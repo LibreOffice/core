@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adc_cl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-15 18:45:35 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <tools/tkpchars.hxx>
 #include "adc_cmds.hxx"
 #include "adc_cmd_parse.hxx"
+#include "cmd_sincedata.hxx"
 
 
 namespace autodoc
@@ -80,9 +81,7 @@ namespace autodoc
 
 CommandLine * CommandLine::pTheInstance_ = 0;
 
-
 const char * const C_sUserGuide =
-
 "\n\n\n"
 "               Use of Autodoc\n"
 "               --------------\n"
@@ -277,6 +276,7 @@ const char * const C_sUserGuide =
 
 CommandLine::CommandLine()
     :   nDebugStyle(0),
+        pSinceTransformator(new command::SinceTagTransformationData),
         aCommands(),
         bInitOk(false)
 {
@@ -319,6 +319,25 @@ CommandLine::Get_()
     return *pTheInstance_;
 }
 
+
+bool
+CommandLine::Display_SinceTag() const
+{
+    return pSinceTransformator->DoesTransform();
+}
+
+bool
+CommandLine::Strip_SinceTagText( String & io_sSinceTagValue ) const
+{
+    return pSinceTransformator->StripSinceTagText(io_sSinceTagValue);
+}
+
+const String &
+CommandLine::DisplayOf_SinceTagValue( const String & i_sVersionNumber ) const
+{
+    return pSinceTransformator->DisplayOf(i_sVersionNumber);
+}
+
 void
 CommandLine::do_Init( int                 argc,
                       char *              argv[] )
@@ -350,6 +369,8 @@ CommandLine::do_Init( int                 argc,
             do_clParse(it,itEnd);
         else if (*it == command::C_opt_CreateHtml)
             do_clCreateHtml(it,itEnd);
+        else if (*it == command::C_opt_SinceFile)
+            do_clSinceFile(it,itEnd);
 //        else if (*it == command::C_opt_CreateXml)
 //            do_clCreateXml(it,itEnd);
 //        else if (command::C_opt_Load)
@@ -494,29 +515,13 @@ CommandLine::do_clCreateHtml( opt_iter &          it,
     aCommands.push_back(pCmd_CreateHtml);
 }
 
-//void
-//CommandLine::do_clCreateXml( opt_iter &          it,
-//                             opt_iter            itEnd )
-//{
-//    pCmd_CreateXml = new command::CreateXml;
-//    pCmd_CreateXml->Init(it, itEnd);
-//}
-//
-//void
-//CommandLine::do_clLoad( opt_iter &          it,
-//                        opt_iter            itEnd )
-//{
-//    pCmd_Load = new command::Load;
-//    pCmd_Load->Init(it, itEnd);
-//}
-//
-//void
-//CommandLine::do_clSave( opt_iter &          it,
-//                        opt_iter            itEnd )
-//{
-//    pCmd_Save = new command::Save;
-//    pCmd_Save->Init(it, itEnd);
-//}
+void
+CommandLine::do_clSinceFile( opt_iter &          it,
+                             opt_iter            itEnd )
+{
+    pSinceTransformator->Init(it, itEnd);
+}
+
 
 namespace
 {
