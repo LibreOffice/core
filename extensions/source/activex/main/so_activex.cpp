@@ -214,9 +214,9 @@ STDAPI DllRegisterServerNative( BOOL bForAllUsers )
           || ERROR_SUCCESS != RegSetValueEx(hkey, "Content Type", 0, REG_SZ,
              (const BYTE *)aMimeType[ind], strlen( aMimeType[ind] ) ) )
                 aResult = FALSE;
-*/
         if( hkey )
             RegCloseKey(hkey);
+*/
     }
 
 
