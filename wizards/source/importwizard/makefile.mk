@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: tv $ $Date: 2001-03-27 11:20:32 $
+#   last change: $Author: tv $ $Date: 2001-04-23 09:02:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ TARGET=importwizardall
 
 ZIP1TARGET      = $(IMPORTWIZARD_ALL_TARGET)
 
-ZIP1LIST        = *.xdl
+ZIP1LIST        = *.xdl *.xba
 
 
 
