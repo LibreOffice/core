@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.25 2001-10-30 14:53:54 bm Exp $
+	$Id: chart.mod,v 1.26 2001-11-19 13:23:39 bm Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -69,6 +69,8 @@
 		  %draw-position;
 		  %draw-size;
 		  %draw-style-name;
+		  chart:column-mapping %string; #IMPLIED
+		  chart:row-mapping %string; #IMPLIED
 		  chart:style-name %styleName; #IMPLIED>
 
 <!ATTLIST chart:chart %presentation-class; >
