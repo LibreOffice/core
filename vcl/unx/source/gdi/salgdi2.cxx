@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:38:36 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,9 @@
 #ifndef _SV_SALGDI_H
 #include <salgdi.h>
 #endif
-
+#ifndef _SV_SALFRAME_HXX
+#include <salframe.hxx>
+#endif
 
 #ifndef _USE_PRINT_EXTENSION_
 #include <psprint/printergfx.hxx>
@@ -682,6 +684,11 @@ void X11SalGraphics::copyBits( const SalTwoRect *pPosAry,
                            pPosAry->mnSrcX,     pPosAry->mnSrcY,
                            pPosAry->mnSrcWidth, pPosAry->mnSrcHeight,
                            pPosAry->mnDestX,    pPosAry->mnDestY );
+
+            if( _IsWindow() && ! _IsVirtualDevice() )
+            {
+                static_cast<X11SalFrame*>(m_pFrame)->YieldGraphicsExpose();
+            }
         }
         else if( n )
         {
@@ -777,14 +784,18 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSa
         XGCValues           aOldVal, aNewVal;
         int                 nValues = GCForeground | GCBackground;
 
-        // set foreground/background values for 1Bit bitmaps
-        XGetGCValues( pXDisp, aGC, nValues, &aOldVal );
-        aNewVal.foreground = rColMap.GetWhitePixel(), aNewVal.background = rColMap.GetBlackPixel();
-        XChangeGC( pXDisp, aGC, nValues, &aNewVal );
+        if( rSalBitmap.GetBitCount() == 1 )
+        {
+                // set foreground/background values for 1Bit bitmaps
+                XGetGCValues( pXDisp, aGC, nValues, &aOldVal );
+                aNewVal.foreground = rColMap.GetWhitePixel(), aNewVal.background = rColMap.GetBlackPixel();
+                XChangeGC( pXDisp, aGC, nValues, &aNewVal );
+        }
 
         static_cast<const X11SalBitmap&>(rSalBitmap).ImplDraw( aDrawable, nDepth, *pPosAry, aGC );
 
-        XChangeGC( pXDisp, aGC, nValues, &aOldVal );
+        if( rSalBitmap.GetBitCount() == 1 )
+                XChangeGC( pXDisp, aGC, nValues, &aOldVal );
         XFlush( pXDisp );
 
 #ifndef _USE_PRINT_EXTENSION_
