@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DynamicResultSet.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com { module sun { module star { module ucb {
     <type>Content</type>.
 */
 
-service DynamicResultSet
+published service DynamicResultSet
 {
     //-------------------------------------------------------------------------
     /** Provides read access to a static or a dynamically changing
