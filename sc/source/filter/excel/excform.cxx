@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:30 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 07:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1414,6 +1414,11 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, co
     return eRet;
 }
 
+BOOL ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, UINT32 nLen )
+{
+    DBG_ERRORFILE( "ExcelToSc::GetAbsRefs - not implemented" );
+    return false;
+}
 
 void ExcelToSc::DoMulArgs( DefTokenId eId, BYTE nAnz )
 {
