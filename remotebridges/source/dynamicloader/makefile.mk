@@ -3,8 +3,8 @@
 #*	  $Workfile:   makefile  $
 #*
 #*	  Ersterstellung	JSC 24.06.99
-#*	  Letzte Aenderung	$Author: kr $ $Date: 2000-11-10 09:50:30 $
-#*	  $Revision: 1.1 $
+#*	  Letzte Aenderung	$Author: hr $ $Date: 2000-11-13 16:11:22 $
+#*	  $Revision: 1.2 $
 #*
 #*	  $Logfile:$
 #*
@@ -28,8 +28,8 @@ COMP1TYPELIST=$(TARGET)
 # ------------------------------------------------------------------
 
 CPPUMAKERFLAGS += -C
-UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb 
+UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb 
 
 # output directory (one dir for each project)
 UNOUCROUT=$(OUT)$/inc
