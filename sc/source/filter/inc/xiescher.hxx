@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:44:05 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 12:45:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,8 @@ public:
     void                        ReadCblsFmla( XclImpStream& rStrm );
     /** Reads the contents of the ftLbsData sub structure in an OBJ record. */
     void                        ReadLbsData( XclImpStream& rStrm );
+    /** Reads the contents of the ftSbs sub structure in an OBJ record. */
+    void                        ReadSbs( XclImpStream& rStrm );
 
     /** Returns the complete component service name for this control. */
     ::rtl::OUString             GetServiceName() const;
@@ -330,7 +332,13 @@ private:
     sal_Int16                   mnSelEntry;     /// Index of selected entry (1-based).
     sal_Int16                   mnSelType;      /// Selection type.
     sal_Int16                   mnLineCount;    /// Combobox dropdown line count.
+    sal_Int16                   mnScrollValue;  /// Scrollbar: Current value.
+    sal_Int16                   mnScrollMin;    /// Scrollbar: Minimum value.
+    sal_Int16                   mnScrollMax;    /// Scrollbar: Maximum value.
+    sal_Int16                   mnScrollStep;   /// Scrollbar: Single step.
+    sal_Int16                   mnScrollPage;   /// Scrollbar: Page step.
     bool                        mb3DStyle;      /// true = 3D style.
+    bool                        mbScrollHor;    /// Scrollbar: true = horizontal.
 };
 
 
