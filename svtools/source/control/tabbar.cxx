@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabbar.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: th $ $Date: 2001-08-28 13:43:34 $
+ *  last change: $Author: tbe $ $Date: 2002-09-02 16:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,10 @@
 #define _SV_TABBAR_CXX
 #define private public
 #include <tabbar.hxx>
+
+#ifndef _SVTOOLS_ACCESSIBLETABBAR_HXX_
+#include <accessibletabbar.hxx>
+#endif
 
 // =======================================================================
 
@@ -941,7 +945,7 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
                 {
                     ImplShowPage( nPos );
                     Update();
-                    Select();
+                    ImplSelect();
                 }
             }
             else
@@ -1001,12 +1005,12 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
                         }
                     }
 
-                    if ( DeactivatePage() )
+                    if ( ImplDeactivatePage() )
                     {
                         SetCurPageId( nSelId );
                         Update();
-                        ActivatePage();
-                        Select();
+                        ImplActivatePage();
+                        ImplSelect();
                     }
                 }
                 else
@@ -1436,6 +1440,15 @@ void TabBar::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
+void TabBar::ImplSelect()
+{
+    Select();
+
+    CallEventListeners( VCLEVENT_TABBAR_PAGESELECTED, (void*) mnCurPageId );
+}
+
+// -----------------------------------------------------------------------
+
 void TabBar::Select()
 {
     maSelectHdl.Call( this );
@@ -1457,9 +1470,29 @@ void TabBar::Split()
 
 // -----------------------------------------------------------------------
 
+void TabBar::ImplActivatePage()
+{
+    ActivatePage();
+
+    CallEventListeners( VCLEVENT_TABBAR_PAGEACTIVATED, (void*) mnCurPageId );
+}
+
+// -----------------------------------------------------------------------
+
 void TabBar::ActivatePage()
 {
     maActivatePageHdl.Call( this );
+}
+
+// -----------------------------------------------------------------------
+
+long TabBar::ImplDeactivatePage()
+{
+    long nRet = DeactivatePage();
+
+    CallEventListeners( VCLEVENT_TABBAR_PAGEDEACTIVATED, (void*) mnCurPageId );
+
+    return nRet;
 }
 
 // -----------------------------------------------------------------------
@@ -1521,6 +1554,8 @@ void TabBar::InsertPage( USHORT nPageId, const XubString& rText,
     // Leiste neu ausgeben
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
+
+    CallEventListeners( VCLEVENT_TABBAR_PAGEINSERTED, (void*) nPageId );
 }
 
 // -----------------------------------------------------------------------
@@ -1546,6 +1581,8 @@ void TabBar::RemovePage( USHORT nPageId )
         // Leiste neu ausgeben
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
+
+        CallEventListeners( VCLEVENT_TABBAR_PAGEREMOVED, (void*) nPageId );
     }
 }
 
@@ -1554,6 +1591,7 @@ void TabBar::RemovePage( USHORT nPageId )
 void TabBar::MovePage( USHORT nPageId, USHORT nNewPos )
 {
     USHORT nPos = GetPagePos( nPageId );
+    Pair aPair( nPos, nNewPos );
 
     if ( nPos < nNewPos )
         nNewPos--;
@@ -1572,6 +1610,8 @@ void TabBar::MovePage( USHORT nPageId, USHORT nNewPos )
         // Leiste neu ausgeben
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
+
+        CallEventListeners( VCLEVENT_TABBAR_PAGEMOVED, (void*) &aPair );
     }
 }
 
@@ -1597,6 +1637,8 @@ void TabBar::Clear()
     // Leiste neu ausgeben
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
+
+    CallEventListeners( VCLEVENT_TABBAR_PAGEREMOVED, (void*) TAB_PAGE_NOTFOUND );
 }
 
 // -----------------------------------------------------------------------
@@ -1616,6 +1658,8 @@ void TabBar::EnablePage( USHORT nPageId, BOOL bEnable )
             // Leiste neu ausgeben
             if ( IsReallyVisible() && IsUpdateMode() )
                 Invalidate( pItem->maRect );
+
+            CallEventListeners( bEnable ? VCLEVENT_TABBAR_PAGEENABLED : VCLEVENT_TABBAR_PAGEDISABLED, (void*) nPageId );
         }
     }
 }
@@ -2204,6 +2248,8 @@ void TabBar::SetPageText( USHORT nPageId, const XubString& rText )
         // Leiste neu ausgeben
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
+
+        CallEventListeners( VCLEVENT_TABBAR_PAGETEXTCHANGED, (void*) nPageId );
     }
 }
 
@@ -2305,12 +2351,12 @@ BOOL TabBar::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
         // Seite setzen und Select rufen.
         if ( !IsPageSelected( nSelId ) )
         {
-            if ( DeactivatePage() )
+            if ( ImplDeactivatePage() )
             {
                 SetCurPageId( nSelId );
                 Update();
-                ActivatePage();
-                Select();
+                ImplActivatePage();
+                ImplSelect();
             }
             else
                 return FALSE;
@@ -2517,12 +2563,12 @@ BOOL TabBar::SwitchPage( const Point& rPos )
                 if ( Time::GetSystemTicks() > mnSwitchTime+500 )
                 {
                     mbInSwitching = TRUE;
-                    if ( DeactivatePage() )
+                    if ( ImplDeactivatePage() )
                     {
                         SetCurPageId( mnSwitchId );
                         Update();
-                        ActivatePage();
-                        Select();
+                        ImplActivatePage();
+                        ImplSelect();
                         bSwitch = TRUE;
                     }
                     mbInSwitching = FALSE;
@@ -2573,3 +2619,12 @@ Size TabBar::CalcWindowSizePixel() const
 
     return Size( nWidth, GetSettings().GetStyleSettings().GetScrollBarSize() );
 }
+
+// -----------------------------------------------------------------------
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > TabBar::CreateAccessible()
+{
+    return (::drafts::com::sun::star::accessibility::XAccessible*) new svt::AccessibleTabBar( this );
+}
+
+// -----------------------------------------------------------------------
