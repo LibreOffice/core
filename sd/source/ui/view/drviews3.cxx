@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:41:34 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -763,6 +763,9 @@ void  SdDrawViewShell::GetRulerState(SfxItemSet& rSet)
 
     aMarkRect = pDrView->GetAllMarkedRect();
 
+    const sal_Bool bRTL = pDoc && pDoc->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB;
+    rSet.Put(SfxBoolItem(SID_RULER_TEXT_RIGHT_TO_LEFT, bRTL));
+
     if( pDrView->HasMarkedObj() )
     {
         if( pDrView->IsTextEdit() )
@@ -853,7 +856,7 @@ void  SdDrawViewShell::GetRulerState(SfxItemSet& rSet)
     {
         rSet.DisableItem( SID_RULER_OBJECT );
         rSet.DisableItem( ITEMID_TABSTOP );
-        rSet.DisableItem( SID_RULER_TEXT_RIGHT_TO_LEFT );
+//      rSet.DisableItem( SID_RULER_TEXT_RIGHT_TO_LEFT );
     }
 
     rSet.Put( aLRSpace );
