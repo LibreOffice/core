@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:27 $
+ *  last change: $Author: jp $ $Date: 2001-02-27 18:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,16 +63,19 @@
 #define _SECTION_HXX
 
 
-#ifndef _LNKBASE_HXX //autogen
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
+#ifndef _LNKBASE_HXX
 #include <so3/lnkbase.hxx>
 #endif
-#ifndef _RTTI_HXX //autogen
+#ifndef _RTTI_HXX
 #include <tools/rtti.hxx>
 #endif
-#ifndef _SVARRAY_HXX //autogen
+#ifndef _SVARRAY_HXX
 #include <svtools/svarray.hxx>
 #endif
-#ifndef _SO2REF_HXX //autogen
+#ifndef _SO2REF_HXX
 #include <so3/so2ref.hxx>
 #endif
 #ifndef _FRMFMT_HXX
@@ -123,7 +126,9 @@ class SwSection : public SwClient
 
     String sSectionNm;
     String sCondition;          // erstmal, vielleicht auch mal ein Feld ??
-    String sLinkFileName, sLinkFilePassWd;
+    String sLinkFileName,
+           sLinkFilePassWd;     // JP 27.02.2001: must later changed to Sequence
+    ::com::sun::star::uno::Sequence< sal_uInt8 > aPasswd;
 
     SwServerObjectRef refObj;   // falls DataServer -> Pointer gesetzt
     SvBaseLinkRef refLink;
@@ -197,6 +202,12 @@ public:
     // Passwort des gelinkten Files (nur waehrend der Laufzeit gueltig!)
     const String& GetLinkFilePassWd() const         { return sLinkFilePassWd; }
     void SetLinkFilePassWd( const String& rS )      { sLinkFilePassWd = rS; }
+
+    // get / set password of this section
+    const ::com::sun::star::uno::Sequence <sal_uInt8>&
+            GetPasswd() const               { return aPasswd; }
+    void SetPasswd( const ::com::sun::star::uno::Sequence <sal_uInt8>& rNew )
+                                            { aPasswd = rNew; }
 
     // Daten Server-Methoden
     void SetRefObject( SvPseudoObject* pObj );
@@ -313,6 +324,9 @@ inline SwSection* SwSectionFmt::GetParentSection() const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:27  hr
+      initial import
+
       Revision 1.40  2000/09/18 16:03:26  willem.vandorp
       OpenOffice header added.
 
