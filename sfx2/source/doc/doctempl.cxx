@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-28 08:53:33 $
+ *  last change: $Author: dv $ $Date: 2001-03-28 14:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1211,6 +1211,7 @@ BOOL SfxDocumentTemplates::CopyFrom
         else
             nIdx += 1;
         pTargetRgn->AddEntry( aTitle, rName, &nIdx );
+        rName = aTitle;
         return TRUE;
     }
 
@@ -1395,6 +1396,9 @@ BOOL SfxDocumentTemplates::SetName
 
         if ( !pEntry )
             return FALSE;
+
+        if ( pEntry->GetTitle() == OUString( rName ) )
+            return TRUE;
 
         if ( xTemplates->renameTemplate( pRegion->GetTitle(),
                                          pEntry->GetTitle(),
