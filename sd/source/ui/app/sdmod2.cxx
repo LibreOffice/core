@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:47:59 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 17:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,8 @@
 #ifndef _SFXFLAGITEM_HXX //autogen
 #include <svtools/flagitem.hxx>
 #endif
-#ifndef _SVX_ADRITEM_HXX //autogen
-#include <svx/adritem.hxx>
+#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
+#include <svtools/useroptions.hxx>
 #endif
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
@@ -329,8 +329,10 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                 aAuthor = pAuthorField->GetFormatted();
             else
             {
-                SvxAddressItem aAdrItem;
-                SvxAuthorField aAuthorField( aAdrItem, pAuthorField->GetType(), pAuthorField->GetFormat() );
+                SvtUserOptions aUserOptions;
+                SvxAuthorField aAuthorField(
+                        aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID(),
+                        pAuthorField->GetType(), pAuthorField->GetFormat() );
 
                 // #92496# Set new content also for living field
                 *(const_cast< SvxAuthorField* >(pAuthorField)) = aAuthorField;
@@ -654,13 +656,6 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
         pViewShell = pDocSh->GetViewShell();
         pViewShell->WriteFrameViewData();
     }
-    // TP_GENERAL
-    //!!! const weg-casten, da Store nicht-const:
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_ADDRESS, TRUE, &pItem ) )
-    {
-        ((SfxAddressItem*)pItem)->Store();
-    }
-
     SdOptions* pOptions = GetSdOptions(eDocType);
     // Raster
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS ,
