@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-10 11:05:14 $
+ *  last change: $Author: oj $ $Date: 2000-11-10 14:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1932,7 +1932,7 @@ BOOL OResultSet::OpenImpl()
 
             OSL_ENSHURE(sizeof nOrderbyColumnNumber / sizeof (* nOrderbyColumnNumber) == SQL_ORDERBYKEYS,"Maximale Anzahl der ORDER BY Columns muss derzeit genau 3 sein!");
             OKeyType eKeyType[SQL_ORDERBYKEYS];
-            aRowIter = m_aRow->begin();
+            aRowIter = m_aRow->begin()+1;
             for (int i = 0; i < SQL_ORDERBYKEYS; i++)
             {
                 if (nOrderbyColumnNumber[i] == SQL_COLUMN_NOTFOUND)
@@ -2242,7 +2242,7 @@ void OResultSet::setOrderbyColumn(UINT16 nOrderbyColumnNo,
         return;
     // Alles geprueft und wir haben den Namen der Column.
     // Die wievielte Column ist das?
-    nOrderbyColumnNumber[nOrderbyColumnNo] = xColLocate->findColumn(aColumnName)-1;
+    nOrderbyColumnNumber[nOrderbyColumnNo] = xColLocate->findColumn(aColumnName);
 
     // Ascending or Descending?
     bOrderbyAscending[nOrderbyColumnNo]  = (SQL_ISTOKEN(pAscendingDescending,DESC)) ?
