@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestDefines.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
+ *  last change: $Author: mtg $ $Date: 2001-05-08 13:53:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,16 +62,26 @@
 #define _MANIFEST_DEFINES_HXX
 
 #define ELEMENT_MANIFEST "manifest:manifest"
-#define ELEMENT_FILE_ENTRY "manifest:file-entry"
-#define ELEMENT_ENCRYPTION_DATA "manifest:encryption-data"
-#define ELEMENT_INITIALISATION_VECTOR "manifest:initialisation-vector"
-#define ATTRIBUTE_FULL_PATH "manifest:full-path"
-#define ATTRIBUTE_MEDIA_TYPE "manifest:media-type"
-#define ATTRIBUTE_ALGORITHM "manifest:algorithm"
-#define ATTRIBUTE_SALT "manifest:salt"
-#define ATTRIBUTE_ITERATION_COUNT "manifest:iteration-count"
-#define ATTRIBUTE_CDATA "CDATA"
 #define ATTRIBUTE_XMLNS "xmlns:manifest"
 #define MANIFEST_NAMESPACE "http://openoffice.org/2001/manifest"
+#define MANIFEST_DOCTYPE "<!DOCTYPE manifest:manifest PUBLIC \"-//OpenOffice.org//DTD Manifest 1.0//EN\" \"Manifest.dtd\">"
+#define ATTRIBUTE_CDATA "CDATA"
+
+#define ELEMENT_FILE_ENTRY "manifest:file-entry"
+#define ATTRIBUTE_FULL_PATH "manifest:full-path"
+#define ATTRIBUTE_MEDIA_TYPE "manifest:media-type"
+#define ATTRIBUTE_SIZE "manifest:size"
+
+#define ELEMENT_ENCRYPTION_DATA "manifest:encryption-data"
+
+#define ELEMENT_ALGORITHM "manifest:algorithm"
+#define ATTRIBUTE_ALGORITHM_NAME "manifest:algorithm-name"
+#define ATTRIBUTE_INITIALISATION_VECTOR "manifest:initialisation-vector"
+
+#define ELEMENT_KEY_DERIVATION "manifest:key-derivation"
+#define ATTRIBUTE_KEY_DERIVATION_NAME "manifest:key-derivation-name"
+#define ATTRIBUTE_SALT "manifest:salt"
+#define ATTRIBUTE_ITERATION_COUNT "manifest:iteration-count"
+
 
 #endif
