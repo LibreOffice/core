@@ -6,6 +6,8 @@ mkdir: %_DEST%\inc%_EXT%\framework
 ..\%__SRC%\bin\login %_DEST%\bin%_EXT%\login.bin
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*
 
+..\dtd\menubar.dtd %_DEST%\bin\menubar.dtd
+
 ..\%__SRC%\lib\ifwe.lib %_DEST%\lib%_EXT%\ifwe.lib
 ..\inc\helper\imageproducer.hxx %_DEST%\inc%_EXT%\framework\imageproducer.hxx
 ..\inc\classes\menuconfiguration.hxx %_DEST%\inc%_EXT%\framework\menuconfiguration.hxx
