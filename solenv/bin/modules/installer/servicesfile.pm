@@ -2,9 +2,9 @@
 #
 #   $RCSfile: servicesfile.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:30:00 $
+#   last change: $Author: kz $ $Date: 2004-06-11 18:17:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,6 +108,46 @@ sub add_services_file_into_filearray
     push(@{$filesarrayref}, \%servicesfile);
 }
 
+############################################################################
+# Adding the newly created legacy_binfilters.rdb into the files collector
+############################################################################
+
+sub add_legacy_binfilters_rdb_file_into_filearray
+{
+    my ( $filesarrayref, $includepatharrayref ) = @_;
+
+    # Some data are set now, others are taken from the file "gid_File_Lib_Vcl"
+
+    my %legacyfile = ();    # This has to be done always, not only once
+
+    my $legacyfilename = "legacy_binfilters.rdb";
+
+    my $legacyfilesourceref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$legacyfilename, $includepatharrayref, 1);
+    if ( $$legacyfilesourceref eq "" ) { installer::exiter::exit_program("ERROR: Could not find file $legacyfilename!", "add_legacy_binfilters_rdb_file_into_filearray"); }
+
+    # Taking the data from the "gid_File_Lib_Vcl"
+
+    my $vclgid = "gid_File_Lib_Vcl";
+    my $vclfile = installer::existence::get_specified_file($filesarrayref, $vclgid);
+
+    # copying all base data
+    installer::converter::copy_item_object($vclfile, \%legacyfile);
+
+    # and overriding all new values
+
+    $legacyfile{'ismultilingual'} = 0;
+    $legacyfile{'sourcepath'} = $$legacyfilesourceref;
+    $legacyfile{'Name'} = $legacyfilename;
+    $legacyfile{'UnixRights'} = "644";
+    $legacyfile{'gid'} = "gid_File_Rdb_Legacy_Binfilters";
+
+    my $destinationpath = $vclfile->{'destination'};
+    installer::pathanalyzer::get_path_from_fullqualifiedname(\$destinationpath);
+    $legacyfile{'destination'} = $destinationpath . $legacyfilename;
+
+    push(@{$filesarrayref}, \%legacyfile);
+}
+
 ################################################################
 # Generating a file url from a path
 ################################################################
@@ -145,6 +185,7 @@ sub register_component
 
     my $registerfile = $onefile->{'Name'};
     my $java_component = 0;
+    my $error_occured = 0;
     my $systemcall;
 
     if ( $registerfile =~ /\.jar\s*$/ ) { $java_component = 1; }    # this is a .jar file, a Java component
@@ -185,11 +226,175 @@ sub register_component
         chdir($from);
 
         my $infoline;
-        if ($returnvalue) { $infoline = "ERROR: $systemcall\n"; }
-        else { $infoline = "SUCCESS: $systemcall\n"; }
+        if ($returnvalue)
+        {
+            $infoline = "ERROR: $systemcall\n";
+            $error_occured = 1;
+        }
+        else
+        {
+            $infoline = "SUCCESS: $systemcall\n";
+        }
 
         push( @installer::globals::logfileinfo, $infoline);
     }
+
+    return $error_occured;
+}
+
+################################################################
+# Determining all sourcepath from the uno components
+################################################################
+
+sub get_all_sourcepathes
+{
+    my ( $filesref ) = @_;
+
+    my @pathes = ();
+
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        my $onefile = ${$filesref}[$i];
+        my $path = $onefile->{'sourcepath'};
+
+        installer::pathanalyzer::get_path_from_fullqualifiedname(\$path);
+
+        if (! installer::existence::exists_in_array($path, \@pathes))
+        {
+            push(@pathes, $path);
+        }
+    }
+
+    return \@pathes;
+}
+
+################################################################
+# Registering all uno component files in the services.rdb
+################################################################
+
+sub register_unocomponents
+{
+    my ($unocomponents, $regcompfileref, $servicesfile) = @_;
+
+    installer::logger::include_header_into_logfile("Registering UNO components:");
+
+    my $error_occured = 0;
+
+    my $systemcall = "";
+
+    my $allsourcepathes = get_all_sourcepathes($unocomponents);
+
+    for ( my $j = 0; $j <= $#{$allsourcepathes}; $j++ )
+    {
+        my $filestring = "";
+        my $onesourcepath = ${$allsourcepathes}[$j];
+        my $to = "";
+        my $from = cwd();
+        if ( $installer::globals::iswin ) { $from =~ s/\//\\/g; }
+
+        for ( my $i = 0; $i <= $#{$unocomponents}; $i++ )
+        {
+            my $sourcepath = ${$unocomponents}[$i]->{'sourcepath'};
+
+            $to = $sourcepath;
+            installer::pathanalyzer::get_path_from_fullqualifiedname(\$to);
+
+            if (!($to eq $onesourcepath)) { next; }
+
+            my $filename = ${$unocomponents}[$i]->{'Name'};
+
+            $filestring = $filestring . $filename . "\;";
+        }
+
+        $filestring =~ s/\;\s*$//;
+
+        chdir($onesourcepath);
+
+        $systemcall = "$$regcompfileref -register -s -r $servicesfile -c "  . $installer::globals::quote . $filestring . $installer::globals::quote;
+
+        my $returnvalue = system($systemcall);
+
+        my $infoline;
+        if ($returnvalue)
+        {
+            $infoline = "ERROR: $systemcall\n";
+            $error_occured = 1;
+        }
+        else
+        {
+            $infoline = "SUCCESS: $systemcall\n";
+        }
+
+        push( @installer::globals::logfileinfo, $infoline);
+
+        chdir($from);
+    }
+
+#           if ((( $i > 0 ) &&  ( $i%100 == 0 )) || ( $i == $#{$unocomponents} ))   # limiting to 100 files
+#           {
+
+    return $error_occured;
+}
+
+################################################################
+# Registering all java component files in the services.rdb
+################################################################
+
+sub register_javacomponents
+{
+    my ($javacomponents, $regcompfileref, $servicesfile, $regcomprdb) = @_;
+
+    installer::logger::include_header_into_logfile("Registering Java components:");
+
+    my $error_occured = 0;
+    my $systemcall;
+
+    my $do_register = 1;
+    if (!( $installer::globals::solarjava )) { $do_register = 0; }
+
+    if ( $do_register )
+    {
+        for ( my $i = 0; $i <= $#{$javacomponents}; $i++ )
+        {
+            my $sourcepath = ${$javacomponents}[$i]->{'sourcepath'};
+            my $registerfile = ${$javacomponents}[$i]->{'Name'};
+
+            my $from = cwd();
+            if ( $installer::globals::iswin ) { $from =~ s/\//\\/g; }
+
+            my $to = $sourcepath;
+            installer::pathanalyzer::get_path_from_fullqualifiedname(\$to);
+
+            # ATTENTION: "regcomp" can only be executed on the corresponding platform!
+            # On a Windows system, "regcomp.exe" has to be executed, on a Unix system
+            # the correct "regcomp"
+
+            chdir($to);
+
+            my $fileurl = make_file_url($to);
+
+            $systemcall = "$$regcompfileref -register -s -br $regcomprdb -r $servicesfile -c " . $installer::globals::quote . "vnd.sun.star.expand\:\$UNO_JAVA_COMPONENT_PATH\/$registerfile" . $installer::globals::quote . " -l com.sun.star.loader.Java2 -env:UNO_JAVA_COMPONENT_PATH=" . $installer::globals::quote . $fileurl . $installer::globals::quote;
+
+            my $returnvalue = system($systemcall);
+
+            chdir($from);
+
+            my $infoline;
+            if ($returnvalue)
+            {
+                $infoline = "ERROR: $systemcall\n";
+                $error_occured = 1;
+            }
+            else
+            {
+                $infoline = "SUCCESS: $systemcall\n";
+            }
+
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+    }
+
+    return $error_occured;
 }
 
 ################################################################
@@ -197,9 +402,14 @@ sub register_component
 # style UNO_COMPONENT. This can be libraries and jar files.
 ################################################################
 
-sub search_components
+sub register_all_components
 {
     my ( $filesarrayref, $regcompfileref, $servicesfile, $regcomprdb ) = @_;
+
+    my $registererrorflag = 0;
+
+    my @unocomponents = ();
+    my @javacomponents = ();
 
     for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
     {
@@ -210,9 +420,25 @@ sub search_components
 
         if ( $styles =~ /\bUNO_COMPONENT\b/ )
         {
-            register_component($onefile, $regcompfileref, $servicesfile, $regcomprdb);
+            my $filename = $onefile->{'Name'};
+
+            if ( $filename =~ /\.jar\s*$/ ) # java component
+            {
+                push(@javacomponents, $onefile);
+            }
+            else    # uno_component
+            {
+                push(@unocomponents, $onefile);
+            }
         }
     }
+
+    if ( $#unocomponents > -1 ) { $error_occured = register_unocomponents(\@unocomponents, $regcompfileref, $servicesfile); }
+    if ( $#javacomponents > -1 ) { $error_occured = register_javacomponents(\@javacomponents, $regcompfileref, $servicesfile, $regcomprdb); }
+
+    if ( $error_occured ) { $registererrorflag = 1; }
+
+    return $registererrorflag;
 }
 
 ###################################################
@@ -338,7 +564,7 @@ sub prepare_regcomp_rdb
 
         chdir($to);
 
-        my $systemcall = "$regcompfile -register -r $regcomprdb -c $libfilename";
+        my $systemcall = "$regcompfile -register -s -r $regcomprdb -c $libfilename";
 
         my $returnvalue = system($systemcall);
 
@@ -360,22 +586,30 @@ sub prepare_regcomp_rdb
 
 sub create_services_rdb
 {
-    my ($filesarrayref, $includepatharrayref) = @_;
+    my ($filesarrayref, $includepatharrayref, $languagestringref) = @_;
 
     my $servicesname = "services.rdb";
 
     installer::logger::include_header_into_logfile("Creating $servicesname:");
 
-    my $servicesdir = installer::systemactions::create_directories($servicesname, "");
+    my $servicesdir = installer::systemactions::create_directories($servicesname, $languagestringref);
 
     my $servicesfile = $servicesdir . $installer::globals::separator . $servicesname;
 
     # If there is an older version of this file, it has to be removed
+    if ( -f $servicesfile ) { unlink($servicesfile); }
 
-    if ((-f $servicesfile) && (!($installer::globals::services_rdb_created))) { $installer::globals::services_rdb_created = 1; }
+    # if ((-f $servicesfile) && (!($installer::globals::services_rdb_created))) { $installer::globals::services_rdb_created = 1; }
 
-    if ((!($installer::globals::services_rdb_created)) && $installer::globals::servicesrdb_can_be_created ) # This has to be done once
+    # if ((!($installer::globals::services_rdb_created)) && $installer::globals::servicesrdb_can_be_created )   # This has to be done once
+    if ( $installer::globals::servicesrdb_can_be_created )  # This has to be done always
     {
+        # Creating the services.rdb in directory "inprogress"
+        my $origservicesdir = $servicesdir;
+        $servicesdir = installer::systemactions::make_numbered_dir("inprogress", $servicesdir);
+        my $current_install_number = installer::converter::get_number_from_directory($servicesdir);
+        $servicesfile = $servicesdir . $installer::globals::separator . $servicesname;
+
         # determining the location of the file regcomp
         # Because the program regcomp.exe (regcomp) is used now, it has to be taken the version
         # from the platform, this script is running. It is not important, for which platform the
@@ -414,7 +648,20 @@ sub create_services_rdb
 
         # and now iteration over all files
 
-        search_components($filesarrayref, $regcompfileref, $servicesfile, $regcomprdb);
+        my $error_during_registration = register_all_components($filesarrayref, $regcompfileref, $servicesfile, $regcomprdb);
+
+        # Dependent from the success, the registration directory can be renamed.
+
+        if ( $error_during_registration )
+        {
+            $servicesdir = installer::systemactions::rename_string_in_directory($servicesdir, "inprogress", "with_error");
+        }
+        else
+        {
+            $servicesdir = installer::systemactions::rename_directory($servicesdir, $origservicesdir);
+        }
+
+        $servicesfile = $servicesdir . $installer::globals::separator . $servicesname;
     }
     else
     {
@@ -446,6 +693,11 @@ sub create_services_rdb
     # Setting the global variable $installer::globals::services_rdb_created
 
     $installer::globals::services_rdb_created = 1;
+
+    # Adding the created file "legacy_binfilters.rdb" to the filearray
+
+    add_legacy_binfilters_rdb_file_into_filearray($filesarrayref, $includepatharrayref);
+
 }
 
 1;
