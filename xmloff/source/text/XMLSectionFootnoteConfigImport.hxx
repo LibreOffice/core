@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionFootnoteConfigImport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-17 12:01:21 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@ class XMLSectionFootnoteConfigImport : public SvXMLImportContext
 {
     ::std::vector<XMLPropertyState> & rProperties;
     UniReference<XMLPropertySetMapper> rMapper;
-    sal_Int32 nPropIndex;
 
 public:
 
@@ -103,8 +102,7 @@ public:
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
         ::std::vector<XMLPropertyState> & rProperties,
-        const UniReference<XMLPropertySetMapper> & rMapperRef,
-        sal_Int32 nIndex);
+        const UniReference<XMLPropertySetMapper> & rMapperRef);
 
     ~XMLSectionFootnoteConfigImport();
 
