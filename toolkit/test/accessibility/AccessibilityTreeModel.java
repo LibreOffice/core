@@ -34,6 +34,9 @@ public class AccessibilityTreeModel
     // The list of TreeModelListener objects.
     private Vector maTMListeners;
 
+    // The root node of the tree.  Use setRoot to change it.
+    private AccessibleTreeNode maRoot = null;
+
     // default handlers, Vector<HandlerPair>
     private static Vector aDefaultHandlers;
     private static NodeHandler maContextHandler = new AccessibleContextHandler();
@@ -48,12 +51,12 @@ public class AccessibilityTreeModel
     private static NodeHandler maHyperlinkHandler = new AccessibleHyperlinkHandler();
     private static NodeHandler maTreeHandler = new AccessibleTreeHandler();
 
-    public AccessibilityTreeModel (Object aRoot, MessageInterface aMessageArea, Print aPrinter)
+    public AccessibilityTreeModel (AccessibleTreeNode aRoot, MessageInterface aMessageArea, Print aPrinter)
     {
         // create default node (unless we have a 'proper' node)
         if( ! (aRoot instanceof AccessibleTreeNode) )
             aRoot = new StringNode ("Root", null);
-        maRoot = aRoot;
+        setRoot (aRoot);
         maMessageArea = aMessageArea;
         maPrinter = aPrinter;
 
@@ -85,20 +88,28 @@ public class AccessibilityTreeModel
         mnLockCount -= 1;
         if (mnLockCount == 0)
         {
-            if (aNodeHint instanceof AccTreeNode)
-                fireTreeStructureChanged (createEvent (((AccTreeNode)aNodeHint).getAccessible()));
+            fireTreeStructureChanged (
+                new TreeModelEvent (this,
+                    new TreePath (aNodeHint.createPath())));
         }
     }
-
-    //
-    // the root node
-    //
-
-    private Object maRoot;
 
     public Object getRoot()
     {
         return maRoot;
+    }
+
+    public synchronized void setRoot (AccessibleTreeNode aRoot)
+    {
+        if (maRoot == null)
+            maRoot = aRoot;
+        else
+        {
+            lock ();
+            removeNode (maRoot);
+            maRoot = aRoot;
+            unlock (maRoot);
+        }
     }
 
 
@@ -615,7 +626,9 @@ public class AccessibilityTreeModel
                         }
                     }
                 }
+                maCanvas.repaint ();
                 break;
+
             case AccessibleEventId.ACCESSIBLE_TABLE_MODEL_CHANGED:
                 AccessibleTableModelChange aModelChange = (AccessibleTableModelChange)aEvent.NewValue;
                 System.out.println( "Range: StartRow " + aModelChange.FirstRow +
@@ -655,7 +668,10 @@ public class AccessibilityTreeModel
                 AccessibleTreeNode aNode = (AccessibleTreeNode)maXAccessibleToNode.get (xSource);
                 fireTreeStructureChanged (createEvent (xSource));
                 if (aNode instanceof AccTreeNode)
+                {
                     updateOnCanvas ((AccTreeNode)aNode);
+                    maCanvas.repaint ();
+                }
                 break;
 
 
@@ -716,6 +732,8 @@ public class AccessibilityTreeModel
     {
         public QueuedListener()
         {
+            System.out.println ("starting new queued listener");
+
             // initiate thread
             new Thread(this).start();
         }

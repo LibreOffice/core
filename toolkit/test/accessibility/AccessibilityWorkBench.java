@@ -361,10 +361,19 @@ public class AccessibilityWorkBench
             maCanvas.clear ();
 
         // create new model (with new documents)
-        AccessibilityTreeModel aModel =
-            new AccessibilityTreeModel (createTreeModelRoot(), this, this);
-        aModel.setCanvas( maCanvas );
-        maTree.setModel( aModel );
+        if (maTree.getModel() instanceof AccessibilityTreeModel)
+        {
+            AccessibilityTreeModel aModel = (AccessibilityTreeModel)maTree.getModel();
+            aModel.setRoot (createTreeModelRoot());
+        }
+        else
+        {
+            System.out.println ("creating new tree model");
+            AccessibilityTreeModel aModel =
+                new AccessibilityTreeModel (createTreeModelRoot(), this, this);
+            aModel.setCanvas (maCanvas);
+            maTree.setModel (aModel);
+        }
 
         aConnectButton.setEnabled (true);
         aQuitButton.setEnabled (true);
@@ -447,7 +456,7 @@ public class AccessibilityWorkBench
 
 
     /** Create an AccessibilityTreeModel root which contains the documents */
-    private Object createTreeModelRoot()
+    private AccessibleTreeNode createTreeModelRoot()
     {
         // create root node
         VectorNode aRoot = new VectorNode ("Accessibility Tree", null);
@@ -456,13 +465,13 @@ public class AccessibilityWorkBench
             XDesktop xDesktop = office.getDesktop();
             if (xDesktop == null)
             {
-                return "ERROR: Can't connect. (No desktop)";
+                return new StringNode ("ERROR: Can't connect. (No desktop)", null);
             }
 
             XEnumerationAccess xEA = xDesktop.getComponents();
             if (xEA == null)
             {
-                return "ERROR: Can't get components";
+                return new StringNode ("ERROR: Can't get components", null);
             }
             XEnumeration xE = xEA.createEnumeration();
             while (xE.hasMoreElements())

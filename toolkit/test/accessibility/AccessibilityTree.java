@@ -49,7 +49,13 @@ public class AccessibilityTree
         maCanvas = aCanvas;
         maPrinter = aPrinter;
 
-        setModel( new AccessibilityTreeModel( "Please press Update button", aMessageDisplay, aPrinter) );
+        AccessibilityTreeModel aModel =
+            new AccessibilityTreeModel (
+                new StringNode ("Please press Update button", null),
+                aMessageDisplay,
+                aPrinter);
+        aModel.setCanvas (maCanvas);
+        setModel (aModel);
 
         maCellRenderer = new AccessibleTreeCellRenderer();
         //        setCellRenderer (maCellRenderer);
