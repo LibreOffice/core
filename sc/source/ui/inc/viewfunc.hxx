@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:37:58 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:54:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,8 @@ public:
     void            DoThesaurus( BOOL bRecord = TRUE );
     DECL_LINK( SpellError, void * );
 
-    void            SetPrintRanges( const String* pPrint,
+    // if bEntireSheet==TRUE, pPrint is ignored
+    void            SetPrintRanges( BOOL bEntireSheet, const String* pPrint,
                                     const String* pRepCol, const String* pRepRow,
                                     BOOL bAddPrint );
 
