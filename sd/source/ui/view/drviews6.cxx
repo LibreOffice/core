@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews6.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:12:45 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,14 +134,8 @@
 #ifndef SD_PREVIEW_CHILD_WINDOW_HXX
 #include "PreviewChildWindow.hxx"
 #endif
-#ifndef SD_EFFECT_CHILD_WINDOW_HXX
-#include "EffectChildWindow.hxx"
-#endif
 #ifndef SD_LAYER_DIALOG_CHILD_WINDOW_HXX
 #include "LayerDialogChildWindow.hxx"
-#endif
-#ifndef SD_SLIDE_CHANGE_CHILD_WINDOW_HXX
-#include "SlideChangeChildWindow.hxx"
 #endif
 #include "sdresid.hxx"
 #ifndef SD_FU_POOR_HXX
@@ -180,6 +174,9 @@
 #endif
 #ifndef SD_DRAW_DOC_SHELL_HXX
 #include "DrawDocShell.hxx"
+#endif
+#ifndef SD_TOOLPANEL_TASK_PANE_VIEW_SHELL_HXX
+#include "TaskPaneViewShell.hxx"
 #endif
 
 namespace sd {
@@ -456,20 +453,10 @@ void DrawViewShell::SetChildWindowState( SfxItemSet& rSet )
         USHORT nId = PreviewChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_PREVIEW_WIN, GetViewFrame()->HasChildWindow( nId ) ) );
     }
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_EFFECT_WIN ) )
-    {
-        USHORT nId = EffectChildWindow::GetChildWindowId();
-        rSet.Put( SfxBoolItem( SID_EFFECT_WIN, GetViewFrame()->HasChildWindow( nId ) ) );
-    }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_LAYER_DIALOG_WIN ) )
     {
         USHORT nId = LayerDialogChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_LAYER_DIALOG_WIN, GetViewFrame()->HasChildWindow( nId ) ) );
-    }
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_SLIDE_CHANGE_WIN ) )
-    {
-        USHORT nId = SlideChangeChildWindow::GetChildWindowId();
-        rSet.Put( SfxBoolItem( SID_SLIDE_CHANGE_WIN, GetViewFrame()->HasChildWindow( nId ) ) );
     }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_3D_WIN ) )
     {
@@ -785,37 +772,40 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
         }
         break;
 
-        case SID_EFFECT_WIN:
+        case SID_CUSTOM_ANIMATION_PANEL:
         {
-            if ( rReq.GetArgs() )
-                GetViewFrame()->SetChildWindow(
-                    EffectChildWindow::GetChildWindowId(),
-                    ((const SfxBoolItem&) (rReq.GetArgs()->
-                        Get(SID_EFFECT_WIN))).GetValue());
-            else
-                GetViewFrame()->ToggleChildWindow(
-                    EffectChildWindow::GetChildWindowId() );
+            // Make the slide transition panel visible (expand it) in the
+            // tool pane.
+            SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, TRUE);
+            SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX,
+                toolpanel::TaskPaneViewShell::PID_CUSTOM_ANIMATION);
+            GetViewFrame()->GetDispatcher()->Execute(
+                SID_TASK_PANE,
+                SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                &aMakeToolPaneVisible,
+                &aPanelId,
+                NULL);
 
-            GetViewFrame()->GetBindings().Invalidate(SID_EFFECT_WIN);
             Cancel();
-            rReq.Ignore ();
+            rReq.Done ();
         }
         break;
 
-        case SID_SLIDE_CHANGE_WIN:
+        case SID_SLIDE_TRANSITIONS_PANEL:
         {
-            if ( rReq.GetArgs() )
-                GetViewFrame()->SetChildWindow(
-                    SlideChangeChildWindow::GetChildWindowId(),
-                    ((const SfxBoolItem&) (rReq.GetArgs()->
-                        Get(SID_SLIDE_CHANGE_WIN))).GetValue());
-            else
-                GetViewFrame()->ToggleChildWindow(
-                    SlideChangeChildWindow::GetChildWindowId() );
-
-            GetViewFrame()->GetBindings().Invalidate(SID_SLIDE_CHANGE_WIN);
+            // Make the slide transition panel visible (expand it) in the
+            // tool pane.
+            SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, TRUE);
+            SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX,
+                toolpanel::TaskPaneViewShell::PID_SLIDE_TRANSITION);
+            GetViewFrame()->GetDispatcher()->Execute(
+                SID_TASK_PANE,
+                SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                &aMakeToolPaneVisible,
+                &aPanelId,
+                NULL);
             Cancel();
-            rReq.Ignore ();
+            rReq.Done ();
         }
         break;
 
