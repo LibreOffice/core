@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-23 10:47:51 $
+#   last change: $Author: rt $ $Date: 2004-09-20 10:38:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -134,7 +134,8 @@ LIB3OBJFILES=\
     $(SLO)$/cliplistener.obj \
     $(SLO)$/stringtransfer.obj \
     $(SLO)$/graphictools.obj \
-    $(SLO)$/imageresourceaccess.obj
+    $(SLO)$/imageresourceaccess.obj \
+    $(SLO)$/acceleratorexecute.obj
 
 EXCEPTIONSFILES=\
     $(SLO)$/productregistration.obj	\
@@ -144,7 +145,8 @@ EXCEPTIONSFILES=\
     $(SLO)$/transfer2.obj			\
     $(SLO)$/cliplistener.obj		\
     $(SLO)$/stringtransfer.obj		\
-    $(SLO)$/imagemgr.obj
+    $(SLO)$/imagemgr.obj            \
+    $(SLO)$/acceleratorexecute.obj
 
 # --- Targets -------------------------------------------------------
 
