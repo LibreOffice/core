@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexpit.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:33:47 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:04:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ protected:
                               const SvUShorts& rIndexArray ) const;
 
     static const SfxPoolItem* GetItem( const SfxItemSet &rSet,
-                                       sal_uInt32 nWhichId,
+                                       sal_uInt16 nWhichId,
                                        sal_uInt16 nFlags );
 
 public:
