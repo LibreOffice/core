@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TIndexes.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 08:51:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,11 +76,10 @@ namespace connectivity
     {
         OTableHelper*   m_pTable;
     protected:
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > createObject(const ::rtl::OUString& _rName);
+        virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
         virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
         virtual void appendObject( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > cloneObject(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDescriptor);
         virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
     public:
         OIndexesHelper(OTableHelper* _pTable,
