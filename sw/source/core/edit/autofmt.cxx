@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:20:20 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,7 +433,7 @@ void SwAutoFormat::_SetRedlineTxt( USHORT nActionId )
             break;
         }
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     else
         sTxt = String::CreateFromAscii(
                             RTL_CONSTASCII_STRINGPARAM( "Action-Text fehlt" ));
