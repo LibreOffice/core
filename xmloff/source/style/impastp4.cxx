@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastp4.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:05 $
+ *  last change: $Author: sab $ $Date: 2000-09-22 13:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,6 +343,10 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
 
                 rPropExp.exportXML( rHandler, aExpStyles[i].mpProperties->GetProperties(), rUnitConverter,
                                     rNamespaceMap, XML_EXPORT_FLAG_IGN_WS );
+
+                pAntiImpl->exportStyleContent( rHandler, nFamily,
+                        aExpStyles[i].mpProperties->GetProperties(),
+                        rUnitConverter, rNamespaceMap );
 
                 rHandler->ignorableWhitespace( msWS );
                 rHandler->endElement( sName );
