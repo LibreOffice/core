@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosdoc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 14:18:05 $
+ *  last change: $Author: kso $ $Date: 2000-10-31 10:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -736,7 +736,7 @@ SvStrings* SwGlossaries::GetNameList()
                             {
                                 do
                                 {
-//                                  OUString sId( xContentAccess->queryContentIdentfierString() );
+//                                  OUString sId( xContentAccess->queryContentIdentifierString() );
                                     // an den Gruppennamen wird der Pfad-Index angehaengt
                                     // damit spaeter richtig zugegriffen werden kann
                                     String sTitle = xRow->getString( 1 );
@@ -911,6 +911,9 @@ String  SwGlossaries::GetExtension()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/20 14:18:05  os
+    use comphelper methods
+
     Revision 1.2  2000/10/06 13:35:57  jp
     should changes: don't use IniManager
 
