@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: os $ $Date: 2001-10-16 11:10:55 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,9 @@
 #endif
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
 #endif
 
 #ifndef _DBINSDLG_HRC
@@ -1448,7 +1451,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             if( !rSh.IsEndPara() )
             {
                 rSh.SwEditShell::SplitNode();
-                rSh.SwCrsrShell::Left();
+                rSh.SwCrsrShell::Left(1,CRSR_SKIP_CHARS);
             }
 
             rSh.DoUndo( FALSE );

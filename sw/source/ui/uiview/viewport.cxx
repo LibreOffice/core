@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-12-13 16:07:02 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:48:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,20 +90,48 @@
 #include <sfx2/app.hxx>
 #endif
 
-
-#include "view.hxx"
-#include "wrtsh.hxx"
-#include "swmodule.hxx"
-#include "viewopt.hxx"
-#include "frmatr.hxx"
-#include "docsh.hxx"
-#include "cmdid.h"
-#include "edtwin.hxx"
-#include "scroll.hxx"
-#include "wview.hxx"
-#include "usrpref.hxx"
-#include "pagedesc.hxx"
-#include "workctrl.hxx"
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
+#endif
+#ifndef _FRMATR_HXX
+#include <frmatr.hxx>
+#endif
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
+#endif
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _EDTWIN_HXX
+#include <edtwin.hxx>
+#endif
+#ifndef _SCROLL_HXX
+#include <scroll.hxx>
+#endif
+#ifndef _WVIEW_HXX
+#include <wview.hxx>
+#endif
+#ifndef _USRPREF_HXX
+#include <usrpref.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx>
+#endif
+#ifndef _WORKCTRL_HXX
+#include <workctrl.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
+#endif
 
 //Das SetVisArea der DocShell darf nicht vom InnerResizePixel gerufen werden.
 //Unsere Einstellungen muessen aber stattfinden.
@@ -710,7 +738,7 @@ long SwView::PageUpCrsr( BOOL bSelect )
         {
             pWrtShell->MoveCrsr();
             pWrtShell->GotoFtnAnchor();
-            pWrtShell->Right();
+            pWrtShell->Right(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
             return 1;
         }
     }

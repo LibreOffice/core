@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtcrsr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:47 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,18 +78,37 @@
 #include <svtools/args.hxx>
 #endif
 
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _TEXTSH_HXX
+#include <textsh.hxx>
+#endif
+#ifndef _NUM_HXX
+#include <num.hxx>
+#endif
+#ifndef _BOOKMRK_HXX
+#include <bookmrk.hxx>
+#endif
+#ifndef _EDTWIN_HXX
+#include <edtwin.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
+#endif
 
-#include "view.hxx"
-#include "cmdid.h"
-#include "wrtsh.hxx"
-#include "globals.hrc"
-#include "textsh.hxx"
-#include "num.hxx"
-#include "bookmrk.hxx"
-#include "edtwin.hxx"
-#include "globals.h"
-
-
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _GLOBALS_H
+#include <globals.h>
+#endif
+#ifndef _GLOBALS_HRC
+#include <globals.hrc>
+#endif
 
 
 
@@ -101,15 +120,15 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
     USHORT nSlot = rReq.GetSlot();
     switch(nSlot)
     {
-        case FN_CHAR_LEFT_SEL:
-        case FN_CHAR_LEFT:  rSh.Left ( FN_CHAR_LEFT_SEL == nSlot, 1 ); break;
-        case FN_CHAR_RIGHT_SEL:
-        case FN_CHAR_RIGHT: rSh.Right( FN_CHAR_RIGHT_SEL == nSlot, 1 ); break;
-        case FN_LINE_UP_SEL:
-        case FN_LINE_UP:    rSh.Up   ( FN_LINE_UP_SEL == nSlot, 1 ); break;
-        case FN_LINE_DOWN_SEL:
-        case FN_LINE_DOWN:  rSh.Down ( FN_LINE_DOWN_SEL == nSlot, 1 ); break;
-        default:            ASSERT(FALSE, falscher Dispatcher); return;
+    case FN_CHAR_LEFT_SEL:
+    case FN_CHAR_LEFT:  rSh.Left( CRSR_SKIP_CELLS, FN_CHAR_LEFT_SEL == nSlot, 1, FALSE ); break;
+    case FN_CHAR_RIGHT_SEL:
+    case FN_CHAR_RIGHT: rSh.Right( CRSR_SKIP_CELLS, FN_CHAR_RIGHT_SEL == nSlot, 1, FALSE ); break;
+    case FN_LINE_UP_SEL:
+    case FN_LINE_UP:    rSh.Up   ( FN_LINE_UP_SEL == nSlot, 1 ); break;
+    case FN_LINE_DOWN_SEL:
+    case FN_LINE_DOWN:  rSh.Down ( FN_LINE_DOWN_SEL == nSlot, 1 ); break;
+    default:            ASSERT(FALSE, falscher Dispatcher); return;
     }
 }
 
@@ -319,6 +338,9 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:47  hr
+    initial import
+
     Revision 1.47  2000/09/18 16:06:07  willem.vandorp
     OpenOffice header added.
 

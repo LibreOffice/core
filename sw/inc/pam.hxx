@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-12 08:13:31 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,23 +148,12 @@ typedef SwMoveFnCollection* SwMoveFn;
 extern SwMoveFn fnMoveForward, fnMoveBackward;
 
 typedef FASTBOOL (*SwGoInDoc)( SwPaM& rPam, SwMoveFn fnMove );
-extern SwGoInDoc fnGoDoc, fnGoSection, fnGoNode, fnGoCntnt;
+extern SwGoInDoc fnGoDoc, fnGoSection, fnGoNode, fnGoCntnt, fnGoCntntCells;
 
 void _InitPam();
 
 class SwPaM : public Ring
 {
-    friend class SwTxtFrm;
-    friend FASTBOOL GoInDoc( SwPaM&, SwMoveFn );
-    friend FASTBOOL GoInNode( SwPaM&, SwMoveFn );
-    friend FASTBOOL GoInCntnt( SwPaM&, SwMoveFn );
-    friend FASTBOOL GoPrevPara( SwPaM&, SwPosPara );
-    friend FASTBOOL GoCurrPara( SwPaM&, SwPosPara );
-    friend FASTBOOL GoNextPara( SwPaM&, SwPosPara );
-    friend FASTBOOL GoPrevSection( SwPaM&, SwPosSection );
-    friend FASTBOOL GoCurrSection( SwPaM&, SwPosSection );
-    friend FASTBOOL GoNextSection( SwPaM&, SwPosSection );
-
     SwPosition aBound1;
     SwPosition aBound2;
     SwPosition *pPoint;

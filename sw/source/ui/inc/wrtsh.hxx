@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-07-12 13:10:25 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,10 +200,10 @@ public:
 typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
     FASTBOOL SimpleMove( FNSimpleMove, FASTBOOL bSelect );
 
-    FASTBOOL Left       ( FASTBOOL bSelect = FALSE, USHORT nCount = 1,
-                            BOOL bBasicCall = FALSE );
-    FASTBOOL Right      ( FASTBOOL bSelect = FALSE, USHORT nCount = 1,
-                            BOOL bBasicCall = FALSE );
+    FASTBOOL Left       ( USHORT nMode, FASTBOOL bSelect,
+                            USHORT nCount, BOOL bBasicCall );
+    FASTBOOL Right      ( USHORT nMode, FASTBOOL bSelect,
+                            USHORT nCount, BOOL bBasicCall );
     FASTBOOL Up         ( FASTBOOL bSelect = FALSE, USHORT nCount = 1,
                             BOOL bBasicCall = FALSE );
     FASTBOOL Down       ( FASTBOOL bSelect = FALSE, USHORT nCount = 1,

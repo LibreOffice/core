@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2001-12-13 15:55:25 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,9 @@
 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
 #endif
 
 #ifndef _DOCHDL_HRC
@@ -766,7 +769,7 @@ BOOL SwGlossaryHdl::Expand( const String& rShortName,
                     pWrtShell->SetAttr( aAdjustItem );
                     pWrtShell->SttPara ();
                     pWrtShell->SplitNode();
-                    pWrtShell->Left();
+                    pWrtShell->Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
                     SvxWeightItem aWeightItem ( WEIGHT_BOLD );
                     pWrtShell->Insert ( String ( RTL_CONSTASCII_USTRINGPARAM ( "The StarWriter team!" ) ) );
                     pWrtShell->SttPara ( TRUE );

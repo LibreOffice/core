@@ -2,9 +2,9 @@
  *
  *  $RCSfile: delete.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:53 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
 #endif
 
 
@@ -178,22 +181,22 @@ long SwWrtShell::DelLeft()
     BOOL bSwap = FALSE;
     if( SwCrsrShell::IsSttPara() && !SwCrsrShell::IsCrsrInTbl() )
     {
-        if( !SwCrsrShell::Left() )
+        if( !SwCrsrShell::Left(1,CRSR_SKIP_CHARS) )
             return 0;
         if( SwCrsrShell::IsCrsrInTbl() )
         {
-            SwCrsrShell::Right();
+            SwCrsrShell::Right(1,CRSR_SKIP_CHARS);
             return 0;
         }
         OpenMark();
-        SwCrsrShell::Right();
+        SwCrsrShell::Right(1,CRSR_SKIP_CHARS);
         SwCrsrShell::SwapPam();
         bSwap = TRUE;
     }
     else
     {
         OpenMark();
-        SwCrsrShell::Left();
+        SwCrsrShell::Left(1,CRSR_SKIP_CHARS);
     }
     long nRet = Delete();
     if( !nRet && bSwap )
@@ -237,10 +240,10 @@ long SwWrtShell::DelRight(BOOL bDelFrm)
 
         if( SEL_TXT & nSelection && SwCrsrShell::IsSttPara() &&
             SwCrsrShell::IsEndPara() && !IsCrsrInTbl() &&
-            SwCrsrShell::Right() )
+            SwCrsrShell::Right(1,CRSR_SKIP_CHARS) )
         {
             BOOL bDelFull = 0 != IsCrsrInTbl();
-            SwCrsrShell::Left();
+            SwCrsrShell::Left(1,CRSR_SKIP_CHARS);
 
             if( bDelFull )
             {
@@ -251,7 +254,7 @@ long SwWrtShell::DelRight(BOOL bDelFrm)
         }
 
         OpenMark();
-        SwCrsrShell::Right();
+        SwCrsrShell::Right(1,CRSR_SKIP_CELLS);
         nRet = Delete();
         CloseMark( 0 != nRet );
         break;
@@ -419,6 +422,9 @@ long SwWrtShell::DelPrvWord()
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:53  hr
+      initial import
+
       Revision 1.70  2000/09/18 16:06:26  willem.vandorp
       OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docruby.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-20 16:00:17 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
 #endif
 
 SV_IMPL_PTRARR( SwRubyList, SwRubyListEntryPtr )
@@ -409,7 +412,7 @@ BOOL SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry,
                     nWordEnd = nEnd;
             }
         }
-        pTNd->GoNext( &pPos->nContent );
+        pTNd->GoNext( &pPos->nContent, CRSR_SKIP_CHARS );
         nStart = pPos->nContent.GetIndex();
     }
 

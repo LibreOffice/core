@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-28 14:35:56 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ public:
     FASTBOOL GoNextSentence(){return GoSentence(NEXT_SENT);}
     FASTBOOL GoPrevSentence(){return GoSentence(PREV_SENT);}
 
-    FASTBOOL LeftRight( BOOL bLeft, USHORT nCnt = 1 );
+    FASTBOOL LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode );
     FASTBOOL UpDown( BOOL bUp, USHORT nCnt = 1,
                     Point* pPt = 0, long nUpDownX = 0 );
     FASTBOOL LeftRightMargin( BOOL bLeftMargin, BOOL bAPI = FALSE );
@@ -190,8 +190,10 @@ public:
     FASTBOOL SttEndDoc( BOOL bSttDoc );
     FASTBOOL GoPrevNextCell( BOOL bNext, USHORT nCnt );
 
-    FASTBOOL Left( USHORT nCnt = 1 )    { return LeftRight( TRUE, nCnt ); }
-    FASTBOOL Right( USHORT nCnt = 1 )   { return LeftRight( FALSE, nCnt ); }
+    FASTBOOL Left( USHORT nCnt, USHORT nMode )
+                                    { return LeftRight( TRUE, nCnt, nMode ); }
+    FASTBOOL Right( USHORT nCnt, USHORT nMode )
+                                    { return LeftRight( FALSE, nCnt, nMode ); }
     FASTBOOL Up( USHORT nCnt = 1 )      { return UpDown( TRUE, nCnt ); }
     FASTBOOL Down( USHORT nCnt = 1 )    { return UpDown( FALSE, nCnt ); }
     FASTBOOL LeftMargin()               { return LeftRightMargin( TRUE ); }

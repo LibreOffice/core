@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-10 11:22:09 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@
 #endif
 #ifndef _FMTFLD_HXX
 #include <fmtfld.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
 #endif
 
 
@@ -529,7 +532,7 @@ USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
                     if( nPos )
                     {
                         SwIndex aIdx( pStt->nContent );
-                        if( pTNd->GoPrevious( &aIdx ) )
+                        if( pTNd->GoPrevious( &aIdx, CRSR_SKIP_CHARS ) )
                             nPos = aIdx.GetIndex();
                     }
 

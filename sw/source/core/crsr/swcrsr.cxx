@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-29 10:57:22 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,9 @@
 #endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
 #endif
 
 #ifndef _MDIEXP_HXX
@@ -1328,7 +1331,7 @@ FASTBOOL SwCursor::GoSentence( SentenceMoveType eMoveType )
     return bRet;
 }
 
-FASTBOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt )
+FASTBOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode )
 {
     SwTableCursor* pTblCrsr = (SwTableCursor*)*this;
     if( pTblCrsr )
@@ -1338,7 +1341,8 @@ FASTBOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt )
     // kann der Cursor n-mal weiterverschoben werden ?
     SwCrsrSaveState aSave( *this );
     SwMoveFn fnMove = bLeft ? fnMoveBackward : fnMoveForward;
-    while( nCnt && Move( fnMove, fnGoCntnt ) )
+    SwGoInDoc fnGo = CRSR_SKIP_CELLS == nMode ? fnGoCntntCells : fnGoCntnt;
+    while( nCnt && Move( fnMove, fnGo ) )
         --nCnt;
     return 0 == nCnt && !IsInProtectTable( TRUE ) &&
             !IsSelOvr( SELOVER_TOGGLE | SELOVER_CHANGEPOS );

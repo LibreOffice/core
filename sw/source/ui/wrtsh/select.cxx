@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:38:57 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,9 @@
 #ifndef _SWDTFLVR_HXX
 #include <swdtflvr.hxx>
 #endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
+#endif
 
 #ifdef DEBUG
 #ifndef _PAM_HXX
@@ -150,7 +153,7 @@ BOOL SwWrtShell::SelNearestWrd()
     if( !IsInWrd() && !IsEndWrd() && !IsSttWrd() )
         PrvWrd();
     if( IsEndWrd() )
-        Left();
+        Left(CRSR_SKIP_CELLS, FALSE, 1, FALSE );
     return SelWrd();
 }
 
@@ -546,7 +549,7 @@ long SwWrtShell::ExtSelLn(const Point *pPt, BOOL )
         if( bToTop )
         {
             if( !IsEndPara() )
-                SwCrsrShell::Right();
+                SwCrsrShell::Right(1,CRSR_SKIP_CHARS);
             SwCrsrShell::RightMargin();
         }
         else
@@ -899,7 +902,7 @@ int SwWrtShell::IntelligentCut(int nSelection, BOOL bCut)
                 SwapPam();
             ClearMark();
             SetMark();
-            SwCrsrShell::Left();
+            SwCrsrShell::Left(1,CRSR_SKIP_CHARS);
             SwFEShell::Delete();
             Pop( FALSE );
         }
@@ -913,7 +916,7 @@ int SwWrtShell::IntelligentCut(int nSelection, BOOL bCut)
             if(!IsCrsrPtAtEnd()) SwapPam();
             ClearMark();
             SetMark();
-            SwCrsrShell::Right();
+            SwCrsrShell::Right(1,CRSR_SKIP_CHARS);
             SwFEShell::Delete();
             Pop( FALSE );
         }

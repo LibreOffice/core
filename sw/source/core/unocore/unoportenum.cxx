@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-01 13:52:20 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 #endif
 #ifndef _REDLINE_HXX
 #include <redline.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
@@ -484,19 +487,19 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
             switch( nAttrWhich )
             {
                 case RES_TXTATR_FIELD:
-                    pUnoCrsr->Right(1);
+                    pUnoCrsr->Right(1,CRSR_SKIP_CHARS);
                     bAttrFound = sal_True;
                     ePortionType = PORTION_FIELD;
                 break;
                 case RES_TXTATR_FLYCNT   :
-                    pUnoCrsr->Right(1);
+                    pUnoCrsr->Right(1,CRSR_SKIP_CHARS);
                     pUnoCrsr->Exchange();
                     bAttrFound = sal_True;
                     ePortionType = PORTION_FRAME;
                 break;
                 case RES_TXTATR_FTN      :
                 {
-                    pUnoCrsr->Right(1);
+                    pUnoCrsr->Right(1,CRSR_SKIP_CHARS);
                     SwXTextPortion* pPortion;
                     xRef =  pPortion = new SwXTextPortion(*pUnoCrsr, rParent, PORTION_FOOTNOTE);
                     Reference<XTextContent> xContent =
@@ -545,7 +548,7 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
                 case RES_TXTATR_REFMARK:
                     if(!pAttr->GetEnd())
                     {
-                        pUnoCrsr->Right(1);
+                        pUnoCrsr->Right(1,CRSR_SKIP_CHARS);
                         bAttrFound = sal_True;
                     }
                     lcl_InsertRefMarkPortion(
@@ -768,7 +771,7 @@ void SwXTextPortionEnumeration::CreatePortions()
         DBG_ASSERT(pUnoCrsr->Start()->nNode.GetNode().GetTxtNode() &&
             nStartPos <= pUnoCrsr->Start()->nNode.GetNode().GetTxtNode()->GetTxt().Len(),
                 "Incorrect start position"  )
-        pUnoCrsr->Right((xub_StrLen)nStartPos);
+        pUnoCrsr->Right((xub_StrLen)nStartPos,CRSR_SKIP_CHARS);
     }
     if(pUnoCrsr /*&& !bAtEnd*/)
     {
@@ -890,7 +893,7 @@ void SwXTextPortionEnumeration::CreatePortions()
                         }
                         else if(USHRT_MAX != nFirstFrameIndex)
                         {
-                            pUnoCrsr->Right(nFirstFrameIndex - nCurrentIndex);
+                            pUnoCrsr->Right(nFirstFrameIndex - nCurrentIndex,CRSR_SKIP_CHARS);
                         }
                         else
                         {
@@ -905,7 +908,7 @@ void SwXTextPortionEnumeration::CreatePortions()
                             else
                             {
                                 DBG_ASSERT(nNextIndex > nCurrentIndex, "wrong move index")
-                                pUnoCrsr->Right(nNextIndex - nCurrentIndex);
+                                pUnoCrsr->Right(nNextIndex - nCurrentIndex,CRSR_SKIP_CHARS);
                             }
                         }
                     }

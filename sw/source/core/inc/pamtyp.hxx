@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pamtyp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-22 14:09:08 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,11 +90,12 @@ FASTBOOL GoInDoc( SwPaM&, SwMoveFn);
 FASTBOOL GoInSection( SwPaM&, SwMoveFn);
 FASTBOOL GoInNode( SwPaM&, SwMoveFn);
 FASTBOOL GoInCntnt( SwPaM&, SwMoveFn);
+FASTBOOL GoInCntntCells( SwPaM&, SwMoveFn);
 const SwTxtAttr* GetFrwrdTxtHint( const SwpHints&, USHORT&, xub_StrLen );
 const SwTxtAttr* GetBkwrdTxtHint( const SwpHints&, USHORT&, xub_StrLen );
 
-FASTBOOL GoNext(SwNode* pNd, SwIndex * pIdx );
-FASTBOOL GoPrevious(SwNode* pNd, SwIndex * pIdx);
+FASTBOOL GoNext(SwNode* pNd, SwIndex * pIdx, USHORT nMode );
+FASTBOOL GoPrevious(SwNode* pNd, SwIndex * pIdx, USHORT nMode );
 SwCntntNode* GoNextNds( SwNodeIndex * pIdx, FASTBOOL );
 SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, FASTBOOL );
 
@@ -110,7 +111,7 @@ FASTBOOL GoNextSection( SwPaM&, SwPosSection);
 
 // ------------ Typedefiniton fuer Funktionen ----------------------
 
-typedef FASTBOOL (*GoNd)( SwNode*, SwIndex* );
+typedef FASTBOOL (*GoNd)( SwNode*, SwIndex*, USHORT );
 typedef SwCntntNode* (*GoNds)( SwNodeIndex*, FASTBOOL );
 typedef void (*GoDoc)( SwPosition* );
 typedef void (*GoSection)( SwPosition* );

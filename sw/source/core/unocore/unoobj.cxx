@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-28 20:16:32 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,6 +320,9 @@
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -1064,7 +1067,7 @@ void SwXTextCursor::DeleteAndInsert(const String& rText)
                     ASSERT( sal_False, "Doc->Insert(Str) failed." )
                 }
                 SwXTextCursor::SelectPam(*pUnoCrsr, sal_True);
-                    _pStartCrsr->Left(rText.Len());
+                _pStartCrsr->Left(rText.Len(), CRSR_SKIP_CHARS);
             }
         } while( (_pStartCrsr=(SwCursor*)_pStartCrsr->GetNext()) != pUnoCrsr );
         pDoc->EndUndo(UNDO_INSERT);
@@ -1158,7 +1161,7 @@ sal_Bool SwXTextCursor::goLeft(sal_Int16 nCount, sal_Bool Expand) throw( uno::Ru
     if(pUnoCrsr)
     {
         SwXTextCursor::SelectPam(*pUnoCrsr, Expand);
-        bRet = pUnoCrsr->Left( nCount);
+        bRet = pUnoCrsr->Left( nCount, CRSR_SKIP_CHARS);
     }
     else
     {
@@ -1177,7 +1180,7 @@ sal_Bool SwXTextCursor::goRight(sal_Int16 nCount, sal_Bool Expand) throw( uno::R
     if(pUnoCrsr)
     {
         SwXTextCursor::SelectPam(*pUnoCrsr, Expand);
-        bRet = pUnoCrsr->Right(nCount);
+        bRet = pUnoCrsr->Right(nCount, CRSR_SKIP_CHARS);
     }
     else
     {
@@ -1459,7 +1462,7 @@ sal_Bool SwXTextCursor::gotoNextWord(sal_Bool Expand) throw( uno::RuntimeExcepti
         //Absatzende?
         if(pUnoCrsr->GetCntntNode() &&
                 pUnoCrsr->GetPoint()->nContent == pUnoCrsr->GetCntntNode()->Len())
-                bRet = pUnoCrsr->Right();
+                bRet = pUnoCrsr->Right(1, CRSR_SKIP_CHARS);
         else
         {
             bRet = pUnoCrsr->GoNextWord();
@@ -1488,12 +1491,12 @@ sal_Bool SwXTextCursor::gotoPreviousWord(sal_Bool Expand) throw( uno::RuntimeExc
         SwXTextCursor::SelectPam(*pUnoCrsr, Expand);
         //Absatzanfang ?
         if(pUnoCrsr->GetPoint()->nContent == 0)
-            bRet = pUnoCrsr->Left();
+            bRet = pUnoCrsr->Left(1, CRSR_SKIP_CHARS);
         else
         {
             bRet = pUnoCrsr->GoPrevWord();
             if(pUnoCrsr->GetPoint()->nContent == 0)
-                pUnoCrsr->Left();
+                pUnoCrsr->Left(1, CRSR_SKIP_CHARS);
         }
     }
     else
@@ -1562,7 +1565,7 @@ sal_Bool SwXTextCursor::isStartOfSentence(void) throw( uno::RuntimeException )
         if(!bRet && !pUnoCrsr->HasMark())
         {
             SwCursor aCrsr(*pUnoCrsr->GetPoint());
-            aCrsr.LeftRight(sal_False, 1);
+            aCrsr.Right(1, CRSR_SKIP_CHARS);
             if(aCrsr.GoSentence(SwCursor::START_SENT) &&
                 aCrsr.GetPoint()->nContent == pUnoCrsr->GetPoint()->nContent)
                 bRet = sal_True;
@@ -1589,7 +1592,7 @@ sal_Bool SwXTextCursor::isEndOfSentence(void) throw( uno::RuntimeException )
         if(!bRet && !pUnoCrsr->HasMark())
         {
             SwCursor aCrsr(*pUnoCrsr->GetPoint());
-            aCrsr.LeftRight(sal_True, 1);
+            aCrsr.Left( 1, CRSR_SKIP_CHARS);
             if(aCrsr.GoSentence(SwCursor::END_SENT) && aCrsr.GetPoint()->nContent == pUnoCrsr->GetPoint()->nContent)
                 bRet = sal_True;
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldedt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 12:07:14 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,9 @@
 #ifndef _FLDEDT_HXX
 #include <fldedt.hxx>
 #endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
+#endif
 
 
 #ifndef _CMDID_H
@@ -160,7 +163,7 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw) :
         return;
 
     pSh->SetCareWin(this);
-    pSh->Right(TRUE);
+    pSh->Right(CRSR_SKIP_CHARS, TRUE, 1, FALSE );
     pSh->SwapPam();
     USHORT nGroup = aMgr.GetGroup(FALSE, pCurFld->GetTypeId(), pCurFld->GetSubType());
 
@@ -367,7 +370,7 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
 
     rMgr.GoNextPrev( bNext, pOldTyp );
     pCurFld = rMgr.GetCurFld();
-    pSh->Right(TRUE);
+    pSh->Right(CRSR_SKIP_CHARS, TRUE, 1, FALSE );
     pSh->SwapPam();
 
     USHORT nGroup = rMgr.GetGroup(FALSE, pCurFld->GetTypeId(), pCurFld->GetSubType());

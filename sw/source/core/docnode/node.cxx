@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-18 12:44:42 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,9 @@
 #endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
@@ -1189,63 +1192,77 @@ SwFmtColl *SwCntntNode::ChgFmtColl( SwFmtColl *pNewColl )
 }
 
 
-BOOL SwCntntNode::GoNext(SwIndex * pIdx) const
+BOOL SwCntntNode::GoNext(SwIndex * pIdx, USHORT nMode ) const
 {
+    BOOL bRet = TRUE;
     if( pIdx->GetIndex() < Len() )
     {
         if( !IsTxtNode() )
-        {
             (*pIdx)++;
-            return TRUE;
-        }
-
-        if( pBreakIt->xBreak.is() )
+        else
         {
             const SwTxtNode& rTNd = *GetTxtNode();
             xub_StrLen nPos = pIdx->GetIndex();
-            sal_Int32 nDone = 0;
-            nPos = pBreakIt->xBreak->nextCharacters( rTNd.GetTxt(), nPos,
-                            pBreakIt->GetLocale( rTNd.GetLang( nPos ) ),
-                            CharacterIteratorMode::SKIPCONTROLCHARACTER,
-                            1, nDone );
-            if( 1 == nDone )
+            if( pBreakIt->xBreak.is() )
             {
-                *pIdx = nPos;
-                return TRUE;
+                sal_Int32 nDone = 0;
+                sal_uInt16 nItrMode = CRSR_SKIP_CHARS == nMode
+                                    ? CharacterIteratorMode::SKIPCONTROLCHARACTER
+                                    : CharacterIteratorMode::SKIPCELL;
+                nPos = pBreakIt->xBreak->nextCharacters( rTNd.GetTxt(), nPos,
+                                pBreakIt->GetLocale( rTNd.GetLang( nPos ) ),
+                                nItrMode, 1, nDone );
+                if( 1 == nDone )
+                    *pIdx = nPos;
+                else
+                    bRet = FALSE;
             }
+            else if( nPos < rTNd.GetTxt().Len() )
+                (*pIdx)++;
+            else
+                bRet = FALSE;
         }
     }
-    return FALSE;
+    else
+        bRet = FALSE;
+    return bRet;
 }
 
 
-BOOL SwCntntNode::GoPrevious(SwIndex * pIdx) const
+BOOL SwCntntNode::GoPrevious(SwIndex * pIdx, USHORT nMode ) const
 {
+    BOOL bRet = TRUE;
     if( pIdx->GetIndex() > 0 )
     {
         if( !IsTxtNode() )
-        {
             (*pIdx)--;
-            return TRUE;
-        }
-
-        if( pBreakIt->xBreak.is() )
+        else
         {
             const SwTxtNode& rTNd = *GetTxtNode();
             xub_StrLen nPos = pIdx->GetIndex();
-            sal_Int32 nDone = 0;
-            nPos = pBreakIt->xBreak->previousCharacters( rTNd.GetTxt(), nPos,
-                            pBreakIt->GetLocale( rTNd.GetLang( nPos ) ),
-                            CharacterIteratorMode::SKIPCONTROLCHARACTER,
-                            1, nDone );
-            if( 1 == nDone )
+            if( pBreakIt->xBreak.is() )
             {
-                *pIdx = nPos;
-                return TRUE;
+                sal_Int32 nDone = 0;
+                sal_uInt16 nItrMode = CRSR_SKIP_CHARS == nMode
+                                ? CharacterIteratorMode::SKIPCONTROLCHARACTER
+                                : CharacterIteratorMode::SKIPCELL;
+                nPos = pBreakIt->xBreak->previousCharacters( rTNd.GetTxt(), nPos,
+                                pBreakIt->GetLocale( rTNd.GetLang( nPos ) ),
+                                nItrMode, 1, nDone );
+                if( 1 == nDone )
+                    *pIdx = nPos;
+                else
+                    bRet = FALSE;
             }
+            else if( nPos )
+                (*pIdx)--;
+            else
+                bRet = FALSE;
         }
     }
-    return FALSE;
+    else
+        bRet = FALSE;
+    return bRet;
 }
 
 

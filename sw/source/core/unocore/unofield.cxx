@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: os $ $Date: 2002-01-18 09:45:31 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1802,11 +1802,8 @@ void SwXTextField::attachToRange(
             if(aPam.HasMark())
                 pDoc->DeleteAndJoin(aPam);
             pDoc->Insert(aPam, aFmt);
-            SwUnoCrsr* pCrsr = pDoc->CreateUnoCrsr( *aPam.Start() );
-            pCrsr->SetMark();
-            pCrsr->Left(1);
-            pTxtAttr = pCrsr->GetNode()->GetTxtNode()->GetTxtAttr(pCrsr->GetPoint()->nContent, RES_TXTATR_FIELD);
-            delete pCrsr;
+            pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttr(
+                    aPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_FIELD);
 
             // was passiert mit dem Update der Felder ? (siehe fldmgr.cxx)
             if(pTxtAttr)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-12 08:13:15 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ struct SwPosition;
 namespace com { namespace sun { namespace star { namespace util {
     struct SearchOptions;
 } } } }
+
 
 // enum und struktur, um ueber die Doc-Position Informationen zu erfragen
 
@@ -298,7 +299,7 @@ private:
 
     void _ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing );
 
-    FASTBOOL LeftRight( BOOL, USHORT );
+    FASTBOOL LeftRight( BOOL, USHORT, USHORT );
     FASTBOOL UpDown( BOOL, USHORT );
     FASTBOOL LRMargin( BOOL, BOOL bAPI = FALSE );
     FASTBOOL IsAtLRMargin( BOOL, BOOL bAPI = FALSE ) const;
@@ -382,8 +383,10 @@ public:
     // Basiscursortravelling
     long GetUpDownX() const             { return nUpDownX; }
 
-    FASTBOOL Left( USHORT nCnt = 1 )    { return LeftRight( TRUE, nCnt ); }
-    FASTBOOL Right( USHORT nCnt = 1 )   { return LeftRight( FALSE, nCnt ); }
+    FASTBOOL Left( USHORT nCnt, USHORT nMode )
+                                { return LeftRight( TRUE, nCnt, nMode ); }
+    FASTBOOL Right( USHORT nCnt, USHORT nMode )
+                                { return LeftRight( FALSE, nCnt, nMode ); }
     FASTBOOL Up( USHORT nCnt = 1 )      { return UpDown( TRUE, nCnt ); }
     FASTBOOL Down( USHORT nCnt = 1 )    { return UpDown( FALSE, nCnt ); }
     FASTBOOL LeftMargin()               { return LRMargin( TRUE ); }

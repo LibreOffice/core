@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh4.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:53 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,12 @@
 
 #pragma hdrstop
 
-#include "wrtsh.hxx"
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
+#endif
 
 
 /*
@@ -129,7 +134,7 @@ FASTBOOL SwWrtShell::_NxtWrd()
 {
     if( IsEndPara() )               // wenn schon am Ende, dann naechsten ???
     {
-        if(!SwCrsrShell::Right())   // Document - Ende ??
+        if(!SwCrsrShell::Right(1,CRSR_SKIP_CHARS))  // Document - Ende ??
         {
             Pop( FALSE );
             return 0L;
@@ -152,7 +157,7 @@ FASTBOOL SwWrtShell::_PrvWrd()
 {
     if(IsSttPara())
     {                               // wenn schon am Anfang, dann naechsten ???
-        if(!SwCrsrShell::Left())
+        if(!SwCrsrShell::Left(1,CRSR_SKIP_CHARS))
         {                           // Document - Anfang ??
             Pop( FALSE );
             return 0;
@@ -175,7 +180,7 @@ FASTBOOL SwWrtShell::_FwdSentence()
 {
     Push();
     ClearMark();
-    if(!SwCrsrShell::Right())
+    if(!SwCrsrShell::Right(1,CRSR_SKIP_CHARS))
     {
         Pop(FALSE);
         return 0;
@@ -194,7 +199,7 @@ FASTBOOL SwWrtShell::_BwdSentence()
 {
     Push();
     ClearMark();
-    if(!SwCrsrShell::Left())
+    if(!SwCrsrShell::Left(1,CRSR_SKIP_CHARS))
     {
         Pop(FALSE);
         return 0;
@@ -217,12 +222,12 @@ FASTBOOL SwWrtShell::_FwdPara()
 {
     Push();
     ClearMark();
-    if(!SwCrsrShell::Right())
+    if(!SwCrsrShell::Right(1,CRSR_SKIP_CHARS))
     {
         Pop(FALSE);
         return 0;
     }
-    SwCrsrShell::Left();
+    SwCrsrShell::Left(1,CRSR_SKIP_CHARS);
     SwCrsrShell::MovePara(fnParaNext, fnParaStart);
 
     ClearMark();
@@ -235,12 +240,12 @@ FASTBOOL SwWrtShell::_BwdPara()
 {
     Push();
     ClearMark();
-    if(!SwCrsrShell::Left())
+    if(!SwCrsrShell::Left(1,CRSR_SKIP_CHARS))
     {
         Pop(FALSE);
         return 0;
     }
-    SwCrsrShell::Right();
+    SwCrsrShell::Right(1,CRSR_SKIP_CHARS);
     if(!IsSttOfPara())
         SttPara();
     SwCrsrShell::MovePara(fnParaPrev, fnParaStart);
@@ -252,6 +257,9 @@ FASTBOOL SwWrtShell::_BwdPara()
 /*************************************************************************
 
    $Log: not supported by cvs2svn $
+   Revision 1.1.1.1  2000/09/18 17:14:53  hr
+   initial import
+
    Revision 1.8  2000/09/18 16:06:27  willem.vandorp
    OpenOffice header added.
 

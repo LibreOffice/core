@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-25 15:37:10 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,15 @@
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
 #endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
+#endif
+#ifndef _MODOPT_HXX //autogen
+#include <modcfg.hxx>
+#endif
+#ifndef _COLUMN_HXX
+#include <column.hxx>
+#endif
 
 #ifndef _SHELLS_HRC
 #include <shells.hrc>
@@ -282,12 +291,6 @@
 #endif
 #ifndef _SWERROR_H
 #include <swerror.h>
-#endif
-#ifndef _MODOPT_HXX //autogen
-#include <modcfg.hxx>
-#endif
-#ifndef _COLUMN_HXX
-#include <column.hxx>
 #endif
 
 #define SwTextShell
@@ -649,9 +652,9 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             if(!(rSh.IsSttOfPara() && rSh.IsEndOfPara())) // kein leerer Absatz?
                 rSh.SplitNode( FALSE, FALSE ); // dann Platz schaffen
             rSh.SplitNode( FALSE, FALSE );
-            rSh.Left();
+            rSh.Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
             rSh.SetTxtFmtColl( rSh.GetTxtCollFromPool( RES_POOLCOLL_HTML_HR ));
-            rSh.Right();
+            rSh.Right(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
             bRet = TRUE;
         }
         else if(sPath.Len())
@@ -664,12 +667,12 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
             rSh.SplitNode( FALSE, FALSE );
             rSh.SplitNode( FALSE, FALSE );
-            rSh.Left();
+            rSh.Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
             rSh.SetAttr(SvxAdjustItem(SVX_ADJUST_CENTER,RES_PARATR_ADJUST ));
             if(GRFILTER_OK == InsertGraphic(sPath, aEmptyStr, TRUE, 0, 0 ))
                 bRet = TRUE;
             rSh.EnterStdMode();
-            rSh.Right();
+            rSh.Right(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
             DELETEZ(pFrmMgr);
         }
         rSh.EndAllAction();
@@ -1060,6 +1063,9 @@ void SwTextShell::InsertSymbol(const String& rChars, const String& rFontName)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.11  2001/10/25 15:37:10  ka
+    #93596#: SvxPluginFileDialog returns an error code
+
     Revision 1.10  2001/10/08 13:02:30  jp
     Task #87333#: remove unused code
 

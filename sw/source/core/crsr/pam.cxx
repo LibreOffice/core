@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-20 11:45:25 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,9 @@
 #endif
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
 #endif
 
 
@@ -370,18 +373,18 @@ FASTBOOL CheckNodesRange( const SwNodeIndex& rStt,
 }
 
 
-FASTBOOL GoNext(SwNode* pNd, SwIndex * pIdx )
+FASTBOOL GoNext(SwNode* pNd, SwIndex * pIdx, USHORT nMode )
 {
     if( pNd->IsCntntNode() )
-        return ((SwCntntNode*)pNd)->GoNext( pIdx );
+        return ((SwCntntNode*)pNd)->GoNext( pIdx, nMode );
     return FALSE;
 }
 
 
-FASTBOOL GoPrevious(SwNode* pNd, SwIndex * pIdx)
+FASTBOOL GoPrevious( SwNode* pNd, SwIndex * pIdx, USHORT nMode )
 {
     if( pNd->IsCntntNode() )
-        return ((SwCntntNode*)pNd)->GoPrevious( pIdx );
+        return ((SwCntntNode*)pNd)->GoPrevious( pIdx, nMode );
     return FALSE;
 }
 
@@ -885,7 +888,7 @@ void GoEndSection( SwPosition * pPos )
 
 FASTBOOL GoInDoc( SwPaM & rPam, SwMoveFn fnMove )
 {
-    (*fnMove->fnDoc)( rPam.pPoint );
+    (*fnMove->fnDoc)( rPam.GetPoint() );
     return TRUE;
 }
 
@@ -899,9 +902,9 @@ FASTBOOL GoInSection( SwPaM & rPam, SwMoveFn fnMove )
 
 FASTBOOL GoInNode( SwPaM & rPam, SwMoveFn fnMove )
 {
-    SwCntntNode *pNd = (*fnMove->fnNds)( &rPam.pPoint->nNode, TRUE );
+    SwCntntNode *pNd = (*fnMove->fnNds)( &rPam.GetPoint()->nNode, TRUE );
     if( pNd )
-        rPam.pPoint->nContent.Assign( pNd,
+        rPam.GetPoint()->nContent.Assign( pNd,
                         ::GetSttOrEnd( fnMove == fnMoveForward, *pNd ) );
     return 0 != pNd;
 }
@@ -909,7 +912,16 @@ FASTBOOL GoInNode( SwPaM & rPam, SwMoveFn fnMove )
 
 FASTBOOL GoInCntnt( SwPaM & rPam, SwMoveFn fnMove )
 {
-    if( (*fnMove->fnNd)( &rPam.pPoint->nNode.GetNode(), &rPam.pPoint->nContent ))
+    if( (*fnMove->fnNd)( &rPam.GetPoint()->nNode.GetNode(),
+                        &rPam.GetPoint()->nContent, CRSR_SKIP_CHARS ))
+        return TRUE;
+    return GoInNode( rPam, fnMove );
+}
+
+FASTBOOL GoInCntntCells( SwPaM & rPam, SwMoveFn fnMove )
+{
+    if( (*fnMove->fnNd)( &rPam.GetPoint()->nNode.GetNode(),
+                         &rPam.GetPoint()->nContent, CRSR_SKIP_CELLS ))
         return TRUE;
     return GoInNode( rPam, fnMove );
 }
@@ -922,8 +934,9 @@ FASTBOOL GoPrevPara( SwPaM & rPam, SwPosPara aPosPara )
     if( rPam.Move( fnMoveBackward, fnGoNode ) )
     {
         // steht immer auf einem ContentNode !
-        SwCntntNode * pNd = rPam.pPoint->nNode.GetNode().GetCntntNode();
-        rPam.pPoint->nContent.Assign( pNd,
+        SwPosition& rPos = *rPam.GetPoint();
+        SwCntntNode * pNd = rPos.nNode.GetNode().GetCntntNode();
+        rPos.nContent.Assign( pNd,
                             ::GetSttOrEnd( aPosPara == fnMoveForward, *pNd ) );
         return TRUE;
     }
@@ -933,25 +946,26 @@ FASTBOOL GoPrevPara( SwPaM & rPam, SwPosPara aPosPara )
 
 FASTBOOL GoCurrPara( SwPaM & rPam, SwPosPara aPosPara )
 {
-    SwCntntNode * pNd = rPam.pPoint->nNode.GetNode().GetCntntNode();
+    SwPosition& rPos = *rPam.GetPoint();
+    SwCntntNode * pNd = rPos.nNode.GetNode().GetCntntNode();
     if( pNd )
     {
-        xub_StrLen nOld = rPam.pPoint->nContent.GetIndex(),
+        xub_StrLen nOld = rPos.nContent.GetIndex(),
                    nNew = aPosPara == fnMoveForward ? 0 : pNd->Len();
         // stand er schon auf dem Anfang/Ende dann zum naechsten/vorherigen
         if( nOld != nNew )
         {
-            rPam.pPoint->nContent.Assign( pNd, nNew );
+            rPos.nContent.Assign( pNd, nNew );
             return TRUE;
         }
     }
     // den Node noch etwas bewegen ( auf den naechsten/vorh. CntntNode)
     if( ( aPosPara==fnParaStart && 0 != ( pNd =
-            GoPreviousNds( &rPam.pPoint->nNode, TRUE ))) ||
+            GoPreviousNds( &rPos.nNode, TRUE ))) ||
         ( aPosPara==fnParaEnd && 0 != ( pNd =
-            GoNextNds( &rPam.pPoint->nNode, TRUE ))) )
+            GoNextNds( &rPos.nNode, TRUE ))) )
     {
-        rPam.pPoint->nContent.Assign( pNd,
+        rPos.nContent.Assign( pNd,
                         ::GetSttOrEnd( aPosPara == fnMoveForward, *pNd ));
         return TRUE;
     }
@@ -964,8 +978,9 @@ FASTBOOL GoNextPara( SwPaM & rPam, SwPosPara aPosPara )
     if( rPam.Move( fnMoveForward, fnGoNode ) )
     {
         // steht immer auf einem ContentNode !
-        SwCntntNode * pNd = rPam.pPoint->nNode.GetNode().GetCntntNode();
-        rPam.pPoint->nContent.Assign( pNd,
+        SwPosition& rPos = *rPam.GetPoint();
+        SwCntntNode * pNd = rPos.nNode.GetNode().GetCntntNode();
+        rPos.nContent.Assign( pNd,
                         ::GetSttOrEnd( aPosPara == fnMoveForward, *pNd ) );
         return TRUE;
     }
@@ -976,38 +991,40 @@ FASTBOOL GoNextPara( SwPaM & rPam, SwPosPara aPosPara )
 
 FASTBOOL GoCurrSection( SwPaM & rPam, SwMoveFn fnMove )
 {
-    SwPosition aSavePos( *rPam.pPoint );        // eine Vergleichsposition
+    SwPosition& rPos = *rPam.GetPoint();
+    SwPosition aSavePos( rPos );        // eine Vergleichsposition
     SwNodes& rNds = aSavePos.nNode.GetNodes();
-    (rNds.*fnMove->fnSection)( &rPam.pPoint->nNode );
+    (rNds.*fnMove->fnSection)( &rPos.nNode );
     SwCntntNode *pNd;
-    if( 0 == ( pNd = rPam.pPoint->nNode.GetNode().GetCntntNode()) &&
-        0 == ( pNd = (*fnMove->fnNds)( &rPam.pPoint->nNode, TRUE )) )
+    if( 0 == ( pNd = rPos.nNode.GetNode().GetCntntNode()) &&
+        0 == ( pNd = (*fnMove->fnNds)( &rPos.nNode, TRUE )) )
     {
-        *rPam.pPoint = aSavePos;        // Cusror nicht veraendern
+        rPos = aSavePos;        // Cusror nicht veraendern
         return FALSE;
     }
 
-    rPam.pPoint->nContent.Assign( pNd,
+    rPos.nContent.Assign( pNd,
                         ::GetSttOrEnd( fnMove == fnMoveForward, *pNd ) );
-    return aSavePos != *rPam.pPoint;
+    return aSavePos != rPos;
 }
 
 
 FASTBOOL GoNextSection( SwPaM & rPam, SwMoveFn fnMove )
 {
-    SwPosition aSavePos( *rPam.pPoint );        // eine Vergleichsposition
+    SwPosition& rPos = *rPam.GetPoint();
+    SwPosition aSavePos( rPos );        // eine Vergleichsposition
     SwNodes& rNds = aSavePos.nNode.GetNodes();
-    rNds.GoEndOfSection( &rPam.pPoint->nNode );
+    rNds.GoEndOfSection( &rPos.nNode );
 
     // kein weiterer ContentNode vorhanden ?
     if( !GoInCntnt( rPam, fnMoveForward ) )
     {
-        *rPam.pPoint = aSavePos;        // Cusror nicht veraendern
+        rPos = aSavePos;        // Cusror nicht veraendern
         return FALSE;
     }
-    (rNds.*fnMove->fnSection)( &rPam.pPoint->nNode );
-    SwCntntNode *pNd = rPam.pPoint->nNode.GetNode().GetCntntNode();
-    rPam.pPoint->nContent.Assign( pNd,
+    (rNds.*fnMove->fnSection)( &rPos.nNode );
+    SwCntntNode *pNd = rPos.nNode.GetNode().GetCntntNode();
+    rPos.nContent.Assign( pNd,
                         ::GetSttOrEnd( fnMove == fnMoveForward, *pNd ) );
     return TRUE;
 }
@@ -1015,19 +1032,20 @@ FASTBOOL GoNextSection( SwPaM & rPam, SwMoveFn fnMove )
 
 FASTBOOL GoPrevSection( SwPaM & rPam, SwMoveFn fnMove )
 {
-    SwPosition aSavePos( *rPam.pPoint );        // eine Vergleichsposition
+    SwPosition& rPos = *rPam.GetPoint();
+    SwPosition aSavePos( rPos );        // eine Vergleichsposition
     SwNodes& rNds = aSavePos.nNode.GetNodes();
-    rNds.GoStartOfSection( &rPam.pPoint->nNode );
+    rNds.GoStartOfSection( &rPos.nNode );
 
     // kein weiterer ContentNode vorhanden ?
     if( !GoInCntnt( rPam, fnMoveBackward ))
     {
-        *rPam.pPoint = aSavePos;        // Cusror nicht veraendern
+        rPos = aSavePos;        // Cusror nicht veraendern
         return FALSE;
     }
-    (rNds.*fnMove->fnSection)( &rPam.pPoint->nNode );
-    SwCntntNode *pNd = rPam.pPoint->nNode.GetNode().GetCntntNode();
-    rPam.pPoint->nContent.Assign( pNd,
+    (rNds.*fnMove->fnSection)( &rPos.nNode );
+    SwCntntNode *pNd = rPos.nNode.GetNode().GetCntntNode();
+    rPos.nContent.Assign( pNd,
                             ::GetSttOrEnd( fnMove == fnMoveForward, *pNd ));
     return TRUE;
 }

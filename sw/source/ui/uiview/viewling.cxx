@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-18 16:34:58 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:48:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,9 @@
 #endif
 #ifndef _EDTWIN_HXX
 #include <edtwin.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
 #endif
 
 #ifndef _CMDID_H
@@ -651,7 +654,7 @@ void SwView::StartThesaurus()
                     pWrtShell->PrvWrd();
 
                 if(pWrtShell->IsEndWrd())
-                    pWrtShell->Left();
+                    pWrtShell->Left(CRSR_SKIP_CELLS, FALSE, 1, FALSE );
 
                 pWrtShell->SelWrd();
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-23 12:15:50 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,9 @@
 #ifndef _NAVIPI_HXX
 #include <navipi.hxx>
 #endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
+#endif
 
 #ifndef _CMDID_H
 #include <cmdid.h>
@@ -328,7 +331,7 @@ void SwWrtShell::ClickToField( const SwField& rFld, USHORT nFilter )
 //          case JE_FMT_TEXT:
             }
 
-            Right( TRUE );      // Feld selektieren
+            Right( CRSR_SKIP_CHARS, TRUE, 1, FALSE );       // Feld selektieren
 
             if( nSlotId )
             {

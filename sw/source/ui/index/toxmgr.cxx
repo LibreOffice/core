@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-06-29 06:25:04 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef _AUTHFLD_HXX
 #include <authfld.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
 #endif
 
 #ifndef _GLOBALS_HRC
@@ -257,7 +260,7 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
     // Bug 36207 pCurTOXMark zeigt hier in den Wald!
     if(!pCurTOXMark)
     {
-        pSh->Left();
+        pSh->Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
         pSh->GetCurTOXMarks(aCurMarks);
         SetCurTOXMark(0);
     }

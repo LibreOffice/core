@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2001-11-30 13:36:11 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,9 @@
 #ifndef _UNOTXDOC_HXX
 #include <unotxdoc.hxx>
 #endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
+#endif
 
 #ifdef OS2
 #include <vcl/sysdep.hxx>
@@ -428,7 +431,7 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
             if( rSh.IsNoNum() )
             {
                 rSh.SttCrsrMove();
-                BOOL bLeft = rSh.Left( TRUE );
+                BOOL bLeft = rSh.Left( CRSR_SKIP_CHARS, TRUE, 1, FALSE  );
                 if( bLeft )
                 {
                     // JP 28.03.96: ein Backspace im Absatz ohne Nummer wird zum Delete

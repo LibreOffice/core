@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insfnote.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:47:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 #ifndef _INSFNOTE_HXX
 #include <insfnote.hxx>
 #endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
+#endif
 
 #ifndef _MISC_HRC
 #include <misc.hrc>
@@ -129,14 +132,14 @@ void __EXPORT SwInsFootNoteDlg::Apply()
     if ( bEdit )
     {
         rSh.StartAction();
-        rSh.Left();
+        rSh.Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
         rSh.StartUndo( UNDO_START );
         SwFmtFtn aNote( aEndNoteBtn.IsChecked() );
         aNote.SetNumStr( aStr );
 
         if( rSh.SetCurFtn( aNote ) && bExtCharAvailable )
         {
-            rSh.Right(TRUE);
+            rSh.Right(CRSR_SKIP_CHARS, TRUE, 1, FALSE );
             SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
             rSh.GetAttr( aSet );
             SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
@@ -146,7 +149,7 @@ void __EXPORT SwInsFootNoteDlg::Apply()
             aSet.Put( aFont );
             rSh.SetAttr( aSet, SETATTR_DONTEXPAND );
             rSh.ResetSelect(0, FALSE);
-            rSh.Left();
+            rSh.Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
         }
         rSh.EndUndo( UNDO_END );
         rSh.EndAction();
@@ -158,7 +161,7 @@ void __EXPORT SwInsFootNoteDlg::Apply()
 
         if ( bExtCharAvailable )
         {
-            rSh.Left( TRUE );
+            rSh.Left( CRSR_SKIP_CHARS, TRUE, 1, FALSE );
             SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
             rSh.GetAttr( aSet );
             SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
@@ -349,7 +352,7 @@ void SwInsFootNoteDlg::Init()
         {
             sNumStr = aFtnNote.GetNumStr();
 
-            rSh.Right(TRUE);
+            rSh.Right(CRSR_SKIP_CHARS, TRUE, 1, FALSE );
             SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
             rSh.GetAttr( aSet );
             const SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
@@ -360,7 +363,7 @@ void SwInsFootNoteDlg::Init()
             aFont.SetName(aFontName);
             aFont.SetCharSet(eCharSet);
             bExtCharAvailable = TRUE;
-            rSh.Left();
+            rSh.Left( CRSR_SKIP_CHARS, FALSE, 1, FALSE );
         }
         bFootnote = !aFtnNote.IsEndNote();
     }
@@ -392,99 +395,8 @@ void SwInsFootNoteDlg::Init()
     aPrevBT.Enable(bPrev);
     aNextBT.Enable(bNext);
 
-    rSh.Right(TRUE);
+    rSh.Right(CRSR_SKIP_CHARS, TRUE, 1, FALSE );
 
     rSh.EndAction();
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 17:14:45  hr
-    initial import
-
-    Revision 1.46  2000/09/18 16:05:57  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.45  2000/05/10 11:53:43  os
-    Basic API removed
-
-    Revision 1.44  2000/02/11 14:56:21  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.43  1999/12/22 19:50:26  jp
-    Bug #71204#: SetCurFtn - return change state
-
-    Revision 1.42  1998/04/02 15:17:46  OM
-    Fussnoten: Traveling u.a.
-
-
-      Rev 1.41   02 Apr 1998 17:17:46   OM
-   Fussnoten: Traveling u.a.
-
-      Rev 1.40   26 Feb 1998 19:01:10   MA
-   #47622# richtig initialisieren
-
-      Rev 1.39   09 Feb 1998 09:55:12   OM
-   #46894# Letzten Mode merken
-
-      Rev 1.38   12 Dec 1997 14:46:04   MA
-   undo chgftn jetzt in der core
-
-      Rev 1.37   12 Dec 1997 11:04:16   TJ
-   include
-
-      Rev 1.36   10 Dec 1997 13:08:56   MA
-   weiteres fuer Fuss-/Endnoten
-
-      Rev 1.35   24 Nov 1997 16:47:44   MA
-   includes
-
-      Rev 1.34   03 Nov 1997 13:22:42   MA
-   precomp entfernt
-
-      Rev 1.33   15 Aug 1997 12:19:34   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.32   07 Apr 1997 16:08:26   MH
-   chg: header
-
-      Rev 1.31   11 Nov 1996 11:05:44   MA
-   ResMgr
-
-      Rev 1.30   28 Aug 1996 14:12:10   OS
-   includes
-
-      Rev 1.29   17 Jul 1996 14:09:04   JP
-   SS von GetCurFtn geaendert
-
-      Rev 1.28   06 Feb 1996 15:21:08   JP
-   Link Umstellung 305
-
-      Rev 1.27   24 Nov 1995 16:58:44   OM
-   PCH->PRECOMPILED
-
-      Rev 1.26   08 Nov 1995 13:31:42   JP
-   Umstellung zur 301: Change -> Set
-
-      Rev 1.25   24 Oct 1995 18:19:22   MA
-   chg: AutoCheck bei Edit
-
-      Rev 1.24   23 Oct 1995 17:28:00   OS
-   Insert/EditFootnote recordable
-
-      Rev 1.23   12 Sep 1995 17:29:32   OM
-   Helpbutton eingefuegt
-
-      Rev 1.22   30 Aug 1995 14:00:46   MA
-   fix: __EXPORT'iert
-
-      Rev 1.21   24 Aug 1995 14:33:22   MA
-   swstddlg -> svxstandarddialog
-
-      Rev 1.20   21 Jun 1995 16:17:32   OS
-   Max. Fussnotenlaenge auf 10 begrenzt
-
-------------------------------------------------------------------------*/
-
 

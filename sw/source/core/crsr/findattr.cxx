@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findattr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-02 15:55:43 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,9 @@
 #endif
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
 #endif
 
 using namespace com::sun::star;
@@ -1348,7 +1351,8 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
             {
                 BOOL bCheckRegion = TRUE;
                 SwPosition* pPos = aSrchPam.GetPoint();
-                if( !(*fnMove->fnNd)( &pPos->nNode.GetNode(), &pPos->nContent ))
+                if( !(*fnMove->fnNd)( &pPos->nNode.GetNode(),
+                                        &pPos->nContent, CRSR_SKIP_CHARS ))
                 {
                     if( (*fnMove->fnNds)( &pPos->nNode, FALSE ))
                     {

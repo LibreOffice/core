@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unorefmk.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-06 08:34:24 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,20 +192,19 @@ void SwXReferenceMark::InsertRefMark(SwPaM& rPam, SwDoc* pDoc)
     sal_Bool bMark = *rPam.GetPoint() != *rPam.GetMark();
     SwXTextCursor::SetCrsrAttr(rPam, aSet);
 
-    if(bMark && *rPam.GetPoint() > *rPam.GetMark())
+    if( bMark && *rPam.GetPoint() > *rPam.GetMark())
         rPam.Exchange();
-    SwUnoCrsr* pCrsr = pDoc->CreateUnoCrsr( *rPam.Start() );
-    if(!bMark)
-    {
-        pCrsr->SetMark();
-        pCrsr->Left(1);
-    }
-    pTxtAttr = pCrsr->GetNode()->GetTxtNode()->GetTxtAttr(pCrsr->GetPoint()->nContent, RES_TXTATR_REFMARK);
-    delete pCrsr;
+
+    if( bMark )
+        pTxtAttr = rPam.GetNode()->GetTxtNode()->GetTxtAttr(
+                rPam.GetPoint()->nContent, RES_TXTATR_REFMARK );
+    else
+        pTxtAttr = rPam.GetNode()->GetTxtNode()->GetTxtAttr(
+                rPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_REFMARK );
+
     if(pTxtAttr)
-    {
         pMark = &pTxtAttr->GetRefMark();
-    }
+
     pDoc->GetUnoCallBack()->Add(this);
 }
 
@@ -295,21 +294,12 @@ void SwXReferenceMark::dispose(void) throw( uno::RuntimeException )
                 &pTxtMark->GetTxtNode().GetNodes() == &pDoc->GetNodes())
             {
                 SwTxtNode& rTxtNode = (SwTxtNode&)pTxtMark->GetTxtNode();
-                SwPaM* pPam  = pTxtMark->GetEnd() ?
-                                new SwPaM( rTxtNode, *pTxtMark->GetEnd(),
-                                    rTxtNode, *pTxtMark->GetStart()) :
-                                new SwPaM(  rTxtNode, *pTxtMark->GetStart());
+                xub_StrLen nStt = *pTxtMark->GetStart(),
+                           nEnd = pTxtMark->GetEnd() ? *pTxtMark->GetEnd()
+                                                     : nStt + 1;
 
-                if(pPam->HasMark())
-                    pDoc->DeleteAndJoin(*pPam);
-                else
-                {
-                    SwCursor aCrsr(*pPam->Start());
-                    aCrsr.SetMark();
-                    aCrsr.LeftRight(sal_False, 1);
-                    pDoc->DeleteAndJoin(aCrsr);
-                }
-                delete pPam;
+                SwPaM aPam( rTxtNode, nStt, rTxtNode, nEnd );
+                pDoc->DeleteAndJoin( aPam );
             }
         }
     }
@@ -370,25 +360,16 @@ void SwXReferenceMark::setName(const OUString& Name_) throw( uno::RuntimeExcepti
                 &pTxtMark->GetTxtNode().GetNodes() == &pTempDoc->GetNodes())
             {
                 SwTxtNode& rTxtNode = (SwTxtNode&)pTxtMark->GetTxtNode();
-                SwPaM* pPam  = pTxtMark->GetEnd() ?
-                                new SwPaM( rTxtNode, *pTxtMark->GetEnd(),
-                                    rTxtNode, *pTxtMark->GetStart()) :
-                                new SwPaM(  rTxtNode, *pTxtMark->GetStart());
+                xub_StrLen nStt = *pTxtMark->GetStart(),
+                           nEnd = pTxtMark->GetEnd() ? *pTxtMark->GetEnd()
+                                                     : nStt + 1;
 
-                //kill the old reference mark
-                if(pPam->HasMark())
-                    pTempDoc->DeleteAndJoin(*pPam);
-                else
-                {
-                    SwCursor aCrsr(*pPam->Start());
-                    aCrsr.SetMark();
-                    aCrsr.LeftRight(sal_False, 1);
-                    pDoc->DeleteAndJoin(aCrsr);
-                }
+                SwPaM aPam( rTxtNode, nStt, rTxtNode, nEnd );
+                pDoc->DeleteAndJoin( aPam );
+
                 sMarkName = sNewName;
                 //create a new one
-                InsertRefMark(*pPam, pTempDoc);
-                delete pPam;
+                InsertRefMark( aPam, pTempDoc );
                 pDoc = pTempDoc;
             }
         }
@@ -497,6 +478,9 @@ void SwXReferenceMark::removeVetoableChangeListener(
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/11/06 08:34:24  jp
+    Bug #93914#: optimize the modify calls
+
     Revision 1.2  2001/01/12 16:12:45  os
     new: Redline container
 

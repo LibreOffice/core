@@ -2,9 +2,9 @@
  *
  *  $RCSfile: move.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:53 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
 #endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
+#endif
 
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
@@ -78,8 +81,8 @@
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
 #endif
-#ifndef _SFXVIEWFRM_HXX
-#include <sfx2/viewfrm.hxx>
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
 #endif
 
 /*  Immer:
@@ -152,7 +155,8 @@ FASTBOOL SwWrtShell::SimpleMove( FNSimpleMove FnSimpleMove, FASTBOOL bSelect )
 }
 
 
-FASTBOOL SwWrtShell::Left( FASTBOOL bSelect, USHORT nCount, BOOL bBasicCall )
+FASTBOOL SwWrtShell::Left( USHORT nMode, FASTBOOL bSelect,
+                            USHORT nCount, BOOL bBasicCall )
 {
     if ( !bSelect && !bBasicCall && IsCrsrReadonly() )
     {
@@ -164,13 +168,14 @@ FASTBOOL SwWrtShell::Left( FASTBOOL bSelect, USHORT nCount, BOOL bBasicCall )
     else
     {
         ShellMoveCrsr aTmp( this, bSelect );
-        return SwCrsrShell::Left( nCount );
+        return SwCrsrShell::Left( nCount, nMode );
     }
 }
 
 
 
-FASTBOOL SwWrtShell::Right( FASTBOOL bSelect, USHORT nCount, BOOL bBasicCall )
+FASTBOOL SwWrtShell::Right( USHORT nMode, FASTBOOL bSelect,
+                            USHORT nCount, BOOL bBasicCall )
 {
     if ( !bSelect && !bBasicCall && IsCrsrReadonly() )
     {
@@ -183,7 +188,7 @@ FASTBOOL SwWrtShell::Right( FASTBOOL bSelect, USHORT nCount, BOOL bBasicCall )
     else
     {
         ShellMoveCrsr aTmp( this, bSelect );
-        return SwCrsrShell::Right( nCount );
+        return SwCrsrShell::Right( nCount, nMode );
     }
 }
 
@@ -721,6 +726,9 @@ FASTBOOL SwWrtShell::SelectTxtAttr( USHORT nWhich, const SwTxtAttr* pAttr )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:53  hr
+      initial import
+
       Revision 1.100  2000/09/18 16:06:26  willem.vandorp
       OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appenv.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 15:58:32 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,30 +124,75 @@
 #ifndef _SWWAIT_HXX
 #include <swwait.hxx>
 #endif
-
-#include "paratr.hxx"
-#include "swmodule.hxx"
-#include "wrtsh.hxx"
-#include "view.hxx"
-#include "docsh.hxx"
-#include "frmatr.hxx"
-#include "fldbas.hxx"
-#include "swundo.hxx"
-#include "cmdid.h"
-#include "globals.hrc"
-#include "doc.hxx"
-#include "dbmgr.hxx"
-#include "envlop.hxx"
-#include "fmtcol.hxx"
-#include "frmmgr.hxx"
-#include "fldmgr.hxx"
-#include "pagedesc.hxx"
-#include "poolfmt.hxx"
-#include "expfld.hxx"
-#include "app.hrc"
-#include "poolfmt.hrc"
+#ifndef _PARATR_HXX
+#include <paratr.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
+#endif
+#ifndef _FRMATR_HXX
+#include <frmatr.hxx>
+#endif
+#ifndef _FLDBAS_HXX
+#include <fldbas.hxx>
+#endif
+#ifndef _SWUNDO_HXX
+#include <swundo.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _DBMGR_HXX
+#include <dbmgr.hxx>
+#endif
+#ifndef _ENVLOP_HXX
+#include <envlop.hxx>
+#endif
+#ifndef _FMTCOL_HXX
+#include <fmtcol.hxx>
+#endif
+#ifndef _FRMMGR_HXX
+#include <frmmgr.hxx>
+#endif
+#ifndef _FLDMGR_HXX
+#include <fldmgr.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx>
+#endif
+#ifndef _POOLFMT_HXX
+#include <poolfmt.hxx>
+#endif
+#ifndef _EXPFLD_HXX
+#include <expfld.hxx>
+#endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
+#endif
+
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _GLOBALS_HRC
+#include <globals.hrc>
+#endif
+#ifndef _APP_HRC
+#include <app.hrc>
+#endif
+#ifndef _POOLFMT_HRC
+#include <poolfmt.hrc>
 #endif
 
 #define ENV_NEWDOC      RET_OK
@@ -376,7 +421,7 @@ static USHORT nTitleNo = 0;
             if ( pSh->IsCrsrInTbl() )
             {
                 pSh->SplitNode();
-                pSh->Right();
+                pSh->Right( CRSR_SKIP_CHARS, FALSE, 1, FALSE );
                 SfxItemSet aSet( pSh->GetAttrPool(), RES_BREAK, RES_BREAK, 0 );
                 aSet.Put( SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE) );
                 pSh->SetTblAttr( aSet );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 10:46:12 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,8 +377,8 @@ public:
     void MakeStartIndex( SwIndex * pIdx )   { pIdx->Assign( this, 0 ); }
     void MakeEndIndex( SwIndex * pIdx )     { pIdx->Assign( this, Len() ); }
 
-    BOOL GoNext(SwIndex *) const;
-    BOOL GoPrevious(SwIndex *) const;
+    BOOL GoNext(SwIndex *, USHORT nMode ) const;
+    BOOL GoPrevious(SwIndex *, USHORT nMode ) const;
 
     SwCntntFrm *GetFrm( const Point* pDocPos = 0,
                         const SwPosition *pPos = 0,

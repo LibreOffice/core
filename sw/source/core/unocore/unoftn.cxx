@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoftn.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-20 14:42:32 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,11 +319,9 @@ void SwXFootnote::attachToRange(const uno::Reference< text::XTextRange > & xText
         aSet.Put(aFootNote);
         SwXTextCursor::SetCrsrAttr(aPam, aSet);
 
-        SwUnoCrsr* pCrsr = pDoc->CreateUnoCrsr( *aPam.Start() );
-        pCrsr->SetMark();
-        pCrsr->Left(1);
-        pTxtAttr = pCrsr->GetNode()->GetTxtNode()->GetTxtAttr(pCrsr->GetPoint()->nContent, RES_TXTATR_FTN);
-        delete pCrsr;
+        pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttr(
+                    aPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_FTN );
+
         if(pTxtAttr)
         {
             const SwFmtFtn& rFtn = pTxtAttr->GetFtn();
@@ -378,12 +376,9 @@ void SwXFootnote::dispose(void) throw( uno::RuntimeException )
         const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
         DBG_ASSERT(pTxtFtn, "kein TextNode?")
         SwTxtNode& rTxtNode = (SwTxtNode&)pTxtFtn->GetTxtNode();
-
-        SwPaM aPam(rTxtNode, *pTxtFtn->GetStart());
-        SwCursor aCrsr(*aPam.Start());
-        aCrsr.SetMark();
-        aCrsr.LeftRight(sal_False, 1);
-        GetDoc()->DeleteAndJoin(aCrsr);
+        xub_StrLen nPos = *pTxtFtn->GetStart();
+        SwPaM aPam(rTxtNode, nPos, rTxtNode, nPos+1 );
+        GetDoc()->DeleteAndJoin( aPam );
     }
     else
         throw uno::RuntimeException();
@@ -641,6 +636,9 @@ void SwXFootnote::removeVetoableChangeListener( const OUString& PropertyName,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.13  2001/11/20 14:42:32  vg
+    #65293#
+
     Revision 1.12  2001/11/06 08:34:24  jp
     Bug #93914#: optimize the modify calls
 

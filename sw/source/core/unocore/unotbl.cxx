@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-28 20:26:29 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,15 @@
 #pragma hdrstop
 
 #define ITEMID_BOXINFO SID_ATTR_BORDER_INNER
+
+#include <float.h> // for DBL_MIN
+
+#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
+#endif
+#ifndef _CMDID_H
 #include <cmdid.h>
+#endif
 #ifndef _UNOTBL_HXX
 #include <unotbl.hxx>
 #endif
@@ -232,9 +239,11 @@
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
-#include <float.h> // for DBL_MIN
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -1619,7 +1628,7 @@ sal_Bool SwXTextTableCursor::goLeft(sal_Int16 Count, sal_Bool Expand) throw( uno
     {
         SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
         lcl_CrsrSelect( pTblCrsr, Expand );
-        bRet = pTblCrsr->LeftRight(sal_True, Count);
+        bRet = pTblCrsr->Left( Count,CRSR_SKIP_CHARS);
     }
     return bRet;
 }
@@ -1635,7 +1644,7 @@ sal_Bool SwXTextTableCursor::goRight(sal_Int16 Count, sal_Bool Expand) throw( un
     {
         SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
         lcl_CrsrSelect( pTblCrsr, Expand );
-        bRet = pTblCrsr->LeftRight(sal_False, Count);
+        bRet = pTblCrsr->Right( Count, CRSR_SKIP_CHARS);
     }
     return bRet;
 }

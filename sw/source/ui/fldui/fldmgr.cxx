@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-08-30 14:46:42 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,9 @@
 #endif
 #ifndef _FLDMGR_HXX
 #include <fldmgr.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
 #endif
 
 #ifndef _FLDUI_HRC
@@ -1576,9 +1579,9 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
 
     if(bTbl)
     {
-        pCurShell->Left();
+        pCurShell->Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
         pCurShell->UpdateFlds(*pFld);
-        pCurShell->Right();
+        pCurShell->Right(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
     }
     else if( bPageVar )
         ((SwRefPageGetFieldType*)pCurShell->GetFldType( 0, RES_REFPAGEGETFLD ))->UpdateFlds();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2001-09-07 12:31:30 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,6 +326,9 @@
 #endif
 #ifndef _DFLYOBJ_HXX
 #include <dflyobj.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -1063,10 +1066,10 @@ uno::Any SwXParagraphEnumeration::nextElement(void)
 
         if( bFirstParagraph || bInTable || pUnoCrsr->MovePara(fnParaNext, fnParaStart))
         {
-            sal_Int32 nFirstContent = bFirstParagraph ? nFirstParaStart : -1;
-            sal_Int32 nLastContent = nEndIndex ==  pUnoCrsr->Start()->nNode.GetIndex() ? nLastParaEnd : -1;
-            bFirstParagraph = sal_False;
             SwPosition* pStart = pUnoCrsr->Start();
+            sal_Int32 nFirstContent = bFirstParagraph ? nFirstParaStart : -1;
+            sal_Int32 nLastContent = nEndIndex ==  pStart->nNode.GetIndex() ? nLastParaEnd : -1;
+            bFirstParagraph = sal_False;
             //steht man nun in einer Tabelle, oder in einem einfachen Absatz?
 
             SwTableNode* pTblNode = pUnoCrsr->GetNode()->FindTableNode();
@@ -1333,7 +1336,7 @@ void    SwXTextRange::DeleteAndInsert(const String& rText) throw( uno::RuntimeEx
                 ASSERT( sal_False, "Doc->Insert(Str) failed." )
             }
             SwXTextCursor::SelectPam(aNewCrsr, sal_True);
-            aNewCrsr.Left(rText.Len());
+            aNewCrsr.Left(rText.Len(), CRSR_SKIP_CHARS);
         }
         _CreateNewBookmark(aNewCrsr);
         pDoc->EndUndo(UNDO_INSERT);
@@ -2273,7 +2276,7 @@ void SwXTextCursor::SetString(SwUnoCrsr& rUnoCrsr, const OUString& rString)
             ASSERT( sal_False, "Doc->Insert(Str) failed." )
         }
         SwXTextCursor::SelectPam(rUnoCrsr, sal_True);
-        rUnoCrsr.Left(nTxtLen);
+        rUnoCrsr.Left(nTxtLen, CRSR_SKIP_CHARS);
     }
     pDoc->EndUndo(UNDO_INSERT);
 }
@@ -2354,9 +2357,9 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(const SwUnoCrsr& rUnoCrsr,
                 do
                 {
                     FillFrame(*pUnoCrsr);
-                    pUnoCrsr->Right();
+                    pUnoCrsr->Right(1, CRSR_SKIP_CHARS);
                 }
-                while(*pUnoCrsr->Start() < *pUnoCrsr->End());
+                while(*pUnoCrsr->GetPoint() < *pUnoCrsr->GetMark());
             }
         }
         FillFrame(*pUnoCrsr);

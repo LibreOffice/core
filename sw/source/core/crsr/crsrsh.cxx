@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-06 14:09:20 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,13 +425,13 @@ void SwCrsrShell::EndCrsrMove( const BOOL bIdleEnd )
 #endif
 
 
-FASTBOOL SwCrsrShell::LeftRight( BOOL bLeft, USHORT nCnt )
+FASTBOOL SwCrsrShell::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode )
 {
     if( IsTableMode() )
         return bLeft ? GoPrevCell() : GoNextCell();
 
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
-    FASTBOOL bRet = pCurCrsr->LeftRight( bLeft, nCnt );
+    FASTBOOL bRet = pCurCrsr->LeftRight( bLeft, nCnt, nMode );
     if( bRet )
         UpdateCrsr();
     return bRet;
