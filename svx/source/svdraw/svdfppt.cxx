@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-05 12:00:59 $
+ *  last change: $Author: cl $ $Date: 2002-04-25 10:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,8 @@
 #include <bulitem.hxx>
 #include "polysc3d.hxx"
 #include "extrud3d.hxx"
+#include "writingmodeitem.hxx"
+
 #ifndef _EEITEMID_HXX
 #include "eeitemid.hxx"
 #endif
@@ -1367,7 +1369,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             }
 
 
-            aSet.Put( SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, bVerticalText != sal_False ) );
+            aSet.Put( SvxWritingModeItem( bVerticalText ? com::sun::star::text::WritingMode_TB_RL : com::sun::star::text::WritingMode_LR_TB ) );
 
              aSet.Put( SdrTextAutoGrowWidthItem( bAutoGrowWidth ) );
             aSet.Put( SdrTextAutoGrowHeightItem( bAutoGrowHeight ) );
