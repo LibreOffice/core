@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuoltext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:32:41 $
+ *  last change: $Author: obo $ $Date: 2005-01-28 16:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,36 +333,11 @@ BOOL FuOutlineText::KeyInput(const KeyEvent& rKEvt)
     {
         pWindow->GrabFocus();
 
-        SdPage* pCurrentPage = pOutlineViewShell->GetActualPage();
         bReturn = pOutlineView->GetViewByWindow(pWindow)->PostKeyEvent(rKEvt);
 
         if (bReturn)
         {
-            // Attributierung der akt. Textstelle kann jetzt anders sein
-            pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
-
-            bool bUpdatePreview = true;
-            switch (rKEvt.GetKeyCode().GetCode())
-            {
-                // When just the cursor has been moved the preview
-                // only changes when it moved to entries of another
-                // page.  To prevent unnecessary updates we check this
-                // here.  This is an early rejection test, so missing
-                // a key is not a problem.
-                case KEY_UP:
-                case KEY_DOWN:
-                case KEY_LEFT:
-                case KEY_RIGHT:
-                case KEY_HOME:
-                case KEY_END:
-                case KEY_PAGEUP:
-                case KEY_PAGEDOWN:
-                    bUpdatePreview =
-                        (pCurrentPage != pOutlineViewShell->GetActualPage());
-            }
-            if (bUpdatePreview)
-                pOutlineViewShell->UpdatePreview (
-                    pOutlineViewShell->GetActualPage());
+            UpdateForKeyPress (rKEvt);
         }
         else
         {
@@ -372,6 +347,42 @@ BOOL FuOutlineText::KeyInput(const KeyEvent& rKEvt)
 
     return (bReturn);
 }
+
+
+
+
+void FuOutlineText::UpdateForKeyPress (const KeyEvent& rEvent)
+{
+    // Attributes at the current text position may have changed.
+    pViewShell->GetViewFrame()->GetBindings().Invalidate(SidArray);
+
+    bool bUpdatePreview = true;
+    switch (rEvent.GetKeyCode().GetCode())
+    {
+        // When just the cursor has been moved the preview only changes when
+        // it moved to entries of another page.  To prevent unnecessary
+        // updates we check this here.  This is an early rejection test, so
+        // missing a key is not a problem.
+        case KEY_UP:
+        case KEY_DOWN:
+        case KEY_LEFT:
+        case KEY_RIGHT:
+        case KEY_HOME:
+        case KEY_END:
+        case KEY_PAGEUP:
+        case KEY_PAGEDOWN:
+        {
+            SdPage* pCurrentPage = pOutlineViewShell->GetActualPage();
+            bUpdatePreview = (pCurrentPage != pOutlineViewShell->GetActualPage());
+        }
+        break;
+    }
+    if (bUpdatePreview)
+        pOutlineViewShell->UpdatePreview (pOutlineViewShell->GetActualPage());
+}
+
+
+
 
 /*************************************************************************
 |*
