@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dfoster $ $Date: 2002-11-14 11:36:46 $
+#   last change: $Author: dfoster $ $Date: 2002-11-14 15:02:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@
   <property name="bindir" value="${out}/bin"/>
   <property name="sfversion" value="0.1"/>
   <property name="installerjarname" value="SFrameworkInstall.jar"/>
+  <property environment="env"/>
 
   <!-- ==================== classpath setting ============================ -->
   <path id="idlclasspath">
@@ -115,24 +116,56 @@
     <copy file="${prj}/examples/java/MemoryUsageParcel.xml" tofile="${out}/class/examples/MemoryUsage/parcel-descriptor.xml"/>
   </target>
 
-  <!-- ===================== Prepare Directories ========================= -->
-  <target name="prepare" depends="buildexamples">
-    <mkdir dir="${installerclasses}"/>
-    <mkdir dir="${jardir}"/>
-    <property environment="env"/>
+  <!-- ===================== Build UNO package ========================= -->
+  <target name="buildunopackage">
+    <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
+    <mkdir dir="${out}/class/sframework"/>
+    <copy file="${prj}/../offapi/wntmsci9${proext}/ucr/offapi.db"
+        tofile="${out}/class/sframework/ScriptFramework.rdb"/>
+    <copy file="${out}/class/ScriptRuntimeForJava.jar"
+        todir="${out}/class/sframework/"/>
+    <mkdir dir="${out}/class/sframework/solaris_sparc.plt"/>
+    <copy todir="${out}/class/sframework/solaris_sparc.plt">
+        <fileset dir="${prj}/unxsols3${proext}/lib/">
+            <include name="**/lib*.so"/>
+        </fileset>
+    </copy>
+    <mkdir dir="${out}/class/sframework/linux_x86.plt"/>
+    <copy todir="${out}/class/sframework/linux_x86.plt">
+        <fileset dir="${prj}/unxlngi4${proext}/lib/">
+            <include name="**/lib*.so"/>
+        </fileset>
+    </copy>
+    <mkdir dir="${out}/class/sframework/windows.plt"/>
+    <copy todir="${out}/class/sframework/windows.plt">
+        <fileset dir="${prj}/wntmsci9${proext}/bin/">
+            <include name="**/*.dll"/>
+        </fileset>
+    </copy>
+    <mkdir dir="${out}/class/sframework/skip_registration"/>
+    <copy file="${prj}/../unoil/wntmsci9${proext}/class/unoil.jar"
+        todir="${out}/class/sframework/skip_registration"/>
+    <zip destfile="${out}/class/sframeworkinstall/sframework/ooscriptframe.zip"
+        basedir="${out}/class/sframework">
+    </zip>
+  </target>
+  <!-- ===================== Package regsingletons ========================= -->
+  <target name="packagesingletons">
     <mkdir dir="${out}/class/sframeworkinstall/windows"/>
     <copy file="${env.SOLARVER}/wntmsci9${proext}/bin${env.UPDMINOREXT}/regsingleton.exe" todir="${out}/class/sframeworkinstall/windows"/>
     <mkdir dir="${out}/class/sframeworkinstall/linux_x86"/>
     <copy file="${env.SOLARVER}/unxlngi4${proext}/bin${env.UPDMINOREXT}/regsingleton" todir="${out}/class/sframeworkinstall/linux_x86"/>
     <mkdir dir="${out}/class/sframeworkinstall/solaris_sparc"/>
     <copy file="${env.SOLARVER}/unxsols3${proext}/bin${env.UPDMINOREXT}/regsingleton" todir="${out}/class/sframeworkinstall/solaris_sparc"/>
+  </target>
+  <!-- ===================== Package scripts, dislogs & examples =========== -->
+  <target name="packagedialogsandexamples" depends="buildexamples">
     <mkdir dir="${out}/class/sframeworkinstall/bindingdialog"/>
     <copy todir="${out}/class/sframeworkinstall/bindingdialog">
         <fileset dir="bindings/">
             <include name="**/*.x*"/>
         </fileset>
     </copy>
-    <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
     <mkdir dir="${out}/class/sframeworkinstall/examples"/>
     <copy todir="${out}/class/sframeworkinstall/examples">
         <fileset dir="${out}/class/examples/"/>
@@ -140,14 +173,15 @@
   </target>
 
   <!-- ======================== Compile Classes ========================== -->
-  <target name="compile" depends="prepare">
+  <target name="compileinstaller">
+    <mkdir dir="${installerclasses}"/>
     <javac srcdir="installer/" destdir="${installerclasses}"
               includes="**/*.java" classpathref="idlclasspath"
        debug="${debug}" optimize="${optimize}" deprecation="on"/>
   </target>
 
   <!-- ===================== jar ========================= -->
-  <target name="jar" depends="compile">
+  <target name="jar" depends="compileinstaller,packagedialogsandexamples,packagesingletons,buildunopackage">
     <jar jarfile="${jardir}/${installerjarname}"
          basedir="${installerclasses}/..">
         <manifest>
