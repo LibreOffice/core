@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:52:58 $
+ *  last change: $Author: cl $ $Date: 2001-03-27 22:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,10 @@
 
 #ifndef SVX_LIGHT
 #include <docshell.hxx>
+#endif
+
+#ifndef _SD_UNODOCUMENTSETTINGS_HXX_
+#include <UnoDocumentSettings.hxx>
 #endif
 
 #include <drawdoc.hxx>
@@ -669,6 +673,11 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
     if( aServiceSpecifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_Service_ImageMapPolygonObject) ) )
     {
         return SvUnoImageMapPolygonObject_createInstance( ImplGetSupportedMacroItems() );
+    }
+
+    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.Settings") ) )
+    {
+        return sd::DocumentSettings_createInstance( this );
     }
 
     uno::Reference< uno::XInterface > xRet;

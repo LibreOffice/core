@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-20 20:08:37 $
+ *  last change: $Author: cl $ $Date: 2001-03-27 22:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,24 +153,29 @@ XML_STRING( sXML_metaStreamName, "meta.xml");
 XML_STRING( sXML_styleStreamName, "styles.xml" );
 XML_STRING( sXML_contentStreamName, "content.xml" );
 XML_STRING( sXML_oldContentStreamName, "Content.xml" );
+XML_STRING( sXML_settingsStreamName, "settings.xml" );
 
 XML_STRING( sXML_export_impress_meta_service, "com.sun.star.comp.Impress.XMLMetaExporter" );
 XML_STRING( sXML_export_impress_styles_service, "com.sun.star.comp.Impress.XMLStylesExporter" );
 XML_STRING( sXML_export_impress_content_service, "com.sun.star.comp.Impress.XMLContentExporter" );
+XML_STRING( sXML_export_impress_settings_service, "com.sun.star.comp.Impress.XMLSettingsExporter" );
 
 XML_STRING( sXML_export_draw_meta_service, "com.sun.star.comp.Draw.XMLMetaExporter" );
 XML_STRING( sXML_export_draw_styles_service, "com.sun.star.comp.Draw.XMLStylesExporter" );
 XML_STRING( sXML_export_draw_content_service, "com.sun.star.comp.Draw.XMLContentExporter" );
+XML_STRING( sXML_export_draw_settings_service, "com.sun.star.comp.Draw.XMLSettingsExporter" );
 
 XML_STRING( sXML_import_impress_service, "com.sun.star.comp.Impress.XMLImporter" );
 XML_STRING( sXML_import_impress_meta_service, "com.sun.star.comp.Impress.XMLMetaImporter" );
 XML_STRING( sXML_import_impress_styles_service, "com.sun.star.comp.Impress.XMLStylesImporter" );
 XML_STRING( sXML_import_impress_content_service, "com.sun.star.comp.Impress.XMLContentImporter" );
+XML_STRING( sXML_import_impress_settings_service, "com.sun.star.comp.Impress.XMLSettingsImporter" );
 
 XML_STRING( sXML_import_draw_service, "com.sun.star.comp.Draw.XMLImporter" );
 XML_STRING( sXML_import_draw_meta_service, "com.sun.star.comp.Draw.XMLMetaImporter" );
 XML_STRING( sXML_import_draw_styles_service, "com.sun.star.comp.Draw.XMLStylesImporter" );
 XML_STRING( sXML_import_draw_content_service, "com.sun.star.comp.Draw.XMLContentImporter" );
+XML_STRING( sXML_import_draw_settings_service, "com.sun.star.comp.Draw.XMLSettingsImporter" );
 
 struct XML_SERVICEMAP
 {
@@ -273,8 +278,7 @@ sal_Bool SdXMLFilter::Import()
 
             uno::Reference< lang::XComponent > xComponent( mxModel, uno::UNO_QUERY );
 
-            XML_SERVICEMAP aServices[4];
-
+            XML_SERVICEMAP aServices[5];
             {
                 int i = 0;
                 // old format?
@@ -294,6 +298,8 @@ sal_Bool SdXMLFilter::Import()
                     aServices[i  ].mpService = IsDraw() ? sXML_import_draw_content_service : sXML_import_impress_content_service;
                     aServices[i++].mpStream  = sXML_contentStreamName;
 
+                    aServices[i  ].mpService = IsDraw() ? sXML_import_draw_settings_service : sXML_import_impress_settings_service;
+                    aServices[i++].mpStream  = sXML_settingsStreamName;
                 }
 
                 aServices[i].mpService = NULL;
@@ -505,7 +511,7 @@ sal_Bool SdXMLFilter::Export()
 
             uno::Reference< lang::XComponent > xComponent( mxModel, uno::UNO_QUERY );
 
-            XML_SERVICEMAP aServices[4];
+            XML_SERVICEMAP aServices[5];
             aServices[0].mpService = IsDraw() ? sXML_export_draw_meta_service : sXML_export_impress_meta_service;
             aServices[0].mpStream  = sXML_metaStreamName;
 
@@ -515,8 +521,11 @@ sal_Bool SdXMLFilter::Export()
             aServices[2].mpService = IsDraw() ? sXML_export_draw_content_service : sXML_export_impress_content_service;
             aServices[2].mpStream  = sXML_contentStreamName;
 
-            aServices[3].mpService = NULL;
-            aServices[3].mpStream  = NULL;
+            aServices[3].mpService = IsDraw() ? sXML_export_draw_settings_service : sXML_export_impress_settings_service;
+            aServices[3].mpStream  = sXML_settingsStreamName;
+
+            aServices[4].mpService = NULL;
+            aServices[4].mpStream  = NULL;
 
             XML_SERVICEMAP* pServices = aServices;
 
