@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:38:52 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,9 @@
 #include <svtools/miscopt.hxx>
 #endif
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "tbxctrl.hxx"
 #include "mnumgr.hxx"
@@ -198,10 +200,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::drafts::com::sun::star::frame;
 using namespace ::drafts::com::sun::star::ui;
-
-//--------------------------------------------------------------------
-
-static USHORT nLastId_Impl = SID_NEWDOCDIRECT;
 
 //====================================================================
 
