@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-11-09 11:01:39 $
+ *  last change: $Author: os $ $Date: 2000-11-20 14:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ using namespace ::rtl;
     if((rUnoCrsr).HasReadonlySel()) \
         throw uno::RuntimeException();
 
+const sal_Char cInvalidObject[] = "this object is invalid";
 /******************************************************************
  * SwXText
  ******************************************************************/
@@ -423,7 +424,11 @@ void SwXText::insertTextContent(const uno::Reference< XTextRange > & xRange,
     // erstmal testen, ob der Range an der richtigen Stelle ist und dann
     // am Sw-Content attachToRange aufrufen
     if(!GetDoc())
-        throw uno::RuntimeException();
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U(cInvalidObject);
+        throw aRuntime;
+    }
     if(xRange.is() && xContent.is())
     {
         SwUnoInternalPaM aPam(*GetDoc());
@@ -624,12 +629,19 @@ void SwXText::insertTextContent(const uno::Reference< XTextRange > & xRange,
         }
         else
         {
-            throw IllegalArgumentException();
+            IllegalArgumentException aIllegal;
+            aIllegal.Message = C2U("first parameter invalid");
+            throw aIllegal;
         }
     }
     else
     {
-        throw IllegalArgumentException();
+        IllegalArgumentException aIllegal;
+        if(!xRange.is())
+            aIllegal.Message = C2U("first parameter invalid;");
+        if(!xContent.is())
+            aIllegal.Message += C2U("second parameter invalid");
+        throw aIllegal;
     }
 
 }
@@ -643,7 +655,11 @@ void SwXText::insertTextContentBefore(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!GetDoc())
-        throw RuntimeException();
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U(cInvalidObject);
+        throw aRuntime;
+    }
 
     SwXParagraph* pPara = SwXParagraph::GetImplementation(xNewContent);
     if(!pPara || !pPara->IsDescriptor() || !xSuccessor.is())
@@ -755,7 +771,11 @@ void SwXText::removeTextContentBefore(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!GetDoc())
-        throw RuntimeException();
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U(cInvalidObject);
+        throw aRuntime;
+    }
 
     sal_Bool bRet = FALSE;
     SwXTextSection* pXSection = SwXTextSection::GetImplementation( xSuccessor );
@@ -800,7 +820,11 @@ void SwXText::removeTextContentAfter(const Reference< XTextContent>& xPredecesso
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!GetDoc())
-        throw RuntimeException();
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U(cInvalidObject);
+        throw aRuntime;
+    }
 
     sal_Bool bRet = FALSE;
     SwXTextSection* pXSection = SwXTextSection::GetImplementation( xPredecessor );
@@ -846,7 +870,11 @@ void SwXText::removeTextContent(const uno::Reference< XTextContent > & xContent)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!xContent.is())
-        throw uno::RuntimeException();
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U("first parameter invalid");
+        throw aRuntime;
+    }
     else
         xContent->dispose();
 }
@@ -870,7 +898,9 @@ uno::Reference< XTextRange >  SwXText::getStart(void) throw( uno::RuntimeExcepti
     uno::Reference< XTextCursor >  xRef = createCursor();
     if(!xRef.is())
     {
-        throw uno::RuntimeException();
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U(cInvalidObject);
+        throw aRuntime;
     }
     xRef->gotoStart(sal_False);
     uno::Reference< XTextRange >  xRet(xRef, uno::UNO_QUERY);
@@ -885,7 +915,9 @@ uno::Reference< XTextRange >  SwXText::getEnd(void) throw( uno::RuntimeException
     uno::Reference< XTextCursor >  xRef = createCursor();
     if(!xRef.is())
     {
-        throw uno::RuntimeException();
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U(cInvalidObject);
+        throw aRuntime;
     }
     else
         xRef->gotoEnd(sal_False);
@@ -902,7 +934,9 @@ OUString SwXText::getString(void) throw( uno::RuntimeException )
     uno::Reference< XTextCursor >  xRet = createCursor();
     if(!xRet.is())
     {
-        throw uno::RuntimeException();
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U(cInvalidObject);
+        throw aRuntime;
     }
     else
     {
@@ -919,7 +953,9 @@ void SwXText::setString(const OUString& aString) throw( uno::RuntimeException )
     uno::Reference< XTextCursor >  xRet = createCursor();
     if(!xRet.is())
     {
-        throw uno::RuntimeException();
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U(cInvalidObject);
+        throw aRuntime;
     }
     else
     {
@@ -1250,7 +1286,11 @@ uno::Reference< XTextCursor >  SwXBodyText::createTextCursor(void) throw( uno::R
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< XTextCursor >  aRef = CreateTextCursor(sal_False);
     if(!aRef.is())
-        throw uno::RuntimeException();
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U(cInvalidObject);
+        throw aRuntime;
+    }
     return aRef;
 }
 /*-- 10.12.98 11:17:29---------------------------------------------------
@@ -1261,8 +1301,14 @@ uno::Reference< XTextCursor >  SwXBodyText::createTextCursorByRange(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< XTextCursor >  aRef;
+    if(!IsValid())
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U(cInvalidObject);
+        throw aRuntime;
+    }
     SwUnoInternalPaM aPam(*GetDoc());
-    if(IsValid() && SwXTextRange::XTextRangeToSwPaM(aPam, aTextPosition))
+    if(SwXTextRange::XTextRangeToSwPaM(aPam, aTextPosition))
     {
         SwNode& rNode = GetDoc()->GetNodes().GetEndOfContent();
 
@@ -1298,7 +1344,11 @@ uno::Reference< container::XEnumeration >  SwXBodyText::createEnumeration(void)
         aRef = new SwXParagraphEnumeration(this, pUnoCrsr, CURSOR_BODY);
     }
     else
-        throw uno::RuntimeException();
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U(cInvalidObject);
+        throw aRuntime;
+    }
     return aRef;
 
 }
@@ -1318,7 +1368,11 @@ sal_Bool SwXBodyText::hasElements(void) throw( uno::RuntimeException )
     if(IsValid())
         return sal_True;
     else
-        throw uno::RuntimeException();
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U(cInvalidObject);
+        throw aRuntime;
+    }
     return sal_False;
 }
 /******************************************************************
@@ -1448,7 +1502,11 @@ uno::Reference< XTextCursor >  SwXHeadFootText::createTextCursor(void) throw( un
         xRet =  (XWordCursor*)pCrsr;
     }
     else
-        throw uno::RuntimeException();
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U(cInvalidObject);
+        throw aRuntime;
+    }
     return xRet;
 }
 /*-- 11.12.98 10:14:50---------------------------------------------------
@@ -1497,7 +1555,11 @@ uno::Reference< container::XEnumeration >  SwXHeadFootText::createEnumeration(vo
         aRef = new SwXParagraphEnumeration(this, pUnoCrsr, bIsHeader ? CURSOR_HEADER : CURSOR_FOOTER);
     }
     else
-        throw RuntimeException();
+    {
+        RuntimeException aRuntime;
+        aRuntime.Message = C2U(cInvalidObject);
+        throw aRuntime;
+    }
 
     return aRef;
 }
