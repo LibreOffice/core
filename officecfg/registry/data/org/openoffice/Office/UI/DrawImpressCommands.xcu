@@ -33,6 +33,9 @@
                     <value xml:lang="zh-CN">填色多边形</value>
                     <value xml:lang="pt">Polígono, preenchido</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ColorView" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -63,6 +66,9 @@
                     <value xml:lang="hi">काला और सफेद दृश्य</value>
                     <value xml:lang="zh-CN">黑白视图</value>
                     <value xml:lang="pt">Ver a preto e branco</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:RenamePage" oor:op="replace">
@@ -157,6 +163,9 @@
                     <value xml:lang="zh-CN">放映演示文稿(~W)</value>
                     <value xml:lang="pt">Apresentação no ~ecrã</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:RehearseTimings" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -187,6 +196,9 @@
                     <value xml:lang="hi">~समय पर बयान करों</value>
                     <value xml:lang="zh-CN">演示文稿附加放映时间(~R)</value>
                     <value xml:lang="pt">~Apresentação cronometrada</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:Dia" oor:op="replace">
@@ -219,6 +231,9 @@
                     <value xml:lang="zh-CN">转换幻灯片</value>
                     <value xml:lang="pt">Transição de diapositivos</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:HideSlide" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -249,6 +264,9 @@
                     <value xml:lang="hi">स्लइड ~दिखाओ/छिपाओ</value>
                     <value xml:lang="zh-CN">显示/隐入幻灯片(~S)</value>
                     <value xml:lang="pt">Mostrar ~diapositivo</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:TextAttributes" oor:op="replace">
@@ -343,6 +361,9 @@
                     <value xml:lang="zh-CN">文字对准框</value>
                     <value xml:lang="pt">Ajustar texto à moldura</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:VerticalTextFitToSizeTool" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -373,6 +394,9 @@
                     <value xml:lang="hi">फ्रेम के योग्य लंबरूप टेक्स्ट्</value>
                     <value xml:lang="zh-CN">直式文字和框对齐</value>
                     <value xml:lang="pt">Ajustar texto vertical à moldura</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:Objects3DToolbox" oor:op="replace">
@@ -405,6 +429,9 @@
                     <value xml:lang="zh-CN">3 维对象</value>
                     <value xml:lang="pt">Objectos 3D</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:Cube" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -435,6 +462,9 @@
                     <value xml:lang="hi">घन</value>
                     <value xml:lang="zh-CN">立方体</value>
                     <value xml:lang="pt">Cubo</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:Sphere" oor:op="replace">
@@ -467,6 +497,9 @@
                     <value xml:lang="zh-CN">球体</value>
                     <value xml:lang="pt">Esfera</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:Cylinder" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -497,6 +530,9 @@
                     <value xml:lang="hi">वर्तुलाकार</value>
                     <value xml:lang="zh-CN">圆柱体</value>
                     <value xml:lang="pt">Cilindro</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:Cone" oor:op="replace">
@@ -529,6 +565,9 @@
                     <value xml:lang="zh-CN">圆锥体</value>
                     <value xml:lang="pt">Cone</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:Cyramid" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -559,6 +598,9 @@
                     <value xml:lang="hi">शुण्डाकार स्तंभ</value>
                     <value xml:lang="zh-CN">棱锥体</value>
                     <value xml:lang="pt">Pirâmide</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:GlueEditMode" oor:op="replace">
@@ -591,6 +633,9 @@
                     <value xml:lang="zh-CN">接点(~G)</value>
                     <value xml:lang="pt">Glue Points</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:GlueInsertPoint" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -622,6 +667,9 @@
                     <value xml:lang="zh-CN">插入粘结点</value>
                     <value xml:lang="pt">Inserir ponto de colagem</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:GluePercent" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -652,6 +700,9 @@
                     <value xml:lang="hi">ग्लू बिन्दु सम्बन्धित</value>
                     <value xml:lang="zh-CN">相对的粘结点位置</value>
                     <value xml:lang="pt">Posição de colagem relativa</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:GlueEscapeDirection" oor:op="replace">
@@ -715,6 +766,9 @@
                     <value xml:lang="zh-CN">粘结点水平居中</value>
                     <value xml:lang="pt">Centrar ponto de colagem na horizontal</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:GlueHorzAlignLeft" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -745,6 +799,9 @@
                     <value xml:lang="hi">ग्लू बिन्दु समतल बायाँ</value>
                     <value xml:lang="zh-CN">粘结点水平左向对齐</value>
                     <value xml:lang="pt">Ponto de colagem à esquerda na horizontal</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:GlueHorzAlignRight" oor:op="replace">
@@ -777,6 +834,9 @@
                     <value xml:lang="zh-CN">粘结点水平右向对齐</value>
                     <value xml:lang="pt">Ponto de colagem à direita na horizontal</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:GlueVertAlignCenter" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -807,6 +867,9 @@
                     <value xml:lang="hi">ग्लू बिन्दु लंब मध्य</value>
                     <value xml:lang="zh-CN">粘结点垂直居中</value>
                     <value xml:lang="pt">Centrar ponto de colagem na vertical</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:GlueVertAlignTop" oor:op="replace">
@@ -839,6 +902,9 @@
                     <value xml:lang="zh-CN">垂直上方的粘结点</value>
                     <value xml:lang="pt">Ponto de colagem na vertical em cima</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:GlueVertAlignBottom" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -869,6 +935,9 @@
                     <value xml:lang="hi">ग्लू बिन्दु लंब नीचे</value>
                     <value xml:lang="zh-CN">垂直向下的粘结点</value>
                     <value xml:lang="pt">Ponto de colagem na vertical em baixo</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:Shell3D" oor:op="replace">
@@ -901,6 +970,9 @@
                     <value xml:lang="zh-CN">球壳</value>
                     <value xml:lang="pt">Casca</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:Torus" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -931,6 +1003,9 @@
                     <value xml:lang="hi">टोरस्</value>
                     <value xml:lang="zh-CN">圆环面</value>
                     <value xml:lang="pt">Touro</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:HalfSphere" oor:op="replace">
@@ -963,6 +1038,9 @@
                     <value xml:lang="zh-CN">半球</value>
                     <value xml:lang="pt">Semi-círculo</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:GlueEscapeDirectionLeft" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -993,6 +1071,9 @@
                     <value xml:lang="hi">बायाँ ओर से निर्गम करो</value>
                     <value xml:lang="zh-CN">退出方向 向左</value>
                     <value xml:lang="pt">Direcção de saída à esquerda</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:GlueEscapeDirectionRight" oor:op="replace">
@@ -1025,6 +1106,9 @@
                     <value xml:lang="zh-CN">退出方向 向右</value>
                     <value xml:lang="pt">Direcção de saída à direita</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:GlueEscapeDirectionTop" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -1055,6 +1139,9 @@
                     <value xml:lang="hi">ऊपर की दिशा से निर्गम करो</value>
                     <value xml:lang="zh-CN">退出方向 向上</value>
                     <value xml:lang="pt">Direcção de saída para cima</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:GlueEscapeDirectionBottom" oor:op="replace">
@@ -1087,6 +1174,9 @@
                     <value xml:lang="zh-CN">退出方向 向下</value>
                     <value xml:lang="pt">Direcção de saída em baixo</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:InsertToolbox" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -1117,6 +1207,9 @@
                     <value xml:lang="hi">जोड़ो</value>
                     <value xml:lang="zh-CN">插入</value>
                     <value xml:lang="pt">Inserir</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:Morphing" oor:op="replace">
@@ -1242,6 +1335,9 @@
                     <value xml:lang="zh-CN">显示坐标线(~S)</value>
                     <value xml:lang="pt">~Guias vísiveis</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:HelplinesFront" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -1304,6 +1400,9 @@
                     <value xml:lang="zh-CN">在对象之前(~O)</value>
                     <value xml:lang="pt">~Frente ao objecto</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:PreviewWindow" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -1365,6 +1464,9 @@
                     <value xml:lang="hi">~प्रभाव</value>
                     <value xml:lang="zh-CN">效果(~E)</value>
                     <value xml:lang="pt">E~feitos</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:SlideChangeWindow" oor:op="replace">
@@ -1490,6 +1592,9 @@
                     <value xml:lang="zh-CN">连字符(~H)</value>
                     <value xml:lang="pt">Divisão ~silábica</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:NewRouting" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -1552,6 +1657,9 @@
                     <value xml:lang="zh-CN">复制页面(~U)</value>
                     <value xml:lang="pt">~Duplicar página</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ExpandPage" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -1582,6 +1690,9 @@
                     <value xml:lang="hi">~स्लइड को विस्तार करना</value>
                     <value xml:lang="zh-CN">展开幻灯片(~X)</value>
                     <value xml:lang="pt">E~xpandir página</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:SummaryPage" oor:op="replace">
@@ -1645,6 +1756,9 @@
                     <value xml:lang="zh-CN">退出所有的分组</value>
                     <value xml:lang="pt">Sair de todos os grupos</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ParaspaceIncrease" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -1676,6 +1790,9 @@
                     <value xml:lang="zh-CN">扩大段落间隔</value>
                     <value xml:lang="pt">Aumentar espaçamento</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ParaspaceDecrease" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -1706,6 +1823,9 @@
                     <value xml:lang="hi">अंतर घटाओ</value>
                     <value xml:lang="zh-CN">缩小段落间隔</value>
                     <value xml:lang="pt">Diminuir espaçamento</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:SlideMasterPage" oor:op="replace">
@@ -2110,6 +2230,9 @@
                     <value xml:lang="zh-CN">作者(~A)</value>
                     <value xml:lang="pt">Au~tor</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:CustomShowDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -2358,6 +2481,9 @@
                     <value xml:lang="zh-CN">变成 3 维(~D)</value>
                     <value xml:lang="pt">Em ~3D</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ConvertInto3DLatheFast" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -2388,6 +2514,9 @@
                     <value xml:lang="hi">3D ~घुमाव वस्तु में</value>
                     <value xml:lang="zh-CN">变成 3 维旋转体(~R)</value>
                     <value xml:lang="pt">Objecto de rotação 3~D</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ConvertIntoBitmap" oor:op="replace">
@@ -2699,6 +2828,9 @@
                     <value xml:lang="zh-CN">变成 3 维旋转体</value>
                     <value xml:lang="pt">Em corpo de rotação 3D</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:DrawingMode" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -2885,6 +3017,9 @@
                     <value xml:lang="zh-CN">幻灯片...</value>
                     <value xml:lang="pt">~Página...</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ImportFromFile" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -2915,6 +3050,9 @@
                     <value xml:lang="hi">~फाइल...</value>
                     <value xml:lang="zh-CN">文件(~F)...</value>
                     <value xml:lang="pt">~Ficheiro...</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ZoomPanning" oor:op="replace">
@@ -2947,6 +3085,9 @@
                     <value xml:lang="zh-CN">移动</value>
                     <value xml:lang="pt">Mover</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:Bullet" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -2977,6 +3118,9 @@
                     <value xml:lang="hi">~विशेष अक्षर...</value>
                     <value xml:lang="zh-CN">特殊字符(~P)...</value>
                     <value xml:lang="pt">Caracteres es~peciais...</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:PixelMode" oor:op="replace">
@@ -3039,6 +3183,9 @@
                     <value xml:lang="hi">क्रम में रखो</value>
                     <value xml:lang="zh-CN">排序</value>
                     <value xml:lang="pt">Disposição</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:Combine" oor:op="replace">
@@ -3133,6 +3280,9 @@
                     <value xml:lang="zh-CN">连接符</value>
                     <value xml:lang="pt">Conector</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:Forward" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -3164,6 +3314,9 @@
                     <value xml:lang="zh-CN">上移一层</value>
                     <value xml:lang="pt">Trazer para a ~frente</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:Backward" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -3194,6 +3347,9 @@
                     <value xml:lang="hi">~पीछे की ओर भेजो</value>
                     <value xml:lang="zh-CN">下移一层(~W)</value>
                     <value xml:lang="pt">Enviar mais ~para trás</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:MirrorVert" oor:op="replace">
@@ -3288,6 +3444,9 @@
                     <value xml:lang="zh-CN">变成曲线(~C)</value>
                     <value xml:lang="pt">Em c~urva</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ChangePolygon" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -3318,6 +3477,9 @@
                     <value xml:lang="hi">~बहुभुज में</value>
                     <value xml:lang="zh-CN">变成多边形(~P)</value>
                     <value xml:lang="pt">Em ~polígono</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:CapturePoint" oor:op="replace">
@@ -3443,6 +3605,9 @@
                     <value xml:lang="zh-CN">更改版式...</value>
                     <value xml:lang="pt">Modificar ~configuração de página...</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ModifyLayer" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -3567,6 +3732,9 @@
                     <value xml:lang="zh-CN">定量线</value>
                     <value xml:lang="pt">Dimensões da linha</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:MasterPage" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -3629,6 +3797,9 @@
                     <value xml:lang="zh-CN">幻灯片效果</value>
                     <value xml:lang="pt">Efeito Diapositivo</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:DiaSpeed" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -3659,6 +3830,9 @@
                     <value xml:lang="hi">परिवर्तन गति</value>
                     <value xml:lang="zh-CN">速度</value>
                     <value xml:lang="pt">Velocidade</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:DiaAuto" oor:op="replace">
@@ -3691,6 +3865,9 @@
                     <value xml:lang="zh-CN">自动转换</value>
                     <value xml:lang="pt">Transição automática</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:DiaTime" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -3721,6 +3898,9 @@
                     <value xml:lang="hi">समय</value>
                     <value xml:lang="zh-CN">时间</value>
                     <value xml:lang="pt">Tempo</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:Connector" oor:op="replace">
@@ -3753,6 +3933,9 @@
                     <value xml:lang="zh-CN">连接符</value>
                     <value xml:lang="pt">Conector</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:AnimationMode" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -3783,6 +3966,9 @@
                     <value xml:lang="hi">प्रभाव स्वीकृत</value>
                     <value xml:lang="zh-CN">动画模式</value>
                     <value xml:lang="pt">Activar efeitos</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ActionMode" oor:op="replace">
@@ -3815,6 +4001,9 @@
                     <value xml:lang="zh-CN">允许交互式</value>
                     <value xml:lang="pt">Permitir Interacção</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:AnimationObjects" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -3845,6 +4034,9 @@
                     <value xml:lang="hi">~हूलास</value>
                     <value xml:lang="zh-CN">动画(~A)</value>
                     <value xml:lang="pt">~Animação</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:AnimationEffects" oor:op="replace">
@@ -3877,6 +4069,9 @@
                     <value xml:lang="zh-CN">交互式(~I)...</value>
                     <value xml:lang="pt">~Interacção...</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:PresentationLayout" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -3907,6 +4102,9 @@
                     <value xml:lang="hi">~स्लइड डिसैन...</value>
                     <value xml:lang="zh-CN">幻灯片设计...</value>
                     <value xml:lang="pt">~Estilo de página...</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:NotesMode" oor:op="replace">
@@ -4156,6 +4354,9 @@
                     <value xml:lang="zh-CN">设定为圆形(透视)</value>
                     <value xml:lang="pt">Colocar em círculo (perspectiva)</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:CrookSlant" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -4186,6 +4387,9 @@
                     <value xml:lang="hi">वृत्त केलिए सेट्ट करो (तिरछा)</value>
                     <value xml:lang="zh-CN">设定为圆形(倾斜)</value>
                     <value xml:lang="pt">Colocar em círculo (inclinar)</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:CrookStretch" oor:op="replace">
@@ -4311,6 +4515,9 @@
                     <value xml:lang="zh-CN">效果</value>
                     <value xml:lang="pt">Efeitos</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:InteractiveTransparence" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -4341,6 +4548,9 @@
                     <value xml:lang="hi">पारदर्शकता</value>
                     <value xml:lang="zh-CN">透明</value>
                     <value xml:lang="pt">Transparência</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:InteractiveGradient" oor:op="replace">
@@ -4373,6 +4583,9 @@
                     <value xml:lang="zh-CN">彩色图案</value>
                     <value xml:lang="pt">Gradação</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:Shear" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -4403,6 +4616,9 @@
                     <value xml:lang="hi">रूप बिगाडना</value>
                     <value xml:lang="zh-CN">扭曲变形</value>
                     <value xml:lang="pt">Distorcer</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:BehindObject" oor:op="replace">
@@ -4435,6 +4651,9 @@
                     <value xml:lang="zh-CN">在对象之后(~H)</value>
                     <value xml:lang="pt">~Atrás do objecto</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ReverseOrder" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -4465,6 +4684,9 @@
                     <value xml:lang="hi">~उलटना</value>
                     <value xml:lang="zh-CN">相反(~R)</value>
                     <value xml:lang="pt">~Inverter</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ConnectorArrowStart" oor:op="replace">
@@ -4497,6 +4719,9 @@
                     <value xml:lang="zh-CN">首端为箭头的连接符</value>
                     <value xml:lang="pt">Conector com seta no início</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ConnectorArrowEnd" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -4527,6 +4752,9 @@
                     <value xml:lang="hi">कनेक्टर तीर सहित अंत</value>
                     <value xml:lang="zh-CN">尾端为箭头的连接符</value>
                     <value xml:lang="pt">Conector com seta no fim</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ConnectorArrows" oor:op="replace">
@@ -4559,6 +4787,9 @@
                     <value xml:lang="zh-CN">两端为箭头的连接符</value>
                     <value xml:lang="pt">Conector com setas</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ConnectorCircleStart" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -4589,6 +4820,9 @@
                     <value xml:lang="hi">कनेक्टर वृत्त सहित प्रारंभ</value>
                     <value xml:lang="zh-CN">首端为圆形的连接符</value>
                     <value xml:lang="pt">Conector com círculo no início</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ConnectorCircleEnd" oor:op="replace">
@@ -4621,6 +4855,9 @@
                     <value xml:lang="zh-CN">尾端为圆形的连接符</value>
                     <value xml:lang="pt">Conector com círculo no fim</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ConnectorCircles" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -4651,6 +4888,9 @@
                     <value xml:lang="hi">वृत्त सहित कनेक्टर</value>
                     <value xml:lang="zh-CN">两端为圆形的连接符</value>
                     <value xml:lang="pt">Conector com círculos</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:TextToolbox" oor:op="replace">
@@ -4683,6 +4923,9 @@
                     <value xml:lang="zh-CN">文字</value>
                     <value xml:lang="pt">Texto</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ConnectorLine" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -4713,6 +4956,9 @@
                     <value xml:lang="hi">सीधा कनेक्टर</value>
                     <value xml:lang="zh-CN">直线连接符</value>
                     <value xml:lang="pt">Conector recto</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:RectangleToolbox" oor:op="replace">
@@ -4745,6 +4991,9 @@
                     <value xml:lang="zh-CN">矩形</value>
                     <value xml:lang="pt">Rectângulo</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ConnectorLineArrowStart" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -4775,6 +5024,9 @@
                     <value xml:lang="hi">सीधा कनेक्टर तीर सहित प्रारंभ</value>
                     <value xml:lang="zh-CN">首端为箭头的直线连接符</value>
                     <value xml:lang="pt">Conector recto com seta no início</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:EllipseToolbox" oor:op="replace">
@@ -4807,6 +5059,9 @@
                     <value xml:lang="zh-CN">椭圆</value>
                     <value xml:lang="pt">Elipse</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ConnectorLineArrowEnd" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -4837,6 +5092,9 @@
                     <value xml:lang="hi">सीधा कनेक्टर तीर सहित अंत</value>
                     <value xml:lang="zh-CN">尾端为箭头的直线连接符</value>
                     <value xml:lang="pt">Conector recto com seta no fim</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:LineToolbox" oor:op="replace">
@@ -4869,6 +5127,9 @@
                     <value xml:lang="zh-CN">曲线</value>
                     <value xml:lang="pt">Curva</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ConnectorLineArrows" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -4899,6 +5160,9 @@
                     <value xml:lang="hi">सीधा कनेक्टर तीरों के सहित</value>
                     <value xml:lang="zh-CN">两端为箭头的直线连接符</value>
                     <value xml:lang="pt">Conector recto com setas</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ConnectorLineCircleStart" oor:op="replace">
@@ -4931,6 +5195,9 @@
                     <value xml:lang="zh-CN">首端为圆形的直线连接符</value>
                     <value xml:lang="pt">Conector recto com círculo no início</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ConnectorLineCircleEnd" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -4961,6 +5228,9 @@
                     <value xml:lang="hi">सीधा कनेक्टर वृत्त सहित अंत</value>
                     <value xml:lang="zh-CN">尾端为圆形的直线连接符</value>
                     <value xml:lang="pt">Conector recto com círculo no fim</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ConnectorLineCircles" oor:op="replace">
@@ -4993,6 +5263,9 @@
                     <value xml:lang="zh-CN">两端为圆形的直线连接符</value>
                     <value xml:lang="pt">Conector recto com círculos</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ConnectorCurve" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -5023,6 +5296,9 @@
                     <value xml:lang="hi">वक्राकार कनेक्टर</value>
                     <value xml:lang="zh-CN">曲线连接符</value>
                     <value xml:lang="pt">Conector curvilíneo</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ConnectorCurveArrowStart" oor:op="replace">
@@ -5055,6 +5331,9 @@
                     <value xml:lang="zh-CN">首端为箭头的曲线连接符</value>
                     <value xml:lang="pt">Conector curvilíneo com seta no início</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ConnectorCurveArrowEnd" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -5085,6 +5364,9 @@
                     <value xml:lang="hi">वक्राकार कनेक्टर तीर सहित अंत</value>
                     <value xml:lang="zh-CN">尾端为箭头的曲线连接符</value>
                     <value xml:lang="pt">Conector curvilíneo com seta no fim</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ConnectorCurveArrows" oor:op="replace">
@@ -5117,6 +5399,9 @@
                     <value xml:lang="zh-CN">两端为箭头的曲线连接符</value>
                     <value xml:lang="pt">Conector curvilíneo com setas</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ConnectorCurveCircleStart" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -5147,6 +5432,9 @@
                     <value xml:lang="hi">वक्राकार कनेक्टर वृत्त सहित प्रारंभ</value>
                     <value xml:lang="zh-CN">首端为圆形的曲线连接符</value>
                     <value xml:lang="pt">Conector curvilíneo com círculo no início</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ConnectorCurveCircleEnd" oor:op="replace">
@@ -5179,6 +5467,9 @@
                     <value xml:lang="zh-CN">尾端为圆形的曲线连接符</value>
                     <value xml:lang="pt">Conector curvilíneo com círculo no fim</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ConnectorCurveCircles" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -5209,6 +5500,9 @@
                     <value xml:lang="hi">वक्राकार कनेक्टर वृत्तों सहित</value>
                     <value xml:lang="zh-CN">两端为圆形的曲线连接符</value>
                     <value xml:lang="pt">Conector curvilíneo com círculos</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ConnectorLines" oor:op="replace">
@@ -5241,6 +5535,9 @@
                     <value xml:lang="zh-CN">线状连接符</value>
                     <value xml:lang="pt">Conector linear</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ConnectorLinesArrowStart" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -5271,6 +5568,9 @@
                     <value xml:lang="hi">रेखा कनेक्टर तीर सहित प्रारंभ</value>
                     <value xml:lang="zh-CN">首端为箭头的线状连接符</value>
                     <value xml:lang="pt">Conector linear com seta no início</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ConnectorLinesArrowEnd" oor:op="replace">
@@ -5303,6 +5603,9 @@
                     <value xml:lang="zh-CN">尾端为箭头的线条连接符</value>
                     <value xml:lang="pt">Conector linear com seta no fim</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ConnectorLinesArrows" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -5333,6 +5636,9 @@
                     <value xml:lang="hi">रेखा कनेक्टर तीरों सहित</value>
                     <value xml:lang="zh-CN">两端为箭头的线状连接符</value>
                     <value xml:lang="pt">Conector linear com setas</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ConnectorLinesCircleStart" oor:op="replace">
@@ -5365,6 +5671,9 @@
                     <value xml:lang="zh-CN">首端为圆形的线状连接符</value>
                     <value xml:lang="pt">Conector linear com círculo no início</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ConnectorLinesCircleEnd" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -5395,6 +5704,9 @@
                     <value xml:lang="hi">रेखा कनेक्टर वृत्त सहित अंत</value>
                     <value xml:lang="zh-CN">尾端为圆形的线状连接符</value>
                     <value xml:lang="pt">Conector linear com círculo no fim</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ConnectorLinesCircles" oor:op="replace">
@@ -5427,6 +5739,9 @@
                     <value xml:lang="zh-CN">两端为圆形的线状连接符</value>
                     <value xml:lang="pt">Conector linear com círculos</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:GraphicDraft" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -5457,6 +5772,9 @@
                     <value xml:lang="hi">चित्र स्थानधारक</value>
                     <value xml:lang="zh-CN">显示外部图形框</value>
                     <value xml:lang="pt">Delinear imagens externas</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:FillDraft" oor:op="replace">
@@ -5489,6 +5807,9 @@
                     <value xml:lang="zh-CN">轮廓模式</value>
                     <value xml:lang="pt">Modo de contorno</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:TextDraft" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -5519,6 +5840,9 @@
                     <value xml:lang="hi">टेक्स्ट् स्थानधारक</value>
                     <value xml:lang="zh-CN">显示文字框</value>
                     <value xml:lang="pt">Separadores de texto</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:LineDraft" oor:op="replace">
@@ -5551,6 +5875,9 @@
                     <value xml:lang="zh-CN">只显示轮廓线</value>
                     <value xml:lang="pt">Mostrar apenas linhas finas</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:HandlesDraft" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -5581,6 +5908,9 @@
                     <value xml:lang="hi">सामान्य हान्डलें</value>
                     <value xml:lang="zh-CN">标准控点</value>
                     <value xml:lang="pt">Guias simples</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:SolidCreate" oor:op="replace">
@@ -5613,6 +5943,9 @@
                     <value xml:lang="zh-CN">生成具备属性的对象</value>
                     <value xml:lang="pt">Criar objectos com atributos</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:HelplinesUse" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -5643,6 +5976,9 @@
                     <value xml:lang="hi">Snap to Snap Lines</value>
                     <value xml:lang="zh-CN">和坐标线对齐</value>
                     <value xml:lang="pt">Capturar em guias</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:SnapBorder" oor:op="replace">
@@ -5675,6 +6011,9 @@
                     <value xml:lang="zh-CN">和页边距对齐</value>
                     <value xml:lang="pt">Capturar nas margens</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:SnapFrame" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -5705,6 +6044,9 @@
                     <value xml:lang="hi">वस्तु किनारे को स्नॉप करो</value>
                     <value xml:lang="zh-CN">和对象框对齐</value>
                     <value xml:lang="pt">Capturar na moldura do objecto</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:SnapPoints" oor:op="replace">
@@ -5737,6 +6079,9 @@
                     <value xml:lang="zh-CN">对准对象点</value>
                     <value xml:lang="pt">Capturar nos pontos do objecto</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:QuickEdit" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -5768,6 +6113,9 @@
                     <value xml:lang="zh-CN">允许快速编辑</value>
                     <value xml:lang="pt">Permitir Editar rápido</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:PickThrough" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -5798,6 +6146,9 @@
                     <value xml:lang="hi">केवल टेक्स्ट् विस्तीर्ण चुनो</value>
                     <value xml:lang="zh-CN">只能够选择文字区域</value>
                     <value xml:lang="pt">Apenas seleccionável a área do texto</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ConvertTo1BitThreshold" oor:op="replace">
@@ -6047,6 +6398,9 @@
                     <value xml:lang="zh-CN">大控点</value>
                     <value xml:lang="pt">Guias grandes</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:DoubleClickTextEdit" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -6077,6 +6431,9 @@
                     <value xml:lang="hi">टेक्स्ट् संपादन केलिए डबल-क्लिक करो</value>
                     <value xml:lang="zh-CN">双击鼠标编辑文字</value>
                     <value xml:lang="pt">Clique duplo para Editar Texto</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:ClickChangeRotation" oor:op="replace">
@@ -6109,6 +6466,9 @@
                     <value xml:lang="zh-CN">单击转到对象旋转模式</value>
                     <value xml:lang="pt">Modo de rotação depois de clique no objecto</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:ArrowsToolbox" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -6139,6 +6499,9 @@
                     <value xml:lang="hi">रेखाएँ और तीरें</value>
                     <value xml:lang="zh-CN">线条和箭头</value>
                     <value xml:lang="pt">Linhas e setas</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:LineArrowStart" oor:op="replace">
@@ -6171,6 +6534,9 @@
                     <value xml:lang="zh-CN">首端带箭头的线条</value>
                     <value xml:lang="pt">Linha com seta no início</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:LineArrowEnd" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -6201,6 +6567,9 @@
                     <value xml:lang="hi">तीर सहित रेखा अंत</value>
                     <value xml:lang="zh-CN">尾端带箭头的线条</value>
                     <value xml:lang="pt">Linha com seta no fim</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:LineArrows" oor:op="replace">
@@ -6233,6 +6602,9 @@
                     <value xml:lang="zh-CN">两端带箭头的线条</value>
                     <value xml:lang="pt">Linha com setas nas duas pontas</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:LineArrowCircle" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -6263,6 +6635,9 @@
                     <value xml:lang="hi">तीर/वृत्त सहित रेखा</value>
                     <value xml:lang="zh-CN">首尾端带箭头与圆头的线条</value>
                     <value xml:lang="pt">Linha com seta e círculo no fim</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:LineCircleArrow" oor:op="replace">
@@ -6295,6 +6670,9 @@
                     <value xml:lang="zh-CN">首尾端带圆头与箭头的线条</value>
                     <value xml:lang="pt">Linha com círculo e seta</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:LineArrowSquare" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -6326,6 +6704,9 @@
                     <value xml:lang="zh-CN">首尾端带箭头与方头的线条</value>
                     <value xml:lang="pt">Linha com seta e quadrado</value>
                 </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
             </node>
             <node oor:name=".uno:LineSquareArrow" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -6356,6 +6737,9 @@
                     <value xml:lang="hi">समचतुर्भुज/तीर सहित रेखा</value>
                     <value xml:lang="zh-CN">首尾端带方头与箭头的线条</value>
                     <value xml:lang="pt">Linha com quadrado e seta</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
         </node>
