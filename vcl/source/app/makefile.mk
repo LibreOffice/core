@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:05:35 $
+#   last change: $Author: cd $ $Date: 2000-10-23 06:42:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,7 +112,8 @@ EXCEPTIONSFILES=					\
             $(SLO)$/unohelp.obj
 .ELSE
 EXCEPTIONSFILES= $(SLO)$/svapp.obj	\
-EXCEPTIONSFILES= $(SLO)$/unohelp.obj
+EXCEPTIONSFILES= $(SLO)$/unohelp.obj \
+EXCEPTIONSFILES= $(SLO)$/svmain.obj
 .ENDIF
 
 # --- Targets ------------------------------------------------------
