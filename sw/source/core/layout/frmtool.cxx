@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ama $ $Date: 2002-05-22 09:09:30 $
+ *  last change: $Author: ama $ $Date: 2002-08-12 08:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,6 +477,7 @@ void MA_FASTCALL lcl_MoveDrawObjs( SwFrm *pLow, const Point &rDiff,
             SwFlyFrm *pF = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
             if ( pF->Frm().Left() != WEIT_WECH )
             {
+                BOOL bOldBack = pF->IsNotifyBack();
                 {//Scope fuer Notify
                     SwFlyNotify aNotify( pF );
                     pF->Frm().Pos() += rDiff;
@@ -492,7 +493,10 @@ void MA_FASTCALL lcl_MoveDrawObjs( SwFrm *pLow, const Point &rDiff,
                                 pNewPage->SwPageFrm::AppendFly( pF );
                         }
                     }
+                    pF->ResetNotifyBack();
                 }
+                if( bOldBack )
+                    pF->SetNotifyBack();
             }
         }
         else
