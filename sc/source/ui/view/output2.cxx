@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-12 09:21:43 $
+ *  last change: $Author: nn $ $Date: 2002-11-22 17:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include <svx/brshitem.hxx>
 #include <svx/colorcfg.hxx>
 #include <svx/colritem.hxx>
+#include <svx/editobj.hxx>
 #include <svx/editstat.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/forbiddencharacterstable.hxx>
@@ -2134,8 +2135,9 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                             else
                                 pEngine->SetPaperSize(aPaperSize);
 
-                            //  Daten aus Zelle lesen
+                            //  Read content from cell
 
+                            BOOL bWrapFields = FALSE;
                             if (pCell)
                             {
                                 if (pCell->GetCellType() == CELLTYPE_EDIT)
@@ -2144,7 +2146,17 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                     ((ScEditCell*)pCell)->GetData(pData);
 
                                     if (pData)
+                                    {
                                         pEngine->SetText(*pData);
+
+                                        if ( bBreak && !bAsianVertical && pData->HasField() )
+                                        {
+                                            //  Fields aren't wrapped, so clipping is enabled to prevent
+                                            //  a field from being drawn beyond the cell size
+
+                                            bWrapFields = TRUE;
+                                        }
+                                    }
                                     else
                                         DBG_ERROR("pData == 0");
                                 }
@@ -2211,6 +2223,13 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                 CellInfo* pClipRight = NULL;    // Zelle mit Clipping-Markierung
                                 BOOL bSimClip = FALSE;
                                 Size aClipSize = Size( nScrX+nScrW-nStartX, nScrY+nScrH-nStartY );
+
+                                if ( bWrapFields )
+                                {
+                                    //  Fields in a cell with automatic breaks: clip to cell width
+                                    bClip = TRUE;
+                                    aClipSize.Width() = nOutWidth;
+                                }
 
                                 //  Zelle, an der Clipping-Markierung gesetzt wird, wenn
                                 //  vertikal zu klein
