@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 00:45:31 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,37 +75,10 @@ PushButton RID_TIME_BUTTON
 PushButton RID_PREVIEW_BUTTON
 {
     Size = MAP_APPFONT ( 50 , 14 ) ;
-    Text = "Ab~spielen" ;
-    Text [ ENGLISH ] = "~Play" ;
+    Text [ de ] = "Ab~spielen" ;
     TabStop = TRUE ;
-    Text [ english_us ] = "Play" ;
-    Text [ italian ] = "Esegui" ;
-    Text [ spanish ] = "~Reproducir" ;
-    Text [ french ] = "Reproduire" ;
-    Text [ dutch ] = "Af~spelen" ;
-    Text [ swedish ] = "~Spela upp" ;
-    Text [ danish ] = "Afspil" ;
-    Text [ portuguese_brazilian ] = "Tocar" ;
-    Text [ portuguese ] = "~Tocar" ;
-    Text[ chinese_simplified ] = "æ”¾æ˜ ";
-    Text[ russian ] = "Âîñïğîèçâåñòè";
-    Text[ polish ] = "O~dtwórz";
-    Text[ japanese ] = "å†ç”Ÿ";
-    Text[ chinese_traditional ] = "æ”¾æ˜ ";
-    Text[ arabic ] = "ÊÔÛíá";
-    Text[ greek ] = "Åêôİëå~óç";
-    Text[ korean ] = "ì¬ìƒ";
-    Text[ turkish ] = "Çalıştır";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Reprodueix";
-    Text[ finnish ] = "Toista";
-    Text[ thai ] = "à¹€à¸¥à¹ˆà¸™";
-    Text[ czech ] = "PÅ™ehrÃ¡t";
-    Text[ hebrew ] = "Ab~spielen";
-    Text[ hindi ] = "à¤¶à¥à¤°à¥";
-    Text[ slovak ] = "PrehraÅ¥";
-    Text[ hungarian ] = "LejÃ¡tszÃ¡s";
-    Text[ slovenian ] = "Predvajaj";
+    Text [ en-US ] = "Play" ;
+    Text [ x-comment ] = " ";
 };
 Bitmap BMP_TAB_PAGEMODE
 {
@@ -1369,6 +1342,15 @@ Image IMG_SLIDE_MANU_H
     MaskColor = IMAGE_MASK_STDCOLOR_HC;
 };
 
+
+#define SfxStyleFamiliesRes1\
+    Text [ de ] = "Grafikobjektvorlagen" ;\
+    Text [ en-US ] = "Graphics Styles" ;
+
+#define SfxStyleFamiliesRes2\
+    Text [ de ] = "Präsentationsobjektvorlagen" ;\
+    Text [ en-US ] = "Presentation Styles" ;
+
 SfxStyleFamilies DLG_STYLE_DESIGNER
 {
 
@@ -1377,33 +1359,9 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
     {
         SfxStyleFamilyItem RID_GRAPHICSTYLEFAMILY
         {
-            Text = "Grafikobjektvorlagen" ;
-            Text [ ENGLISH ] = "Graphic Objects Styles" ;
-            Text [ english_us ] = "Graphics Styles" ;
-            Text [ italian ] = "Modelli di oggetti grafici" ;
-            Text [ spanish ] = "Estilos de objeto gráfico" ;
-            Text [ french ] = "Styles d'objet graphique" ;
-            Text [ dutch ] = "Opmaakprofielen voor grafische objecten" ;
-            Text [ swedish ] = "Grafikobjektmallar" ;
-            Text [ danish ] = "Grafikobjekttypografier" ;
-            Text [ portuguese_brazilian ] = "Estilos de objetos Gráficos" ;
-            Text [ portuguese ] = "Estilos de objectos gráficos" ;
-            Text[ chinese_simplified ] = "å›¾å½¢å¯¹è±¡æ ·å¼";
-            Text[ russian ] = "Ãğàôè÷åñêèå ñòèëè";
-            Text[ polish ] = "Style obiektów graficznych";
-            Text[ japanese ] = "å›³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¹ã‚¿ã‚¤ãƒ«";
-            Text[ chinese_traditional ] = "åœ–å½¢ç‰©ä»¶æ¨£å¼";
-            Text[ arabic ] = "ÃäãÇØ ßÇÆäÇÊ ÕæÑÉ";
-            Text[ greek ] = "Óôõë áíôéêåéìİíùí ãñáöéêşí";
-            Text[ korean ] = "ê·¸ë¦¼ ìŠ¤íƒ€ì¼";
-            Text[ turkish ] = "Grafik Biçemleri";
-            Text[ czech ] = "GrafickÃ© styly";
-            Text[ slovak ] = "GrafickÃ© Å¡tÃ½ly";
-            Text[ hungarian ] = "KÃ©pstÃ­lusok";
-            Text[ finnish ] = "Grafiikkatyylit";
-            Text[ slovenian ] = "Slogi grafike";
+            SfxStyleFamiliesRes1
             StyleFamily = SFX_STYLE_FAMILY_PARA ;
-            FilterList =
+            FilterList  =
             {
                 < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
                 < STR_STYLE_FILTER_USED ; SFXSTYLEBIT_USED ; > ;
@@ -1412,31 +1370,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         SfxStyleFamilyItem RID_PRESENTATIONSTYLEFAMILY
         {
-            Text = "Präsentationsobjektvorlagen" ;
-            Text [ ENGLISH ] = "Presentation objects styles" ;
-            Text [ english_us ] = "Presentation Styles" ;
-            Text [ italian ] = "Modelli di oggetti per presentazione" ;
-            Text [ spanish ] = "Estilos de objetos de presentación" ;
-            Text [ french ] = "Styles d'objet de présentation" ;
-            Text [ dutch ] = "Opmaakprofielen voor presentatieobjecten" ;
-            Text [ swedish ] = "Presentationsobjektmallar" ;
-            Text [ danish ] = "Præsentationsobjekttypografier" ;
-            Text [ portuguese_brazilian ] = "Estilos de objetos de apresentação" ;
-            Text [ portuguese ] = "Estilos de objectos de apresentação" ;
-            Text[ chinese_simplified ] = "æ¼”ç¤ºæ–‡ç¨¿å¯¹è±¡æ ·å¼";
-            Text[ russian ] = "Ñòèëè ïğåçåíòàöèè";
-            Text[ polish ] = "Style obiektów prezentacji";
-            Text[ japanese ] = "ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¹ã‚¿ã‚¤ãƒ«";
-            Text[ chinese_traditional ] = "ç°¡å ±æ¨£å¼";
-            Text[ arabic ] = "ÃäãÇØ ßÇÆä ÚÑÖ ÊŞÏíãí";
-            Text[ greek ] = "Ğñüôõğá áíôéêåéìİíùí ğáñïõóßáóçò";
-            Text[ korean ] = "í”„ë ˆì  í…Œì´ì…˜ ìŠ¤íƒ€ì¼";
-            Text[ turkish ] = "Sunum Biçemleri";
-            Text[ czech ] = "Styly prezentace";
-            Text[ slovak ] = "Å tÃ½ly prezentÃ¡cie";
-            Text[ hungarian ] = "BemutatÃ³stÃ­lusok";
-            Text[ finnish ] = "Esitystyylit";
-            Text[ slovenian ] = "Slogi predstavitve";
+            SfxStyleFamiliesRes2
             StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
             FilterList =
             {
