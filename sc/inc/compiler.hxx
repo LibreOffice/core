@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:34 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:32:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,6 +348,8 @@ public:
     void DelRPN();
     ScToken* First() { nIndex = 0; return Next(); }
     ScToken* Next();
+    ScToken* FirstNoSpaces() { nIndex = 0; return NextNoSpaces(); }
+    ScToken* NextNoSpaces();
     ScToken* GetNextName();
     ScToken* GetNextDBArea();
     ScToken* GetNextReference();
@@ -368,11 +370,6 @@ public:
     BOOL    HasNameOrColRowName() const;    // token of type svIndex or opcode ocColRowName
     BOOL    IsReference( ScRange& rRange ) const;       // exactly and only one range (valid or deleted)
     BOOL    IsValidReference( ScRange& rRange ) const;  // exactly and only one valid range (no #REF!s)
-    BOOL    GetTableOpRefs(                             // exactly and only one multiple operation
-                ScAddress& rFormula,
-                ScAddress& rColFirstPos, ScAddress& rColRelPos,
-                ScAddress& rRowFirstPos, ScAddress& rRowRelPos,
-                BOOL& rbIsMode2 ) const;
 
     ScToken** GetArray() const  { return pCode; }
     ScToken** GetCode()  const  { return pRPN; }
