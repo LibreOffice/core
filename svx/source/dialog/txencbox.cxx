@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txencbox.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2000-12-20 11:36:16 $
+ *  last change: $Author: er $ $Date: 2001-02-05 17:21:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,16 @@ void SvxTextEncodingBox::FillFromTextEncodingTable(
                 m_pEncTable->GetString( j ) );
         }
     }
+}
+
+//------------------------------------------------------------------------
+
+void SvxTextEncodingBox::FillWithMimeAndSelectBest()
+{
+    FillFromTextEncodingTable( 0xffffffff, RTL_TEXTENCODING_INFO_MIME );
+    const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding( gsl_getSystemTextEncoding() );
+    rtl_TextEncoding nEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
+    SelectTextEncoding( nEnc );
 }
 
 //------------------------------------------------------------------------

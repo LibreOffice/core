@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txencbox.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2000-12-20 11:34:34 $
+ *  last change: $Author: er $ $Date: 2001-02-05 17:20:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,11 @@ public:
                             sal_uInt32 nExcludeInfoFlags = 0,
                             sal_uInt32 nButIncludeInfoFlags = 0
                             );
+
+    /** Fill with all known MIME encodings and select the best one matching
+        the system encoding.
+     */
+    void                FillWithMimeAndSelectBest();
 
     const SvxTextEncodingTable*     GetTextEncodingTable() const
                             { return m_pEncTable; }
