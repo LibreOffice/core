@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-12 11:11:59 $
+ *  last change: $Author: jl $ $Date: 2001-02-12 11:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,10 @@ private:
 
     // Used to find out wheter the listeners callbacks through the Context interfaces
     // contained in the event objects are valid.
-    sal_uInt32 m_currentEventId;
+//  sal_uInt32 m_currentEventId;
+
+    Reference<XDropTargetDragContext> m_currentDragContext;
+    Reference<XDropTargetDropContext> m_currentDropContext;
 
 
 private:
@@ -184,20 +187,15 @@ public:
 // Non - interface functions --------------------------------------------------
 // XDropTargetDropContext delegated from DropContext
 
-    // return false signifies the caller to throw a InvalidDNDOperationException
-    void _acceptDrop( sal_Int8 dropOperation, sal_uInt32 id);
-    // return false signifies the caller to throw a InvalidDNDOperationException
-    void _rejectDrop( sal_uInt32 id);
-    // return false signifies the caller to throw a InvalidDNDOperationException
-    void _dropComplete( sal_Bool success, sal_uInt32);
+    void _acceptDrop( sal_Int8 dropOperation, const Reference<XDropTargetDropContext>& context);
+    void _rejectDrop( const Reference<XDropTargetDropContext>& context);
+    void _dropComplete( sal_Bool success, const Reference<XDropTargetDropContext>& context);
 
 // XDropTargetDragContext delegated from DragContext
-    // return false signifies the caller to throw a InvalidDNDOperationException
-    void _acceptDrag( sal_Int8 dragOperation, sal_uInt32);
-    // return false signifies the caller to throw a InvalidDNDOperationException
+    void _acceptDrag( sal_Int8 dragOperation, const Reference<XDropTargetDragContext>& context);
     void _rejectDrag( sal_uInt32);
-    Sequence<DataFlavor> _getCurrentDataFlavors( sal_uInt32 id);
-    sal_Bool _isDataFlavorSupported( const DataFlavor& df, sal_uInt32 id);
+    Sequence<DataFlavor> _getCurrentDataFlavors( const Reference<XDropTargetDragContext>& context);
+    sal_Bool _isDataFlavorSupported( const DataFlavor& df, const Reference<XDropTargetDragContext>& context);
 
 
 protected:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-12 11:11:59 $
+ *  last change: $Author: jl $ $Date: 2001-02-12 11:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,15 +233,18 @@ STDMETHODIMP DropTarget::DragEnter( IDataObject __RPC_FAR *pDataObj,
     // the action to COPY or something. Otherwise the source would display a NONE from the beginning.
     m_nListenerDropAction= getFilteredActions( grfKeyState);
     m_userAction= m_nListenerDropAction;
+
+    m_currentDragContext= static_cast<XDropTargetDragContext*>( new TargetDragContext( static_cast<DropTarget*>(this),
+                                                     m_currentEventId ));
+    m_currentData= static_cast<XTransferable*>( new DNDTransferable( pDataObj) );
+
     if( m_nListenerDropAction != ACTION_NONE)
     {
-        m_currentData= static_cast<XTransferable*>( new DNDTransferable( pDataObj) );
         DropTargetDragEnterEvent e;
         e.SupportedDataFlavors= m_currentData->getTransferDataFlavors();
         e.DropAction= m_nListenerDropAction;
         e.Source= Reference<XInterface>( static_cast<XDropTarget*>(this),UNO_QUERY);
-        e.Context= static_cast<XDropTargetDragContext*>( new TargetDragContext( static_cast<DropTarget*>(this),
-                                                         m_currentEventId ));
+        e.Context= m_currentDragContext;
         POINT point={ pt.x, pt.y};
         ScreenToClient( m_hWnd, &point);
         e.Location.X= point.x;
@@ -251,10 +254,7 @@ STDMETHODIMP DropTarget::DragEnter( IDataObject __RPC_FAR *pDataObj,
 
         // The Event contains a XDropTargetDragContext Implementation. A listener is only allowd to call
         // on it in the same thread and in event handler where it receives that event.
-        // m_currentEventId is used  to verify the callback's validity.
         fire_dragEnter( e);
-        m_currentEventId++;
-
         // Check if the action derived from grfKeyState (m_nListenerDropAction) or the action set
         // by the listener (m_nListenerDropAction) is allowed by the source. Only a allowed action is set
         // in pdwEffect.
@@ -288,8 +288,7 @@ STDMETHODIMP DropTarget::DragOver( DWORD grfKeyState,
         DropTargetDragEvent e;
         e.DropAction= m_nListenerDropAction;
         e.Source= Reference<XInterface>(static_cast<XDropTarget*>(this),UNO_QUERY);
-        e.Context= static_cast<XDropTargetDragContext*>( new TargetDragContext( static_cast<DropTarget*>(this),
-                                                         m_currentEventId));
+        e.Context= m_currentDragContext;
         POINT point={ pt.x, pt.y};
         ScreenToClient( m_hWnd, &point);
         e.Location.X= point.x;
@@ -308,9 +307,7 @@ STDMETHODIMP DropTarget::DragOver( DWORD grfKeyState,
 
         // The Event contains a XDropTargetDragContext Implementation. A listener is only allowd to call
         // on it in the same thread and in event handler where it receives that envent.
-        // m_currentEventId is used  to verify the callback's validity.
         fire_dragOver( e);
-        m_currentEventId++;
         // Check if the action derived from grfKeyState (m_nListenerDropAction) or the action set
         // by the listener (m_nListenerDropAction) is allowed by the source. Only a allowed action is set
         // in pdwEffect.
@@ -334,6 +331,9 @@ STDMETHODIMP DropTarget::DragLeave( void)
 #endif
 
     m_currentData=0;
+    m_currentDragContext= 0;
+    m_currentDropContext= 0;
+
     if( m_nDefaultActions != ACTION_NONE)
     {
         DropTargetEvent e;
@@ -356,13 +356,13 @@ STDMETHODIMP DropTarget::Drop( IDataObject  *pDataObj,
     m_bDropComplete= sal_False;
 
     m_nListenerDropAction= getFilteredActions( grfKeyState);
-
+    m_currentDropContext= static_cast<XDropTargetDropContext*>( new TargetDropContext( static_cast<DropTarget*>(this ))  );
     if( m_nListenerDropAction)
     {
         DropTargetDropEvent e;
         e.DropAction= m_nListenerDropAction;
         e.Source= Reference<XInterface>( static_cast<XDropTarget*>(this), UNO_QUERY);
-        e.Context= static_cast<XDropTargetDropContext*>( new TargetDropContext( static_cast<DropTarget*>(this ),  m_currentEventId)  );
+        e.Context= m_currentDropContext;
         POINT point={ pt.x, pt.y};
         ScreenToClient( m_hWnd, &point);
         e.Location.X= point.x;
@@ -370,7 +370,6 @@ STDMETHODIMP DropTarget::Drop( IDataObject  *pDataObj,
         e.SourceActions= dndOleDropEffectsToActions( *pdwEffect);
         e.Transferable= m_currentData;
         fire_drop( e);
-        m_currentEventId++;
 
         //if fire_drop returns than a listener might have modified m_nListenerDropAction
         // XDropTargetDropContext::dropComplete or the other functions
