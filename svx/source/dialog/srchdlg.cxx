@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: gt $ $Date: 2001-10-23 11:48:04 $
+ *  last change: $Author: mba $ $Date: 2002-06-04 07:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,9 +162,8 @@ using namespace com::sun::star::i18n;
 
 SV_IMPL_VARARR(SrchAttrItemList, SearchAttrItem);
 
-#define NotifyApp( nId )                                        \
-    rBindings.GetDispatcher()->Execute( nId, SFX_CALLMODE_SLOT,           \
-                              pSearchItem, 0L )
+//#define NotifyApp( nId )                                        \
+//    rBindings.ExecuteSynchron( nId, (const SfxPoolItem**)&pSearchItem, 0L )
 
 #define GetCheckBoxValue( rBox )                                \
     rBox.IsEnabled() ? rBox.IsChecked() : FALSE
@@ -504,14 +503,15 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
     InitControls_Impl();
 
     // Attribut-Sets nur einmal im Ctor() besorgen
+    const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
     const SvxSetItem* pSrchSetItem =
-        (const SvxSetItem*)NotifyApp( FID_SEARCH_SEARCHSET );
+        (const SvxSetItem*) rBindings.ExecuteSynchron( FID_SEARCH_SEARCHSET, ppArgs, 0L );
 
     if ( pSrchSetItem )
         InitAttrList_Impl( &pSrchSetItem->GetItemSet(), 0 );
 
     const SvxSetItem* pReplSetItem =
-        (const SvxSetItem*)NotifyApp( FID_SEARCH_REPLACESET );
+        (const SvxSetItem*)rBindings.ExecuteSynchron( FID_SEARCH_REPLACESET, ppArgs, 0L );
 
     if ( pReplSetItem )
         InitAttrList_Impl( 0, &pReplSetItem->GetItemSet() );
@@ -523,7 +523,7 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
     pOptionsController =
         new SvxSearchController( SID_SEARCH_OPTIONS, rBindings, *this );
     rBindings.LeaveRegistrations();
-    NotifyApp( FID_SEARCH_ON );
+    rBindings.ExecuteSynchron( FID_SEARCH_ON, ppArgs, 0L );
     pImpl->aSelectionTimer.Start();
 
 
@@ -583,8 +583,9 @@ BOOL SvxSearchDialog::Close()
     //aOpt.SetMatchFullHalfWidthForms   ( !aJapMatchFullHalfWidthCB.IsChecked() );
     aOpt.SetUseAsianOptions         ( aJapOptionsCB           .IsChecked() );
 
-    NotifyApp( FID_SEARCH_OFF );
-    NotifyApp( SID_SEARCH_DLG );
+    const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
+    rBindings.ExecuteSynchron( FID_SEARCH_OFF, ppArgs, 0L );
+    rBindings.ExecuteSynchron( SID_SEARCH_DLG, ppArgs, 0L );
     return TRUE;
 }
 
@@ -817,14 +818,15 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
             if ( !pSearchList )
             {
                 // Attribut-Sets besorgen, wenn noch nicht geschehen
+                const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
                 const SvxSetItem* pSrchSetItem =
-                    (const SvxSetItem*)NotifyApp( FID_SEARCH_SEARCHSET );
+                (const SvxSetItem*)rBindings.ExecuteSynchron( FID_SEARCH_SEARCHSET, ppArgs, 0L );
 
                 if ( pSrchSetItem )
                     InitAttrList_Impl( &pSrchSetItem->GetItemSet(), 0 );
 
                 const SvxSetItem* pReplSetItem =
-                    (const SvxSetItem*)NotifyApp( FID_SEARCH_REPLACESET );
+                (const SvxSetItem*)rBindings.ExecuteSynchron( FID_SEARCH_REPLACESET, ppArgs, 0L );
 
                 if ( pReplSetItem )
                     InitAttrList_Impl( 0, &pReplSetItem->GetItemSet() );
@@ -1254,7 +1256,8 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
                 pReplaceList->Clear();
         }
         nModifyFlag = 0;
-        NotifyApp( FID_SEARCH_NOW );
+        const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
+        rBindings.ExecuteSynchron( FID_SEARCH_NOW, ppArgs, 0L );
     }
     else if ( pBtn == &aCloseBtn )
     {
@@ -2168,7 +2171,8 @@ void SvxSearchDialog::SaveToModule_Impl()
 
     pSearchItem->SetCommand( SVX_SEARCHCMD_FIND );
     nModifyFlag = 0;
-    NotifyApp( SID_SEARCH_ITEM );
+    const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
+    rBindings.ExecuteSynchron( SID_SEARCH_ITEM, ppArgs, 0L );
 }
 
 // class SvxSearchDialogWrapper ------------------------------------------

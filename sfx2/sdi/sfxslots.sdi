@@ -2,7 +2,7 @@
     module StarApplicationFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: mba $ $Date: 2002-05-28 14:16:53 $ $Revision: 1.6 $
+    $Author: mba $ $Date: 2002-06-04 07:49:11 $ $Revision: 1.7 $
     $Logfile:   T:/sfx2/sdi/sfxslots.sdv  $ $Workfile:   SFXSLOTS.SDI  $
 =========================================================================*/
 
@@ -79,20 +79,23 @@ TypeLibFile( "sfxslots.tlb" )
 
     struct SvxSearch
     {
-        BOOL        Backward        MID_SEARCH_BACKWARD;
-        BOOL        InSelection     MID_SEARCH_INSELECTION;
-        BOOL        CaseSensitive   MID_SEARCH_CASESENSITIVE;
-        BOOL        RegExp          MID_SEARCH_REGEXPR;
-        BOOL        WordOnly        MID_SEARCH_WORDONLY;
-        UINT16      Mode            MID_SEARCH_MODE;
-        UINT16      Order           MID_SEARCH_ORDER;
+        INT16       StyleFamily     MID_SEARCH_STYLEFAMILY;
+        UINT16      CellType        MID_SEARCH_CELLTYPE;
+        BOOL        RowDirection    MID_SEARCH_ROWDIRECTION;
         BOOL        AllTables       MID_SEARCH_ALLTABLES;
-        BOOL        Similarity      MID_SEARCH_LEV_ON;
-        BOOL        Relaxed         MID_SEARCH_LEV_RELAXED;
-        UINT16      Other           MID_SEARCH_LEV_OTHER;
-        UINT16      Shorter         MID_SEARCH_LEV_SHORTER;
-        UINT16      Longer          MID_SEARCH_LEV_LONGER;
+        BOOL        Backward        MID_SEARCH_BACKWARD;
         BOOL        Pattern         MID_SEARCH_PATTERN;
+        BOOL        Content         MID_SEARCH_CONTENT;
+        BOOL        AsianOptions    MID_SEARCH_ASIANOPTIONS;
+        INT16       AlgorithmType   MID_SEARCH_ALGORITHMTYPE;
+        INT32       SearchFlags     MID_SEARCH_FLAGS;
+        String      SearchString    MID_SEARCH_SEARCHSTRING;
+        String      ReplaceString   MID_SEARCH_REPLACESTRING;
+        INT16       Locale          MID_SEARCH_LOCALE;
+        INT32       ChangedChars    MID_SEARCH_CHANGEDCHARS;
+        INT32       DeletedChars    MID_SEARCH_DELETEDCHARS;
+        INT32       InsertedChars   MID_SEARCH_INSERTEDCHARS;
+        INT32       TransliterateFlags MID_SEARCH_TRANSLITERATEFLAGS;
     };
     item SvxSearch SvxSearchItem;
 

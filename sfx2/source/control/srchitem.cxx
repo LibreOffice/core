@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-08 16:45:04 $
+ *  last change: $Author: mba $ $Date: 2002-06-04 07:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
 #endif
 
 #include <svtools/memberid.hrc>
-//ASDBG #include <usr/uno.hxx>
+#include <tools/isolang.hxx>
 
 #pragma hdrstop
 
@@ -462,66 +462,54 @@ void SvxSearchItem::SetTransliterationFlags( sal_Int32 nFlags )
 
 sal_Bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
-        case MID_SEARCH_BACKWARD:
-            rVal <<= (sal_Bool) bBackward;
-            break;
-/*
-        case MID_SEARCH_INSELECTION:
-            rVal <<= (sal_Bool) bSelection;
-            break;
-
-        case MID_SEARCH_CASESENSITIVE:
-            rVal <<= (sal_Bool) bExact;
-            break;
-
-        case MID_SEARCH_REGEXPR:
-            rVal <<= (sal_Bool) bRegExp;
-            break;
-
-        case MID_SEARCH_WORDONLY:
-            rVal <<= (sal_Bool) bWordOnly;
-            break;
-
-        case MID_SEARCH_PATTERN:
-            rVal <<= (sal_Bool) bPattern;
-            break;
-
-        case MID_SEARCH_ORDER:
-            rVal <<= (sal_Bool) bRowDirection;
-            break;
-
+        case MID_SEARCH_STYLEFAMILY:
+            rVal <<= (sal_Int16) eFamily; break;
+        case MID_SEARCH_CELLTYPE:
+            rVal <<= (sal_Int32) nCellType; break;
+        case MID_SEARCH_ROWDIRECTION:
+            rVal <<= (sal_Bool) bRowDirection; break;
         case MID_SEARCH_ALLTABLES:
-            rVal <<= (sal_Bool) bAllTables;
+            rVal <<= (sal_Bool) bAllTables; break;
+        case MID_SEARCH_BACKWARD:
+            rVal <<= (sal_Bool) bBackward; break;
+        case MID_SEARCH_PATTERN:
+            rVal <<= (sal_Bool) bPattern; break;
+        case MID_SEARCH_CONTENT:
+            rVal <<= (sal_Bool) bContent; break;
+        case MID_SEARCH_ASIANOPTIONS:
+            rVal <<= (sal_Bool) bAsianOptions; break;
+        case MID_SEARCH_ALGORITHMTYPE:
+            rVal <<= (sal_Int16) aSearchOpt.algorithmType; break;
+        case MID_SEARCH_FLAGS:
+            rVal <<= aSearchOpt.searchFlag; break;
+        case MID_SEARCH_SEARCHSTRING:
+            rVal <<= aSearchOpt.searchString; break;
+        case MID_SEARCH_REPLACESTRING:
+            rVal <<= aSearchOpt.replaceString; break;
+        case MID_SEARCH_CHANGEDCHARS:
+            rVal <<= aSearchOpt.changedChars; break;
+        case MID_SEARCH_DELETEDCHARS:
+            rVal <<= aSearchOpt.deletedChars; break;
+        case MID_SEARCH_INSERTEDCHARS:
+            rVal <<= aSearchOpt.insertedChars; break;
+        case MID_SEARCH_TRANSLITERATEFLAGS:
+            rVal <<= aSearchOpt.transliterateFlags; break;
+        case MID_SEARCH_LOCALE:
+        {
+            sal_Int16 nLocale;
+            if (aSearchOpt.Locale.Language.getLength() || aSearchOpt.Locale.Country.getLength() )
+                nLocale = ConvertIsoNamesToLanguage( aSearchOpt.Locale.Language, aSearchOpt.Locale.Country );
+            else
+                nLocale = LANGUAGE_NONE;
+            rVal <<= nLocale;
             break;
-
-        case MID_SEARCH_MODE:
-            rVal <<= (sal_Int32) nCellType;
-            break;
-
-        case MID_SEARCH_LEV_ON:
-            rVal <<= (sal_Bool) bLevenshtein;
-            break;
-
-        case MID_SEARCH_LEV_RELAXED:
-            rVal <<= (sal_Bool) bLEVRelaxed;
-            break;
-
-        case MID_SEARCH_LEV_OTHER:
-            rVal <<= (sal_Int32) nLEVOther;
-            break;
-
-        case MID_SEARCH_LEV_SHORTER:
-            rVal <<= (sal_Int32) nLEVShorter;
-            break;
-
-        case MID_SEARCH_LEV_LONGER:
-            rVal <<= (sal_Int32) nLEVLonger;
-            break;
-*/
+        }
         default:
-            DBG_ERROR( "can't interprete SbxVariable" );
+            DBG_ERROR( "Unknown MemberId" );
             return sal_False;
     }
 
@@ -532,72 +520,68 @@ sal_Bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMember
 
 sal_Bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
-    sal_Bool nBool;
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
+    sal_Bool bRet = sal_False;
     sal_Int32 nInt;
     switch ( nMemberId )
     {
-        case MID_SEARCH_BACKWARD:
-            rVal >>= bBackward;
-            break;
-/*
-        case MID_SEARCH_INSELECTION:
-            rVal >>= bSelection;
-            break;
-
-        case MID_SEARCH_CASESENSITIVE:
-            rVal >>= bExact;
-            break;
-
-        case MID_SEARCH_REGEXPR:
-            rVal >>= bRegExp;
-            break;
-
-        case MID_SEARCH_WORDONLY:
-            rVal >>= bWordOnly;
-            break;
-
-        case MID_SEARCH_PATTERN:
-            rVal >>= bPattern;
-            break;
-
-        case MID_SEARCH_ORDER:
-            rVal >>= bRowDirection;
-            break;
-
+        case MID_SEARCH_STYLEFAMILY:
+            bRet = (rVal >>= nInt); eFamily =  (SfxStyleFamily) (sal_Int16) nInt; break;
+        case MID_SEARCH_CELLTYPE:
+            bRet = (rVal >>= nInt); nCellType = (sal_uInt16) nInt; break;
+        case MID_SEARCH_ROWDIRECTION:
+            bRet = (rVal >>= bRowDirection); break;
         case MID_SEARCH_ALLTABLES:
-            rVal >>= bAllTables;
+            bRet = (rVal >>= bAllTables); break;
+        case MID_SEARCH_BACKWARD:
+            bRet = (rVal >>= bBackward); break;
+        case MID_SEARCH_PATTERN:
+            bRet = (rVal >>= bPattern); break;
+        case MID_SEARCH_CONTENT:
+            bRet = (rVal >>= bContent); break;
+        case MID_SEARCH_ASIANOPTIONS:
+            bRet = (rVal >>= bAsianOptions); break;
+        case MID_SEARCH_ALGORITHMTYPE:
+            bRet = (rVal >>= nInt); aSearchOpt.algorithmType = (::com::sun::star::util::SearchAlgorithms) (sal_Int16) nInt; break;
+        case MID_SEARCH_FLAGS:
+            bRet = (rVal >>= aSearchOpt.searchFlag); break;
+        case MID_SEARCH_SEARCHSTRING:
+            bRet = (rVal >>= aSearchOpt.searchString); break;
+        case MID_SEARCH_REPLACESTRING:
+            bRet = (rVal >>= aSearchOpt.replaceString); break;
+        case MID_SEARCH_CHANGEDCHARS:
+            bRet = (rVal >>= aSearchOpt.changedChars); break;
+        case MID_SEARCH_DELETEDCHARS:
+            bRet = (rVal >>= aSearchOpt.deletedChars); break;
+        case MID_SEARCH_INSERTEDCHARS:
+            bRet = (rVal >>= aSearchOpt.insertedChars); break;
+        case MID_SEARCH_TRANSLITERATEFLAGS:
+            bRet = (rVal >>= aSearchOpt.transliterateFlags); break;
+        case MID_SEARCH_LOCALE:
+        {
+            bRet = (rVal >>= nInt);
+            if ( bRet )
+            {
+                if ( nInt == LANGUAGE_NONE )
+                {
+                    aSearchOpt.Locale = ::com::sun::star::lang::Locale();
+                }
+                else
+                {
+                    String sLanguage, sCountry;
+                    ConvertLanguageToIsoNames( (sal_Int16) nInt, sLanguage, sCountry );
+                    aSearchOpt.Locale.Language = sLanguage;
+                    aSearchOpt.Locale.Country = sCountry;
+                }
+            }
             break;
-
-        case MID_SEARCH_MODE:
-            rVal >>= nCellType;
-            break;
-
-        case MID_SEARCH_LEV_ON:
-            rVal >>= bLevenshtein;
-            break;
-
-        case MID_SEARCH_LEV_RELAXED:
-            rVal >>= bLEVRelaxed;
-            break;
-
-        case MID_SEARCH_LEV_OTHER   :
-            rVal >>= nLEVOther;
-            break;
-
-        case MID_SEARCH_LEV_SHORTER:
-            rVal >>= nLEVShorter;
-            break;
-
-        case MID_SEARCH_LEV_LONGER  :
-            rVal >>= nLEVLonger;
-            break;
-*/
+        }
         default:
-            DBG_ERROR( "can't interprete SbxVariable" );
-            return sal_False;
+            DBG_ERROR( "Unknown MemberId" );
     }
 
-    return sal_True;
+    return bRet;
 }
 
 

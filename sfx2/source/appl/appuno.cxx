@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-03 10:35:52 $
+ *  last change: $Author: mba $ $Date: 2002-06-04 07:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,6 +728,9 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
 
                     if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC || nSlotId == SID_SAVETO )
                     {
+                        if ( nId == SID_SAVETO )
+                            // used only internally
+                            break;
                         if ( nId == SID_DOCFRAME )
                             break;
                         if ( nId == SID_PROGRESS_STATUSBAR_CONTROL )
@@ -884,7 +887,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                         aName += '.';
                         aName += String( String::CreateFromAscii( rArg.pType->aAttrib[n-1].pName ) ) ;
                         pValue[nProps].Name = aName;
-                        if ( pItem->QueryValue( pValue[nProps++].Value, nSubId ) )
+                        if ( !pItem->QueryValue( pValue[nProps++].Value, nSubId ) )
                         {
                             ByteString aStr( "Sub item ");
                             aStr += ByteString::CreateFromInt32( rArg.pType->aAttrib[n-1].nAID );
