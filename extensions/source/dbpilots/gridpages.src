@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridpages.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:47:34 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Text [ english_us ] = "Table element";
         Text[ portuguese ] = "Elemento de tabela";
         Text[ russian ] = "Βϋαξπ οξλει";
-        Text[ greek ] = "Table element";
+        Text[ greek ] = "Στοιχείο πίνακα";
         Text[ dutch ] = "Tabelelement";
         Text[ french ] = "Ιlιment de table";
         Text[ spanish ] = "Elemento de tabla";
@@ -110,7 +110,7 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Text[ swedish ] = "Tabellelement";
         Text[ polish ] = "Element tabeli";
         Text[ portuguese_brazilian ] = "Elemento de tabela";
-        Text[ japanese ] = "γƒ†γƒΌγƒ–γƒ«ζ§‹ζθ¦η΄ ";
+        Text[ japanese ] = "γƒ†γƒΌγƒ–γƒ«γ‚³γƒ³γƒγƒ­γƒΌγƒ«";
         Text[ korean ] = "ν…μ΄λΈ” μ”μ†";
         Text[ chinese_simplified ] = "θ΅¨ε•ε…ƒδ»¶";
         Text[ chinese_traditional ] = "θ΅¨ε–®ε…ƒδ»¶";
@@ -268,7 +268,7 @@ String RID_STR_DATEPOSTFIX
     Text [ greek ] = " (Ημερομηνία)";
     Text [ korean ] = "(λ‚ μ§)";
     Text [ turkish ] = "(Tarih)";
-    Text [ language_user1 ] = "Please preserve the leading space in this text! Thanks";
+    Text [ language_user1 ] = "; Please preserve the leading space in this text! Thanks";
     Text[ catalan ] = " (Data)";
     Text[ finnish ] = " (Pδivδmδδrδ)";
     Text[ thai ] = " (ΰΈ§ΰΈ±ΰΈ™ΰΈ—ΰΈµΰΉ)";
@@ -301,7 +301,7 @@ String RID_STR_TIMEPOSTFIX
     Text [ greek ] = " (Ώρα)";
     Text [ korean ] = "(μ‹κ°„)";
     Text [ turkish ] = "(Zaman)";
-    Text [ language_user1 ] = "Please preserve the leading space in this text! Thanks";
+    Text [ language_user1 ] = "; Please preserve the leading space in this text! Thanks";
     Text[ catalan ] = " (Temps)";
     Text[ finnish ] = " (Aika)";
     Text[ thai ] = " (ΰΉ€ΰΈ§ΰΈ¥ΰΈ²)";
@@ -314,6 +314,13 @@ String RID_STR_TIMEPOSTFIX
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.24.8.1  2003/07/03 14:40:43  ihi
+ *  rc-2 merge all languages
+ *
+ *  Revision 1.24  2003/06/13 12:47:34  hr
+ *  INTEGRATION: CWS rcmerge (1.23.26); FILE MERGED
+ *  2003/06/12 11:09:55 gh 1.23.26.1: final Merge RC
+ *
  *  Revision 1.23.26.1  2003/06/12 11:09:55  gh
  *  final Merge RC
  *
@@ -424,6 +431,7 @@ String RID_STR_TIMEPOSTFIX
  *
  *  Revision 1.0 05.03.01 09:50:25  fs
  ************************************************************************/
+
 
 
 
