@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docundo.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 13:59:49 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1002,8 +1002,20 @@ BOOL SwDoc::Repeat( SwUndoIter& rUndoIter, USHORT nRepeatCnt )
     BOOL bOneUndo = nSize + 1 == nUndoPos;
 
     SwPaM* pTmpCrsr = rUndoIter.pAktPam;
+    USHORT nId = 0;
+
     if( pTmpCrsr != pTmpCrsr->GetNext() || !bOneUndo )  // Undo-Klammerung aufbauen
-        StartUndo( 0 );
+    {
+        if (pUndo->GetId() == UNDO_END)
+        {
+            SwUndoStart * pStartUndo =
+                (SwUndoStart *) (*pUndos)[nSize];
+
+            nId = pStartUndo->GetUserId();
+        }
+
+        StartUndo( nId );
+    }
     do {        // dann durchlaufe mal den gesamten Ring
         for( USHORT nRptCnt = nRepeatCnt; nRptCnt > 0; --nRptCnt )
         {
@@ -1014,7 +1026,7 @@ BOOL SwDoc::Repeat( SwUndoIter& rUndoIter, USHORT nRepeatCnt )
     } while( pTmpCrsr !=
         ( rUndoIter.pAktPam = (SwPaM*)rUndoIter.pAktPam->GetNext() ));
     if( pTmpCrsr != pTmpCrsr->GetNext() || !bOneUndo )
-        EndUndo( 0 );
+        EndUndo( nId );
 
     return TRUE;
 }
