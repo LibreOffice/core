@@ -4,3 +4,5 @@
 ..\%__SRC%\bin\*.bin %_DEST%\bin%_EXT%\*.bin
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 ..\%__SRC%\bin\*.exe %_DEST%\bin%_EXT%\*.exe
+
+touch: ..\%__SRC%\misc\dbu.hid %_DEST%\bin%_EXT%\dbu.hid
