@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-27 15:26:29 $
+#   last change: $Author: kz $ $Date: 2005-03-01 13:07:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -171,6 +171,6 @@
   </target>
 
   <!-- ========================= All In One Build ======================= -->
-  <target name="all" depends="HelloWorld,Highlight,MemoryUsage,selector"/>
+  <target name="all" depends="HelloWorld,Highlight,MemoryUsage"/>
 
 </project>
