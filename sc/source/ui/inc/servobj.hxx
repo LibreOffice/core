@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servobj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:40:28 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #include <svtools/listener.hxx>
 #endif
 #ifndef _LINKSRC_HXX //autogen
-#include <so3/linksrc.hxx>
+#include <sfx2/linksrc.hxx>
 #endif
 
 #ifndef SC_SCGLOB_HXX
@@ -93,7 +93,7 @@ public:
     virtual void    Notify( SvtBroadcaster& rBC, const SfxHint& rHint);
 };
 
-class ScServerObject : public ::so3::SvLinkSource, public SfxListener
+class ScServerObject : public ::sfx2::SvLinkSource, public SfxListener
 {
 private:
     ScServerObjectSvtListenerForwarder  aForwarder;
