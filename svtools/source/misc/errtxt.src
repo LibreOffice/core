@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-04 11:01:12 $
+ *  last change: $Author: obo $ $Date: 2000-12-06 14:05:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1590,7 +1590,7 @@ Resource RID_ERRHDL
         Text [ english_us ] = "Path to the file does not exist" ;
         Text [ italian ] = "Il percorso del file non esiste" ;
         Text [ spanish ] = "No existe la ruta de acceso al archivo." ;
-        Text [ french ] = "Le chemin uindiqué pour le fichier n'existe pas" ;
+        Text [ french ] = "Le chemin vers le fichier n'existe pas" ;
         Text [ dutch ] = "Pad naar bestand niet gevonden" ;
         Text [ swedish ] = "Sökvägen till filen existerar inte" ;
         Text [ danish ] = "Stien til filen eksisterer ikke" ;
