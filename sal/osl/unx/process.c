@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: tra $ $Date: 2002-11-13 10:55:49 $
+ *  last change: $Author: tra $ $Date: 2002-12-14 12:57:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -18,7 +18,7 @@
  *  =============================================
  *  Copyright 2000 by Sun Microsystems, Inc.
  *  901 San Antonio Road, Palo Alto, CA 94303, USA
- *
+ *osl_getExecut
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
  *  License version 2.1, as published by the Free Software Foundation.
@@ -79,13 +79,33 @@
 
 #include "system.h"
 
+#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
+#endif
+
+#ifndef _OSL_MUTEX_H_
 #include <osl/mutex.h>
+#endif
+
+#ifndef _OSL_CONDITN_H_
 #include <osl/conditn.h>
+#endif
+
+#ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
+#endif
+
+#ifndef _OSL_FILE_H_
 #include <osl/file.h>
+#endif
+
+#ifndef _OSL_SIGNAL_H_
 #include <osl/signal.h>
+#endif
+
+#ifndef _RTL_ALLOC_H_
 #include <rtl/alloc.h>
+#endif
 
 #include <grp.h>
 
@@ -148,7 +168,7 @@ typedef struct _oslPipeImpl {
  *
  *****************************************************************************/
 
-static sal_Char *getCmdLine();
+extern sal_Char *getCmdLine();
 
 oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
                                                 sal_Char *pszArguments[],
@@ -160,8 +180,15 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
                                                 oslFileHandle *pInputWrite,
                                                 oslFileHandle *pOutputRead,
                                                 oslFileHandle *pErrorRead );
-oslProcessError SAL_CALL osl_searchPath(const sal_Char* pszName, const sal_Char* pszPath,
-                                        sal_Char Separator, sal_Char *pszBuffer, sal_uInt32 Max);
+
+
+oslProcessError SAL_CALL osl_searchPath_impl(
+    const sal_Char* pszName,
+    const sal_Char* pszPath,
+    sal_Char Separator,
+    sal_Char *pszBuffer,
+    sal_uInt32 Max);
+
 
 oslProcessError SAL_CALL osl_psz_getExecutableFile(sal_Char* pszBuffer, sal_uInt32 Max);
 sal_Bool osl_getFullPath(const sal_Char* pszFilename, sal_Char* pszPath, sal_uInt32 MaxLen);
@@ -184,7 +211,7 @@ static int nArgCount = -1;
 
 #if defined(MACOSX)
 /* Can't access environ and __progname directly when linking two-level. */
-static sal_Char *getCmdLine()
+sal_Char *getCmdLine()
 {
     int i;
     int len = 0;
@@ -217,7 +244,7 @@ static sal_Char *getCmdLine()
  * mfe: used by FreeBSD, NetBSD, HP-UX, IRIX
  *      (and which other Unix flavours?)
  */
-static sal_Char *getCmdLine()
+sal_Char *getCmdLine()
 {
     /* Memory layout of CMD_ARG_PRG:
        progname\0arg1\0...argn[\0]\0environ\0env2\0...envn\0[\0] */
@@ -260,7 +287,7 @@ static void saveEnviron(void)
     pEnviron = CMD_ARG_ENV;
 }
 
-static sal_Char *getCmdLine()
+sal_Char *getCmdLine()
 {
     sal_Char **pArgs = pEnviron;
     sal_Char *pChr;
@@ -286,7 +313,7 @@ static sal_Char *getCmdLine()
  *  mfe: this is for Linux
  *       (and which other Unix flavours?)
  */
-static sal_Char *getCmdLine()
+sal_Char *getCmdLine()
 {
     FILE *fp;
     sal_Char  name[PATH_MAX + 1];
@@ -326,7 +353,7 @@ static sal_Char *getCmdLine()
  *       (and which other Unix flavours?)
  */
 
-static sal_Char *getCmdLine()
+sal_Char *getCmdLine()
 {
     int   fd;
     sal_Char  name[PATH_MAX + 1];
@@ -379,7 +406,7 @@ static sal_Char *getCmdLine()
  *       (and which other Unix flavours?)
  */
 
-static sal_Char *getCmdLine()
+sal_Char *getCmdLine()
 {
     FILE    *fp;
     sal_Char    cmd[CMD_ARG_MAX + 1];
@@ -425,86 +452,13 @@ static sal_Char *getCmdLine()
 }
 #endif
 
-oslProcessError SAL_CALL osl_getExecutableFile( rtl_uString** pustrFile )
-{
-    const char * pszCmdLine = getCmdLine();
-    const char * pszRealPathSrc = pszCmdLine;
-    char szAbsolutePath[PATH_MAX] = "";
-    char szRealPathBuf[PATH_MAX] = "";
+/*******************************************************************
+   !!! Working on byte strings is dangerous because of MBCS see
+   #104563.
+   Don't fix this function because it is only used in profile.c and
+   profiles are deprecated
+ ******************************************************************/
 
-    /* if the command line argument #0 starts with a '/', this program has been */
-    /* invoked using a full qualified path */
-    if( '/' != pszCmdLine[0] )
-    {
-        oslProcessError ret = osl_Process_E_None;
-
-        /* if the command line argument #0 contains a '/' somewhere else, it has */
-        /* been probably invoked relatively to the current working directory */
-        if( strchr(pszCmdLine, '/') )
-        {
-            if( NULL != getcwd(szAbsolutePath, sizeof(szAbsolutePath)) )
-            {
-                size_t n  = strlen(szAbsolutePath);
-                size_t n2 = strlen(pszCmdLine);
-
-                /* check remaining size and append '/' and argument #0 is possible */
-                if( n + n2 + 1 < PATH_MAX )
-                {
-                    szAbsolutePath[n] = '/';
-                    strncpy(szAbsolutePath + n + 1, pszCmdLine, n2 + 1);
-
-                    /* replace the original pszRealPathSrc pointer */
-                    pszRealPathSrc = szAbsolutePath;
-                }
-            }
-        }
-        /* this program must be in the PATH variable */
-        else
-        {
-            ret = osl_searchPath(pszCmdLine, NULL, '\0', szAbsolutePath, sizeof(szAbsolutePath));
-            if( osl_Process_E_None == ret )
-            {
-                /* replace the original pszRealPathSrc pointer */
-                pszRealPathSrc = szAbsolutePath;
-            }
-        }
-
-        /* if szAbsolutePath has not been filled, return with an error */
-        if( '\0' == szAbsolutePath[0] )
-        {
-            ret = osl_Process_E_Unknown;
-        }
-
-        if( osl_Process_E_None != ret )
-        {
-            free((void *) pszCmdLine);
-            return ret;
-        }
-    }
-
-    /* get the realpath of the resulting file and convert it to a file URL */
-    if( NULL != realpath(pszRealPathSrc, szRealPathBuf) )
-    {
-        rtl_uString *ustrTmp = NULL;
-
-        rtl_string2UString(&ustrTmp, szRealPathBuf, strlen(szRealPathBuf),
-            osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS);
-
-        osl_getFileURLFromSystemPath(ustrTmp, pustrFile);
-        rtl_uString_release(ustrTmp);
-
-        free((void *) pszCmdLine);
-        return osl_Process_E_None;
-    }
-    else
-    {
-        free((void *)pszCmdLine);
-        return osl_Process_E_Unknown;
-    }
-}
-
-
-/* a copy of the above, hopefully no longer used by referenced in profile.c, which is deprecated .. */
 oslProcessError SAL_CALL osl_psz_getExecutableFile(sal_Char* pszBuffer, sal_uInt32 Max)
 {
     const char * pszCmdLine = getCmdLine();
@@ -541,7 +495,7 @@ oslProcessError SAL_CALL osl_psz_getExecutableFile(sal_Char* pszBuffer, sal_uInt
         /* this program must be in the PATH variable */
         else
         {
-            ret = osl_searchPath(pszCmdLine, NULL, '\0', szAbsolutePath, sizeof(szAbsolutePath));
+            ret = osl_searchPath_impl(pszCmdLine, NULL, '\0', szAbsolutePath, sizeof(szAbsolutePath));
             if( osl_Process_E_None == ret )
             {
                 /* replace the original pszRealPathSrc pointer */
@@ -577,30 +531,76 @@ oslProcessError SAL_CALL osl_psz_getExecutableFile(sal_Char* pszBuffer, sal_uInt
     return osl_Process_E_None;
 }
 
+/******************************************************************************
+ Deprecated
+ Old and buggy implementation of osl_searchPath used only by the deprected
+ osl_psz_getExecutableName.
+ A new implemenation is in process_impl.cxx
+ *****************************************************************************/
 
-/* return the executable name without path - used in signal.c */
-char * osl_impl_getExecutableName(char * buffer, size_t n)
+oslProcessError SAL_CALL osl_searchPath_impl(const sal_Char* pszName, const sal_Char* pszPath,
+                   sal_Char Separator, sal_Char *pszBuffer, sal_uInt32 Max)
 {
-    const char * pszCmdLine = getCmdLine();
-    const char * pc = strrchr(pszCmdLine, '/');
-    size_t len;
+    sal_Char path[PATH_MAX + 1];
+    sal_Char *pchr;
 
-    /* cut of the path */
-    if( NULL != pc )
-        ++pc;
-    else
-        pc = pszCmdLine;
+    path[0] = '\0';
 
-    if( n > strlen(pc) )
+    OSL_ASSERT(pszName != NULL);
+
+    if ( pszName == 0 )
     {
-        strcpy(buffer, pc);
-        free((void *) pszCmdLine);
-        return buffer;
+        return osl_Process_E_NotFound;
     }
 
-    free((void *) pszCmdLine);
-    return NULL;
+    if (pszPath == NULL)
+        pszPath = "PATH";
+
+    if (Separator == '\0')
+        Separator = ':';
+
+
+    if ( (pchr = getenv(pszPath)) != 0 )
+    {
+        sal_Char *pstr;
+
+        while (*pchr != '\0')
+        {
+            pstr = path;
+
+            while ((*pchr != '\0') && (*pchr != Separator))
+                *pstr++ = *pchr++;
+
+            if ((pstr > path) && ((*(pstr - 1) != '/')))
+                *pstr++ = '/';
+
+            *pstr = '\0';
+
+            strcat(path, pszName);
+
+            if (access(path, 0) == 0)
+            {
+                char szRealPathBuf[PATH_MAX] = "";
+
+                if( NULL == realpath(path, szRealPathBuf) || (strlen(szRealPathBuf) >= (sal_uInt32)Max))
+                    return osl_Process_E_Unknown;
+
+                strcpy(pszBuffer, path);
+
+                return osl_Process_E_None;
+            }
+
+            if (*pchr == Separator)
+                pchr++;
+        }
+    }
+
+    return osl_Process_E_NotFound;
 }
+
+/**********************************************
+ osl_getCommandArgCount
+ *********************************************/
 
 sal_uInt32  SAL_CALL osl_getCommandArgCount()
 {
@@ -624,6 +624,10 @@ sal_uInt32  SAL_CALL osl_getCommandArgCount()
 
     return nArgCount;
 }
+
+/**********************************************
+ osl_getCommandArg
+ *********************************************/
 
 oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCommandArg)
 {
@@ -674,6 +678,10 @@ oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCo
 
     return tErr;
 }
+
+/**********************************************
+ osl_getCommandArgs
+ *********************************************/
 
 oslProcessError SAL_CALL osl_getCommandArgs(sal_Char* pszBuffer, sal_uInt32 Max)
 {
@@ -736,6 +744,10 @@ oslProcessError SAL_CALL osl_getCommandArgs(sal_Char* pszBuffer, sal_uInt32 Max)
  *
  *****************************************************************************/
 
+
+/**********************************************
+ sendFdPipe
+ *********************************************/
 
 static sal_Bool sendFdPipe(int PipeFD, int SocketFD)
 {
@@ -816,6 +828,9 @@ static sal_Bool sendFdPipe(int PipeFD, int SocketFD)
     return bRet;
 }
 
+/**********************************************
+ receiveFdPipe
+ *********************************************/
 
 static oslSocket receiveFdPipe(int PipeFD)
 {
@@ -896,6 +911,10 @@ static oslSocket receiveFdPipe(int PipeFD)
     return pSocket;
 }
 
+/**********************************************
+ osl_sendResourcePipe
+ *********************************************/
+
 sal_Bool osl_sendResourcePipe(oslPipe pPipe, oslSocket pSocket)
 {
     sal_Bool bRet = sal_False;
@@ -910,6 +929,9 @@ sal_Bool osl_sendResourcePipe(oslPipe pPipe, oslSocket pSocket)
     return bRet;
 }
 
+/**********************************************
+ osl_receiveResourcePipe
+ *********************************************/
 
 oslSocket osl_receiveResourcePipe(oslPipe pPipe)
 {
@@ -1145,6 +1167,9 @@ static void ChildStatusProc(void *pData)
     }
 }
 
+/**********************************************
+ osl_executeProcess_WithRedirectedIO
+ *********************************************/
 
 oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
                                             rtl_uString *ustrImageName,
@@ -1264,6 +1289,9 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     return Error;
 }
 
+/**********************************************
+ osl_executeProcess
+ *********************************************/
 
 oslProcessError SAL_CALL osl_executeProcess(
                                             rtl_uString *ustrImageName,
@@ -1293,6 +1321,9 @@ oslProcessError SAL_CALL osl_executeProcess(
         );
 }
 
+/**********************************************
+ osl_psz_executeProcess
+ *********************************************/
 
 oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
                                                 sal_Char *pszArguments[],
@@ -1329,7 +1360,7 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
     }
 
     if ((Options & osl_Process_SEARCHPATH) &&
-        (osl_searchPath(pszImageName, NULL, '\0', path, sizeof(path)) == osl_Process_E_None))
+        (osl_searchPath_impl(pszImageName, NULL, '\0', path, sizeof(path)) == osl_Process_E_None))
         pszImageName = path;
 
     Data.m_pszArgs[0] = strdup(pszImageName);
@@ -1414,6 +1445,11 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
  *
  *****************************************************************************/
 
+
+/**********************************************
+ osl_terminateProcess
+ *********************************************/
+
 oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
 {
     if (Process == NULL)
@@ -1436,6 +1472,10 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
 
     return osl_Process_E_None;
 }
+
+/**********************************************
+ osl_getProcess
+ *********************************************/
 
 oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
 {
@@ -1486,6 +1526,10 @@ oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
 
     return (pProcImpl);
 }
+
+/**********************************************
+ osl_freeProcessHandle
+ *********************************************/
 
 void SAL_CALL osl_freeProcessHandle(oslProcess Process)
 {
@@ -1606,9 +1650,11 @@ struct osl_procStat
     unsigned long vm_lib;     /* library size */
 };
 
+/**********************************************
+ osl_getProcStat
+ *********************************************/
 
-void
-osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
+void osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
 {
     int fd = 0;
     char name[PATH_MAX + 1];
@@ -1653,8 +1699,11 @@ osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
     }
 }
 
-void
-osl_getProcStatm(pid_t pid, struct osl_procStat* procstat)
+/**********************************************
+ osl_getProcStatm
+ *********************************************/
+
+void osl_getProcStatm(pid_t pid, struct osl_procStat* procstat)
 {
     int fd = 0;
     char name[PATH_MAX + 1];
@@ -1678,8 +1727,11 @@ osl_getProcStatm(pid_t pid, struct osl_procStat* procstat)
     }
 }
 
-void
-osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
+/**********************************************
+ osl_getProcStatus
+ *********************************************/
+
+void osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
 {
     int fd = 0;
     char name[PATH_MAX + 1];
@@ -1740,6 +1792,10 @@ osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
 }
 
 #endif
+
+/**********************************************
+ osl_getProcessInfo
+ *********************************************/
 
 oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData Fields, oslProcessInfo* pInfo)
 {
@@ -1931,6 +1987,10 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
     return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;
 }
 
+/**********************************************
+ osl_joinProcess
+ *********************************************/
+
 oslProcessError SAL_CALL osl_joinProcess(oslProcess Process)
 {
 /*  int status;*/
@@ -1985,129 +2045,39 @@ oslProcessError SAL_CALL osl_joinProcess(oslProcess Process)
  *
  *****************************************************************************/
 
-oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **ustrValue)
+oslProcessError SAL_CALL osl_getEnvironment(rtl_uString* pustrEnvVar, rtl_uString** ppustrValue)
 {
-    oslProcessError Error;
-    sal_Char pszValue[PATH_MAX];
-    rtl_String* strVar=0;
-    sal_Char* pszVar=0;
+    rtl_String*     pstr_env_var = 0;
+    char*           p_env_var;
+    oslProcessError osl_error = osl_Process_E_NotFound;
 
-    pszValue[0] = '\0';
+    OSL_PRECOND(pustrEnvVar, "osl_getEnvironment: Invalid parameter");
+    OSL_PRECOND(ppustrValue, "osl_getEnvironment: Invalid parameter");
 
-    if ( ustrVar != 0 )
-    {
-        rtl_uString2String( &strVar,
-                            rtl_uString_getStr(ustrVar),
-                            rtl_uString_getLength(ustrVar),
-                            osl_getThreadTextEncoding(),
-                            OUSTRING_TO_OSTRING_CVTFLAGS );
-        pszVar = rtl_string_getStr(strVar);
-    }
+    rtl_uString2String(
+        &pstr_env_var,
+        rtl_uString_getStr(pustrEnvVar),
+        rtl_uString_getLength(pustrEnvVar),
+        osl_getThreadTextEncoding(),
+        OUSTRING_TO_OSTRING_CVTFLAGS);
 
-
-    Error=osl_psz_getEnvironment(pszVar,pszValue,sizeof(pszValue));
-
-    if( osl_Process_E_None == Error )
+    if ((p_env_var = getenv(rtl_string_getStr(pstr_env_var))))
     {
         rtl_string2UString(
-            ustrValue,
-            pszValue,
-            rtl_str_getLength( pszValue ),
+            ppustrValue,
+            p_env_var,
+            strlen(p_env_var),
             osl_getThreadTextEncoding(),
-            OUSTRING_TO_OSTRING_CVTFLAGS );
+            OSTRING_TO_OUSTRING_CVTFLAGS);
+
+        osl_error = osl_Process_E_None;
     }
 
-    if ( strVar != 0 )
-    {
-        rtl_string_release(strVar);
-    }
+    rtl_string_release(pstr_env_var);
 
-
-    return Error;
+    return osl_error;
 }
 
-
-oslProcessError SAL_CALL osl_psz_getEnvironment(const sal_Char* pszName, sal_Char *pszBuffer, sal_uInt32 Max)
-{
-    sal_Char *pStr;
-
-    if ( (pStr = getenv(pszName)) != 0 )
-    {
-        strncpy(pszBuffer, pStr, Max);
-        pszBuffer[Max-1] = '\0';
-
-        return osl_Process_E_None;
-    }
-
-    return osl_Process_E_NotFound;
-}
-
-
-/******************************************************************************
- *
- *                  Utilities
- *
- *****************************************************************************/
-
-oslProcessError SAL_CALL osl_searchPath(const sal_Char* pszName, const sal_Char* pszPath,
-                   sal_Char Separator, sal_Char *pszBuffer, sal_uInt32 Max)
-{
-    sal_Char path[PATH_MAX + 1];
-    sal_Char *pchr;
-
-    path[0] = '\0';
-
-    OSL_ASSERT(pszName != NULL);
-
-    if ( pszName == 0 )
-    {
-        return osl_Process_E_NotFound;
-    }
-
-    if (pszPath == NULL)
-        pszPath = "PATH";
-
-    if (Separator == '\0')
-        Separator = ':';
-
-
-    if ( (pchr = getenv(pszPath)) != 0 )
-    {
-        sal_Char *pstr;
-
-        while (*pchr != '\0')
-        {
-            pstr = path;
-
-            while ((*pchr != '\0') && (*pchr != Separator))
-                *pstr++ = *pchr++;
-
-            if ((pstr > path) && ((*(pstr - 1) != '/')))
-                *pstr++ = '/';
-
-            *pstr = '\0';
-
-            strcat(path, pszName);
-
-            if (access(path, 0) == 0)
-            {
-                char szRealPathBuf[PATH_MAX] = "";
-
-                if( NULL == realpath(path, szRealPathBuf) || (strlen(szRealPathBuf) >= (sal_uInt32)Max))
-                    return osl_Process_E_Unknown;
-
-                strcpy(pszBuffer, path);
-
-                return osl_Process_E_None;
-            }
-
-            if (*pchr == Separator)
-                pchr++;
-        }
-    }
-
-    return osl_Process_E_NotFound;
-}
 
 /******************************************************************************
  *
@@ -2115,25 +2085,30 @@ oslProcessError SAL_CALL osl_searchPath(const sal_Char* pszName, const sal_Char*
  *
  *****************************************************************************/
 
-oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir )
+oslProcessError SAL_CALL osl_getProcessWorkingDir(rtl_uString **ppustrWorkingDir)
 {
-    char buffer[PATH_MAX];
+    oslProcessError osl_error = osl_Process_E_None;
+    char            buffer[PATH_MAX];
 
-    if( getcwd( buffer, PATH_MAX ) )
+    OSL_PRECOND(ppustrWorkingDir, "osl_getProcessWorkingDir: invalid parameter");
+
+    if (getcwd(buffer, PATH_MAX))
     {
         rtl_uString* ustrTmp = NULL;
 
-        /* convert file path to unicode */
-        rtl_string2UString( &ustrTmp, buffer, strlen( buffer ), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+        rtl_string2UString(
+            &ustrTmp,
+            buffer,
+            strlen(buffer),
+            osl_getThreadTextEncoding(),
+            OSTRING_TO_OUSTRING_CVTFLAGS);
 
-        /* convert file path to file URL */
-        osl_getFileURLFromSystemPath( ustrTmp, pustrWorkingDir );
+        osl_error = osl_getFileURLFromSystemPath(ustrTmp, ppustrWorkingDir);
 
-        rtl_uString_release( ustrTmp );
-        return osl_Process_E_None;
+        rtl_uString_release(ustrTmp);
     }
 
-    return osl_Process_E_Unknown;
+    return osl_error;
 }
 
 /******************************************************************************
@@ -2144,6 +2119,10 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir
 
 static rtl_Locale * theProcessLocale = NULL;
 static pthread_mutex_t aLocalMutex = PTHREAD_MUTEX_INITIALIZER;
+
+/**********************************************
+ osl_getProcessLocale
+ *********************************************/
 
 oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
 {
@@ -2162,6 +2141,9 @@ oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
     return osl_Process_E_None;
 }
 
+/**********************************************
+ osl_setProcessLocale
+ *********************************************/
 
 oslProcessError SAL_CALL osl_setProcessLocale( rtl_Locale * pLocale )
 {
