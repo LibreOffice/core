@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocapt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:44:07 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,10 @@
 
 #ifndef _EEITEM_HXX
 #include "eeitem.hxx"
+#endif
+
+#ifndef _SDR_PROPERTIES_CAPTIONPROPERTIES_HXX
+#include <svx/sdr/properties/captionproperties.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -222,6 +226,15 @@ void ImpCaptParams::CalcEscPos(const Point& rTailPt, const Rectangle& rRect, Poi
     rDir=eBestDir;
 }
 
+//////////////////////////////////////////////////////////////////////////////
+
+sdr::properties::BaseProperties* SdrCaptionObj::CreateObjectSpecificProperties()
+{
+    return new sdr::properties::CaptionProperties(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 TYPEINIT1(SdrCaptionObj,SdrRectObj);
 
 SdrCaptionObj::SdrCaptionObj():
@@ -250,12 +263,12 @@ SdrCaptionObj::~SdrCaptionObj()
 {
 }
 
-FASTBOOL SdrCaptionObj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrCaptionObj::DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
 {
     // special shadow paint for calc
     if(mbSpecialTextBoxShadow)
     {
-        const SfxItemSet& rSet = GetItemSet();
+        const SfxItemSet& rSet = GetObjectItemSet();
         sal_uInt32 nXDist = ((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
         sal_uInt32 nYDist = ((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
         const SdrShadowColorItem& rShadColItem = ((SdrShadowColorItem&)(rSet.Get(SDRATTR_SHADOWCOLOR)));
@@ -305,7 +318,7 @@ FASTBOOL SdrCaptionObj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInf
     }
 
     // call parent for normal paint
-    return SdrRectObj::Paint(rOut, rInfoRec);
+    return SdrRectObj::DoPaintObject(rOut, rInfoRec);
 }
 
 void SdrCaptionObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
@@ -354,7 +367,7 @@ SdrObject* SdrCaptionObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfBy
     FASTBOOL bHit=SdrRectObj::CheckHit(rPnt,nTol,pVisiLayer)!=NULL;
     if (!bHit) {
         INT32 nMyTol=nTol;
-        INT32 nWdt = ((XLineWidthItem&)(GetItem(XATTR_LINEWIDTH))).GetValue();
+        INT32 nWdt = ((XLineWidthItem&)(GetObjectItem(XATTR_LINEWIDTH))).GetValue();
         nWdt++;
         nWdt /= 2;
 
@@ -400,9 +413,10 @@ void SdrCaptionObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL bDetail) const
     rPoly.Insert(XPolygon(aTailPoly));
 }
 
-void SdrCaptionObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
-{
-}
+//#110094#-12
+//void SdrCaptionObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
+//{
+//}
 
 USHORT SdrCaptionObj::GetHdlCount() const
 {
@@ -490,16 +504,20 @@ FASTBOOL SdrCaptionObj::MovDrag(SdrDragStat& rDrag) const
 
 FASTBOOL SdrCaptionObj::EndDrag(SdrDragStat& rDrag)
 {
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
+    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
     const SdrHdl* pHdl=rDrag.GetHdl();
     if (pHdl!=NULL && pHdl->GetPolyNum()==0) {
         FASTBOOL bRet=SdrRectObj::EndDrag(rDrag);
         ImpRecalcTail();
-        SendRepaintBroadcast();
+
+        // Here only redraw wanted
+        ActionChanged();
+        // BroadcastObjectChange();
+
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
         return bRet;
     } else {
-        SendRepaintBroadcast();
+        // #110094#-14 SendRepaintBroadcast();
         Point aDelt(rDrag.GetNow()-rDrag.GetStart());
         if (pHdl==NULL) { // Rect verschoben
             aRect.Move(aDelt.X(),aDelt.Y());
@@ -508,7 +526,7 @@ FASTBOOL SdrCaptionObj::EndDrag(SdrDragStat& rDrag)
         }
         ImpRecalcTail();
         SetChanged();
-        SendRepaintBroadcast();
+        BroadcastObjectChange();
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
         return TRUE;
     }
@@ -571,7 +589,7 @@ void SdrCaptionObj::TakeDragPoly(const SdrDragStat& rDrag, XPolyPolygon& rXPP) c
 
 void SdrCaptionObj::ImpGetCaptParams(ImpCaptParams& rPara) const
 {
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
     rPara.eType      =((SdrCaptionTypeItem&)      (rSet.Get(SDRATTR_CAPTIONTYPE      ))).GetValue();
     rPara.bFixedAngle=((SdrCaptionFixedAngleItem&)(rSet.Get(SDRATTR_CAPTIONANGLE     ))).GetValue();
     rPara.nAngle     =((SdrCaptionAngleItem&)     (rSet.Get(SDRATTR_CAPTIONFIXEDANGLE))).GetValue();
@@ -856,11 +874,11 @@ const Point& SdrCaptionObj::GetTailPos() const
 void SdrCaptionObj::SetTailPos(const Point& rPos)
 {
     if (aTailPoly.GetSize()==0 || aTailPoly[0]!=rPos) {
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
-        SendRepaintBroadcast();
+        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+        // #110094#-14 SendRepaintBroadcast();
         NbcSetTailPos(rPos);
         SetChanged();
-        SendRepaintBroadcast();
+        BroadcastObjectChange();
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
     }
 }
@@ -886,45 +904,6 @@ Point SdrCaptionObj::GetSnapPoint(USHORT i) const
 void SdrCaptionObj::SetModel(SdrModel* pNewModel)
 {
     SdrRectObj::SetModel(pNewModel);
-    ImpRecalcTail();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// ItemSet access
-
-SfxItemSet* SdrCaptionObj::CreateNewItemSet(SfxItemPool& rPool)
-{
-    // include ALL items, 2D and 3D
-    return new SfxItemSet(rPool,
-        // ranges from SdrAttrObj
-        SDRATTR_START, SDRATTRSET_SHADOW,
-        SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
-        SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
-
-        // caption attributes
-        SDRATTR_CAPTION_FIRST, SDRATTRSET_CAPTION,
-
-        // outliner and end
-        EE_ITEMS_START, EE_ITEMS_END,
-        0, 0);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// private support routines for ItemSet access
-void SdrCaptionObj::ItemSetChanged(const SfxItemSet& rSet)
-{
-    // local changes
-    ImpRecalcTail();
-
-    // call parent
-    SdrRectObj::ItemSetChanged(rSet);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void SdrCaptionObj::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontRemoveHardAttr)
-{
-    SdrRectObj::NbcSetStyleSheet(pNewStyleSheet,bDontRemoveHardAttr);
     ImpRecalcTail();
 }
 
@@ -977,32 +956,6 @@ SdrObject* SdrCaptionObj::DoConvertToPolyObj(BOOL bBezier) const
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// pre- and postprocessing for objects for saving
-
-void SdrCaptionObj::PreSave()
-{
-    // call parent
-    SdrRectObj::PreSave();
-
-    // prepare SetItems for storage
-    const SfxItemSet& rSet = GetUnmergedItemSet();
-    const SfxItemSet* pParent = GetStyleSheet() ? &GetStyleSheet()->GetItemSet() : 0L;
-    SdrCaptionSetItem aCaptAttr(rSet.GetPool());
-    aCaptAttr.GetItemSet().Put(rSet);
-    aCaptAttr.GetItemSet().SetParent(pParent);
-    mpObjectItemSet->Put(aCaptAttr);
-}
-
-void SdrCaptionObj::PostSave()
-{
-    // call parent
-    SdrRectObj::PostSave();
-
-    // remove SetItems from local itemset
-    mpObjectItemSet->ClearItem(SDRATTRSET_CAPTION);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrCaptionObj::WriteData(SvStream& rOut) const
 {
@@ -1017,7 +970,7 @@ void SdrCaptionObj::WriteData(SvStream& rOut) const
 
     if(pPool)
     {
-        const SfxItemSet& rSet = GetUnmergedItemSet();
+        const SfxItemSet& rSet = GetObjectItemSet();
 
         pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_CAPTION));
     }
@@ -1049,7 +1002,7 @@ void SdrCaptionObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
         sal_uInt16 nSetID = SDRATTRSET_CAPTION;
         const SdrCaptionSetItem* pCaptAttr = (const SdrCaptionSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
         if(pCaptAttr)
-            SetItemSet(pCaptAttr->GetItemSet());
+            SetObjectItemSet(pCaptAttr->GetItemSet());
     }
     else
     {
