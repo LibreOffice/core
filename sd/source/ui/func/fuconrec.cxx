@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-27 13:29:45 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,9 +301,7 @@ BOOL FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
             SetStyleSheet(aAttr, pObj);
             SetAttributes(aAttr, pObj);
             SetLineEnds(aAttr, pObj);
-
-//-/            pObj->NbcSetAttributes(aAttr, FALSE);
-            pObj->SetItemSet(aAttr);
+            pObj->SetMergedItemSet(aAttr);
 
             if( nSlotId == SID_DRAW_CAPTION_VERTICAL )
                 ( (SdrTextObj*) pObj)->SetVerticalWriting( TRUE );
@@ -351,7 +349,7 @@ BOOL FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             if(pObj->ISA(SdrCaptionObj) && SID_DRAW_CAPTION_VERTICAL == nSlotId)
             {
                 // draw text object, needs to be initialized when vertical text is used
-                SfxItemSet aSet(pObj->GetItemSet());
+                SfxItemSet aSet(pObj->GetMergedItemSet());
 
                 aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
                 aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
@@ -362,8 +360,7 @@ BOOL FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                 // be set at the object and thus may differ from verical state of
                 // the object.
                 aSet.Put(SvxWritingModeItem(com::sun::star::text::WritingMode_TB_RL));
-
-                pObj->SetItemSet(aSet);
+                pObj->SetMergedItemSet(aSet);
             }
 
             bReturn = sal_True;
@@ -1044,10 +1041,10 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
 
                     if(bIsVertical)
                     {
-                        SfxItemSet aSet(pObj->GetItemSet());
+                        SfxItemSet aSet(pObj->GetMergedItemSet());
                         aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
                         aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
-                        pObj->SetItemSet(aSet);
+                        pObj->SetMergedItemSet(aSet);
                     }
 
                     // For task #105815# the default text is not inserted anymore.
@@ -1077,7 +1074,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
         SetStyleSheet(aAttr, pObj);
         SetAttributes(aAttr, pObj);
         SetLineEnds(aAttr, pObj);
-        pObj->SetItemSet(aAttr);
+        pObj->SetMergedItemSet(aAttr);
     }
 
     return pObj;
