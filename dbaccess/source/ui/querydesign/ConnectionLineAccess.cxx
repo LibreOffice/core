@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLineAccess.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:21:56 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 11:04:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ namespace dbaui
     using namespace ::com::sun::star;
 
     OConnectionLineAccess::OConnectionLineAccess(const OTableConnection* _pLine)
-        :OAccessibleBase(_pLine->GetParent(),_pLine ? _pLine->GetParent()->GetAccessible() : Reference< XAccessible >())
+        :VCLXAccessibleComponent(_pLine->GetParent()->GetComponentInterface().is() ? _pLine->GetParent()->GetWindowPeer() : NULL)
         ,m_pLine(_pLine)
     {
     }
@@ -110,18 +110,18 @@ namespace dbaui
     void SAL_CALL OConnectionLineAccess::disposing()
     {
         m_pLine = NULL;
-        OAccessibleBase::disposing();
+        VCLXAccessibleComponent::disposing();
     }
     // -----------------------------------------------------------------------------
     Any SAL_CALL OConnectionLineAccess::queryInterface( const Type& aType ) throw (RuntimeException)
     {
-        Any aRet(OAccessibleBase::queryInterface( aType ));
+        Any aRet(VCLXAccessibleComponent::queryInterface( aType ));
         return aRet.hasValue() ? aRet : OConnectionLineAccess_BASE::queryInterface( aType );
     }
     // -----------------------------------------------------------------------------
     Sequence< Type > SAL_CALL OConnectionLineAccess::getTypes(  ) throw (RuntimeException)
     {
-        return ::comphelper::concatSequences(OAccessibleBase::getTypes(),OConnectionLineAccess_BASE::getTypes());
+        return ::comphelper::concatSequences(VCLXAccessibleComponent::getTypes(),OConnectionLineAccess_BASE::getTypes());
     }
     // -----------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL OConnectionLineAccess::getImplementationName() throw(RuntimeException)
@@ -292,6 +292,11 @@ namespace dbaui
     sal_Bool OConnectionLineAccess::isEditable() const
     {
         return m_pLine ? !m_pLine->GetParent()->getDesignView()->getController()->isReadOnly() : sal_False;
+    }
+    // -----------------------------------------------------------------------------
+    Reference< XAccessibleContext > SAL_CALL OConnectionLineAccess::getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        return this;
     }
     // -----------------------------------------------------------------------------
 }
