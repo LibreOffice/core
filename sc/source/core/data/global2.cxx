@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:58:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-15 07:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -965,7 +965,7 @@ void ScConsolidateParam::Store( SvStream& rStream ) const
 
 // -----------------------------------------------------------------------
 
-PivotField::PivotField( short nNewCol, USHORT nNewFuncMask ) :
+PivotField::PivotField( SCsCOL nNewCol, USHORT nNewFuncMask ) :
     nCol( nNewCol ),
     nFuncMask( nNewFuncMask ),
     nFuncCount( 0 )
