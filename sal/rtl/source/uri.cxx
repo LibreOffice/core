@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uri.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-08 07:49:12 $
+ *  last change: $Author: sb $ $Date: 2002-11-05 16:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,7 +468,7 @@ rtl::OUString joinPaths(Component const & rBasePath, Component const & rRelPath)
 
 }
 
-sal_Bool const * rtl_getUriCharClass(rtl_UriCharClass eCharClass)
+sal_Bool const * SAL_CALL rtl_getUriCharClass(rtl_UriCharClass eCharClass)
     SAL_THROW_EXTERN_C()
 {
     static sal_Bool const aCharClass[][nCharClassSize]
@@ -549,9 +549,9 @@ sal_Bool const * rtl_getUriCharClass(rtl_UriCharClass eCharClass)
     return aCharClass[eCharClass];
 }
 
-void rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
-                   rtl_UriEncodeMechanism eMechanism, rtl_TextEncoding eCharset,
-                   rtl_uString ** pResult)
+void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
+                            rtl_UriEncodeMechanism eMechanism,
+                            rtl_TextEncoding eCharset, rtl_uString ** pResult)
     SAL_THROW_EXTERN_C()
 {
     OSL_ENSURE(!pCharClass[0x25], "bad pCharClass");
@@ -593,8 +593,9 @@ void rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
     }
 }
 
-void rtl_uriDecode(rtl_uString * pText, rtl_UriDecodeMechanism eMechanism,
-                   rtl_TextEncoding eCharset, rtl_uString ** pResult)
+void SAL_CALL rtl_uriDecode(rtl_uString * pText,
+                            rtl_UriDecodeMechanism eMechanism,
+                            rtl_TextEncoding eCharset, rtl_uString ** pResult)
     SAL_THROW_EXTERN_C()
 {
     switch (eMechanism)
@@ -643,10 +644,10 @@ void rtl_uriDecode(rtl_uString * pText, rtl_UriDecodeMechanism eMechanism,
     }
 }
 
-sal_Bool rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
-                                rtl_uString * pRelUriRef,
-                                rtl_uString ** pResult,
-                                rtl_uString ** pException)
+sal_Bool SAL_CALL rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
+                                         rtl_uString * pRelUriRef,
+                                         rtl_uString ** pResult,
+                                         rtl_uString ** pException)
     SAL_THROW_EXTERN_C()
 {
     // If pRelUriRef starts with a scheme component it is an absolute URI

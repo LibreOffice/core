@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uri.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2002-09-24 10:15:18 $
+ *  last change: $Author: sb $ $Date: 2002-11-05 16:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ rtl_UriDecodeMechanism;
     @return
     An array of 128 booleans, to be used in calls to rtl_uriEncode().
  */
-sal_Bool const * rtl_getUriCharClass(rtl_UriCharClass eCharClass)
+sal_Bool const * SAL_CALL rtl_getUriCharClass(rtl_UriCharClass eCharClass)
     SAL_THROW_EXTERN_C();
 
 /** Encode a text as (part of) a URI.
@@ -271,11 +271,11 @@ sal_Bool const * rtl_getUriCharClass(rtl_UriCharClass eCharClass)
     Returns an encoded representation of the input text.  Must itself not be
     null, and must point to either null or a valid string.
  */
-void rtl_uriEncode(rtl_uString * pText,
-                   sal_Bool const * pCharClass,
-                   rtl_UriEncodeMechanism eMechanism,
-                   rtl_TextEncoding eCharset,
-                   rtl_uString ** pResult)
+void SAL_CALL rtl_uriEncode(rtl_uString * pText,
+                            sal_Bool const * pCharClass,
+                            rtl_UriEncodeMechanism eMechanism,
+                            rtl_TextEncoding eCharset,
+                            rtl_uString ** pResult)
     SAL_THROW_EXTERN_C();
 
 /** Decode (a part of) a URI.
@@ -303,10 +303,10 @@ void rtl_uriEncode(rtl_uString * pText,
     Returns a decoded representation of the input text.  Must itself not be
     null, and must point to either null or a valid string.
  */
-void rtl_uriDecode(rtl_uString * pText,
-                   rtl_UriDecodeMechanism eMechanism,
-                   rtl_TextEncoding eCharset,
-                   rtl_uString ** pResult)
+void SAL_CALL rtl_uriDecode(rtl_uString * pText,
+                            rtl_UriDecodeMechanism eMechanism,
+                            rtl_TextEncoding eCharset,
+                            rtl_uString ** pResult)
     SAL_THROW_EXTERN_C();
 
 /** Convert a relative URI reference into an absolute one.
@@ -351,10 +351,10 @@ void rtl_uriDecode(rtl_uString * pText,
     @return
     True if no exception is signalled, otherwise false.
  */
-sal_Bool rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
-                                rtl_uString * pRelUriRef,
-                                rtl_uString ** pResult,
-                                rtl_uString ** pException)
+sal_Bool SAL_CALL rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
+                                         rtl_uString * pRelUriRef,
+                                         rtl_uString ** pResult,
+                                         rtl_uString ** pException)
     SAL_THROW_EXTERN_C();
 
 #if defined __cplusplus
