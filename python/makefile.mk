@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2003-07-18 15:45:46 $
+#   last change: $Author: hjs $ $Date: 2003-08-18 15:10:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,6 +91,9 @@ CXX:=$(COMPATH)$/bin$/CC
 .IF "$(USE_SHELL)"!="4nt"
 CONVERT=convert.sh
 BUILD_ACTION_SEP=;
+.IF "$(HOME)" == ""
+ENV_BUILD=setenv HOME ;
+.ENDIF
 .ELSE # "$(USE_SHELL)"!="4nt"
 CONVERT=convert.bat
 BUILD_ACTION_SEP=^
@@ -100,9 +103,9 @@ DSP_DIR=PCbuild
 .IF "$(GUI)" == "UNX"
 CONFIGURE_ACTION= ./configure --prefix=../python-inst
 .IF "$(OS)" == "IRIX"
-BUILD_ACTION=gmake ; gmake install
+BUILD_ACTION=$(ENV_BUILD) gmake ; gmake install
 .ELSE
-BUILD_ACTION=make ; make install
+BUILD_ACTION=$(ENV_BUILD) make ; make install
 .ENDIF
 .IF "$(OS)"=="MACOSX"
 PYTHONCORESHL=$(OUT)$/lib$/$(DLLPRE)python$(PYMAJOR)$(PYMINOR)$(DLLPOST)
