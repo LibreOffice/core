@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-28 10:21:03 $
+ *  last change: $Author: mba $ $Date: 2001-07-02 07:54:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,7 +483,7 @@ UcbLockBytes::~UcbLockBytes()
         }
     }
 
-    if ( m_xOutputStream.is() )
+    if ( !m_xInputStream.is() && m_xOutputStream.is() )
     {
         try
         {
