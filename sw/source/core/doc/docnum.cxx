@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2002-10-10 16:29:46 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-11-14 17:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,9 @@
 #include <comcore.hrc>
 #endif
 
+#include <stdio.h>
+#include <tools/stream.hxx>
+#include <undobj.hxx>
 
 inline BYTE GetUpperLvlChg( BYTE nCurLvl, BYTE nLevel, USHORT nMask )
 {
@@ -1624,6 +1627,19 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
 
             BOOL bDelLastPara = !aInsPos.nNode.GetNode().IsCntntNode();
 
+            if (bDelLastPara)
+            {
+                SwPaM aInsPam(aInsPos);
+                BOOL bMoved = aInsPam.Move(fnMoveBackward);
+                ASSERT(bMoved, "No content node found!");
+
+                if (bMoved)
+                {
+                    AppendTxtNode(*aInsPam.GetPoint());
+                    aInsPos = *aInsPam.GetPoint();
+                }
+            }
+
             Copy( aPam, aInsPos );
             if( bDelLastPara )
             {
@@ -1680,6 +1696,18 @@ SetRedlineMode( REDLINE_ON | REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE );
 SetRedlineMode( eOld );
             EndUndo( UNDO_END );
             SetModified();
+
+#ifdef DEBUG
+            char * aLogfileName = getenv("LOGFILE");
+            if (aLogfileName)
+            {
+                SvFileStream aStream(String::CreateFromAscii(aLogfileName),
+                                     STREAM_WRITE | STREAM_TRUNC);
+                aStream << *pUndos;
+                aStream.Flush();
+            }
+#endif
+
             return TRUE;
         }
     }
