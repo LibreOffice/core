@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:04 $
+ *  last change: $Author: bm $ $Date: 2000-11-27 09:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,16 +116,34 @@
 #ifndef _COM_SUN_STAR_CHART_CHARTSYMBOLTYPE_HPP_
 #include <com/sun/star/chart/ChartSymbolType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
+#include <com/sun/star/drawing/LineStyle.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
+#include <com/sun/star/drawing/FillStyle.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_LINEJOINT_HPP_
+#include <com/sun/star/drawing/LineJoint.hpp>
+#endif
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+
+#define SCH_XML_SETFLAG( status, flag )     (status)|= (flag)
+#define SCH_XML_UNSETFLAG( status, flag )   (status) = ((status) | (flag)) - (flag)
+
 using namespace com::sun::star;
 
+// special handling
 #define XML_SCH_TYPE_AXIS_ARRANGEMENT       ( XML_SCH_TYPES_START + 0 )
 #define XML_SCH_TYPE_ERROR_CATEGORY         ( XML_SCH_TYPES_START + 1 )
 #define XML_SCH_TYPE_REGRESSION_TYPE        ( XML_SCH_TYPES_START + 2 )
 #define XML_SCH_TYPE_SOLID_TYPE             ( XML_SCH_TYPES_START + 3 )
+// copyied from draw
+#define XML_SCH_TYPE_STROKE                 ( XML_SCH_TYPES_START + 4 )
+#define XML_SCH_TYPE_LINEJOIN               ( XML_SCH_TYPES_START + 5 )
+#define XML_SCH_TYPE_FILLSTYLE              ( XML_SCH_TYPES_START + 6 )
 
 #define MAP_ENTRY( a, ns, nm, t ) { a, XML_NAMESPACE_##ns, sXML_##nm, t }
 #define MAP_CONTEXT( a, ns, nm, t, c ) { a, XML_NAMESPACE_##ns, sXML_##nm, t, c }
@@ -203,22 +221,45 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     // misc properties
 
     // draw properties
-    // ...
 
     // stroke attributes
-//      { "LineStyle",      XML_NAMESPACE_DRAW, sXML_stroke,                XML_SD_TYPE_STROKE, 0 },
-//      { "LineDash",       XML_NAMESPACE_SVG,  sXML_stroke_dasharray,      XML_SD_TYPE_DASHARRAY, 0 },
-//      { "LineWidth",      XML_NAMESPACE_SVG,  sXML_stroke_width,          XML_TYPE_MEASURE, 0 },
-//      { "LineColor",      XML_NAMESPACE_SVG,  sXML_stroke_color,          XML_TYPE_COLOR, 0 },
-//      { "LineStartWidth", XML_NAMESPACE_DRAW, sXML_marker_start_width,    XML_TYPE_MEASURE, 0 },
-//      { "LineStartCenter",XML_NAMESPACE_DRAW, sXML_marker_start_center,   XML_TYPE_BOOL, 0 },
-//      { "LineEndWidth",   XML_NAMESPACE_DRAW, sXML_marker_end_width,      XML_TYPE_MEASURE, 0 },
-//      { "LineEndCenter",  XML_NAMESPACE_DRAW, sXML_marker_end_center,     XML_TYPE_BOOL, 0 },
-//      { "LineJoint",      XML_NAMESPACE_SVG,  sXML_stroke_linejoin,       XML_SD_TYPE_LINEJOIN, 0 },
+    { "LineStyle",      XML_NAMESPACE_DRAW, sXML_stroke,                XML_SCH_TYPE_STROKE, 0 },
+    { "LineDashName",   XML_NAMESPACE_DRAW, sXML_stroke_dasharray,      XML_TYPE_STRING, 0 },
+    { "LineWidth",      XML_NAMESPACE_SVG,  sXML_stroke_width,          XML_TYPE_MEASURE, 0 },
+    { "LineColor",      XML_NAMESPACE_SVG,  sXML_stroke_color,          XML_TYPE_COLOR, 0 },
+    { "LineStartName",  XML_NAMESPACE_DRAW, sXML_marker_start,          XML_TYPE_STRING, 0 },
+    { "LineStartWidth", XML_NAMESPACE_DRAW, sXML_marker_start_width,    XML_TYPE_MEASURE, 0 },
+    { "LineStartCenter",XML_NAMESPACE_DRAW, sXML_marker_start_center,   XML_TYPE_BOOL, 0 },
+    { "LineEndName",    XML_NAMESPACE_DRAW, sXML_marker_end,            XML_TYPE_STRING, 0 },
+    { "LineEndWidth",   XML_NAMESPACE_DRAW, sXML_marker_end_width,      XML_TYPE_MEASURE, 0 },
+    { "LineEndCenter",  XML_NAMESPACE_DRAW, sXML_marker_end_center,     XML_TYPE_BOOL, 0 },
+//  { "LineTransparence", XML_NAMESPACE_SVG,sXML_stroke_opacity,        XML_SD_TYPE_OPACITY, 0 },
+    { "LineJoint",      XML_NAMESPACE_SVG,  sXML_stroke_linejoin,       XML_SCH_TYPE_LINEJOIN, 0 },
 
-//      // fill attributes
-//      { "FillStyle",      XML_NAMESPACE_DRAW, sXML_fill,                  XML_SD_TYPE_FILLSTYLE, 0 },
-//      { "FillColor",      XML_NAMESPACE_DRAW, sXML_fill_color,            XML_TYPE_COLOR, 0 },
+    // fill attributes
+    { "FillStyle",      XML_NAMESPACE_DRAW, sXML_fill,                  XML_SCH_TYPE_FILLSTYLE, 0 },
+    { "FillColor",      XML_NAMESPACE_DRAW, sXML_fill_color,            XML_TYPE_COLOR, 0 },
+    { "FillGradientName",   XML_NAMESPACE_DRAW, sXML_fill_gradient_name,XML_TYPE_STRING, 0 },
+    { "FillHatchName",  XML_NAMESPACE_DRAW, sXML_fill_hatch_name,   XML_TYPE_STRING, 0 },
+    { "FillBitmapName", XML_NAMESPACE_DRAW, sXML_fill_image_name,   XML_TYPE_STRING, 0 },
+    { "FillTransparenceName",   XML_NAMESPACE_DRAW, sXML_transparency_name, XML_TYPE_STRING, 0 },
+
+    // text attributes
+
+    { "CharColor",      XML_NAMESPACE_FO,       sXML_color,                 XML_TYPE_COLOR, 0 },
+    { "CharCrossedOut", XML_NAMESPACE_STYLE,    sXML_text_crossing_out,     XML_TYPE_BOOL,  0},
+//  { "CharEscapement",      XML_NAMESPACE_STYLE, sXML_text_position,   XML_TYPE_TEXT_ESCAPEMENT|MID_FLAG_MERGE_ATTRIBUTE, 0 }, BugID #76842#
+//  { "CharEscapementHeight", XML_NAMESPACE_STYLE, sXML_text_position,  XML_TYPE_TEXT_ESCAPEMENT_HEIGHT|MID_FLAG_MERGE_ATTRIBUTE, 0 },
+/// { "CharFontName",   XML_NAMESPACE_FO,       sXML_font_family,       XML_TYPE_TEXT_FONTFAMILYNAME, 0 },
+    { "CharFontStyleName",XML_NAMESPACE_STYLE,  sXML_font_style_name,   XML_TYPE_STRING, 0 },
+    { "CharFontFamily", XML_NAMESPACE_STYLE,    sXML_font_family_generic,XML_TYPE_TEXT_FONTFAMILY, 0 },
+    { "CharFontCharSet",XML_NAMESPACE_STYLE,    sXML_font_charset,      XML_TYPE_TEXT_FONTENCODING, 0 },
+    { "CharHeight",     XML_NAMESPACE_FO,   sXML_font_size,         XML_TYPE_CHAR_HEIGHT },
+//  { "CharLocale",     XML_NAMESPACE_FO,       sXML_language,          XML_TYPE_CHAR_LANGUAGE|MID_FLAG_MERGE_PROPERTY, 0 }, not supported yet
+//  { "CharLocale",     XML_NAMESPACE_FO,       sXML_country,           XML_TYPE_CHAR_COUNTRY|MID_FLAG_MERGE_PROPERTY, 0 }, not supported yet
+    { "CharPosture",    XML_NAMESPACE_FO,       sXML_font_style,            XML_TYPE_TEXT_POSTURE, 0 },
+    { "CharUnderline",  XML_NAMESPACE_STYLE,    sXML_text_underline,        XML_TYPE_TEXT_UNDERLINE, 0 },
+    { "CharWeight",     XML_NAMESPACE_FO,       sXML_font_weight,       XML_TYPE_TEXT_WEIGHT, 0 },
 
     MAP_ENTRY_END
 };
@@ -229,6 +270,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
 
 SvXMLEnumMapEntry aXMLChartAxisArrangementEnumMap[] =
 {
+    { sXML_automatic,       chart::ChartAxisArrangeOrderType_AUTO },
     { sXML_side_by_side,    chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE },
     { sXML_stagger_even,    chart::ChartAxisArrangeOrderType_STAGGER_EVEN },
     { sXML_stagger_odd,     chart::ChartAxisArrangeOrderType_STAGGER_ODD }
@@ -262,6 +304,35 @@ SvXMLEnumMapEntry aXMLChartSolidTypeEnumMap[] =
     { sXML_pyramid,     chart::ChartSolidType::PYRAMID },
 };
 
+// enum maps copied from draw
+SvXMLEnumMapEntry aXMLChartLineStyleEnumMap[] =
+{
+    { sXML_none, drawing::LineStyle_NONE },
+    { sXML_solid, drawing::LineStyle_SOLID },
+    { sXML_dash, drawing::LineStyle_DASH },
+    { NULL, 0 }
+};
+
+SvXMLEnumMapEntry aXMLChartLineJointEnumMap[] =
+{
+    { sXML_none,    drawing::LineJoint_NONE },
+    { sXML_miter,   drawing::LineJoint_MITER },
+    { sXML_round,   drawing::LineJoint_ROUND },
+    { sXML_bevel,   drawing::LineJoint_BEVEL },
+    { sXML_middle,  drawing::LineJoint_MIDDLE },
+    { NULL, 0 }
+};
+
+SvXMLEnumMapEntry aXMLChartFillStyleEnumMap[] =
+{
+    { sXML_none,    drawing::FillStyle_NONE },
+    { sXML_solid,   drawing::FillStyle_SOLID },
+    { sXML_bitmap,  drawing::FillStyle_BITMAP },
+    { sXML_gradient,drawing::FillStyle_GRADIENT },
+    { sXML_hatch,   drawing::FillStyle_HATCH },
+    { NULL, 0 }
+};
+
 // ----------------------------------------
 
 XMLChartPropHdlFactory::~XMLChartPropHdlFactory()
@@ -293,6 +364,18 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
             case XML_SCH_TYPE_SOLID_TYPE:
                 // here we have a constant rather than an enum
                 pHdl = new XMLConstantsPropertyHandler( aXMLChartSolidTypeEnumMap, sXML_cuboid );
+                break;
+
+            case XML_SCH_TYPE_FILLSTYLE:
+                pHdl = new XMLEnumPropertyHdl( aXMLChartFillStyleEnumMap, ::getCppuType((const drawing::FillStyle*)0) );
+                break;
+
+            case XML_SCH_TYPE_STROKE:
+                pHdl = new XMLEnumPropertyHdl( aXMLChartLineStyleEnumMap, ::getCppuType((const drawing::LineStyle*)0) );
+                break;
+
+            case XML_SCH_TYPE_LINEJOIN:
+                pHdl = new XMLEnumPropertyHdl( aXMLChartLineJointEnumMap, ::getCppuType((const drawing::LineJoint*)0) );
                 break;
         }
         if( pHdl )
@@ -474,7 +557,126 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
     const SvXMLUnitConverter& rUnitConverter,
     const SvXMLNamespaceMap& rNamespaceMap ) const
 {
-    return sal_False;
+    sal_Int32 nContextId = maPropMapper->GetEntryContextId( rProperty.mnIndex );
+    sal_Bool bRet = (nContextId != 0);
+
+    if( nContextId )
+    {
+        sal_Int32 nValue = 0;
+        sal_Bool bValue = sal_False;
+
+        switch( nContextId )
+        {
+            case XML_SCH_SPECIAL_TICKS_MAJ_INNER:
+            case XML_SCH_SPECIAL_TICKS_MIN_INNER:
+                SvXMLUnitConverter::convertBool( bValue, rValue );
+                // modify old value
+                rProperty.maValue >>= nValue;
+                if( bValue )
+                    SCH_XML_SETFLAG( nValue, chart::ChartAxisMarks::INNER );
+                else
+                    SCH_XML_UNSETFLAG( nValue, chart::ChartAxisMarks::INNER );
+                rProperty.maValue <<= nValue;
+                break;
+            case XML_SCH_SPECIAL_TICKS_MAJ_OUTER:
+            case XML_SCH_SPECIAL_TICKS_MIN_OUTER:
+                SvXMLUnitConverter::convertBool( bValue, rValue );
+                // modify old value
+                rProperty.maValue >>= nValue;
+                if( bValue )
+                    SCH_XML_SETFLAG( nValue, chart::ChartAxisMarks::OUTER );
+                else
+                    SCH_XML_UNSETFLAG( nValue, chart::ChartAxisMarks::OUTER );
+                rProperty.maValue <<= nValue;
+                break;
+            case XML_SCH_SPECIAL_ERROR_UPPER_INDICATOR:
+                {
+                    SvXMLUnitConverter::convertBool( bValue, rValue );
+                    // modify old value
+                    chart::ChartErrorIndicatorType eType;
+                    rProperty.maValue >>= eType;
+                    if( bValue )
+                        eType = ( eType == chart::ChartErrorIndicatorType_LOWER )
+                            ? chart::ChartErrorIndicatorType_TOP_AND_BOTTOM
+                            : chart::ChartErrorIndicatorType_UPPER;
+                    else
+                        eType = ( eType == chart::ChartErrorIndicatorType_TOP_AND_BOTTOM )
+                            ? chart::ChartErrorIndicatorType_LOWER
+                            : chart::ChartErrorIndicatorType_NONE;
+
+                    rProperty.maValue <<= eType;
+                }
+                break;
+            case XML_SCH_SPECIAL_ERROR_LOWER_INDICATOR:
+                {
+                    SvXMLUnitConverter::convertBool( bValue, rValue );
+                    // modify old value
+                    chart::ChartErrorIndicatorType eType;
+                    rProperty.maValue >>= eType;
+                    if( bValue )
+                        eType = ( eType == chart::ChartErrorIndicatorType_UPPER )
+                            ? chart::ChartErrorIndicatorType_TOP_AND_BOTTOM
+                            : chart::ChartErrorIndicatorType_LOWER;
+                    else
+                        eType = ( eType == chart::ChartErrorIndicatorType_TOP_AND_BOTTOM )
+                            ? chart::ChartErrorIndicatorType_UPPER
+                            : chart::ChartErrorIndicatorType_NONE;
+
+                    rProperty.maValue <<= eType;
+                }
+                break;
+            case XML_SCH_SPECIAL_TEXT_ROTATION:
+                {
+                    // convert from degrees (double) to 100th degrees (integer)
+                    double fVal;
+                    SvXMLUnitConverter::convertNumber( fVal, rValue );
+                    nValue = (sal_Int32)( fVal * 100.0 );
+                    rProperty.maValue <<= nValue;
+                }
+                break;
+            case XML_SCH_SPECIAL_DATA_LABEL_NUMBER:
+                {
+                    // modify old value
+                    rProperty.maValue >>= nValue;
+                    if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_none )))
+                        SCH_XML_UNSETFLAG( nValue, chart::ChartDataCaption::VALUE | chart::ChartDataCaption::PERCENT );
+                    else if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_value )))
+                        SCH_XML_SETFLAG( nValue, chart::ChartDataCaption::VALUE );
+                    else // must be sXML_percentage
+                        SCH_XML_SETFLAG( nValue, chart::ChartDataCaption::PERCENT );
+                    rProperty.maValue <<= nValue;
+                }
+                break;
+            case XML_SCH_SPECIAL_DATA_LABEL_TEXT:
+                rProperty.maValue >>= nValue;
+                SvXMLUnitConverter::convertBool( bValue, rValue );
+                if( bValue )
+                    SCH_XML_SETFLAG( nValue, chart::ChartDataCaption::TEXT );
+                else
+                    SCH_XML_UNSETFLAG( nValue, chart::ChartDataCaption::TEXT );
+                rProperty.maValue <<= nValue;
+                break;
+            case XML_SCH_SPECIAL_DATA_LABEL_SYMBOL:
+                rProperty.maValue >>= nValue;
+                SvXMLUnitConverter::convertBool( bValue, rValue );
+                if( bValue )
+                    SCH_XML_SETFLAG( nValue, chart::ChartDataCaption::SYMBOL );
+                else
+                    SCH_XML_UNSETFLAG( nValue, chart::ChartDataCaption::SYMBOL );
+                rProperty.maValue <<= nValue;
+                break;
+            default:
+                bRet = sal_False;
+                break;
+        }
+    }
+    else
+    {
+        // call parent
+        bRet = SvXMLImportPropertyMapper::handleSpecialItem( rProperty, rProperties, rValue, rUnitConverter, rNamespaceMap );
+    }
+
+    return bRet;
 }
 
 void XMLChartImportPropertyMapper::finished( ::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const

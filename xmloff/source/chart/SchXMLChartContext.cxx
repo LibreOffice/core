@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2000-11-24 15:08:19 $
+ *  last change: $Author: bm $ $Date: 2000-11-27 09:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,12 @@
 #ifndef _COM_SUN_STAR_UTIL_XSTRINGMAPPING_HPP_
 #include <com/sun/star/util/XStringMapping.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#endif
 
 using namespace com::sun::star;
 
@@ -184,6 +190,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     rtl::OUString aValue;
     const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetChartAttrTokenMap();
+    awt::Size aChartSize;
 
     rtl::OUString aServiceName;
 
@@ -247,11 +254,11 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
                 break;
 
             case XML_TOK_CHART_WIDTH:
-                GetImport().GetMM100UnitConverter().convertMeasure( mnWidth, aValue );
+                GetImport().GetMM100UnitConverter().convertMeasure( aChartSize.Width, aValue );
                 break;
 
             case XML_TOK_CHART_HEIGHT:
-                GetImport().GetMM100UnitConverter().convertMeasure( mnHeight, aValue );
+                GetImport().GetMM100UnitConverter().convertMeasure( aChartSize.Height, aValue );
                 break;
 
             case XML_TOK_CHART_STYLE_NAME:
@@ -277,6 +284,33 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
             }
         }
     }
+
+    uno::Reference< drawing::XDrawPageSupplier > xPageSupp( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
+    if( xPageSupp.is())
+    {
+        uno::Reference< beans::XPropertySet > xPageProp( xPageSupp->getDrawPage(), uno::UNO_QUERY );
+        if( xPageProp.is())
+        {
+            try
+            {
+                uno::Any aAny;
+                aAny <<= (sal_Int32)( aChartSize.Width );
+                xPageProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" )), aAny );
+
+                aAny <<= (sal_Int32)( aChartSize.Height );
+                xPageProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" )), aAny );
+            }
+            catch( beans::UnknownPropertyException )
+            {
+                DBG_ERROR( "Cannot set page size" );
+            }
+        }
+    }
+
+    // prevent BuildChart from now on
+    uno::Reference< frame::XModel > xModel( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
+    if( xModel.is())
+        xModel->lockControllers();
 }
 
 void SchXMLChartContext::EndElement()
@@ -400,6 +434,11 @@ void SchXMLChartContext::EndElement()
             }
         }
     }
+
+    // allow BuildChart again
+    uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );
+    if( xModel.is())
+        xModel->unlockControllers();
 }
 
 SvXMLImportContext* SchXMLChartContext::CreateChildContext(

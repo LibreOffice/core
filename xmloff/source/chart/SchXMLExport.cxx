@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2000-11-24 15:10:45 $
+ *  last change: $Author: bm $ $Date: 2000-11-27 09:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1772,6 +1772,23 @@ void SchXMLExport::_ExportContent()
     uno::Reference< chart::XChartDocument > xChartDoc( GetModel(), uno::UNO_QUERY );
     if( xChartDoc.is())
     {
+        // add size for chart element in standalone case
+        uno::Reference< drawing::XShape > xShape ( xChartDoc->getArea(), uno::UNO_QUERY );
+        if( xShape.is())
+        {
+            awt::Size aSize = xShape->getSize();
+            rtl::OUStringBuffer sStringBuffer;
+            rtl::OUString sString;
+
+            GetMM100UnitConverter().convertMeasure( sStringBuffer, aSize.Width );
+            sString = sStringBuffer.makeStringAndClear();
+            AddAttribute( XML_NAMESPACE_SVG, sXML_width,  sString );
+
+            GetMM100UnitConverter().convertMeasure( sStringBuffer, aSize.Height );
+            sString = sStringBuffer.makeStringAndClear();
+            AddAttribute( XML_NAMESPACE_SVG, sXML_height, sString );
+        }
+
         maExportHelper.exportChart( xChartDoc, sal_True );
     }
     else

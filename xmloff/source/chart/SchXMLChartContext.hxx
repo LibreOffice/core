@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:02 $
+ *  last change: $Author: bm $ $Date: 2000-11-27 09:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,6 @@ private:
     SchXMLTable maTable;
     SchXMLImportHelper& mrImportHelper;
 
-    sal_Int32 mnWidth, mnHeight;
     rtl::OUString maMainTitle, maSubTitle;
     sal_Bool mbHasOwnTable;
     rtl::OUString msAutoStyleName;
