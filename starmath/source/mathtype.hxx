@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-23 09:07:42 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,7 @@ private:
     int HandleChar(xub_StrLen &rTextStart,int &rSetSize,int nLevel,
         sal_uInt8 nTag,sal_uInt8 nSelector,sal_uInt8 nVariation,
         sal_Bool bSilent);
+    void HandleNudge();
     int xfLMOVE(sal_uInt8 nTest) {return nTest&0x80;}
     int xfAUTO(sal_uInt8 nTest) {return nTest&0x10;}
     int xfEMBELL(sal_uInt8 nTest) {return nTest&0x20;}
