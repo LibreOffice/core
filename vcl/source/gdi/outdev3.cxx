@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.163 $
+ *  $Revision: 1.164 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:21:21 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,6 @@
 #include <string.h>
 
 
-#define _SV_OUTDEV_CXX
-
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
@@ -102,8 +100,8 @@
 #ifndef _SV_OUTFONT_HXX
 #include <outfont.hxx>
 #endif
-#ifndef _SV_POLY_HXX
-#include <poly.hxx>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 #ifndef _SV_OUTDEV_H
 #include <outdev.h>
@@ -175,11 +173,10 @@
 #define GLYPH_FONT_HEIGHT   256
 #endif
 
-#if defined(WIN32)
-#include <malloc.h>
-#define alloca _alloca
-#elif defined(SOLARIS) || defined(IRIX)
-#include <alloca.h>
+#if defined(SOLARIS) || defined(IRIX)
+  #include <alloca.h>
+#else
+  #include <malloc.h>
 #endif
 
 #include <memory>
@@ -387,7 +384,8 @@ void OutputDevice::ImplUpdateAllFontData( BOOL bNewFontLists )
         if ( pFrame )
         {
             if ( pFrame->ImplGetGraphics() )
-                pFrame->mpGraphics->GetDevFontList( pFrame->mpFrameData->mpFontList );
+                // MT: Stupid typecast here and somewhere ((OutputDevice*)&aVDev)->, because bug in .NET2002 compiler.
+                ((OutputDevice*)pFrame)->mpGraphics->GetDevFontList( pFrame->mpFrameData->mpFontList );
         }
     }
 }
@@ -3089,9 +3087,10 @@ inline bool CmpKernData( const ImplKernPairData& a, const ImplKernPairData& b )
 
 static void ImplSortKernPairs( ImplKernPairData* pKernPairs, long l, long r )
 {
-#if 1 // TODO: use STL's insertion sort
-    long                i = l;
+    // TODO: use STL's insertion sort
+    // std::sort( pKernPairs+l, pKernPairs+r, CmpKernData );
 
+    long                i = l;
     long                j = r;
     ImplKernPairData*   pComp = pKernPairs + ((l+r) >> 1);
     sal_uInt32          nComp = *((sal_uInt32*)pComp);
@@ -3117,9 +3116,6 @@ static void ImplSortKernPairs( ImplKernPairData* pKernPairs, long l, long r )
         ImplSortKernPairs( pKernPairs, l, j );
     if ( i < r )
         ImplSortKernPairs( pKernPairs, i, r );
-#else
-    std::sort( pKernPairs+l, pKernPairs+r, CmpKernData );
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -3777,7 +3773,15 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
             case UNDERLINE_WAVE:
             case UNDERLINE_DOUBLEWAVE:
             case UNDERLINE_BOLDWAVE:
+            {
                 bNormalLines = FALSE;
+            }
+            break;
+            default:
+            {
+                ; // We don't want a gcc warning...
+            }
+
         }
     }
 
@@ -4456,7 +4460,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
 
     // draw text into upper left corner
     rSalLayout.DrawBase() -= aBoundRect.TopLeft();
-    rSalLayout.DrawText( *pVDev->mpGraphics );
+    rSalLayout.DrawText( *((OutputDevice*)pVDev)->mpGraphics );
 
     Bitmap aBmp = pVDev->GetBitmap( Point(), aBoundRect.GetSize() );
     if ( !aBmp || !aBmp.Rotate( mpFontEntry->mnOwnOrientation, COL_WHITE ) )
@@ -5279,23 +5283,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const String& rStr,
 
     if ( !IsDeviceOutputNecessary() || pVector )
         return;
-#ifdef UNX
-    String aStr( rStr );
-    if( meOutDevType == OUTDEV_PRINTER )
-    {
-        if( !mpGraphics )
-            if( !ImplGetGraphics() )
-                return;
-        // FIXME: make fax on unix work again
-#if 0
-        xub_StrLen nCutStart, nCutStop;
-        aStr = mpGraphics->maGraphicsData.FaxPhoneComment( rStr, nIndex, nLen, nCutStart, nCutStop );
-#endif
-    }
-    SalLayout* pSalLayout = ImplLayout( aStr, nIndex, nLen, rStartPt );
-#else
     SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen, rStartPt );
-#endif
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
@@ -5352,31 +5340,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const String& rStr,
     if ( !IsDeviceOutputNecessary() )
         return;
 
-#ifdef UNX
-    String aStr( rStr );
-    if( meOutDevType == OUTDEV_PRINTER )
-    {
-        if( !mpGraphics )
-            if( !ImplGetGraphics() )
-                return;
-        // FIXME: make fax work again on UNX
-#if 0
-        xub_StrLen nCutStart, nCutStop, nOrgLen = nLen;
-        aStr = mpGraphics->maGraphicsData.FaxPhoneComment( rStr, nIndex, nLen, nCutStart, nCutStop );
-        if( nCutStop != nCutStart )
-        {
-            long* pAry = (long*)alloca(sizeof(long)*nLen );
-            if( nCutStart > nIndex )
-                memcpy( pAry, pDXAry, sizeof(long)*(nCutStart-nIndex) );
-            memcpy( pAry+nCutStart-nIndex, pDXAry + nOrgLen - (nCutStop-nIndex), nLen - (nCutStop-nIndex) );
-            pDXAry = pAry;
-        }
-#endif
-    }
-    SalLayout* pSalLayout = ImplLayout( aStr, nIndex, nLen, rStartPt, 0, pDXAry );
-#else
     SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen, rStartPt, 0, pDXAry );
-#endif
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
@@ -5518,23 +5482,7 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, ULONG nWidth,
     if ( !IsDeviceOutputNecessary() )
         return;
 
-#ifdef UNX
-    String aStr( rStr );
-    if( meOutDevType == OUTDEV_PRINTER )
-    {
-        if( !mpGraphics )
-            if( !ImplGetGraphics() )
-                return;
-        // FIXME: make fax work again
-#if 0
-        xub_StrLen nCutStart, nCutStop;
-        aStr = mpGraphics->maGraphicsData.FaxPhoneComment( rStr, nIndex, nLen, nCutStart, nCutStop );
-#endif
-    }
-    SalLayout* pSalLayout = ImplLayout( aStr, nIndex, nLen, rStartPt, nWidth );
-#else
     SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen, rStartPt, nWidth );
-#endif
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
@@ -6065,11 +6013,7 @@ void OutputDevice::DrawText( const Rectangle& rRect,
                         nMnemonicWidth = ::abs((int)(lc_x1 - lc_x2));
 
                         Point       aTempPos = LogicToPixel( aPos );
-#if (_MSC_VER < 1300)
-                        nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( std::min( lc_x1, lc_x2 ) );
-#else
-                        nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( min( lc_x1, lc_x2 ) );
-#endif
+                        nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( Min( lc_x1, lc_x2 ) );
                         nMnemonicY = mnOutOffY + aTempPos.Y() + ImplLogicWidthToDevicePixel( GetFontMetric().GetAscent() );
                         ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
                     }
@@ -6139,11 +6083,7 @@ void OutputDevice::DrawText( const Rectangle& rRect,
             nMnemonicWidth = ::abs((int)(lc_x1 - lc_x2));
 
             Point aTempPos = LogicToPixel( aPos );
-#if (_MSC_VER < 1300)
-            nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( std::min(lc_x1, lc_x2) );
-#else
-            nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( min(lc_x1, lc_x2) );
-#endif
+            nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( Min(lc_x1, lc_x2) );
             nMnemonicY = mnOutOffY + aTempPos.Y() + ImplLogicWidthToDevicePixel( GetFontMetric().GetAscent() );
         }
 
@@ -6493,15 +6433,10 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
             long lc_x2 = pCaretXArray[ 2*(nMnemonicPos - nIndex)+1 ];
             nMnemonicWidth = ::abs((int)(lc_x1 - lc_x2));
 
-#if (_MSC_VER < 1300)
-            Point aTempPos( std::min(lc_x1,lc_x2), GetFontMetric().GetAscent() );
+            Point aTempPos( Min(lc_x1,lc_x2), GetFontMetric().GetAscent() );
             if( bInvalidPos )  // #106952#, place behind the (last) character
-                aTempPos = Point( std::max(lc_x1,lc_x2), GetFontMetric().GetAscent() );
-#else
-            Point aTempPos( min(lc_x1,lc_x2), GetFontMetric().GetAscent() );
-            if( bInvalidPos )  // #106952#, place behind the (last) character
-                aTempPos = Point( max(lc_x1,lc_x2), GetFontMetric().GetAscent() );
-#endif
+                aTempPos = Point( Max(lc_x1,lc_x2), GetFontMetric().GetAscent() );
+
             aTempPos += rPos;
             aTempPos = LogicToPixel( aTempPos );
             nMnemonicX = mnOutOffX + aTempPos.X();
@@ -6988,13 +6923,8 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
     long nXOffset = 0;
     if( nBase != nIndex )
     {
-#if (_MSC_VER < 1300)
-        xub_StrLen nStart = std::min( nBase, nIndex );
-        xub_StrLen nOfsLen = std::max( nBase, nIndex ) - nStart;
-#else
-        xub_StrLen nStart = min( nBase, nIndex );
-        xub_StrLen nOfsLen = max( nBase, nIndex ) - nStart;
-#endif
+        xub_StrLen nStart = Min( nBase, nIndex );
+        xub_StrLen nOfsLen = Max( nBase, nIndex ) - nStart;
         pSalLayout = ImplLayout( rStr, nStart, nOfsLen );
         if( pSalLayout )
         {
@@ -7196,13 +7126,8 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
     long nXOffset = 0;
     if( nBase != nIndex )
     {
-#if (_MSC_VER < 1300)
-        xub_StrLen nStart = std::min( nBase, nIndex );
-        xub_StrLen nOfsLen = std::max( nBase, nIndex ) - nStart;
-#else
-        xub_StrLen nStart = min( nBase, nIndex );
-        xub_StrLen nOfsLen = max( nBase, nIndex ) - nStart;
-#endif
+        xub_StrLen nStart = Min( nBase, nIndex );
+        xub_StrLen nOfsLen = Max( nBase, nIndex ) - nStart;
         pSalLayout = ImplLayout( rStr, nStart, nOfsLen, Point( 0,0 ), nTWidth, pDXArray );
         if( pSalLayout )
         {
@@ -7288,8 +7213,8 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
     if (pSalLayout == 0)
         return false;
     long nWidth = pSalLayout->GetTextWidth();
-    long nHeight = aVDev.mpFontEntry->mnLineHeight + aVDev.mnEmphasisAscent
-        + aVDev.mnEmphasisDescent;
+    long nHeight = ((OutputDevice*)&aVDev)->mpFontEntry->mnLineHeight + ((OutputDevice*)&aVDev)->mnEmphasisAscent
+        + ((OutputDevice*)&aVDev)->mnEmphasisDescent;
     pSalLayout->Release();
 
     if( !nWidth || !nHeight )
@@ -7333,8 +7258,8 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
             // draw glyph into virtual device
             aVDev.Erase();
             pSalLayout->DrawBase() += aOffset;
-            pSalLayout->DrawBase() += Point( aVDev.mnTextOffX, aVDev.mnTextOffY );
-            pSalLayout->DrawText( *aVDev.mpGraphics );
+            pSalLayout->DrawBase() += Point( ((OutputDevice*)&aVDev)->mnTextOffX, ((OutputDevice*)&aVDev)->mnTextOffY );
+            pSalLayout->DrawText( *((OutputDevice*)&aVDev)->mpGraphics );
             pSalLayout->Release();
 
             // convert character image into outline
@@ -7354,11 +7279,11 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
                         Point& rPt = rPoly[k];
                         rPt.X() = FRound(ImplDevicePixelToLogicWidth(
                                              nXOffset + rPt.X() - aOffset.X()
-                                             - aVDev.mnTextOffX)
+                                             - ((OutputDevice*)&aVDev)->mnTextOffX)
                                          * fScaleX);
                         rPt.Y() = FRound(ImplDevicePixelToLogicHeight(
                                              rPt.Y() - aOffset.Y()
-                                             - aVDev.mnTextOffY)
+                                             - ((OutputDevice*)&aVDev)->mnTextOffY)
                                          * fScaleY);
                     }
                 }
