@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoipset.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-11 13:51:49 $
+ *  last change: $Author: cl $ $Date: 2001-07-23 15:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,6 +454,7 @@ void SvxUnoConvertFromMM( const SfxMapUnit eDestinationMapUnit, com::sun::star::
                 default:
                     DBG_ERROR("AW: Missing unit translation to 100th mm!");
             }
+            break;
         }
         default:
         {
