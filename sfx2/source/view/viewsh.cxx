@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-04 12:41:45 $
+ *  last change: $Author: mba $ $Date: 2001-01-25 15:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,19 +142,6 @@ SFX_IMPL_INTERFACE(SfxViewShell,SfxShell,SfxResId(0))
 }
 
 TYPEINIT2(SfxViewShell,SfxShell,SfxListener);
-
-//--------------------------------------------------------------------
-
-void SfxViewShell::SetMenu_Impl( SfxMenuBarManager* pMenu )
-{
-}
-
-//--------------------------------------------------------------------
-
-SfxMenuBarManager* SfxViewShell::GetMenu_Impl() const
-{
-    return NULL;
-}
 
 //--------------------------------------------------------------------
 
@@ -848,6 +835,7 @@ SfxViewShell::SfxViewShell
     pImp->pAccel = 0;
     pImp->pMenu = 0;
     pImp->bControllerSet = FALSE;
+    pImp->bOwnsMenu = TRUE;
     pImp->nFamily = 0xFFFF;                 // undefined, default set by TemplateDialog
     SetMargin( pFrame->GetMargin_Impl() );
 
@@ -874,7 +862,7 @@ SfxViewShell::~SfxViewShell()
 //      GetViewFrame()->GetFrame()->SetFrameSet_Impl( NULL );
 //  delete pImp->pSetDescr;
 
-    if ( pImp->pMenu )
+    if ( pImp->pMenu && pImp->bOwnsMenu )
     {
         SfxTopViewFrame* pTopView = PTR_CAST( SfxTopViewFrame, GetViewFrame()->GetTopViewFrame() );
         SfxTopFrame *pTop = pTopView ? pTopView->GetTopFrame_Impl() : NULL;
@@ -1649,6 +1637,11 @@ SvInPlaceClientMemberList* SfxViewShell::GetIPClientList_Impl( BOOL bCreate ) co
 
 #endif
 
+void SfxViewShell::ReleaseMenuBar_Impl()
+{
+    pImp->bOwnsMenu = FALSE;
+}
+
 SfxMenuBarManager* SfxViewShell::GetMenuBar_Impl( BOOL bPlugin )
 {
     // F"ur das Menu wird auch ein Accelerator gebraucht
@@ -1697,16 +1690,21 @@ void SfxViewShell::SetMenuBar_Impl( const ResId& rId )
 
         if ( pImp->pMenu )
         {
-            SfxTopViewFrame* pTopView = PTR_CAST( SfxTopViewFrame, GetViewFrame()->GetTopViewFrame() );
-            SfxTopFrame *pTop = pTopView ? pTopView->GetTopFrame_Impl() : NULL;
-            if ( pTop )
+            if ( pImp->bOwnsMenu )
             {
-                Menu* pMenu = pImp->pMenu->GetMenu()->GetSVMenu();
-                if ( pMenu == pTop->GetMenuBar_Impl() )
-                    pTop->SetMenuBar_Impl( 0 );
-            }
+                SfxTopViewFrame* pTopView = PTR_CAST( SfxTopViewFrame, GetViewFrame()->GetTopViewFrame() );
+                SfxTopFrame *pTop = pTopView ? pTopView->GetTopFrame_Impl() : NULL;
+                if ( pTop )
+                {
+                    Menu* pMenu = pImp->pMenu->GetMenu()->GetSVMenu();
+                    if ( pMenu == pTop->GetMenuBar_Impl() )
+                        pTop->SetMenuBar_Impl( 0 );
+                }
 
-            DELETEZ( pImp->pMenu );
+                DELETEZ( pImp->pMenu );
+            }
+            else
+                pImp->pMenu = NULL;
         }
 
         if ( rId.GetId() )

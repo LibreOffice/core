@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-18 09:09:08 $
+ *  last change: $Author: mba $ $Date: 2001-01-25 15:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,7 @@ using namespace ::com::sun::star::frame;
 #include "workwin.hxx"
 #include "helper.hxx"
 #include "tbxconf.hxx"
+#include "mnumgr.hxx"
 
 //-------------------------------------------------------------------------
 DBG_NAME(SfxViewFrame);
@@ -214,6 +215,7 @@ struct SfxViewFrame_Impl
     SfxViewFrame*       pParentViewFrame;
     SfxObjectShell*     pImportShell;
     Window*             pFocusWin;
+    SfxMenuBarManager*  pMenuBar;
     sal_uInt16          nDocViewNo;
     sal_uInt16          nCurViewId;
     sal_Bool            bResizeInToOut:1;
@@ -680,7 +682,12 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     // RestoreView nur wenn keine neue Datei geladen
                     // (Client-Pull-Reloading)
                     if( bHandsOff )
+                    {
+                        pView->pImp->pMenuBar = pView->GetViewShell()->GetMenuBar_Impl();
+                        pView->GetViewShell()->ReleaseMenuBar_Impl();
                         pView->ReleaseObjectShell_Impl( bRestoreView );
+                    }
+
                     pView = bHandsOff ? (SfxTopViewFrame*) GetFirst(
                         xOldObj, TYPE(SfxTopViewFrame) ) :
                         (SfxTopViewFrame*)GetNext( *pView, xOldObj,
@@ -820,7 +827,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     }
                 }
                 else
+                {
                     xNewObj->GetMedium()->GetItemSet()->ClearItem( SID_RELOAD );
+                }
 
                 DELETEZ( pSaveItemSet );
 
@@ -844,12 +853,19 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     // RestoreView nur, wenn gleicher Dokumenttyp
                     bRestoreView = sal_False;
 
+                DELETEZ( pImp->pMenuBar );
+
                 const sal_uInt16 nCount = aFrames.Count();
                 for(sal_uInt16 i = 0; i < nCount; ++i)
                 {
                     SfxViewFrame *pView = aFrames.GetObject( i );
                     if( !bHandsOff && this != pView   )
+                    {
+                        pView->pImp->pMenuBar = pView->GetViewShell()->GetMenuBar_Impl();
+                        pView->GetViewShell()->ReleaseMenuBar_Impl();
                         pView->ReleaseObjectShell_Impl( bRestoreView );
+                    }
+
                     pView->SetRestoreView_Impl( bRestoreView );
                     if( pView != this || !xNewObj.Is() )
                     {
@@ -857,6 +873,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         pFrame->InsertDocument(xNewObj.Is() ? xNewObj : xOldObj );
                     }
 
+                    DELETEZ( pView->pImp->pMenuBar );
                     pView->GetBindings().LEAVEREGISTRATIONS();
                     pView->GetDispatcher()->LockUI_Impl( sal_False );
                 }
@@ -1742,6 +1759,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
 {
     pImp->pFrame->DocumentInserted( pObjSh );
+    pImp->pMenuBar = NULL;
     pImp->bInCtor = sal_True;
     pImp->pParentViewFrame = 0;
     pImp->bResizeInToOut = sal_True;
