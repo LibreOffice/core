@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleSetAccess.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:02:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ module com { module sun { module star { module configuration {
  but all elements have to be of one predetermined type.
  </p>
 */
-service SimpleSetAccess
+published service SimpleSetAccess
 {
 /** is the basic service for accessing child and descendent nodes.
 
