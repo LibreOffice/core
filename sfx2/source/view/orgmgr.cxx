@@ -2,9 +2,9 @@
  *
  *  $RCSfile: orgmgr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 21:03:33 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:33:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,13 +117,14 @@ struct _FileListEntry
     SfxObjectShellLock aDocShell; // ObjectShell als Ref-Klasse
 
 //REMOVE        SvStorageRef aStor;         // Referenz auf Storage, wenn wir diesen geoeffnet haben
-    uno::Reference< embed::XStorage > xStorage;
+    //uno::Reference< embed::XStorage > xStorage;
 
     BOOL bFile;                 // als Datei auf Platte
                                 // (!= unbenannt1, nicht als Dok. geladen;
                                 // diese werden nicht gespeichert!)
     BOOL bOwner;                // selbst erzeugt
     BOOL bNoName;
+    BOOL bOwnFormat;
 
     _FileListEntry( const String& rFileName,
                     const CollatorWrapper* pColl, const String* pTitle = NULL );
@@ -159,8 +160,8 @@ _FileListEntry::_FileListEntry( const String& rFileName,
     pCollator   ( pColl ),
     bFile       ( FALSE ),
     bOwner      ( FALSE ),
+    bOwnFormat  ( TRUE ),
     bNoName     ( TRUE )
-
 {
     if ( pTitle )
         aBaseName = *pTitle;
@@ -203,14 +204,14 @@ BOOL _FileListEntry::DeleteObjectShell()
     if(bOwner && aDocShell.Is() && aDocShell->IsModified())
     {
         //Mussten wir konvertieren?
-        if( xStorage.is() )
+        if( bOwnFormat )
         {
             if(!aDocShell->Save() )
                 bRet = FALSE;
             else
             {
                 try {
-                    uno::Reference< embed::XTransactedObject > xTransact( xStorage, uno::UNO_QUERY );
+                    uno::Reference< embed::XTransactedObject > xTransact( aDocShell->GetStorage(), uno::UNO_QUERY );
                     OSL_ENSURE( xTransact.is(), "Storage must implement XTransactedObject!\n" );
                     if ( !xTransact.is() )
                         throw uno::RuntimeException();
@@ -238,7 +239,6 @@ BOOL _FileListEntry::DeleteObjectShell()
     if( bOwner)
     {
         aDocShell.Clear();
-        xStorage = uno::Reference< embed::XStorage >();
     }
 
     return bRet;
@@ -354,51 +354,24 @@ SfxObjectShellRef SfxOrganizeMgr::CreateObjectShell( USHORT nIdx )
                 pFilter && !pFilter->UsesStorage() )
             {
                 pSfxApp->LoadTemplate( pEntry->aDocShell, aFilePath );
-                pEntry->xStorage = uno::Reference< embed::XStorage >();
+                pEntry->bOwnFormat = FALSE;
                 delete pMed;
                 if ( pEntry->aDocShell.Is() )
                     return (SfxObjectShellRef)(SfxObjectShell*)(pEntry->aDocShell);
             }
             else
             {
-                delete pMed;
                 if ( pFilter )
                 {
+                    pEntry->bOwnFormat = TRUE;
                     pEntry->aDocShell = SfxObjectShell::CreateObject( pFilter->GetServiceName(), SFX_CREATE_MODE_ORGANIZER );
-                }
-
-#if SUPD<583 //(mba)
-                if ( !pEntry->aDocShell.Is() )
-                    // Config-Files
-                    pEntry->aDocShell = new SfxGenericObjectShell( SFX_CREATE_MODE_ORGANIZER );
-#else
-                if ( !pEntry->aDocShell.Is() )
-                    return NULL;
-#endif
-//REMOVE                    pEntry->aStor = new SvStorage( aFilePath,
-//REMOVE                                                    STREAM_READWRITE |
-//REMOVE                                                    STREAM_NOCREATE  |
-//REMOVE                                                    STREAM_SHARE_DENYALL,
-//REMOVE                                                    STORAGE_TRANSACTED );
-                try {
-                    pEntry->xStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
-                                            aFilePath,
-                                            embed::ElementModes::READWRITE | embed::ElementModes::NOCREATE );
-
                     if ( pEntry->aDocShell.Is() )
                     {
-                        String aOldBaseURL = INetURLObject::GetBaseURL();
                         pEntry->aDocShell->DoInitNew(0);
-                        INetURLObject::SetBaseURL( pEntry->aDocShell->GetMedium()->GetName() );
-                        pEntry->aDocShell->LoadFrom( pEntry->xStorage );
-//REMOVE                            pEntry->aDocShell->DoHandsOff();
-                        pEntry->aDocShell->DoSaveCompleted( pEntry->xStorage );
-                        INetURLObject::SetBaseURL( aOldBaseURL );
+                        pEntry->aDocShell->LoadFrom( *pMed );
+                        // Medium is now owned by DocShell
+                        pEntry->aDocShell->DoSaveCompleted( pMed );
                     }
-                }
-                catch( uno::Exception& )
-                {
-                    // TODO: error handling?
                 }
             }
         }
