@@ -37,6 +37,11 @@ mkdir: %_DEST%\bin%_EXT%\96
 ..\%__SRC%\bin\soffice_so %_DEST%\bin%_EXT%\soffice_so.bin
 
 ..\%__SRC%\bin\soffice.exe %_DEST%\bin%_EXT%\soffice.exe
+..\%__SRC%\bin\soffice.exe %_DEST%\bin%_EXT%\scalc.exe
+..\%__SRC%\bin\soffice.exe %_DEST%\bin%_EXT%\sdraw.exe
+..\%__SRC%\bin\soffice.exe %_DEST%\bin%_EXT%\simpress.exe
+..\%__SRC%\bin\soffice.exe %_DEST%\bin%_EXT%\smath.exe
+..\%__SRC%\bin\soffice.exe %_DEST%\bin%_EXT%\swriter.exe
 ..\%__SRC%\bin\*.exe.manifest %_DEST%\bin%_EXT%\*.exe.manifest
 ..\%__SRC%\bin\wrp*.dll %_DEST%\bin%_EXT%\wrp*.dll
 ..\%__SRC%\bin\spl*.dll %_DEST%\bin%_EXT%\spl*.dll
