@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsaddtask.pl,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-12 15:10:14 $
+#   last change: $Author: hr $ $Date: 2004-12-13 17:25:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #*************************************************************************
 
 #
-# cwsaddtask.pl - add taskids to child workspaces
+# cwsaddtask.pl - add taskids (issues) to child workspaces
 #
 
 use strict;
@@ -90,7 +90,7 @@ use CwsConfig;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.3 $ ';
+my $id_str = ' $Revision: 1.4 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -231,7 +231,7 @@ sub print_warning
     my $message     = shift;
 
     print STDERR "$script_name: ";
-    print STDERR "WARNING $message\n";
+    print STDERR "WARNING: $message\n";
     return;
 }
 
