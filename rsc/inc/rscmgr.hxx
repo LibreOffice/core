@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscmgr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,9 @@ class RscMgr : public RscClass {
         void Create(){ aRefId.Create(); bDflt = TRUE; }
         void Destroy(){ aRefId.Destroy(); }
     };
-    ERRTYPE         IsToDeep( const RSCINST & rInst, USHORT nDeep = 0 );
+    ERRTYPE         IsToDeep( const RSCINST & rInst, sal_uInt32 nDeep = 0 );
 public:
-                    RscMgr( HASHID nId, USHORT nTypId, RscTop * pSuperCl );
+                    RscMgr( Atom nId, sal_uInt32 nTypId, RscTop * pSuperCl );
 
     void            SetToDefault( const RSCINST & rInst );
     BOOL            IsDefault( const RSCINST & rInst );
@@ -95,18 +95,18 @@ public:
 
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, BOOL );
     void            Destroy( const RSCINST & rInst );
-    USHORT          Size();
+    sal_uInt32          Size();
     void            WriteSrcHeader( const RSCINST & aInst, FILE * fOutput,
-                            RscTypCont * pTC, USHORT nTab,
+                            RscTypCont * pTC, sal_uInt32 nTab,
                             const RscId & rId, const char * );
 
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                              RscTypCont * pTC, USHORT nTab, const char * );
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRcHeader( const RSCINST & rInst, RscWriteRc & aMem,
                                    RscTypCont * pTC, const RscId & rId,
-                                   USHORT, BOOL bExtra );
+                                   sal_uInt32, BOOL bExtra );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, USHORT, BOOL bExtra );
+                             RscTypCont * pTC, sal_uInt32, BOOL bExtra );
     ERRTYPE         WriteHxxHeader( const RSCINST & rInst, FILE * fOutput,
                                     RscTypCont * pTC, const RscId & rId );
     ERRTYPE         WriteHxx( const RSCINST & rInst, FILE * fOutput,

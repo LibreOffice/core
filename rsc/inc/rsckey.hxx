@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsckey.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:22:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,28 +69,28 @@ class RscTop;
 #endif
 
 typedef struct {
-    HASHID          nName;
-    USHORT          nTyp;
+    Atom          nName;
+    sal_uInt32          nTyp;
     long            yylval;
 } KEY_STRUCT;
 
 class RscNameTable {
     BOOL            bSort;      //soll bei jedem einfuegen sortiert werden?
-    USHORT          nEntries;   //Anzahl der Eintr„ge
+    sal_uInt32          nEntries;   //Anzahl der Eintrï¿½ge
     KEY_STRUCT *    pTable;
 public:
             RscNameTable();
             ~RscNameTable();
     void    SetSort( BOOL bSorted = TRUE );
-    HASHID  Put( HASHID nName, USHORT nTyp, long nValue );
-    HASHID  Put( HASHID nName, USHORT nTyp );
-    HASHID  Put( const char * pName, USHORT nTyp, long nValue );
-    HASHID  Put( const char * pName, USHORT nTyp );
-    HASHID  Put( HASHID nName, USHORT nTyp, RscTop * pClass );
-    HASHID  Put( const char * pName, USHORT nTyp, RscTop * pClass );
+    Atom  Put( Atom nName, sal_uInt32 nTyp, long nValue );
+    Atom  Put( Atom nName, sal_uInt32 nTyp );
+    Atom  Put( const char * pName, sal_uInt32 nTyp, long nValue );
+    Atom  Put( const char * pName, sal_uInt32 nTyp );
+    Atom  Put( Atom nName, sal_uInt32 nTyp, RscTop * pClass );
+    Atom  Put( const char * pName, sal_uInt32 nTyp, RscTop * pClass );
 
             // TRUE, wurde gefunden
-    BOOL    Get( HASHID nName, KEY_STRUCT * pEle );
+    BOOL    Get( Atom nName, KEY_STRUCT * pEle );
 };
 
 
