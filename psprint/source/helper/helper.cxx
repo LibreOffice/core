@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2001-09-27 13:14:20 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 14:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <string.h>
 #include <psprint/helper.hxx>
 #include <tools/string.hxx>
 #include <osl/file.hxx>

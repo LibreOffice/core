@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap_gfx.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cp $ $Date: 2001-08-30 12:39:13 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 14:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include <string.h>
 
 #ifndef _PSPRINT_PRINTERGFX_HXX_
 #include <psprint/printergfx.hxx>
