@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-01 12:22:31 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:27:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,10 +89,10 @@ TabPage TP_CONDCOLL
         Text[ swedish ] = "Alternativ";
         Text[ polish ] = "Opcje";
         Text[ portuguese_brazilian ] = "Settings";
-        Text[ japanese ] = "µÌß¼®İ";
-        Text[ korean ] = "¿É¼Ç";
-        Text[ chinese_simplified ] = "Ñ¡Ïî";
-        Text[ chinese_traditional ] = "¿ï¶µ";
+        Text[ japanese ] = "ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+        Text[ korean ] = "ì˜µì…˜";
+        Text[ chinese_simplified ] = "é€‰é¡¹";
+        Text[ chinese_traditional ] = "é¸é …";
         Text[ turkish ] = "Settings";
         Text[ arabic ] = "ÎíÇÑÇÊ";
         Text[ catalan ] = "Opciones";
@@ -115,14 +115,14 @@ TabPage TP_CONDCOLL
         Text [ danish ] = "Som betinget typografi" ;
         Text [ portuguese_brazilian ] = "~Als bedingte Vorlage" ;
         Text [ portuguese ] = "~Estilo condicional" ;
-        Text[ chinese_simplified ] = "µ±×÷ÓĞÌõ¼şµÄÑùÊ½(~C)";
+        Text[ chinese_simplified ] = "å½“ä½œæœ‰æ¡ä»¶çš„æ ·å¼(~C)";
         Text[ russian ] = "Êàê óñëîâíûé ñòèëü";
         Text[ polish ] = "Jako warunkowy szablon";
-        Text[ japanese ] = "ğŒ•t‚«½À²Ù‚Æ‚µ‚Ä(~C)";
-        Text[ chinese_traditional ] = "·í§@¦³±ø¥óªº¼Ë¦¡(~C)";
+        Text[ japanese ] = "æ¡ä»¶ä»˜ãï½½ï¾€ï½²ï¾™ã¨ã—ã¦(~C)";
+        Text[ chinese_traditional ] = "ç•¶ä½œæœ‰æ¢ä»¶çš„æ¨£å¼(~C)";
         Text[ arabic ] = "ßäãØ ãÔÑæØ";
         Text[ greek ] = "Ùò åîáñôşìåíï ğñüôõğï";
-        Text[ korean ] = "Á¶°ÇÀû À¯Çü(~C)";
+        Text[ korean ] = "ì¡°ê±´ì  ìœ í˜•(~C)";
         Text[ turkish ] = "~Koşullu biçim olarak";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are capitalized. EM15.5.00";
         Text[ catalan ] = "C~omo estilo condicional";
@@ -144,14 +144,14 @@ TabPage TP_CONDCOLL
         Text [ danish ] = "Kontekst" ;
         Text [ portuguese ] = "~Contexto" ;
         Text [ portuguese_brazilian ] = "~Kontext" ;
-        Text[ chinese_simplified ] = "ÉÏÏÂÎÄ(~X)";
+        Text[ chinese_simplified ] = "ä¸Šä¸‹æ–‡(~X)";
         Text[ russian ] = "~Êîíòåêñò";
         Text[ polish ] = "Kontekst";
-        Text[ japanese ] = "ºİÃ·½Ä(~X)";
-        Text[ chinese_traditional ] = "¤W¤U¤å(~X)";
+        Text[ japanese ] = "ï½ºï¾ï¾ƒï½·ï½½ï¾„(~X)";
+        Text[ chinese_traditional ] = "ä¸Šä¸‹æ–‡(~X)";
         Text[ arabic ] = "ÇáÓíÇŞ";
         Text[ greek ] = "ĞåñéâÜëëïí";
-        Text[ korean ] = "³»¿ë(~X)";
+        Text[ korean ] = "ë‚´ìš©(~X)";
         Text[ turkish ] = "Bağlam";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Contexto";
@@ -173,14 +173,14 @@ TabPage TP_CONDCOLL
         Text [ danish ] = "Anvendt typografi" ;
         Text [ portuguese ] = "Estilos em uso" ;
         Text [ portuguese_brazilian ] = "Verwendete Vorlage" ;
-        Text[ chinese_simplified ] = "Ê¹ÓÃµÄÑùÊ½";
+        Text[ chinese_simplified ] = "ä½¿ç”¨çš„æ ·å¼";
         Text[ russian ] = "Ïğèìåíåííûå ñòèëè";
         Text[ polish ] = "U¿yte style";
-        Text[ japanese ] = "g—p‚³‚ê‚½½À²Ù";
-        Text[ chinese_traditional ] = "¨Ï¥Îªº¼Ë¦¡";
+        Text[ japanese ] = "ä½¿ç”¨ã•ã‚ŒãŸï½½ï¾€ï½²ï¾™";
+        Text[ chinese_traditional ] = "ä½¿ç”¨çš„æ¨£å¼";
         Text[ arabic ] = "ÃäãÇØ ŞíÏ ÇáÇÓÊÎÏÇã";
         Text[ greek ] = "Åöáñìïóìİíá ğñüôõğá";
-        Text[ korean ] = "À¯ÇüÀÌ Àû¿ëµÇ¾ú½À´Ï´Ù.";
+        Text[ korean ] = "ìœ í˜•ì´ ì ìš©ë˜ì—ˆìŠµë‹ˆë‹¤.";
         Text[ turkish ] = "Uygulanan biçim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estilos utilizados";
@@ -212,14 +212,14 @@ TabPage TP_CONDCOLL
         Text [ danish ] = "Afsnitstypografier" ;
         Text [ portuguese ] = "E~stilos de parágrafo" ;
         Text [ portuguese_brazilian ] = "Absatzvorlagen" ;
-        Text[ chinese_simplified ] = "¶ÎÂäÑùÊ½(~P)";
+        Text[ chinese_simplified ] = "æ®µè½æ ·å¼(~P)";
         Text[ russian ] = "Ñòèëè àáçàöà";
         Text[ polish ] = "Style akapitu";
-        Text[ japanese ] = "’i—½À²Ù(~P)";
-        Text[ chinese_traditional ] = "¬q¸¨¼Ë¦¡(~P)";
+        Text[ japanese ] = "æ®µè½ï½½ï¾€ï½²ï¾™(~P)";
+        Text[ chinese_traditional ] = "æ®µè½æ¨£å¼(~P)";
         Text[ arabic ] = "ÃäãÇØ İŞÑÉ";
         Text[ greek ] = "Ğñüôõğá ğáñáãñÜöïõ";
-        Text[ korean ] = "´Ü¶ô ¼­½Ä(~P)";
+        Text[ korean ] = "ë‹¨ë½ ì„œì‹(~P)";
         Text[ turkish ] = "Paragraf biçimi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Es~tilos de párrafo";
@@ -262,14 +262,14 @@ TabPage TP_CONDCOLL
         Text [ danish ] = "Fjern" ;
         Text [ portuguese ] = "~Remover" ;
         Text [ portuguese_brazilian ] = "~Entfernen" ;
-        Text[ chinese_simplified ] = "É¾³ı(~M)";
+        Text[ chinese_simplified ] = "åˆ é™¤(~M)";
         Text[ russian ] = "~Óäàëèòü";
         Text[ polish ] = "~Usuñ";
-        Text[ japanese ] = "íœ(~M)";
-        Text[ chinese_traditional ] = "§R°£(~M)";
+        Text[ japanese ] = "å‰Šé™¤(~M)";
+        Text[ chinese_traditional ] = "åˆªé™¤(~M)";
         Text[ arabic ] = "ÅÒÇáÉ";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "Á¦°Å(~M)";
+        Text[ korean ] = "ì œê±°(~M)";
         Text[ turkish ] = "~Kaldır";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
@@ -292,14 +292,14 @@ TabPage TP_CONDCOLL
         Text [ danish ] = "Tildel" ;
         Text [ portuguese ] = "~Atribuir" ;
         Text [ portuguese_brazilian ] = "~Zuweisen" ;
-        Text[ chinese_simplified ] = "Ö¸¶¨(~A)";
+        Text[ chinese_simplified ] = "æŒ‡å®š(~A)";
         Text[ russian ] = "~Íàçíà÷èòü";
         Text[ polish ] = "P~rzypisz";
-        Text[ japanese ] = "Š„‚è“–‚Ä(~A)";
-        Text[ chinese_traditional ] = "«ü©w(~A)";
+        Text[ japanese ] = "å‰²ã‚Šå½“ã¦(~A)";
+        Text[ chinese_traditional ] = "æŒ‡å®š(~A)";
         Text[ arabic ] = "ÊÚííä";
         Text[ greek ] = "Áíôéóôïß÷éóç";
-        Text[ korean ] = "ÁöÁ¤(~A)";
+        Text[ korean ] = "ì§€ì •(~A)";
         Text[ turkish ] = "~Ata";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Asignar";
@@ -561,7 +561,7 @@ TabPage TP_CONDCOLL
             < "Encabezamiento de la hoja" ; > ;
             < "Tabla" ; > ;
             < "Marco" ; > ;
-            < "Area" ; > ;
+            < "Área" ; > ;
             < "Nota al pie" ; > ;
             < "Nota al final" ; > ;
             < "Encabezamiento" ; > ;
@@ -651,34 +651,34 @@ TabPage TP_CONDCOLL
         };
     ItemList [ chinese_simplified ] =
     {
-            < "±í¸ñÒ³Ã¼" ; > ;
-        < "±í¸ñ" ; > ;
-        < "¿ò" ; > ;
-        < "ÇøÓò" ; > ;
-        < "×¢½Å" ; > ;
-        < "Î²×¢" ; > ;
-        < "Ò³Ã¼" ; > ;
-        < "Ò³½Å" ; > ;
-        < "µÚÒ»¸ö´ó¸Ù¼¶" ; > ;
-        < "µÚ¶ş¸ö´ó¸Ù¼¶" ; > ;
-        < "µÚÈı¸ö´ó¸Ù¼¶" ; > ;
-        < "µÚËÄ¸ö´ó¸Ù¼¶" ; > ;
-        < "µÚÎå¸ö´ó¸Ù¼¶" ; > ;
-        < "µÚÁù¸ö´ó¸Ù¼¶" ; > ;
-        < "µÚÆß¸ö´ó¸Ù¼¶" ; > ;
-        < "µÚ°Ë¸ö´ó¸Ù¼¶" ; > ;
-        < "µÚ¾Å¸ö´ó¸Ù¼¶" ; > ;
-        < "µÚÊ®¸ö´ó¸Ù¼¶" ; > ;
-        < "µÚÒ»¼¶±àºÅ" ; > ;
-        < "µÚ¶ş¼¶±àºÅ" ; > ;
-        < "µÚÈı¼¶±àºÅ" ; > ;
-        < "µÚËÄ¼¶±àºÅ" ; > ;
-        < "µÚÎå¼¶±àºÅ" ; > ;
-        < "µÚÁù¼¶±àºÅ" ; > ;
-        < "µÚÆß¼¶±àºÅ" ; > ;
-        < "µÚ°Ë¼¶±àºÅ" ; > ;
-        < "µÚ¾Å¼¶±àºÅ" ; > ;
-        < "µÚÊ®¼¶±àºÅ" ; > ;
+            < "è¡¨æ ¼é¡µçœ‰" ; > ;
+        < "è¡¨æ ¼" ; > ;
+        < "æ¡†" ; > ;
+        < "åŒºåŸŸ" ; > ;
+        < "æ³¨è„š" ; > ;
+        < "å°¾æ³¨" ; > ;
+        < "é¡µçœ‰" ; > ;
+        < "é¡µè„š" ; > ;
+        < "ç¬¬ä¸€ä¸ªå¤§çº²çº§" ; > ;
+        < "ç¬¬äºŒä¸ªå¤§çº²çº§" ; > ;
+        < "ç¬¬ä¸‰ä¸ªå¤§çº²çº§" ; > ;
+        < "ç¬¬å››ä¸ªå¤§çº²çº§" ; > ;
+        < "ç¬¬äº”ä¸ªå¤§çº²çº§" ; > ;
+        < "ç¬¬å…­ä¸ªå¤§çº²çº§" ; > ;
+        < "ç¬¬ä¸ƒä¸ªå¤§çº²çº§" ; > ;
+        < "ç¬¬å…«ä¸ªå¤§çº²çº§" ; > ;
+        < "ç¬¬ä¹ä¸ªå¤§çº²çº§" ; > ;
+        < "ç¬¬åä¸ªå¤§çº²çº§" ; > ;
+        < "ç¬¬ä¸€çº§ç¼–å·" ; > ;
+        < "ç¬¬äºŒçº§ç¼–å·" ; > ;
+        < "ç¬¬ä¸‰çº§ç¼–å·" ; > ;
+        < "ç¬¬å››çº§ç¼–å·" ; > ;
+        < "ç¬¬äº”çº§ç¼–å·" ; > ;
+        < "ç¬¬å…­çº§ç¼–å·" ; > ;
+        < "ç¬¬ä¸ƒçº§ç¼–å·" ; > ;
+        < "ç¬¬å…«çº§ç¼–å·" ; > ;
+        < "ç¬¬ä¹çº§ç¼–å·" ; > ;
+        < "ç¬¬åçº§ç¼–å·" ; > ;
     };
     ItemList [ russian ] =
     {
@@ -744,65 +744,65 @@ TabPage TP_CONDCOLL
     };
     ItemList [ japanese ] =
     {
-            < "•\\‚ÌÍ¯ÀŞ" ; > ;
-        < "•\\" ; > ;
-        < "˜g" ; > ;
-        < "”ÍˆÍ" ; > ;
-        < "‹r’" ; > ;
-        < "•¶––‹r’" ; > ;
-        < "Í¯ÀŞ" ; > ;
-        < "Ì¯À" ; > ;
-        < "1ÚÍŞÙ–Ú‚Ì±³Ä×²İ" ; > ;
-        < "2ÚÍŞÙ–Ú‚Ì±³Ä×²İ" ; > ;
-        < "3ÚÍŞÙ–Ú‚Ì±³Ä×²İ" ; > ;
-        < "4ÚÍŞÙ–Ú‚Ì±³Ä×²İ" ; > ;
-        < "5ÚÍŞÙ–Ú‚Ì±³Ä×²İ" ; > ;
-        < "6ÚÍŞÙ–Ú‚Ì±³Ä×²İ" ; > ;
-        < "7ÚÍŞÙ–Ú‚Ì±³Ä×²İ" ; > ;
-        < "8ÚÍŞÙ–Ú‚Ì±³Ä×²İ" ; > ;
-        < "9ÚÍŞÙ–Ú‚Ì±³Ä×²İ" ; > ;
-        < "10ÚÍŞÙ–Ú‚Ì±³Ä×²İ" ; > ;
-        < "1ÚÍŞÙ–Ú‚Ì”Ô†•t‚¯" ; > ;
-        < "2ÚÍŞÙ–Ú‚Ì”Ô†•t‚¯" ; > ;
-        < "3ÚÍŞÙ–Ú‚Ì”Ô†•t‚¯" ; > ;
-        < "4ÚÍŞÙ–Ú‚Ì”Ô†•t‚¯" ; > ;
-        < "5ÚÍŞÙ–Ú‚Ì”Ô†•t‚¯" ; > ;
-        < "6ÚÍŞÙ–Ú‚Ì”Ô†•t‚¯" ; > ;
-        < "7ÚÍŞÙ–Ú‚Ì”Ô†•t‚¯" ; > ;
-        < "8ÚÍŞÙ–Ú‚Ì”Ô†•t‚¯" ; > ;
-        < "9ÚÍŞÙ–Ú‚Ì”Ô†•t‚¯" ; > ;
-        < "10ÚÍŞÙ–Ú‚Ì”Ô†•t‚¯" ; > ;
+            < "è¡¨ã®ï¾ï½¯ï¾€ï¾" ; > ;
+        < "è¡¨" ; > ;
+        < "æ " ; > ;
+        < "ç¯„å›²" ; > ;
+        < "è„šæ³¨" ; > ;
+        < "æ–‡æœ«è„šæ³¨" ; > ;
+        < "ï¾ï½¯ï¾€ï¾" ; > ;
+        < "ï¾Œï½¯ï¾€" ; > ;
+        < "1ï¾šï¾ï¾ï¾™ç›®ã®ï½±ï½³ï¾„ï¾—ï½²ï¾" ; > ;
+        < "2ï¾šï¾ï¾ï¾™ç›®ã®ï½±ï½³ï¾„ï¾—ï½²ï¾" ; > ;
+        < "3ï¾šï¾ï¾ï¾™ç›®ã®ï½±ï½³ï¾„ï¾—ï½²ï¾" ; > ;
+        < "4ï¾šï¾ï¾ï¾™ç›®ã®ï½±ï½³ï¾„ï¾—ï½²ï¾" ; > ;
+        < "5ï¾šï¾ï¾ï¾™ç›®ã®ï½±ï½³ï¾„ï¾—ï½²ï¾" ; > ;
+        < "6ï¾šï¾ï¾ï¾™ç›®ã®ï½±ï½³ï¾„ï¾—ï½²ï¾" ; > ;
+        < "7ï¾šï¾ï¾ï¾™ç›®ã®ï½±ï½³ï¾„ï¾—ï½²ï¾" ; > ;
+        < "8ï¾šï¾ï¾ï¾™ç›®ã®ï½±ï½³ï¾„ï¾—ï½²ï¾" ; > ;
+        < "9ï¾šï¾ï¾ï¾™ç›®ã®ï½±ï½³ï¾„ï¾—ï½²ï¾" ; > ;
+        < "10ï¾šï¾ï¾ï¾™ç›®ã®ï½±ï½³ï¾„ï¾—ï½²ï¾" ; > ;
+        < "1ï¾šï¾ï¾ï¾™ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
+        < "2ï¾šï¾ï¾ï¾™ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
+        < "3ï¾šï¾ï¾ï¾™ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
+        < "4ï¾šï¾ï¾ï¾™ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
+        < "5ï¾šï¾ï¾ï¾™ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
+        < "6ï¾šï¾ï¾ï¾™ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
+        < "7ï¾šï¾ï¾ï¾™ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
+        < "8ï¾šï¾ï¾ï¾™ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
+        < "9ï¾šï¾ï¾ï¾™ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
+        < "10ï¾šï¾ï¾ï¾™ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
     };
     ItemList [ chinese_traditional ] =
     {
-            < "ªí®æ­¶­º" ; > ;
-        < "ªí®æ" ; > ;
-        < "¤å¦r¤è¶ô" ; > ;
-        < "°Ï°ì" ; > ;
-        < "µù¸}" ; > ;
-        < "§Àµù" ; > ;
-        < "­¶­º" ; > ;
-        < "­¶§À" ; > ;
-        < "²Ä¤@­Ó¤jºõ¯Å" ; > ;
-        < "²Ä¤G­Ó¤jºõ¯Å" ; > ;
-        < "²Ä¤T­Ó¤jºõ¯Å" ; > ;
-        < "²Ä¥|­Ó¤jºõ¯Å" ; > ;
-        < "²Ä¤­­Ó¤jºõ¯Å" ; > ;
-        < "²Ä¤»­Ó¤jºõ¯Å" ; > ;
-        < "²Ä¤C­Ó¤jºõ¯Å" ; > ;
-        < "²Ä¤K­Ó¤jºõ¯Å" ; > ;
-        < "²Ä¤E­Ó¤jºõ¯Å" ; > ;
-        < "²Ä¤Q­Ó¤jºõ¯Å" ; > ;
-        < "²Ä¤@¯Å½s¸¹" ; > ;
-        < "²Ä¤G¯Å½s¸¹" ; > ;
-        < "²Ä¤T¯Å½s¸¹" ; > ;
-        < "²Ä¥|¯Å½s¸¹" ; > ;
-        < "²Ä¤­¯Å½s¸¹" ; > ;
-        < "²Ä¤»¯Å½s¸¹" ; > ;
-        < "²Ä¤C¯Å½s¸¹" ; > ;
-        < "²Ä¤K¯Å½s¸¹" ; > ;
-        < "²Ä¤E¯Å½s¸¹" ; > ;
-        < "²Ä¤Q¯Å½s¸¹" ; > ;
+            < "è¡¨æ ¼é é¦–" ; > ;
+        < "è¡¨æ ¼" ; > ;
+        < "æ–‡å­—æ–¹å¡Š" ; > ;
+        < "å€åŸŸ" ; > ;
+        < "è¨»è…³" ; > ;
+        < "å°¾è¨»" ; > ;
+        < "é é¦–" ; > ;
+        < "é å°¾" ; > ;
+        < "ç¬¬ä¸€å€‹å¤§ç¶±ç´š" ; > ;
+        < "ç¬¬äºŒå€‹å¤§ç¶±ç´š" ; > ;
+        < "ç¬¬ä¸‰å€‹å¤§ç¶±ç´š" ; > ;
+        < "ç¬¬å››å€‹å¤§ç¶±ç´š" ; > ;
+        < "ç¬¬äº”å€‹å¤§ç¶±ç´š" ; > ;
+        < "ç¬¬å…­å€‹å¤§ç¶±ç´š" ; > ;
+        < "ç¬¬ä¸ƒå€‹å¤§ç¶±ç´š" ; > ;
+        < "ç¬¬å…«å€‹å¤§ç¶±ç´š" ; > ;
+        < "ç¬¬ä¹å€‹å¤§ç¶±ç´š" ; > ;
+        < "ç¬¬åå€‹å¤§ç¶±ç´š" ; > ;
+        < "ç¬¬ä¸€ç´šç·¨è™Ÿ" ; > ;
+        < "ç¬¬äºŒç´šç·¨è™Ÿ" ; > ;
+        < "ç¬¬ä¸‰ç´šç·¨è™Ÿ" ; > ;
+        < "ç¬¬å››ç´šç·¨è™Ÿ" ; > ;
+        < "ç¬¬äº”ç´šç·¨è™Ÿ" ; > ;
+        < "ç¬¬å…­ç´šç·¨è™Ÿ" ; > ;
+        < "ç¬¬ä¸ƒç´šç·¨è™Ÿ" ; > ;
+        < "ç¬¬å…«ç´šç·¨è™Ÿ" ; > ;
+        < "ç¬¬ä¹ç´šç·¨è™Ÿ" ; > ;
+        < "ç¬¬åç´šç·¨è™Ÿ" ; > ;
     };
     ItemList [ arabic ] =
     {
@@ -868,34 +868,34 @@ TabPage TP_CONDCOLL
     };
     ItemList [ korean ] =
     {
-            < "½ÃÆ® ¸Ó¸®¸»" ; > ;
-        < "Ç¥" ; > ;
-        < "Å×µÎ¸®" ; > ;
-        < "±¸¿ª" ; > ;
-        < "¹Ù´Ú±Û" ; > ;
-        < "¹ÌÁÖ" ; > ;
-        < "¸Ó¸®±Û" ; > ;
-        < "¹Ù´Ú±Û" ; > ;
-        < " 1¹øÂ° ´Ù´Ü°è" ; > ;
-        < " 2¹øÂ° ´Ù´Ü°è" ; > ;
-        < " 3¹øÂ° ´Ù´Ü°è" ; > ;
-        < " 4¹øÂ° ´Ù´Ü°è" ; > ;
-        < " 5¹øÂ° ´Ù´Ü°è" ; > ;
-        < " 6¹øÂ° ´Ù´Ü°è" ; > ;
-        < " 7¹øÂ° ´Ù´Ü°è" ; > ;
-        < " 8¹øÂ° ´Ù´Ü°è" ; > ;
-        < " 9¹øÂ° ´Ù´Ü°è" ; > ;
-        < "10¹øÂ° ´Ù´Ü°è" ; > ;
-        < " 1¹øÂ° ´Ü°è ¹øÈ£ ¸Å±â±â" ; > ;
-        < " 2¹øÂ° ´Ü°è ¹øÈ£ ¸Å±â±â" ; > ;
-        < " 3¹øÂ° ´Ü°è ¹øÈ£ ¸Å±â±â" ; > ;
-        < " 4¹øÂ° ´Ü°è ¹øÈ£ ¸Å±â±â" ; > ;
-        < " 5¹øÂ° ´Ü°è ¹øÈ£ ¸Å±â±â" ; > ;
-        < " 6¹øÂ° ´Ü°è ¹øÈ£ ¸Å±â±â" ; > ;
-        < " 7¹øÂ° ´Ü°è ¹øÈ£ ¸Å±â±â" ; > ;
-        < " 8¹øÂ° ´Ü°è ¹øÈ£ ¸Å±â±â" ; > ;
-        < " 9¹øÂ° ´Ü°è ¹øÈ£ ¸Å±â±â" ; > ;
-        < "10¹øÂ° ´Ü°è ¹øÈ£ ¸Å±â±â" ; > ;
+            < "ì‹œíŠ¸ ë¨¸ë¦¬ë§" ; > ;
+        < "í‘œ" ; > ;
+        < "í…Œë‘ë¦¬" ; > ;
+        < "êµ¬ì—­" ; > ;
+        < "ë°”ë‹¥ê¸€" ; > ;
+        < "ë¯¸ì£¼" ; > ;
+        < "ë¨¸ë¦¬ê¸€" ; > ;
+        < "ë°”ë‹¥ê¸€" ; > ;
+        < " 1ë²ˆì§¸ ë‹¤ë‹¨ê³„" ; > ;
+        < " 2ë²ˆì§¸ ë‹¤ë‹¨ê³„" ; > ;
+        < " 3ë²ˆì§¸ ë‹¤ë‹¨ê³„" ; > ;
+        < " 4ë²ˆì§¸ ë‹¤ë‹¨ê³„" ; > ;
+        < " 5ë²ˆì§¸ ë‹¤ë‹¨ê³„" ; > ;
+        < " 6ë²ˆì§¸ ë‹¤ë‹¨ê³„" ; > ;
+        < " 7ë²ˆì§¸ ë‹¤ë‹¨ê³„" ; > ;
+        < " 8ë²ˆì§¸ ë‹¤ë‹¨ê³„" ; > ;
+        < " 9ë²ˆì§¸ ë‹¤ë‹¨ê³„" ; > ;
+        < "10ë²ˆì§¸ ë‹¤ë‹¨ê³„" ; > ;
+        < " 1ë²ˆì§¸ ë‹¨ê³„ ë²ˆí˜¸ ë§¤ê¸°ê¸°" ; > ;
+        < " 2ë²ˆì§¸ ë‹¨ê³„ ë²ˆí˜¸ ë§¤ê¸°ê¸°" ; > ;
+        < " 3ë²ˆì§¸ ë‹¨ê³„ ë²ˆí˜¸ ë§¤ê¸°ê¸°" ; > ;
+        < " 4ë²ˆì§¸ ë‹¨ê³„ ë²ˆí˜¸ ë§¤ê¸°ê¸°" ; > ;
+        < " 5ë²ˆì§¸ ë‹¨ê³„ ë²ˆí˜¸ ë§¤ê¸°ê¸°" ; > ;
+        < " 6ë²ˆì§¸ ë‹¨ê³„ ë²ˆí˜¸ ë§¤ê¸°ê¸°" ; > ;
+        < " 7ë²ˆì§¸ ë‹¨ê³„ ë²ˆí˜¸ ë§¤ê¸°ê¸°" ; > ;
+        < " 8ë²ˆì§¸ ë‹¨ê³„ ë²ˆí˜¸ ë§¤ê¸°ê¸°" ; > ;
+        < " 9ë²ˆì§¸ ë‹¨ê³„ ë²ˆí˜¸ ë§¤ê¸°ê¸°" ; > ;
+        < "10ë²ˆì§¸ ë‹¨ê³„ ë²ˆí˜¸ ë§¤ê¸°ê¸°" ; > ;
     };
     ItemList [ turkish ] =
     {
@@ -1035,21 +1035,22 @@ TabPage TP_CONDCOLL
         Text [ danish ] = "<ingen>" ;
         Text [ portuguese ] = "<nenhum>" ;
         Text [ portuguese_brazilian ] = "<keine>" ;
-        Text[ chinese_simplified ] = "<ÎŞ>";
+        Text[ chinese_simplified ] = "<æ— >";
         Text[ russian ] = "<íåò>";
         Text[ polish ] = "<brak>";
-        Text[ japanese ] = "<‚È‚µ>";
+        Text[ japanese ] = "<ãªã—>";
         Text[ language_user1 ] = " ";
-        Text[ chinese_traditional ] = "<µL>";
+        Text[ chinese_traditional ] = "<ç„¡>";
         Text[ arabic ] = "<ÈÏæä>";
         Text[ greek ] = "<êáíİíá>";
-        Text[ korean ] = "<¾øÀ½>";
+        Text[ korean ] = "<ì—†ìŒ>";
         Text[ turkish ] = "<yok>";
         Text[ catalan ] = "<ninguno>";
         Text[ finnish ] = "<Ei mitään>";
     };
 };
  // ********************************************************************** EOF
+
 
 
 
