@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtutf8.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 17:14:45 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,14 +67,14 @@
 #include "tenchelp.h"
 #include "unichars.h"
 
-static struct ImplUtf8ToUnicodeContext
+struct ImplUtf8ToUnicodeContext
 {
     sal_uInt32 nUtf32;
     int nShift;
     sal_Bool bCheckBom;
 };
 
-static struct ImplUnicodeToUtf8Context
+struct ImplUnicodeToUtf8Context
 {
     sal_Unicode nHighSurrogate; /* 0xFFFF: write BOM */
 };
@@ -107,9 +107,12 @@ sal_Size ImplConvertUtf8ToUnicode(ImplTextConverterData const * pData,
        - surrogates (e.g., ED A0 80 to represent U+D800)
        - encodings with up to six bytes (everything outside the range
          U+0000..10FFFF is considered "undefined")
+       The first two of these points allow this routine to translate from both
+       RTL_TEXTENCODING_UTF8 and RTL_TEXTENCODING_JAVA_UTF8.
       */
 
-    sal_uInt32 nUtf32;
+    sal_Bool bJavaUtf8 = pData != NULL;
+    sal_uInt32 nUtf32 = 0;
     int nShift = -1;
     sal_Bool bCheckBom = sal_True;
     sal_uInt32 nInfo = 0;
@@ -188,7 +191,9 @@ sal_Size ImplConvertUtf8ToUnicode(ImplTextConverterData const * pData,
 
     transform:
         if (!bCheckBom || nUtf32 != 0xFEFF
-            || (nFlags & RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE) == 0)
+            || (nFlags & RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE) == 0
+            || bJavaUtf8)
+        {
             if (nUtf32 <= 0xFFFF)
                 if (pDestBufPtr != pDestBufEnd)
                     *pDestBufPtr++ = (sal_Unicode) nUtf32;
@@ -207,6 +212,7 @@ sal_Size ImplConvertUtf8ToUnicode(ImplTextConverterData const * pData,
                 bUndefined = sal_True;
                 goto bad_input;
             }
+        }
         nShift = -1;
         bCheckBom = sal_False;
         continue;
@@ -246,6 +252,7 @@ sal_Size ImplConvertUtf8ToUnicode(ImplTextConverterData const * pData,
         && (nInfo & (RTL_TEXTTOUNICODE_INFO_ERROR
                          | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL))
                == 0)
+    {
         if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0)
             nInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
         else
@@ -265,6 +272,7 @@ sal_Size ImplConvertUtf8ToUnicode(ImplTextConverterData const * pData,
                 nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
                 break;
             }
+    }
 
     if (pContext != NULL)
     {
@@ -298,6 +306,7 @@ sal_Size ImplConvertUnicodeToUtf8(ImplTextConverterData const * pData,
                                   sal_Size nDestBytes, sal_uInt32 nFlags,
                                   sal_uInt32 * pInfo, sal_Size* pSrcCvtChars)
 {
+    sal_Bool bJavaUtf8 = pData != NULL;
     sal_Unicode nHighSurrogate = 0xFFFF;
     sal_uInt32 nInfo = 0;
     sal_Unicode const * pSrcBufPtr = pSrcBuf;
@@ -311,7 +320,9 @@ sal_Size ImplConvertUnicodeToUtf8(ImplTextConverterData const * pData,
 
     if (nHighSurrogate == 0xFFFF)
     {
-        if ((nFlags & RTL_UNICODETOTEXT_FLAGS_GLOBAL_SIGNATURE) != 0)
+        if ((nFlags & RTL_UNICODETOTEXT_FLAGS_GLOBAL_SIGNATURE) != 0
+            && !bJavaUtf8)
+        {
             if (pDestBufEnd - pDestBufPtr >= 3)
             {
                 /* Write BOM (U+FEFF) as UTF-8: */
@@ -324,6 +335,7 @@ sal_Size ImplConvertUnicodeToUtf8(ImplTextConverterData const * pData,
                 nInfo |= RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
                 goto done;
             }
+        }
         nHighSurrogate = 0;
     }
 
@@ -332,21 +344,22 @@ sal_Size ImplConvertUnicodeToUtf8(ImplTextConverterData const * pData,
         sal_uInt32 nChar = *pSrcBufPtr++;
         if (nHighSurrogate == 0)
         {
-            if (ImplIsHighSurrogate(nChar))
+            if (ImplIsHighSurrogate(nChar) && !bJavaUtf8)
             {
                 nHighSurrogate = (sal_Unicode) nChar;
                 continue;
             }
         }
-        else if (ImplIsLowSurrogate(nChar))
+        else if (ImplIsLowSurrogate(nChar) && !bJavaUtf8)
             nChar = ImplCombineSurrogates(nHighSurrogate, nChar);
         else
             goto bad_input;
 
-        if (ImplIsLowSurrogate(nChar) || ImplIsNoncharacter(nChar))
+        if ((ImplIsLowSurrogate(nChar) && !bJavaUtf8)
+            || ImplIsNoncharacter(nChar))
             goto bad_input;
 
-        if (nChar <= 0x7F)
+        if (nChar <= 0x7F && (!bJavaUtf8 || nChar != 0))
             if (pDestBufPtr != pDestBufEnd)
                 *pDestBufPtr++ = (sal_Char) nChar;
             else
@@ -409,6 +422,7 @@ sal_Size ImplConvertUnicodeToUtf8(ImplTextConverterData const * pData,
         && (nInfo & (RTL_UNICODETOTEXT_INFO_ERROR
                          | RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL))
                == 0)
+    {
         if ((nFlags & RTL_UNICODETOTEXT_FLAGS_FLUSH) != 0)
             nInfo |= RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
         else
@@ -428,6 +442,7 @@ sal_Size ImplConvertUnicodeToUtf8(ImplTextConverterData const * pData,
                 nInfo |= RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
                 break;
             }
+    }
 
  done:
     if (pContext != NULL)
