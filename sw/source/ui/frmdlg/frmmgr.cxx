@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmmgr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:48:00 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
