@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:07:47 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 10:04:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,14 @@ private:
                rRequest)
         throw (com::sun::star::uno::RuntimeException);
 
+public:
+    virtual void SAL_CALL
+    handle_impl(com::sun::star::uno::Reference<
+                com::sun::star::task::XInteractionRequest > const &
+                rRequest)
+        throw (com::sun::star::uno::RuntimeException);
+
+private:
     Window * getParentProperty() SAL_THROW(());
 
     rtl::OUString getContextProperty() SAL_THROW(());
