@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-20 13:30:20 $
+ *  last change: $Author: obr $ $Date: 2001-02-20 16:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1756,7 +1756,7 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
         {
             if( it != m_aDropTargets.end() )
             {
-                if( it->second.m_pTarget->m_bActive )
+                if( it->second.m_pTarget->m_bActive && m_nUserDragAction != DNDConstants::ACTION_NONE )
                 {
                     int x, y;
                     Window aChild;
