@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _xoutbmp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 15:17:43 $
+ *  last change: $Author: ka $ $Date: 2000-11-15 13:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,6 +534,7 @@ USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& 
                                   GraphicFilter& rFilter, const USHORT nFormat,
                                   BOOL bIgnoreOptions )
 {
+#ifndef SVX_LIGHT
     DBG_ASSERT( rURL.GetProtocol() != INET_PROT_NOT_VALID, "XOutBitmap::ExportGraphic(...): invalid URL" );
 
     SfxMedium   aMedium( rURL.GetMainURL(), STREAM_WRITE | STREAM_SHARE_DENYNONE | STREAM_TRUNC, TRUE );
@@ -607,6 +608,9 @@ USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& 
     }
 
     return nRet;
+#else
+    return 1;
+#endif
 }
 
 #ifdef WNT
