@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-21 13:51:20 $
+ *  last change: $Author: hdu $ $Date: 2001-12-10 11:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3953,6 +3953,24 @@ int OutputDevice::ImplNewFont()
 
     if ( pOldEntry )
         mpFontCache->Release( pOldEntry );
+
+    // #95414# fix for OLE objects which use scale factors very creatively
+    if( mbMap && !aSize.Width() )
+    {
+        int nOrigWidth = pFontEntry->maMetric.mnWidth;
+        float fStretch = (float)maMapRes.mnMapScNumX * maMapRes.mnMapScDenomY;
+        fStretch /= (float)maMapRes.mnMapScNumY * maMapRes.mnMapScDenomX;
+        int nNewWidth = (int)(nOrigWidth * fStretch + 0.5);
+        if( nNewWidth != nOrigWidth )
+        {
+            aSize.Width() = nNewWidth;
+            maFont.SetSize( aSize );
+            mbNewFont = TRUE;
+            mbMap = FALSE;
+            ImplNewFont();  // recurse once using stretched width
+            mbMap = TRUE;
+        }
+    }
 
     return TRUE;
 }
