@@ -3,9 +3,9 @@
  *
  *  $RCSfile: alllang.xsl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 11:48:52 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 10:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@
 			</xsl:when>
             <!-- copying non-module data -->
             <xsl:otherwise>
-                <xsl:if test="($applicable-values | $substantive-nodes)[not(ancestor::*/@install:module)]">
+                <xsl:if test="($applicable-values | $substantive-nodes)[not(ancestor-or-self::*/@install:module)]">
                     <xsl:call-template name="copy-node">
                         <xsl:with-param name="component-schema" select="$component-schema"/>
                         <xsl:with-param name="context" select="$context"/>
@@ -275,27 +275,29 @@
 	<xsl:template match="prop">
 		<xsl:param name = "context"/>
 		<xsl:choose>
-            <xsl:when test="$module and not(ancestor-or-self::*/@install:module=$module)"/>
+            <xsl:when test="$module and not((ancestor-or-self::* | child::value)/@install:module=$module)"/>
             <xsl:when test="not($module) and ancestor-or-self::*/@install:module"/>
-			<xsl:when test="not ($context) or @oor:finalized='true'">
+			<xsl:when test="not ($context) or @oor:finalized='true' or @oor:op!='modify'">
 				<xsl:copy>
 					<xsl:apply-templates select = "@*"/>
 					<xsl:apply-templates select = "value"/>
 				</xsl:copy>
 			</xsl:when>
 			<xsl:when test="value[not (@xml:lang)]">
-			    <!-- copy locale independent values only, if the values differ -->
-				<xsl:variable name="isRedundant">
-					<xsl:call-template name="isRedundant">
-						<xsl:with-param name="schemaval"  select="$context/value"/>
-						<xsl:with-param name="dataval" select="value[not (@xml:lang)]"/>
-					</xsl:call-template>
-				</xsl:variable>
-				<xsl:if test="$isRedundant ='false'">
-					<xsl:copy>
-						<xsl:apply-templates select = "@*"/>
-						<xsl:apply-templates select = "value"/>
-					</xsl:copy>
+                <xsl:if test="value[not(@install:module) or @install:module=$module]">
+                    <!-- copy locale independent values only, if the values differ -->
+                    <xsl:variable name="isRedundant">
+                        <xsl:call-template name="isRedundant">
+                            <xsl:with-param name="schemaval"  select="$context/value"/>
+                            <xsl:with-param name="dataval" select="value[not (@xml:lang) and (not(@install:module) or @install:module=$module)]"/>
+                        </xsl:call-template>
+                    </xsl:variable>
+                    <xsl:if test="$isRedundant ='false'">
+                        <xsl:copy>
+                            <xsl:apply-templates select = "@*"/>
+                            <xsl:apply-templates select = "value"/>
+                        </xsl:copy>
+                        </xsl:if>
 				</xsl:if>
 			</xsl:when>
 			<xsl:otherwise>
@@ -308,20 +310,25 @@
 	</xsl:template>
 
 	<xsl:template match="value">
-		<xsl:if test="not (@xml:lang)">
-			<xsl:copy>
-				<xsl:apply-templates select = "@*"/>
-				<xsl:value-of select="."/>
-			</xsl:copy>
-		</xsl:if>
+		<xsl:choose>
+            <xsl:when test="@xml:lang"/>
+            <xsl:when test="$module and not(ancestor-or-self::*/@install:module=$module)"/>
+            <xsl:when test="not($module) and ancestor-or-self::*/@install:module"/>
+            <xsl:otherwise>
+                <xsl:copy>
+                    <xsl:apply-templates select = "@*"/>
+                    <xsl:value-of select="."/>
+                </xsl:copy>
+            </xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 	<xsl:template match="value" mode="fallback-locale">
 		<xsl:if test="@xml:lang = $fallback-locale">
-			<xsl:copy>
-				<xsl:apply-templates select = "@*"/>
-				<xsl:value-of select="."/>
-			</xsl:copy>
+            <xsl:copy>
+                <xsl:apply-templates select = "@*"/>
+                <xsl:value-of select="."/>
+            </xsl:copy>
 		</xsl:if>
 	</xsl:template>
 
@@ -357,11 +364,11 @@
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>
-			<xsl:when test="$schemaval = $dataval">
-				<xsl:value-of select="true()"/>
+			<xsl:when test="$schemaval != $dataval">
+				<xsl:value-of select="false()"/>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="false()"/>
+				<xsl:value-of select="true()"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
