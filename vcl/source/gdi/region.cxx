@@ -2,9 +2,9 @@
  *
  *  $RCSfile: region.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:07:47 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1562,9 +1562,12 @@ BOOL Region::XOr( const Region& rRegion )
     if ( (rRegion.mpImplRegion == &aImplEmptyRegion) || (rRegion.mpImplRegion == &aImplNullRegion) )
         return TRUE;
 
-    // no instance data? -> nothing to do
+    // no own instance data? -> XOr = copy
     if ( (mpImplRegion == &aImplEmptyRegion) || (mpImplRegion == &aImplNullRegion) )
+    {
+        *this = rRegion;
         return TRUE;
+    }
 
     // no own instance data? -> make own copy!
     if ( mpImplRegion->mnRefCount > 1 )
@@ -2468,4 +2471,85 @@ void Region::EndEnumRects( RegionHandle pVoidData )
     // cleanup
     delete pData->mpRegion;
     delete pData;
+}
+
+// -----------------------------------------------------------------------
+
+static inline bool ImplPolygonRectTest( const Polygon& rPoly, Rectangle* pRectOut = NULL )
+{
+    bool bIsRect = false;
+    const Point* pPoints = rPoly.GetConstPointAry();
+    USHORT nPoints = rPoly.GetSize();
+    if( nPoints == 4 || (nPoints == 5 && pPoints[0] == pPoints[4]) )
+    {
+        long nX1 = pPoints[0].X(), nX2 = pPoints[2].X(),
+        nY1 = pPoints[0].Y(), nY2 = pPoints[2].Y();
+        if( ( (pPoints[1].X() == nX1 && pPoints[3].X() == nX2) &&
+            (pPoints[1].Y() == nY2 && pPoints[3].Y() == nY1) )
+        ||
+        ( (pPoints[1].X() == nX2 && pPoints[3].X() == nX1) &&
+        (pPoints[1].Y() == nY1 && pPoints[3].Y() == nY2) ) )
+        {
+            bIsRect = true;
+            if( pRectOut )
+            {
+                long nSwap;
+                if( nX2 < nX1 )
+                {
+                    nSwap = nX2;
+                    nX2 = nX1;
+                    nX1 = nSwap;
+                }
+                if( nY2 < nY1 )
+                {
+                    nSwap = nY2;
+                    nY2 = nY1;
+                    nY1 = nSwap;
+                }
+                if( nX2 != nX1 )
+                    nX2--;
+                if( nY2 != nY1 )
+                    nY2--;
+                pRectOut->Left()    = nX1;
+                pRectOut->Right()   = nX2;
+                pRectOut->Top()     = nY1;
+                pRectOut->Bottom()  = nY2;
+            }
+        }
+    }
+    return bIsRect;
+}
+
+Region Region::GetRegionFromPolyPolygon( const PolyPolygon& rPolyPoly )
+{
+    //return Region( rPolyPoly );
+
+    // check if it's worth extracting the XOr'ing the Rectangles
+    // empiricism shows that break even between XOr'ing rectangles separately
+    // and ImplPolyPolyRegionToBandRegion is at half rectangles/half polygons
+    int nPolygonRects = 0, nPolygonPolygons = 0;
+    int nPolygons = rPolyPoly.Count();
+
+    for( int i = 0; i < nPolygons; i++ )
+    {
+        const Polygon& rPoly = rPolyPoly[i];
+        if( ImplPolygonRectTest( rPoly ) )
+            nPolygonRects++;
+        else
+            nPolygonPolygons++;
+    }
+    if( nPolygonPolygons > nPolygonRects )
+        return Region( rPolyPoly );
+
+    Region aResult;
+    Rectangle aRect;
+    for( int i = 0; i < nPolygons; i++ )
+    {
+        const Polygon& rPoly = rPolyPoly[i];
+        if( ImplPolygonRectTest( rPoly, &aRect ) )
+            aResult.XOr( aRect );
+        else
+            aResult.XOr( Region(rPoly) );
+    }
+    return aResult;
 }
