@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-08-01 14:13:28 $
+ *  last change: $Author: pb $ $Date: 2002-08-21 11:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,7 +489,7 @@ SwViewOption::SwViewOption() :
                     VIEWOPT_1_PAGEBACK |
                     VIEWOPT_1_SOLIDMARKHDL | VIEWOPT_1_POSTITS;
     nCore2Options = VIEWOPT_CORE2_BLACKFONT | VIEWOPT_CORE2_HIDDENPARA;
-    nUIOptions    = VIEWOPT_2_MODIFIED | VIEWOPT_2_EXECHYPERLINKS;
+    nUIOptions    = VIEWOPT_2_MODIFIED | VIEWOPT_2_EXECHYPERLINKS | VIEWOPT_2_GRFKEEPZOOM;
 
     if(MEASURE_METRIC != GetAppLocaleData().getMeasurementSystemEnum())
         aSnapSize.Width() = aSnapSize.Height() = 720;   // 1/2"
