@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:15:58 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,7 @@ private:
     xub_StrLen nAktSwPos;
     USHORT nCurRedlinePos;
 
-    typedef std::pair<UTextOffset, bool> DirEntry;
+    typedef std::pair<int32_t, bool> DirEntry;
     std::vector<DirEntry> maDirChanges;
     typedef std::vector<DirEntry>::const_iterator myciter;
     myciter maBiDiIter;
@@ -452,8 +452,8 @@ WW8_SwAttrIter::WW8_SwAttrIter(SwWW8Writer& rWr, const SwTxtNode& rTxtNd)
         sal_Int32 nCount = ubidi_countRuns(pBidi, &nError);
         maDirChanges.reserve(nCount);
 
-        UTextOffset nStart = 0;
-        UTextOffset nEnd;
+        int32_t nStart = 0;
+        int32_t nEnd;
         UBiDiLevel nCurrDir;
 
         for (sal_Int32 nIdx = 0; nIdx < nCount; ++nIdx)
