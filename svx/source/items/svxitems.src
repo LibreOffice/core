@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:34:12 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ String RID_SVXITEMS_SEARCHCMD_FIND
     Text[ russian ] = "Νΰιςθ";
     Text[ polish ] = "Szukaj";
     Text[ japanese ] = "υ";
-    Text[ chinese_traditional ] = "΄M§δ";
+    Text[ chinese_traditional ] = "·j΄M";
     Text[ arabic ] = "ΘΝΛ";
     Text[ greek ] = "Αναζήτηση";
     Text[ korean ] = "Γ£±β";
@@ -189,7 +189,7 @@ String RID_SVXITEMS_SEARCHCMD_FIND_ALL
     Text[ russian ] = "Νΰιςθ βρε";
     Text[ polish ] = "Wyszukuj wszystkie";
     Text[ japanese ] = "‚·‚Χ‚Δυ";
-    Text[ chinese_traditional ] = "΄M§δ¥ώ³΅";
+    Text[ chinese_traditional ] = "·j΄M¥ώ³΅";
     Text[ arabic ] = "ΘΝΛ Ηαία";
     Text[ greek ] = "Αναζήτηση όλων";
     Text[ korean ] = "ΈπµΞ Γ£±β";
@@ -6703,14 +6703,14 @@ String RID_SVXITEMS_PAGE_USAGE_MIRROR
     Text [ finnish ] = "Peilikuva" ;
     Text [ danish ] = "Spejlvendt" ;
     Text [ french ] = "Pages en vis-ΰ-vis" ;
-    Text [ swedish ] = "Spegelvδnd" ;
+    Text [ swedish ] = "Spegelvδnt" ;
     Text [ dutch ] = "Gespiegeld" ;
     Text [ spanish ] = "Reflejado" ;
-    Text[ chinese_simplified ] = "·΄Σ³µΔ";
+    Text[ chinese_simplified ] = "·­ΧªµΔ";
     Text[ russian ] = "Ξςπΰζενθε";
     Text[ polish ] = "Odbity";
     Text[ japanese ] = "¶‰E‘ΞΜ";
-    Text[ chinese_traditional ] = "¤Ο¬MªΊ";
+    Text[ chinese_traditional ] = "Β½ΒΰªΊ";
     Text[ arabic ] = "γδΪίΣ";
     Text[ greek ] = "Με κατόπτριση";
     Text[ korean ] = "΄λΔª";
@@ -7328,10 +7328,10 @@ String RID_SVXITEMS_TWOLINES_OFF
     Text[ greek ] = "Δίγραμμα - Όχι";
     Text[ dutch ] = "Tweeregelig uit";
     Text[ french ] = "Two lines off";
-    Text[ spanish ] = "Desactivar doble espacio";
-    Text[ italian ] = "Two lines off";
+    Text[ spanish ] = "Desactivar lνneas dobles";
+    Text[ italian ] = "Paragrafo su una riga";
     Text[ danish ] = "Two lines off";
-    Text[ swedish ] = "Tvεradigt av";
+    Text[ swedish ] = "Dubbla rader av";
     Text[ polish ] = "Wy³Ήcz dwuwierszowoζ";
     Text[ portuguese_brazilian ] = "Two lines off";
     Text[ japanese ] = "2sg‚Ά µΜ";
@@ -7352,9 +7352,9 @@ String RID_SVXITEMS_TWOLINES
     Text[ dutch ] = "Tweeregelig";
     Text[ french ] = "Two lines";
     Text[ spanish ] = "Dos lνneas";
-    Text[ italian ] = "Per riga";
+    Text[ italian ] = "Paragrafo su due righe";
     Text[ danish ] = "Two lines";
-    Text[ swedish ] = "Tvεradig";
+    Text[ swedish ] = "Dubbla rader";
     Text[ polish ] = "Dwa wiersze";
     Text[ portuguese_brazilian ] = "Two lines";
     Text[ japanese ] = "2sg‚Ά";
@@ -7419,7 +7419,7 @@ String RID_SVXITEMS_HNGPNCT_OFF
     Text[ english_us ] = "No hanging punctuation at line end";
     Text[ portuguese ] = "Sem pontuaηγo negativa no fim da linha";
     Text[ russian ] = "Αεη βθρÿχει οσνκςσΰφθθ β κξνφε ρςπξκθ";
-    Text[ greek ] = "Χωρίς προεξέχοντα σημεία στίξης στο τέλος της γραμμής";
+    Text[ greek ] = "Να μην προεξέχουν τα σημεία στίξης στο τέλος της γραμμής";
     Text[ dutch ] = "Geen hangende interpunctie aan regeleinde.";
     Text[ french ] = "Pas de ponctuation nιgative en fin de ligne";
     Text[ spanish ] = "Sin puntuaciσn libre al final de lνnea";
@@ -7442,7 +7442,7 @@ String RID_SVXITEMS_HNGPNCT_ON
     Text[ english_us ] = "Hanging punctuation at line end";
     Text[ portuguese ] = "Pontuaηγo negativa no fim da linha";
     Text[ russian ] = "Βθρÿχΰÿ οσνκςσΰφθÿ β κξνφε ρςπξκθ";
-    Text[ greek ] = "Προεξέχοντα σημεία στίξης στο τέλος της γραμμής";
+    Text[ greek ] = "Να επιτρέπεται η προεξοχή των σημείων στίξης στο τέλος της γραμμής";
     Text[ dutch ] = "Hangende interpunctie aan regeleinde";
     Text[ french ] = "Ponctuation nιgative en fin de ligne";
     Text[ spanish ] = "Puntuaciσn libre al final de lνnea";
