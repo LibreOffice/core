@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-10 15:16:29 $
+ *  last change: $Author: kz $ $Date: 2002-06-13 12:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,7 +569,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ chinese_traditional ] = "ηΈ½θ¨η„ζ¬„";
         Text[ arabic ] = "ΓΪγΟΙ ΗαγΜγζΪ";
         Text[ greek ] = "Συνολικό άθροισμα στηλών";
-        Text[ korean ] = "μ—΄μ ν•©κ³„";
+        Text[ korean ] = "μ—΄ ν•©κ³„";
         Text[ turkish ] = "Sόtun ~toplamύ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Total de ~columnes";
