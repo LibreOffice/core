@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-18 12:42:34 $
+#   last change: $Author: vg $ $Date: 2002-01-21 16:04:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,11 +73,15 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.42 $ ';
+$id_str = ' $Revision: 1.43 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
 print "$script_name -- version: $script_rev\n";
+
+if ($ENV{GUI} eq 'UNX') {
+    use Cwd 'chdir';
+};
 
 #########################
 #                       #
@@ -85,6 +89,7 @@ print "$script_name -- version: $script_rev\n";
 #                       #
 #########################
 $QuantityToBuild = 0;
+$cmd_file = '';
 $BuildAllParents = 0;
 $show = 0;
 $deliver = 0;
@@ -107,21 +112,47 @@ $build_since = '';
 &get_options;
 $ENV{mk_tmp}++;
 %prj_platform = ();
-
+#@dirs_to_make = '';
+$check_error_string = '';
+$dmake = '';
+$echo = '';
+$new_line = "\n";
 #### main ####
 
-$dmake = &GetDmakeCommando();
+&get_commands();
+unlink ($cmd_file);
+if ($cmd_file) {
+    if (open (CMD_FILE, ">>$cmd_file")) {
+        select CMD_FILE;
+        $echo = 'echo ';
+        $new_line = $echo."\"\"\n";
+        print "\@$echo off\npushd\n" if ($ENV{GUI} ne 'UNX');
+    } else {
+        &print_error ("Cannot open file $cmd_file");
+    };
+} elsif ($show) {
+    select STDERR;
+};
+
 &BuildAll();
 @TotenEltern = keys %DeadParents;
 if ($#TotenEltern != -1) {
     my ($DeadPrj);
-    print "\nWARNING! Project(s):\n\n";
+    print $new_line.$new_line;
+    print $echo."WARNING! Project(s):\n";
     foreach $DeadPrj (@TotenEltern) {
-        print "$DeadPrj\n";
+        print $echo."$DeadPrj\n";
     };
-    print "\nnot found and couldn't be built. Correct build.lsts.\n";
+    print $new_line;
+    print $echo."not found and couldn't be built. Correct build.lsts.\n";
+    print $new_line;
+};
+if (($ENV{GUI} ne 'UNX') && $cmd_file) {
+    print "popd\n";
 };
 $ENV{mk_tmp} = '';
+close CMD_FILE if ($cmd_file);
+exit(0);
 
 #########################
 #                       #
@@ -189,17 +220,20 @@ sub BuildAll {
                 };
                 next;
             };
-            print "\n=============\n";
-            print "Building project $Prj\n";
-            print   "=============\n";
+            print $new_line;
+            print $echo.    "=============\n";
+            print $echo.    "Building project $Prj\n";
+            print $echo.    "=============\n";
             $PrjDir = &CorrectPath($StandDir.$Prj);
-            if ($ENV{GUI} eq "UNX") {
-                use Cwd 'chdir';
-            };
             chdir $PrjDir;
             cwd();
             &BuildPrj($PrjDir) if (!$deliver);
-            system ("$ENV{DELIVER}") if (!$show);
+            if ($cmd_file) {
+                print "deliver\n";
+            } else {
+                system ("$ENV{DELIVER}") if (!$show);
+            };
+            print $check_error_string;
             &RemoveFromDependencies($Prj, \%ParentDepsHash);
         };
     } else {
@@ -213,28 +247,28 @@ sub BuildAll {
 sub MakeDir {
     my ($DirToBuild, $BuildDir, $error);
     $DirToBuild = shift;
-    $BuildDir = &CorrectPath($StandDir.$PathHash{$DirToBuild});
-    if ($ENV{GUI} eq 'UNX') {
-        use Cwd 'chdir';
-    };
-    if (chdir ($BuildDir)) {
+    $BuildDir = &CorrectPath($StandDir . $PathHash{$DirToBuild});
+    if ($cmd_file) {
+        print "cd $BuildDir\n";
+        print $check_error_string;
+        print $echo.$BuildDir."\n";
+        print "$dmake\n";
+        print $check_error_string;
+    } else {
         print "$BuildDir\n";
-    } else {
-        &print_error("\n$BuildDir not found!!\n");
-        exit (1);
     };
-    cwd();
-    if (!$show) {
-        $error = system ("$dmake");
-        if (!$error) {
-            &RemoveFromDependencies($DirToBuild, \%LocalDepsHash);
+    &RemoveFromDependencies($DirToBuild, \%LocalDepsHash);
+    if (!$cmd_file && !$show) {
+        if (chdir ($BuildDir)) {
+            print "$BuildDir\n";
         } else {
-            &print_error("Error $error occurred while making $BuildDir");
-            $ENV{mk_tmp} = '';
-            exit(1);
+            &print_error("\n$BuildDir not found!!\n");
         };
-    } else {
-        &RemoveFromDependencies($DirToBuild, \%LocalDepsHash);
+        cwd();
+        $error = system ("$dmake");
+        if ($error) {
+            &print_error("Error $error occurred while making $BuildDir");
+        };
     };
 };
 
@@ -281,12 +315,10 @@ sub get_prj_platform {
                 my $alias = $2;
                 if ($alias eq 'NULL') {
                     &print_error ("There is no correct alias set in the line $line!");
-                    exit (1);
                 };
                 &mark_platform($alias, $platform);
             } else {
                 &print_error("Misspelling in line: \n$_");
-                exit(1);
             };
         };
     };
@@ -368,42 +400,32 @@ sub mark_platform {
 #
 sub CorrectPath {
     $_ = shift;
-    s/\\/\//g;
+    if (($ENV{GUI} ne 'UNX') && $cmd_file) {
+        s/\//\\/g;
+    } else {;
+        s/\\/\//g;
+    };
     return $_;
 };
 
 
 #
-# Get platform-dependent dmake commando
+# Get platform-dependent commands
 #
-sub GetDmakeCommando {
-    my ($dmake, $dmake_insert);
-
+sub get_commands {
+    my $arg = '';
     # Setting alias for dmake
-    $dmake_insert = join ' ', @dmake_args;
-    if (defined $ENV{PRODUCTNAME}) {
-        if (defined $ENV{DMAKE}) {
-            $dmake = $ENV{DMAKE};
-            if ($ENV{GUI} ne 'UNX') {
-                $dmake = $ENV{COMSPEC} . ' -c ' . "\"$dmake\"";
-                $dmake =~ s/#/%/g;
-#               print "$dmake";
-            } else {
-                $dmake = $ENV{SHELL} . " -cf \"$dmake\"";
-#               print "$dmake";
-            }
+    $dmake = 'dmake';
+    while ($arg = pop(@dmake_args)) {
+        $dmake .= ' '.$arg;
+    };
+    if ($cmd_file) {
+        if ($ENV{GUI} eq 'UNX') {
+            $check_error_string = "if \"\$?\" != \"0\" exit\n";
         } else {
-            die "PRODUCNAME without \$DMAKE set";
-        }
-        $dmake =~ s/\&\&/$dmake_insert \&\&/;
-    } else {
-        if (defined $ENV{DMAKE}) {
-            $dmake = $ENV{DMAKE} . $dmake_insert;
-        } else {
-            $dmake = 'dmake' . $dmake_insert;
-        }
-    }
-    return $dmake;
+            $check_error_string = "if \"\%?\" != \"0\" quit\n";
+        };
+    };
 };
 
 
@@ -448,7 +470,6 @@ sub get_stand_dir {
         } elsif (&IsRootDir($StandDir)) {
             $ENV{mk_tmp} = '';
             &print_error ('Found no project to build');
-            exit (1);
         };
     }
     while (chdir '..');
@@ -558,10 +579,9 @@ sub FindIndepPrj {
         # If there are only dependent projects in hash - generate error
         return '' if ($build_from);
         print STDERR "\nError: projects";
-        DeadPrjLoop:
         foreach $Prj (keys %$Dependencies) {
             if (IsHashNative($Prj)) {
-                next DeadPrjLoop;
+                next;
             };
             $i = 0;
             print STDERR "\n$Prj depends on:";
@@ -570,8 +590,6 @@ sub FindIndepPrj {
             };
         };
         &print_error ("\nhave dead or circular dependencies\n");
-        $ENV{mk_tmp} = '';
-        exit (1);
     };
 };
 
@@ -602,7 +620,6 @@ sub GetDependenciesArray {
     while (!($DepString =~ /^NULL/)) {
         if (!$DepString) {
             &print_error("Project $prj has wrong written dependencies string:\n $string");
-            exit (1);
         };
         $DepString =~ /(\S+)\s*/;
         $ParentPrj = $1;
@@ -612,7 +629,6 @@ sub GetDependenciesArray {
             if (($prj_platform{$ParentPrj} ne $1) &&
                 ($prj_platform{$ParentPrj} ne 'all')) {
                 &print_error ("$ParentPrj\.$1 is a wrong dependency identifier!\nCheck if it is platform dependent");
-                exit (1);
             };
             if (&CheckPlatform($1)) {
                 $AliveDependencies{$ParentPrj}++;
@@ -622,7 +638,6 @@ sub GetDependenciesArray {
             if ((exists($prj_platform{$ParentPrj})) &&
                 ($prj_platform{$ParentPrj} ne 'all') ) {
                 &print_error("$ParentPrj is a wrong used dependency identifier!\nCheck if it is platform dependent");
-                exit (1);
             };
             push(@Dependencies, $ParentPrj);
         };
@@ -643,6 +658,34 @@ sub GetDirectoryList {
     return @DirectoryList;
 };
 
+sub print_error {
+    my $message = shift;
+    print STDERR "\nERROR: $message\n";
+    $ENV{mk_tmp} = '';
+    close CMD_FILE if ($cmd_file);
+    unlink ($cmd_file);
+    exit(1);
+};
+
+sub usage {
+    print STDERR "\nbuild\n";
+    print STDERR "Syntax:   build [-help|-all|-from|-from_opt|since prj_name|-file file_name] \n";
+    print STDERR "Example:  build -from sfx2\n";
+    print STDERR "              - build all projects including current one from sfx2\n";
+    print STDERR "Example:  build -from_opt sfx2\n";
+    print STDERR "              - the same as -from, but skip all projects that could have been built (no secure way, use ONLY when -all or -from is already been run and there no external dependensies\' changes occurred)\n";
+    print STDERR "Keys:     -all        - build all projects from very beginning till current one\n";
+    print STDERR "      -from       - build all projects beginning from the specified till current one\n";
+    print STDERR "      -from_opt   - build all projects beginning from the specified till current one (optimized version)\n";
+    print STDERR "      -since      - build all projects beginning from the specified till current one (optimized version, skips specified project)\n";
+    print STDERR "      -show       - show what is going to be built\n";
+    print STDERR "      -file       - generate command file file_name\n";
+    print STDERR "      -deliver    - only deliver, no build (usable for \'-all\' and \'-from\' keys)\n";
+    print STDERR "      -help       - print help info\n";
+    print STDERR "Default:          - build current project\n";
+    print STDERR "Keys that are not listed above would be passed to dmake\n";
+};
+
 #
 # Get all options passed
 #
@@ -655,6 +698,7 @@ sub get_options {
         $arg =~ /^-all$/        and $BuildAllParents = 1            and next;
         $arg =~ /^-show$/       and $show = 1                       and next;
         $arg =~ /^-deliver$/    and $deliver = 1                    and next;
+        $arg =~ /^-file$/       and $cmd_file = shift @ARGV         and next;
         $arg =~ /^-from$/       and $BuildAllParents = 1
                                 and $build_from = shift @ARGV       and next;
         $arg =~ /^-from_opt$/   and $BuildAllParents = 1
@@ -667,35 +711,12 @@ sub get_options {
     };
     if ($build_from && $build_from_opt) {
         &print_error('Switches -from an -from_opt collision');
-        exit(1);
     };
 
     if ($build_from && $build_since) {
         &print_error('Switches -from an -since collision');
-        exit(1);
     };
+    #&print_error ('No file name supplied') if (!$cmd_file);
     @ARGV = @dmake_args;
-};
-
-sub print_error {
-    my $message = shift;
-    print STDERR "\nERROR: $message\n";
-};
-
-sub usage {
-    print STDERR "\nbuild\n";
-    print STDERR "Syntax:   build [-help|-all|-from|-from_opt|since prj_name] \n";
-    print STDERR "Example:  build -from sfx2\n";
-    print STDERR "              - build all projects including current one from sfx2\n";
-    print STDERR "Example:  build -from_opt sfx2\n";
-    print STDERR "              - the same as -from, but skip all projects that could have been built (no secure way, use ONLY when -all or -from is already been run and there no external dependensies\' changes occurred)\n";
-    print STDERR "Keys:     -all        - build all projects from very beginning till current one\n";
-    print STDERR "      -from       - build all projects beginning from the specified till current one\n";
-    print STDERR "      -from_opt   - build all projects beginning from the specified till current one (optimized version)\n";
-    print STDERR "      -since      - build all projects beginning from the specified till current one (optimized version, skips specified project)\n";
-    print STDERR "      -show       - show what is gonna be built\n";
-    print STDERR "      -deliver    - only deliver, no build (usable for \'-all\' and \'-from\' keys)\n";
-    print STDERR "      -help       - print help info\n";
-    print STDERR "Default:          - build current project\n";
-    print STDERR "Keys that are not listed above would be passed to dmake\n";
+    $cmd_file = '' if ($show);
 };
