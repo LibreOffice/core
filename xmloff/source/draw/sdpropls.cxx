@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-09 16:06:24 $
+ *  last change: $Author: cl $ $Date: 2002-10-11 09:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,6 +695,7 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_VerticalAlign_Enum[] =
     { XML_TOP,          drawing::TextVerticalAdjust_TOP },
     { XML_MIDDLE,       drawing::TextVerticalAdjust_CENTER },
     { XML_BOTTOM,       drawing::TextVerticalAdjust_BOTTOM },
+    { XML_JUSTIFY,      drawing::TextVerticalAdjust_BLOCK },
     { XML_TOKEN_INVALID, 0 }
 };
 

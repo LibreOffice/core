@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.79 2002-10-09 16:08:24 cl Exp $
+	$Id: drawing.mod,v 1.80 2002-10-11 09:10:23 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -341,7 +341,7 @@
 <!ATTLIST style:properties draw:fit-to-size %boolean; #IMPLIED>
 <!ATTLIST style:properties draw:fit-to-contour %boolean; #IMPLIED>
 <!ATTLIST style:properties draw:textarea-horizontal-align ( left | center | right | justify ) #IMPLIED>
-<!ATTLIST style:properties draw:textarea-vertical-align ( top | middle | bottom ) #IMPLIED>
+<!ATTLIST style:properties draw:textarea-vertical-align ( top | middle | bottom | justify ) #IMPLIED>
 <!ATTLIST style:properties draw:writing-mode (lr-tb|tb-rl) "lr-tb">
 
 <!-- fill attributes -->
