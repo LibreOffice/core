@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Columns.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:49:35 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,17 +141,6 @@ const sal_uInt16 ALIGN              = 0x0002;
 const sal_uInt16 OLD_HIDDEN         = 0x0004;
 const sal_uInt16 COMPATIBLE_HIDDEN  = 0x0008;
 
-IMPLEMENT_CONSTASCII_USTRING(FRM_COL_TEXTFIELD, "TextField");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COL_COMBOBOX, "ComboBox");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COL_CHECKBOX, "CheckBox");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COL_TIMEFIELD, "TimeField");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COL_DATEFIELD, "DateField");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COL_NUMERICFIELD, "NumericField");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COL_CURRENCYFIELD, "CurrencyField");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COL_PATTERNFIELD, "PatternField");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COL_LISTBOX, "ListBox");
-IMPLEMENT_CONSTASCII_USTRING(FRM_COL_FORMATTEDFIELD, "FormattedField");
-
 //------------------------------------------------------------------------------
 const StringSequence& getColumnTypes()
 {
@@ -159,16 +148,16 @@ const StringSequence& getColumnTypes()
     if (!aColumnTypes.getConstArray()[0].getLength())
     {
         ::rtl::OUString* pNames = aColumnTypes.getArray();
-        pNames[TYPE_CHECKBOX]       = FRM_COL_CHECKBOX;
-        pNames[TYPE_COMBOBOX]       = FRM_COL_COMBOBOX;
-        pNames[TYPE_CURRENCYFIELD]  = FRM_COL_CURRENCYFIELD;
-        pNames[TYPE_DATEFIELD]      = FRM_COL_DATEFIELD;
-        pNames[TYPE_FORMATTEDFIELD] = FRM_COL_FORMATTEDFIELD;
-        pNames[TYPE_LISTBOX]        = FRM_COL_LISTBOX;
-        pNames[TYPE_NUMERICFIELD]   = FRM_COL_NUMERICFIELD;
-        pNames[TYPE_PATTERNFIELD]   = FRM_COL_PATTERNFIELD;
-        pNames[TYPE_TEXTFIELD]      = FRM_COL_TEXTFIELD;
-        pNames[TYPE_TIMEFIELD]      = FRM_COL_TIMEFIELD;
+        pNames[TYPE_CHECKBOX]       = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CheckBox" ) );
+        pNames[TYPE_COMBOBOX]       = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ComboBox" ) );
+        pNames[TYPE_CURRENCYFIELD]  = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CurrencyField" ) );
+        pNames[TYPE_DATEFIELD]      = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateField" ) );
+        pNames[TYPE_FORMATTEDFIELD] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FormattedField" ) );
+        pNames[TYPE_LISTBOX]        = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ListBox" ) );
+        pNames[TYPE_NUMERICFIELD]   = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NumericField" ) );
+        pNames[TYPE_PATTERNFIELD]   = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PatternField" ) );
+        pNames[TYPE_TEXTFIELD]      = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextField" ) );
+        pNames[TYPE_TIMEFIELD]      = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TimeField" ) );
     }
     return aColumnTypes;
 }
