@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-24 17:57:19 $
+ *  last change: $Author: kz $ $Date: 2002-08-02 20:12:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,7 @@ ErrorBox MSG_ERR_WEBBROWSER_NOT_STARTED
     Message[ spanish ] = "Se ha producido un error al iniciar el navegador web. Compruebe la configuraciÛn de %PRODUCTNAME en 'Herramientas - Opciones - %PRODUCTNAME - Programas de ayuda' asÌ como la del navegador web. ";
     Message[ finnish ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
     Message[ italian ] = "Si Ë verificato un errore durante l'avvio del browser Web. Verificate le impostazioni di %PRODUCTNAME al menu 'Strumenti - Opzioni - %PRODUCTNAME - Programmi ausiliari' e le impostazioni del browser Web.";
-    Message[ danish ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
+    Message[ danish ] = "Fejl ved start af webbrowseren.\nKontroller indstillingerne for %PRODUCTNAME og for webbrowseren.";
     Message[ swedish ] = "Det uppstod ett fel n‰r webbl‰saren skulle startas. Kontrollera inst‰llningarna i %PRODUCTNAME under 'Verktyg - Alternativ - %PRODUCTNAME - Hj‰lpprogram' och inst‰llningarna i din webbl‰sare.";
     Message[ polish ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
     Message[ portuguese_brazilian ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
@@ -401,7 +401,7 @@ ErrorBox MSG_ERR_EXTERNAL_APP_NOT_FOUND
     Message[ spanish ] = "No se pudo encontrar ninguna aplicaciÛn exterior correspondiente al tipo de archivo seleccionado.\nCompruebe la configuraciÛn del %PRODUCTNAME.";
     Message[ finnish ] = "An error occurred in starting the external application for the given file type.\nPlease check the %PRODUCTNAME settings.";
     Message[ italian ] = "Impossibile trovare le applicazioni esterne per il tipo di file selezionato.\\Verificate le impostazioni di %PRODUCTNAME.";
-    Message[ danish ] = "An error occurred in starting the external application for the given file type.\nPlease check the %PRODUCTNAME settings.";
+    Message[ danish ] = "Der kunne ikke findes nogen tilh¯rende ekstern applikation til den valgte filtype.\nKontroller indstillingerne for %PRODUCTNAME.";
     Message[ swedish ] = "Det gick inte att hitta nÂgot tillhˆrande externt program fˆr den valda filtypen.\nKontrollera inst‰llningarna i %PRODUCTNAME.";
     Message[ polish ] = "An error occurred in starting the external application for the given file type.\nPlease check the %PRODUCTNAME settings.";
     Message[ portuguese_brazilian ] = "An error occurred in starting the external application for the given file type.\nPlease check the %PRODUCTNAME settings.";
@@ -667,7 +667,7 @@ String GID_VIEW
     Text[ korean ] = "Î≥¥Í∏∞";
     Text[ turkish ] = "Gˆr¸n¸m";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ver";
+    Text[ catalan ] = "Disseny";
     Text[ thai ] = "‡∏°‡∏∏‡∏°‡∏°‡∏≠‡∏á";
 };
 
@@ -729,7 +729,7 @@ String GID_EDIT
     Text[ korean ] = "Ìé∏Ïßë";
     Text[ turkish ] = "D¸zenle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Editar";
+    Text[ catalan ] = "Edita";
     Text[ thai ] = "‡πÅ‡∏Å‡πâ‡πÑ‡∏Ç";
 };
 
@@ -790,7 +790,7 @@ String GID_OPTIONS
     Text[ korean ] = "ÎèÑÍµ¨";
     Text[ turkish ] = "AraÁlar";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Opciones";
+    Text[ catalan ] = "Opcions";
     Text[ thai ] = "‡∏ï‡∏±‡∏ß‡πÄ‡∏•‡∏∑‡∏≠‡∏Å";
 };
 
@@ -880,7 +880,7 @@ String GID_INSERT
     Text[ korean ] = "ÏÇΩÏûÖ";
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar";
+    Text[ catalan ] = "Enganxa";
     Text[ finnish ] = "Lis‰‰";
     Text[ thai ] = "‡πÅ‡∏ó‡∏£‡∏Å";
 };
@@ -910,7 +910,7 @@ String GID_FORMAT
     Text[ korean ] = "ÏÑúÏãù";
     Text[ turkish ] = "Format";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Formato";
+    Text[ catalan ] = "Formata";
     Text[ finnish ] = "Muoto";
     Text[ thai ] = "‡∏£‡∏π‡∏õ‡πÅ‡∏ö‡∏ö";
 };
@@ -970,7 +970,7 @@ String GID_TEXT
     Text[ korean ] = "ÌÖçÏä§Ìä∏";
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Texto";
+    Text[ catalan ] = "text ";
     Text[ finnish ] = "Teksti";
     Text[ thai ] = "‡∏Ç‡πâ‡∏≠‡∏Ñ‡∏ß‡∏≤‡∏°";
 };
@@ -1000,7 +1000,7 @@ String GID_FRAME
     Text[ korean ] = "ÌîÑÎ†àÏûÑ";
     Text[ turkish ] = "«erÁeve";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Marco";
+    Text[ catalan ] = "Vora";
     Text[ finnish ] = "Kehys";
     Text[ thai ] = "‡∏Å‡∏£‡∏≠‡∏ö";
 };
@@ -1030,7 +1030,7 @@ String GID_GRAPHIC
     Text[ korean ] = "Í∑∏ÎûòÌîΩ";
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Imagen";
+    Text[ catalan ] = "Gr‡fics";
     Text[ finnish ] = "Grafiikka";
     Text[ thai ] = "‡∏Å‡∏£‡∏≤‡∏ü‡∏¥‡∏Ñ";
 };
@@ -1060,7 +1060,7 @@ String GID_TABLE
     Text[ korean ] = "ÏãúÌä∏";
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tabla";
+    Text[ catalan ] = "Crea";
     Text[ finnish ] = "Taulukko";
     Text[ thai ] = "‡∏ï‡∏≤‡∏£‡∏≤‡∏á";
 };
@@ -1120,7 +1120,7 @@ String GID_DATA
     Text[ korean ] = "Îç∞Ïù¥ÌÑ∞";
     Text[ turkish ] = "Veri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Datos";
+    Text[ catalan ] = "Dades";
     Text[ finnish ] = "Tiedot";
     Text[ thai ] = "‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•";
 };
@@ -1270,7 +1270,7 @@ String GID_CONNECTOR
     Text[ korean ] = "Ïó∞Í≤∞Ïûê";
     Text[ turkish ] = "Balay˝c˝";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Conector";
+    Text[ catalan ] = "Connector";
     Text[ finnish ] = "Liitin";
     Text[ thai ] = "‡∏ï‡∏±‡∏ß‡πÄ‡∏ä‡∏∑‡πà‡∏≠‡∏°‡∏ï‡πà‡∏≠";
 };
@@ -1300,7 +1300,7 @@ String GID_MODIFY
     Text[ korean ] = "ÏàòÏ†ï";
     Text[ turkish ] = "Dei˛tir";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Modificar";
+    Text[ catalan ] = "Modifica";
     Text[ finnish ] = "Muokkaa";
     Text[ thai ] = "‡∏î‡∏±‡∏î‡πÅ‡∏õ‡∏•‡∏á";
 };
@@ -1453,7 +1453,7 @@ TabDialog SID_OPTIONS
                 Text[ korean ] = "Ï†ÄÏû•";
                 Text[ turkish ] = "Kaydet";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Guardar";
+                Text[ catalan ] = "Desa";
                 Text[ thai ] = "‡∏ö‡∏±‡∏ô‡∏ó‡∏∂‡∏Å";
             };
             PageItem
@@ -1485,7 +1485,7 @@ TabDialog SID_OPTIONS
                 Text[ korean ] = "Í≤ΩÎ°ú";
                 Text[ turkish ] = "Veri yolu";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Rutas";
+                Text[ catalan ] = "Colors";
                 Text[ thai ] = "‡πÄ‡∏™‡πâ‡∏ô‡∏ó‡∏≤‡∏á";
             };
             PageItem
@@ -1534,7 +1534,7 @@ TabDialog SID_OPTIONS
     Text[ korean ] = "ÏòµÏÖò";
     Text[ turkish ] = "SeÁenekler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Opciones";
+    Text[ catalan ] = "Opcions";
     Text[ thai ] = "‡∏ï‡∏±‡∏ß‡πÄ‡∏•‡∏∑‡∏≠‡∏Å";
 };
 
@@ -2767,7 +2767,7 @@ String STR_QUITAPP
     Text[ korean ] = "Ï¢ÖÎ£å(~X)";
     Text[ turkish ] = "~«˝k˝˛";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Terminar";
+    Text[ catalan ] = "~Surt";
     Text[ finnish ] = "Lo~peta";
     Text[ thai ] = "‡∏≠‡∏≠~‡∏Å";
 };
@@ -2918,7 +2918,7 @@ String RID_STR_HELP
     Text[ korean ] = "ÎèÑÏõÄÎßê";
     Text[ turkish ] = "Yard˝m";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ayuda";
+    Text[ catalan ] = "Ajuda";
     Text[ finnish ] = "Ohje";
     Text[ thai ] = "‡∏ä‡πà‡∏ß‡∏¢‡πÄ‡∏´‡∏•‡∏∑‡∏≠";
 };
@@ -3155,7 +3155,7 @@ String RID_ENVTOOLBOX
     Text[ korean ] = "Í∏∞Îä• Î™®Ïùå";
     Text[ turkish ] = "›˛lev Áubuu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de funciones";
+    Text[ catalan ] = "Barra de funcions";
     Text[ finnish ] = "Toimintopalkki";
     Text[ thai ] = "‡πÅ‡∏ñ‡∏ö‡∏ü‡∏±‡∏á‡∏Å‡πå‡∏ä‡∏±‡πà‡∏ô";
 };
@@ -3522,7 +3522,7 @@ String IDS_SBERR_STOREREF
     Text[ greek ] = "« ·Ì·ˆÔÒ‹ ‰ÂÌ Ë· ·ÔËÁÍÂıÙÂﬂ: ";
     Text[ korean ] = "Ï∞∏Ï°∞Í∞Ä Ï†ÄÏû•ÎêòÏßÄ ÏïäÏùÑ Í≤ÉÏûÖÎãàÎã§: ";
     Text[ turkish ] = "Referans kaydedilmeyecek: ";
-    Text[ catalan ] = "No se guardar· la referencia:  ";
+    Text[ catalan ] = "No es desar‡ la referËncia:  ";
     Text[ finnish ] = "Viitett‰ ei tallenneta: ";
     Text[ thai ] = "‡∏Å‡∏≤‡∏£‡∏≠‡πâ‡∏≤‡∏á‡∏≠‡∏¥‡∏á‡∏à‡∏∞‡πÑ‡∏°‡πà‡∏ñ‡∏π‡∏Å‡∏ö‡∏±‡∏ô‡∏ó‡∏∂‡∏Å: ";
 };
@@ -3536,7 +3536,7 @@ String STR_KEY_CONFIG_DIR
     Text [ portuguese_brazilian ] = "Configura??s" ;
     Text [ portuguese ] = "ConfiguraÁ„o" ;
     Text [ finnish ] = "Kokoonpano" ;
-    Text [ danish ] = "Brugerkonfigurationer" ;
+    Text [ danish ] = "Konfiguration" ;
     Text [ french ] = "Configuration" ;
     Text [ swedish ] = "Konfiguration" ;
     Text [ dutch ] = "Configuratie" ;
@@ -3614,7 +3614,7 @@ String STR_KEY_GRAPHICS_PATH
     Text[ korean ] = "Í∑∏ÎûòÌîΩ";
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Im·genes";
+    Text[ catalan ] = "Gr‡fics";
     Text[ thai ] = "‡∏Å‡∏£‡∏≤‡∏ü‡∏¥‡∏Ñ";
 };
 String STR_KEY_BITMAP_PATH
@@ -3642,7 +3642,7 @@ String STR_KEY_BITMAP_PATH
     Text[ korean ] = "Í∏∞Ìò∏";
     Text[ language_user1 ] = "BLG 18.01.00 : Ds la liste des chemin \"Outils - Options - Chemins\"";
     Text[ turkish ] = "Simgeler";
-    Text[ catalan ] = "SÌmbolos";
+    Text[ catalan ] = "SÌmbols";
     Text[ finnish ] = "Kuvakkeet";
     Text[ thai ] = "‡πÑ‡∏≠‡∏Ñ‡∏≠‡∏ô";
 };
@@ -3738,7 +3738,7 @@ String STR_KEY_MODULES_PATH
     Text[ korean ] = "Î™®Îìà";
     Text[ turkish ] = "Mod¸ller";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "MÛdulos";
+    Text[ catalan ] = "MÚduls";
     Text[ thai ] = "‡πÇ‡∏°‡∏î‡∏π‡∏•";
 };
 String STR_KEY_TEMPLATE_PATH
@@ -3866,7 +3866,7 @@ String STR_KEY_GALLERY_DIR
     Text [ spanish ] = "Gallery" ;
     Text [ french ] = "Gallery" ;
     Text [ swedish ] = "Gallery" ;
-    Text [ danish ] = "Nyt Gallery" ;
+    Text [ danish ] = "Gallery" ;
     Text [ portuguese ] = "Gallery" ;
     Text [ portuguese_brazilian ] = "Gallery" ;
     Text[ chinese_simplified ] = "ÁîªÂªä";
@@ -3928,7 +3928,7 @@ String STR_KEY_TEMP_PATH
     Text[ spanish ] = "Archivos temporales";
     Text[ finnish ] = "Temporary base directory";
     Text[ italian ] = "File temporanei";
-    Text[ danish ] = "Temporary base directory";
+    Text[ danish ] = "Midlertidige filer";
     Text[ swedish ] = "Tempor‰ra filer";
     Text[ polish ] = "Pliki tymczasowe";
     Text[ portuguese_brazilian ] = "Temporary base directory";
@@ -4009,7 +4009,7 @@ String STR_KEY_FILTER_PATH
     Text[ swedish ] = "Filter";
     Text[ russian ] = "‘ËÎ¸Ú˚";
     Text[ italian ] = "Filtro";
-    Text[ danish ] = "Filtre";
+    Text[ danish ] = "Filter";
     Text[ polish ] = "Filtr";
     Text[ portuguese_brazilian ] = "Filter";
     Text[ japanese ] = "„Éï„Ç£„É´„Çø";
@@ -4019,7 +4019,7 @@ String STR_KEY_FILTER_PATH
     Text[ arabic ] = "›· —";
     Text[ turkish ] = "Filtre";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Filtros";
+    Text[ catalan ] = "Filtre";
     Text[ finnish ] = "Suodattimet";
     Text[ thai ] = "‡∏ï‡∏±‡∏ß‡∏Å‡∏£‡∏≠‡∏á";
 };
@@ -4062,7 +4062,7 @@ String STR_KEY_USERCONFIG_PATH
     Text[ swedish ] = "Anv‰ndarkonfiguration";
     Text[ russian ] = " ÓÌÙË„Û‡ˆËˇ ÔÓÎ¸ÁÓ‚‡ÚÂÎˇ";
     Text[ italian ] = "Configurazione utente";
-    Text[ danish ] = "Brugerkonfigurationer";
+    Text[ danish ] = "Brugerkonfiguration";
     Text[ polish ] = "Konfiguracje uøytkownika";
     Text[ portuguese_brazilian ] = "User Settings";
     Text[ japanese ] = "„É¶„Éº„Ç∂„ÉºË®≠ÂÆö";
@@ -4114,7 +4114,7 @@ String STR_KEY_AUTOCORRECT_DIR
     Text[ french ] = "AutoCorrection";
     Text[ spanish ] = "AutoCorrecciÛn";
     Text[ italian ] = "Correzione automatica";
-    Text[ danish ] = "Rediger AutoKorrektur";
+    Text[ danish ] = "AutoKorrektur";
     Text[ swedish ] = "AutoKorrigering";
     Text[ polish ] = "Autokorekta";
     Text[ portuguese_brazilian ] = "AutoCorrect";
@@ -4124,7 +4124,7 @@ String STR_KEY_AUTOCORRECT_DIR
     Text[ chinese_traditional ] = "Ëá™ÂãïÊ†°Ê≠£";
     Text[ arabic ] = " ’ÕÌÕ  ·ﬁ«∆Ì";
     Text[ turkish ] = "Otomatik d¸zeltme";
-    Text[ catalan ] = "AutoCorrecciÛn";
+    Text[ catalan ] = "CorrecciÛ autom‡tica";
     Text[ finnish ] = "Automaattinen korjaus";
     Text[ thai ] = "‡πÅ‡∏Å‡πâ‡πÑ‡∏Ç‡∏≠‡∏±‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥";
 };
@@ -4151,7 +4151,7 @@ String STR_KEY_LINGUISTIC_DIR
     Text[ chinese_traditional ] = "Ë™ûË®ÄË¶èÂâá";
     Text[ arabic ] = "«··€…";
     Text[ turkish ] = "Dil";
-    Text[ catalan ] = "Ling¸Ìstica";
+    Text[ catalan ] = "Ajudes sobre l'escriptura";
     Text[ finnish ] = "Kirjoituksen aputyˆkalut";
     Text[ thai ] = "‡∏ï‡∏±‡∏ß‡πÄ‡∏Ç‡∏µ‡∏¢‡∏ô";
 };
@@ -4170,7 +4170,7 @@ String STR_QUICKSTART_EXIT
     Text[ spanish ] = "Terminar Inicio r·pido";
     Text[ finnish ] = "Lopeta pikak‰ynnistys";
     Text[ italian ] = "Termina QuickStart";
-    Text[ danish ] = "Exit %PRODUCTNAME QuickStart";
+    Text[ danish ] = "Afslut Hurtig start";
     Text[ swedish ] = "Avsluta snabbstart";
     Text[ polish ] = "ZakoÒcz szybkie uruchamianie";
     Text[ portuguese_brazilian ] = "Exit %PRODUCTNAME QuickStart";
@@ -4196,7 +4196,7 @@ String STR_QUICKSTART_TIP
     Text[ spanish ] = "Inicio r·pido de %PRODUCTNAME %PRODUCTVERSION ";
     Text[ finnish ] = "Ohjelman %PRODUCTNAME %PRODUCTVERSION pikak‰ynnistys";
     Text[ italian ] = "QuickStart %PRODUCTNAME %PRODUCTVERSION";
-    Text[ danish ] = "%PRODUCTNAME QuickStart active";
+    Text[ danish ] = "Hurtig start til %PRODUCTNAME %PRODUCTVERSION";
     Text[ swedish ] = "Snabbstart %PRODUCTNAME %PRODUCTVERSION";
     Text[ polish ] = "%PRODUCTNAME %PRODUCTVERSION - Szybkie uruchamianie";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME QuickStart active";
@@ -4222,7 +4222,7 @@ String STR_QUICKSTART_FILEOPEN
     Text[ spanish ] = "Abrir archivo...";
     Text[ finnish ] = "~Tiedoston avaus";
     Text[ italian ] = "Apri file...";
-    Text[ danish ] = "File open...";
+    Text[ danish ] = "≈bn fil...";
     Text[ swedish ] = "÷ppna fil...";
     Text[ polish ] = "OtwÛrz plik...";
     Text[ portuguese_brazilian ] = "File open...";
@@ -4248,7 +4248,7 @@ String STR_QUICKSTART_FROMTEMPLATE
     Text[ spanish ] = "A partir de una plantilla...";
     Text[ finnish ] = "Mallipohjasta";
     Text[ italian ] = "Dal modello...";
-    Text[ danish ] = "From template...";
+    Text[ danish ] = "Fra skabelon...";
     Text[ swedish ] = "FrÂn mall...";
     Text[ polish ] = "Na podstawie szablonu...";
     Text[ portuguese_brazilian ] = "From template...";
@@ -4274,7 +4274,7 @@ String STR_QUICKSTART_PRELAUNCH
     Text[ spanish ] = "Cargar %PRODUCTNAME al iniciar el sistema";
     Text[ finnish ] = "Esik‰ynnist‰ ohjelma %PRODUCTNAME j‰rjestelm‰n k‰ynnistyksen aikana";
     Text[ italian ] = "Apri %PRODUCTNAME all'avvio del sistema";
-    Text[ danish ] = "Pre-launch %PRODUCTNAME during system start";
+    Text[ danish ] = "IndlÊs %PRODUCTNAME ved systemstart";
     Text[ swedish ] = "Ladda %PRODUCTNAME vid systemstart";
     Text[ polish ] = "£aduj program %PRODUCTNAME w trakcie uruchamiania systemu";
     Text[ portuguese_brazilian ] = "Pre-launch %PRODUCTNAME during system start";
