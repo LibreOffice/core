@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-20 21:16:35 $
+ *  last change: $Author: vg $ $Date: 2002-01-14 21:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -10148,7 +10148,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Liefert den Kurs pro 100 Wдhrungseinheiten Nennwert eines Wertpapiers, das periodische Zinsen auszahlt.";
             Text[ english ] = "Returns the price per 100 currency units face value of a security that pays periodic interest";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Returns the price per $100 face value of a security that pays periodic interest";
+            Text[ english_us ] = "Returns the price per 100 currency units face value of a security that pays periodic interest";
             Text[ portuguese ] = "Devolve o preзo por 100 euros do valor nominal de um tнtulo que paga juros periуdicos.";
             Text[ russian ] = "Возвращает цену за 100 рублей нарицательной стоимости ценных бумаг, по которым выплачивается периодический процент.";
             Text[ greek ] = "Returns the price per $100 face value of a security that pays periodic interest";
@@ -10162,7 +10162,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ polish ] = "Podaje cenк za 100 jednostek wartoњci nominalnej papieru wartoњciowego o okresowym oprocentowaniu.";
             Text[ portuguese_brazilian ] = "Returns the price per $100 face value of a security that pays periodic interest";
             Text[ japanese ] = "е®љжњџзљ„гЃ«е€©жЃЇгЃЊж”Їж‰•г‚Џг‚Њг‚‹иЁје€ёгЃ«еЇѕгЃ—гЃ¦йЎЌйќў пїҐ100 еЅ“гЃџг‚ЉгЃ®дѕЎж јг‚’иї”гЃ—гЃѕгЃ™гЂ‚";
-            Text[ korean ] = "м •кё° мќґмћђлҐј м§Ђл¶€н•лЉ” н•л‚мќ л‹ґліґл¬јм—ђ лЊЂн•ґ $100 м•Ўл©ґк°Ђл‹№ к°ЂкІ©мќ„ л°н™н•©л‹€л‹¤";
+            Text[ korean ] = "мЈјкё°м ЃмњјлЎњ мќґмћђк°Ђ м§Ђл¶€лђлЉ” мњ к°Ђ м¦ќк¶Њмќ 100 м•Ўл©ґк°Ђл‹№ м‹њм„ёлҐј м њкіµн•©л‹€л‹¤";
             Text[ chinese_simplified ] = "и®Ўз®—жџђдёЂе®љжњџд»жЃЇзљ„йќўйўќдёє100е…ѓзљ„жњ‰д»·иЇЃе€ёзљ„д»·ж јгЂ‚";
             Text[ chinese_traditional ] = "е‚іе›ћжџђдёЂе®љжњџд»жЃЇгЂЃйќўйЎЌз‚є100е…ѓзљ„жњ‰еѓ№и­‰е€ёзљ„еѓ№ж јгЂ‚";
             Text[ turkish ] = "Returns the price per $100 face value of a security that pays periodic interest";
@@ -10556,7 +10556,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Liefert den Kurs pro 100 Wдhrungseinheiten Nennwert eines unverzinslichen Werpapiers.";
             Text[ english ] = "Returns the price per 100 currency units face value of a discounted security";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Returns the price per $100 face value of a discounted security";
+            Text[ english_us ] = "Returns the price per 100 currency units face value of a discounted security";
             Text[ portuguese ] = "Devolve o preзo por 100 euros do valor nominal de um tнtulo descontado.";
             Text[ russian ] = "Возвращает цену за 100 рублей номинальной стоимости ценных бумаг, на которые сделана скидка.";
             Text[ greek ] = "Returns the price per $100 face value of a discounted security";
@@ -10570,7 +10570,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ polish ] = "Podaje cenк za 100 jednostek wartoњci nominalnej papieru wartoњciowego zdyskontowanego.";
             Text[ portuguese_brazilian ] = "Returns the price per $100 face value of a discounted security";
             Text[ japanese ] = "е‰Іеј•иЁје€ёгЃ®йЎЌйќў $100 гЃ«еЇѕгЃ™г‚‹дѕЎж јг‚’иї”гЃ—гЃѕгЃ™гЂ‚";
-            Text[ korean ] = "к°ђк°Ђлђњ л‹ґліґл¬јмќ $100 м•Ўл©ґк°Ђл‹№ к°ЂкІ©мќ„ л°н™н•©л‹€л‹¤";
+            Text[ korean ] = "л¬ґмќґмћђ мњ к°Ђ м¦ќк¶Њмќ 100 м•Ўл©ґк°Ђл‹№ м‹њм„ёлҐј м њкіµн•©л‹€л‹¤";
             Text[ chinese_simplified ] = "и®Ўз®—жџђдёЂдёЌи®Ўз®—е€©жЃЇзљ„гЂЃйќўйўќдёє100е…ѓзљ„жњ‰д»·иЇЃе€ёзљ„д»·ж јгЂ‚";
             Text[ chinese_traditional ] = "е‚іе›ћжџђдёЂдёЌиЁ€з®—й™„еЉ е€©жЃЇзљ„гЂЃйќўйЎЌз‚є100е…ѓзљ„жњ‰еѓ№и­‰е€ёзљ„еѓ№ж јгЂ‚";
             Text[ turkish ] = "Returns the price per $100 face value of a discounted security";
@@ -10856,7 +10856,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Liefert den Kurs pro 100 Wдhrungseinheiten Nennwert eines Wertpapiers, das Zinsen am Fдlligkeitsdatum auszahlt.";
             Text[ english ] = "Returns the price per 100 currency units face value of a security that pays interest at maturity";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Returns the price per $100 face value of a security that pays interest at maturity";
+            Text[ english_us ] = "Returns the price per 100 currency units face value of a security that pays interest at maturity";
             Text[ portuguese ] = "Devolve o preзo por 100 euros do valor nominal de um tнtulo que paga juros no vencimento.";
             Text[ russian ] = "Возвращает цену за 100 рублей нарицательной стоимости ценных бумаг, по которым доход выплачивается в срок погашения.";
             Text[ greek ] = "Returns the price per $100 face value of a security that pays interest at maturity";
@@ -10870,7 +10870,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ polish ] = "Podaje cenк za 100 jednostek wartoњci nominalnej papieru wartoњciowego oprocentowanego przy wykupie.";
             Text[ portuguese_brazilian ] = "Returns the price per $100 face value of a security that pays interest at maturity";
             Text[ japanese ] = "жєЂжњџж—ҐгЃ«е€©жЃЇгЃЊж”Їж‰•г‚Џг‚Њг‚‹иЁје€ёгЃ«еЇѕгЃ—гЃ¦йЎЌйќў $100 еЅ“гЃџг‚ЉгЃ®дѕЎж јг‚’иї”гЃ—гЃѕгЃ™гЂ‚";
-            Text[ korean ] = "л§Њкё°мќјм—ђ мќґмћђлҐј м§Ђл¶€н•лЉ” н•л‚мќ л‹ґліґл¬јм—ђ лЊЂн•њ $100 м•Ўл©ґк°Ђмќ к°ЂкІ©мќ„ л°н™н•©л‹€л‹¤";
+            Text[ korean ] = "л§Њкё°мќјм—ђ мќґмћђк°Ђ м§Ђл¶€лђлЉ” мњ к°Ђ м¦ќк¶Њмќ 100 м•Ўл©ґк°Ђл‹№ м‹њм„ёлҐј м њкіµн•©л‹€л‹¤";
             Text[ chinese_simplified ] = "и®Ўз®—жџђдёЂе€°жњџд»жЃЇзљ„йќўйўќдёє100е…ѓзљ„жњ‰д»·иЇЃе€ёзљ„д»·ж јгЂ‚";
             Text[ chinese_traditional ] = "е‚іе›ћжџђдёЂе€°жњџд»жЃЇгЂЃйќўйЎЌз‚є100е…ѓзљ„жњ‰еѓ№и­‰е€ёзљ„еѓ№ж јгЂ‚";
             Text[ turkish ] = "Returns the price per $100 face value of a security that pays interest at maturity";
@@ -11210,7 +11210,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Liefert die modifizierte Macaulay-Duration eines Wertpapiers mit 100 Wдhrungseinheiten Nennwert.";
             Text[ english ] = "Returns the Macaulay modified duration for a security with an assumed par value of 100 currency units.";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Returns the Macaulay modified duration for a security with an assumed par value of $100";
+            Text[ english_us ] = "Returns the Macaulay modified duration for a security with an assumed par value of 100 currency units";
             Text[ portuguese ] = "Devolve a duraзгo alterada Macauley para um tнtulo com um valor nominal de 100 euros.";
             Text[ russian ] = "Возвращает модифицированную длительность Макалея для ценных бумаг с предполагаемой номинальной стоимостью 100 руб.";
             Text[ greek ] = "Returns the Macauley modified duration for a security with an assumed par ";
@@ -11224,7 +11224,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ polish ] = "Podaje wartoњж zmodyfikowanego okresu Macauley'a w przypadku papieru wartoњciowego o zaіoїonej wartoњci 100 jednostek.";
             Text[ portuguese_brazilian ] = "Returns the Macauley modified duration for a security with an assumed par ";
             Text[ japanese ] = "йЎЌйќўдѕЎж ј $100 гЃЁд»®е®љгЃ—гЃ¦гЂЃиЁје€ёгЃ«еЇѕгЃ™г‚‹дї®ж­Јгѓћг‚ігѓјгѓ¬гѓјдї‚ж•°г‚’иї”гЃ—гЃѕгЃ™гЂ‚";
-            Text[ korean ] = "м•Ўл©ґк°Ђ 100 DM мќ мњ к°Ђ м¦ќк¶Њмќ м€м •  л§¤м»¬л¦¬(Macauley) кё°к°„мќ„ м њкіµн•©л‹€л‹¤.";
+            Text[ korean ] = "100 м•Ўл©ґк°Ђ мњ к°Ђ м¦ќк¶Њмќ м€м •  л§¤м»¬л¦¬(Macauley) кё°к°„мќ„ м њкіµн•©л‹€л‹¤.";
             Text[ chinese_simplified ] = "и®Ўз®—жџђдёЂйќўйўќдёє100е…ѓзљ„жњ‰д»·иЇЃе€ёзљ„ Macauley дї®ж­Јжњџй™ђгЂ‚";
             Text[ chinese_traditional ] = "е‚іе›ћжџђдёЂйќўйЎЌз‚є100е…ѓзљ„жњ‰еѓ№и­‰е€ёзљ„ Macauley дї®ж­Јжњџй™ђгЂ‚";
             Text[ turkish ] = "Returns the Macauley modified duration for a security with an assumed par ";
@@ -13227,7 +13227,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Liefert den Kurs pro 100 Wдhrungseinheiten Nennwert eines Schatzwechsels.";
             Text[ english ] = "Returns the price of 100 currency units face value for a treasury bill";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Returns the price of $100 face value for a treasury bill";
+            Text[ english_us ] = "Returns the price of 100 currency units face value for a treasury bill";
             Text[ portuguese ] = "Devolve o preзo por 100 euros do valor nominal de uma Obrigaзгo do Tesouro.";
             Text[ russian ] = "Возвращает цену на 100 руб. номинальной стоимости для казначейского чека.";
             Text[ greek ] = "Returns the price of $100 face value for a treasury bill";
@@ -13241,7 +13241,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ polish ] = "Podaje cenк za 100 jednostek wartoњci nominalnej bonu skarbowego.";
             Text[ portuguese_brazilian ] = "Returns the price of $100 face value for a treasury bill";
             Text[ japanese ] = "з±іе›ЅиІЎе‹™зњЃзџ­жњџиЁје€ё(TB)гЃ®йЎЌйќў $100 еЅ“гЃџг‚ЉгЃ®дѕЎж јг‚’иї”гЃ—гЃѕгЃ™гЂ‚";
-            Text[ korean ] = "мћ¬л¬ґм„± л‹Ёкё° м±„к¶Њм—ђ лЊЂн•њ $100 м•Ўл©ґк°Ђ л‹№ к°ЂкІ©мќ„ л°н™н•©л‹€л‹¤";
+            Text[ korean ] = "л‹Ёкё° кіµм±„мќ 100 м•Ўл©ґк°Ђл‹№ м‹њм„ёлҐј м њкіµн•©л‹€л‹¤";
             Text[ chinese_simplified ] = "и®Ўз®—жџђдёЂйќўйўќдёє100е…ѓзљ„е›Ѕеє“е€ёзљ„д»·ж јгЂ‚";
             Text[ chinese_traditional ] = "е‚іе›ћжџђдёЂйќўйЎЌз‚є100е…ѓзљ„ењ‹еє«е€ёзљ„еЇ¦йљ›еѓ№ж јгЂ‚";
             Text[ turkish ] = "Returns the price of $100 face value for a treasury bill";
@@ -17858,6 +17858,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 };
+
 
 
 
