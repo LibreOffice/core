@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: hr $ $Date: 2003-07-16 17:23:32 $
+#   last change: $Author: obo $ $Date: 2004-03-19 14:57:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -185,6 +185,25 @@ SHL1DEPN=
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME= $(SHL1TARGET)
+
+# --- Coverage -----------------------------------------------------
+# LLA: 20040304 The follows lines are an additional which is only need if we run
+#               coverage tests. For normal test runs this feature is not used.
+#               For more information about coverage tests see:
+#               http://gcc.gnu.org/onlinedocs/gcc-3.0/gcc_8.html
+#
+#               Why this additional?
+#               Anybody has decide to link sal with g++ instead of gcc.
+#
+.IF "$(TESTCOVERAGE)"!=""
+.IF "$(GUI)"=="UNX"
+.IF "$(COM)"=="GCC"
+.IF "$(OS)"=="LINUX"
+SHL1STDLIBS+=-lgcc
+.ENDIF
+.ENDIF
+.ENDIF
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
