@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCatalog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:36:27 $
+ *  last change: $Author: fs $ $Date: 2001-03-19 07:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 //------------------------------------------------------------------------------
-IMPLEMENT_SERVICE_INFO(OCatalog,"com.sun.star.sdbcx.VDatabaseDefinition","com.sun.star.sdbcx.DatabaseDefinition")
+IMPLEMENT_SERVICE_INFO(OCatalog,"com.sun.star.comp.connectivity.OCatalog","com.sun.star.sdbcx.DatabaseDefinition")
 //------------------------------------------------------------------------------
 OCatalog::OCatalog(const Reference< XConnection> &_xConnection) : OCatalog_BASE(m_aMutex)
             ,connectivity::OSubComponent<OCatalog>(_xConnection, this)
@@ -177,39 +177,6 @@ void ODescriptor::construct()
 // -------------------------------------------------------------------------
 ODescriptor::~ODescriptor()
 {
-}
-// -------------------------------------------------------------------------
-// com::sun::star::lang::XUnoTunnel
-sal_Int64 SAL_CALL ODescriptor::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException)
-{
-    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return (sal_Int64)this;
-
-    return 0;
-}
-// -----------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< sal_Int8 > ODescriptor::getUnoTunnelImplementationId()
-{
-    static ::cppu::OImplementationId * pId = 0;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
-}
-typedef ::comphelper::OPropertyContainer ODescriptorCon_BASE2;
-// -----------------------------------------------------------------------------
-Any SAL_CALL ODescriptor::queryInterface( const Type & rType ) throw(RuntimeException)
-{
-    Any aRet = ::cppu::queryInterface(rType,static_cast< ::com::sun::star::lang::XUnoTunnel*> (this));
-    if(!aRet.hasValue())
-        aRet = ODescriptorCon_BASE2::queryInterface(rType);
-    return aRet;
 }
 // -----------------------------------------------------------------------------
 
