@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progressbarwrapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:11:14 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:43:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_UIELEMENTTYPE_HPP_
-#include <drafts/com/sun/star/ui/UIElementType.hpp>
+#ifndef _COM_SUN_STAR_UI_UIELEMENTTYPE_HPP_
+#include <com/sun/star/ui/UIElementType.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -116,7 +116,7 @@ namespace framework{
 //_________________________________________________________________________________________________________________
 
 ProgressBarWrapper::ProgressBarWrapper() :
-UIElementWrapperBase( ::drafts::com::sun::star::ui::UIElementType::PROGRESSBAR )
+UIElementWrapperBase( ::com::sun::star::ui::UIElementType::PROGRESSBAR )
     ,   m_bOwnsInstance( sal_False )
     ,   m_nRange( 100 )
     ,   m_nValue( 0 )
