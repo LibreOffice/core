@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: mh $ $Date: 2001-08-23 12:06:47 $
+#   last change: $Author: sab $ $Date: 2002-02-14 13:54:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,8 @@ LIB1FILES=\
         $(SLB)$/config.lib \
         $(SLB)$/ucbhelp.lib \
         $(SLB)$/procfact.lib \
-        $(SLB)$/property.lib
+        $(SLB)$/property.lib \
+        $(SLB)$/accessibility.lib
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
 
