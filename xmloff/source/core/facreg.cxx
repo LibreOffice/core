@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-09-28 14:25:14 $
+ *  last change: $Author: bm $ $Date: 2001-10-02 14:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,11 +212,6 @@ extern uno::Sequence< OUString > SAL_CALL SchXMLImport_Content_getSupportedServi
 extern OUString SAL_CALL SchXMLImport_Content_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
-// meta
-extern uno::Sequence< OUString > SAL_CALL SchXMLImport_Meta_getSupportedServiceNames() throw();
-extern OUString SAL_CALL SchXMLImport_Meta_getImplementationName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
-
 // chart export
 // ------------
 extern uno::Sequence< OUString > SAL_CALL SchXMLExport_getSupportedServiceNames() throw();
@@ -232,11 +227,6 @@ extern uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Styles_createInst
 extern uno::Sequence< OUString > SAL_CALL SchXMLExport_Content_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SchXMLExport_Content_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
-
-// meta
-extern uno::Sequence< OUString > SAL_CALL SchXMLExport_Meta_getSupportedServiceNames() throw();
-extern OUString SAL_CALL SchXMLExport_Meta_getImplementationName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 #endif // #ifndef SVX_LIGHT
 
 
@@ -351,10 +341,6 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             // chart.content
             writeInfo( pKey, SchXMLImport_Content_getImplementationName(), SchXMLImport_Content_getSupportedServiceNames() );
             writeInfo( pKey, SchXMLExport_Content_getImplementationName(), SchXMLExport_Content_getSupportedServiceNames() );
-
-            // chart.meta
-            writeInfo( pKey, SchXMLImport_Meta_getImplementationName(), SchXMLImport_Meta_getSupportedServiceNames() );
-            writeInfo( pKey, SchXMLExport_Meta_getImplementationName(), SchXMLExport_Meta_getSupportedServiceNames() );
 
             // meta
             writeInfo( pKey, XMLMetaImportComponent_getImplementationName(), XMLMetaImportComponent_getSupportedServiceNames() );
@@ -572,20 +558,6 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
                 SchXMLExport_Content_getImplementationName(),
                 SchXMLExport_Content_createInstance,
                 SchXMLExport_Content_getSupportedServiceNames() );
-        }
-        else if( SchXMLImport_Meta_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
-        {
-            xFactory = ::cppu::createSingleFactory( xMSF,
-                SchXMLImport_Meta_getImplementationName(),
-                SchXMLImport_Meta_createInstance,
-                SchXMLImport_Meta_getSupportedServiceNames() );
-        }
-        else if( SchXMLExport_Meta_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
-        {
-            xFactory = ::cppu::createSingleFactory( xMSF,
-                SchXMLExport_Meta_getImplementationName(),
-                SchXMLExport_Meta_createInstance,
-                SchXMLExport_Meta_getSupportedServiceNames() );
         }
         else if ( XMLMetaExportComponent_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
         {
