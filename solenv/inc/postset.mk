@@ -2,9 +2,9 @@
 #
 #   $RCSfile: postset.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-28 12:12:06 $
+#   last change: $Author: hjs $ $Date: 2001-12-05 13:01:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,14 +64,17 @@
 defaultlang=deut
 defaultlangext=49
 
-alllangext=49
+.IF "$(RES_GER)"!=""
+alllangext+=49
 deut$(LANG_GUI)*=$(default$(LANG_GUI))
 lang_49=deut
 longlang_49=german
 langext_49=49
 rsclang_49=-lgGERMAN $(IBM_PC_437)
 rescharset_49=$(deut$(LANG_GUI))
+RCLANGFLAGS_49+= -d GERMAN
 iso_49=de
+.ENDIF
 
 .IF "$(RES_ENUS)"!=""
 alllangext+=01
