@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-03-06 15:45:11 $
+ *  last change: $Author: os $ $Date: 2001-03-13 15:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2378,6 +2378,12 @@ void SwXTextTable::attachToRange(const uno::Reference< XTextRange > & xTextRange
                 DELETEZ(pTableProps);
             }
             pDoc->EndUndo( UNDO_END );
+        }
+        else
+        {
+            IllegalArgumentException aExcept;
+            aExcept.Message = C2U("tables cannot be inserted into tables");
+            throw aExcept;
         }
     }
     else
