@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testconv.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:27:20 $
+ *  last change: $Author: dbo $ $Date: 2001-03-19 12:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,16 @@ static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bE
         printf( " failed, but success was expected! [" );
         printf( aExcMsg.getStr() );
         printf( "]\n" );
+#ifdef DEBUG
+        // for debugging, to trace again
+        try
+        {
+            aRet = s_xConverter->convertTo( rVal, rDestType );
+        }
+        catch (Exception &)
+        {
+        }
+#endif
         return sal_False;
     }
     if (!bExpectSuccess && bCanConvert)
@@ -235,10 +245,14 @@ static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bE
         printf( " to " );
         printValue( aRet );
         printf( " was successful, but was not expected to be!\n" );
+#ifdef DEBUG
+        // for debugging, to trace again
+        aRet = s_xConverter->convertTo( rVal, rDestType );
+#endif
         return sal_False;
     }
 
-#ifdef __MAG_MARKUS_NICHT___EXTRA_AUSGABEN__
+#ifdef __RECONVERSION_OUTPUT__
 //= re-conversion output =
     if (bCanConvert)
     {
@@ -456,7 +470,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     aVal <<= (sal_Int32)( 0xffffffff ); // is -1
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= (sal_Int32)( -0x80000000 );
+    aVal <<= (sal_Int32)( -(sal_Int32)0x80000000 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     aVal <<= (sal_Int32)( 0x7fffffff );
