@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:15:39 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:14:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,19 @@ class AbstractSvxZoomDialog_Impl : public AbstractSvxZoomDialog
 
 };
 //for SvxZoomDialog end
+
+//for SvxSpellDialog begin
+namespace svx{ class SpellDialog;}
+class AbstractSpellDialog_Impl : public AbstractSpellDialog
+{
+ public:
+    DECL_ABSTDLG_BASE(AbstractSpellDialog_Impl, svx::SpellDialog);
+    virtual void        SetLanguage( sal_uInt16 nLang );
+    virtual sal_Bool    Close();
+    virtual void        Invalidate();
+    virtual Window*     GetWindow();
+    virtual SfxBindings& GetBindings();
+};
 
 //for SvxSpellCheckDialog begin
 //STRIP001 class AbstractSvxSpellCheckDialog_Impl : public AbstractSvxSpellCheckDialog //add for FmShowColsDialog
@@ -596,6 +609,11 @@ public:
                                                                 const ResId& rResId,
                                                                 bool bSizeTabPage = false
                                                                  );
+    virtual AbstractSpellDialog *  CreateSvxSpellDialog(
+                            Window* pParent,
+                            SfxBindings* pBindings,
+                            svx::SpellDialogChildWindow* pSpellChildWindow );
+
 //STRIP001    virtual AbstractSvxSpellCheckDialog * CreateSvxSpellCheckDialog( Window* pParent, //add for SvxSpellCheckDialog
 //STRIP001    ::com::sun::star::uno::Reference<
 //STRIP001    ::com::sun::star::linguistic2::XSpellChecker1 >  &xChecker,
