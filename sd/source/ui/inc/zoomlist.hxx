@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoomlist.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dl $ $Date: 2000-10-18 08:55:35 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _SD_ZOOMLIST_HXX
-#define _SD_ZOOMLIST_HXX
+#ifndef SD_ZOOM_LIST_HXX
+#define SD_ZOOM_LIST_HXX
 
 
 #ifndef _GEN_HXX //autogen
@@ -71,17 +71,17 @@
 #include <tools/list.hxx>
 #endif
 
-class SfxViewShell;
 
-class ZoomList : public List
+namespace sd {
+
+class ViewShell;
+
+class ZoomList
+    : public List
 {
-private:
-    SfxViewShell* pViewSh;
-    ULONG         nCurPos;
-
 public:
-    ZoomList( SfxViewShell* pViewShell );
-    virtual     ~ZoomList();
+    ZoomList(ViewShell* pViewShell);
+    virtual ~ZoomList();
 
     void        InsertZoomRect(const Rectangle& rRect);
     Rectangle   GetCurrentZoomRect() const;
@@ -89,8 +89,14 @@ public:
     Rectangle   GetPreviousZoomRect();
     BOOL        IsNextPossible() const;
     BOOL        IsPreviousPossible() const;
+
+private:
+    ViewShell* mpViewShell;
+    ULONG mnCurPos;
 };
 
-#endif // _SD_ZOOMLIST_HXX
+} // end of namespace sd
+
+#endif
 
 
