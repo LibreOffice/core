@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:34:12 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,398 +67,74 @@
 
 String SID_SD_A11Y_D_DRAWVIEW_N
 {
-    Text = "Zeichnungsansicht" ;
-    Text [ english ] = "Drawing View" ;
-    Text[ english_us ] = "Drawing View";
-    Text[ portuguese ] = "Modo Desenho";
-    Text[ russian ] = "Ğåæèì ğèñîâàíèÿ";
-    Text[ greek ] = "ĞñïâïëŞ ó÷åäßïõ";
-    Text[ dutch ] = "Tekenmodus";
-    Text[ french ] = "Mode Dessin";
-    Text[ spanish ] = "Modo Dibujo";
-    Text[ finnish ] = "Piirrosnäkymä";
-    Text[ italian ] = "Vista disegno";
-    Text[ danish ] = "Tegningsvisning";
-    Text[ swedish ] = "Teckningsvy";
-    Text[ polish ] = "Tryb rysunku";
-    Text[ portuguese_brazilian ] = "Modo de Desenho";
-    Text[ japanese ] = "å›³å½¢æç”»ãƒ¢ãƒ¼ãƒ‰";
-    Text[ korean ] = "ê·¸ë¦¬ê¸° ë³´ê¸°";
-    Text[ chinese_simplified ] = "ç»˜å›¾è§†å›¾";
-    Text[ chinese_traditional ] = "ç¹ªåœ–é è¦½";
-    Text[ turkish ] = "Çizim görünümü";
-    Text[ arabic ] = "ÚÑÖ ÇáÑÓã";
-    Text[ catalan ] = "Mode Dibuix";
-    Text[ thai ] = "à¸¡à¸¸à¸¡à¸¡à¸­à¸‡à¸§à¸²à¸”à¸£à¸¹à¸›";
-    Text[ czech ] = "Pohled na kreslenÃ­";
-    Text[ hebrew ] = "Zeichnungsansicht";
-    Text[ hindi ] = "à¤°à¥‡à¤–à¤¾à¤šà¤¿à¤¤à¥à¤° à¤¦à¥ƒà¤¶à¥à¤¯";
-    Text[ slovak ] = "NÃ¡hÄ¾ad kresby";
-    Text[ hungarian ] = "RajzolÃ³nÃ©zet";
-    Text[ slovenian ] = "Risalni pogled";
+    Text [ de ] = "Zeichnungsansicht" ;
+    Text [ en-US ] = "Drawing View";
 };
 
 String SID_SD_A11Y_D_DRAWVIEW_D
 {
-    Text = "Hier können Sie Zeichnungen erzeugen und bearbeiten." ;
-    Text [ english ] = "This is where you create and edit drawings." ;
-    Text[ english_us ] = "This is where you create and edit drawings.";
-    Text[ portuguese ] = "This is where you create and edit drawings.";
-    Text[ russian ] = "This is where you create and edit drawings.";
-    Text[ greek ] = "Åäş äçìéïõñãåßôå êáé åğåîåñãÜæåóôå ó÷İäéá.";
-    Text[ dutch ] = "Hier maakt en bewerkt u tekeningen.";
-    Text[ french ] = "Création et édition des dessins";
-    Text[ spanish ] = "Aquí puede crear y editar dibujos. ";
-    Text[ finnish ] = "This is where you create and edit drawings.";
-    Text[ italian ] = "Spazio per creare e modificare disegni.";
-    Text[ danish ] = "Her kan du oprette og redigere tegninger.";
-    Text[ swedish ] = "Här kan du skapa och redigera teckningar.";
-    Text[ polish ] = "This is where you create and edit drawings.";
-    Text[ portuguese_brazilian ] = "Criação e edição de desenhos";
-    Text[ japanese ] = "ã“ã“ã§ã€å›³å½¢æç”»ã®ä½œæˆã¨ç·¨é›†ãŒã§ãã¾ã™ã€‚";
-    Text[ korean ] = "ì—¬ê¸°ì—ì„œ ê·¸ë¦¬ê¸°ë¥¼ ë§Œë“¤ê³  í¸ì§‘í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "åœ¨è¿™é‡Œæ‚¨èƒ½å¤Ÿæ–°å»ºå’Œç¼–è¾‘ç»˜å›¾ã€‚";
-    Text[ chinese_traditional ] = "åœ¨æ­¤æ‚¨èƒ½å¤ æ–°å¢å’Œç·¨è¼¯ç¹ªåœ–æ–‡ä»¶ã€‚";
-    Text[ turkish ] = "Burası çizimleri yarattığınız ve düzenlediğiniz yer";
-    Text[ arabic ] = "This is where you create and edit drawings.";
-    Text[ catalan ] = "This is where you create and edit drawings.";
-    Text[ thai ] = "This is where you create and edit drawings.";
-    Text[ czech ] = "Zde vytvÃ¡Å™Ã­te a upravujete kresby.";
-    Text[ hebrew ] = "Hier kÃ¶nnen Sie Zeichnungen erzeugen und bearbeiten.";
-    Text[ hindi ] = "This is where you create and edit drawings.";
-    Text[ slovak ] = "Tu mÃ´Å¾ete vytvÃ¡raÅ¥ a upravovaÅ¥ kresby.";
-    Text[ hungarian ] = "Ebben a nÃ©zetben lehet lÃ©trehozni Ã©s szerkeszteni a rajzokat.";
-    Text[ slovenian ] = "Tukaj lahko ustvarjate in urejate risbe.";
+    Text [ de ] = "Hier können Sie Zeichnungen erzeugen und bearbeiten." ;
+    Text [ en-US ] = "This is where you create and edit drawings.";
 };
 
 String SID_SD_A11Y_I_DRAWVIEW_N
 {
-    Text = "Zeichnungsansicht" ;
-    Text [ english ] = "Drawing View" ;
-    Text[ english_us ] = "Drawing View";
-    Text[ portuguese ] = "Modo Desenho";
-    Text[ russian ] = "Ğåæèì ğèñîâàíèÿ";
-    Text[ greek ] = "ĞñïâïëŞ ó÷åäßïõ";
-    Text[ dutch ] = "Tekenmodus";
-    Text[ french ] = "Mode Dessin";
-    Text[ spanish ] = "Modo Dibujo";
-    Text[ finnish ] = "Piirrosnäkymä";
-    Text[ italian ] = "Vista disegno";
-    Text[ danish ] = "Tegningsvisning";
-    Text[ swedish ] = "Teckningsvy";
-    Text[ polish ] = "Tryb rysunku";
-    Text[ portuguese_brazilian ] = "Modo de Desenho";
-    Text[ japanese ] = "å›³å½¢æç”»ãƒ¢ãƒ¼ãƒ‰";
-    Text[ korean ] = "ê·¸ë¦¬ê¸° ë³´ê¸°";
-    Text[ chinese_simplified ] = "ç»˜å›¾è§†å›¾";
-    Text[ chinese_traditional ] = "ç¹ªåœ–é è¦½";
-    Text[ turkish ] = "Çizim görünümü";
-    Text[ arabic ] = "ÚÑÖ ÇáÑÓã";
-    Text[ catalan ] = "Mode Dibuix";
-    Text[ thai ] = "à¸¡à¸¸à¸¡à¸¡à¸­à¸‡à¸§à¸²à¸”à¸£à¸¹à¸›";
-    Text[ czech ] = "Pohled na kreslenÃ­";
-    Text[ hebrew ] = "Zeichnungsansicht";
-    Text[ hindi ] = "à¤°à¥‡à¤–à¤¾à¤šà¤¿à¤¤à¥à¤° à¤¦à¥ƒà¤¶à¥à¤¯";
-    Text[ slovak ] = "NÃ¡hÄ¾ad kresby";
-    Text[ hungarian ] = "SzerkesztÃ©s nÃ©zet";
-    Text[ slovenian ] = "Risalni pogled";
+    Text [ de ] = "Zeichnungsansicht" ;
+    Text [ en-US ] = "Drawing View";
 };
 
 String SID_SD_A11Y_I_DRAWVIEW_D
 {
-    Text = "Hier können Sie Seiten erzeugen und bearbeiten." ;
-    Text [ english ] = "This is where you create and edit slides." ;
-    Text[ english_us ] = "This is where you create and edit slides.";
-    Text[ portuguese ] = "This is where you create and edit slides.";
-    Text[ russian ] = "This is where you create and edit slides.";
-    Text[ greek ] = "Åäş äçìéïõñãåßôå êáé åğåîåñãÜæåóôå äéáöÜíåéåò.";
-    Text[ dutch ] = "Hier maakt en bewerkt u dia's.";
-    Text[ french ] = "Création et édition des pages";
-    Text[ spanish ] = "Aquí se pueden crear y editar diapositivas.";
-    Text[ finnish ] = "This is where you create and edit slides.";
-    Text[ italian ] = "Spazio per creare e modificare le presentazioni.";
-    Text[ danish ] = "Her kan du oprette og redigere dias.";
-    Text[ swedish ] = "Här kan du skapa och redigera sidor.";
-    Text[ polish ] = "This is where you create and edit slides.";
-    Text[ portuguese_brazilian ] = "Criação e edição de slides";
-    Text[ japanese ] = "ã“ã“ã§ã€ã‚¹ãƒ©ã‚¤ãƒ‰ã®ä½œæˆã¨ç·¨é›†ãŒã§ãã¾ã™ã€‚";
-    Text[ korean ] = "ì—¬ê¸°ì—ì„œ ìŠ¬ë¼ì´ë“œë¥¼ ë§Œë“¤ê³  í¸ì§‘í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "åœ¨è¿™é‡Œæ‚¨èƒ½å¤Ÿæ–°å»ºå’Œç¼–è¾‘å¹»ç¯ç‰‡ã€‚";
-    Text[ chinese_traditional ] = "åœ¨æ­¤æ‚¨èƒ½å¤ æ–°å¢å’Œç·¨è¼¯æŠ•å½±ç‰‡ã€‚";
-    Text[ turkish ] = "Slaytları oluşturduğunuz ve düzenlediğiniz yer.";
-    Text[ arabic ] = "This is where you create and edit slides.";
-    Text[ catalan ] = "This is where you create and edit slides.";
-    Text[ thai ] = "This is where you create and edit slides.";
-    Text[ czech ] = "Zde vytvÃ¡Å™Ã­te a upravujete snÃ­mky.";
-    Text[ hebrew ] = "Hier kÃ¶nnen Sie Seiten erzeugen und bearbeiten.";
-    Text[ hindi ] = "This is where you create and edit slides.";
-    Text[ slovak ] = "Tu mÃ´Å¾ete vytvÃ¡raÅ¥ a upravovaÅ¥ snÃ­mky.";
-    Text[ hungarian ] = "Ebben a nÃ©zetben lehet lÃ©trehozni Ã©s szerkeszteni a diÃ¡kat.";
-    Text[ slovenian ] = "Tukaj oblikujete in urejate diapozitive.";
+    Text [ de ] = "Hier können Sie Seiten erzeugen und bearbeiten." ;
+    Text [ en-US ] = "This is where you create and edit slides.";
 };
 
 String SID_SD_A11Y_I_OUTLINEVIEW_N
 {
-    Text = "Gliederungsansicht" ;
-    Text [ english ] = "Outline View" ;
-    Text[ english_us ] = "Outline View";
-    Text[ portuguese ] = "Modo Esquema";
-    Text[ russian ] = "Ğåæèì ñòğóêòóğû";
-    Text[ greek ] = "ĞñïâïëŞ äéÜñèñùóçò";
-    Text[ dutch ] = "Overzichtmodus";
-    Text[ french ] = "Mode Plan";
-    Text[ spanish ] = "Modo Esquema";
-    Text[ finnish ] = "Jäsennysnäkymä";
-    Text[ italian ] = "Vista struttura";
-    Text[ danish ] = "Dispositionsvisning";
-    Text[ swedish ] = "Dispositionsvy";
-    Text[ polish ] = "Tryb konspektu";
-    Text[ portuguese_brazilian ] = "Modo de Estrutura de Tópicos";
-    Text[ japanese ] = "ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ãƒ¢ãƒ¼ãƒ‰";
-    Text[ korean ] = "ê°œìš” ë³´ê¸°";
-    Text[ chinese_simplified ] = "å¤§çº²è§†å›¾";
-    Text[ chinese_traditional ] = "å¤§ç¶±é è¦½";
-    Text[ turkish ] = "Görünüm";
-    Text[ arabic ] = "ÚÑÖ ÇáÊŞÓíã";
-    Text[ catalan ] = "Vista Contorn";
-    Text[ thai ] = "à¸¡à¸¸à¸¡à¸¡à¸­à¸‡à¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡";
-    Text[ czech ] = "Pohled s osnovou";
-    Text[ hebrew ] = "Gliederungsansicht";
-    Text[ hindi ] = "à¤¬à¤¾à¤¹à¤°à¥€ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤¦à¥ƒà¤¶à¥à¤¯";
-    Text[ slovak ] = "PohÄ¾ad s osnovou";
-    Text[ hungarian ] = "VÃ¡zlat nÃ©zet";
-    Text[ slovenian ] = "Orisni pogled";
+    Text [ de ] = "Gliederungsansicht" ;
+    Text [ en-US ] = "Outline View";
 };
 
 String SID_SD_A11Y_I_OUTLINEVIEW_D
 {
-    Text = "Hier können Sie Text in der Gliederungsansicht eingeben und bearbeiten." ;
-    Text [ english ] = "This is where you enter or edit text in list form." ;
-    Text[ english_us ] = "This is where you enter or edit text in list form.";
-    Text[ portuguese ] = "This is where you enter or edit text in list form.";
-    Text[ russian ] = "This is where you enter or edit text in list form.";
-    Text[ greek ] = "Åäş åéóÜãåôå Ş åğåîåñãÜæåóôå êåßìåíï óå ìïñöŞ ëßóôáò.";
-    Text[ dutch ] = "Hier voert u tekst in lijstvorm in of of bewerkt deze tekst.";
-    Text[ french ] = "Saisie et édition du texte en mode Plan";
-    Text[ spanish ] = "Aquí puede introducir y editar texto en forma de lista. ";
-    Text[ finnish ] = "This is where you enter or edit text in list form.";
-    Text[ italian ] = "Spazio per creare e modificare un testo nella vista struttura.";
-    Text[ danish ] = "Her kan du indtaste eller redigere tekst på listeform.";
-    Text[ swedish ] = "Här kan du mata in och redigera text i dispositionsvyn.";
-    Text[ polish ] = "This is where you enter or edit text in list form.";
-    Text[ portuguese_brazilian ] = "Criação e edição do texto dos tópicos.";
-    Text[ japanese ] = "ã“ã“ã§ã€ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ç”¨ãƒ†ã‚­ã‚¹ãƒˆã®å…¥åŠ›ã¨ç·¨é›†ãŒã§ãã¾ã™ã€‚";
-    Text[ korean ] = "ì—¬ê¸°ì—ì„œ í…ìŠ¤íŠ¸ë¥¼ ê°œìš” ë³´ê¸°ë¡œ ì…ë ¥í•˜ê±°ë‚˜ í¸ì§‘í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "åœ¨è¿™é‡Œæ‚¨èƒ½å¤Ÿåœ¨å¤§çº²è§†å›¾ä¹‹ä¸­è¾“å…¥å’Œç¼–è¾‘æ–‡å­—ã€‚";
-    Text[ chinese_traditional ] = "åœ¨æ­¤æ‚¨èƒ½å¤ åœ¨å¤§ç¶±é è¦½ä¹‹ä¸­è¼¸å…¥å’Œç·¨è¼¯æ–‡å­—ã€‚";
-    Text[ turkish ] = "Burası Liste formundaki metni girdiğiniz veya düzenlediğiniz yer.";
-    Text[ arabic ] = "This is where you enter or edit text in list form.";
-    Text[ catalan ] = "This is where you enter or edit text in list form.";
-    Text[ thai ] = "This is where you enter or edit text in list form.";
-    Text[ czech ] = "Zde zadÃ¡vÃ¡te nebo upravujete text ve formÄ› seznamu.";
-    Text[ hebrew ] = "Hier kÃ¶nnen Sie Text in der Gliederungsansicht eingeben und bearbeiten.";
-    Text[ hindi ] = "This is where you enter or edit text in list form.";
-    Text[ slovak ] = "Tu mÃ´Å¾ete zadÃ¡vaÅ¥ a upravovaÅ¥ text formulÃ¡ra.";
-    Text[ hungarian ] = "Ebben a nÃ©zetben listaformÃ¡ban Ã­rhatjuk be vagy szerkeszthetjÃ¼k a szÃ¶vegeket.";
-    Text[ slovenian ] = "Tukaj vnaÅ¡ate in urejate besedilo v obliki seznama.";
+    Text [ de ] = "Hier können Sie Text in der Gliederungsansicht eingeben und bearbeiten." ;
+    Text [ en-US ] = "This is where you enter or edit text in list form.";
 };
 
 String SID_SD_A11Y_I_SLIDEVIEW_N
 {
-    Text = "Diaansicht" ;
-    Text [ english ] = "Slides View" ;
-    Text[ english_us ] = "Slides View";
-    Text[ portuguese ] = "Modo Diapositivo";
-    Text[ russian ] = "Ğåæèì ñëàéäîâ";
-    Text[ greek ] = "ĞñïâïëŞ äéáöÜíåéáò";
-    Text[ dutch ] = "Diamodus";
-    Text[ french ] = "Mode Diapo";
-    Text[ spanish ] = "Modo Diapositivas";
-    Text[ finnish ] = "Dianäkymä";
-    Text[ italian ] = "Vista diapositiva";
-    Text[ danish ] = "Diasvisning";
-    Text[ swedish ] = "Diabildsvy";
-    Text[ polish ] = "Tryb slajdu";
-    Text[ portuguese_brazilian ] = "Modo de Slides";
-    Text[ japanese ] = "ã‚¹ãƒ©ã‚¤ãƒ‰ãƒ¢ãƒ¼ãƒ‰";
-    Text[ korean ] = "ìŠ¬ë¼ì´ë“œ ë³´ê¸°";
-    Text[ chinese_simplified ] = "å¹»ç¯ç‰‡è§†å›¾";
-    Text[ chinese_traditional ] = "æŠ•å½±ç‰‡é è¦½";
-    Text[ turkish ] = "Slaytların Görünümü";
-    Text[ arabic ] = "ÚÑÖ ÇáÔÑÇÆÍ";
-    Text[ catalan ] = "Mode diapositives";
-    Text[ thai ] = "à¸¡à¸¸à¸¡à¸¡à¸­à¸‡à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡";
-    Text[ czech ] = "Pohled na snÃ­mky";
-    Text[ hebrew ] = "Diaansicht";
-    Text[ hindi ] = "à¤¸à¥à¤²à¤‡à¤¡ à¤¦à¥ƒà¤¶à¥à¤¯";
-    Text[ slovak ] = "PohÄ¾ad na snÃ­mky";
-    Text[ hungarian ] = "Dia nÃ©zet";
-    Text[ slovenian ] = "Pogled diapozitivov";
+    Text [ de ] = "Diaansicht" ;
+    Text [ en-US ] = "Slides View";
 };
 
 String SID_SD_A11Y_I_SLIDEVIEW_D
 {
-    Text = "Hier können Sie Seiten sortieren." ;
-    Text [ english ] = "This is where you sort slides." ;
-    Text[ english_us ] = "This is where you sort slides.";
-    Text[ portuguese ] = "This is where you sort slides.";
-    Text[ russian ] = "This is where you sort slides.";
-    Text[ greek ] = "Åäş ôáîéíïìåßôå ôéò äéáöÜíåéåò.";
-    Text[ dutch ] = "Hier sorteert u dia's.";
-    Text[ french ] = "Tri des diapos";
-    Text[ spanish ] = "Aquí puede ordenar las diapositivas.";
-    Text[ finnish ] = "This is where you sort slides.";
-    Text[ italian ] = "Spazio per ordinare le diapositive.";
-    Text[ danish ] = "Her kan du sortere dine dias.";
-    Text[ swedish ] = "Här kan du sortera sidor.";
-    Text[ polish ] = "This is where you sort slides.";
-    Text[ portuguese_brazilian ] = "Seleção de slides";
-    Text[ japanese ] = "ã“ã“ã§ã€ã‚¹ãƒ©ã‚¤ãƒ‰ã®ä¸¦ã¹æ›¿ãˆãŒã§ãã¾ã™ã€‚";
-    Text[ korean ] = "ì—¬ê¸°ì—ì„œ ìŠ¬ë¼ì´ë“œë¥¼ ì •ë ¬í•˜ì‹¤ ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "åœ¨è¿™é‡Œæ‚¨èƒ½å¤Ÿæ’åºé¡µé¢ã€‚";
-    Text[ chinese_traditional ] = "åœ¨æ­¤æ‚¨èƒ½å¤ æ’åºé é¢ã€‚";
-    Text[ turkish ] = "Slaytları sıraladığınız yer.";
-    Text[ arabic ] = "This is where you sort slides.";
-    Text[ catalan ] = "This is where you sort slides.";
-    Text[ thai ] = "This is where you sort slides.";
-    Text[ czech ] = "Zde mÅ¯Å¾ete Å™adit snÃ­mky.";
-    Text[ hebrew ] = "Hier kÃ¶nnen Sie Seiten sortieren.";
-    Text[ hindi ] = "This is where you sort slides.";
-    Text[ slovak ] = "Tu mÃ´Å¾ete triediÅ¥ snÃ­mky.";
-    Text[ hungarian ] = "Ebben a nÃ©zetben rendezhetjÃ¼k a diÃ¡kat.";
-    Text[ slovenian ] = "Tukaj razvrÅ¡Äate diapozitive.";
+    Text [ de ] = "Hier können Sie Seiten sortieren." ;
+    Text [ en-US ] = "This is where you sort slides.";
 };
 
 String SID_SD_A11Y_I_NOTESVIEW_N
 {
-    Text = "Notizansicht" ;
-    Text [ english ] = "Notes View" ;
-    Text[ english_us ] = "Notes View";
-    Text[ portuguese ] = "Modo Anotações";
-    Text[ russian ] = "Ğåæèì ïğèìå÷àíèé";
-    Text[ greek ] = "ĞñïâïëŞ óçìåéşóåùí";
-    Text[ dutch ] = "Aantekeningenmodus";
-    Text[ french ] = "Mode Note";
-    Text[ spanish ] = "Modo Notas";
-    Text[ finnish ] = "Huomautusnäkymä";
-    Text[ italian ] = "Vista note";
-    Text[ danish ] = "Notevisning";
-    Text[ swedish ] = "Anteckningsvy";
-    Text[ polish ] = "Tryb notatek";
-    Text[ portuguese_brazilian ] = "Modo de Anotações";
-    Text[ japanese ] = "ãƒãƒ¼ãƒˆãƒ¢ãƒ¼ãƒ‰";
-    Text[ korean ] = "ë©”ëª¨ ë³´ê¸°";
-    Text[ chinese_simplified ] = "å¤‡æ³¨è§†å›¾";
-    Text[ chinese_traditional ] = "å‚™è¨»é è¦½";
-    Text[ turkish ] = "Not Görünümü";
-    Text[ arabic ] = "ÚÑÖ ÇáãáÇÍÙÇÊ";
-    Text[ catalan ] = "Mode Notes";
-    Text[ thai ] = "à¸¡à¸¸à¸¡à¸¡à¸­à¸‡à¸«à¸¡à¸²à¸¢à¹€à¸«à¸•à¸¸";
-    Text[ czech ] = "Pohled na poznÃ¡mky";
-    Text[ hebrew ] = "Notizansicht";
-    Text[ hindi ] = "à¤Ÿà¤¿à¤ªà¥à¤ªà¤£à¥€ à¤¦à¥ƒà¤¶à¥à¤¯";
-    Text[ slovak ] = "PohÄ¾ad na poznÃ¡mky";
-    Text[ hungarian ] = "Jegyzet nÃ©zet";
-    Text[ slovenian ] = "Pogled opomb";
+    Text [ de ] = "Notizansicht" ;
+    Text [ en-US ] = "Notes View";
 };
 
 String SID_SD_A11Y_I_NOTESVIEW_D
 {
-    Text = "Hier können Sie Notizen eingeben und bearbeiten." ;
-    Text [ english ] = "This is where you enter and view notes." ;
-    Text[ english_us ] = "This is where you enter and view notes.";
-    Text[ portuguese ] = "This is where you enter and view notes.";
-    Text[ russian ] = "This is where you enter and view notes.";
-    Text[ greek ] = "Åäş åéóÜãåôå êáé âëİğåôå óçìåéşóåéò.";
-    Text[ dutch ] = "Hier voert u aantekeningen in en bewerkt ze.";
-    Text[ french ] = "Saisie et édition des notes";
-    Text[ spanish ] = "Aquí puede introducir y editar anotaciones. ";
-    Text[ finnish ] = "This is where you enter and view notes.";
-    Text[ italian ] = "Spazio per scrivere le annotazioni.";
-    Text[ danish ] = "Her kan du indtaste og vise noter.";
-    Text[ swedish ] = "Här kan du mata in och redigera anteckningar.";
-    Text[ polish ] = "This is where you enter and view notes.";
-    Text[ portuguese_brazilian ] = "Digitação e edição de anotações";
-    Text[ japanese ] = "ã“ã“ã§ã€ãƒãƒ¼ãƒˆã®å…¥åŠ›ã¨ç·¨é›†ãŒã§ãã¾ã™ã€‚";
-    Text[ korean ] = "ì—¬ê¸°ì—ì„œ ë©”ëª¨ë¥¼ ì…ë ¥í•˜ê³  í¸ì§‘í•˜ì‹¤ ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "åœ¨è¿™é‡Œæ‚¨èƒ½å¤Ÿè¾“å…¥å’Œç¼–è¾‘å¤‡æ³¨ã€‚";
-    Text[ chinese_traditional ] = "åœ¨æ­¤æ‚¨èƒ½å¤ è¼¸å…¥å’Œç·¨è¼¯å‚™è¨»ã€‚";
-    Text[ turkish ] = "Burası, notları girdiğiniz ve görüntülediğiniz yerdir.";
-    Text[ arabic ] = "This is where you enter and view notes.";
-    Text[ catalan ] = "This is where you enter and view notes.";
-    Text[ thai ] = "This is where you enter and view notes.";
-    Text[ czech ] = "Zde zadÃ¡vÃ¡te a mÅ¯Å¾ete si prohlÃ­Å¾et poznÃ¡mky.";
-    Text[ hebrew ] = "Hier kÃ¶nnen Sie Notizen eingeben und bearbeiten.";
-    Text[ hindi ] = "This is where you enter and view notes.";
-    Text[ slovak ] = "Tu mÃ´Å¾ete zadÃ¡vaÅ¥ a prezeraÅ¥ poznÃ¡mky.";
-    Text[ hungarian ] = "Ebben a nÃ©zetben Ã­rhatjuk be Ã©s nÃ©zhetjÃ¼k meg a megjegyzÃ©seket.";
-    Text[ slovenian ] = "Tukaj vnaÅ¡ate in urejate opombe.";
+    Text [ de ] = "Hier können Sie Notizen eingeben und bearbeiten." ;
+    Text [ en-US ] = "This is where you enter and view notes.";
 };
 
 String SID_SD_A11Y_I_HANDOUTVIEW_N
 {
-    Text = "Handzettelansicht" ;
-    Text [ english ] = "Handout View" ;
-    Text[ english_us ] = "Handout View";
-    Text[ portuguese ] = "Modo Folheto";
-    Text[ russian ] = "Ğåæèì òåçèñîâ";
-    Text[ greek ] = "ĞñïâïëŞ óçìåéşìáôïò";
-    Text[ dutch ] = "Modus Folder";
-    Text[ french ] = "Mode Prospectus";
-    Text[ spanish ] = "Modo Volante";
-    Text[ finnish ] = "Esitenäkymä";
-    Text[ italian ] = "Vista stampato";
-    Text[ danish ] = "Uddelingskopivisning";
-    Text[ swedish ] = "Flygbladsvy";
-    Text[ polish ] = "Tryb prospektu";
-    Text[ portuguese_brazilian ] = "Modo Folheto";
-    Text[ japanese ] = "ãƒãƒ³ãƒ‰ã‚¢ã‚¦ãƒˆãƒ¢ãƒ¼ãƒ‰";
-    Text[ korean ] = "ìœ ì¸ë¬¼ ë³´ê¸°";
-    Text[ chinese_simplified ] = "è®²ä¹‰è§†å›¾";
-    Text[ chinese_traditional ] = "è¬›ç¾©é è¦½";
-    Text[ turkish ] = "Handout Gösterimi";
-    Text[ arabic ] = "ÚÑÖ ÇáäÔÑÉ";
-    Text[ catalan ] = "Mode Follet";
-    Text[ thai ] = "à¸¡à¸¸à¸¡à¸¡à¸­à¸‡à¹€à¸­à¸à¸ªà¸²à¸£à¸›à¸£à¸°à¸à¸­à¸šà¸„à¸³à¸šà¸£à¸£à¸¢à¸²à¸¢";
-    Text[ czech ] = "Pohled na teze";
-    Text[ hebrew ] = "Handzettelansicht";
-    Text[ hindi ] = "à¤¹à¤¾à¤¨à¥à¤¡à¥Œà¤Ÿà¥ à¤¦à¥ƒà¤¶à¥à¤¯";
-    Text[ slovak ] = "PohÄ¾ad na tÃ©zu";
-    Text[ hungarian ] = "EmlÃ©keztetÅ‘ nÃ©zet";
-    Text[ slovenian ] = "Pogled izroÄka";
+    Text [ de ] = "Handzettelansicht" ;
+    Text [ en-US ] = "Handout View";
 };
 
 String SID_SD_A11Y_I_HANDOUTVIEW_D
 {
-    Text = "Hier können Sie das Layout der Handzettel bearbeiten." ;
-    Text [ english ] = "This is where you decide on the layout for handouts." ;
-    Text[ english_us ] = "This is where you decide on the layout for handouts.";
-    Text[ portuguese ] = "This is where you decide on the layout for handouts.";
-    Text[ russian ] = "This is where you decide on the layout for handouts.";
-    Text[ greek ] = "Åäş áğïöáóßæåôå ôç äéÜôáîç ôùí óçìåéùìÜôùí.";
-    Text[ dutch ] = "Hier bepaalt u de lay-out van hand-outs.";
-    Text[ french ] = "Édition de la mise en page des prospectus";
-    Text[ spanish ] = "Aquí puede editar el diseño de los volantes. ";
-    Text[ finnish ] = "This is where you decide on the layout for handouts.";
-    Text[ italian ] = "Spazio per modificare il layout di stampati.";
-    Text[ danish ] = "Her bestemmer du layout for uddelingskopier.";
-    Text[ swedish ] = "Här kan du redigera layout för flygblad.";
-    Text[ polish ] = "This is where you decide on the layout for handouts.";
-    Text[ portuguese_brazilian ] = "Edição do layout dos folhetos";
-    Text[ japanese ] = "ã“ã“ã§ã€ãƒãƒ³ãƒ‰ã‚¢ã‚¦ãƒˆã®ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã¨ç·¨é›†ãŒã§ãã¾ã™ã€‚";
-    Text[ korean ] = "ì—¬ê¸°ì—ì„œ ìœ ì¸ë¬¼ì˜ ë ˆì´ì•„ì›ƒì„ í¸ì§‘í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "åœ¨è¿™é‡Œæ‚¨èƒ½å¤Ÿç¼–è¾‘è®²ä¹‰çš„ç‰ˆå¼ã€‚";
-    Text[ chinese_traditional ] = "åœ¨æ­¤æ‚¨èƒ½å¤ ç·¨è¼¯è¬›ç¾©çš„ç‰ˆå¼ã€‚";
-    Text[ turkish ] = "This is where you decide on the layout for handouts.";
-    Text[ arabic ] = "This is where you decide on the layout for handouts.";
-    Text[ catalan ] = "This is where you decide on the layout for handouts.";
-    Text[ thai ] = "This is where you decide on the layout for handouts.";
-    Text[ czech ] = "Zde se mÅ¯Å¾ete rozhodnout o rozvrÅ¾enÃ­ tezÃ­.";
-    Text[ hebrew ] = "Hier kÃ¶nnen Sie das Layout der Handzettel bearbeiten.";
-    Text[ hindi ] = "This is where you decide on the layout for handouts.";
-    Text[ slovak ] = "Tu sa mÃ´Å¾ete rozhodnÃºÅ¥ pre rozloÅ¾enie tÃ©z.";
-    Text[ hungarian ] = "Ebben a nÃ©zetben hatÃ¡rozhatjuk meg az emlÃ©keztetÅ‘k elrendezÃ©sÃ©t.";
-    Text[ slovenian ] = "Tukaj doloÄite postavitev izroÄka.";
+    Text [ de ] = "Hier können Sie das Layout der Handzettel bearbeiten." ;
+    Text [ en-US ] = "This is where you decide on the layout for handouts.";
 };
 
 
