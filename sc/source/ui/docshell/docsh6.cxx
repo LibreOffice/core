@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh6.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-09 20:03:36 $
+ *  last change: $Author: nn $ $Date: 2001-02-22 17:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,13 @@
 #include "tablink.hxx"
 #include "collect.hxx"
 
+struct ScStylePair
+{
+    SfxStyleSheetBase *pSource;
+    SfxStyleSheetBase *pDest;
+};
+
+
 // STATIC DATA -----------------------------------------------------------
 
 //----------------------------------------------------------------------
@@ -387,6 +394,73 @@ void __EXPORT ScDocShell::LoadStyles( SfxObjectShell &rSource )
 
     PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID | PAINT_LEFT );
 }
+
+void ScDocShell::LoadStylesArgs( ScDocShell& rSource, BOOL bReplace, BOOL bCellStyles, BOOL bPageStyles )
+{
+    //  similar to LoadStyles, but with selectable behavior for XStyleLoader::loadStylesFromURL call
+
+    if ( !bCellStyles && !bPageStyles )     // nothing to do
+        return;
+
+    ScStyleSheetPool* pSourcePool = rSource.GetDocument()->GetStyleSheetPool();
+    ScStyleSheetPool* pDestPool = aDocument.GetStyleSheetPool();
+
+    SfxStyleFamily eFamily = bCellStyles ?
+            ( bPageStyles ? SFX_STYLE_FAMILY_ALL : SFX_STYLE_FAMILY_PARA ) :
+            SFX_STYLE_FAMILY_PAGE;
+    SfxStyleSheetIterator aIter( pSourcePool, eFamily );
+    USHORT nSourceCount = aIter.Count();
+    if ( nSourceCount == 0 )
+        return;                             // no source styles
+
+    ScStylePair* pStyles = new ScStylePair[ nSourceCount ];
+    USHORT nFound = 0;
+
+    //  first create all new styles
+
+    SfxStyleSheetBase* pSourceStyle = aIter.First();
+    while (pSourceStyle)
+    {
+        String aName = pSourceStyle->GetName();
+        SfxStyleSheetBase* pDestStyle = pDestPool->Find( pSourceStyle->GetName(), pSourceStyle->GetFamily() );
+        if ( pDestStyle )
+        {
+            // touch existing styles only if replace flag is set
+            if ( bReplace )
+            {
+                pStyles[nFound].pSource = pSourceStyle;
+                pStyles[nFound].pDest = pDestStyle;
+                ++nFound;
+            }
+        }
+        else
+        {
+            pStyles[nFound].pSource = pSourceStyle;
+            pStyles[nFound].pDest = &pDestPool->Make( aName, pSourceStyle->GetFamily(), pSourceStyle->GetMask() );
+            ++nFound;
+        }
+
+        pSourceStyle = aIter.Next();
+    }
+
+    //  then copy contents (after inserting all styles, for parent etc.)
+
+    for ( USHORT i = 0; i < nFound; ++i )
+    {
+        pStyles[i].pDest->GetItemSet().PutExtended(
+            pStyles[i].pSource->GetItemSet(), SFX_ITEM_DONTCARE, SFX_ITEM_DEFAULT);
+        if(pStyles[i].pSource->HasParentSupport())
+            pStyles[i].pDest->SetParent(pStyles[i].pSource->GetParent());
+        // follow is never used
+    }
+
+    lcl_AdjustPool( GetStyleSheetPool() );      // adjust SetItems
+    UpdateAllRowHeights();
+    PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID | PAINT_LEFT );      // Paint
+
+    delete[] pStyles;
+}
+
 
 BOOL __EXPORT ScDocShell::Insert( SfxObjectShell &rSource,
                                 USHORT nSourceIdx1, USHORT nSourceIdx2, USHORT nSourceIdx3,
