@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTableAddressSupplier.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-16 21:14:50 $
+ *  last change: $Author: mi $ $Date: 2001-10-24 14:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ service ChartTableAddressSupplier
     [property] string CategoriesRangeAddress;
 
     //-------------------------------------------------------------------------
-    /** contains the addresss to the elements of a series.
+    /** contains the addresses to the elements of a series.
         This sequence should contain one element for each series in the chart.
 
         @see ChartSeriesAddress
@@ -100,10 +100,10 @@ service ChartTableAddressSupplier
     [optional, property] string MainTitleAddress;
 
     //-------------------------------------------------------------------------
-    /** contains the Address to the sub title.
+    /** contains the address to the sub title.
 
     <!-- Dennis: Does "Address" have a capital "A" or lowercase? -->
-    */
+    <!-- JRH: changed to lowercase, consistent with the others -->*/
     [optional, property] string SubTitleAddress;
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineDiagram.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2001-08-27 14:35:34 $
+ *  last change: $Author: mi $ $Date: 2001-10-24 14:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,13 +131,12 @@ service LineDiagram
     /** determines which type of symbols are displayed.
 
 
-
         <p>In this interface, only the two values <type>ChartSymbolType</type>::NONE
         and <type>ChartSymbolType</type>::AUTO are supported. Later versions may support
         the selection of the symbols shape. You can change the symbol shape only
         in the services <type>ChartDataPointProperties</type> and <type>ChartDataRowProperties</type>.
-
         </p>
+
         <p>In this Interface, only the absence of symbols
         (SymbolTypeType=ChartSymbol_NONE) or default symbols
         (SymbolTypeType=ChartSymbol_AUTO) are supported.
@@ -211,6 +210,9 @@ service LineDiagram
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/08/27 14:35:34  bm
+    #91579# +properties SplineOrder, SplineResolution
+
     Revision 1.6  2001/05/10 08:50:56  bm
     +optional property SymbolSize
 

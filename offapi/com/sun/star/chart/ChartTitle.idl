@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTitle.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:01 $
+ *  last change: $Author: mi $ $Date: 2001-10-24 14:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 //=============================================================================
 
 // DocMerge from xml: service com::sun::star::chart::ChartTitle
-/** specifies titles in a chart (i.e. the main title, sub title
+/** specifies titles in a chart (e.g., the main title, sub title
     and axis titles).@see com::sun::star::drawing::Shape
  */
 service ChartTitle
@@ -84,7 +84,7 @@ service ChartTitle
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::chart::ChartTitle::TextRotation
-    /** specifies the rotation of the shape in 100th degrees.
+    /** specifies the rotation of the shape in 100th of degrees.
 
 
 
@@ -110,6 +110,9 @@ service ChartTitle
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:01  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:42:35  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StackableDiagram.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+ *  last change: $Author: mi $ $Date: 2001-10-24 14:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 //=============================================================================
 
 // DocMerge from xml: service com::sun::star::chart::StackableDiagram
-/** a helper service for stackable chart types (e.g. charts in
+/** a helper service for stackable chart types (e.g., charts in
     which the data rows may be displayed stacked on each other or in
     percent relation).
  */
@@ -100,6 +100,9 @@ service StackableDiagram
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:03  hjs
     initial import
 

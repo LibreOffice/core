@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartAxisMarks.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+ *  last change: $Author: mi $ $Date: 2001-10-24 14:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,28 +71,28 @@
 // DocMerge from idl: constants com::sun::star::chart::ChartAxisMarks
 /** These are the positions for the marks of an axis.
 
-        <p>The values are combinable (arithmetical <em>or</em>-operation).
+        <p>The values are combinable, an arithmetical <em>or</em> operation.
  */
 constants ChartAxisMarks
 {
     //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::chart::ChartAxisMarks::NONE
-    /** no marks
+    /** No marks.
      */
     const long NONE = 0;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::chart::ChartAxisMarks::INNER
-    /** marks inside the diagram area
+    /** Marks inside the diagram area.
      */
     const long INNER = 1;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::chart::ChartAxisMarks::OUTER
-    /** marks outside the diagram area
+    /** Marks outside the diagram area.
      */
     const long OUTER = 2;
 
@@ -105,6 +105,9 @@ constants ChartAxisMarks
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:01  hjs
     initial import
 

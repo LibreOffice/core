@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartDataPointProperties.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-07 13:57:13 $
+ *  last change: $Author: mi $ $Date: 2001-10-24 14:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
 
 // DocMerge from xml: service com::sun::star::chart::ChartDataPointProperties
 /** specifies all the properties for the graphic object of
-    a data point (i.e. a single bar in a bar chart).
+    a data point (e.g., a single bar in a bar chart).
 
 
 
@@ -159,6 +159,9 @@ service ChartDataPointProperties
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/03/07 13:57:13  cl
+    cleanup of shape services
+
     Revision 1.6  2001/01/23 10:08:03  mi
     optional interfaces now marked as [optional] instead of just a prosa description of this fact
 

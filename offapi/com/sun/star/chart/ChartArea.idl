@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartArea.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-07 13:57:13 $
+ *  last change: $Author: mi $ $Date: 2001-10-24 14:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,9 @@
 //=============================================================================
 
 // DocMerge from xml: service com::sun::star::chart::ChartArea
-/** specifies the area elements of a chart, e.g. the
-    background area, the diagram wall and the diagram floor of 3
-    dimensional charts.
+/** Specifies the area elements of a chart, e.g. the
+    background area, the diagram wall, and the diagram floor of
+   three-dimensional charts.
  */
 service ChartArea
 {
@@ -105,6 +105,9 @@ service ChartArea
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/03/07 13:57:13  cl
+    cleanup of shape services
+
     Revision 1.3  2000/11/08 12:42:35  mi
     moved from api
 
