@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:33:18 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,10 +336,11 @@ void SdrOle2Obj::SetGraphic(const Graphic* pGrf)
         mpImpl->pGraphicObject = new GraphicObject( *pGraphic );
     }
 
-    if ( ppObjRef->Is() && pGrf )
-        SendRepaintBroadcast();
-
     SetChanged();
+    BroadcastObjectChange();
+
+    //if ( ppObjRef->Is() && pGrf )
+    //  BroadcastObjectChange();
 }
 
 // -----------------------------------------------------------------------------
@@ -533,8 +534,9 @@ void SdrOle2Obj::SetObjRef(const SvInPlaceObjectRef& rNewObjRef)
         SetClosedObj( false );
 
     Connect();
+
     SetChanged();
-    SendRepaintBroadcast();
+    BroadcastObjectChange();
 }
 
 // -----------------------------------------------------------------------------
@@ -618,9 +620,9 @@ UINT16 SdrOle2Obj::GetObjIdentifier() const
 
 // -----------------------------------------------------------------------------
 
-FASTBOOL SdrOle2Obj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrOle2Obj::DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
 {
-    FASTBOOL bOk=TRUE;
+    sal_Bool bOk(sal_True);
 
     if( !pGraphic )
         GetObjRef();    // try to load inplace object
@@ -740,7 +742,7 @@ FASTBOOL SdrOle2Obj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRe
 
     if (HasText())
     {
-        bOk=SdrTextObj::Paint(rOut,rInfoRec);
+        bOk = SdrTextObj::DoPaintObject(rOut, rInfoRec);
     }
     return bOk;
 }
@@ -1243,7 +1245,7 @@ const SvInPlaceObjectRef& SdrOle2Obj::GetObjRef() const
             if( !IsEmptyPresObj() )
             {
                 // #75637# remember modified status of model
-                BOOL bWasChanged(pModel ? pModel->IsChanged() : FALSE);
+                const sal_Bool bWasChanged(pModel ? pModel->IsChanged() : sal_False);
 
                 // perhaps preview not valid anymore
                 // #75637# This line changes the modified state of the model
@@ -1253,7 +1255,9 @@ const SvInPlaceObjectRef& SdrOle2Obj::GetObjRef() const
                 // to not set, so that SetGraphic(0L) above does not
                 // set the modified state of the model.
                 if(!bWasChanged && pModel && pModel->IsChanged())
-                    pModel->SetChanged(FALSE);
+                {
+                    pModel->SetChanged( sal_False );
+                }
             }
 
             if ( (*ppObjRef)->GetMiscStatus() & SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE )
@@ -1331,6 +1335,30 @@ uno::Reference< frame::XModel > SdrOle2Obj::getXModel() const
 
 // -----------------------------------------------------------------------------
 
+// #109985#
+sal_Bool SdrOle2Obj::IsChart() const
+{
+    SvInPlaceObjectRef aIPObj = GetObjRef();
+
+    if(aIPObj.Is())
+    {
+        SvGlobalName aObjClsId = *aIPObj->GetSvFactory();
+
+        if(
+            SvGlobalName(SO3_SCH_CLASSID_30) == aObjClsId
+            || SvGlobalName(SO3_SCH_CLASSID_40) == aObjClsId
+            || SvGlobalName(SO3_SCH_CLASSID_50) == aObjClsId
+            || SvGlobalName(SO3_SCH_CLASSID_60) == aObjClsId)
+        {
+            return sal_True;
+        }
+    }
+
+    return sal_False;
+}
+
+// -----------------------------------------------------------------------------
+
 /// #110015# sets the visible area at the SvInPlaceObject and SvEmbeddedInfoObject
 void SdrOle2Obj::SetVisibleArea( const Rectangle& rVisArea )
 {
@@ -1359,3 +1387,4 @@ void SdrOle2Obj::SetVisibleArea( const Rectangle& rVisArea )
 }
 
 // -----------------------------------------------------------------------------
+// eof
