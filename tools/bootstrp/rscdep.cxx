@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdep.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:29:22 $
+ *  last change: $Author: hr $ $Date: 2004-04-08 15:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,12 +129,16 @@ main( int argc, char **argv )
     int digit_optind = 0;
     char aBuf[255];
     char pOutputFileName[255];
+    char pSrsFileName[255];
     String aSrsBaseName;
     BOOL bSource = FALSE;
     ByteString aRespArg;
     String aDelim = String(DirEntry::GetAccessDelimiter());
 
     RscHrcDep *pDep = new RscHrcDep;
+
+    pOutputFileName[0] = 0;
+    pSrsFileName[0] = 0;
 
     for ( int i=1; i<argc; i++)
     {
@@ -146,11 +150,11 @@ main( int argc, char **argv )
         }
         if ( aBuf[0] == '-' && aBuf[1] == 'f' && aBuf[2] == 'p' )
         {
-            strcpy(pOutputFileName, &aBuf[3]);
-            String aName( pOutputFileName, gsl_getSystemTextEncoding());
+            strcpy(pSrsFileName, &aBuf[3]);
+            String aName( pSrsFileName, gsl_getSystemTextEncoding());
             USHORT nPos = 0;
             DirEntry aDest( aName );
-            aSrsBaseName = DirEntry(aDest.GetBase()).GetExtension();
+            aSrsBaseName = aDest.GetBase();
             //break;
         }
         if (aBuf[0] == '-' &&  aBuf[1] == 'i' )
@@ -179,8 +183,8 @@ main( int argc, char **argv )
                 }
                 if ( aBuf2[0] == '-' && aBuf2[1] == 'f' && aBuf2[2] == 'p' )
                 {
-                    strcpy(pOutputFileName, &aBuf2[3]);
-                    String aName( pOutputFileName, gsl_getSystemTextEncoding());
+                    strcpy(pSrsFileName, &aBuf2[3]);
+                    String aName( pSrsFileName, gsl_getSystemTextEncoding());
                     USHORT nPos = 0;
                     DirEntry aDest( aName );
                     aSrsBaseName = aDest.GetBase();
@@ -280,7 +284,7 @@ main( int argc, char **argv )
 #ifdef DEBUG_VERBOSE
         printf("further arguments : ");
 #endif
-        aString = ByteString( pOutputFileName );
+        aString = ByteString( pSrsFileName );
         aString += ByteString(" : " );
 
         while ( optind < argc )
