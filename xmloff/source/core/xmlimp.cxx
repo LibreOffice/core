@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:33:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@
 #ifndef _XMLOFF_XMLSCRIPTCONTEXTFACTORY_HXX
 #include "XMLScriptContextFactory.hxx"
 #endif
+#ifndef _XMLOFF_STYLEMAP_HXX
+#include "StyleMap.hxx"
+#endif
 
 #ifndef _XMLOFF_PROGRESSBARHELPER_HXX
 #include "ProgressBarHelper.hxx"
@@ -181,6 +184,9 @@ using namespace ::com::sun::star::document;
 using namespace ::xmloff::token;
 
 sal_Char __READONLY_DATA sXML_np__office[] = "_office";
+sal_Char __READONLY_DATA sXML_np__ooo[] = "_ooo";
+sal_Char __READONLY_DATA sXML_np__ooow[] = "_ooow";
+sal_Char __READONLY_DATA sXML_np__oooc[] = "_oooc";
 sal_Char __READONLY_DATA sXML_np__style[] = "_style";
 sal_Char __READONLY_DATA sXML_np__text[] = "_text";
 sal_Char __READONLY_DATA sXML_np__table[] = "_table";
@@ -189,6 +195,7 @@ sal_Char __READONLY_DATA sXML_np__dr3d[] = "_dr3d";
 sal_Char __READONLY_DATA sXML_np__fo[] = "_fo";
 sal_Char __READONLY_DATA sXML_np__xlink[] = "_xlink";
 sal_Char __READONLY_DATA sXML_np__dc[] = "_dc";
+sal_Char __READONLY_DATA sXML_np__dom[] = "_dom";
 sal_Char __READONLY_DATA sXML_np__meta[] = "_meta";
 sal_Char __READONLY_DATA sXML_np__number[] = "_number";
 sal_Char __READONLY_DATA sXML_np__svg[] = "_svg";
@@ -205,9 +212,9 @@ sal_Char __READONLY_DATA sXML_np__text_old[] = "__text";
 sal_Char __READONLY_DATA sXML_np__table_old[] = "__table";
 sal_Char __READONLY_DATA sXML_np__meta_old[] = "__meta";
 
+
 #define LOGFILE_AUTHOR "mb93740"
 
-#ifdef CONV_STAR_FONTS
 
 class SvXMLImportEventListener : public cppu::WeakImplHelper1<
                             com::sun::star::lang::XEventListener >
@@ -245,22 +252,30 @@ void SAL_CALL SvXMLImportEventListener::disposing( const lang::EventObject& rEve
 class SvXMLImport_Impl
 {
 public:
+#ifdef CONV_STAR_FONTS
     FontToSubsFontConverter hBatsFontConv;
     FontToSubsFontConverter hMathFontConv;
+#endif
 
     bool mbOwnGraphicResolver;
     bool mbOwnEmbeddedResolver;
+    INetURLObject aBaseURL;
 
-    SvXMLImport_Impl() : hBatsFontConv( 0 ), hMathFontConv( 0 ), mbOwnGraphicResolver( false ), mbOwnEmbeddedResolver( false ) {}
+    SvXMLImport_Impl() :
+#ifdef CONV_STAR_FONTS
+        hBatsFontConv( 0 ), hMathFontConv( 0 ),
+#endif
+        mbOwnGraphicResolver( false ), mbOwnEmbeddedResolver( false ) {}
     ~SvXMLImport_Impl()
     {
+#ifdef CONV_STAR_FONTS
         if( hBatsFontConv )
             DestroyFontToSubsFontConverter( hBatsFontConv );
         if( hMathFontConv )
             DestroyFontToSubsFontConverter( hMathFontConv );
+#endif
     }
 };
-#endif
 
 typedef SvXMLImportContext *SvXMLImportContextPtr;
 SV_DECL_PTRARR( SvXMLImportContexts_Impl, SvXMLImportContextPtr, 20, 5 )
@@ -275,80 +290,67 @@ SvXMLImportContext *SvXMLImport::CreateContext( USHORT nPrefix,
 
 void SvXMLImport::_InitCtor()
 {
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__office ) ),
-                        GetXMLToken(XML_N_OFFICE),
-                        XML_NAMESPACE_OFFICE );
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__style) ),
-                        GetXMLToken(XML_N_STYLE),
-                        XML_NAMESPACE_STYLE );
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__text) ),
-                        GetXMLToken(XML_N_TEXT),
-                        XML_NAMESPACE_TEXT );
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__table ) ),
-                        GetXMLToken(XML_N_TABLE),
-                        XML_NAMESPACE_TABLE );
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__draw ) ),
-                        GetXMLToken(XML_N_DRAW),
-                        XML_NAMESPACE_DRAW );
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM (sXML_np__dr3d ) ),
-                        GetXMLToken(XML_N_DR3D),
-                        XML_NAMESPACE_DR3D );
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__fo) ),
-                        GetXMLToken(XML_N_FO),
-                        XML_NAMESPACE_FO );
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__xlink) ),
-                        GetXMLToken(XML_N_XLINK),
-                        XML_NAMESPACE_XLINK );
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__dc) ),
-                        GetXMLToken(XML_N_DC),
-                        XML_NAMESPACE_DC );
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__meta) ),
-                        GetXMLToken(XML_N_META),
-                        XML_NAMESPACE_META );
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__number) ),
-                        GetXMLToken(XML_N_NUMBER),
-                        XML_NAMESPACE_NUMBER );
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__svg) ),
-                        GetXMLToken(XML_N_SVG),
-                        XML_NAMESPACE_SVG );
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__chart) ),
-                        GetXMLToken(XML_N_CHART),
-                        XML_NAMESPACE_CHART );
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__math) ),
-                        GetXMLToken(XML_N_MATH),
-                        XML_NAMESPACE_MATH );
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_namespace_form) ),
-                           GetXMLToken(XML_N_FORM),
-                        XML_NAMESPACE_FORM );
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__script) ),
-                        GetXMLToken(XML_N_SCRIPT),
-                        XML_NAMESPACE_SCRIPT );
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__config) ),
-                        GetXMLToken(XML_N_CONFIG),
-                        XML_NAMESPACE_CONFIG );
+    if( mnImportFlags != 0 )
+    {
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__office ) ),
+                            GetXMLToken(XML_N_OFFICE),
+                            XML_NAMESPACE_OFFICE );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__ooo ) ), GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__style) ),
+                            GetXMLToken(XML_N_STYLE),
+                            XML_NAMESPACE_STYLE );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__text) ),
+                            GetXMLToken(XML_N_TEXT),
+                            XML_NAMESPACE_TEXT );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__table ) ),
+                            GetXMLToken(XML_N_TABLE),
+                            XML_NAMESPACE_TABLE );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__draw ) ),
+                            GetXMLToken(XML_N_DRAW),
+                            XML_NAMESPACE_DRAW );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM (sXML_np__dr3d ) ),
+                            GetXMLToken(XML_N_DR3D),
+                            XML_NAMESPACE_DR3D );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__fo) ),
+                            GetXMLToken(XML_N_FO),
+                            XML_NAMESPACE_FO );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__xlink) ),
+                            GetXMLToken(XML_N_XLINK),
+                            XML_NAMESPACE_XLINK );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__dc) ),
+                            GetXMLToken(XML_N_DC),
+                            XML_NAMESPACE_DC );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__dom ) ),
+                            GetXMLToken(XML_N_DOM),
+                            XML_NAMESPACE_DOM );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__meta) ),
+                            GetXMLToken(XML_N_META),
+                            XML_NAMESPACE_META );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__number) ),
+                            GetXMLToken(XML_N_NUMBER),
+                            XML_NAMESPACE_NUMBER );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__svg) ),
+                            GetXMLToken(XML_N_SVG),
+                            XML_NAMESPACE_SVG );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__chart) ),
+                            GetXMLToken(XML_N_CHART),
+                            XML_NAMESPACE_CHART );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__math) ),
+                            GetXMLToken(XML_N_MATH),
+                            XML_NAMESPACE_MATH );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_namespace_form) ),
+                            GetXMLToken(XML_N_FORM),
+                            XML_NAMESPACE_FORM );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__script) ),
+                            GetXMLToken(XML_N_SCRIPT),
+                            XML_NAMESPACE_SCRIPT );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__config) ),
+                            GetXMLToken(XML_N_CONFIG),
+                            XML_NAMESPACE_CONFIG );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__ooow ) ), GetXMLToken(XML_N_OOOW), XML_NAMESPACE_OOOW );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__oooc ) ), GetXMLToken(XML_N_OOOC), XML_NAMESPACE_OOOC );
+    }
 
-    // namespaces used in the technical preview (SO 5.2)
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__fo_old) ),
-                        GetXMLToken(XML_N_FO_OLD),
-                        XML_NAMESPACE_FO );
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__xlink_old) ),
-                        GetXMLToken(XML_N_XLINK_OLD),
-                        XML_NAMESPACE_XLINK );
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__office) ),
-                        GetXMLToken(XML_N_OFFICE_OLD),
-                        XML_NAMESPACE_OFFICE );
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__style_old) ),
-                        GetXMLToken(XML_N_STYLE_OLD),
-                        XML_NAMESPACE_STYLE );
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__text_old) ),
-                        GetXMLToken(XML_N_TEXT_OLD),
-                        XML_NAMESPACE_TEXT );
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__table_old) ),
-                        GetXMLToken(XML_N_TABLE_OLD),
-                        XML_NAMESPACE_TABLE );
-    pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__meta_old) ),
-                        GetXMLToken(XML_N_META_OLD),
-                        XML_NAMESPACE_META );
     sPackageProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );
 
     if (xNumberFormatsSupplier.is())
@@ -380,6 +382,7 @@ SvXMLImport::SvXMLImport(
     pEventImportHelper( NULL ),
     pEventListener( NULL ),
     pXMLErrors( NULL ),
+    pStyleMap(0),
     mnImportFlags( nImportFlags ),
     mbIsFormsSupported( sal_True )
 {
@@ -408,6 +411,7 @@ SvXMLImport::SvXMLImport(
     pEventImportHelper( NULL ),
     pEventListener( NULL ),
     pXMLErrors( NULL ),
+    pStyleMap(0),
     mnImportFlags( IMPORT_ALL ),
     mbIsFormsSupported( sal_True )
 {
@@ -438,6 +442,7 @@ SvXMLImport::SvXMLImport(
     pEventImportHelper( NULL ),
     pEventListener( NULL ),
     pXMLErrors( NULL ),
+    pStyleMap(0),
     mnImportFlags( IMPORT_ALL ),
     mbIsFormsSupported( sal_True )
 {
@@ -624,6 +629,11 @@ void SAL_CALL SvXMLImport::endDocument( void )
     {
         Reference< lang::XComponent > xComp( xEmbeddedResolver, UNO_QUERY );
         xComp->dispose();
+    }
+    if( pStyleMap )
+    {
+        pStyleMap->release();
+        pStyleMap = 0;
     }
 
     if ( pXMLErrors != NULL )
@@ -875,12 +885,56 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
             uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xImportInfo->getPropertySetInfo();
             if (xPropertySetInfo.is())
             {
-                OUString sNumberStyles(RTL_CONSTASCII_USTRINGPARAM(XML_NUMBERSTYLES));
-                if (xPropertySetInfo->hasPropertyByName(sNumberStyles))
+                OUString sPropName(RTL_CONSTASCII_USTRINGPARAM(XML_NUMBERSTYLES));
+                if (xPropertySetInfo->hasPropertyByName(sPropName))
                 {
-                    uno::Any aAny = xImportInfo->getPropertyValue(sNumberStyles);
+                    uno::Any aAny = xImportInfo->getPropertyValue(sPropName);
                     aAny >>= xNumberStyles;
                 }
+
+                sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("PrivateData" ) );
+                if (xPropertySetInfo->hasPropertyByName(sPropName))
+                {
+                    Reference < XInterface > xIfc;
+                    uno::Any aAny = xImportInfo->getPropertyValue(sPropName);
+                    aAny >>= xIfc;
+
+                    StyleMap *pSMap = StyleMap::getImplementation( xIfc );
+                    if( pSMap )
+                    {
+                        pStyleMap = pSMap;
+                        pStyleMap->acquire();
+                    }
+                }
+                OUString sBaseURI;
+                sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("BaseURI" ) );
+                if (xPropertySetInfo->hasPropertyByName(sPropName))
+                {
+                    uno::Any aAny = xImportInfo->getPropertyValue(sPropName);
+                    aAny >>= sBaseURI;
+                    pImpl->aBaseURL.SetURL( sBaseURI );
+                }
+                OUString sRelPath;
+                sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("StreamRelPath" ) );
+                if( xPropertySetInfo->hasPropertyByName(sPropName) )
+                {
+                    uno::Any aAny = xImportInfo->getPropertyValue(sPropName);
+                    aAny >>= sRelPath;
+                }
+                OUString sName;
+                sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("StreamName" ) );
+                if( xPropertySetInfo->hasPropertyByName(sPropName) )
+                {
+                    uno::Any aAny = xImportInfo->getPropertyValue(sPropName);
+                    aAny >>= sName;
+                }
+                if( sBaseURI.getLength() && sName.getLength() )
+                {
+                    if( sRelPath.getLength() )
+                        pImpl->aBaseURL.insertName( sRelPath );
+                    pImpl->aBaseURL.insertName( sName );
+                }
+
             }
         }
     }
@@ -1090,29 +1144,75 @@ const Reference< container::XNameContainer > & SvXMLImport::GetDashHelper()
     return xDashHelper;
 }
 
+sal_Bool SvXMLImport::IsPackageURL( const ::rtl::OUString& rURL ) const
+{
+
+    // if, and only if, only parts are imported, then we're in a package
+    const sal_uInt32 nTest = IMPORT_META|IMPORT_STYLES|IMPORT_CONTENT|IMPORT_SETTINGS;
+    if( (mnImportFlags & nTest) == nTest )
+        return sal_False;
+
+    // Some quick tests: Some may rely on the package structure!
+    sal_Int32 nLen = rURL.getLength();
+    if( (nLen > 0 && '/' == rURL[0]) )
+        // RFC2396 net_path or abs_path
+        return sal_False;
+    else if( nLen > 1 && '.' == rURL[0] )
+    {
+        if( '.' == rURL[1] )
+            // ../: We are never going up one level, so we know
+            // it's not an external URI
+            return sal_False;
+        else if( '/' == rURL[1] )
+            // we are remaining on a level, so it's an package URI
+            return sal_True;
+    }
+
+    // Now check for a RFC2396 schema
+    sal_Int32 nPos = 1;
+    while( nPos < nLen )
+    {
+        switch( rURL[nPos] )
+        {
+        case '/':
+            // a relative path segement
+            return sal_True;
+        case ':':
+            // a schema
+            return sal_False;
+        default:
+            break;
+            // we don't care about any other characters
+        }
+        ++nPos;
+    }
+
+    return sal_False;
+}
+
 ::rtl::OUString SvXMLImport::ResolveGraphicObjectURL( const ::rtl::OUString& rURL,
                                                       sal_Bool bLoadOnDemand )
 {
     ::rtl::OUString sRet;
 
-    if( 0 == rURL.compareTo( ::rtl::OUString( '#' ), 1 ) )
+    if( IsPackageURL( rURL ) )
     {
         if( !bLoadOnDemand && xGraphicResolver.is() )
         {
             ::rtl::OUString     aTmp( sPackageProtocol );
-            aTmp += rURL.copy( 1 );
+            aTmp += rURL;
             sRet = xGraphicResolver->resolveGraphicObjectURL( aTmp );
         }
 
         if( !sRet.getLength() )
         {
             sRet = sPackageProtocol;
-            sRet += rURL.copy( 1 );
+            sRet += rURL;
         }
     }
 
     if( !sRet.getLength() )
-        sRet = INetURLObject::RelToAbs( rURL );
+        sRet = GetAbsoluteReference( rURL );
 
     return sRet;
 }
@@ -1145,8 +1245,7 @@ Reference< XOutputStream > SvXMLImport::GetStreamForGraphicObjectURLFromBase64()
 {
     ::rtl::OUString sRet;
 
-    if( 0 == rURL.compareTo( ::rtl::OUString( '#' ), 1 ) &&
-         xEmbeddedResolver.is() )
+    if( IsPackageURL( rURL ) && xEmbeddedResolver.is() )
     {
         OUString sURL( rURL );
         if( rClassId.getLength() )
@@ -1177,6 +1276,53 @@ Reference < XOutputStream > SvXMLImport::ResolveEmbeddedObjectURLFromBase64(
     }
 
     return xOLEStream;
+}
+
+void SvXMLImport::AddStyleDisplayName( sal_uInt16 nFamily,
+                                       const OUString& rName,
+                                       const OUString& rDisplayName )
+{
+    if( !pStyleMap )
+    {
+        pStyleMap = new StyleMap;
+        pStyleMap->acquire();
+        if( xImportInfo.is() )
+        {
+            OUString sPrivateData(
+                    RTL_CONSTASCII_USTRINGPARAM("PrivateData" ) );
+            Reference< beans::XPropertySetInfo > xPropertySetInfo =
+                xImportInfo->getPropertySetInfo();
+            if( xPropertySetInfo.is() &&
+                xPropertySetInfo->hasPropertyByName(sPrivateData) )
+            {
+                Reference < XInterface > xIfc(
+                        static_cast< XUnoTunnel *>( pStyleMap ) );
+                Any aAny;
+                aAny <<= xIfc;
+                xImportInfo->setPropertyValue( sPrivateData, aAny );
+            }
+        }
+    }
+
+    StyleMap::key_type aKey( nFamily, rName );
+    StyleMap::value_type aValue( aKey, rDisplayName );
+    ::std::pair<StyleMap::iterator,bool> aRes( pStyleMap->insert( aValue ) );
+    OSL_ENSURE( aRes.second, "duplicate style name" );
+
+}
+
+OUString SvXMLImport::GetStyleDisplayName( sal_uInt16 nFamily,
+                                           const OUString& rName )
+{
+    OUString sName( rName );
+    if( pStyleMap && rName.getLength() )
+    {
+        StyleMap::key_type aKey( nFamily, rName );
+        StyleMap::const_iterator aIter = pStyleMap->find( aKey );
+        if( aIter != pStyleMap->end() )
+            sName = (*aIter).second;
+    }
+    return sName;
 }
 
 void SvXMLImport::SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps)
@@ -1376,7 +1522,14 @@ const SvXMLStylesContext *SvXMLImport::GetMasterStyles() const
 
 OUString SvXMLImport::GetAbsoluteReference(const OUString& rValue)
 {
-    return INetURLObject::RelToAbs( rValue );
+    if( rValue.getLength() == 0 || rValue[0] == '#' )
+        return rValue;
+
+    INetURLObject aAbsURL;
+    if( pImpl->aBaseURL.GetNewAbsURL( rValue, &aAbsURL ) )
+        return aAbsURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
+    else
+        return rValue;
 }
 
 void SvXMLImport::_CreateNumberFormatsSupplier()
