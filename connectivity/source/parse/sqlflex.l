@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.24 2003-12-16 12:28:57 vg Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.25 2004-03-15 12:49:12 obo Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: vg $ $Date: 2003-12-16 12:28:57 $ $Revision: 1.24 $
+//	$Author: obo $ $Date: 2004-03-15 12:49:12 $ $Revision: 1.25 $
 //
 // Description:
 //
@@ -220,6 +220,7 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 [Ll][Oo][Gg][Ff]								{SQL_NEW_KEYWORD(SQL_TOKEN_LOGF); return SQL_TOKEN_LOGF; }
 [Ll][Oo][Gg]10									{SQL_NEW_KEYWORD(SQL_TOKEN_LOG10); return SQL_TOKEN_LOG10; }
 [Ll][Oo][Ww][Ee][Rr]							{SQL_NEW_KEYWORD(SQL_TOKEN_LOWER); return SQL_TOKEN_LOWER; }
+[Ll][Nn]										{SQL_NEW_KEYWORD(SQL_TOKEN_LN); return SQL_TOKEN_LN; }
 [Ll][Tt][Rr][Ii][Mm]							{SQL_NEW_KEYWORD(SQL_TOKEN_LTRIM); return SQL_TOKEN_LTRIM; }
 
 [Mm][Aa][Xx]									{SQL_NEW_KEYWORD(SQL_TOKEN_MAX); return SQL_TOKEN_MAX; }
