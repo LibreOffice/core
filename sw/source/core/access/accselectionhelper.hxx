@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accselectionhelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-15 09:29:35 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@ class SwRootFrm;
 class SwFEShell;
 class SwFlyFrm;
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleSelection.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
+#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #endif
 
 class SwAccessibleSelectionHelper
@@ -105,11 +105,11 @@ public:
         throw ( ::com::sun::star::uno::RuntimeException );
     sal_Int32 getSelectedAccessibleChildCount(  )
         throw ( ::com::sun::star::uno::RuntimeException );
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > getSelectedAccessibleChild(
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > getSelectedAccessibleChild(
         sal_Int32 nSelectedChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException);
-    void deselectSelectedAccessibleChild(
+    void deselectAccessibleChild(
         sal_Int32 nSelectedChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException );
