@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 17:19:01 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1134,8 +1134,8 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
     PangoStyle  eStyle  = pango_font_description_get_style( pStyle->font_desc );
     PangoWeight eWeight = pango_font_description_get_weight( pStyle->font_desc );
 
-    long nDPIX, nDPIY;
-    long nDispDPIY = getDisplay()->GetResolution().B();
+    sal_Int32 nDPIX, nDPIY;
+    sal_Int32 nDispDPIY = getDisplay()->GetResolution().B();
     getDisplay()->GetScreenFontResolution( nDPIX, nDPIY );
     int nHeight = nPixelHeight * nDispDPIY / nDPIY;
     // allow for rounding in back conversion (at SetFont)
