@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-16 20:10:01 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 13:31:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1096,7 +1096,7 @@ String S_NO_SELECTED_ENTRY_DEPRECATED
     Text[ spanish ] = "No hay ninguna entrada seleccionada en TreeListBox para ($Arg1)";
     Text[ italian ] = "An entry has not been selected at ($Arg1)";
     Text[ danish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
-    Text[ swedish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
+    Text[ swedish ] = "No entry was selected in TreeListBox at ($Arg1)";
     Text[ polish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "($Arg1) の TreeListBox で項目の選択ができていません。";
@@ -1120,11 +1120,11 @@ String S_NO_SELECTED_ENTRY
     Text[ spanish ] = "No hay ninguna entrada seleccionada en ($Arg2) para ($Arg1)";
     Text[ italian ] = "An entry has not been selected at ($Arg2)";
     Text[ danish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
-    Text[ swedish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
+    Text[ swedish ] = "No entry was selected in ($Arg2) at ($Arg1)";
     Text[ polish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "($Arg1) の ($Arg2) で項目の選択ができていません。";
-    Text[ korean ] = "($Arg1)의 트리 리스트 박스에 선택된 항목이 없습니다.";
+    Text[ korean ] = "($Arg1)의 ($Arg2)에는 선택된 항목이 없습니다.";
     Text[ chinese_simplified ] = "没有在 ($Arg1) 的 ($Arg2) 中选中一个条目";
     Text[ chinese_traditional ] = "No entry was selected in ($Arg2) at ($Arg1)";
     Text[ arabic ] = "An entry has not been selected in TreeListBox at ($Arg1)";
@@ -1588,6 +1588,7 @@ String S_NO_MENU
     Text[ catalan ] = "No existe bot�n Ayuda para ($Arg1)";
     Text[ finnish ] = "Kohteessa ($Arg1) ei ole Ohje-painiketta";
 };
+
 
 
 
