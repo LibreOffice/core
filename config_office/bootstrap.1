@@ -1,0 +1,17 @@
+
+set platform = `uname`
+
+cd dmake
+
+if ($platform == "SunOS") then
+   make Solaris2.1
+else if ($platform == "Linux") then
+   make linux
+else if ($platform == "Darwin") then
+   make macosx
+endif
+
+if "$?" != "0" exit
+
+cd ..
+

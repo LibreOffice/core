@@ -1,0 +1,788 @@
+dnl /******************************************************************
+dnl *
+dnl * Name: configure.in
+dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
+dnl * Rev.: 0.1
+dnl * Date: May 2000
+dnl *
+dnl * Desc: This file serves as input for the GNU autoconf package
+dnl *       in order to create a configure script.
+dnl *       In this stage configure just checks the pre-requisites
+dnl *       necessary to build OpenOffice on a Sun Solaris or Linux
+dnl *       platform.
+dnl *
+dnl *
+dnl ******************************************************************/
+clear;
+AC_PREREQ(2.12)
+AC_INIT()
+AC_ARG_WITH(gcc-home,
+[  --with-gcc-home         if you built gcc-2.95.2 from source to a specific
+                          directory, and used the --with-shared option,
+                          please supply your gcc home directory here.
+                          Note that this is not the location of the gcc binary but the 
+                          location of the entire distribution.
+                          
+                          Usage: --with-gcc-home=<absolute path to gcc home>
+],,)
+AC_ARG_WITH(jdk-home,
+[  --with-jdk-home         if you have installed the JDK 1.1.8, on your system,
+                          please supply the path here.
+                          Note that this is not the location of the Java binary but the
+                          location of the entire distribution.
+ 
+                          Usage: --with-jdk-home=<absolute path to JDK 1.1.8 home>
+],,)
+AC_ARG_WITH(perl-home,
+[  --with-perl-home        if you have installed the Perl 5 Distribution, on your system,
+                          please supply the path here.
+                          Note that this is not the location of the Perl binary but the
+                          location of the entire distribution.
+ 
+                          Usage: --with-perl-home=<absolute path to Perl 5 home>
+],,)
+AC_ARG_WITH(local-solenv,
+[  --with-local-solenv     if you have solenv in a location other than OpenOffice/solenv,
+                          please supply the path here.
+ 
+                          Usage: --with-local-solenv=<absolute path to solenv>
+],,)
+AC_ARG_WITH(local-solver,
+[  --with-local-solver     if you have solver in a location other than OpenOffice/solver,
+                          please supply the path here.
+ 
+                          Usage: --with-local-solver=<absolute path to solver>
+],,)
+AC_ARG_ENABLE(check-only,
+[  --enable-check-only     Use this option option if you just want to check your environment.
+                          This option stops the generation of an env.set
+ 
+                          Usage: --enable-check-only=yes
+],,)
+AC_ARG_ENABLE(macos9,
+[  --enable-macos9         Use this option option if you want to generate a macos9 
+                          environment on macosx.
+                          
+                          Usage: --enable-macos9
+],,)
+dnl ===================================================================
+dnl Message.
+dnl ===================================================================
+echo "********************************************************************"
+echo "*                                                                  *"
+echo "*   OpenOffice build configuration.                            *"
+echo "*                                                                  *"
+echo "*   The configure proces checks your platform to see whether       *"
+echo "*   you can build OpenOffice on it.                                *"
+echo "*   This proces checks all pre-requisites and generates a file     *"
+echo "*   containing the necessary environment variables.                *"
+echo "*   Source this file after configure has ended succesfully.        *"
+echo "*                                                                  *"
+echo "*   Any warning that is generated during the configure process     *"
+echo "*   must be taken into account, since it can be a reason for       *"
+echo "*   an unsuccessfull build of OpenOffice.                          *"
+echo "*                                                                  *"
+echo "********************************************************************"
+echo "********************************************************************"
+echo "*                                                                  *"
+echo "*   Checking the platform pre-requisites.                          *"
+echo "*                                                                  *"
+echo "********************************************************************"
+dnl ===================================================================
+dnl Configure pre-requisites.
+dnl ===================================================================
+cat /dev/null > warn
+AC_PATH_PROGS(AWK, awk gawk )
+if test -z "$AWK"; then
+   AC_MSG_ERROR([install awk to run this script])
+fi
+AC_PATH_PROGS(SED, sed )
+if test -z "$SED"; then
+   AC_MSG_ERROR([install sed to run this script])
+fi
+dnl ===================================================================
+dnl Checks for the operating system and processor.
+dnl ===================================================================
+dnl checking the os
+AC_MSG_CHECKING([the operating system])
+_os=`uname`
+if test "$_os" = "SunOS" -o "$_os" = "Linux" -o "$_os" = "WINNT" -o "$_os" = "Darwin"; then
+   AC_MSG_RESULT([checked ($_os)])
+else
+   AC_MSG_ERROR([$_os operating system is not suitable to build OpenOffice!])
+fi
+_machine_type=`uname -m`
+dnl check whether we're using solaris 7
+if test "$_os" = "SunOS"; then 
+   AC_MSG_CHECKING([the solaris operating system release])
+   _os_release=`uname -r | $AWK -F. '{ print $2 }'`
+   if test "$_os_release" != "7" -a "$_os_release" != "6"; then
+      AC_MSG_ERROR([use solaris 6 or 7 to build OpenOffice])
+   else
+      AC_MSG_RESULT([ok ($_os_release)])
+   fi
+fi
+dnl !!! This configure script is not suitable for windows nt !!!
+if test "$_os" = "WINNT"
+then
+   AC_MSG_WARN([use the windows configure script.])
+fi
+dnl check whether we're using a sparc processor
+if test "$_os" = "SunOS"
+then
+   AC_MSG_CHECKING([the processor type])
+   _processor=`uname -p`
+   if test "$_processor" = "sparc"
+   then
+      AC_MSG_RESULT([ok ($_processor)])
+   else
+      AC_MSG_ERROR([only sparc processor is supported])
+   fi
+fi
+dnl ===================================================================
+dnl Checks for compilers. 
+dnl ===================================================================
+if test "$_os" = "SunOS"; then
+   CC=cc; export CC;
+fi   
+if test "$_os" != "WINNT"; then
+   AC_PROG_CC
+fi
+if test "$_os" = "Linux"; then
+   dnl ******************************************
+   dnl Testing for GNU compiler and version...
+   dnl ******************************************
+   dnl Check whether the gnu gcc compiler is used.
+   if test -z "$with_gcc_home"; then
+      if test "$CC" = "gcc"; then
+         AC_PATH_PROG(GCC, gcc)
+         COMPATH=`echo $GCC | $SED -n "s/\/gcc//p"`
+         _gcc_include_start=/usr/lib/gcc-lib
+         _gxx_include_start=/usr/include
+      fi
+   else
+      dnl Compiler has been installed to its own directory and it's home is arg with_gcc_home
+      _gcc_path="$with_gcc_home/bin/gcc"
+      if test -x $_gcc_path; then
+         GCC=$_gcc_path
+         COMPATH="$with_gcc_home/bin"
+         _gcc_include_start=$with_gcc_home
+         _gxx_include_start=$with_gcc_home
+      fi
+   fi
+
+   if test $GCC; then
+      AC_MSG_CHECKING([the GNU gcc compiler version])
+      _gcc_releasetype=`$GCC --version | $AWK -F"-" '{ print \$1 }'`
+      if test "$_gcc_releasetype" = "egcs"; then
+         AC_MSG_WARN([found egcs- version,  use (stable=gcc-) version of the compiler])
+         AC_MSG_WARN([found egcs- version,  use (stable=gcc-) version of the compiler]) >> warn
+         _gcc_version=`$GCC --version | $AWK -F"-" '{ print \$2 }'`
+      else
+         _gcc_version=`$GCC --version`
+      fi
+      _gcc_major=`echo $_gcc_version | $AWK -F. '{ print \$1 }'` 
+      if test "$_gcc_major" != "2"; then
+         AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2 of the gcc compiler])
+         AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2 of the gcc compiler]) >> warn
+         COMPATH="NO_GCC"
+      else
+         _gcc_middle=`$GCC --version | $AWK -F. '{ if ($2 != 95) print "false"; else print "true" }'` 
+         if test "$_gcc_middle" = "false"; then
+            AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2 of the gcc compiler])
+            AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2 of the gcc compiler]) >> warn
+            COMPATH="NO_GCC"
+         else
+            _gcc_minor=`$GCC --version | $AWK -F. '{ if ($3 != 2) print "false"; else print "true" }'` 
+            if test "$_gcc_minor" = "false"; then
+               AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2 of the gcc compiler])
+               AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2 of the gcc compiler]) >> warn
+               COMPATH="NO_GCC"
+            else
+               dnl compiler will do
+               AC_MSG_RESULT([checked (gcc $_gcc_version)])
+               dnl find include paths now
+               AC_MSG_CHECKING([the GNU gcc include paths])
+               _gcc_include_path=`find $_gcc_include_start -name "2.95.2" -print 2> /dev/null`
+               if test "$_gcc_include_path"; then
+                  _multiple=`echo $_gcc_include_path | $AWK '{ if ($2) print "true"; else print "false" }'`
+                  if test "$_multiple" = "false"; then
+                     _gcc_include_path="$_gcc_include_path/include"
+
+                     _gxx_include_path=`find $_gxx_include_start -name "g++-3" -print 2> /dev/null`
+                     if test "$_gxx_include_path"; then
+                        _multiple=`echo $_gxx_include_path | $AWK '{ if ($2) print "true"; else print "false" }'`
+                        if test "$_multiple" = "false"; then
+                           AC_MSG_RESULT([checked])
+                        else
+                           AC_MSG_WARN([found multiple g++-3 directories, please rename so you have one distinct])
+                           AC_MSG_WARN([found multiple g++-3 directories, please rename so you have one distinct]) >> warn
+                        fi
+                     else
+                        _gxx_include_path2=`find $_gxx_include_start -name "g++-2" -print 2> /dev/null`
+                        if test "$_gxx_include_path2"; then
+                           _multiple=`echo $_gxx_include_path2 | $AWK '{ if ($2) print "true"; else print "false" }'`
+                           if test "$_multiple" = "false"; then
+                              AC_MSG_RESULT([checked])
+                              _gxx_include_path="$_gxx_include_path2"
+                           else
+                              AC_MSG_WARN([found multiple g++-2 directories, please rename so you have one distinct])
+                              AC_MSG_WARN([found multiple g++-2 directories, please rename so you have one distinct]) >> warn
+                           fi
+                        else
+                           _gxx_include_path3=`find $_gxx_include_start -name "g++" -print 2> /dev/null`
+                           if test "$_gxx_include_path3"; then
+                              _multiple=`echo $_gxx_include_path3 | $AWK '{ if ($2) print "true"; else print "false" }'`
+                              if test "$_multiple" = "false"; then
+                                 AC_MSG_RESULT([checked])
+                                 _gxx_include_path="$_gxx_include_path3"
+                              else
+                                 AC_MSG_WARN([found multiple g++ directories, please rename so you have one distinct])
+                                 AC_MSG_WARN([found multiple g++ directories, please rename so you have one distinct]) >> warn
+                                 _gxx_include_path="NO_GXX_INCLUDE"
+                              fi
+                           else
+                              AC_MSG_WARN([could not find g++-3 or g++-2 or g++ directories, please use ./configure --help])
+                              AC_MSG_WARN([could not find g++-3 or g++-2 or g++ directories, please use ./configure --help]) >> warn
+                           fi
+                        fi
+                     fi
+                  else
+                     AC_MSG_WARN([found multiple 2.95.2/include directories, please rename so you have one distinct])
+                     AC_MSG_WARN([found multiple 2.95.2/include directories, please rename so you have one distinct]) >> warn
+                     _gcc_include_path="NO_GCC_INCLUDE"
+                  fi
+               else
+                  AC_MSG_WARN([could not find 2.95.2/include directory of the gcc compiler])
+                  AC_MSG_WARN([could not find 2.95.2/include directory of the gcc compiler]) >> warn
+                  _gcc_include_path="NO_GCC_INCLUDE"
+               fi
+            fi
+         fi
+      fi
+   else
+      AC_MSG_WARN([no gcc compiler found])
+      AC_MSG_WARN([no gcc compiler found]) >> warn
+      COMPATH="NO_GCC"
+   fi
+fi
+if test "$_os" = "SunOS"; then
+   if test "$CC" = "cc"; then
+      AC_PATH_PROGS(_cc, cc)
+      COMPATH=`echo $_cc | $SED -n "s/\/bin\/cc//p"`
+      AC_MSG_CHECKING([the SUN Workshop C compiler version])
+      dnl cc -V outputs to standard error!!!!
+      _workshop_version=`$CC -V 2>&1 | $AWK '/^cc/ { print $7 }'`
+      _workshop_major=`echo $_workshop_version | $AWK -F. '{ print $1 }'` 
+      if test "$_workshop_major" != "5"; then
+         AC_MSG_WARN([found version "$_workshop_version", use version 5.0 of the Sun Workshop C compiler])
+         AC_MSG_WARN([found version "$_workshop_version", use version 5.0 of the Sun Workshop C compiler]) >> warn
+         COMPATH="NO_COMPATH"
+      else
+         _workshop_minor=`echo $_workshop_version | $AWK -F. '{ if ($2 != 0) print "false"; else print "true" }'` 
+         if test "$_workshop_minor" = "false"; then
+            AC_MSG_WARN([found version "$_workshop_version", use version 5.0 of the Sun Workshop C compiler])
+            AC_MSG_WARN([found version "$_workshop_version", use version 5.0 of the Sun Workshop C compiler]) >> warn
+            COMPATH="NO_COMPATH"
+         else
+            dnl compiler will do
+            AC_MSG_RESULT([checked])
+         fi
+      fi
+   fi
+fi
+if test "$_os" = "Darwin"; then
+   if test "$CC" = "cc"; then
+      AC_PATH_PROGS(_cc, cc)
+      COMPATH=`echo $_cc | $SED -n "s/\/cc//p"`
+      AC_MSG_CHECKING([the gcc compiler version])
+      dnl cc -v outputs to standard error!!!!
+      cc_version=`$CC -v 2>&1 | $AWK '/Apple Computer/ { print $15 }'`
+      cc_major=`echo $cc_version | $AWK -F. '{ print $1 }'`
+      if test "$cc_major" != "2"; then
+         AC_MSG_WARN([found version "$cc_version", use version 2.95.2 of the gcc compiler])
+         AC_MSG_WARN([found version "$cc_version", use version 2.95.2 of the gcc compiler]) >> warn
+         COMPATH="NO_COMPATH"
+      else
+         cc_middle=`echo $cc_version | $AWK -F. '{ if ($2 != 95) print "false"; else print "true" }'`
+         if test "$cc_middle" = "false"; then
+            AC_MSG_WARN([found version "$cc_version", use version 2.95.2 of the gcc compiler])
+            AC_MSG_WARN([found version "$cc_version", use version 2.95.2 of the gcc compiler]) >> warn
+            COMPATH="NO_COMPATH"
+         else
+            cc_minor=`echo $cc_version | $AWK -F. '{ if ($3 != 2) print "false"; else print "true" }'`
+            if test "$cc_minor" = "false"; then
+               AC_MSG_WARN([found version "$cc_version", use version 2.95.2 of the gcc compiler])
+               AC_MSG_WARN([found version "$cc_version", use version 2.95.2 of the gcc compiler]) >> warn
+               COMPATH="NO_COMPATH"
+            else
+               dnl compiler will do
+               AC_MSG_RESULT([checked])
+            fi
+         fi
+      fi
+   fi
+fi     
+if test "$_os" = "WINNT"; then
+   AC_PATH_PROGS(_cl, cl)
+   COMPATH=`echo $_cl | $SED -n "s/\/cl//p"`
+   AC_MSG_CHECKING([the Microsoft C/C++ Compiler])
+   if test -x "$_cl"; then
+      dnl compiler will do
+      AC_MSG_RESULT([checked])
+   else
+      AC_MSG_WARN([could not find Microsoft C/C++ Compiler])
+      AC_MSG_WARN([could not find Microsoft C/C++ Compiler]) >> warn
+   fi
+fi     
+
+dnl Check if stdc headers are availlable excluding windows.
+if test "$_os" != "WINNT"; then
+   AC_HEADER_STDC
+fi
+
+dnl Check if palm-appl.h is available on Linux
+if test "$_os" = "Linux"; then
+   AC_MSG_CHECKING([pam_appl.h])
+   if test -f "/usr/include/security/pam_appl.h"; then
+      AC_MSG_RESULT([yes])
+   else
+      AC_MSG_WARN([pam_appl.h could not be found in /usr/include/security])
+      AC_MSG_WARN([pam_appl.h could not be found in /usr/include/security]) >> warn
+   fi
+fi
+dnl ***************************************
+dnl Testing for c++ compiler and version...
+dnl ***************************************
+
+AC_PROG_CXX
+if test "$_os" = "Linux"; then
+   dnl Check whether the gnu gcc compiler is used.
+   if test "$CC" = "gcc"; then
+      AC_MSG_CHECKING([g++ Compiler])
+      dnl Check whether the wrapper g++ exists.
+      if test -z "$GXX"; then
+         AC_MSG_WARN([GNU g++/c++ was not found])
+         AC_MSG_WARN([GNU g++/c++ was not found]) >> warn
+      else
+         AC_MSG_RESULT([checked]) 
+      fi
+   fi
+fi
+if test "$_os" = "SunOS"; then
+   CXX=CC; export CXX;
+   dnl Workshop C++ compiler packaged with Workshop C compiler
+   if test "$CC" = "cc"; then
+   AC_MSG_CHECKING([Sun Workshop C++ Compiler])
+      if test "$CXX" != "CC"; then
+         AC_MSG_WARN([Sun Workshop C++ was not found])
+         AC_MSG_WARN([Sun Worlshop C++ was not found]) >> warn
+      else
+         AC_MSG_RESULT([checked]) 
+      fi
+   fi 
+fi
+if test "$_os" = "Darwin"; then
+   CXX=c++; export CXX;
+   dnl c++ packaged with cc (gcc) for Macosx
+   if test "$CC" = "cc"; then
+      AC_MSG_CHECKING([Macosx c++ Compiler])
+      if test "$CXX" != "c++"; then
+         AC_MSG_WARN([Macosx C++ was not found])
+         AC_MSG_WARN([Macosx C++ was not found]) >> warn
+      else
+         AC_MSG_RESULT([checked]) 
+      fi
+   fi 
+fi 
+
+dnl **************************************************************
+dnl Testing for required  Solaris and workshop compiler patches...
+dnl **************************************************************
+dnl Check whether the OS is SunOS.
+if test "$_os" = "SunOS"; then
+   _temp=`showrev -p | $AWK -F" " '{ print $2 }'` 
+   if test "$_os_release" = "7"; then
+      dnl ***************
+      dnl patch 106327-06
+      dnl ***************
+      AC_MSG_CHECKING([for patch 106327-06 or greater])
+      _patch=`echo $_temp | $AWK '/106327-06/ { print "found" }'`
+      _patch="false"
+      for i in $_temp
+      do
+         _patch_major=`echo $i | $AWK -F"-" '{ print $1 }'`
+         if test "$_patch_major" = "106327"; then
+            _patch_rev=`echo $i | $AWK -F"-" '{ print $2 }'`
+            if test "$_patch_rev" -ge "6"; then
+               _patch="found"
+            fi
+        fi
+      done
+      if test "$_patch" = "found"; then
+         AC_MSG_RESULT([found])
+      else
+         AC_MSG_WARN([patch 106327-06 not found, please install compiler patch 106327-06 or greater])
+         AC_MSG_WARN([patch 106327-06 not found, please install compiler patch 106327-06 or greater]) >> warn
+      fi
+      dnl ***************
+      dnl patch 106590-11
+      dnl ***************
+      AC_MSG_CHECKING([for patch 106590-11 or greater])
+      _patch=`echo $_temp | $AWK '/106590-11/ { print "found" }'`
+      _patch="false"
+      for i in $_temp
+      do
+         _patch_major=`echo $i | $AWK -F"-" '{ print $1 }'`
+         if test "$_patch_major" = "106590"; then
+            _patch_rev=`echo $i | $AWK -F"-" '{ print $2 }'`
+            if test "$_patch_rev" -ge "11"; then
+               _patch="found"
+            fi
+         fi
+      done
+      if test "$_patch" = "found"; then
+         AC_MSG_RESULT([found])
+      else
+         AC_MSG_WARN([patch 106590-11 not found, please install linker patch 106590-11 or greater])
+         AC_MSG_WARN([patch 106590-11 not found, please install linker patch 106590-11 or greater]) >> warn
+      fi
+   else
+      if test "$_os_release" = "6"; then
+         dnl ***************
+         dnl patch 105591-09
+         dnl ***************
+         AC_MSG_CHECKING([for patch 105591-09 or greater])
+         _patch=`echo $_temp | $AWK '/105591-09/ { print "found" }'`
+         _patch="false"
+         for i in $_temp
+         do
+            _patch_major=`echo $i | $AWK -F"-" '{ print $1 }'`
+            if test "$_patch_major" = "105591"; then
+               _patch_rev=`echo $i | $AWK -F"-" '{ print $2 }'`
+               if test "$_patch_rev" -ge "9"; then
+                  _patch="found"
+               fi
+           fi
+         done
+         if test "$_patch" = "found"; then
+            AC_MSG_RESULT([found])
+         else
+            AC_MSG_WARN([patch 105591-09 not found, please install compiler patch 105591-09 or greater])
+            AC_MSG_WARN([patch 105591-09 not found, please install compiler patch 105591-09 or greater]) >> warn
+         fi
+         dnl ***************
+         dnl patch 107733-08
+         dnl ***************
+         AC_MSG_CHECKING([for patch 107733-08 or greater])
+         _patch=`echo $_temp | $AWK '/107733-08/ { print "found" }'`
+         _patch="false"
+         for i in $_temp
+         do
+            _patch_major=`echo $i | $AWK -F"-" '{ print $1 }'`
+            if test "$_patch_major" = "107733"; then
+               _patch_rev=`echo $i | $AWK -F"-" '{ print $2 }'`
+               if test "$_patch_rev" -ge "8"; then
+                  _patch="found"
+               fi
+           fi
+         done
+         if test "$_patch" = "found"; then
+            AC_MSG_RESULT([found])
+         else
+            AC_MSG_WARN([patch 107733-06 not found, please install linker patch 107733-08 or greater])
+            AC_MSG_WARN([patch 107733-06 not found, please install linker patch 107733-08 or greater]) >> warn
+         fi
+      fi
+   fi
+fi
+dnl ===================================================================
+dnl Checks for JDK.
+dnl ===================================================================
+JAVA_HOME=; export JAVA_HOME
+if test -z "$with_jdk_home"; then
+   AC_PATH_PROG(JAVA, java)
+else
+   _java_path="$with_jdk_home/bin/java"
+   dnl Check if there is a java compiler at all.
+   if test -x "$_java_path"; then
+      JAVA=$_java_path
+   fi
+fi
+AC_MSG_CHECKING([the installed JDK])
+if test "$JAVA"; then
+   _correct_jdk_exists="false"
+   dnl java -version sends output to stderr!
+   _jdk=`$JAVA -version 2>&1 | $AWK -F'"' '{ print \$2 }'`
+   if test "$_os" = "SunOS"; then
+      _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 1) print "false"; else print "true" }'`
+   fi
+   if test "$_os" = "Linux" -a "$_machine_type" = "i686"; then
+      _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 1) print "false"; else print "true" }'`
+   fi
+   if test "$_os" = "Linux" -a "$_machine_type" = "sparc"; then
+      _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 2) print "false"; else print "true" }'`
+   fi
+   if test "$_os" = "WINNT"; then
+      _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 1) print "false"; else print "true" }'`
+   fi
+   if test "$_os" = "Darwin"; then
+      _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 2) print "false"; else print "true" }'`
+   fi
+   if test "$_jdk_middle" = "true"; then
+      if test "$_os" = "SunOS"; then
+         _jdk_minor=`echo $_jdk | $AWK -F. '{ if ($3 < 6) print "false"; else print "true" }'`
+      fi
+      if test "$_os" = "Linux"; then
+         if test "$_machine_type" = "i686"; then
+            _jdk_minor=`echo $_jdk | $AWK -F. '{ if ($3 < 8) print "false"; else print "true" }'`
+         fi
+         if test "$_machine_type" = "sparc"; then
+            _jdk_minor=`echo $_jdk | $AWK -F. '{ if ($3 != 2) print "false"; else print "true" }'`
+         fi 
+      fi
+      if test "$_os" = "WINNT"; then
+            _jdk_minor=`echo $_jdk | $AWK -F. '{ if ($3 < 8) print "false"; else print "true" }'`
+      fi
+      if test "$_os" = "Darwin"; then
+            _jdk_minor=`echo $_jdk | $AWK -F. '{ if ($3 != 2) print "false"; else print "true" }'`
+      fi
+   fi
+   if test "$_jdk_minor" = "true"; then
+      _correct_jdk_exists="true"
+      JAVA_HOME=`echo $JAVA | $SED -n "s/\/bin\/java//p"`
+      AC_MSG_RESULT([checked (JDK $_jdk)])
+   else
+      _correct_jdk_exists="false"
+   fi
+else
+   _correct_jdk_exists="false"
+fi
+if test "$_correct_jdk_exists" = "false"; then
+   JAVA_HOME="NO_JAVA_HOME"
+   AC_MSG_WARN([Correct jdk not found])
+   AC_MSG_WARN([Correct jdk not found]) >> warn
+fi
+dnl ===================================================================
+dnl Checks for specific files.
+dnl ===================================================================
+dnl AC_CHECK_FILE(set_soenv.1)
+dnl ===================================================================
+dnl Checks for programs.
+dnl ===================================================================
+dnl Check whether there's a C pre-processor.
+if test "$_os" = "Linux"; then
+   AC_PROG_CPP
+fi
+dnl Check whether there's a C++ pre-processor.
+if test "$_os" = "Linux"; then
+   AC_PROG_CXXCPP
+fi
+dnl Check for a BSD compatible install program.
+dnl AC_PROG_INSTALL
+dnl Check whether ln -s works on the current file system.
+dnl AC_PROG_LN_S
+dnl Check whether there's a Perl version available.
+if test -z "$with_perl_home"; then
+   AC_PATH_PROG(PERL, perl)
+else
+   _perl_path="$with_perl_home/bin/perl"
+   if test -x "$_perl_path"; then
+      PERL=$_perl_path
+   fi
+fi
+if test "$PERL"; then
+   AC_MSG_CHECKING([the Perl version])
+   dnl ***************************************
+   dnl Testing Perl version.
+   dnl ***************************************
+   _perl_temp=`$PERL -version 2> /dev/null | $AWK -F" " '/built for/ { print $4 }'`
+   if test "$_perl_temp" = "version"; then
+      _perl_version=`$PERL -version 2> /dev/null | $AWK -F" " '/built for/ { print $5 }'`
+   else
+      _perl_version=`echo $_perl_temp | $SED -n "s/v//p"`
+   fi
+   _perl_major=`echo $_perl_version | $AWK -F"." '{ if ($1 < 5) print "false"; else print "true" }'`
+   if test "$_perl_major" = "true"; then
+      PERL=`echo $PERL | $SED -n "s/\/perl//p"`
+      AC_MSG_RESULT([checked (Perl $_perl_version)])
+   else
+      AC_MSG_ERROR([found Perl version "$_perl_version", use version 5 of Perl])
+   fi 
+else
+   AC_MSG_ERROR([Perl not found, install version 5 of Perl])
+fi
+
+dnl Write the Perl compiler directive into the set_soenv script.
+echo "#!$PERL/perl -w" > set_soenv
+cat set_soenv.1 >> set_soenv
+chmod +x set_soenv
+
+dnl Check whether the tcsh can be used.
+if test "$_os" != "WINNT"; then
+   AC_PATH_PROG(TCSH, tcsh)
+   if test -z "$TCSH"; then
+      AC_MSG_ERROR([tcsh not found in \$PATH])
+      TCSH="NO_TCSH";
+   else
+      TCSH=`echo $TCSH | $SED -n "s/\/tcsh//p"`
+   fi
+else
+   AC_MSG_WARN([Windows does not have tcsh])
+   TCSH="NO_TCSH"
+fi
+dnl ===================================================================
+dnl Checks for libraries.
+dnl ===================================================================
+dnl ***************************************
+dnl testing for X libraries and includes...
+dnl ***************************************
+if test "$_os" != "WINNT" -a "$_os" != "Darwin"; then
+   AC_PATH_X
+   dnl The variables $x_libraries and $x_includes are set.
+   if test -z "$x_libraries"; then
+      AC_MSG_ERROR([No X libraries found]) # Exit
+   fi
+   if test -z "$x_includes"; then
+      AC_MSG_ERROR([No X includes found]) # Exit
+   fi
+   AC_MSG_CHECKING([X Development Libraries])
+   if test -f "$x_libraries/libX11.a"; then
+      AC_MSG_RESULT([checked])
+   else
+      AC_MSG_ERROR([X Development libraries not found])
+   fi
+else
+   x_includes="no_x_includes"
+   x_libraries="no_x_libraries"
+fi
+dnl ***************************************
+dnl testing libc version for Linux...
+dnl ***************************************
+if test "$_os" = "Linux"; then
+   AC_CHECK_LIB(c, gnu_get_libc_version, HAVE_LIBC=yes; export HAVE_LIBC)
+   AC_MSG_CHECKING([the installed libc is at least version 2.1.1])
+   if test "$HAVE_LIBC"; then
+      AC_MSG_RESULT([checked])
+   else
+      AC_MSG_ERROR([libc is less than version 2.1.1, upgrade libc])
+   fi
+fi
+dnl ***************************************
+dnl testing bison and flex exist
+dnl ***************************************
+AC_PATH_PROG(BISON, bison)
+if test -z "$BISON"; then
+   AC_MSG_WARN([no bison found in \$PATH, install bison]) >> warn
+fi
+AC_PATH_PROG(FLEX, flex)
+if test -z "$FLEX"; then
+   AC_MSG_WARN([no flex found in \$PATH, install flex]) >> warn
+fi
+dnl ***************************************
+dnl testing bash tools path
+dnl ***************************************
+AC_PATH_PROG(CYGWIN, bash)
+CYGWIN=`dirname $CYGWIN`
+
+dnl ===================================================================
+dnl Setting up the environment.
+dnl ===================================================================
+echo "********************************************************************"
+echo "*                                                                  *"
+echo "*   Setting up the build environment variables.                    *"
+echo "*                                                                  *"
+echo "********************************************************************"
+
+# Get UPD number from ../solenv/inc/minor.mk
+upd=`grep RSCVERSION= ../solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'` 
+
+if test -z "$COMPATH"; then
+   COMPATH="NO_COMPATH"
+fi
+if test -z "$_gcc_include_path"; then
+   _gcc_include_path="NO_GCC_INCLUDE"
+fi
+if test -z "$_gxx_include_path"; then
+   _gxx_include_path="NO_GXX_INCLUDE"
+fi
+if test -z "$JAVA_HOME"; then
+   JAVA_HOME="NO_JAVA_HOME"
+fi
+if test -z "$TCSH"; then
+   TCSH="NO_TCSH"
+fi
+if test -z "$PERL"; then
+   PERL="NO_PERL"
+fi
+if test -z "$x_libraries"; then
+   x_libraries="no_x_libraries"
+fi
+if test -z "$x_includes"; then
+   x_includes="no_x_includes"
+fi
+if test -z "$with_local_solenv"; then
+   _LOCAL_SOLENV="DEFAULT"
+else
+   _LOCAL_SOLENV=$with_local_solenv
+fi
+if test -z "$with_local_solver"; then
+   _LOCAL_SOLVER="DEFAULT"
+else
+   _LOCAL_SOLVER=$with_local_solver
+fi
+if test -z "$CYGWIN"; then
+   CYGWIN="NO_CYGWIN"
+fi
+# Substituting blank spaces in windows pathnames with '#'
+if test "$_os" = "WINNT"; then
+   COMPATH=`echo $COMPATH | $SED "s/ /#/g"`
+   JAVA_HOME=`echo $JAVA_HOME | $SED "s/ /#/g"`
+   PERL=`echo $PERL | $SED "s/ /#/g"`
+   _LOCAL_SOLENV=`echo $_LOCAL_SOLENV | $SED "s/ /#/g"`
+   _LOCAL_SOLVER=`echo $_LOCAL_SOLVER | $SED "s/ /#/g"`
+   CYGWIN=`echo $CYGWIN | $SED "s/ /#/g"`
+fi
+# Print args passed to set_soenv.
+if test 1 = 1; then
+echo
+echo "\$COMPATH="$COMPATH
+echo "\$_gcc_include_path="$_gcc_include_path
+echo "\$_gxx_include_path="$_gxx_include_path
+echo "\$JAVA_HOME="$JAVA_HOME
+echo "\$TCSH="$TCSH
+echo "\$PERL="$PERL
+echo "\$x_libraries="$x_libraries
+echo "\$x_includes="$x_includes
+echo "\$_LOCAL_SOLENV="$_LOCAL_SOLENV
+echo "\$_LOCAL_SOLVER="$_LOCAL_SOLVER
+echo "\$upd="$upd
+echo "\$CYGWIN="$CYGWIN
+echo
+fi
+
+# Executing the set_soenv script to setup the environment variables.
+if test -z "$enable_check_only"; then
+   './set_soenv' $COMPATH $_gcc_include_path $_gxx_include_path $JAVA_HOME $TCSH $PERL $x_libraries $x_includes $_LOCAL_SOLENV $_LOCAL_SOLVER $upd $CYGWIN
+   if test "$_os" = "WINNT"; then
+      mv WindowsNTEnv.bat ..
+   fi
+else
+   echo
+   echo Test Complete
+   echo No environment file will be generated
+   echo
+   num_warnings=`wc -l warn`
+   _num=`echo $num_warnings | $AWK '{ print $1 }'`
+   if test $_num -gt 0; then
+      echo The following warning\(s\) were generated by configure
+      echo ----------------------------------------------------
+      echo
+      cat warn
+      echo
+   else
+      echo There were no warnings
+   fi
+   echo
+fi   
+AC_OUTPUT()
