@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximp3dscene.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-15 10:32:09 $
+ *  last change: $Author: aw $ $Date: 2001-08-15 13:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,10 +402,6 @@ void SdXML3DSceneAttributesHelper::setSceneAttributes( const com::sun::star::uno
         xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DTransformMatrix")), aAny);
     }
 
-    // projection "D3DScenePerspective" drawing::ProjectionMode
-    aAny <<= mxPrjMode;
-    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DScenePerspective")), aAny);
-
     // distance
     aAny <<= mnDistance;
     xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneDistance")), aAny);
@@ -524,4 +520,9 @@ void SdXML3DSceneAttributesHelper::setSceneAttributes( const com::sun::star::uno
     aCamGeo.vup.DirectionZ = maVUP.Z();
     aAny <<= aCamGeo;
     xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DCameraGeometry")), aAny);
+
+    // #91047# set drawing::ProjectionMode AFTER camera geometry is set
+    // projection "D3DScenePerspective" drawing::ProjectionMode
+    aAny <<= mxPrjMode;
+    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DScenePerspective")), aAny);
 }
