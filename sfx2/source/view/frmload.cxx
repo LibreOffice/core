@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: as $ $Date: 2000-11-28 14:37:37 $
+ *  last change: $Author: mba $ $Date: 2000-12-05 14:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,9 +768,10 @@ sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, 
         USHORT nPos = aFact.Search( '?' );
         if ( nPos != STRING_NOTFOUND )
         {
-            aParam = aFact.Copy( nPos, aFact.Len() );
+            USHORT nParamPos = aFact.Search( String::CreateFromAscii("slot="), nPos );
+            if ( nParamPos != STRING_NOTFOUND )
+                aParam = aFact.Copy( nParamPos+5, aFact.Len() );
             aFact.Erase( nPos, aFact.Len() );
-            aParam.Erase(0,1);
         }
     }
     else
@@ -789,7 +790,7 @@ sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, 
         INetURLObject aObj( rURL );
         if ( aParam.Len() )
         {
-            sal_uInt16 nSlotId = aParam.ToInt32();
+            sal_uInt16 nSlotId = (sal_uInt16) aParam.ToInt32();
             SfxModule* pMod = pFactory->GetModule()->Load();
             SfxRequest aReq( nSlotId, SFX_CALLMODE_SYNCHRON, pMod->GetPool() );
             aReq.AppendItem( SfxStringItem ( SID_FILE_NAME, rURL ) );
@@ -906,9 +907,10 @@ void SAL_CALL SfxFrameLoader::load( const Reference < XFrame >& rFrame, const OU
         USHORT nPos = aFact.Search( '?' );
         if ( nPos != STRING_NOTFOUND )
         {
-            aParam = aFact.Copy( nPos, aFact.Len() );
+            USHORT nParamPos = aFact.Search( String::CreateFromAscii("slot="), nPos );
+            if ( nParamPos != STRING_NOTFOUND )
+                aParam = aFact.Copy( nParamPos+5, aFact.Len() );
             aFact.Erase( nPos, aFact.Len() );
-            aParam.Erase(0,1);
         }
     }
     else
@@ -927,7 +929,7 @@ void SAL_CALL SfxFrameLoader::load( const Reference < XFrame >& rFrame, const OU
         INetURLObject aObj( rURL );
         if ( aParam.Len() )
         {
-            sal_uInt16 nSlotId = aParam.ToInt32();
+            sal_uInt16 nSlotId = (sal_uInt16) aParam.ToInt32();
             SfxModule* pMod = pFactory->GetModule()->Load();
             SfxRequest aReq( nSlotId, SFX_CALLMODE_SYNCHRON, pMod->GetPool() );
             aReq.AppendItem( SfxStringItem ( SID_FILE_NAME, rURL ) );
