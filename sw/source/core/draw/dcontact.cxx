@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:01:44 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,11 +218,6 @@ SwFrmFmt *FindFrmFmt( SdrObject *pObj )
             pRetval = pContact->GetFmt();
         }
     }
-
-#if OSL_DEBUG_LEVEL > 1
-    ASSERT( pRetval,
-            "<::FindFrmFmt(..)> - no frame format found for given object. Please inform OD." );
-#endif
 
     return pRetval;
 }
@@ -445,6 +440,63 @@ const SwIndex& SwContact::GetCntntAnchorIndex() const
     return GetCntntAnchor().nContent;
 }
 
+/** get minimum order number of anchored objects handled by with contact
+
+    OD 2004-08-24 #110810#
+
+    @author
+*/
+sal_uInt32 SwContact::GetMinOrdNum() const
+{
+    sal_uInt32 nMinOrdNum( ULONG_MAX );
+
+    std::vector< SwAnchoredObject* > aObjs;
+    GetAnchoredObjs( aObjs );
+
+    while ( !aObjs.empty() )
+    {
+        sal_uInt32 nTmpOrdNum = aObjs.back()->GetDrawObj()->GetOrdNum();
+
+        if ( nTmpOrdNum < nMinOrdNum )
+        {
+            nMinOrdNum = nTmpOrdNum;
+        }
+
+        aObjs.pop_back();
+    }
+
+    ASSERT( nMinOrdNum != ULONG_MAX,
+            "<SwContact::GetMinOrdNum()> - no order number found." );
+    return nMinOrdNum;
+}
+
+/** get maximum order number of anchored objects handled by with contact
+
+    OD 2004-08-24 #110810#
+
+    @author
+*/
+sal_uInt32 SwContact::GetMaxOrdNum() const
+{
+    sal_uInt32 nMaxOrdNum( 0L );
+
+    std::vector< SwAnchoredObject* > aObjs;
+    GetAnchoredObjs( aObjs );
+
+    while ( !aObjs.empty() )
+    {
+        sal_uInt32 nTmpOrdNum = aObjs.back()->GetDrawObj()->GetOrdNum();
+
+        if ( nTmpOrdNum > nMaxOrdNum )
+        {
+            nMaxOrdNum = nTmpOrdNum;
+        }
+
+        aObjs.pop_back();
+    }
+
+    return nMaxOrdNum;
+}
 // -------------------------------------------------------------------------
 
 /*************************************************************************
@@ -564,13 +616,59 @@ SwVirtFlyDrawObj *SwFlyDrawContact::CreateNewRef( SwFlyFrm *pFly )
     //transportieren, in die Page ein. Beim erzeugen der ersten Referenz werden
     //die Master aus der Liste entfernt und fuehren von da an ein
     //Schattendasein.
-    SdrPage *pPg;
+    SdrPage* pPg( 0L );
     if ( 0 != ( pPg = GetMaster()->GetPage() ) )
     {
         const UINT32 nOrdNum = GetMaster()->GetOrdNum();
         pPg->ReplaceObject( pDrawObj, nOrdNum );
     }
+    // --> OD 2004-08-16 #i27030# - insert new <SwVirtFlyDrawObj> instance
+    // into drawing page with correct order number
+    else
+    {
+        GetFmt()->GetDoc()->GetDrawModel()->GetPage( 0 )->
+                        InsertObject( pDrawObj, _GetOrdNumForNewRef( pFly ) );
+    }
+    // <--
     return pDrawObj;
+}
+
+/** method to determine new order number for new instance of <SwVirtFlyDrawObj>
+
+    OD 2004-08-16 #i27030#
+    Used in method <CreateNewRef(..)>
+
+    @author OD
+*/
+sal_uInt32 SwFlyDrawContact::_GetOrdNumForNewRef( const SwFlyFrm* _pFlyFrm )
+{
+    sal_uInt32 nOrdNum( 0L );
+
+    // search for another Writer fly frame registered at same frame format
+    SwClientIter aIter( *GetFmt() );
+    const SwFlyFrm* pFlyFrm( 0L );
+    for ( pFlyFrm = (SwFlyFrm*)aIter.First( TYPE(SwFlyFrm) );
+          pFlyFrm;
+          pFlyFrm = (SwFlyFrm*)aIter.Next() )
+    {
+        if ( pFlyFrm != _pFlyFrm )
+        {
+            break;
+        }
+    }
+
+    if ( pFlyFrm )
+    {
+        // another Writer fly frame found. Take its order number
+        nOrdNum = pFlyFrm->GetVirtDrawObj()->GetOrdNum();
+    }
+    else
+    {
+        // no other Writer fly frame found. Take order number of 'master' object
+        nOrdNum = GetMaster()->GetOrdNum();
+    }
+
+    return nOrdNum;
 }
 
 /*************************************************************************
@@ -663,6 +761,25 @@ void SwFlyDrawContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
 
     // make fly frame invisible
     SwContact::MoveObjToInvisibleLayer( _pDrawObj );
+}
+
+/** get data collection of anchored objects, handled by with contact
+
+    OD 2004-08-23 #110810#
+
+    @author
+*/
+void SwFlyDrawContact::GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const
+{
+    const SwFrmFmt* pFmt = GetFmt();
+
+    SwClientIter aIter( *(const_cast<SwFrmFmt*>(pFmt)) );
+    for( SwFlyFrm* pFlyFrm = (SwFlyFrm*)aIter.First( TYPE(SwFlyFrm) );
+         pFlyFrm;
+         pFlyFrm = (SwFlyFrm*)aIter.Next() )
+    {
+        _roAnchoredObjs.push_back( pFlyFrm );
+    }
 }
 
 /*************************************************************************
@@ -1425,11 +1542,17 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         NotifyBackgrdOfAllVirtObjs( 0L );
         _InvalidateObjs();
     }
+    else if ( RES_REMOVE_UNO_OBJECT == nWhich )
+    {
+        // nothing to do
+    }
+#if OSL_DEBUG_LEVEL > 1
     else
     {
         ASSERT( false,
                 "<SwDrawContact::Modify(..)> - unhandled attribute? - please inform od@openoffice.org" );
     }
+#endif
 }
 
 // OD 2004-03-31 #i26791#
@@ -1442,11 +1565,17 @@ void SwDrawContact::_InvalidateObjs( const bool _bUpdateSortedObjsList )
           ++aDisconnectIter )
     {
         SwDrawVirtObj* pDrawVirtObj = (*aDisconnectIter);
-        pDrawVirtObj->AnchoredObj()->InvalidateObjPos();
-        // --> OD 2004-07-01 #i28701#
-        if ( _bUpdateSortedObjsList )
+        // --> OD 2004-08-23 #i33313# - invalidation only for connected
+        // 'virtual' drawing objects
+        if ( pDrawVirtObj->IsConnected() )
         {
-            pDrawVirtObj->AnchoredObj()->UpdateObjInSortedList();
+            pDrawVirtObj->AnchoredObj()->InvalidateObjPos();
+            // --> OD 2004-07-01 #i28701#
+            if ( _bUpdateSortedObjsList )
+            {
+                pDrawVirtObj->AnchoredObj()->UpdateObjInSortedList();
+            }
+            // <--
         }
         // <--
     }
@@ -1884,6 +2013,24 @@ void SwDrawContact::ChangeMasterObject( SdrObject *pNewMaster )
     _InvalidateObjs();
 }
 
+/** get data collection of anchored objects, handled by with contact
+
+    OD 2004-08-23 #110810#
+
+    @author
+*/
+void SwDrawContact::GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const
+{
+    _roAnchoredObjs.push_back( const_cast<SwAnchoredDrawObject*>(&maAnchoredDrawObj) );
+
+    for ( std::list<SwDrawVirtObj*>::const_iterator aDrawVirtObjsIter = maDrawVirtObjs.begin();
+          aDrawVirtObjsIter != maDrawVirtObjs.end();
+          ++aDrawVirtObjsIter )
+    {
+        _roAnchoredObjs.push_back( (*aDrawVirtObjsIter)->AnchoredObj() );
+    }
+}
+
 // =============================================================================
 /** implementation of class <SwDrawVirtObj>
 
@@ -1999,11 +2146,27 @@ void SwDrawVirtObj::AddToDrawingPage()
     SdrObject* pOrgMasterSdrObj = mrDrawContact.GetMaster();
 
     // insert 'virtual' drawing object into page, set layer and user call.
-    SdrPage *pPg;
-    if ( 0 != ( pPg = pOrgMasterSdrObj->GetPage() ) )
+    SdrPage* pDrawPg;
+    // --> OD 2004-08-16 #i27030# - apply order number of referenced object
+    if ( 0 != ( pDrawPg = pOrgMasterSdrObj->GetPage() ) )
     {
-        pPg->InsertObject( this );
+        // --> OD 2004-08-16 #i27030# - apply order number of referenced object
+        pDrawPg->InsertObject( this, GetReferencedObj().GetOrdNum() );
     }
+    else
+    {
+        pDrawPg = GetPage();
+        if ( pDrawPg )
+        {
+            pDrawPg->SetObjectOrdNum( GetOrdNumDirect(),
+                                      GetReferencedObj().GetOrdNum() );
+        }
+        else
+        {
+            SetOrdNum( GetReferencedObj().GetOrdNum() );
+        }
+    }
+    // <--
     SetUserCall( &mrDrawContact );
 }
 
@@ -2016,7 +2179,7 @@ void SwDrawVirtObj::RemoveFromDrawingPage()
     }
 }
 
-// is 'virtual' drawing object connected to writer layout and  to drawing layer.
+// is 'virtual' drawing object connected to writer layout and to drawing layer.
 bool SwDrawVirtObj::IsConnected() const
 {
     bool bRetVal = GetAnchorFrm() &&
