@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: tra $ $Date: 2002-08-26 10:54:14 $
+#   last change: $Author: tra $ $Date: 2002-08-26 11:47:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,7 +113,6 @@ SLOFILES=$(SLO)$/classfactory.obj\
 SHL1TARGET=$(TARGET)
 
 SHL1STDLIBS=uwinapi.lib\
-    unicows.lib\
     oleaut32.lib\
     advapi32.lib\
     ole32.lib\
