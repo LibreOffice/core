@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: af $ $Date: 2002-05-17 11:50:15 $
+ *  last change: $Author: af $ $Date: 2002-06-26 12:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,6 @@ sal_Bool AccessibleContextBase::ResetState (sal_Int16 aState)
     ::osl::ClearableMutexGuard aGuard (maMutex);
     ::utl::AccessibleStateSetHelper* pStateSet =
         static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-    bool bStateChanged;
     if ((pStateSet != NULL) && pStateSet->contains(aState))
     {
         pStateSet->RemoveState (aState);
@@ -229,11 +228,11 @@ void AccessibleContextBase::SetRelationSet (
     // both sets.
     typedef std::pair<short int,short int> RD;
     const RD aRelationDescriptors[] = {
-        RD(AccessibleRelationType::CONTROLLED_BY, AccessibleEventId::CONTROLLED_BY_PROPERTY),
-        RD(AccessibleRelationType::CONTROLLER_FOR, AccessibleEventId::CONTROLLER_FOR_PROPERTY),
-        RD(AccessibleRelationType::LABELED_BY, AccessibleEventId::LABELED_BY_PROPERTY),
-        RD(AccessibleRelationType::LABEL_FOR, AccessibleEventId::LABEL_FOR_PROPERTY),
-        RD(AccessibleRelationType::MEMBER_OF, AccessibleEventId::MEMBER_OF_PROPERTY),
+        RD(AccessibleRelationType::CONTROLLED_BY, AccessibleEventId::CONTROLLED_BY_EVENT),
+        RD(AccessibleRelationType::CONTROLLER_FOR, AccessibleEventId::CONTROLLER_FOR_EVENT),
+        RD(AccessibleRelationType::LABELED_BY, AccessibleEventId::LABELED_BY_EVENT),
+        RD(AccessibleRelationType::LABEL_FOR, AccessibleEventId::LABEL_FOR_EVENT),
+        RD(AccessibleRelationType::MEMBER_OF, AccessibleEventId::MEMBER_OF_EVENT),
         RD(AccessibleRelationType::INVALID, -1),
     };
     for (int i=0; aRelationDescriptors[i].first!=AccessibleRelationType::INVALID; i++)
