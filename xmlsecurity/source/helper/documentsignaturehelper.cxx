@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentsignaturehelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-22 05:54:33 $
+ *  last change: $Author: mt $ $Date: 2004-08-18 08:03:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,11 +185,11 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream( const uno::R
         {
             ::rtl::OUString aSIGStreamName;
             if ( eDocSigMode == SignatureModeDocumentContent )
-                aSIGStreamName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentSignatures.xml" ) );
+                aSIGStreamName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "documentsignatures.xml" ) );
             else if ( eDocSigMode == SignatureModeMacros )
-                aSIGStreamName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MacroSignatures.xml" ) );
+                aSIGStreamName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "macrosignatures.xml" ) );
             else
-                aSIGStreamName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PackageSignatures.xml" ) );
+                aSIGStreamName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "packagesignatures.xml" ) );
 
             aHelper.xSignatureStream = aHelper.xSignatureStorage->openStreamElement( aSIGStreamName, nOpenMode );
         }
