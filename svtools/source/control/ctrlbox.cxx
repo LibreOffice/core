@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-28 10:23:16 $
+ *  last change: $Author: gt $ $Date: 2002-07-19 09:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,6 +296,14 @@ struct ImpLineListData
 DECLARE_LIST( ImpLineList, ImpLineListData* );
 
 // -----------------------------------------------------------------------
+inline const Color& LineListBox::GetPaintColor( void ) const
+{
+//  return GetDisplayBackground().GetColor().IsDark()?  GetTextColor() : aColor;
+    return maPaintCol;
+//  return GetDisplayBackground().GetColor().IsDark()?  Application::GetSettings().GetStyleSettings() : aColor;
+}
+
+// -----------------------------------------------------------------------
 
 void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
                             Bitmap& rBmp, XubString& rStr )
@@ -348,7 +356,14 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
             aVirDev.SetOutputSizePixel( aVirSize );
         aVirDev.SetFillColor( GetSettings().GetStyleSettings().GetFieldColor() );
         aVirDev.DrawRect( Rectangle( Point(), aSize ) );
-        aVirDev.SetFillColor( aColor );
+
+/*      Color aCol( GetPaintColor() );
+        if( GetDisplayBackground().GetColor().IsDark() )
+            aCol = GetTextColor();
+        else
+            aCol = aColor;*/
+
+        aVirDev.SetFillColor( GetPaintColor() );
         aVirDev.DrawRect( Rectangle( 0, 0, aSize.Width(), n1-nPix ) );
         if ( n2 )
         {
@@ -398,7 +413,8 @@ void LineListBox::ImplInit()
 
 LineListBox::LineListBox( Window* pParent, WinBits nWinStyle ) :
     ListBox( pParent, nWinStyle ),
-    aColor( COL_BLACK )
+    aColor( COL_BLACK ),
+    maPaintCol( COL_BLACK )
 {
     ImplInit();
 }
@@ -407,7 +423,8 @@ LineListBox::LineListBox( Window* pParent, WinBits nWinStyle ) :
 
 LineListBox::LineListBox( Window* pParent, const ResId& rResId ) :
     ListBox( pParent, rResId ),
-    aColor( COL_BLACK )
+    aColor( COL_BLACK ),
+    maPaintCol( COL_BLACK )
 {
     ImplInit();
 }
@@ -546,10 +563,12 @@ long LineListBox::GetEntryDistance( USHORT nPos ) const
 
 // -----------------------------------------------------------------------
 
-void LineListBox::SetColor( const Color& rColor )
+/*void LineListBox::SetColor( const Color& rColor )
 {
     // exchange colours
     aColor = rColor;
+
+    UpdateLineColors();
 
     // Variablen anlegen
     ULONG n = 0;
@@ -583,7 +602,62 @@ void LineListBox::SetColor( const Color& rColor )
 
     SetUpdateMode( TRUE );
     Invalidate();
+}*/
+
+// -----------------------------------------------------------------------
+
+void LineListBox::UpdateLineColors( void )
+{
+//  maPaintCol = GetDisplayBackground().GetColor().IsDark()? Application::GetSettings().GetStyleSettings() : aColor;
+    if( GetDisplayBackground().GetColor().IsDark() )
+        maPaintCol = GetSettings().GetStyleSettings().GetLabelTextColor();
+    else
+        maPaintCol = aColor;
+
+    ULONG       nCount = pLineList->Count();
+    if( !nCount )
+        return;
+
+//  ULONG       n = 0;
+    XubString   aStr;
+    Bitmap      aBmp;
+
+    // exchange entries which containing lines
+    SetUpdateMode( FALSE );
+
+    USHORT      nSelEntry = GetSelectEntryPos();
+//  while( n < nCount )
+    for( ULONG n = 0 ; n < nCount ; ++n )
+    {
+        ImpLineListData*    pData = pLineList->GetObject( n );
+        if( pData )
+        {
+            // exchange listbox data
+            ListBox::RemoveEntry( USHORT( n ) );
+            ImpGetLine( pData->nLine1, pData->nLine2, pData->nDistance, aBmp, aStr );
+            ListBox::InsertEntry( aStr, aBmp, USHORT( n ) );
+        }
+
+//      ++n;
+    }
+
+    if( nSelEntry != LISTBOX_ENTRY_NOTFOUND )
+        SelectEntryPos( nSelEntry );
+
+    SetUpdateMode( TRUE );
+    Invalidate();
 }
+
+// -----------------------------------------------------------------------
+
+void LineListBox::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    ListBox::DataChanged( rDCEvt );
+
+    if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+        UpdateLineColors();
+}
+
 
 // ===================================================================
 // FontNameBox

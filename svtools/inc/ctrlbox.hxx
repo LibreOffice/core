@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-28 10:25:06 $
+ *  last change: $Author: gt $ $Date: 2002-07-19 09:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,59 +287,52 @@ class LineListBox : public ListBox
     International   OLDMEMBER_TO_BE_REMOVED;
     Size            aTxtSize;
     Color           aColor;
+    Color           maPaintCol;
     FieldUnit       eUnit;
     FieldUnit       eSourceUnit;
 
 #ifdef _CTRLBOX_CXX
-    void            ImpGetLine( long nLine1, long nLine2, long nDistance,
-                                Bitmap& rBmp, XubString& rStr );
+    void            ImpGetLine( long nLine1, long nLine2, long nDistance, Bitmap& rBmp, XubString& rStr );
     void            ImplInit();
 #endif
+    void            UpdateLineColors( void );
+    inline const Color& GetPaintColor( void ) const;
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
-                    LineListBox( Window* pParent,
-                                 WinBits nWinStyle = WB_BORDER );
+                    LineListBox( Window* pParent, WinBits nWinStyle = WB_BORDER );
                     LineListBox( Window* pParent, const ResId& rResId );
     virtual         ~LineListBox();
 
-    USHORT          InsertEntry( const XubString& rStr,
-                                 USHORT nPos = LISTBOX_APPEND );
-    USHORT          InsertEntry( long nLine1, long nLine2 = 0,
-                                 long nDistance = 0,
-                                 USHORT nPos = LISTBOX_APPEND );
+    USHORT          InsertEntry( const XubString& rStr, USHORT nPos = LISTBOX_APPEND );
+    USHORT          InsertEntry( long nLine1, long nLine2 = 0, long nDistance = 0, USHORT nPos = LISTBOX_APPEND );
     void            RemoveEntry( USHORT nPos );
     void            Clear();
 
-    USHORT          GetEntryPos( const XubString& rStr ) const
-                        { return ListBox::GetEntryPos( rStr ); }
-    USHORT          GetEntryPos( long nLine1, long nLine2 = 0,
-                                 long nDistance = 0 ) const;
+    inline USHORT   GetEntryPos( const XubString& rStr ) const { return ListBox::GetEntryPos( rStr ); }
+    USHORT          GetEntryPos( long nLine1, long nLine2 = 0, long nDistance = 0 ) const;
     long            GetEntryLine1( USHORT nPos ) const;
     long            GetEntryLine2( USHORT nPos ) const;
     long            GetEntryDistance( USHORT nPos ) const;
 
-    void            SelectEntry( const XubString& rStr, BOOL bSelect = TRUE )
-                        { ListBox::SelectEntry( rStr, bSelect ); }
-    void            SelectEntry( long nLine1, long nLine2 = 0,
-                                 long nDistance = 0, BOOL bSelect = TRUE );
+    inline void     SelectEntry( const XubString& rStr, BOOL bSelect = TRUE ) { ListBox::SelectEntry( rStr, bSelect ); }
+    void            SelectEntry( long nLine1, long nLine2 = 0, long nDistance = 0, BOOL bSelect = TRUE );
     long            GetSelectEntryLine1( USHORT nSelIndex = 0 ) const;
     long            GetSelectEntryLine2( USHORT nSelIndex = 0 ) const;
     long            GetSelectEntryDistance( USHORT nSelIndex = 0 ) const;
-    BOOL            IsEntrySelected( const XubString& rStr ) const
-                        { return ListBox::IsEntrySelected( rStr ); }
-    BOOL            IsEntrySelected( long nLine1, long nLine2 = 0,
-                                     long nDistance = 0 ) const;
+    inline BOOL     IsEntrySelected( const XubString& rStr ) const { return ListBox::IsEntrySelected( rStr ); }
+    BOOL            IsEntrySelected( long nLine1, long nLine2 = 0, long nDistance = 0 ) const;
 
-    void            SetUnit( FieldUnit eNewUnit ) { eUnit = eNewUnit; }
-    FieldUnit       GetUnit() const { return eUnit; }
-    void            SetSourceUnit( FieldUnit eNewUnit ) { eSourceUnit = eNewUnit; }
-    FieldUnit       GetSourceUnit() const { return eSourceUnit; }
+    inline void     SetUnit( FieldUnit eNewUnit ) { eUnit = eNewUnit; }
+    inline FieldUnit    GetUnit() const { return eUnit; }
+    inline void     SetSourceUnit( FieldUnit eNewUnit ) { eSourceUnit = eNewUnit; }
+    inline FieldUnit    GetSourceUnit() const { return eSourceUnit; }
 
     void            SetColor( const Color& rColor );
-    Color           GetColor() const { return aColor; }
+    inline Color    GetColor( void ) const;
 
 private:
-    // declared as private because some compilers would generate the default functions
+    // declared as private because some compilers would generate the default methods
                     LineListBox( const LineListBox& );
     LineListBox&    operator =( const LineListBox& );
     USHORT          GetEntryPos( const void* pData ) const;
@@ -347,8 +340,7 @@ private:
     void*           GetEntryData( USHORT nPos ) const;
 };
 
-inline void LineListBox::SelectEntry( long nLine1, long nLine2,
-                                      long nDistance, BOOL bSelect )
+inline void LineListBox::SelectEntry( long nLine1, long nLine2, long nDistance, BOOL bSelect )
 {
     USHORT nPos = GetEntryPos( nLine1, nLine2, nDistance );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -382,8 +374,7 @@ inline long LineListBox::GetSelectEntryDistance( USHORT nSelIndex ) const
         return 0;
 }
 
-inline BOOL LineListBox::IsEntrySelected( long nLine1, long nLine2,
-                                          long nDistance ) const
+inline BOOL LineListBox::IsEntrySelected( long nLine1, long nLine2, long nDistance ) const
 {
     USHORT nPos = GetEntryPos( nLine1, nLine2, nDistance );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -391,6 +382,19 @@ inline BOOL LineListBox::IsEntrySelected( long nLine1, long nLine2,
     else
         return FALSE;
 }
+
+inline void LineListBox::SetColor( const Color& rColor )
+{
+    aColor = rColor;
+
+    UpdateLineColors();
+}
+
+inline Color LineListBox::GetColor( void ) const
+{
+    return aColor;
+}
+
 
 // ---------------
 // - FontNameBox -
