@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progressbar.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-08-10 12:04:15 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 13:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual void SAL_CALL acquire() throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL acquire() throw();
 
     /**_______________________________________________________________________________________________________
         @short      decrement refcount
@@ -216,7 +216,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual void SAL_CALL release() throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL release() throw();
 
     //__________________________________________________________________________________________________________
     //  XTypeProvider
