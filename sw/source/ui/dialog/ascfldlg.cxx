@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 12:38:32 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,11 @@
 #endif
 #ifndef _ASCFLDLG_HRC
 #include <ascfldlg.hrc>
+#endif
+
+// #107253#
+#ifndef _SWLINGUCONFIG_HXX
+#include <swlinguconfig.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -287,7 +292,10 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 else
                 {
                     SvtLinguOptions aLinguOpt;
-                    SvtLinguConfig().GetOptions( aLinguOpt );
+
+                    // #107253# Replaced SvtLinguConfig with SwLinguConfig wrapper with UsageCount
+                    SwLinguConfig().GetOptions( aLinguOpt );
+
                     aOpt.SetLanguage(aLinguOpt.nDefaultLanguage);
                 }
             }
