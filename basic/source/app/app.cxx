@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-09 11:19:00 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,16 +164,28 @@ void TestToolDebugMessageFilter( const sal_Char *pString )
 
     ByteString aMessage( pString );
 
+    BOOL bIgnore = FALSE;
+
     // OSL
-    if ( aMessage.Search( CByteString("PropertySetRegistry::") ) != STRING_NOTFOUND ) return;
-    if ( aMessage.Search( CByteString("AcquireTree failed") ) != STRING_NOTFOUND ) return;
-    if ( aMessage.Search( CByteString("Cannot open Configuration: Connector: unknown delegatee com.sun.star.connection.Connector.portal") ) != STRING_NOTFOUND ) return;
+    if ( aMessage.Search( CByteString("PropertySetRegistry::") ) != STRING_NOTFOUND )
+        bIgnore = TRUE;
+    if ( aMessage.Search( CByteString("AcquireTree failed") ) != STRING_NOTFOUND )
+        bIgnore = TRUE;
+    if ( aMessage.Search( CByteString("Cannot open Configuration: Connector: unknown delegatee com.sun.star.connection.Connector.portal") ) != STRING_NOTFOUND )
+        bIgnore = TRUE;
 
     // VCL
-    if ( aMessage.Search( CByteString("property value missing") ) != STRING_NOTFOUND ) return;
+    if ( aMessage.Search( CByteString("property value missing") ) != STRING_NOTFOUND )
+        bIgnore = TRUE;
     if ( aMessage.Search( CByteString("getDateFormatsImpl") ) != STRING_NOTFOUND
-      && aMessage.Search( CByteString("no date formats") ) != STRING_NOTFOUND ) return;
+      && aMessage.Search( CByteString("no date formats") ) != STRING_NOTFOUND )
+      bIgnore = TRUE;
 
+    if ( bIgnore )
+    {
+        static_bInsideFilter = FALSE;
+        return;
+    }
 
     try
     {
