@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:14:12 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -177,6 +176,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SHEET_XNAMEDRANGE_HPP_
 #include <com/sun/star/sheet/XNamedRange.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XLABELRANGES_HPP_
+#include <com/sun/star/sheet/XLabelRanges.hpp>
 #endif
 
 #define SC_LOCALE           "Locale"
@@ -1559,6 +1561,7 @@ ScXMLImport::ScXMLImport(
     pConsolidationAttrTokenMap( 0 ),
     aTables(*this),
     pMyNamedExpressions(NULL),
+    pMyLabelRanges(NULL),
     pValidations(NULL),
     pDetectiveOpArray(NULL),
 //  pScAutoStylePool(new SvXMLAutoStylePoolP),
@@ -1678,6 +1681,8 @@ ScXMLImport::~ScXMLImport() throw()
 
     if (pMyNamedExpressions)
         delete pMyNamedExpressions;
+    if (pMyLabelRanges)
+        delete pMyLabelRanges;
     if (pValidations)
         delete pValidations;
     if (pDetectiveOpArray)
@@ -2412,6 +2417,48 @@ sal_Int32 ScXMLImport::GetRangeType(const rtl::OUString sRangeType) const
     return nRangeType;
 }
 
+void ScXMLImport::SetLabelRanges()
+{
+    ScMyLabelRanges* pLabelRanges = GetLabelRanges();
+    if (pLabelRanges)
+    {
+        uno::Reference <beans::XPropertySet> xPropertySet (GetModel(), uno::UNO_QUERY);
+        if (xPropertySet.is())
+        {
+            uno::Any aColAny = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_COLLABELRNG)));
+            uno::Any aRowAny = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ROWLABELRNG)));
+
+            uno::Reference< sheet::XLabelRanges > xColRanges;
+            uno::Reference< sheet::XLabelRanges > xRowRanges;
+
+            if ( ( aColAny >>= xColRanges ) && ( aRowAny >>= xRowRanges ) )
+            {
+                table::CellRangeAddress aLabelRange;
+                table::CellRangeAddress aDataRange;
+
+                ScMyLabelRanges::iterator aItr = pLabelRanges->begin();
+                while (aItr != pLabelRanges->end())
+                {
+                    sal_Int32 nOffset1(0);
+                    sal_Int32 nOffset2(0);
+
+                    if (ScXMLConverter::GetRangeFromString( aLabelRange, (*aItr)->sLabelRangeStr, GetDocument(), nOffset1 ) &&
+                        ScXMLConverter::GetRangeFromString( aDataRange, (*aItr)->sDataRangeStr, GetDocument(), nOffset2 ))
+                    {
+                        if ( (*aItr)->bColumnOrientation )
+                            xColRanges->addNew( aLabelRange, aDataRange );
+                        else
+                            xRowRanges->addNew( aLabelRange, aDataRange );
+                    }
+
+                    delete *aItr;
+                    aItr = pLabelRanges->erase(aItr);
+                }
+            }
+        }
+    }
+}
+
 void ScXMLImport::SetNamedRanges()
 {
     ScMyNamedExpressions* pNamedExpressions = GetNamedExpressions();
@@ -2530,6 +2577,7 @@ void SAL_CALL ScXMLImport::endDocument(void)
                     }
                 }
             }
+            SetLabelRanges();
             SetNamedRanges();
         }
         GetProgressBarHelper()->End();  // make room for subsequent SfxProgressBars
