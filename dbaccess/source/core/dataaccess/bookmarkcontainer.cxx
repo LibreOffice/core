@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmarkcontainer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:52:46 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,6 @@
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
 #endif
-#ifndef _DBA_CORE_CONTAINERELEMENT_HXX_
-#include "containerelement.hxx"
-#endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
@@ -90,15 +87,8 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
-
-#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
-#include <com/sun/star/util/XFlushable.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
@@ -106,12 +96,10 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::osl;
 using namespace ::comphelper;
-using namespace ::utl;
 using namespace ::cppu;
 
 //........................................................................
@@ -125,38 +113,17 @@ namespace dbaccess
 DBG_NAME(OBookmarkContainer)
 //--------------------------------------------------------------------------
 OBookmarkContainer::OBookmarkContainer(OWeakObject& _rParent, Mutex& _rMutex)
-    :OConfigurationFlushable(_rMutex)
-    ,m_aContainerListeners(_rMutex)
+    :m_aContainerListeners(_rMutex)
     ,m_rParent(_rParent)
-    ,m_bInitialized(sal_False)
+    ,m_rMutex(_rMutex)
 {
     DBG_CTOR(OBookmarkContainer, NULL);
-}
-
-//--------------------------------------------------------------------------
-void OBookmarkContainer::initialize(const OConfigurationTreeRoot& _rConfigurationRoot, sal_Bool _bRead)
-{
-    MutexGuard aGuard(m_rMutex);
-    m_aConfigurationNode = _rConfigurationRoot;
-
-    DBG_ASSERT(m_aConfigurationNode.isValid(), "OBookmarkContainer::initialize : need a starting point within the configuration !");
-    DBG_ASSERT(!m_bInitialized, "OBookmarkContainer::initialize : already initialized !");
-
-    if (m_aConfigurationNode.isValid())
-    {
-        DBG_ASSERT(m_aConfigurationNode.isSetNode(), "OBookmarkContainer::initialize: our config node should be a set node!");
-        m_aConfigurationNode.setEscape(sal_True);
-        initializeFromConfiguration();
-    }
-
-    m_bInitialized = sal_True;
 }
 
 //--------------------------------------------------------------------------
 void OBookmarkContainer::dispose()
 {
     MutexGuard aGuard(m_rMutex);
-    DBG_ASSERT(m_bInitialized, "OBookmarkContainer::dispose : not initialized !");
 
     // say our listeners goobye
     EventObject aEvt(*this);
@@ -165,30 +132,6 @@ void OBookmarkContainer::dispose()
     // remove our elements
     m_aBookmarksIndexed.clear();
     m_aBookmarks.clear();
-    m_aObjectKeys.clear();
-    m_aConfigurationNode.clear();
-
-    m_bInitialized = sal_False;
-}
-
-//--------------------------------------------------------------------------
-Sequence< Type > SAL_CALL OBookmarkContainer::getTypes() throw (RuntimeException)
-{
-    Sequence< Type > aTypes = OBookmarkContainer_Base::getTypes();
-    sal_Int32 nLen = aTypes.getLength();
-    aTypes.realloc(nLen + 1);
-    aTypes[nLen] = ::getCppuType( static_cast< const Reference< XFlushable >* >( NULL ) );
-
-    return aTypes;
-}
-
-//--------------------------------------------------------------------------
-Any SAL_CALL OBookmarkContainer::queryInterface( const Type & _rType ) throw (RuntimeException)
-{
-    Any aReturn = OBookmarkContainer_Base::queryInterface(_rType);
-    if (!aReturn.hasValue())
-        aReturn = OConfigurationFlushable::queryInterface(_rType);
-    return aReturn;
 }
 
 //--------------------------------------------------------------------------
@@ -201,25 +144,6 @@ void SAL_CALL OBookmarkContainer::acquire(  ) throw()
 void SAL_CALL OBookmarkContainer::release(  ) throw()
 {
     m_rParent.release();
-}
-
-//--------------------------------------------------------------------------
-void OBookmarkContainer::flush_NoBroadcast_NoCommit()
-{
-    DBG_ASSERT(m_aConfigurationNode.isValid(), "OBookmarkContainer::flush_NoBroadcast_NoCommit: need a starting point within the configuration !");
-    DBG_ASSERT(m_bInitialized, "OBookmarkContainer::flush_NoBroadcast_NoCommit: not initialized !");
-
-    DBG_ASSERT(m_aBookmarks.size() == m_aObjectKeys.size(), "OBookmarkContainer::flush_NoBroadcast_NoCommit: inconsistence: this may crash!");
-    ConstMapString2StringIterator aLinks = m_aBookmarks.begin();
-    ConstConfigNodeMapIterator aNodes = m_aObjectKeys.begin();
-
-    for (   ;
-            aLinks != m_aBookmarks.end();
-            ++aLinks, ++aNodes
-        )
-    {
-        aNodes->second.setNodeValue(CONFIGKEY_DBLINK_DOCUMENTLOCAITON, makeAny(aLinks->second));
-    }
 }
 
 //--------------------------------------------------------------------------
@@ -269,17 +193,8 @@ void SAL_CALL OBookmarkContainer::insertByName( const ::rtl::OUString& _rName, c
     if (!(aElement >>= sNewLink))
         throw IllegalArgumentException();
 
-    OConfigurationNode aObjectNode = m_aConfigurationNode.createNode(_rName);
-    if (!aObjectNode.isValid())
-    {   // something went (heavily) wrong
-        DBG_ERROR("OBookmarkContainer::insertByName : could not create the new configuration nodes !");
-        throw RuntimeException(::rtl::OUString(), *this);
-    }
 
-    aObjectNode.setNodeValue(CONFIGKEY_DBLINK_DOCUMENTLOCAITON, makeAny(sNewLink));
-//  OSL_VERIFY(m_aConfigurationNode.commit());
-
-    implAppend(_rName, sNewLink, aObjectNode);
+    implAppend(_rName, sNewLink);
 
     // notify the listeners
     if (m_aContainerListeners.getLength())
@@ -465,37 +380,9 @@ sal_Bool SAL_CALL OBookmarkContainer::hasByName( const ::rtl::OUString& _rName )
 }
 
 //--------------------------------------------------------------------------
-void OBookmarkContainer::initializeFromConfiguration()
-{
-    if (!m_aConfigurationNode.isValid())
-    {
-        DBG_ERROR("OBookmarkContainer::initializeFromConfiguration : invalid configuration key !");
-        return;
-    }
-
-    Sequence< ::rtl::OUString > aDefinitionNames = m_aConfigurationNode.getNodeNames();
-    const ::rtl::OUString* pDefinitionNames = aDefinitionNames.getConstArray();
-    for (sal_Int32 i=0; i<aDefinitionNames.getLength(); ++i, ++pDefinitionNames)
-    {
-        // get the node under which the object is stored
-        OConfigurationNode aObjectNode = m_aConfigurationNode.openNode(*pDefinitionNames);
-
-        if ((0 == pDefinitionNames->getLength()) || !aObjectNode.isValid())
-        {
-            DBG_ERROR("OBookmarkContainer::initializeFromConfiguration : invalid structure within the configuration !");
-            continue;
-        }
-
-        ::rtl::OUString sBookmark;
-        aObjectNode.getNodeValue(CONFIGKEY_DBLINK_DOCUMENTLOCAITON) >>= sBookmark;
-        implAppend(*pDefinitionNames, sBookmark, aObjectNode);
-    }
-}
-
-//--------------------------------------------------------------------------
 sal_Bool OBookmarkContainer::isReadOnly() const
 {
-    return !m_aConfigurationNode.isValid() || m_aConfigurationNode.isReadonly();
+    return sal_False;
 }
 
 //--------------------------------------------------------------------------
@@ -529,20 +416,15 @@ void OBookmarkContainer::implRemove(const ::rtl::OUString& _rName)
 
     // remove the map entries
     m_aBookmarks.erase(aMapPos);
-    m_aObjectKeys.erase(_rName);
-
-    m_aConfigurationNode.removeNode(_rName);
-//  OSL_VERIFY(m_aConfigurationNode.commit());
 }
 
 //--------------------------------------------------------------------------
-void OBookmarkContainer::implAppend(const ::rtl::OUString& _rName, const ::rtl::OUString& _rDocumentLocation, const OConfigurationNode& _rObjectNode)
+void OBookmarkContainer::implAppend(const ::rtl::OUString& _rName, const ::rtl::OUString& _rDocumentLocation)
 {
     MutexGuard aGuard(m_rMutex);
 
     OSL_ENSURE(m_aBookmarks.find(_rName) == m_aBookmarks.end(),"Bookmark already known!");
     m_aBookmarksIndexed.push_back(m_aBookmarks.insert(  MapString2String::value_type(_rName,_rDocumentLocation)).first);
-    m_aObjectKeys.insert(ConfigNodeMap::value_type(_rName,_rObjectNode));
 }
 
 //--------------------------------------------------------------------------
@@ -552,31 +434,11 @@ void OBookmarkContainer::implReplace(const ::rtl::OUString& _rName, const ::rtl:
     DBG_ASSERT(checkExistence(_rName), "OBookmarkContainer::implReplace : invalid name !");
 
     m_aBookmarks[_rName] = _rNewLink;
-
-    // update the configuration
-    DBG_ASSERT(m_aObjectKeys.find(_rName) != m_aObjectKeys.end(), "OBookmarkContainer::implReplace: missing the config node!");
-    m_aObjectKeys[_rName].setNodeValue(CONFIGKEY_DBLINK_DOCUMENTLOCAITON, makeAny(_rNewLink));
-//  OSL_VERIFY(m_aConfigurationNode.commit());
 }
 
 //--------------------------------------------------------------------------
 void OBookmarkContainer::checkValid(sal_Bool _bIntendWriteAccess) const throw (RuntimeException, DisposedException)
 {
-    if (!m_bInitialized)
-        throw DisposedException();
-
-    if (_bIntendWriteAccess && isReadOnly())
-    {
-        ::rtl::OUString sMessage = DBACORE_RESSTRING(RID_STR_NEED_CONFIG_WRITE_ACCESS);
-        DisposedException(
-            sMessage,
-            Reference< XInterface >(const_cast<XServiceInfo*>(static_cast<const XServiceInfo*>(this)))
-        );
-    }
-
-    DBG_ASSERT( (m_aObjectKeys.size() == m_aBookmarks.size()) &&
-                (m_aBookmarks.size() == m_aBookmarksIndexed.size()),
-        "OBookmarkContainer::checkValid : inconsistent state !");
 }
 
 //--------------------------------------------------------------------------
