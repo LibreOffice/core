@@ -8205,3 +8205,14 @@ _real@8@bffdf1a9fbe76c8b4000
 ?EndElement@XMLCalculationSettingsContext@@UAEXXZ
 ?__query@?$Reference@VXTextDocument@text@star@sun@com@@@uno@star@sun@com@@CAPAVXTextDocument@text@345@PAVXInterface@2345@@Z
 ?s_pType_com_sun_star_text_XTextDocument@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXTextDocument@text@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+??1?$Reference@VXForbiddenCharacters@i18n@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??1?$Reference@VXSupportedLocales@linguistic2@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??1?$Sequence@ULocale@lang@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??1ForbiddenCharacters@i18n@star@sun@com@@QAE@XZ
+??_C@_0CH@LMOF@com?4sun?4star?4i18n?4XForbiddenChar@
+??_C@_0CL@NNMA@com?4sun?4star?4linguistic2?4XSuppor@
+?exportForbiddenCharacters@XMLSettingsExportHelper@@ABEXABVAny@uno@star@sun@com@@VOUString@rtl@@@Z
+?s_pType@?$Sequence@ULocale@lang@star@sun@com@@@uno@star@sun@com@@2PAU_typelib_TypeDescriptionReference@@A
+?s_pType_com_sun_star_i18n_XForbiddenCharacters@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXForbiddenCharacters@i18n@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?s_pType_com_sun_star_linguistic2_XSupportedLocales@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXSupportedLocales@linguistic2@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+??0XMLConfigItemMapIndexedContext@@QAE@AAVSvXMLImport@@GABVOUString@rtl@@ABV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@AAVAny@5678@1PAVXMLConfigBaseContext@@@Z
