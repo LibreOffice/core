@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-07 10:53:15 $
+ *  last change: $Author: os $ $Date: 2001-07-30 11:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,8 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions ) :
     Dieser Ctor erzeugt einen Standard-Drucker.
 */
 
-    pOptions( pTheOptions )
+    pOptions( pTheOptions ),
+    bKnown(sal_True)
 
 {
     pImpl = new SfxPrinter_Impl;
