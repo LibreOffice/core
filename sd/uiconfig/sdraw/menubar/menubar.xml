@@ -65,15 +65,6 @@
             <menu:menuitem menu:id=".uno:ModifyField" menu:helpid="27362" menu:label="" />
             <menu:menuitem menu:id=".uno:DeletePage" menu:helpid="27080" menu:label="" />
             <menu:menuseparator/>
-            <menu:menu menu:id=".uno:LayerMenu" menu:label="" >
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:InsertLayer" menu:helpid="27043" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ModifyLayer" menu:helpid="27048" menu:label="" />
-                    <menu:menuitem menu:id=".uno:DeleteLayer" menu:helpid="27081" menu:label="" />
-                    <menu:menuitem menu:id=".uno:RenameLayer" menu:helpid="27269" menu:label="" />
-                </menu:menupopup>
-            </menu:menu>
-            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ManageLinks" menu:helpid="27005" menu:label="" />
             <menu:menuitem menu:id=".uno:PlugInsActive" menu:helpid="6314" menu:label="" />
             <menu:menuitem menu:id=".uno:ImageMapDialog" menu:helpid="10371" menu:label="" />
@@ -84,18 +75,17 @@
     <menu:menu menu:id=".uno:ViewMenu" menu:label="" >
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:PageMode" menu:helpid="27049" menu:label="" />
-            <menu:menuitem menu:id=".uno:LayerMode" menu:helpid="27050" menu:label="" />
+            <menu:menuitem menu:id=".uno:MasterPage" menu:helpid="27053" menu:label="" />
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:DisplayQualityMenu" menu:label="" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:OutputQualityColor" menu:helpid="27366" menu:label="" />
                     <menu:menuitem menu:id=".uno:OutputQualityGrayscale" menu:helpid="27367" menu:label="" />
                     <menu:menuitem menu:id=".uno:OutputQualityBlackWhite" menu:helpid="27368" menu:label="" />
-                    <menu:menuitem menu:id=".uno:OutputQualityContrast" menu:helpid="27400" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-               <menu:menuitem menu:id=".uno:LeftPaneChildWindow" menu:helpid="27414" menu:label="" />
+            <menu:menuitem menu:id=".uno:LeftPaneDraw" menu:helpid="27415" menu:label="" />
             <menu:menuitem menu:id=".uno:AvailableToolbars" menu:label="" />
             <menu:menuitem menu:id=".uno:StatusBarVisible" menu:helpid="5920" menu:label="" />
             <menu:menuitem menu:id=".uno:ShowImeStatusWindow" menu:helpid="6680" menu:label="" />
