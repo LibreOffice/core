@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 16:45:25 $
+ *  last change: $Author: fs $ $Date: 2002-02-06 12:50:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,15 +553,17 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
         if (sPwd.getLength()) ++nAdditionalArgs;
 
         Sequence< PropertyValue > aUserPwd(nAdditionalArgs);
+        sal_Int32 nArgPos = 0;
         if (sUser.getLength())
         {
-            aUserPwd[0].Name = ::rtl::OUString::createFromAscii("user");
-            aUserPwd[0].Value <<= sUser;
+            aUserPwd[ nArgPos ].Name = ::rtl::OUString::createFromAscii("user");
+            aUserPwd[ nArgPos ].Value <<= sUser;
+            ++nArgPos;
         }
         if (sPwd.getLength())
         {
-            aUserPwd[1].Name = ::rtl::OUString::createFromAscii("password");
-            aUserPwd[1].Value <<= sPwd;
+            aUserPwd[ nArgPos ].Name = ::rtl::OUString::createFromAscii("password");
+            aUserPwd[ nArgPos ].Value <<= sPwd;
         }
         if (nAdditionalArgs)
             xReturn = xManager->getConnectionWithInfo(m_sConnectURL, ::comphelper::concatSequences(aUserPwd,m_aInfo));
