@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:16:50 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 //CHINA001 #ifndef _SVX_ZOOM_HXX //autogen
 //CHINA001 #include <svx/zoom.hxx>
 //CHINA001 #endif
+#ifndef _UNO_LINGU_HXX
+#include "svx/unolingu.hxx"
+#endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -1454,7 +1457,7 @@ BOOL SwView::JumpToSwMark( const String& rMark )
                 SearchOptions aSearchOpt(
                                     SearchAlgorithms_ABSOLUTE, 0,
                                     sName, rtl::OUString(),
-                                    CreateLocale( LANGUAGE_SYSTEM ),
+                                    SvxCreateLocale( LANGUAGE_SYSTEM ),
                                     0,0,0,
                                     TransliterationModules_IGNORE_CASE );
 
