@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-11 08:54:49 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,6 +357,7 @@ XMLRedlineImportHelper::XMLRedlineImportHelper(
     // check to see if redline mode is handled outside of component
     sal_Bool bHandleShowChanges = sal_True;
     sal_Bool bHandleRecordChanges = sal_True;
+    sal_Bool bHandleProtectionKey = sal_True;
     if ( xImportInfoPropertySet.is() )
     {
         Reference<XPropertySetInfo> xInfo =
@@ -364,6 +365,7 @@ XMLRedlineImportHelper::XMLRedlineImportHelper(
 
         bHandleShowChanges = ! xInfo->hasPropertyByName( sShowChanges );
         bHandleRecordChanges = ! xInfo->hasPropertyByName( sRecordChanges );
+        bHandleProtectionKey = ! xInfo->hasPropertyByName( sRedlineProtectionKey );
     }
 
     // get redline mode
@@ -373,6 +375,12 @@ XMLRedlineImportHelper::XMLRedlineImportHelper(
     bRecordChanges = *(sal_Bool*)
         ( bHandleRecordChanges ? xModelPropertySet : xImportInfoPropertySet )
         ->getPropertyValue( sRecordChanges ).getValue();
+    {
+        Any aAny = (bHandleProtectionKey  ? xModelPropertySet
+                                          : xImportInfoPropertySet )
+                        ->getPropertyValue( sRedlineProtectionKey );
+        aAny >>= aProtectionKey;
+    }
 
     // set redline mode to "don't record changes"
     if( bHandleRecordChanges )
