@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: os $ $Date: 2002-08-29 06:47:13 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 11:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1875,10 +1875,50 @@ String STR_HYPERCTRL_SEL
 {
     Text = "SEL" ;
     Text[ english_us ] = "SEL";
+    Text[ portuguese ] = "SEL";
+    Text[ russian ] = "SEL";
+    Text[ greek ] = "SEL";
+    Text[ dutch ] = "SEL";
+    Text[ french ] = "SEL";
+    Text[ spanish ] = "SEL";
+    Text[ finnish ] = "SEL";
+    Text[ italian ] = "SEL";
+    Text[ danish ] = "SEL";
+    Text[ swedish ] = "SEL";
+    Text[ polish ] = "SEL";
+    Text[ portuguese_brazilian ] = "SEL";
+    Text[ japanese ] = "SEL";
+    Text[ korean ] = "SEL";
+    Text[ chinese_simplified ] = "SEL";
+    Text[ chinese_traditional ] = "SEL";
+    Text[ turkish ] = "SEL";
+    Text[ arabic ] = "SEL";
+    Text[ catalan ] = "SEL";
+    Text[ thai ] = "SEL";
 };
 String STR_HYPERCTRL_HYP
 {
     Text = "HYP" ;
     Text[ english_us ] = "HYP";
+    Text[ portuguese ] = "HYP";
+    Text[ russian ] = "HYP";
+    Text[ greek ] = "HYP";
+    Text[ dutch ] = "HYP";
+    Text[ french ] = "HYP";
+    Text[ spanish ] = "HYP";
+    Text[ finnish ] = "HYP";
+    Text[ italian ] = "HYP";
+    Text[ danish ] = "HYP";
+    Text[ swedish ] = "HYP";
+    Text[ polish ] = "HYP";
+    Text[ portuguese_brazilian ] = "HYP";
+    Text[ japanese ] = "HYP";
+    Text[ korean ] = "HYP";
+    Text[ chinese_simplified ] = "HYP";
+    Text[ chinese_traditional ] = "HYP";
+    Text[ turkish ] = "HYP";
+    Text[ arabic ] = "HYP";
+    Text[ catalan ] = "HYP";
+    Text[ thai ] = "HYP";
 };
 
