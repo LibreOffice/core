@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hro $ $Date: 2001-11-16 12:33:12 $
+ *  last change: $Author: hro $ $Date: 2002-05-16 12:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,15 +277,25 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT4( void *pv, rtl_uString **p
             ZeroMemory( &ModuleInfo, sizeof(ModuleInfo) );
             ModuleInfo.SizeOfStruct = sizeof(ModuleInfo);
 
-            bSuccess = lpfnSymGetModuleInfo( GetCurrentProcess(), (DWORD)pv, &ModuleInfo );
+            bSuccess = !!lpfnSymGetModuleInfo( GetCurrentProcess(), (DWORD)pv, &ModuleInfo );
 
             if ( bSuccess )
             {
-                rtl_uString *ustrSysPath = NULL;
+                /*  #99182 On localized (non-english) NT4 and XP (!!!) for some libraries the LoadedImageName member of ModuleInfo isn't filled. Because
+                    other members ModuleName and ImageName do not contain the full path we can cast the Member
+                    BaseOfImage to a HMODULE (on NT it's the same) and use GetModuleFileName to retrieve the full
+                    path of the loaded image */
 
-                rtl_string2UString( &ustrSysPath, ModuleInfo.LoadedImageName, strlen(ModuleInfo.LoadedImageName), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
-                osl_getFileURLFromSystemPath( ustrSysPath, pustrURL );
-                rtl_uString_release( ustrSysPath );
+                if ( ModuleInfo.LoadedImageName[0] || GetModuleFileNameA( (HMODULE)ModuleInfo.BaseOfImage, ModuleInfo.LoadedImageName, sizeof(ModuleInfo.LoadedImageName) ) )
+                {
+                    rtl_uString *ustrSysPath = NULL;
+
+                    rtl_string2UString( &ustrSysPath, ModuleInfo.LoadedImageName, strlen(ModuleInfo.LoadedImageName), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+                    osl_getFileURLFromSystemPath( ustrSysPath, pustrURL );
+                    rtl_uString_release( ustrSysPath );
+                }
+                else
+                    bSuccess = sal_False;
             }
 
             lpfnSymCleanup( GetCurrentProcess() );
