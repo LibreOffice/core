@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_di.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-31 15:22:49 $
+ *  last change: $Author: dbo $ $Date: 2002-04-24 13:43:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,13 +79,15 @@
 
 #include <cppuhelper/implbase1.hxx>
 
+#include <com/sun/star/lang/DisposedException.hpp>
+
 
 using namespace test;
 using namespace cppu;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
 using namespace osl;
 using namespace rtl;
+using namespace com::sun::star;
+using namespace com::sun::star::uno;
 
 
 //==================================================================================================
@@ -516,7 +518,7 @@ static sal_Bool performTest(
 test::TestData Test_Impl::raiseException( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte, sal_Int16& nShort, sal_uInt16& nUShort, sal_Int32& nLong, sal_uInt32& nULong, sal_Int64& nHyper, sal_uInt64& nUHyper, float& fFloat, double& fDouble, test::TestEnum& eEnum, ::rtl::OUString& aString, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xInterface, ::com::sun::star::uno::Any& aAny, ::com::sun::star::uno::Sequence< test::TestElement >& aSequence, test::TestData& aStruct )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    IllegalArgumentException aExc;
+    lang::IllegalArgumentException aExc;
     aExc.ArgumentPosition = 5;
     aExc.Message          = OUString::createFromAscii( "dum dum dum ich tanz im kreis herum..." );
     aExc.Context          = getInterface();
@@ -526,7 +528,7 @@ test::TestData Test_Impl::raiseException( sal_Bool& bBool, sal_Unicode& cChar, s
 //__________________________________________________________________________________________________
 sal_Int32 Test_Impl::getRuntimeException() throw(::com::sun::star::uno::RuntimeException)
 {
-    RuntimeException aExc;
+    lang::DisposedException aExc;
     aExc.Message          = OUString::createFromAscii( "dum dum dum ich tanz im kreis herum..." );
     aExc.Context          = getInterface();
     throw aExc;
@@ -535,7 +537,7 @@ sal_Int32 Test_Impl::getRuntimeException() throw(::com::sun::star::uno::RuntimeE
 //__________________________________________________________________________________________________
 void Test_Impl::setRuntimeException( sal_Int32 _runtimeexception ) throw(::com::sun::star::uno::RuntimeException)
 {
-    RuntimeException aExc;
+    lang::DisposedException aExc;
     aExc.Message          = OUString::createFromAscii( "dum dum dum ich tanz im kreis herum..." );
     aExc.Context          = getInterface();
     throw aExc;
@@ -566,6 +568,28 @@ static void raising2( const Reference< XLanguageBindingTest > & xLBT )
 //==================================================================================================
 sal_Bool raiseException( const Reference< XLanguageBindingTest > & xLBT )
 {
+    try
+    {
+        xLBT->getRuntimeException();
+    }
+    catch (lang::DisposedException & exc)
+    {
+        OSL_ENSURE( exc.Context == xLBT->getInterface() &&
+                    exc.Message.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dum dum dum ich tanz im kreis herum...") ),
+                    "### unexpected exception content!" );
+    }
+    catch (RuntimeException &)
+    {
+    }
+    catch (Exception &)
+    {
+        return sal_False;
+    }
+    catch (...)
+    {
+        return sal_False;
+    }
+
     sal_Int32 nCount = 0;
     try
     {
@@ -578,7 +602,7 @@ sal_Bool raiseException( const Reference< XLanguageBindingTest > & xLBT )
             catch (RuntimeException &)
             {
             }
-            catch (IllegalArgumentException aExc)
+            catch (lang::IllegalArgumentException aExc)
             {
                 ++nCount;
                 OSL_ENSURE( aExc.ArgumentPosition == 5 &&
@@ -600,7 +624,7 @@ sal_Bool raiseException( const Reference< XLanguageBindingTest > & xLBT )
             /** it is certain, that the RuntimeException testing will fail, if no */
             xLBT->setRuntimeException( 0xcafebabe );
         }
-        catch (IllegalArgumentException &)
+        catch (lang::IllegalArgumentException &)
         {
         }
     }
@@ -623,7 +647,7 @@ static void checkInvalidInterfaceQuery(
 {
     try
     {
-        Any aRet( xObj->queryInterface( ::getCppuType( (const IllegalArgumentException *)0 ) ) );
+        Any aRet( xObj->queryInterface( ::getCppuType( (const lang::IllegalArgumentException *)0 ) ) );
         OSL_ASSERT( ! aRet.hasValue() );
     }
     catch (RuntimeException &)
