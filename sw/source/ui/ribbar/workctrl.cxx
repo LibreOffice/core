@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-04-22 14:29:51 $
+ *  last change: $Author: hr $ $Date: 2002-04-30 17:44:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ void SwTbxInsertCtrl::StateChanged( USHORT nSID,
 
             BOOL bHiContrast = GetToolBox().GetBackground().GetColor().IsDark();
             Image aImage = GetBindings().GetImageManager()->GetImage( nId, bHiContrast, SW_MOD() );
-            GetToolBox().SetItemImage(GetId(), aImage);
+            GetToolBox().SetItemImage(GetId(), aImage);
         }
     }
 
