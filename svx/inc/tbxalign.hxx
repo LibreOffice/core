@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxalign.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:26:32 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,12 @@
 #include <sfx2/tbxctrl.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
 
-class SvxTbxCtlAlign: public SfxToolBoxControl
+
+class SVX_DLLPUBLIC SvxTbxCtlAlign: public SfxToolBoxControl
 {
 public:
     virtual ::sal_Bool SAL_CALL opensSubToolbar() throw (::com::sun::star::uno::RuntimeException);
