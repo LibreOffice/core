@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptNameResolverImpl.hxx,v $
 *
-*  $Revision: 1.10 $
+*  $Revision: 1.11 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-01-28 17:09:25 $
+*  last change: $Author: npower $ $Date: 2003-03-03 18:39:41 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -70,7 +70,7 @@
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/reflection/InvocationTargetException.hpp>
 
-#include <drafts/com/sun/star/script/framework/XScriptNameResolver.hpp>
+#include <drafts/com/sun/star/script/framework/runtime/XScriptNameResolver.hpp>
 #include <drafts/com/sun/star/script/framework/storage/XScriptInfoAccess.hpp>
 #include <drafts/com/sun/star/script/framework/storage/XScriptInfo.hpp>
 
@@ -81,7 +81,7 @@ namespace scripting_runtimemgr
 #define dcsssf ::drafts::com::sun::star::script::framework
 
 class ScriptNameResolverImpl : public
-    ::cppu::WeakImplHelper1 < dcsssf::XScriptNameResolver >
+    ::cppu::WeakImplHelper1 < dcsssf::runtime::XScriptNameResolver >
 {
 public:
     /**********************************************

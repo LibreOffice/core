@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptRuntimeManager.hxx,v $
 *
-*  $Revision: 1.8 $
+*  $Revision: 1.9 $
 *
-*  last change: $Author: npower $ $Date: 2003-01-28 11:52:17 $
+*  last change: $Author: npower $ $Date: 2003-03-03 18:39:42 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -74,8 +74,8 @@
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/reflection/InvocationTargetException.hpp>
 
-#include <drafts/com/sun/star/script/framework/XScriptInvocation.hpp>
-#include <drafts/com/sun/star/script/framework/XScriptNameResolver.hpp>
+#include <drafts/com/sun/star/script/framework/runtime/XScriptInvocation.hpp>
+#include <drafts/com/sun/star/script/framework/runtime/XScriptNameResolver.hpp>
 
 namespace scripting_runtimemgr
 {
@@ -87,8 +87,8 @@ namespace scripting_runtimemgr
  * Class responsible for managing the various ScriptRuntime implementations.
  */
 class ScriptRuntimeManager : public
-    ::cppu::WeakImplHelper3< dcsssf::XScriptInvocation, css::lang::XServiceInfo,
-    dcsssf::XScriptNameResolver >
+    ::cppu::WeakImplHelper3< dcsssf::runtime::XScriptInvocation, css::lang::XServiceInfo,
+    dcsssf::runtime::XScriptNameResolver >
 {
 public:
     explicit ScriptRuntimeManager(
@@ -168,10 +168,10 @@ public:
            css::uno::RuntimeException );
 
 private:
-    css::uno::Reference< dcsssf::XScriptInvocation > SAL_CALL getScriptRuntime(
+    css::uno::Reference< dcsssf::runtime::XScriptInvocation > SAL_CALL getScriptRuntime(
         const css::uno::Reference< css::uno::XInterface > & scriptInfo )
         throw( css::uno::RuntimeException );
-    css::uno::Reference< dcsssf::XScriptNameResolver > SAL_CALL getScriptNameResolver()
+    css::uno::Reference< dcsssf::runtime::XScriptNameResolver > SAL_CALL getScriptNameResolver()
         throw( css::uno::RuntimeException );
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;

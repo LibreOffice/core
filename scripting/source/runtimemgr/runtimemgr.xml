@@ -32,8 +32,8 @@
         <type>  com.sun.star.io.XOutputStream   </type>
         <type>  drafts.com.sun.star.script.framework.storage.XScriptInfoAccess </type>
         <type>  drafts.com.sun.star.script.framework.storage.XScriptStorageManager </type>
-        <type>  drafts.com.sun.star.script.framework.XScriptInvocation </type>
-    <type>  drafts.com.sun.star.script.framework.XScriptNameResolver </type>
+        <type>  drafts.com.sun.star.script.framework.runtime.XScriptInvocation </type>
+    <type>  drafts.com.sun.star.script.framework.runtime.XScriptNameResolver </type>
     </component-description>
     <project-build-dependency>  cppuhelper  </project-build-dependency>
     <project-build-dependency>  cppu        </project-build-dependency>

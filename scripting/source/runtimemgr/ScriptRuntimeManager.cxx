@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptRuntimeManager.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-20 12:17:55 $
+ *  last change: $Author: npower $ $Date: 2003-03-03 18:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,9 @@ namespace scripting_runtimemgr
 {
 
 static OUString s_implName = ::rtl::OUString::createFromAscii(
- "drafts.com.sun.star.script.framework.ScriptRuntimeManager" );
+ "drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager" );
 static OUString s_serviceName = ::rtl::OUString::createFromAscii(
- "drafts.com.sun.star.script.framework.ScriptRuntimeManager" );
+ "drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager" );
 static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceName, 1 );
 
 ::rtl_StandardModuleCount s_moduleCount = MODULE_COUNT_INIT;
@@ -120,13 +120,13 @@ ScriptRuntimeManager::~ScriptRuntimeManager()
 
 //*************************************************************************
 // Get the proper XScriptInvocation
-Reference< XScriptInvocation > SAL_CALL ScriptRuntimeManager::getScriptRuntime(
+Reference< runtime::XScriptInvocation > SAL_CALL ScriptRuntimeManager::getScriptRuntime(
 const Reference< XInterface >& scriptInfo )
 throw( RuntimeException )
 {
     OSL_TRACE( "** ==> ScriptRuntimeManager in getScriptRuntime\n" );
 
-    Reference< XScriptInvocation > xScriptInvocation;
+    Reference< runtime::XScriptInvocation > xScriptInvocation;
 
     try
     {
@@ -150,7 +150,7 @@ throw( RuntimeException )
         validateXRef( xInterface,
             "ScriptRuntimeManager::GetScriptRuntime: cannot get appropriate ScriptRuntime Service"
         );
-        xScriptInvocation = Reference< XScriptInvocation >( xInterface, UNO_QUERY_THROW );
+        xScriptInvocation = Reference< runtime::XScriptInvocation >( xInterface, UNO_QUERY_THROW );
     }
     catch ( Exception & e )
     {
@@ -163,22 +163,22 @@ throw( RuntimeException )
 
 //*************************************************************************
 // Get the proper XScriptNameResolver
-Reference< XScriptNameResolver > SAL_CALL
+Reference< runtime::XScriptNameResolver > SAL_CALL
 ScriptRuntimeManager::getScriptNameResolver()
 throw( RuntimeException )
 {
     OSL_TRACE( "** ==> ScriptRuntimeManager in getScriptNameResolver\n" );
-    Reference< XScriptNameResolver > xScriptNameResolver;
+    Reference< runtime::XScriptNameResolver > xScriptNameResolver;
 
     try
     {
         Reference< XInterface > xInterface = m_xMgr->createInstanceWithContext(
             OUString::createFromAscii(
-                "drafts.com.sun.star.script.framework.DefaultScriptNameResolver" ),
+                "drafts.com.sun.star.script.framework.runtime.DefaultScriptNameResolver" ),
                 m_xContext );
         validateXRef( xInterface,
             "ScriptRuntimeManager::GetScriptRuntime: cannot get instance of DefaultScriptNameResolver" );
-        xScriptNameResolver = Reference< XScriptNameResolver >( xInterface, UNO_QUERY_THROW );
+        xScriptNameResolver = Reference< runtime::XScriptNameResolver >( xInterface, UNO_QUERY_THROW );
     }
     catch ( Exception & e )
     {
@@ -257,7 +257,7 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
         xPropSetResolvedCtx->setPropertyValue( scriptingConstantsPool.SCRIPT_INFO,
                 aResolvedScript );
 
-        Reference< XScriptInvocation > xScriptInvocation =
+        Reference< runtime::XScriptInvocation > xScriptInvocation =
             getScriptRuntime( resolvedScript );
         validateXRef( xScriptInvocation,
             "ScriptRuntimeManager::invoke: cannot get instance of language specific runtime." );
@@ -334,7 +334,7 @@ throw( lang::IllegalArgumentException, script::CannotConvertException, RuntimeEx
     OSL_TRACE( "** ==> ScriptRuntimeManager in resolve\n" );
     Reference< storage::XScriptInfo > resolvedURI;
 
-    Reference< XScriptNameResolver > xScriptNameResolver = getScriptNameResolver();
+    Reference< runtime::XScriptNameResolver > xScriptNameResolver = getScriptNameResolver();
     validateXRef( xScriptNameResolver,
         "ScriptRuntimeManager::resolve: No ScriptNameResolver" );
 
@@ -491,8 +491,8 @@ extern "C"
                 Reference< registry::XRegistryKey > xKey(
                     pKey->createKey(
 
-                    OUSTR("drafts.com.sun.star.script.framework.ScriptRuntimeManager/UNO/SINGLETONS/drafts.com.sun.star.script.framework.theScriptRuntimeManager")));
-                    xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.ScriptRuntimeManager") );
+                    OUSTR("drafts.com.sun.star.script.framework.ScriptRuntimeManager/UNO/SINGLETONS/drafts.com.sun.star.script.framework.runtime.theScriptRuntimeManager")));
+                    xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager") );
 
                 return sal_True;
             }
