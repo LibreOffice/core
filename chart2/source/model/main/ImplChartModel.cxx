@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplChartModel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-21 16:58:23 $
+ *  last change: $Author: bm $ $Date: 2003-12-11 14:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
 
 // enable this to get x-values in the data-series
-// #define USE_XY_DATA
+#define USE_XY_DATA
 
 namespace chart
 {
