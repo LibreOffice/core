@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pfiledlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-27 08:23:46 $
+ *  last change: $Author: gt $ $Date: 2002-10-18 13:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,10 @@ public:
     String                   GetPath() const;
 
     static BOOL IsAvailable (USHORT nKind);
+
+    // setting HelpId and/or context of FileDialogHelper
+    void                    SetDialogHelpId( const sal_Int32 nHelpId );
+    void                    SetContext( sfx2::FileDialogHelper::Context eNewContext );
 };
 
 #endif // _SVX_PFILEDLG_HXX
