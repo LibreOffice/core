@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-09 07:24:53 $
+ *  last change: $Author: oj $ $Date: 2002-04-17 11:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ Reference< XAccessible > BrowseBox::CreateAccessibleControl( sal_Int32 nIndex )
 sal_Bool BrowseBox::ConvertPointToCellAddress(
         sal_Int32& rnRow, sal_uInt16& rnColumnId, const Point& rPoint )
 {
-    //! TODO
+    //! TODO has to be checked
     rnRow = GetRowAtYPosPixel(rPoint.Y());
     rnColumnId = GetColumnAtXPosPixel(rPoint.X());
     return rnRow != BROWSER_INVALIDID && rnColumnId != BROWSER_INVALIDID;
@@ -217,7 +217,7 @@ sal_Bool BrowseBox::ConvertPointToColumnHeader( sal_uInt16& _rnColumnId, const P
 
 sal_Bool BrowseBox::ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint )
 {
-    //! TODO
+    //! TODO has to be checked
     sal_Int32 nRow = 0;
     sal_uInt16 nColumn = 0;
     sal_Bool bRet = ConvertPointToCellAddress(nRow,nColumn,_rPoint);
@@ -233,11 +233,9 @@ sal_Bool BrowseBox::ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point
 OUString BrowseBox::GetAccessibleName( ::svt::AccessibleBrowseBoxObjType eObjType ) const
 {
     OUString aRetText;
-    //! TODO all texts
     switch( eObjType )
     {
         case ::svt::BBTYPE_BROWSEBOX:
-            //! TODO only a test name
             aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "BrowseBox" ) );
             break;
         case ::svt::BBTYPE_TABLE:
@@ -248,9 +246,6 @@ OUString BrowseBox::GetAccessibleName( ::svt::AccessibleBrowseBoxObjType eObjTyp
             break;
         case ::svt::BBTYPE_COLUMNHEADERBAR:
             aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ColumnHeaderBar" ) );
-            break;
-        case ::svt::BBTYPE_CORNERCONTROL:
-            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "CornerControl" ) );
             break;
         case ::svt::BBTYPE_TABLECELL:
             aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "TableCell" ) );
@@ -274,30 +269,25 @@ OUString BrowseBox::GetAccessibleDescription( ::svt::AccessibleBrowseBoxObjType 
     switch( eObjType )
     {
         case ::svt::BBTYPE_BROWSEBOX:
-            //! TODO only a test name
             aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "BrowseBox description" ) );
             break;
-        //! TODO all texts
         case ::svt::BBTYPE_TABLE:
-            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "BBTYPE_TABLE description" ) );
+            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "TABLE description" ) );
             break;
         case ::svt::BBTYPE_ROWHEADERBAR:
-            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "BBTYPE_ROWHEADERBAR description" ) );
+            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ROWHEADERBAR description" ) );
             break;
         case ::svt::BBTYPE_COLUMNHEADERBAR:
-            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "BBTYPE_COLUMNHEADERBAR description" ) );
-            break;
-        case ::svt::BBTYPE_CORNERCONTROL:
-            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "BBTYPE_CORNERCONTROL description" ) );
+            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "COLUMNHEADERBAR description" ) );
             break;
         case ::svt::BBTYPE_TABLECELL:
-            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "BBTYPE_TABLECELL description" ) );
+            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "TABLECELL description" ) );
             break;
         case ::svt::BBTYPE_ROWHEADERCELL:
-            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "BBTYPE_ROWHEADERCELL description" ) );
+            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ROWHEADERCELL description" ) );
             break;
         case ::svt::BBTYPE_COLUMNHEADERCELL:
-            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "BBTYPE_COLUMNHEADERCELL description" ) );
+            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "COLUMNHEADERCELL description" ) );
             break;
     }
     return aRetText;
@@ -314,7 +304,6 @@ void BrowseBox::FillAccessibleStateSet(
         ::utl::AccessibleStateSetHelper& rStateSet,
         ::svt::AccessibleBrowseBoxObjType eObjType ) const
 {
-    //! TODO
     switch( eObjType )
     {
         case ::svt::BBTYPE_BROWSEBOX:
@@ -344,12 +333,6 @@ void BrowseBox::FillAccessibleStateSet(
             if ( GetSelectColumnCount() )
                 rStateSet.AddState( AccessibleStateType::FOCUSED );
             break;
-        case ::svt::BBTYPE_CORNERCONTROL:
-            rStateSet.AddState( AccessibleStateType::FOCUSABLE );
-            rStateSet.AddState( AccessibleStateType::VISIBLE );
-            if ( IsAllSelected() )
-                rStateSet.AddState( AccessibleStateType::FOCUSED );
-            break;
         case ::svt::BBTYPE_TABLECELL:
             {
                 sal_Int32 nCurRow = GetCurRow();
@@ -371,7 +354,6 @@ void BrowseBox::FillAccessibleStateSet(
 
 void BrowseBox::GrabTableFocus()
 {
-    //! TODO EditBrowseBox has to grab focus of the edit control of the current cell (ActivateCell)
     GrabFocus();
 }
 // -----------------------------------------------------------------------------
@@ -381,4 +363,13 @@ String BrowseBox::GetCellText(long _nRow, USHORT _nColId) const
     return String();
 }
 // -----------------------------------------------------------------------------
+void BrowseBox::commitTableEvent(sal_Int16 _nEventId,
+            const ::com::sun::star::uno::Any& _rNewValue,
+            const ::com::sun::star::uno::Any& _rOldValue)
+{
+    if ( m_pImpl->m_pAccessible )
+        m_pImpl->commitTableEvent(  _nEventId, _rNewValue, _rOldValue);
+}
+// -----------------------------------------------------------------------------
+
 

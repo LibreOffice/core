@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: oj $ $Date: 2002-04-09 07:24:53 $
+#   last change: $Author: oj $ $Date: 2002-04-17 11:56:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,8 +81,9 @@ BMP_IN=$(PRJ)$/res
 SRCFILES=		editbrowsebox.src
 
 EXCEPTIONSFILES =\
-            $(SLO)$/editbrowsebox2.obj  \
-                    $(SLO)$/brwbox1.obj			\
+            $(SLO)$/editbrowsebox2.obj		\
+            $(SLO)$/editbrowseboxcell.obj	\
+            $(SLO)$/brwbox1.obj				\
             $(SLO)$/brwbox3.obj
 
 SLOFILES=   \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox2.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-09 07:23:58 $
+ *  last change: $Author: oj $ $Date: 2002-04-17 11:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,15 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessible.hpp>
 #endif
+#ifndef _SVTOOLS_ACCESSIBILEEDITBROWSEBOXTABLECELL_HXX
+#include "editbrowseboxcell.hxx"
+#endif
+#ifndef SVTOOLS_EDITBROWSEBOX_IMPL_HXX
+#include "editbrowseboximpl.hxx"
+#endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 
 namespace svt
 {
@@ -76,10 +85,17 @@ Reference< XAccessible > EditBrowseBox::CreateAccessibleCell( sal_Int32 nRow, sa
     Reference< XAccessible > xRet;
     if ( nRow == GetCurRow() && IsEditing() )
     {
-        //! TODO need extra class which handles the controller as a child
         CellController* pController = GetController(nRow, nColumnId);
         if ( pController )
-            xRet = pController->GetWindow().GetAccessible();
+        {
+            Reference< XAccessible > xCont = pController->GetWindow().GetAccessible();
+            Reference< XAccessible > xMy = GetAccessible();
+            if ( xMy.is() && xCont.is() )
+            {
+                m_aImpl->m_xActiveCell = new EditBrowseBoxTableCell(xMy->getAccessibleContext()->getAccessibleChild(::svt::BBINDEX_TABLE),*this,nRow, nColumnId,xCont->getAccessibleContext());
+                xRet = m_aImpl->m_xActiveCell;
+            }
+        }
     }
     else
         xRet = BrowseBox::CreateAccessibleCell( nRow, nColumnId );
@@ -106,6 +122,22 @@ Reference<XAccessible > EditBrowseBox::CreateAccessibleRowHeader( sal_Int32 _nRo
     return BrowseBox::CreateAccessibleRowHeader( _nRow );
 }
 // -----------------------------------------------------------------------------
+void EditBrowseBoxImpl::disposeCell()
+{
+    try
+    {
+        ::comphelper::disposeComponent(m_xActiveCell);
+    }
+    catch(const Exception&)
+    {
+    }
+}
+// -----------------------------------------------------------------------------
+void EditBrowseBox::GrabTableFocus()
+{
+    if ( aController.Is() )
+        aController->GetWindow().GrabFocus();
+}
 // -----------------------------------------------------------------------------
 } // namespace svt
 // -----------------------------------------------------------------------------

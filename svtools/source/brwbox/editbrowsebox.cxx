@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-11 15:57:05 $
+ *  last change: $Author: oj $ $Date: 2002-04-17 11:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,12 +104,19 @@
 #ifndef _SV_MULTISEL_HXX
 #include <tools/multisel.hxx>
 #endif
+#ifndef SVTOOLS_EDITBROWSEBOX_IMPL_HXX
+#include "editbrowseboximpl.hxx"
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
 
 // .......................................................................
 namespace svt
 {
 // .......................................................................
 
+    using namespace drafts::com::sun::star::accessibility::AccessibleEventId;
     //==================================================================
 
     #define HANDLE_ID   0
@@ -165,6 +172,26 @@ namespace svt
 
 
     DBG_NAME(EditBrowseBox);
+    void EditBrowseBox::Construct()
+    {
+        m_aImpl = ::std::auto_ptr<EditBrowseBoxImpl>(new EditBrowseBoxImpl());
+        SetCompoundControl(sal_True);
+        SetLineColor(Color(COL_LIGHTGRAY));
+
+        // HACK: the BrowseBox does not invalidate it's children (as it should be)
+        // Thus we reset WB_CLIPCHILDREN, which forces the invalidation of the children
+        WinBits aStyle = GetStyle();
+        if( aStyle & WB_CLIPCHILDREN )
+        {
+            aStyle &= ~WB_CLIPCHILDREN;
+            SetStyle( aStyle );
+        }
+        ImplInitSettings(sal_True, sal_True, sal_True);
+
+        pCheckBoxPaint = new CheckBoxControl(&GetDataWindow());
+        pCheckBoxPaint->SetPaintTransparent( sal_True );
+        pCheckBoxPaint->SetBackground();
+    }
     //------------------------------------------------------------------------------
     EditBrowseBox::EditBrowseBox(Window* pParent, const ResId& rId, sal_Int32 nBrowserFlags, BrowserMode _nMode )
                   :BrowseBox( pParent, rId, _nMode )
@@ -182,22 +209,7 @@ namespace svt
     {
         DBG_CTOR(EditBrowseBox,NULL);
 
-        SetCompoundControl(sal_True);
-        SetLineColor(Color(COL_LIGHTGRAY));
-
-        // HACK: the BrowseBox does not invalidate it's children (as it should be)
-        // Thus we reset WB_CLIPCHILDREN, which forces the invalidation of the children
-        WinBits aStyle = GetStyle();
-        if( aStyle & WB_CLIPCHILDREN )
-        {
-            aStyle &= ~WB_CLIPCHILDREN;
-            SetStyle( aStyle );
-        }
-        ImplInitSettings(sal_True, sal_True, sal_True);
-
-        pCheckBoxPaint = new CheckBoxControl(&GetDataWindow());
-        pCheckBoxPaint->SetPaintTransparent( sal_True );
-        pCheckBoxPaint->SetBackground();
+        Construct();
     }
 
     //==================================================================
@@ -218,22 +230,7 @@ namespace svt
     {
         DBG_CTOR(EditBrowseBox,NULL);
 
-        SetCompoundControl(sal_True);
-        SetLineColor(Color(COL_LIGHTGRAY));
-
-        // HACK: the BrowseBox does not invalidate it's children (as it should be)
-        // Thus we reset WB_CLIPCHILDREN, which forces the invalidation of the children
-        WinBits aStyle = GetStyle();
-        if( aStyle & WB_CLIPCHILDREN )
-        {
-            aStyle &= ~WB_CLIPCHILDREN;
-            SetStyle( aStyle );
-        }
-        ImplInitSettings(sal_True, sal_True, sal_True);
-
-        pCheckBoxPaint = new CheckBoxControl(&GetDataWindow());
-        pCheckBoxPaint->SetPaintTransparent( sal_True );
-        pCheckBoxPaint->SetBackground();
+        Construct();
     }
 
     //------------------------------------------------------------------------------
@@ -1019,6 +1016,11 @@ namespace svt
     {
         if (IsEditing())
         {
+            commitTableEvent(ACCESSIBLE_ACTIVE_DESCENDANT_EVENT,
+                             com::sun::star::uno::Any(),
+                             com::sun::star::uno::Any());
+            m_aImpl->disposeCell();
+
             aOldController = aController;
             aController.Clear();
 
@@ -1454,6 +1456,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2002/04/11 15:57:05  fs
+ *  #98483# allow for row/column selection (event when currently editing)
+ *
  *  Revision 1.4  2001/12/05 14:37:37  oj
  *  #95598# PaintTristate correct for parentupdate
  *
