@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 18:10:46 $
+ *  last change: $Author: oj $ $Date: 2001-11-29 10:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1932,7 +1932,7 @@ FmFilterNavigatorWin::FmFilterNavigatorWin( SfxBindings *pBindings, SfxChildWind
     m_pNavigator = new FmFilterNavigator( this );
     m_pNavigator->Show();
     SetText( SVX_RES(RID_STR_FILTER_NAVIGATOR) );
-    SetSizePixel( Size(200,200) );
+    SfxDockingWindow::SetFloatingSize( Size(200,200) );
 }
 
 //------------------------------------------------------------------------
