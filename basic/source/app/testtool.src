@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-24 15:42:44 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:15:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ String S_MANDATORY_FILE
     Text[ polish ] = "\nnie znaleziono.\n.Plik ten jest niezbêdny.";
     Text[ portuguese_brazilian ] = "\nwurde nicht gefunden.\nDiese Datei ist unentbehrlich.";
     Text[ japanese ] = "\nŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B\n‚±‚ÌÌ§²Ù‚Íâ‘Î‚É•K—v‚Å‚·B";
-    Text[ korean ] = "\n¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.\nÀÌ ÆÄÀÏÀº ¹İµå½Ã ÀÖ¾î¾ßÇÕ´Ï´Ù.";
+    Text[ korean ] = "\nÃ£Áö ¸øÇß½À´Ï´Ù.\nÀÌ ÆÄÀÏÀº ¹İµå½Ã ÇÊ¿äÇÕ´Ï´Ù.";
     Text[ chinese_simplified ] = "\nÎŞ·¨ÕÒµ½¡£\nÒ»¶¨ĞèÒªÕâ¸öÎÄ¼ş¡£";
     Text[ chinese_traditional ] = "\n¨S¦³³Q§ä¨ì¡C\n³o­ÓÀÉ®×¬O¥²¤£¥i¤Öªº¡C";
     Text[ arabic ] = "\ncould not be found.\nThis file is indispensable.";
