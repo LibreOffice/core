@@ -1,0 +1,4 @@
+smtn      smoketest_native     ::       instset_native NULL
+smtn      smoketest_native    usr1	-       all     smoketestnative_mkout NULL
+smtn      smoketest_native    nmake	-       all,test10     smoketestnative_mk smoketestnative_jars.u NULL
+smtn      smoketest_native\statjars    nmake    -       u,test10     smoketestnative_jars NULL
