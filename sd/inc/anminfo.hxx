@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anminfo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:42:25 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:51:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ private:
 
 public:
 
-    Polygon*                pPolygon;       // fuer nichtlinearen Pfad (unbenutzt)
+//BFS02 Polygon*                pPolygon;       // fuer nichtlinearen Pfad (unbenutzt)
     Point                   aStart;         // Startpunkt eines linearen Pfades (unbenutzt)
     Point                   aEnd;           // Endpunkt eines linearen Pfades (unbenutzt)
     ::com::sun::star::presentation::AnimationEffect         eEffect;        // Animationseffekt
@@ -114,7 +114,7 @@ public:
     String                  aSoundFile;     // Pfad zum Soundfile in MSDOS-Notation
     BOOL                    bSoundOn;       // Sound ein/aus
     BOOL                    bPlayFull;      // Sound ganz abspielen
-    SdrObjSurrogate*        pPathSuro;      // Surrogat fuer pPathObj
+//BFS02 SdrObjSurrogate*        pPathSuro;      // Surrogat fuer pPathObj
     SdrPathObj*             pPathObj;       // das Pfadobjekt
     ::com::sun::star::presentation::ClickAction             eClickAction;   // Aktion bei Mausklick
     ::com::sun::star::presentation::AnimationEffect         eSecondEffect;  // fuer Objekt ausblenden
@@ -140,13 +140,13 @@ public:
 
     virtual SdrObjUserData* Clone(SdrObject* pObj) const;
 
-    virtual void            WriteData(SvStream& rOut);
-    virtual void            ReadData(SvStream& rIn);
+//BFS02 virtual void            WriteData(SvStream& rOut);
+//BFS02 virtual void            ReadData(SvStream& rIn);
 
             // NULL loest die Verbindung zum Pfadobjekt
             void            SetPath(SdrPathObj* pPath = NULL);
     virtual void            SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
-    virtual void            AfterRead();
+//BFS02 virtual void            AfterRead();
 };
 
 #endif // _SD_ANMINFO_HXX
