@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:58:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -973,7 +973,7 @@ sal_Int8 SdWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 
 ::com::sun::star::uno::Reference<
-    ::drafts::com::sun::star::accessibility::XAccessible>
+    ::com::sun::star::accessibility::XAccessible>
     SdWindow::CreateAccessible (void)
 {
     if (pViewShell != NULL)
