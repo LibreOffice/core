@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-03 11:22:53 $
+ *  last change: $Author: fs $ $Date: 2001-07-17 07:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2616,12 +2616,12 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const MouseE
         // FormMethod GET
         if( eSubmitMethod == FormSubmitMethod_GET )
         {
-            INetURLObject aUrlObj( aURLStr );
-            aUrlObj.SetParam( aData );
-            ::rtl::OUString aMainURL = INetURLObject::decode(aUrlObj.GetMainURL(), '%', INetURLObject::DECODE_UNAMBIGUOUS);
+            INetURLObject aUrlObj( aURLStr, INetURLObject::WAS_ENCODED );
+            aUrlObj.SetParam( aData, INetURLObject::ENCODE_ALL );
+            aURL.Complete = aUrlObj.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
+            if (xTransformer.is())
+                xTransformer->parseStrict(aURL);
 
-            aURL.Complete = aMainURL;
-            xTransformer->parseStrict(aURL);
             Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY)->queryDispatch(aURL, aTargetName,
                     FrameSearchFlag::SELF | FrameSearchFlag::PARENT | FrameSearchFlag::CHILDREN |
                     FrameSearchFlag::SIBLINGS | FrameSearchFlag::CREATE | FrameSearchFlag::TASKS);
