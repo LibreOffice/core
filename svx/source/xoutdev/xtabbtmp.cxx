@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabbtmp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-23 21:37:11 $
+ *  last change: $Author: cl $ $Date: 2001-07-24 10:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #endif
 #ifndef _SVX_XPROPERTYTABLE_HXX
 #include "XPropertyTable.hxx"
+#endif
+
+#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
 #endif
 
 #include "xmlxtexp.hxx"
@@ -339,6 +343,20 @@ BOOL XBitmapList::Load()
 
         if( !aURL.getExtension().Len() )
             aURL.setExtension( String( pszExtBitmap, 3 ) );
+
+        // check if file exists, SfxMedium shows an errorbox else
+        {
+            com::sun::star::uno::Reference < com::sun::star::task::XInteractionHandler > xHandler;
+            SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_READ, xHandler );
+
+            sal_Bool bOk = pIStm && ( pIStm->GetError() == 0);
+
+            if( pIStm )
+                delete pIStm;
+
+            if( !bOk )
+                return sal_False;
+        }
 
         {
             SfxMedium aMedium( aURL.GetMainURL(), STREAM_READ | STREAM_NOCREATE, TRUE );
