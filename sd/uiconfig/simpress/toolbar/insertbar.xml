@@ -12,6 +12,7 @@
  <toolbar:toolbaritem xlink:href=".uno:ImportFromFile" toolbar:helpid="helpid:27015" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:InsertPage" toolbar:helpid="helpid:27014" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic" toolbar:helpid="helpid:10241" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertAVMedia" toolbar:helpid="helpid:6695" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:InsertSound" toolbar:helpid="helpid:5676" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:InsertVideo" toolbar:helpid="helpid:5677" toolbar:text="" />
 </toolbar:toolbar>
