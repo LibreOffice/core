@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olevisual.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-13 17:01:14 $
+ *  last change: $Author: mav $ $Date: 2003-12-15 15:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,11 +96,15 @@ void SAL_CALL OleEmbeddedObject::setVisAreaSize( sal_Int64 nAspect, const awt::S
     if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::EMBED_LOADED )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no model!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
-
+#ifdef WNT
     if ( !m_pOleComponent )
         throw uno::RuntimeException();
 
     m_pOleComponent->SetExtent( aSize, nAspect ); // will throw an exception in case of failure
+#else
+    throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
+                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+#endif
 }
 
 awt::Size SAL_CALL OleEmbeddedObject::getVisAreaSize( sal_Int64 nAspect )
@@ -116,11 +120,15 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisAreaSize( sal_Int64 nAspect )
     if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::EMBED_LOADED )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no model!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
-
+#ifdef WNT
     if ( !m_pOleComponent )
         throw uno::RuntimeException();
 
     return m_pOleComponent->GetExtent( nAspect ); // will throw an exception in case of failure
+#else
+    throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
+                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+#endif
 }
 
 // Probably will be removed!!!

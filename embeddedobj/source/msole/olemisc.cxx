@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olemisc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-12 12:50:52 $
+ *  last change: $Author: mav $ $Date: 2003-12-15 15:37:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,20 +138,30 @@ OleEmbeddedObject::~OleEmbeddedObject()
 //------------------------------------------------------
 void OleEmbeddedObject::GetRidOfComponent()
 {
+#ifdef WNT
     if ( m_pOleComponent )
     {
         if ( m_nObjectState != embed::EmbedStates::EMBED_LOADED )
-        {
             SaveObject_Impl();
-            m_pOleComponent->CloseObject();
-        }
 
         m_pOleComponent->removeCloseListener( m_xClosePreventer );
-        m_pOleComponent->close( sal_True );
+        try
+        {
+            m_pOleComponent->close( sal_False );
+        }
+        catch( uno::Exception& )
+        {
+            // TODO: there should be a special listener to wait for component closing
+            //       and to notify object, may be object itself can be such a listener
+            m_pOleComponent->addCloseListener( m_xClosePreventer );
+            throw;
+        }
+
         m_pOleComponent->disconnectEmbeddedObject();
         m_pOleComponent->release();
         m_pOleComponent = NULL;
     }
+#endif
 }
 
 //------------------------------------------------------
@@ -164,6 +174,8 @@ void OleEmbeddedObject::Dispose()
         delete m_pInterfaceContainer;
         m_pInterfaceContainer = NULL;
     }
+
+    m_bDisposed = true;
 
     if ( m_pOleComponent )
         GetRidOfComponent();
@@ -183,8 +195,6 @@ void OleEmbeddedObject::Dispose()
     }
 
     m_xParentStorage = uno::Reference< embed::XStorage >();
-
-    m_bDisposed = true;
 }
 
 //------------------------------------------------------
@@ -229,7 +239,7 @@ uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
 
     if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::EMBED_LOADED )
     {
-        // the object is still not loaded
+        // the object is still not running
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is not running!\n" ),
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-15 13:10:01 $
+ *  last change: $Author: mav $ $Date: 2003-12-15 15:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,12 +98,14 @@ using namespace ::com::sun::star;
 #define     MAX_ENUM_ELE     20
 #define     FORMATS_NUM      3
 
-const sal_Int32 n_ConstBufferSize = 32000;
-
 sal_Bool ConvertBufferToFormat( void* pBuf,
                                 sal_uInt32 nBufSize,
                                 const ::rtl::OUString& aFormatShortName,
                                 uno::Any& aResult );
+
+void copyInputToOutput_Impl( const uno::Reference< io::XInputStream >& aIn,
+                             const uno::Reference< io::XOutputStream >& aOut );
+
 
 typedef ::std::vector< FORMATETC* > FormatEtcList;
 
@@ -323,29 +325,6 @@ sal_Bool OleComponentNative_Impl::GraphicalFlavor( const datatransfer::DataFlavo
             return sal_True;
 
     return sal_False;
-}
-
-//-----------------------------------------------
-// TODO: probably later such a common function can be moved
-//       to a separate helper library.
-void copyInputToOutput_Impl( const uno::Reference< io::XInputStream >& aIn,
-                             const uno::Reference< io::XOutputStream >& aOut )
-{
-    sal_Int32 nRead;
-    uno::Sequence < sal_Int8 > aSequence ( n_ConstBufferSize );
-
-    do
-    {
-        nRead = aIn->readBytes ( aSequence, n_ConstBufferSize );
-        if ( nRead < n_ConstBufferSize )
-        {
-            uno::Sequence < sal_Int8 > aTempBuf ( aSequence.getConstArray(), nRead );
-            aOut->writeBytes ( aTempBuf );
-        }
-        else
-            aOut->writeBytes ( aSequence );
-    }
-    while ( nRead == n_ConstBufferSize );
 }
 
 //-----------------------------------------------
@@ -579,6 +558,8 @@ FORMATETC* OleComponentNative_Impl::GetSupportedFormatForAspect( sal_uInt32 nReq
 //----------------------------------------------
 void OleComponent::Dispose()
 {
+    CloseObject();
+
     if ( m_pOleWrapClientSite )
     {
         m_pOleWrapClientSite->disconnectOleComponent();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembed.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-12 12:50:52 $
+ *  last change: $Author: mav $ $Date: 2003-12-15 15:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,24 +147,29 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
     if ( m_nObjectState == nNewState )
         return;
 
-    if ( !m_pOleComponent )
-        throw uno::RuntimeException();
-
+#ifdef WNT
     // TODO: additional verbs can be a problem, since nobody knows how the object
     //       will behave after activation
 
     if ( nNewState == embed::EmbedStates::EMBED_LOADED )
     {
         // This means just closing of the current object
-        SaveObject_Impl();
-        m_pOleComponent->CloseObject();
+        // If component can not be closed the object stays in loaded state
+        // and it holds reference to "incomplete" component
+        // If the object is switched to running state later
+        // the component will become "complete"
+        GetRidOfComponent( sal_False );
     }
-    else
+    else if ( nNewState == embed::EmbedStates::EMBED_RUNNING || nNewState == embed::EmbedStates::EMBED_ACTIVE )
     {
         if ( m_nObjectState == embed::EmbedStates::EMBED_LOADED )
         {
             // if the target object is in loaded state and a different state is specified
             // as a new one the object first must be switched to running state.
+
+            // the component can exist already in nonrunning state
+            // it can be created during loading to detect type of object
+            CreateOleComponentAndLoad_Impl( m_pOleComponent );
 
             m_pOleComponent->RunObject();
             m_nObjectState = embed::EmbedStates::EMBED_RUNNING;
@@ -185,9 +190,13 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
         }
         else
         {
-            OSL_ENSURE( sal_False, "Unreachable code executed!" );
+            throw embed::UnreachableStateException();
         }
     }
+    else
+#endif
+        throw embed::UnreachableStateException();
+
 }
 
 //----------------------------------------------
@@ -203,18 +212,22 @@ uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
-    if ( !m_pOleComponent )
-        throw uno::RuntimeException();
-
+#ifdef WNT
     if ( m_nObjectState == embed::EmbedStates::EMBED_LOADED )
     {
         // the list of supported verbs can be retrieved only when object is in running state
         throw embed::NeedsRunningStateException(); // TODO:
     }
 
+    if ( !m_pOleComponent )
+        throw uno::RuntimeException();
+
     // the list of states can only be guessed based on standard verbs,
     // since there is no way to detect what additional verbs do
     return GetReachableStatesList_Impl( m_pOleComponent->GetVerbList() );
+#else
+    return uno::Sequence< sal_Int32 >();
+#endif
 }
 
 //----------------------------------------------
@@ -250,19 +263,26 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
-    if ( !m_pOleComponent )
-        throw uno::RuntimeException();
-
+#ifdef WNT
     if ( m_nObjectState == embed::EmbedStates::EMBED_LOADED )
     {
         // if the target object is in loaded state
         // it must be switched to running state to execute verb
 
+        // the component can exist already in noncomplete state
+        // it can be created during loading
+        CreateOleComponentAndLoad_Impl( m_pOleComponent );
         m_pOleComponent->RunObject();
         m_nObjectState = embed::EmbedStates::EMBED_RUNNING;
     }
 
+    if ( !m_pOleComponent )
+        throw uno::RuntimeException();
+
     m_pOleComponent->ExecuteVerb( nVerbID );
+#else
+    throw embed::UnreachableStateException();
+#endif
 }
 
 //----------------------------------------------
@@ -277,14 +297,20 @@ uno::Sequence< embed::VerbDescr > SAL_CALL OleEmbeddedObject::getSupportedVerbs(
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
-
+#ifdef WNT
     if ( m_nObjectState == embed::EmbedStates::EMBED_LOADED )
     {
         // the list of supported verbs can be retrieved only when object is in running state
         throw embed::NeedsRunningStateException(); // TODO:
     }
 
+    if ( !m_pOleComponent )
+        throw uno::RuntimeException();
+
     return m_pOleComponent->GetVerbList();
+#else
+    return uno::Sequence< embed::VerbDescr >();
+#endif
 }
 
 //----------------------------------------------
@@ -377,6 +403,14 @@ sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64 nAspect )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object must be in running state!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
+#ifdef WNT
+    if ( !m_pOleComponent )
+        throw uno::RuntimeException();
+
     return m_pOleComponent->GetMiscStatus( nAspect );
+#else
+    throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
+                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+#endif
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembobj.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-09 15:09:30 $
+ *  last change: $Author: mav $ $Date: 2003-12-15 15:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,7 @@ public:
     sal_Bool OnShowWindow_Impl( sal_Bool bShow );
 
     void CreateOleComponent_Impl( OleComponent* pOleComponent = NULL );
+    void CreateOleComponentAndLoad_Impl( OleComponent* pOleComponent = NULL );
 
     void SetObjectIsLink_Impl( sal_Bool bIsLink ) { m_bIsLink = bIsLink; }
 
