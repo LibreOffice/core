@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-11 15:14:48 $
+ *  last change: $Author: mba $ $Date: 2001-12-07 14:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/pathoptions.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include "mnumgr.hxx"
 
@@ -100,6 +101,8 @@
 #include "msgpool.hxx"
 #include "sfx.hrc"
 #include "menu.hrc"
+#include "viewfrm.hxx"
+#include "viewsh.hxx"
 
 static const USHORT nCompatVersion = 4;
 static const USHORT nVersion = 5;
@@ -312,6 +315,31 @@ BOOL SfxMenuManager::Store( SvStream& rStream )
 }
 
 //-------------------------------------------------------------------------
+void InsertVerbs_Impl( const SvVerbList* pList, Menu* pMenu )
+{
+    if ( pList )
+    {
+        pMenu->InsertSeparator();
+        USHORT nr=0;
+        for ( USHORT n = 0; n < pList->Count(); ++n )
+        {
+            // nicht alle Verbs landen im Men"u
+            const SvVerb& rVerb = (*pList)[n];
+            if ( !rVerb.IsOnMenu() )
+                continue;
+
+            // neue Id vergeben
+            USHORT nId = SID_VERB_START + nr++;
+            DBG_ASSERT(nId <= SID_VERB_END, "Zuviele Verben!");
+            if ( nId > SID_VERB_END )
+                break;
+
+            // einf"ugen
+            pMenu->InsertItem( nId, rVerb.GetName() );
+            pMenu->SetHelpId( nId, (ULONG) nId );
+        }
+    }
+}
 
 void SfxMenuManager::InsertVerbs(const SvVerbList *pList)
 
@@ -322,30 +350,11 @@ void SfxMenuManager::InsertVerbs(const SvVerbList *pList)
 
 {
     // hinten anh"angen
-    if ( !pList->Count() )
+    if ( !pList || !pList->Count() )
         return;
 
     Menu *pMenu = GetMenu()->GetSVMenu();
-    pMenu->InsertSeparator();
-
-    USHORT nr=0;
-    for ( USHORT n = 0; n < pList->Count(); ++n )
-    {
-        // nicht alle Verbs landen im Men"u
-        const SvVerb& rVerb = (*pList)[n];
-        if ( !rVerb.IsOnMenu() )
-            continue;
-
-        // neue Id vergeben
-        USHORT nId = SID_VERB_START + nr++;
-        DBG_ASSERT(nId <= SID_VERB_END, "Zuviele Verben!");
-        if ( nId > SID_VERB_END )
-            break;
-
-        // einf"ugen
-        pMenu->InsertItem( nId, rVerb.GetName() );
-        pMenu->SetHelpId( nId, (ULONG) nId );
-    }
+    InsertVerbs_Impl( pList, pMenu );
 }
 
 //-------------------------------------------------------------------------
@@ -1405,7 +1414,6 @@ SfxPopupMenuManager::SfxPopupMenuManager(const ResId& rResId, SfxBindings &rBind
     , pSVMenu( NULL )
 {
     DBG_MEMTEST();
-//    SetInternal(TRUE);
 }
 
 //-------------------------------------------------------------------------
@@ -1570,3 +1578,65 @@ BOOL SfxMenuBarManager::Store( SotStorage& rStorage )
         return StoreMenuBar( *xStream, (MenuBar*) GetMenu()->GetSVMenu() );
 }
 
+SfxMenuManager::SfxMenuManager( Menu* pMenu, SfxBindings &rBindings )
+:   SfxConfigItem( 0, NULL ),
+    bMenuBar(FALSE),
+    pMenu(0),
+    pOldMenu(0),
+    pResMgr(NULL),
+    pBindings(&rBindings)
+{
+    bOLE = FALSE;
+    bAddClipboardFuncs = FALSE;
+    SfxVirtualMenu* pVMenu = new SfxVirtualMenu( pMenu, FALSE, rBindings, TRUE, TRUE );
+    Construct(*pVMenu);
+}
+
+SfxPopupMenuManager::SfxPopupMenuManager( PopupMenu* pMenu, SfxBindings& rBindings )
+    : SfxMenuManager( pMenu, rBindings )
+    , pSVMenu( pMenu )
+{
+}
+
+void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFrame, const Point& rPoint, Window* pWindow )
+{
+    PopupMenu *pSVMenu = new PopupMenu( rResId );
+    USHORT n, nCount = pSVMenu->GetItemCount();
+    for ( n=0; n<nCount; n++ )
+    {
+        USHORT nId = pSVMenu->GetItemId( n );
+        if ( nId == SID_COPY || nId == SID_CUT || nId == SID_PASTE )
+            break;
+    }
+
+    if ( n == nCount )
+    {
+        PopupMenu aPop( SfxResId( MN_CLIPBOARDFUNCS ) );
+        nCount = aPop.GetItemCount();
+        pSVMenu->InsertSeparator();
+        for ( n=0; n<nCount; n++ )
+        {
+            USHORT nId = aPop.GetItemId( n );
+            pSVMenu->InsertItem( nId, aPop.GetItemText( nId ), aPop.GetItemBits( nId ) );
+        }
+    }
+
+    InsertVerbs_Impl( pFrame->GetViewShell()->GetVerbs(), pSVMenu );
+    Menu* pMenu = NULL;
+    ::com::sun::star::ui::ContextMenuExecuteEvent aEvent;
+    aEvent.SourceWindow = VCLUnoHelper::GetInterface( pWindow );
+    aEvent.ExecutePosition.X = rPoint.X();
+    aEvent.ExecutePosition.Y = rPoint.Y();
+    if ( pFrame->GetViewShell()->TryContextMenuInterception( *pSVMenu, pMenu, aEvent ) )
+    {
+        if ( pMenu )
+        {
+            delete pSVMenu;
+            pSVMenu = (PopupMenu*) pMenu;
+        }
+    }
+
+    SfxPopupMenuManager aPop( pSVMenu, pFrame->GetBindings() );
+    aPop.RemoveDisabledEntries();
+    aPop.Execute( rPoint, pWindow );
+}

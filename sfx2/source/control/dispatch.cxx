@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-13 13:23:48 $
+ *  last change: $Author: mba $ $Date: 2001-12-07 14:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2754,41 +2754,31 @@ const SfxPoolItem* SfxDispatcher::_Execute( const SfxSlotServer &rSvr )
 void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId,
                                   Window *pWin, const Point *pPos,
                                   const SfxPoolItem *pArg1, ... )
+{
+    ExecutePopup( nConfigId, pWin, pPos );
+}
 
-/*  [Beschreibung]
-
-    Diese Methode f"uhrt das unter der Id nConfigId registrierte PopupMenu
-    aus. Die Regisitrierung wird i.d.R. in <SFX_IMPL_INTERFACE> vorgenommen.
-
-    Bei nConfigId == 0 werden die auf dem Stack des Dispatchers befindlichen
-    <SfxShell>s von oben nach unten nach dem ersten registrieren PopupMenu
-    durchsucht.
-*/
-
+//----------------------------------------------------------------------
+void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId, Window *pWin, const Point *pPos )
 {
     SfxDispatcher &rDisp = *SFX_APP()->GetDispatcher_Impl();
     sal_uInt16 nShLevel = 0;
-
-    const SvVerbList *pVerbList = 0;
-
-    // Nur die eigenen Shells nehmen !!
-    sal_uInt16 nMaxShellLevel = rDisp.pImp->aStack.Count();
-
     SfxShell *pSh;
+/*
+    const SvVerbList *pVerbList = 0;
+    sal_uInt16 nMaxShellLevel = rDisp.pImp->aStack.Count();
     for ( pSh = rDisp.GetShell(nShLevel);
           pSh && nShLevel < nMaxShellLevel ;
           ++nShLevel, pSh = rDisp.GetShell(nShLevel) )
     {
-
-        if (pSh->GetVerbs())
+        if ( pSh->GetVerbs() )
         {
             pVerbList = pSh->GetVerbs();
             break;
         }
     }
-
+*/
     nShLevel=0;
-
     if ( rDisp.pImp->bQuiet )
     {
         nConfigId = 0;
@@ -2799,111 +2789,34 @@ void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId,
     for ( pSh = rDisp.GetShell(nShLevel); pSh; ++nShLevel, pSh = rDisp.GetShell(nShLevel) )
     {
         const ResId& rResId = pSh->GetInterface()->GetPopupMenuResId();
-        if ( ( nConfigId == 0 && rResId.GetId() ) ||
-             ( nConfigId != 0 && rResId.GetId() == nConfigId ) )
+        if ( ( nConfigId == 0 && rResId.GetId() ) || ( nConfigId != 0 && rResId.GetId() == nConfigId ) )
         {
-            SfxPopupMenuManager aPop(rResId.GetId(), *rDisp.GetBindings() );
-            aPop.SetResMgr(rResId.GetResMgr());
-            aPop.AddClipboardFunctions();
-            aPop.Initialize();
-
-            if (pVerbList && pVerbList->Count())
-                aPop.InsertVerbs(pVerbList);
-
-            aPop.RemoveDisabledEntries();
-            sal_uInt16 nRetId = aPop.Execute(
-                    pPos ? *pPos : pWindow->GetPointerPosPixel(), pWindow );
+            //SfxPopupMenuManager aPop( rResId.GetId(), *rDisp.GetBindings() );
+            //aPop.SetResMgr(rResId.GetResMgr());
+            //aPop.AddClipboardFunctions();
+            //aPop.Initialize();
+            //if ( pVerbList && pVerbList->Count() )
+            //    aPop.InsertVerbs(pVerbList);
+            //aPop.RemoveDisabledEntries();
+            //aPop.Execute( pPos ? *pPos : pWindow->GetPointerPosPixel(), pWindow );
+            SfxPopupMenuManager::ExecutePopup( rResId, rDisp.GetFrame(), pPos ? *pPos : pWindow->GetPointerPosPixel(), pWindow );
             return;
         }
     }
 }
 
 //----------------------------------------------------------------------
-void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId
-                                , Window *pWin, const Point *pPos
-                                    )
-
-/*  [Beschreibung]
-
-    Diese Methode f"uhrt das unter der Id nConfigId registrierte PopupMenu
-    aus. Die Regisitrierung wird i.d.R. in <SFX_IMPL_INTERFACE> vorgenommen.
-
-    Bei nConfigId == 0 werden die auf dem Stack des Dispatchers befindlichen
-    <SfxShell>s von oben nach unten nach dem ersten registrieren PopupMenu
-    durchsucht.
-*/
-
-{
-    SfxDispatcher &rDisp = *SFX_APP()->GetDispatcher_Impl();
-    sal_uInt16 nShLevel = 0;
-    const SvVerbList *pVerbList = 0;
-
-    // Nur die eigenen Shells nehmen !!
-    sal_uInt16 nMaxShellLevel = rDisp.pImp->aStack.Count();
-
-    SfxShell *pSh;
-    for ( pSh = rDisp.GetShell(nShLevel);
-          pSh && nShLevel < nMaxShellLevel ;
-          ++nShLevel, pSh = rDisp.GetShell(nShLevel) )
-    {
-
-        if (pSh->GetVerbs())
-        {
-            pVerbList = pSh->GetVerbs();
-            break;
-        }
-    }
-
-    nShLevel=0;
-
-    if ( rDisp.pImp->bQuiet )
-    {
-        nConfigId = 0;
-        nShLevel = rDisp.pImp->aStack.Count();
-    }
-
-    Window *pWindow = pWin ? pWin : rDisp.pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->GetWindow();
-    for ( pSh = rDisp.GetShell(nShLevel); pSh; ++nShLevel, pSh = rDisp.GetShell(nShLevel) )
-    {
-
-        const ResId& rResId = pSh->GetInterface()->GetPopupMenuResId();
-        if ( ( nConfigId == 0 && rResId.GetId() ) ||
-             ( nConfigId != 0 && rResId.GetId() == nConfigId ) )
-        {
-            SfxPopupMenuManager aPop(rResId.GetId(), *rDisp.GetBindings() );
-            aPop.SetResMgr(rResId.GetResMgr());
-            aPop.AddClipboardFunctions();
-            aPop.Initialize();
-            if (pVerbList && pVerbList->Count())
-                aPop.InsertVerbs(pVerbList);
-
-            aPop.RemoveDisabledEntries();
-            sal_uInt16 nRetId = aPop.Execute(
-                    pPos ? *pPos : pWindow->GetPointerPosPixel(), pWindow );
-            return;
-        }
-    }
-}
-
-//----------------------------------------------------------------------
-void SfxDispatcher::ExecutePopup( const ResId &rId
-                                , Window *pWin, const Point *pPos
-                                    )
-
-/*  [Beschreibung]
-
-    Diese Methode l"adt ein PopupMenu aus der angegebenen Resource und
-    f"uhrt es aus. Die Selektion wird "uber diesen SfxDispatcher ausgef"uhrt.
-*/
-
+void SfxDispatcher::ExecutePopup( const ResId &rId, Window *pWin, const Point *pPos )
 {
     Window *pWindow = pWin ? pWin : pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->GetWindow();
+/*
     SfxPopupMenuManager aPop( rId, *GetBindings() );
     aPop.AddClipboardFunctions();
     aPop.Initialize();
     aPop.RemoveDisabledEntries();
-    sal_uInt16 nRetId = aPop.Execute( pPos ? *pPos : pWindow->GetPointerPosPixel(),
-                                  pWindow );
+    aPop.Execute( pPos ? *pPos : pWindow->GetPointerPosPixel(), pWindow );
+*/
+    SfxPopupMenuManager::ExecutePopup( rId, GetFrame(), pPos ? *pPos : pWindow->GetPointerPosPixel(), pWindow );
 }
 
 //--------------------------------------------------------------------

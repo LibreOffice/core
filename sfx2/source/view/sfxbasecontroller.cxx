@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-03 17:46:38 $
+ *  last change: $Author: mba $ $Date: 2001-12-07 14:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@
 #include <osl/mutex.hxx>
 
 #define OMULTITYPEINTERFACECONTAINERHELPER      ::cppu::OMultiTypeInterfaceContainerHelper
+#define OINTERFACECONTAINERHELPER               ::cppu::OInterfaceContainerHelper
 #define XFRAMEACTIONLISTENER                    ::com::sun::star::frame::XFrameActionListener
 #define FRAMEACTIONEVENT                        ::com::sun::star::frame::FrameActionEvent
 #define EVENTOBJECT                             ::com::sun::star::lang::EventObject
@@ -310,6 +311,7 @@ struct IMPL_SfxBaseController_DataContainer
     REFERENCE < XFRAME >    m_xFrame;
     REFERENCE < XFRAMEACTIONLISTENER >      m_xListener       ;
     OMULTITYPEINTERFACECONTAINERHELPER      m_aListenerContainer    ;
+    OINTERFACECONTAINERHELPER               m_aInterceptorContainer    ;
     REFERENCE < ::com::sun::star::task::XStatusIndicator > m_xIndicator;
     SfxViewShell*                           m_pViewShell            ;
     SfxBaseController*                      m_pController           ;
@@ -320,6 +322,7 @@ struct IMPL_SfxBaseController_DataContainer
                                             SfxBaseController*  pController )
             :   m_xListener       ( new IMPL_SfxBaseController_ListenerHelper( aMutex, pController ) )
             ,   m_aListenerContainer    ( aMutex                                                )
+            ,   m_aInterceptorContainer ( aMutex                                                )
             ,   m_pViewShell            ( pViewShell                                            )
             ,   m_pController           ( pController                                           )
             ,   m_bDisposing            ( sal_False                                             )
@@ -414,6 +417,7 @@ ANY SAL_CALL SfxBaseController::queryInterface( const UNOTYPE& rType ) throw( RU
                                                static_cast< XCONTROLLER*        > ( this )  ,
                                             static_cast< XSTATUSINDICATORSUPPLIER* > ( this )  ,
                                             static_cast< XDISPATCHINFORMATIONPROVIDER* > ( this ) ,
+  //                                          static_cast< XCONTEXTMENUINTERCEPTION* > ( this ) ,
                                                static_cast< XDISPATCHPROVIDER*  > ( this )  ) ) ;
 
     // If searched interface supported by this class ...
@@ -478,6 +482,7 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseController::getTypes() throw( RUNTIMEEXCEPTI
             static OTYPECOLLECTION aTypeCollection( ::getCppuType(( const REFERENCE< XTYPEPROVIDER      >*)NULL ) ,
                                                     ::getCppuType(( const REFERENCE< XSTATUSINDICATORSUPPLIER >*)NULL ) ,
                                                       ::getCppuType(( const REFERENCE< XCONTROLLER      >*)NULL ) ,
+//                                                    ::getCppuType(( const REFERENCE< XCONTEXTMENUINTERCEPTION   >*)NULL ) ,
                                                     ::getCppuType(( const REFERENCE< XDISPATCHINFORMATIONPROVIDER  >*)NULL ) ,
                                                       ::getCppuType(( const REFERENCE< XDISPATCHPROVIDER    >*)NULL ) ) ;
             // ... and set his address to static pointer!
@@ -851,4 +856,23 @@ SEQUENCE < DISPATCHINFORMATION > SAL_CALL SfxBaseController::getConfigurableDisp
     return SEQUENCE < DISPATCHINFORMATION >();
 }
 #endif
+
+
+void SAL_CALL SfxBaseController::registerContextMenuInterceptor( const REFERENCE< XCONTEXTMENUINTERCEPTOR >& xInterceptor )
+{
+    m_pData->m_aInterceptorContainer.addInterface( xInterceptor );
+
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( m_pData->m_pViewShell )
+        m_pData->m_pViewShell->AddContextMenuInterceptor_Impl( xInterceptor );
+}
+
+void SAL_CALL SfxBaseController::releaseContextMenuInterceptor( const REFERENCE< XCONTEXTMENUINTERCEPTOR >& xInterceptor )
+{
+    m_pData->m_aInterceptorContainer.removeInterface( xInterceptor );
+
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( m_pData->m_pViewShell )
+        m_pData->m_pViewShell->RemoveContextMenuInterceptor_Impl( xInterceptor );
+}
 

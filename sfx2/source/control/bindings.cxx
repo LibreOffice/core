@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-11 09:12:08 $
+ *  last change: $Author: mba $ $Date: 2001-12-07 14:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1774,7 +1774,8 @@ SfxItemSet* SfxBindings::CreateSet_Impl
         pRealSlot->GetSlotId(), pRealSlot->GetWhich(rPool), pRealSlot, pCache );
     rFound.Insert( pFound );
 
-    if ( !SfxMacroConfig::IsMacroSlot( pRealSlot->GetSlotId() ) )
+    USHORT nSlot = pRealSlot->GetSlotId();
+    if ( !SfxMacroConfig::IsMacroSlot( nSlot ) || !(nSlot >= SID_VERB_START && nSlot <= SID_VERB_END) )
     {
         pInterface = pInterface->GetRealInterfaceForSlot( pRealSlot );
         DBG_ASSERT (pInterface,"Slot in angegebener Shell nicht gefunden!");
