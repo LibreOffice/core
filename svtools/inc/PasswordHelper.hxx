@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PasswordHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-23 06:52:29 $
+ *  last change: $Author: sab $ $Date: 2002-07-24 07:17:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,17 @@
 
 class SvPasswordHelper
 {
+    static void     GetHashPassword(com::sun::star::uno::Sequence <sal_Int8>& rPassHash, const sal_Char* pPass, sal_uInt32 nLen);
+    static void     GetHashPasswordLittleEndian(com::sun::star::uno::Sequence<sal_Int8>& rPassHash, const String& sPass);
+    static void     GetHashPasswordBigEndian(com::sun::star::uno::Sequence<sal_Int8>& rPassHash, const String& sPass);
 public:
-    static void     GetHashPassword(com::sun::star::uno::Sequence <sal_Int8>& rPassHash, const String& sPass);
+    static void     GetHashPassword(com::sun::star::uno::Sequence<sal_Int8>& rPassHash, const String& sPass);
+    /**
+    Use this method to compare a given string with another given Hash value.
+    This is necessary, because in older versions exists different hashs of the same string. They were endian dependent.
+    We need this to handle old files. This method will compare against big and little endian. See #101326#
+    */
+    static bool     CompareHashPassword(const com::sun::star::uno::Sequence<sal_Int8>& rOldPassHash, const String& sNewPass);
 };
 
 #endif
