@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 14:31:38 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,6 +435,13 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pHeightRelState = NULL;
     XMLPropertyState* pSizeTypeState = NULL;
 
+    // filter width properties
+    XMLPropertyState* pWidthMinAbsState = NULL;
+    XMLPropertyState* pWidthMinRelState = NULL;
+    XMLPropertyState* pWidthAbsState = NULL;
+    XMLPropertyState* pWidthRelState = NULL;
+    XMLPropertyState* pWidthTypeState = NULL;
+
     // wrap
     XMLPropertyState* pWrapState = NULL;
     XMLPropertyState* pWrapContourState = NULL;
@@ -515,6 +522,12 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_FRAMEHEIGHT_ABS:       pHeightAbsState = propertie; break;
         case CTF_FRAMEHEIGHT_REL:       pHeightRelState = propertie; break;
         case CTF_SIZETYPE:              pSizeTypeState = propertie; break;
+
+        case CTF_FRAMEWIDTH_MIN_ABS:    pWidthMinAbsState = propertie; break;
+        case CTF_FRAMEWIDTH_MIN_REL:    pWidthMinRelState = propertie; break;
+        case CTF_FRAMEWIDTH_ABS:        pWidthAbsState = propertie; break;
+        case CTF_FRAMEWIDTH_REL:        pWidthRelState = propertie; break;
+        case CTF_FRAMEWIDTH_TYPE:       pWidthTypeState = propertie; break;
 
         case CTF_WRAP:                  pWrapState = propertie; break;
         case CTF_WRAP_CONTOUR:          pWrapContourState = propertie; break;
@@ -807,12 +820,16 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     if( pHeightMinAbsState )
     {
         sal_Int16 nRel;
-        if( (SizeType::MIN != nSizeType) ||
+        if( (SizeType::FIX == nSizeType) ||
             ( pHeightMinRelState &&
               ( !(pHeightMinRelState->maValue >>= nRel) || nRel > 0 ) ) )
         {
             pHeightMinAbsState->mnIndex = -1;
         }
+
+        // export SizeType::VARIABLE als min-width="0"
+        if( SizeType::VARIABLE == nSizeType )
+            pHeightMinAbsState->maValue <<= static_cast<sal_Int32>( 0 );
     }
     if( pHeightMinRelState  && SizeType::MIN != nSizeType)
         pHeightMinRelState->mnIndex = -1;
@@ -821,6 +838,35 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         pHeightAbsState->mnIndex = -1;
     if( pHeightRelState && SizeType::FIX != nSizeType)
         pHeightRelState->mnIndex = -1;
+
+    // frame width
+    nSizeType = SizeType::FIX;
+    if( pWidthTypeState )
+    {
+        pWidthTypeState->maValue >>= nSizeType;
+        pWidthTypeState->mnIndex = -1;
+    }
+    if( pWidthMinAbsState )
+    {
+        sal_Int16 nRel;
+        if( (SizeType::FIX == nSizeType) ||
+            ( pWidthMinRelState &&
+              ( !(pWidthMinRelState->maValue >>= nRel) || nRel > 0 ) ) )
+        {
+            pWidthMinAbsState->mnIndex = -1;
+        }
+
+        // export SizeType::VARIABLE als min-width="0"
+        if( SizeType::VARIABLE == nSizeType )
+            pWidthMinAbsState->maValue <<= static_cast<sal_Int32>( 0 );
+    }
+    if( pWidthMinRelState  && SizeType::MIN != nSizeType)
+        pWidthMinRelState->mnIndex = -1;
+    if( pWidthAbsState && pWidthMinAbsState &&
+        -1 != pWidthMinAbsState->mnIndex )
+        pWidthAbsState->mnIndex = -1;
+    if( pWidthRelState && SizeType::FIX != nSizeType)
+        pWidthRelState->mnIndex = -1;
 
     if( pWrapState )
     {
