@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:47 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 13:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
 #endif
+#ifndef _SFXITEMITER_HXX
+#include <svtools/itemiter.hxx>
+#endif
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
 #endif
@@ -105,25 +108,55 @@
 #ifndef _FMTINFMT_HXX //autogen
 #include <fmtinfmt.hxx>
 #endif
-#include "cmdid.h"
-#include "docsh.hxx"
-#include "wrtsh.hxx"
-#include "view.hxx"
-#include "viewopt.hxx"
-#include "uitool.hxx"
-#include "uiitems.hxx"
-#include "textsh.hxx"
-#include "drpcps.hxx"
-#include "num.hxx"
-#include "swundo.hxx"
-#include "fmtcol.hxx"
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
+#endif
+#ifndef _UITOOL_HXX
+#include <uitool.hxx>
+#endif
+#ifndef _UIITEMS_HXX
+#include <uiitems.hxx>
+#endif
+#ifndef _TEXTSH_HXX
+#include <textsh.hxx>
+#endif
+#ifndef _DRPCPS_HXX
+#include <drpcps.hxx>
+#endif
+#ifndef _NUM_HXX
+#include <num.hxx>
+#endif
+#ifndef _SWUNDO_HXX
+#include <swundo.hxx>
+#endif
+#ifndef _FMTCOL_HXX
+#include <fmtcol.hxx>
+#endif
+#ifndef _SCRPMTCH_HXX
+#include <scrpmtch.hxx>
+#endif
 
-#include "globals.h"
-#include "shells.hrc"
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _GLOBALS_H
+#include <globals.h>
+#endif
+#ifndef _SHELLS_HRC
+#include <shells.hrc>
+#endif
 
 const SwTwips lFontInc = 2 * 20;           // ==> PointToTwips(2)
 const SwTwips lFontMaxSz = 72 * 20;        // ==> PointToTwips(72)
-
 
 
 
@@ -231,28 +264,6 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
 }
 
 
-
-void SwTextShell::ExecCharButtonAttr(SfxRequest &rReq)
-{
-    const SfxItemSet *pArgs = rReq.GetArgs();
-    if (pArgs)
-    {
-        SwWrtShell& rWrtSh = GetShell();
-        SwTxtFmtColl* pColl = rWrtSh.GetCurTxtFmtColl();
-        if(rWrtSh.HasSelection() &&
-                rWrtSh.IsSelFullPara() &&
-                    pColl && pColl->IsAutoUpdateFmt())
-        {
-            rWrtSh.AutoUpdatePara(pColl, *pArgs);
-        }
-        else
-            rWrtSh.SetAttr(*pArgs);
-
-    }
-}
-
-
-
 void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
 {
     int nSlot = rReq.GetSlot();
@@ -290,55 +301,59 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
                         rWrtSh.GetPoolId( aINetFmt.GetINetFmt(), GET_POOLID_CHRFMT));
             }
 
-
             if ( pColl )
                 pColl->SetAttr( aINetFmt );
             else rWrtSh.SetAttr( aINetFmt );
         }
         break;
-        case SID_ATTR_CHAR_WORDLINEMODE:
-        case SID_ATTR_CHAR_CASEMAP:
-        case SID_ATTR_CHAR_LANGUAGE:
-        case SID_ATTR_CHAR_KERNING:
-            if( bArgs )
-            {
-                const SfxPoolItem& rItem = pArgs->Get(nWhich );
-                if ( pColl ) pColl->SetAttr( rItem );
-                else rWrtSh.SetAttr( rItem );
-            }
-        break;
+
         case FN_GROW_FONT_SIZE:
             bGrow = TRUE;
             // kein break !!
         case FN_SHRINK_FONT_SIZE:
         {
-            SfxItemSet aSet( GetPool(), RES_CHRATR_FONTSIZE, RES_CHRATR_FONTSIZE);
-            rWrtSh.GetAttr( aSet );
-            SvxFontHeightItem aSize( (const SvxFontHeightItem&)
-                                        aSet.Get(RES_CHRATR_FONTSIZE) );
-
-            SwTwips lSize = (SwTwips) aSize.GetHeight();
-
-            if (bGrow)
+            GetLatinAsianComplexAttr aAttrs( RES_CHRATR_FONTSIZE, rWrtSh );
+            SfxItemSet* pSet = (SfxItemSet*)aAttrs.GetItemSet(
+                                                    rWrtSh.GetScriptType());
+            if( pSet )
             {
-                if( lSize == lFontMaxSz )
-                    break;      // das wars, hoeher gehts nicht
-                if( ( lSize += lFontInc ) > lFontMaxSz )
-                    lSize = lFontMaxSz;
+                SfxItemIter aIter( *pSet );
+                const SfxPoolItem* pItem = aIter.GetCurItem();
+                while( TRUE )
+                {
+                    SvxFontHeightItem aSize( *(const SvxFontHeightItem*)pItem);
+                    SwTwips lSize = (SwTwips) aSize.GetHeight();
+
+                    if (bGrow)
+                    {
+                        if( lSize == lFontMaxSz )
+                            break;      // das wars, hoeher gehts nicht
+                        if( ( lSize += lFontInc ) > lFontMaxSz )
+                            lSize = lFontMaxSz;
+                    }
+                    else
+                    {
+                        if( 4 == lSize )
+                            break;
+                        if( ( lSize -= lFontInc ) < 4 )
+                            lSize = 4;
+                    }
+                    aSize.SetHeight( lSize );
+                    pSet->Put( aSize );
+
+                    if( aIter.IsAtEnd() )
+                        break;
+                    pItem = aIter.NextItem();
+                }
+
+                if( pColl )
+                    pColl->SetAttr( *pSet );
+                else
+                    rWrtSh.SetAttr( *pSet );
             }
-            else
-            {
-                if( 4 == lSize )
-                    break;
-                if( ( lSize -= lFontInc ) < 4 )
-                    lSize = 4;
-            }
-            aSize.SetHeight( lSize );
-            aSet.Put( aSize );
-            if (pColl) pColl->SetAttr(aSet);
-            else rWrtSh.SetAttr( aSet );
         }
         break;
+
         default:
             ASSERT(FALSE, falscher Dispatcher);
             return;
@@ -650,8 +665,8 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             case FN_GROW_FONT_SIZE:
             case FN_SHRINK_FONT_SIZE:
             {
-                SfxItemState eState = aCoreSet.GetItemState( RES_CHRATR_FONTSIZE );
-                if( eState == SFX_ITEM_DONTCARE )
+                GetLatinAsianComplexAttr aAttrs( RES_CHRATR_FONTSIZE );
+                if( !aAttrs.GetItemSet( rSh.GetScriptType(), aCoreSet ))
                     rSet.DisableItem( nSlot );
                 nSlot = 0;
             }
@@ -677,13 +692,9 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                     rSet.Put(SvxAdjustItem((SvxAdjust)eAdjust, SID_ATTR_PARA_ADJUST ));
                 nSlot = 0;
             break;
-            case SID_ATTR_CHAR_CASEMAP:
+
             case SID_ATTR_CHAR_LANGUAGE:
             case SID_ATTR_CHAR_KERNING:
-            case SID_ATTR_PARA_HYPHENZONE:
-            case SID_ATTR_PARA_KEEP:
-            case SID_ATTR_PARA_WIDOWS:
-            case SID_ATTR_PARA_ORPHANS:
             case RES_PARATR_DROP:
             {
 #ifdef DEBUG
@@ -740,6 +751,9 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:47  hr
+    initial import
+
     Revision 1.122  2000/09/18 16:06:07  willem.vandorp
     OpenOffice header added.
 
