@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-22 16:23:52 $
+ *  last change: $Author: fs $ $Date: 2001-10-29 15:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3171,15 +3171,18 @@ sal_Bool DbGridControl::SaveModified()
     {
         Controller()->ClearModified();
 
-        if (IsValid(m_xCurrentRow) && !m_xCurrentRow->IsModified())
+        if ( IsValid(m_xCurrentRow) )
         {
             m_xCurrentRow->SetState(m_pDataCursor, sal_False);
             TRACE_RANGE_MESSAGE1("explicit SetState, new state : %s", ROWSTATUS(m_xCurrentRow));
+            InvalidateStatusCell( m_nCurrentPos );
         }
+#ifdef DBG_UTIL
         else
         {
             TRACE_RANGE_MESSAGE1("no SetState, new state : %s", ROWSTATUS(m_xCurrentRow));
         }
+#endif
     }
     else
     {
