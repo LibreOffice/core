@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_resource.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:06:30 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,20 +63,30 @@
 #define INCLUDED_DP_RESOURCE_H
 
 #include "vos/mutex.hxx"
+#include "tools/resmgr.hxx"
 #include "tools/string.hxx"
 #include "tools/resid.hxx"
 #include "com/sun/star/lang/Locale.hpp"
+#include "dp_misc.h"
+#include <memory>
 
 
 namespace dp_misc {
 
-extern ::vos::IMutex * g_pResMgrMmutex;
+// xxx todo: remove when PL has inserted res mgr mutex in tools:
+extern ::vos::IMutex * g_pResMgrMutex;
 
 //==============================================================================
 ResId getResId( USHORT id );
 
 //==============================================================================
 String getResourceString( USHORT id );
+
+template<typename Unique, USHORT id>
+struct StaticResourceString
+    : public ::rtl::StaticData< ::rtl::OUString, Unique > {
+    ::rtl::OUString operator () () { return getResourceString(id); }
+};
 
 //==============================================================================
 inline ::com::sun::star::lang::Locale toLocale( ::rtl::OUString const & slang )
