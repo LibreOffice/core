@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 11:31:57 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1759,7 +1759,7 @@ void SfxHelpIndexWindow_Impl::SetActiveFactory()
     if ( !aActiveLB.GetEntryCount() )
     {
         aTimer.Stop();
-        Initialize();
+        InitHdl( NULL );
     }
 
     for ( USHORT i = 0; i < aActiveLB.GetEntryCount(); ++i )
