@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-28 13:45:35 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1586,7 +1586,8 @@ sal_Bool ImpEditEngine::HasConvertibleTextPortion( LanguageType nLang )
 
 
 void ImpEditEngine::Convert( EditView* pEditView,
-        LanguageType nLang, sal_Bool bMultipleDoc )
+        LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont,
+        INT32 nOptions, sal_Bool bIsInteractive, sal_Bool bMultipleDoc )
 {
     // modified version of ImpEditEngine::Spell
 
@@ -1614,7 +1615,10 @@ void ImpEditEngine::Convert( EditView* pEditView,
 
     Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     TextConvWrapper aWrp( Application::GetDefDialogParent(), xMSF,
-                          SvxCreateLocale( nLang ), bIsStart, pEditView );
+                          SvxCreateLocale( nSrcLang ), SvxCreateLocale( nDestLang ),
+                          pDestFont,
+                          nOptions, bIsInteractive,
+                          bIsStart, pEditView );
     aWrp.Convert();
 
     if ( !bMultipleDoc )
@@ -1634,7 +1638,7 @@ void ImpEditEngine::Convert( EditView* pEditView,
 
 
 String ImpEditEngine::ImpConvert( EditView* pEditView,
-        LanguageType nLang, const ESelection &rConvRange )
+        LanguageType nSrcLang, const ESelection &rConvRange )
 {
     // modified version of ImpEditEngine::ImpSpell
 
@@ -1727,7 +1731,7 @@ String ImpEditEngine::ImpConvert( EditView* pEditView,
             }
         }
 
-        if ( aWord.Len() > 0  &&  GetLanguage( aCurSel.Max() ) == nLang )
+        if ( aWord.Len() > 0  &&  GetLanguage( aCurSel.Max() ) == nSrcLang )
             aRes = aWord;
 
         if ( !aRes.Len() )
