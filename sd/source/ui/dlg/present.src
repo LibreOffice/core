@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:16:28 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,7 +339,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ swedish ] = "A~uto";
         Text[ polish ] = "Automatycznie";
         Text[ portuguese_brazilian ] = "A~uto";
-        Text[ japanese ] = "µ°Δ(~U)";
+        Text[ japanese ] = "©“®(~U)";
         Text[ chinese_simplified ] = "ΧΤ¶―(~U)";
         Text[ chinese_traditional ] = "¦Ϋ°Κ(~U)";
         Text[ arabic ] = "ΚαήΗΖν";
@@ -391,7 +391,7 @@ ModalDialog DLG_START_PRESENTATION
         QuickHelpText[ italian ] = "Duration of pause";
         QuickHelpText[ danish ] = "Pausetid";
         QuickHelpText[ swedish ] = "Pausens lδngd";
-        QuickHelpText[ polish ] = "Czas trwania przerwy";
+        QuickHelpText[ polish ] = "D³ugo?ζ przerwy!";
         QuickHelpText[ portuguese_brazilian ] = "Duration of pause";
         QuickHelpText[ japanese ] = "‹x~Τ";
         QuickHelpText[ chinese_simplified ] = "ΌδΈτΚ±Όδ";
@@ -482,7 +482,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ russian ] = "Ρμενΰ ρλΰιδΰ βπσχνσώ";
         Text[ polish ] = "Zmieniaj slajdy rκcznie";
         Text[ japanese ] = "θ“®‚Ε‰ζ–ΚΨ‚θ‘Φ‚¦(~C)";
-        Text[ chinese_traditional ] = "¤β¤u§σ΄«§λΌv¤ω(~C)";
+        Text[ chinese_traditional ] = "¤β°Κ§σ΄«§λΌv¤ω(~C)";
         Text[ arabic ] = "ΚΫννΡ ΗαΤΡνΝΙ νΟζνΗπ";
         Text[ greek ] = "Αλλαγή δια~φανειών (slides) χειροκίνητα";
         Text[ korean ] = "ΌφµΏΐΈ·Ξ ½½¶σΐΜµε ΐόΘ―";
@@ -511,7 +511,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ russian ] = "Οξκΰηΰςό σκΰηΰςελό μϋψθ";
         Text[ polish ] = "Wskanik myszy widoczny";
         Text[ japanese ] = "Ο³½Ξί²έΐ‚ª–Ϊ‚Ι©‚¦‚ι(~V)";
-        Text[ chinese_traditional ] = "Εγ¥άΉ«ΌΠ(~V)";
+        Text[ chinese_traditional ] = "Εγ¥ά·ΖΉ«ΌΠ(~V)";
         Text[ arabic ] = "γΔΤΡ ΗαγΗζΣ γΡΖν";
         Text[ greek ] = "Δείκτης ποντικιού ορατός";
         Text[ korean ] = "Έ¶Ώμ½Ί ΖχΐΞΕΝ ΊΈΐΜ°Τ(~V)";
@@ -593,7 +593,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ chinese_simplified ] = "ΤΚΠν¶―»­(~A)";
         Text[ russian ] = "Δξοσρςθςό ΰνθμΰφθθ";
         Text[ polish ] = "Dopu~ζ animacje";
-        Text[ japanese ] = "±ΖÒ°Ό®έ‚π‹–‰Β‚·‚ι(~A)";
+        Text[ japanese ] = "±ΖÒ°Ό®έ‚πg—p‰Β”\\‚Ι‚·‚ι(~A)";
         Text[ chinese_traditional ] = "¤Ή³\\°Κµe(~A)";
         Text[ arabic ] = "ΗαΣγΗΝ ΘΗαΝΡίΙ";
         Text[ greek ] = "Επιτρέπ~ονται κινούμενες εικόνες";
