@@ -2,7 +2,7 @@
  *
  *  $RCSfile: xmleohlp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
  *  last change: $Author: mib $
  *
@@ -70,6 +70,9 @@
 #endif
 #ifndef _PERSIST_HXX
 #include <so3/persist.hxx>
+#endif
+#ifndef _FACTORY_HXX
+#include <so3/factory.hxx>
 #endif
 #ifndef _EMBOBJ_HXX
 #include <so3/embobj.hxx>
@@ -395,14 +398,28 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
     SvGlobalName aClassId;
     if( pClassId )
     {
+        // If a class id is specifies, use it.
         aClassId = *pClassId;
     }
     else
     {
+        // Otherwise try to get one from the storage. For packages, the
+        // class id is derived from the package's mime type. The mime type
+        // is stored in the packages manifest and the manifest is read when
+        // the stoage is opened. Therfor, the class id is available without
+        // realy accessing the storage.
         SvStorageRef xObjStor( ImplGetObjectStorage( rContainerStorageName,
                                                      aSrcObjName, sal_False ) );
         aClassId = xObjStor->GetClassName();
     }
+
+    // For all unkown class id, the OLE object has to be wrapped by an
+    // outplace object.
+    SvGlobalName aOutClassId( SO3_OUT_CLASSID );
+    if( SvGlobalName() == aClassId ||
+        ( aOutClassId != aClassId &&
+          !SvFactory::IsIntern( aClassId, 0 ) ) )
+        aClassId = SvGlobalName( aOutClassId );
 
     SvInfoObjectRef xInfo = new SvEmbeddedInfoObject( aObjName, aClassId );
     mpDocPersist->Insert( xInfo );
