@@ -242,6 +242,7 @@
     </menu:menupopup>
    </menu:menu>
    <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.RefreshUserScripts()" menu:label="~Refresh User Scripts (Java)"/>
+   <menu:menuitem menu:id="script://Interactive.BeanShell" menu:helpid="1929" menu:label="Interactive BeanShell Scripting"/>
    <menu:menuitem menu:id="slot:31630" menu:helpid="31630" menu:label="~Options..."/>
   </menu:menupopup>
  </menu:menu>
