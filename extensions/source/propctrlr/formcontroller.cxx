@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-02 12:41:49 $
+ *  last change: $Author: fs $ $Date: 2001-05-11 10:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,15 @@
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
 #endif
+#ifndef _COM_SUN_STAR_UI_FILEPICKERELEMENTID_HPP_
+#include <com/sun/star/ui/FilePickerElementID.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILEPICKERCONTROLACCESS_HPP_
+#include <com/sun/star/ui/XFilePickerControlAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
+#include <com/sun/star/ui/XFilePicker.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #endif
@@ -186,6 +195,9 @@
 #endif
 #ifndef _EXTENSIONS_PROPCTRLR_FONTDIALOG_HXX_
 #include "fontdialog.hxx"
+#endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
 #endif
 
 // for the font handling
@@ -299,12 +311,6 @@
 #include <comphelper/stl_types.hxx>
 #endif
 
-#ifndef _IODLG_HXX
-#include <sfx2/iodlg.hxx>
-#endif
-#ifndef _SVX_IMPGRF_HXX
-#include <svx/impgrf.hxx>
-#endif
 #ifndef _SV_COLRDLG_HXX
 #include <svtools/colrdlg.hxx>
 #endif
@@ -329,6 +335,7 @@ namespace pcr
     using namespace ::com::sun::star::script;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
+    using namespace ::com::sun::star::ui;
     using namespace ::com::sun::star::container;
     using namespace ::dbtools;
 
@@ -2443,20 +2450,14 @@ namespace pcr
             // DataSource & ImageURL
             if (PROPERTY_ID_TARGET_URL == nPropId)
             {
+                ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK);
+                aFileDlg.SetDisplayDirectory(aVal);
 
-                ::rtl::OUString aStrTrans = m_pPropertyInfo->getPropertyTranslation( nPropId );
-
-                SfxFileDialog* pDlg = new SfxFileDialog(
-                             GetpApp()->GetAppWindow(), WB_3DLOOK );
-
-                pDlg->SetPath( aVal );
-                if (pDlg->Execute() == RET_OK )
+                if (0 == aFileDlg.Execute())
                 {
-                    String aDataSource = pDlg->GetPath();
+                    String aDataSource = aFileDlg.GetPath();
                     Commit( aName, aDataSource, pData );
-
                 }
-                delete pDlg;
             }
 
 
@@ -2485,23 +2486,45 @@ namespace pcr
             // URL
             else if (nPropId == PROPERTY_ID_IMAGE_URL)
             {
-
                 ::rtl::OUString aStrTrans = m_pPropertyInfo->getPropertyTranslation( nPropId );
 
-                SvxImportGraphicDialog* pDlg = new SvxImportGraphicDialog(
-                                               NULL,aStrTrans,
-                                               ENABLE_STANDARD );
+                const ::rtl::OUString sServiceName = ::rtl::OUString::createFromAscii("com.sun.star.ui.FilePicker");
+                const ::rtl::OUString sInitializer = ::rtl::OUString::createFromAscii("FileOpen_LinkPreviewBox");
+
+                Reference< XFilePicker > xDialog(m_xORB->createInstance(sServiceName), UNO_QUERY);
+                Reference< XFilePickerControlAccess > xController(xDialog, UNO_QUERY);
+                Reference< XInitialization > xInit(xController, UNO_QUERY);
+                if (!xInit.is())
+                {
+                    DBG_ERROR("OPropertyBrowserController::Clicked: coult not instantiate the file picker!");
+                    return;
+                }
+
+                // initialize the dialog
+                Sequence< Any > aInitArguments(1);
+                aInitArguments[0] <<= sInitializer;
+                xInit->initialize(aInitArguments);
+                xDialog->setTitle(aStrTrans);
+
+                // do a preview by default
+                xController->setValue(FilePickerElementID::CBX_PREVIEW, ::cppu::bool2any(sal_True));
+
+                // "as link" is checked, but disabled
+                xController->setValue(FilePickerElementID::CBX_INSERT_AS_LINK, ::cppu::bool2any(sal_True));
+                xController->enableControl(FilePickerElementID::CBX_INSERT_AS_LINK, sal_False);
 
                 if (aVal.Len() != 0)
-                    pDlg ->SetPath( aVal,sal_False);
-
-
-                if (pDlg->Execute() == RET_OK )
                 {
-                    String aDataSource = pDlg->GetPath();
-                    Commit( aName, aDataSource, pData );
+                    xDialog->setDisplayDirectory(aVal);
+                    // TODO: need to set the display directory _and_ the default name
                 }
-                delete pDlg;
+
+                if (xDialog->execute())
+                {
+                    Sequence< ::rtl::OUString > aPaths = xDialog->getPath();
+                    if (aPaths.getLength() > 0)
+                        Commit( aName, aPaths[0], pData );
+                }
             }
 
 
@@ -2781,6 +2804,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18  2001/05/02 12:41:49  tbe
+ *  added scrollbar properties
+ *
  *  Revision 1.17  2001/04/26 09:14:59  tbe
  *  colortable for fillcolor
  *
