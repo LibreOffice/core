@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:34:39 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #endif
 #ifndef _CNTFRM_HXX
 #include <cntfrm.hxx>
+#endif
+#ifndef _DCONTACT_HXX
+#include <dcontact.hxx>
 #endif
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
@@ -1903,10 +1906,49 @@ SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
         else
         {
             nReal = 0;
-            // #108745# Sorry, dear old footer friend, I'm not gonna invalidate you.
+
+            // #108745# Sorry, dear old footer friend, I'm not gonna invalidate you,
+            // if there are any objects anchored inside your content, which
+            // overlap with the shrinking frame.
             // This may lead to a footer frame that is too big, but this is better
             // than looping.
-//            GetUpper()->InvalidateSize();
+            // #109722# : The fix for #108745# was too strict.
+
+            bool bInvalidate = true;
+            const SwRect aRect( Frm() );
+            const SwPageFrm* pPage = FindPageFrm();
+            const SwSortDrawObjs* pSorted;
+            if( pPage && ( pSorted = pPage->GetSortedObjs() ) )
+            {
+                for ( USHORT i = 0; i < pSorted->Count(); ++i )
+                {
+                    const SdrObject *pObj = (*pSorted)[i];
+                    const SwRect aBound( GetBoundRect( pObj ) );
+
+                    if( aBound.Left() > aRect.Right() )
+                        continue;
+
+                    if( aBound.IsOver( aRect ) )
+                    {
+                        const SwFmt* pFmt = ((SwContact*)GetUserCall(pObj))->GetFmt();
+                        if( SURROUND_THROUGHT != pFmt->GetSurround().GetSurround() )
+                        {
+                            const SwFrm* pAnchor = pObj->IsWriterFlyFrame() ?
+                                                   ( (SwVirtFlyDrawObj*)pObj )->GetFlyFrm()->GetAnchor() :
+                                                   ( (SwDrawContact*)GetUserCall(pObj) )->GetAnchor();
+
+                            if ( pAnchor && pAnchor->FindFooterOrHeader() == GetUpper() )
+                            {
+                                bInvalidate = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if ( bInvalidate )
+                GetUpper()->InvalidateSize();
         }
     }
     else
