@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:04:06 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,8 +531,31 @@ sal_Bool XMLColorPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, 
     sal_Bool bRet = sal_False;
     Color aColor;
 
-    bRet = rUnitConverter.convertColor( aColor, rStrImpValue );
-    rValue <<= (sal_Int32)( aColor.GetColor() );
+    const OUString astrHSL( RTL_CONSTASCII_USTRINGPARAM( "hsl" ) );
+    if( rStrImpValue.matchIgnoreAsciiCase( astrHSL ) )
+    {
+        sal_Int32 nOpen = rStrImpValue.indexOf( '(' );
+        sal_Int32 nClose = rStrImpValue.lastIndexOf( ')' );
+
+        if( (nOpen != -1) && (nClose > nOpen) )
+        {
+            const OUString aTmp( rStrImpValue.copy( nOpen+1, nClose - nOpen-1) );
+
+            sal_Int32 nIndex = 0;
+
+            Sequence< double > aHSL(3);
+            aHSL[0] = aTmp.getToken( 0, ',', nIndex ).toDouble();
+            aHSL[1] = aTmp.getToken( 0, ',', nIndex ).toDouble() / 100.0;
+            aHSL[2] = aTmp.getToken( 0, ',', nIndex ).toDouble() / 100.0;
+            rValue <<= aHSL;
+            bRet = true;
+        }
+    }
+    else
+    {
+        bRet = rUnitConverter.convertColor( aColor, rStrImpValue );
+        rValue <<= (sal_Int32)( aColor.GetColor() );
+    }
 
     return bRet;
 }
@@ -543,15 +566,32 @@ sal_Bool XMLColorPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, 
     Color aColor;
     sal_Int32 nColor;
 
+    OUStringBuffer aOut;
     if( rValue >>= nColor )
     {
         aColor.SetColor( nColor );
 
-        OUStringBuffer aOut;
         rUnitConverter.convertColor( aOut, aColor );
         rStrExpValue = aOut.makeStringAndClear();
 
         bRet = sal_True;
+    }
+    else
+    {
+        Sequence< double > aHSL;
+        if( (rValue >>= aHSL) && (aHSL.getLength() == 3) )
+        {
+            aOut.append( OUString::createFromAscii("hsl(") );
+            aOut.append( aHSL[0] );
+            aOut.append( OUString::createFromAscii(",") );
+            aOut.append( aHSL[1] * 100.0 );
+            aOut.append( OUString::createFromAscii("%,") );
+            aOut.append( aHSL[2] * 100.0 );
+            aOut.append( OUString::createFromAscii("%)") );
+            rStrExpValue = aOut.makeStringAndClear();
+
+            bRet = sal_True;
+        }
     }
 
     return bRet;
