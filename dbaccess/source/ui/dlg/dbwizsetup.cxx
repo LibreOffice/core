@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:23:20 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:35:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1086,8 +1086,8 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             aWorkURL.setExtension(sExtension);
             createUniqueFileName(&aWorkURL);
             aFileDlg.SetDisplayDirectory( aWorkURL.GetMainURL( INetURLObject::NO_DECODE ));
-            aFileDlg.AddFilter(pFilter->GetFilterName(),pFilter->GetDefaultExtension());
-            aFileDlg.SetCurrentFilter(pFilter->GetFilterName());
+            aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());
+            aFileDlg.SetCurrentFilter(pFilter->GetUIName());
         }
         Reference< XNameAccess > xDatabaseContext(getORB()->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
         if ( xDatabaseContext.is() )
