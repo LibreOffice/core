@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-04 18:29:45 $
+ *  last change: $Author: sab $ $Date: 2001-12-05 12:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,10 +371,10 @@ struct ScMyExportAnnotation
 {
     com::sun::star::uno::Reference<com::sun::star::sheet::XSheetAnnotation> xAnnotation;
     com::sun::star::table::CellAddress      aCellAddress;
-    sal_Bool operator<(const ScMyExportAnnotation& rDetOp);
+    sal_Bool operator<(const ScMyExportAnnotation& rAnno);
 };
 
-typedef ::std::list< ScMyExportAnnotation* > ScMyExportAnnotationList;
+typedef ::std::list< ScMyExportAnnotation > ScMyExportAnnotationList;
 
 class ScMyNotEmptyCellsIterator
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-04 18:29:45 $
+ *  last change: $Author: sab $ $Date: 2001-12-05 12:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,16 +605,7 @@ void ScMyNotEmptyCellsIterator::Clear()
 {
     if (pCellItr)
         delete pCellItr;
-    if (!aAnnotations.empty())
-    {
-        ScMyExportAnnotationList::iterator aItr = aAnnotations.begin();
-        ScMyExportAnnotationList::iterator aEndItr = aAnnotations.end();
-        while (aItr != aEndItr)
-        {
-            delete *aItr;
-            aItr = aAnnotations.erase(aItr);
-        }
-    }
+    DBG_ASSERT(aAnnotations.empty(), "not all Annotations saved");
     pCellItr = NULL;
     pShapes = NULL;
     pMergedRanges = NULL;
@@ -668,10 +659,10 @@ void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
     if (!aAnnotations.empty())
     {
         ScMyExportAnnotationList::iterator aItr = aAnnotations.begin();
-        if ((aCell.aCellAddress.Column == (*aItr)->aCellAddress.Column) &&
-            (aCell.aCellAddress.Row == (*aItr)->aCellAddress.Row))
+        if ((aCell.aCellAddress.Column == aItr->aCellAddress.Column) &&
+            (aCell.aCellAddress.Row == aItr->aCellAddress.Row))
         {
-            aCell.xAnnotation = (*aItr)->xAnnotation;
+            aCell.xAnnotation = aItr->xAnnotation;
             uno::Reference<text::XSimpleText> xSimpleText(aCell.xAnnotation, uno::UNO_QUERY);
             if (aCell.xAnnotation.is() && xSimpleText.is())
             {
@@ -679,7 +670,6 @@ void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
                 if (aCell.sAnnotationText.getLength())
                     aCell.bHasAnnotation = sal_True;
             }
-            delete *aItr;
             aAnnotations.erase(aItr);
         }
     }
@@ -716,11 +706,11 @@ void ScMyNotEmptyCellsIterator::SetCurrentTable(const sal_Int32 nTable,
                     while (xAnnotations->hasMoreElements())
                     {
                         uno::Any aAny = xAnnotations->nextElement();
-                        ScMyExportAnnotation* pAnnotation = new ScMyExportAnnotation();
-                        if (pAnnotation && (aAny >>= pAnnotation->xAnnotation))
+                        ScMyExportAnnotation aAnnotation;
+                        if (aAny >>= aAnnotation.xAnnotation)
                         {
-                            pAnnotation->aCellAddress = pAnnotation->xAnnotation->getPosition();
-                            aAnnotations.push_back(pAnnotation);
+                            aAnnotation.aCellAddress = aAnnotation.xAnnotation->getPosition();
+                            aAnnotations.push_back(aAnnotation);
                         }
                     }
                     if (!aAnnotations.empty())
