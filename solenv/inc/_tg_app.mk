@@ -94,23 +94,17 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP1LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP1LINKRES:b).rc >& $(NULLDEV)
+.IF "$(APP1ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
-.IF "$(APP1ICON)" != ""
     @-+echo 1 ICON "$(APP1ICON:s/\/\\/)" >> $(MISC)$/$(APP1LINKRES:b).rc
-.ENDIF
-.IF "$(APP1VERINFO)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP1LINKRES:b).rc
-    @-+echo #include  "$(APP1VERINFO)" >> $(MISC)$/$(APP1LINKRES:b).rc
-.ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
-.IF "$(APP1ICON)" != ""
-    @-+guw.pl echo 1 ICON \"$(APP1ICON)\" | sed 'sX\\X\\\\Xg' >> $(MISC)$/$(APP1LINKRES:b).rc
-.ENDIF
-.IF "$(APP1VERINFO)" != ""
-    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP1LINKRES:b).rc
-    @-+echo \#include  \"$(APP1VERINFO)\" >> $(MISC)$/$(APP1LINKRES:b).rc
-.ENDIF
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP1ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF		# "$(APP1ICON)" != ""
+.IF "$(APP1VERINFO)" != ""
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP1LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP1VERINFO)$(EMQ)" >> $(MISC)$/$(APP1LINKRES:b).rc
+.ENDIF		# "$(APP1VERINFO)" != ""
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF			# "$(APP1LINKRES)" != ""
 .IF "$(linkinc)" == ""
@@ -145,8 +139,8 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         $(APP1LIBS) \
         $(APP1STDLIBS) \
         $(APP1STDLIB) $(STDLIB1))
-        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP1TARGETN:b)_linkobj.lst >> $(MISC)\$(APP1TARGET).lst
-        +if exist $(MISC)\$(APP1TARGET).lst type $(MISC)\$(APP1TARGET).lst  >> $(MISC)\$(APP1TARGET).lnk
+        $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP1TARGETN:b)_linkobj.lst >> $(MISC)\$(APP1TARGET).lst
+        +$(IFEXIST) $(MISC)\$(APP1TARGET).lst $(THEN) type $(MISC)\$(APP1TARGET).lst  >> $(MISC)\$(APP1TARGET).lnk
         $(APP1LINKER) @$(MISC)\$(APP1TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP1TARGET)" == "loader"
@@ -262,23 +256,17 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP2LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP2LINKRES:b).rc >& $(NULLDEV)
+.IF "$(APP2ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
-.IF "$(APP2ICON)" != ""
     @-+echo 1 ICON "$(APP2ICON:s/\/\\/)" >> $(MISC)$/$(APP2LINKRES:b).rc
-.ENDIF
-.IF "$(APP2VERINFO)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP2LINKRES:b).rc
-    @-+echo #include  "$(APP2VERINFO)" >> $(MISC)$/$(APP2LINKRES:b).rc
-.ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
-.IF "$(APP2ICON)" != ""
-    @-+guw.pl echo 1 ICON \"$(APP2ICON)\" | sed 'sX\\X\\\\Xg' >> $(MISC)$/$(APP2LINKRES:b).rc
-.ENDIF
-.IF "$(APP2VERINFO)" != ""
-    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP2LINKRES:b).rc
-    @-+echo \#include  \"$(APP2VERINFO)\" >> $(MISC)$/$(APP2LINKRES:b).rc
-.ENDIF
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP2ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF		# "$(APP2ICON)" != ""
+.IF "$(APP2VERINFO)" != ""
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP2LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP2VERINFO)$(EMQ)" >> $(MISC)$/$(APP2LINKRES:b).rc
+.ENDIF		# "$(APP2VERINFO)" != ""
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF			# "$(APP2LINKRES)" != ""
 .IF "$(linkinc)" == ""
@@ -313,8 +301,8 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         $(APP2LIBS) \
         $(APP2STDLIBS) \
         $(APP2STDLIB) $(STDLIB2))
-        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP2TARGETN:b)_linkobj.lst >> $(MISC)\$(APP2TARGET).lst
-        +if exist $(MISC)\$(APP2TARGET).lst type $(MISC)\$(APP2TARGET).lst  >> $(MISC)\$(APP2TARGET).lnk
+        $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP2TARGETN:b)_linkobj.lst >> $(MISC)\$(APP2TARGET).lst
+        +$(IFEXIST) $(MISC)\$(APP2TARGET).lst $(THEN) type $(MISC)\$(APP2TARGET).lst  >> $(MISC)\$(APP2TARGET).lnk
         $(APP2LINKER) @$(MISC)\$(APP2TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP2TARGET)" == "loader"
@@ -430,23 +418,17 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP3LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP3LINKRES:b).rc >& $(NULLDEV)
+.IF "$(APP3ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
-.IF "$(APP3ICON)" != ""
     @-+echo 1 ICON "$(APP3ICON:s/\/\\/)" >> $(MISC)$/$(APP3LINKRES:b).rc
-.ENDIF
-.IF "$(APP3VERINFO)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP3LINKRES:b).rc
-    @-+echo #include  "$(APP3VERINFO)" >> $(MISC)$/$(APP3LINKRES:b).rc
-.ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
-.IF "$(APP3ICON)" != ""
-    @-+guw.pl echo 1 ICON \"$(APP3ICON)\" | sed 'sX\\X\\\\Xg' >> $(MISC)$/$(APP3LINKRES:b).rc
-.ENDIF
-.IF "$(APP3VERINFO)" != ""
-    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP3LINKRES:b).rc
-    @-+echo \#include  \"$(APP3VERINFO)\" >> $(MISC)$/$(APP3LINKRES:b).rc
-.ENDIF
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP3ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF		# "$(APP3ICON)" != ""
+.IF "$(APP3VERINFO)" != ""
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP3LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP3VERINFO)$(EMQ)" >> $(MISC)$/$(APP3LINKRES:b).rc
+.ENDIF		# "$(APP3VERINFO)" != ""
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF			# "$(APP3LINKRES)" != ""
 .IF "$(linkinc)" == ""
@@ -481,8 +463,8 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         $(APP3LIBS) \
         $(APP3STDLIBS) \
         $(APP3STDLIB) $(STDLIB3))
-        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP3TARGETN:b)_linkobj.lst >> $(MISC)\$(APP3TARGET).lst
-        +if exist $(MISC)\$(APP3TARGET).lst type $(MISC)\$(APP3TARGET).lst  >> $(MISC)\$(APP3TARGET).lnk
+        $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP3TARGETN:b)_linkobj.lst >> $(MISC)\$(APP3TARGET).lst
+        +$(IFEXIST) $(MISC)\$(APP3TARGET).lst $(THEN) type $(MISC)\$(APP3TARGET).lst  >> $(MISC)\$(APP3TARGET).lnk
         $(APP3LINKER) @$(MISC)\$(APP3TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP3TARGET)" == "loader"
@@ -598,23 +580,17 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP4LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP4LINKRES:b).rc >& $(NULLDEV)
+.IF "$(APP4ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
-.IF "$(APP4ICON)" != ""
     @-+echo 1 ICON "$(APP4ICON:s/\/\\/)" >> $(MISC)$/$(APP4LINKRES:b).rc
-.ENDIF
-.IF "$(APP4VERINFO)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP4LINKRES:b).rc
-    @-+echo #include  "$(APP4VERINFO)" >> $(MISC)$/$(APP4LINKRES:b).rc
-.ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
-.IF "$(APP4ICON)" != ""
-    @-+guw.pl echo 1 ICON \"$(APP4ICON)\" | sed 'sX\\X\\\\Xg' >> $(MISC)$/$(APP4LINKRES:b).rc
-.ENDIF
-.IF "$(APP4VERINFO)" != ""
-    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP4LINKRES:b).rc
-    @-+echo \#include  \"$(APP4VERINFO)\" >> $(MISC)$/$(APP4LINKRES:b).rc
-.ENDIF
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP4ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF		# "$(APP4ICON)" != ""
+.IF "$(APP4VERINFO)" != ""
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP4LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP4VERINFO)$(EMQ)" >> $(MISC)$/$(APP4LINKRES:b).rc
+.ENDIF		# "$(APP4VERINFO)" != ""
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF			# "$(APP4LINKRES)" != ""
 .IF "$(linkinc)" == ""
@@ -649,8 +625,8 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         $(APP4LIBS) \
         $(APP4STDLIBS) \
         $(APP4STDLIB) $(STDLIB4))
-        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP4TARGETN:b)_linkobj.lst >> $(MISC)\$(APP4TARGET).lst
-        +if exist $(MISC)\$(APP4TARGET).lst type $(MISC)\$(APP4TARGET).lst  >> $(MISC)\$(APP4TARGET).lnk
+        $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP4TARGETN:b)_linkobj.lst >> $(MISC)\$(APP4TARGET).lst
+        +$(IFEXIST) $(MISC)\$(APP4TARGET).lst $(THEN) type $(MISC)\$(APP4TARGET).lst  >> $(MISC)\$(APP4TARGET).lnk
         $(APP4LINKER) @$(MISC)\$(APP4TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP4TARGET)" == "loader"
@@ -766,23 +742,17 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP5LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP5LINKRES:b).rc >& $(NULLDEV)
+.IF "$(APP5ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
-.IF "$(APP5ICON)" != ""
     @-+echo 1 ICON "$(APP5ICON:s/\/\\/)" >> $(MISC)$/$(APP5LINKRES:b).rc
-.ENDIF
-.IF "$(APP5VERINFO)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP5LINKRES:b).rc
-    @-+echo #include  "$(APP5VERINFO)" >> $(MISC)$/$(APP5LINKRES:b).rc
-.ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
-.IF "$(APP5ICON)" != ""
-    @-+guw.pl echo 1 ICON \"$(APP5ICON)\" | sed 'sX\\X\\\\Xg' >> $(MISC)$/$(APP5LINKRES:b).rc
-.ENDIF
-.IF "$(APP5VERINFO)" != ""
-    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP5LINKRES:b).rc
-    @-+echo \#include  \"$(APP5VERINFO)\" >> $(MISC)$/$(APP5LINKRES:b).rc
-.ENDIF
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP5ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF		# "$(APP5ICON)" != ""
+.IF "$(APP5VERINFO)" != ""
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP5LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP5VERINFO)$(EMQ)" >> $(MISC)$/$(APP5LINKRES:b).rc
+.ENDIF		# "$(APP5VERINFO)" != ""
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF			# "$(APP5LINKRES)" != ""
 .IF "$(linkinc)" == ""
@@ -817,8 +787,8 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         $(APP5LIBS) \
         $(APP5STDLIBS) \
         $(APP5STDLIB) $(STDLIB5))
-        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP5TARGETN:b)_linkobj.lst >> $(MISC)\$(APP5TARGET).lst
-        +if exist $(MISC)\$(APP5TARGET).lst type $(MISC)\$(APP5TARGET).lst  >> $(MISC)\$(APP5TARGET).lnk
+        $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP5TARGETN:b)_linkobj.lst >> $(MISC)\$(APP5TARGET).lst
+        +$(IFEXIST) $(MISC)\$(APP5TARGET).lst $(THEN) type $(MISC)\$(APP5TARGET).lst  >> $(MISC)\$(APP5TARGET).lnk
         $(APP5LINKER) @$(MISC)\$(APP5TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP5TARGET)" == "loader"
@@ -934,23 +904,17 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP6LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP6LINKRES:b).rc >& $(NULLDEV)
+.IF "$(APP6ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
-.IF "$(APP6ICON)" != ""
     @-+echo 1 ICON "$(APP6ICON:s/\/\\/)" >> $(MISC)$/$(APP6LINKRES:b).rc
-.ENDIF
-.IF "$(APP6VERINFO)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP6LINKRES:b).rc
-    @-+echo #include  "$(APP6VERINFO)" >> $(MISC)$/$(APP6LINKRES:b).rc
-.ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
-.IF "$(APP6ICON)" != ""
-    @-+guw.pl echo 1 ICON \"$(APP6ICON)\" | sed 'sX\\X\\\\Xg' >> $(MISC)$/$(APP6LINKRES:b).rc
-.ENDIF
-.IF "$(APP6VERINFO)" != ""
-    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP6LINKRES:b).rc
-    @-+echo \#include  \"$(APP6VERINFO)\" >> $(MISC)$/$(APP6LINKRES:b).rc
-.ENDIF
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP6ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF		# "$(APP6ICON)" != ""
+.IF "$(APP6VERINFO)" != ""
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP6LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP6VERINFO)$(EMQ)" >> $(MISC)$/$(APP6LINKRES:b).rc
+.ENDIF		# "$(APP6VERINFO)" != ""
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF			# "$(APP6LINKRES)" != ""
 .IF "$(linkinc)" == ""
@@ -985,8 +949,8 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         $(APP6LIBS) \
         $(APP6STDLIBS) \
         $(APP6STDLIB) $(STDLIB6))
-        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP6TARGETN:b)_linkobj.lst >> $(MISC)\$(APP6TARGET).lst
-        +if exist $(MISC)\$(APP6TARGET).lst type $(MISC)\$(APP6TARGET).lst  >> $(MISC)\$(APP6TARGET).lnk
+        $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP6TARGETN:b)_linkobj.lst >> $(MISC)\$(APP6TARGET).lst
+        +$(IFEXIST) $(MISC)\$(APP6TARGET).lst $(THEN) type $(MISC)\$(APP6TARGET).lst  >> $(MISC)\$(APP6TARGET).lnk
         $(APP6LINKER) @$(MISC)\$(APP6TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP6TARGET)" == "loader"
@@ -1102,23 +1066,17 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP7LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP7LINKRES:b).rc >& $(NULLDEV)
+.IF "$(APP7ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
-.IF "$(APP7ICON)" != ""
     @-+echo 1 ICON "$(APP7ICON:s/\/\\/)" >> $(MISC)$/$(APP7LINKRES:b).rc
-.ENDIF
-.IF "$(APP7VERINFO)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP7LINKRES:b).rc
-    @-+echo #include  "$(APP7VERINFO)" >> $(MISC)$/$(APP7LINKRES:b).rc
-.ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
-.IF "$(APP7ICON)" != ""
-    @-+guw.pl echo 1 ICON \"$(APP7ICON)\" | sed 'sX\\X\\\\Xg' >> $(MISC)$/$(APP7LINKRES:b).rc
-.ENDIF
-.IF "$(APP7VERINFO)" != ""
-    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP7LINKRES:b).rc
-    @-+echo \#include  \"$(APP7VERINFO)\" >> $(MISC)$/$(APP7LINKRES:b).rc
-.ENDIF
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP7ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF		# "$(APP7ICON)" != ""
+.IF "$(APP7VERINFO)" != ""
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP7LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP7VERINFO)$(EMQ)" >> $(MISC)$/$(APP7LINKRES:b).rc
+.ENDIF		# "$(APP7VERINFO)" != ""
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF			# "$(APP7LINKRES)" != ""
 .IF "$(linkinc)" == ""
@@ -1153,8 +1111,8 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         $(APP7LIBS) \
         $(APP7STDLIBS) \
         $(APP7STDLIB) $(STDLIB7))
-        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP7TARGETN:b)_linkobj.lst >> $(MISC)\$(APP7TARGET).lst
-        +if exist $(MISC)\$(APP7TARGET).lst type $(MISC)\$(APP7TARGET).lst  >> $(MISC)\$(APP7TARGET).lnk
+        $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP7TARGETN:b)_linkobj.lst >> $(MISC)\$(APP7TARGET).lst
+        +$(IFEXIST) $(MISC)\$(APP7TARGET).lst $(THEN) type $(MISC)\$(APP7TARGET).lst  >> $(MISC)\$(APP7TARGET).lnk
         $(APP7LINKER) @$(MISC)\$(APP7TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP7TARGET)" == "loader"
@@ -1270,23 +1228,17 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP8LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP8LINKRES:b).rc >& $(NULLDEV)
+.IF "$(APP8ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
-.IF "$(APP8ICON)" != ""
     @-+echo 1 ICON "$(APP8ICON:s/\/\\/)" >> $(MISC)$/$(APP8LINKRES:b).rc
-.ENDIF
-.IF "$(APP8VERINFO)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP8LINKRES:b).rc
-    @-+echo #include  "$(APP8VERINFO)" >> $(MISC)$/$(APP8LINKRES:b).rc
-.ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
-.IF "$(APP8ICON)" != ""
-    @-+guw.pl echo 1 ICON \"$(APP8ICON)\" | sed 'sX\\X\\\\Xg' >> $(MISC)$/$(APP8LINKRES:b).rc
-.ENDIF
-.IF "$(APP8VERINFO)" != ""
-    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP8LINKRES:b).rc
-    @-+echo \#include  \"$(APP8VERINFO)\" >> $(MISC)$/$(APP8LINKRES:b).rc
-.ENDIF
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP8ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF		# "$(APP8ICON)" != ""
+.IF "$(APP8VERINFO)" != ""
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP8LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP8VERINFO)$(EMQ)" >> $(MISC)$/$(APP8LINKRES:b).rc
+.ENDIF		# "$(APP8VERINFO)" != ""
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF			# "$(APP8LINKRES)" != ""
 .IF "$(linkinc)" == ""
@@ -1321,8 +1273,8 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         $(APP8LIBS) \
         $(APP8STDLIBS) \
         $(APP8STDLIB) $(STDLIB8))
-        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP8TARGETN:b)_linkobj.lst >> $(MISC)\$(APP8TARGET).lst
-        +if exist $(MISC)\$(APP8TARGET).lst type $(MISC)\$(APP8TARGET).lst  >> $(MISC)\$(APP8TARGET).lnk
+        $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP8TARGETN:b)_linkobj.lst >> $(MISC)\$(APP8TARGET).lst
+        +$(IFEXIST) $(MISC)\$(APP8TARGET).lst $(THEN) type $(MISC)\$(APP8TARGET).lst  >> $(MISC)\$(APP8TARGET).lnk
         $(APP8LINKER) @$(MISC)\$(APP8TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP8TARGET)" == "loader"
@@ -1438,23 +1390,17 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP9LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP9LINKRES:b).rc >& $(NULLDEV)
+.IF "$(APP9ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
-.IF "$(APP9ICON)" != ""
     @-+echo 1 ICON "$(APP9ICON:s/\/\\/)" >> $(MISC)$/$(APP9LINKRES:b).rc
-.ENDIF
-.IF "$(APP9VERINFO)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP9LINKRES:b).rc
-    @-+echo #include  "$(APP9VERINFO)" >> $(MISC)$/$(APP9LINKRES:b).rc
-.ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
-.IF "$(APP9ICON)" != ""
-    @-+guw.pl echo 1 ICON \"$(APP9ICON)\" | sed 'sX\\X\\\\Xg' >> $(MISC)$/$(APP9LINKRES:b).rc
-.ENDIF
-.IF "$(APP9VERINFO)" != ""
-    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP9LINKRES:b).rc
-    @-+echo \#include  \"$(APP9VERINFO)\" >> $(MISC)$/$(APP9LINKRES:b).rc
-.ENDIF
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP9ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF		# "$(APP9ICON)" != ""
+.IF "$(APP9VERINFO)" != ""
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP9LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP9VERINFO)$(EMQ)" >> $(MISC)$/$(APP9LINKRES:b).rc
+.ENDIF		# "$(APP9VERINFO)" != ""
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF			# "$(APP9LINKRES)" != ""
 .IF "$(linkinc)" == ""
@@ -1489,8 +1435,8 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         $(APP9LIBS) \
         $(APP9STDLIBS) \
         $(APP9STDLIB) $(STDLIB9))
-        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP9TARGETN:b)_linkobj.lst >> $(MISC)\$(APP9TARGET).lst
-        +if exist $(MISC)\$(APP9TARGET).lst type $(MISC)\$(APP9TARGET).lst  >> $(MISC)\$(APP9TARGET).lnk
+        $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP9TARGETN:b)_linkobj.lst >> $(MISC)\$(APP9TARGET).lst
+        +$(IFEXIST) $(MISC)\$(APP9TARGET).lst $(THEN) type $(MISC)\$(APP9TARGET).lst  >> $(MISC)\$(APP9TARGET).lnk
         $(APP9LINKER) @$(MISC)\$(APP9TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP9TARGET)" == "loader"
@@ -1606,23 +1552,17 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP10LINKRES)" != ""
     @+-$(RM) $(MISC)$/$(APP10LINKRES:b).rc >& $(NULLDEV)
+.IF "$(APP10ICON)" != ""
 .IF "$(USE_SHELL)"=="4nt"
-.IF "$(APP10ICON)" != ""
     @-+echo 1 ICON "$(APP10ICON:s/\/\\/)" >> $(MISC)$/$(APP10LINKRES:b).rc
-.ENDIF
-.IF "$(APP10VERINFO)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP10LINKRES:b).rc
-    @-+echo #include  "$(APP10VERINFO)" >> $(MISC)$/$(APP10LINKRES:b).rc
-.ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
-.IF "$(APP10ICON)" != ""
-    @-+guw.pl echo 1 ICON \"$(APP10ICON)\" | sed 'sX\\X\\\\Xg' >> $(MISC)$/$(APP10LINKRES:b).rc
-.ENDIF
-.IF "$(APP10VERINFO)" != ""
-    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP10LINKRES:b).rc
-    @-+echo \#include  \"$(APP10VERINFO)\" >> $(MISC)$/$(APP10LINKRES:b).rc
-.ENDIF
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP10ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF		# "$(APP10ICON)" != ""
+.IF "$(APP10VERINFO)" != ""
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP10LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP10VERINFO)$(EMQ)" >> $(MISC)$/$(APP10LINKRES:b).rc
+.ENDIF		# "$(APP10VERINFO)" != ""
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF			# "$(APP10LINKRES)" != ""
 .IF "$(linkinc)" == ""
@@ -1657,8 +1597,8 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         $(APP10LIBS) \
         $(APP10STDLIBS) \
         $(APP10STDLIB) $(STDLIB10))
-        sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP10TARGETN:b)_linkobj.lst >> $(MISC)\$(APP10TARGET).lst
-        +if exist $(MISC)\$(APP10TARGET).lst type $(MISC)\$(APP10TARGET).lst  >> $(MISC)\$(APP10TARGET).lnk
+        $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP10TARGETN:b)_linkobj.lst >> $(MISC)\$(APP10TARGET).lst
+        +$(IFEXIST) $(MISC)\$(APP10TARGET).lst $(THEN) type $(MISC)\$(APP10TARGET).lst  >> $(MISC)\$(APP10TARGET).lnk
         $(APP10LINKER) @$(MISC)\$(APP10TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP10TARGET)" == "loader"
