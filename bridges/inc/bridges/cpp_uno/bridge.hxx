@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridge.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-06 11:00:42 $
+ *  last change: $Author: dbo $ $Date: 2001-10-26 07:22:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ namespace CPPU_CURRENT_NAMESPACE
 {
 
 //--------------------------------------------------------------------------------------------------
-inline void SAL_CALL cppu_cppInterfaceProxy_free( uno_ExtEnvironment * pEnv, void * pProxy ) throw ()
+inline void SAL_CALL cppu_cppInterfaceProxy_free( uno_ExtEnvironment * pEnv, void * pProxy ) SAL_THROW( () )
 {
     cppu_cppInterfaceProxy * pThis =
         static_cast< cppu_cppInterfaceProxy * >(
@@ -110,7 +110,7 @@ inline void SAL_CALL cppu_cppInterfaceProxy_free( uno_ExtEnvironment * pEnv, voi
 //--------------------------------------------------------------------------------------------------
 inline void SAL_CALL cppu_Mapping_uno2cpp(
     uno_Mapping * pMapping, void ** ppCppI,
-    void * pUnoI, typelib_InterfaceTypeDescription * pTypeDescr ) throw ()
+    void * pUnoI, typelib_InterfaceTypeDescription * pTypeDescr ) SAL_THROW( () )
 {
     OSL_ASSERT( ppCppI && pTypeDescr );
     if (*ppCppI)
@@ -150,7 +150,7 @@ inline void SAL_CALL cppu_Mapping_uno2cpp(
     }
 }
 //__________________________________________________________________________________________________
-inline void cppu_cppInterfaceProxy::acquireProxy() throw ()
+inline void cppu_cppInterfaceProxy::acquireProxy() SAL_THROW( () )
 {
     if (1 == osl_incrementInterlockedCount( &nRef ))
     {
@@ -164,7 +164,7 @@ inline void cppu_cppInterfaceProxy::acquireProxy() throw ()
     }
 }
 //__________________________________________________________________________________________________
-inline void cppu_cppInterfaceProxy::releaseProxy() throw ()
+inline void cppu_cppInterfaceProxy::releaseProxy() SAL_THROW( () )
 {
     if (! osl_decrementInterlockedCount( &nRef )) // last release
     {
@@ -176,7 +176,7 @@ inline void cppu_cppInterfaceProxy::releaseProxy() throw ()
 //__________________________________________________________________________________________________
 inline cppu_cppInterfaceProxy::cppu_cppInterfaceProxy(
     cppu_Bridge * pBridge_, uno_Interface * pUnoI_,
-    typelib_InterfaceTypeDescription * pTypeDescr_, const ::rtl::OUString & rOId_ ) throw ()
+    typelib_InterfaceTypeDescription * pTypeDescr_, const ::rtl::OUString & rOId_ ) SAL_THROW( () )
     : nRef( 1 )
     , pBridge( pBridge_ )
     , pUnoI( pUnoI_ )
@@ -200,7 +200,7 @@ inline cppu_cppInterfaceProxy::cppu_cppInterfaceProxy(
 
 
 //--------------------------------------------------------------------------------------------------
-inline void SAL_CALL cppu_unoInterfaceProxy_free( uno_ExtEnvironment * pEnv, void * pProxy ) throw ()
+inline void SAL_CALL cppu_unoInterfaceProxy_free( uno_ExtEnvironment * pEnv, void * pProxy ) SAL_THROW( () )
 {
     cppu_unoInterfaceProxy * pThis =
         static_cast< cppu_unoInterfaceProxy * >(
@@ -218,7 +218,7 @@ inline void SAL_CALL cppu_unoInterfaceProxy_free( uno_ExtEnvironment * pEnv, voi
     delete pThis;
 }
 //--------------------------------------------------------------------------------------------------
-inline void SAL_CALL cppu_unoInterfaceProxy_acquire( uno_Interface * pUnoI ) throw ()
+inline void SAL_CALL cppu_unoInterfaceProxy_acquire( uno_Interface * pUnoI ) SAL_THROW( () )
 {
     if (1 == osl_incrementInterlockedCount( & static_cast< cppu_unoInterfaceProxy * >( pUnoI )->nRef ))
     {
@@ -239,7 +239,7 @@ inline void SAL_CALL cppu_unoInterfaceProxy_acquire( uno_Interface * pUnoI ) thr
     }
 }
 //--------------------------------------------------------------------------------------------------
-inline void SAL_CALL cppu_unoInterfaceProxy_release( uno_Interface * pUnoI ) throw ()
+inline void SAL_CALL cppu_unoInterfaceProxy_release( uno_Interface * pUnoI ) SAL_THROW( () )
 {
     if (! osl_decrementInterlockedCount( & static_cast< cppu_unoInterfaceProxy * >( pUnoI )->nRef ))
     {
@@ -251,7 +251,7 @@ inline void SAL_CALL cppu_unoInterfaceProxy_release( uno_Interface * pUnoI ) thr
 //--------------------------------------------------------------------------------------------------
 inline void SAL_CALL cppu_Mapping_cpp2uno(
     uno_Mapping * pMapping, void ** ppUnoI,
-    void * pCppI, typelib_InterfaceTypeDescription * pTypeDescr ) throw ()
+    void * pCppI, typelib_InterfaceTypeDescription * pTypeDescr ) SAL_THROW( () )
 {
     OSL_ENSURE( ppUnoI && pTypeDescr, "### null ptr!" );
     if (*ppUnoI)
@@ -293,7 +293,7 @@ inline void SAL_CALL cppu_Mapping_cpp2uno(
 //__________________________________________________________________________________________________
 inline cppu_unoInterfaceProxy::cppu_unoInterfaceProxy(
     cppu_Bridge * pBridge_, ::com::sun::star::uno::XInterface * pCppI_,
-    typelib_InterfaceTypeDescription * pTypeDescr_, const ::rtl::OUString & rOId_ ) throw ()
+    typelib_InterfaceTypeDescription * pTypeDescr_, const ::rtl::OUString & rOId_ ) SAL_THROW( () )
     : nRef( 1 )
     , pBridge( pBridge_ )
     , pCppI( pCppI_ )
@@ -310,9 +310,9 @@ inline cppu_unoInterfaceProxy::cppu_unoInterfaceProxy(
     pCppI->acquire();
 
     // uno_Interface
-    uno_Interface::acquire = CPPU_CURRENT_NAMESPACE::cppu_unoInterfaceProxy_acquire;
-    uno_Interface::release = CPPU_CURRENT_NAMESPACE::cppu_unoInterfaceProxy_release;
-    uno_Interface::pDispatcher = (uno_DispatchMethod)CPPU_CURRENT_NAMESPACE::cppu_unoInterfaceProxy_dispatch;
+    uno_Interface::acquire = cppu_unoInterfaceProxy_acquire;
+    uno_Interface::release = cppu_unoInterfaceProxy_release;
+    uno_Interface::pDispatcher = (uno_DispatchMethod)cppu_unoInterfaceProxy_dispatch;
 }
 
 
@@ -322,17 +322,17 @@ inline cppu_unoInterfaceProxy::cppu_unoInterfaceProxy(
 
 
 //--------------------------------------------------------------------------------------------------
-inline void SAL_CALL cppu_Mapping_acquire( uno_Mapping * pMapping ) throw ()
+inline void SAL_CALL cppu_Mapping_acquire( uno_Mapping * pMapping ) SAL_THROW( () )
 {
     static_cast< cppu_Mapping * >( pMapping )->pBridge->acquire();
 }
 //--------------------------------------------------------------------------------------------------
-inline void SAL_CALL cppu_Mapping_release( uno_Mapping * pMapping ) throw ()
+inline void SAL_CALL cppu_Mapping_release( uno_Mapping * pMapping ) SAL_THROW( () )
 {
     static_cast< cppu_Mapping * >( pMapping )->pBridge->release();
 }
 //__________________________________________________________________________________________________
-inline cppu_Mapping::cppu_Mapping( cppu_Bridge * pBridge_, uno_MapInterfaceFunc fpMap ) throw ()
+inline cppu_Mapping::cppu_Mapping( cppu_Bridge * pBridge_, uno_MapInterfaceFunc fpMap ) SAL_THROW( () )
     : pBridge( pBridge_ )
 {
     uno_Mapping::acquire = cppu_Mapping_acquire;
@@ -342,7 +342,7 @@ inline cppu_Mapping::cppu_Mapping( cppu_Bridge * pBridge_, uno_MapInterfaceFunc 
 //__________________________________________________________________________________________________
 inline cppu_Bridge::cppu_Bridge(
     uno_ExtEnvironment * pCppEnv_, uno_ExtEnvironment * pUnoEnv_,
-    sal_Bool bExportCpp2Uno_ ) throw ()
+    sal_Bool bExportCpp2Uno_ ) SAL_THROW( () )
     : nRef( 1 )
     , pCppEnv( pCppEnv_ )
     , pUnoEnv( pUnoEnv_ )
@@ -350,20 +350,24 @@ inline cppu_Bridge::cppu_Bridge(
     , aUno2Cpp( this, cppu_Mapping_uno2cpp )
     , bExportCpp2Uno( bExportCpp2Uno_ )
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     (*((uno_Environment *)pCppEnv)->acquire)( (uno_Environment *)pCppEnv );
     (*((uno_Environment *)pUnoEnv)->acquire)( (uno_Environment *)pUnoEnv );
 }
 //__________________________________________________________________________________________________
-inline void SAL_CALL cppu_Bridge_free( uno_Mapping * pMapping ) throw ()
+inline cppu_Bridge::~cppu_Bridge() SAL_THROW( () )
 {
-    cppu_Bridge * pThis = static_cast< cppu_Mapping * >( pMapping )->pBridge;
-    (*((uno_Environment *)pThis->pUnoEnv)->release)( (uno_Environment *)pThis->pUnoEnv );
-    (*((uno_Environment *)pThis->pCppEnv)->release)( (uno_Environment *)pThis->pCppEnv );
-    delete pThis;
+    (*((uno_Environment *)pUnoEnv)->release)( (uno_Environment *)pUnoEnv );
+    (*((uno_Environment *)pCppEnv)->release)( (uno_Environment *)pCppEnv );
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
-inline void cppu_Bridge::acquire() throw ()
+inline void SAL_CALL cppu_Bridge_free( uno_Mapping * pMapping ) SAL_THROW( () )
+{
+    delete static_cast< cppu_Mapping * >( pMapping )->pBridge;
+}
+//__________________________________________________________________________________________________
+inline void cppu_Bridge::acquire() SAL_THROW( () )
 {
     if (1 == osl_incrementInterlockedCount( &nRef ))
     {
@@ -384,7 +388,7 @@ inline void cppu_Bridge::acquire() throw ()
     }
 }
 //__________________________________________________________________________________________________
-inline void cppu_Bridge::release() throw ()
+inline void cppu_Bridge::release() SAL_THROW( () )
 {
     if (! osl_decrementInterlockedCount( &nRef ))
     {
@@ -394,7 +398,7 @@ inline void cppu_Bridge::release() throw ()
 
 //##################################################################################################
 inline void SAL_CALL cppu_ext_getMapping(
-    uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo ) throw ()
+    uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo ) SAL_THROW( () )
 {
     OSL_ASSERT( ppMapping && pFrom && pTo );
     if (ppMapping && pFrom && pTo && pFrom->pExtEnv && pTo->pExtEnv)
@@ -404,7 +408,6 @@ inline void SAL_CALL cppu_ext_getMapping(
         if (0 == rtl_ustr_ascii_compare( pFrom->pTypeName->buffer, CPPU_CURRENT_LANGUAGE_BINDING_NAME ) &&
             0 == rtl_ustr_ascii_compare( pTo->pTypeName->buffer, UNO_LB_UNO ))
         {
-            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
             // ref count initially 1
             pMapping = &(new cppu_Bridge( pFrom->pExtEnv, pTo->pExtEnv, sal_True ))->aCpp2Uno;
             ::uno_registerMapping(
@@ -415,7 +418,6 @@ inline void SAL_CALL cppu_ext_getMapping(
         else if (0 == rtl_ustr_ascii_compare( pTo->pTypeName->buffer, CPPU_CURRENT_LANGUAGE_BINDING_NAME ) &&
                  0 == rtl_ustr_ascii_compare( pFrom->pTypeName->buffer, UNO_LB_UNO ))
         {
-            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
             // ref count initially 1
             pMapping = &(new cppu_Bridge( pTo->pExtEnv, pFrom->pExtEnv, sal_False ))->aUno2Cpp;
             ::uno_registerMapping(
@@ -444,7 +446,7 @@ static ::rtl::OUString * s_pStaticOidPart = 0;
 
 // environment init stuff
 //--------------------------------------------------------------------------------------------------
-inline const ::rtl::OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() throw ()
+inline const ::rtl::OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() SAL_THROW( () )
 {
 #if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))
     static ::rtl::OUString * s_pStaticOidPart = 0;
@@ -488,7 +490,7 @@ inline const ::rtl::OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() throw ()
 // functions set at environment init
 //--------------------------------------------------------------------------------------------------
 inline void SAL_CALL cppu_cppenv_computeObjectIdentifier(
-    uno_ExtEnvironment * pEnv, rtl_uString ** ppOId, void * pInterface ) throw ()
+    uno_ExtEnvironment * pEnv, rtl_uString ** ppOId, void * pInterface ) SAL_THROW( () )
 {
     OSL_ENSURE( pEnv && ppOId && pInterface, "### null ptr!" );
     if (pEnv && ppOId && pInterface)
@@ -527,30 +529,30 @@ inline void SAL_CALL cppu_cppenv_computeObjectIdentifier(
     }
 }
 //--------------------------------------------------------------------------------------------------
-inline void SAL_CALL cppu_cppenv_acquireInterface( uno_ExtEnvironment *, void * pCppI ) throw ()
+inline void SAL_CALL cppu_cppenv_acquireInterface( uno_ExtEnvironment *, void * pCppI ) SAL_THROW( () )
 {
     reinterpret_cast< ::com::sun::star::uno::XInterface * >( pCppI )->acquire();
 }
 //--------------------------------------------------------------------------------------------------
-inline void SAL_CALL cppu_cppenv_releaseInterface( uno_ExtEnvironment *, void * pCppI ) throw ()
+inline void SAL_CALL cppu_cppenv_releaseInterface( uno_ExtEnvironment *, void * pCppI ) SAL_THROW( () )
 {
     reinterpret_cast< ::com::sun::star::uno::XInterface * >( pCppI )->release();
 }
 //--------------------------------------------------------------------------------------------------
-inline void SAL_CALL cppu_cppenv_environmentDisposing( uno_Environment * ) throw ()
+inline void SAL_CALL cppu_cppenv_environmentDisposing( uno_Environment * ) SAL_THROW( () )
 {
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 //--------------------------------------------------------------------------------------------------
-inline void SAL_CALL cppu_cppenv_initEnvironment( uno_Environment * pCppEnv ) throw ()
+inline void SAL_CALL cppu_cppenv_initEnvironment( uno_Environment * pCppEnv ) SAL_THROW( () )
 {
     OSL_ENSURE( pCppEnv->pExtEnv, "### expected extended environment!" );
     OSL_ENSURE( ::rtl_ustr_ascii_compare( pCppEnv->pTypeName->buffer, CPPU_CURRENT_LANGUAGE_BINDING_NAME ) == 0, "### wrong environment type!" );
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-    ((uno_ExtEnvironment *)pCppEnv)->computeObjectIdentifier = CPPU_CURRENT_NAMESPACE::cppu_cppenv_computeObjectIdentifier;
-    ((uno_ExtEnvironment *)pCppEnv)->acquireInterface        = CPPU_CURRENT_NAMESPACE::cppu_cppenv_acquireInterface;
-    ((uno_ExtEnvironment *)pCppEnv)->releaseInterface        = CPPU_CURRENT_NAMESPACE::cppu_cppenv_releaseInterface;
-    pCppEnv->environmentDisposing                            = CPPU_CURRENT_NAMESPACE::cppu_cppenv_environmentDisposing;
+    ((uno_ExtEnvironment *)pCppEnv)->computeObjectIdentifier = cppu_cppenv_computeObjectIdentifier;
+    ((uno_ExtEnvironment *)pCppEnv)->acquireInterface = cppu_cppenv_acquireInterface;
+    ((uno_ExtEnvironment *)pCppEnv)->releaseInterface = cppu_cppenv_releaseInterface;
+    pCppEnv->environmentDisposing = cppu_cppenv_environmentDisposing;
 }
 
 }
