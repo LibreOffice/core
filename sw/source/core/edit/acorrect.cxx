@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acorrect.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-21 17:39:20 $
+ *  last change: $Author: mtg $ $Date: 2001-05-02 16:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,7 +403,7 @@ BOOL SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPos,
         }
         else
         {
-            SwTextBlocks aTBlks( rACorrect.GetAutoCorrFileName( eLang ));
+            SwTextBlocks aTBlks( rACorrect.GetAutoCorrFileName( eLang, FALSE, TRUE ));
             USHORT nPos = aTBlks.GetIndex( pFnd->GetShort() );
             if( USHRT_MAX != nPos && aTBlks.BeginGetDoc( nPos ) )
             {
