@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DbAdminImpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:13:00 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:48:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,9 @@
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
-
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
 
 class Window;
 //.........................................................................
@@ -115,7 +117,8 @@ namespace dbaui
                                 m_xDatabaseContext;     /// database context we're working in
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XNamingService >
                                 m_xDynamicContext;      /// just another interface of the context ...
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xDatasource;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xDatasource;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >         m_xModel;
 
         ::com::sun::star::uno::Any              m_aDataSourceName;
         typedef ::std::set< ::rtl::OUString >   StringSet;
