@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-30 08:53:34 $
+ *  last change: $Author: mba $ $Date: 2000-12-01 11:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,7 @@ class UCBStorage : public BaseStorage
 public:
     static BOOL                 IsStorageFile( SvStream* );
 
-                                UCBStorage( const String& rName, StreamMode nMode, BOOL bDirect = TRUE );
+                                UCBStorage( const String& rName, StreamMode nMode, BOOL bDirect = TRUE, BOOL bIsRoot = TRUE );
                                 UCBStorage( UCBStorage_Impl* );
                                 UCBStorage( SvStream& rStrm, BOOL bDirect = TRUE );
                                 ~UCBStorage();
