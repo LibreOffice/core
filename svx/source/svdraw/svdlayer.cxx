@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdlayer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:31 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,84 +73,108 @@
 // SetOfByte
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-FASTBOOL SetOfByte::IsEmpty() const
+sal_Bool SetOfByte::IsEmpty() const
 {
-    for (USHORT i=0; i<32; i++) {
-        if (aData[i]!=0) return FALSE;
+    for(sal_uInt16 i(0); i < 32; i++)
+    {
+        if(aData[i] != 0)
+            return sal_False;
     }
-    return TRUE;
+
+    return sal_True;
 }
 
-FASTBOOL SetOfByte::IsFull() const
+sal_Bool SetOfByte::IsFull() const
 {
-    for (USHORT i=0; i<32; i++) {
-        if (aData[i]!=0xFF) return FALSE;
+    for(sal_uInt16 i(0); i < 32; i++)
+    {
+        if(aData[i] != 0xFF)
+            return sal_False;
     }
-    return TRUE;
+
+    return sal_True;
 }
 
-USHORT SetOfByte::GetSetCount() const
+sal_uInt16 SetOfByte::GetSetCount() const
 {
-    USHORT i;
-    USHORT nRet=0;
-    for (i=0; i<32; i++) {
-        BYTE a=aData[i];
-        if (a!=0) {
-            if (a & 0x80) nRet++;
-            if (a & 0x40) nRet++;
-            if (a & 0x20) nRet++;
-            if (a & 0x10) nRet++;
-            if (a & 0x08) nRet++;
-            if (a & 0x04) nRet++;
-            if (a & 0x02) nRet++;
-            if (a & 0x01) nRet++;
+    sal_uInt16 nRet(0);
+
+    for(sal_uInt16 i(0); i < 32; i++)
+    {
+        sal_uInt8 a(aData[i]);
+
+        if(a != 0)
+        {
+            if(a & 0x80) nRet++;
+            if(a & 0x40) nRet++;
+            if(a & 0x20) nRet++;
+            if(a & 0x10) nRet++;
+            if(a & 0x08) nRet++;
+            if(a & 0x04) nRet++;
+            if(a & 0x02) nRet++;
+            if(a & 0x01) nRet++;
         }
     }
+
     return nRet;
 }
 
-BYTE SetOfByte::GetSetBit(USHORT nNum) const
+sal_uInt8 SetOfByte::GetSetBit(sal_uInt16 nNum) const
 {
     nNum++;
-    USHORT i=0,j=0;
-    USHORT nRet=0;
-    while (j<nNum && i<256) {
-        if (IsSet(BYTE(i))) j++;
+    sal_uInt16 i(0), j(0);
+    sal_uInt16 nRet(0);
+
+    while(j < nNum && i < 256)
+    {
+        if(IsSet(sal_uInt8(i)))
+            j++;
         i++;
     }
-    if (j==nNum) nRet=i-1;
-    return BYTE(nRet);
+
+    if(j == nNum)
+        nRet = i - 1;
+
+    return sal_uInt8(nRet);
 }
 
-USHORT SetOfByte::GetClearCount() const
+sal_uInt16 SetOfByte::GetClearCount() const
 {
-    return USHORT(256-GetSetCount());
+    return sal_uInt16(256 - GetSetCount());
 }
 
-BYTE SetOfByte::GetClearBit(USHORT nNum) const
+sal_uInt8 SetOfByte::GetClearBit(sal_uInt16 nNum) const
 {
     nNum++;
-    USHORT i=0,j=0;
-    USHORT nRet=0;
-    while (j<nNum && i<256) {
-        if (!IsSet(BYTE(i))) j++;
+    sal_uInt16 i(0), j(0);
+    sal_uInt16 nRet(0);
+
+    while(j < nNum && i < 256)
+    {
+        if(!IsSet(sal_uInt8(i)))
+            j++;
         i++;
     }
-    if (j==nNum) nRet=i-1;
-    return BYTE(nRet);
+
+    if(j == nNum)
+        nRet = i - 1;
+
+    return sal_uInt8(nRet);
 }
 
 void SetOfByte::operator&=(const SetOfByte& r2ndSet)
 {
-    for (unsigned i=0; i<32; i++) {
-        aData[i]&=r2ndSet.aData[i];
+    for(sal_uInt16 i(0); i < 32; i++)
+    {
+        aData[i] &= r2ndSet.aData[i];
     }
 }
 
 void SetOfByte::operator|=(const SetOfByte& r2ndSet)
 {
-    for (unsigned i=0; i<32; i++) {
-        aData[i]|=r2ndSet.aData[i];
+    for(sal_uInt16 i(0); i < 32; i++)
+    {
+        aData[i] |= r2ndSet.aData[i];
     }
 }
 
@@ -295,50 +319,54 @@ SvStream& operator<<(SvStream& rOut, const SdrLayer& rLayer)
 // SdrLayerSet
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-FASTBOOL SdrLayerSet::operator==(const SdrLayerSet& rCmpLayerSet) const
-{
-    return(aName.Equals(rCmpLayerSet.aName)
-        && aMember == rCmpLayerSet.aMember
-        && aExclude == rCmpLayerSet.aExclude);
-}
+//#110094#-10
+//FASTBOOL SdrLayerSet::operator==(const SdrLayerSet& rCmpLayerSet) const
+//{
+//  return(aName.Equals(rCmpLayerSet.aName)
+//      && aMember == rCmpLayerSet.aMember
+//      && aExclude == rCmpLayerSet.aExclude);
+//}
 
-void SdrLayerSet::Broadcast() const
-{
-    if (pModel!=NULL) {
-        SdrHint aHint(HINT_LAYERSETCHG);
-        pModel->Broadcast(aHint);
-        pModel->SetChanged();
-    }
-}
+//#110094#-10
+//void SdrLayerSet::Broadcast() const
+//{
+//  if (pModel!=NULL) {
+//      SdrHint aHint(HINT_LAYERSETCHG);
+//      pModel->Broadcast(aHint);
+//      pModel->SetChanged();
+//  }
+//}
 
-SvStream& operator>>(SvStream& rIn, SdrLayerSet& rSet)
-{
-    if(rIn.GetError())
-        return rIn;
+//#110094#-10
+//SvStream& operator>>(SvStream& rIn, SdrLayerSet& rSet)
+//{
+//  if(rIn.GetError())
+//      return rIn;
+//
+//  SdrIOHeader aHead(rIn, STREAM_READ);
+//
+//  rIn >> rSet.aMember;
+//  rIn >> rSet.aExclude;
+//
+//  // UNICODE: rIn >> rSet.aName;
+//  rIn.ReadByteString(rSet.aName);
+//
+//  return rIn;
+//}
 
-    SdrIOHeader aHead(rIn, STREAM_READ);
-
-    rIn >> rSet.aMember;
-    rIn >> rSet.aExclude;
-
-    // UNICODE: rIn >> rSet.aName;
-    rIn.ReadByteString(rSet.aName);
-
-    return rIn;
-}
-
-SvStream& operator<<(SvStream& rOut, const SdrLayerSet& rSet)
-{
-    SdrIOHeader aHead(rOut, STREAM_WRITE, SdrIOLSetID);
-
-    rOut << rSet.aMember;
-    rOut << rSet.aExclude;
-
-    // UNICODE: rOut << rSet.aName;
-    rOut.WriteByteString(rSet.aName);
-
-    return rOut;
-}
+//#110094#-10
+//SvStream& operator<<(SvStream& rOut, const SdrLayerSet& rSet)
+//{
+//  SdrIOHeader aHead(rOut, STREAM_WRITE, SdrIOLSetID);
+//
+//  rOut << rSet.aMember;
+//  rOut << rSet.aExclude;
+//
+//  // UNICODE: rOut << rSet.aName;
+//  rOut.WriteByteString(rSet.aName);
+//
+//  return rOut;
+//}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // SdrLayerAdmin
@@ -368,7 +396,8 @@ SdrLayerAdmin::SdrLayerAdmin(const SdrLayerAdmin& rSrcLayerAdmin):
 SdrLayerAdmin::~SdrLayerAdmin()
 {
     ClearLayer();
-    ClearLayerSets();
+    //#110094#-10
+    //ClearLayerSets();
 }
 
 void SdrLayerAdmin::ClearLayer()
@@ -382,31 +411,34 @@ void SdrLayerAdmin::ClearLayer()
     aLayer.Clear();
 }
 
-void SdrLayerAdmin::ClearLayerSets()
-{
-    SdrLayerSet* pL;
-    pL=(SdrLayerSet*)aLSets.First();
-    while (pL!=NULL) {
-        delete pL;
-        pL=(SdrLayerSet*)aLSets.Next();
-    }
-    aLSets.Clear();
-}
+//#110094#-10
+//void SdrLayerAdmin::ClearLayerSets()
+//{
+//  SdrLayerSet* pL;
+//  pL=(SdrLayerSet*)aLSets.First();
+//  while (pL!=NULL) {
+//      delete pL;
+//      pL=(SdrLayerSet*)aLSets.Next();
+//  }
+//  aLSets.Clear();
+//}
 
 const SdrLayerAdmin& SdrLayerAdmin::operator=(const SdrLayerAdmin& rSrcLayerAdmin)
 {
     ClearLayer();
-    ClearLayerSets();
+    //#110094#-10
+    //ClearLayerSets();
     pParent=rSrcLayerAdmin.pParent;
     USHORT i;
     USHORT nAnz=rSrcLayerAdmin.GetLayerCount();
     for (i=0; i<nAnz; i++) {
         aLayer.Insert(new SdrLayer(*rSrcLayerAdmin.GetLayer(i)),CONTAINER_APPEND);
     }
-    nAnz=rSrcLayerAdmin.GetLayerSetCount();
-    for (i=0; i<nAnz; i++) {
-        aLSets.Insert(new SdrLayerSet(*rSrcLayerAdmin.GetLayerSet(i)),CONTAINER_APPEND);
-    }
+//#110094#-10
+//  nAnz=rSrcLayerAdmin.GetLayerSetCount();
+//  for (i=0; i<nAnz; i++) {
+//      aLSets.Insert(new SdrLayerSet(*rSrcLayerAdmin.GetLayerSet(i)),CONTAINER_APPEND);
+//  }
     return *this;
 }
 
@@ -422,12 +454,13 @@ FASTBOOL SdrLayerAdmin::operator==(const SdrLayerAdmin& rCmpLayerAdmin) const
         bOk=*GetLayer(i)==*rCmpLayerAdmin.GetLayer(i);
         i++;
     }
-    nAnz=GetLayerSetCount();
-    i=0;
-    while (bOk && i<nAnz) {
-        bOk=*GetLayerSet(i)==*rCmpLayerAdmin.GetLayerSet(i);
-        i++;
-    }
+    //#110094#-10
+    //nAnz=GetLayerSetCount();
+    //i=0;
+    //while (bOk && i<nAnz) {
+    //  bOk=*GetLayerSet(i)==*rCmpLayerAdmin.GetLayerSet(i);
+    //  i++;
+    //}
     return bOk;
 }
 
@@ -440,17 +473,22 @@ void SdrLayerAdmin::SetModel(SdrModel* pNewModel)
         for (i=0; i<nAnz; i++) {
             GetLayer(i)->SetModel(pNewModel);
         }
-        nAnz=GetLayerSetCount();
-        for (i=0; i<nAnz; i++) {
-            GetLayerSet(i)->SetModel(pNewModel);
-        }
+        //#110094#-10
+        //nAnz=GetLayerSetCount();
+        //for (i=0; i<nAnz; i++) {
+        //  GetLayerSet(i)->SetModel(pNewModel);
+        //}
     }
 }
 
-void SdrLayerAdmin::Broadcast(FASTBOOL bLayerSet) const
+//#110094#-10
+//void SdrLayerAdmin::Broadcast(FASTBOOL bLayerSet) const
+void SdrLayerAdmin::Broadcast() const
 {
     if (pModel!=NULL) {
-        SdrHint aHint(bLayerSet ? HINT_LAYERSETORDERCHG : HINT_LAYERORDERCHG);
+        //#110094#-10
+        //SdrHint aHint(bLayerSet ? HINT_LAYERSETORDERCHG : HINT_LAYERORDERCHG);
+        SdrHint aHint(HINT_LAYERORDERCHG);
         pModel->Broadcast(aHint);
         pModel->SetChanged();
     }
@@ -459,7 +497,11 @@ void SdrLayerAdmin::Broadcast(FASTBOOL bLayerSet) const
 SdrLayer* SdrLayerAdmin::RemoveLayer(USHORT nPos)
 {
     SdrLayer* pRetLayer=(SdrLayer*)(aLayer.Remove(nPos));
-    Broadcast(FALSE);
+
+    //#110094#-10
+    Broadcast();
+    //Broadcast(FALSE);
+
     return pRetLayer;
 }
 
@@ -469,7 +511,11 @@ SdrLayer* SdrLayerAdmin::NewLayer(const XubString& rName, USHORT nPos)
     SdrLayer* pLay=new SdrLayer(nID,rName);
     pLay->SetModel(pModel);
     aLayer.Insert(pLay,nPos);
-    Broadcast(FALSE);
+
+    //#110094#-10
+    //Broadcast(FALSE);
+    Broadcast();
+
     return pLay;
 }
 
@@ -480,7 +526,11 @@ SdrLayer* SdrLayerAdmin::NewStandardLayer(USHORT nPos)
     pLay->SetStandardLayer();
     pLay->SetModel(pModel);
     aLayer.Insert(pLay,nPos);
-    Broadcast(FALSE);
+
+    //#110094#-10
+    //Broadcast(FALSE);
+    Broadcast();
+
     return pLay;
 }
 
@@ -490,7 +540,11 @@ SdrLayer* SdrLayerAdmin::MoveLayer(USHORT nPos, USHORT nNewPos)
     if (pLayer!=NULL) {
         aLayer.Insert(pLayer,nNewPos);
     }
-    Broadcast(FALSE);
+
+    //#110094#-10
+    //Broadcast(FALSE);
+    Broadcast();
+
     return pLayer;
 }
 
@@ -500,7 +554,10 @@ void SdrLayerAdmin::MoveLayer(SdrLayer* pLayer, USHORT nNewPos)
     if (nPos!=CONTAINER_ENTRY_NOTFOUND) {
         aLayer.Remove(nPos);
         aLayer.Insert(pLayer,nNewPos);
-        Broadcast(FALSE);
+
+        //#110094#-10
+        //Broadcast(FALSE);
+        Broadcast();
     }
 }
 
@@ -589,50 +646,54 @@ SdrLayerID SdrLayerAdmin::GetUniqueLayerID() const
     return i;
 }
 
-SdrLayerSet* SdrLayerAdmin::NewLayerSet(const XubString& rName, USHORT nPos)
-{
-    SdrLayerSet* pSet=new SdrLayerSet(/**this,*/rName);
-    pSet->SetModel(pModel);
-    aLSets.Insert(pSet,nPos);
-    Broadcast(TRUE);
-    return pSet;
-}
+//#110094#-10
+//SdrLayerSet* SdrLayerAdmin::NewLayerSet(const XubString& rName, USHORT nPos)
+//{
+//  SdrLayerSet* pSet=new SdrLayerSet(/**this,*/rName);
+//  pSet->SetModel(pModel);
+//  aLSets.Insert(pSet,nPos);
+//  Broadcast(TRUE);
+//  return pSet;
+//}
 
-SdrLayerSet* SdrLayerAdmin::RemoveLayerSet(SdrLayerSet* pSet)
-{
-    SdrLayerSet* pRetSet=(SdrLayerSet*)aLSets.Remove(pSet);
-    Broadcast(TRUE);
-    return pRetSet;
-}
+//#110094#-10
+//SdrLayerSet* SdrLayerAdmin::RemoveLayerSet(SdrLayerSet* pSet)
+//{
+//  SdrLayerSet* pRetSet=(SdrLayerSet*)aLSets.Remove(pSet);
+//  Broadcast(TRUE);
+//  return pRetSet;
+//}
 
-void SdrLayerAdmin::MoveLayerSet(SdrLayerSet* pSet, USHORT nNewPos)
-{
-    ULONG nPos=aLSets.GetPos(pSet);
-    if (nPos!=CONTAINER_ENTRY_NOTFOUND) {
-        aLSets.Remove(nPos);
-        aLSets.Insert(pSet,nNewPos);
-        Broadcast(TRUE);
-    }
-}
+//#110094#-10
+//void SdrLayerAdmin::MoveLayerSet(SdrLayerSet* pSet, USHORT nNewPos)
+//{
+//  ULONG nPos=aLSets.GetPos(pSet);
+//  if (nPos!=CONTAINER_ENTRY_NOTFOUND) {
+//      aLSets.Remove(nPos);
+//      aLSets.Insert(pSet,nNewPos);
+//      Broadcast(TRUE);
+//  }
+//}
 
-const SdrLayerSet* SdrLayerAdmin::GetLayerSet(const XubString& rName, FASTBOOL bInherited) const
-{
-    UINT16 i(0);
-    const SdrLayerSet* pSet = NULL;
-
-    while(i <= GetLayerSetCount() && !pSet)
-    {
-        if(rName.Equals(GetLayerSet(i)->GetName()))
-            pSet = GetLayerSet(i);
-        else
-            i++;
-    }
-
-    if(!pSet && pParent)
-    {
-        pSet = pParent->GetLayerSet(rName, TRUE);
-    }
-
-    return pSet;
-}
+//#110094#-10
+//const SdrLayerSet* SdrLayerAdmin::GetLayerSet(const XubString& rName, FASTBOOL bInherited) const
+//{
+//  UINT16 i(0);
+//  const SdrLayerSet* pSet = NULL;
+//
+//  while(i <= GetLayerSetCount() && !pSet)
+//  {
+//      if(rName.Equals(GetLayerSet(i)->GetName()))
+//          pSet = GetLayerSet(i);
+//      else
+//          i++;
+//  }
+//
+//  if(!pSet && pParent)
+//  {
+//      pSet = pParent->GetLayerSet(rName, TRUE);
+//  }
+//
+//  return pSet;
+//}
 
