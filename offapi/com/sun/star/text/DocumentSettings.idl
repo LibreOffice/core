@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettings.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:52:22 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ published service DocumentSettings
     /** specifies if the former (till OpenOffice.org 1.1) or the new
         line spacing formatting is applied.
 
-        @since #i11859#
+        @since OOo 2.0.0
 
         <p>This property controls how a set line spacing at a paragraph
         influences the formatting of the text lines and the spacing between
@@ -181,7 +181,7 @@ published service DocumentSettings
     /** specifies if paragraph and table spacing is added at the
         bottom of table cells
 
-        @since #106629#
+        @since OOo 2.0.0
 
         <p>This property controls, if the spacing of the last paragraph
         respectively table of a table cell is added at the bottom of this
@@ -199,7 +199,7 @@ published service DocumentSettings
     /** specifies if the former (till OpenOffice.org 1.1) or the new
         object positioning is applied.
 
-        @since #i11860#
+        @since OOo 2.0.0
 
         <p>This property controls how floating screen objects (Writer
         fly frames and drawing objects are positioned.
@@ -219,7 +219,7 @@ published service DocumentSettings
     /** specifies if the text wrap of floating screen objects are
         considered in a specified way in the positioning algorithm.
 
-        @since #i28701#
+        @since OOo 2.0.0
 
         <p>This property controls how floating screen objects (Writer
         fly frames and drawing objects) are positioned.
