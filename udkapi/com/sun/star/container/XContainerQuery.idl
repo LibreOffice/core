@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContainerQuery.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2002-10-30 11:28:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ module com {  module sun {  module star {  module container {
     which serve specified search criterion.
     <p>
  */
-interface XContainerQuery: com::sun::star::uno::XInterface
+published interface XContainerQuery: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** creates a sub set of container items which match given query command
