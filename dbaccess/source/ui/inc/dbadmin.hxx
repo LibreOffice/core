@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-13 10:21:25 $
+ *  last change: $Author: oj $ $Date: 2001-03-27 06:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
+#include <com/sun/star/sdbc/XConnection.hpp>
 #endif
 
 //.........................................................................
@@ -226,7 +229,6 @@ public:
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                 createNew(const ::rtl::OUString& _rName, SfxItemPool* _pPool, const USHORT* _pRanges);
-
 protected:
     /** ensure that the DatabaseInfo for the named object is filled<p/>
         This method allows us lazy access to the data sources: They're retrieved from the context
@@ -551,6 +553,12 @@ public:
     /// return <TRUE/> if in the current state, the changes can be saved (i.e. they produce no conflict)
     sal_Bool    isApplyable();
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const { return m_xORB; }
+
+    /** creates a new connection. The caller is responsible to dispose it
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> createConnection();
+
 protected:
     virtual void PageCreated(USHORT _nId, SfxTabPage& _rPage);
     virtual short Ok();
@@ -645,6 +653,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/03/13 10:21:25  fs
+ *  #84827# #84908# allow changes to be applied without re-initializing the page (which could lead to opening a connection)
+ *
  *  Revision 1.11  2001/02/20 13:15:59  fs
  *  #84151# applyChanges -> applyChangesAsync / +OnAsyncapplyChanges
  *
