@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:45:57 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@
 #include "tbcontrl.hxx"
 #include "dlgutil.hxx"
 #include "dialmgr.hxx"
-
+#include "colorwindow.hxx"
 // ------------------------------------------------------------------------
 
 #define IMAGE_COL_TRANSPARENT       COL_LIGHTMAGENTA
@@ -279,38 +279,6 @@ public:
 };
 
 //========================================================================
-// class SvxColorWindow_Impl --------------------------------------------------
-//========================================================================
-
-class SvxColorWindow_Impl : public SfxPopupWindow, public SfxListener
-{
-private:
-    const USHORT    theSlotId;
-    ValueSet        aColorSet;
-
-#if _SOLAR__PRIVATE
-    DECL_LINK( SelectHdl, void * );
-#endif
-
-protected:
-    virtual void    Resize();
-    virtual BOOL    Close();
-
-public:
-    SvxColorWindow_Impl( USHORT nId, USHORT nSlotId,
-                    const String& rWndTitle,
-                    SfxBindings& rBindings );
-    ~SvxColorWindow_Impl();
-    void            StartSelection();
-
-    virtual void    SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                            const SfxHint& rHint, const TypeId& rHintType );
-    virtual void        KeyInput( const KeyEvent& rKEvt );
-
-    virtual SfxPopupWindow* Clone() const;
-};
-
-//========================================================================
 // class SvxFrameWindow_Impl --------------------------------------------------
 //========================================================================
 
@@ -399,36 +367,6 @@ public:
 
 //########################################################################
 // Hilfsklassen:
-//========================================================================
-// class SvxTbxButtonColorUpdater_Impl ----------------------------------------
-//========================================================================
-#define TBX_UPDATER_MODE_NONE               0x00
-#define TBX_UPDATER_MODE_CHAR_COLOR         0x01
-#define TBX_UPDATER_MODE_CHAR_BACKGROUND    0x02
-#define TBX_UPDATER_MODE_CHAR_COLOR_NEW     0x03
-
-class SvxTbxButtonColorUpdater_Impl
-{
-public:
-                SvxTbxButtonColorUpdater_Impl( USHORT nTbxBtnId,
-                                          ToolBox* ptrTbx, USHORT nMode = 0 );
-                ~SvxTbxButtonColorUpdater_Impl();
-
-    void        Update( const Color& rColor );
-
-protected:
-    void        DrawChar(VirtualDevice&, const Color&);
-
-private:
-    USHORT      nDrawMode;
-    USHORT      nBtnId;
-    ToolBox*    pTbx;
-    Bitmap*     pBtnBmp;
-    Color       aCurColor;
-    Rectangle   theUpdRect;
-    Size        theBmpSize;
-    BOOL        bWasHiContrastMode;
-};
 
 //========================================================================
 // class SfxStyleControllerItem ------------------------------------------
@@ -1026,11 +964,11 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( USHORT nId, USHORT nSlotId,
         aColorSet.SetStyle( aColorSet.GetStyle() | WB_NONEFIELD );
         aColorSet.SetText( SVX_RESSTR( RID_SVXSTR_TRANSPARENT ) );
     }
-    else if ( SID_ATTR_CHAR_COLOR == theSlotId || SID_ATTR_CHAR_COLOR2 == theSlotId)
+    else if ( SID_ATTR_CHAR_COLOR == theSlotId || SID_ATTR_CHAR_COLOR2 == theSlotId || SID_EXTRUSION_3D_COLOR == theSlotId )
     {
         SfxPoolItem* pDummy;
         SfxItemState eState = rBindings.QueryState(SID_ATTR_AUTO_COLOR_INVALID, pDummy);
-        if(SFX_ITEM_DEFAULT > eState)
+        if( (SFX_ITEM_DEFAULT > eState) || ( SID_EXTRUSION_3D_COLOR == theSlotId ) )
         {
             aColorSet.SetStyle( aColorSet.GetStyle() | WB_NONEFIELD );
             aColorSet.SetText( SVX_RESSTR( RID_SVXSTR_AUTOMATIC ) );
@@ -1101,7 +1039,7 @@ IMPL_LINK( SvxColorWindow_Impl, SelectHdl, void *, EMPTYARG )
 
     if ( !nItemId && ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId  || SID_BACKGROUND_COLOR == theSlotId ) )
         GetBindings().Execute( theSlotId );
-    else if ( !nItemId && (SID_ATTR_CHAR_COLOR == theSlotId || SID_ATTR_CHAR_COLOR2  == theSlotId) )
+    else if ( !nItemId && (SID_ATTR_CHAR_COLOR == theSlotId || SID_ATTR_CHAR_COLOR2  == theSlotId || SID_EXTRUSION_3D_COLOR == theSlotId) )
     {
         SvxColorItem aColorItem( COL_AUTO, theSlotId );
         GetBindings().GetDispatcher()->Execute( theSlotId, SFX_CALLMODE_RECORD, &aColorItem, 0L );
