@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-15 17:14:01 $
+ *  last change: $Author: sab $ $Date: 2001-12-10 17:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1497,13 +1497,6 @@ void XMLShapeExport::ImpExportCaptionShape(
 
         awt::Point aCaptionPoint;
         xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "CaptionPoint" ) ) ) >>= aCaptionPoint;
-
-        // #88491# correct CaptionPoint position about pRefPoint
-        if(pRefPoint)
-        {
-            aCaptionPoint.X = aCaptionPoint.X - pRefPoint->X;
-            aCaptionPoint.Y = aCaptionPoint.Y - pRefPoint->Y;
-        }
 
         rExport.GetMM100UnitConverter().convertMeasure(msBuffer, aCaptionPoint.X);
         rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CAPTION_POINT_X, msBuffer.makeStringAndClear() );
