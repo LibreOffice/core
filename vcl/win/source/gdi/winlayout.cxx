@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hdu $ $Date: 2002-11-29 16:50:09 $
+ *  last change: $Author: hdu $ $Date: 2002-12-05 11:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,8 +134,8 @@ private:
     WCHAR*          mpOutGlyphs;
     int*            mpGlyphAdvances;
     int*            mpGlyphOrigAdvs;
-    int*            mpChars2Glyphs;
-    int*            mpGlyphs2Chars;
+    int*            mpChars2Glyphs; // rel char pos, abs glyph pos
+    int*            mpGlyphs2Chars; // abs glyph pos, abs char pos
     int             mnNotdefWidth;
     long            mnWidth;
 
@@ -254,6 +254,9 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
         // note: glyph to char mapping is relative to first character
         mpChars2Glyphs = new int[ nMaxGlyphCount ];
         mpGlyphs2Chars = new int[ nMaxGlyphCount ];
+
+        for( i = 0; i < nMaxGlyphCount; ++i )
+            mpChars2Glyphs[i] = mpGlyphs2Chars[i] = -1;
 
         mnGlyphCount = 0;
         rArgs.ResetPos();
@@ -441,7 +444,6 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
         bool bRTL = false;  // TODO: get from run
         if( mpGlyphs2Chars )
             nCharPos = mpGlyphs2Chars[ i ];
-        nCharPos += rArgs.mnMinCharPos;
         rArgs.NeedFallback( nCharPos, bRTL );
 
         // insert a dummy in the meantime
@@ -553,8 +555,6 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& n
         if( pCharIndexes )
         {
             int nCharPos = mpGlyphs2Chars ? mpGlyphs2Chars[nStart] : nStart;
-            if( nCharPos >= 0 )
-                nCharPos += mnMinCharPos;
             *(pCharIndexes++) = nCharPos;
         }
 
@@ -702,7 +702,7 @@ void SimpleWinLayout::GetCaretPositions( long* pCaretXArray ) const
         for( i = 0; i < mnGlyphCount; ++i )
         {
             long nXRight = nXPos + mpGlyphAdvances[ i ];
-            int nCurrIdx = 2 * mpGlyphs2Chars[ i ];
+            int nCurrIdx = 2 * (mpGlyphs2Chars[ i ] - mnMinCharPos);
             if( nLeftIdx <= nCurrIdx )
             {
                 // normal positions for LTR case
