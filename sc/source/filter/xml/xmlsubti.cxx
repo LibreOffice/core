@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-02 14:41:42 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 18:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XPROTECTABLE_HPP_
 #include <com/sun/star/util/XProtectable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XARRAYFORMULARANGE_HPP_
+#include <com/sun/star/sheet/XArrayFormulaRange.hpp>
 #endif
 
 //------------------------------------------------------------------
@@ -713,6 +716,18 @@ void ScMyTables::DeleteTable()
             rImport.SetError(XMLERROR_API | XMLERROR_FLAG_ERROR, aSeq, rtl::OUString(), xLocator);
         }
     }
+
+    if (!aMatrixRangeList.empty())
+    {
+        ScMyMatrixRangeList::iterator aItr = aMatrixRangeList.begin();
+        ScMyMatrixRangeList::iterator aEndItr = aMatrixRangeList.end();
+        while(aItr != aEndItr)
+        {
+            SetMatrix(aItr->aRange, aItr->sFormula);
+            ++aItr;
+        }
+        aMatrixRangeList.clear();
+    }
 }
 
 table::CellAddress ScMyTables::GetRealCellPos()
@@ -788,7 +803,7 @@ void ScMyTables::AddShape(uno::Reference <drawing::XShape>& rShape,
     aResizeShapes.AddShape(rShape, pRangeList, rStartAddress, rEndAddress, nEndX, nEndY);
 }
 
-void ScMyTables::AddMatrixRange(sal_Int32 nStartColumn, sal_Int32 nStartRow, sal_Int32 nEndColumn, sal_Int32 nEndRow)
+void ScMyTables::AddMatrixRange(sal_Int32 nStartColumn, sal_Int32 nStartRow, sal_Int32 nEndColumn, sal_Int32 nEndRow, const rtl::OUString& rFormula)
 {
     DBG_ASSERT(nEndRow >= nStartRow, "wrong row order");
     DBG_ASSERT(nEndColumn >= nStartColumn, "wrong column order");
@@ -798,7 +813,8 @@ void ScMyTables::AddMatrixRange(sal_Int32 nStartColumn, sal_Int32 nStartRow, sal
     aRange.EndColumn = nEndColumn;
     aRange.EndRow = nEndRow;
     aRange.Sheet = nCurrentSheet;
-    aMatrixRangeList.push_back(aRange);
+    ScMatrixRange aMRange(aRange, rFormula);
+    aMatrixRangeList.push_back(aMRange);
 }
 
 sal_Bool ScMyTables::IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow)
@@ -811,13 +827,19 @@ sal_Bool ScMyTables::IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow)
         sal_Bool bReady(sal_False);
         while(!bReady && aItr != aEndItr)
         {
-            if (nCurrentSheet > aItr->Sheet)
+            if (nCurrentSheet > aItr->aRange.Sheet)
+            {
+                DBG_ERROR("should never hapen, because the list should be cleared in DeleteTable");
                 aItr = aMatrixRangeList.erase(aItr);
-            else if (nRow > aItr->EndRow)
+            }
+            else if ((nRow > aItr->aRange.EndRow) && (nColumn > aItr->aRange.EndColumn))
+            {
+                SetMatrix(aItr->aRange, aItr->sFormula);
                 aItr = aMatrixRangeList.erase(aItr);
-            else if ((nRow == aItr->EndRow) && (nColumn > aItr->EndColumn))
-                aItr = aMatrixRangeList.erase(aItr);
-            else if (nColumn >= aItr->StartColumn && nColumn <= aItr->EndColumn && nRow >= aItr->StartRow && nRow <= aItr->EndRow)
+            }
+            else if (nColumn < aItr->aRange.StartColumn)
+                bReady = sal_True;
+            else if (nColumn >= aItr->aRange.StartColumn && nColumn <= aItr->aRange.EndColumn && nRow >= aItr->aRange.StartRow && nRow <= aItr->aRange.EndRow)
             {
                 bReady = sal_True;
                 bResult = sal_True;
@@ -827,4 +849,17 @@ sal_Bool ScMyTables::IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow)
         }
     }
     return bResult;
+}
+
+void ScMyTables::SetMatrix(const table::CellRangeAddress& rRange, const rtl::OUString& rFormula)
+{
+    uno::Reference <table::XCellRange> xMatrixCellRange(
+        GetCurrentXCellRange()->getCellRangeByPosition(rRange.StartColumn, rRange.StartRow,
+                    rRange.EndColumn, rRange.EndRow));
+    if (xMatrixCellRange.is())
+    {
+        uno::Reference <sheet::XArrayFormulaRange> xArrayFormulaRange(xMatrixCellRange, uno::UNO_QUERY);
+        if (xArrayFormulaRange.is())
+            xArrayFormulaRange->setArrayFormula(rFormula);
+    }
 }
