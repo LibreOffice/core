@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:08:12 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ public:
 protected:
     friend class GlyphCache;
 
-    int                         ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* ) const;
+    int                         ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_*, bool ) const;
     virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
     virtual ULONG               GetFontCodeRanges( sal_uInt32* pCodes ) const;
     bool                        ApplyGSUB( const ImplFontSelectData& );
