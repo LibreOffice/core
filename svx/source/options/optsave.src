@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: os $ $Date: 2001-12-06 13:00:33 $
+ *  last change: $Author: kz $ $Date: 2001-12-14 18:51:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ swedish ] = "Ladda ~anvδndarspecifika instδllningar med dokumentet";
         Text[ polish ] = "£aduj dokument ³Ήcznie z ustawieniami indywidualnymi";
         Text[ portuguese_brazilian ] = "Load user-defined settings with the document";
-        Text[ japanese ] = "οΎ•ο½°ο½»οΎο½°η‹¬θ‡ªγ®θ¨­ε®γ‚’οΎ„οΎο½·ο½­οΎ’οΎοΎ„γ¨γ¨γ‚‚γ«θª­γΏθΎΌγ‚€";
+        Text[ japanese ] = "γƒ¦γƒΌγ‚¶γƒΌη‹¬θ‡ªγ®θ¨­ε®γ‚’γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ¨γ¨γ‚‚γ«θª­γΏθΎΌγ‚€";
         Text[ korean ] = "λ¬Έμ„μ™€ ν•¨κ» μ‚¬μ©μ κ³ μ  μ„¤μ • λ΅λ“";
         Text[ chinese_simplified ] = "θΏεδ½Ώη”¨θ€…η„θ®Ύε®δΈ€θµ·θ£…ε…¥ζ–‡ζ΅£";
         Text[ chinese_traditional ] = "ι€£εδ½Ώη”¨θ€…η„θ¨­ε®δΈ€θµ·θΌ‰ε…¥ζ–‡δ»¶";
@@ -201,7 +201,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ chinese_simplified ] = "ε…ηΌ–θΎ‘ε±ζ€§(~E)";
         Text[ russian ] = "Οπΰβκΰ ρβξιρςβ δξκσμενςΰ δξ ρξυπΰνενθÿ";
         Text[ polish ] = "Edytuj wczeniej w³aciwoci";
-        Text[ japanese ] = "δΏε­ζ™‚γ«οΎοΎοΎ›οΎοΎοΎƒο½¨γ®ηΆΊθª(~E)";
+        Text[ japanese ] = "δΏε­ζ™‚γ«γƒ—γƒ­γƒ‘γƒ†γ‚£γ®ηΆΊθª(~E)";
         Text[ chinese_traditional ] = "ε…η·¨θΌ―ε±¬ζ€§(~E)";
         Text[ arabic ] = "ΚΝΡνΡ ΞΥΗΖΥ ΗαγΣΚδΟ ήΘα ΗαΝέΩ";
         Text[ greek ] = "Επεξεργ. ~ιδιοτήτων εγγράφου πριν την αποθήκευση";
@@ -229,7 +229,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ chinese_simplified ] = "θ‡ªε¨ε»Ίη«‹ε®‰ε…¨ε¤‡δ»¶(~W)";
         Text[ russian ] = "Ρξηδΰβΰςό βρεγδΰ πεηεπβνσώ κξοθώ";
         Text[ polish ] = "Twσrz zawsze kopiκ zapasowΉ";
-        Text[ japanese ] = "εΈΈζ™‚οΎοΎο½―ο½Έο½±ο½―οΎοΎο½ΊοΎ‹οΎο½°γ®δ½ζ(~W)";
+        Text[ japanese ] = "εΈΈζ™‚γƒγƒƒγ‚―γ‚Άγƒƒγƒ—γ‚³γƒ”γƒΌγ®δ½ζ(~W)";
         Text[ chinese_traditional ] = "θ‡ªε‹•θ£½δ½ε®‰ε…¨ε‚™δ»½(~W)";
         Text[ arabic ] = "Ϊγα δΣΞΙ ΗΝΚνΗΨνΙ ΟζγΗπ";
         Text[ greek ] = "Πάντα δημιουργία αντιγράφου α~σφαλείας";
@@ -330,7 +330,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ chinese_simplified ] = "ζΎη¤Ίθ―Άι—®(~P)";
         Text[ russian ] = "Ρ ηΰοπξρξμ";
         Text[ polish ] = "Potwierdzenie";
-        Text[ japanese ] = "ηΆΊθªοΎ’ο½―ο½Ύο½°ο½ΌοΎγ®θ΅¨η¤Ί(~P)";
+        Text[ japanese ] = "ηΆΊθªγƒ΅γƒƒγ‚»γƒΌγ‚Έγ®θ΅¨η¤Ί(~P)";
         Text[ chinese_traditional ] = "ι΅―η¤Ίθ©Άε•(~P)";
         Text[ arabic ] = "ΗαγΨΗαΘΙ ΘΗαΝέΩ";
         Text[ greek ] = "Με ε~ρώτηση διευκρίνισης";
@@ -358,10 +358,10 @@ TabPage RID_SFXPAGE_SAVE
         Text[ swedish ] = "Storleksoptimering fφr XML-format (utan pretty printing)";
         Text[ polish ] = "Size optimization for XML files (no pretty printing)";
         Text[ portuguese_brazilian ] = "Size optimization for XML files (no pretty printing)";
-        Text[ japanese ] = "XML ε½ΆεΌγ‚’ο½»ο½²ο½½οΎγ§ζ€ι©ε–γ™γ‚‹(pretty printing γªγ—)";
-        Text[ korean ] = "Size optimization for XML files (no pretty printing)";
-        Text[ chinese_simplified ] = "ζ€δ½³ε– XML ζ–‡δ»¶(ζ—  Pretty Printing)";
-        Text[ chinese_traditional ] = "ζ€δ½³ε– XML ζª”ζ΅(η„΅ε‹ε–„ε—ε°)";
+        Text[ japanese ] = "XML ε½ΆεΌγ‚’γ‚µγ‚¤γ‚Ίγ§ζ€ι©ε–γ™γ‚‹(pretty printing γªγ—)";
+        Text[ korean ] = "XML νμΌμ©μΌλ΅ ν¬κΈ° μµμ ν™” (κ³ κΈ‰ μΈμ‡„ μ—†μ)";
+        Text[ chinese_simplified ] = "ζ€δ½³ε– XML ζ ΌεΌη„ε¤§ε°(δΈδ½Ώη”¨ Pretty Printing ζ€ζ―)";
+        Text[ chinese_traditional ] = "ζ€δ½³ε– XML ζ ΌεΌη„ε¤§ε°(δΈδ½Ώη”¨ Pretty Printing ζ€θ΅“)";
         Text[ turkish ] = "Size optimization for XML files (no pretty printing)";
         Text[ arabic ] = "Size optimization for XML files (no pretty printing)";
         Text[ catalan ] = "Size optimization for XML files (no pretty printing)";
@@ -385,7 +385,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ chinese_simplified ] = "ε­η›η›Έε―Ήη„URLε°ε€";
         Text[ russian ] = "Ρξυπΰνÿςό URL ξςνξρθςελόνξ";
         Text[ polish ] = "Zapisz adresy URL w sposσb relatywny";
-        Text[ japanese ] = "URL ο½±οΎ„οΎοΎο½½γ®η›Έε―ΎδΏε­";
+        Text[ japanese ] = "URL γ‚Άγƒ‰γƒ¬γ‚Ήγ®η›Έε―ΎδΏε­";
         Text[ chinese_traditional ] = "ε„²ε­η›Έε°εΌ URL ε°ε€";
         Text[ arabic ] = "ΝέΩ Ηαά URLs ΝέΩΗπ δΣΘνΗπ έν";
         Text[ greek ] = "Σχετική αποθήκευση των URL";
@@ -413,7 +413,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ chinese_simplified ] = "ε¨ζ–‡δ»¶η³»η»ε†…(~F)";
         Text[ russian ] = "β ρθρςεμε τΰιλξβ";
         Text[ polish ] = "W systemie pli~kσw";
-        Text[ japanese ] = "οΎο½§ο½²οΎ™ ο½Όο½½οΎƒοΎ‘(~F)";
+        Text[ japanese ] = "γƒ•γ‚΅γ‚¤γƒ« γ‚·γ‚Ήγƒ†γƒ (~F)";
         Text[ chinese_traditional ] = "ε¨ζª”ζ΅η³»ηµ±ε…§(~F)";
         Text[ arabic ] = "δΩΗγ Ηαγαέ";
         Text[ greek ] = "στο σύστημα αρχείων";
@@ -441,7 +441,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ chinese_simplified ] = "ε¨ε›½ι™…δΊ’θ”η½‘ε†…(~I)";
         Text[ russian ] = "β Θνςεπνεςε";
         Text[ polish ] = "W I~nternecie";
-        Text[ japanese ] = "ο½²οΎοΎ€ο½°οΎο½―οΎ„(~I)";
+        Text[ japanese ] = "γ‚¤γƒ³γ‚ΏγƒΌγƒγƒƒγƒ(~I)";
         Text[ chinese_traditional ] = "~Internet";
         Text[ arabic ] = "ΗαΕδΚΡδΚ";
         Text[ greek ] = "στο Internet";
@@ -468,7 +468,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ swedish ] = "Standardfilformat";
         Text[ polish ] = "Domylny format pliku";
         Text[ portuguese_brazilian ] = "Standard file format";
-        Text[ japanese ] = "ζ¨™ζΊ–οΎο½§ο½²οΎ™ε½ΆεΌ";
+        Text[ japanese ] = "ζ¨™ζΊ–γƒ•γ‚΅γ‚¤γƒ«ε½ΆεΌ";
         Text[ korean ] = "κΈ°λ³Έ νμΌ ν•μ‹";
         Text[ chinese_simplified ] = "ζ ‡ε‡†ζ–‡δ»¶ζ ΌεΌ";
         Text[ chinese_traditional ] = "ζ¨™ζΊ–ζª”ζ΅ζ ΌεΌ";
@@ -496,7 +496,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ swedish ] = "~Dokumenttyp";
         Text[ polish ] = "Typ dokumentu";
         Text[ portuguese_brazilian ] = "Document";
-        Text[ japanese ] = "οΎ„οΎο½·ο½­οΎ’οΎοΎ„γ®η¨®ι΅(~O)";
+        Text[ japanese ] = "γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ®η¨®ι΅(~O)";
         Text[ korean ] = "λ¬Έμ„ μ ν•(~O)";
         Text[ chinese_simplified ] = "ζ–‡ζ΅£η±»ε‹(~O)";
         Text[ chinese_traditional ] = "ζ–‡δ»¶ι΅ε‹(~O)";
@@ -682,10 +682,10 @@ TabPage RID_SFXPAGE_SAVE
         };
     StringList [ japanese ] =
     {
-            < "ζ–‡ζ›ΈοΎ„οΎο½·ο½­οΎ’οΎοΎ„" ;     APP_WRITER    ; > ;
-        < "HTML ε½ΆεΌοΎ„οΎο½·ο½­οΎ’οΎοΎ„" ;    APP_WRITER_WEB;  > ;
-        < "θ΅¨θ¨η®—οΎ„οΎο½·ο½­οΎ’οΎοΎ„" ; APP_CALC      ; > ;
-        < "οΎοΎοΎο½ΎοΎοΎοΎƒο½°ο½Όο½®οΎ" ;     APP_IMPRESS   ; > ;
+            < "ζ–‡ζ›Έγƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒ" ;     APP_WRITER    ; > ;
+        < "HTML ε½ΆεΌγƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒ" ;    APP_WRITER_WEB;  > ;
+        < "θ΅¨θ¨η®—γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒ" ; APP_CALC      ; > ;
+        < "γƒ—γƒ¬γ‚Όγƒ³γƒ†γƒΌγ‚·γƒ§γƒ³" ;     APP_IMPRESS   ; > ;
         < "ε›³ε½Άζη”»" ;        APP_DRAW      ; > ;
         < "ζ•°εΌ" ;           APP_MATH      ; > ;
         };
@@ -791,8 +791,8 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Text[ swedish ] = "Att anvδnda \"%1\" som standarfilformat kan leda till att information gεr fφrlorad.\n";
         Text[ polish ] = "Saving with \"%1\" may cause information loss.\n";
         Text[ portuguese_brazilian ] = "Saving with \"%1\" may cause information loss.\n";
-        Text[ japanese ] = "\"%1\" γ‚’ζ¨™ζΊ–οΎο½§ο½²οΎ™ζ›ΈεΌγ¨γ—γ¦δ½Ώη”¨γ™γ‚‹γ¨γ€ζƒ…ε ±γε¤±γ‚γ‚γ‚‹ε―θƒ½ζ€§γγ‚γ‚γΎγ™γ€‚\n";
-        Text[ korean ] = "Saving with \"%1\" may cause information loss.\n";
+        Text[ japanese ] = "\"%1\" γ‚’ζ¨™ζΊ–γƒ•γ‚΅γ‚¤γƒ«ζ›ΈεΌγ¨γ—γ¦δ½Ώη”¨γ™γ‚‹γ¨γ€ζƒ…ε ±γε¤±γ‚γ‚γ‚‹ε―θƒ½ζ€§γγ‚γ‚γΎγ™γ€‚\n";
+        Text[ korean ] = "\"%1\"λ΅(μΌλ΅) μ €μ¥ν•λ©΄ μ •λ³΄κ°€ μ†μ‹¤λ  μλ„ μμµλ‹λ‹¤.\n";
         Text[ chinese_simplified ] = "ε°† \"%1\" ε½“ζζ ‡ε‡†ζ–‡δ»¶ζ ΌεΌζ¥ε­η›ζ–‡δ»¶ε―θƒ½δΌεΌ•θµ·ζ•°ζ®ζµε¤±γ€‚\n";
         Text[ chinese_traditional ] = "ε°‡ \"%1\" η•¶ζζ¨™ζΊ–ζª”ζ΅ζ ΌεΌδΎ†ε„²ε­ζ–‡δ»¶ε―θƒ½ζƒεΌ•θµ·θ³‡ζ–™ζµε¤±γ€‚\n";
         Text[ turkish ] = "Saving with \"%1\" may cause information loss.\n";
@@ -819,6 +819,7 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Size = MAP_APPFONT( 50, 14 );
     };
 };
+
 
 
 
