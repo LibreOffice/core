@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsskip.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:29:11 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,5 +73,6 @@
 // These defines exist only to cut off the dependicies to I18N project.
 const USHORT CRSR_SKIP_CHARS  = 0;
 const USHORT CRSR_SKIP_CELLS  = 1;
+const USHORT CRSR_SKIP_HIDDEN = 2;
 
 #endif
