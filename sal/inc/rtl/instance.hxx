@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instance.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 14:59:13 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 06:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,36 +373,134 @@ rtl_Instance< Inst, InstCtor, Guard, GuardCtor, Data, DataCtor >::m_pInstance
 
 }
 
-namespace rtl
-{
-    template< typename T, typename Unique > struct StaticInstance
-    {
-        T * operator ()()
-        {
+namespace rtl {
+
+/** Helper base class for a late-initialized (default-constructed)
+    static variable, implementing the double-checked locking pattern correctly.
+
+    @derive
+    Derive from this class (common practice), e.g.
+    <pre>
+    struct MyStatic : public rtl::Static<MyType, MyStatic> {};
+    ...
+    MyType & rStatic = MyStatic::get();
+    ...
+    </pre>
+
+    @tplparam T
+              variable's type
+    @tplparam Unique
+              Implementation trick to make the inner static holder unique,
+              using the outer class
+              (the one that derives from this base class)
+*/
+template<typename T, typename Unique>
+class Static {
+public:
+    /** Gets the static.  Mutual exclusion is performed using the
+        osl global mutex.
+
+        @return
+                static variable
+    */
+    static T & get() {
+        return *rtl_Instance<
+            T, StaticInstance,
+            ::osl::MutexGuard, ::osl::GetGlobalMutex >::create(
+                StaticInstance(), ::osl::GetGlobalMutex() );
+    }
+private:
+    struct StaticInstance {
+        T * operator () () {
             static T instance;
             return &instance;
         }
     };
+};
 
-    template< typename T, typename Unique, typename Base = StaticInstance<T, Unique> > struct Static : public Base
-    {
-        static T & get()
-        {
-              return *rtl_Instance<
-                  T, Static, osl::MutexGuard, osl::GetGlobalMutex >::create(
-                      Static(), osl::GetGlobalMutex());
+/** Helper class for a late-initialized static aggregate, e.g. an array,
+    implementing the double-checked locking pattern correctly.
+
+    @tplparam T
+              aggregate's element type
+    @tplparam InitAggregate
+              initializer functor class
+*/
+template<typename T, typename InitAggregate>
+class StaticAggregate {
+public:
+    /** Gets the static aggregate, late-initializing.
+        Mutual exclusion is performed using the osl global mutex.
+
+        @return
+                aggregate
+    */
+    static T * get() {
+        return rtl_Instance<
+            T, InitAggregate,
+            ::osl::MutexGuard, ::osl::GetGlobalMutex >::create(
+                InitAggregate(), ::osl::GetGlobalMutex() );
+    }
+};
+
+/** Helper base class for a late-initialized static variable,
+    implementing the double-checked locking pattern correctly.
+
+    @derive
+    Derive from this class (common practice),
+    providing an initializer functor class, e.g.
+    <pre>
+    struct MyStatic : public rtl::StaticWithInit<MyType, MyStatic> {
+        MyType operator () () {
+            ...
+            return MyType( ... );
         }
     };
+    ...
+    MyType & rStatic = MyStatic::get();
+    ...
+    </pre>
 
-    template< typename T, typename InitAggregate > struct StaticAggregate : public InitAggregate
-    {
-        static T * get()
-        {
-              return rtl_Instance<
-                  T, StaticAggregate, osl::MutexGuard, osl::GetGlobalMutex >::create(
-                      StaticAggregate(), osl::GetGlobalMutex());
+    @tplparam T
+              variable's type
+    @tplparam InitData
+              initializer functor class
+    @tplparam Unique
+              Implementation trick to make the inner static holder unique,
+              using the outer class
+              (the one that derives from this base class).
+              Default is InitData (common practice).
+    @tplparam Data
+              Initializer functor's return type.
+              Default is T (common practice).
+*/
+template<typename T, typename InitData,
+         typename Unique = InitData, typename Data = T>
+class StaticWithInit {
+public:
+    /** Gets the static.  Mutual exclusion is performed using the
+        osl global mutex.
+
+        @return
+                static variable
+    */
+    static T & get() {
+        return *rtl_Instance<
+            T, StaticInstanceWithInit,
+            ::osl::MutexGuard, ::osl::GetGlobalMutex,
+            Data, InitData >::create( StaticInstanceWithInit(),
+                                      ::osl::GetGlobalMutex(),
+                                      InitData() );
+    }
+private:
+    struct StaticInstanceWithInit {
+        T * operator () ( Data d ) {
+            static T instance(d);
+            return &instance;
         }
     };
-}
+};
+
+} // namespace rtl
 
 #endif // INCLUDED_RTL_INSTANCE_HXX
