@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-26 12:10:29 $
+ *  last change: $Author: ka $ $Date: 2000-11-02 15:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,26 +493,29 @@ void GalleryBrowser2::Command( const CommandEvent& rCEvt )
 {
     const USHORT nId = mbIsPreview ? mpValueSet->GetSelectItemId() : mpValueSet->GetItemId( rCEvt.GetMousePosPixel() );
 
-    if( rCEvt.GetCommand() == COMMAND_STARTDRAG )
+    if( nId && mpCurTheme && ( nId <= mpCurTheme->GetObjectCount() ) )
     {
-        SgaDataObjectRef    xDataObject( new SgaDataObject( mpCurTheme, nId - 1 ) );
-        Region              aRegion( mpValueSet->GetItemRect( nId ) );
-        const DropAction    eAction = xDataObject->ExecuteDrag( NULL,
-                                            POINTER_MOVEDATA, POINTER_COPYDATA, POINTER_LINKDATA,
-                                            DRAG_COPYABLE | DRAG_LINKABLE /*| DRAG_MOVEABLE*/,
-                                            &aRegion );
-    }
-    else if( ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ) && rCEvt.IsMouseEvent() && mpCurTheme )
-    {
-        if( !mbIsPreview )
-            mpValueSet->SelectItem( nId );
+        if( rCEvt.GetCommand() == COMMAND_STARTDRAG )
+        {
+            SgaDataObjectRef    xDataObject( new SgaDataObject( mpCurTheme, nId - 1 ) );
+            Region              aRegion( mpValueSet->GetItemRect( nId ) );
+            const DropAction    eAction = xDataObject->ExecuteDrag( NULL,
+                                                POINTER_MOVEDATA, POINTER_COPYDATA, POINTER_LINKDATA,
+                                                DRAG_COPYABLE | DRAG_LINKABLE /*| DRAG_MOVEABLE*/,
+                                                &aRegion );
+        }
+        else if( ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ) && rCEvt.IsMouseEvent() && mpCurTheme )
+        {
+            if( !mbIsPreview )
+                mpValueSet->SelectItem( nId );
 
-        SfxBindings& rBindings = SfxViewFrame::Current()->GetBindings();
-        rBindings.ENTERREGISTRATIONS();
-        GalleryThemePopup aMenu( mpCurTheme, nId - 1, mbIsPreview );
-        rBindings.LEAVEREGISTRATIONS();
-        aMenu.SetSelectHdl( LINK( this, GalleryBrowser2, MenuSelectHdl ) );
-        aMenu.Execute( this, rCEvt.GetMousePosPixel() );
+            SfxBindings& rBindings = SfxViewFrame::Current()->GetBindings();
+            rBindings.ENTERREGISTRATIONS();
+            GalleryThemePopup aMenu( mpCurTheme, nId - 1, mbIsPreview );
+            rBindings.LEAVEREGISTRATIONS();
+            aMenu.SetSelectHdl( LINK( this, GalleryBrowser2, MenuSelectHdl ) );
+            aMenu.Execute( this, rCEvt.GetMousePosPixel() );
+        }
     }
 }
 
