@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-24 15:38:37 $
+ *  last change: $Author: cd $ $Date: 2002-11-01 14:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,6 @@
 
 using namespace vos;
 using namespace rtl;
-using namespace desktop;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
@@ -113,6 +112,9 @@ using namespace ::com::sun::star::frame;
 #define SHOW_SEQUENCE   "-show"
 #define SHOW_LENGTH     5
 */
+
+namespace desktop
+{
 
 // Type of pipe we use
 enum PipeMode
@@ -126,11 +128,6 @@ enum PipeMode
 };
 
 String GetURL_Impl( const String& rName );
-
-extern desktop::CommandLineArgs*    GetCommandLineArgs();
-
-namespace desktop
-{
 
 const char  *OfficeIPCThread::sc_aTerminationSequence = "InternalIPC::TerminateThread";
 const int OfficeIPCThread::sc_nTSeqLength = 28;
@@ -746,7 +743,7 @@ void SAL_CALL OfficeIPCThread::run()
 
             String              aEmpty;
             CommandLineArgs     aCmdLineArgs( OUString( aArguments.GetBuffer(), aArguments.Len(), gsl_getSystemTextEncoding() ));
-            CommandLineArgs*    pCurrentCmdLineArgs = GetCommandLineArgs();
+            CommandLineArgs*    pCurrentCmdLineArgs = Desktop::GetCommandLineArgs();
 
             if ( aCmdLineArgs.IsQuickstart() )
             {
