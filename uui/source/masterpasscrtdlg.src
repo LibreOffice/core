@@ -2,9 +2,9 @@
  *
  *  $RCSfile: masterpasscrtdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:20:08 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
         Text[ danish ] = "Hovedadgangskode";
         Text[ swedish ] = "Huvudl�senord";
         Text[ polish ] = "Has�o g��wne";
-        Text[ portuguese_brazilian ] = "Master ~password";
+        Text[ portuguese_brazilian ] = "Senha ~principal";
         Text[ japanese ] = "マスターパスワード";
         Text[ korean ] = "마스터 암호";
         Text[ chinese_simplified ] = "主密码";
@@ -135,9 +135,9 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
         Text[ danish ] = "~Bekr�ft hovedadgangskode";
         Text[ swedish ] = "~Bekr�fta huvudl�senord";
         Text[ polish ] = "~Potwierd� has�o g��wne";
-        Text[ portuguese_brazilian ] = "~Confirmar senha principal";
+        Text[ portuguese_brazilian ] = "~Confirme a senha principal";
         Text[ japanese ] = "マスターパスワードの確認(~C)";
-        Text[ korean ] = "마스터 암호 확인";
+        Text[ korean ] = "마스터 암호 확인(~C)";
         Text[ chinese_simplified ] = "确认主密码(~C)";
         Text[ chinese_traditional ] = "確認主密碼(~C)";
         Text[ turkish ] = "~Ana parolay� onaylay�n";
@@ -185,7 +185,7 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
     Text[ danish ] = "Definer hovedadgangskode";
     Text[ swedish ] = "Definiera huvudl�senord";
     Text[ polish ] = "Zdefiniuj has�o g��wne";
-    Text[ portuguese_brazilian ] = "Please enter master password";
+    Text[ portuguese_brazilian ] = "Digite a senha principal";
     Text[ japanese ] = "マスターパスワードの入力";
     Text[ korean ] = "마스터 암호 입력";
     Text[ chinese_simplified ] = "输入主密码";
@@ -199,6 +199,7 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
     Text[ hindi ] = "Enter Master Password";
     Text[ slovak ] = "Zadajte hlavné heslo";
 };
+
 
 
 
