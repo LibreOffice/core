@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-23 10:59:09 $
+ *  last change: $Author: oj $ $Date: 2001-03-27 07:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,8 +644,12 @@ namespace dbaui
 
             // the rtf format
             ORTFImportExport* pRtf = new ORTFImportExport(aSeq,getORB(),getNumberFormatter());
+            Reference< XInterface> xRTF = *pRtf;
+            pRtf->initialize();
             // the html format
             OHTMLImportExport* pHtml = new OHTMLImportExport(aSeq,getORB(),getNumberFormatter());
+            Reference< XInterface> xHTML = *pHtml;
+            pHtml->initialize();
             // the sdbc format
             // the owner ship goes to ODataClipboard
             ODataClipboard* pData = new ODataClipboard(aSeq,pHtml,pRtf);
@@ -813,6 +817,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/03/23 10:59:09  fs
+ *  initial checkin - DnD related implementations for the data source browser controller
+ *
  *
  *  Revision 1.0 23.03.01 09:03:17  fs
  ************************************************************************/
