@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:54:27 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,8 +192,8 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             {
                 // Neues PresObj in die Liste eintragen
                 pNewGrafObj->SetUserCall(pPickObj->GetUserCall());
-                pPage->GetPresObjList()->Remove(pPickObj);
-                pPage->GetPresObjList()->Insert(pNewGrafObj, LIST_APPEND);
+                pPage->RemovePresObj(pPickObj);
+                pPage->InsertPresObj(pNewGrafObj, PRESOBJ_GRAPHIC);
             }
 
             if (pImageMap)
@@ -255,7 +255,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             SdPage* pPage = (SdPage*) pPickObj->GetPage();
 
             if ( pPage && pPage->IsMasterPage() )
-                bIsPresTarget = pPage->GetPresObjList()->GetPos(pPickObj) != LIST_ENTRY_NOTFOUND;
+                bIsPresTarget = pPage->IsPresObj(pPickObj);
         }
 
         if( ( nAction & DND_ACTION_MOVE ) && pPickObj && !bIsPresTarget )
