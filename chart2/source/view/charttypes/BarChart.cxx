@@ -363,6 +363,7 @@ void BarChart::createShapes()
                     fUpperYValue = fHelp;
                 }
                 */
+                drawing::Position3D aUnscaledLogicPosition( fLogicX, fUpperYValue, fLogicZ );
 
                 //@todo ... start an iteration over the different breaks of the axis
                 //each subsystem may add an additional shape to form the whole point
@@ -439,6 +440,8 @@ void BarChart::createShapes()
                             xPointGroupShape_Shapes
                             , aTransformedGeom
                             , (*aSeriesIter)->getPropertiesOfPoint( nCatIndex ));
+
+                        createErrorBar_Y( aUnscaledLogicPosition, **aSeriesIter, nCatIndex, m_xLogicTarget );
                     }
                     //set name/classified ObjectID (CID)
                     ShapeFactory::setShapeName(xShape
