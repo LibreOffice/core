@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-20 12:55:09 $
+ *  last change: $Author: mba $ $Date: 2000-11-30 08:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,6 +548,14 @@ void Storage::FillInfoList( SvStorageInfoList* pList ) const
 }
 
 // Open or create a substorage
+
+BaseStorage* Storage::OpenUCBStorage( const String& rName, StreamMode m, BOOL bDirect )
+{
+    DBG_ERROR("Not supported!");
+    BaseStorage* pStorage = new Storage( pIo, NULL, m );
+    SetError( ERRCODE_IO_NOTSUPPORTED );
+    return pStorage;
+}
 
 BaseStorage* Storage::OpenStorage( const String& rName, StreamMode m, BOOL bDirect )
 {

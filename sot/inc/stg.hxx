@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-20 12:53:40 $
+ *  last change: $Author: mba $ $Date: 2000-11-30 08:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,9 @@ public:
     virtual BaseStorage*        OpenStorage( const String & rEleName,
                                    StreamMode = STREAM_STD_READWRITE,
                                    BOOL bDirect = FALSE ) = 0;
+    virtual BaseStorage*        OpenUCBStorage( const String & rEleName,
+                                   StreamMode = STREAM_STD_READWRITE,
+                                   BOOL bDirect = FALSE ) = 0;
     virtual BOOL                IsStream( const String& rEleName ) const = 0;
     virtual BOOL                IsStorage( const String& rEleName ) const = 0;
     virtual BOOL                IsContained( const String& rEleName ) const = 0;
@@ -195,34 +198,6 @@ public:
     virtual BOOL    Equals( const BaseStorageStream& rStream ) const;
 };
 
-class UCBStorageStream_Impl;
-class UCBStorageStream : public BaseStorageStream
-{
-friend class UCBStorage;
-
-    UCBStorageStream_Impl*      pImp;
-
-public:
-                                TYPEINFO();
-                                UCBStorageStream( const String& rName, StreamMode nMode );
-                                UCBStorageStream( UCBStorageStream_Impl* );
-                                ~UCBStorageStream();
-
-    virtual ULONG               Read( void * pData, ULONG nSize );
-    virtual ULONG               Write( const void* pData, ULONG nSize );
-    virtual ULONG               Seek( ULONG nPos );
-    virtual ULONG               Tell();
-    virtual void                Flush();
-    virtual BOOL                SetSize( ULONG nNewSize );
-    virtual BOOL                CopyTo( BaseStorageStream * pDestStm );
-    virtual BOOL                Commit();
-    virtual BOOL                Revert();
-    virtual BOOL                Validate( BOOL=FALSE ) const;
-    virtual BOOL                ValidateMode( StreamMode ) const;
-    const SvStream*             GetSvStream() const;
-    virtual BOOL                Equals( const BaseStorageStream& rStream ) const;
-};
-
 class Storage : public BaseStorage, public OLEStorageBase
 {
     String                      aName;
@@ -263,6 +238,9 @@ public:
     virtual BaseStorage*        OpenStorage( const String & rEleName,
                                        StreamMode = STREAM_STD_READWRITE,
                                        BOOL bDirect = FALSE );
+    virtual BaseStorage*        OpenUCBStorage( const String & rEleName,
+                                   StreamMode = STREAM_STD_READWRITE,
+                                   BOOL bDirect = FALSE );
     virtual BOOL                IsStream( const String& rEleName ) const;
     virtual BOOL                IsStorage( const String& rEleName ) const;
     virtual BOOL                IsContained( const String& rEleName ) const;
@@ -278,6 +256,34 @@ public:
     virtual BOOL                Equals( const BaseStorage& rStream ) const;
 };
 
+class UCBStorageStream_Impl;
+class UCBStorageStream : public BaseStorageStream
+{
+friend class UCBStorage;
+
+    UCBStorageStream_Impl*      pImp;
+
+public:
+                                TYPEINFO();
+                                UCBStorageStream( const String& rName, StreamMode nMode, BOOL bDirect );
+                                UCBStorageStream( UCBStorageStream_Impl* );
+                                ~UCBStorageStream();
+
+    virtual ULONG               Read( void * pData, ULONG nSize );
+    virtual ULONG               Write( const void* pData, ULONG nSize );
+    virtual ULONG               Seek( ULONG nPos );
+    virtual ULONG               Tell();
+    virtual void                Flush();
+    virtual BOOL                SetSize( ULONG nNewSize );
+    virtual BOOL                CopyTo( BaseStorageStream * pDestStm );
+    virtual BOOL                Commit();
+    virtual BOOL                Revert();
+    virtual BOOL                Validate( BOOL=FALSE ) const;
+    virtual BOOL                ValidateMode( StreamMode ) const;
+    const SvStream*             GetSvStream() const;
+    virtual BOOL                Equals( const BaseStorageStream& rStream ) const;
+};
+
 class UCBStorage_Impl;
 struct UCBStorageElement_Impl;
 class UCBStorage : public BaseStorage
@@ -287,7 +293,7 @@ class UCBStorage : public BaseStorage
 public:
     static BOOL                 IsStorageFile( SvStream* );
 
-                                UCBStorage( const String& rName, StreamMode nMode );
+                                UCBStorage( const String& rName, StreamMode nMode, BOOL bDirect = TRUE );
                                 UCBStorage( UCBStorage_Impl* );
                                 UCBStorage( SvStream& rStrm, BOOL bDirect = TRUE );
                                 ~UCBStorage();
@@ -318,6 +324,9 @@ public:
     virtual BaseStorage*        OpenStorage( const String & rEleName,
                                        StreamMode = STREAM_STD_READWRITE,
                                        BOOL bDirect = FALSE );
+    virtual BaseStorage*        OpenUCBStorage( const String & rEleName,
+                                   StreamMode = STREAM_STD_READWRITE,
+                                   BOOL bDirect = FALSE );
     virtual BOOL                IsStream( const String& rEleName ) const;
     virtual BOOL                IsStorage( const String& rEleName ) const;
     virtual BOOL                IsContained( const String& rEleName ) const;
@@ -335,6 +344,8 @@ public:
     UCBStorageElement_Impl*     FindElement_Impl( const String& rName ) const;
     BOOL                        CopyStorageElement_Impl( UCBStorageElement_Impl& rElement,
                                     BaseStorage* pDest, const String& rNew ) const;
+    BaseStorage*                OpenStorage_Impl( const String & rEleName,
+                                       StreamMode, BOOL bDirect, BOOL bForceUCBStorage );
 #endif
 
 };

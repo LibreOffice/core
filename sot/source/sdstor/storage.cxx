@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-24 16:42:38 $
+ *  last change: $Author: mba $ $Date: 2000-11-30 08:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,38 +470,60 @@ SotStorage::SotStorage()
 }
 
 #define ERASEMASK  ( STREAM_TRUNC | STREAM_WRITE | STREAM_SHARE_DENYALL )
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#endif
+#ifndef _UCBHELPER_CONTENT_HXX
+#include <ucbhelper/content.hxx>
+#endif
 
 SotStorage::SotStorage( const String & rName, StreamMode nMode, StorageMode nStorageMode )
     INIT_SotStorage()
 {
     aName = rName; // Namen merken
+    CreateStorage( FALSE, nMode, nStorageMode );
+}
+
+void SotStorage::CreateStorage( BOOL bForceUCBStorage, StreamMode nMode, StorageMode nStorageMode  )
+{
+    DBG_ASSERT( !pStorStm && !pOwnStg, "Use only in ctor!" );
     if( aName.Len() )
     {
         // named storage
         if( ( ( nMode & ERASEMASK ) == ERASEMASK ) )
+        {
+            DBG_ERROR( "Only possible for file URLs, remove file by yourself" );
             // ???
-            osl::File::remove( rName );
+            osl::File::remove( aName );
+        }
 
         String aURL;
-        INetURLObject aObj( rName );
+        INetURLObject aObj( aName );
         if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
         {
             String aURL;
-            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rName, aURL );
+            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL );
             aObj.SetURL( aURL );
+            aName = aObj.GetMainURL();
         }
 
-//        pStorStm = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL(), nMode );
-        pStorStm = new SvFileStream( aObj.GetMainURL(), nMode );
+        pStorStm = ::utl::UcbStreamHelper::CreateStream( aName, nMode );
         if ( pStorStm )
         {
             // try as UCBStorage, next try as OLEStorage
-            if ( UCBStorage::IsStorageFile( pStorStm ) )
+            BOOL bIsUCBStorage = UCBStorage::IsStorageFile( pStorStm );
+            if ( !bIsUCBStorage && bForceUCBStorage )
+                // if UCBStorage has priority, it should not be used only if it is really an OLEStorage
+                bIsUCBStorage = !Storage::IsStorageFile( pStorStm );
+
+            if ( bIsUCBStorage )
             {
                 // UCBStorage always works directly on the UCB content, so discard the stream first
                 DELETEZ( pStorStm );
-                DBG_ASSERT( (nStorageMode & STORAGE_TRANSACTED), "No direct mode supported!" );
-                pOwnStg = new UCBStorage( rName, nMode );
+                pOwnStg = new UCBStorage( aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
             }
             else
             {
@@ -510,22 +532,36 @@ SotStorage::SotStorage( const String & rName, StreamMode nMode, StorageMode nSto
                 bDelStm = TRUE;
             }
         }
+        else if ( bForceUCBStorage )
+        {
+            pOwnStg = new UCBStorage( aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+            SetError( ERRCODE_IO_NOTSUPPORTED );
+        }
         else
         {
-            pOwnStg = new Storage( rName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+            pOwnStg = new Storage( aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
             SetError( ERRCODE_IO_NOTSUPPORTED );
         }
     }
     else
     {
         // temporary storage
-        // try as UCBStorage, next try as OLEStorage ( how to check which one is desired ?! )
-        pOwnStg = new Storage( rName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+        if ( bForceUCBStorage )
+            pOwnStg = new UCBStorage( aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+        else
+            pOwnStg = new Storage( aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
         aName = pOwnStg->GetName();
     }
 
     ULONG nErr = pOwnStg->GetError();
     SetError( nErr );
+}
+
+SotStorage::SotStorage( BOOL bUCBStorage, const String & rName, StreamMode nMode, StorageMode nStorageMode )
+    INIT_SotStorage()
+{
+    aName = rName;
+    CreateStorage( bUCBStorage, nMode, nStorageMode );
 }
 
 SotStorage::SotStorage( BaseStorage * pStor )
@@ -545,7 +581,7 @@ SotStorage::SotStorage( SvStream & rStm )
     SetError( rStm.GetError() );
 
     // try as UCBStorage, next try as OLEStorage
-    if ( UCBStorage::IsStorageFile( pStorStm ) )
+    if ( UCBStorage::IsStorageFile( &rStm ) )
         pOwnStg = new UCBStorage( rStm, FALSE );
     else
         pOwnStg = new Storage( rStm, FALSE );
@@ -557,7 +593,7 @@ SotStorage::SotStorage( SvStream * pStm, BOOL bDelete )
     SetError( pStm->GetError() );
 
     // try as UCBStorage, next try as OLEStorage
-    if ( UCBStorage::IsStorageFile( pStorStm ) )
+    if ( UCBStorage::IsStorageFile( pStm ) )
         pOwnStg = new UCBStorage( *pStm, FALSE );
     else
         pOwnStg = new Storage( *pStm, FALSE );
@@ -610,8 +646,20 @@ SvMemoryStream * SotStorage::CreateMemoryStream()
 *************************************************************************/
 BOOL SotStorage::IsStorageFile( const String & rFileName )
 {
-    /** code for new storages must come first! **/
-    return Storage::IsStorageFile( rFileName );
+    String aName( rFileName );
+    INetURLObject aObj( aName );
+    if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
+    {
+        String aURL;
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL );
+        aObj.SetURL( aURL );
+        aName = aObj.GetMainURL();
+    }
+
+    SvStream * pStm = ::utl::UcbStreamHelper::CreateStream( aName, STREAM_STD_READ );
+    BOOL bRet = SotStorage::IsStorageFile( pStm );
+    delete pStm;
+    return bRet;
 }
 
 BOOL SotStorage::IsStorageFile( SvStream* pStream )
@@ -620,7 +668,9 @@ BOOL SotStorage::IsStorageFile( SvStream* pStream )
     if ( pStream )
     {
         long nPos = pStream->Tell();
-        BOOL bRet = Storage::IsStorageFile( pStream );
+        BOOL bRet = UCBStorage::IsStorageFile( pStream );
+        if ( !bRet )
+            bRet = Storage::IsStorageFile( pStream );
         pStream->Seek( nPos );
         return bRet;
     }
@@ -860,6 +910,27 @@ SotStorage * SotStorage::OpenSotStorage( const String & rEleName,
         nMode |= STREAM_SHARE_DENYALL;
         ErrCode nE = pOwnStg->GetError();
         BaseStorage * p = pOwnStg->OpenStorage( rEleName, nMode,
+                        (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+        pStor = new SotStorage( p );
+        if( !nE )
+            pOwnStg->ResetError(); // kein Fehler setzen
+    }
+    else
+        SetError( SVSTREAM_GENERALERROR );
+    return pStor;
+}
+
+SotStorage * SotStorage::OpenUCBStorage( const String & rEleName,
+                                        StreamMode nMode,
+                                        StorageMode nStorageMode )
+{
+    SotStorage * pStor = NULL;
+    DBG_ASSERT( Owner(), "must be owner" )
+    if( pOwnStg )
+    {
+        nMode |= STREAM_SHARE_DENYALL;
+        ErrCode nE = pOwnStg->GetError();
+        BaseStorage * p = pOwnStg->OpenUCBStorage( rEleName, nMode,
                         (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
         pStor = new SotStorage( p );
         if( !nE )
