@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileobj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:45:09 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ struct Impl_DownLoadData
 SvFileObject::SvFileObject()
     : nType( FILETYPE_TEXT ), pDownLoadData( 0 )
 {
-    bLoadAgain = bMedUseCache = TRUE;
+    bLoadAgain = TRUE;
     bSynchron = bLoadError = bWaitForData = bDataReady = bNativFormat =
     bClearMedium = bProgress = bStateChangeCalled = bInCallDownLoad = FALSE;
 }
@@ -246,12 +246,7 @@ JP 28.02.96: noch eine Baustelle:
                     // testhalber mal ein LoadFile rufen um das nach-
                     // laden ueberahaupt anzustossen
                     if( !xMed.Is() )
-                    {
                         LoadFile_Impl();
-                        if( xMed.Is() )
-                            // dann mit der hoechsten Prioritaet
-                            xMed->SetTransferPriority( SFX_TFPRIO_VISIBLE_LOWRES_GRAPHIC );
-                    }
 
                     if( !bInCallDownLoad )
                     {
@@ -344,9 +339,6 @@ BOOL SvFileObject::Connect( so3::SvBaseLink* pLink )
 
     if( OBJECT_CLIENT_GRF == pLink->GetObjType() )
     {
-        if( !pLink->IsUseCache() )
-            bMedUseCache = FALSE;
-
         // Reload-Erkennung ???
         SvInPlaceObjectRef aRef( pLink->GetLinkManager()->GetPersist() );
         if( aRef.Is() )
@@ -354,9 +346,6 @@ BOOL SvFileObject::Connect( so3::SvBaseLink* pLink )
             SfxObjectShell* pShell = ((SfxInPlaceObject*)&aRef)->GetObjectShell();
             if( pShell->IsAbortingImport() )
                 return FALSE;
-
-            if( pShell->IsReloading() )
-                bMedUseCache = FALSE;
 
             if( pShell->GetMedium() )
                 sReferer = pShell->GetMedium()->GetName();
@@ -398,11 +387,8 @@ BOOL SvFileObject::LoadFile_Impl()
     xMed = new SfxMedium( sFileNm, STREAM_STD_READ, TRUE );
     // Keinen Eintrag im Roter Button Menu
     xMed->SetDontCreateCancellable();
-    xMed->SetUsesCache( bMedUseCache );
     if( sReferer.Len() )
         xMed->SetReferer( sReferer );
-    // erstmal mit der niedrigsten Prioritaet
-    xMed->SetTransferPriority( SFX_TFPRIO_INVISIBLE_HIGHRES_GRAPHIC );
 
     if( !bSynchron )
     {
@@ -755,7 +741,7 @@ void SvFileObject::CancelTransfers()
     if( !bDataReady )
     {
         // nicht noch mal aufsetzen
-        bLoadAgain = bMedUseCache = FALSE;
+        bLoadAgain = FALSE;
         bDataReady = bLoadError = bWaitForData = TRUE;
         SendStateChg_Impl( STATE_LOAD_ABORT );
     }
@@ -764,8 +750,6 @@ void SvFileObject::CancelTransfers()
 
 void SvFileObject::SetTransferPriority( USHORT nPrio )
 {
-    if( xMed.Is() )
-        xMed->SetTransferPriority( nPrio );
 }
 
 
