@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hintids.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:03:06 $
+ *  last change: $Author: rt $ $Date: 2003-05-27 16:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ RES_PARATR_BEGIN = RES_TXTATR_END,
     RES_PARATR_FORBIDDEN_RULES,                     // 67
     RES_PARATR_VERTALIGN,                           // 68
     RES_PARATR_SNAPTOGRID,                          // 69
-    RES_PARATR_DUMMY4,                              // 70
+    RES_PARATR_CONNECT_BORDER,                      // 70
     RES_PARATR_DUMMY5,                              // 71
     RES_PARATR_DUMMY6,                              // 72
     RES_PARATR_DUMMY7,                              // 73
