@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-09 12:55:31 $
+ *  last change: $Author: oj $ $Date: 2000-12-14 15:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 #include "dbfindex.hxx"
 #endif
 
-#ifndef _FSYS_HXX //autogen
-#include <tools/fsys.hxx>
-#endif
 #ifndef _CONFIG_HXX //autogen
 #include <vcl/config.hxx>
 #endif
@@ -85,11 +82,25 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
+#ifndef _UCBHELPER_CONTENT_HXX
+#include <ucbhelper/content.hxx>
+#endif
 //.........................................................................
 namespace dbaui
 {
 //.........................................................................
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ucb;
 
 const ByteString aGroupIdent("dbase III");
 
@@ -297,42 +308,90 @@ void ODbaseIndexDialog::Init()
 
     ///////////////////////////////////////////////////////////////////////////
     // if the string does not contain a path, cut the string
-    DirEntry aInitEntry( m_aDSN );
-    FileStat aFileStat(aInitEntry);     // do not combine - bug in VC++ 2.0!
+    INetURLObject aURL;
+    aURL.SetSmartProtocol(INET_PROT_FILE);
+    {
+        SvtPathOptions aPathOptions;
+        m_aDSN = aPathOptions.SubstituteVariable(m_aDSN);
+    }
+    aURL.SetSmartURL(m_aDSN);
 
-    if (aFileStat.IsKind(FSYS_KIND_WILD))
-        m_aDSN = (DirEntry(m_aDSN).GetPath()).GetFull();
-    else if (aFileStat.IsKind(FSYS_KIND_DIR))
-        m_aDSN = DirEntry(m_aDSN).GetFull();
-    else if (aFileStat.IsKind(FSYS_KIND_FILE))
-        m_aDSN = (DirEntry(m_aDSN).GetPath()).GetFull();
 
+    //  String aFileName = aURL.PathToFileName();
+    m_aDSN = aURL.GetMainURL();
+    ::ucb::Content aFile;
+    sal_Bool bFolder=sal_True;
+    try
+    {
+        aFile = ::ucb::Content(m_aDSN,Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+        bFolder = aFile.isFolder();
+    }
+    catch(ContentCreationException&)
+    {
+        return;
+    }
     ///////////////////////////////////////////////////////////////////////////
     // first assume for all indexes they're free
-    DirEntry aDirEntry( m_aDSN );
 
-    m_bCaseSensitiv = aDirEntry.IsCaseSensitive();
+    Sequence< ::rtl::OUString> aFolderContent( ::utl::LocalFileHelper::GetFolderContents(m_aDSN,bFolder));
 
-    aDirEntry += String::CreateFromAscii("*.ndx");
-    Dir* pDir = new Dir( aDirEntry, FSYS_KIND_FILE,FSYS_SORT_NAME | FSYS_SORT_ASCENDING | FSYS_SORT_END );
+    ::rtl::OUString aIndexExt = ::rtl::OUString::createFromAscii("ndx");
+    ::rtl::OUString aTableExt = ::rtl::OUString::createFromAscii("dbf");
 
-    sal_uInt16 nCount = pDir->Count();
-    String aEntry;
-
-    for( sal_uInt16 nCurPos = 0; nCurPos < nCount; nCurPos++ )
+    String aExt;
+    const ::rtl::OUString *pBegin = aFolderContent.getConstArray();
+    const ::rtl::OUString *pEnd   = pBegin + aFolderContent.getLength();
+    for(;pBegin != pEnd;++pBegin)
     {
-        aEntry = (*pDir)[nCurPos].GetName();
-        m_aFreeIndexList.push_back( OTableIndex(aEntry) );
+        INetURLObject aURL;
+        aURL.SetSmartProtocol(INET_PROT_FILE);
+        String aName;
+        ::utl::LocalFileHelper::ConvertURLToPhysicalName(pBegin->getStr(),aName);
+        aURL.SetSmartURL(aName);
+        aExt = aURL.getExtension();
+        aURL.removeExtension();
+        if(aExt == aIndexExt.getStr())
+        {
+            m_aFreeIndexList.push_back( OTableIndex(aURL.getName()) );
+        }
+        else if(aExt == aTableExt.getStr())
+        {
+            m_aTableInfoList.push_back( OTableInfo(aURL.getName()) );
+            OTableInfo& rTabInfo = m_aTableInfoList.back();
+
+            // open the INF file
+            aURL.setExtension(String::CreateFromAscii("inf"));
+            Config aInfFile( aURL.GetURLNoPass() );
+            aInfFile.SetGroup( aGroupIdent );
+
+            ///////////////////////////////////////////////////////////////////////////
+            // fill the indexes list
+            ByteString aNDX;
+            sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
+            ByteString aKeyName;
+            String aEntry;
+
+            for( sal_uInt16 nKey = 0; nKey < nKeyCnt; nKey++ )
+            {
+                // does the key point to an index file ?
+                aKeyName = aInfFile.GetKeyName( nKey );
+                aNDX = aKeyName.Copy(0,3);
+
+                // yes -> add to the tables index list
+                if (aNDX == "NDX" )
+                {
+                    aEntry = String(aInfFile.ReadKey(aKeyName), gsl_getSystemTextEncoding());
+                    rTabInfo.aIndexList.push_back( OTableIndex( aEntry ) );
+
+                    // and remove it from the free index list
+                    RemoveFreeIndex( aEntry );
+                }
+
+            }
+        }
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // fill the table list
-    aDirEntry.SetExtension(String::CreateFromAscii("dbf"));
-    delete pDir;
-    pDir = new Dir( aDirEntry, FSYS_KIND_FILE,FSYS_SORT_NAME | FSYS_SORT_ASCENDING | FSYS_SORT_END );
-
-    nCount = pDir->Count();
-    if(!nCount)
+    if(!m_aTableInfoList.size())
     {
         aPB_OK.Disable(sal_True);
         m_GB_Indexes.Disable(sal_True);
@@ -345,50 +404,6 @@ void ODbaseIndexDialog::Init()
         aPB_AddAll.Disable(sal_True);
         aPB_RemoveAll.Disable(sal_True);
     }
-
-    for( nCurPos = 0; nCurPos < nCount; nCurPos++ )
-    {
-        // add the table to the list
-        aEntry = (*pDir)[nCurPos].GetName();
-        m_aTableInfoList.push_back( OTableInfo(aEntry) );
-        OTableInfo& rTabInfo = m_aTableInfoList.back();
-
-        // open the INF file
-        String aTableName = (*pDir)[nCurPos].GetBase();
-        String aFileName = m_aDSN;
-        aFileName += DirEntry::GetAccessDelimiter();
-        aFileName += aTableName;
-        aFileName.AppendAscii(".inf");
-        Config aInfFile( aFileName );
-        aInfFile.SetGroup( aGroupIdent );
-
-        ///////////////////////////////////////////////////////////////////////////
-        // fill the indexes list
-        ByteString aNDX;
-        sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
-        ByteString aKeyName;
-
-        for( sal_uInt16 nKey = 0; nKey < nKeyCnt; nKey++ )
-        {
-            // does the key point to an index file ?
-            aKeyName = aInfFile.GetKeyName( nKey );
-            aNDX = aKeyName.Copy(0,3);
-
-            // yes -> add to the tables index list
-            if (aNDX == "NDX" )
-            {
-                aEntry = String(aInfFile.ReadKey(aKeyName), gsl_getSystemTextEncoding());
-                rTabInfo.aIndexList.push_back( OTableIndex( aEntry ) );
-
-                // and remove it from the free index list
-                RemoveFreeIndex( aEntry );
-            }
-
-        }
-
-    }
-
-    delete pDir;
 }
 
 void ODbaseIndexDialog::SetCtrls()
@@ -435,13 +450,18 @@ void ODbaseIndexDialog::SetCtrls()
 void OTableInfo::WriteInfFile( const String& rDSN ) const
 {
     // INF-Datei oeffnen
-    xub_StrLen nLen = aTableName.Len();
-    String aName = aTableName.Copy( 0,(nLen-4) ); // Extension ausblenden
-    String aFileName = rDSN;
-    aFileName += '\\';
-    aFileName += aName;
-    aFileName.AppendAscii(".inf");
-    Config aInfFile( aFileName );
+    INetURLObject aURL;
+    aURL.SetSmartProtocol(INET_PROT_FILE);
+    String aDsn = rDSN;
+    {
+        SvtPathOptions aPathOptions;
+        aDsn = aPathOptions.SubstituteVariable(aDsn);
+    }
+    aURL.SetSmartURL(aDsn);
+    aURL.setName(aTableName);
+    aURL.setExtension(String::CreateFromAscii("inf"));
+
+    Config aInfFile( aURL.GetURLNoPass() );
     aInfFile.SetGroup( aGroupIdent );
 
     // Erst einmal alle Tabellenindizes loeschen
@@ -484,13 +504,19 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
     aInfFile.Flush();
 
     // Falls nur noch [dbase] in INF-File steht, Datei loeschen
-    DirEntry aDirEntry( aFileName );
-    FileStat aFileStat( aDirEntry );
-    sal_uInt32 nFileSize = aFileStat.GetSize();
-    xub_StrLen nGroupIdLen = aGroupIdent.Len();
+    if(!nPos)
+    {
+        ::ucb::Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
+        aContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),makeAny( sal_Bool( sal_True ) ) );
+    }
 
-    if( (xub_StrLen)nFileSize == (nGroupIdLen+4) )
-        aDirEntry.Kill();
+//  DirEntry aDirEntry( aFileName );
+//  FileStat aFileStat( aDirEntry );
+//  sal_uInt32 nFileSize = aFileStat.GetSize();
+//  xub_StrLen nGroupIdLen = aGroupIdent.Len();
+//
+//  if( (xub_StrLen)nFileSize == (nGroupIdLen+4) )
+//      aDirEntry.Kill();
 }
 
 //.........................................................................
@@ -500,6 +526,9 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/11/09 12:55:31  fs
+ *  no usage of the SfxIniManager anymore - MUST change
+ *
  *  Revision 1.1  2000/10/05 10:05:22  fs
  *  initial checkin
  *
