@@ -1,6 +1,7 @@
 sa	sal	:	xml2cmp NULL 
 sa	sal										usr1	-	all	sa_mkout NULL
 sa	sal\cpprt								nmake	-	u	sa_cpprt sa_util NULL
+sa	sal\systools\macxp_extras\x11osx			nmake	-	u	sa_mxpext_x11osx NULL
 sa	sal\rtl\source							nmake	-	all	sa_rtl NULL
 sa	sal\textenc								nmake	-	all	sa_textenc NULL
 sa	sal\osl\w16								nmake	-	d	sa_osld NULL
