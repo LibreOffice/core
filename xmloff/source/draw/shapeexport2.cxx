@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:34:17 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1560,6 +1560,8 @@ void XMLShapeExport::ImpExportOLE2Shape(
             bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_TABLE) );
 
         sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
+        sal_Bool bExportEmbedded(0 != (rExport.getExportFlags() & EXPORT_EMBEDDED));
+        OUString sPersistName;
         SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW,
                                   XML_FRAME, bCreateNewline, sal_True );
 
@@ -1571,13 +1573,11 @@ void XMLShapeExport::ImpExportOLE2Shape(
 
             OUString sClassId;
             OUString sURL;
-            sal_Bool bExportEmbedded(0 != (rExport.getExportFlags() & EXPORT_EMBEDDED));
             sal_Bool bInternal;
             xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("IsInternal"))) >>= bInternal;
 
             if( !bIsEmptyPresObj )
             {
-                OUString sPersistName;
 
                 if ( bInternal )
                 {
@@ -1586,9 +1586,9 @@ void XMLShapeExport::ImpExportOLE2Shape(
                     xPropSet->getPropertyValue( OUString::createFromAscii( "LinkURL" ) ) >>= sURL;
                 }
 
+                xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "PersistName" ) ) ) >>= sPersistName;
                 if ( !sURL.getLength() )
                 {
-                    xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "PersistName" ) ) ) >>= sPersistName;
                     if( sPersistName.getLength() )
                     {
                         sURL = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) );
@@ -1640,6 +1640,25 @@ void XMLShapeExport::ImpExportOLE2Shape(
                     rExport.AddEmbeddedObjectAsBase64( sURL );
                 }
             }
+        }
+        if( !bIsEmptyPresObj )
+        {
+            OUString sURL( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
+            sURL += sPersistName;
+            if( !bExportEmbedded )
+            {
+                sURL = GetExport().AddEmbeddedObject( sURL );
+                rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sURL );
+                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+            }
+
+            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
+                                      XML_IMAGE, sal_False, sal_True );
+
+            if( bExportEmbedded )
+                GetExport().AddEmbeddedObjectAsBase64( sURL );
         }
 
         ImpExportEvents( xShape );
