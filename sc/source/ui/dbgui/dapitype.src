@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:16:12 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:50:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -967,6 +967,8 @@ ModalDialog RID_SCDLG_DAPIDATA
     Text[ hindi ] = "ड़ॉटा मूल चुनो";
     Text[ slovak ] = "Vyber zdroj dát";
 };
+
+
 
 
 
