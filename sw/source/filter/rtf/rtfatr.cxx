@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:13:47 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 11:42:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,56 +541,79 @@ void OutRTF_SfxItemSet( SwRTFWriter& rWrt, const SfxItemSet& rSet,
             (*pOut)(rWrt, rSet.Get(RES_FRAMEDIR));
     }
 
-    if( aAsian.Count() || aCmplx.Count() ||aLatin.Count() )
+    if (aAsian.Count() || aCmplx.Count() || aLatin.Count())
     {
-        SvPtrarr* aArr[ 3 ];
+        SvPtrarr* aArr[4];
         switch (rWrt.GetCurrScriptType())
         {
         case ::com::sun::star::i18n::ScriptType::LATIN:
             aArr[ 0 ] = &aCmplx;
             aArr[ 1 ] = &aAsian;
             aArr[ 2 ] = &aLatin;
+            aArr[ 3 ] = &aLatin;
             break;
 
         case ::com::sun::star::i18n::ScriptType::ASIAN:
             aArr[ 0 ] = &aCmplx;
             aArr[ 1 ] = &aLatin;
-            aArr[ 2 ] = &aAsian;
+            aArr[ 2 ] = &aLatin;
+            aArr[ 3 ] = &aAsian;
             break;
 
         case ::com::sun::star::i18n::ScriptType::COMPLEX:
             aArr[ 0 ] = &aLatin;
-            aArr[ 1 ] = &aAsian;
-            aArr[ 2 ] = &aCmplx;
+            aArr[ 1 ] = &aLatin;
+            aArr[ 2 ] = &aAsian;
+            aArr[ 3 ] = &aCmplx;
             break;
 
         default:
             return ;
         }
 
-        BOOL bOutLTOR = TRUE;
-        for( int nArrCnt = 0; nArrCnt < 3; ++nArrCnt )
+        //The final entry is the one that is actually in use
+        //so it uses e.g. \b \i \fs, the others are not in
+        //use and so are "associated". Both asian and western
+        //are ltr runs, with asian being the dbch varient
+        //and western being the loch/hich varient
+        bool bOutLTOR = true;
+        bool bLowLTOR = false;
+        for( int nArrCnt = 0; nArrCnt < 4; ++nArrCnt )
         {
             SvPtrarr* pCurArr = aArr[ nArrCnt ];
-            if( pCurArr->Count() )
+            if (pCurArr->Count())
             {
-                rWrt.SetAssociatedFlag( 2 != nArrCnt );
-                if( pCurArr == &aLatin )
+                bool bInUse = (aArr[nArrCnt] == aArr[3]);
+                rWrt.SetAssociatedFlag(!bInUse);
+                if (pCurArr == &aLatin)
                 {
-                    if( bOutLTOR )
-                    {   rWrt.Strm() << sRTF_LTRCH; bOutLTOR = FALSE; }
-                    rWrt.Strm() << sRTF_LOCH;
+                    if (bOutLTOR)
+                    {
+                        rWrt.Strm() << sRTF_LTRCH;
+                        bOutLTOR = false;
+                    }
+
+                    if (bLowLTOR)
+                        rWrt.Strm() << sRTF_LOCH;
+                    else
+                    {
+                        rWrt.Strm() << sRTF_HICH;
+                        bLowLTOR = true;
+                    }
                 }
                 else if( pCurArr == &aAsian )
                 {
                     if( bOutLTOR )
-                    {   rWrt.Strm() << sRTF_LTRCH; bOutLTOR = FALSE; }
+                    {
+                        rWrt.Strm() << sRTF_LTRCH;
+                        bOutLTOR = false;
+                    }
                     rWrt.Strm() << sRTF_DBCH;
                 }
                 else
                     rWrt.Strm() << sRTF_RTLCH;
 
-                for( USHORT n = 0; n < pCurArr->Count(); ++n )
+                for (USHORT n = 0; n < pCurArr->Count(); ++n)
                 {
                     pItem = (const SfxPoolItem*)(*pCurArr)[ n ];
                     pOut = aRTFAttrFnTab[ pItem->Which() - RES_CHRATR_BEGIN];
@@ -1505,13 +1528,13 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
     rRTFWrt.pFlyFmt = pSaveFmt;
 
+    rRTFWrt.bTxtAttr = true;
     // erstmal den Start berichtigen. D.h. wird nur ein Teil vom Satz
     // ausgegeben, so muessen auch da die Attribute stimmen!!
     const SwTxtAttr * pHt = 0;
     USHORT nCntAttr = pNd->HasHints() ? pNd->GetSwpHints().Count() : 0;
     if( nCntAttr && nStrPos > *( pHt = pNd->GetSwpHints()[ 0 ] )->GetStart() )
     {
-        rRTFWrt.bTxtAttr = TRUE;
         // Ok, es gibt vorher Attribute, die ausgegeben werden muessen
         do {
             nAttrPos++;
@@ -1545,8 +1568,6 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
         // dann gebe mal alle gesammelten Attribute von der String-Pos aus
         aEndPosLst.OutAttrs( nStrPos );
-
-        rRTFWrt.bTxtAttr = FALSE;
     }
 
     if( rRTFWrt.bOutFmtAttr &&
@@ -1568,8 +1589,6 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             rWrt.Strm() << SwRTFWriter::sNewLine;
             nChrCnt = nStrPos & 0xff00;
         }
-
-        rRTFWrt.bTxtAttr = TRUE;
 
         HandleHyperlinks(rWrt, pNd->GetpSwpHints(), nStrPos);
 
@@ -1606,7 +1625,6 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
         if( rRTFWrt.bOutFmtAttr )
             rRTFWrt.Strm() << ' ';
-        rRTFWrt.bTxtAttr = FALSE;
 
         rRTFWrt.OutBookmarks( nStrPos );
 
@@ -1616,6 +1634,8 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                 DEF_ENCODING, rRTFWrt.bWriteHelpFmt);
         }
     }
+
+    rRTFWrt.bTxtAttr = false;
 
     // noch eine schliesende Klammer da ??
     if( aEndPosLst.Count() )
@@ -2205,6 +2225,17 @@ static Writer& OutRTF_SwPosture( Writer& rWrt, const SfxPoolItem& rHt )
         ( rRTFWrt.GetEndPosLst() &&
         rRTFWrt.GetEndPosLst()->MatchScriptToId( rHt.Which() ) ))
     {
+        if (rRTFWrt.IsAssociatedFlag() && rHt.Which() == RES_CHRATR_CJK_POSTURE)
+        {
+            /*
+            #i21422#
+            Sadly in word rtf we can't retain CJK italic when we are not
+            exporting asian text as it doesn't have a seperate italic for
+            western and asian.
+            */
+            return rWrt;
+        }
+
         const FontItalic nPosture = ((const SvxPostureItem&)rHt).GetPosture();
         int bTxtOut = rRTFWrt.bTxtAttr && ITALIC_NONE == nPosture;
         if( ITALIC_NORMAL == nPosture || bTxtOut )
@@ -2227,6 +2258,17 @@ static Writer& OutRTF_SwWeight( Writer& rWrt, const SfxPoolItem& rHt )
         ( rRTFWrt.GetEndPosLst() &&
         rRTFWrt.GetEndPosLst()->MatchScriptToId( rHt.Which() ) ))
     {
+        if (rRTFWrt.IsAssociatedFlag() && rHt.Which() == RES_CHRATR_CJK_WEIGHT)
+        {
+            /*
+            #i21422#
+            Sadly in word rtf we can't retain CJK bold when we are not
+            exporting asian text as it doesn't have a seperate bold for western
+            and asian.
+            */
+            return rWrt;
+        }
+
         const FontWeight nBold = ((const SvxWeightItem&)rHt).GetWeight();
         int bTxtOut = rRTFWrt.bTxtAttr && WEIGHT_NORMAL == nBold;
         if( WEIGHT_BOLD == nBold || bTxtOut )
@@ -2556,6 +2598,20 @@ static Writer& OutRTF_SwSize( Writer& rWrt, const SfxPoolItem& rHt )
         ( rRTFWrt.GetEndPosLst() &&
         rRTFWrt.GetEndPosLst()->MatchScriptToId( rHt.Which() ) ))
     {
+        if (
+             rRTFWrt.IsAssociatedFlag() &&
+             rHt.Which() == RES_CHRATR_CJK_FONTSIZE
+           )
+        {
+            /*
+            #i21422#
+            Sadly in word rtf we can't retain CJK fontsize when we are not
+            exporting asian text as it doesn't have a seperate fontsize for
+            western and asian.
+            */
+            return rWrt;
+        }
+
         rRTFWrt.bOutFmtAttr = TRUE;
 
         const sal_Char* pCmd = rRTFWrt.IsAssociatedFlag() ? sRTF_AFS : sRTF_FS;
