@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 10:56:03 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1825,6 +1825,8 @@ void FmXGridPeer::elementInserted(const ContainerEvent& evt) throw( RuntimeExcep
     Any aHidden = xNewColumn->getPropertyValue(FM_PROP_HIDDEN);
     if (::comphelper::getBOOL(aHidden))
         pGrid->HideColumn(pCol->GetId());
+
+    initializeTextFieldLineEnds( xNewColumn, m_xServiceFactory );
 }
 
 //------------------------------------------------------------------------------
