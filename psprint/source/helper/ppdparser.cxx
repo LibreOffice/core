@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:55:36 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 14:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,14 +183,24 @@ String PPDParser::getPPDFile( const String& rFile )
     if( ! aStream.IsOpen() )
     {
         initPPDFiles();
+#ifdef MACOSX
+        std::hash_map< OUString, OUString, OUStringHash >::const_iterator it =
+            pAllPPDFiles->find( aPPD.getName() );
+#else
         std::hash_map< OUString, OUString, OUStringHash >::const_iterator it =
             pAllPPDFiles->find( aPPD.getBase() );
+#endif // MACOSX
         if( it == pAllPPDFiles->end() )
         {
             // a new file ? rehash
             delete pAllPPDFiles; pAllPPDFiles = NULL;
             initPPDFiles();
+            // aPPD is already the file name minus the extension
+#ifdef MACOSX
+            it = pAllPPDFiles->find( aPPD.getName() );
+#else
             it = pAllPPDFiles->find( aPPD.getBase() );
+#endif // MACOSX
             // note this is optimized for office start where
             // no new files occur and initPPDFiles is called only once
         }
@@ -269,10 +279,10 @@ const PPDParser* PPDParser::getParser( String aFile )
 
     aFile = getPPDFile( aFile );
     if( ! aFile.Len() )
-{
-fprintf( stderr, "Could not get printer PPD file!\n" );
+    {
+        fprintf( stderr, "Could not get printer PPD file!\n" );
         return NULL;
-}
+    }
 
     for( ::std::list< PPDParser* >::const_iterator it = aAllParsers.begin(); it != aAllParsers.end(); ++it )
         if( (*it)->m_aFile == aFile )
