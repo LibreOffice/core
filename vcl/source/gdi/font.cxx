@@ -2,9 +2,9 @@
  *
  *  $RCSfile: font.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2001-03-23 11:45:26 $
+ *  last change: $Author: pl $ $Date: 2001-08-01 12:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,6 +630,13 @@ SvStream& operator>>( SvStream& rIStm, Impl_Font& rImpl_Font )
     rIStm >> nTmp8; rImpl_Font.mnKerning = nTmp8;
 //  rIStm >> bTmp; rImpl_Font.mbTransparent = bTmp;                 // removed since SUPD396
 
+    if( aCompat.GetVersion() >= 2 )
+    {
+        rIStm >> nTmp8;     rImpl_Font.meRelief = (FontRelief)nTmp8;
+        rIStm >> nTmp16;    rImpl_Font.meCJKLanguage = (LanguageType)nTmp16;
+        rIStm >> bTmp;      rImpl_Font.mbVertical = bTmp;
+        rIStm >> nTmp16;    rImpl_Font.meEmphasisMark = (FontEmphasisMark)nTmp16;
+    }
     // Relief
     // CJKContextLanguage
 
@@ -640,7 +647,7 @@ SvStream& operator>>( SvStream& rIStm, Impl_Font& rImpl_Font )
 
 SvStream& operator<<( SvStream& rOStm, const Impl_Font& rImpl_Font )
 {
-    VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
+    VersionCompat aCompat( rOStm, STREAM_WRITE, 2 );
     rOStm.WriteByteString( rImpl_Font.maName, rOStm.GetStreamCharSet() );
     rOStm.WriteByteString( rImpl_Font.maStyleName, rOStm.GetStreamCharSet() );
     rOStm << rImpl_Font.maSize;
@@ -666,8 +673,11 @@ SvStream& operator<<( SvStream& rOStm, const Impl_Font& rImpl_Font )
     rOStm << (BYTE) rImpl_Font.mnKerning;
 //  rOStm << (BOOL) rImpl_Font.mbTransparent;   // removed since SUPD396
 
-    // Relief
-    // CJKContextLanguage
+    // new in version 2
+    rOStm << (BYTE)     rImpl_Font.meRelief;
+    rOStm << (UINT16)   rImpl_Font.meCJKLanguage;
+    rOStm << (BOOL)     rImpl_Font.mbVertical;
+    rOStm << (UINT16)   rImpl_Font.meEmphasisMark;
 
     return rOStm;
 }
