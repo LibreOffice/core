@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: hr $ $Date: 2003-06-30 15:36:57 $
+#  last change: $Author: rt $ $Date: 2004-05-18 13:25:26 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -84,4 +84,4 @@ $(SHAREDLIB_OUT)/$(SHAREDLIB_PRE)$(SHL_NAME).$(SHAREDLIB_EXT) : $(SLOFILES) $(OU
 clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_SHL_SLO))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_SHL_MISC))
-	-$(DEL) $(subst /,$(PS),$(SHAREDLIB_OUT))$(PS)*$(SHL_NAME)*.*
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(SHAREDLIB_OUT))$(PS)*$(SHL_NAME)*.*)
