@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-03 20:04:22 $
+ *  last change: $Author: os $ $Date: 2001-05-07 11:52:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,8 @@
 #define WID_TXTCOL_LINE_REL_HGT         2
 #define WID_TXTCOL_LINE_ALIGN           3
 #define WID_TXTCOL_LINE_IS_ON           4
+#define WID_TXTCOL_IS_AUTOMATIC         5
+#define WID_TXTCOL_AUTO_DISTANCE        6
 
 /* -----------------04.07.98 11:41-------------------
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-03-19 09:16:20 $
+ *  last change: $Author: os $ $Date: 2001-05-07 11:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2377,7 +2377,9 @@ SwXTextColumns::SwXTextColumns(sal_uInt16 nColCount) :
     nSepLineHeightRelative(100),//full height
     nSepLineVertAlign(style::VerticalAlignment_MIDDLE),
     bSepLineIsOn(sal_False),
-    _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_COLUMS))
+    _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_COLUMS)),
+    bIsAutomaticWidth(sal_True),
+    nAutoDistance(0)
 {
     if(nColCount)
         setColumnCount(nColCount);
@@ -2388,8 +2390,15 @@ SwXTextColumns::SwXTextColumns(sal_uInt16 nColCount) :
 SwXTextColumns::SwXTextColumns(const SwFmtCol& rFmtCol) :
     aTextColumns(rFmtCol.GetNumCols()),
     nReference(0),
-    _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_COLUMS))
+    _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_COLUMS)),
+    bIsAutomaticWidth(rFmtCol.IsOrtho())
 {
+    USHORT nItemGutterWidth = rFmtCol.GetGutterWidth();
+    nAutoDistance = bIsAutomaticWidth ?
+                        USHRT_MAX == nItemGutterWidth ? DEF_GUTTER_WIDTH : (sal_Int32)nItemGutterWidth
+                        : 0;
+    nAutoDistance = TWIP_TO_MM100(nAutoDistance);
+
     TextColumn* pColumns = aTextColumns.getArray();
     const SwColumns& rCols = rFmtCol.GetColumns();
     for(sal_uInt16 i = 0; i < aTextColumns.getLength(); i++)
@@ -2447,16 +2456,18 @@ void SwXTextColumns::setColumnCount(sal_Int16 nColumns) throw( uno::RuntimeExcep
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(nColumns <= 0)
         throw uno::RuntimeException();
+    bIsAutomaticWidth = sal_True;
     aTextColumns.realloc(nColumns);
      TextColumn* pCols = aTextColumns.getArray();
     nReference = USHRT_MAX;
     sal_uInt16 nWidth = nReference / nColumns;
     sal_uInt16 nDiff = nReference - nWidth * nColumns;
+    sal_Int32 nDist = nAutoDistance / 2;
     for(sal_Int16 i = 0; i < nColumns; i++)
     {
         pCols[i].Width = nWidth;
-        pCols[i].LeftMargin = 0;
-        pCols[i].RightMargin = 0;
+        pCols[i].LeftMargin = i == 0 ? 0 : nDist;
+        pCols[i].RightMargin = i == nColumns - 1 ? 0 : nDist;
     }
     pCols[nColumns - 1].Width += nDiff;
 }
@@ -2485,6 +2496,7 @@ void SwXTextColumns::setColumns(const uno::Sequence< TextColumn >& rColumns)
             throw uno::RuntimeException();
         nReferenceTemp += prCols[i].Width;
     }
+    bIsAutomaticWidth = sal_False;
     nReference = !nReferenceTemp ? USHRT_MAX : nReferenceTemp;
     aTextColumns = rColumns;
 }
@@ -2507,6 +2519,8 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
                                                     _pMap, rPropertyName);
     if(!pMap)
         throw UnknownPropertyException();
+    if( pMap->nFlags & PropertyAttribute::READONLY)
+        throw IllegalArgumentException();
     switch(pMap->nWID)
     {
         case WID_TXTCOL_LINE_WIDTH:
@@ -2539,6 +2553,23 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
         case WID_TXTCOL_LINE_IS_ON:
             bSepLineIsOn = *(sal_Bool*)aValue.getValue();
         break;
+        case WID_TXTCOL_AUTO_DISTANCE:
+        {
+            sal_Int32 nTmp;
+            aValue >>= nTmp;
+            if(nTmp < 0 || nTmp >= nReference)
+                throw IllegalArgumentException();
+            nAutoDistance = nTmp;
+            sal_Int32 nColumns = aTextColumns.getLength();
+            TextColumn* pCols = aTextColumns.getArray();
+            sal_Int32 nDist = nAutoDistance / 2;
+            for(sal_Int32 i = 0; i < nColumns; i++)
+            {
+                pCols[i].LeftMargin = i == 0 ? 0 : nDist;
+                pCols[i].RightMargin = i == nColumns - 1 ? 0 : nDist;
+            }
+        }
+        break;
     }
 }
 /*-- 25.10.00 10:15:40---------------------------------------------------
@@ -2568,6 +2599,12 @@ Any SwXTextColumns::getPropertyValue( const OUString& rPropertyName )
         break;
         case WID_TXTCOL_LINE_IS_ON:
             aRet.setValue(&bSepLineIsOn, ::getBooleanCppuType());
+        break;
+        case WID_TXTCOL_IS_AUTOMATIC :
+            aRet.setValue(&bIsAutomaticWidth, ::getBooleanCppuType());
+        break;
+        case WID_TXTCOL_AUTO_DISTANCE:
+            aRet <<= nAutoDistance;
         break;
     }
     return aRet;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-04 08:41:21 $
+ *  last change: $Author: os $ $Date: 2001-05-07 11:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -710,4 +710,4 @@ const SwPropNameLen __FAR_DATA UNO_NAME_CURRENT_DATABASE_COMMAND_TYPE       (MAP
 const SwPropNameLen __FAR_DATA UNO_NAME_PRINTER_SETUP                       (MAP_CHAR_LEN("PrinterSetup"));
 const SwPropNameLen __FAR_DATA UNO_NAME_PROTECTION_KEY                      (MAP_CHAR_LEN("ProtectionKey"));
 const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_PROTECTION_KEY              (MAP_CHAR_LEN("RedlineProtectionKey"));
-
+const SwPropNameLen __FAR_DATA UNO_NAME_AUTOMATIC_DISTANCE                  (MAP_CHAR_LEN("AutomaticDistance"));

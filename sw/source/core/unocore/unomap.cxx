@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-04 08:41:21 $
+ *  last change: $Author: os $ $Date: 2001-05-07 11:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1954,7 +1954,9 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
             {
                 static SfxItemPropertyMap aTextColumns_Impl[] =
                 {
-                    {SW_PROP_NAME(UNO_NAME_SEPARATOR_LINE_WIDTH),               WID_TXTCOL_LINE_WIDTH, &::getCppuType((const sal_Int32*)0),PROPERTY_NONE,   0},
+                    {SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC),                       WID_TXTCOL_IS_AUTOMATIC, &::getBooleanCppuType(),PROPERTY_NONE, 0},
+                    {SW_PROP_NAME(UNO_NAME_AUTOMATIC_DISTANCE),                 WID_TXTCOL_AUTO_DISTANCE, &::getCppuType((const sal_Int32*)0),PROPERTY_NONE, 0},
+                    {SW_PROP_NAME(UNO_NAME_SEPARATOR_LINE_WIDTH),               WID_TXTCOL_LINE_WIDTH, &::getCppuType((const sal_Int32*)0),PROPERTY_NONE, 0},
                     {SW_PROP_NAME(UNO_NAME_SEPARATOR_LINE_COLOR),               WID_TXTCOL_LINE_COLOR, &::getCppuType((const sal_Int32*)0),PROPERTY_NONE,   0},
                     {SW_PROP_NAME(UNO_NAME_SEPARATOR_LINE_RELATIVE_HEIGHT),     WID_TXTCOL_LINE_REL_HGT, &::getCppuType((const sal_Int32*)0),PROPERTY_NONE, 0},
                     {SW_PROP_NAME(UNO_NAME_SEPARATOR_LINE_VERTIVAL_ALIGNMENT),  WID_TXTCOL_LINE_ALIGN, &::getCppuType((style::VerticalAlignment*)0),PROPERTY_NONE,  0},

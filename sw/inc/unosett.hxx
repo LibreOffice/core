@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-25 12:59:51 $
+ *  last change: $Author: os $ $Date: 2001-05-07 11:52:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,6 +321,8 @@ class SwXTextColumns : public cppu::WeakAggImplHelper4
 {
     sal_uInt32                  nReference;
     ::com::sun::star::uno::Sequence< ::com::sun::star::text::TextColumn>    aTextColumns;
+    sal_Bool                    bIsAutomaticWidth;
+    sal_Int32                   nAutoDistance;
 
     const SfxItemPropertyMap*   _pMap;
 
@@ -368,6 +370,8 @@ public:
     sal_Int8    GetSepLineHeightRelative() const {return    nSepLineHeightRelative;}
     sal_Int8    GetSepLineVertAlign() const {return     nSepLineVertAlign;}
     sal_Bool    GetSepLineIsOn() const {return  bSepLineIsOn;}
+
+    sal_Bool    IsAutomaticWidth() const {return bIsAutomaticWidth;}
 };
 #endif
 

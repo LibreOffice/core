@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-04 08:34:39 $
+ *  last change: $Author: os $ $Date: 2001-05-07 11:52:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,4 +712,5 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_CURRENT_DATABASE_COMMAND_TYPE;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PRINTER_SETUP;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PROTECTION_KEY        ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_PROTECTION_KEY;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_AUTOMATIC_DISTANCE;
 #endif
