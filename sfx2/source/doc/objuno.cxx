@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-06 12:45:16 $
+ *  last change: $Author: mba $ $Date: 2001-09-06 07:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ using namespace ::com::sun::star::frame;
 
 SfxItemPropertyMap aDocInfoPropertyMap_Impl[] =
 {
+    { "AlwaysSaveVersionOnClosing", 26 , SID_VERSION, &::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
     { "Author"          , 6 , WID_FROM,           &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "AutoloadEnabled" , 15, MID_DOCINFO_AUTOLOADENABLED, &::getBooleanCppuType(),   PROPERTY_UNBOUND, 0 },
     { "AutoloadSecs"    , 12, MID_DOCINFO_AUTOLOADSECS, &::getCppuType((const sal_Int16*)0),     PROPERTY_UNBOUND, 0 },
@@ -532,6 +533,9 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
         aValue >>= bBoolVal ;
         switch ( nHandle )
         {
+            case SID_VERSION :
+                _pInfo->SetSaveVersionOnClose( bBoolVal );
+                break;
             case MID_DOCINFO_AUTOLOADENABLED:
                 _pInfo->EnableReload( bBoolVal );
                 break;
@@ -600,6 +604,9 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
     {
         switch ( nHandle )
         {
+            case SID_VERSION :
+                aValue <<= _pInfo->IsSaveVersionOnClose();
+                break;
             case MID_DOCINFO_REVISION :
                 aValue <<= _pInfo->GetDocumentNumber() ;
                 break;
