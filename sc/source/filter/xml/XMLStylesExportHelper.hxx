@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-06 19:45:45 $
+ *  last change: $Author: hr $ $Date: 2002-02-08 18:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ struct ScMyRowFormatRange
     sal_Bool    bIsAutoStyle : 1;
 
     ScMyRowFormatRange();
-    sal_Bool operator<(const ScMyRowFormatRange& rRange);
+    sal_Bool operator<(const ScMyRowFormatRange& rRange) const;
 };
 
 typedef std::list<ScMyRowFormatRange> ScMyRowFormatRangesList;
@@ -241,7 +241,7 @@ struct ScMyFormatRange
     sal_Bool                                bIsAutoStyle : 1;
 
     ScMyFormatRange();
-    sal_Bool operator< (const ScMyFormatRange& rRange);
+    sal_Bool operator< (const ScMyFormatRange& rRange) const;
 };
 
 typedef std::list<ScMyFormatRange>          ScMyFormatRangeAddresses;

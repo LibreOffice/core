@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-05 12:53:42 $
+ *  last change: $Author: hr $ $Date: 2002-02-08 18:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ struct ScMyShape
     com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape;
     sal_Int16   nLayerID;
 
-    sal_Bool operator<(const ScMyShape& aShape);
+    sal_Bool operator<(const ScMyShape& aShape) const;
 };
 
 typedef std::list<ScMyShape>    ScMyShapeList;
@@ -163,7 +163,7 @@ struct ScMyMergedRange
     com::sun::star::table::CellRangeAddress aCellRange;
     sal_Int32                   nRows;
     sal_Bool                    bIsFirst : 1;
-    sal_Bool                    operator<(const ScMyMergedRange& aRange);
+    sal_Bool                    operator<(const ScMyMergedRange& aRange) const;
 };
 
 typedef std::list<ScMyMergedRange>  ScMyMergedRangeList;
@@ -201,7 +201,7 @@ struct ScMyAreaLink
     inline sal_Int32            GetRowCount() const { return aDestRange.EndRow - aDestRange.StartRow + 1; }
 
     sal_Bool                    Compare( const ScMyAreaLink& rAreaLink ) const;
-    sal_Bool                    operator<(const ScMyAreaLink& rAreaLink );
+    sal_Bool                    operator<(const ScMyAreaLink& rAreaLink ) const;
 };
 
 typedef ::std::list< ScMyAreaLink > ScMyAreaLinkList;
@@ -229,7 +229,7 @@ public:
 struct ScMyCellRangeAddress : com::sun::star::table::CellRangeAddress
 {
     ScMyCellRangeAddress(const com::sun::star::table::CellRangeAddress& rRange);
-    sal_Bool                    operator<(const ScMyCellRangeAddress& rCellRangeAddress );
+    sal_Bool                    operator<(const ScMyCellRangeAddress& rCellRangeAddress ) const;
 };
 
 typedef std::list<ScMyCellRangeAddress> ScMyEmptyDatabaseRangeList;
@@ -258,7 +258,7 @@ struct ScMyDetectiveObj
     ::com::sun::star::table::CellRangeAddress   aSourceRange;
     ScDetectiveObjType                          eObjType;
     sal_Bool                                    bHasError : 1;
-    sal_Bool operator<(const ScMyDetectiveObj& rDetObj);
+    sal_Bool operator<(const ScMyDetectiveObj& rDetObj) const;
 };
 
 typedef ::std::list< ScMyDetectiveObj > ScMyDetectiveObjList;
@@ -292,7 +292,7 @@ struct ScMyDetectiveOp
     ::com::sun::star::table::CellAddress    aPosition;
     ScDetOpType                             eOpType;
     sal_Int32                               nIndex;
-    sal_Bool operator<(const ScMyDetectiveOp& rDetOp);
+    sal_Bool operator<(const ScMyDetectiveOp& rDetOp) const;
 };
 
 typedef ::std::list< ScMyDetectiveOp > ScMyDetectiveOpList;
@@ -371,7 +371,7 @@ struct ScMyExportAnnotation
 {
     com::sun::star::uno::Reference<com::sun::star::sheet::XSheetAnnotation> xAnnotation;
     com::sun::star::table::CellAddress      aCellAddress;
-    sal_Bool operator<(const ScMyExportAnnotation& rAnno);
+    sal_Bool operator<(const ScMyExportAnnotation& rAnno) const;
 };
 
 typedef ::std::list< ScMyExportAnnotation > ScMyExportAnnotationList;

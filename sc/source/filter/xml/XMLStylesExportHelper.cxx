@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-06 19:45:45 $
+ *  last change: $Author: hr $ $Date: 2002-02-08 18:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,7 +613,7 @@ ScMyRowFormatRange::ScMyRowFormatRange()
 {
 }
 
-sal_Bool ScMyRowFormatRange::operator< (const ScMyRowFormatRange& rRange)
+sal_Bool ScMyRowFormatRange::operator< (const ScMyRowFormatRange& rRange) const
 {
     return (nStartColumn < rRange.nStartColumn);
 }
@@ -788,7 +788,7 @@ ScMyFormatRange::ScMyFormatRange()
 {
 }
 
-sal_Bool ScMyFormatRange::operator<(const ScMyFormatRange& rRange)
+sal_Bool ScMyFormatRange::operator<(const ScMyFormatRange& rRange) const
 {
     if (aRangeAddress.StartRow < rRange.aRangeAddress.StartRow)
         return sal_True;

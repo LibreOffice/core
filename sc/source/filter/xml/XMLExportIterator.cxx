@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-06 18:41:07 $
+ *  last change: $Author: hr $ $Date: 2002-02-08 18:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ void ScMyIteratorBase::UpdateAddress( table::CellAddress& rCellAddress )
 
 //==============================================================================
 
-sal_Bool ScMyShape::operator<(const ScMyShape& aShape)
+sal_Bool ScMyShape::operator<(const ScMyShape& aShape) const
 {
     if( aAddress.Tab() != aShape.aAddress.Tab() )
         return (aAddress.Tab() < aShape.aAddress.Tab());
@@ -198,7 +198,7 @@ void ScMyShapesContainer::Sort()
 
 //==============================================================================
 
-sal_Bool ScMyMergedRange::operator<(const ScMyMergedRange& aRange)
+sal_Bool ScMyMergedRange::operator<(const ScMyMergedRange& aRange) const
 {
     if( aCellRange.Sheet != aRange.aCellRange.Sheet )
         return (aCellRange.Sheet < aRange.aCellRange.Sheet);
@@ -292,7 +292,7 @@ sal_Bool ScMyAreaLink::Compare( const ScMyAreaLink& rAreaLink ) const
             (sSourceStr == rAreaLink.sSourceStr);
 }
 
-sal_Bool ScMyAreaLink::operator<(const ScMyAreaLink& rAreaLink )
+sal_Bool ScMyAreaLink::operator<(const ScMyAreaLink& rAreaLink ) const
 {
     if( aDestRange.Sheet != rAreaLink.aDestRange.Sheet )
         return (aDestRange.Sheet < rAreaLink.aDestRange.Sheet);
@@ -351,7 +351,7 @@ ScMyCellRangeAddress::ScMyCellRangeAddress(const table::CellRangeAddress& rRange
 {
 }
 
-sal_Bool ScMyCellRangeAddress::operator<(const ScMyCellRangeAddress& rRange )
+sal_Bool ScMyCellRangeAddress::operator<(const ScMyCellRangeAddress& rRange ) const
 {
     if( Sheet != rRange.Sheet )
         return (Sheet < rRange.Sheet);
@@ -420,7 +420,7 @@ void ScMyEmptyDatabaseRangesContainer::Sort()
 
 //==============================================================================
 
-sal_Bool ScMyDetectiveObj::operator<( const ScMyDetectiveObj& rDetObj)
+sal_Bool ScMyDetectiveObj::operator<( const ScMyDetectiveObj& rDetObj) const
 {
     if( aPosition.Sheet != rDetObj.aPosition.Sheet )
         return (aPosition.Sheet < rDetObj.aPosition.Sheet);
@@ -488,7 +488,7 @@ void ScMyDetectiveObjContainer::Sort()
 
 //==============================================================================
 
-sal_Bool ScMyDetectiveOp::operator<( const ScMyDetectiveOp& rDetOp)
+sal_Bool ScMyDetectiveOp::operator<( const ScMyDetectiveOp& rDetOp) const
 {
     if( aPosition.Sheet != rDetOp.aPosition.Sheet )
         return (aPosition.Sheet < rDetOp.aPosition.Sheet);
@@ -574,7 +574,7 @@ ScMyCell::~ScMyCell()
 
 //==============================================================================
 
-sal_Bool ScMyExportAnnotation::operator<(const ScMyExportAnnotation& rAnno)
+sal_Bool ScMyExportAnnotation::operator<(const ScMyExportAnnotation& rAnno) const
 {
     if( aCellAddress.Row != rAnno.aCellAddress.Row )
         return (aCellAddress.Row < rAnno.aCellAddress.Row);
