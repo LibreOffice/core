@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:55:07 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,10 +494,17 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
         return FALSE;
 
     _UndoFmtAttr* pSaveUndo = 0;
+    const bool bDoesUndo = DoesUndo();
+
     if( DoesUndo() )
     {
         ClearRedo();
         pSaveUndo = new _UndoFmtAttr( rFlyFmt );
+        // --> FME 2004-10-13 #i32968#
+        // Inserting columns in the frame causes MakeFrmFmt to put two
+        // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
+        DoUndo( FALSE );
+        // <--
     }
 
     //Ist das Ankerattribut dabei? Falls ja ueberlassen wir die Verarbeitung
@@ -548,6 +555,10 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
 
     if( pSaveUndo )
     {
+        // --> FME 2004-10-13 #i32968#
+        DoUndo( bDoesUndo );
+        // <--
+
         if( pSaveUndo->pUndo )
             AppendUndo( pSaveUndo->pUndo );
         delete pSaveUndo;
@@ -580,6 +591,11 @@ BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
     {
         ClearRedo();
         AppendUndo( pUndo = new SwUndoSetFlyFmt( rFmt, rNewFmt ) );
+        // --> FME 2004-10-13 #i32968#
+        // Inserting columns in the section causes MakeFrmFmt to put two
+        // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
+        DoUndo( FALSE );
+        // <--
     }
 
     //Erstmal die Spalten setzen, sonst gibts nix als Aerger mit dem
@@ -606,9 +622,6 @@ BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
             && ((SwFmtAnchor*)pItem)->GetAnchorId() !=
                 rFmt.GetAnchor().GetAnchorId() )
         {
-            if( pUndo )
-                DoUndo( FALSE );
-
             if( pSet )
                 bChgAnchor = MAKEFRMS == SetFlyFrmAnchor( rFmt, *pSet, FALSE );
             else
@@ -620,9 +633,6 @@ BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
                 aFlySet.Put( *pItem );
                 bChgAnchor = MAKEFRMS == SetFlyFrmAnchor( rFmt, aFlySet, FALSE);
             }
-
-            if( pUndo )
-                DoUndo( TRUE );
         }
     }
 
@@ -653,6 +663,12 @@ BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
         rFmt.Remove( pUndo );
 
     SetModified();
+
+    // --> FME 2004-10-13 #i32968#
+    if ( pUndo )
+        DoUndo( TRUE );
+    // <--
+
     return bChgAnchor;
 }
 
