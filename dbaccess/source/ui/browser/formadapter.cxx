@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formadapter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 06:57:24 $
+ *  last change: $Author: fs $ $Date: 2001-10-24 16:21:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,6 @@
 #ifndef _SBA_FORMADAPTER_HXX
 #include "formadapter.hxx"
 #endif
-//#ifndef _ModuleRes_HRC
-//#include "ModuleRes.hrc"
-//#endif
-//#ifndef _SBA_SBARES_HXX
-//#include "sbares.hxx"
-//#endif
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
 #endif
@@ -91,6 +85,12 @@
 #endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
+#endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
+#endif
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 
 using namespace dbaui;
@@ -133,70 +133,41 @@ SbaXFormAdapter::~SbaXFormAdapter()
 }
 
 // -------------------------------------------------------------------------
+Sequence< Type > SAL_CALL SbaXFormAdapter::getTypes(  ) throw (RuntimeException)
+{
+    return ::comphelper::concatSequences(
+        SbaXFormAdapter_BASE1::getTypes(),
+        SbaXFormAdapter_BASE2::getTypes(),
+        SbaXFormAdapter_BASE3::getTypes()
+    );
+}
+
+// -------------------------------------------------------------------------
+Sequence< sal_Int8 > SAL_CALL SbaXFormAdapter::getImplementationId(  ) throw (RuntimeException)
+{
+    static ::cppu::OImplementationId * pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
+}
+
+// -------------------------------------------------------------------------
 Any SAL_CALL SbaXFormAdapter::queryInterface(const Type& _rType) throw (RuntimeException)
 {
-    Any aReturn;
-
-    aReturn = ::cppu::queryInterface(_rType,
-        static_cast< ::com::sun::star::sdbc::XResultSetMetaDataSupplier* >(this),
-        static_cast< ::com::sun::star::sdb::XResultSetAccess* >(this),
-        static_cast< ::com::sun::star::sdbc::XResultSetUpdate* >(this),
-        static_cast< ::com::sun::star::sdbc::XRowSet* >(this),
-        static_cast< ::com::sun::star::sdbc::XResultSet* >(this),
-        static_cast< ::com::sun::star::sdb::XRowSetApproveBroadcaster* >(this),
-        static_cast< ::com::sun::star::sdbcx::XRowLocate* >(this),
-        static_cast< ::com::sun::star::sdbc::XRowUpdate* >(this),
-        static_cast< ::com::sun::star::sdbc::XRow* >(this),
-        static_cast< ::com::sun::star::sdbcx::XColumnsSupplier* >(this),
-        static_cast< ::com::sun::star::sdbc::XColumnLocate* >(this),
-        static_cast< ::com::sun::star::sdbc::XParameters* >(this)
-    );
+    Any aReturn = SbaXFormAdapter_BASE1::queryInterface( _rType );
 
     if (!aReturn.hasValue())
-        aReturn = ::cppu::queryInterface(_rType,
-            static_cast< ::com::sun::star::sdbcx::XDeleteRows* >(this),
-            static_cast< ::com::sun::star::sdbc::XWarningsSupplier* >(this),
-            static_cast< ::com::sun::star::sdbc::XCloseable* >(this),
-            static_cast< ::com::sun::star::form::XLoadable* >(this),
-            static_cast< ::com::sun::star::sdb::XSQLErrorBroadcaster* >(this),
-            static_cast< ::com::sun::star::form::XDatabaseParameterBroadcaster* >(this),
-            static_cast< ::com::sun::star::form::XForm* >(this),
-            static_cast< ::com::sun::star::form::XFormComponent* >(this),
-            static_cast< ::com::sun::star::container::XChild* >(this),
-            static_cast< ::com::sun::star::form::XSubmit* >(this),
-            static_cast< ::com::sun::star::awt::XTabControllerModel* >(this),
-            static_cast< ::com::sun::star::lang::XComponent* >(this)
-        );
+        aReturn = SbaXFormAdapter_BASE2::queryInterface( _rType );
 
     if (!aReturn.hasValue())
-        aReturn = ::cppu::queryInterface(_rType,
-            static_cast< ::com::sun::star::beans::XFastPropertySet* >(this),
-            static_cast< ::com::sun::star::beans::XMultiPropertySet* >(this),
-            static_cast< ::com::sun::star::container::XNamed* >(this),
-            static_cast< ::com::sun::star::io::XPersistObject* >(this),
-            static_cast< ::com::sun::star::beans::XPropertySet* >(this),
-            static_cast< ::com::sun::star::util::XCancellable* >(this),
-            static_cast< ::com::sun::star::beans::XPropertyState* >(this),
-            static_cast< ::com::sun::star::form::XReset* >(this),
-            static_cast< ::com::sun::star::container::XNameContainer* >(this),
-            static_cast< ::com::sun::star::container::XNameReplace* >(this),
-            static_cast< ::com::sun::star::container::XNameAccess* >(this),
-            static_cast< ::com::sun::star::container::XElementAccess* >(static_cast< ::com::sun::star::container::XNameAccess* >(this))
-        );
-
-    if (!aReturn.hasValue())
-        aReturn = ::cppu::queryInterface(_rType,
-            static_cast< ::com::sun::star::container::XIndexContainer* >(this),
-            static_cast< ::com::sun::star::container::XIndexReplace* >(this),
-            static_cast< ::com::sun::star::container::XIndexAccess* >(this),
-            static_cast< ::com::sun::star::container::XContainer* >(this),
-            static_cast< ::com::sun::star::container::XEnumerationAccess* >(this),
-            static_cast< ::com::sun::star::beans::XPropertyChangeListener* >(this),
-            static_cast< ::com::sun::star::lang::XEventListener* >(this)
-        );
-
-    if (!aReturn.hasValue())
-        OWeakObject::queryInterface(_rType);
+        aReturn = SbaXFormAdapter_BASE3::queryInterface( _rType );
 
     return aReturn;
 }

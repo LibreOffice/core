@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formadapter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
+ *  last change: $Author: fs $ $Date: 2001-10-24 16:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,8 +168,11 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
-#ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/weak.hxx>
+#ifndef _CPPUHELPER_IMPLBASE12_HXX_
+#include <cppuhelper/implbase12.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE10_HXX_
+#include <cppuhelper/implbase10.hxx>
 #endif
 
 namespace dbaui
@@ -178,54 +181,60 @@ namespace dbaui
     // SbaXFormAdapter
     //==================================================================
 
+    typedef ::cppu::WeakImplHelper12<   ::com::sun::star::sdbc::XResultSetMetaDataSupplier
+                                    ,   ::com::sun::star::sdb::XResultSetAccess
+                                    ,   ::com::sun::star::sdbc::XResultSetUpdate
+                                    ,   ::com::sun::star::sdbc::XRowSet
+                                    ,   ::com::sun::star::sdb::XRowSetApproveBroadcaster
+                                    ,   ::com::sun::star::sdbcx::XRowLocate
+                                    ,   ::com::sun::star::sdbc::XRowUpdate
+                                    ,   ::com::sun::star::sdbc::XRow
+                                    ,   ::com::sun::star::sdbcx::XColumnsSupplier
+                                    ,   ::com::sun::star::sdbc::XColumnLocate
+                                    // --- stardiv::one::form::component::DatabaseForm ---
+                                    ,   ::com::sun::star::sdbc::XParameters
+                                    ,   ::com::sun::star::sdbcx::XDeleteRows
+                                    >   SbaXFormAdapter_BASE1;
+    typedef ::cppu::ImplHelper12    <   ::com::sun::star::sdbc::XWarningsSupplier
+                                    ,   ::com::sun::star::sdbc::XCloseable
+                                    ,   ::com::sun::star::form::XLoadable
+                                    ,   ::com::sun::star::sdb::XSQLErrorBroadcaster
+                                    ,   ::com::sun::star::form::XDatabaseParameterBroadcaster
+                                        // --- stardiv::one::form::component::Form ---
+                                    ,       ::com::sun::star::form::XForm
+                                    ,       ::com::sun::star::form::XSubmit
+                                    ,       ::com::sun::star::awt::XTabControllerModel
+                                            // --- stardiv::one::form::FormComponent ---
+                                    ,           ::com::sun::star::lang::XComponent
+                                    ,           ::com::sun::star::beans::XFastPropertySet
+                                            // already present : ::com::sun::star::form::XFormComponent (base of ::com::sun::star::form::XForm)
+                                    ,           ::com::sun::star::beans::XMultiPropertySet
+                                    ,           ::com::sun::star::container::XNamed
+                                    >   SbaXFormAdapter_BASE2;
+    typedef ::cppu::ImplHelper10    <           ::com::sun::star::io::XPersistObject
+                                    ,           ::com::sun::star::beans::XPropertySet
+                                        // --- stardiv::one::data::DatabaseCursor ---
+                                    ,       ::com::sun::star::util::XCancellable
+                                        // already present : ::com::sun::star::beans::XPropertySet
+                                            // --- stardiv::one::data::DatabaseComponent ---
+                                            // already present : ::com::sun::star::lang::XComponent
+                                            // already present : ::com::sun::star::container::XChild (base of ::com::sun::star::form::XForm)
+                                    // interfaces I don't know the service which they belong to ;)
+                                    // (they are supported by FmXDatabaseForm, se we support it, too)
+                                    ,   ::com::sun::star::beans::XPropertyState
+                                    ,   ::com::sun::star::form::XReset
+                                    ,   ::com::sun::star::container::XNameContainer
+                                    ,   ::com::sun::star::container::XIndexContainer
+                                    ,   ::com::sun::star::container::XContainer
+                                    ,   ::com::sun::star::container::XEnumerationAccess
+                                    // interfaces we need because of other reasons
+                                    ,   ::com::sun::star::beans::XPropertyChangeListener
+                                    >   SbaXFormAdapter_BASE3;
+
     class SbaXFormAdapter
-            :public ::cppu::OWeakObject
-            // --- stardiv::one::form::component::DatabaseForm ---
-            ,public ::com::sun::star::sdbc::XResultSetMetaDataSupplier
-            ,public ::com::sun::star::sdb::XResultSetAccess
-            ,public ::com::sun::star::sdbc::XResultSetUpdate
-            ,public ::com::sun::star::sdbc::XRowSet
-            ,public ::com::sun::star::sdb::XRowSetApproveBroadcaster
-            ,public ::com::sun::star::sdbcx::XRowLocate
-            ,public ::com::sun::star::sdbc::XRowUpdate
-            ,public ::com::sun::star::sdbc::XRow
-            ,public ::com::sun::star::sdbcx::XColumnsSupplier
-            ,public ::com::sun::star::sdbc::XColumnLocate
-            ,public ::com::sun::star::sdbc::XParameters
-            ,public ::com::sun::star::sdbcx::XDeleteRows
-            ,public ::com::sun::star::sdbc::XWarningsSupplier
-            ,public ::com::sun::star::sdbc::XCloseable
-            ,public ::com::sun::star::form::XLoadable
-            ,public ::com::sun::star::sdb::XSQLErrorBroadcaster
-            ,public ::com::sun::star::form::XDatabaseParameterBroadcaster
-                // --- stardiv::one::form::component::Form ---
-                ,public ::com::sun::star::form::XForm
-                ,public ::com::sun::star::form::XSubmit
-                ,public ::com::sun::star::awt::XTabControllerModel
-                    // --- stardiv::one::form::FormComponent ---
-                    ,public ::com::sun::star::lang::XComponent
-                    ,public ::com::sun::star::beans::XFastPropertySet
-                    // already present : ::com::sun::star::form::XFormComponent (base of ::com::sun::star::form::XForm)
-                    ,public ::com::sun::star::beans::XMultiPropertySet
-                    ,public ::com::sun::star::container::XNamed
-                    ,public ::com::sun::star::io::XPersistObject
-                    ,public ::com::sun::star::beans::XPropertySet
-                // --- stardiv::one::data::DatabaseCursor ---
-                ,public ::com::sun::star::util::XCancellable
-                // already present : ::com::sun::star::beans::XPropertySet
-                    // --- stardiv::one::data::DatabaseComponent ---
-                    // already present : ::com::sun::star::lang::XComponent
-                    // already present : ::com::sun::star::container::XChild (base of ::com::sun::star::form::XForm)
-            // interfaces I don't know the service which they belong to ;)
-            // (they are supported by FmXDatabaseForm, se we support it, too)
-            ,public ::com::sun::star::beans::XPropertyState
-            ,public ::com::sun::star::form::XReset
-            ,public ::com::sun::star::container::XNameContainer
-            ,public ::com::sun::star::container::XIndexContainer
-            ,public ::com::sun::star::container::XContainer
-            ,public ::com::sun::star::container::XEnumerationAccess
-            // interfaces we need because of other reasons
-            ,public ::com::sun::star::beans::XPropertyChangeListener
+        :public SbaXFormAdapter_BASE1
+        ,public SbaXFormAdapter_BASE2
+        ,public SbaXFormAdapter_BASE3
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                             m_xMainForm;
@@ -268,8 +277,12 @@ namespace dbaui
         void AttachForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xNewMaster);
 
         // UNO
-        DECLARE_UNO3_DEFAULTS(SbaXFormAdapter, OWeakObject);
+        DECLARE_UNO3_DEFAULTS(SbaXFormAdapter, SbaXFormAdapter_BASE1);
         virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+
+        // XTypeProvider
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::sdbc::XCloseable
         virtual void SAL_CALL close() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
