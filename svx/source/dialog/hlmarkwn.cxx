@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-03-14 14:25:18 $
+ *  last change: $Author: gt $ $Date: 2002-08-12 10:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,9 @@ struct TargetData
 SvxHlmarkTreeLBox::SvxHlmarkTreeLBox( Window* pParent, const ResId& rResId )
 : SvTreeListBox ( pParent, rResId ),
   mpParentWnd   ( (SvxHlinkDlgMarkWnd*) pParent )
-{}
+{
+    SetNodeDefaultImages();
+}
 
 void SvxHlmarkTreeLBox::Paint( const Rectangle& rRect )
 {
@@ -196,9 +198,6 @@ SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
     maLbTree.SetWindowBits( WinBits( WB_TABSTOP | WB_BORDER | WB_HASLINES |
                             WB_HASBUTTONS |  //WB_HASLINESATROOT |
                             WB_HSCROLL | WB_HASBUTTONSATROOT ) );
-
-    maLbTree.SetNodeBitmaps( Bitmap( ResId( RID_SVXBMP_HYPDLG_EXPAND ) ),
-                             Bitmap( ResId( RID_SVXBMP_HYPDLG_COLLAPSE ) ) );
 }
 
 SvxHlinkDlgMarkWnd::~SvxHlinkDlgMarkWnd()
@@ -389,7 +388,9 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
     const uno::Sequence< OUString > aNames( xLinks->getElementNames() );
     const ULONG nLinks = aNames.getLength();
     const OUString* pNames = aNames.getConstArray();
-
+    const OUString aProp_LinkDisplayName( RTL_CONSTASCII_USTRINGPARAM( "LinkDisplayName" ) );
+    const OUString aProp_LinkTarget( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.LinkTarget" ) );
+    const OUString aProp_LinkDisplayBitmap( RTL_CONSTASCII_USTRINGPARAM( "LinkDisplayBitmap" ) );
 
     for( ULONG i = 0; i < nLinks; i++ )
     {
@@ -417,14 +418,14 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
             try
             {
                 // get name to display
-                aAny = xTarget->getPropertyValue( OUString::createFromAscii( "LinkDisplayName" ) );
+                aAny = xTarget->getPropertyValue( aProp_LinkDisplayName );
                 OUString aDisplayName;
                 aAny >>= aDisplayName;
                 String aStrDisplayname ( aDisplayName );
 
                 // is it a target ?
                 uno::Reference< lang::XServiceInfo > xSI( xTarget, uno::UNO_QUERY );
-                BOOL bIsTarget = xSI->supportsService( OUString::createFromAscii( "com.sun.star.document.LinkTarget" ) );
+                BOOL bIsTarget = xSI->supportsService( aProp_LinkTarget );
 
                 // create userdata
                 TargetData *pData = new TargetData ( aLink, bIsTarget );
@@ -434,7 +435,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                 try
                 {
                     // get bitmap for the tree-entry
-                    uno::Any aAny( xTarget->getPropertyValue( OUString::createFromAscii( "LinkDisplayBitmap" ) ) );
+                    uno::Any aAny( xTarget->getPropertyValue( aProp_LinkDisplayBitmap ) );
                     uno::Reference< awt::XBitmap > aXBitmap;
                     if( aAny >>= aXBitmap )
                     {
