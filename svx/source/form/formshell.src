@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formshell.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:48:52 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,8 @@ Menu RID_FM_TEXTATTRIBUTE_MENU
         {
             Identifier = MENU_FM_TEXTATTRIBITES_STYLE;
             HelpID = MENU_FM_TEXTATTRIBITES_STYLE;
-            Text = "Sti~l";
-            Text [ english ] = "St~yle";
-            Text [ english_us ] = "St~yle";
+            Text [ de ] = "Sti~l";
+            Text [ en-US ] = "St~yle";
             SubMenu = Menu
             {
                 ItemList =
@@ -129,9 +128,8 @@ Menu RID_FM_TEXTATTRIBUTE_MENU
         {
             Identifier = MENU_FM_TEXTATTRIBITES_ALIGNMENT;
             HelpID = MENU_FM_TEXTATTRIBITES_ALIGNMENT;
-            Text = "Aus~richtung";
-            Text [ english ] = "~Alignment";
-            Text [ english_us ] = "~Alignment";
+            Text [ de ] = "Aus~richtung";
+            Text [ en-US ] = "~Alignment";
             RadioCheck = TRUE;
             SubMenu = Menu
             {
@@ -164,9 +162,8 @@ Menu RID_FM_TEXTATTRIBUTE_MENU
         {
             Identifier = MENU_FM_TEXTATTRIBITES_SPACING;
             HelpID = MENU_FM_TEXTATTRIBITES_SPACING;
-            Text = "Zeilenabs~tand";
-            Text [ english ] = "~Line Spacing";
-            Text [ english_us ] = "~Line Spacing";
+            Text [ de ] = "Zeilenabs~tand";
+            Text [ en-US ] = "~Line Spacing";
             _MenuItemFlags = MIB_RADIOCHECK;
             SubMenu = Menu
             {
@@ -339,7 +336,7 @@ ToolBox RID_SVXTBX_TEXT_CONTROL_ATTRIBUTES
         STANDARD_DIALOG_ITEMS
     };
 
-    ItemList [ hebrew ] =
+    ItemList [ he ] =
     {
         STANDARD_FONT_ITEMS
         ITEM_PARA_ADJUST_RIGHT
@@ -352,7 +349,7 @@ ToolBox RID_SVXTBX_TEXT_CONTROL_ATTRIBUTES
         STANDARD_DIALOG_ITEMS
     };
 
-    ItemList [ arabic ] =
+    ItemList [ ar ] =
     {
         STANDARD_FONT_ITEMS
         ITEM_PARA_ADJUST_RIGHT
@@ -368,9 +365,8 @@ ToolBox RID_SVXTBX_TEXT_CONTROL_ATTRIBUTES
 
 String RID_SVXTBX_TEXT_CONTROL_ATTRIBUTES
 {
-    Text = "Textfeld Formatierungsleiste";
-    Text [ english ] = "Text Box Formatting Bar";
-    Text [ english_us ] = "Text Box Formatting Bar";
+    Text [ de ] = "Textfeld Formatierungsleiste";
+    Text [ en-US ] = "Text Box Formatting Bar";
 };
 
 TabDialog RID_SVXDLG_TEXTCONTROL_CHARATTR
@@ -379,9 +375,8 @@ TabDialog RID_SVXDLG_TEXTCONTROL_CHARATTR
     SVLook = TRUE;
     Moveable = TRUE;
 
-    Text = "Zeichen";
-    Text [ english ] = "Character";
-    Text [ english_us ] = "Character";
+    Text [ de ] = "Zeichen";
+    Text [ en-US ] = "Character";
 
     TabControl 1
     {
@@ -391,23 +386,20 @@ TabDialog RID_SVXDLG_TEXTCONTROL_CHARATTR
             PageItem
             {
                 Identifier = 1;
-                Text = "Schrift";
-                Text [ english ] = "Font";
-                Text [ english_us ] = "Font";
+                Text [ de ] = "Schrift";
+                Text [ en-US ] = "Font";
             };
             PageItem
             {
                 Identifier = 2;
-                Text = "Schrifteffekt";
-                Text [ english ] = "Font Effects";
-                Text [ english_us ] = "Font Effects";
+                Text [ de ] = "Schrifteffekt";
+                Text [ en-US ] = "Font Effects";
             };
             PageItem
             {
                 Identifier = 3;
-                Text = "Position";
-                Text [ english ] = "Position";
-                Text [ english_us ] = "Position";
+                Text [ de ] = "Position";
+                Text [ en-US ] = "Position";
             };
         };
     };
@@ -419,9 +411,8 @@ TabDialog RID_SVXDLG_TEXTCONTROL_PARAATTR
     SVLook = TRUE;
     Moveable = TRUE;
 
-    Text = "Absatz";
-    Text [ english ] = "Paragraph";
-    Text [ english_us ] = "Paragraph";
+    Text [ de ] = "Absatz";
+    Text [ en-US ] = "Paragraph";
 
     TabControl 1
     {
@@ -431,30 +422,26 @@ TabDialog RID_SVXDLG_TEXTCONTROL_PARAATTR
             PageItem
             {
                 Identifier = 1;
-                Text = "Einzüge und Abstände";
-                Text [ english ] = "Indents & Spacing";
-                Text [ english_us ] = "Indents & Spacing";
+                Text [ de ] = "Einzüge und Abstände";
+                Text [ en-US ] = "Indents & Spacing";
             };
             PageItem
             {
                 Identifier = 2;
-                Text = "Ausrichtung";
-                Text [ english ] = "Alignment";
-                Text [ english_us ] = "Alignment";
+                Text [ de ] = "Ausrichtung";
+                Text [ en-US ] = "Alignment";
             };
             PageItem
             {
                 Identifier = 3;
-                Text = "Asiatische Typographie";
-                Text [ english ] = "Asian Typography";
-                Text [ english_us ] = "Asian Typography";
+                Text [ de ] = "Asiatische Typographie";
+                Text [ en-US ] = "Asian Typography";
             };
             PageItem
             {
                 Identifier = 4;
-                Text = "Tabulator";
-                Text [ english ] = "Tabs";
-                Text [ english_us ] = "Tabs";
+                Text [ de ] = "Tabulator";
+                Text [ en-US ] = "Tabs";
             };
         };
     };
