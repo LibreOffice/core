@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:18:02 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,14 @@
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
+#ifndef _SFXITEMPOOL_HXX
+#include <svtools/itempool.hxx>
+#endif
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
+#endif
+#ifndef _SFXPOOLITEM_HXX
+#include <svtools/poolitem.hxx>
 #endif
 
 #include <math.h>
@@ -256,7 +262,6 @@ const SvStorageStreamRef ScfTools::OpenStorageStreamWrite( SvStorage* pStorage, 
 }
 
 
-
 // *** item handling *** ------------------------------------------------------
 
 bool ScfTools::CheckItem( const SfxItemSet& rItemSet, sal_uInt16 nWhichId, bool bDeep )
@@ -264,16 +269,29 @@ bool ScfTools::CheckItem( const SfxItemSet& rItemSet, sal_uInt16 nWhichId, bool 
     return rItemSet.GetItemState( nWhichId, bDeep ) == SFX_ITEM_SET;
 }
 
+void ScfTools::PutItem( SfxItemSet& rItemSet, const SfxPoolItem& rItem, sal_uInt16 nWhichId, bool bSkipPoolDef )
+{
+    if( !bSkipPoolDef || (rItem != rItemSet.GetPool()->GetDefaultItem( nWhichId )) )
+        rItemSet.Put( rItem, nWhichId );
+}
+
+void ScfTools::PutItem( SfxItemSet& rItemSet, const SfxPoolItem& rItem, bool bSkipPoolDef )
+{
+    PutItem( rItemSet, rItem, rItem.Which(), bSkipPoolDef );
+}
+
 
 // *** style sheet handling *** -----------------------------------------------
 
-ScStyleSheet& ScfTools::MakeCellStyleSheet( ScStyleSheetPool& rPool, const String& rStyleName, bool bForceName )
+namespace {
+
+ScStyleSheet& lclMakeStyleSheet( ScStyleSheetPool& rPool, const String& rStyleName, SfxStyleFamily eFamily, bool bForceName )
 {
     // find an unused name
     String aNewName( rStyleName );
     sal_Int32 nIndex = 0;
     SfxStyleSheetBase* pOldStyleSheet = NULL;
-    while( SfxStyleSheetBase* pStyleSheet = rPool.Find( aNewName, SFX_STYLE_FAMILY_PARA ) )
+    while( SfxStyleSheetBase* pStyleSheet = rPool.Find( aNewName, eFamily ) )
     {
         if( !pOldStyleSheet )
             pOldStyleSheet = pStyleSheet;
@@ -288,7 +306,19 @@ ScStyleSheet& ScfTools::MakeCellStyleSheet( ScStyleSheetPool& rPool, const Strin
     }
 
     // create new style sheet
-    return static_cast< ScStyleSheet& >( rPool.Make( aNewName, SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_USERDEF ) );
+    return static_cast< ScStyleSheet& >( rPool.Make( aNewName, eFamily, SFXSTYLEBIT_USERDEF ) );
+}
+
+} // namespace
+
+ScStyleSheet& ScfTools::MakeCellStyleSheet( ScStyleSheetPool& rPool, const String& rStyleName, bool bForceName )
+{
+    return lclMakeStyleSheet( rPool, rStyleName, SFX_STYLE_FAMILY_PARA, bForceName );
+}
+
+ScStyleSheet& ScfTools::MakePageStyleSheet( ScStyleSheetPool& rPool, const String& rStyleName, bool bForceName )
+{
+    return lclMakeStyleSheet( rPool, rStyleName, SFX_STYLE_FAMILY_PAGE, bForceName );
 }
 
 
