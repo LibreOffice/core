@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testhelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:23:42 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 12:27:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,50 +86,46 @@ int main( int argc, char * argv[] )
 int __cdecl main( int argc, char * argv[] )
 #endif
 {
-    Reference< XMultiComponentFactory > xMgr( createRegistryServiceFactory(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("cpputest.rdb") ) ), UNO_QUERY );
-    Reference< XComponentContext > xInitialContext;
-    OSL_VERIFY( Reference< beans::XPropertySet >( xMgr, UNO_QUERY )->getPropertyValue(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xInitialContext );
-
-    ContextEntry_Init aEntry;
-    aEntry.bLateInitService = false;
-    aEntry.name = OUString( RTL_CONSTASCII_USTRINGPARAM("bla, bla") );
-    aEntry.value = makeAny( (sal_Int32)5 );
-    Reference< XComponentContext > xContext( createComponentContext( &aEntry, 1, xInitialContext ) );
-    OSL_ASSERT( xContext->getServiceManager() != xMgr ); // must be wrapped one
-    OSL_ASSERT(
-        Reference< beans::XPropertySet >(
-            xContext->getServiceManager(), UNO_QUERY )->getPropertyValue(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) != xInitialContext );
-
-    sal_Bool bSucc = sal_False;
     try
     {
+        Reference< XMultiComponentFactory > xMgr( createRegistryServiceFactory(
+                                                      OUString( RTL_CONSTASCII_USTRINGPARAM("cpputest.rdb") ) ), UNO_QUERY );
+        Reference< XComponentContext > xInitialContext;
+        OSL_VERIFY( Reference< beans::XPropertySet >( xMgr, UNO_QUERY )->getPropertyValue(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xInitialContext );
+
+        ContextEntry_Init aEntry;
+        aEntry.bLateInitService = false;
+        aEntry.name = OUString( RTL_CONSTASCII_USTRINGPARAM("bla, bla") );
+        aEntry.value = makeAny( (sal_Int32)5 );
+        Reference< XComponentContext > xContext( createComponentContext( &aEntry, 1, xInitialContext ) );
+        OSL_ASSERT( xContext->getServiceManager() != xMgr ); // must be wrapped one
+        OSL_ASSERT(
+            Reference< beans::XPropertySet >(
+                xContext->getServiceManager(), UNO_QUERY )->getPropertyValue(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) != xInitialContext );
+
         Reference< XMultiServiceFactory > x( xMgr, UNO_QUERY );
         test_ImplHelper( x );
         testPropertyTypeHelper();
         testidlclass( x );
          test_PropertySetHelper();
         test_interfacecontainer();
-    }
-    catch (Exception & rExc)
-    {
-        OSL_ENSURE( sal_False, "### exception occured!" );
-        OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( "### exception occured: " );
-        OSL_TRACE( aMsg.getStr() );
-        OSL_TRACE( "\n" );
-    }
 
-    OSL_VERIFY( xContext->getValueByName(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("bla, bla") ) ) == (sal_Int32)5 );
-    OSL_VERIFY( ! xInitialContext->getValueByName(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("bla, bla") ) ).hasValue() );
-    Reference< XComponent >( xInitialContext, UNO_QUERY )->dispose();
-    xMgr.clear();
-    xContext.clear();
-    xInitialContext.clear();
+        OSL_VERIFY( xContext->getValueByName(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("bla, bla") ) ) == (sal_Int32)5 );
+        OSL_VERIFY( ! xInitialContext->getValueByName(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("bla, bla") ) ).hasValue() );
+        Reference< XComponent >( xInitialContext, UNO_QUERY )->dispose();
+        xMgr.clear();
+        xContext.clear();
+        xInitialContext.clear();
+    }
+    catch (Exception & exc)
+    {
+        OString cstr_msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+        OSL_ENSURE( ! "exception occured: ", cstr_msg.getStr() );
+    }
 
     printf( "Test finished\n" );
     return 0;
