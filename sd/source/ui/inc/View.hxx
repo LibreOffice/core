@@ -2,9 +2,9 @@
  *
  *  $RCSfile: View.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:46:12 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:51:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ public:
         ViewShell* pViewSh=NULL);
     virtual ~View (void);
 
-    void                    InitRedraw( OutputDevice* pOutDev, const Region& rReg );
+    void                    InitRedraw( OutputDevice* pOutDev, const Region& rReg, const Link* pPaintProc=NULL );
 
     virtual BOOL            GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr=FALSE ) const;
     virtual BOOL            SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll = FALSE);
@@ -182,7 +182,7 @@ public:
                                            sal_Int8& rAction, const Point& rPos,
                                            SdrObject* pSelectedObj, ImageMap* pImageMap );
 
-    BOOL                    IsPresObjSelected(BOOL bOnPage=TRUE, BOOL bOnMasterPage=TRUE, BOOL bCheckPresObjListOnly=FALSE) const;
+    BOOL                    IsPresObjSelected(BOOL bOnPage=TRUE, BOOL bOnMasterPage=TRUE, BOOL bCheckPresObjListOnly=FALSE, BOOL bCheckLayoutOnly=FALSE) const;
 
     void                    SetMarkedOriginalSize();
 
@@ -222,6 +222,8 @@ protected:
                             DECL_LINK( DropErrorHdl, Timer* );
                             DECL_LINK( DropInsertFileHdl, Timer* );
                             DECL_LINK( ExecuteNavigatorDrop, SdNavigatorDropEvent* pSdNavigatorDropEvent );
+                            DECL_LINK( PaintProc, SdrPaintProcRec* );
+
 };
 
 } // end of namespace sd
