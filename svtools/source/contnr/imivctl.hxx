@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-08 04:27:46 $
+ *  last change: $Author: pb $ $Date: 2001-07-04 09:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,6 +516,7 @@ public:
     BOOL            IsEntryEditing() const { return (BOOL)(pCurEditedEntry!=0); }
     void            EditEntry( SvxIconChoiceCtrlEntry* pEntry );
     void            StopEntryEditing( BOOL bCancel );
+#ifndef TF_SVDATA
     BOOL            QueryDrop( DropEvent& rDEvt );
     void            QueryDropImpl(
                         const DropEvent& rDEvt,
@@ -525,6 +526,8 @@ public:
     void            DropStartImpl( const DropEvent& );
     void            DropEndImpl();
     void            InitStartDrag( const CommandEvent& rDEvt );
+    void            MoveDraggedEntries( const DropEvent& rDEvt );
+#endif
     void            LockEntryPos( SvxIconChoiceCtrlEntry* pEntry, BOOL bLock );
     ULONG           GetEntryCount() const { return aEntries.Count(); }
     SvxIconChoiceCtrlEntry* GetEntry( ULONG nPos ) { return (SvxIconChoiceCtrlEntry*)aEntries.GetObject(nPos); }
@@ -536,7 +539,6 @@ public:
     SvxIconChoiceCtrlTextMode GetEntryTextModeSmart( const SvxIconChoiceCtrlEntry* pEntry ) const;
     void            SetSelectionMode( SelectionMode eMode ) { eSelectionMode=eMode; }
     SelectionMode   GetSelectionMode() const { return eSelectionMode; }
-    void            MoveDraggedEntries( const DropEvent& rDEvt );
     BOOL            AreEntriesMoved() const { return (BOOL)((nFlags & F_MOVED_ENTRIES)!=0); }
     void            SetEntriesMoved( BOOL bMoved )
                     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datwin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-03 12:24:31 $
+ *  last change: $Author: pb $ $Date: 2001-07-04 09:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,7 +621,6 @@ BrowseEvent::BrowseEvent( Window* pWindow,
 }
 
 //===================================================================
-#ifndef TF_SVDATA
 BrowserMouseEvent::BrowserMouseEvent( BrowserDataWin *pWin,
                           const MouseEvent& rEvt ):
     MouseEvent(rEvt),
@@ -640,7 +639,7 @@ BrowserMouseEvent::BrowserMouseEvent( Window *pWin, const MouseEvent& rEvt,
 }
 
 //===================================================================
-
+#ifndef TF_SVDATA
 BrowserDropEvent::BrowserDropEvent( BrowserDataWin *pWin, const DropEvent& rEvt )
     :DropEvent(rEvt)
     ,BrowseEvent( pWin->CreateBrowseEvent( rEvt.GetPosPixel() ) )

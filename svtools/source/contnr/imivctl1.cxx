@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-04 08:41:09 $
+ *  last change: $Author: pb $ $Date: 2001-07-04 09:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #include <limits.h>
 
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 #ifndef _SV_WALL_HXX
 #include <vcl/wall.hxx>
 #endif
@@ -70,20 +73,19 @@
 #ifndef _SV_DECOVIEW_HXX
 #include <vcl/decoview.hxx>
 #endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX //autogen wg. Application
+#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_DRAG_HXX //autogen wg. DragManager
-#include <vcl/drag.hxx>
 #endif
 #ifndef _SV_POLY_HXX
 #include <vcl/poly.hxx>
 #endif
 #ifndef _SV_LINEINFO_HXX
 #include <vcl/lineinfo.hxx>
+#endif
+#ifndef TF_SVDATA
+#ifndef _SV_DRAG_HXX
+#include <vcl/drag.hxx>
+#endif
 #endif
 #pragma hdrstop
 
@@ -219,7 +221,9 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl( SvtIconChoiceCtrl* pCurView,
     aVisRectChangedTimer.SetTimeoutHdl(LINK(this,SvxIconChoiceCtrl_Impl,VisRectChangedHdl));
 
     Clear( TRUE );
+#ifndef TF_SVDATA
     pView->EnableDrop( TRUE );
+#endif
     SetGrid( Size(100, 70) );
 }
 
@@ -2781,6 +2785,7 @@ void SvxIconChoiceCtrl_Impl::Command( const CommandEvent& rCEvt )
 #endif
     }
 
+#ifndef TF_SVDATA
     if( rCEvt.GetCommand() == COMMAND_STARTDRAG )
     {
         if( !GetSelectionCount() || pView->IsTracking() )
@@ -2790,8 +2795,10 @@ void SvxIconChoiceCtrl_Impl::Command( const CommandEvent& rCEvt )
         DropAction eAction = DragManager::ExecuteDrag( &xObj, DRAG_ALL );
         DropEndImpl();
     }
+#endif
 }
 
+#ifndef TF_SVDATA
 BOOL SvxIconChoiceCtrl_Impl::QueryDrop( DropEvent& rDEvt )
 {
     SvxIconChoiceCtrlEntry* pTarget = 0;
@@ -3017,7 +3024,7 @@ void SvxIconChoiceCtrl_Impl::MoveDraggedEntries( const DropEvent& rDEvt )
     }
     CheckScrollBars();
 }
-
+#endif
 
 void SvxIconChoiceCtrl_Impl::ToTop( SvxIconChoiceCtrlEntry* pEntry )
 {
