@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-05 08:42:06 $
+ *  last change: $Author: thb $ $Date: 2002-07-24 16:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,22 @@ namespace accessibility
         return mnParagraphIndex;
     }
 
+    void AccessibleEditableTextPara::Dispose()
+    {
+        // notify listeners
+        try
+        {
+            uno::Reference < XAccessibleContext > xThis = getAccessibleContext();
+
+            lang::EventObject aEvent (xThis);
+            maStateListeners.disposeAndClear( aEvent );
+        }
+        catch( const uno::Exception& ) {}
+
+        // drop all references
+        mxParent = NULL;
+    }
+
     void AccessibleEditableTextPara::SetEditSource( SvxEditSourceAdapter* pEditSource )
     {
         SvxEditSource* pOldEditSource = mpEditSource;
@@ -254,18 +270,7 @@ namespace accessibility
             SetState( AccessibleStateType::INVALID );
             SetState( AccessibleStateType::DEFUNC );
 
-            // notify listeners
-            try
-            {
-                uno::Reference < XAccessibleContext > xThis = getAccessibleContext();
-
-                lang::EventObject aEvent (xThis);
-                maStateListeners.disposeAndClear( aEvent );
-            }
-            catch( const uno::Exception& ) {}
-
-            // drop all references
-            mxParent = NULL;
+            Dispose();
         }
     }
 
@@ -929,7 +934,7 @@ namespace accessibility
 
     uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCharacterAttributes( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
-#if 1
+#if 0
         // TODO: getCharacterAttributes() does not work for paragraphs containing fields (SIGSEV in SvxUnoTextField::~SvxUnoTextField() throw())
         throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cannot query XPropertySetInfo")),
                                     uno::Reference< uno::XInterface >

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-15 16:40:43 $
+ *  last change: $Author: thb $ $Date: 2002-07-24 16:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,9 +657,9 @@ namespace accessibility
         // from scratch each and every child.
 
         // invalidate children
-        maParaManager.SetEditSource( NULL );
+        maParaManager.Dispose();
 
-        // loosing all children
+        // lost all children
         AccessibleTextHelper_LostChildEvent aFunctor( *this );
         ::std::for_each( maParaManager.begin(), maParaManager.end(), aFunctor );
         maParaManager.SetNum(0);
@@ -1181,7 +1181,15 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::Dispose()
     {
-        ShutdownEditSource(); // also disposes children
+        // dispose children
+        maParaManager.Dispose();
+
+        // quit listen on stale edit source
+        if( maEditSource.IsValid() )
+            EndListening( maEditSource.GetBroadcaster() );
+
+        // clear references
+        maEditSource.SetEditSource( ::std::auto_ptr< SvxEditSource >(NULL) );
         mxFrontEnd = NULL;
     }
 

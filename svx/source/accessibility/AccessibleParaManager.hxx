@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleParaManager.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-12 13:41:41 $
+ *  last change: $Author: thb $ $Date: 2002-07-24 16:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,8 @@ namespace accessibility
         void SetEEOffset        ( const Point& rOffset );
         /// Change edit source on all living children
         void SetEditSource      ( SvxEditSourceAdapter* pEditSource );
+        /// Dispose all living children
+        void Dispose            ();
 
         // forwarder to given paragraphs
         //------------------------------------------------------------------------

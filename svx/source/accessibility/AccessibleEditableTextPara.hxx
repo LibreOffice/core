@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-28 09:32:30 $
+ *  last change: $Author: thb $ $Date: 2002-07-24 16:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,12 @@ namespace accessibility
             make sure SolarMutex is locked when calling this.
          */
         void SetEditSource( SvxEditSourceAdapter* pEditSource );
+
+        /** Dispose this object
+
+            Notifies and deregisters the listeners, drops all references.
+         */
+        void Dispose();
 
         /// Calls all Listener objects to tell them the change. Don't hold locks when calling this!
         virtual void FireEvent(const sal_Int16 nEventId, const ::com::sun::star::uno::Any& rNewValue = ::com::sun::star::uno::Any(), const ::com::sun::star::uno::Any& rOldValue = ::com::sun::star::uno::Any() ) const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleParaManager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-12 13:41:41 $
+ *  last change: $Author: thb $ $Date: 2002-07-24 16:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,6 +339,25 @@ namespace accessibility
     {
         MemFunAdapter< SvxEditSourceAdapter* > aAdapter( &accessibility::AccessibleEditableTextPara::SetEditSource, pEditSource );
         ::std::for_each( begin(), end(), aAdapter );
+    }
+
+    // not generic yet, no arguments...
+    class AccessibleParaManager_DisposeChildren : public ::std::unary_function< accessibility::AccessibleEditableTextPara&, void >
+    {
+    public:
+        AccessibleParaManager_DisposeChildren() {}
+        void operator()( accessibility::AccessibleEditableTextPara& rPara )
+        {
+            rPara.Dispose();
+        }
+    };
+
+    void AccessibleParaManager::Dispose()
+    {
+        AccessibleParaManager_DisposeChildren aFunctor;
+
+        ::std::for_each( begin(), end(),
+                         WeakChildAdapter< AccessibleParaManager_DisposeChildren > (aFunctor) );
     }
 
     // not generic yet, too many method arguments...
