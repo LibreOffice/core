@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:46:35 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,7 +725,9 @@ public:
     SfxBroadcaster* GetDrawBroadcaster();       // zwecks Header-Vermeidung
     void            BeginDrawUndo();
 
-    BOOL            IsChart( SdrObject* pObject );
+    // #109985#
+    sal_Bool IsChart( const SdrObject* pObject );
+
     void            UpdateAllCharts( BOOL bDoUpdate = TRUE );
     void            UpdateChartRef( UpdateRefMode eUpdateRefMode,
                                     USHORT nCol1, USHORT nRow1, USHORT nTab1,
