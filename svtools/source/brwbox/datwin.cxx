@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datwin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:56 $
+ *  last change: $Author: mi $ $Date: 2000-10-23 14:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,6 +343,7 @@ void BrowserDataWin::DataChanged( const DataChangedEvent& rDCEvt )
             Invalidate();
             InitSettings_Impl( GetParent(), TRUE, TRUE, TRUE );
             GetParent()->Invalidate();
+            GetParent()->Resize();
         }
     }
     else
