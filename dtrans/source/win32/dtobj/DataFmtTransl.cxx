@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFmtTransl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-01 15:39:15 $
+ *  last change: $Author: tra $ $Date: 2001-03-02 15:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,10 @@
 #include <rtl/string.h>
 #endif
 
+#ifndef _FETC_HXX_
+#include "Fetc.hxx"
+#endif
+
 #include <windows.h>
 #include <olestd.h>
 
@@ -139,7 +143,7 @@ CDataFormatTranslator::CDataFormatTranslator( const Reference< XMultiServiceFact
 //
 //------------------------------------------------------------------------
 
-FORMATETC CDataFormatTranslator::getFormatEtcFromDataFlavor( const DataFlavor& aDataFlavor ) const
+CFormatEtc CDataFormatTranslator::getFormatEtcFromDataFlavor( const DataFlavor& aDataFlavor ) const
 {
     sal_Int32 cf = CF_INVALID;
 
@@ -245,27 +249,22 @@ OUString CDataFormatTranslator::getClipboardFormatName( CLIPFORMAT aClipformat )
 //
 //------------------------------------------------------------------------
 
-FORMATETC SAL_CALL CDataFormatTranslator::getFormatEtcForClipformat( CLIPFORMAT cf ) const
+CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformat( CLIPFORMAT cf ) const
 {
-    FORMATETC fetc;
-
-    fetc.cfFormat = cf;
-    fetc.ptd      = NULL;
-    fetc.dwAspect = DVASPECT_CONTENT;
-    fetc.lindex   = -1;
+    CFormatEtc fetc( cf, TYMED_NULL, NULL, DVASPECT_CONTENT );;
 
     switch( cf )
     {
     case CF_METAFILEPICT:
-        fetc.tymed = TYMED_MFPICT;
+        fetc.setTymed( TYMED_MFPICT );
         break;
 
     case CF_ENHMETAFILE:
-        fetc.tymed = TYMED_ENHMF;
+        fetc.setTymed( TYMED_ENHMF );
         break;
 
     default:
-        fetc.tymed = TYMED_HGLOBAL | TYMED_ISTREAM;
+        fetc.setTymed( TYMED_HGLOBAL | TYMED_ISTREAM );
     }
 
     return fetc;
@@ -306,8 +305,8 @@ OUString SAL_CALL CDataFormatTranslator::getCodePageFromLocaleId( LCID locale, L
 LCID SAL_CALL CDataFormatTranslator::getCurrentLocaleFromClipboard(
     const Reference< XTransferable >& refXTransferable ) const
 {
-    Any       aAny;
-    FORMATETC fetc = getFormatEtcForClipformat( CF_LOCALE );
+    Any        aAny;
+    CFormatEtc fetc = getFormatEtcForClipformat( CF_LOCALE );
     DataFlavor aFlavor = getDataFlavorFromFormatEtc( refXTransferable, fetc );
 
     OSL_ASSERT( aFlavor.MimeType.getLength( ) );

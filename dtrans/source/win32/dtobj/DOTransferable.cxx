@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-01 15:39:15 $
+ *  last change: $Author: tra $ $Date: 2001-03-02 15:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,10 @@
 #include "FmtFilter.hxx"
 #endif
 
+#ifndef _FETC_HXX_
+#include "Fetc.hxx"
+#endif
+
 #include <olestd.h>
 
 #define STR2(x) #x
@@ -113,18 +117,34 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
+using namespace com::sun::star::container;
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-const Type CPPUTYPE_OUSTRING = getCppuType( (OUString*)0 );
+namespace
+{
+    const Type CPPUTYPE_SEQINT8  = getCppuType( ( Sequence< sal_Int8 >* )0 );
+    const Type CPPUTYPE_OUSTRING = getCppuType( (OUString*)0 );
+
+    inline
+    sal_Bool isValidFlavor( const DataFlavor& aFlavor )
+    {
+        return ( aFlavor.MimeType.getLength( ) &&
+                 ( ( aFlavor.DataType ==  CPPUTYPE_SEQINT8 ) ||
+                 ( aFlavor.DataType == CPPUTYPE_OUSTRING ) ) );
+    }
+
+} // end namespace
+
 
 //------------------------------------------------------------------------
 // ctor
 //------------------------------------------------------------------------
 
-CDOTransferable::CDOTransferable( const Reference< XMultiServiceFactory >& ServiceManager, IDataObjectPtr rDataObject ) :
+CDOTransferable::CDOTransferable(
+    const Reference< XMultiServiceFactory >& ServiceManager, IDataObjectPtr rDataObject ) :
     m_rDataObject( rDataObject ),
     m_SrvMgr( ServiceManager ),
     m_DataFormatTranslator( m_SrvMgr )
@@ -138,10 +158,12 @@ CDOTransferable::CDOTransferable( const Reference< XMultiServiceFactory >& Servi
 Any SAL_CALL CDOTransferable::getTransferData( const DataFlavor& aFlavor )
         throw( UnsupportedFlavorException, IOException, RuntimeException )
 {
+    OSL_ASSERT( isValidFlavor( aFlavor ) );
+
     MutexGuard aGuard( m_aMutex );
 
-    FORMATETC fetc = dataFlavorToFormatEtc( aFlavor );
-    OSL_ASSERT( CF_INVALID != fetc.cfFormat );
+    CFormatEtc fetc = dataFlavorToFormatEtc( aFlavor );
+    OSL_ASSERT( CF_INVALID != fetc.getClipformat() );
 
     ByteSequence_t clipDataStream = getClipboardData( fetc );
 
@@ -155,7 +177,6 @@ Any SAL_CALL CDOTransferable::getTransferData( const DataFlavor& aFlavor )
 Sequence< DataFlavor > SAL_CALL CDOTransferable::getTransferDataFlavors(  )
     throw( RuntimeException )
 {
-    MutexGuard aGuard( m_aMutex );
     return m_FlavorList;
 }
 
@@ -166,10 +187,10 @@ Sequence< DataFlavor > SAL_CALL CDOTransferable::getTransferDataFlavors(  )
 sal_Bool SAL_CALL CDOTransferable::isDataFlavorSupported( const DataFlavor& aFlavor )
     throw( RuntimeException )
 {
-    MutexGuard aGuard( m_aMutex );
+    OSL_ASSERT( isValidFlavor( aFlavor ) );
 
     for ( sal_Int32 i = 0; i < m_FlavorList.getLength( ); i++ )
-        if ( aFlavor == m_FlavorList[i] )
+        if ( compareDataFlavors( aFlavor, m_FlavorList[i] ) )
             return sal_True;
 
     return sal_False;
@@ -201,12 +222,10 @@ void SAL_CALL CDOTransferable::initFlavorList( )
                 continue;
 
             DataFlavor aFlavor = formatEtcToDataFlavor( fetc );
-
             addSupportedFlavor( aFlavor );
 
             // see MSDN IEnumFORMATETC
-            if ( fetc.ptd )
-                CoTaskMemFree( fetc.ptd );
+            CoTaskMemFree( fetc.ptd );
         }
     }
 }
@@ -218,9 +237,11 @@ void SAL_CALL CDOTransferable::initFlavorList( )
 //inline
 void SAL_CALL CDOTransferable::addSupportedFlavor( const DataFlavor& aFlavor )
 {
-    // we ignore all formats that can't be translated
+    // we ignore all formats that couldn't be translated
     if ( aFlavor.MimeType.getLength( ) )
     {
+        OSL_ASSERT( isValidFlavor( aFlavor ) );
+
         m_FlavorList.realloc( m_FlavorList.getLength( ) + 1 );
         m_FlavorList[m_FlavorList.getLength( ) - 1] = aFlavor;
     }
@@ -231,7 +252,7 @@ void SAL_CALL CDOTransferable::addSupportedFlavor( const DataFlavor& aFlavor )
 //------------------------------------------------------------------------
 
 inline
-FORMATETC SAL_CALL CDOTransferable::dataFlavorToFormatEtc( const DataFlavor& aFlavor ) const
+CFormatEtc SAL_CALL CDOTransferable::dataFlavorToFormatEtc( const DataFlavor& aFlavor ) const
 {
     return m_DataFormatTranslator.getFormatEtcFromDataFlavor( aFlavor );
 }
@@ -247,44 +268,55 @@ DataFlavor SAL_CALL CDOTransferable::formatEtcToDataFlavor( const FORMATETC& aFo
 }
 
 //------------------------------------------------------------------------
-//
+// i think it's not necessary to call ReleaseStgMedium
+// in case of failures because nothing should have been
+// allocated etc.
 //------------------------------------------------------------------------
 
-CDOTransferable::ByteSequence_t CDOTransferable::getClipboardData( const FORMATETC& aFormatEtc )
+CDOTransferable::ByteSequence_t CDOTransferable::getClipboardData( CFormatEtc& aFormatEtc )
 {
     STGMEDIUM stgmedium;
-    HRESULT hr = m_rDataObject->GetData( &const_cast< FORMATETC& >( aFormatEtc ), &stgmedium );
+    HRESULT hr = m_rDataObject->GetData( aFormatEtc, &stgmedium );
 
     if ( FAILED( hr ) )
     {
-        /*
-            i think it's not necessary to call ReleaseStgMedium
-            in case of failures because nothing should have been
-            allocated etc.
-        */
-        OSL_ASSERT( (hr != E_INVALIDARG) || (hr != DV_E_DVASPECT) );
+        OSL_ASSERT( (hr != E_INVALIDARG) &&
+                    (hr != DV_E_DVASPECT) &&
+                    (hr != DV_E_LINDEX) &&
+                    (hr != DV_E_TYMED) &&
+                    (hr != DV_E_FORMATETC) );
 
         if ( DV_E_FORMATETC == hr )
             throw UnsupportedFlavorException( );
+        else if ( STG_E_MEDIUMFULL == hr )
+            throw IOException( );
         else
             throw RuntimeException( );
     }
 
     ByteSequence_t byteStream;
-    sal_Bool bSuccess = clipDataToByteStream( stgmedium, byteStream );
-    if ( !bSuccess )
+
+    try
+    {
+        clipDataToByteStream( stgmedium, byteStream );
+
+        // format conversion if necessary
+        if ( CF_DIB == aFormatEtc.getClipformat() )
+            byteStream = WinDIBToOOBMP( byteStream );
+        else if ( CF_METAFILEPICT == aFormatEtc.getClipformat() )
+            byteStream = WinMFPictToOOMFPict( byteStream );
+
+        ReleaseStgMedium( &stgmedium );
+    }
+    catch( CStgTransferException& )
     {
         ReleaseStgMedium( &stgmedium );
-        throw RuntimeException( );
+        throw IOException( );
     }
-
-    // format conversion if necessary
-    if ( CF_DIB == aFormatEtc.cfFormat )
-        byteStream = WinDIBToOOBMP( byteStream );
-    else if ( CF_METAFILEPICT == aFormatEtc.cfFormat )
-        byteStream = WinMFPictToOOMFPict( byteStream );
-
-    ReleaseStgMedium( &stgmedium );
+    catch(...)
+    {
+        OSL_ENSURE( sal_False, "Unexpected error" );
+    }
 
     return byteStream;
 }
@@ -293,7 +325,7 @@ CDOTransferable::ByteSequence_t CDOTransferable::getClipboardData( const FORMATE
 //
 //------------------------------------------------------------------------
 
-sal_Bool CDOTransferable::clipDataToByteStream( STGMEDIUM stgmedium, ByteSequence_t& aByteSequence )
+void CDOTransferable::clipDataToByteStream( STGMEDIUM stgmedium, ByteSequence_t& aByteSequence )
 {
     CStgTransferHelper memTransferHelper;
 
@@ -316,14 +348,13 @@ sal_Bool CDOTransferable::clipDataToByteStream( STGMEDIUM stgmedium, ByteSequenc
         break;
 
     default:
-        OSL_ENSURE( sal_False, "Unsupported tymed" );
-        return sal_False;
+        throw UnsupportedFlavorException( );
+        break;
     }
 
     int nMemSize = memTransferHelper.memSize( );
     aByteSequence.realloc( nMemSize );
-
-    return memTransferHelper.read( aByteSequence.getArray( ), nMemSize );
+    memTransferHelper.read( aByteSequence.getArray( ), nMemSize );
 }
 
 //------------------------------------------------------------------------
@@ -366,3 +397,92 @@ OUString CDOTransferable::byteStreamToOUString( ByteSequence_t& aByteStream )
     return OUString( reinterpret_cast< sal_Unicode* >( aByteStream.getArray( ) ), nWChars );
 }
 
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+sal_Bool SAL_CALL CDOTransferable::compareDataFlavors(
+    const DataFlavor& lhs, const DataFlavor& rhs )
+{
+    if ( !m_rXMimeCntFactory.is( ) )
+    {
+        m_rXMimeCntFactory = Reference< XMimeContentTypeFactory >( m_SrvMgr->createInstance(
+            OUString::createFromAscii( "com.sun.star.datatransfer.MimeContentTypeFactory" ) ), UNO_QUERY );
+    }
+    OSL_ASSERT( m_rXMimeCntFactory.is( ) );
+
+    sal_Bool bRet = sal_False;
+
+    try
+    {
+        Reference< XMimeContentType > xLhs( m_rXMimeCntFactory->createMimeContentType( lhs.MimeType ) );
+        Reference< XMimeContentType > xRhs( m_rXMimeCntFactory->createMimeContentType( rhs.MimeType ) );
+
+        if ( cmpFullMediaType( xLhs, xRhs ) )
+        {
+            bRet = cmpAllContentTypeParameter( xLhs, xRhs );
+        }
+    }
+    catch( IllegalArgumentException& )
+    {
+        OSL_ENSURE( sal_False, "Invalid content type detected" );
+        bRet = sal_False;
+    }
+
+    return bRet;
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+sal_Bool SAL_CALL CDOTransferable::cmpFullMediaType(
+    const Reference< XMimeContentType >& xLhs, const Reference< XMimeContentType >& xRhs ) const
+{
+    return xLhs->getFullMediaType().equalsIgnoreCase( xRhs->getFullMediaType( ) );
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+sal_Bool SAL_CALL CDOTransferable::cmpAllContentTypeParameter(
+    const Reference< XMimeContentType >& xLhs, const Reference< XMimeContentType >& xRhs ) const
+{
+    Sequence< OUString > xLhsFlavors = xLhs->getParameters( );
+    Sequence< OUString > xRhsFlavors = xRhs->getParameters( );
+    sal_Bool bRet = sal_True;
+
+    try
+    {
+        if ( xLhsFlavors.getLength( ) == xRhsFlavors.getLength( ) )
+        {
+            OUString pLhs;
+            OUString pRhs;
+
+            for ( sal_Int32 i = 0; i < xLhsFlavors.getLength( ); i++ )
+            {
+                pLhs = xLhs->getParameterValue( xLhsFlavors[i] );
+                pRhs = xRhs->getParameterValue( xLhsFlavors[i] );
+
+                if ( !pLhs.equalsIgnoreCase( pRhs ) )
+                {
+                    bRet = sal_False;
+                    break;
+                }
+            }
+        }
+        else
+            bRet = sal_False;
+    }
+    catch( NoSuchElementException& )
+    {
+        bRet = sal_False;
+    }
+    catch( IllegalArgumentException& )
+    {
+        bRet = sal_False;
+    }
+
+    return bRet;
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFmtTransl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 07:51:59 $
+ *  last change: $Author: tra $ $Date: 2001-03-02 15:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,16 +93,18 @@
 // declaration
 //-----------------------------------------------
 
+class CFormatEtc;
+
 class CDataFormatTranslator
 {
 public:
     CDataFormatTranslator( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&  aServiceManager );
 
-    FORMATETC getFormatEtcFromDataFlavor( const com::sun::star::datatransfer::DataFlavor& aDataFlavor ) const;
+    CFormatEtc getFormatEtcFromDataFlavor( const com::sun::star::datatransfer::DataFlavor& aDataFlavor ) const;
     com::sun::star::datatransfer::DataFlavor getDataFlavorFromFormatEtc(
         const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& refXTransferable, const FORMATETC& aFormatEtc ) const;
 
-    FORMATETC SAL_CALL getFormatEtcForClipformat( CLIPFORMAT cf ) const;
+    CFormatEtc SAL_CALL getFormatEtcForClipformat( CLIPFORMAT cf ) const;
 
 private:
     rtl::OUString SAL_CALL getClipboardFormatName( CLIPFORMAT aClipformat ) const;

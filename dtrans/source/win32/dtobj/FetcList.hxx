@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FetcList.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-01 15:39:15 $
+ *  last change: $Author: tra $ $Date: 2001-03-02 15:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,46 +79,12 @@
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #endif
 
+#ifndef _FETC_HXX_
+#include "Fetc.hxx"
+#endif
+
 #include <windows.h>
-#include <map>
-
-/**********************************************************************
- stl container elements must fulfill the following requirements:
- 1. they need a copy ctor and assignement operator(?)
- 2. they must be compareable
- because the FORMATETC structure has a pointer to a TARGETDEVICE
- structure we need a simple wrapper class to fulfill these needs
-***********************************************************************/
-
-class CFormatEtc
-{
-public:
-    CFormatEtc( const FORMATETC& aFormatEtc );
-    CFormatEtc( CLIPFORMAT cf, DWORD tymed, DVTARGETDEVICE* ptd = NULL, DWORD dwAspect = DVASPECT_CONTENT, LONG lindex = -1 );
-    CFormatEtc( const CFormatEtc& theOther );
-
-    ~CFormatEtc( );
-
-    CFormatEtc& operator=( const CFormatEtc& theOther );
-    operator FORMATETC*( );
-
-    void getFORMATETC( LPFORMATETC lpFormatEtc );
-
-    CLIPFORMAT getClipformat( ) const;
-    DWORD      getTymed( ) const;
-    void       getTargetDevice( DVTARGETDEVICE** ptd ) const;
-    DWORD      getAspect( ) const;
-    LONG       getLindex( ) const;
-
-private:
-    FORMATETC m_FormatEtc;
-
-    friend sal_Int32 operator==( CFormatEtc& lhs, CFormatEtc& rhs );
-    friend sal_Int32 operator!=( CFormatEtc& lhs, CFormatEtc& rhs );
-};
-
-sal_Int32 operator==( CFormatEtc& lhs, CFormatEtc& rhs );
-sal_Int32 operator!=( CFormatEtc& lhs, CFormatEtc& rhs );
+#include <vector>
 
 /*****************************************************************
     a simple container for FORMATECT structures
@@ -131,7 +97,7 @@ public:
     CFormatEtcContainer( );
 
     // duplicates not allowed
-    sal_Bool SAL_CALL addFormatEtc( const FORMATETC& fetc );
+    void SAL_CALL addFormatEtc( const FORMATETC& fetc );
 
     // removes the specified formatetc
     void SAL_CALL removeFormatEtc( const FORMATETC& fetc );
@@ -156,16 +122,12 @@ public:
     sal_Bool SAL_CALL skipFormatEtc( sal_uInt32 aNum );
 
 protected:
-    typedef std::map< CLIPFORMAT, CFormatEtc > FormatEtcMap_t;
+    typedef std::vector< CFormatEtc > FormatEtcMap_t;
 
 private:
     sal_uInt32               m_nCurrentEnumPos;
     FormatEtcMap_t           m_FormatMap;
     FormatEtcMap_t::iterator m_EnumIterator;
-
-private:
-    //CFormatEtcContainer( const CFormatEtcContainer& );
-    //CFormatEtcContainer& operator=( const CFormatEtcContainer& );
 };
 
 /*****************************************************************

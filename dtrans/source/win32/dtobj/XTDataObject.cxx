@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-02 06:57:52 $
+ *  last change: $Author: tra $ $Date: 2001-03-02 15:46:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,13 @@ void SAL_CALL CXTDataObject::transferDataToStorageAndSetupStgMedium(
         stgTransfHelper.init(
             nInitStgSize, GMEM_MOVEABLE | GMEM_ZEROINIT, sal_False, bShouldReleaseStream );
 
+#ifndef _DEBUG
     stgTransfHelper.write( lpStorage, nBytesToTransfer );
+#else
+    sal_uInt32 nBytesWritten = 0;
+    stgTransfHelper.write( lpStorage, nBytesToTransfer, &nBytesWritten );
+    OSL_ASSERT( nBytesWritten == nBytesToTransfer );
+#endif
 
     setupStgMedium( fetc, stgTransfHelper, stgmedium );
 }
@@ -329,7 +335,7 @@ void SAL_CALL CXTDataObject::transferUnicodeToClipbAndSetupStgMedium(
     sal_uInt32 nBytesToTransfer = aText.getLength( ) * sizeof( sal_Unicode );
 
     // to be sure there is an ending 0
-    sal_uInt32 nRequiredMemSize = nBytesToTransfer + 1;
+    sal_uInt32 nRequiredMemSize = nBytesToTransfer + sizeof( sal_Unicode );
 
     transferDataToStorageAndSetupStgMedium(
         reinterpret_cast< const sal_Int8* >( aText.getStr( ) ),

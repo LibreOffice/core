@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DtObjFactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-01 15:39:15 $
+ *  last change: $Author: tra $ $Date: 2001-03-02 15:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 //------------------------------------------------------------------------
 
 #ifndef _DTOBJFACTORY_HXX_
-#include "DtObjFactory.hxx"
+#include "..\..\inc\DtObjFactory.hxx"
 #endif
 
 #ifndef _TWRAPPERDATAOBJECT_HXX_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-01 15:39:15 $
+ *  last change: $Author: tra $ $Date: 2001-03-02 15:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,14 @@
 #include "DataFmtTransl.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_DATATRANSFER_XMIMECONTENTTYPEFACTORY_HPP_
+#include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DATATRANSFER_XMIMECONTENTTYPE_HPP_
+#include <com/sun/star/datatransfer/XMimeContentType.hpp>
+#endif
+
 #include <comdef.h>
 
 //------------------------------------------------------------------------
@@ -87,6 +95,7 @@
 
 // forward
 class CDTransObjFactory;
+class CFormatEtc;
 
 class CDOTransferable : public ::cppu::WeakImplHelper1< ::com::sun::star::datatransfer::XTransferable >
 {
@@ -119,19 +128,30 @@ private:
     void SAL_CALL initFlavorList( );
 
     void                                     SAL_CALL addSupportedFlavor( const com::sun::star::datatransfer::DataFlavor& aFlavor );
-    FORMATETC                                SAL_CALL dataFlavorToFormatEtc( const com::sun::star::datatransfer::DataFlavor& aFlavor ) const;
+    CFormatEtc                               SAL_CALL dataFlavorToFormatEtc( const com::sun::star::datatransfer::DataFlavor& aFlavor ) const;
     com::sun::star::datatransfer::DataFlavor SAL_CALL formatEtcToDataFlavor( const FORMATETC& aFormatEtc );
 
-    ByteSequence_t             SAL_CALL getClipboardData( const FORMATETC& aFormatEtc );
-    sal_Bool                   SAL_CALL clipDataToByteStream( STGMEDIUM stgmedium, ByteSequence_t& aByteSequence );
+    ByteSequence_t SAL_CALL getClipboardData( CFormatEtc& aFormatEtc );
+    void           SAL_CALL clipDataToByteStream( STGMEDIUM stgmedium, ByteSequence_t& aByteSequence );
+
     ::com::sun::star::uno::Any SAL_CALL byteStreamToAny( ByteSequence_t& aByteStream, const com::sun::star::uno::Type& aRequestedDataType );
     rtl::OUString              SAL_CALL byteStreamToOUString( ByteSequence_t& aByteStream );
+
+    sal_Bool SAL_CALL compareDataFlavors( const com::sun::star::datatransfer::DataFlavor& lhs,
+                                          const com::sun::star::datatransfer::DataFlavor& rhs );
+
+    sal_Bool SAL_CALL cmpFullMediaType( const com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentType >& xLhs,
+                                        const com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentType >& xRhs ) const;
+
+    sal_Bool SAL_CALL cmpAllContentTypeParameter( const com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentType >& xLhs,
+                                        const com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentType >& xRhs ) const;
 
 private:
     IDataObjectPtr                                                                          m_rDataObject;
     com::sun::star::uno::Sequence< com::sun::star::datatransfer::DataFlavor >               m_FlavorList;
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  m_SrvMgr;
     CDataFormatTranslator                                                                   m_DataFormatTranslator;
+    com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentTypeFactory > m_rXMimeCntFactory;
     ::osl::Mutex                                                                            m_aMutex;
 
 // non supported operations

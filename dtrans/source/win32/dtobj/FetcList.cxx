@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FetcList.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-01 15:39:15 $
+ *  last change: $Author: tra $ $Date: 2001-03-02 15:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #include "FetcList.hxx"
 #endif
 
+#ifndef _FETC_HXX_
+#include "Fetc.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_DATATRANSFER_XMIMECONTENTTYPEFACTORY_HPP_
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
 #endif
@@ -86,6 +90,8 @@
 #ifndef _IMPLHELPER_HXX_
 #include "..\misc\ImplHelper.hxx"
 #endif
+
+#include <algorithm>
 
 #include "MimeAttrib.hxx"
 
@@ -112,164 +118,6 @@ sal_uInt32 CFormatRegistrar::m_TxtCodePage         = GetACP( );
 //
 //------------------------------------------------------------------------
 
-CFormatEtc::CFormatEtc( const FORMATETC& aFormatEtc )
-{
-    CopyFormatEtc( &m_FormatEtc, &const_cast< FORMATETC& >( aFormatEtc ) );
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-CFormatEtc::CFormatEtc( CLIPFORMAT cf, DWORD tymed, DVTARGETDEVICE* ptd, DWORD dwAspect, LONG lindex )
-{
-    m_FormatEtc.cfFormat = cf;
-    m_FormatEtc.ptd      = CopyTargetDevice( ptd );
-    m_FormatEtc.dwAspect = dwAspect;
-    m_FormatEtc.lindex   = lindex;
-    m_FormatEtc.tymed    = tymed;
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-CFormatEtc::CFormatEtc( const CFormatEtc& theOther )
-{
-    m_FormatEtc.cfFormat = theOther.m_FormatEtc.cfFormat;
-    m_FormatEtc.ptd      = CopyTargetDevice( theOther.m_FormatEtc.ptd );
-    m_FormatEtc.dwAspect = theOther.m_FormatEtc.dwAspect;
-    m_FormatEtc.lindex   = theOther.m_FormatEtc.lindex;
-    m_FormatEtc.tymed    = theOther.m_FormatEtc.tymed;
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-CFormatEtc::~CFormatEtc( )
-{
-    DeleteTargetDevice( m_FormatEtc.ptd );
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-CFormatEtc& CFormatEtc::operator=( const CFormatEtc& theOther )
-{
-    if ( this != &theOther )
-    {
-        DeleteTargetDevice( m_FormatEtc.ptd );
-
-        m_FormatEtc.cfFormat = theOther.m_FormatEtc.cfFormat;
-        m_FormatEtc.ptd      = CopyTargetDevice( theOther.m_FormatEtc.ptd );
-        m_FormatEtc.dwAspect = theOther.m_FormatEtc.dwAspect;
-        m_FormatEtc.lindex   = theOther.m_FormatEtc.lindex;
-        m_FormatEtc.tymed    = theOther.m_FormatEtc.tymed;
-    }
-
-    return *this;
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-CFormatEtc::operator FORMATETC*( )
-{
-    return &m_FormatEtc;
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-void CFormatEtc::getFORMATETC( LPFORMATETC lpFormatEtc )
-{
-    OSL_ASSERT( lpFormatEtc );
-    OSL_ASSERT( !IsBadWritePtr( lpFormatEtc, sizeof( FORMATETC ) ) );
-
-    CopyFormatEtc( lpFormatEtc, &m_FormatEtc );
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-CLIPFORMAT CFormatEtc::getClipformat( ) const
-{
-    return m_FormatEtc.cfFormat;
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-DWORD CFormatEtc::getTymed( ) const
-{
-    return m_FormatEtc.tymed;
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-void CFormatEtc::getTargetDevice( DVTARGETDEVICE** lpDvTargetDevice ) const
-{
-    OSL_ASSERT( lpDvTargetDevice );
-    OSL_ASSERT( !IsBadWritePtr( lpDvTargetDevice, sizeof( DVTARGETDEVICE ) ) );
-
-    *lpDvTargetDevice = NULL;
-
-    if ( m_FormatEtc.ptd )
-        *lpDvTargetDevice = CopyTargetDevice( m_FormatEtc.ptd );
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-DWORD CFormatEtc::getAspect( ) const
-{
-    return m_FormatEtc.dwAspect;
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-LONG CFormatEtc::getLindex( ) const
-{
-    return m_FormatEtc.lindex;
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-sal_Int32 operator==( CFormatEtc& lhs, CFormatEtc& rhs )
-{
-    return CompareFormatEtc( &lhs.m_FormatEtc, &rhs.m_FormatEtc );
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-sal_Int32 operator!=( CFormatEtc& lhs, CFormatEtc& rhs )
-{
-    return ( ( lhs == rhs ) != 1 );
-}
-
-
-//#########################################################################
-
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
 CFormatEtcContainer::CFormatEtcContainer( )
 {
     m_EnumIterator = m_FormatMap.begin( );
@@ -279,10 +127,9 @@ CFormatEtcContainer::CFormatEtcContainer( )
 //
 //------------------------------------------------------------------------
 
-sal_Bool CFormatEtcContainer::addFormatEtc( const FORMATETC& fetc )
+void CFormatEtcContainer::addFormatEtc( const FORMATETC& fetc )
 {
-    return m_FormatMap.insert(
-        make_pair( fetc.cfFormat, CFormatEtc( fetc ) ) ).second;
+    m_FormatMap.push_back( CFormatEtc( fetc ) );
 }
 
 //------------------------------------------------------------------------
@@ -291,7 +138,8 @@ sal_Bool CFormatEtcContainer::addFormatEtc( const FORMATETC& fetc )
 
 void SAL_CALL CFormatEtcContainer::removeFormatEtc( const FORMATETC& fetc )
 {
-    FormatEtcMap_t::iterator iter = m_FormatMap.find( fetc.cfFormat );
+    FormatEtcMap_t::iterator iter =
+        find( m_FormatMap.begin(), m_FormatMap.end(), CFormatEtc( fetc ) );
 
     if ( iter != m_FormatMap.end( ) )
         m_FormatMap.erase( iter );
@@ -312,11 +160,12 @@ void SAL_CALL CFormatEtcContainer::removeAllFormatEtc( )
 
 sal_Bool CFormatEtcContainer::hasFormatEtc( const FORMATETC& fetc ) const
 {
-    FormatEtcMap_t::const_iterator iter = m_FormatMap.find( fetc.cfFormat );
+    FormatEtcMap_t::const_iterator iter =
+        find( m_FormatMap.begin(), m_FormatMap.end(), CFormatEtc( fetc ) );
 
     if ( iter != m_FormatMap.end( ) )
     {
-        return CFormatEtc( fetc ) == CFormatEtc( iter->second );
+        return ( (CFormatEtc( fetc ) == CFormatEtc( *iter )) == 1  );
     }
 
     return sal_False;
@@ -356,7 +205,7 @@ sal_uInt32 SAL_CALL CFormatEtcContainer::nextFormatEtc( LPFORMATETC lpFetc,
     {
         for ( sal_uInt32 i = 0; i < aNum; i++, nFetched++, lpFetc++, ++m_EnumIterator )
         {
-            CopyFormatEtc( lpFetc, m_EnumIterator->second );
+            CopyFormatEtc( lpFetc, *m_EnumIterator );
         }
     }
 
@@ -370,8 +219,11 @@ sal_uInt32 SAL_CALL CFormatEtcContainer::nextFormatEtc( LPFORMATETC lpFetc,
 
 sal_Bool SAL_CALL CFormatEtcContainer::skipFormatEtc( sal_uInt32 aNum )
 {
-    for ( sal_uInt32 i = 0; i < aNum; i++, ++m_EnumIterator )
-        /* intentionally left empty */;
+    FormatEtcMap_t::const_iterator iter_end = m_FormatMap.end( );
+    for ( sal_uInt32 i = 0;
+          (i < aNum) && (m_EnumIterator != iter_end);
+          i++, ++m_EnumIterator )
+        ;/* intentionally left empty */
 
     return ( m_EnumIterator != m_FormatMap.end( ) );
 }
@@ -454,10 +306,7 @@ void SAL_CALL CFormatRegistrar::RegisterFormats( const Sequence< DataFlavor >& a
             synthesizeAndRegisterAccompanyFormats( fetc, aFlavor, aFormatEtcContainer );
         }
         else
-        {
-            bSuccess = aFormatEtcContainer.addFormatEtc( fetc );
-            OSL_ASSERT( bSuccess );
-        }
+            aFormatEtcContainer.addFormatEtc( fetc );
     }
 }
 
