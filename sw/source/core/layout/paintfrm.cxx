@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ama $ $Date: 2002-06-25 11:06:43 $
+ *  last change: $Author: ama $ $Date: 2002-07-12 12:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2404,7 +2404,8 @@ void MA_FASTCALL lcl_PaintLeftLine( const SwFrm *pFrm, const SwPageFrm *pPage,
                            const SwBorderAttrs &rAttrs, SwRectFn& rRectFn )
 {
     const SvxBoxItem &rBox = rAttrs.GetBox();
-    const SvxBorderLine *pLeft = rBox.GetLeft();
+    const sal_Bool bR2L = pFrm->IsCellFrm() && pFrm->IsRightToLeft();
+    const SvxBorderLine *pLeft = bR2L ? rBox.GetRight() : rBox.GetLeft();
 
     if ( !pLeft )
         return;
@@ -2439,7 +2440,8 @@ void MA_FASTCALL lcl_PaintRightLine( const SwFrm *pFrm, const SwPageFrm *pPage,
                             const SwBorderAttrs &rAttrs, SwRectFn& rRectFn )
 {
     const SvxBoxItem &rBox = rAttrs.GetBox();
-    const SvxBorderLine *pRight = rBox.GetRight();
+    const sal_Bool bR2L = pFrm->IsCellFrm() && pFrm->IsRightToLeft();
+    const SvxBorderLine *pRight = bR2L ? rBox.GetLeft() : rBox.GetRight();
 
     if ( !pRight )
         return;
