@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-06 13:29:18 $
+ *  last change: $Author: sab $ $Date: 2002-07-08 09:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,28 @@ void ScAccessibleSpreadsheet::CompleteSelectionChanged(sal_Bool bNewState)
     else
         aEvent.OldValue = uno::makeAny(AccessibleStateType::SELECTED);
     aEvent.Source = uno::Reference< XAccessible >(this);
+
+    CommitChange(aEvent);
+}
+
+void ScAccessibleSpreadsheet::LostFocus()
+{
+    AccessibleEventObject aEvent;
+    aEvent.EventId = AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT;
+    aEvent.Source = uno::Reference< XAccessible >(this);
+    uno::Reference< XAccessible > xOld = mpAccCell;
+    aEvent.OldValue <<= xOld;
+
+    CommitChange(aEvent);
+}
+
+void ScAccessibleSpreadsheet::GotFocus()
+{
+    AccessibleEventObject aEvent;
+    aEvent.EventId = AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT;
+    aEvent.Source = uno::Reference< XAccessible >(this);
+    uno::Reference< XAccessible > xNew = mpAccCell;
+    aEvent.NewValue <<= xNew;
 
     CommitChange(aEvent);
 }

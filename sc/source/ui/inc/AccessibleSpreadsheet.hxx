@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-31 08:01:50 $
+ *  last change: $Author: sab $ $Date: 2002-07-08 09:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,10 @@ public:
      virtual void SAL_CALL disposing();
 
     void CompleteSelectionChanged(sal_Bool bNewState);
+
+    virtual void LostFocus();
+
+    virtual void GotFocus();
 
     ///=====  SfxListener  =====================================================
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditObject.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-11 15:53:18 $
+ *  last change: $Author: sab $ $Date: 2002-07-08 09:39:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,10 @@ protected:
     virtual ~ScAccessibleEditObject();
 public:
     virtual void SAL_CALL disposing();
+
+    virtual void LostFocus();
+
+    virtual void GotFocus();
 
     ///=====  XAccessibleComponent  ============================================
 
@@ -188,6 +192,7 @@ private:
     EditView* mpEditView;
     Window* mpWindow;
     sal_Bool mbCellInEditMode;
+    sal_Bool mbHasFocus;
 
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<

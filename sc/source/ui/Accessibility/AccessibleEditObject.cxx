@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditObject.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-26 11:13:41 $
+ *  last change: $Author: sab $ $Date: 2002-07-08 09:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,8 @@ ScAccessibleEditObject::ScAccessibleEditObject(
     mpTextHelper(NULL),
     mpEditView(pEditView),
     mpWindow(pWin),
-    mbCellInEditMode(bCellInEditMode)
+    mbCellInEditMode(bCellInEditMode),
+    mbHasFocus(sal_False)
 {
     CreateTextHelper();
 }
@@ -140,6 +141,20 @@ void SAL_CALL ScAccessibleEditObject::disposing()
         DELETEZ(mpTextHelper);
 
     ScAccessibleContextBase::disposing();
+}
+
+void ScAccessibleEditObject::LostFocus()
+{
+    if (mpTextHelper)
+        mpTextHelper->SetFocus(sal_False);
+    mbHasFocus = sal_False;
+}
+
+void ScAccessibleEditObject::GotFocus()
+{
+    if (mpTextHelper)
+        mpTextHelper->SetFocus(sal_True);
+    mbHasFocus = sal_True;
 }
 
     //=====  XAccessibleComponent  ============================================
@@ -352,7 +367,6 @@ void ScAccessibleEditObject::CreateTextHelper()
 
             mpTextHelper = new accessibility::AccessibleTextHelper(pEditSource );
             mpTextHelper->SetEventSource(this);
-            mpTextHelper->SetFocus(sal_True);
         }
         else
         {
@@ -363,6 +377,7 @@ void ScAccessibleEditObject::CreateTextHelper()
             mpTextHelper = new accessibility::AccessibleTextHelper(pEditSource );
             mpTextHelper->SetEventSource(this);
         }
+        mpTextHelper->SetFocus(mbHasFocus);
     }
 }
 
