@@ -1,0 +1,20 @@
+# Jobfile
+basegfx.b1drange.test					 
+basegfx.b2dcubicbezier.test				 
+basegfx.b2dhommatrix.test				 
+basegfx.b2dhompoint.test					 
+basegfx.b2dpoint.test				   
+basegfx.b2dpolygon.test				   
+basegfx.b2dpolygontools.test			  
+basegfx.b2dpolypolygon.test			   
+basegfx.b2dquadraticbezier.test		   
+basegfx.b2drange.test				     
+basegfx.b2dtuple.test				     
+basegfx.b2dvector.test					     
+basegfx.b3dhommatrix.test			     
+basegfx.b3dhompoint.test				   
+basegfx.b3dhompoint.test                 
+basegfx.b3dpoint.test				   
+basegfx.b3drange.test				   
+basegfx.b3dtuple.test					   
+basegfx.b3dvector.test			   
