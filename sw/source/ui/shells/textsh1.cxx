@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 16:18:50 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1202,17 +1202,6 @@ void SwTextShell::GetState( SfxItemSet &rSet )
     {
         switch ( nWhich )
         {
-        case FN_NUM_NUMBERING_ON:
-        case FN_NUM_BULLET_ON:
-            if ( rSh.IsTableMode() )
-                rSet.DisableItem( nWhich );
-            break;
-
-        case FN_NUMBER_BULLETS:
-            if ( rSh.IsTableMode() )
-                rSet.DisableItem(nWhich);
-            break;
-
         case FN_NUMBER_NEWSTART :
             rSet.Put(SfxBoolItem(FN_NUMBER_NEWSTART,
                 rSh.IsNumRuleStart()||USHRT_MAX != rSh.IsNodeNumStart()));
