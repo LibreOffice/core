@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen6.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 15:24:00 $
+ *  last change: $Author: nn $ $Date: 2001-01-31 09:57:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include "document.hxx"
 #include "cell.hxx"
 #include "cellform.hxx"
+#include "patattr.hxx"
 #include "scrdata.hxx"
 
 using namespace com::sun::star;
@@ -167,7 +168,13 @@ BYTE ScDocument::GetScriptType( USHORT nCol, USHORT nRow, USHORT nTab, ScBaseCel
 
     // include number formats from conditional formatting
 
-    ULONG nFormat = ((const SfxUInt32Item*)GetEffItem( nCol, nRow, nTab, ATTR_VALUE_FORMAT ))->GetValue();
+    const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
+    if (!pPattern) return 0;
+    const SfxItemSet* pCondSet = NULL;
+    if ( ((const SfxUInt32Item&)pPattern->GetItem(ATTR_CONDITIONAL)).GetValue() )
+        pCondSet = GetCondResult( nCol, nRow, nTab );
+
+    ULONG nFormat = pPattern->GetNumberFormat( pFormTable, pCondSet );
     return GetCellScriptType( pCell, nFormat );
 }
 
