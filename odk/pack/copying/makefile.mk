@@ -31,6 +31,8 @@ DIRLIST = \
     $(DESTDIRJAVAEXAMPLES)$/Car		\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins	\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo	\
+    $(DESTDIRJAVAEXAMPLES)$/compsamples		\
+    $(DESTDIRJAVAEXAMPLES)$/compsamples$/componentsamples		\
     $(DESTDIRJAVAEXAMPLES)$/ConverterServlet		\
     $(DESTDIRJAVAEXAMPLES)$/DocumentConverter		\
     $(DESTDIRJAVAEXAMPLES)$/DocumentLoader	\
@@ -141,6 +143,15 @@ JAVA_DEMOCOMP= \
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SCalcDemo.java	\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SDrawDemo.java	\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SWriterDemo.java
+
+JAVA_COMPSAMPLES= \
+    $(DESTDIRJAVAEXAMPLES)$/compsamples$/componentsamples$/TestComponentA.java	\
+    $(DESTDIRJAVAEXAMPLES)$/compsamples$/componentsamples$/TestComponentB.java	\
+    $(DESTDIRJAVAEXAMPLES)$/compsamples$/componentsamples$/TestServiceProvider.java	\
+    $(DESTDIRJAVAEXAMPLES)$/compsamples$/componentsamples$/Makefile			\
+    $(DESTDIRJAVAEXAMPLES)$/compsamples$/componentsamples$/$/Manifest       \
+    $(DESTDIRJAVAEXAMPLES)$/compsamples$/componentsamples$/$/XSomethingA.idl       \
+    $(DESTDIRJAVAEXAMPLES)$/compsamples$/componentsamples$/$/XSomethingB.idl
 
 JAVA_CONVERTERSERVLET= \
     $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/ConverterServlet.html	\
@@ -314,6 +325,7 @@ EXAMPLESLIST= \
     $(JAVA_WRITER)      \
     $(JAVA_CALCADDINS)  \
     $(JAVA_DEMOCOMP)    \
+    $(JAVA_COMPSAMPLES) \
     $(JAVA_CONVERTERSERVLET)    \
     $(JAVA_DOCUMENTCONVERTER)      \
     $(JAVA_DOCUMENTLOADER)         \
@@ -369,6 +381,8 @@ all : 	\
     $(DOCUFILES) \
     $(INSTALLSCRIPT) \
     $(DESTIDLLIST)  \
+    $(DESTDIRBIN)$/pkgchk$(PKGCHK_POSTFIX)  \
+    $(DESTDIRDLL)$/$(MY_DLLPREFIX)pkgchk$(UPD)$(DLLPOSTFIX)$(MY_DLLPOSTFIX)  \
     $(DESTDIRDLL)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX)  \
     $(DESTDIR)$/settings$/dk.mk \
     $(DESTDIRCLASSES)$/officebean.jar \
@@ -404,10 +418,16 @@ $(DESTDIRDOCUIMAGES)$/% : $(PRJ)$/docs/images$/%
 $(DESTDIR)$/configureUnix : $(PRJ)$/configureUnix
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+.IF "$(GUI)"=="UNX"
+    +-chmod 755 $@
+.ENDIF
 
 $(DESTDIR)$/setsdkenv_unix.in : $(PRJ)$/setsdkenv_unix.in
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+.IF "$(GUI)"=="UNX"
+    +-chmod 755 $@
+.ENDIF
 
 $(DESTDIR)$/configureWindowsNT.bat : $(PRJ)$/configureWindowsNT.bat
     +-rm -f $@ >& $(NULLDEV)
@@ -441,6 +461,12 @@ $(DESTDIRCLASSES)$/officebean.jar : $(OUT)$/class$/officebean.jar
 
 $(DESTDIRBIN)$/applicat.rdb : $(BINOUT)$/applicat.rdb 
     $(GNUCOPY) -p $(BINOUT)$/applicat.rdb $@
+
+$(DESTDIRBIN)$/pkgchk$(PKGCHK_POSTFIX) : $(BINOUT)$/pkgchk$(PKGCHK_POSTFIX)
+    $(GNUCOPY) -p $? $@
+
+$(DESTDIRDLL)$/$(MY_DLLPREFIX)pkgchk$(UPD)$(DLLPOSTFIX)$(MY_DLLPOSTFIX) : $(DLLOUT)$/$(MY_DLLPREFIX)pkgchk$(UPD)$(DLLPOSTFIX)$(MY_DLLPOSTFIX)
+    $(GNUCOPY) -p $? $@
 
 $(DESTDIRDLL)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX) : $(MY_DLLOUT)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX)
     $(GNUCOPY) -p $? $@
@@ -478,7 +504,7 @@ remove_dk :
 
 .IF "$(BUILD_SOSL)"!=""  
 $(CONVERTTAGFLAG) : $(MISC)$/deltree.txt $(DOCUHTMLFILES)
-    +$(PERL) $(CONVERTTAGSCRIPT) $(PRODUCT_NAME) $(PRODUCT_NAME) $(DOCUHTMLFILES)
+    +$(PERL) $(CONVERTTAGSCRIPT) $(TITLE) $(OFFICEPRODUCTNAME) $(DOCUHTMLFILES)
     +@echo "tags converted" > $@
 .ELSE
 $(CONVERTTAGFLAG) : $(MISC)$/deltree.txt
