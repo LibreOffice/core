@@ -2,7 +2,7 @@
  *
  *  $RCSfile: ScAccessibleCsvGrid.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
  *  last change: $Author: vg $
  *
@@ -62,6 +62,7 @@
 package mod._sc;
 
 import com.sun.star.awt.XWindow;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XModel;
@@ -111,7 +112,7 @@ public class ScAccessibleCsvGrid extends TestCase {
         shortWait();
 
         try {
-            oObj = (XInterface) Param.getMSF().createInstance
+            oObj = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.awt.Toolkit") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
@@ -191,7 +192,7 @@ public class ScAccessibleCsvGrid extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
 
         log.println("opening dialog");
 
@@ -199,7 +200,7 @@ public class ScAccessibleCsvGrid extends TestCase {
         try {
             args[0] = new PropertyValue();
             args[0].Name = "InteractionHandler";
-            args[0].Value = Param.getMSF().createInstance(
+            args[0].Value = ((XMultiServiceFactory)Param.getMSF()).createInstance(
                 "com.sun.star.comp.uui.UUIInteractionHandler");
         } catch(com.sun.star.uno.Exception e) {
         }
