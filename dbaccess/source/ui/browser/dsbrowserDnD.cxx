@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 11:33:57 $
+ *  last change: $Author: oj $ $Date: 2001-07-19 09:27:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,7 +813,7 @@ namespace dbaui
         // set values and column names
         ::rtl::OUString aValues = ::rtl::OUString::createFromAscii(" VALUES ( ");
         static ::rtl::OUString aPara = ::rtl::OUString::createFromAscii("?,");
-        static ::rtl::OUString aQuote = _xMetaData->getIdentifierQuoteString();
+        ::rtl::OUString aQuote = _xMetaData->getIdentifierQuoteString();
         static ::rtl::OUString aComma = ::rtl::OUString::createFromAscii(",");
 
         Reference<XColumnsSupplier> xColsSup(_xTable,UNO_QUERY);
@@ -1081,6 +1081,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.22  2001/07/18 11:33:57  oj
+ *  #85664# enable copy/cut/paste/delete keys
+ *
  *  Revision 1.21  2001/07/17 10:31:48  oj
  *  #89128# look if connection is readonly
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 14:01:34 $
+ *  last change: $Author: oj $ $Date: 2001-07-19 09:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
     // set values and column names
     ::rtl::OUString aValues = ::rtl::OUString::createFromAscii(" VALUES ( ");
     static ::rtl::OUString aPara = ::rtl::OUString::createFromAscii("?,");
-    static ::rtl::OUString aQuote = m_xConnection->getMetaData()->getIdentifierQuoteString();
+    ::rtl::OUString aQuote = m_xConnection->getMetaData()->getIdentifierQuoteString();
     static ::rtl::OUString aComma = ::rtl::OUString::createFromAscii(",");
     sal_Int32 i = 1;
     ORowVector< ORowSetValue >::const_iterator aIter = _rInsertRow->begin()+1;
@@ -228,7 +228,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     aSql += ::rtl::OUString::createFromAscii(" SET ");
     // list all cloumns that should be set
     static ::rtl::OUString aPara    = ::rtl::OUString::createFromAscii(" = ?,");
-    static ::rtl::OUString aQuote   = m_xConnection->getMetaData()->getIdentifierQuoteString();
+    ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString();
     static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
 
     sal_Int32 i = 1;
@@ -359,7 +359,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     aSql += ::rtl::OUString::createFromAscii(" WHERE ");
 
     // list all cloumns that should be set
-    static ::rtl::OUString aQuote   = m_xConnection->getMetaData()->getIdentifierQuoteString();
+    ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString();
     static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
 
     sal_Int32 i = 1;
@@ -596,6 +596,9 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.23  2001/07/18 14:01:34  oj
+    #89837# check types
+
     Revision 1.22  2001/05/22 13:08:22  oj
     #87199# check column names
 

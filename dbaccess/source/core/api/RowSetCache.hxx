@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-12 07:56:32 $
+ *  last change: $Author: oj $ $Date: 2001-07-19 09:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ namespace dbaccess
         //the set can be static, bookmarkable or keyset
         ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>       m_xSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData; // must be before m_aInsertRow
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xServiceFactory;
 
         OCacheSet*                      m_pCacheSet;            // is a bookmarkable, keyset or static resultset
         ORowSetMatrix*                  m_pMatrix;              // represent the table struct
@@ -204,6 +205,9 @@ namespace dbaccess
         // checks and set the flags isAfterLast isLast and position when afterlast is true
         void checkPositionFlags();
         void checkUpdateConditions(sal_Int32 columnIndex);
+        sal_Bool checkJoin( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >& _xComposer,
+                            const ::rtl::OUString& _sUpdateTableName);
 
     protected:
         ORowSetMatrix::iterator& getIterator() { return m_aMatrixIter;}
@@ -213,6 +217,7 @@ namespace dbaccess
     public:
         ORowSetCache(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >&,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >& _xComposer,
+                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory,
                      const connectivity::ORowVector< ORowSetValue >& _rParameterRow,
                      const ::rtl::OUString& _rUpdateTableName,
                      sal_Bool&  _bModified,
@@ -324,6 +329,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.11  2001/07/12 07:56:32  oj
+    #89437# positioning cache when standing on a row outside the cache
+
     Revision 1.9  2001/06/26 10:30:55  oj
     #87808# setObject corrected and some more
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-09 07:00:18 $
+ *  last change: $Author: oj $ $Date: 2001-07-19 09:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#endif
 
 using namespace dbaccess;
 using namespace connectivity;
@@ -138,54 +141,67 @@ OKeySet::OKeySet(const Reference< XResultSet>& _xDriverSet,
             ,m_aKeyColumnNames(m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers() ? true : false)
             ,m_aColumnNames(m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers() ? true : false)
 {
-    try
-    {
-        Reference<XNameAccess> xKeyColumns  = getKeyColumns();
-        Reference<XColumnsSupplier> xSup(m_xComposer,UNO_QUERY);
-        ::dbaccess::getColumnPositions(xSup->getColumns(),xKeyColumns,m_sUpdateTableName,m_aKeyColumnNames);
-        ::dbaccess::getColumnPositions(xSup->getColumns(),_xTable->getColumns(),m_sUpdateTableName,m_aColumnNames);
-
-        // the first row is empty because it's now easier for us to distinguish when we are beforefirst or first
-        // without extra varaible to be set
-        m_aKeyMap.insert(OKeySetMatrix::value_type(0,OKeySetValue(NULL,0)));
-
-        m_aKeyIter = m_aKeyMap.begin();
-
-        static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
-        static ::rtl::OUString aQuote   = m_xConnection->getMetaData()->getIdentifierQuoteString();
-
-        ::rtl::OUString aFilter,aCatalog,aSchema,aTable,aComposedName;
-
-        Reference<XPropertySet> xTableProp(_xTable,UNO_QUERY);
-        xTableProp->getPropertyValue(PROPERTY_CATALOGNAME)  >>= aCatalog;
-        xTableProp->getPropertyValue(PROPERTY_SCHEMANAME)   >>= aSchema;
-        xTableProp->getPropertyValue(PROPERTY_NAME)         >>= aTable;
-
-        ::dbtools::composeTableName(m_xConnection->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True);
-
-        // create the where clause
-        OColumnNamePos::const_iterator aIter;
-        for(aIter = m_aKeyColumnNames.begin();aIter != m_aKeyColumnNames.end();)
-        {
-            aFilter += aComposedName;
-            aFilter += ::rtl::OUString::createFromAscii(".");
-            aFilter += ::dbtools::quoteName( aQuote,aIter->first);
-            aFilter += ::rtl::OUString::createFromAscii(" = ?");
-            ++aIter;
-            if(aIter != m_aKeyColumnNames.end())
-                aFilter += aAnd;
-        }
-        _xComposer->setFilter(aFilter);
-        m_xStatement = m_xConnection->prepareStatement(_xComposer->getComposedQuery());
-    }
-    catch(SQLException&)
-    {
-    }
 }
 // -----------------------------------------------------------------------------
 OKeySet::~OKeySet()
 {
     ::comphelper::disposeComponent(m_xStatement);
+}
+// -----------------------------------------------------------------------------
+void OKeySet::construct()
+{
+    Reference<XNameAccess> xKeyColumns  = getKeyColumns();
+    Reference<XColumnsSupplier> xSup(m_xComposer,UNO_QUERY);
+    ::dbaccess::getColumnPositions(xSup->getColumns(),xKeyColumns,m_sUpdateTableName,m_aKeyColumnNames);
+    ::dbaccess::getColumnPositions(xSup->getColumns(),m_xTable->getColumns(),m_sUpdateTableName,m_aColumnNames);
+
+    // the first row is empty because it's now easier for us to distinguish when we are beforefirst or first
+    // without extra varaible to be set
+    m_aKeyMap.insert(OKeySetMatrix::value_type(0,OKeySetValue(NULL,0)));
+
+    m_aKeyIter = m_aKeyMap.begin();
+
+    static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
+    ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString();
+
+    ::rtl::OUString aFilter,aCatalog,aSchema,aTable,aComposedName;
+
+    Reference<XPropertySet> xTableProp(m_xTable,UNO_QUERY);
+    xTableProp->getPropertyValue(PROPERTY_CATALOGNAME)  >>= aCatalog;
+    xTableProp->getPropertyValue(PROPERTY_SCHEMANAME)   >>= aSchema;
+    xTableProp->getPropertyValue(PROPERTY_NAME)         >>= aTable;
+
+    ::dbtools::composeTableName(m_xConnection->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True);
+
+    if(m_xConnection->getMetaData()->supportsTableCorrelationNames())
+    {
+        // first we have to check if the composed tablename is in the select clause or if an alias is used
+        Reference<XTablesSupplier> xTabSup(m_xComposer,UNO_QUERY);
+        Reference<XNameAccess> xSelectTables = xTabSup->getTables();
+        OSL_ENSURE(xSelectTables.is(),"No Select tables!");
+        if(xSelectTables.is())
+        {
+            if(!xSelectTables->hasByName(aComposedName))
+            { // the composed name isn't used in the select clause so we have to find out which name is used instead
+                aComposedName = ::dbtools::quoteName( aQuote,m_sUpdateTableName);
+            }
+        }
+    }
+
+    // create the where clause
+    OColumnNamePos::const_iterator aIter;
+    for(aIter = m_aKeyColumnNames.begin();aIter != m_aKeyColumnNames.end();)
+    {
+        aFilter += aComposedName;
+        aFilter += ::rtl::OUString::createFromAscii(".");
+        aFilter += ::dbtools::quoteName( aQuote,aIter->first);
+        aFilter += ::rtl::OUString::createFromAscii(" = ?");
+        ++aIter;
+        if(aIter != m_aKeyColumnNames.end())
+            aFilter += aAnd;
+    }
+    m_xComposer->setFilter(aFilter);
+    m_xStatement = m_xConnection->prepareStatement(m_xComposer->getComposedQuery());
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OKeySet::getBookmark( const ORowSetRow& _rRow ) throw(SQLException, RuntimeException)
@@ -246,7 +262,7 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     aSql += ::rtl::OUString::createFromAscii(" WHERE ");
 
     // list all cloumns that should be set
-    static ::rtl::OUString aQuote   = m_xConnection->getMetaData()->getIdentifierQuoteString();
+    ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString();
     static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
     static ::rtl::OUString aOr      = ::rtl::OUString::createFromAscii(" OR ");
     static ::rtl::OUString aEqual   = ::rtl::OUString::createFromAscii(" = ?");
@@ -328,7 +344,7 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     aSql += ::rtl::OUString::createFromAscii(" SET ");
     // list all cloumns that should be set
     static ::rtl::OUString aPara    = ::rtl::OUString::createFromAscii(" = ?,");
-    static ::rtl::OUString aQuote   = m_xConnection->getMetaData()->getIdentifierQuoteString();
+    ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString();
     static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
 
     // use keys and indexes for excat postioning
@@ -458,7 +474,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     // set values and column names
     ::rtl::OUString aValues = ::rtl::OUString::createFromAscii(" VALUES ( ");
     static ::rtl::OUString aPara = ::rtl::OUString::createFromAscii("?,");
-    static ::rtl::OUString aQuote = m_xConnection->getMetaData()->getIdentifierQuoteString();
+    ::rtl::OUString aQuote = m_xConnection->getMetaData()->getIdentifierQuoteString();
     static ::rtl::OUString aComma = ::rtl::OUString::createFromAscii(",");
 
     OColumnNamePos::const_iterator aIter = m_aColumnNames.begin();
@@ -521,7 +537,7 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
     aSql += ::rtl::OUString::createFromAscii(" WHERE ");
 
     // list all cloumns that should be set
-    static ::rtl::OUString aQuote   = m_xConnection->getMetaData()->getIdentifierQuoteString();
+    ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString();
     static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
 
     // use keys and indexes for excat postioning
@@ -566,20 +582,6 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
                 aSql += ::rtl::OUString::createFromAscii(" = ?");
             aSql += aAnd;
         }
-//      for( ::std::vector< Reference<XNameAccess> >::const_iterator aIndexIter = aAllIndexColumns.begin();
-//              aIndexIter != aAllIndexColumns.end();++aIndexIter)
-//      {
-//          if((*aIndexIter)->hasByName(aIter->first))
-//          {
-//              aSql += ::dbtools::quoteName( aQuote,aIter->first);
-//              if((*_rDeleteRow)[aIter->second].isNull())
-//                  aSql += ::rtl::OUString::createFromAscii(" IS NULL");
-//              else
-//                  aSql += ::rtl::OUString::createFromAscii(" = ?");
-//              aSql += aAnd;
-//              break;
-//          }
-//      }
     }
     aSql = aSql.replaceAt(aSql.getLength()-5,5,::rtl::OUString::createFromAscii(" "));
 
@@ -1217,6 +1219,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.21  2001/07/09 07:00:18  oj
+    #89364# provide the parameter row to the keyset
+
     Revision 1.20  2001/07/05 11:58:54  oj
     #87744# check non casesensitive for table privs
 

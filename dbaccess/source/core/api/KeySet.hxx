@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-09 07:00:18 $
+ *  last change: $Author: oj $ $Date: 2001-07-19 09:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,8 @@ namespace dbaccess
                 const ::rtl::OUString& _rUpdateTableName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >& _xComposer);
         ~OKeySet();
+        // late ctor which can throw exceptions
+        void construct();
 
         void setExternParameters(const connectivity::ORowVector< ORowSetValue >& _rParameterRow);
 
@@ -193,6 +195,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.9  2001/07/09 07:00:18  oj
+    #89364# provide the parameter row to the keyset
+
     Revision 1.8  2001/06/22 13:07:17  oj
     #88012# change rowdeleted
 

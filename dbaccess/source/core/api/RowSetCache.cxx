@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-12 07:56:32 $
+ *  last change: $Author: oj $ $Date: 2001-07-19 09:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,12 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
+#ifndef _CONNECTIVITY_SQLPARSE_HXX
+#include <connectivity/sqlparse.hxx>
+#endif
+#ifndef _CONNECTIVITY_SQLNODE_HXX
+#include <connectivity/sqlnode.hxx>
+#endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
@@ -133,6 +139,7 @@ using namespace ::osl;
 // -------------------------------------------------------------------------
 ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                            const Reference< XSQLQueryComposer >& _xComposer,
+                           const Reference< XMultiServiceFactory >& _xServiceFactory,
                            const connectivity::ORowVector< ORowSetValue >&  _rParameterRow,
                            const ::rtl::OUString& _rUpdateTableName,
                            sal_Bool&    _bModified,
@@ -149,6 +156,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     ,m_bDeleted(sal_False)
     ,m_bUpdated(sal_False)
     ,m_xMetaData(Reference< XResultSetMetaDataSupplier >(_xRs,UNO_QUERY)->getMetaData())
+    ,m_xServiceFactory(_xServiceFactory)
     ,m_nFetchSize(0)
     ,m_bNew(_bNew)
     ,m_bModified(_bModified)
@@ -158,6 +166,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
 {
     // check if all keys of the updateable table are fetched
     sal_Bool bAllKeysFound = sal_False;
+    sal_Int32 nTablesCount = 0;
 
     ::rtl::OUString aUpdateTableName = _rUpdateTableName;
     Reference< XConnection> xConnection;
@@ -175,8 +184,13 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             aUpdateTableName = xTables->getElementNames()[0];
             xTables->getByName(aUpdateTableName) >>= m_aUpdateTable;
         }
+        Reference<XIndexAccess> xIndexAccess(xTables,UNO_QUERY);
+        if(xIndexAccess.is())
+            nTablesCount = xIndexAccess->getCount();
+        else
+            nTablesCount = xTables->getElementNames().getLength();
 
-        if(m_aUpdateTable.is())
+        if(m_aUpdateTable.is() && nTablesCount < 3) // for we can't handle more than 2 tables in our keyset
         {
             Reference<XKeysSupplier> xKeys(m_aUpdateTable,UNO_QUERY);
             if(xKeys.is())
@@ -244,15 +258,15 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     }
     else
     {
+        // need to check if we could handle this select clause
+        bAllKeysFound = bAllKeysFound && (nTablesCount == 1 || checkJoin(xConnection,_xComposer,aUpdateTableName));
+
         // || !(comphelper::hasProperty(PROPERTY_CANUPDATEINSERTEDROWS,xProp) && any2bool(xProp->getPropertyValue(PROPERTY_CANUPDATEINSERTEDROWS)))
         if(!bAllKeysFound || (xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_RESULTSETTYPE) &&
             comphelper::getINT32(xProp->getPropertyValue(PROPERTY_RESULTSETTYPE)) == ResultSetType::FORWARD_ONLY) )
         {
             m_pCacheSet = new OStaticSet(_xRs);
-//          if(bAllKeysFound)
-//              m_nPrivileges = Privilege::INSERT | Privilege::DELETE | Privilege::UPDATE;
-//          else
-                m_nPrivileges = Privilege::SELECT;
+            m_nPrivileges = Privilege::SELECT;
         }
         else
         {
@@ -287,23 +301,36 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             }
 
             OKeySet* pKeySet = new OKeySet(_xRs,m_aUpdateTable,aUpdateTableName ,_xComposer);
-            // now we need to set the extern parameters because the select stmt could contain a :var1
-            pKeySet->setExternParameters(_rParameterRow);
-            m_pCacheSet = pKeySet;
-
-            if(Reference<XResultSetUpdate>(_xRs,UNO_QUERY).is())  // this interface is optional so we have to check it
+            try
             {
-                Reference<XPropertySet> xTable(m_aUpdateTable,UNO_QUERY);
-                if(xTable.is() && xTable->getPropertySetInfo()->hasPropertyByName(PROPERTY_PRIVILEGES))
+                pKeySet->construct();
+
+                // now we need to set the extern parameters because the select stmt could contain a :var1
+                pKeySet->setExternParameters(_rParameterRow);
+                m_pCacheSet = pKeySet;
+
+                if(Reference<XResultSetUpdate>(_xRs,UNO_QUERY).is())  // this interface is optional so we have to check it
                 {
-                    m_nPrivileges = 0;
-                    xTable->getPropertyValue(PROPERTY_PRIVILEGES) >>= m_nPrivileges;
-                    if(!m_nPrivileges)
-                        m_nPrivileges = Privilege::SELECT;
+                    Reference<XPropertySet> xTable(m_aUpdateTable,UNO_QUERY);
+                    if(xTable.is() && xTable->getPropertySetInfo()->hasPropertyByName(PROPERTY_PRIVILEGES))
+                    {
+                        m_nPrivileges = 0;
+                        xTable->getPropertyValue(PROPERTY_PRIVILEGES) >>= m_nPrivileges;
+                        if(!m_nPrivileges)
+                            m_nPrivileges = Privilege::SELECT;
+                    }
                 }
+                if(bNoInsert)
+                    m_nPrivileges |= ~Privilege::INSERT; // remove the insert privilege
             }
-            if(bNoInsert)
-                m_nPrivileges |= ~Privilege::INSERT; // remove the insert privilege
+            catch(const SQLException&)
+            {
+                // we couldn't create a keyset here so we have to create a static cache
+                if(m_pCacheSet)
+                    delete m_pCacheSet;
+                m_pCacheSet = new OStaticSet(_xRs);
+                m_nPrivileges = Privilege::SELECT;
+            }
         }
 
     }
@@ -1596,129 +1623,62 @@ void ORowSetCache::checkUpdateConditions(sal_Int32 columnIndex)
     if(m_bAfterLast || columnIndex >= (sal_Int32)(*m_aInsertRow)->size())
         throwFunctionSequenceException(m_xSet.get());
 }
-/*------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
+                                 const Reference< XSQLQueryComposer >& _xComposer,
+                                 const ::rtl::OUString& _sUpdateTableName )
+{
+    sal_Bool bOk = sal_True;
+    ::rtl::OUString sSql = _xComposer->getQuery();
+    ::rtl::OUString sErrorMsg;
+    ::connectivity::OSQLParser aSqlParser(m_xServiceFactory);
+    ::connectivity::OSQLParseNode* pSqlParseNode = aSqlParser.parseTree(sErrorMsg,sSql);
+    if(pSqlParseNode)
+    {
+        OSQLParseNode* pTableRefCommalist = pSqlParseNode->getByRule(::connectivity::OSQLParseNode::table_ref_commalist);
+        OSL_ENSURE(pTableRefCommalist,"NO tables why!?");
+        if(pTableRefCommalist && pTableRefCommalist->count() == 1)
+        {
+            // we found only one element so it must some kind of join here
+            OSQLParseNode* pJoin = pTableRefCommalist->getByRule(::connectivity::OSQLParseNode::qualified_join);
+            if(pJoin)
+            { // we are only intereseted in qualified joins like RIGHT or LEFT
+                OSQLParseNode* pJoinType    = pJoin->getChild(1);
+                OSQLParseNode* pOuterType   = NULL;
+                if(SQL_ISRULE(pJoinType,join_type) && pJoinType->count() == 2)
+                    pOuterType = pJoinType->getChild(0);
+                else if(SQL_ISRULE(pJoinType,outer_join_type))
+                    pOuterType = pJoinType;
 
-    $Log: not supported by cvs2svn $
-    Revision 1.38  2001/06/26 10:30:55  oj
-    #87808# setObject corrected and some more
+                sal_Bool bCheck     = sal_False;
+                sal_Bool bLeftSide  = sal_False;
+                if(pOuterType)
+                { // found outer join
+                    bLeftSide = SQL_ISTOKEN(pOuterType->getChild(0),LEFT);
+                    bCheck = bLeftSide || SQL_ISTOKEN(pOuterType->getChild(0),RIGHT);
+                }
+                if(bCheck)
+                { // here we know that we have to check on which side our table resides
+                    OSQLParseNode* pTableRef = pJoin->getByRule(::connectivity::OSQLParseNode::qualified_join);
+                    if(bLeftSide)
+                        pTableRef = pJoin->getChild(0);
+                    else
+                        pTableRef = pJoin->getChild(3);
+                    OSL_ENSURE(SQL_ISRULE(pTableRef,table_ref),"Must be a tableref here!");
 
-    Revision 1.37  2001/06/26 09:32:05  fs
-    #88392# added columnModified for diagnostics
+                    ::rtl::OUString sTableRange;
+                    if(pTableRef->count() == 4)
+                        sTableRange = pTableRef->getChild(2)->getTokenValue(); // Tabellenrange an Pos 2
+                    if(!sTableRange.getLength())
+                        pTableRef->getChild(0)->parseNodeToStr(sTableRange,_xConnection->getMetaData(),NULL,sal_False,sal_False);
+                    bOk =  sTableRange == _sUpdateTableName;
+                }
+            }
 
-    Revision 1.36  2001/06/22 13:08:06  oj
-    #88012# a new method for repositioning the cache
-
-    Revision 1.35  2001/05/22 13:08:22  oj
-    #87199# check column names
-
-    Revision 1.34  2001/05/11 06:14:11  oj
-    #86724# clear updaterow after update
-
-    Revision 1.33  2001/05/10 14:09:19  oj
-    #86724# check null values and you of correct assignment
-
-    Revision 1.32  2001/04/24 14:40:19  oj
-    view fixes
-
-    Revision 1.31  2001/04/19 07:13:59  fs
-    throwFunctionSequenceException instead of throw FunctionSequenceException (bridge problems)
-
-    Revision 1.30  2001/04/06 10:51:29  oj
-    #85825# initialize pcache=NULL
-
-    Revision 1.29  2001/04/05 14:14:41  oj
-    #85788# absolut(-1) is last record
-
-    Revision 1.28  2001/04/05 07:51:27  oj
-    #85735# insert more exceptions when using in wrong order
-
-    Revision 1.27  2001/04/02 11:14:53  oj
-    changes for character stream
-
-    Revision 1.26  2001/03/15 08:19:18  fs
-    cppuhelper/extract -> comphelper/extract
-
-    Revision 1.25  2001/02/14 13:18:24  oj
-    impl sql stmt
-
-    Revision 1.24  2001/02/01 14:23:57  oj
-    change for insert , delete and update rows
-
-    Revision 1.23  2001/01/26 15:18:17  oj
-    #83216# check if we stands after the last row after a next
-
-    Revision 1.22  2001/01/24 09:52:19  oj
-    #82628# rowset modifications
-
-    Revision 1.21  2001/01/22 07:38:24  oj
-    #82632# change member
-
-    Revision 1.20  2001/01/09 15:38:59  oj
-    look for concurrency
-
-    Revision 1.19  2001/01/04 14:30:37  oj
-    check columns
-
-    Revision 1.18  2000/12/14 11:41:19  oj
-    #82061# beforeFirst called everytime
-
-    Revision 1.17  2000/12/12 12:19:01  oj
-    #80933# change flush of attributes
-
-    Revision 1.16  2000/12/06 09:55:44  oj
-    #80219# correted deleterow(s) and remeber position
-
-    Revision 1.15  2000/11/22 14:56:33  oj
-    #80276# resolve some trouble with positioning
-
-    Revision 1.14  2000/11/15 15:57:40  oj
-    change for rowset
-
-    Revision 1.13  2000/11/14 13:28:20  oj
-    change for rowset when getRow returns 0
-
-    Revision 1.12  2000/11/10 16:05:41  oj
-    check for afterlast and before first
-
-    Revision 1.11  2000/11/10 14:17:54  oj
-    search for primarykey not only keys
-
-    Revision 1.10  2000/11/10 11:05:43  oj
-    bookmark error corrected
-
-    Revision 1.9  2000/11/07 13:19:27  oj
-    read one row forward because of isLast
-
-    Revision 1.8  2000/11/03 14:40:45  oj
-    some problems with refcount resolved
-
-    Revision 1.7  2000/10/25 07:30:24  oj
-    make strings unique for lib's
-
-    Revision 1.6  2000/10/17 10:18:12  oj
-    some changes for the rowset
-
-    Revision 1.5  2000/10/11 11:18:11  fs
-    replace unotools with comphelper
-
-    Revision 1.4  2000/10/05 14:52:16  oj
-    last changed
-
-    Revision 1.3  2000/10/04 13:34:40  oj
-    some changes for deleteRow and updateRow
-
-    Revision 1.2  2000/09/29 15:20:51  oj
-    rowset impl
-
-    Revision 1.1.1.1  2000/09/19 00:15:38  hr
-    initial import
-
-    Revision 1.2  2000/09/18 14:52:47  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.1  2000/09/01 15:21:04  oj
-    rowset addons
-
-    Revision 1.0 26.07.2000 12:37:41  oj
-------------------------------------------------------------------------*/
+        }
+        delete pSqlParseNode;
+    }
+    return bOk;
+}
+// -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 14:22:47 $
+ *  last change: $Author: oj $ $Date: 2001-07-19 09:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1313,7 +1313,7 @@ sal_Int32 OQueryDesignView::GetColumnFormatKey(const ::connectivity::OSQLParseNo
 sal_Bool OQueryDesignView::FillDragInfo(const ::connectivity::OSQLParseNode* pColumnRef,OTableFieldDesc& aDragInfo)
 {
 
-    sal_Bool bErg = sal_True;
+    sal_Bool bErg = sal_False;
 
     ::rtl::OUString aTableRange,aColumnName;
     sal_uInt16 nCntAccount;
@@ -1323,10 +1323,10 @@ sal_Bool OQueryDesignView::FillDragInfo(const ::connectivity::OSQLParseNode* pCo
     if (aTableRange.getLength())
     {
         OQueryTableWindow*  pSTW = static_cast<OQueryTableView*>(m_pTableView)->FindTable( aTableRange );
-        if(!( pSTW && pSTW->ExistsField( aColumnName, aDragInfo ) ))
-            bErg = sal_False;
+        if(pSTW && pSTW->ExistsField( aColumnName, aDragInfo ) )
+            bErg = sal_True;
     }
-    else
+    if(!bErg)
         bErg = static_cast<OQueryTableView*>(m_pTableView)->FindTableFromField(aColumnName, aDragInfo, nCntAccount);
 
     return bErg;

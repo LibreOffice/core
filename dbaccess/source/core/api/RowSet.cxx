@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-12 07:56:32 $
+ *  last change: $Author: oj $ $Date: 2001-07-19 09:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1454,7 +1454,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                     if(m_aUpdateTableName.getLength())
                         composeTableName(m_xActiveConnection->getMetaData(),m_aUpdateCatalogName,m_aUpdateSchemaName,m_aUpdateTableName,aComposedTableName,sal_False);
 
-                    m_pCache = new ORowSetCache(xRs,m_xComposer,m_aParameterRow,aComposedTableName,m_bModified,m_bNew);
+                    m_pCache = new ORowSetCache(xRs,m_xComposer,m_xServiceManager,m_aParameterRow,aComposedTableName,m_bModified,m_bNew);
                     m_pCache->setMaxRowSize(m_nFetchSize);
                     m_aCurrentRow   = m_pCache->createIterator();
                     // now we can clear the parameter row
