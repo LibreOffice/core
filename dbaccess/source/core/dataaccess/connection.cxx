@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:35:53 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 12:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
+#include "SingleSelectQueryComposer.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -799,6 +800,30 @@ void OConnection::setNewConfigNode(const ::utl::OConfigurationTreeRoot& _aConfig
 
     m_aQueries.setNewConfigNode(_aConfigTreeNode.openNode(CONFIGKEY_DBLINK_QUERYDOCUMENTS).cloneAsRoot());
 }
+// -----------------------------------------------------------------------------
+Reference< XInterface > SAL_CALL OConnection::createInstance( const ::rtl::OUString& _sServiceSpecifier ) throw (Exception, RuntimeException)
+{
+    Reference< XServiceInfo > xRet;
+    if ( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER == _sServiceSpecifier )
+    {
+        xRet = new OSingleSelectQueryComposer(getTables(),this, m_xORB);
+        m_aComposers.push_back(WeakReferenceHelper(xRet));
+    }
+    return Reference< XInterface >(xRet,UNO_QUERY);
+}
+// -----------------------------------------------------------------------------
+Reference< XInterface > SAL_CALL OConnection::createInstanceWithArguments( const ::rtl::OUString& _sServiceSpecifier, const Sequence< Any >& Arguments ) throw (Exception, RuntimeException)
+{
+    return createInstance(_sServiceSpecifier);
+}
+// -----------------------------------------------------------------------------
+Sequence< ::rtl::OUString > SAL_CALL OConnection::getAvailableServiceNames(  ) throw (RuntimeException)
+{
+    Sequence< ::rtl::OUString > aRet(1);
+    aRet[0] = SERVICE_NAME_SINGLESELECTQUERYCOMPOSER;
+    return aRet;
+}
+// -----------------------------------------------------------------------------
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
