@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml_element.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-24 11:16:38 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ Reference< xml::sax::XAttributeList > XMLElement::getSubElement( sal_Int32 nInde
     return _subElems[ (size_t)nIndex ];
 }
 //__________________________________________________________________________________________________
-void XMLElement::dumpSubElements( Reference< xml::sax::XExtendedDocumentHandler > const & xOut )
+void XMLElement::dumpSubElements( Reference< xml::sax::XDocumentHandler > const & xOut )
 {
     for ( size_t nPos = 0; nPos < _subElems.size(); ++nPos )
     {
@@ -98,7 +98,7 @@ void XMLElement::dumpSubElements( Reference< xml::sax::XExtendedDocumentHandler 
     }
 }
 //__________________________________________________________________________________________________
-void XMLElement::dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOut )
+void XMLElement::dump( Reference< xml::sax::XDocumentHandler > const & xOut )
 {
     xOut->ignorableWhitespace( OUString() );
     xOut->startElement( _name, static_cast< xml::sax::XAttributeList * >( this ) );
