@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfld.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,8 @@ public:
     const SwTxtNode* GetpTxtNode() const { return pMyTxtNd; }
     inline const SwTxtNode& GetTxtNode() const;
     void ChgTxtNode( const SwTxtNode* pNew ) { pMyTxtNd = (SwTxtNode*)pNew; }
+    // enable notification that field content has changed and needs reformatting
+    void NotifyContentChange(SwFmtFld& rFmtFld);
 };
 
 inline const SwTxtNode& SwTxtFld::GetTxtNode() const
