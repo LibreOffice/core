@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleMenu.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Date: 2003-04-28 11:21:38 $
+ *  last change: $Date: 2003-05-22 13:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,8 @@ public class AccessibleMenu extends TestCase {
         tEnv.addObjRelation("XAccessibleText.Text", text.getText());
 
         tEnv.addObjRelation("EditOnly","Can't change or select Text in Menu");
+
+        tEnv.addObjRelation("LimitedBounds", "yes");
 
         return tEnv;
 
