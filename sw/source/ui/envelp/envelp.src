@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envelp.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:23:01 $
+ *  last change: $Author: obo $ $Date: 2001-02-09 20:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ String STR_DATABASE_NOT_OPENED
     Text[ dutch ] = "Database kon niet worden geopend.";
     Text[ chinese_simplified ] = "Ξή·¨΄ςΏªΚύΎέΏβ΅£";
     Text[ greek ] = "Δεν ήταν δυνατόν να ανοιχτεί η βάση δεδομένων.";
-    Text[ korean ] = "µ¥ΐΜΕΝΊ£ΐΜ½Ί°΅ Ώ­Έ±Όφ Ύψ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "µ¥ΐΜΕΝΊ£ΐΜ½ΊΈ¦ Ώ­Αφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Veritabanύ aηύlamadύ.";
     Text[ language_user1 ] = " ";
 };
@@ -144,7 +144,7 @@ String STR_BTN_NEW_DOC
     Text[ dutch ] = "~Nieuw document";
     Text[ chinese_simplified ] = "ΠΒ½¨ΞΔµµ(~N)";
     Text[ greek ] = "Δημιουργία εγγράφου";
-    Text[ korean ] = "»υ·ΞΏξ Ή®Ό­(~N)";
+    Text[ korean ] = "»υ·ΞΏξ Ή®Ό­";
     Text[ turkish ] = "~Yeni belge";
     Text[ language_user1 ] = " ";
 };
@@ -171,7 +171,7 @@ String STR_BTN_NEWDOC
     Text[ dutch ] = "~Nieuw doc.";
     Text[ chinese_simplified ] = "ΠΒ½¨ΞΔµµ(~N)";
     Text[ greek ] = "Δημιουργία εγγράφου";
-    Text[ korean ] = "»υ·ΞΏξ Ή®Ό­(~N)";
+    Text[ korean ] = "»υ·ΞΏξ Ή®Ό­";
     Text[ turkish ] = "~Yeni blg.";
     Text[ language_user1 ] = " ";
 };
