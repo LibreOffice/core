@@ -32,6 +32,13 @@ foreach $i (@files)
     open( FILEOUT, ">$i->{filename}.tmp" ) || die "could not open $i->{filename} for writing";
     foreach $_ (@lines)
     {
+        if("$ARGV[1]" eq "udk_" | "$ARGV[1]" eq "odk_")
+        {
+            s#((\")(index.html\"))#$2$ARGV[1]$3#go;
+            s#((\/|\")(faq.html\"))#$2$ARGV[1]$3#go;
+            s#((\/|\")(bylaws.html\"))#$2$ARGV[1]$3#go;
+        }
+
         s#((http:\/\/api\.openoffice\.org\/)(common\/ref[^\"]+))#$relPath\/$3#go;
         print FILEOUT $_;
     }
