@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2005-01-25 15:09:08 $
+#   last change: $Author: obo $ $Date: 2005-03-15 09:06:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,10 +67,5 @@ TARGET=javaexamples
 .INCLUDE : ant.mk
 
 .IF "$(SOLAR_JAVA)"!=""
-.IF "$(JDK)"=="gcj"
-all:
-    @echo This dir cannot be build with gcj because of javax.swing.JTree.getLastSelectedPathComponent
-.ELSE 
 ALLTAR : ANTBUILD
-.ENDIF
 .ENDIF
