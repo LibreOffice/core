@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:24:46 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,10 +396,10 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
             sal_Bool bErg = sal_False;
             do
             {
-                if (!aURL.getExtension().Len())
+                if (!aURL.getExtension().getLength())
                 {
-                    sal_Unicode nChar = aURL.getBase().GetChar(0);
-                    if(match(tableNamePattern,aURL.getBase().GetBuffer(),'\0') && ( !bCheckEnabled || ( bCheckEnabled && ((nChar < '0' || nChar > '9')))) )
+                    sal_Unicode nChar = aURL.getBase().getStr()[0];
+                    if(match(tableNamePattern,aURL.getBase().getStr(),'\0') && ( !bCheckEnabled || ( bCheckEnabled && ((nChar < '0' || nChar > '9')))) )
                     {
                         aRow.push_back(new ORowSetValueDecorator(::rtl::OUString(aURL.getBase())));
                         bNewRow = sal_True;
