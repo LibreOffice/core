@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.17 $
+#*  $Revision: 1.18 $
 #*
-#*  last change: $Author: ka $ $Date: 2001-05-10 13:57:54 $
+#*  last change: $Author: mav $ $Date: 2001-05-14 16:40:52 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -155,6 +155,7 @@ LIB8FILES=	\
         $(SLB)$/items1.lib	\
         $(SLB)$/misc1.lib	\
         $(SLB)$/notify.lib	\
+        $(SLB)$/passwordcontainer.lib	\
         $(SLB)$/svarray.lib \
         $(SLB)$/svhtml1.lib \
         $(SLB)$/svrtf.lib	\
@@ -243,7 +244,8 @@ SHL2STDLIBS=$(TOOLSLIB) 	\
         $(CPPUHELPERLIB)	\
         $(RTLLIB)			\
         $(SALLIB)			\
-        $(UNOTOOLSLIB)
+        $(UNOTOOLSLIB)		\
+        $(UCBHELPERLIB)
 
 .IF "$(GUI)"=="WNT"
 SHL2STDLIBS+= \
