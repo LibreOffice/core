@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spinbtn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:47:45 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:13:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,8 +158,7 @@ void SpinButton::Up()
         ImplMoveFocus( TRUE );
     }
 
-    ImplCallEventListeners( VCLEVENT_SPINBUTTON_UP );
-    maUpHdlLink.Call( this );
+    ImplCallEventListenersAndHandler( VCLEVENT_SPINBUTTON_UP, maUpHdlLink, this );
 }
 
 // -----------------------------------------------------------------------
@@ -174,8 +173,7 @@ void SpinButton::Down()
         ImplMoveFocus( FALSE );
     }
 
-    ImplCallEventListeners( VCLEVENT_SPINBUTTON_DOWN );
-    maDownHdlLink.Call( this );
+    ImplCallEventListenersAndHandler( VCLEVENT_SPINBUTTON_DOWN, maDownHdlLink, this );
 }
 
 // -----------------------------------------------------------------------
