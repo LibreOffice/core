@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filt_pch.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:20:52 $
+ *  last change: $Author: nn $ $Date: 2001-07-30 16:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,6 @@
 #include <vcl/wintypes.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/event.hxx>
-#include <sot/dtrans.hxx>
 #include <tools/ownlist.hxx>
 #include <vcl/cmdevt.hxx>
 #include <vcl/fonttype.hxx>
