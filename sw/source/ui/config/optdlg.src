@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:44:03 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1444,7 +1444,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ portuguese_brazilian ] = "da impressora ~setup";
         Text[ japanese ] = "ÌßØİÀ‚Ìİ’è‚Ì—p†ÄÚ²‚ğ’Êíg—p(~P)";
         Text[ korean ] = "ÇÁ¸°ÅÍ ¼³Á¤¿¡ µû¸¥ ¿ëÁö °ø±Ş(~P)";
-        Text[ chinese_simplified ] = "Ì×ÓÃ´òÓ¡»úÉè¶¨µÄÖ½ÕÅÀ´Ô´(~P)";
+        Text[ chinese_simplified ] = "²ÉÓÃ´òÓ¡»úÉè¶¨µÄÖ½ÕÅÀ´Ô´(~P)";
         Text[ chinese_traditional ] = "±Ä¥Î¦Lªí¾÷³]©wªº¯È±i¨Ó·½(~P)";
         Text[ turkish ] = "Yazıcı ayarlarını kullan";
         Text[ arabic ] = "ÏÑÌ ÇáæÑŞ ãä ÅÚÏÇÏÇÊ ÇáØÇÈÚÉ";
@@ -2453,7 +2453,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ italian ] = "Le modifiche di una riga si ripercuotono solo sulle aree adiacenti";
         Text[ danish ] = "Række- eller kolonneændringer påvirker kun den direkte nabo";
         Text[ swedish ] = "Ändringar påverkar bara den omedelbara omgivningen";
-        Text[ polish ] = "Zmiany wywieraj¹ wp³yw tylko na obszary przyleg³e";
+        Text[ polish ] = "Zmiany maj¹ wp³yw tylko na obszary przyleg³e.";
         Text[ portuguese_brazilian ] = "Ver?nderungen einer Zeile bzw. Spalte wirken sich nur auf den direkten Nachbarn aus";
         Text[ japanese ] = "•ÏX‚Í—×Ú”ÍˆÍ‚¾‚¯‚Éì—p‚µ‚Ü‚·";
         Text[ korean ] = "º¯°æ»çÇ×Àº Á÷Á¢ÀûÀ¸·Î ÀÎÁ¢ÇÑ ¿µ¿ª¿¡¸¸ ¿µÇâÀ» ¹ÌÄ¨´Ï´Ù.";
@@ -2510,7 +2510,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ italian ] = "Le modifiche di una riga o colonna si ripercuotono  sull'intera tabella";
         Text[ danish ] = "Række- eller kolonneændringer påvirker hele tabellen";
         Text[ swedish ] = "Ändringar påverkar hela tabellen";
-        Text[ polish ] = "Zmiany wywieraj¹ wp³yw na ca³¹ tabelê";
+        Text[ polish ] = "Zmiany maj¹ wp³yw na ca³¹ tabelê.";
         Text[ portuguese_brazilian ] = "Ver?nderungen einer Zeile bzw. Spalte wirken sich auf die gesamte Tabelle aus";
         Text[ japanese ] = "•ÏX‚Í•\\‘S‘Ì‚Éì—p‚µ‚Ü‚·";
         Text[ korean ] = "º¯°æ»çÇ×Àº ÀüÃ¼ Å×ÀÌºí¿¡ ¿µÇâÀ» ¹ÌÄ¨´Ï´Ù.";
@@ -2567,7 +2567,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ italian ] = "Le modifiche di una riga o colonna si ripercuotono sulle dimensioni della tabella";
         Text[ danish ] = "Række- eller kolonneændringer påvirker tabelstørrelsen";
         Text[ swedish ] = "Ändringar påverkar tabellstorleken";
-        Text[ polish ] = "Zmiany wywieraj¹ wp³yw na rozmiar tabeli";
+        Text[ polish ] = "Zmiany maj¹ wp³yw na rozmiar tabeli.";
         Text[ portuguese_brazilian ] = "Ver?nderungen einer Zeile bzw. Spalte wirken sich auf die Tabellengr?e aus";
         Text[ japanese ] = "•ÏX‚Í•\\‚Ì»²½Ş‚Éì—p‚µ‚Ü‚·";
         Text[ korean ] = "º¯°æ»çÇ×Àº Å×ÀÌºíÀÇ Å©±â¿¡ ¿µÇâÀ» ¹ÌÄ¨´Ï´Ù.";
@@ -3331,6 +3331,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ language_user1 ] = " ";
     };
 };
+
 
 
 
