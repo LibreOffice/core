@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcu,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:26:02 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,16 @@
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">MathML XML (Math);MathType 3.x;StarMath 2.0;StarMath 3.0;StarMath 4.0;StarMath 5.0;StarOffice XML (Math)</value>
+                    </prop>
+                </node>
+                <node oor:name="com.sun.star.sdb.DatabaseDocument" oor:op="replace">
+                    <prop oor:name="DisplayName">
+                        <value xml:lang="de">Datenbankdokumente</value>
+                        <value xml:lang="en">Database Documents</value>
+                        <value xml:lang="en-US">Database documents</value>
+                    </prop>
+                    <prop oor:name="Filters">
+                        <value oor:separator=";">StarOffice XML (Base)</value>
                     </prop>
                 </node>
             </node>
