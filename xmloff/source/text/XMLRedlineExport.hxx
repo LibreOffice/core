@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineExport.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-19 19:19:50 $
+ *  last change: $Author: dvo $ $Date: 2001-03-09 14:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,14 @@
 #endif
 
 #include <list>
+#include <map>
+#include <set>
 
 class SvXMLExport;
 namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
     namespace beans { struct PropertyValue; }
+    namespace text { class XText; }
     namespace text { class XTextContent; }
     namespace text { class XTextSection; }
  } } }
@@ -86,9 +89,16 @@ namespace rtl {
     class OUStringBuffer;
 }
 
+// store a list of redline properties
 typedef ::std::list<
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet> > ChangesListType;
+
+// store a list of redline properties for each XText
+typedef ::std::map<
+            ::com::sun::star::uno::Reference< ::com::sun::star::text::XText>,
+            ChangesListType* > ChangesMapType;
+
 
 /**
  * This class handles the export of redline portions.
@@ -116,13 +126,26 @@ class XMLRedlineExport
     const ::rtl::OUString sStartRedline;
     const ::rtl::OUString sEndRedline;
     const ::rtl::OUString sRedlineIdentifier;
+    const ::rtl::OUString sIsInHeaderFooter;
 
 
     const ::rtl::OUString sChangePrefix;
 
     SvXMLExport& rExport;
 
-    ChangesListType aChangesList;   /// list of changes
+
+    // handling of change recording:
+
+    // To support change tracking in headers and footers we need to
+    // write these changes separately. To do this, we record the
+    // changes for headers and footers. For the main document body, we
+    // get the complete list of changes from the document, which
+    // should be much more efficient than recording all of those.
+
+    ChangesMapType aChangeMap;              /// map of recorded changes
+
+    /// list of current changes; is NULL or points to member of aChangeMap
+    ChangesListType* pCurrentChangesList;
 
 
 public:
@@ -131,23 +154,30 @@ public:
     ~XMLRedlineExport();
 
     /// export a change
-    /// convenience method:calls CollectChange() if
-    /// bAutoStyle is set, and ExportChangeInline() if not
     void ExportChange(
         /// PropertySet of RedlinePortion
         const ::com::sun::star::uno::Reference<
                     ::com::sun::star::beans::XPropertySet> & rPropSet,
-        /// if (bAutoStyle) CollectChange(..) else ExoirtChangeInline(...)
         sal_Bool bAutoStyle);
 
-    /// export the list of changes
+    /// export the list of changes (complete list minus recorded changed)
     void ExportChangesList(sal_Bool bAutoStyles);
 
-    /// export the change mark contained in the text body
-    void ExportChangeInline(
-        /// PropertySet of RedlinePortion
+    /// export the list of changes (recorded changes for this XText only)
+    void ExportChangesList(
         const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet> & rPropSet);
+            ::com::sun::star::text::XText> & rText,
+        sal_Bool bAutoStyles);
+
+    /// set the current XText for which changes should be recorded.
+    /// An empty XText means: don't record changes
+    void SetCurrentXText(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::text::XText> & rText);
+
+    /// Do not record changes.
+    /// Same as SetCurrentXText(Reference<XText>) with empty argument.
+    void SetCurrentXText();
 
     /// export redline marks which start or end at start nodes,
     /// i.e. that include the complete paragraph/table/section
@@ -171,6 +201,18 @@ public:
         sal_Bool bStart);
 
 private:
+
+    /// export the change mark contained in the text body
+    void ExportChangeInline(
+        /// PropertySet of RedlinePortion
+        const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::beans::XPropertySet> & rPropSet);
+
+    /// export the auto styles used in this change
+    void ExportChangeAutoStyle(
+        /// PropertySet of RedlinePortion
+        const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::beans::XPropertySet> & rPropSet);
 
     /// export the changes list (<text:tracked-changes>)
     void ExportChangesListElements();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-09 07:23:23 $
+ *  last change: $Author: dvo $ $Date: 2001-03-09 14:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1357,25 +1357,29 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
                                                 xAttrList );
         break;
     case XML_TOK_TEXT_SEQUENCE_DECLS:
-        if( XML_TEXT_TYPE_BODY == eType )
+        if( XML_TEXT_TYPE_BODY == eType ||
+            XML_TEXT_TYPE_HEADER_FOOTER == eType )
             pContext = new XMLVariableDeclsImportContext(
                 rImport, *this, nPrefix, rLocalName, VarTypeSequence);
         break;
 
     case XML_TOK_TEXT_VARFIELD_DECLS:
-        if( XML_TEXT_TYPE_BODY == eType )
+        if( XML_TEXT_TYPE_BODY == eType ||
+            XML_TEXT_TYPE_HEADER_FOOTER == eType )
             pContext = new XMLVariableDeclsImportContext(
                 rImport, *this, nPrefix, rLocalName, VarTypeSimple);
         break;
 
     case XML_TOK_TEXT_USERFIELD_DECLS:
-        if( XML_TEXT_TYPE_BODY == eType )
+        if( XML_TEXT_TYPE_BODY == eType ||
+            XML_TEXT_TYPE_HEADER_FOOTER == eType )
             pContext = new XMLVariableDeclsImportContext(
                 rImport, *this, nPrefix, rLocalName, VarTypeUserField);
         break;
 
     case XML_TOK_TEXT_DDE_DECLS:
-        if( XML_TEXT_TYPE_BODY == eType )
+        if( XML_TEXT_TYPE_BODY == eType ||
+            XML_TEXT_TYPE_HEADER_FOOTER == eType )
             pContext = new XMLDdeFieldDeclsImportContext(
                 rImport, nPrefix, rLocalName);
         break;

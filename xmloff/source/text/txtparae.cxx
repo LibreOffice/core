@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-06 11:17:30 $
+ *  last change: $Author: dvo $ $Date: 2001-03-09 14:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2364,11 +2364,45 @@ void XMLTextParagraphExport::exportTextDeclarations()
     pFieldExport->ExportFieldDeclarations();
 }
 
+void XMLTextParagraphExport::exportTextDeclarations(
+    const Reference<XText> & rText )
+{
+    pFieldExport->ExportFieldDeclarations(rText);
+}
+
+void XMLTextParagraphExport::exportUsedDeclarations( sal_Bool bOnlyUsed )
+{
+    pFieldExport->SetExportOnlyUsedFieldDeclarations( bOnlyUsed );
+}
+
+
 void XMLTextParagraphExport::exportTrackedChanges(sal_Bool bAutoStyles)
 {
     if (NULL != pRedlineExport)
         pRedlineExport->ExportChangesList( bAutoStyles );
 }
+
+void XMLTextParagraphExport::exportTrackedChanges(
+    const Reference<XText> & rText,
+    sal_Bool bAutoStyle)
+{
+    if (NULL != pRedlineExport)
+        pRedlineExport->ExportChangesList(rText, bAutoStyle);
+}
+
+void XMLTextParagraphExport::recordTrackedChangesForXText(
+    const Reference<XText> & rText )
+{
+    if (NULL != pRedlineExport)
+        pRedlineExport->SetCurrentXText(rText);
+}
+
+void XMLTextParagraphExport::recordTrackedChangesNoXText()
+{
+    if (NULL != pRedlineExport)
+        pRedlineExport->SetCurrentXText();
+}
+
 
 void XMLTextParagraphExport::exportTextAutoStyles()
 {

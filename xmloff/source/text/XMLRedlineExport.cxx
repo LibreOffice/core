@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineExport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-24 16:49:51 $
+ *  last change: $Author: dvo $ $Date: 2001-03-09 14:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,14 +165,24 @@ XMLRedlineExport::XMLRedlineExport(SvXMLExport& rExp) :
     sStartRedline(RTL_CONSTASCII_USTRINGPARAM("StartRedline")),
     sEndRedline(RTL_CONSTASCII_USTRINGPARAM("EndRedline")),
     sRedlineIdentifier(RTL_CONSTASCII_USTRINGPARAM("RedlineIdentifier")),
+    sIsInHeaderFooter(RTL_CONSTASCII_USTRINGPARAM("IsInHeaderFooter")),
     rExport(rExp),
-    aChangesList()
+    aChangeMap(),
+    pCurrentChangesList(NULL)
 {
 }
 
 
 XMLRedlineExport::~XMLRedlineExport()
 {
+    // delete changes lists
+    for( ChangesMapType::iterator aIter = aChangeMap.begin();
+         aIter != aChangeMap.end();
+         aIter++ )
+    {
+        delete aIter->second;
+    }
+    aChangeMap.clear();
 }
 
 
@@ -180,23 +190,91 @@ void XMLRedlineExport::ExportChange(
     const Reference<XPropertySet> & rPropSet,
     sal_Bool bAutoStyle)
 {
-    if (!bAutoStyle)
+    if (bAutoStyle)
+    {
+        ExportChangeAutoStyle(rPropSet);
+    }
+    else
     {
         ExportChangeInline(rPropSet);
     }
 }
 
 
-void XMLRedlineExport::ExportChangesList(sal_Bool bAutoStyle)
+void XMLRedlineExport::ExportChangesList(sal_Bool bAutoStyles)
 {
-    if (bAutoStyle)
+    if (bAutoStyles)
     {
-        ExportChangesListAutoStyles();
+//      ExportChangesListAutoStyles();
     }
     else
     {
         ExportChangesListElements();
     }
+}
+
+
+void XMLRedlineExport::ExportChangesList(
+    const Reference<XText> & rText,
+    sal_Bool bAutoStyles)
+{
+    // do not export any auto styles
+    if (bAutoStyles)
+        return;
+
+    // look for changes list for this XText
+    ChangesMapType::iterator aFind = aChangeMap.find(rText);
+    if (aFind != aChangeMap.end())
+    {
+        ChangesListType* pChangesList = aFind->second;
+
+        // export only if changes are found
+        if (pChangesList->size() > 0)
+        {
+            // changes container element
+            SvXMLElementExport aChanges(rExport, XML_NAMESPACE_TEXT,
+                                        sXML_tracked_changes,
+                                        sal_True, sal_True);
+
+            // iterate over changes list
+            for( ChangesListType::iterator aIter = pChangesList->begin();
+                 aIter != pChangesList->end();
+                 aIter++ )
+            {
+                ExportChangedRegion( *aIter );
+            }
+        }
+        // else: changes list empty -> ignore
+    }
+    // else: no changes list found -> empty
+}
+
+void XMLRedlineExport::SetCurrentXText(
+    const Reference<XText> & rText)
+{
+    if (rText.is())
+    {
+        // look for appropriate list in map; use the found one, or create new
+        ChangesMapType::iterator aIter = aChangeMap.find(rText);
+        if (aIter == aChangeMap.end())
+        {
+            ChangesListType* pList = new ChangesListType;
+            aChangeMap[rText] = pList;
+            pCurrentChangesList = pList;
+        }
+        else
+            pCurrentChangesList = aIter->second;
+    }
+    else
+    {
+        // don't record changes
+        SetCurrentXText();
+    }
+}
+
+void XMLRedlineExport::SetCurrentXText()
+{
+    pCurrentChangesList = NULL;
 }
 
 
@@ -228,8 +306,14 @@ void XMLRedlineExport::ExportChangesListElements()
                            "can't get XPropertySet; skipping Redline");
                 if (xPropSet.is())
                 {
-                    // and finally, export change
-                    ExportChangedRegion(xPropSet);
+                    // export only if not in header or footer
+                    // (those must be exported with their XText)
+                    aAny = xPropSet->getPropertyValue(sIsInHeaderFooter);
+                    if (! *(sal_Bool*)aAny.getValue())
+                    {
+                        // and finally, export change
+                        ExportChangedRegion(xPropSet);
+                    }
                 }
                 // else: no XPropertySet -> no export
             }
@@ -237,6 +321,32 @@ void XMLRedlineExport::ExportChangesListElements()
         // else: no redlines -> no export
     }
     // else: no XRedlineSupplier -> no export
+}
+
+void XMLRedlineExport::ExportChangeAutoStyle(
+    const Reference<XPropertySet> & rPropSet)
+{
+    // record change (if changes should be recorded)
+    if (NULL != pCurrentChangesList)
+    {
+        // put redline in list if it's collapsed or the redline start
+        Any aIsStart = rPropSet->getPropertyValue(sIsStart);
+        Any aIsCollapsed = rPropSet->getPropertyValue(sIsCollapsed);
+
+        if ( *(sal_Bool*)aIsStart.getValue() ||
+             *(sal_Bool*)aIsCollapsed.getValue() )
+            pCurrentChangesList->push_back(rPropSet);
+    }
+
+    // get XText for export of redline auto styles
+    Any aAny = rPropSet->getPropertyValue(sRedlineText);
+    Reference<XText> xText;
+    aAny >>= xText;
+    if (xText.is())
+    {
+        // export the auto styles
+        rExport.GetTextParagraphExport()->collectTextAutoStyles(xText);
+    }
 }
 
 void XMLRedlineExport::ExportChangesListAutoStyles()
@@ -262,17 +372,7 @@ void XMLRedlineExport::ExportChangesListAutoStyles()
                            "can't get XPropertySet; skipping Redline");
                 if (xPropSet.is())
                 {
-                    // get XText for export of redline auto styles
-                    aAny = xPropSet->getPropertyValue(sRedlineText);
-                    Reference<XText> xText;
-                    aAny >>= xText;
-                    if (xText.is())
-                    {
-                        // export the auto styles
-                        rExport.GetTextParagraphExport()->
-                            collectTextAutoStyles(xText);
-                        // default parameters: bProgress, bExportParagraph ???
-                    }
+                    ExportChangeAutoStyle(xPropSet);
                 }
             }
         }
