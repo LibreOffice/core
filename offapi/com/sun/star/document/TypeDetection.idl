@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDetection.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:40 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,16 @@
 #include <com/sun/star/document/XTypeDetection.idl>
 #endif
 
-#ifndef __com_sun_star_container_XNameAccess_idl__
-#include <com/sun/star/container/XNameAccess.idl>
+#ifndef __com_sun_star_container_XNameContainer_idl__
+#include <com/sun/star/container/XNameContainer.idl>
+#endif
+
+#ifndef __com_sun_star_container_XContainerQuery_idl__
+#include <com/sun/star/container/XContainerQuery.idl>
+#endif
+
+#ifndef __com_sun_star_util_XFlushable_idl__
+#include <com/sun/star/util/XFlushable.idl>
 #endif
 
 //=============================================================================
@@ -74,83 +82,147 @@
 module com { module sun { module star { module document {
 
 //=============================================================================
-/** capsulate a type detection service and supports access on taht configuration
+/** capsulate a type detection service and provide read/write access on it's configuration data.
 
     <p>
     It's possible to make a "flat" detection wich may use internal configuration
-    data only - or a "deep" detection which use special <type>ExtendedTypeDetection</type>s
-    to look into the document to specify it unambigous. Last mode can be supressed
-    to perform.
+    data only - or a "deep" detection which use special <type>ExtendedTypeDetection</type>
+    services to look into the document stream. Last mode can be supressed to perform the operation.
+    Of course the results can't be guaranteed then. (e.g. in case the extension was changed)
     </p>
  */
 service TypeDetection
 {
     //-------------------------------------------------------------------------
-    /** detect resource
+    /** can be used to make a flat or deep type detection.
 
         <p>
-        Use this interface to get information about type of given document.
+        Use this interface to get information about the type of the given resource.
         Return value will be always an internal name of a registered document type.
-        It can be used may on other services (e.g. <type>FilterFactory</type>) for
-        further things (especialy to get the default filter for it).
-         </p>
+        It can be used may on other services (e.g. <type scope="com::sun::star::frame">FrameLoaderFactory</type>)
+        to do further things, which base on it (e.g. to load it into a frame).
+        </p>
      */
     interface XTypeDetection;
 
     //-------------------------------------------------------------------------
-    /** provides access to complete type configuration
+    /** provides read access to the complete set of type configuration data.
 
         <p>
-        This configuration is organized as a collection of flat data structures.
-        The representation of such data structures will pe represented by
-        the type sequence<com::sun::star::beans::PropertyValue>.
-        Follow properties will be supported:
+        Every container item is specified as a set of properties and will be
+        represented by a sequence< <type scope="com::sun::star::beans">PropertyValue</type> > structure.
+        Follow properties are supported:
+        (But note: not all of them must be present everytimes!)
+
         <table border=1>
             <tr>
-                <td><strong>property name</strong></td>
-                <td><strong>Value type</strong></td>
-                <td><strong>description</strong></td>
+                <td><strong>Property Name</strong></td>
+                <td><strong>Value Type</strong></td>
+                <td><strong>Description</strong></td>
             </tr>
             <tr>
-                <td>UIName</td>
+                <td><em>Name</em></td>
                 <td>[string]</td>
-                <td>localized name of type to show at UI elements</td>
+                <td>The internal name is the only value, which makes a container item unique.</td>
             </tr>
             <tr>
-                <td>MediaType</td>
+                <td><em>UIName</em></td>
                 <td>[string]</td>
-                <td>MIME or content type</td>
+                <td>It contains the localized name for this type for the current locale.</td>
             </tr>
             <tr>
-                <td>ClipboardFormat</td>
-                <td>[string]</td>
-                <td>name of supported clipboard format</td>
-            </tr>
-            <tr>
-                <td>URLPattern</td>
+                <td><em>UINames</em></td>
                 <td>[sequence< string >]</td>
-                <td>a list of URL patterns which identify this type</td>
+                <td>It contains all available localized names for this type. The are organized
+                    in pairs and represented as a structure of sequence< <type scope="com::sun::star::beans">PropertyValue</type> >.
+                    The name of such property must be interpreted as locale; it's value as the localized
+                    type name corresponding to this locale.</td>
             </tr>
             <tr>
-                <td>Extensions</td>
+                <td><em>MediaType</em></td>
+                <td>[string]</td>
+                <td>It contains the MIME or content type descriptor. The differences between a MIME type and
+                    an internal type name was made, to resolve existing ambigities.</td>
+            </tr>
+            <tr>
+                <td><em>ClipboardFormat</em><strong>deprecated!</strong></td>
+                <td>[string]</td>
+                <td>It was interepreted as an identifier inside clipboard.
+                    Please use new property ContentFormat instead of this now.</td>
+            </tr>
+            <tr>
+                <td><em>ContentFormat</em></td>
+                <td>[string]</td>
+                <td>It's and identifier, which is used for a deep format detection.
+                    An <type>ExtendedTypeDetection</type> use this value to match
+                    a given content to this type. e.g. It's interpreted as the doc type
+                    of an XML stream or as an identifier inside a file header.
+                </td>
+            </tr>
+            <tr>
+                <td><em>URLPattern</em></td>
                 <td>[sequence< string >]</td>
-                <td>a list of file extensions which identify this type</td>
+                <td>This list contains different URL patterns, which identify this type.
+                    E.g. data base contents can be described by an new defined protocol like "sql://select*".
+                    In combination with a sutable <type scope="com::sun::star::frame">FrameLoader</type> or
+                    <type>ImportFilter</type>/<type>ExportFilter</type> it woul be possible then, to
+                    layout a sql query output into an office frame.</td>
             </tr>
             <tr>
-                <td>DocumentIconID</td>
+                <td><em>Extensions</em></td>
+                <td>[sequence< string >]</td>
+                <td>It contains a list of file extensions, which match this type.
+                    They must be specified as pure extension, without any special signs.
+                    E.g.: "doc", "html" ... but not ".doc".
+                    Using of wildcards is allowed but not very usefull. The may resulting
+                    ambigities with other type registrations can't be resolved anytimes.</td>
+            </tr>
+            <tr>
+                <td><em>DocumentIconID</em></td>
                 <td>[integer]</td>
-                <td>an ID which present the number of corresponding icon</td>
+                <td>It's an ID, which present the number of a corresponding icon.</td>
             </tr>
         </table>
-         </p>
+        </p>
 
         <p>
         Note:<br>
-        All elements of this container will be adressed by his internal type name.
-        This must be an unambigous name.
+        All elements of this container will be adressed by his internal name,
+        and it must be an unambigous value.
         </p>
      */
     interface com::sun::star::container::XNameAccess;
+
+    //-------------------------------------------------------------------------
+    /** provides a write access to the configuration data.
+     */
+    [optional] interface com::sun::star::container::XNameContainer;
+
+    //-------------------------------------------------------------------------
+    /** provides search on the configuration data set.
+
+        <p>
+        Against simple property search it provides some complex algorithms too.
+        For further informations please read the SDK documentation.
+        </p>
+     */
+    [optional] interface com::sun::star::container::XContainerQuery;
+
+    //-------------------------------------------------------------------------
+    /** can be used to perform container changes.
+
+        <p>
+        Because the complexness of such configuration set can be very high,
+        it seams not very usefull to update the undelying configuration layer
+        on every container change request immediatly. Another strategy can be to
+        make all changes (adding/changing/removing of items) and call flush at the end.
+        That will validate the whole container and reject inconsistent data sets.
+        Only in case all made changes was correct, they will be written back to the
+        configuration. Further this interface provides the possibelity, that interested
+        changes listener can be registered too.
+        </p>
+     */
+    [optional] interface com::sun::star::util::XFlushable;
 };
 
 //=============================================================================
