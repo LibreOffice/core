@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:42:47 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 09:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -718,6 +718,12 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
 
     aAppletImpl.CreateApplet ( rCode, rName, bMayScript, sCodeBase, GetXMLImport().GetDocumentBase() );
 
+    // set the size of the applet
+    lcl_setObjectVisualArea( aAppletImpl.GetApplet(),
+                            embed::Aspects::MSOLE_CONTENT,
+                            Size( nWidth, nHeight ),
+                            MAP_100TH_MM );
+
     SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
                                        aAppletImpl.GetApplet(),
                                        &aAppletImpl.GetItemSet());
@@ -754,7 +760,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
        INetURLObject aURLObj;
 
     bool bValidURL = rHRef.getLength() != 0 &&
-                     aURLObj.SetURL( rHRef );
+                     aURLObj.SetURL( URIHelper::SmartRel2Abs( INetURLObject( GetXMLImport().GetBaseURL() ), rHRef ) );
     bool bValidMimeType = rMimeType.getLength() != 0;
     if( !bValidURL && !bValidMimeType )
         return xPropSet;
@@ -771,6 +777,13 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
             uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitNew(
             aClass, ::rtl::OUString(), xStorage, aName,
             uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
+
+        // set size to the object
+        lcl_setObjectVisualArea( xObj,
+                                embed::Aspects::MSOLE_CONTENT,
+                                Size( nWidth, nHeight ),
+                                MAP_100TH_MM );
+
         if ( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
         {
             uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
@@ -895,6 +908,13 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFrame(
             uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitNew(
             aClass, ::rtl::OUString(), xStorage, aName,
             uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
+
+        // set size to the object
+        lcl_setObjectVisualArea( xObj,
+                                embed::Aspects::MSOLE_CONTENT,
+                                Size( nWidth, nHeight ),
+                                MAP_100TH_MM );
+
         if ( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
         {
             uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
