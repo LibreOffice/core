@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-30 18:20:24 $
+ *  last change: $Author: jp $ $Date: 2002-01-07 13:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ SwRTFParser::SwRTFParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
 
     pPam = new SwPaM( *rCrsr.GetPoint() );
     SetInsPos( SwxPosition( pPam ) );
-    SetChkStyleAttr( TRUE );
+    SetChkStyleAttr( 0 != bReadNewDoc );
     SetCalcValue( FALSE );
     SetReadDocInfo( TRUE );
 
