@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-10 10:48:13 $
+#   last change: $Author: kz $ $Date: 2003-08-27 16:47:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,9 +69,9 @@ TARGET=checkbin
 #----------------------------------------------------------------
 ODKCHECKFILE=$(MISC)$/$(TARGET).txt
 
-all: checkit
+all: $(ODKCHECKFILE)
 
-checkit:
+$(ODKCHECKFILE) : $(SDK_CONTENT_CHECK_FILES)
     +@echo "" > $(ODKCHECKFILE)
 # THE PERL SCRIPT DELETES THE CHECK FILE, WHEN AN ERROR OCCURS
     $(PERL) $(PRJ)$/util$/check.pl $(DESTDIR) $(DESTPLATFROM) "$(EXEPOSTFIX)" $(ODKCHECKFILE)
