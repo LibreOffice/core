@@ -68,6 +68,17 @@ End Function
 
 
 Sub CalFindWholeYearHolidays_GERMANY(ByVal iSelYear as Integer, ByVal iCountry as Integer)
+	
+	&apos;	Ermittelt die Feiertage eines gesamten Jahres (Parameter iSelYear),
+	&apos;	bezogen auf ein bestimmtes Bundesland (Parameter iCountry). Kein 
+	&apos;	bestimmtes Bundesland bedeutet, dass der Parameter gleich der 
+	&apos;	Konstante calBLHamburg ist, da Hamburg nur Standardfeiertage kennt. 
+	&apos;	Die Feiertage werden in das Array CalBankHolidayName$ geschrieben. 
+	&apos;	Der Index dieses Arrays geht bis vierhundert. Der 1. Januar hat den 
+	&apos;	Indexwert 1, der 2. Januar den Indexwert 2 usw. Das bedeutet, daß 
+	&apos;	wenn am 2. Januar kein Feiertag existiert, liefert 
+	&apos;	CalBankHolidayName$(DateSerial(0, 1, 2) eine leere Zeichenkette (&quot;&quot;).
+
 	Dim So as Integer
 	Dim OsternDate&amp;, VierterAdvent&amp;
 
@@ -118,7 +129,7 @@ Sub CalFindWholeYearHolidays_GERMANY(ByVal iSelYear as Integer, ByVal iCountry a
 		CalInsertBankholiday(vierterAdvent-32, &quot;Buß- und Bettag&quot;, cHolidayType_Full)
 	Else
 		CalInsertBankholiday(vierterAdvent-32, &quot;Buß- und Bettag&quot;, cHolidayType_Half)
-	End If
+	End If		&apos; Dank an die EKD für die Berechnungsvorschrift des Buß- und Bettags!
 	CalInsertBankholiday(vierterAdvent-21, &quot;1. Advent&quot;, cHolidayType_Full)
 	CalInsertBankholiday(vierterAdvent-14, &quot;2. Advent&quot;, cHolidayType_Full)
 	CalInsertBankholiday(vierterAdvent-7, &quot;3. Advent&quot;, cHolidayType_Full)

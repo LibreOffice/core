@@ -20,7 +20,7 @@ Dim MsgBoxResult as Integer
 		MsgBoxResult = MsgBox(cCalSubcmdDeleteSelect_DeleteSelEntry$, 4+32, cCalSubcmdDeleteSelect_DeleteSelEntryTitle$)
 		If MsgBoxResult = 6 Then
 			DlgCalModel.lstOwnData.StringItemList() = RemoveSelected(DlgCalModel.lstOwnData)
-			&apos; Flag to store the new data
+			&apos; Flag zum Speichern der neuen Daten.
 			bCalOwnDataChanged = True
 			DlgCalModel.cmdDelete.Enabled = Ubound(DlgCalModel.lstOwnData.StringItemList()) &gt; -1
 			Call CalClearInputMask()
@@ -39,6 +39,9 @@ End Sub
 
 
 Sub ToggleYearBox()
+&apos; Falls der RadioButton für einen Jahreskalender angeklickt
+&apos; worden ist, müssen die Controls für den Monat Disabled
+&apos; werden, da ihre Werte in einer Jahrestabelle aufgehen.
 	With DlgCalModel
 		.txtOwnEventYear.Enabled  = .chkEventOnce.State = 1
 		.lblEventYear.Enabled  = .chkEventOnce.State = 1
@@ -79,6 +82,7 @@ End Sub
 
 Sub CalClearInputMask()
 Dim NullList() as String
+&apos;  Löscht die Werte der Eingabe Controls für ein neues Ereignis.
 	With DlgCalModel
 		.chkEventOnce.State = 0
 		.lblEventYear.Enabled = False
@@ -89,10 +93,13 @@ Dim NullList() as String
 		.cmdInsert.Enabled = False
 	End With
 	DlgCalendar.GetControl(&quot;lstOwnEventMonth&quot;).SelectItemPos(0,True)
+	CurOwnMonth = 1
 End Sub
 
 
 Sub CalmdSwitchOwnDataOrGeneral()
+	&apos;Ändert den Titel der Dialogbox beim Seitenwechsel und die 
+	&apos;Beschriftungen der Knöpfe
 	If DlgCalModel.Step = 1 Then
 		DlgCalModel.Step = 2
 		DlgCalModel.cmdOwnData.Label = cCalSubcmdSwitchOwnDataOrGeneral_Back$
@@ -118,35 +125,32 @@ Dim bDoEnable as Boolean
 Dim sSelectedItem
 Dim ListIndex as Integer
 Dim MaxSelIndex as Integer
-Dim CurEvYear as Integer
-Dim CurEvMonth as Integer
-Dim CurEvDay as Integer
-Dim DateStr as String
+Dim iMonth as Integer
 	bDoEnable = False
 	With DlgCalModel
 		MaxSelIndex = Ubound(DlgCalModel.lstOwnData.SelectedItems())
 		If MaxSelIndex &gt; -1 Then
 			ListIndex = .lstOwnData.SelectedItems(MaxSelIndex)
 			.txtEvent.Text = CalGetNameofEvent(ListIndex)
-			If GetSelectedDateUnits(CurEvDay, CurEvMonth, CurEvYear, ListIndex) &lt;&gt; SBDATEUNDEFINED Then
-				.txtOwnEventDay.Value = CurEvDay
-				DlgCalendar.GetControl(&quot;lstOwnEventMonth&quot;).SelectItemPos(CurEvMonth-1, True)
-				If CurEvYear &lt;&gt; SBYEARUNDEFINED Then
-					.txtOwnEventYear.Value = CurEvYear
-					bDoEnable = True
-				Else
-					bDoEnable = False
-					DlgCalModel.txtOwnEventYear.SetPropertyToDefault(&quot;Value&quot;)
-				End If
-				.chkEventOnce.State = Abs(bDoEnable)
-				.lblEventYear.Enabled = bDoEnable
-				.txtOwnEventYear.Enabled = bDoEnable
-				.cmdDelete.Enabled = True
-				.cmdInsert.Enabled = True
+			.txtOwnEventDay.Value = CalGetDayOfEvent(ListIndex)
+			iMonth = CalGetMonthOfEvent(ListIndex)
+			DlgCalendar.GetControl(&quot;lstOwnEventMonth&quot;).SelectItemPos(iMonth-1, True)
+			CurOwnMonth = DlgCalModel.lstOwnEventMonth.SelectedItems(0) + 1
+			If CalGetYearofEvent(ListIndex) &lt;&gt; 0 Then
+				.txtOwnEventYear.Value = CalGetYearofEvent(ListIndex)
+				bDoEnable = True
 			Else
-				Call CalClearInputMask()
-				.cmdDelete.Enabled = False
+				bDoEnable = False
+				DlgCalModel.txtOwnEventYear.SetPropertyToDefault(&quot;Value&quot;)
 			End If
+			.chkEventOnce.State = Abs(bDoEnable)
+			.lblEventYear.Enabled = bDoEnable
+			.txtOwnEventYear.Enabled = bDoEnable
+			.cmdDelete.Enabled = True
+			.cmdInsert.Enabled = True
+		Else
+			Call CalClearInputMask()
+			.cmdDelete.Enabled = False
 		End If
 	End With
 End Sub</script:module>
