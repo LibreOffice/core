@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GenericDrawPage.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:09 $
+ *  last change: $Author: tl $ $Date: 2002-10-30 12:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,42 +186,42 @@ service GenericDrawPage
     // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::BorderBottom
     /** This is the border at the bottom.
      */
-    [property] long BorderBottom;
+        [optional, property] long BorderBottom;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::BorderLeft
     /** This is the border at the left.
      */
-    [property] long BorderLeft;
+        [optional, property] long BorderLeft;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::BorderRight
     /** This is the border at the right.
      */
-    [property] long BorderRight;
+        [optional, property] long BorderRight;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::BorderTop
     /** This is the border at the top.
      */
-    [property] long BorderTop;
+        [optional, property] long BorderTop;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::Height
     /** This is the height.
      */
-    [property] long Height;
+        [optional, property] long Height;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::Width
     /** This is the width.
      */
-    [property] long Width;
+        [optional, property] long Width;
 
     //-------------------------------------------------------------------------
 
@@ -235,7 +235,7 @@ service GenericDrawPage
     // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::Orientation
     /** This is the orientation of this page.
      */
-    [property] com::sun::star::view::PaperOrientation Orientation;
+        [optional, property] com::sun::star::view::PaperOrientation Orientation;
 
     //-------------------------------------------------------------------------
 
