@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: od $ $Date: 2002-12-06 16:22:12 $
+ *  last change: $Author: od $ $Date: 2002-12-10 14:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,12 +245,17 @@ public:
     const SdrPageView*GetPageView() const { return pSdrPageView; }
     void MakeDrawView();
 
-    /// OD 29.08.2002 #102450#
-    /// add 3rd parameter <const Color* pPageBackgrdColor> for setting this
-    /// color as the background color at the outliner of the draw view
-    /// for painting layers <hell> and <heaven>
-    void   PaintLayer  ( const BYTE nLayerID, const SwRect &rRect,
-                         const Color* pPageBackgrdColor = 0 ) const;
+    // OD 29.08.2002 #102450#
+    // add 3rd parameter <const Color* pPageBackgrdColor> for setting this
+    // color as the background color at the outliner of the draw view
+    // for painting layers <hell> and <heaven>
+    // OD 09.12.2002 #103045# - add 4th parameter for the horizontal text
+    // direction of the page in order to set the default horizontal text
+    // direction at the outliner of the draw view for painting layers <hell>
+    // and <heaven>.
+    void   PaintLayer  ( const BYTE _nLayerID, const SwRect& _rRect,
+                         const Color* _pPageBackgrdColor = 0,
+                         const bool _bIsPageRightToLeft = false ) const;
 
     //wird als Link an die DrawEngine uebergeben, entscheidet was wie
     //gepaintet wird oder nicht.
