@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenernotification.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:46:04 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 #endif
 /** === end UNO includes === **/
 
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
+
 //........................................................................
 namespace comphelper
 {
@@ -99,7 +103,7 @@ namespace comphelper
         @see http://www.openoffice.org/servlets/ReadMsg?list=interface-announce&msgId=494345
         @see OListenerContainerBase
     */
-    class OListenerContainer
+    class COMPHELPER_DLLPUBLIC OListenerContainer
     {
     private:
         ::cppu::OInterfaceContainerHelper    m_aListeners;
