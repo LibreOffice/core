@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:38:17 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2980,12 +2980,14 @@ void SwRedline::ShowOriginal( USHORT nLoop )
 {
     SwDoc* pDoc = GetDoc();
     SwRedlineMode eOld = pDoc->GetRedlineMode();
+    SwRedlineData* pCur;
+
     pDoc->SetRedlineMode_intern( eOld | REDLINE_IGNORE );
     BOOL bUndo = pDoc->DoesUndo();
     pDoc->DoUndo( FALSE );
 
     // bestimme den Type, ist der erste auf Stack
-    for( SwRedlineData* pCur = pRedlineData; pCur->pNext; )
+    for( pCur = pRedlineData; pCur->pNext; )
         pCur = pCur->pNext;
 
     switch( pCur->eType )
@@ -3338,8 +3340,9 @@ void SwRedline::MoveFromSection()
         USHORT nMyPos = rTbl.GetPos( this );
         ASSERT( this, "this nicht im Array?" );
         register BOOL bBreak = FALSE;
+        USHORT n;
 
-        for( USHORT n = nMyPos+1; !bBreak && n < rTbl.Count(); ++n )
+        for( n = nMyPos+1; !bBreak && n < rTbl.Count(); ++n )
         {
             bBreak = TRUE;
             if( rTbl[ n ]->GetBound(TRUE) == *GetPoint() )
@@ -3496,7 +3499,9 @@ USHORT SwRedline::GetStackCount() const
 
 USHORT SwRedline::GetAuthor( USHORT nPos ) const
 {
-    for( SwRedlineData* pCur = pRedlineData; nPos && pCur->pNext; --nPos )
+    SwRedlineData* pCur;
+
+    for( pCur = pRedlineData; nPos && pCur->pNext; --nPos )
         pCur = pCur->pNext;
     ASSERT( !nPos, "Pos angabe ist zu gross" );
     return pCur->nAuthor;
@@ -3504,7 +3509,9 @@ USHORT SwRedline::GetAuthor( USHORT nPos ) const
 
 const String& SwRedline::GetAuthorString( USHORT nPos ) const
 {
-    for( SwRedlineData* pCur = pRedlineData; nPos && pCur->pNext; --nPos )
+    SwRedlineData* pCur;
+
+    for( pCur = pRedlineData; nPos && pCur->pNext; --nPos )
         pCur = pCur->pNext;
     ASSERT( !nPos, "Pos angabe ist zu gross" );
     return SW_MOD()->GetRedlineAuthor(pCur->nAuthor);
@@ -3512,7 +3519,8 @@ const String& SwRedline::GetAuthorString( USHORT nPos ) const
 
 const DateTime& SwRedline::GetTimeStamp( USHORT nPos ) const
 {
-    for( SwRedlineData* pCur = pRedlineData; nPos && pCur->pNext; --nPos )
+    SwRedlineData* pCur;
+    for( pCur = pRedlineData; nPos && pCur->pNext; --nPos )
         pCur = pCur->pNext;
     ASSERT( !nPos, "Pos angabe ist zu gross" );
     return pCur->aStamp;
@@ -3520,7 +3528,9 @@ const DateTime& SwRedline::GetTimeStamp( USHORT nPos ) const
 
 SwRedlineType SwRedline::GetRealType( USHORT nPos ) const
 {
-    for( SwRedlineData* pCur = pRedlineData; nPos && pCur->pNext; --nPos )
+    SwRedlineData* pCur;
+
+    for( pCur = pRedlineData; nPos && pCur->pNext; --nPos )
         pCur = pCur->pNext;
     ASSERT( !nPos, "Pos angabe ist zu gross" );
     return pCur->eType;
@@ -3528,7 +3538,9 @@ SwRedlineType SwRedline::GetRealType( USHORT nPos ) const
 
 const String& SwRedline::GetComment( USHORT nPos ) const
 {
-    for( SwRedlineData* pCur = pRedlineData; nPos && pCur->pNext; --nPos )
+    SwRedlineData* pCur;
+
+    for( pCur = pRedlineData; nPos && pCur->pNext; --nPos )
         pCur = pCur->pNext;
     ASSERT( !nPos, "Pos angabe ist zu gross" );
     return pCur->sComment;
