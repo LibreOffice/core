@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-01 10:31:40 $
+ *  last change: $Author: ssa $ $Date: 2001-11-06 10:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2136,13 +2136,13 @@ long PopupMenu::ImplCalcHeight( USHORT nEntries ) const
 }
 
 
-static void ImplInitMenuWindow( Window* pWin, BOOL bFont )
+static void ImplInitMenuWindow( Window* pWin, BOOL bFont, BOOL bMenuBar )
 {
     const StyleSettings& rStyleSettings = pWin->GetSettings().GetStyleSettings();
 
     if ( bFont )
         pWin->SetPointFont( rStyleSettings.GetMenuFont() );
-    pWin->SetBackground( Wallpaper( rStyleSettings.GetMenuColor() ) );
+    pWin->SetBackground( Wallpaper( bMenuBar ? rStyleSettings.GetMenuBarColor() : rStyleSettings.GetMenuColor() ) );
     pWin->SetTextColor( rStyleSettings.GetMenuTextColor() );
     pWin->SetTextFillColor();
     pWin->SetLineColor();
@@ -2166,7 +2166,7 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nSt
     bScrollDown         = FALSE;
 
     EnableSaveBackground();
-    ImplInitMenuWindow( this, TRUE );
+    ImplInitMenuWindow( this, TRUE, FALSE );
 
     SetPopupModeEndHdl( LINK( this, MenuFloatingWindow, PopupEnd ) );
 
@@ -2984,7 +2984,7 @@ void MenuFloatingWindow::StateChanged( StateChangedType nType )
 
     if ( ( nType == STATE_CHANGE_CONTROLFOREGROUND ) || ( nType == STATE_CHANGE_CONTROLBACKGROUND ) )
     {
-        ImplInitMenuWindow( this, FALSE );
+        ImplInitMenuWindow( this, FALSE, FALSE );
         Invalidate();
     }
 }
@@ -2998,7 +2998,7 @@ void MenuFloatingWindow::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        ImplInitMenuWindow( this, FALSE );
+        ImplInitMenuWindow( this, FALSE, FALSE );
         Invalidate();
     }
 }
@@ -3052,7 +3052,7 @@ void MenuBarWindow::SetMenu( MenuBar* pMen )
     pMenu = pMen;
     KillActivePopup();
     nHighlightedItem = ITEMPOS_INVALID;
-    ImplInitMenuWindow( this, TRUE );
+    ImplInitMenuWindow( this, TRUE, TRUE );
     if ( pMen )
     {
         aCloser.Show( pMen->HasCloser() );
@@ -3256,7 +3256,7 @@ void MenuBarWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
                 if ( bHighlight )
                     SetFillColor( GetSettings().GetStyleSettings().GetMenuHighlightColor() );
                 else
-                    SetFillColor( GetSettings().GetStyleSettings().GetMenuColor() );
+                    SetFillColor( GetSettings().GetStyleSettings().GetMenuBarColor() );
 
                 DrawRect( Rectangle( Point( nX, 1 ), Size( pData->aSz.Width(), pData->aSz.Height()-2 ) ) );
                 pMenu->ImplPaint( this, 0, 0, pData, bHighlight );
@@ -3495,7 +3495,7 @@ void MenuBarWindow::StateChanged( StateChangedType nType )
     if ( ( nType == STATE_CHANGE_CONTROLFOREGROUND ) ||
          ( nType == STATE_CHANGE_CONTROLBACKGROUND ) )
     {
-        ImplInitMenuWindow( this, FALSE );
+        ImplInitMenuWindow( this, FALSE, TRUE );
         Invalidate();
     }
 }
@@ -3509,7 +3509,7 @@ void MenuBarWindow::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        ImplInitMenuWindow( this, TRUE );
+        ImplInitMenuWindow( this, TRUE, TRUE );
         // Falls sich der Font geaendert hat.
         long nHeight = pMenu->ImplCalcSize( this ).Height();
         SetPosSizePixel( 0, 0, 0, nHeight, WINDOW_POSSIZE_HEIGHT );

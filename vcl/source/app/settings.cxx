@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 18:17:42 $
+ *  last change: $Author: ssa $ $Date: 2001-11-06 10:03:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,6 +502,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maDeactiveTextColor( rData.maDeactiveTextColor ),
     maDeactiveBorderColor( rData.maDeactiveBorderColor ),
     maMenuColor( rData.maMenuColor ),
+    maMenuBarColor( rData.maMenuBarColor ),
     maMenuTextColor( rData.maMenuTextColor ),
     maMenuHighlightColor( rData.maMenuHighlightColor ),
     maMenuHighlightTextColor( rData.maMenuHighlightTextColor ),
@@ -606,6 +607,7 @@ void ImplStyleData::SetStandardStyles()
     maDeactiveTextColor         = Color( COL_LIGHTGRAY );
     maDeactiveBorderColor       = Color( COL_LIGHTGRAY );
     maMenuColor                 = Color( COL_LIGHTGRAY );
+    maMenuBarColor              = Color( COL_LIGHTGRAY );
     maMenuTextColor             = Color( COL_BLACK );
     maMenuHighlightColor        = Color( COL_BLUE );
     maMenuHighlightTextColor    = Color( COL_WHITE );
@@ -700,6 +702,7 @@ void ImplStyleData::SetStandardOS2Styles()
     maDeactiveTextColor         = Color( COL_LIGHTGRAY );
     maDeactiveBorderColor       = Color( COL_LIGHTGRAY );
     maMenuColor                 = Color( COL_LIGHTGRAY );
+    maMenuBarColor              = Color( COL_LIGHTGRAY );
     maMenuTextColor             = Color( COL_BLACK );
     maMenuHighlightColor        = Color( COL_BLUE );
     maMenuHighlightTextColor    = Color( COL_WHITE );
@@ -781,6 +784,7 @@ void ImplStyleData::SetStandardMacStyles()
     maDeactiveTextColor         = Color( COL_GRAY );
     maDeactiveBorderColor       = Color( COL_LIGHTGRAY );
     maMenuColor                 = Color( COL_LIGHTGRAY );
+    maMenuBarColor              = Color( COL_LIGHTGRAY );
     maMenuTextColor             = Color( COL_BLACK );
     maMenuHighlightColor        = Color( COL_BLUE );
     maMenuHighlightTextColor    = Color( COL_WHITE );
@@ -1026,6 +1030,7 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->maDeactiveTextColor       == rSet.mpData->maDeactiveTextColor)        &&
          (mpData->maDeactiveBorderColor     == rSet.mpData->maDeactiveBorderColor)      &&
          (mpData->maMenuColor               == rSet.mpData->maMenuColor)                &&
+         (mpData->maMenuBarColor            == rSet.mpData->maMenuBarColor)             &&
          (mpData->maMenuTextColor           == rSet.mpData->maMenuTextColor)            &&
          (mpData->maMenuHighlightColor      == rSet.mpData->maMenuHighlightColor)       &&
          (mpData->maMenuHighlightTextColor  == rSet.mpData->maMenuHighlightTextColor)   &&

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-02 14:16:43 $
+ *  last change: $Author: ssa $ $Date: 2001-11-06 10:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1914,6 +1914,7 @@ void SalFrame::UpdateSettings( AllSettings& rSettings )
             aStyleSettings.SetFaceColor( aInfo.background );
             aStyleSettings.SetDialogColor( aInfo.background );
             aStyleSettings.SetMenuColor( aInfo.background );
+            aStyleSettings.SetMenuBarColor( aInfo.background );
             if ( aStyleSettings.GetFaceColor() == COL_LIGHTGRAY )
                 aStyleSettings.SetCheckedColor( Color( 0xCC, 0xCC, 0xCC ) );
             else
