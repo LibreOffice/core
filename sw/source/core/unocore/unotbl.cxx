@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-06 13:08:26 $
+ *  last change: $Author: os $ $Date: 2002-05-30 13:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4737,6 +4737,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
         throw uno::RuntimeException();
     else
     {
+        BOOL bSuccess = FALSE;
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
         if(!pTable->IsTblComplex())
         {
@@ -4744,19 +4745,39 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName.ToUpperAscii() );
             if(pTLBox)
             {
-                const SwStartNode* pSttNd = pTLBox->GetSttNd();
-                SwPosition aPos(*pSttNd);
-                SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, sal_True);
-                pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                {
-                    // Die Klammer ist wichtig!
-                    UnoActionContext aAction(pFrmFmt->GetDoc());
-                    pFrmFmt->GetDoc()->DeleteRow(*pUnoCrsr);
-                    delete pUnoCrsr;
-                }
                 // hier muessen die Actions aufgehoben werden
                 UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
+                const SwStartNode* pSttNd = pTLBox->GetSttNd();
+                SwPosition aPos(*pSttNd);
+                // Cursor in die obere linke Zelle des Ranges setzen
+                SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, sal_True);
+                pUnoCrsr->Move( fnMoveForward, fnGoNode );
+                pUnoCrsr->SetRemainInSection( sal_False );
+                String sBLName = lcl_GetCellName(0, (sal_Int16)nIndex + nCount - 1);
+                const SwTableBox* pBLBox = pTable->GetTblBox( sBLName.ToUpperAscii() );
+                if(pBLBox)
+                {
+                    pUnoCrsr->SetMark();
+                    pUnoCrsr->GetPoint()->nNode = *pBLBox->GetSttNd();
+                    pUnoCrsr->Move( fnMoveForward, fnGoNode );
+                    SwUnoTableCrsr* pCrsr = *pUnoCrsr;
+                    pCrsr->MakeBoxSels();
+                    {   // Die Klammer ist wichtig
+                        UnoActionContext aAction(pFrmFmt->GetDoc());
+                        pFrmFmt->GetDoc()->DeleteRow(*pUnoCrsr);
+                        delete pUnoCrsr;
+                        bSuccess = TRUE;
+                    }
+                    // hier muessen die Actions aufgehoben werden
+                    UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
+                }
             }
+        }
+        if(!bSuccess)
+        {
+            uno::RuntimeException aExcept;
+            aExcept.Message = C2U("Illegal arguments");
+            throw aExcept;
         }
     }
 }
@@ -4926,6 +4947,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
         throw uno::RuntimeException();
     else
     {
+        BOOL bSuccess = FALSE;
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
         if(!pTable->IsTblComplex())
         {
@@ -4933,19 +4955,39 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName.ToUpperAscii() );
             if(pTLBox)
             {
-                const SwStartNode* pSttNd = pTLBox->GetSttNd();
-                SwPosition aPos(*pSttNd);
-                SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, sal_True);
-                //TODO: hier wird nur eine Spalte geloescht!
-                pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                {   // Die Klammer ist wichtig
-                    UnoActionContext aAction(pFrmFmt->GetDoc());
-                    pFrmFmt->GetDoc()->DeleteCol(*pUnoCrsr);
-                    delete pUnoCrsr;
-                }
                 // hier muessen die Actions aufgehoben werden
                 UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
+                const SwStartNode* pSttNd = pTLBox->GetSttNd();
+                SwPosition aPos(*pSttNd);
+                // Cursor in die obere linke Zelle des Ranges setzen
+                SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, sal_True);
+                pUnoCrsr->Move( fnMoveForward, fnGoNode );
+                pUnoCrsr->SetRemainInSection( sal_False );
+                String sTRName = lcl_GetCellName((sal_Int16)nIndex + nCount - 1, 0);
+                const SwTableBox* pTRBox = pTable->GetTblBox( sTRName.ToUpperAscii() );
+                if(pTRBox)
+                {
+                    pUnoCrsr->SetMark();
+                    pUnoCrsr->GetPoint()->nNode = *pTRBox->GetSttNd();
+                    pUnoCrsr->Move( fnMoveForward, fnGoNode );
+                    SwUnoTableCrsr* pCrsr = *pUnoCrsr;
+                    pCrsr->MakeBoxSels();
+                    {   // Die Klammer ist wichtig
+                        UnoActionContext aAction(pFrmFmt->GetDoc());
+                        pFrmFmt->GetDoc()->DeleteCol(*pUnoCrsr);
+                        delete pUnoCrsr;
+                        bSuccess = TRUE;
+                    }
+                    // hier muessen die Actions aufgehoben werden
+                    UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
+                }
             }
+        }
+        if(!bSuccess)
+        {
+            uno::RuntimeException aExcept;
+            aExcept.Message = C2U("Illegal arguments");
+            throw aExcept;
         }
     }
 }
