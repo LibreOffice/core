@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-08 13:20:09 $
+ *  last change: $Author: sab $ $Date: 2002-08-13 09:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,6 +313,10 @@ public:
 
     utl::AccessibleRelationSetHelper* GetRelationSet(const ScAddress* pAddress) const;
 
+    ::com::sun::star::uno::Reference
+        < ::drafts::com::sun::star::accessibility::XAccessible >
+        GetAccessibleSpreadsheet();
+
 protected:
     /// Return this object's description.
     virtual ::rtl::OUString SAL_CALL
@@ -345,10 +349,6 @@ public:
     sal_uInt16 getVisibleTable() const; // use it in ScChildrenShapes
 
 private:
-    ::com::sun::star::uno::Reference
-        < ::drafts::com::sun::star::accessibility::XAccessible >
-        GetAccessibleSpreadsheet();
-
     void FreeAccessibleSpreadsheet();
 
     sal_Bool IsTableSelected() const;
