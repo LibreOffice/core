@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:56:35 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:41:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -742,9 +742,11 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
                 {
                     if( IsCenter() )
                     {
+                        /* #110778# a / 2 * 2 == a is not a tautology */
+                        KSHORT nTmpOffset = nOffset;
                         nOffset /= 2;
                         if( nOffset < nMinDist )
-                            nOffset = 2 * nOffset - nMinDist;
+                            nOffset = nTmpOffset - nMinDist;
                     }
                     else
                         nOffset -= nMinDist;
