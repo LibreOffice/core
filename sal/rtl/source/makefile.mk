@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 16:46:39 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 18:38:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -126,6 +126,23 @@ OBJFILES=   $(OBJ)$/alloc.obj       \
             $(OBJ)$/logfile.obj     \
             $(OBJ)$/tres.obj        \
             $(OBJ)$/math.obj
+
+# --- Extra objs ----------------------------------------------------
+
+.IF "$(OS)"=="LINUX"
+
+#
+# This part builds a second version of alloc.c, with 
+# FORCE_SYSALLOC defined. Is later used in util/makefile.mk
+# to build a tiny replacement lib to LD_PRELOAD into the 
+# office, enabling e.g. proper valgrinding.
+#
+
+SECOND_BUILD=SYSALLOC
+SYSALLOC_SLOFILES=	$(SLO)$/alloc.obj
+SYSALLOCCDEFS+=-DFORCE_SYSALLOC -DOSL_DEBUG_LEVEL=0
+
+.ENDIF # .IF "$(OS)"=="LINUX"
 
 #.ENDIF
 
