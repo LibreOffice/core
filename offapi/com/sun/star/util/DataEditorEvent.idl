@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataEditorEvent.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:17 $
+ *  last change: $Author: mi $ $Date: 2001-11-15 17:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
  module com {  module sun {  module star {  module util {
 
 // DocMerge from xml: struct com::sun::star::util::DataEditorEvent
-/** specifies an event broadcasted by an <type>XEventEditor</type>.
+/** specifies an event broadcast by an <type>XEventEditor</type>.
  */
 struct DataEditorEvent: com::sun::star::lang::EventObject
 {
@@ -91,6 +91,9 @@ struct DataEditorEvent: com::sun::star::lang::EventObject
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:45:17  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:19  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextSearch.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-05 08:51:07 $
+ *  last change: $Author: mi $ $Date: 2001-11-15 17:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,18 +97,26 @@ constants SearchFlags
 
     /// Flag for "regular expression" search / interpret as extended regular expression
     const long  REG_EXTENDED        = 0x00000100;
-    /// Flag for "regular expression" search / No replace means ie avoid sub regular expresions return true/false to match
+    /** Flag for "regular expression" search / No replace, i.e., avoid sub regular
+         expresions, return true/false to match
+
+<!-- JRH: Check this for sense of the expression. -->
+    */
     const long  REG_NOSUB       = 0x00000200;
 
     /// Flag for "regular expression" search / Special new  line treatment
     const long  REG_NEWLINE     = 0x00000400;
 
-    /** A NEWLINE character in string will not be matched by  a period outside  bracket expression or by any form of a non matching list.
-        A circumflex (^) in pattern when used to specify expression anhoring will match the zero
-        length string immediately after a newline in string, regardless of the setting of REG_NOTBOL
-        A dollar-sign ($) in pattern when used to specify expression anchoring, will match zero-length
-        string immediatlely before a new line in string regardless of the setting of REG_NOTEOL
-    */
+    /** A NEWLINE character in string will not be matched by  a period outside bracket
+        expression or by any form of a non matching list.
+        A circumflex (^) in pattern when used to specify expression anchoring
+<!-- JRH: anhoring to anchoring.  -->
+        will match the zero length string immediately after a newline in string,
+        regardless of the setting of REG_NOTBOL
+        A dollar-sign ($) in pattern when used to specify expression anchoring,
+        will match zero-length string immediately before a new line in string,
+        regardless of the setting of REG_NOTEOL
+*/
     const long  REG_NOT_BEGINOFLINE = 0x00000800;
 
     /** The first character in the string is not the beginning of the line therefore ^  will not
@@ -136,16 +144,19 @@ struct SearchOptions  {
     /// the search text
     string          searchString;
 
-    /// the replace text (is for optional replacing - SearchOption is only the data container for it)
+    /** the replace text
+    (is for optional replacing - SearchOption is only the data container for it)*/
     string          replaceString;
 
     /// this is the language for case insensitive search
     ::com::sun::star::lang::Locale  Locale;
 
-    /// this many characters can be different between the found and search word in a "Weight Levenshtein-Distance"
+    /** this many characters can be different between the found and search word
+    in a "Weight Levenshtein-Distance"*/
     long            changedChars;
 
-    /// this many characters can be missed in the found word in a "Weight Levenshtein-Distance"
+    /** this many characters can be missed in the found word
+    in a "Weight Levenshtein-Distance"*/
     long            deletedChars;
 
     /// this many characters can be additional in the found word in a "Weight Levenshtein-Distance"
@@ -161,18 +172,19 @@ struct SearchOptions  {
 
 struct SearchResult  {
     //-------------------------------------------------------------------------
-    /** Number of subexpressions, if it is 0 , then no match found, this value is 1 for ABSOLUTE and APPROXIMATE match
-        The start and endOffset are always depends on the search direction.
-        By example:
-        if you search "X" in the text "-X-" the offset are:
-         for forward:   start = 1, end = 2
-         for backward:  start = 1, end = 0
-          The startOffset is always inclusive, the endOffset allways exclusive
+    /** Number of subexpressions,
+    if it is 0, then no match found; this value is 1 for ABSOLUTE and APPROXIMATE match.
+    The start and endOffset are always dependent on the search direction.
+    For example:
+    if you search "X" in the text "-X-" the offset are:
+        for forward:    start = 1, end = 2
+        for backward:   start = 1, end = 0
+    The startOffset is always inclusive, the endOffset allways exclusive
 
-        For regular expressions it can be greater than 1.
-        If the value is 1, startoffset[0] and endoffset[0] points to the matching sub string
-        if value is > 1, still startoffset[0] and endoffset[0] points to the matching substring for whole regular expression
-        startoffset[i] and endoffset[i] points to the matching substring of i th matching   substring.,
+    For regular expressions it can be greater than 1.
+    If the value is 1, startoffset[0] and endoffset[0] points to the matching sub string
+    if value is > 1, still startoffset[0] and endoffset[0] points to the matching substring for whole regular expression
+    startoffset[i] and endoffset[i] points to the matching substring of i th matching substring.
     */
     long subRegExpressions;
     sequence<long> startOffset;     // inclusive
@@ -190,14 +202,14 @@ interface XTextSearch : com::sun::star::uno::XInterface
     void setOptions ([in] SearchOptions options);
     //-------------------------------------------------------------------------
     /** search forward in the searchStr, starts at startPos and ends by endpos.
-        The result is returnt in the SearchResult.
+        The result is returned in the SearchResult.
 
     */
     SearchResult  searchForward  ([in] string searchStr, [in] long startPos, [in] long endPos );
     //-------------------------------------------------------------------------
     /** search backward in the searchStr, starts at startPos and ends by endpos.
-        The endpos must be lower then the startpos, because the function search backward!
-        The result is returnt in the SearchResult.
+        The endpos must be lower then the startpos, because the function searches backward!
+        The result is returned in the SearchResult.
 
     */
     SearchResult  searchBackward ([in] string searchStr, [in] long startPos, [in] long endPos );

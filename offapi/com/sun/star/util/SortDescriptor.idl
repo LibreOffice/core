@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SortDescriptor.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-03-14 16:31:44 $
+ *  last change: $Author: mi $ $Date: 2001-11-15 17:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ service SortDescriptor
     [property] com::sun::star::lang::Locale CollatorLocale;
 
      //-------------------------------------------------------------------------
-    /** specifies the algorith for the compare operator (collator).
+    /** specifies the algorithm for the compare operator (collator).
 
         @see com::sun::star::i18n::XCollator
      */
@@ -139,6 +139,9 @@ service SortDescriptor
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/14 16:31:44  mi
+    collation properties added / all global props now in util::SortDescriptor
+
     Revision 1.5  2000/12/21 08:35:27  mi
     @see interface/service/... ident -> @see ident - for new docu generator
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextSearch.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-25 19:34:38 $
+ *  last change: $Author: mi $ $Date: 2001-11-15 17:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 //=============================================================================
 
 //--------------------------------------------------------------------------
-/** search a string with a defined algorythm in another string.
-    Its able to search forward or backward in the string
+/** search a string with a defined algorithm in another string.
+    It is able to search forward or backward in the string
 */
 service TextSearch
 {

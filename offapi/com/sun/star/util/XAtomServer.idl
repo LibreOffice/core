@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAtomServer.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:51 $
+ *  last change: $Author: mi $ $Date: 2001-11-15 17:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,24 +83,24 @@ module star
 module util
 {
 
-/** an interface to map between strings and ids
+/** an interface to map between <i>string</i>s and <i>id</i>s
 
    <p>a note on atoms:<br>
-   atoms are abbreviations for strings
-   when a string gets registered it is assigned a numeric id
+   Atoms are abbreviations for strings.
+   When a string gets registered, it is assigned a numeric id
    so that said string can always be referred to by this id.
-   this way strings have to be transported only once over remote connections.
-   valid ids are (in this implementation) non zero signed 32 bit values
-   an atom of 0 means that the string in question is not registered</p>
+   This way strings have to be transported only once over remote connections.
+   Valid ids are (in this implementation) non zero, signed 32 bit values.
+   An atom of 0 means that the string in question is not registered</p>
 
-   <p>additionally there is the abstraction of atom class:<br>
-   atoms are grouped into classes, so that an id can be assigned
-   to multiple strings depending on the class context. The main
-   advantage of this is that this way atoms in one class may be kept
+   <p>Additionally there is the abstraction of atom class:<br>
+   Atoms are grouped into classes, so that an id can be assigned
+   to multiple strings, depending on the class context. The main
+   advantage of this is that atoms in one class may be kept
    to small numbers, so that bandwidth can be reduced by sending
    the atoms only as 16 bit values. Note that it is up to the user in this
    case to handle overflows.</p>
- */
+*/
 
 interface XAtomServer : com::sun::star::uno::XInterface
 {
@@ -110,7 +110,7 @@ interface XAtomServer : com::sun::star::uno::XInterface
             which class to return
 
         @returns
-            the discriptions for all atoms of class <code>atomClass</code>
+            the descriptions for all atoms of class <code>atomClass</code>
     */
     sequence< AtomDescription > getClass( [in] long atomClass );
     /** returns mutltiple atom classes
@@ -119,10 +119,10 @@ interface XAtomServer : com::sun::star::uno::XInterface
             which classes to return
 
         @returns
-            the discriptions for all atoms of the requested classes
+            the descriptions for all atoms of the requested classes
     */
     sequence< sequence< AtomDescription > > getClasses( [in] sequence< long > atomClasses );
-    /** returns a the strings for an arbitrary amount of atoms of multiple classes
+    /** returns the strings for an arbitrary amount of atoms of multiple classes
 
         @param atoms
             describes which strings to return
@@ -156,8 +156,9 @@ interface XAtomServer : com::sun::star::uno::XInterface
         @param description
             the string in question
 
-        @param create if true a new atom will be created for an unknown string
-        else the invalid atom (0) will be returned for an unknown string
+        @param create
+            if true a new atom will be created for an unknown string
+            else the invalid atom (0) will be returned for an unknown string
 
         @returns
             the atom for the string <code>description</code>
