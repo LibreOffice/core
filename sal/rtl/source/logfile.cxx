@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logfile.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-08-10 08:59:48 $
+ *  last change: $Author: jbu $ $Date: 2001-09-26 16:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,9 +178,16 @@ extern "C" void SAL_CALL rtl_logfile_trace  ( const char *pszFormat, ... )
                 //  Construct name of log file and open the file.
                 OUStringBuffer buf( 128 );
                 buf.append( value );
-                buf.appendAscii( "_" );
-                buf.append( (sal_Int32) aProcessId );
-                buf.appendAscii( ".log" );
+
+                // if the filename ends with .nopid, the incoming filename is not modified
+                if( value.getLength() < 6 /* ".nopid" */ ||
+                    rtl_ustr_ascii_compare_WithLength(
+                        value.getStr() + (value.getLength()-6) , 6 , ".nopid" ) )
+                {
+                    buf.appendAscii( "_" );
+                    buf.append( (sal_Int32) aProcessId );
+                    buf.appendAscii( ".log" );
+                }
 
                 OUString o = getFileUrl( buf.makeStringAndClear() );
                 oslFileError e = osl_openFile(
