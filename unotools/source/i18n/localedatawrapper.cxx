@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: er $ $Date: 2001-11-12 18:52:39 $
+ *  last change: $Author: er $ $Date: 2001-12-05 17:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,7 +725,10 @@ void LocaleDataWrapper::getCurrSymbolsImpl()
     }
     if ( nElem >= nCnt )
     {
-        DBG_ERRORFILE( AppendLocaleInfo( ByteString( RTL_CONSTASCII_STRINGPARAM( "getCurrSymbolsImpl: no default currency" ) ) ).GetBuffer() );
+#ifndef PRODUCT
+        ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "getCurrSymbolsImpl: no default currency" ) );
+        DBG_ERRORFILE( AppendLocaleInfo( aMsg ).GetBuffer() );
+#endif
         nElem = 0;
         if ( nElem >= nCnt )
         {
@@ -831,7 +834,10 @@ void LocaleDataWrapper::getCurrFormatsImpl()
     sal_Int32 nCnt = aFormatSeq.getLength();
     if ( !nCnt )
     {   // bad luck
-        DBG_ERRORFILE( AppendLocaleInfo( ByteString( RTL_CONSTASCII_STRINGPARAM( "getCurrFormatsImpl: no currency formats" ) ) ).GetBuffer() );
+#ifndef PRODUCT
+        ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "getCurrFormatsImpl: no currency formats" ) );
+        DBG_ERRORFILE( AppendLocaleInfo( aMsg ).GetBuffer() );
+#endif
         nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;
         return ;
     }
@@ -878,7 +884,8 @@ void LocaleDataWrapper::getCurrFormatsImpl()
 #ifndef PRODUCT
     if ( nNum == STRING_NOTFOUND || nSym == STRING_NOTFOUND )
     {
-        DBG_ERRORFILE( AppendLocaleInfo( ByteString( RTL_CONSTASCII_STRINGPARAM( "getCurrFormatsImpl: CurrPositiveFormat?" ) ) ).GetBuffer() );
+        ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "getCurrFormatsImpl: CurrPositiveFormat?" ) );
+        DBG_ERRORFILE( AppendLocaleInfo( aMsg ).GetBuffer() );
     }
 #endif
     if ( nBlank == STRING_NOTFOUND )
@@ -908,7 +915,8 @@ void LocaleDataWrapper::getCurrFormatsImpl()
         if ( nNum == STRING_NOTFOUND || nSym == STRING_NOTFOUND
           || (nPar == STRING_NOTFOUND && nSign == STRING_NOTFOUND) )
         {
-            DBG_ERRORFILE( AppendLocaleInfo( ByteString( RTL_CONSTASCII_STRINGPARAM( "getCurrFormatsImpl: CurrNegativeFormat?" ) ) ).GetBuffer() );
+            ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "getCurrFormatsImpl: CurrNegativeFormat?" ) );
+            DBG_ERRORFILE( AppendLocaleInfo( aMsg ).GetBuffer() );
         }
 #endif
         if ( nBlank == STRING_NOTFOUND )
@@ -1041,7 +1049,10 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const String& rCode )
         }
         if ( nDay == STRING_NOTFOUND || nMonth == STRING_NOTFOUND || nYear == STRING_NOTFOUND )
         {
-            DBG_ERRORFILE( AppendLocaleInfo( ByteString( RTL_CONSTASCII_STRINGPARAM( "scanDateFormat: not all DMY present" ) ) ).GetBuffer() );
+#ifndef PRODUCT
+            ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "scanDateFormat: not all DMY present" ) );
+            DBG_ERRORFILE( AppendLocaleInfo( aMsg ).GetBuffer() );
+#endif
             if ( nDay == STRING_NOTFOUND )
                 nDay = rCode.Len();
             if ( nMonth == STRING_NOTFOUND )
@@ -1059,7 +1070,10 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const String& rCode )
         return YMD;
     else
     {
-        DBG_ERRORFILE( AppendLocaleInfo( ByteString( RTL_CONSTASCII_STRINGPARAM( "scanDateFormat: no magic applyable" ) ) ).GetBuffer() );
+#ifndef PRODUCT
+        ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "scanDateFormat: no magic applyable" ) );
+        DBG_ERRORFILE( AppendLocaleInfo( aMsg ).GetBuffer() );
+#endif
         return DMY;
     }
 }
@@ -1073,7 +1087,10 @@ void LocaleDataWrapper::getDateFormatsImpl()
     sal_Int32 nCnt = aFormatSeq.getLength();
     if ( !nCnt )
     {   // bad luck
-        DBG_ERRORFILE( AppendLocaleInfo( ByteString( RTL_CONSTASCII_STRINGPARAM( "getDateFormatsImpl: no date formats" ) ) ).GetBuffer() );
+#ifndef PRODUCT
+        ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "getDateFormatsImpl: no date formats" ) );
+        DBG_ERRORFILE( AppendLocaleInfo( aMsg ).GetBuffer() );
+#endif
         nDateFormat = nLongDateFormat = DMY;
         return ;
     }
@@ -1110,7 +1127,10 @@ void LocaleDataWrapper::getDateFormatsImpl()
     }
     if ( nDef == -1 )
     {
-        DBG_ERRORFILE( AppendLocaleInfo( ByteString( RTL_CONSTASCII_STRINGPARAM( "getDateFormatsImpl: no default" ) ) ).GetBuffer() );
+#ifndef PRODUCT
+        ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "getDateFormatsImpl: no default" ) );
+        DBG_ERRORFILE( AppendLocaleInfo( aMsg ).GetBuffer() );
+#endif
         if ( nMedium != -1 )
             nDef = nMedium;
         else if ( nLong != -1 )
