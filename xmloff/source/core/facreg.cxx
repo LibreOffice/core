@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 14:27:12 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,9 @@ SERVICE( SchXMLExport );
 SERVICE( SchXMLExport_Styles );
 SERVICE( SchXMLExport_Content );
 
+// version list import/export
+SERVICE( XMLVersionListPersistence );
+
 // meta export
 SERVICE( XMLMetaExportComponent );
 
@@ -296,6 +299,8 @@ XMLOFF_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, 
             WRITEINFO( XMLMetaImportComponent );
             WRITEINFO( XMLMetaExportComponent );
 
+            WRITEINFO( XMLVersionListPersistence );
+
             // meta OOo
             WRITEINFO( XMLMetaExportOOO );
 
@@ -400,6 +405,8 @@ XMLOFF_DLLPUBLIC void * SAL_CALL component_getFactory( const sal_Char * pImplNam
         // meta import/export
         else SINGLEFACTORY( XMLMetaExportComponent )
         else SINGLEFACTORY( XMLMetaImportComponent )
+
+        else SINGLEFACTORY( XMLVersionListPersistence )
 
         // meta import/export OOo
         else SINGLEFACTORY( XMLMetaExportOOO )
