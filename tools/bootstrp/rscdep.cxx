@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdep.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:30:17 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 15:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ main( int argc, char **argv )
             String aName( pOutputFileName, gsl_getSystemTextEncoding());
             USHORT nPos = 0;
             DirEntry aDest( aName );
-            aSrsBaseName = aDest.GetBase();
+            aSrsBaseName = DirEntry(aDest.GetBase()).GetExtension();
             //break;
         }
         if (aBuf[0] == '-' &&  aBuf[1] == 'i' )
@@ -274,7 +274,7 @@ main( int argc, char **argv )
     aFileName += aCwd;
     aFileName += String(".", gsl_getSystemTextEncoding());
     aFileName += aSrsBaseName;
-    aFileName += String(".dpr", gsl_getSystemTextEncoding());
+    aFileName += String(".dprr", gsl_getSystemTextEncoding());
     //fprintf( stderr, "OutFileName : %s \n",aFileName.GetStr());
     aOutStream.Open( aFileName, STREAM_WRITE );
 
