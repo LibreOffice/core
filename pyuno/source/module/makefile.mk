@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 15:00:47 $
+#   last change: $Author: hr $ $Date: 2004-02-02 19:29:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -144,6 +144,8 @@ $(PYUNO_MODULE) : $(SLO)$/pyuno_dlopenwrapper.obj
     ld -G -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o
 .ELIF "$(OS)" == "FREEBSD"
     ld -shared -o $@ $(SLO)$/pyuno_dlopenwrapper.o
+.ELIF "$(OS)" == "NETBSD"
+    $(LINK) $(LINKFLAGSSHLCUI) -o $@ $(SLO)$/pyuno_dlopenwrapper.o
 .ELIF "$(OS)" == "MACOSX"
     $(CC) -dynamiclib -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o
 .ENDIF
