@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-24 16:39:49 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:39:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,7 @@ String RID_STR_FONT
     Text[ japanese ] = "•¶š—ñ";
     Text[ chinese_traditional ] = "¦r¤¸";
     Text[ greek ] = "Óåô ÷áñáêôŞñùí";
-    Text[ korean ] = "¹®ÀÚ ¼¼Æ®";
+    Text[ korean ] = "¹®ÀÚÁıÇÕ";
     Text[ arabic ] = "ãÌãæÚÉ ÃÍÑİ";
     Text[ turkish ] = "Karakter kümesi";
     Text[ language_user1 ] = " ";
@@ -392,7 +392,7 @@ String RID_STR_HSCROLL
     Text[ japanese ] = "…•½‚È½¸Û°ÙÊŞ°";
     Text[ chinese_traditional ] = "¤ô¥­¦¡¨÷¶b";
     Text[ greek ] = "Ïñéæüíôéá ãñáììŞ êıëéóçò";
-    Text[ korean ] = "¼öÆò ½ºÅ©·Ñ ¸·´ë";
+    Text[ korean ] = "¼öÆò ½ºÅ©·Ñ¹Ù";
     Text[ arabic ] = "ÔÑíØ ÊÍÑíß ÇáÕİÍÉ ÃİŞíÇğ";
     Text[ turkish ] = "Yatay kaydırma çubuğu";
     Text[ language_user1 ] = " ";
@@ -416,7 +416,7 @@ String RID_STR_VSCROLL
     Text[ japanese ] = "‚’¼‚È½¸Û°ÙÊŞ°";
     Text[ chinese_traditional ] = "««ª½¤è¦V¨÷¶b";
     Text[ greek ] = "Êáôáêüñõöç ãñáììŞ êıëéóçò";
-    Text[ korean ] = "¼öÁ÷ ½ºÅ©·Ñ ¸·´ë";
+    Text[ korean ] = "¼öÁ÷ ½ºÅ©·Ñ¹Ù";
     Text[ arabic ] = "ÔÑíØ ÊÍÑíß ÇáÕİÍÉ ÑÃÓíÇğ";
     Text[ turkish ] = "Dikey kaydırma çubuğu";
     Text[ language_user1 ] = " ";
@@ -821,7 +821,7 @@ String RID_STR_DATASOURCE
     Text[ polish ] = "ród³o danych";
     Text[ portuguese_brazilian ] = "Datenbank";
     Text[ japanese ] = "ÃŞ°ÀÍŞ°½";
-    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º";
+    Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º";
     Text[ chinese_simplified ] = "Êı¾İÔ´";
     Text[ chinese_traditional ] = "¸ê®Æ®w·½";
     Text[ turkish ] = "Veritabanı";
@@ -2667,7 +2667,7 @@ String RID_STR_LISTINDEX
     Text[ japanese ] = "Ø½Ä‚Ì²İÃŞ¯¸½";
     Text[ chinese_traditional ] = "²M³æ¯Á¤Ş";
     Text[ greek ] = "ÅõñåôŞñéï ëßóôáò";
-    Text[ korean ] = "¸ñ·Ï ÀÎµ¦½º";
+    Text[ korean ] = "¸ñ·Ï »öÀÎ";
     Text[ arabic ] = "İåÑÓ ÇáŞÇÆãÉ";
     Text[ turkish ] = "Liste dizini";
     Text[ language_user1 ] = " ";
@@ -5317,7 +5317,7 @@ String RID_STR_EVT_UPDATECANCELED
     Text[ russian ] = "Îáíîâëåíèå îòìåíåíî";
     Text[ polish ] = "Aktualizacja zosta³a anulowana";
     Text[ japanese ] = "XV‚Ì’†~";
-    Text[ chinese_traditional ] = "¤w¸g¤¤Â_§ó·s";
+    Text[ chinese_traditional ] = "¤w¸g¤¤Â_¤É¯Å";
     Text[ greek ] = "Áêıñùóç åíçìİñùóçò";
     Text[ korean ] = "¾÷Å×ÀÌÆ® Ãë¼ÒµÊ";
     Text[ arabic ] = "Êã ŞØÚ ÚãáíÉ ÇáÊÍÏíË";
