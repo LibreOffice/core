@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityenvironment_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mmi $ $Date: 2004-08-02 03:32:01 $
+ *  last change: $Author: kz $ $Date: 2004-09-02 14:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,9 @@
 #include "Windows.h"
 #include "WinCrypt.h"
 
-#include "xmlsec/xmlsec.h"
-#include "xmlsec/keysmngr.h"
-#include "xmlsec/crypto.h"
+#include <xmlsec/xmlsec.h>
+#include <xmlsec/keysmngr.h>
+#include <xmlsec/crypto.h>
 #include <xmlsec/base64.h>
 
 #include <xmlsecurity/biginteger.hxx>

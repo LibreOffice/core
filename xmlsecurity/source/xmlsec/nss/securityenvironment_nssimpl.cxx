@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityenvironment_nssimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mmi $ $Date: 2004-08-05 06:36:33 $
+ *  last change: $Author: kz $ $Date: 2004-09-02 14:16:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,11 +83,11 @@
 #include "secerr.h"
 #include "limits.h"
 
-#include "xmlsec/xmlsec.h"
-#include "xmlsec/keysmngr.h"
-#include "xmlsec/crypto.h"
+#include <xmlsec/xmlsec.h>
+#include <xmlsec/keysmngr.h>
+#include <xmlsec/crypto.h>
 #include <xmlsec/base64.h>
-#include "xmlsec/strings.h"
+#include <xmlsec/strings.h>
 
 #include <tools/string.hxx>
 
