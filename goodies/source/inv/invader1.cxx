@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invader1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:08:37 $
+ *  last change: $Author: hr $ $Date: 2005-02-11 19:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,7 @@ void MyWindow::RandomLevel()
         for(long i=0; i<nPos ;i++)
         {
 
-            int nRan = rand() / 200;
+            int nRan = rand() % 40;
 
             if(nRan < 3)
                 pGegner->InsertGegner(GEGNER5,ranpos[i*2+1],ranpos[i*2+2]);
