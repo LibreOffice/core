@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-01 21:24:49 $
+ *  last change: $Author: obo $ $Date: 2001-11-07 21:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1332,7 +1332,7 @@ Resource RID_UUI_ERRHDL
         Text[ finnish ] = "Volume $(ARG1) is not ready; please insert a storage medium";
         Text[ italian ] = "Il drive $(ARG1) non � pronto; inserite un supporto dati";
         Text[ danish ] = "Volume $(ARG1) is not ready; please insert a storage medium";
-        Text[ swedish ] = "Enheten $(ARG1) �r inte redo; l�gg in ett lagringsmedium";
+        Text[ swedish ] = "Enhet $(ARG1) �r inte redo; l�gg in ett lagringsmedium";
         Text[ polish ] = "Nap�d $(ARG1) nie jest gotowy; nale�y wsun�� no�nik danych";
         Text[ portuguese_brazilian ] = "Volume $(ARG1) is not ready; please insert a storage medium";
         Text[ japanese ] = "ﾄﾞﾗｲﾌﾞ $(ARG1) の準備ができていません。記憶媒体を入れてください。";
@@ -1396,6 +1396,7 @@ Resource RID_UUI_ERRHDL
         Text[ catalan ] = "The object could not be created in directory $(ARG2)";
     };
 };
+
 
 
 
