@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:04 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:28:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@
 #include "excdefs.hxx"
 #endif
 
+
 class SfxItemSet;
 class SvStream;
 
@@ -152,8 +153,22 @@ struct ExcelChartData
                             ~ExcelChartData();
 };
 
+class OutlineDataBuffer
+{
+private:
+    OutlineBuffer*                      pColOutlineBuff;
+    OutlineBuffer*                      pRowOutlineBuff;
+    ColRowSettings*                     pColRowBuff;
+    UINT16 nTab;
 
+public:
+    OutlineDataBuffer(RootData& rRootData, UINT16 nTab);
 
+    inline ColRowSettings* GetColRowBuff() const { return pColRowBuff ; }
+    inline OutlineBuffer* GetColOutline()  const { return pColOutlineBuff; }
+    inline OutlineBuffer* GetRowOutline()  const { return pRowOutlineBuff; }
+    void Apply(ScDocument* pD);
+};
 
 class ImportExcel : private XclImpRootData, public ImportTyp, public XclImpRoot
 {
@@ -178,9 +193,12 @@ protected:
 
     SfxItemSet*             pStyleSheetItemSet; // aktuelle Seitenvorlage
 
-    OutlineBuffer           aColOutlineBuff;    // temporaere Puffer fuer Outline-
-    OutlineBuffer           aRowOutlineBuff;    //  Angabe
+    OutlineBuffer*          pColOutlineBuff;
+    OutlineBuffer*          pRowOutlineBuff;
     ColRowSettings*         pColRowBuff;        // Col/Row-Einstellungen 1 Tabelle
+
+    typedef ScfDelList< OutlineDataBuffer >        OutlineListBuffer;
+    OutlineListBuffer*      pOutlineListBuffer;
 
     UINT16                  nIxfeIndex;         // merkt sich Angabe im IXFE-Record
     UINT16                  nLastXF;            // letzter XF in Formula-Record
@@ -341,7 +359,6 @@ protected:
                                 BYTE nFlag, BOOL bShrFmla );
                                             //      -> excform.cxx
 
-    void                    ResetBof( void );
     void                    EndSheet( void );
     void                    NeueTabelle( void );
     const ScTokenArray*     ErrorToFormula( BYTE bErrOrVal, BYTE nError,
