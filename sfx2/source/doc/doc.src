@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:43:43 $
+ *  last change: $Author: kz $ $Date: 2000-10-09 06:53:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ QueryBox MSG_QUERY_LOAD_TEMPLATE
     MESSAGE [ English ] = "Die Formatvorlagen dieses Dokuments stimmen nicht mit Ihren aktuellen Vorlagen ьberein. Sollen Ihre aktuellen Vorlagen auf dieses Dokument angewendet werden?" ;
     MESSAGE[ english_us ] = "The Styles in this document do not match your current Styles. Should your current Styles be applied to this document?";
     MESSAGE[ portuguese ] = "Os estilos de formato deste documento nгo coincidem com os estilos actuais. Aplicar os seus estilos actuais a este documento?";
-    MESSAGE[ russian ] = "Стиль формата этого документа не совпадает с текущим стилем.\nПрименить текущий стиль к этому документу?";
+    MESSAGE[ russian ] = "Стили формата этого документа не совпадают с Вашими текущими стилями.\nПрименить Ваши текущие стили к этому документу?";
     MESSAGE[ dutch ] = "De sjablonen bij dit document komen niet overeen met uw actuele sjablonen. Wilt u dat uw actuele sjablonen op dit documentworden toegepast?";
     MESSAGE[ french ] = "Les styles de format utilisйs dans ce document ne concordent pas avec les styles actifs.\nSouhaitez-vous appliquer les styles actifs dans ce document ?";
     MESSAGE[ spanish ] = "Los estilos de este documento no coinciden con sus estilos actuales.\nїDesea aplicar sus estilos actuales a este documento?";
