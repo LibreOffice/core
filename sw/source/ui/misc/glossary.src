@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:26:07 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 22:35:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -958,7 +958,7 @@ String STR_GLOSSARY
     Text [ finnish ] = "Textblock : " ;
     Text [ english_us ] = "AutoText : " ;
     Text[ chinese_simplified ] = "ґКМх: ";
-    Text[ russian ] = "Текстовый блок :  ";
+    Text[ russian ] = "Автотекст : ";
     Text[ polish ] = "Blok tekstu :  ";
     Text[ japanese ] = "Г·ЅДМЮЫЇё: ";
     Text[ chinese_traditional ] = "¶µҐШЎG ";
@@ -1169,7 +1169,7 @@ String STR_SAVE_GLOSSARY
     Text[ spanish ] = "Guardar mуdulo de texto";
     Text[ english_us ] = "Save AutoText";
     Text[ chinese_simplified ] = "ґжЕМґКМх";
-    Text[ russian ] = "Сохранить текстовый блок";
+    Text[ russian ] = "Сохранить автотекст";
     Text[ polish ] = "Zapisz blok tekstu";
     Text[ japanese ] = "Г·ЅДМЮЫЇё‚М•Ы‘¶";
     Text[ chinese_traditional ] = "Аx¦s¶µҐШ";
@@ -1186,7 +1186,7 @@ InfoBox MSG_NO_GLOSSARIES
     MESSAGE [ ENGLISH ] = "There are no textblocks in this file." ;
     MESSAGE[ english_us ] = "There is no AutoText in this file.";
     MESSAGE[ portuguese ] = "Este ficheiro nгo contйm mуdulos de texto.";
-    MESSAGE[ russian ] = "Этот файл не содержит элементов текста.";
+    MESSAGE[ russian ] = "Этот файл не содержит автотекста.";
     MESSAGE[ greek ] = "Фп бсчеЯп бхфь ден ресйЭчей фмЮмбфб кеймЭнпх.";
     MESSAGE[ dutch ] = "Dit bestand bevat geen tekstbouwstenen";
     MESSAGE[ french ] = "Ce fichier ne contient aucun module de texte.";
