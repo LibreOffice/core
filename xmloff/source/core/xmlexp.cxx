@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 17:45:40 $
+ *  last change: $Author: mtg $ $Date: 2001-02-09 15:37:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,14 +447,12 @@ void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey, const sal_Char *pName,
                              sCDATA, rValue );
 }
 
-#ifdef USED
 void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey, const OUString& rName,
                               const OUString& rValue )
 {
     pAttrList->AddAttribute( pNamespaceMap->GetQNameByKey( nPrefixKey, rName ),
                              sCDATA, rValue );
 }
-#endif
 
 void SvXMLExport::AddAttributeList( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
