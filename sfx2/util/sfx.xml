@@ -21,13 +21,14 @@
         <author> Mathias Bauer </author>
         <name> com.sun.star.comp.office.FrameLoader </name>
         <description>
-            FrameLoader.
+            Used to detect (means a deep detection) of content formats
+            and to load it into a frame synchronously.
         </description>
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
         <status value="final"/>
-        <supported-service> com.sun.star.frame.ExtendedFilterDetect </supported-service>
-        <supported-service> com.sun.star.frame.FrameLoader </supported-service>
+        <supported-service> com.sun.star.document.ExtendedTypeDetection </supported-service>
+        <supported-service> com.sun.star.frame.SynchronousFrameLoader </supported-service>
     </component-description>
 
     <component-description>
@@ -39,7 +40,7 @@
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
         <status value="final"/>
-        <supported-service> com.sun.star.frame.DispatchProvider </supported-service>
+        <supported-service> com.sun.star.frame.ProtocolHandler </supported-service>
     </component-description>
 
     <component-description>
@@ -51,7 +52,7 @@
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
         <status value="final"/>
-        <supported-service> com.sun.star.frame.FrameLoader </supported-service>
+        <supported-service> com.sun.star.frame.ProtocolHandler </supported-service>
     </component-description>
 
     <component-description>

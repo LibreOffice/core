@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-06 12:43:40 $
+ *  last change: $Author: as $ $Date: 2002-09-09 11:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1622,9 +1622,6 @@ Sequence< Reference < XDispatch > > SAL_CALL SfxAppDispatchProvider::queryDispat
 
 // -----------------------------------------------------------------------
 
-#define IMPLEMENTATION_NAME "com.sun.comp.jsimport.IchitaroImportFilter"
-#define SERVICE_NAME        "com.sun.star.document.ImportFilter"
-
 extern "C" {
 
 void SAL_CALL component_getImplementationEnvironment(   const   sal_Char**          ppEnvironmentTypeName   ,
@@ -1645,14 +1642,16 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     Reference< XRegistryKey > xNewKey;
     Reference< XRegistryKey > xLoaderKey;
 
+    // global app dispatcher
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     aImpl += SfxAppDispatchProvider::impl_getStaticImplementationName();
 
     aTempStr = aImpl;
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.DispatchProvider") );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.ProtocolHandler") );
 
+    // standalone document info
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     aImpl += SfxStandaloneDocumentInfoObject::impl_getStaticImplementationName();
 
@@ -1661,6 +1660,7 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     xNewKey = xKey->createKey( aTempStr );
     xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.document.StandaloneDocumentInfo") );
 
+    // frame loader
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     aImpl += SfxFrameLoader_Impl::impl_getStaticImplementationName();
 
@@ -1672,33 +1672,14 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     for ( sal_Int16 i=0; i<nCount; i++ )
         xNewKey->createKey( aServices.getConstArray()[i] );
 
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/Loader"));
-    xNewKey = xKey->createKey( aTempStr );
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Loader"));
-    xLoaderKey = xKey->createKey( aTempStr );
-    xNewKey = xLoaderKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Pattern")) );
-    xNewKey->setAsciiValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/*" )) );
-
+    // macro loader
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     aImpl += SfxMacroLoader::impl_getStaticImplementationName();
 
     aTempStr = aImpl;
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.FrameLoader") );
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/Loader"));
-    xNewKey = xKey->createKey( aTempStr );
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Loader"));
-    xLoaderKey = xKey->createKey( aTempStr );
-    xNewKey = xLoaderKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Pattern")) );
-    xNewKey->setAsciiValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("macro:*" )) );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.ProtocolHandler") );
 
     // - sfx document templates
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
@@ -1754,26 +1735,6 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     xNewKey = xKey->createKey( aTempStr );
     xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.script.ApplicationDialogLibraryContainer") );
 
-#if 0
-    if (pRegistryKey)
-    {
-            try
-            {
-                Reference< XRegistryKey > xKey(
-                    reinterpret_cast< XRegistryKey * >( pRegistryKey ) );
-
-                Reference< XRegistryKey > xNewKey = xKey->createKey(
-                    ::rtl::OUString::createFromAscii( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) );
-                xNewKey->createKey( ::rtl::OUString::createFromAscii( SERVICE_NAME ) );
-
-                return sal_True;
-            }
-            catch (InvalidRegistryException &)
-            {
-                OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-            }
-    }
-#endif
     return sal_True;
 }
 
@@ -1816,23 +1777,6 @@ void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName 
             xFactory->acquire();
             pReturn = xFactory.get();
         }
-#if 0
-        if (!xFactory.is() && pServiceManager )
-        {
-                ::rtl::OUString aImplementationName = ::rtl::OUString::createFromAscii( pImplementationName );
-                if (aImplementationName == ::rtl::OUString::createFromAscii( IMPLEMENTATION_NAME ) )
-                {
-                    xFactory = ::cppu::createSingleFactory( xServiceManager, aImplementationName,
-                                                IchitaroImportFilter_CreateInstance,
-                                                IchitaroImportFilter::getSupportedServiceNames_Static() );
-                }
-                if (xFactory.is())
-                {
-                    xFactory->acquire();
-                    pReturn = xFactory.get();
-                }
-        }
-#endif
     }
     // Return with result of this operation.
     return pReturn ;
