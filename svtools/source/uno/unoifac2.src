@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoifac2.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 14:04:42 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@ Menu RID_CONTEXTMENU
             Text[ hebrew ] = "‮פתיחה‬";
             Text[ hindi ] = "~खोलो";
             Text[ slovak ] = "O~tvoriť";
+            Text[ hungarian ] = "~Megnyitás";
+            Text[ slovenian ] = "~Odpri";
         };
         MenuItem
         {
@@ -114,7 +116,7 @@ Menu RID_CONTEXTMENU
             Text[ italian ] = "Apri nella ~finestra nuova";
             Text[ portuguese_brazilian ] = "Abrir numa ~Nova Janela";
             Text[ portuguese ] = "Abrir em ~nova janela";
-            Text[ danish ] = "�bn i nyt vindue";
+            Text[ danish ] = "�bn i nyt ~vindue";
             Text[ french ] = "Ouvrir dans une nouvelle ~fen�tre";
             Text[ swedish ] = "�ppna i ett nytt ~f�nster";
             Text[ dutch ] = "Openen in nieuw ~venster";
@@ -139,6 +141,8 @@ Menu RID_CONTEXTMENU
             Text[ hebrew ] = "‮פתיחה בחלון חדש‬";
             Text[ hindi ] = "Open in New ~Window";
             Text[ slovak ] = "~Otvoriť v novom okne";
+            Text[ hungarian ] = "Megnyitás új ~ablakban";
+            Text[ slovenian ] = "Odpri v novem ~oknu";
         };
         MenuItem
         {
@@ -149,7 +153,7 @@ Menu RID_CONTEXTMENU
             Text[ italian ] = "~Download...";
             Text[ portuguese_brazilian ] = "~Download...";
             Text[ portuguese ] = "~Download...";
-            Text[ danish ] = "Overf�r...";
+            Text[ danish ] = "~Overf�r...";
             Text[ french ] = "~T�l�chargement...";
             Text[ swedish ] = "~Ladda ned...";
             Text[ dutch ] = "~Downloaden...";
@@ -174,6 +178,8 @@ Menu RID_CONTEXTMENU
             Text[ hebrew ] = "‮הורדת נתונים מהרשת‬";
             Text[ hindi ] = "~डौनलोड...";
             Text[ slovak ] = "Stia~hnuť...";
+            Text[ hungarian ] = "~Letöltés...";
+            Text[ slovenian ] = "Pr~enesi...";
         };
         MenuItem
         {
@@ -188,7 +194,7 @@ Menu RID_CONTEXTMENU
             Text[ italian ] = "~Aggiungi collegamento";
             Text[ portuguese_brazilian ] = "Adicionar ~V�nculo";
             Text[ portuguese ] = "Adicionar ~liga��o";
-            Text[ danish ] = "Tilf�j k�de";
+            Text[ danish ] = "Tilf�j ~k�de";
             Text[ french ] = "~Ajouter un lien";
             Text[ swedish ] = "L�gg till l~�nk";
             Text[ dutch ] = "Koppeling ~toevoegen";
@@ -213,6 +219,8 @@ Menu RID_CONTEXTMENU
             Text[ hebrew ] = "‮הוספת קישור‬";
             Text[ hindi ] = "लिंक जोड़ो";
             Text[ slovak ] = "P~ridať odkaz";
+            Text[ hungarian ] = "~Hivatkozás hozzáadása";
+            Text[ slovenian ] = "Dodaj ~povezavo";
         };
         MenuItem
         {
@@ -252,9 +260,12 @@ Menu RID_CONTEXTMENU
             Text[ hebrew ] = "‮העתקת קישור‬";
             Text[ hindi ] = "लिंक की प्रतिलिपि";
             Text[ slovak ] = "Ko~pírovať odkaz";
+            Text[ hungarian ] = "Hivatkozás ~másolása";
+            Text[ slovenian ] = "Kopira~j povezavo";
         };
     };
 };
+
 
 
 
