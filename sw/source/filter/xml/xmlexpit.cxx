@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexpit.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:25 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1043,11 +1043,12 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         break;
 
         case RES_LAYOUT_SPLIT:
+        case RES_ROW_SPLIT:
         {
-            const SwFmtLayoutSplit* pLayoutSplit = PTR_CAST(SwFmtLayoutSplit, &rItem);
-            DBG_ASSERT( pLayoutSplit != NULL, "Wrong Which-ID" );
+            const SfxBoolItem* pSplit = PTR_CAST(SfxBoolItem, &rItem);
+            DBG_ASSERT( pSplit != NULL, "Wrong Which-ID" );
 
-            rUnitConverter.convertBool( aOut, pLayoutSplit->GetValue() );
+            rUnitConverter.convertBool( aOut, pSplit->GetValue() );
             bOk = sal_True;
         }
         break;
