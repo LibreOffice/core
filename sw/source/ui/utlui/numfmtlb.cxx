@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmtlb.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-11-15 11:13:22 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:44:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,8 +529,10 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
                 SID_ATTR_NUMBERFORMAT_VALUE, FALSE, &pItem ))
             {
                 UINT32 nFormat = ((SfxUInt32Item*)pItem)->GetValue();
-                SetDefFormat(nFormat);
+                // oj #105473# change order of calls
                 eCurLanguage = pFormatter->GetEntry(nFormat)->GetLanguage();
+                // SetDefFormat uses eCurLanguage to look for if this format already in the list
+                SetDefFormat(nFormat);
             }
             if( bShowLanguageControl && SFX_ITEM_SET == pOutSet->GetItemState(
                 SID_ATTR_NUMBERFORMAT_ADD_AUTO, FALSE, &pItem ))
