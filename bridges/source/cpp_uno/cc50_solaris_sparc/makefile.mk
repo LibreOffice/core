@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2001-12-11 19:08:22 $
+#   last change: $Author: hjs $ $Date: 2001-12-12 16:43:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,10 @@ NO_BSYMBOLIC=TRUE
 .INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
+
+# disable check for PIC code as it would complain about 
+# hand coded assembler
+CHECKFORPIC=
 
 .IF "$(COM)$(CPU)" == "C50S" || "$(COM)$(CPU)" == "C52S"  
 

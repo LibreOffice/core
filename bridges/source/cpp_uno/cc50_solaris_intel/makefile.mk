@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2001-12-11 19:09:34 $
+#   last change: $Author: hjs $ $Date: 2001-12-12 16:40:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,10 @@ NO_BSYMBOLIC=TRUE
 
 # --- Files --------------------------------------------------------
 
+# disable check for PIC code as it would complain about 
+# hand coded assembler
+CHECKFORPIC=
+
 .IF "$(COM)$(CPU)" == "C50I" || "$(COM)$(CPU)" == "C52I"
 
 CFLAGS += -O5 -xO5
@@ -107,5 +111,5 @@ SHL1STDLIBS= \
 .INCLUDE :	target.mk
 
 $(SLO)$/%.obj: %.s
-    CC -KPIC -c -o $(SLO)$/$(@:b).o $< ; touch $@
+    CC -c -o $(SLO)$/$(@:b).o $< ; touch $@
 
