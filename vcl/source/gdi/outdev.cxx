@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 11:52:49 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,8 +142,8 @@
 #include <com/sun/star/awt/XGraphics.hpp>
 
 DBG_NAME( OutputDevice );
-DBG_NAMEEX( Polygon );
-DBG_NAMEEX( PolyPolygon );
+DBG_NAME( Polygon );
+DBG_NAME( PolyPolygon );
 DBG_NAMEEX( Region );
 
 // -----------------------------------------------------------------------
