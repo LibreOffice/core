@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:00:30 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -715,6 +715,7 @@ BOOL SfxOrganizeListBox_Impl::MoveOrCopyContents(SvLBox *pSourceBox,
 {
     SfxErrorContext aEc( ERRCTX_SFX_MOVEORCOPYCONTENTS, this);
     BOOL bOk = FALSE, bKeepExpansion = FALSE;
+    BOOL bRemovedFromSource = FALSE;
     Path aSource(pSourceBox, pSource);
     Path aTarget(this, pTarget);
     SfxObjectShellRef aSourceDoc =
@@ -803,13 +804,18 @@ BOOL SfxOrganizeListBox_Impl::MoveOrCopyContents(SvLBox *pSourceBox,
                     bOk = FALSE;
             }
             if(!bCopy && &aSourceDoc != &aTargetDoc)
-                    aSourceDoc->Remove(aSource[nSLevel+1],
+            {
+                //#109566# pool styles that are moved produce
+                //an rIdx == INDEX_IGNORE
+                //the method has to return true to keep the box content consistent
+                bRemovedFromSource = aSourceDoc->Remove(aSource[nSLevel+1],
                                      aSource[nSLevel+2],
                                      aSource[nSLevel+3]);
+            }
         }
     }
 //  rIdx++;
-    return (rIdx != INDEX_IGNORE && bOk )
+    return (((rIdx != INDEX_IGNORE)|| bRemovedFromSource) && bOk )
         ? bKeepExpansion? (BOOL)2: TRUE: FALSE;
 }
 
