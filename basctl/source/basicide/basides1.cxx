@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:59:39 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 17:12:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,6 @@
 #include <iderdll.hxx>
 #include <iderdll2.hxx>
 #include <sbxitem.hxx>
-#include <vcl/rcid.h>
 #include <helpid.hrc>
 
 #include <svtools/texteng.hxx>
@@ -1336,12 +1335,16 @@ long BasicIDEShell::CallBasicBreakHdl( StarBASIC* pBasic )
         if ( StarBASIC::IsRunning() )   // Falls abgebrochen...
         {
             if ( bAppWindowDisabled )
-                Application::GetDefModalDialogParent()->Enable( FALSE );
+                Application::GetDefDialogParent()->Enable( FALSE );
             if ( bDispatcherLocked )
                 SFX_APP()->LockDispatcher( TRUE );
 
-            for ( USHORT n = 0; n < nWaitCount; n++ )
-                Application::EnterWait();
+            if ( nWaitCount )
+            {
+                BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+                for ( USHORT n = 0; n < nWaitCount; n++ )
+                    pIDEShell->GetViewFrame()->GetWindow().EnterWait();
+            }
         }
     }
     return nRet;
