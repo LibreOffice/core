@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:50:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 08:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include <rtl/bootstrap.hxx>
 #include <sal/config.h>
 #ifdef SOLAR_JAVA
-#include "jvmaccess/javainfo.hxx"
+#include <jvmfwk/framework.h>
 #endif // SOLAR_JAVA
 
 #ifdef MACOSX
@@ -247,86 +247,35 @@ const OUString& psp::getFontPath()
 
         // append jre/jdk fonts if possible
         OString aJREpath;
-        if( aUserPath.getLength() )
+
+#ifdef SOLAR_JAVA
+        JavaInfo * pInfo = NULL;
+        javaFrameworkError jerr = jfw_getSelectedJRE( & pInfo);
+        if (jerr == JFW_E_NONE && pInfo != NULL)
         {
-            OUString aJavaRc( aUserPath );
-            aJavaRc += OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/config/" SAL_CONFIGFILE( "java" ) ) );
-            Config aConfig( aJavaRc );
-            aConfig.SetGroup( "Java" );
-            aJREpath = aConfig.ReadKey( "Home" );
-            if( ! aJREpath.getLength() )
-            {
-                aJavaRc = aNetPath;
-                aJavaRc += OUString( RTL_CONSTASCII_USTRINGPARAM( "/share/config/" SAL_CONFIGFILE("java") ) );
-                Config aShareConfig( aJavaRc );
-                aShareConfig.SetGroup( "Java" );
-                aJREpath = aShareConfig.ReadKey( "Home" );
-            }
+            OUString aSys;
+            if( osl_getSystemPathFromFileURL( pInfo->sLocation, &aSys.pData ) == osl_File_E_None )
+                aJREpath = OUStringToOString( aSys, osl_getThreadTextEncoding() );
+        }
+        jfw_freeJavaInfo(pInfo);
+#endif
 
-            if( aJREpath.compareTo( "file:", 5 ) == 0 )
+        if( aJREpath.getLength() > 0 )
+        {
+            OString aTestPath( aJREpath );
+            aTestPath += "/jre/lib/fonts";
+            if( access( aTestPath.getStr(), R_OK ) )
             {
-                OUString aURL( OStringToOUString( aJREpath, osl_getThreadTextEncoding() ) );
-                OUString aSys;
-                if( osl_getSystemPathFromFileURL( aURL.pData, &aSys.pData ) == osl_File_E_None )
-                    aJREpath = OUStringToOString( aSys, osl_getThreadTextEncoding() );
-            }
-
-            if( aJREpath.getLength() > 0 )
-            {
-                OString aTestPath( aJREpath );
-                aTestPath += "/jre/lib/fonts";
+                aTestPath = aJREpath;
+                aTestPath += "/lib/fonts";
                 if( access( aTestPath.getStr(), R_OK ) )
-                {
-                    aTestPath = aJREpath;
-                    aTestPath += "/lib/fonts";
-                    if( access( aTestPath.getStr(), R_OK ) )
-                        aJREpath = OString();
-                    else
-                        aJREpath = aTestPath;
-                }
+                    aJREpath = OString();
                 else
                     aJREpath = aTestPath;
             }
+            else
+                aJREpath = aTestPath;
         }
-
-#ifdef SOLAR_JAVA
-        // if no javarc (e.g. in setup) exists or it failed try the UDK method
-        if( ! aJREpath.getLength() )
-        {
-            OString aJavaLib;
-            try
-            {
-                OUString aLib;
-                if (osl::FileBase::getSystemPathFromFileURL(
-                            jvmaccess::JavaInfo::createBestInfo(true).
-                                getRuntimeLibLocation(),
-                            aLib)
-                        == osl::FileBase::E_None)
-                    aLib.convertToString(
-                        &aJavaLib, osl_getThreadTextEncoding(),
-                        RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
-                            | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR);
-            }
-            catch (jvmaccess::JavaInfo::InitException &)
-            {}
-
-            if (aJavaLib.getLength() != 0)
-            {
-                sal_Int32 nIndex;
-                while( ( nIndex = aJavaLib.lastIndexOf( '/' ) ) != -1 )
-                {
-                    aJavaLib = aJavaLib.copy( 0, nIndex );
-                    OString aTmpPath = aJavaLib;
-                    aTmpPath += "/lib/fonts";
-                    if( access( aTmpPath.getStr(), R_OK ) == 0 )
-                    {
-                        aJREpath = aTmpPath;
-                        break;
-                    }
-                }
-            }
-        }
-#endif // SOLAR_JAVA
 
         if( aJREpath.getLength() )
         {
