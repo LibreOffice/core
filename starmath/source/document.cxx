@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-12 15:54:37 $
+ *  last change: $Author: hr $ $Date: 2001-10-18 12:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,7 +756,8 @@ BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
             delete pTree;
             pTree = 0;
         }
-        SmXMLWrapper aEquation(GetModel());
+        Reference<com::sun::star::frame::XModel> xModel(GetModel());
+        SmXMLWrapper aEquation(xModel);
         bSuccess = 0 == aEquation.Import(rMedium);
     }
     else if( rMedium.IsStorage() && rMedium.GetStorage()->IsStream(
@@ -837,7 +838,8 @@ BOOL SmDocShell::Load(SvStorage *pStor)
                  pStor->IsStream(C2S("Content.xml")) )
         {
             // is this a fabulous math package ?
-            SmXMLWrapper aEquation(GetModel());
+            Reference<com::sun::star::frame::XModel> xModel(GetModel());
+            SmXMLWrapper aEquation(xModel);
             SfxMedium aMedium(pStor);
             ULONG nError = aEquation.Import(aMedium);
             bRet = 0 == nError;
@@ -892,7 +894,8 @@ BOOL SmDocShell::Insert(SvStorage *pStor)
     {
         bChkOldVersion = FALSE;
         // is this a fabulous math package ?
-        SmXMLWrapper aEquation(GetModel());
+        Reference<com::sun::star::frame::XModel> xModel(GetModel());
+        SmXMLWrapper aEquation(xModel);
         SfxMedium aMedium(pStor);
         bRet = aEquation.Import(aMedium);
     }
@@ -964,7 +967,8 @@ BOOL SmDocShell::Save()
         if(pStor->GetVersion() >= SOFFICE_FILEFORMAT_60)
         {
             // a math package as a storage
-            SmXMLWrapper aEquation(GetModel());
+            Reference<com::sun::star::frame::XModel> xModel(GetModel());
+            SmXMLWrapper aEquation(xModel);
             SfxMedium aMedium(pStor);
             aEquation.SetFlat(sal_False);
             return aEquation.Export(aMedium);
@@ -1014,7 +1018,8 @@ BOOL SmDocShell::SaveAs(SvStorage * pNewStor)
         if (pNewStor->GetVersion() >= SOFFICE_FILEFORMAT_60)
         {
             // a math package as a storage
-            SmXMLWrapper aEquation(GetModel());
+            Reference<com::sun::star::frame::XModel> xModel(GetModel());
+            SmXMLWrapper aEquation(xModel);
             SfxMedium aMedium(pNewStor);
             aEquation.SetFlat(sal_False);
             bRet = aEquation.Export(aMedium);
@@ -1052,13 +1057,15 @@ BOOL SmDocShell::ConvertTo( SfxMedium &rMedium )
         const String& rFltName = pFlt->GetFilterName();
         if(rFltName.EqualsAscii( STAROFFICE_XML ))
         {
-            SmXMLWrapper aEquation(GetModel());
+            Reference<com::sun::star::frame::XModel> xModel(GetModel());
+            SmXMLWrapper aEquation(xModel);
             aEquation.SetFlat(sal_False);
             bRet = aEquation.Export(rMedium);
         }
         else if(rFltName.EqualsAscii( MATHML_XML ))
         {
-            SmXMLWrapper aEquation(GetModel());
+            Reference<com::sun::star::frame::XModel> xModel(GetModel());
+            SmXMLWrapper aEquation(xModel);
             aEquation.SetFlat(sal_True);
             bRet = aEquation.Export(rMedium);
         }
