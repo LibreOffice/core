@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxwriter.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:39:58 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:49:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,6 @@ inline sal_Bool IsInvalidChar(const sal_Unicode aChar)
         // check first for the most common characters
     if( aChar < 32 || aChar >= 0xd800 )
         bRet = ( (aChar < 32 && ! g_bValidCharsBelow32[aChar]) ||
-            (aChar >= 0xd800 && aChar <= 0xdfff) ||
             aChar == 0xffff ||
             aChar == 0xfffe );
 #endif
@@ -329,6 +328,7 @@ inline sal_Bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
 {
     sal_Int32 nOutputLength(0);
     sal_Bool bRet(sal_True);
+    sal_uInt32 nSurrogate = 0;
 
     for( sal_Int32 i = 0 ; i < nStrLen ; i ++ )
     {
@@ -462,6 +462,47 @@ inline sal_Bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
                 rPos ++;
             }
         }
+        else if( c >= 0xd800 && c < 0xdc00  )
+        {
+            // 1. surrogate: save (until 2. surrogate)
+            OSL_ENSURE( nSurrogate == 0, "left-over Unicode surrogate" );
+            nSurrogate = ( ( c & 0x03ff ) + 0x0040 );
+        }
+        else if( c >= 0xdc00 && c < 0xe000 )
+        {
+            // 2. surrogate: write as UTF-8
+            OSL_ENSURE( nSurrogate != 0, "lone 2nd Unicode surrogate" );
+
+            nSurrogate = ( nSurrogate << 10 ) | ( c & 0x03ff );
+            if( nSurrogate > 0x00010000  &&  nSurrogate <= 0x001FFFFF )
+            {
+                sal_Int8 aBytes[] = { sal_Int8(0xF0 | ((nSurrogate >> 18) & 0x0F)),
+                                      sal_Int8(0x80 | ((nSurrogate >> 12) & 0x3F)),
+                                      sal_Int8(0x80 | ((nSurrogate >>  6) & 0x3F)),
+                                      sal_Int8(0x80 | ((nSurrogate >>  0) & 0x3F)) };
+                if ((rPos + 4) > SEQUENCESIZE)
+                    AddBytes(pTarget, rPos, aBytes, 3);
+                else
+                {
+                    pTarget[rPos] = aBytes[0];
+                    rPos ++;
+                    pTarget[rPos] = aBytes[1];
+                    rPos ++;
+                    pTarget[rPos] = aBytes[2];
+                    rPos ++;
+                    pTarget[rPos] = aBytes[3];
+                    rPos ++;
+                }
+            }
+            else
+            {
+                OSL_ENSURE( false, "illegal Unicode character" );
+                bRet = sal_False;
+            }
+
+            // reset surrogate
+            nSurrogate = 0;
+        }
         else if( c > 0x07FF )
         {
             sal_Int8 aBytes[] = { sal_Int8(0xE0 | ((c >> 12) & 0x0F)),
@@ -496,6 +537,14 @@ inline sal_Bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
         OSL_ENSURE(rPos <= SEQUENCESIZE, "not reset current position");
         if (rPos == SEQUENCESIZE)
             rPos = writeSequence();
+
+        // reset left-over surrogate
+        if( ( nSurrogate != 0 ) && !( c >= 0xd800 && c < 0xdc00 ) )
+        {
+            OSL_ENSURE( nSurrogate != 0, "left-over Unicode surrogate" );
+            nSurrogate = 0;
+            bRet = sal_False;
+        }
     }
     return bRet;
 }
@@ -791,6 +840,7 @@ inline sal_Int32 calcXMLByteLength( const sal_Unicode *pStr, sal_Int32 nStrLen,
                                     sal_Bool bNormalizeWhitespace )
 {
     sal_Int32 nOutputLength = 0;
+    sal_uInt32 nSurrogate = 0;
 
     for( sal_Int32 i = 0 ; i < nStrLen ; i++ )
     {
@@ -834,6 +884,19 @@ inline sal_Int32 calcXMLByteLength( const sal_Unicode *pStr, sal_Int32 nStrLen,
                 nOutputLength ++;
             }
         }
+        else if( c >= 0xd800 && c < 0xdc00  )
+        {
+            // save surrogate
+            nSurrogate = ( ( c & 0x03ff ) + 0x0040 );
+        }
+        else if( c >= 0xdc00 && c < 0xe000 )
+        {
+            // 2. surrogate: write as UTF-8 (if range is OK
+            nSurrogate = ( nSurrogate << 10 ) | ( c & 0x03ff );
+            if( nSurrogate > 0x00010000  &&  nSurrogate <= 0x001FFFFF )
+                nOutputLength += 4;
+            nSurrogate = 0;
+        }
         else if( c > 0x07FF )
         {
             nOutputLength += 3;
@@ -842,6 +905,10 @@ inline sal_Int32 calcXMLByteLength( const sal_Unicode *pStr, sal_Int32 nStrLen,
         {
             nOutputLength += 2;
         }
+
+        // surrogate processing
+        if( ( nSurrogate != 0 ) && !( c >= 0xd800 && c < 0xdc00 ) )
+            nSurrogate = 0;
     }
 
     return nOutputLength;
