@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:35 $
+ *  last change: $Author: cl $ $Date: 2000-10-04 13:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,7 +544,7 @@ BOOL FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 {
     pDocSh->SetWaitCursor( FALSE );
-    SdInsertPagesObjsDlg* pDlg = new SdInsertPagesObjsDlg( NULL, NULL,
+    SdInsertPagesObjsDlg* pDlg = new SdInsertPagesObjsDlg( NULL, pDoc,
                                                         NULL, aFile );
 
     USHORT nRet = pDlg->Execute();
