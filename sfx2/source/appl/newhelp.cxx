@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-14 13:26:26 $
+ *  last change: $Author: pb $ $Date: 2002-05-15 06:59:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1976,6 +1976,7 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     aToolBox.InsertItem( TBI_BOOKMARKS, Image( SfxResId( IMG_HELP_TOOLBOX_BOOKMARKS ) ) );
     aToolBox.SetQuickHelpText( TBI_BOOKMARKS, String( SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ) ) );
     aToolBox.SetHelpId( TBI_BOOKMARKS, HID_HELP_TOOLBOXITEM_BOOKMARKS );
+
 /*!!! pb: searchdialog problem not fixable til 6.0 final
     aToolBox.InsertItem( TBI_SEARCHDIALOG, Image( SfxResId( IMG_HELP_TOOLBOX_SEARCHDIALOG ) ) );
     aToolBox.SetQuickHelpText( TBI_SEARCHDIALOG, String( SfxResId( STR_HELP_BUTTON_SEARCHDIALOG ) ) );
@@ -2006,7 +2007,7 @@ SfxHelpTextWindow_Impl::~SfxHelpTextWindow_Impl()
     sfx2::RemoveFromTaskPaneList( &aToolBox );
 
     bIsInClose = sal_True;
-    xFrame->dispose();
+//! xFrame->dispose();
 }
 
 // -----------------------------------------------------------------------
@@ -2203,7 +2204,6 @@ void SfxHelpTextWindow_Impl::GetFocus()
     }
 }
 
-
 // -----------------------------------------------------------------------
 
 void SfxHelpTextWindow_Impl::ToggleIndex( sal_Bool bOn )
@@ -2287,6 +2287,14 @@ void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
         DBG_ERRORFILE( "SfxHelpTextWindow_Impl::SetPageStyleHeaderOff(): set off failed" );
     }
 #endif
+}
+
+// -----------------------------------------------------------------------
+
+void SfxHelpTextWindow_Impl::CloseFrame()
+{
+    bIsInClose = sal_True;
+    xFrame->dispose();
 }
 
 // class SfxHelpWindow_Impl ----------------------------------------------
@@ -2521,7 +2529,7 @@ IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox )
 {
     if ( pToolBox )
     {
-        bDisableGrabFocus = pToolBox->HasChildPathFocus();
+        bGrabFocusToToolBox = pToolBox->HasChildPathFocus();
         DoAction( pToolBox->GetCurItemId() );
     }
 
@@ -2609,13 +2617,13 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenDoneHdl, OpenStatusListener_Impl*, pListener 
         SetFactory( aObj.GetHost() );
     if ( IsWait() )
         LeaveWait();
-    if ( !bDisableGrabFocus )
-        pIndexWin->GrabFocusBack();
-    else
+    if ( bGrabFocusToToolBox )
     {
         pTextWin->GetToolBox().GrabFocus();
-        bDisableGrabFocus = sal_False;
+        bGrabFocusToToolBox = sal_False;
     }
+    else
+        pIndexWin->GrabFocusBack();
     if ( pListener->IsSuccessful() )
     {
         // set some view settings: "prevent help tips" and "helpid == 68245"
@@ -2668,7 +2676,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     nIndexSize          ( 40 ),
     nTextSize           ( 60 ),
     bIndex              ( sal_True ),
-    bDisableGrabFocus   ( sal_False ),
+    bGrabFocusToToolBox ( sal_False ),
     aWinPos             ( 0, 0 ),
     sTitle              ( pParent->GetText() )
 
@@ -2705,6 +2713,7 @@ SfxHelpWindow_Impl::~SfxHelpWindow_Impl()
     pIndexWin = NULL;
     delete pDel;
 
+    pTextWin->CloseFrame();
     delete pTextWin;
 }
 

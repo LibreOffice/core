@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-14 13:26:26 $
+ *  last change: $Author: pb $ $Date: 2002-05-15 06:59:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,6 +438,7 @@ public:
     void                    SelectSearchText( const String& rSearchText, sal_Bool _bIsFullWordSearch );
     void                    SetPageStyleHeaderOff() const;
     inline ToolBox&         GetToolBox() { return aToolBox; }
+     void                   CloseFrame();
 };
 
 // class SfxHelpWindow_Impl ----------------------------------------------
@@ -465,7 +466,7 @@ friend class SfxHelpIndexWindow_Impl;
     long                nIndexSize;
     long                nTextSize;
     sal_Bool            bIndex;
-    sal_Bool            bDisableGrabFocus;
+    sal_Bool            bGrabFocusToToolBox;
     Point               aWinPos;
     String              sTitle;
     String              sKeyword;
