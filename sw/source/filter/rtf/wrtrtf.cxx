@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:59:19 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
 #endif
+#ifndef _SVX_UDLNITEM_HXX //autogen
+#include <svx/udlnitem.hxx>
+#endif
 #ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #endif
@@ -202,6 +205,10 @@
 #endif
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>      // ResId fuer Statusleiste
+#endif
+
+#ifndef SW_MS_MSFILTER_HXX
+#include <msfilter.hxx>
 #endif
 
 #if defined(MAC)
@@ -777,9 +784,22 @@ void SwRTFWriter::OutRTFColorTab()
             InsColor( *pColTbl, pCol->GetValue() );
         nMaxItem = rPool.GetItemCount(RES_CHRATR_COLOR);
         for( n = 0; n < nMaxItem; ++n )
+        {
             if( 0 != (pCol = (const SvxColorItem*)rPool.GetItem(
                 RES_CHRATR_COLOR, n ) ) )
                 InsColor( *pColTbl, pCol->GetValue() );
+        }
+
+        const SvxUnderlineItem* pUnder = (const SvxUnderlineItem*)GetDfltAttr( RES_CHRATR_UNDERLINE );
+        InsColor( *pColTbl, pUnder->GetColor() );
+        nMaxItem = rPool.GetItemCount(RES_CHRATR_UNDERLINE);
+        for( n = 0; n < nMaxItem;n++)
+        {
+            if( 0 != (pUnder = (const SvxUnderlineItem*)rPool.GetItem( RES_CHRATR_UNDERLINE, n ) ) )
+                InsColor( *pColTbl, pUnder->GetColor() );
+
+        }
+
     }
 
     // das Frame Hintergrund - Attribut
@@ -854,6 +874,23 @@ void SwRTFWriter::OutRTFColorTab()
     Strm() << '}';
 }
 
+bool FontCharsetSufficient(const String &rFntNm, const String &rAltNm,
+    rtl_TextEncoding eChrSet)
+{
+    bool bRet = true;
+    const sal_uInt32 nFlags =
+        RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
+    RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR;
+    rtl::OString sDummy;
+    rtl::OUString sStr(rFntNm);
+    bRet = sStr.convertToString(&sDummy, eChrSet, nFlags);
+    if (bRet)
+    {
+        rtl::OUString sOther(rFntNm);
+        bRet = sOther.convertToString(&sDummy, eChrSet, nFlags);
+    }
+    return bRet;
+}
 
 static void _OutFont( SwRTFWriter& rWrt, const SvxFontItem& rFont, USHORT nNo )
 {
@@ -862,50 +899,73 @@ static void _OutFont( SwRTFWriter& rWrt, const SvxFontItem& rFont, USHORT nNo )
     const char* pStr = sRTF_FNIL;
     switch( rFont.GetFamily() )
     {
-    case FAMILY_ROMAN:          pStr = sRTF_FROMAN;     break;
-    case FAMILY_SWISS:          pStr = sRTF_FSWISS;     break;
-    case FAMILY_MODERN:         pStr = sRTF_FMODERN;    break;
-    case FAMILY_SCRIPT:         pStr = sRTF_FSCRIPT;    break;
-    case FAMILY_DECORATIVE:     pStr = sRTF_FDECOR;     break;
+        case FAMILY_ROMAN:
+            pStr = sRTF_FROMAN;
+            break;
+        case FAMILY_SWISS:
+            pStr = sRTF_FSWISS;
+            break;
+        case FAMILY_MODERN:
+            pStr = sRTF_FMODERN;
+            break;
+        case FAMILY_SCRIPT:
+            pStr = sRTF_FSCRIPT;
+            break;
+        case FAMILY_DECORATIVE:
+            pStr = sRTF_FDECOR;
+            break;
     }
     rWrt.OutULong( nNo ) << pStr << sRTF_FPRQ;
 
     USHORT nVal = 0;
     switch( rFont.GetPitch() )
     {
-    case PITCH_FIXED:       nVal = 1;       break;
-    case PITCH_VARIABLE:    nVal = 2;       break;
+        case PITCH_FIXED:
+            nVal = 1;
+            break;
+        case PITCH_VARIABLE:
+            nVal = 2;
+break;
     }
     rWrt.OutULong( nVal );
 
-    ULONG nChSet = 0;
-    rtl_TextEncoding eChrSet = rFont.GetCharSet();
-    if( RTL_TEXTENCODING_DONTKNOW != eChrSet )
-        nChSet = rtl_getBestWindowsCharsetFromTextEncoding( eChrSet );
-    rWrt.Strm() << sRTF_FCHARSET;
-    rWrt.OutULong( nChSet );
-
-    String sFntNm( GetFontToken( rFont.GetFamilyName(), 0 ));
-    String sAltNm( GetSubsFontName( sFntNm, SUBSFONT_ONLYONE | SUBSFONT_MS ));
-    if( !sAltNm.Len() )                 // or contains the name itself a list?
+    String sFntNm(GetFontToken( rFont.GetFamilyName(), 0));
+    String sAltNm(GetSubsFontName( sFntNm, SUBSFONT_ONLYONE | SUBSFONT_MS));
+    if(!sAltNm.Len())   // or contains the name itself a list?
         sAltNm = GetFontToken( rFont.GetFamilyName(), 1 );
 
-    rWrt.Strm() << ' ';
-    if( sAltNm.Len() && sAltNm != sFntNm )
+    /*
+     #i10538#
+     In rtf the fontname is in the fontcharset, so if that isn't possible
+     then bump the charset up to unicode
+    */
+    sal_uInt8 nChSet = 0;
+    rtl_TextEncoding eChrSet = rFont.GetCharSet();
+    nChSet = sw::types::rtl_TextEncodingToWinCharset(eChrSet);
+    eChrSet = rtl_getTextEncodingFromWindowsCharset(nChSet);
+    if (!FontCharsetSufficient(sFntNm, sAltNm, eChrSet))
     {
-        //JP 30.7.2001: then save the MS font name as normal name and the own
-        //              as alternative name. Because WinWord can't match each
-        //              font to a UniCode font. So the CJK texts are shown as
-        //              empty rectangles ;-(.
-        RTFOutFuncs::Out_String( rWrt.Strm(), sFntNm, DEF_ENCODING,
-                                 rWrt.bWriteHelpFmt );
-        OutComment( rWrt, sRTF_FALT) << ' ';
-        RTFOutFuncs::Out_String( rWrt.Strm(), sAltNm, DEF_ENCODING,
-                                    rWrt.bWriteHelpFmt ) << '}';
+        eChrSet = RTL_TEXTENCODING_UNICODE;
+        nChSet = sw::types::rtl_TextEncodingToWinCharset(eChrSet);
+    eChrSet = rtl_getTextEncodingFromWindowsCharset(nChSet);
+    }
+
+    rWrt.Strm() << sRTF_FCHARSET;
+    rWrt.OutULong( nChSet );
+    rWrt.Strm() << ' ';
+    if (sAltNm.Len() && sAltNm != sFntNm)
+    {
+        RTFOutFuncs::Out_Fontname(rWrt.Strm(), sFntNm, eChrSet,
+            rWrt.bWriteHelpFmt);
+        OutComment(rWrt, sRTF_FALT) << ' ';
+        RTFOutFuncs::Out_Fontname(rWrt.Strm(), sAltNm, eChrSet,
+            rWrt.bWriteHelpFmt) << '}';
     }
     else
-        RTFOutFuncs::Out_String( rWrt.Strm(), sFntNm, DEF_ENCODING,
-                                 rWrt.bWriteHelpFmt );
+    {
+        RTFOutFuncs::Out_Fontname(rWrt.Strm(), sFntNm, eChrSet,
+            rWrt.bWriteHelpFmt);
+    }
     rWrt.Strm() << ";}";
 }
 
