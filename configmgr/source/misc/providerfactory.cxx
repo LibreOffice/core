@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2000-12-03 17:12:52 $
+ *  last change: $Author: tlx $ $Date: 2000-12-07 13:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ namespace configmgr
             // For a plugin-local session, we need a valid update directory.
             // (We can't just rely on the session to fail if it is created with a valid source directory and an
             // invalid update directory. In such a scenario it will succeed to open, but not to update.)
-            if (aThisRoundSettings.isValidUpdatePath())
+            if (aThisRoundSettings.hasRegistryRC() && aThisRoundSettings.isValidUpdatePath())
             {
                 const ::rtl::OUString sLocalSessionIdentifier = ::rtl::OUString::createFromAscii(LOCAL_SESSION_IDENTIFIER);
                 aThisRoundSettings.setSessionType(sLocalSessionIdentifier);
@@ -269,6 +269,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/12/03 17:12:52  dg
+ *  #81164# stdio missing
+ *
  *  Revision 1.2  2000/12/03 11:52:13  dg
  *  #81164# invalid provider instantiation
  *
