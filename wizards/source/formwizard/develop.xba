@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="develop" script:language="StarBasic">REM  *****  BASIC  *****
-Public oDBShapeList(200) as Object
-Public oTCShapeList(200) as Object
+Public oDBShapeList() as Object
+Public oTCShapeList() as Object
 Public oGridShape as Object
 Public a as Integer
 Public StartA as Integer
@@ -20,6 +20,7 @@ Public CurControlType as Integer
 Public CurFieldlength as Double
 Public CurFieldType as Integer
 Public CurFieldName as String
+Public CurControlName as String
 Dim iReduceWidth as Integer
 
 Function PositionControls(Maxindex as Integer)
@@ -36,15 +37,17 @@ Dim i as Integer
 		CurFieldType = FieldMetaValues(i,0)
 		CurFieldLength = CDbl(FieldMetaValues(i,1))
 		CurControlType = FieldMetaValues(i,2)
+		CurControlName = FieldMetaValues(i,3)
 		CurFieldName = FieldNames(i)
 		oTCModel = InsertTextControl(i)
 		InsertDBControl(oDBModel, i)
 		bIsVeryFirstRun = False
-		oDBModel.LabelControl = oTCModel
+&apos; Todo: Klären, wieso er bei der folgenden Zeile abstürzt
+&apos;		oDBModel.LabelControl = oTCModel
 		ResetPosSizes(i)
 		oProgressbar.Value = i
 	Next i
-&apos;	ControlCaptionstoStandardLayout()
+	ControlCaptionstoStandardLayout()
 	bControlsareCreated = True
 End Function
 
@@ -80,6 +83,7 @@ Sub ResetPosSizes(LastIndex as Integer)
 				a = a + 1
 			End If
 		Case cLeftJustified,cTopJustified
+&apos; Todo: Berücksichtigen, wenn das Label eines Controls länger als das DB-Control ist
 			If nMaxColRightX &gt; cXOffset + nFormWidth Then
 				Dim nOldYTCPos as Long
 				nOldYTCPos = nYTCPos
@@ -147,21 +151,20 @@ Dim aSize As New com.sun.star.awt.Size
 		oShape.Position = GetPoint(nXTCPos, nYTCPos)
 	Else
 		oModel = CreateUnoService(oModelService(cLabel))
-		oModel.Name =&quot;Label&quot; + (i+1)
 		oModel.Label = CurFieldName &apos; + nFieldPostfixes(i) (Todo: Was ist ein fieldPostfix?)
 		oDBForm.InsertByName(oModel.Name, oModel)
 		aPoint = GetPoint(nXTCPos, nYTCPos)
 		aSize = GetSize(nTCWidth,nTCHeight)
 		Set oShape = InsertControl(oModel, aPoint, aSize)
-		Set oTCShapeList(i)= oShape	
+		Set oTCShapeList(i)= oShape
 		If bIsVeryFirstRun Then
 			nTCHeight = GetPreferredHeight(oModel, CurFieldname)
 			If CurArrangement = cColumnarTop Then
 				nYDBPos = nYTCPos + nTCHeight
 			End If
 		End If
+		nTCWidth = GetPreferredWidth(oModel, True, CurFieldname)
 	End If
-	nTCWidth = GetPreferredWidth(oModel, True, CurFieldname)
 	CheckOuterPoints(oShape.Position.X, nTCWidth, nYTCPos, nTCHeight)
 	Select Case CurArrangement
 		Case cLeftJustified
@@ -206,9 +209,8 @@ Dim iColRightX as Long
 	Else
 		aSize = GetSize(nDBWidth,nDBHeight)
 		oDBModel = CreateUnoService(oModelService(CurControlType))
-		oDBModel.Name = ControlList(CurControlType)
-		&apos; ToDo: Diese (recht allgemein benamte) Prozedur mit Hilfe von FS anpassen
-		HandleNumerics(oDBModel)
+		oDBModel.Name = CurControlName
+		SetNumerics(oDBModel)
 		oShape = InsertControl(oDBModel, aPoint, aSize)
 		Set oDBShapeList(i)= oShape
 		oDBForm.InsertByName(oDBModel.Name, oDBModel)
@@ -375,22 +377,26 @@ Dim n as Integer
 Dim oColumn as Object
 Dim aPoint as New com.sun.star.awt.Point
 Dim aSize as New com.sun.star.awt.Size
-Dim ControlName as String
 Dim nWidth as Long
 	If bControlsareCreated Then
-		MakeControlsVisible(False)
+		ShapesToNirwana()
 	End If
 	oGridModel = CreateUnoService(oModelService(cGridControl))
+	
 	nWidth = 0
 	For n = 0 to MaxIndex
 		CurType = FieldMetaValues(n,0)
 		CurControlType = FieldMetaValues(n,2)
-		CurFieldName = FieldNames(n)
-		ControlName = ControlList(CurControlType)
-		oColumn = oGridModel.CreateColumn(ControlName)
-		oColumn.Name = CalcUniqueContentName(oGridModel, ControlName)
-&apos; Todo: Put this in a separate function
-		HandleNumerics(oColumn)
+	    CurFieldName = FieldNames(n)
+		If CurControlType = cImageControl Then
+			CurControlName = &quot;TextField&quot;			
+			oColumn.Hidden = True
+		Else
+			CurControlName = FieldMetaValues(n,3)
+			oColumn = oGridModel.CreateColumn(CurControlName)
+		End If
+		oColumn.Name = CalcUniqueContentName(oGridModel, CurControlName)
+		SetNumerics(oColumn)
 		oColumn.DataField = CurFieldName
 		oColumn.Label = CurFieldName  &apos;+ nFieldPostfixes(n); Todo: Was hat das nFieldPostfix hier zu suchen?
 		oColumn.Width = 0 	&apos;Spaltenbreite richtet sich nach dem Feldnamen

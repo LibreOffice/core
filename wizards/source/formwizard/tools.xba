@@ -17,6 +17,7 @@ Dim aPeerSize as new com.sun.star.awt.Size
 Dim nWidth as Integer
 Dim oControl as Object
 &apos; Todo: Wie geht das mit ImageControls
+&apos; kann nur fest verdrahtet werden
 	If Not IsMissing(LocText) Then
 		aPeerSize = GetPeerSize(oModel, oControl, LocText)
 	Else
@@ -102,57 +103,91 @@ End Function
 Sub	ImportStyles()
 Dim CurIndex as Integer
 Dim sImportPath as String
-	oDocument.LockControllers
+&apos;	oDocument.LockControllers
 	CurIndex = GetCurIndex(oDialogModel.lstStyles, Styles(), NumberofStyles,8)
 	sImportPath = Styles(8,CurIndex)
 	LoadNewStyles(oDocument, oDialogModel, CurIndex, sImportPath, Styles(), TexturePath)
-	&apos; Todo: Diese Zeile wieder rein wenn Bug #83015 behoben ist
 	ControlCaptionsToStandardLayout()
-	oDocument.UnlockControllers
+	ConfigurePageStyle()	
+&apos;	oDocument.UnlockControllers
 End Sub
 
 
-&apos; Todo: Einbinden!!!
-Function SetMaxNumericValue(ByVal oLocObject as Object, nType as Long) as Object	
-	oLocObject.DecimalAccuracy = 0 	&apos; keine Nachkommastellen
-	oLocObject.ValueMin = 0 		&apos; Minwerte sind 0
-	select Case (nType)
-		case cLong
-			oLocObject.ValueMax = 2147483647 &apos; Maxwert
-		case cInteger
-			oLocObject.ValueMax = 32767 &apos; Maxwert
-		case cShortInt
-			oLocObject.ValueMax = 255 &apos; Maxwert
-		case cDecimal
-			oLocObject.DecimalAccuracy = FieldDecimalAccuracy%(n%) &apos; Nachkommastellen
+Function SetNumerics(ByVal oLocObject as Object) as Object	
+	&apos; Todo: FS fragen, ob dies alles richtig ist
+	&apos; Todo: Es sollte in der Hilfe darauf hingewiesen werden, dass der untere Wertbereich negativ ist.
+	Select Case CurFieldType
+		Case com.sun.star.sdbc.DataType.BIGINT
+			oLocObject.ValueMax = 2147483647 * 2147483647 
+			oLocObject.ValueMin = -(-2147483648 * -2147483648)
+		Case com.sun.star.sdbc.DataType.INTEGER 
+			oLocObject.ValueMax = 2147483647 
+			oLocObject.ValueMin = -2147483648
+		Case  com.sun.star.sdbc.DataType.SMALLINT
+			oLocObject.ValueMax = 32767 
+			oLocObject.ValueMin = -32768
+		Case com.sun.star.sdbc.DataType.TINYINT
+			oLocObject.ValueMax = 127
+			oLocObject.ValueMin = -128
+		Case com.sun.star.sdbc.DataType.FLOAT, com.sun.star.sdbc.DataType.REAL, com.sun.star.sdbc.DataType.DOUBLE, com.sun.star.sdbc.DataType.DECIMAL, com.sun.star.sdbc.DataType.NUMERIC
+		&apos; Todo: Hier sollte der Numberformatter angeworfen werden um die Nachkommastellen
+		&apos; festzulegen
+&apos;			oLocObject.DecimalAccuracy = FieldDecimalAccuracy%(n%) &apos; Nachkommastellen
 	End Select
 	SetMaxColumnValue = oLocObject
 End Function
 
 
-Sub MakeControlsVisible(bIsVisible as Boolean)
+&apos; Destroy all Shapes in Nirwana
+Sub RemoveShapes()
 Dim n as Integer
 Dim oControl as Object
-	For n = 0 To MaxIndex
-		oControl = oController.GetControl(oDBShapeList(n).GetControl)
-		oControl.SetVisible(bIsVisible)
-		oControl = oController.GetControl(oTCShapeList(n).GetControl)
-		oControl.SetVisible(bIsVisible)
+	For n = oDrawPage.Count-1 To 0 Step -1
+		oShape = oDrawPage(n)
+		If oShape.Position.Y &gt; -2000 Then
+			oDrawPage.Remove(oShape)
+		End If
+	Next n
+End Sub
+
+&apos; Note as Shapes cannot be removed from the DrawPage without destroying
+&apos; the object we have to park them somewhere in Nirwana
+Sub ShapesToNirwana()
+Dim n as Integer
+Dim oControl as Object
+	For n = 0 To oDrawPage.Count-1
+		oDrawPage(n).Position = GetPoint(-20, -10000)
 	Next n
 End Sub
 
 
-&apos; Todo: Hier werden allgemeine Einstellungen für numerische Werte vorgenommen
-&apos; Was wird mit den Währungen gemacht?; für Dezimalfelder muss die Anzahl der
-&apos; Nachkommastellen, Tausenderstellen, festgelegt werden. Stichwort &quot;Formatüberprüfungen&quot;
-&apos; im Propertybrowser des Controls
-Sub HandleNumerics(oObject)
-	Select Case CurControlType
-		Case cNumericBox
-			oLocObject = SetMaxNumericValue(oLocObject, CurFieldType)
-		Case cCurrencyBox
-			oLocObject.CurrencySymbol = s_aCurrencySymbol
-			oLocObject.PrependCurrencySymbol = s_aPrependCurrencySymbol
-	End Select
-End Sub
-</script:module>
+Function CalcUniqueContentName(BYVAL oContainer as Object, sBaseName as String) as String
+Dim nPostfix as Integer
+Dim sReturn as String
+	nPostfix = 2
+	sReturn = sBaseName
+
+	while (oContainer.hasByName(sReturn))
+		sReturn = sBaseName &amp; nPostfix
+		nPostfix = nPostfix + 1
+	Wend
+	CalcUniqueContentName = sReturn
+End Function
+
+
+
+Function AddListtoList(FirstArray(), SecondArray(), Optional StarIndex)
+Dim n as Integer
+Dim m as Integer
+Dim MaxIndex as Integer
+	MaxIndex = Ubound(FirstArray()) + Ubound(SecondArray()) + 1
+	Dim ResultArray(MaxIndex)
+	For m = 0 To Ubound(FirstArray())
+		ResultArray(m) = FirstArray(m)
+	Next m
+	For n = 0 To Ubound(SecondArray())
+		ResultArray(m) = SecondArray(n)
+		m = m + 1
+	Next n
+	AddListToList() = ResultArray()
+End Function</script:module>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:33:31 $
+ *  last change: $Author: bc $ $Date: 2001-06-15 15:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2520,6 +2520,23 @@ String RID_DB_FORM_WIZARD_START + 60
     Text[ turkish ] = "Directory Path";
     Text[ arabic ] = "Directory Path";
     Text[ catalan ] = "Directory Path";
+};
+
+
+String RID_DB_FORM_WIZARD_START + 65
+{
+    Text = "Dialog wird verkleinert";
+    Text[English] = "Dialog will be reduced";
+    Text[ English_us ] = "Dialog will be reduced";
+    Text[ language_user1 ] = "Hilfetext eines Buttons";
+};
+
+String RID_DB_FORM_WIZARD_START + 66
+{
+    Text = "Dialog wird vergrößert";
+    Text[English] = "Dialog will be enlarged";
+    Text[ English_us ] = "Dialog will be enlarged";
+    Text[ language_user1 ] = "Hilfetext eines Buttons";
 };
 
 

@@ -14,56 +14,63 @@ End Sub
 Sub GetSelectedDBMetaData()
 Dim NullList()
 Dim OldsDBname as String
-Dim bGetConnection as Boolean
-	ToggleDatabasePage(False)
-	bGetConnection = GetDBMetaData(sDatabaseList(), oDialogModel.lstDatabases.SelectedItems(0) )
-	If bGetConnection Then
-		With oDialogModel
-			.lstTables.Enabled = True
-			.lblTables.Enabled = True
-			.lstTables.StringItemList() = AddListToList(TableNames(), QueryNames())
-			.lstFields.StringItemList() = NullList()
-			.lstSelFields.StringItemList() = NullList()
-		End With
+Dim bGetMetaData as Boolean
+	If Ubound(oDialogModel.lstDatabases.SelectedItems()) &gt; -1 Then
+		ToggleDatabasePage(False)
+		DBIndex = oDialogModel.lstDatabases.SelectedItems(0)
+		If GetConnection(sDatabaseList(DBIndex)) Then
+		bGetMetaData = GetDBMetaData()
+		End If
+		If bGetMetaData Then
+			With oDialogModel
+				.lstTables.Enabled = True
+				.lblTables.Enabled = True
+				.lstTables.StringItemList() = AddListToList(TableNames(), QueryNames())
+				.lstFields.StringItemList() = NullList()
+				.lstSelFields.StringItemList() = NullList()
+			End With
+		End If
+		ToggleDatabasePage(True)
 	End If
-	ToggleDatabasePage(True)
 End Sub
 
 
-Function GetDBMetaData(sDataBaseList(), DBIndex as Integer)
+Function GetConnection(sDBName as String)
 Dim oDatabase as Object
 Dim oInteractionHandler as Object
 Dim oDataSource as Object
 Dim bExitLoop as Boolean
+Dim bGetConnection as Boolean
 Dim iMsg as Integer
-	If oDBContext.HasElements Then
-		oDatabase = oDBContext.GetByName(sDatabaseList(DBIndex))
-		sDBName = oDatabase.Name
-		If Not oDatabase.IsPasswordRequired Then
-			oDBConnection = oDBContext.GetByName(sDatabaseList(DBIndex)).GetConnection(&quot;&quot;,&quot;&quot;)
-			bGetConnection = True
-		Else
-			oInteractionHandler = createUnoService(&quot;com.sun.star.sdb.InteractionHandler&quot;)
-			oDataSource = oDBContext.GetByName(sDatabaseList(DBIndex))
-			On Local Error Goto NOCONNECTION
-			Do
-				bExitLoop = True
-				oDBConnection = oDataSource.ConnectWithCompletion(oInteractionHandler) 
+	oDatabase = oDBContext.GetByName(sDBName)
+	If Not oDatabase.IsPasswordRequired Then
+		oDBConnection = oDBContext.GetByName(sDBName).GetConnection(&quot;&quot;,&quot;&quot;)
+		GetConnection() = True
+	Else
+		oInteractionHandler = createUnoService(&quot;com.sun.star.sdb.InteractionHandler&quot;)
+		oDataSource = oDBContext.GetByName(sDBName)
+&apos;		On Local Error Goto NOCONNECTION
+		Do
+			bExitLoop = True
+			oDBConnection = oDataSource.ConnectWithCompletion(oInteractionHandler) 
+			NOCONNECTION:
+			bGetConnection = Err = 0
+			If Not bGetConnection Then
+				iMsg = Msgbox (sMsgNoConnection,32 + 2, sMsgWizardName)	&apos; &apos;?&apos; &amp; &apos; Repeat and Cancel&apos;
+				bExitLoop = iMsg = SBCANCEL
+			End If
+			On Local Error Goto 0		
+		Loop Until bExitLoop
+	End If
+	GetConnection() = bGetConnection
+End Function
 
-				NOCONNECTION:
-				bGetConnection = Err = 0
-				If Not bGetConnection Then
-					iMsg = Msgbox (sMsgNoConnection,32 + 2, sMsgWizardName)	&apos; &apos;?&apos; &amp; &apos; Repeat and Cancel&apos;
-					bExitLoop = iMsg = SBCANCEL
-				End If
-				On Local Error Goto 0		
-			Loop Until bExitLoop
-		End If
-		If bGetConnection Then
-			Tablenames() = oDBConnection.Tables.ElementNames()
-			Querynames() = oDBConnection.Queries.ElementNames()
-		End If
-		GetDBMetaData() = bGetConnection
+
+Function GetDBMetaData()
+	If oDBContext.HasElements Then
+		Tablenames() = oDBConnection.Tables.ElementNames()
+		Querynames() = oDBConnection.Queries.ElementNames()
+		GetDBMetaData = True
 	Else
 		MsgBox(sMsgErrNoDatabase, 64, sMsgWizardName)
 		GetDBMetaData = False
@@ -95,14 +102,17 @@ Dim Found as Boolean
 		Wend
 	Next i
 
-&apos; Todo: Was Wenn die Reihenfolge durcheinandergebracht ist?
 	For n = 0 to MaxIndex
 		sFieldname = FieldNames(n)
 		iType = oColumns.GetByName(sFieldName).Type
 		FieldMetaValues(n,0) = iType
+		&apos; Todo: Geht das nicht etwas performanter?
 		FieldMetaValues(n,1) = GetValueoutofList(iType, WidthList(),1)
 		FieldMetaValues(n,2) = GetValueoutofList(iType, WidthList(),2)
+		FieldMetaValues(n,3) = GetValueoutofList(iType, WidthList(),4)
 	Next
+	ReDim oDBShapeList(MaxIndex) as Object
+	ReDim oTCShapeList(MaxIndex) as Object
 End Sub
 
 
@@ -115,38 +125,71 @@ Dim MaxIndex as Integer
 Dim EmptyList()
 	If Ubound(oDialogModel.lstTables.StringItemList()) &gt; -1 Then
 		FieldNames() = oColumns.GetElementNames()
-		If oDialogModel.optIgnoreBinaries.State = 1 Then
-			MaxIndex = Ubound(FieldNames())
-			Dim ResultFieldNames(MaxIndex)
-			m = 0
-			For n = 0 To MaxIndex
-				oField = oColumns.GetByName(FieldNames(n))
-				iType = oField.Type
-				If (iType &lt;&gt; com.sun.star.sdbc.DataType.BINARY)AND(iType &lt;&gt; com.sun.star.sdbc.DataType.VARBINARY)AND(iType &lt;&gt; com.sun.star.sdbc.DataType.LONGVARBINARY) Then
-					ResultFieldNames(m) = FieldNames(n)
-					m = m + 1
-				End If
-			Next n
-			Redim Preserve ResultFieldNames(m-1)
-			Redim Preserve FieldNames(m-1)
-			FieldNames() = ResultFieldNames()
-		End If
+		MaxIndex = Ubound(FieldNames())
+		Dim ResultFieldNames(MaxIndex)
+		m = 0
+		For n = 0 To MaxIndex
+			oField = oColumns.GetByName(FieldNames(n))
+			iType = oField.Type
+			If GetIndexInMultiArray(WidthList(), iType, 0) &lt;&gt; -1 Then
+				ResultFieldNames(m) = FieldNames(n)
+				m = m + 1
+			End If
+		Next n
+		Redim Preserve ResultFieldNames(m-1)
+		Redim Preserve FieldNames(m-1)
+		FieldNames() = ResultFieldNames()
 		oDialogModel.lstFields.StringItemList = FieldNames()
+		InitializeListboxProcedures(oDialogModel, oDialogModel.lstFields, oDialogModel.lstSelFields)
 	End If
 End Sub
 
 
 Sub CreateDBForm()
-  	oDBForm = oDocument.CreateInstance(&quot;com.sun.star.form.component.Form&quot;)
-	oDocument.Drawpage.Forms.InsertByIndex (0, oDBForm)
+	If oDrawPage.Forms.Count = 0 Then
+	  	oDBForm = oDocument.CreateInstance(&quot;com.sun.star.form.component.Form&quot;)
+		oDrawpage.Forms.InsertByIndex (0, oDBForm)
+	Else
+		oDBForm = oDrawPage.Forms.GetByIndex(0)
+	End If
 	oDBForm.Name = &quot;Standard&quot;
 	oDBForm.DataSourceName = sDBName
 	oDBForm.Command = TableName
-	&apos; Todo: Ist diese Abfrage notwendig?
 	If bIsQuery Then
 		oDBForm.CommandType = 1 &apos; Abfrage
 	else
 		oDBForm.CommandType = 0 &apos; Tabelle
 	End If
 End Sub
-</script:module>
+
+
+Sub AddBinaryFieldsToWidthList()
+Dim LocWidthList()
+Dim MaxIndex as Integer
+Dim OldMaxIndex as Integer
+Dim s as Integer
+Dim n as Integer
+Dim m as Integer
+&apos; Todo: Die folgenden Zeilen könnten in einer allgemeinen Routine 
+&apos; bearbeitet werden, z. B. durch Umschreiben von AddListToList, wobei
+&apos; beim Abfragen des Ubounds der zweiten Dimension eine Fehlerabfrage nötig wäre.
+	MaxIndex = Ubound(WidthList(),1) + Ubound(ImgWidthList(),1) + 1
+	OldMaxIndex = Ubound(WidthList(),1)
+	ReDim Preserve WidthList(MaxIndex,4)
+	s = 0
+	For n = OldMaxIndex + 1 To MaxIndex
+		For m = 0 To 4
+			WidthList(n,m) = ImgWidthList(s,m)
+		Next m
+		s = s + 1
+	Next n
+	FillUpFieldsListbox()
+End Sub
+
+
+Sub RemoveBinaryFieldsFromWidthList()
+Dim MaxIndex as Integer
+	MaxIndex = Ubound(WidthList(),1) - Ubound(ImgWidthList(),1) - 1
+	ReDim Preserve WidthList(MaxIndex, 4)
+	FillUpFieldsListbox()
+End Sub</script:module>

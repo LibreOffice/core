@@ -34,6 +34,9 @@ Dim sMsgDatetime_TimeComponent as String
 Public sGoOn as String
 Public sReady as String
 Public sMsgNoConnection as String
+Public sReduceDialog as String
+Public sHeightenDialog as String
+
 
 Sub LoadLanguage ()
 	sMsgWizardName = GetResText(RID_FORM + 0)
@@ -63,232 +66,216 @@ End Sub
 Sub SetDialogLanguage ()
 	DlgFormDB = LoadDialog(&quot;FormWizard&quot;, &quot;DlgFormDB&quot;)
 	oDialogModel = DlgFormDB.Model
-	oDialogModel.cmdCancel.Label = GetResText(RID_COMMON + 1)
-	oDialogModel.cmdBack.Label = GetResText(RID_COMMON + 2)
-	oDialogModel.cmdHelp.Label = GetResText(RID_COMMON + 20)
-	sGoOn = GetResText(RID_COMMON + 3)
-	oDialogModel.cmdGoOn.Label = sGoOn
-	oDialogModel.lblDatabases.Label = GetResText(RID_COMMON + 4)
-	oDialogModel.lblTables.Label = GetResText(RID_FORM + 11) &apos;Form_1_frameTables
+	With oDialogModel
+		.cmdCancel.Label = GetResText(RID_COMMON + 1)
+		.cmdBack.Label = GetResText(RID_COMMON + 2)
+		.cmdHelp.Label = GetResText(RID_COMMON + 20)
+		sGoOn = GetResText(RID_COMMON + 3)
+		.cmdGoOn.Label = sGoOn
+		.lblDatabases.Label = GetResText(RID_COMMON + 4)
+		.lblTables.Label = GetResText(RID_FORM + 11)
 
-	oDialogModel.lblFields.Label = GetResText(RID_FORM + 12) &apos;Form_2_lblAvailable
-	oDialogModel.lblSelFields.Label = GetResText(RID_FORM + 13) &apos;Form_2_lblSelected
+		.lblFields.Label = GetResText(RID_FORM + 12)
+		.lblSelFields.Label = GetResText(RID_FORM + 13)
 
+		.lblStyles.Label = GetResText(RID_FORM + 21)
+		.hlnBorderLayout.Label = GetResText(RID_FORM + 28)
+		.hlnAlign.Label = GetResText(RID_FORM + 32)
+		.hlnArrangements.Label = GetResText(RID_FORM + 35)
 
-	oDialogModel.lblStyles.Label = GetResText(RID_FORM + 21)
-&apos; Todo: Die Position des Eingabefeld für den Formulartitel entsprechend der Länge seines Labels bestimmen	
-	oDialogModel.lblInputTitle.Label = GetResText(RID_FORM + 22)
-	oDialogModel.lblFinalConfig.Label = GetResText(RID_FORM + 23)
-	oDialogModel.optUseDocument.Label = GetResText(RID_FORM + 24)
-	oDialogModel.optSaveDocument.Label = GetResText(RID_FORM + 25)
-	oDialogModel.optUseDocument.Enabled = True
-	oDialogModel.lblPath.Label = GetResText(RID_FORM + 60)
-	oDialogModel.txtInputPath.Text = ConvertFromUrl(WorkPath)
-	oDialogModel.hlnBorderLayout.Label = GetResText(RID_FORM + 28)
-	oDialogModel.hlnAlign.Label = GetResText(RID_FORM + 32)
-	oDialogModel.hlnArrangements.Label = GetResText(RID_FORM + 35)
+		WizardTitle(1) = GetResText(RID_FORM + 45)
+		WizardTitle(2) = GetResText(RID_FORM + 46)
+		WizardTitle(3) = GetResText(RID_FORM + 47)
 
-	WizardTitle(1) = GetResText(RID_FORM + 45)
-	WizardTitle(2) = GetResText(RID_FORM + 46)
-	WizardTitle(3) = GetResText(RID_FORM + 47)
-
-	oDialogModel.hlnBinaries.Label = GetResText(RID_FORM + 50)
-	oDialogModel.optIgnoreBinaries.Label = GetResText(RID_FORM + 51)
-	oDialogModel.optBinariesasGraphics.Label = GetResText(RID_FORM + 52)
+		.hlnBinaries.Label = GetResText(RID_FORM + 50)
+		.optIgnoreBinaries.Label = GetResText(RID_FORM + 51)
+		.optBinariesasGraphics.Label = GetResText(RID_FORM + 52)
 	
-	oDialogModel.hlnBackground.Label = GetResText(RID_FORM + 55)
-	oDialogModel.optTiled.Label = GetResText(RID_FORM + 56)
-	oDialogModel.optArea.Label = GetResText(RID_FORM + 57)
+		.hlnBackground.Label = GetResText(RID_FORM + 55)
+		.optTiled.Label = GetResText(RID_FORM + 56)
+		.optArea.Label = GetResText(RID_FORM + 57)
 
-	oDialogModel.cmdAlign0.ImageURL = FormPath &amp; &quot;Align_0.bmp&quot;
-	oDialogModel.cmdAlign0.HelpText = GetResText(RID_FORM + 33)
+		.cmdAlign0.ImageURL = FormPath &amp; &quot;Align_0.bmp&quot;
+		.cmdAlign0.HelpText = GetResText(RID_FORM + 33)
 
-	oDialogModel.cmdAlign2.ImageURL = FormPath &amp; &quot;Align_2.bmp&quot;
-	oDialogModel.cmdAlign2.HelpText = GetResText(RID_FORM + 34)
+		.cmdAlign2.ImageURL = FormPath &amp; &quot;Align_2.bmp&quot;
+		.cmdAlign2.HelpText = GetResText(RID_FORM + 34)
 
-	oDialogModel.cmdBorder0.ImageURL = FormPath &amp; &quot;Border_0.bmp&quot;
-	oDialogModel.cmdBorder0.HelpText = GetResText(RID_FORM + 29)
+		.cmdBorder0.ImageURL = FormPath &amp; &quot;Border_0.bmp&quot;
+		.cmdBorder0.HelpText = GetResText(RID_FORM + 29)
 
-	oDialogModel.cmdBorder1.ImageURL = FormPath &amp; &quot;Border_1.bmp&quot;
-	oDialogModel.cmdBorder1.HelpText = GetResText(RID_FORM + 30)
+		.cmdBorder1.ImageURL = FormPath &amp; &quot;Border_1.bmp&quot;
+		.cmdBorder1.HelpText = GetResText(RID_FORM + 30)
 
-	oDialogModel.cmdBorder2.ImageURL = FormPath &amp; &quot;Border_2.bmp&quot;
-	oDialogModel.cmdBorder2.HelpText = GetResText(RID_FORM + 31)
+		.cmdBorder2.ImageURL = FormPath &amp; &quot;Border_2.bmp&quot;
+		.cmdBorder2.HelpText = GetResText(RID_FORM + 31)
 
+		.cmdArrange1.ImageURL = FormPath &amp; &quot;Arrange_1.bmp&quot;
+		.cmdArrange1.HelpText = GetResText(RID_FORM + 36)
+	
+		.cmdArrange2.ImageURL = FormPath &amp; &quot;Arrange_2.bmp&quot;
+		.cmdArrange2.HelpText = GetResText(RID_FORM + 37)
 
-	oDialogModel.cmdArrange1.ImageURL = FormPath &amp; &quot;Arrange_1.bmp&quot;
-	oDialogModel.cmdArrange1.HelpText = GetResText(RID_FORM + 36)
+		.cmdArrange3.ImageURL = FormPath &amp; &quot;Arrange_3.bmp&quot;
+		.cmdArrange3.HelpText = GetResText(RID_FORM + 40)
 
-	oDialogModel.cmdArrange2.ImageURL = FormPath &amp; &quot;Arrange_2.bmp&quot;
-	oDialogModel.cmdArrange2.HelpText = GetResText(RID_FORM + 37)
+		.cmdArrange4.ImageURL = FormPath &amp; &quot;Arrange_4.bmp&quot;
+		.cmdArrange4.HelpText = GetResText(RID_FORM + 38)
 
-	oDialogModel.cmdArrange3.ImageURL = FormPath &amp; &quot;Arrange_3.bmp&quot;
-	oDialogModel.cmdArrange3.HelpText = GetResText(RID_FORM + 40)
+		.cmdArrange5.ImageURL = FormPath &amp; &quot;Arrange_5.bmp&quot;
+		.cmdArrange5.HelpText = GetResText(RID_FORM + 39)
+		
+		sHeightenDialog = GetResText(RID_FORM + 66)
+		sReduceDialog = GetResText(RID_FORM + 65)
 
-	oDialogModel.cmdArrange4.ImageURL = FormPath &amp; &quot;Arrange_4.bmp&quot;
-	oDialogModel.cmdArrange4.HelpText = GetResText(RID_FORM + 38)
-
-	oDialogModel.cmdArrange5.ImageURL = FormPath &amp; &quot;Arrange_5.bmp&quot;
-	oDialogModel.cmdArrange5.HelpText = GetResText(RID_FORM + 39)
+		.cmdSwitchHeight.HelpText = sReduceDialog
+		.cmdSwitchHeight.ImageURL = FormPath &amp; &quot;up.bmp&quot;
+	End With
 End Sub
 
 
 
 Sub InitializeWidthList()
+
 &apos;Todo: Was ist mit Currencies? Wieso sind dafür in der API keine Feldtypen definiert?
+&apos;  &apos;Currency&apos; ist ein Flag, dass grundsätzlich an jedes Feld angehängt sein kann.
+&apos; An der Connection kann man irgendwie abfragen, ob ein bestimmter Datentyp als Währung 
+&apos; interpretiert wird. Darstellung über Numberformatter. Ist nicht konsistent über Datenbanken.
+&apos; außerdem dürften hier einige Treiber auch buggy sein.
 	WidthList(0,0) = com.sun.star.sdbc.DataType.BIT   			&apos; = -7;
 	WidthList(0,1) = 5
 	WidthList(0,2) = cCheckbox
 	WidthList(0,3) = False
-
+	WidthList(0,4) = &quot;CheckBox&quot;
 	WidthList(1,0) = com.sun.star.sdbc.DataType.TINYINT			&apos; =  -6;
 	WidthList(1,1) = 4
 	WidthList(1,2) = cNumericBox
 	WidthList(1,3) = False
+	WidthList(1,4) = &quot;FormattedField&quot;
 	
 	WidthList(2,0) = com.sun.star.sdbc.DataType.SMALLINT		&apos; =   5;
 	WidthList(2,1) = 4
 	WidthList(2,2) = cNumericBox
 	WidthList(2,3) = False
+	WidthList(2,4) = &quot;FormattedField&quot;
 	
 	WidthList(3,0) = com.sun.star.sdbc.DataType.INTEGER			&apos; =   4;
 	WidthList(3,1) = 6
 	WidthList(3,2) = cNumericBox
 	WidthList(3,3) = False
+	WidthList(3,4) = &quot;FormattedField&quot;
 	
 	WidthList(4,0) = com.sun.star.sdbc.DataType.BIGINT			&apos; =  -5;
 	WidthList(4,1) = 11
 	WidthList(4,2) = cNumericBox
 	WidthList(4,3) = False
+	WidthList(4,4) = &quot;FormattedField&quot;
 	
 	WidthList(5,0) = com.sun.star.sdbc.DataType.FLOAT			&apos; =   6;
 	WidthList(5,1) = 21
 	WidthList(5,2) = cNumericBox
 	WidthList(5,3) = False
+	WidthList(5,4) = &quot;FormattedField&quot;
 	
 	WidthList(6,0) = com.sun.star.sdbc.DataType.REAL			&apos; =   7;
-	WidthList(6,1) = 21
+	WidthList(6,1) = 21	&apos;Property &apos;Scale&apos;, keine maximalwerte
 	WidthList(6,2) = cNumericBox
 	WidthList(6,3) = False
+	WidthList(6,4) = &quot;FormattedField&quot;
 	
 	WidthList(7,0) = com.sun.star.sdbc.DataType.DOUBLE			&apos; =   8;
-	WidthList(7,1) = 21
+	WidthList(7,1) = 21 &apos; dynamisch erstellen
+	&apos;Property &apos;Scale&apos;
 	WidthList(7,2) = cNumericBox
 	WidthList(7,3) = False
+	WidthList(7,4) = &quot;FormattedField&quot;
 	
 	WidthList(8,0) = com.sun.star.sdbc.DataType.NUMERIC			&apos; =   2;
 	WidthList(8,1) = 21
 	WidthList(8,2) = cNumericBox
 	WidthList(8,3) = False
+	WidthList(8,4) = &quot;FormattedField&quot;
 	
-	WidthList(9,0) = com.sun.star.sdbc.DataType.DECIMAL			&apos; =   3;
+	WidthList(9,0) = com.sun.star.sdbc.DataType.DECIMAL			&apos; =   3;  (mit Nachkommastellen)
 	WidthList(9,1) = 10	&apos; ToDo: Dies muss in einer Routine errechnet werden
 	WidthList(9,2) = cNumericBox
 	WidthList(9,3) = False
+	WidthList(9,4) = &quot;FormattedField&quot;
 	
 	WidthList(10,0) = com.sun.star.sdbc.DataType.CHAR			&apos; =   1;
 	WidthList(10,1) = 3
 	WidthList(10,2) = cTextBox
 	WidthList(10,3) = False
+	WidthList(10,4) = &quot;TextField&quot;
+
 	&apos; Todo: Sollte die Feldlänge vielleicht lieber aus den Metadaten ausgelesen werden?	
 	WidthList(11,0) = com.sun.star.sdbc.DataType.VARCHAR		&apos; =  12;
 	WidthList(11,1) = 20
 	WidthList(11,2) = cTextBox
 	WidthList(11,3) = True
+	WidthList(11,4) = &quot;TextField&quot;
 	
 	WidthList(12,0) = com.sun.star.sdbc.DataType.LONGVARCHAR	&apos; =  -1;
 	WidthList(12,1) = 20
 	WidthList(12,2) = cTextBox
 	WidthList(12,3) = True
+	WidthList(12,4) = &quot;TextField&quot;
 	
 	WidthList(13,0) = com.sun.star.sdbc.DataType.DATE			&apos; =  91;
 	WidthList(13,1) = 12
 	WidthList(13,2) = cDateBox
 	WidthList(13,3) = False
+	WidthList(13,4) = &quot;DateField&quot;
 	
 	WidthList(14,0) = com.sun.star.sdbc.DataType.TIME			&apos; =  92;
 	WidthList(14,1) = 11
 	WidthList(14,2) = cTimeBox
 	WidthList(14,3) = False
+	WidthList(14,4) = &quot;TimeField&quot;
 	
 &apos; Todo: Die folgenden Felder auffüllen!	
 	WidthList(15,0) = com.sun.star.sdbc.DataType.TIMESTAMP		&apos; =  93;
-&apos;	WidthList(15,1) = 
+&apos;	WidthList(15,1) = Datum-Zeit Feld
 &apos;	WidthList(15,2) = 
 	WidthList(15,3) = False
-	
-	WidthList(16,0) = com.sun.star.sdbc.DataType.BINARY			&apos; =  -2;
-&apos;	WidthList(16,1) = 
-&apos;	WidthList(16,2) = cImageControl
-	WidthList(16,3) = False
-	
-	WidthList(17,0) = com.sun.star.sdbc.DataType.VARBINARY		&apos; =  -3;
-&apos;	WidthList(17,1) = 
-&apos;	WidthList(17,2) = cImageControl
-	WidthList(17,3) = False
-	
-	WidthList(18,0) = com.sun.star.sdbc.DataType.LONGVARBINARY	&apos; =  -4;
-&apos;	WidthList(18,1) = 
-&apos;	WidthList(18,2) = cImageControl
-	WidthList(18,3) = False
-	
-	WidthList(19,0) = com.sun.star.sdbc.DataType.SQLNULL		&apos; =   0;
-&apos;	WidthList(19,1) = 
-&apos;	WidthList(19,2) = 
-	WidthList(19,3) = False
-	
-	WidthList(20,0) = com.sun.star.sdbc.DataType.OTHER			&apos; = 1111;
-&apos;	WidthList(20,1) = 
-&apos;	WidthList(20,2) = 
-	WidthList(20,3) = False
-	
-	WidthList(21,0) = com.sun.star.sdbc.DataType.OBJECT			&apos; = 2000;
-&apos;	WidthList(21,1) = 
-&apos;	WidthList(21,2) = 
-	WidthList(21,3) = False
-	
-	WidthList(22,0) = com.sun.star.sdbc.DataType.DISTINCT		&apos; = 2001;
-&apos;	WidthList(22,1) = 
-&apos;	WidthList(22,2) = 
-	WidthList(22,3) = False
-	
-	WidthList(23,0) = com.sun.star.sdbc.DataType.STRUCT			&apos; = 2002;
-&apos;	WidthList(23,1) = 
-&apos;	WidthList(23,2) = 
-	WidthList(23,3) = False
-	
-	WidthList(24,0) = com.sun.star.sdbc.DataType.ARRAY			&apos; = 2003;
-&apos;	WidthList(24,1) = 
-&apos;	WidthList(24,2) = 
-	WidthList(24,3) = False
-	
-	WidthList(25,0) = com.sun.star.sdbc.DataType.BLOB			&apos; = 2004;
-&apos;	WidthList(25,1) = 
-&apos;	WidthList(25,2) = 
-	WidthList(25,3) = False
-	
-	WidthList(26,0) = com.sun.star.sdbc.DataType.CLOB			&apos; = 2005;
-&apos;	WidthList(26,1) = 
-&apos;	WidthList(26,2) = 
-	WidthList(26,3) = False
-	
-	WidthList(27,0) = com.sun.star.sdbc.DataType.REF			&apos; = 2006;
-&apos;	WidthList(27,1) = 
-&apos;	WidthList(27,2) = 
-	WidthList(27,3) = False
+&apos;	WidthList(15,4) = 
 
-	ControlList(cCheckBox) = &quot;CheckBox&quot;							&apos; cBoolean
-	ControlList(cNumericBox) = &quot;NumericField&quot;					&apos; cFloat, cInteger, cLong, cCounter, cDecimal, cShortInt
-	ControlList(cCurrencyBox) = &quot;CurrencyField&quot;					&apos; cCurrency
-	ControlList(cDateBox) = &quot;DateField&quot;
-	ControlList(cTimeBox) = &quot;TimeField&quot;
-	ControlList(cTextBox) = &quot;TextField&quot;
-	ControlList(cImageControl) = &quot;ImageControl&quot;
-&apos; Todo: Und was ist hiermit?
-&apos;const cLabel 		= 1 
-&apos;const cGridControl	= 8
-&apos;const cImageControl	= 9
 
+	ImgWidthList(0,0) = com.sun.star.sdbc.DataType.BINARY			&apos; =  -2;
+	ImgWidthList(0,1) = 1000
+	ImgWidthList(0,2) = cImageControl
+	ImgWidthList(0,3) = False
+	ImgWidthList(0,4) = &quot;ImageControl&quot;
+	
+	ImgWidthList(1,0) = com.sun.star.sdbc.DataType.VARBINARY		&apos; =  -3;
+	ImgWidthList(1,1) = 1000
+	ImgWidthList(1,2) = cImageControl
+	ImgWidthList(1,3) = False
+	ImgWidthList(1,4) = &quot;ImageControl&quot;
+
+	ImgWidthList(2,0) = com.sun.star.sdbc.DataType.LONGVARBINARY	&apos; =  -4;
+	ImgWidthList(2,1) = 1000
+	ImgWidthList(2,2) = cImageControl
+	ImgWidthList(2,3) = False
+	ImgWidthList(2,4) = &quot;ImageControl&quot;
+
+	ImgWidthList(3,0) = com.sun.star.sdbc.DataType.BLOB			&apos; = 2004;
+	ImgWidthList(3,1) = 1000
+	ImgWidthList(3,2) = cImageControl
+	ImgWidthList(3,3) = False
+	ImgWidthList(3,4) = &quot;ImageControl&quot;
+
+&apos; Note: the following Fieldtypes cannot be presented
+&apos; Todo: This should be mentioned in the help	
+&apos;ExcludeList(0) = com.sun.star.sdbc.DataType.SQLNULL
+&apos;ExcludeList(1) = com.sun.star.sdbc.DataType.OTHER
+&apos;ExcludeList(2) = com.sun.star.sdbc.DataType.OBJECT
+&apos;ExcludeList(3) = com.sun.star.sdbc.DataType.DISTINCT
+&apos;ExcludeList(4) = com.sun.star.sdbc.DataType.STRUCT
+&apos;ExcludeList(5) = com.sun.star.sdbc.DataType.ARRAY
+&apos;ExcludeList(6) = com.sun.star.sdbc.DataType.CLOB
+&apos;ExcludeList(7) = com.sun.star.sdbc.DataType.REF
+	
 	oModelService(cLabel) = &quot;com.sun.star.form.component.FixedText&quot;
 	oModelService(cTextBox) = &quot;com.sun.star.form.component.TextField&quot;
 	oModelService(cCheckBox) = &quot;com.sun.star.form.component.CheckBox&quot;

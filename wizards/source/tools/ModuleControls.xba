@@ -142,20 +142,29 @@ Dim oCell as Object
 End Function
 
 
-Function LoadDialog(Libname as String, DialogName as String, Optional oLibContainer)
+Function LoadDialog(Libname as String, DialogName as String)
 Dim oLib as Object
-Dim oLibDialog as Object
-Dim oRuntimeDialog as Object
-
-	If IsMissing( oLibContainer ) then
-		oLibContainer = DialogLibraries
-	End If
-	oLibContainer.LoadLibrary(Libname)
-	oLib = oLibContainer.GetByName(Libname)
-	oLibDialog = oLib.GetByName(DialogName)
-	oRuntimeDialog = CreateUnoDialog(oLibDialog)
-	LoadDialog() = oRuntimeDialog
+Dim oDialog as Object
+        DialogLibraries.loadLibrary(Libname)
+        oLib = DialogLibraries.GetByName(Libname)
+        oDialog = CreateUnoDialog(oLib, DialogName)
+        LoadDialog() = oDialog
 End Function
+
+&apos;Function LoadDialog(Libname as String, DialogName as String, Optional oLibContainer)
+&apos;Dim oLib as Object
+&apos;Dim oLibDialog as Object
+&apos;Dim oRuntimeDialog as Object
+
+&apos;	If IsMissing( oLibContainer ) then
+&apos;		oLibContainer = DialogLibraries
+&apos;	End If
+&apos;	oLibContainer.LoadLibrary(Libname)
+&apos;	oLib = oLibContainer.GetByName(Libname)
+&apos;	oLibDialog = oLib.GetByName(DialogName)
+&apos;	oRuntimeDialog = CreateUnoDialog(oLibDialog)
+&apos;	LoadDialog() = oRuntimeDialog
+&apos;End Function
 
 
 Sub SwitchWizardDialogHeight(oDialog as Object)

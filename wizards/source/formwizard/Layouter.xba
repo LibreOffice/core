@@ -7,12 +7,16 @@
 &apos; 		Was passiert, wenn Felder jenseits der Ränder positioniert werden?
 &apos; Todo: Die ObjektArrays oDBShapeList() und oTCShaplist könnten 3-Dimensional sein mit dem Model und dem Control 
 &apos; in den anderen beiden Dimensionen
+&apos; Todo: doppelte Liste für Tabellen und Abfragen mit der Angabe des Contenttypes
+
 Public oProgressbar as Object
 Public ProgressValue as Integer
 Public oDocument as Object
 Public oController as Object
 Public oForm as Object
 Public oDrawPage as Object
+Public oPageStyle as Object
+
 Public nMaxColRightX as Long
 Public nMaxTCWidth as Long
 Public nMaxRowRightX as Long
@@ -39,7 +43,10 @@ Public CurArrangement as Integer
 Public CurBorderType as Integer
 Public CurAlignmode as Integer
 
+Public OldAlignMode as Integer
+Public OldBorderType as Integer
 Public OldArrangement as Integer
+
 Public Const cColumnarLeft = 1
 Public Const cColumnarTop = 2
 Public Const cTabled = 3
@@ -64,7 +71,7 @@ Public Const cGridControl	= 8
 Public Const cImageControl	= 9
 
 Public Styles(8, 50) as String
-Public FieldMetaValues(MaxFieldIndex,2) as String
+Public FieldMetaValues(MaxFieldIndex,3)
 &apos; Description of this List:
 &apos; FieldMetaValues(0-MaxFieldIndex,0) (Datafieldtype)
 &apos; FieldMetaValues(0-MaxFieldIndex,1) (Datafieldlength)
@@ -122,36 +129,37 @@ ErrorAndCloseForm:
 End Function
 
 
-Sub OpenBaseDocument()
+Sub OpenFormDocument()
 Dim NoArgs() as new com.sun.star.beans.PropertyValue
-Dim aPageSize As New com.sun.star.awt.Size
-Dim aSize As New com.sun.star.awt.Size
 Dim oViewSettings as Object
-Dim oPageStyle as Object
-
 	oDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter&quot;, &quot;_blank&quot;, 0, NoArgs())
+	oDocument.ApplyFormDesignMode = False
 	oController = oDocument.GetCurrentController
 	oViewSettings = oDocument.CurrentController.ViewSettings
 &apos;	oDocument.LockControllers
 	oViewSettings.ShowTableBoundaries = False
+&apos; Todo: Im Auge behalten, ob die Viewsettings auch mit abgespeichert werden
 	oViewSettings.ShowTextBoundaries = False
 	oViewSettings.ShowOnlineLayout = True
 	oViewSettings.ShowHoriRuler = True
-&apos;	oCursor = oDocument.Text.CreateTextCursor
-&apos;	oCursor.InsertDocumentfromURL(FileStr, NoArgs())
 	oDrawPage = oDocument.DrawPage
 	oPageStyle = oDocument.StyleFamilies.GetByName(&quot;PageStyles&quot;).GetByName(&quot;Standard&quot;)
+End Sub
+
+
+Sub ConfigurePageStyle()
+Dim aPageSize As New com.sun.star.awt.Size
+Dim aSize As New com.sun.star.awt.Size
 	oPageStyle.IsLandscape = True
-&apos; Todo: Prozedur schreiben um Seite auf Landscape/Portrait zu setzen
 	aPageSize = oPageStyle.Size
 	nPageWidth = aPageSize.Width
 	nPageHeight = aPageSize.Height
 	aSize.Width = nPageHeight
 	aSize.Height = nPageWidth
 	oPageStyle.Size = aSize
+
 	nPageWidth = nPageHeight
 	nPageHeight = oPageStyle.Size.Height
-	&apos; Todo: Es könnte der unterste Grenze in Abhängigkeit von der Anzahl der DB-Felder bestimmt werden.
 	nFormWidth = nPageWidth - oPageStyle.RightMargin - oPageStyle.LeftMargin - 2 * cXOffset
 	nFormHeight = nPageHeight - oPageStyle.TopMargin - oPageStyle.BottomMargin - 2 * cYOffset - cSymbolMargin
 End Sub
@@ -160,22 +168,18 @@ End Sub
 &apos; Modify the Borders of the Controls
 Sub ChangeBorderLayouts(oEvent as Object)
 Dim oModel as Object
-Dim OldBorderType as Integer
 Dim i as Integer
 Dim oCurModel as Object
+	oModel = oEvent.Source.Model
+	SwitchBorderButtons(Val(Right(oModel.Name,1)))	
 	ToggleLayoutPage(False)
 &apos;	oDocument.LockControllers
-	OldBorderType = CurBorderType
-	oModel = oEvent.Source.Model
-	CurBorderType = Val(Right(oModel.Name,1))	
-&apos; Todo: Die Grafikurl des Controls umsetzen, ebenso wie die Grafikurl des 
-&apos; alten Controls
+
 &apos; Todo: Auch unsichtbare Controls müssen eine neue Border bekommen
 &apos; Am besten wird hierbei das dynamische Array oDBShapeList() abgegriffen
 	If CurArrangement = cTabled Then
 		oGridModel.Border = CurBorderType
 	Else
-		&apos; 
 		If OldBorderType &lt;&gt; CurBorderType Then
 			For i = 0 To MaxIndex
 				oCurModel = oDBShapeList(i).GetControl
@@ -193,15 +197,11 @@ End Sub
 Sub ChangeLabelAlignments(oEvent as Object)
 Dim i as Integer
 Dim oCurModel as Object
-Dim OldAlignMode as Integer
 Dim oModel as Object
+	oModel = oEvent.Source.Model
+	SwitchAlignButtons(Val(Right(oModel.Name,1)))
 	ToggleLayoutPage(False)
 &apos;	oDocument.LockControllers()
-	OldAlignMode = CurAlignMode
-	oModel = oEvent.Source.Model
-	CurAlignMode = Val(Right(oModel.Name,1))
-	&apos; Todo: Es muss festgestellt werden, welches Imagecontrol vorher selectiert war
-	&apos; und die GrafikUrls müssen entsprechend angepasst werden.	
 	If OldAlignMode &lt;&gt; CurAlignMode Then
 		For i = 0 To MaxIndex
 			oCurModel = oTCShapeList(i).GetControl
@@ -215,9 +215,10 @@ End Sub
 
 Sub ChangeArrangemode(oEvent as Object)
 Dim oModel as Object
-	OldArrangement = CurArrangement
 	oModel = oEvent.Source.Model
-	CurArrangement = Val(Right(oModel.Name,1))	
+	SwitchArrangementButtons(Val(Right(oModel.Name,1)))
+	oModel.State = 1
+	DlgFormDB.GetControl(&quot;cmdArrange&quot; &amp; OldArrangement).Model.State = 0
 	If CurArrangement &lt;&gt; OldArrangement Then
 		ArrangeControls()
 		Select Case CurArrangement
@@ -228,8 +229,8 @@ Dim oModel as Object
 				ToggleAlignGroup(CurArrangement = cColumnarLeft)
 				ControlCaptionstoStandardLayout()
 &apos; Todo: geht das nicht eleganter?
-				ToggleDesignmode(oDocument)
-				ToggleDesignmode(oDocument)
+&apos;				ToggleDesignmode(oDocument)
+&apos;				ToggleDesignmode(oDocument)
 				oDBForm.Load
 		End Select
 		
@@ -276,7 +277,7 @@ Sub ToggleLayoutPage(bDoEnable as Boolean)
 		.cmdBack.Enabled = bDoEnable
 		.cmdGoOn.Enabled = bDoEnable
 &apos;		If DlgFormDB.GetControl(&quot;imgTheme&quot;).Visible Then
-			.imgTheme.Enabled = bDoEnable
+&apos;			.imgTheme.Enabled = bDoEnable
 &apos;		End If
 	End With
 	ToggleAlignGroup(bDoEnable)
@@ -293,5 +294,35 @@ Dim oShape as Object
 			oShape.Dispose
 		End If
 	Next i
+End Sub
+
+
+Sub SwitchArrangementButtons(ByVal LocArrangement as Integer)
+	OldArrangement = CurArrangement
+	CurArrangement = LocArrangement
+	If OldArrangement &lt;&gt; 0 Then
+		DlgFormDB.GetControl(&quot;cmdArrange&quot; &amp; OldArrangement).Model.State = 0
+	End If
+	DlgFormDB.GetControl(&quot;cmdArrange&quot; &amp; CurArrangement).Model.State = 1
+End Sub
+
+
+Sub SwitchBorderButtons(ByVal LocBorderType as Integer)
+	OldBorderType = CurBorderType
+	CurBorderType = LocBorderType
+&apos;	If OldArrangement &lt;&gt; 0 Then
+		DlgFormDB.GetControl(&quot;cmdBorder&quot; &amp; OldBorderType).Model.State = 0
+&apos;	End If
+	DlgFormDB.GetControl(&quot;cmdBorder&quot; &amp; CurBorderType).Model.State = 1
+End Sub
+
+
+Sub SwitchAlignButtons(ByVal LocAlignMode as Integer)
+	OldAlignMode = CurAlignMode
+	CurAlignMode = LocAlignMode
+&apos;	If OldAlignMode &lt;&gt; 0 Then
+		DlgFormDB.GetControl(&quot;cmdAlign&quot; &amp; OldAlignMode).Model.State = 0
+&apos;	End If
+	DlgFormDB.GetControl(&quot;cmdAlign&quot; &amp; CurAlignMode).Model.State = 1
 End Sub
 </script:module>

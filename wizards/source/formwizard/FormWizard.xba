@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="FormWizard" script:language="StarBasic">Option Explicit
-&apos;Very new version
+
 Public DocumentName as String
 Public FormPath$, FormDBName$, FormReturnValue$
 Public TemplatePath$
@@ -27,21 +27,23 @@ Public oDBContext as Object
 Public oUcb as Object
 Public oDocInfo as Object
 &apos;Public TemplateList(50,1) as String
-Public WidthList(27,3) as Long
-Public ControlList(1 To 9) as String
+Public WidthList(15,4)
+Public ImgWidthList(3,4)
 Public sDBName as String
 Public Tablename as String
 
 
-Sub MainWithDefault()
+&apos; Todo: &apos;Datenquelle&apos; für &apos;Datenbank&apos;
+&apos; &apos;Inhalte&apos; oder &apos;Objekte&apos; mit &apos;Tabellen und Abfragen&apos; evtl als Hilfetext für &apos;Datenquelle&apos;
+Sub MainWithDefault(Optional DatasourceName as String, Optional Contenttype as Integer, Optional sContent as String, Optional oConnection as Object)
 &apos;On Local Error Goto GlobalError
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	BasicLibraries.LoadLibrary(&quot;WebWizard&quot;)
 	bControlsareCreated = False
+	MaxIndex = -1
 	If Not InitResources(&quot;Formwizard&quot;,&quot;dbw&quot;) Then
 		Exit Sub
 	End If
-	MaxIndex = -1
 	oDBContext = CreateUnoService(&quot;com.sun.star.sdb.DatabaseContext&quot;)
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	FormPath = GetOfficeSubPath(&quot;Template&quot;,&quot;wizard/bitmap&quot;)
@@ -49,15 +51,16 @@ Sub MainWithDefault()
 	WizardPath = GetOfficeSubPath(&quot;Template&quot;,&quot;wizard/&quot;)
 	TexturePath = GetOfficeSubPath(&quot;Gallery&quot;, &quot;www-back/&quot;)
 	WorkPath = GetPathSettings(&quot;Work&quot;)
-	OpenBaseDocument()
+	OpenFormDocument()
 	GetDatabaseNames()
 	InitializeWidthList()
-	&apos; calc some special currency control properties (they depend from the system language)
-	&apos; Todo: What&apos;s going on here?
-&apos;	calcCurrencyProperties()
 	LoadLanguage
 	bNeedFieldRefresh = True
-	CreateForm()
+	If Not IsMissing(DataSourceName) Then
+		CreateForm(DatasourceName, Contenttype, sContent, oConnection)
+	Else
+		CreateForm()
+	End If
 GlobalError:
 	If Err &lt;&gt; 0 Then
 		ToggleWindow(True)
@@ -66,20 +69,29 @@ GlobalError:
 End Sub
 
 
-Sub CreateForm() as String
+Sub CreateForm(Optional DatasourceName as String, Optional Contenttype as Integer, Optional sContent as String, Optional oConnection as Object) as String
 Dim i as Integer
-&apos; On Error Goto GlobalError
 	With oDialogModel
 		.optIgnoreBinaries.State = True
-		.optUseDocument.State = True
 		.cmdBack.Enabled = False
 		.cmdGoOn.Enabled = False
 		.lblTables.Enabled = False
 		.lstSelFields.Tag = False
-		ToggleListboxControls(oDialogModel, False)
 		.Step = 1
 		.lstDatabases.StringItemList()= sDatabaseList()&apos; = AddItem(sDatabaseList(i)
 	End With
+	If Not IsMissing(DataSourceName) Then
+		DlgFormDB.GetControl(&quot;lstDatabases&quot;).SelectItem(DataSourceName, True)
+		&apos; Todo: Hier muss auch noch der Contenttype untergebracht werden
+		If GetDBMetaData() Then
+			Set oDBConnection = oConnection
+			oDialogModel.lstTables.StringItemList() = AddListToList(TableNames(), QueryNames()
+			DlgFormDB.GetControl(&quot;lstTables&quot;).SelectItem(sContent, True)
+			FillUpFieldsListbox()
+		End If
+	Else
+		ToggleListboxControls(oDialogModel, False)
+	End If
 	DlgFormDB.Title = WizardTitle(1)
 	NumberofStyles = FillupWebListbox(oUcb, &quot;/stl&quot;, DlgFormDB, &quot;lstStyles&quot;, Styles())
 	ImportStyles()
@@ -97,29 +109,17 @@ GlobalError:
 End Sub
 
 
-Function AddListtoList(FirstArray(), SecondArray(), Optional StarIndex)
-Dim n as Integer
-Dim m as Integer
-Dim MaxIndex as Integer
-	MaxIndex = Ubound(FirstArray()) + Ubound(SecondArray()) + 1
-	Dim ResultArray(MaxIndex)
-	For m = 0 To Ubound(FirstArray())
-		ResultArray(m) = FirstArray(m)
-	Next m
-	For n = 0 To Ubound(SecondArray())
-		ResultArray(m) = SecondArray(n)
-		m = m + 1
-	Next n
-	AddListToList() = ResultArray()
-End Function
-
-
 Sub FormGetFields()
 Dim i as Integer
-Dim n as Integer
 	ToggleDatabasePage(False)
+	FillUpFieldsListbox()
+	ToggleDatabasePage(True)
+End Sub
+
+
+Sub FillUpFieldsListbox()
+Dim n as Integer
 	n = Ubound(oDialogModel.lstTables.SelectedItems())
-	InitializeListboxProcedures(oDialogModel, oDialogModel.lstFields, oDialogModel.lstSelFields)
 	If n &lt;&gt; -1 Then
 		Tablename = Tablenames(oDialogModel.lstTables.SelectedItems(0))
 		bIsQuery = FieldinArray(QueryNames(), Ubound(QueryNames()), TableName)
@@ -131,14 +131,11 @@ Dim n as Integer
 		GetSpecificFieldNames()
 		ToggleListboxControls(oDialogModel, True)
 	End If
-	ToggleDatabasePage(True)
-
-&apos;	bNeedFieldRefresh = False
 	Exit Sub
-no_fields:
+&apos;TODO: Diese Fehlermarke sinnvoll einbinden	
+NOFIELDS:
 	MsgBox sMsgErrCouldNotOpenObject, 16, sMsgWizardName
 End Sub
-
 
 Sub CancelFormWizard()
 	DlgFormDB.EndExecute()
@@ -149,121 +146,62 @@ End Sub
 
 
 Sub PreviousStep()
-Dim CurStep as Integer
-	CurStep = oDialogModel.Step - 1
-	oDialogModel.Step = CurStep
-	oDialogModel.cmdBack.Enabled = CurStep &lt;&gt; 1
-	oDialogModel.cmdGoOn.Enabled = True
-	Select Case oDialogModel.Step
-		Case 1
-			oDialogModel.lstSelFields.Tag = Not bControlsareCreated
-		Case 2
-			oDialogModel.cmdGoOn.Label = sGoOn	
-	End Select
-	oDialogModel.imgTheme.ImageUrl = FormPath &amp; &quot;FormWizard_&quot; &amp; CurStep &amp; &quot;.bmp&quot;	
-	DlgFormDB.Title = WizardTitle(CurStep)
+	With oDialogModel
+		.Step = 1
+		.cmdBack.Enabled = False
+		.cmdGoOn.Enabled = True
+		.lstSelFields.Tag = Not bControlsareCreated
+		.cmdGoOn.Label = sGoOn
+		.imgTheme.ImageUrl = FormPath &amp; &quot;FormWizard_1.bmp&quot;	
+	End With
+	DlgFormDB.Title = WizardTitle(1)
 End Sub
 
 
 Sub NextStep()
+Dim bOldVisible
+	&apos; Note: Unfortunately it is not possible to query the visibility of the imagecontrol directly
+	bOldVisible = oDialogModel.Height &gt; 40
 	Select Case oDialogModel.Step
 		Case 1
-			GetTableMetaData()
-			CreateDBForm()
-			InitializeLayoutSettings()
-			oDialogModel.Step = 2
-			oDBForm.Load
-		Case 2
+			bControlsAreCreated = Not (CBool(oDialogModel.lstSelFields.Tag))
+			If Not bControlsAreCreated Then
+				GetTableMetaData()
+				CreateDBForm()
+				RemoveShapes()
+				InitializeLayoutSettings()
+				oDBForm.Load
+			End If
 			oDialogModel.cmdGoOn.Label = sReady
-			ToggleControlsofLastPage()
-			oDialogModel.Step = 3
-		Case 3
-			HandleCreatedDocument()
+			oDialogModel.cmdBack.Enabled = True
+			oDialogModel.Step = 2
+		Case 2
+			StoreForm()
 	End Select
+	DlgFormDB.GetControl(&quot;imgTheme&quot;).Visible = bOldVisible
 	oDialogModel.imgTheme.ImageUrl = FormPath &amp; &quot;FormWizard_&quot; &amp; oDialogModel.Step &amp; &quot;.bmp&quot;
-	DlgFormDB.Title = WizardTitle(oDialogModel.Step)	
+	DlgFormDB.Title = WizardTitle(oDialogModel.Step)
 End Sub
 
 
 Sub InitializeLayoutSettings()
-&apos; Todo: Dieses Flag neu setzen!
-	bControlsAreCreated =  False &apos;Not (CBool(oDialogModel.lstSelFields.Tag))
-	If Not bControlsAreCreated Then
+	If oPageStyle.BackGraphicLocation = com.sun.star.style.GraphicLocation.TILED Then
 		oDialogModel.optTiled.State = 1
-		OldArrangement = 0
-		CurArrangement = cTabled
-		CurBorderType = SB3DBORDER
-		CurAlignmode = SBALIGNLEFT
-		ToggleBorderGroup(bControlsAreCreated)
-		ToggleAlignGroup(bControlsAreCreated)
-		ArrangeControls()
-	End If
-End Sub
-
-
-Sub HandleCreatedDocument()
-Dim sPath as String
-Dim NoArgs() as new com.sun.star.beans.PropertyValue
-Dim DocTitle as String
-Dim sDirPath as String
-	On Local Error Goto NOSAVING
-
-	If oDialogModel.optSaveDocument.State = 1 Then
-		sDirPath = ConvertToUrl(oDialogModel.txtInputPath.Text)
-		sDirPath = RTrimStr(sDirPath,&quot;/&quot;)
-		DocTitle = oDialogModel.txtTitle.Text	
-		sPath = sDirPath &amp; &quot;/&quot; &amp; DocTitle &amp; &quot;.sxw&quot;
-		
-		oDocument.StoreToUrl(sPath,NoArgs()
-		NOSAVING:
-		If Err &lt;&gt; 0 Then
-			Msgbox(&quot;Todo: Resourcen für fehlerhaftes Abspeichern suchen!&quot;, 16, GetProductname)
-			Resume CLERROR
-		Else
-			DlgFormDB.EndExecute()
-			oDocument.Dispose
-		End If
-		CLERROR:
 	Else
-		DlgFormDB.EndExecute()
+		oDialogModel.optArea.State = 1
 	End If
-End Sub
-
-
-Sub ChangeDocumentTitle
-	oDocument.DocumentInfo.Title = oDialogModel.txtTitle.Text
-End Sub
-
-
-Sub CheckPathValidation()
-Dim sPath as String
-Dim sDir as String
-	sPath = ConvertToUrl(oDialogModel.txtInputPath.Text)
-	If sPath &lt;&gt; &quot;&quot; Then
-		sDir = DirectorynameoutofPath(sPath, &quot;/&quot;)
-	End If	
-	If oUcb.IsFolder(sDir) Then
-		oDialogModel.cmdGoOn.Enabled = oUcb.Exists(sDir)
-	Else
-		oDialogModel.cmdGoOn.Enabled = False
+	SwitchArrangementButtons(cTabled)
+	SwitchAlignButtons(SBALIGNLEFT)
+	SwitchBorderButtons(SB3DBORDER)
+	ToggleBorderGroup(bControlsAreCreated)
+	ToggleAlignGroup(bControlsAreCreated)
+	ArrangeControls()
+	If OldAlignMode &lt;&gt; 0 Then
+		DlgFormDB.GetControl(&quot;cmdAlign&quot; &amp; OldAlignmode).Model.State = 0
 	End If
-End Sub
-
-
-Sub ToggleControlsofLastPage()
-	With oDialogModel
-		If .optUseDocument.State = 1 Then
-			.cmdGoOn.Enabled = True
-			.txtInputPath.Enabled = False
-			.cmdGetPathDialog.Enabled = False
-			.lblPath.Enabled = False
-		Else
-			.lblPath.Enabled = True
-			.txtInputPath.Enabled = True
-			.cmdGetPathDialog.Enabled = True
-			CheckPathValidation()
-		End If
-	End With
+	If OldAlignMode &lt;&gt; 0 Then
+		DlgFormDB.GetControl(&quot;cmdAlign&quot; &amp; OldAlignmode).Model.State = 0
+	End If
 End Sub
 
 
@@ -278,6 +216,32 @@ End Sub
 
 
 Sub SwitchDialogHeight()
-	SwitchWizardDialogHeight(DlgFormDB)
+	SwitchWizardDialogHeight(DlgFormDB, sHeightenDialog, sReduceDialog)
 End Sub
-</script:module>
+
+
+Sub StoreForm()
+Dim oFileDialog
+Dim iAccept as Integer
+Dim sPath as String
+Dim oStoreProperties(0) as New com.sun.star.beans.PropertyValue
+Dim ListAny(0)
+&apos; Todo: Laut DV soll hierfür ein integer Wert gesetzt werden
+	ListAny(0) = &quot;FileSave_AutoextPwdBox&quot;
+	oFileDialog = CreateUnoService(&quot;com.sun.star.ui.FilePicker&quot;)
+	oFileDialog.AppendFilter(&quot;Writer 6.0&quot;, &quot;*.sxw&quot;)
+	oFileDialog.AppendFilter(&quot;Writer 6.0 Vorlage&quot;, &quot;*.stw&quot;)
+	oFileDialog.SetCurrentFilter(&quot;Writer 6.0&quot;)
+	oFileDialog.Initialize(ListAny())
+	oFileDialog.SetDisplayDirectory(WorkPath)
+&apos; Todo: Vorschlag für Namen: &quot;Form_DatasourceName.ContentName	
+	iAccept = oFileDialog.Execute()
+	If iAccept = 1 Then
+		sPath = oFileDialog.Path(0)
+		oStoreProperties(0).Name = &quot;FilterName&quot;
+		oStoreProperties(0).Value = oFileDialog.GetCurrentFilter
+		RemoveShapes()
+		oDocument.StoreAsUrl(sPath, oStoreProperties())
+		DlgFormDB.EndExecute()
+	End If
+End Sub</script:module>

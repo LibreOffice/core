@@ -1,122 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" dlg:id="DlgFormDB" dlg:style-id="0" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="3">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" dlg:id="DlgFormDB" dlg:style-id="0" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="1">
  <dlg:styles>
   <dlg:style dlg:style-id="0"/>
   <dlg:style dlg:style-id="1" dlg:text-color="0x80" dlg:font-name="StarMath" dlg:font-stylename="Standard" dlg:font-charset="symbol"/>
  </dlg:styles>
  <dlg:bulletinboard>
-  <dlg:radiogroup>
-   <dlg:radio dlg:style-id="0" dlg:id="optSaveDocument" dlg:tab-index="0" dlg:left="6" dlg:top="93" dlg:width="152" dlg:height="8" dlg:page="3" dlg:value="optSaveDocument">
-    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.FormWizard.ToggleControlsofLastPage"/>
-   </dlg:radio>
-   <dlg:radio dlg:style-id="0" dlg:id="optUseDocument" dlg:tab-index="1" dlg:left="5" dlg:top="122" dlg:width="153" dlg:height="8" dlg:page="3" dlg:value="optUseDocument">
-    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.FormWizard.ToggleControlsofLastPage"/>
-   </dlg:radio>
-  </dlg:radiogroup>
-  <dlg:text dlg:style-id="0" dlg:id="lblPath" dlg:tab-index="2" dlg:left="20" dlg:top="106" dlg:width="74" dlg:height="8" dlg:page="3" dlg:value="lblPath" dlg:align="right"/>
-  <dlg:textfield dlg:style-id="0" dlg:id="txtInputPath" dlg:tab-index="3" dlg:left="99" dlg:top="104" dlg:width="145" dlg:height="14" dlg:page="3">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XKeyListener" dlg:event-method="keyReleased" dlg:script-type="StarBasic" dlg:script-code="FormWizard.FormWizard.CheckPathValidation"/>
-  </dlg:textfield>
-  <dlg:button dlg:style-id="0" dlg:id="cmdGetPathDialog" dlg:tab-index="4" dlg:disabled="true" dlg:left="250" dlg:top="103" dlg:width="14" dlg:height="14" dlg:page="3" dlg:value="..."/>
-  <dlg:text dlg:style-id="0" dlg:id="lblSelFields" dlg:tab-index="5" dlg:left="154" dlg:top="96" dlg:width="110" dlg:height="8" dlg:page="1" dlg:value="lblSelFields"/>
-  <dlg:menulist dlg:style-id="0" dlg:id="lstDatabases" dlg:tab-index="6" dlg:left="6" dlg:top="51" dlg:width="110" dlg:height="12" dlg:page="1" dlg:spin="true">
+  <dlg:text dlg:style-id="0" dlg:id="lblSelFields" dlg:tab-index="0" dlg:left="154" dlg:top="96" dlg:width="110" dlg:height="8" dlg:page="1" dlg:value="lblSelFields"/>
+  <dlg:menulist dlg:style-id="0" dlg:id="lstDatabases" dlg:tab-index="1" dlg:left="6" dlg:top="51" dlg:width="110" dlg:height="12" dlg:page="1" dlg:spin="true">
    <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="FormWizard.DBMeta.GetSelectedDBMetaData"/>
   </dlg:menulist>
-  <dlg:menulist dlg:style-id="0" dlg:id="lstTables" dlg:tab-index="7" dlg:left="6" dlg:top="78" dlg:width="110" dlg:height="12" dlg:page="1" dlg:spin="true">
+  <dlg:menulist dlg:style-id="0" dlg:id="lstTables" dlg:tab-index="2" dlg:left="6" dlg:top="78" dlg:width="110" dlg:height="12" dlg:page="1" dlg:spin="true">
    <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="FormWizard.FormWizard.FormGetFields"/>
   </dlg:menulist>
-  <dlg:img dlg:id="imgTheme" dlg:tab-index="8" dlg:left="6" dlg:top="6" dlg:width="258" dlg:height="31"/>
-  <dlg:textfield dlg:style-id="0" dlg:id="txtTitle" dlg:tab-index="9" dlg:left="142" dlg:top="44" dlg:width="122" dlg:height="14" dlg:page="3">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XKeyListener" dlg:event-method="keyReleased" dlg:script-type="StarBasic" dlg:script-code="FormWizard.FormWizard.ChangeDocumentTitle"/>
-  </dlg:textfield>
-  <dlg:button dlg:style-id="0" dlg:id="cmdCancel" dlg:tab-index="10" dlg:left="6" dlg:top="190" dlg:width="53" dlg:height="14" dlg:value="cmdCancel">
+  <dlg:img dlg:id="imgTheme" dlg:tab-index="3" dlg:left="6" dlg:top="6" dlg:width="258" dlg:height="31"/>
+  <dlg:button dlg:style-id="0" dlg:id="cmdCancel" dlg:tab-index="4" dlg:left="6" dlg:top="190" dlg:width="53" dlg:height="14" dlg:value="cmdCancel">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.FormWizard.CancelFormWizard"/>
   </dlg:button>
-  <dlg:button dlg:style-id="0" dlg:id="cmdHelp" dlg:tab-index="11" dlg:left="63" dlg:top="190" dlg:width="53" dlg:height="14" dlg:value="cmdHelp"/>
-  <dlg:button dlg:style-id="0" dlg:id="cmdBack" dlg:tab-index="12" dlg:left="155" dlg:top="190" dlg:width="53" dlg:height="14" dlg:value="cmdBack">
+  <dlg:button dlg:style-id="0" dlg:id="cmdHelp" dlg:tab-index="5" dlg:left="63" dlg:top="190" dlg:width="53" dlg:height="14" dlg:value="cmdHelp"/>
+  <dlg:button dlg:style-id="0" dlg:id="cmdBack" dlg:tab-index="6" dlg:left="155" dlg:top="190" dlg:width="53" dlg:height="14" dlg:value="cmdBack">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.FormWizard.PreviousStep"/>
   </dlg:button>
-  <dlg:button dlg:style-id="0" dlg:id="cmdGoOn" dlg:tab-index="13" dlg:left="211" dlg:top="190" dlg:width="53" dlg:height="14" dlg:value="cmdGoOn">
+  <dlg:button dlg:style-id="0" dlg:id="cmdGoOn" dlg:tab-index="7" dlg:left="211" dlg:top="190" dlg:width="53" dlg:height="14" dlg:value="cmdGoOn">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.FormWizard.NextStep"/>
   </dlg:button>
-  <dlg:text dlg:style-id="0" dlg:id="lblDatabases" dlg:tab-index="14" dlg:left="6" dlg:top="40" dlg:width="74" dlg:height="8" dlg:page="1" dlg:value="lblDatabases"/>
-  <dlg:text dlg:style-id="0" dlg:id="lblTables" dlg:tab-index="15" dlg:left="6" dlg:top="67" dlg:width="72" dlg:height="8" dlg:page="1" dlg:value="lblTables"/>
-  <dlg:text dlg:style-id="0" dlg:id="lblFields" dlg:tab-index="16" dlg:left="6" dlg:top="96" dlg:width="109" dlg:height="8" dlg:page="1" dlg:value="lblFields"/>
-  <dlg:button dlg:style-id="0" dlg:id="cmdMoveSelected" dlg:tab-index="17" dlg:left="122" dlg:top="112" dlg:width="25" dlg:height="14" dlg:page="1" dlg:value="-&gt;">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.Listbox.FormMoveSelected"/>
+  <dlg:text dlg:style-id="0" dlg:id="lblDatabases" dlg:tab-index="8" dlg:left="6" dlg:top="40" dlg:width="74" dlg:height="8" dlg:page="1" dlg:value="lblDatabases"/>
+  <dlg:text dlg:style-id="0" dlg:id="lblTables" dlg:tab-index="9" dlg:left="6" dlg:top="67" dlg:width="72" dlg:height="8" dlg:page="1" dlg:value="lblTables"/>
+  <dlg:text dlg:style-id="0" dlg:id="lblFields" dlg:tab-index="10" dlg:left="6" dlg:top="96" dlg:width="109" dlg:height="8" dlg:page="1" dlg:value="lblFields"/>
+  <dlg:button dlg:style-id="0" dlg:id="cmdMoveSelected" dlg:tab-index="11" dlg:left="122" dlg:top="112" dlg:width="25" dlg:height="14" dlg:page="1" dlg:value="-&gt;">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="Tools.Listbox.FormMoveSelected"/>
   </dlg:button>
-  <dlg:button dlg:style-id="0" dlg:id="cmdMoveAll" dlg:tab-index="18" dlg:left="122" dlg:top="130" dlg:width="25" dlg:height="14" dlg:page="1" dlg:value="=&gt;&gt;">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.Listbox.FormMoveAll"/>
+  <dlg:button dlg:style-id="0" dlg:id="cmdMoveAll" dlg:tab-index="12" dlg:left="122" dlg:top="130" dlg:width="25" dlg:height="14" dlg:page="1" dlg:value="=&gt;&gt;">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="Tools.Listbox.FormMoveAll"/>
   </dlg:button>
-  <dlg:button dlg:style-id="0" dlg:id="cmdRemoveSelected" dlg:tab-index="19" dlg:left="122" dlg:top="148" dlg:width="25" dlg:height="14" dlg:page="1" dlg:value="&lt;-">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.Listbox.FormRemoveSelected"/>
+  <dlg:button dlg:style-id="0" dlg:id="cmdRemoveSelected" dlg:tab-index="13" dlg:left="122" dlg:top="148" dlg:width="25" dlg:height="14" dlg:page="1" dlg:value="&lt;-">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="Tools.Listbox.FormRemoveSelected"/>
   </dlg:button>
-  <dlg:button dlg:style-id="0" dlg:id="cmdRemoveAll" dlg:tab-index="20" dlg:left="122" dlg:top="166" dlg:width="25" dlg:height="14" dlg:page="1" dlg:value="&lt;&lt;=">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.Listbox.FormRemoveAll"/>
+  <dlg:button dlg:style-id="0" dlg:id="cmdRemoveAll" dlg:tab-index="14" dlg:left="122" dlg:top="166" dlg:width="25" dlg:height="14" dlg:page="1" dlg:value="&lt;&lt;=">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="Tools.Listbox.FormRemoveAll"/>
   </dlg:button>
   <dlg:radiogroup>
-   <dlg:radio dlg:style-id="0" dlg:id="optIgnoreBinaries" dlg:tab-index="21" dlg:left="160" dlg:top="62" dlg:width="104" dlg:height="8" dlg:page="1" dlg:help-text="Todo: GetSpecificFieldNames an Status geändert" dlg:value="optIgnoreBinaries"/>
-   <dlg:radio dlg:style-id="0" dlg:id="optBinariesasGraphics" dlg:tab-index="22" dlg:left="160" dlg:top="74" dlg:width="104" dlg:height="8" dlg:page="1" dlg:help-text="Todo: GetSpecificFieldNames an Status geändert" dlg:value="optBinariesasGraphics"/>
+   <dlg:radio dlg:style-id="0" dlg:id="optIgnoreBinaries" dlg:tab-index="15" dlg:left="160" dlg:top="62" dlg:width="104" dlg:height="8" dlg:page="1" dlg:value="optIgnoreBinaries">
+    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.DBMeta.RemoveBinaryFieldsFromWidthList"/>
+   </dlg:radio>
+   <dlg:radio dlg:style-id="0" dlg:id="optBinariesasGraphics" dlg:tab-index="16" dlg:left="160" dlg:top="74" dlg:width="104" dlg:height="8" dlg:page="1" dlg:value="optBinariesasGraphics">
+    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.DBMeta.AddBinaryFieldsToWidthList"/>
+   </dlg:radio>
   </dlg:radiogroup>
-  <dlg:menulist dlg:style-id="0" dlg:id="lstFields" dlg:tab-index="23" dlg:left="6" dlg:top="107" dlg:width="110" dlg:height="77" dlg:page="1" dlg:multiselection="true">
+  <dlg:menulist dlg:style-id="0" dlg:id="lstFields" dlg:tab-index="17" dlg:left="6" dlg:top="107" dlg:width="110" dlg:height="77" dlg:page="1" dlg:multiselection="true">
    <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="Tools.Listbox.FormSetMoveRights"/>
   </dlg:menulist>
-  <dlg:menulist dlg:style-id="0" dlg:id="lstSelFields" dlg:tab-index="24" dlg:left="154" dlg:top="107" dlg:width="110" dlg:height="77" dlg:page="1" dlg:multiselection="true">
+  <dlg:menulist dlg:style-id="0" dlg:id="lstSelFields" dlg:tab-index="18" dlg:left="154" dlg:top="107" dlg:width="110" dlg:height="77" dlg:page="1" dlg:multiselection="true">
    <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="Tools.Listbox.FormSetMoveRights"/>
   </dlg:menulist>
-  <dlg:text dlg:style-id="0" dlg:id="lblStyles" dlg:tab-index="25" dlg:left="6" dlg:top="41" dlg:width="110" dlg:height="8" dlg:page="2" dlg:value="lblStyles"/>
+  <dlg:text dlg:style-id="0" dlg:id="lblStyles" dlg:tab-index="19" dlg:left="6" dlg:top="41" dlg:width="110" dlg:height="8" dlg:page="2" dlg:value="lblStyles"/>
   <dlg:radiogroup>
-   <dlg:radio dlg:style-id="0" dlg:id="optTiled" dlg:tab-index="26" dlg:left="126" dlg:top="164" dlg:width="81" dlg:height="8" dlg:page="2" dlg:tag="11" dlg:value="optTiled">
+   <dlg:radio dlg:style-id="0" dlg:id="optTiled" dlg:tab-index="20" dlg:left="126" dlg:top="164" dlg:width="81" dlg:height="8" dlg:page="2" dlg:tag="11" dlg:value="optTiled">
     <dlg:event dlg:listener-type="com.sun.star.awt.XMouseListener" dlg:event-method="mouseReleased" dlg:script-type="StarBasic" dlg:script-code="WebWizard.Common.SetBackGraphicStyle"/>
    </dlg:radio>
-   <dlg:radio dlg:style-id="0" dlg:id="optArea" dlg:tab-index="27" dlg:left="126" dlg:top="176" dlg:width="81" dlg:height="8" dlg:page="2" dlg:tag="10" dlg:value="optArea">
+   <dlg:radio dlg:style-id="0" dlg:id="optArea" dlg:tab-index="21" dlg:left="126" dlg:top="176" dlg:width="81" dlg:height="8" dlg:page="2" dlg:tag="10" dlg:value="optArea">
     <dlg:event dlg:listener-type="com.sun.star.awt.XMouseListener" dlg:event-method="mouseReleased" dlg:script-type="StarBasic" dlg:script-code="WebWizard.Common.SetBackGraphicStyle"/>
    </dlg:radio>
   </dlg:radiogroup>
-  <dlg:menulist dlg:style-id="0" dlg:id="lstStyles" dlg:tab-index="28" dlg:left="6" dlg:top="51" dlg:width="110" dlg:height="135" dlg:page="2">
+  <dlg:menulist dlg:style-id="0" dlg:id="lstStyles" dlg:tab-index="22" dlg:left="6" dlg:top="51" dlg:width="110" dlg:height="135" dlg:page="2">
    <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="FormWizard.tools.ImportStyles"/>
   </dlg:menulist>
-  <dlg:text dlg:style-id="0" dlg:id="lblInputTitle" dlg:tab-index="29" dlg:left="5" dlg:top="47" dlg:width="135" dlg:height="8" dlg:page="3" dlg:value="lblInputTitle"/>
-  <dlg:text dlg:style-id="0" dlg:id="lblFinalConfig" dlg:tab-index="30" dlg:left="6" dlg:top="72" dlg:width="258" dlg:height="16" dlg:page="3" dlg:value="lblFinalConfig"/>
-  <dlg:fixedline dlg:style-id="0" dlg:id="hlnBinaries" dlg:tab-index="31" dlg:left="154" dlg:top="51" dlg:width="110" dlg:height="8" dlg:page="1" dlg:value="hlnBinaries"/>
-  <dlg:button dlg:style-id="1" dlg:id="cmdSwitchHeight" dlg:tab-index="32" dlg:left="122" dlg:top="191" dlg:width="25" dlg:height="14" dlg:help-text="Verkleinert den Dialog!">
+  <dlg:fixedline dlg:style-id="0" dlg:id="hlnBinaries" dlg:tab-index="23" dlg:left="154" dlg:top="51" dlg:width="110" dlg:height="8" dlg:page="1" dlg:value="hlnBinaries"/>
+  <dlg:button dlg:style-id="1" dlg:id="cmdSwitchHeight" dlg:tab-index="24" dlg:left="122" dlg:top="191" dlg:width="25" dlg:height="14">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.FormWizard.SwitchDialogHeight"/>
   </dlg:button>
-  <dlg:fixedline dlg:style-id="0" dlg:id="FixedLine1" dlg:tab-index="33" dlg:left="154" dlg:top="84" dlg:width="110" dlg:height="8" dlg:page="1"/>
-  <dlg:fixedline dlg:style-id="0" dlg:id="hlnBackground" dlg:tab-index="34" dlg:left="120" dlg:top="153" dlg:width="144" dlg:height="8" dlg:page="2" dlg:value="hlnBackground"/>
-  <dlg:fixedline dlg:style-id="0" dlg:id="hlnAlign" dlg:tab-index="35" dlg:left="209" dlg:top="100" dlg:width="55" dlg:height="8" dlg:page="2" dlg:value="hlnAlign"/>
-  <dlg:fixedline dlg:style-id="0" dlg:id="hlnBorderLayout" dlg:tab-index="36" dlg:left="120" dlg:top="100" dlg:width="81" dlg:height="8" dlg:page="2" dlg:value="hlnBorderLayout"/>
-  <dlg:fixedline dlg:style-id="0" dlg:id="hlnArrangements" dlg:tab-index="37" dlg:left="120" dlg:top="51" dlg:width="144" dlg:height="10" dlg:page="2" dlg:value="hlnArrangements"/>
-  <dlg:button dlg:style-id="0" dlg:id="cmdArrange1" dlg:tab-index="38" dlg:left="126" dlg:top="62" dlg:width="23" dlg:height="25" dlg:page="2" dlg:tag="1">
+  <dlg:fixedline dlg:style-id="0" dlg:id="FixedLine1" dlg:tab-index="25" dlg:left="154" dlg:top="84" dlg:width="110" dlg:height="8" dlg:page="1"/>
+  <dlg:fixedline dlg:style-id="0" dlg:id="hlnBackground" dlg:tab-index="26" dlg:left="120" dlg:top="153" dlg:width="144" dlg:height="8" dlg:page="2" dlg:value="hlnBackground"/>
+  <dlg:fixedline dlg:style-id="0" dlg:id="hlnAlign" dlg:tab-index="27" dlg:left="209" dlg:top="100" dlg:width="55" dlg:height="8" dlg:page="2" dlg:value="hlnAlign"/>
+  <dlg:fixedline dlg:style-id="0" dlg:id="hlnBorderLayout" dlg:tab-index="28" dlg:left="120" dlg:top="100" dlg:width="81" dlg:height="8" dlg:page="2" dlg:value="hlnBorderLayout"/>
+  <dlg:fixedline dlg:style-id="0" dlg:id="hlnArrangements" dlg:tab-index="29" dlg:left="120" dlg:top="51" dlg:width="144" dlg:height="10" dlg:page="2" dlg:value="hlnArrangements"/>
+  <dlg:button dlg:style-id="0" dlg:id="cmdArrange1" dlg:tab-index="30" dlg:left="126" dlg:top="62" dlg:width="23" dlg:height="25" dlg:page="2" dlg:tag="1">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.Layouter.ChangeArrangemode"/>
   </dlg:button>
-  <dlg:button dlg:style-id="0" dlg:id="cmdArrange2" dlg:tab-index="39" dlg:left="152" dlg:top="62" dlg:width="23" dlg:height="25" dlg:page="2" dlg:tag="2">
+  <dlg:button dlg:style-id="0" dlg:id="cmdArrange2" dlg:tab-index="31" dlg:left="152" dlg:top="62" dlg:width="23" dlg:height="25" dlg:page="2" dlg:tag="2">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.Layouter.ChangeArrangemode"/>
   </dlg:button>
-  <dlg:button dlg:style-id="0" dlg:id="cmdArrange3" dlg:tab-index="40" dlg:left="178" dlg:top="62" dlg:width="23" dlg:height="25" dlg:page="2" dlg:tag="3">
+  <dlg:button dlg:style-id="0" dlg:id="cmdArrange3" dlg:tab-index="32" dlg:left="178" dlg:top="62" dlg:width="23" dlg:height="25" dlg:page="2" dlg:tag="3">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.Layouter.ChangeArrangemode"/>
   </dlg:button>
-  <dlg:button dlg:style-id="0" dlg:id="cmdArrange4" dlg:tab-index="41" dlg:left="215" dlg:top="62" dlg:width="23" dlg:height="25" dlg:page="2" dlg:tag="4">
+  <dlg:button dlg:style-id="0" dlg:id="cmdArrange4" dlg:tab-index="33" dlg:left="215" dlg:top="62" dlg:width="23" dlg:height="25" dlg:page="2" dlg:tag="4">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.Layouter.ChangeArrangemode"/>
   </dlg:button>
-  <dlg:button dlg:style-id="0" dlg:id="cmdArrange5" dlg:tab-index="42" dlg:left="241" dlg:top="62" dlg:width="23" dlg:height="25" dlg:page="2" dlg:tag="5">
+  <dlg:button dlg:style-id="0" dlg:id="cmdArrange5" dlg:tab-index="34" dlg:left="241" dlg:top="62" dlg:width="23" dlg:height="25" dlg:page="2" dlg:tag="5">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.Layouter.ChangeArrangemode"/>
   </dlg:button>
-  <dlg:button dlg:style-id="0" dlg:id="cmdBorder0" dlg:tab-index="43" dlg:left="126" dlg:top="111" dlg:width="23" dlg:height="25" dlg:page="2" dlg:tag="0">
+  <dlg:button dlg:style-id="0" dlg:id="cmdBorder0" dlg:tab-index="35" dlg:left="126" dlg:top="111" dlg:width="23" dlg:height="25" dlg:page="2" dlg:tag="0">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.Layouter.ChangeBorderLayouts"/>
   </dlg:button>
-  <dlg:button dlg:style-id="0" dlg:id="cmdBorder1" dlg:tab-index="44" dlg:left="152" dlg:top="111" dlg:width="23" dlg:height="25" dlg:page="2" dlg:tag="1">
+  <dlg:button dlg:style-id="0" dlg:id="cmdBorder1" dlg:tab-index="36" dlg:left="152" dlg:top="111" dlg:width="23" dlg:height="25" dlg:page="2" dlg:tag="1">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.Layouter.ChangeBorderLayouts"/>
   </dlg:button>
-  <dlg:button dlg:style-id="0" dlg:id="CommandButton1" dlg:tab-index="45" dlg:left="15" dlg:top="128" dlg:width="0" dlg:height="2" dlg:page="2" dlg:tag="1" dlg:value="CommandButton1"/>
-  <dlg:button dlg:style-id="0" dlg:id="cmdBorder2" dlg:tab-index="46" dlg:left="178" dlg:top="111" dlg:width="23" dlg:height="25" dlg:page="2" dlg:tag="2">
+  <dlg:button dlg:style-id="0" dlg:id="CommandButton1" dlg:tab-index="37" dlg:left="15" dlg:top="128" dlg:width="0" dlg:height="2" dlg:page="2" dlg:tag="1" dlg:value="CommandButton1"/>
+  <dlg:button dlg:style-id="0" dlg:id="cmdBorder2" dlg:tab-index="38" dlg:left="178" dlg:top="111" dlg:width="23" dlg:height="25" dlg:page="2" dlg:tag="2">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.Layouter.ChangeBorderLayouts"/>
   </dlg:button>
-  <dlg:button dlg:style-id="0" dlg:id="cmdAlign0" dlg:tab-index="47" dlg:left="215" dlg:top="111" dlg:width="23" dlg:height="25" dlg:page="2" dlg:tag="0">
+  <dlg:button dlg:style-id="0" dlg:id="cmdAlign0" dlg:tab-index="39" dlg:left="215" dlg:top="111" dlg:width="23" dlg:height="25" dlg:page="2" dlg:tag="0">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.Layouter.ChangeLabelAlignments"/>
   </dlg:button>
-  <dlg:button dlg:style-id="0" dlg:id="cmdAlign2" dlg:tab-index="48" dlg:left="241" dlg:top="111" dlg:width="23" dlg:height="25" dlg:page="2" dlg:tag="2">
+  <dlg:button dlg:style-id="0" dlg:id="cmdAlign2" dlg:tab-index="40" dlg:left="241" dlg:top="111" dlg:width="23" dlg:height="25" dlg:page="2" dlg:tag="2">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.Layouter.ChangeLabelAlignments"/>
   </dlg:button>
  </dlg:bulletinboard>
