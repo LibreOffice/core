@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableSourceContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:30 $
+ *  last change: $Author: sab $ $Date: 2001-04-20 08:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ class ScXMLTableSourceContext : public SvXMLImportContext
     rtl::OUString                           sTableName;
     rtl::OUString                           sFilterName;
     rtl::OUString                           sFilterOptions;
+    sal_Int32                               nRefresh;
     com::sun::star::sheet::SheetLinkMode    nMode;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }

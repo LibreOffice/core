@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-18 13:59:30 $
+ *  last change: $Author: sab $ $Date: 2001-04-20 08:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2688,10 +2688,13 @@ void ScXMLExport::WriteTableSource()
                             rtl::OUString sFilter;
                             rtl::OUString sFilterOptions;
                             rtl::OUString sTableName (xLinkable->getLinkSheetName());
+                            sal_Int32 nRefresh(0);
                             aAny = xLinkProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FILTER)));
                             aAny >>= sFilter;
                             aAny = xLinkProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FILTOPT)));
                             aAny >>= sFilterOptions;
+                            aAny = xLinkProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_REFDELAY)));
+                            aAny >>= nRefresh;
                             if (sLink.getLength())
                             {
                                 AddAttribute(XML_NAMESPACE_XLINK, sXML_href, sLink);
@@ -2703,6 +2706,12 @@ void ScXMLExport::WriteTableSource()
                                     AddAttribute(XML_NAMESPACE_TABLE, sXML_filter_options, sFilterOptions);
                                 if (nMode != sheet::SheetLinkMode_NORMAL)
                                     AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_mode, sXML_copy_results_only);
+                                if( nRefresh )
+                                {
+                                    rtl::OUStringBuffer sBuffer;
+                                    SvXMLUnitConverter::convertTime( sBuffer, (double)nRefresh / 86400 );
+                                    AddAttribute( XML_NAMESPACE_TABLE, sXML_refresh_delay, sBuffer.makeStringAndClear() );
+                                }
                                 SvXMLElementExport aSourceElem(*this, XML_NAMESPACE_TABLE, sXML_table_source, sal_True, sal_True);
                             }
                         }

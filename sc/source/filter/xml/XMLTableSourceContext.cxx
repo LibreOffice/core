@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableSourceContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-04-18 12:31:39 $
+ *  last change: $Author: sab $ $Date: 2001-04-20 08:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
 #endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmloff/xmluconv.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_SHEET_XSHEETLINKABLE_HPP_
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
@@ -111,6 +114,7 @@ ScXMLTableSourceContext::ScXMLTableSourceContext( ScXMLImport& rImport,
     sTableName(),
     sFilterName(),
     sFilterOptions(),
+    nRefresh(0),
     nMode(sheet::SheetLinkMode_NORMAL)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -135,8 +139,16 @@ ScXMLTableSourceContext::ScXMLTableSourceContext( ScXMLImport& rImport,
             else if (aLocalName.compareToAscii(sXML_filter_options) == 0)
                 sFilterOptions = sValue;
             else if (aLocalName.compareToAscii(sXML_mode) == 0)
+            {
                 if (sValue.compareToAscii(sXML_copy_results_only) == 0)
                     nMode = sheet::SheetLinkMode_VALUE;
+            }
+            else if (aLocalName.compareToAscii(sXML_refresh_delay) == 0)
+            {
+                double fTime;
+                if( SvXMLUnitConverter::convertTime( fTime, sValue ) )
+                    nRefresh = Max( (sal_Int32)(fTime * 86400.0), (sal_Int32)0 );
+            }
         }
     }
 }
@@ -180,14 +192,9 @@ void ScXMLTableSourceContext::EndElement()
                 else if ( nMode == sheet::SheetLinkMode_VALUE )
                     nLinkMode = SC_LINK_VALUE;
 
-//!!!!!!!
-//! TODO: (erAck 17.04.01) store and load refresh delay
-//!!!!!!!
-                ULONG nLinkRefreshDelay = 0;
-
                 pDoc->SetLink( GetScImport().GetTables().GetCurrentSheet(),
                     nLinkMode, aFileString, aFilterString, aOptString,
-                    aSheetString, nLinkRefreshDelay );
+                    aSheetString, nRefresh );
             }
         }
     }
