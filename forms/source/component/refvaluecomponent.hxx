@@ -2,9 +2,9 @@
  *
  *  $RCSfile: refvaluecomponent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:42:28 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,9 +138,9 @@ namespace frm
         virtual sal_Bool        approveValueBinding( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding );
 
         virtual ::com::sun::star::uno::Any
-                                translateExternalValueToControlValue( );
+                                translateExternalValueToControlValue( ) const;
         virtual ::com::sun::star::uno::Any
-                                translateControlValueToExternalValue( );
+                                translateControlValueToExternalValue( ) const;
 
         virtual ::com::sun::star::uno::Any
                                 getDefaultForReset() const;

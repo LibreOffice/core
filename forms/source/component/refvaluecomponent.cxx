@@ -2,9 +2,9 @@
  *
  *  $RCSfile: refvaluecomponent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:42:15 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ namespace frm
     }
 
     //-----------------------------------------------------------------------------
-    Any OReferenceValueComponent::translateExternalValueToControlValue( )
+    Any OReferenceValueComponent::translateExternalValueToControlValue( ) const
     {
         OSL_PRECOND( getExternalValueBinding().is(), "OReferenceValueComponent::commitControlValueToExternalBinding: no active binding!" );
 
@@ -289,7 +289,7 @@ namespace frm
     }
 
     //-----------------------------------------------------------------------------
-    Any OReferenceValueComponent::translateControlValueToExternalValue( )
+    Any OReferenceValueComponent::translateControlValueToExternalValue( ) const
     {
         Any aExternalValue;
 
