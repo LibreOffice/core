@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OleDropTarget.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-09 10:55:21 $
+ *  last change: $Author: arellano $ $Date: 2001-07-17 15:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ module com { module sun { module star { module datatransfer { module dnd {
 interface XDropTarget;
 
 //=============================================================================
-/** This service connects the java like UNO drag and drop protocol to the protocol
+/** This service connects the Java-like UNO drag and drop protocol to the protocol
     used on window platforms. It realizes the drop target.
 
     @see XDropTarget
