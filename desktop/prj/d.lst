@@ -93,6 +93,7 @@ mkdir: %_DEST%\bin%_EXT%\96
 ..\%__SRC%\misc\swriter.sh %_DEST%\bin%_EXT%\swriter
 ..\%__SRC%\misc\fromTemplate.sh %_DEST%\bin%_EXT%\fromtemplate
 ..\%__SRC%\misc\nswrapper.sh %_DEST%\bin%_EXT%\nswrapper
+..\%__SRC%\misc\mozwrapper.sh %_DEST%\bin%_EXT%\mozwrapper
 
 mkdir: %COMMON_DEST%\pck%_EXT%\starsuite_bitmap
 mkdir: %COMMON_DEST%\pck%_EXT%\staroffice_bitmap
