@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hro $ $Date: 2001-07-20 09:39:29 $
+ *  last change: $Author: hro $ $Date: 2001-07-30 16:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,8 +483,11 @@ oslFileError SAL_CALL osl_getVolumeDeviceMountPath( oslVolumeDeviceHandle Handle
 
 /* Volume attributes */
 
-#define osl_Volume_Attribute_Removeable 0x00000001L
-#define osl_Volume_Attribute_Remote     0x00000002L
+#define osl_Volume_Attribute_Removeable     0x00000001L
+#define osl_Volume_Attribute_Remote         0x00000002L
+#define osl_Volume_Attribute_CompactDisc    0x00000004L
+#define osl_Volume_Attribute_FixedDisk      0x00000008L
+#define osl_Volume_Attribute_RAMDisk        0x00000010L
 
 /* Flags specifying which fields to retreive by osl_getVolumeInfo */
 
@@ -522,10 +525,10 @@ struct _oslVolumeInfo {
     sal_uInt32      uMaxNameLength;
 /** Maximum length of a full quallified path in UNC notation */
     sal_uInt32      uMaxPathLength;
-/** Name of the file system type. Should be set to zero before calling <code>osl_getVolumeInformation</code>
+/** Points to a string that receives the name of the file system type. String should be set to zero before calling <code>osl_getVolumeInformation</code>
     and released after usage. */
     rtl_uString     *ustrFileSystemName;
-/** Handle of underlying device */
+/** Pointer to handle the receives underlying device. Handle should be set to zero before calling <code>osl_getVolumeInformation</code>*/
     oslVolumeDeviceHandle   *pDeviceHandle;
 } oslVolumeInfo;
 
