@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_singl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:49 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ namespace ary
     namespace idl
     {
         class Singleton;
+        class SglIfcSingleton;
     }
 }
 
@@ -122,6 +123,7 @@ class PE_Singleton : public UnoIDL_PE,
         e_std,
         in_service,
         need_finish,
+        in_base_interface,
         e_STATES_MAX
     };
 
@@ -165,9 +167,11 @@ class PE_Singleton : public UnoIDL_PE,
     bool                bIsPreDeclaration;
     ary::idl::Singleton *
                         pCurSingleton;
+    ary::idl::SglIfcSingleton *
+                        pCurSiSingleton;
 
     Dyn<PE_Type>        pPE_Type;
-    ary::idl::Type_id   nCurParsed_Service;
+    ary::idl::Type_id   nCurParsed_Type;
 };
 
 
