@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: sab $ $Date: 2001-02-15 11:03:18 $
+#   last change: $Author: dvo $ $Date: 2001-02-21 19:28:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -141,6 +141,8 @@ CXXFILES = \
         XMLClipPropertyHandler.cxx		\
         XMLConstantsPropertyHandler.cxx	\
         XMLElementPropertyContext.cxx	\
+        XMLFootnoteSeparatorExport.cxx	\
+        XMLFootnoteSeparatorImport.cxx	\
         XMLFontAutoStylePool.cxx		\
         XMLFontStylesContext.cxx		\
         XMLPageExport.cxx				\
@@ -225,6 +227,8 @@ SLOFILES =	\
         $(SLO)$/XMLConstantsPropertyHandler.obj	\
         $(SLO)$/AttributeContainerHandler.obj	\
         $(SLO)$/XMLElementPropertyContext.obj	\
+        $(SLO)$/XMLFootnoteSeparatorExport.obj	\
+        $(SLO)$/XMLFootnoteSeparatorImport.obj	\
         $(SLO)$/XMLFontAutoStylePool.obj		\
         $(SLO)$/XMLFontStylesContext.obj		\
         $(SLO)$/XMLPageExport.obj				\

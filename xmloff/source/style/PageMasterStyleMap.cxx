@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterStyleMap.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 17:47:28 $
+ *  last change: $Author: dvo $ $Date: 2001-02-21 19:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,16 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     { "TextColumns",            XML_NAMESPACE_STYLE,    sXML_columns,   MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_COLUMNS, CTF_PM_TEXTCOLUMNS },
     { "RegisterModeActive",     XML_NAMESPACE_STYLE,    sXML_register_true, XML_TYPE_BOOL, 0 },
     { "RegisterParagraphStyle", XML_NAMESPACE_STYLE,    sXML_register_truth_ref_style_name, XML_TYPE_STRING| MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_PM_REGISTER_STYLE },
+
+// footnote
+    { "FootnoteHeight",         XML_NAMESPACE_STYLE,    sXML_footnote_max_height, XML_TYPE_MEASURE, CTF_PM_FTN_HEIGTH },
+    { "FootnoteLineWeight",     XML_NAMESPACE_STYLE,    sXML__empty,    XML_TYPE_MEASURE16|MID_FLAG_SPECIAL_ITEM,   CTF_PM_FTN_LINE_WEIGTH },
+    { "FootnoteLineColor",      XML_NAMESPACE_STYLE,    sXML__empty,    XML_TYPE_COLOR|MID_FLAG_SPECIAL_ITEM,       CTF_PM_FTN_LINE_COLOR },
+    { "FootnoteLineRelativeWidth", XML_NAMESPACE_STYLE, sXML__empty,    XML_TYPE_PERCENT8|MID_FLAG_SPECIAL_ITEM,    CTF_PM_FTN_LINE_WIDTH },
+    { "FootnoteLineAdjust",     XML_NAMESPACE_STYLE,    sXML__empty,    XML_TYPE_TEXT_HORIZONTAL_ADJUST|MID_FLAG_SPECIAL_ITEM,  CTF_PM_FTN_LINE_ADJUST },
+    { "FootnoteLineTextDistance", XML_NAMESPACE_STYLE,  sXML__empty,    XML_TYPE_MEASURE|MID_FLAG_SPECIAL_ITEM,     CTF_PM_FTN_LINE_DISTANCE },
+    { "FootnoteLineDistance",   XML_NAMESPACE_STYLE,    sXML_footnote_sep,  XML_TYPE_MEASURE|MID_FLAG_ELEMENT_ITEM,     CTF_PM_FTN_DISTANCE },
+
 // header
     { "HeaderHeight",               XML_NAMESPACE_SVG,      sXML_height,                    XML_TYPE_MEASURE,       CTF_PM_HEADERHEIGHT },
     { "HeaderHeight",               XML_NAMESPACE_FO,       sXML_min_height,                XML_TYPE_MEASURE,       CTF_PM_HEADERMINHEIGHT },

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterExportPropMapper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:06 $
+ *  last change: $Author: dvo $ $Date: 2001-02-21 19:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,9 @@
 #ifndef _XMLOFF_XMLTEXTCOLUMNSEXPORT_HXX
 #include "XMLTextColumnsExport.hxx"
 #endif
-
+#ifndef _XMLOFF_XMLFOOTNOTESEPARATOREXPORT_HXX
+#include "XMLFootnoteSeparatorExport.hxx"
+#endif
 
 //______________________________________________________________________________
 
@@ -80,6 +82,7 @@ class XMLPageMasterExportPropMapper : public SvXMLExportPropertyMapper
 protected:
     XMLBackgroundImageExport aBackgroundImageExport;
     XMLTextColumnsExport aTextColumnsExport;
+    XMLFootnoteSeparatorExport aFootnoteSeparatorExport;
 
     virtual void        ContextFilter(
                             ::std::vector< XMLPropertyState >& rProperties,

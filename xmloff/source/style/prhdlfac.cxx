@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prhdlfac.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-30 13:59:24 $
+ *  last change: $Author: dvo $ $Date: 2001-02-21 19:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifndef _COM_SUN_STAR_DRAWING_COLORMODE_HPP_
 #include <com/sun/star/drawing/ColorMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_HORIZONTALADJUST_HPP_
+#include <com/sun/star/text/HorizontalAdjust.hpp>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -159,6 +162,14 @@ SvXMLEnumMapEntry aXML_ColorMode_EnumMap[] =
     { sXML_watermark, drawing::ColorMode_WATERMARK },
     { sXML_standard,  drawing::ColorMode_STANDARD },
     { NULL, 0 }
+};
+
+SvXMLEnumMapEntry __READONLY_DATA aXML_HorizontalAdjust_Enum[] =
+{
+    { sXML_left,    text::HorizontalAdjust_LEFT },
+    { sXML_center,  text::HorizontalAdjust_CENTER },
+    { sXML_right,   text::HorizontalAdjust_RIGHT },
+    { 0, 0 }
 };
 
 
@@ -384,10 +395,16 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::GetBasicHandler( sal_Int32 
                 pPropHdl = new XMLAttributeContainerHandler;
                 break;
             case XML_TYPE_COLOR_MODE:
-                pPropHdl = new XMLEnumPropertyHdl( aXML_ColorMode_EnumMap, ::getCppuType((const drawing::ColorMode*)0) );
+                pPropHdl = new XMLEnumPropertyHdl( aXML_ColorMode_EnumMap,
+                                ::getCppuType((const drawing::ColorMode*)0) );
                 break;
             case XML_TYPE_DURATION16_MS:
                 pPropHdl = new XMLDurationMS16PropHdl_Impl;
+                break;
+            case XML_TYPE_TEXT_HORIZONTAL_ADJUST:
+                pPropHdl = new XMLEnumPropertyHdl(
+                    aXML_HorizontalAdjust_Enum,
+                    ::getCppuType((const text::HorizontalAdjust*)0) );
                 break;
         }
 

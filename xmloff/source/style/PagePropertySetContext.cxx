@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PagePropertySetContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-26 08:35:07 $
+ *  last change: $Author: dvo $ $Date: 2001-02-21 19:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #endif
 #ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include "PageMasterStyleMap.hxx"
+#endif
+#ifndef _XMLOFF_XMLFOOTNOTESEPARATORIMPORT_HXX
+#include "XMLFootnoteSeparatorImport.hxx"
 #endif
 
 using namespace ::rtl;
@@ -147,6 +150,10 @@ SvXMLImportContext *PagePropertySetContext::CreateChildContext(
         pContext = new XMLTextColumnsContext( GetImport(), nPrefix,
                                               rLocalName, xAttrList, rProp,
                                               rProperties );
+        break;
+    case CTF_PM_FTN_DISTANCE:
+        pContext = new XMLFootnoteSeparatorImport(
+            GetImport(), nPrefix, rLocalName, rProperties, rProp.mnIndex);
         break;
     }
 

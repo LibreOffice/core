@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-21 15:03:40 $
+ *  last change: $Author: dvo $ $Date: 2001-02-21 19:28:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,7 @@ XML_CONSTASCII_ACTION( sXML_actuate, "actuate" );
 XML_CONSTASCII_ACTION( sXML_add_in, "add-in" );
 XML_CONSTASCII_ACTION( sXML_add_in_name, "add-in-name" );
 XML_CONSTASCII_ACTION( sXML_address, "address" );
+XML_CONSTASCII_ACTION( sXML_adjustment, "adjustment" );
 XML_CONSTASCII_ACTION( sXML_align, "align" );
 XML_CONSTASCII_ACTION( sXML_all, "all" );
 XML_CONSTASCII_ACTION( sXML_allow_empty_cell, "allow-empty-cell" );
@@ -727,7 +728,11 @@ XML_CONSTASCII_ACTION( sXML_footnote_body, "footnote-body" );
 XML_CONSTASCII_ACTION( sXML_footnote_citation, "footnote-citation" );
 XML_CONSTASCII_ACTION( sXML_footnote_continuation_notice_backward, "footnote-continuation-notice-backward" );
 XML_CONSTASCII_ACTION( sXML_footnote_continuation_notice_forward, "footnote-continuation-notice-forward" );
+XML_CONSTASCII_ACTION( sXML_footnote_max_height, "footnote-max-height" );
+XML_CONSTASCII_ACTION( sXML_distance_after_sep, "distance-after-sep" );
+XML_CONSTASCII_ACTION( sXML_distance_before_sep, "distance-before-sep" );
 XML_CONSTASCII_ACTION( sXML_footnote_ref, "footnote-ref" );
+XML_CONSTASCII_ACTION( sXML_footnote_sep, "footnote-sep" );
 XML_CONSTASCII_ACTION( sXML_footnotes_configuration, "footnotes-configuration");
 XML_CONSTASCII_ACTION( sXML_footnotes_position, "footnotes-position" );
 XML_CONSTASCII_ACTION( sXML_forall, "forall" );

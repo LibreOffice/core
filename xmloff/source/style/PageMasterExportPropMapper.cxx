@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterExportPropMapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 22:34:42 $
+ *  last change: $Author: dvo $ $Date: 2001-02-21 19:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,8 @@ XMLPageMasterExportPropMapper::XMLPageMasterExportPropMapper(
         SvXMLExport& rExport ) :
     SvXMLExportPropertyMapper( rMapper ),
     aBackgroundImageExport( rExport ),
-    aTextColumnsExport( rExport )
+    aTextColumnsExport( rExport ),
+    aFootnoteSeparatorExport( rExport )
 {
 }
 
@@ -297,6 +298,10 @@ void XMLPageMasterExportPropMapper::handleElementItem(
             break;
         case CTF_PM_TEXTCOLUMNS:
             pThis->aTextColumnsExport.exportXML( rProperty.maValue );
+            break;
+        case CTF_PM_FTN_DISTANCE:
+            pThis->aFootnoteSeparatorExport.exportXML( pProperties, nIdx,
+                                                       getPropertySetMapper());
             break;
     }
 }
