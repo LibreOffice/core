@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hdu $ $Date: 2002-02-28 12:51:27 $
+ *  last change: $Author: hdu $ $Date: 2002-03-28 16:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,20 @@ void SimpleWinLayout::Justify( long nNewWidth )
 void SimpleWinLayout::ApplyDXArray( const long* pDXArray )
 {
     long nOldWidth = 0;
-    for( int i = 0; i < mnGlyphCount; ++i )
+
+    int i;
+    for( i = 0; i < mnGlyphCount; ++i )
+    {
+        nOldWidth += mpGlyphAdvances[i];
+        int nDiff = nOldWidth - pDXArray[i];
+        if( nDiff>+1 || nDiff<-1)
+            break;
+    }
+    if( i >= mnGlyphCount )
+        return;
+
+    nOldWidth = 0;
+    for( i = 0; i < mnGlyphCount; ++i )
     {
         mpGlyphAdvances[i] = pDXArray[i] - nOldWidth;
         nOldWidth = pDXArray[i];
@@ -357,7 +370,7 @@ static HRESULT ((WINAPI *pScriptJustify)( const SCRIPT_VISATTR*,
 static HRESULT ((WINAPI *pScriptTextOut)( const HDC, SCRIPT_CACHE*,
     int, int, UINT, const RECT*, const SCRIPT_ANALYSIS*, const WCHAR*,
     int, const WORD*, int, const int*, const int*, const GOFFSET* ));
-static HRESULT ((WINAPI *pScriptGetFontProperties)( HDC, SCRIPT_FONTPROPERTIES***, int* ));
+static HRESULT ((WINAPI *pScriptGetFontProperties)( HDC, SCRIPT_CACHE*, SCRIPT_FONTPROPERTIES* ));
 static HRESULT ((WINAPI *pScriptFreeCache)( SCRIPT_CACHE* ));
 
 // -----------------------------------------------------------------------
@@ -402,7 +415,7 @@ static bool InitUSP()
         ::GetProcAddress( aUspModule, "ScriptJustify" );
     bUspDisabled |= (pScriptJustify == NULL);
 
-    pScriptGetFontProperties = (HRESULT (WINAPI*)(HDC,SCRIPT_FONTPROPERTIES***,int*))
+    pScriptGetFontProperties = (HRESULT (WINAPI*)( HDC,SCRIPT_CACHE*,SCRIPT_FONTPROPERTIES*))
         ::GetProcAddress( aUspModule, "ScriptGetFontProperties" );
     bUspDisabled |= (pScriptGetFontProperties == NULL);
 
@@ -761,6 +774,7 @@ bool UniscribeLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyP
 long UniscribeLayout::FillDXArray( long* pDXArray ) const
 {
     long nWidth = 0;
+
     for( int i = mnFirstCharIndex; i < mnEndCharIndex; ++i )
     {
         nWidth += mpCharWidths[ i ];
@@ -817,18 +831,14 @@ void UniscribeLayout::ApplyDXArray( const long* pDXArray )
         if( mnEndCharIndex > rScriptItem.iCharPos
         &&  mnFirstCharIndex < (rScriptItem.iCharPos + nCharCount) )
         {
-            // recreate ABC widths
-            ABC aAbcInfo = {0,0,0};
-            for( int i = 0; i < nGlyphCount; ++i )
-                aAbcInfo.abcB = mpGlyphAdvances[ i+nGlyphsProcessed ];
-
             HRESULT nRC = (*pScriptApplyLogicalWidth)(
                 mpCharWidths + rScriptItem.iCharPos,
                 nCharCount, nGlyphCount,
                 mpLogClusters + rScriptItem.iCharPos,
                 mpVisualAttrs + nGlyphsProcessed,
                 mpGlyphAdvances + nGlyphsProcessed,
-                &rScriptItem.a, &aAbcInfo,
+                &rScriptItem.a,
+                NULL,
                 mpJustifications + nGlyphsProcessed );
         }
 
@@ -870,16 +880,11 @@ void UniscribeLayout::Justify( long nNewWidth )
             for( i = 0; i < nCharCount; ++i )
                 nItemWidth += mpCharWidths[ i+rScriptItem.iCharPos ];
 
-            SCRIPT_FONTPROPERTIES** ppFontProperties;
+            SCRIPT_FONTPROPERTIES aFontProperties;
             int nMinKashida = 1;
-            int nFontProperties;
-            HRESULT nRC = (*pScriptGetFontProperties)( mhDC, &ppFontProperties, &nFontProperties );
+            HRESULT nRC = (*pScriptGetFontProperties)( mhDC, &maScriptCache, &aFontProperties );
             if( !nRC )
-            {
-                int eScript = rScriptItem.a.eScript;
-                if( eScript < nFontProperties )
-                    nMinKashida = (*ppFontProperties)[ eScript ].iKashidaWidth;
-            }
+                nMinKashida = aFontProperties.iKashidaWidth;
 
             nRC = (*pScriptJustify) (
                 mpVisualAttrs + nGlyphsProcessed,
