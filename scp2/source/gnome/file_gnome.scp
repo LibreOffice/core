@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_gnome.scp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: is $ $Date: 2004-02-05 18:09:12 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 12:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,34 +61,21 @@
 
 #include "macros.inc"
 
-File gid_File_Bin_Gnomeint
-    BIN_FILE_BODY;
+File gid_File_Lib_Gnomevfs
+    TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Program;
-    Name = "gnomeint.bin";
+    Name = STRING(CONCAT2(ucpgvfs1.uno,UNXSUFFIX));
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Regmergefile = "ucpgvfs-ucd.txt";
 End
 
-File gid_File_Script_Gnomeint
-    BIN_FILE_BODY;
+File gid_File_Lib_Gconfbe
+    TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Program;
-    Name = "gnomeint";
+    Name = STRING(CONCAT2(gconfbe1.uno,UNXSUFFIX));
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Regmergefile = "gconfbe1-ucd.txt";
 End
 
-File gid_File_Extra_Gnome_Icons
-    Dir = gid_Dir_Share;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "gnomeicons.zip";
-End
-
-File gid_File_Extra_Gnome_Apps
-    Dir = gid_Dir_Share_Gnome_Net;
-    ARCHIVE_SUBST_FILE_BODY;
-    Name = "gnomeapps.zip";
-End
-
-File gid_File_Extra_Gnome2_Apps
-    Dir = gid_Dir_Share_Gnome_Net;
-    ARCHIVE_SUBST_FILE_BODY;
-    Name = "gnome2apps.zip";
-End
