@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:46:12 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1496,7 +1496,7 @@ class EventsNameReplace_Impl:
             ::rtl::OUString aListenerClassName;
             Sequence< ::rtl::OUString> aMethSeq;
 
-            EventsNameReplace_Impl eventsNameReplace;
+            Reference< css::container::XNameReplace > xNameReplace( new EventsNameReplace_Impl );
 
             for (i = 0 ; i < nLength ; i++ ,++pListeners)
             {
@@ -1587,13 +1587,13 @@ class EventsNameReplace_Impl:
                             }
 
                             aNameArray.push_back(pEventDisplayDescription->sDisplayName);
-                            eventsNameReplace.AddEvent(sEventName,sMacroURL);
+                            EventsNameReplace_Impl* pENR = static_cast< EventsNameReplace_Impl* >(xNameReplace.get());
+                            pENR->AddEvent(sEventName,sMacroURL);
                         }
                     }
                 }
             }
 
-            Reference< css::container::XNameReplace > xNameReplace( &eventsNameReplace );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if( !pFact )
             {
@@ -1642,7 +1642,7 @@ class EventsNameReplace_Impl:
 
 
                 //sal_uInt16 nEventCount = (sal_uInt16)aTab.Count();
-                sal_uInt16 nEventCount = eventsNameReplace.getElementNames().getLength();
+                sal_uInt16 nEventCount = xNameReplace->getElementNames().getLength();
                 sal_uInt16 nEventIndex = 0;
 
                 Sequence< ScriptEventDescriptor > aSeqScriptEvts(nEventCount);
@@ -1687,7 +1687,7 @@ class EventsNameReplace_Impl:
                                 //SvxMacro* pMacro = aTab.Get( nIndex++ );
                                 Sequence< css::beans::PropertyValue > props;
                                 ::rtl::OUString macroURL;
-                                if( sal_True == ( eventsNameReplace.getByName( *pMethods ) >>= props ) )
+                                if( xNameReplace->getByName( *pMethods ) >>= props )
                                 {
                                     sal_Int32 nCount = props.getLength();
                                     for( sal_Int32 index = 0; index < nCount ; ++index )
@@ -1773,12 +1773,14 @@ class EventsNameReplace_Impl:
                     {
                         const ScriptEventDescriptor& rDesc = pDescs[ i ];
                         ::rtl::OUString aName = rDesc.ListenerType;
-                        aName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "::" ) );
-                        aName += rDesc.EventMethod;
-
-                        Any aEventAny;
-                        aEventAny <<= rDesc;
-                        xEventCont->insertByName( aName, aEventAny );
+                        if ( rDesc.ScriptCode.getLength() > 0 )
+                        {
+                            aName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "::" ) );
+                            aName += rDesc.EventMethod;
+                            Any aEventAny;
+                            aEventAny <<= rDesc;
+                            xEventCont->insertByName( aName, aEventAny );
+                        }
                     }
                 }
             }
