@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-29 13:05:04 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 14:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1073,6 +1073,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleRowExtentAt( sal_Int32 nRow
         throw( RuntimeException )
 {
     ensureAlive();
+    ensureValidPosition( nRow, nColumn );
     return 1;
 }
 
@@ -1080,6 +1081,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleColumnExtentAt( sal_Int32 n
         throw( RuntimeException )
 {
     ensureAlive();
+    ensureValidPosition( nRow, nColumn );
     return 1;
 }
 
