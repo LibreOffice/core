@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FeatureStateEvent.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:10 $
+ *  last change: $Author: arellano $ $Date: 2001-04-13 20:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 //=============================================================================
 
 // DocMerge from xml: struct com::sun::star::frame::FeatureStateEvent
-/** This event is broadcasted by a <type>Controller</type> whenever the state of
+/** This event is broadcast by a <type>Controller</type> whenever the state of
     the feature changes.@see XController
         @see XStatusListener
  */
@@ -122,6 +122,8 @@ struct FeatureStateEvent: com::sun::star::lang::EventObject
         underline on/off. Some simple types like <code>string</code> or
         <atom>boolean</atom> are useful here for generic UI elements, like
         a checkmark in a menu.</p>
+
+    <!-- Dennis: The <true> is appearing on the openoffice Web page. -->
      */
     any State;
 
@@ -134,6 +136,9 @@ struct FeatureStateEvent: com::sun::star::lang::EventObject
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/21 08:35:10  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.4  2000/12/14 12:53:37  mi
     <true></true> -> <TRUE/> and same with FALSE
 
