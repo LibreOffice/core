@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoDirectSql.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:24:24 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
+#include <com/sun/star/sdbc/XConnection.hpp>
+#endif
 
 //.........................................................................
 namespace dbaui
@@ -99,6 +102,7 @@ namespace dbaui
             ,public OModuleClient
     {
         ::rtl::OUString m_sInitialSelection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xActiveConnection;
     protected:
         ODirectSQLDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
         virtual ~ODirectSQLDialog();

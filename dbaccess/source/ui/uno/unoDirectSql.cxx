@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoDirectSql.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:24:12 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,18 +133,20 @@ namespace dbaui
     Dialog* ODirectSQLDialog::createDialog(Window* _pParent)
     {
         // obtain all the objects needed for the dialog
-        Reference< XConnection > xConnection;
-        try
+        Reference< XConnection > xConnection = m_xActiveConnection;
+        if ( !xConnection.is() )
         {
-            // the connection the row set is working with
-            ODatasourceConnector aDSConnector(m_xORB,_pParent);
-            xConnection = aDSConnector.connect(m_sInitialSelection);
+            try
+            {
+                // the connection the row set is working with
+                ODatasourceConnector aDSConnector(m_xORB,_pParent);
+                xConnection = aDSConnector.connect(m_sInitialSelection);
+            }
+            catch( const Exception& )
+            {
+                OSL_ENSURE( sal_False, "ODirectSQLDialog::createDialog: caught an exception!" );
+            }
         }
-        catch( const Exception& )
-        {
-            OSL_ENSURE( sal_False, "ODirectSQLDialog::createDialog: caught an exception!" );
-        }
-
         if ( !xConnection.is() )
             // can't create the dialog if I have improper settings
             return NULL;
@@ -160,6 +162,10 @@ namespace dbaui
             if (0 == aProperty.Name.compareToAscii("InitialSelection"))
             {
                 aProperty.Value >>= m_sInitialSelection;
+            }
+            else if (0 == aProperty.Name.compareToAscii("ActiveConnection"))
+            {
+                m_xActiveConnection.set(aProperty.Value,UNO_QUERY);
             }
         }
         ODirectSQLDialog_BASE::implInitialize(_rValue);
