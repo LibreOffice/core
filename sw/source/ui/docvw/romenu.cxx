@@ -2,9 +2,9 @@
  *
  *  $RCSfile: romenu.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-17 15:16:11 $
+ *  last change: $Author: sj $ $Date: 2001-03-07 20:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,7 +567,7 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
         aExpDlg.AddFilter( rGF.GetExportFormatName( i ),
                             rGF.GetExportWildcard( i ),
                             rGF.GetExportOSFileType( i ) );
-        if ( COMPARE_EQUAL == aExt.CompareIgnoreCaseToAscii(rGF.GetExportFormatType( i ).ToLowerAscii() ))
+        if ( COMPARE_EQUAL == aExt.CompareIgnoreCaseToAscii(rGF.GetExportFormatShortName( i ).ToLowerAscii() ))
             nDfltFilter = i;
     }
     if ( INT_MAX == nDfltFilter )
@@ -575,7 +575,7 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
         //"falsche" Extension?
         lcl_GetPreferedExtension( aExt, aGraphic );
         for ( int i = 0; i < nCount; ++i )
-            if ( aExt == rGF.GetExportFormatType( i ).ToLowerAscii() )
+            if ( aExt == rGF.GetExportFormatShortName( i ).ToLowerAscii() )
             {
                 nDfltFilter =  i;
                 break;
@@ -635,6 +635,9 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/10/17 15:16:11  os
+      Change: SfxMedium Ctor
+
       Revision 1.2  2000/10/06 13:33:32  jp
       should changes: don't use IniManager
 
