@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: hr $ $Date: 2003-06-30 15:44:40 $
+#  last change: $Author: vg $ $Date: 2003-07-09 10:38:56 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -132,7 +132,7 @@ ProUNOLifetimeExamples : $(OUT_BIN)/$(COMPONENT_NAME)$(EXE_EXT) $(OUT_COMP_CLASS
 	java -classpath "$(SDK_CLASSPATH)" $(basename $@)
 
 %.runexe: $(OUT_BIN)/%$(EXE_EXT) 
-	cd $(OUT_BIN) && $(basename $@)
+	cd $(subst /,$(PS),$(OUT_BIN)) && $(basename $@)
 
 .PHONY: clean
 clean :
