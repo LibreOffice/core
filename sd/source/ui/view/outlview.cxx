@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:17:29 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,6 @@
 #endif
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
-#endif
-#ifndef _SFXSTBMGR_HXX //autogen
-#include <sfx2/stbmgr.hxx>
 #endif
 #ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
