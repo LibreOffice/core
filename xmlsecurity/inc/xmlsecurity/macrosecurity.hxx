@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-16 10:26:28 $
+ *  last change: $Author: gt $ $Date: 2004-07-20 15:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <svtools/stdctrl.hxx>
 #include <svx/simptabl.hxx>
 #include <svtools/svmedit.hxx>
+#include <svtools/securityoptions.hxx>
 
 #include <xmlsecurity/documentsignaturehelper.hxx>
 #include <xmlsecurity/xmlsignaturehelper.hxx>
@@ -99,6 +100,8 @@ namespace css = com::sun::star;
 namespace cssu = com::sun::star::uno;
 namespace dcss = ::com::sun::star;
 
+class MacroSecurityTP;
+
 class MacroSecurity : public TabDialog
 {
 private:
@@ -111,9 +114,14 @@ private:
     HelpButton          maHelpBtn;
     PushButton          maResetBtn;
 
-    XMLSignatureHelper      maSignatureHelper;
-    cssu::Reference< dcss::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
-    SignatureInformations   maCurrentSignatureInformations;
+    XMLSignatureHelper                                          maSignatureHelper;
+    cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >  mxSecurityEnvironment;
+    SignatureInformations                                       maCurrentSignatureInformations;
+    SvtSecurityOptions                                          maSecOptions;
+    MacroSecurityTP*    mpLevelTP;
+    MacroSecurityTP*    mpTrustSrcTP;
+
+    DECL_LINK(          OkBtnHdl, void* );
 public:
     MacroSecurity( Window* pParent,
                     cssu::Reference< css::lang::XMultiServiceFactory >& rxMSF,
@@ -137,6 +145,8 @@ protected:
 public:
                         MacroSecurityTP( Window* _pParent, const ResId& _rResId, MacroSecurity* _pDlg );
     inline void         SetTabDlg( MacroSecurity* pTabDlg );
+
+    virtual void        ClosePage( void ) = 0;
 };
 
 inline void MacroSecurityTP::SetTabDlg( MacroSecurity* _pTabDlg )
@@ -153,10 +163,14 @@ private:
     RadioButton         maHighRB;
     RadioButton         maMediumRB;
     RadioButton         maLowRB;
+
+    RadioButton*        GetRadioButton( USHORT _nLevel );
+    USHORT              GetLevel( void ) const;
 public:
                         MacroSecurityLevelTP( Window* pParent, MacroSecurity* _pDlg );
 
     virtual void        ActivatePage();
+    virtual void        ClosePage( void );
 };
 
 
@@ -182,12 +196,14 @@ private:
     DECL_LINK(          TrustCertLBSelectHdl, void* );
     DECL_LINK(          TrustFileLocLBSelectHdl, void* );
 
+    cssu::Sequence< SvtSecurityOptions::Certificate >           maTrustedAuthors;
 //  void                InsertCert( cssu::Reference< css::security::XCertificate >& _rxCert, USHORT _nInd );
     void                FillCertLB( void );
 public:
                         MacroSecurityTrustedSourcesTP( Window* pParent, MacroSecurity* _pDlg );
 
     virtual void        ActivatePage();
+    virtual void        ClosePage( void );
 };
 
 

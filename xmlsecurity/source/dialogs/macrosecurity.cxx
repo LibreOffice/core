@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-19 15:47:55 $
+ *  last change: $Author: gt $ $Date: 2004-07-20 15:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,16 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
 
+IMPL_LINK( MacroSecurity, OkBtnHdl, void*, EMTYARG )
+{
+    mpLevelTP->ClosePage();
+    mpTrustSrcTP->ClosePage();
+
+//  ExitDialog( RET_OK );
+
+    return 0;
+}
+
 MacroSecurity::MacroSecurity( Window* _pParent, cssu::Reference< lang::XMultiServiceFactory >& rxMSF, cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment )
     :TabDialog          ( _pParent, XMLSEC_RES( RID_XMLSECTP_MACROSEC ) )
     ,maSignatureHelper  ( rxMSF )
@@ -127,9 +137,14 @@ MacroSecurity::MacroSecurity( Window* _pParent, cssu::Reference< lang::XMultiSer
 
     mxSecurityEnvironment = _rxSecurityEnvironment;
 
-    maTabCtrl.SetTabPage( RID_XMLSECTP_SECLEVEL, new MacroSecurityLevelTP( &maTabCtrl, this ) );
-    maTabCtrl.SetTabPage( RID_XMLSECTP_TRUSTSOURCES, new MacroSecurityTrustedSourcesTP( &maTabCtrl, this ) );
+    MacroSecurityTP*    mpLevelTP = new MacroSecurityLevelTP( &maTabCtrl, this );
+    MacroSecurityTP*    mpTrustSrcTP = new MacroSecurityTrustedSourcesTP( &maTabCtrl, this );
+
+    maTabCtrl.SetTabPage( RID_XMLSECTP_SECLEVEL, mpLevelTP );
+    maTabCtrl.SetTabPage( RID_XMLSECTP_TRUSTSOURCES, mpTrustSrcTP );
     maTabCtrl.SetCurPageId( RID_XMLSECTP_SECLEVEL );
+
+    maOkBtn.SetClickHdl( LINK( this, MacroSecurity, OkBtnHdl ) );
 }
 
 MacroSecurity::~MacroSecurity()
@@ -143,6 +158,39 @@ MacroSecurityTP::MacroSecurityTP( Window* _pParent, const ResId& _rResId, MacroS
 {
 }
 
+
+RadioButton* MacroSecurityLevelTP::GetRadioButton( USHORT _nLevel )
+{
+    RadioButton*    pRet;
+    switch( _nLevel )
+    {
+        case 0:     pRet = &maVeryHighRB;       break;
+        case 1:     pRet = &maHighRB;           break;
+        case 2:     pRet = &maMediumRB;         break;
+        case 3:     pRet = &maLowRB;            break;
+        default:    pRet = NULL;
+    }
+
+    return pRet;
+}
+
+USHORT MacroSecurityLevelTP::GetLevel( void ) const
+{
+    USHORT  nRet;
+
+    if( maVeryHighRB.IsChecked() )
+        nRet = 3;
+    else if( maHighRB.IsChecked() )
+        nRet = 2;
+    else if( maMediumRB.IsChecked() )
+        nRet = 1;
+    else if( maLowRB.IsChecked() )
+        nRet = 0;
+    else
+        nRet = 0xFFFF;
+
+    return nRet;
+}
 
 MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pDlg )
     :MacroSecurityTP    ( _pParent, XMLSEC_RES( RID_XMLSECTP_SECLEVEL ), _pDlg )
@@ -158,6 +206,17 @@ MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pD
 void MacroSecurityLevelTP::ActivatePage()
 {
     mpDlg->EnableReset();
+
+    RadioButton*    pRB = GetRadioButton( USHORT( mpDlg->maSecOptions.GetMacroSecurityLevel() ) );
+    if( pRB )
+        pRB->Check();
+}
+
+void MacroSecurityLevelTP::ClosePage( void )
+{
+    USHORT  nLevel = GetLevel();
+    if( nLevel <= 3 )
+        mpDlg->maSecOptions.SetMacroSecurityLevel( nLevel );
 }
 
 
@@ -252,6 +311,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, void*, EMTYARG )
     if( nSel != LISTBOX_ENTRY_NOTFOUND )
     {
         maTrustFileLocLB.RemoveEntry( nSel );
+        // remove from sequence
     }
 
     return 0;
@@ -287,7 +347,23 @@ void MacroSecurityTrustedSourcesTP::FillCertLB( void )
 {
     maTrustCertLB.Clear();
 
-    uno::Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv = mpDlg->maSignatureHelper.GetSecurityEnvironment();
+    sal_uInt32      nCountEntries = maTrustedAuthors.getLength();
+    String          aCN_Id( String::CreateFromAscii( "CN" ) );
+    for( sal_uInt32 nEntry = 0 ; nEntry < nCountEntries ; ++nEntry )
+    {
+        cssu::Sequence< ::rtl::OUString >&  rEntry = maTrustedAuthors[ nEntry ];
+
+        const SignatureInformation& rInfo = mpDlg->maCurrentSignatureInformations[ nEntry ];
+        uno::Reference< css::security::XCertificate > xCert;
+
+        SvLBoxEntry*    pLBEntry = maTrustCertLB.InsertEntry( XmlSec::GetContentPart( xCert->getSubjectName(), aCN_Id ) );
+        maTrustCertLB.SetEntryText( XmlSec::GetContentPart( rInfo.ouX509IssuerName, aCN_Id ), pLBEntry, 1 );
+        maTrustCertLB.SetEntryText( XmlSec::GetDateTimeString( rInfo.ouDate, rInfo.ouTime ), pLBEntry, 2 );
+        pLBEntry->SetUserData( ( void* ) sal_Int32( nEntry ) );     // missuse user data as index
+    }
+//      m_seqSecureURLs[ nItem ] = aOpt.SubstituteVariable( m_seqSecureURLs[ nItem ] );
+
+/*    uno::Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv = mpDlg->maSignatureHelper.GetSecurityEnvironment();
     uno::Reference< css::security::XCertificate > xCert;
 
     String  aCN_Id( String::CreateFromAscii( "CN" ) );
@@ -306,7 +382,7 @@ void MacroSecurityTrustedSourcesTP::FillCertLB( void )
         }
     }
 
-    TrustCertLBSelectHdl( NULL );
+    TrustCertLBSelectHdl( NULL );*/
 }
 
 MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP( Window* _pParent, MacroSecurity* _pDlg )
@@ -328,7 +404,8 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP( Window* _pParent, 
 
     FreeResource();
 
-    maAddCertPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, AddCertPBHdl ) );
+//  maAddCertPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, AddCertPBHdl ) );
+    maAddCertPB.Hide();     // not used in the moment...
     maViewCertPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, ViewCertPBHdl ) );
     maViewCertPB.Disable();
     maRemoveCertPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, RemoveCertPBHdl ) );
@@ -336,11 +413,15 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP( Window* _pParent, 
     maAddLocPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, AddLocPBHdl ) );
     maRemoveLocPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, RemoveLocPBHdl ) );
     maRemoveLocPB.Disable();
-
-    FillCertLB();
 }
 
 void MacroSecurityTrustedSourcesTP::ActivatePage()
 {
     mpDlg->EnableReset( false );
+    FillCertLB();
+}
+
+void MacroSecurityTrustedSourcesTP::ClosePage( void )
+{
+    mpDlg->maSecOptions.SetTrustedAuthors( maTrustedAuthors );
 }
