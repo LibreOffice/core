@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ins_paste.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:44:14 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:41:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,8 @@ ModalDialog DLG_INSERT_PASTE
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "Position";
         Text[ slovak ] = "Umiestnenie";
+        Text[ hungarian ] = "Pozíció";
+        Text[ slovenian ] = "Položaj";
     };
     RadioButton RB_BEFORE
     {
@@ -132,7 +134,7 @@ ModalDialog DLG_INSERT_PASTE
         Text [ portuguese_brazilian ] = "~antes" ;
         Text [ portuguese ] = "� ~frente" ;
         Text [ finnish ] = "~Ennen" ;
-        Text [ danish ] = "foran" ;
+        Text [ danish ] = "~Foran" ;
         Text [ french ] = "Avant" ;
         Text [ swedish ] = "~framf�r" ;
         Text [ dutch ] = "~ervoor" ;
@@ -155,6 +157,8 @@ ModalDialog DLG_INSERT_PASTE
         Text[ hebrew ] = "da~vor";
         Text[ hindi ] = "~Before";
         Text[ slovak ] = "P~red";
+        Text[ hungarian ] = "~Elé";
+        Text[ slovenian ] = "~Pred";
     };
     RadioButton RB_AFTER
     {
@@ -167,7 +171,7 @@ ModalDialog DLG_INSERT_PASTE
         Text [ portuguese_brazilian ] = "~atr�s" ;
         Text [ portuguese ] = "~atr�s" ;
         Text [ finnish ] = "~J�lkeen" ;
-        Text [ danish ] = "efter" ;
+        Text [ danish ] = "E~fter" ;
         Text [ french ] = "Apr�s" ;
         Text [ swedish ] = "~bakom" ;
         Text [ dutch ] = "e~rachter" ;
@@ -191,6 +195,8 @@ ModalDialog DLG_INSERT_PASTE
         Text[ hebrew ] = "da~hinter";
         Text[ hindi ] = "A~fter";
         Text[ slovak ] = "~za";
+        Text[ hungarian ] = "~Mögé";
+        Text[ slovenian ] = "Z~a";
     };
     Text[ swedish ] = "Infoga diabilder";
     Text[ spanish ] = "Insertar diapositivas";
@@ -204,7 +210,7 @@ ModalDialog DLG_INSERT_PASTE
     Text[ french ] = "Insertion de diapos";
     Text[ finnish ] = "Insert Slides";
     Text[ italian ] = "Inserisci diapositiva";
-    Text[ danish ] = "Insert Slides";
+    Text[ danish ] = "Inds�t dias";
     Text[ polish ] = "Insert Slides";
     Text[ japanese ] = "スライドの挿入";
     Text[ chinese_simplified ] = "插入幻灯片";
@@ -217,7 +223,10 @@ ModalDialog DLG_INSERT_PASTE
     Text[ thai ] = "Insert Slides";
     Text[ hindi ] = "Insert Slides";
     Text[ slovak ] = "Vložiť snímky";
+    Text[ hungarian ] = "Dia beszúrása";
+    Text[ slovenian ] = "Vstavi diapozitive";
 };
+
 
 
 
