@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Component.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 12:39:59 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,42 +316,6 @@ public abstract class Component extends java.awt.Component {
             }
         }
 
-        /** Fires the appropriate PropertyChangeEvent */
-        protected void handleTextChangedEvent(Object any1, Object any2) {
-            Object[] values = new Object[2];
-            try {
-                if (AnyConverter.isObject(any1)) {
-                    com.sun.star.awt.Selection s = (com.sun.star.awt.Selection)
-                        AnyConverter.toObject(SelectionType, any1);
-                    if (s != null) {
-                        // Since there is nothing like a "range" object in the JAA yet,
-                        // the Integer[2] is a private negotiation with the JABG
-                        Integer[] deleted = { new Integer(s.Min), new Integer(s.Max) };
-                        values[0] = deleted;
-                        if (Build.DEBUG) {
-                            System.err.println("text range (" + s.Min + "," + s.Max + ") deleted");
-                        }
-                    }
-                }
-
-                if (AnyConverter.isObject(any2)) {
-                    com.sun.star.awt.Selection s = (com.sun.star.awt.Selection)
-                        AnyConverter.toObject(SelectionType, any2);
-                    if (s != null) {
-                        // Since there is nothing like a "range" object in the JAA yet,
-                        // the Integer[2] is a private negotiation with the JABG
-                        Integer[] inserted = { new Integer(s.Min), new Integer(s.Max) };
-                        values[1] = inserted;
-                        if (Build.DEBUG) {
-                            System.err.println("text range (" + s.Min + "," + s.Max + ") inserted");
-                        }
-                    }
-                }
-                firePropertyChange(AccessibleContext.ACCESSIBLE_TEXT_PROPERTY, values[0], values[1]);
-            } catch (com.sun.star.lang.IllegalArgumentException e) {
-            }
-        }
-
         /** Called by OpenOffice process to notify property changes */
         public void notifyEvent(AccessibleEventObject event) {
             switch (event.EventId) {
@@ -383,7 +347,9 @@ public abstract class Component extends java.awt.Component {
                     firePropertyChange(AccessibleContext.ACCESSIBLE_VISIBLE_DATA_PROPERTY, null, null);
                     break;
                 case AccessibleEventId.TEXT_CHANGED:
-                    handleTextChangedEvent(event.OldValue, event.NewValue);
+                    firePropertyChange(AccessibleContext.ACCESSIBLE_TEXT_PROPERTY,
+                                            AccessibleTextImpl.convertTextSegment(event.OldValue),
+                                            AccessibleTextImpl.convertTextSegment(event.NewValue));
                     break;
                 case AccessibleEventId.CARET_CHANGED:
                     firePropertyChange(accessibleContext.ACCESSIBLE_CARET_PROPERTY, toNumber(event.OldValue), toNumber(event.NewValue));
@@ -409,28 +375,35 @@ public abstract class Component extends java.awt.Component {
         return new AccessibleUNOComponentListener();
     }
 
-    protected AccessibleContext accessibleContext = null;
+    protected javax.accessibility.AccessibleContext accessibleContext = null;
+
+    /** This method actually creates the AccessibleContext object returned by
+     * getAccessibleContext().
+     */
+    protected javax.accessibility.AccessibleContext createAccessibleContext() {
+        return null;
+    }
+
+    /** Returns the AccessibleContext associated with this object */
+    public final javax.accessibility.AccessibleContext getAccessibleContext() {
+        if (accessibleContext == null) {
+            try {
+                AccessibleContext ac = createAccessibleContext();
+                if (ac != null) {
+                    // Set accessible name and description here to avoid
+                    // unnecessary property change events later ..
+                    ac.setAccessibleName(unoAccessibleContext.getAccessibleName());
+                    ac.setAccessibleDescription(unoAccessibleContext.getAccessibleDescription());
+                    accessibleContext = ac;
+                }
+            } catch (com.sun.star.uno.RuntimeException e) {
+            }
+        }
+        return accessibleContext;
+    }
 
     protected abstract class AccessibleUNOComponent extends java.awt.Component.AccessibleAWTComponent
         implements javax.accessibility.AccessibleExtendedComponent {
-
-        /**
-        * Though the class is abstract, this should be called by all sub-classes
-        */
-        protected AccessibleUNOComponent() {
-            super();
-            // Set accessible name and description here to avoid unnecessary property change
-            // events later ..
-            XAccessibleContext unoAccessibleContext = unoAccessible.getAccessibleContext();
-            String s = unoAccessibleContext.getAccessibleName();
-            if (s != null && s.length() > 0) {
-                setAccessibleName(s);
-            }
-            s = unoAccessibleContext.getAccessibleDescription();
-            if (s != null && s.length() > 0) {
-                setAccessibleDescription(s);
-            }
-        }
 
         /** Check if the parent of an selectable object supports AccessibleSelection */
         protected void dbgCheckSelectable() {
