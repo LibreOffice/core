@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:20:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,7 @@ const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
 
     if ( m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd() && !m_aCurrentRow.isNull() && m_aCurrentRow->isValid() )
     {
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         ORowSetMatrix::iterator aCacheEnd = m_pCache->getEnd();
         ORowSetMatrix::iterator aCurrentRow = m_aCurrentRow;
 #endif
@@ -1126,7 +1126,7 @@ void SAL_CALL ORowSetBase::clearWarnings(  ) throw(SQLException, RuntimeExceptio
 void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
 {
     OSL_ENSURE(m_pColumns,"Columns can not be NULL here!");
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     sal_Bool bNull = m_aCurrentRow.isNull();
     ORowSetMatrix::iterator atest = m_aCurrentRow;
 #endif
