@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:21 $
+ *  last change: $Author: mib $ $Date: 2002-05-23 15:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
+#include <com/sun/star/awt/XFocusListener.hpp>
+#endif
 
 class Window;
 class SwAccessibleMap;
@@ -171,8 +174,8 @@ protected:
     const SwAccessibleMap *GetMap() const { return pMap; }
 
     /** convenience method to get the SwViewShell through accessibility map */
-    ViewShell* GetShell();
-    const ViewShell* GetShell() const;
+    inline ViewShell* GetShell();
+    inline const ViewShell* GetShell() const;
 
     /** convenience method to get SwCrsrShell through accessibility map
      * @returns SwCrsrShell, or NULL if none is found */
