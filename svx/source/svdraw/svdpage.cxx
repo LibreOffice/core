@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-07 15:30:26 $
+ *  last change: $Author: cl $ $Date: 2002-02-25 15:46:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1977,6 +1977,34 @@ FASTBOOL SdrPage::HasTransparentObjects( BOOL bCheckForAlphaChannel ) const
             bRet = TRUE;
 
     return bRet;
+}
+
+/** returns an averaged background color of this page */
+Color SdrPage::GetBackgroundColor() const
+{
+    Color aColor( COL_WHITE );
+
+    // first, see if we have a background object
+    SdrObject* pBackgroundObj = GetBackgroundObj();
+    if( NULL == pBackgroundObj )
+    {
+        // if not, see if we have a masterpage and get that background object
+        if( GetMasterPageCount() )
+        {
+            SdrPage* pMaster = GetMasterPage(0);
+
+            if( pMaster && pMaster->GetObjCount() )
+                pBackgroundObj = pMaster->GetObj( 0 );
+        }
+    }
+
+    if( pBackgroundObj )
+    {
+        const SfxItemSet& rSet = pBackgroundObj->GetItemSet();
+        GetDraftFillColor( rSet, aColor );
+    }
+
+    return aColor;
 }
 
 #ifdef GCC
