@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: aw $ $Date: 2001-11-13 19:13:51 $
+ *  last change: $Author: cl $ $Date: 2002-01-08 14:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,8 +380,8 @@ void SdModule::Execute(SfxRequest& rReq)
                     }
 
 
-                    SfxObjectShell* pShell = pPilotDlg->GetDocument();
-                    SfxObjectShellLock xShell( pShell );
+                    SfxObjectShellLock xShell( pPilotDlg->GetDocument() );
+                    SfxObjectShell* pShell = xShell;
 
                     delete pPilotDlg;
 
