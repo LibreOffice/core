@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-19 20:59:30 $
+ *  last change: $Author: kz $ $Date: 2001-10-31 21:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ String STR_STYLE_FILTER_USED
     TEXT[ chinese_traditional ] = "δ½Ώη”¨η„ζ¨£εΌ";
     TEXT[ arabic ] = "ΓδγΗΨ ήνΟ ΗαΗΣΚΞΟΗγ";
     TEXT[ greek ] = "Εφαρμοσμένα πρότυπα";
-    TEXT[ korean ] = "μ‚¬μ©λγ€€μ ν•.";
+    TEXT[ korean ] = "μ‚¬μ©λ ν…ν”λ¦Ώ.";
     TEXT[ turkish ] = "Kullanύlan biηimler";
     TEXT[ catalan ] = "Estilos utilizados";
 };
@@ -220,7 +220,7 @@ String STR_STYLE_FILTER_USERDEF
     TEXT[ chinese_traditional ] = "θ‡ªθ¨‚ζ¨£εΌ";
     TEXT[ arabic ] = "ΓδγΗΨ γΞΥΥΙ";
     TEXT[ greek ] = "Στυλ χρήστη";
-    TEXT[ korean ] = "μ‚¬μ©μ μ •μ μ ν•";
+    TEXT[ korean ] = "μ‚¬μ©μ μ •μ ν…ν”λ¦Ώ";
     TEXT[ turkish ] = "Kullanύcύ tanύmlύ biηimler";
     TEXT[ catalan ] = "Estilos del usuario";
 };
@@ -247,7 +247,7 @@ String STR_STYLE_FILTER_ALL
     TEXT[ chinese_traditional ] = "ε…¨ιƒ¨ζ¨£εΌ";
     TEXT[ arabic ] = "ία ΗαΓδγΗΨ";
     TEXT[ greek ] = "Όλα τα πρότυπα";
-    TEXT[ korean ] = "λª¨λ“  μ ν•";
+    TEXT[ korean ] = "λª¨λ“  ν…ν”λ¦Ώ";
     TEXT[ turkish ] = "Tόm biηimler";
     TEXT[ catalan ] = "Todos los estilos";
 };
@@ -295,8 +295,8 @@ String STR_FILTERNAME_ALL
     Text[ swedish ] = "Alla filer (*.*)";
     Text[ polish ] = "Wszystkie pliki (*.*)";
     Text[ portuguese_brazilian ] = "<Tudo>";
-    Text[ japanese ] = "<γ™γΉγ¦>";
-    Text[ korean ] = "<μ „λ¶€>";
+    Text[ japanese ] = "γ™γΉγ¦γ®οΎο½§ο½²οΎ™ (*.*)";
+    Text[ korean ] = "<λª¨λ‘>";
     Text[ chinese_simplified ] = "ε…¨ιƒ¨ζ–‡δ»¶ (*.*)";
     Text[ chinese_traditional ] = "ε…¨ιƒ¨η„ζª”ζ΅(*.*)";
     Text[ turkish ] = "<Tόmό>";
@@ -488,7 +488,7 @@ String STR_REPEAT
     Text[ chinese_traditional ] = "δΈδΈ€ε€‹ζ‡δ»¤(~R)";
     Text[ arabic ] = "ΗαΓγΡ ΗαΓΞνΡ: ";
     Text[ greek ] = "Επανάληψη: ";
-    Text[ korean ] = "λ§μ§€λ§‰γ€€λª…λ Ή(~R):";
+    Text[ korean ] = "λ§μ§€λ§‰ λª…λ Ή(~R):";
     Text[ turkish ] = "Son ~komutu yinele: ";
     Text[ catalan ] = "~Ϊltimo comando: ";
     Text[ finnish ] = "~Toisto: ";
@@ -543,11 +543,12 @@ QueryBox MSG_QUERY_LASTVERSION
     Message[ japanese ] = "γ™γΉγ¦γ®ε¤‰ζ›΄γ‚’θ§£ι™¤γ—γΎγ™γ‹γ€‚";
     Message[ chinese_traditional ] = "ε–ζ¶ζ‰€ζ‰η„θ®ζ›΄οΌ";
     Message[ greek ] = "Ακύρωση όλων των αλλαγών;";
-    Message[ korean ] = "λª¨λ“  λ³€κ²½μ„ μ·¨μ† ν•μ‹κ² μµλ‹κΉ?";
+    Message[ korean ] = "λª¨λ“  λ³€κ²½μ„ μ·¨μ†ν•κ² μµλ‹κΉ?";
     Message[ arabic ] = "εα ΚΡνΟ ΡέΦ ία ΗαΚΫννΡΗΚΏ";
     Message[ turkish ] = "Tόm deπiώiklikleri iptal et?";
     Message[ catalan ] = "ΏCancelar todos los cambios?";
 };
+
 
 
 
