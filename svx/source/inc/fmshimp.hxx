@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-21 13:05:55 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 17:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,15 +417,15 @@ public:
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException );
 
 // ::com::sun::star::container::XContainerListener
-    virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent);
-    virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& rEvent);
-    virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent);
+    virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& rEvent) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw( ::com::sun::star::uno::RuntimeException );
 
 // XSelectionChangeListener
-    virtual void SAL_CALL selectionChanged(const ::com::sun::star::lang::EventObject& rEvent);
+    virtual void SAL_CALL selectionChanged(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException );
 
 // ::com::sun::star::beans::XPropertyChangeListener
-    virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt);
+    virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException );
 
 // ::com::sun::star::sdbc::XRowSetListener
     virtual void SAL_CALL cursorMoved(const ::com::sun::star::lang::EventObject& event) throw( ::com::sun::star::uno::RuntimeException );
@@ -433,7 +433,7 @@ public:
     virtual void SAL_CALL rowSetChanged(const ::com::sun::star::lang::EventObject& event) throw( ::com::sun::star::uno::RuntimeException ) { }
 
 // ::com::sun::star::util::XModifyListener    -> modify setzen
-    virtual void SAL_CALL modified(const ::com::sun::star::lang::EventObject& Source);
+    virtual void SAL_CALL modified(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException );
 
 // ::com::sun::star::frame::XDispatchProviderInterceptor
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch> interceptedQueryDispatch(sal_uInt16 _nId,
