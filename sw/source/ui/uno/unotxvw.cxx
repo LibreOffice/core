@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: os $ $Date: 2002-10-09 12:09:24 $
+ *  last change: $Author: os $ $Date: 2002-10-09 14:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,6 +418,8 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
         Reference< text::XTextCursor >  xCrsr(xInterface, uno::UNO_QUERY);
         Reference< container::XIndexAccess >    xPosN(xInterface, uno::UNO_QUERY);
         Reference< text::XTextRange >   xPos(xInterface, uno::UNO_QUERY);
+        SwXFrame* pFrame = xIfcTunnel.is() ? (SwXFrame*)
+            xIfcTunnel->getSomething(SwXFrame::getUnoTunnelId()) : 0;
 
         SwPaM * pPam = 0;
         SwXTextRanges* pPosN = 0;
@@ -443,7 +445,8 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                 pPam = lcl_createPamCopy(*pUnoCrsr);
             }
         }
-        else if(xPos.is())
+        // prevent misinterpretation of text frames that provide a XTextRange interface, too
+        else if(!pFrame && xPos.is())
         {
             SwUnoInternalPaM aPam(*pDoc);
             if(SwXTextRange::XTextRangeToSwPaM(aPam, xPos))
@@ -460,15 +463,10 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
             delete pPam;
             return sal_True;
         }
-        Reference< uno::XInterface >  xFrm(xInterface, uno::UNO_QUERY);;
-
-        if(xFrm.is() && xIfcTunnel.is())
+        if(pFrame)
         {
-            //
-            SwXFrame* pFrame = (SwXFrame*)
-                xIfcTunnel->getSomething(SwXFrame::getUnoTunnelId());
 
-            SwFrmFmt* pFrmFmt = pFrame ? pFrame->GetFrmFmt() : 0;
+            SwFrmFmt* pFrmFmt = pFrame->GetFrmFmt();
             if(pFrmFmt && pFrmFmt->GetDoc() == pDoc)
             {
                 sal_Bool bSuccess = rSh.GotoFly( pFrmFmt->GetName(), pFrame->GetFlyCntType());
@@ -661,6 +659,8 @@ uno::Any SwXTextView::getSelection(void) throw( uno::RuntimeException )
     SwView* pView = ((SwXTextView*)this)->GetView();
     if(pView)
     {
+        //force immediat shell update
+        pView->StopShellTimer();
         // ein interface aus der aktuellen Selektion erzeugen
         SwWrtShell& rSh = pView->GetWrtShell();
         ShellModes  eSelMode = pView->GetShellMode();
