@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testsmgr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:15:15 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 #include <stdio.h>
 
+#include <sal/main.h>
 #ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
 #endif
@@ -76,7 +77,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-#include "testsmgr_cpnt/testsmgr_cpnt.hxx"
+extern "C" void SAL_CALL test_ServiceManager();
 
 #ifndef FALSE
 #define FALSE 0
@@ -140,8 +141,7 @@ void setStarUserRegistry()
 }
 
 
-
-int SAL_CALL main()
+SAL_IMPLEMENT_MAIN()
 {
     printf( "ServiceManagerTest : \r");
     setStarUserRegistry();
