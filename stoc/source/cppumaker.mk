@@ -2,9 +2,9 @@
 #
 #   $RCSfile: cppumaker.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: dbo $ $Date: 2002-11-13 11:00:21 $
+#   last change: $Author: rt $ $Date: 2003-04-09 07:28:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,17 +62,18 @@
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
 UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 
-CPPUMAKERFLAGS =
 
-.IF "$(BOOTSTRAP_SERVICE)" == "TRUE"
+.IF "$(BOOTSTRAP_SERVICE)" != ""
+
+CPPUMAKERFLAGS =
 UNOUCROUT=	$(OUT)$/inc$/bootstrap
 INCPRE+=	$(OUT)$/inc$/bootstrap
+
 .ELSE
-.IF "$(COM)" == "MSC"
-CPPUMAKERFLAGS = -L
-.ENDIF
+
 UNOUCROUT=	$(OUT)$/inc$/light
 INCPRE+=	$(OUT)$/inc$/light
+
 .ENDIF
 
 .IF "$(debug)" != ""
