@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-07-25 14:11:11 $
+ *  last change: $Author: jl $ $Date: 2001-08-02 12:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,13 +302,6 @@ void registerServices( Reference< XMultiServiceFactory >& xSMgr )
             OUString::createFromAscii( "com.sun.star.portal.InstallUser" ),
             Sequence<Any>( &aAny, 1 ) );
     }
-
-    // try to start OLE registration service.
-    // on success (WIN32 only) this process will work
-    // as OLE automation server for standard UNO objects.
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ createInstance com.sun.star.bridge.OleApplicationRegistration" );
-    xSMgr->createInstance(DEFINE_CONST_UNICODE("com.sun.star.bridge.OleApplicationRegistration"));
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "} createInstance com.sun.star.bridge.OleApplicationRegistration" );
 
     ::rtl::OUString aPortalConnect;
     sal_Bool        bServer = pCmdLine->IsServer();

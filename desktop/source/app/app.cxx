@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 12:16:42 $
+ *  last change: $Author: jl $ $Date: 2001-08-02 12:21:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -908,7 +908,17 @@ IMPL_LINK( Desktop, OpenClients_Impl, void*, pvoid )
 
     CheckFirstRun( );
 
+    EnableOleAutomation();
     return 0;
+}
+// Registers a COM class factory of the service manager with the windows operating system.
+void Desktop::EnableOleAutomation()
+{
+      RTL_LOGFILE_CONTEXT( aLog, "desktop (jl97489) ::Desktop::EnableOleAutomation" );
+#ifdef WNT
+    Reference< XMultiServiceFactory > xSMgr=  comphelper::getProcessServiceFactory();
+    xSMgr->createInstance(DEFINE_CONST_UNICODE("com.sun.star.bridge.OleApplicationRegistration"));
+#endif
 }
 
 void Desktop::OpenClients()
