@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODriver.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:09:23 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 14:40:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _CONNECTIVITY_ODBC_ODRIVER_HXX_
 #include "odbc/ODriver.hxx"
 #endif
@@ -231,7 +230,7 @@ Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const ::rtl
                 ,::rtl::OUString()
                 ,Sequence< ::rtl::OUString >())
                 );
-        return Sequence< DriverPropertyInfo >(aDriverInfo.begin(),aDriverInfo.size());
+        return Sequence< DriverPropertyInfo >(&(aDriverInfo[0]),aDriverInfo.size());
     }
     ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
     return Sequence< DriverPropertyInfo >();
