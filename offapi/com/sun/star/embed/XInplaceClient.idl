@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInplaceClient.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:26:06 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 18:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,18 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
+#ifndef __com_sun_star_container_XIndexAccess_idl__
+#include <com/sun/star/container/XIndexAccess.idl>
+#endif
+
+#ifndef __drafts_com_sun_star_frame_XLayoutManager_idl__
+#include <drafts/com/sun/star/frame/XLayoutManager.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XWindow_idl__
+#include <com/sun/star/awt/XWindow.idl>
+#endif
+
 #ifndef __com_sun_star_awt_Rectangle_idl__
 #include <com/sun/star/awt/Rectangle.idl>
 #endif
@@ -81,75 +93,72 @@
 #include <com/sun/star/embed/WrongStateException.idl>
 #endif
 
-#ifndef __com_sun_star_embed_XInplaceUIWindow_idl__
-#include <com/sun/star/embed/XInplaceUIWindow.idl>
-#endif
 
-#ifndef __com_sun_star_embed_XIPMainContainerWindow_idl__
-#include <com/sun/star/embed/XIPMainContainerWindow.idl>
-#endif
-
-
-//=============================================================================
+//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//=============================================================================
-/** represents common functionality for inplace clients
+//============================================================================
+/** represents common functionality for inplace clients.
  */
 interface XInplaceClient: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
-    /** Checks if the container can activate the object inplace.
+    //------------------------------------------------------------------------
+    /** checks if the container can activate the object inplace.
 
         @return
             <TRUE/> the container can activate the object inplace.
             <FALSE/> otherwise.
      */
-    boolean canInPlaceActivate();
+    boolean canInplaceActivate();
 
-    //-------------------------------------------------------------------------
-    /** Notifies container through the client that the object is to be activated.
-
-        @throws com::sun::star::embed::WrongStateException
-            the container is not ready for activation
-     */
-    void onInPlaceActivate()
-        raises( ::com::sun::star::embed::WrongStateException );
-
-    //-------------------------------------------------------------------------
-    /** Notifies container through the client that the object is to be UI-activated.
+    //------------------------------------------------------------------------
+    /** notifies container through the client that the object is to be
+        inplace activated.
 
         @throws com::sun::star::embed::WrongStateException
             the container is not ready for activation
      */
-    void onUIActivate()
+    void activatingInplace()
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //-------------------------------------------------------------------------
-    /** Notifies container through the client that the object is to be deactivated.
+    //------------------------------------------------------------------------
+    /** notifies container through the client that the object is to be
+        UI-activated.
+
+        @throws com::sun::star::embed::WrongStateException
+            the container is not ready for activation
+     */
+    void activatingUI()
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //------------------------------------------------------------------------
+    /** notifies container through the client that the object is deactivated.
 
         @throws com::sun::star::embed::WrongStateException
             the container is not ready for deactivation
      */
-    void onInPlaceDeactivate()
+    void deactivatedInplace()
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //-------------------------------------------------------------------------
-    /** Notifies container through the client that the object is to be UI-deactivated.
+    //------------------------------------------------------------------------
+    /** notifies container through the client that the object is
+        UI-deactivated.
 
-        <p> After this notification the container can restore it's own UI and take focus.
+        <p>
+        After this notification the container can restore it's own UI and take focus.
         </p>
 
         @throws com::sun::star::embed::WrongStateException
             the container is not ready for deactivation
      */
-    void onUIDeactivate()
+    void deactivatedUI()
         raises( ::com::sun::star::embed::WrongStateException );
 
 
-    //-------------------------------------------------------------------------
-    /** Allows to retrieve top window represented by reference to XIPMainContainerWindow
+    //------------------------------------------------------------------------
+    /** allows to retrieve top window represented by reference to
+        <type scope="com::sun::star::awt">XWindow</type>.
 
         @return
             reference to object representing the topmost container window
@@ -157,15 +166,12 @@ interface XInplaceClient: com::sun::star::uno::XInterface
         @throws com::sun::star::embed::WrongStateException
             the object is in unexpected state to make such request
      */
-    ::com::sun::star::embed::XIPMainContainerWindow getTopmostWindow()
+    ::com::sun::star::awt::XWindow getTopWindow()
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //-------------------------------------------------------------------------
-    /** Allows to retrieve document window represented by reference to XInPlaceUIWindow
-
-        <p> The object representing document window can be different from
-        the one representing top window.
-        </p>
+    //------------------------------------------------------------------------
+    /** allows to retrieve component window represented by reference to
+        <type scope="com::sun::star::awt">XWindow</type>.
 
         @return
             reference to object representing the container document window
@@ -173,17 +179,47 @@ interface XInplaceClient: com::sun::star::uno::XInterface
         @throws com::sun::star::embed::WrongStateException
             the object is in unexpected state to make such request
      */
-    ::com::sun::star::embed::XInplaceUIWindow getDocumentWindow()
+    ::com::sun::star::awt::XWindow getDocumentWindow()
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //-------------------------------------------------------------------------
-    /** Gets the inplace object position rectangle.
+    //------------------------------------------------------------------------
+    /** allows to retrieve the
+        <type scope="com::sun::star::frame">LayoutManager</type> of the
+        container.
 
-        <p> The rectangle is provided in object's parent window
-        coordinates in pixels. The intersection of position and clip rectangles
-        specifies the visible part of the object.
-        In case the position window has a size that is bigger than
-        object's size, the object should either scale or deactivate.
+        @return
+            reference to object representing the
+            <type scope="com::sun::star::frame">LayoutManager</type> of the
+            container
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in unexpected state to make such request
+     */
+    ::drafts::com::sun::star::frame::XLayoutManager getLayoutManager()
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //------------------------------------------------------------------------
+    /** allows to retrieve the container's inplace menubar part.
+
+        @return
+            reference to object implementing the
+            <type scope="com::sun::star::container">XIndexAccess</type>
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in unexpected state to make such request
+     */
+    ::com::sun::star::container::XIndexAccess getInplaceMenu()
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //------------------------------------------------------------------------
+    /** gets the inplace object position rectangle.
+
+        <p>
+        The rectangle is provided in object's parent window coordinates in
+        pixels. The intersection of position and clip rectangles specifies
+        the visible part of the object. In case the position window has a size
+        that is bigger than object's size, the object should either scale or
+        deactivate.
         </p>
 
         @return
@@ -192,40 +228,42 @@ interface XInplaceClient: com::sun::star::uno::XInterface
         @throws com::sun::star::embed::WrongStateException
             the object is in unexpected state to make such request
      */
-    ::com::sun::star::awt::Rectangle getPosRect()
+    ::com::sun::star::awt::Rectangle getPlacement()
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //-------------------------------------------------------------------------
-    /** Gets the inplace object clip rectangle.
+    //------------------------------------------------------------------------
+    /** gets the inplace object clip rectangle.
 
-        <p> The rectangle is provided in object's parent window
-        coordinates in pixels. The intersection of position and clip rectangles
-        specifies the visible part of the object.
+        <p>
+        The rectangle is provided in object's parent window coordinates in
+        pixels. The intersection of position and clip rectangles specifies
+        the visible part of the object.
         </p>
 
         @return
-            specidies a new clip rectangle
+            specifies a new clip rectangle
 
         @throws com::sun::star::embed::WrongStateException
             the object is in unexpected state to make such request
      */
-    ::com::sun::star::awt::Rectangle getClipRect()
+    ::com::sun::star::awt::Rectangle getClipRectangle()
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //-------------------------------------------------------------------------
-    /** Provides accelerator table the object whants to use while it is inplace active.
+    //------------------------------------------------------------------------
+    /** provides accelerator table the object whants to use while it is
+        inplace active.
 
         @param aKeys
             an accelerator table from object
 
         @throws com::sun::star::embed::WrongStateException
             the object is in unexpected state
-     */
+    */
     void translateAccelerators( [in] sequence< ::com::sun::star::awt::KeyEvent > aKeys )
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //-------------------------------------------------------------------------
-    /** Scrolls the object.
+    //------------------------------------------------------------------------
+    /** scrolls the object.
 
         @param aOffset
             scrolls the object to specified offset in pixels
@@ -233,11 +271,11 @@ interface XInplaceClient: com::sun::star::uno::XInterface
         @throws com::sun::star::embed::WrongStateException
             the object is in unexpected state
      */
-    void scrollObj( [in] ::com::sun::star::awt::Size aOffset )
+    void scrollObject( [in] ::com::sun::star::awt::Size aOffset )
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //-------------------------------------------------------------------------
-    /** Notifies the container that the position of the object is changed.
+    //------------------------------------------------------------------------
+    /** notifies the container that the position of the object is changed.
 
         @param aPosRect
             specifies a new position rectangle
@@ -248,12 +286,12 @@ interface XInplaceClient: com::sun::star::uno::XInterface
         @throws com::sun::star::uno::Exception
             in case of other problems
      */
-    void onPosRectChange( [in] ::com::sun::star::awt::Rectangle aPosRect )
+    void changedPlacement( [in] ::com::sun::star::awt::Rectangle aPosRect )
         raises( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception );
 };
 
-//=============================================================================
+//============================================================================
 
 }; }; }; };
 
