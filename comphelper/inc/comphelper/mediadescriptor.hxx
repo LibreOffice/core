@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediadescriptor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 11:53:03 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,18 @@ class MediaDescriptor : public SequenceAsHashMap
          */
         sal_Bool impl_openStreamWithURL(const ::rtl::OUString& sURL)
             throw(::com::sun::star::uno::RuntimeException);
+
+        //---------------------------------------
+        /** @short  some URL parts can make trouble for opening streams (e.g. jumpmarks.)
+                    An URL should be "normalized" before its used.
+
+            @param  sURL
+                    the original URL (e.g. including a jumpmark)
+
+            @return [string]
+                    the "normalized" URL (e.g. without jumpmark)
+         */
+        ::rtl::OUString impl_normalizeURL(const ::rtl::OUString& sURL);
 };
 
 } // namespace comphelper
