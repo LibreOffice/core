@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 10:15:15 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1909,9 +1909,7 @@ Point ScTabView::GetInsertPos()
     nPosX = (long)(nPosX * HMM_PER_TWIPS);
     if ( pDoc->IsNegativePage( nTab ) )
         nPosX = -nPosX;
-    long nPosY = 0;
-    for (SCROW j=0; j<nRow; j++)
-        nPosY += pDoc->GetRowHeight(j,nTab);
+    long nPosY = (long) pDoc->GetRowHeight( 0, nRow-1, nTab);
     nPosY = (long)(nPosY * HMM_PER_TWIPS);
     return Point(nPosX,nPosY);
 }
