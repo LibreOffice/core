@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 17:57:49 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,11 @@
 #include "chrtdefs.hxx"
 #endif
 
+namespace com { namespace sun { namespace star {
+    namespace script { struct ScriptEventDescriptor; }
+} } }
+
 class ScfProgressBar;
-class XclImpStream;
 
 // Escher stream consumer =====================================================
 
@@ -324,6 +327,8 @@ public:
     void                ReadSbs( XclImpStream& rStrm );
     /** Reads the contents of the ftGboData sub structure in an OBJ record. */
     void                ReadGboData( XclImpStream& rStrm );
+    /** Reads the contents of the ftMacro sub structure in an OBJ record. */
+    void                ReadMacro( XclImpStream& rStrm );
 
     /** Returns the complete component service name for this control. */
     ::rtl::OUString     GetServiceName() const;
@@ -331,12 +336,17 @@ public:
     /** Sets form control specific properties. */
     void                SetProperties( ::com::sun::star::uno::Reference<
                             ::com::sun::star::beans::XPropertySet >& rxPropSet ) const;
+    /** Tries to fill the passed descriptor with imported macro data.
+        @return  true = Control is associated with a macro, rEvent contains valid data. */
+    bool                FillMacroDescriptor(
+                            ::com::sun::star::script::ScriptEventDescriptor& rEvent ) const;
 
     /** Inserts the contained SdrObj into the draw page. */
     virtual void        Apply( ScfProgressBar& rProgress );
 
 private:
     ScfInt16Vec         maMultiSel;     /// Indexes of all selected entries in a multi selection.
+    String              maMacroName;    /// Name of an attached macro.
     sal_uInt16          mnCtrlType;     /// Type of the control from OBJ record.
     sal_uInt16          mnState;        /// Checked/unchecked state.
     sal_Int16           mnSelEntry;     /// Index of selected entry (1-based).
