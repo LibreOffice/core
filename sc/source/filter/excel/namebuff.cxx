@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:33 $
+ *  last change: $Author: hr $ $Date: 2003-04-23 17:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,8 +541,7 @@ void ExtNameBuff::AddOLE( const String& rName, UINT32 nStorageId )
 
 void ExtNameBuff::AddName( const String& rName )
 {
-    XclAddInNameTranslator& rTrans = pExcRoot->pIR->GetAddInNames();
-    ExtName* pNew = new ExtName( rTrans.GetScName( rName ) );
+    ExtName* pNew = new ExtName( pExcRoot->pIR->GetScAddInName( rName ) );
     pNew->nFlags = 0x0004;
 
     List::Insert( pNew, LIST_APPEND );
