@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:14:00 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 09:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,11 +563,12 @@ USHORT SwTOXIndex::GetLevel() const
  --------------------------------------------------------------------*/
 
 
-SwTOXCustom::SwTOXCustom(const String& rStr, USHORT nLevel,
+SwTOXCustom::SwTOXCustom(const String& rStr, const String& rReading,
+                         USHORT nLevel,
                          const SwTOXInternational& rIntl,
                          const ::com::sun::star::lang::Locale& rLocale )
     : SwTOXSortTabBase( TOX_SORT_CUSTOM, 0, 0, &rIntl, &rLocale ),
-    aKey(rStr), nLev(nLevel)
+    aKey(rStr), sReading(rReading), nLev(nLevel)
 {
 }
 
@@ -613,6 +614,7 @@ USHORT SwTOXCustom::GetLevel() const
 void SwTOXCustom::_GetText( String& rTxt, String &rTxtReading )
 {
     rTxt = aKey;
+    rTxtReading = sReading;
     /// !!!!!!!!!!!!!!
 }
 
