@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTables.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 13:58:56 $
+ *  last change: $Author: oj $ $Date: 2001-09-18 13:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,11 +148,22 @@ void SAL_CALL ODbaseTables::appendByDescriptor( const Reference< XPropertySet >&
         if(pTable)
         {
             pTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
-            if(pTable->CreateImpl())
+            try
             {
-                pTable->setNew(sal_False);
-                pTable->construct();
-                ODbaseTables_BASE_BASE::appendByDescriptor(Reference< XPropertySet >(*pTable,UNO_QUERY));
+                if(pTable->CreateImpl())
+                {
+                    pTable->setNew(sal_False);
+                    pTable->construct();
+                    ODbaseTables_BASE_BASE::appendByDescriptor(Reference< XPropertySet >(*pTable,UNO_QUERY));
+                }
+            }
+            catch(SQLException&)
+            {
+                throw;
+            }
+            catch(Exception&)
+            {
+                throw SQLException();
             }
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:19:31 $
+ *  last change: $Author: oj $ $Date: 2001-09-18 13:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _UCBHELPER_CONTENT_HXX
+#include <ucbhelper/content.hxx>
 #endif
 
 using namespace ::comphelper;
@@ -509,7 +512,12 @@ sal_Bool SAL_CALL ODbaseDatabaseMetaData::isReadOnly(  ) throw(SQLException, Run
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return sal_False;
+    sal_Bool bReadOnly = sal_False;
+    static ::rtl::OUString sReadOnly = ::rtl::OUString::createFromAscii("IsReadOnly");
+    ::ucb::Content aFile(m_pConnection->getContent(),::com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >());
+    aFile.getPropertyValue(sReadOnly) >>= bReadOnly;
+
+    return bReadOnly;
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DConnection.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:05:37 $
+ *  last change: $Author: oj $ $Date: 2001-09-18 13:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,8 +171,7 @@ Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareStatement( con
 // --------------------------------------------------------------------------------
 Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareCall( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-
     return NULL;
 }
+// -----------------------------------------------------------------------------
+
