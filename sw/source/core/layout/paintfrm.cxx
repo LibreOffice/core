@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-05 15:49:55 $
+ *  last change: $Author: ama $ $Date: 2002-02-06 09:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3010,8 +3010,8 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
     if( !bHasGrid || pRetoucheFly || pRetoucheFly2 )
         return;
     GETGRID( this )
-    if( pGrid && OUTDEV_PRINTER != pOut->GetOutDevType() ?
-        pGrid->GetDisplayGrid() : pGrid->GetPrintGrid() )
+    if( pGrid && ( OUTDEV_PRINTER != pOut->GetOutDevType() ?
+        pGrid->GetDisplayGrid() : pGrid->GetPrintGrid() ) )
     {
         const SwLayoutFrm* pBody = FindBodyCont();
         if( pBody && pBody->Lower() && !pBody->Lower()->IsColumnFrm() )
@@ -3028,8 +3028,7 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                 long nGrid = pGrid->GetBaseHeight();
                 long nRuby = pGrid->GetRubyHeight();
                 long nSum = nGrid + nRuby;
-                pOut->Push( PUSH_FILLCOLOR );
-                pOut->SetFillColor( pGrid->GetColor() );
+                const Color *pCol = &pGrid->GetColor();
 
                 SwTwips nRight = aInter.Left() + aInter.Width();
                 SwTwips nBottom = aInter.Top() + aInter.Height();
@@ -3062,7 +3061,7 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                                             Size( nHeight, 1 ) );
                                 while( aVert.Top() <= nBottom )
                                 {
-                                    pOut->DrawRect( aVert.SVRect() );
+                                    PaintBorderLine( rRect, aVert, this, pCol);
                                     aVert.Pos().Y() += nGrid;
                                 }
                             }
@@ -3079,11 +3078,11 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                                 if( nW > 0 )
                                 {
                                     if( bLeft )
-                                        pOut->DrawRect( aVert.SVRect() );
+                                        PaintBorderLine(rRect,aVert,this,pCol);
                                     if( bRight )
                                     {
                                         aVert.Pos().Y() = nGridBottom;
-                                        pOut->DrawRect( aVert.SVRect() );
+                                        PaintBorderLine(rRect,aVert,this,pCol);
                                     }
                                 }
                             }
@@ -3093,7 +3092,7 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                     while( nY >= aInter.Left() )
                     {
                         aTmp.Pos().X() = nY;
-                        pOut->DrawRect( aTmp.SVRect() );
+                        PaintBorderLine( rRect, aTmp, this, pCol);
                         if( bGrid )
                         {
                             nY -= nGrid;
@@ -3105,7 +3104,7 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                                                      nX ), Size( nHeight, 1 ) );
                                 while( aVert.Top() <= nBottom )
                                 {
-                                    pOut->DrawRect( aVert.SVRect() );
+                                    PaintBorderLine( rRect, aVert, this, pCol);
                                     aVert.Pos().Y() += nGrid;
                                 }
                             }
@@ -3122,11 +3121,11 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                                 if( nW > 0 )
                                 {
                                     if( bLeft )
-                                        pOut->DrawRect( aVert.SVRect() );
+                                        PaintBorderLine(rRect,aVert,this,pCol);
                                     if( bRight )
                                     {
                                         aVert.Pos().Y() = nGridBottom;
-                                        pOut->DrawRect( aVert.SVRect() );
+                                        PaintBorderLine(rRect,aVert,this,pCol);
                                     }
                                 }
                             }
@@ -3162,7 +3161,7 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                                             Size( 1, nHeight ) );
                                 while( aVert.Left() <= nRight )
                                 {
-                                    pOut->DrawRect( aVert.SVRect() );
+                                    PaintBorderLine( rRect, aVert, this, pCol);
                                     aVert.Pos().X() += nGrid;
                                 }
                             }
@@ -3179,21 +3178,11 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                                 if( nH > 0 )
                                 {
                                     if( bLeft )
-                                        pOut->DrawRect( aVert.SVRect() );
+                                        PaintBorderLine(rRect,aVert,this,pCol);
                                     if( bRight )
                                     {
                                         aVert.Pos().X() = nGridRight;
-                                    static BOOL bTest = TRUE;
-                                    if( bTest )
-                                    {
-                                        static Color *pMyCol = 0;
-                                        if( !pMyCol )
-                                            pMyCol = new Color( COL_YELLOW );
-                                        PaintBorderLine( rRect, aVert, this,pMyCol);
-                                        //pLines->AddLineRect( aVert, pMyCol, 0 );
-                                    }
-                                    else
-                                        pOut->DrawRect( aVert.SVRect() );
+                                        PaintBorderLine(rRect,aVert,this,pCol);
                                     }
                                 }
                             }
@@ -3203,7 +3192,7 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                     while( nY <= nBottom )
                     {
                         aTmp.Pos().Y() = nY;
-                        pOut->DrawRect( aTmp.SVRect() );
+                        PaintBorderLine( rRect, aTmp, this, pCol);
                         if( bGrid )
                         {
                             nY += nGrid;
@@ -3214,7 +3203,7 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                                             Size( 1, nHeight ) );
                                 while( aVert.Left() <= nRight )
                                 {
-                                    pOut->DrawRect( aVert.SVRect() );
+                                    PaintBorderLine( rRect, aVert, this, pCol);
                                     aVert.Pos().X() += nGrid;
                                 }
                             }
@@ -3231,11 +3220,11 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                                 if( nH > 0 )
                                 {
                                     if( bLeft )
-                                        pOut->DrawRect( aVert.SVRect() );
+                                        PaintBorderLine(rRect,aVert,this,pCol);
                                     if( bRight )
                                     {
                                         aVert.Pos().X() = nGridRight;
-                                        pOut->DrawRect( aVert.SVRect() );
+                                        PaintBorderLine(rRect,aVert,this,pCol);
                                     }
                                 }
                             }
@@ -3243,7 +3232,6 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                         bGrid = !bGrid;
                     }
                 }
-                pOut->Pop();
             }
         }
     }
