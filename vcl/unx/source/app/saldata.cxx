@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-17 10:09:28 $
+ *  last change: $Author: pl $ $Date: 2002-11-13 16:45:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,6 +573,22 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
 
     if( ! bIgnoreXErrors_ )
     {
+        if (   (pEvent->error_code   == BadAlloc)
+            && (pEvent->request_code == X_OpenFont) )
+        {
+            static Bool bOnce = False;
+            if ( !bOnce )
+            {
+                fprintf(stderr, "X-Error occured in a request for X_OpenFont\n");
+                EmitFontpathWarning();
+
+                bOnce = True ;
+            }
+            return;
+        }
+        else if( pEvent->request_code == X_SetInputFocus )
+            return;
+
 #if defined DEBUG || defined DBG_UTIL || defined BUILD_SOSL
 #if ! ( defined LINUX && defined PPC )
         XGetErrorText( pDisplay, pEvent->error_code, msg, sizeof( msg ) );
@@ -593,22 +609,6 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
         fflush( stdout );
         fflush( stderr );
 #endif
-        if (   (pEvent->error_code   == BadAlloc)
-            && (pEvent->request_code == X_OpenFont) )
-        {
-            static Bool bOnce = False;
-            if ( !bOnce )
-            {
-                fprintf(stderr, "X-Error occured in a request for X_OpenFont\n");
-                EmitFontpathWarning();
-
-                bOnce = True ;
-            }
-            return;
-        }
-        else if( pEvent->request_code == X_SetInputFocus )
-            return;
-
         oslSignalAction eToDo = osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
         switch (eToDo)
         {
