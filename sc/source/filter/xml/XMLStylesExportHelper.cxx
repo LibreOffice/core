@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-05 10:30:19 $
+ *  last change: $Author: sab $ $Date: 2001-01-05 11:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,6 +532,17 @@ ScMyFormatRange::ScMyFormatRange()
 {
 }
 
+sal_Bool ScMyFormatRange::operator<(const ScMyFormatRange& rRange)
+{
+    if (aRangeAddress.StartRow < rRange.aRangeAddress.StartRow)
+        return sal_True;
+    else
+        if (aRangeAddress.StartRow == rRange.aRangeAddress.StartRow)
+            return (aRangeAddress.StartColumn < rRange.aRangeAddress.StartColumn);
+        else
+            return sal_False;
+}
+
 ScFormatRangeStyles::ScFormatRangeStyles()
     : aTables(),
     aStyleNames(),
@@ -766,26 +777,12 @@ rtl::OUString* ScFormatRangeStyles::GetStyleNameByIndex(const sal_Int32 nIndex, 
         return aStyleNames[nIndex];
 }
 
-sal_Bool LessFormatRange(const ScMyFormatRange& aRange1, const ScMyFormatRange& aRange2)
-{
-    if (aRange1.aRangeAddress.StartRow < aRange2.aRangeAddress.StartRow)
-        return sal_True;
-    else
-        if (aRange1.aRangeAddress.StartRow == aRange2.aRangeAddress.StartRow)
-            if (aRange1.aRangeAddress.StartColumn < aRange2.aRangeAddress.StartColumn)
-                return sal_True;
-            else
-                return sal_False;
-        else
-            return sal_False;
-}
-
 void ScFormatRangeStyles::Sort()
 {
     sal_Int16 nTables = aTables.size();
     for (sal_Int16 i = 0; i < nTables; i++)
         if (!aTables[i]->empty())
-            aTables[i]->sort(LessFormatRange);
+            aTables[i]->sort();
 }
 
 //===========================================================================
