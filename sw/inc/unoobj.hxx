@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-09 15:04:39 $
+ *  last change: $Author: mtg $ $Date: 2001-10-25 16:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSTATES_HPP_
+#include <com/sun/star/beans/XMultiPropertyStates.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
@@ -184,8 +187,8 @@
 #ifndef _CPPUHELPER_IMPLBASE9_HXX_
 #include <cppuhelper/implbase9.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE11_HXX_
-#include <cppuhelper/implbase11.hxx>    // helper for implementations
+#ifndef _CPPUHELPER_IMPLBASE12_HXX_
+#include <cppuhelper/implbase12.hxx>    // helper for implementations
 #endif
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
@@ -384,7 +387,7 @@ enum SwGetPropertyStatesCaller
     SW_PROPERTY_STATE_CALLER_SINGLE_VALUE_ONLY
 };
 
-class SwXTextCursor : public cppu::WeakImplHelper11
+class SwXTextCursor : public cppu::WeakImplHelper12
 <
     ::com::sun::star::text::XSentenceCursor,
     ::com::sun::star::text::XWordCursor,
@@ -396,7 +399,8 @@ class SwXTextCursor : public cppu::WeakImplHelper11
     ::com::sun::star::lang::XUnoTunnel,
     ::com::sun::star::util::XSortable,
     ::com::sun::star::container::XContentEnumerationAccess,
-    ::com::sun::star::container::XEnumerationAccess
+    ::com::sun::star::container::XEnumerationAccess,
+    ::com::sun::star::beans::XMultiPropertyStates
 >,
     public SwClient
 {
@@ -507,6 +511,13 @@ public:
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
+
+    //XMultiPropertyStates
+    //virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > SAL_CALL getPropertyStates( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setAllPropertiesToDefault(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPropertiesToDefault( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getPropertyDefaults( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
 
     //SwClient
     virtual void        Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
