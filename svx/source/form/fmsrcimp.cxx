@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 08:18:32 $
+ *  last change: $Author: fs $ $Date: 2001-02-19 10:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,9 @@
     #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
     #include <com/sun/star/lang/Locale.hpp>
     #endif
+    #ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
+    #include <com/sun/star/i18n/TransliterationModules.hpp>
+    #endif
 #else
     #ifndef _TXTCMP_HXX //autogen
     #include <svtools/txtcmp.hxx>
@@ -195,6 +198,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::i18n;
 using namespace ::svxform;
 
 // ***************************************************************************************************
@@ -696,6 +700,7 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(
     SearchOptions aParam;
     aParam.algorithmType = m_bRegular ? SearchAlgorithms_REGEXP : SearchAlgorithms_APPROXIMATE;
     aParam.searchFlag = 0;
+    aParam.transliterateFlags = m_bCase ? 0 : TransliterationModules_IGNORE_CASE;
     if (!m_bCase)
         aParam.searchFlag |= SearchFlags::ALL_IGNORE_CASE;
     if (m_bLevenshtein)
