@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interlck_sparc.s,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 17:13:44 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
  * sparcv8 architecture:                use the "swap" instruction
  * sparcv9/sparcv8plus architecture:    use the "cas"  instruction
  * 
+ * 32 bit mode with v8 and v8plus support:
  * Initialize once with osl_InterlockedCountSetV9(int bv9) if you want to
  * use the "cas" instruction, which is faster (no spinlock needed)
  * Default is to use the "swap" instruction, which works on all supported
@@ -73,8 +74,15 @@
  * osl_InterlockedCountSetV9(int bv9)
  *    bv9 = 0   use sparcv8 "swap" (spinlock)
  *    bv9 = 1   use sparcv9/sparcv8plus "cas" (no spinlock)
+ *
+ * 32 bit mode without v8 support (implies v8plus) or 64 bit mode:
+ * No need (nor the possibilty) to call osl_InterlockedCountSetV9(), 
+ * sparcv9 mode is implied. Assemble with -xarch=v8plus (32 bit) or
+ * -xarch=v9 (64 bit).
  * 
  */
+
+#if !defined(__sparcv8plus) && !defined(__sparcv9) && !defined(__sparc_v9__)
 
 .section ".data"
 .align 4
@@ -236,10 +244,16 @@ osl_decrementInterlockedCountV8:
  .type  osl_decrementInterlockedCountV8,#function
  .size  osl_decrementInterlockedCountV8,.-osl_decrementInterlockedCountV8
 
+#endif /* !__sparcv8plus && !__sparcv9 && !_sparcv9__ */
 
 .section   ".text"
+#if defined(__sparcv8plus) || defined(__sparcv9) || defined(__sparc_v9__)
+#define   osl_incrementInterlockedCountV9 osl_incrementInterlockedCount
+ .global  osl_incrementInterlockedCountV9
+#else
  .local   osl_incrementInterlockedCountV9
- .align   4
+#endif
+ .align   8
 
 !   Implements osl_[increment|decrement]InterlockedCount with sparcv9(sparcv8plus) "cas" 
 !   instruction.
@@ -260,8 +274,13 @@ osl_incrementInterlockedCountV9:
 
 
 .section   ".text"
+#if defined(__sparcv8plus) || defined(__sparcv9) || defined(__sparc_v9__)
+#define   osl_decrementInterlockedCountV9 osl_decrementInterlockedCount
+ .global  osl_decrementInterlockedCountV9
+#else
  .local   osl_decrementInterlockedCountV9
- .align   4
+#endif
+ .align   8
 
 osl_decrementInterlockedCountV9:             
 
