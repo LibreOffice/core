@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cli_cs_multi.cs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:02:22 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:29:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,28 +67,85 @@ public class Multi: unoidl.test.testtools.bridgetest.XMulti
     {
     }
 
-    public int f1()
+    public double att1
     {
-        return 1;
+        get { return _att1; }
+        set { _att1 = value; }
     }
 
-    public int f2() 
+    public int fn11(int arg)
     {
-        return 2;
+        return 11 * arg;
     }
 
-    public int f3()
+    public string fn12(string arg)
     {
-        return 3;
+        return "12" + arg;
     }
 
-    public int a
+    public int fn21(int arg)
     {
-        get { return _a; }
-        set { _a = value;}
+        return 21 * arg;
     }
-    
-    private int _a;
+
+    public string fn22(string arg)
+    {
+        return "22" + arg;
+    }
+
+    public double att3
+    {
+        get { return _att3; }
+        set { _att3 = value; }
+    }
+
+    public int fn31(int arg)
+    {
+        return 31 * arg;
+    }
+
+    public string fn32(string arg)
+    {
+        return "32" + arg;
+    }
+
+    public int fn33()
+    {
+        return 33;
+    }
+
+    public int fn41(int arg)
+    {
+        return 41 * arg;
+    }
+
+    public int fn61(int arg)
+    {
+        return 61 * arg;
+    }
+
+    public string fn62(string arg)
+    {
+        return "62" + arg;
+    }
+
+    public int fn71(int arg)
+    {
+        return 71 * arg;
+    }
+
+    public string fn72(string arg)
+    {
+        return "72" + arg;
+    }
+
+    public int fn73()
+    {
+        return 73;
+    }
+
+    private double _att1;
+    private double _att3;
 };
 
 } } }
