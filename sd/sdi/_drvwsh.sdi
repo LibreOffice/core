@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _drvwsh.sdi,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-27 12:27:48 $
+ *  last change: $Author: bm $ $Date: 2002-11-04 17:25:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,11 @@ interface DrawView : View
         StateMethod = GetCtrlState ;
     ]
     SID_RENAMEPAGE // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_RENAMEPAGE_QUICK // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;

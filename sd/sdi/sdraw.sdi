@@ -6082,6 +6082,31 @@ SfxVoidItem RenamePage SID_RENAMEPAGE
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem RenamePageQuick SID_RENAMEPAGE_QUICK
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem ReverseOrder SID_REVERSE_ORDER
 ()
 [
