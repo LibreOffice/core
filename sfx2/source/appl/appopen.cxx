@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-09 15:21:56 $
+ *  last change: $Author: vg $ $Date: 2001-11-14 18:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1072,12 +1072,14 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                         catch ( ::com::sun::star::lang::IllegalArgumentException& )
                         {
                             vos::OGuard aGuard( Application::GetSolarMutex() );
-                            ErrorBox( SFX_APP()->GetTopWindow(), SfxResId( MSG_ERR_WEBBROWSER_NOT_STARTED )).Execute();
+                            Window *pWindow = SFX_APP()->GetTopWindow();
+                            ErrorBox( pWindow, SfxResId( MSG_ERR_WEBBROWSER_NOT_STARTED )).Execute();
                         }
                         catch ( ::com::sun::star::system::SystemShellExecuteException& )
                         {
                             vos::OGuard aGuard( Application::GetSolarMutex() );
-                            ErrorBox( SFX_APP()->GetTopWindow(), SfxResId( MSG_ERR_WEBBROWSER_NOT_STARTED )).Execute();
+                            Window *pWindow = SFX_APP()->GetTopWindow();
+                            ErrorBox( pWindow, SfxResId( MSG_ERR_WEBBROWSER_NOT_STARTED )).Execute();
                         }
 
                         return;
@@ -1099,12 +1101,14 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                                 catch ( ::com::sun::star::lang::IllegalArgumentException& )
                                 {
                                     vos::OGuard aGuard( Application::GetSolarMutex() );
-                                    ErrorBox( SFX_APP()->GetTopWindow(), SfxResId( MSG_ERR_EXTERNAL_APP_NOT_FOUND )).Execute();
+                                    Window *pWindow = SFX_APP()->GetTopWindow();
+                                    ErrorBox( pWindow, SfxResId( MSG_ERR_EXTERNAL_APP_NOT_FOUND )).Execute();
                                 }
                                 catch ( ::com::sun::star::system::SystemShellExecuteException& )
                                 {
                                     vos::OGuard aGuard( Application::GetSolarMutex() );
-                                    ErrorBox( SFX_APP()->GetTopWindow(), SfxResId( MSG_ERR_EXTERNAL_APP_NOT_FOUND )).Execute();
+                                    Window *pWindow = SFX_APP()->GetTopWindow();
+                                    ErrorBox( pWindow, SfxResId( MSG_ERR_EXTERNAL_APP_NOT_FOUND )).Execute();
                                 }
                             }
                         }
