@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:33:10 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:44:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,8 @@
 #include "strload.hxx"
 #include "docpool.hxx"
 #include "unitconv.hxx"
+#include "compiler.hxx"
+#include "parclass.hxx"
 #include "globstr.hrc"
 #include "scfuncs.hrc"
 #include "sc.hrc"
@@ -649,6 +651,10 @@ void ScGlobal::Init()
 
     UpdatePPT(NULL);
     ScCompiler::Init();
+    // ScParameterClassification _after_ Compiler, needs function resources if
+    // arguments are to be merged in, which in turn need strings of function
+    // names from the compiler.
+    ScParameterClassification::Init();
     srand( (unsigned) time( NULL ) );       // Random Seed Init fuer Interpreter
 
     InitAddIns();
@@ -739,6 +745,7 @@ void ScGlobal::Clear()
 
     DELETEZ(pStarCalcFunctionList);     // vor ResMgr zerstoeren!
     DELETEZ(pStarCalcFunctionMgr);
+    ScParameterClassification::Exit();
     ScCompiler::DeInit();
     ScInterpreter::GlobalExit();            // statischen Stack loeschen
 
@@ -1152,7 +1159,7 @@ BOOL ScFormulaUtil::GetNextFunc( const String&  rFormula,
                                  BOOL           bBack,
                                  xub_StrLen&    rFStart,   // Ein- und Ausgabe
                                  xub_StrLen*    pFEnd,     // = NULL
-                                 ScFuncDesc**   ppFDesc,   // = NULL
+                                 const ScFuncDesc** ppFDesc,   // = NULL
                                  String***      pppArgs )  // = NULL
 {
     BOOL        bFound = FALSE;
@@ -1696,11 +1703,11 @@ ScFunctionList::ScFunctionList() :
 
 ScFunctionList::~ScFunctionList()
 {
-    ScFuncDesc* pDesc = (ScFuncDesc*)aFunctionList.First();
+    const ScFuncDesc* pDesc = First();
     while (pDesc)
     {
         delete pDesc;
-        pDesc = (ScFuncDesc*)aFunctionList.Next();
+        pDesc = Next();
     }
 }
 
@@ -1837,7 +1844,7 @@ ScFunctionMgr::ScFunctionMgr()
 {
     DBG_ASSERT( pFuncList, "Funktionsliste nicht gefunden." );
     ULONG       nCount  = pFuncList->GetCount();
-    ScFuncDesc* pDesc;
+    const ScFuncDesc*   pDesc;
     List*       pRootList;
     ULONG       n;
 
@@ -1853,20 +1860,20 @@ ScFunctionMgr::ScFunctionMgr()
         {
             // ist zwar case-sensitiv, aber Umlaute muessen richtig einsortiert werden
 
-            ScFuncDesc* pTmpDesc = (ScFuncDesc*)pRootList->GetObject(nTmpCnt);
+            const ScFuncDesc*   pTmpDesc = (const ScFuncDesc*)pRootList->GetObject(nTmpCnt);
             if ( ScGlobal::pCaseCollator->compareString(
                         *pDesc->pFuncName, *pTmpDesc->pFuncName ) == COMPARE_LESS )
                 break;
         }
-        pRootList->Insert(pDesc, nTmpCnt);                  // Einsortieren
+        pRootList->Insert((void*)pDesc, nTmpCnt);                   // Einsortieren
     }
 
     for ( n=0; n<nCount; n++ )                              // in Gruppenlisten kopieren
     {
-        pDesc = (ScFuncDesc*)pRootList->GetObject(n);
+        pDesc = (const ScFuncDesc*)pRootList->GetObject(n);
         DBG_ASSERT((pDesc->nCategory) < MAX_FUNCCAT, "Unbekannte Kategorie");
         if ((pDesc->nCategory) < MAX_FUNCCAT)
-            aCatLists[pDesc->nCategory]->Insert(pDesc, LIST_APPEND);
+            aCatLists[pDesc->nCategory]->Insert((void*)pDesc, LIST_APPEND);
     }
 }
 
@@ -1881,9 +1888,9 @@ ScFunctionMgr::~ScFunctionMgr()
 
 //------------------------------------------------------------------------
 
-ScFuncDesc* ScFunctionMgr::Get( const String& rFName )
+const ScFuncDesc* ScFunctionMgr::Get( const String& rFName )
 {
-    ScFuncDesc* pDesc = NULL;
+    const ScFuncDesc*   pDesc = NULL;
     if (rFName.Len() <= pFuncList->GetMaxFuncNameLen())
         for (pDesc = First(0); pDesc; pDesc = Next())
             if (rFName.EqualsIgnoreCaseAscii(*(pDesc->pFuncName)))
@@ -1893,9 +1900,9 @@ ScFuncDesc* ScFunctionMgr::Get( const String& rFName )
 
 //------------------------------------------------------------------------
 
-ScFuncDesc* ScFunctionMgr::Get( USHORT nFIndex )
+const ScFuncDesc* ScFunctionMgr::Get( USHORT nFIndex )
 {
-    ScFuncDesc* pDesc;
+    const ScFuncDesc*   pDesc;
     for (pDesc = First(0); pDesc; pDesc = Next())
         if (pDesc->nFIndex == nFIndex)
             break;
@@ -1904,14 +1911,14 @@ ScFuncDesc* ScFunctionMgr::Get( USHORT nFIndex )
 
 //------------------------------------------------------------------------
 
-ScFuncDesc* ScFunctionMgr::First( USHORT nCategory )
+const ScFuncDesc*   ScFunctionMgr::First( USHORT nCategory )
 {
     DBG_ASSERT( nCategory < MAX_FUNCCAT, "Unbekannte Kategorie" );
 
     if ( nCategory < MAX_FUNCCAT )
     {
         pCurCatList = aCatLists[nCategory];
-        return (ScFuncDesc*)pCurCatList->First();
+        return (const ScFuncDesc*)pCurCatList->First();
     }
     else
     {
@@ -1922,10 +1929,10 @@ ScFuncDesc* ScFunctionMgr::First( USHORT nCategory )
 
 //------------------------------------------------------------------------
 
-ScFuncDesc* ScFunctionMgr::Next()
+const ScFuncDesc* ScFunctionMgr::Next() const
 {
     if ( pCurCatList )
-        return (ScFuncDesc*)pCurCatList->Next();
+        return (const ScFuncDesc*)pCurCatList->Next();
     else
         return NULL;
 }
