@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-28 10:12:29 $
+ *  last change: $Author: mt $ $Date: 2001-10-11 15:27:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -907,6 +907,12 @@ UnoEditControl::UnoEditControl()
 {
     maComponentInfos.nWidth = 100;
     maComponentInfos.nHeight = 12;
+
+    mnMaxTextLen = 0;
+    mbSetMaxTextLenInPeer = FALSE;
+
+    mbSetTextInPeer = FALSE;
+
 }
 
 ::rtl::OUString UnoEditControl::GetComponentServiceName()
@@ -955,17 +961,27 @@ void UnoEditControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolk
 
     uno::Reference< awt::XTextComponent > xText( mxPeer, uno::UNO_QUERY );
     xText->addTextListener( this );
+
+    if ( mbSetMaxTextLenInPeer )
+        xText->setMaxTextLen( mnMaxTextLen );
+    if ( mbSetTextInPeer )
+        xText->setText( maText );
 }
 
 void UnoEditControl::textChanged(const awt::TextEvent& e) throw(uno::RuntimeException)
 {
-    // Neuen Text als beans::Property ins Model treten.
     uno::Reference< awt::XTextComponent > xText( mxPeer, uno::UNO_QUERY );
-    DBG_ASSERT( xText.is(), "TextComponentInterface?" );
 
-    uno::Any aAny;
-    aAny <<= xText->getText();
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TEXT ), aAny, sal_False );
+    if ( ImplHasProperty( BASEPROPERTY_TEXT ) )
+    {
+        uno::Any aAny;
+        aAny <<= xText->getText();
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TEXT ), aAny, sal_False );
+    }
+    else
+    {
+        maText = xText->getText();
+    }
 
     if ( maTextListeners.getLength() )
         maTextListeners.textChanged( e );
@@ -983,15 +999,29 @@ void UnoEditControl::removeTextListener(const uno::Reference< awt::XTextListener
 
 void UnoEditControl::setText( const ::rtl::OUString& aText ) throw(uno::RuntimeException)
 {
-    uno::Any aAny;
-    aAny <<= aText;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TEXT ), aAny, sal_True );
+    if ( ImplHasProperty( BASEPROPERTY_TEXT ) )
+    {
+        uno::Any aAny;
+        aAny <<= aText;
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TEXT ), aAny, sal_True );
+    }
+    else
+    {
+        maText = aText;
+        mbSetTextInPeer = TRUE;
+        if ( mxPeer.is() )
+        {
+            uno::Reference < awt::XTextComponent > xText( mxPeer, uno::UNO_QUERY );
+            xText->setText( maText );
+        }
+    }
 
     // Setting the property to the VCLXWindow doesn't call textChanged
     if ( maTextListeners.getLength() )
     {
         ::com::sun::star::awt::TextEvent aEvent;
         aEvent.Source = (::cppu::OWeakObject*)this;
+
         maTextListeners.textChanged( aEvent );
     }
 }
@@ -1005,23 +1035,10 @@ void UnoEditControl::insertText( const awt::Selection& rSel, const ::rtl::OUStri
 
 ::rtl::OUString UnoEditControl::getText() throw(uno::RuntimeException)
 {
-    ::rtl::OUString aText;
-    ::rtl::OUString aLineBreakProp( GetPropertyName( BASEPROPERTY_HARDLINEBREAKS ) );
-    if ( mxPeer.is() && ImplHasProperty( aLineBreakProp ) && ImplGetPropertyValue_BOOL( BASEPROPERTY_HARDLINEBREAKS ) )
-    {
-        uno::Reference< awt::XTextArea > xText( mxPeer, uno::UNO_QUERY );
-        aText = xText->getTextLines();
-    }
-    else if ( mxPeer.is() )
-    {
-        // Peer fragen, weil es die beans::Property "Text" nicht geben muss...
-        uno::Reference< awt::XTextComponent > xText( mxPeer, uno::UNO_QUERY );
-        aText = xText->getText();
-    }
-    else
-    {
+    ::rtl::OUString aText = maText;
+
+    if ( ImplHasProperty( BASEPROPERTY_TEXT ) )
         aText = ImplGetPropertyValue_UString( BASEPROPERTY_TEXT );
-    }
 
     return aText;
 }
@@ -1071,14 +1088,32 @@ void UnoEditControl::setEditable( sal_Bool bEditable ) throw(uno::RuntimeExcepti
 
 sal_Int16 UnoEditControl::getMaxTextLen() throw(uno::RuntimeException)
 {
-    return ImplGetPropertyValue_INT16( BASEPROPERTY_MAXTEXTLEN );
+    sal_Int16 nMaxLen = mnMaxTextLen;
+
+    if ( ImplHasProperty( BASEPROPERTY_MAXTEXTLEN) )
+        nMaxLen = ImplGetPropertyValue_INT16( BASEPROPERTY_MAXTEXTLEN );
+
+    return nMaxLen;
 }
 
 void UnoEditControl::setMaxTextLen( sal_Int16 nLen ) throw(uno::RuntimeException)
 {
-    uno::Any aAny;
-    aAny <<= (sal_Int16)nLen;
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MAXTEXTLEN ), aAny, sal_True );
+    if ( ImplHasProperty( BASEPROPERTY_MAXTEXTLEN) )
+    {
+        uno::Any aAny;
+        aAny <<= (sal_Int16)nLen;
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MAXTEXTLEN ), aAny, sal_True );
+    }
+    else
+    {
+        mnMaxTextLen = nLen;
+        mbSetMaxTextLenInPeer = TRUE;
+        if ( mxPeer.is() )
+        {
+            uno::Reference < awt::XTextComponent > xText( mxPeer, uno::UNO_QUERY );
+            xText->setMaxTextLen( mnMaxTextLen );
+        }
+    }
 }
 
 awt::Size UnoEditControl::getMinimumSize(  ) throw(uno::RuntimeException)
@@ -1221,7 +1256,6 @@ UnoControlFileControlModel::UnoControlFileControlModel()
     ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
-    ImplRegisterProperty( BASEPROPERTY_MAXTEXTLEN );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
     ImplRegisterProperty( BASEPROPERTY_TEXT );
@@ -2982,7 +3016,6 @@ UnoControlDateFieldModel::UnoControlDateFieldModel()
     ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
-    ImplRegisterProperty( BASEPROPERTY_MAXTEXTLEN );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_READONLY );
     ImplRegisterProperty( BASEPROPERTY_SPIN );
@@ -3206,7 +3239,6 @@ UnoControlTimeFieldModel::UnoControlTimeFieldModel()
     ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
-    ImplRegisterProperty( BASEPROPERTY_MAXTEXTLEN );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_READONLY );
     ImplRegisterProperty( BASEPROPERTY_SPIN );
@@ -3414,7 +3446,6 @@ UnoControlNumericFieldModel::UnoControlNumericFieldModel()
     ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
-    ImplRegisterProperty( BASEPROPERTY_MAXTEXTLEN );
     ImplRegisterProperty( BASEPROPERTY_NUMSHOWTHOUSANDSEP );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_READONLY );
@@ -3630,7 +3661,6 @@ UnoControlCurrencyFieldModel::UnoControlCurrencyFieldModel()
     ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
-    ImplRegisterProperty( BASEPROPERTY_MAXTEXTLEN );
     ImplRegisterProperty( BASEPROPERTY_NUMSHOWTHOUSANDSEP );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_READONLY );
