@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UStringDescription_Impl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:37:08 $
+ *  last change: $Author: oj $ $Date: 2001-01-30 15:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_CATALOGNAME);
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_COMMAND);
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_CHECKOPTION);
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_PASSWORD);
-IMPLEMENT_CONSTASCII_USTRING(PROPERTY_REFERENCEDCOLUMN);
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_RELATEDCOLUMN);
 
 IMPLEMENT_CONSTASCII_USTRING(STAT_INVALID_INDEX);
 

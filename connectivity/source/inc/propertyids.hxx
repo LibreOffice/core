@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyids.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-31 11:04:19 $
+ *  last change: $Author: oj $ $Date: 2001-01-30 15:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ namespace dbtools
     extern const sal_Char* getPROPERTY_COMMAND();
     extern const sal_Char* getPROPERTY_CHECKOPTION();
     extern const sal_Char* getPROPERTY_PASSWORD();
-    extern const sal_Char* getPROPERTY_REFERENCEDCOLUMN();
+    extern const sal_Char* getPROPERTY_RELATEDCOLUMN();
 
     extern const sal_Char* getSTAT_INVALID_INDEX();
 
@@ -187,7 +187,7 @@ namespace connectivity
     DECLARE_CONSTASCII_USTRING(PROPERTY_COMMAND,CONNECTIVITY_PROPERTY_NAME_SPACE)
     DECLARE_CONSTASCII_USTRING(PROPERTY_CHECKOPTION,CONNECTIVITY_PROPERTY_NAME_SPACE)
     DECLARE_CONSTASCII_USTRING(PROPERTY_PASSWORD,CONNECTIVITY_PROPERTY_NAME_SPACE)
-    DECLARE_CONSTASCII_USTRING(PROPERTY_REFERENCEDCOLUMN,CONNECTIVITY_PROPERTY_NAME_SPACE)
+    DECLARE_CONSTASCII_USTRING(PROPERTY_RELATEDCOLUMN,CONNECTIVITY_PROPERTY_NAME_SPACE)
 
     DECLARE_CONSTASCII_USTRING(PROPERTY_FUNCTION,CONNECTIVITY_PROPERTY_NAME_SPACE)
     DECLARE_CONSTASCII_USTRING(PROPERTY_TABLENAME,CONNECTIVITY_PROPERTY_NAME_SPACE)
@@ -255,7 +255,7 @@ pProperties[nPos++] = ::com::sun::star::beans::Property(connectivity::CONNECTIVI
 #define PROPERTY_ID_COMMAND                         31
 #define PROPERTY_ID_CHECKOPTION                     32
 #define PROPERTY_ID_PASSWORD                        33
-#define PROPERTY_ID_REFERENCEDCOLUMN                34
+#define PROPERTY_ID_RELATEDCOLUMN                   34
 
 #define PROPERTY_ID_FUNCTION                        35
 #define PROPERTY_ID_TABLENAME                       36
