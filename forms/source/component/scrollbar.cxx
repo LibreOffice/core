@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrollbar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:56:46 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,6 @@ namespace frm
             {
                 if ( ::rtl::math::isInf( nExternalValue ) )
                 {
-
                     // set the minimum or maximum of the scroll values
                     ::rtl::OUString sLimitPropertyName = ::rtl::math::isSignBitSet( nExternalValue )
                         ? _rMinValueName : _rMaxValueName;
@@ -128,7 +127,7 @@ namespace frm
             else
             {
                 if ( _rxProperties.is() )
-                    _rxProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScrollValueMin" ) ) ) >>= nControlValue;
+                    _rxProperties->getPropertyValue( _rMinValueName ) >>= nControlValue;
             }
         }
 
@@ -182,7 +181,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    IMPLEMENT_SERVICE_REGISTRATION_1( OScrollBarModel, OControlModel, FRM_SUN_COMPONENT_SCROLLBAR )
+    IMPLEMENT_SERVICE_REGISTRATION_2( OScrollBarModel, OControlModel, FRM_SUN_COMPONENT_SCROLLBAR, BINDABLE_INTEGER_VALUE_RANGE )
         // note that we're passing OControlModel as "base class". This is because
         // OBoundControlModel, our real base class, claims to support the DataAwareControlModel
         // service, which isn't really true for us. We only derive from this class
@@ -355,7 +354,7 @@ namespace frm
     //--------------------------------------------------------------------
     Any OScrollBarModel::translateExternalValueToControlValue( )
     {
-        return translateExternalDoubleToControlIntValue( m_xExternalBinding, m_xAggregateSet,
+        return translateExternalDoubleToControlIntValue( getExternalValueBinding(), m_xAggregateSet,
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScrollValueMin" ) ),
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScrollValueMax" ) ) );
     }

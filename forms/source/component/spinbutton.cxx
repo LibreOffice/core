@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spinbutton.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:57:10 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    IMPLEMENT_SERVICE_REGISTRATION_1( OSpinButtonModel, OControlModel, FRM_SUN_COMPONENT_SPINBUTTON )
+    IMPLEMENT_SERVICE_REGISTRATION_2( OSpinButtonModel, OControlModel, FRM_SUN_COMPONENT_SPINBUTTON, BINDABLE_INTEGER_VALUE_RANGE )
         // note that we're passing OControlModel as "base class". This is because
         // OBoundControlModel, our real base class, claims to support the DataAwareControlModel
         // service, which isn't really true for us. We only derive from this class
@@ -302,7 +302,7 @@ namespace frm
     //--------------------------------------------------------------------
     Any OSpinButtonModel::translateExternalValueToControlValue( )
     {
-        return translateExternalDoubleToControlIntValue( m_xExternalBinding, m_xAggregateSet,
+        return translateExternalDoubleToControlIntValue( getExternalValueBinding(), m_xAggregateSet,
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SpinValueMin" ) ),
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SpinValueMax" ) ) );
     }
