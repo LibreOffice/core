@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:12 $
+ *  last change: $Author: pb $ $Date: 2000-10-12 09:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,8 +190,7 @@ SvxTextAttrPage::SvxTextAttrPage( Window* pWindow, const SfxItemSet& rInAttrs ) 
 {
     FreeResource();
 
-    FieldUnit eFUnit;
-    GET_MODULE_FIELDUNIT( eFUnit );
+    FieldUnit eFUnit = GetModuleFieldUnit();
     SetFieldUnit( aMtrFldLeft, eFUnit );
     SetFieldUnit( aMtrFldRight, eFUnit );
     SetFieldUnit( aMtrFldTop, eFUnit );

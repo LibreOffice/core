@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphatch.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-26 06:37:20 $
+ *  last change: $Author: pb $ $Date: 2000-10-12 09:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,8 +163,7 @@ SvxHatchTabPage::SvxHatchTabPage
     SetExchangeSupport();
 
     // Metrik einstellen
-    FieldUnit eFUnit;
-    GET_MODULE_FIELDUNIT( eFUnit );
+    FieldUnit eFUnit = GetModuleFieldUnit();
 
     switch ( eFUnit )
     {

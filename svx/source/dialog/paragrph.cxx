@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:10 $
+ *  last change: $Author: pb $ $Date: 2000-10-12 09:37:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,8 +482,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
     String aEmpty;
 
     // Metrik einstellen
-    FieldUnit eFUnit;
-    GET_MODULE_FIELDUNIT( eFUnit );
+    FieldUnit eFUnit = GetModuleFieldUnit();
     SetFieldUnit( aLeftIndent, eFUnit );
     SetFieldUnit( aRightIndent, eFUnit );
     SetFieldUnit( aFLineIndent, eFUnit );

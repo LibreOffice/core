@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpshadow.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:13 $
+ *  last change: $Author: pb $ $Date: 2000-10-12 09:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,8 +146,7 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
     SetExchangeSupport();
 
     // Metrik einstellen
-    FieldUnit eFUnit;
-    GET_MODULE_FIELDUNIT( eFUnit );
+    FieldUnit eFUnit = GetModuleFieldUnit();
 
     switch ( eFUnit )
     {

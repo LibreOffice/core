@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:11 $
+ *  last change: $Author: pb $ $Date: 2000-10-12 09:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1809,8 +1809,7 @@ String& SvxSearchDialog::BuildAttrText_Impl( String& rStr,
 
     // Metrik abfragen
     SfxMapUnit eMapUnit = SFX_MAPUNIT_CM;
-    FieldUnit eFieldUnit;
-    GET_MODULE_FIELDUNIT( eFieldUnit );
+    FieldUnit eFieldUnit = GetModuleFieldUnit();
 
     switch ( eFieldUnit )
     {

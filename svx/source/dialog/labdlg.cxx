@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *  last change: $Author: pb $ $Date: 2000-10-12 09:37:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,8 +281,8 @@ void SvxCaptionTabPage::Reset( const SfxItemSet& rOutAttrs )
 {
 
     //------------Metrik einstellen-----------------------------
-    FieldUnit eFUnit;
-    GET_MODULE_FIELDUNIT( eFUnit );
+
+    FieldUnit eFUnit = GetModuleFieldUnit();
 
     switch ( eFUnit )
     {

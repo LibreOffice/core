@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:13 $
+ *  last change: $Author: pb $ $Date: 2000-10-12 09:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,7 @@ void SvxPositionTabPage::Construct()
 {
     // Setzen des Rechtecks und der Workingarea
     DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
-    GET_MODULE_FIELDUNIT( eDlgUnit );
+    eDlgUnit = GetModuleFieldUnit();
     SetFieldUnit( aMtrPosX, eDlgUnit, TRUE );
     SetFieldUnit( aMtrPosY, eDlgUnit, TRUE );
 
@@ -931,7 +931,7 @@ void SvxSizeTabPage::Construct()
 {
     // Setzen des Rechtecks und Automatisch bei Textobjekten
     DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
-    GET_MODULE_FIELDUNIT( eDlgUnit );
+    eDlgUnit = GetModuleFieldUnit();
     SetFieldUnit( aMtrWidth, eDlgUnit, TRUE );
     SetFieldUnit( aMtrHeight, eDlgUnit, TRUE );
 
@@ -1543,7 +1543,7 @@ void SvxAngleTabPage::Construct()
 {
     // Setzen des Rechtecks
     DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
-    GET_MODULE_FIELDUNIT( eDlgUnit );
+    eDlgUnit = GetModuleFieldUnit();
     SetFieldUnit( aMtrPosX, eDlgUnit, TRUE );
     SetFieldUnit( aMtrPosY, eDlgUnit, TRUE );
 
@@ -1861,7 +1861,7 @@ void SvxSlantTabPage::Construct()
 {
     // Setzen des Rechtecks
     DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
-    GET_MODULE_FIELDUNIT( eDlgUnit );
+    eDlgUnit = GetModuleFieldUnit();
     SetFieldUnit( aMtrRadius, eDlgUnit, TRUE );
 
     aRect = pView->GetAllMarkedRect();
