@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:02:10 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,8 @@ ModelessDialog RID_SVXDLG_RUBY
     HelpId = HID_RUBY_DIALOG;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 227 , 195 ) ;
-    Text [ de ] = "Ruby" ;
+    Text [ de ] = "Phonetische Leitzeichen" ;
+    Text [ en-US ] = "Asian Phonetic Guide" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     CheckBox CB_AUTO_DETECT
@@ -273,39 +274,5 @@ ModelessDialog RID_SVXDLG_RUBY
         Pos = MAP_APPFONT ( 171 , 175 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    Text [ en-US ] = "Ruby";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
