@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-29 10:23:48 $
+ *  last change: $Author: fs $ $Date: 2001-05-08 16:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,11 +110,8 @@ public:
     FmFieldWinListBox( FmFieldWin* pParent );
     virtual ~FmFieldWinListBox();
 
-    virtual sal_Bool QueryDrop( DropEvent& rDEvt )
-    {
-        return (!nDragDropMode) ? sal_False : SvTreeListBox::QueryDrop(rDEvt);
-    }
-        // this prevents an assertion the base class makes (unjustified ?) to fail - 67071 - fs - 21.06.99
+    sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
+    sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
 
 protected:
     // DragSourceHelper

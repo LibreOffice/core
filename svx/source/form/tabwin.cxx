@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-29 10:23:55 $
+ *  last change: $Author: fs $ $Date: 2001-05-08 16:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,18 @@ FmFieldWinListBox::FmFieldWinListBox( FmFieldWin* pParent )
 FmFieldWinListBox::~FmFieldWinListBox()
 {
     DBG_DTOR(FmFieldWinListBox,NULL);
+}
+
+//------------------------------------------------------------------------------
+sal_Int8 FmFieldWinListBox::AcceptDrop( const AcceptDropEvent& rEvt )
+{
+    return DND_ACTION_NONE;
+}
+
+//------------------------------------------------------------------------------
+sal_Int8 FmFieldWinListBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
+{
+    return DND_ACTION_NONE;
 }
 
 //------------------------------------------------------------------------------
