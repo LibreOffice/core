@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+#   last change: $Author: hr $ $Date: 2003-03-19 16:19:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,6 @@ SLOFILES=	\
         $(SLO)$/template.obj	\
         $(SLO)$/templateimpl.obj	\
         $(SLO)$/treeimpl.obj	\
-        $(SLO)$/treeiterators.obj \
         $(SLO)$/viewaccess.obj \
         $(SLO)$/viewstrategy.obj \
         $(SLO)$/viewnode.obj \

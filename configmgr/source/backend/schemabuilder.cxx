@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemabuilder.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-10-24 12:59:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,10 +100,11 @@ namespace configmgr
         }
 // -----------------------------------------------------------------------------
 
-SchemaBuilder::SchemaBuilder( const OUString& aExpectedComponentName  )
+SchemaBuilder::SchemaBuilder( const OUString& aExpectedComponentName, ITemplateDataProvider* aTemplateProvider )
 : m_aData()
-, m_aContext(static_cast<backenduno::XSchemaHandler*>(this), aExpectedComponentName )
+, m_aContext(static_cast<backenduno::XSchemaHandler*>(this), aExpectedComponentName, aTemplateProvider )
 , m_aFactory()
+, m_aTemplateProvider(aTemplateProvider)
 {
 
 }
@@ -160,7 +161,7 @@ void SAL_CALL SchemaBuilder::endSchema(  )
 void SAL_CALL SchemaBuilder::importComponent( const OUString& aName )
     throw (MalformedDataException, container::NoSuchElementException, lang::IllegalArgumentException, uno::RuntimeException)
 {
-    OSL_TRACE("WARNING: Configuration schema parser: Cross-component references are not yet supported\n");
+    //OSL_TRACE("WARNING: Configuration schema parser: Cross-component references are not yet supported\n");
     // OSL_ENSURE(false, "Cross-component references are not yet supported");
 }
 // -----------------------------------------------------------------------------
@@ -211,7 +212,7 @@ void SAL_CALL SchemaBuilder::startGroupTemplate( const TemplateIdentifier& aTemp
 
     m_aContext.startActiveComponent(aTemplate.Component);
 
-    if (m_aData.hasTemplate(aTemplate))
+    if (m_aData.hasTemplate(aTemplate.Name))
         m_aContext.raiseElementExistException("Schema builder: Template already exists",aTemplate.Name);
 
     OUString aName = m_aData.getTemplateAccessor(aTemplate);
@@ -234,7 +235,7 @@ void SAL_CALL SchemaBuilder::startSetTemplate( const TemplateIdentifier& aTempla
 
     m_aContext.startActiveComponent(aTemplate.Component);
 
-    if (m_aData.hasTemplate(aTemplate))
+    if (m_aData.hasTemplate(aTemplate.Name))
         m_aContext.raiseElementExistException("Schema builder: Template already exists",aTemplate.Name);
 
     OUString aName = m_aData.getTemplateAccessor(aTemplate);
@@ -422,9 +423,9 @@ namespace
         InstanceList            m_aReplacementList;
         TemplateStack           m_aTemplateStack;
     public:
-        SubstitutionHelper(MergedComponentData & _rData, uno::XInterface * _pContext)
+        SubstitutionHelper(MergedComponentData & _rData, uno::XInterface * _pContext, ITemplateDataProvider* aTemplateProvider=NULL  )
         : m_rData(_rData)
-        , m_aContext(_pContext)
+        , m_aContext(_pContext,aTemplateProvider)
         , m_aReplacementList()
         , m_aTemplateStack()
         {}
@@ -445,7 +446,7 @@ namespace
 
 void SchemaBuilder::substituteInstances()
 {
-    SubstitutionHelper helper(m_aData, static_cast<backenduno::XSchemaHandler*>(this));
+    SubstitutionHelper helper(m_aData, static_cast<backenduno::XSchemaHandler*>(this),m_aTemplateProvider);
 
     helper.substituteInData();
 }
@@ -507,6 +508,7 @@ namespace
 
     void SubstitutionHelper::substitute(OUString const & _aName)
     {
+
         ISubtree & rParent = m_aContext.getCurrentParent();
 
         std::auto_ptr<INode> pReplacedNode = rParent.removeChild(_aName);
@@ -516,33 +518,46 @@ namespace
         OSL_ASSERT( pReplacedInstance != NULL );
 
         TemplateIdentifier aTemplateName = m_aFactory.getInstanceType(*pReplacedInstance);
-
-        if (ISubtree const * pTemplate = m_rData.findTemplate(aTemplateName))
+        if (aTemplateName.Component == m_aContext.getActiveComponent())
         {
-            TemplateStack::iterator beg = m_aTemplateStack.begin(), end = m_aTemplateStack.end();
-            if (std::find(beg,end,pTemplate) != end)
-                m_aContext.raiseMalformedDataException("SchemaBuilder: Could not expand instances: Template is recursive");
+            if (ISubtree const * pTemplate = m_rData.findTemplate(aTemplateName.Name))
+            {
+                TemplateStack::iterator beg = m_aTemplateStack.begin(), end = m_aTemplateStack.end();
+                if (std::find(beg,end,pTemplate) != end)
+                    m_aContext.raiseMalformedDataException("SchemaBuilder: Could not expand instances: Template is recursive");
 
-            m_aTemplateStack.push_back(pTemplate);
+                m_aTemplateStack.push_back(pTemplate);
 
-            std::auto_ptr< INode > pTemplateInstance = pTemplate->clone();
+                std::auto_ptr< INode > pTemplateInstance = pTemplate->clone();
 
-            pTemplateInstance->setName(_aName);
-            // TODO: adjust state/attributes here (?)
+                pTemplateInstance->setName(_aName);
+                // TODO: adjust state/attributes here (?)
 
-            ISubtree * pAddedTree = rParent.addChild(pTemplateInstance)->asISubtree();
+                ISubtree * pAddedTree = rParent.addChild(pTemplateInstance)->asISubtree();
 
-            OSL_ENSURE(pAddedTree, "Could not obtain added template instance");
+                OSL_ENSURE(pAddedTree, "Could not obtain added template instance");
 
-            this->substituteInNode(*pAddedTree);
+                this->substituteInNode(*pAddedTree);
 
-            m_aTemplateStack.pop_back();
+                m_aTemplateStack.pop_back();
+            }
+            else
+            {
+                m_aContext.raiseMalformedDataException("SchemaBuilder: Could not expand instances: Template not found");
+            }
         }
+         //Import Template from different component
         else
         {
-            m_aContext.raiseMalformedDataException("SchemaBuilder: Could not expand instances: Template not found");
-        }
+             TemplateRequest aTemplateRequest(configuration::makeName(aTemplateName.Name, configuration::Name::NoValidate()),
+                                              configuration::makeName(aTemplateName.Component, configuration::Name::NoValidate()) );
+             TemplateResult aResult = m_aContext.getTemplateData( aTemplateRequest );
 
+             std::auto_ptr<INode> pTemplateInstance = aResult.extractDataAndClear();
+             pTemplateInstance->setName(_aName);
+             ISubtree * pAddedTree = rParent.addChild(pTemplateInstance)->asISubtree();
+             OSL_ENSURE(pAddedTree, "Could not obtain added template instance");
+        }
     }
     // -----------------------------------------------------------------------------
 

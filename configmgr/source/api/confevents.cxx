@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confevents.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 14:07:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,9 +123,9 @@ namespace configmgr
 
     /////////////////////////////////////////////////////////////////////////
     // IConfigBroadcaster implementation
-    void ConfigChangeBroadcaster::addListener(AbsolutePath const& aName, const vos::ORef < OOptions >& _xOptions, INodeListenerRef const& pHandler)
+    void ConfigChangeBroadcaster::addListener(AbsolutePath const& aName, RequestOptions const & _aOptions, INodeListenerRef const& pHandler)
     {
-        if (ConfigChangeBroadcastHelper* pHelper = getBroadcastHelper(_xOptions,true))
+        if (ConfigChangeBroadcastHelper* pHelper = getBroadcastHelper(_aOptions,true))
         {
             pHelper->addListener(aName, pHandler);
         }
@@ -133,9 +133,9 @@ namespace configmgr
             OSL_ASSERT(false);
     }
 
-    void ConfigChangeBroadcaster::removeListener(const vos::ORef < OOptions >& _xOptions, INodeListenerRef const& pHandler)
+    void ConfigChangeBroadcaster::removeListener(RequestOptions const & _aOptions, INodeListenerRef const& pHandler)
     {
-        if (ConfigChangeBroadcastHelper* pHelper = getBroadcastHelper(_xOptions,false))
+        if (ConfigChangeBroadcastHelper* pHelper = getBroadcastHelper(_aOptions,false))
         {
             pHelper->removeListener( pHandler);
         }

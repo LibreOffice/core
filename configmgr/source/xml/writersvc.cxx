@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writersvc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2002-12-10 12:13:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,13 +90,13 @@ static inline void clear(OUString & _rs) { _rs = OUString(); }
 
 // -----------------------------------------------------------------------------
 template <class BackendInterface>
-WriterService<BackendInterface>::WriterService(CreationArg _xServiceFactory)
-: m_xServiceFactory(_xServiceFactory)
+WriterService<BackendInterface>::WriterService(CreationArg _xContext)
+: m_xServiceFactory(_xContext->getServiceManager(), uno::UNO_QUERY)
 , m_xWriter()
 {
     if (!m_xServiceFactory.is())
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration XML Writer: Unexpected NULL context"));
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration XML Writer: Context has no service manager"));
         throw uno::RuntimeException(sMessage,NULL);
     }
 }

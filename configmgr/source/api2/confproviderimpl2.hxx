@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 11:23:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ namespace configmgr
         uno::Reference<uno::XInterface>  createUpdateAccess( uno::Sequence<uno::Any> const& aArgs) CFG_UNO_THROW_ALL(  );
     private:
         OConfigurationProviderImpl(OConfigurationProvider* _pProvider,
-                                   const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory);
+                                   CreationContext const & xContext);
     };
 } // namespace configmgr
 

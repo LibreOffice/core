@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendaccess.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-12-13 10:14:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,12 @@
 #include <drafts/com/sun/star/configuration/backend/XBackend.hpp>
 #endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKEND_HPP_
 
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif // _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#endif
 
 namespace configmgr { namespace backend {
 
@@ -105,15 +108,16 @@ class BackendAccess : public IMergedDataProvider {
           service factory.
 
           @param xBackend   backend used for access to data
-          @param xFactory   factory for instantiation of services
+          @param xContext   uno context for instantiation of services
           */
-        BackendAccess(const uno::Reference<backenduno::XBackend>& xBackend,
-                const uno::Reference<lang::XMultiServiceFactory>& xFactory) ;
+        BackendAccess(  const uno::Reference<backenduno::XBackend>& xBackend,
+                        const uno::Reference<uno::XComponentContext>& xContext) ;
         /** Destructor */
         ~BackendAccess(void) ;
 
         // IMergedDataProvider
         virtual ComponentResult getNodeData(const ComponentRequest& aRequest,
+                                            ITemplateDataProvider* aTemplateProvider,
                                             INodeDataListener *aListener = NULL)
             CFG_UNO_THROW_ALL() ;
         virtual void removeRequestListener(INodeDataListener *aListener)

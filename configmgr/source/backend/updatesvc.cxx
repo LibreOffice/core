@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatesvc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2002-12-06 13:08:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,13 +112,13 @@ ServiceInfoHelper UpdateService::getServiceInfo()
 // -----------------------------------------------------------------------------
 
 
-UpdateService::UpdateService(CreationArg _xServiceFactory)
-: m_xServiceFactory(_xServiceFactory)
+UpdateService::UpdateService(CreationArg _xContext)
+: m_xServiceFactory(_xContext->getServiceManager(),uno::UNO_QUERY)
 , m_aSourceMode(merge)
 {
     if (!m_xServiceFactory.is())
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration Update Merger: Unexpected NULL context"));
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration Update Merger: Context has no service manager (or missing interface)"));
         throw uno::RuntimeException(sMessage,NULL);
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2002-12-06 13:08:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #include "bootstrap.hxx"
 #endif
 
-#ifndef CONFIGMGR_CMTREEMODEL_HXX
-#include "cmtreemodel.hxx"
-#endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
@@ -117,9 +114,12 @@ namespace configmgr
 
         virtual void SAL_CALL disposing(com::sun::star::lang::EventObject const& rEvt) throw()
             {
-                CFG_TRACE_INFO("Service Manager disposed, disposing the provider");
-                if (m_pProvider)
-                    m_pProvider->disposing(rEvt);
+                CFG_TRACE_INFO("Service Manager or context disposed, disposing the provider");
+                if (OProvider* pProvider = m_pProvider)
+                {
+                    m_pProvider = NULL;
+                    pProvider->disposing(rEvt);
+                }
             }
     };
 
@@ -127,28 +127,85 @@ namespace configmgr
     //= OProvider
     //=============================================================================
     //-----------------------------------------------------------------------------
-    OProvider::OProvider(const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory, ServiceImplementationInfo const* pInfo)
+    OProvider::OProvider(CreationContext const & xContext, ServiceImplementationInfo const* pInfo)
               :ServiceComponentImpl(pInfo)
               ,OPropertyContainer(ServiceComponentImpl::rBHelper)
-              ,m_xServiceFactory(_xServiceFactory)
+              ,m_xContext(xContext)
     {
-        m_xDisposeListener = new OProviderDisposingListener(this);
-        uno::Reference<com::sun::star::lang::XComponent> xComponent(m_xServiceFactory, uno::UNO_QUERY);
-        if (xComponent.is())
-            xComponent->addEventListener(m_xDisposeListener);
+        OSL_ENSURE(m_xContext.is(), "Creating a provider without a context");
+        attachToContext();
     }
 
     //-----------------------------------------------------------------------------
     OProvider::~OProvider()
     {
-        if (m_xDisposeListener.is() && m_xServiceFactory.is())
+        discardContext(releaseContext());
+    }
+
+    //-----------------------------------------------------------------------------
+    void OProvider::attachToContext()
+    {
+        ::osl::MutexGuard aGuard(ServiceComponentImpl::rBHelper.rMutex);
+        OSL_ASSERT(!m_xDisposeListener.is());
+        if (m_xContext.is())
         {
-            uno::Reference<com::sun::star::lang::XComponent> xComponent(m_xServiceFactory, uno::UNO_QUERY);
-            if (xComponent.is())
-                xComponent->removeEventListener(m_xDisposeListener);
+            uno::Reference< lang::XComponent > xContextComp(m_xContext, uno::UNO_QUERY);
+            uno::Reference< lang::XComponent > xServiceMgrComp(m_xContext->getServiceManager(), uno::UNO_QUERY);
+
+            m_xDisposeListener = new OProviderDisposingListener(this);
+
+            if (xContextComp.is())    xContextComp   ->addEventListener(m_xDisposeListener);
+            if (xServiceMgrComp.is()) xServiceMgrComp->addEventListener(m_xDisposeListener);
+
+            OSL_ENSURE(xServiceMgrComp.is() || xContextComp.is(),
+                        "Provider cannot detect shutdown -> no XComponent found");
         }
     }
 
+    //-----------------------------------------------------------------------------
+    uno::Reference< lang::XComponent > OProvider::releaseContext()
+    {
+        ::osl::MutexGuard aGuard(ServiceComponentImpl::rBHelper.rMutex);
+
+        uno::Reference< lang::XComponent > xContextComp(m_xContext, uno::UNO_QUERY);
+        if (m_xDisposeListener.is() && m_xContext.is())
+        {
+            uno::Reference< lang::XComponent > xServiceMgrComp(m_xContext->getServiceManager(), uno::UNO_QUERY);
+
+            if (xContextComp.is())
+            {
+                try { xContextComp   ->removeEventListener(m_xDisposeListener); }
+                catch (uno::Exception & ) {}
+            }
+
+            if (xServiceMgrComp.is())
+            {
+                try { xServiceMgrComp->removeEventListener(m_xDisposeListener); }
+                catch (uno::Exception & ) {}
+            }
+        }
+        m_xDisposeListener = NULL;
+        m_xContext = NULL;
+
+        return xContextComp;
+    }
+    //-----------------------------------------------------------------------------
+
+    void OProvider::discardContext(uno::Reference< lang::XComponent > const & xContext)
+    {
+        if (xContext.is())
+        {
+            uno::Reference< uno::XComponentContext > xCC(xContext,uno::UNO_QUERY);
+            OSL_ASSERT(xCC.is());
+
+            if (BootstrapContext::isWrapper(xCC))
+            {
+                try { xContext->dispose(); }
+                catch (uno::Exception & ) {}
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------
     // XTypeProvider
     //-----------------------------------------------------------------------------
     uno::Sequence< uno::Type > SAL_CALL OProvider::getTypes(  ) throw(uno::RuntimeException)
@@ -174,7 +231,7 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------
-    void OProvider::implConnect(OProviderImpl& _rFreshProviderImpl, const ConnectionSettings& _rSettings) throw(uno::Exception)
+    void OProvider::implConnect(OProviderImpl& _rFreshProviderImpl, const ContextReader& _rSettings) throw(uno::Exception)
     {
         if (!_rFreshProviderImpl.initSession(_rSettings))
             throw uno::Exception(::rtl::OUString::createFromAscii("Could not connect to the configuration. Please check your settings."), THISREF() );
@@ -183,32 +240,19 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     void SAL_CALL OProvider::disposing(com::sun::star::lang::EventObject const& rEvt) throw()
     {
-        {
-            ::osl::MutexGuard aGuard(ServiceComponentImpl::rBHelper.rMutex);
-            m_xDisposeListener = NULL;
-            m_xServiceFactory = NULL;
-        }
-        dispose();
+        releaseContext();
+        this->dispose();
     }
 
     //-----------------------------------------------------------------------------
     void SAL_CALL OProvider::disposing()
     {
-        {
-            ::osl::MutexGuard aGuard(ServiceComponentImpl::rBHelper.rMutex);
-            if (m_xDisposeListener.is() && m_xServiceFactory.is())
-            {
-                uno::Reference<com::sun::star::lang::XComponent> xComponent(m_xServiceFactory, uno::UNO_QUERY);
-                if (xComponent.is())
-                    xComponent->removeEventListener(m_xDisposeListener);
-            }
-
-            m_xServiceFactory = NULL;
-            m_xDisposeListener = NULL;
-        }
+        uno::Reference< lang::XComponent > xComp = releaseContext();
 
         ServiceComponentImpl::disposing();
         OPropertyContainer::disposing();
+
+        discardContext( xComp );
     }
 /*
     // com::sun::star::lang::XUnoTunnel

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treechangefactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ namespace configmgr
     //= ValueChanges ============================================================
         std::auto_ptr<ValueChange> createValueChange(
                                         Name const& _aName,
-                                        configuration::Attributes _aAttrs,
+                                        node::Attributes _aAttrs,
                                         ValueChange::Mode _eMode,
                                         uno::Any const& _aNewValue,
                                         uno::Any const& _aOldValue = uno::Any()
@@ -117,7 +117,7 @@ namespace configmgr
     //= SubtreeChanges ============================================================
         std::auto_ptr<SubtreeChange> createGroupNodeChange(
                                         Name const& _aName,
-                                        configuration::Attributes _aAttrs,
+                                        node::Attributes _aAttrs,
                                         bool _bToDefault = false);
 
         //-----------------------------------------------
@@ -125,7 +125,7 @@ namespace configmgr
                                         Name const& _aName,
                                         Name const& _aTemplateName,
                                         Name const& _aTemplateModule,
-                                        configuration::Attributes _aAttrs,
+                                        node::Attributes _aAttrs,
                                         bool _bToDefault = false);
         //-----------------------------------------------
 

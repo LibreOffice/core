@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeaccess.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2002-12-06 13:08:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,14 @@
 #ifndef CONFIGMGR_API_TREEACCESS_HXX_
 #define CONFIGMGR_API_TREEACCESS_HXX_
 
-#ifndef CONFIGMGR_API_APITYPES_HXX_
-#include "apitypes.hxx"
-#endif
 #ifndef CONFIGMGR_ACCESSOR_HXX
 #include "accessor.hxx"
 #endif
 #ifndef CONFIGMGR_MISC_OPTIONS_HXX_
 #include "options.hxx"
+#endif
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
 #endif
 
 namespace osl { class Mutex; }
@@ -99,6 +99,7 @@ namespace configmgr
     namespace configapi
     {
 //-----------------------------------------------------------------------------
+        namespace uno = com::sun::star::uno;
         typedef uno::XInterface UnoInterface;
         typedef uno::Any UnoAny;
 //-----------------------------------------------------------------------------
@@ -115,7 +116,7 @@ namespace configmgr
         // these objects just provide the pieces needed to navigate and manipulate trees and nodes
 
         // A common base class for 'element' classes
-        class NodeElement : NotCopyable
+        class NodeElement : Noncopyable
         {
         public:
             typedef ServiceImplementationInfo ServiceInfo;
@@ -202,7 +203,7 @@ namespace configmgr
         };
 //-----------------------------------------------------------------------------
         /// guards a TreeElement; provides an object (read) lock, ensures object was not disposed
-        class TreeReadGuardImpl : NotCopyable
+        class TreeReadGuardImpl : Noncopyable
         {
             osl::MutexGuard     m_aViewLock;
             TreeElement&        m_rTree;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parsersvc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-12-06 13:08:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,13 +104,13 @@ static inline void clear(OUString & _rs) { _rs = OUString(); }
 
 // -----------------------------------------------------------------------------
 template <class BackendInterface>
-ParserService<BackendInterface>::ParserService(CreationArg _xServiceFactory)
-: m_xServiceFactory(_xServiceFactory)
+ParserService<BackendInterface>::ParserService(CreationArg _xContext)
+: m_xServiceFactory(_xContext->getServiceManager(), uno::UNO_QUERY)
 , m_aInputSource()
 {
     if (!m_xServiceFactory.is())
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration Parser: Unexpected NULL context"));
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration Parser: Context has no service factory"));
         throw uno::RuntimeException(sMessage,NULL);
     }
 }
@@ -304,8 +304,8 @@ class SchemaParserService : public SchemaParserService_Base
 public:
     typedef SchemaParser::HandlerRef HandlerArg;
 
-    SchemaParserService(CreationArg _xServiceFactory)
-    : SchemaParserService_Base(_xServiceFactory)
+    SchemaParserService(CreationArg _xContext)
+    : SchemaParserService_Base(_xContext)
     {
     }
 
@@ -327,8 +327,8 @@ class LayerParserService : public LayerParserService_Base
 public:
     typedef LayerParser::HandlerRef HandlerArg;
 
-    LayerParserService(CreationArg _xServiceFactory)
-    : LayerParserService_Base(_xServiceFactory)
+    LayerParserService(CreationArg _xContext)
+    : LayerParserService_Base(_xContext)
     {
     }
 
@@ -338,13 +338,13 @@ public:
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-uno::Reference< uno::XInterface > SAL_CALL instantiateSchemaParser( CreationContext const& rServiceManager )
+uno::Reference< uno::XInterface > SAL_CALL instantiateSchemaParser( CreationContext const& xContext )
 {
-    return * new SchemaParserService(rServiceManager);
+    return * new SchemaParserService(xContext);
 }
-uno::Reference< uno::XInterface > SAL_CALL instantiateLayerParser( CreationContext const& rServiceManager )
+uno::Reference< uno::XInterface > SAL_CALL instantiateLayerParser( CreationContext const& xContext )
 {
-    return * new LayerParserService(rServiceManager);
+    return * new LayerParserService(xContext);
 }
 // -----------------------------------------------------------------------------
 const ServiceRegistrationInfo* getSchemaParserServiceInfo()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultproviderproxy.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-10 09:32:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,14 +68,14 @@
 #ifndef CONFIGMGR_UTILITY_HXX_
 #include "utility.hxx"
 #endif
+#ifndef CONFIGMGR_MISC_REQUESTOPTIONS_HXX_
+#include "requestoptions.hxx"
+#endif
 
 #ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
 #include <salhelper/simplereferenceobject.hxx>
 #endif
 
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
-#endif
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
 #endif
@@ -108,8 +108,7 @@ namespace configmgr
         {
             // the data defining a request
             AbsolutePath            m_aBaseLocation;
-            vos::ORef< OOptions >   m_xOptions;
-            sal_Int16               m_nRequestDepth;
+            RequestOptions          m_aOptions;
 
             // the object(s) that provide the defaults
             rtl::Reference< IConfigDefaultProvider >    m_xDefaultTreeProvider;
@@ -120,8 +119,7 @@ namespace configmgr
                     rtl::Reference< IConfigDefaultProvider > const & _xDefaultTreeProvider,
                     IDefaultableTreeManager *   _pDefaultTreeManager,
                     AbsolutePath        const&  _aBaseLocation,
-                    vos::ORef<OOptions> const&  _xOptions,
-                    sal_Int16                   _nRequestDepth
+                    RequestOptions      const&  _aOptions
                 );
 
             ~DefaultProviderProxy();

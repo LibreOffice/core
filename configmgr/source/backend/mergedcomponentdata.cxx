@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergedcomponentdata.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:34:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,10 +112,10 @@ OUString MergedComponentData::getTemplateAccessor (TemplateIdentifier const & _a
 }
 // -----------------------------------------------------------------------------
 
-bool MergedComponentData::hasTemplate(TemplateIdentifier const & _aTemplateName) const
+bool MergedComponentData::hasTemplate(OUString const & _aTemplateName) const
 {
     return m_pTemplatesTree.get() != NULL &&
-            m_pTemplatesTree->getChild( getTemplateAccessor(_aTemplateName) ) != NULL;
+            m_pTemplatesTree->getChild( _aTemplateName ) != NULL;
 }
 // -----------------------------------------------------------------------------
 
@@ -131,12 +131,12 @@ std::auto_ptr<ISubtree> MergedComponentData::extractTemplatesTree()
 }
 // -----------------------------------------------------------------------------
 
-std::auto_ptr<INode> MergedComponentData::extractTemplateNode(TemplateIdentifier const & _aTemplateName)
+std::auto_ptr<INode> MergedComponentData::extractTemplateNode(OUString const & _aTemplateName)
 {
     if (m_pTemplatesTree.get() == NULL)
         return std::auto_ptr<INode>();
 
-    return m_pTemplatesTree->removeChild(getTemplateAccessor(_aTemplateName));
+    return m_pTemplatesTree->removeChild(_aTemplateName);
 }
 // -----------------------------------------------------------------------------
 
@@ -146,9 +146,9 @@ ISubtree const * MergedComponentData::getSchemaTree() const
 }
 // -----------------------------------------------------------------------------
 
-ISubtree const * MergedComponentData::findTemplate(TemplateIdentifier const & _aTemplateName) const
+ISubtree const * MergedComponentData::findTemplate(OUString const & _aTemplateName) const
 {
-    INode const * pTemplateNode = m_pTemplatesTree->getChild(getTemplateAccessor(_aTemplateName));
+    INode const * pTemplateNode = m_pTemplatesTree->getChild(_aTemplateName);
 
     ISubtree const * pTemplateTree = pTemplateNode ? pTemplateNode->asISubtree() : NULL;
 
@@ -158,9 +158,9 @@ ISubtree const * MergedComponentData::findTemplate(TemplateIdentifier const & _a
 }
 // -----------------------------------------------------------------------------
 
-std::auto_ptr<INode>    MergedComponentData::instantiateTemplate(OUString const & _aName, TemplateIdentifier const & _aTemplateName) const
+std::auto_ptr<INode>    MergedComponentData::instantiateTemplate(OUString const & _aName, OUString const & _aTemplateName) const
 {
-    if (INode const * pTemplateNode = m_pTemplatesTree->getChild(getTemplateAccessor(_aTemplateName)))
+    if (INode const * pTemplateNode = m_pTemplatesTree->getChild(_aTemplateName))
     {
         std::auto_ptr<INode> aResult = pTemplateNode->clone();
         aResult->setName(_aName);

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: jb $ $Date: 2002-02-11 13:47:55 $
+#   last change: $Author: hr $ $Date: 2003-03-19 16:19:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,16 +88,16 @@ SLOFILES=\
     $(SLO)$/valuenodeaccess.obj	\
     $(SLO)$/groupnodeaccess.obj	\
     $(SLO)$/setnodeaccess.obj	\
-    $(SLO)$/localizedtreeactions.obj	\
+    $(SLO)$/changes.obj			\
     $(SLO)$/treenodefactory.obj			\
     $(SLO)$/treechangefactory.obj		\
-    $(SLO)$/changes.obj			\
+    $(SLO)$/localizedtreeactions.obj	\
     $(SLO)$/treeactions.obj		\
-    $(SLO)$/mergehelper.obj		\
-    $(SLO)$/updatehelper.obj	\
-    $(SLO)$/nodeconverter.obj	\
     $(SLO)$/cmtreemodel.obj		\
     $(SLO)$/cmtree.obj			\
+    $(SLO)$/nodeconverter.obj	\
+    $(SLO)$/updatehelper.obj	\
+    $(SLO)$/mergehelper.obj		\
 
 # --- Targets ---
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: timestamp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-15 16:14:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #ifndef CONFIGMGR_TIMESTAMP_HXX
 #define CONFIGMGR_TIMESTAMP_HXX
 
-#include "apitypes.hxx"
 #include <vos/timer.hxx>
 
 namespace configmgr

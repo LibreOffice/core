@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergeddataprovider.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-12-13 10:29:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,32 @@ namespace configmgr
         virtual ComponentResult getComponentData(ComponentRequest const & _aRequest)
             CFG_UNO_THROW_ALL() = 0;
     };
+
+// ---------------------------------------------------------------------------
+
+    /// Interface providing access to template (schema) data
+    struct SAL_NO_VTABLE ITemplateDataProvider
+    {
+        /** loads a given template and returns it as return value
+
+            @param _aRequest
+                identifies the template to be loaded
+
+            @returns
+                A valid instance of the given template.
+
+                <p> Currently a request with empty template name
+                    will retrieve a group node holding all templates
+                    of a component.
+                </p>
+
+            @throws com::sun::star::uno::Exception
+                if the template cannot be retrieved.
+                The exact exception being thrown may depend on the underlying backend.
+        */
+        virtual TemplateResult getTemplateData(TemplateRequest const & _aRequest)
+            CFG_UNO_THROW_ALL() = 0;
+    };
 // ---------------------------------------------------------------------------
 
     /** Interface providing access to (merged) data for individual nodes
@@ -147,7 +173,9 @@ namespace configmgr
                 if the node cannot be retrieved.
                 The exact exception being thrown may depend on the underlying backend.
         */
-        virtual ComponentResult getNodeData(ComponentRequest const & _aRequest, INodeDataListener * _pListener = NULL)
+        virtual ComponentResult getNodeData(ComponentRequest const & _aRequest,
+                                            ITemplateDataProvider*   _aTemplateProvider,
+                                            INodeDataListener * _pListener = NULL)
             CFG_UNO_THROW_ALL() = 0;
 
         /** remove a listener registered for a previous request.
@@ -198,31 +226,7 @@ namespace configmgr
         virtual NodeResult getDefaultData(NodeRequest const & _aRequest)
             CFG_UNO_THROW_ALL() = 0;
     };
-// ---------------------------------------------------------------------------
 
-    /// Interface providing access to template (schema) data
-    struct SAL_NO_VTABLE ITemplateDataProvider
-    {
-        /** loads a given template and returns it as return value
-
-            @param _aRequest
-                identifies the template to be loaded
-
-            @returns
-                A valid instance of the given template.
-
-                <p> Currently a request with empty template name
-                    will retrieve a group node holding all templates
-                    of a component.
-                </p>
-
-            @throws com::sun::star::uno::Exception
-                if the template cannot be retrieved.
-                The exact exception being thrown may depend on the underlying backend.
-        */
-        virtual TemplateResult getTemplateData(TemplateRequest const & _aRequest)
-            CFG_UNO_THROW_ALL() = 0;
-    };
 // ---------------------------------------------------------------------------
 
     /// Interface providing access to backend meta-data

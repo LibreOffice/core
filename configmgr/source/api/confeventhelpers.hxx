@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confeventhelpers.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,10 +195,10 @@ namespace configmgr
             INodeListener& operator*() const { return *m_pListener; }
         // needed to allow if (info) ...
             struct HasListener;
-            operator HasListener const*() const { return reinterpret_cast<HasListener*>(m_pListener.getBodyPtr()); }
+            operator HasListener const*() const { return reinterpret_cast<HasListener*>(m_pListener.get()); }
 
             bool operator < (NodeListenerInfo const& aInfo) const
-            { return std::less<INodeListener*>()(m_pListener.getBodyPtr(), aInfo.m_pListener.getBodyPtr()); }
+            { return std::less<INodeListener*>()(m_pListener.get(), aInfo.m_pListener.get()); }
 
             bool operator == (NodeListenerInfo const& aInfo) const
             { return !!( m_pListener == aInfo.m_pListener); }

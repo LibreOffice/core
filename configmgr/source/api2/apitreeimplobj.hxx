@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: jb $ $Date: 2002-12-06 13:08:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,6 @@
 #ifndef CONFIGMGR_API_TREEIMPLOBJECTS_HXX_
 #define CONFIGMGR_API_TREEIMPLOBJECTS_HXX_
 
-#ifndef CONFIGMGR_API_APITYPES_HXX_
-#include "apitypes.hxx"
-#endif
-
 #ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
 #endif
@@ -81,9 +77,15 @@
 #ifndef CONFIGMGR_MISC_OPTIONS_HXX_
 #include "options.hxx"
 #endif
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
+#endif
 
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
+#endif
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -119,16 +121,17 @@ namespace configmgr
         typedef vos::ORef<NotifierImpl> NotifierImplHolder;
 //-----------------------------------------------------------------------------
         class ObjectRegistry;
-        typedef vos::ORef<ObjectRegistry> ObjectRegistryHolder;
+        typedef rtl::Reference<ObjectRegistry> ObjectRegistryHolder;
 
         typedef uno::XInterface UnoInterface;
         typedef uno::Reference<UnoInterface> UnoInterfaceRef;
         typedef uno::Reference<com::sun::star::script::XTypeConverter>  UnoTypeConverter;
 
+        typedef vos::ORef< OOptions > TreeOptions;
 //-----------------------------------------------------------------------------
 // API object implementation wrappers
 //-------------------------------------------------------------------------
-        class ApiProvider : NotCopyable
+        class ApiProvider : Noncopyable
         {
             Factory&                    m_rFactory;
             OProviderImpl&              m_rProviderImpl;
@@ -146,7 +149,7 @@ namespace configmgr
     //-----------------------------------------------------------------------------
 
     //-------------------------------------------------------------------------
-        class ApiTreeImpl : NotCopyable
+        class ApiTreeImpl : Noncopyable
         {
             class ComponentAdapter;
             typedef uno::Reference<ComponentAdapter> ComponentRef;
@@ -221,17 +224,17 @@ namespace configmgr
         {
             typedef configuration::AbsolutePath AbsolutePath;
             typedef configuration::DefaultProvider DefaultProvider;
-            vos::ORef< OOptions > m_xOptions;
+            TreeOptions m_xOptions;
 
         public:
-            explicit ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, configuration::Tree const& aTree, vos::ORef< OOptions >const& _xOptions);
+            explicit ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, configuration::Tree const& aTree, TreeOptions const& _xOptions);
             ~ApiRootTreeImpl();
 
             ApiTreeImpl& getApiTree() { return m_aTreeImpl; }
             ApiTreeImpl const& getApiTree() const { return m_aTreeImpl; }
 
             AbsolutePath const & getLocation() const { return m_aLocationPath; }
-            vos::ORef< OOptions > getOptions() const { return m_xOptions; }
+            TreeOptions getOptions() const { return m_xOptions; }
 
         // self-locked methods for dispose handling
             bool disposeTree();
@@ -257,7 +260,7 @@ namespace configmgr
         private:
             ApiTreeImpl                 m_aTreeImpl;
             AbsolutePath                m_aLocationPath;
-            vos::ORef<NodeListener>     m_pNotificationListener;
+            rtl::Reference<NodeListener> m_pNotificationListener;
         };
 //-----------------------------------------------------------------------------
     }

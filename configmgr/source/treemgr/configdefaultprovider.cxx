@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configdefaultprovider.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-10 09:32:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ DefaultProvider DefaultProvider::createEmpty()
 }
 //-----------------------------------------------------------------------------
 
-DefaultProvider DefaultProvider::create(Tree const& _aRootTree, vos::ORef<OOptions> const& _xOptions,
+DefaultProvider DefaultProvider::create(Tree const& _aRootTree, RequestOptions const& _aOptions,
                                           rtl::Reference< IConfigDefaultProvider > const &  _xDefaultProvider,
                                           IDefaultableTreeManager* _pDefaultableTree)
 {
@@ -108,8 +108,7 @@ DefaultProvider DefaultProvider::create(Tree const& _aRootTree, vos::ORef<OOptio
     if (!_aRootTree.isEmpty())
     {
         xNewProxy = new DefaultProviderProxy(_xDefaultProvider,_pDefaultableTree,
-                                             _aRootTree.getRootPath(), _xOptions,
-                                             _aRootTree.getRootNode().getDepth() );
+                                             _aRootTree.getRootPath(), _aOptions );
     }
 
     return DefaultProvider( xNewProxy );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-10 09:28:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 #ifndef CONFIGMGR_CONFIGTEMPLATE_HXX_
 #define CONFIGMGR_CONFIGTEMPLATE_HXX_
 
-#ifndef CONFIGMGR_API_APITYPES_HXX_
-#include "apitypes.hxx"
-#endif
 #ifndef CONFIGMGR_CONFIGEXCEPT_HXX_
 #include "configexcept.hxx"
 #endif
@@ -83,15 +80,11 @@
 #include <salhelper/simplereferenceobject.hxx>
 #endif
 
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
-#endif
-
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
     struct IConfigTemplateManager;
-    class OOptions;
+    class RequestOptions;
 //-----------------------------------------------------------------------------
     namespace data { class SetNodeAccess; }
 //-----------------------------------------------------------------------------
@@ -119,7 +112,7 @@ namespace configmgr
             typedef rtl::Reference< IConfigTemplateManager > TemplateManagerRef;
         public:
             TemplateProvider(); // creates an empty (invalid) template instance provider
-            TemplateProvider(TemplateManagerRef const & xProvider, vos::ORef< OOptions > const& xOptions);
+            TemplateProvider(TemplateManagerRef const & xProvider, RequestOptions const& xOptions);
             TemplateProvider(TemplateProvider const& aOther);
             TemplateProvider& operator=(TemplateProvider const& aOther);
             ~TemplateProvider();

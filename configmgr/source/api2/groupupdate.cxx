@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupupdate.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include "groupupdate.hxx"
 #include "updateimpl.hxx"
 #include "apinodeaccess.hxx"
+#include "apitypes.hxx"
 
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -69,7 +70,6 @@
 namespace configmgr
 {
 //////////////////////////////////////////////////////////////////////////////////
-    using namespace configapi;
 
     using uno::Reference;
     using uno::Sequence;
@@ -100,7 +100,7 @@ uno::Sequence< uno::Type > SAL_CALL BasicGroup::getTypes( ) throw (uno::RuntimeE
 {
     /*static ?*/
     cppu::OTypeCollection aTypes(
-        getReferenceType(static_cast< css::container::XNameReplace *>(this)),
+        configapi::getReferenceType(static_cast< css::container::XNameReplace *>(this)),
         BasicGroupAccess::getTypes());
 
     return aTypes.getTypes();
@@ -133,7 +133,7 @@ configapi::NodeGroupAccess& BasicGroup::getGroupNode()
 void SAL_CALL BasicGroup::replaceByName( const OUString& rName, const uno::Any& rElement )
         throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException)
 {
-    implReplaceByName( getGroupNode(), rName, rElement );
+    configapi::implReplaceByName( getGroupNode(), rName, rElement );
 }
 
 //-----------------------------------------------------------------------------------

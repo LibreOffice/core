@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinotifierimpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,6 @@
 #ifndef CONFIGMGR_API_NOTIFIERIMPL_HXX_
 #define CONFIGMGR_API_NOTIFIERIMPL_HXX_
 
-#ifndef CONFIGMGR_APITYPES_HXX_
-#include "apitypes.hxx"
-#endif
-
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/container/XChild.hpp>
 #endif
@@ -86,6 +82,7 @@ namespace configmgr
 {
     namespace css = ::com::sun::star;
     namespace uno = ::com::sun::star::uno;
+    using rtl::OUString;
 
     /* implementations of the event notification interfaces
         supported by a node within the configuration tree.

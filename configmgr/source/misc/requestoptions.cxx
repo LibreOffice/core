@@ -2,9 +2,9 @@
  *
  *  $RCSfile: requestoptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-04-25 15:48:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,18 +100,6 @@ namespace configmgr
     }
 
 // ---------------------------------------------------------------------------
-    void RequestOptions::forceReload(bool _bNoCache)
-    {
-        if (_bNoCache)
-        {
-            m_nCacheID = getNextCacheID();
-        }
-        else
-        {
-            m_nCacheID = 0;
-        }
-    }
-// ---------------------------------------------------------------------------
 
     bool RequestOptions::isForAllLocales() const
     {
@@ -127,7 +115,7 @@ namespace configmgr
 
     sal_Int32 RequestOptions::hashCode() const
     {
-        return m_sLocale.hashCode() ^ m_sEntity.hashCode() ^ m_nCacheID;
+        return m_sLocale.hashCode() ^ m_sEntity.hashCode();
     }
 // ---------------------------------------------------------------------------
 
@@ -136,9 +124,6 @@ namespace configmgr
         sal_Int32 nDiff = lhs.getEntity().compareTo(rhs.getEntity());
         if (nDiff == 0)
             nDiff = lhs.getLocale().compareTo(rhs.getLocale());
-
-        if (nDiff == 0)
-            nDiff = rhs.m_nCacheID - lhs.m_nCacheID;
 
         return nDiff;
     }

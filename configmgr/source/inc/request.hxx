@@ -2,9 +2,9 @@
  *
  *  $RCSfile: request.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:59:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,18 +102,20 @@ namespace configmgr
         {
             Name    m_aComponentName;
             RequestOptions  m_aOptions;
-
+            bool            m_bForcedReload;
         public:
             ComponentRequest(Name const& _aComponentName, RequestOptions const & _aOptions)
             : m_aComponentName(_aComponentName)
             , m_aOptions(_aOptions)
+            , m_bForcedReload(false)
             {
             }
 
             Name            const & getComponentName()  const { return m_aComponentName; }
             RequestOptions  const & getOptions()        const { return m_aOptions; }
 
-            void forceReload() { m_aOptions.forceReload(); }
+            bool isForcingReload() const { return m_bForcedReload; }
+            void forceReload(bool _bForce = true) { m_bForcedReload = _bForce; }
      };
 // ---------------------------------------------------------------------------
 
@@ -154,14 +156,12 @@ namespace configmgr
             ConstUpdateInstance  m_aUpdate;
             RequestOptions  m_aOptions;
             RequestId       m_aRQID;
-            bool            m_bForceFlush;
         public:
             explicit
             UpdateRequest(  UpdateInstance const & _aUpdate,
                             RequestOptions const & _aOptions)
             : m_aUpdate(_aUpdate)
             , m_aOptions(_aOptions)
-            , m_bForceFlush( _aOptions.isForcingReload() )
             {}
 
             explicit
@@ -169,7 +169,6 @@ namespace configmgr
                             RequestOptions const & _aOptions)
             : m_aUpdate(_aUpdate)
             , m_aOptions(_aOptions)
-            , m_bForceFlush( _aOptions.isForcingReload() )
             {}
 
             explicit
@@ -178,12 +177,9 @@ namespace configmgr
                             RequestOptions const & _aOptions)
             : m_aUpdate(_aUpdateData, _aRootpath)
             , m_aOptions(_aOptions)
-            , m_bForceFlush( _aOptions.isForcingReload() )
             {}
 
-            void forceFlush() { m_bForceFlush = true; }
-
-            bool isForcingFlush() const { return m_bForceFlush; }
+            bool isSyncRequired() const { return !m_aOptions.isAsyncEnabled(); }
 
             RequestOptions const & getOptions()  const { return m_aOptions; }
             NodePath const & getUpdateRoot()     const { return m_aUpdate.root(); }

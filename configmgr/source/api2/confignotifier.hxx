@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confignotifier.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 18:43:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,22 @@
 #ifndef CONFIGMGR_CONFIGNOTIFIER_HXX_
 #define CONFIGMGR_CONFIGNOTIFIER_HXX_
 
-#include "apitypes.hxx"
+#ifndef CONFIGMGR_CONFIGEXCEPT_HXX_
 #include "configexcept.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGPATH_HXX_
 #include "configpath.hxx"
+#endif
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
+#endif
 #include <vos/ref.hxx>
 
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
 #endif
 
 namespace com { namespace sun { namespace star {
@@ -214,7 +223,7 @@ namespace configmgr
         class TreeElement;
 
         ///  guards a NodeAccess; provides a simple lock for non-data access, does not check for disposed state
-        class DisposeGuardImpl : NotCopyable
+        class DisposeGuardImpl : Noncopyable
         {
             osl::MutexGuard m_aLock;
         public:

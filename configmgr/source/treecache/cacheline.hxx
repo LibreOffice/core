@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheline.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-12-13 10:30:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef CONFIGMGR_BACKEND_REQUESTTYPES_HXX_
 #include "requesttypes.hxx"
 #endif
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
+#endif
 
 #ifndef _OSL_INTERLOCK_H_
 #include <osl/interlck.h>
@@ -94,7 +97,7 @@ namespace configmgr
 ////////////////////////////////////////////////////////////////////////////////
     /** This object represents a cache line for a single configuration tree
     */
-    class CacheLine : public salhelper::SimpleReferenceObject, NotCopyable
+    class CacheLine : public salhelper::SimpleReferenceObject, Noncopyable
     {
     public:
         typedef oslInterlockedCount RefCount;

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: cyrillem $ $Date: 2002-06-17 14:35:03 $
+#   last change: $Author: hr $ $Date: 2003-03-19 16:20:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,7 +96,6 @@ SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
 SHL1LIBS=	$(SLB)$/registry.lib	\
             $(SLB)$/treecache.lib	\
-            $(SLB)$/session.lib		\
             $(SLB)$/misc.lib		\
             $(SLB)$/backend.lib		\
             $(SLB)$/localbe.lib		\
@@ -138,7 +137,6 @@ SHL2DEPN=
 SHL2IMPLIB=	i$(SHL2TARGET)
 SHL2LIBS=	$(SLB)$/registry.lib	\
             $(SLB)$/treecache.lib	\
-            $(SLB)$/sxl_session.lib	\
             $(SLB)$/misc.lib		\
             $(SLB)$/xml.lib			\
             $(SLB)$/treemgr.lib		\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatehandler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-06-07 12:01:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ namespace configmgr
         {
         public:
             explicit
-            LayerUpdateHandler(CreationArg _xServiceFactory);
+            LayerUpdateHandler(CreationArg _xContext);
 
             ~LayerUpdateHandler();
 

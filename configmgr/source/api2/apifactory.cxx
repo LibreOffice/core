@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactory.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ Factory::Factory(ObjectRegistryHolder pRegistry)
 : m_pRegistry(pRegistry)
 , m_aTunnelID()
 {
-    OSL_ENSURE(pRegistry.isValid(), "ERROR: Factory requires a Object Registry");
+    OSL_ENSURE(pRegistry.is(), "ERROR: Factory requires a Object Registry");
 }
 //-----------------------------------------------------------------------------
 
@@ -276,7 +276,7 @@ void Factory::revokeElement(NodeID const& aNodeID, NodeElement& rElement)
 }
 
 //-----------------------------------------------------------------------------
-TreeElement* Factory::makeAccessRoot(Tree const& aTree, vos::ORef< OOptions >const& _xOptions)
+TreeElement* Factory::makeAccessRoot(Tree const& aTree, RequestOptions const& _aOptions)
 {
     OSL_PRECOND( !aTree.isEmpty() , "ERROR: Configuration: Making element from tree requires valid tree");
     if (aTree.isEmpty()) return 0;
@@ -297,7 +297,8 @@ TreeElement* Factory::makeAccessRoot(Tree const& aTree, vos::ORef< OOptions >con
     if (0 == pRet)
     {
         TemplateHolder aTemplate = implGetSetElementTemplate(aTree,aRoot);
-        pRet = doCreateAccessRoot(aTree,aTemplate.get(), _xOptions);
+        vos::ORef<OOptions> xOptions = new OOptions(_aOptions);
+        pRet = doCreateAccessRoot(aTree,aTemplate.get(), xOptions);
         implHaveNewElement (aNodeID,pRet);
     }
     return pRet;

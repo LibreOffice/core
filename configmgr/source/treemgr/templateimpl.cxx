@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-10 09:32:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #endif
 #ifndef _CONFIGMGR_TREEACTIONS_HXX_
 #include "treeactions.hxx"
+#endif
+#ifndef CONFIGMGR_API_APITYPES_HXX_
+#include "apitypes.hxx"
 #endif
 
 #ifndef INCLUDED_MAP
@@ -234,9 +237,9 @@ TemplateHolder SpecialTemplateProvider_Impl::makeTemplate (TemplateName const& a
 // class TemplateProvider_Impl
 //-----------------------------------------------------------------------------
 
-TemplateProvider_Impl::TemplateProvider_Impl(TemplateManagerRef const & xProvider, vos::ORef< OOptions > const& xOptions)
+TemplateProvider_Impl::TemplateProvider_Impl(TemplateManagerRef const & xProvider, RequestOptions const& aOptions)
 : m_xProvider(xProvider)
-, m_xOptions(xOptions)
+, m_aOptions(aOptions)
 , m_aRepository()
 {
 }
@@ -249,11 +252,7 @@ data::TreeSegment TemplateProvider_Impl::instantiate(data::Accessor const& _aSou
     {
         data::TreeAccessor aTemplateData = m_xProvider->requestTemplate(_aSourceAccessor, aTemplate->getName(), aTemplate->getModule());
 
-        // #86095# we sometimes wrongly are passed NULL options - using default instead
-        OSL_ENSURE( m_xOptions.isValid(), "ERROR: Requesting template instance without options" );
-
-        bool bForceWritable = m_xOptions->isForcingWritable();
-        pRet = cloneExpandedForLocale(aTemplateData, m_xOptions->getLocale(), bForceWritable);
+        pRet = cloneExpandedForLocale(aTemplateData, m_aOptions.getLocale());
     }
     return pRet;
 }

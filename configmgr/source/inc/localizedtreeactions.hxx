@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localizedtreeactions.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ class SubtreeChange;
 // convert to the given locale format, no matter what the original representation
 data::TreeSegment cloneForLocale(INode const* _pNode, OUString const& _sLocale);
 // convert to the given locale format, assuming the original representation was expanded
-data::TreeSegment cloneExpandedForLocale(data::TreeAccessor const & _aTree, OUString const& _sLocale, bool bMakeWritable = false);
+data::TreeSegment cloneExpandedForLocale(data::TreeAccessor const & _aTree, OUString const& _sLocale);
 // convert to the given locale format, assuming the original representation was expanded
 std::auto_ptr<INode> reduceExpandedForLocale(std::auto_ptr<ISubtree> _pNode, OUString const& _sLocale);
 

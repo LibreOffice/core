@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,7 +329,7 @@ namespace
         {
             Tree aTree( anEntry.accessor(), pTree );
 
-            Attributes aElementAttributes = aTree.getAttributes(aTree.getRootNode());
+            node::Attributes aElementAttributes = aTree.getAttributes(aTree.getRootNode());
 
             // a set element is considered default iff it is not replaced/added
             bool bDefault = !aElementAttributes.isReplacedForUser();
@@ -505,13 +505,13 @@ ElementRef Tree::getAvailableElement(NodeRef const& aNode, Name const& aName) co
 }
 //-----------------------------------------------------------------------------
 
-Attributes Tree::getAttributes(NodeRef const& aNode)    const
+node::Attributes Tree::getAttributes(NodeRef const& aNode)  const
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires valid tree" );
     OSL_PRECOND( aNode.isValid(), "ERROR: Configuration: NodeRef operation requires valid node" );
     OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: NodeRef does not match tree" );
 
-    if (!aNode.isValid()) return Attributes();
+    if (!aNode.isValid()) return NodeAttributes();
 
     return this->getView().getAttributes(aNode);
 }
@@ -583,13 +583,13 @@ ValueRef::~ValueRef()
 
 //-----------------------------------------------------------------------------
 
-Attributes Tree::getAttributes(ValueRef const& aValue)  const
+node::Attributes Tree::getAttributes(ValueRef const& aValue)    const
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires valid tree" );
     OSL_PRECOND( aValue.isValid(), "ERROR: Configuration: ValueRef operation requires valid reference" );
     OSL_PRECOND( isValidNode(aValue), "ERROR: Configuration: ValueRef does not match tree" );
 
-    if (!aValue.isValid()) return Attributes();
+    if (!aValue.isValid()) return NodeAttributes();
 
     return TreeImplHelper::member_node(*this,aValue).getAttributes();
 }
@@ -727,13 +727,13 @@ ValueRef AnyNodeRef::toValue() const
 }
 //-----------------------------------------------------------------------------
 
-Attributes Tree::getAttributes(AnyNodeRef const& aNode) const
+node::Attributes Tree::getAttributes(AnyNodeRef const& aNode)   const
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires valid tree" );
     OSL_PRECOND( aNode.isValid(), "ERROR: Configuration: NodeRef operation requires valid node" );
     OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: NodeRef does not match tree" );
 
-    if (!aNode.isValid()) return Attributes();
+    if (!aNode.isValid()) return NodeAttributes();
 
     if (aNode.isNode())
         return this->getView().getAttributes(aNode.toNode());

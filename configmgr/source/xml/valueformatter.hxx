@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueformatter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-28 15:42:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,12 +88,6 @@ namespace configmgr
             typedef uno::Reference< script::XTypeConverter >  TypeConverter;
 
         public:
-            ValueFormatter()
-            : m_aValue()
-            , m_sSeparator()
-            {
-            }
-
             explicit
             ValueFormatter(uno::Any const & _aValue)
             : m_aValue(_aValue)
@@ -116,6 +110,7 @@ namespace configmgr
 
             uno::Any m_aValue;
             OUString m_sSeparator;
+            bool     m_bUseSeparator;
         };
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,59 +535,4 @@ void OConfigTracer::implTrace(const sal_Char* _pType, const sal_Char* _pFormat, 
 }   // namespace configmgr
 
 #endif // defined(DEBUG) || defined(_DEBUG)
-
-//**************************************************************************
-// history:
-//  $Log: not supported by cvs2svn $
-//  Revision 1.9  2001/05/14 08:50:25  lla
-//  Some bugs removed withhin tracing.
-//
-//  Revision 1.8  2001/03/13 15:26:48  kz
-//  use ftime() for windows
-//
-//  Revision 1.7  2001/03/11 02:16:13  pluby
-//  Replaced ftime() calls with gettimeofday() since ftime() is obsolete on Linux and Mac OS X
-//
-//  Revision 1.6  2001/02/27 14:27:25  jb
-//  Correction: Do not print the message type twice
-//
-//  Revision 1.5  2001/02/26 15:53:00  jb
-//  Add thread-sensitive tracing
-//
-//  Revision 1.4  2001/02/13 09:48:02  dg
-//  #83239# timing output
-//
-//  Revision 1.3  2000/11/29 12:45:31  fs
-//  #80122# additional traces upon initialization (process id / executable name)
-//
-//  Revision 1.2  2000/11/07 12:14:37  hr
-//  #65293#: includes
-//
-//  Revision 1.1.1.1  2000/09/18 16:13:41  hr
-//  initial import
-//
-//  Revision 1.7  2000/09/15 09:51:51  willem.vandorp
-//  OpenOffice header added
-//
-//  Revision 1.6  2000/08/31 10:00:21  fs
-//  time_t unknown
-//
-//  Revision 1.5  2000/08/30 14:34:09  fs
-//  getTimeStamp
-//
-//  Revision 1.4  2000/08/20 12:55:42  fs
-//  #77860# introduced an impl class; introduces virtual trace devices
-//
-//  Revision 1.3  2000/08/17 07:18:02  lla
-//  im/export
-//
-//  Revision 1.2  2000/08/10 06:53:45  fs
-//  read settings from the ENVCFGFLAGS environment variable
-//
-//  Revision 1.1  2000/08/09 18:52:46  fs
-//  helper classes for tracing
-//
-//
-//  Revision 1.0 09.08.00 13:10:05  fs
-//**************************************************************************
 

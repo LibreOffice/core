@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configpath.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-27 11:59:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,8 @@
 #ifndef CONFIGMGR_CONFIGPATH_HXX_
 #define CONFIGMGR_CONFIGPATH_HXX_
 
-#ifndef CONFIGMGR_API_APITYPES_HXX_
-#include "apitypes.hxx"
-#endif
-
-#ifndef CONFIGMGR_CONFIGURATION_ATTRIBUTES_HXX_
-#include "attributes.hxx" // used to be defined in this header
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
 #ifndef INCLUDED_VECTOR
@@ -79,6 +75,8 @@ namespace configmgr
 {
     namespace configuration
     {
+    //------------------------------------------------------------------------
+        using rtl::OUString;
     //------------------------------------------------------------------------
         /// A tag struct for disabling validity checking on arguments
         namespace argument { struct NoValidate {}; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-10 09:32:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef CONFIGMGR_SETNODEACCESS_HXX
 #include "setnodeaccess.hxx"
 #endif
+#ifndef CONFIGMGR_API_APITYPES_HXX_
+#include "apitypes.hxx"
+#endif
 
 namespace configmgr
 {
@@ -81,8 +84,8 @@ TemplateProvider::TemplateProvider()
 }
 
 //-----------------------------------------------------------------------------
-TemplateProvider::TemplateProvider(TemplateManagerRef const & xProvider, vos::ORef< OOptions > const& xOptions)
-: m_aImpl( new TemplateProvider_Impl(xProvider,xOptions) )
+TemplateProvider::TemplateProvider(TemplateManagerRef const & xProvider, RequestOptions const& aOptions)
+: m_aImpl( new TemplateProvider_Impl(xProvider,aOptions) )
 {
 }
 

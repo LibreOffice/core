@@ -2,9 +2,9 @@
 *
 *  $RCSfile: layerwriter.hxx,v $
 *
-*  $Revision: 1.7 $
+*  $Revision: 1.8 $
 *
-*  last change: $Author: ssmith $ $Date: 2002-11-08 14:43:45 $
+*  last change: $Author: hr $ $Date: 2003-03-19 16:19:58 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -97,7 +97,7 @@ namespace configmgr
         {
         public:
             explicit
-                LayerWriter(ServiceFactory const & _xSvcFactory);
+                LayerWriter(CreationArg _xContext);
             virtual ~LayerWriter();
 
             // XLayerHandler

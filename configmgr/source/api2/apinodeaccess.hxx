@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeaccess.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,9 @@
 #ifndef CONFIGMGR_API_NODEACCESS_HXX_
 #define CONFIGMGR_API_NODEACCESS_HXX_
 
-#include "apitypes.hxx"
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
+#endif
 
 namespace osl { class Mutex; }
 
@@ -94,6 +96,7 @@ namespace configmgr
 
         class ApiTreeImpl;
 
+        namespace uno = com::sun::star::uno;
         typedef uno::XInterface UnoInterface;
         typedef uno::Any UnoAny;
 
@@ -101,7 +104,7 @@ namespace configmgr
         // these objects just provide the pieces needed to navigate and manipulate trees and nodes
 
         // The common part of all nodes, provides all you need to read and listen
-        class NodeAccess : NotCopyable
+        class NodeAccess : Noncopyable
         {
         public:
             virtual ~NodeAccess();
@@ -184,7 +187,7 @@ namespace configmgr
 
     // Guarding and locking implementations
         /// guards a NodeAccess; provides an object (read) lock, ensures object was not disposed
-        class NodeReadGuardImpl : NotCopyable
+        class NodeReadGuardImpl : Noncopyable
         {
             osl::MutexGuard     m_aLock;
             NodeAccess&         m_rNode;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configgroup.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2002-08-13 13:33:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 #ifndef CONFIGMGR_CONFIGGROUP_HXX_
 #define CONFIGMGR_CONFIGGROUP_HXX_
 
-#ifndef CONFIGMGR_API_APITYPES_HXX_
-#include "apitypes.hxx"
-#endif
 #ifndef CONFIGMGR_CONFIGEXCEPT_HXX_
 #include "configexcept.hxx"
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propsetaccessimpl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,11 +88,14 @@
 #ifndef CONFIGMGR_CONFIGNOTIFIER_HXX_
 #include "confignotifier.hxx"
 #endif
+#ifndef CONFIGMGR_API_BROADCASTER_HXX_
+#include "broadcaster.hxx"
+#endif
 #ifndef CONFIGMGR_API_APITYPES_HXX_
 #include "apitypes.hxx"
 #endif
-#ifndef CONFIGMGR_API_BROADCASTER_HXX_
-#include "broadcaster.hxx"
+#ifndef CONFIGMGR_CONFIGURATION_ATTRIBUTES_HXX_
+#include "attributes.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
@@ -185,7 +188,7 @@ public:
     }
 
 private:
-    typedef configuration::Attributes NodeAttributes;
+    typedef node::Attributes NodeAttributes;
 
     void    reset() { m_aProperties.clear(); }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendaccess.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-12-13 10:14:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,13 @@ namespace configmgr { namespace backend {
 
 BackendAccess::BackendAccess(
         const uno::Reference<backenduno::XBackend>& xBackend,
-        const uno::Reference<lang::XMultiServiceFactory>& xFactory)
-    : mFactory(xFactory), mBackend(xBackend)
+        const uno::Reference<uno::XComponentContext>& xContext)
+    : mFactory(xContext->getServiceManager(), uno::UNO_QUERY)
+    , mBackend(xBackend)
 {
+    OSL_ENSURE(mFactory.is(), "BackendAccess: Context has no ServiceManager (or it is missing an interface)");
+    if (!mFactory.is())
+        throw uno::RuntimeException(OUString::createFromAscii("BackendAccess: Context has no ServiceManager (or it is missing an interface)"), NULL);
 }
 //------------------------------------------------------------------------------
 
@@ -128,9 +132,10 @@ static void merge(
         MergedComponentData& aData,
         const uno::Sequence<uno::Reference<backenduno::XLayer> >& aLayers,
         sal_Int32 aNbLayers,
-        const rtl::OUString& aLocale)
+        const rtl::OUString& aLocale,
+        ITemplateDataProvider *aTemplateProvider=NULL)
 {
-    LayerMergeHandler * pMerger = new LayerMergeHandler(aFactory, aData, OUString());
+    LayerMergeHandler * pMerger = new LayerMergeHandler(aFactory, aData, aTemplateProvider);
     uno::Reference<backenduno::XLayerHandler> xLayerMerger(pMerger);
 
     RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::BackendAccess", "jb99855", "configmgr: BackendAccess::merge()");
@@ -138,18 +143,19 @@ static void merge(
 
     for (sal_Int32 i = 0 ; i < aNbLayers ; ++ i)
     {
-        promoteToDefault(aData) ;
+        pMerger->prepareLayer() ;
         aLayers [i]->readData(xLayerMerger) ;
 
         uno::Reference<backenduno::XCompositeLayer> compositeLayer(
                 aLayers [i], uno::UNO_QUERY) ;
 
-        if (compositeLayer.is()) {
+        if (compositeLayer.is())
+        {
             rtl::OUString bestLocale = findBestLocale(
                     compositeLayer->listSubLayerIds(), aLocale) ;
 
-            if (bestLocale.getLength() > 0) {
-                promoteToDefault(aData) ;
+            if (pMerger->prepareSublayer(bestLocale) )
+            {
                 compositeLayer->readSubLayerData(xLayerMerger, bestLocale) ;
             }
         }
@@ -158,11 +164,12 @@ static void merge(
 //------------------------------------------------------------------------------
 
 ComponentResult BackendAccess::getNodeData(const ComponentRequest& aRequest,
+                                           ITemplateDataProvider *aTemplateProvider,
                                            INodeDataListener *aListener)
     CFG_UNO_THROW_ALL()
 {
     rtl::OUString component = aRequest.getComponentName().toString() ;
-    SchemaBuilder *schemaBuilder = new backend::SchemaBuilder( component ) ;
+    SchemaBuilder *schemaBuilder = new backend::SchemaBuilder( component, aTemplateProvider == NULL ? this:aTemplateProvider ) ;
     uno::Reference<backenduno::XSchemaHandler> schemaHandler = schemaBuilder ;
     uno::Sequence<uno::Reference<backenduno::XLayer> > layers ;
     uno::Reference<backenduno::XSchema> schema ;
@@ -177,7 +184,7 @@ ComponentResult BackendAccess::getNodeData(const ComponentRequest& aRequest,
     schema->readSchema(schemaHandler) ;
 
     merge(mFactory, schemaBuilder->result(), layers, layers.getLength(),
-                 aNodeRequest.getOptions().getLocale());
+          aNodeRequest.getOptions().getLocale(),aTemplateProvider );
 
     ComponentInstance retCode(schemaBuilder->result().extractSchemaTree(),
                               schemaBuilder->result().extractTemplatesTree(),
@@ -260,7 +267,7 @@ TemplateResult BackendAccess::getTemplateData(const TemplateRequest& aRequest)
         templateId.Name = aRequest.getTemplateName().toString() ;
         templateId.Component = aRequest.getComponentName().toString() ;
 
-        aResultData = schemaBuilder->result().extractTemplateNode(templateId);
+        aResultData = schemaBuilder->result().extractTemplateNode(templateId.Name);
     }
 
     TemplateInstance retCode(aResultData,aRequest.getTemplateName(), aRequest.getComponentName()) ;

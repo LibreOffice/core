@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: jb $ $Date: 2002-10-24 15:39:15 $
+#   last change: $Author: hr $ $Date: 2003-03-19 16:19:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,30 +75,26 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=	\
-        $(SLO)$/anypair.obj	\
         $(SLO)$/bootstrap.obj	\
         $(SLO)$/providerfactory.obj	\
+        $(SLO)$/providerwrapper.obj	\
         $(SLO)$/tracer.obj	\
-        $(SLO)$/saxtools.obj	\
-        $(SLO)$/oslstream.obj	\
-        $(SLO)$/attributelist.obj	\
-        $(SLO)$/confname.obj	\
         $(SLO)$/configunoreg.obj	\
-        $(SLO)$/filehelper.obj	\
+        $(SLO)$/serviceinfohelper.obj \
+        $(SLO)$/bootstrapcontext.obj	\
+        $(SLO)$/attributelist.obj	\
+        $(SLO)$/anypair.obj	\
         $(SLO)$/strimpl.obj	\
         $(SLO)$/mergechange.obj \
-        $(SLO)$/serviceinfohelper.obj \
+        $(SLO)$/oslstream.obj	\
+        $(SLO)$/filehelper.obj	\
         $(SLO)$/trivialbufferedfile.obj \
         $(SLO)$/requestoptions.obj	\
-        $(SLO)$/bootstrapcontext.obj	\
 
 OBJFILES=	\
         $(OBJ)$/oslstream.obj	\
         $(OBJ)$/filehelper.obj	\
         $(OBJ)$/trivialbufferedfile.obj \
-
-#		$(SLO)$/synchronize.obj	\
-#		$(SLO)$/memory.obj \
 
 
 .IF "$(OS)"=="MACOSX"

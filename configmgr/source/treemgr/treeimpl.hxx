@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-15 14:34:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 #ifndef CONFIGMGR_CONFIGNODEIMPL_HXX_
 #define CONFIGMGR_CONFIGNODEIMPL_HXX_
 
-#ifndef CONFIGMGR_API_APITYPES_HXX_
-#include "apitypes.hxx"
-#endif
 #ifndef CONFIGMGR_CHANGE_HXX
 #include "change.hxx"
 #endif
@@ -76,9 +73,6 @@
 #endif
 #ifndef CONFIGMGR_CONFIGTEMPLATE_HXX_
 #include "template.hxx"
-#endif
-#ifndef CONFIGMGR_RWLOCK_HXX_
-#include "rwlock.hxx"
 #endif
 #ifndef CONFIGMGR_TREEACCESSOR_HXX
 #include "treeaccessor.hxx"
@@ -117,14 +111,11 @@ namespace configmgr
     class SubtreeChange;
 
     namespace view { class ViewStrategy; class ViewTreeAccess; }
-
+    namespace node { struct Attributes; }
     namespace configuration
     {
 //-----------------------------------------------------------------------------
         typedef com::sun::star::uno::Any UnoAny;
-
-//-----------------------------------------------------------------------------
-        struct Attributes;
 
 //-----------------------------------------------------------------------------
         class TreeImpl;

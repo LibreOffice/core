@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treemanager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-14 14:19:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,10 +250,10 @@ void TreeManager::implDisposeOne(CacheRef const & _aDisposedCache, RequestOption
 
 // ConfigChangeBroadcaster
 // -------------------------------------------------------------------------
-ConfigChangeBroadcastHelper* TreeManager::getBroadcastHelper(vos::ORef<OOptions> const& _xOptions, bool bCreate)
+ConfigChangeBroadcastHelper* TreeManager::getBroadcastHelper(RequestOptions const& _aOptions, bool bCreate)
 {
-    CacheRef aCache =  bCreate  ? this->getCacheAlways(_xOptions->getRequestOptions())
-                                : m_aCacheList.get(_xOptions->getRequestOptions());
+    CacheRef aCache =  bCreate  ? this->getCacheAlways(_aOptions)
+                                : m_aCacheList.get(_aOptions);
 
     return aCache.is() ? aCache->getBroadcaster() : NULL;
 }
@@ -331,9 +331,10 @@ TreeManager::CacheRef TreeManager::getCacheAlways(RequestOptions const & _aOptio
 }
 
 // -------------------------------------------------------------------------
-memory::Segment* TreeManager::getDataSegment(AbsolutePath const& _rAccessor, const vos::ORef < OOptions >& _xOptions)
+memory::Segment* TreeManager::getDataSegment(AbsolutePath const& _rAccessor,
+                                             const RequestOptions& _aOptions)
 {
-    CacheRef aCache = m_aCacheList.get(_xOptions->getRequestOptions());
+    CacheRef aCache = m_aCacheList.get(_aOptions);
 
     OSL_ENSURE(aCache.is(), "No cache data to get segment for");
 
@@ -346,12 +347,12 @@ memory::Segment* TreeManager::getDataSegment(AbsolutePath const& _rAccessor, con
 // -------------------------------------------------------------------------
 
 data::NodeAccess TreeManager::requestSubtree(AbsolutePath const& aSubtreePath,
-                                      const vos::ORef < OOptions >& _xOptions,
-                                      sal_Int16 nMinLevels)  CFG_UNO_THROW_ALL(  )
+                                                const RequestOptions& _aOptions)
+                                             CFG_UNO_THROW_ALL(  )
 {
     CFG_TRACE_INFO("TreeManager: request for subtree '%s'", OUSTRING2ASCII(aSubtreePath.toString()));
 
-    CacheRef aCache = getCacheAlways(_xOptions->getRequestOptions());
+    CacheRef aCache = getCacheAlways(_aOptions);
     OSL_ENSURE(aCache.is(),"TreeManager: Cannot create cache access for loading node");
 
     data::Accessor aAccessor(NULL);
@@ -359,7 +360,7 @@ data::NodeAccess TreeManager::requestSubtree(AbsolutePath const& aSubtreePath,
     if (!aCache->hasModule(aSubtreePath))
     {
         CFG_TRACE_INFO_NI("TreeManager: cache miss. going to load the node");
-        backend::ComponentRequest aQuery( aSubtreePath.getModuleName(), _xOptions->getRequestOptions() );
+        backend::ComponentRequest aQuery( aSubtreePath.getModuleName(), _aOptions );
 
         backend::CacheLocation aLoadedLocation = getCacheLoader()->loadComponent(aQuery);
         if (aLoadedLocation.isNull())
@@ -377,7 +378,6 @@ data::NodeAccess TreeManager::requestSubtree(AbsolutePath const& aSubtreePath,
     else
     {
         CFG_TRACE_INFO_NI("TreeManager: found node in cache");
-        OSL_ENSURE(_xOptions->canUseCache(),"TreeManager: Found node in cache for non-cachable request");
 
         aAccessor = data::Accessor(aCache->getDataSegment(aSubtreePath));
         OSL_ENSURE(aAccessor.is(),"Cannot get accessor for existing component");
@@ -389,7 +389,7 @@ data::NodeAccess TreeManager::requestSubtree(AbsolutePath const& aSubtreePath,
 }
 
 // -------------------------------------------------------------------------
-void TreeManager::fetchSubtree(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& , sal_Int16 ) CFG_NOTHROW()
+void TreeManager::fetchSubtree(AbsolutePath const& aSubtreePath, const RequestOptions&  ) CFG_NOTHROW()
 {
     CFG_TRACE_WARNING("TreeManager: Prefetching not implemented. (Request to prefetch component %s.", OUSTRING2ASCII(aSubtreePath.toString()));
 }
@@ -397,12 +397,12 @@ void TreeManager::fetchSubtree(AbsolutePath const& aSubtreePath, const vos::ORef
 // -------------------------------------------------------------------------
 sal_Bool TreeManager::fetchDefaultData( memory::UpdateAccessor& _aAccessToken,
                                         AbsolutePath const& aSubtreePath,
-                                        const vos::ORef < OOptions >& _xOptions,
-                                        sal_Int16 nMinLevels) CFG_UNO_THROW_ALL(  )
+                                        const RequestOptions& _aOptions
+                                      ) CFG_UNO_THROW_ALL(  )
 {
     CFG_TRACE_INFO("tree manager: checking the cache for defaults");
 
-    CacheRef aCache = m_aCacheList.get(_xOptions->getRequestOptions());
+    CacheRef aCache = m_aCacheList.get(_aOptions);
 
     if (!aCache.is())
     {
@@ -418,7 +418,7 @@ sal_Bool TreeManager::fetchDefaultData( memory::UpdateAccessor& _aAccessToken,
 
     AbsolutePath aRequestPath = extractModulePath(aSubtreePath);
 
-    backend::NodeRequest aRequest(aRequestPath,_xOptions->getRequestOptions());
+    backend::NodeRequest aRequest(aRequestPath,_aOptions);
 
     backend::NodeResult aDefaults = getCacheLoader()->getDirectDataProvider().getDefaultData( aRequest );
 
@@ -436,13 +436,13 @@ sal_Bool TreeManager::fetchDefaultData( memory::UpdateAccessor& _aAccessToken,
 
 // -------------------------------------------------------------------------
 std::auto_ptr<ISubtree> TreeManager::requestDefaultData(AbsolutePath const& aSubtreePath,
-                                                        const vos::ORef < OOptions >& _xOptions,
-                                                        sal_Int16 nMinLevels) CFG_UNO_THROW_ALL(  )
+                                                        const RequestOptions& _aOptions
+                                                       ) CFG_UNO_THROW_ALL(  )
 {
     // to do: check cache for existing default data (?!)
     CFG_TRACE_INFO_NI("TreeManager: loading default data directly");
 
-    backend::NodeRequest aRequest(aSubtreePath,_xOptions->getRequestOptions());
+    backend::NodeRequest aRequest(aSubtreePath,_aOptions);
 
     backend::NodeResult aDefaults = getCacheLoader()->getDirectDataProvider().getDefaultData( aRequest );
 
@@ -530,7 +530,7 @@ void TreeManager::saveAndNotifyUpdate(data::Accessor const& _aChangedDataAccesso
         backend::UpdateRequest anUpdate(
                                 & aChangeTree.root,
                                 aChangeTree.getRootNodePath(),
-                                aChangeTree.getOptions()->getRequestOptions());
+                                aChangeTree.getOptions());
 
         getCacheLoader()->saveAndNotify(anUpdate);
         CFG_TRACE_INFO_NI("TreeManager: committing done");
@@ -552,35 +552,9 @@ void TreeManager::updateTree(memory::UpdateAccessor& _aAccessToken, TreeChangeLi
 {
     CFG_TRACE_INFO("TreeManager: updating the cache from a changes list");
 
-    // normalize the update tree. This means that we want a tree with one root which has either more than one child
-#if 0 // try without the normalization
-    // or exactly one non-SubtreeChange-child
-    // This prevents us from giving unneccessary items to the session
-    AbsolutePath aRootPath = aChanges.getRootNodePath();
-    SubtreeChange const * pRootChanges = &aChanges.root;
-
-
-    // do the normalizing
-    SubtreeChange::ChildIterator aChildren = pRootChanges->begin();
-    while ((pRootChanges->size() == 1) && (aChildren->ISA(SubtreeChange)))
-    {
-        aRootPath = aRootPath.compose( ONameCreator::createName(*aChildren, pRootChanges) );
-        pRootChanges = static_cast<const SubtreeChange*>(&*aChildren);
-        aChildren = pRootChanges->begin();
-    }
-
-    OChangeActionCounter aChangeCounter;
-    // now count if there are any changes
-    aChangeCounter.handle(*pRootChanges);
-    CFG_TRACE_INFO_NI("cache manager: counted changes for update : additions: %i , removes: %i, value changes: %i", aChangeCounter.nAdds, aChangeCounter.nRemoves, aChangeCounter.nValues);
-
-    if (!aChangeCounter.hasChanges())
-        return;
-#endif
-
     backend::UpdateInstance anUpdate(&_aChanges.root,_aChanges.getRootNodePath());
 
-    CacheRef aCache = m_aCacheList.get(_aChanges.getOptions()->getRequestOptions());
+    CacheRef aCache = m_aCacheList.get(_aChanges.getOptions());
 
     if (!aCache.is())
     {
@@ -598,11 +572,11 @@ void TreeManager::updateTree(memory::UpdateAccessor& _aAccessToken, TreeChangeLi
 // -----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-void TreeManager::releaseSubtree( AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions ) CFG_NOTHROW()
+void TreeManager::releaseSubtree( AbsolutePath const& aSubtreePath, const RequestOptions& _aOptions ) CFG_NOTHROW()
 {
-    CFG_TRACE_INFO("TreeManager: releasing subtree '%s' for user '%s' with locale '%s'", OUSTRING2ASCII(aSubtreePath.toString()), OUSTRING2ASCII(_xOptions->getUser()), OUSTRING2ASCII(_xOptions->getLocale()) );
+    CFG_TRACE_INFO("TreeManager: releasing subtree '%s' for entity '%s' with locale '%s'", OUSTRING2ASCII(aSubtreePath.toString()), OUSTRING2ASCII(_aOptions.getEntity()), OUSTRING2ASCII(_aOptions.getLocale()) );
 
-    CacheRef aCache = m_aCacheList.get(_xOptions->getRequestOptions());
+    CacheRef aCache = m_aCacheList.get(_aOptions);
 
     OSL_ENSURE(aCache.is(),"TreeManager: No local data to release");
 
@@ -611,7 +585,7 @@ void TreeManager::releaseSubtree( AbsolutePath const& aSubtreePath, const vos::O
         CFG_TRACE_INFO_NI("TreeManager: decrementing refcount for subtree '%s'", OUSTRING2ASCII(aSubtreePath.toString()) );
         if (aCache->releaseNode(aSubtreePath) == 0)
         {
-            backend::ComponentRequest aComponentDesc(aSubtreePath.getModuleName(),_xOptions->getRequestOptions());
+            backend::ComponentRequest aComponentDesc(aSubtreePath.getModuleName(),_aOptions);
             BackendCacheRef xBackendCache = maybeGetBackendCache();
             if (xBackendCache.is()) xBackendCache->freeComponent(aComponentDesc);
         }
@@ -619,26 +593,23 @@ void TreeManager::releaseSubtree( AbsolutePath const& aSubtreePath, const vos::O
 }
 
 //-----------------------------------------------------------------------------
-void TreeManager::disposeData(const vos::ORef < OOptions >& _xOptions) CFG_NOTHROW()
+void TreeManager::disposeData(const RequestOptions& _aOptions) CFG_NOTHROW()
 {
     CFG_TRACE_INFO("TreeManager: disposing data by options");
 
-    OSL_ENSURE(!_xOptions.isEmpty(), "TreeManager: Cannot dispose: NULL options are not permitted");
-    if (_xOptions.isEmpty()) return;
-
-    if (_xOptions->getLocale().getLength() != 0)
+    if (_aOptions.getLocale().getLength() != 0)
     {
-        OSL_ENSURE(_xOptions->getUser().getLength() != 0, "TreeManager: Cannot dispose locale without user");
-        CFG_TRACE_INFO_NI( "TreeManager: Disposing data for options: USER='%s' and LOCALE = '%s'",
-                                OUSTRING2ASCII(_xOptions->getUser()), OUSTRING2ASCII(_xOptions->getLocale()) );
+        OSL_ENSURE(_aOptions.getEntity().getLength() != 0, "TreeManager: Cannot dispose locale without user");
+        CFG_TRACE_INFO_NI( "TreeManager: Disposing data for options: ENTITY='%s' and LOCALE = '%s'",
+                                OUSTRING2ASCII(_aOptions.getEntity()), OUSTRING2ASCII(_aOptions.getLocale()) );
 
-        this->disposeOne( _xOptions->getRequestOptions() );
+        this->disposeOne( _aOptions );
     }
-    else if (_xOptions->getUser().getLength() != 0)
+    else if (_aOptions.getEntity().getLength() != 0)
     {
-        CFG_TRACE_INFO_NI( "TreeManager: Disposing data for user: '%s'", OUSTRING2ASCII(_xOptions->getUser()) );
+        CFG_TRACE_INFO_NI( "TreeManager: Disposing data for user: '%s'", OUSTRING2ASCII(_aOptions.getEntity()) );
 
-        this->disposeUser(_xOptions->getRequestOptions() );
+        this->disposeUser(_aOptions );
     }
     else
     {
@@ -654,7 +625,7 @@ void TreeManager::nodeUpdated(TreeChangeList& _rChanges)
     CFG_TRACE_INFO("TreeManager: nodeUpdated");
     try
     {
-        CacheRef aCache = m_aCacheList.get(_rChanges.getOptions()->getRequestOptions());
+        CacheRef aCache = m_aCacheList.get(_rChanges.getOptions());
 
         if (aCache.is())
         {
@@ -698,8 +669,7 @@ void TreeManager::componentCreated(backend::ComponentRequest const & ) CFG_NOTHR
 
 void TreeManager::componentChanged(backend::UpdateRequest  const & _anUpdate)     CFG_NOTHROW()
 {
-    vos::ORef< OOptions > xOptions( new OOptions( _anUpdate.getOptions() ) );
-    TreeChangeList aChanges(xOptions,
+    TreeChangeList aChanges(_anUpdate.getOptions(),
                             _anUpdate.getUpdateRoot().location(),
                             *_anUpdate.getUpdateData(),
                             SubtreeChange::DeepChildCopy() );

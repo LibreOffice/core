@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupaccess.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@
 
 namespace configmgr
 {
-    using namespace configapi;
 
     using uno::Reference;
     using uno::Sequence;
@@ -77,14 +76,14 @@ namespace configmgr
 //------------------------------------------------------------------------------------------------------------------
 OUString SAL_CALL BasicGroupAccess::getHierarchicalName(  ) throw(RuntimeException)
 {
-    return implGetHierarchicalName( getNode() );
+    return configapi::implGetHierarchicalName( getNode() );
 }
 
 //------------------------------------------------------------------------------------------------------------------
 OUString SAL_CALL BasicGroupAccess::composeHierarchicalName( const OUString& sRelativeName )
     throw(css::lang::IllegalArgumentException, css::lang::NoSupportException, RuntimeException)
 {
-    return implComposeHierarchicalName( getNode(), sRelativeName );
+    return configapi::implComposeHierarchicalName( getNode(), sRelativeName );
 }
 
 //------------------------------------------------------------------------------------------------------------------
@@ -95,13 +94,13 @@ OUString SAL_CALL BasicGroupAccess::composeHierarchicalName( const OUString& sRe
 //-----------------------------------------------------------------------------------
 uno::Type SAL_CALL BasicGroupAccess::getElementType(  ) throw(RuntimeException)
 {
-    return implGetElementType( getNode() );
+    return configapi::implGetElementType( getNode() );
 }
 
 //-----------------------------------------------------------------------------------
 sal_Bool SAL_CALL BasicGroupAccess::hasElements(  ) throw(RuntimeException)
 {
-    return implHasElements( getNode() );
+    return configapi::implHasElements( getNode() );
 }
 
 // XExactName
@@ -109,7 +108,7 @@ sal_Bool SAL_CALL BasicGroupAccess::hasElements(  ) throw(RuntimeException)
 
 OUString SAL_CALL BasicGroupAccess::getExactName( const OUString& rApproximateName ) throw(RuntimeException)
 {
-    return implGetExactName( getNode(), rApproximateName);
+    return configapi::implGetExactName( getNode(), rApproximateName);
 }
 
 // XProperty
@@ -117,7 +116,7 @@ OUString SAL_CALL BasicGroupAccess::getExactName( const OUString& rApproximateNa
 
 css::beans::Property SAL_CALL BasicGroupAccess::getAsProperty(  ) throw(uno::RuntimeException)
 {
-    return implGetAsProperty( getNode() );
+    return configapi::implGetAsProperty( getNode() );
 }
 
 // XNameAccess
@@ -125,34 +124,34 @@ css::beans::Property SAL_CALL BasicGroupAccess::getAsProperty(  ) throw(uno::Run
 
 sal_Bool SAL_CALL BasicGroupAccess::hasByName( const OUString& sName ) throw(RuntimeException)
 {
-    return implHasByName( getNode(), sName);
+    return configapi::implHasByName( getNode(), sName);
 }
 
 //-----------------------------------------------------------------------------------
 Any SAL_CALL BasicGroupAccess::getByName( const OUString& sName )
     throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, RuntimeException)
 {
-    return implGetByName( getNode(), sName );
+    return configapi::implGetByName( getNode(), sName );
 }
 
 //-----------------------------------------------------------------------------------
 Sequence< OUString > SAL_CALL BasicGroupAccess::getElementNames(  ) throw( RuntimeException)
 {
-    return implGetElementNames( getNode() );
+    return configapi::implGetElementNames( getNode() );
 }
 
 // XHierarchicalNameAccess
 //-----------------------------------------------------------------------------------
 sal_Bool SAL_CALL BasicGroupAccess::hasByHierarchicalName( const OUString& sName ) throw(RuntimeException)
 {
-    return implHasByHierarchicalName( getNode(), sName);
+    return configapi::implHasByHierarchicalName( getNode(), sName);
 }
 
 //-----------------------------------------------------------------------------------
 Any SAL_CALL BasicGroupAccess::getByHierarchicalName( const OUString& sName )
     throw(css::container::NoSuchElementException, RuntimeException)
 {
-    return implGetByHierarchicalName( getNode(), sName );
+    return configapi::implGetByHierarchicalName( getNode(), sName );
 }
 
 
@@ -162,14 +161,14 @@ Any SAL_CALL BasicGroupAccess::getByHierarchicalName( const OUString& sName )
 void SAL_CALL BasicGroupAccess::addContainerListener( const Reference< css::container::XContainerListener >& xListener )
     throw(RuntimeException)
 {
-    implAddListener( getNode(), xListener );
+    configapi::implAddListener( getNode(), xListener );
 }
 
 //-----------------------------------------------------------------------------------
 void SAL_CALL BasicGroupAccess::removeContainerListener( const Reference< css::container::XContainerListener >& xListener )
     throw(RuntimeException)
 {
-    implRemoveListener( getNode(), xListener );
+    configapi::implRemoveListener( getNode(), xListener );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessimpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,14 +80,17 @@
 #ifndef CONFIGMGR_CONFIGNOTIFIER_HXX_
 #include "confignotifier.hxx"
 #endif
-#ifndef CONFIGMGR_API_ENCODENAME_HXX_
-#include "encodename.hxx"
-#endif
 #ifndef CONFIGMGR_API_PROPERTYINFOIMPL_HXX_
 #include "propertyinfohelper.hxx"
 #endif
 #ifndef CONFIGMGR_TREEITERATORS_HXX_
 #include "treeiterators.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGURATION_ATTRIBUTES_HXX_
+#include "attributes.hxx"
+#endif
+#ifndef CONFIGMGR_API_APITYPES_HXX_
+#include "apitypes.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
@@ -132,7 +135,7 @@ namespace configmgr
         using configuration::Name;
         using configuration::AbsolutePath;
         using configuration::RelativePath;
-        using configuration::Attributes;
+        using node::Attributes;
 
 //-----------------------------------------------------------------------------------
 // Constructors
@@ -535,7 +538,7 @@ OUString implGetExactName(NodeSetInfoAccess& rNode, const OUString& rApproximate
     return rApproximateName;
 }
 
-// XNameAccess
+// XProperty
 //-----------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------
@@ -567,6 +570,87 @@ beans::Property implGetAsProperty(NodeAccess& rNode)
     // unreachable, but still there to make some compilers happy
     OSL_ASSERT(!"Unreachable code");
     return Property();
+}
+// XPropertySetInfo
+//-----------------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------------
+uno::Sequence< css::beans::Property > implGetProperties( NodeAccess& rNode ) throw (uno::RuntimeException)
+{
+    CollectPropertyInfo aCollect;
+
+    try
+    {
+        GuardedNodeDataAccess lock( rNode );
+
+        lock.getTree().dispatchToChildren(lock.getNode(), aCollect);
+    }
+    catch (configuration::Exception& ex)
+    {
+        ExceptionMapper e(ex);
+        e.setContext( rNode.getUnoInstance() );
+        e.unhandled();
+    }
+
+    return makeSequence( aCollect.list() );
+}
+
+//-----------------------------------------------------------------------------------
+css::beans::Property implGetPropertyByName( NodeAccess& rNode, const OUString& aName )
+    throw (css::beans::UnknownPropertyException, uno::RuntimeException)
+{
+    try
+    {
+        GuardedNodeDataAccess lock( rNode );
+
+        Tree aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
+
+        Name aChildName = configuration::validateChildOrElementName(aName,aTree,aNode);
+
+        AnyNodeRef aChildNode = configuration::getChildOrElement(aTree,aNode, aChildName);
+
+        if (!aChildNode.isValid())
+        {
+            OSL_ENSURE(!configuration::hasChildOrElement(aTree,aNode,aChildName),"ERROR: Configuration: Existing Property not found by implementation");
+
+            OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Property. Property '") );
+            sMessage += aName;
+            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' could not be found in ")  );
+            sMessage += aTree.getAbsolutePath(aNode).toString();
+
+            Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+            throw css::beans::UnknownPropertyException( sMessage, xContext );
+        }
+
+        Attributes  aChildAttributes = aTree.getAttributes(aChildNode);
+        uno::Type   aApiType = aChildNode.isNode() ? getUnoInterfaceType() : aTree.getUnoType(aChildNode.toValue());
+
+        return helperMakeProperty( aChildName,aChildAttributes,aApiType, aTree.hasNodeDefault(aChildNode) );
+    }
+    catch (configuration::InvalidName& ex)
+    {
+        ExceptionMapper e(ex);
+        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+        throw css::beans::UnknownPropertyException( e.message(), xContext );
+    }
+    catch (configuration::Exception& ex)
+    {
+        ExceptionMapper e(ex);
+        e.setContext( rNode.getUnoInstance() );
+        e.unhandled();
+    }
+
+    // unreachable, but still there to make some compilers happy
+    OSL_ASSERT(!"Unreachable code");
+    return css::beans::Property();
+}
+
+
+//-----------------------------------------------------------------------------------
+sal_Bool implHasPropertyByName( NodeAccess& rNode, const OUString& Name ) throw (uno::RuntimeException)
+{
+    return implHasByName(rNode, Name);
 }
 
 // XNameAccess
@@ -831,48 +915,6 @@ OUString SAL_CALL implGetElementTemplateName(NodeSetInfoAccess& rNode)
 {
     GuardedNodeData<NodeSetInfoAccess> lock(rNode);
     return rNode.getElementInfo(lock.getDataAccessor()).getTemplateInfo().getTemplatePathString();
-}
-
-// XStringEscape
-//-----------------------------------------------------------------------------------
-OUString SAL_CALL implEscapeString(NodeAccess& rNode, const OUString& aString)
-    throw(css::lang::IllegalArgumentException, RuntimeException)
-{
-    OUString sRet;
-    try
-    {
-        sRet = escaped_name::escapeString(aString,0,1);
-    }
-    catch (css::lang::IllegalArgumentException& ex)
-    {
-        ex.Context = rNode.getUnoInstance();
-        throw;
-    }
-    catch (uno::Exception& ex)
-    {
-        throw RuntimeException(ex.Message, rNode.getUnoInstance());
-    }
-    return sRet;
-}
-
-OUString SAL_CALL implUnescapeString(NodeAccess& rNode, const OUString& aEscapedString)
-    throw(css::lang::IllegalArgumentException, RuntimeException)
-{
-    OUString sRet;
-    try
-    {
-        sRet = escaped_name::unescapeString(aEscapedString,0,1);
-    }
-    catch (css::lang::IllegalArgumentException& ex)
-    {
-        ex.Context = rNode.getUnoInstance();
-        throw;
-    }
-    catch (uno::Exception& ex)
-    {
-        throw RuntimeException(ex.Message, rNode.getUnoInstance());
-    }
-    return sRet;
 }
 
 //-----------------------------------------------------------------------------------

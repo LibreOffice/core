@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,6 @@
 #ifndef CONFIGMGR_API_ELEMENTIMPL_HXX_
 #define CONFIGMGR_API_ELEMENTIMPL_HXX_
 
-#ifndef CONFIGMGR_APITYPES_HXX_
-#include "apitypes.hxx"
-#endif
-
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
 #endif
@@ -86,6 +82,7 @@ namespace configmgr
 {
     namespace css = ::com::sun::star;
     namespace uno = ::com::sun::star::uno;
+    using rtl::OUString;
 
     /* implementations of the interfaces supported by a (parent) node
         within the configuration tree.

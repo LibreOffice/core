@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 09:08:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 #ifndef CONFIGMGR_DISPOSETIMER_HXX
 #define CONFIGMGR_DISPOSETIMER_HXX
 
-#ifndef CONFIGMGR_API_APITYPES_HXX_
-#include "apitypes.hxx"
-#endif
 #ifndef CONFIGMGR_TIMESTAMP_HXX
 #include "timestamp.hxx"
 #endif

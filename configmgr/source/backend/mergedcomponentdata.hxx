@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergedcomponentdata.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 10:56:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,17 +99,17 @@ namespace configmgr
 
             bool hasSchema()    const;
             bool hasTemplates() const;
-            bool hasTemplate(TemplateIdentifier const & _aTemplateName) const;
+            bool hasTemplate(OUString const & _aTemplateName) const;
 
             OUString getTemplateAccessor (TemplateIdentifier const & _aTemplateName) const;
 
             ISubtree const * getSchemaTree() const;
-            ISubtree const * findTemplate(TemplateIdentifier const & _aTemplateName) const;
+            ISubtree const * findTemplate(OUString const & _aTemplateName) const;
 
             ISubtree * getSchemaTree()      { return m_pSchemaTree.get(); }
             ISubtree * getTemplatesTree()   { return m_pTemplatesTree.get(); }
 
-            std::auto_ptr<INode> instantiateTemplate(OUString const & _aName, TemplateIdentifier const & _aTemplateName) const;
+            std::auto_ptr<INode> instantiateTemplate(OUString const & _aName, OUString const & _aTemplateName) const;
 
             void clear();
 
@@ -118,7 +118,7 @@ namespace configmgr
 
             std::auto_ptr<ISubtree> extractSchemaTree();
             std::auto_ptr<ISubtree> extractTemplatesTree();
-            std::auto_ptr<INode>    extractTemplateNode(TemplateIdentifier const & _aTemplateName);
+            std::auto_ptr<INode>    extractTemplateNode(OUString const & _aTemplateName);
         private:
             std::auto_ptr<ISubtree> m_pSchemaTree;
             std::auto_ptr<ISubtree> m_pTemplatesTree;

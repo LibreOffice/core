@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localizedtreeactions.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:27:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,7 @@ static std::auto_ptr<INode> impl_cloneExpandedForLocale(INode const* _pNode, OUS
 //--------------------------------------------------------------------------
 
 // convert to the given locale format, assuming the original representation was expanded
-static data::TreeSegment old_cloneExpandedForLocale(OUString const& _sName, INode const* _pNode, OUString const& _sLocale, bool bMakeWritable)
+static data::TreeSegment old_cloneExpandedForLocale(OUString const& _sName, INode const* _pNode, OUString const& _sLocale)
 {
     using data::TreeSegment;
 
@@ -345,9 +345,6 @@ static data::TreeSegment old_cloneExpandedForLocale(OUString const& _sName, INod
     else
         aResult = impl_cloneExpandedForLocale(_pNode,_sLocale);
 
-    if (bMakeWritable && aResult.get() != NULL)
-        forceWritable(*aResult);
-
     return TreeSegment::createNew(_sName,aResult);
 }
 //--------------------------------------------------------------------------
@@ -360,17 +357,17 @@ data::TreeSegment cloneForLocale(INode const* _pNode, OUString const& _sLocale)
                 "WARNING: This function doesn't work from single values to  expanded sets so far");
 
     OUString sName = _pNode ? _pNode->getName() : OUString();
-    return old_cloneExpandedForLocale(sName, _pNode,_sLocale,false);
+    return old_cloneExpandedForLocale(sName, _pNode,_sLocale);
 }
 //--------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
 //--------------------------------------------------------------------------
-data::TreeSegment cloneExpandedForLocale(data::TreeAccessor const & _aTree, OUString const& _sLocale, bool bMakeWritable)
+data::TreeSegment cloneExpandedForLocale(data::TreeAccessor const & _aTree, OUString const& _sLocale)
 {
     std::auto_ptr<INode> aOldTree = data::convertTree(_aTree,true);
 
-    return old_cloneExpandedForLocale(_aTree.getName().toString(), aOldTree.get(),_sLocale,bMakeWritable);
+    return old_cloneExpandedForLocale(_aTree.getName().toString(), aOldTree.get(),_sLocale);
 }
 // -----------------------------------------------------------------------------
 //--------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: jb $ $Date: 2002-12-06 13:08:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,17 @@
 #ifndef CONFIGMGR_API_PROVIDERIMPL2_HXX_
 #include "confproviderimpl2.hxx"
 #endif
+#ifndef CONFIGMGR_API_FACTORY_HXX_
+#include "confapifactory.hxx"
+#endif
 #ifndef CONFIGMGR_BOOTSTRAP_HXX_
 #include "bootstrap.hxx"
+#endif
+#ifndef CONFIGMGR_BOOTSTRAPCONTEXT_HXX_
+#include "bootstrapcontext.hxx"
+#endif
+#ifndef CONFIGMGR_WRAPEXCEPTION_HXX
+#include "wrapexception.hxx"
 #endif
 #ifndef _CONFIGMGR_TRACER_HXX_
 #include "tracer.hxx"
@@ -79,8 +88,9 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
-#ifndef __SGI_STL_ALGORITHM
+#ifndef INCLUDED_ALGORITHM
 #include <algorithm>
+#define INCLUDED_ALGORITHM
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
@@ -107,34 +117,63 @@ namespace configmgr
 
     namespace
     {
+    //------------------------------------------------------------------------
+        AsciiServiceName const aConfigProviderServices[] =
+        {
+            "com.sun.star.configuration.ConfigurationProvider",
+            0
+        };
+        AsciiServiceName const aAdminProviderServices[] =
+        {
+            "com.sun.star.configuration.AdministrationProvider",
+            0
+        };
+    //------------------------------------------------------------------------
+
+        ServiceImplementationInfo const aConfigProviderInfo =
+        {
+            "com.sun.star.comp.configuration.ConfigurationProvider",
+            aConfigProviderServices,
+            0
+        };
+        ServiceImplementationInfo const aAdminProviderInfo =
+        {
+            "com.sun.star.comp.configuration.AdministrationProvider",
+            aAdminProviderServices,
+            aConfigProviderServices
+        };
+    //------------------------------------------------------------------------
+
+        AsciiServiceName const
+            aDefaultProviderServiceAndImplName  = A_DefaultProviderServiceAndImplName;
+
+    //------------------------------------------------------------------------
+
+        AsciiServiceName const aDefaultProviderServices[] =
+        {
+            aDefaultProviderServiceAndImplName,
+            0
+        };
+    //------------------------------------------------------------------------
+
+        ServiceRegistrationInfo const aDefaultProviderInfo =
+        {
+            aDefaultProviderServiceAndImplName,
+            aDefaultProviderServices
+        };
+        SingletonRegistrationInfo const aDefaultProviderSingletonInfo =
+        {
+            A_DefaultProviderSingletonName,
+            aDefaultProviderServiceAndImplName,
+            aDefaultProviderServiceAndImplName,
+            0
+        };
+    //------------------------------------------------------------------------
         typedef uno::Reference< uno::XInterface > (OConfigurationProviderImpl::*CreatorFunc)(const uno::Sequence< uno::Any >& aArguments);
         struct ServiceCreationInfo
         {
             ServiceRegistrationInfo const* info;
             CreatorFunc create;
-        };
-
-        AsciiServiceName const aProviderServices[] =
-        {
-            "com.sun.star.configuration.ConfigurationProvider",
-            0
-        };
-        AsciiServiceName const aLocalAdminProviderServices[] =
-        {
-            "com.sun.star.configuration.AdministrationProvider",
-            0
-        };
-        ServiceImplementationInfo const aProviderInfo =
-        {
-            "com.sun.star.comp.configuration.ConfigurationProvider",
-            aProviderServices,
-            0
-        };
-        ServiceImplementationInfo const aLocalAdminProviderInfo =
-        {
-            "com.sun.star.comp.configuration.LocalAdministrationProvider",
-            aLocalAdminProviderServices,
-            aProviderServices
         };
 
         static sal_Int32 getCreateServiceDataCount()
@@ -153,6 +192,7 @@ namespace configmgr
                 "getCreateServiceData : inconsistent data !");
             return createServiceData;
         }
+    //------------------------------------------------------------------------
     }
 
     static ServiceCreationInfo const* findCreationInfo( const OUString& aServiceSpecifier )
@@ -192,52 +232,95 @@ namespace configmgr
     //= OConfigurationProvider
     //=============================================================================
     // service info export
-    const ServiceRegistrationInfo* getConfigurationProviderServices()
+    const ServiceRegistrationInfo* getConfigurationProviderServiceInfo()
     {
-        return getRegistrationInfo(&aProviderInfo);
+        return getRegistrationInfo(&aConfigProviderInfo);
     }
 
-    const ServiceRegistrationInfo* getLocalAdminProviderServices()
+    const ServiceRegistrationInfo* getAdminProviderServiceInfo()
     {
-        return getRegistrationInfo(&aLocalAdminProviderInfo);
+        return getRegistrationInfo(&aAdminProviderInfo);
+    }
+
+    const ServiceRegistrationInfo* getDefaultProviderServiceInfo()
+    {
+        return &aDefaultProviderInfo;
+    }
+
+    const SingletonRegistrationInfo* getDefaultProviderSingletonInfo()
+    {
+        return &aDefaultProviderSingletonInfo;
     }
 
     //-----------------------------------------------------------------------------
-    // provider instantiation
-    uno::Reference< uno::XInterface > SAL_CALL instantiateConfigProvider( uno::Reference< lang::XMultiServiceFactory > const& rServiceManager, ConnectionSettings const& _aSettings )
+    uno::Reference<uno::XInterface> SAL_CALL
+        getDefaultConfigProviderSingleton( CreationContext const& xContext )
     {
-        OConfigurationProvider* pNewProvider = new OConfigurationProvider(rServiceManager,&aProviderInfo);
+        OSL_ENSURE( xContext.is(), "ERROR: NULL context has no singletons" );
+
+        UnoContextTunnel aTunnel;
+        aTunnel.passthru( xContext );
+
+        uno::Reference<uno::XInterface> xResult;
+
+        if (xContext.is())
+        try
+        {
+            OUString aSingletonName = SINGLETON(A_DefaultProviderSingletonName);
+            uno::Any aResult = xContext->getValueByName(aSingletonName);
+            aResult >>= xResult;
+        }
+        catch (uno::Exception & )
+        {
+            // to do: really use the tunneled failure when that is set properly
+            if ( aTunnel.recoverFailure(true).hasValue() )
+            {
+                // have a failure, but can't recover it
+                // -> try to regenerate
+                instantiateDefaultProvider(xContext);
+
+                OSL_ENSURE(false, "Cannot recreate configuration backend instantiation failure - using generic error");
+            }
+            // cannot recover any failure
+            throw;
+        }
+
+        return xResult;
+    }
+    // ------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------
+    #define TUNNEL_ALL_EXCEPTIONS()     \
+        WRAP_CONFIGBACKEND_CREATION_EXCEPTIONS1( UnoContextTunnel::tunnelFailure, true)
+
+    // ----------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+
+    uno::Reference< uno::XInterface > SAL_CALL instantiateDefaultProvider( OProvider::CreationContext const & xTargetContext )
+    {
+        CreationContext xContext = UnoContextTunnel::recoverContext(xTargetContext);
+
+        ServiceImplementationInfo const * pProviderInfo =
+            ContextReader::testAdminService(xContext,true) ? &aAdminProviderInfo : &aConfigProviderInfo;
+
+        OConfigurationProvider* pNewProvider = new OConfigurationProvider(xContext,pProviderInfo);
         uno::Reference< lang::XMultiServiceFactory > aRet( pNewProvider );
 
-        ::rtl::OUString const sService(RTL_CONSTASCII_USTRINGPARAM("configuration"));
-
-        ConnectionSettings aSettings(_aSettings);
-        aSettings.setUserSession(sService);
-
-        pNewProvider->connect(aSettings);
+        try
+        {
+            pNewProvider->connect();
+        }
+        TUNNEL_ALL_EXCEPTIONS()
 
         return  aRet;
     }
 
-    uno::Reference< uno::XInterface > SAL_CALL instantiateLocalAdminProvider( uno::Reference< lang::XMultiServiceFactory > const& rServiceManager, ConnectionSettings const& _aSettings )
-    {
-        OConfigurationProvider* pNewProvider = new OConfigurationProvider(rServiceManager,&aLocalAdminProviderInfo);
-        uno::Reference< lang::XMultiServiceFactory > aRet( pNewProvider );
-
-        ConnectionSettings aSettings(_aSettings);
-        aSettings.setAdminSession();
-
-        pNewProvider->connect(aSettings);
-
-        return  aRet;
-    }
-
+    //-----------------------------------------------------------------------------
     //-----------------------------------------------------------------------------
     OConfigurationProvider::OConfigurationProvider(
-        const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory,
+        CreationContext const & xContext,
         const ServiceImplementationInfo* pServices
         )
-                           :OProvider(_xServiceFactory,pServices)
+                           :OProvider(xContext,pServices)
                            ,m_pImpl(NULL)
     {
         registerProperty(rtl::OUString::createFromAscii("PrefetchNodes"),   ID_PREFETCH, 0,&m_aPrefetchNodes, ::getCppuType(static_cast< uno::Sequence< rtl::OUString > const * >(0) ));
@@ -250,13 +333,13 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------
-    void OConfigurationProvider::connect(const ConnectionSettings& _rSettings) throw (uno::Exception)
+    void OConfigurationProvider::connect() throw (uno::Exception)
     {
         OSL_ENSURE( m_pImpl == NULL, "Error: Configuration Provider already is connected");
 
-        std::auto_ptr<OConfigurationProviderImpl> pNewImpl( new OConfigurationProviderImpl(this, m_xServiceFactory) );
+        std::auto_ptr<OConfigurationProviderImpl> pNewImpl( new OConfigurationProviderImpl(this, m_xContext) );
 
-        implConnect(*pNewImpl,_rSettings);
+        implConnect(*pNewImpl,ContextReader(m_xContext));
 
         m_pImpl = pNewImpl.release();
     }
@@ -380,13 +463,13 @@ namespace configmgr
         uno::Sequence< OUString > aNodeList;
         rValue >>= aNodeList;
 
-        ::vos::ORef<OOptions> xOptions(new OOptions(m_pImpl->getDefaultOptions()));
+        RequestOptions const aOptions = m_pImpl->getDefaultOptions();
 
         for (sal_Int32 i = 0; i < aNodeList.getLength(); i++)
         {
             using namespace configuration;
             AbsolutePath aModulePath = AbsolutePath::makeModulePath(aNodeList[i], AbsolutePath::NoValidate());
-            m_pImpl->fetchSubtree(aModulePath , xOptions);
+            m_pImpl->fetchSubtree(aModulePath , aOptions);
         }
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configexcept.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:40:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,26 @@
 #ifndef CONFIGMGR_CONFIGEXCEPT_HXX_
 #define CONFIGMGR_CONFIGEXCEPT_HXX_
 
-#include "apitypes.hxx"
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+#ifndef _RTL_STRING_HXX_
 #include <rtl/string.hxx>
+#endif
 
+#ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
 #include <com/sun/star/uno/Exception.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#endif
 
 namespace configmgr
 {
+//-------------------------------------------------------------------------
+    namespace uno  = ::com::sun::star::uno;
+    namespace lang = ::com::sun::star::lang;
+    using rtl::OUString;
 //-----------------------------------------------------------------------------
     namespace configuration
     {
@@ -161,7 +173,7 @@ namespace configmgr
             OUString message() const;
             uno::Reference<uno::XInterface> context() const;
 
-            void illegalArgument(sal_Int16 nArgument = -1) throw(css::lang::IllegalArgumentException);
+            void illegalArgument(sal_Int16 nArgument = -1) throw(lang::IllegalArgumentException);
             void unhandled() throw(uno::RuntimeException);
         };
     //-------------------------------------------------------------------------

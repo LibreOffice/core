@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treechangefactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #include "change.hxx"
 #endif
 
+#ifndef CONFIGMGR_CONFIGPATH_HXX_
+#include "configpath.hxx"
+#endif
 
 namespace configmgr
 {
@@ -109,7 +112,7 @@ OTreeChangeFactory& getDefaultTreeChangeFactory()
 //= ValueNodes ============================================================
 std::auto_ptr<ValueChange> OTreeChangeFactory::createValueChange(
                                     Name const& _aName,
-                                    configuration::Attributes _aAttrs,
+                                    node::Attributes _aAttrs,
                                     ValueChange::Mode _eMode,
                                     uno::Any const& _aNewValue,
                                     uno::Any const& _aOldValue
@@ -166,14 +169,14 @@ std::auto_ptr<SubtreeChange> OTreeChangeFactory::createDummyChange(
 
     if (_aElementTypeName.isEmpty())
     {
-        pResult.reset( new SubtreeChange(_aName.toString(),configuration::Attributes()) );
+        pResult.reset( new SubtreeChange(_aName.toString(),node::Attributes()) );
     }
     else
     {
         pResult.reset( new SubtreeChange(_aName.toString(),
                                          _aElementTypeName.toString(),
                                          getDummySetElementModule().toString(),
-                                         configuration::Attributes()) );
+                                         node::Attributes()) );
     }
     return pResult;
 }
@@ -181,7 +184,7 @@ std::auto_ptr<SubtreeChange> OTreeChangeFactory::createDummyChange(
 //-----------------------------------------------
 std::auto_ptr<SubtreeChange> OTreeChangeFactory::createGroupNodeChange(
                                 Name const& _aName,
-                                configuration::Attributes _aAttrs,
+                                node::Attributes _aAttrs,
                                 bool _bToDefault)
 {
     return std::auto_ptr<SubtreeChange>(new SubtreeChange(_aName,_aAttrs,_bToDefault));
@@ -192,7 +195,7 @@ std::auto_ptr<SubtreeChange> OTreeChangeFactory::createSetNodeChange(
                                 Name const& _aName,
                                 Name const& _aTemplateName,
                                 Name const& _aTemplateModule,
-                                configuration::Attributes _aAttrs,
+                                node::Attributes _aAttrs,
                                 bool _bToDefault)
 {
     return std::auto_ptr<SubtreeChange>(new SubtreeChange(_aName,

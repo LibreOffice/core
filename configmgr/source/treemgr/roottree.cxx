@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottree.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,9 @@
 #ifndef CONFIGMGR_CONFIGCHANGEINFO_HXX_
 #include "nodechangeinfo.hxx"
 #endif
-#ifndef CONFIGMGR_CMTREEMODEL_HXX
-#include "cmtreemodel.hxx"
+
+#ifndef CONFIGMGR_TREECHANGELIST_HXX
+#include "treechangelist.hxx"
 #endif
 
 namespace configmgr

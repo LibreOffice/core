@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treenodefactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-16 17:01:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,32 +91,32 @@ namespace configmgr
         std::auto_ptr<ValueNode> createValueNode(
                                     rtl::OUString const& aName,
                                     uno::Any const& aValue,
-                                    configuration::Attributes _aAttrs);
+                                    node::Attributes _aAttrs);
 
         //-----------------------------------------------
         std::auto_ptr<ValueNode> createValueNode(
                                     rtl::OUString const& aName,
                                     uno::Any const& aValue,
                                     uno::Any const& aDefault,
-                                    configuration::Attributes _aAttrs);
+                                    node::Attributes _aAttrs);
 
         //-----------------------------------------------
         std::auto_ptr<ValueNode>  createNullValueNode(
                                     rtl::OUString const& aName,
                                     uno::Type const& aType,
-                                    configuration::Attributes _aAttrs);
+                                    node::Attributes _aAttrs);
 
     //= ISubtree ============================================================
         std::auto_ptr<ISubtree> createGroupNode(
                                     rtl::OUString const& aName,
-                                    configuration::Attributes _aAttrs);
+                                    node::Attributes _aAttrs);
 
         //-----------------------------------------------
         std::auto_ptr<ISubtree> createSetNode(
                                     rtl::OUString const& aName,
                                     rtl::OUString const& _rTemplateName,
                                     rtl::OUString const& _rTemplateModule,
-                                    configuration::Attributes _aAttrs);
+                                    node::Attributes _aAttrs);
         //-----------------------------------------------
 
     //= special case: Dummy ISubtree ============================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatehandler.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-28 12:49:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,15 +87,15 @@ namespace configmgr
 // -----------------------------------------------------------------------------
 
 uno::Reference< uno::XInterface > SAL_CALL instantiateUpdateMerger
-( CreationContext const& rServiceManager )
+( CreationContext const& xContext )
 {
-    return * new LayerUpdateHandler( rServiceManager );
+    return * new LayerUpdateHandler( xContext );
 }
 
 // -----------------------------------------------------------------------------
 
-LayerUpdateHandler::LayerUpdateHandler(CreationArg _xServiceFactory)
-: UpdateService(_xServiceFactory)
+LayerUpdateHandler::LayerUpdateHandler(CreationArg _xContext)
+: UpdateService(_xContext)
 , m_aBuilder()
 {
 }

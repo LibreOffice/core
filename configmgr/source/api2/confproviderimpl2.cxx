@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:21:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,8 @@ namespace configmgr
     //= OConfigurationProviderImpl
     //=============================================================================
     //-----------------------------------------------------------------------------------
-    OConfigurationProviderImpl::OConfigurationProviderImpl(OConfigurationProvider* _pProvider, const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory)
-                               :OProviderImpl(_pProvider, _xServiceFactory)
+    OConfigurationProviderImpl::OConfigurationProviderImpl(OConfigurationProvider* _pProvider, CreationContext const & xContext)
+                               :OProviderImpl(_pProvider, xContext)
     {
     }
     //--------------------------------------------------------------------------
@@ -120,46 +120,18 @@ namespace configmgr
         // extract the args
         OUString sPath;
         sal_Int32 nLevels;
-        vos::ORef<OOptions> xOptions = new OOptions(getDefaultOptions());
 
-        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, nLevels, xOptions);
+        RequestOptions aOptions = getDefaultOptions();
+
+        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, nLevels, aOptions);
 
         CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sPath));
         CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
 
-        if (!xOptions->canUseCache()) CFG_TRACE_INFO_NI("config provider: Ignoring cache for request");
-
-        OUString sUser = xOptions->getUser();
-        if (sUser.getLength())
-        {
-            if (xOptions->getDefaultUser() == sUser)
-            {
-                OSL_ASSERT(xOptions->isForSessionUser());
-                OSL_ASSERT(xOptions->getUser() == sUser);
-                // respecified the actual user
-                CFG_TRACE_WARNING_NI("config provider: User should not be specified again when creating an Access");
-                OSL_ENSURE(false,"config provider: User should not be specified again when creating an Access");
-            }
-            else if (!xOptions->getDefaultUser().getLength() )
-            {
-                // have no default user - cannot tell whether the argument is the wrong one
-                CFG_TRACE_WARNING_NI("config provider: No user should be specified, when creating an Access - user parameter is ignored");
-                OSL_ENSURE(false,"config provider: No user should be specified, when creating an Access - user parameter is ignored");
-            }
-            else
-            {
-                // specified a different user
-                CFG_TRACE_ERROR_NI("config provider: Cannot access foreign user data");
-                throw lang::IllegalArgumentException(OUString::createFromAscii("config provider: Cannot access foreign user data"),this->getProviderInstance(), -1);
-            }
-            // user should always be the default user!
-            xOptions->setUser(xOptions->getDefaultUser());
-        }
-
         // create the access object
         uno::Reference< uno::XInterface > xReturn;
 
-        NodeElement* pElement = buildReadAccess(sPath, xOptions, nLevels);
+        NodeElement* pElement = buildReadAccess(sPath, aOptions, nLevels);
         if (pElement != 0)
         {
             xReturn = pElement->getUnoInstance();
@@ -180,53 +152,18 @@ namespace configmgr
         // extract the args
         OUString sPath;
         sal_Int32 nLevels;
-        vos::ORef<OOptions> xOptions = new OOptions(getDefaultOptions());
 
-        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, nLevels, xOptions);
+        RequestOptions aOptions = getDefaultOptions();
+
+        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, nLevels, aOptions);
 
         CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sPath));
         CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
 
-        if (!xOptions->canUseCache())
-        {
-            CFG_TRACE_INFO_NI("config provider: Ignoring cache for request");
-            OSL_ENSURE( !xOptions->getLazyWrite(), "WARNING: Async writing is enabled for non-cached node. Results may be unexpected.");
-            if (xOptions->getLazyWrite())
-                CFG_TRACE_WARNING_NI("config provider: Async writing is enabled for non-cached node. Results may be unexpected.");
-        }
-
-
-        OUString sUser = xOptions->getUser();
-        if (sUser.getLength())
-        {
-            if (xOptions->getDefaultUser() == sUser)
-            {
-                OSL_ASSERT(xOptions->isForSessionUser());
-                OSL_ASSERT(xOptions->getUser() == sUser);
-                // respecified the actual user
-                CFG_TRACE_WARNING_NI("config provider: User should not be specified again when creating an Access");
-                OSL_ENSURE(false,"config provider: User should not be specified again when creating an Access");
-            }
-            else if (!xOptions->getDefaultUser().getLength() )
-            {
-                // have no default user - cannot tell whether the argument is the wrong one
-                CFG_TRACE_WARNING_NI("config provider: No user should be specified, when creating an Access - user parameter is ignored");
-                OSL_ENSURE(false,"config provider: No user should be specified, when creating an Access - user parameter is ignored");
-            }
-            else
-            {
-                // specified a different user
-                CFG_TRACE_ERROR_NI("config provider: Cannot access foreign user data");
-                throw lang::IllegalArgumentException(OUString::createFromAscii("config provider: Cannot access foreign user data"),this->getProviderInstance(), -1);
-            }
-            // user should always be the default user!
-            xOptions->setUser(xOptions->getDefaultUser());
-        }
-
         // create the access object
         uno::Reference< uno::XInterface > xReturn;
 
-        NodeElement* pElement = buildUpdateAccess(sPath, xOptions, nLevels);
+        NodeElement* pElement = buildUpdateAccess(sPath, aOptions, nLevels);
         if (pElement != 0)
         {
             xReturn = pElement->getUnoInstance();

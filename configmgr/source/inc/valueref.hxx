@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueref.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,12 @@
 
 namespace configmgr
 {
+    namespace node { struct Attributes; }
+
     namespace configuration
     {
     //-------------------------------------------------------------------------
         class Name;
-        struct Attributes;
     //-------------------------------------------------------------------------
 
         namespace argument { struct NoValidate; }

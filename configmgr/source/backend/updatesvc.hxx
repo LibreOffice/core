@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatesvc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-28 12:49:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #include <cppuhelper/implbase3.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
@@ -107,10 +110,10 @@ namespace configmgr
                                         >
         {
         public:
-            typedef uno::Reference< lang::XMultiServiceFactory > const & CreationArg;
+            typedef uno::Reference< uno::XComponentContext > const & CreationArg;
 
             explicit
-            UpdateService(CreationArg _xServiceFactory);
+            UpdateService(CreationArg _xContext);
 
             // XInitialization
             virtual void SAL_CALL

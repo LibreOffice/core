@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementaccess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-05 10:05:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,15 +100,12 @@
 #include <cppuhelper/implbase6.hxx>
 #endif
 
-#ifndef CONFIGMGR_APITYPES_HXX_
-#include "apitypes.hxx"
-#endif
-
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
     namespace css = ::com::sun::star;
     namespace uno = ::com::sun::star::uno;
+    using rtl::OUString;
 
 //-----------------------------------------------------------------------------
     namespace configapi

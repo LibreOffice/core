@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treechangelist.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,8 @@
 #ifndef CONFIGMGR_CONFIGPATH_HXX_
 #include "configpath.hxx"
 #endif
-#ifndef CONFIGMGR_MISC_OPTIONS_HXX_
-#include <options.hxx>
-#endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
+#ifndef CONFIGMGR_MISC_REQUESTOPTIONS_HXX_
+#include "requestoptions.hxx"
 #endif
 
 namespace configmgr
@@ -93,13 +90,13 @@ namespace configmgr
     {
         typedef configuration::AbsolutePath   AbsolutePath;
         typedef configuration::Name           Name;
-        typedef configuration::Attributes     NodeAttributes;
+        typedef node::Attributes              NodeAttributes;
 
-        TreeChangeList(const vos::ORef < OOptions >& _xOptions,
+        TreeChangeList(const RequestOptions& _aOptions,
                         const AbsolutePath& _rRootPath,
                         const SubtreeChange& _aSubtree,
                         SubtreeChange::DeepChildCopy _doDeepCopy)
-                : m_xOptions(_xOptions),
+                : m_aOptions(_aOptions),
                   m_aLocation(_rRootPath),
                   root(_aSubtree,_doDeepCopy)
             {}
@@ -107,10 +104,10 @@ namespace configmgr
         /** ctor
         @param      _rRootPath      path to the root of the whole to-be-updated subtree
         */
-        TreeChangeList( const vos::ORef < OOptions >& _xOptions,
+        TreeChangeList( const RequestOptions& _aOptions,
                         const AbsolutePath& _rRootPath,
                         const NodeAttributes& _rAttr = NodeAttributes())
-                : m_xOptions(_xOptions)
+                : m_aOptions(_aOptions)
                 , m_aLocation(_rRootPath)
                 , root(_rRootPath.getLocalName().getName().toString(), _rAttr)
         {}
@@ -118,35 +115,21 @@ namespace configmgr
         /** ctor
         @param      _rLocalName         relative path within the to-be-updated subtree
         */
-        TreeChangeList( const vos::ORef < OOptions >& _xOptions,
+        TreeChangeList( const RequestOptions& _aOptions,
                         const AbsolutePath& _rRootPath,
                         const Name& _rChildTemplateName,
                         const Name& _rChildTemplateModule,
                         const NodeAttributes& _rAttr = NodeAttributes())
-                : m_xOptions(_xOptions)
+                : m_aOptions(_aOptions)
                 , m_aLocation(_rRootPath)
                 , root(_rRootPath.getLocalName().getName().toString(), _rChildTemplateName.toString(), _rChildTemplateModule.toString(), _rAttr)
         {}
 
         /** ctor
-        @param      _rPathToRoot        path to the root of the whole to-be-updated subtree
-        @param      _rLocalName         relative path within the to-be-updated subtree
-        TreeChangeList( const vos::ORef < OOptions >& _xOptions,
-                        const AbsolutePath& _rRootPath,
-                        const ISubtree& _rTree)
-                : m_xOptions(_xOptions)
-                , m_aLocation(_rRootPath)
-                , root(_rTree)
-        {
-            OSL_ENSURE(false, "Test only, because deep copy of subtreechange is very expensive.");
-        }
-        */
-
-        /** ctor
         @param      _rTreeList          list to initialize the path, no childs are copied
         */
         TreeChangeList( const TreeChangeList& _rTree, SubtreeChange::NoChildCopy _rNoCopy)
-            : m_xOptions(_rTree.m_xOptions)
+            : m_aOptions(_rTree.m_aOptions)
             , m_aLocation(_rTree.m_aLocation)
             , root(_rTree.root, _rNoCopy)
         {}
@@ -167,13 +150,13 @@ namespace configmgr
         /// get the full path to the root (location)
         AbsolutePath getRootContextPath() const { return m_aLocation.getParentPath(); }
 
-        vos::ORef < OOptions > getOptions() const { return m_xOptions; }
+        RequestOptions const & getOptions() const { return m_aOptions; }
 
     public:
         SubtreeChange root;                      // the root of the whole tree of updates
     private:
         AbsolutePath            m_aLocation;     // absolute path to the parent of the node corresponding to this->root
-        vos::ORef < OOptions >  m_xOptions;      // options for the tree that is concerned by these changes
+        RequestOptions          m_aOptions;      // options for the tree that is concerned by these changes
     };
 //----------------------------------------------------------------------------
 

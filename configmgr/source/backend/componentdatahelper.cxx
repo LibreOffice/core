@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentdatahelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-10-24 12:59:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,21 +98,23 @@ DataBuilderContext::DataBuilderContext(  )
 }
 // -----------------------------------------------------------------------------
 
-DataBuilderContext::DataBuilderContext( uno::XInterface * _pContext )
+DataBuilderContext::DataBuilderContext( uno::XInterface * _pContext, ITemplateDataProvider* aTemplateProvider )
 : m_aParentStack()
 , m_aActiveComponent()
 , m_pContext(_pContext)
 , m_aExpectedComponentName(OUString())
+, m_aTemplateProvider( aTemplateProvider )
 {
 
 }
 // -----------------------------------------------------------------------------
 
-DataBuilderContext::DataBuilderContext( uno::XInterface * _pContext, const OUString& aExpectedComponentName )
+DataBuilderContext::DataBuilderContext( uno::XInterface * _pContext, const OUString& aExpectedComponentName, ITemplateDataProvider* aTemplateProvider )
 : m_aParentStack()
 , m_aActiveComponent()
 , m_pContext(_pContext)
 , m_aExpectedComponentName( aExpectedComponentName )
+, m_aTemplateProvider( aTemplateProvider )
 {
 
 }
@@ -227,21 +229,19 @@ ISubtree & DataBuilderContext::implGetCurrentParent() const
 }
 // -----------------------------------------------------------------------------
 
-void DataBuilderContext::ensureWritable(INode const * pNode) const
-        CFG_UNO_THROW1( lang::IllegalAccessException )
+bool DataBuilderContext::isWritable(INode const * pNode) const
+        CFG_NOTHROW( )
 {
     OSL_PRECOND(pNode,"Unexpected NULL node pointer");
-    if (!pNode->getAttributes().bWritable)
-        raiseIllegalAccessException("Illegal Access: Cannot remove or replace. Item is mandatory.");
+    return pNode->getAttributes().bWritable;
 }
 // -----------------------------------------------------------------------------
 
-void DataBuilderContext::ensureRemovable(ISubtree const * pItem) const
-        CFG_UNO_THROW1( lang::IllegalAccessException )
+bool DataBuilderContext::isRemovable(ISubtree const * pItem) const
+        CFG_NOTHROW( )
 {
     OSL_PRECOND(pItem,"Unexpected NULL item pointer");
-    if (!pItem->getAttributes().bNullable && !pItem->getAttributes().isReplacedForUser())
-        raiseIllegalAccessException("Illegal Access: Cannot remove or replace. Item is mandatory.");
+    return pItem->getAttributes().bNullable || pItem->getAttributes().isReplacedForUser();
 }
 
 // -----------------------------------------------------------------------------
@@ -473,8 +473,12 @@ void DataBuilderContext::endActiveComponent()
     OSL_POSTCOND(!hasActiveComponent(), "Component Builder Context: Could not end Component/Template");
 }
 // -----------------------------------------------------------------------------
+TemplateResult DataBuilderContext::getTemplateData (TemplateRequest const & _aRequest  )
+{
+    return(m_aTemplateProvider->getTemplateData (_aRequest));
+}
 // -----------------------------------------------------------------------------
-
+// -----------------------------------------------------------------------------
 ComponentDataFactory::ComponentDataFactory()
 : m_rNodeFactory( getDefaultTreeNodeFactory() )
 {

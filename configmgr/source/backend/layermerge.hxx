@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-11 16:58:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,11 +105,16 @@ namespace configmgr
             typedef uno::Reference< lang::XMultiServiceFactory > ServiceFactory;
 
             explicit
-            LayerMergeHandler(ServiceFactory const & _xServiceFactory , MergedComponentData & _rData, OUString const & _aLocale);
+            LayerMergeHandler(ServiceFactory const & _xServiceFactory , MergedComponentData & _rData, ITemplateDataProvider* aTemplateProvider = NULL);
             virtual ~LayerMergeHandler();
+
+        // prepare merging
+            void prepareLayer();
+            bool prepareSublayer(OUString const & aLocale);
 
         // checking the result
             bool isDone() const { return m_aContext.isDone(); }
+            bool isInSublayer() const { return m_bSublayer; }
 
             MergedComponentData &       result();
             MergedComponentData const & result() const;
@@ -189,11 +194,11 @@ namespace configmgr
             void overrideLayerRoot( const OUString& aName, sal_Int16 aAttributes )
                 CFG_THROW4 (MalformedDataException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
 
-            void startOverride(INode * pNode) /* ensure writable, mark merged */
-                CFG_THROW3( MalformedDataException, lang::IllegalAccessException, uno::RuntimeException );
+            bool startOverride(INode * pNode) /* check if writable, mark merged */
+                CFG_NOTHROW( );
 
             void implAddOrReplaceNode(const OUString& aName, const TemplateIdentifier& aTemplate, sal_Int16 aAttributes)
-                CFG_THROW5 (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+                CFG_THROW4 (MalformedDataException, container::NoSuchElementException, lang::IllegalArgumentException, uno::RuntimeException);
 
             void ensureUnchanged(INode const * pNode) const
                 CFG_THROW2( MalformedDataException, uno::RuntimeException );

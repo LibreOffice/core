@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachefactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-12-13 10:30:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,9 @@ namespace configmgr
 // -------------------------------------------------------------------------
 
     rtl::Reference<TreeManager>
-        CacheFactory::createCacheManager(ConnectionSettings const & _aSettings, CreationContext const & _xContext)
+        CacheFactory::createCacheManager(CreationContext const & _xContext)
     {
-        MergedBackendRef xBackend = backend::BackendFactory::instance().createBackend(_aSettings,_xContext);
+        MergedBackendRef xBackend = backend::BackendFactory::instance(_xContext).createBackend();
 
         return buildCacheManager(xBackend);
     }

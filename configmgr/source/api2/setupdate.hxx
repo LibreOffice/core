@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setupdate.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,6 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
-
-#ifndef CONFIGMGR_APITYPES_HXX_
-#include "apitypes.hxx"
 #endif
 
 //........................................................................

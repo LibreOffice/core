@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-24 15:44:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,322 +62,214 @@
 #ifndef CONFIGMGR_BOOTSTRAP_HXX_
 #define CONFIGMGR_BOOTSTRAP_HXX_
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
-#include <com/sun/star/uno/Reference.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
-#include <com/sun/star/uno/Any.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
-#include <com/sun/star/beans/NamedValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
-#include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
+#ifndef CONFIGMGR_BOOTSTRAPCONTEXT_HXX_
+#include "bootstrapcontext.hxx"
 #endif
 
-#ifndef INCLUDED_MAP
-#include <map>
-#define INCLUDED_MAP
-#endif
+// ---------------------------------------------------------------------------------------
+#define CONFIGMGR_INIFILE                   SAL_CONFIGFILE("configmgr")
+#define BOOTSTRAP_ITEM_INIFILE              "CFG_INIFILE"
+// ---------------------------------------------------------------------------------------
+// standard settings
+#define SETTING_UNOSERVICE                  "BackendService"
+#define SETTING_UNOWRAPPER                  "BackendWrapper"
+#define SETTING_OFFLINE                     "Offline"
+#define SETTING_LOCALE_NEW                  "Locale"
+#define SETTING_ASYNC_NEW                   "EnableAsync"
+#define SETTING_INIFILE                     "Inifile"
 
-namespace osl {
-    class Profile;
-}
+// Prefixes
+#define CONTEXT_MODULE_PREFIX_              "/modules/com.sun.star.configuration/"
+#define CONTEXT_SECTION_BOOTSTRAP_          "bootstrap/"
+#define CONTEXT_ITEM_PREFIX_                CONTEXT_MODULE_PREFIX_ CONTEXT_SECTION_BOOTSTRAP_
+#define BOOTSTRAP_ITEM_PREFIX_              "CFG_"
 
+// special internal context values
+#define CONTEXT_SECTION_INTERNAL_           "factory/"
+#define CONTEXT_INTERNAL_PREFIX_            CONTEXT_MODULE_PREFIX_ CONTEXT_SECTION_INTERNAL_
+#define CONTEXT_ITEM_ADMINFLAG              CONTEXT_INTERNAL_PREFIX_"isAdminConfiguration"
+#define CONTEXT_ITEM_BOOTSTRAP_ERROR        CONTEXT_INTERNAL_PREFIX_"theBootstrapError"
+
+#define CONTEXT_ITEM_IS_WRAPPER_CONTEXT     CONTEXT_INTERNAL_PREFIX_"isWrapperContext"
+#define CONTEXT_ITEM_IS_BOOTSTRAP_CONTEXT   CONTEXT_INTERNAL_PREFIX_"isBootstrapContext"
+
+// ---------------------------------------------------------------------------------------
+#define A_DefaultProviderSingletonName "com.sun.star.configuration.theDefaultProvider"
+#define K_DefaultBackendSingletonName       "com.sun.star.configuration.backend.theDefaultBackend"
+#define K_DefaultSingleBackendSingletonName "com.sun.star.configuration.backend.theDefaultSingleBackend"
+#define A_BootstrapContextSingletonName     "com.sun.star.configuration.bootstrap.theBootstrapContext"
+// -------------------------------------------------------------------------
+#define A_DefaultProviderServiceAndImplName     "com.sun.star.configuration.DefaultProvider"
+#define K_DefaultBackendServiceAndImplName         "com.sun.star.configuration.backend.DefaultBackend"
+#define K_DefaultSingleBackendServiceAndImplName   "com.sun.star.configuration.backend.DefaultSingleBackend"
+// ---------------------------------------------------------------------------------------
 namespace configmgr
 {
-    class IConfigSession;
-
-    // ===================================================================================
+    // -----------------------------------------------------------------------------------
 
     namespace uno = ::com::sun::star::uno;
     namespace lang = ::com::sun::star::lang;
     namespace beans = ::com::sun::star::beans;
     using ::rtl::OUString;
+    // -----------------------------------------------------------------------------------
 
-    // ===================================================================================
-    #define UNO_SESSION_IDENTIFIER              "uno"
-    #define PORTAL_SESSION_IDENTIFIER           "portal"
-    #define REMOTE_SESSION_IDENTIFIER           "remote"
-    #define LOCAL_SESSION_IDENTIFIER            "local"
-    #define SETUP_SESSION_IDENTIFIER            "setup"
-    #define PLUGIN_SESSION_IDENTIFIER           "plugin"
-
-
-    // ===================================================================================
-    // ===================================================================================
-    // = Settings
-    // ===================================================================================
-    class Settings
+    /** Customized ComponentContext for configuration bootstrap data and runtime arguments
+    */
+    class BootstrapContext : public ComponentContext
     {
-    public:
-        enum Origin
-        {
-            SO_NOT_SET,
-            SO_UNKNOWN,
-            SO_FALLBACK,
-            SO_INIFILE,
-            SO_BOOTSTRAP,
-            SO_DEFAULT,
-            SO_OVERRIDE,
-            SO_ADJUSTMENT,
-            SO_MANUAL
-        };
-        typedef OUString Name;
+    // creation and destruction
+    private:
+        friend uno::Reference<uno::XInterface> SAL_CALL
+            instantiateBootstrapContext( Context const& xContext );
 
-        // a single setting
-        class Setting
-        {
-            uno::Any        m_aValue;
-            Origin          m_eOrigin;
-        public:
-            Setting() : m_aValue(), m_eOrigin(SO_NOT_SET) { }
-            Setting(const OUString& _rValue, Origin _eOrigin) : m_aValue(uno::makeAny(_rValue)), m_eOrigin(_eOrigin) { }
-            Setting(const sal_Int32 _nValue, Origin _eOrigin) : m_aValue(uno::makeAny(_nValue)), m_eOrigin(_eOrigin) { }
-            Setting(const uno::Any& _rValue, Origin _eOrigin) : m_aValue(_rValue), m_eOrigin(_eOrigin) { }
+        // constructor
+        BootstrapContext(Context const & _xContext);
 
-
-            uno::Any    value()  const { return m_aValue; }
-            Origin      origin() const { return m_eOrigin; };
-
-            OUString        toString() const;
-            sal_Int32       toInt32() const;
-            sal_Bool        toBool() const;
-        };
-    protected:
-        typedef std::map< Name, Setting > SettingsImpl;
-        SettingsImpl        m_aImpl;
+        // two-phase construct
+        void initialize();
 
     public:
-        typedef SettingsImpl::const_iterator Iterator;
-    public:
-        /// default ctor
-        Settings();
+        typedef uno::Sequence < beans::NamedValue >             Overrides;
+        /** Constructs a Context based on the given arguments and context.
+            @param _xContext
+                The base context of this component context.
 
-        /** construct a settings object
-           containing the given overrides
+            @param _aArguments
+                The arguments used to create this component context.
+        */
+        static Context createWrapper(Context const & _xContext, Overrides const & _aOverrides);
+
+        /** Checks, if the given context is a wrapper.
+            @param _xContext
+                The context that is checked.
+        */
+        static sal_Bool isWrapper(Context const & _xContext);
+
+        /** Retrieves the BootstrapContext for the given non-bootstrap context.
+            @param _xContext
+                The context from which the bootstrap context should be retrieved.
 
         */
-        Settings(const uno::Sequence< uno::Any >& _rOverrides, Origin _eOrigin = SO_OVERRIDE);
+        static Context get(Context const & _xContext);
 
-        /// merge the given overrides into the object itself
-        void mergeOverrides(const Settings& _rOverrides);
+        /// Destroys this BootstrapContext
+        ~BootstrapContext();
 
-        // check setting existence
-        sal_Bool        haveSetting(Name const& _pName) const;
-        Origin          getOrigin(Name const& _pName) const;
+        // gets the INI that should be used for bootstrap data by default
+        static OUString getDefaultConfigurationBootstrapURL();
 
-        void            putSetting(Name const&  _pName, const Setting& _rSetting);
-        void            clearSetting(Name const& _pName);
-
-        OUString        getStringSetting(Name const& _pName) const;
-        sal_Int32       getIntSetting(Name const& _pName) const;
-        sal_Bool        getBoolSetting(Name const& _pName) const;
-        Setting         getSetting(Name const& _pName) const;
-        Setting         getMaybeSetting(Name const& _pName) const;
-
-        SettingsImpl::size_type size() const { return m_aImpl.size(); }
-        Iterator begin()    const { return m_aImpl.begin(); }
-        Iterator end()      const { return m_aImpl.end(); }
-
-        void swap(Settings& _rOther) { m_aImpl.swap(_rOther.m_aImpl); }
-    private:
-        void implAddOverrides(const uno::Sequence< uno::Any >& _rOverrides, Origin _eOrigin);
-        bool implExtractOverride(const uno::Any & _rOverride, Name& _rName, uno::Any& _rValue);
-    };
-
-
-    class ConnectionSettings
-    {
-        friend class BootstrapSettings;
-
-        Settings m_aSettings;
-
-        ConnectionSettings() : m_aSettings() {};
+    // interface implementations
     public:
-        ConnectionSettings(const uno::Sequence< uno::Any >& _rOverrides,
-                            Settings::Origin _eOrigin = Settings::SO_OVERRIDE);
+    // XComponentContext
+        /** Retrieves a value from this context.
 
-        /// merge the given overrides into the object itself
-        void mergeOverrides(const Settings& _rOverrides)
-        {
-            implMergeOverrides(_rOverrides);
-            implNormalizeSettings();
-        }
+            @param Name
+                The name of the value to retrieve.
+                A prefix of "com.sun.star.configuration.bootstrap." is stripped/ignored
 
-        /// merge the given overrides into the object itself
-        void mergeOverrides(const ConnectionSettings& _rOverrides)
-        {
-            implMergeOverrides(_rOverrides.m_aSettings);
-        }
+            @returns
+                The requested value, or <VOID/> if the value is not found.
+        */
+        virtual uno::Any SAL_CALL
+            getValueByName( const OUString& Name )
+                throw (uno::RuntimeException);
 
-        bool validate();
+    public: // used by ArgumentHelper
+        static OUString makeContextName (OUString const & _aShortName);
 
-        bool isComplete() const;
-        bool isComplete(OUString const& aSessionType) const;
+    private:
+        static OUString makeBootstrapName(OUString const & _aLongName);
+        uno::Any makeBootstrapException();
+    };
+// -----------------------------------------------------------------------------
+    class ContextReader
+    {
+    public:
+        typedef uno::Reference< uno::XComponentContext > Context;
+        explicit
+        ContextReader(Context const & context);
 
-        sal_Bool    isSessionTypeKnown() const;
+    // the underlying contexts
+        sal_Bool hasBootstrapContext()          const { return m_fullcontext.is(); }
+        Context const & getBootstrapContext()   const { return m_fullcontext; }
+        Context const & getBaseContext()        const { return m_basecontext; }
+        Context const & getBestContext()        const { return m_fullcontext.is() ? m_fullcontext : m_basecontext; }
 
-        sal_Bool    hasUser() const;
-        sal_Bool    hasPassword() const;
+        uno::Reference< lang::XMultiComponentFactory > getServiceManager() const;
+
+        /** Checks, if the given context is a BootstrapContext.
+            @param _xContext
+                The context that is checked.
+        */
+        static bool isBootstrapContext(Context const & context);
+
+        /** Checks, if the given context has the given 'admin' flag setting..
+            @param _xContext
+                The context that is checked.
+        */
+        static bool testAdminService(Context const & context, bool bAdmin);
+
+    // general settings
+        sal_Bool    isUnoBackend() const;
+
+        sal_Bool    hasUnoBackendService() const;
+        sal_Bool    hasUnoBackendWrapper() const;
 
         sal_Bool    hasLocale() const;
         sal_Bool    hasAsyncSetting() const;
         sal_Bool    hasOfflineSetting() const;
 
-        sal_Bool    hasServer() const;
-        sal_Bool    hasPort() const;
-        sal_Bool    hasTimeout() const;
-        sal_Bool    hasService() const;
-
-        sal_Bool    isPlugin() const;
-        sal_Bool    isLocalSession() const;
-        sal_Bool    isRemoteSession() const;
-        bool        isUnoBackend() const;
-
-        sal_Bool    hasUnoBackendService() const;
-        sal_Bool    hasUnoBackendWrapper() const;
-
-        sal_Bool    isSourcePathValid() const;
-        sal_Bool    isUpdatePathValid() const;
-        sal_Bool    hasReinitializeFlag() const;
-
-        // get a special setting
-        OUString    getSessionType() const;
-        sal_Bool    isAdminSession() const;
-
         OUString    getUnoBackendService() const;
         OUString    getUnoBackendWrapper() const;
-
-        OUString    getUser() const;
-        OUString    getPassword() const;
 
         OUString    getLocale() const;
         sal_Bool    getAsyncSetting() const;
         sal_Bool    getOfflineSetting() const;
 
-        OUString    getSourcePath() const;
-        OUString    getUpdatePath() const;
-        sal_Bool    getReinitializeFlag() const;
+    // internal settings - should only ever be in configmgr::BootstrapContext instances
+        // get a special setting
+        sal_Bool    isAdminService() const;
 
-        OUString    getServer() const;
-        OUString    getService() const;
-        sal_Int32   getPort() const;
-        sal_Int32   getTimeout() const;
-
-        // make sure this behaves as a user session
-        void setUserSession();
-        void setUserSession(const OUString& _rRemoteServiceName);
-
-        // make sure this behaves as an administrative session
-        void setAdminSession();
-        void setAdminSession(const OUString& _rRemoteServiceName);
-
-        // set a new session type. Must be one of the *_SESSION_IDENTIFIER defines
-        void setSessionType(const OUString& _rSessionIdentifier, Settings::Origin _eOrigin /*= SO_MANUAL*/);
-
-        // set a desired service, only necessary in remote environments
-        sal_Bool    isServiceRequired() const;
-        void        setService(const OUString& _rService, Settings::Origin _eOrigin /*= SO_MANUAL*/);
-
-        // set this to a wildcard locale
-        void        setAnyLocale(Settings::Origin _eOrigin /*= SO_MANUAL*/);
-
-        IConfigSession* createConnection(
-            uno::Reference< lang::XMultiServiceFactory > const& _rxServiceMgr) const;
-
-        void swap(ConnectionSettings& _rOther) { m_aSettings.swap(_rOther.m_aSettings); }
-
-        uno::Sequence< beans::NamedValue > getUnoSettings() const;
-
+        // access to error diagnostics
+        sal_Bool    isBootstrapValid() const;
+        uno::Any    getBootstrapError() const;
     private:
-        bool checkSettings() const;
-
-        /** @return <TRUE/> if the setting exists and is a valid path
-        */
-        // sal_Bool isValidPathSetting(Settings::Name const& _pSetting) const;
-
-        // if we do not already have the given config path setting, ensure that it exists (calculated relative to a given path)
-        //sal_Bool ensureConfigPath(Settings::Name const& _pSetting, const OUString& _rBasePath);
-
-        /// merge the given overrides into the object itself
-        void implMergeOverrides(const Settings& _rOverrides);
-
-        // ensure that the named setting is a valid file URL
-        bool implNormalizePathSetting(Settings::Name const& _pSetting);
-
-        // normalize the server and port settings
-        void implNormalizeRemoteServer();
-
-        // transform settings that are accepted for compatibility reasons to their normal form
-        void implNormalizeSettings();
-
-        // tries to ensure that a session type is set
-        bool implDetermineSessionType();
-
-    // convenience wrappers for Settings members
-    public:
-        sal_Bool    haveSetting(Settings::Name const& _pName) const
-        { return m_aSettings.haveSetting(_pName); }
-
-        Settings::Setting   getSetting(Settings::Name const& _pName) const
-        { return m_aSettings.getSetting(_pName); }
-
-    // private convenience wrappers for Settings members
+        sal_Bool hasSetting(OUString const & _aSetting) const;
+        sal_Bool getBoolSetting(OUString const & _aSetting, sal_Bool bValue) const;
+        OUString getStringSetting(OUString const & _aSetting, OUString aValue) const;
+        uno::Any getSetting(OUString const & _aSetting) const;
     private:
-        void        putSetting(Settings::Name const&  _pName, const Settings::Setting& _rSetting)
-        { m_aSettings.putSetting(_pName,_rSetting); }
-
-        void        clearSetting(Settings::Name const& _pName)
-        { m_aSettings.clearSetting(_pName); }
+        Context m_basecontext;
+        Context m_fullcontext;
     };
+    //------------------------------------------------------------------------
 
-// ===================================================================================
-
-// ===================================================================================
-    class BootstrapSettings
+    class ArgumentHelper
     {
+        bool m_bHasBackendArguments;
     public:
         typedef uno::Reference< uno::XComponentContext > Context;
 
-        ConnectionSettings  settings; /// the settings collected from bootstrapping (may work even if !valid)
-        bool                valid;    /// indicates whether the whole bootstrap process was executed successfully
-
         explicit
-        BootstrapSettings(Context const & xContext)
-        : settings()
-        , valid(false)
-        {
-            bootstrap(xContext);
-        }
+        ArgumentHelper(Context const & context)
+        : m_context(context)
+        , m_bHasBackendArguments(false)
+        {}
 
-        void raiseBootstrapException( uno::Reference< uno::XInterface > const & xErrorContext ) const;
+        bool hasBackendArguments() const { return m_bHasBackendArguments; }
+        bool checkBackendArgument(beans::NamedValue const & aAdjustedValue);
 
-        static OUString getURL();
+        bool filterAndAdjustArgument(beans::NamedValue & rValue);
+
+        static
+        bool extractArgument(beans::NamedValue & rValue, uno::Any const & aArgument);
+
+        static beans::NamedValue makeAdminServiceOverride(sal_Bool bAdmin);
     private:
-        void bootstrap(Context const & xContext);
-
-        struct Impl;
-        friend struct Impl;
+        Context m_context; // context used to strip identical arguments
     };
-// ===================================================================================
+// -----------------------------------------------------------------------------------
 
-    // a transition helper
-    BootstrapSettings::Context getBootstrapContext(const uno::Reference< lang::XMultiServiceFactory >& _xORB);
-
-// ===================================================================================
 }
 
 #endif // CONFIGMGR_BOOTSTRAP_HXX_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: singlebackendadapter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2002-12-06 13:08:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,8 @@ namespace configmgr { namespace backend {
 //==============================================================================
 
 SingleBackendAdapter::SingleBackendAdapter(
-        const uno::Reference<lang::XMultiServiceFactory>& aFactory)
-: BackendBase(mMutex), mFactory(aFactory) {
+        const uno::Reference<uno::XComponentContext>& xContext)
+        : BackendBase(mMutex), mFactory(xContext->getServiceManager(),uno::UNO_QUERY) {
 }
 //------------------------------------------------------------------------------
 
@@ -148,8 +148,25 @@ SAL_CALL SingleBackendAdapter::listLayers(const rtl::OUString& aComponent,
             lang::IllegalArgumentException,
             uno::RuntimeException)
 {
-    return mBackend->getLayers(mBackend->listLayerIds(aComponent, aEntity),
-                               rtl::OUString()) ;
+    uno::Sequence<uno::Reference<backenduno::XLayer> > retCode =
+        mBackend->getLayers(mBackend->listLayerIds(aComponent, aEntity),
+                            rtl::OUString()) ;
+
+    // There might be non-existent layers in the list if there's no
+    // actual data associated to a given layer id. Hence we have to
+    // compress the list.
+    sal_Int32 maxLayer = 0 ;
+
+    for (sal_Int32 i = 0 ; i < retCode.getLength() ; ++ i)
+    {
+        if (retCode [i].is())
+        {
+            if (i != maxLayer) { retCode [maxLayer] = retCode [i] ; }
+            ++ maxLayer ;
+        }
+    }
+    retCode.realloc(maxLayer) ;
+    return retCode ;
 }
 //------------------------------------------------------------------------------
 
@@ -200,9 +217,9 @@ const ServiceRegistrationInfo *getSingleBackendAdapterServiceInfo()
 }
 
 uno::Reference<uno::XInterface> SAL_CALL
-instantiateSingleBackendAdapter(const CreationContext& aContext)
+instantiateSingleBackendAdapter(const CreationContext& xContext)
 {
-    return *new SingleBackendAdapter(aContext) ;
+    return *new SingleBackendAdapter(xContext) ;
 }
 //------------------------------------------------------------------------------
 

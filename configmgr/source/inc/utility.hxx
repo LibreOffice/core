@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utility.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-04-25 15:46:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef CONFIGMGR_UTILITY_HXX_
 #define CONFIGMGR_UTILITY_HXX_
 
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/uno/RuntimeException.hpp>
+#endif
 #ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
 #include <salhelper/simplereferenceobject.hxx>
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confeventhelpers.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 14:07:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 #include <string.h>
 #include "confeventhelpers.hxx"
 
-#ifndef INCLUDED_CONFIGMGR_NAMECREATOR_HXX
-#include "namecreator.hxx"
-#endif
 #ifndef CONFIGMGR_CONFIGEXCEPT_HXX_
 #include "configexcept.hxx"
 #endif
@@ -211,7 +208,7 @@ void ConfigChangesBroadcasterImpl::dispatchInner
     using namespace configuration;
     try
     {
-        OSL_ASSERT(pTarget.isValid());
+        OSL_ASSERT(pTarget.is());
         OSL_ASSERT( Path::hasPrefix( _aTargetPath, _aChangeLocation ) );
 
         RelativePath aLocalPath = Path::stripPrefix( _aTargetPath, _aChangeLocation );
@@ -246,7 +243,7 @@ void ConfigChangesBroadcasterImpl::dispatchOuter
     IConfigBroadcaster* pSource
 )
 {
-    OSL_ASSERT(pTarget.isValid());
+    OSL_ASSERT(pTarget.is());
     OSL_ASSERT( Path::hasPrefix( _aChangeLocation, _aTargetPath) );
 
     pTarget->nodeChanged(_aChangedDataAccessor, rBaseChange, _aChangeLocation, pSource);

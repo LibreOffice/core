@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commontypes.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,31 +97,6 @@ public:
     virtual void SAL_CALL release(  ) throw () = 0;
 };
 
-typedef ::com::sun::star::uno::RuntimeException CantRenameException_Base;
-class CantRenameException : CantRenameException_Base
-{
-public:
-    ::rtl::OUString newName;
-    ::rtl::OUString oldName;
-
-    static ::rtl::OUString message(::rtl::OUString const& sNewName, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed> xContext)
-    {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Object cannot be renamed") );
-    }
-
-    CantRenameException(::rtl::OUString const& sNewName, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > xContext)
-        : CantRenameException_Base(message(sNewName,xContext), xContext)
-        , newName(sNewName)
-        , oldName(xContext->getName())
-    {
-    }
-};
-//..........................................................................
-struct UStringLess : public std::binary_function< rtl::OUString, rtl::OUString, bool>
-{
-    bool operator() (const rtl::OUString& lhs, const rtl::OUString& rhs) const
-    { return lhs < rhs ? true : false;}      // construct prevents a MSVC6 warning
-};
 //..........................................................................
 }   // namespace configmgr
 //..........................................................................

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertysetaccess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,10 +86,6 @@
 #include <cppuhelper/implbase6.hxx>
 #endif
 
-#ifndef CONFIGMGR_APITYPES_HXX_
-#include "apitypes.hxx"
-#endif
-
 namespace configmgr
 {
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,6 +93,7 @@ namespace configmgr
     namespace uno       = css::uno;
     namespace lang      = css::lang;
     namespace beans     = css::beans;
+    using rtl::OUString;
 
     namespace configapi
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachecontroller.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-12-18 15:29:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,10 +436,10 @@ CacheLocation CacheController::loadComponent(ComponentRequest const & _aRequest)
     data::TreeAddress aResultAddress;
     data::TreeAddress aTemplateResultAdddress;
 
+    OSL_ENSURE(!_aRequest.isForcingReload(),"CacheController: No support for forced requests");
     if (aCache->hasModule(_aRequest.getComponentName()))
     {
         CFG_TRACE_INFO_NI("CacheController: found node in cache");
-        OSL_ENSURE(!_aRequest.getOptions().isForcingReload(),"CacheController: Found node in cache for non-cachable request");
 
         aResultAddress = aCache->acquireModule(_aRequest.getComponentName());
     }
@@ -660,7 +660,7 @@ void CacheController::saveAndNotify(UpdateRequest const & _anUpdate) CFG_UNO_THR
 
         aCache->addChangesToPending(_anUpdate.getUpdate());
 
-        if ( _anUpdate.isForcingFlush()||  m_bDisposing ) // cannot do it asynchronously
+        if ( _anUpdate.isSyncRequired()||  m_bDisposing ) // cannot do it asynchronously
         {
             CFG_TRACE_INFO_NI("Running synchronous write");
             savePendingChanges( aCache, getComponentRequest(_anUpdate) );
@@ -741,7 +741,7 @@ ComponentResult CacheController::loadDirectly(ComponentRequest const & _aRequest
 
     NodeRequest aNodeRequest(aRequestPath, _aRequest.getOptions());
 
-    ComponentResult aResult = m_xBackend->getNodeData(_aRequest);
+    ComponentResult aResult = m_xBackend->getNodeData(_aRequest, this);
 
     OSL_PRECOND(aResult.mutableInstance().mutableData().get(), "loadDirectly: Data must not be NULL");
 
@@ -879,10 +879,7 @@ void CacheController::freeComponent(ComponentRequest const & _aRequest) CFG_NOTH
         if (aCache->releaseModule(_aRequest.getComponentName()) == 0)
         {
             // start the cleanup
-            if (_aRequest.getOptions().isForcingReload()) // not sharable -> dispose at once
-                this->disposeOne(_aRequest.getOptions(),true);
-            else
-                m_pDisposer->scheduleCleanup(_aRequest.getOptions());
+            m_pDisposer->scheduleCleanup(_aRequest.getOptions());
         }
     }
 }

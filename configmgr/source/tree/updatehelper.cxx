@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatehelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:26:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,7 +376,7 @@ void AdjustUpdate::handle(SubtreeChange& _rChange)
             OSL_ASSERT(pNode.get() != NULL);
 
             // set the level
-            pNode->setLevels(ITreeProvider::ALL_LEVELS,ITreeProvider::ALL_LEVELS);
+            pNode->setLevels(treeop::ALL_LEVELS,treeop::ALL_LEVELS);
 
             OSL_ENSURE(m_rChangeList.isSetNodeChange(), "Adding a new value to a non-set node");
             OUString sTypeName = m_rChangeList.getElementTemplateName();

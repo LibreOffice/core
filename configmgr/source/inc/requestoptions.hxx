@@ -2,9 +2,9 @@
  *
  *  $RCSfile: requestoptions.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:59:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,29 +86,11 @@ namespace configmgr
         RequestOptions()
         : m_sLocale()
         , m_sEntity()
-        , m_nCacheID(0)
+        , m_bEnableAsync(false)
         {}
 
-        /// Copy constructor. Copies all options (optionally copying or renewing the cache ID)
-        RequestOptions(const RequestOptions& _aOther, bool _bRenewCacheID = false)
-        : m_sLocale(_aOther.m_sLocale)
-        , m_sEntity(_aOther.m_sEntity)
-        {
-            if (_bRenewCacheID)
-            {
-                m_nCacheID = 0;
-                this->forceReload(_aOther.isForcingReload());
-            }
-            else
-            {
-                m_nCacheID = _aOther.m_nCacheID;
-            }
-        }
-
-        /// @returns <TRUE/>, if data must be loaded freshly into a private cache line
-        bool isForcingReload() const { return m_nCacheID != 0; }
-        /// @returns an ID number identifying the private cache line to use
-        sal_Int32 getCacheID() const { return m_nCacheID; }
+        /// @returns <TRUE/>, if data can be written asynchronously
+        bool isAsyncEnabled() const { return m_bEnableAsync; }
 
         /** @returns
                 <TRUE/>,  if a locale is specified, <BR/>
@@ -140,8 +122,8 @@ namespace configmgr
         /// resets the locale to get data for to use the default
         void clearLocale()   { m_sLocale = rtl::OUString(); }
 
-        /// forces data to be freshly loaded into a new private cache line
-        void forceReload(bool _bNoCache = true);
+        /// marks asyncronous access a enabled or disabled
+        void enableAsync(bool _bEnable = true)  { m_bEnableAsync = _bEnable; }
 
     // comparison/container helpers
         /// return a hash code for this object
@@ -151,7 +133,7 @@ namespace configmgr
     private:
         Locale      m_sLocale;                              /// locale to fetch data for
         Entity      m_sEntity;                              /// user/group/role to fetch data for
-        sal_Int32   m_nCacheID;                             /// nonzero, if data should not be fetched from the cache, but reloaded
+        bool        m_bEnableAsync;                         /// true, if data may be
     };
 
 // ---------------------------------------------------------------------------

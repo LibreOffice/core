@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setaccess.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,22 +83,22 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTY_HPP_
 #include <com/sun/star/beans/XProperty.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XSTRINGESCAPE_HPP_
 #include <com/sun/star/util/XStringEscape.hpp>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE8_HXX_
-#include <cppuhelper/implbase8.hxx>
-#endif
-
-#ifndef CONFIGMGR_APITYPES_HXX_
-#include "apitypes.hxx"
+#ifndef _CPPUHELPER_IMPLBASE9_HXX_
+#include <cppuhelper/implbase9.hxx>
 #endif
 
 namespace configmgr
 {
     namespace css = ::com::sun::star;
     namespace uno = ::com::sun::star::uno;
+    using rtl::OUString;
 
     namespace configapi { class NodeSetInfoAccess; }
 
@@ -107,13 +107,14 @@ namespace configmgr
         <p> Is an interface adapter around <type scope='configmgr::configapi'>NodeAccess</type>.</p>
     */
     class BasicSetAccess
-    : public ::cppu::ImplHelper8
+    : public ::cppu::ImplHelper9
                 < css::container::XNameAccess
                 , css::container::XHierarchicalName
                 , css::container::XHierarchicalNameAccess
                 , css::container::XContainer
                 , css::beans::XExactName
                 , css::beans::XProperty
+                , css::beans::XPropertySetInfo
                 , css::configuration::XTemplateContainer
                 , css::util::XStringEscape
                 >
@@ -184,6 +185,19 @@ namespace configmgr
         virtual css::beans::Property SAL_CALL
             getAsProperty(  )
                 throw(uno::RuntimeException);
+
+        // XPropertySetInfo
+        virtual uno::Sequence< css::beans::Property > SAL_CALL
+            getProperties(  )
+                throw (uno::RuntimeException);
+
+        virtual css::beans::Property SAL_CALL
+            getPropertyByName( const OUString& aName )
+                throw (css::beans::UnknownPropertyException, uno::RuntimeException);
+
+        virtual sal_Bool SAL_CALL
+            hasPropertyByName( const OUString& Name )
+                throw (uno::RuntimeException);
 
         // XTemplateContainer
         OUString SAL_CALL

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: requesttypes.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-12-16 12:46:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #endif
 #ifndef CONFIGMGR_CONFIGPATH_HXX_
 #include "configpath.hxx"
+#endif
+
+#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
+#include <salhelper/simplereferenceobject.hxx>
 #endif
 
 #ifndef INCLUDED_MEMORY

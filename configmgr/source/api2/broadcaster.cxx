@@ -2,9 +2,9 @@
  *
  *  $RCSfile: broadcaster.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-15 15:06:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,18 +426,29 @@ namespace configmgr
 
                 if (configapi::fillEventDataFromResolved(aEvent,aChange,bMore))
                 {
-
+                    // Catch only RuntimeExceptions here: vetoableChange issues its veto by throwing
+                    // a PropertyVetoException (which is not a RuntimeException)
                     if (pListeners)
                     {
                         ListenerIterator aIterator(*pListeners);
                         while (aIterator.hasMoreElements())
+                        try
+                        {
                             aIterator.next()->vetoableChange(aEvent);
+                        }
+                        catch (uno::RuntimeException & )
+                        {}
                     }
                     if (pSpecial)
                     {
                         ListenerIterator aIterator(*pSpecial);
                         while (aIterator.hasMoreElements())
+                        try
+                        {
                             aIterator.next()->vetoableChange(aEvent);
+                        }
+                        catch (uno::RuntimeException & )
+                        {}
                     }
                 }
             }
@@ -469,6 +480,7 @@ namespace configmgr
                     ContainerListenerIterator aIterator(*pContainerListeners);
 
                     while (aIterator.hasMoreElements())
+                    try
                     {
                         uno::Reference<XContainerListener> xListener( aIterator.next() );
                         OSL_ASSERT( xListener.is() );
@@ -497,6 +509,8 @@ namespace configmgr
                             break;
                         }
                     }
+                    catch (uno::Exception &)
+                    {}
                 }
             }
 
@@ -513,7 +527,7 @@ namespace configmgr
                 {
                     PropertyListenerIterator aIterator(*pPropertyListeners);
                     while (aIterator.hasMoreElements())
-                        aIterator.next()->propertyChange(rEvent);
+                        try { aIterator.next()->propertyChange(rEvent); } catch (uno::Exception & ) {}
                 }
 
                 ListenerContainer* pSpecialListeners    = pNotifierImpl->m_aListeners.getSpecialContainer( aChange.location.getChangingValueID() );
@@ -521,7 +535,7 @@ namespace configmgr
                 {
                     PropertyListenerIterator aIterator(*pSpecialListeners);
                     while (aIterator.hasMoreElements())
-                        aIterator.next()->propertyChange(rEvent);
+                        try { aIterator.next()->propertyChange(rEvent); } catch (uno::Exception & ) {}
                 }
 
                 ++pCurEvent;
@@ -634,7 +648,7 @@ namespace configmgr
                     {
                         ListenerIterator aIterator(*pContainer);
                         while (aIterator.hasMoreElements())
-                            aIterator.next()->propertiesChange(aPropertyEvents);
+                            try { aIterator.next()->propertiesChange(aPropertyEvents); } catch (uno::Exception & ) {}
                     }
                 }
             }
@@ -760,7 +774,7 @@ namespace configmgr
                 {
                     ListenerIterator aIterator(*pContainer);
                     while (aIterator.hasMoreElements())
-                        aIterator.next()->propertiesChange(aPropertyEvents);
+                        try { aIterator.next()->propertiesChange(aPropertyEvents); } catch (uno::Exception & ) {}
                 }
             }
         }
@@ -1173,7 +1187,7 @@ namespace configmgr
                     aGuardRoot.clear();
 
                     while (aIter.hasMoreElements())
-                        aIter.next()->changesOccurred(aEvent);
+                        try { aIter.next()->changesOccurred(aEvent); } catch (uno::Exception & ) {}
                 }
             }
         }
@@ -1219,7 +1233,7 @@ Broadcaster::~Broadcaster()
 }
 // ---------------------------------------------------------------------------------------------------
 
-void Broadcaster::queryConstraints(NodeChange const& aChange) throw(com::sun::star::beans::PropertyVetoException)
+void Broadcaster::queryConstraints(NodeChange const& aChange) throw(beans::PropertyVetoException)
 {
     OSL_ENSURE(aChange.isChange(),"Constraint query without a change !");
 
@@ -1229,14 +1243,29 @@ void Broadcaster::queryConstraints(NodeChange const& aChange) throw(com::sun::st
 }
 // ---------------------------------------------------------------------------------------------------
 
-void Broadcaster::queryConstraints(NodeChanges const& aChanges, bool bSingleBase) throw(com::sun::star::beans::PropertyVetoException)
+void Broadcaster::queryConstraints(NodeChanges const& aChanges, bool bSingleBase) throw(beans::PropertyVetoException)
 {
     OSL_ENSURE(!aChanges.isEmpty(),"Constraint query without a change !");
 
-    NodeChangesInformation aInfos;
-    if (m_pImpl->translateChanges(aInfos,aChanges,bSingleBase))
+    try
     {
-        m_pImpl->queryConstraints(aInfos);
+        NodeChangesInformation aInfos;
+        if (m_pImpl->translateChanges(aInfos,aChanges,bSingleBase))
+        {
+            m_pImpl->queryConstraints(aInfos);
+        }
+    }
+    catch (beans::PropertyVetoException & )
+    {
+        throw;
+    }
+    catch (uno::Exception & )
+    {
+        OSL_ENSURE(false, "configmgr::Broadcaster: Unexpected UNO exception in notifyListeners");
+    }
+    catch (configuration::Exception & )
+    {
+        OSL_ENSURE(false, "configmgr::Broadcaster: Unexpected internal exception in notifyListeners");
     }
 }
 // ---------------------------------------------------------------------------------------------------
@@ -1265,11 +1294,22 @@ void Broadcaster::notifyListeners(NodeChanges const& aChanges, bool bSingleBase)
 {
     OSL_ENSURE(!aChanges.isEmpty(),"Notifying without a change !");
 
-    NodeChangesInformation aInfos;
-    if (m_pImpl->translateChanges(aInfos,aChanges, bSingleBase))
+    try
     {
-        m_pImpl->notifyListeners(aInfos);
-        m_pImpl->notifyRootListeners(aInfos);
+        NodeChangesInformation aInfos;
+        if (m_pImpl->translateChanges(aInfos,aChanges, bSingleBase))
+        {
+            m_pImpl->notifyListeners(aInfos);
+            m_pImpl->notifyRootListeners(aInfos);
+        }
+    }
+    catch (uno::Exception & )
+    {
+        OSL_ENSURE(false, "configmgr::Broadcaster: Unexpected UNO exception in notifyListeners");
+    }
+    catch (configuration::Exception & )
+    {
+        OSL_ENSURE(false, "configmgr::Broadcaster: Unexpected internal exception in notifyListeners");
     }
 }
 // ---------------------------------------------------------------------------------------------------
@@ -1278,11 +1318,22 @@ void Broadcaster::notifyListeners(NodeChangesInformation const& aChanges, bool b
 {
     OSL_ENSURE(!aChanges.empty(),"Notifying without a change !");
 
-    NodeChangesInformation aInfos;
-    if (m_pImpl->translateChanges(aInfos,aChanges, bSingleBase))
+    try
     {
-        m_pImpl->notifyListeners(aInfos);
-        m_pImpl->notifyRootListeners(aInfos);
+        NodeChangesInformation aInfos;
+        if (m_pImpl->translateChanges(aInfos,aChanges, bSingleBase))
+        {
+            m_pImpl->notifyListeners(aInfos);
+            m_pImpl->notifyRootListeners(aInfos);
+        }
+    }
+    catch (uno::Exception & )
+    {
+        OSL_ENSURE(false, "configmgr::Broadcaster: Unexpected UNO exception in notifyListeners");
+    }
+    catch (configuration::Exception & )
+    {
+        OSL_ENSURE(false, "configmgr::Broadcaster: Unexpected internal exception in notifyListeners");
     }
 }
 // ---------------------------------------------------------------------------------------------------

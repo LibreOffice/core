@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-13 15:27:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,38 +166,4 @@ public:
 #endif  // (defined(DEBUG) || defined(_DEBUG))
 
 #endif // _CONFIGMGR_TRACER_HXX_
-
-//**************************************************************************
-// history:
-//  $Log: not supported by cvs2svn $
-//  Revision 1.3  2001/03/11 02:16:12  pluby
-//  Replaced ftime() calls with gettimeofday() since ftime() is obsolete on Linux and Mac OS X
-//
-//  Revision 1.2  2001/02/13 09:47:14  dg
-//  #83239# timing output
-//
-//  Revision 1.1.1.1  2000/09/18 16:13:41  hr
-//  initial import
-//
-//  Revision 1.6  2000/09/15 09:51:50  willem.vandorp
-//  OpenOffice header added
-//
-//  Revision 1.5  2000/08/30 10:00:40  fs
-//  getTimeStamp
-//
-//  Revision 1.4  2000/08/20 12:52:14  fs
-//  #77860# introduced an impl class; introduces virtual trace devices
-//
-//  Revision 1.3  2000/08/10 11:37:30  hjs
-//  filled defines with correct dummies
-//
-//  Revision 1.2  2000/08/10 06:53:08  fs
-//  m_bInitialized
-//
-//  Revision 1.1  2000/08/09 18:53:41  fs
-//  helper classes for tracing
-//
-//
-//  Revision 1.0 09.08.00 13:10:04  fs
-//**************************************************************************
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentdatahelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-10-24 12:59:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,13 @@
 #define INCLUDED_MEMORY
 #endif
 
+#ifndef CONFIGMGR_BACKEND_MERGEDDATAPROVIDER_HXX
+#include "mergeddataprovider.hxx"
+#endif
+#ifndef CONFIGMGR_BACKEND_REQUEST_HXX_
+#include "request.hxx"
+#endif
+
 namespace configmgr
 {
 // -----------------------------------------------------------------------------
@@ -138,10 +145,11 @@ namespace configmgr
             OUString                    m_aActiveComponent;
             uno::XInterface *           m_pContext;
             OUString                    m_aExpectedComponentName;
+            ITemplateDataProvider *     m_aTemplateProvider;
         public:
             DataBuilderContext();
-            explicit DataBuilderContext(uno::XInterface * _pContext );
-            explicit DataBuilderContext(uno::XInterface * _pContext, const OUString& aExpectedComponentName );
+            explicit DataBuilderContext(uno::XInterface * _pContext , ITemplateDataProvider*  aTemplateProvider = NULL);
+            explicit DataBuilderContext(uno::XInterface * _pContext, const OUString& aExpectedComponentName,ITemplateDataProvider*  aTemplateProvider = NULL );
             ~DataBuilderContext();
 
             bool        isDone() const;
@@ -192,10 +200,10 @@ namespace configmgr
             ISubtree * findNode(OUString const & _aName)
                 CFG_THROW2( MalformedDataException, uno::RuntimeException );
 
-            void ensureWritable(INode const * pNode) const
-                CFG_UNO_THROW1( lang::IllegalAccessException );
-            void ensureRemovable(ISubtree const * pItem) const
-                CFG_UNO_THROW1( lang::IllegalAccessException );
+            bool isWritable(INode const * pNode) const
+                CFG_NOTHROW(  );
+            bool isRemovable(ISubtree const * pItem) const
+                CFG_NOTHROW(  );
 
             ISubtree  * addNodeToCurrent(std::auto_ptr<ISubtree>  _aNode)
                 CFG_THROW3( MalformedDataException, container::ElementExistException, uno::RuntimeException );
@@ -222,6 +230,7 @@ namespace configmgr
                 CFG_UNO_THROW1( beans::PropertyExistException );
             void raiseIllegalTypeException  (sal_Char const * _pText) const
                 CFG_UNO_THROW1( beans::IllegalTypeException );
+            TemplateResult getTemplateData (TemplateRequest const & _aRequest  );
         private:
             INode * findChild(OUString const & _aName)
                 CFG_THROW2( MalformedDataException, uno::RuntimeException );
@@ -231,6 +240,7 @@ namespace configmgr
 
             ISubtree & implGetCurrentParent() const
                 CFG_THROW2( MalformedDataException, uno::RuntimeException );
+
         };
 // -----------------------------------------------------------------------------
 

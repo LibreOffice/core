@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ namespace
             return collection.back();
         }
 
-        typedef vector<Element> Collection;
+        typedef std::vector<Element> Collection;
         Collection collection;
     private:
         Result handle(TreeAccessor const& _aElement);

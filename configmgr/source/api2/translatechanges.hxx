@@ -2,9 +2,9 @@
  *
  *  $RCSfile: translatechanges.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,6 @@
 
 #ifndef CONFIGMGR_API_TRANSLATECHANGES_HXX_
 #define CONFIGMGR_API_TRANSLATECHANGES_HXX_
-
-#include "apitypes.hxx"
 
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>

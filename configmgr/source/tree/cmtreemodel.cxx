@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtreemodel.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-16 07:58:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,17 +61,13 @@
 
 #include <stdio.h>
 
-#include "cmtreemodel.hxx"
+#include "valuenode.hxx"
+#include "change.hxx"
 
 #ifndef CONFIGMGR_CONFIGEXCEPT_HXX_
 #include "configexcept.hxx"
 #endif
-#ifndef INCLUDED_CONFIGMGR_NAMECREATOR_HXX
-#include "namecreator.hxx"
-#endif
-#ifndef _CONFIGMGR_STRDECL_HXX_
 #include "strdecl.hxx"
-#endif
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>

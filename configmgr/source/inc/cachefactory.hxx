@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachefactory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-12-13 10:27:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,29 +66,22 @@
 #include <rtl/ref.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
-#include <com/sun/star/script/XTypeConverter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
     class TreeManager;
-    class ConnectionSettings;
-    class IConfigSession;
 //-----------------------------------------------------------------------------
     struct CacheFactory
     {
-        typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+        typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
             CreationContext;
-        typedef ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >
-            TypeConverterRef;
 
         rtl::Reference<TreeManager>
-            createCacheManager(ConnectionSettings const & _aSettings, CreationContext const & _xContext);
+            createCacheManager(CreationContext const & _xContext);
 
         static CacheFactory & instance();
     };

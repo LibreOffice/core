@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,6 @@
 #ifndef CONFIGMGR_API_BASEACCESSIMPL_HXX_
 #define CONFIGMGR_API_BASEACCESSIMPL_HXX_
 
-#ifndef CONFIGMGR_APITYPES_HXX_
-#include "apitypes.hxx"
-#endif
-
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAME_HPP_
 #include <com/sun/star/container/XHierarchicalName.hpp>
 #endif
@@ -87,17 +83,18 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTY_HPP_
 #include <com/sun/star/beans/XProperty.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYWITHSTATE_HPP_
 #include <com/sun/star/beans/XPropertyWithState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XSTRINGESCAPE_HPP_
-#include <com/sun/star/util/XStringEscape.hpp>
 #endif
 
 namespace configmgr
 {
     namespace css = ::com::sun::star;
     namespace uno = ::com::sun::star::uno;
+    using rtl::OUString;
 
     /* implementations of the interfaces supported by a (parent) node
         within the configuration tree.
@@ -160,6 +157,17 @@ namespace configmgr
         css::beans::Property implGetAsProperty(NodeAccess& rNode)
             throw(uno::RuntimeException);
 
+        // XPropertySetInfo
+        uno::Sequence< css::beans::Property > implGetProperties( NodeAccess& rNode )
+            throw (uno::RuntimeException);
+
+        css::beans::Property implGetPropertyByName( NodeAccess& rNode, const OUString& aName )
+            throw (css::beans::UnknownPropertyException, uno::RuntimeException);
+
+        sal_Bool implHasPropertyByName( NodeAccess& rNode, const OUString& Name )
+            throw (uno::RuntimeException);
+
+
         // XPropertyWithState
         css::beans::PropertyState implGetStateAsProperty(NodeAccess& rNode)
             throw (uno::RuntimeException);
@@ -176,12 +184,6 @@ namespace configmgr
         OUString SAL_CALL implGetElementTemplateName(NodeSetInfoAccess& rNode)
             throw(uno::RuntimeException);
 
-        // XStringEscape
-        OUString SAL_CALL implEscapeString(NodeAccess& rNode, const OUString& aString)
-            throw(css::lang::IllegalArgumentException, uno::RuntimeException);
-
-        OUString SAL_CALL implUnescapeString(NodeAccess& rNode, const OUString& aEscapedString)
-            throw(css::lang::IllegalArgumentException, uno::RuntimeException);
     }
 
 }

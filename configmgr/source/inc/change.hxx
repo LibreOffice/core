@@ -2,9 +2,9 @@
  *
  *  $RCSfile: change.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-16 07:58:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,8 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
-#include <com/sun/star/uno/Sequence.h>
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
 #endif
 
 #ifndef INCLUDED_MAP
@@ -217,7 +217,7 @@ namespace configmgr
 
         Mode getMode() const { return m_eMode; }
 
-        const configuration::Attributes& getAttributes() const {return m_aAttributes;}
+        const node::Attributes& getAttributes() const {return m_aAttributes;}
 
         rtl::OUString getModeAsString() const;
         void setModeAsString(const rtl::OUString& _rMode);
@@ -542,7 +542,7 @@ namespace configmgr
     class SubtreeChangeReferrer : public SubtreeChange
     {
         // no explicit construction
-        SubtreeChangeReferrer() : SubtreeChange(::rtl::OUString(), configuration::Attributes()) { }
+        SubtreeChangeReferrer() : SubtreeChange(::rtl::OUString(), node::Attributes()) { }
 
     public:
         SubtreeChangeReferrer(const SubtreeChange& _rSource);

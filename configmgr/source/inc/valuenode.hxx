@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-14 16:49:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,11 @@
 #ifndef _CONFIGMGR_TREE_VALUENODE_HXX
 #define _CONFIGMGR_TREE_VALUENODE_HXX
 
-#ifndef CONFIGMGR_RTTIMACROS_HXX
-#include "rttimacros.hxx"
+#ifndef CONFIGMGR_CONFIGURATION_ATTRIBUTES_HXX_
+#include "attributes.hxx"
 #endif
 #ifndef CFGMGR_ANYPAIR_HXX
 #include "anypair.hxx"
-#endif
-#ifndef CONFIGMGR_CONFIGPATH_HXX_
-#include "configpath.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
@@ -78,6 +75,10 @@
 
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
+#endif
+
+#ifndef CONFIGMGR_RTTIMACROS_HXX
+#include "rttimacros.hxx"
 #endif
 
 #include <string.h>
@@ -99,7 +100,7 @@ namespace configmgr
     using rtl::OUString;
 
     // helper (tag) class
-    namespace treeop { struct NoChildCopy {}; struct DeepChildCopy {}; }
+    namespace treeop { struct NoChildCopy {}; struct DeepChildCopy {}; enum { ALL_LEVELS = -1 }; }
     //==========================================================================
     //= Visitors
     //==========================================================================
@@ -170,47 +171,6 @@ namespace configmgr
         RTTI_BASE(INode);
     };
 
-
-#if 0 // for future redesign
-    //==========================================================================
-    //= ISubtree
-    //==========================================================================
-    // Abstract class
-
-    class ASubtree : public INode
-    {
-        sal_Int16       m_nLevel;                   /// determines if everything is read
-        OUString        m_sId;
-
-    public:
-        virtual bool isSetNode() const = 0;
-
-    };
-
-    //==========================================================================
-    //= GroupTree
-    //==========================================================================
-    class GroupTree : public ASubtree
-    {
-    public:
-        virtual bool isSetNode() const; // always false!
-
-    };
-
-    //==========================================================================
-    //= SetTree
-    //==========================================================================
-    class SetTree : public ASubtree
-    {
-        OUString        m_sTemplateName;            /// path of the template for child instantiation
-        OUString        m_sTemplateModule;          /// module of the template for child instantiation
-    public:
-        virtual bool isSetNode() const; // always true!
-    };
-#endif
-
-// -----------------------------------------------------------------------------
-// ----------------------------------- O L D -----------------------------------
 // -----------------------------------------------------------------------------
 
     //==========================================================================

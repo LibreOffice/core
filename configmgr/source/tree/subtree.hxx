@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtree.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ namespace configmgr
 
         Subtree(){}
         Subtree(const OUString& _rName,
-                const configuration::Attributes& _rAttrs)
+                const node::Attributes& _rAttrs)
                 :ISubtree(_rName, _rAttrs){};
 
         Subtree(const ISubtree& _rOther, NoChildCopy)
@@ -121,7 +121,7 @@ namespace configmgr
 
         Subtree(const OUString& _rName,
                 const OUString& _rTemplateName, const OUString& _rTemplateModule,
-                const configuration::Attributes& _rAttrs)
+                const node::Attributes& _rAttrs)
                 :ISubtree(_rName, _rTemplateName, _rTemplateModule, _rAttrs){};
 
         Subtree(const Subtree& _rOther, treeop::DeepChildCopy _dc)

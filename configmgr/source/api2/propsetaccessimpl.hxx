@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propsetaccessimpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,6 @@
 #ifndef CONFIGMGR_API_PROPERTYSETIMPL_HXX_
 #define CONFIGMGR_API_PROPERTYSETIMPL_HXX_
 
-#ifndef CONFIGMGR_APITYPES_HXX_
-#include "apitypes.hxx"
-#endif
-
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -91,6 +87,7 @@ namespace configmgr
     namespace uno = ::com::sun::star::uno;
     namespace lang = ::com::sun::star::lang;
     namespace beans = ::com::sun::star::beans;
+    using rtl::OUString;
 
     /* implementations of the interfaces supported by a (parent) node
         within the configuration tree.

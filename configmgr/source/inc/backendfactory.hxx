@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendfactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-12-13 10:26:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,19 +66,13 @@
 #include <rtl/ref.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
-#include <com/sun/star/script/XTypeConverter.hpp>
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 #include <drafts/com/sun/star/configuration/backend/XBackend.hpp>
 
 namespace configmgr
 {
-//-----------------------------------------------------------------------------
-    class ConnectionSettings;
-    class IConfigSession;
 //-----------------------------------------------------------------------------
     namespace backend
     {
@@ -86,27 +80,28 @@ namespace configmgr
 
         struct IMergedDataProvider;
 //-----------------------------------------------------------------------------
-        struct BackendFactory
+        class BackendFactory
         {
-            typedef com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+        public:
+            typedef com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
                 CreationContext;
-
-            typedef com::sun::star::uno::Reference< com::sun::star::script::XTypeConverter >
-                TypeConverterRef;
 
             typedef com::sun::star::uno::Reference< drafts::com::sun::star::configuration::backend::XBackend >
                 UnoBackend;
 
-            rtl::Reference<IMergedDataProvider>
-                createBackend(ConnectionSettings const & _aSettings, CreationContext const & _xCtx);
+            rtl::Reference<IMergedDataProvider> createBackend();
 
-           static UnoBackend
-                createDefaultUnoBackend(CreationContext const & _xCtx);
+            UnoBackend getUnoBackend();
 
-            static UnoBackend
-                createUnoBackend(ConnectionSettings const & _aSettings, CreationContext const & _xCtx);
+            static BackendFactory instance(CreationContext const & _xCtx);
 
-            static BackendFactory & instance();
+        private:
+            explicit
+            BackendFactory(CreationContext const & _xCtx)
+            : m_xCtx(_xCtx)
+            {}
+
+            CreationContext m_xCtx;
         };
 //-----------------------------------------------------------------------------
     }

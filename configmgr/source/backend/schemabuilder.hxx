@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemabuilder.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-10-24 12:59:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef CONFIGMGR_BACKEND_COMPONENTDATAHELPER_HXX
 #include "componentdatahelper.hxx"
 #endif
+#ifndef CONFIGMGR_BACKEND_MERGEDDATAPROVIDER_HXX
+#include "mergeddataprovider.hxx"
+#endif
 
 #include <drafts/com/sun/star/configuration/backend/XSchemaHandler.hpp>
 
@@ -98,7 +101,7 @@ namespace configmgr
         :   public SchemaBuilder_Base
         {
         public:
-            SchemaBuilder( const OUString& aExpectedComponentName );
+            SchemaBuilder( const OUString& aExpectedComponentName, ITemplateDataProvider* aTemplateProvider = NULL );
             virtual ~SchemaBuilder();
 
         // checking the result
@@ -181,6 +184,7 @@ namespace configmgr
             MergedComponentData     m_aData;
             DataBuilderContext      m_aContext;
             ComponentDataFactory    m_aFactory;
+            ITemplateDataProvider *  m_aTemplateProvider;
         };
 // -----------------------------------------------------------------------------
 

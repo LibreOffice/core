@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: mh $ $Date: 2002-10-02 11:34:58 $
+#   last change: $Author: hr $ $Date: 2003-03-19 16:20:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,30 +75,10 @@ ENABLE_EXCEPTIONS=TRUE
 
 
 SLOFILES=\
-    $(SLO)$/lookupcontext.obj \
-    $(SLO)$/attributeparser.obj \
-    $(SLO)$/valuenodebuilder.obj \
-    $(SLO)$/localizednodebuilder.obj \
-    $(SLO)$/valueconverter.obj \
     $(SLO)$/matchlocale.obj \
-    $(SLO)$/treebuildercallback.obj \
-    $(SLO)$/notifycallback.obj \
-    $(SLO)$/valuehandler.obj \
     $(SLO)$/typeconverter.obj \
-    $(SLO)$/xmltreebuilder.obj \
-    $(SLO)$/xmlformater.obj \
-    $(SLO)$/localsession.obj \
-    $(SLO)$/saxadapter.obj \
-    $(SLO)$/updatehandler.obj \
-    $(SLO)$/namehelper.obj \
-    $(SLO)$/binarywritehandler.obj \
-    $(SLO)$/writesubtreeasbinaryhandler.obj \
-    $(SLO)$/binarywriter.obj \
-    $(SLO)$/binaryreader.obj \
     $(SLO)$/simpletypehelper.obj \
-    $(SLO)$/binarydecide.obj \
-    $(SLO)$/binarybasereader.obj \
-    $(SLO)$/generatecache.obj \
+    $(SLO)$/valueconverter.obj \
     $(SLO)$/elementparser.obj \
     $(SLO)$/elementformatter.obj \
     $(SLO)$/basicparser.obj \
@@ -109,12 +89,6 @@ SLOFILES=\
     $(SLO)$/layerwriter.obj \
     $(SLO)$/valueformatter.obj \
     $(SLO)$/xmlstrings.obj \
-
-
-.IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCPOWERPC"
-NOOPTFILES= $(SLO)$/localsession.obj
-.ENDIF
-
 
 # --- Targets ---
 

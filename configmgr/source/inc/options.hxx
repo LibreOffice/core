@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 09:00:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,87 +95,45 @@ namespace configmgr
     class OOptions : public salhelper::SimpleReferenceObject
     {
         RequestOptions  m_aRequestOptions;  // current options to use
-        RequestOptions  m_aDefaultOptions;  // default options used as base
 
-        bool            m_bLazyWrite;       // true, if tree use lazy writing
-        bool            m_bForceWritable;   // true, if write-protection should be ignored
     public:
         typedef RequestOptions::Locale Locale;
         typedef RequestOptions::Entity Entity;
 
         OOptions()
         : m_aRequestOptions()
-        , m_aDefaultOptions()
-        , m_bLazyWrite(true)
-        , m_bForceWritable(false)
         {}
 
         explicit
         OOptions(const RequestOptions& _aDefaultOptions)
-        : m_aRequestOptions(_aDefaultOptions, true)
-        , m_aDefaultOptions(_aDefaultOptions)
-        , m_bLazyWrite(true)
-        , m_bForceWritable(false)
+        : m_aRequestOptions(_aDefaultOptions)
         {
         }
 
-        OOptions(const OOptions& _rOptions)
-        : m_aRequestOptions(_rOptions.m_aRequestOptions, true)
-        , m_aDefaultOptions(_rOptions.m_aDefaultOptions)
-        , m_bLazyWrite(_rOptions.m_bLazyWrite)
-        , m_bForceWritable(_rOptions.m_bForceWritable)
+        OOptions(const OOptions& _aOtherOptions)
+        : m_aRequestOptions(_aOtherOptions.m_aRequestOptions)
         {
         }
 
         bool isForSessionUser()     const { return ! m_aRequestOptions.hasEntity(); }
-        bool canUseCache()          const { return ! m_aRequestOptions.isForcingReload(); }
-        bool getLazyWrite()         const { return m_bLazyWrite; }
-        bool isForcingWritable()    const { return m_bForceWritable; }
 
         Locale getLocale()          const { return m_aRequestOptions.getLocale(); }
         Entity getUser()            const { return m_aRequestOptions.getEntity(); }
 
-        Locale getDefaultLocale()   const { return m_aDefaultOptions.getLocale(); }
-        Entity getDefaultUser()     const { return m_aDefaultOptions.getEntity(); }
-
         RequestOptions const & getRequestOptions() const
         { return m_aRequestOptions; }
-
-        void setNoCache(bool _bNoCache = true)
-        { m_aRequestOptions.forceReload(_bNoCache); }
 
         void setUser(const Entity & _rUser)
         { m_aRequestOptions.setEntity(_rUser); }
 
-        void setDefaultUser(const Entity & _rUser)
-        {
-            m_aDefaultOptions.setEntity(_rUser);
-            if (!m_aRequestOptions.hasEntity())
-                m_aRequestOptions.setEntity(_rUser);
-        }
-
         void setLocale(const Locale & _rLocale)
         { m_aRequestOptions.setLocale(_rLocale); }
-
-        void setDefaultLocale(const Locale & _rLocale)
-        {
-            m_aDefaultOptions.setLocale(_rLocale);
-            if (!m_aRequestOptions.hasLocale())
-                m_aRequestOptions.setLocale(_rLocale);
-        }
 
         void setMultiLocaleMode()
         { m_aRequestOptions.setAllLocales(); }
 
-        void setMultiLocaleDefault()
-        {
-            m_aDefaultOptions.setAllLocales();
-            if (!m_aRequestOptions.hasLocale())
-                m_aRequestOptions.setAllLocales();
-        }
-
-        void setLazyWrite(bool _bLazyWrite) { m_bLazyWrite = _bLazyWrite; }
-        void setForceWritable(bool _bForce) { m_bForceWritable = _bForce; }
+        void enableAsync(bool _bEnable)
+        { m_aRequestOptions.enableAsync(_bEnable); }
     };
     typedef vos::ORef<OOptions> OptionsRef;
 

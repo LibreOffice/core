@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuetypeconverter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-28 15:44:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,13 +90,14 @@ namespace configmgr
 // -----------------------------------------------------------------------------
     class ValueConverter
     {
-        typedef std::vector< OUString > StringList;
         /// TypeConverter is used for converting type from string values
         uno::Reference< script::XTypeConverter > m_xTypeConverter;
         /// Value info
         uno::Type   m_aType;
         OUString    m_sSeparator;
         bool        m_bNull;
+    public:
+        typedef std::vector< OUString > StringList;
     public:
         /// construct a value converter with no initial type info
         ValueConverter(const uno::Reference< script::XTypeConverter > & _xTC)

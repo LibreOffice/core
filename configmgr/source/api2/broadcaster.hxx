@@ -2,9 +2,9 @@
  *
  *  $RCSfile: broadcaster.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 18:43:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@
 #include <com/sun/star/beans/PropertyVetoException.hpp>
 #endif
 
-#include "apitypes.hxx"
 #include <vos/ref.hxx>
 
 namespace configmgr

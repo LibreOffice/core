@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-15 14:34:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 #ifndef CONFIGMGR_CONFIGNODEBEHAVIOR_HXX_
 #define CONFIGMGR_CONFIGNODEBEHAVIOR_HXX_
 
-#ifndef CONFIGMGR_API_APITYPES_HXX_
-#include "apitypes.hxx"
-#endif
 #ifndef CONFIGMGR_CONFIGURATION_ATTRIBUTES_HXX_
 #include "attributes.hxx"
 #endif

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: confprovider2.hxx,v $
+ *  $RCSfile: providerwrapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -50,7 +50,7 @@
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
+ *  Copyright: 2003 by Sun Microsystems, Inc.
  *
  *  All Rights Reserved.
  *
@@ -58,43 +58,60 @@
  *
  *
  ************************************************************************/
-#ifndef CONFIGMGR_API_CONFPROVIDER2_HXX_
-#define CONFIGMGR_API_CONFPROVIDER2_HXX_
+#ifndef CONFIGMGR_API_PROVIDERWRAPPER_HXX_
+#define CONFIGMGR_API_PROVIDERWRAPPER_HXX_
 
-#ifndef CONFIGMGR_API_PROVIDER_HXX_
-#include "provider.hxx"
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
 #endif
 
-#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
-#include <comphelper/proparrhlp.hxx>
+#ifndef _CPPUHELPER_COMPBASE2_HXX_
+#include <cppuhelper/compbase2.hxx>
 #endif
-
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
 
 namespace configmgr
 {
-    namespace css  = ::com::sun::star;
-    namespace uno  = css::uno;
-    namespace lang = css::lang;
-    using ::rtl::OUString;
-    using ::vos::ORef;
+    //==========================================================================
+    namespace uno = com::sun::star::uno;
+    namespace lang = com::sun::star::lang;
+    using rtl::OUString;
+    //==========================================================================
+    //= ProviderWrapper
+    //==========================================================================
+    typedef ::cppu::WeakComponentImplHelper2 <  lang::XMultiServiceFactory,
+                                                lang::XServiceInfo
+                                            >   ProviderWrapper_Base;
 
-    class OConfigurationProviderImpl;
-    //==========================================================================
-    //= OConfigurationProvider
-    //==========================================================================
-    /** Factory for receiving access for user configuration data. */
-    class OConfigurationProvider : public OProvider
-                                 , public  ::comphelper::OPropertyArrayUsageHelper<OConfigurationProvider>
+    struct PWMutexHolder { osl::Mutex mutex; }; // ad hoc ...
+
+    class ProviderWrapper : private PWMutexHolder, public ProviderWrapper_Base
     {
-        OConfigurationProviderImpl*         m_pImpl;
-        uno::Sequence< ::rtl::OUString >    m_aPrefetchNodes;
+    public:
+        typedef uno::Reference< lang::XMultiServiceFactory > Provider;
+        typedef uno::Sequence< com::sun::star::beans::NamedValue >  NamedValues;
+        typedef uno::Sequence< uno::Any >                           Arguments;
+
+    private:
+        Provider    m_xDelegate;
+        Arguments   m_aDefaults;
+    private:
+        ProviderWrapper(Provider const & xDelegate, NamedValues const & aPresets);
 
     public:
-        OConfigurationProvider(CreationContext const & xContext, ServiceImplementationInfo const* pServices);
-        void connect() throw (uno::Exception);
-
-    public:
-        ~OConfigurationProvider();
+        static uno::Reference< uno::XInterface > create( uno::Reference< uno::XInterface > xDelegate, NamedValues const & aPresets);
+        ~ProviderWrapper();
 
         /// XMultiServiceFactory
         virtual uno::Reference< uno::XInterface > SAL_CALL
@@ -109,26 +126,25 @@ namespace configmgr
             getAvailableServiceNames(  )
                 throw(uno::RuntimeException);
 
-        // OPropertSetHelper
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                                sal_Int32 nHandle,
-                                const ::com::sun::star::uno::Any& rValue
-                                                 )
-                                                 throw (::com::sun::star::uno::Exception);
+        /// XServiceInfo
+        virtual OUString SAL_CALL
+            getImplementationName(  )
+                throw(uno::RuntimeException);
 
-        // XInterface
-        virtual uno::Any SAL_CALL queryInterface( const uno::Type & rType ) throw(uno::RuntimeException);
-        //XTypeProvider
-        virtual uno::Sequence< uno::Type > SAL_CALL getTypes(  ) throw(uno::RuntimeException);
+        virtual sal_Bool SAL_CALL
+            supportsService( const ::rtl::OUString& ServiceName )
+                throw(uno::RuntimeException);
+
+        virtual uno::Sequence< OUString > SAL_CALL
+            getSupportedServiceNames(  )
+                throw(uno::RuntimeException);
 
     protected:
         virtual void SAL_CALL disposing();
-
-        // OPropertyArrayUsageHelper
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
-
-        // OPropertySetHelper
-        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+    private:
+        Provider getDelegate();
+        uno::Reference<lang::XServiceInfo> getDelegateInfo();
+        Arguments patchArguments(Arguments const & aArgs) const;
     };
 
 

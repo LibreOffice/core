@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrapexception.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-01 16:08:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,16 @@
 #ifndef CONFIGMGR_WRAPEXCEPTION_HXX
 #define CONFIGMGR_WRAPEXCEPTION_HXX
 
+#include <com/sun/star/configuration/MissingBootstrapFileException.hpp>
+#include <com/sun/star/configuration/InvalidBootstrapFileException.hpp>
+#include <com/sun/star/configuration/InstallationIncompleteException.hpp>
+#include <com/sun/star/configuration/CannotLoadConfigurationException.hpp>
+#include <drafts/com/sun/star/configuration/backend/BackendSetupException.hpp>
+#include <drafts/com/sun/star/configuration/backend/AuthenticationFailedException.hpp>
+#include <drafts/com/sun/star/configuration/backend/InvalidAuthenticationMechanismException.hpp>
+#include <drafts/com/sun/star/configuration/backend/CannotConnectException.hpp>
+#include <drafts/com/sun/star/configuration/backend/InsufficientAccessRightsException.hpp>
+
 #include <drafts/com/sun/star/configuration/backend/BackendAccessException.hpp>
 #include <drafts/com/sun/star/configuration/backend/ConnectionLostException.hpp>
 #include <drafts/com/sun/star/configuration/backend/MalformedDataException.hpp>
@@ -71,10 +81,12 @@
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 
@@ -86,6 +98,23 @@
 
 #define PASS_EXCEPTION( ETyp ) \
     catch (ETyp & ) { throw; }
+
+#define WRAP_CONFIGBACKEND_CREATION_EXCEPTIONS( Raise )      \
+    WRAP_EXCEPTION(::drafts::com::sun::star::configuration::backend::InsufficientAccessRightsException, Raise)    \
+    WRAP_EXCEPTION(::drafts::com::sun::star::configuration::backend::AuthenticationFailedException, Raise)    \
+    WRAP_EXCEPTION(::drafts::com::sun::star::configuration::backend::InvalidAuthenticationMechanismException, Raise)    \
+    WRAP_EXCEPTION(::drafts::com::sun::star::configuration::backend::CannotConnectException, Raise)    \
+    WRAP_EXCEPTION(::drafts::com::sun::star::configuration::backend::BackendSetupException, Raise)    \
+    WRAP_EXCEPTION(::drafts::com::sun::star::configuration::backend::BackendAccessException, Raise)     \
+    WRAP_EXCEPTION(::com::sun::star::configuration::MissingBootstrapFileException, Raise)    \
+    WRAP_EXCEPTION(::com::sun::star::configuration::InvalidBootstrapFileException, Raise)    \
+    WRAP_EXCEPTION(::com::sun::star::configuration::InstallationIncompleteException, Raise)    \
+    WRAP_EXCEPTION(::com::sun::star::configuration::CannotLoadConfigurationException, Raise)    \
+    WRAP_EXCEPTION(::com::sun::star::lang::WrappedTargetException, Raise)                   \
+    WRAP_EXCEPTION(::com::sun::star::lang::WrappedTargetRuntimeException, Raise)            \
+    WRAP_EXCEPTION(::com::sun::star::lang::DisposedException, Raise)                        \
+    WRAP_EXCEPTION(::com::sun::star::uno::RuntimeException, Raise)      \
+    WRAP_EXCEPTION(::com::sun::star::uno::Exception, Raise)
 
 #define WRAP_CONFIGBACKEND_EXCEPTIONS( Raise )      \
     WRAP_EXCEPTION(::drafts::com::sun::star::configuration::backend::ConnectionLostException, Raise)    \
@@ -108,6 +137,23 @@
 
 #define WRAP_OTHER_EXCEPTIONS( Raise ) \
     WRAP_EXCEPTION(::com::sun::star::uno::Exception, Raise)
+
+#define WRAP_CONFIGBACKEND_CREATION_EXCEPTIONS1( Raise, Arg )      \
+    WRAP_EXCEPTION1(::drafts::com::sun::star::configuration::backend::InsufficientAccessRightsException, Raise, Arg)    \
+    WRAP_EXCEPTION1(::drafts::com::sun::star::configuration::backend::AuthenticationFailedException, Raise, Arg)    \
+    WRAP_EXCEPTION1(::drafts::com::sun::star::configuration::backend::InvalidAuthenticationMechanismException, Raise, Arg)    \
+    WRAP_EXCEPTION1(::drafts::com::sun::star::configuration::backend::CannotConnectException, Raise, Arg)    \
+    WRAP_EXCEPTION1(::drafts::com::sun::star::configuration::backend::BackendSetupException, Raise, Arg)    \
+    WRAP_EXCEPTION1(::drafts::com::sun::star::configuration::backend::BackendAccessException, Raise, Arg)     \
+    WRAP_EXCEPTION1(::com::sun::star::configuration::MissingBootstrapFileException, Raise, Arg)    \
+    WRAP_EXCEPTION1(::com::sun::star::configuration::InvalidBootstrapFileException, Raise, Arg)    \
+    WRAP_EXCEPTION1(::com::sun::star::configuration::InstallationIncompleteException, Raise, Arg)    \
+    WRAP_EXCEPTION1(::com::sun::star::configuration::CannotLoadConfigurationException, Raise, Arg)    \
+    WRAP_EXCEPTION1(::com::sun::star::lang::WrappedTargetException, Raise, Arg)                   \
+    WRAP_EXCEPTION1(::com::sun::star::lang::WrappedTargetRuntimeException, Raise, Arg)            \
+    WRAP_EXCEPTION1(::com::sun::star::lang::DisposedException, Raise, Arg)                        \
+    WRAP_EXCEPTION1(::com::sun::star::uno::RuntimeException, Raise, Arg)      \
+    WRAP_EXCEPTION1(::com::sun::star::uno::Exception, Raise, Arg)
 
 #define WRAP_CONFIGBACKEND_EXCEPTIONS1( Raise, Arg )      \
     WRAP_EXCEPTION1(::drafts::com::sun::star::configuration::backend::ConnectionLostException, Raise, Arg)    \

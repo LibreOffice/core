@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenercontainer.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 13:27:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ void DisposeNotifier::notify()
     {
         if (it->is())
         {
-            (*it)->disposing(aEvent);
+            try { (*it)->disposing(aEvent); } catch (uno::Exception & ) {}
             it->clear();
         }
     }

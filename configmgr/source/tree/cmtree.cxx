@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-14 16:49:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,8 @@ namespace configmgr
 
 // ---------------------------- Node implementation ----------------------------
 
-    INode::INode(configuration::Attributes _aAttr):m_aAttributes(_aAttr){}
-    INode::INode(OUString const& aName, configuration::Attributes _aAttr)
+    INode::INode(node::Attributes _aAttr):m_aAttributes(_aAttr){}
+    INode::INode(OUString const& aName, node::Attributes _aAttr)
           :m_aName(aName)
           ,m_aAttributes(_aAttr){}
     // CopyCTor will be create automatically
@@ -174,9 +174,9 @@ namespace configmgr
     }
 
 // ------------------------- SearchNode implementation -------------------------
-    SearchNode::SearchNode():INode(configuration::Attributes()){}
+    SearchNode::SearchNode():INode(node::Attributes()){}
     SearchNode::SearchNode(OUString const& aName)
-        :INode(aName, configuration::Attributes()){}
+        :INode(aName, node::Attributes()){}
 
     std::auto_ptr<INode> SearchNode::clone() const {return std::auto_ptr<INode>(new SearchNode(*this));}
 
@@ -204,7 +204,7 @@ namespace configmgr
 
         static Level childLevel(Level _nLevel)
         {
-            OSL_ASSERT(0 > ITreeProvider::ALL_LEVELS);
+            OSL_ASSERT(0 > treeop::ALL_LEVELS);
             return (_nLevel > 0) ? _nLevel-1 : _nLevel;
         }
     protected:
@@ -220,9 +220,9 @@ namespace configmgr
     //--------------------------------------------------------------------------
     static inline bool adjustLevel(sal_Int16& _rLevel, sal_Int16 _nNewLevel)
     {
-        if (_rLevel == ITreeProvider::ALL_LEVELS)   return false;
+        if (_rLevel == treeop::ALL_LEVELS)   return false;
         if (_nNewLevel <= _rLevel &&
-            _nNewLevel != ITreeProvider::ALL_LEVELS) return false;
+            _nNewLevel != treeop::ALL_LEVELS) return false;
 
         _rLevel = _nNewLevel;
         return true;

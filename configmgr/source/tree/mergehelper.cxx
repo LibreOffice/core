@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergehelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #endif
 #ifndef CONFIGMGR_TREE_CHANGEFACTORY_HXX
 #include "treechangefactory.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGPATH_HXX_
+#include "configpath.hxx"
 #endif
 
 #ifndef _CONFIGMGR_TRACER_HXX_
@@ -276,7 +279,7 @@ void OCleanupLayerAction::handle(SubtreeChange& _rChange)
         std::auto_ptr<ISubtree> pNode = m_aNodeConverter.createCorrespondingTree(_rChange);
 
         // mark as complete with defaults)
-        pNode->setLevels(ITreeProvider::ALL_LEVELS,ITreeProvider::ALL_LEVELS);
+        pNode->setLevels(treeop::ALL_LEVELS,treeop::ALL_LEVELS);
 
         this->addReplacedNode( base_ptr(pNode) );
     }

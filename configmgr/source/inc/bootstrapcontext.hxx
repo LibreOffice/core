@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrapcontext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-06-12 16:37:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef CONFIGMGR_BOOTSTRAPCONTEXT_HXX_
 #define CONFIGMGR_BOOTSTRAPCONTEXT_HXX_
 
+#ifndef _CPPUHELPER_COMPBASE2_HXX_
+#include <cppuhelper/compbase2.hxx>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
@@ -70,8 +73,17 @@
 #include <rtl/bootstrap.h>
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_XCURRENTCONTEXT_HPP_
 #include <com/sun/star/uno/XCurrentContext.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
+#include <com/sun/star/lang/XEventListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -84,6 +96,10 @@ namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
 
+// -----------------------------------------------------------------------------
+#define SINGLETON_ "/singletons/"
+#define SINGLETON( NAME ) OUString( RTL_CONSTASCII_USTRINGPARAM( SINGLETON_ NAME ) )
+// -----------------------------------------------------------------------------
 namespace configmgr
 {
 // -----------------------------------------------------------------------------
@@ -92,66 +108,144 @@ namespace configmgr
     namespace beans = ::com::sun::star::beans;
     using ::rtl::OUString;
 // -----------------------------------------------------------------------------
-    /** Base class for a customized ComponentContext
+    typedef ::cppu::WeakComponentImplHelper2 <
+                    uno::XComponentContext,
+                    uno::XCurrentContext
+                > ComponentContext_Base;
+    /** Base class for customized ComponentContext using bootstrap data and overrides
     */
-    class BootstrapContext
-    : public ::cppu::WeakImplHelper1< uno::XCurrentContext >
+    class ComponentContext : public ComponentContext_Base
     {
     public:
-        typedef uno::Reference< uno::XComponentContext > ComponentContext;
-        typedef uno::Sequence < beans::NamedValue > Arguments;
+        typedef uno::Reference< uno::XComponentContext >        Context;
+        typedef uno::Reference< lang::XMultiComponentFactory >  ServiceManager;
+
     // creation and destruction
     public:
-        /** Constructs a BoottrapContext based on the given arguments and context.
-
-            @param _aArguments
-                The arguments used to create this component.
-                These values will override values from the context or bootstrap data.
+        /** Constructs a ComponentContext based on the given overrides and context.
+            Initially no bootstrap data will be used.
 
             @param _xContext
-                The context of this component.
-                Values from here will override values from bootstrap data.
+                The base context of this component context.
+                Values from here take precedence over values from bootstrap data.
+
+            @param _aOverrides
+                The overrides used to create this component context.
+                These values take precedence over values from the base context or bootstrap data.
         */
         explicit
-        BootstrapContext(Arguments const & _aArguments, ComponentContext const & _xContext = ComponentContext());
+        ComponentContext(Context const & _xContext);
 
         /// Destroys this BootstrapContext
-        ~BootstrapContext();
+        ~ComponentContext();
 
-        /// sets the INI file to use for bootstrap data
-        void setBootstrapURL( const OUString& _aURL );
+        /// changes the INI file to use for bootstrap data
+        void changeBootstrapURL( const OUString& _aURL );
 
+        // gets the INI in use for getting bootstrap data
+        OUString getBootstrapURL() const;
+
+        static sal_Bool isPassthrough(Context const & _xContext);
+
+        static Context getBaseContext(Context const & _xContext);
+
+        static beans::NamedValue makePassthroughMarker(sal_Bool bPassthrough = true);
     // interface implementations
     public:
-    // XCurrentContext
+    // XComponentContext & XCurrentContext
         /** Retrieves a value from this context.
+            Can be overridden in derived implementations
 
             @param Name
                 The name of the value to retrieve.
-                A prefix of "com.sun.star.configuration.bootstrap." is stripped/ignored
 
             @returns
                 The requested value, or <VOID/> if the value is not found.
         */
         virtual uno::Any SAL_CALL
             getValueByName( const OUString& Name )
+                throw (uno::RuntimeException) = 0;
+
+    // XComponentContext only
+        virtual ServiceManager SAL_CALL
+            getServiceManager(  )
                 throw (uno::RuntimeException);
 
+    protected:
+    // ComponentHelper
+        virtual void SAL_CALL disposing();
+
+    protected:
+        // two phase construct - also initialized the bootstrap data
+        void initialize(const OUString& _aBootstrapURL);
+
+        bool lookupInContext  ( uno::Any & _rValue, const OUString& _aName ) const;
+        bool lookupInBootstrap( uno::Any & _rValue, const OUString& _aName ) const;
+
+        osl::Mutex & mutex() const { return m_aMutex; }
+        Context const & basecontext() const { osl::MutexGuard lock(mutex()); return m_xContext; }
+
     private:
-        bool lookupInArguments( uno::Any & _rValue, const OUString& _aName );
-        bool lookupInContext  ( uno::Any & _rValue, const OUString& _aName );
-        bool lookupInBootstrap( uno::Any & _rValue, const OUString& _aName );
-
-        static OUString makeLongName (OUString const & _aName);
-        static OUString makeShortName(OUString const & _aName);
-
-        /// The context that some requests are delegated to
-        Arguments           m_aArguments;
-        ComponentContext    m_xContext;
+        /// The mutex protecting this component
+        mutable osl::Mutex  m_aMutex;
+        /// The context that most requests are delegated to
+        Context             m_xContext;
+        /// The bootstrap data consulted as fallback
         rtlBootstrapHandle  m_hBootstrapData;
     };
 // -----------------------------------------------------------------------------
 
+    class UnoContextTunnel
+    {
+    public:
+        typedef uno::Reference< uno::XCurrentContext >  CurrentContext;
+        typedef uno::Reference< lang::XUnoTunnel >      FailureTunnel;
+        typedef uno::Reference< uno::XComponentContext > Context;
+    public:
+        UnoContextTunnel();
+        ~UnoContextTunnel();
+        void tunnel(Context const & xContext);
+        void passthru(Context const & xContext);
+        uno::Any recoverFailure(bool bRaise); // true, if there is a failure
+
+        static Context recoverContext(Context const & xFallback = Context());
+        static bool tunnelFailure(uno::Any const & aException, bool bRaise = false);
+    private:
+        CurrentContext  m_xOldContext;
+        FailureTunnel   m_xActiveTunnel;
+        class Tunnel;
+    };
+// -----------------------------------------------------------------------------
+
+    class DisposingForwarder : public cppu::WeakImplHelper1< lang::XEventListener >
+    {
+        uno::Reference< lang::XComponent > m_xTarget;
+
+        DisposingForwarder( uno::Reference< lang::XComponent > const & xTarget ) SAL_THROW( () )
+        : m_xTarget( xTarget )
+        { OSL_ASSERT( m_xTarget.is() ); }
+
+        virtual void SAL_CALL disposing( lang::EventObject const & rSource )
+            throw (uno::RuntimeException);
+    public:
+        // listens at source for disposing, then disposes target
+        static inline void forward(
+            uno::Reference< lang::XComponent > const & xSource,
+            uno::Reference< lang::XComponent > const & xTarget )
+            SAL_THROW( (uno::RuntimeException) );
+    };
+//__________________________________________________________________________________________________
+    inline void DisposingForwarder::forward(
+        uno::Reference< lang::XComponent > const & xSource,
+        uno::Reference< lang::XComponent > const & xTarget )
+        SAL_THROW( (uno::RuntimeException) )
+    {
+        if (xSource.is())
+        {
+            xSource->addEventListener( new DisposingForwarder( xTarget ) );
+        }
+    }
+// -----------------------------------------------------------------------------
 } // namespace configmgr
 
 #endif

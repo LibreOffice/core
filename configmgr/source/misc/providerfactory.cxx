@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-24 15:44:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,25 +65,26 @@
 #ifndef CONFIGMGR_API_FACTORY_HXX_
 #include "confapifactory.hxx"
 #endif
-#ifndef CONFIGMGR_API_SVCCOMPONENT_HXX_
-#include "confsvccomponent.hxx"
-#endif
 #ifndef CONFIGMGR_BOOTSTRAP_HXX_
 #include "bootstrap.hxx"
 #endif
+#ifndef CONFIGMGR_API_PROVIDERWRAPPER_HXX_
+#include "providerwrapper.hxx"
+#endif
 
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
-#include <com/sun/star/lang/XComponent.hpp>
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONFIGURATION_CANNOTLOADCONFIGURATIONEXCEPTION_HPP_
 #include <com/sun/star/configuration/CannotLoadConfigurationException.hpp>
 #endif
 
-#ifndef _UNO_LBNAMES_H_
-#include <uno/lbnames.h>
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
 #endif
-
-#define THISREF() static_cast< ::cppu::OWeakObject* >(this)
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -92,425 +93,201 @@
 #include <rtl/logfile.hxx>
 #endif
 
-//........................................................................
+//---------------------------------------------------------------------------------------
 namespace configmgr
 {
-//........................................................................
-
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::lang;
-    namespace csscfg = ::com::sun::star::configuration;
-    using namespace ::cppu;
-    using namespace ::osl;
-
-
-    //=======================================================================================
+    //---------------------------------------------------------------------------------------
     //= OProviderFactory
-    //=======================================================================================
-    typedef ::cppu::WeakImplHelper1<XEventListener> XEventListener_BASE;
-    class ODisposingListener : public XEventListener_BASE
-    {
-        OProviderFactory& m_aFactory;
-    public:
-        ODisposingListener(OProviderFactory& _aFactory):
-            m_aFactory(_aFactory){}
-
-        virtual void SAL_CALL disposing(com::sun::star::lang::EventObject const& rEvt) throw()
-            {
-                RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::ODisposingListener", "jb99855", "configmgr::ODisposingListener::disposing()");
-                m_aFactory.disposing(rEvt);
-            }
-        ~ODisposingListener()
-            {
-                volatile int dummy = 0;
-            }
-
-    };
     //---------------------------------------------------------------------------------------
 
-    //=======================================================================================
-    //= OProviderFactory
-    //=======================================================================================
     //---------------------------------------------------------------------------------------
-    OProviderFactory::OProviderFactory(const Reference< XMultiServiceFactory >& _rxORB, ProviderInstantiation _pObjectCreator)
-        :m_pObjectCreator(_pObjectCreator)
-        ,m_xORB(_rxORB)
-        ,m_pPureSettings(NULL)
-    {
-        ODisposingListener *pListener = new ODisposingListener(*this);
-        m_xEventListener = pListener;
 
-        Reference<com::sun::star::lang::XComponent> xComponent(_rxORB, UNO_QUERY);
-        if (xComponent.is())
-        {
-            xComponent->addEventListener(m_xEventListener);
-            // CFG_TRACE_INFO("insert disposeListener.");
-        }
+    ProviderFactory::ProviderFactory(OUString const & aImplementationName, bool bAdmin)
+    : m_aImplementationName(aImplementationName)
+    , m_bAdmin(bAdmin)
+    {
     }
+    //---------------------------------------------------------------------------------------
 
-//---------------------------------------------------------------------------------------
-    OProviderFactory::~OProviderFactory()
+    ProviderFactory::~ProviderFactory()
     {
-        delete m_pPureSettings;
-
-        Reference<com::sun::star::lang::XComponent> xComponent(m_xORB, UNO_QUERY);
-        if (xComponent.is())
-        {
-            xComponent->removeEventListener(m_xEventListener);
-        }
-        xComponent = xComponent.query(m_xDefaultProvider);
-        if (xComponent.is())
-        {
-            xComponent->removeEventListener(m_xEventListener);
-        }
     }
-
     //---------------------------------------------------------------------------------------
-    void OProviderFactory::ensureBootstrapSettings(Context const & xContext)
+
+    uno::Reference< uno::XInterface > ProviderFactory::getProviderAlways(Context const & xContext)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::OProviderFactory", "jb99855", "configmgr::OProviderFactory::ensureBootstrapSettings()");
-        if (!m_pPureSettings)
-            m_pPureSettings = new BootstrapSettings( xContext );
-    }
+        RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::ProviderFactory", "jb99855", "configmgr::ProviderFactory::getProviderAlways()");
+        uno::Reference< uno::XInterface > xResult = getDefaultConfigProviderSingleton(xContext);
 
-    //---------------------------------------------------------------------------------------
-    static bool isReusableConnection(const ConnectionSettings& _rSettings)
-    {
-        if (_rSettings.isUnoBackend())
-            return false;
-
-        // #78409
-        // if a provider is queried with a password, we always create a new instance for it,
-        // as don't wan't to remember the passwords for the user.
-
-        if ( _rSettings.hasPassword() && !_rSettings.isLocalSession())
-            return false;
-
-        if (_rSettings.hasReinitializeFlag() && _rSettings.getReinitializeFlag())
-            return false;
-
-        return  true;
-    }
-
-    //---------------------------------------------------------------------------------------
-    extern OUString buildConnectString(const ConnectionSettings& _rSettings);
-
-    //---------------------------------------------------------------------------------------
-    Reference< XInterface > OProviderFactory::implGetProvider(const ConnectionSettings& _rSettings)
-    {
-        OUString const sConnectString = buildConnectString(_rSettings);
-
-        Reference< XInterface > xReturn;
-
-        ProviderCacheIterator aExistentProviderPos = m_aProviders.find(sConnectString);
-        if (m_aProviders.end() != aExistentProviderPos)
+        // check for success
+        OSL_ENSURE(xResult.is(), "Context could not create provider, but returned NULL instead of throwing an exception");
+        if (!xResult.is())
         {
-            xReturn = aExistentProviderPos->second;
+            using ::com::sun::star::configuration::CannotLoadConfigurationException;
+
+            static sal_Char const sCannotCreate[] = "Cannot create ConfigurationProvider. Unknown backend or factory error.";
+
+            throw CannotLoadConfigurationException( OUString(RTL_CONSTASCII_USTRINGPARAM(sCannotCreate)), *this );
         }
 
-        if (!xReturn.is())
-        {
-            RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::OProviderFactory", "jb99855", "configmgr::OProviderFactory: (*m_pObjectCreator)()");
-
-            // create and connect the provider (may still throw exceptions)
-            xReturn = (*m_pObjectCreator)(m_xORB, _rSettings);
-
-            // check for success
-            if (!xReturn.is())
-            {
-                OSL_ENSURE(false, "Object creator could not create provider, but returned NULL instead of throwing an exception");
-                sal_Char const sCannotCreate[] = "Cannot create ConfigurationProvider. Unknown backend or factory error.";
-                // should become CannotLoadConfigurationException
-                throw csscfg::CannotLoadConfigurationException( OUString::createFromAscii(sCannotCreate), *this );
-            }
-
-            // remember it for later usage
-            if (isReusableConnection(_rSettings))
-                m_aProviders[sConnectString] = xReturn;
-        }
-
-        return xReturn;
+        return xResult;
     }
-
     //---------------------------------------------------------------------------------------
-    Reference< XInterface > OProviderFactory::implCreateProviderWithSettings(const ConnectionSettings& _rSettings, bool _bRequiresBootstrap)
+    uno::Reference< uno::XInterface > ProviderFactory::getProviderFromContext(Context const & xContext)
     {
+        OSL_ENSURE(ContextReader::testAdminService(xContext, this->m_bAdmin),
+                    "Creation context admin flag does not match service being created");
+
         try
         {
-            return implGetProvider(_rSettings);
+            return getProviderAlways(xContext);
         }
         catch(uno::Exception& e)
         {
-            if (_bRequiresBootstrap)
-            {
-                OSL_ASSERT(m_pPureSettings);
-                m_pPureSettings->raiseBootstrapException(*this);
+            ContextReader aContext(xContext);
 
-                OSL_ASSERT(m_pPureSettings->valid);
+            uno::Any aError = aContext.getBootstrapError();
+            if (aError.hasValue())
+            {
+                OSL_ASSERT(aError.getValueTypeClass() == uno::TypeClass_EXCEPTION);
+                cppu::throwException(aError);
             }
 
-            sal_Char const sConnectionFailure[] = "Cannot open Configuration: ";
-            OUString const sFailure = OUString::createFromAscii(sConnectionFailure);
-            e.Message = sFailure.concat(e.Message);
+            OSL_ASSERT(aContext.isBootstrapValid());
+
+            static const sal_Char sErrContext[] = "Cannot open Configuration: ";
+            OUString const sContext(RTL_CONSTASCII_USTRINGPARAM(sErrContext));
+            e.Message = sContext.concat(e.Message);
             throw;
         }
     }
-
     //---------------------------------------------------------------------------------------
-    void OProviderFactory::ensureDefaultProvider(Context const & xContext)
+    uno::Reference< uno::XInterface > ProviderFactory::createProviderWithArguments(Context const & xContext, Arguments const & _aArguments)
     {
-        if (m_xDefaultProvider.is())
-            return;
+        RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::ProviderFactory", "jb99855", "configmgr::ProviderFactory::createProviderWithArguments()");
 
-        // force new BootstrapSettings
-        delete m_pPureSettings,m_pPureSettings  = NULL;
-        ensureBootstrapSettings(xContext);
+        ContextReader aContext(xContext);
+        ArgumentHelper aParser(aContext.getBootstrapContext());
 
-        ConnectionSettings aThisRoundSettings(m_pPureSettings->settings);
+        NamedValues aValues(_aArguments.getLength() + 2);
+        sal_Int32 nCount = parseArguments(aParser,aValues,_aArguments);
 
-        aThisRoundSettings.validate();
-        OSL_ENSURE(aThisRoundSettings.isComplete(), "Incomplete Data for creating a ConfigurationProvider");
+        bool bNeedNewBackend = aParser.hasBackendArguments();
 
-        m_xDefaultProvider = implCreateProviderWithSettings(aThisRoundSettings,true);
-
-        // register disposing listener
-        Reference<com::sun::star::lang::XComponent> xComponent(m_xDefaultProvider, UNO_QUERY);
-        if (xComponent.is())
+        if (!aContext.testAdminService(aContext.getBaseContext(),m_bAdmin))
         {
-            xComponent->addEventListener(m_xEventListener);
-        }
-    }
-
-    //---------------------------------------------------------------------------------------
-    Reference< XInterface > OProviderFactory::createProvider(Context const & xContext)
-    {
-        MutexGuard aGuard(m_aMutex);
-        RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::OProviderFactory", "jb99855", "configmgr::OProviderFactory::createProvider()");
-
-        ensureDefaultProvider(xContext);
-        return m_xDefaultProvider;
-    }
-
-    //---------------------------------------------------------------------------------------
-    Reference< XInterface > OProviderFactory::createProviderWithArguments(Context const & xContext, const Sequence< Any >& _rArguments)
-    {
-        RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::OProviderFactory", "jb99855", "configmgr::OProviderFactory::createProviderWithArguments()");
-        ConnectionSettings aSettings(_rArguments);
-        return createProviderWithSettings( xContext, aSettings );
-    }
-
-    //---------------------------------------------------------------------------------------
-    Reference< XInterface > OProviderFactory::createProviderWithSettings(Context const & xContext, const ConnectionSettings& _rSettings)
-    {
-        MutexGuard aGuard(m_aMutex);
-
-        ConnectionSettings aThisRoundSettings(_rSettings);
-
-        // use bootstrap data if necessary
-        bool bUseBootstrapData = !aThisRoundSettings.isComplete();
-
-        // detect a plugin session. Can be specified only as argument
-        sal_Bool bIsPluginSession = aThisRoundSettings.isPlugin();
-
-        OSL_ASSERT(bUseBootstrapData || !bIsPluginSession);
-        OSL_ENSURE(!bIsPluginSession || !aThisRoundSettings.isSourcePathValid(),"Invalid Argument: No explicit source path should be specified for plugin session");
-
-        // use bootstrap data if necessary
-        if (bUseBootstrapData)
-        {
-            ensureBootstrapSettings(xContext);
-
-            // hack to disable 'plugin' behavior for new-style sessions
-            if (bIsPluginSession && m_pPureSettings->settings.isUnoBackend())
-                return this->createProvider(xContext); //--> use default provider
-
-            ConnectionSettings aMergedSettings = m_pPureSettings->settings;
-            aMergedSettings.mergeOverrides(aThisRoundSettings);
-            aMergedSettings.swap(aThisRoundSettings);
+            bNeedNewBackend = true;
+            OSL_ASSERT( nCount+2  <= aValues.getLength());
+            aValues[nCount++] = ArgumentHelper::makeAdminServiceOverride(m_bAdmin);
+            aValues[nCount++] = BootstrapContext::makePassthroughMarker(sal_False);
         }
 
-        // if we have a plugin session, translate the session type into the one appliable.
-        if (bIsPluginSession)
+        OSL_ASSERT(nCount <= aValues.getLength());
+        aValues.realloc(nCount);
+
+        if (bNeedNewBackend)
         {
-            // try to create (or share) a local-session provider
+            Context xMergedContext = BootstrapContext::createWrapper(xContext,aValues);
+            uno::Reference< uno::XInterface > xResult = getProviderFromContext(xMergedContext);
 
-            // For a plugin-local session, we need a valid update directory.
-            // (We can't just rely on the session to fail if it is created with a valid source directory and an
-            // invalid update directory. In such a scenario it will succeed to open, but not to update.)
-            if (!m_pPureSettings->settings.isLocalSession())
+            return xResult;
+        }
+        else
+        {
+            uno::Reference< uno::XInterface > xBaseProvider = getProviderFromContext(xContext);
+            uno::Reference< uno::XInterface > xResult = ProviderWrapper::create(xBaseProvider,aValues);
+
+            return xResult;
+        }
+    }
+    //---------------------------------------------------------------------------------------
+    uno::Reference< uno::XInterface > ProviderFactory::createProvider(Context const & xContext, bool bAdmin)
+    {
+        RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::ProviderFactory", "jb99855", "configmgr::ProviderFactory::createProvider(bAdmin)");
+
+        NamedValues aValues(2);
+        aValues[0] = ArgumentHelper::makeAdminServiceOverride(bAdmin);
+        aValues[1] = BootstrapContext::makePassthroughMarker(sal_False);
+
+        Context xMergedContext = BootstrapContext::createWrapper(xContext,aValues);
+        uno::Reference< uno::XInterface > xResult = getProviderFromContext(xMergedContext);
+
+        return xResult;
+    }
+    //---------------------------------------------------------------------------------------
+    uno::Reference< uno::XInterface > ProviderFactory::createProvider(Context const & xContext)
+    {
+        RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::ProviderFactory", "jb99855", "configmgr::ProviderFactory::createProvider()");
+
+        if (BootstrapContext::isPassthrough(xContext))
+        {
+            // make sure this uses a new BootstrapContext !
+            Context xPatchedContext = BootstrapContext::createWrapper(xContext,NamedValues());
+            return getProviderFromContext(xPatchedContext);
+        }
+        else
+            return getProviderFromContext(xContext);
+    }
+    //---------------------------------------------------------------------------------------
+
+    sal_Int32 ProviderFactory::parseArguments(ArgumentHelper & aParser, NamedValues & rValues, Arguments const & _aArguments)
+    {
+        OSL_ASSERT(rValues.getLength() >= _aArguments.getLength());
+
+        sal_Int32 nCount = 0;
+        for (sal_Int32 i = 0; i < _aArguments.getLength(); ++i)
+        {
+            if (!aParser.extractArgument(rValues[nCount],_aArguments[i]))
             {
-                const OUString sLocalSessionIdentifier = OUString::createFromAscii(LOCAL_SESSION_IDENTIFIER);
-
-                // (We can't just rely on the session to fail if it is created with a valid source directory and an
-                // invalid update directory. In such a scenario it will succeed to open, but not to update.)
-                if (aThisRoundSettings.isComplete(sLocalSessionIdentifier) &&
-                    aThisRoundSettings.isUpdatePathValid())
-                try
-                {
-                    aThisRoundSettings.setSessionType(sLocalSessionIdentifier, Settings::SO_ADJUSTMENT);
-
-                    Reference< XInterface > xLocalProvider
-                        = implGetProvider(aThisRoundSettings);
-
-                    if (xLocalProvider.is()) return xLocalProvider;
-                }
-                catch(Exception&)
-                {
-                    // allowed. The creation of the local provider may fail.
-                }
+                rtl::OUStringBuffer sMsg;
+                sMsg.appendAscii("ProviderFactory: Unexpected Argument Type. ");
+                sMsg.appendAscii("Expected NamedValue or PropertyValue,  ");
+                sMsg.appendAscii("found ").append(_aArguments[i].getValueTypeName()).appendAscii(". ");
+                throw lang::IllegalArgumentException(sMsg.makeStringAndClear(),*this,static_cast<sal_Int16>(i));
             }
-            // did not create the local session
 
-            // -> create the original one
-            if (m_pPureSettings->settings.isSessionTypeKnown())
+            if (aParser.filterAndAdjustArgument(rValues[nCount]))
             {
-                OUString sOriginalType = m_pPureSettings->settings.getSessionType();
-                aThisRoundSettings.setSessionType(sOriginalType, Settings::SO_ADJUSTMENT);
-            }
-            else
-            {
-                OUString const sPortalSessionIdentifier = OUString::createFromAscii(PORTAL_SESSION_IDENTIFIER);
-                aThisRoundSettings.setSessionType(sPortalSessionIdentifier, Settings::SO_ADJUSTMENT);
+                aParser.checkBackendArgument(rValues[nCount]);
+                ++nCount;
             }
         }
-
-        aThisRoundSettings.validate();
-        OSL_ENSURE(aThisRoundSettings.isComplete(), "Incomplete Data for creating a ConfigurationProvider");
-
-        Reference< XInterface > xProvider =
-            implCreateProviderWithSettings( aThisRoundSettings,bUseBootstrapData);
-
-        return xProvider;
-    }
-
-    //---------------------------------------------------------------------------------------
-    Reference< XInterface > SAL_CALL OProviderFactory::createInstance(  ) throw(Exception, RuntimeException)
-    {
-        // default provider
-        return createProvider( getBootstrapContext(m_xORB) );
-    }
-
-    //---------------------------------------------------------------------------------------
-    Reference< XInterface > SAL_CALL OProviderFactory::createInstanceWithArguments( const Sequence< Any >& _rArguments ) throw(Exception, RuntimeException)
-    {
-        return createProviderWithArguments(getBootstrapContext(m_xORB), _rArguments);
+        return nCount;
     }
     //---------------------------------------------------------------------------------------
 
     uno::Reference< uno::XInterface >
-        SAL_CALL OProviderFactory::createInstanceWithContext( const uno::Reference< uno::XComponentContext >& xContext )
+        SAL_CALL ProviderFactory::createInstanceWithContext( const uno::Reference< uno::XComponentContext >& xContext )
             throw (uno::Exception, ::com::sun::star::uno::RuntimeException)
     {
-        // default provider
-        return createProvider( xContext );
+        // default provider ?
+        if (ContextReader::testAdminService(xContext,m_bAdmin))
+            return createProvider( xContext );
+
+        else
+            return createProvider(xContext,m_bAdmin);
     }
     //---------------------------------------------------------------------------------------
 
     uno::Reference< uno::XInterface > SAL_CALL
-        OProviderFactory::createInstanceWithArgumentsAndContext( const uno::Sequence< uno::Any >& aArguments, const uno::Reference< uno::XComponentContext >& xContext )
+        ProviderFactory::createInstanceWithArgumentsAndContext( const uno::Sequence< uno::Any >& aArguments, const uno::Reference< uno::XComponentContext >& xContext )
             throw (uno::Exception, uno::RuntimeException)
     {
+        // default request
         return createProviderWithArguments(xContext, aArguments);
     }
 
     //---------------------------------------------------------------------------------------
-    //=======================================================================================
-    Reference< XSingleServiceFactory > SAL_CALL createProviderFactory(
-            const Reference< XMultiServiceFactory > & rServiceManager,
-            const OUString & rComponentName,
-            ProviderInstantiation pCreateFunction,
-            const Sequence< OUString > & rServiceNames
+    //---------------------------------------------------------------------------------------
+
+    uno::Reference< lang::XSingleComponentFactory > SAL_CALL createProviderFactory(
+            OUString const & aImplementationName,
+            bool bAdmin
         )
     {
-        return new OProviderFactory(rServiceManager, pCreateFunction);
+        return new ProviderFactory(aImplementationName, bAdmin);
     }
-
-    void OProviderFactory::disposing(com::sun::star::lang::EventObject const& _rEvt) throw()
-    {
-        MutexGuard aGuard(m_aMutex);
-        if (_rEvt.Source == m_xORB)
-        {
-            Reference<com::sun::star::lang::XComponent> xComponent(m_xDefaultProvider, UNO_QUERY);
-            if (xComponent.is())
-            {
-                xComponent->removeEventListener(m_xEventListener);
-            }
-            m_xORB = NULL;
-            m_xDefaultProvider = NULL;
-        }
-        else if (_rEvt.Source == m_xDefaultProvider)
-        {
-            m_xDefaultProvider = NULL;
-        }
-        else
-            OSL_ENSURE(sal_False, "unknown object disposed.");
-    }
-
-//........................................................................
+    //---------------------------------------------------------------------------------------
 }   // namespace configmgr
 //........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.19  2002/10/14 14:19:27  jb
- *  #104043# Add/adjust log point for TIMELOG
- *
- *  Revision 1.18  2002/09/19 10:52:06  jb
- *  #102850# Support for contexts to allow fallback initialization
- *
- *  Revision 1.17  2002/07/03 15:54:38  jb
- *  #98489# Added support for uno backend bootstrapping
- *
- *  Revision 1.16  2002/06/12 16:44:14  jb
- *  #98489# Initial support for new UNO-based backends
- *
- *  Revision 1.15  2001/11/09 12:03:36  jb
- *  #86080# Corrected exception thrown for creation failures
- *
- *  Revision 1.14  2001/11/02 12:22:35  jb
- *  #91782# Adjusted to change in BootstrapSettings
- *
- *  Revision 1.13  2001/08/06 16:06:35  jb
- *  #85017#,#81412# Moved common bootstrap code to unotools (utl::Bootstrap)
- *
- *  Revision 1.12  2001/08/01 12:16:00  lla
- *  #90434# some logging code implemented.
- *
- *  Revision 1.11  2001/06/22 08:26:18  jb
- *  Correct argument-dependent caching of providers
- *
- *  Revision 1.10  2001/05/22 07:42:07  jb
- *  #81412# Erroneous handling of default provider
- *
- *  Revision 1.9  2001/05/18 16:16:52  jb
- *  #81412# Cleaned up bootstrap settings handling; Added recognition of bootstrap errors
- *
- *  Revision 1.8  2001/04/03 16:33:58  jb
- *  Local AdministrationProvider now mapped to Setup-session
- *
- *  Revision 1.7  2001/03/21 12:15:40  jl
- *  OSL_ENSHURE replaced by OSL_ENSURE
- *
- *  Revision 1.6  2001/01/26 07:54:21  lla
- *  #82734# disposing with lasy writing necessary
- *
- *  Revision 1.5  2000/12/07 16:46:12  dg
- *  #81469# incomplete adjustments to portal environment fixed
- *
- *  Revision 1.4  2000/12/07 13:56:21  tlx
- *  #81469#
- *
- *  Revision 1.3  2000/12/03 17:12:52  dg
- *  #81164# stdio missing
- *
- *  Revision 1.2  2000/12/03 11:52:13  dg
- *  #81164# invalid provider instantiation
- *
- *  Revision 1.1  2000/12/01 13:53:17  fs
- *  initial checkin - afctory for configuration provider(s)
- *
- *
- *  Revision 1.0 30.11.00 19:05:35  fs
- ************************************************************************/
 

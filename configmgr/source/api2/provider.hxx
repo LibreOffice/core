@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-12-06 13:08:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,14 +65,14 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HDL_
 #include <com/sun/star/lang/IllegalArgumentException.hdl>
 #endif
 #ifndef CONFIGMGR_API_SVCCOMPONENT_HXX_
 #include "confsvccomponent.hxx"
-#endif
-#ifndef _CONFIGMGR_COMMONTYPES_HXX_
-#include "commontypes.hxx"
 #endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
@@ -96,7 +96,7 @@ namespace configmgr
     using ::vos::ORef;
 
     class Module;
-    class ConnectionSettings;
+    class ContextReader;
     class OProviderImpl;
 
     typedef ::cppu::ImplHelper1 <    lang::XMultiServiceFactory
@@ -121,7 +121,7 @@ namespace configmgr
         friend class OProviderDisposingListener;
 
     protected:
-        uno::Reference< lang::XMultiServiceFactory >        m_xServiceFactory;
+        uno::Reference< uno::XComponentContext >            m_xContext;
         uno::Reference< lang::XEventListener >              m_xDisposeListener;
 
     public:
@@ -131,7 +131,9 @@ namespace configmgr
         static void SAL_CALL operator delete( void * pMem ) throw()
             { ServiceComponentImpl::operator delete( pMem ); }
 
-        OProvider(const uno::Reference< lang::XMultiServiceFactory >& xServiceFactory, ServiceImplementationInfo const* pInfo);
+        typedef uno::Reference< uno::XComponentContext > CreationContext;
+
+        OProvider(CreationContext const & xContext, ServiceImplementationInfo const* pInfo);
         virtual ~OProvider();
 
         /// XTypeOProvider
@@ -159,7 +161,7 @@ namespace configmgr
 
     protected:
         // creates a new session
-        void implConnect(OProviderImpl& rFreshProviderImpl, const ConnectionSettings& _rSettings) throw (uno::Exception);
+        void implConnect(OProviderImpl& rFreshProviderImpl, const ContextReader& _rSettings) throw (uno::Exception);
 
     protected:
         /// Component Helper override
@@ -179,6 +181,10 @@ namespace configmgr
         uno::Any SAL_CALL queryPropertyInterface(uno::Type const& rType) throw (uno::RuntimeException)
         { return OPropertyContainer::queryInterface(rType);}
 
+    private:
+        void attachToContext();
+        uno::Reference< lang::XComponent > releaseContext();
+        void discardContext(uno::Reference< lang::XComponent > const & xContext);
     };
 
 } // namespace configmgr

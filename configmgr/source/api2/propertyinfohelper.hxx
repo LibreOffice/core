@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyinfohelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,17 +62,15 @@
 #ifndef CONFIGMGR_API_PROPERTYINFOIMPL_HXX_
 #define CONFIGMGR_API_PROPERTYINFOIMPL_HXX_
 
-#ifndef CONFIGMGR_APITYPES_HXX_
-#include "apitypes.hxx"
-#endif
-
 #ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
 #include <com/sun/star/beans/Property.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 
 namespace configmgr
 {
-    namespace css = ::com::sun::star;
     namespace uno = ::com::sun::star::uno;
     namespace beans = ::com::sun::star::beans;
 

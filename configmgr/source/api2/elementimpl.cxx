@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2002-12-06 13:08:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef CONFIGMGR_API_TRANSLATECHANGES_HXX_
 #include "translatechanges.hxx"
+#endif
+#ifndef CONFIGMGR_API_APITYPES_HXX_
+#include "apitypes.hxx"
 #endif
 
 #ifndef CONFIGMGR_CONFIGSET_HXX_

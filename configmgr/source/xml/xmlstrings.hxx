@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstrings.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-14 16:49:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:20:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,6 @@ namespace configmgr
 
         // simple types names
         DECLARE_CONSTASCII_USTRING(VALUETYPE_BOOLEAN);
-        DECLARE_CONSTASCII_USTRING(VALUETYPE_BYTE);
         DECLARE_CONSTASCII_USTRING(VALUETYPE_SHORT);
         DECLARE_CONSTASCII_USTRING(VALUETYPE_INT);
         DECLARE_CONSTASCII_USTRING(VALUETYPE_LONG);

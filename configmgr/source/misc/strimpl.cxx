@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strimpl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-14 16:53:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,40 +59,14 @@
  *
  ************************************************************************/
 
-#ifndef _CONFIGMGR_STRINGS_HXX_
-#include "strings.hxx"
+#ifndef _CONFIGMGR_STRDECL_HXX_
+#include "strdecl.hxx"
 #endif
 
 namespace configmgr
 {
-    // tag names
-    // <name>...</name>
-    IMPLEMENT_CONSTASCII_USTRING(TAG_VALUE,     "cfg:value");
-
-    // Attributes name="..."
-    IMPLEMENT_CONSTASCII_USTRING(ATTR_NAME,         "cfg:name");
-    IMPLEMENT_CONSTASCII_USTRING(ATTR_TYPE,         "cfg:type");
-    IMPLEMENT_CONSTASCII_USTRING(ATTR_TYPE_MODIFIER,"cfg:derivedBy");
-    IMPLEMENT_CONSTASCII_USTRING(ATTR_INSTANCE,     "cfg:element-type");
-    IMPLEMENT_CONSTASCII_USTRING(ATTR_MODULE,       "cfg:component");
-    IMPLEMENT_CONSTASCII_USTRING(ATTR_ENCODING,     "cfg:encoding");
-    IMPLEMENT_CONSTASCII_USTRING(ATTR_SEPARATOR,    "cfg:separator");
-    IMPLEMENT_CONSTASCII_USTRING(ATTR_NULL,         "xsi:null");
-    IMPLEMENT_CONSTASCII_USTRING(ATTR_LANG,         "xml:lang");
-    IMPLEMENT_CONSTASCII_USTRING(ATTR_LOCALIZE,     "cfg:localized");
-    IMPLEMENT_CONSTASCII_USTRING(ATTR_NULLABLE,     "cfg:nullable");
-    IMPLEMENT_CONSTASCII_USTRING(ATTR_WRITABLE,     "cfg:writable");
-    IMPLEMENT_CONSTASCII_USTRING(ATTR_FINALIZE,     "cfg:finalized");
-    IMPLEMENT_CONSTASCII_USTRING(ATTR_STATE,        "state");
-    IMPLEMENT_CONSTASCII_USTRING(ATTR_PACKAGE,      "cfg:package");
-
-    // boolean constants
-    IMPLEMENT_CONSTASCII_USTRING(ATTR_VALUE_TRUE,   "true");
-    IMPLEMENT_CONSTASCII_USTRING(ATTR_VALUE_FALSE,  "false");
-
     // simple types names
     IMPLEMENT_CONSTASCII_USTRING(TYPE_BOOLEAN,  "boolean");
-    IMPLEMENT_CONSTASCII_USTRING(TYPE_BYTE,     "byte");
     IMPLEMENT_CONSTASCII_USTRING(TYPE_SHORT,    "short");
     IMPLEMENT_CONSTASCII_USTRING(TYPE_INT,      "int");
     IMPLEMENT_CONSTASCII_USTRING(TYPE_LONG,     "long");
@@ -102,24 +76,6 @@ namespace configmgr
     IMPLEMENT_CONSTASCII_USTRING(TYPE_BINARY,   "binary");
     // Universal type: Any
     IMPLEMENT_CONSTASCII_USTRING(TYPE_ANY,      "any");
-    // special non-value types
-    IMPLEMENT_CONSTASCII_USTRING(TYPE_SET,      "set");
-    IMPLEMENT_CONSTASCII_USTRING(TYPE_GROUP,    "group");
-
-    // type modifier values
-    IMPLEMENT_CONSTASCII_USTRING(TYPE_MODIFIER_LIST, "list");
-
-    // States for update actions
-    IMPLEMENT_CONSTASCII_USTRING(STATE_MODIFIED, "modified");
-    IMPLEMENT_CONSTASCII_USTRING(STATE_REPLACED, "replaced");
-    IMPLEMENT_CONSTASCII_USTRING(STATE_DELETED,  "deleted");
-    IMPLEMENT_CONSTASCII_USTRING(STATE_DEFAULT,  "default");
-
-    // the encoding for binary values
-    IMPLEMENT_CONSTASCII_USTRING(ENCODING_HEX,      "hex");
-    IMPLEMENT_CONSTASCII_USTRING(ENCODING_BASE64,   "base64");
-
-    IMPLEMENT_CONSTASCII_USTRING(XML_CDATA, "CDATA");
 
     // special template names for native/localized value types
     IMPLEMENT_CONSTASCII_USTRING(TEMPLATE_MODULE_NATIVE_PREFIX,     "cfg:");
@@ -128,32 +84,6 @@ namespace configmgr
 
     IMPLEMENT_CONSTASCII_USTRING(TEMPLATE_LIST_SUFFIX, "-list");
 
-    // the default separator for strings
-    IMPLEMENT_CONSTASCII_USTRING(DEFAULT_SEPARATOR,  " ");
-
-    // im-/export specific
-    IMPLEMENT_CONSTASCII_USTRING(TAG_DATA,  "data");
-    IMPLEMENT_CONSTASCII_USTRING(ATTR_PATH, "path");
-
-    // Parameter (?)
-    IMPLEMENT_CONSTASCII_USTRING(PARAM_OBJECT, "Object");
-    IMPLEMENT_CONSTASCII_USTRING(PARAM_NAME, "Name");
-    IMPLEMENT_CONSTASCII_USTRING(PARAM_ISNEWOBJECT, "IsNewObject");
-    IMPLEMENT_CONSTASCII_USTRING(PARAM_GROUP, "Group");
-
-    // Properties
-    IMPLEMENT_CONSTASCII_USTRING(PROP_MEMBEROF, "MemberOf");
-
-    // node strings
-    IMPLEMENT_CONSTASCII_USTRING(NODE_TOPLEVEL, "TOPLEVEL");
-    IMPLEMENT_CONSTASCII_USTRING(NODE_USERPROFILE, "org.openoffice.UserProfile");
-    IMPLEMENT_CONSTASCII_USTRING(NODE_USERPROFILE_GROUP_PATH, "Data");
-    IMPLEMENT_CONSTASCII_USTRING(NODE_USERPROFILE_GROUP_FIELD, "UserGroup");
-    IMPLEMENT_CONSTASCII_USTRING(NODE_USERPROFILE_DEFAULTGROUP, "defaultGroup");
-    IMPLEMENT_CONSTASCII_USTRING(NODE_USERPROFILE_GROUPLIST, "Template/Group");
-    IMPLEMENT_CONSTASCII_USTRING(NODE_USERPROFILE_USERLIST, "Template/User");
-    IMPLEMENT_CONSTASCII_USTRING(NODE_USERTEMPLATE_MODULE, "org.openoffice.Webtop.Common");
-    IMPLEMENT_CONSTASCII_USTRING(NODE_USERTEMPLATE_NAME, "User");
 
 
 // emacs:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenercontainer.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-15 15:02:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,6 @@
 
 #ifndef CONFIGMGR_API_LISTENERCONTAINER_HXX_
 #define CONFIGMGR_API_LISTENERCONTAINER_HXX_
-
-#include "apitypes.hxx"
 
 #ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -262,14 +260,14 @@ namespace configmgr
              * Call disposing on all object in all the containers that
              * support XEventListener. Then clear the container.
              */
-            bool disposeAll(KeyFinder _aFinder) throw(uno::RuntimeException);
+            bool disposeAll(KeyFinder _aFinder) throw();
 
             /**
              * Call disposing on all object in all the container for anIndex
              * and in the containers for the associated indices
              * support XEventListener. Then clear the container.
              */
-            bool disposeOne( KeyFinder _aFinder, Index anIndex ) throw(uno::RuntimeException);
+            bool disposeOne( KeyFinder _aFinder, Index anIndex ) throw();
 
             /**
              * Start disposing this object, leave the mutex locked for dispose processing
@@ -289,7 +287,7 @@ namespace configmgr
              * @return <FALSE/>
              *      if disposing had already been started before
              */
-            void notifyDisposing(KeyFinder _aFinder) throw(uno::RuntimeException);
+            void notifyDisposing(KeyFinder _aFinder) throw();
 
             /// mark the end of the dispose processing
             void endDisposing() throw();
@@ -334,7 +332,7 @@ namespace configmgr
              *                  the same pointer more than once.
              * @return the new count of elements in the container (or 0 if the object is ready being disposed).
              */
-            sal_Int32 addListener( Index nIndex, const UnoType& aType, uno::Reference< lang::XEventListener > const& xListener) throw(uno::RuntimeException);
+            sal_Int32 addListener( Index nIndex, const UnoType& aType, uno::Reference< lang::XEventListener > const& xListener) throw();
 
             /**
              * Remove an element from the container specified with the index and type.
@@ -343,7 +341,7 @@ namespace configmgr
              * @param xListener the removed interface.
              * @return the new count of elements in the container (or 0 if the object is ready being disposed).
              */
-            sal_Int32 removeListener( Index nIndex, const UnoType& aType, uno::Reference< lang::XEventListener > const& xListener) throw(uno::RuntimeException);
+            sal_Int32 removeListener( Index nIndex, const UnoType& aType, uno::Reference< lang::XEventListener > const& xListener) throw();
 
 
             /**
@@ -354,7 +352,7 @@ namespace configmgr
              *                  the same pointer more than once.
              * @return the new count of elements in the container (or 0 if the object is ready being disposed).
              */
-            sal_Int32 addSpecialListener( const Key_& aKey, uno::Reference< lang::XEventListener > const& xListener) throw(uno::RuntimeException);
+            sal_Int32 addSpecialListener( const Key_& aKey, uno::Reference< lang::XEventListener > const& xListener) throw();
 
             /**
              * Remove an element from the container specified with the key.
@@ -363,7 +361,7 @@ namespace configmgr
              * @param xListener the removed interface.
              * @return the new count of elements in the container (or 0 if the object is ready being disposed).
              */
-            sal_Int32 removeSpecialListener( const Key_& aKey, uno::Reference< lang::XEventListener > const& xListener) throw(uno::RuntimeException);
+            sal_Int32 removeSpecialListener( const Key_& aKey, uno::Reference< lang::XEventListener > const& xListener) throw();
 
         private:
             void implFillDisposer(DisposeNotifier& aNotifier, KeyFinder _aFinder, Index nIndex);
@@ -409,7 +407,7 @@ namespace configmgr
         }
 //-----------------------------------------------------------------------------
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
-        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::disposeAll(KeyFinder _aFinder) throw(uno::RuntimeException)
+        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::disposeAll(KeyFinder _aFinder) throw()
         {
             if (beginDisposing())
             {
@@ -422,7 +420,7 @@ namespace configmgr
         }
 //-----------------------------------------------------------------------------
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
-        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::disposeOne(KeyFinder _aFinder, Index nIndex) throw(uno::RuntimeException)
+        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::disposeOne(KeyFinder _aFinder, Index nIndex) throw()
         {
     //      OSL_ENSURE(!isDisposed(),"Object is already disposed in toto");
 
@@ -467,7 +465,7 @@ namespace configmgr
         }
 //-----------------------------------------------------------------------------
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
-        void SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::notifyDisposing(KeyFinder _aFinder) throw(uno::RuntimeException)
+        void SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::notifyDisposing(KeyFinder _aFinder) throw()
         {
             OSL_ENSURE(isDisposing(),"Disposing isn't in progress on this object");
             OSL_ENSURE(m_bDisposeLock,"Duplicate call for dispose notification or disposing is not taking place");
@@ -529,7 +527,7 @@ namespace configmgr
         }
 //-----------------------------------------------------------------------------
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
-        sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::addListener( Index nIndex, const UnoType& aType, const uno::Reference< lang::XEventListener > & xListener ) throw(uno::RuntimeException)
+        sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::addListener( Index nIndex, const UnoType& aType, const uno::Reference< lang::XEventListener > & xListener ) throw()
         {
             osl::ClearableMutexGuard aGuard( mutex() );
 
@@ -547,7 +545,7 @@ namespace configmgr
                 {
                     lang::EventObject aEvent(m_aContainers[nIndex].pInterface);
                     aGuard.clear();
-                    xListener->disposing(aEvent);
+                    try { xListener->disposing(aEvent); } catch (uno::Exception & ) {}
                 }
 
             }
@@ -558,7 +556,7 @@ namespace configmgr
         }
 //-----------------------------------------------------------------------------
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
-        sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::addSpecialListener( const Key_& aKey, const uno::Reference< lang::XEventListener > & xListener ) throw(uno::RuntimeException)
+        sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::addSpecialListener( const Key_& aKey, const uno::Reference< lang::XEventListener > & xListener ) throw()
         {
             osl::ClearableMutexGuard aGuard( mutex() );
 
@@ -574,7 +572,7 @@ namespace configmgr
                 {
                     lang::EventObject aEvent(m_aContainers[nIndex].pInterface);
                     aGuard.clear();
-                    xListener->disposing(aEvent);
+                    try { xListener->disposing(aEvent); } catch (uno::Exception & ) {}
                 }
             }
             else
@@ -585,7 +583,7 @@ namespace configmgr
 //-----------------------------------------------------------------------------
 
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
-        sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::removeListener( Index nIndex, const UnoType& aType, const uno::Reference< lang::XEventListener > & xListener ) throw(uno::RuntimeException)
+        sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::removeListener( Index nIndex, const UnoType& aType, const uno::Reference< lang::XEventListener > & xListener ) throw()
         {
             osl::MutexGuard aGuard( mutex() );
             OSL_ENSURE( !isDisposed(), "object is disposed" );
@@ -602,7 +600,7 @@ namespace configmgr
 //-----------------------------------------------------------------------------
 
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
-        sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::removeSpecialListener( const Key_& aKey, const uno::Reference< lang::XEventListener > & xListener ) throw(uno::RuntimeException)
+        sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::removeSpecialListener( const Key_& aKey, const uno::Reference< lang::XEventListener > & xListener ) throw()
         {
             osl::MutexGuard aGuard( mutex() );
             OSL_ENSURE( !isDisposed(), "object is disposed" );

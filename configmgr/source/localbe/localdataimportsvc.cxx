@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localdataimportsvc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-12-06 13:08:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,18 +118,18 @@ ServiceInfoHelper LocalDataImportService::getServiceInfo()
 // -----------------------------------------------------------------------------
 
 uno::Reference< uno::XInterface > SAL_CALL instantiateLocalDataImporter
-( CreationContext const& rServiceManager )
+( CreationContext const& xContext )
 {
-    return * new LocalDataImportService( rServiceManager );
+    return * new LocalDataImportService( xContext );
 }
 // -----------------------------------------------------------------------------
 
-LocalDataImportService::LocalDataImportService(CreationArg _xServiceFactory)
-: m_xServiceFactory(_xServiceFactory)
+LocalDataImportService::LocalDataImportService(CreationArg _xContext)
+: m_xServiceFactory(_xContext->getServiceManager(), uno::UNO_QUERY)
 {
     if (!m_xServiceFactory.is())
     {
-        OUString sMessage = OUSTRING("Configuration Importer: Unexpected NULL context");
+        OUString sMessage = OUSTRING("Configuration Importer: Context has no service manager (or interface is missing)");
         throw lang::NullPointerException(sMessage,NULL);
     }
 }

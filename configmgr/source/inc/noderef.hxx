@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 #ifndef CONFIGMGR_CONFIGNODE_HXX_
 #define CONFIGMGR_CONFIGNODE_HXX_
 
-#ifndef CONFIGMGR_API_APITYPES_HXX_
-#include "apitypes.hxx"
-#endif
 #ifndef CONFIGMGR_CONFIGEXCEPT_HXX_
 #include "configexcept.hxx"
 #endif
@@ -87,6 +84,7 @@ namespace configmgr
     namespace data      { using memory::Accessor; class TreeAccessor; }
     namespace view      { class ViewTreeAccess; }
     namespace configapi { class Factory; }
+    namespace node      { struct Attributes; }
     namespace configuration
     {
     //-------------------------------------------------------------------------
@@ -94,8 +92,6 @@ namespace configmgr
         class AbsolutePath;
         class RelativePath;
         namespace Path { class Component; }
-
-        struct Attributes;
 
         class NodeChange;
         class NodeChanges;
@@ -246,6 +242,7 @@ namespace configmgr
         */
         class Tree
         {
+            typedef node::Attributes NodeAttributes;
         public:
             /// create a tree with a given implementation
             Tree(data::Accessor const& _accessor, TreeImpl* pImpl);
@@ -359,13 +356,13 @@ namespace configmgr
             Name            getName(ValueRef const& aValue) const;
 
             /// return the <type>Attributes</type> of node <var>aNode</var> in this tree
-            Attributes      getAttributes(NodeRef const& aNode) const;
+            NodeAttributes  getAttributes(NodeRef const& aNode) const;
 
             /// return the <type>Attributes</type> of node <var>aNode</var> in this tree
-            Attributes      getAttributes(AnyNodeRef const& aNode)  const;
+            NodeAttributes  getAttributes(AnyNodeRef const& aNode)  const;
 
             /// return the <type>Attributes</type> of value <var>aValue</var> in this tree
-            Attributes      getAttributes(ValueRef const& aValue)   const;
+            NodeAttributes  getAttributes(ValueRef const& aValue)   const;
 
             /// get the Uno <type scope='com::sun::star::uno'>Type</type> of value <var>aValue</var> in this tree
             UnoType         getUnoType(ValueRef const& aValue) const;

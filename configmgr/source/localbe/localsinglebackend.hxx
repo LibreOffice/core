@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglebackend.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-28 09:05:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <drafts/com/sun/star/configuration/backend/XSingleBackend.hpp>
 #endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XSINGLEBACKEND_HPP_
 
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif // _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
@@ -81,6 +85,14 @@
 #ifndef _CPPUHELPER_COMPBASE3_HXX_
 #include <cppuhelper/compbase3.hxx>
 #endif // _CPPUHELPER_COMPBASE3_HXX_
+
+#ifndef _COM_SUN_STAR_CONFIGURATION_INVALIDBOOTSTRAPFILEEXCEPTION_HPP_
+#include <com/sun/star/configuration/InvalidBootstrapFileException.hpp>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_CONFIGURATION_BACKEND_CANNOTCONNECTEXCEPTION_HPP_
+#include <drafts/com/sun/star/configuration/backend/CannotConnectException.hpp>
+#endif
 
 namespace configmgr { namespace localbe {
 
@@ -108,14 +120,17 @@ class LocalSingleBackend : public SingleBackendBase {
           @param xFactory   service factory
           */
         LocalSingleBackend(
-                const uno::Reference<lang::XMultiServiceFactory>& xFactory) ;
+                const uno::Reference<uno::XComponentContext>& xContext) ;
         /** Destructor */
         ~LocalSingleBackend(void) ;
 
         // XInitialize
         virtual void SAL_CALL initialize(
                                 const uno::Sequence<uno::Any>& aParameters)
-            throw (uno::RuntimeException, uno::Exception) ;
+            throw (uno::RuntimeException, uno::Exception,
+                   css::configuration::InvalidBootstrapFileException,
+                   backend::CannotConnectException,
+                   backend::BackendSetupException);
         // XSingleBackend
         virtual uno::Sequence<rtl::OUString> SAL_CALL listLayerIds(
                                                 const rtl::OUString& aComponent,
@@ -210,18 +225,16 @@ class LocalSingleBackend : public SingleBackendBase {
                               rtl::OUString const & aComponentUrl);
     private :
         /** Service factory */
-        const uno::Reference<lang::XMultiServiceFactory>& mFactory ;
+        uno::Reference<lang::XMultiServiceFactory> mFactory ;
         /** Mutex for resources protection */
         osl::Mutex mMutex ;
-        /** Identifier of the user of the backend */
-        rtl::OUString mOwnId ;
         /** Base of the schema data */
         rtl::OUString mSchemaDataUrl ;
         /**
           Base of the default data. Is a list to allow
           for multiple layers of default data.
           */
-        uno::Sequence<rtl::OUString> mDefaultDataUrl ;
+        uno::Sequence<rtl::OUString> mDefaultDataUrls ;
         /** Base of the user data */
         rtl::OUString mUserDataUrl ;
 
@@ -272,6 +285,27 @@ class LocalSingleBackend : public SingleBackendBase {
         sal_Bool isMoreRecent(const rtl::OUString& aComponent,
                               sal_Int32 aLayerId,
                               const rtl::OUString& aTimestamp) ;
+        /**
+          Validates a file URL
+
+          @param aFileURL    URL of the file to validate
+          */
+        void validateFileURL(rtl::OUString& aFileURL);
+        /**
+           Checks if a Directory exist for a given file URL
+
+          @param aFileURL    URL of the file to validate
+          */
+        void checkIfDirectory(rtl::OUString& aFileURL)
+            throw (backend::BackendSetupException);
+        /**
+           Checks if a File exist for a given file URL
+
+          @param aFileURL    URL of the file to validate
+          */
+        void checkFileExists(rtl::OUString& aFileURL)
+            throw (backend::CannotConnectException);
+
 } ;
 
 } } // configmgr.localbe

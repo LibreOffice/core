@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:14:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,10 +95,6 @@
 #endif
 #ifndef CONFIGMGR_CHANGE_HXX
 #include "change.hxx"
-#endif
-
-#ifndef CONFIGMGR_CMTREEMODEL_HXX
-#include "cmtreemodel.hxx"
 #endif
 
 #ifndef _OSL_DIAGNOSE_H_

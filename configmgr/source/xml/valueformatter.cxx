@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueformatter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-11 17:23:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,12 +476,14 @@ void ValueFormatter::makeSeparator()
         Separator aSeparator = createSeparator(m_aValue);
 
         m_sSeparator = aSeparator.value();
+        m_bUseSeparator = !aSeparator.isDefault();
 
         OSL_POSTCOND( this->isList() , "ValueFormatter: Could not mark as list");
     }
     else
     {
         m_sSeparator = OUString();
+        m_bUseSeparator = false;
 
         OSL_POSTCOND( !this->isList(), "ValueFormatter: Could not mark as non-list");
     }
@@ -522,8 +524,9 @@ bool ValueFormatter::addValueAttributes(ElementFormatter & _rFormatter) const
     }
 
     // create a sequence separator
-    if (this->isList())
+    if (m_bUseSeparator)
     {
+        OSL_ASSERT(this->isList());
         _rFormatter.addSeparator(m_sSeparator);
     }
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: dg $ $Date: 2001-10-11 14:18:27 $
+#   last change: $Author: hr $ $Date: 2003-03-19 16:18:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,21 +74,15 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=	\
-        $(SLO)$/adminimpl.obj		\
-        $(SLO)$/userimpl.obj		\
-        $(SLO)$/groupimpl.obj		\
-        $(SLO)$/confapifactory.obj		\
         $(SLO)$/broadcaster.obj		\
         $(SLO)$/listenercontainer.obj		\
         $(SLO)$/provider.obj		\
         $(SLO)$/providerimpl.obj	\
-        $(SLO)$/adminprovider.obj	\
-        $(SLO)$/adminproviderimpl.obj \
         $(SLO)$/confprovider2.obj	\
         $(SLO)$/confproviderimpl2.obj \
         $(SLO)$/accessimpl.obj		\
         $(SLO)$/apiaccessobj.obj	\
-       $(SLO)$/apiserviceinfo.obj	\
+        $(SLO)$/apiserviceinfo.obj	\
         $(SLO)$/apifactory.obj	\
         $(SLO)$/apifactoryimpl.obj	\
         $(SLO)$/apinodeaccess.obj	\
@@ -111,6 +105,7 @@ SLOFILES=	\
         $(SLO)$/setobjects.obj		\
         $(SLO)$/setupdate.obj		\
         $(SLO)$/translatechanges.obj	\
+        $(SLO)$/treeiterators.obj \
         $(SLO)$/updateimpl.obj		\
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: committer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:19:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #ifndef CONFIGMGR_ROOTTREE_HXX_
 #include "roottree.hxx"
 #endif
-#ifndef CONFIGMGR_CMTREEMODEL_HXX
-#include "cmtreemodel.hxx"
-#endif
 #ifndef CONFIGMGR_API_PROVIDERIMPL2_HXX_
 #include "confproviderimpl2.hxx"
 #endif
@@ -78,6 +75,9 @@
 #endif
 #ifndef CONFIGMGR_TREEACCESSOR_HXX
 #include "treeaccessor.hxx"
+#endif
+#ifndef CONFIGMGR_TREECHANGELIST_HXX
+#include "treechangelist.hxx"
 #endif
 
 namespace configmgr
@@ -133,10 +133,14 @@ void Committer::commit()
     OSL_PRECOND(!m_rTree.getLocation().isRoot(),"INTERNAL ERROR: Empty location used.");
     OSL_PRECOND(m_rTree.getOptions().isValid(),"INTERNAL ERROR: Invalid Options used.");
 
+    if (!m_rTree.getOptions().isValid()) return;
+
+    RequestOptions aOptions = m_rTree.getOptions()->getRequestOptions();
+
     ITreeManager* pUpdateProvider = getUpdateProvider();
     OSL_ASSERT(pUpdateProvider);
 
-    memory::Segment * pCacheSegment = pUpdateProvider->getDataSegment(m_rTree.getLocation(),m_rTree.getOptions());
+    memory::Segment * pCacheSegment = pUpdateProvider->getDataSegment(m_rTree.getLocation(),aOptions);
     OSL_ASSERT(rApiTree.getSourceData() == pCacheSegment);
 
     memory::UpdateAccessor aUpdateAccessor(pCacheSegment);
@@ -145,7 +149,7 @@ void Committer::commit()
     Tree aTree( aUpdateAccessor.accessor(), rApiTree.getTree());
     if (!aTree.hasChanges()) return;
 
-    TreeChangeList  aChangeList(m_rTree.getOptions(),
+    TreeChangeList  aChangeList(aOptions,
                                 aTree.getRootPath(),
                                 aTree.getAttributes(aTree.getRootNode()));
 

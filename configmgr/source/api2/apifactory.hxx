@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactory.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,11 @@
 #ifndef CONFIGMGR_API_FACTORY_HXX_
 #define CONFIGMGR_API_FACTORY_HXX_
 
-#ifndef CONFIGMGR_API_APITYPES_HXX_
-#include "apitypes.hxx"
-#endif
 #ifndef CONFIGMGR_MISC_OPTIONS_HXX_
 #include "options.hxx"
+#endif
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
 #endif
 
 #ifndef _RTL_REF_HXX_
@@ -97,6 +97,7 @@ namespace configmgr
     }
     namespace configapi
     {
+        namespace uno = com::sun::star::uno;
         typedef uno::XInterface UnoInterface;
         typedef uno::Reference< uno::XInterface > UnoInterfaceRef;
         typedef uno::Any UnoAny;
@@ -110,11 +111,11 @@ namespace configmgr
 
     // used to register objects
         class ObjectRegistry;
-        typedef vos::ORef<ObjectRegistry> ObjectRegistryHolder;
+        typedef rtl::Reference<ObjectRegistry> ObjectRegistryHolder;
         typedef cppu::OImplementationId UnoTunnelID;
 
     // used to create UNO objects
-        class Factory : NotCopyable
+        class Factory : Noncopyable
         {
             ObjectRegistryHolder m_pRegistry;
             UnoTunnelID const m_aTunnelID;
@@ -137,7 +138,7 @@ namespace configmgr
             NodeElement* findElement(configuration::NodeID const& aNode);
 
             NodeElement*    makeGroupMember(configuration::Tree const& aTree, configuration::NodeRef const& aNode);
-            TreeElement*    makeAccessRoot(configuration::Tree const& aTree, vos::ORef< OOptions >const& _xOptions);
+            TreeElement*    makeAccessRoot(configuration::Tree const& aTree, RequestOptions const& _aOptions);
             SetElement*     makeSetElement(configuration::ElementTree const& aTree);
 
             SetElement*     findSetElement(configuration::ElementRef const& aElement);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confapifactory.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2002-12-06 13:06:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,68 +69,67 @@ namespace com { namespace sun { namespace star {
     {
         class XInterface;
         template <class> class Reference;
+        class XComponentContext;
     }
     namespace lang
     {
-        class XMultiServiceFactory;
+        class XSingleComponentFactory;
     }
 } } }
+namespace rtl { class OUString; }
 
 namespace configmgr
 {
-    namespace css = ::com::sun::star;
-    namespace uno = css::uno;
-    namespace lang = css::lang;
+    namespace uno  = ::com::sun::star::uno;
+    namespace lang = ::com::sun::star::lang;
+
+    extern
+    uno::Reference< lang::XSingleComponentFactory > SAL_CALL
+        createProviderFactory(
+            ::rtl::OUString const & aImplementationName,
+            bool bAdmin
+        )
+        SAL_THROW( () );
+
     struct ServiceRegistrationInfo;
-    class ConnectionSettings;
+    struct SingletonRegistrationInfo;
 
-    typedef uno::Reference< lang::XMultiServiceFactory > CreationContext;
-
-    typedef uno::Reference< uno::XInterface > (SAL_CALL * ProviderInstantiation)
-            (
-                CreationContext const& rServiceManager,
-                ConnectionSettings const& _rConnectionSettings
-            );
+    typedef uno::Reference< uno::XComponentContext >        CreationContext;
 
 // provider instantiation
-    uno::Reference< uno::XInterface > SAL_CALL instantiateConfigProvider
-        (
-            CreationContext const& rServiceManager,
-            ConnectionSettings const& _rConnectionSettings
-        );
+    uno::Reference<uno::XInterface> SAL_CALL
+        getDefaultConfigProviderSingleton( CreationContext const& xContext );
 
-    uno::Reference< uno::XInterface > SAL_CALL instantiateAdminProvider
-        (
-            CreationContext const& rServiceManager,
-            ConnectionSettings const& _rConnectionSettings
-        );
-
-    uno::Reference< uno::XInterface > SAL_CALL instantiateLocalAdminProvider
-        (
-            CreationContext const& rServiceManager,
-            ConnectionSettings const& _rConnectionSettings
-        );
-
+    uno::Reference<uno::XInterface> SAL_CALL
+        instantiateDefaultProvider( CreationContext const& xContext );
 
 // provider service info
-    const ServiceRegistrationInfo* getConfigurationProviderServices();
-    const ServiceRegistrationInfo* getAdminProviderServices();
-    const ServiceRegistrationInfo* getLocalAdminProviderServices();
+    const SingletonRegistrationInfo * getDefaultProviderSingletonInfo();
+    const ServiceRegistrationInfo   * getConfigurationProviderServiceInfo();
+    const ServiceRegistrationInfo   * getDefaultProviderServiceInfo();
+    const ServiceRegistrationInfo   * getAdminProviderServiceInfo();
 
 // other services - instantiation and info
-    uno::Reference< uno::XInterface > SAL_CALL instantiateConfigRegistry
-        ( CreationContext const& rServiceManager );
+    uno::Reference< uno::XInterface > SAL_CALL
+        instantiateConfigRegistry( CreationContext const& xContext );
 
     const ServiceRegistrationInfo* getConfigurationRegistryServiceInfo();
+
+// bootstrap context support
+    uno::Reference<uno::XInterface> SAL_CALL
+        instantiateBootstrapContext( CreationContext const& xContext );
+
+    const SingletonRegistrationInfo * getBootstrapContextSingletonInfo();
+    const ServiceRegistrationInfo   * getBootstrapContextServiceInfo();
 
     namespace xml
     {
         uno::Reference< uno::XInterface > SAL_CALL instantiateSchemaParser
-        ( CreationContext const& rServiceManager );
+        ( CreationContext const& xContext );
         uno::Reference< uno::XInterface > SAL_CALL instantiateLayerParser
-        ( CreationContext const& rServiceManager );
+        ( CreationContext const& xContext );
         uno::Reference< uno::XInterface > SAL_CALL instantiateLayerWriter
-        ( CreationContext const& rServiceManager );
+        ( CreationContext const& xContext );
 
         const ServiceRegistrationInfo* getSchemaParserServiceInfo();
         const ServiceRegistrationInfo* getLayerParserServiceInfo();
@@ -138,36 +137,55 @@ namespace configmgr
     }
     namespace backend
     {
-        uno::Reference< uno::XInterface > SAL_CALL
-            instantiateUpdateMerger( CreationContext const& rServiceManager );
+        uno::Reference<uno::XInterface> SAL_CALL
+            getDefaultBackendSingleton( CreationContext const& xContext );
 
         uno::Reference<uno::XInterface> SAL_CALL
-            instantiateSingleBackendAdapter(const CreationContext& aServiceManager) ;
+            getDefaultSingleBackendSingleton( CreationContext const& xContext );
+
+        uno::Reference<uno::XInterface> SAL_CALL
+            instantiateDefaultBackend( CreationContext const& xContext );
+
+        uno::Reference<uno::XInterface> SAL_CALL
+            instantiateDefaultSingleBackend( CreationContext const& xContext );
 
         uno::Reference< uno::XInterface > SAL_CALL
-            instantiateMergeImporter( CreationContext const& rServiceManager );
+            instantiateUpdateMerger( CreationContext const& xContext );
+
+        uno::Reference<uno::XInterface> SAL_CALL
+            instantiateSingleBackendAdapter( CreationContext const& xContext );
 
         uno::Reference< uno::XInterface > SAL_CALL
-            instantiateCopyImporter( CreationContext const& rServiceManager );
+            instantiateMergeImporter( CreationContext const& xContext );
+
+        uno::Reference< uno::XInterface > SAL_CALL
+            instantiateCopyImporter( CreationContext const& xContext );
+
+        const SingletonRegistrationInfo * getDefaultBackendSingletonInfo();
+        const SingletonRegistrationInfo * getDefaultSingleBackendSingletonInfo();
+
+        const ServiceRegistrationInfo   * getDefaultBackendServiceInfo();
+        const ServiceRegistrationInfo   * getDefaultSingleBackendServiceInfo();
 
         const ServiceRegistrationInfo * getUpdateMergerServiceInfo();
-        const ServiceRegistrationInfo * getSingleBackendAdapterServiceInfo() ;
+        const ServiceRegistrationInfo * getSingleBackendAdapterServiceInfo();
         const ServiceRegistrationInfo * getMergeImportServiceInfo();
         const ServiceRegistrationInfo * getCopyImportServiceInfo();
     }
-    namespace localbe {
+    namespace localbe
+    {
         uno::Reference<uno::XInterface> SAL_CALL
-            instantiateLocalBackend(const CreationContext& aServiceManager) ;
+            instantiateLocalBackend( CreationContext const& xContext );
 
         uno::Reference<uno::XInterface> SAL_CALL
-            instantiateLocalDataImporter(const CreationContext& aServiceManager) ;
+            instantiateLocalDataImporter( CreationContext const& xContext );
 
         uno::Reference<uno::XInterface> SAL_CALL
-            instantiateLocalHierarchyBrowser(const CreationContext& aServiceManager) ;
+            instantiateLocalHierarchyBrowser( CreationContext const& xContext );
 
-        const ServiceRegistrationInfo * getLocalBackendServiceInfo() ;
-        const ServiceRegistrationInfo * getLocalDataImportServiceInfo() ;
-        const ServiceRegistrationInfo * getLocalHierarchyBrowserServiceInfo() ;
+        const ServiceRegistrationInfo * getLocalBackendServiceInfo();
+        const ServiceRegistrationInfo * getLocalDataImportServiceInfo();
+        const ServiceRegistrationInfo * getLocalHierarchyBrowserServiceInfo();
     } // localbe
 } //  namespace configmgr
 

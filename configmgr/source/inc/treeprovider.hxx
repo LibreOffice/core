@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeprovider.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-10 09:27:46 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,6 @@
 #ifndef _CONFIGMGR_TREE_VALUENODE_HXX
 #include "valuenode.hxx"
 #endif
-#ifndef CONFIGMGR_MISC_OPTIONS_HXX_
-#include <options.hxx>
-#endif
 #ifndef CONFIGMGR_UTILITY_HXX_
 #include "utility.hxx"
 #endif
@@ -84,10 +81,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
-#endif
-
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
 #endif
 
 #ifndef INCLUDED_MEMORY
@@ -125,41 +118,21 @@ namespace configmgr
     class ISubtree;
     struct TreeChangeList;
 
-    //==========================================================================
-    //= ITreeProvider
-    //==========================================================================
-    struct SAL_NO_VTABLE ITreeProvider
-    {
-        typedef configuration::AbsolutePath AbsolutePath;
-
-        enum { ALL_LEVELS = -1  };
-
-        /// load the tree named by a path using certain options and requiring a specific loading depth - return it yielding ownership
-        virtual std::auto_ptr<ISubtree> loadSubtree(AbsolutePath const& aSubtreePath,
-                                                      const vos::ORef < OOptions >& _xOptions,
-                                                      sal_Int16 nMinLevels = ALL_LEVELS) CFG_UNO_THROW_ALL(  ) = 0;
-
-        /// update the stored data according to a changes list
-        virtual void updateTree(TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  ) = 0;
-
-    };
+    class RequestOptions;
 
     //==========================================================================
     //= ITreeManager
     //==========================================================================
-    // a ITreeProvider which can notify changes that were done, and manages the lifetime of subtrees
+    // a TreeProvider which can notify changes that were done, and manages the lifetime of subtrees
 
     class SAL_NO_VTABLE ITreeManager
     {
     public:
         typedef configuration::AbsolutePath AbsolutePath;
 
-         enum { ALL_LEVELS = ITreeProvider::ALL_LEVELS  };
-
-
         /// get a data segment to host the given location
         virtual memory::Segment* getDataSegment(  AbsolutePath const& _rAccessor,
-                                                    const vos::ORef < OOptions >& _xOptions) = 0;
+                                                    const RequestOptions& _aOptions) = 0;
 
        /** request that the tree named by a path is added to the collection of managed trees
             respecting certain options and requiring a specific loading depth.
@@ -167,15 +140,13 @@ namespace configmgr
             The reference must later be released by calling releaseSubtree with the same path and options.
         */
         virtual data::NodeAccess requestSubtree(AbsolutePath const& aSubtreePath,
-                                          const vos::ORef < OOptions >& _xOptions,
-                                          sal_Int16 nMinLevels = ALL_LEVELS) CFG_UNO_THROW_ALL(  ) = 0;
+                                                const RequestOptions& _aOptions) CFG_UNO_THROW_ALL(  ) = 0;
 
         /** request that the tree named by a path is added to the collection of managed trees
             respecting certain options and requiring a specific loading depth.
         */
         virtual void fetchSubtree(AbsolutePath const& aSubtreePath,
-                                  const vos::ORef < OOptions >& _xOptions,
-                                  sal_Int16 nMinLevels = ALL_LEVELS) CFG_NOTHROW() = 0;
+                                  const RequestOptions& _aOptions) CFG_NOTHROW() = 0;
 
         /// update the managed data according to a changes list - update the changes list accordingly with old values
         virtual void updateTree(memory::UpdateAccessor& _aAccessToken, TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  ) = 0;
@@ -185,13 +156,13 @@ namespace configmgr
 
         // bookkeeping support
         virtual void releaseSubtree(AbsolutePath const& aSubtreePath,
-                                    const vos::ORef < OOptions >& _xOptions ) CFG_NOTHROW() = 0;
+                                    const RequestOptions& _aOptions ) CFG_NOTHROW() = 0;
 
         /** data for the given options may not be used any more
             <p>all clients of such data must be disposed</p>
             <p>If the locale is not set, the whole user has become invalid</p>
         */
-        virtual void disposeData(const vos::ORef < OOptions >& _xOptions) CFG_NOTHROW() = 0;
+        virtual void disposeData(const RequestOptions& _aOptions) CFG_NOTHROW() = 0;
 
 
     };
@@ -206,7 +177,7 @@ namespace configmgr
 
         virtual ::std::auto_ptr<INode> loadTemplate(
                                             Name const& aName, Name const& aModule,
-                                            const vos::ORef < OOptions >& _xOptions
+                                            const RequestOptions& _aOptions
                                         ) CFG_UNO_THROW_ALL( ) = 0;
 
     };
@@ -240,20 +211,6 @@ namespace configmgr
             @param      _rChanges       The list of changes for a node.
         */
         virtual void    nodeUpdated(TreeChangeList& _rChanges) = 0;
-    };
-
-    //==========================================================================
-    //= INotifyBroadcaster
-    //==========================================================================
-    /** a broadcaster of changes on configuration nodes. Able to broadcast all changes in one or more
-        specific registry sub trees.
-
-    */
-    struct SAL_NO_VTABLE INotifyBroadcaster
-    {
-        /** registers a listener for node changes.
-        */
-        virtual void    setNotifyListener(const ::vos::ORef< INotifyListener >& _rListener) = 0;
     };
 
     //==========================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setupdate.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef CONFIGMGR_API_NODEUPDATE_HXX_
 #include "apinodeupdate.hxx"
 #endif
+#ifndef CONFIGMGR_API_APITYPES_HXX_
+#include "apitypes.hxx"
+#endif
 
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
@@ -82,7 +85,6 @@
 namespace configmgr
 {
 //////////////////////////////////////////////////////////////////////////////////
-    using namespace configapi;
 
     using uno::Reference;
     using uno::Sequence;
@@ -129,9 +131,9 @@ uno::Sequence< uno::Type > SAL_CALL BasicSet::getTypes( ) throw (uno::RuntimeExc
 {
     /*static ?*/
     cppu::OTypeCollection aTypes(
-        getReferenceType(static_cast< css::container::XNameContainer *>(this)),
-        getReferenceType(static_cast< css::container::XNameReplace *>(this)),
-        getReferenceType(static_cast< css::lang::XSingleServiceFactory *>(this)),
+        configapi::getReferenceType(static_cast< css::container::XNameContainer *>(this)),
+        configapi::getReferenceType(static_cast< css::container::XNameReplace *>(this)),
+        configapi::getReferenceType(static_cast< css::lang::XSingleServiceFactory *>(this)),
         BasicSetAccess::getTypes());
 
     return aTypes.getTypes();
@@ -142,8 +144,8 @@ uno::Sequence< uno::Type > SAL_CALL BasicValueSet::getTypes( ) throw (uno::Runti
 {
     /*static ?*/
     cppu::OTypeCollection aTypes(
-        getReferenceType(static_cast< css::container::XNameContainer *>(this)),
-        getReferenceType(static_cast< css::container::XNameReplace *>(this)),
+        configapi::getReferenceType(static_cast< css::container::XNameContainer *>(this)),
+        configapi::getReferenceType(static_cast< css::container::XNameReplace *>(this)),
         BasicSetAccess::getTypes());
 
     return aTypes.getTypes();
@@ -190,14 +192,14 @@ configapi::NodeValueSetAccess& BasicValueSet::getSetNode()
 void SAL_CALL BasicSet::replaceByName( const OUString& rName, const uno::Any& rElement )
         throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException)
 {
-    implReplaceByName( getSetNode(), rName, rElement );
+    configapi::implReplaceByName( getSetNode(), rName, rElement );
 }
 //..............................................................................
 
 void SAL_CALL BasicValueSet::replaceByName( const OUString& rName, const uno::Any& rElement )
         throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException)
 {
-    implReplaceByName( getSetNode(), rName, rElement );
+    configapi::implReplaceByName( getSetNode(), rName, rElement );
 }
 
 // XNameContainer
@@ -205,28 +207,28 @@ void SAL_CALL BasicValueSet::replaceByName( const OUString& rName, const uno::An
 void SAL_CALL BasicSet::insertByName( const OUString& rName, const uno::Any& rElement)
         throw(css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, uno::RuntimeException)
 {
-    implInsertByName( getSetNode(), rName, rElement );
+    configapi::implInsertByName( getSetNode(), rName, rElement );
 }
 //..............................................................................
 
 void SAL_CALL BasicValueSet::insertByName( const OUString& rName, const uno::Any& rElement)
         throw(css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, uno::RuntimeException)
 {
-    implInsertByName( getSetNode(), rName, rElement );
+    configapi::implInsertByName( getSetNode(), rName, rElement );
 }
 
 //----------------------------------------------------------------------------------
 void SAL_CALL BasicSet::removeByName( const OUString& rName )
         throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException)
 {
-    implRemoveByName( getSetNode(), rName );
+    configapi::implRemoveByName( getSetNode(), rName );
 }
 //..............................................................................
 
 void SAL_CALL BasicValueSet::removeByName( const OUString& rName )
         throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException)
 {
-    implRemoveByName( getSetNode(), rName );
+    configapi::implRemoveByName( getSetNode(), rName );
 }
 
 // XPropertyWithState
@@ -234,37 +236,37 @@ void SAL_CALL BasicValueSet::removeByName( const OUString& rName )
 
 css::beans::PropertyState SAL_CALL BasicSet::getStateAsProperty() throw (uno::RuntimeException)
 {
-    return implGetStateAsProperty( getSetNode() );
+    return configapi::implGetStateAsProperty( getSetNode() );
 }
 //..............................................................................
 
 css::beans::PropertyState SAL_CALL BasicValueSet::getStateAsProperty() throw (uno::RuntimeException)
 {
-    return implGetStateAsProperty( getSetNode() );
+    return configapi::implGetStateAsProperty( getSetNode() );
 }
 //-----------------------------------------------------------------------------------
 
 void SAL_CALL BasicSet::setToDefaultAsProperty() throw (css::lang::WrappedTargetException, uno::RuntimeException)
 {
-    implSetToDefaultAsProperty( getSetNode() );
+    configapi::implSetToDefaultAsProperty( getSetNode() );
 }
 //..............................................................................
 
 void SAL_CALL BasicValueSet::setToDefaultAsProperty() throw (css::lang::WrappedTargetException, uno::RuntimeException)
 {
-    implSetToDefaultAsProperty( getSetNode() );
+    configapi::implSetToDefaultAsProperty( getSetNode() );
 }
 //-----------------------------------------------------------------------------------
 
 uno::Reference< uno::XInterface > SAL_CALL BasicSet::getDefaultAsProperty() throw (css::lang::WrappedTargetException, uno::RuntimeException)
 {
-    return implGetDefaultAsProperty( getSetNode() );
+    return configapi::implGetDefaultAsProperty( getSetNode() );
 }
 //..............................................................................
 
 uno::Reference< uno::XInterface > SAL_CALL BasicValueSet::getDefaultAsProperty() throw (css::lang::WrappedTargetException, uno::RuntimeException)
 {
-    return implGetDefaultAsProperty( getSetNode() );
+    return configapi::implGetDefaultAsProperty( getSetNode() );
 }
 
 // XSingleServiceFactory (not for ValueSet)
@@ -272,14 +274,14 @@ uno::Reference< uno::XInterface > SAL_CALL BasicValueSet::getDefaultAsProperty()
 uno::Reference< uno::XInterface > SAL_CALL BasicSet::createInstance(  )
         throw(uno::Exception, uno::RuntimeException)
 {
-    return implCreateElement( getSetNode() );
+    return configapi::implCreateElement( getSetNode() );
 }
 
 //----------------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL BasicSet::createInstanceWithArguments( const uno::Sequence< uno::Any >& aArguments )
         throw(uno::Exception, uno::RuntimeException)
 {
-    return implCreateElement( getSetNode(), aArguments );
+    return configapi::implCreateElement( getSetNode(), aArguments );
 }
 
 //-----------------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: serviceinfohelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-12-06 13:07:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,9 @@ namespace configmgr
     {
         /// The name of this singleton
         AsciiServiceName singletonName;
-        /// The implementation, which should be instatiated for this singleton
+        /// The implementation, which owns this singleton
+        AsciiServiceName implementationName;
+        /// The service, which should be instatiated for this singleton
         AsciiServiceName instantiatedServiceName;
         /// A name for a pseudo-implementation, which is mapped to this singleton
         ServiceRegistrationInfo const * mappedImplementation;

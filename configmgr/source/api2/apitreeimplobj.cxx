@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-15 15:03:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ void ApiTreeImpl::ComponentAdapter::setComponent(
 
         aGuard.clear();
 
-        if (xOld.is()) xOld->removeEventListener(this);
+        if (xOld.is())  try { xOld->removeEventListener(this); } catch (uno::Exception & ) {}
         if (xComp.is()) xComp->addEventListener(this);
     }
 }
@@ -251,8 +251,8 @@ void ApiTreeImpl::ComponentAdapter::clear()
 
     aGuard.clear();
 
-    if (xParent.is()) xParent->removeEventListener(this);
-    if (xProvider.is()) xProvider->removeEventListener(this);
+    if (xParent.is())   try { xParent  ->removeEventListener(this); } catch (uno::Exception & ) {}
+    if (xProvider.is()) try { xProvider->removeEventListener(this); } catch (uno::Exception & ) {}
 }
 
 //-----------------------------------------------------------------------------
@@ -262,7 +262,7 @@ class ApiRootTreeImpl::NodeListener : public INodeListener
     ApiRootTreeImpl*    pParent;
     IConfigBroadcaster* pSource;
 
-    vos::ORef< OOptions > m_xOptions;
+    TreeOptions           m_xOptions;
     AbsolutePath          m_aLocationPath;
 public:
     NodeListener(ApiRootTreeImpl& _rParent)
@@ -288,31 +288,42 @@ public:
         {
             if (pNew != pSource)
             {
-                if (pSource)
-                    pSource->removeListener(m_xOptions, this);
-
-                pSource = pNew;
-                if (pNew)
+                OSL_ENSURE(m_xOptions.isValid(),"Cannot set IConfigListener without Options");
+                if (m_xOptions.isValid())
                 {
-                    OSL_ENSURE(!m_aLocationPath.isRoot(), "Cannot register for notifications: no location set");
-                    pNew->addListener(m_aLocationPath, m_xOptions, this);
+                    if (pSource)
+                        pSource->removeListener(m_xOptions->getRequestOptions(), this);
+
+                    pSource = pNew;
+                    if (pNew)
+                    {
+                        OSL_ENSURE(!m_aLocationPath.isRoot(), "Cannot register for notifications: no location set");
+                        pNew->addListener(m_aLocationPath, m_xOptions->getRequestOptions(), this);
+                    }
                 }
+                else
+                    pSource = 0;
             }
         }
     }
 
-    void setLocation(AbsolutePath const& _aLocation, vos::ORef< OOptions > const& _xOptions)
+    void setLocation(AbsolutePath const& _aLocation, TreeOptions const& _xOptions)
     {
+        OSL_ASSERT(_xOptions.isValid());
+
         osl::MutexGuard aGuard(mutex);
 
         if (pSource && pParent)
-            pSource->removeListener(m_xOptions, this);
+        {
+            OSL_ASSERT(m_xOptions.isValid());
+            pSource->removeListener(m_xOptions->getRequestOptions(), this);
+        }
 
         m_aLocationPath = _aLocation;
         m_xOptions = _xOptions;
 
         if (pSource && pParent)
-            pSource->addListener(m_aLocationPath, m_xOptions, this);
+            pSource->addListener(m_aLocationPath, m_xOptions->getRequestOptions(), this);
     }
 
     void unbind()
@@ -322,7 +333,8 @@ public:
         pParent = 0;
         if (pSource)
         {
-            pSource->removeListener(m_xOptions, this);
+            OSL_ASSERT(m_xOptions.isValid());
+            pSource->removeListener(m_xOptions->getRequestOptions(), this);
             m_xOptions.unbind();
             m_aLocationPath = AbsolutePath::root();
         }
@@ -339,7 +351,7 @@ public:
             if (pSource)
             {
                 IConfigBroadcaster* pOrgSource = pSource;
-                vos::ORef< OOptions > xOptions = m_xOptions;
+                TreeOptions xOptions = m_xOptions;
 
                 pSource = 0;
                 m_xOptions.unbind();
@@ -347,7 +359,8 @@ public:
 
                 aGuard.clear();
 
-                pOrgSource->removeListener(xOptions, this);
+                OSL_ASSERT(xOptions.isValid());
+                pOrgSource->removeListener(xOptions->getRequestOptions(), this);
             }
         }
     }
@@ -379,13 +392,16 @@ inline
 configuration::DefaultProvider createDefaultProvider(
                                     ApiProvider& rProvider,
                                     configuration::Tree const& aTree,
-                                    vos::ORef< OOptions >const& _xOptions
+                                    TreeOptions const& _xOptions
                                )
 {
     OProviderImpl& rProviderImpl        = rProvider.getProviderImpl();
     rtl::Reference< IConfigDefaultProvider > xDefaultProvider  = rProviderImpl.getDefaultProvider();
 
-    return configuration::DefaultProvider::create(aTree,_xOptions,xDefaultProvider,&rProviderImpl);
+    OSL_ASSERT(_xOptions.isValid());
+    RequestOptions const aOptions = _xOptions.isValid() ? _xOptions->getRequestOptions() : RequestOptions();
+
+    return configuration::DefaultProvider::create(aTree,aOptions,xDefaultProvider,&rProviderImpl);
 }
 //-------------------------------------------------------------------------
 static
@@ -444,7 +460,7 @@ ApiTreeImpl::~ApiTreeImpl()
 }
 //-------------------------------------------------------------------------
 
-ApiRootTreeImpl::ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, configuration::Tree const& aTree, vos::ORef< OOptions >const& _xOptions)
+ApiRootTreeImpl::ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, configuration::Tree const& aTree, TreeOptions const& _xOptions)
 : m_aTreeImpl(pInstance, rProvider, aTree.getRef(), createDefaultProvider(rProvider, aTree, _xOptions))
 , m_pNotificationListener(NULL)
 , m_xOptions(_xOptions)
@@ -456,7 +472,7 @@ ApiRootTreeImpl::ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider
 //-------------------------------------------------------------------------
 ApiRootTreeImpl::~ApiRootTreeImpl()
 {
-    if (m_pNotificationListener.isValid())
+    if (m_pNotificationListener.is())
     {
         m_pNotificationListener->setSource(0);
         m_pNotificationListener->clearParent();
@@ -554,11 +570,11 @@ bool ApiRootTreeImpl::disposeTree()
     // ensure our provider stays alive
     UnoInterfaceRef xKeepProvider( m_aTreeImpl.getUnoProviderInstance() );
 
-    vos::ORef<NodeListener> xListener = m_pNotificationListener;
-    if (xListener.isValid())
+    rtl::Reference<NodeListener> xListener = m_pNotificationListener;
+    if (xListener.is())
     {
         xListener->clearParent();
-        xListener.unbind();
+        xListener.clear();
     }
 
     bool bDisposed = m_aTreeImpl.disposeTreeNow();
@@ -774,12 +790,12 @@ IConfigBroadcaster* ApiRootTreeImpl::implSetNotificationSource(IConfigBroadcaste
 {
     osl::MutexGuard aGuard(getApiTree().getApiLock());
 
-    IConfigBroadcaster* pOld = m_pNotificationListener.isValid() ? m_pNotificationListener->getSource() : 0;
+    IConfigBroadcaster* pOld = m_pNotificationListener.is() ? m_pNotificationListener->getSource() : 0;
     if (pOld != pNew)
     {
         OSL_ENSURE(m_xOptions.isValid(), "Cannot change notification source without options");
 
-        if (!m_pNotificationListener.isValid())
+        if (!m_pNotificationListener.is())
             m_pNotificationListener = new NodeListener(*this);
 
         m_pNotificationListener->setSource(pNew);
@@ -805,7 +821,7 @@ void ApiRootTreeImpl::implSetLocation(configuration::Tree const& _aTree)
         m_aLocationPath = configuration::AbsolutePath::root();
     }
 
-    if (!m_pNotificationListener.isValid())
+    if (!m_pNotificationListener.is())
         m_pNotificationListener = new NodeListener(*this);
 
     OSL_ENSURE(!m_aLocationPath.isRoot() && !m_aLocationPath.isDetached(), "Cannot reregister for notifications: setting empty location");
@@ -826,8 +842,9 @@ void ApiRootTreeImpl::releaseData()
     OSL_ENSURE( !m_aLocationPath.isRoot() && !m_aLocationPath.isDetached(), "Location still needed to release data" );
     OSL_ENSURE( m_xOptions.isValid(), "Options still needed to release data" );
 
-    getApiTree().getProvider().getProviderImpl().releaseSubtree(m_aLocationPath,m_xOptions);
+    getApiTree().getProvider().getProviderImpl().releaseSubtree(m_aLocationPath,m_xOptions->getRequestOptions());
     m_xOptions.unbind();
+
     m_aLocationPath = configuration::AbsolutePath::detachedRoot();
 }
 // ---------------------------------------------------------------------------------------------------
@@ -854,11 +871,11 @@ void ApiRootTreeImpl::disposing(IConfigBroadcaster* pSource)
         // ensure our provider stays alive
     UnoInterfaceRef xKeepProvider( m_aTreeImpl.getUnoProviderInstance() );
 
-    vos::ORef<NodeListener> xListener = m_pNotificationListener;
-    if (xListener.isValid())
+    rtl::Reference<NodeListener> xListener = m_pNotificationListener;
+    if (xListener.is())
     {
         xListener->clearParent();
-        xListener.unbind();
+        xListener.clear();
     }
 
     if (m_aTreeImpl.disposeTreeNow())
@@ -1077,11 +1094,11 @@ void ApiRootTreeImpl::nodeDeleted(data::Accessor const& _aChangedDataAccessor, A
     // ensure our provider stays alive
     UnoInterfaceRef xKeepProvider( m_aTreeImpl.getUnoProviderInstance() );
 
-    vos::ORef<NodeListener> xListener = m_pNotificationListener;
-    if (xListener.isValid())
+    rtl::Reference<NodeListener> xListener = m_pNotificationListener;
+    if (xListener.is())
     {
         xListener->clearParent();
-        xListener.unbind();
+        xListener.clear();
     }
 
     if (m_aTreeImpl.disposeTreeNow())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-28 14:41:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,17 @@
 #ifndef CONFIGMGR_DEFAULTPROVIDER_HXX
 #include "defaultprovider.hxx"
 #endif
-
-#ifndef CONFIGMGR_MISC_OPTIONS_HXX_
-#include "options.hxx"
+#ifndef _CONFIGMGR_COMMONTYPES_HXX_
+#include "commontypes.hxx" // IInterface
 #endif
 
+#ifndef CONFIGMGR_MISC_REQUESTOPTIONS_HXX_
+#include "requestoptions.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
 #include <com/sun/star/script/XTypeConverter.hpp>
 #endif
@@ -122,9 +128,8 @@ namespace configmgr
     class ISubtree;
     class ITemplateManager;
     class IConfigDefaultProvider;
-    class IConfigSession;
     class TreeManager;
-    class ConnectionSettings;
+    class ContextReader;
 
     struct IConfigBroadcaster;
 
@@ -150,12 +155,14 @@ namespace configmgr
             /// possible arguments, given only in small letters.
             enum Argument
             {
-                ARG_NODEPATH,   // requested node path
-                ARG_DEPTH,      // depth of the tree
-                ARG_USER,       // name of the user - only for admin
-                ARG_LOCALE,     // desired locale
-                ARG_NOCACHE,    // cache disabling
-                ARG_ASYNC,      // lasy write data
+                ARG_NODEPATH,           // requested node path
+                ARG_DEPTH,              // depth of the tree
+                ARG_USER_DEPRECATED,    // name of the entity to be manipulated - deprecated version
+                ARG_LOCALE,             // desired locale
+                ARG_NOCACHE_OBSOLETE,   // cache disabling - obsolete and nonfunctional
+                ARG_ASYNC_DEPRECATED,   // lasy write data - deprecated version
+                ARG_ASYNC,              // lazy write data
+                ARG_ENTITY,             // name of the entity to be manipulated - only for admin
 
                 _arg_count,
                 ARG_NOT_FOUND = _arg_count
@@ -165,11 +172,12 @@ namespace configmgr
             static OUString getArgumentName(Argument _which)                CFG_NOTHROW();
             static Argument lookupArgument(OUString const& sArgumentName)   CFG_NOTHROW();
 
-            static OUString getUserArgumentName()               CFG_NOTHROW() { return getArgumentName(ARG_USER);     }
+            static OUString getUserArgumentNameD()              CFG_NOTHROW() { return getArgumentName(ARG_USER_DEPRECATED);     }
+            static OUString getEntityArgumentName()             CFG_NOTHROW() { return getArgumentName(ARG_ENTITY);     }
             static OUString getNodePathArgumentName()           CFG_NOTHROW() { return getArgumentName(ARG_NODEPATH); }
             static OUString getDepthArgumentNameArgumentName()  CFG_NOTHROW() { return getArgumentName(ARG_DEPTH);    }
             static OUString getLocaleArgumentName()             CFG_NOTHROW() { return getArgumentName(ARG_LOCALE);   }
-            static OUString getNoCacheArgumentName()            CFG_NOTHROW() { return getArgumentName(ARG_NOCACHE);  }
+            static OUString getNoCacheArgumentNameD()           CFG_NOTHROW() { return getArgumentName(ARG_NOCACHE_OBSOLETE);  }
             static OUString getAsyncArgumentName()              CFG_NOTHROW() { return getArgumentName(ARG_ASYNC);    }
         public:
             /** extracts arguments from the argument sequence into to the parameter variables
@@ -185,34 +193,31 @@ namespace configmgr
             static void extractArgs(    const uno::Sequence<uno::Any>& _rArgs,
                                         OUString&   /* [out] */ _rNodeAccessor,
                                         sal_Int32&  /* [out] */ _nLevels,
-                                        vos::ORef<OOptions> /* [in/out] */ xOptions
+                                        RequestOptions& /* [in/out] */ xOptions
                                    ) CFG_THROW1(lang::IllegalArgumentException);
 
             static bool extractOneArgument( OUString const& aName, uno::Any const& aValue,
                                             OUString&   /* [out] */ _rNodeAccessor,
                                             sal_Int32&  /* [out] */ _nLevels,
-                                            vos::ORef<OOptions> /* [in/out] */ _xOptions
+                                            RequestOptions& /* [in/out] */ xOptions
                                           ) CFG_NOTHROW();
 
         };
 
-    private:
-        typedef uno::Reference< lang::XMultiServiceFactory >    CreationContext;
+    public:
+        typedef uno::Reference< uno::XComponentContext >        CreationContext;
         typedef uno::Reference< script::XTypeConverter >        TypeConverterRef;
-        CreationContext                     m_xContext;
+    private:
         TypeConverterRef                    m_xTypeConverter;
-        vos::ORef<OOptions>                 m_xDefaultOptions;
+        RequestOptions                      m_aDefaultOptions;
         configapi::ApiProviderInstances*    m_pNewProviders;    /// order depedency - this must be after the TreeManager
         mutable osl::Mutex                  m_aTreeManagerMutex;
         TreeManager*                        m_pTreeManager;     /// the tree cache. Will hold a reference to us as long as it life
-        IConfigSession*                     m_pSession;
 
         rtl::Reference< TreeManager > maybeGetTreeManager() const CFG_NOTHROW();
         rtl::Reference< TreeManager > getTreeManager() const CFG_UNO_THROW_RTE();
         void setTreeManager(TreeManager * pTreeManager) CFG_UNO_THROW_RTE();
         void clearTreeManager() CFG_NOTHROW();
-    protected:
-        IConfigSession*   getSession() const;
     public:
         OProviderImpl(OProvider* _pProvider, CreationContext const & _xContext);
 
@@ -220,19 +225,18 @@ namespace configmgr
         virtual ~OProviderImpl();
 
         /// ITreeManager
-        virtual memory::Segment* getDataSegment(AbsolutePath const& _rAccessor, const vos::ORef < OOptions >& _xOptions);
-        virtual data::NodeAccess requestSubtree(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions,
-                                          sal_Int16 nMinLevels = ALL_LEVELS) CFG_UNO_THROW_ALL(  );
+        virtual memory::Segment* getDataSegment(AbsolutePath const& _rAccessor, const RequestOptions& _aOptions);
+        virtual data::NodeAccess requestSubtree(AbsolutePath const& aSubtreePath, const RequestOptions& _aOptions) CFG_UNO_THROW_ALL(  );
         virtual void updateTree(memory::UpdateAccessor& _aAccessToken, TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  );
 
-        virtual void releaseSubtree( AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions ) CFG_NOTHROW();
+        virtual void releaseSubtree( AbsolutePath const& aSubtreePath, const RequestOptions& _aOptions ) CFG_NOTHROW();
         virtual void saveAndNotifyUpdate(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& aChanges) CFG_UNO_THROW_ALL(  );
-        virtual void disposeData(const vos::ORef < OOptions >& _xOptions) CFG_NOTHROW();
-        virtual void fetchSubtree(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions, sal_Int16 nMinLevels = ALL_LEVELS) CFG_NOTHROW();
+        virtual void disposeData(const RequestOptions& _aOptions) CFG_NOTHROW();
+        virtual void fetchSubtree(AbsolutePath const& aSubtreePath, const RequestOptions& _aOptions) CFG_NOTHROW();
         /// IDefaultableTreeManager
         virtual sal_Bool fetchDefaultData(  memory::UpdateAccessor& _aAccessToken,
-                                            AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions,
-                                            sal_Int16 nMinLevels) CFG_UNO_THROW_ALL(  );
+                                            AbsolutePath const& aSubtreePath, const RequestOptions& _aOptions
+                                          ) CFG_UNO_THROW_ALL(  );
 
         // IInterface
         virtual void SAL_CALL acquire(  ) throw ();
@@ -245,11 +249,11 @@ namespace configmgr
         rtl::Reference< IConfigTemplateManager >  getTemplateProvider() const CFG_UNO_THROW_RTE( );
 
     protected:
-        static OUString getErrorMessage(AbsolutePath const& _rAccessor, const vos::ORef < OOptions >& _xOptions);
+        static OUString getErrorMessage(AbsolutePath const& _rAccessor, const RequestOptions& _aOptions);
 
         virtual void SAL_CALL dispose() throw();
     public:
-        const OOptions&     getDefaultOptions() const {return *m_xDefaultOptions;}
+        RequestOptions const& getDefaultOptions() const {return m_aDefaultOptions;}
         TypeConverterRef getTypeConverter() const {return m_xTypeConverter;}
         configapi::Factory& getWriterFactory();
         IConfigBroadcaster* getNotifier() CFG_NOTHROW();
@@ -257,17 +261,17 @@ namespace configmgr
 
         // actual factory methods
         // the returned object (if any) has to be acquired once)
-        configapi::NodeElement* buildReadAccess( OUString const& _rAccessor, const vos::ORef < OOptions >& _xOptions, sal_Int32 nMinLevels) CFG_UNO_THROW_ALL(  );
+        configapi::NodeElement* buildReadAccess( OUString const& _rAccessor, const RequestOptions& _aOptions, sal_Int32 nMinLevels) CFG_UNO_THROW_ALL(  );
         // the returned object (if any) has to be acquired once)
-        configapi::NodeElement* buildUpdateAccess(OUString const& _rAccessor, const vos::ORef < OOptions >& _xOptions, sal_Int32 nMinLevels) CFG_UNO_THROW_ALL(  );
+        configapi::NodeElement* buildUpdateAccess(OUString const& _rAccessor, const RequestOptions& _aOptions, sal_Int32 nMinLevels) CFG_UNO_THROW_ALL(  );
 
     private:
-        bool initSession(const ConnectionSettings& _rSettings);
+        bool initSession(const ContextReader& _rSettings);
     private:
-        void implInitFromSettings(const ConnectionSettings& _rSettings, bool& rNeedProfile);
+        void implInitFromSettings(const ContextReader& _rSettings, bool& rNeedProfile);
         void implInitFromProfile(data::NodeAccess const& aProfile);
 
-        virtual void initFromSettings(const ConnectionSettings& _rSettings, bool& rNeedProfile);
+        virtual void initFromSettings(const ContextReader& _rSettings, bool& rNeedProfile);
         virtual void initFromProfile(data::NodeAccess const& aProfile);
     };
 } // namespace configmgr

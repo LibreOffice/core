@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgupdate.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 13:32:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,7 @@ void displayTree(Reference< XNameAccess > xIFace, sal_Int32 nLevel)
             cout << "<" << aNames[i] << "/>";
 
     }
-    cout.flush();
+    ::flush(cout);
 }
 
 // -----------------------------------------------------------------------------
@@ -397,7 +397,7 @@ int _cdecl main( int argc, char * argv[] )
             );
         if (!xORB.is())
         {
-            cout.flush();
+            ::flush(cout);
             cerr << "Could not create the service factory !\n\n";
             return 1;
         }
@@ -428,7 +428,7 @@ int _cdecl main( int argc, char * argv[] )
             UNO_QUERY);
         if (!xCfgProvider.is())
         {
-            cout.flush();
+            ::flush(cout);
             cerr << "Could not create the configuration provider !\n\n";
             return 3;
         }
@@ -461,7 +461,7 @@ int _cdecl main( int argc, char * argv[] )
     }
     catch (Exception& e)
     {
-        cout.flush();
+        ::flush(cout);
         cerr << "Caught exception: " << e.Message << endl;
     }
 /*

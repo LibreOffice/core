@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2002-09-19 10:52:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,15 +62,22 @@
 #ifndef _CONFIGMGR_PROVIDER_FACTORY_HXX_
 #define _CONFIGMGR_PROVIDER_FACTORY_HXX_
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSINGLECOMPONENTFACTORY_HPP_
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
+#include <com/sun/star/lang/XEventListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
+/*
 #ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
@@ -80,121 +87,59 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
-
-#include "confapifactory.hxx"
-
-#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
-#include <com/sun/star/lang/XEventListener.hpp>
-#endif
-
-//........................................................................
+*/
+//------------------------------------------------------------------------
 namespace configmgr
 {
-//........................................................................
-    namespace uno  = ::com::sun::star::uno;
-    namespace lang = ::com::sun::star::lang;
-    using ::rtl::OUString;
-//........................................................................
-
-    uno::Reference< lang::XSingleServiceFactory > SAL_CALL
-        createProviderFactory(
-            const uno::Reference< lang::XMultiServiceFactory >& _rServiceManager,
-            const OUString& _rComponentName,
-            ::configmgr::ProviderInstantiation _pCreateFunction,
-            const uno::Sequence< OUString >& _rServiceNames
-        );
-
-    class ConnectionSettings;
-    class BootstrapSettings;
-
-    //====================================================================
+    //------------------------------------------------------------------------
+    namespace uno   = ::com::sun::star::uno;
+    namespace lang  = ::com::sun::star::lang;
+    namespace beans = ::com::sun::star::beans;
+    using rtl::OUString;
+    //------------------------------------------------------------------------
+    class ContextReader;
+    class ArgumentHelper;
+    //------------------------------------------------------------------------
     //= OProviderFactory
-    //====================================================================
-    typedef ::cppu::WeakImplHelper2< lang::XSingleServiceFactory, lang::XSingleComponentFactory > OProviderFactory_Base;
-    /** a special factory for the configuration provider, which implements some kind of
-        "shared multiple instances" factory.
+    //------------------------------------------------------------------------
+    typedef ::cppu::WeakImplHelper1< lang::XSingleComponentFactory > ProviderFactory_Base;
+
+    /** a special factory for the configuration provider,
+        which maps creation arguments into a context.
     */
-
-    class OProviderFactory : public OProviderFactory_Base
+    class ProviderFactory : public ProviderFactory_Base
     {
-        friend class ODisposingListener;
-    protected:
-        ::osl::Mutex                        m_aMutex;
-        ProviderInstantiation               m_pObjectCreator;
+        OUString const m_aImplementationName;
+        bool m_bAdmin;
 
-        uno::Reference< lang::XEventListener >          m_xEventListener; // must be the first uno::object
-        uno::Reference< lang::XMultiServiceFactory >    m_xORB;
-        uno::Reference< uno::XInterface >               m_xDefaultProvider;
-
-        // the pure settings, not overwritten by any runtime arguments
-        BootstrapSettings const*            m_pPureSettings;
-
-        typedef uno::WeakReference< uno::XInterface >   ProviderReference;
-        DECLARE_STL_USTRINGACCESS_MAP(ProviderReference, ProviderCache);
-        ProviderCache   m_aProviders;
-
-        typedef uno::Reference< uno::XComponentContext > Context;
     public:
-        OProviderFactory(
-            const uno::Reference< lang::XMultiServiceFactory >& _rxORB,
-            ProviderInstantiation _pObjectCreator);
-        ~OProviderFactory();
-
-        virtual uno::Reference< uno::XInterface > SAL_CALL createInstance(  ) throw(uno::Exception, uno::RuntimeException);
-        virtual uno::Reference< uno::XInterface > SAL_CALL createInstanceWithArguments( const uno::Sequence< uno::Any >& aArguments ) throw(uno::Exception, uno::RuntimeException);
+        typedef uno::Reference< uno::XComponentContext > Context;
+        typedef uno::Sequence < uno::Any >          Arguments;
+        typedef uno::Sequence < beans::NamedValue > NamedValues;
+    public:
+        explicit
+        ProviderFactory(OUString const & aImplementationName, bool bAdmin);
+        ~ProviderFactory();
 
         virtual uno::Reference< uno::XInterface >
-            SAL_CALL createInstanceWithContext( const uno::Reference< uno::XComponentContext >& xContext )
-                throw (uno::Exception, ::com::sun::star::uno::RuntimeException);
-
-        virtual uno::Reference< uno::XInterface > SAL_CALL
-            createInstanceWithArgumentsAndContext( const uno::Sequence< uno::Any >& aArguments, const uno::Reference< uno::XComponentContext >& xContext )
+            SAL_CALL createInstanceWithContext(Context const & xContext )
                 throw (uno::Exception, uno::RuntimeException);
 
+        virtual uno::Reference< uno::XInterface > SAL_CALL
+            createInstanceWithArgumentsAndContext( Arguments const & aArguments, Context const & xContext )
+                throw (uno::Exception, uno::RuntimeException);
+
+    private:
+        uno::Reference< uno::XInterface > getProviderFromContext(Context const & aContext);
+        uno::Reference< uno::XInterface > getProviderAlways(Context const & xContext);
+        uno::Reference< uno::XInterface > createProviderWithArguments(Context const & xContext, Arguments const & _aArguments);
+        uno::Reference< uno::XInterface > createProvider(Context const & xContext,bool bAdmin);
         uno::Reference< uno::XInterface > createProvider(Context const & xContext);
-        uno::Reference< uno::XInterface > createProviderWithArguments(Context const & xContext, const uno::Sequence< uno::Any >& _rArguments);
-        uno::Reference< uno::XInterface > createProviderWithSettings(Context const & xContext, const ConnectionSettings& _rSettings);
-
-    protected:
-        void    ensureDefaultProvider(Context const & xContext);
-        void    ensureBootstrapSettings(Context const & xContext);
-
-        uno::Reference< uno::XInterface > implCreateProviderWithSettings(const ConnectionSettings& _rSettings, bool bRequiresBootstrap);
-        // from the given map, extract a provider for the given user. (if necessary, create one and insert it into the map)
-        uno::Reference< uno::XInterface > implGetProvider( const ConnectionSettings& _rSettings );
-
-        // to be called with m:aMutex locked
-        void disposing(com::sun::star::lang::EventObject const& rEvt) throw();
+        sal_Int32 parseArguments(ArgumentHelper & aParser, NamedValues & rValues, Arguments const & _aArguments);
     };
-
-//........................................................................
+//------------------------------------------------------------------------
 }   // namespace configmgr
-//........................................................................
+//------------------------------------------------------------------------
 
 #endif // _CONFIGMGR_PROVIDER_FACTORY_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.6  2001/06/22 08:26:18  jb
- *  Correct argument-dependent caching of providers
- *
- *  Revision 1.5  2001/05/18 16:16:52  jb
- *  #81412# Cleaned up bootstrap settings handling; Added recognition of bootstrap errors
- *
- *  Revision 1.4  2001/04/03 16:33:58  jb
- *  Local AdministrationProvider now mapped to Setup-session
- *
- *  Revision 1.3  2001/01/29 08:51:11  dg
- *  #82336# invalid syntax for template
- *
- *  Revision 1.2  2001/01/26 07:54:21  lla
- *  #82734# disposing with lasy writing necessary
- *
- *  Revision 1.1  2000/12/01 13:53:17  fs
- *  initial checkin - afctory for configuration provider(s)
- *
- *
- *  Revision 1.0 30.11.00 19:03:57  fs
- ************************************************************************/
 

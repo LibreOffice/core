@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuemembernode.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ Name ValueMemberNode::getNodeName() const
 }
 //-----------------------------------------------------------------------------
 
-Attributes ValueMemberNode::getAttributes() const
+node::Attributes ValueMemberNode::getAttributes()   const
 {
     return m_aNodeRef.getAttributes();
 }

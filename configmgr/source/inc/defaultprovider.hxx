@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultprovider.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-10 09:27:46 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,19 +69,11 @@
 #include "utility.hxx"
 #endif
 
-#ifndef CONFIGMGR_MISC_OPTIONS_HXX_
-#include <options.hxx>
-#endif
-
 #ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
 #include <com/sun/star/uno/Exception.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
-#endif
-
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
 #endif
 
 #ifndef INCLUDED_MEMORY
@@ -108,7 +100,7 @@ namespace configmgr
     }
     //-------------------------
     class ISubtree;
-
+    class RequestOptions;
     //==========================================================================
     //= IDefaultProvider
     //==========================================================================
@@ -126,8 +118,8 @@ namespace configmgr
                 <NULL/>if no default data is available for the tree
         */
         virtual std::auto_ptr<ISubtree> requestDefaultData( configuration::AbsolutePath const& aSubtreePath,
-                                                            const vos::ORef < OOptions >& _xOptions,
-                                                            sal_Int16 nMinLevels) CFG_UNO_THROW_ALL(  ) = 0;
+                                                            const RequestOptions& _aOptions
+                                                           ) CFG_UNO_THROW_ALL(  ) = 0;
     };
 
     //==========================================================================
@@ -147,7 +139,7 @@ namespace configmgr
     public:
         /// get a data segment to host the given location - also available in ITreeManager
         virtual memory::Segment* getDataSegment(configuration::AbsolutePath const& _rAccessor,
-                                                const vos::ORef < OOptions >& _xOptions) = 0;
+                                                const RequestOptions& _aOptions) = 0;
 
         /** attempt to load default data into the tree named by a path using certain options
             and requiring a specific loading depth.
@@ -158,8 +150,8 @@ namespace configmgr
         */
         virtual sal_Bool fetchDefaultData(  memory::UpdateAccessor& _aAccessToken,
                                             configuration::AbsolutePath const& aSubtreePath,
-                                            const vos::ORef < OOptions >& _xOptions,
-                                            sal_Int16 nMinLevels) CFG_UNO_THROW_ALL(  ) = 0;
+                                            const RequestOptions& _xOptions
+                                         ) CFG_UNO_THROW_ALL(  ) = 0;
 
     };
 

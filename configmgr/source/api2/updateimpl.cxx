@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updateimpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,6 @@
 #endif
 #ifndef CONFIGMGR_API_BROADCASTER_HXX_
 #include "broadcaster.hxx"
-#endif
-#ifndef CONFIGMGR_API_ENCODENAME_HXX_
-#include "encodename.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactoryimpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include "template.hxx"
 #include "noderef.hxx"
 #include "objectregistry.hxx"
+#include "attributes.hxx"
 
 namespace configmgr
 {

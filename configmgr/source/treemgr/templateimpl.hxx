@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-10 09:32:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,17 +62,14 @@
 #ifndef CONFIGMGR_TEMPLATEIMPL_HXX_
 #define CONFIGMGR_TEMPLATEIMPL_HXX_
 
-#ifndef CONFIGMGR_API_APITYPES_HXX_
-#include "apitypes.hxx"
-#endif
 #ifndef CONFIGMGR_CONFIGTEMPLATE_HXX_
 #include "template.hxx"
 #endif
 #ifndef CONFIGMGR_CONFIGPATH_HXX_
 #include "configpath.hxx"
 #endif
-#ifndef CONFIGMGR_MISC_OPTIONS_HXX_
-#include "options.hxx"
+#ifndef CONFIGMGR_MISC_REQUESTOPTIONS_HXX_
+#include "requestoptions.hxx"
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -83,10 +80,6 @@
 #endif
 #ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
 #include <salhelper/simplereferenceobject.hxx>
-#endif
-
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
 #endif
 
 #ifndef INCLUDED_MAP
@@ -244,14 +237,14 @@ namespace configmgr
         {
             typedef TemplateProvider::TemplateManagerRef TemplateManagerRef;
 
-            TemplateProvider_Impl(TemplateManagerRef const & xProvider, vos::ORef< OOptions > const& xOptions);
+            TemplateProvider_Impl(TemplateManagerRef const & xProvider, RequestOptions const& aOptions);
 
             data::TreeSegment instantiate(memory::Accessor const& _aSourceAccessor, TemplateHolder const& aTemplate);
 
             TemplateHolder makeElementTemplateWithType(TemplateName const& _aNames, data::SetNodeAccess const& _aSet);
         private:
             TemplateManagerRef      m_xProvider;
-            vos::ORef< OOptions >   m_xOptions;
+            RequestOptions          m_aOptions;
 
             TemplateRepository      m_aRepository;
         };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importsvc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-28 09:05:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #include <osl/mutex.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
@@ -104,10 +107,10 @@ namespace configmgr
                                         >
         {
         public:
-            typedef uno::Reference< lang::XMultiServiceFactory > const & CreationArg;
+            typedef uno::Reference< uno::XComponentContext > const & CreationArg;
 
             explicit
-            ImportService(CreationArg _xServiceFactory, ServiceInfoHelper const & aSvcInfo);
+            ImportService(CreationArg _xContext, ServiceInfoHelper const & aSvcInfo);
             ~ImportService();
 
             // XInitialization
@@ -147,14 +150,14 @@ namespace configmgr
                     throw ( lang::WrappedTargetException, lang::IllegalArgumentException,
                             lang::NullPointerException, uno::RuntimeException);
         protected:
+            typedef uno::Reference< uno::XComponentContext >        Context;
             typedef uno::Reference< lang::XMultiServiceFactory >    ServiceFactory;
             typedef uno::Reference< backenduno::XBackend >          Backend;
             typedef uno::Reference< backenduno::XLayerHandler >     InputHandler;
 
             Backend createDefaultBackend() const;
 
-            ServiceFactory getServiceFactory() const
-            { return m_xServiceFactory; }
+            //ServiceFactory getServiceFactory() const
 
             virtual sal_Bool setImplementationProperty( OUString const & aName, uno::Any const & aValue);
         private:
@@ -163,7 +166,7 @@ namespace configmgr
 
         private:
             osl::Mutex      m_aMutex;
-            ServiceFactory  m_xServiceFactory;
+            Context         m_xContext;
             Backend         m_xDestinationBackend;
 
             ServiceInfoHelper m_aServiceInfo;
@@ -175,7 +178,7 @@ namespace configmgr
         class MergeImportService : public ImportService
         {
         public:
-            explicit MergeImportService(CreationArg _xServiceFactory);
+            explicit MergeImportService(CreationArg _xContext);
         private:
             InputHandler createImportHandler(Backend const & xBackend, OUString const & aEntity);
         };
@@ -184,7 +187,7 @@ namespace configmgr
         class CopyImportService : public ImportService
         {
         public:
-            explicit CopyImportService(CreationArg _xServiceFactory);
+            explicit CopyImportService(CreationArg _xContext);
         private:
             InputHandler createImportHandler(Backend const & xBackend, OUString const & aEntity);
             sal_Bool setImplementationProperty( OUString const & aName, uno::Any const & aValue);

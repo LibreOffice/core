@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jb $ $Date: 2002-11-26 08:54:02 $
+#   last change: $Author: hr $ $Date: 2003-03-19 16:18:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,32 +123,4 @@ APP2OBJS=	\
     $(OBJ)$/unomain.obj 
 
 .INCLUDE :  target.mk
-
-#**************************************************************************
-# history:
-#	$Log: not supported by cvs2svn $
-#	Revision 1.2  2002/10/24 15:29:25  jb
-#	#102602# New application for importing configuration data into a backend
-#	
-#	Revision 1.1.1.1  2000/09/18 16:13:40  hr
-#	initial import
-#	
-#	Revision 1.4  2000/09/15 09:51:48  willem.vandorp
-#	OpenOffice header added
-#	
-#	Revision 1.3  2000/08/27 15:44:53  fs
-#	#78183# replaced cout/cerr with fprintf
-#	
-#	Revision 1.2  2000/08/25 13:22:39  fs
-#	#78116# on unx, build *.bin
-#	
-#	Revision 1.1  2000/08/25 13:02:07  fs
-#	common reg server related command line tools
-#	
-#	Revision 1.1  2000/06/23 08:47:33  fs
-#	socket related helpers/samples
-#	
-#
-#	Revision 1.0 26.05.00 17:11:32  fs
-#**************************************************************************
 

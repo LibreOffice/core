@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: jb $ $Date: 2002-08-13 13:33:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,9 +473,9 @@ TemplateProvider SetElementFactory::findTemplateProvider(Tree const& aTree, Node
 // class TreeSetUpdater and ValueSetUpdater
 //-----------------------------------------------------------------------------
 
-static Attributes getNewElementAttributes(bool bInserting)
+static node::Attributes getNewElementAttributes(bool bInserting)
 {
-    Attributes aResult;
+    node::Attributes aResult;
     aResult.setState( node::isReplaced );
 
     return aResult;
@@ -486,7 +486,7 @@ static Attributes getNewElementAttributes(bool bInserting)
 
 ElementTreeHolder ValueSetUpdater::makeValueElement(Name const& aName, UnoAny const& aValue)
 {
-    static const Attributes aNewValueAttributes = getNewElementAttributes(false); // TODO: get real value
+    static const node::Attributes aNewValueAttributes = getNewElementAttributes(false); // TODO: get real value
 
     UnoType aType = m_aTemplate->getInstanceType();
 
@@ -755,7 +755,7 @@ UnoAny ValueSetUpdater::implValidateValue(UnoAny const& aValue)
 
 UnoAny ValueSetUpdater::implValidateValue(ElementNodeRef const& aElementTree, UnoAny const& aValue)
 {
-    Attributes aAttributes = aElementTree.getAttributes(aElementTree.getRootNode());
+    node::Attributes aAttributes = aElementTree.getAttributes(aElementTree.getRootNode());
     // Here we assume writable == removable/replaceable
     if (!aAttributes.bWritable)
         throw ConstraintViolation( "Set Update: Existing element is read-only !" );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeupdate.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,14 @@
 #ifndef CONFIGMGR_API_NODEUPDATE_HXX_
 #define CONFIGMGR_API_NODEUPDATE_HXX_
 
-#include "apitypes.hxx"
-
 #ifndef CONFIGMGR_API_NODEACCESS_HXX_
 #include "apinodeaccess.hxx"
 #endif
 #ifndef CONFIGMGR_ACCESSOR_HXX
 #include "accessor.hxx"
+#endif
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
 #endif
 
 namespace configmgr
@@ -151,7 +152,7 @@ namespace configmgr
 
     // Guarding and locking implementations
         /// guards a NodeGroupAccess, or NodeSetAccess; provides an object (write)/provider(read) lock; ensures object was not disposed
-        class UpdateGuardImpl : NotCopyable
+        class UpdateGuardImpl : Noncopyable
         {
             memory::Accessor                m_aDataAccess;
             osl::MutexGuard             m_aViewLock;

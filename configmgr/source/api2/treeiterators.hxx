@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: apitypes.hxx,v $
+ *  $RCSfile: treeiterators.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -42,7 +42,7 @@
  *  License at http://www.openoffice.org/license.html.
  *
  *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
  *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
@@ -59,25 +59,16 @@
  *
  ************************************************************************/
 
-#ifndef CONFIGMGR_API_APITYPES_HXX_
-#define CONFIGMGR_API_APITYPES_HXX_
+#ifndef CONFIGMGR_TREEITERATORS_HXX_
+#define CONFIGMGR_TREEITERATORS_HXX_
 
-#ifndef _COM_SUN_STAR_UNO_TYPE_HXX_
-#include <com/sun/star/uno/Type.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
-#include <com/sun/star/uno/Reference.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
-#include <com/sun/star/uno/Any.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
-#include <com/sun/star/uno/XInterface.hpp>
+#ifndef CONFIGMGR_CONFIGNODE_HXX_
+#include "noderef.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
+#include <com/sun/star/beans/Property.hpp>
+#endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -85,52 +76,60 @@
 #ifndef INCLUDED_VECTOR
 #include <vector>
 #define INCLUDED_VECTOR
-#endif  INCLUDED_VECTOR
+#endif
 
+// .......................................................................
 namespace configmgr
 {
+// .......................................................................
+    using rtl::OUString;
+
     namespace configapi
     {
-        namespace uno = ::com::sun::star::uno;
-
-        inline
-        uno::Type getAnyType( )
+        // ===================================================================
+        // = CollectNodeNames
+        // ===================================================================
+        class CollectNodeNames :  public configuration::NodeVisitor
         {
-            return ::getCppuType( static_cast< uno::Any const * >(0) );
-        }
+        public:
+            typedef std::vector<OUString> NameList;
 
-        inline
-        uno::Type getUnoInterfaceType( )
-        {
-            return ::getCppuType( static_cast< uno::Reference< uno::XInterface > const * >(0) );
-        }
+        protected:
+            NameList    m_aList;
 
-        template <typename Interface>
-        inline
-        uno::Type getReferenceType( Interface const* )
-        {
-            return ::getCppuType( static_cast< uno::Reference<Interface> const * >(0) );
-        }
+        public:
+            CollectNodeNames() { }
 
-        template <typename Type>
-        inline
-        uno::Type getSequenceType( Type const* )
-        {
-            return ::getCppuType( static_cast< uno::Sequence<Type> const * >(0) );
-        }
+            virtual Result handle(configuration::Tree const& aTree, configuration::NodeRef const& aNode); // NodeVisitor
+            virtual Result handle(configuration::Tree const& aTree, configuration::ValueRef const& aNode); // NodeVisitor
 
-        template <typename T>
-        inline
-        uno::Sequence<T> makeSequence(::std::vector<T> const& aVector)
+            NameList const& list() const { return m_aList; }
+        };
+
+        // ===================================================================
+        // = CollectPropertyInfo
+        // ===================================================================
+        class CollectPropertyInfo :  public configuration::NodeVisitor
         {
-            if (aVector.empty())
-                return uno::Sequence<T>();
-            return uno::Sequence<T>(&aVector[0],aVector.size());
-        }
+        public:
+            typedef com::sun::star::beans::Property Property;
+            typedef std::vector<Property> PropertyList;
+
+        protected:
+            PropertyList    m_aList;
+
+        public:
+            CollectPropertyInfo() { }
+
+            virtual Result handle(configuration::Tree const& aTree, configuration::NodeRef const& aNode); // NodeVisitor
+            virtual Result handle(configuration::Tree const& aTree, configuration::ValueRef const& aNode); // NodeVisitor
+
+            PropertyList const& list() const { return m_aList; }
+        };
     }
+// .......................................................................
+}   // namespace configmgr
+// .......................................................................
 
-}
-
-#endif // CONFIGMGR_API_APITYPES_HXX_
-
+#endif // _CONFIGMGR_TREEITERATORS_HXX_
 

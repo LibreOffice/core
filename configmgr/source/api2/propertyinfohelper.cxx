@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyinfohelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #ifndef CONFIGMGR_CONFIGPATH_HXX_
 #include "configpath.hxx"
 #endif
+#ifndef CONFIGMGR_CONFIGURATION_ATTRIBUTES_HXX_
+#include "attributes.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HDL_
 #include <com/sun/star/beans/PropertyAttribute.hdl>
 #endif
@@ -78,7 +82,7 @@ namespace configmgr
     {
 //-----------------------------------------------------------------------------
 beans::Property helperMakeProperty(configuration::Name const& aName,
-                                   configuration::Attributes const aAttributes,
+                                   node::Attributes const aAttributes,
                                    uno::Type const& aType,
                                    bool bDefaultable )
     throw(uno::RuntimeException)

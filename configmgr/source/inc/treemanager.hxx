@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treemanager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-10 09:30:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,8 @@ namespace configmgr
         memory::HeapManager & getCacheHeapManager() const;
 
         // ITreeManager
-        virtual memory::Segment* getDataSegment(AbsolutePath const& _rAccessor, const vos::ORef < OOptions >& _xOptions);
+        virtual memory::Segment* getDataSegment(AbsolutePath const& _rAccessor,
+                                                RequestOptions const& _aOptions);
 
         /** requests a node given by it's path. Basicly, this means
             that the node is fetch from the cache when it contains it else it ask the server
@@ -147,32 +148,33 @@ namespace configmgr
                                             should be loaded
         */
         virtual data::NodeAccess requestSubtree(AbsolutePath const& _rSubtreePath,
-                                                 const vos::ORef < OOptions >& _xOptions,
-                                                 sal_Int16 _nMinLevels = ALL_LEVELS) CFG_UNO_THROW_ALL(  );
+                                                RequestOptions const& _aOptions
+                                               ) CFG_UNO_THROW_ALL(  );
 
         virtual void updateTree(memory::UpdateAccessor& _aAccessToken, TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  );
 
-        virtual void saveAndNotifyUpdate(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& aChanges) CFG_UNO_THROW_ALL(  );
+        virtual void saveAndNotifyUpdate(memory::Accessor const& _aChangedDataAccessor,
+                                            TreeChangeList const& aChanges) CFG_UNO_THROW_ALL(  );
 
         virtual void releaseSubtree(AbsolutePath const& aSubtreePath,
-                                    const vos::ORef < OOptions >& _xOptions ) CFG_NOTHROW();
+                                    RequestOptions const& _aOptions ) CFG_NOTHROW();
 
-        virtual void disposeData(const vos::ORef < OOptions >& _xOptions) CFG_NOTHROW();
+        virtual void disposeData(const RequestOptions& _aOptions) CFG_NOTHROW();
 
         virtual void fetchSubtree(  AbsolutePath const& aSubtreePath,
-                                    const vos::ORef < OOptions >& _xOptions,
-                                    sal_Int16 nMinLevels = ALL_LEVELS) CFG_NOTHROW();
+                                    RequestOptions const& _xOptions
+                                 ) CFG_NOTHROW();
 
         // IDefaultableTreeManager
         virtual sal_Bool fetchDefaultData(  memory::UpdateAccessor& _aAccessToken,
                                             AbsolutePath const& aSubtreePath,
-                                            const vos::ORef < OOptions >& _xOptions,
-                                            sal_Int16 nMinLevels) CFG_UNO_THROW_ALL(  );
+                                            RequestOptions const& _aOptions
+                                         ) CFG_UNO_THROW_ALL(  );
 
         // IDefaultProvider
         virtual std::auto_ptr<ISubtree> requestDefaultData(AbsolutePath const& aSubtreePath,
-                                                            const vos::ORef < OOptions >& _xOptions,
-                                                            sal_Int16 nMinLevels) CFG_UNO_THROW_ALL(  );
+                                                            const RequestOptions& _aOptions
+                                                          ) CFG_UNO_THROW_ALL(  );
         // ITemplateManager
         virtual data::TreeAccessor requestTemplate( memory::Accessor const& _aAccessor,
                                                     Name const& aName, Name const& aModule
@@ -183,7 +185,7 @@ namespace configmgr
 
     // implementation interfaces
         void refreshSubtree(const AbsolutePath &_aAbsoluteSubtreePath,
-                            const vos::ORef<OOptions>& _aOptions) CFG_UNO_THROW_ALL(  );
+                            const RequestOptions& _aOptions) CFG_UNO_THROW_ALL(  );
 
     private:
         CacheData & getTemplates() { return * m_aTemplates.get(); }
@@ -202,7 +204,7 @@ namespace configmgr
         void implDisposeOne(CacheRef const & _aCache, RequestOptions const & _aOptions);
 
         // ConfigChangeBroadcaster
-        virtual ConfigChangeBroadcastHelper* getBroadcastHelper(vos::ORef<OOptions> const& _xOptions, bool bCreate);
+        virtual ConfigChangeBroadcastHelper* getBroadcastHelper(RequestOptions const& _aOptions, bool bCreate);
 
         // former INotifyListener
         void nodeUpdated(TreeChangeList& _rChanges);

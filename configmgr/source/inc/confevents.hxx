@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confevents.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,11 @@
 #ifndef CONFIGMGR_API_EVENTS_HXX_
 #define CONFIGMGR_API_EVENTS_HXX_
 
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
+#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
+#include <salhelper/simplereferenceobject.hxx>
+#endif
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
 
 namespace rtl { class OUString; }
@@ -72,14 +75,14 @@ namespace configmgr
 {
     class Change;
     struct TreeChangeList;
-    class OOptions;
+    class RequestOptions;
 
     namespace memory { class Accessor; }
     namespace configuration { class AbsolutePath; }
     using configuration::AbsolutePath;
 
     struct IConfigBroadcaster;
-    struct IConfigListener : public virtual vos::OReference
+    struct IConfigListener : public virtual salhelper::SimpleReferenceObject
     {
         virtual void disposing(IConfigBroadcaster* pSource) = 0;
     };
@@ -88,7 +91,7 @@ namespace configmgr
         virtual void nodeChanged(memory::Accessor const& _aChangedDataAccessor, Change const& aChange, AbsolutePath const& aPath, IConfigBroadcaster* pSource) = 0;
         virtual void nodeDeleted(memory::Accessor const& _aChangedDataAccessor, AbsolutePath const& aPath, IConfigBroadcaster* pSource) = 0;
     };
-    typedef vos::ORef<INodeListener> INodeListenerRef;
+    typedef rtl::Reference<INodeListener> INodeListenerRef;
 
     struct IConfigBroadcaster
     {
@@ -96,8 +99,8 @@ namespace configmgr
         IConfigBroadcaster() {}
         ~IConfigBroadcaster() {}
     public:
-        virtual void addListener(AbsolutePath const& aPath, const vos::ORef < OOptions >& _xOptions, INodeListenerRef const& pListener) = 0;
-        virtual void removeListener(const vos::ORef < OOptions >& _xOptions, INodeListenerRef const& pListener) = 0;
+        virtual void addListener(AbsolutePath const& aPath, const RequestOptions& _aOptions, INodeListenerRef const& pListener) = 0;
+        virtual void removeListener(const RequestOptions& _aOptions, INodeListenerRef const& pListener) = 0;
 
     };
 
@@ -108,13 +111,13 @@ namespace configmgr
         ConfigChangeBroadcaster();
         virtual ~ConfigChangeBroadcaster();
 
-        virtual void addListener(AbsolutePath const& aName, const vos::ORef < OOptions >& _xOptions, INodeListenerRef const& pListener);
-        virtual void removeListener(const vos::ORef < OOptions >& _xOptions, INodeListenerRef const& pListener);
+        virtual void addListener(AbsolutePath const& aName, const RequestOptions& _aOptions, INodeListenerRef const& pListener);
+        virtual void removeListener(const RequestOptions& _aOptions, INodeListenerRef const& pListener);
 
     protected:
         virtual void fireChanges(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& _aChanges, sal_Bool _bError);
     protected:
-        virtual ConfigChangeBroadcastHelper* getBroadcastHelper(const vos::ORef < OOptions >& _xOptions, bool bCreate) = 0;
+        virtual ConfigChangeBroadcastHelper* getBroadcastHelper(const RequestOptions& _aOptions, bool bCreate) = 0;
         ConfigChangeBroadcastHelper* newBroadcastHelper(); // needed to implement the preceding
         void disposeBroadcastHelper(ConfigChangeBroadcastHelper* pHelper); // needed to discard the preceding
     };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuemembernode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ namespace configmgr
             /// retrieve the name of the underlying node
             Name getNodeName() const;
             /// retrieve the attributes
-            Attributes getAttributes()  const;
+            node::Attributes getAttributes()    const;
 
             /// Does this node assume its default value
             bool isDefault()        const;

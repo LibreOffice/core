@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localhierarchybrowsersvc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-12-06 13:08:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,8 +124,8 @@ uno::Reference< uno::XInterface > SAL_CALL instantiateLocalHierarchyBrowser
 }
 // -----------------------------------------------------------------------------
 
-LocalHierarchyBrowserService::LocalHierarchyBrowserService(CreationArg _xServiceFactory)
-: m_xServiceFactory(_xServiceFactory)
+LocalHierarchyBrowserService::LocalHierarchyBrowserService(CreationArg _xContext)
+: m_xServiceFactory(_xContext->getServiceManager(), uno::UNO_QUERY)
 {
     if (!m_xServiceFactory.is())
     {

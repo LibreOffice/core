@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheaccess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-12-13 10:30:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef CONFIGMGR_TIMESTAMP_HXX
 #include "timestamp.hxx"
 #endif
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
+#endif
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -88,7 +91,7 @@ namespace configmgr
 
 //-----------------------------------------------------------------------------
 
-    class CacheClientAccess : public salhelper::SimpleReferenceObject, NotCopyable
+    class CacheClientAccess : public salhelper::SimpleReferenceObject, Noncopyable
     {
     public:
         typedef CacheData   Data;
@@ -149,7 +152,7 @@ namespace configmgr
 
 ////////////////////////////////////////////////////////////////////////////////
 
-    class CacheLoadingAccess : public salhelper::SimpleReferenceObject, NotCopyable
+    class CacheLoadingAccess : public salhelper::SimpleReferenceObject, Noncopyable
     {
     public:
         typedef ExtendedCacheData  Data;

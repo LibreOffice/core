@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2002-08-20 10:21:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ namespace configmgr
             MergedComponentData aData;
 
             uno::Reference< backenduno::XLayerHandler >
-                test(new LayerMergeHandler(_xServiceFactory, aData, localehelper::getDefaultLocale()));
+                test(new LayerMergeHandler(_xServiceFactory, aData));
         }
 
 // -----------------------------------------------------------------------------
@@ -132,15 +132,15 @@ struct LayerMergeHandler::Converter
     bool m_bConvertData;
 };
 // -----------------------------------------------------------------------------
-LayerMergeHandler::LayerMergeHandler(ServiceFactory const & _xServiceFactory, MergedComponentData & _rData, OUString const & _aLocale )
+LayerMergeHandler::LayerMergeHandler(ServiceFactory const & _xServiceFactory, MergedComponentData & _rData, ITemplateDataProvider* aTemplateProvider )
 : m_rData(_rData)
-, m_aContext(static_cast<backenduno::XLayerHandler*>(this))
+, m_aContext(static_cast<backenduno::XLayerHandler*>(this),aTemplateProvider )
 , m_aFactory()
-, m_aLocale(_aLocale)
+, m_aLocale()
 , m_pProperty(NULL)
 , m_pConverter( new Converter(_xServiceFactory) )
 , m_nSkipping(0)
-, m_bSublayer(_aLocale.getLength() != 0)
+, m_bSublayer(false)
 {
     OSL_ENSURE( m_rData.hasSchema(), "Creating layer merger without default data" );
 }
@@ -152,9 +152,30 @@ LayerMergeHandler::~LayerMergeHandler(  )
 }
 // -----------------------------------------------------------------------------
 
+void LayerMergeHandler::prepareLayer()
+{
+    OSL_ENSURE(isDone(), "LayerMergeHandler: Warning: Previous layer or schema not terminated properly");
+    m_aLocale = OUString();
+    m_bSublayer = false;
+
+    promoteToDefault(m_rData);
+}
+// -----------------------------------------------------------------------------
+
+bool LayerMergeHandler::prepareSublayer(OUString const & aLocale)
+{
+    OSL_ENSURE(isDone(), "LayerMergeHandler: Warning: Previous layer not terminated properly");
+
+    m_aLocale = aLocale;
+    m_bSublayer = (aLocale.getLength() != 0);
+
+    return m_bSublayer;
+}
+// -----------------------------------------------------------------------------
+
 MergedComponentData & LayerMergeHandler::result()
 {
-    OSL_ENSURE(isDone(), "LayerMergeHandler: Warning: Schema not terminated properly");
+    OSL_ENSURE(isDone(), "LayerMergeHandler: Warning: Layer not terminated properly");
 
     return m_rData;
 }
@@ -162,7 +183,7 @@ MergedComponentData & LayerMergeHandler::result()
 
 MergedComponentData const & LayerMergeHandler::result() const
 {
-    OSL_ENSURE(isDone(), "LayerMergeHandler: Warning: Schema not terminated properly");
+    OSL_ENSURE(isDone(), "LayerMergeHandler: Warning: Layer not terminated properly");
 
     return m_rData;
 }
@@ -477,12 +498,14 @@ void LayerMergeHandler::applyAttributes(INode * pNode, sal_Int16 aNodeAttributes
 }
 // -----------------------------------------------------------------------------
 
-void LayerMergeHandler::startOverride(INode * pNode) /* ensure writable, mark merged */
-    CFG_UNO_THROW1( lang::IllegalAccessException )
+bool LayerMergeHandler::startOverride(INode * pNode) /* ensure writable, mark merged */
+    CFG_NOTHROW( )
 {
-    m_aContext.ensureWritable(pNode);
+    if (!m_aContext.isWritable(pNode)) return false;
 
     if (pNode->isDefault()) pNode->modifyState( node::isMerged );
+
+    return true;
 }
 // -----------------------------------------------------------------------------
 
@@ -492,8 +515,9 @@ void LayerMergeHandler::ensureUnchanged(INode const * pNode) const
     // to do: change state handling to detect this within sets
     OSL_PRECOND(pNode,"INTERNAL ERROR: Unexpected NULL node pointer");
 
-    if (pNode->getAttributes().state() == node::isMerged)
-        m_aContext.raiseMalformedDataException("Layer merging: Duplicate node or property in this layer");
+    if (!this->isInSublayer())
+        if (pNode->getAttributes().state() == node::isMerged)
+            m_aContext.raiseMalformedDataException("Layer merging: Duplicate node or property in this layer");
 }
 // -----------------------------------------------------------------------------
 
@@ -529,6 +553,8 @@ void SAL_CALL LayerMergeHandler::endLayer( )
 
     m_aContext.endActiveComponent();
 
+    m_bSublayer = false;
+
     OSL_POSTCOND( !m_aContext.hasActiveComponent(), "Layer merging: could not clear active component");
     OSL_POSTCOND(  m_aContext.isDone(), "Layer merging: could not finish processing");
 }
@@ -550,14 +576,17 @@ void LayerMergeHandler::overrideLayerRoot( const OUString& aName, sal_Int16 aAtt
 
         ensureUnchanged(pSchema);
 
-        startOverride(pSchema);
+        if (startOverride(pSchema))
+        {
+            applyAttributes(pSchema,aAttributes);
 
-        applyAttributes(pSchema,aAttributes);
+            m_aContext.pushNode(pSchema);
 
-        m_aContext.pushNode(pSchema);
-
-        OSL_POSTCOND( m_aContext.hasActiveComponent(),  "Layer merging: could not set active component");
-        OSL_POSTCOND( !m_aContext.isDone(),             "Layer merging: could not start component");
+            OSL_POSTCOND( m_aContext.hasActiveComponent(),  "Layer merging: could not set active component");
+            OSL_POSTCOND( !m_aContext.isDone(),             "Layer merging: could not start component");
+        }
+        else
+            this->skipNode();
     }
     else
     {
@@ -582,11 +611,14 @@ void SAL_CALL LayerMergeHandler::overrideNode( const OUString& aName, sal_Int16 
     {
         ensureUnchanged(pNode);
 
-        startOverride(pNode);
+        if (startOverride(pNode))
+        {
+            applyAttributes(pNode, aAttributes);
 
-        applyAttributes(pNode, aAttributes);
-
-        m_aContext.pushNode(pNode);
+            m_aContext.pushNode(pNode);
+        }
+        else
+            this->skipNode();
     }
     else // ignore non-matched data
     {
@@ -598,20 +630,38 @@ void SAL_CALL LayerMergeHandler::overrideNode( const OUString& aName, sal_Int16 
 // -----------------------------------------------------------------------------
 
 void LayerMergeHandler::implAddOrReplaceNode( const OUString& aName, const TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
-    CFG_THROW5 (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+    CFG_THROW4 (MalformedDataException, container::NoSuchElementException, lang::IllegalArgumentException, uno::RuntimeException)
 {
-    std::auto_ptr<INode> apNewInstance = m_rData.instantiateTemplate(aName, aTemplate);
+    ISubtree * pReplacedNode = m_aContext.findNode(aName);
+    if (pReplacedNode)
+    {
+        this->ensureUnchanged(pReplacedNode);
+
+        if (!m_aContext.isRemovable(pReplacedNode))
+        {
+            this->skipNode();
+            return;
+        }
+    }
+
+    std::auto_ptr<INode> apNewInstance;
+    if (aTemplate.Component == m_aContext.getActiveComponent())
+    {
+        apNewInstance = m_rData.instantiateTemplate(aName, aTemplate.Name);
+    }
+    else
+    {
+        TemplateRequest aTemplateRequest(configuration::makeName(aTemplate.Name, configuration::Name::NoValidate()),
+                                         configuration::makeName(aTemplate.Component, configuration::Name::NoValidate()) );
+        apNewInstance = m_aContext.getTemplateData( aTemplateRequest ).extractDataAndClear();
+    }
+
     if (NULL == apNewInstance.get())
         m_aContext.raiseNoSuchElementException("Layer merging: Cannot instantiate template.", aTemplate.Name);
 
     applyAttributes(apNewInstance.get(), aAttributes);
 
-    if (ISubtree * pReplaced = m_aContext.findNode(aName))
-    {
-        this->ensureUnchanged(pReplaced);
-        m_aContext.ensureRemovable(pReplaced);
-        m_aContext.getCurrentParent().removeChild( aName );
-    }
+    if (pReplacedNode) m_aContext.getCurrentParent().removeChild( aName );
 
     INode * pAddedInstance = m_aContext.getCurrentParent().addChild( apNewInstance );
 
@@ -670,7 +720,8 @@ void SAL_CALL LayerMergeHandler::dropNode( const OUString& aName )
     if (ISubtree * pDropped = m_aContext.findNode(aName))
     {
         this->ensureUnchanged(pDropped);
-        m_aContext.ensureRemovable(pDropped);
+        if (!m_aContext.isRemovable(pDropped))
+            return;
     }
     else
     {
@@ -692,13 +743,16 @@ void SAL_CALL LayerMergeHandler::overrideProperty( const OUString& aName, sal_In
     {
         ensureUnchanged(pProp);
 
-        startOverride(pProp);
+        if (startOverride(pProp))
+        {
+            applyAttributes(pProp,aAttributes);
 
-        applyAttributes(pProp,aAttributes);
+            m_pProperty = pProp;
 
-        m_pProperty = pProp;
-
-        checkPropertyType(aType);
+            checkPropertyType(aType);
+        }
+        else
+            this->skipNode();
     }
     else // ignore non-matched data
     {

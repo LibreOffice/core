@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultproviderproxy.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-10 09:32:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,12 +88,10 @@ DefaultProviderProxy::DefaultProviderProxy(
         rtl::Reference< IConfigDefaultProvider > const & _xDefaultTreeProvider,
         IDefaultableTreeManager *   _pDefaultTreeManager,
         AbsolutePath        const&  _aBaseLocation,
-        vos::ORef<OOptions> const&  _xOptions,
-        sal_Int16                   _nRequestDepth
+        RequestOptions      const&  _aOptions
     )
 : m_aBaseLocation(_aBaseLocation)
-, m_xOptions(_xOptions)
-, m_nRequestDepth(_nRequestDepth)
+, m_aOptions(_aOptions)
 , m_xDefaultTreeProvider(_xDefaultTreeProvider)
 , m_pDefaultTreeManager(_pDefaultTreeManager)
 {
@@ -117,7 +115,7 @@ std::auto_ptr<ISubtree> DefaultProviderProxy::getDefaultTree(
     std::auto_ptr<ISubtree> aRet;
 
     if (m_xDefaultTreeProvider.is())
-        aRet = m_xDefaultTreeProvider->requestDefaultData(_aLocation, m_xOptions, ITreeProvider::ALL_LEVELS);
+        aRet = m_xDefaultTreeProvider->requestDefaultData(_aLocation, m_aOptions);
 
     return aRet;
 }
@@ -129,9 +127,9 @@ bool DefaultProviderProxy::fetchDefaultData()  CFG_UNO_THROW_ALL()
     OSL_PRECOND(m_pDefaultTreeManager, "No tree to fetch defaults into");
     if (!m_pDefaultTreeManager) return false;
 
-    memory::UpdateAccessor anAccessToken(m_pDefaultTreeManager->getDataSegment(m_aBaseLocation,m_xOptions));
+    memory::UpdateAccessor anAccessToken(m_pDefaultTreeManager->getDataSegment(m_aBaseLocation,m_aOptions));
 
-    return !! m_pDefaultTreeManager->fetchDefaultData(anAccessToken,m_aBaseLocation,m_xOptions, m_nRequestDepth);
+    return !! m_pDefaultTreeManager->fetchDefaultData(anAccessToken,m_aBaseLocation,m_aOptions);
 }
 //-----------------------------------------------------------------------------
     }

@@ -2,9 +2,9 @@
 *
 *  $RCSfile: layerwriter.cxx,v $
 *
-*  $Revision: 1.7 $
+*  $Revision: 1.8 $
 *
-*  last change: $Author: ssmith $ $Date: 2002-11-08 14:43:44 $
+*  last change: $Author: hr $ $Date: 2003-03-19 16:19:58 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -81,9 +81,9 @@ namespace configmgr
         // -----------------------------------------------------------------------------
 
         uno::Reference< uno::XInterface > SAL_CALL instantiateLayerWriter
-            ( CreationContext const& rServiceManager )
+            ( CreationContext const& xContext )
         {
-            return * new LayerWriter(rServiceManager);
+            return * new LayerWriter(xContext);
         }
         // -----------------------------------------------------------------------------
 
@@ -110,9 +110,9 @@ namespace configmgr
         }
         // -----------------------------------------------------------------------------
 
-        LayerWriter::LayerWriter(ServiceFactory const & _xSvcFactory)
-            : LayerWriterService_Base(_xSvcFactory)
-            , m_xTCV( createTCV(_xSvcFactory) )
+        LayerWriter::LayerWriter(CreationArg _xContext)
+            : LayerWriterService_Base(_xContext)
+            , m_xTCV( createTCV( LayerWriterService_Base::getServiceFactory() ) )
             , m_bInProperty(false)
             , m_bStartedDocument(false)
         {

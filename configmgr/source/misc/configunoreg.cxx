@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: jb $ $Date: 2002-12-06 13:07:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,47 +60,31 @@
  ************************************************************************/
 #include <stdio.h>
 
-#ifndef _CONFIGMGR_PROVIDER_FACTORY_HXX_
-#include "providerfactory.hxx"
-#endif
+#include "confapifactory.hxx"
+
 #ifndef CONFIGMGR_SERVICEINFOHELPER_HXX_
 #include "serviceinfohelper.hxx"
 #endif
-#ifndef CONFIGMGR_API_FACTORY_HXX_
-#include "confapifactory.hxx"
-#endif
+
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
 #endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 
 using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::registry::XRegistryKey;
-using ::com::sun::star::lang::XSingleServiceFactory;
+using ::com::sun::star::lang::XSingleComponentFactory;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::configmgr::ServiceRegistrationInfo;
 using ::configmgr::SingletonRegistrationInfo;
 using ::configmgr::AsciiServiceName;
-
-typedef Reference< XSingleServiceFactory > (SAL_CALL * createFactoryFunc)
-        (
-            const Reference< XMultiServiceFactory > & rServiceManager,
-            const OUString & rComponentName,
-            ::cppu::ComponentInstantiation pCreateFunction,
-            const Sequence< OUString > & rServiceNames,
-            rtl_ModuleCount*
-        );
-
-typedef Reference< XSingleServiceFactory > (SAL_CALL * createProviderFactoryFunc)
-        (
-            const Reference< XMultiServiceFactory > & rServiceManager,
-            const OUString & rComponentName,
-            ::configmgr::ProviderInstantiation pCreateFunction,
-            const Sequence< OUString > & rServiceNames
-        );
 
 // ***************************************************************************************
 //
@@ -116,11 +100,12 @@ void RegisterService(
     if (pInfo == 0 || pInfo->registeredServiceNames==0 || pInfo->implementationName==0)
         return;
 
-    OUString aMainKeyName(OUString(RTL_CONSTASCII_USTRINGPARAM("/")));
-    aMainKeyName += OUString::createFromAscii(pInfo->implementationName);
-    aMainKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    OUStringBuffer aMainKeyName;
+    aMainKeyName.appendAscii("/");
+    aMainKeyName.appendAscii(pInfo->implementationName);
+    aMainKeyName.appendAscii("/UNO/SERVICES");
 
-    Reference< XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
+    Reference< XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName.makeStringAndClear()) );
     OSL_ENSURE(xNewKey.is(), "CONFMGR::component_writeInfo : could not create a registry key !");
 
     for(AsciiServiceName const* p = pInfo->registeredServiceNames ; *p; ++p)
@@ -135,13 +120,18 @@ void RegisterSingleton(
         const SingletonRegistrationInfo* pInfo,
         const Reference< XRegistryKey > & xKey)
 {
-    if (pInfo == 0 || pInfo->singletonName==0 || pInfo->instantiatedServiceName==0)
+    if (pInfo == 0 ||   pInfo->singletonName            ==0 ||
+                        pInfo->implementationName       ==0 ||
+                        pInfo->instantiatedServiceName  ==0 )
         return;
 
-    OUString aSingletonKeyName(OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SINGLETONS/")));
-    aSingletonKeyName += OUString::createFromAscii(pInfo->singletonName);
+    OUStringBuffer aSingletonKeyName;
+    aSingletonKeyName.appendAscii("/");
+    aSingletonKeyName.appendAscii(pInfo->implementationName);
+    aSingletonKeyName.appendAscii("/UNO/SINGLETONS/");
+    aSingletonKeyName.appendAscii(pInfo->singletonName);
 
-    Reference< XRegistryKey >  xNewKey( xKey->createKey(aSingletonKeyName) );
+    Reference< XRegistryKey >  xNewKey( xKey->createKey(aSingletonKeyName.makeStringAndClear()) );
     OSL_ENSURE(xNewKey.is(), "CONFMGR::component_writeInfo : could not create a registry key !");
 
     xNewKey->setStringValue(OUString::createFromAscii(pInfo->instantiatedServiceName));
@@ -154,7 +144,7 @@ void RegisterSingleton(
 //-----------------------------------------------------------------------------
 struct ServiceImplementationRequest
 {
-    Reference< XSingleServiceFactory > xRet;
+    Reference< XInterface > xRet;
     Reference< XMultiServiceFactory > const m_xServiceManager;
     OUString const sImplementationName;
 
@@ -179,10 +169,9 @@ struct ServiceImplementationRequest
 
     //-------------------------------------------------------------------------
 
-    sal_Bool CreateService(
+    sal_Bool CreateProviderFactory(
                 const ServiceRegistrationInfo* pInfo,
-                ::cppu::ComponentInstantiation Factory,
-                createFactoryFunc creator
+                bool bAdmin
             )
     {
         if (this->shouldCreate(pInfo))
@@ -192,7 +181,7 @@ struct ServiceImplementationRequest
 
             const Sequence< OUString > Services=  aInfo.getRegisteredServiceNames();
 
-            xRet = creator( m_xServiceManager, aInfo.getImplementationName(), Factory, Services, 0);
+            xRet = configmgr::createProviderFactory( aInfo.getImplementationName(), bAdmin);
 
             OSL_ENSURE(xRet.is(), "CreateProvider : WHERE IS THE return value !");
         }
@@ -204,10 +193,9 @@ struct ServiceImplementationRequest
 
     //-------------------------------------------------------------------------
 
-    sal_Bool CreateProvider(
+    sal_Bool CreateServiceFactory(
                 const ServiceRegistrationInfo* pInfo,
-                ::configmgr::ProviderInstantiation Factory,
-                createProviderFactoryFunc creator
+                ::cppu::ComponentFactoryFunc Factory
             )
     {
         if (this->shouldCreate(pInfo))
@@ -217,7 +205,8 @@ struct ServiceImplementationRequest
 
             const Sequence< OUString > Services=  aInfo.getRegisteredServiceNames();
 
-            xRet = creator( m_xServiceManager, aInfo.getImplementationName(), Factory, Services);
+            xRet = cppu::createSingleComponentFactory( Factory, aInfo.getImplementationName(), Services, 0);
+
             OSL_ENSURE(xRet.is(), "CreateProvider : WHERE IS THE return value !");
         }
         catch(Exception&)
@@ -228,16 +217,15 @@ struct ServiceImplementationRequest
 
     //-------------------------------------------------------------------------
 
-    sal_Bool MapSingleton(
+    sal_Bool CreateSingletonMapperFactory(
                 const SingletonRegistrationInfo* pInfo,
-                ::cppu::ComponentInstantiation Mapper,
-                createFactoryFunc creator
+                ::cppu::ComponentFactoryFunc Mapper
             )
     {
         OSL_ENSURE(pInfo && pInfo->mappedImplementation, "CreateProvider : Cannot map unmapped singleton !");
 
         return pInfo && pInfo->mappedImplementation &&
-                CreateService(pInfo->mappedImplementation,Mapper,creator);
+                CreateServiceFactory(pInfo->mappedImplementation,Mapper);
     }
 
     //-------------------------------------------------------------------------
@@ -273,8 +261,11 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
         Reference< XRegistryKey > xKey(reinterpret_cast<XRegistryKey*>(pRegistryKey));
 
         // configuration access entry points: configuration provider
-        RegisterService(configmgr::getConfigurationProviderServices(), xKey);
-        RegisterService(configmgr::getAdminProviderServices(), xKey);
+        RegisterSingleton(configmgr::getDefaultProviderSingletonInfo(), xKey) ;
+
+        RegisterService(configmgr::getConfigurationProviderServiceInfo(), xKey);
+        RegisterService(configmgr::getDefaultProviderServiceInfo(), xKey);
+        RegisterService(configmgr::getAdminProviderServiceInfo(), xKey);
 
         // registry wrapper (deprecated)
         RegisterService(configmgr::getConfigurationRegistryServiceInfo(), xKey);
@@ -286,11 +277,23 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
         RegisterService(configmgr::xml::getSchemaParserServiceInfo(), xKey);
         RegisterService(configmgr::xml::getLayerParserServiceInfo(), xKey);
         RegisterService(configmgr::xml::getLayerWriterServiceInfo(), xKey);
+
+        // bootstrap handling
+        RegisterSingleton(configmgr::getBootstrapContextSingletonInfo(), xKey) ;
+        RegisterService(configmgr::getBootstrapContextServiceInfo(), xKey) ;
+
+        // backend singletons
+        RegisterSingleton(configmgr::backend::getDefaultBackendSingletonInfo(), xKey) ;
+        RegisterSingleton(configmgr::backend::getDefaultSingleBackendSingletonInfo(), xKey) ;
+
         // backends
+        RegisterService(configmgr::backend::getDefaultBackendServiceInfo(), xKey) ;
+        RegisterService(configmgr::backend::getDefaultSingleBackendServiceInfo(), xKey) ;
         RegisterService(configmgr::backend::getSingleBackendAdapterServiceInfo(), xKey) ;
         RegisterService(configmgr::localbe::getLocalBackendServiceInfo(), xKey) ;
         RegisterService(configmgr::localbe::getLocalDataImportServiceInfo(), xKey) ;
         RegisterService(configmgr::localbe::getLocalHierarchyBrowserServiceInfo(), xKey) ;
+
         // im/export
         RegisterService(configmgr::backend::getMergeImportServiceInfo(), xKey);
         RegisterService(configmgr::backend::getCopyImportServiceInfo(), xKey);
@@ -317,75 +320,88 @@ extern "C" void* SAL_CALL component_getFactory(
         ServiceImplementationRequest aReq(pServiceManager,pImplementationName);
 
         // configuration access entry points: configuration provider
-        aReq.CreateProvider(
-            configmgr::getConfigurationProviderServices(),
-            &configmgr::instantiateConfigProvider,
-            ::configmgr::createProviderFactory)
+        aReq.CreateProviderFactory(
+            configmgr::getConfigurationProviderServiceInfo(),
+            false)
         ||
-        aReq.CreateProvider(
-            configmgr::getAdminProviderServices(),
-            &configmgr::instantiateAdminProvider,
-            ::configmgr::createProviderFactory)
+        aReq.CreateProviderFactory(
+            configmgr::getAdminProviderServiceInfo(),
+            true)
+        ||
+        aReq.CreateServiceFactory(
+            configmgr::getDefaultProviderServiceInfo(),
+            &configmgr::instantiateDefaultProvider)
         ||
         // registry wrapper (deprecated)
-        aReq.CreateService(
+        aReq.CreateServiceFactory(
             configmgr::getConfigurationRegistryServiceInfo(),
-            &configmgr::instantiateConfigRegistry,
-            ::cppu::createSingleFactory)
+            &configmgr::instantiateConfigRegistry)
         ||
         // updating
-        aReq.CreateService(
+        aReq.CreateServiceFactory(
             configmgr::backend::getUpdateMergerServiceInfo(),
-            &configmgr::backend::instantiateUpdateMerger,
-            ::cppu::createSingleFactory)
+            &configmgr::backend::instantiateUpdateMerger)
         ||
         // xml handling
-        aReq.CreateService(
+        aReq.CreateServiceFactory(
             configmgr::xml::getSchemaParserServiceInfo(),
-            &configmgr::xml::instantiateSchemaParser,
-            ::cppu::createSingleFactory)
+            &configmgr::xml::instantiateSchemaParser)
         ||
-        aReq.CreateService(
+        aReq.CreateServiceFactory(
             configmgr::xml::getLayerParserServiceInfo(),
-            &configmgr::xml::instantiateLayerParser,
-            ::cppu::createSingleFactory)
+            &configmgr::xml::instantiateLayerParser)
         ||
-        aReq.CreateService(
+        aReq.CreateServiceFactory(
             configmgr::xml::getLayerWriterServiceInfo(),
-            &configmgr::xml::instantiateLayerWriter,
-            ::cppu::createSingleFactory)
+            &configmgr::xml::instantiateLayerWriter)
+        ||
+        // bootstrap handling
+        aReq.CreateServiceFactory(
+            configmgr::getBootstrapContextServiceInfo(),
+            &configmgr::instantiateBootstrapContext)
+        ||
+        // backend singletons
+        aReq.CreateSingletonMapperFactory(
+                configmgr::backend::getDefaultBackendSingletonInfo(),
+                configmgr::backend::getDefaultBackendSingleton)
+        ||
+        aReq.CreateSingletonMapperFactory(
+                configmgr::backend::getDefaultSingleBackendSingletonInfo(),
+                configmgr::backend::getDefaultSingleBackendSingleton)
         ||
         // backends
-        aReq.CreateService(
+        aReq.CreateServiceFactory(
+                configmgr::backend::getDefaultBackendServiceInfo(),
+                configmgr::backend::instantiateDefaultBackend)
+        ||
+        aReq.CreateServiceFactory(
+                configmgr::backend::getDefaultSingleBackendServiceInfo(),
+                configmgr::backend::instantiateDefaultSingleBackend)
+        ||
+        aReq.CreateServiceFactory(
                 configmgr::backend::getSingleBackendAdapterServiceInfo(),
-                configmgr::backend::instantiateSingleBackendAdapter,
-                cppu::createSingleFactory)
+                configmgr::backend::instantiateSingleBackendAdapter)
         ||
-        aReq.CreateService(
+        aReq.CreateServiceFactory(
                 configmgr::localbe::getLocalBackendServiceInfo(),
-                configmgr::localbe::instantiateLocalBackend,
-                cppu::createSingleFactory)
+                configmgr::localbe::instantiateLocalBackend)
         ||
-        aReq.CreateService(
+        aReq.CreateServiceFactory(
                 configmgr::localbe::getLocalDataImportServiceInfo(),
-                configmgr::localbe::instantiateLocalDataImporter,
-                cppu::createSingleFactory)
+                configmgr::localbe::instantiateLocalDataImporter)
         ||
-        aReq.CreateService(
+        aReq.CreateServiceFactory(
                 configmgr::localbe::getLocalHierarchyBrowserServiceInfo(),
-                configmgr::localbe::instantiateLocalHierarchyBrowser,
-                cppu::createSingleFactory)
+                configmgr::localbe::instantiateLocalHierarchyBrowser)
         ||
         // im/export
-        aReq.CreateService(
+        aReq.CreateServiceFactory(
             configmgr::backend::getMergeImportServiceInfo(),
-            &configmgr::backend::instantiateMergeImporter,
-            ::cppu::createSingleFactory)
+            &configmgr::backend::instantiateMergeImporter)
         ||
-        aReq.CreateService(
+        aReq.CreateServiceFactory(
             configmgr::backend::getCopyImportServiceInfo(),
-            &configmgr::backend::instantiateCopyImporter,
-            ::cppu::createSingleFactory)
+            &configmgr::backend::instantiateCopyImporter)
         ||
         false;
 

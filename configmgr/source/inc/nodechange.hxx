@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechange.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #ifndef CONFIGMGR_CONFIGCHANGE_HXX_
 #define CONFIGMGR_CONFIGCHANGE_HXX_
 
-#include "apitypes.hxx"
 #include "configexcept.hxx"
 
 #include <vector>
@@ -159,7 +158,7 @@ namespace configmgr
         */
         class NodeChanges
         {
-            typedef vector<NodeChange> ChangesList;
+            typedef std::vector<NodeChange> ChangesList;
         public:
             typedef ChangesList::const_iterator Iterator;
             typedef ChangesList::iterator MutatingIterator;

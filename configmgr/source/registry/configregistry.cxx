@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configregistry.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2002-12-06 13:08:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #ifndef _CONFIGMGR_REGISTRY_CFGREGISTRYKEY_HXX_
 #include "cfgregistrykey.hxx"
 #endif
+#ifndef CONFIGMGR_API_FACTORY_HXX_
+#include "confapifactory.hxx"
+#endif
 
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
@@ -76,17 +79,24 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+
 #ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETRUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 
 #define THISREF()       static_cast< ::cppu::OWeakObject* >(this)
@@ -140,9 +150,12 @@ namespace beans = ::com::sun::star::beans;
         aAdditionalConfigRegistryServices
     };
 
-    Reference< XInterface > SAL_CALL instantiateConfigRegistry(Reference< XMultiServiceFactory > const& _rServiceManager )
+    Reference< XInterface > SAL_CALL instantiateConfigRegistry(CreationContext const& xContext )
     {
-        return static_cast< ::cppu::OWeakObject* >(new OConfigurationRegistry(_rServiceManager));
+        OSL_ASSERT( xContext.is() );
+        Reference< XMultiServiceFactory > xServiceManager( xContext->getServiceManager(), UNO_QUERY );
+        ::cppu::OWeakObject * pNewInstance = new OConfigurationRegistry(xServiceManager);
+        return pNewInstance;
     }
 
     const ServiceRegistrationInfo* getConfigurationRegistryServiceInfo()
@@ -388,9 +401,9 @@ void SAL_CALL OConfigurationRegistry::flush(  ) throw(RuntimeException)
 
                 // TODO : the specification of XFlushable has to be changed !!!!!
                 OSL_ENSURE(sal_False, "OConfigurationRegistry::flush : caught an exception, could not flush the data !");
-                return;
+    //          return;
 
-    //          throw RuntimeException(sMessage, THISREF());
+                throw WrappedTargetRuntimeException(sMessage, THISREF(), e.TargetException);
             }
         }
     }
@@ -402,7 +415,12 @@ void SAL_CALL OConfigurationRegistry::flush(  ) throw(RuntimeException)
 
         EventObject aFlushed(THISREF());
         while (aIter.hasMoreElements())
+        try
+        {
             static_cast< XFlushListener* >(aIter.next())->flushed(aFlushed);
+        }
+        catch (uno::Exception & )
+        {}
     }
 }
 

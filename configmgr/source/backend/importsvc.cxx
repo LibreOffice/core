@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importsvc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-12-06 13:08:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,16 +108,16 @@ const ServiceRegistrationInfo* getMergeImportServiceInfo()
 { return getRegistrationInfo(& aMergeImporterSI); }
 // -----------------------------------------------------------------------------
 
-MergeImportService::MergeImportService(CreationArg _xServiceFactory)
-: ImportService(_xServiceFactory, &aMergeImporterSI)
+MergeImportService::MergeImportService(CreationArg _xContext)
+: ImportService(_xContext, &aMergeImporterSI)
 {
 }
 // -----------------------------------------------------------------------------
 
 uno::Reference< uno::XInterface > SAL_CALL instantiateMergeImporter
-( CreationContext const& rServiceManager )
+( CreationContext const& xContext )
 {
-    return * new MergeImportService( rServiceManager );
+    return * new MergeImportService( xContext );
 }
 // -----------------------------------------------------------------------------
 
@@ -154,16 +154,16 @@ const ServiceRegistrationInfo* getCopyImportServiceInfo()
 { return getRegistrationInfo(& aCopyImporterSI); }
 // -----------------------------------------------------------------------------
 
-CopyImportService::CopyImportService(CreationArg _xServiceFactory)
-: ImportService(_xServiceFactory, &aCopyImporterSI)
+CopyImportService::CopyImportService(CreationArg _xContext)
+: ImportService(_xContext, &aCopyImporterSI)
 {
 }
 // -----------------------------------------------------------------------------
 
 uno::Reference< uno::XInterface > SAL_CALL instantiateCopyImporter
-( CreationContext const& rServiceManager )
+( CreationContext const& xContext )
 {
-    return * new CopyImportService( rServiceManager );
+    return * new CopyImportService( xContext );
 }
 // -----------------------------------------------------------------------------
 
@@ -195,13 +195,13 @@ sal_Bool CopyImportService::setImplementationProperty(OUString const & aName, un
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-ImportService::ImportService(CreationArg _xServiceFactory, ServiceInfoHelper const & aSvcInfo )
+ImportService::ImportService(CreationArg _xContext, ServiceInfoHelper const & aSvcInfo )
 : m_aMutex()
-, m_xServiceFactory(_xServiceFactory)
+, m_xContext(_xContext)
 , m_xDestinationBackend()
 , m_aServiceInfo(aSvcInfo)
 {
-    if (!m_xServiceFactory.is())
+    if (!m_xContext.is())
     {
         OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration Importer: Unexpected NULL context"));
         throw lang::NullPointerException(sMessage,NULL);
@@ -215,7 +215,7 @@ ImportService::~ImportService()
 
 ImportService::Backend ImportService::createDefaultBackend() const
 {
-    return BackendFactory::createDefaultUnoBackend( m_xServiceFactory );
+    return BackendFactory::instance( m_xContext ).getUnoBackend();
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertysetaccess.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 namespace configmgr
 {
 //////////////////////////////////////////////////////////////////////////////////
-    using namespace configapi;
 
     using uno::Reference;
     using uno::Sequence;
@@ -88,7 +87,7 @@ namespace configmgr
 uno::Reference< beans::XPropertySetInfo > SAL_CALL BasicPropertySet::getPropertySetInfo(  )
     throw(uno::RuntimeException)
 {
-    return implGetPropertySetInfo( getNode(), NULL != maybeGetUpdateAccess() );
+    return configapi::implGetPropertySetInfo( getNode(), NULL != maybeGetUpdateAccess() );
 }
 
 // XHierarchicalPropertySet & XHierarchicalMultiPropertySet
@@ -96,7 +95,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL BasicPropertySet::getProperty
 uno::Reference< beans::XHierarchicalPropertySetInfo > SAL_CALL BasicPropertySet::getHierarchicalPropertySetInfo(  )
     throw(uno::RuntimeException)
 {
-    return implGetHierarchicalPropertySetInfo( getNode() );
+    return configapi::implGetHierarchicalPropertySetInfo( getNode() );
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -125,7 +124,7 @@ void SAL_CALL BasicPropertySet::setPropertyValue( const OUString& aPropertyName,
     throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
           lang::WrappedTargetException, uno::RuntimeException)
 {
-    implSetPropertyValue( getGroupNode(), aPropertyName, aValue );
+    configapi::implSetPropertyValue( getGroupNode(), aPropertyName, aValue );
 }
 
 // XMultiPropertySet
@@ -134,7 +133,7 @@ void SAL_CALL BasicPropertySet::setPropertyValues( const uno::Sequence< OUString
     throw(beans::PropertyVetoException, lang::IllegalArgumentException,
           lang::WrappedTargetException, uno::RuntimeException)
 {
-    implSetPropertyValues( getGroupNode(), PropertyNames, Values );
+    configapi::implSetPropertyValues( getGroupNode(), PropertyNames, Values );
 }
 
 // XHierarchicalPropertySet
@@ -143,7 +142,7 @@ void SAL_CALL BasicPropertySet::setHierarchicalPropertyValue( const OUString& aP
     throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
           lang::WrappedTargetException, uno::RuntimeException)
 {
-    implSetHierarchicalPropertyValue( getGroupNode(), aPropertyName, aValue );
+    configapi::implSetHierarchicalPropertyValue( getGroupNode(), aPropertyName, aValue );
 }
 
 // XMultiHierarchicalPropertySet
@@ -152,7 +151,7 @@ void SAL_CALL BasicPropertySet::setHierarchicalPropertyValues( const uno::Sequen
     throw(beans::PropertyVetoException, lang::IllegalArgumentException,
           lang::WrappedTargetException, uno::RuntimeException)
 {
-    implSetHierarchicalPropertyValues( getGroupNode(), PropertyNames, Values );
+    configapi::implSetHierarchicalPropertyValues( getGroupNode(), PropertyNames, Values );
 }
 
 
@@ -164,7 +163,7 @@ void SAL_CALL BasicPropertySet::setHierarchicalPropertyValues( const uno::Sequen
 uno::Any SAL_CALL BasicPropertySet::getPropertyValue( const OUString& aPropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    return implGetPropertyValue( getNode(), aPropertyName );
+    return configapi::implGetPropertyValue( getNode(), aPropertyName );
 }
 
 // XMultiPropertySet
@@ -172,7 +171,7 @@ uno::Any SAL_CALL BasicPropertySet::getPropertyValue( const OUString& aPropertyN
 uno::Sequence< uno::Any > SAL_CALL BasicPropertySet::getPropertyValues( const uno::Sequence< OUString >& aPropertyNames )
     throw(uno::RuntimeException)
 {
-    return implGetPropertyValues( getNode(), aPropertyNames );
+    return configapi::implGetPropertyValues( getNode(), aPropertyNames );
 }
 
 // XHierarchicalPropertySet
@@ -180,7 +179,7 @@ uno::Sequence< uno::Any > SAL_CALL BasicPropertySet::getPropertyValues( const un
 uno::Any SAL_CALL BasicPropertySet::getHierarchicalPropertyValue( const OUString& aPropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    return implGetHierarchicalPropertyValue( getNode(), aPropertyName );
+    return configapi::implGetHierarchicalPropertyValue( getNode(), aPropertyName );
 }
 
 // XMultiHierarchicalPropertySet
@@ -188,7 +187,7 @@ uno::Any SAL_CALL BasicPropertySet::getHierarchicalPropertyValue( const OUString
 uno::Sequence< uno::Any > SAL_CALL BasicPropertySet::getHierarchicalPropertyValues( const uno::Sequence< OUString >& aPropertyNames )
     throw(uno::RuntimeException)
 {
-    return implGetHierarchicalPropertyValues( getNode(), aPropertyNames );
+    return configapi::implGetHierarchicalPropertyValues( getNode(), aPropertyNames );
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -198,40 +197,40 @@ uno::Sequence< uno::Any > SAL_CALL BasicPropertySet::getHierarchicalPropertyValu
 void SAL_CALL BasicPropertySet::addVetoableChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XVetoableChangeListener >& xListener )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    implAddListener( getNode(), xListener, aPropertyName );
+    configapi::implAddListener( getNode(), xListener, aPropertyName );
 }
 
 void SAL_CALL BasicPropertySet::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    implAddListener( getNode(), xListener, aPropertyName );
+    configapi::implAddListener( getNode(), xListener, aPropertyName );
 }
 
 void SAL_CALL BasicPropertySet::addPropertiesChangeListener( const uno::Sequence< OUString >& aPropertyNames, const uno::Reference< beans::XPropertiesChangeListener >& xListener )
     throw(uno::RuntimeException)
 {
-    implAddListener( getNode(), xListener, aPropertyNames );
+    configapi::implAddListener( getNode(), xListener, aPropertyNames );
 }
 
 //////////////////////////////////////////////////////////////////////////////////
 void SAL_CALL BasicPropertySet::removeVetoableChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XVetoableChangeListener >& xListener )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    implRemoveListener( getNode(), xListener, aPropertyName );
+    configapi::implRemoveListener( getNode(), xListener, aPropertyName );
 }
 //---------------------------------------------------------------------------------
 
 void SAL_CALL BasicPropertySet::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    implRemoveListener( getNode(), xListener, aPropertyName );
+    configapi::implRemoveListener( getNode(), xListener, aPropertyName );
 }
 //---------------------------------------------------------------------------------
 
 void SAL_CALL BasicPropertySet::removePropertiesChangeListener( const uno::Reference< beans::XPropertiesChangeListener >& xListener )
     throw(uno::RuntimeException)
 {
-    implRemoveListener( getNode(), xListener );
+    configapi::implRemoveListener( getNode(), xListener );
 }
 //---------------------------------------------------------------------------------
 
@@ -242,7 +241,7 @@ void SAL_CALL BasicPropertySet::removePropertiesChangeListener( const uno::Refer
 void SAL_CALL BasicPropertySet::firePropertiesChangeEvent( const uno::Sequence< OUString >& aPropertyNames, const uno::Reference< beans::XPropertiesChangeListener >& xListener )
     throw(uno::RuntimeException)
 {
-    implFirePropertiesChangeEvent( getNode(),aPropertyNames , xListener );
+    configapi::implFirePropertiesChangeEvent( getNode(),aPropertyNames , xListener );
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -255,14 +254,14 @@ void SAL_CALL BasicPropertySet::firePropertiesChangeEvent( const uno::Sequence< 
 beans::PropertyState SAL_CALL BasicPropertySet::getPropertyState( const OUString& sPropertyName )
         throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
-    return implGetPropertyState( getNode(), sPropertyName);
+    return configapi::implGetPropertyState( getNode(), sPropertyName);
 }
 //---------------------------------------------------------------------------------
 
 uno::Sequence< beans::PropertyState > SAL_CALL BasicPropertySet::getPropertyStates( const uno::Sequence< OUString >& aPropertyNames )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
-    return implGetPropertyStates( getNode(), aPropertyNames );
+    return configapi::implGetPropertyStates( getNode(), aPropertyNames );
 }
 //---------------------------------------------------------------------------------
 
@@ -272,21 +271,21 @@ uno::Sequence< beans::PropertyState > SAL_CALL BasicPropertySet::getPropertyStat
 void SAL_CALL BasicPropertySet::setPropertyToDefault( const OUString& sPropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
-    implSetPropertyToDefault( getGroupNode(), sPropertyName);
+    configapi::implSetPropertyToDefault( getGroupNode(), sPropertyName);
 }
 //---------------------------------------------------------------------------------
 
 void SAL_CALL BasicPropertySet::setPropertiesToDefault( const uno::Sequence< OUString >& aPropertyNames )
     throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    implSetPropertiesToDefault( getGroupNode(), aPropertyNames);
+    configapi::implSetPropertiesToDefault( getGroupNode(), aPropertyNames);
 }
 //---------------------------------------------------------------------------------
 
 void SAL_CALL BasicPropertySet::setAllPropertiesToDefault(  )
     throw (uno::RuntimeException)
 {
-    implSetAllPropertiesToDefault( getGroupNode() );
+    configapi::implSetAllPropertiesToDefault( getGroupNode() );
 }
 //---------------------------------------------------------------------------------
 
@@ -297,14 +296,14 @@ uno::Any SAL_CALL BasicPropertySet::getPropertyDefault( const OUString& sPropert
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 
 {
-    return implGetPropertyDefault( getNode(), sPropertyName);
+    return configapi::implGetPropertyDefault( getNode(), sPropertyName);
 }
 //---------------------------------------------------------------------------------
 
 uno::Sequence< uno::Any > SAL_CALL BasicPropertySet::getPropertyDefaults( const uno::Sequence< OUString >& aPropertyNames )
         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    return implGetPropertyDefaults( getNode(), aPropertyNames);
+    return configapi::implGetPropertyDefaults( getNode(), aPropertyNames);
 }
 //---------------------------------------------------------------------------------
 
