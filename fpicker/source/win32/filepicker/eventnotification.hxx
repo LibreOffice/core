@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventnotification.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-21 07:09:57 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:55:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
