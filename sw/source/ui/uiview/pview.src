@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:44:26 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -871,14 +871,14 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Text[ turkish ] = "Görünüm";
         Text[ language_user1 ] = " ";
     };
-    Text[ chinese_simplified ] = "¿Ì¶È";
+    Text[ chinese_simplified ] = "ÏÔÊ¾±ÈÁĞ";
     Text[ russian ] = "Ìàñøòàá";
     Text[ polish ] = "Skala";
     Text[ japanese ] = "½Ş°Ñ";
     Text[ chinese_traditional ] = "Åã¥Ü¤ñ¨Ò";
     Text[ arabic ] = "ÊßÈíÑ æÊÕÛíÑ";
     Text[ dutch ] = "Maatstaf";
-    Text[ chinese_simplified ] = "¿Ì¶È";
+    Text[ chinese_simplified ] = "ÏÔÊ¾±ÈÁĞ";
     Text[ greek ] = "Êëßìáêá";
     Text[ korean ] = "È®´ë/Ãà¼Ò";
     Text[ turkish ] = "Yakınlaştır";
