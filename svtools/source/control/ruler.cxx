@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:23:22 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1642,7 +1642,8 @@ void Ruler::ImplUpdate( BOOL bMustCalc )
 
 // -----------------------------------------------------------------------
 
-BOOL Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest ) const
+BOOL Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
+                         BOOL bRequireStyle, USHORT nRequiredStyle ) const
 {
     USHORT      i;
     USHORT      nStyle;
@@ -1749,7 +1750,8 @@ BOOL Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest ) const
         for ( i = mpData->nIndents; i; i-- )
         {
             nStyle = mpData->pIndents[i-1].nStyle;
-            if ( !(nStyle & RULER_STYLE_INVISIBLE) )
+            if ( (! bRequireStyle || nStyle == nRequiredStyle) &&
+                 !(nStyle & RULER_STYLE_INVISIBLE) )
             {
                 nStyle &= RULER_INDENT_STYLE;
                 n1 = mpData->pIndents[i-1].nPos;
@@ -1934,6 +1936,14 @@ BOOL Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
                             ImplRulerHitTest* pHitTest ) const
 {
     Point aPos = rPos;
+    BOOL bRequiredStyle = FALSE;
+    USHORT nRequiredStyle = 0;
+
+    if (eDragType == RULER_TYPE_INDENT)
+    {
+        bRequiredStyle = TRUE;
+        nRequiredStyle = RULER_INDENT_BOTTOM;
+    }
 
     if ( mnWinStyle & WB_HORZ )
         aPos.X() += mnWinOff;
@@ -1948,7 +1958,7 @@ BOOL Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
             aPos.X() = RULER_OFF+1;
 
         // HitTest durchfuehren
-        if ( ImplHitTest( aPos, pHitTest ) )
+        if ( ImplHitTest( aPos, pHitTest, bRequiredStyle, nRequiredStyle ) )
         {
             if ( (pHitTest->eType == eDragType) || (eDragType == RULER_TYPE_DONTKNOW) )
                 return TRUE;
@@ -1964,7 +1974,7 @@ BOOL Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
             aPos.X() = mnWidth-RULER_OFF-1;
 
         // HitTest durchfuehren
-        if ( ImplHitTest( aPos, pHitTest ) )
+        if ( ImplHitTest( aPos, pHitTest, bRequiredStyle, nRequiredStyle ) )
         {
             if ( (pHitTest->eType == eDragType) || (eDragType == RULER_TYPE_DONTKNOW) )
                 return TRUE;
