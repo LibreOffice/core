@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: abi $ $Date: 2002-08-29 09:45:04 $
+#   last change: $Author: abi $ $Date: 2002-08-29 11:44:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,8 +69,6 @@ NO_BSYMBOLIC=TRUE
 
 # Version
 UCPFTP_MAJOR=1
-
-CURLLIB = -lcurl
 
 # --- Settings ---------------------------------------------------------
 
