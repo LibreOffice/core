@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-12-04 10:33:21 $
+ *  last change: $Author: os $ $Date: 2000-12-05 12:59:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,11 @@ namespace utl
                                         const com::sun::star::uno::Sequence< rtl::OUString >& rNames,
                                         const com::sun::star::uno::Sequence< com::sun::star::uno::Any>& rValues);
 
+#if SUPD>615
+            sal_Bool                EnableNotification(const com::sun::star::uno::Sequence< rtl::OUString >& rNames);
+#else
             sal_Bool                EnableNotification(com::sun::star::uno::Sequence< rtl::OUString >& rNames);
+#endif
 
             //returns all members of a node
             com::sun::star::uno::Sequence< rtl::OUString >

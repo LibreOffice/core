@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2000-12-04 10:53:07 $
+ *  last change: $Author: os $ $Date: 2000-12-05 13:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ namespace utl{
             ConfigItem*                 pParent;
             const Sequence< OUString >  aPropertyNames;
         public:
-            ConfigChangeListener_Impl(ConfigItem& rItem, Sequence< OUString >& rNames);
+            ConfigChangeListener_Impl(ConfigItem& rItem, const Sequence< OUString >& rNames);
             ~ConfigChangeListener_Impl();
 
         //XChangesListener
@@ -186,7 +186,7 @@ ValueCounter_Impl::~ValueCounter_Impl()
 
  ---------------------------------------------------------------------------*/
 ConfigChangeListener_Impl::ConfigChangeListener_Impl(
-             ConfigItem& rItem, Sequence< OUString >& rNames) :
+             ConfigItem& rItem, const Sequence< OUString >& rNames) :
     pParent(&rItem),
     aPropertyNames(rNames)
 {
@@ -468,11 +468,20 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
 /* -----------------------------29.08.00 16:19--------------------------------
 
  ---------------------------------------------------------------------------*/
+#if SUPD>615
+sal_Bool    ConfigItem::EnableNotification(const Sequence< OUString >& rNames)
+#else
 sal_Bool    ConfigItem::EnableNotification(Sequence< OUString >& rNames)
+#endif
 {
     Reference<XChangesNotifier> xChgNot(xHierarchyAccess, UNO_QUERY);
     if(!xChgNot.is())
         return sal_False;
+
+    OSL_ENSURE(!xChangeLstnr.is(), "EnableNotification already called");
+    if(xChangeLstnr.is())
+        xChgNot->removeChangesListener( xChangeLstnr );
+
     sal_Bool bRet = sal_True;
 
     try
