@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:13:19 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,12 +581,12 @@ ModalDialog DLG_EXPORT_EPS
     };
     StringList [ chinese_simplified ] =
     {
-            < "总是输出字体轮廓" ; > ;
+            < "自动输出字体轮廓" ; > ;
         < "永不输出字体轮廓" ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "羆琌蹲近锅" ; > ;
+            < "笆蹲近锅" ; > ;
         < "ッぃ蹲近锅" ; > ;
     };
     StringList [ turkish ] =
@@ -636,6 +636,7 @@ ModalDialog DLG_EXPORT_EPS
     Text[ finnish ] = "EPS-vientiasetukset";
     Text[ catalan ] = "Opciones Exportaci髇 EPS";
 };
+
 
 
 
