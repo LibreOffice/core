@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 11:09:11 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 13:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,6 +436,15 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         ,   m_aStatusBarAlias( RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" ))
         ,   m_aProgressBarAlias( RTL_CONSTASCII_USTRINGPARAM( "private:resource/progressbar/progressbar" ))
         ,   m_eDockOperation( DOCKOP_ON_COLROW )
+        ,   m_aPropDocked( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_DOCKED ))
+        ,   m_aPropVisible( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_VISIBLE ))
+        ,   m_aPropDockingArea( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_DOCKINGAREA ))
+        ,   m_aPropDockPos( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_DOCKPOS ))
+        ,   m_aPropPos( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_POS ))
+        ,   m_aPropSize( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_SIZE ))
+        ,   m_aPropUIName( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_UINAME ))
+        ,   m_aPropLocked( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_LOCKED ))
+        ,   m_aPropStyle( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_STYLE ))
 {
     // Initialize statusbar member
     m_aStatusBarElement.m_aType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "statusbar" ));
@@ -1232,23 +1241,23 @@ sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, 
                 sal_Bool bValue( sal_False );
                 for ( sal_Int32 n = 0; n < aWindowState.getLength(); n++ )
                 {
-                    if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_DOCKED ))
+                    if ( aWindowState[n].Name == m_aPropDocked )
                     {
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_bFloating = !bValue;
                     }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_VISIBLE ))
+                    else if ( aWindowState[n].Name == m_aPropVisible )
                     {
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_bVisible = bValue;
                     }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_DOCKINGAREA ))
+                    else if ( aWindowState[n].Name == m_aPropDockingArea )
                     {
                         ::com::sun::star::ui::DockingArea eDockingArea;
                         if ( aWindowState[n].Value >>= eDockingArea )
                             rElementData.m_aDockedData.m_nDockedArea = sal_Int16( eDockingArea );
                     }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_DOCKPOS ))
+                    else if ( aWindowState[n].Name == m_aPropDockPos )
                     {
                         css::awt::Point aPoint;
                         if ( aWindowState[n].Value >>= aPoint )
@@ -1257,7 +1266,7 @@ sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, 
                             rElementData.m_aDockedData.m_aPos.Y() = aPoint.Y;
                         }
                     }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_POS ))
+                    else if ( aWindowState[n].Name == m_aPropPos )
                     {
                         css::awt::Point aPoint;
                         if ( aWindowState[n].Value >>= aPoint )
@@ -1266,7 +1275,7 @@ sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, 
                             rElementData.m_aFloatingData.m_aPos.Y() = aPoint.Y;
                         }
                     }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_SIZE ))
+                    else if ( aWindowState[n].Name == m_aPropSize )
                     {
                         css::awt::Size aSize;
                         if ( aWindowState[n].Value >>= aSize )
@@ -1275,15 +1284,15 @@ sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, 
                             rElementData.m_aFloatingData.m_aSize.Height() = aSize.Height;
                         }
                     }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_UINAME ))
+                    else if ( aWindowState[n].Name == m_aPropUIName )
                         aWindowState[n].Value >>= rElementData.m_aUIName;
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_STYLE ))
+                    else if ( aWindowState[n].Name == m_aPropStyle )
                     {
                         sal_Int32 nStyle;
                         if ( aWindowState[n].Value >>= nStyle )
                             rElementData.m_nStyle = sal_Int16( nStyle );
                     }
-                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_LOCKED ))
+                    else if ( aWindowState[n].Name == m_aPropLocked )
                     {
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_aDockedData.m_bLocked = bValue;
@@ -1351,34 +1360,36 @@ void LayoutManager::implts_writeWindowStateData( const rtl::OUString& aName, con
         try
         {
             sal_Bool bValue( sal_False );
-            Sequence< PropertyValue > aWindowState( 7 );
+            Sequence< PropertyValue > aWindowState( 8 );
 
-            aWindowState[0].Name    = OUString( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_DOCKED ));
+            aWindowState[0].Name    = m_aPropDocked;
             aWindowState[0].Value   = makeAny( sal_Bool( !rElementData.m_bFloating ));
-            aWindowState[1].Name    = OUString( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_VISIBLE ));
+            aWindowState[1].Name    = m_aPropVisible;
             aWindowState[1].Value   = makeAny( sal_Bool( rElementData.m_bVisible ));
 
-            aWindowState[2].Name    = OUString( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_DOCKINGAREA ));
+            aWindowState[2].Name    = m_aPropDockingArea;
             aWindowState[2].Value   = makeAny( static_cast< DockingArea >( rElementData.m_aDockedData.m_nDockedArea ) );
 
             css::awt::Point aPos;
             aPos.X = rElementData.m_aDockedData.m_aPos.X();
             aPos.Y = rElementData.m_aDockedData.m_aPos.Y();
-            aWindowState[3].Name    = OUString( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_DOCKPOS ));
+            aWindowState[3].Name    = m_aPropDockPos;
             aWindowState[3].Value   = makeAny( aPos );
 
             aPos.X = rElementData.m_aFloatingData.m_aPos.X();
             aPos.Y = rElementData.m_aFloatingData.m_aPos.Y();
-            aWindowState[4].Name    = OUString( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_POS ));
+            aWindowState[4].Name    = m_aPropPos;
             aWindowState[4].Value   = makeAny( aPos );
 
             css::awt::Size aSize;
             aSize.Width = rElementData.m_aFloatingData.m_aSize.Width();
             aSize.Height = rElementData.m_aFloatingData.m_aSize.Height();
-            aWindowState[5].Name    = OUString( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_SIZE ));
+            aWindowState[5].Name    = m_aPropSize;
             aWindowState[5].Value   = makeAny( aSize );
-            aWindowState[6].Name    = OUString( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_UINAME ));
+            aWindowState[6].Name    = m_aPropUIName;
             aWindowState[6].Value   = makeAny( rElementData.m_aUIName );
+            aWindowState[7].Name    = m_aPropLocked;
+            aWindowState[7].Value   = makeAny( rElementData.m_aDockedData.m_bLocked );
 
             if ( xPersistentWindowState->hasByName( aName ))
             {
@@ -2794,9 +2805,9 @@ void LayoutManager::implts_renumberRowColumnData(
                         xPersistentWindowState->getByName( aWindowElements[i] ) >>= aPropValueSeq;
                         for ( sal_Int32 j = 0; j < aPropValueSeq.getLength(); j++ )
                         {
-                            if ( aPropValueSeq[j].Name.equalsAscii( WINDOWSTATE_PROPERTY_DOCKINGAREA ))
+                            if ( aPropValueSeq[j].Name == m_aPropDockingArea )
                                 aPropValueSeq[j].Value >>= nDockedArea;
-                            else if ( aPropValueSeq[j].Name.equalsAscii( WINDOWSTATE_PROPERTY_DOCKPOS ))
+                            else if ( aPropValueSeq[j].Name == m_aPropDockPos )
                                 aPropValueSeq[j].Value >>= aDockedPos;
                         }
 
@@ -3928,10 +3939,14 @@ throw (::com::sun::star::uno::RuntimeException)
                         {
                             Reference< css::awt::XWindow > xWindow( pIter->m_xUIElement->getRealInterface(), UNO_QUERY );
                             Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
+                            Reference< css::awt::XWindow2 > xContainerWindow( m_xContainerWindow, UNO_QUERY );
 
                             sal_Bool bShowElement( pIter->m_bVisible &&
                                                    !pIter->m_bMasterHide &&
                                                    m_bParentWindowVisible );
+
+                            if ( xContainerWindow.is() && xDockWindow.is() && xDockWindow->isFloating() )
+                                bShowElement &= xContainerWindow->isActive();
 
                             if ( xWindow.is() && xDockWindow.is() && bShowElement )
                             {
@@ -4452,6 +4467,14 @@ throw (::com::sun::star::uno::RuntimeException)
                     aUIElement.m_aDockedData.m_bLocked = sal_True;
                     implts_writeWindowStateData( ResourceURL, aUIElement );
                     xDockWindow->lock();
+
+                    // Write back lock state
+                    WriteGuard aWriteLock( m_aLock );
+                    UIElement& rUIElement = LayoutManager::impl_findElement( aUIElement.m_aName );
+                    if ( rUIElement.m_aName == aUIElement.m_aName )
+                        rUIElement.m_aDockedData.m_bLocked = aUIElement.m_aDockedData.m_bLocked;
+                    aWriteLock.unlock();
+
                     doLayout();
                     return sal_True;
                 }
@@ -4487,6 +4510,14 @@ throw (::com::sun::star::uno::RuntimeException)
                     aUIElement.m_aDockedData.m_bLocked = sal_False;
                     implts_writeWindowStateData( ResourceURL, aUIElement );
                     xDockWindow->unlock();
+
+                    // Write back lock state
+                    WriteGuard aWriteLock( m_aLock );
+                    UIElement& rUIElement = LayoutManager::impl_findElement( aUIElement.m_aName );
+                    if ( rUIElement.m_aName == aUIElement.m_aName )
+                        rUIElement.m_aDockedData.m_bLocked = aUIElement.m_aDockedData.m_bLocked;
+                    aWriteLock.unlock();
+
                     doLayout();
                     return sal_True;
                 }
