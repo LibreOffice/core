@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mba $ $Date: 2001-04-24 15:07:52 $
+ *  last change: $Author: cd $ $Date: 2001-05-31 06:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,11 @@ sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, 
     }
 
     if ( aPreselectedFilterName.Len() )
-        aFilterName = aPreselectedFilterName;
+    {
+        aFilterName = SfxFilterContainer::ConvertToOldFilterName(aPreselectedFilterName);
+        if ( aFilterName.Len() == 0 )
+            aFilterName = aPreselectedFilterName;
+    }
 
     xFrame = rFrame;
 
