@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:51:13 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,7 +473,7 @@ void Outliner::EndSpelling (void)
         ClearModifyFlag();
 
         // When spell checking then restore the start position.
-        if (meMode==SPELL || meMode==HANGUL_HANJA_CONVERSION)
+        if (meMode==SPELL || meMode==TEXT_CONVERSION)
             RestoreStartPosition ();
     }
 
@@ -1050,8 +1050,8 @@ void Outliner::ProvideNextTextObject (void)
                         case SPELL:
                             PrepareSpellCheck ();
                             break;
-                        case HANGUL_HANJA_CONVERSION:
-                            PrepareHangulHanjaConversion();
+                        case TEXT_CONVERSION:
+                            PrepareConversion();
                             break;
                     }
             }
@@ -1087,7 +1087,7 @@ void Outliner::EndOfSearch (void)
         }
         // Ask the user whether to wrap arround and continue the search or
         // to terminate.
-        else if (meMode==HANGUL_HANJA_CONVERSION || ShowWrapArroundDialog ())
+        else if (meMode==TEXT_CONVERSION || ShowWrapArroundDialog ())
         {
             mbMatchMayExist = false;
             maObjectIterator = ::sd::outliner::OutlinerContainer(this).begin();
@@ -1563,19 +1563,22 @@ void Outliner::HandleChangedSelection (void)
 
 
 
-void Outliner::StartTextConversion( INT16 nLanguage )
+void Outliner::StartConversion( INT16 nSourceLanguage,  INT16 nTargetLanguage,
+        const Font *pTargetFont, INT32 nOptions, BOOL bIsInteractive )
 {
     BOOL bMultiDoc = mpViewShell->ISA(DrawViewShell);
 
-    meMode = HANGUL_HANJA_CONVERSION;
+    meMode = TEXT_CONVERSION;
     mbDirectionIsForward = true;
     mpSearchItem = NULL;
-    mnConversionLanguage = nLanguage;
+    mnConversionLanguage = nSourceLanguage;
 
     BeginConversion();
 
     if (mpOutlineView != NULL)
-        mpOutlineView->StartTextConversion( nLanguage, bMultiDoc );
+    {
+        mpOutlineView->StartTextConversion( nSourceLanguage, nTargetLanguage, pTargetFont, nOptions, bIsInteractive, bMultiDoc );
+    }
 
     EndConversion();
 }
@@ -1583,10 +1586,10 @@ void Outliner::StartTextConversion( INT16 nLanguage )
 
 
 
-/** Prepare to do a hangul hanja conversion on the current text object. This
+/** Prepare to do a text conversion on the current text object. This
     includes putting it into edit mode.
 */
-void Outliner::PrepareHangulHanjaConversion (void)
+void Outliner::PrepareConversion (void)
 {
     if( HasConvertibleTextPortion( mnConversionLanguage ) )
     {
@@ -1660,7 +1663,7 @@ sal_Bool Outliner::ConvertNextDocument()
     mpDrawDocument->GetDocSh()->SetWaitCursor( FALSE );
     ClearModifyFlag();
 
-    // for hangul hanja conversion we automaticly wrap around one
+    // for text conversion we automaticly wrap around one
     // time and stop at the start shape
     if( mpFirstObj )
     {
