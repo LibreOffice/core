@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:49:49 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:35:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,8 @@
 //add header of cui CHINA001
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-
+#include "swabstdlg.hxx" //CHINA001
+#include "dialog.hrc" //CHINA001
 SFX_IMPL_INTERFACE(SwDrawBaseShell, SwBaseShell, SW_RES(0))
 {
 }
@@ -274,12 +275,17 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         aSet.Put(SfxInt16Item(FN_DRAW_WRAP_DLG, pSh->GetLayerId()));
 
                         pSh->GetObjAttr(aSet);
-                        SwWrapDlg aDlg(GetView().GetWindow(), aSet, pSh, TRUE);
+                        //CHINA001 SwWrapDlg aDlg(GetView().GetWindow(), aSet, pSh, TRUE);
+                        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+                        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-                        if (aDlg.Execute() == RET_OK)
+                        AbstractSfxSingleTabDialog* pDlg = pFact->CreateSwWrapDlg( GetView().GetWindow(), aSet, pSh, TRUE,ResId( RC_DLG_SWWRAPDLG ));
+                        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+
+                        if (pDlg->Execute() == RET_OK) //CHINA001 if (aDlg.Execute() == RET_OK)
                         {
                             const SfxPoolItem* pItem;
-                            const SfxItemSet* pOutSet = aDlg.GetOutputItemSet();
+                            const SfxItemSet* pOutSet = pDlg->GetOutputItemSet(); //CHINA001 const SfxItemSet* pOutSet = aDlg.GetOutputItemSet();
                             if(SFX_ITEM_SET == pOutSet->GetItemState(FN_DRAW_WRAP_DLG, FALSE, &pItem))
                             {
                                 short nLayer = ((const SfxInt16Item*)pItem)->GetValue();
@@ -291,6 +297,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                             pSh->SetObjAttr(*pOutSet);
                         }
+                    delete pDlg; //CHINA001
                     }
                 }
             }
