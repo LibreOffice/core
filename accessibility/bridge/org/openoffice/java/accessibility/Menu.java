@@ -59,7 +59,7 @@ package org.openoffice.java.accessibility;
 
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
-import drafts.com.sun.star.accessibility.*;
+import com.sun.star.accessibility.*;
 
 public class Menu extends AbstractButton implements javax.accessibility.Accessible {
 
@@ -158,7 +158,7 @@ public class Menu extends AbstractButton implements javax.accessibility.Accessib
         /** Called by OpenOffice process to notify property changes */
         public void notifyEvent(AccessibleEventObject event) {
             switch (event.EventId) {
-                case AccessibleEventId.ACCESSIBLE_CHILD_EVENT:
+                case AccessibleEventId.CHILD:
                     if (AnyConverter.isObject(event.OldValue)) {
                         remove(event.OldValue);
                     }
@@ -166,7 +166,7 @@ public class Menu extends AbstractButton implements javax.accessibility.Accessib
                         add(event.NewValue);
                     }
                     break;
-                case AccessibleEventId.ACCESSIBLE_SELECTION_EVENT:
+                case AccessibleEventId.SELECTION_CHANGED:
                     firePropertyChange(javax.accessibility.AccessibleContext.ACCESSIBLE_SELECTION_PROPERTY, null, null);
                     break;
                 default:
@@ -253,7 +253,7 @@ public class Menu extends AbstractButton implements javax.accessibility.Accessib
         public javax.accessibility.Accessible getAccessibleAt(java.awt.Point p) {
             try {
                 java.awt.Component c = AccessibleObjectFactory.getAccessibleComponent(
-                    unoAccessibleComponent.getAccessibleAt(new com.sun.star.awt.Point(p.x, p.y)));
+                    unoAccessibleComponent.getAccessibleAtPoint(new com.sun.star.awt.Point(p.x, p.y)));
 
                 return (javax.accessibility.Accessible) c;
             } catch (com.sun.star.uno.RuntimeException e) {
