@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-22 14:13:05 $
+ *  last change: $Author: kr $ $Date: 2001-08-07 14:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,10 +234,10 @@ SalObject::SalObject()
 SalObject::~SalObject()
 {
     SalObjectData::aAllObjects.Remove( this );
-    if ( maObjectData.maPrimary )
-        XtDestroyWidget ( maObjectData.maPrimary );
     if ( maObjectData.maSecondary )
         XtDestroyWidget ( maObjectData.maSecondary );
+    if ( maObjectData.maPrimary )
+        XtDestroyWidget ( maObjectData.maPrimary );
 }
 
 
@@ -253,8 +253,10 @@ SalObject::ResetClipRegion()
     XWindowAttributes win_attrib;
     XRectangle        win_size;
 
+    XLIB_Window aShapeWindow = XtWindow( maObjectData.maPrimary );
+
     XGetWindowAttributes ( (Display*)maObjectData.maSystemChildData.pDisplay,
-                           maObjectData.maSystemChildData.aWindow,
+                           aShapeWindow,
                            &win_attrib );
 
     win_size.x      = 0;
@@ -263,7 +265,7 @@ SalObject::ResetClipRegion()
     win_size.height = win_attrib.width;
 
     XShapeCombineRectangles ( (Display*)maObjectData.maSystemChildData.pDisplay,
-                              maObjectData.maSystemChildData.aWindow,
+                              aShapeWindow,
                               dest_kind,
                               0, 0,             // x_off, y_off
                               &win_size,        // list of rectangles
@@ -312,8 +314,10 @@ SalObject::EndSetClipRegion()
             op = ShapeUnion;
     }
 
+    XLIB_Window aShapeWindow = XtWindow( maObjectData.maPrimary );
+
     XShapeCombineRectangles ( (Display*)maObjectData.maSystemChildData.pDisplay,
-                              maObjectData.maSystemChildData.aWindow,
+                              aShapeWindow,
                               dest_kind,
                               0, 0, // x_off, y_off
                               pRectangles,
@@ -350,9 +354,15 @@ SalObject::Show( BOOL bVisible )
         return;
 
     if ( bVisible )
+    {
         XtMapWidget( (Widget)maObjectData.maPrimary );
+        XtMapWidget( (Widget)maObjectData.maSecondary );
+    }
     else
+    {
+        XtUnmapWidget( (Widget)maObjectData.maSecondary );
         XtUnmapWidget( (Widget)maObjectData.maPrimary );
+    }
 
     maObjectData.mbVisible = bVisible;
 }
