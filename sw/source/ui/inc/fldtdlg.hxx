@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:41 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,12 +78,14 @@ struct SfxChildWinInfo;
 class SwFldDlg: public SfxTabDialog
 {
     SwChildWinWrapper*  pChildWin;
+    SfxBindings*        pBindings;
     BOOL                bHtmlMode;
     BOOL                bDataBaseMode;
 
     virtual BOOL        Close();
     virtual SfxItemSet* CreateInputItemSet( USHORT nId );
     virtual void        Activate();
+    virtual void        PageCreated(USHORT nId, SfxTabPage& rPage);
 
     void                ReInitTabPage( USHORT nPageId,
                                         BOOL bOnlyActivate = FALSE );
