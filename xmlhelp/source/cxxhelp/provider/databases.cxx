@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: abi $ $Date: 2001-11-23 15:50:43 $
+ *  last change: $Author: abi $ $Date: 2001-11-23 16:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,41 +539,53 @@ Databases::getCollator( const rtl::OUString& Language,
 
 
 
-bool KeywordInfo::KeywordElementComparator::operator()( const KeywordInfo::KeywordElement& la,
-                                                        const KeywordInfo::KeywordElement& ra) const
-{
-    const rtl::OUString& l = la.key;
-    const rtl::OUString& r = ra.key;
+namespace chelp {
 
-    bool ret;
-
-    if( m_xCollator.is() )
+    struct KeywordElementComparator
     {
-        sal_Int32 l1 = l.indexOf( sal_Unicode( ';' ) );
-        sal_Int32 l3 = ( l1 == -1 ? l.getLength() : l1 );
+        KeywordElementComparator( const Reference< XCollator >& xCollator )
+            : m_xCollator( xCollator )
+        { }
 
-        sal_Int32 r1 = r.indexOf( sal_Unicode( ';' ) );
-        sal_Int32 r3 = ( r1 == -1 ? r.getLength() : r1 );
-
-        sal_Int32 c1 = m_xCollator->compareSubstring( l,0,l3,r,0,r3 );
-
-        if( c1 == +1 )
-            ret = false;
-        else if( c1 == 0 )
+        bool operator()( const KeywordInfo::KeywordElement& la,
+                         const KeywordInfo::KeywordElement& ra ) const
         {
-            sal_Int32 l2 = l.getLength() - l1 - 1;
-            sal_Int32 r2 = r.getLength() - r1 - 1;
-            ret = ( m_xCollator->compareSubstring( l,1+l1,l2,r,1+r1,r2 ) < 0 );
+            const rtl::OUString& l = la.key;
+            const rtl::OUString& r = ra.key;
+
+            bool ret;
+
+            if( m_xCollator.is() )
+            {
+                sal_Int32 l1 = l.indexOf( sal_Unicode( ';' ) );
+                sal_Int32 l3 = ( l1 == -1 ? l.getLength() : l1 );
+
+                sal_Int32 r1 = r.indexOf( sal_Unicode( ';' ) );
+                sal_Int32 r3 = ( r1 == -1 ? r.getLength() : r1 );
+
+                sal_Int32 c1 = m_xCollator->compareSubstring( l,0,l3,r,0,r3 );
+
+                if( c1 == +1 )
+                    ret = false;
+                else if( c1 == 0 )
+                {
+                    sal_Int32 l2 = l.getLength() - l1 - 1;
+                    sal_Int32 r2 = r.getLength() - r1 - 1;
+                    ret = ( m_xCollator->compareSubstring( l,1+l1,l2,r,1+r1,r2 ) < 0 );
+                }
+                else
+                    ret = true;
+            }
+            else
+                ret = l < r;
+
+            return ret;
         }
-        else
-            ret = true;
-    }
-    else
-        ret = l < r;
 
-    return ret;
+        Reference< XCollator > m_xCollator;
+    }; // end struct KeywordElementComparator
+
 }
-
 
 
 
@@ -636,22 +648,18 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
 
 
 
-KeywordInfo::KeywordInfo( const std::set< KeywordElement,KeywordElementComparator >& aSet )
-    : listKey( aSet.size() ),
-      listId( aSet.size() ),
-      listAnchor( aSet.size() ),
-      listTitle( aSet.size() )
+KeywordInfo::KeywordInfo( const std::vector< KeywordElement >& aVec )
+    : listKey( aVec.size() ),
+      listId( aVec.size() ),
+      listAnchor( aVec.size() ),
+      listTitle( aVec.size() )
 {
-    int idx = 0;
-    std::set< KeywordElement >::iterator it = aSet.begin();
-    while( it != aSet.end() )
+    for( int i = 0; i < aVec.size(); ++i )
     {
-        listKey[idx] = it->key;
-        listId[idx] = it->listId;
-        listAnchor[idx] = it->listAnchor;
-        listTitle[idx] = it->listTitle;
-        ++idx;
-        ++it;
+        listKey[i] = aVec[i].key;
+        listId[i] = aVec[i].listId;
+        listAnchor[i] = aVec[i].listAnchor;
+        listTitle[i] = aVec[i].listTitle;
     }
 }
 
@@ -683,11 +691,7 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
         Db table( 0,DB_CXX_NO_EXCEPTIONS );
         if( 0 == table.open( fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 ) )
         {
-            Reference< XCollator > xCollator = getCollator( Language,rtl::OUString() );
-
-            KeywordInfo::KeywordElementComparator aComparator( xCollator );
-
-            std::set<KeywordInfo::KeywordElement,KeywordInfo::KeywordElementComparator> aSet( aComparator );
+            std::vector<KeywordInfo::KeywordElement> aVector;
             Db* idmap = getBerkeley( Database,Language );
 
             bool first = true;
@@ -706,10 +710,10 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
                                        data.get_size(),
                                        RTL_TEXTENCODING_UTF8 );
 
-                aSet.insert( KeywordInfo::KeywordElement( this,
-                                                          idmap,
-                                                          keyword,
-                                                          doclist ) );
+                aVector.push_back( KeywordInfo::KeywordElement( this,
+                                                                idmap,
+                                                                keyword,
+                                                                doclist ) );
                 if( first )
                 {
                     key.set_flags( DB_DBT_REALLOC );
@@ -719,7 +723,13 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
             }
 
             if( cursor ) cursor->close();
-            KeywordInfo* info = it->second = new KeywordInfo( aSet );
+
+            // sorting
+            Reference< XCollator > xCollator = getCollator( Language,rtl::OUString() );
+            KeywordElementComparator aComparator( xCollator );
+            std::sort(aVector.begin(),aVector.end(),aComparator);
+
+            KeywordInfo* info = it->second = new KeywordInfo( aVector );
         }
         table.close( 0 );
     }
