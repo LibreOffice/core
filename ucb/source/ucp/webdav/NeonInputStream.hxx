@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonInputStream.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-09-12 10:03:35 $
+ *  last change: $Author: hr $ $Date: 2001-11-08 13:13:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,11 +109,11 @@ class NeonInputStream : public ::com::sun::star::io::XInputStream,
                             throw( ::com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL acquire( void )
-                            throw ( ::com::sun::star::uno::RuntimeException )
+                            throw ()
                                 { OWeakObject::acquire(); }
 
     virtual void SAL_CALL release( void )
-                            throw( ::com::sun::star::uno::RuntimeException )
+                            throw()
                                 { OWeakObject::release(); }
 
 
