@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-19 00:08:23 $
+#   last change: $Author: mtg $ $Date: 2001-02-08 16:03:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,7 @@ PRJNAME=sw
 TARGET=swg
 
 AUTOSEG=true
+ENABLE_EXCEPTIONS=TRUE
 
 PROJECTPCH=core_pch
 PDBTARGET=core_pch
@@ -97,7 +98,11 @@ CXXFILES = \
         swgpar.cxx \
         swgstr.cxx \
         sw2block.cxx \
-        swblocks.cxx
+        swblocks.cxx 	\
+        SwXMLBlockImport.cxx 	\
+        SwXMLBlockExport.cxx 	\
+        SwXMLBlockListContext.cxx 	\
+        SwXMLTextBlocks.cxx
 
 SLOFILES =  \
         $(SLO)$/rdcont.obj \
@@ -113,7 +118,11 @@ SLOFILES =  \
         $(SLO)$/swgpar.obj \
         $(SLO)$/swgstr.obj \
         $(SLO)$/sw2block.obj \
-        $(SLO)$/swblocks.obj
+        $(SLO)$/swblocks.obj	\
+        $(SLO)$/SwXMLBlockImport.obj	\
+        $(SLO)$/SwXMLBlockExport.obj	\
+        $(SLO)$/SwXMLBlockListContext.obj	\
+        $(SLO)$/SwXMLTextBlocks.obj	
 
 EXCEPTIONSFILES = \
         $(SLO)$/swblocks.obj
