@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurationProvider.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-06 16:24:30 $
+ *  last change: $Author: mi $ $Date: 2001-10-26 09:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ service ConfigurationProvider
  <type>ConfigurationUpdateAccess</type>. To reflect its <em>element role</em>
  which includes controlling updates for the whole view, it implements
  service <type>UpdateRootElement</type>.
- <BR />If the root element of the view is marked read-only (as indicated
+ <BR>If the root element of the view is marked read-only (as indicated
  by <const scope="com::sun::star::beans">PropertyAttributes::READONLY</const>),
  the implementation may either raise an exception or return a (read-only)
  <type>ConfigurationAccess</type>/<type>AccessRootElement</type> instead.
@@ -180,7 +180,7 @@ service ConfigurationProvider
  <!-- Developer: I had them wrong  -->
 
        <p><strong>Example:</strong> In the hierarchy
-<BR /><pre>
+<BR><pre>
  A - B1 - C1
    |
    - B2 - C2 (localized: de, en, fr, ..)
@@ -200,10 +200,10 @@ service ConfigurationProvider
    - B4 - C6 - D4 - E3
 
 </pre>
-         <BR />selecting a view with <code>nodepath = "/A/B2"</code>,
+         <BR>selecting a view with <code>nodepath = "/A/B2"</code>,
          <code>depth = 2</code> and <code>locale = &lt;Locale for en_US&gt;</code>
          would result in the tree fragment
-<BR /><pre>
+<BR><pre>
 (A-) B2 - C2 (en)
         |
         - C3 - D1
@@ -242,7 +242,7 @@ service ConfigurationProvider
           read directly from storage. This may entail future changes that
           become visible in the cache are not reflected in this view and that
           changes done through this view are not reflected in the cache.
-          <BR /><strong>Use with caution !</strong>
+          <BR><strong>Use with caution !</strong>
          </dd>
        </dl>
     </li>
@@ -255,7 +255,6 @@ service ConfigurationProvider
  <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
  had been called using an empty sequence of arguments.
  </p>
-
 */
     interface com::sun::star::lang::XMultiServiceFactory;
 

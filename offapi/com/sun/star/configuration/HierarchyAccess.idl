@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HierarchyAccess.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-06 16:24:30 $
+ *  last change: $Author: mi $ $Date: 2001-10-26 09:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,6 @@ module com { module sun { module star { module configuration {
  service <type>HierarchyElement</type>, which concerns the complementary role
  of being accessible as an element of the hierarchy.
  </p>
-
 */
 service HierarchyAccess
 {
@@ -121,7 +120,7 @@ service HierarchyAccess
  <!-- Dennis: I don't understand the phrase "returns an Any holding" -->
  <!-- Developer: Added missing <atom>. 'any' is a builtin variant type,
   which can contain ('hold') values of any other type
-  (e.g a ('simple') integer or interface -->*/
+  (e.g., a ('simple') integer or interface -->*/
     interface com::sun::star::container::XNameAccess;
 
 /** allows access to all descendants of this node

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleSetUpdate.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-06 16:24:30 $
+ *  last change: $Author: mi $ $Date: 2001-10-26 09:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 module com { module sun { module star { module configuration {
 
 //=============================================================================
-/** provides write access to a dynamic homogeneous non-hierarchical set of
+/** provides write access to a dynamic, homogeneous, non-hierarchical set of
  values or objects.
 
  <p>Allows adding and removing elements.

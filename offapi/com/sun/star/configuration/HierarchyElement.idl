@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HierarchyElement.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-06 16:24:30 $
+ *  last change: $Author: mi $ $Date: 2001-10-26 09:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ service HierarchyElement
 /** provides a property descriptor for this element.[optional]
 
  <p>This interface may be missing, if the hierarchy supports no traits that are
- described by <type.scope="com::sun::star::beans">PropertyAttribute</type>
+ described by <type scope="com::sun::star::beans">PropertyAttribute</type>
  values.
  </p>
 
@@ -162,7 +162,7 @@ service HierarchyElement
  returns NULL, if this object is currently not contained in another node.
  </p>
 
- <p><em>Setting a different parent is generally not supported.</em></p>
+ <p><em>Setting a different parent is, generally, not supported.</em></p>
 
  <!-- Dennis: "generally" is vague -->
  <!-- Developer: To a degree on purpose ;) Basically what I mean is:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleSetAccess.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-03-01 01:19:50 $
+ *  last change: $Author: mi $ $Date: 2001-10-26 09:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 module com { module sun { module star { module configuration {
 
 //=============================================================================
-/** provides access to a dynamic homogeneous nonhierarchical set of values
+/** provides access to a dynamic, homogeneous, nonhierarchical set of values
  or objects.
 
  <p>Also provides information about the template for elements.
@@ -119,7 +119,7 @@ service SimpleSetAccess
  one predefined type or if the elements are of a simple type and
  no further information is available.  In the latter case,
  <member scope="com::sun::star::container">XElementAccess::getElementType()</member>
- provides all the information there is about the elements' type.
+ provides all the information there is about the element's type.
  </p>
 */
     [optional] interface com::sun::star::configuration::XTemplateContainer;

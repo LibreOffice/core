@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurationAccess.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-06 16:24:30 $
+ *  last change: $Author: mi $ $Date: 2001-10-26 09:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,12 +97,11 @@ module com { module sun { module star { module configuration {
 /** provides (read) access to a fragment of the configuration hierarchy.
 
  <!-- Dennis: Why is "read" in () -->
- <!-- Developer: I'm not completely sure wheteher to drop the parentheses or the word "read".
+ <!-- Developer: I'm not completely sure whether to drop the parentheses or the word "read".
       This service provides access to ... PERIOD.
       But this access may be read only. This service only guarantees the ability to read data.
       It does not preclude write access, though.
  -->
-
  <p>Values that are direct or indirect descendants of a root element can be
  retrieved and, if themselves objects, navigated. Other interfaces provide
  access to information about this element and its context.
@@ -216,8 +215,8 @@ module com { module sun { module star { module configuration {
  </p>
 
  <p>If the schema marks a value as <em>nullable</em> (which is indicated by
- attribute <const scope="com::sun::star::beans">PropertyAttribute::MAYBEVOID</const>
- ), its contents may be <NULL/>.
+ attribute <const scope="com::sun::star::beans">PropertyAttribute::MAYBEVOID</const> ),
+ its contents may be <NULL/>.
  </p>
 
  <!-- Dennis: Should the data between the <const> appear in the HTML. It is not. -->
@@ -268,7 +267,7 @@ service ConfigurationAccess
       implements the service named here (....HierarchyAccess)
       by implementing a specialization of ...HierarchyAccess.
       Which one is chosen out of several existing ones depends on the Element role.
-I haven't found a less awkward way to say that concisely. -->
+    I haven't found a less awkward way to say that concisely. -->
 
      <p>Implementations shall implement exactly one of:</p>
      <ul>
@@ -285,26 +284,22 @@ I haven't found a less awkward way to say that concisely. -->
     */
     service HierarchyElement;
 
-    /** specializes <type>HierarchyAccess</type>,
-     if this element is a <em>Set</em>.
-     <BR />This is an alternative to <type>GroupAccess</type>.
- <!-- Developer:  The changed text here should be in sync with the similar one in ConfigurationUpdateAccess -->
+    /** specializes <type>HierarchyAccess</type>, if this element is a <em>Set</em>.
 
- <!-- <BR/> is displaying -->
- <!-- Developer: There was a missing space needed for non-XHTML browsers.>
-    */
+         <p>This is an alternative to <type>GroupAccess</type>.
+ <!-- Developer:  The changed text here should be in sync with the similar one in ConfigurationUpdateAccess -->
     /*[optional]*/ service SetAccess;
 
     /** specializes <type>HierarchyAccess</type>,
      if this element is a <em>Group</em>.
-     <BR />This is an alternative to <type>SetAccess</type>.
+     <BR>This is an alternative to <type>SetAccess</type>.
  <!-- Developer:  The changed text here should be in sync with the similar one in ConfigurationUpdateAccess -->
 */
     /*[optional]*/ service GroupAccess;
 
     /** specializes <type>HierarchyElement</type>,
      if this element is the <em>Root</em> of the whole hierarchy.
-     <BR />This is an alternative to <type>SetElement</type>
+     <BR>This is an alternative to <type>SetElement</type>
      or <type>GroupElement</type>.
  <!-- Developer:  The changed text here should be in sync with the similar one in ConfigurationUpdateAccess -->
 
@@ -317,7 +312,7 @@ I haven't found a less awkward way to say that concisely. -->
 
     /** specializes <type>HierarchyElement</type>,
      if this element may be contained in a <em>Set</em>.
-     <BR />This is an alternative to <type>AccessRootElement</type>
+     <BR>This is an alternative to <type>AccessRootElement</type>
      or <type>GroupElement</type>.
  <!-- Developer:  The changed text here should be in sync with the similar one in ConfigurationUpdateAccess -->
 */
@@ -325,7 +320,7 @@ I haven't found a less awkward way to say that concisely. -->
 
     /** specializes <type>HierarchyElement</type>,
      if this element is a child of a <em>Group</em>.
-     <BR />This is an alternative to <type>AccessRootElement</type>
+     <BR>This is an alternative to <type>AccessRootElement</type>
      or <type>SetElement</type>.
  <!-- Developer:  The changed text here should be in sync with the similar one in ConfigurationUpdateAccess -->
 */
