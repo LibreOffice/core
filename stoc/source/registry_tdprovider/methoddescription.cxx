@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methoddescription.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:14:47 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:32:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include "com/sun/star/reflection/XParameter.hpp"
 #include "com/sun/star/reflection/XTypeDescription.hpp"
 #include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/weak.hxx"
