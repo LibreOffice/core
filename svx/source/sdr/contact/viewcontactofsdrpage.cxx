@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrpage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:42:05 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,16 @@ namespace sdr
 
                         if(pPageView)
                         {
+                            // Paint (erase) the background.  That was
+                            // formerly done in DrawPaper() but has to be
+                            // done even when the paper (the page) is not
+                            // painted.
+                            OutputDevice* pOut=rDisplayInfo.GetOutputDevice();
+                            pOut->SetBackground(Wallpaper(
+                                pPageView->GetApplicationBackgroundColor()));
+                            pOut->SetLineColor();
+                            pOut->Erase();
+
                             const SdrView& rView = pPageView->GetView();
 
                             if(rView.IsPageVisible())
@@ -269,13 +279,8 @@ namespace sdr
             if(pPageView)
             {
                 OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
-
                 // No line drawing
                 pOut->SetLineColor();
-
-                // Paint page background
-                pOut->SetBackground(Wallpaper(pPageView->GetApplicationBackgroundColor()));
-                pOut->Erase();
 
                 // Set page color
                 if(pPageView->GetApplicationDocumentColor() != COL_AUTO)
