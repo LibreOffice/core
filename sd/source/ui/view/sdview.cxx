@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:17:51 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,8 +149,8 @@
 #ifndef SD_FU_INSERT_FILE_HXX
 #include "fuinsfil.hxx"
 #endif
-#ifndef SD_FU_SLIDE_SHOW_HXX
-#include "fuslshow.hxx"
+#ifndef _SD_SLIDESHOW_HXX
+#include "slideshow.hxx"
 #endif
 #include "stlpool.hxx"
 #ifndef SD_FRAME_VIEW_HXX
@@ -168,6 +168,12 @@
 
 #ifndef _SDR_CONTACT_DISPLAYINFO_HXX
 #include <svx/sdr/contact/displayinfo.hxx>
+#endif
+#ifndef SD_TOOLS_EVENT_MULTIPLEXER_HXX
+#include "EventMultiplexer.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
 #endif
 
 #include "ViewShellBase.hxx"
@@ -698,6 +704,8 @@ BOOL View::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
                          OutlinerView* pGivenOutlinerView, BOOL bDontDeleteOutliner,
                          BOOL bOnlyOneView)
 {
+    GetViewShell()->GetViewShellBase().GetEventMultiplexer().MultiplexEvent( sd::tools::EventMultiplexerEvent::EID_BEGIN_TEXT_EDIT, (void*)pObj );
+
     BOOL bReturn = FmFormView::BegTextEdit(pObj, pPV, pWin, bIsNewObj, pGivenOutliner,
                                         pGivenOutlinerView, bDontDeleteOutliner,
                                         bOnlyOneView);
@@ -719,6 +727,9 @@ BOOL View::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
             pViewShell->GetViewFrame()->GetDispatcher()->
                 GetShell(0)->SetUndoManager(&rUndoMgr);
         }
+
+        pOL->SetParaInsertedHdl(LINK(this, View, ParagraphInsertedHdl));
+        pOL->SetParaRemovingHdl(LINK(this, View, ParagraphRemovingHdl));
     }
 
     return(bReturn);
@@ -737,6 +748,8 @@ SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally)
 
 SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally, FuPoor* pFunc)
 {
+    SdrObject* pObj = GetTextEditObject();
+
     BOOL bIsTextEdit = IsTextEdit();
 
     SdrEndTextEditKind eKind;
@@ -765,13 +778,6 @@ SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally, FuPoor* pFunc)
 
         pTextObj = ( (FuText*) pFunc)->GetTextObj();
 
-        if ( pTextObj && pViewShell )
-        {
-            FuSlideShow* pFuSlideShow = pViewShell->GetSlideShow();
-            if (pFuSlideShow)
-                pFuSlideShow->EndTextEdit(pTextObj);
-        }
-
         if (eKind == SDRENDTEXTEDIT_CHANGED && !bDefaultTextRestored)
             ( (FuText*) pFunc)->ObjectChanged();
 
@@ -794,6 +800,11 @@ SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally, FuPoor* pFunc)
                 GetShell(0)->SetUndoManager(pUndoMgr);
         }
     }
+
+    if( eKind != SDRENDTEXTEDIT_CHANGED )
+        pObj = 0;
+
+    GetViewShell()->GetViewShellBase().GetEventMultiplexer().MultiplexEvent( sd::tools::EventMultiplexerEvent::EID_END_TEXT_EDIT, (void*)pObj );
 
     return(eKind);
 }
@@ -1103,5 +1114,40 @@ void View::onAccessibilityOptionsChanged()
         }
     }
 }
+
+IMPL_LINK( View, ParagraphInsertedHdl, ::Outliner *, pOutliner )
+{
+    Paragraph* pPara = pOutliner->GetHdlParagraph();
+    SdrObject* pObj = GetTextEditObject();
+
+    if( pPara && pObj )
+    {
+        SdPage* pPage = dynamic_cast< SdPage* >( pObj->GetPage() );
+        if( pPage )
+            pPage->onParagraphInserted( pOutliner, pPara, pObj );
+    }
+    return 0;
+}
+
+/*************************************************************************
+|*
+|* Handler fuer das Loeschen von Seiten (Absaetzen)
+|*
+\************************************************************************/
+
+IMPL_LINK( View, ParagraphRemovingHdl, ::Outliner *, pOutliner )
+{
+    Paragraph* pPara = pOutliner->GetHdlParagraph();
+    SdrObject* pObj = GetTextEditObject();
+
+    if( pPara && pObj )
+    {
+        SdPage* pPage = dynamic_cast< SdPage* >( pObj->GetPage() );
+        if( pPage )
+            pPage->onParagraphRemoving( pOutliner, pPara, pObj );
+    }
+    return 0;
+}
+
 
 } // end of namespace sd
