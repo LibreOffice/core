@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mav $ $Date: 2003-11-28 17:54:16 $
+#   last change: $Author: kz $ $Date: 2004-10-04 19:49:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@ PRJ=..$/..
 
 PRJNAME=embeddedobj
 TARGET=embedobj
-
+ENABLE_EXCEPTIONS=true
 
 # --- Settings -----------------------------------------------------
 
@@ -79,19 +79,11 @@ SLOFILES =  \
         $(SLO)$/register.obj\
         $(SLO)$/xfactory.obj\
         $(SLO)$/miscobj.obj\
-        $(SLO)$/persistence.obj\
         $(SLO)$/embedobj.obj\
+                $(SLO)$/specialobject.obj\
+                $(SLO)$/persistence.obj\
+        $(SLO)$/inplaceobj.obj\
         $(SLO)$/visobj.obj
-
-
-EXCEPTIONSFILES= \
-        $(SLO)$/register.obj\
-        $(SLO)$/xfactory.obj\
-        $(SLO)$/miscobj.obj\
-        $(SLO)$/persistence.obj\
-        $(SLO)$/embedobj.obj\
-        $(SLO)$/visobj.obj
-
 
 # --- Targets -------------------------------------------------------
 
