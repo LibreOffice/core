@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:58:01 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 10:20:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,9 +122,6 @@
 #include "ndindex.hxx"
 
 using namespace ::com::sun::star;
-
-extern BYTE WhichFont( xub_StrLen nIdx, const String* pTxt,
-                       const SwScriptInfo* pSI );
 
 /*************************************************************************
  *                              _IsFtnNumFrm()
@@ -1109,7 +1106,9 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
     }
 
     pFnt->SetVertical( pFnt->GetOrientation(), pFrm->IsVertical() );
-    return new SwFtnNumPortion( aFtnTxt, pFnt );
+    SwFtnNumPortion* pNewPor = new SwFtnNumPortion( aFtnTxt, pFnt );
+    pNewPor->SetLeft( !pFrm->IsRightToLeft() );
+    return pNewPor;
 }
 
 /*************************************************************************
@@ -1405,7 +1404,7 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf, const SwTxtFtn* pTxtFtn )
 
         // examine text and set script
         String aTmpStr( rFtn.GetViewNumStr( *pDoc ) );
-        pFnt->SetActual( WhichFont( 0, &aTmpStr, 0 ) );
+        pFnt->SetActual( SwScriptInfo::WhichFont( 0, &aTmpStr, 0 ) );
 
         const SwEndNoteInfo* pInfo;
         if( rFtn.IsEndNote() )
