@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-14 21:18:51 $
+ *  last change: $Author: kz $ $Date: 2002-01-16 21:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ QueryBox DLG_MACROQUERY
         Text[ polish ] = "Nach den Sicherheitseinstellungen soll dieses Makro nicht ausgef�hrt werden. M�chten Sie es trotzdem ausf�hren?";
         Text[ portuguese_brazilian ] = "Nach den Sicherheitseinstellungen soll dieses Makro nicht ausgef�hrt werden. M�chten Sie es trotzdem ausf�hren?";
         Text[ japanese ] = "セキュリティ設定ではこのマクロは実行できないはずです。それでも実行しますか。";
-        Text[ korean ] = "보안 설정에 따라 이 매크로는 실행할 수 없습니다. 계속하시겠습니까?";
+        Text[ korean ] = "보안 설정에 따라 이 매크로는 실행되어서는 안 됩니다.";
         Text[ chinese_simplified ] = "按照安全的设定不应该执行这个宏。您还是要执行这个宏吗？";
         Text[ chinese_traditional ] = "依照安全的設定不應該執行這個巨集。還是要執行這個巨集嗎？";
         Text[ turkish ] = "Nach den Sicherheitseinstellungen soll dieses Makro nicht ausgef�hrt werden. M�chten Sie es trotzdem ausf�hren?";
