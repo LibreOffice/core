@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-17 09:30:51 $
+ *  last change: $Author: cl $ $Date: 2001-01-18 14:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,6 +676,7 @@ XML_CONSTASCII_ACTION( sXML_foreground, "foreground" );
 XML_CONSTASCII_ACTION( sXML_foreign_object, "foreign-object" );
 XML_CONSTASCII_ACTION( sXML_format_change, "format-change" );
 XML_CONSTASCII_ACTION( sXML_format_source, "format-source" );
+XML_CONSTASCII_ACTION( sXML_forms, "forms" );
 XML_CONSTASCII_ACTION( sXML_formula, "formula");
 XML_CONSTASCII_ACTION( sXML_formula_hidden, "formula-hidden");
 XML_CONSTASCII_ACTION( sXML_formulas, "formulas");

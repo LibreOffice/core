@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.23 2001-01-05 10:23:08 mib Exp $
+	$Id: style.mod,v 1.24 2001-01-18 14:40:19 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -366,7 +366,7 @@
 
 <!-- master page properties -->
 <!ELEMENT style:master-page ( (style:header, style:header-left?)?, (style:footer, style:footer-left?)?,
-								style:style*, (%shapes;)*, presentation:notes? )>
+								office:forms?,style:style*, (%shapes;)*, presentation:notes? )>
 <!ATTLIST style:master-page style:name %styleName; #REQUIRED>
 <!ATTLIST style:master-page style:page-master-name %styleName; #REQUIRED>
 <!ATTLIST style:master-page style:next-style-name %styleName; #IMPLIED>

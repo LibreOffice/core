@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.27 2001-01-17 21:29:51 cl Exp $
+	$Id: drawing.mod,v 1.28 2001-01-18 14:40:19 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -184,6 +184,16 @@
 <!ATTLIST draw:connector %draw-end-position; >
 <!ATTLIST draw:connector draw:id %shapeId;>
 <!ATTLIST draw:connector %text-anchor;>
+
+<!ELEMENT draw:control EMPTY>
+<!ATTLIST draw:control %draw-style-name;>
+<!ATTLIST draw:control %draw-position; >
+<!ATTLIST draw:control %draw-size; >
+<!ATTLIST draw:control %control-id; >
+<!ATTLIST draw:control %zindex;>
+<!ATTLIST draw:control %draw-end-position; >
+<!ATTLIST draw:control draw:id %shapeId;>
+<!ATTLIST draw:control %text-anchor;>
 
 <!ELEMENT draw:g (%shapes;)* >
 <!ATTLIST draw:g %draw-transform; >
@@ -392,7 +402,7 @@
 <!ELEMENT presentation:shows (presentation:show)*>
 
 <!-- Drawing page -->
-<!ELEMENT draw:page ((%shapes;)*,presentation:animations?,presentation:notes?)>
+<!ELEMENT draw:page (office:forms?,(%shapes;)*,presentation:animations?,presentation:notes?)>
 <!ATTLIST draw:page draw:name %string; #IMPLIED>
 <!ATTLIST draw:page draw:style-name %styleName; #IMPLIED>
 <!ATTLIST draw:page draw:master-page-name %styleName; #REQUIRED>

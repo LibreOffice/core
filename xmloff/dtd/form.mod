@@ -1,5 +1,5 @@
 <!--
-	$Id: form.mod,v 1.1 2001-01-03 16:17:50 fs Exp $
+	$Id: form.mod,v 1.2 2001-01-18 14:40:19 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -92,6 +92,8 @@
 <!ATTLIST form:form form:navigation-mode %navigation; #IMPLIED>
 <!ATTLIST form:form form:order CDATA #IMPLIED>
 <!ATTLIST form:form form:tab-cycle %cycles; "records" >
+
+<!ELEMENT office:forms (form:form*)>
 
 <!ELEMENT form:text (form:properties?, script:events?)>
 <!ATTLIST form:text %style-name;
