@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: abi $ $Date: 2001-10-05 14:38:57 $
+ *  last change: $Author: hr $ $Date: 2001-10-24 10:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,8 @@
 #include <com/sun/star/lang/Locale.hpp>
 #endif
 #include "inputstream.hxx"
+
+#include <algorithm>
 
 
 using namespace chelp;
@@ -511,7 +513,7 @@ KeywordInfo::Compare::Compare( const Reference< XCollator >& xCollator )
 }
 
 
-int KeywordInfo::Compare::operator()( const rtl::OUString& l,const rtl::OUString& r )
+int KeywordInfo::Compare::operator()( const rtl::OUString& l,const rtl::OUString& r ) const
 {
     if( m_xCollator.is() )
     {
@@ -554,7 +556,7 @@ int KeywordInfo::Compare::operator()( const rtl::OUString& l,const rtl::OUString
 
 
 
-void KeywordInfo::sort( std::vector< rtl::OUString >& listKey_,Compare& comp )
+void KeywordInfo::sort( std::vector< rtl::OUString >& listKey_, const Compare& comp )
 {
     std::sort( listKey_.begin(),listKey_.end(),comp );
     listKey.realloc( listKey_.size() );
