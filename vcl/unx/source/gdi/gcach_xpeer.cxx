@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hdu $ $Date: 2001-02-27 18:39:01 $
+ *  last change: $Author: hdu $ $Date: 2001-02-28 08:29:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,8 @@ GlyphSet X11GlyphPeer::GetGlyphSet( ServerFont& rServerFont )
                 // => prefer readablity of hinted glyphs at small sizes
                 // => prefer "grey clouds" to "black clouds" at very small sizes
                 const ImplFontSelectData& rFSD = rServerFont.GetFontSelData();
-                if( rFSD.mnHeight<250  && (rFSD.mnHeight>=12 || rFSD.mnHeight<8) )
+                if( !rFSD.mbNonAntialiased
+                && rFSD.mnHeight<250  && (rFSD.mnHeight>=12 || rFSD.mnHeight<8) )
                 {
                     aGlyphSet = (*pXRenderCreateGlyphSet)( mpDisplay, mpGlyphFormat );
                     rServerFont.SetExtended( XRENDER_KIND, (void*)aGlyphSet );
