@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:07:51 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,16 @@
 #endif
 #ifndef _FMTFTNTX_HXX //autogen
 #include <fmtftntx.hxx>
+#endif
+// OD 2004-05-24 #i28701#
+#ifndef _DFLYOBJ_HXX
+#include <dflyobj.hxx>
+#endif
+#ifndef _FLYFRMS_HXX
+#include <flyfrms.hxx>
+#endif
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
 #endif
 
 SV_IMPL_PTRARR_SORT( SwDestroyList, SwSectionFrmPtr )
@@ -1191,6 +1201,61 @@ void SwSectionFrm::SimpleFormat()
     UnlockJoin();
 }
 
+// OD 2004-05-17 #i28701# - extra format for a section consisting of more than
+// one column to position its floating screen objects.
+void lcl_ExtraFormatToPositionObjs( SwSectionFrm& _rSectFrm )
+{
+    if ( _rSectFrm.Lower() && _rSectFrm.Lower()->IsColumnFrm() &&
+         _rSectFrm.Lower()->GetNext() )
+    {
+        // unlock position of lower floating screen objects for the extra format
+        SwPageFrm* pPageFrm = _rSectFrm.FindPageFrm();
+        SwSortedObjs* pObjs = pPageFrm ? pPageFrm->GetSortedObjs() : 0L;
+        if ( pObjs )
+        {
+            sal_uInt32 i = 0;
+            for ( i = 0; i < pObjs->Count(); ++i )
+            {
+                SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
+
+                if ( _rSectFrm.IsAnLower( pAnchoredObj->GetAnchorFrm() ) )
+                {
+                    pAnchoredObj->UnlockPosition();
+                }
+            }
+        }
+
+        // grow section till bottom of printing area of upper frame
+        SWRECTFN( (&_rSectFrm) );
+        SwTwips nTopMargin = (_rSectFrm.*fnRect->fnGetTopMargin)();
+        Size aOldSectPrtSize( _rSectFrm.Prt().SSize() );
+        SwTwips nDiff = (_rSectFrm.Frm().*fnRect->fnBottomDist)(
+                                (_rSectFrm.GetUpper()->*fnRect->fnGetPrtBottom)() );
+        (_rSectFrm.Frm().*fnRect->fnAddBottom)( nDiff );
+        (_rSectFrm.*fnRect->fnSetYMargins)( nTopMargin, 0 );
+        _rSectFrm.ChgLowersProp( aOldSectPrtSize );
+
+        // format column frames and its body and footnote container
+        SwColumnFrm* pColFrm = static_cast<SwColumnFrm*>(_rSectFrm.Lower());
+        while ( pColFrm )
+        {
+            pColFrm->Calc();
+            pColFrm->Lower()->Calc();
+            if ( pColFrm->Lower()->GetNext() )
+            {
+                pColFrm->Lower()->GetNext()->Calc();
+            }
+
+            pColFrm = static_cast<SwColumnFrm*>(pColFrm->GetNext());
+        }
+
+        // format content - first with collecting its foot-/endnotes before content
+        // format, second without collecting its foot-/endnotes.
+        ::CalcCntnt( &_rSectFrm );
+        ::CalcCntnt( &_rSectFrm, true );
+    }
+}
+
 /*************************************************************************
 |*
 |*  SwSectionFrm::Format()
@@ -1246,6 +1311,15 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
         //Inhalt selbst verantwortlich.
         BOOL bMaximize = ToMaximize( FALSE );
 
+        // OD 2004-05-17 #i28701# - If the wrapping style has to be considered
+        // on object positioning, an extra formatting has to be performed
+        // to determine the correct positions the floating screen objects.
+        if ( !bMaximize &&
+             GetFmt()->GetDoc()->ConsiderWrapOnObjPos() )
+        {
+            lcl_ExtraFormatToPositionObjs( *this );
+        }
+
         // Column widths have to be adjusted before calling _CheckClipping.
         // _CheckClipping can cause the formatting of the lower frames
         // which still have a width of 0.
@@ -1263,9 +1337,9 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
             (aPrt.*fnRect->fnSetWidth)( nWidth - rLRSpace.GetLeft() -
                                         rLRSpace.GetRight() );
 
-            /// OD 15.10.2002 #103517# - allow grow in online layout
-            /// Thus, set <..IsBrowseMode()> as parameter <bGrow> on calling
-            /// method <_CheckClipping(..)>.
+            // OD 15.10.2002 #103517# - allow grow in online layout
+            // Thus, set <..IsBrowseMode()> as parameter <bGrow> on calling
+            // method <_CheckClipping(..)>.
             _CheckClipping( GetFmt()->GetDoc()->IsBrowseMode(), bMaximize );
             bMaximize = ToMaximize( FALSE );
             bValidSize = TRUE;
@@ -1277,7 +1351,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
 
         if ( !bMaximize )
         {
-            SwTwips nRemaining = (this->*fnRect->fnGetTopMargin)(), nDiff;
+            SwTwips nRemaining = (this->*fnRect->fnGetTopMargin)();
             SwFrm *pFrm = pLower;
             if( pFrm )
             {
@@ -1315,7 +1389,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
                 }
             }
 
-            nDiff = (Frm().*fnRect->fnGetHeight)() - nRemaining;
+            SwTwips nDiff = (Frm().*fnRect->fnGetHeight)() - nRemaining;
             if( nDiff < 0)
             {
                 SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
@@ -1943,6 +2017,16 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, BOOL bTst )
                             pFrm->InvalidatePos();
                     }
                 }
+                // --> OD 2004-07-05 #i28701# - Due to the new object positioning
+                // the frame on the next page/column can flow backward (e.g. it
+                // was moved forward due to the positioning of its objects ).
+                // Thus, invalivate this next frame, if document compatibility
+                // option 'Consider wrapping style influence on object positioning' is ON.
+                else if ( GetFmt()->GetDoc()->ConsiderWrapOnObjPos() )
+                {
+                    InvalidateNextPos();
+                }
+                // <--
             }
             return nGrow;
         }
