@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-21 11:56:52 $
+ *  last change: $Author: th $ $Date: 2001-06-29 10:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1535,6 +1535,8 @@ ImplAllSettingsData::ImplAllSettingsData()
     mnRefCount                  = 1;
     mnSystemUpdate              = SETTINGS_ALLSETTINGS;
     mnWindowUpdate              = SETTINGS_ALLSETTINGS;
+    meLanguage                  = LANGUAGE_SYSTEM;
+    meUILanguage                = LANGUAGE_SYSTEM;
 }
 
 // -----------------------------------------------------------------------
