@@ -8803,3 +8803,6 @@ threadFunc
 ?lcl_translateBasic2Uno@?%O:\SRC663\src\sfx2\source\doc\objmisc.cxx807724407@@YAXABVSbxVariableRef@@PAX@Z
 ?lcl_translateBasic2Uno@?%O:\SRX643\src\sfx2\source\doc\objmisc.cxx5272158@@YAXABVSbxVariableRef@@PAX@Z
 ?lcl_translateBasic2Uno@?%O:\SRX643\src\sfx2\source\doc\objmisc.cxx3037015518@@YAXABVSbxVariableRef@@PAX@Z
+??1Directory@osl@@QAE@XZ
+?close@Directory@osl@@QAE?AW4RC@FileBase@2@XZ
+?lcl_translateBasic2Uno@?%O:\SRX643\src\sfx2\source\doc\objmisc.cxx98511719@@YAXABVSbxVariableRef@@PAX@Z
