@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2001-07-13 11:52:35 $
+#   last change: $Author: hjs $ $Date: 2001-08-22 10:27:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,9 @@ APP1DEF=
 
 .INCLUDE :  target.mk
 
+.IF "$(L10N-framework)"==""
 ALLTAR : $(INCCOM)$/svconf.h
+.ENDIF			# "$(L10N-framework)"==""
 
 $(INCCOM)$/svconf.h : $(BIN)$/$(TARGET)
     $(BIN)$/$(TARGET) $@
