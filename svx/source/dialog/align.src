@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dr $ $Date: 2001-12-17 14:56:09 $
+ *  last change: $Author: kz $ $Date: 2001-12-20 21:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,7 +670,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ portuguese_brazilian ] = "Bezugs~kante" ;
         Text [ swedish ] = "Referens~kant" ;
         Text [ danish ] = "Referencekant" ;
-        Text [ italian ] = "Bordo di ~riferimento" ;
+        Text [ italian ] = "~Bordo di riferimento" ;
         Text [ spanish ] = "~Aristas de referencia" ;
         Text [ french ] = "~Bord de référence" ;
         Text [ dutch ] = "~Invalshoek" ;
@@ -1110,4 +1110,5 @@ TabPage RID_SVXPAGE_ALIGNMENT
     Text[ catalan ] = "Alineación";
 };
  // ********************************************************************** EOF
+
 
