@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontactofpageview.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:30:07 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,12 +99,6 @@ namespace sdr
             // The VirtualDevice for PreRendering
             VirtualDevice                                   maPreRenderDevice;
 
-            // internal access to SdrPageViewWindow
-            SdrPageViewWindow& GetPageViewWindow() const;
-
-            // internal access to SdrPage of PageView
-            SdrPage* GetSdrPage() const;
-
             // Create and set the ExpandPaintClipRegion. This needs to be done before
             // any of the objects gets really painted because it relies on the invalidated
             // and not painted state of the single objects.
@@ -167,6 +161,13 @@ namespace sdr
 
             // check if asynchronious graphis loading is allowed. Default is sal_False.
             virtual sal_Bool IsAsynchronGraphicsLoadingAllowed() const;
+
+        public:
+                    // internal access to SdrPageViewWindow
+            SdrPageViewWindow& GetPageViewWindow() const;
+
+            // internal access to SdrPage of PageView
+            SdrPage* GetSdrPage() const;
         };
     } // end of namespace contact
 } // end of namespace sdr
