@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-11 16:33:15 $
+ *  last change: $Author: fs $ $Date: 2001-01-04 09:43:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1198,6 +1198,7 @@ OTextDetailsPage::OTextDetailsPage( Window* pParent, const SfxItemSet& _rCoreAtt
     m_aThousandsSeparator.SetModifyHdl(getControlModifiedLink());
     m_aExtension.SetModifyHdl(getControlModifiedLink());
 
+    m_aExtension.EnableAutocomplete(sal_True, sal_True);
 
     m_pCharset->SetZOrder(&m_aExtension, WINDOW_ZORDER_BEHIND);
 
@@ -1829,6 +1830,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.23  2000/12/11 16:33:15  fs
+ *  reversed the semantics of the SuppressVersionColumns checkbox
+ *
  *  Revision 1.22  2000/12/07 15:04:40  fs
  *  #81490# reset the password when changing the user
  *
