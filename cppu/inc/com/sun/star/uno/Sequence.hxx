@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2000-09-25 14:49:22 $
+ *  last change: $Author: dbo $ $Date: 2000-10-04 15:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@ namespace star
 /** */ //for docpp
 namespace uno
 {
+//__________________________________________________________________________________________________
+template< class E >
+typelib_TypeDescriptionReference * Sequence< E >::s_pType = 0;
 
 //__________________________________________________________________________________________________
 template< class E >
@@ -200,54 +203,41 @@ inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
 
 // generic sequence template
 template< class S >
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-inline const ::com::sun::star::uno::Type
-#else
 inline const ::com::sun::star::uno::Type &
-#endif
 SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< S > * )
 {
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-    typelib_TypeDescriptionReference * s_pType = 0;
-#else
-    static typelib_TypeDescriptionReference * s_pType = 0;
-    if (! s_pType)
+    if (! ::com::sun::star::uno::Sequence< S >::s_pType)
     {
-#endif
         const ::com::sun::star::uno::Type & rElementType = ::getCppuType(
             (::com::sun::star::uno::Sequence< S >::ElementType *)0 );
-        ::typelib_static_sequence_type_init( &s_pType, rElementType.getTypeLibType() );
-#if !( (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))
+        ::typelib_static_sequence_type_init(
+            & ::com::sun::star::uno::Sequence< S >::s_pType,
+            rElementType.getTypeLibType() );
     }
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >( &s_pType );
-#else
-    return ::com::sun::star::uno::Type( s_pType );
-#endif
+    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
+        & ::com::sun::star::uno::Sequence< S >::s_pType );
 }
 
-// char sequence
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-inline const ::com::sun::star::uno::Type
-#else
-inline const ::com::sun::star::uno::Type &
+#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))
+static typelib_TypeDescriptionReference * s_pType_com_sun_star_uno_Sequence_Char = 0;
 #endif
+
+// char sequence
+inline const ::com::sun::star::uno::Type &
 SAL_CALL getCharSequenceCppuType()
 {
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-    typelib_TypeDescriptionReference * s_pType = 0;
-#else
-    static typelib_TypeDescriptionReference * s_pType = 0;
-    if (! s_pType)
+#if !( (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)) )
+    static typelib_TypeDescriptionReference * s_pType_com_sun_star_uno_Sequence_Char = 0;
+#endif
+    if (! s_pType_com_sun_star_uno_Sequence_Char)
     {
-#endif
         const ::com::sun::star::uno::Type & rElementType = ::getCharCppuType();
-        ::typelib_static_sequence_type_init( &s_pType, rElementType.getTypeLibType() );
-#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))
+        ::typelib_static_sequence_type_init(
+            & s_pType_com_sun_star_uno_Sequence_Char,
+            rElementType.getTypeLibType() );
     }
-    return * reinterpret_cast< const ::com::sun::star::uno::Type * >( &s_pType );
-#else
-    return ::com::sun::star::uno::Type( s_pType );
-#endif
+    return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
+        & s_pType_com_sun_star_uno_Sequence_Char );
 }
 
 #endif

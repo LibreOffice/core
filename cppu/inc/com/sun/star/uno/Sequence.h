@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-09-25 14:48:13 $
+ *  last change: $Author: dbo $ $Date: 2000-10-04 15:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@ public:
         { return pMem; }
     inline static void SAL_CALL operator delete( void *, void * ) throw()
         {}
+
+    // static pointer to typelib type
+    static typelib_TypeDescriptionReference * s_pType;
 
     /** typedefs the element type of the sequence
         <br>
@@ -266,11 +269,7 @@ inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
     @return type of IDL sequence
 */
 template< class S >
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-inline const ::com::sun::star::uno::Type
-#else
 inline const ::com::sun::star::uno::Type &
-#endif
 SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< S > * );
 
 /** Gets the meta type of IDL <b>sequence< char ></b>.
@@ -279,11 +278,7 @@ SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< S > * );
     @param dummy typed pointer for function signature
     @return type of IDL <b>sequence< char ></b>
 */
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-inline const ::com::sun::star::uno::Type
-#else
 inline const ::com::sun::star::uno::Type &
-#endif
 SAL_CALL getCharSequenceCppuType();
 
 #endif
