@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:16:59 $
+ *  last change: $Author: mib $ $Date: 2001-07-02 09:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,9 +518,7 @@ void SwXMLTextStyleContext_Impl::Finish( sal_Bool bOverwrite )
 
     const SwDoc *pDoc = pStyle->GetDoc();
 
-    const OUString& rName =
-                SwXStyleFamilies::GetUIName( GetName(), SFX_STYLE_FAMILY_PARA );
-    SwTxtFmtColl *pColl = pDoc->FindTxtFmtCollByName( rName );
+    SwTxtFmtColl *pColl = pDoc->FindTxtFmtCollByName( pStyle->GetStyleName() );
     ASSERT( pColl, "Text collection not found" );
     if( !pColl || RES_CONDTXTFMTCOLL != pColl->Which() )
         return;

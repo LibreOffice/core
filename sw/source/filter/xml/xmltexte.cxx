@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-28 13:31:51 $
+ *  last change: $Author: mib $ $Date: 2001-07-02 09:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ void SwXMLTextParagraphExport::exportStyleContent(
     {
         const SwDoc *pDoc = pStyle->GetDoc();
         const SwTxtFmtColl *pColl =
-            pDoc->FindTxtFmtCollByName( SwXStyleFamilies::GetUIName( pStyle->GetStyleName(), SFX_STYLE_FAMILY_PARA ) );
+            pDoc->FindTxtFmtCollByName( pStyle->GetStyleName() );
         ASSERT( pColl, "There is the text collection?" );
         if( pColl && RES_CONDTXTFMTCOLL == pColl->Which() )
         {
