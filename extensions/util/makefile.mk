@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2002-01-10 09:35:42 $
+#   last change: $Author: gh $ $Date: 2002-11-07 15:14:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,10 +74,15 @@ GEN_HID=TRUE
 .IF "$(GUI)$(CPU)"=="WNTI"
 .IF "$(BUILD_SOSL)"==""
 ALLTAR : $(SRS)$/hidother.hid
-.ENDIF
-.ENDIF
 
 $(MISC)$/$(PRJNAME).hid : $(SRS)$/hidother.hid
 
 $(SRS)$/hidother.hid: hidother.src
     @+-mhids hidother.src $(SRS) $(PRJNAME) dummy $(INCLUDE)
+
+$(MISC)$/$(PRJNAME).hid : buildmealways
+buildmealways:
+    @+echo >& $(NULLDEV)
+.ENDIF
+.ENDIF
+

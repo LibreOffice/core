@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2001-09-18 14:24:48 $
+#   last change: $Author: gh $ $Date: 2002-11-07 15:14:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,6 @@ PRJNAME=extensions
 TARGET=pl
 TARGETTYPE=GUI
 USE_DEFFILE=TRUE
-GEN_HID=TRUE
 
 # --- Settings -----------------------------------------------------
 
