@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 06:54:43 $
+ *  last change: $Author: oj $ $Date: 2001-08-14 09:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -785,9 +785,7 @@ void OTableController::AddSupportedFeatures()
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/IndexDesign")]  = SID_INDEXDESIGN;
 
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/Close")]        = SID_CLOSEDOC;
-//  m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:ExplorerContentOpen")]         = SID_EXPLORERCONTENT_OPEN;
-//  m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:ExplorerContentOpenDocument")] = SID_EXPLORERCONTENT_OPEN_DOCUMENT;
-
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/EditDoc")] = ID_BROWSER_EDITDOC;
 }
 // -----------------------------------------------------------------------------
 ToolBox* OTableController::CreateToolBox(Window* _pParent)
