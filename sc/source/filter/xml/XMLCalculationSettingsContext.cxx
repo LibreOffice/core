@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLCalculationSettingsContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-27 14:16:13 $
+ *  last change: $Author: sab $ $Date: 2001-03-01 15:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,12 @@
 #ifndef SC_UNONAMES_HXX
 #include "unonames.hxx"
 #endif
+#ifndef SC_DOCOPTIO_HXX
+#include "docoptio.hxx"
+#endif
+#ifndef SC_DOCUMENT_HXX
+#include "document.hxx"
+#endif
 
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include <xmloff/xmlkywd.hxx>
@@ -109,6 +115,7 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
     SvXMLImportContext( rImport, nPrfx, rLName ),
     fIterationEpsilon(0.001),
     nIterationCount(100),
+    nYear2000(1930),
     bIsIterationEnabled(sal_False),
     bCalcAsShown(sal_False),
     bIgnoreCase(sal_False),
@@ -148,6 +155,12 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
             {
                 if (sValue.compareToAscii(sXML_false) == 0)
                     bLookUpLabels = sal_False;
+            }
+            else if (aLocalName.compareToAscii(sXML_null_year) == 0)
+            {
+                sal_Int32 nTemp;
+                GetScImport().GetMM100UnitConverter().convertNumber(nTemp, sValue);
+                nYear2000 = static_cast<sal_uInt16>(nTemp);
             }
         }
     }
@@ -202,6 +215,9 @@ void ScXMLCalculationSettingsContext::EndElement()
             xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ITEREPSILON)), aAny);
             aAny <<= aNullDate;
             xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_NULLDATE)), aAny);
+            ScDocOptions aDocOptions (GetScImport().GetDocument()->GetDocOptions());
+            aDocOptions.SetYear2000(nYear2000);
+            GetScImport().GetDocument()->SetDocOptions(aDocOptions);
         }
     }
 }
