@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonembobj.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:02:03 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 09:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,7 @@ protected:
     sal_Bool m_bClosed;
 
     sal_Int32 m_nObjectState;
+    sal_Int32 m_nTargetState; // should be -1 exept during state changing
     sal_Int32 m_nUpdateMode;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
