@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:56:50 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,7 +588,7 @@ Window DLG_NAVIGATION_PI
                 Text [ finnish ] = "Korota tasoa" ;
                 Text [ danish ] = "Niveau op" ;
                 Text [ french ] = "Hausser d'un niveau" ;
-                Text [ swedish ] = "Höj nivån" ;
+                Text [ swedish ] = "En nivå upp" ;
                 Text [ dutch ] = "Hoger niveau" ;
                 Text [ spanish ] = "Subir un nivel" ;
                 Text [ english_us ] = "Promote Level" ;
@@ -616,7 +616,7 @@ Window DLG_NAVIGATION_PI
                 Text [ finnish ] = "Laske tasoa" ;
                 Text [ danish ] = "Niveau ned" ;
                 Text [ french ] = "Abaisser d'un niveau" ;
-                Text [ swedish ] = "Sänk nivån" ;
+                Text [ swedish ] = "En nivå ner" ;
                 Text [ dutch ] = "Lager niveau" ;
                 Text [ spanish ] = "Bajar un nivel" ;
                 Text [ english_us ] = "Demote Level" ;
