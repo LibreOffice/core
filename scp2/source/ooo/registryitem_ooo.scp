@@ -2,9 +2,9 @@
 *
 *  $RCSfile: registryitem_ooo.scp,v $
 *
-*  $Revision: 1.7 $
+*  $Revision: 1.8 $
 *
-*  last change: $Author: rt $ $Date: 2004-12-07 11:26:50 $
+*  last change: $Author: vg $ $Date: 2005-02-24 16:29:36 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -602,21 +602,7 @@ RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "opendocument.DatabaseDocument.1\shell";
     ModuleID = gid_Module_Root;
-    Value = "new";
-End
-
-RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell_New
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "opendocument.DatabaseDocument.1\shell\new";
-    ModuleID = gid_Module_Root;
-    REG_VALUE_LNG(NEW)
-End
-
-RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell_New_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "opendocument.DatabaseDocument.1\shell\new\command";
-    ModuleID = gid_Module_Root;
-    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+    Value = "open";
 End
 
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell_Open_Command
@@ -624,20 +610,6 @@ RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell_Open_Command
     Subkey = "opendocument.DatabaseDocument.1\shell\open\command";
     ModuleID = gid_Module_Root;
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
-End
-
-RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell_Print_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "opendocument.DatabaseDocument.1\shell\print\command";
-    ModuleID = gid_Module_Root;
-    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
-End
-
-RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell_Printto_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "opendocument.DatabaseDocument.1\shell\printto\command";
-    ModuleID = gid_Module_Root;
-    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
 
 // Begin registry items for the MS Indexing server filter component
