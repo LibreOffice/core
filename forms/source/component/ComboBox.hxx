@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2001-01-25 11:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,11 @@ class OComboBoxModel
     ::rtl::OUString                         m_aListSource;          //
     ::rtl::OUString                         m_aDefaultText;         // DefaultText
     ::rtl::OUString                         m_aSaveValue;
+
+    StringSequence                          m_aDesignModeStringItems;
+        // upon loading, in some cases we reset fill our string item list ourself. We don't want
+        // to lose the user's items then, so we remember them here.
+
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter> m_xFormatter;
 
