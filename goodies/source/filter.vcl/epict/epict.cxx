@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epict.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-23 13:56:12 $
+ *  last change: $Author: obo $ $Date: 2000-10-31 10:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,8 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/gdimtf.hxx>
+
 #include <tools/bigint.hxx>
 #include "strings.hrc"
 #include "dlgepct.hrc"
@@ -2110,7 +2112,9 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 void PictWriter::WriteHeader(const GDIMetaFile & rMTF)
 {
     USHORT  i;
-    Rectangle   aRect( Point(), rMTF.GetPrefSize() );
+    Size aSize( rMTF.GetPrefSize() );
+    Point aPoint;
+    Rectangle   aRect( aPoint, aSize );
 
     // 512 Bytes "Muell" am Anfang:
     for (i=0;i<128;i++) *pPict << (ULONG)0;
