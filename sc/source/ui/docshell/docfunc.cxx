@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-01 18:04:59 $
+ *  last change: $Author: nn $ $Date: 2001-06-21 09:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -932,6 +932,12 @@ BOOL ScDocFunc::SetCellText( const ScAddress& rPos, const String& rText,
                 }
                 pNewCell = new ScFormulaCell( pDoc, rPos, pCode, 0 );
                 delete pCode;   // Zell-ctor hat das TokenArray kopiert
+            }
+            else if ( rText.Len() && rText.GetChar(0) == '\'' )
+            {
+                //  for bEnglish, "'" at the beginning is always interpreted as text
+                //  marker and stripped
+                pNewCell = ScBaseCell::CreateTextCell( rText.Copy( 1 ), pDoc );
             }
             else        // (nur) auf englisches Zahlformat testen
             {
