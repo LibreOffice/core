@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:54:37 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:22:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,9 @@
 #include <utility>
 #endif
 
-
+#ifndef SW_TRACER
+#include "tracer.hxx"
+#endif
 #ifndef _WW8STRUC_HXX
 #include "ww8struc.hxx"     // WW8_BRC
 #endif
@@ -770,6 +772,11 @@ friend class SwMSDffManager;
 friend class SwWW8FltControlStack;
 friend class WW8FormulaControl;
 friend class wwSectionManager;
+
+    /*
+    To log unimplemented features
+    */
+    sw::log::Tracer maTracer;
 
     SvStorage* pStg;                // Input-Storage
     SvStream* pStrm;                // Input-(Storage)Stream
