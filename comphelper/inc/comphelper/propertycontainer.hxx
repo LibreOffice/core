@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycontainer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-13 12:09:55 $
+ *  last change: $Author: mh $ $Date: 2001-01-31 14:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #include <com/sun/star/uno/Type.hxx>
 #endif
 #ifndef __SGI_STL_VECTOR
-#include <stl/vector>
+#include <vector>
 #endif
 
 //.........................................................................
@@ -249,6 +249,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/13 12:09:55  oj
+ *  impl dtor to avoid wrong delete call
+ *
  *  Revision 1.1.1.1  2000/09/29 11:28:15  fs
  *  initial import
  *
