@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-05 15:47:51 $
+ *  last change: $Author: dvo $ $Date: 2000-12-11 19:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,10 +103,6 @@
 
 #ifndef _XMLOFF_XMLEMENT_HXX
 #include "xmlement.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLNUMI_HXX
-#include "xmlnumi.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
