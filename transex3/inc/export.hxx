@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:38:35 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,167 +66,65 @@
 #include <tools/list.hxx>
 #include <tools/stream.hxx>
 #include <tools/fsys.hxx>
+#include <tools/isolang.hxx>
 
-#define COMMENT                 0
-#define COMMENT_ISO             "x-comment"
-#define COMMENT_INDEX               0
-
-#define ENGLISH_US              1
-#define ENGLISH_US_ISO          "en-US"
-#define ENGLISH_US_PROPERTY     "en_US"
-#define ENGLISH_US_INDEX            1
-
-#define PORTUGUESE              3
-#define PORTUGUESE_ISO          "pt"
-#define PORTUGUESE_INDEX            2
-
-#define GERMAN_DE               4
-#define GERMAN_DE_ISO           "x-german"
-#define GERMAN_DE_INDEX             3
-
-#define RUSSIAN                 7
-#define RUSSIAN_ISO             "ru"
-#define RUSSIAN_INDEX               4
-
-#define GREEK                   30
-#define GREEK_ISO               "el"
-#define GREEK_INDEX                 5
-
-#define DUTCH                   31
-#define DUTCH_ISO               "nl"
-#define DUTCH_INDEX                 6
-
-#define FRENCH                  33
-#define FRENCH_ISO              "fr"
-#define FRENCH_INDEX                7
-
-#define SPANISH                 34
-#define SPANISH_ISO             "es"
-#define SPANISH_INDEX               8
-
-#define FINNISH                 35
-#define FINNISH_ISO             "fi"
-#define FINNISH_INDEX               9
-
-#define HUNGARIAN               36
-#define HUNGARIAN_ISO           "hu"
-#define HUNGARIAN_INDEX             10
-
-#define ITALIAN                 39
-#define ITALIAN_ISO             "it"
-#define ITALIAN_INDEX               11
-
-#define CZECH                   42
-#define CZECH_ISO               "cs"
-#define CZECH_INDEX                 12
-
-#define SLOVAK                  43
-#define SLOVAK_ISO              "sk"
-#define SLOVAK_INDEX                13
-
-#define ENGLISH                 44
-#define ENGLISH_ISO             "x-translate"
-#define ENGLISH_INDEX               14
-
-#define DANISH                  45
-#define DANISH_ISO              "da"
-#define DANISH_INDEX                15
-
-#define SWEDISH                 46
-#define SWEDISH_ISO             "sv"
-#define SWEDISH_INDEX               16
-
-#define NORWEGIAN               47
-#define NORWEGIAN_ISO           "no"
-#define NORWEGIAN_INDEX             17
-
-#define POLISH                  48
-#define POLISH_ISO              "pl"
-#define POLISH_INDEX                18
-
-#define GERMAN                  49
-#define GERMAN_ISO              "de"
-#define GERMAN_INDEX                19
-
-#define PORTUGUESE_BRAZILIAN    55
-#define PORTUGUESE_BRAZILIAN_ISO "pt-BR"
-#define PORTUGUESE_BRAZILIAN_PROPERTY "pt_BR"
-#define PORTUGUESE_BRAZILIAN_INDEX  20
-
-#define JAPANESE                81
-#define JAPANESE_ISO            "ja"
-#define JAPANESE_INDEX              21
-
-#define KOREAN                  82
-#define KOREAN_ISO              "ko"
-#define KOREAN_INDEX                22
-
-#define CHINESE_SIMPLIFIED      86
-#define CHINESE_SIMPLIFIED_ISO  "zh-CN"
-#define CHINESE_SIMPLIFIED_PROPERTY "zh_CN"
-#define CHINESE_SIMPLIFIED_INDEX    23
-
-#define CHINESE_TRADITIONAL     88
-#define CHINESE_TRADITIONAL_ISO "zh-TW"
-#define CHINESE_TRADITIONAL_PROPERTY    "zh_TW"
-#define CHINESE_TRADITIONAL_INDEX   24
-
-#define TURKISH                 90
-#define TURKISH_ISO             "tr"
-#define TURKISH_INDEX               25
-
-#define ARABIC                  96
-#define ARABIC_ISO              "ar"
-#define ARABIC_INDEX                26
-
-#define HEBREW                  97
-#define HEBREW_ISO              "he"
-#define HEBREW_INDEX                27
-
-#define CATALAN                 37
-#define CATALAN_ISO             "ca"
-#define CATALAN_INDEX               28
-
-#define THAI                    66
-#define THAI_ISO                "th"
-#define THAI_INDEX                  29
-
-#define HINDI                   91
-#define HINDI_ISO               "hi-IN"
-#define HINDI_INDEX                 30
-
-#define ESTONIAN                77
-#define ESTONIAN_ISO            "et"
-#define ESTONIAN_INDEX              31
-
-#define SLOVENIAN               50
-#define SLOVENIAN_ISO               "sl"
-#define SLOVENIAN_INDEX             32
-
-// special language for l10n framework
-#define EXTERN                  99
-#define EXTERN_INDEX                33
-
-#define LANGUAGES                   34
+#include <hash_map> /* std::hashmap*/
+#include <iterator> /* std::iterator*/
+#include <set>      /* std::set*/
+#include <vector>   /* std::vector*/
+#include <queue>
 
 #define NO_TRANSLATE_ISO        "x-no-translate"
 
-#define LANGUAGE_ALLOWED( n )  (( n != 0xFFFF ) && ( Export::LanguageAllowed( Export::LangId[ n ] )) &&                                         \
-                               (( Export::LangId[ n ] == 01 ) || ( Export::LangId[ n ] == 03 ) || ( Export::LangId[ n ] == 07 ) ||  \
-                                ( Export::LangId[ n ] == 30 ) || ( Export::LangId[ n ] == 31 ) || ( Export::LangId[ n ] == 33 ) ||  \
-                                ( Export::LangId[ n ] == 34 ) || ( Export::LangId[ n ] == 35 ) || ( Export::LangId[ n ] == 37 ) ||  \
-                                ( Export::LangId[ n ] == 36 ) || \
-                                ( Export::LangId[ n ] == 39 ) || ( Export::LangId[ n ] == 45 ) || ( Export::LangId[ n ] == 46 ) ||  \
-                                ( Export::LangId[ n ] == 48 ) || ( Export::LangId[ n ] == 49 ) || ( Export::LangId[ n ] == 50 ) || ( Export::LangId[ n ] == 55 ) ||     \
-                                ( Export::LangId[ n ] == 81 ) || ( Export::LangId[ n ] == 82 ) || ( Export::LangId[ n ] == 86 ) ||  \
-                                ( Export::LangId[ n ] == 88 ) || ( Export::LangId[ n ] == 90 ) || ( Export::LangId[ n ] == 96 ) ||  \
-                                ( Export::LangId[ n ] == 42 ) || ( Export::LangId[ n ] == 43 ) || ( Export::LangId[ n ] == 97 ) ||  \
-                                ( Export::LangId[ n ] == 66 ) || ( Export::LangId[ n ] == 91 ) || ( Export::LangId[ n ] == 00 ) ||  \
-                                ( Export::LangId[ n ] == 99 ) || ( Export::LangId[ n ] == 77 ) || ( Export::LangId[ n ] == 36 )))
+// Achtung !!! merge.cxx
+#define JAPANESE_ISO "ja"
 
-#define GERMAN_LIST_LINE_INDEX  LANGUAGES
-#define LIST_REFID              (GERMAN_LIST_LINE_INDEX+1)
-typedef ByteString ExportListEntry[ LANGUAGES + 2 ];
+
+struct eqstr{
+  BOOL operator()(const char* s1, const char* s2) const{
+    return strcmp(s1,s2)==0;
+  }
+};
+
+struct equalByteString{
+        bool operator()( const ByteString& rKey1, const ByteString& rKey2 ) const {
+            return rKey1.CompareTo( rKey2 )==COMPARE_EQUAL;
+    }
+};
+struct lessByteString{
+        bool operator()( const ByteString& rKey1, const ByteString& rKey2 ) const {
+            return rKey1.CompareTo( rKey2 )==COMPARE_LESS;
+    }
+};
+
+struct hashByteString{
+    size_t operator()( const ByteString& rName ) const{
+                std::hash< const char* > myHash;
+                return myHash( rName.GetBuffer() );
+    }
+};
+
+class PFormEntrys;
+class MergeData;
+typedef std::set<ByteString , lessByteString > ByteStringSet;
+
+typedef std::hash_map<ByteString , ByteString , hashByteString,equalByteString>
+                                ByteStringHashMap;
+
+typedef std::hash_map<ByteString , bool , hashByteString,equalByteString>
+                                ByteStringBoolHashMap;
+
+typedef std::hash_map<ByteString , PFormEntrys* , hashByteString,equalByteString>
+                                PFormEntrysHashMap;
+
+typedef std::hash_map<ByteString , MergeData* , hashByteString,equalByteString>
+                                MergeDataHashMap;
+
+#define GERMAN_LIST_LINE_INDEX "GERMAN_LIST_LINE_INDEX"
+#define LIST_REFID  "LIST_REFID"
+
+typedef ByteStringHashMap ExportListEntry;
+
 DECLARE_LIST( ExportListBase, ExportListEntry * );
 
 //
@@ -316,16 +214,16 @@ public:
     ByteString sHelpId;
     USHORT nWidth;
 
-    ByteString sText[ LANGUAGES ];
+    ByteStringHashMap sText;
     USHORT nTextRefId;
 
-    ByteString sHelpText[ LANGUAGES ];
+    ByteStringHashMap sHelpText;
     USHORT nHelpTextRefId;
 
-    ByteString sQuickHelpText[ LANGUAGES ];
+    ByteStringHashMap sQuickHelpText;
     USHORT nQuickHelpTextRefId;
 
-    ByteString sTitle[ LANGUAGES ];
+    ByteStringHashMap sTitle;
     USHORT nTitleRefId;
 
     ByteString sTextTyp;
@@ -361,6 +259,7 @@ public:
 DECLARE_LIST( ResStack, ResData * );
 // forwards
 class WordTransformer;
+class ParserQueue;
 
 class Export
 {
@@ -370,6 +269,7 @@ private:
     CharSet aCharSet;                   // used charset in src
 
     SvFileStream aOutput;
+
     ResStack aResStack;                 // stack for parsing recursive
 
     ByteString sActPForm;               // hold cur. system
@@ -378,15 +278,20 @@ private:
     BOOL bNextMustBeDefineEOL;          // define but no \ at lineend
     ULONG nLevel;                       // res. recursiv? how deep?
     USHORT nList;                       // cur. res. is String- or FilterList
-    USHORT nListLang;
+
+    ByteString nListLang;
     ULONG nListIndex;
     ULONG nListLevel;
 
+    bool bSkipFile;
+
     ByteString sProject;
     ByteString sRoot;
+    //ByteString sFile;
 
     BOOL bEnableExport;
     BOOL bMergeMode;
+
     ByteString sMergeSrc;
     ByteString sLastListLine;
 
@@ -396,28 +301,40 @@ private:
 
     ByteString sLastTextTyp;
 
+    static bool isInitialized;
+
+
+
 public:
+    ParserQueue* pParseQueue; // public ?
+
     static ByteString sLanguages;
+
     static ByteString sIsoCode99;
-    static USHORT LangId[ LANGUAGES ];  // table to handle country codes
-    static const ByteString LangName[ LANGUAGES ];
-    static USHORT GetLangIndex( const ByteString &rLang );  // string to LangId-Index
+    static void InitLanguages( bool bMergeMode = false );
+    static std::vector<ByteString> GetLanguages();
+    static void SetLanguages( std::vector<ByteString> val );
     static USHORT GetLangIndex( USHORT nLangId );
     static CharSet GetCharSet( USHORT nLangId );
     static USHORT GetLangByIsoLang( const ByteString &rIsoLang );
     static ByteString GetIsoLangByIndex( USHORT nIndex );
     static void QuotHTML( ByteString &rString );
     static void UnquotHTML( ByteString &rString );
-    static BOOL LanguageAllowed( USHORT nLanguage );
-    static USHORT GetFallbackLanguage( USHORT nLanguage );
+
+    static bool LanguageAllowed( const ByteString &nLanguage );
+    static void Languages( std::vector<ByteString>::const_iterator& begin , std::vector<ByteString>::const_iterator& end );
+
+
+    static ByteString GetFallbackLanguage( const ByteString nLanguage );
     static void FillInFallbacks( ResData *pResData );
-    static void FillInListFallbacks( ExportList *pList, USHORT nSource, USHORT nFallback );
+    static void FillInListFallbacks( ExportList *pList, const ByteString &nSource, const ByteString &nFallback );
     static ByteString GetTimeStamp();
     static BOOL ConvertLineEnds( ByteString sSource, ByteString sDestination );
     static ByteString GetNativeFile( ByteString sSource );
     static DirEntry GetTempFile();
 
 private:
+    static std::vector<ByteString> aLanguages;
 
     BOOL CreateRefIds( ResData *pResData ) { /* Dummy !!! */ return TRUE; }
     BOOL ListExists( ResData *pResData, USHORT nLst );
@@ -433,21 +350,22 @@ private:
     ByteString GetText( const ByteString &rSource, USHORT nToken );
 
     BOOL PrepareTextToMerge( ByteString &rText, USHORT nTyp,
-                USHORT nLangIndex, ResData *pResData );
+        ByteString &nLangIndex, ResData *pResData );
+
     void MergeRest( ResData *pResData, USHORT nMode = MERGE_MODE_NORMAL );
     void ConvertMergeContent( ByteString &rText, USHORT nTyp );
 
-      void WriteToMerged( const ByteString &rText );
+      void WriteToMerged( const ByteString &rText , bool bSDFContent );
     void SetChildWithText();
 
     void CutComment( ByteString &rText );
 
 public:
     Export( const ByteString &rOutput, BOOL bWrite,
-            const ByteString &rPrj, const ByteString &rPrjRoot );
+            const ByteString &rPrj, const ByteString &rPrjRoot , const ByteString& rFile );
     Export( const ByteString &rOutput, BOOL bWrite,
             const ByteString &rPrj, const ByteString &rPrjRoot,
-            const ByteString &rMergeSource );
+            const ByteString &rMergeSource , const ByteString& rFile );
     ~Export();
 
     void Init();
@@ -481,26 +399,29 @@ class PFormEntrys : public ByteString
 friend class MergeDataFile;
 private:
     ByteString sHelpText; // empty string
-    ByteString sText[ LANGUAGES ];
-    BOOL bTextFirst[ LANGUAGES ];
-    ByteString sQuickHelpText[ LANGUAGES ];
-    BOOL bQuickHelpTextFirst[ LANGUAGES ];
-    ByteString sTitle[ LANGUAGES ];
-    BOOL bTitleFirst[ LANGUAGES ];
+    ByteStringHashMap sText;
+    ByteStringBoolHashMap bTextFirst;
+    ByteStringHashMap sQuickHelpText;
+    ByteStringBoolHashMap bQuickHelpTextFirst;
+    ByteStringHashMap sTitle;
+    ByteStringBoolHashMap bTitleFirst;
+
 public:
     PFormEntrys( const ByteString &rPForm ) : ByteString( rPForm ) {};
-    void InsertEntry( USHORT nId, const ByteString &rText,
+    void InsertEntry(
+                    const ByteString &nId ,
+                    const ByteString &rText,
                     const ByteString &rQuickHelpText,
                     const ByteString &rTitle )
         {
             sText[ nId ] = rText;
-            bTextFirst[ nId ] = TRUE;
+            bTextFirst[ nId ] = true;
             sQuickHelpText[ nId ] = rQuickHelpText;
-            bQuickHelpTextFirst[ nId ] = TRUE;
+            bQuickHelpTextFirst[ nId ] = true;
             sTitle[ nId ] = rTitle;
-            bTitleFirst[ nId ] = TRUE;
+            bTitleFirst[ nId ] = true;
         }
-    BOOL GetText( ByteString &rReturn, USHORT nTyp, USHORT nLangIndex, BOOL bDel = FALSE );
+     BOOL GetText( ByteString &rReturn, USHORT nTyp, const ByteString &nLangIndex, BOOL bDel = FALSE );
 };
 
 //
@@ -512,21 +433,24 @@ public:
 ******************************************************************************/
 
 class MergeDataFile;
-DECLARE_LIST( MergeStrings, PFormEntrys * );
-class MergeData : public MergeStrings
+//DECLARE_LIST( MergeStrings, PFormEntrys * );
+class MergeData //: public MergeStrings
 {
 friend class MergeDataFile;
 private:
     ByteString sTyp;
     ByteString sGID;
     ByteString sLID;
-
+    PFormEntrysHashMap aMap;
 public:
     MergeData( const ByteString &rTyp, const ByteString &rGID, const ByteString &rLID )
             : sTyp( rTyp ), sGID( rGID ), sLID( rLID ) {};
     ~MergeData();
-    PFormEntrys *InsertEntry( const ByteString &rPForm );
-    PFormEntrys *GetPFormEntrys( ResData *pResData );
+    PFormEntrys* InsertEntry( const ByteString &rPForm );
+    PFormEntrys* GetPFormEntrys( ResData *pResData );
+
+    void Insert( const ByteString& rPFO , PFormEntrys* pfEntrys );
+    PFormEntrys* GetPFObject( const ByteString& rPFO );
 
     BOOL operator==( ResData *pData );
 };
@@ -539,26 +463,72 @@ public:
 * Purpose: holds information of data to merge
 ******************************************************************************/
 
-DECLARE_LIST( MergeDataList, MergeData * )
-class MergeDataFile  : public MergeDataList
+class MergeDataFile
 {
 private:
     BOOL bErrorLog;
     ByteString sErrorLog;
     SvFileStream aErrLog;
+    ByteStringSet aLanguageSet;
+    MergeDataHashMap aMap;
+    std::vector<ByteString> aLanguages;
+    inline ByteString CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID );
+
 public:
-    MergeDataFile( const ByteString &rFileName, BOOL bErrLog, CharSet aCharSet, BOOL bUTF8 );
+    MergeDataFile( const ByteString &rFileName, const ByteString& rFile , BOOL bErrLog, CharSet aCharSet, BOOL bUTF8 );
     ~MergeDataFile();
 
+    std::vector<ByteString> GetLanguages();
     MergeData *GetMergeData( ResData *pResData );
+
     PFormEntrys *GetPFormEntrys( ResData *pResData );
     void InsertEntry( const ByteString &rTYP, const ByteString &rGID, const ByteString &rLID,
-                const ByteString &rPFO, USHORT nLANG, const ByteString &rTEXT,
+                const ByteString &rPFO, //USHORT nLANG
+                const ByteString &nLang , const ByteString &rTEXT,
                 const ByteString &rQHTEXT, const ByteString &rTITLE );
     static USHORT GetLangIndex( USHORT nId );
+
 
     void WriteErrorLog( const ByteString &rFileName );
     void WriteError( const ByteString &rLine );
 };
 
+
+class QueueEntry
+{
+public:
+    QueueEntry( int nTypVal , ByteString sLineVal ): nTyp( nTypVal ) , sLine( sLineVal ){};
+    int nTyp;
+    ByteString sLine;
+};
+
+class ParserQueue
+{
+public:
+
+    ParserQueue( Export& aExportObj );
+    ~ParserQueue();
+
+    inline void Push( const QueueEntry& aEntry );
+    bool bCurrentIsM;  // public ?
+    bool bNextIsM;   // public ?
+    bool bLastWasM;   // public ?
+    bool bMflag;   // public ?
+
+    void Close();
+private:
+    // Future / Next
+    std::queue<QueueEntry>* aQueueNext;
+    // Current
+    std::queue<QueueEntry>* aQueueCur;
+    // Ref
+    std::queue<QueueEntry>* aQref;
+
+    Export& aExport;
+    bool bStart;
+    bool bStartNext;
+
+    inline void Pop( std::queue<QueueEntry>& aQueue );
+
+};
 #endif
