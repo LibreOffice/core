@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: jl $ $Date: 2001-08-02 12:21:34 $
+ *  last change: $Author: as $ $Date: 2001-08-02 13:34:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,18 @@
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_URL_HPP_
+#include <com/sun/star/util/URL.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
+#include <com/sun/star/frame/XDispatch.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
 
 #ifndef _SOLAR_H
 #include <tools/solar.h>
@@ -213,6 +225,7 @@ using namespace vos;
 using namespace rtl;
 using namespace desktop;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::bridge;
@@ -1170,8 +1183,38 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 aArgs[4].Value <<= sal_True;
             }
 
-            // load the document
-            Reference < XPrintable > xDoc ( xDesktop->loadComponentFromURL( aName, ::rtl::OUString::createFromAscii( "_blank" ), 0, aArgs ), UNO_QUERY );
+            // load the document ... if they are loadable!
+            // Otherwise try to dispatch it ...
+            Reference < XPrintable > xDoc;
+            if(
+                ( aName.CompareToAscii( ".uno"  , 4 ) == COMPARE_EQUAL )  ||
+                ( aName.CompareToAscii( "slot:" , 5 ) == COMPARE_EQUAL )  ||
+                ( aName.CompareToAscii( "macro:", 6 ) == COMPARE_EQUAL )
+              )
+            {
+                // Attention: URL must be parsed full. Otherwise some detections on it will fail!
+                // It doesnt matter, if parser isn't available. Because; We try loading of URL then ...
+                URL             aURL ;
+                aURL.Complete = aName;
+
+                Reference < XDispatch >         xDispatcher ;
+                Reference < XDispatchProvider > xProvider   ( xDesktop, UNO_QUERY );
+                Reference < XURLTransformer >   xParser     ( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ), ::com::sun::star::uno::UNO_QUERY );
+
+                if( xParser.is() == sal_True )
+                    xParser->parseStrict( aURL );
+
+                if( xProvider.is() == sal_True )
+                    xDispatcher = xProvider->queryDispatch( aURL, ::rtl::OUString(), 0 );
+
+                if( xDispatcher.is() == sal_True )
+                    xDispatcher->dispatch( aURL, aArgs );
+            }
+            else
+            {
+                xDoc = Reference < XPrintable >( xDesktop->loadComponentFromURL( aName, ::rtl::OUString::createFromAscii("_blank"), 0, aArgs ), UNO_QUERY );
+            }
+
             if ( rAppEvent.IsPrintEvent() )
             {
                 if ( xDoc.is() )

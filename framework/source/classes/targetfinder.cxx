@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetfinder.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-07-04 13:28:37 $
+ *  last change: $Author: as $ $Date: 2001-08-02 13:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,8 +423,23 @@ ETargetClass TargetFinder::classifyQueryDispatch( TargetInfo& aInfo )
         }
     }
     //*************************************************************************************************************
-    // IV) There exist no other special targets or flag combinations ...
-    //     I think we can use helper for normal findFrame() classify here!
+    // IV)  handle "", "_self"
+    //      These case is clear. It's queals to "_self". Search flags could be ignored - other special target names
+    //      couldn't occure - a real name couldn't be resolved realy! Frames with empty names exist more then ones ...
+    //      Return E_SELF for desktop too!! Some URLs could be dispatched on desktop too ... e.g. slot, uno, macro URLs.
+    //      Desktop must check other URLs - to prevent himself against wrong laoding of documents in it ... e.g. file...!
+    //*************************************************************************************************************
+    else
+    if(
+        ( aInfo.sTargetName.getLength() <  1                  ) ||
+        ( aInfo.sTargetName             == SPECIALTARGET_SELF )
+      )
+    {
+        eResult = E_SELF;
+    }
+    //*************************************************************************************************************
+    // V)   There exist no other special targets or flag combinations ...
+    //      I think we can use helper for normal findFrame() classify here!
     //*************************************************************************************************************
     else
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2001-07-31 10:07:00 $
+ *  last change: $Author: as $ $Date: 2001-08-02 13:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,10 @@
 #include <com/sun/star/uno/Exception.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDERMANAGER_HPP_
+#include <com/sun/star/ucb/XContentProviderManager.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
@@ -139,10 +143,6 @@
 #include <rtl/string.h>
 #endif
 
-#ifndef _RTL_USTRING_H_
-#include <rtl/ustring.h>
-#endif
-
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -151,6 +151,9 @@
 #include <vcl/svapp.hxx>
 #endif
 
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -268,10 +271,6 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
     aReadLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
-    if (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
-                                       "private:factory/sync")))
-        return implts_getOrCreateDispatchHelper(E_SYNCDISPATCHER);
-
     if( xOwner.is() == sal_True )
     {
         // Classify target of this dispatch call to find right dispatch helper!
@@ -280,57 +279,37 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
         ETargetClass eResult= TargetFinder::classifyQueryDispatch( aInfo );
         switch( eResult )
         {
+            //-----------------------------------------------------------------------------------------------------
             case E_SELF          :  {
                                         // Ask our controller for his agreement for these dispatched URL ...
                                         // because some URLs are internal and can be handled faster by SFX - which most is the current controller!
-                                        css::uno::Reference< css::frame::XDispatchProvider > xController( xOwner->getController(), css::uno::UNO_QUERY );
-                                        if( xController.is() == sal_True )
+                                        // Attention: Desktop has no controller - don't ask him!
+                                        if( aInfo.eFrameType != E_DESKTOP )
                                         {
-                                            xReturn = xController->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
+                                            css::uno::Reference< css::frame::XDispatchProvider > xController( xOwner->getController(), css::uno::UNO_QUERY );
+                                            if( xController.is() == sal_True )
+                                            {
+                                                xReturn = xController->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
+                                            }
                                         }
-
                                         // If controller has no fun to dispatch these URL - we must search another right dispatcher.
                                         if( xReturn.is() == sal_False )
                                         {
-                                            // May be - it's a "mailto:" URL ...?
-                                            if( aURL.Protocol.compareToAscii( "mailto:", 7 ) == 0 )
-                                            {
-                                                xReturn = implts_getOrCreateDispatchHelper( E_MAILTODISPATCHER );
-                                            }
-                                            else
-                                            // May be - it's an internal URL ... like "uno/slot"?
-                                            if(
-                                                ( aURL.Protocol.compareToAscii( ".uno" , 4 ) == 0 ) ||
-                                                ( aURL.Protocol.compareToAscii( "slot:", 5 ) == 0 )
-                                              )
-                                            {
-                                                if(
-                                                    ( aInfo.eFrameType == E_TASK        ) ||
-                                                    ( aInfo.eFrameType == E_PLUGINFRAME ) ||
-                                                    ( aInfo.eFrameType == E_DESKTOP     )
-                                                )
-                                                {
-                                                    css::uno::Reference< css::frame::XDispatchProvider > xAppDispatcher = implts_getOrCreateAppDispatchProvider();
-                                                    if( xAppDispatcher.is() == sal_True )
-                                                    {
-                                                        xReturn = xAppDispatcher->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
-                                                    }
-                                                }
-                                            }
-                                            // We should be last chance for user :-)
-                                            // But not for "slot, uno, nmacro" URLs
-                                            else
-                                            if( xReturn.is() == sal_False )
-                                            {
-                                                xReturn = implts_getOrCreateDispatchHelper( E_SELFDISPATCHER );
-                                            }
+                                            xReturn = implts_searchProtocolHandler( aURL, aInfo );
                                         }
                                     }
                                     break;
+            //-----------------------------------------------------------------------------------------------------
             case E_CREATETASK    :  {
-                                        xReturn = implts_getOrCreateDispatchHelper( E_BLANKDISPATCHER );
+                                        // Check ucb support before you create dispatch helper.
+                                        // He could do nothing then ... but it doesnt perform, if we try it!
+                                        if( implts_isLoadableContent( aURL ) == sal_True )
+                                        {
+                                            xReturn = implts_getOrCreateDispatchHelper( E_BLANKDISPATCHER );
+                                        }
                                     }
                                     break;
+            //-----------------------------------------------------------------------------------------------------
             case E_PARENT        :
             case E_FORWARD_UP    :  {
                                         css::uno::Reference< css::frame::XDispatchProvider > xParent( xOwner->getCreator(), css::uno::UNO_QUERY );
@@ -340,6 +319,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
                                         }
                                     }
                                     break;
+            //-----------------------------------------------------------------------------------------------------
             case E_BEAMER        :  {
                                         css::uno::Reference< css::frame::XDispatchProvider > xBeamer( xOwner->findFrame( SPECIALTARGET_BEAMER, css::frame::FrameSearchFlag::CHILDREN || css::frame::FrameSearchFlag::SELF ), css::uno::UNO_QUERY );
                                         if( xBeamer.is() == sal_True )
@@ -356,28 +336,34 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
                                         }
                                     }
                                     break;
+            //-----------------------------------------------------------------------------------------------------
             case E_MENUBAR       :  {
                                         xReturn = implts_getOrCreateDispatchHelper( E_MENUDISPATCHER );
                                     }
                                     break;
+            //-----------------------------------------------------------------------------------------------------
             case E_HELPAGENT     :  {
                                         xReturn = implts_getOrCreateDispatchHelper( E_HELPAGENTDISPATCHER );
                                     }
                                     break;
+            //-----------------------------------------------------------------------------------------------------
             case E_TASKS         :
             case E_DEEP_DOWN     :
             case E_FLAT_DOWN     :
             case E_DEEP_BOTH     :
             case E_FLAT_BOTH     :  {
-                                        sal_Int32 nNewFlags  = nSearchFlags                       ;
-                                                  nNewFlags -= css::frame::FrameSearchFlag::CREATE;
+                                        sal_Int32 nNewFlags  =  nSearchFlags                       ;
+                                                  nNewFlags &= ~css::frame::FrameSearchFlag::CREATE;
                                         css::uno::Reference< css::frame::XFrame > xFrame = xOwner->findFrame( sTargetFrameName, nNewFlags );
                                         if( xFrame.is() == sal_True )
                                         {
                                             xReturn = css::uno::Reference< css::frame::XDispatchProvider >( xFrame, css::uno::UNO_QUERY )->queryDispatch( aURL, SPECIALTARGET_SELF, 0 );
                                         }
                                         else
-                                        if( aInfo.bCreationAllowed == sal_True )
+                                        if(
+                                            ( aInfo.bCreationAllowed           == sal_True )    &&
+                                            ( implts_isLoadableContent( aURL ) == sal_True )
+                                          )
                                         {
                                             css::uno::Any aParameter;
                                             aParameter <<= sTargetFrameName;
@@ -385,6 +371,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
                                         }
                                     }
                                     break;
+            //-----------------------------------------------------------------------------------------------------
             #ifdef ENABLE_WARNINGS
             default             :   {
                                         if( eResult != E_UNKNOWN )
@@ -548,8 +535,7 @@ void SAL_CALL DispatchProvider::disposing( const css::lang::EventObject& aEvent 
         m_xBlankDispatcher      = css::uno::Reference< css::frame::XDispatch >()          ;
         m_xSelfDispatcher       = css::uno::Reference< css::frame::XDispatch >()          ;
         m_xAppDispatchProvider  = css::uno::Reference< css::frame::XDispatchProvider >()  ;
-
-        m_xSyncDispatcher = 0;
+        m_xSyncDispatcher       = css::uno::Reference< css::frame::XDispatch >()          ;
 
         // Forget all other references too.
         m_xFactory              = css::uno::Reference< css::lang::XMultiServiceFactory >();
@@ -558,6 +544,85 @@ void SAL_CALL DispatchProvider::disposing( const css::lang::EventObject& aEvent 
         // Disable object for working ... Do it for ever .-)
         m_aTransactionManager.setWorkingMode( E_CLOSE );
     }
+}
+
+/*-************************************************************************************************************//**
+    @short      search right dispatcher for given protocol/URL
+    @descr      We know different dispatch helper for different types of URLs. So w must decide, which one is required.
+                Thats the reason for this method. We check given URL and return right dispatcher.
+
+    @seealso    method queryDispatch()
+
+    @param      "aURL" , URL with protocol, which must handled
+    @param      "aInfo", informations about environment of owner frame (neccessary to check typ of frame!)
+    @return     A reference to a dispatch helper.
+
+    @onerror    We return a NULL-reference.
+    @threadsafe yes
+*//*-*************************************************************************************************************/
+css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProtocolHandler( const css::util::URL& aURL  ,
+                                                                                             const TargetInfo&     aInfo )
+{
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    // Register operation as transaction and reject wrong calls!
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    // default value, if operation failed.
+    css::uno::Reference< css::frame::XDispatch > xHandler;
+
+    //-------------------------------------------------------------------------------------------------------------
+    /*HACK ... search better place! */
+    if( aURL.Complete == DECLARE_ASCII("private:factory/sync") )
+    {
+        xHandler = implts_getOrCreateDispatchHelper( E_SYNCDISPATCHER );
+    }
+    else
+    //-------------------------------------------------------------------------------------------------------------
+    // May be - it's a "mailto:" URL ...?
+    if( aURL.Complete.compareToAscii( "mailto:", 7 ) == 0 )
+    {
+        xHandler = implts_getOrCreateDispatchHelper( E_MAILTODISPATCHER );
+    }
+    else
+    //-------------------------------------------------------------------------------------------------------------
+    // May be - it's an internal URL ... like "uno/slot/macro"?
+    // But they could be handled by tasks/pluginframes/desktop only.
+    // Normal frames don't know it.
+    // Supported targets don't know it real too ... but they could ask the global
+    // sfx-AppDispatcher!!!
+    if(
+        ( aURL.Complete.compareToAscii( ".uno"  , 4 ) == 0 ) ||
+        ( aURL.Complete.compareToAscii( "slot:" , 5 ) == 0 ) ||
+        ( aURL.Complete.compareToAscii( "macro:", 6 ) == 0 )
+      )
+    {
+        if(
+            ( aInfo.eFrameType == E_TASK        ) ||
+            ( aInfo.eFrameType == E_PLUGINFRAME ) ||
+            ( aInfo.eFrameType == E_DESKTOP     )
+          )
+        {
+            css::uno::Reference< css::frame::XDispatchProvider > xAppDispatcher = implts_getOrCreateAppDispatchProvider();
+            if( xAppDispatcher.is() == sal_True )
+            {
+                xHandler = xAppDispatcher->queryDispatch( aURL, aInfo.sTargetName, aInfo.nSearchFlags );
+            }
+        }
+    }
+    else
+    //-------------------------------------------------------------------------------------------------------------
+    // We should be last chance for user :-)
+    // But loadable ucb content only!
+    // This check is neccessary to found out, that
+    // support for some protocols isn't installed by user. May be
+    // "ftp" isn't available. So we suppress creation of our self dispatcher.
+    // The result will be clear. He can't handle it - but he would try it.
+    if( implts_isLoadableContent( aURL ) == sal_True )
+    {
+        xHandler = implts_getOrCreateDispatchHelper( E_SELFDISPATCHER );
+    }
+
+    return xHandler;
 }
 
 /*-************************************************************************************************************//**
@@ -608,6 +673,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
     {
         switch( eHelper )
         {
+            //-----------------------------------------------------------------------------------------------------
             case E_MENUDISPATCHER       :   {
                                                 if( m_xMenuDispatcher.is() == sal_False )
                                                 {
@@ -617,6 +683,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                                                 xDispatchHelper = m_xMenuDispatcher;
                                             }
                                             break;
+            //-----------------------------------------------------------------------------------------------------
             case E_MAILTODISPATCHER     :   {
                                                 if( m_xMailToDispatcher.is() == sal_False )
                                                 {
@@ -626,6 +693,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                                                 xDispatchHelper = m_xMailToDispatcher;
                                             }
                                             break;
+            //-----------------------------------------------------------------------------------------------------
             case E_HELPAGENTDISPATCHER  :   {
                                                 if( m_xHelpAgentDispatcher.is() == sal_False )
                                                 {
@@ -635,15 +703,17 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                                                 xDispatchHelper = m_xHelpAgentDispatcher;
                                             }
                                             break;
+            //-----------------------------------------------------------------------------------------------------
             case E_CREATEDISPATCHER     :   {
                                                 // Don't hold these dispatch helper! Create it on demand for every given target name.
-                                                // They could handle one target frame at one time only!
+                                                // He could handle one target frame at one time only!
                                                 ::rtl::OUString sTargetName;
                                                 aParameters >>= sTargetName;
                                                 CreateDispatcher* pDispatcher = new CreateDispatcher( m_xFactory, xOwner, sTargetName );
                                                 xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                                             }
                                             break;
+            //-----------------------------------------------------------------------------------------------------
             case E_BLANKDISPATCHER      :   {
                                                 if( m_xBlankDispatcher.is() == sal_False )
                                                 {
@@ -654,6 +724,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                                                 xDispatchHelper = m_xBlankDispatcher;
                                             }
                                             break;
+            //-----------------------------------------------------------------------------------------------------
             case E_SELFDISPATCHER       :   {
                                                 if( m_xSelfDispatcher.is() == sal_False )
                                                 {
@@ -663,38 +734,91 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                                                 xDispatchHelper = m_xSelfDispatcher;
                                             }
                                             break;
+            //-----------------------------------------------------------------------------------------------------
             case E_PLUGINDISPATCHER     :   {
                                                 LOG_WARNING( "DispatchProvider::implts_getOrCreateDispatchHelper( E_PLUGINDISPATCHER )", "Not implemented yet!" )
                                             }
                                             break;
 
-            case E_SYNCDISPATCHER:
-                if (!m_xSyncDispatcher.is())
-                {
-                    LOG_ASSERT2( m_xFactory.is()==sal_False, "DispatchProvider::getOrCreateDispatchHelper( E_SYNCDISPATCHER )", "unexpected situation")
-                    if (m_xFactory.is())
-                        try
-                        {
-                            m_xSyncDispatcher
-                                = css::uno::Reference<
-                                          css::frame::XDispatch >(
-                                      m_xFactory->
-                                          createInstance(
-                                              rtl::OUString(
-                                                  RTL_CONSTASCII_USTRINGPARAM(
-                                     "com.sun.star.syncaccess.ui.Dispatch"))),
-                                      css::uno::UNO_QUERY);
-                        }
-                        catch (css::uno::Exception const &)
-                        {
-                            LOG_ERROR( "DispatchProvider::getOrCreateDispatchHelper( E_SYNCDISPATCHER )", "unexpected situation")
-                        }
-                }
-                xDispatchHelper = m_xSyncDispatcher;
-                break;
+            //-----------------------------------------------------------------------------------------------------
+            case E_SYNCDISPATCHER       :   {
+                                                if( m_xSyncDispatcher.is() == sal_False )
+                                                {
+                                                    try
+                                                    {
+                                                        m_xSyncDispatcher = css::uno::Reference< css::frame::XDispatch >( m_xFactory->createInstance( SERVICENAME_SYNCDISPATCHER ), css::uno::UNO_QUERY );
+                                                    }
+                                                    catch( css::uno::Exception& )
+                                                    {
+                                                        LOG_ERROR( "DispatchProvider::getOrCreateDispatchHelper( E_SYNCDISPATCHER )", "unexpected situation")
+                                                    }
+                                                }
+                                                xDispatchHelper = m_xSyncDispatcher;
+                                            }
+                                            break;
         }
     }
+
     return xDispatchHelper;
+}
+
+/*-************************************************************************************************************//**
+    @short      check URL for support by our used ucb
+    @descr      If we must return our own dispatch helper implementations (self, blank, create dispatcher!)
+                we should be shure, that URL describe any loadable content. Otherwise slot/macro/uno URLs
+                will be detected ... but there exist nothing to detect!
+
+    @attention  We return True, if ucb isn't available too! Because: may be he isn't installed for local cases ...
+                and loading of document work on OSL functions only. Then we should try to load it without any checks before.
+                It will be fast enough. Faster then "tra to loading with ucb ... and get any failed messages"!!!
+
+    @seealso    method queryDispatch()
+
+    @param      "aURL", URL which should be "detected"
+    @return     True  , if ucb could handle that OR ISN'T AVAILABLE
+                False , otherwise
+
+    @onerror    We return True.
+    @threadsafe yes
+*//*-*************************************************************************************************************/
+sal_Bool DispatchProvider::implts_isLoadableContent( const css::util::URL& aURL )
+{
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    // Register operation as transaction and reject wrong calls!
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory = m_xFactory;
+    aReadLock.unlock();
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+
+    sal_Bool bLoadable = sal_True;
+
+    // Check some well known protocols before you ask the ucb.
+    // Result will be clear ... and we save time!
+    if(
+        ( aURL.Protocol.compareToAscii( ".uno"  , 4 ) == 0 ) ||
+        ( aURL.Protocol.compareToAscii( "slot:" , 5 ) == 0 ) ||
+        ( aURL.Protocol.compareToAscii( "macro:", 6 ) == 0 )
+      )
+    {
+        bLoadable = sal_False;
+    }
+    else
+    if( aURL.Complete.compareToAscii( "private:factory/", 16 ) == 0 )
+    {
+        bLoadable = sal_True;
+    }
+    else
+    {
+        css::uno::Reference< css::ucb::XContentProviderManager > xUCB( xFactory->createInstance( SERVICENAME_UCBCONTENTBROKER ), css::uno::UNO_QUERY );
+        if( xUCB.is() == sal_True )
+        {
+            bLoadable = xUCB->queryContentProvider( aURL.Complete ).is();
+        }
+    }
+    return bLoadable;
 }
 
 /*-************************************************************************************************************//**
@@ -704,8 +828,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 
     @attention  These methods are threadsafe ...
                 because they don't work on internal member...
-
-they are static functions!
+                they are static functions!
 
     @seealso    ASSERTs in implementation!
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-07-31 10:06:19 $
+ *  last change: $Author: as $ $Date: 2001-08-02 13:32:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ enum EDispatchHelper
     E_CREATEDISPATCHER      ,
     E_BLANKDISPATCHER       ,
     E_SELFDISPATCHER        ,
-    E_PLUGINDISPATCHER,
+    E_PLUGINDISPATCHER      ,
     E_SYNCDISPATCHER
 };
 
@@ -218,9 +218,12 @@ class DispatchProvider  :   // interfaces
     //  private methods
     //-------------------------------------------------------------------------------------------------------------
     private:
-        css::uno::Reference< css::frame::XDispatchProvider > implts_getOrCreateAppDispatchProvider(                                     );
-        css::uno::Reference< css::frame::XDispatch >         implts_getOrCreateDispatchHelper     ( EDispatchHelper         eHelper     ,
+        css::uno::Reference< css::frame::XDispatch >         implts_searchProtocolHandler         ( const css::util::URL&   aURL                          ,
+                                                                                                    const TargetInfo&       aInfo                         );
+        css::uno::Reference< css::frame::XDispatchProvider > implts_getOrCreateAppDispatchProvider(                                                       );
+        css::uno::Reference< css::frame::XDispatch >         implts_getOrCreateDispatchHelper     ( EDispatchHelper         eHelper                       ,
                                                                                                     const css::uno::Any&    aParameters = css::uno::Any() );
+        sal_Bool                                             implts_isLoadableContent             ( const css::util::URL&   aURL                          );
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
@@ -251,7 +254,7 @@ class DispatchProvider  :   // interfaces
         css::uno::Reference< css::frame::XDispatch >                m_xBlankDispatcher          ;
         css::uno::Reference< css::frame::XDispatch >                m_xSelfDispatcher           ;
         css::uno::Reference< css::frame::XDispatch >                m_xPlugInDispatcher         ;
-        css::uno::Reference< css::frame::XDispatch > m_xSyncDispatcher;
+        css::uno::Reference< css::frame::XDispatch >                m_xSyncDispatcher           ;
 
 };      //  class DispatchProvider
 

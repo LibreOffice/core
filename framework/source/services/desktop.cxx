@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: as $ $Date: 2001-08-01 11:13:13 $
+ *  last change: $Author: as $ $Date: 2001-08-02 13:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,10 @@
 
 #ifndef _COM_SUN_STAR_MOZILLA_XPLUGININSTANCE_HPP_
 #include <com/sun/star/mozilla/XPluginInstance.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -803,11 +807,14 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
 
     // CHeck incoming parameter and throw an exception for wrong values!
     if(
-        ( &sURL            == NULL )   ||
-        ( sURL.getLength() <  1    )
+        ( &sURL                              == NULL ) ||
+        ( sURL.getLength()                   <  1    ) ||
+        ( sURL.compareToAscii( ".uno"  , 4 ) == 0    ) ||
+        ( sURL.compareToAscii( "slot:" , 5 ) == 0    ) ||
+        ( sURL.compareToAscii( "macro:", 6 ) == 0    )
       )
     {
-        throw css::lang::IllegalArgumentException( DECLARE_ASCII("Null pointer or empty URLs are not allowed!"), static_cast< ::cppu::OWeakObject* >(this), 1 );
+        throw css::lang::IllegalArgumentException( DECLARE_ASCII("Null pointer, empty AND not loadable URL's are not allowed!"), static_cast< ::cppu::OWeakObject* >(this), 1 );
     }
     // Attention: An empty target name is equal to "_self"!
     if( &sTargetFrameName == NULL )
@@ -829,8 +836,19 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
         It's the only way to do so. If we found another way - we should implement this method better.
      */
 
+    // Attention: URL must be parsed full. Otherwise some detections on it will fail!
+    // It doesnt matter, if parser isn't available. Because; We try loading of URL then ...
     css::util::URL aURL;
     aURL.Complete = sURL;
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    css::uno::Reference< css::util::XURLTransformer > xParser( m_xFactory->createInstance( SERVICENAME_URLTRANSFORMER ), css::uno::UNO_QUERY );
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    if( xParser.is() == sal_True )
+    {
+        xParser->parseStrict( aURL );
+    }
+
     css::uno::Reference< css::frame::XDispatch > xDispatcher = queryDispatch( aURL, sTargetFrameName, nSearchFlags );
     if( xDispatcher.is() == sal_True )
     {
@@ -2111,8 +2129,8 @@ sal_Bool Desktop::implcp_removeEventListener( const css::uno::Reference< css::la
 sal_Bool Desktop::implcp_statusChanged( const css::frame::FeatureStateEvent& aEvent )
 {
     return(
-            ( &aEvent                               ==  NULL    )   ||
-            ( aEvent.FeatureDescriptor.getLength()  <   1       )
+            ( &aEvent                              == NULL ) ||
+            ( aEvent.FeatureDescriptor.getLength() <  1    )
           );
 }
 

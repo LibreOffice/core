@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-08-01 11:13:56 $
+ *  last change: $Author: as $ $Date: 2001-08-02 13:31:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,8 @@ namespace framework{
 #define SERVICENAME_SOUNDHANDLER                            DECLARE_ASCII("com.sun.star.comp.framework.SoundHandler"            )
 #define SERVICENAME_CONTENTHANDLERFACTORY                   DECLARE_ASCII("com.sun.star.document.ContentHandlerFactory"         )
 #define SERVICENAME_APPDISPATCHPROVIDER                     DECLARE_ASCII("com.sun.star.comp.sfx2.AppDispatchProvider"          )
+#define SERVICENAME_UCBCONTENTBROKER                        DECLARE_ASCII("com.sun.star.ucb.UniversalContentBroker"             )
+#define SERVICENAME_SYNCDISPATCHER                          DECLARE_ASCII("com.sun.star.syncaccess.ui.Dispatch"                 )
 
 //_________________________________________________________________________________________________________________
 //  used implementationnames by framework
