@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.29 $
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:09:25 $
+ *  $Revision: 1.30 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 16:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #if defined(SOLARIS) || defined(IRIX)
   #include <alloca.h>
 #else
-#ifndef MACOSX
+#if !(defined(MACOSX) || defined(FREEBSD))
   #include <malloc.h>
 #endif
 #endif
