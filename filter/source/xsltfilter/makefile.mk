@@ -2,9 +2,9 @@
 # 
 #   $RCSfile: makefile.mk,v $ 
 # 
-#   $Revision: 1.5 $ 
+#   $Revision: 1.6 $ 
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 15:28:38 $ 
+#   last change: $Author: hr $ $Date: 2004-03-09 10:05:50 $ 
 # 
 #   The Contents of this file are made available subject to the terms of 
 #   either of the following licenses 
@@ -63,6 +63,9 @@ PRJ	= ..$/..
 PRJNAME = filter 
 #PACKAGE = com$/sun$/star$/documentconversion$/XSLTFilter
 TARGET  =XSLTFilter  
+ENABLE_EXCEPTIONS=TRUE
+LIBTARGET=NO
+
 # --- Settings ----------------------------------------------------- 
 CLASSDIR!:=$(CLASSDIR)$/$(TARGET)  
 .IF "$(XML_CLASSPATH)" != ""
@@ -79,15 +82,38 @@ CUSTOMMANIFESTFILE = Manifest
 #JARDIR=$(CLASSDIR)
 
 JARCOMPRESS		= TRUE  
-JARCLASSDIRS	= XSLTFilter*.class
+JARCLASSDIRS	= XSLTFilter*.class XSLTransformer*.class
 JARTARGET		= $(TARGET).jar
 
 
 # --- Files --------------------------------------------------------  
-JAVACLASSFILES=$(CLASSDIR)$/XSLTFilter.class  
+JAVACLASSFILES=$(CLASSDIR)$/XSLTFilter.class  $(CLASSDIR)$/XSLTransformer.class  
+
 #---Manifest -------------------------------------------------------
 #$(OUT)$/class$/$(TARGET)$/META-INF: META-INF
 #        + $(COPY) $(COPYRECURSE) META-INF $(OUT)$/class$/XSLTFilter$/META-INF
+#
+
+SLOFILES=$(SLO)$/XSLTFilter.obj
+LIBNAME=xsltfilter
+SHL1TARGETDEPN=makefile.mk
+SHL1OBJS=$(SLOFILES)
+SHL1TARGET=$(LIBNAME)$(UPD)$(DLLPOSTFIX)
+SHL1IMPLIB=i$(LIBNAME)
+SHL1VERSIONMAP=exports.map
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
+
+SHL1STDLIBS= \
+    $(VCLLIB)           \
+    $(UNOTOOLSLIB)      \
+    $(TOOLSLIB)         \
+    $(VOSLIB)           \
+    $(CPPUHELPERLIB)    \
+    $(CPPULIB)          \
+    $(SALLIB)
+    
+    
 # --- Targets ------------------------------------------------------  
 .INCLUDE :  target.mk 
 .IF "$(SOLAR_JAVA)"!=""
