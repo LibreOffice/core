@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animexp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:06 $
+ *  last change: $Author: cl $ $Date: 2001-06-27 13:56:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,7 +619,7 @@ void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
                 SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, pLocalName, sal_True, sal_True );
                 if( rEffect.maSoundURL.getLength() != 0 )
                 {
-                    rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, rEffect.maSoundURL );
+                    rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, rExport.GetRelativeReference(rEffect.maSoundURL) );
                     rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
                     rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show, sXML_new );
                     rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onRequest );

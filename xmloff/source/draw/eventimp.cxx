@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
+ *  last change: $Author: cl $ $Date: 2001-06-27 14:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ XMLEventSoundContext::XMLEventSoundContext( SvXMLImport& rImport, sal_uInt16 nPr
             case XML_NAMESPACE_XLINK:
                 if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_href ) ) )
                 {
-                    mpParent->msSoundURL = sValue;
+                    mpParent->msSoundURL = rImport.GetAbsoluteReference(sValue);
                 }
                 break;
             case XML_NAMESPACE_PRESENTATION:
@@ -326,7 +326,7 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImport,  sal_uInt16 nPrfx, c
         case XML_NAMESPACE_XLINK:
             if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_href ) ) )
             {
-                msBookmark = sValue;
+                msBookmark = rImport.GetAbsoluteReference(sValue);
             }
             break;
         }
