@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-23 11:39:35 $
+ *  last change: $Author: mav $ $Date: 2002-04-23 12:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1043,21 +1043,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
 
     // Export dialog
     if ( mbExport )
-    {
         mxFileDlg->setTitle( OUString( String( SfxResId( STR_SFX_EXPLORERFILE_EXPORT ) ) ) );
-
-        Reference < XFilePickerControlAccess > xExtDlg( mxFileDlg, UNO_QUERY );
-        if ( xExtDlg.is() )
-        {
-            try
-            {
-                xExtDlg->setLabel( CommonFilePickerElementIds::PUSHBUTTON_OK,
-                                   OUString( String( SfxResId( STR_SFX_EXPLORERFILE_BUTTONEXPORT ) ) ) );
-                xExtDlg->enableControl( com::sun::star::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION, FALSE );
-            }
-            catch( IllegalArgumentException ){}
-        }
-    }
 
     // the "insert file" dialog needs another title
     if ( mbInsert )
