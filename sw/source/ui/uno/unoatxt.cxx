@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-10 11:16:32 $
+ *  last change: $Author: os $ $Date: 2000-11-03 09:43:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 using namespace ::rtl;
 
 
@@ -295,12 +296,35 @@ sal_Bool SwXAutoTextContainer::hasByName(const OUString& Name)
 /*-- 21.12.98 12:42:19---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(const OUString& aGroupName)
+Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
+    const OUString& aGroupName)
     throw( lang::IllegalArgumentException, container::ElementExistException, uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(hasByName(aGroupName))
         throw container::ElementExistException();
+    //check for non-ASCII characters
+    if(!aGroupName.getLength())
+    {
+        IllegalArgumentException aIllegal;
+        aIllegal.Message = C2U("group name must not be empty");
+        throw aIllegal;
+    }
+    for(sal_Int32 nPos = 0; nPos < aGroupName.getLength(); nPos++)
+    {
+        sal_Unicode cChar = aGroupName[nPos];
+        if( ((cChar >= 'A') && (cChar <= 'Z')) ||
+                ((cChar >= 'a') && (cChar <= 'z')) ||
+                    ((cChar >= '0') && (cChar <= '9')) ||
+                        (cChar == '_') ||
+                    cChar == 0x20 )
+        {
+            continue;
+        }
+        IllegalArgumentException aIllegal;
+        aIllegal.Message = C2U("group name must not contain non-ASCII characters");
+        throw aIllegal;
+    }
     String sGroup(aGroupName);
     if(STRING_NOTFOUND == sGroup.Search(GLOS_DELIM))
     {
