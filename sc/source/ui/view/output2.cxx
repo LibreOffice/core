@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-10 08:59:49 $
+ *  last change: $Author: nn $ $Date: 2002-10-15 17:23:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1301,6 +1301,9 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                                     //  zusammengefasste zu klein - nicht weitersuchen
                                     eOutHorJust = SVX_HOR_JUSTIFY_LEFT;
                                     bHClip = TRUE;
+                                    //  The flag for clip marks can be set for any cell
+                                    //  in the merged area (handled by DrawClipMarks)
+                                    pClipRight = &pThisRowInfo->pCellInfo[nX+1];
                                 }
                                 else
                                 {
@@ -1335,6 +1338,13 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                                                     nOutWidth += (long) pRowInfo[0].pCellInfo[nTempX+1].nWidth;
                                                 ++nTempX;
                                             }
+                                        }
+                                        else
+                                        {
+                                            //  The flag for clip marks can be set for any cell
+                                            //  in the merged area (handled by DrawClipMarks)
+                                            if ( nOutWidth < nNeededWidth )
+                                                pClipRight = &pThisRowInfo->pCellInfo[nX+1];
                                         }
                                     }
 
@@ -1450,7 +1460,8 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
 
                         if ( bMergeHClip )
                         {
-                            if ( aClipRect.Right() > nScrX+nScrW )
+                            //  don't limit to end of screen if clip mark is subtracted below
+                            if ( aClipRect.Right() > nScrX+nScrW && !( pClipRight && bMarkClipped ) )
                                 aClipRect.Right() = nScrX+nScrW;
                             bHClip = TRUE;
                         }
@@ -2178,6 +2189,16 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                         //if ( bSyntaxMode )
                                         //  SetEditSyntaxColor( *pEngine, pCell );
                                         nEngineWidth = (long) pEngine->CalcTextWidth();
+
+                                        if ( nEngineWidth > aCellSize.Width() )     // still too big?
+                                        {
+                                            // handle clipping like for text (may also be a merged cell)
+                                            bExtend = TRUE;
+                                            bClip = TRUE;
+                                            aClipSize.Width() = nOutWidth;
+                                            USHORT nClipX = ( nX < nX1 ) ? nX1 : nX;
+                                            pClipRight = &pRowInfo[nArrY ? nArrY : 1].pCellInfo[nClipX+1];
+                                        }
                                     }
                                 }
                                 else if ( !bBreak || eOrient!=SVX_ORIENTATION_STANDARD || bAsianVertical )
@@ -2232,6 +2253,13 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                         bExtend = TRUE;     // -> immer linksbuendig
                                         bClip = TRUE;
                                         aClipSize.Width() = nOutWidth;      // Pixel
+
+                                        if ( bMerged )      // otherwise it's handled above
+                                        {
+                                            //  anywhere in the merged area...
+                                            USHORT nClipX = ( nX < nX1 ) ? nX1 : nX;
+                                            pClipRight = &pRowInfo[nArrY ? nArrY : 1].pCellInfo[nClipX+1];
+                                        }
                                     }
                                 }
                                 if ( nEngineHeight > aCellSize.Height() )
@@ -2248,12 +2276,23 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                         bSimClip = TRUE;
                                     aClipSize.Height() = nOutHeight;        // Pixel
 
-                                    //  Clipping-Markierung, wenn 5 Punkt zu klein,
-                                    //  nicht zusammengefasst, und mehrere Zeilen
-                                    if ( nEngineHeight - aCellSize.Height() > 100 && !bMerged &&
+                                    //  Show clip marks if height is at least 5pt too small and
+                                    //  there are several lines of text.
+                                    //  Not for asian vertical text, because that would interfere
+                                    //  with the default right position of the text.
+                                    if ( nEngineHeight - aCellSize.Height() > 100 && !bAsianVertical &&
                                          ( pEngine->GetParagraphCount() > 1 ||
                                            pEngine->GetLineCount(0) > 1 ) )
-                                        pClipRight = pEndInfo;
+                                    {
+                                        if ( bMerged )
+                                        {
+                                            //  anywhere in the merged area...
+                                            USHORT nClipX = ( nX < nX1 ) ? nX1 : nX;
+                                            pClipRight = &pRowInfo[nArrY ? nArrY : 1].pCellInfo[nClipX+1];
+                                        }
+                                        else
+                                            pClipRight = pEndInfo;
+                                    }
                                 }
 
                                 long nClipStartX = nStartX;

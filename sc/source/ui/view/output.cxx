@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-14 14:44:18 $
+ *  last change: $Author: nn $ $Date: 2002-10-15 17:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2715,6 +2715,7 @@ void ScOutputData::DrawClipMarks()
         aArrowFillCol = rStyleSettings.GetWindowTextColor();
     }
 
+    Rectangle aCellRect;
     long nPosY = nScrY;
     for (USHORT nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
@@ -2730,19 +2731,33 @@ void ScOutputData::DrawClipMarks()
                 {
                     if (pInfo->bHOverlapped || pInfo->bVOverlapped)
                     {
-                        //! ...
-                    }
+                        //  merge origin may be outside of visible area - use document functions
 
-                    long nOutWidth = pRowInfo[0].pCellInfo[nX+1].nWidth;
-                    long nOutHeight = pThisRowInfo->nHeight;
-
-                    if ( pInfo->bMerged && pInfo->pPatternAttr )
-                    {
                         USHORT nOverX = nX;
                         USHORT nOverY = nY;
+                        long nStartPosX = nPosX;
+                        long nStartPosY = nPosY;
+
+                        while ( nOverX > 0 && ( ((const ScMergeFlagAttr*)pDoc->GetAttr(
+                                nOverX, nOverY, nTab, ATTR_MERGE_FLAG ))->GetValue() & SC_MF_HOR ) )
+                        {
+                            --nOverX;
+                            nStartPosX -= (long) ( pDoc->GetColWidth(nOverX,nTab) * nPPTX );
+                        }
+
+                        while ( nOverY > 0 && ( ((const ScMergeFlagAttr*)pDoc->GetAttr(
+                                nOverX, nOverY, nTab, ATTR_MERGE_FLAG ))->GetValue() & SC_MF_VER ) )
+                        {
+                            --nOverY;
+                            nStartPosY -= (long) ( pDoc->GetRowHeight(nOverY,nTab) * nPPTY );
+                        }
+
+                        long nOutWidth = (long) ( pDoc->GetColWidth(nOverX,nTab) * nPPTX );
+                        long nOutHeight = (long) ( pDoc->GetRowHeight(nOverY,nTab) * nPPTY );
+
                         USHORT i;
-                        const ScMergeAttr* pMerge =
-                                (ScMergeAttr*)&pInfo->pPatternAttr->GetItem(ATTR_MERGE);
+                        const ScMergeAttr* pMerge = (const ScMergeAttr*)
+                                    pDoc->GetAttr( nOverX, nOverY, nTab, ATTR_MERGE );
                         USHORT nCountX = pMerge->GetColMerge();
                         for (i=1; i<nCountX; i++)
                             nOutWidth += (long) ( pDoc->GetColWidth(nOverX+i,nTab) * nPPTX );
@@ -2750,9 +2765,31 @@ void ScOutputData::DrawClipMarks()
                         for (i=1; i<nCountY; i++)
                             nOutHeight += (long) ( pDoc->GetRowHeight(nOverY+i,nTab) * nPPTY );
 
+                        aCellRect = Rectangle( Point( nStartPosX, nStartPosY ), Size( nOutWidth, nOutHeight ) );
                     }
+                    else
+                    {
+                        long nOutWidth = pRowInfo[0].pCellInfo[nX+1].nWidth;
+                        long nOutHeight = pThisRowInfo->nHeight;
 
-                    Rectangle aCellRect( Point( nPosX, nPosY ), Size( nOutWidth, nOutHeight ) );
+                        if ( pInfo->bMerged && pInfo->pPatternAttr )
+                        {
+                            USHORT nOverX = nX;
+                            USHORT nOverY = nY;
+                            USHORT i;
+                            const ScMergeAttr* pMerge =
+                                    (ScMergeAttr*)&pInfo->pPatternAttr->GetItem(ATTR_MERGE);
+                            USHORT nCountX = pMerge->GetColMerge();
+                            for (i=1; i<nCountX; i++)
+                                nOutWidth += (long) ( pDoc->GetColWidth(nOverX+i,nTab) * nPPTX );
+                            USHORT nCountY = pMerge->GetRowMerge();
+                            for (i=1; i<nCountY; i++)
+                                nOutHeight += (long) ( pDoc->GetRowHeight(nOverY+i,nTab) * nPPTY );
+
+                        }
+
+                        aCellRect = Rectangle( Point( nPosX, nPosY ), Size( nOutWidth, nOutHeight ) );
+                    }
 
                     long nMarkPixel = (long)( SC_CLIPMARK_SIZE * nPPTX );
                     Size aMarkSize( nMarkPixel, (nMarkPixel-1)*2 );
