@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtoolsclient.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:44:50 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 10:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,6 +378,16 @@ namespace svxform
         if ( m_xDataAccessTools.is() )
             bRet = m_xDataAccessTools->isDataSourcePropertyEnabled( _xProp,_sProperty ,_bDefault );
         return bRet;
+    }
+
+    //----------------------------------------------------------------
+    Reference< XConnection > OStaticDataAccessTools::getComponentContextConnection( const Reference< XInterface >& _rxComponent )
+    {
+        Reference< XConnection > xReturn;
+        checkIfLoaded();
+        if ( m_xDataAccessTools.is() )
+            xReturn = m_xDataAccessTools->getComponentContextConnection( _rxComponent );
+        return xReturn;
     }
 
 //........................................................................
