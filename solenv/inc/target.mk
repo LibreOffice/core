@@ -5,8 +5,8 @@
 #*	  Beschreibung		TARGET-Rules
 #*
 #*	  Ersterstellung	TH 28.03.94
-#*	  Letzte Aenderung	$Author: hjs $ $Date: 2000-10-13 17:00:19 $
-#*	  $Revision: 1.10 $
+#*	  Letzte Aenderung	$Author: csaba $ $Date: 2000-10-16 10:27:25 $
+#*	  $Revision: 1.11 $
 #*
 #*	  $Logfile:   T:/solar/inc/target.mkv  $
 #*
@@ -1712,8 +1712,10 @@ TARGETDPJ=$(MISC)$/$(TARGET).dpj
 .IF "$(product)"!=""
 .IF "$(GEN_HID)"!=""
 .IF "$(no_hids)"==""
+.IF "$(BUILD_SOSL)" == ""
 .IF "$(GUI)"=="WNT"
 PRJHIDTARGET=$(MISC)$/$(PRJNAME).hid
+.ENDIF
 .ENDIF
 .ENDIF
 .ENDIF
