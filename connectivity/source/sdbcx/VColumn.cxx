@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VColumn.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-16 18:14:25 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,9 @@
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
 #endif
-
+#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
+#include <com/sun/star/sdbc/ColumnValue.hpp>
+#endif
 // -------------------------------------------------------------------------
 using namespace connectivity;
 using namespace connectivity::sdbcx;
@@ -79,7 +81,7 @@ using namespace connectivity;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-//  using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbc;
 
 // -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OColumn::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
@@ -116,7 +118,7 @@ OColumn::OColumn(sal_Bool _bCase)  :    OColumnDescriptor_BASE(m_aMutex)
                     ,   m_Precision(0)
                     ,   m_Type(0)
                     ,   m_Scale(0)
-                    ,   m_IsNullable(sal_True)
+                    ,   m_IsNullable(ColumnValue::NULLABLE)
                     ,   m_IsAutoIncrement(sal_False)
                     ,   m_IsRowVersion(sal_False)
                     ,   m_IsCurrency(sal_False)
