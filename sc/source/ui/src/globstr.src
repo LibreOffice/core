@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-19 20:44:23 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:09:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,7 +374,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Ξοςθμΰλόνΰÿ ψθπθνΰ ρςξλαφξβ";
         Text[ polish ] = "Optymalna szerokoζ kolumny";
         Text[ japanese ] = "Ε“K‚Θ—ρ‚Μ•";
-        Text[ chinese_traditional ] = "³ΜΣμΔζΌe";
+        Text[ chinese_traditional ] = "³ΜΎAΔζΌe";
         Text[ arabic ] = "ΗαΪΡΦ ΗαΓγΛα ααΪγζΟ";
         Text[ greek ] = "βέλτιστο πλάτος στήλης";
         Text[ korean ] = "ΓΦΐϋΐΗ Ώ­ ³ΚΊρ";
@@ -428,7 +428,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Ξοςθμΰλόνΰÿ βϋρξςΰ ρςπξκ";
         Text[ polish ] = "Optymalna wysokoζ wierszy";
         Text[ japanese ] = "Ε“K‚Θs‚Μ‚‚³";
-        Text[ chinese_traditional ] = "³ΜΣμΔζ°ª";
+        Text[ chinese_traditional ] = "³ΜΎAΔζ°ª";
         Text[ arabic ] = "ΗαΗΡΚέΗΪ ΗαΓγΛα ααΥέ";
         Text[ greek ] = "Βέλτιστο ύψος γραμμής";
         Text[ korean ] = "ΓΦΐϋΐΗ Ηΰ ³τΐΜ";
@@ -1087,7 +1087,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Θμοξπς";
         Text[ polish ] = "Importuj";
         Text[ japanese ] = "²έΞί°Δ";
-        Text[ chinese_traditional ] = "Ώι¤J";
+        Text[ chinese_traditional ] = "¶Χ¤J";
         Text[ arabic ] = "ΗΣΚνΡΗΟ";
         Text[ greek ] = "Εισαγωγή";
         Text[ korean ] = "°΅Α®Ώΐ±β";
@@ -1792,7 +1792,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Οξκΰηΰςό οπθμεχΰνθÿ";
         Text[ polish ] = "PokaΏ notatkκ";
         Text[ japanese ] = "ΊÒέΔ‚Μ•\\¦";
-        Text[ chinese_traditional ] = "Εγ¥ά³Ζª`";
+        Text[ chinese_traditional ] = "Εγ¥ά³Ζµω";
         Text[ arabic ] = "ΕΩεΗΡ ΗαγαΗΝΩΙ";
         Text[ greek ] = "Εμφάνιση σημείωσης";
         Text[ korean ] = "ΈήΈπ ΊΈΐΜ±β";
@@ -1816,7 +1816,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Ρκπϋςό οπθμεχΰνθε";
         Text[ polish ] = "Ukryj notatkκ";
         Text[ japanese ] = "ΊÒέΔ‚Μ”ρ•\\¦";
-        Text[ chinese_traditional ] = "Ατ¤J³Ζª`";
+        Text[ chinese_traditional ] = "Ατ¤J³Ζµω";
         Text[ arabic ] = "ΕΞέΗΑ ΗαγαΗΝΩΙ";
         Text[ greek ] = "Απόκρυψη σημείωσης";
         Text[ korean ] = "ΈήΈπ Όϋ±β±β";
@@ -1840,7 +1840,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Ξαπΰαξςκΰ οπθμεχΰνθÿ";
         Text[ polish ] = "Edytuj notatkκ";
         Text[ japanese ] = "ΊÒέΔ‚Μ•ÒW";
-        Text[ chinese_traditional ] = "½sΏθ³Ζª`";
+        Text[ chinese_traditional ] = "½sΏθ³Ζµω";
         Text[ arabic ] = "ΚΝΡνΡ γαΗΝΩΙ";
         Text[ greek ] = "Επεξεργασία σημείωσης";
         Text[ korean ] = "ΈήΈπ  ΖνΑύ";
@@ -2011,7 +2011,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Ξαλΰρςθ οεχΰςθ";
         Text[ polish ] = "Zakres wydruku";
         Text[ japanese ] = "σό”ΝΝ";
-        Text[ chinese_traditional ] = "¦C¦L­S³ς";
+        Text[ chinese_traditional ] = "¦C¦L½d³ς";
         Text[ arabic ] = "δΨΗήΗΚ ΗαΨΘΗΪΙ";
         Text[ greek ] = "Περιοχές εκτύπωσης";
         Text[ korean ] = "ΐΞΌβ Ήόΐ§";
@@ -2159,7 +2159,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Θμοξπς";
         Text[ polish ] = "Import";
         Text[ japanese ] = "²έΞί°Δ";
-        Text[ chinese_traditional ] = "Ώι¤J";
+        Text[ chinese_traditional ] = "¶Χ¤J";
         Text[ arabic ] = "ΗΣΚνΡΗΟ";
         Text[ greek ] = "Εισαγωγή";
         Text[ korean ] = "°΅Α®Ώΐ±β";
@@ -2319,7 +2319,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Ξψθακΰ οπθ θμοξπςε!";
         Text[ polish ] = "B³Ήd podczas importowania!";
         Text[ japanese ] = "²έΞί°Δ‚Μ΄Χ°B";
-        Text[ chinese_traditional ] = "Ώι¤J®Ιµo¥ΝΏω»~΅I";
+        Text[ chinese_traditional ] = "¶Χ¤J®Ιµo¥ΝΏω»~΅I";
         Text[ arabic ] = "ΝΟΛ ΞΨΓ ΓΛδΗΑ ΗΣΚνΡΗΟ ΗαΘνΗδΗΚ!";
         Text[ greek ] = "Σφάλμα κατά την εισαγωγή!";
         Text[ korean ] = "µ¥ΐΜΕΝΈ¦ °΅Α®Ώΐ΄Β µΏΎΘ Ώΐ·ω!";
@@ -2391,7 +2391,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Θμοξπς αΰηϋ δΰννϋυ ξςμενεν.";
         Text[ polish ] = "Import bazy danych zosta³ anulowany.";
         Text[ japanese ] = "Γή°ΐΝή°½‚Μ²έΞί°Δ‚Ν’†~‚³‚κ‚ά‚µ‚½B";
-        Text[ chinese_traditional ] = "¤wΈg¤¤Β_Έκ®Ζ®wΏι¤J΅C";
+        Text[ chinese_traditional ] = "¤wΈg¤¤Β_Έκ®Ζ®w¶Χ¤J΅C";
         Text[ arabic ] = "Κγ ήΨΪ ΪγανΙ ΗΣΚνΡΗΟ ήΗΪΟΙ ΗαΘνΗδΗΚ.";
         Text[ greek ] = "Διακοπή της εισαγωγής βάσης δεδομένων.";
         Text[ korean ] = "µ¥ΐΜΕΝΊ£ΐΜ½Ί °΅Α®Ώΐ±β Αί΄ά";
@@ -2416,7 +2416,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "# Θμοξπςθπξβΰννϋε ηΰοθρθ...";
         Text[ polish ] = "# Importowane rekordy...";
         Text[ japanese ] = "# ΪΊ°Δή‚Μ²έΞί°Δ...";
-        Text[ chinese_traditional ] = "# Ώι¤JΈκ®Ζ...";
+        Text[ chinese_traditional ] = "# ¶Χ¤JΈκ®Ζ...";
         Text[ arabic ] = "# ΣΜα(ΣΜαΗΚ) γΣΚζΡΟ(Ι)...";
         Text[ greek ] = "# εγγραφές εισάχθηκαν...";
         Text[ korean ] = "# ·ΉΔΪµεΈ¦ °΅Α®ΏΤ½ΐ΄Ο΄Ω ...";
@@ -2704,7 +2704,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Δΰννϋε, σδξβλεςβξπÿώωθε σρλξβθώ, νε ξανΰπσζενϋ.";
         Text[ polish ] = "Szukanego has³a nie znaleziono.";
         Text[ japanese ] = "υ·°‚Ν©‚Β‚©‚θ‚ά‚Ή‚ρB";
-        Text[ chinese_traditional ] = "¨S¦³§δ¨μ΄M§δ¤Ί®e΅C";
+        Text[ chinese_traditional ] = "¨S¦³§δ¨μ·j΄M¶µ¥Ψ΅C";
         Text[ arabic ] = "ΚΪΠΡ ΗαΪΛζΡ Ϊαμ ΗαΘνΗδΗΚ ΗαΚν ΚΘΝΛ ΪδεΗ.";
         Text[ greek ] = "Δεν βρέθηκε ο όρος αναζήτησης.";
         Text[ korean ] = "°Λ»φ Ε°°΅ Ήί°ίµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
@@ -3928,7 +3928,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Β ύςξι ξαλΰρςθ θμοξπςθπξβΰννϋυ δΰννϋυ νε νΰιδενξ.";
         Text[ polish ] = "Ten obszar nie zawiera importiowanych danych.";
         Text[ japanese ] = "‚±‚Μ”ΝΝ‚Ι²έΞί°Δ‚³‚κ‚½Γή°ΐ‚Ν‚ ‚θ‚ά‚Ή‚ρB";
-        Text[ chinese_traditional ] = "³o­Σ°Ο°μ¨S¦³§t¦³¥τ¦σΏι¤JªΊΈκ®Ζ΅C";
+        Text[ chinese_traditional ] = "³o­Σ°Ο°μ¨S¦³§t¦³¥τ¦σ¶Χ¤JªΊΈκ®Ζ΅C";
         Text[ arabic ] = "αΗ νΝΚζν εΠΗ ΗαδΨΗή Ϊαμ ΘνΗδΗΚ γΣΚζΡΟΙ.";
         Text[ greek ] = "Αυτή η περιοχή δεν περιέχει εισαγόμενα δεδομένα.";
         Text[ korean ] = "ΐΜ Ήόΐ§Ώ΅΄Β °΅Α®ΏΒ µ¥ΐΜΕΝ°΅ ΖχΗΤµΗΎξ ΐΦΑφ ΎΚ½ΐ΄Ο΄Ω.";
@@ -6372,7 +6372,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Θμοξπς τΰιλξβ ςεκρςΰ";
         Text[ polish ] = "Import tekstu";
         Text[ japanese ] = "Γ·½Δ‚Μ²έΞί°Δ";
-        Text[ chinese_traditional ] = "Ώι¤J¤ε¥σ";
+        Text[ chinese_traditional ] = "¶Χ¤J¤ε¦r";
         Text[ arabic ] = "ΗΣΚνΡΗΟ δΥ";
         Text[ greek ] = "Εισαγωγή κειμένου";
         Text[ korean ] = "ΕΨ½ΊΖ® ΖΔΐΟ °΅Α®Ώΐ±β";
@@ -6420,7 +6420,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Θμοξπς τΰιλξβ Lotus";
         Text[ polish ] = "Import programu Lotus";
         Text[ japanese ] = "Lotus ‚Μ²έΞί°Δ";
-        Text[ chinese_traditional ] = "Ώι¤J Lotus ΐΙ®Χ";
+        Text[ chinese_traditional ] = "¶Χ¤J Lotus ΐΙ®Χ";
         Text[ arabic ] = "ΗΣΚνΡΗΟ γαέΗΚ Lotus";
         Text[ greek ] = "Εισαγωγή αρχείου Lotus";
         Text[ korean ] = "LotusΖΔΐΟ °΅Α®Ώΐ±β";
@@ -6444,7 +6444,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Θμοξπς DBase";
         Text[ polish ] = "Import DBase";
         Text[ japanese ] = "DBase ‚Μ²έΞί°Δ";
-        Text[ chinese_traditional ] = "Ώι¤J DBase ΐΙ®Χ";
+        Text[ chinese_traditional ] = "¶Χ¤J DBase ΐΙ®Χ";
         Text[ arabic ] = "ΗΣΚνΡΗΟ γαέΗΚ DBase";
         Text[ greek ] = "Εισαγωγή αρχεία DBase";
         Text[ korean ] = "DBase ΖΔΐΟ °΅Α®Ώΐ±β";
@@ -6515,7 +6515,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Θμοξπς Dif";
         Text[ polish ] = "Import Dif";
         Text[ japanese ] = "Dif ‚Μ²έΞί°Δ";
-        Text[ chinese_traditional ] = "Ώι¤J DIF";
+        Text[ chinese_traditional ] = "¶Χ¤J DIF";
         Text[ arabic ] = "ΗΣΚνΡΗΟ Dif";
         Text[ greek ] = "Εισαγωγή Dif";
         Text[ korean ] = "Dif °΅Α®Ώΐ±β";
@@ -6764,7 +6764,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Οπξδξλζθςό οπξβεπκσ οπΰβξοθρΰνθÿ β νΰχΰλε ςΰαλθφϋ?";
         Text[ polish ] = "Czy sprawdzanie pisowni ma byζ kontynuowane na poczΉtku arkusza?";
         Text[ japanese ] = "•\\‚Μn‚ί‚Ι–ί‚Α‚Δ½ΝίΩΑª―Έ‚π‘±s‚µ‚ά‚·‚©B";
-        Text[ chinese_traditional ] = "±z­n¦b¤u§@ªν¤§­Ί¶}©lΐΛ¬d«χΌg΅H";
+        Text[ chinese_traditional ] = "±z­n±q¤u§@ªν°_©l¦μΈm¶}©lΐΛ¬d«χΌg΅H";
         Text[ arabic ] = "εα ΚΡνΟ γΚΗΘΪΙ ΗαΚΟήνή ΗαΕγαΗΖν ΪδΟ ΘΟΗνΙ ΗαΜΟζαΏ";
         Text[ greek ] = "Συνέχεια του ορθογραφικού ελέγχου από την αρχή του πίνακα;";
         Text[ korean ] = "Ηφΐη ½ΓΖ®ΐΗ ½ΓΐΫΊΞΊΠΏ΅Ό­ ΈΒΓγΉύ °Λ»ηΈ¦ °θΌΣΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
