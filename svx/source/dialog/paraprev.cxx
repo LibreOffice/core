@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraprev.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:10 $
+ *  last change: $Author: os $ $Date: 2001-05-10 14:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,11 @@ SvxParaPrevWindow::SvxParaPrevWindow( Window* pParent, const ResId& rId ) :
     SetMapMode( MapMode( MAP_TWIP ) );
     aWinSize = GetOutputSizePixel();
     aWinSize = PixelToLogic( aWinSize );
+    Size aTmp(1, 1);
+    aTmp = PixelToLogic(aTmp);
+    aWinSize.Width() -= aTmp.Width() /2;
+    aWinSize.Height() -= aTmp.Height() /2;
+
     aSize = Size( 11905, 16837 );
 }
 
@@ -108,11 +113,15 @@ void SvxParaPrevWindow::Paint( const Rectangle& rRect )
 
 void SvxParaPrevWindow::DrawParagraph( BOOL bAll )
 {
-    SetLineColor();
     SetFillColor( Color( COL_WHITE ) );
 
     if ( bAll )
+    {
+        SetLineColor(Color( COL_BLACK) );
         DrawRect( Rectangle( Point(), aWinSize ) );
+    }
+
+    SetLineColor();
 
     long nH = aWinSize.Height() / 19;
     Size aLineSiz( aWinSize.Width() - DEF_MARGIN, nH ),
