@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arguments.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-17 14:23:46 $
+ *  last change: $Author: mba $ $Date: 2002-07-24 18:02:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,10 @@ namespace framework{
 *//*-*************************************************************************************************************/
 
 #define ARGUMENTNAME_CHARACTERSET                           DECLARE_ASCII("CharacterSet"        )   // string
-#define ARGUMENTNAME_MEDIATYPE                              DECLARE_ASCII("ContentType"         )   // string
+#define ARGUMENTNAME_MEDIATYPE                              DECLARE_ASCII("MediaType"           )   // string
 #define ARGUMENTNAME_DETECTSERVICE                          DECLARE_ASCII("DetectService"       )   // string
 #define ARGUMENTNAME_EXTENSION                              DECLARE_ASCII("Extension"           )   // string
-#define ARGUMENTNAME_URL                                    DECLARE_ASCII("FileName"            )   // string
+#define ARGUMENTNAME_URL                                    DECLARE_ASCII("URL"                 )   // string
 #define ARGUMENTNAME_FILTERNAME                             DECLARE_ASCII("FilterName"          )   // string
 #define ARGUMENTNAME_FORMAT                                 DECLARE_ASCII("Format"              )   // string
 #define ARGUMENTNAME_FRAMENAME                              DECLARE_ASCII("FrameName"           )   // string
@@ -114,6 +114,7 @@ namespace framework{
 #define ARGUMENTNAME_INTERACTIONHANDLER                     DECLARE_ASCII("InteractionHandler"  )   // Reference< XInteractionHandler >
 #define ARGUMENTNAME_MACROEXECUTIONMODE                     DECLARE_ASCII("MacroExecutionMode"  )   // int16
 #define ARGUMENTNAME_UPDATEDOCMODE                          DECLARE_ASCII("UpdateDocMode"       )   // int16
+#define ARGUMENTNAME_MINIMIZED                              DECLARE_ASCII("Minimized"           )   // bool
 
 /*-************************************************************************************************************//**
     @short          define our argument mask
@@ -195,7 +196,8 @@ enum EArgument
     E_STATUSINDICATOR       = ARGUMENTLAYER_2 | ARGUMENTFLAG_6  ,
     E_INTERACTIONHANDLER    = ARGUMENTLAYER_2 | ARGUMENTFLAG_7  ,
     E_MACROEXECUTIONMODE    = ARGUMENTLAYER_2 | ARGUMENTFLAG_8  ,
-    E_UPDATEDOCMODE         = ARGUMENTLAYER_2 | ARGUMENTFLAG_9
+    E_UPDATEDOCMODE         = ARGUMENTLAYER_2 | ARGUMENTFLAG_9,
+    E_MINIMIZED             = ARGUMENTLAYER_2 | ARGUMENTFLAG_10 ,
 };
 
 }       //  namespace framework
