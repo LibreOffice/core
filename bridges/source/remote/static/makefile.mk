@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dbo $ $Date: 2001-04-18 12:02:46 $
+#   last change: $Author: hr $ $Date: 2001-05-31 15:18:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,13 @@ SLOFILES= 	\
         $(SLO)$/helper.obj \
         $(SLO)$/remote_types.obj
 
+# Forte6 update 1 on Solaris Intel dies with internal compiler error
+# on stub.cxx if optimization is on. Switch it off for now.
+# To be reevaluated on compiler upgrade
+.IF "$(OS)$(CPU)"=="SOLARISI"
+NOOPTFILES=\
+        $(SLO)$/stub.obj
+.ENDIF        
 
 # --- Targets ------------------------------------------------------
 
