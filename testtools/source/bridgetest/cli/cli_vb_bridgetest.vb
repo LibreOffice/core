@@ -2,9 +2,9 @@
  '
  '  $RCSfile: cli_vb_bridgetest.vb,v $
  '
- '  $Revision: 1.3 $
+ '  $Revision: 1.4 $
  '
- '  last change: $Author: rt $ $Date: 2004-07-12 13:02:49 $
+ '  last change: $Author: rt $ $Date: 2004-09-20 14:28:37 $
  '
  '  The Contents of this file are made available subject to the terms of
  '  either of the following licenses
@@ -874,7 +874,7 @@ Public Class BridgeTest
                 m_xContext.getServiceManager().createInstanceWithContext( _
                     args( 0 ), m_xContext )
 
-            Console.WriteLine( _
+            Debug.WriteLine( _
                 "cli target bridgetest obj: {0}", test_obj.ToString() )
             Dim xTest As XBridgeTest = DirectCast(test_obj, XBridgeTest) 
             perform_test( xTest )
