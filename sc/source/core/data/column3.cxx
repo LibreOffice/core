@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:43:20 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:36:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 
 #include <sfx2/objsh.hxx>
 #include <svtools/zforlist.hxx>
+#include <svtools/zformat.hxx>
 
 #include "scitems.hxx"
 #include "column.hxx"
@@ -1310,9 +1311,36 @@ BOOL ScColumn::SetString( USHORT nRow, USHORT nTab, const String& rString )
                     pNewCell = new ScValueCell( nVal );
                     if ( nIndex != nOldIndex)
                     {
-                        ApplyAttr( nRow, SfxUInt32Item( ATTR_VALUE_FORMAT,
-                            (UINT32) nIndex) );
-                        bNumFmtSet = TRUE;
+                        // #i22345# New behavior: Apply the detected number format only if
+                        // the old one was the default number, date, time or boolean format.
+                        // Exception: If the new format is boolean, always apply it.
+
+                        BOOL bOverwrite = FALSE;
+                        const SvNumberformat* pOldFormat = pFormatter->GetEntry( nOldIndex );
+                        if ( pOldFormat )
+                        {
+                            short nOldType = pOldFormat->GetType() & ~NUMBERFORMAT_DEFINED;
+                            if ( nOldType == NUMBERFORMAT_NUMBER || nOldType == NUMBERFORMAT_DATE ||
+                                 nOldType == NUMBERFORMAT_TIME || nOldType == NUMBERFORMAT_LOGICAL )
+                            {
+                                if ( nOldIndex == pFormatter->GetStandardFormat(
+                                                    nOldType, pOldFormat->GetLanguage() ) )
+                                {
+                                    bOverwrite = TRUE;      // default of these types can be overwritten
+                                }
+                            }
+                        }
+                        if ( !bOverwrite && pFormatter->GetType( nIndex ) == NUMBERFORMAT_LOGICAL )
+                        {
+                            bOverwrite = TRUE;              // overwrite anything if boolean was detected
+                        }
+
+                        if ( bOverwrite )
+                        {
+                            ApplyAttr( nRow, SfxUInt32Item( ATTR_VALUE_FORMAT,
+                                (UINT32) nIndex) );
+                            bNumFmtSet = TRUE;
+                        }
                     }
                 }
                 else                                            // Text
