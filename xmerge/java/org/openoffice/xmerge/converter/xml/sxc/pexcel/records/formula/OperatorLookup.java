@@ -65,9 +65,7 @@ import org.openoffice.xmerge.util.Debug;
 /**
   * A lookup table containing information about operators
   */
-public class OperatorLookup {
-    private static HashMap stringToID = null;
-    private static HashMap idToString = null;
+public class OperatorLookup extends SymbolLookup {
 
     /**
     * The default constructor - invokes {@link #initialize() initialize()}
@@ -79,7 +77,7 @@ public class OperatorLookup {
     /**
      * Initialize the lookup table for operators
      */
-    public synchronized void initialize() {
+    public void initialize() {
         if ((stringToID != null) || (idToString != null)) {
             return;
         }
@@ -105,32 +103,4 @@ public class OperatorLookup {
         addEntry("<>", TokenConstants.TNEQUALS);
     }
 
-    /**
-     * Associate an operator with an identifier
-     * @param symbol    The operator that will act as the key in the lookup table
-     * @param id        The identifier for the operator
-     */
-    public void addEntry(String symbol, int id) {
-        Integer iObj = new Integer(id);
-        stringToID.put(symbol, iObj);
-        idToString.put(iObj, symbol);
-    }
-
-    /**
-     * Retrieve the operator string associated with a given id
-     * @param   id  The identfier for the operator
-     * @return  The operator string
-     */
-    public String getStringFromID(int id) {
-        return (String)idToString.get(new Integer(id));
-    }
-
-    /**
-     * Retrieve the identifier associated with a given operator
-     * @param   symbol  The operator name
-     * @return  The identifier associated with this operator in the lookup table.
-     */
-    public int getIDFromString(String symbol) {
-        return ((Integer)stringToID.get(symbol)).intValue();
-    }
 }

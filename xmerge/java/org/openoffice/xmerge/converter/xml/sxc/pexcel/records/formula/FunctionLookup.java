@@ -61,10 +61,9 @@ import org.openoffice.xmerge.util.Debug;
 
 import java.util.HashMap;
 
-public class FunctionLookup implements SymbolLookup {
-    private static HashMap stringToArgs = null;
-    private static HashMap stringToID = null;
-    private static HashMap idToString = null;
+public class FunctionLookup extends SymbolLookup {
+
+    private HashMap stringToArgs = null;
 
     /**
     * The default constructor - invokes {@link #initialize() initialize()}
@@ -76,7 +75,7 @@ public class FunctionLookup implements SymbolLookup {
     /**
      * Initialize the lookup table for functions
      */
-    public synchronized void initialize() {
+    public void initialize() {
         if ((stringToID != null) || (idToString != null) || (stringToArgs !=null)) {
             return;
         }
@@ -216,17 +215,6 @@ public class FunctionLookup implements SymbolLookup {
     }
 
     /**
-     * Associate a function with an identifier
-     * @param symbol    The function string that will act as the key in the lookup table
-     * @param id        The identifier for the function
-     */
-    public void addEntry(String symbol, int id) {
-        Integer iObj = new Integer(id);
-        stringToID.put(symbol,iObj);
-        idToString.put(iObj,symbol);
-    }
-
-    /**
      * Associate a function with an identifier and specifiy the number of arguments for that function
      * @param symbol    The function string that will act as the key in the lookup table
      * @param id        The identifier for the function
@@ -235,28 +223,6 @@ public class FunctionLookup implements SymbolLookup {
     public void addEntry(String symbol, int id, int args) {
         addEntry(symbol, id);
         stringToArgs.put(symbol, new Integer(args));
-    }
-
-    /**
-     * Retrieve the function string associated with a given id
-     * @param   id  The identfier for the function
-     * @return  The function string
-     */
-    public String getStringFromID(int id) {
-        return (String)idToString.get(new Integer(id));
-    }
-
-    /**
-     * Retrieve the identifier associated with a given function
-     * @param   symbol  The function name
-     * @throws UnsupportedFunctionException Thown when the function is not found in the lookup table
-     * @return  The identifier associated with this function in the lookup table.
-     */
-    public int getIDFromString(String symbol) throws UnsupportedFunctionException {
-        Integer i = (Integer)stringToID.get(symbol);
-        if (i == null)
-            throw new UnsupportedFunctionException("Function '" + symbol + "' not supported by Pocket Excel");
-        return ((Integer)stringToID.get(symbol)).intValue();
     }
 
     /**

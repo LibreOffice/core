@@ -113,16 +113,20 @@ public class TokenFactory {
         Token t = null;
 
         Debug.log(Debug.TRACE,"TokenFactory creating operator Token : " + s);
-        if(args==1) {
-            if(s.equals("+")) {
-                t = new Token(s, ParseToken.TOKEN_OPERATOR, operatorLookup.getIDFromString("UNARY_PLUS"), args);
-            } else if (s.equals("-")) {
-                t = new Token(s, ParseToken.TOKEN_OPERATOR, operatorLookup.getIDFromString("UNARY_MINUS"), args);
+        try  {
+            if(args==1) {
+                if(s.equals("+")) {
+                    t = new Token(s, ParseToken.TOKEN_OPERATOR, operatorLookup.getIDFromString("UNARY_PLUS"), args);
+                } else if (s.equals("-")) {
+                    t = new Token(s, ParseToken.TOKEN_OPERATOR, operatorLookup.getIDFromString("UNARY_MINUS"), args);
+                } else {
+                    t = new Token(s, ParseToken.TOKEN_OPERATOR, operatorLookup.getIDFromString(s), args);
+                }
             } else {
                 t = new Token(s, ParseToken.TOKEN_OPERATOR, operatorLookup.getIDFromString(s), args);
             }
-        } else {
-            t = new Token(s, ParseToken.TOKEN_OPERATOR, operatorLookup.getIDFromString(s), args);
+        } catch (UnsupportedFunctionException eFn) {
+            Debug.log(Debug.ERROR, eFn.getMessage());
         }
         return t;
     }
@@ -133,10 +137,14 @@ public class TokenFactory {
      * @return The created <code>Token</code>
      */
     public Token getOperandToken(String s, String type) {
-        Token t;
+        Token t = null;
 
         Debug.log(Debug.TRACE,"TokenFactory creating operand (" + type + ") Token : " + s);
-        t = new Token(s, ParseToken.TOKEN_OPERAND, operandLookup.getIDFromString(type), 0);
+        try {
+            t = new Token(s, ParseToken.TOKEN_OPERAND, operandLookup.getIDFromString(type), 0);
+        } catch (UnsupportedFunctionException eFn) {
+            Debug.log(Debug.ERROR, eFn.getMessage());
+        }
 
         return t;
     }

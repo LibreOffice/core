@@ -64,10 +64,7 @@ import org.openoffice.xmerge.util.Debug;
 /**
   * A lookup table containing information about operands
   */
-public class OperandLookup implements SymbolLookup {
-    private static HashMap stringToID = null;
-    private static HashMap idToString = null;
-
+public class OperandLookup extends SymbolLookup {
 
     /**
     * The default constructor - invokes {@link #initialize() initialize()}
@@ -77,9 +74,9 @@ public class OperandLookup implements SymbolLookup {
     }
 
     /**
-     * Initialize the lookup table for operandss
+     * Initialize the lookup table for operands
      */
-    public synchronized void initialize() {
+    public void initialize() {
         if ((stringToID != null) || (idToString != null)) {
             return;
         }
@@ -95,32 +92,4 @@ public class OperandLookup implements SymbolLookup {
         addEntry("3D_CELL_AREA_REFERENCE", TokenConstants.TAREA3D);
     }
 
-    /**
-     * Associate an operand with an identifier
-     * @param symbol    The operand that will act as the key in the lookup table
-     * @param id        The identifier for the operand
-     */
-    public void addEntry(String symbol, int id) {
-        Integer iObj = new Integer(id);
-        stringToID.put(symbol,iObj);
-        idToString.put(iObj,symbol);
-    }
-
-    /**
-     * Retrieve the operand string associated with a given id
-     * @param   id  The identfier for the operand
-     * @return  The operand string
-     */
-    public String getStringFromID(int id) {
-        return (String)idToString.get(new Integer(id));
-    }
-
-    /**
-     * Retrieve the identifier associated with a given operator
-     * @param   symbol  The operand name
-     * @return  The identifier associated with this operand in the lookup table.
-     */
-    public int getIDFromString(String symbol) {
-        return ((Integer)stringToID.get(symbol)).intValue();
-    }
 }
