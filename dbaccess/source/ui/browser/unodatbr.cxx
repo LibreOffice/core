@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-18 14:16:00 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 07:57:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -960,7 +960,7 @@ void SAL_CALL SbaTableQueryBrowser::statusChanged( const FeatureStateEvent& _rEv
                 {
                     // if it's the slot for the document data source, remember the state
                     Sequence< PropertyValue > aDescriptor;
-    #ifdef DBG_UTIL
+    #ifdef _DEBUG
                     sal_Bool bProperFormat =
     #endif
                     _rEvent.State >>= aDescriptor;
@@ -1934,6 +1934,14 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
             catch(const SQLContext& e) { aInfo = e; }
             catch(const SQLWarning& e) { aInfo = e; }
             catch(const SQLException& e) { aInfo = e; }
+            catch(const WrappedTargetException& e)
+            {
+                SQLException aSql;
+                if(e.TargetException >>= aSql)
+                    aInfo = aSql;
+                else
+                    OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implLoadAnything: something strange happended!");
+            }
             catch(const Exception&)
             {
                 OSL_ENSURE(sal_False, "SbaTableQueryBrowser, OnExpandEntry: caught an unknown exception while populating the tables!");
@@ -2159,6 +2167,14 @@ sal_Bool SbaTableQueryBrowser::implLoadAnything(const ::rtl::OUString& _rDataSou
         {
             showError(SQLExceptionInfo(e));
         }
+        catch(WrappedTargetException& e)
+        {
+            SQLException aSql;
+            if(e.TargetException >>= aSql)
+                showError(SQLExceptionInfo(aSql));
+            else
+                OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implLoadAnything: something strange happended!");
+        }
         catch(Exception&)
         {
             OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implLoadAnything: something strange happended!");
@@ -2379,9 +2395,20 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
                 criticalFail();
             }
         }
-        catch(SQLException& e)
+        catch(const SQLException& e)
         {
             showError(SQLExceptionInfo(e));
+            // reset the values
+            xProp->setPropertyValue(PROPERTY_DATASOURCENAME,Any());
+            xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,Any());
+        }
+        catch(WrappedTargetException& e)
+        {
+            SQLException aSql;
+            if(e.TargetException >>= aSql)
+                showError(SQLExceptionInfo(aSql));
+            else
+                OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implLoadAnything: something strange happended!");
             // reset the values
             xProp->setPropertyValue(PROPERTY_DATASOURCENAME,Any());
             xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,Any());
@@ -2825,6 +2852,14 @@ void SbaTableQueryBrowser::unloadAndCleanup(sal_Bool _bDisposeConnection, sal_Bo
     {
         showError(SQLExceptionInfo(e));
     }
+    catch(WrappedTargetException& e)
+    {
+        SQLException aSql;
+        if(e.TargetException >>= aSql)
+            showError(SQLExceptionInfo(aSql));
+        else
+            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implLoadAnything: something strange happended!");
+    }
     catch(Exception&)
     {
         OSL_ENSURE(sal_False, "SbaTableQueryBrowser::unloadAndCleanup: could not reset the form");
@@ -3081,6 +3116,14 @@ void SbaTableQueryBrowser::implDirectSQL( SvLBoxEntry* _pApplyTo )
     {
         showError(SQLExceptionInfo(e));
     }
+    catch(const WrappedTargetException& e)
+    {
+        SQLException aSql;
+        if(e.TargetException >>= aSql)
+            showError(SQLExceptionInfo(aSql));
+        else
+            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implLoadAnything: something strange happended!");
+    }
     catch(const Exception&)
     {
         DBG_ERROR("SbaTableQueryBrowser::implDirectSQL: caught an (unknown) exception!");
@@ -3207,6 +3250,14 @@ void SbaTableQueryBrowser::implCreateObject( SvLBoxEntry* _pApplyTo, sal_uInt16 
     {
         showError(SQLExceptionInfo(e));
     }
+    catch(WrappedTargetException& e)
+    {
+        SQLException aSql;
+        if(e.TargetException >>= aSql)
+            showError(SQLExceptionInfo(aSql));
+        else
+            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implLoadAnything: something strange happended!");
+    }
     catch(Exception&)
     {
         DBG_ERROR("SbaTableQueryBrowser::implCreateObject: caught an exception!");
@@ -3250,6 +3301,14 @@ void SbaTableQueryBrowser::implRemoveQuery( SvLBoxEntry* _pApplyTo )
                 catch(SQLException& e)
                 {
                     showError(SQLExceptionInfo(e));
+                }
+                catch(WrappedTargetException& e)
+                {
+                    SQLException aSql;
+                    if(e.TargetException >>= aSql)
+                        showError(SQLExceptionInfo(aSql));
+                    else
+                        OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implLoadAnything: something strange happended!");
                 }
                 catch(Exception&)
                 {
@@ -3308,6 +3367,14 @@ void SbaTableQueryBrowser::implDropTable( SvLBoxEntry* _pApplyTo )
             catch(SQLContext& e) { aErrorInfo = e; }
             catch(SQLWarning& e) { aErrorInfo = e; }
             catch(SQLException& e) { aErrorInfo = e; }
+            catch(WrappedTargetException& e)
+            {
+                SQLException aSql;
+                if(e.TargetException >>= aSql)
+                    aErrorInfo = aSql;
+                else
+                    OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implLoadAnything: something strange happended!");
+            }
             catch(Exception&)
             {
                 DBG_ERROR("SbaTableQueryBrowser::implDropTable: suspicious exception caught!");
