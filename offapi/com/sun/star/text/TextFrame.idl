@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextFrame.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:21 $
+ *  last change: $Author: os $ $Date: 2001-01-22 13:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,27 +61,12 @@
 #ifndef __com_sun_star_text_TextFrame_idl__
 #define __com_sun_star_text_TextFrame_idl__
 
-#ifndef __com_sun_star_text_TextContent_idl__
-#include <com/sun/star/text/TextContent.idl>
-#endif
-
 #ifndef __com_sun_star_text_XTextFrame_idl__
 #include <com/sun/star/text/XTextFrame.idl>
 #endif
 
-#ifndef __com_sun_star_drawing_XShape_idl__
-#include <com/sun/star/drawing/XShape.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_container_XNamed_idl__
-#include <com/sun/star/container/XNamed.idl>
-#endif
-#ifndef __com_sun_star_style_GraphicLocation_idl__
-#include <com/sun/star/style/GraphicLocation.idl>
+#ifndef __com_sun_star_text_BaseFrame_idl__
+#include <com/sun/star/text/BaseFrame.idl>
 #endif
 
 //=============================================================================
@@ -90,7 +75,6 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::text::TextFrame
 /** specifies a rectangular shape which contains a <type scope="com::sun::star::drawing">Text</type> object
     and is attached to a piece of surrounding <type scope="com::sun::star::drawing">Text</type>.
 
@@ -113,132 +97,52 @@
  */
 service TextFrame
 {
-    // DocMerge: empty anyway
-    service com::sun::star::text::TextContent;
+    /** contains the definition of interfaces and properties that are supported by text frames,
+     graphic objects and embeddedobjects.
+     */
+    service BaseFrame;
 
-
-    // DocMerge from xml: service com::sun::star::text::TextFrame: interface com::sun::star::text::XTextFrame
     /** This interface makes it possible to access the text within this
                 text frame.
      */
     interface com::sun::star::text::XTextFrame;
-
-
-    // DocMerge from xml: service com::sun::star::text::TextFrame: interface com::sun::star::drawing::XShape
-    /** This interface specifies the access to the shape data (position
-                and size) of the text frame.
-
-                <p>This interface is valid before the text frame is attached
-                to a surrounding text, but when attached the values can change
-                (e.g. due to a revised layout of the surrounding text).
-
-                <p>The position is relative to the position of the anchor
-                [see <member>XTextFrame::getAnchor()</member>]. Size and position are
-                both measured in 100th mm. The size is not valid if the
-                size is relative and no layout exists or if the layout is invalid.
-
-                <p>This interface is only for the layout.  In particular, the
-                setting of values is only allowed for the layout component of the
-                owner text of this text component.
-     */
-    interface com::sun::star::drawing::XShape;
-
-
-    // DocMerge from xml: service com::sun::star::text::TextFrame: interface com::sun::star::beans::XPropertySet
-    /** This interface makes it possible to access the properties of
-                this text frame.
-
-                <p>This interface is valid before the text frame is attached to
-                a surrounding text.
-     */
-    interface com::sun::star::beans::XPropertySet;
-
-
-    // DocMerge from xml: service com::sun::star::text::TextFrame: interface com::sun::star::container::XNamed
-    /** This interface specifies the name of this text frame.
-
-                <p>The name may be set automatically by the container if it is not
-                set when inserted. In this case a random, unique name is assigned.
-     */
-    interface com::sun::star::container::XNamed;
-
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::text::TextFrame::FrameHeightAbsolute
     /** contains the metric height value of the frame.
      */
     [property] long FrameHeightAbsolute;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::text::TextFrame::FrameWidthAbsolute
     /** contains the metric width value of the frame.
      */
     [property] long FrameWidthAbsolute;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextFrame::FrameWidthPercent
     /** specifies a width relative to the width of the
         surrounding text.
-
-
-
         <p>If the value for "WidthPercent" is 0, the absolute value from
-
-
-
-
-
         is used.</p>
      */
     [property] byte FrameWidthPercent;
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::text::TextFrame::FrameHeightPercent
     /** specifies a width relative to the width of the
         surrounding text.
 
-
-
         <p>If the value for "HeightPercent" is 0, the absolute value from
-
-
-
-
-
         is used.</p>
      */
     [property] byte FrameHeightPercent;
-
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::text::TextFrame::FrameIsAutomaticHeight
     /** If "AutomaticHeight" is set, then the object grows if it is required
         by the frame content.
      */
     [property] boolean FrameIsAutomaticHeight;
     //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::text::TextFrame::BackGraphicURL
-    /** contains the URL for the background graphic.
+    /** determines the interpretation of the height and relative
+        height properties.@see SizeType
      */
-    [property] string BackGraphicURL;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::text::TextFrame::BackGraphicFilter
-    /** contains the name of the file filter for the background graphic.
-     */
-    [property] string BackGraphicFilter;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::text::TextFrame::BackGraphicLocation
-    /** determines the position of the background graphic.@see GraphicLocation
-     */
-    [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
+    [property] short SizeType;
 
 
 };
@@ -247,42 +151,4 @@ service TextFrame
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.5  2000/12/19 16:03:49  mi
-    documentations syntax errors fixed
-
-    Revision 1.4  2000/12/19 14:59:04  mi
-    documentation sytax errors fixed
-
-    Revision 1.3  2000/11/08 12:44:27  mi
-    moved from api
-
-    Revision 1.2  2000/10/16 16:27:27  mi
-    example code added
-
-    Revision 1.1.1.1  2000/09/18 23:36:03  hjs
-    initial import
-
-    Revision 1.7  2000/09/11 11:53:01  mi
-    documentation merged from XML
-
-    Revision 1.5  2000/06/16 11:42:16  os
-    #75622# BackGraphicLocation/URL/Filter added/changed
-
-    Revision 1.4  2000/04/05 13:44:03  os
-    syntax
-
-    Revision 1.3  2000/03/31 11:53:57  os
-    #74034# Documentation changed
-
-    Revision 1.2  2000/02/07 11:25:02  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:46  jsc
-    new
-
-
-=============================================================================*/
 #endif
