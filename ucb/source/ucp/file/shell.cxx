@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hro $ $Date: 2001-04-03 12:06:25 $
+ *  last change: $Author: hro $ $Date: 2001-04-03 12:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #endif
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XTRUNCATE_HPP_
+#include <com/sun/star/io/XTruncate.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument.hpp>
@@ -1168,7 +1171,8 @@ public:
     class XOutputStreamForStream
         : public cppu::OWeakObject,
           public io::XOutputStream,
-          public io::XSeekable
+          public io::XSeekable,
+          public io::XTruncate
     {
     public:
         XOutputStreamForStream( XStream_impl* xPtr )
@@ -1182,6 +1186,8 @@ public:
             m_xPtr->release();
         }
 
+        // XInterface
+
         uno::Any SAL_CALL
         queryInterface(
             const uno::Type& rType )
@@ -1189,7 +1195,9 @@ public:
         {
             uno::Any aRet = cppu::queryInterface( rType,
                                                   SAL_STATIC_CAST( io::XOutputStream*,this ),
-                                                  SAL_STATIC_CAST( io::XSeekable*,this ) );
+                                                  SAL_STATIC_CAST( io::XSeekable*,this ),
+                                                  SAL_STATIC_CAST( io::XTruncate*,this )
+                                                  );
             return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
         }
 
@@ -1210,6 +1218,18 @@ public:
             OWeakObject::release();
         }
 
+        // XTruncate
+
+        void SAL_CALL truncate( void )
+            throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException )
+        {
+            if ( m_bOpen )
+                m_xPtr->truncate();
+            else
+                throw io::IOException();
+        }
+
+        // XSeekable
 
         void SAL_CALL
         seek(
@@ -1248,6 +1268,8 @@ public:
                 throw io::IOException();
         }
 
+
+        // XOutputStream
 
         void SAL_CALL
         writeBytes( const uno::Sequence< sal_Int8 >& aData )
@@ -1377,6 +1399,9 @@ public:
         throw( io::NotConnectedException,
                io::IOException,
                uno::RuntimeException );
+
+    void SAL_CALL XStream_impl::truncate(void)
+        throw( io::IOException, uno::RuntimeException );
 
     void SAL_CALL
     seek(
@@ -1589,6 +1614,21 @@ XStream_impl::closeOutput(
     closeStream();
 }
 
+
+//===========================================================================
+// XStream_impl::truncate
+//===========================================================================
+
+void SAL_CALL XStream_impl::truncate(void)
+    throw( io::IOException, uno::RuntimeException )
+{
+    if( osl::FileBase::E_None != m_aFile.setSize(0) )
+        throw io::IOException();
+}
+
+//===========================================================================
+// XStream_impl other interface methods
+//===========================================================================
 
 void SAL_CALL
 XStream_impl::seek(
