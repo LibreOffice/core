@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgedit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:24 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 17:17:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ class MsgEdit : public DataEdit
 {
     SvLBoxEntry *pCurrentRun;
     SvLBoxEntry *pCurrentTestCase;
+    SvLBoxEntry *pCurrentAssertion;
     SvLBoxEntry *pCurrentError;
 protected:
     BOOL bModified;
@@ -130,6 +131,7 @@ public:
     void AddMessage( String aMsg, TTDebugData aDebugData );
     void AddWarning( String aMsg, TTDebugData aDebugData );
     void AddAssertion( String aMsg, TTDebugData aDebugData );
+    void AddAssertionStack( String aMsg, TTDebugData aDebugData );
     void AddQAError( String aMsg, TTDebugData aDebugData );
 DATA_FUNC_DEF( aEditTree, TTTreeListBox )
 };
