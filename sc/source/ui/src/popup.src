@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:44:27 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ Menu RID_POPUP_CELLS
             Text[ japanese ] = "γ‚»γƒ«γ®ζΏε…¥(~E)...";
             Text[ chinese_traditional ] = "ζ’ε…¥ε„²ε­ζ Ό(~E)...";
             Text[ arabic ] = "...ΕΟΡΗΜ ΞαΗνΗ";
-            Text[ greek ] = "Προσθήκη κ~ελιών...";
+            Text[ greek ] = "Εισαγωγή κ~ελιών...";
             Text[ korean ] = "μ…€ μ‚½μ…(~E)...";
             Text[ turkish ] = "Hόcre ekle...";
             Text[ language_user1 ] = " ";
@@ -516,7 +516,7 @@ String RID_POPUP_TAB
     Text[ japanese ] = "θ΅¨γ®θ¦‹ε‡Ίγ—γ®γƒγƒƒγƒ—γ‚Άγƒƒγƒ—γƒ΅γƒ‹γƒ¥γƒΌ";
     Text[ chinese_traditional ] = "ε·¥δ½θ΅¨ε·¥ε…·ε—η„εΏ«ι΅―εθƒ½θ΅¨";
     Text[ arabic ] = "ήΗΖγΙ γδΘΛήΙ αΤΡνΨ ΜΟζα";
-    Text[ greek ] = "Αναδυόμενο μενού για γραμμή πίνακα";
+    Text[ greek ] = "Αναδυόμενο μενού για γραμμή φύλλου";
     Text[ korean ] = "μ‹νΈ ν‘μ‹μ¤„ νμ—… λ©”λ‰΄";
     Text[ turkish ] = "Tablo ηubuπu iηin popup mφnό";
     Text[ language_user1 ] = " ";
@@ -821,8 +821,8 @@ Menu RID_POPUP_PIVOT
             Text[ spanish ] = "~Filtro...";
             Text[ italian ] = "~Filtro...";
             Text[ swedish ] = "~Filter...";
-            Text[ japanese ] = "γƒ•γ‚£γƒ«γ‚Ώ(F)...";
-            Text[ korean ] = "ν•„ν„°(F)...";
+            Text[ japanese ] = "γƒ•γ‚£γƒ«γ‚Ώ(~F)...";
+            Text[ korean ] = "ν•„ν„°(~F)...";
             Text[ chinese_simplified ] = "η­›ι€‰(~F)...";
             Text[ chinese_traditional ] = "η―©ιΈ(~F)...";
             Text[ turkish ] = "~Sόzgeη...";
@@ -837,7 +837,7 @@ Menu RID_POPUP_PIVOT
             Text[ portuguese ] = "~Filter...";
             Text[ russian ] = "~Filter...";
             Text[ polish ] = "~Filter...";
-            Text[ portuguese_brazilian ] = "~Filter...";
+            Text[ portuguese_brazilian ] = "~Filtro...";
             Text[ thai ] = "~Filter...";
             Text[ hindi ] = "~Filter...";
             Text[ slovak ] = "~Filter...";
@@ -1071,9 +1071,9 @@ Menu RID_POPUP_PREVIEW
             Text[ danish ] = "Close Pre~view";
             Text[ swedish ] = "Stδng fφrh~andsvisning";
             Text[ polish ] = "Close Pre~view";
-            Text[ portuguese_brazilian ] = "Close Pre~view";
+            Text[ portuguese_brazilian ] = "Fechar visualizaηγo";
             Text[ japanese ] = "γƒ—γƒ¬γƒ“γƒ¥γƒΌγ‚’ι–‰γγ‚‹(~V)";
-            Text[ korean ] = "λ―Έλ¦¬ λ³΄κΈ° λ‹«κΈ°";
+            Text[ korean ] = "λ―Έλ¦¬ λ³΄κΈ° λ‹«κΈ°(~V)";
             Text[ chinese_simplified ] = "ε…³ι—­ιΆ„θ§(~V)";
             Text[ chinese_traditional ] = "ι—ι–‰ι θ¦½(~V)";
             Text[ turkish ] = "Gφ~rόnόmό Kapat";
@@ -2031,6 +2031,7 @@ Menu RID_POPUP_PAGEBREAK
         };
     };
 };
+
 
 
 
