@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_vdev.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:21:43 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:30:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,20 +73,19 @@
 
 // -----------------------------------------------------------------------
 
-long VirtDevServerFont::FetchFontList( ImplDevFontList* pToAdd )
+void VirtDevServerFont::AnnounceFonts( ImplDevFontList* pToAdd )
 {
     // TODO: get fonts on server but not on client,
     // problem is that currently there is no serverside virtual device...
     VirtualDevice vdev( 1 );
     long nCount = vdev.GetDevFontCount();
 
-    for( int i = 0; i < nCount; ++ i)
+    for( int i = 0; i < nCount; ++i )
     {
         const FontInfo aFontInfo = vdev.GetDevFont( i );
 
-        ImplFontData rData;
-        rData.mpNext        = NULL;
-        rData.mpSysData     = SERVERFONT_MAGIC;
+        ImplFontData& rData = *new ImplFontData;
+        rData.SetSysData( new FontSysData( (void*)SERVERFONT_MAGIC ) );
 
         rData.maName        = aFontInfo.GetName();
         rData.maStyleName   = aFontInfo.GetStyleName();
@@ -101,14 +100,12 @@ long VirtDevServerFont::FetchFontList( ImplDevFontList* pToAdd )
         rData.meType        = aFontInfo.GetType();
         rData.meFamily      = aFontInfo.GetFamily();
 
-        rData.mnVerticalOrientation = 0;    // TODO: where to get this info?
         rData.mbOrientation = true;         // TODO: where to get this info?
         rData.mbDevice      = false;
         rData.mnQuality     = 0;            // prefer client-side fonts if available
 
-        pToAdd->Add( new ImplFontData( rData ) );   // TODO: avoid copy if possible
+        pToAdd->Add( &rData );
     }
-    return nCount;
 }
 
 // -----------------------------------------------------------------------
@@ -201,13 +198,15 @@ void VirtDevServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 // TODO:    vdev.GetCharWidth( nGlyphIndex, nGlyphIndex, &nCharWidth );
     rGD.SetCharWidth( nCharWidth );
 
-    const Rectangle aRect = vdev.GetTextRect(
-        aRect, String(static_cast< sal_Unicode >(nGlyphIndex)) );
-    rGD.SetOffset( aRect.Top(), aRect.Left() );
-    rGD.SetDelta(
-        vdev.GetTextWidth( String(static_cast< sal_Unicode >(nGlyphIndex)) ),
-        0 );
-    rGD.SetSize( aRect.GetSize() );
+    sal_Unicode aChar = nGlyphIndex;
+    String aGlyphStr( &aChar, 1 );
+    Rectangle aRect;
+    if( vdev.GetTextBoundRect( aRect, aGlyphStr, 0, 1 ) )
+    {
+        rGD.SetOffset( aRect.Top(), aRect.Left() );
+        rGD.SetDelta( vdev.GetTextWidth( nGlyphIndex ), 0 );
+        rGD.SetSize( aRect.GetSize() );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -222,9 +221,12 @@ bool VirtDevServerFont::GetAntialiasAdvice( void ) const
 bool VirtDevServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const
 {
     /*
+    sal_Unicode aChar = nGlyphIndex;
+    String aGlyphStr( &aChar, 1 );
+
     // draw bitmap
     vdev.SetOutputSizePixel( aSize, TRUE );
-    vdev.DrawText( Point(0,0)-rGD.GetMetric().GetOffset(), nGlyphIndex );
+    vdev.DrawText( Point(0,0)-rGD.GetMetric().GetOffset(), aGlyphStr );
 
     // create new glyph item
 
@@ -306,7 +308,10 @@ bool VirtDevServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPoly
     vdev.SetFont( aFont );
 
     const bool bOptimize = true;
-    return vdev.GetGlyphOutline( nGlyphIndex, rPolyPoly, bOptimize );
+
+    sal_Unicode aChar = nGlyphIndex;
+    String aGlyphStr( &aChar, 1 );
+    return vdev.GetTextOutline( rPolyPoly, aGlyphStr, 0, 1, bOptimize );
     */
 }
 
