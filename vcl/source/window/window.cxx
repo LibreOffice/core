@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.177 $
+ *  $Revision: 1.178 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:35:29 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5839,6 +5839,28 @@ Region Window::GetPaintRegion() const
     {
         Region aPaintRegion( REGION_NULL );
         return aPaintRegion;
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void Window::ExpandPaintClipRegion( const Region& rRegion )
+{
+    if( mpPaintRegion )
+    {
+        Region aPixRegion = LogicToPixel( rRegion );
+        Region aDevPixRegion = ImplPixelToDevicePixel( aPixRegion );
+
+        Region aWinChildRegion = *ImplGetWinChildClipRegion();
+        // --- RTL -- only this region is in frame coordinates, so re-mirror it
+        if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
+            ImplReMirror( aWinChildRegion );
+        aDevPixRegion.Intersect( aWinChildRegion );
+        if( ! aDevPixRegion.IsEmpty() )
+        {
+            mpPaintRegion->Union( aDevPixRegion );
+            mbInitClipRegion = TRUE;
+        }
     }
 }
 
