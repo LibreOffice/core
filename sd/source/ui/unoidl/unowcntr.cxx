@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowcntr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:43 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
 
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
@@ -162,5 +166,22 @@ sal_Bool SvUnoWeakContainer::findRef( uno::WeakReference< uno::XInterface >& rRe
     }
 
     return sal_False;
+}
+
+void SvUnoWeakContainer::dispose()
+{
+    uno::WeakReference< uno::XInterface >* pRef = mpList->First();
+    while( pRef )
+    {
+        uno::Reference< uno::XInterface > xTestRef( *pRef );
+        if(xTestRef.is())
+        {
+            uno::Reference< lang::XComponent > xComp( xTestRef, uno::UNO_QUERY );
+            if( xComp.is() )
+                xComp->dispose();
+        }
+
+        pRef = mpList->Next();
+    }
 }
 

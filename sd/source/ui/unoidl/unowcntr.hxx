@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowcntr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:43 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:41:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,8 @@ public:
         search function
     */
     sal_Bool findRef( ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >& rRef, void* pSearchData, weakref_searchfunc pSearchFunc );
+
+    void dispose();
 };
 
 #endif // _SV_UNOWCNTR_HXX_
