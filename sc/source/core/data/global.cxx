@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:54:49 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 12:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1755,6 +1755,43 @@ ScFuncDesc::~ScFuncDesc()
 
 //------------------------------------------------------------------------
 
+String ScFuncDesc::GetParamList() const
+{
+    String aSig;
+
+    if ( nArgCount > 0 )
+    {
+        if ( nArgCount < VAR_ARGS )
+        {
+            for ( USHORT i=0; i<nArgCount; i++ )
+            {
+                aSig += *(aDefArgNames[i]);
+                if ( i != nArgCount-1 )
+                    aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; " ));
+            }
+        }
+        else
+        {
+            USHORT nFix = nArgCount - VAR_ARGS;
+            for ( USHORT nArg = 0; nArg < nFix; nArg++ )
+            {
+                aSig += *(aDefArgNames[nArg]);
+                aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; " ));
+            }
+            aSig += *(aDefArgNames[nFix]);
+            aSig += '1';
+            aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; " ));
+            aSig += *(aDefArgNames[nFix]);
+            aSig += '2';
+            aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; ... " ));
+        }
+    }
+
+    return aSig;
+}
+
+//------------------------------------------------------------------------
+
 String ScFuncDesc::GetSignature() const
 {
     String aSig;
@@ -1762,34 +1799,13 @@ String ScFuncDesc::GetSignature() const
     if(pFuncName)
     {
         aSig = *pFuncName;
-        if ( nArgCount > 0 )
+
+        String aParamList( GetParamList() );
+        if( aParamList.Len() )
         {
             aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "( " ));
-            if ( nArgCount < VAR_ARGS )
-            {
-                for ( USHORT i=0; i<nArgCount; i++ )
-                {
-                    aSig += *(aDefArgNames[i]);
-                    if ( i != nArgCount-1 )
-                        aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; " ));
-                }
-            }
-            else
-            {
-                USHORT nFix = nArgCount - VAR_ARGS;
-                for ( USHORT nArg = 0; nArg < nFix; nArg++ )
-                {
-                    aSig += *(aDefArgNames[nArg]);
-                    aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; " ));
-                }
-                aSig += *(aDefArgNames[nFix]);
-                aSig += '1';
-                aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; " ));
-                aSig += *(aDefArgNames[nFix]);
-                aSig += '2';
-                aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; ... " ));
-            }
-
+            aSig.Append( aParamList );
+            // U+00A0 (NBSP) prevents automatic line break
             aSig.Append( static_cast< sal_Unicode >(0xA0) ).Append( ')' );
         }
         else
