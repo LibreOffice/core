@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SecurityDialog.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-02-06 17:12:58 $
+ *  last change: $Author: dfoster $ $Date: 2003-02-06 17:21:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-package com.sun.star.scripting.framework.security;
+package com.sun.star.script.framework.security;
 
 import com.sun.star.awt.ActionEvent;
 import com.sun.star.awt.XActionListener;
