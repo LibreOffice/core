@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *  last change: $Author: os $ $Date: 2001-06-12 10:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,6 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
     GetView().NoRotate();
 
-    pSh->StartAction();
-
     switch (rReq.GetSlot())
     {
         case FN_DRAWTEXT_ATTR_DLG:
@@ -142,7 +140,11 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             if (nResult == RET_OK)
             {
                 if (pView->HasMarkedObj())
+                {
+                    pSh->StartAction();
                     pView->SetAttributes(*pDlg->GetOutputItemSet());
+                    pSh->EndAction();
+                }
             }
             delete( pDlg );
         }
@@ -153,21 +155,19 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             BOOL bHasMarked = pView->HasMarkedObj();
 
 
-#if SUPD>352
             SvxAreaTabDialog* pDlg = new SvxAreaTabDialog( NULL, &aNewAttr, pDoc, pView );
-#else
-            SvxAreaTabDialog* pDlg = new SvxAreaTabDialog( NULL, &aNewAttr, pDoc);
-#endif
             const SvxColorTableItem* pColorItem = (const SvxColorTableItem*)
                                     GetView().GetDocShell()->GetItem(SID_COLOR_TABLE);
             if(pColorItem->GetColorTable() == OFF_APP()->GetStdColorTable())
                 pDlg->DontDeleteColorTable();
             if (pDlg->Execute() == RET_OK)
             {
+                pSh->StartAction();
                 if (bHasMarked)
                     pView->SetAttributes(*pDlg->GetOutputItemSet());
                 else
                     pView->SetDefaultAttr(*pDlg->GetOutputItemSet(), FALSE);
+                pSh->EndAction();
 
                 static USHORT __READONLY_DATA aInval[] =
                 {
@@ -196,10 +196,12 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
             if (pDlg->Execute() == RET_OK)
             {
+                pSh->StartAction();
                 if(bHasMarked)
                     pView->SetAttrToMarked(*pDlg->GetOutputItemSet(), FALSE);
                 else
                     pView->SetDefaultAttr(*pDlg->GetOutputItemSet(), FALSE);
+                pSh->EndAction();
 
                 static USHORT __READONLY_DATA aInval[] =
                 {
@@ -217,7 +219,6 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             break;
     }
 
-    pSh->EndAction();
 
     if (pDoc->IsChanged())
         GetShell().SetModified();
@@ -300,6 +301,9 @@ void SwDrawShell::GetDrawAttrState(SfxItemSet& rSet)
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:46  hr
+      initial import
+
       Revision 1.85  2000/09/18 16:06:03  willem.vandorp
       OpenOffice header added.
 
