@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-30 14:02:53 $
+ *  last change: $Author: sj $ $Date: 2002-05-31 11:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4080,7 +4080,7 @@ SvxMSDffManager::~SvxMSDffManager()
     delete pShapeInfos;
     delete pShapeOrders;
     delete pFormModel;
-    delete mpFidcls;
+    delete[] mpFidcls;
 }
 
 void SvxMSDffManager::InitSvxMSDffManager( long nOffsDgg_, SvStream* pStData_, sal_uInt32 nOleConvFlags )
@@ -4887,7 +4887,7 @@ BOOL SvxMSDffManager::GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData) const
                         pGrStream->Read( pDat, nDbgLen );
                         pDbgOut->Write( pDat, nDbgLen );
                         pGrStream->SeekRel( -nDbgLen );
-                        delete pDat;
+                        delete[] pDat;
                     }
                 }
 
@@ -4968,7 +4968,7 @@ BOOL SvxMSDffManager::ZCodecDecompressed( SvStream& rIn, SvStream& rOut, BOOL bL
                 break;
         }
         if( nBytesRead < 0 ) nBytesOut = 0;     // Error: Ergebnisse ungueltig !!
-        delete pBuf;
+        delete[] pBuf;
     }
     else
         nBytesOut = aZCodec.Decompress( rIn, rOut );

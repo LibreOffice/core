@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-30 14:03:15 $
+ *  last change: $Author: sj $ $Date: 2002-05-31 11:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -773,8 +773,8 @@ PptSlidePersistEntry::PptSlidePersistEntry() :
 PptSlidePersistEntry::~PptSlidePersistEntry()
 {
     delete pStyleSheet;
-    delete pPresentationObjects;
     delete pSolverContainer;
+    delete[] pPresentationObjects;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1796,7 +1796,7 @@ SdrPowerPointImport::~SdrPowerPointImport()
     delete pMasterPages;
     delete pSlidePages;
     delete pNotePages;
-    delete pPersistPtr;
+    delete[] pPersistPtr;
 }
 
 sal_Bool PPTConvertOCXControls::InsertControl(
@@ -1944,7 +1944,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, co
             aZCodec.BeginCompression();
             SvMemoryStream aSource( pBuf, nLen, STREAM_READ );
             aZCodec.Decompress( aSource, *pDest );
-            delete pBuf;
+            delete[] pBuf;
 
 #ifdef DBG_EXTRACTOLEOBJECTS
 
@@ -2165,7 +2165,7 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                                                                         xOriginal->Write( pBuf, nBufSize );
                                                                         nToCopy -= nBufSize;
                                                                     }
-                                                                    delete pBuf;
+                                                                    delete[] pBuf;
                                                                 }
                                                             }
                                                         }
@@ -2537,7 +2537,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                     aParagraphAttribs.Put( SfxUInt16Item( EE_PARA_BULLETSTATE, FALSE ) );
                 aSelection.nStartPos = 0;
                 rOutliner.QuickSetAttribs( aParagraphAttribs, aSelection );
-                delete pParaText;
+                delete[] pParaText;
             }
         }
         OutlinerParaObject* pNewText = rOutliner.CreateParaObject();
@@ -4962,7 +4962,7 @@ PPTRuler::PPTRuler() :
 
 PPTRuler::~PPTRuler()
 {
-    delete pTab;
+    delete[] pTab;
 };
 
 
@@ -6087,7 +6087,7 @@ void PPTParagraphObj::AppendPortion( PPTPortionObj& rPPTPortion )
     mpPortionList = new PPTPortionObj*[ ++mnPortionCount ];
     for ( i = 0; i < mnPortionCount - 1; i++ )
         mpPortionList[ i ] = mpOldPortionList[ i ];
-    delete mpOldPortionList;
+    delete[] mpOldPortionList;
     mpPortionList[ mnPortionCount - 1 ] = new PPTPortionObj( rPPTPortion );
     if ( !mbTab )
         mbTab = mpPortionList[ mnPortionCount - 1 ]->HasTabulator();
@@ -6560,7 +6560,7 @@ void PPTParagraphObj::ImplClear()
 {
     for ( void* pPtr = First(); pPtr; pPtr = Next() )
         delete (PPTPortionObj*)pPtr;
-    delete mpPortionList;
+    delete[] mpPortionList;
 }
 
 PPTFieldEntry::~PPTFieldEntry()
