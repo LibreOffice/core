@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellexec.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:06:44 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:34:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,14 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_URI_XEXTERNALURIREFERENCETRANSLATOR_HPP_
+#include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_URI_EXTERNALURIREFERENCETRANSLATOR_HPP_
+#include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
+#endif
+
 #include "uno/current_context.hxx"
 
 #include <string.h>
@@ -137,33 +145,6 @@ namespace // private
         aRet[0] = OUString::createFromAscii("com.sun.star.sys.shell.SystemShellExecute");
         return aRet;
     }
-
-    //-------------------------------------
-
-    /* a slightly modified version of Pchar in rtl/source/uri.c */
-    const sal_Bool uriCharClass[128] =
-    {
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* Pchar but without encoding slashes */
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* !"#$%&'()*+,-./  */
-      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, /* 0123456789:;<=>? */
-      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* @ABCDEFGHIJKLMNO */
-      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, /* PQRSTUVWXYZ[\]^_ */
-      0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /* `abcdefghijklmno */
-      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0  /* pqrstuvwxyz{|}~  */
-    };
-
-    //-------------------------------------
-
-    rtl::OUString reencode_file_url(const rtl::OUString& file_url,
-        rtl_TextEncoding from_textenc, rtl_TextEncoding to_textenc)
-    {
-        rtl::OUString tmp = rtl::Uri::decode(
-            file_url, rtl_UriDecodeWithCharset, from_textenc);
-
-        return rtl::Uri::encode(
-            tmp, uriCharClass, rtl_UriEncodeIgnoreEscapes, to_textenc);
-    }
 }
 
 //-----------------------------------------------------------------------------------------
@@ -171,7 +152,8 @@ namespace // private
 //-----------------------------------------------------------------------------------------
 
 ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
-    WeakImplHelper2< XSystemShellExecute, XServiceInfo >()
+    WeakImplHelper2< XSystemShellExecute, XServiceInfo >(),
+    m_xContext(xContext)
 {
     try {
         Reference< XCurrentContext > xCurrentContext(getCurrentContext());
@@ -206,13 +188,21 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
     if( nIndex > 0 || 0 == aCommand.compareToAscii("mailto:", 7) )
     {
         // It seems to be a url ..
-        OUString aURL(aCommand);
-
         // We need to re-encode file urls because osl_getFileURLFromSystemPath converts
         // to UTF-8 before encoding non ascii characters, which is not what other apps
         // expect.
-        if ( 0 == aURL.compareToAscii("file://", 7) )
-            aURL = reencode_file_url(aURL, RTL_TEXTENCODING_UTF8, osl_getThreadTextEncoding());
+        OUString aURL(
+            com::sun::star::uri::ExternalUriReferenceTranslator::create(
+                m_xContext)->translateToExternal(aCommand));
+        if ( aURL.getLength() == 0 && aCommand.getLength() != 0 )
+        {
+            throw RuntimeException(
+                (OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "Cannot translate URI reference to external format: "))
+                 + aCommand),
+                static_cast< cppu::OWeakObject * >(this));
+        }
 
 #ifdef MACOSX
         aBuffer.append("open");
