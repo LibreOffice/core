@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-13 19:35:07 $
+ *  last change: $Author: nn $ $Date: 2001-06-27 13:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1150,6 +1150,15 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     sal_uInt16 nLeading = 0;
     rFormat.GetNumForInfo( nPart, nFmtType, bThousand, nPrecision, nLeading);
     nFmtType &= ~NUMBERFORMAT_DEFINED;
+
+    //  special treatment of builtin formats that aren't detected by normal parsing
+    //  (the same formats that get the type set in SvNumberFormatter::ImpGenerateFormats)
+    if ( eBuiltIn == NF_NUMBER_STANDARD )
+        nFmtType = NUMBERFORMAT_NUMBER;
+    else if ( eBuiltIn == NF_BOOLEAN )
+        nFmtType = NUMBERFORMAT_LOGICAL;
+    else if ( eBuiltIn == NF_TEXT )
+        nFmtType = NUMBERFORMAT_TEXT;
 
     OUString sType;
     switch ( nFmtType )
