@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: thb $ $Date: 2004-03-18 10:41:04 $
+#   last change: $Author: rt $ $Date: 2004-11-26 20:55:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,7 @@ SLOFILES =	$(SLO)$/bitmapaction.obj \
             $(SLO)$/pointaction.obj \
             $(SLO)$/polypolyaction.obj \
             $(SLO)$/textaction.obj \
+            $(SLO)$/transparencygroupaction.obj \
             $(SLO)$/mtftools.obj
 
 # ==========================================================================
