@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:18:38 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ using namespace psp;
 using namespace rtl;
 
 #undef DBG_ASSERT
-#if defined DBG_UTIL || defined DEBUG
+#if defined DBG_UTIL || (OSL_DEBUG_LEVEL > 1)
 #define BSTRING(x) ByteString( x, gsl_getSystemTextEncoding() )
 #define DBG_ASSERT( x, y ) { if( ! (x) ) fprintf( stderr, (y) ); }
 #else
@@ -1384,7 +1384,7 @@ bool PPDContext::resetValue( const PPDKey* pKey, bool bDefaultable )
 
     bool bRet = pResetValue ? ( setValue( pKey, pResetValue ) == pResetValue ? true : false ) : false;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "%s\n", bRet ? "succeeded" : "failed" );
 #endif
 
