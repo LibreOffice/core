@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:23:27 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 15:49:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,8 +792,8 @@ void ImpFileDialog::InitControls()
 {
     UniString aEmptyStr;
 
-    const nW = 160;
-    const nH = 48; // Um den Dialog in eine akzeptable Form zu bringen
+    const int nW = 160;
+    const int nH = 48; // Um den Dialog in eine akzeptable Form zu bringen
 
     INITCONTROL( pFileTitel, FixedText, 0,
         Point(10, 12), Size(nW, 18), UniString( SvtResId( STR_FILEDLG_FILE ) ), HID_FILEDLG_FILE );
