@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Bibliography.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:11 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ module com { module sun { module star { module text { module FieldMaster {
 /** specifies service of a Bibliography field master.
     @see com::sun::star::text::TextField
 */
-service Bibliography
+published service Bibliography
 {
     service  com::sun::star::text::TextFieldMaster;
 
