@@ -2,9 +2,9 @@
 *
 *  $RCSfile: registryitem_ooo.scp,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-11-03 08:07:19 $
+*  last change: $Author: hr $ $Date: 2004-11-26 21:54:38 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -187,7 +187,7 @@ RegistryItem gid_Regitem_Soffice_Starchartdocument_5_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "soffice.StarChartDocument.5\DefaultIcon";
     ModuleID = gid_Module_Root;
-    Value = "<progpath>\program\soffice.exe,12";
+    Value = "<progpath>\program\soffice.exe,36";
 End
 
 RegistryItem gid_Regitem_Soffice_Starchartdocument_5_Shell
@@ -545,7 +545,7 @@ RegistryItem gid_Regitem_Odb
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".odb";
     ModuleID = gid_Module_Root;
-    Value = "openoffice.DatabaseDocument.1";
+    Value = "opendocument.DatabaseDocument.1";
 End
 
 RegistryItem gid_Regitem_Odb_PersistentHandler
@@ -572,7 +572,7 @@ End
 RegistryItem gid_Regitem_DatabaseDocument_1_Shellex_PropertySheetHandlers_MyPropSheet1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Root;
-    Subkey = "openoffice.DatabaseDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
+    Subkey = "opendocument.DatabaseDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
     Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
@@ -581,61 +581,61 @@ RegistryItem gid_Regitem_Odb_Contenttype
     ModuleID = gid_Module_Root;
     Subkey = ".odb";
     Name = "Content Type";
-    Value = "application/x-vnd.oasis.openoffice.database";
+    Value = "application/vnd.oasis.opendocument.database";
 End
 
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "openoffice.DatabaseDocument.1";
+    Subkey = "opendocument.DatabaseDocument.1";
     ModuleID = gid_Module_Root;
     REG_VALUE_LNG(OO_DATABASE)
 End
 
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "openoffice.DatabaseDocument.1\DefaultIcon";
+    Subkey = "opendocument.DatabaseDocument.1\DefaultIcon";
     ModuleID = gid_Module_Root;
     Value = "<progpath>\program\soffice.exe,14";
 End
 
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "openoffice.DatabaseDocument.1\shell";
+    Subkey = "opendocument.DatabaseDocument.1\shell";
     ModuleID = gid_Module_Root;
     Value = "new";
 End
 
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell_New
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "openoffice.DatabaseDocument.1\shell\new";
+    Subkey = "opendocument.DatabaseDocument.1\shell\new";
     ModuleID = gid_Module_Root;
     REG_VALUE_LNG(NEW)
 End
 
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "openoffice.DatabaseDocument.1\shell\new\command";
+    Subkey = "opendocument.DatabaseDocument.1\shell\new\command";
     ModuleID = gid_Module_Root;
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "openoffice.DatabaseDocument.1\shell\open\command";
+    Subkey = "opendocument.DatabaseDocument.1\shell\open\command";
     ModuleID = gid_Module_Root;
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell_Print_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "openoffice.DatabaseDocument.1\shell\print\command";
+    Subkey = "opendocument.DatabaseDocument.1\shell\print\command";
     ModuleID = gid_Module_Root;
     Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell_Printto_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "openoffice.DatabaseDocument.1\shell\printto\command";
+    Subkey = "opendocument.DatabaseDocument.1\shell\printto\command";
     ModuleID = gid_Module_Root;
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
@@ -646,7 +646,7 @@ RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Root;
     Subkey = "CLSID\{7BC0E710-5703-45BE-A29D-5D46D8B39262}";
-    Value = "OpenOffice.org Filter";
+    Value = "opendocument.org Filter";
 End
 
 RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer32
@@ -668,7 +668,7 @@ RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Root;
     Subkey = "CLSID\{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
-    Value = "OpenOffice.org Persistent Handler";
+    Value = "opendocument.org Persistent Handler";
 End
 
 RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262_PersistentAddinsRegistered
