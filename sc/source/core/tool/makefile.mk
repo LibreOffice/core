@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 19:51:16 $
+#   last change: $Author: hr $ $Date: 2004-02-02 18:43:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -150,7 +150,8 @@ NOOPTFILES= \
 NOOPTFILES= \
         $(SLO)$/interpr2.obj \
         $(SLO)$/interpr4.obj \
-        $(SLO)$/token.obj 
+        $(SLO)$/token.obj    \
+        $(SLO)$/chartarr.obj 
 .ENDIF
 
 .IF "$(GUI)"=="OS2"
