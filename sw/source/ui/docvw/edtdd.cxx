@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtdd.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2002-04-09 14:20:51 $
+ *  last change: $Author: dvo $ $Date: 2002-05-27 16:12:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,26 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
         }
     }
 
+
+    // dvo 2002-05-27, #99027#: There's a special treatment for file lists with a single
+    //                          element, that depends on the actual content of the
+    //                          Transferable to be accessible. Since the transferable
+    //                          may only be accessed after the drop has been accepted
+    //                          (according to KA due to Java D&D), we'll have to
+    //                          reevaluate the drop action once more _with_ the
+    //                          Transferable.
+    USHORT nEventAction;
+    sal_Int8 nUserOpt = rEvt.mbDefault ? EXCHG_IN_ACTION_DEFAULT
+                                       : rEvt.mnAction;
+    nDropAction = SotExchange::GetExchangeAction(
+                                GetDataFlavorExVector(),
+                                nDropDestination,
+                                rEvt.mnAction,
+//!!                                rEvt.GetSourceOptions(),
+                                nUserOpt, nDropFormat, nEventAction, 0,
+                                &rEvt.maDropEvent.Transferable );
+
+
     TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
     nRet = rEvt.mnAction;
     if( !SwTransferable::PasteData( aData, rSh, nDropAction, nDropFormat,
@@ -579,6 +599,9 @@ IMPL_LINK( SwEditWin, DDHandler, Timer *, EMPTYARG )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.10  2002/04/09 14:20:51  ama
+    Fix #98156#: Leave the selected frame
+
     Revision 1.9  2001/10/11 17:20:34  jp
     Bug #93007#: StartDrag - ask DrawView if they will handle the DragEvent
 
