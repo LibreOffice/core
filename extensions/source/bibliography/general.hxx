@@ -2,9 +2,9 @@
  *
  *  $RCSfile: general.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:45 $
+ *  last change: $Author: os $ $Date: 2000-11-13 11:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ class BibGeneralPage:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >        AddXControl(const String& rName, Point aPos, Size aSize, sal_uInt16 nHelpId);
 
-    void                    AddControlWithError(const String& rColumnName,
+    void                    AddControlWithError(const rtl::OUString& rColumnName,
                                     const Point& rPos,  const Size& rSize, String& rErrorString,
                                     String aColumnUIName, sal_uInt16 nHelpId);
 

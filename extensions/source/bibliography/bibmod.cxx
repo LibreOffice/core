@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibmod.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:44 $
+ *  last change: $Author: os $ $Date: 2000-11-13 11:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,6 @@
 
 
 #include <tools/resmgr.hxx>
-#include <svtools/iniprop.hxx>
-#include <svtools/iniman.hxx>
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -91,6 +89,7 @@
 #include "bibresid.hxx"
 #include "registry.hxx"
 #include "datman.hxx"
+#include "bibconfig.hxx"
 static PtrBibModul pBibModul=NULL;
 static nBibModulCount=0;
 
@@ -128,16 +127,11 @@ void CloseBibModul(HdlBibModul ppBibModul)
     }
 }
 
-/*PtrBibModul GetBibModul()
-{
-    return pBibModul;
-} */
-
 BibResId::BibResId( sal_uInt16 nId ) :
     ResId( nId, pBibModul->GetResMgr() )
 {
 }
-
+BibConfig* BibModul::pBibConfig = 0;
 BibModul::BibModul()
 {
     pResMgr = ResMgr::CreateResMgr( "bib" MAKE_NUMSTR(SUPD) );
@@ -148,6 +142,7 @@ BibModul::BibModul()
 BibModul::~BibModul()
 {
     delete pResMgr;
+    delete pBibConfig;
     xRegistry = 0;
     //delete pRegistry;
 }
@@ -157,107 +152,13 @@ BibDataManager*  BibModul::createDataManager()
     return new BibDataManager(pRegistry);
 }
 //-----------------------------------------------------------------------------
-String BibModul::GetBibliographyURL(String* pTableName)
+BibConfig*  BibModul::GetConfig()
 {
-    String aURL;
-    SfxAppIniManagerProperty aProp;
-    GetpApp()->Property( aProp );
-    SfxIniManager* pIniMan = aProp.GetIniManager();
-    if( !pIniMan )
-        return String();
-
-    String  aBib = pIniMan->Get( C2S(BIBLIOGRAPHY_INI_GROUP),
-                                 sal_False, sal_False,
-                                 C2S(BIBLIOGRAPHY_INI_CUR_NAME));
-    sal_Bool bCorrect = sal_False;
-    if(aBib.Len())
-    {
-        aURL = aBib.GetToken( 0, ';' );
-        aURL = pIniMan->SubstPathVars( aURL );
-        aURL = URIHelper::SmartRelToAbs(aURL);
-
-        INetURLObject aTmpURL(aURL);
-        BOOL bExist = FALSE;
-        if(aTmpURL.GetProtocol() == INET_PROT_FILE)
-            try
-            {
-                bExist = ::ucb::Content(
-                    aTmpURL.GetMainURL(), uno::Reference< XCommandEnvironment >()).isDocument();
-            }
-            catch(...){}
-
-        if(bExist)
-        {
-            bCorrect = sal_True;
-            if(pTableName)
-                *pTableName = aBib.GetToken( 1, ';' );
-        }
-    }
-    if(!bCorrect)
-    {
-        //if there's no entry defined take the first *.sdb from the database favorites
-        try
-        {
-            uno::Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
-            uno::Reference< container::XNameAccess >  xDatabaseContext(xMgr->createInstance(
-                C2U("com.sun.star.sdb.DatabaseAccessContext") ), UNO_QUERY );
-//          uno::Sequence<rtl::OUString> aFavorites;
-//          if (xDatabaseContext.is())
-//              aFavorites = xDatabaseContext->getElementNames();
-//          if (aFavorites.getLength())
-//              aURL = INetURLObject::SmartRelToAbs(U2S(aFavorites.getConstArray()[0]));
-            Reference<XLocalizedAliases> xAlias(xDatabaseContext, UNO_QUERY);
-            Reference<XLocalizable> xLocal(xDatabaseContext, UNO_QUERY);
-            Sequence< AliasProgrammaticPair > aAliasPairs =
-                                xAlias->listAliases(xLocal->getLocale());
-            const AliasProgrammaticPair* pPairs = aAliasPairs.getConstArray();
-            for(INT32 nFav = 0; nFav < aAliasPairs.getLength(); nFav++)
-            {
-                String sURL =  pPairs[nFav].ProgrammaticName;
-                aURL = URIHelper::SmartRelToAbs(sURL);
-                INetURLObject aTmpURL(aURL);
-                BOOL bExist = FALSE;
-                if(aTmpURL.GetProtocol() == INET_PROT_FILE)
-                    try
-                    {
-                        bExist = ::ucb::Content(
-                            aTmpURL.GetMainURL(), uno::Reference< XCommandEnvironment >()).isDocument();
-                    }
-                    catch(...){}
-
-                if(bExist)
-                    break;
-                else
-                    aURL.Erase();
-            }
-
-        }
-        catch(...)
-        {
-            DBG_ERROR("Exception in BibDataManager::DBChangeDialog_Impl::DBChangeDialog_Impl")
-        }
-
-    }
-    return aURL;
+    if(!pBibConfig)
+        pBibConfig = new BibConfig;
+    return pBibConfig;
 }
-//-----------------------------------------------------------------------------
-void BibModul::SetBibliographyURL(const String& rURL, const String& rTable)
-{
-    SfxAppIniManagerProperty aProp;
-    GetpApp()->Property( aProp );
-    SfxIniManager* pIniMan = aProp.GetIniManager();
-    if( !pIniMan )
-        return;
 
-    String sEntry(rURL);
-    sEntry = pIniMan->UsePathVars( sEntry );
-
-    sEntry += ';';
-    sEntry += rTable;
-
-    pIniMan->WriteKey( C2S(BIBLIOGRAPHY_INI_GROUP),
-                        C2S(BIBLIOGRAPHY_INI_CUR_NAME), sEntry);
-}
 
 // PropertyNames
 #define STATIC_USTRING(a,b) rtl::OUString a(b)

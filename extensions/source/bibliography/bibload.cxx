@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibload.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:44 $
+ *  last change: $Author: os $ $Date: 2000-11-13 11:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,9 +144,6 @@
 #ifndef _SFXINIPROP_HXX
 #include <svtools/iniprop.hxx>
 #endif
-#ifndef _SFXINIMGR_HXX
-#include <svtools/iniman.hxx>
-#endif
 #ifndef _SVEDIT_HXX
 #include <svtools/svmedit.hxx>
 #endif
@@ -160,7 +157,7 @@
 #ifndef ADRBEAM_HXX
 #include "bibbeam.hxx"
 #endif
-#ifndef ADDRMOD_HXX
+#ifndef BIBMOD_HXX
 #include "bibmod.hxx"
 #endif
 #ifndef _BIB_VIEW_HXX
@@ -171,6 +168,9 @@
 #endif
 #ifndef _BIB_DATMAN_HXX
 #include "datman.hxx"
+#endif
+#ifndef _BIBCONFIG_HXX
+#include <bibconfig.hxx>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
@@ -410,10 +410,9 @@ void BibliographyLoader::loadView(const Reference< frame::XFrame > & rFrame, con
 
     BibDataManager* pDatMan=(*pBibMod)->createDataManager();
     xDatMan = pDatMan;
-    String sTableName;
-    rtl::OUString aBibUrl=BibModul::GetBibliographyURL(&sTableName);
+    BibDBDescriptor aBibDesc = BibModul::GetConfig()->GetBibliographyURL();
 
-    Reference< form::XForm >  xForm = pDatMan->createDatabaseForm(aBibUrl, OUString(sTableName));
+    Reference< form::XForm >  xForm = pDatMan->createDatabaseForm(aBibDesc);
 
     if(xForm.is())
     {
@@ -504,14 +503,13 @@ Reference< container::XNameAccess >  BibliographyLoader::GetDataColumns() const
         Reference< XPropertySet >  xResultSetProps(xRowSet, UNO_QUERY);
         DBG_ASSERT(xResultSetProps.is() , "BibliographyLoader::GetDataCursor : invalid row set (no XResultSet or no XPropertySet) !");
 
-        String sTableName;
-        rtl::OUString aBibUrl = BibModul::GetBibliographyURL(&sTableName);
+        BibDBDescriptor aBibDesc = BibModul::GetConfig()->GetBibliographyURL();
 
-        Any aBibUrlAny; aBibUrlAny <<= aBibUrl;
+        Any aBibUrlAny; aBibUrlAny <<= aBibDesc.sDataSource;
         xResultSetProps->setPropertyValue(C2U("DataSourceName"), aBibUrlAny);
-        Any aCommandType; aCommandType <<= (sal_Int32)(CommandType::TABLE);
+        Any aCommandType; aCommandType <<= aBibDesc.nCommandType;
         xResultSetProps->setPropertyValue(C2U("CommandType"), aCommandType);
-        Any aTableName; aTableName <<= OUString(sTableName);
+        Any aTableName; aTableName <<= aBibDesc.sTableOrQuery;
         xResultSetProps->setPropertyValue(C2U("Command"), aTableName);
         Any aResultSetType; aResultSetType <<= (sal_Int32)(ResultSetType::SCROLL_INSENSITIVE);
         xResultSetProps->setPropertyValue(C2U("ResultSetType"), aResultSetType);
@@ -598,7 +596,7 @@ rtl::OUString lcl_AddProperty(Reference< container::XNameAccess >  xColumns,
     {
         for(sal_uInt16 nEntry = 0; nEntry < COLUMN_COUNT; nEntry++)
         {
-            if(pMapping->aColumnPairs[nEntry].sLogicalColumnName == rColumnName)
+            if(pMapping->aColumnPairs[nEntry].sLogicalColumnName == OUString(rColumnName))
             {
                    sColumnName = pMapping->aColumnPairs[nEntry].sRealColumnName;
                 break;
@@ -645,12 +643,12 @@ Any BibliographyLoader::getByName(const rtl::OUString& rName) throw
                 {
                     Sequence<PropertyValue> aPropSequ(COLUMN_COUNT);
                     PropertyValue* pValues = aPropSequ.getArray();
-                    String sTableName;
-                    rtl::OUString aBibUrl = BibModul::GetBibliographyURL(&sTableName);
-                    const Mapping* pMapping = pDatMan->GetMapping(sTableName, &aBibUrl);
+                    BibConfig* pConfig = BibModul::GetConfig();
+                    BibDBDescriptor aBibDesc = BibModul::GetConfig()->GetBibliographyURL();
+                    const Mapping* pMapping = pConfig->GetMapping(aBibDesc);
                     for(sal_uInt16 nEntry = 0; nEntry < COLUMN_COUNT; nEntry++)
                     {
-                        const String sColName = pDatMan->GetDefColumnName(
+                        const String sColName = pConfig->GetDefColumnName(
                                                     nEntry);
                         pValues[nEntry].Name = sColName;
                         pValues[nEntry].Value <<= lcl_AddProperty(xColumns, pMapping, sColName);
@@ -829,9 +827,10 @@ Any BibliographyLoader::getPropertyValue(const rtl::OUString& rPropertyName)
         Sequence<PropertyValue> aSeq(COLUMN_COUNT);
         PropertyValue* pArray = aSeq.getArray();
         BibDataManager* pDatMan = GetDataManager();
+        BibConfig* pConfig = BibModul::GetConfig();
         for(sal_uInt16 i = 0; i <= text::BibliographyDataField::ISBN ; i++)
         {
-            pArray[i].Name = pDatMan->GetDefColumnName(aInternalMapping[i]);
+            pArray[i].Name = pConfig->GetDefColumnName(aInternalMapping[i]);
             pArray[i].Value <<= (sal_Int16) i;
         }
         aRet.setValue(&aSeq, ::getCppuType((Sequence<PropertyValue>*)0));

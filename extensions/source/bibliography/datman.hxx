@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:44 $
+ *  last change: $Author: os $ $Date: 2000-11-13 11:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,60 +83,13 @@
 #endif
 
 class BibRegistry;
-class MappingArray;
 class Window;
-//-----------------------------------------------------------------------------
-#define COLUMN_COUNT                31
-#define IDENTIFIER_POS              0
-#define AUTHORITYTYPE_POS           1
-#define AUTHOR_POS                  2
-#define TITLE_POS                   3
-#define YEAR_POS                    4
-#define ISBN_POS                    5
-#define BOOKTITLE_POS               6
-#define CHAPTER_POS                 7
-#define EDITION_POS                 8
-#define EDITOR_POS                  9
-#define HOWPUBLISHED_POS            10
-#define INSTITUTION_POS             11
-#define JOURNAL_POS                 12
-#define MONTH_POS                   13
-#define NOTE_POS                    14
-#define ANNOTE_POS                  15
-#define NUMBER_POS                  16
-#define ORGANIZATIONS_POS           17
-#define PAGES_POS                   18
-#define PUBLISHER_POS               19
-#define ADDRESS_POS                 20
-#define SCHOOL_POS                  21
-#define SERIES_POS                  22
-#define REPORTTYPE_POS              23
-#define VOLUME_POS                  24
-#define URL_POS                     25
-#define CUSTOM1_POS                 26
-#define CUSTOM2_POS                 27
-#define CUSTOM3_POS                 28
-#define CUSTOM4_POS                 29
-#define CUSTOM5_POS                 30
 
-//-----------------------------------------------------------------------------
-struct StringPair
-{
-    String  sRealColumnName;
-    String  sLogicalColumnName;
-};
-//-----------------------------------------------------------------------------
-struct Mapping
-{
-    String          sTableName;
-    String          sURL;
-    StringPair      aColumnPairs[COLUMN_COUNT];
-};
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 class BibView;
 class BibToolBar;
 class BibGridwin;
+struct BibDBDescriptor;
 class BibDataManager :  public cppu::WeakImplHelper1 < ::com::sun::star::beans::XPropertyChangeListener>
 {
 private:
@@ -153,14 +106,12 @@ private:
 //      sal_Bool                        bModified;
         ::com::sun::star::uno::Any                      aUID;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >              xBibCursor;
-        MappingArray*               pMappingsArr;
 
         BibView*                    pBibView;
         BibToolBar*                 pToolbar;
         BibGridwin*                 pGridWin;
 
-        String                      aColumnDefaults[COLUMN_COUNT];
-        String                      sIdentifierMapping;
+        rtl::OUString               sIdentifierMapping;
 protected:
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >               createGlobalProperties();
@@ -181,7 +132,7 @@ public:
 
 
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >                   createDatabaseForm(const ::rtl::OUString& rURL, ::rtl::OUString& rTableName);
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >                   createDatabaseForm( BibDBDescriptor&    aDesc);
         ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >                   getDatabaseForm();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            createGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > & xDbForm);
@@ -234,19 +185,14 @@ public:
 
         void                        CreateMappingDialog(Window* pParent);
         ::rtl::OUString                     CreateDBChangeDialog(Window* pParent);
-        const Mapping*              GetMapping(const ::rtl::OUString& rTableName, const ::rtl::OUString* pURL = 0) const;
-        void                        SetMapping(const ::rtl::OUString& rTableName, const Mapping* pMapping);
-
-        const String&               GetDefColumnName(sal_uInt16 nIndex) const
-                                                    {return aColumnDefaults[nIndex];}
 
         void                        SetView(BibView* pView) {pBibView = pView;}
 
         void                        SetToolbar(BibToolBar* pSet) {pToolbar = pSet;}
         void                        SetGridWin(BibGridwin* pSet) {pGridWin = pSet;}
 
-        const String&               GetIdentifierMapping();
-        void                        ResetIdentifierMapping() {sIdentifierMapping.Erase();}
+        const rtl::OUString&        GetIdentifierMapping();
+        void                        ResetIdentifierMapping() {sIdentifierMapping = rtl::OUString();}
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibcont.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:44 $
+ *  last change: $Author: os $ $Date: 2000-11-13 11:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 
 
 #include <svtools/iniprop.hxx>
-#include <svtools/iniman.hxx>
 
 #include "datman.hxx"
 #include "bibcont.hxx"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibmod.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:44 $
+ *  last change: $Author: os $ $Date: 2000-11-13 11:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef ADDRMOD_HXX
-#define ADDRMOD_HXX
+#ifndef BIBMOD_HXX
+#define BIBMOD_HXX
 
 
 #ifndef _COM_SUN_STAR_REGISTRY_MERGECONFLICTEXCEPTION_HPP_
@@ -73,6 +73,7 @@
 class ResMgr;
 class BibDataManager;
 class BibRegistry;
+class BibConfig;
 
 #define BIBLIOGRAPHY_INI_GROUP      "Bibliography"
 #define BIBLIOGRAPHY_INI_CUR_NAME   "BibliographyCurrent"
@@ -84,6 +85,8 @@ class BibModul
 {
     private:
         ResMgr*                 pResMgr;
+        static BibConfig*       pBibConfig;
+
         BibRegistry*            pRegistry;
         ::com::sun::star::uno::Reference< ::com::sun::star::registry::XSimpleRegistry >         xRegistry;
 
@@ -92,9 +95,7 @@ class BibModul
                                 ~BibModul();
 
         ResMgr*                 GetResMgr(){return pResMgr;}
-
-        static String           GetBibliographyURL(String* pTableName);
-        static void             SetBibliographyURL(const String& rURL, const String& rTable);
+        static BibConfig*       GetConfig();
 
         BibDataManager*         createDataManager();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:44 $
+ *  last change: $Author: os $ $Date: 2000-11-13 11:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,15 +150,11 @@
 #include <svtools/urihelper.hxx>
 #endif
 #include <svtools/iniprop.hxx>
-#include <svtools/iniman.hxx>
 #ifndef _SVTABBX_HXX
 #include <svtools/svtabbx.hxx>
 #endif
 #ifndef _HEADBAR_HXX
 #include <svtools/headbar.hxx>
-#endif
-#ifndef _SVARRAY_HXX
-#include <svtools/svarray.hxx>
 #endif
 #ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
@@ -195,7 +191,7 @@
 #ifndef ADRRESID_HXX
 #include "bibresid.hxx"
 #endif
-#ifndef ADDRMOD_HXX
+#ifndef BIBMOD_HXX
 #include "bibmod.hxx"
 #endif
 #ifndef _BIB_VIEW_HXX
@@ -209,6 +205,9 @@
 #endif
 #ifndef _BIB_TOOLBAR_HXX
 #include "toolbar.hxx"
+#endif
+#ifndef _BIBCONFIG_HXX
+#include "bibconfig.hxx"
 #endif
 #ifndef ADRBEAM_HXX
 #include "bibbeam.hxx"
@@ -238,12 +237,6 @@ using namespace ::ucb;
 #define MAP_TOKEN ';'
 #define PAIR_TOKEN ':'
 
-/* -----------------11.11.99 14:34-------------------
-
- --------------------------------------------------*/
-typedef Mapping* MappingPtr;
-SV_DECL_PTRARR_DEL(MappingArray, MappingPtr, 2, 2);
-SV_IMPL_PTRARR(MappingArray, MappingPtr);
 
 /* -----------------------------15.06.00 16:12--------------------------------
 
@@ -513,12 +506,12 @@ public:
 /* -----------------11.11.99 16:42-------------------
 
  --------------------------------------------------*/
-sal_uInt16 lcl_FindLogicalName(BibDataManager* pDatMan,
-                                    const String& rLogicalColumnName)
+sal_uInt16 lcl_FindLogicalName(BibConfig* pConfig ,
+                                    const OUString& rLogicalColumnName)
 {
     for(sal_uInt16 i = 0; i < COLUMN_COUNT; i++)
     {
-        if(rLogicalColumnName == pDatMan->GetDefColumnName(i))
+        if(rLogicalColumnName == pConfig->GetDefColumnName(i))
             return i;
     }
     return USHRT_MAX;
@@ -657,13 +650,17 @@ MappingDialog_Impl::MappingDialog_Impl(Window* pParent, BibDataManager* pMan) :
         aListBoxes[i]->SelectEntryPos(0);
         aListBoxes[i]->SetSelectHdl(aLnk);
     }
-    const Mapping* pMapping = pDatMan->GetMapping(pDatMan->getActiveDataTable());
+    BibConfig* pConfig = BibModul::GetConfig();
+    BibDBDescriptor aDesc;
+    aDesc.sDataSource = pDatMan->getActiveDataSource();
+    aDesc.sTableOrQuery = pDatMan->getActiveDataTable();
+    aDesc.nCommandType = CommandType::TABLE;
+    const Mapping* pMapping = pConfig->GetMapping(aDesc);
     if(pMapping)
     {
         for(sal_uInt16 nEntry = 0; nEntry < COLUMN_COUNT; nEntry++)
         {
-            sal_uInt16 nListBoxIndex = lcl_FindLogicalName(pDatMan,
-                                    pMapping->aColumnPairs[nEntry].sLogicalColumnName);
+            sal_uInt16 nListBoxIndex = lcl_FindLogicalName( pConfig, pMapping->aColumnPairs[nEntry].sLogicalColumnName);
             if(nListBoxIndex < COLUMN_COUNT)
             {
                 aListBoxes[nListBoxIndex]->SelectEntry(pMapping->aColumnPairs[nEntry].sRealColumnName);
@@ -702,18 +699,22 @@ IMPL_LINK(MappingDialog_Impl, OkHdl, OKButton*, EMPTYARG)
     aNew.sURL = String(pDatMan->getActiveDataSource());
 
     sal_uInt16 nWriteIndex = 0;
+    BibConfig* pConfig = BibModul::GetConfig();
     for(sal_uInt16 nEntry = 0; nEntry < COLUMN_COUNT; nEntry++)
     {
-
         String sSel = aListBoxes[nEntry]->GetSelectEntry();
         if(sSel != sNone)
         {
             aNew.aColumnPairs[nWriteIndex].sRealColumnName = sSel;
-            aNew.aColumnPairs[nWriteIndex].sLogicalColumnName = pDatMan->GetDefColumnName(nEntry);
+            aNew.aColumnPairs[nWriteIndex].sLogicalColumnName = pConfig->GetDefColumnName(nEntry);
             nWriteIndex++;
         }
     }
-    pDatMan->SetMapping(pDatMan->getActiveDataTable(), &aNew);
+    BibDBDescriptor aDesc;
+    aDesc.sDataSource = pDatMan->getActiveDataSource();
+    aDesc.sTableOrQuery = pDatMan->getActiveDataTable();
+    aDesc.nCommandType = CommandType::TABLE;
+    pConfig->SetMapping(aDesc, &aNew);
     EndDialog(RET_OK);
     return 0;
 }
@@ -868,96 +869,14 @@ rtl::OUString gBeamerSize(C2U("theBeamerSize"));
 rtl::OUString gViewSize(C2U("theViewSize"));
 
 BibDataManager::BibDataManager(BibRegistry * pRegistry) :
-    pMappingsArr(new MappingArray),
     pToolbar(0),
     pGridWin(0)
 {
-    //Names of the default columns
-    aColumnDefaults[0] = C2S("Identifier");
-    aColumnDefaults[1] = C2S("BibliographyType");
-    aColumnDefaults[2] = C2S("Author");
-    aColumnDefaults[3] = C2S("Title");
-    aColumnDefaults[4] = C2S("Year");
-    aColumnDefaults[5] = C2S("ISBN");
-    aColumnDefaults[6] = C2S("Booktitle");
-    aColumnDefaults[7] = C2S("Chapter");
-    aColumnDefaults[8] = C2S("Edition");
-    aColumnDefaults[9] = C2S("Editor");
-    aColumnDefaults[10] = C2S("Howpublished");
-    aColumnDefaults[11] = C2S("Institution");
-    aColumnDefaults[12] = C2S("Journal");
-    aColumnDefaults[13] = C2S("Month");
-    aColumnDefaults[14] = C2S("Note");
-    aColumnDefaults[15] = C2S("Annote");
-    aColumnDefaults[16] = C2S("Number");
-    aColumnDefaults[17] = C2S("Organizations");
-    aColumnDefaults[18] = C2S("Pages");
-    aColumnDefaults[19] = C2S("Publisher");
-    aColumnDefaults[20] = C2S("Address");
-    aColumnDefaults[21] = C2S("School");
-    aColumnDefaults[22] = C2S("Series");
-    aColumnDefaults[23] = C2S("ReportType");
-    aColumnDefaults[24] = C2S("Volume");
-    aColumnDefaults[25] = C2S("URL");
-    aColumnDefaults[26] = C2S("Custom1");
-    aColumnDefaults[27] = C2S("Custom2");
-    aColumnDefaults[28] = C2S("Custom3");
-    aColumnDefaults[29] = C2S("Custom4");
-    aColumnDefaults[30] = C2S("Custom5");
 
 //  nEditMode = DatabaseRecordMode_STANDARD;
     xRegistry = pRegistry;
     xGlobalProps=createGlobalProperties();
 
-    SfxAppIniManagerProperty aProp;
-    GetpApp()->Property( aProp );
-
-    SfxIniManager* pIniMan = aProp.GetIniManager();
-    if(pIniMan)
-    {
-        String  sBibMapping;
-        sal_uInt16 nIdx = USHRT_MAX;
-        String sEntry;
-        do
-        {
-            String sKey(C2S(BIBLIOGRAPHY_INI_DB_ENTRY));
-            String sMapKey = C2S(BIBLIOGRAPHY_INI_MAPPING);
-            if(USHRT_MAX != nIdx)
-            {
-                sKey += nIdx;
-                sMapKey += nIdx;
-            }
-
-            sEntry = pIniMan->ReadKey( C2S(BIBLIOGRAPHY_INI_GROUP),
-                                            sKey );
-            String sURL = sEntry.GetToken(0, ';');
-            sURL = pIniMan->SubstPathVars( sURL );
-
-            sURL = URIHelper::SmartRelToAbs(sURL);
-
-
-            String sTableName = sEntry.GetToken(1, ';');
-
-            sBibMapping = pIniMan->ReadKey( C2S(BIBLIOGRAPHY_INI_GROUP),
-                                            sMapKey );
-            if(sTableName.Len())
-            {
-                Mapping* pNew = new Mapping;
-                pNew->sTableName = sTableName;
-                pNew->sURL = sURL;
-                sal_uInt16 nMapTokens = sBibMapping.GetTokenCount(MAP_TOKEN);
-                for(sal_uInt16 i = 0; i < nMapTokens && i < COLUMN_COUNT; i++)
-                {
-                    String sPair = sBibMapping.GetToken(i, MAP_TOKEN);
-                    pNew->aColumnPairs[i].sLogicalColumnName = sPair.GetToken(0, PAIR_TOKEN);
-                    pNew->aColumnPairs[i].sRealColumnName = sPair.GetToken(1, PAIR_TOKEN);
-                }
-                pMappingsArr->Insert(pNew, pMappingsArr->Count());
-            }
-            nIdx = USHRT_MAX == nIdx ? 0 : nIdx + 1;
-        }
-        while(sEntry.Len());
-    }
 }
 /* --------------------------------------------------
 
@@ -975,7 +894,6 @@ BibDataManager::~BibDataManager()
             xComp->dispose();
         xForm = NULL;
     }
-    delete pMappingsArr;
 }
 //------------------------------------------------------------------------
 void BibDataManager::InsertFields(const uno::Reference< XFormComponent > & xGrid)
@@ -1071,21 +989,21 @@ uno::Reference< XForm >  BibDataManager::getDatabaseForm()
 /* --------------------------------------------------
 
  --------------------------------------------------*/
-uno::Reference< XForm >  BibDataManager::createDatabaseForm(const rtl::OUString& rURL, rtl::OUString& rTable)
+uno::Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
 {
     uno::Reference< XForm >  xResult;
     try
     {
-    uno::Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
+        uno::Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
         xForm = uno::Reference< XForm > (xMgr->createInstance( C2U("com.sun.star.form.component.Form") ),
                                                                             UNO_QUERY );
 
         uno::Reference< XPropertySet >  aPropertySet(xForm, UNO_QUERY );
 
-        aDataSourceURL = rURL;
+        aDataSourceURL = rDesc.sDataSource;
         if(aPropertySet.is())
         {
-            Any aVal; aVal <<= rURL;
+            Any aVal; aVal <<= rDesc.sDataSource;
             aPropertySet->setPropertyValue(C2U("DataSourceName"), aVal);
             aVal <<= (sal_Int32)sdbc::ResultSetType::SCROLL_INSENSITIVE;
             aPropertySet->setPropertyValue(C2U("ResultSetType"),aVal );
@@ -1096,7 +1014,7 @@ uno::Reference< XForm >  BibDataManager::createDatabaseForm(const rtl::OUString&
             aVal <<= (sal_Int32)50;
             aPropertySet->setPropertyValue(C2U("FetchSize"), aVal);
 
-            uno::Reference< sdbc::XConnection >  xConnection = getConnection(rURL);
+            uno::Reference< sdbc::XConnection >  xConnection = getConnection(rDesc.sDataSource);
             uno::Reference< sdbcx::XTablesSupplier >  xSupplyTables(xConnection, UNO_QUERY);
             uno::Reference< XNameAccess >  xTables = xSupplyTables.is() ?
                                 xSupplyTables->getTables() : uno::Reference< XNameAccess > ();
@@ -1108,10 +1026,13 @@ uno::Reference< XForm >  BibDataManager::createDatabaseForm(const rtl::OUString&
             if(aTableNameSeq.getLength() > 0)
             {
                 const rtl::OUString* pTableNames = aTableNameSeq.getConstArray();
-                if(rTable.getLength())
-                    aActiveDataTable = rTable;
+                if(rDesc.sTableOrQuery.getLength())
+                    aActiveDataTable = rDesc.sTableOrQuery;
                 else
-                    rTable = aActiveDataTable = pTableNames[0];
+                {
+                    rDesc.sTableOrQuery = aActiveDataTable = pTableNames[0];
+                    rDesc.nCommandType = CommandType::TABLE;
+                }
 
                 uno::Reference< registry::XRegistryKey >  xRoot = xRegistry->getRootKey();
                 uno::Reference< registry::XRegistryKey >  xKey = xRoot->openKey(aActiveDataTable);
@@ -1122,7 +1043,7 @@ uno::Reference< XForm >  BibDataManager::createDatabaseForm(const rtl::OUString&
 
                 aVal <<= aActiveDataTable;
                 aPropertySet->setPropertyValue(C2U("Command"), aVal);
-                aVal <<= (sal_Int32)CommandType::TABLE;
+                aVal <<= rDesc.nCommandType;
                 aPropertySet->setPropertyValue(C2U("CommandType"), aVal);
 
 
@@ -1460,7 +1381,11 @@ void BibDataManager::setActiveDataTable(const rtl::OUString& rTable)
                 setQueryField(getQueryField());
                 startQueryWith(getQueryString());
 
-                BibModul::SetBibliographyURL(aDataSourceURL, aActiveDataTable);
+                BibDBDescriptor aDesc;
+                aDesc.sDataSource = aDataSourceURL;
+                aDesc.sTableOrQuery = aActiveDataTable;
+                aDesc.nCommandType = CommandType::TABLE;
+                BibModul::GetConfig()->SetBibliographyURL(aDesc);
             }
             if(pBibView)
                 pBibView->UpdatePages();
@@ -1976,140 +1901,20 @@ rtl::OUString BibDataManager::CreateDBChangeDialog(Window* pParent)
     delete pDlg;
     return uRet;
 }
-/* -----------------12.11.99 14:26-------------------
-
- --------------------------------------------------*/
-const Mapping*  BibDataManager::GetMapping(const rtl::OUString& rTableName, const rtl::OUString* pURL) const
-{
-    String sTable(rTableName);
-    String sURL(aDataSourceURL);
-    if(pURL)
-        sURL = String(*pURL);
-    for(sal_uInt16 i = 0; i < pMappingsArr->Count(); i++)
-    {
-        sal_Bool bCaseSensitive = sal_True;
-        INetURLObject aTempURL(sURL);
-        if(INET_PROT_FILE == aTempURL.GetProtocol())
-        {
-            sal_Bool bCaseSensitive = lcl_IsCaseSensitive(aTempURL.GetMainURL());
-//          DirEntry aEnt(aTempURL.GetPath());
-//          bCaseSensitive = aEnt.IsCaseSensitive();
-        }
-
-        const Mapping* pMapping = pMappingsArr->GetObject(i);
-        sal_Bool bURLEqual = bCaseSensitive ?
-                sURL.Equals(pMapping->sURL) :
-                    sURL.EqualsIgnoreCaseAscii(pMapping->sURL);
-
-        if(sTable == pMapping->sTableName && bURLEqual)
-            return pMapping;
-    }
-    return 0;
-}
-/* -----------------12.11.99 14:26-------------------
-
- --------------------------------------------------*/
-void BibDataManager::SetMapping(const rtl::OUString& rTableName, const Mapping* pSetMapping)
-{
-    ResetIdentifierMapping();
-    String sTable(rTableName);
-    const String sURL(aDataSourceURL);
-    for(sal_uInt16 i = 0; i < pMappingsArr->Count(); i++)
-    {
-        const Mapping* pMapping = pMappingsArr->GetObject(i);
-
-        sal_Bool bCaseSensitive = sal_True;
-        INetURLObject aTempURL(sURL);
-        if(INET_PROT_FILE == aTempURL.GetProtocol())
-        {
-            sal_Bool bCaseSensitive = lcl_IsCaseSensitive(aTempURL.GetMainURL());
-//          DirEntry aEnt(aTempURL.GetPath());
-//          bCaseSensitive = aEnt.IsCaseSensitive();
-        }
-
-        sal_Bool bURLEqual = bCaseSensitive ?
-                sURL.Equals(pMapping->sURL) :
-                    sURL.EqualsIgnoreCaseAscii(pMapping->sURL);
-
-        if(sTable == pMapping->sTableName && bURLEqual)
-        {
-            pMappingsArr->DeleteAndDestroy(i, 1);
-            break;
-        }
-    }
-    Mapping* pNew = new Mapping(*pSetMapping);
-    pMappingsArr->Insert(pNew, pMappingsArr->Count());
-
-    SfxAppIniManagerProperty aProp;
-    GetpApp()->Property( aProp );
-    SfxIniManager* pIniMan = aProp.GetIniManager();
-    if(pIniMan)
-    {
-        //kill all old entries an rewrite all mappings
-        String sTempEntry;
-        sal_uInt16 nIdx = USHRT_MAX;
-        do
-        {
-            String sDBKey(C2S(BIBLIOGRAPHY_INI_DB_ENTRY));
-            String sMapKey = C2S(BIBLIOGRAPHY_INI_MAPPING);
-            if(USHRT_MAX != nIdx)
-            {
-                sDBKey += nIdx;
-                sMapKey += nIdx;
-            }
-            sTempEntry = pIniMan->ReadKey( C2S(BIBLIOGRAPHY_INI_GROUP),
-                                            sDBKey );
-            pIniMan->DeleteKey( C2S(BIBLIOGRAPHY_INI_GROUP), sDBKey);
-            pIniMan->DeleteKey( C2S(BIBLIOGRAPHY_INI_GROUP), sMapKey);
-            nIdx = USHRT_MAX == nIdx ? 0 : nIdx +1;
-        }while(sTempEntry.Len());
-
-        nIdx = USHRT_MAX;
-        for(sal_uInt16 i = 0; i < pMappingsArr->Count(); i++)
-        {
-            const Mapping* pMapping = pMappingsArr->GetObject(i);
-
-            String sDataTableEntry(pMapping->sURL);
-            sDataTableEntry = pIniMan->UsePathVars( sDataTableEntry );
-            sDataTableEntry += ';';
-            sDataTableEntry += pMapping->sTableName;
-
-            String sDBKey = C2S(BIBLIOGRAPHY_INI_DB_ENTRY);
-            String sMapKey = C2S(BIBLIOGRAPHY_INI_MAPPING);
-            if(USHRT_MAX != nIdx)
-            {
-                sDBKey += nIdx;
-                sMapKey += nIdx;
-            }
-            pIniMan->WriteKey( C2S(BIBLIOGRAPHY_INI_GROUP), sDBKey, sDataTableEntry );
-
-            String sEntry;
-            for(sal_uInt16 nColumn = 0; nColumn < COLUMN_COUNT; nColumn++)
-            {
-                if(!pMapping->aColumnPairs[nColumn].sLogicalColumnName.Len() ||
-                    !pMapping->aColumnPairs[nColumn].sRealColumnName.Len())
-                    break;
-                sEntry += pMapping->aColumnPairs[nColumn].sLogicalColumnName;
-                sEntry += PAIR_TOKEN;
-                sEntry += pMapping->aColumnPairs[nColumn].sRealColumnName;
-                sEntry += MAP_TOKEN;
-            }
-            pIniMan->WriteKey( C2S(BIBLIOGRAPHY_INI_GROUP), sMapKey, sEntry );
-
-            nIdx = USHRT_MAX == nIdx ? 0 : nIdx +1;
-        }
-        pIniMan->Flush();
-    }
-}
 /* -----------------06.12.99 15:11-------------------
 
  --------------------------------------------------*/
-const String&   BibDataManager::GetIdentifierMapping()
+const OUString& BibDataManager::GetIdentifierMapping()
 {
-    if(!sIdentifierMapping.Len())
+    if(!sIdentifierMapping.getLength())
     {
-        const Mapping* pMapping = GetMapping(getActiveDataTable());
-        sIdentifierMapping = GetDefColumnName(IDENTIFIER_POS);
+        BibConfig* pConfig = BibModul::GetConfig();
+        BibDBDescriptor aDesc;
+        aDesc.sDataSource = getActiveDataSource();
+        aDesc.sTableOrQuery = getActiveDataTable();
+        aDesc.nCommandType = CommandType::TABLE;
+        const Mapping* pMapping = pConfig->GetMapping(aDesc);
+        sIdentifierMapping = pConfig->GetDefColumnName(IDENTIFIER_POS);
         if(pMapping)
         {
             for(sal_uInt16 nEntry = 0; nEntry < COLUMN_COUNT; nEntry++)
