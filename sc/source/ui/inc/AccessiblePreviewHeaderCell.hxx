@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewHeaderCell.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:09 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #include "AccessibleContextBase.hxx"
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEVALUE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleValue.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEVALUE_HPP_
+#include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #endif
 
 #ifndef _SV_GEN_HXX
@@ -87,7 +87,7 @@ class ScPreviewShell;
 class ScPreviewTableInfo;
 class accessibility::AccessibleTextHelper;
 
-typedef cppu::ImplHelper1< ::drafts::com::sun::star::accessibility::XAccessibleValue>
+typedef cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleValue>
                     ScAccessiblePreviewHeaderCellImpl;
 
 class ScAccessiblePreviewHeaderCell :
@@ -96,7 +96,7 @@ class ScAccessiblePreviewHeaderCell :
 {
 public:
     ScAccessiblePreviewHeaderCell( const ::com::sun::star::uno::Reference<
-                                ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+                                ::com::sun::star::accessibility::XAccessible>& rxParent,
                             ScPreviewShell* pViewShell,
                             const ScAddress& rCellPos, sal_Bool bIsColHdr, sal_Bool bIsRowHdr,
                             sal_Int32 nIndex );
@@ -131,20 +131,20 @@ public:
 
     //=====  XAccessibleComponent  ============================================
 
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
-                            getAccessibleAt( const ::com::sun::star::awt::Point& aPoint )
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
+                            getAccessibleAtPoint( const ::com::sun::star::awt::Point& aPoint )
                                 throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   grabFocus() throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleContext  ==============================================
 
     virtual sal_Int32 SAL_CALL getAccessibleChildCount() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
                             getAccessibleChild( sal_Int32 i )
                                 throw (::com::sun::star::lang::IndexOutOfBoundsException,
                                     ::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL
                             getAccessibleStateSet() throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XServiceInfo  ====================================================
@@ -184,7 +184,7 @@ private:
 
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+        ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 
     void CreateTextHelper();
     void    FillTableInfo() const;
