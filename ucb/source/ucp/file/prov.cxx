@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:49:09 $
+ *  last change: $Author: kso $ $Date: 2001-04-06 08:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,11 +183,6 @@ extern "C" void * SAL_CALL component_getFactory(
     if ( fileaccess::shell::getImplementationName_static().
             compareToAscii( pImplName ) == 0 )
     {
-        xFactory = FileProvider::createServiceFactory( xSMgr );
-    }
-    else if ( rtl_str_compare( pImplName, "FileProvider" ) == 0 )
-    {
-        // Backward compatibility... :-/
         xFactory = FileProvider::createServiceFactory( xSMgr );
     }
 

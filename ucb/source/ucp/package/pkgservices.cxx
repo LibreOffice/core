@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgservices.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:48:30 $
+ *  last change: $Author: kso $ $Date: 2001-04-06 08:36:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,11 +156,6 @@ extern "C" void * SAL_CALL component_getFactory(
     if ( ::package_ucp::ContentProvider::getImplementationName_Static().
                 compareToAscii( pImplName ) == 0 )
     {
-        xFactory = ::package_ucp::ContentProvider::createServiceFactory( xSMgr );
-    }
-    else if ( rtl_str_compare( pImplName, "PackageContentProvider" ) == 0 )
-    {
-        // Backward compatibility... :-/
         xFactory = ::package_ucp::ContentProvider::createServiceFactory( xSMgr );
     }
 

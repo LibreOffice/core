@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheserv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:50:13 $
+ *  last change: $Author: kso $ $Date: 2001-04-06 08:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,11 +191,6 @@ extern "C" void * SAL_CALL component_getFactory(
     {
         xFactory = CachedContentResultSetFactory::createServiceFactory( xSMgr );
     }
-    else if ( rtl_str_compare( pImplName, "CachedContentResultSetFactory" ) == 0 )
-    {
-        // Backward compatibility... :-/
-        xFactory = CachedContentResultSetFactory::createServiceFactory( xSMgr );
-    }
 
     //////////////////////////////////////////////////////////////////////
     // CachedContentResultSetStubFactory.
@@ -204,11 +199,6 @@ extern "C" void * SAL_CALL component_getFactory(
     else if ( CachedContentResultSetStubFactory::getImplementationName_Static().
                 compareToAscii( pImplName ) == 0 )
     {
-        xFactory = CachedContentResultSetStubFactory::createServiceFactory( xSMgr );
-    }
-    else if ( rtl_str_compare( pImplName, "CachedContentResultSetStubFactory" ) == 0 )
-    {
-        // Backward compatibility... :-/
         xFactory = CachedContentResultSetStubFactory::createServiceFactory( xSMgr );
     }
 
@@ -221,11 +211,6 @@ extern "C" void * SAL_CALL component_getFactory(
     {
         xFactory = CachedDynamicResultSetFactory::createServiceFactory( xSMgr );
     }
-    else if ( rtl_str_compare( pImplName, "CachedDynamicResultSetFactory" ) == 0 )
-    {
-        // Backward compatibility... :-/
-        xFactory = CachedDynamicResultSetFactory::createServiceFactory( xSMgr );
-    }
 
     //////////////////////////////////////////////////////////////////////
     // CachedDynamicResultSetStubFactory.
@@ -234,11 +219,6 @@ extern "C" void * SAL_CALL component_getFactory(
     else if ( CachedDynamicResultSetStubFactory::getImplementationName_Static().
                 compareToAscii( pImplName ) == 0 )
     {
-        xFactory = CachedDynamicResultSetStubFactory::createServiceFactory( xSMgr );
-    }
-    else if ( rtl_str_compare( pImplName, "CachedDynamicResultSetStubFactory" ) == 0 )
-    {
-        // Backward compatibility... :-/
         xFactory = CachedDynamicResultSetStubFactory::createServiceFactory( xSMgr );
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchyservices.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:48:49 $
+ *  last change: $Author: kso $ $Date: 2001-04-06 08:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,11 +157,6 @@ extern "C" void * SAL_CALL component_getFactory(
     if ( HierarchyContentProvider::getImplementationName_Static().
                 compareToAscii( pImplName ) == 0 )
     {
-        xFactory = HierarchyContentProvider::createServiceFactory( xSMgr );
-    }
-    else if ( rtl_str_compare( pImplName, "HierarchyContentProvider" ) == 0 )
-    {
-        // Backward compatibility... :-/
         xFactory = HierarchyContentProvider::createServiceFactory( xSMgr );
     }
 

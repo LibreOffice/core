@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbserv.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:49:55 $
+ *  last change: $Author: kso $ $Date: 2001-04-06 08:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,11 +204,6 @@ extern "C" void * SAL_CALL component_getFactory(
     {
         xFactory = UniversalContentBroker::createServiceFactory( xSMgr );
     }
-    else if ( rtl_str_compare( pImplName, "UniversalContentBroker" ) == 0 )
-    {
-        // Backward compatibility... :-/
-        xFactory = UniversalContentBroker::createServiceFactory( xSMgr );
-    }
 
     //////////////////////////////////////////////////////////////////////
     // UCB Store.
@@ -219,11 +214,6 @@ extern "C" void * SAL_CALL component_getFactory(
     {
         xFactory = UcbStore::createServiceFactory( xSMgr );
     }
-    else if ( rtl_str_compare( pImplName, "UcbStore" ) == 0 )
-    {
-        // Backward compatibility... :-/
-        xFactory = UcbStore::createServiceFactory( xSMgr );
-    }
 
     //////////////////////////////////////////////////////////////////////
     // UCB PropertiesManager.
@@ -232,11 +222,6 @@ extern "C" void * SAL_CALL component_getFactory(
     else if ( UcbPropertiesManager::getImplementationName_Static().
                 compareToAscii( pImplName ) == 0 )
     {
-        xFactory = UcbPropertiesManager::createServiceFactory( xSMgr );
-    }
-    else if ( rtl_str_compare( pImplName, "UcbPropertiesManager" ) == 0 )
-    {
-        // Backward compatibility... :-/
         xFactory = UcbPropertiesManager::createServiceFactory( xSMgr );
     }
 
@@ -250,13 +235,6 @@ extern "C" void * SAL_CALL component_getFactory(
         xFactory
             = UcbContentProviderProxyFactory::createServiceFactory( xSMgr );
     }
-    else if ( rtl_str_compare( pImplName, "UcbContentProviderProxyFactory" )
-                == 0    )
-    {
-        // Backward compatibility... :-/
-        xFactory
-            = UcbContentProviderProxyFactory::createServiceFactory( xSMgr );
-    }
 
     //////////////////////////////////////////////////////////////////////
     // Remote Content Broker.
@@ -266,12 +244,6 @@ extern "C" void * SAL_CALL component_getFactory(
     else if ( RemoteContentBroker::getImplementationName_Static().
                 compareToAscii( pImplName ) == 0 )
     {
-        xFactory = RemoteContentBroker::createServiceFactory( xSMgr );
-    }
-    else if ( rtl_str_compare( pImplName, "ucb_core::RemoteContentBroker" )
-                == 0 )
-    {
-        // Backward compatibility... :-/
         xFactory = RemoteContentBroker::createServiceFactory( xSMgr );
     }
 

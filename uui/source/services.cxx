@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:52:00 $
+ *  last change: $Author: kso $ $Date: 2001-04-06 08:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,12 +163,9 @@ extern "C" void * SAL_CALL component_getFactory(sal_Char const * pImplName,
 {
     void * pFactory = 0;
     if (pServiceManager
-        && (rtl_str_compare(pImplName,
+        && rtl_str_compare(pImplName,
                            UUIInteractionHandler::m_aImplementationName)
                == 0)
-            ||
-           // Backward compatibility... :-/
-           (rtl_str_compare(pImplName, "UUIInteractionHandler") == 0))
     {
         uno::Reference< lang::XSingleServiceFactory >
             xTheFactory(
