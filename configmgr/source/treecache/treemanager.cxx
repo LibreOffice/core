@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treemanager.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 09:06:57 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 18:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ void TreeManager::disposeUser(RequestOptions const& _aUserOptions)
             OSL_ASSERT(aLast->second.is());
 
             if (aLast->second.is())
-                aDisposeList.push_back( *aLast );
+                aDisposeList.push_back( DisposeList::value_type(aLast->first,aLast->second) );
 
             ++aLast;
         }
