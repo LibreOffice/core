@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-24 11:55:30 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:37:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -629,14 +629,14 @@ String XclTools::GetCtrlLinkTag( ScDocument& rDoc, const ScAddress* pCellLink, c
         String aCellTag;
         pCellLink->Format( aCellTag, SCA_VALID | SCA_TAB_3D, &rDoc );
         aCellTag.Insert( maCtrlCellLinkPrefix, 0 );
-        ScfTools::AddToken( aTag, aCellTag, ';' );
+        ScGlobal::AddToken( aTag, aCellTag, ';' );
     }
     if( pSrcRange )
     {
         String aRangeTag;
         pSrcRange->Format( aRangeTag, SCA_VALID | SCA_TAB_3D, &rDoc );
         aRangeTag.Insert( maCtrlSrcRangePrefix, 0 );
-        ScfTools::AddToken( aTag, aRangeTag, ';' );
+        ScGlobal::AddToken( aTag, aRangeTag, ';' );
     }
     return aTag;
 }
