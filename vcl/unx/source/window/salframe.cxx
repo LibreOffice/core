@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.167 $
+ *  $Revision: 1.168 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:58:41 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_SALFRAME_CXX
-
-// -=-= #includes =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -1404,7 +1401,6 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
 
         const Size& rScreenSize( pDisplay_->GetScreenSize() );
         const WMAdaptor *pWM = GetDisplay()->getWMAdaptor();
-        int nGravity = pWM->getPositionWinGravity();
 
         if( pState->mnMask & ( SAL_FRAMESTATE_MASK_HEIGHT | SAL_FRAMESTATE_MASK_WIDTH )
             && aPosSize.GetWidth() <= rScreenSize.Width()
@@ -3197,20 +3193,6 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
         aPresentationReparentList.push_back( GetStackingWindow() );
     }
 
-#ifdef NC_EVENTS
-    XQueryTree( pDisplay,
-                hWM_Parent,
-                &hRoot,
-                &hDummy,
-                &Children,
-                &nChildren );
-
-    for( n = 0; n < nChildren; n++ )
-        if( Children[n] != hShell_ && Children[n] != pEvent->parent )
-            XSelectInput( pDisplay, Children[n], NC_EVENTS );
-    XFree( Children );
-#endif
-
     int nLeft = 0, nTop = 0;
     XTranslateCoordinates( GetXDisplay(),
                            GetShellWindow(),
@@ -3602,24 +3584,6 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
     {
         switch( pEvent->type )
         {
-#ifdef NC_EVENTS
-            case XLIB_KeyPress:
-            case KeyRelease:
-                nRet = HandleNCKeyEvent()
-                break;
-
-            case ButtonPress:
-            case ButtonRelease:
-            case MotionNotify:
-            case EnterNotify:
-            case LeaveNotify:
-                nRet = HandleNCMouseEvent( pEvent );
-                break;
-
-            case Expose:
-                nRet = HandleNCExposeEvent( pEvent );
-                break;
-#endif
              case FocusIn:
              case FocusOut:
                 if( ( nStyle_ & SAL_FRAME_STYLE_CHILD )
