@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:37 $
+ *  last change: $Author: cl $ $Date: 2002-01-09 14:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,8 +277,10 @@ List* SdStyleSheetPool::CreateOutlineSheetList (const String& rLayoutName)
 |*
 \************************************************************************/
 
-void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
+void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bool bCheck /*=sal_False*/ )
 {
+    sal_Bool bCreated = sal_False;
+
     SfxStyleSheetBase* pSheet = NULL;
 
     String aPrefix(rLayoutName);
@@ -309,8 +311,9 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
     SfxStyleSheetBase* pParent = NULL;
     SvxLRSpaceItem aSvxLRSpaceItem;
     SvxULSpaceItem aSvxULSpaceItem;
+    USHORT nLevel;
 
-    for (USHORT nLevel = 1; nLevel < 10; nLevel++)
+    for( nLevel = 1; nLevel < 10; nLevel++)
     {
         String aLevelName(aName);
         aLevelName.Append( sal_Unicode( ' ' ));
@@ -320,6 +323,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
 
         if (!Find(aLevelName, SD_LT_FAMILY))
         {
+            bCreated = sal_True;
             pSheet = &Make(aLevelName, SD_LT_FAMILY);
             pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_OUTLINE + nLevel );
 
@@ -417,10 +421,37 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
                 pSheet->GetItemSet().Put(aBulletStateItem);
             }
 
+/*
             // Gliederungsvorlagen haben die naechsthoehere Ebene als Parent
             if (pParent)
                 pSheet->SetParent(pParent->GetName());
             pParent = pSheet;
+*/
+        }
+    }
+
+    // if we created outline styles, we need to chain them
+    if( bCreated )
+    {
+        pParent = NULL;
+        for (nLevel = 1; nLevel < 10; nLevel++)
+        {
+            String aLevelName(aName);
+            aLevelName.Append( sal_Unicode( ' ' ));
+            aLevelName.Append( String::CreateFromInt32( sal_Int32( nLevel )));
+
+            aLevelName.Insert(aPrefix, 0);
+
+            pSheet = Find(aLevelName, SD_LT_FAMILY);
+
+            DBG_ASSERT( pSheet, "missing layout style!");
+
+            if( pSheet )
+            {
+                if (pParent)
+                    pSheet->SetParent(pParent->GetName());
+                pParent = pSheet;
+            }
         }
     }
 
@@ -432,6 +463,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
 
     if (!Find(aName, SD_LT_FAMILY))
     {
+        bCreated = sal_True;
+
         pSheet = &Make(aName, SD_LT_FAMILY);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_TITLE );
         pSheet->SetParent(String());
@@ -473,6 +506,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
 
     if (!Find(aName, SD_LT_FAMILY))
     {
+        bCreated = sal_True;
+
         pSheet = &Make(aName, SD_LT_FAMILY);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_SUBTITLE );
         pSheet->SetParent(String());
@@ -516,6 +551,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
 
     if (!Find(aName, SD_LT_FAMILY))
     {
+        bCreated = sal_True;
+
         pSheet = &Make(aName, SD_LT_FAMILY);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_NOTES );
         pSheet->SetParent(String());
@@ -552,6 +589,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
 
     if (!Find(aName, SD_LT_FAMILY))
     {
+        bCreated = sal_True;
+
         pSheet = &Make(aName, SD_LT_FAMILY);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUNDOBJECTS );
         pSheet->SetParent(String());
@@ -570,6 +609,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
 
     if (!Find(aName, SD_LT_FAMILY))
     {
+        bCreated = sal_True;
+
         pSheet = &Make(aName, SD_LT_FAMILY);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUND );
         pSheet->SetParent(String());
@@ -577,6 +618,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
         rBackgroundSet.Put(XLineStyleItem(XLINE_NONE));
         rBackgroundSet.Put(XFillStyleItem(XFILL_NONE));
     }
+
+    DBG_ASSERT( !bCheck || !bCreated, "missing layout style sheets detected!" );
 }
 
 /*************************************************************************
