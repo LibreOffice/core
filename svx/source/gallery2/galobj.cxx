@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galobj.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:10:53 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:38:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,7 +552,7 @@ BOOL SgaObjectSvDraw::DrawCentered( OutputDevice* pOut, const FmFormModel& rMode
             pOut->Push();
             pOut->SetMapMode( aMap );
             aView.ShowPage( const_cast< FmFormPage* >( pPage ), Point() );
-            aView.InitRedraw( pOut, Rectangle( pOut->PixelToLogic( Point() ), pOut->GetOutputSize() ) );
+            aView.CompleteRedraw( pOut, Rectangle( pOut->PixelToLogic( Point() ), pOut->GetOutputSize() ) );
             pOut->Pop();
 
             bRet = TRUE;
