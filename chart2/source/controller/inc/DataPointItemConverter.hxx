@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointItemConverter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-09 16:30:45 $
+ *  last change: $Author: bm $ $Date: 2003-12-17 16:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #include "GraphicPropertyItemConverter.hxx"
 #include "chartview/NumberFormatterWrapper.hxx"
 
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
 #endif
@@ -85,7 +88,9 @@ class DataPointItemConverter :
 public:
     DataPointItemConverter(
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet > & rPropertySet,
+            ::com::sun::star::frame::XModel > & xChartModel,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
         NumberFormatterWrapper * pNumFormatter,

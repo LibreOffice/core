@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LinearRegressionCurveCalculator.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-17 14:06:20 $
+ *  last change: $Author: bm $ $Date: 2003-12-17 16:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #include "LinearRegressionCurveCalculator.hxx"
 #include "macros.hxx"
-// #include "algohelper.hxx"
 #include "RegressionCalculationHelper.hxx"
 
 #ifndef INCLUDED_RTL_MATH_HXX

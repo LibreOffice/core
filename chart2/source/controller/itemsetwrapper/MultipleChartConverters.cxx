@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultipleChartConverters.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-10 16:51:51 $
+ *  last change: $Author: bm $ $Date: 2003-12-17 16:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,12 +179,13 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
         uno::Reference< beans::XPropertySet > xObjectProperties( *aIt, uno::UNO_QUERY);
         if( pRefSize.get())
             m_aConverters.push_back( new ::chart::wrapper::DataPointItemConverter(
+                                         xChartModel,
                                          xObjectProperties, rItemPool, rDrawModel, NULL,
                                          GraphicPropertyItemConverter::FILLED_DATA_POINT,
                                          ::std::auto_ptr< awt::Size >( new awt::Size( *pRefSize )) ));
         else
             m_aConverters.push_back( new ::chart::wrapper::DataPointItemConverter(
-                                         xObjectProperties, rItemPool, rDrawModel, NULL ));
+                                         xChartModel, xObjectProperties, rItemPool, rDrawModel, NULL ));
     }
 }
 
@@ -213,7 +214,7 @@ AllSeriesStatisticsConverter::AllSeriesStatisticsConverter(
     {
         uno::Reference< beans::XPropertySet > xObjectProperties( *aIt, uno::UNO_QUERY);
         m_aConverters.push_back( new ::chart::wrapper::StatisticsItemConverter(
-                                     xObjectProperties, rItemPool ));
+                                     xChartModel, xObjectProperties, rItemPool ));
     }
 }
 

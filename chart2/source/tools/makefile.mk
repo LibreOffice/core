@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: bm $ $Date: 2003-12-12 17:02:43 $
+#   last change: $Author: bm $ $Date: 2003-12-17 16:43:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,16 +91,17 @@ SLOFILES=	\
     $(SLO)$/ExponentialRegressionCurve.obj \
     $(SLO)$/ImplOPropertySet.obj \
     $(SLO)$/LayoutHelper.obj \
-    $(SLO)$/LinearRegressionCurve.obj \
+    $(SLO)$/LinearRegressionCurveCalculator.obj \
     $(SLO)$/LogarithmicRegressionCurve.obj \
-    $(SLO)$/MeanValueRegressionCurve.obj \
+    $(SLO)$/MeanValueRegressionCurveCalculator.obj \
     $(SLO)$/OChartElementContainerHelper.obj \
     $(SLO)$/OEnumeration.obj \
     $(SLO)$/OIndexContainer.obj \
     $(SLO)$/OPropertySet.obj \
     $(SLO)$/OStyle.obj \
-    $(SLO)$/PotentialRegressionCurve.obj \
+    $(SLO)$/PotentialRegressionCurveCalculator.obj \
     $(SLO)$/RegressionCurveHelper.obj \
+    $(SLO)$/RegressionCurveModel.obj \
     $(SLO)$/Rotation.obj \
     $(SLO)$/RelativeSizeHelper.obj \
     $(SLO)$/Scaling.obj \

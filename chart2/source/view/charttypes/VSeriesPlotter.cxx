@@ -678,8 +678,11 @@ void VSeriesPlotter::createRegressionCurvesShapes( const VDataSeries& rVDataSeri
         xRegressionContainer->getRegressionCurves();
     for(sal_Int32 nN=0; nN<aCurveList.getLength(); nN++)
     {
-        uno::Reference< XRegressionCurve > xRegressionCurve( aCurveList[nN] );
-        xRegressionCurve->recalculateRegression( rVDataSeries.getAllX(), rVDataSeries.getAllY() );
+        uno::Reference< XRegressionCurveCalculator > xRegressionCurveCalculator(
+            aCurveList[nN]->getCalculator() );
+        if( ! xRegressionCurveCalculator.is())
+            continue;
+        xRegressionCurveCalculator->recalculateRegression( rVDataSeries.getAllX(), rVDataSeries.getAllY() );
 
         sal_Int32 nRegressionPointCount = 50;//@todo find a more optimal solution if more complicated curve types are introduced
         drawing::PolyPolygonShape3D aRegressionPoly;
@@ -693,7 +696,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( const VDataSeries& rVDataSeri
         for(sal_Int32 nP=0; nP<nRegressionPointCount; nP++)
         {
             double fLogicX = fMinX + nP*(fMaxX-fMinX)/double(nRegressionPointCount-1);
-            double fLogicY = xRegressionCurve->getCurveValue( fLogicX );
+            double fLogicY = xRegressionCurveCalculator->getCurveValue( fLogicX );
             double fLogicZ = 0.0;//dummy
 
             m_pPosHelper->doLogicScaling( &fLogicX, &fLogicY, &fLogicZ );
@@ -723,7 +726,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( const VDataSeries& rVDataSeri
         if( !aRegressionPoly.SequenceX.getLength() || !aRegressionPoly.SequenceX[0].getLength() )
             continue;
 
-        uno::Reference< beans::XPropertySet > xCurveModelProp( xRegressionCurve, uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySet > xCurveModelProp( aCurveList[nN], uno::UNO_QUERY );
         VLineProperties aVLineProperties;
         aVLineProperties.initFromPropertySet( xCurveModelProp );
 

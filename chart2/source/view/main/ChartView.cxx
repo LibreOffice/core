@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-12 20:43:35 $
+ *  last change: $Author: bm $ $Date: 2003-12-17 16:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -711,12 +711,12 @@ bool createLegend( const uno::Reference< XLegend > & xLegend
                    , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
                    , awt::Rectangle & rOutSpaceLeft
                    , const awt::Size & rPageSize
-    )
+                   , const uno::Reference< frame::XModel > & xModel )
 {
     if( VLegend::isVisible( xLegend ))
     {
         VLegend aVLegend( xLegend );
-        aVLegend.init( xPageShapes, xShapeFactory );
+        aVLegend.init( xPageShapes, xShapeFactory, xModel );
         aVLegend.createShapes( awt::Size( rOutSpaceLeft.Width, rOutSpaceLeft.Height ),
                                rPageSize );
         aVLegend.changePosition( rOutSpaceLeft, rPageSize );
@@ -818,7 +818,7 @@ bool ChartViewImpl::create( const awt::Size& rPageSize )
 
     //------------ create legend
     createLegend( LegendHelper::getLegend( m_xChartModel ), xPageShapes, m_xShapeFactory
-                , aRemainingSpace, rPageSize );
+                , aRemainingSpace, rPageSize, m_xChartModel );
     if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
         return true;
 

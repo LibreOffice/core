@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-15 20:46:10 $
+ *  last change: $Author: bm $ $Date: 2003-12-17 16:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,7 @@ private:
                 */
                 bool bIncludeStatistics = ( eObjectType == OBJECTTYPE_DATA_SERIES );
                 pItemConverter =  new wrapper::DataPointItemConverter(
+                                        xChartModel,
                                         xObjectProperties, rDrawModel.GetItemPool(), rDrawModel,
                                         pNumberFormatterWrapper, eMapTo, pRefSize,
                                         bIncludeStatistics );
@@ -561,10 +562,11 @@ void SAL_CALL ChartController::executeDlg_ObjectProperties( const ::rtl::OUStrin
             uno::Reference< beans::XPropertySet > xObjectProperties =
                 ObjectIdentifier::getObjectPropertySet( aObjectCID, m_aModel->getModel() );
             wrapper::DataPointItemConverter aSymbolItemConverter(
-                                        xObjectProperties
+                                          m_aModel->getModel()
+                                        , xObjectProperties
                                         , m_pDrawModelWrapper->getSdrModel().GetItemPool()
-                                        , m_pDrawModelWrapper->getSdrModel(),
-                                        m_pNumberFormatterWrapper
+                                        , m_pDrawModelWrapper->getSdrModel()
+                                        , m_pNumberFormatterWrapper
                                         , wrapper::GraphicPropertyItemConverter::FILLED_DATA_POINT );
 
             pSymbolShapeProperties = new SfxItemSet( aSymbolItemConverter.CreateEmptyItemSet() );

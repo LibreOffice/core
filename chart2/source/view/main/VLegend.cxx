@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-12 20:10:00 $
+ *  last change: $Author: bm $ $Date: 2003-12-17 16:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include "LayoutHelper.hxx"
 #include "ShapeFactory.hxx"
 #include "RelativeSizeHelper.hxx"
+#include "RegressionCurveHelper.hxx"
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
 #include <com/sun/star/text/XTextRange.hpp>
@@ -104,6 +105,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
 #include <drafts/com/sun/star/layout/RelativePosition.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XREGRESSIONCURVECONTAINER_HPP_
+#include <drafts/com/sun/star/chart2/XRegressionCurveContainer.hpp>
+#endif
 
 // header for class Matrix3D
 #ifndef _B2D_MATRIX3D_HXX
@@ -131,7 +135,7 @@ namespace
 
 struct LegendEntry
 {
-    uno::Reference< drawing::XShapes >      xGroupShapes;
+    uno::Reference< drawing::XShapes >     xGroupShapes;
     uno::Reference< drawing::XShape >      xTextShape;
     uno::Reference< beans::XPropertySet >  xSymbolProperties;
     uno::Reference< chart2::XChartType >   xChartType;
@@ -271,18 +275,20 @@ uno::Reference< drawing::XShape >
 {
     uno::Reference< drawing::XShape > xResult;
 
+    xResult.set( xFact->createInstance(
+                     C2U( "com.sun.star.drawing.GroupShape" )), uno::UNO_QUERY );
+    xShapeContainer->add( xResult );
+    uno::Reference< drawing::XShapes > xGroup( xResult, uno::UNO_QUERY );
+    if( ! xGroup.is())
+        return uno::Reference< drawing::XShape >();
+
+    xShapeContainer->add( xResult );
+
     if( xChartType.is())
     {
         ::rtl::OUString aChartType( xChartType->getChartType());
-
-        xResult.set( xFact->createInstance(
-                         C2U( "com.sun.star.drawing.GroupShape" )), uno::UNO_QUERY );
-        xShapeContainer->add( xResult );
-        uno::Reference< drawing::XShapes > xGroup( xResult, uno::UNO_QUERY );
-        if( ! xGroup.is())
-            return uno::Reference< drawing::XShape >();
-
-        xShapeContainer->add( xResult );
+        VLegendSymbolFactory::tPropertyType ePropType =
+            VLegendSymbolFactory::PROP_TYPE_FILLED_SERIES;
 
         chart2::LegendSymbolStyle eSymbolStyle = chart2::LegendSymbolStyle_BOX;
 
@@ -299,6 +305,7 @@ uno::Reference< drawing::XShape >
                  aChartType.equals( C2U( "com.sun.star.chart2.ScatterChart" )))
         {
             eSymbolStyle = chart2::LegendSymbolStyle_LINE;
+            ePropType = VLegendSymbolFactory::PROP_TYPE_LINE_SERIES;
             try
             {
                 // use a box for 3d-line charts
@@ -320,16 +327,88 @@ uno::Reference< drawing::XShape >
         else if( aChartType.equals( C2U( "com.sun.star.chart2.NetChart" )))
         {
             eSymbolStyle = chart2::LegendSymbolStyle_DIAGONAL_LINE;
+            ePropType = VLegendSymbolFactory::PROP_TYPE_LINE_SERIES;
         }
 
-        ::chart::VLegendSymbolFactory::createSymbol( xGroup, eSymbolStyle, xFact, xSeriesProp );
+        ::chart::VLegendSymbolFactory::createSymbol(
+            xGroup, eSymbolStyle, xFact, xSeriesProp, ePropType );
     }
     else
     {
-        OSL_ENSURE( false, "No ChartTypeGroup!" );
+        // no chart-type group => assume regression line
+        ::chart::VLegendSymbolFactory::createSymbol(
+            xGroup, chart2::LegendSymbolStyle_DIAGONAL_LINE, xFact, xSeriesProp,
+            VLegendSymbolFactory::PROP_TYPE_LINE );
     }
 
     return xResult;
+}
+
+typedef ::std::pair< uno::Reference< drawing::XShape >, uno::Reference< drawing::XShapes > >
+    tShapeWithGroup;
+
+tShapeWithGroup lcl_getLegendEntry(
+        const uno::Reference< lang::XMultiServiceFactory > & xShapeFactory,
+        const uno::Reference< drawing::XShapes > & xTarget,
+        const ::rtl::OUString & rText,
+        const tPropertyValues & rProperties,
+        awt::Size & rOutMinExtentSoFar,
+        awt::Size & rOutMaxExtentSoFar,
+        tEntryGroup & rOutEntryContainer,
+        const ::rtl::OUString & rCID )
+{
+    uno::Reference< drawing::XShape > xEntry;
+    uno::Reference< drawing::XShapes > xGroupShapes;
+    try
+    {
+        // create label shape
+        uno::Reference< drawing::XShape > xGroupShapeForSingleEntry(
+            xShapeFactory->createInstance(
+                C2U( "com.sun.star.drawing.GroupShape" )), uno::UNO_QUERY_THROW );
+        xEntry.set( xShapeFactory->createInstance(
+                C2U( "com.sun.star.drawing.TextShape" )), uno::UNO_QUERY_THROW );
+
+        xTarget->add( xGroupShapeForSingleEntry );
+
+        xGroupShapes.set( xGroupShapeForSingleEntry, uno::UNO_QUERY_THROW );
+        xGroupShapes->add( xEntry );
+
+        // set label text
+        uno::Reference< text::XTextRange > xRange( xEntry, uno::UNO_QUERY );
+        if( xRange.is())
+            xRange->setString( rText );
+
+        // set character properties
+        ::chart::PropertyMapper::setMultiProperties(
+            rProperties.first, rProperties.second,
+            uno::Reference< beans::XPropertySet >( xEntry,uno::UNO_QUERY ) );
+
+        // adapt min-/max-extent
+        awt::Size aEntrySize( xEntry->getSize() );
+        rOutMaxExtentSoFar.Width =  ::std::max( rOutMaxExtentSoFar.Width,  aEntrySize.Width );
+        rOutMaxExtentSoFar.Height = ::std::max( rOutMaxExtentSoFar.Height, aEntrySize.Height );
+        if( aEntrySize.Height > 0 )
+        {
+            // setting initial value (otherwise (0,0) is always the minimum)
+            if( rOutMinExtentSoFar.Height == 0 )
+                rOutMinExtentSoFar = aEntrySize;
+            else
+            {
+                rOutMinExtentSoFar.Width =  ::std::min( rOutMinExtentSoFar.Width,  aEntrySize.Width );
+                rOutMinExtentSoFar.Height = ::std::min( rOutMinExtentSoFar.Height, aEntrySize.Height );
+            }
+        }
+
+        // set identifier for selection handling
+        uno::Reference< beans::XPropertySet > xEntryProps( xGroupShapeForSingleEntry,uno::UNO_QUERY );
+        xEntryProps->setPropertyValue( C2U("Name"), uno::makeAny( rCID ));
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    return ::std::make_pair( xEntry, xGroupShapes );
 }
 
 /** Note: rOutMinExtentSoFar is the smallest non-zero size
@@ -343,7 +422,8 @@ void lcl_getLegendEntries(
     const tPropertyValues & rProperties,
     awt::Size & rOutMinExtentSoFar,
     awt::Size & rOutMaxExtentSoFar,
-    const rtl::OUString& rLegendIdentifier )
+    const rtl::OUString& rLegendIdentifier,
+    uno::Reference< frame::XModel > & xModel )
 {
     uno::Sequence< uno::Reference< chart2::XDataSeriesTreeNode > > aChildren(
         xParent->getChildren());
@@ -355,26 +435,13 @@ void lcl_getLegendEntries(
         {
             // recurse !
             lcl_getLegendEntries( xNewParent, rOutEntryContainer, xTarget, xShapeFactory,
-                                  xChartType, rProperties, rOutMinExtentSoFar, rOutMaxExtentSoFar, rLegendIdentifier );
+                                  xChartType, rProperties, rOutMinExtentSoFar, rOutMaxExtentSoFar,
+                                  rLegendIdentifier, xModel );
         }
         else
         {
             try
             {
-                // create label shape
-                uno::Reference< drawing::XShape > xGroupShapeForSingleEntry(
-                    xShapeFactory->createInstance(
-                        C2U( "com.sun.star.drawing.GroupShape" )), uno::UNO_QUERY );
-                uno::Reference< drawing::XShape > xEntry(
-                    xShapeFactory->createInstance(
-                        C2U( "com.sun.star.drawing.TextShape" )), uno::UNO_QUERY );
-                if( !xEntry.is())
-                    continue;
-
-                xTarget->add( xGroupShapeForSingleEntry );
-
-                uno::Reference< drawing::XShapes > xGroupShapes( xGroupShapeForSingleEntry, uno::UNO_QUERY );
-                xGroupShapes->add( xEntry );
                 // get label text via data source
                 ::rtl::OUString aName;
                 uno::Reference< chart2::XDataSource > xSeriesSource(
@@ -382,53 +449,57 @@ void lcl_getLegendEntries(
                 if( xSeriesSource.is())
                     aName = lcl_getLabelForSeries( xSeriesSource );
 
-                // set label text
-                uno::Reference< text::XTextRange > xRange( xEntry, uno::UNO_QUERY );
-                if( xRange.is())
-                    xRange->setString( aName );
+                // identifier for selection handling
+                uno::Reference< beans::XPropertySet > xSeriesProp( xSeriesSource, uno::UNO_QUERY );
+                rtl::OUString aSeriesIdentifier;
+                xSeriesProp->getPropertyValue( C2U( "Identifier" ) ) >>= aSeriesIdentifier;
 
-                // set character properties
-                ::chart::PropertyMapper::setMultiProperties(
-                    rProperties.first, rProperties.second,
-                    uno::Reference< beans::XPropertySet >( xEntry,uno::UNO_QUERY ) );
+                rtl::OUString aCID = chart::ObjectIdentifier::createClassifiedIdentifier(
+                    chart::OBJECTTYPE_LEGEND_ENTRY, aSeriesIdentifier
+                    , chart::ObjectIdentifier::createParticle( chart::OBJECTTYPE_LEGEND, rLegendIdentifier ) );
 
-                // adapt min-/max-extent
-                awt::Size aEntrySize( xEntry->getSize() );
-                rOutMaxExtentSoFar.Width =  ::std::max( rOutMaxExtentSoFar.Width,  aEntrySize.Width );
-                rOutMaxExtentSoFar.Height = ::std::max( rOutMaxExtentSoFar.Height, aEntrySize.Height );
-                if( aEntrySize.Height > 0 )
-                {
-                    // setting initial value (otherwise (0,0) is always the minimum)
-                    if( rOutMinExtentSoFar.Height == 0 )
-                        rOutMinExtentSoFar = aEntrySize;
-                    else
-                    {
-                        rOutMinExtentSoFar.Width =  ::std::min( rOutMinExtentSoFar.Width,  aEntrySize.Width );
-                        rOutMinExtentSoFar.Height = ::std::min( rOutMinExtentSoFar.Height, aEntrySize.Height );
-                    }
-                }
+                tShapeWithGroup aResult(
+                    lcl_getLegendEntry( xShapeFactory, xTarget, aName, rProperties,
+                                        rOutMinExtentSoFar, rOutMaxExtentSoFar,
+                                        rOutEntryContainer, aCID ));
 
                 // add entry to list
-                uno::Reference< beans::XPropertySet > xSeriesProp( xSeriesSource, uno::UNO_QUERY );
                 rOutEntryContainer.push_back(
-                    tEntryGroup::value_type( xGroupShapes, xEntry, xSeriesProp, xChartType ));
+                    tEntryGroup::value_type( aResult.second, aResult.first, xSeriesProp, xChartType ));
 
-                //set identifier for selection handling
-                try
+                uno::Reference< chart2::XRegressionCurveContainer > xRegrCont(
+                    aChildren[ nI ], uno::UNO_QUERY );
+                if( xRegrCont.is())
                 {
-                    rtl::OUString aSeriesIdentifier;
-                    uno::Any aAIdentifier = xSeriesProp->getPropertyValue( C2U( "Identifier" ) );
-                    aAIdentifier >>= aSeriesIdentifier;
+                    uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(
+                        xRegrCont->getRegressionCurves());
+                    for( sal_Int32 nJ = 0; nJ < aCurves.getLength(); ++ nJ )
+                    {
+                        if( aCurves[ nJ ].is())
+                        {
+                            uno::Reference< chart2::XRegressionCurveCalculator >xCalc(
+                                aCurves[ nJ ]->getCalculator());
+                            if( xCalc.is())
+                            {
+                                RegressionCurveHelper::initializeCurveCalculator(
+                                    xCalc,
+                                    uno::Reference< chart2::XDataSeries >( aChildren[ nI ], uno::UNO_QUERY ),
+                                    xModel );
 
-                    rtl::OUString aCID = chart::ObjectIdentifier::createClassifiedIdentifier(
-                          chart::OBJECTTYPE_LEGEND_ENTRY, aSeriesIdentifier
-                          , chart::ObjectIdentifier::createParticle( chart::OBJECTTYPE_LEGEND, rLegendIdentifier ) );
-                    uno::Reference< beans::XPropertySet > xEntryProps( xGroupShapeForSingleEntry,uno::UNO_QUERY );
-                    xEntryProps->setPropertyValue( C2U("Name"), uno::makeAny( aCID ));
-                }
-                catch( uno::Exception & ex )
-                {
-                    ASSERT_EXCEPTION( ex );
+                                ::rtl::OUString aText( xCalc->getRepresentation());
+                                aResult =
+                                    lcl_getLegendEntry( xShapeFactory, xTarget, aText, rProperties,
+                                                        rOutMinExtentSoFar, rOutMaxExtentSoFar,
+                                                        rOutEntryContainer, aCID );
+                                // add entry to list
+                                rOutEntryContainer.push_back(
+                                    tEntryGroup::value_type( aResult.second, aResult.first,
+                                                             uno::Reference< beans::XPropertySet >(
+                                                                 aCurves[ nJ ], uno::UNO_QUERY ),
+                                                             uno::Reference< chart2::XChartType >() ));
+                            }
+                        }
+                    }
                 }
             }
             catch( uno::Exception & ex )
@@ -694,10 +765,12 @@ VLegend::VLegend(
 
 void SAL_CALL VLegend::init(
     const uno::Reference< drawing::XShapes >& xTargetPage,
-    const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+    const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+    const uno::Reference< frame::XModel >& xModel )
 {
     m_xTarget = xTargetPage;
     m_xShapeFactory = xFactory;
+    m_xModel = xModel;
 }
 
 // ----------------------------------------
@@ -814,7 +887,8 @@ void VLegend::createShapes(
                     lcl_getLegendEntries( xGroup, aEntryGroup, xLegendContainer,
                                           m_xShapeFactory, xChartType,
                                           aTextProperties,
-                                          aMinEntryExtent, aMaxEntryExtent, aLegendIdentifier );
+                                          aMinEntryExtent, aMaxEntryExtent, aLegendIdentifier,
+                                          m_xModel );
                 }
             }
 

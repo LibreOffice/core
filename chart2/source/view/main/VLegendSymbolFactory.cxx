@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegendSymbolFactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-17 14:50:29 $
+ *  last change: $Author: bm $ $Date: 2003-12-17 16:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,19 +80,28 @@ namespace
 void lcl_setPropetiesToShape(
     const uno::Reference< beans::XPropertySet > & xProp,
     const uno::Reference< drawing::XShape > & xShape,
-    bool bFilledSeries )
+    ::chart::VLegendSymbolFactory::tPropertyType ePropertyType )
 {
-    static ::chart::tPropertyNameMap aFilledNameMap( ::chart::PropertyMapper::getPropertyNameMapForFilledSeriesProperties());
-    static ::chart::tPropertyNameMap aLineNameMap( ::chart::PropertyMapper::getPropertyNameMapForLineSeriesProperties());
+    static ::chart::tPropertyNameMap aFilledSeriesNameMap( ::chart::PropertyMapper::getPropertyNameMapForFilledSeriesProperties());
+    static ::chart::tPropertyNameMap aLineSeriesNameMap( ::chart::PropertyMapper::getPropertyNameMapForLineSeriesProperties());
+    static ::chart::tPropertyNameMap aLineNameMap( ::chart::PropertyMapper::getPropertyNameMapForLineProperties());
 
     uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
     if( xProp.is() && xShapeProp.is() )
     {
         ::chart::tPropertyNameValueMap aValueMap;
-        if( bFilledSeries )
-            ::chart::PropertyMapper::getValueMap( aValueMap, aFilledNameMap, xProp );
-        else
-            ::chart::PropertyMapper::getValueMap( aValueMap, aLineNameMap, xProp );
+        switch( ePropertyType )
+        {
+            case ::chart::VLegendSymbolFactory::PROP_TYPE_FILLED_SERIES:
+                ::chart::PropertyMapper::getValueMap( aValueMap, aFilledSeriesNameMap, xProp );
+                break;
+            case ::chart::VLegendSymbolFactory::PROP_TYPE_LINE_SERIES:
+                ::chart::PropertyMapper::getValueMap( aValueMap, aLineSeriesNameMap, xProp );
+                break;
+            case ::chart::VLegendSymbolFactory::PROP_TYPE_LINE:
+                ::chart::PropertyMapper::getValueMap( aValueMap, aLineNameMap, xProp );
+                break;
+        }
 
         ::chart::tNameSequence aPropNames;
         ::chart::tAnySequence aPropValues;
@@ -111,7 +120,8 @@ void VLegendSymbolFactory::createSymbol(
     const uno::Reference< drawing::XShapes > xSymbolGroup,
     chart2::LegendSymbolStyle eStyle,
     const uno::Reference< lang::XMultiServiceFactory > & xShapeFactory,
-    const uno::Reference< beans::XPropertySet > & xSeriesProperties )
+    const uno::Reference< beans::XPropertySet > & xLegendEntryProperties,
+    tPropertyType ePropertyType )
 {
     // aspect ratio of symbols is always 3:2
     awt::Size aBoundSize( 3000, 2000 );
@@ -195,7 +205,7 @@ void VLegendSymbolFactory::createSymbol(
                     }
                 }
 
-                lcl_setPropetiesToShape( xSeriesProperties, xShape, true /* bFilledSeries */ );
+                lcl_setPropetiesToShape( xLegendEntryProperties, xShape, ePropertyType ); // PROP_TYPE_FILLED_SERIES );
 
 #ifdef DISABLE_DASHES_AT_BORDER
                 // don't allow dashed border style
@@ -232,7 +242,7 @@ void VLegendSymbolFactory::createSymbol(
                     xLine->setSize(  awt::Size( 3000, 0 ));
                     xLine->setPosition( awt::Point( 0, 1000 ));
 
-                    lcl_setPropetiesToShape( xSeriesProperties, xLine, false /* bFilledSeries */ );
+                    lcl_setPropetiesToShape( xLegendEntryProperties, xLine, ePropertyType ); // PROP_TYPE_LINE_SERIES );
                 }
             }
             catch( uno::Exception & ex )
@@ -255,7 +265,7 @@ void VLegendSymbolFactory::createSymbol(
                     xLine->setSize(  awt::Size( 2000, 2000 ));
                     xLine->setPosition( awt::Point( 500, 0 ));
 
-                    lcl_setPropetiesToShape( xSeriesProperties, xLine, false /* bFilledSeries */ );
+                    lcl_setPropetiesToShape( xLegendEntryProperties, xLine, ePropertyType ); // PROP_TYPE_LINE_SERIES );
                 }
             }
             catch( uno::Exception & ex )
@@ -278,7 +288,7 @@ void VLegendSymbolFactory::createSymbol(
                     xLine->setSize(  awt::Size( 3000, 0 ));
                     xLine->setPosition( awt::Point( 0, 1000 ));
 
-                    lcl_setPropetiesToShape( xSeriesProperties, xLine, false /* bFilledSeries */ );
+                    lcl_setPropetiesToShape( xLegendEntryProperties, xLine, ePropertyType ); // PROP_TYPE_LINE_SERIES );
                 }
 
                 uno::Reference< drawing::XShape > xSymbol(
@@ -291,7 +301,7 @@ void VLegendSymbolFactory::createSymbol(
                     xSymbol->setSize( awt::Size( nSize, nSize ));
                     xSymbol->setPosition( awt::Point( 1500 - nSize/2, 1000 - nSize/2 ));
 
-                    lcl_setPropetiesToShape( xSeriesProperties, xSymbol, true /* bFilledSeries */ );
+                    lcl_setPropetiesToShape( xLegendEntryProperties, xSymbol, ePropertyType ); // PROP_TYPE_FILLED_SERIES );
                 }
             }
             catch( uno::Exception & ex )

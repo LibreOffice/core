@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegressionCurveHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-10 16:51:53 $
+ *  last change: $Author: bm $ $Date: 2003-12-17 16:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,11 +60,15 @@
  ************************************************************************/
 #include "RegressionCurveHelper.hxx"
 #include "ContextHelper.hxx"
-#include "MeanValueRegressionCurve.hxx"
-#include "LinearRegressionCurve.hxx"
-#include "LogarithmicRegressionCurve.hxx"
-#include "ExponentialRegressionCurve.hxx"
-#include "PotentialRegressionCurve.hxx"
+#include "MeanValueRegressionCurveCalculator.hxx"
+#include "LinearRegressionCurveCalculator.hxx"
+#include "LogarithmicRegressionCurveCalculator.hxx"
+#include "ExponentialRegressionCurveCalculator.hxx"
+#include "PotentialRegressionCurveCalculator.hxx"
+#include "CommonConverters.hxx"
+#include "RegressionCurveModel.hxx"
+#include "ChartTypeHelper.hxx"
+#include "ChartModelHelper.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
 #include <drafts/com/sun/star/chart2/XChartDocument.hpp>
@@ -76,31 +80,36 @@ namespace chart
 //.............................................................................
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
+using namespace ::drafts::com::sun::star::chart2;
+
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::XComponentContext;
 
 // static
-uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::createMeanValueLine(
-    const uno::Reference< uno::XComponentContext > & xContext )
+Reference< XRegressionCurve > RegressionCurveHelper::createMeanValueLine(
+    const Reference< XComponentContext > & xContext )
 {
     ContextHelper::tContextEntryMapType aContextValues(
         ContextHelper::MakeContextEntryMap(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Identifier" )), uno::makeAny(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "@mean-value-line" )))));
 
-    return uno::Reference< chart2::XRegressionCurve >(
-        new MeanValueRegressionCurve( ContextHelper::createContext( aContextValues, xContext ) ));
+    return Reference< XRegressionCurve >(
+        new RegressionCurveModel( ContextHelper::createContext( aContextValues, xContext ),
+                                  RegressionCurveModel::CURVE_TYPE_MEAN_VALUE ));
 }
 
 // static
-uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::createRegressionCurveByServiceName(
-    const uno::Reference< uno::XComponentContext > & xContext,
+Reference< XRegressionCurve > RegressionCurveHelper::createRegressionCurveByServiceName(
+    const Reference< XComponentContext > & xContext,
     ::rtl::OUString aServiceName )
 {
-    uno::Reference< chart2::XRegressionCurve > xResult;
+    Reference< XRegressionCurve > xResult;
 
     // todo: use factory methods with service name
     if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                "com.sun.star.comp.chart2.LinearRegressionCurve" )))
+                "com.sun.star.chart2.LinearRegressionCurve" )))
     {
         ContextHelper::tContextEntryMapType aContextValues(
             ContextHelper::MakeContextEntryMap(
@@ -108,10 +117,11 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::createRegressi
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "@linear-regression" )))));
 
         xResult.set(
-            new LinearRegressionCurve( ContextHelper::createContext( aContextValues, xContext ) ));
+            new RegressionCurveModel( ContextHelper::createContext( aContextValues, xContext ),
+                                      RegressionCurveModel::CURVE_TYPE_LINEAR ));
     }
     else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                     "com.sun.star.comp.chart2.LogarithmicRegressionCurve" )))
+                     "com.sun.star.chart2.LogarithmicRegressionCurve" )))
     {
         ContextHelper::tContextEntryMapType aContextValues(
             ContextHelper::MakeContextEntryMap(
@@ -119,10 +129,11 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::createRegressi
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "@logarithmic-regression" )))));
 
         xResult.set(
-            new LogarithmicRegressionCurve( ContextHelper::createContext( aContextValues, xContext ) ));
+            new RegressionCurveModel( ContextHelper::createContext( aContextValues, xContext ),
+                                      RegressionCurveModel::CURVE_TYPE_LOGARITHM ));
     }
     else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                     "com.sun.star.comp.chart2.ExponentialRegressionCurve" )))
+                     "com.sun.star.chart2.ExponentialRegressionCurve" )))
     {
         ContextHelper::tContextEntryMapType aContextValues(
             ContextHelper::MakeContextEntryMap(
@@ -130,10 +141,11 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::createRegressi
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "@exponential-regression" )))));
 
         xResult.set(
-            new ExponentialRegressionCurve( ContextHelper::createContext( aContextValues, xContext ) ));
+            new RegressionCurveModel( ContextHelper::createContext( aContextValues, xContext ),
+                                      RegressionCurveModel::CURVE_TYPE_EXPONENTIAL ));
     }
     else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                     "com.sun.star.comp.chart2.PotentialRegressionCurve" )))
+                     "com.sun.star.chart2.PotentialRegressionCurve" )))
     {
         ContextHelper::tContextEntryMapType aContextValues(
             ContextHelper::MakeContextEntryMap(
@@ -141,13 +153,132 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::createRegressi
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "@potential-regression" )))));
 
         xResult.set(
-            new PotentialRegressionCurve( ContextHelper::createContext( aContextValues, xContext ) ));
+            new RegressionCurveModel( ContextHelper::createContext( aContextValues, xContext ),
+                                      RegressionCurveModel::CURVE_TYPE_POWER ));
     }
 
     return xResult;
 }
 
+// ------------------------------------------------------------
+
+// static
+Reference< XRegressionCurveCalculator > RegressionCurveHelper::createMeanValueLineCalculator()
+{
+    return Reference< XRegressionCurveCalculator >( new MeanValueRegressionCurveCalculator());
+}
+
+// static
+Reference< XRegressionCurveCalculator > RegressionCurveHelper::createRegressionCurveCalculatorByServiceName(
+    ::rtl::OUString aServiceName )
+{
+    Reference< XRegressionCurveCalculator > xResult;
+
+    // todo: use factory methods with service name
+    if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
+                     "com.sun.star.chart2.MeanValueRegressionCurve" )))
+    {
+        xResult.set( new MeanValueRegressionCurveCalculator());
+    }
+    if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
+                     "com.sun.star.chart2.LinearRegressionCurve" )))
+    {
+        xResult.set( new LinearRegressionCurveCalculator());
+    }
+    else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
+                     "com.sun.star.chart2.LogarithmicRegressionCurve" )))
+    {
+        xResult.set( new LogarithmicRegressionCurveCalculator());
+    }
+    else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
+                     "com.sun.star.chart2.ExponentialRegressionCurve" )))
+    {
+        xResult.set( new ExponentialRegressionCurveCalculator());
+    }
+    else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
+                     "com.sun.star.chart2.PotentialRegressionCurve" )))
+    {
+        xResult.set( new PotentialRegressionCurveCalculator());
+    }
+
+    return xResult;
+}
+
+// static
+void RegressionCurveHelper::initializeCurveCalculator(
+    const Reference< XRegressionCurveCalculator > & xOutCurveCalculator,
+    const Reference< XDataSource > & xSource,
+    bool bUseXValuesIfAvailable /* = true */ )
+{
+    if( ! (xOutCurveCalculator.is() &&
+           xSource.is() ))
+        return;
+
+    Sequence< double > aXValues, aYValues;
+    bool bXValuesFound = false, bYValuesFound = false;
+
+    Sequence< Reference< XDataSequence > > aDataSeqs( xSource->getDataSequences());
+    for( sal_Int32 i=0;
+         ! (bXValuesFound && bYValuesFound) && i<aDataSeqs.getLength();
+         ++i )
+    {
+        try
+        {
+            Reference< beans::XPropertySet > xProp( aDataSeqs[i], uno::UNO_QUERY_THROW );
+            ::rtl::OUString aRole;
+            if( xProp->getPropertyValue(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Role" ))) >>= aRole )
+            {
+                if( bUseXValuesIfAvailable &&
+                    ! bXValuesFound &&
+                    aRole.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "x-values" )))
+                {
+                    aXValues = DataSequenceToDoubleSequence( aDataSeqs[i] );
+                    bXValuesFound = true;
+                }
+                else if( ! bYValuesFound &&
+                         aRole.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "values" )))
+                {
+                    aYValues = DataSequenceToDoubleSequence( aDataSeqs[i] );
+                    bYValuesFound = true;
+                }
+            }
+        }
+        catch( uno::Exception )
+        {
+        }
+    }
+
+    if( ! bXValuesFound &&
+        bYValuesFound )
+    {
+        // initialize with 1, 2, ...
+        aXValues.realloc( aYValues.getLength());
+        for( i=0; i<aXValues.getLength(); )
+            aXValues[i] = ++i;
+        bXValuesFound = true;
+    }
+
+    if( bXValuesFound && bYValuesFound &&
+        aXValues.getLength() > 0 &&
+        aYValues.getLength() > 0 )
+        xOutCurveCalculator->recalculateRegression( aXValues, aYValues );
+}
+
+// static
+void RegressionCurveHelper::initializeCurveCalculator(
+    const Reference< XRegressionCurveCalculator > & xOutCurveCalculator,
+    const Reference< XDataSeries > & xSeries,
+    const Reference< frame::XModel > & xModel )
+{
+    AxisType eAxisType = ChartTypeHelper::getAxisType(
+        ChartModelHelper::getChartTypeOfSeries( xModel, xSeries ), 0 ); // x-axis
+
+    initializeCurveCalculator( xOutCurveCalculator,
+                               uno::Reference< XDataSource >( xSeries, uno::UNO_QUERY ),
+                               (eAxisType == AxisType_REALNUMBER) );
+}
+
 //.............................................................................
 } //namespace chart
 //.............................................................................
-

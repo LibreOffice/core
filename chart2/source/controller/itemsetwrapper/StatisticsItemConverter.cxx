@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StatisticsItemConverter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-16 13:57:00 $
+ *  last change: $Author: bm $ $Date: 2003-12-17 16:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 #include "RegressionCurveHelper.hxx"
 #include "ErrorBar.hxx"
 #include "PropertyHelper.hxx"
+#include "ChartModelHelper.hxx"
+#include "ChartTypeHelper.hxx"
 
 #include "GraphicPropertyItemConverter.hxx"
 #include "CharacterPropertyItemConverter.hxx"
@@ -118,7 +120,7 @@ bool lcl_HasMeanValueLine( const uno::Reference< chart2::XRegressionCurveContain
             uno::Reference< lang::XServiceName > xServName( aCurves[i], uno::UNO_QUERY );
             if( xServName.is() &&
                 xServName->getServiceName().equals(
-                    C2U( "com.sun.star.comp.chart2.MeanValueRegressionCurve" )))
+                    C2U( "com.sun.star.chart2.MeanValueRegressionCurve" )))
             {
                 bResult = true;
                 break;
@@ -148,7 +150,7 @@ void lcl_RemoveMeanValueLine( uno::Reference< chart2::XRegressionCurveContainer 
             uno::Reference< lang::XServiceName > xServName( aCurves[i], uno::UNO_QUERY );
             if( xServName.is() &&
                 xServName->getServiceName().equals(
-                    C2U( "com.sun.star.comp.chart2.MeanValueRegressionCurve" )))
+                    C2U( "com.sun.star.chart2.MeanValueRegressionCurve" )))
             {
                 // note: assume that there is only one mean-value curve
                 xRegCnt->removeRegressionCurve( aCurves[i] );
@@ -164,7 +166,8 @@ void lcl_RemoveMeanValueLine( uno::Reference< chart2::XRegressionCurveContainer 
 }
 
 void lcl_AddMeanValueLine( uno::Reference< chart2::XRegressionCurveContainer > & xRegCnt,
-    const uno::Reference< beans::XPropertySet > & xSeriesProp )
+                           const uno::Reference< beans::XPropertySet > & xSeriesProp,
+                           const uno::Reference< frame::XModel > & xModel )
 {
     if( !xRegCnt.is())
         return;
@@ -226,28 +229,28 @@ bool lcl_getRegressType( const uno::Reference< chart2::XRegressionCurveContainer
                     // note: take first regression curve that matches any known
                     // type (except mean-value line)
                     if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                "com.sun.star.comp.chart2.LinearRegressionCurve" )))
+                                "com.sun.star.chart2.LinearRegressionCurve" )))
                     {
                         rOutRegress = CHREGRESS_LINEAR;
                         bResult = true;
                         break;
                     }
                     else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                "com.sun.star.comp.chart2.LogarithmicRegressionCurve" )))
+                                "com.sun.star.chart2.LogarithmicRegressionCurve" )))
                     {
                         rOutRegress = CHREGRESS_LOG;
                         bResult = true;
                         break;
                     }
                     else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                "com.sun.star.comp.chart2.ExponentialRegressionCurve" )))
+                                "com.sun.star.chart2.ExponentialRegressionCurve" )))
                     {
                         rOutRegress = CHREGRESS_EXP;
                         bResult = true;
                         break;
                     }
                     else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                "com.sun.star.comp.chart2.PotentialRegressionCurve" )))
+                                "com.sun.star.chart2.PotentialRegressionCurve" )))
                     {
                         rOutRegress = CHREGRESS_POWER;
                         bResult = true;
@@ -268,7 +271,8 @@ bool lcl_getRegressType( const uno::Reference< chart2::XRegressionCurveContainer
 uno::Reference< chart2::XRegressionCurve > lcl_createRegressionCurve(
     SvxChartRegress eRegress,
     const uno::Reference< beans::XPropertySet > & xFormerProp,
-    const uno::Reference< beans::XPropertySet > & xSeriesProp )
+    const uno::Reference< beans::XPropertySet > & xSeriesProp,
+    const uno::Reference< frame::XModel > & xModel )
 {
     uno::Reference< chart2::XRegressionCurve > xResult;
     ::rtl::OUString aServiceName;
@@ -276,16 +280,16 @@ uno::Reference< chart2::XRegressionCurve > lcl_createRegressionCurve(
     switch( eRegress )
     {
         case CHREGRESS_LINEAR:
-            aServiceName = C2U( "com.sun.star.comp.chart2.LinearRegressionCurve" );
+            aServiceName = C2U( "com.sun.star.chart2.LinearRegressionCurve" );
             break;
         case CHREGRESS_LOG:
-            aServiceName = C2U( "com.sun.star.comp.chart2.LogarithmicRegressionCurve" );
+            aServiceName = C2U( "com.sun.star.chart2.LogarithmicRegressionCurve" );
             break;
         case CHREGRESS_EXP:
-            aServiceName = C2U( "com.sun.star.comp.chart2.ExponentialRegressionCurve" );
+            aServiceName = C2U( "com.sun.star.chart2.ExponentialRegressionCurve" );
             break;
         case CHREGRESS_POWER:
-            aServiceName = C2U( "com.sun.star.comp.chart2.PotentialRegressionCurve" );
+            aServiceName = C2U( "com.sun.star.chart2.PotentialRegressionCurve" );
             break;
 
         case CHREGRESS_NONE:
@@ -340,13 +344,13 @@ lcl_removeAllKnownRegressionCurves(
                 uno::Reference< lang::XServiceName > xServName( aCurves[i], uno::UNO_QUERY );
                 if( xServName.is() &&
                     ( xServName->getServiceName().equals(
-                          C2U( "com.sun.star.comp.chart2.LinearRegressionCurve" )) ||
+                          C2U( "com.sun.star.chart2.LinearRegressionCurve" )) ||
                       xServName->getServiceName().equals(
-                          C2U( "com.sun.star.comp.chart2.LogarithmicRegressionCurve" )) ||
+                          C2U( "com.sun.star.chart2.LogarithmicRegressionCurve" )) ||
                       xServName->getServiceName().equals(
-                          C2U( "com.sun.star.comp.chart2.ExponentialRegressionCurve" )) ||
+                          C2U( "com.sun.star.chart2.ExponentialRegressionCurve" )) ||
                       xServName->getServiceName().equals(
-                          C2U( "com.sun.star.comp.chart2.PotentialRegressionCurve" ))
+                          C2U( "com.sun.star.chart2.PotentialRegressionCurve" ))
                         ))
                 {
                     aDeleteIndexes.push_back( i );
@@ -428,10 +432,11 @@ namespace wrapper
 {
 
 StatisticsItemConverter::StatisticsItemConverter(
-    const uno::Reference<
-    beans::XPropertySet > & rPropertySet,
+    const uno::Reference< frame::XModel > & xModel,
+    const uno::Reference< beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool ) :
-        ItemConverter( rPropertySet, rItemPool )
+        ItemConverter( rPropertySet, rItemPool ),
+        m_xModel( xModel )
 {
 }
 
@@ -472,7 +477,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
                 if( ! bNewHasMeanValueLine )
                     lcl_RemoveMeanValueLine( xRegCnt );
                 else
-                    lcl_AddMeanValueLine( xRegCnt, GetPropertySet() );
+                    lcl_AddMeanValueLine( xRegCnt, GetPropertySet(), m_xModel );
                 bChanged = true;
             }
         }
@@ -636,7 +641,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
                     uno::Reference< beans::XPropertySet > xFormerProp(
                         lcl_removeAllKnownRegressionCurves( xRegCnt ).second );
                     xRegCnt->addRegressionCurve(
-                        lcl_createRegressionCurve( eRegress, xFormerProp, GetPropertySet() ));
+                        lcl_createRegressionCurve( eRegress, xFormerProp, GetPropertySet(), m_xModel ));
                     bChanged = true;
                 }
             }

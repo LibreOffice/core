@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegressionCurveHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-10 16:51:52 $
+ *  last change: $Author: bm $ $Date: 2003-12-17 16:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,20 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XREGRESSIONCURVE_HPP_
 #include <drafts/com/sun/star/chart2/XRegressionCurve.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XREGRESSIONCURVECALCULATOR_HPP_
+#include <drafts/com/sun/star/chart2/XRegressionCurveCalculator.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASOURCE_HPP_
+#include <drafts/com/sun/star/chart2/XDataSource.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASERIES_HPP_
+#include <drafts/com/sun/star/chart2/XDataSeries.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
 #endif
 
 namespace chart
@@ -74,18 +86,68 @@ namespace chart
 class RegressionCurveHelper
 {
 public:
+    /// returns a model mean-value line
     static ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XRegressionCurve >
+            ::drafts::com::sun::star::chart2::XRegressionCurve >
         createMeanValueLine(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext > & xContext );
 
+    /// returns a model regression curve
     static ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::chart2::XRegressionCurve >
+            ::drafts::com::sun::star::chart2::XRegressionCurve >
         createRegressionCurveByServiceName(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext > & xContext,
             ::rtl::OUString aServiceName );
+
+    // ------------------------------------------------------------
+
+    /// returns a calculator object for mean-value lines (used by the view)
+    static ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XRegressionCurveCalculator >
+        createMeanValueLineCalculator();
+
+    /// returns a calculator object for regression curves (used by the view)
+    static ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XRegressionCurveCalculator >
+        createRegressionCurveCalculatorByServiceName(
+            ::rtl::OUString aServiceName );
+
+    /** recalculates the regression parameters according to the data given in
+        the data source.
+
+        A sequence having the role "x-values" will be used as x-values for the
+        calculation if found.  Otherwise a sequence (1, 2, 3, ...) of category
+        indexes will be used for the recalculateRegression() method of the
+        regression curve.
+
+        The first sequence having the role "values" will be used as y-values for
+        the recalculateRegression() method of the regression curve.
+
+        @param bUseXValuesIfAvailable
+            If false, the sequence (1, 2, 3, ...) will always be used, even if
+            there is a data-sequence with role "x-values"
+     */
+    static void initializeCurveCalculator(
+        const ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XRegressionCurveCalculator > & xOutCurveCalculator,
+        const ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XDataSource > & xSource,
+        bool bUseXValuesIfAvailable = true );
+
+    /** Same method as above, but uses the given XModel to determine the
+        parameter bUseXValuesIfAvailable in the above function.  It is also
+        necessary that the XDataSource is an XDataSeries, thus this parameter
+        also changed.
+     */
+    static void initializeCurveCalculator(
+        const ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XRegressionCurveCalculator > & xOutCurveCalculator,
+        const ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XDataSeries > & xSeries,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::frame::XModel > & xModel );
 
 private:
     // not implemented

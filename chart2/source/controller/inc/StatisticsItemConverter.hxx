@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StatisticsItemConverter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-10 14:55:57 $
+ *  last change: $Author: bm $ $Date: 2003-12-17 16:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef CHART_STATISTICSITEMCONVERTER_HXX
 #define CHART_STATISTICSITEMCONVERTER_HXX
 
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+
 #include "ItemConverter.hxx"
 #include "GraphicPropertyItemConverter.hxx"
 #include "chartview/NumberFormatterWrapper.hxx"
@@ -80,6 +84,8 @@ class StatisticsItemConverter :
 public:
     StatisticsItemConverter(
         const ::com::sun::star::uno::Reference<
+            ::com::sun::star::frame::XModel > & xChartModel,
+        const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool );
     virtual ~StatisticsItemConverter();
@@ -92,6 +98,10 @@ protected:
         throw( ::com::sun::star::uno::Exception );
     virtual bool ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet )
         throw( ::com::sun::star::uno::Exception );
+
+private:
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::frame::XModel >  m_xModel;
 };
 
 } //  namespace wrapper

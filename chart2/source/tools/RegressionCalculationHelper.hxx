@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegressionCalculationHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-16 13:55:57 $
+ *  last change: $Author: bm $ $Date: 2003-12-17 16:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,15 @@
 #endif
 
 #include <utility>
+#include <functional>
 #include <vector>
+
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
+#endif
+
+#define NUMBER_TO_STR(number) (::rtl::OStringToOUString(::rtl::math::doubleToString( \
+          number, rtl_math_StringFormat_G, 4, '.', true ),RTL_TEXTENCODING_ASCII_US ))
 
 namespace chart
 {

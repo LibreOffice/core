@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-04 15:46:54 $
+ *  last change: $Author: bm $ $Date: 2003-12-17 16:43:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_ALIGNMENT_HPP_
 #include <drafts/com/sun/star/layout/Alignment.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
 
 //.............................................................................
 namespace chart
@@ -98,7 +101,9 @@ public:
     void SAL_CALL init( const ::com::sun::star::uno::Reference<
                             ::com::sun::star::drawing::XShapes >& xTargetPage,
                         const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+                            ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
+                        const ::com::sun::star::uno::Reference<
+                            ::com::sun::star::frame::XModel > & xModel );
 
     void createShapes( const ::com::sun::star::awt::Size & rAvailableSpace,
                        const ::com::sun::star::awt::Size & rPageSize );
@@ -129,6 +134,8 @@ private:
                     ::drafts::com::sun::star::chart2::XLegend >     m_xLegend;
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape >             m_xShape;
+    ::com::sun::star::uno::Reference<
+                    ::com::sun::star::frame::XModel >               m_xModel;
 };
 
 //.............................................................................

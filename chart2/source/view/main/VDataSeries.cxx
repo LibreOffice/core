@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-17 10:44:12 $
+ *  last change: $Author: bm $ $Date: 2003-12-17 16:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 #include "VDataSeries.hxx"
 #include "chartview/ObjectIdentifier.hxx"
 #include "macros.hxx"
+#include "CommonConverters.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOL_HPP_
 #include <drafts/com/sun/star/chart2/Symbol.hpp>
@@ -104,34 +105,6 @@ namespace chart
 //.............................................................................
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::chart2;
-
-void initDoubleValues( uno::Sequence< double >& rDoubleValues,
-                      const uno::Reference< XDataSequence >& xDataSequence )
-{
-    OSL_ASSERT( xDataSequence.is());
-    if(!xDataSequence.is())
-        return;
-
-    uno::Reference< XNumericalDataSequence > xNumericalDataSequence
-        = uno::Reference< XNumericalDataSequence >( xDataSequence, uno::UNO_QUERY );
-    if( xNumericalDataSequence.is() )
-    {
-        rDoubleValues = xNumericalDataSequence->getNumericalData();
-    }
-    else
-    {
-        uno::Sequence< uno::Any > aValues = xDataSequence->getData();
-        rDoubleValues.realloc(aValues.getLength());
-        for(sal_Int32 nN=aValues.getLength();nN--;)
-        {
-            if( !(aValues[nN] >>= rDoubleValues[nN]) )
-            {
-                ::rtl::math::setNan( &rDoubleValues[nN] );
-            }
-        }
-    }
-}
-
 
 VDataSeries::VDataSeries()
 {
@@ -182,12 +155,12 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
                 if( aRole.equals(C2U("x-values")) )
                 {
                     m_xData_XValues = xDataSequence;
-                    initDoubleValues( m_XValues_Double, m_xData_XValues );
+                    m_XValues_Double = DataSequenceToDoubleSequence( m_xData_XValues );
                 }
                 else if( aRole.equals(C2U("values")) )
                 {
                     m_xData_YValues = xDataSequence;
-                    initDoubleValues( m_YValues_Double, m_xData_YValues );
+                    m_YValues_Double = DataSequenceToDoubleSequence( m_xData_YValues );
                     m_nPointCount = xDataSequence->getData().getLength(); //@todo determination of m_nPointCount  may needs to be improved (e.g. max of x,y,z or something)
                 }
                 //@todo assign the other roles (+ error for unknown?)

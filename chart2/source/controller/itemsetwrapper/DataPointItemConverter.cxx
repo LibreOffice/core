@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointItemConverter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-10 18:08:46 $
+ *  last change: $Author: bm $ $Date: 2003-12-17 16:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,8 @@ namespace wrapper
 {
 
 DataPointItemConverter::DataPointItemConverter(
-    const uno::Reference<
-    beans::XPropertySet > & rPropertySet,
+    const uno::Reference< frame::XModel > & xChartModel,
+    const uno::Reference< beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     NumberFormatterWrapper * pNumFormatter,
@@ -159,7 +159,7 @@ DataPointItemConverter::DataPointItemConverter(
     m_aConverters.push_back( new CharacterPropertyItemConverter( rPropertySet, rItemPool, pRefSize,
                                                                  C2U( "ReferenceDiagramSize" )));
     if( m_bIncludeStatistics )
-        m_aConverters.push_back( new StatisticsItemConverter( rPropertySet, rItemPool ));
+        m_aConverters.push_back( new StatisticsItemConverter( xChartModel, rPropertySet, rItemPool ));
 }
 
 DataPointItemConverter::~DataPointItemConverter()
