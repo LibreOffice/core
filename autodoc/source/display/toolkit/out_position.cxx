@@ -2,9 +2,9 @@
  *
  *  $RCSfile: out_position.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:27 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,13 +241,15 @@ Position::Set( Node &           i_node,
 const char *
 get_UpLink(intt i_depth)
 {
+    intt nDepth;
+
     if ( i_depth <= C_nMaxDepth )
         return C_sUpLink + 3*(C_nMaxDepth - i_depth);
 
 
     StreamLock  aRet(i_depth*3 + 1);
     StreamStr & rRet = aRet();
-    for ( intt nDepth = i_depth; nDepth > C_nMaxDepth; nDepth -= C_nMaxDepth )
+    for ( nDepth = i_depth; nDepth > C_nMaxDepth; nDepth -= C_nMaxDepth )
     {
         rRet << C_sUpLink;
     }
