@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:48 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:45:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
     //  -> Metric vom Bildschirm nehmen (wie EditEngine!)
     //
 
-    if ( pFmtDevice->GetOutDevType() == OUTDEV_PRINTER && aMetric.GetLeading() == 0 )
+    if ( pFmtDevice->GetOutDevType() == OUTDEV_PRINTER && aMetric.GetIntLeading() == 0 )
     {
         OutputDevice* pDefaultDev = Application::GetDefaultDevice();
         MapMode aOld = pDefaultDev->GetMapMode();
