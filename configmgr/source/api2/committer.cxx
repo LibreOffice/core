@@ -2,9 +2,9 @@
  *
  *  $RCSfile: committer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 17:29:04 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 19:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@ void Committer::commit()
 
     CommitHelper    aHelper(aTree);
     if (aHelper.prepareCommit(aChangeList))
+    try
     {
 
         pUpdateProvider->updateTree(aChangeList);
@@ -140,6 +141,19 @@ void Committer::commit()
         NotifyDisabler  aDisableNotify(m_rTree);    // do not notify self
         pUpdateProvider->notifyUpdate(aChangeList);
 
+    }
+    catch(...)
+    {
+        // should be a special clean-up routine, but for now we just need a consistent state
+        try
+        {
+            aHelper.finishCommit(aChangeList);
+        }
+        catch(configuration::Exception&)
+        {
+            OSL_ENSURE(false, "Cleanup really should not throw");
+        }
+        throw;
     }
 }
 //-----------------------------------------------------------------------------
