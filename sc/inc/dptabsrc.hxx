@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabsrc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-08 14:23:30 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:22:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,6 +366,9 @@ private:
     USHORT              nFunction;          // enum GeneralFunction
     String              aName;              // if empty, take from source
     long                nSourceDim;         // >=0 if dup'ed
+    BOOL                bHasSelectedPage;
+    String              aSelectedPage;
+    ScDPItemData*       pSelectedData;      // internal, temporary, created from aSelectedPage
 
 public:
                             ScDPDimension( ScDPSource* pSrc, long nD );
@@ -448,6 +451,8 @@ public:
     virtual long                getUsedHierarchy() const;
     virtual void                setUsedHierarchy(long nNew);
     virtual BOOL                isDuplicated() const;
+
+    BOOL                        IsValidPage( const ScDPItemData& rData );
 };
 
 class ScDPHierarchies : public cppu::WeakImplHelper2<
@@ -732,6 +737,7 @@ public:
 
     BOOL                    IsNamedItem( const ScDPItemData& r ) const;
     String                  GetNameStr() const;
+    void                    FillItemData( ScDPItemData& rData ) const;
 
                             // XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
