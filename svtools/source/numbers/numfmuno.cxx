@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:11:09 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #pragma hdrstop
 
 #include <vcl/svapp.hxx>
-#include <vcl/color.hxx>
+#include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <tools/isolang.hxx>
 #include <vos/mutex.hxx>
