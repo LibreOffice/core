@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicehandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2002-05-03 08:01:00 $
+ *  last change: $Author: as $ $Date: 2002-05-29 12:29:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@
 
 #ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTSTATE_HPP_
 #include <com/sun/star/frame/DispatchResultState.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TASK_XJOBEXECUTOR_HPP_
+#include <com/sun/star/task/XJobExecutor.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -321,11 +325,30 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
 
     if (xFactory.is())
     {
-        // extract service name from given URL and use it to create the component
-        // Arguments are not supported yet.
+        // extract service name and may optional given parameters from given URL
+        // and use it to create and start the component
         ::rtl::OUString sServiceName = aURL.Complete.copy(PROTOCOL_LENGTH);
+        ::rtl::OUString sParameters  ;
+        sal_Int32 nParamStart = sServiceName.indexOf('?',0);
+        if (nParamStart!=-1)
+        {
+            ++nParamStart; // don't copy first '?'!
+            sParameters = sServiceName.copy(nParamStart);
+        }
+
         if (sServiceName.getLength()>0)
+        {
+            // If a service doesnt support an optional job executor interface - he can't get
+            // any given parameters!
+            // Because we can't know if we must call createInstanceWithArguments() or XJobExecutor::trigger() ...
+
+            // => a) a service starts running inside his own ctor and we create it only
             xService = xFactory->createInstance(sServiceName);
+            // or b) he implements the right interface and starts there (may with optional parameters)
+            css::uno::Reference< css::task::XJobExecutor > xExecuteable( xService, css::uno::UNO_QUERY );
+            if (xExecuteable.is())
+                xExecuteable->trigger(sParameters);
+        }
     }
 
     return xService;
