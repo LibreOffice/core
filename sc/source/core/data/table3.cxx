@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:15 $
+ *  last change: $Author: nn $ $Date: 2000-09-29 15:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,6 +672,8 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
     String  aSubString;
     String  aOutString;
 
+    BOOL bIgnoreCase = !rParam.bCaseSens;
+
     String *pCompString[MAXSUBTOTAL];               // Pointer wegen Compiler-Problemen
     for (i=0; i<MAXSUBTOTAL; i++)
         pCompString[i] = new String;
@@ -698,7 +700,8 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
             {
                 GetString( nGroupCol[i], nStartRow, aSubString );
                 *pCompString[i] = aSubString;
-                ScGlobal::pCharClass->toUpper( *pCompString[i] );
+                if (bIgnoreCase)
+                    ScGlobal::pCharClass->toUpper( *pCompString[i] );
             }                                                   // aSubString bleibt auf dem letzten stehen
 
             BOOL bBlockVis = FALSE;             // Gruppe eingeblendet?
@@ -715,7 +718,8 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         for (i=0; i<=nGroupNo && !bChanged; i++)
                         {
                             GetString( nGroupCol[i], nRow, aString );
-                            ScGlobal::pCharClass->toUpper( aString );
+                            if (bIgnoreCase)
+                                ScGlobal::pCharClass->toUpper( aString );
                             //  #41427# wenn sortiert, ist "leer" eine eigene Gruppe
                             //  sonst sind leere Zellen unten erlaubt
                             bChanged = ( ( aString.Len() || rParam.bDoSort ) &&
@@ -826,7 +830,8 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         {
                             GetString( nGroupCol[i], nRow, aSubString );
                             *pCompString[i] = aSubString;
-                            ScGlobal::pCharClass->toUpper( *pCompString[i] );
+                            if (bIgnoreCase)
+                                ScGlobal::pCharClass->toUpper( *pCompString[i] );
                         }
                     }
                 }
