@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adiasync.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:17 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData )
 
 
 ScAddInAsync::ScAddInAsync() :
-    SfxBroadcaster(),
+    SvtBroadcaster(),
     nHandle( 0 )
 {   // nur fuer aSeekObj !
 }
@@ -112,7 +112,7 @@ ScAddInAsync::ScAddInAsync() :
 
 
 ScAddInAsync::ScAddInAsync( ULONG nHandleP, USHORT nIndex, ScDocument* pDoc ) :
-    SfxBroadcaster(),
+    SvtBroadcaster(),
     pStr( NULL ),
     nHandle( nHandleP ),
     bValid( FALSE )
@@ -183,7 +183,7 @@ void ScAddInAsync::CallBack( ULONG nHandleP, void* pData )
             return;
     }
     p->bValid = TRUE;
-    p->Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress( 0 ), NULL ) );
+    p->Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress(), NULL ) );
 
     const ScDocument** ppDoc = (const ScDocument**) p->pDocs->GetData();
     USHORT nCount = p->pDocs->Count();
