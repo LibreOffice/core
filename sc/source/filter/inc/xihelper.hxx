@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:11:43 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:09:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,7 +341,7 @@ public:
     explicit            XclImpCachedMatrix( XclImpStream& rStrm );
                         ~XclImpCachedMatrix();
 
-    /** Creates a new ScMatrix object and fills it with the contained valöues. */
+    /** Creates a new ScMatrix object and fills it with the contained values. */
     ScMatrixRef         CreateScMatrix() const;
 
 private:
