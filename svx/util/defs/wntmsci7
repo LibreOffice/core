@@ -18402,3 +18402,7 @@ _real@8@3ff9a0a0a0a0a0a0a000
 ?setPropertyValue@SvxFrameShape@@UAAXABVOUString@rtl@@ABVAny@uno@star@sun@com@@@Z
 ?setPropertyValue@SvxOle2Shape@@UAAXABVOUString@rtl@@ABVAny@uno@star@sun@com@@@Z
 ?setPropertyValue@SvxPluginShape@@UAAXABVOUString@rtl@@ABVAny@uno@star@sun@com@@@Z
+?AcceptDrop@FmFieldWinListBox@@UAECABUAcceptDropEvent@@@Z
+?ExecuteDrop@FmFieldWinListBox@@UAECABUExecuteDropEvent@@@Z
+?GetPolyPolygon@EscherPropertyContainer@@SA?AVPolyPolygon@@ABV?$Reference@VXShape@drawing@star@sun@com@@@uno@star@sun@com@@@Z
+?GetPolyPolygon@EscherPropertyContainer@@SA?AVPolyPolygon@@ABVAny@uno@star@sun@com@@@Z
