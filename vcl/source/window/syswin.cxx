@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-15 18:44:30 $
+ *  last change: $Author: mba $ $Date: 2001-11-16 10:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,7 +558,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         long nY         = rData.GetY();
         long nWidth     = rData.GetWidth();
         long nHeight    = rData.GetHeight();
-        const SalFrame::Geometry& rGeom( pWindow->mpFrame->GetGeometry() );
+        const SalFrame::Geometry& rGeom = pWindow->mpFrame->GetGeometry();
         if( nX < 0 )
             nX = 0;
         if( nX + nWidth > rGeom.nWidth )
