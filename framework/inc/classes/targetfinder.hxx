@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetfinder.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-05-15 05:40:46 $
+ *  last change: $Author: as $ $Date: 2001-07-02 13:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #include <targets.h>
 #endif
 
+#ifndef __FRAMEWORK_GENERAL_H_
+#include <general.h>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -112,9 +116,9 @@ namespace framework{
     @short          We need some informations about our caller, With these enum he can specify his frame type ...
                     (Frame/Task/PlugInFrame/Desktop ...)
 *//*-*************************************************************************************************************/
-
 enum EFrameType
 {
+    E_UNKNOWNFRAME  ,
     E_DESKTOP       ,
     E_PLUGINFRAME   ,
     E_TASK          ,
@@ -124,9 +128,12 @@ enum EFrameType
 /*-************************************************************************************************************//**
     @short          valid result values to classify targeting
 *//*-*************************************************************************************************************/
-
 enum ETargetClass
 {
+    //-------------------------------------------------------------------------------------------------------------
+    // useable by classifyFindFrame() and classifyQueryDispatch()
+    //-------------------------------------------------------------------------------------------------------------
+
     E_UNKNOWN       ,   /// occure if you call us without valid flag combinations!
     E_CREATETASK    ,   /// create new task (supported by desktop only!)
     E_SELF          ,   /// you are the target himself
@@ -137,8 +144,89 @@ enum ETargetClass
     E_DEEP_DOWN     ,   /// search at your children (search children of direct children before another direcht children!)
     E_FLAT_DOWN     ,   /// search at your children (search at all direct children first;  children of direcht children then!)
     E_DEEP_BOTH     ,   /// combination of E_DEEP_DOWN and E_FORWARD_UP ( search down first!)
-    E_FLAT_BOTH         /// combination of E_FLAT_DOWN and E_FORWARD_UP ( search down first!)
+    E_FLAT_BOTH     ,   /// combination of E_FLAT_DOWN and E_FORWARD_UP ( search down first!)
+
+    //-------------------------------------------------------------------------------------------------------------
+    // useable by classifyQueryDispatch() only
+    //-------------------------------------------------------------------------------------------------------------
+
+    E_MENUBAR       ,   /// a menu bar is supported by a task only and should be forwarded to her internal dispatch helper! (valid for classifyQueryDispatch() only!)
+    E_HELPAGENT         /// same like menu bar!
 };
+
+/*-************************************************************************************************************//**
+    @short          hold information about environment of frame, which use TargetFinder::classify...()
+    @descr          Follow TargetFinder::classify...() methods need some informations about the environment of
+                    a frame to specify search direction. Use methods of this TargetInfo to collect this informations
+                    and use it on classify...().
+
+    @implements     -
+    @base           -
+
+    @devstatus      ready to use
+    @threadsafe     not neccessary
+*//*-*************************************************************************************************************/
+struct TargetInfo
+{
+    //-------------------------------------------------------------------------------------------------------------
+    //  public methods
+    //-------------------------------------------------------------------------------------------------------------
+    public:
+                   TargetInfo  ( const css::uno::Reference< css::frame::XFrame >& xFrame     ,
+                                 const ::rtl::OUString&                           sTarget    ,
+                                       sal_Int32                                  nFlags     );
+
+                   TargetInfo  ( const ::rtl::OUString&                           sTarget    ,
+                                       sal_Int32                                  nFlags     ,
+                                       EFrameType                                 eType      ,
+                                       sal_Bool                                   bChildrens ,
+                                       sal_Bool                                   bParent    ,
+                                 const ::rtl::OUString&                           sFrame     ,
+                                 const ::rtl::OUString&                           sParent    );
+
+        EFrameType getFrameType( const css::uno::Reference< css::frame::XFrame >& xFrame     );
+
+    //-------------------------------------------------------------------------------------------------------------
+    //  private methods
+    //-------------------------------------------------------------------------------------------------------------
+    private:
+        sal_Bool impl_getCreateFlag( sal_Int32 nSearchFlags );
+
+    //-------------------------------------------------------------------------------------------------------------
+    //  debug and test methods
+    //-------------------------------------------------------------------------------------------------------------
+    #ifdef ENABLE_ASSERTIONS
+    private:
+        static sal_Bool implcp_ctor        ( const css::uno::Reference< css::frame::XFrame >& xFrame     ,
+                                             const ::rtl::OUString&                           sTarget    ,
+                                                   sal_Int32                                  nFlags     );
+
+        static sal_Bool implcp_ctor        ( const ::rtl::OUString&                           sTarget    ,
+                                                   sal_Int32                                  nFlags     ,
+                                                   EFrameType                                 eType      ,
+                                                   sal_Bool                                   bChildrens ,
+                                                   sal_Bool                                   bParent    ,
+                                             const ::rtl::OUString&                           sFrame     ,
+                                             const ::rtl::OUString&                           sParent    );
+
+        static sal_Bool implcp_getFrameType( const css::uno::Reference< css::frame::XFrame >& xFrame     );
+    #endif
+
+    //-------------------------------------------------------------------------------------------------------------
+    //  public variables!
+    //  faster access for TargetFinder::classify...()
+    //-------------------------------------------------------------------------------------------------------------
+    public:
+        EFrameType         eFrameType        ;  /// your node type (desktop, task ,frame) Its neccessary to select right search algorithm.
+        ::rtl::OUString    sTargetName       ;  /// is the search parameter to find right frame by name or special value!
+        sal_Int32          nSearchFlags      ;  /// is an optional parameter to regulate search direction if no special target name was given.
+        sal_Bool           bChildrenExist    ;  /// Say us - if some children exist. Otherwise down search is ignored!
+        ::rtl::OUString    sFrameName        ;  /// If SELF flag is set we can break search earlier if this name is the target!
+        sal_Bool           bParentExist      ;  /// Say us - if a parent exist. Otherwise upper search is ignored!
+        ::rtl::OUString    sParentName       ;  /// If PARENT flag is set we can break search earlier if this name is the target!
+        sal_Bool           bCreationAllowed  ;  /// we set it TRUE if flag CREATE is set. You must search for given target, but could create a new tree node if search will fail!
+
+};  // struct TargetInfo
 
 /*-************************************************************************************************************//**
     @short          implement helper to implement code for targeting only one time!
@@ -153,176 +241,50 @@ enum ETargetClass
     @devstatus      ready to use
     @threadsafe     not neccessary
 *//*-*************************************************************************************************************/
-
 class TargetFinder
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
-
     public:
+        static ETargetClass classifyFindFrame    ( TargetInfo& aInfo );
+        static ETargetClass classifyQueryDispatch( TargetInfo& aInfo );
 
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------------------------------------
+    //  private methods
+    //-------------------------------------------------------------------------------------------------------------
+    private:
+        static ETargetClass impl_classifyForDesktop_findFrame         (         sal_Bool            bParentExist        ,
+                                                                        const   ::rtl::OUString&    sTargetName         ,
+                                                                                sal_Int32           nSearchFlags        );
 
-        /*-****************************************************************************************************//**
-            @short      standard ctor/dtor
-            @descr      We do nothing here.
+        static ETargetClass impl_classifyForPlugInFrame_findFrame     (         sal_Bool            bParentExist        ,
+                                                                                sal_Bool            bChildrenExist      ,
+                                                                        const   ::rtl::OUString&    sFrameName          ,
+                                                                        const   ::rtl::OUString&    sTargetName         ,
+                                                                                sal_Int32           nSearchFlags        );
 
-            @seealso    -
+        static ETargetClass impl_classifyForTask_findFrame            (         sal_Bool            bParentExist        ,
+                                                                                sal_Bool            bChildrenExist      ,
+                                                                        const   ::rtl::OUString&    sFrameName          ,
+                                                                        const   ::rtl::OUString&    sTargetName         ,
+                                                                                sal_Int32           nSearchFlags        );
 
-            @param      -
-            @return     -
+        static ETargetClass impl_classifyForFrame_findFrame           (         sal_Bool            bParentExist        ,
+                                                                                sal_Bool            bChildrenExist      ,
+                                                                        const   ::rtl::OUString&    sFrameName          ,
+                                                                        const   ::rtl::OUString&    sParentName         ,
+                                                                        const   ::rtl::OUString&    sTargetName         ,
+                                                                                sal_Int32           nSearchFlags        );
 
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-                 TargetFinder();
-        virtual ~TargetFinder();
-
-        //---------------------------------------------------------------------------------------------------------
-        //  interface
-        //---------------------------------------------------------------------------------------------------------
-
-        /*-****************************************************************************************************//**
-            @short      get a recommendation for searching right target
-            @descr      Our caller search for a target which match with given parameter.
-                        Give him a direction to find the right one.
-                        These method never create or return a tree node! Thats your job!
-                        We say: go up, go down or give you the permission to create new frame if search will fail!
-
-            @seealso    -
-
-            @param      "eFrameType"        Give us your node type (desktop, task ,frame) Its neccessary to select right search algorithm.
-            @param      "sTargetName"       This is the search parameter to find right frame by name or special value!
-            @param      "nSearchFlags"      This value is an optional parameter to regulate search direction if no special target name was given.
-            @param      "bCreationAllowed"  We set it TRUE if flag TASKS is set. You must search for given target, but could create a new tree node if search will fail!
-            @param      "bChildrenExist"    Say us - if some children exist. Otherwise down search is ignored!
-            @param      "bParentExist"      Say us - if a parent exist. Otherwise upper search is ignored!
-            @param      "sFrameName"        If SELF flag is set we can break search earlier if this name is the target!
-            @param      "sParentName"       If PARENT flag is set we can break search earlier if this name is the target!
-            @return     An enum value to classify the direction for searching.
-
-            @onerror    E_UNKNOWN is returned.
-        *//*-*****************************************************************************************************/
-
-        static ETargetClass classify(           EFrameType          eFrameType                                  ,
-                                        const   ::rtl::OUString&    sTargetName                                 ,
-                                                   sal_Int32            nSearchFlags                                ,
-                                                sal_Bool&           bCreationAllowed                            ,
-                                                sal_Bool            bChildrenExist                              ,
-                                        const   ::rtl::OUString&    sFrameName          =   ::rtl::OUString()   ,
-                                                sal_Bool            bParentExist        =   sal_False           ,
-                                        const   ::rtl::OUString&    sParentName         =   ::rtl::OUString()   );
-
-        //---------------------------------------------------------------------------------------------------------
-        //  private methods
-        //---------------------------------------------------------------------------------------------------------
-
-        /*-****************************************************************************************************//**
-            @short      helper methods for classify()
-            @descr      Every tree node (desktop, frame, task ...) has another preference shares to search a target.
-                        With these helper methods we differ between these search algorithm!
-
-            @seealso    method classify()
-
-            @param      "bParentExist"      set if a parent exist for caller tree node
-            @param      "bChildrenExist"    set if some children exist for caller tree node
-            @param      "sFrameName"        name of current tree node (used for SELF flag to break search earlier!)
-            @param      "sParentName"       name of current tree node (used for PARENT flag to break search earlier!)
-            @param      "sTargetName"       name of searched target tree node
-            @param      "nSearchFlags"      flags to regulate search in tree
-            @param      "bTopFrame"         used to break upper searches at a top frame if search outside current task isnt allowed!
-
-            @return     A reference to an existing frame or null if search failed.
-
-            @onerror    A null reference is returned.
-        *//*-*****************************************************************************************************/
-
-        static ETargetClass impl_classifyForDesktop     (           sal_Bool            bChildrenExist      ,
-                                                            const   ::rtl::OUString&    sTargetName         ,
-                                                                       sal_Int32            nSearchFlags        );
-
-        static ETargetClass impl_classifyForPlugInFrame (           sal_Bool            bParentExist        ,
-                                                                    sal_Bool            bChildrenExist      ,
-                                                            const   ::rtl::OUString&    sFrameName          ,
-                                                            const   ::rtl::OUString&    sTargetName         ,
-                                                                       sal_Int32            nSearchFlags        );
-
-        static ETargetClass impl_classifyForTask        (           sal_Bool            bParentExist        ,
-                                                                    sal_Bool            bChildrenExist      ,
-                                                            const   ::rtl::OUString&    sFrameName          ,
-                                                            const   ::rtl::OUString&    sTargetName         ,
-                                                                       sal_Int32            nSearchFlags        );
-
-        static ETargetClass impl_classifyForFrame       (           sal_Bool            bParentExist        ,
-                                                                    sal_Bool            bChildrenExist      ,
-                                                            const   ::rtl::OUString&    sFrameName          ,
-                                                            const   ::rtl::OUString&    sParentName         ,
-                                                            const   ::rtl::OUString&    sTargetName         ,
-                                                                       sal_Int32            nSearchFlags        );
-
-        //---------------------------------------------------------------------------------------------------------
-        //  debug and test methods
-        //---------------------------------------------------------------------------------------------------------
-
-        /*-****************************************************************************************************//**
-            @short      debug-methods to check incoming parameter of some other mehods of this class
-            @descr      The follow methods are used to check parameters for other methods
-                        of this class. The return value is used directly for an ASSERT(...).
-                        This mechanism is active in debug version only!
-
-            @seealso    FRAMEWORK_ASSERT in implementation!
-
-            @param      references to checking variables
-            @return     sal_False on invalid parameter
-            @return     sal_True otherwise
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        #ifdef ENABLE_ASSERTIONS
-
-        private:
-
-        //*********************************************************************************************************
-        // - check invalid references, misused booleans, wrong flags or for an unknown frame type
-        // - value of bCreationAllowed will set by classify() - existing value isn't important
-        // - empty strings are allowed
-        static inline sal_Bool implcp_classify(         EFrameType          eFrameType          ,
-                                                const   ::rtl::OUString&    sTargetName         ,
-                                                        sal_Int32           nSearchFlags        ,
-                                                        sal_Bool&           bCreationAllowed    ,
-                                                        sal_Bool            bChildrenExist      ,
-                                                const   ::rtl::OUString&    sFrameName          ,
-                                                        sal_Bool            bParentExist        ,
-                                                const   ::rtl::OUString&    sParentName         )
-        {
-            return  (
-                        ( &sTargetName      ==  NULL            )   ||
-                        ( &sFrameName       ==  NULL            )   ||
-                        ( &sParentName      ==  NULL            )   ||
-                        ( &bCreationAllowed ==  NULL            )   ||
-                        ( nSearchFlags      <   0               )   ||
-                        (
-                            ( bChildrenExist!=  sal_False       )   &&
-                            ( bChildrenExist!=  sal_True        )
-                        )                                           ||
-                        (
-                            ( bParentExist  !=  sal_False       )   &&
-                            ( bParentExist  !=  sal_True        )
-                        )                                           ||
-                        (
-                            ( eFrameType    !=  E_DESKTOP       )   &&
-                            ( eFrameType    !=  E_PLUGINFRAME   )   &&
-                            ( eFrameType    !=  E_TASK          )   &&
-                            ( eFrameType    !=  E_FRAME         )
-                        )
-                    );
-        }
-
-        #endif  // #ifdef ENABLE_ASSERTIONS
+    //-------------------------------------------------------------------------------------------------------------
+    //  debug and test methods
+    //-------------------------------------------------------------------------------------------------------------
+    #ifdef ENABLE_ASSERTIONS
+    private:
+        static sal_Bool implcp_classifyFindFrame    ( const TargetInfo& aInfo );
+        static sal_Bool implcp_classifyQueryDispatch( const TargetInfo& aInfo );
+    #endif
 
 };      //  class TargetFinder
 
