@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ownlist.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:02 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:47:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,13 @@
 #include <ctype.h>
 #include <stdio.h>
 
-#include <ownlist.hxx>
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
+#include <com/sun/star/beans/PropertyValues.hpp>
+#endif
+
+#include "ownlist.hxx"
+
+using namespace com::sun::star;
 
 //=========================================================================
 //============== SvCommandList ============================================
@@ -322,4 +328,34 @@ SvStream & operator <<
     return rStm;
 }
 
+BOOL SvCommandList::FillFromSequence( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& aCommandSequence )
+{
+    const sal_Int32 nCount = aCommandSequence.getLength();
+    String aCommand, aArg;
+    ::rtl::OUString aApiArg;
+    for( sal_Int32 nIndex=0; nIndex<nCount; nIndex++ )
+    {
+        aCommand = aCommandSequence[nIndex].Name;
+        if( !( aCommandSequence[nIndex].Value >>= aApiArg ) )
+            return sal_False;
+        aArg = aApiArg;
+        Append( aCommand, aArg );
+    }
+
+    return TRUE;
+}
+
+void SvCommandList::FillSequence( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& aCommandSequence )
+{
+    const sal_Int32 nCount = Count();
+    aCommandSequence.realloc( nCount );
+    for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+    {
+        const SvCommand& rCommand = (*this)[ nIndex ];
+        aCommandSequence[nIndex].Name = rCommand.GetCommand();
+        aCommandSequence[nIndex].Handle = -1;
+        aCommandSequence[nIndex].Value = uno::makeAny( ::rtl::OUString( rCommand.GetArgument() ) );
+        aCommandSequence[nIndex].State = beans::PropertyState_DIRECT_VALUE;
+    }
+}
 
