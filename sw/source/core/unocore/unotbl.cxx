@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-12 07:25:32 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 13:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,6 @@ void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap, cons
                 }
             }
             pFmt->GetDoc()->SetAttr(aSz, *pFmt);
-
         }
         break;
         case RES_PAGEDESC:
@@ -1057,8 +1056,7 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
     uno::Any aRet;
     if(IsValid())
     {
-        if(rPropertyName.equalsAsciiL(
-            UNO_NAME_TEXT_SECTION.pName, UNO_NAME_TEXT_SECTION.nNameLen))
+        if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_TEXT_SECTION)))
         {
             SwFrmFmt* pTblFmt = GetFrmFmt();
             SwDoc* pDoc = pTblFmt->GetDoc();
@@ -1880,8 +1878,13 @@ public:
     SwTableProperties_Impl(const SfxItemPropertyMap* pMap);
     ~SwTableProperties_Impl();
 
-    sal_Bool    SetProperty(const char* pName, uno::Any aVal);
+    sal_Bool    SetProperty(const char* pName , uno::Any aVal);
     sal_Bool    GetProperty(const char* pName, uno::Any*& rpAny);
+
+    sal_Bool    SetProperty(USHORT nId , uno::Any aVal)
+    {   return SetProperty(SW_PROP_NAME_STR( nId ), aVal); }
+    sal_Bool    GetProperty(USHORT nId, uno::Any*& rpAny)
+    {   return GetProperty(SW_PROP_NAME_STR( nId ), rpAny); }
 
     const SfxItemPropertyMap*   GetMap() const {return _pMap;}
     void                        ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc);
@@ -1914,7 +1917,7 @@ sal_Bool SwTableProperties_Impl::SetProperty(const char* pName, uno::Any aVal)
 {
     sal_uInt16 nPos = 0;
     const SfxItemPropertyMap* pTemp = _pMap;
-    String aName(C2S(pName));
+    String aName(C2S( pName ));
     while( pTemp->pName )
     {
         if( aName.EqualsAscii(pTemp->pName))
@@ -1932,6 +1935,7 @@ sal_Bool SwTableProperties_Impl::SetProperty(const char* pName, uno::Any aVal)
 /* -----------------22.06.98 09:51-------------------
  *
  * --------------------------------------------------*/
+
 sal_Bool SwTableProperties_Impl::GetProperty(const char* pName, uno::Any*& rpAny )
 {
     sal_uInt16 nPos = 0;
@@ -3111,7 +3115,9 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
     else if(bIsDescriptor)
     {
         String aPropertyName(rPropertyName);
-        if(!pTableProps->SetProperty(ByteString(aPropertyName, RTL_TEXTENCODING_ASCII_US).GetBuffer(), aValue))
+        if(!pTableProps->SetProperty(
+             ByteString( aPropertyName, RTL_TEXTENCODING_ASCII_US).GetBuffer(),
+            aValue))
             throw IllegalArgumentException();
     }
     else
