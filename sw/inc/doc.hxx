@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:41:59 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1891,7 +1891,7 @@ public:
                           const SvxBorderLine* pBorderLine );
     void GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const;
     void SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew );
-    sal_Bool GetBoxBackground( const SwCursor& rCursor, SvxBrushItem &rToFill ) const;
+    sal_Bool GetBoxAttr( const SwCursor& rCursor, SfxPoolItem &rToFill ) const;
     void SetBoxAlign( const SwCursor& rCursor, sal_uInt16 nAlign );
     sal_uInt16 GetBoxAlign( const SwCursor& rCursor ) const;
     void AdjustCellWidth( const SwCursor& rCursor, sal_Bool bBalance = sal_False );
