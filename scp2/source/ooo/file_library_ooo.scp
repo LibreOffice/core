@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.77 $
+*  $Revision: 1.78 $
 *
-*  last change: $Author: kz $ $Date: 2005-01-18 13:29:49 $
+*  last change: $Author: kz $ $Date: 2005-01-21 12:14:03 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -404,17 +404,6 @@ File gid_File_Lib_Cppuhelper
     Name = STRING(CONCAT5(cppuhelper,UDK_MAJOR,COMID,.,dll));
   #endif
 End
-
-#if defined(UNX) && defined(ENABLE_GNOMEVFS)
-File gid_File_Lib_Gnomevfs
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-    Name = STRING(CONCAT2(ucpgvfs1.uno,UNXSUFFIX));
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Regmergefile = "ucpgvfs-ucd.txt";
-End
-#endif
 
 STD_UNO_LIB_FILE( gid_File_Lib_Ctl , ctl)
 
@@ -1756,17 +1745,6 @@ End
 
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Syssh, syssh.uno )
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Localebe, localebe1.uno )
-
-#if defined(UNX) && defined(ENABLE_GNOMEVFS)
-File gid_File_Lib_Gconfebe
-    TXT_FILE_BODY;
-    Name = STRING(CONCAT2(gconfbe1.uno,UNXSUFFIX));
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Regmergefile = "gconfbe1-ucd.txt";
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-End
-#endif
 
 #ifdef WNT
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Wininetbe, wininetbe1.uno )
