@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediator.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:38:21 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:15:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #include <plugin/unx/mediator.hxx>
 #include <vcl/svapp.hxx>
 
+#define MEDIATOR_MAGIC 0xf7a8d2f4
+
 Mediator::Mediator( int nSocket ) :
         m_nSocket( nSocket ),
         m_pListener( NULL ),
@@ -85,9 +87,10 @@ Mediator::~Mediator()
         m_pListener = NULL;
         if( m_bValid )
         {
-            ULONG aHeader[2];
+            ULONG aHeader[3];
             aHeader[0] = 0;
             aHeader[1] = 0;
+            aHeader[2] = MEDIATOR_MAGIC;
             write( m_nSocket, aHeader, sizeof( aHeader ) );
         }
         // kick the thread out of its run method; it deletes itself
@@ -113,11 +116,12 @@ ULONG Mediator::SendMessage( ULONG nBytes, const char* pBytes, ULONG nMessageID 
     if( ! m_bValid )
         return nMessageID;
 
-    ULONG* pBuffer = new ULONG[ (nBytes/sizeof(ULONG)) + 3 ];
+    ULONG* pBuffer = new ULONG[ (nBytes/sizeof(ULONG)) + 4 ];
     pBuffer[ 0 ] = nMessageID;
     pBuffer[ 1 ] = nBytes;
-    memcpy( &pBuffer[2], pBytes, (size_t)nBytes );
-    write( m_nSocket, pBuffer, nBytes + 2*sizeof( ULONG ) );
+    pBuffer[ 2 ] = MEDIATOR_MAGIC;
+    memcpy( &pBuffer[3], pBytes, (size_t)nBytes );
+    write( m_nSocket, pBuffer, nBytes + 3*sizeof( ULONG ) );
     delete [] pBuffer;
 
     return nMessageID;
@@ -199,12 +203,13 @@ MediatorListener::~MediatorListener()
 
 void MediatorListener::run()
 {
-    while( schedule() && m_pMediator )
+    bool bRun = true;
+    while( schedule() && m_pMediator && bRun )
     {
-        ULONG nHeader[ 2 ];
+        ULONG nHeader[ 3 ];
         int nBytes;
 
-        if( m_pMediator && ( nBytes = read( m_pMediator->m_nSocket, nHeader, sizeof( nHeader ) ) ) == sizeof( nHeader ) )
+        if( m_pMediator && ( nBytes = read( m_pMediator->m_nSocket, nHeader, sizeof( nHeader ) ) ) == sizeof( nHeader ) && nHeader[2] == MEDIATOR_MAGIC)
         {
             if( nHeader[ 0 ] == 0 && nHeader[ 1 ] == 0 )
                 return;
@@ -223,15 +228,18 @@ void MediatorListener::run()
                 m_pMediator->m_aNewMessageHdl.Call( m_pMediator );
             }
             else
+            {
                 medDebug( 1, "got incomplete MediatorMessage: { %d, %d, %*s }\n",
                           nHeader[0], nHeader[1], nHeader[1], pBuffer );
+                bRun = false;
+            }
             delete [] pBuffer;
         }
         else
         {
             medDebug( 1, "got incomplete message header of %d bytes ( nHeader = [ %u, %u ] ), errno is %d\n",
                       nBytes, nHeader[ 0 ], nHeader[ 1 ], (int)errno );
-            break;
+            bRun = false;
         }
     }
 }
