@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProvider.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: toconnor $ $Date: 2003-10-29 15:01:14 $
+*  last change: $Author: rt $ $Date: 2004-01-05 13:11:22 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -81,7 +81,6 @@ import com.sun.star.reflection.InvocationTargetException;
 import com.sun.star.script.CannotConvertException;
 
 import drafts.com.sun.star.script.provider.XScriptContext;
-import drafts.com.sun.star.script.framework.storage.XScriptInfo;
 import drafts.com.sun.star.script.provider.XScriptProvider;
 import drafts.com.sun.star.script.provider.XScript;
 import drafts.com.sun.star.script.browse.XBrowseNode;
@@ -90,10 +89,15 @@ import drafts.com.sun.star.script.browse.BrowseNodeTypes;
 import com.sun.star.script.framework.log.LogUtils;
 import com.sun.star.script.framework.browse.DirBrowseNode;
 import com.sun.star.script.framework.browse.DocBrowseNode;
+import com.sun.star.script.framework.browse.ScriptMetaData;
 import com.sun.star.script.framework.browse.XMLParserFactory;
+import com.sun.star.script.framework.provider.ScriptsRegistry;
+import com.sun.star.script.framework.provider.LocationRegistry;
 
+
+import java.util.*;
 public abstract class ScriptProvider
-    implements XScriptProvider, XScript, XBrowseNode,
+    implements XScriptProvider, XBrowseNode,
                XInitialization, XTypeProvider, XServiceInfo
 {
     private final String[] __serviceNames = {
@@ -102,16 +106,16 @@ public abstract class ScriptProvider
     };
 
     public final static String CLASSPATH = "classpath";
+    public static ScriptsRegistry frameWorkRegistry;
 
     private String language;
-
+    protected XModel m_xModel;
+    protected String m_sPath;
+    protected String m_sSharePath;
+    protected String m_sUserPath;
     protected XComponentContext m_xContext;
     protected XMultiComponentFactory m_xMultiComponentFactory;
     protected XPropertySet m_xInvocationContext;
-    protected XScriptInfo m_xScriptInfo;
-    protected String m_scriptURI;
-
-    private XBrowseNode m_browseNodeProxy;
 
     public ScriptProvider( XComponentContext ctx, String language )
     {
@@ -140,9 +144,25 @@ public abstract class ScriptProvider
 
             XMLParserFactory.setOfficeDTDURL(me.expandMacros(
                 "${$SYSBINDIR/bootstraprc::BaseInstallation}/share/dtd/officedocument/1_0/"));
+            m_sSharePath = PathUtils.getShareURL( m_xContext );
+            m_sUserPath = PathUtils.getUserURL( m_xContext );
+
+            // initialse script registry for this language and user and share
+            synchronized ( ScriptProvider.class )
+            {
+                if ( frameWorkRegistry == null )
+                {
+                    frameWorkRegistry = new ScriptsRegistry( m_xContext, m_sUserPath, m_sSharePath );
+                }
+            }
+            LocationRegistry reg = frameWorkRegistry.getLocationRegistry( m_sSharePath, true );
+            reg.addScriptingBrowseNodes( new DirBrowseNode(reg, m_xContext, m_sSharePath, language) );
+            reg  = frameWorkRegistry.getLocationRegistry( m_sUserPath, true );
+            reg.addScriptingBrowseNodes( new DirBrowseNode( reg, m_xContext, m_sUserPath, language) );
         }
         catch ( Exception e )
         {
+            e.printStackTrace();
             throw new com.sun.star.uno.RuntimeException(
                 "Error constructing  ScriptProvider: "
                 + e.getMessage() );
@@ -155,7 +175,7 @@ public abstract class ScriptProvider
     public void initialize( Object[] aArguments )
         throws com.sun.star.uno.Exception
     {
-        LogUtils.DEBUG( "entering XInit" );
+        LogUtils.DEBUG( "entering XInit for language " + language);
         if( aArguments.length == 1 )
         {
             if (AnyConverter.isObject(aArguments[0]) == true)
@@ -165,20 +185,21 @@ public abstract class ScriptProvider
                         new com.sun.star.uno.Type(XPropertySet.class),
                         aArguments[0]);
 
-                XModel model =
+                 m_xModel =
                     (XModel) AnyConverter.toObject(
                         new com.sun.star.uno.Type(XModel.class),
                         m_xInvocationContext.getPropertyValue(
                             "SCRIPTING_DOC_REF"));
 
-                LogUtils.DEBUG("creating DocBrowseNode, model: " + model.getURL());
-                m_browseNodeProxy = new DocBrowseNode(m_xContext,model, language);
+                LocationRegistry docReg = frameWorkRegistry.getLocationRegistry( m_xModel, true );
+                docReg.addScriptingBrowseNodes(  new DocBrowseNode( docReg, m_xContext,m_xModel, language) );
             }
             else if (AnyConverter.isString(aArguments[0]) == true)
             {
-                String path = AnyConverter.toString(aArguments[0]);
-                LogUtils.DEBUG("creating DirBrowseNode, path: " + path);
-                m_browseNodeProxy = new DirBrowseNode(m_xContext, path, language);
+                m_sPath = AnyConverter.toString(aArguments[0]);
+                LogUtils.DEBUG("creating DirBrowseNode, path: " + m_sPath);
+                LocationRegistry reg = frameWorkRegistry.getLocationRegistry( m_sPath, true );
+                reg.addScriptingBrowseNodes(  new DirBrowseNode(reg, m_xContext,m_sPath, language) );
             }
             else
             {
@@ -203,13 +224,12 @@ public abstract class ScriptProvider
      */
     public com.sun.star.uno.Type[] getTypes()
     {
-        Type[] retValue = new Type[ 6 ];
+        Type[] retValue = new Type[ 5 ];
         retValue[ 0 ] = new Type( XScriptProvider.class );
-        retValue[ 1 ] = new Type( XScript.class );
-        retValue[ 2 ] = new Type( XBrowseNode.class );
-        retValue[ 3 ] = new Type( XInitialization.class );
-        retValue[ 4 ] = new Type( XTypeProvider.class );
-        retValue[ 5 ] = new Type( XServiceInfo.class );
+        retValue[ 1 ] = new Type( XBrowseNode.class );
+        retValue[ 2 ] = new Type( XInitialization.class );
+        retValue[ 3 ] = new Type( XTypeProvider.class );
+        retValue[ 4 ] = new Type( XServiceInfo.class );
         return retValue;
     }
 
@@ -261,49 +281,48 @@ public abstract class ScriptProvider
         return __serviceNames;
     }
 
-    public abstract Object invoke( /*IN*/Object[] aParams,
-                        /*OUT*/short[][] aOutParamIndex,
-                        /*OUT*/Object[][] aOutParam )
-        throws IllegalArgumentException, CannotConvertException,
-            InvocationTargetException;
-
-    public XScript getScript ( /*IN*/String scriptURI )
+    public abstract XScript getScript( /*IN*/String scriptURI )
         throws com.sun.star.uno.RuntimeException,
-               com.sun.star.lang.IllegalArgumentException
+               com.sun.star.lang.IllegalArgumentException;
+
+    public ScriptMetaData  getScriptData( /*IN*/String scriptURI )
     {
-        LogUtils.DEBUG( "in ScriptProvider.getScript" );
 
-        if( m_xInvocationContext == null )
+        ScriptMetaData scriptData = null;
+        if ( scriptURI.indexOf( "location=document" ) > -1 )
         {
-            LogUtils.DEBUG( "ScriptProvider.getScript: not init'd" );
-            throw new com.sun.star.uno.RuntimeException(
-                "ScriptProvider has not been initialised" );
+             scriptData = (ScriptMetaData)frameWorkRegistry.getScriptData(m_xModel, scriptURI);
         }
+        else if ( scriptURI.indexOf( "location=user" ) > -1 )
+        {
+            scriptData = (ScriptMetaData)frameWorkRegistry.getScriptData( m_sUserPath, scriptURI );
+        }
+        else if ( scriptURI.indexOf( "location=share" ) > -1 )
+        {
+            scriptData = (ScriptMetaData)frameWorkRegistry.getScriptData( m_sSharePath,scriptURI );
+        }
+        return scriptData;
+    }
+    private XBrowseNode getBrowseNode()
+    {
+        XBrowseNode nodes = null;
+        Object key = m_xModel;
+        if ( m_xModel == null )
+        {
+            key = m_sPath;
+        }
+        LocationRegistry reg = frameWorkRegistry.getLocationRegistry( key );
+        if ( reg == null )
+        {
+            LogUtils.DEBUG("Cant find registry for " + key );
+            return null;
+        }
+        else
+        {
+            nodes = reg.getBrowseNodeForLanguage( language );
+        }
+        return nodes;
 
-        // do the standard resolution stuff
-        // and put something into m_ScriptContext
-        XScriptInfo xScriptInfo = null;
-        try
-        {
-            LogUtils.DEBUG( "ScriptProvider.getScript: about to resolve" );
-            if( ( xScriptInfo = ScriptResolver.resolve( m_xContext,
-                m_xInvocationContext, scriptURI ) ) == null )
-            {
-                LogUtils.DEBUG( "ScriptProvider.getScript: failed to resolve" );
-                throw new com.sun.star.uno.RuntimeException( "ScriptProvider: failed to resolve script: " + scriptURI );
-            }
-        }
-        catch (IllegalArgumentException iae)
-        {
-            String trace = LogUtils.getTrace( iae );
-            LogUtils.DEBUG("ScriptProvider.getScript: failed to resolve:\n" + trace);
-            throw new com.sun.star.lang.IllegalArgumentException(trace);
-        }
-
-        m_xScriptInfo = xScriptInfo;
-        m_scriptURI = scriptURI;
-        LogUtils.DEBUG( "leaving ScriptProvider.getScript" );
-        return this;
     }
 
     // Implementation of XBrowseNode interface
@@ -314,12 +333,24 @@ public abstract class ScriptProvider
 
     public XBrowseNode[] getChildNodes()
     {
-        return m_browseNodeProxy.getChildNodes();
+        XBrowseNode children = getBrowseNode();
+        if ( children == null )
+        {
+            LogUtils.DEBUG("No Nodes available ");
+            return new XBrowseNode[0];
+        }
+        return children.getChildNodes();
     }
 
     public boolean hasChildNodes()
     {
-        return m_browseNodeProxy.hasChildNodes();
+        XBrowseNode children = getBrowseNode();
+        if ( children == null )
+        {
+            LogUtils.DEBUG("No Nodes available ");
+            return false;
+        }
+        return children.hasChildNodes();
     }
 
     public short getType()
