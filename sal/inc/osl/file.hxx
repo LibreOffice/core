@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-21 10:14:09 $
+ *  last change: $Author: obr $ $Date: 2001-05-21 11:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1124,7 +1124,10 @@ public:
     static inline RC get( const ::rtl::OUString& strPath, DirectoryItem& rItem )
     {
         if( rItem._pData)
+        {
             osl_releaseDirectoryItem( rItem._pData );
+            rItem._pData = NULL;
+        }
 
         return (RC) osl_getDirectoryItem( strPath.pData, &rItem._pData );
     }
