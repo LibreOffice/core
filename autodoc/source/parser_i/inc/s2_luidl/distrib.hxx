@@ -2,9 +2,9 @@
  *
  *  $RCSfile: distrib.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:45 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,13 @@ class TokenDistributor : private TokenProcessing_Types
                         ReleaseLastParsedDocu()
                             { return aDocumentation.ReleaseLastParsedDocu(); }
 
+    /** Used from PE_File, if the term "published" was parsed.
+        The next opened parse environment will be set to be published
+        (call ->UnoIDL_PE::SetPublished()).
+    */
+    void                Set_PublishedOn()
+                            { aProcessingData.Set_PublishedOn(); }
+
 
   private:
     class Documentation;
@@ -168,6 +175,8 @@ class TokenDistributor : private TokenProcessing_Types
 
         UnoIDL_PE &         CurEnvironment() const;
         bool                NextTokenExists() const;
+        void                Set_PublishedOn()
+                                { bPublishedRecentlyOn = true; }
 
       private:
         typedef uintt   TokenQ_Position;
@@ -193,6 +202,7 @@ class TokenDistributor : private TokenProcessing_Types
         ary::n22::Repository &
                             rRepository;
         Documentation *     pDocuProcessor;
+        bool                bPublishedRecentlyOn;
     };
 
     class Documentation : public csi::dsapi::Token_Receiver
