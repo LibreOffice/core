@@ -4675,3 +4675,17 @@ __CTA2?AVbad_alloc@std@@
 ?LoadEventsConfig@EventsConfiguration@framework@@SAEABV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@AAVSvStream@@AAUEventsConfig@2@@Z
 ?StoreEventsConfig@EventsConfiguration@framework@@SAEABV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@AAVSvStream@@ABUEventsConfig@2@@Z
 ?GetSizePixel@BitmapEx@@QBEABVSize@@XZ
+?the_type@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBUPropertyValue@beans@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?the_type@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXElementAccess@container@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?the_type@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXIndexAccess@container@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?the_type@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXTypeProvider@lang@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?the_type@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXUnoTunnel@lang@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?the_type@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXIndexContainer@container@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?the_type@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXIndexReplace@container@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?the_type@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXSingleComponentFactory@lang@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?the_type@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXFrame@frame@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?the_type@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXModuleManager@frame@star@sun@com@drafts@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?the_type@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXPropertySet@beans@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?the_type@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXChangesBatch@util@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?the_type@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?the_type@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBUNamedValue@beans@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
