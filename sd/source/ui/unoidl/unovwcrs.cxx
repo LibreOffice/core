@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unovwcrs.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-13 12:58:12 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,12 +74,20 @@
 #include <vos/mutex.hxx>
 #endif
 
-#include "sdview.hxx"
-#ifndef SVX_LIGHT
-#include "docshell.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
 #endif
-#include "viewshel.hxx"
+#ifndef SVX_LIGHT
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_FU_SLIDE_SHOW_HXX
 #include "fuslshow.hxx"
+#endif
 
 #include <cppuhelper/implbase2.hxx>
 
@@ -87,13 +95,13 @@ using namespace ::vos;
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-class SdXTextViewCursor : public ::cppu::WeakImplHelper2<
-                                    text::XTextViewCursor,
-                                    view::XScreenCursor >
+class SdXTextViewCursor
+    : public ::cppu::WeakImplHelper2<
+    text::XTextViewCursor,
+    view::XScreenCursor >
 {
-    SdView* mpView;
 public:
-    SdXTextViewCursor(SdView* pVw) throw();
+    SdXTextViewCursor(::sd::View* pVw) throw();
     virtual ~SdXTextViewCursor() throw();
 
     //XTextViewCursor
@@ -123,16 +131,19 @@ public:
     virtual sal_Bool SAL_CALL screenUp(void) throw( uno::RuntimeException );
 
     void    Invalidate()    { mpView = 0; }
+
+private:
+    ::sd::View* mpView;
 };
 
 
-text::XTextViewCursor* CreateSdXTextViewCursor( SdView* mpView )
+text::XTextViewCursor* CreateSdXTextViewCursor(::sd::View* mpView )
 {
     return new SdXTextViewCursor( mpView );
 }
 
-SdXTextViewCursor::SdXTextViewCursor(SdView* pSdView ) throw()
-:   mpView(pSdView)
+SdXTextViewCursor::SdXTextViewCursor(::sd::View* pSdView ) throw()
+    :   mpView(pSdView)
 {
 
 }
@@ -210,10 +221,10 @@ sal_Bool SdXTextViewCursor::screenDown(void) throw( uno::RuntimeException )
 
     if( mpView && mpView->GetDocSh() )
     {
-        SdViewShell* pViewSh = mpView->GetDocSh()->GetViewShell();
+        ::sd::ViewShell* pViewSh = mpView->GetDocSh()->GetViewShell();
         if( pViewSh )
         {
-            FuSlideShow* pShow = pViewSh->GetSlideShow();
+            ::sd::FuSlideShow* pShow = pViewSh->GetSlideShow();
             if( pShow )
             {
                 pShow->KeyInput( KeyEvent( 32, KeyCode( KEY_SPACE ) ) );
@@ -231,10 +242,10 @@ sal_Bool SdXTextViewCursor::screenUp(void) throw( uno::RuntimeException )
 
     if( mpView && mpView->GetDocSh() )
     {
-        SdViewShell* pViewSh = mpView->GetDocSh()->GetViewShell();
+        ::sd::ViewShell* pViewSh = mpView->GetDocSh()->GetViewShell();
         if( pViewSh )
         {
-            FuSlideShow* pShow = pViewSh->GetSlideShow();
+            ::sd::FuSlideShow* pShow = pViewSh->GetSlideShow();
             if( pShow )
             {
                 pShow->KeyInput( KeyEvent( 32, KeyCode( KEY_BACKSPACE ) ) );
