@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gconfbackend.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-07 10:57:09 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,16 @@
 
 #include "gconfbackend.hxx"
 
-#ifndef GCONFLAYER_HXX_
-#include "gconflayer.hxx"
+#ifndef GCONFCOMMONLAYER_HXX_
+#include "gconfcommonlayer.hxx"
+#endif
+
+#ifndef GCONFINETLAYER_HXX_
+#include "gconfinetlayer.hxx"
+#endif
+
+#ifndef GCONFVCLLAYER_HXX_
+#include "gconfvcllayer.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_COMPONENTCHANGEEVENT_HPP_
@@ -88,8 +96,6 @@
 #ifndef _RTL_BYTESEQ_H_
 #include <rtl/byteseq.h>
 #endif
-
-// #include<glib.h>
 
 #include <stdio.h>
 
@@ -183,23 +189,22 @@ uno::Reference<backend::XLayer> SAL_CALL GconfBackend::getLayer(
     const rtl::OUString& aComponent, const rtl::OUString& aTimestamp)
     throw (backend::BackendAccessException, lang::IllegalArgumentException)
 {
-    // timestamps need to be updated when notifications are recieved from gconf
-    TimeValue aTimeValue = {0,0};
-    osl_getSystemTime(&aTimeValue);
+    uno::Reference<backend::XLayer> xLayer;
 
-    oslDateTime aLayerTS;
-    rtl::OUString aTimeStamp;
-
-    if (osl_getDateTimeFromTimeValue(&aTimeValue, &aLayerTS)) {
-        sal_Char asciiStamp [20] ;
-
-        snprintf(asciiStamp, sizeof(asciiStamp), "%04d%02d%02d%02d%02d%02dZ",
-                aLayerTS.Year, aLayerTS.Month, aLayerTS.Day,
-                aLayerTS.Hours, aLayerTS.Minutes, aLayerTS.Seconds) ;
-        aTimeStamp = rtl::OUString::createFromAscii(asciiStamp) ;
+    if( aComponent.equalsAscii("org.openoffice.Office.Common" ) )
+    {
+        xLayer = new GconfCommonLayer(m_xContext);
+    }
+    else if( aComponent.equalsAscii("org.openoffice.Inet" ) )
+    {
+        xLayer = new GconfInetLayer(m_xContext);
+    }
+    else if( aComponent.equalsAscii("org.openoffice.VCL" ) )
+    {
+        xLayer = new GconfVCLLayer(m_xContext);
     }
 
-    return new GconfLayer(aComponent, aTimeStamp,  m_xContext);
+    return xLayer;
 }
 
 //------------------------------------------------------------------------------
@@ -455,10 +460,12 @@ uno::Sequence<rtl::OUString> SAL_CALL GconfBackend::getBackendServiceNames(void)
 
 uno::Sequence<rtl::OUString> SAL_CALL GconfBackend::getSupportedComponents(void)
 {
-    uno::Sequence<rtl::OUString> aSupportedComponentsList(2) ;
+    uno::Sequence<rtl::OUString> aSupportedComponentsList(3) ;
     aSupportedComponentsList[0] = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Inet")) ;
+        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.VCL")) ;
     aSupportedComponentsList[1] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Inet")) ;
+    aSupportedComponentsList[2] = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common")) ;
 
     return aSupportedComponentsList ;
