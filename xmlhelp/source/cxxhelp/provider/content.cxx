@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: abi $ $Date: 2001-09-28 15:01:59 $
+ *  last change: $Author: vg $ $Date: 2001-10-02 11:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ Content::~Content()
 
 // virtual
 void SAL_CALL Content::acquire()
-    throw( RuntimeException )
+    throw( )
 {
     ContentImplHelper::acquire();
 }
@@ -185,7 +185,7 @@ void SAL_CALL Content::acquire()
 //=========================================================================
 // virtual
 void SAL_CALL Content::release()
-    throw( RuntimeException )
+    throw( )
 {
     ContentImplHelper::release();
 }
