@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notesuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:29:56 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,9 +316,9 @@ void SAL_CALL ScAnnotationObj::setIsVisible( sal_Bool bIsVisible ) throw(uno::Ru
         BOOL bSet = bIsVisible ? TRUE : FALSE;
         ScDocument* pDoc = pDocShell->GetDocument();
         BOOL bUndo(pDoc->IsUndoEnabled());
-        USHORT nCol = aCellPos.Col();
-        USHORT nRow = aCellPos.Row();
-        USHORT nTab = aCellPos.Tab();
+        SCCOL nCol = aCellPos.Col();
+        SCROW nRow = aCellPos.Row();
+        SCTAB nTab = aCellPos.Tab();
         ScPostIt aNote;
         if ( pDoc->GetNote( nCol, nRow, nTab, aNote ) )
         {
