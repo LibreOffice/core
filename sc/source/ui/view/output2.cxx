@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-11 18:07:18 $
+ *  last change: $Author: nn $ $Date: 2002-09-20 18:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1861,6 +1861,8 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
 
                         if (!bHidden)
                         {
+                            BOOL bMergeClip = FALSE;
+
                             long nOutWidth = nCellWidth - 1;
                             long nOutHeight;
                             if (pInfo)
@@ -1879,6 +1881,9 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                 USHORT nCountY = pMerge->GetRowMerge();
                                 for (i=1; i<nCountY; i++)
                                     nOutHeight += (long) ( pDoc->GetRowHeight(nY+i,nTab) * nPPTY );
+
+                                if ( nX+nCountX > nX2+1 || nY+nCountY > nY2+1 )
+                                    bMergeClip = TRUE;
                             }
 
                             //  aCellRect: Margins nicht abgezogen
@@ -2147,7 +2152,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                             if (!bHidden)
                             {
                                 BOOL bExtend = FALSE;           // ueber Zellenrand geschrieben ?
-                                BOOL bClip = FALSE;
+                                BOOL bClip = bMergeClip;        // clip to draw only part of merged cell
                                 CellInfo* pClipRight = NULL;    // Zelle mit Clipping-Markierung
                                 BOOL bSimClip = FALSE;
                                 Size aClipSize = Size( nScrX+nScrW-nStartX, nScrY+nScrH-nStartY );
