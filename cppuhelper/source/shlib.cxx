@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlib.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-25 07:52:04 $
+ *  last change: $Author: jl $ $Date: 2001-06-07 10:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <osl/module.h>
-
+#include <rtl/unload.h>
 #include <rtl/ustrbuf.hxx>
 
 #include <uno/environment.h>
@@ -331,6 +331,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         throw CannotActivateFactoryException( aExcMsg, Reference< XInterface >() );
     }
 
+
     Reference< XInterface > xRet;
 
     void * pSym;
@@ -499,7 +500,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
 #endif
         throw CannotActivateFactoryException( aExcMsg, Reference< XInterface >() );
     }
-
+    rtl_registerModuleForUnloading( lib);
     return xRet;
 }
 
@@ -676,6 +677,8 @@ void SAL_CALL writeSharedLibComponentInfo(
 #endif
         throw CannotRegisterImplementationException( aExcMsg, Reference< XInterface >() );
     }
+
+    ::osl_unloadModule( lib);
 }
 
 }
