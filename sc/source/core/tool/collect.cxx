@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collect.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-08-08 14:22:27 $
+ *  last change: $Author: nn $ $Date: 2001-11-15 16:13:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,8 +138,8 @@ void Collection::AtFree(USHORT nIndex)
     if ((pItems) && (nIndex < nCount))
     {
         delete pItems[nIndex];
+        --nCount;               // before memmove
         memmove ( &pItems[nIndex], &pItems[nIndex + 1], (nCount - nIndex) * sizeof(DataObject*));
-        --nCount;
         pItems[nCount] = NULL;
     }
 }
