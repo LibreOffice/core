@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolcach.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:01 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,9 @@
 
 #include <limits.h>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "itempool.hxx"
 #include "itemset.hxx"
@@ -89,8 +91,8 @@ SfxItemPoolCache::SfxItemPoolCache( SfxItemPool *pItemPool,
                                     const SfxPoolItem *pPutItem ):
     pPool(pItemPool),
     pCache(new SfxItemModifyArr_Impl),
-    pItemToPut( &pItemPool->Put(*pPutItem) ),
-    pSetToPut( 0 )
+    pSetToPut( 0 ),
+    pItemToPut( &pItemPool->Put(*pPutItem) )
 {
     DBG_CTOR(SfxItemPoolCache, 0);
     DBG_ASSERT(pItemPool, "kein Pool angegeben");
@@ -102,8 +104,8 @@ SfxItemPoolCache::SfxItemPoolCache( SfxItemPool *pItemPool,
                                     const SfxItemSet *pPutSet ):
     pPool(pItemPool),
     pCache(new SfxItemModifyArr_Impl),
-    pItemToPut( 0 ),
-    pSetToPut( pPutSet )
+    pSetToPut( pPutSet ),
+    pItemToPut( 0 )
 {
     DBG_CTOR(SfxItemPoolCache, 0);
     DBG_ASSERT(pItemPool, "kein Pool angegeben");
