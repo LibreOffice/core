@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edfld.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-08-03 14:23:57 $
+ *  last change: $Author: mtg $ $Date: 2001-10-23 12:14:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -715,9 +715,13 @@ void SwEditShell::SetFixFields( BOOL bOnlyTimeDate,
                                 const DateTime* pNewDateTime )
 {
     SET_CURR_SHELL( this );
+    BOOL bUnLockView = !IsViewLocked();
+    LockView( TRUE );
     StartAllAction();
     GetDoc()->SetFixFields( bOnlyTimeDate, pNewDateTime );
     EndAllAction();
+    if( bUnLockView )
+        LockView( FALSE );
 }
 
 void SwEditShell::SetLabelDoc( BOOL bFlag )
