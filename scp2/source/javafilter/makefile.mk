@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2005-01-25 15:20:24 $
+#   last change: $Author: obo $ $Date: 2005-03-15 09:23:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,10 +84,6 @@ PARFILES= \
 PARFILES += \
         registryitem_javafilter.par
 .ENDIF
-.ENDIF
-
-.IF "$(JDK)" == "gcj"
-SCPDEFS+=-DGCJ
 .ENDIF
 
 ULFFILES= \
