@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdmailsuppl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obr $ $Date: 2001-10-12 12:05:56 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,14 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
+
 //------------------------------------------------------------------------
 // namespace directives
 //------------------------------------------------------------------------
@@ -163,7 +171,15 @@ Reference< XSimpleMailClient > SAL_CALL CmdMailSuppl::querySimpleMailClient(  )
 Reference< XSimpleMailMessage > SAL_CALL CmdMailSuppl::createSimpleMailMessage(  )
         throw (::com::sun::star::uno::RuntimeException)
 {
-    return Reference< XSimpleMailMessage >( new CmdMailMsg() );
+    //TODO  Instead of obtaining the component context from the service manager
+    // here, it would be better if the CmdMailSuppl service were instantiated
+    // with a component context, from which it would obtain a service manager:
+    Reference< XComponentContext > xContext(
+        Reference< com::sun::star::beans::XPropertySet >(
+            m_xServiceManager, UNO_QUERY_THROW )->getPropertyValue(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
+        UNO_QUERY_THROW );
+    return Reference< XSimpleMailMessage >( new CmdMailMsg( xContext ) );
 }
 
 //------------------------------------------------
