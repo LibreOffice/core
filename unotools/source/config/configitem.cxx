@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-09-28 13:45:14 $
+ *  last change: $Author: os $ $Date: 2000-10-13 14:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,11 +93,8 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #endif
 
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
 
 using namespace utl;
@@ -118,9 +115,10 @@ namespace utl{
         com::sun::star::util::XChangesListener
     >
     {
-            ConfigItem*             pParent;
+            ConfigItem*                 pParent;
+            const Sequence< OUString >  aPropertyNames;
         public:
-            ConfigChangeListener_Impl(ConfigItem& rItem);
+            ConfigChangeListener_Impl(ConfigItem& rItem, Sequence< OUString >& rNames);
             ~ConfigChangeListener_Impl();
 
         //XChangesListener
@@ -134,8 +132,10 @@ namespace utl{
 /* -----------------------------29.08.00 16:34--------------------------------
 
  ---------------------------------------------------------------------------*/
-ConfigChangeListener_Impl::ConfigChangeListener_Impl(ConfigItem& rItem) :
-    pParent(&rItem)
+ConfigChangeListener_Impl::ConfigChangeListener_Impl(
+             ConfigItem& rItem, Sequence< OUString >& rNames) :
+    pParent(&rItem),
+    aPropertyNames(rNames)
 {
 }
 /* -----------------------------29.08.00 16:34--------------------------------
@@ -147,7 +147,17 @@ ConfigChangeListener_Impl::~ConfigChangeListener_Impl()
 /* -----------------------------29.08.00 16:34--------------------------------
 
  ---------------------------------------------------------------------------*/
-
+sal_Bool lcl_Find(
+        const rtl::OUString& rTemp,
+        const OUString* pCheckPropertyNames,
+        sal_Int32 nLength)
+{
+    for(sal_Int32 nIndex = 0; nIndex < nLength; nIndex++)
+        if(pCheckPropertyNames[nIndex] == rTemp)
+            return sal_True;
+    return sal_False;
+}
+//-----------------------------------------------------------------------------
 void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) throw(RuntimeException)
 {
     const ElementChange* pElementChanges = rEvent.Changes.getConstArray();
@@ -155,27 +165,37 @@ void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) th
     Sequence<OUString>  aChangedNames(rEvent.Changes.getLength());
     OUString* pNames = aChangedNames.getArray();
 
+    const OUString* pCheckPropertyNames = aPropertyNames.getConstArray();
+
     const sal_Int32 nBaseTreeLen = ConfigManager::GetConfigBaseURL().getLength() +
         pParent->GetSubTreeName().getLength() + 1;
+    sal_Int32 nNotify = 0;
     for(int i = 0; i < aChangedNames.getLength(); i++)
     {
-        pElementChanges[i].Accessor >>= pNames[i];
-        DBG_ASSERT(nBaseTreeLen < pNames[i].getLength(),"property name incorrect");
-        pNames[i] = pNames[i].copy(nBaseTreeLen);
+        OUString sTemp;
+        pElementChanges[i].Accessor >>= sTemp;
+        OSL_ENSHURE(nBaseTreeLen < sTemp.getLength(),"property name incorrect");
+        sTemp = sTemp.copy(nBaseTreeLen);
+        if(lcl_Find(sTemp, pCheckPropertyNames, aPropertyNames.getLength()))
+            pNames[nNotify++] = sTemp;
     }
-    pParent->CallNotify(aChangedNames);
+    if(nNotify)
+    {
+        aChangedNames.realloc(nNotify);
+        pParent->CallNotify(aChangedNames);
+    }
 }
 /* -----------------------------29.08.00 16:34--------------------------------
 
  ---------------------------------------------------------------------------*/
 void ConfigChangeListener_Impl::disposing( const EventObject& Source ) throw(RuntimeException)
 {
-    DBG_ERROR("ConfigChangeListener_Impl::disposing")
+    OSL_DEBUG_ONLY("ConfigChangeListener_Impl::disposing");
 }
 /* -----------------------------29.08.00 12:50--------------------------------
 
  ---------------------------------------------------------------------------*/
-ConfigItem::ConfigItem(const rtl::OUString rSubTree ) :
+ConfigItem::ConfigItem(const OUString rSubTree ) :
     pManager(ConfigManager::GetConfigManager()),
     sSubTree(rSubTree),
     bIsModified(sal_False),
@@ -201,9 +221,11 @@ ConfigItem::~ConfigItem()
             catch(Exception& rEx)
             {
     #ifdef DBG_UTIL
-                ByteString sMsg("Exception from commitChanges(): ");
-                sMsg += ByteString(String(rEx.Message), RTL_TEXTENCODING_ASCII_US);
-                DBG_ERROR(sMsg.GetBuffer())
+                OString sMsg("Exception from commitChanges(): ");
+                sMsg += OString(rEx.Message.getStr(),
+                    rEx.Message.getLength(),
+                     RTL_TEXTENCODING_ASCII_US);
+                OSL_DEBUG_ONLY(sMsg.getStr());
     #endif
             }
         }
@@ -216,7 +238,7 @@ ConfigItem::~ConfigItem()
  ---------------------------------------------------------------------------*/
 void    ConfigItem::Commit()
 {
-    DBG_ERROR("Base class called")
+    OSL_DEBUG_ONLY("Base class called");
 }
 /* -----------------------------29.08.00 12:52--------------------------------
 
@@ -233,33 +255,35 @@ void    ConfigItem::ReleaseConfigMgr()
         catch(Exception& rEx)
         {
 #ifdef DBG_UTIL
-            ByteString sMsg("Exception from commitChanges(): ");
-            sMsg += ByteString(String(rEx.Message), RTL_TEXTENCODING_ASCII_US);
-            DBG_ERROR(sMsg.GetBuffer())
+            OString sMsg("Exception from commitChanges(): ");
+            sMsg += OString(rEx.Message.getStr(),
+                    rEx.Message.getLength(),
+                     RTL_TEXTENCODING_ASCII_US);
+            OSL_DEBUG_ONLY(sMsg.getStr());
 #endif
         }
-        bHasChangedProperties = FALSE;
+        bHasChangedProperties = sal_False;
     }
     RemoveListener();
-    DBG_ASSERT(pManager, "ConfigManager already released")
+    OSL_ENSHURE(pManager, "ConfigManager already released");
     pManager = 0;
 }
 /* -----------------------------29.08.00 12:52--------------------------------
 
  ---------------------------------------------------------------------------*/
-void ConfigItem::CallNotify( const com::sun::star::uno::Sequence<rtl::OUString>& rPropertyNames )
+void ConfigItem::CallNotify( const com::sun::star::uno::Sequence<OUString>& rPropertyNames )
 {
     if(!bInPutValues)
         Notify(rPropertyNames);
     else
-        bHasChangedProperties = TRUE;
+        bHasChangedProperties = sal_True;
 }
 /* -----------------------------29.08.00 12:52--------------------------------
 
  ---------------------------------------------------------------------------*/
-void    ConfigItem::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& rPropertyNames)
+void    ConfigItem::Notify( const com::sun::star::uno::Sequence<OUString>& rPropertyNames)
 {
-    DBG_ERROR("Base class called")
+    OSL_DEBUG_ONLY("Base class called");
 }
 /* -----------------------------29.08.00 15:10--------------------------------
 
@@ -280,14 +304,22 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
     #ifdef DBG_UTIL
             catch(Exception& rEx)
             {
-                ByteString sMsg("XHierarchicalNameAccess: ");
-                sMsg += ByteString(String(rEx.Message), RTL_TEXTENCODING_ASCII_US);
-                sMsg += '\n';
-                sMsg += ByteString(String(ConfigManager::GetConfigBaseURL()), RTL_TEXTENCODING_ASCII_US);
-                sMsg += ByteString(String(sSubTree), RTL_TEXTENCODING_ASCII_US);
-                sMsg += '/';
-                sMsg += ByteString(String(pNames[i]), RTL_TEXTENCODING_ASCII_US);
-                DBG_ERROR(sMsg.GetBuffer())
+                OString sMsg("XHierarchicalNameAccess: ");
+                sMsg += OString(rEx.Message.getStr(),
+                    rEx.Message.getLength(),
+                     RTL_TEXTENCODING_ASCII_US);
+                sMsg += OString("\n");
+                sMsg += OString(ConfigManager::GetConfigBaseURL().getStr(),
+                    ConfigManager::GetConfigBaseURL().getLength(),
+                     RTL_TEXTENCODING_ASCII_US);
+                sMsg += OString(sSubTree.getStr(),
+                    sSubTree.getLength(),
+                     RTL_TEXTENCODING_ASCII_US);
+                sMsg += OString("/");
+                sMsg += OString(pNames[i].getStr(),
+                    pNames[i].getLength(),
+                     RTL_TEXTENCODING_ASCII_US);
+                OSL_DEBUG_ONLY(sMsg.getStr());
             }
 #else
             catch(Exception&){}
@@ -328,7 +360,7 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
                         xNodeReplace->replaceByName(sProperty, pValues[i]);
                     }
                     else
-                        bRet = FALSE;
+                        bRet = sal_False;
                 }
                 else //direct value
                 {
@@ -338,9 +370,11 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
 #ifdef DBG_UTIL
             catch(Exception& rEx)
             {
-                ByteString sMsg("Exception from PutProperties: ");
-                sMsg += ByteString(String(rEx.Message), RTL_TEXTENCODING_ASCII_US);
-                DBG_ERROR(sMsg.GetBuffer())
+                OString sMsg("Exception from PutProperties: ");
+                sMsg += OString(rEx.Message.getStr(),
+                    rEx.Message.getLength(),
+                     RTL_TEXTENCODING_ASCII_US);
+                OSL_DEBUG_ONLY(sMsg.getStr());
             }
 #else
             catch(Exception&){}
@@ -354,9 +388,11 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
         catch(Exception& rEx)
         {
 #ifdef DBG_UTIL
-            ByteString sMsg("Exception from commitChanges(): ");
-            sMsg += ByteString(String(rEx.Message), RTL_TEXTENCODING_ASCII_US);
-            DBG_ERROR(sMsg.GetBuffer())
+            OString sMsg("Exception from commitChanges(): ");
+                sMsg += OString(rEx.Message.getStr(),
+                    rEx.Message.getLength(),
+                     RTL_TEXTENCODING_ASCII_US);
+            OSL_DEBUG_ONLY(sMsg.getStr());
 #endif
         }
     }
@@ -367,21 +403,21 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
 /* -----------------------------29.08.00 16:19--------------------------------
 
  ---------------------------------------------------------------------------*/
-sal_Bool    ConfigItem::EnableNotification(com::sun::star::uno::Sequence< rtl::OUString >& rNames)
+sal_Bool    ConfigItem::EnableNotification(Sequence< OUString >& rNames)
 {
     Reference<XChangesNotifier> xChgNot(xHierarchyAccess, UNO_QUERY);
     if(!xChgNot.is())
-        return FALSE;
-    BOOL bRet = TRUE;
+        return sal_False;
+    sal_Bool bRet = sal_True;
 
     try
     {
-        xChangeLstnr = new ConfigChangeListener_Impl(*this);
+        xChangeLstnr = new ConfigChangeListener_Impl(*this, rNames);
         xChgNot->addChangesListener( xChangeLstnr );
     }
     catch(RuntimeException& )
     {
-        bRet = FALSE;
+        bRet = sal_False;
     }
     return bRet;
 }
@@ -406,7 +442,7 @@ void ConfigItem::RemoveListener()
 /* -----------------------------15.09.00 12:06--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence< OUString > ConfigItem::GetNodeNames(rtl::OUString& rNode)
+Sequence< OUString > ConfigItem::GetNodeNames(OUString& rNode)
 {
     Sequence< OUString > aRet;
     if(xHierarchyAccess.is())
@@ -429,9 +465,11 @@ Sequence< OUString > ConfigItem::GetNodeNames(rtl::OUString& rNode)
 #ifdef DBG_UTIL
         catch(Exception& rEx)
         {
-            ByteString sMsg("Exception from GetNodeNames: ");
-            sMsg += ByteString(String(rEx.Message), RTL_TEXTENCODING_ASCII_US);
-            DBG_ERROR(sMsg.GetBuffer())
+            OString sMsg("Exception from GetNodeNames: ");
+                sMsg += OString(rEx.Message.getStr(),
+                    rEx.Message.getLength(),
+                     RTL_TEXTENCODING_ASCII_US);
+            OSL_DEBUG_ONLY(sMsg.getStr());
         }
 #else
         catch(Exception&){}
@@ -473,20 +511,24 @@ sal_Bool ConfigItem::ClearNodeSet(OUString& rNode)
             catch(Exception& rEx)
             {
     #ifdef DBG_UTIL
-                ByteString sMsg("Exception from commitChanges(): ");
-                sMsg += ByteString(String(rEx.Message), RTL_TEXTENCODING_ASCII_US);
-                DBG_ERROR(sMsg.GetBuffer())
+                OString sMsg("Exception from commitChanges(): ");
+                sMsg += OString(rEx.Message.getStr(),
+                    rEx.Message.getLength(),
+                     RTL_TEXTENCODING_ASCII_US);
+                OSL_DEBUG_ONLY(sMsg.getStr());
     #endif
             }
         }
         catch(Exception& rEx)
         {
 #ifdef DBG_UTIL
-            ByteString sMsg("Exception from GetNodeNames: ");
-            sMsg += ByteString(String(rEx.Message), RTL_TEXTENCODING_ASCII_US);
-            DBG_ERROR(sMsg.GetBuffer())
+            OString sMsg("Exception from GetNodeNames: ");
+                sMsg += OString(rEx.Message.getStr(),
+                    rEx.Message.getLength(),
+                     RTL_TEXTENCODING_ASCII_US);
+            OSL_DEBUG_ONLY(sMsg.getStr());
 #endif
-            bRet = FALSE;
+            bRet = sal_False;
         }
     }
     return bRet;
@@ -540,7 +582,7 @@ sal_Bool ConfigItem::SetSetProperties(
                 {
                     //create if not available
                     if(!xFac.is())
-                        return FALSE;
+                        return sal_False;
                     Reference<XInterface> xInst = xFac->createInstance();
                     Any aVal; aVal <<= xInst;
                     xCont->insertByName(pSubNodeNames[j], aVal);
@@ -552,9 +594,11 @@ sal_Bool ConfigItem::SetSetProperties(
                     catch(Exception& rEx)
                     {
             #ifdef DBG_UTIL
-                        ByteString sMsg("Exception from commitChanges(): ");
-                        sMsg += ByteString(String(rEx.Message), RTL_TEXTENCODING_ASCII_US);
-                        DBG_ERROR(sMsg.GetBuffer())
+                        OString sMsg("Exception from commitChanges(): ");
+                        sMsg += OString(rEx.Message.getStr(),
+                            rEx.Message.getLength(),
+                             RTL_TEXTENCODING_ASCII_US);
+                        OSL_DEBUG_ONLY(sMsg.getStr());
             #endif
                     }
                 }
@@ -576,9 +620,11 @@ sal_Bool ConfigItem::SetSetProperties(
             catch(Exception& rEx)
             {
     #ifdef DBG_UTIL
-                ByteString sMsg("Exception from commitChanges(): ");
-                sMsg += ByteString(String(rEx.Message), RTL_TEXTENCODING_ASCII_US);
-                DBG_ERROR(sMsg.GetBuffer())
+                OString sMsg("Exception from commitChanges(): ");
+                sMsg += OString(rEx.Message.getStr(),
+                    rEx.Message.getLength(),
+                     RTL_TEXTENCODING_ASCII_US);
+                OSL_DEBUG_ONLY(sMsg.getStr());
     #endif
             }
             bRet = PutProperties(aSetNames, aSetValues);
@@ -587,11 +633,13 @@ sal_Bool ConfigItem::SetSetProperties(
         catch(Exception& rEx)
         {
 #ifdef DBG_UTIL
-            ByteString sMsg("Exception from GetNodeNames: ");
-            sMsg += ByteString(String(rEx.Message), RTL_TEXTENCODING_ASCII_US);
-            DBG_ERROR(sMsg.GetBuffer())
+            OString sMsg("Exception from GetNodeNames: ");
+            sMsg += OString(rEx.Message.getStr(),
+                    rEx.Message.getLength(),
+                     RTL_TEXTENCODING_ASCII_US);
+            OSL_DEBUG_ONLY(sMsg.getStr());
 #endif
-            bRet = FALSE;
+            bRet = sal_False;
         }
     }
     return bRet;
@@ -662,9 +710,11 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                     catch(Exception& rEx)
                     {
             #ifdef DBG_UTIL
-                        ByteString sMsg("Exception from commitChanges(): ");
-                        sMsg += ByteString(String(rEx.Message), RTL_TEXTENCODING_ASCII_US);
-                        DBG_ERROR(sMsg.GetBuffer())
+                        OString sMsg("Exception from commitChanges(): ");
+                        sMsg += OString(rEx.Message.getStr(),
+                            rEx.Message.getLength(),
+                             RTL_TEXTENCODING_ASCII_US);
+                        OSL_DEBUG_ONLY(sMsg.getStr());
             #endif
                     }
                 }
@@ -677,7 +727,7 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                 {
                     //create if not available
                     if(!xFac.is())
-                        return FALSE;
+                        return sal_False;
                     Reference<XInterface> xInst = xFac->createInstance();
                     Any aVal; aVal <<= xInst;
                     xCont->insertByName(pSubNodeNames[j], aVal);
@@ -689,9 +739,11 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                     catch(Exception& rEx)
                     {
             #ifdef DBG_UTIL
-                        ByteString sMsg("Exception from commitChanges(): ");
-                        sMsg += ByteString(String(rEx.Message), RTL_TEXTENCODING_ASCII_US);
-                        DBG_ERROR(sMsg.GetBuffer())
+                        OString sMsg("Exception from commitChanges(): ");
+                        sMsg += OString(rEx.Message.getStr(),
+                            rEx.Message.getLength(),
+                             RTL_TEXTENCODING_ASCII_US);
+                        OSL_DEBUG_ONLY(sMsg.getStr());
             #endif
                     }
                 }
@@ -715,9 +767,11 @@ sal_Bool ConfigItem::ReplaceSetProperties(
             catch(Exception& rEx)
             {
     #ifdef DBG_UTIL
-                ByteString sMsg("Exception from commitChanges(): ");
-                sMsg += ByteString(String(rEx.Message), RTL_TEXTENCODING_ASCII_US);
-                DBG_ERROR(sMsg.GetBuffer())
+                OString sMsg("Exception from commitChanges(): ");
+                sMsg += OString(rEx.Message.getStr(),
+                    rEx.Message.getLength(),
+                     RTL_TEXTENCODING_ASCII_US);
+                OSL_DEBUG_ONLY(sMsg.getStr());
     #endif
             }
             bRet = PutProperties(aSetNames, aSetValues);
@@ -726,11 +780,13 @@ sal_Bool ConfigItem::ReplaceSetProperties(
         catch(Exception& rEx)
         {
 #ifdef DBG_UTIL
-            ByteString sMsg("Exception from GetNodeNames: ");
-            sMsg += ByteString(String(rEx.Message), RTL_TEXTENCODING_ASCII_US);
-            DBG_ERROR(sMsg.GetBuffer())
+            OString sMsg("Exception from GetNodeNames: ");
+                sMsg += OString(rEx.Message.getStr(),
+                    rEx.Message.getLength(),
+                     RTL_TEXTENCODING_ASCII_US);
+            OSL_DEBUG_ONLY(sMsg.getStr());
 #endif
-            bRet = FALSE;
+            bRet = sal_False;
         }
     }
     return bRet;
