@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:29:50 $
+ *  last change: $Author: rt $ $Date: 2004-06-30 14:02:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2190,10 +2190,6 @@ public:
     */
     bool ContainsHiddenChars() const;
 
-    // -> #111955#
-    sal_Bool IsOldNumbering() const { return bOldNumbering; }
-    void SetOldNumbering(sal_Bool _bOldNumbering);
-    // <- #111955#
     // call back for API wrapper
     SwModify*   GetUnoCallBack() const;
 
