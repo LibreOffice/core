@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Window.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-26 10:45:43 $
+ *  last change: $Author: iha $ $Date: 2003-12-06 22:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,27 @@
 #include "chartview/ChartView.hxx"
 #include "Chart.hrc"
 #include "ResId.hxx"
+#include "CommonConverters.hxx"
+#include "Rotation.hxx"
+#include "ChartModelHelper.hxx"
+
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SCENEDESCRIPTOR_HPP_
+#include <drafts/com/sun/star/chart2/SceneDescriptor.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
+#include <drafts/com/sun/star/layout/RelativePosition.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVESIZE_HPP_
+#include <drafts/com/sun/star/layout/RelativeSize.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDPOSITION_HPP_
+#include <drafts/com/sun/star/chart2/LegendPosition.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_DIRECTION3D_HPP_
+#include <com/sun/star/drawing/Direction3D.hpp>
+#endif
+
 
 // header for class PopupMenu
 #ifndef _SV_MENU_HXX
@@ -76,7 +97,40 @@
 #include <svx/svxids.hrc>
 #endif
 
+// header for class E3dObject
+#ifndef _E3D_OBJ3D_HXX
+#include <svx/obj3d.hxx>
+#endif
+
+#include <rtl/math.hxx>
+
+// header for class SdrDragMethod
+#ifndef _SVDDRGMT_HXX
+#include <svx/svddrgmt.hxx>
+#endif
+
 #define DRGPIX    2     // Drag MinMove in Pixel
+
+
+//#define CHART2_DEBUG_VIEW_PERFORMANCE 1
+#ifdef CHART2_DEBUG_VIEW_PERFORMANCE
+#include <time.h>
+#endif
+
+// header for class B3dCamera
+#ifndef _B3D_B3DTRANS_HXX
+#include <goodies/b3dtrans.hxx>
+#endif
+// header for class E3dScene
+#ifndef _E3D_SCENE3D_HXX
+#include <svx/scene3d.hxx>
+#endif
+// header for class ExtOutputDevice
+#ifndef _XOUTX_HXX
+#include <svx/xoutx.hxx>
+#endif
+
+#define FIXED_SIZE_FOR_3D_CHART_VOLUME (10000.0)
 
 //.............................................................................
 namespace chart
@@ -84,7 +138,7 @@ namespace chart
 //.............................................................................
 
 using namespace ::com::sun::star;
-//using namespace ::drafts::com::sun::star::chart2;
+using namespace ::drafts::com::sun::star::chart2;
 
 //-----------------------------------------------------------------
 // awt::XWindow
@@ -294,19 +348,41 @@ using namespace ::com::sun::star;
 //-----------------------------------------------------------------
 void ChartController::execute_Paint( const Rectangle& rRect )
 {
-    //Window::Paint(rRect);
-    //??? @todo initialize doc if not ready or update view state if not ready and invalidate all
+#ifdef CHART2_DEBUG_VIEW_PERFORMANCE
+    static clock_t nBeforeBuild = 0;
+    static clock_t nAfterBuild = 0;
+    static clock_t nBeforePaint = 0;
+    static clock_t nAfterPaint = 0;
+    static double fBuildTimeInSec = 0.0;
+    static double fPaintTimeInSec = 0.0;
+#endif
 
     if(m_bViewDirty)
     {
+#ifdef CHART2_DEBUG_VIEW_PERFORMANCE
+        nBeforeBuild =clock();
+#endif
         impl_rebuildView();
+
+#ifdef CHART2_DEBUG_VIEW_PERFORMANCE
+        nAfterBuild =clock();
+        fBuildTimeInSec =double(nAfterBuild-nBeforeBuild)/double(CLOCKS_PER_SEC);
+#endif
         return;
     }
 
+#ifdef CHART2_DEBUG_VIEW_PERFORMANCE
+    nBeforePaint=clock();
+#endif
     Window* pWindow = m_pChartWindow;
     DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
     if(pDrawViewWrapper)
         pDrawViewWrapper->InitRedraw(pWindow, Region(rRect) );
+
+#ifdef CHART2_DEBUG_VIEW_PERFORMANCE
+    nAfterPaint=clock();
+    fPaintTimeInSec =double(nAfterPaint-nBeforePaint)/double(CLOCKS_PER_SEC);
+#endif
 }
 
 bool isDoubleClick( const MouseEvent& rMEvt )
@@ -314,6 +390,183 @@ bool isDoubleClick( const MouseEvent& rMEvt )
     return rMEvt.GetClicks() == 2 && rMEvt.IsLeft() &&
         !rMEvt.IsMod1() && !rMEvt.IsMod2() && !rMEvt.IsShift();
 }
+
+class RotateDiagramDragMethod : public SdrDragMethod
+{
+public:
+    RotateDiagramDragMethod( DrawViewWrapper& rDrawViewWrapper );
+    //,pDrawViewWrapper->GetMarkList(),E3DDETAIL_ONEBOX,E3DDRAG_CONSTR_XZ
+
+    //TYPEINFO();
+    virtual void TakeComment(String& rStr) const;
+
+    virtual FASTBOOL Beg();
+    virtual void Mov(const Point& rPnt);
+    virtual FASTBOOL End(FASTBOOL bCopy);
+
+    virtual Pointer GetPointer() const;
+    virtual void DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const;
+
+    /*
+    virtual void Brk();
+    virtual void DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const;
+    E3dView& Get3DView()  { return (E3dView&)rView;  }
+
+    DECL_LINK(TimerInterruptHdl, void*);
+
+
+    E3dDragRotate(SdrDragView &rView,
+        const SdrMarkList& rMark,
+        E3dDragDetail eDetail,
+        E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
+        BOOL bFull=FALSE);
+    */
+    private:
+        DrawViewWrapper&    m_rDrawViewWrapper;
+        E3dScene*           m_pScene;
+
+        Rectangle           m_aReferenceRect;
+        Point               m_aStartPos;
+
+        drawing::Direction3D    m_aRotationAxis;
+        double                  m_fStartRotationAngleDegree;
+        Matrix4D                m_aParentTransform;
+
+        Matrix4D            m_aCurrentTransform;
+        Polygon3D           m_aWireframePoly;
+};
+
+RotateDiagramDragMethod::RotateDiagramDragMethod( DrawViewWrapper& rDrawViewWrapper )
+    : SdrDragMethod( rDrawViewWrapper )
+    , m_rDrawViewWrapper(rDrawViewWrapper)
+    , m_pScene(0)
+    , m_aReferenceRect(100,100,100,100)
+    , m_aStartPos(0,0)
+    , m_aRotationAxis(0,1,0)
+    , m_fStartRotationAngleDegree(0.0)
+    , m_aParentTransform()
+    , m_aCurrentTransform()
+    , m_aWireframePoly()
+{
+    SdrObject* pObj = rDrawViewWrapper.getSelectedObject();
+    if(pObj)
+    {
+        m_aReferenceRect = pObj->GetLogicRect();
+        m_aWireframePoly.SetPointCount(0);
+        if(pObj->ISA(E3dObject))
+        {
+            E3dObject* pE3dObject = (E3dObject*)pObj;
+            pE3dObject->CreateWireframe(m_aWireframePoly, NULL, E3DDETAIL_DEFAULT ); //E3DDETAIL_ONEBOX, E3DDETAIL_ALLBOXES, E3DDETAIL_ALLLINES
+            m_pScene = pE3dObject->GetScene();
+
+            //m_aCurrentTransform = m_pScene->GetFullTransform();
+            //--
+            Matrix4D aPureRotateMatrix = m_pScene->GetTransform();
+            Matrix4D aTranslateM4Inverse;
+            aTranslateM4Inverse.Translate(FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, 0.0);
+            aPureRotateMatrix = aPureRotateMatrix*aTranslateM4Inverse;
+            //--
+            Matrix4D aSceneFullM4 = m_pScene->GetFullTransform();
+            Matrix4D aSceneM4 = m_pScene->GetTransform();
+            Matrix4D aObjM4 = pE3dObject->GetTransform();
+            Matrix4D aObjFullM4 = pE3dObject->GetFullTransform();
+            Rotation::getRotationAxisAngleFromMatrixRepresentation( m_aRotationAxis, m_fStartRotationAngleDegree, aPureRotateMatrix );
+
+            if(pE3dObject->GetParentObj())
+            {
+                E3dObject* pParent = pE3dObject->GetParentObj();
+                m_aReferenceRect = pParent->GetLogicRect();
+                m_aParentTransform = pParent->GetTransform();
+
+                Matrix4D aParentM4 = pParent->GetTransform();
+                Matrix4D aParentFullM4 = pParent->GetFullTransform();
+                int i;
+                int j=i;
+                //m_aCurrentTransform = pParent->GetFullTransform();
+                //Rotation::getRotationAxisAngleFromMatrixRepresentation( m_aRotationAxis, m_fStartRotationAngleDegree, m_aCurrentTransform );
+            }
+
+            Matrix4D aTranslateM4;
+            aTranslateM4.Translate(-FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, 0.0);
+            m_aParentTransform = aTranslateM4*m_aParentTransform;
+
+            m_aCurrentTransform = aPureRotateMatrix*m_aParentTransform;
+        }
+    }
+}
+void RotateDiagramDragMethod::TakeComment(String& rStr) const
+{
+}
+FASTBOOL RotateDiagramDragMethod::Beg()
+{
+    m_aStartPos = DragStat().GetStart();
+    Show();
+    return true;
+}
+void RotateDiagramDragMethod::Mov(const Point& rPnt)
+{
+    if( DragStat().CheckMinMoved(rPnt) )
+    {
+        //calculate new angle
+        double fWAngle = 180.0 * (double)(m_aStartPos.X() - rPnt.X())
+            / (double)m_aReferenceRect.GetWidth();
+        double fHAngle = 180.0 * (double)(m_aStartPos.Y() - rPnt.Y())
+            / (double)m_aReferenceRect.GetHeight();
+
+        //get new transformation from axis angle representation
+        Matrix4D aRotateM4 = Rotation::getRotationMatrixFromAxisAngleRepresentation( m_aRotationAxis, m_fStartRotationAngleDegree+fWAngle );
+        /*
+        Matrix4D aTranslateM4;
+        aTranslateM4.Translate(-FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, 0.0);
+        */
+
+        //use new matrix
+        Hide();
+        m_aCurrentTransform = aRotateM4*m_aParentTransform;
+        Show();
+
+    }
+    DragStat().NextMove(rPnt);
+}
+FASTBOOL RotateDiagramDragMethod::End(FASTBOOL bCopy)
+{
+
+    m_pScene->SetTransform(m_aCurrentTransform);
+    //m_pScene->CorrectSceneDimensions();
+
+    Hide();
+    return true;
+}
+Pointer RotateDiagramDragMethod::GetPointer() const
+{
+    return Pointer();
+}
+void RotateDiagramDragMethod::DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const
+{
+    //rXOut.SetOffset(pPV->GetOffset());
+    UINT16 nPntCnt = m_aWireframePoly.GetPointCount();
+    if(nPntCnt > 1 && m_pScene)
+    {
+        B3dCamera& rCameraSet = m_pScene->GetCameraSet();
+        XPolygon aLine(2);
+        for(UINT16 b=0;b < nPntCnt;b += 2)
+        {
+            Vector3D aPnt1 = m_aCurrentTransform * m_aWireframePoly[b];
+            aPnt1 = rCameraSet.WorldToViewCoor(aPnt1);
+            aLine[0].X() = (long)(aPnt1.X() + 0.5);
+            aLine[0].Y() = (long)(aPnt1.Y() + 0.5);
+
+            Vector3D aPnt2 = m_aCurrentTransform * m_aWireframePoly[b+1];
+            aPnt2 = rCameraSet.WorldToViewCoor(aPnt2);
+            aLine[1].X() = (long)(aPnt2.X() + 0.5);
+            aLine[1].Y() = (long)(aPnt2.Y() + 0.5);
+
+            rXOut.DrawXPolyLine(aLine);
+        }
+    }
+}
+
+//------------------------------------------------------------------------
 
 void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -360,66 +613,33 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
         SelectionHelper::changeSelection( aMPos, m_aSelectedObjectCID
                                 , *pDrawViewWrapper
                                 , !rMEvt.IsRight() ); //do not change selection if right clicked on the selected object
+
         if( !ObjectIdentifier::isRotateableObject( m_aSelectedObjectCID ) )
                 pDrawViewWrapper->SetDragMode(SDRDRAG_MOVE);
     }
     if( bClickedTwiceOnDragableObject
         || ObjectIdentifier::isDragableObject( m_aSelectedObjectCID ) )
     {
+        //@todo ... cleanup
+
         //start drag
 
-        //@todo maybe change selection to according group object ?...
+        //@todo change selection to according group object ?...
         SdrHdl* pHdl = NULL;//pDrawViewWrapper->PickHandle( aMPos, *pWindow );
         USHORT  nDrgLog = (USHORT)pWindow->PixelToLogic(Size(DRGPIX,0)).Width();
-        pDrawViewWrapper->BegDragObj(aMPos, NULL, pHdl, nDrgLog);
+        SdrDragMethod* pDragMethod = NULL;
+        if(pDrawViewWrapper->getSelectedObject()->ISA(E3dObject))
+        {
+            pDrawViewWrapper->SetDragMode(SDRDRAG_ROTATE);
+            E3dObject* pE3dObject = (E3dObject*)pDrawViewWrapper->getSelectedObject();
+            E3dScene* pScene = pE3dObject->GetScene();
+            pDrawViewWrapper->UnmarkAll();
+            pDrawViewWrapper->MarkObject(pScene);
+            pDragMethod = new RotateDiagramDragMethod( *pDrawViewWrapper );
+        }
+        pDrawViewWrapper->SdrView::BegDragObj(aMPos, NULL, pHdl, nDrgLog, pDragMethod);
     }
-
-    //pDrawViewWrapper->UnmarkAll();
-    //pDrawViewWrapper->GetPageViewPvNum(0)->GetEnteredLevel()
-    //pDrawViewWrapper->IsMarkedHit(aMPos, nHitLog)
-    //pDrawViewWrapper->HasMarkedObj();
-    //pDrawViewWrapper->MarkLogicalGroup();
-    //pDrawViewWrapper->EnterMarkedGroup();
-    //pDrawViewWrapper->LeaveOneGroup();
-
-    //pDrawViewWrapper->MovAction( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-    //pDrawViewWrapper->EndAction();
-
-    //pDrawViewWrapper->IsDragObj();
-    //pDrawViewWrapper->EndDragObj(rMEvt.IsMod1());
-    //pDrawViewWrapper->SetDragWithCopy( rMEvt.IsMod1());
-    //pDrawViewWrapper->GetDragMode()
-    //pDrawViewWrapper->SetEditMode(FALSE);
-
-    //pDrawViewWrapper->GetPageView()->DragPoly() ;
-
-    //pView->BeginDrag(pWindow, aMPos);
-
-
-    //if(!pFunction) //if no Fu active/set ...
-    //  Window::MouseButtonDown(rMEvt);
 }
-
-// Timer-Handler fuer Drag&Drop
-/*
-IMPL_LINK( ChartWindow, DragHdl, Timer *, pTimer )
-{
-    *//*
-    USHORT nHitLog = (USHORT)pWindow->PixelToLogic(Size(HITPIX,0)).Width();
-    SdrHdl* pHdl = pView->HitHandle(aMPos, *pWindow);
-
-    if (pHdl==NULL && pView->IsMarkedHit(aMPos, nHitLog))
-    {
-        pWindow->ReleaseMouse();
-        m_bIsInDragMode = TRUE;
-
-        pView->BeginDrag(pWindow, aMPos);
-    }
-    *//*
-    this->ReleaseMouse();
-    return 0;
-}
-*/
 
 void ChartController::execute_MouseMove( const MouseEvent& rMEvt )
 {
@@ -434,70 +654,24 @@ void ChartController::execute_MouseMove( const MouseEvent& rMEvt )
             return;
     }
 
-    //ForcePointer(&rMEvt); should be sufficient and correct to do it at the end
-    //??? select Fu ( SchFuDraw SchFuText SchFuSelection ) and call MouseMove there
-
-/*
-    if(m_aDragTimer.IsActive())
-    {
-        m_aDragTimer.Stop();
-        m_bIsInDragMode = FALSE;
-    }
-*/
-
     if(pDrawViewWrapper->IsAction())
         pDrawViewWrapper->MovAction( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    //text:    pView->MouseMove(rMEvt, pWindow) // Event von der SdrView ausgewertet
     //??    pDrawViewWrapper->GetPageView()->DragPoly();
-
-    //if(!pFunction) //if no Fu active/set ...
-    //  Window::MouseMove(rMEvt);
-
     //@todo ForcePointer(&rMEvt);
 }
 void ChartController::execute_Tracking( const TrackingEvent& rTEvt )
 {
 }
+
+//-----------------
+
 void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 {
     Window* pWindow = m_pChartWindow;
     DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
     Point   aMPos   = pWindow->PixelToLogic(rMEvt.GetPosPixel());
 
-    //??? select Fu ( SchFuDraw SchFuText SchFuSelection ) and call MouseButtonUp there
-    //----------------------------
-    /*
-    uno::Reference< uno::XInterface > xI;
-    uno::Reference< drawing::XShape > xShape;
-    uno::Reference< beans::XPropertySet > xShapeProps;
-
-    if(s_pObj)
-    {
-        xI = s_pObj->getUnoShape();
-        xShape =  uno::Reference<drawing::XShape>( xI, uno::UNO_QUERY );
-        xShapeProps = uno::Reference<beans::XPropertySet>( xI, uno::UNO_QUERY );
-    }
-
-    awt::Point aOldPoint;
-    awt::Point aNewPoint;
-    awt::Size aOldSize;
-    awt::Size aNewSize;
-    drawing::HomogenMatrix3 aOldMatrix;
-    drawing::HomogenMatrix3 aNewMatrix;
-
-    if(xShape.is())
-    {
-        aOldPoint = xShape->getPosition();
-        aOldSize =  xShape->getSize();
-    }
-    if(xShapeProps.is())
-    {
-        uno::Any aVal = xShapeProps->getPropertyValue(
-            ::rtl::OUString::createFromAscii("Transformation") );
-        aVal >>= aOldMatrix;
-    }
-    */
     //----------------------------
 
     if(!pDrawViewWrapper)
@@ -510,24 +684,173 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 
     if(pDrawViewWrapper->IsDragObj())
     {
-        if( pDrawViewWrapper->EndDragObj(rMEvt.IsMod1()) )
+        if( pDrawViewWrapper->EndDragObj(false) )
         {
-
-            /*
-            if(xShape.is())
+            //@todo ... cleanup
+            try
             {
-                aNewPoint = xShape->getPosition();
-                aNewSize =  xShape->getSize();
-            }
-            if(xShapeProps.is())
-            {
-                uno::Any aVal = xShapeProps->getPropertyValue(
-                    ::rtl::OUString::createFromAscii("Transformation") );
-                aVal >>= aNewMatrix;
-            }
-            */
+                SdrObject* pObj = pDrawViewWrapper->getSelectedObject();
+                Point aPos = pObj->GetLogicRect().TopLeft();
+                Rectangle aLogicRect = pObj->GetLogicRect();
+                Rectangle aBoundRect = pObj->GetCurrentBoundRect();
+                Rectangle aSnapRect = pObj->GetSnapRect();
+                Rectangle aPageRect( Point(0,0),m_pChartWindow->GetOutputSize() );
 
-//          pDrawViewWrapper->SetDragWithCopy( rMEvt.IsMod1());
+                //----------------
+
+                uno::Reference< beans::XPropertySet > xProp = ObjectIdentifier::getObjectPropertySet(
+                    m_aSelectedObjectCID, m_aModel->getModel() );
+                if( xProp.is() )
+                {
+                    SdrDragMode eDragMode = pDrawViewWrapper->GetDragMode();
+                    if( SDRDRAG_ROTATE==eDragMode )
+                    {
+                        Matrix4D aSceneMatrix;
+                        if(pObj->ISA(E3dObject))
+                        {
+                            E3dObject* pE3dObject = (E3dObject*)pObj;
+                            E3dScene* pScene = pE3dObject->GetScene();
+                            aSceneMatrix = pScene->GetFullTransform();
+                            /*
+                            if(pE3dObject->GetParentObj())
+                                aSceneMatrix = pE3dObject->GetParentObj()->GetFullTransform();
+                                */
+                            Matrix4D aTranslateM4Inverse;
+                            aTranslateM4Inverse.Translate(FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, 0.0);
+
+                            aSceneMatrix = aSceneMatrix*aTranslateM4Inverse;
+                        }
+                        SceneDescriptor aSceneDescriptor;
+                        xProp = uno::Reference< beans::XPropertySet >( ChartModelHelper::findDiagram( m_aModel->getModel() ), uno::UNO_QUERY );
+                        if( xProp.is() && (xProp->getPropertyValue( C2U( "SceneProperties" ) )>>=aSceneDescriptor) )
+                        {
+                            Rotation::getRotationAxisAngleFromMatrixRepresentation( aSceneDescriptor.aDirection, aSceneDescriptor.fRotationAngle, aSceneMatrix );
+                            Matrix4D aTestM4 = Rotation::getRotationMatrixFromAxisAngleRepresentation( aSceneDescriptor.aDirection, aSceneDescriptor.fRotationAngle );
+                            xProp->setPropertyValue( C2U( "SceneProperties" ), uno::makeAny(aSceneDescriptor) );
+                        }
+                    }
+                    else
+                    {
+                        if(m_aSelectedObjectCID.indexOf(C2U("Title"))!=-1)
+                        {
+                            //@todo decide wether x is primary or secondary
+                            Size aRefSize = m_pChartWindow->GetOutputSize();
+
+                            ::drafts::com::sun::star::layout::RelativePosition aRelativePosition;
+                            //the anchor point at the title object is top/middle
+                            aRelativePosition.Primary = (double(aPos.X())+double(aLogicRect.getWidth())/2.0)/double(aRefSize.Width());
+                            aRelativePosition.Secondary = double(aPos.Y())/double(aRefSize.Height());
+                            xProp->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aRelativePosition) );
+                        }
+                        else if(m_aSelectedObjectCID.indexOf(C2U("Legend"))!=-1)
+                        {
+                            LegendPosition ePos = LegendPosition_LINE_END;
+                            xProp->getPropertyValue( C2U( "AnchorPosition" )) >>= ePos;
+                            Point aLegendAnchor(0,0);//point at legend
+                            Point aPageAnchor(0,0);//point at page
+                            ::drafts::com::sun::star::layout::RelativePosition aRelativePosition;
+                            switch( ePos )
+                            {
+                                case LegendPosition_LINE_START:
+                                    //@todo language dependent positions ...
+                                    aLegendAnchor = aLogicRect.LeftCenter();
+                                    aPageAnchor = aPageRect.LeftCenter();
+                                    aRelativePosition.Primary = aLegendAnchor.X()-aPageAnchor.X();
+                                    aRelativePosition.Secondary = aPageAnchor.Y()-aLegendAnchor.Y();
+                                    aRelativePosition.Primary /= double(aPageRect.getWidth());
+                                    aRelativePosition.Secondary /= double(aPageRect.getHeight());
+                                    break;
+                                case LegendPosition_LINE_END:
+                                    //@todo language dependent positions ...
+                                    aLegendAnchor = aLogicRect.RightCenter();
+                                    aPageAnchor = aPageRect.RightCenter();
+                                    aRelativePosition.Primary = aPageAnchor.X()-aLegendAnchor.X();
+                                    aRelativePosition.Secondary = aLegendAnchor.Y()-aPageAnchor.Y();
+                                    aRelativePosition.Primary /= double(aPageRect.getWidth());
+                                    aRelativePosition.Secondary /= double(aPageRect.getHeight());
+                                    break;
+                                case LegendPosition_PAGE_START:
+                                    //@todo language dependent positions ...
+                                    aLegendAnchor = aLogicRect.TopCenter();
+                                    aPageAnchor = aPageRect.TopCenter();
+                                    aRelativePosition.Primary = aLegendAnchor.Y()-aPageAnchor.Y();
+                                    aRelativePosition.Secondary = aLegendAnchor.X()-aPageAnchor.X();
+                                    aRelativePosition.Primary /= double(aPageRect.getHeight());
+                                    aRelativePosition.Secondary /= double(aPageRect.getWidth());
+                                    break;
+                                case LegendPosition_PAGE_END:
+                                case LegendPosition_CUSTOM:
+                                case LegendPosition_MAKE_FIXED_SIZE:
+                                    //@todo language dependent positions ...
+                                    aLegendAnchor = aLogicRect.BottomCenter();
+                                    aPageAnchor = aPageRect.BottomCenter();
+                                    aRelativePosition.Primary = aPageAnchor.Y()-aLegendAnchor.Y();
+                                    aRelativePosition.Secondary = aPageAnchor.X()-aLegendAnchor.X();
+                                    aRelativePosition.Primary /= double(aPageRect.getHeight());
+                                    aRelativePosition.Secondary /= double(aPageRect.getWidth());
+                                    break;
+                            }
+                            xProp->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aRelativePosition) );
+                        }
+                        else
+                        {
+                            xProp = uno::Reference< beans::XPropertySet >( ChartModelHelper::findDiagram( m_aModel->getModel() ), uno::UNO_QUERY );
+                            if( xProp.is() )
+                            {
+                                //@todo decide wether x is primary or secondary
+                                Size aRefSize = m_pChartWindow->GetOutputSize();
+
+                                if(pObj->ISA(E3dObject))
+                                {
+                                    E3dObject* pE3dObject = (E3dObject*)pObj;
+                                    E3dScene* pScene = pE3dObject->GetScene();
+                                    aLogicRect = pScene->GetLogicRect();
+                                    aPos = aLogicRect.TopLeft();
+
+                                    /*
+                                    Matrix4D aSceneMatrix;
+                                    E3dObject* pE3dObject = (E3dObject*)pObj;
+                                    E3dScene* pScene = pE3dObject->GetScene();
+                                    aSceneMatrix = pScene->GetFullTransform();
+
+                                    if(pE3dObject->GetParentObj())
+                                        aSceneMatrix = pE3dObject->GetParentObj()->GetFullTransform();
+
+                                    Matrix4D aTranslateM4Inverse;
+                                    aTranslateM4Inverse.Translate(FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, 0.0);
+
+                                    aSceneMatrix = aSceneMatrix*aTranslateM4Inverse;
+                                    */
+                                }
+
+                                //set position:
+                                ::drafts::com::sun::star::layout::RelativePosition aRelativePosition;
+                                //the anchor points for the diagram are in the middle of the diagram
+                                //and in the middle of the page
+                                aRelativePosition.Primary = (double(aPos.X())+double(aLogicRect.getWidth())/2.0-double(aRefSize.Width())/2.0)/double(aRefSize.Width());
+                                aRelativePosition.Secondary = (double(aPos.Y())+double(aLogicRect.getHeight())/2.0-double(aRefSize.Height())/2.0)/double(aRefSize.Height());
+                                xProp->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aRelativePosition) );
+
+                                //set size:
+                                ::drafts::com::sun::star::layout::RelativeSize aRelativeSize;
+                                //the anchor points for the diagram are in the middle of the diagram
+                                //and in the middle of the page
+                                aRelativeSize.Primary = double(aLogicRect.getWidth())/double(aPageRect.getWidth());
+                                aRelativeSize.Secondary = double(aLogicRect.getHeight())/double(aPageRect.getHeight());
+                                xProp->setPropertyValue( C2U( "RelativeSize" ), uno::makeAny(aRelativeSize) );
+                            }
+                        }
+                    }
+                }
+            }
+            catch( uno::Exception & ex )
+            {
+                ASSERT_EXCEPTION( ex );
+            }
+            //all wanted model changes will take effect
+            //and all unwanted view modifications are cleaned
+            m_bViewDirty = true;
+            m_pChartWindow->Invalidate();
         }
         else //mouse wasn't moved while dragging
         {
@@ -537,13 +860,13 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
             //toogle between move and rotate
             SdrDragMode eDragMode = pDrawViewWrapper->GetDragMode();
             if( bIsRotateable && bClickedTwiceOnDragableObject && SDRDRAG_MOVE==eDragMode )
-                eDragMode=SDRDRAG_ROTATE;
+                eDragMode=SDRDRAG_MOVE;//eDragMode=SDRDRAG_ROTATE;//@todo ...
             else
                 eDragMode=SDRDRAG_MOVE;
             pDrawViewWrapper->SetDragMode(eDragMode);
 
             rtl::OUString aPreviousSelectedObjectCID(m_aSelectedObjectCID);
-            m_aSelectedObjectCID = rtl::OUString();
+            //m_aSelectedObjectCID = rtl::OUString();
             SelectionHelper::changeSelection( aMPos, m_aSelectedObjectCID, *pDrawViewWrapper, true );
             if( !aPreviousSelectedObjectCID.equals(m_aSelectedObjectCID) )
                 pDrawViewWrapper->SetDragMode(SDRDRAG_MOVE);
@@ -552,28 +875,8 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
     else if( isDoubleClick(rMEvt) )
         execute_DoubleClick();
 
-    pWindow->ReleaseMouse();
-
-    //if(pDrawViewWrapper->IsAction())
-    //  pDrawViewWrapper->EndAction();
-
-    /* SchFuText:
-    SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
-
-    rBindings.Invalidate(SID_CUT);
-    rBindings.Invalidate(SID_COPY);
-
-    if (pView->MouseButtonUp(rMEvt, pWindow))
-        return TRUE; // Event von der SdrView ausgewertet
-
-    */
-
-
-    //if(!pFunction) //if no Fu active/set ...
-    //  Window::MouseButtonUp(rMEvt);
-
     //@todo ForcePointer(&rMEvt);
-    //pWindow->ReleaseMouse();
+    pWindow->ReleaseMouse();
 }
 
 void ChartController::execute_DoubleClick()
@@ -597,10 +900,7 @@ void ChartController::execute_Activate()
 void ChartController::execute_Deactivate()
 {
     /*
-    m_aDragTimer.Stop();
-
     pDrawViewWrapper->SetEditMode(FALSE);
-
     this->ReleaseMouse();
     */
 }
