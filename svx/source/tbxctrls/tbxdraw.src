@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-25 21:52:21 $
+ *  last change: $Author: aw $ $Date: 2001-10-09 15:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,28 +266,8 @@ FloatingWindow RID_SVXTBX_DRAW
                 Identifier = SID_DRAW_FREELINE_NOFILL ;
                 HelpID = SID_DRAW_FREELINE_NOFILL ;
                 RadioCheck = TRUE ;
-                Text = "Freihandkurve" ;
-                Text [ ENGLISH ] = "Freeform Curve" ;
-                Text[ english_us ] = "Freeform Curve";
-                Text[ portuguese ] = "Curva livre";
-                Text[ russian ] = "Ğèñîâàííàÿ êğèâàÿ";
-                Text[ greek ] = "Åëåıèåñç ó÷åäßáóç";
-                Text[ dutch ] = "Vrije hand";
-                Text[ french ] = "Courbe à main levée";
-                Text[ spanish ] = "Curva a mano alzada";
-                Text[ finnish ] = "Vapaamuoto";
-                Text[ italian ] = "Mano libera";
-                Text[ danish ] = "Frihånd";
-                Text[ swedish ] = "Frihandskurva";
-                Text[ polish ] = "Krzywa narysowana odrêcznie";
-                Text[ portuguese_brazilian ] = "Freihand";
-                Text[ japanese ] = "ï¾Œï¾˜ï½°ï¾Šï¾ï¾„ï¾ã®æ›²ç·š";
-                Text[ korean ] = "ììœ ì„œì‹";
-                Text[ chinese_simplified ] = "è‡ªç”±å½¢çº¿æ¡";
-                Text[ chinese_traditional ] = "è‡ªç”±å½¢";
-                Text[ turkish ] = "Serbest biçim";
-                Text[ arabic ] = "ÍÑ";
-                Text[ catalan ] = "Mano alzada";
+                Text = "Freihandlinie" ;
+                Text [ ENGLISH ] = "Freeform Line" ;
             };
             ToolBoxItem
             {
