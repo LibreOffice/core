@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtualdbtools.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:49:51 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 10:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,16 @@ namespace connectivity
             virtual sal_Bool isDataSourcePropertyEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xProp
                                         ,const ::rtl::OUString& _sProperty,
                                         sal_Bool _bDefault = sal_False) const = 0;
+
+            /** retrieves the connection which is associated with the context where the
+                given component lives in
+
+                In other (and more understandable) words: For a form component, which lives
+                in a (e.g. text) document which is part of a database, the connection
+                belonging to this database is returned
+            */
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+                getComponentContextConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent ) = 0;
         };
 
         //================================================================
