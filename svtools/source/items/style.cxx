@@ -2,9 +2,9 @@
  *
  *  $RCSfile: style.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-01 13:22:46 $
+ *  last change: $Author: mib $ $Date: 2001-08-01 14:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #define _SVSTDARR_STRINGSSORTDTOR
 #define _SVSTDARR_BYTESTRINGS
 #define _SVSTDARR_BYTESTRINGSSORTDTOR
+
+#ifndef _TOOLS_TENCCVT_HXX
+#include <tools/tenccvt.hxx>
+#endif
 
 #include <smplhint.hxx>
 #include <poolitem.hxx>
@@ -866,6 +870,11 @@ BOOL SfxStyleSheetBasePool::Load( SvStream& rStream )
         if ( !aStylesRec.IsValid() )
             return FALSE;
 
+        rtl_TextEncoding eEnc = GetSOLoadTextEncoding( (rtl_TextEncoding)nCharSet,
+                                                       rStream.GetVersion() );
+        rtl_TextEncoding eOldEnc = rStream.GetStreamCharSet();
+        rStream.SetStreamCharSet( eEnc );
+
         USHORT nCount;
         for ( nCount = 0; aStylesRec.GetContent(); nCount++ )
         {
@@ -878,9 +887,9 @@ BOOL SfxStyleSheetBasePool::Load( SvStream& rStream )
             String aHelpFile;
             USHORT nFamily, nMask,nCount;
             ULONG nHelpId;
-            rStream.ReadByteString(aName, rtl_TextEncoding(nCharSet));
-            rStream.ReadByteString(aParent, rtl_TextEncoding(nCharSet));
-            rStream.ReadByteString(aFollow, rtl_TextEncoding(nCharSet));
+            rStream.ReadByteString(aName, eEnc );
+            rStream.ReadByteString(aParent, eEnc );
+            rStream.ReadByteString(aFollow, eEnc );
             rStream >> nFamily >> nMask;
             SfxPoolItem::readByteString(rStream, aHelpFile);
             rStream >> nHelpId;
@@ -929,6 +938,8 @@ BOOL SfxStyleSheetBasePool::Load( SvStream& rStream )
             p->aFollow.Erase();
             p->SetFollow( aText );
         }
+
+        rStream.SetStreamCharSet( eOldEnc );
     }
 
     // alles klar?
@@ -947,6 +958,11 @@ BOOL SfxStyleSheetBasePool::Load1_Impl( SvStream& rStream )
     else
         rStream >> nCharSet;
 
+    rtl_TextEncoding eEnc = GetSOLoadTextEncoding( (rtl_TextEncoding)nCharSet,
+                                                   rStream.GetVersion() );
+    rtl_TextEncoding eOldEnc = rStream.GetStreamCharSet();
+    rStream.SetStreamCharSet( eEnc );
+
     USHORT nCount;
     rStream >> nCount;
     USHORT i;
@@ -964,9 +980,9 @@ BOOL SfxStyleSheetBasePool::Load1_Impl( SvStream& rStream )
         String aHelpFile;
         USHORT nFamily, nMask,nCount;
         ULONG nHelpId;
-        rStream.ReadByteString(aName, rtl_TextEncoding(nCharSet));
-        rStream.ReadByteString(aParent, rtl_TextEncoding(nCharSet));
-        rStream.ReadByteString(aFollow, rtl_TextEncoding(nCharSet));
+        rStream.ReadByteString(aName, eEnc );
+        rStream.ReadByteString(aParent, eEnc );
+        rStream.ReadByteString(aFollow, eEnc );
         rStream >> nFamily >> nMask;
         SfxPoolItem::readByteString(rStream, aHelpFile);
         if(nVersion!=STYLESTREAM_VERSION)
@@ -1018,6 +1034,9 @@ BOOL SfxStyleSheetBasePool::Load1_Impl( SvStream& rStream )
         p->aFollow.Erase();
         p->SetFollow( aText );
     }
+
+    rStream.SetStreamCharSet( eOldEnc );
+
     return BOOL( rStream.GetError() == SVSTREAM_OK );
 }
 
@@ -1035,13 +1054,17 @@ BOOL SfxStyleSheetBasePool::Store( SvStream& rStream, BOOL bUsed )
     }
 
     // einen Header-Record vorweg
-    rtl_TextEncoding eCharSet
-        = ::GetStoreCharSet( rStream.GetStreamCharSet() );
+    rtl_TextEncoding eEnc
+        = ::GetSOStoreTextEncoding( rStream.GetStreamCharSet(),
+                                     rStream.GetVersion() );
+    rtl_TextEncoding eOldEnc = rStream.GetStreamCharSet();
+    rStream.SetStreamCharSet( eEnc );
+
     {
         SfxSingleRecordWriter aHeaderRec( &rStream,
                 SFX_STYLES_REC_HEADER,
                 STYLESTREAM_VERSION );
-        rStream << (short) eCharSet;
+        rStream << (short) eEnc;
     }
 
     // die StyleSheets in einen MultiVarRecord
@@ -1062,7 +1085,7 @@ BOOL SfxStyleSheetBasePool::Store( SvStream& rStream, BOOL bUsed )
                 {
                     USHORT nFamily = (USHORT)p->GetFamily();
                     String* pName = new String( p->GetName() );
-                    ByteString* pConvName = new ByteString( *pName, eCharSet );
+                    ByteString* pConvName = new ByteString( *pName, eEnc );
 
                     pName->Insert( (sal_Unicode)nFamily, 0 );
                     pConvName->Insert( "  ", 0 );
@@ -1151,6 +1174,8 @@ BOOL SfxStyleSheetBasePool::Store( SvStream& rStream, BOOL bUsed )
             }
         }
     }
+
+    rStream.SetStreamCharSet( eOldEnc );
 
     return BOOL( rStream.GetError() == SVSTREAM_OK );
 }
