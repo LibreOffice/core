@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:54 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ class SvStream;
 class StatementFlow;
 class CommunicationManager;
 class CommunicationLink;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 class EditWindow;
 #endif
 class ImplRC;
@@ -84,7 +84,7 @@ class RemoteControl
     friend class StatementFlow;
 
     BOOL         m_bIdleInserted;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     EditWindow *m_pDbgWin;
 #endif
     ImplRC* pImplRC;
