@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-24 12:12:04 $
+ *  last change: $Author: ssa $ $Date: 2002-06-27 16:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3225,7 +3225,8 @@ void ImplBorderWindow::ImplInit( Window* pParent,
         mbOverlapWin    = TRUE;
         mbFrame         = TRUE;
         mbFrameBorder   = FALSE;
-        if ( (nOrgStyle & (WB_BORDER | WB_NOBORDER | WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE)) == WB_BORDER )
+        // closeable windows may have a border as well, eg. system floating windows without caption
+        if ( (nOrgStyle & (WB_BORDER | WB_NOBORDER | WB_MOVEABLE | WB_SIZEABLE/* | WB_CLOSEABLE*/)) == WB_BORDER )
             mbSmallOutBorder = TRUE;
     }
     else if ( nTypeStyle & BORDERWINDOW_STYLE_OVERLAP )
