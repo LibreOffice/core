@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-10 10:44:35 $
+#   last change: $Author: kz $ $Date: 2003-08-27 16:45:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,15 +89,19 @@ UCB_FILES=\
     $(DESTDIRDEVGUIDEEXAMPLES)$/UCB$/ResourceManager.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/UCB$/ResourceRemover.java
 
-EXAMPLESLIST= \
+DIR_FILE_LIST= \
     $(UCB_FILES) \
 
+DIR_DIRECTORY_LIST=$(uniq $(DIR_FILE_LIST:d))
+DIR_CREATE_FLAG=$(MISC)$/devguide_ucb_dirs_created.txt
+DIR_FILE_FLAG=$(MISC)$/devguide_ucb.txt
 
 #--------------------------------------------------
 # TARGETS
 #--------------------------------------------------
 all : \
-    $(EXAMPLESLIST)
+    $(DIR_FILE_LIST) \
+    $(DIR_FILE_FLAG)
 
 #--------------------------------------------------
 # use global rules
