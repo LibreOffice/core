@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-05 16:53:20 $
+ *  last change: $Author: pl $ $Date: 2001-09-06 11:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -778,6 +778,14 @@ void SalFrame::SetIcon( USHORT nIcon )
                         pIconSize[i].width_inc, pIconSize[i].height_inc);
 #endif
             }
+        }
+        else
+        {
+            const String& rWM( maFrameData.pDisplay_->getWMAdaptor()->getWindowManagerName() );
+            if( rWM.EqualsAscii( "KWin" )           // assume KDE is running
+                || rWM.EqualsAscii( "Sawfish" )     // assume GNOME is running
+                )
+                iconSize = 16;
         }
 
         XWMHints Hints;

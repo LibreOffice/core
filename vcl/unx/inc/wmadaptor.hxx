@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cp $ $Date: 2001-08-24 15:56:41 $
+ *  last change: $Author: pl $ $Date: 2001-09-06 11:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,12 @@ public:
     WMAdaptor( SalDisplay * );
     ~WMAdaptor();
 
+    /*
+     *  may return an empty string if the window manager could
+     *  not be identified.
+     */
+    const String& getWindowManagerName() const
+    { return m_aWMName; }
 
     /*
      *  sets WM_NAME and _NET_WM_NAME
