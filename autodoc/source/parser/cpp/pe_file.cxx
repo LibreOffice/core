@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_file.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:19 $
+ *  last change: $Author: hr $ $Date: 2003-04-15 18:46:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ PE_File::Hdl_SyntaxError( const char * i_sText)
     {
          Cerr() << Env().CurFileName() << ", line "
                   << Env().LineCount()
-                  << ": Sourcecode error: ';' as a toplevel declaration is deprecated."
+                  << ": Sourcecode warning: ';' as a toplevel declaration is deprecated."
                   << Endl();
         SetTokenResult(done,stay);
         return;
