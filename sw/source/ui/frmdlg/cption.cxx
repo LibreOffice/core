@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 16:01:53 $
+ *  last change: $Author: jp $ $Date: 2001-08-16 16:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,19 +406,6 @@ IMPL_LINK_INLINE_END( SwCaptionDialog, SelectHdl, ListBox *, EMPTYARG )
 
 IMPL_LINK( SwCaptionDialog, ModifyHdl, Edit *, pEdit )
 {
-    if(&aCategoryBox == pEdit)
-    {
-        String sName = pEdit->GetText();
-        xub_StrLen nLen = sName.Len();
-        SwCalc::IsValidVarName( sName, &sName );
-        if( sName.Len() != nLen )
-        {
-            nLen = sName.Len();
-            Selection aSel(pEdit->GetSelection());
-            pEdit->SetText( sName );
-            pEdit->SetSelection( aSel );   // Cursorpos restaurieren
-        }
-    }
     String sNewName = aObjectNameED.GetText();
     sal_Bool bCorrectName = !aObjectNameED.IsVisible() ||
         (sNewName.Len() &&
@@ -566,4 +553,23 @@ void SwSequenceOptionDialog::Apply()
 }
 
 
+long SwCaptionDialog::SwCptComboBox::PreNotify( NotifyEvent& rNEvt )
+{
+    long nHandled = 0;
+    if( rNEvt.GetType() == EVENT_KEYINPUT &&
+        rNEvt.GetKeyEvent()->GetCharCode() )
+    {
+        String sKey( rNEvt.GetKeyEvent()->GetCharCode() ), sName( GetText() );
+        Selection aSel( GetSelection() );
+        aSel.Justify();
+        if( aSel.Len() )
+            sName.Erase( (xub_StrLen)aSel.Min(), (xub_StrLen)aSel.Len() );
+        sName.Insert( sKey, (xub_StrLen)aSel.Min() );
+        if( !SwCalc::IsValidVarName( sName ))
+            nHandled = 1;
+    }
+    if(!nHandled)
+        nHandled = ComboBox::PreNotify( rNEvt );
+    return nHandled;
+}
 
