@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 15:04:14 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 15:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -969,7 +969,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         // sind
         BOOL bHasOutliner = FALSE;
         BOOL bHasOther    = FALSE;
-        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+        const SdrMarkList& rMarkList = GetView()->GetMarkedObjectList();
         const ULONG nCount = rMarkList.GetMarkCount();
         for(ULONG nNum = 0; nNum < nCount; nNum++)
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 15:03:42 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 15:14:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,7 @@ BOOL DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
         {
             // this should be used for cursor travelling.
             SdPage* pActualPage = GetActualPage();
-            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+            const SdrMarkList& rMarkList = GetView()->GetMarkedObjectList();
             SdrTextObj* pCandidate = 0L;
 
             if(pActualPage && 1 == rMarkList.GetMarkCount())
