@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ieps.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:59:45 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 10:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,13 +410,14 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
                                 if ( *pDest == ' ' )
                                     pDest++;
                                 nLen = ImplGetLen( pDest, 32 );
-                                pDest[ nLen ] = 0;
+                                BYTE aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
                                 if ( strcmp( (const char*)pDest, "none" ) != 0 )
                                 {
                                     aString.AppendAscii( " Title:" );
                                     aString.AppendAscii( (char*)pDest );
                                     aString.AppendAscii( "\n" );
                                 }
+                                pDest[ nLen ] = aOldValue;
                             }
                             pDest = ImplSearchEntry( pBuf, (BYTE*)"%%Creator:", nBytesRead - 32, 10 );
                             if ( pDest )
@@ -425,10 +426,11 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
                                 if ( *pDest == ' ' )
                                     pDest++;
                                 nLen = ImplGetLen( pDest, 32 );
-                                pDest[ nLen ] = 0;
+                                BYTE aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
                                 aString.AppendAscii( " Creator:" );
                                 aString.AppendAscii( (char*)pDest );
                                 aString.AppendAscii( "\n" );
+                                pDest[ nLen ] = aOldValue;
                             }
                             pDest = ImplSearchEntry( pBuf, (BYTE*)"%%CreationDate:", nBytesRead - 32, 15 );
                             if ( pDest )
@@ -437,13 +439,14 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
                                 if ( *pDest == ' ' )
                                     pDest++;
                                 nLen = ImplGetLen( pDest, 32 );
-                                pDest[ nLen ] = 0;
+                                BYTE aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
                                 if ( strcmp( (const char*)pDest, "none" ) != 0 )
                                 {
                                     aString.AppendAscii( " CreationDate:" );
                                     aString.AppendAscii( (char*)pDest );
                                     aString.AppendAscii( "\n" );
                                 }
+                                pDest[ nLen ] = aOldValue;
                             }
                             pDest = ImplSearchEntry( pBuf, (BYTE*)"%%LanguageLevel:", nBytesRead - 4, 16 );
                             if ( pDest )
