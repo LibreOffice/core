@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-27 13:26:53 $
+ *  last change: $Author: os $ $Date: 2001-09-06 10:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,8 +493,46 @@ void SvxCharNamePage::UpdatePreview_Impl()
     aCJKSize.Width() = 0;
     // Font
     const FontList* pFontList = GetFontList();
-    FontInfo aFontInfo( pFontList->Get( m_pWestFontNameLB->GetText(), m_pWestFontStyleLB->GetText() ) );
-    FontInfo aCJKFontInfo( pFontList->Get( m_pEastFontNameLB->GetText(), m_pEastFontStyleLB->GetText() ) );
+
+    FontInfo aFontInfo;
+    String sWestFontName(m_pWestFontNameLB->GetText());
+    BOOL bWestFontAvailable = pFontList->IsAvailable( sWestFontName );
+    if(bWestFontAvailable  || m_pWestFontNameLB->GetSavedValue() != sWestFontName)
+        aFontInfo = pFontList->Get( sWestFontName, m_pWestFontStyleLB->GetText() );
+    else
+    {
+        //get the font from itemset
+        USHORT nWhich = GetWhich( SID_ATTR_CHAR_FONT );
+        SfxItemState eState = GetItemSet().GetItemState( nWhich );
+        if ( eState >= SFX_ITEM_DEFAULT )
+        {
+            const SvxFontItem* pFontItem = (const SvxFontItem*)&( GetItemSet().Get( nWhich ) );
+            aFontInfo.SetName(pFontItem->GetFamilyName());
+            aFontInfo.SetStyleName(pFontItem->GetStyleName());
+            aFontInfo.SetFamily(pFontItem->GetFamily());
+            aFontInfo.SetPitch(pFontItem->GetPitch());
+            aFontInfo.SetCharSet(pFontItem->GetCharSet());
+        }
+    }
+    FontInfo aCJKFontInfo;
+    String sEastFontName(m_pEastFontNameLB->GetText());
+    BOOL bEastFontAvailable =     pFontList->IsAvailable( sEastFontName );
+    if(bEastFontAvailable || m_pEastFontNameLB->GetText() != sEastFontName )
+        aCJKFontInfo = pFontList->Get( sEastFontName, m_pEastFontStyleLB->GetText() );
+    else
+    {
+        USHORT nWhich = GetWhich( SID_ATTR_CHAR_CJK_FONT );
+        SfxItemState eState = GetItemSet().GetItemState( nWhich );
+        if ( eState >= SFX_ITEM_DEFAULT )
+        {
+            const SvxFontItem* pFontItem = (const SvxFontItem*)&( GetItemSet().Get( nWhich ) );
+            aCJKFontInfo.SetName(pFontItem->GetFamilyName());
+            aCJKFontInfo.SetStyleName(pFontItem->GetStyleName());
+            aCJKFontInfo.SetFamily(pFontItem->GetFamily());
+            aCJKFontInfo.SetPitch(pFontItem->GetPitch());
+            aCJKFontInfo.SetCharSet(pFontItem->GetCharSet());
+        }
+    }
 
     if ( m_pWestFontSizeLB->IsRelative() )
     {
