@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YDriver.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-05 14:00:49 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Ocke Janssen
  *
  *
  ************************************************************************/
