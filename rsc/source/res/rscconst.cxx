@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscconst.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:52:31 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,17 +61,20 @@
 /****************** I N C L U D E S **************************************/
 
 // C and C++ Includes.
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
 
 // Solar Definitionen
 #include <tools/solar.h>
 
-// Programmabh„ngige Includes.
+// Programmabhaengige Includes.
 #ifndef _RSCCONST_HXX
 #include <rscconst.hxx>
 #endif
+#include <rscall.h>
+#include <rschash.hxx>
+#include <tools/resid.hxx>
 
 /****************** C O D E **********************************************/
 /****************** R s c C o n s t **************************************/
@@ -441,4 +444,7 @@ ERRTYPE RscEnum::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
     return( ERR_OK );
 }
 
-
+RscLangEnum::RscLangEnum()
+        : RscEnum( pHS->Insert( "LangEnum" ), RSC_NOTYPE )
+{
+}
