@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:21:07 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:33:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,8 +251,7 @@ sal_Bool SfxDispatcher::IsLocked( sal_uInt16 nSID ) const
 */
 
 {
-    return nSID != SID_BROWSE_STOP && nSID != SID_HELP_PI &&
-           ( pImp->bLocked || SFX_APP()->IsDispatcherLocked() );
+    return pImp->bLocked;
 }
 
 //--------------------------------------------------------------------
@@ -2464,11 +2463,8 @@ sal_Bool SfxDispatcher::_FindServer
 
     // Dispatcher gelockt? (SID_BROWSE_STOP und SID_HELP_PI trotzdem durchlassen)
     SfxApplication *pSfxApp = SFX_APP();
-    sal_Bool bAllLocked = pSfxApp->IsDispatcherLocked();
     if ( IsLocked(nSlot) )
     {
-        if ( bAllLocked )
-            pSfxApp->Get_Impl()->bInvalidateOnUnlock = sal_True;
         pImp->bInvalidateOnUnlock = sal_True;
         return sal_False;
     }
@@ -2665,11 +2661,8 @@ sal_Bool SfxDispatcher::_FillState
 
     const SfxSlot *pSlot = rSvr.GetSlot();
     SfxApplication *pSfxApp = SFX_APP();
-    sal_Bool bAllLocked = pSfxApp->IsDispatcherLocked();
     if ( pSlot && IsLocked( pSlot->GetSlotId() ) )
     {
-        if ( bAllLocked )
-            pSfxApp->Get_Impl()->bInvalidateOnUnlock = sal_True;
         pImp->bInvalidateOnUnlock = sal_True;
         DBG_PROFSTOP(SfxDispatcherFillState);
         return sal_False;
