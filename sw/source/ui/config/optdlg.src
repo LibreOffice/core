@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:12:12 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 17:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,7 +517,7 @@ TabPage TP_CONTENT_OPT
         Text [ swedish ] = "~Skyddade blanksteg" ;
         Text [ dutch ] = "~Beveiligde spatie" ;
         Text [ spanish ] = "Espacios proteg~idos" ;
-        Text [ english_us ] = "~Protected spaces" ;
+        Text [ english_us ] = "Non-breaking s~paces" ;
         Text[ chinese_simplified ] = "Κά±£»¤µΔΏΥ°ΧΧΦ·ϋ(~P)";
         Text[ russian ] = "Ηΰωθωεννϋε οπξαελϋ";
         Text[ polish ] = "Zab~ezpieczone spacje";
@@ -2144,7 +2144,7 @@ TabPage TP_STD_FONT
         Text [ english_us ] = "C~aption" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "±κΗ©(~A)";
-        Text[ russian ] = "Νΰηβΰνθε";
+        Text[ russian ] = "Οξδοθρό";
         Text[ polish ] = "Opis";
         Text[ japanese ] = "ΧΝήΩ(~A)";
         Text[ chinese_traditional ] = "ΌΠΕÒ(~A)";
@@ -2524,7 +2524,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ chinese_simplified ] = "·½Κ½";
         Text[ russian ] = "Ρβξιρςβΰ";
         Text[ polish ] = "Efekt";
-        Text[ japanese ] = "•ΟX‚Ε¶‚¶‚ι‰e‹Ώ‚π’²®";
+        Text[ japanese ] = "»²½ή•ΟX‚ΜΫ‚Μ’²®";
         Text[ chinese_traditional ] = "¤θ¦΅";
         Text[ arabic ] = "ΗαΚΓΛνΡΗΚ";
         Text[ greek ] = "Συμπεριφορά";
@@ -2577,7 +2577,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ chinese_simplified ] = "ΠΠΑΠµΔΈόΈΔΦ»»αΣ°Ομµ½Φ±½ΣΑ¬½ΣµΔΗψΣς΅£";
         Text[ russian ] = "Θημενενθÿ ρςπξκθ θλθ κξλξνκθ οξβλθÿώς ςξλόκξ νΰ νεοξρπεδρςβεννϋυ ρξρεδει";
         Text[ polish ] = "Zmiany wiersza lub kolumny wywierajΉ wp³yw tylko na obszary przyleg³e";
-        Text[ japanese ] = "s‚ ‚ι‚Ά‚Ν—ρ‚Μ•ΟX‚Ν¤’ΌΪ—ΧΪ‚µ‚Δ‚Ά‚ι”ΝΝ‚Ι‚Μ‚έμ—p";
+        Text[ japanese ] = "s‚ά‚½‚Ν—ρ‚Μ»²½ή•ΟX‚π¤—ΧΪ”ΝΝ‚Ζ‚ΜΦW‚Μ‚έ‚Ε’²ί‚µ‚ά‚·";
         Text[ chinese_traditional ] = "Δζ¦CªΊΕά§σ¶Θ·|ΌvΕT¨μª½±µ³sµ²ªΊ°Ο°μ΅C";
         Text[ arabic ] = "ΚΔΛΡ ΗαΚΫννΡΗΚ ΗαΝΗΟΛΙ έν Υέ Γζ ΪγζΟ Ϊαμ ΗαγδΨήΙ ΗαγΜΗζΡΙ έήΨ";
         Text[ greek ] = "Αλλαγές μιας στήλης ή γραμμής επιρεάζουν μόνο την άμεσα γειτονική περιοχή";
@@ -2630,7 +2630,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ chinese_simplified ] = "ΠΠΑΠµΔΈόΈΔ»αΣ°Ομµ½ΥϋΈφ±νΈρ΅£";
         Text[ russian ] = "Θημενενθÿ ρςπξκθ θλθ κξλξνκθ οξβλθÿώς νΰ βρώ ςΰαλθφσ";
         Text[ polish ] = "Zmiany wiersza lub kolumny wywierajΉ wp³yw na ca³Ή tabelκ";
-        Text[ japanese ] = "s‚ ‚ι‚Ά‚Ν—ρ‚Μ•ΟX‚Ν¤•\\‘S‘Μ‚Ιμ—p";
+        Text[ japanese ] = "s‚ά‚½‚Ν—ρ‚Μ»²½ή•ΟX‚Ν¤•\\“ΰ‘S‘Μ‚Ιμ—p‚µ‚ά‚·";
         Text[ chinese_traditional ] = "Δζ¦CªΊΕά§σ·|ΌvΕT¨μΎγ­Σªν®ζ΅C";
         Text[ arabic ] = "ΚΔΛΡ ΗαΚΫννΡΗΚ ΗαΝΗΟΛΙ έν Υέ Γζ ΪγζΟ Ϊαμ ΗαΜΟζα ΘΓΛΡε";
         Text[ greek ] = "Αλλαγές μιας γραμμής ή στήλης επιρεάζουν ολόκληρο τον πίνακα";
@@ -2683,7 +2683,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ chinese_simplified ] = "Ò»ΠΠΊΝΑΠµΔΈόΈΔ»αΣ°Ομ±νΈρµΔ΄σΠ΅΅£";
         Text[ russian ] = "Θημενενθÿ ρςπξκθ θλθ κξλξνκθ οξβλθÿώς νΰ πΰημεπ ςΰαλθφϋ";
         Text[ polish ] = "Zmiany wiersza lub kolumny wywierajΉ wp³yw na rozmiar tabeli";
-        Text[ japanese ] = "s‚ ‚ι‚Ά‚Ν—ρ‚Μ•ΟX‚Ν¤•\\‚Μ‘ε‚«‚³‚Ιμ—p";
+        Text[ japanese ] = "s‚ά‚½‚Ν—ρ‚Μ»²½ή•ΟX‚Ν¤•\\‚Μ»²½ή‚Ιμ—p‚µ‚ά‚·";
         Text[ chinese_traditional ] = "¤@­ΣΔζ¦CªΊΕά§σ·|ΌvΕTªν®ζªΊ¤j¤p΅C";
         Text[ arabic ] = "ΚΔΛΡ ΗαΚΫννΡΗΚ ΗαΝΗΟΛΙ έν Υέ Γζ ΪγζΟ Ϊαμ ΝΜγ ΗαΜΟζα";
         Text[ greek ] = "Αλλαγές μιας γραμμής ή στήλης επιρεάζουν το μέγεθος του πίνακα";
@@ -2710,7 +2710,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ chinese_simplified ] = "ΥβΈφΙθ¶¨ΏΙΣΓΣΪΌόΕΜ²ΩΧχ΅£";
         Text[ russian ] = "έςθ νΰρςπξικθ δειρςβσώς οπθ ξαρλσζθβΰνθθ κλΰβθΰςσπϋ.";
         Text[ polish ] = "Ustawienia te sΉ uaktywnione podczas korzystania z klawiatury.";
-        Text[ japanese ] = "‚±‚Μέ’θ‚Ν·°Ξή°Δή‘€μ‚Ιμ—p‚µ‚ά‚·";
+        Text[ japanese ] = "‚±‚Μέ’θ‚Ν·°Ξή°Δή‘€μ‚ΜΫ‚Ι—Lψ‚Ι‚Θ‚θ‚ά‚·";
         Text[ chinese_traditional ] = "³o­Σ³]©wΣμ¥Ξ©σΑδ½LΎή§@΅C";
         Text[ arabic ] = "ΣΚίζδ εΠε ΗαΕΪΟΗΟΗΚ ΣΗΡνΙ ΗαγέΪζα ΪδΟ ΗΣΚΞΟΗγ αζΝΙ ΗαγέΗΚνΝ.";
         Text[ greek ] = "Αυτές οι ρυθμίσεις επιρεάζουν τον χειρισμό του πληκτρολογίου.";
