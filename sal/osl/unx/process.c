@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mfe $ $Date: 2001-03-22 10:01:41 $
+ *  last change: $Author: obr $ $Date: 2001-05-11 19:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,8 @@
 #define CONTROLLEN (sizeof(struct cmsghdr) + sizeof(int))
 #endif
 
-
+/* implemented in file.c */
+extern oslFileError FileURLToPath( char *, size_t, rtl_uString* );
 
 /******************************************************************************
  *
@@ -386,33 +387,25 @@ static sal_Char *getCmdLine()
 #endif
 
 
-oslProcessError SAL_CALL osl_getExecutableFile(rtl_uString **ustrFile)
+oslProcessError SAL_CALL osl_getExecutableFile( rtl_uString** pustrFile )
 {
-    sal_Char pszExecutable[PATH_MAX];
-    sal_Char pszUncPath[PATH_MAX+5];
-    oslProcessError Error;
+    char executablePath[PATH_MAX] = "";
+    oslProcessError eRet;
 
-    pszExecutable[0] = '\0';
-    pszUncPath[0] = '\0';
+    eRet = osl_psz_getExecutableFile( executablePath, PATH_MAX );
 
-    Error=osl_psz_getExecutableFile(pszExecutable,sizeof(pszExecutable));
-
-    if ( Error == osl_Process_E_None)
+    if ( eRet == osl_Process_E_None)
     {
-        strcpy(pszUncPath,"//.");
-        strcat(pszUncPath,pszExecutable);
+        rtl_uString *ustrTmp = NULL;
+
+        rtl_string2UString( &ustrTmp, executablePath, strlen( executablePath ),
+            osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
+
+        osl_getFileURLFromSystemPath( ustrTmp, pustrFile );
+        rtl_uString_release( ustrTmp );
     }
 
-    /*    fprintf(stderr,"Exec file is '%s'\n",pszUncPath);*/
-
-    rtl_string2UString(
-        ustrFile,
-        pszUncPath,
-        rtl_str_getLength( pszUncPath ),
-        osl_getThreadTextEncoding(),
-        OUSTRING_TO_OSTRING_CVTFLAGS );
-
-    return Error;
+    return eRet;
 }
 
 
@@ -967,26 +960,16 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
     oslProcessError Error;
     rtl_String* strImageName=0;
     rtl_String* strWorkDir=0;
-    sal_Char* pszImageName=0;
     sal_Char* pszWorkDir=0;
     sal_Char** pArguments=0;
     sal_Char** pEnvironment=0;
     unsigned int index;
 
+    char imagePath[PATH_MAX] = "";
 
-    if ( ustrImageName != 0 && ustrImageName->buffer[0] != 0 )
+    if ( ustrImageName && ustrImageName->length )
     {
-        rtl_uString2String( &strImageName,
-                            rtl_uString_getStr(ustrImageName),
-                            rtl_uString_getLength(ustrImageName),
-                            osl_getThreadTextEncoding(),
-                            OUSTRING_TO_OSTRING_CVTFLAGS );
-
-        pszImageName = rtl_string_getStr(strImageName);
-        if ( strncmp(pszImageName,"//./",4) == 0 )
-        {
-            pszImageName+=3;
-        }
+        FileURLToPath( imagePath, PATH_MAX, ustrImageName );
     }
 
     if ( ustrWorkDir != 0 && ustrWorkDir->buffer[0] != 0 )
@@ -1043,7 +1026,7 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
     }
 
 
-    Error = osl_psz_executeProcess(pszImageName,
+    Error = osl_psz_executeProcess(imagePath,
                                    pArguments,
                                    Options,
                                    Security,
@@ -1074,11 +1057,6 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
             }
         }
         free(pEnvironment);
-    }
-
-    if ( strImageName != 0 )
-    {
-        rtl_string_release(strImageName);
     }
 
     if ( strWorkDir != 0 )

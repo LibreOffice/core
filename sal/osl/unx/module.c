@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: svesik $ $Date: 2001-04-26 14:53:29 $
+ *  last change: $Author: obr $ $Date: 2001-05-11 19:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 #include <osl/thread.h>
 #endif
 
+#ifndef _OSL_FILE_H_
+#include <osl/file.h>
+#endif
+
 #include "system.h"
 
 #if defined(DEBUG)
@@ -90,6 +94,9 @@ extern oslProcessError SAL_CALL osl_searchPath(const sal_Char* pszName, const sa
 extern int _dlclose(void *handle);
 #endif /* MACOSX */
 
+/* implemented in file.c */
+extern UnicodeToText( char *, size_t, const sal_Unicode *, sal_Int32 );
+
 oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode);
 void* SAL_CALL osl_psz_getSymbol(oslModule hModule, const sal_Char* pszSymbolName);
 
@@ -101,36 +108,30 @@ void* SAL_CALL osl_psz_getSymbol(oslModule hModule, const sal_Char* pszSymbolNam
 oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMode)
 {
     oslModule pModule=0;
+    rtl_uString* ustrTmp = NULL;
 
     OSL_ENSURE(ustrModuleName,"osl_loadModule : string is not valid");
 
-    if (  ustrModuleName != 0 )
+    /* ensure ustrTmp hold valid string */
+    if( osl_File_E_None != osl_getSystemPathFromFileURL( ustrModuleName, &ustrTmp ) )
+        rtl_uString_assign( &ustrTmp, ustrModuleName );
+
+    if( ustrTmp )
     {
-        rtl_String* strModuleName = 0;
-        sal_Char* pszModuleName=0;
+        char *buffer[PATH_MAX];
 
-        rtl_uString2String( &strModuleName,
-                            rtl_uString_getStr(ustrModuleName),
-                            rtl_uString_getLength(ustrModuleName),
-                            osl_getThreadTextEncoding(),
-                            OUSTRING_TO_OSTRING_CVTFLAGS );
-
-        pszModuleName=rtl_string_getStr(strModuleName);
-
-#if defined(DEBUG)
-        fprintf(stderr,"osl_loadModule : lib to load : [%s]\n",pszModuleName);
-#endif
-
-        if ( strncmp(pszModuleName,"//./",4) == 0 )
-            pszModuleName+=3;
-
-        pModule = osl_psz_loadModule(pszModuleName,nRtldMode);
-        rtl_string_release(strModuleName);
+        if( UnicodeToText( buffer, PATH_MAX, ustrTmp->buffer, ustrTmp->length ) )
+            pModule = osl_psz_loadModule( buffer, nRtldMode );
     }
+
+    rtl_uString_release( ustrTmp );
 
     return pModule;
 }
 
+/*****************************************************************************/
+/* osl_psz_loadModule */
+/*****************************************************************************/
 
 oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode)
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-26 16:17:49 $
+ *  last change: $Author: obr $ $Date: 2001-05-11 19:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,45 +225,20 @@ oslProcessError SAL_CALL osl_getCommandArgs(sal_Char* pszBuffer, sal_uInt32 Max)
 
 static sal_Bool bGlobalSofficeFlag=sal_False;
 
+/* implemented in file.c */
+extern oslFileError FileURLToPath( char *, size_t, rtl_uString* );
 
 /*****************************************************************************/
 /* Exported Module Functions */
 /*****************************************************************************/
 oslProfile SAL_CALL osl_openProfile(rtl_uString *ustrProfileName, oslProfileOption Options)
 {
-    oslProfile pProfile=0;
-    rtl_String* strProfileName=0;
-    sal_Char* pszProfileName=0;
-
+    char profilePath[PATH_MAX] = "";
 
     if ( ustrProfileName != 0  && ustrProfileName->buffer[0] != 0 )
-    {
+        FileURLToPath( profilePath, PATH_MAX, ustrProfileName );
 
-        rtl_uString2String( &strProfileName,
-                            rtl_uString_getStr(ustrProfileName),
-                            rtl_uString_getLength(ustrProfileName),
-                            osl_getThreadTextEncoding(),
-                            OUSTRING_TO_OSTRING_CVTFLAGS );
-        pszProfileName = rtl_string_getStr(strProfileName);
-
-        if ( strncmp(pszProfileName,"//./",4) != 0 )
-        {
-            rtl_string_release(strProfileName);
-            return 0;
-        }
-        pszProfileName+=3;
-    }
-
-
-    pProfile = osl_psz_openProfile(pszProfileName,Options);
-
-    if ( strProfileName != 0 )
-    {
-        rtl_string_release(strProfileName);
-    }
-
-
-    return pProfile;
+    return osl_psz_openProfile( profilePath,Options );
 }
 
 
@@ -1233,73 +1208,33 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile, sal_Char* pszBuff
     return (n);
 }
 
-sal_Bool SAL_CALL osl_getProfileName(rtl_uString* ustrPath, rtl_uString* ustrName, rtl_uString** strProfileName)
+sal_Bool SAL_CALL osl_getProfileName(rtl_uString* ustrPath, rtl_uString* ustrName, rtl_uString** pustrProfileName)
 {
     sal_Bool bRet=sal_False;
-    sal_Char pszBuffer[PATH_MAX];
-    rtl_uString* strNativeName=0;
-    rtl_String* strPath=0;
-    rtl_String* strName=0;
-    sal_Char* pszPath=0;
-    sal_Char* pszName=0;
+    sal_Char buffer[PATH_MAX] = "";
+    rtl_uString* ustrTmp = NULL;
 
-    pszBuffer[0] = '\0';
-
+    char path[PATH_MAX] = "";
+    char name[PATH_MAX] = "";
 
     if ( ustrPath != 0 && ustrPath->buffer[0] != 0 )
     {
-        rtl_uString2String( &strPath,
-                            rtl_uString_getStr(ustrPath),
-                            rtl_uString_getLength(ustrPath),
-                            osl_getThreadTextEncoding(),
-                            OUSTRING_TO_OSTRING_CVTFLAGS );
-        pszPath = rtl_string_getStr(strPath);
-
-        /* Don't skip UNC prefix if metatag is used */
-
-        if ( strncmp(pszPath,"//./",4) == 0 )
-        {
-            pszPath+=3;
-        }
-        else if ( strncmp(pszPath, "?", 1) != 0 )
-        {
-            rtl_string_release(strPath);
-            return 0;
-        }
+        FileURLToPath( path, PATH_MAX, ustrPath );
     }
 
     if ( ustrName != 0 && ustrName->buffer[0] != 0 )
     {
-        rtl_uString2String( &strName,
-                            rtl_uString_getStr(ustrName),
-                            rtl_uString_getLength(ustrName),
-                            osl_getThreadTextEncoding(),
-                            OUSTRING_TO_OSTRING_CVTFLAGS );
-        pszName = rtl_string_getStr(strName);
+        FileURLToPath( name, PATH_MAX, ustrName );
     }
 
+    bRet = osl_psz_getProfileName( path, name, buffer, PATH_MAX );
 
-
-    bRet=osl_psz_getProfileName(pszPath,pszName,pszBuffer,sizeof(pszBuffer));
-
-
-    if ( strPath != 0 )
+    if( bRet )
     {
-        rtl_string_release(strPath);
+        rtl_string2UString( &ustrTmp, buffer, strlen( buffer ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
+        osl_getFileURLFromSystemPath( ustrTmp, pustrProfileName );
+        rtl_uString_release( ustrTmp );
     }
-
-    if ( strName != 0 )
-    {
-        rtl_string_release(strName);
-    }
-
-    /* Convert result to UNC notation */
-
-    rtl_string2UString( &strNativeName, pszBuffer, rtl_str_getLength( pszBuffer ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
-
-    osl_normalizePath( strNativeName, strProfileName );
-    rtl_uString_release( strNativeName );
-
 
     return bRet;
 }
