@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:07:56 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #define _SW_XMLTEXTBLOCKS_HXX
 
 #include <sfx2/objsh.hxx>
+#include <sfx2/docfile.hxx>
 
 #ifndef _SWBLOCKS_HXX
 #include <swblocks.hxx>
@@ -85,6 +86,7 @@ protected:
     SfxObjectShellRef xDocShellRef;
     USHORT       nFlags;
     String       aPackageName;
+    SfxMediumRef xMedium;
 
     void ReadInfo();
     void WriteInfo();
@@ -95,8 +97,8 @@ public:
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xBlkRoot;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xRoot;
     short               nCurBlk;
-    SwXMLTextBlocks( const String& );
-    SwXMLTextBlocks( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String& );
+    SwXMLTextBlocks( const String& rFile );
+    SwXMLTextBlocks( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String& rFile );
     void   AddName( const String&, const String&, const String&, BOOL bOnlyTxt = FALSE );
     virtual void   AddName( const String&, const String&, BOOL bOnlyTxt = FALSE );
     void GeneratePackageName ( const String& rShort, String& rPackageName );
