@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astunion.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-30 07:22:03 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:46:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef _IDLC_ASTUNION_HXX_
 #include <idlc/astunion.hxx>
 #endif
@@ -67,6 +68,9 @@
 #ifndef _IDLC_ERRORHANDLER_HXX_
 #include <idlc/errorhandler.hxx>
 #endif
+
+#include "registry/version.h"
+#include "registry/writer.hxx"
 
 using namespace ::rtl;
 
@@ -168,8 +172,8 @@ AstUnionBranch* AstUnion::lookupBranch(AstUnionBranch* pBranch)
 
 AstUnionBranch* AstUnion::lookupDefault(sal_Bool bReportError)
 {
-    DeclList::iterator iter = getIteratorBegin();
-    DeclList::iterator end = getIteratorEnd();
+    DeclList::const_iterator iter = getIteratorBegin();
+    DeclList::const_iterator end = getIteratorEnd();
     AstUnionBranch      *pBranch = NULL;
     AstDeclaration      *pDecl = NULL;
 
@@ -214,8 +218,8 @@ AstUnionBranch* AstUnion::lookupLabel(AstUnionBranch* pBranch)
         pLabel->getLabelValue()->setExprValue(pLabelValue);
     }
 
-    DeclList::iterator iter = getIteratorBegin();
-    DeclList::iterator end = getIteratorEnd();
+    DeclList::const_iterator iter = getIteratorBegin();
+    DeclList::const_iterator end = getIteratorEnd();
     AstUnionBranch* pB = NULL;
     AstDeclaration* pDecl = NULL;
 
@@ -245,7 +249,7 @@ AstUnionBranch* AstUnion::lookupLabel(AstUnionBranch* pBranch)
 
 AstUnionBranch* AstUnion::lookupEnum(AstUnionBranch* pBranch)
 {
-    AstType* pType = resolveTypeDef(m_pDiscriminantType);
+    AstType const * pType = resolveTypedefs(m_pDiscriminantType);
     if ( pType->getNodeType() != NT_enum )
         return NULL;
 
@@ -275,8 +279,8 @@ AstUnionBranch* AstUnion::lookupEnum(AstUnionBranch* pBranch)
     }
 
 
-    DeclList::iterator iter = getIteratorBegin();
-    DeclList::iterator end = getIteratorEnd();
+    DeclList::const_iterator iter = getIteratorBegin();
+    DeclList::const_iterator end = getIteratorEnd();
     AstUnionBranch* pB = NULL;
     pDecl = NULL;
 
@@ -304,7 +308,7 @@ AstUnionBranch* AstUnion::lookupEnum(AstUnionBranch* pBranch)
     return NULL;
 }
 
-sal_Bool AstUnion::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
+sal_Bool AstUnion::dump(RegistryKey& rKey)
 {
     RegistryKey localKey;
     if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey))
@@ -317,18 +321,20 @@ sal_Bool AstUnion::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
 
     sal_uInt16 nMember = getNodeCount(NT_union_branch);
 
-    RegistryTypeWriter aBlob(pLoader->getApi(), RT_TYPE_UNION,
-                             OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
-                             OStringToOUString(getDiscrimantType()->getScopedName(), RTL_TEXTENCODING_UTF8),
-                             nMember, 0, 0);
-
-    aBlob.setDoku( getDocumentation() );
-    aBlob.setFileName( OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8));
+    typereg::Writer aBlob(
+        TYPEREG_VERSION_0, getDocumentation(),
+        OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8), RT_TYPE_UNION,
+        OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 1, nMember,
+        0, 0);
+    aBlob.setSuperTypeName(
+        0,
+        OStringToOUString(
+            getDiscrimantType()->getScopedName(), RTL_TEXTENCODING_UTF8));
 
     if ( nMember > 0 )
     {
-        DeclList::iterator iter = getIteratorBegin();
-        DeclList::iterator end = getIteratorEnd();
+        DeclList::const_iterator iter = getIteratorBegin();
+        DeclList::const_iterator end = getIteratorEnd();
         AstDeclaration* pDecl = NULL;
         AstUnionBranch* pBranch = NULL;
         AstUnionBranch* pDefault = lookupDefault(sal_False);
@@ -361,10 +367,15 @@ sal_Bool AstUnion::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
                 if ( aConst.m_value.aHyper > disc )
                     disc = aConst.m_value.aHyper;
 
-                aBlob.setFieldData(index++,
-                        OStringToOUString(pBranch->getLocalName(), RTL_TEXTENCODING_UTF8),
-                        OStringToOUString(pBranch->getType()->getRelativName(), RTL_TEXTENCODING_UTF8),
-                        pBranch->getDocumentation(), OUString(), RT_ACCESS_READWRITE, aConst);
+                aBlob.setFieldData(
+                    index++, pBranch->getDocumentation(), OUString(),
+                    RT_ACCESS_READWRITE,
+                    OStringToOUString(
+                        pBranch->getLocalName(), RTL_TEXTENCODING_UTF8),
+                    OStringToOUString(
+                        pBranch->getType()->getRelativName(),
+                        RTL_TEXTENCODING_UTF8),
+                    aConst);
             }
             ++iter;
         }
@@ -374,15 +385,19 @@ sal_Bool AstUnion::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
             access = RT_ACCESS_DEFAULT;
             aConst.m_type = RT_TYPE_INT64;
             aConst.m_value.aHyper = disc + 1;
-            aBlob.setFieldData(0,
-                    OStringToOUString(pDefault->getLocalName(), RTL_TEXTENCODING_UTF8),
-                    OStringToOUString(pDefault->getType()->getRelativName(), RTL_TEXTENCODING_UTF8),
-                    pDefault->getDocumentation(), OUString(), RT_ACCESS_DEFAULT, aConst);
+            aBlob.setFieldData(
+                0, pDefault->getDocumentation(), OUString(), RT_ACCESS_DEFAULT,
+                OStringToOUString(
+                    pDefault->getLocalName(), RTL_TEXTENCODING_UTF8),
+                OStringToOUString(
+                    pDefault->getType()->getRelativName(),
+                    RTL_TEXTENCODING_UTF8),
+                aConst);
         }
     }
 
-    const sal_uInt8* pBlob = aBlob.getBlop();
-    sal_uInt32       aBlobSize = aBlob.getBlopSize();
+    sal_uInt32 aBlobSize;
+    void const * pBlob = aBlob.getBlob(&aBlobSize);
 
     if (localKey.setValue(OUString(), RG_VALUETYPE_BINARY,
                             (RegValue)pBlob, aBlobSize))
@@ -396,7 +411,7 @@ sal_Bool AstUnion::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
     return sal_True;
 }
 
-AstUnionBranch::AstUnionBranch(AstUnionLabel* pLabel, AstType* pType, const ::rtl::OString& name, AstScope* pScope)
+AstUnionBranch::AstUnionBranch(AstUnionLabel* pLabel, AstType const * pType, const ::rtl::OString& name, AstScope* pScope)
     : AstMember(NT_union_branch, pType, name, pScope)
     , m_pLabel(pLabel)
 {
