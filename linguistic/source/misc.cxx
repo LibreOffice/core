@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-04 13:33:43 $
+ *  last change: $Author: tl $ $Date: 2001-07-25 10:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,58 @@ osl::Mutex &    GetLinguMutex()
 {
     static osl::Mutex   aMutex;
     return aMutex;
+}
+
+///////////////////////////////////////////////////////////////////////////
+
+/**
+    returns text-encoding used for ByteString unicode String conversion
+ */
+rtl_TextEncoding GetTextEncoding( INT16 nLanguage )
+{
+    DBG_ASSERT( nLanguage != LANGUAGE_NONE, "invalid language argument" )
+    static INT16 nLastLanguage = LANGUAGE_NONE;
+
+    // set default value for unknown languages
+    static rtl_TextEncoding nEncoding = RTL_TEXTENCODING_DONTKNOW;
+
+    if (nLastLanguage != nLanguage)
+    {
+        nLastLanguage = nLanguage;
+        switch (nLanguage)
+        {
+            case LANGUAGE_GERMAN :
+            case LANGUAGE_GERMAN_SWISS :
+            case LANGUAGE_ENGLISH_US :
+            case LANGUAGE_ENGLISH_UK :
+            case LANGUAGE_FRENCH :
+            case LANGUAGE_ITALIAN :
+            case LANGUAGE_SPANISH :
+            case LANGUAGE_CATALAN :
+            case LANGUAGE_PORTUGUESE :
+            case LANGUAGE_PORTUGUESE_BRAZILIAN :
+            case LANGUAGE_DANISH :
+            case LANGUAGE_DUTCH :
+            case LANGUAGE_SWEDISH :
+            case LANGUAGE_FINNISH :
+            case LANGUAGE_NORWEGIAN_BOKMAL :
+            case LANGUAGE_NORWEGIAN_NYNORSK :
+            case LANGUAGE_AFRIKAANS :
+                    nEncoding = RTL_TEXTENCODING_MS_1252;   break;
+            case LANGUAGE_CZECH :
+            case LANGUAGE_HUNGARIAN :
+            case LANGUAGE_POLISH :
+                    nEncoding = RTL_TEXTENCODING_MS_1250;   break;
+            case LANGUAGE_RUSSIAN :
+                    nEncoding = RTL_TEXTENCODING_MS_1251;   break;
+            case LANGUAGE_GREEK :
+                    nEncoding = RTL_TEXTENCODING_MS_1253;   break;
+            default:
+                    DBG_ERROR( "unexpected language" );
+        }
+    }
+
+    return nEncoding;
 }
 
 ///////////////////////////////////////////////////////////////////////////

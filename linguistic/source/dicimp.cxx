@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dicimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-18 11:28:27 $
+ *  last change: $Author: tl $ $Date: 2001-07-25 10:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
 
     nDicVersion = GetDicVersion( aWordBuf );
 
-    rtl_TextEncoding eEnc = RTL_TEXTENCODING_MS_1252;
+    rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
     if (6 == nDicVersion)
         eEnc = RTL_TEXTENCODING_UTF8;
 
@@ -396,7 +396,7 @@ ULONG DictionaryNeo::saveEntries(const OUString &rURL)
     if ((nErr = pStream->GetError()))
         return nErr;
 
-    rtl_TextEncoding eEnc = GetTextEncoding();
+    rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
     if (6 == nDicVersion)
         eEnc = RTL_TEXTENCODING_UTF8;
 
@@ -469,7 +469,7 @@ int DictionaryNeo::cmpDicEntry(const OUString& rWord1,
 
     OUString    aWord1( rWord1 ),
                 aWord2( rWord2 );
-    xub_StrLen  nLen1 = aWord1.getLength(),
+    INT32       nLen1 = aWord1.getLength(),
                   nLen2 = aWord2.getLength();
     if (bSimilarOnly)
     {
@@ -481,7 +481,7 @@ int DictionaryNeo::cmpDicEntry(const OUString& rWord1,
     }
 
     const sal_Unicode cIgnChar = '=';
-    xub_StrLen  nIdx1 = 0,
+    INT32       nIdx1 = 0,
                   nIdx2 = 0,
                   nNumIgnChar1 = 0,
                   nNumIgnChar2 = 0;

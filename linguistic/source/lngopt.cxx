@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngopt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-08 12:46:16 $
+ *  last change: $Author: tl $ $Date: 2001-07-25 10:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,7 +607,7 @@ Sequence< PropertyValue > SAL_CALL
         Any aAny;
         aOpt.GetValue( aAny, rItem.nWID );
 
-        rVal.Name   = OUString( rItem.pName, rItem.nNameLen, GetTextEncoding() );
+        rVal.Name   = OUString( rItem.pName, rItem.nNameLen, RTL_TEXTENCODING_ASCII_US );
         rVal.Handle = rItem.nWID;
         rVal.Value  = aAny;
         rVal.State  = PropertyState_DIRECT_VALUE ;

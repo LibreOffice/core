@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlistimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-27 10:23:02 $
+ *  last change: $Author: tl $ $Date: 2001-07-25 10:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,8 +422,8 @@ void DicList::searchForDictionaries( ActDicArray &rDicList,
         if (STRING_NOTFOUND != nPos)
             aTmp1 = aTmp1.Copy( nPos + 1 );
         String aTmp2;
-        INT32 j;
-        INT32  nCount = rDicList.Count();
+        USHORT j;
+        USHORT nCount = rDicList.Count();
         for(j = 0;  j < nCount;  j++)
         {
             aTmp2 = rDicList.GetObject( j ).xDic->getName().getStr();
@@ -456,8 +456,8 @@ INT32 DicList::getDicPos(const Reference< XDictionary > &xDic)
 
     INT32 nPos = -1;
     ActDicArray& rDicList = GetDicList();
-    INT32 n = rDicList.Count();
-    for (INT32 i = 0;  i < n;  i++)
+    USHORT n = rDicList.Count();
+    for (USHORT i = 0;  i < n;  i++)
     {
         if ( rDicList.GetObject(i).xDic == xDic )
             return i;
@@ -491,8 +491,8 @@ uno::Sequence< Reference< XDictionary > > SAL_CALL
     uno::Sequence< Reference< XDictionary > > aDics( rDicList.Count() );
     Reference< XDictionary > *pDic = aDics.getArray();
 
-    INT32 n = aDics.getLength();
-    for (INT32 i = 0;  i < n;  i++)
+    USHORT n = (USHORT) aDics.getLength();
+    for (USHORT i = 0;  i < n;  i++)
         pDic[i] = rDicList.GetObject(i).xDic;
 
     return aDics;
@@ -506,8 +506,8 @@ Reference< XDictionary > SAL_CALL
 
     Reference< XDictionary > xDic;
     ActDicArray& rDicList = GetDicList();
-    INT32 nCount = rDicList.Count();
-    for (INT32 i = 0;  i < nCount;  i++)
+    USHORT nCount = rDicList.Count();
+    for (USHORT i = 0;  i < nCount;  i++)
     {
         const Reference< XDictionary > &rDic = rDicList.GetObject(i).xDic;
         if (rDic.is()  &&  rDic->getName() == aDictionaryName)
@@ -557,7 +557,7 @@ sal_Bool SAL_CALL
     {
         // remove dictionary list from the dictionaries listener lists
         ActDicArray& rDicList = GetDicList();
-        Reference< XDictionary > xDic( rDicList.GetObject( nPos ).xDic );
+        Reference< XDictionary > xDic( rDicList.GetObject( (USHORT) nPos ).xDic );
         DBG_ASSERT(xDic.is(), "lng : empty reference");
         if (xDic.is())
         {
@@ -567,7 +567,7 @@ sal_Bool SAL_CALL
             xDic->removeDictionaryEventListener( xDicEvtLstnrHelper );
         }
 
-        rDicList.Remove(nPos);
+        rDicList.Remove( (USHORT) nPos );
         bRes = TRUE;
     }
     return bRes;
@@ -773,8 +773,8 @@ void DicList::SaveDics()
     {
         // save (modified) dictionaries
         ActDicArray& rDicList = GetDicList();
-        INT32 nCount = rDicList.Count();;
-        for (INT32 i = 0;  i < nCount;  i++)
+        USHORT nCount = rDicList.Count();;
+        for (USHORT i = 0;  i < nCount;  i++)
         {
             // save (modified) dictionaries
             Reference< frame::XStorable >  xStor( rDicList.GetObject(i).xDic,
@@ -926,7 +926,7 @@ static void AddInternal(
         static const char *pDefWordDelim =
                 "!\"#$%&'()*+,-./:;<=>?[]\\_^`{|}~\t \n";
         ByteString aDummy( pDefWordDelim );
-        String aDelim( aDummy , RTL_TEXTENCODING_MS_1252 );
+        String aDelim( aDummy, osl_getThreadTextEncoding() );
         aDelim.EraseAllChars( '.' );
 
         String      aToken;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-22 12:44:34 $
+ *  last change: $Author: tl $ $Date: 2001-07-25 10:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,16 +146,16 @@ namespace linguistic
 
 ///////////////////////////////////////////////////////////////////////////
 
-inline rtl_TextEncoding GetTextEncoding()   { return osl_getThreadTextEncoding(); }
+rtl_TextEncoding GetTextEncoding( INT16 nLanguage );
 
-inline ::rtl::OUString BS2OU(const ByteString &rText)
+inline ::rtl::OUString BS2OU(const ByteString &rText, rtl_TextEncoding nEnc)
 {
-    return ::rtl::OUString( rText.GetBuffer(), rText.Len(), GetTextEncoding() );
+    return ::rtl::OUString( rText.GetBuffer(), rText.Len(), nEnc );
 }
 
-inline ByteString OU2BS(const ::rtl::OUString &rText)
+inline ByteString OU2BS(const ::rtl::OUString &rText, rtl_TextEncoding nEnc)
 {
-    return ByteString( rText.getStr(), GetTextEncoding() );
+    return ByteString( rText.getStr(), nEnc );
 }
 
 ///////////////////////////////////////////////////////////////////////////
