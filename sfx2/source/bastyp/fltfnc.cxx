@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:40:51 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,10 +226,6 @@
 #include <vos/process.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/moduleoptions.hxx>
-
-#ifndef _L2TXTENC_HXX
-#include <tools/l2txtenc.hxx>
-#endif
 
 #include <rtl/logfile.hxx>
 
