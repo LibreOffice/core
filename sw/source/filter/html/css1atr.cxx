@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-11 11:33:26 $
+ *  last change: $Author: mib $ $Date: 2001-07-30 14:36:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1127,7 +1127,7 @@ USHORT SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
                 {
                     rToken.Assign( sHTML_tabledata );
                     rToken.Append( ' ' );
-                    rToken.Assign( sHTML_parabreak );
+                    rToken.Append( sHTML_parabreak );
                 }
                 else
                     rToken.Assign( sHTML_parabreak );
@@ -1136,8 +1136,8 @@ USHORT SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
                 if( pPseudo )
                 {
                     rToken.Assign( sHTML_tableheader );
-                    rToken.Assign( ' ' );
-                    rToken.Assign( sHTML_parabreak );
+                    rToken.Append( ' ' );
+                    rToken.Append( sHTML_parabreak );
                 }
                 else
                     rToken.Assign( sHTML_parabreak );
@@ -3495,6 +3495,9 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/07/11 11:33:26  mib
+      #89534#: Export faont-family and some other properties again
+
       Revision 1.7  2001/07/03 07:49:47  mib
       #88156#: warning for unconvertable chars
 
