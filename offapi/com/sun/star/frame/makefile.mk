@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-28 13:31:51 $
+#   last change: $Author: kz $ $Date: 2004-02-25 16:57:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -148,7 +148,7 @@ IDLFILES=\
     XTasksSupplier.idl\
     XTerminateListener.idl\
     XUrlList.idl\
-    XWindowArranger.idl\
+    XWindowArranger.idl
 
 # ------------------------------------------------------------------
 
