@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: aw $ $Date: 2001-12-13 15:57:04 $
+ *  last change: $Author: aw $ $Date: 2001-12-14 11:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,13 +453,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
             USHORT nOutlMode = pOutliner->GetMode();
             pOutliner->Init( OUTLINERMODE_TEXTOBJECT );
             pOutliner->SetMinDepth(0);
-
-            // #95114# Always set the object's StyleSheet at the Outliner to
-            // use the current objects StyleSheet. Thus it's the same as in
-            // SetText(...).
-            pOutliner->SetStyleSheet(0, pSdrObj->GetStyleSheet());
-            //pOutliner->SetStyleSheet( 0, NULL );
-
+            pOutliner->SetStyleSheet( 0, NULL );
             pOutliner->SetVertical( bVertical );
 
             String aEmptyStr;
@@ -2714,6 +2708,13 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner,
         BOOL bUpdateMode = pOutl->GetUpdateMode();
         pOutl->SetUpdateMode(FALSE);
         pOutl->SetParaAttribs( 0, pOutl->GetEmptyItemSet() );
+
+        // #95114# Always set the object's StyleSheet at the Outliner to
+        // use the current objects StyleSheet. Thus it's the same as in
+        // SetText(...).
+        // #95114# Moved this implementation from where SetObjText(...) was called
+        // to inside this method to work even when outliner is fetched here.
+        pOutl->SetStyleSheet(0, pObj->GetStyleSheet());
 
         String aString;
 
