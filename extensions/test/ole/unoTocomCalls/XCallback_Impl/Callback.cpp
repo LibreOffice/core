@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Callback.cpp,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:56 $
+ *  last change: $Author: jl $ $Date: 2000-10-20 15:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,11 +100,11 @@ STDMETHODIMP CCallback::outInterface(IDispatch **ppdisp)
 
 STDMETHODIMP CCallback::outValuesMixed(long val, long *pval, BSTR string)
 {
-
-    TCHAR buff[1024];
+    USES_CONVERSION;
+    char buff[1024];
     *pval = val+1;
-    wsprintf( buff, _T("param1: %d, param2 out: %d, param3: %s"), val, *pval, string);
-    MessageBox( NULL, buff, _T(""), MB_OK);
+    sprintf( buff, "param1: %d, param2 out: %d, param3: %S", val, *pval, string);
+    MessageBox( NULL, buff, A2T("XCallback_Impl.Callback"), MB_OK);
     return S_OK;
 }
 

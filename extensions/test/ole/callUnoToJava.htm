@@ -121,6 +121,16 @@ function callOleTest(	 id)
 		oletest.testInterface( new XCallback_Impl, 200);
 		break;
 
+		// Call a COM object that has not been passed as parameter to a UNO component and
+		// hence no type information are available in the COM wrapper
+//		case 300:
+		//##################################################
+		// Attributes
+		//##################################################
+		case 400:
+		oletest.testInterface( new XCallback_Impl, 400);
+		break;
+
 		case 1000:
 		oletest.testInterface2(new MultiInterface(), 0);
 		break;
@@ -179,6 +189,12 @@ function XCallback_Impl()
 	// IN parameter
 	//##################################################
 	this.inValues= XCallback_Impl_inValues;
+
+	// #################################################
+	// Attributes
+	//##################################################
+	this.simple= new XSimple_Impl();
+
 
 }
 
@@ -501,6 +517,10 @@ Other test with out parameters <br>
 <button onclick='callOleTest( 111)'>short</Button>
 <button onclick='callOleTest( 112)'>long</Button>
 <br>
+<h1> Attributes </h1>
+<button onclick='callOleTest( 400)'>getting XSimple</Button>
+<br>
+
 Other tests with inout parameters <br>
 <button onclick='callOleTest( 120)'>inoutValuesAll</Button>
 <h1>in parameters </h1>
@@ -508,6 +528,8 @@ Other tests with inout parameters <br>
 
 <h1> JScript object implements several interfaces </h1>
 <button onclick='callOleTest( 1000)'>go</Button>
+
+
 
 
 </body>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oletest.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2000-09-18 23:52:13 $
+ *  last change: $Author: jl $ $Date: 2000-10-20 15:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,6 +281,10 @@ interface XCallback: com::sun::star::uno::XInterface
 
     void inValues( [in] char aChar, [in] long aLong, [in] string aString);
     void inSeqByte( [in] sequence<byte> val);
+
+    // Attributes
+    [attribute] oletest::XSimple simple;
+
 
 
 

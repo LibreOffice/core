@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpnt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-19 11:17:03 $
+ *  last change: $Author: jl $ $Date: 2000-10-20 15:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1517,6 +1517,14 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
 
             break;
         }
+    // ############################################################################
+    // Attributes
+    // ############################################################################
+
+    case 400:
+        Reference<XSimple> simple=  xCallback->getsimple();
+        simple->func(L"OleTest calls on XSimple");
+        break;
 
 
 
