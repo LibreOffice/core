@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleCell.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $
+ *  last change: $Author: obo $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,6 @@ public class ScAccessibleCell extends TestCase {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = (XComponent)
             UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
-        oComp.dispose();
+        util.DesktopTools.closeDoc(oComp);
     }
 }
