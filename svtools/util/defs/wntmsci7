@@ -9554,3 +9554,16 @@ _real@8@3ffeccccccccccccd000
 ?ImplBrowseFile@FileControl@@AAEXXZ
 ?GetFocus@SvtFileView@@MAEXXZ
 ?OpenTemplateRoot@SvtTemplateWindow@@QAEXXZ
+?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXOutputStream@io@star@sun@com@@@2345@@Z
+?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXTypeProvider@lang@star@sun@com@@@2345@@Z
+?s_cd@?$WeakImplHelper1@VXOutputStream@io@star@sun@com@@@cppu@@0Uclass_data1@2@A
+?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@2345@@Z
+?s_cd@?$WeakImplHelper1@VXAttributeList@sax@xml@star@sun@com@@@cppu@@0Uclass_data1@2@A
+?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXPropertySetInfo@beans@star@sun@com@@@2345@@Z
+?s_cd@?$WeakImplHelper1@VXPropertySetInfo@beans@star@sun@com@@@cppu@@0Uclass_data1@2@A
+?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXEventListener@lang@star@sun@com@@@2345@@Z
+?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXPasswordContainer@task@star@sun@com@@@2345@@Z
+?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXServiceInfo@lang@star@sun@com@@@2345@@Z
+?s_cd@?$WeakImplHelper3@VXPasswordContainer@task@star@sun@com@@VXServiceInfo@lang@345@VXEventListener@7345@@cppu@@0Uclass_data3@2@A
+?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXConfigManager@frame@star@sun@com@@@2345@@Z
+?s_cd@?$WeakImplHelper2@VXConfigManager@frame@star@sun@com@@VXServiceInfo@lang@345@@cppu@@0Uclass_data2@2@A
