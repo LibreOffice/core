@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-04 10:41:58 $
+#   last change: $Author: vg $ $Date: 2003-06-12 09:50:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,12 @@ CONFIGURE_ACTION=..$/dist$/configure
 CONFIGURE_FLAGS=--enable-cxx --enable-java --enable-dynamic --enable-shared
 
 BUILD_DIR=$(CONFIGURE_DIR)
+.IF "$(OS)"=="IRIX"
+CONFIGURE_ACTION= $(CONFIG_SHELL) ..$/dist$/configure
+BUILD_ACTION=gmake
+.ELSE
 BUILD_ACTION=make
+.ENDIF
 
 OUT2LIB=$(BUILD_DIR)$/.libs$/libdb*$(DLLPOST)
 
@@ -97,7 +102,14 @@ EXT_USE_STLPORT=TRUE
 
 BUILD_DIR=build_win32
 .IF "$(COMEX)"=="8"
-BUILD_ACTION=wdevenv Berkeley_DB Release
+CONFIGURE_DIR=build_win32
+CONFIGURE_ACTION=wdevenv Berkeley_DB Release
+.IF "$(USE_SHELL)"!="4nt"
+BUILD_ACTION_SEP=;
+.ELSE # "$(USE_SHELL)"!="4nt"
+BUILD_ACTION_SEP=^
+.ENDIF # "$(USE_SHELL)"!="4nt"
+BUILD_ACTION=devenv Berkeley_DB.sln /build Release /project db_buildall /useenv $(BUILD_ACTION_SEP) devenv Berkeley_DB.sln /build Release /project db_java /useenv
 .ELSE
 BUILD_ACTION=msdev Berkeley_DB.dsw /useenv /MAKE "db_buildall - RELEASE" /MAKE "db_java - RELEASE"
 .ENDIF
