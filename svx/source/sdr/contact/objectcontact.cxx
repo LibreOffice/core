@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontact.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:39:43 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,6 +371,12 @@ namespace sdr
             {
                 mpViewObjectContactRedirector = pNew;
             }
+        }
+
+        // check if buffering of MasterPages is allowed. Default is sal_False.
+        sal_Bool ObjectContact::IsMasterPageBufferingAllowed() const
+        {
+            return sal_False;
         }
     } // end of namespace contact
 } // end of namespace sdr
