@@ -2,9 +2,9 @@
  *
  *  $RCSfile: romenu.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-08 19:15:04 $
+ *  last change: $Author: os $ $Date: 2001-05-15 10:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,9 +107,6 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
-#ifndef _IODLG_HXX
-#include <sfx2/iodlg.hxx>
-#endif
 #ifndef _XOUTBMP_HXX //autogen
 #include <svx/xoutbmp.hxx>
 #endif
@@ -176,6 +173,21 @@
 #ifndef _DOCVW_HRC
 #include <docvw.hrc>
 #endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
+#include <com/sun/star/ui/XFilePicker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/XFilterManager.hpp>
+#endif
+
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ui;
+
+#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 
 
 SwReadOnlyPopup::~SwReadOnlyPopup()
@@ -481,9 +493,19 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
     SvtPathOptions aPathOpt;
     String sGrfPath( aPathOpt.GetGraphicPath() );
     SwWrtShell &rSh = rView.GetWrtShell();
-    SfxFileDialog aExpDlg( NULL, WinBits(WB_SAVEAS|WB_3DLOOK) );
-    aExpDlg.DisableSaveLastDirectory();
-    aExpDlg.SetHelpId(HID_FILEDLG_ROMENU);
+    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+    Reference < XFilePicker > xFP;
+    if( xMgr.is() )
+    {
+        Sequence <Any> aProps(1);
+        aProps.getArray()[0] <<= C2U("FileSave");
+        xFP = Reference< XFilePicker >(
+                xMgr->createInstanceWithArguments(
+                    C2U( "com.sun.star.ui.FilePicker" ), aProps ),
+                UNO_QUERY );
+    }
+    DBG_ERROR("how to set help ids at com.sun.star.ui.FilePicker")
+//    aExpDlg.SetHelpId(HID_FILEDLG_ROMENU);
     INetURLObject aPath;
     aPath.SetSmartURL( sGrfPath);
 
@@ -509,8 +531,8 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
     INetURLObject aURL;
     aURL.SetSmartURL( aName );
     aPath.Append( aURL.GetName() );
-    aExpDlg.SetPath( aPath.GetMainURL() );
-    aExpDlg.SetText( SW_RESSTR(STR_EXPORT_GRAFIK_TITLE));
+    xFP->setDisplayDirectory( aPath.GetMainURL() );
+    xFP->setTitle( SW_RESSTR(STR_EXPORT_GRAFIK_TITLE));
 
     GraphicFilter& rGF = *GetGrfFilter();
     const USHORT nCount = rGF.GetExportFormatCount();
@@ -519,15 +541,14 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
     if( !aExt.Len() )
         lcl_GetPreferedExtension( aExt, aGraphic );
 
-    aExpDlg.SetDefaultExt( aExt );
     aExt.ToLowerAscii();
     int nDfltFilter = INT_MAX;
 
+    Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
+
     for ( int i = 0; i < nCount; i++ )
     {
-        aExpDlg.AddFilter( rGF.GetExportFormatName( i ),
-                            rGF.GetExportWildcard( i ),
-                            rGF.GetExportOSFileType( i ) );
+        xFltMgr->appendFilter( rGF.GetExportFormatName( i ), rGF.GetExportWildcard( i ) );
         if ( COMPARE_EQUAL == aExt.CompareIgnoreCaseToAscii(rGF.GetExportFormatShortName( i ).ToLowerAscii() ))
             nDfltFilter = i;
     }
@@ -545,17 +566,17 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
 
     if( INT_MAX != nDfltFilter )
     {
-        aExpDlg.SetCurFilter( rGF.GetExportFormatName( nDfltFilter ) );
+        xFltMgr->setCurrentFilter( rGF.GetExportFormatName( nDfltFilter ) ) ;
 
-        if( RET_OK == aExpDlg.Execute() )
+        if( RET_OK == xFP->execute() )
         {
-            String sPath( aExpDlg.GetPath() );
+            String sPath( xFP->getPath().getConstArray()[0] );
             //verwendeten Pfad merken - bitte nicht wieder wegoptimieren!
             aPath.SetSmartURL( sPath);
             sGrfPath = aPath.GetPath();
 
             if( sGrfName.Len() &&
-                 nDfltFilter == rGF.GetExportFormatNumber( aExpDlg.GetCurFilter()))
+                 nDfltFilter == rGF.GetExportFormatNumber( xFltMgr->getCurrentFilter()))
             {
                 //Versuchen die Originalgrafik zu speichern.
                 SfxMedium aIn( sGrfName, STREAM_READ | STREAM_NOCREATE,
@@ -579,8 +600,8 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
             }
 
             int nFilter;
-            if ( aExpDlg.GetCurFilter().Len() && rGF.GetExportFormatCount() )
-                nFilter = rGF.GetExportFormatNumber( aExpDlg.GetCurFilter() );
+            if ( xFltMgr->getCurrentFilter().getLength() && rGF.GetExportFormatCount() )
+                nFilter = rGF.GetExportFormatNumber( xFltMgr->getCurrentFilter() );
             else
                 nFilter = GRFILTER_FORMAT_DONTKNOW;
             String aFilter( rGF.GetExportFormatShortName( nFilter ) );
@@ -592,194 +613,5 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
     return aEmptyStr;
 }
 
-
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.4  2001/03/07 20:20:02  sj
-      api changes, GraphicFilter now using Configuration Management
-
-      Revision 1.3  2000/10/17 15:16:11  os
-      Change: SfxMedium Ctor
-
-      Revision 1.2  2000/10/06 13:33:32  jp
-      should changes: don't use IniManager
-
-      Revision 1.1.1.1  2000/09/18 17:14:35  hr
-      initial import
-
-      Revision 1.56  2000/09/18 16:05:24  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.55  2000/09/07 15:59:22  os
-      change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-      Revision 1.54  2000/04/19 12:56:34  os
-      include sfx2/filedlg.hxx removed
-
-      Revision 1.53  2000/04/18 15:18:17  os
-      UNICODE
-
-      Revision 1.52  2000/03/03 15:17:00  os
-      StarView remainders removed
-
-      Revision 1.51  2000/02/11 14:45:03  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.50  2000/01/24 12:49:10  os
-      #72153# call SfxFileDialog::DisableSaveLastDirectory
-
-      Revision 1.49  1999/03/08 10:51:04  JP
-      Bug #62925#: ImageMap/INetImage mit ins Clipboard stellen
-
-
-      Rev 1.48   08 Mar 1999 11:51:04   JP
-   Bug #62925#: ImageMap/INetImage mit ins Clipboard stellen
-
-      Rev 1.47   25 Nov 1998 13:56:30   OS
-   #59809# Grafik-Pfad wieder merken
-
-      Rev 1.46   26 Oct 1998 16:16:06   OS
-   #58159# Reload und ReloadFrame im ReadOnlyPopup
-
-      Rev 1.45   21 Oct 1998 13:23:26   OM
-   #58267# Slotstatus ueber Bindings abfragen
-
-      Rev 1.44   02 Sep 1998 14:11:48   OM
-   #45378# HelpIDs fuer Dateidialoge
-
-      Rev 1.43   12 Aug 1998 09:41:54   MA
-   #54165# Phantasie-Extensions verarbeiten
-
-      Rev 1.42   11 Aug 1998 14:15:24   JP
-   Bug #54446#: bei embeddeten Grafiken, das default Format aus der Grafik besorgen
-
-      Rev 1.41   05 Aug 1998 12:42:10   JP
-   Bug #54446#: bei embeddeten Grafiken keine leeren Dateien erzeugen
-
-      Rev 1.40   30 Jul 1998 22:15:16   JP
-   Bug #54446# auch nicht gelinkte Grafiken speichern
-
-      Rev 1.39   30 Jun 1998 17:47:44   MA
-   RemoveDisabledEntries genutzt
-
-      Rev 1.38   07 May 1998 17:58:42   MA
-   PlugIn fuer WNT wieder aktiv
-
-      Rev 1.37   29 Apr 1998 18:30:26   MA
-   #49873# so macht man das also
-
-      Rev 1.36   28 Apr 1998 15:07:54   MA
-   chg: PathToFileName statt GetFull am URL-Objekt
-
-      Rev 1.35   16 Apr 1998 08:15:10   OS
-   nach Grafiken einschalten evtl. Modify-Flag zuruecksetzen#49488#
-
-      Rev 1.34   25 Mar 1998 14:24:12   OS
-   im ReadonlyUI-Zustand der Globaldokumente Bearbeiten nicht moeglich #48871#
-
-      Rev 1.33   25 Nov 1997 10:32:58   MA
-   includes
-
-      Rev 1.32   16 Oct 1997 12:03:08   OS
-   PlugIn nicht im VCL
-
-      Rev 1.31   12 Sep 1997 10:38:44   OS
-   ITEMID_* definiert
-
-      Rev 1.30   02 Sep 1997 13:20:48   OS
-   includes
-
-      Rev 1.29   29 Aug 1997 16:03:32   OS
-   PopupMenu::Execute mit Window* fuer VCL
-
-      Rev 1.28   29 Aug 1997 14:35:36   OS
-   DLL-Umbau
-
-      Rev 1.27   15 Aug 1997 12:09:56   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.26   12 Aug 1997 15:59:04   OS
-   frmitems/textitem/paraitem aufgeteilt
-
-      Rev 1.25   12 Aug 1997 12:40:30   MA
-   #41880# Original der Grafiken speichern
-
-      Rev 1.24   08 Aug 1997 17:30:12   OM
-   Headerfile-Umstellung
-
-      Rev 1.23   07 Aug 1997 15:00:18   OM
-   Headerfile-Umstellung
-
-      Rev 1.22   06 Aug 1997 10:18:12   OS
-   FN_SOURCEVIEW->SID_SOURCEVIEW
-
-      Rev 1.21   27 May 1997 13:22:10   OS
-   FN_SOURCEVIEW im Popup
-
-      Rev 1.20   15 Apr 1997 14:14:24   OS
-   Status fuer EDITDOC an den Bindings erfragen
-
-      Rev 1.19   20 Mar 1997 16:59:42   MA
-   fix: richtige Extension und damit Filtererkennung reanimiert
-
-      Rev 1.18   18 Mar 1997 14:40:18   OS
-   letzten Save-Pfad merken und am Dialog richtig einstellen
-
-      Rev 1.17   23 Feb 1997 17:56:50   MA
-   #36840# mit den Separatoren aufraeumen.
-
-      Rev 1.16   14 Feb 1997 19:42:26   MA
-   new: Flag fuer Readonly-Gallery
-
-      Rev 1.15   12 Feb 1997 17:05:36   MA
-   #36004# Background disablen
-
-      Rev 1.14   10 Feb 1997 16:48:10   MA
-   fix: BackgroundToGallery ggf. disablen
-
-      Rev 1.13   06 Feb 1997 08:24:02   MA
-   BackgroundToGallery, removen disableter Items
-
-      Rev 1.12   04 Feb 1997 16:04:18   MA
-   chg: Aufnehmen in Gallery
-
-      Rev 1.11   02 Dec 1996 08:32:00   TRI
-   SfxPoolItem const gemacht
-
-      Rev 1.10   29 Nov 1996 10:20:36   MA
-   fix: dontexpandfilename
-
-      Rev 1.9   28 Nov 1996 18:15:00   HJS
-   cast fuer os2
-
-      Rev 1.8   28 Nov 1996 14:20:32   MA
-   fix: Grafiken speichern, fehlt noch der TempName
-
-      Rev 1.7   21 Nov 1996 20:07:08   MA
-   chg: neue Eintraege
-
-      Rev 1.6   18 Nov 1996 18:22:08   MA
-   chg: SfxFileDialog statt FileDialog
-
-      Rev 1.5   11 Nov 1996 09:39:32   MA
-   ResMgr
-
-      Rev 1.4   24 Oct 1996 15:37:18   MA
-   chg: Filter per Extension detecten
-
-      Rev 1.3   22 Oct 1996 12:27:50   MA
-   new: Namen und Filter defaulten
-
-      Rev 1.2   24 Sep 1996 16:45:16   OS
-   OS/2-Absturz behoben; richtiges enablen
-
-      Rev 1.1   18 Sep 1996 18:20:12   MA
-   #31458# Dispatcher statt Bindings
-
-      Rev 1.0   16 Sep 1996 14:56:38   MA
-   new: Readonly-Popup
-
-*************************************************************************/
 
 
