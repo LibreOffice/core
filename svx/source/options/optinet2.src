@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-02-08 16:47:32 $
+ *  last change: $Author: pb $ $Date: 2001-02-27 11:49:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1830,8 +1830,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     {
         Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X , GB_SCRIPT_EXEC_Y ) ;
         Size = MAP_APPFONT ( 248 , 107 ) ;
-        Text = "StarBasic-Scripts ausführen von" ;
-        Text [ English ] = "Execute StarBasic Scripts from" ;
+        Text = "%PRODUCTNAME Basic-Scripte ausführen von" ;
+        Text [ English ] = "Execute %PRODUCTNAME Basic Scripts from" ;
         Text [ english_us ] = "Execute %PRODUCTNAME Basic Scripts from" ;
         Text [ portuguese_brazilian ] = "Star Basic-Scripts ausführen von" ;
         Text [ swedish ] = "Utför %PRODUCTNAME Basic-skript från" ;
@@ -1949,8 +1949,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     {
         Pos = MAP_APPFONT ( GB_SCRIPTING_X , GB_SCRIPTING_Y ) ;
         Size = MAP_APPFONT ( 248 , 69 ) ;
-        Text = "StarBasic-Script" ;
-        Text [ English ] = "StarBasic Script" ;
+        Text = "%PRODUCTNAME Basic-Script" ;
+        Text [ English ] = "%PRODUCTNAME Basic Script" ;
         Text [ english_us ] = "%PRODUCTNAME Basic Script" ;
         Text [ portuguese_brazilian ] = "%PRODUCTNAME Basic-Script" ;
         Text [ swedish ] = "%PRODUCTNAME Basic-skript" ;
@@ -2055,8 +2055,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 240 , 16 ) ;
         WordBreak = TRUE ;
         Hide = TRUE ;
-        Text = "ACHTUNG: StarBasic-Scripte aus dem Internet werden ohne Überprüfung ausgeführt!" ;
-        Text [ English ] = "ATTENTION: StarBasic scripts from the Internet will be executet without check!" ;
+        Text = "ACHTUNG: %PRODUCTNAME Basic-Scripte aus dem Internet werden ohne Überprüfung ausgeführt!" ;
+        Text [ English ] = "NOTE: %PRODUCTNAME Basic scripts from the Internet will be executed without confirming!" ;
         Text [ english_us ] = "NOTE: %PRODUCTNAME Basic scripts from the Internet will be executed without confirming!" ;
         Text [ portuguese_brazilian ] = "ACHTUNG: %PRODUCTNAME Basic-Scripte aus dem Internet werden ohne Überprüfung ausgeführt!" ;
         Text [ swedish ] = "OBS: %PRODUCTNAME Basic-skript från Internet utförs utan kontroll!" ;
@@ -2083,8 +2083,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 240 , 16 ) ;
         WordBreak = TRUE ;
         Hide = TRUE ;
-        Text = "StarBasic-Scripte werden nur aus Verzeichnissen der Liste ausgeführt." ;
-        Text [ English ] = "StarBasic scripts will be executet only from directories from the list." ;
+        Text = "%PRODUCTNAME Basic-Scripte werden nur aus Verzeichnissen der Liste ausgeführt." ;
+        Text [ English ] = "%PRODUCTNAME Basic scripts will be executed only from directories in the list." ;
         Text [ english_us ] = "%PRODUCTNAME Basic scripts will be executed only from directories in the list." ;
         Text [ portuguese_brazilian ] = "%PRODUCTNAME Basic-Scripte werden nur aus Verzeichnissen der Liste ausgeführt." ;
         Text [ swedish ] = "%PRODUCTNAME Basic-skript utförs endast från katalogerna i listan." ;
@@ -2111,8 +2111,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 240 , 16 ) ;
         WordBreak = TRUE ;
         Hide = TRUE ;
-        Text = "Es werden kein StarBasic-Scripte ausgeführt." ;
-        Text [ English ] = "StarBasic scripts won't be executed." ;
+        Text = "Es werden keine %PRODUCTNAME Basic-Scripte ausgeführt." ;
+        Text [ English ] = "%PRODUCTNAME Basic scripts won't be executed." ;
         Text [ english_us ] = "%PRODUCTNAME Basic scripts won't be executed." ;
         Text [ portuguese_brazilian ] = "Es werden kein %PRODUCTNAME Basic-Scripte ausgeführt." ;
         Text [ swedish ] = "Inga %PRODUCTNAME Basic-skript utförs." ;
