@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:55:41 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 #include <tools/urlobj.hxx>
 
 #include <vcl/msgbox.hxx>
-#include <vcl/fonttype.hxx>
+#include <vcl/vclenum.hxx>
 
 #include "globstr.hrc"
 #include "scmod.hxx"
