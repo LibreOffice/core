@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-01 10:31:47 $
+ *  last change: $Author: jp $ $Date: 2001-07-05 10:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef _SV_TIMER_HXX //autogen
 #include <vcl/timer.hxx>
 #endif
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
+#endif
 #ifndef _MyEDITDATA_HXX //autogen
 #include <svx/editdata.hxx>
 #endif
@@ -88,7 +91,7 @@ class Menu;
 
 /**************************************************************************/
 
-class SmEditWindow: public Window
+class SmEditWindow : public Window, public DropTargetHelper
 {
     EditView       *pEditView;
     ScrollBar      *pHScrollBar,
@@ -112,8 +115,8 @@ class SmEditWindow: public Window
     virtual void MouseButtonUp(const MouseEvent &rEvt);
     virtual void MouseButtonDown(const MouseEvent &rEvt);
 
-    virtual BOOL Drop(const DropEvent& rEvt);
-    virtual BOOL QueryDrop(DropEvent & rEvt);
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
     virtual void Paint(const Rectangle& rRect);
 
     DECL_LINK(EditStatusHdl ,EditStatus *);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-30 13:08:10 $
+ *  last change: $Author: jp $ $Date: 2001-07-05 10:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,6 @@ class SmSymSetManager;
 class SfxPrinter;
 class Printer;
 
-
 #ifndef SO2_DECL_SVSTORAGESTREAM_DEFINED
 #define SO2_DECL_SVSTORAGESTREAM_DEFINED
 SO2_DECL_REF(SvStorageStream)
@@ -191,7 +190,6 @@ class SmDocShell : public SfxObjectShell, public SfxInPlaceObject,
                              const JobSetup & rSetup,
                              USHORT nAspect = ASPECT_CONTENT);
 
-    virtual void        FillRegInfo(SvEmbeddedRegistryInfo * pInfo);
     virtual void        FillClass(SvGlobalName* pClassName,
                                   ULONG*  pFormat,
                                   String* pAppName,
