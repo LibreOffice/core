@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcommuni.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:09:15 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,6 @@
 #include "rcontrol.hxx"
 #include "tcommuni.hxx"
 #include <basic/testtool.hxx>
-#include <basic/process.hxx>
 
 CommunicationManagerClientViaSocketTT::CommunicationManagerClientViaSocketTT()
 : CommunicationManagerClientViaSocket( TRUE )
@@ -101,10 +100,11 @@ BOOL CommunicationManagerClientViaSocketTT::StartCommunication()
 }
 
 
-BOOL CommunicationManagerClientViaSocketTT::StartCommunication( String aApp, String aParams )
+BOOL CommunicationManagerClientViaSocketTT::StartCommunication( String aApp, String aParams, Environment *pChildEnv )
 {
     aAppPath = aApp;
     aAppParams = aParams;
+    aAppEnv = (*pChildEnv);
     return StartCommunication();
 }
 
@@ -119,7 +119,7 @@ BOOL CommunicationManagerClientViaSocketTT::RetryConnect()
             delete pProcess;
 
             pProcess = new Process();
-            pProcess->SetImage( aAppPath, aAppParams );
+            pProcess->SetImage( aAppPath, aAppParams, &aAppEnv );
 
             BOOL bSucc = pProcess->Start();
             bApplicationStarted = TRUE;
@@ -193,7 +193,7 @@ ULONG GetTTPortConfig()
           )
         {
             aPortToTalk = Application::GetCommandLineParam( i ).Copy(6);
-            return aPortToTalk.ToInt64();
+            return (ULONG)aPortToTalk.ToInt64();
         }
     }
 
@@ -202,7 +202,7 @@ ULONG GetTTPortConfig()
     aConf.SetGroup("Communication");
 
     GETSET( abPortToTalk, "TTPort", ByteString::CreateFromInt32( TESTTOOL_DEFAULT_PORT ) );
-    return abPortToTalk.ToInt64();
+    return (ULONG)abPortToTalk.ToInt64();
 }
 
 
@@ -219,7 +219,7 @@ ULONG GetUnoPortConfig()
           )
         {
             aPortToTalk = Application::GetCommandLineParam( i ).Copy(6);
-            return aPortToTalk.ToInt64();
+            return (ULONG)aPortToTalk.ToInt64();
         }
     }
 
@@ -228,5 +228,5 @@ ULONG GetUnoPortConfig()
     aConf.SetGroup("Communication");
 
     GETSET( abPortToTalk, "UnoPort", ByteString::CreateFromInt32( UNO_DEFAULT_PORT ) );
-    return abPortToTalk.ToInt64();
+    return (ULONG)abPortToTalk.ToInt64();
 }
