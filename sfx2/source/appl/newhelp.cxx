@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:34:47 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 11:31:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2215,11 +2215,29 @@ sal_Bool SfxHelpTextWindow_Impl::HasSelection() const
     return bRet;
 }
 
+static sal_Int16 GetCurrentSymbolSet()
+{
+    sal_Int16   eOptSymbolSet = SvtMiscOptions().GetSymbolSet();
+
+    if ( eOptSymbolSet == SFX_SYMBOLS_AUTO )
+    {
+        // Use system settings, we have to retrieve the toolbar icon size from the
+        // Application class
+        ULONG nStyleIconSize = Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
+        if ( nStyleIconSize == STYLE_TOOLBAR_ICONSIZE_LARGE )
+            eOptSymbolSet = SFX_SYMBOLS_LARGE;
+        else
+            eOptSymbolSet = SFX_SYMBOLS_SMALL;
+    }
+
+    return eOptSymbolSet;
+}
+
 // -----------------------------------------------------------------------
 
 void SfxHelpTextWindow_Impl::InitToolBoxImages()
 {
-    sal_Bool bLarge = ( SfxImageManager::GetCurrentSymbolSet() == SFX_SYMBOLS_LARGE );
+    sal_Bool bLarge = ( GetCurrentSymbolSet() == SFX_SYMBOLS_LARGE );
     sal_Bool bHiContrast = GetBackground().GetColor().IsDark();
 
     aIndexOnImage = Image( SfxResId(
