@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_char.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 15:02:43 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:43:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ TabDialog TAB_CHAR
                 Text[ korean ] = "±Û²Ã";
                 Text[ turkish ] = "Yazýtipi";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Fuente";
             };
             PageItem
             {
@@ -143,6 +144,7 @@ TabDialog TAB_CHAR
                 Text[ korean ] = "±Û²Ã È¿°ú";
                 Text[ turkish ] = "Yazýtipi efekti";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Efectos de fuente";
             };
             PageItem
             {
@@ -168,6 +170,7 @@ TabDialog TAB_CHAR
                 Text[ chinese_traditional ] = "¦ì¸m";
                 Text[ turkish ] = "Position";
                 Text[ arabic ] = "ÇáãæÖÚ";
+                Text[ catalan ] = "Posición";
             };
         };
     };
@@ -218,6 +221,7 @@ TabDialog TAB_CHAR
         Text[ korean ] = "µÇµ¹¾Æ °¡±â";
         Text[ turkish ] = "Geri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Regresar";
     };
     Text[ chinese_simplified ] = "×Ö·û";
     Text[ russian ] = "Çíàêè";
@@ -229,4 +233,5 @@ TabDialog TAB_CHAR
     Text[ korean ] = "¹®ÀÚ";
     Text[ turkish ] = "Yazýtipi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Caracteres";
 };
