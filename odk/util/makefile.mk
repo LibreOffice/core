@@ -122,7 +122,6 @@ deliver .PHONY :
     +-$(MY_COPY)  $(BINOUT)$/unoidl$(EXEPOSTFIX) $(DESTDIRBIN)
     +-$(MY_COPY)  $(BINOUT)$/javamaker$(EXEPOSTFIX) $(DESTDIRBIN)
     +-$(MY_COPY)  $(BINOUT)$/uno$(EXEPOSTFIX) $(DESTDIRBIN)
-
 # ------------------------------------------------------------------------------------
 #           S H A R E D  L I B R I E S
 # ------------------------------------------------------------------------------------
