@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fulinend.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-17 16:26:55 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,9 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
+
+#include "fulinend.hxx"
 
 #ifndef _XTABLE_HXX
 #include <svx/xtable.hxx>
@@ -79,18 +80,20 @@
 #endif
 
 #include "strings.hrc"
-
-#ifndef _SD_VIEWSHEL_HXX
-#include "viewshel.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
 #endif
-
-
 #include "helpids.h"
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
-#include "sdview.hxx"
-#include "sdwindow.hxx"
-#include "fulinend.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_WINDOW_SHELL_HXX
+#include "Window.hxx"
+#endif
+
+namespace sd {
 
 #define BITMAP_WIDTH  32
 #define BITMAP_HEIGHT 12
@@ -103,7 +106,7 @@ TYPEINIT1( FuLineEnd, FuPoor );
 |*
 \************************************************************************/
 
-FuLineEnd::FuLineEnd(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
+FuLineEnd::FuLineEnd(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
                     SdDrawDocument* pDoc, SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
@@ -229,3 +232,4 @@ FuLineEnd::FuLineEnd(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 }
 
 
+} // end of namespace sd
