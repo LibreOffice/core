@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMultiPropertyStates.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:06:25 $
+ *  last change: $Author: mi $ $Date: 2001-11-22 16:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,10 @@ interface XMultiPropertyStates: com::sun::star::uno::XInterface
 
         <p>The order of the states is correlating to the order of the
         given property names.
+
+        @param aPropertyName
+            specifies the names of the properties. All names must be unique.
+            This sequence must be alphabetically sorted.
     */
     sequence<com::sun::star::beans::PropertyState> getPropertyStates(
             [in] sequence<string> aPropertyName )
@@ -127,8 +131,9 @@ interface XMultiPropertyStates: com::sun::star::uno::XInterface
         the change events are fired.  If it is a constrained property, you
         must fire the vetoable event before you change the property value. </p>
 
-        @param aPropertyNames
-            specifies the names of the properties.
+        @param aPropertyName
+            specifies the names of the properties. All names must be unique.
+            This sequence must be alphabetically sorted.
 
         @throws UnknownPropertyException
             if one of the properties does not exist.
@@ -144,8 +149,9 @@ interface XMultiPropertyStates: com::sun::star::uno::XInterface
         then the return type at the corresponding position in the
         sequence returned is <type>void</type>. </p>
 
-        @param aPropertyNames
-            specifies the names of the properties.
+        @param aPropertyName
+            specifies the names of the properties. All names must be unique.
+            This sequence must be alphabetically sorted.
 
         @throws UnknownPropertyException
             if one of the propertes does not exist.
