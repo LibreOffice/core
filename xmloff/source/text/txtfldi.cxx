@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
+ *  last change: $Author: dvo $ $Date: 2000-12-05 15:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3173,7 +3173,7 @@ void XMLBibliographyFieldImportContext::StartElement(
                 if (SvXMLUnitConverter::convertEnum(nTmp, sLocalName,
                                                     aBibliographyDataFieldMap))
                 {
-                    aAny <<= nTmp;
+                    aAny <<= (sal_Int16)nTmp;
                     aValue.Value = aAny;
 
                     aValues.push_back(aValue);
