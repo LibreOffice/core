@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgexpor.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-24 20:06:10 $
+ *  last change: $Author: rt $ $Date: 2001-08-08 09:00:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,14 +84,14 @@ ModalDialog DLG_EXPORT_PIX
         Text [ spanish ] = "Resolución del color" ;
         Text [ french ] = "Résolution couleur" ;
         Text [ dutch ] = "Kleurdichtheid" ;
-        Text[ chinese_simplified ] = "²ÊÉ«·Ö±æÂÊ";
+        Text[ chinese_simplified ] = "å½©è‰²åˆ†è¾¨ç‡";
         Text[ russian ] = "Öâåòîâîå ğàçğåøåíèå";
         Text[ polish ] = "Rozdzielczoœæ kolorów";
-        Text[ japanese ] = "F‚Ì‰ğ‘œ“x";
-        Text[ chinese_traditional ] = "±m¦â¸ÑªR«×";
+        Text[ japanese ] = "è‰²ã®è§£åƒåº¦";
+        Text[ chinese_traditional ] = "å½©è‰²è§£æåº¦";
         Text[ arabic ] = "ÇÓÊÈÇäÉ Çááæä";
         Text[ greek ] = "ÁíÜëõóç ÷ñùìÜôùí";
-        Text[ korean ] = "ÄÃ·¯ ÇØ»óµµ";
+        Text[ korean ] = "ì»¬ëŸ¬ í•´ìƒë„";
         Text[ turkish ] = "Renk çözünürlüğü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Resolución del color";
@@ -227,14 +227,14 @@ ModalDialog DLG_EXPORT_PIX
         };
     StringList [ chinese_simplified ] =
     {
-    < "Ô­¼ş" ; Default ; > ;
-        < "1 Î»³õÊ¼Öµ" ; Default ; > ;
-        < "1 Î»¶¶¶¯" ; Default ; > ;
-        < "4 Î»»Ò¶Èµ÷É«°å" ; Default ; > ;
-        < "4 Î»µ÷É«°å" ; Default ; > ;
-        < "8 Î»»Ò¶Èµ÷É«°å" ; Default ; > ;
-        < "8 Î»µ÷É«°å" ; Default ; > ;
-        < "24 Î»·ÂÕæÑÕÉ«" ; Default ; > ;
+    < "åŸä»¶" ; Default ; > ;
+        < "1 ä½åˆå§‹å€¼" ; Default ; > ;
+        < "1 ä½æŠ–åŠ¨" ; Default ; > ;
+        < "4 ä½ç°åº¦è°ƒè‰²æ¿" ; Default ; > ;
+        < "4 ä½è°ƒè‰²æ¿" ; Default ; > ;
+        < "8 ä½ç°åº¦è°ƒè‰²æ¿" ; Default ; > ;
+        < "8 ä½è°ƒè‰²æ¿" ; Default ; > ;
+        < "24 ä½ä»¿çœŸé¢œè‰²" ; Default ; > ;
     };
     StringList [ russian ] =
     {
@@ -260,25 +260,25 @@ ModalDialog DLG_EXPORT_PIX
     };
     StringList [ japanese ] =
     {
-            < "µØ¼ŞÅÙ" ; Default ; > ;
-        < "1Bit ‚µ‚«‚¢’l" ; Default ; > ;
-        < "1Bit ÃŞ¨»Ş–@" ; Default ; > ;
-        < "4Bit-¸ŞÚ°½¹°Ù" ; Default ; > ;
-        < "4Bit-¶×°ÊßÚ¯Ä" ; Default ; > ;
-        < "8Bit-¸ŞÚ°½¹°Ù" ; Default ; > ;
-        < "8Bit-¶×°ÊßÚ¯Ä" ; Default ; > ;
+            < "ï½µï¾˜ï½¼ï¾ï¾…ï¾™" ; Default ; > ;
+        < "1Bit ã—ãã„å€¤" ; Default ; > ;
+        < "1Bit ï¾ƒï¾ï½¨ï½»ï¾æ³•" ; Default ; > ;
+        < "4Bit-ï½¸ï¾ï¾šï½°ï½½ï½¹ï½°ï¾™" ; Default ; > ;
+        < "4Bit-ï½¶ï¾—ï½°ï¾Šï¾Ÿï¾šï½¯ï¾„" ; Default ; > ;
+        < "8Bit-ï½¸ï¾ï¾šï½°ï½½ï½¹ï½°ï¾™" ; Default ; > ;
+        < "8Bit-ï½¶ï¾—ï½°ï¾Šï¾Ÿï¾šï½¯ï¾„" ; Default ; > ;
         < "24Bit ~True Color" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "­ì¥ó" ; Default ; > ;
-        < "1 ¦ì¤¸ªì©l­È" ; Default ; > ;
-        < "1 ¦ì¤¸§İ°Ê" ; Default ; > ;
-        < "4 ¦ì¤¸¦Ç¶¥¦âªO" ; Default ; > ;
-        < "4 ¦ì¤¸¦âªO" ; Default ; > ;
-        < "8 ¦ì¤¸¦Ç¶¥¦âªO" ; Default ; > ;
-        < "8 ¦ì¤¸¦âªO" ; Default ; > ;
-        < "24 ¦ì¤¸¥ş±m" ; Default ; > ;
+            < "åŸä»¶" ; Default ; > ;
+        < "1 ä½å…ƒåˆå§‹å€¼" ; Default ; > ;
+        < "1 ä½å…ƒæŠ–å‹•" ; Default ; > ;
+        < "4 ä½å…ƒç°éšè‰²æ¿" ; Default ; > ;
+        < "4 ä½å…ƒè‰²æ¿" ; Default ; > ;
+        < "8 ä½å…ƒç°éšè‰²æ¿" ; Default ; > ;
+        < "8 ä½å…ƒè‰²æ¿" ; Default ; > ;
+        < "24 ä½å…ƒå…¨å½©" ; Default ; > ;
     };
     StringList [ arabic ] =
     {
@@ -304,14 +304,14 @@ ModalDialog DLG_EXPORT_PIX
     };
     StringList [ korean ] =
     {
-            < "¿øº»" ; Default ; > ;
-        < "1 ºñÆ®- ÀÓ°è°ª" ; Default ; > ;
-        < "1ºñÆ® - µğ´õ¸µ" ; Default ; > ;
-        < "4 ºñÆ® - È¸»öµµÆÈ·¹Æ®" ; Default ; > ;
-        < "4 ºñÆ® - »ö»ó ÆÈ·¹Æ®" ; Default ; > ;
-        < "8 ºñÆ® - È¸»öµµ ÆÈ·¹Æ®" ; Default ; > ;
-        < "8 ºñÆ®-»ö»ó ÆÈ·¹Æ®" ; Default ; > ;
-        < "24 ºñÆ® - Æ®·ç ÄÃ·¯" ; Default ; > ;
+            < "ì›ë³¸" ; Default ; > ;
+        < "1 ë¹„íŠ¸- ì„ê³„ê°’" ; Default ; > ;
+        < "1ë¹„íŠ¸ - ë””ë”ë§" ; Default ; > ;
+        < "4 ë¹„íŠ¸ - íšŒìƒ‰ë„íŒ”ë ˆíŠ¸" ; Default ; > ;
+        < "4 ë¹„íŠ¸ - ìƒ‰ìƒ íŒ”ë ˆíŠ¸" ; Default ; > ;
+        < "8 ë¹„íŠ¸ - íšŒìƒ‰ë„ íŒ”ë ˆíŠ¸" ; Default ; > ;
+        < "8 ë¹„íŠ¸-ìƒ‰ìƒ íŒ”ë ˆíŠ¸" ; Default ; > ;
+        < "24 ë¹„íŠ¸ - íŠ¸ë£¨ ì»¬ëŸ¬" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -374,14 +374,14 @@ ModalDialog DLG_EXPORT_PIX
         Text [ french ] = "Code RLE" ;
         Text [ dutch ] = "RLE-codering" ;
         Text [ portuguese ] = "Codificação RLE" ;
-        Text[ chinese_simplified ] = "RLE - ±àÂë";
+        Text[ chinese_simplified ] = "RLE - ç¼–ç ";
         Text[ russian ] = "Êîäèğîâêà RLE";
         Text[ polish ] = "Kodowanie RLE";
-        Text[ japanese ] = "RLE º°ÃŞ¨İ¸Ş";
-        Text[ chinese_traditional ] = "RLE ½s½X";
+        Text[ japanese ] = "RLE ï½ºï½°ï¾ƒï¾ï½¨ï¾ï½¸ï¾";
+        Text[ chinese_traditional ] = "RLE ç·¨ç¢¼";
         Text[ arabic ] = "ÊÑãíÒ RLE";
         Text[ greek ] = "Êùäéêïğïßçóç RLE";
-        Text[ korean ] = "RLE ÄÚµù";
+        Text[ korean ] = "RLE ì½”ë”©";
         Text[ turkish ] = "RLE kodlama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Codificación RLE";
@@ -402,14 +402,14 @@ ModalDialog DLG_EXPORT_PIX
         Text [ danish ] = "Modus" ;
         Text [ portuguese ] = "Modo" ;
         Text [ portuguese_brazilian ] = "Modus" ;
-        Text[ chinese_simplified ] = "Ä£Ê½";
+        Text[ chinese_simplified ] = "æ¨¡å¼";
         Text[ russian ] = "Ğåæèì";
         Text[ polish ] = "Tryb";
-        Text[ japanese ] = "Ó°ÄŞ";
-        Text[ chinese_traditional ] = "¼Ò¦¡";
+        Text[ japanese ] = "ï¾“ï½°ï¾„ï¾";
+        Text[ chinese_traditional ] = "æ¨¡å¼";
         Text[ arabic ] = "ÇáæÖÚ";
         Text[ greek ] = "ÊáôÜóôáóç";
-        Text[ korean ] = "¸ğµå";
+        Text[ korean ] = "ëª¨ë“œ";
         Text[ turkish ] = "Kip";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Modo";
@@ -431,14 +431,14 @@ ModalDialog DLG_EXPORT_PIX
         Text [ danish ] = "Original" ;
         Text [ portuguese ] = "~Original" ;
         Text [ portuguese_brazilian ] = "~Original" ;
-        Text[ chinese_simplified ] = "Ô­¼ş(~O)";
+        Text[ chinese_simplified ] = "åŸä»¶(~O)";
         Text[ russian ] = "Îğèãèíàë";
         Text[ polish ] = "Orygina³";
-        Text[ japanese ] = "µØ¼ŞÅÙ(~O)";
-        Text[ chinese_traditional ] = "­ì¥ó(~O)";
+        Text[ japanese ] = "ï½µï¾˜ï½¼ï¾ï¾…ï¾™(~O)";
+        Text[ chinese_traditional ] = "åŸä»¶(~O)";
         Text[ arabic ] = "ÇáÃÕá";
         Text[ greek ] = "Áñ÷éêü";
-        Text[ korean ] = "¿øº»(~O)";
+        Text[ korean ] = "ì›ë³¸(~O)";
         Text[ turkish ] = "~Asıl";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Original";
@@ -460,14 +460,14 @@ ModalDialog DLG_EXPORT_PIX
         Text [ danish ] = "Opløsning" ;
         Text [ portuguese ] = "~Resolução" ;
         Text [ portuguese_brazilian ] = "~Aufl?ung" ;
-        Text[ chinese_simplified ] = "·Ö±æÂÊ(~R)";
+        Text[ chinese_simplified ] = "åˆ†è¾¨ç‡(~R)";
         Text[ russian ] = "Ğàçğåøåíèå";
         Text[ polish ] = "Rozdzielczoœæ";
-        Text[ japanese ] = "‰ğ‘œ“x(~R)";
-        Text[ chinese_traditional ] = "¸ÑªR«×(~R)";
+        Text[ japanese ] = "è§£åƒåº¦(~R)";
+        Text[ chinese_traditional ] = "è§£æåº¦(~R)";
         Text[ arabic ] = "ÇáÇÓÊÈÇäÉ";
         Text[ greek ] = "ÁíÜëõóç";
-        Text[ korean ] = "ÇØ»óµµ(~R)";
+        Text[ korean ] = "í•´ìƒë„(~R)";
         Text[ turkish ] = "~Çözünürlük";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Resolución";
@@ -503,14 +503,14 @@ ModalDialog DLG_EXPORT_PIX
         Text [ danish ] = "Størrelse" ;
         Text [ portuguese ] = "~Tamanho" ;
         Text [ portuguese_brazilian ] = "~Gr?e" ;
-        Text[ chinese_simplified ] = "´óĞ¡(~S)";
+        Text[ chinese_simplified ] = "å¤§å°(~S)";
         Text[ russian ] = "Ğàçìåğ";
         Text[ polish ] = "Rozmiar";
-        Text[ japanese ] = "»²½Ş(~S)";
-        Text[ chinese_traditional ] = "¤j¤p(~S)";
+        Text[ japanese ] = "ï½»ï½²ï½½ï¾(~S)";
+        Text[ chinese_traditional ] = "å¤§å°(~S)";
         Text[ arabic ] = "ÇáÍÌã";
         Text[ greek ] = "Ìİãåèïò";
-        Text[ korean ] = "Å©±â(~S)";
+        Text[ korean ] = "í¬ê¸°(~S)";
         Text[ turkish ] = "~Büyüklük";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tamaño";
@@ -548,14 +548,14 @@ ModalDialog DLG_EXPORT_PIX
         Text [ danish ] = "Bredde" ;
         Text [ portuguese_brazilian ] = "Breite" ;
         Text [ portuguese ] = "Largura" ;
-        Text[ chinese_simplified ] = "¿í¶È";
+        Text[ chinese_simplified ] = "å®½åº¦";
         Text[ russian ] = "Øèğèíà";
         Text[ polish ] = "Szer.";
-        Text[ japanese ] = "•";
-        Text[ chinese_traditional ] = "¼e«×";
+        Text[ japanese ] = "å¹…";
+        Text[ chinese_traditional ] = "å¯¬åº¦";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
-        Text[ korean ] = "³Êºñ";
+        Text[ korean ] = "ë„ˆë¹„";
         Text[ turkish ] = "Genişlik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ancho";
@@ -593,14 +593,14 @@ ModalDialog DLG_EXPORT_PIX
         Text [ danish ] = "Højde" ;
         Text [ portuguese ] = "Altura" ;
         Text [ portuguese_brazilian ] = "H?e" ;
-        Text[ chinese_simplified ] = "¸ß¶È";
+        Text[ chinese_simplified ] = "é«˜åº¦";
         Text[ russian ] = "Âûñîòà";
         Text[ polish ] = "Wys.";
-        Text[ japanese ] = "‚‚³";
-        Text[ chinese_traditional ] = "°ª«×";
+        Text[ japanese ] = "é«˜ã•";
+        Text[ chinese_traditional ] = "é«˜åº¦";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
         Text[ greek ] = "¾øïò";
-        Text[ korean ] = "³ôÀÌ";
+        Text[ korean ] = "ë†’ì´";
         Text[ turkish ] = "Yükseklik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Altura";
@@ -649,14 +649,14 @@ ModalDialog DLG_EXPORT_VEC
         Text [ danish ] = "Modus" ;
         Text [ portuguese_brazilian ] = "Modus" ;
         Text [ portuguese ] = "Modo" ;
-        Text[ chinese_simplified ] = "Ä£Ê½";
+        Text[ chinese_simplified ] = "æ¨¡å¼";
         Text[ russian ] = "Ğåæèì";
         Text[ polish ] = "Tryb";
-        Text[ japanese ] = "Ó°ÄŞ";
-        Text[ chinese_traditional ] = "¼Ò¦¡";
+        Text[ japanese ] = "ï¾“ï½°ï¾„ï¾";
+        Text[ chinese_traditional ] = "æ¨¡å¼";
         Text[ arabic ] = "ÇáæÖÚ";
         Text[ greek ] = "ÊáôÜóôáóç";
-        Text[ korean ] = "¸ğµå";
+        Text[ korean ] = "ëª¨ë“œ";
         Text[ turkish ] = "Kip";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Modo";
@@ -678,14 +678,14 @@ ModalDialog DLG_EXPORT_VEC
         Text [ danish ] = "Original" ;
         Text [ portuguese_brazilian ] = "~Original" ;
         Text [ portuguese ] = "~Original" ;
-        Text[ chinese_simplified ] = "Ô­¼ş(~O)";
+        Text[ chinese_simplified ] = "åŸä»¶(~O)";
         Text[ russian ] = "Îğèãèíàë";
         Text[ polish ] = "Orygina³";
-        Text[ japanese ] = "µØ¼ŞÅÙ(~O)";
-        Text[ chinese_traditional ] = "­ì¥ó(~O)";
+        Text[ japanese ] = "ï½µï¾˜ï½¼ï¾ï¾…ï¾™(~O)";
+        Text[ chinese_traditional ] = "åŸä»¶(~O)";
         Text[ arabic ] = "ÇáÃÕá";
         Text[ greek ] = "Áñ÷éêü";
-        Text[ korean ] = "¿øº»(~O)";
+        Text[ korean ] = "ì›ë³¸(~O)";
         Text[ turkish ] = "~Asıl";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Original";
@@ -707,14 +707,14 @@ ModalDialog DLG_EXPORT_VEC
         Text [ danish ] = "Størrelse" ;
         Text [ portuguese_brazilian ] = "~Gr?e" ;
         Text [ portuguese ] = "~Tamanho" ;
-        Text[ chinese_simplified ] = "´óĞ¡(~S)";
+        Text[ chinese_simplified ] = "å¤§å°(~S)";
         Text[ russian ] = "Ğàçìåğ";
         Text[ polish ] = "Rozmiar";
-        Text[ japanese ] = "»²½Ş(~S)";
-        Text[ chinese_traditional ] = "¤j¤p(~S)";
+        Text[ japanese ] = "ï½»ï½²ï½½ï¾(~S)";
+        Text[ chinese_traditional ] = "å¤§å°(~S)";
         Text[ arabic ] = "ÇáÍÌã";
         Text[ greek ] = "Ìİãåèïò";
-        Text[ korean ] = "Å©±â(~S)";
+        Text[ korean ] = "í¬ê¸°(~S)";
         Text[ turkish ] = "~Büyüklük";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tamaño";
@@ -735,14 +735,14 @@ ModalDialog DLG_EXPORT_VEC
         Text [ danish ] = "Størrelse" ;
         Text [ portuguese_brazilian ] = "Größe" ;
         Text [ portuguese ] = "Tamanho" ;
-        Text[ chinese_simplified ] = "´óĞ¡";
+        Text[ chinese_simplified ] = "å¤§å°";
         Text[ russian ] = "Ğàçìåğ";
         Text[ polish ] = "Rozmiar";
-        Text[ japanese ] = "»²½Ş";
-        Text[ chinese_traditional ] = "¤j¤p";
+        Text[ japanese ] = "ï½»ï½²ï½½ï¾";
+        Text[ chinese_traditional ] = "å¤§å°";
         Text[ arabic ] = "ÇáÍÌã";
         Text[ greek ] = "Ìİãåèïò";
-        Text[ korean ] = "Å©±â";
+        Text[ korean ] = "í¬ê¸°";
         Text[ turkish ] = "Büyüklük";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tamaño";
@@ -763,14 +763,14 @@ ModalDialog DLG_EXPORT_VEC
         Text [ danish ] = "Bredde" ;
         Text [ portuguese ] = "Largura" ;
         Text [ portuguese_brazilian ] = "Breite" ;
-        Text[ chinese_simplified ] = "¿í¶È";
+        Text[ chinese_simplified ] = "å®½åº¦";
         Text[ russian ] = "Øèğèíà";
         Text[ polish ] = "Szer.";
-        Text[ japanese ] = "•";
-        Text[ chinese_traditional ] = "¼e«×";
+        Text[ japanese ] = "å¹…";
+        Text[ chinese_traditional ] = "å¯¬åº¦";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
-        Text[ korean ] = "³Êºñ";
+        Text[ korean ] = "ë„ˆë¹„";
         Text[ turkish ] = "Genişlik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ancho";
@@ -808,14 +808,14 @@ ModalDialog DLG_EXPORT_VEC
         Text [ danish ] = "Højde" ;
         Text [ portuguese_brazilian ] = "H?e" ;
         Text [ portuguese ] = "Altura" ;
-        Text[ chinese_simplified ] = "¸ß¶È";
+        Text[ chinese_simplified ] = "é«˜åº¦";
         Text[ russian ] = "Âûñîòà";
         Text[ polish ] = "Wys.";
-        Text[ japanese ] = "‚‚³";
-        Text[ chinese_traditional ] = "°ª«×";
+        Text[ japanese ] = "é«˜ã•";
+        Text[ chinese_traditional ] = "é«˜åº¦";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
         Text[ greek ] = "¾øïò";
-        Text[ korean ] = "³ôÀÌ";
+        Text[ korean ] = "ë†’ì´";
         Text[ turkish ] = "Yükseklik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Altura";
@@ -858,6 +858,7 @@ ModalDialog DLG_EXPORT_VEC
         TabStop = TRUE ;
     };
 };
+
 
 
 
