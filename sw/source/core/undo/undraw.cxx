@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undraw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-15 11:43:40 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:57:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 IMPL_LINK( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     USHORT nId = pUndo->GetId();
     String sComment( pUndo->GetComment() );
 #endif
