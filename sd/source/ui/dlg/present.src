@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:33 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:08:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ ModalDialog DLG_START_PRESENTATION
     Text [ portuguese_brazilian ] = "Iniciar Apresentação" ;
     Text [ portuguese ] = "Apresentação no ecrã" ;
     Text [ finnish ] = "Aloita esitys" ;
-    Text [ danish ] = "Diasshow" ;
+    Text [ danish ] = "Præsentation" ;
     Text [ french ] = "Présentation à l'écran" ;
     Text [ swedish ] = "Bildskärmspresentation" ;
     Text [ dutch ] = "Schermpresentatie" ;
@@ -216,7 +216,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ english_us ] = "~Custom Slide Show" ;
         Text [ portuguese_brazilian ] = "~Individuelle Präsentation" ;
         Text [ swedish ] = "~Individuell presentation" ;
-        Text [ danish ] = "Individuelt diasshow" ;
+        Text [ danish ] = "Individuel præsentation" ;
         Text [ italian ] = "Presentazione su schermo personalizzata" ;
         Text [ spanish ] = "~Presentación personalizada" ;
         Text [ french ] = "~Présentation à l'écran personnalisée" ;
@@ -641,7 +641,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ french ] = "~Présentation toujours au premier plan" ;
         Text [ dutch ] = "Schermpresentatie ~steeds op de voorgrond" ;
         Text [ swedish ] = "Presentation alltid i förgrunden" ;
-        Text [ danish ] = "Diasshow altid i forgrunden" ;
+        Text [ danish ] = "Præsentation altid i forgrunden" ;
         Text [ portuguese ] = "Apresentação sempre em ~primeiro plano" ;
         Text [ portuguese_brazilian ] = "Präsentation immer im ~Vordergrund" ;
         Text[ chinese_simplified ] = "×ÜÊÇÇ°¶ËÏÔÊ¾ÑÝÊ¾ÎÄ¸å(~O)";
