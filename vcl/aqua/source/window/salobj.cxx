@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-19 02:37:03 $
+ *  last change: $Author: pluby $ $Date: 2000-11-28 06:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,9 @@ SalObject::SalObject()
 {
     SalData* pSalData = GetSalData();
 
-    maObjectData.mhWnd              = 0;
-    maObjectData.mhWndChild         = 0;
-    maObjectData.mhLastFocusWnd     = 0;
+    maObjectData.mhWnd              = NULL;
+    maObjectData.mhWndChild         = NULL;
+    maObjectData.mhLastFocusWnd     = NULL;
     maObjectData.maSysData.nSize    = sizeof( SystemEnvData );
     maObjectData.mpInst             = NULL;
     maObjectData.mpProc             = ImplSalObjectCallbackDummy;
@@ -109,7 +109,6 @@ SalObject::~SalObject()
         SalObject* pTempObject = pSalData->mpFirstObject;
         while ( pTempObject->maObjectData.mpNextObject != this )
             pTempObject = pTempObject->maObjectData.mpNextObject;
-
         pTempObject->maObjectData.mpNextObject = maObjectData.mpNextObject;
     }
 }

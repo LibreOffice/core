@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-27 20:10:03 $
+ *  last change: $Author: pluby $ $Date: 2000-11-28 06:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,11 +370,9 @@ void SalFrame::SetClientSize( long nWidth, long nHeight )
 
 void SalFrame::GetClientSize( long& rWidth, long& rHeight )
 {
-
-    // Copied from Windows version: not sure if it is correct for Aqua
-    // rWidth  = maFrameData.mnWidth;
-    // rHeight = maFrameData.mnHeight;
-
+    // Stub code until we get real sizing working
+    rWidth  = 500;
+    rHeight = 400;
 }
 
 // -----------------------------------------------------------------------
