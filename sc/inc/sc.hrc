@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:12:07 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:05:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,6 +636,7 @@
 #define SC_HINT_SHOWRANGEFINDER (SC_MESSAGE_START + 34)
 #define SC_HINT_DOC_SAVED       (SC_MESSAGE_START + 35)
 #define SC_HINT_FORCESETTAB     (SC_MESSAGE_START + 36)
+#define SC_HINT_TABLECHANGED    (SC_MESSAGE_START + 37)
 
 // Nachricht zum Oeffnen von Dialogen:
 #define SID_OPENDLG_CONSOLIDATE     (SC_MESSAGE_START + 50)
