@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:02:59 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:17:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,7 +606,8 @@ BOOL SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
             pSrcDrwView->UnmarkAll();
 
             ULONG nMarkCount = aMrkList.GetMarkCount();
-            for ( USHORT i = 0; i < nMarkCount; ++i )
+            USHORT i;
+            for ( i = 0; i < nMarkCount; ++i )
             {
                 SdrObject *pObj = aMrkList.GetMark( i )->GetObj();
                 pSrcDrwView->MarkObj( pObj, pSrcPgView );
@@ -834,7 +835,8 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
     {
         // alte Actions beenden; die Tabellen-Frames werden angelegt und
         // eine SSelection kann erzeugt werden
-        for( USHORT nActCnt = 0; pDestShell->ActionPend(); ++nActCnt )
+        USHORT nActCnt;
+        for( nActCnt = 0; pDestShell->ActionPend(); ++nActCnt )
             pDestShell->EndAllAction();
 
         for( ; nActCnt; --nActCnt )
@@ -1093,7 +1095,8 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc )
     {
         // alte Actions beenden; die Tabellen-Frames werden angelegt und
         // eine Selection kann erzeugt werden
-        for( USHORT nActCnt = 0; ActionPend(); ++nActCnt )
+        USHORT nActCnt;
+        for( nActCnt = 0; ActionPend(); ++nActCnt )
             EndAllAction();
 
         for( ; nActCnt; --nActCnt )
