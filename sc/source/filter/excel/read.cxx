@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:00:29 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1302,6 +1302,7 @@ FltError ImportExcel8::Read( void )
                         case EXC_ID_SXPI:           GetPivotTableManager().ReadSxpi( maStrm );      break;
                         case EXC_ID_SXDI:           GetPivotTableManager().ReadSxdi( maStrm );      break;
                         case EXC_ID_SXVDEX:         GetPivotTableManager().ReadSxvdex( maStrm );    break;
+                        case EXC_ID_SXEX:           GetPivotTableManager().ReadSxex( maStrm );      break;
 
                         case 0x0809:                                    // BOF          [    5   ]
                         {
