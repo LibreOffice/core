@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpreslt.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 09:06:12 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 20:46:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ ModalDialog DLG_PRESLT
         Text[ chinese_traditional ] = "½Ğ±z¿ï¾Ü¤@­Ó­¶­±¼Ë¦¡(~S)";
         Text[ arabic ] = "ÇáÑÌÇÁ ÇÎÊíÇÑ ÊÎØíØ ÇáÕİÍÉ";
         Text[ greek ] = "Åğéëİîôå İíá ğñüôõğï ~óåëßäáò";
-        Text[ korean ] = "½½¶óÀÌµå µğÀÚÀÎÀ» ¼±ÅÃÇÏ½Ê½Ã¿À(~S)";
+        Text[ korean ] = "ÆäÀÌÁö ¼­½Ä ÆÄÀÏÀ» ¼±ÅÃÇÏ½Ê½Ã¿À(~S)";
         Text[ turkish ] = "Bir sayfa biçimi seçin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Elija un estil~o de página";
