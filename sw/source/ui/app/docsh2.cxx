@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:18:43 $
+ *  last change: $Author: os $ $Date: 2004-04-20 13:32:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1718,8 +1718,9 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     text::XTextDocument* pxDoc = xDoc.get();
     ((SwXTextDocument*)pxDoc)->InitNewDoc();
 
-
     AddLink();
+    //#116402# update font list when new document is created
+    UpdateFontList();
     pDoc->SetBrowseMode(bWasBrowseMode);
     pSrcView->SetPool(&GetPool());
 
