@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-02 13:24:55 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 11:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,28 @@
 
 #include <stdio.h>
 #include "providerimpl.hxx"
+
+#ifndef CONFIGMGR_MISC_OPTIONS_HXX_
 #include "options.hxx"
+#endif
+#ifndef CONFIGMGR_API_FACTORYIMPL_HXX_
 #include "apifactoryimpl.hxx"
+#endif
+#ifndef CONFIGMGR_API_TREEIMPLOBJECTS_HXX_
 #include "apitreeimplobj.hxx"
+#endif
+#ifndef CONFIGMGR_API_TREEACCESS_HXX_
 #include "apitreeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_ROOTTREE_HXX_
 #include "roottree.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
+#endif
+#ifndef CONFIGMGR_API_OBJECTREGISTRY_HXX_
 #include "objectregistry.hxx"
+#endif
 
 #ifndef CONFIGMGR_BOOTSTRAP_HXX_
 #include "bootstrap.hxx"
@@ -82,7 +97,10 @@
 #ifndef _CONFIGMGR_TRACER_HXX_
 #include "tracer.hxx"
 #endif
+
+#ifndef _OSL_INTERLOCK_H_
 #include <osl/interlck.h>
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -183,9 +201,10 @@ namespace configmgr
             // should we clean this up ?
             // m_pTreeMgr->releaseSubtree(ssUserProfile, m_xDefaultOptions);
         }
-        catch (uno::Exception&)
+        catch (uno::Exception& e)
         {
             // could not read profile
+            CFG_TRACE_ERROR_NI("Provider bootstrapping: Caught an exception trying to get 'Setup' data: ", OUSTRING2ASCII(e.Message));
         }
     }
     //-----------------------------------------------------------------------------
@@ -284,8 +303,15 @@ namespace configmgr
     // --------------------------------- disposing ---------------------------------
     void SAL_CALL OProviderImpl::dispose() throw()
     {
-        m_pTreeMgr->dispose();
-        m_pSession->close();
+        try
+        {
+            m_pTreeMgr->dispose();
+            m_pSession->close();
+        }
+        catch (uno::Exception& e)
+        {
+            CFG_TRACE_ERROR("Disposing the TreeManager or closing the session caused an exception: %s", OUSTRING2ASCII(e.Message));
+        }
     }
 
     //-----------------------------------------------------------------------------
@@ -313,7 +339,7 @@ namespace configmgr
     // ITreeProvider /ITreeManager
     //-----------------------------------------------------------------------------
     ISubtree* OProviderImpl::requestSubtree( AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions,
-                                             sal_Int16 nMinLevels) throw (uno::Exception)
+                                             sal_Int16 nMinLevels) CFG_UNO_THROW_ALL(  )
     {
         ISubtree* pTree = NULL;
         try
@@ -343,37 +369,37 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------
-    void OProviderImpl::updateTree(TreeChangeList& aChanges) throw (uno::Exception)
+    void OProviderImpl::updateTree(TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  )
     {
         m_pTreeMgr->updateTree(aChanges);
     }
 
     //-----------------------------------------------------------------------------
-    void OProviderImpl::releaseSubtree( AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions ) throw ()
+    void OProviderImpl::releaseSubtree( AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions ) CFG_NOTHROW()
     {
         m_pTreeMgr->releaseSubtree(aSubtreePath, _xOptions);
     }
 
     //-----------------------------------------------------------------------------
-    void OProviderImpl::disposeData(const vos::ORef < OOptions >& _xOptions) throw ()
+    void OProviderImpl::disposeData(const vos::ORef < OOptions >& _xOptions) CFG_NOTHROW()
     {
         m_pTreeMgr->disposeData(_xOptions);
     }
 
     //-----------------------------------------------------------------------------
-    void OProviderImpl::notifyUpdate(TreeChangeList const& aChanges) throw (uno::RuntimeException)
+    void OProviderImpl::notifyUpdate(TreeChangeList const& aChanges) CFG_UNO_THROW_RTE(  )
     {
         m_pTreeMgr->notifyUpdate(aChanges);
     }
 
     //-----------------------------------------------------------------------------
-    void OProviderImpl::fetchSubtree(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions, sal_Int16 nMinLevels) throw()
+    void OProviderImpl::fetchSubtree(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions, sal_Int16 nMinLevels) CFG_NOTHROW()
     {
         m_pTreeMgr->fetchSubtree(aSubtreePath, _xOptions, nMinLevels);
     }
 
     //-----------------------------------------------------------------------------
-    sal_Bool OProviderImpl::fetchDefaultData(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions, sal_Int16 nMinLevels) throw(uno::Exception)
+    sal_Bool OProviderImpl::fetchDefaultData(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions, sal_Int16 nMinLevels) CFG_UNO_THROW_ALL(  )
     {
         return m_pTreeMgr->fetchDefaultData(aSubtreePath, _xOptions, nMinLevels);
     }
@@ -466,7 +492,7 @@ namespace configmgr
 
     // actual factory methods
     //-----------------------------------------------------------------------------------
-    NodeElement* OProviderImpl::buildReadAccess(OUString const& _rAccessor, const vos::ORef < OOptions >& _xOptions, sal_Int32 nMinLevels)  throw (uno::Exception, uno::RuntimeException)
+    NodeElement* OProviderImpl::buildReadAccess(OUString const& _rAccessor, const vos::ORef < OOptions >& _xOptions, sal_Int32 nMinLevels)  CFG_UNO_THROW_ALL(  )
     {
         CFG_TRACE_INFO("config provider: requesting the tree from the cache manager");
 
@@ -502,7 +528,7 @@ namespace configmgr
 
     //-----------------------------------------------------------------------------------
     NodeElement* OProviderImpl::buildUpdateAccess(OUString const& _rAccessor, const vos::ORef < OOptions >& _xOptions,
-                                                  sal_Int32 nMinLevels) throw (uno::Exception, uno::RuntimeException)
+                                                  sal_Int32 nMinLevels) CFG_UNO_THROW_ALL(  )
     {
         CFG_TRACE_INFO("config provider: requesting the tree from the cache manager");
         OSL_ASSERT(sal_Int16(nMinLevels) == nMinLevels);
@@ -549,7 +575,7 @@ namespace configmgr
        "lazywrite"  // ARG_ASYNC,      // lasy write data
     };
 
-    OUString OProviderImpl::FactoryArguments::getArgumentName(Argument _which) SAL_THROW( () )
+    OUString OProviderImpl::FactoryArguments::getArgumentName(Argument _which) CFG_NOTHROW()
     {
         OSL_ASSERT(sizeof asciiArgumentNames/sizeof 0[asciiArgumentNames] == _arg_count);
         OSL_PRECOND(_which < _arg_count, "Illegal argument selector in OProviderImpl::FactoryArguments::getArgumentName");
@@ -559,7 +585,7 @@ namespace configmgr
 
     OProviderImpl::FactoryArguments::Argument
         OProviderImpl::FactoryArguments::lookupArgument(const rtl::OUString& rName)
-            SAL_THROW( () )
+            CFG_NOTHROW()
     {
         OUString sCheck( rName.toAsciiLowerCase() );
 
@@ -588,7 +614,7 @@ namespace configmgr
                             OUString&   /* [out] */ _rNodeAccessor,
                             sal_Int32&  /* [out] */ _nLevels,
                             vos::ORef<OOptions> /* [in/out] */ _xOptions )
-        SAL_THROW( () )
+        CFG_NOTHROW()
     {
         switch ( lookupArgument(aCurrent.Name) )
         {
@@ -686,7 +712,7 @@ namespace configmgr
      //-----------------------------------------------------------------------------------
     static
     void failIllegal(sal_Int32 _nArg = -1)
-        SAL_THROW( (lang::IllegalArgumentException) )
+        CFG_THROW1 (lang::IllegalArgumentException)
     {
         OSL_ENSURE( sal_Int16(_nArg) == _nArg, "Argument number out of range. Raising imprecise exception.");
          throw lang::IllegalArgumentException(
@@ -701,7 +727,7 @@ namespace configmgr
     bool extractLegacyArguments(    const uno::Sequence<uno::Any>& _rArgs,
                                     OUString&   /* [out] */ _rNodeAccessor,
                                     sal_Int32&  /* [out] */ _nLevels )
-        SAL_THROW( () )
+        CFG_NOTHROW()
     {
           // compatibility : formerly, you could specify the node path as first arg and the (optional) depth
             // as second arg
@@ -730,7 +756,7 @@ namespace configmgr
                                                         OUString&   /* [out] */ _rNodeAccessor,
                                                         sal_Int32&  /* [out] */ _nLevels,
                                                         vos::ORef<OOptions> /* [in/out] */ _xOptions )
-        SAL_THROW( (lang::IllegalArgumentException) )
+        CFG_THROW1 (lang::IllegalArgumentException)
     {
         _nLevels = ITreeProvider::ALL_LEVELS; // setting a fallback
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-03 16:31:26 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 11:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,8 @@ namespace configmgr
 
     public:
         // factory methods
-        uno::Reference<uno::XInterface>  createReadAccess( uno::Sequence<uno::Any> const& aArgs) throw (uno::Exception, uno::RuntimeException);
-        uno::Reference<uno::XInterface>  createUpdateAccess( uno::Sequence<uno::Any> const& aArgs) throw (uno::Exception, uno::RuntimeException);
+        uno::Reference<uno::XInterface>  createReadAccess( uno::Sequence<uno::Any> const& aArgs) CFG_UNO_THROW_ALL(  );
+        uno::Reference<uno::XInterface>  createUpdateAccess( uno::Sequence<uno::Any> const& aArgs) CFG_UNO_THROW_ALL(  );
     private:
         OConfigurationProviderImpl(OConfigurationProvider* _pProvider,
                                    const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory);

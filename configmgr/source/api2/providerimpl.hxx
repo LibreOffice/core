@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 11:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,15 +155,15 @@ namespace configmgr
             };
             static sal_Char const * const asciiArgumentNames[];
 
-            static OUString getArgumentName(Argument _which) SAL_THROW( () );
-            static Argument lookupArgument(OUString const& sArgumentName) SAL_THROW( () );
+            static OUString getArgumentName(Argument _which)                CFG_NOTHROW();
+            static Argument lookupArgument(OUString const& sArgumentName)   CFG_NOTHROW();
 
-            static OUString getUserArgumentName()               SAL_THROW(()) { return getArgumentName(ARG_USER);     }
-            static OUString getNodePathArgumentName()           SAL_THROW(()) { return getArgumentName(ARG_NODEPATH); }
-            static OUString getDepthArgumentNameArgumentName()  SAL_THROW(()) { return getArgumentName(ARG_DEPTH);    }
-            static OUString getLocaleArgumentName()             SAL_THROW(()) { return getArgumentName(ARG_LOCALE);   }
-            static OUString getNoCacheArgumentName()            SAL_THROW(()) { return getArgumentName(ARG_NOCACHE);  }
-            static OUString getAsyncArgumentName()              SAL_THROW(()) { return getArgumentName(ARG_ASYNC);    }
+            static OUString getUserArgumentName()               CFG_NOTHROW() { return getArgumentName(ARG_USER);     }
+            static OUString getNodePathArgumentName()           CFG_NOTHROW() { return getArgumentName(ARG_NODEPATH); }
+            static OUString getDepthArgumentNameArgumentName()  CFG_NOTHROW() { return getArgumentName(ARG_DEPTH);    }
+            static OUString getLocaleArgumentName()             CFG_NOTHROW() { return getArgumentName(ARG_LOCALE);   }
+            static OUString getNoCacheArgumentName()            CFG_NOTHROW() { return getArgumentName(ARG_NOCACHE);  }
+            static OUString getAsyncArgumentName()              CFG_NOTHROW() { return getArgumentName(ARG_ASYNC);    }
         public:
             /** extracts arguments from the argument sequence into to the parameter variables
 
@@ -179,13 +179,13 @@ namespace configmgr
                                         OUString&   /* [out] */ _rNodeAccessor,
                                         sal_Int32&  /* [out] */ _nLevels,
                                         vos::ORef<OOptions> /* [in/out] */ xOptions
-                                   ) SAL_THROW( (lang::IllegalArgumentException) );
+                                   ) CFG_THROW1(lang::IllegalArgumentException);
 
             static bool extractOneArgument( beans::PropertyValue const& aCurrent,
                                             OUString&   /* [out] */ _rNodeAccessor,
                                             sal_Int32&  /* [out] */ _nLevels,
                                             vos::ORef<OOptions> /* [in/out] */ _xOptions
-                                          ) SAL_THROW( () );
+                                          ) CFG_NOTHROW();
 
         };
 
@@ -204,16 +204,16 @@ namespace configmgr
 
         /// ITreeManager
         virtual ISubtree * requestSubtree(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions,
-                                          sal_Int16 nMinLevels = ALL_LEVELS) throw (uno::Exception);
-        virtual void updateTree(TreeChangeList& aChanges) throw (uno::Exception);
+                                          sal_Int16 nMinLevels = ALL_LEVELS) CFG_UNO_THROW_ALL(  );
+        virtual void updateTree(TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  );
 
-        virtual void releaseSubtree( AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions ) throw ();
-        virtual void notifyUpdate(TreeChangeList const& aChanges) throw (uno::RuntimeException);
-        virtual void disposeData(const vos::ORef < OOptions >& _xOptions) throw();
-        virtual void fetchSubtree(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions, sal_Int16 nMinLevels = ALL_LEVELS) throw();
+        virtual void releaseSubtree( AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions ) CFG_NOTHROW();
+        virtual void notifyUpdate(TreeChangeList const& aChanges) CFG_UNO_THROW_RTE(  );
+        virtual void disposeData(const vos::ORef < OOptions >& _xOptions) CFG_NOTHROW();
+        virtual void fetchSubtree(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions, sal_Int16 nMinLevels = ALL_LEVELS) CFG_NOTHROW();
         /// IDefaultableTreeManager
         virtual sal_Bool fetchDefaultData(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions,
-                                            sal_Int16 nMinLevels) throw (uno::Exception);
+                                            sal_Int16 nMinLevels) CFG_UNO_THROW_ALL(  );
 
         // IInterface
         virtual void SAL_CALL acquire(  ) throw ();
@@ -247,9 +247,9 @@ namespace configmgr
 
         // actual factory methods
         // the returned object (if any) has to be acquired once)
-        configapi::NodeElement* buildReadAccess( OUString const& _rAccessor, const vos::ORef < OOptions >& _xOptions, sal_Int32 nMinLevels) throw (uno::Exception, uno::RuntimeException);
+        configapi::NodeElement* buildReadAccess( OUString const& _rAccessor, const vos::ORef < OOptions >& _xOptions, sal_Int32 nMinLevels) CFG_UNO_THROW_ALL(  );
         // the returned object (if any) has to be acquired once)
-        configapi::NodeElement* buildUpdateAccess(OUString const& _rAccessor, const vos::ORef < OOptions >& _xOptions, sal_Int32 nMinLevels) throw (uno::Exception, uno::RuntimeException);
+        configapi::NodeElement* buildUpdateAccess(OUString const& _rAccessor, const vos::ORef < OOptions >& _xOptions, sal_Int32 nMinLevels) CFG_UNO_THROW_ALL(  );
 
     private:
         void initSession(IConfigSession* pSession, const ConnectionSettings& _rSettings);
