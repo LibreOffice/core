@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:23:23 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1024,14 +1024,14 @@ ModalDialog RID_SVXDLG_GALLERY_TAKE_PROGRESS
     Text [ danish ] = "Anvend" ;
     Text [ portuguese ] = "Aplicar" ;
     Text [ portuguese_brazilian ] = "?bernehmen" ;
-    Text[ chinese_simplified ] = "Ì×ÓÃ";
+    Text[ chinese_simplified ] = "²ÉÓÃ";
     Text[ russian ] = "Ïğèíÿòü";
     Text[ polish ] = "Zastosuj";
     Text[ japanese ] = "“K—p";
     Text[ chinese_traditional ] = "±Ä¥Î";
     Text[ arabic ] = "ÊØÈíŞ";
     Text[ dutch ] = "Overnemen";
-    Text[ chinese_simplified ] = "Ì×ÓÃ";
+    Text[ chinese_simplified ] = "²ÉÓÃ";
     Text[ greek ] = "ÅöáñìïãŞ";
     Text[ korean ] = "Àû¿ë";
     Text[ turkish ] = "Kullan";
@@ -1519,7 +1519,7 @@ String RID_SVXSTR_GALLERY_FILTER
     Text[ russian ] = "Ãğàôè÷åñêèé ôèëüòğ";
     Text[ polish ] = "Filtr graficzny";
     Text[ japanese ] = "‰æ‘œÌ¨ÙÀ";
-    Text[ chinese_traditional ] = "¹Ï§Î¹LÂo¾¹";
+    Text[ chinese_traditional ] = "¹Ï§ÎÂà´«¾¹";
     Text[ arabic ] = "İáÊÑ ÇáÑÓæãÇÊ";
     Text[ dutch ] = "Grafische filter";
     Text[ chinese_simplified ] = "Í¼ĞÎ¹ıÂËÆ÷";
@@ -1921,14 +1921,14 @@ String RID_SVXSTR_GALLERY_READONLY
     Text [ dutch ] = " (alleen lezen)" ;
     Text [ spanish ] = " (solo lectura)" ;
     Text [ english_us ] = " (read-only)" ;
-    Text[ chinese_simplified ] = " (·À¸²Ğ´)";
+    Text[ chinese_simplified ] = " (·À¸ÄĞ´)";
     Text[ russian ] = " (òîëüêî äëÿ ÷òåíèÿ)";
     Text[ polish ] = " (tylko do odczytu)";
     Text[ japanese ] = " (“Ç‚İæ‚èê—p)";
     Text[ chinese_traditional ] = " (°ßÅª)";
     Text[ arabic ] = "(ááŞÑÇÁÉ İŞØ)";
     Text[ dutch ] = " (alleen lezen)";
-    Text[ chinese_simplified ] = " (·À¸²Ğ´)";
+    Text[ chinese_simplified ] = " (·À¸ÄĞ´)";
     Text[ greek ] = " (ìüíï ãéá áíÜãíùóç)";
     Text[ korean ] = " (ÀĞ±â Àü¿ë)";
     Text[ turkish ] = "(Salt okunur)";
@@ -2651,6 +2651,7 @@ Menu RID_SVXMN_GALLERY2
         };
     };
 };
+
 
 
 
