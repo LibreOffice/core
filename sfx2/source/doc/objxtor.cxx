@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-03 12:12:14 $
+ *  last change: $Author: mba $ $Date: 2001-07-05 15:10:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,10 @@
 
 #include <svtools/urihelper.hxx>
 #include <svtools/pathoptions.hxx>
+
+#if SUPD>636
 #include <svtools/asynclink.hxx>
+#endif
 
 #include "picklist.hxx"
 #include "docfac.hxx"
@@ -157,7 +160,11 @@ DBG_NAME(SfxObjectShell);
 #define DocumentInfo
 #include "sfxslots.hxx"
 
+#if SUPD>636
 extern svtools::AsynchronLink* pPendingCloser;
+#else
+extern AsynchronLink* pPendingCloser;
+#endif
 
 //=========================================================================
 
@@ -522,7 +529,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
                     pPoolItem = pFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, ppArgs );
                 }
 
-                if ( !pPoolItem || ( pPoolItem->ISA(SfxBoolItem) && !( (const SfxBoolItem*) pPoolItem )->GetValue() ) )
+                if ( !pPoolItem || pPoolItem->ISA(SfxVoidItem) || ( pPoolItem->ISA(SfxBoolItem) && !( (const SfxBoolItem*) pPoolItem )->GetValue() ) )
                     return sal_False;
                 else
                     bClose = sal_True;
