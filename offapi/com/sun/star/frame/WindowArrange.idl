@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WindowArrange.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 //=============================================================================
 /** these constants are used to specify a style of window arrangement
  */
-constants WindowArrange
+published constants WindowArrange
 {
     //-------------------------------------------------------------------------
     /** arranges the windows in tiles
