@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:22:06 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ TabPage TP_LINENUMBERING
         Text[ czech ] = "Zobrazit číslování";
         Text[ hebrew ] = "~Nummerierung einschalten";
         Text[ hindi ] = "~संख्या देना दिखाओ";
+        Text[ slovak ] = "~Zobraziť číslovanie";
     };
     FixedText FT_CHAR_STYLE
     {
@@ -145,6 +146,7 @@ TabPage TP_LINENUMBERING
         Text[ czech ] = "Styl znaku";
         Text[ hebrew ] = "~Zeichenvorlage";
         Text[ hindi ] = "~अक्षर शैली";
+        Text[ slovak ] = "Štýl ~znaku";
     };
     ListBox LB_CHAR_STYLE
     {
@@ -185,6 +187,7 @@ TabPage TP_LINENUMBERING
         Text[ czech ] = "Formát";
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "र~चना";
+        Text[ slovak ] = "F~ormát";
     };
     ListBox LB_FORMAT
     {
@@ -224,6 +227,7 @@ TabPage TP_LINENUMBERING
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
+        Text[ slovak ] = "Umiestnenie";
     };
     ListBox LB_POS
     {
@@ -420,6 +424,13 @@ TabPage TP_LINENUMBERING
         < "भीतरी" ; > ;
         < "बाहरी" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Vľavo" ; > ;
+        < "Vpravo" ; > ;
+        < "Vnútorný" ; > ;
+        < "vonkajší" ; > ;
+    };
     };
     FixedText FT_OFFSET
     {
@@ -452,6 +463,7 @@ TabPage TP_LINENUMBERING
         Text[ czech ] = "Vzdálenost";
         Text[ hebrew ] = "‮ריווח‬";
         Text[ hindi ] = "अंतर देना";
+        Text[ slovak ] = "Vzdialenosť";
     };
     MetricField MF_OFFSET
     {
@@ -501,6 +513,7 @@ TabPage TP_LINENUMBERING
         Text[ czech ] = "Interval";
         Text[ hebrew ] = "~Intervall";
         Text[ hindi ] = "अंतराल";
+        Text[ slovak ] = "Interval";
     };
     NumericField NF_NUM_INVERVAL
     {
@@ -548,6 +561,7 @@ TabPage TP_LINENUMBERING
         Text[ czech ] = "řádek";
         Text[ hebrew ] = "Zeilen";
         Text[ hindi ] = "रेखाएँ";
+        Text[ slovak ] = "riadkov";
     };
     FixedLine FL_DISPLAY
     {
@@ -580,6 +594,7 @@ TabPage TP_LINENUMBERING
         Text[ czech ] = "Zobrazit";
         Text[ hebrew ] = "‮תצוגה‬";
         Text[ hindi ] = "दृश्य";
+        Text[ slovak ] = "Zobraziť";
     };
     FixedText FT_DIVISOR
     {
@@ -612,6 +627,7 @@ TabPage TP_LINENUMBERING
         Text[ czech ] = "Text";
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "टेक्स्ट्";
+        Text[ slovak ] = "Text";
     };
     Edit ED_DIVISOR
     {
@@ -652,6 +668,7 @@ TabPage TP_LINENUMBERING
         Text[ czech ] = "Každý";
         Text[ hebrew ] = "A~lle";
         Text[ hindi ] = "हरेक";
+        Text[ slovak ] = "Každé";
     };
     NumericField NF_DIV_INTERVAL
     {
@@ -700,6 +717,7 @@ TabPage TP_LINENUMBERING
         Text[ czech ] = "řádků";
         Text[ hebrew ] = "Zeilen";
         Text[ hindi ] = "रेखाएँ";
+        Text[ slovak ] = "Riadky";
     };
     FixedLine FL_DIVISOR
     {
@@ -710,7 +728,7 @@ TabPage TP_LINENUMBERING
         Text [ english_us ] = "Separator" ;
         Text [ portuguese_brazilian ] = "Separador" ;
         Text [ swedish ] = "Skiljetecken" ;
-        Text [ danish ] = "Separator" ;
+        Text [ danish ] = "Skilletegn" ;
         Text [ italian ] = "Separatore" ;
         Text [ spanish ] = "Separador" ;
         Text [ french ] = "S�parateur" ;
@@ -732,6 +750,7 @@ TabPage TP_LINENUMBERING
         Text[ czech ] = "Oddělovač";
         Text[ hebrew ] = "Teiler";
         Text[ hindi ] = "अलगानेवाला";
+        Text[ slovak ] = "Oddeľovač";
     };
     CheckBox CB_COUNT_EMPTYLINES
     {
@@ -765,6 +784,7 @@ TabPage TP_LINENUMBERING
         Text[ czech ] = "Prázdné řádky";
         Text[ hebrew ] = "L~eerzeilen";
         Text[ hindi ] = "खाली रेखाएँ";
+        Text[ slovak ] = "Prázdne riadky";
     };
     CheckBox CB_COUNT_FRAMELINES
     {
@@ -798,6 +818,7 @@ TabPage TP_LINENUMBERING
         Text[ czech ] = "Řádky v textových rámcích";
         Text[ hebrew ] = "Zeilen in Te~xtrahmen";
         Text[ hindi ] = "टेक्स्ट् फ्रेमों में रेखाएँ ";
+        Text[ slovak ] = "Riadky v textových rámcoch";
     };
     CheckBox CB_RESTART_PAGE
     {
@@ -830,6 +851,7 @@ TabPage TP_LINENUMBERING
         Text[ czech ] = "Restartovat každou novou stranu";
         Text[ hebrew ] = "~Neustart am Seitenanfang";
         Text[ hindi ] = "~हरेक नया पृष्ठ पुनः प्रारंभ करो";
+        Text[ slovak ] = "~Reštartovať každú novú stranu";
     };
     FixedLine FL_COUNT
     {
@@ -862,6 +884,7 @@ TabPage TP_LINENUMBERING
         Text[ czech ] = "Počet";
         Text[ hebrew ] = "Zählen";
         Text[ hindi ] = "गिनती";
+        Text[ slovak ] = "Zahrnúť do počtu";
     };
     Text [ english_us ] = "Line Numbering" ;
     Text [ portuguese_brazilian ] = "Numera��o das Linhas" ;
@@ -888,7 +911,10 @@ TabPage TP_LINENUMBERING
     Text[ czech ] = "Číslování řádků";
     Text[ hebrew ] = "‮מיספור שורות‬";
     Text[ hindi ] = "रेखा को संख्या देना";
+    Text[ slovak ] = "Číslovanie riadkov";
 };
+
+
 
 
 
