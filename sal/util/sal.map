@@ -73,6 +73,7 @@ UDK_3_0_0 {
         osl_getLastSocketErrorDescription;
         osl_getLocalAddrOfSocket;
         osl_getLocalHostname;
+        osl_getModuleURLFromAddress;
         osl_getNextDirectoryItem;
         osl_getPeerAddrOfSocket;
         osl_getProcess;
