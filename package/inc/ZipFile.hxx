@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:13:55 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:49:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,8 @@ protected:
     com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xSeek;
     const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xFactory;
     ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XProgressHandler > xProgressHandler;
+
+    sal_Bool bRecoveryMode;
 
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream >  createMemoryStream(
             ZipEntry & rEntry,
