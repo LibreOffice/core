@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-06 11:09:04 $
+ *  last change: $Author: ka $ $Date: 2002-03-21 15:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
+#endif
+
+#ifndef _SV_HATCH_HXX //autogen
+#include <vcl/hatch.hxx>
 #endif
 
 #ifndef _SFX_WHITER_HXX //autogen
@@ -389,12 +393,13 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
         BOOL bMerk=pWin->IsMapModeEnabled();
         pWin->EnableMapMode(FALSE);
 
-        pWin->SetFillColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
-        pWin->SetLineColor();
-        pWin->DrawRect(Rectangle(aOuterPix.Left(),aOuterPix.Top()  ,aPixRect.Left()  ,aOuterPix.Bottom()));
-        pWin->DrawRect(Rectangle(aOuterPix.Left(),aOuterPix.Top()  ,aOuterPix.Right(),aPixRect.Top()    ));
-        pWin->DrawRect(Rectangle(aOuterPix.Left(),aPixRect.Bottom(),aOuterPix.Right(),aOuterPix.Bottom()));
-        pWin->DrawRect(Rectangle(aPixRect.Right(),aOuterPix.Top()  ,aOuterPix.Right(),aOuterPix.Bottom()));
+        PolyPolygon aPolyPoly( 2 );
+        const Hatch aHatch( HATCH_SINGLE, Application::GetSettings().GetStyleSettings().GetWindowTextColor(), 3, 450 );
+
+        aPolyPoly.Insert( aOuterPix );
+        aPolyPoly.Insert( aPixRect );
+        pWin->DrawHatch( aPolyPoly, aHatch );
+
         pWin->EnableMapMode(bMerk);
         if (bXor) ((SdrPaintView*)this)->ShowShownXor(pWin);
     }
