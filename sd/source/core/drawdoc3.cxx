@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:09:21 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 #endif
 
 #include <unotools/ucbstreamhelper.hxx>
+#include <sfx2/fcontnr.hxx>
 
 #ifndef _SVDOPATH_HXX
 #include <svx/svdopath.hxx>
@@ -216,30 +217,27 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
     BOOL bOK = TRUE;
     SdDrawDocument* pBookmarkDoc = NULL;
     String aBookmarkName = rMedium.GetName();
+    const SfxFilter* pFilter = rMedium.GetFilter();
+    if ( !pFilter )
+        SFX_APP()->GetFilterMatcher().GuessFilter( rMedium, &pFilter );
 
-    if (aBookmarkFile != aBookmarkName && aBookmarkName.Len() && rMedium.IsStorage())
+    if ( !pFilter )
     {
-        DBG_ASSERT( rMedium.IsStorage(), "Kein Storage, keine Banane!" );
-
-        uno::Reference < embed::XStorage > xStorage = rMedium.GetStorage();
-        uno::Reference < container::XNameAccess > xAccess (xStorage, uno::UNO_QUERY);
-        if ( xAccess->hasByName( pStarDrawXMLContent ) && xStorage->isStreamElement( pStarDrawXMLContent ) ||
-             xAccess->hasByName( pStarDrawOldXMLContent ) && xStorage->isStreamElement( pStarDrawOldXMLContent ) )
+        bOK = FALSE;
+    }
+    else if ( aBookmarkFile != aBookmarkName && aBookmarkName.Len() )
+    {
+        BOOL bCreateGraphicShell = pFilter->GetServiceName().EqualsAscii( "com.sun.star.drawing.DrawingDocument" );
+        BOOL bCreateImpressShell = pFilter->GetServiceName().EqualsAscii( "com.sun.star.presentation.PresentationDocument" );
+        if ( bCreateGraphicShell || bCreateImpressShell )
         {
             CloseBookmarkDoc();
-
-            aBookmarkFile = aBookmarkName;
 
             // Es wird eine DocShell erzeugt, da in dem Dokument OLE-Objekte
             // enthalten sein koennten (Persist)
             // Wenn dem nicht so waere, so koennte man auch das Model
             // direkt laden
-            uno::Reference < beans::XPropertySet > xSet (xStorage, uno::UNO_QUERY);
-            uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("MediaType") );
-            ::rtl::OUString aType;
-            aAny >>= aType;
-            if ( SotExchange::GetFormatIdFromMimeType( aType ) == SOT_FORMATSTR_ID_STARDRAW_60 )
-                //TODO/MBA: needs testing, old code used STARDRAW_50 for testing
+            if ( bCreateGraphicShell )
                 // Draw
                 xBookmarkDocShRef = new ::sd::GraphicDocShell(SFX_CREATE_MODE_STANDARD, TRUE);
             else
@@ -247,21 +245,16 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
                 xBookmarkDocShRef = new ::sd::DrawDocShell(SFX_CREATE_MODE_STANDARD, TRUE);
 
             if ( bOK = xBookmarkDocShRef->DoLoad(&rMedium) )
+            {
+                aBookmarkFile = aBookmarkName;
                 pBookmarkDoc = xBookmarkDocShRef->GetDoc();
-        }
-        else
-        {
-            // Es ist nicht unser Storage
-            DBG_ASSERT(bOK, "Nicht unser Storage");
-            bOK = FALSE;
+            }
+            else
+                bOK = FALSE;
         }
     }
-    else
-    {
-        // Kein Storage
-        bOK = FALSE;
-        DBG_ASSERT(bOK, "Kein Storage");
-    }
+
+    DBG_ASSERT(aBookmarkName.Len(), "Empty document name!");
 
     if (!bOK)
     {
@@ -291,37 +284,11 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(const String& rBookmarkFile)
 
     if (aBookmarkFile != rBookmarkFile && rBookmarkFile.Len())
     {
-        // Das Medium muss als read/write geoeffnet werden, da ev.
-        // OLE-Objekte geclont werden muessen (innerhalb des Mediums)
-
-        // #70116#: OpenMode is set only to STREAM_READ
-        SfxMedium* pMedium = new SfxMedium(rBookmarkFile,
-                                           STREAM_READ /*WRITE | STREAM_SHARE_DENYWRITE
-                                           | STREAM_NOCREATE */,
-                                           FALSE );  // direkt
-
-        if (pMedium->IsStorage())
-        {
-            if (!pMedium->GetStorage().is())
-            {
-                // READ/WRITE hat nicht geklappt, also wieder READ
-                pMedium->Close();
-                pMedium->SetOpenMode(STREAM_READ | STREAM_NOCREATE,
-                                     FALSE);
-
-                // Nun wird eine Kopie angelegt. In diese Kopie darf
-                // geschrieben werden
-                SfxMedium* pTempMedium = new SfxMedium(*pMedium, TRUE);
-                pBookmarkDoc = OpenBookmarkDoc(*pTempMedium);
-                delete pTempMedium;
-            }
-            else
-            {
-                pBookmarkDoc = OpenBookmarkDoc(*pMedium);
-            }
-        }
-
-        delete pMedium;
+        SfxMedium* pMedium = new SfxMedium( rBookmarkFile, STREAM_READ, FALSE );
+        pBookmarkDoc = OpenBookmarkDoc(*pMedium);
+        if ( !pBookmarkDoc )
+            // successfull created BookmarkDoc takes ownership of Medium
+            delete pMedium;
     }
     else if (xBookmarkDocShRef.Is())
     {
