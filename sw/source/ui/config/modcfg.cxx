@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modcfg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-10-13 14:48:47 $
+ *  last change: $Author: os $ $Date: 2000-10-19 13:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,8 @@ SwModuleOptions::SwModuleOptions() :
     aInsertConfig(FALSE),
     aWebInsertConfig(TRUE),
     aTableConfig(FALSE),
-    aWebTableConfig(TRUE)
+    aWebTableConfig(TRUE),
+    bHideFieldTips(FALSE)
 {
     aRevisionConfig.Load();
 }
