@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_writer.scp,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-18 09:00:42 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 10:19:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,8 @@ End
 File gid_File_Registry_Spool_Oo_Office_Embedding_Writer_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
-    Name = "/registry/spool/embedding_writer.xcu";
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Embedding;
+    Name = "/registry/spool/org/openoffice/Office/Embedding-writer.xcu";
 End
 
 #ifdef SOLAR_JAVA
@@ -160,64 +160,64 @@ End
 File gid_File_Registry_Spool_Oo_TypeDetection_Writer_Types_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_writer_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Writer_Filters_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
     Name = "/registry/spool/fcfg_writer_filters.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Web_Types_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_web_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Web_Filters_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
     Name = "/registry/spool/fcfg_web_filters.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Global_Types_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_global_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Global_Filters_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
     Name = "/registry/spool/fcfg_global_filters.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Common_Writer_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
-    Name = "/registry/spool/org.openoffice.Office.Common-writer.xcu";
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
+    Name = "/registry/spool/org/openoffice/Office/Common-writer.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Setup_Writer_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
-    Name = "/registry/spool/org.openoffice.Setup-writer.xcu";
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Setup;
+    Name = "/registry/spool/org/openoffice/Setup-writer.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Common_Dicooo_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
-    Name = "/registry/spool/org.openoffice.Office.Common-dicooo.xcu";
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
+    Name = "/registry/spool/org/openoffice/Office/Common-dicooo.xcu";
 End
 
 File gid_File_Oo_Office_Ui_Writerwindowstate_Xcs
