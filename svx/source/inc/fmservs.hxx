@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmservs.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:19 $
+ *  last change: $Author: fs $ $Date: 2000-10-31 09:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ DECLARE_CONSTASCII_USTRING(SRV_SDBC_STATEMENT);
 DECLARE_CONSTASCII_USTRING(SRV_SDB_DATABASE_ENVIRONMENT);
 DECLARE_CONSTASCII_USTRING(SRV_SDB_DATABASE_ACCESS_CONNECTION);
 DECLARE_CONSTASCII_USTRING(SRV_SDB_DATABASE_ACCESS_CONTEXT);
+DECLARE_CONSTASCII_USTRING(SRV_SDB_INTERACTION_HANDLER);
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmservs.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
+ *  last change: $Author: fs $ $Date: 2000-10-31 09:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,7 @@ IMPLEMENT_CONSTASCII_USTRING(SRV_SDBC_STATEMENT,"com.sun.star.sdbc.Statement");
 IMPLEMENT_CONSTASCII_USTRING(SRV_SDB_DATABASE_ENVIRONMENT,"com.sun.star.sdb.DatabaseEnvironment");
 IMPLEMENT_CONSTASCII_USTRING(SRV_SDB_DATABASE_ACCESS_CONNECTION,"com.sun.star.sdb.DatabaseAccessConnection");
 IMPLEMENT_CONSTASCII_USTRING(SRV_SDB_DATABASE_ACCESS_CONTEXT,"com.sun.star.sdb.DatabaseAccessContext");
+IMPLEMENT_CONSTASCII_USTRING(SRV_SDB_INTERACTION_HANDLER,"com.sun.star.sdb.InteractionHandler");
 
 
 #define DECL_SERVICE(ImplName)                      \
