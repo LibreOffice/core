@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:54:03 $
+#   last change: $Author: obo $ $Date: 2005-01-25 15:09:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,10 @@ JARFILES=sandbox.jar
 
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
+.IF "$(JDK)" == "gcj"
+all:
+        @echo This dir cannot be build with gcj because of sun.net.ftp.FtpClient
+.ELSE
 # --- Files --------------------------------------------------------
 
 JAVAFILES=  \
@@ -88,6 +92,7 @@ JAVACLASSFILES=	\
 
 
 # --- Targets ------------------------------------------------------
+.ENDIF
 
 .INCLUDE :  target.mk
 
