@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 14:04:21 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,6 +594,9 @@ public:
     ::rtl::OUString SAL_CALL getTitle(  ) throw(::com::sun::star::uno::RuntimeException);
     sal_Int16 SAL_CALL execute(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL endExecute(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XView
+    void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XDevice,
     ::com::sun::star::awt::DeviceInfo SAL_CALL getInfo() throw(::com::sun::star::uno::RuntimeException);
