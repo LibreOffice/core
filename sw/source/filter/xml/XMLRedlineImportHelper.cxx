@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-25 16:15:18 $
+ *  last change: $Author: dvo $ $Date: 2002-07-05 13:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,10 +689,19 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         aPaM.DeleteMark();
     }
 
-    // check for:
-    // a) bIgnoreRedline (e.g. insert mode)
-    // b) illegal PaM range (CheckNodesRange())
-    if ( bIgnoreRedlines ||
+
+    // cover three cases:
+    // 1) empty redlines (no range, no content) #100921#
+    // 2) check for:
+    //    a) bIgnoreRedline (e.g. insert mode)
+    //    b) illegal PaM range (CheckNodesRange())
+    // 3) normal case: insert redline
+    if( !aPaM.HasMark() && (pRedlineInfo->pContentIndex == NULL) )
+    {
+        // these redlines have no function, and will thus be ignored (just as
+        // in sw3io), so no action here
+    }
+    else if ( bIgnoreRedlines ||
          !CheckNodesRange( aPaM.GetPoint()->nNode,
                            aPaM.GetMark()->nNode,
                            sal_True ) )
