@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 16:46:22 $
+ *  last change: $Author: kz $ $Date: 2001-12-19 17:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1875,7 +1875,7 @@ QueryBox QUERY_SAVE_TABLE_EDIT_INDEXES
     Message[ greek ] = "Ο πίνακας πρέπει να αποθηκευτεί πρώτα για να μπορέσετε να τροποποιήσετε τα ευρετήριά του.\nΝα αποθηκευτεί η δομή του πίνακα τώρα;";
     Message[ dutch ] = "Voordat u de indices van een tabel kunt veranderen moeten deze worden opgeslagen.\nWilt u de wijzigingen in de tabelstructuur nu opslaan?";
     Message[ french ] = "Avant de pouvoir modifier les index d'une table, vous devez l'enregistrer.\nVoulez-vous enregistrer les modifications apportιes ΰ la structure de la table ?";
-    Message[ spanish ] = "Antes de modificar los νndices de una tabla, ιsta debe estar guardada.\nΏDesea guardar ahora las modificaciones en la estructura de la tabla?";
+    Message[ spanish ] = "Antes de modificar los νndices de una tabla deberα guardarla.\nΏDesea guardar ahora las modificaciones en la estructura de la tabla?";
     Message[ italian ] = "Prima di modificare gli indici di una tabella θ necessario salvare prima la tabella.\nVolete salvare adesso le modifiche alla struttura della tabella?";
     Message[ danish ] = "Before you can edit the indexes of a table, it must be saved.\nDo you want to save your changes now?";
     Message[ swedish ] = "Innan du kan δndra indexen till en tabell mεste du spara den.\nVill du spara dina δndringar av tabellstrukturen nu?";
@@ -2223,6 +2223,7 @@ String STR_TABLEDESIGN_ALTER_ERROR
     Text[ arabic ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
     Text[ catalan ] = "No s'ha pogut modificar la columna \"\\$column\\$\". Voleu eliminar-la i adjuntar el nou format?";
 };
+
 
 
 
