@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:34:33 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:52:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,6 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
             pPage = FindPageFrm();
             //Minimieren - sprich ggf. zuruecksetzen - der Invalidierungen s.u.
             bOldInvaCntnt  = pPage->IsInvalidCntnt();
-            bOldInvaLayout = pPage->IsInvalidLayout();
         }
 
         pFollow->_SetOfst( nTxtOfst );
@@ -476,8 +475,6 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
         {
             if ( !bOldInvaCntnt )
                 pPage->ValidateCntnt();
-            if ( !bOldInvaLayout && !IsInSct() )
-                pPage->ValidateLayout();
         }
 
 #ifndef PRODUCT
@@ -2152,11 +2149,18 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
 
 /*************************************************************************
  *                      SwTxtFrm::FormatQuick()
+ *
+ * bForceQuickFormat is set if GetFormatted() has been called during the
+ * painting process. Actually I cannot imagine a situation which requires
+ * a full formatting of the paragraph during painting, on the other hand
+ * a full formatting can cause the invalidation of other layout frames,
+ * e.g., if there are footnotes in this paragraph, and invalid layout
+ * frames will not calculated during the painting. So I actually want to
+ * avoid a formatting during painting, but since I'm a coward, I'll only
+ * force the quick formatting in the situation of issue i29062.
  *************************************************************************/
-// 6995:
-// return sal_False: Prepare(), HasPara(), InvalidateRanges(),
 
-sal_Bool SwTxtFrm::FormatQuick()
+sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
 {
     ASSERT( ! IsVertical() || ! IsSwapped(),
             "SwTxtFrm::FormatQuick with swapped frame" );
@@ -2206,7 +2210,8 @@ sal_Bool SwTxtFrm::FormatQuick()
     const xub_StrLen nEnd = GetFollow()
                       ? GetFollow()->GetOfst() : aInf.GetTxt().Len();
     do
-    {   DBG_LOOP;
+    {
+        DBG_LOOP;
         nStart = aLine.FormatLine( nStart );
         if( aInf.IsNewLine() || (!aInf.IsStop() && nStart < nEnd) )
             aLine.Insert( new SwLineLayout() );
@@ -2217,13 +2222,12 @@ sal_Bool SwTxtFrm::FormatQuick()
     aTopLeft += Prt().Pos();
     const SwTwips nNewHeight = aLine.Y() + aLine.GetLineHeight();
     const SwTwips nOldHeight = aTopLeft.Y() + Prt().Height();
-    if( nNewHeight != nOldHeight && !IsUndersized() )
+
+    if( !bForceQuickFormat && nNewHeight != nOldHeight && !IsUndersized() )
     {
-#if OSL_DEBUG_LEVEL > 1
-//  Achtung: Durch FormatLevel==12 kann diese Situation auftreten, don't panic!
-//      ASSERT( nNewHeight == nOldHeight, "!FormatQuick: rosebud" );
-#endif
-        xub_StrLen nStrt = GetOfst();
+        // Achtung: Durch FormatLevel==12 kann diese Situation auftreten, don't panic!
+        // ASSERT( nNewHeight == nOldHeight, "!FormatQuick: rosebud" );
+        const xub_StrLen nStrt = GetOfst();
         _InvalidateRange( SwCharRange( nStrt, nEnd - nStrt) );
         return sal_False;
     }
