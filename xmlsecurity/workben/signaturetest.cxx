@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signaturetest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-14 11:05:47 $
+ *  last change: $Author: mt $ $Date: 2004-07-15 07:16:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,8 +421,19 @@ IMPL_LINK( MyWin, VerifyDigitalSignaturesHdl, Button*, EMPTYARG )
         comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), uno::UNO_QUERY );
     if ( xD.is() )
     {
-        com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInformation > aInfos = xD->VerifyDocumentContentSignatures( xStore );
-        // ...
+        uno::Sequence< security::DocumentSignaturesInformation > aInfos = xD->VerifyDocumentContentSignatures( xStore );
+        int nInfos = aInfos.getLength();
+        for ( int n = 0; n < nInfos; n++ )
+        {
+            security::DocumentSignaturesInformation& rInf = aInfos[n];
+            String aText( RTL_CONSTASCII_USTRINGPARAM( "The document is signed by\n\n  " ) );
+            aText += String( rInf.Signer->getSubjectName() );
+            aText += String( RTL_CONSTASCII_USTRINGPARAM( "\n\n The signature is " ) );
+            if ( !rInf.SignatureIsValid )
+                aText += String( RTL_CONSTASCII_USTRINGPARAM( "NOT " ) );
+            aText += String( RTL_CONSTASCII_USTRINGPARAM( "valid" ) );
+            InfoBox( this, aText ).Execute();
+        }
 
     }
 

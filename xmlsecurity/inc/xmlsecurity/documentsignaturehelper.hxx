@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentsignaturehelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-14 11:06:05 $
+ *  last change: $Author: mt $ $Date: 2004-07-15 07:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

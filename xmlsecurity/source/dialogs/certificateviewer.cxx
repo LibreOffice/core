@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-15 07:13:23 $
+ *  last change: $Author: mt $ $Date: 2004-07-15 07:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,10 +229,10 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
 
     // recalc positions for date fields according to real size
     Point   aPos( maValidFromLabelFI.GetPosPixel() );
-    AdjustPosAndSize( maValidFromLabelFI, aPos );
-    AdjustPosAndSize( maValidFromFI, aPos );
-    AdjustPosAndSize( maValidToLabelFI, aPos );
-    AdjustPosAndSize( maValidToFI, aPos );
+    AdjustPosAndSize( maValidFromLabelFI, aPos, 5 );
+    AdjustPosAndSize( maValidFromFI, aPos, 5 );
+    AdjustPosAndSize( maValidToLabelFI, aPos, 5 );
+    AdjustPosAndSize( maValidToFI, aPos, 5 );
 
     // adjust position of fixed text depending on image sizes
     ShrinkToFit( maCertImg );

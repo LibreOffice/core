@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-15 06:20:09 $
+ *  last change: $Author: mt $ $Date: 2004-07-15 07:16:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 
 #include <tools/intn.hxx>
+#include <tools/date.hxx>
+#include <tools/time.hxx>
 
 #include "dialogs.hrc"
 #include "resourcemanager.hxx"
@@ -233,6 +235,8 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
                 }
                 maSignatureHelper.AddForSigning( nSecurityId, aElements[n], aElements[n], bBinaryMode );
             }
+
+            maSignatureHelper.SetDateTime( nSecurityId, Date(), Time() );
 
             SignatureStreamHelper aStreamHelper = DocumentSignatureHelper::OpenSignatureStream( mxStore, embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE, meSignatureMode );
             uno::Reference< io::XOutputStream > xOutputStream( aStreamHelper.xSignatureStream, uno::UNO_QUERY );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-14 11:05:44 $
+ *  last change: $Author: mt $ $Date: 2004-07-15 07:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,6 @@ sal_Bool DocumentDigitalSignatures::ImplViewSignatures( const ::com::sun::star::
 
 com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInformation > DocumentDigitalSignatures::ImplVerifySignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage, DocumentSignatureMode eMode ) throw (::com::sun::star::uno::RuntimeException)
 {
-    std::vector< rtl::OUString > aElementsToBeVerified = DocumentSignatureHelper::CreateElementList( rxStorage, ::rtl::OUString(), eMode );
-
     XMLSignatureHelper aSignatureHelper( mxMSF );
     aSignatureHelper.Init( rtl::OUString() );
     aSignatureHelper.SetStorage( rxStorage );
@@ -168,10 +166,42 @@ com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInf
 
     aSignatureHelper.EndMission();
 
-    // MT: LATER...
-    //  = aHelper.GetSignatureInformations();
+    uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > xSecEnv = aSignatureHelper.GetSecurityEnvironment();
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInformation > aInfos;
+    SignatureInformations aSignInfos = aSignatureHelper.GetSignatureInformations();
+    int nInfos = aSignInfos.size();
+    ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInformation > aInfos(nInfos);
+
+    if ( nInfos )
+    {
+        std::vector< rtl::OUString > aElementsToBeVerified = DocumentSignatureHelper::CreateElementList( rxStorage, ::rtl::OUString(), eMode );
+        for( int n = 0; n < nInfos; ++n )
+        {
+            const SignatureInformation& rInfo = aSignInfos[n];
+            aInfos[n].Signer = xSecEnv->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
+            if ( !aInfos[n].Signer.is() )
+                aInfos[n].Signer = xSecEnv->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
+
+            aInfos[n].SignatureDate = String( rInfo.ouDate ).ToInt32();
+            aInfos[n].SignatureTime = String( rInfo.ouTime ).ToInt32();
+
+            aInfos[n].SignatureIsValid = ( rInfo.nStatus == STATUS_VERIFY_SUCCEED );
+
+            if ( aInfos[n].SignatureIsValid )
+            {
+                // Can only be valid if ALL streams are signed, which means real stream count == signed stream count
+                int nRealCount = 0;
+                for ( int i = rInfo.vSignatureReferenceInfors.size(); i; )
+                {
+                    const SignatureReferenceInformation& rInf = rInfo.vSignatureReferenceInfors[--i];
+                    if ( ( rInf.nType == 2 ) || ( rInf.nType == 3 ) )
+                        nRealCount++;
+                }
+                aInfos[n].SignatureIsValid = ( aElementsToBeVerified.size() == nRealCount );
+            }
+
+        }
+    }
     return aInfos;
 
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-14 11:05:44 $
+ *  last change: $Author: mt $ $Date: 2004-07-15 07:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@ extern rtl::OUString bigIntegerToNumericString( ::com::sun::star::uno::Sequence<
 extern ::com::sun::star::uno::Sequence< sal_Int8 > numericStringToBigInteger (  rtl::OUString serialNumber );
 
 class XSecController;
+class Date;
+class Time;
 
 namespace com {
 namespace sun {
@@ -196,7 +198,7 @@ public:
     void        EndMission();
     sal_Int32   GetNewSecurityId();
     void        SetX509Certificate( sal_Int32 nSecurityId, const rtl::OUString& ouX509IssuerName, const rtl::OUString& ouX509SerialNumber);
-    void        SetDateTime( sal_Int32 nSecurityId, const rtl::OUString& ouDate, const rtl::OUString& ouTime);
+    void        SetDateTime( sal_Int32 nSecurityId, const Date& rDate, const Time& rTime );
 
     void        AddForSigning( sal_Int32 securityId, const rtl::OUString& uri, const rtl::OUString& objectURL, sal_Bool bBinary );
     bool        CreateAndWriteSignature( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-14 11:05:46 $
+ *  last change: $Author: mt $ $Date: 2004-07-15 07:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
+
+#include <tools/date.hxx>
+#include <tools/time.hxx>
 
 /* SEInitializer component */
 #define SEINITIALIZER_COMPONENT "com.sun.star.xml.crypto.SEInitializer"
@@ -163,15 +166,11 @@ void XMLSignatureHelper::SetX509Certificate(
         ouX509SerialNumber);
 }
 
-void XMLSignatureHelper::SetDateTime(
-        sal_Int32 nSecurityId,
-        const rtl::OUString& ouDate,
-        const rtl::OUString& ouTime)
+void XMLSignatureHelper::SetDateTime( sal_Int32 nSecurityId, const Date& rDate, const Time& rTime )
 {
-    mpXSecController->setDateTime(
-        nSecurityId,
-        ouDate,
-        ouTime);
+    rtl::OUString aDate = String::CreateFromInt32( rDate.GetDate() );
+    rtl::OUString aTime = String::CreateFromInt32( rTime.GetTime() );
+    mpXSecController->setDateTime( nSecurityId, aDate, aTime );
 }
 
 void XMLSignatureHelper::AddForSigning( sal_Int32 nSecurityId, const rtl::OUString& uri, const rtl::OUString& objectURL, sal_Bool bBinary )
