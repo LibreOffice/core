@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 13:08:12 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 14:08:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,8 @@ class OfaLanguagesTabPage : public SfxTabPage
 {
     FixedLine       aUILanguageGB;
     ReadOnlyImage   aLocaleSettingFI;
+    FixedText       aUserInterfaceFT;
+    ListBox         aUserInterfaceLB;
     FixedText       aLocaleSettingFT;
     SvxLanguageBox  aLocaleSettingLB;
     ReadOnlyImage   aCurrencyFI;
@@ -216,10 +218,9 @@ class OfaLanguagesTabPage : public SfxTabPage
     FixedText       aComplexLanguageFT;
     SvxLanguageBox  aComplexLanguageLB;
     CheckBox        aCurrentDocCB;
-    FixedLine       aAsianSupportFL;
+    FixedLine       aEnhancedFL;
     ReadOnlyImage   aAsianSupportFI;
     CheckBox        aAsianSupportCB;
-    FixedLine       aCTLSupportFL;
     ReadOnlyImage   aCTLSupportFI;
     CheckBox        aCTLSupportCB;
 
@@ -228,6 +229,8 @@ class OfaLanguagesTabPage : public SfxTabPage
     sal_Bool        m_bOldAsian;
     sal_Bool        m_bOldCtl;
     LanguageConfig_Impl*    pLangConfig;
+
+    rtl::OUString m_sUserLocaleValue;
 
     DECL_LINK(  SupportHdl, CheckBox* ) ;
     DECL_LINK(  LocaleSettingHdl, SvxLanguageBox* ) ;
