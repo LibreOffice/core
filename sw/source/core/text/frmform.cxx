@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-01 08:09:19 $
+ *  last change: $Author: ama $ $Date: 2002-05-02 10:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2258,7 +2258,17 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
 #else
                                     SwTwips nOldTop = pFly->Frm().Top();
 #endif
+                                    SwSectionFrm* pSect = FindSctFrm();
+                                    if( pSect )
+                                    {
+                                        if( pSect->IsColLocked() )
+                                            pSect = NULL;
+                                        else
+                                            pSect->ColLock();
+                                    }
                                     pFly->Calc();
+                                    if( pSect )
+                                        pSect->ColUnlock();
                                     bRepeat = sal_True;
 #ifdef VERTICAL_LAYOUT
                                     if( !nRepAdd && nOldTop >= (pFly->Frm().*fnRect->fnGetTop)() )
