@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipboard.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-06 13:55:02 $
+ *  last change: $Author: tra $ $Date: 2001-03-07 11:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,10 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
+#ifndef _OSL_CONDITN_HXX_
+#include <osl/conditn.hxx>
+#endif
+
 #include <memory>
 
 // forward
@@ -130,8 +134,9 @@ class CWinClipbImpl;
 class CWinClipboardDummy
 {
 protected:
-    osl::Mutex m_aMutex;
-    osl::Mutex m_aCbListenerMutex;
+    osl::Mutex      m_aMutex;
+    osl::Mutex      m_aCbListenerMutex;
+    osl::Condition  m_aCondition;
 };
 
 class CWinClipboard :

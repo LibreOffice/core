@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipbImpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-06 12:27:02 $
+ *  last change: $Author: tra $ $Date: 2001-03-07 11:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,8 @@ protected:
         throw( ::com::sun::star::uno::RuntimeException );
 
     void SAL_CALL setContents( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransferable,
-                               const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
+                               const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner,
+                               osl::ClearableMutexGuard& aGuard )
                                throw( ::com::sun::star::uno::RuntimeException );
 
     ::rtl::OUString SAL_CALL getName(  ) throw( ::com::sun::star::uno::RuntimeException );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipboard.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-06 13:55:02 $
+ *  last change: $Author: tra $ $Date: 2001-03-07 11:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ CWinClipboard::CWinClipboard( const Reference< XMultiServiceFactory >& rServiceM
     WeakComponentImplHelper4< XClipboardEx, XFlushableClipboard, XClipboardNotifier, XServiceInfo >( m_aCbListenerMutex ),
     m_SrvMgr( rServiceManager )
 {
+    m_aCondition.set( );
     m_pImpl.reset( new CWinClipbImpl( aClipboardName, this ) );
 }
 
@@ -139,6 +140,8 @@ CWinClipboard::CWinClipboard( const Reference< XMultiServiceFactory >& rServiceM
 
 Reference< XTransferable > SAL_CALL CWinClipboard::getContents( ) throw( RuntimeException )
 {
+    m_aCondition.wait( );
+
     MutexGuard aGuard( m_aMutex );
 
     OSL_ENSURE( !rBHelper.bDisposed, "Object is already disposed" );
@@ -153,10 +156,12 @@ void SAL_CALL CWinClipboard::setContents( const Reference< XTransferable >& xTra
                                           const Reference< XClipboardOwner >& xClipboardOwner )
                                           throw( RuntimeException )
 {
-    MutexGuard aGuard( m_aMutex );
+    m_aCondition.wait( );
+
+    ClearableMutexGuard aGuard( m_aMutex );
 
     OSL_ENSURE( !rBHelper.bDisposed, "Object is already disposed" );
-    m_pImpl->setContents( xTransferable, xClipboardOwner );
+    m_pImpl->setContents( xTransferable, xClipboardOwner, aGuard );
 }
 
 //------------------------------------------------------------------------
@@ -174,6 +179,8 @@ OUString SAL_CALL CWinClipboard::getName(  ) throw( RuntimeException )
 
 void SAL_CALL CWinClipboard::flushClipboard( ) throw( RuntimeException )
 {
+    m_aCondition.wait( );
+
     MutexGuard aGuard( m_aMutex );
     OSL_ENSURE( !rBHelper.bDisposed, "Object is already disposed" );
 
@@ -200,6 +207,8 @@ sal_Int8 SAL_CALL CWinClipboard::getRenderingCapabilities(  ) throw( RuntimeExce
 void SAL_CALL CWinClipboard::addClipboardListener( const Reference< XClipboardListener >& listener )
     throw( RuntimeException )
 {
+    m_aCondition.wait( );
+
     MutexGuard aGuard( m_aMutex );
     rBHelper.aLC.addInterface( getCppuType( &listener ), listener );
 }
@@ -211,6 +220,8 @@ void SAL_CALL CWinClipboard::addClipboardListener( const Reference< XClipboardLi
 void SAL_CALL CWinClipboard::removeClipboardListener( const Reference< XClipboardListener >& listener )
     throw( RuntimeException )
 {
+    m_aCondition.wait( );
+
     MutexGuard aGuard( m_aMutex );
     rBHelper.aLC.removeInterface( getCppuType( &listener ), listener );
 }
