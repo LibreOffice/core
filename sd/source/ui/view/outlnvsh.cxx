@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:34:24 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2361,11 +2361,11 @@ BOOL OutlineViewShell::UpdateLayoutObject( SdPage* pPage, Paragraph* pPara )
 |*
 \************************************************************************/
 
-ULONG OutlineViewShell::Read(SvStream& rInput, USHORT eFormat)
+ULONG OutlineViewShell::Read(SvStream& rInput, const String& rBaseURL, USHORT eFormat)
 {
     ::Outliner* pOutl = pOlView->GetOutliner();
 
-    ULONG bRet = pOutl->Read( rInput, eFormat, GetDocSh()->GetHeaderAttributes() );
+    ULONG bRet = pOutl->Read( rInput, rBaseURL, eFormat, GetDocSh()->GetHeaderAttributes() );
 
     SdPage* pPage = GetDoc()->GetSdPage( GetDoc()->GetSdPageCount(PK_STANDARD) - 1, PK_STANDARD );;
     SfxStyleSheet* pTitleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
