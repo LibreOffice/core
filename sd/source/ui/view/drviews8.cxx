@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews8.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:18:46 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:32:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,9 +99,6 @@
 #include "fuzoom.hxx"
 #ifndef SD_FU_DISPLAY_ORDER_HXX
 #include "fudspord.hxx"
-#endif
-#ifndef SD_FU_SLIDE_PARAMETERS_HXX
-#include "fuslprms.hxx"
 #endif
 #ifndef SD_FU_TRANSFORM_HXX
 #include "futransf.hxx"
@@ -378,13 +375,6 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
             Invalidate( SID_POSITION );
             Cancel();
             rReq.Done ();
-        }
-        break;
-
-        case SID_DIA:
-        {
-            pFuActual =new FuSlideParameters( this, GetActiveWindow(), pDrView, GetDoc(), rReq);
-            Cancel();
         }
         break;
 
