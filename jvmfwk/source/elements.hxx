@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elements.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-13 11:15:02 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,7 +381,7 @@ struct PluginLibrary
 {
     /** contains the vendor string which is later userd in the xml API
      */
-    rtl::OString sVendor;
+    rtl::OUString sVendor;
     /** File URL the plug-in library
      */
     rtl::OUString sPath;
