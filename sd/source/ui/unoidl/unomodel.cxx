@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-16 09:31:24 $
+ *  last change: $Author: thb $ $Date: 2001-10-17 09:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -788,12 +788,14 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
         return (::cppu::OWeakObject * )new SvxUnoTextField( ID_EXT_DATEFIELD );
     }
 
+#ifndef SVX_LIGHT
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.xml.NamespaceMap") ) )
     {
         static sal_uInt16 aWhichIds[] = { SDRATTR_XMLATTRIBUTES, EE_CHAR_XMLATTRIBS, EE_PARA_XMLATTRIBS, 0 };
 
         return svx::NamespaceMap_createInstance( aWhichIds, &pDoc->GetItemPool() );
     }
+#endif
 
     uno::Reference< uno::XInterface > xRet;
 
