@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunjavaplugin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-05 14:11:18 $
+ *  last change: $Author: jl $ $Date: 2004-05-06 11:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include "osl/module.hxx"
 #include "osl/mutex.hxx"
 #include "osl/thread.hxx"
+#include "osl/file.hxx"
 #include "rtl/instance.hxx"
 #include "osl/getglobalmutex.hxx"
 #include <setjmp.h>
@@ -83,6 +84,8 @@
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define SUN_MICRO "Sun Microsystems Inc."
+
+using namespace osl;
 namespace {
 
 struct Init
@@ -100,12 +103,65 @@ osl::Mutex * getPluginMutex()
             Init(), ::osl::GetGlobalMutex());
 }
 
+#if defined UNX
+rtl::OString getPluginJarPath(const rtl::OUString& sLocation, const rtl::OUString& sVersion)
+{
+    rtl::OString ret;
+    rtl::OUString sName1(RTL_CONSTASCII_USTRINGPARAM("javaplugin.jar"));
+    rtl::OUString sName2(RTL_CONSTASCII_USTRINGPARAM("plugin.jar"));
+    rtl::OUString sVer1_4_2(RTL_CONSTASCII_USTRINGPARAM("1.4.2"));
+    rtl::OUString sVer1_5_0(RTL_CONSTASCII_USTRINGPARAM("1.5.0"));
+    rtl::OUString sName;
+    if (stoc_javadetect::JavaInfo::compareVersions(
+            sVersion, sVer1_4_2) == -1)
+    {
+        sName = sName1;
+    }
+    else if (stoc_javadetect::JavaInfo::compareVersions(
+                 sVersion, sVer1_5_0) == -1)
+    {
+        sName = sName2;
+    }
+
+    if (sName.getLength() == 0)
+        return ret;
+
+    //try both SDK or Lib
+    rtl::OUString sJarUrl;
+    DirectoryItem item;
+    rtl::OUString jarPath(sLocation + OUSTR("/lib/")
+                          + sName);
+    if(DirectoryItem::get(jarPath, item) == File::E_None)
+    {
+        sJarUrl = jarPath;
+    }
+    else
+    {
+        rtl::OUString jarPath2(sLocation + OUSTR("/jre/lib/")
+                               + sName);
+        if(DirectoryItem::get(jarPath2, item) == File::E_None)
+        {
+            sJarUrl = jarPath2;
+        }
+    }
+    if (sJarUrl.getLength() == 0)
+        return ret;
+    rtl::OUString sPath;
+    if (osl_getSystemPathFromFileURL(sJarUrl.pData, & sPath.pData)
+        == osl_File_E_None)
+    {
+        ret = rtl::OUStringToOString(sPath, osl_getThreadTextEncoding());
+    }
+    return ret;
+}
+#endif // UNX
+
 JavaInfo* createJavaInfo(const stoc_javadetect::JavaInfo & info)
 {
     JavaInfo* pInfo = (JavaInfo*) rtl_allocateMemory(sizeof(JavaInfo));
     if (pInfo == NULL)
         return NULL;
-    rtl::OUString sVendor(OUSTR("Sun Microsystems Inc."));
+    rtl::OUString sVendor(OUSTR(SUN_MICRO));
     pInfo->sVendor = sVendor.pData;
     rtl_uString_acquire(sVendor.pData);
     pInfo->sLocation = info.usJavaHome.pData;
@@ -321,6 +377,9 @@ javaPluginError startJavaVirtualMachine(
     rtl::OString osJavaHome = rtl::OUStringToOString(
         javaHome, osl_getThreadTextEncoding());
     putenv(strdup(osJavaHome.getStr()));
+#if OSL_DEBUG_LEVEL >=2
+    fprintf(stderr, "Setting JAVA_HOME: %s\n", osJavaHome.getStr());
+#endif
 #endif
 
     typedef jint JNICALL JNI_InitArgs_Type(void *);
@@ -368,15 +427,38 @@ javaPluginError startJavaVirtualMachine(
     // We set an abort handler which is called when the VM calls _exit during
     // JNI_CreateJavaVM. This happens when the LD_LIBRARY_PATH does not contain
     // all some directories of the Java installation. This is necessary for
-    // linux j2re1.3, 1.4 and Solaris j2re1.3. With a j2re1.4 on Solaris the
-    // LD_LIBRARY_PATH need not to be set anymore.
+    // all versions below 1.5.1
     options[0].optionString= "abort";
     options[0].extraInfo= (void* )abort_handler;
     int index = 1;
+    rtl::OString sClassPathProp("-Djava.class.path=");
+    rtl::OString sClassPathOption;
     for (int i = 0; i < cOptions; i++)
     {
-        options[i+1].optionString = arOptions[i].optionString;
-        options[i+1].extraInfo = arOptions[i].extraInfo;
+#ifdef UNX
+    // Until java 1.5 we need to put a plugin.jar or javaplugin.jar (<1.4.2)
+    // in the class path in orderto have applet support.
+        rtl::OString sClassPath = arOptions[i].optionString;
+        if (sClassPath.match(sClassPathProp, 0) == sal_True)
+        {
+//            char sep[] =  {SAL_PATHSEPARATOR, 0};
+            sClassPathOption = sClassPath + //rtl::OString(sep) +
+                getPluginJarPath(pInfo->sLocation,pInfo->sVersion);
+            options[i+1].optionString = (char *) sClassPathOption.getStr();
+            options[i+1].extraInfo = arOptions[i].extraInfo;
+        }
+        else
+        {
+#endif
+            options[i+1].optionString = arOptions[i].optionString;
+            options[i+1].extraInfo = arOptions[i].extraInfo;
+#ifdef UNX
+        }
+#endif
+#if OSL_DEBUG_LEVEL >= 2
+        fprintf(stderr, "VM option: %s\n", options[i+1].optionString);
+#endif
+
     }
 
     vm_args.version= JNI_VERSION_1_2;
@@ -430,8 +512,6 @@ javaPluginError startJavaVirtualMachine(
 
    return errcode;
 }
-
-
 
 
 
