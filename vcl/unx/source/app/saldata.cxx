@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-15 17:01:42 $
+ *  last change: $Author: cp $ $Date: 2002-05-31 14:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -708,21 +708,27 @@ YieldMutexReleaser::~YieldMutexReleaser()
 }
 #endif
 
-void SalXLib::Yield( BOOL bWait )
+void SalXLib::CheckTimeout()
 {
-    struct timeval Timeout;
-
-    // check for timeouts
+    struct timeval aTimeOfDay;
     if( Timeout_.tv_sec ) // timer is started
     {
-        gettimeofday( &Timeout, NULL );
+        gettimeofday( &aTimeOfDay, NULL );
 
-        if( Timeout >= Timeout_ )
+        if( aTimeOfDay >= Timeout_ )
         {
-            Timeout_ = Timeout + nTimeoutMS_;
+            Timeout_ = aTimeOfDay + nTimeoutMS_;
             GetSalData()->Timeout();
         }
     }
+}
+
+void SalXLib::Yield( BOOL bWait )
+{
+    // check for timeouts here if you want to make screenshots
+    static char* p_prioritize_timer = getenv ("SAL_HIGHPRIORITY_REPAINT");
+    if (p_prioritize_timer != NULL)
+        CheckTimeout();
 
     // check for events already queued
     fd_set   ReadFDS;
@@ -758,7 +764,7 @@ void SalXLib::Yield( BOOL bWait )
     ReadFDS         = *pReadFDS_;
     ExceptionFDS    = *pExceptionFDS_;
 
-    Timeout = bWait ? yield : noyield;
+    struct timeval Timeout = bWait ? yield : noyield;
 
     nStateOfYield_ = 1;
 
@@ -786,6 +792,10 @@ void SalXLib::Yield( BOOL bWait )
             errno = 0;
         }
     }
+
+    // usually handle timeouts here (as in 5.2)
+    if (p_prioritize_timer == NULL)
+        CheckTimeout();
 
     // handle events
     if( nFound > 0 )
