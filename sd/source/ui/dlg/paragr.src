@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragr.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 21:17:51 $
+ *  last change: $Author: dl $ $Date: 2001-05-08 13:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ TabDialog TAB_PARAGRAPH
             {
                 Identifier = RID_SVXPAGE_PARA_ASIAN ;
                 PageResID = RID_SVXPAGE_PARA_ASIAN ;
-                Text = "Asiatische Typography" ;
+                Text = "Asiatische Typographie" ;
                 Text [ ENGLISH ] = "Asian typography" ;
                 Text[ english_us ] = "Asian Typography";
                 Text[ portuguese ] = "Tipografia asiática";
