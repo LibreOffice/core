@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlparse.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 06:12:33 $
+ *  last change: $Author: hjs $ $Date: 2002-03-06 12:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 #endif
 #ifndef YYBISON
 #ifndef FLEX_SCANNER
-#include <connectivity/sqlbison.hxx>
+#include <sqlbison.hxx>
 #endif
 #endif
 #ifndef _COM_SUN_STAR_I18N_XCHARACTERCLASSIFICATION_HPP_
