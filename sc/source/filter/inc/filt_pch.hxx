@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filt_pch.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:01 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@
 #include <vcl/sv.h>
 #include <vcl/timer.hxx>
 #include <tools/gen.hxx>
-#include <vcl/color.hxx>
+#include <tools/color.hxx>
 #include <tools/color.hxx>
 #include <filter.hxx>
 #include <rangelst.hxx>
@@ -157,9 +157,7 @@
 #include <tools/table.hxx>
 #include <flttools.hxx>
 #include <vcl/vclenum.hxx>
-#include <vcl/resid.hxx>
 #include <tools/resid.hxx>
-#include <vcl/rc.hxx>
 #include <tools/rc.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/fract.hxx>
@@ -170,7 +168,6 @@
 #include <svtools/lstner.hxx>
 #include <patattr.hxx>
 #include <vcl/font.hxx>
-#include <vcl/gdiobj.hxx>
 #include <svtools/cenumitm.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/intitem.hxx>
@@ -231,7 +228,7 @@
 #include <vcl/event.hxx>
 #include <tools/ownlist.hxx>
 #include <vcl/cmdevt.hxx>
-#include <vcl/fonttype.hxx>
+#include <vcl/vclenum.hxx>
 #include <cell.hxx>
 #include <osl/interlck.h>
 #include <sfx2/sfxuno.hxx>
