@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 18:55:43 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,1184 +65,285 @@ WarningBox WARNINGBOX_JAVANOTFOUND
 {
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK ;
-    Message ="%PRODUCTNAME benötigt eine Java-Laufzeitumgebung (JRE), um diese Aufgabe durchführen zu können. Bitte installieren Sie eine JRE und starten Sie dann %PRODUCTNAME neu.";
-    Message[ english_us ] ="%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task. Please install a JRE and restart %PRODUCTNAME.";
+    Message [ de ] ="%PRODUCTNAME benötigt eine Java-Laufzeitumgebung (JRE), um diese Aufgabe durchführen zu können. Bitte installieren Sie eine JRE und starten Sie dann %PRODUCTNAME neu.";
+    Message[ en-US ] ="%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task. Please install a JRE and restart %PRODUCTNAME.";
 };
 
 WarningBox WARNINGBOX_INVALIDJAVASETTINGS
 {
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK ;
-    Message ="Die %PRODUCTNAME-Konfiguration wurde geändert. Unter Extras - Optionen - %PRODUCTNAME - Java  wählen Sie eine Java-Laufzeitumgebung aus, die von %PRODUCTNAME benutzt werden soll.";
-    Message[ english_us ] ="The %PRODUCTNAME configuration has been changed. Under Tools - Options - %PRODUCTNAME - Java, select the Java runtime environment you want to have used by %PRODUCTNAME.";
+    Message [ de ] ="Die %PRODUCTNAME-Konfiguration wurde geändert. Unter Extras - Optionen - %PRODUCTNAME - Java  wählen Sie eine Java-Laufzeitumgebung aus, die von %PRODUCTNAME benutzt werden soll.";
+    Message[ en-US ] ="The %PRODUCTNAME configuration has been changed. Under Tools - Options - %PRODUCTNAME - Java, select the Java runtime environment you want to have used by %PRODUCTNAME.";
 };
 
 QueryBox QBX_JAVADISABLED
 {
     Buttons = WB_YES_NO_CANCEL ;
     DefButton = WB_DEF_YES ;
-    Message = "%PRODUCTNAME benötigt eine Java-Laufzeitumgebung (JRE), um diese Aufgabe durchführen zu können. Jedoch ist die Benutzung einer  JRE deaktiviert. Möchten Sie die Benutzung von einer JRE jetzt aktivieren?";
-    Message[ english_us ] = "%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task. However, use of a JRE has been disabled. Do you want to enable the use of a JRE now?";
+    Message [ de ] = "%PRODUCTNAME benötigt eine Java-Laufzeitumgebung (JRE), um diese Aufgabe durchführen zu können. Jedoch ist die Benutzung einer  JRE deaktiviert. Möchten Sie die Benutzung von einer JRE jetzt aktivieren?";
+    Message[ en-US ] = "%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task. However, use of a JRE has been disabled. Do you want to enable the use of a JRE now?";
 };
 
 ErrorBox ERRORBOX_JVMCREATIONFAILED
 {
     Buttons = WB_OK;
     DefButton = WB_DEF_OK ;
-    Message = "%PRODUCTNAME benötigt eine Java-Laufzeitumgebung (JRE), um diese Aufgabe durchführen zu können. Die ausgewählte JRE ist defekt. Bitte wählen Sie eine andere Version oder installieren Sie eine neue JRE und aktivieren Sie sie unter Extras - Optionen - %PRODUCTNAME - Java.";
-    Message[ english_us ] = "%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task. The selected JRE is defective. Please select another version or install a new JRE and select  it under Tools - Options - %PRODUCTNAME - Java.";
+    Message [ de ] = "%PRODUCTNAME benötigt eine Java-Laufzeitumgebung (JRE), um diese Aufgabe durchführen zu können. Die ausgewählte JRE ist defekt. Bitte wählen Sie eine andere Version oder installieren Sie eine neue JRE und aktivieren Sie sie unter Extras - Optionen - %PRODUCTNAME - Java.";
+    Message[ en-US ] = "%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task. The selected JRE is defective. Please select another version or install a new JRE and select  it under Tools - Options - %PRODUCTNAME - Java.";
 };
 
 ErrorBox ERRORBOX_RESTARTREQUIRED
 {
     Buttons = WB_OK;
     DefButton = WB_DEF_OK ;
-    Message = "Damit die ausgewählte Java-Laufzeitumgebung richtig funktioniert, muss %PRODUCTNAME neugestartet werden. Bitte starten Sie %PRODUCTNAME neu.";
-    Message[ english_us ] = "For the selected Java runtime environment to work properly, %PRODUCTNAME must be restarted. Please restart %PRODUCTNAME now.";
+    Message [ de ] = "Damit die ausgewählte Java-Laufzeitumgebung richtig funktioniert, muss %PRODUCTNAME neugestartet werden. Bitte starten Sie %PRODUCTNAME neu.";
+    Message[ en-US ] = "For the selected Java runtime environment to work properly, %PRODUCTNAME must be restarted. Please restart %PRODUCTNAME now.";
 };
-
 
 
 String STR_RECOVER_QUERY
 {
-    Text = "Soll die Datei \"$1\" wiederhergestellt werden?" ;
-    Text [ ENGLISH ] = "Recover file $1?" ;
-    Text [ portuguese ] = "Deseja restaurar o ficheiro \"$1\"?" ;
-    Text [ english_us ] = "Should the file \"$1\" be restored?" ;
-    Text [ portuguese_brazilian ] = "Deseja restaurar o arquivo \"$1\"?" ;
-    Text [ swedish ] = "Skall filen \"$1\" återställas?" ;
-    Text [ danish ] = "Skal filen \"$1\" gendannes?" ;
-    Text [ italian ] = "Volete recuperare il file \"$1\"?" ;
-    Text [ spanish ] = "¿Desea restaurar el archivo \"$1\"?" ;
-    Text [ french ] = "Restaurer le fichier \"$1\" ?" ;
-    Text [ dutch ] = "Wilt u het bestand \"$1\" herstellen?" ;
-    Text[ chinese_simplified ] = "è¦ä¿®å¤è¿™ä¸ªæ–‡ä»¶ \"$1\" ï¼Ÿ";
-    Text[ russian ] = "Âîññòàíîâèòü äîêóìåíò \"$1\"?";
-    Text[ polish ] = "Czy przywróciæ plik \"$1\"?";
-    Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ« \"$1\" ã‚’å¾©å…ƒã—ã¾ã™ã‹ã€‚";
-    Text[ chinese_traditional ] = "è¦ä¿®å¾©æª”æ¡ˆ<$1>ï¼Ÿ";
-    Text[ arabic ] = "åá ÊÑíÏ ÇÓÊÚÇÏÉ Çáãáİ \"$1\"¿";
-    Text[ dutch ] = "Wilt u het bestand \"$1\" herstellen?";
-    Text[ chinese_simplified ] = "è¦ä¿®å¤è¿™ä¸ªæ–‡ä»¶ \"$1\" ï¼Ÿ";
-    Text[ greek ] = "Íá ãßíåé åğáíáöïñÜ ôïõ áñ÷åßïõ \"$1\";";
-    Text[ korean ] = "íŒŒì¼ \"$1\"ì„(ë¥¼ï¼‰ ë³µêµ¬í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Text[ turkish ] = "\"$1\" dosyası kurtarılsın mı?";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Voleu restaurar el fitxer \"$1\"?";
-    Text[ finnish ] = "Palautetaanko tiedosto $1?";
-    Text[ thai ] = "à¸ˆà¸°à¸„à¸·à¸™à¸ªà¸ à¸²à¸à¹à¸Ÿà¹‰à¸¡ \"$1\" à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
-    Text[ czech ] = "Obnovit soubor \"$1\"?";
-    Text[ hebrew ] = "â€®×”×× ×œ× ×¡×•×ª ×œ××•×©×© ××ª ×”×§×•×‘×¥ \"$1\"?â€¬";
-    Text[ hindi ] = "à¤«à¤¾à¤‡à¤² \"$1\" à¤•à¥‹ à¤ªà¥‚à¤°à¥à¤µ à¤…à¤µà¤¸à¥à¤¥à¤¾ à¤®à¥‡à¤‚ à¤ªà¤¹à¥à¤à¤šà¤¾à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ?";
-    Text[ slovak ] = "ObnoviÅ¥ sÃºbor \"$1\"?";
-    Text[ hungarian ] = "KÃ­vÃ¡nja helyreÃ¡llÃ­tani a(z) \"$1\" fÃ¡jlt?";
-    Text[ slovenian ] = "Ali Å¾elite obnoviti datoteko \"$1\"?";
+    Text [ de ] = "Soll die Datei \"$1\" wiederhergestellt werden?" ;
+    Text [ en-US ] = "Should the file \"$1\" be restored?" ;
+    Text [ x-comment ] = " ";
 };
 
 String STR_RECOVER_TITLE
 {
-    Text = "Datei-Wiederherstellung" ;
-    Text [ ENGLISH ] = "File Recovery" ;
-    Text [ english_us ] = "File Recovery" ;
-    Text [ portuguese_brazilian ] = "Recuperação de Arquivo" ;
-    Text [ swedish ] = "Återställa fil" ;
-    Text [ danish ] = "Filgendannelse" ;
-    Text [ italian ] = "Recupero file" ;
-    Text [ spanish ] = "Recuperar archivo" ;
-    Text [ french ] = "Restauration de fichier" ;
-    Text [ dutch ] = "Bestandsherstel" ;
-    Text [ portuguese ] = "Restaurar ficheiro" ;
-    Text[ chinese_simplified ] = "ä¿®å¤æ–‡ä»¶";
-    Text[ russian ] = "Âîññòàíîâëåíèå äîêóìåíòà";
-    Text[ polish ] = "Odzyskiwanie plików";
-    Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã®å¾©å…ƒ";
-    Text[ chinese_traditional ] = "ä¿®å¾©æª”æ¡ˆ";
-    Text[ arabic ] = "ÇÓÊÚÇÏÉ ãáİ";
-    Text[ dutch ] = "Bestandsherstel";
-    Text[ chinese_simplified ] = "ä¿®å¤æ–‡ä»¶";
-    Text[ greek ] = "ÁíÜêôçóç áñ÷åßïõ";
-    Text[ korean ] = "íŒŒì¼ ë³µêµ¬";
-    Text[ turkish ] = "Dosya kurtarma";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Recupera el fitxer";
-    Text[ finnish ] = "Tiedoston palautus";
-    Text[ thai ] = "à¸à¸¹à¹‰à¸„à¸·à¸™à¹à¸Ÿà¹‰à¸¡";
-    Text[ czech ] = "ObnovenÃ­ souboru";
-    Text[ hebrew ] = "Datei-Wiederherstellung";
-    Text[ hindi ] = "à¤«à¤¾à¤‡à¤² à¤ªà¥à¤¨à¤ƒ à¤ªà¥à¤°à¤¾à¤ªà¥à¤¤à¤¿";
-    Text[ slovak ] = "Obnovenie sÃºboru";
-    Text[ hungarian ] = "FÃ¡jl helyreÃ¡llÃ­tÃ¡sa";
-    Text[ slovenian ] = "Obnovitev datoteke";
+    Text [ de ] = "Datei-Wiederherstellung" ;
+    Text [ en-US ] = "File Recovery" ;
+    Text [ x-comment ] = " ";
 };
 
 WarningBox STR_RECOVER_PREPARED
 {
-    Message = "Es ist ein nicht behebbarer Fehler aufgetreten.\n\nAlle modifizierten Dateien wurden jedoch\ngesichert und können voraussichtlich beim nächsten\nProgrammstart wiederhergestellt werden." ;
-    Message [ ENGLISH ] = "An unrecoverable error has occured.\n\nAll modified files are saved and can\nprobably be recovered on application restart." ;
-    Message [ portuguese ] = "Surgiu um erro irrecuperável.\n\nContudo, todos os ficheiros\nmodificados foram guardados e poderão provavelmente\nser recuperados ao reiniciar o programa." ;
-    Message [ english_us ] = "An unrecoverable error has occurred.\n\nAll modified files have been saved and can\nprobably be recovered at program restart." ;
-    Message [ portuguese_brazilian ] = "Ocorreu um erro irrecuperável.\n\nTodos os arquivos foram salvos e poderão\n provavelmente ser recuperados ao reiniciar o programa." ;
-    Message [ swedish ] = "Ett irreparabelt fel har uppstått.\n\nMen alla ändrade filer sparades\noch kan förmodligen återställas\nvid nästa programstart." ;
-    Message [ danish ] = "Der er opstået en uoprettelig fejl.\n\nAlle ændrede filer blev dog sikkerhedskopieret\n og kan formodentlig gendannes ved næste \nstart af programmet." ;
-    Message [ italian ] = "Si è verificato un errore irrimediabile.\n\nTutti i file modificati sono stati salvati e probabilmente verranno recuperati\nal prossimo avvio del programma." ;
-    Message [ spanish ] = "Ha ocurrido un error irreparable.\n\nSin embargo se guardaron todos los archivos modificados\ny quizás podrán recuperarse\nal iniciar de nuevo el programa." ;
-    Message [ french ] = "Une erreur irrécupérable s'est produite.\n\nTous les fichiers modifiés ont été sauvegardés\net devraient être restaurés au\nredémarrage du programme." ;
-    Message [ dutch ] = "Er is een onherstelbare fout opgetreden.\n\nAlle gemodificeerde bestanden zijn echter\nopgeslagen en kunnen waarschijnlijk bij de volgende\nprogrammastart worden hersteld." ;
-    Message[ chinese_simplified ] = "çœŸæ˜¯éå¸¸æŠ±æ­‰ã€‚åˆšæ‰çš„æ“ä½œå¼•å‘äº†ä¸€ä¸ªæ— æ³•æ’é™¤çš„é”™è¯¯ã€‚\nä¿®æ”¹è¿‡çš„æ–‡ä»¶å·²ç»ä¿å­˜ã€‚\nåœ¨ä¸‹ä¸€æ¬¡å¯åŠ¨ç¨‹åºæ—¶å¾ˆå¯èƒ½é‡æ–°æ¢å¤è¿™äº›æ–‡ä»¶ã€‚";
-    Message[ russian ] = "Íåèñïğàâèìàÿ îøèáêà.\n\nÂñå èçìåíåííûå äîêóìåíòû áóäóò ñîõğàíåíû,\nè èõ ìîæíî áóäåò âîññòàíîâèòü ïğè ñëåäóşùåì\nçàïóñêå ïğîãğàììû.";
-    Message[ polish ] = "Wyst¹pi³ nieodwracalny b³¹d.\n\nWszystkie zmodyfikowane pliki zosta³y zapisane\ni prawdopodobnie zostan¹ przywrócone przy nastêpnym uruchomieniu programu.";
-    Message[ japanese ] = "äºˆæœŸã—ãªã„ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚\n\nå¤‰æ›´ã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã¯ã™ã¹ã¦ä¿å­˜ã•ã‚Œã¦ã„ã‚‹ã®ã§\næ¬¡ã®ãƒ—ãƒ­ã‚°ãƒ©ãƒ èµ·å‹•ã§å¾©å…ƒã•ã‚Œã‚‹ã¯ãšã§ã™ã€‚";
-    Message[ chinese_traditional ] = "çœŸæ˜¯éå¸¸æŠ±æ­‰ã€‚å‰›æ‰çš„å‹•ä½œå¼•ç™¼äº†ä¸€å€‹ç„¡æ³•æ’é™¤çš„éŒ¯èª¤ã€‚\nå…ˆå‰ä¿®æ”¹éçš„æª”æ¡ˆå·²ç¶“å„²å­˜ã€‚\nåœ¨ä¸‹ä¸€æ¬¡å•Ÿå‹•ç¨‹å¼æ™‚å¾ˆå¯èƒ½é‡æ–°æ¢å¾©é€™äº›æª”æ¡ˆã€‚";
-    Message[ arabic ] = "ÍÏË ÎØÃ ÛíÑ ŞÇÈá ááÅÕáÇÍ.\n\nÊã ÍİÙ ßÇİÉ ÇáãáİÇÊ ÇáÊí Êã ÊÚÏíáåÇ¡ \nÈÍíË íãßä ÇÓÊÚÇÏÊåÇ ÚäÏ ÅÚÇÏÉ\n ÊÔÛíá ÇáÈÑäÇãÌ.";
-    Message[ dutch ] = "Er is een onherstelbare fout opgetreden.\n\nAlle gemodificeerde bestanden zijn echter\nopgeslagen en kunnen waarschijnlijk bij de volgende\nprogrammastart worden hersteld.";
-    Message[ chinese_simplified ] = "çœŸæ˜¯éå¸¸æŠ±æ­‰ã€‚åˆšæ‰çš„æ“ä½œå¼•å‘äº†ä¸€ä¸ªæ— æ³•æ’é™¤çš„é”™è¯¯ã€‚\nä¿®æ”¹è¿‡çš„æ–‡ä»¶å·²ç»ä¿å­˜ã€‚\nåœ¨ä¸‹ä¸€æ¬¡å¯åŠ¨ç¨‹åºæ—¶å¾ˆå¯èƒ½é‡æ–°æ¢å¤è¿™äº›æ–‡ä»¶ã€‚";
-    Message[ greek ] = "ĞáñïõóéÜóôçêå áíåğáíüñèùôï óöÜëìá.\n\n ¼ëá ôá ôñïğïğïéçìİíá áñ÷åßá İ÷ïõí áğïèçêåõôåß êáé ìğïñïıí\nğéèáíüôáôá íá áíáêôçèïıí êáôÜ ôçí åğáíåêêßíçóç ôïõ ğñïãñÜììáôïò. ";
-    Message[ korean ] = "ì¹˜ëª…ì ì¸ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.\n\nê·¸ëŸ¬ë‚˜ ë³€ê²½ëœ ëª¨ë“  íŒŒì¼ì´\nì €ì¥ë˜ì—ˆìœ¼ë¯€ë¡œ ë‹¤ìŒ í”„ë¡œê·¸ë¨\nì‹œì‘ì‹œì— ë³µêµ¬ë  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
-    Message[ turkish ] = "Kaydedilemeyen bir hata oluştu.\n\\ Bütün değişikliğe uğrayan dosyalar kaydedildi ve büyük olasılık ile program tekrar başlarken kaybınız olmaz. ";
-    Message[ language_user1 ] = " ";
-    Message[ catalan ] = "S'ha produït un error irreparable.\n\nTot i això es desaran els canvis realitzats\nen els fitxers i potser es podran recuperar\nen iniciar de nou el programa.";
-    Message[ finnish ] = "On ilmennyt peruuttamaton virhe.\n\nKaikki muokatut tiedostot on tallennettu\nja ne voidaan ehkä palauttaa, kun käynnistät\nohjelman uudelleen.";
-    Message[ thai ] = "à¹€à¸à¸´à¸”à¸‚à¹‰à¸­à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸à¸¹à¹‰à¸„à¸·à¸™à¹„à¸”à¹‰\n\nà¹à¸Ÿà¹‰à¸¡à¸—à¸µà¹ˆà¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚à¹„à¸”à¹‰à¸–à¸¹à¸à¸šà¸±à¸™à¸—à¸¶à¸à¹à¸¥à¸°à¸™à¹ˆà¸²à¸ˆà¸°à¸ªà¸²à¸¡à¸²à¸£à¸–\nà¸–à¸¹à¸à¸à¸¹à¹‰à¸„à¸·à¸™à¸—à¸µà¹ˆà¹‚à¸›à¸£à¹à¸à¸£à¸¡à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¹„à¸”à¹‰";
-    Message[ czech ] = "DoÅ¡lo k neodstranitelnÃ© chybÄ›.\n\nVÅ¡echny zmÄ›nÄ›nÃ© soubory byly uloÅ¾eny a\npravdÄ›podobnÄ› mohou bÃ½t obnoveny pÅ™i restartu programu.";
-    Message[ hebrew ] = "â€®××¨×¢×” ×©×’×™××” ×‘×ª×•×›× ×™×ª ×©××× ×” ×œ× × ×™×ª×Ÿ ×œ×”×ª××•×©×©.\n\n×›×œ ×”×§×‘×¦×™× ×©×©×•× ×• × ×©××¨×•\n\n×•×™×© ×¡×™×›×•×™ ×©× ×™×ª×Ÿ ×œ××•×©×© ××•×ª× ×‘×”×¤×¢×œ×” ×”×‘××” ×©×œ ×”×ª×•×›× ×™×ª.â€¬";
-    Message[ hindi ] = "à¤ªà¥à¤¨à¤ƒ à¤ªà¥à¤°à¤¾à¤ªà¥à¤¤ à¤¨ à¤•à¤°à¤¨à¥‡ à¤¯à¥‹à¤—à¥à¤¯ à¤—à¤²à¤¤à¥€ à¤˜à¤Ÿà¤¿à¤¤ à¤¹à¥à¤† à¥¤\n\nà¤¸à¤¬ à¤¸à¥à¤§à¤¾à¤° à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤† à¤«à¤¾à¤‡à¤²à¥‹à¤‚ à¤•à¥‹ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤¿à¤¯à¤¾ à¤¹à¥ˆ à¤”à¤°\nà¤¶à¤¾à¤¯à¤¦ à¤ªà¥à¤°à¥‹à¤—à¥à¤°à¤¾à¤® à¤•à¥‹ à¤ªà¥à¤¨à¤ƒ à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­ à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ à¤ªà¥à¤¨à¤ƒ à¤ªà¥à¤°à¤¾à¤ªà¥à¤¤ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤";
-    Message[ slovak ] = "Objavila sa neodstrÃ¡niteÄ¾nÃ¡ chyba.\n\nVÅ¡etky zmenenÃ© sÃºbory boli uloÅ¾enÃ© a mÃ´Å¾u\nbyÅ¥ pravdepodobne obnovenÃ© po reÅ¡tarte programu.";
-    Message[ hungarian ] = "Helyrehozhatatlan hiba tÃ¶rtÃ©nt.\n\nA mÃ³dosÃ­tott fÃ¡jlok mentve lettek,\nÃ©s talÃ¡n helyreÃ¡llÃ­thatÃ³k a program\nÃºjbÃ³li indÃ­tÃ¡sakor.";
-    Message[ slovenian ] = "Pojavila se je nepopravljiva napaka.\n\nVse spremenjene datoteke so bile shranjene in\nbodo verjetno ob ponovnem zagonu programa obnovljene.";
+    Message [ de ] = "Es ist ein nicht behebbarer Fehler aufgetreten.\n\nAlle modifizierten Dateien wurden jedoch\ngesichert und können voraussichtlich beim nächsten\nProgrammstart wiederhergestellt werden." ;
+    Message [ en-US ] = "An unrecoverable error has occurred.\n\nAll modified files have been saved and can\nprobably be recovered at program restart." ;
+    Message [ x-comment ] = " ";
 };
 
 String STR_BOOTSTRAP_ERR_CANNOT_START
 {
-    Text = "Die Anwendung kann nicht gestartet werden. " ;
-    Text [ ENGLISH ] = "The program cannot be started. " ;
-    Text[ english_us ] = "The application cannot be started. ";
-    Text[ portuguese ] = "Impossível iniciar a aplicação. ";
-    Text[ russian ] = "Íåâîçìîæíî çàïóñòèòü ïğèëîæåíèå.";
-    Text[ greek ] = "Äåí åßíáé äõíáôŞ ç åêêßíçóç ôçò åöáñìïãŞò.";
-    Text[ dutch ] = "De toepassing kan niet worden gestart.";
-    Text[ french ] = "Impossible de lancer l'application ! ";
-    Text[ spanish ] = "No se puede iniciar la aplicación. ";
-    Text[ finnish ] = "Sovelluksen käynnistys ei onnistu. ";
-    Text[ italian ] = "Impossibile avviare l'applicazione. ";
-    Text[ danish ] = "Programmet kan ikke startes. ";
-    Text[ swedish ] = "Det går inte att starta programmet. ";
-    Text[ polish ] = "Uruchomienie aplikacji nie jest mo¿liwe.";
-    Text[ portuguese_brazilian ] = "Não foi possível iniciar a aplicação.";
-    Text[ japanese ] = "ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã¯èµ·å‹•ã§ãã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "í”„ë¡œê·¸ë¨ì„ ì‹œì‘í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "æ— æ³•å¯åŠ¨è¯¥åº”ç”¨ç¨‹åºã€‚";
-    Text[ chinese_traditional ] = "ç„¡æ³•å•“å‹•é€™å€‹æ‡‰ç”¨ç¨‹å¼ã€‚";
-    Text[ turkish ] = "Uygulama başlatılamadı. ";
-    Text[ arabic ] = "The program cannot be started. ";
-    Text[ catalan ] = "No es pot iniciar el programa. ";
-    Text[ czech ] = "Aplikace nemÅ¯Å¾e bÃ½t spuÅ¡tÄ›na.";
-    Text[ hebrew ] = "Die Anwendung kann nicht gestartet werden.";
-    Text[ thai ] = "The application cannot be started. ";
-    Text[ hindi ] = "à¤•à¤¾à¤°à¥à¤¯à¤•à¥à¤°à¤® à¤•à¥‹ à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤ ";
-    Text[ slovak ] = "AplikÃ¡cia nemÃ´Å¾e byÅ¥ spustenÃ¡.";
-    Text[ hungarian ] = "Az alkalmazÃ¡st nem sikerÃ¼lt elindÃ­tani.";
-    Text[ slovenian ] = "Ni mogoÄe zagnati aplikacije.";
+    Text [ de ] = "Die Anwendung kann nicht gestartet werden. " ;
+    Text [ en-US ] = "The application cannot be started. ";
 };
 
 String STR_BOOTSTRAP_ERR_DIR_MISSING
 {
-    Text = "Der Konfigurationspfad \"$1\" wurde nicht gefunden." ;
-    Text [ ENGLISH ] = "The configuration directory \"$1\" is missing." ;
-    Text[ english_us ] = "The configuration directory \"$1\" could not be found.";
-    Text[ portuguese ] = "Impossível encontrar o caminho de configuração \"$1\".";
-    Text[ russian ] = "Íåâîçìîæíî íàéòè êàòàëîã êîíôèãóğàöèè \"$1\".";
-    Text[ greek ] = "Äåí Şôáí äõíáôŞ ç åıñåóç ôïõ êáôáëüãïõ ğáñáìİôñùí \"$1\".";
-    Text[ dutch ] = "Configuratiepad \"$1\" is niet gevonden.";
-    Text[ french ] = "Impossible de détecter le chemin de configuration \"$1\" !";
-    Text[ spanish ] = "No se encontró el directorio de configuración \"$1\".";
-    Text[ finnish ] = "Määrityshakemistoa \"$1\" ei löydy.";
-    Text[ italian ] = "Impossibile trovare il percorso di configurazione \"$1\".";
-    Text[ danish ] = "Konfigurationskataloget \"$1\" blev ikke fundet.";
-    Text[ swedish ] = "Konfigurationssökvägen \"$1\" hittades inte.";
-    Text[ polish ] = "Nie znaleziono œcie¿ki konfiguracyjnej \"$1\".";
-    Text[ portuguese_brazilian ] = "O diretório de configuração \"$1\" não foi encontrado.";
-    Text[ japanese ] = "è¨­å®šãƒ‘ã‚¹ \"$1\" ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "êµ¬ì„± ë””ë ‰í† ë¦¬ \"$1\" ì´(ê°€) ì—†ìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "æ— æ³•æ‰¾åˆ°é…ç½®è·¯å¾„ \"$1\"ã€‚";
-    Text[ chinese_traditional ] = "æ²’æœ‰æ‰¾åˆ°é…ç½®è·¯å¾‘ \"$1\" ã€‚";
-    Text[ turkish ] = "Konfigürasyon dizini \"$1\" kayıp.";
-    Text[ arabic ] = "The configuration directory \"$1\" is missing.";
-    Text[ catalan ] = "No es pot trobar el directori de configuració \"$1\".";
-    Text[ czech ] = "Nemohu nalÃ©zt konfiguraÄnÃ­ adresÃ¡Å™ \"$1\".";
-    Text[ hebrew ] = "Der Konfigurationspfad \"$1\" wurde nicht gefunden.";
-    Text[ thai ] = "The configuration directory \"$1\" could not be found.";
-    Text[ hindi ] = "à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ \"$1\" à¤¨à¤¹à¥€à¤‚ à¤ªà¥à¤°à¤¾à¤ªà¥à¤¤ à¤¹à¥à¤† à¥¤";
-    Text[ slovak ] = "NemÃ´Å¾em nÃ¡jsÅ¥ konfiguraÄnÃ½ adresÃ¡r \"$1\".";
-    Text[ hungarian ] = "Nem talÃ¡lhatÃ³ a \"$1\" beÃ¡llÃ­tÃ¡si kÃ¶nyvtÃ¡r.";
-    Text[ slovenian ] = "Ni mogoÄe najti konfiguracijske mape \"$1\".";
+    Text [ de ] = "Der Konfigurationspfad \"$1\" wurde nicht gefunden." ;
+    Text [ en-US ] = "The configuration directory \"$1\" could not be found.";
 };
 
 String STR_BOOTSTRAP_ERR_PATH_INVALID
 {
-    Text = "Der Installationspfad ist ungültig." ;
-    Text [ ENGLISH ] = "The installation path is invalid." ;
-    Text[ english_us ] = "The installation path is invalid.";
-    Text[ portuguese ] = "O caminho de instalação não é válido.";
-    Text[ russian ] = "Íåâåğíûé ïóòü óñòàíîâêè.";
-    Text[ greek ] = "Ç äéáäñïìŞ åãêáôÜóôáóçò äåí åßíáé İãêõñç.";
-    Text[ dutch ] = "Het installatiepad kan niet worden vastgesteld.";
-    Text[ french ] = "Le chemin d'installation n'est pas valide.";
-    Text[ spanish ] = "La ruta de instalación no es válida.";
-    Text[ finnish ] = "Asennuspolku on virheellinen.";
-    Text[ italian ] = "Il percorso d'installazione non è valido.";
-    Text[ danish ] = "Installationsstien er ugyldig.";
-    Text[ swedish ] = "Installationssökvägen är ogiltig.";
-    Text[ polish ] = "Œcie¿ka instalacyjna jest nieprawid³owa.";
-    Text[ portuguese_brazilian ] = "O caminho de instalação é inválido.";
-    Text[ japanese ] = "ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ãƒ‘ã‚¹ã¯ç„¡åŠ¹ã§ã™ã€‚";
-    Text[ korean ] = "ì„¤ì¹˜ ê²½ë¡œê°€ ì˜¬ë°”ë¥´ì§€ ì•ŠìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "å®‰è£…è·¯å¾„æ— æ•ˆã€‚";
-    Text[ chinese_traditional ] = "é€™å€‹å®‰è£è·¯å¾‘ç„¡æ•ˆã€‚";
-    Text[ turkish ] = "Kurulum veri yolu geçersiz.";
-    Text[ arabic ] = "The installation path is invalid.";
-    Text[ catalan ] = "El camí d'instal.lació no és correcte.";
-    Text[ czech ] = "AdresÃ¡Å™ pro instalaci je neplatnÃ½.";
-    Text[ hebrew ] = "Der Installationspfad ist ungÃ¼ltig.";
-    Text[ thai ] = "The installation path is invalid.";
-    Text[ hindi ] = "à¤ªà¥à¤°à¤¤à¤¿à¤·à¥à¤ à¤¾à¤ªà¤¨ à¤®à¤¾à¤°à¥à¤— à¤…à¤®à¤¾à¤¨à¥à¤¯ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "AdresÃ¡r pre inÅ¡talÃ¡ciu je neplatnÃ½.";
-    Text[ hungarian ] = "Ã‰rvÃ©nytelen telepÃ­tÃ©si Ãºtvonal";
-    Text[ slovenian ] = "Neveljavna pot za namestitev.";
+    Text [ de ] = "Der Installationspfad ist ungültig." ;
+    Text [ en-US ] = "The installation path is invalid.";
 };
 
 String STR_BOOTSTRAP_ERR_NO_PATH
 {
-    Text = "Der Installationspfad konnte nicht bestimmt werden." ;
-    Text [ ENGLISH ] = "The installation path is not available." ;
-    Text[ english_us ] = "The installation path is not available.";
-    Text[ portuguese ] = "Foi impossível determinar o caminho de instalação.";
-    Text[ russian ] = "Íåäîñòóïåí ïóòü óñòàíîâêè.";
-    Text[ greek ] = "Ç äéáäñïìŞ åãêáôÜóôáóçò äåí åßíáé äéáèİóéìç.";
-    Text[ dutch ] = "Geen installatiepad beschikbaar.";
-    Text[ french ] = "Impossible de déterminer le chemin d'installation !";
-    Text[ spanish ] = "No se pudo determinar la ruta de instalación.";
-    Text[ finnish ] = "Asennuspolku ei ole käytettävissä.";
-    Text[ italian ] = "Impossibile definire il percorso di installazione.";
-    Text[ danish ] = "Installationsstien er ikke tilgængelig.";
-    Text[ swedish ] = "Det gick inte att bestämma installationssökvägen.";
-    Text[ polish ] = "Œcie¿ka instalacyjna jest niedostêpna.";
-    Text[ portuguese_brazilian ] = "O caminho de instalação não está disponível.";
-    Text[ japanese ] = "ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ãƒ‘ã‚¹ã¯æŒ‡å®šã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
-    Text[ korean ] = "ì„¤ì¹˜ ê²½ë¡œë¥¼ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "æ— æ³•ç¡®å®šå®‰è£…è·¯å¾„ã€‚";
-    Text[ chinese_traditional ] = "ç„¡æ³•ç¢ºå®šé€™å€‹å®‰è£è·¯å¾‘ã€‚";
-    Text[ turkish ] = "Kurulum veri yolu mevcut değil.";
-    Text[ arabic ] = "The installation path is not available.";
-    Text[ catalan ] = "El camí d'instal.lació no està disponible.";
-    Text[ czech ] = "AdresÃ¡Å™ pro instalaci nenÃ­ dostupnÃ½.";
-    Text[ hebrew ] = "Der Installationspfad konnte nicht bestimmt werden.";
-    Text[ thai ] = "The installation path is not available.";
-    Text[ hindi ] = "à¤ªà¥à¤°à¤¤à¤¿à¤·à¥à¤ à¤¾à¤ªà¤¨ à¤®à¤¾à¤°à¥à¤—";
-    Text[ slovak ] = "AdresÃ¡r pre inÅ¡talÃ¡ciu je nedostupnÃ½.";
-    Text[ hungarian ] = "Nem elÃ©rhetÅ‘ telepÃ­tÃ©si Ãºtvonal";
-    Text[ slovenian ] = "Pot za namestitev ni na voljo.";
+    Text [ de ] = "Der Installationspfad konnte nicht bestimmt werden." ;
+    Text [ en-US ] = "The installation path is not available.";
 };
 
 String STR_BOOTSTRAP_ERR_INTERNAL
 {
-    Text = "Ein interner Fehler ist aufgetreten." ;
-    Text [ ENGLISH ] = "An internal failure occurred." ;
-    Text[ english_us ] = "An internal error occurred.";
-    Text[ portuguese ] = "Ocorreu um erro interno.";
-    Text[ russian ] = "Âíóòğåííÿÿ îøèáêà.";
-    Text[ greek ] = "ĞáñïõóéÜóôçêå åóùôåñéêü óöÜëìá.";
-    Text[ dutch ] = "Er is een interne fout opgetreden.";
-    Text[ french ] = "Une erreur interne est survenue.";
-    Text[ spanish ] = "Ha occurrido un error interno.";
-    Text[ finnish ] = "On tapahtunut sisäinen virhe.";
-    Text[ italian ] = "Si è verificato un errore interno.";
-    Text[ danish ] = "Der er opstået en intern fejl.";
-    Text[ swedish ] = "Det har uppstått ett internt fel.";
-    Text[ polish ] = "Wyst¹pi³ wewnêtrzny b³¹d.";
-    Text[ portuguese_brazilian ] = "Ocorreu um erro interno.";
-    Text[ japanese ] = "å†…éƒ¨ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚";
-    Text[ korean ] = "ë‚´ë¶€ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "å‡ºç°äº†ä¸€ä¸ªå†…éƒ¨çš„é”™è¯¯ã€‚";
-    Text[ chinese_traditional ] = "ç™¼ç”Ÿä¸€å€‹ä¸æ˜çš„å…§éƒ¨éŒ¯èª¤ã€‚";
-    Text[ turkish ] = "Bir hata oluştu.";
-    Text[ arabic ] = "An internal failure occurred.";
-    Text[ catalan ] = "S'ha produït un error intern.";
-    Text[ czech ] = "DoÅ¡lo k internÃ­ chybÄ›.";
-    Text[ hebrew ] = "Ein interner Fehler ist aufgetreten.";
-    Text[ thai ] = "An internal error occurred.";
-    Text[ hindi ] = "à¤­à¥€à¤¤à¤°à¥€ à¤—à¤²à¤¤à¥€ à¤˜à¤Ÿà¤¿à¤¤ à¤¹à¥à¤† à¥¤";
-    Text[ slovak ] = "Objavila sa internÃ¡ chyba.";
-    Text[ hungarian ] = "BelsÅ‘ hiba tÃ¶rtÃ©nt.";
-    Text[ slovenian ] = "Pojavila se je notranja napaka.";
+    Text [ de ] = "Ein interner Fehler ist aufgetreten." ;
+    Text [ en-US ] = "An internal error occurred.";
 };
 
 String STR_BOOTSTRAP_ERR_FILE_CORRUPT
 {
-    Text = "Die Konfigurationsdatei \"$1\" ist beschädigt." ;
-    Text [ ENGLISH ] = "The configuration file \"$1\" is corrupt." ;
-    Text[ english_us ] = "The configuration file \"$1\" is corrupt.";
-    Text[ portuguese ] = "O ficheiro de configuração \"$1\" está danificado.";
-    Text[ russian ] = "Ôàéë êîíôèãóğàöèè \"$1\" ïîâğåæäåí.";
-    Text[ greek ] = "Ôï áñ÷åßï äéáìüñöùóçò \"$1\" åßíáé êáôåóôñáììİíï.";
-    Text[ dutch ] = "Configuratiebestand \"$1\" is beschadigd.";
-    Text[ french ] = "Le fichier de configuration \"$1\" est défectueux.";
-    Text[ spanish ] = "El archivo de configuración \"$1\" está dañado.";
-    Text[ finnish ] = "Määritystiedosto \"$1\" on vioittunut.";
-    Text[ italian ] = "Il file di configurazione \"$1\" è danneggiato.";
-    Text[ danish ] = "Konfigurationsfilen \"$1\" indeholder fejl.";
-    Text[ swedish ] = "Konfigurationsfilen \"$1\" är skadad.";
-    Text[ polish ] = "Plik konfiguracyjny \"$1\" jest uszkodzony.";
-    Text[ portuguese_brazilian ] = "O arquivo de configuração \"$1\" está corrompido.";
-    Text[ japanese ] = "è¨­å®šãƒ•ã‚¡ã‚¤ãƒ« \"$1\" ã¯ç ´æã—ã¦ã„ã¾ã™ã€‚";
-    Text[ korean ] = "êµ¬ì„± íŒŒì¼ \"$1\"ì´(ê°€) ì†ìƒë˜ì—ˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "é…ç½®æ–‡ä»¶ \"$1\" å·²ç»æŸåã€‚";
-    Text[ chinese_traditional ] = "é…ç½®æª”æ¡ˆ \"$1\" å·²ç¶“æå£ã€‚";
-    Text[ turkish ] = "Konfigürasyon dosyası\"$1\" hatalı.";
-    Text[ arabic ] = "The configuration file \"$1\" is corrupt.";
-    Text[ catalan ] = "El fitxer de configuració \"$1\" està malmés.";
-    Text[ czech ] = "KonfiguraÄnÃ­ soubor \"$1\" je poÅ¡kozen.";
-    Text[ hebrew ] = "Die Konfigurationsdatei \"$1\" ist beschÃ¤digt.";
-    Text[ thai ] = "The configuration file \"$1\" is corrupt.";
-    Text[ hindi ] = "à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤«à¤¾à¤‡à¤² \"$1\" à¤¦à¥‚à¤·à¤¿à¤¤ à¤¹à¥à¤† à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "KonfiguraÄnÃ½ sÃºbor \"$1\" je poÅ¡kodenÃ½.";
-    Text[ hungarian ] = "A kÃ¶vetkezÅ‘ konfigurÃ¡ciÃ³s fÃ¡jl tartalma hibÃ¡s: \"$1\".";
-    Text[ slovenian ] = "Konfiguracijska datoteka \"$1\" je okvarjena.";
+    Text [ de ] = "Die Konfigurationsdatei \"$1\" ist beschädigt." ;
+    Text [ en-US ] = "The configuration file \"$1\" is corrupt.";
 };
 
 String STR_BOOTSTRAP_ERR_FILE_MISSING
 {
-    Text = "Die Konfigurationsdatei \"$1\" wurde nicht gefunden." ;
-    Text [ ENGLISH ] = "The configuration file \"$1\" is missing." ;
-    Text[ english_us ] = "The configuration file \"$1\" was not found.";
-    Text[ portuguese ] = "Impossível encontrar o ficheiro de configuração \"$1\".";
-    Text[ russian ] = "Ôàéë êîíôèãóğàöèè \"$1\" íå íàéäåí.";
-    Text[ greek ] = "Äåí Şôáí äõíáôŞ ç åıñåóç ôïõ áñ÷åßïõ äéáìüñöùóçò \"$1\".";
-    Text[ dutch ] = "Configuratiebestand \"$1\" is niet gevonden.";
-    Text[ french ] = "Impossible de détecter le fichier de configuration \"$1\" !";
-    Text[ spanish ] = "No se encontró el archivo de configuración \"$1\".";
-    Text[ finnish ] = "Määritystiedostoa \"$1\" ei löytynyt.";
-    Text[ italian ] = "Impossibile trovare il file di configurazione \"$1\".";
-    Text[ danish ] = "Konfigurationsfilen \"$1\" blev ikke fundet.";
-    Text[ swedish ] = "Konfigurationsfilen \"$1\" hittades inte.";
-    Text[ polish ] = "Nie znaleziono pliku konfiguracyjnego \"$1\".";
-    Text[ portuguese_brazilian ] = "O arquivo de configuração \"$1\" não foi encontrado.";
-    Text[ japanese ] = "è¨­å®šãƒ•ã‚¡ã‚¤ãƒ« \"$1\" ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "êµ¬ì„± íŒŒì¼ \"$1\"ì´(ê°€) ì—†ìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "æ— æ³•æ‰¾åˆ°é…ç½®æ–‡ä»¶ \"$1\" ã€‚";
-    Text[ chinese_traditional ] = "æ²’æœ‰æ‰¾åˆ°é…ç½®æª”æ¡ˆ \"$1\" ã€‚";
-    Text[ turkish ] = "Konfigürasyon dosyası \"$1\" bulunamadı.";
-    Text[ arabic ] = "The configuration file \"$1\" is missing.";
-    Text[ catalan ] = "No es pot trobar el fitxer de configuració \"$1\".";
-    Text[ czech ] = "KonfiguraÄnÃ­ soubor \"$1\" nebyl nalezen.";
-    Text[ hebrew ] = "Die Konfigurationsdatei \"$1\" wurde nicht gefunden.";
-    Text[ thai ] = "The configuration file \"$1\" was not found.";
-    Text[ hindi ] = "à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤«à¤¾à¤‡à¤² \"$1\" à¤¨à¤¹à¥€à¤‚ à¤ªà¥à¤°à¤¾à¤ªà¥à¤¤ à¤¹à¥à¤† à¥¤";
-    Text[ slovak ] = "KonfiguraÄnÃ½ sÃºbor \"$1\" nebol nÃ¡jdenÃ½.";
-    Text[ hungarian ] = "A kÃ¶vetkezÅ‘ konfigurÃ¡ciÃ³s fÃ¡jl nem talÃ¡lhatÃ³: \"$1\".";
-    Text[ slovenian ] = "Ni mogoÄe najti konfiguracijske datoteke \"$1\".";
+    Text [ de ] = "Die Konfigurationsdatei \"$1\" wurde nicht gefunden." ;
+    Text [ en-US ] = "The configuration file \"$1\" was not found.";
 };
 
 String STR_BOOTSTRAP_ERR_NO_SUPPORT
 {
-    Text = "Die Konfigurationsdatei \"$1\" unterstützt nicht diese Version." ;
-    Text [ ENGLISH ] = "The main configuration file \"$1\" does not support the current version." ;
-    Text[ english_us ] = "The configuration file \"$1\" does not support the current version.";
-    Text[ portuguese ] = "The main configuration file \"$1\" does not support the current version.";
-    Text[ russian ] = "Ôàéë êîíôèãóğàöèè \"$1\" íå ïîääåğæèâàåò òåêóùóş âåğñèş.";
-    Text[ greek ] = "Ôï áñ÷åßï äéáìüñöùóçò \"$1\" äåí õğïóôçñßæåé ôçí ôñİ÷ïõóá İêäïóç.";
-    Text[ dutch ] = "Configuratiebestand \"$1\" ondersteunt deze versie niet.";
-    Text[ french ] = "Le fichier de configuration \"$1\" ne supporte pas cette version.";
-    Text[ spanish ] = "El archivo de configuración \"$1\" no admite esta versión.";
-    Text[ finnish ] = "Määritystiedosto \"$1\" ei tue nykyistä versiota.";
-    Text[ italian ] = "Il file di configurazione principale \"$1\" non supporta questa versione.";
-    Text[ danish ] = "Konfigurationsfilen \"$1\" understøtter ikke den nuværende version.";
-    Text[ swedish ] = "Konfigurationsfilen \"$1\" understöder inte den här versionen.";
-    Text[ polish ] = "Plik konfiguracyjny \"$1\" nie obs³uguje bie¿¹cej wersji.";
-    Text[ portuguese_brazilian ] = "O arquivo de configuração \"$1\" não suporta a versão atual.";
-    Text[ japanese ] = "è¨­å®šãƒ•ã‚¡ã‚¤ãƒ« \"$1\" ã¯ã“ã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã‚’æ”¯æ´ã—ã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "êµ¬ì„± íŒŒì¼ \"$1\"ì€(ëŠ”) í˜„ì¬ ë²„ì „ì„ ì§€ì›í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "é…ç½®æ–‡ä»¶ \"$1\" ä¸æ”¯æŒè¿™ä¸ªç‰ˆæœ¬ã€‚";
-    Text[ chinese_traditional ] = "é…ç½®æª”æ¡ˆ \"$1\" ä¸æ”¯æ´é€™å€‹ç‰ˆæœ¬ã€‚";
-    Text[ turkish ] = "Konfigürasyon dosyası  \"$1\" bu sürümü desteklemiyor.";
-    Text[ arabic ] = "The main configuration file \"$1\" does not support the current version.";
-    Text[ catalan ] = "El fitxer de configuració principal \"$1\" no suporta la versió actual.";
-    Text[ czech ] = "KonfiguraÄnÃ­ soubor \"$1\" nepodporuje souÄasnou verzi.";
-    Text[ hebrew ] = "Die Konfigurationsdatei \"$1\" unterstÃ¼tzt nicht diese Version.";
-    Text[ thai ] = "The configuration file \"$1\" does not support the current version.";
-    Text[ hindi ] = "à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤«à¤¾à¤‡à¤² \"$1\" à¤µà¤°à¥à¤¤à¤®à¤¾à¤¨ à¤†à¤µà¤°à¥à¤¤à¤¨ à¤•à¥‹ à¤¸à¤®à¤°à¥à¤¥à¤¿à¤¤ à¤¨à¤¹à¥€à¤‚ à¤•à¤°à¤¤à¤¾ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "KonfiguraÄnÃ½ sÃºbor \"$1\" nepodporuje sÃºÄasnÃº verziu.";
-    Text[ hungarian ] = "A kÃ¶vetkezÅ‘ konfigurÃ¡ciÃ³s fÃ¡jl nem illik a program jelenlegi verziÃ³jÃ¡hoz: \"$1\".";
-    Text[ slovenian ] = "Konfiguracijska datoteka \"$1\" ne podpira trenutne razliÄice.";
+    Text [ de ] = "Die Konfigurationsdatei \"$1\" unterstützt nicht diese Version." ;
+    Text [ en-US ] = "The configuration file \"$1\" does not support the current version.";
 };
 
 String STR_BOOTSTRAP_ERR_NO_SERVICE
 {
-    Text = "Der Komponenten-Manager ist nicht verfügbar." ;
-    Text [ ENGLISH ] = "The service manager is not available." ;
-    Text[ english_us ] = "The component manager is not available.";
-    Text[ portuguese ] = "O gestor de componentes não está disponível.";
-    Text[ russian ] = "Äèñïåò÷åğ êîìïîíåíòîâ íåäîñòóïåí.";
-    Text[ greek ] = "Ç äéá÷åßñéóç óôïé÷åßùí äåí åßíáé äéáèİóéìç.";
-    Text[ dutch ] = "Het componentenbeheer is niet beschikbaar.";
-    Text[ french ] = "Le gestionnaire de composants n'est pas disponible.";
-    Text[ spanish ] = "El gestor de componentes no está disponible.";
-    Text[ finnish ] = "Komponenttien hallinta ei ole käytettävissä.";
-    Text[ italian ] = "Il gestore dei componenti non è disponibile.";
-    Text[ danish ] = "Komponentmanageren er ikke til rådighed.";
-    Text[ swedish ] = "Komponenthanteraren är inte tillgänglig.";
-    Text[ polish ] = "Mened¿er komponentów nie jest dostêpny.";
-    Text[ portuguese_brazilian ] = "O gerenciador de componentes não está disponível.";
-    Text[ japanese ] = "ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã¯ä½¿ç”¨ã§ãã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "ì„œë¹„ìŠ¤ ê´€ë¦¬ìë¥¼ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "æ— æ³•ä½¿ç”¨ç¨‹åºå…ƒä»¶ç®¡ç†å™¨ã€‚";
-    Text[ chinese_traditional ] = "ç¨‹å¼å…ƒä»¶ç®¡ç†å“¡ä¸å­˜åœ¨ã€‚";
-    Text[ turkish ] = "Bileşen yöneticisi mevcut değil.";
-    Text[ arabic ] = "The service manager is not available.";
-    Text[ catalan ] = "El gestor de serveis no està disponible.";
-    Text[ czech ] = "SprÃ¡vce komponent nenÃ­ dostupnÃ½.";
-    Text[ hebrew ] = "Der Komponenten-Manager ist nicht verfÃ¼gbar.";
-    Text[ thai ] = "The component manager is not available.";
-    Text[ hindi ] = "The component manager is not available.";
-    Text[ slovak ] = "SprÃ¡vca komponentov nieje dostupnÃ½.";
-    Text[ hungarian ] = "A komponenskezelÅ‘ nem Ã©rhetÅ‘ el.";
-    Text[ slovenian ] = "Upravitelj komponent ni na voljo.";
+    Text [ de ] = "Der Komponenten-Manager ist nicht verfügbar." ;
+    Text [ en-US ] = "The component manager is not available.";
 };
 
 String STR_BOOTSTRAP_ERR_NO_CFG_SERVICE
 {
-    Text = "Der Konfigurations-Manager kann nicht erzeugt werden." ;
-    Text [ ENGLISH ] = "The configuration service is not available." ;
-    Text[ english_us ] = "The configuration service is not available.";
-    Text[ portuguese ] = "The configuration service is not available.";
-    Text[ russian ] = "Ñëóæáû êîíôèãóğàöèè íåäîñòóïíû.";
-    Text[ greek ] = "Ç õğçñåóßá äéáìüñöùóçò äåí åßíáé äéáèİóéìç.";
-    Text[ dutch ] = "Het configuratiebeheer is niet beschikbaar.";
-    Text[ french ] = "Impossible de créer le gestionnaire de configuration !";
-    Text[ spanish ] = "No se puede crear el gestor de configuración.";
-    Text[ finnish ] = "Määrityspalvelua ei ole käytettävissä.";
-    Text[ italian ] = "Impossibile creare il gestore di configurazione.";
-    Text[ danish ] = "Konfigurationsmanageren kan ikke oprettes.";
-    Text[ swedish ] = "Det går inte att skapa konfigurationshanteraren.";
-    Text[ polish ] = "Us³uga konfiguracyjna nie jest dostêpna.";
-    Text[ portuguese_brazilian ] = "O serviço de configuração não está disponível.";
-    Text[ japanese ] = "è¨­å®šãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã¯ä½œæˆã§ãã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "êµ¬ì„± ì„œë¹„ìŠ¤ë¥¼ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "æ— æ³•ç”Ÿæˆé…ç½®æœåŠ¡ç®¡ç†å™¨ã€‚";
-    Text[ chinese_traditional ] = "ç„¡æ³•å»ºç«‹é…ç½®ç®¡ç†å“¡ã€‚";
-    Text[ turkish ] = "Konfigürasyon servisi mevcut değil.";
-    Text[ arabic ] = "The configuration service is not available.";
-    Text[ catalan ] = "El servei de configuració no està disponible.";
-    Text[ czech ] = "KonfiguraÄnÃ­ sluÅ¾ba nenÃ­ dostupnÃ¡.";
-    Text[ hebrew ] = "Der Konfigurations-Manager kann nicht erzeugt werden.";
-    Text[ thai ] = "The configuration service is not available.";
-    Text[ hindi ] = "The configuration service is not available.";
-    Text[ slovak ] = "KonfiguraÄnÃ¡ sluÅ¾ba nieje dostupnÃ¡.";
-    Text[ hungarian ] = " A beÃ¡llÃ­tÃ¡si szolgÃ¡ltatÃ¡s nem Ã©rhetÅ‘ el.";
-    Text[ slovenian ] = "Konfiguracijska storitev ni na voljo.";
+    Text [ de ] = "Der Konfigurations-Manager kann nicht erzeugt werden." ;
+    Text [ en-US ] = "The configuration service is not available.";
 };
 
 String STR_ASK_START_SETUP_REPAIR
 {
-    Text = "Soll die Setup-Applikation gestartet werden, um Ihre Installation zu reparieren?" ;
-    Text [ ENGLISH ] = "Start setup application to repair installation?" ;
-    Text[ english_us ] = "Do you want to start the setup application to repair your installation?";
-    Text[ portuguese ] = "Iniciar a aplicação Setup para reparar a instalação?";
-    Text[ russian ] = "Çàïóñòèòü ïğîãğàììó óñòàíîâêè â ğåæèìå Âîññòàíîâëåíèå?";
-    Text[ greek ] = "Èİëåôå íá åêôåëİóåôå ôçí åöáñìïãŞ åãêáôÜóôáóçò ãéá íá åğéäéïñèşóåôå ôçí åãêáôÜóôáóŞ óáò;";
-    Text[ dutch ] = "Wilt u de Setup-toepassing starten om uw installatie te repareren?";
-    Text[ french ] = "Voulez-vous lancer l'application Setup afin de réparer l'installation ?";
-    Text[ spanish ] = "¿Desea iniciar el programa de instalación para reparar la instalación?";
-    Text[ finnish ] = "Haluatko käynnistää asennusohjelman asennuksen korjaamista varten?";
-    Text[ italian ] = "Volete avviare il programma di setup per riparare l'installazione?";
-    Text[ danish ] = "Skal installationsprogrammet startes for at reparere installationen?";
-    Text[ swedish ] = "Ska setupprogrammet startas så att din installation kan repareras?";
-    Text[ polish ] = "Czy chcesz uruchomiæ aplikacjê instalacyjn¹ w celu naprawy zainstalowanego programu?";
-    Text[ portuguese_brazilian ] = "Deseja iniciar o setup para reparar a instalação?";
-    Text[ japanese ] = "ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã®ä¿®å¾©ã‚’ã™ã‚‹ã®ã«ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚’é–‹å§‹ã—ã¾ã™ã‹ã€‚";
-    Text[ korean ] = "ì„¤ì¹˜ ì‘ìš© í”„ë¡œê·¸ë¨ì„ ì‹œì‘í•˜ì—¬ ì„¤ì¹˜ë¥¼ ë³µêµ¬í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Text[ chinese_simplified ] = "è¦å¯åŠ¨å®‰è£…ç¨‹åºæ¥ä¿®è¡¥æ‚¨åŸå…ˆçš„å®‰è£…ï¼Ÿ";
-    Text[ chinese_traditional ] = "è¦å•“å‹•å®‰è£ç¨‹å¼ï¼Œä¿®å¾©å·²ç¶“å®‰è£çš„æ‡‰ç”¨ç¨‹å¼ï¼Ÿ";
-    Text[ turkish ] = "Kurulumunuzu onarmak için kurulum uygulamasının başlatılmasını ister misiniz?";
-    Text[ arabic ] = "Start setup application to repair installation?";
-    Text[ catalan ] = "Inicio la instal.lació per a reparar el producte?";
-    Text[ czech ] = "Chcete spustit instalaÄnÃ­ aplikaci k opravenÃ­ instalace?";
-    Text[ hebrew ] = "Soll die Setup-Applikation gestartet werden, um Ihre Installation zu reparieren?";
-    Text[ thai ] = "Do you want to start the setup application to repair your installation?";
-    Text[ hindi ] = "à¤†à¤ªà¤•à¤¾ à¤ªà¥à¤°à¤¤à¤¿à¤·à¥à¤ à¤¾à¤ªà¤¨ à¤•à¥‹ à¤®à¤°à¤®à¥à¤®à¤¤ à¤•à¤°à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤¸à¥‡à¤Ÿà¤ª à¤•à¤¾à¤°à¥à¤¯à¤•à¥à¤°à¤® à¤•à¥‹ à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­ à¤•à¤°à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ?";
-    Text[ slovak ] = "Chcete spustiÅ¥ setup aby opravil vaÅ¡u inÅ¡talÃ¡ciu?";
-    Text[ hungarian ] = "SzeretnÃ© elindÃ­tani a telepÃ­tÅ‘programot a telepÃ­tÃ©s kijavÃ­tÃ¡sÃ¡hoz?";
-    Text[ slovenian ] = "Ali Å¾elite zagnati namestitveni program za popravilo svoje namestitve?";
+    Text [ de ] = "Soll die Setup-Applikation gestartet werden, um Ihre Installation zu reparieren?" ;
+    Text [ en-US ] = "Do you want to start the setup application to repair your installation?";
 };
 
 String STR_ASK_START_SETUP
 {
-    Text = "Soll die Setup-Applikation gestartet werden, um Ihre Installation zu überprüfen?" ;
-    Text [ ENGLISH ] = "Start setup application to check installation?" ;
-    Text[ english_us ] = "Do you want to start the setup application to check your installation?";
-    Text[ portuguese ] = "Start setup application to check installation?";
-    Text[ russian ] = "Çàïóñòèòü ïğîãğàììó óñòàíîâêè äëÿ ïğîâåğêè óñòàíîâëåííîé âåğñèè?";
-    Text[ greek ] = "Èİëåôå íá åêôåëİóåôå ôçí åöáñìïãŞ åãêáôÜóôáóçò ãéá íá åëİãîåôå ôçí åãêáôÜóôáóŞ óáò;";
-    Text[ dutch ] = "Wilt u de Setup-toepassing starten om uw installatie te controleren?";
-    Text[ french ] = "Voulez-vous lancer l'application Setup afin de vérifier l'installation ?";
-    Text[ spanish ] = "¿Desea iniciar el programa de instalación para comprobar la instalación?";
-    Text[ finnish ] = "Haluatko käynnistää asennusohjelman asennuksen tarkistamista varten?";
-    Text[ italian ] = "Volete avviare il programma di setup per verificare l'installazione?";
-    Text[ danish ] = "Skal installationsprogrammet startes for at kontrollere installationen?";
-    Text[ swedish ] = "Ska setupprogrammet startas så att din installation kan kontrolleras?";
-    Text[ polish ] = "Czy chcesz uruchomiæ aplikacjê instalacyjn¹ w celu sprawdzenia zainstalowanego programu?";
-    Text[ portuguese_brazilian ] = "Deseja iniciar o setup para verificar a instalação?";
-    Text[ japanese ] = "ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã‚’ç¢ºèªã™ã‚‹ã®ã«ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚’é–‹å§‹ã—ã¾ã™ã‹ã€‚";
-    Text[ korean ] = "ì„¤ì¹˜ ì‘ìš© í”„ë¡œê·¸ë¨ì„ ì‹œì‘í•˜ì—¬ ì„¤ì¹˜ë¥¼ ê²€ì‚¬í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Text[ chinese_simplified ] = "è¦å¯åŠ¨å®‰è£…ç¨‹åºæ¥æ£€æŸ¥æ‚¨åŸå…ˆçš„å®‰è£…ï¼Ÿ";
-    Text[ chinese_traditional ] = "è¦å•“å‹•å®‰è£ç¨‹å¼ï¼Œæª¢æŸ¥å·²å®‰è£çš„æ‡‰ç”¨ç¨‹å¼ï¼Ÿ";
-    Text[ turkish ] = "Kurulumun kontrolü için kurulum  uygulamasının başlatılmasını ister misiniz?";
-    Text[ arabic ] = "Start setup application to check installation?";
-    Text[ catalan ] = "Inicio la instal.lació per a comprovar el producte?";
-    Text[ czech ] = "Chcete spustit instalaÄnÃ­ aplikaci ke kontrole instalace?";
-    Text[ hebrew ] = "Soll die Setup-Applikation gestartet werden, um Ihre Installation zu Ã¼berprÃ¼fen?";
-    Text[ thai ] = "Do you want to start the setup application to check your installation?";
-    Text[ hindi ] = "à¤†à¤ªà¤•à¤¾ à¤ªà¥à¤°à¤¤à¤¿à¤·à¥à¤ à¤¾à¤ªà¤¨ à¤•à¥‹ à¤œà¤¾à¤à¤š à¤•à¤°à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤¸à¥‡à¤Ÿà¤ª à¤•à¤¾à¤°à¥à¤¯à¤•à¥à¤°à¤® à¤•à¥‹ à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­ à¤•à¤°à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ?";
-    Text[ slovak ] = "Chcete spustiÅ¥ setup aby skontroloval vaÅ¡u inÅ¡talÃ¡ciu?";
-    Text[ hungarian ] = "SzeretnÃ© elindÃ­tani a telepÃ­tÅ‘programot a telepÃ­tÃ©s ellenÅ‘rzÃ©sÃ©hez?";
-    Text[ slovenian ] = "Ali Å¾elite zagnati namestitveni program za preverjanje svoje namestitve?";
+    Text [ de ] = "Soll die Setup-Applikation gestartet werden, um Ihre Installation zu überprüfen?" ;
+    Text [ en-US ] = "Do you want to start the setup application to check your installation?";
 };
 
 String STR_SETUP_ERR_CANNOT_START
 {
-    Text = "Die Setup-Applikation konnte nicht automatisch gestartet werden! Bitte starten Sie diese manuell." ;
-    Text [ ENGLISH ] = "Couldn't start setup application! Please start it manually." ;
-    Text[ english_us ] = "The Setup could not be started automatically. Please start it manually.";
-    Text[ portuguese ] = "Foi impossível iniciar a aplicação Setup automaticamente! Queira iniciá-la manualmente.";
-    Text[ russian ] = "Íåâîçìîæíî çàïóñòèòü ïğîãğàììó àâòîìàòè÷åñêè. Çàïóñòèòå åå âğó÷íóş.";
-    Text[ greek ] = "Äåí Şôáí äõíáôŞ ç áõôüìáôç åêêßíçóç ôïõ ğñïãñÜììáôïò ÅãêáôÜóôáóçò. ÎåêéíŞóôå ôï ğñüãñáììá ìå ìç áõôüìáôï ôñüğï.";
-    Text[ dutch ] = "De Setup-toepassing kan niet automatisch worden gestart. Start deze handmatig.";
-    Text[ french ] = "Impossible de lancer automatiquement l'application Setup ! Veuillez la démarrer manuellement.";
-    Text[ spanish ] = "No se pudo iniciar automáticamente el programa de instalación. Inícielo manualmente.";
-    Text[ finnish ] = "Asennusohjelmaa ei voitu käynnistää automaattisesti. Käynnistä se manuaalisesti.";
-    Text[ italian ] = "Impossibile avviare il programma di setup in modo automatico. Avviatelo manualmente.";
-    Text[ danish ] = "Installationsprogrammet kunne ikke startes automatisk! Start programmet manuelt.";
-    Text[ swedish ] = "Det gick inte att starta setupprogrammet automatiskt! Starta det manuellt.";
-    Text[ polish ] = "Nie uda³o siê automatycznie uruchomiæ programu instalacyjnego. Uruchom go rêcznie.";
-    Text[ portuguese_brazilian ] = "Não foi possível iniciar automaticamente o setup. Por favor, inicie-o manualmente.";
-    Text[ japanese ] = "ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã¯è‡ªå‹•é–‹å§‹ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚æ‰‹å‹•ã§é–‹å§‹ã—ã¦ãã ã•ã„ã€‚";
-    Text[ korean ] = "ì„¤ì¹˜ ì‘ìš© í”„ë¡œê·¸ë¨ì„ ì‹œì‘í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤. ì„¤ì¹˜ ì‘ìš© í”„ë¡œê·¸ë¨ì„ ìˆ˜ë™ìœ¼ë¡œ ì‹œì‘í•´ì£¼ì‹­ì‹œì˜¤.";
-    Text[ chinese_simplified ] = "æ— æ³•è‡ªåŠ¨å¯åŠ¨å®‰è£…ç¨‹åºï¼è¯·æ‰‹åŠ¨å¯åŠ¨ã€‚";
-    Text[ chinese_traditional ] = "ç„¡æ³•è‡ªå‹•å•“å‹•å®‰è£ç¨‹å¼ï¼è«‹æ‰‹å‹•å•“å‹•å®‰è£ç¨‹å¼ã€‚";
-    Text[ turkish ] = "Kurulum otomatik olarak başlatılamadı! Lütfen kendiniz  başlatın.";
-    Text[ arabic ] = "Couldn't start setup application! Please start it manually.";
-    Text[ catalan ] = "No es pot iniciar la instal.lació! Feu-ho manualment.";
-    Text[ czech ] = "InstalaÄnÃ­ aplikace nemohla bÃ½t spuÅ¡tÄ›na automaticky. ProsÃ­m spusÅ¥te ji manuÃ¡lnÄ›.";
-    Text[ hebrew ] = "Die Setup-Applikation konnte nicht automatisch gestartet werden! Bitte starten Sie diese manuell.";
-    Text[ thai ] = "The Setup could not be started automatically. Please start it manually.";
-    Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤ªà¥à¤°à¤•à¤¾à¤° à¤¸à¥‡ à¤¸à¥‡à¤Ÿà¤ª à¤•à¥‹ à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤ à¤•à¥ƒà¤ªà¤¯à¤¾ à¤®à¤¾à¤¨à¥à¤µà¤²à¥€ à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­ à¤•à¥€à¤œà¤¿à¤ à¥¤";
-    Text[ slovak ] = "Setup nemohol byÅ¥ spustenÃ½ automaticky. ProsÃ­m spustite ho manuÃ¡lne.";
-    Text[ hungarian ] = "A telepÃ­tÃ©st nem lehet automatikusan megkezdeni. IndÃ­tsa el sajÃ¡tkezÅ±leg!";
-    Text[ slovenian ] = "Namestitvenega programa ni mogoÄe zagnati samodejno. Prosimo, da ga zaÅ¾enete roÄno.";
+    Text [ de ] = "Die Setup-Applikation konnte nicht automatisch gestartet werden! Bitte starten Sie diese manuell." ;
+    Text [ en-US ] = "The Setup could not be started automatically. Please start it manually.";
 };
 
 String STR_ASK_START_SETUP_MANUALLY
 {
-    Text = "Um Ihre Installation zu reparieren starten Sie die Setup-Applikation von CD aus, oder aus dem Verzeichnis in dem sich die Installationspakete befinden." ;
-    Text [ ENGLISH ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. " ;
-    Text[ english_us ] = "Start the setup application to repair the installation from the CD or the folder containing the installation packages.";
-    Text[ portuguese ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
-    Text[ russian ] = "Çàïóñòèòå ïğîãğàììó óñòàíîâêè, ÷òîáû ïğîäîëæèòü óñòàíîâêó ñ äèñêà èëè èç ïàïêè, ñîäåğæàùåé ïàêåò ïğîãğàìì óñòàíîâêè. ";
-    Text[ greek ] = "Åêôåëİóôå ôçí åöáñìïãŞ åãêáôÜóôáóçò ãéá íá åğéäéïñèşóåôå ôçí åãêáôÜóôáóç áğü ôï CD Ş ôï öÜêåëï üğïõ ğåñéİ÷ïíôáé ôá ğáêİôá åãêáôÜóôáóçò. ";
-    Text[ dutch ] = "Als u de installatie wilt repareren, start u de Setup-toepassing vanaf de cd of vanuit de directory waarin de installatieprogramma's zich bevinden.";
-    Text[ french ] = "Pour réparer l'installation, lancez l'application Setup à partir du CD-ROM ou depuis le répertoire contenant le paquetage d'installation.";
-    Text[ spanish ] = "Para reparar la instalación inicie la aplicación de Setup, o programa de instalación, desde el CD o desde la carpeta que contenga los archivos de instalación. ";
-    Text[ finnish ] = "Korjaa asennus CD-levyltä tai asennuspakkaukset sisältävästä hakemistosta käynnistämällä asennussovellus.";
-    Text[ italian ] = "Per riparare l'installazione avviate il programma di setup dal CD-ROM oppure dalla cartella in cui avete installato il programma.";
-    Text[ danish ] = "Du skal starte installationsprogrammet fra cd'en eller fra den mappe, hvor installationspakkerne findes, for at reparere installationen.";
-    Text[ swedish ] = "Starta setupprogrammet från cd:n eller från katalogen där installationspaketen finns för att reparera installationen.";
-    Text[ polish ] = "Aby naprawiæ instalacjê, uruchom aplikacjê instalacyjn¹ albo z dysku CD, albo z folderu zawieraj¹cego pakiety instalacyjne.";
-    Text[ portuguese_brazilian ] = "Para reparar a instalação atual inicie o setup pelo CD ou pela pasta que contém os pacotes de instalação. ";
-    Text[ japanese ] = "ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã®ä¿®å¾©ã‚’è¡Œãªã†ã«ã¯ã€CD ã®ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‹ã‚‰ã€ã‚ã‚‹ã„ã¯ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã‚»ãƒƒãƒˆãŒæ ¼ç´ã•ã‚Œã¦ã„ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰é–‹å§‹ã—ã¾ã™ã€‚";
-    Text[ korean ] = "ì„¤ì¹˜ íŒ¨í‚¤ì§€ê°€ ë“¤ì–´ ìˆëŠ” í´ë” ë˜ëŠ” CDì˜ ì„¤ì¹˜ í”„ë¡œê·¸ë¨ì„ ë³µêµ¬í•˜ë ¤ë©´ ì„¤ì¹˜ í”„ë¡œê·¸ë¨ì„ ì‹œì‘í•˜ì‹­ì‹œì˜¤. ";
-    Text[ chinese_simplified ] = "è¦ä¿®å¤æ‚¨çš„ç¨‹åºï¼Œè¯·æ‚¨ä»å…‰ç›˜å¯åŠ¨å®‰è£…ç¨‹åºæˆ–ä»å­˜æœ‰å®‰è£…æ•°æ®çš„ç›®å½•ç›´æ¥å¯åŠ¨å®‰è£…ç¨‹åºã€‚";
-    Text[ chinese_traditional ] = "è¦ä¿®å¾©æ‚¨çš„ç¨‹å¼ï¼Œè«‹æ‚¨å¾å…‰ç¢Ÿå•Ÿå‹•å®‰è£ç¨‹å¼æˆ–å¾å­˜æœ‰å®‰è£æª”æ¡ˆçš„ç›®éŒ„ç›´æ¥å•Ÿå‹•å®‰è£ç¨‹å¼ã€‚ ";
-    Text[ turkish ] = "Kurulumu onarmak CD'den veya kurulum paketlerinin bulunduğu dizinden kurulumu başlatın. ";
-    Text[ arabic ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
-    Text[ catalan ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
-    Text[ czech ] = "SpusÅ¥te instalaÄnÃ­ aplikaci pro opravenÃ­ instalace z CD nebo z adresÃ¡Å™e obsahujÃ­cÃ­ho instalaÄnÃ­ balÃ­ky.";
-    Text[ hebrew ] = "Um Ihre Installation zu reparieren starten Sie die Setup-Applikation von CD aus, oder aus dem Verzeichnis in dem sich die Installationspakete befinden.";
-    Text[ thai ] = "Start the setup application to repair the installation from the CD or the folder containing the installation packages.";
-    Text[ hindi ] = "Start the setup application to repair the installation from the CD or the folder containing the installation packages.";
-    Text[ slovak ] = "Pre opravu inÅ¡talÃ¡cie spustite setup z inÅ¡talaÄnÃ©ho CD alebo z adresÃ¡ra obsahujÃºceho inÅ¡talaÄnÃ© balÃ­Äky.";
-    Text[ hungarian ] = "IndÃ­tsa el a CD-n vagy a telepÃ­tÅ‘csomagokat tartalmazÃ³ mappÃ¡ban talÃ¡lhatÃ³ telepÃ­tÃ©sjavÃ­tÃ³ alkalmazÃ¡st.";
-    Text[ slovenian ] = "ZaÅ¾enite namestitveni program, da popravite namestitev s CD-ja ali z imenika, ki vsebuje namestitveni paket.";
+    Text [ de ] = "Um Ihre Installation zu reparieren starten Sie die Setup-Applikation von CD aus, oder aus dem Verzeichnis in dem sich die Installationspakete befinden." ;
+    Text [ en-US ] = "Start the setup application to repair the installation from the CD or the folder containing the installation packages.";
 };
 
 String STR_SSO_RELOGIN
 {
-    Text = "Bitte wiederholen Sie Ihre Anmeldung. " ;
-    Text[ ENGLISH ] = "Please log in again. " ;
-    Text[ english_us ] = "Please log in again. ";
-    Text[ portuguese ] = "Please log in again. ";
-    Text[ russian ] = "Please log in again. ";
-    Text[ greek ] = "Please log in again. ";
-    Text[ dutch ] = "Meldt u zich a.u.b. opnieuw aan. ";
-    Text[ french ] = "Répétez le login. ";
-    Text[ spanish ] = "Vuelva a registrarse. ";
-    Text[ finnish ] = "Please log in again. ";
-    Text[ italian ] = "Ripetete il login. ";
-    Text[ danish ] = "Log ind igen.";
-    Text[ swedish ] = "Logga in igen. ";
-    Text[ polish ] = "Please log in again. ";
-    Text[ japanese ] = "ãƒ­ã‚°ã‚¤ãƒ³ã—ãªãŠã—ã¦ãã ã•ã„ã€‚";
-    Text[ korean ] = "ë¡œê·¸ì¸ì„ ë‹¤ì‹œ í•´ì£¼ì‹­ì‹œì˜¤. ";
-    Text[ chinese_simplified ] = "è¯·é‡æ–°ç™»å½•ã€‚";
-    Text[ chinese_traditional ] = "è«‹é‡æ–°ç™»å…¥ã€‚ ";
-    Text[ turkish ] = "Lütfen yeniden giriş yapın.";
-    Text[ arabic ] = "Please log in again. ";
-    Text[ catalan ] = "Please log in again. ";
-    Text[ thai ] = "Please log in again. ";
-    Text[ czech ] = "ProsÃ­m pÅ™ihlaste se znovu. ";
-    Text[ hebrew ] = "Bitte wiederholen Sie Ihre Anmeldung.";
-    Text[ portuguese_brazilian ] = "Por favor faça um novo login.";
-    Text[ hindi ] = "Please log in again. ";
-    Text[ slovak ] = "ProsÃ­m prihlÃ¡ste sa znova. ";
-    Text[ hungarian ] = "Jelentkezzen be Ãºjra.";
-    Text[ slovenian ] = "Prosimo, da se ponovno prijavite. ";
+    Text [ de ] = "Bitte wiederholen Sie Ihre Anmeldung. " ;
+    Text [ en-US ] = "Please log in again. ";
 };
 
 String STR_CONFIG_WARN_LOCAL_FALLBACK
 {
-    Text = "StarOffice wird Ihre lokal-gespeicherten persönlichen Einstellungen verwenden, um mit dem Programmstart fortzufahren. " ;
-    Text[ ENGLISH ] = "StarOffice will continue the startup using your locally stored personal settings. " ;
-    Text[ english_us ] = "StarOffice will continue the startup using your locally stored personal settings.";
-    Text[ portuguese ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ russian ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ greek ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ dutch ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ french ] = "StarOffice va poursuivre le processus de démarrage en utilisant les paramètres personnels stockés en local. ";
-    Text[ spanish ] = "StarOffice continuará el proceso de inicialización utilizando la configuración personal guardada localmente.";
-    Text[ finnish ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ italian ] = "StarOffice proseguirà l'avvio dell'applicazione utilizzando le impostazioni personalizzate salvate localmente. ";
-    Text[ danish ] = "StarOffice fortsætter opstarten ved at bruge de lokale personlige indstillinger.";
-    Text[ swedish ] = "StarOffice kommmer att använda dina personliga inställningar som är sparade lokalt för att fortsätta med programstarten. ";
-    Text[ polish ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ japanese ] = "StarSuite ã¯ã€ãƒ­ãƒ¼ã‚«ãƒ«ã«ä¿å­˜ã•ã‚Œã¦ã„ã‚‹å€‹äººè¨­å®šã‚’ä½¿ç”¨ã—ã¦ã‚¹ã‚¿ãƒ¼ãƒˆã‚¢ãƒƒãƒ—ã‚’ç¶šè¡Œã—ã¾ã™ã€‚";
-    Text[ korean ] = "StarSuiteì€ í”„ë¡œê·¸ë¨ì˜ ì‹œì‘ì„ ê³„ì†í•˜ê¸° ìœ„í•´ ë¡œì»¬ ì €ì¥ëœ ì‚¬ìš©ì ì„¤ì • ë‚´ìš©ì„ ì‚¬ìš©í•©ë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "StarSuite å°†ä¼šä½¿ç”¨æ‚¨çš„æœ¬æœºä¸ªäººè®¾å®šï¼Œä»¥ç»§ç»­å¯åŠ¨è¿‡ç¨‹ã€‚";
-    Text[ chinese_traditional ] = "StarOffice å°‡ä½¿ç”¨æœ¬æ©Ÿå„²å­˜çš„å€‹äººè¨­å®šç¹¼çºŒå•Ÿå‹•ã€‚";
-    Text[ turkish ] = "StarOffice yerel kişisel ayarlarınız kullanarak açılmaya devam edecek.";
-    Text[ arabic ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ catalan ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ thai ] = "StarOffice will continue the startup using your locally stored personal settings. ";
-    Text[ czech ] = "StarOffice bude pokraÄovat ve spouÅ¡tÄ›nÃ­ pomocÃ­ mÃ­stnÄ› uloÅ¾enÃ©ho osobnÃ­ho nastavenÃ­.";
-    Text[ hebrew ] = "StarOffice wird Ihre lokal-gespeicherten persÃ¶nlichen Einstellungen verwenden, um mit dem Programmstart fortzufahren.";
-    Text[ portuguese_brazilian ] = "O StarOffice continuará a inicialização usando sua configuração personalizada local.";
-    Text[ hindi ] = "StarOffice will continue the startup using your locally stored personal settings.";
-    Text[ slovak ] = "StarOffice bude pokraÄovaÅ¥ v Å¡tarte s pouÅ¾itÃ­m vaÅ¡ich lokÃ¡lne uloÅ¾enÃ½ch nastavenÃ­.";
-    Text[ hungarian ] = "Az OpenOffice.org folytatja az indÃ­tÃ¡st a helyileg tÃ¡rolt szemÃ©lyes beÃ¡llÃ­tÃ¡sokkal.";
-    Text[ slovenian ] = "StarOffice bo nadaljeval zagon programa z lokalno shranjenimi osebnimi nastavitvami.";
+    Text [ de ] = "StarOffice wird Ihre lokal-gespeicherten persönlichen Einstellungen verwenden, um mit dem Programmstart fortzufahren. " ;
+    Text [ en-US ] = "StarOffice will continue the startup using your locally stored personal settings.";
 };
 
 String STR_CONFIG_WARN_OFFLINE
 {
-    Text = "Ihre geänderten persönlichen Einstellungen werden von StarOffice zunächst lokal gespeichert und beim nächsten Programmstart synchronisiert. " ;
-    Text[ ENGLISH ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. " ;
-    Text[ english_us ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice.";
-    Text[ portuguese ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ russian ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ greek ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ dutch ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ french ] = "Les modifications apportées aux paramètres personnels vont être stockées en local ; une synchronisation aura lieu au prochain démarrage de StarOffice. ";
-    Text[ spanish ] = "Las modificaciones realizadas en la configuración personal se guardarán a nivel local y se sincronizarán la próxima vez que inicie StarOffice. ";
-    Text[ finnish ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ italian ] = "I cambiamenti apportati alle impostazioni personalizzate verranno memorizzati localmente e sincronizzati al prossimo avvio di StarOffice. ";
-    Text[ danish ] = "Dine ændringer til dine personlige indstillinger gemmes lokalt og synkroniseres næste gang du starter StarOffice.";
-    Text[ swedish ] = "Dina ändrade personliga inställningar sparas lokalt och synkroniseras nästa gång du startar StarOffice. ";
-    Text[ polish ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ japanese ] = "å¤‰æ›´ã—ãŸå€‹äººè¨­å®šã¯ãƒ­ãƒ¼ã‚«ãƒ«ã«ä¿å­˜ã•ã‚Œã€StarSuiteã‚’æ¬¡å›èµ·å‹•ã—ãŸã¨ãã«åæ˜ ã•ã‚Œã¾ã™ã€‚";
-    Text[ korean ] = "ì‚¬ìš©ì ì„ì˜ë¡œ ë³€ê²½í•œ ì„¤ì • ë‚´ìš©ì€ ìš°ì„  ë¡œì»¬ ì €ì¥ë˜ë©° ë‹¤ìŒì— StarSuiteì„ ë‹¤ì‹œ ì‹œì‘í•  ë•Œ ë™ê¸°í™”ë©ë‹ˆë‹¤. ";
-    Text[ chinese_simplified ] = "æ‚¨ä¸ªäººè®¾å®šçš„æ›´æ”¹å°†è¢«å‚¨å­˜åœ¨æœ¬æœºä¸Šå¹¶åœ¨ä¸‹æ¬¡å¯åŠ¨ StarSuite æ—¶è¢«åŒæ­¥åŒ–å¤„ç†ã€‚";
-    Text[ chinese_traditional ] = "æ‚¨å°å€‹äººè¨­å®šæ‰€åšçš„è®Šæ›´æœƒå„²å­˜åœ¨æœ¬æ©Ÿï¼Œä¸¦åœ¨ä¸‹æ¬¡å•Ÿå‹• StarOffice æ™‚åŒæ­¥åŒ–ã€‚";
-    Text[ turkish ] = "Kişisel ayarlarınız yerel olarak kaydedilecektir ve bir sonraki StarOffice'i çalıştırmanızda uyarlanacaktır.";
-    Text[ arabic ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ catalan ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ thai ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. ";
-    Text[ czech ] = "ZmÄ›ny, kterÃ© jste provedli ve svÃ©m osobnÃ­m nastavenÃ­, budou uloÅ¾eny mÃ­stnÄ› a synchronizovÃ¡ny pÅ™i pÅ™Ã­Å¡tÃ­m spuÅ¡tÄ›nÃ­ StarOffice.";
-    Text[ hebrew ] = "Ihre geÃ¤nderten persÃ¶nlichen Einstellungen werden von StarOffice zunÃ¤chst lokal gespeichert und beim nÃ¤chsten Programmstart synchronisiert.";
-    Text[ portuguese_brazilian ] = "As alterações feitas em sua configuração pessoal serão armazenadas localmente e sincronizadas na próxima inicialização do Star Office.";
-    Text[ hindi ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice.";
-    Text[ slovak ] = "Zmeny, ktorÃ© ste urobili vo vaÅ¡ich osobnÃ½ch nastaveniach, budÃº uloÅ¾enÃ© lokÃ¡lne a ich synchronizÃ¡cia prebehne pri ÄalÅ¡om Å¡tarte StarOffice.";
-    Text[ hungarian ] = "A szemÃ©lyes beÃ¡llÃ­tÃ¡sok mÃ³dosÃ­tÃ¡sai helyben tÃ¡rolÃ³dnak, Ã©s az OpenOffice.org kÃ¶vetkezÅ‘ indÃ­tÃ¡sakor szinkronizÃ¡lÃ³dnak.";
-    Text[ slovenian ] = "Spremembe v osebnih nastavitvah bodo shranjene lokalno in sinhronizirane, ko boste naslednjiÄ zagnali StarOffice.";
+    Text [ de ] = "Ihre geänderten persönlichen Einstellungen werden von StarOffice zunächst lokal gespeichert und beim nächsten Programmstart synchronisiert. " ;
+    Text [ en-US ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice.";
 };
 
 String STR_CONFIG_ERR_SETTINGS_INCOMPLETE
 {
-    Text = "Die Starteinstellungen für den Zugriff auf die zentrale Konfiguration sind unvollständig. " ;
-    Text[ ENGLISH ] = "The startup settings for accessing the central configuration are incomplete. " ;
-    Text[ english_us ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ portuguese ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ russian ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ greek ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ dutch ] = "De initialisatie-instellingen voor toegang tot de centrale configuratie zijn onvolledig. ";
-    Text[ french ] = "Les paramètres de démarrage pour l'accès à la configuration centrale ne sont pas complets. ";
-    Text[ spanish ] = "La configuración de inicio para acceder a la configuración central no está completa. ";
-    Text[ finnish ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ italian ] = "Le impostazioni di avvio per l'accesso alla configurazione centrale sono incomplete.";
-    Text[ danish ] = "Opstartsindstillingerne for adgang til den centrale konfiguration er ufuldstændige. ";
-    Text[ swedish ] = "Startinställningarna för att komma åt den centrala konfiguration är ofullständiga. ";
-    Text[ polish ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ japanese ] = "å…±é€šè¨­å®šã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ã‚¹ã‚¿ãƒ¼ãƒˆã‚¢ãƒƒãƒ—è¨­å®šãŒååˆ†ã§ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "ì¤‘ì•™ ì§‘ì¤‘ ì„¤ì •ìœ¼ë¡œ ì•¡ì„¸ìŠ¤í•  ë•Œ í•„ìš”í•œ ì‹œì‘ ì„¤ì •ì´ ë¶ˆì™„ì „í•©ë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "ç”¨äºå­˜å–ä¸­å¿ƒé…ç½®çš„å¯åŠ¨è®¾å®šä¸å®Œæ•´ã€‚";
-    Text[ chinese_traditional ] = "å­˜å–é›†ä¸­é…ç½®çš„å•Ÿå‹•è¨­å®šä¸å®Œæ•´ã€‚ ";
-    Text[ turkish ] = "Merkezi ayarlamaya erişim için yapılan başlangıç ayarları tamamlanmadı.";
-    Text[ arabic ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ catalan ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ thai ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ czech ] = "PoÄÃ¡teÄnÃ­ nastavenÃ­ pro pÅ™Ã­stup k centrÃ¡lnÃ­ konfiguraci je neÃºplnÃ©. ";
-    Text[ hebrew ] = "Die Starteinstellungen fÃ¼r den Zugriff auf die zentrale Konfiguration sind unvollstÃ¤ndig.";
-    Text[ portuguese_brazilian ] = "As configurações de inicialização para acesso à configuração central estão incompletas.";
-    Text[ hindi ] = "The startup settings for accessing the central configuration are incomplete. ";
-    Text[ slovak ] = "PoÄiatoÄnÃ© nastavenia pre prÃ­stup k centrÃ¡lnej konfigurÃ¡cii sÃº nekompletnÃ©. ";
-    Text[ hungarian ] = "A kÃ¶zponti konfigurÃ¡ciÃ³ elÃ©rÃ©sÃ©hez szÃ¼ksÃ©ges indÃ­tÃ¡si beÃ¡llÃ­tÃ¡sok nem teljesek.";
-    Text[ slovenian ] = "Zagonske nastavitve za dostop do osrednje konfiguracije so nepopolne. ";
+    Text [ de ] = "Die Starteinstellungen für den Zugriff auf die zentrale Konfiguration sind unvollständig. " ;
+    Text [ en-US ] = "The startup settings for accessing the central configuration are incomplete. ";
 };
 
 String STR_CONFIG_ERR_CANNOT_CONNECT
 {
-    Text = "Eine Verbindung zur zentralen Konfiguration kann nicht hergestellt werden. " ;
-    Text[ ENGLISH ] = "A connection to the central configuration could not be established. " ;
-    Text[ english_us ] = "A connection to the central configuration could not be established. ";
-    Text[ portuguese ] = "A connection to the central configuration could not be established. ";
-    Text[ russian ] = "A connection to the central configuration could not be established. ";
-    Text[ greek ] = "A connection to the central configuration could not be established. ";
-    Text[ dutch ] = "Er kon geen verbinding worden gemaakt met de centrale configuratie. ";
-    Text[ french ] = "Impossible d'établir une connexion à la configuration centrale ! ";
-    Text[ spanish ] = "No se ha podido establecer ninguna conexión con la configuración central. ";
-    Text[ finnish ] = "A connection to the central configuration could not be established. ";
-    Text[ italian ] = "impossibile realizzare un colleamento con la configurazione centrale. ";
-    Text[ danish ] = "Der kunne ikke oprettes forbindelse til den centrale konfiguration. ";
-    Text[ swedish ] = "Det gick inte att koppla till den centrala konfigurationen. ";
-    Text[ polish ] = "A connection to the central configuration could not be established. ";
-    Text[ japanese ] = "å…±é€šè¨­å®šã¸ã®æ¥ç¶šãŒç¢ºç«‹ã§ãã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "ì¤‘ì•™ ì§‘ì¤‘ ì„¤ì •ìœ¼ë¡œ ì—°ê²°í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤. ";
-    Text[ chinese_simplified ] = "æ— æ³•å’Œä¸­å¿ƒé…ç½®å»ºç«‹è¿æ¥ã€‚";
-    Text[ chinese_traditional ] = "ç„¡æ³•å»ºç«‹åˆ°é›†ä¸­é…ç½®çš„é€£ç·šï¼ ";
-    Text[ turkish ] = "Merkezi yapılandırmaya bağlantı sağlanamadı.";
-    Text[ arabic ] = "A connection to the central configuration could not be established. ";
-    Text[ catalan ] = "A connection to the central configuration could not be established. ";
-    Text[ thai ] = "A connection to the central configuration could not be established. ";
-    Text[ czech ] = "Nelze navÃ¡zat spojenÃ­ pro pÅ™Ã­stup k centrÃ¡lnÃ­ konfiguraci. ";
-    Text[ hebrew ] = "Eine Verbindung zur zentralen Konfiguration kann nicht hergestellt werden.";
-    Text[ portuguese_brazilian ] = "Não foi possível estabelecer uma conexão com a configuração central. ";
-    Text[ hindi ] = "A connection to the central configuration could not be established. ";
-    Text[ slovak ] = "Nemohlo byÅ¥ nadviazanÃ© spojenie s centrÃ¡lnou konfigurÃ¡ciou. ";
-    Text[ hungarian ] = "Nem sikerÃ¼lt kapcsolatot teremteni a kÃ¶zponti konfigurÃ¡ciÃ³val.";
-    Text[ slovenian ] = "Ni mogoÄe vzpostaviti povezave z osrednjimi nastavitvami. ";
+    Text [ de ] = "Eine Verbindung zur zentralen Konfiguration kann nicht hergestellt werden. " ;
+    Text [ en-US ] = "A connection to the central configuration could not be established. ";
 };
 
 String STR_CONFIG_ERR_RIGHTS_MISSING
 {
-    Text = "Aufgrund fehlender Zugriffsrechte können Sie nicht auf die zentrale Konfiguration zugreifen. " ;
-    Text[ ENGLISH ] = "You cannot access the central configuration because of missing access rights. " ;
-    Text[ english_us ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ portuguese ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ russian ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ greek ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ dutch ] = "U kunt geen toegang krijgen tot de centrale configuratie vanwege onvoldoende toegangsrechten. ";
-    Text[ french ] = "Accès à la configuration centrale refusé : droits d'accès insuffisants. ";
-    Text[ spanish ] = "No puede acceder a la configuración central por falta de derechos de acceso. ";
-    Text[ finnish ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ italian ] = "Impossibile accedere alla configurazione centrale in quanto mancano i diritti necessari. ";
-    Text[ danish ] = "Du kan på grund af manglende adgangsrettigheder ikke få adgang til den centrale konfiguration. ";
-    Text[ swedish ] = "Du kan inte komma åt den centrala konfigurationen därför att du saknar åtkomsträttigheter. ";
-    Text[ polish ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ japanese ] = "ã‚¢ã‚¯ã‚»ã‚¹æ¨©ãŒãªã„ãŸã‚ã€å…±é€šè¨­å®šã«ã‚¢ã‚¯ã‚»ã‚¹ã§ãã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "ì•¡ì„¸ìŠ¤ ê¶Œí•œì´ ì—†ëŠ” ì´ìœ ë¡œ ì¤‘ì•™ ì§‘ì¤‘ ì„¤ì •ìœ¼ë¡œ ì•¡ì„¸ìŠ¤í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "å› ä¸ºæ‚¨ç¼ºå°‘å­˜å–æƒåˆ©è€Œæ— æ³•å­˜å–ä¸­å¿ƒé…ç½®æ•°æ®ã€‚";
-    Text[ chinese_traditional ] = "å› ç‚ºç¼ºå°‘å­˜å–æ¬Šé™ï¼Œæ‚¨ç„¡æ³•å­˜å–é›†ä¸­é…ç½®ã€‚ ";
-    Text[ turkish ] = "Erişim haklarınızın yeterli olmaması nedeniyle merkezi yapılandırmaya erişim yapamazsınız";
-    Text[ arabic ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ catalan ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ thai ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ czech ] = "Nelze pÅ™istupovat k centrÃ¡lnÃ­ konfiguraci kvÅ¯li chybÄ›jÃ­cÃ­m oprÃ¡vnÄ›nÃ­m. ";
-    Text[ hebrew ] = "Aufgrund fehlender Zugriffsrechte kÃ¶nnen Sie nicht auf die zentrale Konfiguration zugreifen.";
-    Text[ portuguese_brazilian ] = "Por falta de direitos de acesso, não é possível acessar a configuração central. ";
-    Text[ hindi ] = "You cannot access the central configuration because of missing access rights. ";
-    Text[ slovak ] = "NemÃ´Å¾ete pristupovaÅ¥ k centrÃ¡lnej konfigurÃ¡cii, pretoÅ¾e nemÃ¡te prÃ­stupovÃ© prÃ¡va. ";
-    Text[ hungarian ] = "A kÃ¶zponti konfigurÃ¡ciÃ³ elÃ©rÃ©se azÃ©rt nem sikerÃ¼lt, mert nem rendelkezik a megfelelÅ‘ jogosultsÃ¡gokkal.";
-    Text[ slovenian ] = "Zaradi manjkajoÄih pravic nimate dostopa do osrednjih nastavitev. ";
+    Text [ de ] = "Aufgrund fehlender Zugriffsrechte können Sie nicht auf die zentrale Konfiguration zugreifen. " ;
+    Text [ en-US ] = "You cannot access the central configuration because of missing access rights. ";
 };
 
 String STR_CONFIG_ERR_LOGIN_FAILED
 {
-    Text = "Die Anmeldung zur zentralen Konfiguration ist fehlgeschlagen. Der Benutzername oder das Kennwort ist falsch. " ;
-    Text[ ENGLISH ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. " ;
-    Text[ english_us ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ portuguese ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ russian ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ greek ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ dutch ] = "Uw aanmelding bij de centrale configuratie is niet gelukt vanwege ongeldige gebruikersnaam en/of wachtwoord. ";
-    Text[ french ] = "Échec de connexion à la configuration centrale : le nom d'utilisateur ou le mot de passe n'est pas correct. ";
-    Text[ spanish ] = "Fallo de conexión con la configuración central. El nombre de usuario o la contraseña no son correctos. ";
-    Text[ finnish ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ italian ] = "Il login alla configurazione centrale non è riuscito. Probabile causa: nome utente o password non corretto. ";
-    Text[ danish ] = "Dit logind til den centrale konfiguration fejlede. Enten er brugernavnet eller adgangskoden ugyldig. ";
-    Text[ swedish ] = "Det gick inte att logga in till den centrala konfigurationen. Användarnamnet eller lösenordet är felaktigt. ";
-    Text[ polish ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ japanese ] = "å…±é€šè¨­å®šã¸ã®ãƒ­ã‚°ã‚¤ãƒ³ã«å¤±æ•—ã—ã¾ã—ãŸã€‚ãƒ¦ãƒ¼ã‚¶ãƒ¼åã¾ãŸã¯ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®ã„ãšã‚Œã‹ãŒä¸æ­£ã§ã™ã€‚";
-    Text[ korean ] = "ë¡œê·¸ì¸í•˜ëŠ”ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤. ì‚¬ìš©ì ì´ë¦„ ë˜ëŠ” ì•”í˜¸ê°€ ì˜ëª»ë˜ì—ˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "æ‚¨ç™»å½•ä¸­å¿ƒé…ç½®æ²¡æœ‰æˆåŠŸã€‚æ‚¨è¾“å…¥çš„ä½¿ç”¨åå’Œå¯†ç æ— æ•ˆã€‚";
-    Text[ chinese_traditional ] = "ç™»å…¥åˆ°é›†ä¸­é…ç½®ä¸æˆåŠŸã€‚ä½¿ç”¨è€…åç¨±æˆ–å¯†ç¢¼ç„¡æ•ˆã€‚ ";
-    Text[ turkish ] = "Merkezi ayarlama için oturum girişi başarısız. Ya kullanıcı ismi yada parola yanlış.";
-    Text[ arabic ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ catalan ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ thai ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ czech ] = "VaÅ¡e pÅ™ihlÃ¡Å¡enÃ­ ke zdroji centrÃ¡lnÃ­ konfigurace nebylo ÃºspÄ›Å¡nÃ©. UÅ¾ivatelskÃ© jmÃ©no nebo heslo je neplatnÃ©. ";
-    Text[ hebrew ] = "Die Anmeldung zur zentralen Konfiguration ist fehlgeschlagen. Der Benutzername oder das Kennwort ist falsch.";
-    Text[ portuguese_brazilian ] = "O login na configuração central não aconteceu. A senha ou o nome do usuário são inválidos.";
-    Text[ hindi ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
-    Text[ slovak ] = "VaÅ¡e prihlÃ¡senie sa do centrÃ¡lnej konfigurÃ¡cie bolo neÃºspeÅ¡nÃ©. UÅ¾Ã­vateÄ¾skÃ© meno alebo heslo je neplatnÃ©. ";
-    Text[ hungarian ] = "Az azonosÃ­tÃ¡s a kÃ¶zponti konfigurÃ¡ciÃ³ elÃ©rÃ©sÃ©hez nem sikerÃ¼lt. A felhasznÃ¡lÃ³i nÃ©v vagy a jelszÃ³ Ã©rvÃ©nytelen.";
-    Text[ slovenian ] = "VaÅ¡a prijava v osrednjo konfiguracijo ni bila uspeÅ¡na. Preverite, ali sta uporabniÅ¡ko ime in geslo pravilna.";
+    Text [ de ] = "Die Anmeldung zur zentralen Konfiguration ist fehlgeschlagen. Der Benutzername oder das Kennwort ist falsch. " ;
+    Text [ en-US ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. ";
 };
 
 String STR_CONFIG_ERR_MECHANISM_INVALID
 {
-    Text = "Die gewählte Authentifizierungsmethode für den Zugriff auf die zentrale Konfiguration wird nicht unterstützt. " ;
-    Text[ ENGLISH ] = "The specified authentication method to access the central configuration is not supported. " ;
-    Text[ english_us ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ portuguese ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ russian ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ greek ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ dutch ] = "De gespecificeerde authenticatiemethode om toegang te krijgen tot de centrale configuratie wordt niet ondersteund. ";
-    Text[ french ] = "La méthode d'authentification spécifiée pour l'accès à la configuration centrale n'est pas supportée. ";
-    Text[ spanish ] = "El método de autentificación especificado para acceder a la configuración central no está admitido. ";
-    Text[ finnish ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ italian ] = "Il metodo di autenticazione indicato per l'accesso alla configurazione centrale non è supportato. ";
-    Text[ danish ] = "Den angivne godkendelsesmetode for adgang til den centrale konfiguration understøttes ikke. ";
-    Text[ swedish ] = "Den valda autentiseringsmetoden för åtkomst till den centrala konfigurationen stöds inte. ";
-    Text[ polish ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ japanese ] = "å…±é€šè¨­å®šã¸ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ãŸã‚ã«æŒ‡å®šã—ãŸèªè¨¼æ–¹æ³•ã¯ã‚µãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "ì¤‘ì•™ ì§‘ì¤‘ ì„¤ì •ìœ¼ë¡œ ì•¡ì„¸ìŠ¤í•˜ê¸° ìœ„í•´ ì§€ì •ëœ ì¸ì¦ ë°©ì‹ì€ ì§€ì›ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "ä¸æ”¯æŒç”¨äºå­˜å–ä¸­å¿ƒé…ç½®é€‰å–çš„è®¤è¯æ–¹å¼ã€‚";
-    Text[ chinese_traditional ] = "å­˜å–é›†ä¸­é…ç½®çš„æŒ‡å®šé©—è­‰æ–¹æ³•ä¸å—æ”¯æ´ã€‚ ";
-    Text[ turkish ] = "Merkezi yapılandırmaya erişim için özelleştirilmiş yetki metodu desteklenmiyor.";
-    Text[ arabic ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ catalan ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ thai ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ czech ] = "ZadanÃ¡ metoda autentizace k pÅ™Ã­stupu do centrÃ¡lnÃ­ konfigurace nenÃ­ podporovÃ¡na. ";
-    Text[ hebrew ] = "Die gewÃ¤hlte Authentifizierungsmethode fÃ¼r den Zugriff auf die zentrale Konfiguration wird nicht unterstÃ¼tzt.";
-    Text[ portuguese_brazilian ] = "O método de autenticação especificado para acessar a configuração central não é suportado.";
-    Text[ hindi ] = "The specified authentication method to access the central configuration is not supported. ";
-    Text[ slovak ] = "VybranÃ½ spÃ´sob prÃ­stupu k centrÃ¡lnej konfigurÃ¡cii nie je podporovanÃ½. ";
-    Text[ hungarian ] = "A megadott azonosÃ­tÃ¡si eljÃ¡rÃ¡s a kÃ¶zponti konfigurÃ¡ciÃ³ elÃ©rÃ©sÃ©hez nincs tÃ¡mogatva.";
-    Text[ slovenian ] = "Navedena metoda preverjanja pristnosti za dostop do osrednje konfiguracije ni podprta.";
+    Text [ de ] = "Die gewählte Authentifizierungsmethode für den Zugriff auf die zentrale Konfiguration wird nicht unterstützt. " ;
+    Text [ en-US ] = "The specified authentication method to access the central configuration is not supported. ";
 };
 
 String STR_CONFIG_ERR_ACCESS_GENERAL
 {
-    Text = "Ein genereller Fehler ist beim Zugriff auf die zentrale Konfiguration aufgetreten. " ;
-    Text[ ENGLISH ] = "A general access error occurred while accessing your central configuration. " ;
-    Text[ english_us ] = "A general error occurred while accessing your central configuration. ";
-    Text[ portuguese ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ russian ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ greek ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ dutch ] = "Algemene toegangsfout bij het benaderen van uw centrale configuratie. ";
-    Text[ french ] = "Une erreur générale s'est produite lors de l'accès à la configuration centrale. ";
-    Text[ spanish ] = "Se produjo un error general mientras se accedía a la configuración central.";
-    Text[ finnish ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ italian ] = "Si è verificato un errore generale di accesso alla configurazione centrale. ";
-    Text[ danish ] = "Der opstod et generelt problem under adgangen til din centrale konfiguration. ";
-    Text[ swedish ] = "Det har uppstått ett generellt fel vid försöket att komma åt din centrala konfiguration. ";
-    Text[ polish ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ japanese ] = "å…±é€šè¨­å®šã¸ã®ã‚¢ã‚¯ã‚»ã‚¹æ™‚ã«ä¸€èˆ¬çš„ãªã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚";
-    Text[ korean ] = "ì¤‘ì•™ ì§‘ì¤‘ ì„¤ì •ìœ¼ë¡œ ì•¡ì„¸ìŠ¤í•˜ë˜ ì¤‘ ì¼ë°˜ì  ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "åœ¨å­˜å–æ‚¨çš„ä¸­å¿ƒé…ç½®æ—¶å‘ç”Ÿäº†ä¸€èˆ¬çš„å­˜å–é”™è¯¯ã€‚";
-    Text[ chinese_traditional ] = "å­˜å–é›†ä¸­é…ç½®æ™‚ç™¼ç”Ÿä¸€èˆ¬å­˜å–éŒ¯èª¤ã€‚ ";
-    Text[ turkish ] = "Merkezi yapılandırma ayarlarınıza ulaşırken genel bir hata oluştu.";
-    Text[ arabic ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ catalan ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ thai ] = "A general access error occurred while accessing your central configuration. ";
-    Text[ czech ] = "PÅ™i pÅ™Ã­stupu k centrÃ¡lnÃ­ konfiguraci nastala obecnÃ¡ chyba. ";
-    Text[ hebrew ] = "Ein genereller Fehler ist beim Zugriff auf die zentrale Konfiguration aufgetreten.";
-    Text[ portuguese_brazilian ] = "Ocorreu um erro geral enquanto acessava a sua configuração central.";
-    Text[ hindi ] = "A general error occurred while accessing your central configuration. ";
-    Text[ slovak ] = "Pri pristupovanÃ­ k centrÃ¡lnej konfigurÃ¡cii sa vyskytla chyba. ";
-    Text[ hungarian ] = "ÃltalÃ¡nos hiba keletkezett a kÃ¶zponti konfigurÃ¡ciÃ³ elÃ©rÃ©sekor.";
-    Text[ slovenian ] = "Pri dostopu do osrednje konfiguracije je priÅ¡lo do sploÅ¡ne napake.";
+    Text [ de ] = "Ein genereller Fehler ist beim Zugriff auf die zentrale Konfiguration aufgetreten. " ;
+    Text [ en-US ] = "A general error occurred while accessing your central configuration. ";
 };
 
 String STR_CONFIG_ERR_NO_WRITE_ACCESS
 {
-    Text = "Ihre geänderten persönlichen Einstellungen können aufgrund fehlender Zugriffsrechte nicht zentral gespeichert werden. " ;
-    Text[ ENGLISH ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. " ;
-    Text[ english_us ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ portuguese ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ russian ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ greek ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ dutch ] = "De wijzigingen aan uw persoonlijke instellingen kunnen niet centraal worden opgeslagen vanwege onvoldoende toegangsrechten. ";
-    Text[ french ] = "Stockage central des paramètres personnels modifiés impossible : droits d'accès insuffisants. ";
-    Text[ spanish ] = "Las modificaciones realizadas en la configuración personal no se pueden guardar de manera central por falta de derechos de acceso.";
-    Text[ finnish ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ italian ] = "Impossibile memorizzare i cambiamenti alle impostazioni personalizzate in quanto mancano i diritti di accesso. ";
-    Text[ danish ] = "Dine ændringer til dine personlige indstillinger kan ikke gemmes centralt på grund af manglende adgangsrettigheder. ";
-    Text[ swedish ] = "Det går inte att spara dina ändrade personliga inställningar centralt eftersom åtkomsträttigheter saknas. ";
-    Text[ polish ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ japanese ] = "ã‚¢ã‚¯ã‚»ã‚¹æ¨©ãŒãªã„ãŸã‚ã€å€‹äººè¨­å®šã®å¤‰æ›´å†…å®¹ã¯å…±é€šè¨­å®šã«ä¿å­˜ã•ã‚Œã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "ì•¡ì„¸ìŠ¤ ê¶Œí•œì´ ì—†ëŠ” ì´ìœ ë¡œ ë³€ê²½ëœ ì‚¬ìš©ì ì„¤ì • ë‚´ìš©ì„ ì¤‘ì•™ì— ì €ì¥í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "å› ä¸ºæ‚¨ç¼ºå°‘å­˜å–æƒåˆ©è€Œæ— æ³•å°†æ›´æ”¹çš„ä¸ªäººæ•°æ®å­˜å…¥ä¸­å¿ƒé…ç½®ã€‚";
-    Text[ chinese_traditional ] = "ç”±æ–¼ç¼ºå°‘å­˜å–æ¬Šé™ï¼Œå€‹äººè¨­å®šçš„è®Šæ›´ç„¡æ³•é›†ä¸­å„²å­˜ã€‚ ";
-    Text[ turkish ] = "Yeterli erişim haklarınızın olmaması sebebiyle özel ayarlarınızdaki değişiklikler merkezi olarak kaydedilemiyor.";
-    Text[ arabic ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ catalan ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ thai ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ czech ] = "ZmÄ›na vaÅ¡eho osobnÃ­ho nastavenÃ­ nelze centrÃ¡lnÄ› uloÅ¾it kvÅ¯li chybÄ›jÃ­cÃ­m pÅ™Ã­stupovÃ½m prÃ¡vÅ¯m. ";
-    Text[ hebrew ] = "Ihre geÃ¤nderten persÃ¶nlichen Einstellungen kÃ¶nnen aufgrund fehlender Zugriffsrechte nicht zentral gespeichert werden.";
-    Text[ portuguese_brazilian ] = "Por falta de direitos de acesso, as alterações de suas configurações pessoais não podem ser armazenadas na configuração central.";
-    Text[ hindi ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
-    Text[ slovak ] = "Zmeny vo vaÅ¡ich osobnÃ½ch nastaveniach nie je moÅ¾nÃ© uloÅ¾iÅ¥ centrÃ¡lne z dÃ´vodu chÃ½bajÃºcich prÃ­stupovÃ½ch prÃ¡v.. ";
-    Text[ hungarian ] = "HiÃ¡nyzÃ³ jogosultsÃ¡gok miatt nem lehet a szemÃ©lyes beÃ¡llÃ­tÃ¡sokat a kÃ¶zponti konfigurÃ¡ciÃ³ban tÃ¡rolni.";
-    Text[ slovenian ] = "Zaradi manjkajoÄih dostopnih pravic ni mogoÄe shraniti vaÅ¡ih osebnih nastavitev v osrednjo konfiguracijo. ";
+    Text [ de ] = "Ihre geänderten persönlichen Einstellungen können aufgrund fehlender Zugriffsrechte nicht zentral gespeichert werden. " ;
+    Text [ en-US ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
 };
 
 QueryBox QBX_CONFIG_IMPORTSETTINGS
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_YES ;
-    Message = "Auf Ihrem Rechner wurden persönliche %PRODUCTNAME-Einstellungen gefunden. \n"
+    Message [ de ] = "Auf Ihrem Rechner wurden persönliche %PRODUCTNAME-Einstellungen gefunden. \n"
               "Möchten Sie diese in die zentrale Konfiguration übertragen, um weiter damit arbeiten zu können?" ;
-    Message[ ENGLISH ] = "Personal %PRODUCTNAME settings have been detected on your computer. \n"
-                         "Would you like to transfer those settings to the central configuration in order to continue working with them?" ;
-    Message[ portuguese ] = "Personal %PRODUCTNAME settings have been detected on your computer. \n";
-    Message[ russian ] = "Personal %PRODUCTNAME settings have been detected on your computer. \n";
-    Message[ spanish ] = "Se ha detectado una configuración personal de %PRODUCTNAME en el ordenador. \n¿Desea transferir esta configuración a la configuración central para seguir trabajando con ella?";
-    Message[ italian ] = "Sono state rilevate impostazioni personalizzate di %PRODUCTNAME sul vostro computer.\nVolete trasferite le impostazioni alla configurazione centrale per continuare ad utilizzarle?";
-    Message[ swedish ] = "Personliga %PRODUCTNAME-inställningar har hittats på din dator. \nVill du överföra de här inställningarna till den centrala konfigurationen för att fortsätta att arbeta med dem?";
-    Message[ polish ] = "Personal %PRODUCTNAME settings have been detected on your computer. \n";
-    Message[ portuguese_brazilian ] = "Foram encontradas configurações pessoais do %PRODUCTNAME em seu computador. \n";
-    Message[ japanese ] = "%PRODUCTNAME ã®ãƒ¦ãƒ¼ã‚¶ãƒ¼è¨­å®šãŒã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿ã§æ¤œå‡ºã•ã‚Œã¾ã—ãŸã€‚\nã“ã®ãƒ¦ãƒ¼ã‚¶ãƒ¼è¨­å®šã‚’å…±é€šè¨­å®šã«è»¢é€ã—ã¦ã€ãã®è¨­å®šã‚’ä½¿ç”¨ã—ã¾ã™ã‹ã€‚";
-    Message[ korean ] = "ì‚¬ìš©ì ê³ ìœ  %PRODUCTNAME ì„¤ì • ë‚´ìš©ì´ ë°œê²¬ë˜ì—ˆìŠµë‹ˆë‹¤.\n ì´ ì„¤ì • ë‚´ìš©ì„ ì¤‘ì•™ ì§‘ì¤‘ ì„¤ì •ìœ¼ë¡œ ì „ì†¡í•˜ë©´ ì´ ì„¤ì •ìœ¼ë¡œ ê³„ì† ì‘ì—…í•˜ì‹¤ ìˆ˜ ìˆìŠµë‹ˆë‹¤. ì „ì†¡í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Message[ turkish ] = "Bilgisayarınızda kişisel %PRODUCTNAME ayarları tespit edildi. \nAyarları onlarla çalışmaya devam etmek için merkezi yapılandırmaya transfer etmek istermiydiniz.";
-    Message[ thai ] = "Personal %PRODUCTNAME settings have been detected on your computer. \n";
-    Message[ english_us ] = "Personal %PRODUCTNAME settings have been detected on your computer. \nWould you like to transfer those settings to the central configuration in order to continue working with them?";
-    Message[ greek ] = "Personal %PRODUCTNAME settings have been detected on your computer. \n";
-    Message[ dutch ] = "Er zijn persoonlijke %PRODUCTNAME instellingen gedetecteerd op uw computer. \nWilt u deze overdragen naar de centrale configuratie, zodat u hiermee kunt blijven werken?";
-    Message[ french ] = "Des paramètres personnels %PRODUCTNAME ont été détectés sur votre ordinateur.\nSouhaitez-vous les transférer dans la configuration centrale afin de pouvoir continuer à les appliquer ?";
-    Message[ finnish ] = "Personal %PRODUCTNAME settings have been detected on your computer. \n";
-    Message[ danish ] = "Der er detekteret personlige indstillinger for %PRODUCTNAME på din computer. \nVil du overføre disse indstillinger til den centrale konfiguration og fortsætte med at bruge dem?";
-    Message[ chinese_simplified ] = "å‘ç°ç”µè„‘ä¸Šå·²æœ‰ä¸€ä¸ªä¸ªäººçš„ %PRODUCTNAME è®¾å®šã€‚\næ‚¨è¦å°†è¿™äº›è®¾å®šè½¬ç§»åˆ°ä¸­å¿ƒé…ç½®ï¼Œä»¥ç»§ç»­ä½¿ç”¨å®ƒï¼Ÿ";
-    Message[ chinese_traditional ] = "åœ¨æ‚¨çš„é›»è…¦ä¸Šåµæ¸¬åˆ°å€‹äººçš„ %PRODUCTNAME è¨­å®šã€‚ \nè¦å‚³é€é€™äº›è¨­å®šè‡³é›†ä¸­é…ç½®ä»¥ç¹¼çºŒä½¿ç”¨å—ï¼Ÿ";
-    Message[ arabic ] = "Personal %PRODUCTNAME settings have been detected on your computer. \n";
-    Message[ catalan ] = "Personal %PRODUCTNAME settings have been detected on your computer. \n";
-    Message[ czech ] = "Bylo nalezeno osobnÃ­ nastavenÃ­ %PRODUCTNAME na vaÅ¡em poÄÃ­taÄi. \nPÅ™ejete si pÅ™enÃ©st tato nastavenÃ­ do centrÃ¡lnÃ­ konfigurace, abyste s nimi mohli pracovat i nadÃ¡le?";
-    Message[ hebrew ] = "Auf Ihrem Rechner wurden persÃ¶nliche %PRODUCTNAME-Einstellungen gefunden. \n";
-    Message[ hindi ] = "Personal %PRODUCTNAME settings have been detected on your computer. \nWould you like to transfer those settings to the central configuration in order to continue working with them?";
-    Message[ slovak ] = "Na vaÅ¡om poÄÃ­taÄi boli zistenÃ© osobnÃ© nastavenia %PRODUCTNAME. \nChcete preniesÅ¥ tieto nastavenia do centrÃ¡lnej konfigurÃ¡cie aby ste s nimi mohli pracovaÅ¥?";
-    Message[ hungarian ] = "A szÃ¡mÃ­tÃ³gÃ©pen szemÃ©lyes %PRODUCTNAME beÃ¡llÃ­tÃ¡sok talÃ¡lhatÃ³k.\nSzeretnÃ© Ã¡tvinni ezeket a kÃ¶zponti konfigurÃ¡ciÃ³ba, hogy tovÃ¡bbra is ezekkel a beÃ¡llÃ­tÃ¡sokkal dolgozhasson?";
-    Message[ slovenian ] = "Na vaÅ¡em raÄunalniku so bile najdene osebne nastavitve za %PRODUCTNAME. \nAli jih Å¾elite uporabljati Å¡e naprej in jih prenesti v osrednjo konfiguracijo?";
+    Message [ en-US ] = "Personal %PRODUCTNAME settings have been detected on your computer. \nWould you like to transfer those settings to the central configuration in order to continue working with them?";
 };
 
 String STR_TITLE_CONFIG_MSGBOX
 {
-    Text = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ ENGLISH ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ portuguese ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ russian ] = "%PRODUCTNAME 6.0";
-    Text[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ italian ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ polish ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ korean ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ turkish ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ thai ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ greek ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION ";
-    Text[ french ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ finnish ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ danish ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ arabic ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ catalan ] = "Hint";
-    Text[ czech ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ hebrew ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ hindi ] = "à¤‡à¤¶à¤¾à¤°à¤¾";
-    Text[ slovak ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ hungarian ] = "%PRODUCTNAME %PRODUCTVERSION   ";
-    Text[ slovenian ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
 
 String STR_WARNING_JAVANOTFOUND
 {
-    Text = "JRE ist erforderlich" ;
-    Text[ english_us ] = "JRE Required" ;
+    Text [ de ] = "JRE ist erforderlich" ;
+    Text[ en-US ] = "JRE Required" ;
 };
 
 String STR_WARNING_INVALIDJAVASETTINGS
 {
-    Text = "JRE auswählen" ;
-    Text[ english_us ] = "Select JRE";
+    Text [ de ] = "JRE auswählen" ;
+    Text[ en-US ] = "Select JRE";
 };
 
 String STR_ERROR_RESTARTREQUIRED
 {
-    Text = "Neustart ist erforderlich";
-    Text[ english_us ] = "Restart Required";
+    Text [ de ] = "Neustart ist erforderlich";
+    Text[ en-US ] = "Restart Required";
 };
 
 String STR_QUESTION_JAVADISABLED
 {
-    Text = "JRE aktivieren" ;
-    Text[ english_us ] = "Enable JRE" ;
+    Text [ de ] = "JRE aktivieren" ;
+    Text[ en-US ] = "Enable JRE" ;
 };
 
 
 String STR_ERROR_JVMCREATIONFAILED
 {
-    Text = "JRE ist defekt" ;
-    Text[ english_us ] = "JRE is Defective" ;
+    Text [ de ] = "JRE ist defekt" ;
+    Text[ en-US ] = "JRE is Defective" ;
 };
 
 
 String STR_BOOTSTRAP_ERR_CFG_DATAACCESS
 {
-    Text = "%PRODUCTNAME kann nicht gestartet werden, da beim Zugriff auf die %PRODUCTNAME Konfigurationsdaten ein Fehler aufgetreten ist.\n\nBitte wenden Sie sich an Ihren Systemadministrator." ;
-    Text[ ENGLISH ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator." ;
-    Text[ english_us ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator." ;
-    Text[ portuguese ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
-    Text[ russian ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
-    Text[ spanish ] = "%PRODUCTNAME no se puede iniciar debido a un error producido al acceder a los datos de la configuración de %PRODUCTNAME.\n\nContacte su administrador de sistema.";
-    Text[ italian ] = "Impossibile avviare %PRODUCTNAME a causa di un errore di accesso ai dati di configurazione.\n\nContattate il vostro amministratore di sistema.";
-    Text[ swedish ] = "%PRODUCTNAME kunde inte startas därför att det inte går att komma åt %PRODUCTNAME-konfigurationsdata.\n\nVänd dig till din systemadministratör.";
-    Text[ polish ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
-    Text[ portuguese_brazilian ] = "Não foi possível iniciar o %PRODUCTNAME devido a um erro de acesso aos dados de configuração do %PRODUCTNAME.\n\nContacte seu administrador se sistemas.";
-    Text[ japanese ] = "%PRODUCTNAME è¨­å®šãƒ‡ãƒ¼ã‚¿ã¸ã®ã‚¢ã‚¯ã‚»ã‚¹ã«ã‚¨ãƒ©ãƒ¼ãŒç”Ÿã˜ãŸãŸã‚ã€%PRODUCTNAME ã‚’èµ·å‹•ã™ã‚‹ã“ã¨ãŒã§ãã¾ã›ã‚“ã€‚\n\nã‚·ã‚¹ãƒ†ãƒ ç®¡ç†è€…ã«é€£çµ¡ã—ã¦ãã ã•ã„ã€‚";
-    Text[ korean ] = "%PRODUCTNAMEì˜ ì„¤ì • ë°ì´í„°ì— ì•¡ì„¸ìŠ¤ í•˜ëŠ” ì¤‘ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤. %PRODUCTNAMEì„(ë¥¼) ì‹œì‘í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.\n\nì‹œìŠ¤í…œ ê´€ë¦¬ìì—ê²Œ ë¬¸ì˜í•˜ì‹­ì‹œì˜¤.";
-    Text[ turkish ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
-    Text[ thai ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
-    Text[ greek ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
-    Text[ dutch ] = "%PRODUCTNAME kan niet worden gestart tengevolge van een fout in de toegang tot de configuratiegegevens van %PRODUCTNAME.\n\nNeem a.u.b. contact op met uw systeembeheerder.";
-    Text[ french ] = "Impossible de démarrer %PRODUCTNAME : une erreur s'est produite lors de l'accès aux données de configuration %PRODUCTNAME.\n\nVeuillez contacter votre administrateur système.";
-    Text[ finnish ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
-    Text[ danish ] = "%PRODUCTNAME kan ikke startes pga. af fejl ved indlæsning af konfigurationsdata. Kontakt systemadministratoren.";
-    Text[ chinese_simplified ] = "%PRODUCTNAME æ— æ³•å¯åŠ¨ï¼ŒåŸå› æ˜¯å­˜å– %PRODUCTNAME é…ç½®æ•°æ®æ—¶å‘ç”Ÿé”™è¯¯ã€‚\n\nè¯·æ‚¨ä¸ç³»ç»Ÿç®¡ç†å‘˜è”ç³»ã€‚";
-    Text[ chinese_traditional ] = "ç”±æ–¼å­˜å– %PRODUCTNAME é…ç½®è³‡æ–™çš„éŒ¯èª¤ï¼Œç„¡æ³•å•Ÿå‹• %PRODUCTNAMEã€‚\n\nè«‹å’Œç³»çµ±ç®¡ç†å“¡è¯çµ¡ã€‚";
-    Text[ arabic ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
-    Text[ catalan ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
-    Text[ czech ] = "%PRODUCTNAME nemÅ¯Å¾e bÃ½t spuÅ¡tÄ›n kvÅ¯li chybÄ› v pÅ™Ã­stupu ke konfiguraÄnÃ­m datÅ¯m %PRODUCTNAME.\n\nKontaktujte prosÃ­m vaÅ¡eho systÃ©movÃ©ho administrÃ¡tora.";
-    Text[ hebrew ] = "%PRODUCTNAME kann nicht gestartet werden, da beim Zugriff auf die %PRODUCTNAME Konfigurationsdaten ein Fehler aufgetreten ist.\n\nBitte wenden Sie sich an Ihren Systemadministrator.";
-    Text[ hindi ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator.";
-    Text[ slovak ] = "%PRODUCTNAME nemohol byÅ¥ spustenÃ½ kvÃ´li chybe prÃ­stupu k nastaveniam %PRODUCTNAME.\n\nProsÃ­m kontaktujte vÃ¡Å¡ho systÃ©movÃ©ho administrÃ¡tora.";
-    Text[ hungarian ] = "Az %PRODUCTNAME indÃ­tÃ¡sa nem sikerÃ¼lt, mert nem lehet hozzÃ¡fÃ©rni az %PRODUCTNAME konfigurÃ¡ciÃ³s adataihoz.\n\nKÃ©rem, vegye fel a kapcsolatot a rendszergazdÃ¡val.";
-    Text[ slovenian ] = "%PRODUCTNAME ni mogoÄe zagnati zaradi napake pri dostopu do %PRODUCTNAME konfiguracije.\n\nZa pomoÄ se obrnite na sistemskega administratorja.";
+    Text [ de ] = "%PRODUCTNAME kann nicht gestartet werden, da beim Zugriff auf die %PRODUCTNAME Konfigurationsdaten ein Fehler aufgetreten ist.\n\nBitte wenden Sie sich an Ihren Systemadministrator." ;
+    Text [ en-US ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator." ;
 };
 
 String STR_INTERNAL_ERRMSG
 {
-    Text = "Folgender interner Fehler ist aufgetreten: " ;
-    Text[ ENGLISH ] = "The following internal error has occured: " ;
-    Text[ english_us ] = "The following internal error has occurred: " ;
-    Text[ portuguese ] = "The following internal error has occured: ";
-    Text[ russian ] = "The following internal error has occured: ";
-    Text[ spanish ] = "Se ha producido el error interno siguiente: ";
-    Text[ italian ] = "Si è verficato il seguente errore interno: ";
-    Text[ swedish ] = "Följande interna fel har uppstått: ";
-    Text[ polish ] = "The following internal error has occured: ";
-    Text[ portuguese_brazilian ] = "Ocorreu o seguinte erro interno: ";
-    Text[ japanese ] = "æ¬¡ã®å†…éƒ¨ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: ";
-    Text[ korean ] = "ë‹¤ìŒê³¼ ê°™ì€ ë‚´ë¶€ì  ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤:";
-    Text[ turkish ] = "Aşağıdaki dahili hatalar oluştu:";
-    Text[ thai ] = "The following internal error has occured: ";
-    Text[ greek ] = "The following internal error has occured: ";
-    Text[ dutch ] = "De volgende interne fout is opgetreden: ";
-    Text[ french ] = "Erreur interne : ";
-    Text[ finnish ] = "The following internal error has occured: ";
-    Text[ danish ] = "Følgende interne fejl opstod:";
-    Text[ chinese_simplified ] = "å‘ç”Ÿäº†ä»¥ä¸‹çš„å†…éƒ¨é”™è¯¯ï¼š";
-    Text[ chinese_traditional ] = "ç™¼ç”Ÿä»¥ä¸‹å…§éƒ¨éŒ¯èª¤ï¼š ";
-    Text[ arabic ] = "The following internal error has occured: ";
-    Text[ catalan ] = "The following internal error has occured: ";
-    Text[ czech ] = "DoÅ¡lo k nÃ¡sledujÃ­cÃ­ internÃ­ chybÄ›: ";
-    Text[ hebrew ] = "Folgender interner Fehler ist aufgetreten:";
-    Text[ hindi ] = "The following internal error has occurred: ";
-    Text[ slovak ] = "Vyskytla sa nasledujÃºca vnÃºtornÃ¡ chyba: ";
-    Text[ hungarian ] = "BelsÅ‘ hiba keletkezett:";
-    Text[ slovenian ] = "PriÅ¡lo je do naslednje notranje napake: ";
+    Text [ de ] = "Folgender interner Fehler ist aufgetreten: " ;
+    Text [ en-US ] = "The following internal error has occurred: " ;
 };
 
 QueryBox QBX_USERDATALOCKED
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message = "Eine andere Instanz von %PRODUCTNAME greift auf Ihre persönlichen Einstellungen zu "
+    Message [ de ] = "Eine andere Instanz von %PRODUCTNAME greift auf Ihre persönlichen Einstellungen zu "
     "oder hat diese nicht wieder freigegeben.\n"
     "Der gleichzeitige Zugriff kann zu Inkonsistenzen in Ihren persönlichen Einstellungen führen. "
     "Bevor Sie Fortfahren sollten Sie sicher stellen, dass %PRODUCTNAME auf dem Host '$h' vom "
     "Benutzer '$u' beendet wird.\n"
     "\n"
     "Möchten Sie wirklich fortfahren?";
-    Message[ ENGLISH ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal "
-    "settings are locked.\n"
-    "Simultaneous access can lead to inconsistencies in your personal settings. "
-    "Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n"
-    "\n"
-    "Do you really want to continue?";
-    Message[ english_us ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
-    Message[ portuguese ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
-    Message[ russian ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
-    Message[ greek ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
-    Message[ dutch ] = "Ofwel een andere instantie van %PRODUCTNAME heeft toegang tot uw persoonlijke instellingen, of uw persoonlijke instellingen zijn gelocked.\nGelijktijdige toegang kan leiden tot inconsistente persoonlijke instellingen. Alvorens door te gaan, controleer dat gebruiker '$u' %PRODUCTNAME sluit op host '$h'.\n\nWilt u werkelijk doorgaan?";
-    Message[ french ] = "Une autre instance de %PRODUCTNAME a accès à vos paramètres personnels ou les bloque.\nUn accès simultané peut provoquer des incohérences dans vos paramètres personnels. Avant de continuer, assurez-vous que l'utilisateur '$u' quitte bien %PRODUCTNAME sur l'hôte '$h'.\n\nÊtes-vous sûr de vouloir continuer ?";
-    Message[ spanish ] = "Otra instancia de %PRODUCTNAME está accediendo a su configuración personal o la configuración personal está bloqueada.\nUn acceso simultáneo puede provocar incoherencias en la configuración personal. Antes de continuar asegúrese de que el usuario '$u' cierre %PRODUCTNAME en el ordenador '$h'.\n\n¿Está seguro de desear continuar?";
-    Message[ finnish ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
-    Message[ italian ] = "Un'altra istanza di %PRODUCTNAME ha accesso alle impostazioni personalizzate oppure le impostazioni personalizzate sono bloccate.\\L'accesso simultaneo può causare incongruenze alle impostazioni. Prima di procedere assicuratevi che l'utente '$u' chiuda %PRODUCTNAME sul computer host '$h'.\n\nVolete procedere comunque?";
-    Message[ danish ] = "Enten er dine personlige indstillinger låst, eller også bruger en anden instans af %PRODUCTNAME indstillingerne.\nDine personlige indstillinger kan blive beskadiget, hvis flere instanser tilgår dem samtidig. Før du fortsætter skal du sikre dig at bruger '$u' lukker %PRODUCTNAME på værtscomputeren '$h'.\n\nEr du sikker på, at du vil fortsætte?";
-    Message[ swedish ] = "Antingen har en annan instans av %PRODUCTNAME tillgång till dina personliga inställningar eller så har den inte frigjort dem igen.\nSamtidig åtkomst kan leda till att dina personliga inställningar blir inkonsekventa. Innan du fortsätter bör du se till att användaren '$u' stänger %PRODUCTNAME på värden '$h'.\n\nVill du verkligen fortsätta?";
-    Message[ polish ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
-    Message[ portuguese_brazilian ] = "Outra instância do %PRODUCTNAME está acessando suas configurações pessoais ou suas configurações pessoais estão trancadas.\nAcessos simultâneos podem levar a inconsistências em suas configurações pessoais. Antes de continuar, assegure-se que '$u' feche o %PRODUCTNAME no servidor '$h'.\n\nDeseja realmente continuar? ";
-    Message[ japanese ] = "%PRODUCTNAME ã®åˆ¥ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒãƒ¦ãƒ¼ã‚¶ãƒ¼è¨­å®šã«ã‚¢ã‚¯ã‚»ã‚¹ã—ã¦ã„ã‚‹ã‹ã€å€‹äººè¨­å®šãŒãƒ­ãƒƒã‚¯ã•ã‚Œã¦ã„ã¾ã™ã€‚\nã‚¢ã‚¯ã‚»ã‚¹ãŒåŒæ™‚ã«è¡Œã‚ã‚Œã¦ã„ã‚‹ã¨ã€ãƒ¦ãƒ¼ã‚¶ãƒ¼è¨­å®šã«ä¸ä¸€è‡´ãŒç”Ÿã˜ã‚‹ã“ã¨ãŒã‚ã‚Šã¾ã™ã€‚ç¶šè¡Œã™ã‚‹å‰ã«ã€ãƒ¦ãƒ¼ã‚¶ãƒ¼ã€Œ$uã€ãŒãƒ›ã‚¹ãƒˆã€Œ$hã€ã® %PRODUCTNAME ã‚’é–‰ã˜ã¦ã„ã‚‹ã“ã¨ã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚\n\nå‡¦ç†ã‚’ç¶šè¡Œã—ã¾ã™ã‹ã€‚";
-    Message[ korean ] = "%PRODUCTNAMEì˜ ë‹¤ë¥¸ ì¸ìŠ¤í„´ìŠ¤ê°€ ì‚¬ìš©ì ì„ì˜ ì„¤ì •ì— ì•¡ì„¸ìŠ¤ ì¤‘ì´ê±°ë‚˜ ì„¤ì •ì´ ì ê²¨ìˆìŠµë‹ˆë‹¤.\në™ì‹œ ë‹¤ë°œì ì¸ ì•¡ì„¸ìŠ¤ë¡œ ì¸í•˜ì—¬ ì‚¬ìš©ì ì„ì˜ ì„¤ì • ë‚´ìš©ì˜ ì¼ê´€ì„±ì— ë¬¸ì œê°€ ìƒê¸¸ ìˆ˜ ìˆìŠµë‹ˆë‹¤. ê³„ì† ì‹¤í–‰í•˜ê¸° ì „ì— ì‚¬ìš©ì '$u'ê°€(ì´) %PRODUCTNAMEì„(ë¥¼) '$h' í˜¸ìŠ¤íŠ¸ë¡œ ë‹«ëŠ” ì§€ë¥¼ í™•ì¸í•˜ì…”ì•¼ í•©ë‹ˆë‹¤.\n\nê³„ì† ì§„í–‰í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Message[ chinese_simplified ] = "%PRODUCTNAME çš„å¦å¤–ä¸€ä¸ªå®ä¾‹æ­£åœ¨å­˜å–æ‚¨çš„ä¸ªäººè®¾å®šæˆ–æ²¡æœ‰é‡Šæ”¾æ‚¨çš„è®¾å®šã€‚\nåŒæ—¶å­˜å–ä¸ªäººè®¾å®šä¼šé€ æˆæ•°æ®çš„ä¸ç»Ÿä¸€ã€‚è¯·æ‚¨ç¡®å®šä½¿ç”¨è€… '$u' å…³é—­ä¸»æœº '$h' ä¸Šè¿è¡Œçš„ %PRODUCTNAME ã€‚\n\næ‚¨çœŸçš„ç»§ç»­ï¼Ÿ";
-    Message[ chinese_traditional ] = "å¯èƒ½æœ‰å¦ä¸€å€‹ %PRODUCTNAME æ­£åœ¨å­˜å–æ‚¨çš„å€‹äººè¨­å®šï¼Œæˆ–å€‹äººè¨­å®šè¢«é–å®šã€‚\nåŒæ™‚å­˜å–å¯èƒ½æœƒå°è‡´å€‹äººè¨­å®šçš„ä¸ä¸€è‡´ã€‚åœ¨ç¹¼çºŒå‰ï¼Œæ‡‰è©²ç¢ºèªä½¿ç”¨è€… '$u' é—œé–‰äº†ä¸»æ©Ÿ '$h' ä¸Šçš„ %PRODUCTNAMEã€‚\n\nçœŸçš„è¦ç¹¼çºŒï¼Ÿ";
-    Message[ turkish ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
-    Message[ arabic ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
-    Message[ catalan ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
-    Message[ thai ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
-    Message[ czech ] = "JinÃ¡ instance %PRODUCTNAME pÅ™istupuje k vaÅ¡im osobnÃ­m nastavenÃ­m nebo jsou vaÅ¡e osobnÃ­ nastavenÃ­ zamknuta.\nSimultÃ¡nnÃ­ pÅ™Ã­stup mÅ¯Å¾e vÃ©st k nekonzistencÃ­m ve vaÅ¡ich osobnÃ­ch nastavenÃ­ch. NeÅ¾ budete pokraÄovat, ujistÄ›te se, Å¾e uÅ¾ivatel '$u' uzavÅ™el %PRODUCTNAME na poÄÃ­taÄi '$h'.\n\nOpravdu chcete pokraÄovat?";
-    Message[ hebrew ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
-    Message[ hindi ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
-    Message[ slovak ] = "VaÅ¡e osobnÃ© nastavenia sÃº zamknutÃ© alebo k nim pristupuje inÃ¡ sÃºÄasÅ¥ %PRODUCTNAME.\nSimultÃ¡nny prÃ­stup mÃ´Å¾e viesÅ¥ k nekonzistencii vaÅ¡ich osobnÃ½ch nastavenÃ­. Pred pokraÄovanÃ­m sa uistite, Å¾e uÅ¾Ã­vateÄ¾ '$u' zatvorÃ­ %PRODUCTNAME na '$h'.\n\nUrÄite chcete pokraÄovaÅ¥?";
-    Message[ hungarian ] = "Az %PRODUCTNAME programnak egy mÃ¡sik pÃ©ldÃ¡nya szerkeszti a szemÃ©lyes beÃ¡llÃ­tÃ¡sokat, vagy a szemÃ©lyes beÃ¡llÃ­tÃ¡sok zÃ¡rolva vannak.\nA szimultÃ¡n hozzÃ¡fÃ©rÃ©s hibÃ¡t okozhat a szemÃ©lyes beÃ¡llÃ­tÃ¡soknÃ¡l. MielÅ‘tt folytatnÃ¡, intÃ©zkedjen, hogy a(z) '$u' felhasznÃ¡lÃ³ a(z) '$h' gÃ©pen zÃ¡rja be az %PRODUCTNAME programot.\n\nBiztosan folytatja?";
-    Message[ slovenian ] = "MogoÄe je, da ima dostop do vaÅ¡ih osebnih nastavitev drug %PRODUCTNAME program, ali pa so le-te zaklenjene.\nHkratni dostop lahko povzroÄi nedoslednosti v vaÅ¡ih osebnih nastavitvah. Preden nadaljujete, preverite, ali je uporabnik '$u' zaprl %PRODUCTNAME na gostitelju '$h'.\n\nÅ½elite nadaljevati?";
+    Message [ en-US ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
 };
 
 String STR_TITLE_USERDATALOCKED
 {
-    Text[ portuguese ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ russian ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ greek ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION ";
-    Text[ french ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ finnish ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ italian ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ danish ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ polish ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ korean ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ turkish ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ arabic ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ catalan ] = "Hint";
-    Text[ thai ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ czech ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ hebrew ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ hindi ] = "à¤‡à¤¶à¤¾à¤°à¤¾";
+    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
 
 InfoBox INFOBOX_CMDLINEHELP
@@ -1297,67 +398,13 @@ InfoBox INFOBOX_EXPIRED
 {
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK ;
-    Message = "Diese Evaluationsversion ist abgelaufen. Informationen rund um %PRODUCTNAME\nerhalten Sie unter www.sun.com/%PRODUCTNAME.";
-       Message[ ENGLISH ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
-    Message[ english_us ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
-    Message[ french ] = "Cette version d'évaluation est arrivée à terme. Pour plus d'informations sur %PRODUCTNAME,\nvisitez le site www.sun.com/%PRODUCTNAME.";
-    Message[ spanish ] = "Esta versión de prueba ya ha caducado. Para más información referente a %PRODUCTNAME,\nvisite la página www.sun.com/%PRODUCTNAME.";
-    Message[ italian ] = "Questa versione di valutazione è scaduta. Per maggiori informazioni su %PRODUCTNAME,\nandate alla pagina www.sun.com/%PRODUCTNAME.";
-    Message[ swedish ] = "Den här testversionen har gått ut. Besök www.sun.com/%PRODUCTNAME\nom du vill veta mer om %PRODUCTNAME.";
-    Message[ japanese ] = "ã“ã®è©¦ç”¨ç‰ˆã®ä½¿ç”¨æœŸé™ãŒéãã¾ã—ãŸã€‚%PRODUCTNAME ã«é–¢ã—ã¦ã¯ã€\nwww.sun.com/%PRODUCTNAME ã§è©³ç´°æƒ…å ±ãŒå…¥æ‰‹ã§ãã¾ã™ã€‚";
-    Message[ korean ] = "ì´ í‰ê°€íŒ ë²„ì „ì˜ ì‚¬ìš© ê¸°ê°„ì´ ë§Œë£Œë˜ì—ˆìŠµë‹ˆë‹¤. %PRODUCTNAME ì— ê´€í•œ ìì„¸í•œ ì •ë³´ë¥¼ ë³´ì‹œë ¤ë©´\nwww.sun.com/%PRODUCTNAME ì‚¬ì´íŠ¸ë¥¼ ë°©ë¬¸í•´ ì£¼ì‹­ì‹œì˜¤.";
-    Message[ chinese_simplified ] = "è¿™ä¸ªæµ‹è¯•ç‰ˆæœ¬å·²ç»è¿‡æœŸã€‚è¯·æ‚¨è®¿é—®ç½‘ç«™ www.sun.com/%PRODUCTNAME ï¼Œè·å–æœ‰å…³ %PRODUCTNAME çš„è¯¦ç»†èµ„æ–™ã€‚";
-    Message[ chinese_traditional ] = "é€™å€‹è©•ä¼°ç‰ˆæœ¬å·²ç¶“éæœŸã€‚è‹¥è¦è©³ç´°ç­è§£ %PRODUCTNAME ï¼Œè«‹è¨ªå•\n www.sun.com/%PRODUCTNAME";
-    Message[ turkish ] = "Geliştirme sürümünün kullanım süresi bitti.  %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME adresinde daha çok detay bulabilirsiniz.";
-    Message[ greek ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
-    Message[ dutch ] = "Deze Evaluatieversie is niet meer geldig. Voor informatie over %PRODUCTNAME,\nbezoek www.sun.com/%PRODUCTNAME.";
-    Message[ finnish ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
-    Message[ czech ] = "Tato zkuÅ¡ebnÃ­ verze expirovala. Pro dalÅ¡Ã­ informace o %PRODUCTNAME\nnavÅ¡tivte www.sun.com/%PRODUCTNAME.";
-    Message[ danish ] = "Denne evalueringsversion er udløbet. Læs mere på www.sun.com/%PRODUCTNAME.";
-    Message[ arabic ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
-    Message[ hebrew ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
-    Message[ catalan ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
-    Message[ portuguese ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
-    Message[ russian ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
-    Message[ polish ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
-    Message[ portuguese_brazilian ] = "Esta Versão de Avaliação expirou. Para saber mais sobre %PRODUCTNAME,\nvisite www.sun.com/%PRODUCTNAME.";
-    Message[ thai ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
-    Message[ hindi ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
-    Message[ slovak ] = "TÃ¡to skÃºÅ¡obnÃ¡ verzia stratila platnosÅ¥. Ak chcete zistiÅ¥ viac o %PRODUCTNAME,\nnavÅ¡tÃ­vte www.sun.com/%PRODUCTNAME.";
-    Message[ hungarian ] = "Ez a prÃ³baverziÃ³ lejÃ¡rt. Amennyiben tovÃ¡bbi informÃ¡ciÃ³kat szeretnÃ© kapni az %PRODUCTNAME programmal kapcsolatosan,\nlÃ¡togasson el a http://www.sun.com/%PRODUCTNAME oldalra.";
-    Message[ slovenian ] = "Ta brezplaÄna razliÄica je potekla. ÄŒe Å¾elite izvedeti veÄ o %PRODUCTNAME,\nobiÅ¡Äite www.sun.com/%PRODUCTNAME.";
+    Message [ de ] = "Diese Evaluationsversion ist abgelaufen. Informationen rund um %PRODUCTNAME\nerhalten Sie unter www.sun.com/%PRODUCTNAME.";
+    Message [ en-US ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
 };
 
 String STR_TITLE_EXPIRED
 {
-    Text = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ ENGLISH ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ french ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ italian ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ korean ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ turkish ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ greek ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION ";
-    Text[ finnish ] = "%PRODUCTNAME 6.0";
-    Text[ czech ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ danish ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ arabic ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ hebrew ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ catalan ] = "Hint";
-    Text[ portuguese ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ russian ] = "%PRODUCTNAME 6.0";
-    Text[ polish ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ thai ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ hindi ] = "à¤‡à¤¶à¤¾à¤°à¤¾";
-    Text[ slovak ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ hungarian ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ slovenian ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
 
