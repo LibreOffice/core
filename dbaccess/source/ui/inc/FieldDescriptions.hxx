@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescriptions.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:16:55 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 10:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@ namespace dbaui
         ::com::sun::star::uno::Any  GetControlDefault()     const;
         ::rtl::OUString             GetAutoIncrementValue() const;
         sal_Int32                   GetType()               const;
+        ::rtl::OUString             GetTypeName()           const;
         sal_Int32                   GetPrecision()          const;
         sal_Int32                   GetScale()              const;
         sal_Int32                   GetIsNullable()         const;
