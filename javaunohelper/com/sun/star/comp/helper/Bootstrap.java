@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Bootstrap.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:06:59 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,11 +224,11 @@ public class Bootstrap {
         if (null != bootstrap_parameters)
         {
             pairs = new String [ 2 * bootstrap_parameters.size() ];
-            Enumeration enum = bootstrap_parameters.keys();
+            Enumeration keys = bootstrap_parameters.keys();
             int n = 0;
-            while (enum.hasMoreElements())
+            while (keys.hasMoreElements())
             {
-                String name = (String)enum.nextElement();
+                String name = (String)keys.nextElement();
                 pairs[ n++ ] = name;
                 pairs[ n++ ] = (String)bootstrap_parameters.get( name );
             }
@@ -252,6 +252,8 @@ public class Bootstrap {
      * Bootstraps the component context from a UNO installation.
      *
      * @return a bootstrapped component context.
+     *
+     * @since UDK 3.1.0
      */
     public static final XComponentContext bootstrap()
         throws BootstrapException {
