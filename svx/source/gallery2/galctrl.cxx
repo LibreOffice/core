@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-31 11:04:32 $
+ *  last change: $Author: ka $ $Date: 2001-06-06 12:10:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,8 @@
 #define GALLERY_BRWBOX_TITLE    1
 #define GALLERY_BRWBOX_PATH     2
 
+#define GALLERY_BG_COLOR        Color( COL_WHITE )
+
 // ------------------
 // - GalleryPreview -
 // ------------------
@@ -82,11 +84,9 @@ GalleryPreview::GalleryPreview( GalleryBrowser2* pParent, GalleryTheme* pTheme )
     DragSourceHelper( this ),
     mpTheme( pTheme )
 {
-    const Color aBackColor( Application::GetSettings().GetStyleSettings().GetLightColor() );
-
     SetHelpId( HID_GALLERY_WINDOW );
-    SetBackground( Wallpaper( aBackColor ) );
-    SetControlBackground( aBackColor );
+    SetBackground( Wallpaper( GALLERY_BG_COLOR ) );
+    SetControlBackground( GALLERY_BG_COLOR );
     aSound.SetNotifyHdl( LINK( this, GalleryPreview, SoundEndHdl ) );
 }
 
@@ -98,11 +98,9 @@ GalleryPreview::GalleryPreview( Window* pParent, const ResId & rResId  ) :
     DragSourceHelper( this ),
     mpTheme( NULL )
 {
-    const Color aBackColor( Application::GetSettings().GetStyleSettings().GetLightColor() );
-
     SetHelpId( HID_GALLERY_WINDOW );
-    SetBackground( Wallpaper( aBackColor ) );
-    SetControlBackground( aBackColor );
+    SetBackground( Wallpaper( GALLERY_BG_COLOR ) );
+    SetControlBackground( GALLERY_BG_COLOR );
     aSound.SetNotifyHdl( LINK( this, GalleryPreview, SoundEndHdl ) );
 }
 
@@ -259,14 +257,12 @@ GalleryIconView::GalleryIconView( GalleryBrowser2* pParent, GalleryTheme* pTheme
         DragSourceHelper( this ),
         mpTheme ( pTheme )
 {
-    const Color aBackColor( Application::GetSettings().GetStyleSettings().GetLightColor() );
-
     EnableFullItemMode( FALSE );
 
     SetHelpId( HID_GALLERY_WINDOW );
-    SetBackground( Wallpaper( aBackColor ) );
-    SetControlBackground( aBackColor );
-    SetColor( aBackColor );
+    SetBackground( Wallpaper( GALLERY_BG_COLOR ) );
+    SetControlBackground( GALLERY_BG_COLOR );
+    SetColor( GALLERY_BG_COLOR );
     SetExtraSpacing( 2 );
     SetItemWidth( S_THUMB + 6 );
     SetItemHeight( S_THUMB + 6 );
@@ -411,11 +407,9 @@ GalleryListView::GalleryListView( GalleryBrowser2* pParent, GalleryTheme* pTheme
     mnCurRow( 0 ),
     mbInit( FALSE )
 {
-    const Color aBackColor( Application::GetSettings().GetStyleSettings().GetLightColor() );
-
     SetHelpId( HID_GALLERY_WINDOW );
-    SetBackground( Wallpaper( aBackColor ) );
-    SetControlBackground( aBackColor );
+    SetBackground( Wallpaper( GALLERY_BG_COLOR ) );
+    SetControlBackground( GALLERY_BG_COLOR );
 
     SetMode( BROWSER_AUTO_VSCROLL | BROWSER_AUTOSIZE_LASTCOL );
     SetDataRowHeight( 28 );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-31 10:37:09 $
+ *  last change: $Author: ka $ $Date: 2001-06-06 12:10:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ GalleryBrowser1::GalleryBrowser1( GalleryBrowser* pParent, const ResId& rResId, 
 
     mpThemes->SetHelpId( HID_GALLERY_THEMELIST );
     mpThemes->SetControlForeground( COL_BLACK );
-    mpThemes->SetControlBackground( Application::GetSettings().GetStyleSettings().GetLightColor() );
+    mpThemes->SetControlBackground( COL_WHITE );
     mpThemes->SetSelectHdl( LINK( this, GalleryBrowser1, SelectThemeHdl ) );
 
     for( ULONG i = 0, nCount = mpGallery->GetThemeCount(); i < nCount; i++ )
