@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-14 16:08:55 $
+ *  last change: $Author: jl $ $Date: 2001-02-20 12:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,8 +253,8 @@ STDMETHODIMP DropTarget::DragEnter( IDataObject __RPC_FAR *pDataObj,
         e.Context= m_currentDragContext;
         POINT point={ pt.x, pt.y};
         ScreenToClient( m_hWnd, &point);
-        e.Location.X= point.x;
-        e.Location.Y= point.y;
+        e.LocationX= point.x;
+        e.LocationY= point.y;
         e.SourceActions= dndOleDropEffectsToActions( *pdwEffect);
 
         fire_dragEnter( e);
@@ -294,8 +294,8 @@ STDMETHODIMP DropTarget::DragOver( DWORD grfKeyState,
         e.Context= m_currentDragContext;
         POINT point={ pt.x, pt.y};
         ScreenToClient( m_hWnd, &point);
-        e.Location.X= point.x;
-        e.Location.Y= point.y;
+        e.LocationX= point.x;
+        e.LocationY= point.y;
         e.SourceActions= dndOleDropEffectsToActions( *pdwEffect);
 
         // if grfKeyState has changed since the last DragOver then fire events.
@@ -367,8 +367,8 @@ STDMETHODIMP DropTarget::Drop( IDataObject  *pDataObj,
         e.Context= m_currentDropContext;
         POINT point={ pt.x, pt.y};
         ScreenToClient( m_hWnd, &point);
-        e.Location.X= point.x;
-        e.Location.Y= point.y;
+        e.LocationX= point.x;
+        e.LocationY= point.y;
         e.SourceActions= dndOleDropEffectsToActions( *pdwEffect);
         e.Transferable= m_currentData;
         fire_drop( e);
