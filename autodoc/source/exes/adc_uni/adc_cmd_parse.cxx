@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adc_cmd_parse.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:34:47 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,17 +68,6 @@
 #include <cosv/template/tpltools.hxx>
 #include "adc_cmds.hxx"
 #include "cmd_run.hxx"
-
-
-namespace csi
-{
-namespace dsapi
-{
-// Defined in source/parser_i/docu_pe2.cxx.
-extern int      G_nDO_Special_Since_OOo11;
-extern String   G_sDocuVersionString;
-}   // namespace dsapi
-}   // namespace csi
 
 
 
@@ -221,34 +210,7 @@ Parse::do_clName( opt_iter &    it,
     CHECKOPT( it != itEnd AND (*it).char_at(0) != '-',
               "name",
               C_opt_Name );
-
     sRepositoryName = *it;
-
-    // BEGIN Special handling for OpenOffice1.1, StarOffice6.1
-    if ( csv::compare( sRepositoryName,0,"OpenOffice",sizeof("OpenOffice")-1)
-         == 0 )
-    {
-        csi::dsapi::G_nDO_Special_Since_OOo11 = 1;  // See at source/parser_i/docu_pe2.cxx.
-    }
-    else if ( csv::compare( sRepositoryName,0,"StarOffice",sizeof("StarOffice")-1)
-              == 0)
-    {
-        csi::dsapi::G_nDO_Special_Since_OOo11 = 2;  // See at source/parser_i/docu_pe2.cxx.
-    }
-    if (csi::dsapi::G_nDO_Special_Since_OOo11 > 0)
-    {
-        String &
-            rDocuVersion = csi::dsapi::G_sDocuVersionString;
-        rDocuVersion = sRepositoryName;
-        const char *
-            pSpace = strchr(rDocuVersion,' ');
-        if (pSpace != 0)
-            pSpace = strchr(pSpace+1,' ');
-        if (pSpace != 0)
-            rDocuVersion = rDocuVersion.substr( 0, size_t(pSpace - rDocuVersion.c_str()) );
-    }
-    // END   Special handling for OpenOffice 1.1, StarOffice 6.1
-
     ++it;
 }
 
