@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegressionCurveHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-17 16:43:13 $
+ *  last change: $Author: bm $ $Date: 2003-12-19 15:05:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XREGRESSIONCURVECALCULATOR_HPP_
 #include <drafts/com/sun/star/chart2/XRegressionCurveCalculator.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XREGRESSIONCURVECONTAINER_HPP_
+#include <drafts/com/sun/star/chart2/XRegressionCurveContainer.hpp>
+#endif
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASOURCE_HPP_
 #include <drafts/com/sun/star/chart2/XDataSource.hpp>
 #endif
@@ -100,6 +103,45 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext > & xContext,
             ::rtl::OUString aServiceName );
+
+    // ------------------------------------------------------------
+
+    static bool hasMeanValueLine(
+        const ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
+
+    /** creates a mean-value line and adds it to the container.
+
+         @param xSeriesProp
+             If set, this property-set will be used to apply a line color
+     */
+    static void RegressionCurveHelper::addMeanValueLine(
+        ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XComponentContext > & xContext,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet > & xSeriesProp );
+
+    static void removeMeanValueLine(
+        ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
+
+    enum tRegressionType
+    {
+        REGRESSION_TYPE_NONE,
+        REGRESSION_TYPE_LINEAR,
+        REGRESSION_TYPE_LOG,
+        REGRESSION_TYPE_EXP,
+        REGRESSION_TYPE_POWER
+    };
+
+    /** Returns the type of the first regression curve found that is not of type
+        mean-value line
+     */
+    static tRegressionType getRegressType(
+        const ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
 
     // ------------------------------------------------------------
 
