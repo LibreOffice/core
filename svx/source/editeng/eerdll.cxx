@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eerdll.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-12 11:39:48 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,15 @@
 #include <forbiddencharacterstable.hxx>
 
 #include <comphelper/processfactory.hxx>
+
+static EditDLL* pDLL=0;
+
+EditDLL* EditDLL::Get()
+{
+    if ( !pDLL )
+        pDLL = new EditDLL;
+    return pDLL;
+}
 
 GlobalEditData::GlobalEditData()
 {
@@ -240,14 +249,7 @@ EditResId::EditResId( USHORT nId ):
 EditDLL::EditDLL()
 {
     pGlobalData = new GlobalEditData;
-    DBG_ASSERT( !*(EditDLL**)GetAppData(SHL_EDIT), "Noch eine EditDLL ?!" );
-    *(EditDLL**)GetAppData(SHL_EDIT) = this;
-
-#ifndef SVX_LIGHT
     ByteString aResMgrName( "svx" );
-#else
-    ByteString aResMgrName( "svl" );
-#endif
     aResMgrName += ByteString::CreateFromInt32( SOLARUPD );
     pResMgr = ResMgr::CreateResMgr(
         aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
