@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusumry.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:19:06 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ FuSummaryPage::FuSummaryPage (
                     * Inhaltsverzeichnis-Seite einfuegen und Outliner anlegen
                     **********************************************************/
                     pView->BegUndo(String(SdResId(STR_UNDO_SUMMARY_PAGE)));
-                    SetOfByte aVisibleLayers = pActualPage->GetMasterPageVisibleLayers(0);
+                    SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
 
                     // Seite mit Titel & Gliederung!
                     pSummaryPage = (SdPage*) pDoc->AllocPage(FALSE);
@@ -183,11 +183,10 @@ FuSummaryPage::FuSummaryPage (
                     pView->AddUndo(new SdrUndoNewPage(*pSummaryPage));
 
                     // MasterPage der aktuellen Seite verwenden
-                    USHORT nPgNum = pActualPage->GetMasterPageNum(0);
-                    pSummaryPage->InsertMasterPage(nPgNum);
+                    pSummaryPage->TRG_SetMasterPage(pActualPage->TRG_GetMasterPage());
                     pSummaryPage->SetLayoutName(pActualPage->GetLayoutName());
                     pSummaryPage->SetAutoLayout(AUTOLAYOUT_ENUM, TRUE);
-                    pSummaryPage->SetMasterPageVisibleLayers(aVisibleLayers, 0);
+                    pSummaryPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
 
                     // Notiz-Seite
                     SdPage* pNotesPage = (SdPage*) pDoc->AllocPage(FALSE);
@@ -203,11 +202,10 @@ FuSummaryPage::FuSummaryPage (
                     pView->AddUndo(new SdrUndoNewPage(*pNotesPage));
 
                     // MasterPage der aktuellen Seite verwenden
-                    nPgNum = pActualNotesPage->GetMasterPageNum(0);
-                    pNotesPage->InsertMasterPage(nPgNum);
+                    pNotesPage->TRG_SetMasterPage(pActualNotesPage->TRG_GetMasterPage());
                     pNotesPage->SetLayoutName(pActualNotesPage->GetLayoutName());
                     pNotesPage->SetAutoLayout(pActualNotesPage->GetAutoLayout(), TRUE);
-                    pNotesPage->SetMasterPageVisibleLayers(aVisibleLayers, 0);
+                    pNotesPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
 
                     pOutl = new ::sd::Outliner( pDoc, OUTLINERMODE_OUTLINEOBJECT );
                     pOutl->SetUpdateMode(FALSE);
