@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-01 16:30:50 $
+ *  last change: $Author: dvo $ $Date: 2001-03-02 20:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,9 +245,11 @@ SvXMLExport::SvXMLExport(
     bExtended( sal_False ),
     xHandler( rHandler ),
     xExtHandler( rHandler, uno::UNO_QUERY ),
+    pNumExport(0L),
     pProgressBarHelper( NULL ),
     pEventExport( NULL ),
-    bSaveLinkedSections(sal_True)
+    bSaveLinkedSections(sal_True),
+    mnExportFlags( EXPORT_ALL )
 {
     _InitCtor();
 
@@ -275,7 +277,8 @@ SvXMLExport::SvXMLExport(
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     pProgressBarHelper( NULL ),
     pEventExport( NULL ),
-    bSaveLinkedSections(sal_True)
+    bSaveLinkedSections(sal_True),
+    mnExportFlags( EXPORT_ALL )
 {
     _InitCtor();
 
@@ -305,7 +308,8 @@ SvXMLExport::SvXMLExport(
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     pProgressBarHelper( NULL ),
     pEventExport( NULL ),
-    bSaveLinkedSections(sal_True)
+    bSaveLinkedSections(sal_True),
+    mnExportFlags( EXPORT_ALL )
 {
     _InitCtor();
 

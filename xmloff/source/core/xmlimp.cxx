@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-01 16:30:50 $
+ *  last change: $Author: dvo $ $Date: 2001-03-02 20:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,8 @@ SvXMLImport::SvXMLImport( const Reference< XModel > & rModel ) throw () :
     xModel( rModel ),
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     pProgressBarHelper( NULL ),
-    pEventImportHelper( NULL )
+    pEventImportHelper( NULL ),
+    mnImportFlags( IMPORT_ALL )
 {
     _InitCtor();
 }
@@ -256,7 +257,8 @@ SvXMLImport::SvXMLImport( const Reference< XModel > & rModel,
     xGraphicResolver( rGraphicObjects ),
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     pProgressBarHelper( NULL ),
-    pEventImportHelper( NULL )
+    pEventImportHelper( NULL ),
+    mnImportFlags( IMPORT_ALL )
 {
     _InitCtor();
 }
