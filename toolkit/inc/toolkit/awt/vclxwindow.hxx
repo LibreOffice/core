@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2002-01-15 16:19:29 $
+ *  last change: $Author: mt $ $Date: 2002-01-29 12:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,24 @@ public:
     ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding(  ) throw (::com::sun::star::uno::RuntimeException);
 };
 
+/* ----------------------------------------------------------
+  Accessibility only for the Window hierarchy!
+  Maybe derived classes must overwrite these Accessibility interfaces:
+
+    // XAccessibleContext:
+    sal_Int16 getAccessibleRole()
+    OUString getAccessibleDescription()
+    OUString getAccessibleName()    // Default is Window::GetText()
+    Reference< XAccessibleRelationSet > getAccessibleRelationSet()
+    Reference< XAccessibleStateSet > getAccessibleStateSet()
+    void addPropertyChangeListener( Reference< XPropertyChangeListener > )
+    void removePropertyChangeListener( Reference< XPropertyChangeListener > )
+
+// ::drafts::com::sun::star::accessibility::XAccessibleComponent
+    sal_Bool isFocusTraversable()
+    Any getAccessibleKeyBinding()
+
+ ---------------------------------------------------------- */
 
 
 
