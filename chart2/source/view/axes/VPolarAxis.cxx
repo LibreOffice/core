@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VPolarAxis.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-22 19:20:35 $
+ *  last change: $Author: iha $ $Date: 2004-01-23 09:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ void VPolarAxis::create2DRadiusAxis( const uno::Reference< drawing::XShapes >& x
         ; pTickInfo; pTickInfo = aIter.nextInfo(), nTick++ )
     {
         pTickInfo->updateUnscaledValue( xInverseScaling );
-        aAxisProperties.m_pfMainLinePositionAtOtherAxis = &pTickInfo->fUnscaledTickValue;
+        aAxisProperties.m_pfMainLinePositionAtOtherAxis = new double( pTickInfo->fUnscaledTickValue );
         //-------------------
         VCartesianAxis aAxis(aAxisProperties,m_pNumberFormatterWrapper
             ,2,new PolarPlottingPositionHelper(false));
