@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:28:26 $
+#   last change: $Author: dbo $ $Date: 2001-11-27 12:29:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,18 +73,12 @@ PACKAGE=com$/sun$/star$/bridge
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-    Connection.idl\
-    ConnectionBroker.idl\
     ModelDependent.idl\
     OleApplicationRegistration.idl\
     OleBridgeSupplier.idl\
     OleObjectFactory.idl\
     XBridgeSupplier.idl\
     XBridgeSupplier2.idl\
-    XConnectCallback.idl\
-    XConnectionBroker.idl\
-    XConnectionClientSide.idl\
-    XConnectionServerSide.idl\
     XBridge.idl \
     XBridgeFactory.idl\
     XInstanceProvider.idl\
