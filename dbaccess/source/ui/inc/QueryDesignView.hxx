@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 13:19:01 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:44:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,12 +101,20 @@ namespace dbaui
     {
         friend class OQueryViewSwitch;
 
+        enum ChildFocusState
+        {
+            SELECTION,
+            TABLEVIEW,
+            NONE
+        };
+
         Splitter                            m_aSplitter;
 
         ::com::sun::star::lang::Locale      m_aLocale;
         ::rtl::OUString                     m_sDecimalSep;
 
         OSelectionBrowseBox*                m_pSelectionBox;    // presents the lower window
+        ChildFocusState                     m_eChildFocus;
 
         ::rtl::OUString QuoteField( const ::rtl::OUString& rValue, sal_Int32 aType );
         void            InitFromParseNode();

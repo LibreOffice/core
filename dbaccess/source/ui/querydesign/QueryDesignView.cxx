@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 13:02:01 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@ using namespace ::com::sun::star::container;
 OQueryDesignView::OQueryDesignView(Window* _pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
     :OQueryView(_pParent,_pController,_rFactory)
     ,m_aSplitter( this )
+    ,m_eChildFocus(NONE)
 {
     try
     {
@@ -285,7 +286,7 @@ void OQueryDesignView::setStatement(const ::rtl::OUString& _rsStatement)
 // -----------------------------------------------------------------------------
 void OQueryDesignView::copy()
 {
-    if(m_pSelectionBox->HasChildPathFocus())
+    if( m_eChildFocus == SELECTION)
         m_pSelectionBox->copy();
 }
 // -----------------------------------------------------------------------------
@@ -296,23 +297,44 @@ BOOL OQueryDesignView::IsAddAllowed()
 // -----------------------------------------------------------------------------
 sal_Bool OQueryDesignView::isCutAllowed()
 {
-    sal_Bool bCutAllowed = sal_False;
-    if(m_pSelectionBox->HasChildPathFocus())
-        bCutAllowed = m_pSelectionBox->isCutAllowed();
-    else
+    sal_Bool bAllowed = sal_False;
+    switch(m_eChildFocus)
     {
+        case SELECTION:
+            bAllowed = m_pSelectionBox->isCutAllowed();
+            break;
+        case TABLEVIEW:
+            break;
     }
-    return bCutAllowed;
+    return bAllowed;
 }
 // -----------------------------------------------------------------------------
 sal_Bool OQueryDesignView::isPasteAllowed()
 {
-    return m_pSelectionBox->HasChildPathFocus();
+    sal_Bool bAllowed = sal_False;
+    switch(m_eChildFocus)
+    {
+        case SELECTION:
+            bAllowed = sal_True;
+            break;
+        case TABLEVIEW:
+            break;
+    }
+    return bAllowed;
 }
 // -----------------------------------------------------------------------------
 sal_Bool OQueryDesignView::isCopyAllowed()
 {
-    return m_pSelectionBox->HasChildPathFocus();
+    sal_Bool bAllowed = sal_False;
+    switch(m_eChildFocus)
+    {
+        case SELECTION:
+            bAllowed = sal_True;
+            break;
+        case TABLEVIEW:
+            break;
+    }
+    return bAllowed;
 }
 // -----------------------------------------------------------------------------
 void OQueryDesignView::stopTimer()
@@ -327,17 +349,20 @@ void OQueryDesignView::startTimer()
 // -----------------------------------------------------------------------------
 void OQueryDesignView::cut()
 {
-    if(m_pSelectionBox->HasChildPathFocus())
+    if( m_eChildFocus == SELECTION)
+    {
         m_pSelectionBox->cut();
-
-    static_cast<OQueryController*>(getController())->setModified(sal_True);
+        static_cast<OQueryController*>(getController())->setModified(sal_True);
+    }
 }
 // -----------------------------------------------------------------------------
 void OQueryDesignView::paste()
 {
-    if(m_pSelectionBox->HasChildPathFocus())
+    if( m_eChildFocus == SELECTION)
+    {
         m_pSelectionBox->paste();
-    static_cast<OQueryController*>(getController())->setModified(sal_True);
+        static_cast<OQueryController*>(getController())->setModified(sal_True);
+    }
 }
 // -----------------------------------------------------------------------------
 void OQueryDesignView::TableDeleted(const ::rtl::OUString& rAliasName)
@@ -458,13 +483,18 @@ long OQueryDesignView::PreNotify(NotifyEvent& rNEvt)
         break;
         case EVENT_GETFOCUS:
         {
-            // set focus if noone has the focus
+            // set focus if no one has the focus
             if (m_pTableView && !m_pTableView->HasChildPathFocus() &&
                 m_pSelectionBox && !m_pSelectionBox->HasChildPathFocus())
             {
                 m_pTableView->GrabTabWinFocus();
                 bHandled = TRUE;
             }
+
+            if( m_pTableView && m_pTableView->HasChildPathFocus() )
+                m_eChildFocus = TABLEVIEW;
+            else
+                m_eChildFocus = SELECTION;
 
         }
         break;
