@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Shape.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:39:21 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 11:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,30 @@ published service Shape
         @since #i28749#
      */
     [optional, property] short PositionLayoutDir;
+    //-------------------------------------------------------------------------
+    /** determines the start position of the shape in horizontal left-to-right
+        layout
+
+        <p>This property is needed for the export of the OASIS Open Office
+        file format to the OpenOffice.org file format. It provides the
+        start position property of the included service com::sun::star::drawing::Shape
+        converted to the horizontal left-to-right layout.</p>
+
+        @since #i36248#
+    */
+    [optional, readonly, property] com::sun::star::awt::Point StartPositionInHoriL2R;
+    //-------------------------------------------------------------------------
+    /** determines the end position of the shape in horizontal left-to-right
+        layout
+
+        <p>This property is needed for the export of the OASIS Open Office
+        file format to the OpenOffice.org file format. It provides the
+        end position property of the included service com::sun::star::drawing::Shape
+        converted to the horizontal left-to-right layout.</p>
+
+        @since #i36248#
+    */
+    [optional, readonly, property] com::sun::star::awt::Point EndPositionInHoriL2R;
 };
 
 //=============================================================================
