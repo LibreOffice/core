@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsd.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:45:17 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,8 @@
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
-#ifndef SD_FU_SLIDE_SHOW_HXX
-#include "fuslshow.hxx"
+#ifndef _SD_SLIDESHOW_HXX
+#include "slideshow.hxx"
 #endif
 #include "pgjump.hxx"
 #ifndef SD_NAVIGATOR_CHILD_WINDOW_HXX
@@ -110,6 +110,9 @@
 #endif
 #ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
+#ifndef _SD_SLIDESHOW_HXX
+#include "slideshow.hxx"
 #endif
 
 namespace sd {
@@ -141,33 +144,13 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
         }
         break;
 
-        case SID_NAVIGATOR_LIVE:
         case SID_NAVIGATOR_PEN:
         case SID_NAVIGATOR_PAGE:
         case SID_NAVIGATOR_OBJECT:
         {
-            if (pFuSlideShow)
+            if (mpSlideShow)
             {
-                // Um einem Doppelklick vorzubeugen wird der Request
-                // nur weitergeleitet, wenn auch sinnvoll, da sonst
-                // die Show beendet wird.
-                BOOL bReqPossible = TRUE;
-                USHORT nCurrentPage = pFuSlideShow->GetCurrentPage();
-                USHORT nFirstPage = pFuSlideShow->GetFirstPage();
-                USHORT nLastPage = pFuSlideShow->GetLastPage();
-                BOOL   bEndless = pFuSlideShow->IsEndless();
-
-                if( nSId == SID_NAVIGATOR_PAGE )
-                {
-                    PageJump eJump = (PageJump)((SfxAllEnumItem&) rReq.GetArgs()->
-                                          Get(SID_NAVIGATOR_PAGE)).GetValue();
-                    if( !bEndless &&
-                        ( ( eJump == PAGE_NEXT && nCurrentPage == nLastPage ) ||
-                          ( eJump == PAGE_PREVIOUS && nCurrentPage == nFirstPage ) ) )
-                        bReqPossible = FALSE;
-                }
-                if( bReqPossible )
-                    pFuSlideShow->ReceiveRequest( rReq );
+                mpSlideShow->receiveRequest( rReq );
             }
             else if (nSId == SID_NAVIGATOR_PAGE)
             {
@@ -263,47 +246,27 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
     BOOL   bEndless = FALSE;
     String aPageName;
 
-    if( pFuSlideShow )
+    if( mpSlideShow )
     {
-        // Live-Modus ?
-        if( pFuSlideShow->IsLivePresentation() )
-            nState |= NAVBTN_LIVE_CHECKED | NAVBTN_PEN_DISABLED;
-        else
-            nState |= NAVBTN_LIVE_UNCHECKED | NAVBTN_PEN_ENABLED;
+        // pen activated?
+        nState |= mpSlideShow->isDrawingPossible() ? NAVBTN_PEN_CHECKED : NAVBTN_PEN_UNCHECKED;
 
-        // Stift eingeschaltet ?
-        if( pFuSlideShow->IsDrawingPossible() )
-            nState |= NAVBTN_PEN_CHECKED | NAVBTN_LIVE_DISABLED;
-        else
-            nState |= NAVBTN_PEN_UNCHECKED | NAVBTN_LIVE_ENABLED;
+        nCurrentPage = mpSlideShow->getCurrentPageNumber();
+        nFirstPage = mpSlideShow->getFirstPageNumber();
+        nLastPage = mpSlideShow->getLastPageNumber();
+        bEndless = mpSlideShow->isEndless();
 
-        nCurrentPage = pFuSlideShow->GetCurrentPage();
-        nFirstPage = pFuSlideShow->GetFirstPage();
-        nLastPage = pFuSlideShow->GetLastPage();
-        bEndless = FALSE; //pFuSlideShow->IsEndless();
+        // Get the page for the current page number.
+        SdPage* pPage = 0;
+        if( (nCurrentPage >= 0) && (nCurrentPage < GetDoc()->GetSdPageCount( PK_STANDARD ) ) )
+            pPage = GetDoc()->GetSdPage (nCurrentPage, PK_STANDARD);
 
-        // Get the page for the current page index.  Handle special cases by
-        // setting the page pointer to NULL.
-        SdPage* pPage;
-        switch (nCurrentPage)
-        {
-            case PAGE_NO_END:
-            case PAGE_NO_SOFTEND:
-            case PAGE_NO_PAUSE:
-            //same as PAGE_NO_PAUSE:  case PAGE_NO_FIRSTDEF:
-                pPage = NULL;
-                break;
-
-            default:
-                pPage = GetDoc()->GetSdPage (nCurrentPage, ePageKind);
-        }
-        if (pPage != NULL)
+        if(pPage)
             aPageName = pPage->GetName();
     }
     else
     {
-        nState |= NAVBTN_LIVE_DISABLED | NAVBTN_PEN_DISABLED |
-                  NAVTLB_UPDATE;
+        nState |= NAVBTN_PEN_DISABLED | NAVTLB_UPDATE;
 
         nCurrentPage = ( pActualPage->GetPageNum() - 1 ) / 2;
         nLastPage = GetDoc()->GetSdPageCount( ePageKind ) - 1;
@@ -320,7 +283,9 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
             nState |= NAVBTN_PREV_ENABLED;
     }
     else
+    {
         nState |= NAVBTN_FIRST_ENABLED | NAVBTN_PREV_ENABLED;
+    }
 
     // letzte Seite / naechste Seite
     if( nCurrentPage == nLastPage )
@@ -332,7 +297,9 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
             nState |= NAVBTN_NEXT_ENABLED;
     }
     else
+    {
         nState |= NAVBTN_LAST_ENABLED | NAVBTN_NEXT_ENABLED;
+    }
 
     rSet.Put( SfxUInt32Item( SID_NAVIGATOR_STATE, nState ) );
     rSet.Put( SfxStringItem( SID_NAVIGATOR_PAGENAME, aPageName ) );
