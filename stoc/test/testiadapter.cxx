@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testiadapter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-09 15:42:43 $
+ *  last change: $Author: dbo $ $Date: 2001-11-26 15:19:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,6 +347,8 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
                             Sequence< Any > & rOutParam )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException)
 {
+    bool bImplementedMethod = true;
+
     Any aRet;
 
     OSL_ASSERT( rOutParam.getLength() == 0 );
@@ -552,7 +554,7 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
         }
         else
         {
-            OSL_ENSURE( sal_False, "no XLanguageBindingTest call received on invocation!" );
+            bImplementedMethod = false;
         }
     }
     catch (IllegalArgumentException & rExc)
@@ -566,6 +568,13 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
     {
         OSL_ENSURE( sal_False, "### unexpected exception caught!" );
         throw;
+    }
+
+    if (! bImplementedMethod)
+    {
+        throw IllegalArgumentException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("not an implemented method!") ),
+            (OWeakObject *)this, 0 );
     }
 
     return aRet;
@@ -978,6 +987,17 @@ static sal_Bool test_adapter( const Reference< XMultiServiceFactory > & xMgr )
     Reference< XInvocation > xInvok( new XLB_Invocation( xMgr, xOriginal ) );
     Reference< XLanguageBindingTest > xLBT( xAdapFac->createAdapter(
         xInvok, ::getCppuType( (const Reference< XLanguageBindingTest > *)0 ) ), UNO_QUERY );
+
+    Reference< XSimpleRegistry > xInvalidAdapter( xAdapFac->createAdapter(
+        xInvok, ::getCppuType( (const Reference< XSimpleRegistry > *)0 ) ), UNO_QUERY );
+    try
+    {
+        xInvalidAdapter->isValid();
+        OSL_ENSURE( 0, "### invalid adapter created, but call succeeded!" );
+    }
+    catch (RuntimeException &)
+    {
+    }
 
     return (performTest( xLBT ) && raiseException( xLBT ));
 }
