@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldoctp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:56:24 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:28:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#include "hyperdlg.hxx"
+#include "cuihyperdlg.hxx"
 
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
@@ -70,6 +70,7 @@
 
 #include "hldoctp.hxx"
 #include "hyperdlg.hrc"
+#include "hlmarkwn_def.hxx" //ADD CHINA001
 
 sal_Char __READONLY_DATA sHash[]                = "#";
 sal_Char __READONLY_DATA sFileScheme[]          = INET_FILE_SCHEME;
