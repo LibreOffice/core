@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
+ *  last change: $Author: sb $ $Date: 2000-11-09 13:09:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,26 +285,29 @@ USHORT SfxApplication::ParseCommandLine_Impl()
 
         if ( aArg.EqualsIgnoreCaseAscii("-minimized") == sal_True )
             pAppData_Impl->bMinimized = TRUE;
-        if ( aArg.EqualsIgnoreCaseAscii("-invisible") == sal_True )
+        else if ( aArg.EqualsIgnoreCaseAscii("-invisible") == sal_True )
             pAppData_Impl->bInvisible = TRUE;
-        if ( aArg.EqualsIgnoreCaseAscii("-embedding") == sal_True )
+        else if ( aArg.EqualsIgnoreCaseAscii("-embedding") == sal_True )
             pAppData_Impl->nAppEvent |= DISPATCH_SERVER;
-        if ( aArg.EqualsIgnoreCaseAscii("-bean") == sal_True )
+        else if ( aArg.EqualsIgnoreCaseAscii("-bean") == sal_True )
         {
             pAppData_Impl->bBean = TRUE;
             pAppData_Impl->bInvisible = TRUE;
         }
-        if ( aArg.EqualsIgnoreCaseAscii("-plugin") == sal_True )
+        else if ( aArg.EqualsIgnoreCaseAscii("-plugin") == sal_True )
         {
             pAppData_Impl->bBean = TRUE;
             pAppData_Impl->bInvisible = TRUE;
             pAppData_Impl->bPlugged = TRUE;
         }
-        if ( aArg.CompareIgnoreCaseToAscii("-ucb=",
-                                           RTL_CONSTASCII_LENGTH("-ucb="))
-                 == COMPARE_EQUAL )
-            pAppData_Impl->aUcbUrl
-                = aArg.Copy(RTL_CONSTASCII_LENGTH("-ucb="));
+        else if ( aArg.EqualsIgnoreCaseAscii("-server") )
+            pAppData_Impl->bServer = true;
+        else if ( aArg.CompareIgnoreCaseToAscii("-portal,",
+                                                RTL_CONSTASCII_LENGTH(
+                                                    "-portal,"))
+                      == COMPARE_EQUAL )
+            pAppData_Impl->aPortalConnect
+                = aArg.Copy(RTL_CONSTASCII_LENGTH("-portal,"));
 
         const xub_Unicode* pArg = aArg.GetBuffer();
         // Erstmal nur mit -, da unter Unix Dateinmane auch mit Slasch anfangen koennen
