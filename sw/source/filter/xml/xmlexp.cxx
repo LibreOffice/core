@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-09 18:07:06 $
+ *  last change: $Author: dvo $ $Date: 2001-11-08 19:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,6 @@ SwXMLExport::SwXMLExport(sal_uInt16 nExportFlags) :
 #endif
     bBlock( sal_False ),
     bShowProgress( sal_True ),
-    bRedlineModeSaved( sal_False ),
     sNumberFormat(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")),
     sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected")),
     sCell(RTL_CONSTASCII_USTRINGPARAM("Cell"))
@@ -278,7 +277,6 @@ SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
     bExportWholeDoc( bExpWholeDoc ),
     bExportFirstTableOnly( bExpFirstTableOnly ),
     bShowProgress( bShowProg ),
-    bRedlineModeSaved( sal_False ),
     sNumberFormat(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")),
     sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected")),
     sCell(RTL_CONSTASCII_USTRINGPARAM("Cell"))
@@ -392,10 +390,6 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 
     SetExtended( bExtended );
 
-#ifdef XML_CORE_API
-    SetCurPaM( rPaM, bExportWholeDoc, bExportFirstTableOnly );
-#endif
-
     SwDocStat aDocStat( pDoc->GetDocStat() );
     if( (getExportFlags() & EXPORT_META) != 0 )
     {
@@ -486,25 +480,47 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         }
     }
 
+    // set redline mode if we export STYLES or CONTENT, unless redline
+    // mode is taken care of outside (through info XPropertySet)
+    sal_Bool bSaveRedline =
+        ( (getExportFlags() & (EXPORT_CONTENT|EXPORT_STYLES)) != 0 );
+    if( bSaveRedline )
+    {
+        // if the info property set has a ShowChanges property,
+        // then change tracking is taken care of on the outside,
+        // so we don't have to!
+        Reference<XPropertySet> rInfoSet = getExportInfo();
+        if( rInfoSet.is() )
+        {
+            OUString sShowChanges( RTL_CONSTASCII_USTRINGPARAM("ShowChanges"));
+            bSaveRedline = ! rInfoSet->getPropertySetInfo()->hasPropertyByName(
+                                                                sShowChanges );
+        }
+    }
+    sal_uInt16 nRedlineMode = 0;
+    bSavedShowChanges = IsShowChanges( pDoc->GetRedlineMode() );
+    if( bSaveRedline )
+    {
+        // now save and switch redline mode
+        nRedlineMode = pDoc->GetRedlineMode();
+        pDoc->SetRedlineMode(
+            ( nRedlineMode & REDLINE_SHOW_MASK ) | REDLINE_INSERT );
+    }
+
      sal_uInt32 nRet = SvXMLExport::exportDoc( eClass );
+
+    // now we can restore the redline mode (if we changed it previously)
+    if( bSaveRedline )
+    {
+        pDoc->SetRedlineMode( nRedlineMode );
+    }
+
 
     if( pGraphicResolver )
         SvXMLGraphicHelper::Destroy( pGraphicResolver );
     if( pEmbeddedResolver )
         SvXMLEmbeddedObjectHelper::Destroy( pEmbeddedResolver );
 
-    DBG_ASSERT(! bRedlineModeSaved,
-               "If Redline mode was changed + saved, it should have been restored by now!")
-
-#ifdef XML_CORE_API
-    if( pCurPaM )
-    {
-        while( pCurPaM->GetNext() != pCurPaM )
-            delete pCurPaM->GetNext();
-        delete pCurPaM;
-        pCurPam = 0;
-    }
-#endif
     ASSERT( !pTableLines, "there are table columns infos left" );
 
     return nRet;
@@ -615,7 +631,20 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaHeight") );
     pValue[nIndex++].Value <<= rRect.GetHeight();
 
-    sal_Bool bShowRedlineChanges = IsShowChanges ( pDoc->GetRedlineMode() );
+    // "show redline mode" cannot simply be read from the document
+    // since it gets changed during execution. If it's in the info
+    // XPropertySet, we take it from there.
+    sal_Bool bShowRedlineChanges = bSavedShowChanges;
+    Reference<XPropertySet> xInfoSet( getExportInfo() );
+    if ( xInfoSet.is() )
+    {
+        OUString sShowChanges( RTL_CONSTASCII_USTRINGPARAM( "ShowChanges" ));
+        if( xInfoSet->getPropertySetInfo()->hasPropertyByName( sShowChanges ) )
+        {
+            bShowRedlineChanges = *(sal_Bool*) xInfoSet->
+                                   getPropertyValue( sShowChanges ).getValue();
+        }
+    }
 
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowRedlineChanges") );
     pValue[nIndex++].Value.setValue( &bShowRedlineChanges, ::getBooleanCppuType() );
@@ -650,29 +679,6 @@ void SwXMLExport::GetConfigurationSettings( Sequence < PropertyValue >& rProps)
 
 void SwXMLExport::_ExportContent()
 {
-#ifdef XML_CORE_API
-    // export field declarations
-//  pTextFieldExport->ExportFieldDeclarations();
-
-    // export all PaMs
-    SwPaM *pPaM = pOrigPaM;
-    sal_Bool bContinue = sal_True;
-    do
-    {
-        // export PaM content
-        ExportCurPaM( bExportWholeDoc );
-
-        bContinue = pPaM->GetNext() != pOrigPaM;
-
-        if( bContinue )
-        {
-            pPaM = (SwPaM *)pPaM->GetNext();
-            SetCurPaM( *pPaM, bExportWholeDoc, bExportFirstTableOnly );
-        }
-
-    } while( bContinue );
-#else
-
     // export forms
     Reference<XDrawPageSupplier> xDrawPageSupplier(GetModel(), UNO_QUERY);
     if (xDrawPageSupplier.is())
@@ -692,29 +698,12 @@ void SwXMLExport::_ExportContent()
         }
     }
 
-    // switch redline mode (and preserve old mode) before exporting content
-    OUString sShowChanges(RTL_CONSTASCII_USTRINGPARAM("ShowChanges"));
     Reference<XPropertySet> xPropSet(GetModel(), UNO_QUERY);
     if (xPropSet.is())
     {
-        Any aAny;
-
-        if (! bRedlineModeSaved)
-        {
-            // record old mode
-            aAny = xPropSet->getPropertyValue(sShowChanges);
-            bRedlineModeValue = *(sal_Bool*)aAny.getValue();
-            bRedlineModeSaved = sal_True;
-
-            // set mode to false
-            sal_Bool bTmp = sal_False;
-            aAny.setValue(&bTmp, ::getBooleanCppuType());
-            xPropSet->setPropertyValue(sShowChanges, aAny);
-        }
-
         OUString sTwoDigitYear(RTL_CONSTASCII_USTRINGPARAM("TwoDigitYear"));
 
-        aAny = xPropSet->getPropertyValue( sTwoDigitYear );
+        Any aAny = xPropSet->getPropertyValue( sTwoDigitYear );
         aAny <<= (sal_Int16)1930;
 
         sal_Int16 nYear;
@@ -735,18 +724,6 @@ void SwXMLExport::_ExportContent()
 
     GetTextParagraphExport()->exportFramesBoundToPage( bShowProgress );
     GetTextParagraphExport()->exportText( xText, bShowProgress );
-
-    // restore redline mode
-    if (bRedlineModeSaved && xPropSet.is())
-    {
-        // set mode to previous value
-        Any aAny;
-        aAny.setValue(&bRedlineModeValue, ::getBooleanCppuType());
-        xPropSet->setPropertyValue(sShowChanges, aAny);
-
-        bRedlineModeSaved = sal_False;
-    }
-#endif
 }
 
 

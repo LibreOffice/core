@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-19 14:30:12 $
+ *  last change: $Author: dvo $ $Date: 2001-11-08 19:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,9 @@ sal_uInt32 SwXMLWriter::_Write()
         { "UsePrettyPrinting", sizeof("UsePrettyPrinting")-1, 0,
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0},
+        { "ShowChanges", sizeof("ShowChanges")-1, 0,
+              &::getBooleanCppuType(),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
@@ -279,6 +282,18 @@ sal_uInt32 SwXMLWriter::_Write()
     sal_Bool bUsePrettyPrinting( aSaveOpt.IsPrettyPrinting() );
     aAny.setValue( &bUsePrettyPrinting, ::getBooleanCppuType() );
     xInfoSet->setPropertyValue( sUsePrettyPrinting, aAny );
+
+    // save show redline mode ...
+    OUString sShowChanges(RTL_CONSTASCII_USTRINGPARAM("ShowChanges"));
+    sal_uInt16 nRedlineMode = pDoc->GetRedlineMode();
+    sal_Bool bShowChanges( IsShowChanges( nRedlineMode ) );
+    aAny.setValue( &bShowChanges, ::getBooleanCppuType() );
+    xInfoSet->setPropertyValue( sShowChanges, aAny );
+    // ... and hide redlines for export
+    nRedlineMode &= ~REDLINE_SHOW_MASK;
+    nRedlineMode |= REDLINE_SHOW_INSERT;
+    pDoc->SetRedlineMode( nRedlineMode );
+
 
     // filter arguments
     // - graphics + object resolver for styles + content
@@ -432,6 +447,15 @@ sal_uInt32 SwXMLWriter::_Write()
     if( pObjectHelper )
         SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
     xObjectResolver = 0;
+
+    // restore redline mode
+    aAny = xInfoSet->getPropertyValue( sShowChanges );
+    nRedlineMode = pDoc->GetRedlineMode();
+    nRedlineMode &= ~REDLINE_SHOW_MASK;
+    nRedlineMode |= REDLINE_SHOW_INSERT;
+    if ( *(sal_Bool*)aAny.getValue() )
+        nRedlineMode |= REDLINE_SHOW_DELETE;
+    pDoc->SetRedlineMode( nRedlineMode );
 
     if (xStatusIndicator.is())
     {

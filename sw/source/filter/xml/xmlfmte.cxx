@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dvo $ $Date: 2001-11-05 13:45:33 $
+ *  last change: $Author: dvo $ $Date: 2001-11-08 19:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,40 +327,8 @@ XMLPageExport* SwXMLExport::CreatePageExport()
 
 void SwXMLExport::_ExportMasterStyles()
 {
-    // switch redline mode (and preserve old mode) before exporting content
-    OUString sShowChanges(RTL_CONSTASCII_USTRINGPARAM("ShowChanges"));
-    Reference<XPropertySet> xPropSet(GetModel(), UNO_QUERY);
-    if (xPropSet.is() && ! bRedlineModeSaved)
-    {
-        if (xPropSet.is())
-        {
-            // record old mode
-            Any aAny = xPropSet->getPropertyValue(sShowChanges);
-            bRedlineModeValue = *(sal_Bool*)aAny.getValue();
-            bRedlineModeSaved = sal_True;
-
-            // set mode to false
-            sal_Bool bTmp = sal_False;
-            aAny.setValue(&bTmp, ::getBooleanCppuType());
-            xPropSet->setPropertyValue(sShowChanges, aAny);
-        }
-    }
-
     // export master styles
     GetPageExport()->exportMasterStyles( sal_False );
-
-    // restore redline mode (but only if we aren't going to do so
-    // anyway in exportContent)
-    if (bRedlineModeSaved && xPropSet.is() &&
-        ((getExportFlags() & EXPORT_CONTENT) == 0) )
-    {
-        // set mode to previous value
-        Any aAny;
-        aAny.setValue(&bRedlineModeValue, ::getBooleanCppuType());
-        xPropSet->setPropertyValue(sShowChanges, aAny);
-
-        bRedlineModeSaved = sal_False;
-    }
 }
 
 // ---------------------------------------------------------------------
