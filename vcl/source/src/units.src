@@ -2,9 +2,9 @@
  *
  *  $RCSfile: units.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:18:41 $
+ *  last change: $Author: rt $ $Date: 2002-12-05 14:29:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\\"" ; FUNIT_INCH ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -182,7 +182,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "ÏÈ" ; FUNIT_PICA ; > ;
-        < "\\"" ; FUNIT_INCH ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -203,7 +203,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\\"" ; FUNIT_INCH ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -224,7 +224,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\\"" ; FUNIT_INCH ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -287,7 +287,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "Pii" ; FUNIT_PICA ; > ;
-        < "\\"" ; FUNIT_INCH ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -329,7 +329,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\\"" ; FUNIT_INCH ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -371,7 +371,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\\"" ; FUNIT_INCH ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -392,7 +392,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\\"" ; FUNIT_INCH ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -497,7 +497,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\\"" ; FUNIT_INCH ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -518,7 +518,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\\"" ; FUNIT_INCH ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -539,7 +539,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\\"" ; FUNIT_INCH ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
@@ -560,7 +560,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "à¹„à¸ž" ; FUNIT_PICA ; > ;
-        < "\\"" ; FUNIT_INCH ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
