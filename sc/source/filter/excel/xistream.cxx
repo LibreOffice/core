@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistream.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:46:20 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:16:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,14 +469,14 @@ void XclImpStream::SetDecrypter( XclImpDecrypterRef xDecrypter )
 void XclImpStream::CopyDecrypterFrom( const XclImpStream& rStrm )
 {
     XclImpDecrypterRef xNewDecr;
-    if( rStrm.mxDecrypter )
+    if( rStrm.mxDecrypter.is() )
         xNewDecr = rStrm.mxDecrypter->Clone();
     SetDecrypter( xNewDecr );
 }
 
 bool XclImpStream::HasValidDecrypter() const
 {
-    return mxDecrypter && mxDecrypter->IsValid();
+    return mxDecrypter.is() && mxDecrypter->IsValid();
 }
 
 void XclImpStream::EnableDecryption( bool bEnable )
@@ -1025,7 +1025,7 @@ bool XclImpStream::ReadNextRawRecHeader()
 
 void XclImpStream::SetupDecrypter()
 {
-    if( mxDecrypter )
+    if( mxDecrypter.is() )
         mxDecrypter->Update( mrStrm, mnRawRecSize );
 }
 
