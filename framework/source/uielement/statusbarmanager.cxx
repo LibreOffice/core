@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusbarmanager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:43:42 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,6 +673,26 @@ void StatusBarManager::StateChanged( StateChangedType nType )
 
 void StatusBarManager::DataChanged( const DataChangedEvent& rDCEvt )
 {
+    ResetableGuard aGuard( m_aLock );
+
+    if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS         ) ||
+         ( rDCEvt.GetType() == DATACHANGED_FONTS            ) ||
+         ( rDCEvt.GetType() == DATACHANGED_FONTSUBSTITUTION ) ||
+         ( rDCEvt.GetType() == DATACHANGED_DISPLAY          ))  &&
+         ( rDCEvt.GetFlags() & SETTINGS_STYLE               ))
+    {
+        css::uno::Any a;
+        css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+        css::uno::Reference< css::beans::XPropertySet > xPropSet( m_xFrame, css::uno::UNO_QUERY );
+        if ( xPropSet.is() )
+            a = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+        a >>= xLayoutManager;
+        if ( xLayoutManager.is() )
+        {
+            aGuard.unlock();
+            xLayoutManager->doLayout();
+        }
+    }
 }
 
 void StatusBarManager::UserDraw( const UserDrawEvent& rUDEvt )
