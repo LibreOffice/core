@@ -18864,3 +18864,12 @@ _real@8@40088000000000000000
 ?getCppuType@@YAABVType@uno@star@sun@com@@PBUPropertyValue@beans@345@@Z
 ?initializeFrom@ODataAccessDescriptor@svx@@QAEXABV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@E@Z
 ?initializeFrom@ODataAccessDescriptor@svx@@QAEXABV?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@E@Z
+?GetAsianCompressionMode@EditEngine@@QBEGXZ
+?SetAsianCompressionMode@EditEngine@@QAEXG@Z
+?GetAsianCompressionMode@Outliner@@QBEGXZ
+?SetAsianCompressionMode@Outliner@@QAEXG@Z
+??1?$Reference@VXFolderPicker@dialogs@ui@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?AsLink@SvxOpenGraphicDialog@@QAEXE@Z
+?EnableLink@SvxOpenGraphicDialog@@QAEXE@Z
+?SetCurrentFilter@SvxOpenGraphicDialog@@QAEXABVString@@@Z
+?SetPath@SvxOpenGraphicDialog@@QAEXABVString@@E@Z
