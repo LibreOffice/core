@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:36:45 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 12:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,9 +350,10 @@ static __FAR_DATA SvXMLTokenMapEntry aContentValidationsElemTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aContentValidationElemTokenMap[] =
 {
-    { XML_NAMESPACE_TABLE, XML_HELP_MESSAGE,    XML_TOK_CONTENT_VALIDATION_ELEM_HELP_MESSAGE    },
-    { XML_NAMESPACE_TABLE, XML_ERROR_MESSAGE,   XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MESSAGE   },
-    { XML_NAMESPACE_TABLE, XML_ERROR_MACRO,     XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MACRO     },
+    { XML_NAMESPACE_TABLE,  XML_HELP_MESSAGE,    XML_TOK_CONTENT_VALIDATION_ELEM_HELP_MESSAGE    },
+    { XML_NAMESPACE_TABLE,  XML_ERROR_MESSAGE,   XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MESSAGE   },
+    { XML_NAMESPACE_TABLE,  XML_ERROR_MACRO,     XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MACRO     },
+    { XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS, XML_TOK_CONTENT_VALIDATION_ELEM_EVENT_LISTENERS },
     XML_TOKEN_MAP_END
 };
 
