@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-30 10:07:08 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -802,7 +802,11 @@ void SelectionFunction::ProcessMouseEvent (sal_uInt32 nEventType, const MouseEve
     mrController.GetPageSelector().DisableBroadcasting();
     bool bMakeSelectionVisible = true;
 
-    // 2. With the event code determine the type of operation with which to
+    // 2a. Set the focus to the slide under the mouse.
+    if (pHitPage != NULL)
+        mrController.GetFocusManager().FocusPage((pHitPage->GetPageNum()-1)/2);
+
+    // 2b. With the event code determine the type of operation with which to
     // react to the event.
     OSL_TRACE ("EventCode is %x", nEventCode);
     switch (nEventCode)
