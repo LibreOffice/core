@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_backend.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:12:57 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 13:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,11 @@ PackageRegistryBackend::PackageRegistryBackend(
       m_eContext( CONTEXT_UNKNOWN ),
       m_readOnly( false )
 {
+    if (args.getLength() < 1)
+        throw lang::IllegalArgumentException(
+            OUSTR("No arguments passed!"), Reference<XInterface>(),
+            static_cast<sal_Int16>(-1) );
+
     m_context = args[ 0 ].get<OUString>();
     if (args.getLength() > 1) {
         m_cachePath = args[ 1 ].get<OUString>();
