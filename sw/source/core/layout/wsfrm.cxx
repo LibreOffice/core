@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:18:50 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -852,6 +852,27 @@ void SwFrm::Remove()
     }
     if( pNext )
         pNext->pPrev = pPrev;
+
+#ifdef ACCESSIBLE_LAYOUT
+    // inform accessibility API
+    if ( IsInTab() )
+    {
+        SwTabFrm* pTableFrm = FindTabFrm();
+        if( pTableFrm != NULL  &&
+            pTableFrm->IsAccessibleFrm()  &&
+            pTableFrm->GetFmt() != NULL )
+        {
+            SwRootFrm *pRootFrm = pTableFrm->FindRootFrm();
+            if( pRootFrm != NULL &&
+                pRootFrm->IsAnyShellAccessible() )
+            {
+                ViewShell* pShell = pRootFrm->GetCurrShell();
+                if( pShell != NULL )
+                    pShell->Imp()->DisposeAccessibleFrm( pTableFrm, sal_True );
+            }
+        }
+    }
+#endif
 
     // Verbindung kappen.
     pNext  = pPrev  = 0;
