@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-12 13:53:23 $
+#   last change: $Author: kz $ $Date: 2004-08-02 14:30:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -326,7 +326,8 @@ SLOFILES=\
     $(SLO)$/framelink.obj \
     $(SLO)$/swframeposstrings.obj\
     $(SLO)$/swframeexample.obj \
-
+    $(SLO)$/svxbmpnumvalueset.obj	\
+    $(SLO)$/svxgrahicitem.obj
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 
