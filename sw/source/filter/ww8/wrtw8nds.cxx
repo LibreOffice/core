@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-18 13:48:40 $
+ *  last change: $Author: cmc $ $Date: 2002-07-23 16:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,15 @@
 #endif
 
 #pragma hdrstop
+
+#ifndef __SGI_STL_VECTOR
+#include <vector>
+#endif
+#ifndef __SGI_STL_UTILITY
+#include <utility>
+#endif
+
+#include <unicode/ubidi.h>
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -243,6 +252,12 @@ private:
     rtl_TextEncoding eNdChrSet;
     USHORT nScript;
 
+    typedef std::pair<UTextOffset, bool> Entry;
+    std::vector<Entry> maDirChanges;
+    typedef std::vector<Entry>::const_iterator myciter;
+    myciter aIter;
+    bool mbIsRTL;
+
     xub_StrLen SearchNext( xub_StrLen nStartPos );
     void SetCharSet( const SwTxtAttr& rTxtAttr, BOOL bStart );
     void FieldVanish( const String& rTxt );
@@ -273,12 +288,15 @@ public:
     xub_StrLen WhereNext() const                    { return nAktSwPos; }
     rtl_TextEncoding GetNextCharSet() const;
     rtl_TextEncoding GetNodeCharSet() const             { return eNdChrSet; }
+
+    bool IsRTL() const {return mbIsRTL; }
 };
 
 WW8_SwAttrIter::WW8_SwAttrIter( SwWW8Writer& rWr, const SwTxtNode& rTxtNd )
     : WW8_AttrIter( rWr ), rNd( rTxtNd ), nAktSwPos( 0 ), nTmpSwPos( 0 ),
     aTxtAtrArr( 0, 4 ), aChrSetArr( 0, 4 ), nCurRedlinePos( USHRT_MAX ),
-    pCurRedline( 0 )
+    /*watch mbIsRTL this if we need to have an envionmental rtl in the future*/
+    pCurRedline(0), mbIsRTL(false)
 {
     // Attributwechsel an Pos 0 wird ignoriert, da davon ausgegangen
     // wird, dass am Absatzanfang sowieso die Attribute neu ausgegeben
@@ -287,10 +305,51 @@ WW8_SwAttrIter::WW8_SwAttrIter( SwWW8Writer& rWr, const SwTxtNode& rTxtNd )
         ((SvxFontItem&)rNd.SwCntntNode::GetAttr(RES_CHRATR_FONT)).GetCharSet();
     eNdChrSet = GetExtendedTextEncoding(eNdChrSet);
 
+    const String &rTxt = rTxtNd.GetTxt();
+
     if( pBreakIt->xBreak.is() )
-        nScript = pBreakIt->xBreak->getScriptType( rTxtNd.GetTxt(), 0);
+        nScript = pBreakIt->xBreak->getScriptType(rTxt, 0);
     else
         nScript = ScriptType::LATIN;
+
+    if (rTxt.Len())
+    {
+        //Watch nDefaultDir later on, when section and table support are in
+        //may need to make this environmental like vertical text.
+        const BYTE nDefaultDir = UBIDI_LTR;
+        UErrorCode nError = U_ZERO_ERROR;
+        UBiDi* pBidi = ubidi_openSized(rTxt.Len(), 0, &nError);
+        ubidi_setPara(pBidi, rTxt.GetBuffer(), rTxt.Len(), nDefaultDir, NULL,
+            &nError);
+
+        sal_Int32 nCount = ubidi_countRuns(pBidi, &nError);
+        maDirChanges.reserve(nCount);
+
+        UTextOffset nStart = 0;
+        UTextOffset nEnd;
+        UBiDiLevel nCurrDir;
+
+        for (sal_Int32 nIdx = 0; nIdx < nCount; ++nIdx)
+        {
+            ubidi_getLogicalRun(pBidi, nStart, &nEnd, &nCurrDir);
+            /*
+            UBiDiLevel is the type of the level values in this BiDi
+            implementation.
+
+            It holds an embedding level and indicates the visual direction by
+            its bit 0 (even/odd value).
+
+            The value for UBIDI_DEFAULT_LTR is even and the one for
+            UBIDI_DEFAULT_RTL is odd
+            */
+            maDirChanges.push_back(Entry(nEnd, nCurrDir & 0x1));
+            nStart = nEnd;
+        }
+        ubidi_close(pBidi);
+
+        aIter = maDirChanges.begin();
+
+    }
 
     if( rWrt.pDoc->GetRedlineTbl().Count() )
     {
@@ -302,7 +361,7 @@ WW8_SwAttrIter::WW8_SwAttrIter( SwWW8Writer& rWr, const SwTxtNode& rTxtNd )
 
 rtl_TextEncoding WW8_SwAttrIter::GetNextCharSet() const
 {
-    if( aChrSetArr.Count() )
+    if (aChrSetArr.Count())
         return (rtl_TextEncoding)aChrSetArr[ aChrSetArr.Count() - 1 ];
     return eNdChrSet;
 }
@@ -391,6 +450,17 @@ xub_StrLen WW8_SwAttrIter::SearchNext( xub_StrLen nStartPos )
             }
         }
     }
+
+    if (aIter != maDirChanges.end())
+    {
+        if (aIter->first <= nMinPos)
+        {
+            nMinPos = aIter->first;
+            mbIsRTL = aIter->second;
+            ++aIter;
+        }
+    }
+
     return nMinPos;
 }
 
@@ -439,8 +509,15 @@ void WW8_SwAttrIter::SetCharSet( const SwTxtAttr& rAttr, BOOL bStart )
 
 void WW8_SwAttrIter::OutAttr( xub_StrLen nSwPos )
 {
-    if( rNd.GetpSwAttrSet() )
-        rWrt.Out_SfxItemSet( *rNd.GetpSwAttrSet(), FALSE, TRUE, nScript );
+    if (rNd.GetpSwAttrSet())
+        rWrt.Out_SfxItemSet(*rNd.GetpSwAttrSet(), FALSE, TRUE, nScript);
+
+    if (IsRTL())
+    {
+        SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
+        rWrtWW8.InsUInt16(0x85a);
+        rWrtWW8.pO->Insert((BYTE)1, rWrtWW8.pO->Count());
+    }
 
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
     if( pTxtAttrs )

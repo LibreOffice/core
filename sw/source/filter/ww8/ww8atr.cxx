@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-23 12:39:44 $
+ *  last change: $Author: cmc $ $Date: 2002-07-23 16:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1009,15 +1009,18 @@ static Writer& OutWW8_SwLanguage( Writer& rWrt, const SfxPoolItem& rHt )
 {
     USHORT nId = 0;
     SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
-    if( rWrtWW8.bWrtWW8 )
+    if (rWrtWW8.bWrtWW8)
     {
-        switch( rHt.Which() )
+        switch (rHt.Which())
         {
             case RES_CHRATR_LANGUAGE:
                 nId = 0x486D;
                 break;
             case RES_CHRATR_CJK_LANGUAGE:
                 nId = 0x486E;
+                break;
+            case RES_CHRATR_CTL_LANGUAGE:
+                nId = 0x485F;
                 break;
         }
     }
@@ -1026,19 +1029,25 @@ static Writer& OutWW8_SwLanguage( Writer& rWrt, const SfxPoolItem& rHt )
 
     if (nId)
     {
-        if( rWrtWW8.bWrtWW8 ) // use sprmCRgLid0 rather than sprmCLid
-            rWrtWW8.InsUInt16( nId );
+        if (rWrtWW8.bWrtWW8) // use sprmCRgLid0 rather than sprmCLid
+            rWrtWW8.InsUInt16(nId);
         else
-            rWrtWW8.pO->Insert( (BYTE)nId, rWrtWW8.pO->Count() );
-        rWrtWW8.InsUInt16( ((const SvxLanguageItem&)rHt).GetLanguage() );
+            rWrtWW8.pO->Insert((BYTE)nId, rWrtWW8.pO->Count());
+        rWrtWW8.InsUInt16(((const SvxLanguageItem&)rHt).GetLanguage());
 
-        //unknown as to why, but this seems to shadow the other paramater in
-        //word 2000 and without it spellchecking doesn't work
+        //unknown as to exactly why, but this seems to shadow the other
+        //paramater in word 2000 and without it spellchecking doesn't work
         if (nId == 0x486D)
         {
             rWrtWW8.InsUInt16(0x4873);
-            rWrtWW8.InsUInt16( ((const SvxLanguageItem&)rHt).GetLanguage() );
+            rWrtWW8.InsUInt16(((const SvxLanguageItem&)rHt).GetLanguage());
         }
+        else if (nId == 0x485F)
+        {
+            rWrtWW8.InsUInt16(0x4874);
+            rWrtWW8.InsUInt16(((const SvxLanguageItem&)rHt).GetLanguage());
+        }
+
     }
     return rWrt;
 }
@@ -4153,7 +4162,7 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_CHRATR_CJK_WEIGHT */         OutWW8_SwWeight,
 /* RES_CHRATR_CTL_FONT */           0,
 /* RES_CHRATR_CTL_FONTSIZE */       OutWW8_SwSize,
-/* RES_CHRATR_CTL_LANGUAGE */       0,
+/* RES_CHRATR_CTL_LANGUAGE */       OutWW8_SwLanguage,
 /* RES_CHRATR_CTL_POSTURE */        OutWW8_SwBiDiPosture,
 /* RES_CHRATR_CTL_WEIGHT */         OutWW8_SwBiDiWeight,
 /* RES_CHRATR_WRITING_DIRECTION */  OutWW8_CharRotate,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-18 12:29:13 $
+ *  last change: $Author: cmc $ $Date: 2002-07-23 16:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1029,8 +1029,8 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
                     0x0000,0x0000,0x0000,0x2A53,
                     // sprmCFImprint, sprmCFSpec, sprmCFObj, sprmPicBrcl,
                     0x0854,0x0855,0x0856,0x2E00,
-                    // sprmPOutLvl, sprmNoop, sprmNoop, sprmNoop,
-                    0x2640,0x0000,0x0000,0x0000,
+                    // sprmPOutLvl, sprmPFBiDi, sprmNoop, sprmNoop,
+                    0x2640,0x2441,0x0000,0x0000,
                     // sprmNoop, sprmNoop, sprmPPnbrRMarkNot
                     0x0000,0x0000,0x0000,0x0000
                 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-23 12:39:51 $
+ *  last change: $Author: cmc $ $Date: 2002-07-23 16:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3975,6 +3975,9 @@ void SwWW8ImplReader::Read_Language( USHORT nId, const BYTE* pData, short nLen )
         case 0x486E:
             nId = RES_CHRATR_CJK_LANGUAGE;
             break;
+        case 0x485F:
+            nId = RES_CHRATR_CTL_LANGUAGE;
+            break;
         default:
             return ;
     }
@@ -3984,7 +3987,7 @@ void SwWW8ImplReader::Read_Language( USHORT nId, const BYTE* pData, short nLen )
     else
     {
         USHORT nLang = SVBT16ToShort( pData );  // Language-Id
-        NewAttr( SvxLanguageItem( (const LanguageType)nLang, nId ));
+        NewAttr(SvxLanguageItem((const LanguageType)nLang, nId));
     }
 }
 
@@ -5507,7 +5510,7 @@ SprmReadInfo aSprmReadTab[] = {
     0x085C, (FNReadRecord)&SwWW8ImplReader::Read_BoldBiDiUsw, //"sprmCFBoldBi"
     0x085D, (FNReadRecord)&SwWW8ImplReader::Read_BoldBiDiUsw, //"sprmCFItalicBi"
 //0x4A5E, ? ? ?  , "sprmCFtcBi", // ;;;
-    0x485F, (FNReadRecord)0, // "sprmCLidBi", // ;;;
+    0x485F, (FNReadRecord)&SwWW8ImplReader::Read_Language, // "sprmCLidBi"
 //0x4A60, ? ? ?  , "sprmCIcoBi", // ;;;
     0x4A61, &SwWW8ImplReader::Read_FontSize,    // "sprmCHpsBi", // ;;;
     0xCA62, (FNReadRecord)0, //"sprmCDispFldRMark" // chp.fDispFldRMark, chp.ibstDispFldRMark, chp.dttmDispFldRMark ;Complex (see below);variable length always recorded as 39 bytes;
