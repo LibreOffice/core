@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VisAreaContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-21 18:04:03 $
+ *  last change: $Author: sab $ $Date: 2001-02-27 10:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define _XMLOFF_VISAREACONTEXT_HXX
 
 #ifndef _XMLOFF_XMLICTXT_HXX
-#include <xmloff/xmlictxt.hxx>
+#include "xmlictxt.hxx"
 #endif
 
 #ifndef _VCL_MAPUNIT_HXX
