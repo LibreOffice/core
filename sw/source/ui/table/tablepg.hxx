@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablepg.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 14:08:37 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ public:
 };
 
 /*-----------------12.12.96 11.48-------------------
-        Textfluá
+        Textfluss
 --------------------------------------------------*/
 class SwTextFlowPage : public SfxTabPage
 {
