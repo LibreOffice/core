@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendaccess.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-07-19 18:18:35 $
+ *  last change: $Author: jb $ $Date: 2002-10-14 14:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,11 @@
 #include <drafts/com/sun/star/configuration/backend/XCompositeLayer.hpp>
 #endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XCOMPOSITELAYER_HPP_
 
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
+#define RTL_LOGFILE_OU2A(rtlOUString)   (::rtl::OUStringToOString((rtlOUString), RTL_TEXTENCODING_ASCII_US).getStr())
+
 namespace configmgr { namespace backend {
 
 //==============================================================================
@@ -129,6 +134,9 @@ static NodeResult merge(
     LayerMergeHandler * pMerger = new LayerMergeHandler(aFactory, aData, OUString());
     uno::Reference<backenduno::XLayerHandler> xLayerMerger(pMerger);
 
+    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::BackendAccess", "jb99855", "configmgr: BackendAccess::merge()");
+    RTL_LOGFILE_CONTEXT_TRACE1(aLog, "merging %d layers", int(aNbLayers) );
+
     for (sal_Int32 i = 0 ; i < aNbLayers ; ++ i)
     {
         promoteToDefault(aData) ;
@@ -162,6 +170,9 @@ NodeResult BackendAccess::getNodeData(const NodeRequest& aRequest,
     uno::Sequence<uno::Reference<backenduno::XLayer> > layers ;
     uno::Reference<backenduno::XSchema> schema ;
 
+    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::BackendAccess", "jb99855", "configmgr: BackendAccess::getNodeData()");
+    RTL_LOGFILE_CONTEXT_TRACE1(aLog, "request path: %s", RTL_LOGFILE_OU2A(aRequest.getPath().toString()) );
+
     getSchemaAndLayers(aRequest, schema, layers) ;
     schema->readSchema(schemaHandler) ;
     return merge(mFactory, schemaBuilder->result(), layers, layers.getLength(),
@@ -176,6 +187,9 @@ void BackendAccess::updateNodeData(const UpdateRequest& aUpdate)
     rtl::OUString component =
                     aUpdate.getUpdateRoot().getModuleName().toString() ;
     uno::Reference<backenduno::XUpdateHandler> handler ;
+
+    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::BackendAccess", "jb99855", "configmgr: BackendAccess::updateNodeData()");
+    RTL_LOGFILE_CONTEXT_TRACE1(aLog, "updating component: %s", RTL_LOGFILE_OU2A(component) );
 
     if (entity.getLength() == 0) {
         handler = mBackend->getOwnUpdateHandler(component) ;
@@ -196,6 +210,9 @@ NodeResult BackendAccess::getDefaultData(const NodeRequest& aRequest)
     uno::Sequence<uno::Reference<backenduno::XLayer> > layers ;
     uno::Reference<backenduno::XSchema> schema ;
 
+    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::BackendAccess", "jb99855", "configmgr: BackendAccess::getDefaultData()");
+    RTL_LOGFILE_CONTEXT_TRACE1(aLog, "request path: %s", RTL_LOGFILE_OU2A(aRequest.getPath().toString()) );
+
     getSchemaAndLayers(aRequest, schema, layers) ;
     schema->readSchema(schemaHandler) ;
     return merge(mFactory, schemaBuilder->result(), layers,
@@ -211,6 +228,12 @@ TemplateResult BackendAccess::getTemplateData(const TemplateRequest& aRequest)
         mBackend->getComponentSchema(aRequest.getComponentName().toString()) ;
     SchemaBuilder *schemaBuilder = new SchemaBuilder() ;
     uno::Reference<backenduno::XSchemaHandler> handler = schemaBuilder ;
+
+    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::BackendAccess", "jb99855", "configmgr: BackendAccess::getTemplateData()");
+    RTL_LOGFILE_CONTEXT_TRACE2(aLog, "requested template: %s/%s",
+                                    RTL_LOGFILE_OU2A(aRequest.getComponentName().toString()) ,
+                                    aRequest.isComponentRequest() ?
+                                        "*" : RTL_LOGFILE_OU2A(aRequest.getComponentName().toString()) );
 
     schema->readTemplates(handler) ;
 

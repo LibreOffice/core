@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-10 09:23:25 $
+ *  last change: $Author: jb $ $Date: 2002-10-14 14:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,8 @@
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
+
+#define RTL_LOGFILE_OU2A(rtlOUString)   (::rtl::OUStringToOString((rtlOUString), RTL_TEXTENCODING_ASCII_US).getStr())
 
 namespace configmgr
 {
@@ -584,6 +586,9 @@ namespace configmgr
 
         OSL_ASSERT(sal_Int16(nMinLevels) == nMinLevels);
 
+        RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::OProviderImpl", "jb99855", "configmgr::OProviderImpl::buildReadAccess()");
+        RTL_LOGFILE_CONTEXT_TRACE1(aLog, "request path: %s", RTL_LOGFILE_OU2A(_rAccessor) );
+
         try
         {
             using namespace configuration;
@@ -592,7 +597,11 @@ namespace configmgr
 
             data::NodeAccess aTree = this->requestSubtree(aAccessorPath,_xOptions, sal_Int16(nMinLevels));
 
+            RTL_LOGFILE_CONTEXT_TRACE(aLog, "data loaded" );
+
             TreeDepth nDepth = (nMinLevels == ALL_LEVELS) ? C_TreeDepthAll : TreeDepth(nMinLevels);
+
+            RTL_LOGFILE_CONTEXT_AUTHOR(aLog2, "configmgr::OProviderImpl", "jb99855", "configmgr: createReadOnlyTree()");
 
             RootTree aRootTree( createReadOnlyTree(
                     aAccessorPath, this->getDataSegment(aAccessorPath,_xOptions),
@@ -619,6 +628,9 @@ namespace configmgr
         CFG_TRACE_INFO("config provider: requesting the tree from the cache manager");
         OSL_ASSERT(sal_Int16(nMinLevels) == nMinLevels);
 
+        RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::OProviderImpl", "jb99855", "configmgr: buildUpdateAccess()");
+        RTL_LOGFILE_CONTEXT_TRACE1(aLog, "request path: %s", RTL_LOGFILE_OU2A(_rAccessor) );
+
         try
         {
             using namespace configuration;
@@ -627,7 +639,11 @@ namespace configmgr
 
             data::NodeAccess    aTree = requestSubtree(aAccessorPath, _xOptions, sal_Int16(nMinLevels));
 
+            RTL_LOGFILE_CONTEXT_TRACE(aLog, "data loaded" );
+
             TreeDepth nDepth = (nMinLevels == ALL_LEVELS) ? C_TreeDepthAll : TreeDepth(nMinLevels);
+
+            RTL_LOGFILE_CONTEXT_AUTHOR(aLog2, "configmgr::OProviderImpl", "jb99855", "createUpdatableTree()");
 
             RootTree aRootTree( createUpdatableTree(
                                     aAccessorPath, this->getDataSegment(aAccessorPath,_xOptions),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jb $ $Date: 2002-09-19 10:52:06 $
+ *  last change: $Author: jb $ $Date: 2002-10-14 14:19:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ namespace configmgr
 
         virtual void SAL_CALL disposing(com::sun::star::lang::EventObject const& rEvt) throw()
             {
-                RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "Configmgr::ODisposingListener", "jb99855", "disposing()");
+                RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::ODisposingListener", "jb99855", "configmgr::ODisposingListener::disposing()");
                 m_aFactory.disposing(rEvt);
             }
         ~ODisposingListener()
@@ -197,7 +197,7 @@ namespace configmgr
     //---------------------------------------------------------------------------------------
     void OProviderFactory::ensureBootstrapSettings(Context const & xContext)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::OProviderFactory", "jb99855", "ensureBootstrapSettings()");
+        RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::OProviderFactory", "jb99855", "configmgr::OProviderFactory::ensureBootstrapSettings()");
         if (!m_pPureSettings)
             m_pPureSettings = new BootstrapSettings( xContext );
     }
@@ -239,6 +239,8 @@ namespace configmgr
 
         if (!xReturn.is())
         {
+            RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::OProviderFactory", "jb99855", "configmgr::OProviderFactory: (*m_pObjectCreator)()");
+
             // create and connect the provider (may still throw exceptions)
             xReturn = (*m_pObjectCreator)(m_xORB, _rSettings);
 
@@ -312,7 +314,7 @@ namespace configmgr
     Reference< XInterface > OProviderFactory::createProvider(Context const & xContext)
     {
         MutexGuard aGuard(m_aMutex);
-        RTL_LOGFILE_CONTEXT( aLog, "Configmgr::OProviderFactory::createProvider()" );
+        RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::OProviderFactory", "jb99855", "configmgr::OProviderFactory::createProvider()");
 
         ensureDefaultProvider(xContext);
         return m_xDefaultProvider;
@@ -321,7 +323,7 @@ namespace configmgr
     //---------------------------------------------------------------------------------------
     Reference< XInterface > OProviderFactory::createProviderWithArguments(Context const & xContext, const Sequence< Any >& _rArguments)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::OProviderFactory", "jb99855", "createProviderWithArguments()");
+        RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::OProviderFactory", "jb99855", "configmgr::OProviderFactory::createProviderWithArguments()");
         ConnectionSettings aSettings(_rArguments);
         return createProviderWithSettings( xContext, aSettings );
     }
@@ -480,6 +482,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18  2002/09/19 10:52:06  jb
+ *  #102850# Support for contexts to allow fallback initialization
+ *
  *  Revision 1.17  2002/07/03 15:54:38  jb
  *  #98489# Added support for uno backend bootstrapping
  *

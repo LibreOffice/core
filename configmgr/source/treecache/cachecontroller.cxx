@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachecontroller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-12 11:42:47 $
+ *  last change: $Author: jb $ $Date: 2002-10-14 14:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@
 #include <rtl/logfile.hxx>
 #endif
 
+#define RTL_LOGFILE_OU2A(rtlOUString)   (::rtl::OUStringToOString((rtlOUString), RTL_TEXTENCODING_ASCII_US).getStr())
 
 namespace configmgr
 {
@@ -197,7 +198,7 @@ void CacheController::dispose() CFG_UNO_THROW_RTE()
 {
     CFG_TRACE_INFO("CacheController: dispose()" );
 
-    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::CacheController", "jb99855", "dispose(), disable lazy write cache.");
+    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::CacheController", "jb99855", "configmgr: CacheController::dispose(), disable lazy write cache.");
     m_bDisposing = true;                         // we are in dispose, handling of errors must be something different.
 
     // writing of pending updates
@@ -424,6 +425,9 @@ CacheLocation CacheController::loadComponent(ComponentRequest const & _aRequest)
 {
     CFG_TRACE_INFO("CacheController: loading component '%s'", OUSTRING2ASCII(_aRequest.getComponentName().toString()));
 
+    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::CacheController", "jb99855", "configmgr: CacheController::loadComponent()");
+    RTL_LOGFILE_CONTEXT_TRACE1(aLog, "component: %s", RTL_LOGFILE_OU2A(_aRequest.getComponentName().toString()) );
+
     CacheRef aCache = this->getCacheAlways(_aRequest.getOptions());
 
     OSL_ENSURE(aCache.is(), "Could not create CacheAccess");
@@ -463,6 +467,8 @@ CacheLocation CacheController::loadComponent(ComponentRequest const & _aRequest)
 NodeResult CacheController::getComponentData(ComponentRequest const & _aRequest) CFG_UNO_THROW_ALL()
 {
     // TODO: Insert check here, if the data is in the cache already - and then clone
+    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::CacheController", "jb99855", "configmgr: CacheController::getComponentData()");
+    RTL_LOGFILE_CONTEXT_TRACE1(aLog, "component: %s", RTL_LOGFILE_OU2A(_aRequest.getComponentName().toString()) );
 
     NodeResult aRet = this->loadDirectly(_aRequest);
 
@@ -473,6 +479,8 @@ NodeResult CacheController::getComponentData(ComponentRequest const & _aRequest)
 NodeResult CacheController::getDefaultData(NodeRequest const & _aRequest) CFG_UNO_THROW_ALL(  )
 {
     // TODO: Insert check here, if the data is in the cache already - and then clone
+    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::CacheController", "jb99855", "configmgr: CacheController::getDefaultData()");
+    RTL_LOGFILE_CONTEXT_TRACE1(aLog, "path: %s", RTL_LOGFILE_OU2A(_aRequest.getPath().toString()) );
 
     NodeResult aRet = this->loadDefaultsDirectly(_aRequest);
 
@@ -585,6 +593,12 @@ AbsolutePath CacheController::ensureTemplate(const Name& _rName, Name const& _rM
 
 CacheLocation CacheController::loadTemplate(TemplateRequest const & _aRequest) CFG_UNO_THROW_ALL(  )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::CacheController", "jb99855", "configmgr: CacheController::loadTemplate()");
+    RTL_LOGFILE_CONTEXT_TRACE2(aLog, "requested template: %s/%s",
+                                    RTL_LOGFILE_OU2A(_aRequest.getComponentName().toString()) ,
+                                    _aRequest.isComponentRequest() ?
+                                        "*" : RTL_LOGFILE_OU2A(_aRequest.getComponentName().toString()) );
+
     AbsolutePath aTemplateLocation = ensureTemplate(_aRequest.getTemplateName(), _aRequest.getComponentName());
 
     memory::Accessor aTemplatesAccessor( m_aTemplates.getDataSegment(aTemplateLocation.getModuleName()) );
@@ -600,6 +614,12 @@ CacheLocation CacheController::loadTemplate(TemplateRequest const & _aRequest) C
 TemplateResult CacheController::getTemplateData(TemplateRequest const & _aRequest)
     CFG_UNO_THROW_ALL()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::CacheController", "jb99855", "configmgr: CacheController::getTemplateData()");
+    RTL_LOGFILE_CONTEXT_TRACE2(aLog, "requested template: %s/%s",
+                                    RTL_LOGFILE_OU2A(_aRequest.getComponentName().toString()) ,
+                                    _aRequest.isComponentRequest() ?
+                                        "*" : RTL_LOGFILE_OU2A(_aRequest.getComponentName().toString()) );
+
     AbsolutePath aTemplateLocation = ensureTemplate(_aRequest.getTemplateName(), _aRequest.getComponentName());
 
     memory::Segment * pTemplatesSegment = m_aTemplates.getDataSegment(aTemplateLocation.getModuleName());
@@ -622,6 +642,8 @@ TemplateResult CacheController::getTemplateData(TemplateRequest const & _aReques
 
 void CacheController::saveAndNotify(UpdateRequest const & _anUpdate) CFG_UNO_THROW_ALL(  )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::CacheController", "jb99855", "configmgr: CacheController::saveAndNotify()");
+    RTL_LOGFILE_CONTEXT_TRACE1(aLog, "location: %s", RTL_LOGFILE_OU2A(_anUpdate.getUpdateRoot().toString()) );
     try
     {
         // ---------- preworking on the changes ----------

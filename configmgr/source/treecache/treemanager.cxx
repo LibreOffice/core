@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treemanager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-10 09:30:53 $
+ *  last change: $Author: jb $ $Date: 2002-10-14 14:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ void TreeManager::dispose()
 {
     CFG_TRACE_INFO("TreeManager: dispoing the treemanager" );
 
-    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::TreeManager", "jb99855", "dispose().");
+    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::TreeManager", "jb99855", "configmgr: TreeManager::dispose().");
 
     BackendCacheRef xBackendCache = maybeGetBackendCache();
 
