@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleToolBox.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:52:14 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:44:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ service AccessibleToolBox
        <li>Name: The name of a tool box is its localized label.</li>
        <li>Description: The description of a tool box is its localized
            help text.</li>
-       <li>Children: There exists children of type <type scope="::com::sun::star::awt">AccessibleToolBoxItem</type>.
+       <li>Children: There exists children of type <type scope="com::sun::star::awt">AccessibleToolBoxItem</type>.
        </li>
        <li>Parent: The parent is the window that contains the tool box.</li>
        <li>Relations: There are no relations.</li>
