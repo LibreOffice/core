@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergechange.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-11 05:58:48 $
+ *  last change: $Author: lla $ $Date: 2001-05-04 09:50:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,13 +101,14 @@ namespace configmgr
     rtl::OUString ONameCreator::createName(const rtl::OUString &aPlusName)
     {
         // create a name
+        static rtl::OUString aNameDelimiter = OUString::createFromAscii("/");
         OUString aName;
         for (vector<OUString>::const_iterator it = m_aNameList.begin();
              it != m_aNameList.end();
              it++)
         {
             aName += *it;
-            aName += OUString::createFromAscii("/");
+            aName += aNameDelimiter;
         }
         if (aPlusName.getLength() == 0)
         {
@@ -116,6 +117,10 @@ namespace configmgr
         else
         {
             aName += aPlusName;
+        }
+        if (aName[0] == sal_Unicode('/'))
+        {
+            aName = aName.copy(1);
         }
 
         return aName;
@@ -538,6 +543,10 @@ namespace configmgr
         break;
         }
     }
+// -----------------------------------------------------------------------------
+    // in localsession.cxx
+    void apply(TreeChangeList & _aTreeChangeList, ISubtree& _aSubtree);
+// -----------------------------------------------------------------------------
 
     void OMergeTreeChangeList::handle(SubtreeChange const& _rSubtree)
     {
@@ -550,34 +559,13 @@ namespace configmgr
         rtl::OUString aSearchName = createName(_rSubtree.getNodeName());
         OMergeSearchChange a(aSearchName);
         Change *pChange = a.searchForChange(m_aTreeChangeList.root);
-        /*
-          if (pChange)
-          {
-          // Value found, merge content
-          OMergeSubtreeChange a(_rSubtree);
-          a.handleChange(*pChange);
-          }
-          else
-          {
-          // Value not found, create a new SubtreeChange
-          auto_ptr<SubtreeChange> pNewChange(new SubtreeChange(_rSubtree, SubtreeChange::NoChildCopy()));
-          // add the new SubtreeChange in m_aTreeChangeList
-          m_pCurrentParent->addChange(auto_ptr<Change>(pNewChange.release()));
-          }
-        */
 
-                // const sal_Char* pType = pChange ? pChange->getType() : NULL;
+        // const sal_Char* pType = pChange ? pChange->getType() : NULL;
         SubtreeChange* pSubtreeChange = NULL;
         if (pChange == NULL || pChange->ISA(SubtreeChange))
         {
-            // hard cast(!) to SubtreeChange because we are a SubtreeChange
-            pSubtreeChange = SAL_STATIC_CAST(SubtreeChange*, pChange);
-            if (pSubtreeChange)
-            {
-                // Value found, nothing to be done, because we are a SubtreeChange
-                // we only must go downstairs
-            }
-            else
+            // need to create a new Subtreechange
+            if (!pChange)
             {
                 // create a new SubtreeChange
                 auto_ptr<SubtreeChange> pNewChange(new SubtreeChange(_rSubtree, SubtreeChange::NoChildCopy()));
@@ -585,8 +573,10 @@ namespace configmgr
                 m_pCurrentParent->addChange(auto_ptr<Change>(pNewChange.release()));
                 // check list and get this new SubtreeChange
                 pChange = a.searchForChange(m_aTreeChangeList.root);
-                pSubtreeChange = SAL_STATIC_CAST(SubtreeChange*, pChange);
             }
+            // hard cast(!) to SubtreeChange because we are a SubtreeChange
+            pSubtreeChange = SAL_STATIC_CAST(SubtreeChange*, pChange);
+
             // save this SubtreeChange so we allways have the last Subtree
             pushTree(pSubtreeChange);          // remember the SubtreeChange Pointer
             pushName(_rSubtree.getNodeName()); // pathstack
@@ -596,44 +586,35 @@ namespace configmgr
         }
         else if (pChange->ISA(AddNode))
         {
+            // in this AddNode should be a subtree, NOT a subtreechange
+
             AddNode* pAddNode = SAL_STATIC_CAST(AddNode*, pChange);
             INode* pNode = pAddNode->getAddedNode();
             ISubtree* pSubtree = pNode ? pNode->asISubtree() : 0;
-
-            OSL_ENSURE(pSubtree, "BLA");
             if (pSubtree)
             {
-                OSL_ENSURE(false, "DANGER, THIS CODE IS WRONG!");
-                // because, the important Node is the _rSubtree, which will not insert anywhere
+                // pSubtree = pSubtree + _rSubtree;
 
-                // Merge _rSubtree into pSubtree using a TreeUpdate object
-                TreeUpdate aTreeUpdate(pSubtree);
-                TreeChangeList aMergeChangeList(m_aTreeChangeList, SubtreeChange::NoChildCopy());
-                OMergeTreeAction aChangeHandler(aMergeChangeList.root, pSubtree);
-                m_aTreeChangeList.root.forEachChange(aChangeHandler);
-                // now check the real modifications
-                OChangeActionCounter aChangeCounter;
-                aChangeCounter.handle(aMergeChangeList.root);
-                CFG_TRACE_INFO("cache manager: counted changes from notification : additions: %i , removes: %i, value changes: %i", aChangeCounter.nAdds, aChangeCounter.nRemoves, aChangeCounter.nValues);
-                if (aChangeCounter.hasChanges())
-                {
-                    // aTree.updateTree(aMergeChangeList);
-                    aMergeChangeList.root.forEachChange(aTreeUpdate);
-                }
+                // Now apply _rSubtree to the subtree
+                TreeChangeList aChangeList(m_aTreeChangeList.m_xOptions, aSearchName, _rSubtree); // expensive!
+                apply(aChangeList, *pSubtree);
+
+                // This isn't correct today because _rSubtree is const and this construct require that _rSubtree isn't const
+                // TreeUpdate aTreeUpdate(pSubtree);
+                // _rSubtree.applyToChildren(aTreeUpdate);
             }
             else
             {
+                OSL_ENSURE(false, "OMergeTreeChangeList: There is a wrong subtree type node found.");
                 /* wrong type of node found: böse ASSERTEN/WERFEN */;
             }
-
         }
         else
         {
+            OSL_ENSURE(false, "OMergeTreeChangeList: There is a wrong type node found.");
             /* wrong type of node found: böse ASSERTEN/WERFEN */;
         }
     }
-
-
 
     // -----------------------------------------------------------------------------
 
