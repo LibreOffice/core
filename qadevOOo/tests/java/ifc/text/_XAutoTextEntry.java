@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAutoTextEntry.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:17 $
+ *  last change:$Date: 2003-09-08 11:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,12 @@
 
 package ifc.text;
 
-import com.sun.star.text.XAutoTextEntry;
-import com.sun.star.text.XTextDocument;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
+
+import com.sun.star.text.XAutoTextEntry;
+import com.sun.star.text.XTextDocument;
 
 /**
  * Testing <code>com.sun.star.text.XAutoTextEntry</code>
