@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: hjs $ $Date: 2002-05-10 12:12:12 $
+#   last change: $Author: hjs $ $Date: 2002-06-13 17:55:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -178,6 +178,11 @@ $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE) : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) $(T_
     @$(TOUCH) $@
 .ENDIF			# "$(GUI)"=="WNT"
 
+.IF "$(GUI)$(USE_SHELL)"=="WNT4nt"
+my4ver:=$(shell +echo %_4ver)
+my4ver:=
+.ENDIF			# "$(GUI)$(USE_SHELL)"=="WNT4nt"
+
 #patch
 $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
 .IF "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
@@ -185,7 +190,13 @@ $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
     +$(TOUCH) $@
 .ELSE			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
 .IF "$(GUI)"=="WNT"
+# hack to make 4nt version 4,01 work and still get propper
+# errorcodes for versions < 3,00
+.IF "$(my4ver:s/.//:s/,//)" >= "300"
     +cd $(PACKAGE_DIR) && ( $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | tr -d "\015" | patch $(PATCHFLAGS) -p2 ) && $(TOUCH) $(PATCH_FLAG_FILE)
+.ELSE			# "$(my4ver:s/.//:s/,//)" >= "300"
+    +cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | tr -d "\015" | patch $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
+.ENDIF			# "$(my4ver:s/.//:s/,//)" >= "300"
 .ELSE           # "$(GUI)"=="WNT"
 .IF "$(BSCLIENT)"=="TRUE"
     +cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | $(GNUPATCH) -f $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
