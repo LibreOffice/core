@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-21 14:38:35 $
+ *  last change: $Author: mib $ $Date: 2000-12-15 12:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1063,13 +1063,13 @@ SvXMLImportContext *SwXMLImport::CreateStylesContext(
         const Reference< xml::sax::XAttributeList > & xAttrList,
         sal_Bool bAuto )
 {
-    SvXMLImportContext *pContext =
+    SvXMLStylesContext *pContext =
         new SwXMLStylesContext_Impl( *this, XML_NAMESPACE_OFFICE, rLocalName,
                                        xAttrList, bAuto );
     if( bAuto )
-        xAutoStyles = pContext;
+        SetAutoStyles( pContext );
     else
-        xStyles = pContext;
+        SetStyles( pContext );
 
     ShowProgress( bAuto ? 10 : 5 );
 
@@ -1080,9 +1080,10 @@ SvXMLImportContext *SwXMLImport::CreateMasterStylesContext(
         const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext =
+    SvXMLStylesContext *pContext =
         new SwXMLMasterStylesContext_Impl( *this, XML_NAMESPACE_OFFICE, rLocalName,
                                           xAttrList );
+    SetMasterStyles( pContext );
 
     ShowProgress( 15 );
     GetTextImport()->SetProgressValue( nProgress );
@@ -1092,24 +1093,14 @@ SvXMLImportContext *SwXMLImport::CreateMasterStylesContext(
 
 void SwXMLImport::InsertStyles( sal_Bool bAuto )
 {
-    if( !bAuto && xStyles.Is() )
-        ((SwXMLStylesContext_Impl *)&xStyles)->CopyStylesToDoc(
-                                                !IsInsertMode(),
-                                                sal_False );
-
-    if( bAuto && xAutoStyles.Is() )
-    {
-        GetTextImport()->SetAutoStyles( (SwXMLStylesContext_Impl *)&xAutoStyles );
-        GetShapeImport()->SetAutoStylesContext( (SwXMLStylesContext_Impl *)&xAutoStyles );
-    }
-
+    if( !bAuto && GetStyles() )
+        GetStyles()->CopyStylesToDoc( !IsInsertMode(), sal_False );
 }
 
 void SwXMLImport::FinishStyles()
 {
-    if( xStyles.Is() )
-        ((SwXMLStylesContext_Impl *)&xStyles)->FinishStyles(
-                                                !IsInsertMode() );
+    if( GetStyles() )
+        GetStyles()->FinishStyles( !IsInsertMode() );
 }
 
 sal_Bool SwXMLImport::FindAutomaticStyle(
@@ -1119,10 +1110,10 @@ sal_Bool SwXMLImport::FindAutomaticStyle(
         OUString *pParent ) const
 {
     SwXMLItemSetStyleContext_Impl *pStyle = 0;
-    if( xAutoStyles.Is() )
+    if( GetAutoStyles() )
     {
         pStyle = PTR_CAST( SwXMLItemSetStyleContext_Impl,
-              ((SwXMLStylesContext_Impl *)&xAutoStyles)->
+              GetAutoStyles()->
                     FindStyleChildContext( nFamily, rName,
                                            sal_True ) );
         if( pStyle )

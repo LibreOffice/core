@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2000-12-07 16:56:47 $
+ *  last change: $Author: mib $ $Date: 2000-12-15 12:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,14 +195,8 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
     case XML_TOK_DOC_FONTDECLS:
-        {
-            XMLFontStylesContext *pFSContext =
-                new XMLFontStylesContext( GetImport(), nPrefix,
-                                          rLocalName, xAttrList,
-                                          gsl_getSystemTextEncoding() );
-            GetImport().GetTextImport()->SetFontDecls( pFSContext );
-            pContext = pFSContext;
-        }
+        pContext = GetSwImport().CreateFontDeclsContext( rLocalName,
+                                                             xAttrList );
         break;
     case XML_TOK_DOC_STYLES:
         pContext = GetSwImport().CreateStylesContext( rLocalName, xAttrList,
@@ -496,6 +490,18 @@ SwXMLImport::~SwXMLImport()
 XMLShapeImportHelper* SwXMLImport::CreateShapeImport()
 {
     return new XMLTextShapeImportHelper( *this );
+}
+
+SvXMLImportContext *SwXMLImport::CreateFontDeclsContext(
+        const OUString& rLocalName,
+        const Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    XMLFontStylesContext *pFSContext =
+            new XMLFontStylesContext( *this, XML_NAMESPACE_OFFICE,
+                                      rLocalName, xAttrList,
+                                      gsl_getSystemTextEncoding() );
+    SetFontDecls( pFSContext );
+    return pFSContext;
 }
 
 void SwXMLImport::SetProgressRef( sal_Int32 nParagraphs )

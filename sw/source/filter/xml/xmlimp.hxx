@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-02 10:57:15 $
+ *  last change: $Author: mib $ $Date: 2000-12-15 12:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,6 @@ class SwXMLImport: public SvXMLImport
     SvXMLItemMapEntriesRef  xTableRowItemMap;
     SvXMLItemMapEntriesRef  xTableCellItemMap;
 
-    SvXMLImportContextRef   xStyles;
-    SvXMLImportContextRef   xAutoStyles;
-
     sal_uInt16              nStyleFamilyMask;// Mask of styles to load
     sal_Int32               nProgress;
     sal_Int32               nProgressRef;
@@ -144,6 +141,7 @@ public:
 
     void                    InsertStyles( sal_Bool bAuto );
     void                    FinishStyles();
+
     // namespace office
     SvXMLImportContext *CreateMetaContext( const ::rtl::OUString& rLocalName );
     SvXMLImportContext *CreateScriptContext( const ::rtl::OUString& rLocalName );
@@ -155,6 +153,10 @@ public:
     SvXMLImportContext *CreateMasterStylesContext(
                 const ::rtl::OUString& rLocalName,
                 const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+    SvXMLImportContext *CreateFontDeclsContext(
+            const ::rtl::OUString& rLocalName,
+            const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     SvXMLImportContext *CreateBodyContext( const ::rtl::OUString& rLocalName );
     sal_uInt16 GetStyleFamilyMask() const { return nStyleFamilyMask; }
