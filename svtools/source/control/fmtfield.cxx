@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 11:03:26 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,23 +405,23 @@ DBG_NAME(FormattedField);
 
 #define INIT_MEMBERS()              \
      m_aLastSelection(0,0)          \
-    ,m_bStrictFormat(TRUE)          \
-    ,m_nFormatKey(0)                \
-    ,m_pFormatter(NULL)             \
     ,m_dMinValue(0)                 \
     ,m_dMaxValue(0)                 \
     ,m_bHasMin(FALSE)               \
     ,m_bHasMax(FALSE)               \
-    ,m_dCurrentValue(0)             \
+    ,m_bStrictFormat(TRUE)          \
     ,m_bValueDirty(TRUE)            \
     ,m_bEnableEmptyField(TRUE)      \
+    ,m_bAutoColor(FALSE)            \
+    ,m_dCurrentValue(0)             \
     ,m_dDefaultValue(0)             \
+    ,m_nFormatKey(0)                \
+    ,m_pFormatter(NULL)             \
     ,m_dSpinSize(1)                 \
     ,m_dSpinFirst(-1000000)         \
     ,m_dSpinLast(1000000)           \
     ,m_bTreatAsNumber(TRUE)         \
-    ,m_pLastOutputColor(NULL)       \
-    ,m_bAutoColor(FALSE)
+    ,m_pLastOutputColor(NULL)
 
 //------------------------------------------------------------------------------
 FormattedField::FormattedField(Window* pParent, WinBits nStyle, SvNumberFormatter* pInitialFormatter, INT32 nFormatKey)
