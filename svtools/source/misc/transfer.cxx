@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-09 14:50:57 $
+ *  last change: $Author: ka $ $Date: 2001-03-09 17:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,8 +279,10 @@ void SAL_CALL TransferableHelper::disposing( const EventObject& rSource ) throw(
 
 void SAL_CALL TransferableHelper::dragDropEnd( const DragSourceDropEvent& rDSDE ) throw( RuntimeException )
 {
+    Application::GetSolarMutex().acquire();
     DragFinished( rDSDE.DropSuccess ? rDSDE.DropAction : DNDConstants::ACTION_NONE );
     ObjectReleased();
+    Application::GetSolarMutex().release();
 }
 
 // -----------------------------------------------------------------------------
