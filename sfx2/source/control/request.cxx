@@ -2,9 +2,17 @@
 // class SfxRequest
 //
 // (C) 1996 - 2000 StarDivision GmbH, Hamburg, Germany
-// $Author: mba $ $Date: 2002-07-08 07:36:45 $ $Revision: 1.11 $
+// $Author: mba $ $Date: 2002-08-29 12:25:22 $ $Revision: 1.12 $
 // $Logfile:   T:/sfx2/source/control/request.cxv  $ $Workfile:   REQUEST.CXX  $
 //------------------------------------------------------------------*/
+
+#ifndef _COM_SUN_STAR_FRAME_DISPATCHSTATEMENT_HPP_
+#include <com/sun/star/frame/DispatchStatement.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXREPLACE_HPP_
+#include <com/sun/star/container/XIndexReplace.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -321,8 +329,32 @@ void SfxRequest_Impl::Record
 {
     String aCommand = String::CreateFromAscii(".uno:");
     aCommand.AppendAscii( pSlot->GetUnoName() );
+    ::rtl::OUString aCmd( aCommand );
     if(xRecorder.is())
     {
+        uno::Reference< container::XIndexReplace > xReplace( xRecorder, uno::UNO_QUERY );
+        if ( xReplace.is() && aCmd.compareToAscii(".uno:InsertText") == COMPARE_EQUAL )
+        {
+            sal_Int32 nCount = xReplace->getCount();
+            if ( nCount )
+            {
+                frame::DispatchStatement aStatement;
+                uno::Any aElement = xReplace->getByIndex(nCount-1);
+                if ( (aElement >>= aStatement) && aStatement.aCommand == aCmd )
+                {
+                    ::rtl::OUString aStr;
+                    ::rtl::OUString aNew;
+                    aStatement.aArgs[0].Value >>= aStr;
+                    rArgs[0].Value >>= aNew;
+                    aStr += aNew;
+                    aStatement.aArgs[0].Value <<= aStr;
+                    aElement <<= aStatement;
+                    xReplace->replaceByIndex( nCount-1, aElement );
+                    return;
+                }
+            }
+        }
+
         com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xFactory(
                 ::comphelper::getProcessServiceFactory(),
                 com::sun::star::uno::UNO_QUERY);
@@ -332,7 +364,7 @@ void SfxRequest_Impl::Record
                 com::sun::star::uno::UNO_QUERY);
 
         com::sun::star::util::URL aURL;
-        aURL.Complete = ::rtl::OUString(aCommand);
+        aURL.Complete = aCmd;
         xTransform->parseStrict(aURL);
 
         if (bDone)
