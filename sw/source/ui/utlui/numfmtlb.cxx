@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmtlb.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:02:23 $
+ *  last change: $Author: jp $ $Date: 2000-12-13 14:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,10 +88,7 @@
 #define _ZFORLIST_DECLARE_TABLE
 #include <svtools/zformat.hxx>
 #endif
-#ifndef _SFXITEMSET_HXX //autogen
-#include <svtools/itemset.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
+#ifndef _SFXENUMITEM_HXX
 #include <svtools/eitem.hxx>
 #endif
 #ifndef _SVX_SVXIDS_HRC //autogen
@@ -103,9 +100,6 @@
 #endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SVX_LANGITEM_HXX //autogen
-#include <svx/langitem.hxx>
 #endif
 #ifndef _SVX_NUMFMT_HXX //autogen
 #include <svx/numfmt.hxx>
@@ -192,12 +186,7 @@ void NumFormatListBox::Init(short nFormatType, BOOL bUsrFmts)
     SwView *pView = GetView();
 
     if (pView)
-    {
-        SwWrtShell &rSh = pView->GetWrtShell();
-        SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE);
-        rSh.GetAttr(aSet);
-        eCurLanguage = ((const SvxLanguageItem&)aSet.Get( RES_CHRATR_LANGUAGE ) ).GetLanguage();
-    }
+        eCurLanguage = pView->GetWrtShell().GetCurLang();
     else
         eCurLanguage = SvxLocaleToLanguage( GetAppLocaleData().getLocale() );
 
@@ -619,6 +608,9 @@ void NumFormatListBox::Clear()
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/20 09:02:23  jp
+      should change: use LocaleDataWrapper
+
       Revision 1.3  2000/10/20 14:18:07  os
       use comphelper methods
 
