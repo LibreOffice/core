@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splittbl.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text[ chinese_traditional ] = "¦Ϋ­qΌΠΓD‘A±aΌΛ¦‘(~U)";
         Text[ arabic ] = "ΪδζΗδ ΞΗΥ (ΚΨΘνή ΗαδγΨ)";
         Text[ greek ] = "Προσαρμοσμένη επικεφαλίδα (με στυλ)";
-        Text[ korean ] = "°νΐ―  Η₯Α¦£¨ΐ―Ηό ΐϋΏλ£©(~U)";
+        Text[ korean ] = "°νΐ―  Η₯Α¦£¨Ό­½Δ ΖΔΐΟ ΐϋΏλ£©(~U)";
         Text[ turkish ] = "~Φzel baώlύk (biηim uygula)";
         Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
         Text[ catalan ] = "~Encabezado propio, con estilos";
@@ -255,3 +255,4 @@ ModalDialog DLG_SPLIT_TABLE
     Text[ catalan ] = "Dividir tabla";
     Text[ finnish ] = "Jaa taulukko";
 };
+
