@@ -5,8 +5,8 @@
 #*    Description       shell SfxApplication
 #*
 #*    Creation date     MI  01/31/1995
-#*    last change       $Author: rt $ $Date: 2004-05-19 08:31:46 $
-#*    $Revision: 1.13 $
+#*    last change       $Author: kz $ $Date: 2004-08-02 12:48:38 $
+#*    $Revision: 1.14 $
 #*
 #*    Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 #*
@@ -345,6 +345,10 @@ interface Application : Module
         ExecMethod = MiscExec_Impl ;
     ]
 
+     //---------------------------------------------------------------------
+    SID_RECENTFILELIST
+    [
+    ]
 }
 
  //=========================================================================
