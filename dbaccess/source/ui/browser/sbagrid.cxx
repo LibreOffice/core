@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-21 07:21:24 $
+ *  last change: $Author: oj $ $Date: 2002-04-23 07:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1953,12 +1953,20 @@ IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, EMPTY_ARG)
 
     return 0L;
 }
-
-
-
-
 // -------------------------------------------------------------------------
-
+::rtl::OUString SbaGridControl::GetAccessibleDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition) const
+{
+    ::rtl::OUString sRet;
+    if ( ::svt::BBTYPE_BROWSEBOX == eObjType )
+    {
+        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        sRet = String(ModuleRes(STR_DATASOURCE_GRIDCONTROL_DESC));
+    }
+    else
+        sRet = FmGridControl::GetAccessibleDescription( eObjType,_nPosition);
+    return sRet;
+}
+// -----------------------------------------------------------------------------
 
 
 
