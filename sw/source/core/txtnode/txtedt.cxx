@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 09:40:28 $
+ *  last change: $Author: hr $ $Date: 2003-09-29 15:05:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,9 @@
 #endif
 #ifndef _HINTS_HXX
 #include <hints.hxx>
+#endif
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
@@ -797,10 +800,24 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
                     }
                     else
                     {
+                        // make sure the selection build later from the
+                        // data below does not include footnotes and other
+                        // "in word" character to the left and right in order
+                        // to preserve those. Therefore count those "in words"
+                        // in order to modify the selection accordingly.
+                        const sal_Unicode* pChar = rWord.GetBuffer();
+                        xub_StrLen nLeft = 0;
+                        while (pChar && *pChar++ == CH_TXTATR_INWORD)
+                            ++nLeft;
+                        pChar = rWord.Len() ? rWord.GetBuffer() + rWord.Len() - 1 : 0;
+                        xub_StrLen nRight = 0;
+                        while (pChar && *pChar-- == CH_TXTATR_INWORD)
+                            ++nRight;
+
                         pArgs->pStartNode = this;
                         pArgs->pEndNode = this;
-                        pArgs->rStartIdx.Assign(this, aScanner.GetEnd() );
-                        pArgs->rEndIdx.Assign(this, aScanner.GetBegin() );
+                        pArgs->rStartIdx.Assign(this, aScanner.GetEnd() - nRight );
+                        pArgs->rEndIdx.Assign(this, aScanner.GetBegin() + nLeft );
                     }
                 }
             }
