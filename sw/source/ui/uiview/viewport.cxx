@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 11:34:22 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:33:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,8 +142,7 @@ static USHORT nPgNum = 0;
 
 inline BOOL SwView::IsDocumentBorder()
 {
-    return GetDocShell()->IsInPlaceActive() ||
-           GetDocShell()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
+    return GetDocShell()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
            pWrtShell->IsBrowseMode() ||
            SVX_ZOOM_PAGEWIDTH_NOBORDER == (SvxZoomType)pWrtShell->GetViewOptions()->GetZoomType();
 }
@@ -287,7 +286,7 @@ extern int bDocSzUpdated;
         SetVisArea( aNewVisArea, FALSE );
 
     if ( UpdateScrollbars() && !bInOuterResizePixel && !bInInnerResizePixel &&
-            !GetDocShell()->IsInPlaceActive())
+            !GetViewFrame()->GetFrame()->IsInPlace())
         OuterResizePixel( Point(),
                           GetViewFrame()->GetWindow().GetOutputSizePixel() );
 }
@@ -361,14 +360,18 @@ void SwView::SetVisArea( const Rectangle &rRect, BOOL bUpdateScrollbar )
         //Transport von Fehlern vermieden werden.
         Rectangle aVis( aVisArea );
         if ( aVis.GetSize() == aOldSz )
-            aVis.SetSize(
-                    GetDocShell()->SfxInPlaceObject::GetVisArea().GetSize() );
+            aVis.SetSize( GetDocShell()->SfxObjectShell::GetVisArea(ASPECT_CONTENT).GetSize() );
+                    // TODO/LATER: why casting?!
+                    //GetDocShell()->SfxInPlaceObject::GetVisArea().GetSize() );
 
         //Bei embedded immer mit Modify...
+        // TODO/LATER: why casting?!
+        GetDocShell()->SfxObjectShell::SetVisArea( aVis );
+        /*
         if ( GetDocShell()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
             GetDocShell()->SfxInPlaceObject::SetVisArea( aVis );
         else
-            GetDocShell()->SvEmbeddedObject::SetVisArea( aVis );
+            GetDocShell()->SvEmbeddedObject::SetVisArea( aVis );*/
     }
 
     SfxViewShell::VisAreaChanged( aVisArea );
@@ -417,7 +420,7 @@ void SwView::SetVisArea( const Point &rPt, BOOL bUpdateScrollbar )
 void SwView::CheckVisArea()
 {
     pHScrollbar->SetAuto( pWrtShell->IsBrowseMode() &&
-                              !GetDocShell()->IsInPlaceActive() );
+                              !GetViewFrame()->GetFrame()->IsInPlace() );
     if ( IsDocumentBorder() )
     {
         if ( aVisArea.Left() != DOCUMENTBORDER ||
@@ -795,7 +798,7 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
         {
             // JP 21.07.00: the end scrollhandler invalidate the FN_STAT_PAGE,
             //              so we dont must do it agin.
-//          if(!GetDocShell()->IsInPlaceActive())
+//          if(!GetViewFrame()->GetFrame()->IsInPlace())
 //              S F X_BINDINGS().Update(FN_STAT_PAGE);
 
             //QuickHelp:
@@ -942,6 +945,7 @@ void SwView::CalcAndSetBorderPixel( SvBorder &rToFill, FASTBOOL bInner )
         else
             rToFill.Right()  = nTmp;
     }
+
     if ( pHScrollbar->IsVisible(FALSE) && !pWrtShell->IsBrowseMode() )
         rToFill.Bottom() = nTmp;
 
@@ -1089,7 +1093,7 @@ void SwView::ShowAtResize()
     bShowAtResize = FALSE;
     if ( pWrtShell->GetViewOptions()->IsViewHRuler() )
         pHRuler->Show();
-//    if ( !bBrowse ||GetDocShell()->IsInPlaceActive())
+//    if ( !bBrowse ||GetViewFrame()->GetFrame()->IsInPlace())
 //        pHScrollbar->Show();
 //    if ( !bBrowse && pVScrollbar->IsVisible() && pHScrollbar->IsVisible())
 //            pScrollFill->Show();
@@ -1098,17 +1102,43 @@ void SwView::ShowAtResize()
 
 void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize )
 {
+    Size aObjSize = GetObjectShell()->GetVisArea().GetSize();
+    if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
+    {
+        SvBorder aBorder( GetBorderPixel() );
+        Size aSize( rSize );
+        aSize.Width() -= (aBorder.Left() + aBorder.Right());
+        aSize.Height() -= (aBorder.Top() + aBorder.Bottom());
+        Size aObjSizePixel = GetWindow()->LogicToPixel( aObjSize, MAP_TWIP );
+        SfxViewShell::SetZoomFactor( Fraction( aSize.Width(), aObjSizePixel.Width() ),
+                        Fraction( aSize.Height(), aObjSizePixel.Height() ) );
+    }
+
     bInInnerResizePixel = TRUE;
     const BOOL bHScrollVisible = pHScrollbar->IsVisible(TRUE);
     const BOOL bVScrollVisible = pVScrollbar->IsVisible(TRUE);
     BOOL bRepeat = FALSE;
     do
     {
+        Size aSz( rSize );
         SvBorder aBorder;
         CalcAndSetBorderPixel( aBorder, TRUE );
-        Size aSz( rSize );
-        aSz.Height() += aBorder.Top()  + aBorder.Bottom();
-        aSz.Width()  += aBorder.Left() + aBorder.Right();
+        if ( GetViewFrame()->GetFrame()->IsInPlace() )
+        {
+            Size aViewSize( aSz );
+            Point aViewPos( rOfst );
+            aViewSize.Height() -= (aBorder.Top() + aBorder.Bottom());
+            aViewSize.Width()  -= (aBorder.Left() + aBorder.Right());
+            aViewPos.X() += aBorder.Left();
+            aViewPos.Y() += aBorder.Top();
+            GetEditWin().SetPosSizePixel( aViewPos, aViewSize );
+        }
+        else
+        {
+            aSz.Height() += aBorder.Top()  + aBorder.Bottom();
+            aSz.Width()  += aBorder.Left() + aBorder.Right();
+        }
+
         Size aEditSz( GetEditWin().GetOutputSizePixel() );
         const BOOL bBrowse = pWrtShell->IsBrowseMode();
         ViewResizePixel( GetEditWin(), rOfst, aSz, aEditSz, TRUE, *pVScrollbar,
@@ -1250,9 +1280,11 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 
         //Damit auch beim outplace editing die Seitenbreite sofort
         //angepasst wird.
+        //TODO/LATER: is that still necessary?!
+        /*
         if ( pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
             pDocSh->SetVisArea(
-                            pDocSh->SfxInPlaceObject::GetVisArea() );
+                            pDocSh->SfxInPlaceObject::GetVisArea() );*/
         if ( pWrtShell->GetViewOptions()->GetZoomType() != SVX_ZOOM_PERCENT &&
              !pWrtShell->IsBrowseMode() )
             _SetZoom( aEditSz, (SvxZoomType)pWrtShell->GetViewOptions()->GetZoomType(), 100, TRUE );
