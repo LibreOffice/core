@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-01 08:09:43 $
+ *  last change: $Author: fme $ $Date: 2002-02-13 11:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1467,7 +1467,8 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf, const SwTxtFtn* pTxtFtn )
         const SwDoc *pDoc = rInf.GetTxtFrm()->GetNode()->GetDoc();
 
         // examine text and set script
-        pFnt->SetActual( WhichFont( 0, &rFtn.GetViewNumStr( *pDoc ), 0 ) );
+        String aTmpStr( rFtn.GetViewNumStr( *pDoc ) );
+        pFnt->SetActual( WhichFont( 0, &aTmpStr, 0 ) );
 
         const SwEndNoteInfo* pInfo;
         if( rFtn.IsEndNote() )
