@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hdu $ $Date: 2001-08-13 10:28:23 $
+ *  last change: $Author: th $ $Date: 2001-08-28 10:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1053,7 +1053,7 @@ static char const aImplSubsPalaceScript[] = "palacescript;palacescriptmt;arioso;
 static char const aImplSubsSheffield[] = "sheffield;conga;centurygothic;copperlategothic;felixtitling";
 
 static char const aImplSubsJPGothic[] = "msgothic;mspgothic;hggothic;hggothicb;hggothice;gothic;andalesansui";
-static char const aImplSubsJPMincho[] = "hgmincholightj;msmincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;hgheiseimin;heiseimin";
+static char const aImplSubsJPMincho[] = "hgmincholightj;msmincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;hgheiseimin;heiseimin;minchou";
 static char const aImplSubsSCSun[] = "msunglightsc;simsun;nsimsun;zycjksun";
 static char const aImplSubsSCHei[] = "simhei;fzhei;zycjkhei;mhei;hei;andalesansui";
 static char const aImplSubsSCKai[] = "simkai;fzkai;zycjkkai;mkai;kai";
@@ -1368,6 +1368,8 @@ static ImplFontNameAttr const aImplFontNameList[] =
 {   "minchoj",              aImplSubsJPMincho, aImplSubsJPGothic, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
 {   "minchol",              aImplSubsJPMincho, aImplSubsJPGothic, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "minchou",              aImplSubsJPMincho, aImplSubsJPGothic, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
 {   "ming",                 aImplSubsTCMing, aImplSubsTCHei, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TC },
