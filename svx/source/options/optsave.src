@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 23:13:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 16:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,8 +156,8 @@ TabPage RID_SFXPAGE_SAVE
     {
         Pos = MAP_APPFONT ( 12 , 74 ) ;
         Size = MAP_APPFONT ( 236 , 8 ) ;
-        Text [ de ] = "XML-Format auf Grï¿½ï¿½e optimieren (ohne Pretty Printing)" ;
-        Text [ en-US ] = "Size optimization for XML format (no pretty printing)" ;
+        Text [ de ] = "XML-Format auf Größe optimieren" ;
+        Text [ en-US ] = "Size optimization for XML format" ;
     };
 
     FixedLine GB_RELATIVE
