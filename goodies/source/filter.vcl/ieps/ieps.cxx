@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ieps.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:15 $
+ *  last change: $Author: sj $ $Date: 2000-11-10 08:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,27 +407,17 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
 
                                     String aString;
                                     int nLen;
-                                    if ( rStream.IsA() == ID_FILESTREAM )
+                                    pDest = ImplSearchEntry( pBuf, (BYTE*)"%%Title:", nBytesRead - 32, 8 );
+                                    if ( pDest )
                                     {
-                                        SvFileStream* pSvFileStream = (SvFileStream*)&rStream;
-                                        INetURLObject aURL;
-                                        aURL.SetSmartURL( pSvFileStream->GetFileName() );
-                                        aString = aURL.GetName();
-                                    }
-                                    else
-                                    {
-                                        pDest = ImplSearchEntry( pBuf, (BYTE*)"%%Title:", nBytesRead - 32, 8 );
-                                        if ( pDest )
+                                        pDest += 8;
+                                        if ( *pDest == ' ' )
+                                            pDest++;
+                                        nLen = ImplGetLen( pBuf, 32 );
+                                        pDest[ nLen ] = 0;
+                                        if ( strcmp( (const char*)pDest, "none" ) != 0 )
                                         {
-                                            pDest += 8;
-                                            if ( *pDest == ' ' )
-                                                pDest++;
-                                            nLen = ImplGetLen( pBuf, 32 );
-                                            pDest[ nLen ] = 0;
-                                            if ( strcmp( (const char*)pDest, "none" ) != 0 )
-                                            {
-                                                aString.AppendAscii( (char*)pDest );
-                                            }
+                                            aString.AppendAscii( (char*)pDest );
                                         }
                                     }
                                     pDest = ImplSearchEntry( pBuf, (BYTE*)"%%Creator:", nBytesRead - 32, 10 );
