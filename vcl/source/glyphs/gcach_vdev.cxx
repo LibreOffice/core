@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_vdev.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 10:03:32 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,6 @@
 
 long VirtDevServerFont::FetchFontList( ImplDevFontList* pToAdd )
 {
-#if 0
-    // TODO: add fonts on server but not on client to the list
-    long nCount = 0;
-#else
     // TODO: get fonts on server but not on client,
     // problem is that currently there is no serverside virtual device...
     VirtualDevice vdev( 1 );
@@ -112,8 +108,6 @@ long VirtDevServerFont::FetchFontList( ImplDevFontList* pToAdd )
 
         pToAdd->Add( new ImplFontData( rData ) );   // TODO: avoid copy if possible
     }
-#endif
-
     return nCount;
 }
 
@@ -224,7 +218,7 @@ bool VirtDevServerFont::GetAntialiasAdvice( void ) const
 
 bool VirtDevServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const
 {
-#if 0
+    /*
     // draw bitmap
     vdev.SetOutputSizePixel( aSize, TRUE );
     vdev.DrawText( Point(0,0)-rGD.GetMetric().GetOffset(), nGlyphIndex );
@@ -234,9 +228,8 @@ bool VirtDevServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const
     const Bitmap& rBitmap = vdev.GetBitmap( Point(0,0), aSize );
     rGD.SetBitmap( new Bitmap( rBitmap ) );
     return true;
-#else
+    */
     return false;
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -296,9 +289,8 @@ ULONG VirtDevServerFont::GetKernPairs( ImplKernPairData** ppImplKernPairs ) cons
 
 bool VirtDevServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPoly ) const
 {
-#if 1
     return false;
-#else
+    /*
     Font aFont;
     aFont.SetName       ( GetFontSelData().maName );
     aFont.SetStyleName  ( GetFontSelData().maStyleName );
@@ -312,7 +304,7 @@ bool VirtDevServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPoly
 
     const bool bOptimize = true;
     return vdev.GetGlyphOutline( nGlyphIndex, rPolyPoly, bOptimize );
-#endif
+    */
 }
 
 // =======================================================================
