@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-16 10:21:33 $
+ *  last change: $Author: iha $ $Date: 2004-01-05 16:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1256,6 +1256,10 @@ uno::Reference< drawing::XShape >
             //Polygon
             xProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D )
                 , uno::makeAny( rPolyPolygon ) );
+
+            //DoubleSided
+            xProp->setPropertyValue( C2U( UNO_NAME_3D_DOUBLE_SIDED )
+                , uno::makeAny( (sal_Bool)true) );
         }
         catch( uno::Exception& e )
         {
