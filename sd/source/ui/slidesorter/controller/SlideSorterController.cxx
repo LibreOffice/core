@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:12:56 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -935,7 +935,9 @@ void SlideSorterController::SetZoom (long int nZoom)
         // widths of the output window and the page objects.
         long nMaxFactor
             = nCurrentZoom * aWindowSize.Width() / aPageSize.Width();
-        nMaxFactor = nCurrentZoom * 18 / 10;
+        // Apply rounding, so that a current zoom factor of 1 is still
+        // increased.
+        nMaxFactor = (nCurrentZoom * 18 + 5) / 10;
         nZoom = Min(nMaxFactor, nZoom);
     }
     if (nZoom < 1)
