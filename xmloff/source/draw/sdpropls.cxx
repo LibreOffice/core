@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 11:56:44 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,6 +385,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     MAP( "FontWorkShadowTransparence",      XML_NAMESPACE_DRAW, XML_FONTWORK_SHADOW_TRANSPARENCE,   XML_TYPE_PERCENT,           CTF_FONTWORK_SHADOWTRANSPARENCE ),
 
     // control attributes (border exists one mor time for the text additions of shapes)
+    MAP( "ControlForeground",               XML_NAMESPACE_FO,   XML_COLOR,                  XML_TYPE_COLOR, 0 ),
     MAP( "ControlBackground",               XML_NAMESPACE_FO,   XML_BACKGROUND_COLOR,       XML_TYPE_COLOR|MID_FLAG_MULTI_PROPERTY, 0 ),
     MAP( "ControlBorder",                   XML_NAMESPACE_FO,   XML_BORDER,                 XML_SD_TYPE_CONTROL_BORDER|MID_FLAG_MULTI_PROPERTY, 0 ),
     MAP( "ControlDataStyle",                XML_NAMESPACE_STYLE,XML_DATA_STYLE_NAME,        XML_TYPE_STRING|MID_FLAG_NO_PROPERTY_EXPORT|MID_FLAG_SPECIAL_ITEM, CTF_SD_CONTROL_SHAPE_DATA_STYLE ),
