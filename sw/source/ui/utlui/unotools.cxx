@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-01-23 09:03:40 $
+ *  last change: $Author: jp $ $Date: 2001-04-26 19:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,9 @@ const sal_Char cFactory[] = "private:factory/swriter";
 /* -----------------09.06.99 14:39-------------------
  *
  * --------------------------------------------------*/
-SwRenameXNamedDlg::SwRenameXNamedDlg(Window* pWin, uno::Reference< container::XNamed > & xN, uno::Reference< container::XNameAccess > & xNA) :
+SwRenameXNamedDlg::SwRenameXNamedDlg( Window* pWin,
+            uno::Reference< container::XNamed > & xN,
+            uno::Reference< container::XNameAccess > & xNA ) :
     ModalDialog(pWin, SW_RES(DLG_RENAME_XNAMED)),
    xNamed(xN),
    xNameAccess(xNA),
@@ -237,18 +239,21 @@ IMPL_LINK(SwRenameXNamedDlg, ModifyHdl, NoSpaceEdit*, pEdit)
     );
     return 0;
 }
+
 /************************************************************************
 
 ************************************************************************/
+
 sal_Bool SwOneExampleFrame::bShowServiceNotAvailableMessage = sal_True;
+
 /* -----------------27.07.99 15:26-------------------
 
  --------------------------------------------------*/
-SwOneExampleFrame::SwOneExampleFrame(Window& rWin,
-            sal_uInt32 nFlags,
-            const Link* pInitializedLink,
-            String* pURL) :
-    aTopWindow(rWin.GetParent(), 0, this),
+SwOneExampleFrame::SwOneExampleFrame( Window& rWin,
+                                        sal_uInt32 nFlags,
+                                        const Link* pInitializedLink,
+                                        String* pURL ) :
+    aTopWindow( rWin.GetParent(), 0, this ),
     pModuleView(SW_MOD()->GetView()),
     rWindow(rWin),
     aMenuRes(SW_RES(RES_FRMEX_MENU)),
@@ -262,13 +267,21 @@ SwOneExampleFrame::SwOneExampleFrame(Window& rWin,
     aTopWindow.SetPaintTransparent(sal_True);
     aTopWindow.SetPosSizePixel(rWin.GetPosPixel(), rWin.GetSizePixel());
     aTopWindow.SetZOrder( &rWin, WINDOW_ZORDER_FIRST );
-    aTopWindow.Show();
-    if(pInitializedLink)
+
+    if( pInitializedLink )
         aInitializedLink = *pInitializedLink;
+
+    // the controller is asynchronously set
+    aLoadedTimer.SetTimeoutHdl(LINK(this, SwOneExampleFrame, TimeoutHdl));
+//      aLoadedTimer.SetTimeout(500);
+    aLoadedTimer.SetTimeout(200);
 
     rWin.Enable(sal_False);
     CreateControl();
+
+    aTopWindow.Show();
 }
+
 /* -----------------------------08.12.99 13:44--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -334,20 +347,18 @@ void    SwOneExampleFrame::CreateControl()
 
             xPrSet->setPropertyValue(C2U("ComponentURL"), aURL);
 
-
             uno::Reference< awt::XWindow >  xWin( _xControl, uno::UNO_QUERY );
+            xWin->setVisible( sal_False );
             Size aWinSize(rWindow.GetOutputSizePixel());
             xWin->setPosSize( 0, 0, aWinSize.Width(), aWinSize.Height(), awt::PosSize::SIZE );
-            xWin->setVisible( sal_True );
 
-            // the controller is asynchronously set
-            aLoadedTimer.SetTimeoutHdl(LINK(this, SwOneExampleFrame, TimeoutHdl));
-            aLoadedTimer.SetTimeout(500);
             aLoadedTimer.Start();
             bServiceAvailable = sal_True;
         }
     }
 }
+
+
 /* -----------------------------21.12.00 10:16--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -367,6 +378,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
 {
     if(!_xControl.is())
         return 0;
+
     // now get the model
     uno::Reference< beans::XPropertySet >  xPrSet(_xControl, uno::UNO_QUERY);
     uno::Any aFrame = xPrSet->getPropertyValue(C2U("Frame"));
@@ -378,9 +390,11 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         //now the ViewOptions should be set properly
         uno::Reference< view::XViewSettingsSupplier >  xSettings(_xController, uno::UNO_QUERY);
         uno::Reference< beans::XPropertySet >  xViewProps = xSettings->getViewSettings();
+
         uno::Any aSet;
         sal_Bool bTrue = sal_True;
         sal_Bool bFalse = sal_False;
+
         aSet.setValue(&bFalse, ::getBooleanCppuType()); xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_BREAKS              ), aSet);
         aSet.setValue(&bTrue, ::getBooleanCppuType());  xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_DRAWINGS             ), aSet);
         aSet.setValue(&bFalse, ::getBooleanCppuType()); xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_FIELD_COMMANDS       ), aSet);
@@ -428,17 +442,21 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         uno::Reference< text::XText >  xText = xDoc->getText();
         _xCursor = xText->createTextCursor();
         uno::Reference< beans::XPropertySet >  xCrsrProp(_xCursor, uno::UNO_QUERY);
-        uno::Any aPageStyle = xCrsrProp->getPropertyValue(C2U(UNO_NAME_PAGE_STYLE_NAME));
+        uno::Any aPageStyle = xCrsrProp->getPropertyValue(
+                                            C2U(UNO_NAME_PAGE_STYLE_NAME));
         OUString sPageStyle;
         aPageStyle >>= sPageStyle;
-        uno::Reference< style::XStyleFamiliesSupplier >  xSSupp(xDoc, uno::UNO_QUERY);
+
+        uno::Reference< style::XStyleFamiliesSupplier >  xSSupp( xDoc, uno::UNO_QUERY);
         uno::Reference< container::XNameAccess >  xStyles = xSSupp->getStyleFamilies();
-        uno::Any aPFamily = xStyles->getByName(C2U("PageStyles"));
-        uno::Reference< container::XNameContainer >  xPFamily = *(uno::Reference< container::XNameContainer > *)aPFamily.getValue();
-        if(sPageStyle.getLength())
+        uno::Any aPFamily = xStyles->getByName( C2U("PageStyles" ) );
+        uno::Reference< container::XNameContainer >  xPFamily =
+            *(uno::Reference< container::XNameContainer > *)aPFamily.getValue();
+        if( sPageStyle.getLength() )
         {
-            uno::Any aPStyle = xPFamily->getByName(sPageStyle);
-            uno::Reference< style::XStyle >  xPStyle = *(uno::Reference< style::XStyle > *)aPStyle.getValue();
+            uno::Any aPStyle = xPFamily->getByName( sPageStyle );
+            uno::Reference< style::XStyle >  xPStyle =
+                *(uno::Reference< style::XStyle > *)aPStyle.getValue();
             uno::Reference< beans::XPropertySet >  xPProp(xPStyle, uno::UNO_QUERY);
             uno::Any aSize = xPProp->getPropertyValue(C2U(UNO_NAME_SIZE));
             awt::Size aPSize = *(awt::Size*)aSize.getValue();
@@ -447,18 +465,41 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
             aSize.setValue(&aPSize, ::getCppuType((awt::Size*)0));
             xPProp->setPropertyValue(C2U(UNO_NAME_SIZE), aSize);
         }
-        rWindow.Show();
+
         // can only be done here - the SFX changes the ScrollBar values
-        aSet.setValue(&bFalse, ::getBooleanCppuType());     xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_HORI_SCROLL_BAR ), aSet);
-        aSet.setValue(&bFalse, ::getBooleanCppuType());     xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_VERT_SCROLL_BAR ), aSet);
+        aSet.setValue(&bFalse, ::getBooleanCppuType());
+            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_HORI_SCROLL_BAR ), aSet);
+        aSet.setValue(&bFalse, ::getBooleanCppuType());
+            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_VERT_SCROLL_BAR ), aSet);
 
         bIsInitialized = sal_True;
-        if(aInitializedLink.IsSet())
+        if( aInitializedLink.IsSet() )
         {
-                rWindow.Enable(sal_False, sal_True);
-                //rWindow.Enable(sal_True, sal_False);
-                   aInitializedLink.Call(this);
+            rWindow.Enable(sal_False, sal_True);
+            //rWindow.Enable(sal_True, sal_False);
+               aInitializedLink.Call(this);
         }
+
+        uno::Reference< awt::XWindow >  xWin( _xControl, uno::UNO_QUERY );
+        xWin->setVisible( sal_True );
+        rWindow.Show();
+
+        uno::Reference< lang::XUnoTunnel> xTunnel( _xCursor, uno::UNO_QUERY);
+        if( xTunnel.is() )
+        {
+            SwXTextCursor* pCrsr = (SwXTextCursor*)xTunnel->getSomething(
+                                        SwXTextCursor::getUnoTunnelId() );
+            if( pCrsr )
+            {
+                SwEditShell* pSh = pCrsr->GetCrsr()->GetDoc()->GetEditShell();
+                if( pSh->ActionCount() )
+                {
+                    pSh->EndAllAction();
+                    pSh->UnlockPaint();
+                }
+            }
+        }
+
         SW_MOD()->SetView(pModuleView);
     }
     else
@@ -468,10 +509,36 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
 /* -----------------------------27.12.99 09:59--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwOneExampleFrame::ExecUndo()
+void SwOneExampleFrame::ClearDocument( BOOL bStartUpdateTimer )
 {
-    DisposeControl();
-    CreateControl();
+    uno::Reference< lang::XUnoTunnel> xTunnel( _xCursor, uno::UNO_QUERY);
+    if( xTunnel.is() )
+    {
+        SwXTextCursor* pCrsr = (SwXTextCursor*)xTunnel->getSomething(
+                                        SwXTextCursor::getUnoTunnelId() );
+        if( pCrsr )
+        {
+            SwDoc* pDoc = pCrsr->GetCrsr()->GetDoc();
+            SwEditShell* pSh = pDoc->GetEditShell();
+            pSh->LockPaint();
+            pSh->StartAllAction();
+            pDoc->ClearDoc();
+
+            if( aLoadedTimer.IsActive() || !bStartUpdateTimer )
+            {
+                pSh->EndAllAction();
+                pSh->UnlockPaint();
+            }
+            if( bStartUpdateTimer )
+                aLoadedTimer.Start();
+        }
+        else
+        {
+            _xCursor->gotoStart(FALSE);
+            _xCursor->gotoEnd(TRUE);
+            _xCursor->setString(OUString());
+        }
+    }
 }
 /* -----------------------------15.12.99 11:09--------------------------------
 

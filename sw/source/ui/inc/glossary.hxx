@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-12-21 12:11:37 $
+ *  last change: $Author: jp $ $Date: 2001-04-26 19:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,6 @@ class SwGlossaryDlg : public SvxStandardDialog
 
     GroupBox        aExampleGB;
     Window          aExampleWIN;
-    Window          aHideExampleWIN;
     CheckBox        aShowExampleCB;
 
     CheckBox        aInsertTipCB;

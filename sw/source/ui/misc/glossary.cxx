@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-03-20 10:52:16 $
+ *  last change: $Author: jp $ $Date: 2001-04-26 19:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,7 +330,6 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     SvxStandardDialog(&pViewFrame->GetWindow(), SW_RES(DLG_GLOSSARY)),
     aExampleGB    (this, SW_RES(GB_EXAMPLE  )),
     aExampleWIN   (this, SW_RES(WIN_EXAMPLE )),
-    aHideExampleWIN(this, SW_RES(WIN_EXAMPLE    )),
     aShowExampleCB(this, SW_RES(CB_SHOW_EXAMPLE )),
     aInsertTipCB  (this, SW_RES(CB_INSERT_TIP)),
     aNameLbl      (this, SW_RES(FT_NAME)),
@@ -359,8 +358,6 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     bIsDocReadOnly(sal_False),
     bResume(sal_False)
 {
-    aHideExampleWIN.SetBackground( Wallpaper(Color( COL_WHITE )) );
-    aHideExampleWIN.Show(FALSE);
     // Static-Pointer initialisieren
     if( !pCurrGlosGroup )
         pCurrGlosGroup = new String;//(SwGlossaries::GetDefName());
@@ -1292,13 +1289,14 @@ IMPL_LINK( SwGlossaryDlg, ShowPreviewHdl, CheckBox *, pBox )
         if(!pExampleFrame)
         {
             Link aLink(LINK(this, SwGlossaryDlg, PreviewLoadedHdl));
-            pExampleFrame = new SwOneExampleFrame(aExampleWIN, EX_SHOW_ONLINE_LAYOUT, &aLink);
+            pExampleFrame = new SwOneExampleFrame( aExampleWIN,
+                            EX_SHOW_ONLINE_LAYOUT, &aLink );
             bCreated = sal_True;
         }
     }
 
-    aExampleWIN.Show(pBox->IsChecked() && !bCreated);
-    if(pCurrGlosGroup)
+    aExampleWIN.Show( pBox->IsChecked() && !bCreated );
+    if( pCurrGlosGroup )
         ShowAutoText(*pCurrGlosGroup, aShortNameEdit.GetText());
 
     return 0;
@@ -1311,7 +1309,7 @@ IMPL_LINK( SwGlossaryDlg, PreviewLoadedHdl, void *, EMPTYARG )
     aExampleWIN.Show(aShowExampleCB.IsChecked());
     ResumeShowAutoText();
     return 0;
-};
+}
 
 /* -----------------28.07.99 16:28-------------------
 
@@ -1320,38 +1318,9 @@ void SwGlossaryDlg::ShowAutoText(const String& rGroup, const String& rShortName)
 {
     if(aExampleWIN.IsVisible())
     {
-        aHideExampleWIN.Show();
         SetResumeData(rGroup, rShortName);
         //try to make an Undo()
-        pExampleFrame->ExecUndo();
-
-        if(!_xAutoText.is())
-        {
-            uno::Reference< lang::XMultiServiceFactory >
-                                    xMgr = getProcessServiceFactory();
-            //now the AutoText ListBoxes have to be filled
-
-            uno::Reference< uno::XInterface >  xAText = xMgr->createInstance( C2U("com.sun.star.text.AutoTextContainer") );
-            _xAutoText = uno::Reference< container::XNameAccess >(xAText, uno::UNO_QUERY);
-        }
-
-        uno::Reference< XTextCursor > & xCrsr = pExampleFrame->GetTextCursor();
-        if(xCrsr.is())
-        {
-            if(rShortName.Len())
-            {
-                uno::Any aGroup = _xAutoText->getByName(rGroup);
-                uno::Reference< XAutoTextGroup >  xGroup = *(uno::Reference< XAutoTextGroup > *)aGroup.getValue();
-                OUString uShortName(rShortName);
-                if(xGroup->hasByName(uShortName))
-                {
-                    uno::Any aEntry(xGroup->getByName(uShortName));
-                    uno::Reference< XAutoTextEntry >  xEntry = *(uno::Reference< XAutoTextEntry > *)aEntry.getValue();
-                    uno::Reference< XTextRange >  xRange(xCrsr, uno::UNO_QUERY);
-                    xEntry->applyTo(xRange);
-                }
-            }
-        }
+        pExampleFrame->ClearDocument( TRUE );
     }
 }
 /* -----------------------------21.12.00 11:33--------------------------------
@@ -1389,7 +1358,6 @@ void    SwGlossaryDlg::ResumeShowAutoText()
                 }
             }
         }
-        aHideExampleWIN.Hide();
     }
     ResetResumeData();
 }

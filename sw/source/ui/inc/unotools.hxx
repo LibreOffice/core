@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-12-21 12:12:43 $
+ *  last change: $Author: jp $ $Date: 2001-04-26 19:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,8 @@
 #include <vcl/resary.hxx>
 #endif
 
+#define STAR_REFERENCE(aType) \
+    ::com::sun::star::uno::Reference< ::com::sun::star::aType >
 /* -----------------09.06.99 14:36-------------------
  *
  * --------------------------------------------------*/
@@ -114,25 +116,29 @@ class SwRenameXNamedDlg : public ModalDialog
 
     String          sRemoveWarning;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > &           xNamed;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > &  xNameAccess;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        xSecondAccess;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        xThirdAccess;
+    STAR_REFERENCE( container::XNamed ) &   xNamed;
+    STAR_REFERENCE( container::XNameAccess ) & xNameAccess;
+    STAR_REFERENCE( container::XNameAccess )   xSecondAccess;
+    STAR_REFERENCE( container::XNameAccess )   xThirdAccess;
 
     DECL_LINK(OkHdl, OKButton*);
     DECL_LINK(ModifyHdl, NoSpaceEdit*);
 
 public:
-    SwRenameXNamedDlg(Window* pParent, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > & xNamed, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess);
+    SwRenameXNamedDlg( Window* pParent,
+                    STAR_REFERENCE( container::XNamed ) & xNamed,
+                    STAR_REFERENCE( container::XNameAccess ) & xNameAccess );
 
-    void    SetForbiddenChars(const String& rSet){aNewNameED.SetForbiddenChars(rSet);}
+    void    SetForbiddenChars( const String& rSet )
+        { aNewNameED.SetForbiddenChars( rSet ); }
 
-    void    SetAlternativeAccess( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xSecond, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xThird)
-            {
-            xSecondAccess = xSecond;
-            xThirdAccess = xThird;
-            }
-
+    void SetAlternativeAccess(
+            STAR_REFERENCE( container::XNameAccess ) & xSecond,
+            STAR_REFERENCE( container::XNameAccess ) & xThird )
+    {
+        xSecondAccess = xSecond;
+        xThirdAccess = xThird;
+    }
 };
 /* -----------------------------15.12.99 09:55--------------------------------
 
@@ -169,13 +175,13 @@ public:
 class SwView;
 class SwOneExampleFrame
 {
+    STAR_REFERENCE( awt::XControl )         _xControl;
+    STAR_REFERENCE( frame::XModel )         _xModel;
+    STAR_REFERENCE( frame::XController )    _xController;
+    STAR_REFERENCE( text::XTextCursor )     _xCursor;
+
     SwFrmCtrlWindow aTopWindow;
     Window&         rWindow;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >         _xControl;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >         _xModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >    _xController;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >     _xCursor;
-
     Timer           aLoadedTimer;
     Link            aInitializedLink;
 
@@ -203,19 +209,20 @@ public:
                     String* pURL = 0);
     ~SwOneExampleFrame();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > &       GetControl() {return _xControl;}
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &       GetModel() {return _xModel;}
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &  GetController() {return _xController;}
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > & GetTextCursor() {return   _xCursor;}
+    STAR_REFERENCE( awt::XControl ) &       GetControl()    {return _xControl; }
+    STAR_REFERENCE( frame::XModel ) &       GetModel()      {return _xModel;}
+    STAR_REFERENCE( frame::XController ) &  GetController() {return _xController;}
+    STAR_REFERENCE( text::XTextCursor ) &   GetTextCursor() {return _xCursor;}
 
-    void            ExecUndo();
+    void ClearDocument( BOOL bStartTimer = FALSE );
 
-    sal_Bool            IsInitialized() const {return bIsInitialized;}
-    sal_Bool            IsServiceAvailable() const {return bServiceAvailable;}
+    sal_Bool IsInitialized() const {return bIsInitialized;}
+    sal_Bool IsServiceAvailable() const {return bServiceAvailable;}
 
     void CreatePopup(const Point& rPt);
 
     static void     CreateErrorMessage(Window* pParent);
 };
+
 #endif
 
