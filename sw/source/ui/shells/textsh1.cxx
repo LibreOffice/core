@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2002-08-15 07:52:53 $
+ *  last change: $Author: os $ $Date: 2002-09-03 08:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1255,9 +1255,9 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
             {
-                if(GetView().GetEditWin().IsTextBackColorTransparent())
-                    rSet.Put(SvxColorItem(Color(COL_LIGHTGRAY), SID_ATTR_CHAR_COLOR_BACKGROUND));
-                else
+              if(GetView().GetEditWin().IsTextBackColorTransparent())
+                  rSet.Put(SvxColorItem(Color(COL_TRANSPARENT), SID_ATTR_CHAR_COLOR_BACKGROUND));
+              else
                     rSet.Put(SvxColorItem(GetView().GetEditWin().GetTextBackColor(), SID_ATTR_CHAR_COLOR_BACKGROUND));
             }
             break;
