@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_attr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:41:47 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,7 +512,7 @@ AttributeStorage::AddClassification( Attribute *pClassification,
         unsigned int nLower = 0;
         unsigned int nUpper = nNum;
         unsigned int nCurrent;
-          int nComparison;
+          int nComparison = 1;
         Attribute *pHaystack, *pNeedle;
 
         pNeedle = &mpList[ i ];
