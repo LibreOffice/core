@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-15 08:59:07 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,9 +160,6 @@
 #endif
 #ifndef SD_TEXT_OBJECT_BAR_HXX
 #include "TextObjectBar.hxx"
-#endif
-#ifndef SD_GRAPHIC_OBJECT_BAR_HXX
-#include "GraphicObjectBar.hxx"
 #endif
 #ifndef SD_IMPRESS_OBJECT_BAR_HXX
 #include "ImpressObjectBar.hxx"
