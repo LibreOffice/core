@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXStyleFamily.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-06 14:19:39 $
+ *  last change:$Date: 2003-05-27 13:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sw;
 
 import com.sun.star.container.XIndexAccess;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.lang.XComponent;
@@ -110,7 +111,7 @@ public class SwXStyleFamily extends TestCase {
     * Creates text document.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
         try {
             log.println( "creating a textdocument" );
             xTextDoc = SOF.createTextDoc( null );
@@ -162,7 +163,7 @@ public class SwXStyleFamily extends TestCase {
 
         log.println( "Creating Test Environment..." );
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
         XComponent xComp = (XComponent)
             UnoRuntime.queryInterface(XComponent.class, xTextDoc);
         XInterface oInstance = (XInterface)
