@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:48:45 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,6 +264,10 @@ void SdrObjEditView::ModelHasChanged()
                 Rectangle aMinArea1;
                 pTextObj->TakeTextEditArea(&aPaperMin1,&aPaperMax1,&aEditArea1,&aMinArea1);
                 Point aPvOfs(pTextEditPV->GetOffset());
+
+                // #108784#
+                aPvOfs += pTextObj->GetTextEditOffset();
+
                 aEditArea1.Move(aPvOfs.X(),aPvOfs.Y());
                 aMinArea1.Move(aPvOfs.X(),aPvOfs.Y());
                 Rectangle aNewArea(aMinArea1);
@@ -454,6 +458,10 @@ Color SdrObjEditView::ImpGetTextEditBackgroundColor() const
         if (!bFound && pTextEditPV!=NULL && pTextEditObj!=NULL)
         {
             Point aPvOfs(pTextEditPV->GetOffset());
+
+            // #108784#
+            aPvOfs += ((SdrTextObj*)pTextEditObj)->GetTextEditOffset();
+
             const SdrPage* pPg=pTextEditPV->GetPage();
             Rectangle aSnapRect( pTextEditObj->GetSnapRect() );
             aSnapRect.Move(aPvOfs.X(), aPvOfs.Y());
@@ -651,6 +659,10 @@ BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin
             aTextEditArea = aTextRect;
 
             Point aPvOfs(pTextEditPV->GetOffset());
+
+            // #108784#
+            aPvOfs += ((SdrTextObj*)pTextEditObj)->GetTextEditOffset();
+
             aTextEditArea.Move(aPvOfs.X(),aPvOfs.Y());
             aMinTextEditArea.Move(aPvOfs.X(),aPvOfs.Y());
             pTextEditCursorMerker=pWin->GetCursor();
@@ -873,6 +885,18 @@ SdrEndTextEditKind SdrObjEditView::EndTextEdit(BOOL bDontDeleteReally)
         if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
 #endif
     }
+
+    // #108784#
+    if( pTEObj &&
+        pTEObj->GetModel() &&
+        !pTEObj->GetModel()->isLocked() &&
+        pTEObj->GetBroadcaster())
+    {
+        SdrHint aHint(HINT_ENDEDIT);
+        aHint.SetObject(pTEObj);
+        ((SfxBroadcaster*)pTEObj->GetBroadcaster())->Broadcast(aHint);
+    }
+
     return eRet;
 }
 
@@ -971,6 +995,10 @@ void SdrObjEditView::AddTextEditOfs(MouseEvent& rMEvt) const
 {
     if (pTextEditObj!=NULL) {
         Point aPvOfs(pTextEditPV->GetOffset());
+
+        // #108784#
+        aPvOfs += ((SdrTextObj*)pTextEditObj)->GetTextEditOffset();
+
         Point aObjOfs(pTextEditObj->GetLogicRect().TopLeft());
         (Point&)(rMEvt.GetPosPixel())+=aPvOfs+aObjOfs;
     }
