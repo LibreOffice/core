@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-18 19:42:21 $
+ *  last change: $Author: nn $ $Date: 2001-06-06 09:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,7 +429,7 @@ void ScInputHandler::ImplCreateEditEngine()
             pEngine = new ScFieldEditEngine( EditEngine::CreatePool(), NULL, TRUE );
         pEngine->SetWordDelimiters( ScEditUtil::ModifyDelimiters( pEngine->GetWordDelimiters() ) );
         UpdateRefDevice();      // also sets MapMode
-        pEngine->SetPaperSize( Size( 1000,300 ) );
+        pEngine->SetPaperSize( Size( 1000000, 1000000 ) );
         pEditDefaults = new SfxItemSet( pEngine->GetEmptyItemSet() );
 
         pEngine->SetControlWord( pEngine->GetControlWord() | EE_CNTRL_AUTOCORRECT );
@@ -1418,6 +1418,9 @@ BOOL ScInputHandler::StartTable( sal_Unicode cTyped )               // TRUE = ne
                                         aCursorPos.Col(),aCursorPos.Row(),
                                         pActiveViewSh->GetViewData()->GetMarkData() ) )
             {
+                // UpdateMode is enabled again in ScViewData::SetEditEngine (and not needed otherwise)
+                pEngine->SetUpdateMode( FALSE );
+
                 //  Attribute in EditEngine uebernehmen
 
                 const ScPatternAttr* pPattern = pDoc->GetPattern( aCursorPos.Col(),
