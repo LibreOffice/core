@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-27 09:21:24 $
+ *  last change: $Author: mba $ $Date: 2000-12-04 14:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,6 +476,12 @@ void SfxApplication::ForcePendingInitFactories()
 
 IMPL_LINK( SfxApplication, LateInitTimerHdl_Impl, void*, pvoid)
 {
+    if ( !SfxViewFrame::GetFirst( 0,0,FALSE ) )
+    {
+        pAppData_Impl->aLateInitTimer.Start();
+        return 0;
+    }
+
     // Ersten Link aus der Liste holen und ausf"uhren
     Link *pLink = (*pAppData_Impl->pInitLinkList)[0];
     pLink->Call(0);
