@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:41:35 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:23:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1066,10 +1066,12 @@ BOOL SwUndo::CanRedlineGroup( SwRedlineSaveDatas& rCurr,
                         const SwRedlineSaveDatas& rCheck, BOOL bCurrIsEnd )
 {
     BOOL bRet = FALSE;
+    USHORT n;
+
     if( rCurr.Count() == rCheck.Count() )
     {
         bRet = TRUE;
-        for( USHORT n = 0; n < rCurr.Count(); ++n )
+        for( n = 0; n < rCurr.Count(); ++n )
         {
             const SwRedlineSaveData& rSet = *rCurr[ n ];
             const SwRedlineSaveData& rGet = *rCheck[ n ];

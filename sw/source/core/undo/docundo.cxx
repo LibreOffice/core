@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docundo.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:37:01 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:23:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,9 @@ BOOL SwDoc::DelUndoObj( USHORT nEnde )
 
     // pruefe erstmal, wo das Ende steht
     USHORT nId = 0, nSttEndCnt = 0;
-    for( USHORT nCnt = 0; nEnde && nCnt < nUndoPos; ++nCnt )
+    USHORT nCnt;
+
+    for( nCnt = 0; nEnde && nCnt < nUndoPos; ++nCnt )
     {
         if( UNDO_START == ( nId = (*pUndos)[ nCnt ]->GetId() ))
             ++nSttEndCnt;
