@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-01 10:37:24 $
+ *  last change: $Author: tl $ $Date: 2001-06-14 13:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,10 +633,10 @@ SfxChildAlignment SmCmdBoxWindow::CheckAlignment(SfxChildAlignment eActual,
 
 void SmCmdBoxWindow::StateChanged( StateChangedType nStateChange )
 {
-    if (STATE_CHANGE_INITSHOW == nStateChange)
-        AdjustPosition();
-    else
-        SfxDockingWindow::StateChanged( nStateChange );
+    // set initial position of window in floating mode
+    if (TRUE == IsFloatingMode()  &&  STATE_CHANGE_INITSHOW == nStateChange)
+        AdjustPosition();   //! don't change pos in docking-mode !
+    SfxDockingWindow::StateChanged( nStateChange );
 }
 
 
