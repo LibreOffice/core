@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 14:12:26 $
+ *  last change: $Author: os $ $Date: 2001-04-04 07:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,6 @@
 #include "outlview.hxx"
 #include "sdpage.hxx"
 #include "tpoption.hxx"
-#include "tpscale.hxx"
 #include "prntopts.hxx"
 #include "sdxfer.hxx"
 
@@ -740,9 +739,6 @@ SfxTabPage*  SdModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
         case SID_SD_TP_SNAP:
         case SID_SI_TP_SNAP:
             pRet = SdTpOptionsSnap::Create(pParent, rSet);
-        break;
-        case SID_SD_TP_SCALE:
-               pRet = SdTpScale::Create(pParent, rSet);
         break;
         case SID_SD_TP_PRINT:
         case SID_SI_TP_PRINT:

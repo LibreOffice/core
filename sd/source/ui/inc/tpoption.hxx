@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-02 11:37:41 $
+ *  last change: $Author: os $ $Date: 2001-04-04 06:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,37 @@ private:
     FixedLine   aTxtCompatibility;
     CheckBox    aCbxCompatibility;
 
+    //Scale
+    FixedLine       aGrpScale;
+    FixedText       aFtScale;
+    ComboBox        aCbScale;
+
+    FixedText       aFtOriginal;
+    FixedText       aFtEquivalent;
+
+    FixedText       aFtPageWidth;
+    FixedInfo       aFiInfo1;
+    MetricField     aMtrFldOriginalWidth;
+
+    FixedText       aFtPageHeight;
+    FixedInfo       aFiInfo2;
+    MetricField     aMtrFldOriginalHeight;
+
+    MetricField     aMtrFldInfo1;
+    MetricField     aMtrFldInfo2;
+
+    UINT32          nWidth;
+    UINT32          nHeight;
+    String          aInfo1;
+    String          aInfo2;
+
+    SfxMapUnit          ePoolUnit;
+
+    String          GetScale( INT32 nX, INT32 nY );
+    BOOL            SetScale( const String& aScale, INT32& rX, INT32& rY );
+
+    DECL_LINK( ModifyScaleHdl, void * );
+    DECL_LINK( ModifyOriginalScaleHdl, void * );
     DECL_LINK( SelectMetricHdl_Impl, ListBox * );
 
 protected:

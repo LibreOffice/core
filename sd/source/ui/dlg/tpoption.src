@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-02 11:34:53 $
+ *  last change: $Author: os $ $Date: 2001-04-04 06:56:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,30 @@
 
 #include "tpoption.hrc"
 #include "helpids.h"
+
+#define SCALE_TEXT \
+        Text = "Maﬂstab" ;                              \
+        Text [ ENGLISH ] = "Scale" ;                    \
+        Text [ english_us ] = "Scale" ;                 \
+        Text [ italian ] = "Scala" ;                    \
+        Text [ spanish ] = "Escala" ;                   \
+        Text [ french ] = "…chelle" ;                   \
+        Text [ dutch ] = "Schaal" ;                     \
+        Text [ swedish ] = "Skala" ;                    \
+        Text [ danish ] = "MÂlestok" ;                  \
+        Text [ portuguese ] = "Escala" ;                \
+        Text [ portuguese_brazilian ] = "Maﬂstab" ;     \
+        Text[ chinese_simplified ] = "œ‘ æ±»¡–";        \
+        Text[ russian ] = "Ã‡Ò¯Ú‡·";                    \
+        Text[ polish ] = "Skala";                       \
+        Text[ japanese ] = "èké⁄";                      \
+        Text[ chinese_traditional ] = "≈„•‹§Ò®“";       \
+        Text[ arabic ] = " ﬂ»Ì—/ ’€Ì—";                 \
+        Text[ greek ] = " ÎﬂÏ·Í·";                      \
+        Text[ korean ] = "πË¿≤";                        \
+        Text[ turkish ] = "÷lÁek";                      \
+        Text[ language_user1 ] = " ";
+
  // Contents (Inhalte)
 TabPage TP_OPTIONS_CONTENTS
 {
@@ -780,6 +804,147 @@ TabPage TP_OPTIONS_MISC
         Text = "Im aktuellen Dokument alle ~Absatzabst‰nde addieren";
         Text [ English ] = "Add ~distances between paragraphs" ;
     };
+    FixedLine GRP_SCALE
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 6 , 109 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        SCALE_TEXT
+    };
+    FixedText FT_ORIGINAL
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 135 , 120 ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "Original" ;
+        Text [ ENGLISH ] = "Original" ;
+    };
+    FixedText FT_EQUIVALENT
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 185 , 120 ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "Entspricht" ;
+        Text [ ENGLISH ] = "Equivalent to" ;
+    };
+    FixedText FT_SCALE
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 12 , 136 ) ;
+        Size = MAP_APPFONT ( 36 , 70 ) ;
+        SCALE_TEXT
+    };
+    ComboBox CB_SCALE
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 52 , 134 ) ;
+        Size = MAP_APPFONT ( 30 , 70 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_PAGEWIDTH
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 85 , 136 ) ;
+        Size = MAP_APPFONT ( 49 , 8 ) ;
+        Text = "Seitenbreite" ;
+        Text [ ENGLISH ] = "Page width" ;
+        Text [ english_us ] = "Page width" ;
+        Text [ italian ] = "Larghezza pagina" ;
+        Text [ spanish ] = "Ancho de p·gina" ;
+        Text [ french ] = "Largeur de page" ;
+        Text [ dutch ] = "Pagina-breedte" ;
+        Text [ swedish ] = "Sidbredd" ;
+        Text [ danish ] = "Sidebredde" ;
+        Text [ portuguese ] = "Largura da p·gina" ;
+        Text [ portuguese_brazilian ] = "Seitenbreite" ;
+        Text[ chinese_simplified ] = "“≥øÌ";
+        Text[ russian ] = "ÿËËÌ‡ ÒÚ‡ÌËˆ˚";
+        Text[ polish ] = "Szer. strony";
+        Text[ japanese ] = "Õﬂ∞ºﬁïù";
+        Text[ chinese_traditional ] = "≠∂ºe";
+        Text[ arabic ] = "⁄—÷ «·’›Õ…";
+        Text[ greek ] = "–Î‹ÙÔÚ ÛÂÎﬂ‰·Ú";
+        Text[ korean ] = "¬  ≥ ∫Ò";
+        Text[ turkish ] = "Sayfa geni˛lii";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FI_INFO_1
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 135 , 136 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+    };
+    MetricField MTR_FLD_ORIGINAL_WIDTH
+    {
+        Hide = TRUE;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 185 , 134 ) ;
+        Size = MAP_APPFONT ( 60 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        SpinSize = 100 ;
+        Minimum = 1 ;
+        Maximum = 999999999 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        First = 1 ;
+        Last = 999999999 ;
+    };
+    FixedText FT_PAGEHEIGHT
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 85 , 152 ) ;
+        Size = MAP_APPFONT ( 49 , 8 ) ;
+        Text = "Seitenhˆhe" ;
+        Text [ ENGLISH ] = "Page height" ;
+        Text [ dutch ] = "Pagina-hoogte" ;
+        Text [ english_us ] = "Page height" ;
+        Text [ italian ] = "Altezza pagina" ;
+        Text [ spanish ] = "Altura de p·gina" ;
+        Text [ french ] = "Hauteur de page" ;
+        Text [ swedish ] = "Sidhˆjd" ;
+        Text [ danish ] = "Sideh¯jde" ;
+        Text [ portuguese ] = "Altura da p·gina" ;
+        Text [ portuguese_brazilian ] = "Seitenhˆhe" ;
+        Text[ chinese_simplified ] = "“≥∏ﬂ";
+        Text[ russian ] = "¬˚ÒÓÚ‡ ÒÚ‡ÌËˆ˚";
+        Text[ polish ] = "Wys. strony";
+        Text[ japanese ] = "Õﬂ∞ºﬁÇÃçÇÇ≥";
+        Text[ chinese_traditional ] = "≠∂∞™";
+        Text[ arabic ] = "«— ›«⁄ «·’›Õ…";
+        Text[ greek ] = "æ¯ÔÚ ÛÂÎﬂ‰·Ú";
+        Text[ korean ] = "¬  ≥Ù¿Ã";
+        Text[ turkish ] = "Sayfa y¸kseklii";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FI_INFO_2
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 135 , 152 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+    };
+    MetricField MTR_FLD_ORIGINAL_HEIGHT
+    {
+        Hide = TRUE;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 185 , 150 ) ;
+        Size = MAP_APPFONT ( 60 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        SpinSize = 100 ;
+        Minimum = 1 ;
+        Maximum = 999999999 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        First = 1 ;
+        Last = 999999999 ;
+    };
+
     Text[ chinese_simplified ] = "∆‰À¸";
     Text[ russian ] = "œÓ˜ÂÂ";
     Text[ polish ] = "Inne";

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ka $ $Date: 2000-11-18 11:44:07 $
+#   last change: $Author: os $ $Date: 2001-04-04 06:56:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,7 +100,6 @@ CXXFILES = $(PRJ)$/util$/sd.cxx \
         copydlg.cxx  \
         dlgolbul.cxx \
         tpoption.cxx \
-        tpscale.cxx \
         docdlg.cxx   \
         unchss.cxx   \
         dlgassim.cxx	\
@@ -126,7 +125,7 @@ CXXFILES = $(PRJ)$/util$/sd.cxx \
         htmlattr.cxx	\
         vectdlg.cxx		\
         docprev.cxx     \
-        packgdlg.cxx	
+        packgdlg.cxx
 
 SRCFILES =\
     ins_page.src\
@@ -145,7 +144,6 @@ SRCFILES =\
     dlgsnap.src\
     copydlg.src\
     tpoption.src\
-    tpscale.src\
     docdlg.src\
     dlgass.src\
     pubdlg.src\
@@ -161,7 +159,7 @@ SRCFILES =\
     brkdlg.src\
     vectdlg.src\
     dlgolbul.src\
-    packgdlg.src 
+    packgdlg.src
 
 
 SLOFILES =  \
@@ -187,7 +185,6 @@ SLOFILES =  \
         $(SLO)$/copydlg.obj  \
         $(SLO)$/dlgolbul.obj \
         $(SLO)$/tpoption.obj \
-        $(SLO)$/tpscale.obj \
         $(SLO)$/docdlg.obj   \
         $(SLO)$/unchss.obj  \
         $(SLO)$/dlgassim.obj	\
@@ -213,7 +210,7 @@ SLOFILES =  \
         $(SLO)$/htmlattr.obj	\
         $(SLO)$/vectdlg.obj		\
         $(SLO)$/docprev.obj     \
-        $(SLO)$/packgdlg.obj	
+        $(SLO)$/packgdlg.obj
 
 .IF "$(GUI)" == "WIN"
 

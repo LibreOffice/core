@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-02 11:14:24 $
+ *  last change: $Author: os $ $Date: 2001-04-04 06:56:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,16 @@
 #include <svx/strarray.hxx>
 #include <svx/dlgutil.hxx>
 
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
+
 #include "sdattr.hxx"
 #include "sdresid.hxx"
 #include "optsitem.hxx"
 #include "tpoption.hrc"
 #include "tpoption.hxx"
+#include "strings.hrc"
 
 #define DLGWIN this->GetParent()->GetParent()
 
@@ -291,6 +296,8 @@ SfxTabPage* __EXPORT SdTpOptionsContents::Create( Window* pWindow,
 |*  TabPage zum Einstellen der Sonstige-Optionen
 |*
 \************************************************************************/
+#define TABLE_COUNT 12
+#define TOKEN (sal_Unicode(':'))
 
 SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  ) :
         SfxTabPage          ( pParent, SdResId( TP_OPTIONS_MISC ), rInAttrs ),
@@ -316,9 +323,21 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
 
     aCbxStartWithActualPage     ( this, SdResId( CBX_START_WITH_ACTUAL_PAGE ) ),
     aGrpStartWithActualPage     ( this, SdResId( GRP_START_WITH_ACTUAL_PAGE ) ),
-
     aTxtCompatibility           ( this, SdResId( FT_COMPATIBILITY ) ),
-    aCbxCompatibility           ( this, SdResId( CB_MERGE_PARA_DIST ) )
+    aCbxCompatibility           ( this, SdResId( CB_MERGE_PARA_DIST ) ),
+    aGrpScale                   ( this, SdResId( GRP_SCALE ) ),
+    aFtScale                    ( this, SdResId( FT_SCALE ) ),
+    aCbScale                    ( this, SdResId( CB_SCALE ) ),
+    aFtOriginal                 ( this, SdResId( FT_ORIGINAL ) ),
+    aFtEquivalent               ( this, SdResId( FT_EQUIVALENT ) ),
+    aFtPageWidth                ( this, SdResId( FT_PAGEWIDTH ) ),
+    aFiInfo1                    ( this, SdResId( FI_INFO_1 ) ),
+    aMtrFldOriginalWidth        ( this, SdResId( MTR_FLD_ORIGINAL_WIDTH ) ),
+    aFtPageHeight               ( this, SdResId( FT_PAGEHEIGHT ) ),
+    aFiInfo2                    ( this, SdResId( FI_INFO_2 ) ),
+    aMtrFldOriginalHeight       ( this, SdResId( MTR_FLD_ORIGINAL_HEIGHT ) ),
+    aMtrFldInfo1                ( this, WinBits( WB_HIDE ) ),
+    aMtrFldInfo2                ( this, WinBits( WB_HIDE ) )
 {
     FreeResource();
     SetExchangeSupport();
@@ -348,6 +367,35 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
         aLbMetric.SetEntryData( nPos, (void*)nFieldUnit );
     }
     aLbMetric.SetSelectHdl( LINK( this, SdTpOptionsMisc, SelectMetricHdl_Impl ) );
+
+    SetFieldUnit( aMtrFldOriginalWidth, eFUnit );
+    SetFieldUnit( aMtrFldOriginalHeight, eFUnit );
+    aMtrFldOriginalWidth.SetLast( 999999999 );
+    aMtrFldOriginalWidth.SetMax( 999999999 );
+    aMtrFldOriginalHeight.SetLast( 999999999 );
+    aMtrFldOriginalHeight.SetMax( 999999999 );
+
+    // Temporaere Fields fuer Info-Texte (fuer Formatierung/Berechnung)
+    aMtrFldInfo1.SetUnit( eFUnit );
+    aMtrFldInfo1.SetMax( 999999999 );
+    aMtrFldInfo1.SetDecimalDigits( 2 );
+    aMtrFldInfo2.SetUnit( eFUnit );
+    aMtrFldInfo2.SetMax( 999999999 );
+    aMtrFldInfo2.SetDecimalDigits( 2 );
+
+    // PoolUnit ermitteln
+    SfxItemPool* pPool = rInAttrs.GetPool();
+    DBG_ASSERT( pPool, "Wo ist der Pool?" );
+    ePoolUnit = pPool->GetMetric( SID_ATTR_FILL_HATCH );
+
+    // Fuellen der CB
+    USHORT aTable[ TABLE_COUNT ] =
+        { 1, 2, 4, 5, 8, 10, 16, 20, 30, 40, 50, 100 };
+
+    for( i = 0; i < TABLE_COUNT; i++ )
+        aCbScale.InsertEntry( GetScale( 1, aTable[i] ) );
+    for( i = 1; i < TABLE_COUNT; i++ )
+        aCbScale.InsertEntry( GetScale(  aTable[i], 1 ) );
 }
 
 // -----------------------------------------------------------------------
@@ -361,15 +409,65 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
     // Hier muss noch einmal SaveValue gerufen werden, da sonst u.U.
     // der Wert in anderen TabPages keine Wirkung hat
     aLbMetric.SaveValue();
+    // Metrik ggfs. aendern (da TabPage im Dialog liegt,
+    // wo die Metrik eingestellt werden kann
+    const SfxPoolItem* pAttr = NULL;
+    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC , FALSE,
+                                    (const SfxPoolItem**)&pAttr ))
+    {
+        const SfxUInt16Item* pItem = (SfxUInt16Item*) pAttr;
+
+        FieldUnit eFUnit = (FieldUnit)(long)pItem->GetValue();
+
+        if( eFUnit != aMtrFldOriginalWidth.GetUnit() )
+        {
+            // Metriken einstellen
+            long nVal = aMtrFldOriginalWidth.Denormalize( aMtrFldOriginalWidth.GetValue( FUNIT_TWIP ) );
+            SetFieldUnit( aMtrFldOriginalWidth, eFUnit, TRUE );
+            aMtrFldOriginalWidth.SetValue( aMtrFldOriginalWidth.Normalize( nVal ), FUNIT_TWIP );
+
+            nVal = aMtrFldOriginalHeight.Denormalize( aMtrFldOriginalHeight.GetValue( FUNIT_TWIP ) );
+            SetFieldUnit( aMtrFldOriginalHeight, eFUnit, TRUE );
+            aMtrFldOriginalHeight.SetValue( aMtrFldOriginalHeight.Normalize( nVal ), FUNIT_TWIP );
+
+
+            if( nWidth != 0 && nHeight != 0 )
+            {
+                aMtrFldInfo1.SetUnit( eFUnit );
+                aMtrFldInfo2.SetUnit( eFUnit );
+
+                SetMetricValue( aMtrFldInfo1, nWidth, ePoolUnit );
+                aInfo1 = aMtrFldInfo1.GetText();
+                aFiInfo1.SetText( aInfo1 );
+
+                SetMetricValue( aMtrFldInfo2, nHeight, ePoolUnit );
+                aInfo2 = aMtrFldInfo2.GetText();
+                aFiInfo2.SetText( aInfo2 );
+            }
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
 
 int SdTpOptionsMisc::DeactivatePage( SfxItemSet* pSet )
 {
+    // Parsercheck
+    INT32 nX, nY;
+    if( SetScale( aCbScale.GetText(), nX, nY ) )
+    {
+        FillItemSet( *pSet );
+        return( LEAVE_PAGE );
+    }
+    WarningBox aWarnBox( GetParent(), WB_YES_NO, String( SdResId( STR_WARN_SCALE_FAIL ) ) );
+    short nReturn = aWarnBox.Execute();
+
+    if( nReturn == RET_YES )
+        return( KEEP_PAGE );
+
     FillItemSet( *pSet );
 
-    return LEAVE_PAGE;
+    return( LEAVE_PAGE );
 }
 
 // -----------------------------------------------------------------------
@@ -424,6 +522,16 @@ BOOL SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
         rAttrs.Put( aDef );
         bModified |= TRUE;
     }
+
+    INT32 nX, nY;
+    if( SetScale( aCbScale.GetText(), nX, nY ) )
+    {
+        rAttrs.Put( SfxInt32Item( ATTR_OPTIONS_SCALE_X, nX ) );
+        rAttrs.Put( SfxInt32Item( ATTR_OPTIONS_SCALE_Y, nY ) );
+
+        bModified = TRUE;
+    }
+    return( bModified );
 
     return( bModified );
 }
@@ -483,6 +591,53 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     }
     aLbMetric.SaveValue();
     aMtrFldTabstop.SaveValue();
+    //Scale
+    INT32 nX = ( (const SfxInt32Item&) rAttrs.
+                 Get( ATTR_OPTIONS_SCALE_X ) ).GetValue();
+    INT32 nY = ( (const SfxInt32Item&) rAttrs.
+                 Get( ATTR_OPTIONS_SCALE_Y ) ).GetValue();
+    nWidth = ( (const SfxUInt32Item&) rAttrs.
+                    Get( ATTR_OPTIONS_SCALE_WIDTH ) ).GetValue();
+    nHeight = ( (const SfxUInt32Item&) rAttrs.
+                    Get( ATTR_OPTIONS_SCALE_HEIGHT ) ).GetValue();
+
+    aCbScale.SetText( GetScale( nX, nY ) );
+
+    if( nWidth == 0 || nHeight == 0 )
+    {
+        aFtOriginal.Hide();
+        aFtEquivalent.Hide();
+        aMtrFldOriginalWidth.Hide();
+        aMtrFldOriginalWidth.SetText( aInfo1 ); // leer
+        aMtrFldOriginalHeight.Hide();
+        aMtrFldOriginalHeight.SetText( aInfo2 ); //leer
+        aFtPageWidth.Hide();
+        aFtPageHeight.Hide();
+        aFiInfo1.Hide();
+        aFiInfo2.Hide();
+    }
+    else
+    {
+        // Links setzen
+        aCbScale.SetModifyHdl( LINK( this, SdTpOptionsMisc, ModifyScaleHdl ) );
+        aCbScale.SetSelectHdl( LINK( this, SdTpOptionsMisc, ModifyScaleHdl ) );
+        aMtrFldOriginalWidth.SetModifyHdl( LINK( this, SdTpOptionsMisc, ModifyOriginalScaleHdl ) );
+        aMtrFldOriginalHeight.SetModifyHdl( LINK( this, SdTpOptionsMisc, ModifyOriginalScaleHdl ) );
+
+        // Hier werden die MetricFields zur Hilfe genommen, um
+        // die Seiteninformation richtig auszugeben.
+        // Die MetricFields werden erst im ModifyScaleHdl() richtig gesetzt.
+        SetMetricValue( aMtrFldInfo1, nWidth, ePoolUnit );
+        aInfo1 = aMtrFldInfo1.GetText();
+        SetMetricValue( aMtrFldInfo2, nHeight, ePoolUnit );
+        aInfo2 = aMtrFldInfo2.GetText();
+
+        aFiInfo1.SetText( aInfo1 );
+        aFiInfo2.SetText( aInfo2 );
+
+        ModifyScaleHdl( NULL );
+    }
+
 }
 
 // -----------------------------------------------------------------------
@@ -530,6 +685,21 @@ void    SdTpOptionsMisc::SetDrawMode()
     aGrpStartWithActualPage.Hide();
     aCbxCrookNoContortion.Show();
 
+    aGrpScale.Show();
+    aFtScale.Show();
+    aCbScale.Show();
+
+    aFtOriginal.Show();
+    aFtEquivalent.Show();
+
+    aFtPageWidth.Show();
+    aFiInfo1.Show();
+    aMtrFldOriginalWidth.Show();
+
+    aFtPageHeight.Show();
+    aFiInfo2.Show();
+    aMtrFldOriginalHeight.Show();
+
     long nDiff = aGrpSettings.GetPosPixel().Y() - aGrpProgramStart.GetPosPixel().Y();
     lcl_MoveWin( aGrpSettings, nDiff );
     lcl_MoveWin( aCbxMasterPageCache, nDiff );
@@ -540,6 +710,95 @@ void    SdTpOptionsMisc::SetDrawMode()
     lcl_MoveWin( aLbMetric, nDiff );
     lcl_MoveWin( aTxtTabstop, nDiff );
     lcl_MoveWin( aMtrFldTabstop, nDiff );
+}
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SdTpOptionsMisc, ModifyScaleHdl, void *, p )
+{
+    // Originalgroesse berechnen
+    INT32 nX, nY;
+    if( SetScale( aCbScale.GetText(), nX, nY ) )
+    {
+        INT32 nW = nWidth * nY / nX;
+        INT32 nH = nHeight * nY / nX;
+
+        SetMetricValue( aMtrFldOriginalWidth, nW, ePoolUnit );
+        SetMetricValue( aMtrFldOriginalHeight, nH, ePoolUnit );
+    }
+
+    return( 0L );
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SdTpOptionsMisc, ModifyOriginalScaleHdl, void *, p )
+{
+    // Berechnen des Massstabs
+    long nOrgW = aMtrFldOriginalWidth.GetValue();
+    long nOrgH = aMtrFldOriginalHeight.GetValue();
+
+    if( nOrgW == 0 || nOrgH == 0 )
+        return( 0L );
+
+    Fraction aFract1( nOrgW, aMtrFldInfo1.GetValue() );
+    Fraction aFract2( nOrgH, aMtrFldInfo2.GetValue() );
+    Fraction aFract( aFract1 > aFract2 ? aFract1 : aFract2 );
+
+    long nValue;
+    if( aFract < Fraction( 1, 1 ) )
+    {
+        // Fraction umdrehen
+        aFract1 = aFract;
+        aFract = Fraction( aFract1.GetDenominator(), aFract1.GetNumerator() );
+        nValue = aFract;
+        aCbScale.SetText( GetScale( 1, nValue ) );
+    }
+    else
+    {
+        double fValue = aFract;
+        nValue = aFract;
+        if( fValue > (double)nValue )
+            nValue++;
+        aCbScale.SetText( GetScale( nValue, 1 ) );
+    }
+    return( 0L );
+}
+
+// -----------------------------------------------------------------------
+
+String SdTpOptionsMisc::GetScale( INT32 nX, INT32 nY )
+{
+    String aScale( UniString::CreateFromInt32( nX ) );
+    aScale.Append( TOKEN );
+    aScale.Append( UniString::CreateFromInt32( nY ) );
+
+    return( aScale );
+}
+
+// -----------------------------------------------------------------------
+
+BOOL SdTpOptionsMisc::SetScale( const String& aScale, INT32& rX, INT32& rY )
+{
+    if( aScale.GetTokenCount( TOKEN ) != 2 )
+        return( FALSE );
+
+    ByteString aTmp( aScale.GetToken( 0, TOKEN ), RTL_TEXTENCODING_ASCII_US );
+    if( !aTmp.IsNumericAscii() )
+        return( FALSE );
+
+    rX = (long) aTmp.ToInt32();
+    if( rX == 0 )
+        return( FALSE );
+
+    aTmp = ByteString( aScale.GetToken( 1, TOKEN ), RTL_TEXTENCODING_ASCII_US );
+    if( !aTmp.IsNumericAscii() )
+        return( FALSE );
+
+    rY = (long) aTmp.ToInt32();
+    if( rY == 0 )
+        return( FALSE );
+
+    return( TRUE );
 }
 
 
