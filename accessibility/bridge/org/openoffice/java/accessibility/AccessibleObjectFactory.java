@@ -57,8 +57,6 @@
 
 package org.openoffice.java.accessibility;
 
-import org.openoffice.accessibility.internal.*;
-
 import java.lang.ref.WeakReference;
 import javax.accessibility.Accessible;
 import javax.accessibility.AccessibleStateSet;
@@ -101,7 +99,7 @@ public class AccessibleObjectFactory {
         getEventQueue().postEvent(new java.awt.event.WindowEvent(w, java.awt.event.WindowEvent.WINDOW_DEACTIVATED));
     }
 
-    protected static java.awt.Component getAccessibleComponent(XAccessible xAccessible) {
+    public static java.awt.Component getAccessibleComponent(XAccessible xAccessible) {
         java.awt.Component c = null;
         if (xAccessible != null) {
             // Retrieve unique id for the original UNO object to be used as a hash key
