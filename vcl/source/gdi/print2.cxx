@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-21 16:19:00 $
+ *  last change: $Author: hr $ $Date: 2001-05-28 16:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,7 +515,8 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
         for( pO = pOListFirst; pO; pO = pO->mpNext )
             aBoundRect.Union( *pO->mpRect );
 
-        const Rectangle aOutputRect( Point(), GetOutputSizePixel() );
+        Point aPoint;
+        const Rectangle aOutputRect( aPoint, GetOutputSizePixel() );
 
         aBoundRect.Intersection( aOutputRect );
 
