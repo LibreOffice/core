@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iderdll2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-11 15:40:15 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:05:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ class Accelerator;
 #endif
 
 #include <bastypes.hxx>
+#include <bastype2.hxx>
 
 #define INVPOSITION 0x7fff
 
@@ -90,7 +91,7 @@ private:
 
     LibInfos        aLibInfos;
 
-    String          TheLastMacroInMacroDlg;
+    BasicEntryDescriptor    m_aLastEntryDesc;
 
     Point           aObjCatPos;
     Size            aObjCatSize;
@@ -115,7 +116,9 @@ public:
 
     LibInfos&               GetLibInfos() { return aLibInfos; }
 
-    String&                 GetLastMacro()              { return TheLastMacroInMacroDlg; }
+    BasicEntryDescriptor&   GetLastEntryDescriptor()    { return m_aLastEntryDesc; }
+    void                    SetLastEntryDescriptor( BasicEntryDescriptor& rDesc ) { m_aLastEntryDesc = rDesc; }
+
     BOOL&                   ChoosingMacro()             { return bChoosingMacro; }
     BOOL&                   ShellInCriticalSection()    { return bShellInCriticalSection; }
 
