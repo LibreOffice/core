@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:22:55 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 17:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text [ english_us ] = "~Add..." ;
         Text [ portuguese_brazilian ] = "Hi~nzuf?en" ;
         Text [ swedish ] = "L‰gg t~ill..." ;
-        Text [ danish ] = "Tilf¯j..." ;
+        Text [ danish ] = "T~ilf¯j..." ;
         Text [ italian ] = "~Aggiungi..." ;
         Text [ spanish ] = "~AÒadir..." ;
         Text [ french ] = "A~jouter..." ;
@@ -131,7 +131,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text[ korean ] = "Ï∂îÍ∞Ä(~A)...";
         Text[ turkish ] = "Ekle...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~AÒadir...";
+        Text[ catalan ] = "~Afegeix...";
         Text[ finnish ] = "~Lis‰‰...";
     };
     PushButton BTN_DEL_MULTIPATH
@@ -161,7 +161,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text[ korean ] = "ÏÇ≠Ï†ú(~D)";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar";
+        Text[ catalan ] = "~Suprimeix";
         Text[ finnish ] = "~Poista";
     };
     FixedLine GB_MULTIPATH
@@ -191,7 +191,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text[ korean ] = "Í≤ΩÎ°ú";
         Text[ turkish ] = "Veri yollar˝";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Rutas";
+        Text[ catalan ] = "Colors";
         Text[ finnish ] = "Polut";
     };
     OKButton BTN_MULTIPATH_OK
@@ -292,7 +292,7 @@ String RID_SVXSTR_FILE_HEADLINE
     Text[ korean ] = "ÌååÏùº";
     Text[ turkish ] = "Dosyalar";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Archivos";
+    Text[ catalan ] = "Fitxers";
     Text[ finnish ] = "Tiedostot";
 };
 String RID_SVXSTR_ARCHIVE_TITLE
@@ -308,7 +308,7 @@ String RID_SVXSTR_ARCHIVE_TITLE
     Text[ spanish ] = "Seleccionar archivos";
     Text[ finnish ] = "Select archives";
     Text[ italian ] = "Seleziona archivio";
-    Text[ danish ] = "Select archives";
+    Text[ danish ] = "VÊlg arkiver";
     Text[ swedish ] = "V‰lj arkiv";
     Text[ polish ] = "Select archives";
     Text[ portuguese_brazilian ] = "Select archives";
@@ -333,7 +333,7 @@ String RID_SVXSTR_ARCHIVE_HEADLINE
     Text[ spanish ] = "Archivos";
     Text[ finnish ] = "Archives";
     Text[ italian ] = "Archivi";
-    Text[ danish ] = "Archives";
+    Text[ danish ] = "Arkiv";
     Text[ swedish ] = "Arkiv";
     Text[ polish ] = "Archives";
     Text[ portuguese_brazilian ] = "Archives";
