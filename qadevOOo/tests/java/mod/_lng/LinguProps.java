@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LinguProps.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:52 $
+ *  last change:$Date: 2003-05-27 12:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ public class LinguProps extends TestCase {
             ( TestParameters Param, PrintWriter log )
             throws StatusException {
 
-        XMultiServiceFactory xMSF = Param.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
         XInterface oObj = null;
 
         try {
