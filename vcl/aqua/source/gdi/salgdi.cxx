@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.14 $
- *  last change: $Author: bmahbod $ $Date: 2000-12-01 03:20:53 $
+ *  $Revision: 1.15 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-04 23:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,29 @@
 
 SalGraphics::SalGraphics()
 {
+    RGBColor aRGBBackColor;
+    RGBColor aRGBForeColor;
+
     maGraphicsData.mnPenMode        = patCopy;
     maGraphicsData.mbTransparentPen = FALSE;
 
     maGraphicsData.mhDefBrush         = NULL;
     maGraphicsData.mbTransparentBrush = FALSE;
+
+    aRGBBackColor.red   = 0xffff;
+    aRGBBackColor.green = 0xffff;
+    aRGBBackColor.blue  = 0xffff;
+
+    aRGBForeColor.red   = 0x0000;
+    aRGBForeColor.green = 0x0000;
+    aRGBForeColor.blue  = 0x0000;
+
+    maGraphicsData.maPenColor   = aRGBForeColor;
+    maGraphicsData.maBrushColor = aRGBForeColor;
+    maGraphicsData.maTextColor  = aRGBForeColor;
+
+    RGBBackColor( &aRGBBackColor );
+    RGBForeColor( &aRGBForeColor );
 }
 
 // -----------------------------------------------------------------------
@@ -107,15 +125,47 @@ SalGraphics::~SalGraphics()
     } // if
 }
 
-// -----------------------------------------------------------------------
+// =======================================================================
+
+// =======================================================================
+
+static RGBColor SALColor2RGBColor ( SalColor nSalColor )
+{
+    const unsigned long aRGBMask[3] = { 0x00FF0000, 0x0000FF00, 0x000000FF };
+
+    RGBColor aRGBColor;
+
+    // Converting from their SAL color scheme causes only colors that are close to black
+    // to be displayed on-screen.
+
+    /*
+    aRGBColor.red   = (unsigned short)( ( nSalColor & aRGBMask[0] ) >> 16 );
+    aRGBColor.green = (unsigned short)( ( nSalColor & aRGBMask[1] ) >> 8  );
+    aRGBColor.blue  = (unsigned short)(   nSalColor & aRGBMask[2]         );
+    */
+
+    // Temp:  for now, just give me shades of green
+
+    aRGBColor.red   = (unsigned short)( nSalColor & aRGBMask[0] );
+    aRGBColor.green = (unsigned short)( nSalColor & aRGBMask[1] );
+    aRGBColor.blue  = (unsigned short)( nSalColor & aRGBMask[2] );
+
+    return aRGBColor;
+}
+
+// =======================================================================
+
+// =======================================================================
 
 void SalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 {
-    if ( maGraphicsData.mhWnd ) {
+    if ( maGraphicsData.mhWnd )
+    {
         VCLGraphics_GetScreenResolution( maGraphicsData.mhWnd,
             &rDPIX, &rDPIY );
     }
-    else {
+    else
+    {
         // Stub code: we only support screen resolution right now
         rDPIX = 0;
         rDPIY = 0;
@@ -126,11 +176,13 @@ void SalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 
 void SalGraphics::GetScreenFontResolution( long& rDPIX, long& rDPIY )
 {
-    if ( maGraphicsData.mhWnd ) {
+    if ( maGraphicsData.mhWnd )
+    {
         VCLGraphics_GetScreenResolution( maGraphicsData.mhWnd,
             &rDPIX, &rDPIY );
     }
-    else {
+    else
+    {
         // Stub code: we only support screen resolution right now
         rDPIX = 0;
         rDPIY = 0;
@@ -181,14 +233,8 @@ void SalGraphics::SetLineColor()
 
 void SalGraphics::SetLineColor( SalColor nSalColor )
 {
-    RGBColor aRGBColor;
-
-    aRGBColor.red   = SALCOLOR_RED   ( nSalColor );
-    aRGBColor.green = SALCOLOR_GREEN ( nSalColor );
-    aRGBColor.blue  = SALCOLOR_BLUE  ( nSalColor );
-
     maGraphicsData.mbTransparentPen = FALSE;
-    maGraphicsData.maPenColor       = aRGBColor;
+    maGraphicsData.maPenColor       = SALColor2RGBColor( nSalColor );
 }
 
 // -----------------------------------------------------------------------
@@ -202,11 +248,9 @@ void SalGraphics::SetFillColor()
 
 void SalGraphics::SetFillColor( SalColor nSalColor )
 {
-    RGBColor  aRGBColor;
+    RGBColor aRGBColor;
 
-    aRGBColor.red   = SALCOLOR_RED   ( nSalColor );
-    aRGBColor.green = SALCOLOR_GREEN ( nSalColor );
-    aRGBColor.blue  = SALCOLOR_BLUE  ( nSalColor );
+    aRGBColor = SALColor2RGBColor( nSalColor );
 
     maGraphicsData.maBrushColor       = aRGBColor;
     maGraphicsData.mbTransparentBrush = FALSE;
@@ -276,9 +320,7 @@ void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
     {
         RGBColor aPixelRGBColor;
 
-        aPixelRGBColor.red   = SALCOLOR_RED   ( nSalColor );
-        aPixelRGBColor.green = SALCOLOR_GREEN ( nSalColor );
-        aPixelRGBColor.blue  = SALCOLOR_BLUE  ( nSalColor );
+        aPixelRGBColor = SALColor2RGBColor( nSalColor );
 
         VCLGraphics_DrawColorPixel ( hView, nX, nY, &aPixelRGBColor );
     } // if
@@ -567,13 +609,7 @@ BOOL SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight,
 
 void SalGraphics::SetTextColor( SalColor nSalColor )
 {
-    RGBColor aRGBColor;
-
-    aRGBColor.red   = SALCOLOR_RED   ( nSalColor );
-    aRGBColor.green = SALCOLOR_GREEN ( nSalColor );
-    aRGBColor.blue  = SALCOLOR_BLUE  ( nSalColor );
-
-    maGraphicsData.maTextColor = aRGBColor;
+    maGraphicsData.maTextColor = SALColor2RGBColor( nSalColor );
 }
 
 // -----------------------------------------------------------------------
@@ -652,3 +688,6 @@ ULONG SalGraphics::GetGlyphOutline( xub_Unicode cChar, USHORT** ppPolySizes,
 {
     return 0;
 }
+
+// =======================================================================
+
