@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemaparser.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:36:02 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 15:00:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ namespace configmgr
             };
 
         public:
-            SchemaParser(ServiceFactory const & _xSvcFactory, HandlerRef const & _xHandler, Select _selector);
+            SchemaParser(Context const & _xContext, HandlerRef const & _xHandler, Select _selector);
             virtual ~SchemaParser();
 
         // XDocumentHandler
