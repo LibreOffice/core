@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-31 20:47:12 $
+ *  last change: $Author: od $ $Date: 2003-02-28 12:41:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,6 +352,10 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
                     if( bInsOutlineIdx && NO_NUMBERING !=
                         pTxtNd->GetTxtColl()->GetOutlineLevel() )
                         rNds.pOutlineNds->Insert( pTxtNd );
+
+                    // OD 21.01.2003 #106403# - invalidate numbering rule of
+                    // text node in the destination environment.
+                    pTxtNd->InvalidateNumRule();
 
                     // Sonderbehandlung fuer die Felder!
                     if( pHts && pHts->Count() )
