@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 13:13:44 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 #include <svx/shaditem.hxx>
 #include <svx/svxfont.hxx>
 #include <so3/ipobj.hxx>
-#include <vcl/poly.hxx>
+#include <tools/poly.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/accessibilityoptions.hxx>
 
