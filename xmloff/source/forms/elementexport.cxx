@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:38:16 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@
 #ifndef _COM_SUN_STAR_FORM_FORMBUTTONTYPE_HPP_
 #include <com/sun/star/form/FormButtonType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
+#include <com/sun/star/awt/ScrollBarOrientation.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FORM_LISTSOURCETYPE_HPP_
 #include <com/sun/star/form/ListSourceType.hpp>
 #endif
@@ -148,6 +151,7 @@ namespace xmloff
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdb;
+    using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::lang;
@@ -363,7 +367,7 @@ namespace xmloff
         // the control id
         if (CCA_CONTROL_ID & m_nIncludeCommon)
         {
-            OSL_ENSURE(m_sControlId.getLength(), "OControlExport::exportCommonControlAttributes: have no control id for the control!");
+            OSL_ENSURE(m_sControlId.getLength(), "OControlExport::exportOuterAttributes: have no control id for the control!");
             AddAttribute(
                 getCommonControlAttributeNamespace(CCA_CONTROL_ID),
                 getCommonControlAttributeName(CCA_CONTROL_ID),
@@ -588,7 +592,6 @@ namespace xmloff
         // --------------------------------------------------------------------
         // some enum properties
         {
-            // (only one a at the moment)
             if (m_nIncludeCommon & CCA_BUTTON_TYPE)
             {
                 exportEnumPropertyAttribute(
@@ -600,6 +603,20 @@ namespace xmloff
         #ifdef DBG_UTIL
                 //  reset the bit for later checking
                 m_nIncludeCommon = m_nIncludeCommon & ~CCA_BUTTON_TYPE;
+        #endif
+            }
+            if ( m_nIncludeCommon & CCA_ORIENTATION )
+            {
+                exportEnumPropertyAttribute(
+                    getCommonControlAttributeNamespace( CCA_ORIENTATION ),
+                    getCommonControlAttributeName( CCA_ORIENTATION ),
+                    PROPERTY_ORIENTATION,
+                    OEnumMapper::getEnumMap( OEnumMapper::epOrientation ),
+                    ScrollBarOrientation::HORIZONTAL
+                );
+        #ifdef DBG_UTIL
+                //  reset the bit for later checking
+                m_nIncludeCommon = m_nIncludeCommon & ~CCA_ORIENTATION;
         #endif
             }
         }
@@ -878,6 +895,72 @@ namespace xmloff
                 }
         }
 
+        // ----------------------
+        // the integer properties
+        {
+            static sal_Int32 nIntegerPropertyAttributeIds[] =
+            {   // attribute flags
+                SCA_PAGE_STEP_SIZE, SCA_REPEAT_DELAY
+            };
+            static const ::rtl::OUString* pIntegerPropertyNames[] =
+            {   // property names
+                &PROPERTY_BLOCK_INCREMENT, &PROPERTY_REPEAT_DELAY
+            };
+            static const sal_Int32 nIntegerPropertyAttrDefaults[] =
+            {   // attribute defaults (XML defaults, not runtime defaults!)
+                10, 50
+            };
+
+            sal_Int32 nIdCount = sizeof( nIntegerPropertyAttributeIds ) / sizeof( nIntegerPropertyAttributeIds[0] );
+        #ifdef DBG_UTIL
+            sal_Int32 nNameCount = sizeof( pIntegerPropertyNames ) / sizeof( pIntegerPropertyNames[0] );
+            OSL_ENSURE( ( nIdCount == nNameCount ),
+                "OControlExport::exportSpecialAttributes: somebody tampered with the maps (2)!" );
+            sal_Int32 nDefaultCount = sizeof( nIntegerPropertyAttrDefaults ) / sizeof( nIntegerPropertyAttrDefaults[0] );
+            OSL_ENSURE( ( nIdCount == nDefaultCount ),
+                "OControlExport::exportSpecialAttributes: somebody tampered with the maps (3)!" );
+        #endif
+            for ( i = 0; i < nIdCount; ++i )
+                if ( nIntegerPropertyAttributeIds[i] & m_nIncludeSpecial )
+                {
+                    exportInt32PropertyAttribute(
+                        getSpecialAttributeNamespace( nIntegerPropertyAttributeIds[i] ),
+                        getSpecialAttributeName( nIntegerPropertyAttributeIds[i] ),
+                        *( pIntegerPropertyNames[i] ),
+                        nIntegerPropertyAttrDefaults[i]
+                    );
+            #ifdef DBG_UTIL
+                //  reset the bit for later checking
+                m_nIncludeSpecial = m_nIncludeSpecial & ~nIntegerPropertyAttributeIds[i];
+            #endif
+                }
+
+            if ( SCA_STEP_SIZE & m_nIncludeSpecial )
+            {
+                ::rtl::OUString sPropertyName;
+                if ( m_xPropertyInfo->hasPropertyByName( PROPERTY_LINE_INCREMENT ) )
+                    sPropertyName = PROPERTY_LINE_INCREMENT;
+                else if ( m_xPropertyInfo->hasPropertyByName( PROPERTY_SPIN_INCREMENT ) )
+                    sPropertyName = PROPERTY_SPIN_INCREMENT;
+                else
+                    OSL_ENSURE( sal_False, "OControlExport::exportSpecialAttributes: not property which can be mapped to step-size attribute!" );
+
+                if ( sPropertyName.getLength() )
+                    exportInt32PropertyAttribute(
+                        getSpecialAttributeNamespace( SCA_STEP_SIZE ),
+                        getSpecialAttributeName( SCA_STEP_SIZE ),
+                        sPropertyName,
+                        1
+                    );
+
+            #ifdef DBG_UTIL
+                //  reset the bit for later checking
+                m_nIncludeSpecial = m_nIncludeSpecial & ~SCA_STEP_SIZE;
+            #endif
+            }
+
+        }
+
         // -------------------
         // the enum properties
         {
@@ -947,7 +1030,7 @@ namespace xmloff
             OSL_ENSURE((NULL == pMinValuePropertyName) == (0 == (SCA_MIN_VALUE & m_nIncludeSpecial)),
                 "OControlExport::exportCommonControlAttributes: no property found for the min value attribute!");
             OSL_ENSURE((NULL == pMaxValuePropertyName) == (0 == (SCA_MAX_VALUE & m_nIncludeSpecial)),
-                "OControlExport::exportCommonControlAttributes: no property found for the min value attribute!");
+                "OControlExport::exportCommonControlAttributes: no property found for the max value attribute!");
 
             // add the two attributes
             static const sal_Char* pMinValueAttributeName = getSpecialAttributeName(SCA_MIN_VALUE);
@@ -1391,6 +1474,22 @@ namespace xmloff
                     CCA_NAME | CCA_SERVICE_NAME | CCA_DISABLED | CCA_PRINTABLE |
                     CCA_TAB_INDEX | CCA_TAB_STOP | CCA_TITLE;
                 m_nIncludeEvents = EA_CONTROL_EVENTS;
+                break;
+
+            case FormComponentType::SCROLLBAR:
+            case FormComponentType::SPINBUTTON:
+                m_eType = VALUERANGE;
+                m_nIncludeCommon =
+                    CCA_NAME | CCA_SERVICE_NAME | CCA_DISABLED | CCA_PRINTABLE |
+                    CCA_TITLE | CCA_CURRENT_VALUE | CCA_VALUE | CCA_ORIENTATION;
+                m_nIncludeSpecial = SCA_MAX_VALUE | SCA_STEP_SIZE | SCA_MIN_VALUE | SCA_REPEAT_DELAY;
+
+                if ( m_nClassId == FormComponentType::SCROLLBAR )
+                    m_nIncludeSpecial |= SCA_PAGE_STEP_SIZE ;
+
+                m_nIncludeEvents = EA_CONTROL_EVENTS;
+                break;
+
                 break;
 
             case FormComponentType::CONTROL:
