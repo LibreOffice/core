@@ -2,9 +2,9 @@
  *
  *  $RCSfile: actctrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-16 09:32:52 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:57:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,20 @@ public:
                             NoSpaceEdit(pWin, rResId)
                                 {SetForbiddenChars(String::CreateFromAscii(" .<>"));}
 };
+/* -----------------25.06.2003 15:55-----------------
+    call a link when KEY_RETURN is pressed
+ --------------------------------------------------*/
+class ReturnActionEdit : public Edit
+{
+    Link    aReturnActionLink;
+public:
+    ReturnActionEdit( Window* pParent, const ResId& rResId)
+        : Edit(pParent, rResId){}
+    ~ReturnActionEdit();
+    virtual void KeyInput( const KeyEvent& );
 
+    void SetReturnActionLink(Link& rLink)
+            { aReturnActionLink = rLink;}
+};
 
 #endif
