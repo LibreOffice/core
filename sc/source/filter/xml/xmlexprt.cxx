@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.169 $
+ *  $Revision: 1.170 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 14:43:36 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1463,6 +1463,8 @@ void ScXMLExport::_ExportContent()
                             rtl::OUString sPrintRanges( GetPrintRanges() );
                             if( sPrintRanges.getLength() )
                                 AddAttribute( XML_NAMESPACE_TABLE, XML_PRINT_RANGES, sPrintRanges );
+                            else
+                                AddAttribute( XML_NAMESPACE_TABLE, XML_AUTOMATIC_PRINT_RANGE, pDoc->IsPrintEntireSheet(nTable) ? XML_TRUE : XML_FALSE);
                             SvXMLElementExport aElemT(*this, sElemTab, sal_True, sal_True);
                             CheckAttrList();
                             WriteTableSource();
