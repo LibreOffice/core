@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDriver.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:06:24 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:22:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,10 +174,15 @@ Reference< XConnection > SAL_CALL MozabDriver::connect( const ::rtl::OUString& u
     if (s_pCreationFunc)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
+        //We must make sure we create an com.sun.star.mozilla.MozillaBootstrap brfore call any mozilla codes
+        Reference<XInterface> xInstance = m_xMSFactory->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap")) );
+        OSL_ENSURE( xInstance.is(), "failed to create instance" );
+
         OConnection* pCon = reinterpret_cast<OConnection*>((*s_pCreationFunc)(this));
         xCon = pCon;    // important here because otherwise the connection could be deleted inside (refcount goes -> 0)
         pCon->construct(url,info);              // late constructor call which can throw exception and allows a correct dtor call when so
         m_xConnections.push_back(WeakReferenceHelper(*pCon));
+
     }
     else
     {
@@ -260,6 +265,8 @@ EDriverType MozabDriver::acceptsURL_Stat( const ::rtl::OUString& url )
 
     if ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_MOZILLA() ) == 0 )
         return Mozilla;
+    if ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_THUNDERBIRD() ) == 0 )
+        return ThunderBird;
     if ( aAddrbookScheme.compareToAscii( MozabDriver::getSDBC_SCHEME_LDAP() ) == 0 )
         return LDAP;
 
@@ -278,6 +285,12 @@ const sal_Char* MozabDriver::getSDBC_SCHEME_MOZILLA()
 {
     static sal_Char*    SDBC_SCHEME_MOZILLA         = MOZAB_MOZILLA_SCHEMA;
     return SDBC_SCHEME_MOZILLA;
+}
+// -----------------------------------------------------------------------------
+const sal_Char* MozabDriver::getSDBC_SCHEME_THUNDERBIRD()
+{
+    static sal_Char*    SDBC_SCHEME_THUNDERBIRD         = MOZAB_THUNDERBIRD_SCHEMA;
+    return SDBC_SCHEME_THUNDERBIRD;
 }
 // -----------------------------------------------------------------------------
 const sal_Char* MozabDriver::getSDBC_SCHEME_LDAP()
