@@ -2,9 +2,9 @@
 #
 #   $RCSfile: environment.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:26:17 $
+#   last change: $Author: kz $ $Date: 2004-06-11 18:15:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,6 +62,7 @@
 
 package installer::environment;
 
+use installer::exiter;
 use installer::globals;
 
 ######################################################
@@ -88,16 +89,30 @@ sub create_pathvariables
 
     $variables{'os'} = $installer::globals::compiler;
 
-    my $solarenvpath  = $environment->{'ENV_ROOT'} . $installer::globals::separator . "solenv" . $installer::globals::separator . "inst";
+#   my $solarenvpath  = $environment->{'ENV_ROOT'} . $installer::globals::separator . "solenv" . $installer::globals::separator . "inst";
+#   $variables{'solarenvpath'} = $solarenvpath;
+
+    my $solarenvpath = "";
+
+    if (!($installer::globals::product =~ /OpenOffice/i ))
+    {
+        if ( $ENV{'SO_PACK'} ) { $solarenvpath  = $ENV{'SO_PACK'}; }
+        else { installer::exiter::exit_program("ERROR: Environment variable SO_PACK not set!", "create_pathvariables"); }
+
+        # overriding with STAR_INSTPATH, if set
+        if ( $ENV{'STAR_INSTPATH'} ) { $solarenvpath = $ENV{'STAR_INSTPATH'}; }
+    }
+
     $variables{'solarenvpath'} = $solarenvpath;
 
-    # pmiscpath can be removed
+    my $localpath  = $environment->{'LOCAL_OUT'};
+    $variables{'localpath'} = $localpath;
 
-    my $pmiscpath;
-    if ( $installer::globals::iswin ) { $pmiscpath = "z\:"; }
-    else { $pmiscpath = "/packmisc"; }
+    my $localcommonpath  = $environment->{'LOCAL_COMMON_OUT'};
+    $variables{'localcommonpath'} = $localcommonpath;
 
-    $variables{'pmiscpath'} = $pmiscpath;
+    my $platformname  = $environment->{'OUTPATH'};
+    $variables{'platformname'} = $platformname;
 
     return \%variables;
 }
@@ -113,8 +128,10 @@ sub set_global_environment_variables
     my ( $environment ) = @_;
 
     $installer::globals::build = $environment->{'WORK_STAMP'};
-    $installer::globals::minor = $environment->{'UPDMINOR'};
+    # $installer::globals::minor = $environment->{'UPDMINOR'};
     $installer::globals::compiler = $environment->{'OUTPATH'};
+
+    if ( $ENV{'UPDMINOR'} ) { $installer::globals::minor = $ENV{'UPDMINOR'}; }
 
     if ( $ENV{'PROEXT'} ) { $installer::globals::pro = 1; }
     if ( $ENV{'SOLAR_JAVA'} ) { $installer::globals::solarjava = 1; }
