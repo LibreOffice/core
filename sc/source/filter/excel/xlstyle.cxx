@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:46:15 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef SC_XLSTYLE_HXX
 #include "xlstyle.hxx"
 #endif
@@ -163,21 +164,20 @@ XclDefaultPalette::XclDefaultPalette( const XclRoot& rRoot ) :
     // default colors
     switch( rRoot.GetBiff() )
     {
-        case xlBiff2:
+        case EXC_BIFF2:
             mpnColorTable = spnDefColorTable2;
             mnTableSize = STATIC_TABLE_SIZE( spnDefColorTable2 );
         break;
-        case xlBiff3:
-        case xlBiff4:
+        case EXC_BIFF3:
+        case EXC_BIFF4:
             mpnColorTable = spnDefColorTable3;
             mnTableSize = STATIC_TABLE_SIZE( spnDefColorTable3 );
         break;
-        case xlBiff5:
-        case xlBiff7:
+        case EXC_BIFF5:
             mpnColorTable = spnDefColorTable5;
             mnTableSize = STATIC_TABLE_SIZE( spnDefColorTable5 );
         break;
-        case xlBiff8:
+        case EXC_BIFF8:
             mpnColorTable = spnDefColorTable8;
             mnTableSize = STATIC_TABLE_SIZE( spnDefColorTable8 );
         break;
@@ -1083,7 +1083,7 @@ XclNumFmtBuffer::XclNumFmtBuffer( const XclRoot& rRoot ) :
 {
     // *** insert default formats (BIFF5+ only)***
 
-    if( rRoot.GetBiff() >= xlBiff5 )
+    if( rRoot.GetBiff() >= EXC_BIFF5 )
         InsertBuiltinFormats();
 }
 
