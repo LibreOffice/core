@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilterdialogstrings.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:55:42 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:26:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,8 @@ String STR_COLUMN_HEADER_NAME
     Text[ thai ] = "à¸Šà¸·à¹ˆà¸­:";
     Text[ slovak ] = "NÃ¡zov";
     Text[ hindi ] = "à¤¨à¤¾à¤®";
+    Text[ hungarian ] = "NÃ©v";
+    Text[ slovenian ] = "Ime";
 };
 
 String STR_COLUMN_HEADER_TYPE
@@ -110,7 +112,7 @@ String STR_COLUMN_HEADER_TYPE
     Text[ dutch ] = "~Type";
     Text[ finnish ] = "Tyyppi";
     Text[ czech ] = "Typ";
-    Text[ danish ] = "VÆRDITYPE";
+    Text[ danish ] = "Type";
     Text[ polish ] = "Typ";
     Text[ portuguese_brazilian ] = "Tipo";
     Text[ turkish ] = "Tür";
@@ -120,6 +122,8 @@ String STR_COLUMN_HEADER_TYPE
     Text[ thai ] = "à¸Šà¸™à¸´à¸”";
     Text[ slovak ] = "Typ";
     Text[ hindi ] = "à¤µà¤°à¥à¤—";
+    Text[ hungarian ] = "TÃ­pus";
+    Text[ slovenian ] = "Vrsta";
 };
 
 String STR_UNKNOWN_APPLICATION
@@ -150,6 +154,8 @@ String STR_UNKNOWN_APPLICATION
     Text[ thai ] = "à¹„à¸¡à¹ˆà¸£à¸¹à¹‰à¸ˆà¸±à¸";
     Text[ slovak ] = "NeznÃ¡me";
     Text[ hindi ] = "à¤…à¤œà¥à¤à¤¾à¤¤";
+    Text[ hungarian ] = "Ismeretlen";
+    Text[ slovenian ] = "Neznano";
 };
 
 String STR_IMPORT_ONLY
@@ -166,11 +172,11 @@ String STR_IMPORT_ONLY
     Text[ chinese_traditional ] = "åŒ¯å…¥ç¯©é¸å™¨";
     Text[ slovak ] = "importnÃ½ filter";
     Text[ portuguese_brazilian ] = "Filtro de importação";
-    Text[ greek ] = "import filter";
+    Text[ greek ] = "ößëôñï åéóáãùãŞò";
     Text[ dutch ] = "import filter";
     Text[ finnish ] = "import filter";
     Text[ czech ] = "importnÃ­ filtr";
-    Text[ danish ] = "import filter";
+    Text[ danish ] = "importfilter";
     Text[ arabic ] = "import filter";
     Text[ hebrew ] = "import filter";
     Text[ catalan ] = "import filter";
@@ -180,6 +186,8 @@ String STR_IMPORT_ONLY
     Text[ polish ] = "import filter";
     Text[ turkish ] = "import filter";
     Text[ thai ] = "import filter";
+    Text[ hungarian ] = "importszÅ±rÅ‘";
+    Text[ slovenian ] = "uvozni filter";
 };
 
 String STR_IMPORT_EXPORT
@@ -196,11 +204,11 @@ String STR_IMPORT_EXPORT
     Text[ chinese_traditional ] = "åŒ¯å…¥/åŒ¯å‡ºç¯©é¸å™¨";
     Text[ slovak ] = "importnÃ½/exportnÃ½ filter";
     Text[ portuguese_brazilian ] = "Filtro de importação/exportação";
-    Text[ greek ] = "import/export filter";
+    Text[ greek ] = "Ößëôñï åéóáãùãŞò/åîáãùãŞò";
     Text[ dutch ] = "import/export filter";
     Text[ finnish ] = "import/export filter";
     Text[ czech ] = "importnÃ­/exportnÃ­ filtr";
-    Text[ danish ] = "import/export filter";
+    Text[ danish ] = "import-/eksportfilter";
     Text[ arabic ] = "import/export filter";
     Text[ hebrew ] = "import/export filter";
     Text[ catalan ] = "import/export filter";
@@ -210,6 +218,8 @@ String STR_IMPORT_EXPORT
     Text[ polish ] = "import/export filter";
     Text[ turkish ] = "import/export filter";
     Text[ thai ] = "import/export filter";
+    Text[ hungarian ] = "import-/exportszÅ±rÅ‘";
+    Text[ slovenian ] = "uvozni/izvozni filter";
 };
 
 String STR_EXPORT_ONLY
@@ -226,11 +236,11 @@ String STR_EXPORT_ONLY
     Text[ chinese_traditional ] = "åŒ¯å‡ºç¯©é¸å™¨";
     Text[ slovak ] = "exportnÃ½ filter";
     Text[ portuguese_brazilian ] = "Filtro de exportação";
-    Text[ greek ] = "export filter";
+    Text[ greek ] = "ößëôñï åîáãùãŞò";
     Text[ dutch ] = "export filter";
     Text[ finnish ] = "export filter";
     Text[ czech ] = "exportnÃ­ filtr";
-    Text[ danish ] = "export filter";
+    Text[ danish ] = "eksportfilter";
     Text[ arabic ] = "export filter";
     Text[ hebrew ] = "export filter";
     Text[ catalan ] = "export filter";
@@ -240,6 +250,8 @@ String STR_EXPORT_ONLY
     Text[ polish ] = "export filter";
     Text[ turkish ] = "export filter";
     Text[ thai ] = "export filter";
+    Text[ hungarian ] = "exportszÅ±rÅ‘";
+    Text[ slovenian ] = "izvozni filter";
 };
 
 String STR_APPL_NAME_WRITER
@@ -276,11 +288,11 @@ String STR_WARN_DELETE
     Text[ chinese_traditional ] = "æ‚¨çœŸçš„è¦åˆªé™¤ XML ç¯©é¸å™¨ '%s'? æ­¤å‹•ä½œå°‡ç„¡æ³•æ¢å¾©ã€‚";
     Text[ slovak ] = "UrÄite chcete zmazaÅ¥ XML filter '%s'? Tento krok nemÃ´Å¾e byÅ¥ vrÃ¡tenÃ½.";
     Text[ portuguese_brazilian ] = "Deseja realmente excluir o filtro XML '%s' ? Esta ação não poderá ser desfeita. ";
-    Text[ greek ] = "Do you really want to delete the XML Filter '%s'? This action cannot be undone.";
-    Text[ dutch ] = "Do you really want to delete the XML Filter '%s'? This action cannot be undone.";
+    Text[ greek ] = "ĞñÜãìáôé èİëåôå íá äéáãñÜøåôå ôï XML ößëôñï '%s'; ÁõôŞ ç åíİñãåéá äåí ìğïñåß íá áíáéñåèåß.";
+    Text[ dutch ] = "Wilt u echt het XML-filter '%s' verwijderen? Dit kan niet ongedaan worden gemaakt.";
     Text[ finnish ] = "Do you really want to delete the XML Filter '%s'? This action cannot be undone.";
     Text[ czech ] = "Opravdu chcete smazat XML filtr '%s'? Tato akce je nevratnÃ¡.";
-    Text[ danish ] = "Do you really want to delete the XML Filter '%s'? This action cannot be undone.";
+    Text[ danish ] = "Er du sikker på, at du vil slette XML-filteret '%s'?. Denne handling kan ikke fortrydes.";
     Text[ arabic ] = "Do you really want to delete the XML Filter '%s'? This action cannot be undone.";
     Text[ hebrew ] = "Do you really want to delete the XML Filter '%s'? This action cannot be undone.";
     Text[ catalan ] = "Do you really want to delete the XML Filter '%s'? This action cannot be undone.";
@@ -290,6 +302,8 @@ String STR_WARN_DELETE
     Text[ polish ] = "Do you really want to delete the XML Filter '%s'? This action cannot be undone.";
     Text[ turkish ] = "Do you really want to delete the XML Filter '%s'? This action cannot be undone.";
     Text[ thai ] = "Do you really want to delete the XML Filter '%s'? This action cannot be undone.";
+    Text[ hungarian ] = "ValÃ³ban tÃ¶rÃ¶lni akarja a(z) '%s' XML-szÅ±rÅ‘t? A mÅ±velet nem vonhatÃ³ vissza.";
+    Text[ slovenian ] = "Ali ste prepriÄani, da Å¾elite izbrisati XML filter '%s'? Tega dejanja ni mogoÄe razveljaviti.";
 };
 
 String STR_ERROR_FILTER_NAME_EXISTS
@@ -306,11 +320,11 @@ String STR_ERROR_FILTER_NAME_EXISTS
     Text[ chinese_traditional ] = "å·²ç¶“å­˜åœ¨ä¸€å€‹åç¨±ç‚º '%s' çš„ XML ç¯©é¸å™¨ã€‚ è«‹è¼¸å…¥ä¸€å€‹ä¸åŒçš„åç¨±ã€‚";
     Text[ slovak ] = "XML filter s tÃ½mto nÃ¡zvom '%s' uÅ¾ existuje. ProsÃ­m zadajte inÃ½ nÃ¡zov.";
     Text[ portuguese_brazilian ] = "Já existe um filtro XML com o nome '%s'. Digite um nome diferente.";
-    Text[ greek ] = "An XML filter with the name '%s' already exists. Please enter a different name.";
-    Text[ dutch ] = "An XML filter with the name '%s' already exists. Please enter a different name.";
+    Text[ greek ] = "¸íá ößëôñï XML ìå ôï üíïìá '%s' õğÜñ÷åé Şäç. Ğáñáêáëïıìå ÷ñçóéìïğïéŞóôå İíá Üëëï üíïìá.";
+    Text[ dutch ] = "Er bestaat al een XML-filter genaamd '%s'. Voer a.u.b. een andere naam in.";
     Text[ finnish ] = "An XML filter with the name '%s' already exists. Please enter a different name.";
     Text[ czech ] = "XML filtr '%s' jiÅ¾ existuje. ProsÃ­m zadejte jinÃ© nÃ¡zev.";
-    Text[ danish ] = "An XML filter with the name '%s' already exists. Please enter a different name.";
+    Text[ danish ] = "Et XML-filter med navnet '%s' findes allerede. Indtast et andet navn.";
     Text[ arabic ] = "An XML filter with the name '%s' already exists. Please enter a different name.";
     Text[ hebrew ] = "An XML filter with the name '%s' already exists. Please enter a different name.";
     Text[ catalan ] = "An XML filter with the name '%s' already exists. Please enter a different name.";
@@ -320,6 +334,8 @@ String STR_ERROR_FILTER_NAME_EXISTS
     Text[ polish ] = "An XML filter with the name '%s' already exists. Please enter a different name.";
     Text[ turkish ] = "An XML filter with the name '%s' already exists. Please enter a different name.";
     Text[ thai ] = "An XML filter with the name '%s' already exists. Please enter a different name.";
+    Text[ hungarian ] = "MÃ¡r lÃ©tezik '%s' nevÅ± XML-szÅ±rÅ‘. Adjon meg egy mÃ¡sik nevet.";
+    Text[ slovenian ] = "XML filter z imenom '%s' Å¾e obstaja. Vnesite drugo ime.";
 };
 
 String STR_ERROR_TYPE_NAME_EXISTS
@@ -336,11 +352,11 @@ String STR_ERROR_TYPE_NAME_EXISTS
     Text[ chinese_traditional ] = "XML ç¯©é¸å™¨ '%s2' å·²ä½¿ç”¨ä½¿ç”¨ä»‹é¢ '%s1' åç¨±ã€‚è«‹è¼¸å…¥ä¸€å€‹ä¸åŒçš„åç¨±ã€‚";
     Text[ slovak ] = "NÃ¡zov uÅ¾Ã­vateÄ¾skÃ©ho interface '%s1' uÅ¾ pouÅ¾Ã­va XML filter '%s2'. ProsÃ­m zadajte inÃ½ nÃ¡zov.";
     Text[ portuguese_brazilian ] = "O filtro XML '%s2' já usa este nome para a interface do usuário '%s1'. Escolha outro nome ";
-    Text[ greek ] = "The name for  the user interface '%s1' is already used by the XML filter '%s2'. Please enter a different name.";
-    Text[ dutch ] = "The name for  the user interface '%s1' is already used by the XML filter '%s2'. Please enter a different name.";
+    Text[ greek ] = "Ôï üíïìá ãéá ôç äéåğáöŞ '%s1' ÷ñçóéìïğïéåßôáé Şäç áğü ôï XML ößëôñï '%s2'. Ğáñáêáëş ÷ñçóéìïğïéŞóôå İíá Üëëï üíïìá.";
+    Text[ dutch ] = "De naam voor het gebruikersinterface '%s1' is al in gebruik door het XML filter '%s2'. Voer een andere naam in.";
     Text[ finnish ] = "The name for  the user interface '%s1' is already used by the XML filter '%s2'. Please enter a different name.";
     Text[ czech ] = "NÃ¡zev uÅ¾ivatelskÃ©ho rozhranÃ­ '%s1' je jiÅ¾ pouÅ¾Ã­vÃ¡n XML filtrem '%s2'. ProsÃ­m zadejte jinÃ½ nÃ¡zev.";
-    Text[ danish ] = "The name for  the user interface '%s1' is already used by the XML filter '%s2'. Please enter a different name.";
+    Text[ danish ] = "Navnet på brugergrænsefladen '%s1' bruges allerede af XML-filteret '%s2'. Vælg et andet navn.";
     Text[ arabic ] = "The name for  the user interface '%s1' is already used by the XML filter '%s2'. Please enter a different name.";
     Text[ hebrew ] = "The name for  the user interface '%s1' is already used by the XML filter '%s2'. Please enter a different name.";
     Text[ catalan ] = "The name for  the user interface '%s1' is already used by the XML filter '%s2'. Please enter a different name.";
@@ -350,6 +366,8 @@ String STR_ERROR_TYPE_NAME_EXISTS
     Text[ polish ] = "The name for  the user interface '%s1' is already used by the XML filter '%s2'. Please enter a different name.";
     Text[ turkish ] = "The name for  the user interface '%s1' is already used by the XML filter '%s2'. Please enter a different name.";
     Text[ thai ] = "The name for  the user interface '%s1' is already used by the XML filter '%s2'. Please enter a different name.";
+    Text[ hungarian ] = "A felhasznÃ¡lÃ³i felÃ¼lethez hasznÃ¡lt '%s1' nevet mÃ¡r a(z) '%s2' XML-szÅ±rÅ‘ hasznÃ¡lja. Adjon meg egy mÃ¡sik nevet.";
+    Text[ slovenian ] = "Ime za uporabniÅ¡ki vmesnik '%s1' Å¾e uporablja XML filter '%s2'. Vnesite drugaÄno ime.";
 };
 
 String STR_ERROR_DTD_NOT_FOUND
@@ -366,11 +384,11 @@ String STR_ERROR_DTD_NOT_FOUND
     Text[ chinese_traditional ] = "ç„¡æ³•æ‰¾åˆ° DTD ã€‚è«‹è¼¸å…¥ä¸€å€‹æœ‰æ•ˆçš„è·¯å¾‘ã€‚";
     Text[ slovak ] = "DTD nebolo nÃ¡jdenÃ©. ProsÃ­m zadajte platnÃº cestu.";
     Text[ portuguese_brazilian ] = "Não foi possível encontrar o DTD. Especifique um caminho válido ";
-    Text[ greek ] = "The DTD could not be found. Please enter a valid path.";
-    Text[ dutch ] = "The DTD could not be found. Please enter a valid path.";
+    Text[ greek ] = "Ôï DTD äå âñİèçêå. Ğáñáêáëïıìå ãñÜøôå ìßá İãêõñç äéáäñïìŞ.";
+    Text[ dutch ] = "De DTD is niet gevonden. Voer a.u.b. een geldig pad in. ";
     Text[ finnish ] = "The DTD could not be found. Please enter a valid path.";
     Text[ czech ] = "DTD nebylo nalezeno. ProsÃ­m zadejte platnou cestu.";
-    Text[ danish ] = "The DTD could not be found. Please enter a valid path.";
+    Text[ danish ] = "En DTD blev ikke fundet. Indtast en gyldig sti.";
     Text[ arabic ] = "The DTD could not be found. Please enter a valid path.";
     Text[ hebrew ] = "The DTD could not be found. Please enter a valid path.";
     Text[ catalan ] = "The DTD could not be found. Please enter a valid path.";
@@ -380,6 +398,8 @@ String STR_ERROR_DTD_NOT_FOUND
     Text[ polish ] = "The DTD could not be found. Please enter a valid path.";
     Text[ turkish ] = "The DTD could not be found. Please enter a valid path.";
     Text[ thai ] = "The DTD could not be found. Please enter a valid path.";
+    Text[ hungarian ] = "A DTD nem talÃ¡lhatÃ³. Adja meg a helyes elÃ©rÃ©si Ãºtvonalat.";
+    Text[ slovenian ] = "DTD ni mogoÄe najti. Vnesite veljavno pot.";
 };
 
 String STR_ERROR_EXPORT_XSLT_NOT_FOUND
@@ -396,11 +416,11 @@ String STR_ERROR_EXPORT_XSLT_NOT_FOUND
     Text[ chinese_traditional ] = "ç„¡æ³•æ‰¾åˆ°åŒ¯å‡º XSLT ã€‚è«‹è¼¸å…¥ä¸€å€‹æœ‰æ•ˆçš„è·¯å¾‘ã€‚";
     Text[ slovak ] = "XSLT pre export nebolo nÃ¡jdenÃ©. ProsÃ­m zadajte platnÃº cestu.";
     Text[ portuguese_brazilian ] = "Não é possível encontrar o XSLT de exportação. Digite um caminho válido.";
-    Text[ greek ] = "The XSLT for export cannot be found. Please enter a valid path.";
-    Text[ dutch ] = "The XSLT for export cannot be found. Please enter a valid path.";
+    Text[ greek ] = "Ôï XSLT ãéá ôçí åîáãùãŞ äå âñİèçêå. Ğáñáêáëïıìå ãñÜøôå ìßá İãêõñç äéáäñïìŞ.";
+    Text[ dutch ] = "De XSLT voor exporteren is niet gevonden. Voer a.u.b. een geldig pad in.";
     Text[ finnish ] = "The XSLT for export cannot be found. Please enter a valid path.";
     Text[ czech ] = "XSLT pro export nebylo nalezeno. ProsÃ­m zadejte platnou cestu.";
-    Text[ danish ] = "The XSLT for export cannot be found. Please enter a valid path.";
+    Text[ danish ] = "Det nødvendige XSLT til brug ved eksportering blev ikke fundet. Indtast en gyldig sti.";
     Text[ arabic ] = "The XSLT for export cannot be found. Please enter a valid path.";
     Text[ hebrew ] = "The XSLT for export cannot be found. Please enter a valid path.";
     Text[ catalan ] = "The XSLT for export cannot be found. Please enter a valid path.";
@@ -410,6 +430,8 @@ String STR_ERROR_EXPORT_XSLT_NOT_FOUND
     Text[ polish ] = "The XSLT for export cannot be found. Please enter a valid path.";
     Text[ turkish ] = "The XSLT for export cannot be found. Please enter a valid path.";
     Text[ thai ] = "The XSLT for export cannot be found. Please enter a valid path.";
+    Text[ hungarian ] = "Nem talÃ¡lhatÃ³ XSLT az exportÃ¡lÃ¡shoz. Adja meg a helyes elÃ©rÃ©si Ãºtvonalat.";
+    Text[ slovenian ] = "XSLT za izvoz ni mogoÄe najti. Vnesite veljavno pot.";
 };
 
 String STR_ERROR_IMPORT_XSLT_NOT_FOUND
@@ -427,10 +449,10 @@ String STR_ERROR_IMPORT_XSLT_NOT_FOUND
     Text[ slovak ] = "XSLT pre import nebolo nÃ¡jdenÃ©. ProsÃ­m zadajte platnÃº cestu.";
     Text[ portuguese_brazilian ] = "Não foi possível encontrar o XLST para importação. Digite um caminho válido.";
     Text[ greek ] = "The XSLT for import cannot be found. Please enter a valid path.";
-    Text[ dutch ] = "The XSLT for import cannot be found. Please enter a valid path.";
+    Text[ dutch ] = "De XSLT for importeren is niet gevonden. Voer a.u.b. een geldig pad in.";
     Text[ finnish ] = "The XSLT for import cannot be found. Please enter a valid path.";
     Text[ czech ] = "XSLT pro import nebylo nalezeno. ProsÃ­m zadejte platnou cestu.";
-    Text[ danish ] = "The XSLT for import cannot be found. Please enter a valid path.";
+    Text[ danish ] = "Det nødvendige XSLT til importering blev ikke fundet. Indtast en gyldig sti.";
     Text[ arabic ] = "The XSLT for import cannot be found. Please enter a valid path.";
     Text[ hebrew ] = "The XSLT for import cannot be found. Please enter a valid path.";
     Text[ catalan ] = "The XSLT for import cannot be found. Please enter a valid path.";
@@ -440,6 +462,8 @@ String STR_ERROR_IMPORT_XSLT_NOT_FOUND
     Text[ polish ] = "The XSLT for import cannot be found. Please enter a valid path.";
     Text[ turkish ] = "The XSLT for import cannot be found. Please enter a valid path.";
     Text[ thai ] = "The XSLT for import cannot be found. Please enter a valid path.";
+    Text[ hungarian ] = "Nem talÃ¡lhatÃ³ XSLT az importÃ¡lÃ¡shoz. Adja meg a helyes elÃ©rÃ©si Ãºtvonalat.";
+    Text[ slovenian ] = "XSLT za uvoz ni mogoÄe najti. Vnesite veljavno pot.";
 };
 
 String STR_ERROR_IMPORT_TEMPLATE_NOT_FOUND
@@ -457,10 +481,10 @@ String STR_ERROR_IMPORT_TEMPLATE_NOT_FOUND
     Text[ slovak ] = "ZadanÃ¡ Å¡ablÃ³na nebola nÃ¡jdenÃ¡. ProsÃ­m zadajte platnÃº cestu.";
     Text[ portuguese_brazilian ] = "Não foi possível encontrar o modelo de importação especificado. Digite um caminho válido. ";
     Text[ greek ] = "The given import template cannot be found. Please enter a valid path.";
-    Text[ dutch ] = "The given import template cannot be found. Please enter a valid path.";
+    Text[ dutch ] = "De gegeven importsjabloon is niet gevonden. Voer a.u.b. een geldig pad in.";
     Text[ finnish ] = "The given import template cannot be found. Please enter a valid path.";
     Text[ czech ] = "ZadanÃ¡ importnÃ­ Å¡ablona nebyla nalezena. ProsÃ­m zadejte platnou cestu.";
-    Text[ danish ] = "The given import template cannot be found. Please enter a valid path.";
+    Text[ danish ] = "Den givne importskabelon blev ikke fundet. Indtast en gyldig sti.";
     Text[ arabic ] = "The given import template cannot be found. Please enter a valid path.";
     Text[ hebrew ] = "The given import template cannot be found. Please enter a valid path.";
     Text[ catalan ] = "The given import template cannot be found. Please enter a valid path.";
@@ -470,6 +494,8 @@ String STR_ERROR_IMPORT_TEMPLATE_NOT_FOUND
     Text[ polish ] = "The given import template cannot be found. Please enter a valid path.";
     Text[ turkish ] = "The given import template cannot be found. Please enter a valid path.";
     Text[ thai ] = "The given import template cannot be found. Please enter a valid path.";
+    Text[ hungarian ] = "Az importÃ¡lÃ¡shoz megadott sablon nem talÃ¡lhatÃ³. Adja meg a helyes elÃ©rÃ©si Ãºtvonalat.";
+    Text[ slovenian ] = "Podane uvozne predloge ni mogoÄe najti. Vnesite veljavno pot.";
 };
 
 String STR_NOT_SPECIFIED
@@ -487,10 +513,10 @@ String STR_NOT_SPECIFIED
     Text[ slovak ] = "NeÅ¡pecifikovanÃ©";
     Text[ portuguese_brazilian ] = "Não especificado";
     Text[ greek ] = "Not specified";
-    Text[ dutch ] = "Not specified";
+    Text[ dutch ] = "Niet gespecificeerd";
     Text[ finnish ] = "Not specified";
     Text[ czech ] = "NespecifikovÃ¡no";
-    Text[ danish ] = "Not specified";
+    Text[ danish ] = "Ikke angivet";
     Text[ arabic ] = "Not specified";
     Text[ hebrew ] = "Not specified";
     Text[ catalan ] = "Not specified";
@@ -500,6 +526,8 @@ String STR_NOT_SPECIFIED
     Text[ polish ] = "Not specified";
     Text[ turkish ] = "Not specified";
     Text[ thai ] = "Not specified";
+    Text[ hungarian ] = "Nincs meghatÃ¡rozva";
+    Text[ slovenian ] = "Ni navedeno";
 };
 
 String STR_NO_ERRORS_FOUND
@@ -522,10 +550,10 @@ String STR_DEFAULT_FILTER_NAME
     Text[ slovak ] = "NovÃ½ filter";
     Text[ portuguese_brazilian ] = "Novo filtro";
     Text[ greek ] = "New Filter";
-    Text[ dutch ] = "New Filter";
+    Text[ dutch ] = "Nieuw Filter";
     Text[ finnish ] = "New Filter";
     Text[ czech ] = "NovÃ½ filtr";
-    Text[ danish ] = "New Filter";
+    Text[ danish ] = "Nyt filter";
     Text[ arabic ] = "New Filter";
     Text[ hebrew ] = "New Filter";
     Text[ catalan ] = "New Filter";
@@ -535,6 +563,8 @@ String STR_DEFAULT_FILTER_NAME
     Text[ polish ] = "New Filter";
     Text[ turkish ] = "New Filter";
     Text[ thai ] = "New Filter";
+    Text[ hungarian ] = "Ãšj szÅ±rÅ‘";
+    Text[ slovenian ] = "Nov filter";
 };
 
 String STR_DEFAULT_UI_NAME
@@ -565,6 +595,8 @@ String STR_DEFAULT_UI_NAME
     Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¸Šà¸·à¹ˆà¸­";
     Text[ slovak ] = "Bez_nÃ¡zvu";
     Text[ hindi ] = "à¤¨à¤¾à¤® à¤°à¤¹à¤¿à¤¤";
+    Text[ hungarian ] = "NÃ©vtelen";
+    Text[ slovenian ] = "Neimenovano";
 };
 
 String STR_DEFAULT_EXTENSION
@@ -587,10 +619,10 @@ String STR_UNDEFINED_FILTER
     Text[ slovak ] = "nedefinovanÃ½ filter";
     Text[ portuguese_brazilian ] = "Filtro indefinido";
     Text[ greek ] = "undefined filter";
-    Text[ dutch ] = "undefined filter";
+    Text[ dutch ] = "ongedefinieerd filter";
     Text[ finnish ] = "undefined filter";
     Text[ czech ] = "nedefinovanÃ½ filtr";
-    Text[ danish ] = "undefined filter";
+    Text[ danish ] = "udefineret filter";
     Text[ arabic ] = "undefined filter";
     Text[ hebrew ] = "undefined filter";
     Text[ catalan ] = "undefined filter";
@@ -600,6 +632,8 @@ String STR_UNDEFINED_FILTER
     Text[ polish ] = "undefined filter";
     Text[ turkish ] = "undefined filter";
     Text[ thai ] = "undefined filter";
+    Text[ hungarian ] = "ismeretlen szÅ±rÅ‘";
+    Text[ slovenian ] = "nedefiniran filter";
 };
 
 String STR_FILTER_HAS_BEEN_SAVED
@@ -617,10 +651,10 @@ String STR_FILTER_HAS_BEEN_SAVED
     Text[ slovak ] = "XML filter '%s' bol uloÅ¾enÃ½ ako balÃ­k '%s'. ";
     Text[ portuguese_brazilian ] = "O filtro XML '%s' foi salvo como pacote '%s'";
     Text[ greek ] = "The XML filter '%s' has been saved as package '%s'. ";
-    Text[ dutch ] = "The XML filter '%s' has been saved as package '%s'. ";
+    Text[ dutch ] = "Het XML-filter '%s' is opgeslagen als pakket '%s'. ";
     Text[ finnish ] = "The XML filter '%s' has been saved as package '%s'. ";
     Text[ czech ] = "XML filtr '%s' byl uloÅ¾en jako balÃ­k '%s'. ";
-    Text[ danish ] = "The XML filter '%s' has been saved as package '%s'. ";
+    Text[ danish ] = "XML-filteret '%s' er blevet gemt som pakke '%s'. ";
     Text[ arabic ] = "The XML filter '%s' has been saved as package '%s'. ";
     Text[ hebrew ] = "The XML filter '%s' has been saved as package '%s'. ";
     Text[ catalan ] = "The XML filter '%s' has been saved as package '%s'. ";
@@ -630,6 +664,8 @@ String STR_FILTER_HAS_BEEN_SAVED
     Text[ polish ] = "The XML filter '%s' has been saved as package '%s'. ";
     Text[ turkish ] = "The XML filter '%s' has been saved as package '%s'. ";
     Text[ thai ] = "The XML filter '%s' has been saved as package '%s'. ";
+    Text[ hungarian ] = "A(z) '%s' XML-szÅ±rÅ‘ '%s' csomagkÃ©nt kerÃ¼lt mentÃ©sre.";
+    Text[ slovenian ] = "XML filter '%s' je bil shranjen kot paket '%s'. ";
 };
 
 String STR_FILTERS_HAVE_BEEN_SAVED
@@ -647,10 +683,10 @@ String STR_FILTERS_HAVE_BEEN_SAVED
     Text[ slovak ] = "%s XML filtre boli uloÅ¾enÃ© do balÃ­ka '%s'.";
     Text[ portuguese_brazilian ] = "Os filtros XML foram salvos no pacote '%s'.";
     Text[ greek ] = "%s XML filters have been saved in the package '%s'.";
-    Text[ dutch ] = "%s XML filters have been saved in the package '%s'.";
+    Text[ dutch ] = "%s XML filters zijn opgeslagen in het pakket '%s'.";
     Text[ finnish ] = "%s XML filters have been saved in the package '%s'.";
     Text[ czech ] = "XML filtry %s byly uloÅ¾eny v balÃ­ku '%s'.";
-    Text[ danish ] = "%s XML filters have been saved in the package '%s'.";
+    Text[ danish ] = "%s XML-filtre er blevet gemt i pakke '%s'.";
     Text[ arabic ] = "%s XML filters have been saved in the package '%s'.";
     Text[ hebrew ] = "%s XML filters have been saved in the package '%s'.";
     Text[ catalan ] = "%s XML filters have been saved in the package '%s'.";
@@ -660,6 +696,8 @@ String STR_FILTERS_HAVE_BEEN_SAVED
     Text[ polish ] = "%s XML filters have been saved in the package '%s'.";
     Text[ turkish ] = "%s XML filters have been saved in the package '%s'.";
     Text[ thai ] = "%s XML filters have been saved in the package '%s'.";
+    Text[ hungarian ] = "%s XML-szÅ±rÅ‘ mentÃ©sre kerÃ¼lt a(z) '%s' csomagba.";
+    Text[ slovenian ] = "%s XML filterov je bilo shranjenih v paket '%s'. ";
 };
 
 String STR_FILTER_PACKAGE
@@ -677,10 +715,10 @@ String STR_FILTER_PACKAGE
     Text[ slovak ] = "XSLT balÃ­k filtrov";
     Text[ portuguese_brazilian ] = "Pacote de filtro XSLT";
     Text[ greek ] = "XSLT filter package";
-    Text[ dutch ] = "XSLT filter package";
+    Text[ dutch ] = "XSLT filter pakket";
     Text[ finnish ] = "XSLT filter package";
     Text[ czech ] = "BalÃ­k XSLT filtrÅ¯";
-    Text[ danish ] = "XSLT filter package";
+    Text[ danish ] = "XSLT-filterpakke";
     Text[ arabic ] = "XSLT filter package";
     Text[ hebrew ] = "XSLT filter package";
     Text[ catalan ] = "XSLT filter package";
@@ -690,6 +728,8 @@ String STR_FILTER_PACKAGE
     Text[ polish ] = "XSLT filter package";
     Text[ turkish ] = "XSLT filter package";
     Text[ thai ] = "XSLT filter package";
+    Text[ hungarian ] = "XSLT-szÅ±rÅ‘csomag";
+    Text[ slovenian ] = "Paket XSLT filtrov";
 };
 
 String STR_FILTER_INSTALLED
@@ -707,10 +747,10 @@ String STR_FILTER_INSTALLED
     Text[ slovak ] = "XML filter '%s' bol ÃºspeÅ¡ne inÅ¡talovanÃ½.";
     Text[ portuguese_brazilian ] = "O filtro XML '%s' foi instalado com sucesso.";
     Text[ greek ] = "The XML filter '%s' has been installed successfully.";
-    Text[ dutch ] = "The XML filter '%s' has been installed successfully.";
+    Text[ dutch ] = "Het XML-filter '%s' is met succes geïnstalleerd.";
     Text[ finnish ] = "The XML filter '%s' has been installed successfully.";
     Text[ czech ] = "XML filtr '%s' byl ÃºspÄ›Å¡nÄ› nainstalovÃ¡n.";
-    Text[ danish ] = "The XML filter '%s' has been installed successfully.";
+    Text[ danish ] = "XML-filteret '%s' blev installeret uden fejl.";
     Text[ arabic ] = "The XML filter '%s' has been installed successfully.";
     Text[ hebrew ] = "The XML filter '%s' has been installed successfully.";
     Text[ catalan ] = "The XML filter '%s' has been installed successfully.";
@@ -720,6 +760,8 @@ String STR_FILTER_INSTALLED
     Text[ polish ] = "The XML filter '%s' has been installed successfully.";
     Text[ turkish ] = "The XML filter '%s' has been installed successfully.";
     Text[ thai ] = "The XML filter '%s' has been installed successfully.";
+    Text[ hungarian ] = "A(z) '%s' XML-szÅ±rÅ‘ telepÃ­tÃ©se sikerÃ¼lt.";
+    Text[ slovenian ] = "XML filter '%s' je bil uspeÅ¡no nameÅ¡Äen.";
 };
 
 String STR_FILTERS_INSTALLED
@@ -737,10 +779,10 @@ String STR_FILTERS_INSTALLED
     Text[ slovak ] = "%s XML filtre boli ÃºspeÅ¡ne inÅ¡talovanÃ©.";
     Text[ portuguese_brazilian ] = "%s' filtros XML foram instalados com sucesso. ";
     Text[ greek ] = "%s XML filters have been installed successfully.";
-    Text[ dutch ] = "%s XML filters have been installed successfully.";
+    Text[ dutch ] = "%s XML filters zijn met succes geïnstalleerd.";
     Text[ finnish ] = "%s XML filters have been installed successfully.";
     Text[ czech ] = "XML filtry '%s' byly ÃºspÄ›Å¡nÄ› nainstalovÃ¡n.";
-    Text[ danish ] = "%s XML filters have been installed successfully.";
+    Text[ danish ] = "%s XML-filtre blev installeret uden fejl.";
     Text[ arabic ] = "%s XML filters have been installed successfully.";
     Text[ hebrew ] = "%s XML filters have been installed successfully.";
     Text[ catalan ] = "%s XML filters have been installed successfully.";
@@ -750,6 +792,8 @@ String STR_FILTERS_INSTALLED
     Text[ polish ] = "%s XML filters have been installed successfully.";
     Text[ turkish ] = "%s XML filters have been installed successfully.";
     Text[ thai ] = "%s XML filters have been installed successfully.";
+    Text[ hungarian ] = "%s XML-szÅ±rÅ‘ telepÃ­tÃ©se sikeresen befejezÅ‘dÃ¶tt.";
+    Text[ slovenian ] = "%s XML filtrov je bilo uspeÅ¡no nameÅ¡Äenih.";
 };
 
 String STR_NO_FILTERS_FOUND
@@ -767,10 +811,10 @@ String STR_NO_FILTERS_FOUND
     Text[ slovak ] = "Nebol nainÅ¡talovanÃ½ Å¾iaden XML filter, pretoÅ¾e balÃ­k '%s' neobsahuje Å¾iadne XML filtre.";
     Text[ portuguese_brazilian ] = "Não foi possível instalar os filtros XML por que o pacote '%s' não contém filtros XML. ";
     Text[ greek ] = "No XML filter could be installed because the package '%s' does not contain any XML filters.";
-    Text[ dutch ] = "No XML filter could be installed because the package '%s' does not contain any XML filters.";
+    Text[ dutch ] = "Er werden geen XML-filters geïnstalleerd, omdat het pakket '%s' er geen bevat.";
     Text[ finnish ] = "No XML filter could be installed because the package '%s' does not contain any XML filters.";
     Text[ czech ] = "Å½Ã¡dnÃ½ XML filtr nemÅ¯Å¾e bÃ½t nainstalovÃ¡n, neboÅ¥ balÃ­k '%s' neobsahuje Å¾Ã¡dnÃ© XML filtry.";
-    Text[ danish ] = "No XML filter could be installed because the package '%s' does not contain any XML filters.";
+    Text[ danish ] = "Der blev ikke installeret et XML-filter, fordi pakken '%s' ikke indeholder nogle XML-filtre.";
     Text[ arabic ] = "No XML filter could be installed because the package '%s' does not contain any XML filters.";
     Text[ hebrew ] = "No XML filter could be installed because the package '%s' does not contain any XML filters.";
     Text[ catalan ] = "No XML filter could be installed because the package '%s' does not contain any XML filters.";
@@ -780,7 +824,10 @@ String STR_NO_FILTERS_FOUND
     Text[ polish ] = "No XML filter could be installed because the package '%s' does not contain any XML filters.";
     Text[ turkish ] = "No XML filter could be installed because the package '%s' does not contain any XML filters.";
     Text[ thai ] = "No XML filter could be installed because the package '%s' does not contain any XML filters.";
+    Text[ hungarian ] = "Nem sikerÃ¼lt XML-szÅ±rÅ‘t telepÃ­teni, mivel a(z) '%s' csomag nem tartalmaz XML-szÅ±rÅ‘t.";
+    Text[ slovenian ] = "XML filtra ni mogoÄe namestiti, ker paket '%s' ne vsebuje XML filtrov.";
 };
+
 
 
 
