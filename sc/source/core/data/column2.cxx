@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:42:43 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 15:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2065,10 +2065,23 @@ BOOL ScColumn::IsVisibleAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW 
         return !pAttrArray && !rCol.pAttrArray;
 }
 
-BOOL ScColumn::HasVisibleAttr( SCROW& rFirstRow, SCROW& rLastRow, BOOL bSkipFirst ) const
+BOOL ScColumn::GetFirstVisibleAttr( SCROW& rFirstRow ) const
 {
     if (pAttrArray)
-        return pAttrArray->HasVisibleAttr(rFirstRow,rLastRow,bSkipFirst);
+        return pAttrArray->GetFirstVisibleAttr( rFirstRow );
+    else
+        return FALSE;
+}
+
+BOOL ScColumn::GetLastVisibleAttr( SCROW& rLastRow ) const
+{
+    if (pAttrArray)
+    {
+        // row of last cell is needed
+        SCROW nLastData = GetLastVisDataPos( TRUE );    // always including notes, 0 if none
+
+        return pAttrArray->GetLastVisibleAttr( rLastRow, nLastData );
+    }
     else
         return FALSE;
 }
