@@ -2,9 +2,9 @@
 *
  *  $RCSfile: osl_Socket_Const.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:11:48 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,10 @@
 #include <osl/thread.hxx>
 #endif
 
+#ifndef _OSL_FILE_HXX
+#include <osl/file.hxx>
+#endif
+
 #ifndef _OSL_MUTEX_HXX
 #include <osl/mutex.hxx>
 #endif
@@ -103,16 +107,19 @@
 #include <osl/time.h>
 #endif
 
-
+const char * pTestString1 = "test socket";
+const char * pTestString2 = " Passed#OK";
+//define read count
+#define FILE_READ 4000
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
-
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
+#   include <stdio.h>
 //------------------------------------------------------------------------
 // OS dependent declaration and includes
 //------------------------------------------------------------------------
@@ -129,8 +136,9 @@ extern "C"
 #   include <sys/types.h>
 #   include <sys/socket.h>
 #   include <netdb.h>
+#   include <netinet/in.h>
+#       include <arpa/inet.h>
 #else                                   // Windows
-#   include <stdio.h>
 #   include <windows.h>
 #   include <winsock.h>
 #   include <string.h>
@@ -165,11 +173,24 @@ extern "C"
 #define IP_PORT_GOPHER 70
 #define IP_PORT_HTTP1  80
 #define IP_PORT_POP3  110
+#define IP_PORT_NETBIOS_DGM  138
 #define IP_PORT_NETBIOS  139
 #define IP_PORT_IMAP  143
 #define IP_PORT_HTTPS  443
 #define IP_PORT_HTTP2  8080
+
 #define IP_PORT_MYPORT  8888
+#define IP_PORT_MYPORT1  8889
+#define IP_PORT_MYPORT2  8890
+#define IP_PORT_MYPORT3  8891
+#define IP_PORT_MYPORT4  8892
+#define IP_PORT_MYPORT5  8893
+#define IP_PORT_MYPORT6  8894
+#define IP_PORT_MYPORT7  8895
+#define IP_PORT_MYPORT8  8896
+#define IP_PORT_MYPORT9  8897
+#define IP_PORT_MYPORT10  8898
+
 #define IP_PORT_TMP    9999
 #define IP_PORT_INVAL  99999
 
@@ -181,6 +202,7 @@ OSLTEST_DECLARE( ServiceTELNET,  "telnet" );
 OSLTEST_DECLARE( ServiceGOPHER,  "gopher" );
 OSLTEST_DECLARE( ServiceIMAP,  "imap" );
 OSLTEST_DECLARE( ServiceHTTPS,  "https" );
+OSLTEST_DECLARE( ServiceNETBIOS,  "netbios-dgm" );
 
 //------------------------------------------------------------------------
 // protocol definitions.
@@ -197,7 +219,12 @@ OSLTEST_DECLARE( HostName2,  "longshot.prc.sun.com" );
 OSLTEST_DECLARE( HostIp2,  "129.158.217.202" );
 OSLTEST_DECLARE( HostName3,  "deuce.prc.sun.com" );
 OSLTEST_DECLARE( HostIp3,  "129.158.217.199" );
-OSLTEST_DECLARE( HostIpInval,  "123.45.67.89" );
+OSLTEST_DECLARE( HostName4,  "sceri.PRC.Sun.COM" );  //Beijing server for test
+OSLTEST_DECLARE( HostIp4,  "129.158.217.107" );
+OSLTEST_DECLARE( HostName5,  "grande.Germany.Sun.COM" );  //Germany server for test
+OSLTEST_DECLARE( HostIp5,  "129.157.139.140" );
+OSLTEST_DECLARE( HostIpInval,  "123.45.67.89" );    //this is valid ip number,but can not arrive --mindy
+OSLTEST_DECLARE( HostIpInval1,  "123.345.67.89" );  //this is real invalid ip number --mindy
 OSLTEST_DECLARE( HostNameInval,  "www.the_hostname_that_can_not_resolvable_to_an_IP_Address.com" );
 
 
