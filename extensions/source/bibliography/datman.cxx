@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 10:25:23 $
+ *  last change: $Author: os $ $Date: 2001-06-26 10:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,7 +381,7 @@ class MappingDialog_Impl : public ModalDialog
     CancelButton    aCancelBT;
     HelpButton      aHelpBT;
 
-    GroupBox        aMapGB;
+    FixedLine       aMapGB;
     FixedText       aIdentifierFT;
     ListBox         aIdentifierLB;
     FixedText       aAuthorityTypeFT;
@@ -692,7 +692,7 @@ class DBChangeDialog_Impl : public ModalDialog
     CancelButton    aCancelBT;
     HelpButton      aHelpBT;
 
-    GroupBox        aSelectionGB;
+    FixedLine       aSelectionGB;
     SvTabListBox    aSelectionLB;
     HeaderBar       aSelectionHB;
 

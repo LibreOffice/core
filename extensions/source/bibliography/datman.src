@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:46:49 $
+ *  last change: $Author: os $ $Date: 2001-06-26 10:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 //
 //
 //
-// $Author: kz $ $Date: 2001-06-13 22:46:49 $ $Revision: 1.13 $
+// $Author: os $ $Date: 2001-06-26 10:16:25 $ $Revision: 1.14 $
 // $Logfile:   T:/sc/inc/scresid.hxv  $ $Workfile:   scresid.hxx  $
 //------------------------------------------------------------------
 
@@ -94,10 +94,10 @@ ModalDialog RID_DLG_MAPPING
         Pos = MAP_APPFONT ( 338 , 36 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
     };
-    GroupBox    GB_MAPPING
+    FixedLine    GB_MAPPING
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 329 , 175 ) ;
+        Size = MAP_APPFONT ( 329 , 8 ) ;
         Text = "Spaltennamen";
         Text [ENGLISH] = "Column names";
         Text[ english_us ] = "Column names";
@@ -1235,10 +1235,10 @@ ModalDialog RID_DLG_DBCHANGE
         Pos = MAP_APPFONT ( 238 , 36 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
     };
-    GroupBox    GB_SELECTION
+    FixedLine    GB_SELECTION
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 229 , 125 ) ;
+        Size = MAP_APPFONT ( 229 , 8 ) ;
         Text = "Auswahl";
         Text [ENGLISH] = "Selection";
         Text[ english_us ] = "Selection";
