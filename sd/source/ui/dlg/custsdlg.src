@@ -2,9 +2,9 @@
  *
  *  $RCSfile: custsdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:38:49 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,153 +70,44 @@ ModalDialog DLG_CUSTOMSHOW
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 175 + DIFF , 114 + DIFF_Y ) ;
-    Text = "Individuelle Bildschirmpräsentationen" ;
-    Text [ ENGLISH ] = "Custom Shows" ;
+    Text [ de ] = "Individuelle Bildschirmpräsentationen" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     PushButton BTN_NEW
     {
         Pos = MAP_APPFONT ( 120 + DIFF , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Neu..." ;
-        Text [ ENGLISH ] = "~New..." ;
+        Text [ de ] = "~Neu..." ;
         TabStop = TRUE ;
-        Text [ portuguese ] = "~Novo..." ;
-        Text [ english_us ] = "~New..." ;
-        Text [ portuguese_brazilian ] = "~Novo..." ;
-        Text [ swedish ] = "~Ny..." ;
-        Text [ danish ] = "~Ny(t)..." ;
-        Text [ italian ] = "~Nuovo..." ;
-        Text [ spanish ] = "~Nuevo..." ;
-        Text [ french ] = "~Nouveau..." ;
-        Text [ dutch ] = "~Nieuw..." ;
-        Text[ chinese_simplified ] = "æ–°å»º(~N)...";
-        Text[ russian ] = "Ñîçäàòü...";
-        Text[ polish ] = "~Nowy...";
-        Text[ japanese ] = "æ–°è¦ä½œæˆ(~N)...";
-        Text[ chinese_traditional ] = "é–‹å•Ÿæ–°æª”(~N)...";
-        Text[ arabic ] = "ÌÏíÏ...";
-        Text[ greek ] = "Äçìéïõñãßá...";
-        Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~N)...";
-        Text[ turkish ] = "Yeni...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nou...";
-        Text[ finnish ] = "~Luo uusi...";
-        Text[ thai ] = "à¹ƒ~à¸«à¸¡à¹ˆ...";
-        Text[ czech ] = "NovÃ½...";
-        Text[ hebrew ] = "â€®×—×“×©...â€¬";
-        Text[ hindi ] = "~à¤¨à¤¯à¤¾...";
-        Text[ slovak ] = "~NovÃ©...";
-        Text[ hungarian ] = "Ãš~j...";
-        Text[ slovenian ] = "~Nov...";
+        Text [ en-US ] = "~New..." ;
+        Text [ x-comment ] = " ";
     };
     PushButton BTN_EDIT
     {
         Pos = MAP_APPFONT ( 120 + DIFF , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Bearbeiten..." ;
-        Text [ ENGLISH ] = "~Edit..." ;
+        Text [ de ] = "~Bearbeiten..." ;
         TabStop = TRUE ;
-        Text [ portuguese ] = "~Editar..." ;
-        Text [ english_us ] = "~Edit..." ;
-        Text [ portuguese_brazilian ] = "~Editar..." ;
-        Text [ swedish ] = "R~edigera..." ;
-        Text [ danish ] = "~Rediger..." ;
-        Text [ italian ] = "~Modifica..." ;
-        Text [ spanish ] = "E~ditar..." ;
-        Text [ french ] = "Éditer..." ;
-        Text [ dutch ] = "~Bewerken..." ;
-        Text[ chinese_simplified ] = "ç¼–è¾‘(~E)...";
-        Text[ russian ] = "Ïğàâêà...";
-        Text[ polish ] = "~Edytuj...";
-        Text[ japanese ] = "ç·¨é›†(~E)...";
-        Text[ chinese_traditional ] = "ç·¨è¼¯(~E)...";
-        Text[ arabic ] = "ÊÍÑíÑ...";
-        Text[ greek ] = "~Åğåîåñãáóßá...";
-        Text[ korean ] = "í¸ì§‘(~E)...";
-        Text[ turkish ] = "Düzenle...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Edita...";
-        Text[ finnish ] = "~Muokkaa...";
-        Text[ thai ] = "à¹~à¸à¹‰à¹„à¸‚...";
-        Text[ czech ] = "Upravit...";
-        Text[ hebrew ] = "â€®×¢×¨×™×›×”...â€¬";
-        Text[ hindi ] = "~à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨...";
-        Text[ slovak ] = "~UpraviÅ¥...";
-        Text[ hungarian ] = "S~zerkesztÃ©s...";
-        Text[ slovenian ] = "~Uredi...";
+        Text [ en-US ] = "~Edit..." ;
+        Text [ x-comment ] = " ";
     };
     PushButton BTN_REMOVE
     {
         Pos = MAP_APPFONT ( 120 + DIFF , 40 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Löschen" ;
-        Text [ ENGLISH ] = "~Delete" ;
+        Text [ de ] = "~Löschen" ;
         TabStop = TRUE ;
-        Text [ portuguese ] = "E~liminar" ;
-        Text [ english_us ] = "~Delete" ;
-        Text [ portuguese_brazilian ] = "E~xcluir" ;
-        Text [ swedish ] = "~Radera" ;
-        Text [ danish ] = "~Slet" ;
-        Text [ italian ] = "~Elimina" ;
-        Text [ spanish ] = "~Borrar" ;
-        Text [ french ] = "Supprimer" ;
-        Text [ dutch ] = "~Wissen" ;
-        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
-        Text[ russian ] = "~Óäàëèòü";
-        Text[ polish ] = "~Usuñ";
-        Text[ japanese ] = "å‰Šé™¤(~D)";
-        Text[ chinese_traditional ] = "åˆªé™¤(~D)";
-        Text[ arabic ] = "ÍĞİ";
-        Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "ì‚­ì œ(~D)";
-        Text[ turkish ] = "Sil";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Suprimeix";
-        Text[ finnish ] = "~Poista";
-        Text[ thai ] = "~à¸¥à¸š";
-        Text[ czech ] = "Smazat";
-        Text[ hebrew ] = "â€®××—×™×§×”â€¬";
-        Text[ hindi ] = "~à¤®à¤¿à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "~ZmazaÅ¥";
-        Text[ hungarian ] = "~TÃ¶rlÃ©s";
-        Text[ slovenian ] = "~IzbriÅ¡i";
+        Text [ en-US ] = "~Delete" ;
+        Text [ x-comment ] = " ";
     };
     PushButton BTN_COPY
     {
         Pos = MAP_APPFONT ( 120 + DIFF , 57 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Kopieren" ;
-        Text [ ENGLISH ] = "C~opy" ;
+        Text [ de ] = "~Kopieren" ;
         TabStop = TRUE ;
-        Text [ portuguese ] = "~Copiar" ;
-        Text [ english_us ] = "Cop~y" ;
-        Text [ portuguese_brazilian ] = "~Copiar" ;
-        Text [ swedish ] = "~Kopiera" ;
-        Text [ danish ] = "K~opier" ;
-        Text [ italian ] = "~Copia" ;
-        Text [ spanish ] = "Copiar" ;
-        Text [ french ] = "Co~pier" ;
-        Text [ dutch ] = "~Kopiëren" ;
-        Text[ chinese_simplified ] = "å¤åˆ¶(~Y)";
-        Text[ russian ] = "~Êîïèğîâàòü";
-        Text[ polish ] = "~Kopiuj";
-        Text[ japanese ] = "ã‚³ãƒ”ãƒ¼(~Y)";
-        Text[ chinese_traditional ] = "è¤‡è£½(~Y)";
-        Text[ arabic ] = "äÓÎ";
-        Text[ greek ] = "Áíôé~ãñáöŞ";
-        Text[ korean ] = "ë³µì‚¬(~Y)";
-        Text[ turkish ] = "Kopyala";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Copia";
-        Text[ finnish ] = "Ko~pioi";
-        Text[ thai ] = "à¸„à¸±à¸”à¸¥~à¸­à¸";
-        Text[ czech ] = "KopÃ­rovat";
-        Text[ hebrew ] = "â€®×”×¢×ª×§×”â€¬";
-        Text[ hindi ] = "~à¤ªà¥à¤°à¤¤à¤¿à¤²à¤¿à¤ªà¤¿";
-        Text[ slovak ] = "~KopÃ­rovaÅ¥";
-        Text[ hungarian ] = "~MÃ¡solÃ¡s";
-        Text[ slovenian ] = "~Kopiraj";
+        Text [ en-US ] = "Cop~y" ;
+        Text [ x-comment ] = " ";
     };
     HelpButton BTN_HELP
     {
@@ -228,74 +119,20 @@ ModalDialog DLG_CUSTOMSHOW
     {
         Pos = MAP_APPFONT ( 120 + DIFF , 94 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "S~tarten" ;
-        Text [ ENGLISH ] = "S~tart" ;
+        Text [ de ] = "S~tarten" ;
         TabStop = TRUE ;
-        Text [ portuguese ] = "~Iniciar" ;
-        Text [ english_us ] = "~Start" ;
-        Text [ portuguese_brazilian ] = "~Iniciar" ;
-        Text [ swedish ] = "S~tarta" ;
-        Text [ danish ] = "~Start" ;
-        Text [ italian ] = "~Avvia" ;
-        Text [ spanish ] = "~Inicio" ;
-        Text [ french ] = "~Lancer" ;
-        Text [ dutch ] = "S~tarten" ;
-        Text[ chinese_simplified ] = "å¼€å§‹(~S)";
-        Text[ russian ] = "Çàïóñòèòü";
-        Text[ polish ] = "~Rozpocznij";
-        Text[ japanese ] = "é–‹å§‹(~S)";
-        Text[ chinese_traditional ] = "é–‹å§‹(~S)";
-        Text[ arabic ] = "ÈÏÁ";
-        Text[ greek ] = "Åêêßíçóç";
-        Text[ korean ] = "ì‹œì‘(~S)";
-        Text[ turkish ] = "Başlat";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Inicia";
-        Text[ finnish ] = "~Aloita";
-        Text[ thai ] = "à¹€~à¸£à¸´à¹ˆà¸¡";
-        Text[ czech ] = "Spustit";
-        Text[ hebrew ] = "S~tarten";
-        Text[ hindi ] = "~à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­";
-        Text[ slovak ] = "~SpustiÅ¥";
-        Text[ hungarian ] = "~IndÃ­tÃ¡s";
-        Text[ slovenian ] = "~ZaÄetna";
+        Text [ en-US ] = "~Start" ;
+        Text [ x-comment ] = " ";
     };
     OKButton BTN_OK
     {
         Pos = MAP_APPFONT ( 120 + DIFF , 94 + DIFF_Y ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Schließen" ;
-        Text [ ENGLISH ] = "~Close" ;
+        Text [ de ] = "~Schließen" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
-        Text [ portuguese ] = "~Fechar" ;
-        Text [ english_us ] = "~Close" ;
-        Text [ portuguese_brazilian ] = "~Fechar" ;
-        Text [ swedish ] = "~Stäng" ;
-        Text [ danish ] = "~Luk" ;
-        Text [ italian ] = "C~hiudi" ;
-        Text [ spanish ] = "~Cerrar" ;
-        Text [ french ] = "Fermer" ;
-        Text [ dutch ] = "~Sluiten" ;
-        Text[ chinese_simplified ] = "å…³é—­(~C)";
-        Text[ russian ] = "Çàêğûòü";
-        Text[ polish ] = "~Zamknij";
-        Text[ japanese ] = "é–‰ã˜ã‚‹(~C)";
-        Text[ chinese_traditional ] = "é—œé–‰(~C)";
-        Text[ arabic ] = "ÅÛáÇŞ";
-        Text[ greek ] = "Êëåßóéìï";
-        Text[ korean ] = "ë‹«ê¸°(~C)";
-        Text[ turkish ] = "Kapat";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tanca";
-        Text[ finnish ] = "~Sulje";
-        Text[ thai ] = "~à¸›à¸´à¸”";
-        Text[ czech ] = "ZavÅ™Ã­t";
-        Text[ hebrew ] = "â€®×¡×’×™×¨×”â€¬";
-        Text[ hindi ] = "~à¤¬à¤¨à¥à¤¦ à¤•à¤°à¥‹";
-        Text[ slovak ] = "~ZavrieÅ¥";
-        Text[ hungarian ] = "~BezÃ¡rÃ¡s";
-        Text[ slovenian ] = "~Zapri";
+        Text [ en-US ] = "~Close" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_CUSTOMSHOWS
     {
@@ -308,66 +145,13 @@ ModalDialog DLG_CUSTOMSHOW
     {
         Pos = MAP_APPFONT ( 6 , 96 + DIFF_Y ) ;
         Size = MAP_APPFONT ( 112 + DIFF , 12 ) ;
-        Text = "~Individuelle Bildschirmpräsentation benutzen" ;
-        Text [ ENGLISH ] = "~Use Custom Show" ;
+        Text [ de ] = "~Individuelle Bildschirmpräsentation benutzen" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "~Use Custom Slide Show" ;
-        Text [ portuguese_brazilian ] = "Usar Apres~entação de Slides Personalizada" ;
-        Text [ swedish ] = "Använd ~individuell bildskärmspresentation" ;
-        Text [ danish ] = "~Anvend brugerdefineret præsentation" ;
-        Text [ italian ] = "Usa presentaz~ione su schermo personalizzata" ;
-        Text [ spanish ] = "Utilizar presentación personalizada" ;
-        Text [ french ] = "~Utiliser la présentation à l'écran personnalisée" ;
-        Text [ dutch ] = "~Individuele schermpresentatie gebruiken" ;
-        Text [ portuguese ] = "Utilizar apres~entação personalizada" ;
-        Text[ chinese_simplified ] = "ä½¿ç”¨è‡ªå®šçš„æ¼”ç¤ºæ–‡ç¨¿(~U)";
-        Text[ russian ] = "Èñïîëüçîâàòü îáû÷íóş äåìîíñòğàöèş ñëàéäîâ";
-        Text[ polish ] = "U¿yj niestandardowego ~pokazu slajdów";
-        Text[ japanese ] = "ç›®çš„åˆ¥ã‚¹ãƒ©ã‚¤ãƒ‰ã‚·ãƒ§ãƒ¼ã®ä½¿ç”¨(~U)";
-        Text[ chinese_traditional ] = "æ¡ç”¨ä½¿ç”¨è€…çš„æ”¾æ˜ ç°¡å ±æŠ•å½±ç‰‡(~U)";
-        Text[ arabic ] = "ÇÓÊÎÏÇã ÚÑÖ ÊŞÏíãí ãÎÕÕ";
-        Text[ greek ] = "×ñŞóç ğñïóáñìïóìİí~çò ğáñïõóßáóçò ïèüíçò";
-        Text[ korean ] = "ì‚¬ìš©ì ì •ì˜ ìŠ¬ë¼ì´ë“œ ì‡¼ ì´ìš©(~U)";
-        Text[ turkish ] = "Özel slayt göstrimi  kullan";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Utilitza la presentació personalitzada";
-        Text[ finnish ] = "K~äytä mukautettua esitystä";
-        Text[ thai ] = "à¹ƒ~à¸Šà¹‰à¹à¸ªà¸”à¸‡à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡à¹à¸šà¸šà¸à¸³à¸«à¸™à¸”à¹€à¸­à¸‡";
-        Text[ czech ] = "PouÅ¾Ã­t vlastnÃ­ prezentaci";
-        Text[ hebrew ] = "~Individuelle BildschirmprÃ¤sentation benutzen";
-        Text[ hindi ] = "à¤•à¤¸à¥à¤Ÿà¤® à¤¸à¥à¤²à¤‡~à¤¡ à¤¦à¤¿à¤–à¤¾à¤µ à¤•à¤¾ à¤‰à¤ªà¤¯à¥‹à¤— à¤•à¤°à¥‹";
-        Text[ slovak ] = "Po~uÅ¾iÅ¥ vlastnÃº prezentÃ¡ciu";
-        Text[ hungarian ] = "S~ajÃ¡t diavetÃ­tÃ©s hasznÃ¡lata";
-        Text[ slovenian ] = "~Uporabi diaprojekcijo po meri";
+        Text [ en-US ] = "~Use Custom Slide Show" ;
+        Text [ x-comment ] = " ";
     };
-    Text [ english_us ] = "Custom Slide Shows" ;
-    Text [ portuguese_brazilian ] = "Apresentações de Slides Personalizadas" ;
-    Text [ swedish ] = "Individuella bildskärmspresentationer" ;
-    Text [ danish ] = "Brugerdefinerede præsentationer" ;
-    Text [ italian ] = "Presentazioni su schermo personalizzate" ;
-    Text [ spanish ] = "Presentación personalizada" ;
-    Text [ french ] = "Présentations à l'écran personnalisées" ;
-    Text [ dutch ] = "Individuele schermpresentaties" ;
-    Text [ portuguese ] = "Apresentações personalizadas" ;
-    Text[ chinese_simplified ] = "æ”¾æ˜ è‡ªå®šçš„æ¼”ç¤ºæ–‡ç¨¿";
-    Text[ russian ] = "Îáû÷íàÿ äåìîíñòğàöèÿ ñëàéäîâ";
-    Text[ polish ] = "Niestandardowe pokazy slajdów";
-    Text[ japanese ] = "ç›®çš„åˆ¥ã‚¹ãƒ©ã‚¤ãƒ‰ã‚·ãƒ§ãƒ¼";
-    Text[ chinese_traditional ] = "æ”¾æ˜ ä½¿ç”¨è€…çš„ç°¡å ±æŠ•å½±ç‰‡";
-    Text[ arabic ] = "ÚÑæÖ ÊŞÏíãíÉ ãÎÕÕÉ";
-    Text[ greek ] = "Ğñïóáñìïóìİíç ğáñïõóßáóç ïèüíçò";
-    Text[ korean ] = "ì‚¬ìš©ì ì •ì˜ ìŠ¬ë¼ì´ë“œ ì‡¼";
-    Text[ turkish ] = "Özel slayt gösterimi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Presentacions personalitzades";
-    Text[ finnish ] = "Mukautetut esitykset";
-    Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡à¹à¸šà¸šà¸à¸³à¸«à¸™à¸”à¹€à¸­à¸‡";
-    Text[ czech ] = "VlastnÃ­ prezentace";
-    Text[ hebrew ] = "Individuelle BildschirmprÃ¤sentationen";
-    Text[ hindi ] = "à¤¸à¥à¤²à¤‡à¤¡ à¤ªà¥à¤°à¤¸à¥à¤¤à¥à¤¤à¤¿ à¤•à¥‹ à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾ à¤•à¤°à¥‹";
-    Text[ slovak ] = "VlastnÃ¡ prezentÃ¡cia";
-    Text[ hungarian ] = "EgyÃ©ni diavetÃ­tÃ©sek";
-    Text[ slovenian ] = "Diaprojekcije po meri";
+    Text [ en-US ] = "Custom Slide Shows" ;
+    Text [ x-comment ] = " ";
 };
 ModalDialog DLG_DEFINE_CUSTOMSHOW
 {
@@ -375,8 +159,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 248 , 117 ) ;
-    Text = "Individuelle Bildschirmpräsentation definieren" ;
-    Text [ ENGLISH ] = "Define Custom Show" ;
+    Text [ de ] = "Individuelle Bildschirmpräsentation definieren" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     OKButton BTN_OK
@@ -402,36 +185,9 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 30 , 10 ) ;
-        Text = "Name" ;
-        Text [ ENGLISH ] = "Name" ;
-        Text [ english_us ] = "Name" ;
-        Text [ portuguese_brazilian ] = "Nome" ;
-        Text [ swedish ] = "Namn" ;
-        Text [ danish ] = "Navn" ;
-        Text [ italian ] = "Nome" ;
-        Text [ spanish ] = "Nombre" ;
-        Text [ french ] = "Nom" ;
-        Text [ dutch ] = "Naam" ;
-        Text [ portuguese ] = "Nome" ;
-        Text[ chinese_simplified ] = "åç§°";
-        Text[ russian ] = "Èìÿ";
-        Text[ polish ] = "Nazwa";
-        Text[ japanese ] = "åå‰";
-        Text[ chinese_traditional ] = "åç¨±";
-        Text[ arabic ] = "ÇáÇÓã";
-        Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ì´ë¦„";
-        Text[ turkish ] = "Ad";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nom";
-        Text[ finnish ] = "Nimi";
-        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­";
-        Text[ czech ] = "NÃ¡zev";
-        Text[ hebrew ] = "Name";
-        Text[ hindi ] = "à¤¨à¤¾à¤®à¥";
-        Text[ slovak ] = "NÃ¡zov";
-        Text[ hungarian ] = "NÃ©v";
-        Text[ slovenian ] = "Ime";
+        Text [ de ] = "Name" ;
+        Text [ en-US ] = "Name" ;
+        Text [ x-comment ] = " ";
     };
     Edit EDT_NAME
     {
@@ -455,7 +211,6 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
         Text = "~>>" ;
         TabStop = TRUE ;
     };
-     //ListBox LB_CUSTOM_PAGES {
     Control LB_CUSTOM_PAGES
     {
         HelpID = HID_DLG_DEFINE_CUSTOMSHOW_CTL ;
@@ -475,131 +230,19 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     {
         Pos = MAP_APPFONT ( 6 , 24 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
-        Text = "Seiten der Präsentation" ;
-        Text [ ENGLISH ] = "Document Pages" ;
-        Text [ english_us ] = "Existing slides" ;
-        Text [ portuguese_brazilian ] = "Slides existentes" ;
-        Text [ swedish ] = "Presentationens sidor" ;
-        Text [ danish ] = "Eksisterende dias" ;
-        Text [ italian ] = "Pagine della presentazione" ;
-        Text [ spanish ] = "Diapositivas existentes" ;
-        Text [ french ] = "Pages de la présentation" ;
-        Text [ dutch ] = "Pagina's van de presentatie" ;
-        Text [ portuguese ] = "Diapositivos existentes" ;
-        Text[ chinese_simplified ] = "æ¼”ç¤ºæ–‡ç¨¿é¡µé¢";
-        Text[ russian ] = "Ñóùåñòâóşùèå ñëàéäû";
-        Text[ polish ] = "Istniej¹ce slajdy";
-        Text[ japanese ] = "ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã®ãƒšãƒ¼ã‚¸";
-        Text[ chinese_traditional ] = "ç°¡å ±é é¢";
-        Text[ arabic ] = "ÕİÍÇÊ ÇáÚÑÖ ÇáÊŞÏíãí";
-        Text[ greek ] = "ÄéáöÜíåéåò ôçò ğáñïõóßáóçò";
-        Text[ korean ] = "í˜„ì¬ ìŠ¬ë¼ì´ë“œ";
-        Text[ turkish ] = "Var olan slaytlar";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Diapositives existents";
-        Text[ finnish ] = "Alkuperäiset diat";
-        Text[ thai ] = "à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡à¸—à¸µà¹ˆà¸¡à¸µà¸­à¸¢à¸¹à¹ˆ";
-        Text[ czech ] = "ExistujÃ­cÃ­ snÃ­mky";
-        Text[ hebrew ] = "Seiten der PrÃ¤sentation";
-        Text[ hindi ] = "à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ à¤®à¥‡à¤‚ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤¸à¥à¤²à¤‡à¤¡à¤¸";
-        Text[ slovak ] = "ExistujÃºce snÃ­mky";
-        Text[ hungarian ] = "LÃ©tezÅ‘ diÃ¡k";
-        Text[ slovenian ] = "ObstojeÄi diapozitivi";
+        Text [ de ] = "Seiten der Präsentation" ;
+        Text [ en-US ] = "Existing slides" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_CUSTOM_PAGES
     {
         Pos = MAP_APPFONT ( 103 , 24 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text = "Individuelle Präsentation" ;
-        Text [ ENGLISH ] = "Custom Show" ;
-        Text [ portuguese ] = "Diapositivos seleccionados" ;
-        Text [ english_us ] = "Selected slides" ;
-        Text [ portuguese_brazilian ] = "Slides selecionados" ;
-        Text [ swedish ] = "Individuell presentation" ;
-        Text [ danish ] = "Valgte dias" ;
-        Text [ italian ] = "Presentazione personalizzata" ;
-        Text [ spanish ] = "Diapositivas seleccionadas" ;
-        Text [ french ] = "Présentation personnalisée" ;
-        Text [ dutch ] = "Individuele presentatie" ;
-        Text[ chinese_simplified ] = "è‡ªå®šçš„æ¼”ç¤ºæ–‡ç¨¿";
-        Text[ russian ] = "Âûáğàííûå ñëàéäû";
-        Text[ polish ] = "Wybrane slajdy";
-        Text[ japanese ] = "ç›®çš„åˆ¥ã‚¹ãƒ©ã‚¤ãƒ‰ã‚·ãƒ§ãƒ¼";
-        Text[ chinese_traditional ] = "å€‹äººç°¡å ±";
-        Text[ arabic ] = "ÚÑÖ ÊŞÏíãí ãÎÕÕ";
-        Text[ greek ] = "Åğéëåãìİíåò äéáöÜíåéåò";
-        Text[ korean ] = "ì„ íƒí•œ ìŠ¬ë¼ì´ë“œ";
-        Text[ turkish ] = "Seçilmiş slaytlar";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Diapositives seleccionades";
-        Text[ finnish ] = "Valitut diat";
-        Text[ thai ] = "à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡à¸—à¸µà¹ˆà¹€à¸¥à¸·à¸­à¸";
-        Text[ czech ] = "VybranÃ© snÃ­mky";
-        Text[ hebrew ] = "Individuelle PrÃ¤sentation";
-        Text[ hindi ] = "à¤šà¥à¤¨à¥‡ à¤¹à¥à¤ à¤¸à¥à¤²à¤‡à¤¡à¤¸";
-        Text[ slovak ] = "VybranÃ© snÃ­mky";
-        Text[ hungarian ] = "KijelÃ¶lt diÃ¡k";
-        Text[ slovenian ] = "Izbrani diapozitivi";
+        Text [ de ] = "Individuelle Präsentation" ;
+        Text [ en-US ] = "Selected slides" ;
+        Text [ x-comment ] = " ";
     };
-    Text [ english_us ] = "Define Custom Slide Show" ;
-    Text [ portuguese_brazilian ] = "Definir Apresentação de Slides Personalizada" ;
-    Text [ swedish ] = "Definiera individuell bildskärmspresentation" ;
-    Text [ danish ] = "Definer brugerdefineret præsentation" ;
-    Text [ italian ] = "Definisci presentazione su schermo personalizzata" ;
-    Text [ spanish ] = "Definir presentación personalizada" ;
-    Text [ french ] = "Définir une présentation à l'écran personnalisée" ;
-    Text [ dutch ] = "Individuele schermpresentatie definiëren" ;
-    Text [ portuguese ] = "Definir apresentação personalizada" ;
-    Text[ chinese_simplified ] = "è®¾å®šè‡ªå®šçš„æ¼”ç¤ºæ–‡ç¨¿";
-    Text[ russian ] = "Çàäàòü îáû÷íóş äåìîíñòğàöèş ñëàéäîâ";
-    Text[ polish ] = "Definiuj niestandardowy pokaz slajdów";
-    Text[ japanese ] = "ç›®çš„åˆ¥ã‚¹ãƒ©ã‚¤ãƒ‰ã‚·ãƒ§ãƒ¼ã®å®šç¾©ä»˜ã‘";
-    Text[ chinese_traditional ] = "è¨­å®šä½¿ç”¨è€…çš„æ”¾æ˜ ç°¡å ±æŠ•å½±ç‰‡";
-    Text[ arabic ] = "ÊÚÑíİ ÇáÚÑÖ ÇáÊŞÏíãí ÇáãÎÕÕ";
-    Text[ greek ] = "Ïñéóìüò ğñïóáñìïóìİíçò ğáñïõóßáóçò ïèüíçò";
-    Text[ korean ] = "ì‚¬ìš©ì ì •ì˜ ìŠ¬ë¼ì´ë“œ ì‡¼ ì§€ì •";
-    Text[ turkish ] = "Özel slayt gösterimi  tanımla";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Defineix la presentació personalitzada";
-    Text[ finnish ] = "Määritä mukautettu esitys";
-    Text[ thai ] = "à¸£à¸°à¸šà¸¸à¹à¸ªà¸”à¸‡à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡à¹à¸šà¸šà¸à¸³à¸«à¸™à¸”à¹€à¸­à¸‡";
-    Text[ czech ] = "Definovat vlastnÃ­ prezentaci";
-    Text[ hebrew ] = "Individuelle BildschirmprÃ¤sentation definieren";
-    Text[ hindi ] = "à¤•à¤¸à¥à¤Ÿà¤® à¤¸à¥à¤²à¤‡à¤¡ à¤¦à¤¿à¤–à¤¾à¤µ à¤•à¥‹ à¤ªà¤°à¤¿à¤­à¤¾à¤·à¤¾ à¤¦à¥‹";
-    Text[ slovak ] = "DefinovaÅ¥ vlastnÃº prezentÃ¡ciu";
-    Text[ hungarian ] = "EgyÃ©ni diavetÃ­tÃ©s meghatÃ¡rozÃ¡sa";
-    Text[ slovenian ] = "DoloÄi diaprojekcijo po meri";
+    Text [ en-US ] = "Define Custom Slide Show" ;
+    Text [ x-comment ] = " ";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
