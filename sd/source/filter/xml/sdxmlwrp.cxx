@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:45 $
+ *  last change: $Author: cl $ $Date: 2000-10-24 11:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ using namespace rtl;
 
 //////////////////////////////////////////////////////////////////////////////
 
-char __READONLY_DATA sXML_draw[] = "draw";
+char __READONLY_DATA sXML_drawing[] = "drawing";
 char __READONLY_DATA sXML_impress[] = "presentation";
 
 //////////////////////////////////////////////////////////////////////////////
@@ -320,7 +320,7 @@ BOOL SdXMLWrapper::Export()
     SdXMLExport aExp(mxLocalModel, sFileName, xHandler, mbShowProgress, IsDraw());
 
     // give string descriptor as parameter for doc type
-    BOOL bRet = (0 == aExp.exportDoc( IsDraw() ? sXML_draw : sXML_impress ));
+    BOOL bRet = (0 == aExp.exportDoc( IsDraw() ? sXML_drawing : sXML_impress ));
 
     return bRet;
 }
