@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-13 13:53:30 $
+ *  last change: $Author: cl $ $Date: 2002-11-12 15:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,9 @@
 #endif
 #ifndef _GALLERY_HXX_
 #include <svx/gallery.hxx>
+#endif
+#ifndef _SVX_COLORCFG_HXX
+#include <svx/colorcfg.hxx>
 #endif
 #ifndef _FILTER_HXX
 #include <svtools/filter.hxx>
@@ -855,17 +858,26 @@ void HtmlExport::SetDocColors( SdPage* pPage )
     if( pPage == NULL )
         pPage = pDoc->GetSdPage(0, PK_STANDARD);
 
-    m_aVLinkColor = Color(COL_RED);
-    m_aALinkColor = Color(COL_BLUE);
-    m_aLinkColor  = Color(COL_BLUE);
+    svx::ColorConfig aConfig;
+    m_aVLinkColor = Color(aConfig.GetColorValue(svx::LINKSVISITED).nColor);
+    m_aALinkColor = Color(aConfig.GetColorValue(svx::LINKS).nColor);
+    m_aLinkColor  = Color(aConfig.GetColorValue(svx::LINKS).nColor);
     m_aTextColor  = Color(COL_BLACK);
 
-    // Standard Textfarbe aus Outline-Vorlage der ersten Seite
-    SfxStyleSheet* pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_OUTLINE);
+    SfxStyleSheet* pSheet = NULL;
+
+    if( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
+    {
+        // Standard Textfarbe aus Outline-Vorlage der ersten Seite
+        pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_OUTLINE);
+        if(pSheet == NULL)
+            pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_TEXT);
+        if(pSheet == NULL)
+            pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_TITLE);
+    }
+
     if(pSheet == NULL)
-        pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_TEXT);
-    if(pSheet == NULL)
-        pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_TITLE);
+        pSheet = pDoc->GetDefaultStyleSheet();
 
     if(pSheet)
     {
