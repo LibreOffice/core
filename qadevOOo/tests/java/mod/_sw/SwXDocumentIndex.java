@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentIndex.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:39 $
+ *  last change:$Date: 2003-05-27 13:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sw;
 
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
@@ -108,7 +109,7 @@ public class SwXDocumentIndex extends TestCase {
     * Creates text document.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
         try {
             log.println( "creating a textdocument" );
             xTextDoc = SOF.createTextDoc( null );
@@ -139,7 +140,7 @@ public class SwXDocumentIndex extends TestCase {
         XPropertySet xPS = null;
         Object instance = null;
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory)tParam.getMSF());
         log.println( "creating a test environment" );
         try {
             xTC = SOF.createIndex(xTextDoc, "com.sun.star.text.DocumentIndex");
