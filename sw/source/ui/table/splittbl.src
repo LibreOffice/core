@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splittbl.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 07:02:34 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 21:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text[ korean ] = "¸ðµå";
         Text[ turkish ] = "Kip";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Modo";
     };
     RadioButton RB_CNTNT
     {
@@ -144,6 +145,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text[ korean ] = "Ç¥Á¦ º¹»ç(~C)";
         Text[ turkish ] = "B~aþlýðý kopyala";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Copiar encabezado";
     };
     RadioButton RB_BOX_PARA
     {
@@ -170,6 +172,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text[ korean ] = "°íÀ¯  Ç¥Á¦£¨À¯Çü Àû¿ë£©(~U)";
         Text[ turkish ] = "~Özel baþlýk (biçim uygula)";
         Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
+        Text[ catalan ] = "~Encabezado propio, con estilos";
     };
     RadioButton RB_BOX_NOPARA
     {
@@ -196,6 +199,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text[ korean ] = "»ç¿ëÀÚ Ç¥Á¦(~S)";
         Text[ turkish ] = "Ö~zel baþlýk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Encabezado ~propio";
     };
     RadioButton RB_BORDER
     {
@@ -222,6 +226,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text[ korean ] = "Ç¥Á¦ ¾øÀ½(~N)";
         Text[ turkish ] = "~Baþlýk yok";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Sin encabezado";
     };
     Text [ english_us ] = "Split Table" ;
     Text [ portuguese_brazilian ] = "Tabelle auftrennen" ;
@@ -242,4 +247,5 @@ ModalDialog DLG_SPLIT_TABLE
     Text[ korean ] = "Ç¥ ³ª´©±â";
     Text[ turkish ] = "Tabloyu böl";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Dividir tabla";
 };
