@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:22:51 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,6 +332,10 @@
 #ifndef EXTENSIONS_PROPCTRLR_PUSHBUTTONNAVIGATION_HXX
 #include "pushbuttonnavigation.hxx"
 #endif
+
+#define TEXTTYPE_SINGLELINE     0
+#define TEXTTYPE_MULTILINE      1
+#define TEXTTYPE_RICHTEXT       2
 
 //............................................................................
 namespace pcr
@@ -1081,24 +1085,19 @@ namespace pcr
         Reference< XRowSet > xRowSet(m_xPropValueAccess, UNO_QUERY);
         if (!xRowSet.is())
         {
-            // are we inspecting a control?
-            if ( 0 != m_nClassId )
+            xRowSet = Reference< XRowSet >(m_xObjectParent, UNO_QUERY);
+            if (!xRowSet.is())
             {
-                xRowSet = Reference< XRowSet >(m_xObjectParent, UNO_QUERY);
-                if (!xRowSet.is())
-                {
-                    // are we inspecting a grid column?
-                    if (Reference< XGridColumnFactory >(m_xObjectParent, UNO_QUERY).is())
-                    {   // we're inspecting a grid column
-                        Reference< XChild > xParentAsChild(m_xObjectParent, UNO_QUERY);
-                        if (xParentAsChild.is())
-                            xRowSet = Reference< XRowSet >(xParentAsChild->getParent(), UNO_QUERY);
-                    }
+                // are we inspecting a grid column?
+                if (Reference< XGridColumnFactory >(m_xObjectParent, UNO_QUERY).is())
+                {   // we're inspecting a grid column
+                    Reference< XChild > xParentAsChild(m_xObjectParent, UNO_QUERY);
+                    if (xParentAsChild.is())
+                        xRowSet = Reference< XRowSet >(xParentAsChild->getParent(), UNO_QUERY);
                 }
             }
-
         }
-        DBG_ASSERT( xRowSet.is(), "OPropertyBrowserController::SetQueries: could not obtain the rowset for the introspectee!" );
+        DBG_ASSERT( xRowSet.is(), "OPropertyBrowserController::getRowSet: could not obtain the rowset for the introspectee!" );
         return xRowSet;
     }
 
@@ -1927,6 +1926,7 @@ namespace pcr
                         pProperty->sValue = m_sStandard;
                 }
 
+
                 //////////////////////////////////////////////////////////////////////
 
                 sal_Bool bFilter = sal_True;
@@ -2083,8 +2083,21 @@ namespace pcr
                         }
                     }
                 }
+                case PROPERTY_ID_MULTILINE:
+                {
+                    Reference< XPropertySetInfo > xPropInfo = m_xIntrospecteeAsProperty->getPropertySetInfo();
+                    if ( xPropInfo.is() )
+                    {
+                        // if the "RichText" property is also present, then don't show the prop
+                        // (since the combination of the two is then simulated with the virtual property TextType)
+                        if ( xPropInfo->hasPropertyByName( PROPERTY_RICHTEXT ) )
+                        {
+                            delete pProperty;
+                            continue;
+                        }
+                    }
+                }
                 break;
-
                 case PROPERTY_ID_CONTROLLABEL:
                 {
                     bFilter = sal_False;
@@ -3019,6 +3032,33 @@ namespace pcr
         }
         break;
 
+        case PROPERTY_ID_TEXTTYPE:
+        {
+            sal_Int32 nTextType = TEXTTYPE_SINGLELINE;
+            try
+            {
+                sal_Bool bRichText = sal_False;
+                OSL_VERIFY( m_xPropValueAccess->getPropertyValue( PROPERTY_RICHTEXT ) >>= bRichText );
+                if ( bRichText )
+                    nTextType = TEXTTYPE_RICHTEXT;
+                else
+                {
+                    sal_Bool bMultiLine = sal_False;
+                    OSL_VERIFY( m_xPropValueAccess->getPropertyValue( PROPERTY_MULTILINE ) >>= bMultiLine );
+                    if ( bMultiLine )
+                        nTextType = TEXTTYPE_MULTILINE;
+                    else
+                        nTextType = TEXTTYPE_SINGLELINE;
+                }
+                aReturn <<= nTextType;
+            }
+            catch( const Exception& )
+            {
+                OSL_ENSURE( sal_False, "OPropertyBrowserController::getVirtualPropertyValue: caught an exception!" );
+            }
+        }
+        break;
+
         default:
             DBG_ERROR( "OPropertyBrowserController::getVirtualPropertyValue: given id does not refer to a virtual property!" );
         }
@@ -3102,6 +3142,33 @@ namespace pcr
         }
         break;
 
+        case PROPERTY_ID_TEXTTYPE:
+        {
+            sal_Bool bMultiLine = sal_False;
+            sal_Bool bRichText = sal_False;
+            sal_Int32 nTextType = TEXTTYPE_SINGLELINE;
+            OSL_VERIFY( _rValue >>= nTextType );
+            switch ( nTextType )
+            {
+            case TEXTTYPE_SINGLELINE: bMultiLine = bRichText = sal_False; break;
+            case TEXTTYPE_MULTILINE:  bMultiLine = sal_True; bRichText = sal_False; break;
+            case TEXTTYPE_RICHTEXT:   bMultiLine = sal_True; bRichText = sal_True; break;
+            default:
+                OSL_ENSURE( sal_False, "OPropertyBrowserController::setVirtualPropertyValue: invalid text type!" );
+            }
+
+            try
+            {
+                m_xPropValueAccess->setPropertyValue( PROPERTY_MULTILINE, makeAny( bMultiLine ) );
+                m_xPropValueAccess->setPropertyValue( PROPERTY_RICHTEXT, makeAny( bRichText ) );
+            }
+            catch( const Exception& )
+            {
+                OSL_ENSURE( sal_False, "OPropertyBrowserController::setVirtualPropertyValue: caught an exception!" );
+            }
+        }
+        break;
+
         default:
             OSL_ENSURE( sal_False, "OPropertyBrowserController::setVirtualPropertyValue: given id does not refer to a virtual property!" );
         }
@@ -3149,12 +3216,25 @@ namespace pcr
         Reference< XPropertySetInfo > xPSI;
         if ( m_xPropValueAccess.is() )
             xPSI = m_xPropValueAccess->getPropertySetInfo();
-        if ( xPSI.is() && xPSI->hasPropertyByName( PROPERTY_HSCROLL ) && xPSI->hasPropertyByName( PROPERTY_VSCROLL ) )
+        if ( xPSI.is() )
         {
-            sal_Int32 nLength = _rProps.getLength();
-            _rProps.realloc( nLength + 1 );
-            _rProps[ nLength ] = Property( PROPERTY_SHOW_SCROLLBARS, PROPERTY_ID_SHOW_SCROLLBARS,
-                    ::getCppuType( static_cast< sal_Int32* >( NULL ) ), 0 );
+            if ( xPSI->hasPropertyByName( PROPERTY_HSCROLL ) && xPSI->hasPropertyByName( PROPERTY_VSCROLL ) )
+            {
+                sal_Int32 nLength = _rProps.getLength();
+                _rProps.realloc( nLength + 1 );
+                _rProps[ nLength ] = Property( PROPERTY_SHOW_SCROLLBARS, PROPERTY_ID_SHOW_SCROLLBARS,
+                        ::getCppuType( static_cast< sal_Int32* >( NULL ) ), 0 );
+            }
+
+            // if the control supports both the "RichText" and "MultiLine" properties, then we
+            // have a virtual property "TextType", which combines these two
+            if ( xPSI->hasPropertyByName( PROPERTY_MULTILINE ) && xPSI->hasPropertyByName( PROPERTY_RICHTEXT ) )
+            {
+                sal_Int32 nLength = _rProps.getLength();
+                _rProps.realloc( nLength + 1 );
+                _rProps[ nLength ] = Property( PROPERTY_TEXTTYPE, PROPERTY_ID_TEXTTYPE,
+                        ::getCppuType( static_cast< sal_Int32* >( NULL ) ), 0 );
+            }
         }
 
         return _rProps.getLength() != 0;
@@ -3203,6 +3283,23 @@ namespace pcr
 
         switch ( _nPropId )
         {
+        case PROPERTY_ID_TEXTTYPE:
+        {
+            sal_Int32 nTextType = TEXTTYPE_SINGLELINE;
+            getVirtualPropertyValue( PROPERTY_ID_TEXTTYPE ) >>= nTextType;
+
+            getPropertyBox()->EnablePropertyLine( PROPERTY_WORDBREAK,       nTextType == TEXTTYPE_RICHTEXT );
+            getPropertyBox()->EnablePropertyLine( PROPERTY_MAXTEXTLEN,      nTextType != TEXTTYPE_RICHTEXT );
+            getPropertyBox()->EnablePropertyLine( PROPERTY_ECHO_CHAR,       nTextType != TEXTTYPE_RICHTEXT );
+            getPropertyBox()->EnablePropertyLine( PROPERTY_FONT_NAME,       nTextType != TEXTTYPE_RICHTEXT );
+            getPropertyBox()->EnablePropertyLine( PROPERTY_ALIGN,           nTextType != TEXTTYPE_RICHTEXT );
+            getPropertyBox()->EnablePropertyLine( PROPERTY_DEFAULT_TEXT,    nTextType != TEXTTYPE_RICHTEXT );
+            getPropertyBox()->EnablePropertyLine( ::rtl::OUString::createFromAscii( "Font" ), nTextType != TEXTTYPE_RICHTEXT );
+            getPropertyBox()->EnablePropertyLine( PROPERTY_SHOW_SCROLLBARS, nTextType != TEXTTYPE_SINGLELINE );
+            getPropertyBox()->ShowPropertyPage( m_nDataPageId, nTextType != TEXTTYPE_RICHTEXT );
+        }
+        break;
+
         case PROPERTY_ID_BOUND_CELL:
         {
             // the SQL-data-binding related properties need to be enabled if and only if
