@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: ab $ $Date: 2001-11-15 10:02:48 $
+ *  last change: $Author: pl $ $Date: 2001-11-20 19:04:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -839,6 +839,9 @@ BOOL UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
     pDestStm->SetSize( 0 );
     Seek( STREAM_SEEK_TO_END );
     INT32 n = Tell();
+    if( n < 0 )
+        return FALSE;
+
     if( pDestStm->SetSize( n ) && n )
     {
         void* p = new BYTE[ 4096 ];
