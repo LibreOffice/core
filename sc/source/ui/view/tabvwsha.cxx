@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsha.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:08:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,9 +122,9 @@ BOOL ScTabViewShell::GetFunction( String& rFuncStr )
         ScViewData* pViewData   = GetViewData();
         ScDocument* pDoc        = pViewData->GetDocument();
         ScMarkData& rMark       = pViewData->GetMarkData();
-        USHORT      nPosX       = pViewData->GetCurX();
-        USHORT      nPosY       = pViewData->GetCurY();
-        USHORT      nTab        = pViewData->GetTabNo();
+        SCCOL       nPosX       = pViewData->GetCurX();
+        SCROW       nPosY       = pViewData->GetCurY();
+        SCTAB       nTab        = pViewData->GetTabNo();
 
         aStr = ScGlobal::GetRscString(nGlobStrId);
         aStr += '=';
@@ -177,16 +177,16 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
     ScViewData* pViewData   = GetViewData();
     ScDocument* pDoc        = pViewData->GetDocument();
     ScMarkData& rMark       = pViewData->GetMarkData();
-    USHORT      nPosX       = pViewData->GetCurX();
-    USHORT      nPosY       = pViewData->GetCurY();
-    USHORT      nTab        = pViewData->GetTabNo();
+    SCCOL       nPosX       = pViewData->GetCurX();
+    SCROW       nPosY       = pViewData->GetCurY();
+    SCTAB       nTab        = pViewData->GetTabNo();
     USHORT      nMyId       = 0;
 
     SfxViewFrame* pThisFrame = GetViewFrame();
     BOOL bOle = pThisFrame->ISA(SfxInPlaceFrame);
 
-    USHORT nTabCount = pDoc->GetTableCount();
-    USHORT nTabSelCount = rMark.GetSelectCount();
+    SCTAB nTabCount = pDoc->GetTableCount();
+    SCTAB nTabSelCount = rMark.GetSelectCount();
 
     SfxWhichIter    aIter(rSet);
     USHORT          nWhich = aIter.FirstWhich();
@@ -209,7 +209,7 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
                 {
                     // #i22589# also take "Print Entire Sheet" into account here
                     BOOL bHas = FALSE;
-                    for (USHORT i=0; !bHas && i<nTabCount; i++)
+                    for (SCTAB i=0; !bHas && i<nTabCount; i++)
                         bHas = rMark.GetTableSelect(i) && (pDoc->GetPrintRangeCount(i) || pDoc->IsPrintEntireSheet(i));
                     if (!bHas)
                         rSet.DisableItem( nWhich );
@@ -250,7 +250,7 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case SID_CURRENTTAB:
                 //  Tabelle fuer Basic ist 1-basiert
-                rSet.Put( SfxUInt16Item( nWhich, GetViewData()->GetTabNo() + 1 ) );
+                rSet.Put( SfxUInt16Item( nWhich, static_cast<sal_uInt16>(GetViewData()->GetTabNo()) + 1 ) );
                 break;
 
             case SID_CURRENTDOC:
@@ -282,7 +282,7 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
 
                     ScDocShell* pDocSh = GetViewData()->GetDocShell();
                     ScDocument* pDoc = pDocSh->GetDocument();
-                    USHORT nTab = GetViewData()->GetTabNo();
+                    SCTAB nTab = GetViewData()->GetTabNo();
                     String aStyleName = pDoc->GetPageStyle( nTab );
                     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
                     SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName,
@@ -354,7 +354,7 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
             case SID_OUTLINE_DELETEALL:
                 {
                     ScDocument* pDoc = GetViewData()->GetDocument();
-                    USHORT nOlTab = GetViewData()->GetTabNo();
+                    SCTAB nOlTab = GetViewData()->GetTabNo();
                     ScOutlineTable* pOlTable = pDoc->GetOutlineTable( nOlTab );
                     if (pOlTable == NULL)
                         rSet.DisableItem( nWhich );
@@ -497,15 +497,15 @@ void ScTabViewShell::UpdateInputHandler( BOOL bForce /* = FALSE */, BOOL bStopEd
         ScViewData*             pViewData   = GetViewData();
         ScDocument*             pDoc        = pViewData->GetDocument();
         CellType                eType;
-        USHORT                  nPosX       = pViewData->GetCurX();
-        USHORT                  nPosY       = pViewData->GetCurY();
-        USHORT                  nTab        = pViewData->GetTabNo();
-        USHORT                  nStartTab   = 0;
-        USHORT                  nEndTab     = 0;
-        USHORT                  nStartCol   = 0;
-        USHORT                  nStartRow   = 0;
-        USHORT                  nEndCol     = 0;
-        USHORT                  nEndRow     = 0;
+        SCCOL                   nPosX       = pViewData->GetCurX();
+        SCROW                   nPosY       = pViewData->GetCurY();
+        SCTAB                   nTab        = pViewData->GetTabNo();
+        SCTAB                   nStartTab   = 0;
+        SCTAB                   nEndTab     = 0;
+        SCCOL                   nStartCol   = 0;
+        SCROW                   nStartRow   = 0;
+        SCCOL                   nEndCol     = 0;
+        SCROW                   nEndRow     = 0;
 
         pViewData->GetSimpleArea( nStartCol, nStartRow, nStartTab,
                                   nEndCol,   nEndRow,   nEndTab );
