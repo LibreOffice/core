@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-03 15:23:55 $
+ *  last change: $Author: os $ $Date: 2001-08-30 14:46:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1321,16 +1321,20 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
         case TYP_DBNEXTSETFLD:
         case TYP_DBNAMEFLD:
         {
-            USHORT nPos, nTablePos, nExpPos;
+            USHORT nPos, nTablePos, nCmdTypePos, nExpPos;
             String sPar1;
             SwDBData aDBData;
 
-            // DBName aus rData.sPar1 extrahieren. Format: DBName.TableName.ExpStrg
+            // DBName aus rData.sPar1 extrahieren. Format: DBName.TableName.CommandType.ExpStrg
             if ((nTablePos = rData.sPar1.Search(DB_DELIM)) != STRING_NOTFOUND)
                 aDBData.sDataSource = rData.sPar1.Copy(0, nTablePos++);
-            if ((nExpPos = rData.sPar1.Search(DB_DELIM, nTablePos)) != STRING_NOTFOUND)
+            if ((nCmdTypePos = rData.sPar1.Search(DB_DELIM, nTablePos)) != STRING_NOTFOUND)
             {
-                aDBData.sCommand = rData.sPar1.Copy(nTablePos, nExpPos++ - nTablePos);
+                aDBData.sCommand = rData.sPar1.Copy(nTablePos, nCmdTypePos++ - nTablePos);
+            }
+            if ((nExpPos = rData.sPar1.Search(DB_DELIM, nCmdTypePos)) != STRING_NOTFOUND)
+            {
+                aDBData.nCommandType = rData.sPar1.Copy(nCmdTypePos, nExpPos++ - nCmdTypePos).ToInt32();
             }
             if (nExpPos != STRING_NOTFOUND)
                 nPos = nExpPos;
