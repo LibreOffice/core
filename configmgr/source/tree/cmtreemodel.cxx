@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtreemodel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:42 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,11 +66,21 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+#include "configexcept.hxx"
+
+#include <stl/algorithm>
 
 //..........................................................................
 namespace configmgr
 {
 //..........................................................................
+//==========================================================================
+//= Change
+//==========================================================================
+void Change::swap(Change& aOther)
+{
+    std::swap(m_aName, aOther.m_aName);
+}
 
 //==========================================================================
 //= SubtreeChange
@@ -79,6 +89,14 @@ namespace configmgr
 SubtreeChange::SubtreeChange(OUString const& _rName)
     :Change(_rName)
 {
+}
+//--------------------------------------------------------------------------
+
+void SubtreeChange::swap(SubtreeChange& aOther)
+{
+    Change::swap(aOther);
+    m_mChanges.swap(aOther.m_mChanges);
+    std::swap(m_sTemplateName, aOther.m_sTemplateName);
 }
 
 //--------------------------------------------------------------------------
@@ -187,6 +205,18 @@ uno::Sequence< OUString > SubtreeChange::elementNames() const
 }
 
 //--------------------------------------------------------------------------
+SubtreeChange::MutatingChildIterator SubtreeChange::begin_changes() throw()
+{
+    return MutatingChildIterator(m_mChanges.begin());
+}
+
+//--------------------------------------------------------------------------
+SubtreeChange::MutatingChildIterator SubtreeChange::end_changes() throw()
+{
+    return MutatingChildIterator(m_mChanges.end());
+}
+
+//--------------------------------------------------------------------------
 SubtreeChange::ChildIterator SubtreeChange::begin() const throw()
 {
     return ChildIterator(this);
@@ -215,12 +245,14 @@ SubtreeChange::ChildIterator::ChildIterator(const SubtreeChange* _pTree, struct 
 }
 
 //--------------------------------------------------------------------------
-Change const * SubtreeChange::ChildIterator::operator*() const
+Change const & SubtreeChange::ChildIterator::operator*() const
 {
-    if (isValid())
-        return m_pTree->getChange(m_aNames[m_nPos]);
-    OSL_ENSHURE(sal_False, "SubtreeChange::ChildIterator::operator* : invalid iterator !");
-    return NULL;
+    OSL_ENSHURE(isValid(), "SubtreeChange::ChildIterator::operator* : invalid iterator !");
+
+    if (!isValid())
+        throw configuration::Exception("INTERNAL ERROR: Invalid SubtreeChange::ChildIterator dereferenced");
+
+    return *m_pTree->getChange(m_aNames[m_nPos]);
 }
 
 //--------------------------------------------------------------------------
@@ -266,7 +298,7 @@ SubtreeChangeReferrer::SubtreeChangeReferrer(const SubtreeChange& _rSource)
     ChildIterator aSourceChildren = _rSource.begin();
     while (aSourceChildren != _rSource.end())
     {
-        const Change* pChange = *aSourceChildren;
+        const Change* pChange = &*aSourceChildren;
         OSL_ENSHURE(pChange, "SubtreeChangeReferrer::SubtreeChangeReferrer : invalid change !");
         if  (   pChange->isA(ValueChange::getStaticType())
             ||  pChange->isA(RemoveNode::getStaticType())

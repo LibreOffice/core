@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-03 08:51:05 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,7 +450,22 @@ namespace configmgr
     {
         // Add a new Value
         if (m_pCurrentSubtree)
+        {
+            if (aAddNode.isReplacing())
+            {
+                std::auto_ptr<INode> aOldNode = m_pCurrentSubtree->removeChild(aAddNode.getNodeName());
+
+#ifdef DBUG
+                OSL_ENSHURE(aOldNode.get(), "TreeUpdate:AddNode: can't recover node being replaced");
+                if (aOldNode.get() == NULL)
+                    aLog.push_back(OString("TreeUpdate: can't recover node being replaced (for AddNode)"));
+#endif
+
+                aAddNode.takeReplacedNode( aOldNode );
+            }
+
             m_pCurrentSubtree->addChild(aAddNode.releaseAddedNode());
+        }
 #ifdef DBUG
         else
             aLog.push_back(OString("TreeUpdate: no CurrentSubtree for AddNode"));
@@ -463,14 +478,19 @@ namespace configmgr
         // remove a Value
         if (m_pCurrentSubtree)
         {
-            sal_Bool bOk = (NULL != m_pCurrentSubtree->removeChild(aRemoveNode.getNodeName()).get());
+            std::auto_ptr<INode> aOldNode = m_pCurrentSubtree->removeChild(aRemoveNode.getNodeName());
+
+            sal_Bool bOk = (NULL != aOldNode.get());
+            aRemoveNode.takeRemovedNode( aOldNode );
 
 #ifdef DBUG
-            ::rtl::OString aStr("TreeUpdate: Can't remove child with name:=");
-            aStr += rtl::OUStringToOString(aRemoveNode.getNodeName(),RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSHURE(bOk, aStr.getStr());
             if (!bOk)
+            {
+                ::rtl::OString aStr("TreeUpdate: Can't remove child with name:=");
+                aStr += rtl::OUStringToOString(aRemoveNode.getNodeName(),RTL_TEXTENCODING_ASCII_US);
+                OSL_ENSHURE(bOk, aStr.getStr());
                 aLog.push_back(aStr);
+            }
 #endif
         }
     }

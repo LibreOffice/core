@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changes.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:42 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,9 @@ void ValueChange::setModeAsString(const ::rtl::OUString& _rMode)
 AddNode::AddNode(std::auto_ptr<INode> aNewNode_, OUString const& _rName)
     :Change(_rName)
     ,m_aOwnNewNode(aNewNode_)
+    ,m_aOwnOldNode()
+    ,m_pOldNode(0)
+    ,m_bReplacing(false)
 {
     m_pNewNode = m_aOwnNewNode.get();
 }
@@ -190,5 +193,57 @@ AddNode::~AddNode()
 }
 
 //--------------------------------------------------------------------------
+void AddNode::expectReplacedNode(INode* pOldNode)
+{
+    if (pOldNode != m_aOwnOldNode.get())
+    {
+        OSL_ENSURE(!m_aOwnOldNode.get(), "This RemoveNode already owns a Node - throwing that away");
+        m_aOwnOldNode.reset();
+    }
+    m_pOldNode = pOldNode;
+}
+//--------------------------------------------------------------------------
+
+void AddNode::takeReplacedNode(std::auto_ptr<INode> aNode)
+{
+    OSL_ENSURE(m_pOldNode == 0 || m_pOldNode == aNode.get(), "Removing unexpected Node");
+    m_aOwnOldNode = aNode;
+    m_pOldNode = m_aOwnOldNode.get();
+}
+
+
+//==========================================================================
+//= RemoveNode
+//==========================================================================
+RemoveNode::RemoveNode(OUString const& _rName)
+    :Change(_rName)
+    ,m_aOwnOldNode()
+    ,m_pOldNode(0)
+{
+}
+
+//--------------------------------------------------------------------------
+RemoveNode::~RemoveNode()
+{
+}
+//--------------------------------------------------------------------------
+
+void RemoveNode::expectRemovedNode(INode* pOldNode)
+{
+    if (pOldNode != m_aOwnOldNode.get())
+    {
+        OSL_ENSURE(!m_aOwnOldNode.get(), "This RemoveNode already owns a Node - throwing that away");
+        m_aOwnOldNode.reset();
+    }
+    m_pOldNode = pOldNode;
+}
+//--------------------------------------------------------------------------
+
+void RemoveNode::takeRemovedNode(std::auto_ptr<INode> aNode)
+{
+    OSL_ENSURE(m_pOldNode == 0 || m_pOldNode == aNode.get(), "Removing unexpected Node");
+    m_aOwnOldNode = aNode;
+    m_pOldNode = m_aOwnOldNode.get();
+}
 
 
