@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: tra $ $Date: 2001-06-28 11:13:25 $
+#   last change: $Author: tra $ $Date: 2001-08-03 14:08:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,8 @@ SLOFILES=$(SLO)$/FileOpenDlg.obj\
          $(SLO)$/WinFileOpenImpl.obj\
          $(SLO)$/FilterContainer.obj\
          $(SLO)$/controlaccess.obj\
-         $(SLO)$/dibpreview.obj
+         $(SLO)$/dibpreview.obj\
+         $(SLO)$/helppopupwindow.obj
                  
 
 # --- Targets ------------------------------------------------------
