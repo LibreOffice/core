@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:22:30 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:17:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@
 #include "svdmodel.hxx"
 #include "svdouno.hxx"
 #include "shapeimpl.hxx"
+#include "svdoashp.hxx"
 
 using namespace ::osl;
 using namespace ::vos;
@@ -1166,7 +1167,7 @@ void SAL_CALL SvxShapePolyPolygon::setPropertyValue( const OUString& aPropertyNa
         pModel->SetChanged();
 }
 
-void SAL_CALL ImplSvxPointSequenceSequenceToPolyPolygon( const XPolyPolygon& rPolyPoly, drawing::PointSequenceSequence& rRetval )
+void SAL_CALL SvxPointSequenceSequenceToXPolyPolygon( const XPolyPolygon& rPolyPoly, drawing::PointSequenceSequence& rRetval )
 {
     if( rRetval.getLength() != rPolyPoly.Count() )
         rRetval.realloc( rPolyPoly.Count() );
@@ -1208,7 +1209,7 @@ uno::Any SAL_CALL SvxShapePolyPolygon::getPropertyValue( const OUString& aProper
         const XPolyPolygon& rPolyPoly = GetPolygon();
         drawing::PointSequenceSequence aRetval( rPolyPoly.Count() );
 
-        ImplSvxPointSequenceSequenceToPolyPolygon( rPolyPoly, aRetval );
+        SvxPointSequenceSequenceToXPolyPolygon( rPolyPoly, aRetval );
 
         return uno::Any( &aRetval, ::getCppuType((const drawing::PointSequenceSequence*)0) );
     }
@@ -1222,7 +1223,7 @@ uno::Any SAL_CALL SvxShapePolyPolygon::getPropertyValue( const OUString& aProper
 
         drawing::PointSequenceSequence aRetval( aPolyPoly.Count() );
 
-        ImplSvxPointSequenceSequenceToPolyPolygon( aPolyPoly, aRetval );
+        SvxPointSequenceSequenceToXPolyPolygon( aPolyPoly, aRetval );
 
         return uno::Any( &aRetval, ::getCppuType((const drawing::PointSequenceSequence*)0) );
     }
@@ -1315,7 +1316,7 @@ SvxShapePolyPolygonBezier::~SvxShapePolyPolygonBezier() throw()
 {
 }
 
-void SAL_CALL ImplSvxPolyPolygonBezierCoordsToPolyPolygon( drawing::PolyPolygonBezierCoords* pSourcePolyPolygon, XPolyPolygon& rNewPolyPolygon )
+void SvxConvertPolyPolygonBezierToXPolyPolygon( const drawing::PolyPolygonBezierCoords* pSourcePolyPolygon, XPolyPolygon& rNewPolyPolygon )
     throw( IllegalArgumentException )
 {
     sal_Int32 nOuterSequenceCount = pSourcePolyPolygon->Coordinates.getLength();
@@ -1440,7 +1441,7 @@ void SAL_CALL SvxShapePolyPolygonBezier::setPropertyValue( const OUString& aProp
             throw IllegalArgumentException();
 
         XPolyPolygon aNewPolyPolygon;
-        ImplSvxPolyPolygonBezierCoordsToPolyPolygon( (drawing::PolyPolygonBezierCoords*)aValue.getValue(), aNewPolyPolygon );
+        SvxConvertPolyPolygonBezierToXPolyPolygon( (drawing::PolyPolygonBezierCoords*)aValue.getValue(), aNewPolyPolygon );
         SetPolygon(aNewPolyPolygon);
     }
     else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Geometry")))
@@ -1454,7 +1455,7 @@ void SAL_CALL SvxShapePolyPolygonBezier::setPropertyValue( const OUString& aProp
             XPolyPolygon aNewPolyPolygon;
 
             pObj->TRGetBaseGeometry(aMatrix3D, aNewPolyPolygon);
-            ImplSvxPolyPolygonBezierCoordsToPolyPolygon( (drawing::PolyPolygonBezierCoords*)aValue.getValue(), aNewPolyPolygon );
+            SvxConvertPolyPolygonBezierToXPolyPolygon( (drawing::PolyPolygonBezierCoords*)aValue.getValue(), aNewPolyPolygon );
             pObj->TRSetBaseGeometry(aMatrix3D, aNewPolyPolygon);
         }
     }
@@ -1467,7 +1468,7 @@ void SAL_CALL SvxShapePolyPolygonBezier::setPropertyValue( const OUString& aProp
         pModel->SetChanged();
 }
 
-void SAL_CALL ImplSvxPolyPolygonToPolyPolygonBezierCoords( const XPolyPolygon& rPolyPoly, drawing::PolyPolygonBezierCoords& rRetval )
+void SvxPolyPolygonToPolyPolygonBezierCoords( const XPolyPolygon& rPolyPoly, drawing::PolyPolygonBezierCoords& rRetval )
 {
     // Polygone innerhalb vrobereiten
     rRetval.Coordinates.realloc((sal_Int32)rPolyPoly.Count());
@@ -1513,7 +1514,7 @@ uno::Any SAL_CALL SvxShapePolyPolygonBezier::getPropertyValue( const OUString& a
         // PolyPolygon in eine struct PolyPolygon packen
         const XPolyPolygon& rPolyPoly = GetPolygon();
         drawing::PolyPolygonBezierCoords aRetval;
-        ImplSvxPolyPolygonToPolyPolygonBezierCoords(rPolyPoly, aRetval );
+        SvxPolyPolygonToPolyPolygonBezierCoords(rPolyPoly, aRetval );
 
         aAny <<= aRetval;
     }
@@ -1527,7 +1528,7 @@ uno::Any SAL_CALL SvxShapePolyPolygonBezier::getPropertyValue( const OUString& a
             pObj->TRGetBaseGeometry( aMatrix3D, aPolyPoly );
 
             drawing::PolyPolygonBezierCoords aRetval;
-            ImplSvxPolyPolygonToPolyPolygonBezierCoords(aPolyPoly, aRetval );
+            SvxPolyPolygonToPolyPolygonBezierCoords(aPolyPoly, aRetval );
 
             aAny <<= aRetval;
         }
@@ -1863,3 +1864,226 @@ SvxShapeCaption::SvxShapeCaption( SdrObject* pObj ) throw()
 SvxShapeCaption::~SvxShapeCaption() throw()
 {
 }
+
+/***********************************************************************
+* class SvxCustomShape                                                   *
+***********************************************************************/
+
+SvxCustomShape::SvxCustomShape( SdrObject* pObj )  throw() :
+    SvxShapeText( pObj, aSvxMapProvider.GetMap( SVXMAP_CUSTOMSHAPE ) )
+{
+}
+
+//----------------------------------------------------------------------
+SvxCustomShape::~SvxCustomShape() throw()
+{
+}
+
+//----------------------------------------------------------------------
+
+void SvxCustomShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw()
+{
+    SvxShapeText::Create( pNewObj, pNewPage );
+}
+
+//----------------------------------------------------------------------
+
+uno::Sequence< uno::Type > SAL_CALL SvxCustomShape::getTypes()
+    throw (uno::RuntimeException)
+{
+    return SvxShapeText::getTypes();
+}
+
+uno::Sequence< sal_Int8 > SAL_CALL SvxCustomShape::getImplementationId()
+    throw (uno::RuntimeException)
+{
+    static uno::Sequence< sal_Int8 > aId;
+    if( aId.getLength() == 0 )
+    {
+        aId.realloc( 16 );
+        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
+    }
+    return aId;
+}
+
+// ::com::sun::star::drawing::XShape
+
+//----------------------------------------------------------------------
+OUString SAL_CALL SvxCustomShape::getShapeType()
+    throw( uno::RuntimeException )
+{
+    return SvxShape::getShapeType();
+}
+
+//------------------------------------------------------------------1----
+awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException)
+{
+    if ( pModel && pObj )
+    {
+        SdrAShapeObjGeoData aCustomShapeGeoData;
+        ((SdrObjCustomShape*)pObj)->SaveGeoData( aCustomShapeGeoData );
+
+        sal_Bool bMirroredX = sal_False;
+        sal_Bool bMirroredY = sal_False;
+
+        if ( pObj )
+        {
+            bMirroredX = ( ((SdrObjCustomShape*)pObj)->IsMirroredX() );
+            bMirroredY = ( ((SdrObjCustomShape*)pObj)->IsMirroredY() );
+        }
+        // get aRect, this is the unrotated snaprect
+        Rectangle aRect(((SdrObjCustomShape*)pObj)->GetLogicRect());
+        Rectangle aRectangle( aRect );
+
+        if ( bMirroredX || bMirroredY )
+        {   // we have to retrieve the unmirrored rect
+
+            GeoStat aNewGeo( aCustomShapeGeoData.aGeo );
+            if ( bMirroredX )
+            {
+                Polygon aPol( Rect2Poly( aRect, aNewGeo ) );
+                Rectangle aBoundRect( aPol.GetBoundRect() );
+
+                Point aRef1( ( aBoundRect.Left() + aBoundRect.Right() ) >> 1, aBoundRect.Top() );
+                Point aRef2( aRef1.X(), aRef1.Y() + 1000 );
+                USHORT i;
+                USHORT nPntAnz=aPol.GetSize();
+                for (i=0; i<nPntAnz; i++)
+                {
+                    MirrorPoint(aPol[i],aRef1,aRef2);
+                }
+                // Polygon wenden und etwas schieben
+                Polygon aPol0(aPol);
+                aPol[0]=aPol0[1];
+                aPol[1]=aPol0[0];
+                aPol[2]=aPol0[3];
+                aPol[3]=aPol0[2];
+                aPol[4]=aPol0[1];
+                Poly2Rect(aPol,aRectangle,aNewGeo);
+            }
+            if ( bMirroredY )
+            {
+                Polygon aPol( Rect2Poly( aRectangle, aNewGeo ) );
+                Rectangle aBoundRect( aPol.GetBoundRect() );
+
+                Point aRef1( aBoundRect.Left(), ( aBoundRect.Top() + aBoundRect.Bottom() ) >> 1 );
+                Point aRef2( aRef1.X() + 1000, aRef1.Y() );
+                USHORT i;
+                USHORT nPntAnz=aPol.GetSize();
+                for (i=0; i<nPntAnz; i++)
+                {
+                    MirrorPoint(aPol[i],aRef1,aRef2);
+                }
+                // Polygon wenden und etwas schieben
+                Polygon aPol0(aPol);
+                aPol[0]=aPol0[1];
+                aPol[1]=aPol0[0];
+                aPol[2]=aPol0[3];
+                aPol[3]=aPol0[2];
+                aPol[4]=aPol0[1];
+                Poly2Rect( aPol, aRectangle, aNewGeo );
+            }
+        }
+        Point aPt( aRectangle.TopLeft() );
+
+        if( pModel->IsWriter() )
+            aPt -= pObj->GetAnchorPos();
+
+        ForceMetricTo100th_mm(aPt);
+        return ::com::sun::star::awt::Point( aPt.X(), aPt.Y() );
+    }
+    else
+        return SvxShape::getPosition();
+}
+
+//----------------------------------------------------------------------
+void SAL_CALL SvxCustomShape::setPosition( const awt::Point& Position ) throw(uno::RuntimeException)
+{
+    SvxShapeText::setPosition(Position);
+}
+
+//----------------------------------------------------------------------
+
+awt::Size SAL_CALL SvxCustomShape::getSize() throw(uno::RuntimeException)
+{
+    return SvxShapeText::getSize();
+}
+
+//----------------------------------------------------------------------
+void SAL_CALL SvxCustomShape::setSize( const awt::Size& rSize )
+    throw(beans::PropertyVetoException, uno::RuntimeException)
+{
+    SvxShapeText::setSize( rSize );
+}
+
+//----------------------------------------------------------------------
+// ::com::sun::star::lang::XServiceInfo
+
+uno::Sequence< OUString > SAL_CALL SvxCustomShape::getSupportedServiceNames()
+    throw(uno::RuntimeException)
+{
+    return SvxShapeText::getSupportedServiceNames();
+}
+
+//----------------------------------------------------------------------
+void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException)
+{
+    sal_Bool bCustomShapeGeometry = pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CustomShapeGeometry" ) );
+
+    sal_Bool bMirroredX = sal_False;
+    sal_Bool bMirroredY = sal_False;
+
+    if ( bCustomShapeGeometry )
+    {
+        bMirroredX = ( ((SdrObjCustomShape*)pObj)->IsMirroredX() );
+        bMirroredY = ( ((SdrObjCustomShape*)pObj)->IsMirroredY() );
+    }
+
+    SvxShape::setPropertyValue( aPropertyName, aValue );
+
+    if ( bCustomShapeGeometry )
+    {
+        Rectangle aRect( pObj->GetSnapRect() );
+        if ( ((SdrObjCustomShape*)pObj)->IsMirroredX() != bMirroredX )
+        {
+            Point aTop( ( aRect.Left() + aRect.Right() ) >> 1, aRect.Top() );
+            Point aBottom( aTop.X(), aTop.Y() + 1000 );
+            ((SdrObjCustomShape*)pObj)->NbcMirror( aTop, aBottom );
+            // NbcMirroring is flipping the current mirror state,
+            // so we have to set the correct state again
+            ((SdrObjCustomShape*)pObj)->SetMirroredX( bMirroredX ? sal_False : sal_True );
+        }
+        if ( ((SdrObjCustomShape*)pObj)->IsMirroredY() != bMirroredY )
+        {
+            Point aLeft( aRect.Left(), ( aRect.Top() + aRect.Bottom() ) >> 1 );
+            Point aRight( aLeft.X() + 1000, aLeft.Y() );
+            ((SdrObjCustomShape*)pObj)->NbcMirror( aLeft, aRight );
+            // NbcMirroring is flipping the current mirror state,
+            // so we have to set the correct state again
+            ((SdrObjCustomShape*)pObj)->SetMirroredY( bMirroredY ? sal_False : sal_True );
+        }
+    }
+}
+
+uno::Any SAL_CALL SvxCustomShape::getPropertyValue( const OUString& aPropertyName )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+{
+    if( pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RotateAngle" ) ) )
+    {
+        double fAngle = ((SdrObjCustomShape*)pObj)->GetObjectRotation();
+        fAngle *= 100;
+        sal_Int32 nAngle = (sal_Int32)fAngle;
+
+        Any aAny;
+        aAny <<= nAngle;
+        return aAny;
+    }
+    else
+    {
+        return SvxShape::getPropertyValue( aPropertyName );
+    }
+
+}
+
+
