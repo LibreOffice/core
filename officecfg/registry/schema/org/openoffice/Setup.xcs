@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:56:54 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 11:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,13 @@
 				<info>
     				<author>CD</author>
 					<desc>Refer to a configuration file, which contains the list of UI commands, suitable for this module.</desc>
+				</info>
+			</prop>
+			<prop oor:name="ooSetupFactoryWindowStateConfigRef" oor:type="xs:string">
+				<info>
+    				<author>CD</author>
+					<desc xml:lang="en-US">Refer to a configuration file, which contains the persistent window data, suitable for this module.</desc>
+					<desc xml:lang="x-comment">Refer to a configuration file, which contains the persistent window data, suitable for this module.</desc>
 				</info>
 			</prop>
 		</group>
