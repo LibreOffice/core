@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:40:45 $
+ *  last change: $Author: oj $ $Date: 2000-11-06 12:14:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,9 +128,6 @@
 #ifndef _DBA_REGISTRATION_HELPER_HXX_
 #include "registrationhelper.hxx"
 #endif
-#ifndef _DBA_CORE_TABLECONTAINER_HXX_
-#include "tablecontainer.hxx"
-#endif
 #ifdef DEBUG
 #ifndef _COM_SUN_STAR_SDBC_XDRIVERMANAGER_HPP_
 #include <com/sun/star/sdbc/XDriverManager.hpp>
@@ -160,6 +157,21 @@
 #ifndef _DBA_CORE_TABLECONTAINER_HXX_
 #include "tablecontainer.hxx"
 #endif
+#ifndef _COM_SUN_STAR_SDB_XINTERACTIONSUPPLYPARAMETERS_HPP_
+#include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_PARAMETERSREQUEST_HPP_
+#include <com/sun/star/sdb/ParametersRequest.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XPARAMETERSSUPPLIER_HPP_
+#include <com/sun/star/sdb/XParametersSupplier.hpp>
+#endif
+#ifndef _COMPHELPER_INTERACTION_HXX_
+#include <comphelper/interaction.hxx>
+#endif
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
+#endif
 
 using namespace dbaccess;
 using namespace connectivity;
@@ -172,6 +184,7 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::task;
 using namespace ::cppu;
 using namespace ::osl;
 
@@ -185,6 +198,36 @@ extern "C" void SAL_CALL createRegistryInfo_ORowSet()
 {
     static OMultiInstanceAutoRegistration< ORowSet > aAutoRegistration;
 }
+
+//..................................................................
+namespace dbaccess
+{
+//..................................................................
+
+//==================================================================
+// OParameterContinuation
+//==================================================================
+class OParameterContinuation : public OInteraction< XInteractionSupplyParameters >
+{
+    Sequence< PropertyValue >       m_aValues;
+
+public:
+    OParameterContinuation() { }
+
+    Sequence< PropertyValue >   getValues() const { return m_aValues; }
+
+// XInteractionSupplyParameters
+    virtual void SAL_CALL setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException);
+};
+
+//------------------------------------------------------------------
+void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException)
+{
+    m_aValues = _rValues;
+}
+//..................................................................
+}
+//..................................................................
 
 //--------------------------------------------------------------------------
 Reference< XInterface > ORowSet_CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
@@ -1408,16 +1451,112 @@ Reference< XArray > SAL_CALL ORowSet::getArray( sal_Int32 columnIndex ) throw(SQ
 
     return Reference< XArray >();
 }
-
 // -------------------------------------------------------------------------
-using namespace rtl;
-// XRowSet
-void SAL_CALL ORowSet::execute(  ) throw(SQLException, RuntimeException)
+void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandler >& _rxHandler ) throw(SQLException, RuntimeException)
 {
+    if (!_rxHandler.is())
+        execute();
+
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
     // tell everybody that we will change the result set
+    approveExecution();
+
+    ClearableMutexGuard aGuard( m_aMutex );
+
+    // create and fill a composer
+    Reference<XSQLQueryComposer>  xComposer = getCurrentSettingsComposer(this, m_xServiceManager);
+    Reference<XParametersSupplier>  xParameters = Reference<XParametersSupplier> (xComposer, UNO_QUERY);
+
+    Reference<XIndexAccess>  xParamsAsIndicies = xParameters.is() ? xParameters->getParameters() : Reference<XIndexAccess>();
+    Reference<XNameAccess>   xParamsAsNames(xParamsAsIndicies, UNO_QUERY);
+    sal_Int32 nParamCount = xParamsAsIndicies.is() ? xParamsAsIndicies->getCount() : 0;
+
+    if (nParamCount)
+    {
+        try
+        {
+            freeResources();
+
+            // calc the connection to be used
+            if (m_xActiveConnection.is() && m_bRebuildConnOnExecute)
+                // there was a setProperty(ActiveConnection), but a setProperty(DataSource) _after_ that, too
+                m_xActiveConnection = NULL;
+            calcConnection();
+            m_bRebuildConnOnExecute = sal_False;
+
+            // build an interaction request
+            // two continuations (Ok and Cancel)
+            OInteractionAbort* pAbort = new OInteractionAbort;
+            OParameterContinuation* pParams = new OParameterContinuation;
+            // the request
+            ParametersRequest aRequest;
+            aRequest.Parameters = xParamsAsIndicies;
+            aRequest.Connection = m_xActiveConnection;
+            OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));
+            Reference< XInteractionRequest > xRequest(pRequest);
+            // some knittings
+            pRequest->addContinuation(pAbort);
+            pRequest->addContinuation(pParams);
+
+            // execute the request
+            _rxHandler->handle(xRequest);
+
+            if (!pParams->wasSelected())
+                // canceled by the user (i.e. (s)he canceled the dialog)
+                throw RowSetVetoException();
+
+            // now transfer the values from the continuation object to the parameter columns
+            Sequence< PropertyValue > aFinalValues = pParams->getValues();
+            const PropertyValue* pFinalValues = aFinalValues.getConstArray();
+            for (sal_Int32 i=0; i<aFinalValues.getLength(); ++i, ++pFinalValues)
+            {
+                Reference< XPropertySet > xParamColumn;
+                ::cppu::extractInterface(xParamColumn, xParamsAsIndicies->getByIndex(i));
+                if (xParamColumn.is())
+                {
+#ifdef DBG_UTIL
+                    ::rtl::OUString sName;
+                    xParamColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
+                    DBG_ASSERT(sName.equals(pFinalValues->Name), "ORowSet::executeWithCompletion: inconsistent parameter names!");
+#endif
+                    // determine the field type and ...
+                    sal_Int32 nParamType = 0;
+                    xParamColumn->getPropertyValue(PROPERTY_TYPE) >>= nParamType;
+                    // ... the scale of the parameter column
+                    sal_Int32 nScale = 0;
+                    if (hasProperty(PROPERTY_SCALE, xParamColumn))
+                        xParamColumn->getPropertyValue(PROPERTY_SCALE) >>= nScale;
+                    // and set the value
+                    static_cast< XParameters* >(this)->setObjectWithInfo(i + 1, pFinalValues->Value, nParamType, nScale);
+                        // (the index of the parameters is one-based)
+                }
+            }
+        }
+        // ensure that only the allowed exceptions leave this block
+        catch(SQLException&)
+        {
+            throw;
+        }
+        catch(RuntimeException&)
+        {
+            throw;
+        }
+        catch(Exception&)
+        {
+            DBG_ERROR("ORowSet::executeWithCompletion: caught an unexpected exception type while filling in the parameters!");
+        }
+
+        // we're done with the parameters, now for the real execution
+    }
+
+    //  do the real execute
+    execute_NoApprove_NoNewConn(aGuard);
+}
+// -------------------------------------------------------------------------
+void ORowSet::approveExecution() throw (RowSetVetoException, RuntimeException)
+{
     EventObject aEvt(*this);
     OInterfaceIteratorHelper aApproveIter(m_aApproveListeners);
     while (aApproveIter.hasMoreElements())
@@ -1425,150 +1564,165 @@ void SAL_CALL ORowSet::execute(  ) throw(SQLException, RuntimeException)
         if (!((XRowSetApproveListener*)aApproveIter.next())->approveRowSetChange(aEvt))
             throw RowSetVetoException();
     }
+}
+// -------------------------------------------------------------------------
+// XRowSet
+// -------------------------------------------------------------------------
+void SAL_CALL ORowSet::execute(  ) throw(SQLException, RuntimeException)
+{
+    if (ORowSet_BASE1::rBHelper.bDisposed)
+        throw DisposedException();
 
+    // tell everybody that we will change the result set
+    approveExecution();
 
+    ClearableMutexGuard aGuard( m_aMutex );
+    freeResources();
+
+    // calc the connection to be used
+    if (m_xActiveConnection.is() && m_bRebuildConnOnExecute)
+        // there was a setProperty(ActiveConnection), but a setProperty(DataSource) _after_ that, too
+        m_xActiveConnection = NULL;
+
+    calcConnection();
+    m_bRebuildConnOnExecute = sal_False;
+
+    // do the real execute
+    execute_NoApprove_NoNewConn(aGuard);
+
+}
+// -----------------------------------------------------------------------------
+using namespace rtl;
+// XRowSet
+void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotification)
+{
+    ::rtl::OUString aSql;
+    // do we need a new statement
+    if (m_bCreateStatement)
     {
-        freeResources();
+        // if we need a new statement we have to free the previous used columns
+        //  m_aColumns.disposing();
+        m_xStatement = NULL;
+        m_xComposer = NULL;
 
-        ClearableMutexGuard aGuard( m_aMutex );
-        if (ORowSet_BASE1::rBHelper.bDisposed)
-            throw DisposedException();
+        // Build the statement
+        sal_Bool bUseEscapeProcessing;
+        Reference< ::com::sun::star::container::XNameAccess > xTables;
+        // xTables will be filled in getCommand
+        m_aActiveCommand = getCommand(bUseEscapeProcessing,xTables);
+        if (m_aActiveCommand.len())
+            m_xStatement = m_xActiveConnection->prepareStatement(
+                                        aSql = getComposedQuery(m_aActiveCommand, bUseEscapeProcessing,xTables));
 
-        // calc the connection to be used
-        if (m_xActiveConnection.is() && m_bRebuildConnOnExecute)
-            // there was a setProperty(ActiveConnection), but a setProperty(DataSource) _after_ that, too
-            m_xActiveConnection = NULL;
+        Reference<XPropertySet> xProp(m_xStatement,UNO_QUERY);
+        xProp->setPropertyValue(PROPERTY_RESULTSETTYPE,makeAny(m_nResultSetType));
+        xProp->setPropertyValue(PROPERTY_RESULTSETCONCURRENCY,makeAny(m_nResultSetConcurrency));
+        xProp->setPropertyValue(PROPERTY_FETCHDIRECTION,makeAny((sal_Int32)m_nFetchDirection));
 
-        calcConnection();
-
-        m_bRebuildConnOnExecute = sal_False;
-        ::rtl::OUString aSql;
-        // do we need a new statement
-        if (m_bCreateStatement)
         {
-            // if we need a new statement we have to free the previous used columns
-            //  m_aColumns.disposing();
-            m_xStatement = NULL;
-            m_xComposer = NULL;
-
-            // Build the statement
-            sal_Bool bUseEscapeProcessing;
-            Reference< ::com::sun::star::container::XNameAccess > xTables;
-            // xTables will be filled in getCommand
-            m_aActiveCommand = getCommand(bUseEscapeProcessing,xTables);
-            if (m_aActiveCommand.len())
-                m_xStatement = m_xActiveConnection->prepareStatement(
-                                            aSql = getComposedQuery(m_aActiveCommand, bUseEscapeProcessing,xTables));
-
-            Reference<XPropertySet> xProp(m_xStatement,UNO_QUERY);
-            xProp->setPropertyValue(PROPERTY_RESULTSETTYPE,makeAny(m_nResultSetType));
-            xProp->setPropertyValue(PROPERTY_RESULTSETCONCURRENCY,makeAny(m_nResultSetConcurrency));
-            xProp->setPropertyValue(PROPERTY_FETCHDIRECTION,makeAny((sal_Int32)m_nFetchDirection));
-
             {
+                Reference<XParameters> xParam(m_xStatement,UNO_QUERY);
+                sal_Int32 i = 1;
+                for(ORowVector< ORowSetValue >::const_iterator aIter = m_aParameterRow.begin(); aIter != m_aParameterRow.end();++aIter,++i)
                 {
-                    Reference<XParameters> xParam(m_xStatement,UNO_QUERY);
-                    sal_Int32 i = 1;
-                    for(ORowVector< ORowSetValue >::const_iterator aIter = m_aParameterRow.begin(); aIter != m_aParameterRow.end();++aIter,++i)
-                    {
-                        if(aIter->isNull())
-                            xParam->setNull(i,aIter->getTypeKind());
-                        else
-                        {
-                            switch(aIter->getTypeKind())
-                            {
-                                case DataType::CHAR:
-                                case DataType::VARCHAR:
-                                    xParam->setString(i,*aIter);
-                                    break;
-                                case DataType::DOUBLE:
-                                case DataType::FLOAT:
-                                case DataType::REAL:
-                                case DataType::DECIMAL:
-                                case DataType::NUMERIC:
-                                    xParam->setDouble(i,*aIter);
-                                    break;
-                                case DataType::DATE:
-                                    xParam->setDate(i,*aIter);
-                                    break;
-                                case DataType::TIME:
-                                    xParam->setTime(i,*aIter);
-                                    break;
-                                case DataType::TIMESTAMP:
-                                    xParam->setTimestamp(i,*aIter);
-                                    break;
-                                case DataType::BINARY:
-                                case DataType::VARBINARY:
-                                case DataType::LONGVARBINARY:
-                                case DataType::LONGVARCHAR:
-                                    xParam->setBytes(i,*aIter);
-                                    break;
-                                case DataType::BIT:
-                                    xParam->setBoolean(i,*aIter);
-                                    break;
-                                case DataType::TINYINT:
-                                    xParam->setByte(i,*aIter);
-                                    break;
-                                case DataType::SMALLINT:
-                                    xParam->setShort(i,*aIter);
-                                    break;
-                                case DataType::INTEGER:
-                                    xParam->setInt(i,*aIter);
-                                    break;
-                            }
-                        }
-                    }
-                    Reference< XResultSet> xRs = m_xStatement->executeQuery();
-                    m_pCache = new ORowSetCache(xRs,m_xComposer,m_aUpdateTableName,m_bModified,m_bNew);
-
-                    if(!m_xColumns.is())
-                    {
-                        OSL_ENSHURE(0,"HELLO!");
-                    }
+                    if(aIter->isNull())
+                        xParam->setNull(i,aIter->getTypeKind());
                     else
                     {
-                        ORowSetDataColumns_COLLECTION aColumns;
-                        ::std::vector< ::rtl::OUString> aNames;
-
-                        ::rtl::OUString aDescription;
-                        Sequence< ::rtl::OUString> aSeq = m_xColumns->getElementNames();
-                        const ::rtl::OUString* pBegin   = aSeq.getConstArray();
-                        const ::rtl::OUString* pEnd     = pBegin + aSeq.getLength();
-                        for(sal_Int32 i=1;pBegin != pEnd ;++pBegin,++i)
+                        switch(aIter->getTypeKind())
                         {
-                            Reference<XPropertySet> xColumn;
-                            m_xColumns->getByName(*pBegin) >>= xColumn;
-                            if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
-                                aDescription = comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
-
-                            ORowSetDataColumn* pColumn = new ORowSetDataColumn( getMetaData(),
-                                                                                this,
-                                                                                this,
-                                                                                i,
-                                                                                aDescription,
-                                                                                m_pCache->getIterator(),
-                                                                                m_pCache->getEnd());
-                            aColumns.push_back(pColumn);
-                            pColumn->setName(*pBegin);
-                            aNames.push_back(*pBegin);
-
-                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
-                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
-                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,xColumn->getPropertyValue(PROPERTY_RELATIVEPOSITION));
-                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,xColumn->getPropertyValue(PROPERTY_WIDTH));
-                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,xColumn->getPropertyValue(PROPERTY_HIDDEN));
-                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLMODEL,xColumn->getPropertyValue(PROPERTY_CONTROLMODEL));
-
+                            case DataType::CHAR:
+                            case DataType::VARCHAR:
+                                xParam->setString(i,*aIter);
+                                break;
+                            case DataType::DOUBLE:
+                            case DataType::FLOAT:
+                            case DataType::REAL:
+                            case DataType::DECIMAL:
+                            case DataType::NUMERIC:
+                                xParam->setDouble(i,*aIter);
+                                break;
+                            case DataType::DATE:
+                                xParam->setDate(i,*aIter);
+                                break;
+                            case DataType::TIME:
+                                xParam->setTime(i,*aIter);
+                                break;
+                            case DataType::TIMESTAMP:
+                                xParam->setTimestamp(i,*aIter);
+                                break;
+                            case DataType::BINARY:
+                            case DataType::VARBINARY:
+                            case DataType::LONGVARBINARY:
+                            case DataType::LONGVARCHAR:
+                                xParam->setBytes(i,*aIter);
+                                break;
+                            case DataType::BIT:
+                                xParam->setBoolean(i,*aIter);
+                                break;
+                            case DataType::TINYINT:
+                                xParam->setByte(i,*aIter);
+                                break;
+                            case DataType::SMALLINT:
+                                xParam->setShort(i,*aIter);
+                                break;
+                            case DataType::INTEGER:
+                                xParam->setInt(i,*aIter);
+                                break;
                         }
-                        m_pColumns = new ORowSetDataColumns(m_xActiveConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers(),
-                                                            aColumns,*this,m_aColumnsMutex,aNames);
                     }
+                }
+                Reference< XResultSet> xRs = m_xStatement->executeQuery();
+                m_pCache = new ORowSetCache(xRs,m_xComposer,m_aUpdateTableName,m_bModified,m_bNew);
+
+                if(!m_xColumns.is())
+                {
+                    OSL_ENSHURE(0,"HELLO!");
+                }
+                else
+                {
+                    ORowSetDataColumns_COLLECTION aColumns;
+                    ::std::vector< ::rtl::OUString> aNames;
+
+                    ::rtl::OUString aDescription;
+                    Sequence< ::rtl::OUString> aSeq = m_xColumns->getElementNames();
+                    const ::rtl::OUString* pBegin   = aSeq.getConstArray();
+                    const ::rtl::OUString* pEnd     = pBegin + aSeq.getLength();
+                    for(sal_Int32 i=1;pBegin != pEnd ;++pBegin,++i)
+                    {
+                        Reference<XPropertySet> xColumn;
+                        m_xColumns->getByName(*pBegin) >>= xColumn;
+                        if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
+                            aDescription = comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
+
+                        ORowSetDataColumn* pColumn = new ORowSetDataColumn( getMetaData(),
+                                                                            this,
+                                                                            this,
+                                                                            i,
+                                                                            aDescription,
+                                                                            m_pCache->getIterator(),
+                                                                            m_pCache->getEnd());
+                        aColumns.push_back(pColumn);
+                        pColumn->setName(*pBegin);
+                        aNames.push_back(*pBegin);
+
+                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
+                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
+                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,xColumn->getPropertyValue(PROPERTY_RELATIVEPOSITION));
+                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,xColumn->getPropertyValue(PROPERTY_WIDTH));
+                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,xColumn->getPropertyValue(PROPERTY_HIDDEN));
+                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLMODEL,xColumn->getPropertyValue(PROPERTY_CONTROLMODEL));
+
+                    }
+                    m_pColumns = new ORowSetDataColumns(m_xActiveConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers(),
+                                                        aColumns,*this,m_aColumnsMutex,aNames);
                 }
             }
         }
-        if(!m_pCache)
-            throw FunctionSequenceException(*this);
     }
+    if(!m_pCache)
+        throw FunctionSequenceException(*this);
+    _rClearForNotification.clear();
     // notify the rowset listeners
     notifyAllListeners();
 }
