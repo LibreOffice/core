@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copydlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-15 18:16:52 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:48:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,8 @@
  *
  ************************************************************************/
 
-
-#ifndef _SD_COPYDLG_HXX_
-#define _SD_COPYDLG_HXX_
+#ifndef SD_COPY_DLG_HXX
+#define SD_COPY_DLG_HXX
 
 #ifndef _SV_GROUP_HXX //autogen
 #include <vcl/group.hxx>
@@ -83,16 +82,28 @@
 #include <sfx2/basedlgs.hxx>
 #endif
 
-class SdView;
 class XColorTable;
+
+namespace sd {
+
+class View;
 
 /*************************************************************************
 |*
 |* Dialog zum Einstellen des Bildschirms
 |*
 \************************************************************************/
-class SdCopyDlg : public SfxModalDialog
+class CopyDlg
+    : public SfxModalDialog
 {
+public:
+    CopyDlg( ::Window* pWindow, const SfxItemSet& rInAttrs,
+        XColorTable* pColTab, ::sd::View* pView );
+    ~CopyDlg();
+
+    void    GetAttr( SfxItemSet& rOutAttrs );
+    DECL_LINK( Reset, void* );
+
 private:
     FixedText           aFtCopies;
     NumericField        aNumFldCopies;
@@ -127,20 +138,14 @@ private:
     XColorTable*        pColorTab;
     FieldUnit           eUIUnit;
     Fraction            aUIScale;
-    SdView*             pView;
+    ::sd::View*             pView;
 
     DECL_LINK( SelectColorHdl, void * );
     DECL_LINK( SetViewData, void * );
     DECL_LINK( SetDefault, void * );
-
-public:
-            SdCopyDlg( Window* pWindow, const SfxItemSet& rInAttrs,
-                        XColorTable* pColTab, SdView* pView );
-            ~SdCopyDlg();
-
-    void    GetAttr( SfxItemSet& rOutAttrs );
-    DECL_LINK( Reset, void* );
 };
 
-#endif // _SD_COPYDLG_HXX_
+} // end of namespace sd
+
+#endif
 
