@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:11:46 $
+ *  last change: $Author: obo $ $Date: 2004-02-16 12:02:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,8 @@ public:
     sal_Bool            HasKeyword() const;
     sal_Bool            HasKeywordIgnoreCase(); //added by BerryJia for fixing Bug98251, 2002-12-11
     void                OpenKeyword();
+
+    inline void         SelectExecutableEntry() { aIndexCB.SelectExecutableEntry(); }
 };
 
 // class SearchTabPage_Impl ----------------------------------------------
@@ -389,6 +391,7 @@ public:
     String              GetSearchText() const;
     sal_Bool            IsFullWordSearch() const;
     void                OpenKeyword( const String& rKeyword );
+    void                SelectExecutableEntry();
 };
 
 // class TextWin_Impl ----------------------------------------------------
