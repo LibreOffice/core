@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-18 12:45:14 $
+ *  last change: $Author: sj $ $Date: 2001-01-19 15:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,11 @@ PPTWriter::PPTWriter( SvStorageRef& rSvStorage, SvStorageRef& xOleSource,
     if ( !ImplInitSOIface() )
         return;
 
-    maFontCollection.GetId( String( RTL_CONSTASCII_USTRINGPARAM( "Times New Roman" ) ) );       // default: immer ein times new roman
+    FontCollectionEntry aDefaultFontDesc( String( RTL_CONSTASCII_USTRINGPARAM( "Times New Roman" ) ),
+                                            ::com::sun::star::awt::FontFamily::ROMAN,
+                                                ::com::sun::star::awt::FontPitch::VARIABLE,
+                                                    RTL_TEXTENCODING_MS_1252 );
+    maFontCollection.GetId( aDefaultFontDesc ); // default is always times new roman
 
     if ( !ImplGetPageByIndex( 0, NOTICE ) )
         return;
@@ -2025,7 +2029,8 @@ PPTExCharSheet::PPTExCharSheet( int nInstance )
 }
 
 
-void PPTExCharSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet, Collection& rFontCollection, int nLevel )
+void PPTExCharSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+                                    FontCollection& rFontCollection, int nLevel )
 {
     PortionObj  aPortionObj( rXPropSet, rFontCollection );
 
@@ -2169,7 +2174,7 @@ PPTExParaSheet::PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBull
 }
 
 void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
-                                        Collection& rFontCollection, int nLevel, sal_uInt16 nCharacterHeight )
+                                        FontCollection& rFontCollection, int nLevel, sal_uInt16 nCharacterHeight )
 {
     ParagraphObj aParagraphObj( rXPropSet, rBuProv );
     aParagraphObj.CalculateGraphicBulletSize( nCharacterHeight );
@@ -2200,7 +2205,9 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
                 rLev.mnTextOfs = aParagraphObj.nTextOfs;
                 rLev.mnBulletOfs = (sal_uInt16)aParagraphObj.nBulletOfs;
                 rLev.mnBulletChar = aParagraphObj.cBulletId;
-                rLev.mnBulletFont = (sal_uInt16)rFontCollection.GetId( String( aParagraphObj.aFontDesc.Name ) );
+                FontCollectionEntry aFontDescEntry( aParagraphObj.aFontDesc.Name, aParagraphObj.aFontDesc.Family,
+                                                        aParagraphObj.aFontDesc.Pitch, aParagraphObj.aFontDesc.CharSet );
+                rLev.mnBulletFont = (sal_uInt16)rFontCollection.GetId( aFontDescEntry );
                 rLev.mnBulletHeight = aParagraphObj.nBulletRealSize;
                 rLev.mnBulletColor = aParagraphObj.nBulletColor;
 
@@ -2290,7 +2297,8 @@ PPTExStyleSheet::~PPTExStyleSheet()
     }
 }
 
-void PPTExStyleSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet, Collection& rFontCollection, int nInstance, int nLevel )
+void PPTExStyleSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+                                        FontCollection& rFontCollection, int nInstance, int nLevel )
 {
     if ( nInstance == EPP_TEXTTYPE_notUsed )
         return;

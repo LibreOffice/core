@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-18 12:47:21 $
+ *  last change: $Author: sj $ $Date: 2001-01-19 15:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,9 +131,6 @@
 #ifndef _COM_SUN_STAR_STYLE_XSTYLE_HPP_
 #include <com/sun/star/style/XStyle.hpp>
 #endif
-#ifndef _COM_SUN_STAR_AWT_CHARSET_HPP_
-#include <com/sun/star/awt/CharSet.hpp>
-#endif
 #ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCE_HPP_
 #include <com/sun/star/drawing/PointSequence.hpp>
 #endif
@@ -202,9 +199,31 @@
 using namespace vos;
 #endif
 
-#define ANY_FLAGS_LINE          0x01
-#define ANY_FLAGS_POLYLINE      0x02
-#define ANY_FLAGS_POLYPOLYGON   0x04
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#define ANSI_CHARSET            0
+#define DEFAULT_CHARSET         1
+#define SYMBOL_CHARSET          2
+#define SHIFTJIS_CHARSET        128
+#define HANGEUL_CHARSET         129
+#define CHINESEBIG5_CHARSET     136
+#define OEM_CHARSET             255
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/* Font Families */
+#define FF_DONTCARE             0x00
+#define FF_ROMAN                0x10
+#define FF_SWISS                0x20
+#define FF_MODERN               0x30
+#define FF_SCRIPT               0x40
+#define FF_DECORATIVE           0x50
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#define DEFAULT_PITCH           0x00
+#define FIXED_PITCH             0x01
+#define VARIABLE_PITCH          0x02
 
 // ---------------------------------------------------------------------------------------------
 
@@ -388,8 +407,6 @@ Collection::~Collection()
         delete (String*) pStr;
 }
 
-// ---------------------------------------------------------------------------------------------
-
 sal_uInt32 Collection::GetId( const String& rString )
 {
     if( rString.Len() )
@@ -414,6 +431,40 @@ sal_uInt32 Collection::GetCount() const
 const String* Collection::GetById( sal_uInt32 nId )
 {
     return (String*) List::GetObject( nId );
+}
+
+// ---------------------------------------------------------------------------------------------
+
+FontCollection::~FontCollection()
+{
+    for( void* pStr = List::First(); pStr; pStr = List::Next() )
+        delete (FontCollectionEntry*)pStr;
+}
+
+FontCollection::FontCollection()
+{
+
+}
+
+sal_uInt32 FontCollection::GetId( const FontCollectionEntry& rEntry )
+{
+    if( rEntry.Name.Len() )
+    {
+        const sal_uInt32 nCount = GetCount();
+
+        for( sal_uInt32 i = 0; i < nCount; i++ )
+            if( GetById( i )->Name == rEntry.Name )
+                return i;
+
+        List::Insert( new FontCollectionEntry( rEntry ), LIST_APPEND );
+        return nCount;
+    }
+    return 0;
+}
+
+const FontCollectionEntry* FontCollection::GetById( sal_uInt32 nId )
+{
+    return (FontCollectionEntry*)List::GetObject( nId );
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -756,15 +807,65 @@ sal_Bool PPTWriter::ImplCloseDocument()
         for ( sal_uInt32 i = 0; i < maFontCollection.GetCount(); i++ )
         {
             mpPptEscherEx->AddAtom( 68, EPP_FontEnityAtom, 0, i );
-            const String* pEntry = maFontCollection.GetById( i );
-            sal_uInt32 nFontLen = pEntry->Len();
-            for ( sal_uInt16 n = 0; n < 34; n++ )
+            const FontCollectionEntry* pDesc = maFontCollection.GetById( i );
+            sal_uInt32 nFontLen = pDesc->Name.Len();
+            if ( nFontLen > 31 )
+                nFontLen = 31;
+            for ( sal_uInt16 n = 0; n < 32; n++ )
             {
                 sal_Unicode nUniCode = 0;
-                if ( ( n < 31 ) && ( n < nFontLen ) )
-                    nUniCode = pEntry->GetChar( n );
+                if ( n < nFontLen )
+                    nUniCode = pDesc->Name.GetChar( n );
                 *mpStrm << nUniCode;
             }
+            sal_uInt8   lfCharSet = ANSI_CHARSET;
+            sal_uInt8   lfClipPrecision = 0;
+            sal_uInt8   lfQuality = 6;
+            sal_uInt8   lfPitchAndFamily = 0;
+
+            if ( pDesc->CharSet == RTL_TEXTENCODING_SYMBOL )
+                lfCharSet = SYMBOL_CHARSET;
+
+            switch( pDesc->Family )
+            {
+                case ::com::sun::star::awt::FontFamily::ROMAN :
+                    lfPitchAndFamily |= FF_ROMAN;
+                break;
+
+                case ::com::sun::star::awt::FontFamily::SWISS :
+                    lfPitchAndFamily |= FF_SWISS;
+                break;
+
+                case ::com::sun::star::awt::FontFamily::MODERN :
+                    lfPitchAndFamily |= FF_MODERN;
+                break;
+
+                case ::com::sun::star::awt::FontFamily::SCRIPT:
+                    lfPitchAndFamily |= FF_SCRIPT;
+                break;
+
+                case ::com::sun::star::awt::FontFamily::DECORATIVE:
+                     lfPitchAndFamily |= FF_DECORATIVE;
+                break;
+
+                default:
+                    lfPitchAndFamily |= FAMILY_DONTKNOW;
+                break;
+            }
+            switch( pDesc->Pitch )
+            {
+                case ::com::sun::star::awt::FontPitch::FIXED:
+                    lfPitchAndFamily |= FIXED_PITCH;
+                break;
+
+                default:
+                    lfPitchAndFamily |= DEFAULT_PITCH;
+                break;
+            }
+            *mpStrm << lfCharSet
+                    << lfClipPrecision
+                    << lfQuality
+                    << lfPitchAndFamily;
         }
         mpPptEscherEx->AddAtom( 10, EPP_TxSIStyleAtom );
         *mpStrm << (sal_uInt32)7                        // ?
@@ -1488,7 +1589,10 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj, sal_uInt
         if ( nPropertyFlags & 0x80 )
             rOut << (sal_uInt16)( pPara->cBulletId );
         if ( nPropertyFlags & 0x10 )
-            rOut << (sal_uInt16)( maFontCollection.GetId( String( pPara->aFontDesc.Name ) ) );
+        {
+            FontCollectionEntry aFontDescEntry( pPara->aFontDesc.Name, pPara->aFontDesc.Family, pPara->aFontDesc.Pitch, pPara->aFontDesc.CharSet );
+            rOut << (sal_uInt16)( maFontCollection.GetId( aFontDescEntry ) );
+        }
         if ( nPropertyFlags & 0x40 )
             rOut << (sal_Int16)nBuRealSize;
         if ( nPropertyFlags & 0x20 )
@@ -1652,7 +1756,7 @@ struct FieldEntry
 //  -----------------------------------------------------------------------
 
 PortionObj::PortionObj( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
-                Collection& rFontCollection ) :
+                FontCollection& rFontCollection ) :
     mbLastPortion       ( TRUE ),
     mnCharAttrHard      ( 0 ),
     mnCharAttr          ( 0 ),
@@ -1668,7 +1772,7 @@ PortionObj::PortionObj( const ::com::sun::star::uno::Reference< ::com::sun::star
 }
 
 PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRange,
-                            sal_Bool bLast, Collection& rFontCollection ) :
+                            sal_Bool bLast, FontCollection& rFontCollection ) :
     mbLastPortion           ( bLast ),
     mnCharAttrHard          ( 0 ),
     mnCharAttr              ( 0 ),
@@ -1803,20 +1907,45 @@ void PortionObj::Write( SvStream* pStrm, sal_Bool bLast )
         *pStrm << (sal_uInt16)mpText[ i ];
 }
 
-void PortionObj::ImplGetPortionValues( Collection& rFontCollection, sal_Bool bGetPropStateValue )
+void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool bGetPropStateValue )
 {
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontName" ) ), bGetPropStateValue ) )
-    {
-        String aString( *(::rtl::OUString*)mAny.getValue() );
-        mnFont = (sal_uInt16)rFontCollection.GetId( aString );
-    }
+
+    sal_Bool bOk = ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontName" ) ), bGetPropStateValue );
     meFontName = ePropState;
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontNameAsian" ) ), bGetPropStateValue ) )
+    if ( bOk )
     {
-        String aString( *(::rtl::OUString*)mAny.getValue() );
-        mnAsianOrComplexFont = (sal_uInt16)rFontCollection.GetId( aString );
+        FontCollectionEntry aFontDesc( *(::rtl::OUString*)mAny.getValue() );
+        sal_uInt32  nCount = rFontCollection.GetCount();
+        mnFont = (sal_uInt16)rFontCollection.GetId( aFontDesc );
+        if ( mnFont == nCount )
+        {
+            FontCollectionEntry& rFontDesc = rFontCollection.GetLast();
+            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSet" ) ), sal_False ) )
+                mAny >>= rFontDesc.CharSet;
+            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontFamily" ) ), sal_False ) )
+                mAny >>= rFontDesc.Family;
+            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontPitch" ) ), sal_False ) )
+                mAny >>= rFontDesc.Pitch;
+        }
     }
+    bOk = ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontNameAsian" ) ), bGetPropStateValue );
     meAsianOrComplexFont = ePropState;
+    if ( bOk )
+    {
+        FontCollectionEntry aFontDesc( *(::rtl::OUString*)mAny.getValue() );
+        sal_uInt32  nCount = rFontCollection.GetCount();
+        mnAsianOrComplexFont = (sal_uInt16)rFontCollection.GetId( aFontDesc );
+        if ( mnAsianOrComplexFont == nCount )
+        {
+            FontCollectionEntry& rFontDesc = rFontCollection.GetLast();
+            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSetAsian" ) ), sal_False ) )
+                mAny >>= rFontDesc.CharSet;
+            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontFamilyAsian" ) ), sal_False ) )
+                mAny >>= rFontDesc.Family;
+            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontPitchAsian" ) ), sal_False ) )
+                mAny >>= rFontDesc.Pitch;
+        }
+    }
 
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharWeight" ) ), bGetPropStateValue ) )
     {
@@ -2101,7 +2230,7 @@ ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::
 }
 
     ParagraphObj::ParagraphObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > & rXTextContent,
-                    ParaFlags aParaFlags, Collection& rFontCollection, PPTExBulletProvider& rProv ) :
+                    ParaFlags aParaFlags, FontCollection& rFontCollection, PPTExBulletProvider& rProv ) :
     maMapModeSrc        ( MAP_100TH_MM ),
     maMapModeDest       ( MAP_INCH, Point(), Fraction( 1, 576 ), Fraction( 1, 576 ) ),
     mbFirstParagraph    ( aParaFlags.bFirstParagraph ),
@@ -2613,7 +2742,7 @@ ImplTextObj::~ImplTextObj()
 }
 
 TextObj::TextObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XSimpleText > & rXTextRef,
-            int nInstance, Collection& rFontCollection, PPTExBulletProvider& rProv )
+            int nInstance, FontCollection& rFontCollection, PPTExBulletProvider& rProv )
 {
     mpImplTextObj = new ImplTextObj( nInstance );
 

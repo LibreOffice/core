@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-18 12:45:49 $
+ *  last change: $Author: sj $ $Date: 2001-01-19 15:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,15 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_FONTFAMILY_HPP_
+#include <com/sun/star/awt/FontFamily.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTPITCH_HPP_
+#include <com/sun/star/awt/FontPitch.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_CHARSET_HPP_
+#include <com/sun/star/awt/CharSet.hpp>
+#endif
 
 enum PageType { NORMAL = 0, MASTER = 1, NOTICE = 2, UNDEFINED = 3 };
 
@@ -361,14 +370,43 @@ class PPTExBulletProvider
 
 class Collection : private List
 {
-public:
+        public:
 
                                 Collection() {}
                                 ~Collection();
 
         sal_uInt32              GetCount() const;
         sal_uInt32              GetId( const String& );
-        const String*       GetById( sal_uInt32 nId );
+
+        const String*           GetById( sal_uInt32 nId );
+};
+
+struct FontCollectionEntry
+{
+        String                              Name;
+        sal_Int16                           Family;
+        sal_Int16                           Pitch;
+        sal_Int16                           CharSet;
+
+        FontCollectionEntry( const String& rName, sal_Int16 nFamily, sal_Int16 nPitch, sal_Int16 nCharSet ) :
+                            Name    ( rName ),
+                            Family  ( nFamily ),
+                            Pitch   ( nPitch ),
+                            CharSet ( nCharSet ) {};
+        FontCollectionEntry( const String& rName ) :
+                            Name    ( rName ) {};
+};
+
+class FontCollection : private List
+{
+    public :
+                    FontCollection();
+                    ~FontCollection();
+
+        sal_uInt32  GetId( const FontCollectionEntry& rFontDescriptor );
+        sal_uInt32  GetCount() const { return List::Count(); };
+        const FontCollectionEntry*                      GetById( sal_uInt32 nId );
+        FontCollectionEntry&    GetLast() { return *(FontCollectionEntry*)List::Last(); };
 };
 
 // ------------------------------------------------------------------------
@@ -422,7 +460,8 @@ struct PPTExCharSheet
 
                 PPTExCharSheet( int nInstance );
 
-                void    SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &, Collection& rFontCollection, int nLevel );
+                void    SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
+                                        FontCollection& rFontCollection, int nLevel );
                 void    Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText );
 
 };
@@ -461,7 +500,7 @@ struct PPTExParaSheet
                 PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBulletProvider& rProv );
 
                 void    SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
-                                        Collection& rFontCollection, int nLevel, sal_uInt16 nCharHeight );
+                                        FontCollection& rFontCollection, int nLevel, sal_uInt16 nCharHeight );
                 void    Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText );
 };
 
@@ -477,7 +516,8 @@ class PPTExStyleSheet
                 PPTExParaSheet& GetParaSheet( int nInstance ) { return *mpParaSheet[ nInstance ]; };
                 PPTExCharSheet& GetCharSheet( int nInstance ) { return *mpCharSheet[ nInstance ]; };
 
-                void            SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &, Collection& rFontCollection, int nInstance, int nLevel );
+                void            SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
+                                                FontCollection& rFontCollection, int nInstance, int nLevel );
                 sal_Bool        IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLevel, PPTExTextAttr eAttr, sal_uInt32 nValue );
                 void            Write( SvStream& rSt, PptEscherEx* pEx );
 };
@@ -629,7 +669,7 @@ class PortionObj : public PropStateValue
         void            ImplConstruct( PortionObj& rPortionObj );
         sal_uInt32      ImplGetTextField( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRangeRef, String& rURL );
         sal_uInt32      ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition );
-        void            ImplGetPortionValues( Collection& rFontCollection, sal_Bool bGetPropStateValue = FALSE );
+        void            ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool bGetPropStateValue = FALSE );
 
     public :
 
@@ -653,9 +693,10 @@ class PortionObj : public PropStateValue
         sal_uInt16*     mpText;
         FieldEntry*     mpFieldEntry;
 
-                        PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRangeRef, sal_Bool bLast, Collection& rFontCollection );
+                        PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRangeRef,
+                                        sal_Bool bLast, FontCollection& rFontCollection );
                         PortionObj( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSetRef,
-                                    Collection& rFontCollection );
+                                        FontCollection& rFontCollection );
                         PortionObj( PortionObj& rPortionObj );
                         ~PortionObj();
 
@@ -712,7 +753,7 @@ class ParagraphObj : public List, public PropStateValue, public SOParagraph
         sal_Int16           mnLineSpacingBottom;
 
                         ParagraphObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > & rXTextContentRef,
-                            ParaFlags, Collection& rFontCollection,
+                            ParaFlags, FontCollection& rFontCollection,
                                 PPTExBulletProvider& rBuProv );
                         ParagraphObj( ParagraphObj& rParargraphObj );
                         ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSetRef,
@@ -746,10 +787,12 @@ class TextObj
 
     public :
                         TextObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XSimpleText > &
-                                    rXText, int nInstance, Collection& rFontCollection, PPTExBulletProvider& rBuProv );
+                                    rXText, int nInstance, FontCollection& rFontCollection, PPTExBulletProvider& rBuProv );
                         TextObj( TextObj& rTextObj );
                         ~TextObj();
+
         void            Write( SvStream* pStrm );
+
         ParagraphObj*   First(){ return (ParagraphObj*)mpImplTextObj->mpList->First(); };
         ParagraphObj*   Next(){ return(ParagraphObj*)mpImplTextObj->mpList->Next(); };
         sal_uInt32      Count() const { return mpImplTextObj->mnTextSize; };
@@ -837,7 +880,7 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
 
         List                maTextRuleList;     // TextRuleEntry's
         List                maHyperlink;
-        Collection          maFontCollection;
+        FontCollection      maFontCollection;
         Collection          maSoundCollection;
 
         void                ImplWriteExtParaHeader( SvMemoryStream& rSt, sal_uInt32 nRef, sal_uInt32 nInstance, sal_uInt32 nSlideId );
