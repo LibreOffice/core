@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2001-04-12 13:23:26 $
+ *  last change: $Author: mba $ $Date: 2001-04-27 10:43:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2666,6 +2666,7 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
         if ( xModel.is() )
         {
             xController->attachModel( xModel );
+            xModel->connectController( xController );
             xModel->setCurrentController( xController );
         }
     }
