@@ -2,9 +2,9 @@
  *
  *  $RCSfile: native_bootstrap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:05:55 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 14:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include "rtl/bootstrap.hxx"
 #include "cppuhelper/bootstrap.hxx"
 #include <windows.h>
+//#include <winreg.h>
 #include <delayimp.h>
 #include <stdio.h>
 
@@ -74,76 +75,128 @@ using namespace ::com::sun::star::uno;
 #define OFFICE_LOCATION_REGISTRY_KEY "Software\\OpenOffice.org\\UNO\\InstallPath"
 
 
-#pragma unmanaged
 
 namespace
 {
+
 char* getLibraryPath()
 {
-    static char* sPath;
+    static char* sPath = NULL;
+
     //do not use oslMutex here. That would cause to load sal and we would
     //run in a loop with delayLoadHook
     if (sPath == NULL)
     {
-        bool failed = false;
-        HKEY    hKey = 0;
-        if (RegOpenKeyExA(HKEY_CURRENT_USER,OFFICE_LOCATION_REGISTRY_KEY,
-                          0, KEY_READ, &hKey) != ERROR_SUCCESS)
+        //First we try the environment variable UNO_PATH. It overrides all other settings.
+        //Get the UNO_PATH environment variable, do not use CRT, use Kernel library
+        char * sEnvUnoPath = NULL;
+        DWORD  cChars = GetEnvironmentVariableA("UNO_PATH", sEnvUnoPath, 0);
+        if (cChars > 0)
         {
-            if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, OFFICE_LOCATION_REGISTRY_KEY,
+            sEnvUnoPath = new char[cChars];
+            cChars = GetEnvironmentVariableA("UNO_PATH", sEnvUnoPath, cChars);
+        }
+        //store the UNO_PATH in the static variable that will be returned from now on.
+        if (cChars > 0)
+        {
+            sPath = new char[cChars + 1];
+            sPath[0] = 0;
+            lstrcatA(sPath, sEnvUnoPath);
+        }
+        delete[] sEnvUnoPath;
+
+        //try registry
+        if (sPath == NULL)
+        {
+            bool failed = false;
+            HKEY    hKey = 0;
+            if (RegOpenKeyExA(HKEY_CURRENT_USER,OFFICE_LOCATION_REGISTRY_KEY,
                               0, KEY_READ, &hKey) != ERROR_SUCCESS)
             {
-                OSL_ASSERT(0);
-                fprintf(stderr, "cli_cppuhelper: Office not properly installed. "
-                        "Could not open registry keys.");
-                failed = true;
-            }
-        }
-        if (failed)
-            return NULL;
-
-        DWORD   dwType = 0;
-        DWORD   dwLen = 0;
-        char *arData = NULL;
-        //get the length for the path to office
-        if (RegQueryValueExA(hKey, NULL, NULL, &dwType, NULL,
-                                &dwLen) == ERROR_SUCCESS)
-        {
-            arData = new  char[dwLen];
-            if (RegQueryValueExA(hKey, NULL, NULL, &dwType, (LPBYTE) arData,
-                                 & dwLen) == ERROR_SUCCESS)
-            {
-                sPath = strdup(arData);
-#if OSL_DEBUG_LEVEL >=2
-                fprintf(stdout,"[cli_cppuhelper]: Using path %s to load office libraries.", sPath);
+                if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, OFFICE_LOCATION_REGISTRY_KEY,
+                                  0, KEY_READ, &hKey) != ERROR_SUCCESS)
+                {
+                    OSL_ASSERT(0);
+#if OSL_DEBUG_LEVEL >= 2
+                    fprintf(stderr, "cli_cppuhelper: Office not properly installed. "
+                            "Could not open registry keys.");
 #endif
+                    failed = true;
+                }
             }
-            delete [] arData;
-        }
-        RegCloseKey(hKey);
+            if (failed)
+                return NULL;
 
-        //We extend the path to contain the program directory of the office,
-        //so that components can use osl_loadModule with arguments, such as
-        //"reg3.dll". That is, the arguments are only the library names.
-        char * sEnvPath = getenv("PATH");
-        char * buff = NULL;
-        if (sEnvPath)
-            buff = new char[sizeof("PATH=") + strlen(sEnvPath) + strlen(sPath) + 2];
-        else
-            buff = new char[sizeof("PATH=") + strlen(sPath) + 2];
-        buff[0] = 0;
-        strcat(buff, "PATH=");
-        strcat(buff, sPath);
-        if (sEnvPath)
-        {
-            strcat(buff, ";");
-            strcat(buff, sEnvPath);
+            DWORD   dwType = 0;
+            DWORD   dwLen = 0;
+            char *arData = NULL;
+            //get the length for the path to office
+            if (RegQueryValueExA(hKey, NULL, NULL, &dwType, NULL,
+                                 &dwLen) == ERROR_SUCCESS)
+            {
+                arData = new  char[dwLen];
+                if (RegQueryValueExA(hKey, NULL, NULL, &dwType, (LPBYTE) arData,
+                                     & dwLen) == ERROR_SUCCESS)
+                {
+                    sPath = new char[dwLen];
+                    lstrcpyA(sPath, arData);
+#if OSL_DEBUG_LEVEL >=2
+                    fprintf(stdout,"[cli_cppuhelper]: Using path %s to load office libraries.", sPath);
+#endif
+                }
+                delete [] arData;
+            }
+            RegCloseKey(hKey);
         }
-        putenv(buff);
+        if (sPath)
+        {
+            //We extend the path to contain the program directory of the office,
+            //so that components can use osl_loadModule with arguments, such as
+            //"reg3.dll". That is, the arguments are only the library names.
+
+            //Get the PATH environment variable, do not use CRT, use Kernel library
+            char * sEnvPath = NULL;
+            DWORD  cChars = GetEnvironmentVariableA("PATH", sEnvPath, 0);
+            if (cChars > 0)
+            {
+                sEnvPath = new char[cChars];
+                cChars = GetEnvironmentVariableA("PATH", sEnvPath, cChars);
+            }
+            if (cChars == 0 && GetLastError() != ERROR_ENVVAR_NOT_FOUND)
+            {
+                delete[] sEnvPath;
+                return NULL;
+            }
+
+            //prepare the new PATH, including the path to the program folder
+            char * sNewPath = NULL;
+            int lenPath = lstrlenA(sEnvPath);
+            if (lenPath > 0)
+                sNewPath = new char[lenPath + lstrlenA(sPath) + 2];
+            else
+                sNewPath = new char[lenPath + 1];
+            sNewPath[0] = 0;
+
+            lstrcatA(sNewPath, sPath);
+            if (lenPath)
+            {
+                lstrcatA(sNewPath, ";");
+                lstrcatA(sNewPath, sEnvPath);
+            }
+
+            BOOL bSet = SetEnvironmentVariableA("PATH", sNewPath);
+
+            delete[] sEnvPath;
+            delete[] sNewPath;
+
+            if (bSet == FALSE)
+                return NULL;
+        }
     }
 
     return  sPath;
 }
+
 
 
 //Hook for delayed loading of libraries which this library is linked with.
@@ -155,19 +208,22 @@ extern "C"  FARPROC WINAPI delayLoadHook(
     if (dliNotify == dliFailLoadLib)
     {
         char* sPath = getLibraryPath();
-        int lenPath = strlen(sPath);
-        //create string to contain the full path to cppuhelper
-        int lenLib = strlen(pdli->szDll);
-        char*  sFullPath = new char[lenLib + lenPath + 2];
-        sFullPath[0] = 0;
-        sFullPath = strcat(sFullPath, sPath);
-        sFullPath = strcat(sFullPath, "\\");
-        sFullPath = strcat(sFullPath, pdli->szDll);
+        if (sPath)
+        {
+            int lenPath = lstrlenA(sPath);
+            //create string to contain the full path to cppuhelper
+            int lenLib = lstrlenA(pdli->szDll);
+            char*  sFullPath = new char[lenLib + lenPath + 2];
+            sFullPath[0] = 0;
+            sFullPath = lstrcatA(sFullPath, sPath);
+            sFullPath = lstrcatA(sFullPath, "\\");
+            sFullPath = lstrcatA(sFullPath, pdli->szDll);
 
-        HMODULE handle = LoadLibraryExA(sFullPath, NULL,
-                                        LOAD_WITH_ALTERED_SEARCH_PATH);
-        delete[] sFullPath;
-        return (FARPROC) handle;
+            HMODULE handle = LoadLibraryExA(sFullPath, NULL,
+                                            LOAD_WITH_ALTERED_SEARCH_PATH);
+            delete[] sFullPath;
+            return (FARPROC) handle;
+        }
     }
     return 0;
 }
@@ -175,7 +231,6 @@ extern "C"  FARPROC WINAPI delayLoadHook(
 
 ExternC
 PfnDliHook   __pfnDliFailureHook2 = delayLoadHook;
-#pragma managed
 
 namespace uno
 {
