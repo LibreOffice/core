@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 07:19:14 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 10:58:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,7 @@ void OPreparedStatement::construct(const ::rtl::OUString& sql)  throw(SQLExcepti
         if(m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT || m_aSQLIterator.getStatementType() == SQL_STATEMENT_UPDATE)
             m_pResultSet->describeParameter();
         m_aRow = new OValueVector();
+        m_aRow->push_back(sal_Int32(0));
     }
     else
         throw SQLException(aErr,*this,::rtl::OUString(),0,Any());
@@ -238,9 +239,9 @@ void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::r
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    if( !parameterIndex)
+    if( parameterIndex < 1)
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
-    if(parameterIndex >= m_aRow->size())
+    if(parameterIndex >= (sal_Int32)m_aRow->size())
         m_aRow->push_back(x);
     else
         (*m_aRow)[parameterIndex] = x;
@@ -275,10 +276,10 @@ void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    if( !parameterIndex)
+    if( parameterIndex < 1)
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 
-    if(parameterIndex >= m_aRow->size())
+    if(parameterIndex >= (sal_Int32)m_aRow->size())
         m_aRow->push_back(x);
     else
         (*m_aRow)[parameterIndex] = x;
@@ -289,10 +290,10 @@ void SAL_CALL OPreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x 
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    if( !parameterIndex)
+    if( parameterIndex < 1)
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 
-    if(parameterIndex >= m_aRow->size())
+    if(parameterIndex >= (sal_Int32)m_aRow->size())
         m_aRow->push_back((sal_Int32)x);
     else
         (*m_aRow)[parameterIndex] = (sal_Int32)x;
@@ -304,10 +305,10 @@ void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const Date&
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    if( !parameterIndex)
+    if( parameterIndex < 1)
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 
-    if(parameterIndex >= m_aRow->size())
+    if(parameterIndex >= (sal_Int32)m_aRow->size())
         m_aRow->push_back(DBTypeConversion::toDouble(aData));
     else
         (*m_aRow)[parameterIndex] = DBTypeConversion::toDouble(aData);
@@ -320,10 +321,10 @@ void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const Time&
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    if( !parameterIndex)
+    if( parameterIndex < 1)
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 
-    if(parameterIndex >= m_aRow->size())
+    if(parameterIndex >= (sal_Int32)m_aRow->size())
         m_aRow->push_back(DBTypeConversion::toDouble(aVal));
     else
         (*m_aRow)[parameterIndex] = DBTypeConversion::toDouble(aVal);
@@ -335,10 +336,10 @@ void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const 
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    if( !parameterIndex)
+    if( parameterIndex < 1)
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 
-    if(parameterIndex >= m_aRow->size())
+    if(parameterIndex >= (sal_Int32)m_aRow->size())
         m_aRow->push_back(DBTypeConversion::toDouble(aVal));
     else
         (*m_aRow)[parameterIndex] = DBTypeConversion::toDouble(aVal);
@@ -350,10 +351,10 @@ void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x 
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    if( !parameterIndex)
+    if( parameterIndex < 1)
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 
-    if(parameterIndex >= m_aRow->size())
+    if(parameterIndex >= (sal_Int32)m_aRow->size())
         m_aRow->push_back(x);
     else
         (*m_aRow)[parameterIndex] = x;
@@ -366,10 +367,10 @@ void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) 
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    if( !parameterIndex)
+    if( parameterIndex < 1)
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 
-    if(parameterIndex >= m_aRow->size())
+    if(parameterIndex >= (sal_Int32)m_aRow->size())
         m_aRow->push_back((double)x);
     else
         (*m_aRow)[parameterIndex] = (double)x;
@@ -381,10 +382,10 @@ void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x 
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    if( !parameterIndex)
+    if( parameterIndex < 1)
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 
-    if(parameterIndex >= m_aRow->size())
+    if(parameterIndex >= (sal_Int32)m_aRow->size())
         m_aRow->push_back(x);
     else
         (*m_aRow)[parameterIndex] = x;
@@ -396,8 +397,7 @@ void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 a
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    if( !parameterIndex || parameterIndex > m_aRow->size())
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
+    throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 }
 // -------------------------------------------------------------------------
 
@@ -407,10 +407,10 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
     // Get the buffer needed for the length
-    if( !parameterIndex)
+    if( parameterIndex < 1)
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 
-    if(parameterIndex >= m_aRow->size())
+    if(parameterIndex >= (sal_Int32)m_aRow->size())
         m_aRow->push_back(ORowSetValue());
     else
         (*m_aRow)[parameterIndex].setNull();
@@ -422,8 +422,7 @@ void SAL_CALL OPreparedStatement::setClob( sal_Int32 parameterIndex, const Refer
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    if( !parameterIndex || parameterIndex >= m_aRow->size())
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
+    throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 }
 // -------------------------------------------------------------------------
 
@@ -432,8 +431,7 @@ void SAL_CALL OPreparedStatement::setBlob( sal_Int32 parameterIndex, const Refer
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    if( !parameterIndex || parameterIndex >= m_aRow->size())
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
+    throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 }
 // -------------------------------------------------------------------------
 
@@ -442,8 +440,7 @@ void SAL_CALL OPreparedStatement::setArray( sal_Int32 parameterIndex, const Refe
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    if( !parameterIndex || parameterIndex >= m_aRow->size())
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
+    throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 }
 // -------------------------------------------------------------------------
 
@@ -452,8 +449,7 @@ void SAL_CALL OPreparedStatement::setRef( sal_Int32 parameterIndex, const Refere
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    if( !parameterIndex || parameterIndex >= m_aRow->size())
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
+    throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 }
 // -------------------------------------------------------------------------
 
@@ -462,7 +458,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    if( !parameterIndex)
+    if( parameterIndex < 1)
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
     // For each known SQL Type, call the appropriate
         // set routine
@@ -526,10 +522,10 @@ void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_I
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    if( !parameterIndex)
+    if( parameterIndex < 1)
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 
-    if(parameterIndex >= m_aRow->size())
+    if(parameterIndex >= (sal_Int32)m_aRow->size())
         m_aRow->push_back(ORowSetValue());
     else
         (*m_aRow)[parameterIndex].setNull();
@@ -541,8 +537,7 @@ void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    if( !parameterIndex || parameterIndex >= m_aRow->size())
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
+    throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
     //  setObject (parameterIndex, x, sqlType, 0);
 }
 // -------------------------------------------------------------------------
@@ -552,7 +547,7 @@ void SAL_CALL OPreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    if( !parameterIndex)
+    if( parameterIndex < 1)
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
     setInt(parameterIndex,x);
 }
@@ -563,8 +558,7 @@ void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequ
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    if( !parameterIndex || parameterIndex >= m_aRow->size())
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
+    throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 }
 // -------------------------------------------------------------------------
 
@@ -574,8 +568,7 @@ void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, 
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    if( !parameterIndex || parameterIndex >= m_aRow->size())
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
+    throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 }
 // -------------------------------------------------------------------------
 
@@ -584,8 +577,7 @@ void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, con
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    if( !parameterIndex || parameterIndex >= m_aRow->size())
-        throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
+    throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 }
 // -------------------------------------------------------------------------
 
