@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step0.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:38 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,27 +193,32 @@ void SbiRuntime::StepGET()
 inline void checkUnoStructCopy( SbxVariableRef& refVal, SbxVariableRef& refVar )
 {
     SbxDataType eVarType = refVar->GetType();
-    if( eVarType == SbxOBJECT )
+    if( eVarType != SbxOBJECT )
+        return;
+
+    SbxObjectRef xValObj = (SbxObject*)refVal->GetObject();
+    if( xValObj->ISA(SbUnoAnyObject) )
+        return;
+
+    SbxObjectRef xVarObj = (SbxObject*)refVar->GetObject();
+    SbxDataType eValType = refVal->GetType();
+    if( eValType == SbxOBJECT && xVarObj == xValObj )
     {
-        SbxObjectRef xVarObj = (SbxObject*)refVar->GetObject();
-        SbxDataType eValType = refVal->GetType();
-        if( eValType == SbxOBJECT && xVarObj == refVal->GetObject() )
+        SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,(SbxObject*)xVarObj);
+        if( pUnoObj )
         {
-            SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,(SbxObject*)xVarObj);
-            if( pUnoObj )
+            Any aAny = pUnoObj->getUnoAny();
+            if( aAny.getValueType().getTypeClass() == TypeClass_STRUCT )
             {
-                Any aAny = pUnoObj->getUnoAny();
-                if( aAny.getValueType().getTypeClass() == TypeClass_STRUCT )
-                {
-                    SbUnoObject* pNewUnoObj = new SbUnoObject( pUnoObj->GetName(), aAny );
-                    // #70324: ClassName uebernehmen
-                    pNewUnoObj->SetClassName( pUnoObj->GetClassName() );
-                    refVar->PutObject( pNewUnoObj );
-                }
+                SbUnoObject* pNewUnoObj = new SbUnoObject( pUnoObj->GetName(), aAny );
+                // #70324: ClassName uebernehmen
+                pNewUnoObj->SetClassName( pUnoObj->GetClassName() );
+                refVar->PutObject( pNewUnoObj );
             }
         }
     }
 }
+
 
 // Ablage von TOS in TOS-1
 
