@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
+ *  last change: $Author: jb $ $Date: 2001-10-26 10:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,17 +210,12 @@ namespace configmgr
             static void assignActualType (Template& aTemplate,UnoType const& aType);
             //-----------------------------------------------------------------
 
-            static TemplateHolder makeSpecialTemplate (TemplateName const& aNames, SpecialTemplateProvider const& aProvider, UnoType const& aType, Attributes const& aAttrs);
+            static TemplateHolder makeSpecialTemplate (TemplateName const& aNames, SpecialTemplateProvider const& aProvider, UnoType const& aType);
 
             static TemplateHolder makeElementTemplateWithType(TemplateName const& aNames, TemplateProvider const& aProvider, ISubtree const& aSet);
             //-----------------------------------------------------------------
 
-            static TemplateHolder createNew (TemplateName const& aNames,UnoType const& aType, Attributes const& aAttrs);
-            //-----------------------------------------------------------------
-            static TemplateHolder createNew (TemplateName const& aNames)
-            {
-                return createNew(aNames, getNoTypeAvailable(), Attributes());
-            }
+            static TemplateHolder createNew (TemplateName const& aNames,UnoType const& aType);
             //-----------------------------------------------------------------
         };
     //-------------------------------------------------------------------------
@@ -236,7 +231,7 @@ namespace configmgr
         {
             SpecialTemplateProvider_Impl();
 
-            TemplateHolder makeTemplate (TemplateName const& aNames, UnoType const& aType, Attributes const& aAttrs);
+            TemplateHolder makeTemplate (TemplateName const& aNames, UnoType const& aType);
 
         private:
             TemplateRepository m_aRepository;

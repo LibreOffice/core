@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
+ *  last change: $Author: jb $ $Date: 2001-10-26 10:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,11 +134,10 @@ SpecialTemplateProvider::~SpecialTemplateProvider()
 // class Template
 //-----------------------------------------------------------------------------
 
-Template::Template(Name const& aName, Name const& aModule,UnoType const& aType, Attributes const& aAttrs)
+Template::Template(Name const& aName, Name const& aModule,UnoType const& aType)
 : m_aName(aName)
 , m_aModule(aModule)
 , m_aInstanceType(aType)
-, m_aAttributes(aAttrs)
 {
 }
 //-----------------------------------------------------------------------------
@@ -173,17 +172,17 @@ OUString Template::getPathString() const
 }
 //-----------------------------------------------------------------------------
 
-TemplateHolder makeSimpleTemplate(UnoType const& aType, Attributes const& aAttrs, SpecialTemplateProvider const& aProvider)
+TemplateHolder makeSimpleTemplate(UnoType const& aType, SpecialTemplateProvider const& aProvider)
 {
     TemplateName aNames(aType,false);
-    return TemplateImplHelper::makeSpecialTemplate( aNames, aProvider, aType, aAttrs);
+    return TemplateImplHelper::makeSpecialTemplate( aNames, aProvider, aType);
 }
 //-----------------------------------------------------------------------------
 
 TemplateHolder makeTreeTemplate(OUString const& sName, OUString const& sModule, SpecialTemplateProvider const& aProvider)
 {
     TemplateName aNames( TemplateName::parseTemplateNames(sName,sModule) );
-    return TemplateImplHelper::makeSpecialTemplate( aNames,aProvider, configapi::getUnoInterfaceType(), Attributes());
+    return TemplateImplHelper::makeSpecialTemplate( aNames,aProvider, configapi::getUnoInterfaceType());
 }
 //-----------------------------------------------------------------------------
 
