@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: fs $ $Date: 2000-10-05 08:54:45 $
+#   last change: $Author: hjs $ $Date: 2000-10-12 12:46:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,10 @@ SLOFILES=\
         $(SLO)$/CommonTools.obj		\
         $(SLO)$/DateConversion.obj	\
 
-
+.IF "$(OS)$(COM)"=="LINUXGCC"
+NOOPTFILES= \
+        $(SLO)$/dbexception.obj
+.ENDIF			# "$(OS)$(COM)"=="LINUXGCC"
 
 # --- Targets ------------------------------------------------------
 
