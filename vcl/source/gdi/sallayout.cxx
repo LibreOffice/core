@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-16 07:14:56 $
+ *  last change: $Author: sb $ $Date: 2002-08-21 10:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,7 @@ int SalLayout::CalcAsianKerning( sal_Unicode c, bool bLeft, bool bVertical )
 bool SalLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolyVector& rVector ) const
 {
     bool bHasGlyphs = HasGlyphs();
+    bool bRet = true;
     for( int nStart = 0;;)
     {
         Point aPos;
@@ -233,17 +234,19 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolyVector& rVector )
         if( !GetNextGlyphs( 1, &nLGlyph, aPos, nStart, NULL, NULL ) )
             break;
 
-        // get outline of individual glyph
+        // get outline of individual glyph, ignoring "empty" glyphs
         PolyPolygon aGlyphOutline;
-        if( rSalGraphics.GetGlyphOutline( nLGlyph, bHasGlyphs, aGlyphOutline ) )
+        bool bSuccess
+            = rSalGraphics.GetGlyphOutline(nLGlyph, bHasGlyphs, aGlyphOutline);
+        if (bSuccess && aGlyphOutline.Count() > 0)
         {
             // insert outline at correct position
             aGlyphOutline.Move( aPos.X(), aPos.Y() );
             rVector.push_back( aGlyphOutline );
+        }
+        bRet = bRet && bSuccess;
     }
-    }
-
-    return (rVector.size() > 0);
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
