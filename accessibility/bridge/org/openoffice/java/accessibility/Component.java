@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Component.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-01 14:59:45 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,9 @@ public abstract class Component extends java.awt.Component {
                     break;
                 case AccessibleStateType.ENABLED:
                     setEnabled(enable);
+                    // Since we can't access awt.Componet.accessibleContext, we need to fire
+                    // this event manually ..
+                    fireStatePropertyChange(AccessibleState.ENABLED, enable);
                     break;
                 case AccessibleStateType.FOCUSED:
                     getEventQueue().postEvent(new java.awt.event.FocusEvent(
