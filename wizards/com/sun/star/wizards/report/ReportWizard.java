@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: bc $ $Date: 2002-09-10 14:39:58 $
+ *  last change: $Author: bc $ $Date: 2002-09-11 13:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -650,6 +650,7 @@ public class ReportWizard {
             CurReportDocument.createDBForm(xMSF, SOREPORTFORMNAME);
             tools.attachEventCall(CurReportDocument.ReportTextDocument, "OnNew", "macro:///Tools.Debug.FillDocument()");      //"service:com.sun.star.wizards.report.CallReportWizard?fill"
             buseTemplate = ((Short) CurUNODialog.getPropertyOfDialogControl("optUseTemplate", "State")).shortValue() == (short) 1;
+                CurReportDocument.breakLinkofTextSections();
             bDocisStored = tools.storeDocument(xMSF, CurReportDocument.Component , StorePath, "swriter: writer_StarOffice_XML_Writer_Template",
                                    buseTemplate, sMsgSavingImpossible + (char)13 + sMsgLinkCreationImpossible);
             if (bDocisStored == true)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bc $ $Date: 2002-09-11 09:20:07 $
+ *  last change: $Author: bc $ $Date: 2002-09-11 13:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,17 +272,13 @@ public class Dataimport extends ReportWizard{
     public void createReport(final XMultiServiceFactory xMSF){
     try{
         ReportDocument CurReportDocument;
-        DBMetaData CurDBMetaData;
         CurReportDocument = new ReportDocument(xMSF, false, true);
         int iWidth = CurReportDocument.Frame.getComponentWindow().getPosSize().Width;
         CurUNOProgressDialog = showProgressDisplay(xMSF, CurReportDocument, true);
-        CurDBMetaData = new DBMetaData(xMSF, CurReportDocument.Frame);
-        if (reconnectToDatabase(xMSF, CurDBMetaData, CurReportDocument)){
-        CurReportDocument.getGroupFieldFortmats(xMSF, CurDBMetaData, sMsgTableNotExisting);
-
+        if (reconnectToDatabase(xMSF, CurReportDocument)){
+        CurReportDocument.getGroupFieldFortmats(xMSF, CurReportDocument.CurDBMetaData, sMsgTableNotExisting);
         CurUNOProgressDialog.modifyFontWeight("lblProgressDBConnection", com.sun.star.awt.FontWeight.NORMAL);
         CurUNOProgressDialog.modifyFontWeight("lblProgressDataImport", com.sun.star.awt.FontWeight.BOLD);
-
         insertDatabaseDatatoReportDocument(xMSF, CurReportDocument, CurUNOProgressDialog);
         }
         CurUNOProgressDialog.xComponent.dispose();
@@ -310,7 +306,7 @@ public class Dataimport extends ReportWizard{
     }}
 
 
-    public boolean reconnectToDatabase(XMultiServiceFactory xMSF, DBMetaData CurDBMetaData, ReportDocument CurReportDocument){
+    public boolean reconnectToDatabase(XMultiServiceFactory xMSF, ReportDocument CurReportDocument){
     try{
     XNameContainer xNamedForms = CurReportDocument.getDocumentForms();
     Object oDBForm = tools.getUNOObjectbyName(xNamedForms, SOREPORTFORMNAME);
@@ -319,26 +315,22 @@ public class Dataimport extends ReportWizard{
         boolean[] bgoOn = new boolean[1];
         bgoOn[0] = true;
         XNameAccess xNamedForm = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oDBForm);
-        CurDBMetaData.DataSourceName = (String) getValueofHiddenControl(xMSF, xNamedForm, "DataSourceName", CurReportDocument, bgoOn);
-        CurDBMetaData.Command = getValueofHiddenControl(xMSF, xNamedForm, "Command", CurReportDocument, bgoOn);
+        CurReportDocument.CurDBMetaData.DataSourceName = (String) getValueofHiddenControl(xMSF, xNamedForm, "DataSourceName", CurReportDocument, bgoOn);
+        CurReportDocument.CurDBMetaData.Command = getValueofHiddenControl(xMSF, xNamedForm, "Command", CurReportDocument, bgoOn);
         String sCommandType = getValueofHiddenControl(xMSF, xNamedForm, "CommandType", CurReportDocument, bgoOn);
         String sGroupFieldNames = getValueofHiddenControl(xMSF, xNamedForm, "GroupFieldNames", CurReportDocument, bgoOn);
         String sFieldNames = getValueofHiddenControl(xMSF, xNamedForm, "FieldNames", CurReportDocument, bgoOn);
         String sRecordFieldNames = getValueofHiddenControl(xMSF, xNamedForm, "RecordFieldNames", CurReportDocument, bgoOn);
-        CurDBMetaData.FieldNames = tools.ArrayoutofString(sFieldNames,";");
-        CurDBMetaData.RecordFieldNames = tools.ArrayoutofString(sRecordFieldNames,";");
-        CurDBMetaData.GroupFieldNames = tools.ArrayoutofString(sGroupFieldNames,";");
-        CurDBMetaData.CommandType = Integer.valueOf(sCommandType).intValue();
-        sMsgQueryCreationImpossible = tools.replaceSubString(sMsgQueryCreationImpossible, CurDBMetaData.Command, "<STATEMENT>");
-        bgetConnection = CurDBMetaData.getConnection(CurReportDocument, CurDBMetaData.DataSourceName, sMsgNoConnection, sMsgConnectionImpossible);
+        CurReportDocument.CurDBMetaData.FieldNames = tools.ArrayoutofString(sFieldNames,";");
+        CurReportDocument.CurDBMetaData.RecordFieldNames = tools.ArrayoutofString(sRecordFieldNames,";");
+        CurReportDocument.CurDBMetaData.GroupFieldNames = tools.ArrayoutofString(sGroupFieldNames,";");
+        CurReportDocument.CurDBMetaData.CommandType = Integer.valueOf(sCommandType).intValue();
+        sMsgQueryCreationImpossible = tools.replaceSubString(sMsgQueryCreationImpossible, CurReportDocument.CurDBMetaData.Command, "<STATEMENT>");
+        bgetConnection = CurReportDocument.CurDBMetaData.getConnection(CurReportDocument, CurReportDocument.CurDBMetaData.DataSourceName, sMsgNoConnection, sMsgConnectionImpossible);
         if (bgoOn[0] == false)
         return false;
         if (bgetConnection){
-        boolean bexecute = CurDBMetaData.executeCommand(sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot);
-        if (bexecute){;
-            XColumnsSupplier xDBCols = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, CurDBMetaData.ResultSet);
-            CurDBMetaData.xColumns = xDBCols.getColumns();
-        }
+        boolean bexecute = CurReportDocument.CurDBMetaData.executeCommand(sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot);
         return bexecute;
         }
         else
@@ -371,38 +363,37 @@ public class Dataimport extends ReportWizard{
     Object CurGroupValue;
     String CurGroupTableName;
     DBMetaData CurDBMetaData = CurReportDocument.CurDBMetaData;
-        int GroupFieldCount = CurReportDocument.CurDBMetaData.GroupFieldNames.length;
-    int FieldCount = CurReportDocument.CurDBMetaData.FieldNames.length;
+    int GroupFieldCount = tools.getArraylength(CurDBMetaData.GroupFieldNames);
+    int FieldCount = tools.getArraylength(CurDBMetaData.FieldNames);
     Object[] OldGroupFieldValues = new Object[GroupFieldCount];
     XTextTable[] xGroupBaseTables = new XTextTable[GroupFieldCount];
     int RecordFieldCount = FieldCount - GroupFieldCount;
     int[] SelColIndices = null;
     int[] GroupColIndices = null;
-    int iCommandType = CurReportDocument.CurDBMetaData.CommandType;
+    int iCommandType = CurDBMetaData.CommandType;
     if ((iCommandType == com.sun.star.sdb.CommandType.QUERY) || (iCommandType == com.sun.star.sdb.CommandType.COMMAND)){
-        SelColIndices = CurReportDocument.CurDBMetaData.getSelectedQueryFields(CurReportDocument.CurDBMetaData.RecordFieldNames);
-        GroupColIndices = CurReportDocument.CurDBMetaData.getSelectedQueryFields(CurReportDocument.CurDBMetaData.GroupFieldNames);
+        SelColIndices = CurDBMetaData.getSelectedQueryFields(CurDBMetaData.RecordFieldNames);
+        GroupColIndices = CurDBMetaData.getSelectedQueryFields(CurDBMetaData.GroupFieldNames);
     }
     XNameAccess xTextTables = CurReportDocument.TextTablesSupplier.getTextTables();
     xTextDocument = CurReportDocument.ReportTextDocument;
         xTextCursor = CurReportDocument.createTextCursor(CurReportDocument.ReportTextDocument.getText());
     XFrame xFrame = CurReportDocument.Frame;
-    CurDBMetaData.getGroupFieldTypes();
     xTextDocument.lockControllers();
-        if (CurReportDocument.CurDBMetaData.ResultSet.next() == true){
+        if (CurDBMetaData.ResultSet.next() == true){
         tools.setUNOPropertyValue(xTextCursor, "PageDescName", "First Page");
         for (ColIndex = 0; ColIndex < GroupFieldCount; ColIndex++){
             CurGroupTableName = "Tbl_GroupField" + Integer.toString(ColIndex+1);
             xGroupBaseTables[ColIndex] = (XTextTable) CurReportDocument.TextTablesSupplier.getTextTables().getByName(CurGroupTableName);
-            CurGroupValue = CurReportDocument.CurDBMetaData.getGroupColumnValue(iCommandType, GroupColIndices, ColIndex);
+            CurGroupValue = CurDBMetaData.getGroupColumnValue(iCommandType, GroupColIndices, ColIndex);
         OldGroupFieldValues[ColIndex] = CurGroupValue;
         CurGroupFieldFormat = (ReportDocument.GroupFieldFormat) CurReportDocument.GroupFormatVector.elementAt(ColIndex);
         addLinkedTextSection(CurReportDocument, xTextCursor, "GroupField" + Integer.toString(ColIndex+1), CurGroupFieldFormat, CurGroupValue);
         }
-        if (CurReportDocument.CurDBMetaData.getcurrentRecordData(ColIndex, FieldCount, RecordFieldCount, SelColIndices, iCommandType, DataVector, sMsgQueryCreationImpossible) == true){
+        if (CurDBMetaData.getcurrentRecordData(ColIndex, FieldCount, RecordFieldCount, SelColIndices, iCommandType, DataVector, sMsgQueryCreationImpossible) == true){
         int RowIndex = 1;
         bStopProcess = false;
-        while (CurReportDocument.CurDBMetaData.ResultSet.next() == true){
+        while (CurDBMetaData.ResultSet.next() == true){
             if (bStopProcess == true){
             xTextDocument.unlockControllers();
             return;
@@ -410,7 +401,7 @@ public class Dataimport extends ReportWizard{
             RowIndex += 1;
             breset = false;
             for (ColIndex = 0; ColIndex < GroupFieldCount; ColIndex++){
-            CurGroupValue = CurReportDocument.CurDBMetaData.getGroupColumnValue(iCommandType, GroupColIndices, ColIndex);
+            CurGroupValue = CurDBMetaData.getGroupColumnValue(iCommandType, GroupColIndices, ColIndex);
             if ((CurGroupValue.equals((Object) OldGroupFieldValues[ColIndex]) == false) || (breset)){
                 breset = true;
                 insertDataToRecordTable(CurReportDocument, xTextCursor, DataVector, RecordFieldCount);
@@ -420,7 +411,7 @@ public class Dataimport extends ReportWizard{
                 breset = !(ColIndex == GroupFieldCount-1);
             }
             }
-            CurReportDocument.CurDBMetaData.getcurrentRecordData(ColIndex, FieldCount, RecordFieldCount, SelColIndices, iCommandType, DataVector, sMsgQueryCreationImpossible);
+            CurDBMetaData.getcurrentRecordData(ColIndex, FieldCount, RecordFieldCount, SelColIndices, iCommandType, DataVector, sMsgQueryCreationImpossible);
             updateProgressDisplay(RowIndex, CurUNOProgressDialog);
         }
         insertDataToRecordTable(CurReportDocument, xTextCursor, DataVector, RecordFieldCount);
@@ -492,7 +483,7 @@ public class Dataimport extends ReportWizard{
     throws com.sun.star.sdbc.SQLException, com.sun.star.container.NoSuchElementException, com.sun.star.lang.IllegalArgumentException,
         com.sun.star.lang.WrappedTargetException{
     int iColIndex;
-    int FieldCount = FieldNames.length;
+    int FieldCount = tools.getArraylength(FieldNames);
     com.sun.star.sdbc.XRow xResultSetRow;
     String sValue;
     String sResultSet = null;
