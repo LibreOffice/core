@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-24 15:00:58 $
+ *  last change: $Author: hr $ $Date: 2001-09-28 09:52:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,8 @@ public:
 
     // ::com::sun::star::uno::XAggregation
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return OWeakAggObject::queryInterface(rType); }
-    void                        SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException)   { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw(::com::sun::star::uno::RuntimeException)   { OWeakAggObject::release(); }
+    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
+    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
 
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
 
