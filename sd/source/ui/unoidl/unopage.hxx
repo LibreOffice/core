@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 14:37:03 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:29:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #endif
 #ifndef _COM_SUN_STAR_PRESENTATION_XPRESENTATIONPAGE_HPP_
 #include <com/sun/star/presentation/XPresentationPage.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATIONNODESUPPLIER_HPP_
+#include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #endif
 
 
@@ -197,10 +200,12 @@ public:
 
 class SdDrawPage : public ::com::sun::star::drawing::XMasterPageTarget,
                    public ::com::sun::star::presentation::XPresentationPage,
+                   public ::com::sun::star::animations::XAnimationNodeSupplier,
                    public SdGenericDrawPage
 {
 private:
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > maTypeSequence;
+
 protected:
     virtual void setBackground( const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::lang::IllegalArgumentException);
     virtual void getBackground( ::com::sun::star::uno::Any& rValue ) throw();
@@ -250,6 +255,9 @@ public:
     // XShapes
     virtual void SAL_CALL add( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL remove( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XAnimationNodeSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > SAL_CALL getAnimationNode(  ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 /***********************************************************************
