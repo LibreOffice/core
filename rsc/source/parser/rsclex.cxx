@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsclex.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:34:31 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ StringContainer* pStringContainer = NULL;
 /****************** C O D E **********************************************/
 UINT32 GetNumber(){
     UINT32  l = 0;
-    short   nLog = 10;
+    UINT32  nLog = 10;
 
     if( '0' == c ){
         c = pFI->GetFastChar();
@@ -247,7 +247,7 @@ int MakeToken( YYSTYPE * pTokenVal ){
     }
 
     if( isalpha (c) || (c == '_') ){
-        HASHID      nHashId;
+        Atom        nHashId;
         OStringBuffer aBuf( 256 );
 
         while( isalnum (c) || (c == '_') || (c == '-') )
@@ -256,8 +256,8 @@ int MakeToken( YYSTYPE * pTokenVal ){
             c = pFI->GetFastChar();
         }
 
-        nHashId = pHS->Test( aBuf.getStr() );
-        if( HASH_NONAME != nHashId )
+        nHashId = pHS->getID( aBuf.getStr(), true );
+        if( InvalidAtom != nHashId )
         {
             KEY_STRUCT  aKey;
 
@@ -442,7 +442,7 @@ ERRTYPE parser( RscFileInst * pFileInst )
     EndParser();
 
     // yyparser gibt 0 zurueck, wenn erfolgreich
-    if( 0 == (USHORT)aError )
+    if( 0 == aError )
         aError.Clear();
     if( pFileInst->pTypCont->pEH->nErrors )
         aError = ERR_ERROR;
@@ -470,7 +470,7 @@ RscExpression * MacroParser( RscFileInst & rFileInst )
     EndParser();
 
     // yyparser gibt 0 zurueck, wenn erfolgreich
-    if( 0 == (USHORT)aError )
+    if( 0 == aError )
         aError.Clear();
     if( rFileInst.pTypCont->pEH->nErrors )
         aError = ERR_ERROR;
