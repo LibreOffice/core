@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewTable.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:43 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,6 +454,19 @@ sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleSelected( sal_Int32 nRow
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     //  in the page preview, there is no selection
+    ScUnoGuard aGuard;
+    IsObjectValid();
+
+    FillTableInfo();
+
+    sal_Int32 nRet = 0;
+    if ( mpTableInfo && nColumn >= 0 && nRow >= 0 && nColumn < mpTableInfo->GetCols() && nRow < mpTableInfo->GetRows() )
+    {
+        //  index iterates horizontally
+    }
+    else
+        throw lang::IndexOutOfBoundsException();
+
     return sal_False;
 }
 
@@ -535,13 +548,19 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleAt
             const ScPreviewColRowInfo* pColInfo = mpTableInfo->GetColInfo();
             const ScPreviewColRowInfo* pRowInfo = mpTableInfo->GetRowInfo();
 
-            if ( nCols > 0 && nRows > 0 && aPoint.X >= pColInfo[0].nPixelStart && aPoint.Y >= pRowInfo[0].nPixelStart )
+            Rectangle aScreenRect(GetBoundingBox());
+
+            awt::Point aMovedPoint = aPoint;
+            aMovedPoint.X += aScreenRect.Left();
+            aMovedPoint.Y += aScreenRect.Top();
+
+            if ( nCols > 0 && nRows > 0 && aMovedPoint.X >= pColInfo[0].nPixelStart && aMovedPoint.Y >= pRowInfo[0].nPixelStart )
             {
                 USHORT nColIndex = 0;
-                while ( nColIndex < nCols && aPoint.X > pColInfo[nColIndex].nPixelEnd )
+                while ( nColIndex < nCols && aMovedPoint.X > pColInfo[nColIndex].nPixelEnd )
                     ++nColIndex;
                 USHORT nRowIndex = 0;
-                while ( nRowIndex < nRows && aPoint.Y > pRowInfo[nRowIndex].nPixelEnd )
+                while ( nRowIndex < nRows && aMovedPoint.Y > pRowInfo[nRowIndex].nPixelEnd )
                     ++nRowIndex;
                 if ( nColIndex < nCols && nRowIndex < nRows )
                 {
