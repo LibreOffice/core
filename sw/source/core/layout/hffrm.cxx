@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hffrm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:06:10 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 10:22:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,7 @@ SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, BOOL bTst,  BOOL bInfo )
     {
         nResult = 0;
     }
-    else if (! GetEatSpacing())
+    else if (!GetEatSpacing())
     {
         nResult = SwLayoutFrm::GrowFrm(nDist, bTst, bInfo);
     }
@@ -481,7 +481,7 @@ SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, BOOL bTst,  BOOL bInfo )
 
         /* calculate maximum eatable spacing */
         if (IsHeaderFrm())
-            nMaxEat = aFrm.Height() - aPrt.Bottom() - pAttrs->CalcBottomLine();
+            nMaxEat = aFrm.Height() - aPrt.Top() - aPrt.Height() - pAttrs->CalcBottomLine();
         else
             nMaxEat = aPrt.Top() - pAttrs->CalcTopLine();
 
