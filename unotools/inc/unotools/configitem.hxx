@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-11-24 12:02:54 $
+ *  last change: $Author: os $ $Date: 2000-12-04 10:33:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,15 @@ namespace utl
                                         xChangeLstnr;
             utl::ConfigManager*         pManager;
             sal_Bool                    bIsModified             : 1; //
+#if SUPD>615
+#else
             sal_Bool                    bInPutValues            : 1; //prevent notification of own change actions
+#endif
             sal_Bool                    bHasChangedProperties   : 1; //call XChangesBatch::Commit() if any changes were notified
 
+#if SUPD>615
+            sal_Int16                   nInValueChange;
+#endif
             ConfigItem();//
             void                    RemoveListener();
             void                    CallNotify(
@@ -158,6 +164,12 @@ namespace utl
             /** writes the changed values into the sub tree. Always called in the Dtor of the derived class.  */
             virtual void            Commit();
 
+#if SUPD>615
+            sal_Bool                IsInValueChange() const {return nInValueChange > 0;}
+#else
+            void                    SetInValueChange(sal_Bool bSet) {bInPutValues = bSet;}
+            sal_Bool                IsInValueChange() const {return bInPutValues;}
+#endif
     };
 }//namespace utl
 #endif //_UTL_CONFIGITEM_HXX_
