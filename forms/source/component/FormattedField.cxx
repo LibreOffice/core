@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:31 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 13:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,7 +558,7 @@ void OFormattedModel::fillProperties(
         DECL_PROP1(TAG,                 ::rtl::OUString,        BOUND);
         DECL_PROP1(TABINDEX,            sal_Int16,              BOUND);
         DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,        BOUND);
-        DECL_IFACE_PROP2(BOUNDFIELD,    com::sun::star::beans::XPropertySet,READONLY, TRANSIENT);
+        DECL_IFACE_PROP3(BOUNDFIELD,    com::sun::star::beans::XPropertySet,BOUND,READONLY, TRANSIENT);
         DECL_BOOL_PROP2(FILTERPROPOSAL,                         BOUND, MAYBEDEFAULT);
         DECL_IFACE_PROP2(CONTROLLABEL,  com::sun::star::beans::XPropertySet,BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
@@ -775,8 +775,9 @@ sal_Int32 OFormattedModel::calcFormatKey() const
     if (aFormatKey.hasValue())
         return getINT32(aFormatKey);
 
-    if (m_xField.is())
-        return getINT32(m_xField->getPropertyValue(PROPERTY_FORMATKEY));
+    Reference<XPropertySet> xField = getField();
+    if (xField.is())
+        return getINT32(xField->getPropertyValue(PROPERTY_FORMATKEY));
 
     return 0;
 }
@@ -813,9 +814,10 @@ void OFormattedModel::_loaded(const EventObject& rEvent)
 
     // get some properties of the field
     m_nFieldType = DataType::OTHER;
-    if ( m_xField.is() )
+    Reference<XPropertySet> xField = getField();
+    if ( xField.is() )
     {
-        m_xField->getPropertyValue( PROPERTY_FIELDTYPE ) >>= m_nFieldType;
+        xField->getPropertyValue( PROPERTY_FIELDTYPE ) >>= m_nFieldType;
     }
 
 
@@ -831,10 +833,10 @@ void OFormattedModel::_loaded(const EventObject& rEvent)
         {   // unser aggregiertes Model hat noch keine Format-Informationen, also geben wir die von dem Feld, an das
             // wir gebunden sind, weiter
             sal_Int32 nType = DataType::VARCHAR;
-            if (m_xField.is())
+            if (xField.is())
             {
-                aFmtKey = m_xField->getPropertyValue(PROPERTY_FORMATKEY);
-                m_xField->getPropertyValue(PROPERTY_FIELDTYPE) >>= nType ;
+                aFmtKey = xField->getPropertyValue(PROPERTY_FORMATKEY);
+                xField->getPropertyValue(PROPERTY_FIELDTYPE) >>= nType ;
             }
 
             Reference<XNumberFormatsSupplier>  xSupplier = calcFormFormatsSupplier();
@@ -864,7 +866,7 @@ void OFormattedModel::_loaded(const EventObject& rEvent)
                 m_xAggregateSet->setPropertyValue(PROPERTY_FORMATKEY, aFmtKey);
 
                 // das Numeric-Flag an mein gebundenes Feld anpassen
-                if (m_xField.is())
+                if (xField.is())
                 {
                     m_bNumeric = sal_False;
                     switch (nType)
