@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 14:59:36 $
+#   last change: $Author: hr $ $Date: 2004-09-08 14:31:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,25 +72,20 @@ USE_DEFFILE=TRUE
 .INCLUDE :  settings.mk
 
 CFLAGS+=-DISOLATION_AWARE_ENABLED -DWIN32_LEAN_AND_MEAN -DXML_UNICODE -D_NTSDK -DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0501 
-
+CFLAGS+=-wd4710 -wd4711 -wd4514 -wd4619 -wd4217 -wd4820
 CDEFS+=-D_WIN32_IE=0x501
 
 # --- Files --------------------------------------------------------
 
 SLOFILES=$(SLO)$/classfactory.obj\
     $(SLO)$/columninfo.obj\
-    $(SLO)$/dbgmacros.obj\
-    $(SLO)$/fileextensions.obj\
     $(SLO)$/infotips.obj\
     $(SLO)$/propsheets.obj\
-    $(SLO)$/registry.obj\
     $(SLO)$/shlxthdl.obj\
-    $(SLO)$/utilities.obj\
     $(SLO)$/listviewbuilder.obj\
     $(SLO)$/document_statistic.obj\
-    $(SLO)$/iso8601_converter.obj
-    
-    
+    $(SLO)$/thumbviewer.obj
+       
 SHL1TARGET=$(TARGET)
 
 SHL1STDLIBS=uwinapi.lib\
@@ -99,16 +94,16 @@ SHL1STDLIBS=uwinapi.lib\
     ole32.lib\
     uuid.lib\
     shell32.lib\
-    comctl32.lib\
+    kernel32.lib\
     gdi32.lib\
-    kernel32.lib
+    gdiplus.lib
     
 SHL1LIBS=$(SOLARLIBDIR)$/zlib.lib\
     $(SOLARLIBDIR)$/expat_xmlparse.lib\
     $(SOLARLIBDIR)$/expat_xmltok.lib\
-    $(SLB)$/zipfile.lib\
-    $(SLB)$/sax.lib
-
+    $(SLB)$/util.lib\
+    $(SLB)$/ooofilereader.lib
+    
 SHL1DEPN=
 
 SHL1OBJS=$(SLOFILES) 
@@ -123,3 +118,4 @@ DEF1EXPORTFILE=exports.dxp
 
 .INCLUDE :	target.mk
 
+    
