@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PaneDockingWindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 08:53:51 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,7 @@ PaneDockingWindow::PaneDockingWindow (
     SfxChildWindow *pChildWindow,
     ::Window* pParent,
     const ResId& rResId,
-    PaneManager::PaneType ePane,
-    const String& rsTitle)
+    PaneManager::PaneType ePane)
     : SfxDockingWindow (
         pBindings,
         pChildWindow,
@@ -85,7 +84,7 @@ PaneDockingWindow::PaneDockingWindow (
         rResId
         ),
       mePane(ePane),
-      msTitle(rsTitle),
+      msTitle(),
       mpTitleToolBox(NULL),
       maBorder (3,1,3,3),
       mnChildWindowId(pChildWindow->GetType())
@@ -94,6 +93,7 @@ PaneDockingWindow::PaneDockingWindow (
 
     ViewShellBase& rBase (*ViewShellBase::GetViewShellBase(
         pBindings->GetDispatcher()->GetFrame()));
+    msTitle = rBase.GetPaneManager().GetWindowTitle (mePane);
     rBase.GetPaneManager().SetWindow (mePane, this);
 
     // Initialize the title tool box.
@@ -127,6 +127,15 @@ PaneDockingWindow::~PaneDockingWindow (void)
     // Tell the ViewShellBase that the window of this slide sorter is not
     // available anymore.
     rBase.GetPaneManager().SetWindow (mePane, NULL);
+}
+
+
+
+
+void PaneDockingWindow::SetTitle (const String& rsTitle)
+{
+    msTitle = rsTitle;
+    Invalidate();
 }
 
 
