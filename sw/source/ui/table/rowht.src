@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rowht.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-02 20:41:49 $
+ *  last change: $Author: obo $ $Date: 2001-03-19 12:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ ModalDialog DLG_ROW_HEIGHT
     Text [ danish ] = "Rækkehøjde" ;
     Text [ french ] = "Hauteur de ligne" ;
     Text [ swedish ] = "Radhöjd" ;
-    Text [ dutch ] = "Rijlhoogte" ;
+    Text [ dutch ] = "Rijhoogte" ;
     Text [ spanish ] = "Altura de fila" ;
     Text [ english_us ] = "Row Height" ;
     Moveable = TRUE ;
