@@ -3,9 +3,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 12:54:23 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2081,6 +2081,15 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Auto~Format...</value>
                     <value xml:lang="en-US">Auto~Format...</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SpellDialog" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">~Rechtschreibung...</value>
+                    <value xml:lang="en-US">~Spellcheck...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
