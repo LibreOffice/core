@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-08 11:32:43 $
+ *  last change: $Author: mba $ $Date: 2001-03-30 09:36:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #endif
 #ifndef _TOOLS_INETMSG_HXX
 #include <tools/inetmsg.hxx>
+#endif
+#ifndef _COM_SUN_STAR_IO_XTRUNCATE_HPP_
+#include <com/sun/star/io/XTruncate.hpp>
 #endif
 
 #include <ucbhelper/contentbroker.hxx>
@@ -674,6 +677,19 @@ ErrCode UcbLockBytes::SetSize (ULONG nNewSize)
     SvLockBytesStat aStat;
     Stat( &aStat, (SvLockBytesStatFlag) 0 );
     ULONG nSize = aStat.nSize;
+
+    if ( nSize > nNewSize )
+    {
+        Reference < XTruncate > xTrunc( getSeekable_Impl(), UNO_QUERY );
+        if ( xTrunc.is() )
+        {
+            xTrunc->truncate();
+            nSize = 0;
+        }
+        else
+            DBG_WARNING("Not truncatable!");
+    }
+
     if ( nSize < nNewSize )
     {
         ULONG nDiff = nNewSize-nSize, nCount=0;
@@ -682,10 +698,6 @@ ErrCode UcbLockBytes::SetSize (ULONG nNewSize)
         delete pBuffer;
         if ( nCount != nDiff )
             return ERRCODE_IO_CANTWRITE;
-    }
-    else if ( nSize > nNewSize )
-    {
-        DBG_WARNING( "Can't shrink UCBLockBytes!" );
     }
 
     return ERRCODE_NONE;
