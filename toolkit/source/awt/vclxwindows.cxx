@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:36:18 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLETOOLBOX_HXX_
 #include <toolkit/awt/vclxaccessibletoolbox.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
 #endif
 #ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #include <toolkit/helper/macros.hxx>
@@ -2182,6 +2185,24 @@ void VCLXDialog::endExecute() throw(::com::sun::star::uno::RuntimeException)
     Dialog* pDlg = (Dialog*) GetWindow();
     if ( pDlg )
         pDlg->EndDialog( 0 );
+}
+
+void SAL_CALL VCLXDialog::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    Window* pWindow = GetWindow();
+
+    if ( pWindow )
+    {
+        OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( GetViewGraphics() );
+        if ( !pDev )
+            pDev = pWindow->GetParent();
+
+        Size aSize = pDev->PixelToLogic( pWindow->GetSizePixel() );
+        Point aPos = pDev->PixelToLogic( Point( nX, nY ) );
+
+        pWindow->Draw( pDev, aPos, aSize, WINDOW_DRAW_NOCONTROLS );
+    }
 }
 
 ::com::sun::star::awt::DeviceInfo VCLXDialog::getInfo() throw(::com::sun::star::uno::RuntimeException)
