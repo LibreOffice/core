@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-02 13:09:45 $
+ *  last change: $Author: mtg $ $Date: 2001-05-02 16:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,148 +242,30 @@ SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
     pDoc->DoUndo( FALSE );      // always FALSE
     pDoc->AddLink();
 
-    SvStorageRef refStg = new SvStorage ( TRUE, aFile, STREAM_STD_READWRITE, STORAGE_TRANSACTED );
-    bReadOnly = 0 != refStg->GetError();
-
-    BOOL bIsStg = IsFileUCBStorage( rFile );
-
-    if( !bIsStg || !aDateModified.GetDate() || !aTimeModified.GetTime() )
+    if( !aDateModified.GetDate() || !aTimeModified.GetTime() )
         Touch();        // falls neu angelegt -> neuen ZeitStempel besorgen
-
-    refStg.Clear();
-    refStg = new SvStorage( TRUE, rFile, STREAM_STD_READWRITE | STREAM_SHARE_DENYNONE );
-
-    const OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( XMLN_BLOCKLIST ) );
-    if (bIsStg && refStg->IsContained ( sDocName ) )
-    {
-        Reference< lang::XMultiServiceFactory > xServiceFactory =
-                comphelper::getProcessServiceFactory();
-        ASSERT( xServiceFactory.is(),
-                "XMLReader::Read: got no service manager" );
-        if( !xServiceFactory.is() )
-        {
-            // Throw an exception ?
-        }
-
-        xml::sax::InputSource aParserInput;
-        aParserInput.sSystemId = rFile;
-
-        SvStorageStreamRef xDocStream = refStg->OpenStream( sDocName, STREAM_STGREAD );
-        xDocStream->Seek( 0L );
-        xDocStream->SetBufferSize( 16*1024 );
-        aParserInput.aInputStream = new utl::OInputStreamWrapper( *xDocStream );
-
-        // get parser
-        Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
-        ASSERT( xXMLParser.is(),
-            "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
-        if( !xXMLParser.is() )
-        {
-            // Maybe throw an exception?
-        }
-
-        // get filter
-        Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLBlockListImport( *this );
-
-        // connect parser and filter
-        Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
-        xParser->setDocumentHandler( xFilter );
-
-        // parse
-        try
-        {
-            xParser->parseStream( aParserInput );
-        }
-        catch( xml::sax::SAXParseException&  )
-        {
-            // re throw ?
-        }
-        catch( xml::sax::SAXException&  )
-        {
-            // re throw ?
-        }
-        catch( io::IOException& )
-        {
-            // re throw ?
-        }
-    }
+    xBlkRoot = new SvStorage( TRUE, rFile, STREAM_STD_READWRITE | STREAM_SHARE_DENYNONE );
+    ReadInfo();
     bInfoChanged = FALSE;
-    refStg.Clear();
 }
 
 SwXMLTextBlocks::SwXMLTextBlocks( SvStorage& rStg )
-    : SwImpBlocks( rStg.GetName() ),
-      bAutocorrBlock( TRUE ), nFlags ( 0 )
+: SwImpBlocks( rStg.GetName() )
+, bAutocorrBlock( TRUE )
+, nFlags ( 0 )
 {
-    // This is unused by Marty right now - dont forget...
     SwDocShell* pDocSh = new SwDocShell ( SFX_CREATE_MODE_INTERNAL );
     if( !pDocSh->DoInitNew( 0 ) )
         return;
     bReadOnly = FALSE;
     pDoc = pDocSh->GetDoc();
     xDocShellRef = pDocSh;
-
+    pDoc->SetOle2Link( Link() );
     pDoc->DoUndo( FALSE );
     pDoc->AddLink();
 
-
-    SvStorageRef refStg = &rStg;
-    const OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( XMLN_BLOCKLIST ) );
-    if ( refStg->IsContained ( sDocName ) )
-    {
-        Reference< lang::XMultiServiceFactory > xServiceFactory =
-                comphelper::getProcessServiceFactory();
-        ASSERT( xServiceFactory.is(),
-                "XMLReader::Read: got no service manager" );
-        if( !xServiceFactory.is() )
-        {
-            // Throw an exception ?
-        }
-
-        xml::sax::InputSource aParserInput;
-        aParserInput.sSystemId = sDocName;
-
-        SvStorageStreamRef xDocStream = refStg->OpenStream( sDocName, STREAM_STGREAD );
-        xDocStream->Seek( 0L );
-        xDocStream->SetBufferSize( 16*1024 );
-        aParserInput.aInputStream = new utl::OInputStreamWrapper( *xDocStream );
-
-        // get parser
-        Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
-        ASSERT( xXMLParser.is(),
-            "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
-        if( !xXMLParser.is() )
-        {
-            // Maybe throw an exception?
-        }
-
-        // get filter
-        Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLBlockListImport( *this );
-
-        // connect parser and filter
-        Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
-        xParser->setDocumentHandler( xFilter );
-
-        // parse
-        try
-        {
-            xParser->parseStream( aParserInput );
-        }
-        catch( xml::sax::SAXParseException&  )
-        {
-            // re throw ?
-        }
-        catch( xml::sax::SAXException&  )
-        {
-            // re throw ?
-        }
-        catch( io::IOException& )
-        {
-            // re throw ?
-        }
-    }
+    xBlkRoot = &rStg;
+    ReadInfo();
     bInfoChanged = FALSE;
 }
 
@@ -416,6 +298,7 @@ void SwXMLTextBlocks::AddName( const String& rShort, const String& rLong, BOOL b
     pNew->bIsOnlyTxtFlagInit = TRUE;
     pNew->bIsOnlyTxt = bOnlyTxt;
     aNames.C40_PTR_INSERT( SwBlockName, pNew );
+    bInfoChanged = TRUE;
 }
 void SwXMLTextBlocks::AddName( const String& rShort, const String& rLong,
                            const String& rPackageName, BOOL bOnlyTxt )
@@ -427,6 +310,7 @@ void SwXMLTextBlocks::AddName( const String& rShort, const String& rLong,
     pNew->bIsOnlyTxtFlagInit = TRUE;
     pNew->bIsOnlyTxt = bOnlyTxt;
     aNames.C40_PTR_INSERT( SwBlockName, pNew );
+    bInfoChanged = TRUE;
 }
 
 ULONG SwXMLTextBlocks::Delete( USHORT n )
@@ -569,7 +453,7 @@ ULONG SwXMLTextBlocks::GetDoc( USHORT nIdx )
         }
 
         // get filter
-        Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( *this );
+        Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( *this, aCur, sal_True );
 
         // connect parser and filter
         Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
@@ -762,8 +646,8 @@ void SwXMLTextBlocks::CloseFile()
     {
         if (bInfoChanged)
             WriteInfo();
+        xBlkRoot.Clear();
     }
-    xBlkRoot.Clear();
 }
 
 void SwXMLTextBlocks::SetIsTextOnly( const String& rShort, BOOL bNewValue )
@@ -950,68 +834,75 @@ BOOL SwXMLTextBlocks::IsFileUCBStorage( const String & rFileName)
 ULONG SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
 {
     ULONG n = 0;
-    USHORT nIndex = GetIndex ( rShort );
-    String aFolderName( GetPackageName ( nIndex ) );
+    sal_Bool bTextOnly = sal_True;
+    String aFolderName;
+    GeneratePackageName ( rShort, aFolderName );
     String aStreamName = aFolderName + String::CreateFromAscii(".xml");
+    rText.Erase();
 
-    SvStorageStreamRef xContents;
-
-    // Kurzform!
     xRoot = xBlkRoot->OpenUCBStorage( aFolderName, STREAM_STGREAD );
-    xContents = xRoot->OpenStream( aStreamName, STREAM_STGREAD );
-
-    xContents->Seek( 0L );
-    xContents->SetBufferSize( 1024 * 2 );
-    Reference< lang::XMultiServiceFactory > xServiceFactory =
-        comphelper::getProcessServiceFactory();
-    ASSERT( xServiceFactory.is(), "XMLReader::Read: got no service manager" );
-    if( !xServiceFactory.is() )
+    if (xRoot.Is())
     {
-        // Throw an exception ?
-    }
+        if ( !xRoot->IsContained ( aStreamName ) )
+        {
+            bTextOnly = sal_False;
+            aStreamName = String::CreateFromAscii("content.xml");
+        }
 
-    xml::sax::InputSource aParserInput;
-    aParserInput.sSystemId = aName;
-    aParserInput.aInputStream = new utl::OInputStreamWrapper( *xContents );
+        SvStorageStreamRef xContents = xRoot->OpenStream( aStreamName, STREAM_STGREAD );
+        xContents->Seek( 0L );
+        xContents->SetBufferSize( 1024 * 2 );
+        Reference< lang::XMultiServiceFactory > xServiceFactory =
+            comphelper::getProcessServiceFactory();
+        ASSERT( xServiceFactory.is(), "XMLReader::Read: got no service manager" );
+        if( !xServiceFactory.is() )
+        {
+            // Throw an exception ?
+        }
 
-    // get parser
-    Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
-    ASSERT( xXMLParser.is(),
-            "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
-    if( !xXMLParser.is() )
-    {
-        // Maybe throw an exception?
-    }
+        xml::sax::InputSource aParserInput;
+        aParserInput.sSystemId = aName;
+        aParserInput.aInputStream = new utl::OInputStreamWrapper( *xContents );
 
-    // get filter
-    Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( *this );
+        // get parser
+        Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
+                OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
+        ASSERT( xXMLParser.is(),
+                "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
+        if( !xXMLParser.is() )
+        {
+            // Maybe throw an exception?
+        }
 
-    // connect parser and filter
-    Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
-    xParser->setDocumentHandler( xFilter );
+        // get filter
+        Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( *this, rText, bTextOnly );
 
-    // parse
-    try
-    {
-        xParser->parseStream( aParserInput );
-    }
-    catch( xml::sax::SAXParseException&  )
-    {
-        // re throw ?
-    }
-    catch( xml::sax::SAXException&  )
-    {
-        // re throw ?
-    }
-    catch( io::IOException& )
-    {
-        // re throw ?
-    }
-    bInfoChanged = FALSE;
+        // connect parser and filter
+        Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
+        xParser->setDocumentHandler( xFilter );
 
-    xRoot.Clear();
-    xContents.Clear();
+        // parse
+        try
+        {
+            xParser->parseStream( aParserInput );
+        }
+        catch( xml::sax::SAXParseException&  )
+        {
+            // re throw ?
+        }
+        catch( xml::sax::SAXException&  )
+        {
+            // re throw ?
+        }
+        catch( io::IOException& )
+        {
+            // re throw ?
+        }
+        xRoot.Clear();
+        xContents.Clear();
+    }
+    else
+        ASSERT( sal_False, "Tried to open non-existent folder!");
     return n;
 }
 
@@ -1052,6 +943,11 @@ ULONG SwXMLTextBlocks::PutBlockText( const String& rShort, const String& rName,
 
     xDocStream->SetSize ( 0L );
     xDocStream->SetBufferSize( 2*1024 );
+    String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
+    OUString aMime ( RTL_CONSTASCII_USTRINGPARAM ( "text/xml") );
+    Any aAny;
+    aAny <<= aMime;
+    xDocStream->SetProperty( aPropName, aAny );
     Reference < io::XOutputStream > xOut = new  utl::OOutputStreamWrapper(*xDocStream);
        uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
        xSrc->setOutputStream(xOut);
@@ -1086,13 +982,13 @@ ULONG SwXMLTextBlocks::PutBlockText( const String& rShort, const String& rName,
 void SwXMLTextBlocks::GeneratePackageName ( const String& rShort, String& rPackageName )
 {
     rPackageName = rShort;
-    xub_StrLen nPos = 1;
+    xub_StrLen nPos = 0;
     sal_Unicode pDelims[] = { '!', '/', ':', '.', '\\', 0 };
     ByteString sByte ( rPackageName, RTL_TEXTENCODING_UTF7);
     rPackageName = String (sByte, RTL_TEXTENCODING_ASCII_US);
     while( STRING_NOTFOUND != ( nPos = rPackageName.SearchChar( pDelims, nPos )))
     {
-        rPackageName.SetChar( nPos, rPackageName.GetChar( nPos ) & 0x0f );
+        rPackageName.SetChar( nPos, '_' );
         ++nPos;
     }
 #if 0
@@ -1135,6 +1031,61 @@ ULONG SwXMLTextBlocks::PutText( const String& rShort, const String& rName,
 
 void SwXMLTextBlocks::ReadInfo( void )
 {
+    const OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( XMLN_BLOCKLIST ) );
+    if ( xBlkRoot->IsContained ( sDocName ) )
+    {
+        Reference< lang::XMultiServiceFactory > xServiceFactory =
+                comphelper::getProcessServiceFactory();
+        ASSERT( xServiceFactory.is(),
+                "XMLReader::Read: got no service manager" );
+        if( !xServiceFactory.is() )
+        {
+            // Throw an exception ?
+        }
+
+        xml::sax::InputSource aParserInput;
+        aParserInput.sSystemId = sDocName;
+
+        SvStorageStreamRef xDocStream = xBlkRoot->OpenStream( sDocName, STREAM_STGREAD );
+        xDocStream->Seek( 0L );
+        xDocStream->SetBufferSize( 16*1024 );
+        aParserInput.aInputStream = new utl::OInputStreamWrapper( *xDocStream );
+
+        // get parser
+        Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
+            OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
+        ASSERT( xXMLParser.is(),
+            "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
+        if( !xXMLParser.is() )
+        {
+            // Maybe throw an exception?
+        }
+
+        // get filter
+        Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLBlockListImport( *this );
+
+        // connect parser and filter
+        Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
+        xParser->setDocumentHandler( xFilter );
+
+        // parse
+        try
+        {
+            xParser->parseStream( aParserInput );
+        }
+        catch( xml::sax::SAXParseException&  )
+        {
+            // re throw ?
+        }
+        catch( xml::sax::SAXException&  )
+        {
+            // re throw ?
+        }
+        catch( io::IOException& )
+        {
+            // re throw ?
+        }
+    }
 }
 void SwXMLTextBlocks::WriteInfo( void )
 {
