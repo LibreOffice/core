@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfly.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
+ *  last change: $Author: mib $ $Date: 2001-11-23 15:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1812,21 +1812,33 @@ void SwHTMLWriter::AddLinkTarget( const String& rURL )
     if( !rURL.Len() || rURL.GetChar(0) != '#' )
         return;
 
-    xub_StrLen nLastPos, nPos = rURL.Search( cMarkSeperator );
-    if( STRING_NOTFOUND == nPos )
+    // There might be a '|' as delimiter (if the link has been inserted
+    // freshly) or a '%7c' or a '%7C' if the document has been saved and
+    // loaded already.
+    xub_StrLen nPos = rURL.Len();
+    sal_Bool bFound = sal_False, bEncoded = sal_False;
+    while( !bFound && nPos > 0 )
+    {
+        sal_Unicode c = rURL.GetChar( --nPos );
+        switch( c )
+        {
+        case cMarkSeperator:
+            bFound = sal_True;
+            break;
+        case '%':
+            bFound = (rURL.Len() - nPos) >=3 &&
+                     rURL.GetChar( nPos+1 ) == '7' &&
+                     ((c =rURL.GetChar( nPos+2 )) == 'C' || c == 'c');
+            if( bFound )
+                bEncoded = sal_True;
+        }
+    }
+    if( !bFound || nPos < 2 ) // mindetsens "#a|..."
         return;
 
-    while( STRING_NOTFOUND !=
-                ( nLastPos = rURL.Search( cMarkSeperator, nPos + 1 )) )
-        nPos = nLastPos;
+    String aURL( rURL.Copy( 1 ) );
 
-    if( nPos<2 ) // mindetsens "#a|..."
-        return;
-
-    String aURL( rURL );
-    aURL.Erase( 0, 1 );
-
-    String sCmp( aURL.Copy( nPos ) ); // nPos-1+1 (-1 wg. Erase)
+    String sCmp( aURL.Copy( bEncoded ? nPos+2 : nPos ) ); // nPos-1+1/3 (-1 wg. Erase)
     sCmp.EraseAllChars();
     if( !sCmp.Len() )
         return;
@@ -1840,6 +1852,11 @@ void SwHTMLWriter::AddLinkTarget( const String& rURL )
         sCmp.EqualsAscii( pMarkToTable ) )
     {
         // Einfach nur in einem sortierten Array merken
+        if( bEncoded )
+        {
+            aURL.Erase( nPos, 2 );
+            aURL.SetChar( nPos-1, cMarkSeperator );
+        }
         aImplicitMarks.Insert( new String( aURL ) );
     }
     else if( sCmp.EqualsAscii( pMarkToOutline ) )
@@ -1852,13 +1869,18 @@ void SwHTMLWriter::AddLinkTarget( const String& rURL )
         {
             ULONG nIdx = aPos.nNode.GetIndex();
 
-            USHORT nPos=0;
-            while( nPos < aOutlineMarkPoss.Count() &&
-                   aOutlineMarkPoss[nPos] < nIdx )
-                nPos++;
+            USHORT nIns=0;
+            while( nIns < aOutlineMarkPoss.Count() &&
+                   aOutlineMarkPoss[nIns] < nIdx )
+                nIns++;
 
-            aOutlineMarkPoss.Insert( nIdx, nPos );
-            aOutlineMarks.Insert( new String( aURL ), nPos );
+            aOutlineMarkPoss.Insert( nIdx, nIns );
+            if( bEncoded )
+            {
+                aURL.Erase( nPos, 2 );
+                aURL.SetChar( nPos-1, cMarkSeperator );
+            }
+            aOutlineMarks.Insert( new String( aURL ), nIns );
         }
     }
     else if( sCmp.EqualsAscii( pMarkToText ) )
