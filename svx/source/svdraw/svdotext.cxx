@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-16 15:08:13 $
+ *  last change: $Author: aw $ $Date: 2001-03-20 12:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2119,14 +2119,25 @@ void SdrTextObj::SetVerticalWriting( BOOL bVertical )
             sal_Bool bAutoGrowHeight =
                 ((SdrTextAutoGrowHeightItem&)GetItem(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
 
-            // change ParaObject accordingly
-            pOutlinerParaObject->SetVertical( bVertical );
+            // rescue object size
+            Rectangle aObjectRect = GetSnapRect();
 
-            // exchange width and height settings
-            SetItem( SdrTextAutoGrowWidthItem(bAutoGrowHeight) );
-            SetItem( SdrTextAutoGrowHeightItem(bAutoGrowWidth) );
+            // prepare ItemSet to set exchanged width and height items
+            const SfxItemSet& rSet = GetItemSet();
+            SfxItemSet aNewSet(*rSet.GetPool(),
+                SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
+                SDRATTR_TEXT_AUTOGROWWIDTH, SDRATTR_TEXT_AUTOGROWWIDTH,
+                0, 0);
+            aNewSet.Put(rSet);
+            aNewSet.Put(SdrTextAutoGrowWidthItem(bAutoGrowHeight));
+            aNewSet.Put(SdrTextAutoGrowHeightItem(bAutoGrowWidth));
+            SetItemSet(aNewSet);
 
-            SetItem( SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, !bVertical ) );
+            // set ParaObject orientation accordingly
+            pOutlinerParaObject->SetVertical(bVertical);
+
+            // restore object size
+            SetSnapRect(aObjectRect);
         }
     }
 }
