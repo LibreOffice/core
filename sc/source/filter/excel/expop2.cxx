@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:33:15 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:13:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,16 +94,13 @@
 #endif
 
 
-ExportBiff5::ExportBiff5( SfxMedium& rMedium, SvStream& aStream, XclBiff eBiff, ScDocument* pDoc, CharSet eDest, bool bRelUrl ):
-    XclExpRootData( eBiff, rMedium, *pDoc, eDest, bRelUrl ),
-    ExportTyp( aStream, pDoc, eDest ),
-    XclExpRoot( static_cast< XclExpRootData& >( *this ) )
+ExportBiff5::ExportBiff5( XclExpRootData& rExpData ):
+    ExportTyp( rExpData.mrBookStrm, &rExpData.mrDoc, rExpData.meCharSet ),
+    XclExpRoot( rExpData )
 {
-    DBG_ASSERT( pDoc, "-ExportBiff5::ExportBiff5(): No Null-Document!" );
-
     // nur Teil der Root-Daten gebraucht
     pExcRoot = mpRD;
-    pExcRoot->pDoc = pDoc;
+    pExcRoot->pDoc = GetDocPtr();
     pExcRoot->pER = this;   // ExcRoot -> XclExpRoot
     pExcRoot->pScNameList = new ScRangeName;
     pExcRoot->bCellCut = FALSE;
@@ -182,13 +179,13 @@ FltError ExportBiff5::Write()
 
 
 
-ExportBiff8::ExportBiff8( SfxMedium& rMedium, SvStream& aStream, XclBiff eBiff, ScDocument* pDoc, CharSet eZ, bool bRelUrl ) :
-    ExportBiff5( rMedium, aStream, eBiff, pDoc, eZ, bRelUrl )
+ExportBiff8::ExportBiff8( XclExpRootData& rExpData ) :
+    ExportBiff5( rExpData )
 {
     pExcRoot->eHauptDateiTyp = Biff8;
     pExcRoot->eDateiTyp = Biff8;
     pExcRoot->nRowMax = static_cast<SCROW>(XCL8_ROWMAX);
-    pExcRoot->pEscher = new XclEscher( pDoc->GetTableCount(), *pExcRoot );
+    pExcRoot->pEscher = new XclEscher( GetDoc().GetTableCount(), *pExcRoot );
 }
 
 
