@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkeddocuments.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:52:20 $
+ *  last change: $Author: fs $ $Date: 2001-08-16 14:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#include <com/sun/star/sdbc/XConnection.hpp>
 #ifndef _LINK_HXX
 #include <tools/link.hxx>
 #endif
@@ -110,9 +111,12 @@ namespace dbaui
 
         sal_Bool        addLinkUI();
         sal_Bool        newForm(sal_Int32 _nNewFormId);
-
-//      ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-//                      get(const ::rtl::OUString& _rLinkName) SAL_THROW((::com::sun::star::uno::Exception));
+        sal_Bool        newFormWithPilot(
+                            const String& _rDataSourceName,
+                            const sal_Int32 _nCommandType,
+                            const String& _rObjectName,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+                        );
 
         ::rtl::OUString getLocation(const ::rtl::OUString& _rLinkName);
 
@@ -141,6 +145,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/04/26 11:52:20  fs
+ *  initial checkin - access to the data source associated bookmarks
+ *
  *
  *  Revision 1.0 24.04.01 14:53:19  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-07 14:37:48 $
+ *  last change: $Author: fs $ $Date: 2001-08-16 14:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,27 @@
 #ifndef _SVTOOLS_TEMPLDLG_HXX
 #include <svtools/templdlg.hxx>
 #endif
+// -----------------
+// for calling basic
+#ifndef _SFXAPP_HXX
+#include <sfx2/app.hxx>
+#endif
+#ifndef _SBXCLASS_HXX
+#include <svtools/sbx.hxx>
+#endif
+#ifndef _SB_SBUNO_HXX
+#include <basic/sbuno.hxx>
+#endif
+#ifndef _SFX_MACROCONF_HXX
+#include <sfx2/macrconf.hxx>
+#endif
+#ifndef _EHDL_HXX
+#include <svtools/ehdl.hxx>
+#endif
+// -----------------
+#ifndef _DBU_MISCRES_HRC_
+#include "dbumiscres.hrc"
+#endif
 
 //......................................................................
 namespace dbaui
@@ -141,6 +162,7 @@ namespace dbaui
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::ucb;
+    using namespace ::com::sun::star::sdbc;
 
     //==================================================================
     //= OLinkedDocumentsAccess
@@ -445,6 +467,49 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
+    sal_Bool OLinkedDocumentsAccess::newFormWithPilot(const String& _rDataSourceName, const sal_Int32 _nCommandType,
+        const String& _rObjectName, const Reference< XConnection >& _rxConnection)
+    {
+        SfxApplication* pApp = SFX_APP();
+        SbxArray* pParameter            = new SbxArray();
+        SbxVariable* pDataSourceName    = new SbxVariable();
+        SbxVariable* pContentType       = new SbxVariable();
+        SbxVariable* pContent           = new SbxVariable();
+        SbxValue* pReturn               = new SbxValue();
+        pReturn->AddRef();
+
+        if (0 != _rDataSourceName.Len())
+        {
+            // add the data source name to the parameter list
+            SbxVariable* pArgument = new SbxVariable;
+            pArgument->PutString(_rDataSourceName);
+            pParameter->Put(pArgument, 1);
+
+            if (_rxConnection.is())
+            {
+                pParameter->Put(GetSbUnoObject(String::CreateFromAscii("Connection"), makeAny(_rxConnection)), 2);
+
+                if ((-1 != _nCommandType) && _rObjectName.Len())
+                {
+                    pArgument = new SbxVariable;
+                    pArgument->PutLong(_nCommandType);
+                    pParameter->Put(pArgument, 3);
+
+                    pArgument = new SbxVariable;
+                    pArgument->PutString(_rObjectName);
+                    pParameter->Put(pArgument, 4);
+                }
+            }
+        }
+
+        pApp->EnterBasicCall();
+        ErrCode aResult = pApp->GetMacroConfig()->Call(NULL, String::CreateFromAscii("FormWizard.FormWizard.MainWithDefault"), pApp->GetBasicManager(), pParameter, pReturn);
+        pApp->LeaveBasicCall();
+
+        return ERRCODE_NONE != aResult;
+    }
+
+    //------------------------------------------------------------------
     sal_Bool OLinkedDocumentsAccess::newForm(sal_Int32 _nNewFormId)
     {
         // determine the URL to use for the new document
@@ -464,9 +529,8 @@ namespace dbaui
                 break;
 
             case ID_FORM_NEW_PILOT:
-                OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newForm: AutoPilot not implemented yet!");
+                OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newForm: pleas use newFormWithPilot!");
                 return sal_False;
-                break;
 
             case ID_FORM_NEW_TEMPLATE:
             {
@@ -564,6 +628,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/08/07 14:37:48  fs
+ *  #87029# use the new template dialog for selecting a template
+ *
  *  Revision 1.1  2001/04/26 11:54:33  fs
  *  initial checkin - access to the data source associated bookmarks
  *
