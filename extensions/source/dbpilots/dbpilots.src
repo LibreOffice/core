@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpilots.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:25:52 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:12:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ ModalDialog RID_DLG_GROUPBOXWIZARD
     Moveable        = TRUE ;
     Closeable       = TRUE ;
     Hide            = TRUE;
+    Text[ catalan ] = "AutoPiloto - Elemento de grupo";
 };
 
 ModalDialog RID_DLG_LISTCOMBOWIZARD
@@ -133,6 +134,7 @@ ModalDialog RID_DLG_GRIDWIZARD
     Text [ greek ] = "Στοιχείο πίνακα του ΑυτοΠιλότου";
     Text [ korean ] = "ΐΪµΏΖΔΐΟ·µ Η¥ ΏδΌÒ";
     Text [ turkish ] = "OtoPilot Tablo φπesi";
+    Text[ catalan ] = "AutoPiloto - Elemento de tabla";
 };
 
 String RID_STR_LISTWIZARD_TITLE
@@ -159,6 +161,7 @@ String RID_STR_LISTWIZARD_TITLE
     Text[ greek ] = "Πεδίο λίστας του ΑυτοΠιλότου";
     Text[ korean ] = "ΐΪµΏΖΔΐΟ·µ Έρ·Ο ΗΚµε";
     Text[ turkish ] = "OtoPilot Liste alanύ";
+    Text[ catalan ] = "AutoPiloto - Listado";
 };
 
 String RID_STR_COMBOWIZARD_TITLE
@@ -185,6 +188,7 @@ String RID_STR_COMBOWIZARD_TITLE
     Text [ korean ] = "ΐΪµΏΖΔΐΟ·µ: ΔήΊΈΉΪ½Ί";
     Text [ turkish ] = "OtoPilot Kombinasyon alanύ";
     Text [ language_user1 ] = " ";
+    Text[ catalan ] = "AutoPiloto - Campo combinado";
 };
 
 String RID_STR_COULDNOTOPENTABLE
@@ -209,11 +213,15 @@ String RID_STR_COULDNOTOPENTABLE
     Text[ chinese_traditional ] = "µLªk³s½u¨μΈκ®Ζ·½΅C";
     Text[ turkish ] = "The connection to the data source could not be established.";
     Text[ arabic ] = "ΚΪΠΡ ΗαΗΚΥΗα ΘγΥΟΡ ΗαΘνΗδΗΚ.";
+    Text[ catalan ] = "No se pudo crear la tabla \"Conecciσn a la fuente de datos\".";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/04/03 19:25:52  kz
+ *  Merge SRC627: 03.04.01 - 21:25:28
+ *
  *  Revision 1.7  2001/03/31 06:08:57  kz
  *  Merge SRC627: 31.03.01 - 08:08:38 (NoBranch)
  *
