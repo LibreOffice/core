@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvashelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 11:58:56 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,15 @@
 #ifndef _COM_SUN_STAR_RENDERING_TEXTDIRECTION_HPP__
 #include <com/sun/star/rendering/TextDirection.hpp>
 #endif
+#ifndef _COM_SUN_STAR_RENDERING_TEXTURINGMODE_HPP_
+#include <com/sun/star/rendering/TexturingMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_RENDERING_PATHCAPTYPE_HPP_
+#include <com/sun/star/rendering/PathCapType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_RENDERING_PATHJOINTYPE_HPP_
+#include <com/sun/star/rendering/PathJoinType.hpp>
+#endif
 
 #ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
@@ -94,8 +103,20 @@
 #ifndef _BGFX_POINT_B2DPOINT_HXX
 #include <basegfx/point/b2dpoint.hxx>
 #endif
+#ifndef _BGFX_VECTOR_B2DSIZE_HXX
+#include <basegfx/vector/b2dsize.hxx>
+#endif
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#endif
+#ifndef _BGFX_POLYGON_B2DLINEGEOMETRY_HXX
+#include <basegfx/polygon/b2dlinegeometry.hxx>
 #endif
 #ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
@@ -106,6 +127,7 @@
 
 #include <utility>
 
+#include <comphelper/sequence.hxx>
 #include <canvas/canvastools.hxx>
 
 #include "textlayout.hxx"
@@ -118,9 +140,35 @@
 
 using namespace ::com::sun::star;
 
-
 namespace vclcanvas
 {
+    namespace
+    {
+        ::basegfx::tools::B2DLineJoin b2DJoineFromJoin( sal_Int8 nJoinType )
+        {
+            switch( nJoinType )
+            {
+                case rendering::PathJoinType::NONE:
+                    return ::basegfx::tools::B2DLINEJOIN_NONE;
+
+                case rendering::PathJoinType::MITER:
+                    return ::basegfx::tools::B2DLINEJOIN_MITER;
+
+                case rendering::PathJoinType::ROUND:
+                    return ::basegfx::tools::B2DLINEJOIN_ROUND;
+
+                case rendering::PathJoinType::BEVEL:
+                    return ::basegfx::tools::B2DLINEJOIN_BEVEL;
+
+                default:
+                    ENSURE_AND_THROW( false,
+                                      "b2DJoineFromJoin(): Unexpected join type" );
+            }
+
+            return ::basegfx::tools::B2DLINEJOIN_NONE;
+        }
+    }
+
     CanvasHelper::CanvasHelper() :
         mxDevice(),
         mpProtectedOutDev(),
@@ -155,9 +203,10 @@ namespace vclcanvas
         mp2ndOutDev = rOutDev;
     }
 
-    void SAL_CALL CanvasHelper::drawPoint( const geometry::RealPoint2D&     aPoint,
-                                           const rendering::ViewState&      viewState,
-                                           const rendering::RenderState&    renderState )
+    void CanvasHelper::drawPoint( const rendering::XCanvas&     rCanvas,
+                                  const geometry::RealPoint2D&  aPoint,
+                                  const rendering::ViewState&   viewState,
+                                  const rendering::RenderState& renderState )
     {
         // are we disposed?
         if( mpOutDev.get() )
@@ -177,10 +226,11 @@ namespace vclcanvas
         }
     }
 
-    void SAL_CALL CanvasHelper::drawLine( const geometry::RealPoint2D&      aStartRealPoint2D,
-                                          const geometry::RealPoint2D&      aEndRealPoint2D,
-                                          const rendering::ViewState&       viewState,
-                                          const rendering::RenderState&     renderState )
+    void CanvasHelper::drawLine( const rendering::XCanvas&      rCanvas,
+                                 const geometry::RealPoint2D&   aStartRealPoint2D,
+                                 const geometry::RealPoint2D&   aEndRealPoint2D,
+                                 const rendering::ViewState&    viewState,
+                                 const rendering::RenderState&  renderState )
     {
         // are we disposed?
         if( mpOutDev.get() )
@@ -202,10 +252,11 @@ namespace vclcanvas
         }
     }
 
-    void SAL_CALL CanvasHelper::drawBezier( const geometry::RealBezierSegment2D&    aBezierSegment,
-                                            const geometry::RealPoint2D&            _aEndPoint,
-                                            const rendering::ViewState&             viewState,
-                                            const rendering::RenderState&           renderState )
+    void CanvasHelper::drawBezier( const rendering::XCanvas&            rCanvas,
+                                   const geometry::RealBezierSegment2D& aBezierSegment,
+                                   const geometry::RealPoint2D&         _aEndPoint,
+                                   const rendering::ViewState&          viewState,
+                                   const rendering::RenderState&        renderState )
     {
         if( mpOutDev.get() )
         {
@@ -225,9 +276,10 @@ namespace vclcanvas
         }
     }
 
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL CanvasHelper::drawPolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >&    xPolyPolygon,
-                                                                                          const rendering::ViewState&                           viewState,
-                                                                                          const rendering::RenderState&                         renderState )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawPolyPolygon( const rendering::XCanvas&                          rCanvas,
+                                                                                 const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
+                                                                                 const rendering::ViewState&                        viewState,
+                                                                                 const rendering::RenderState&                      renderState )
     {
         CHECK_AND_THROW( xPolyPolygon.is(),
                          "CanvasHelper::drawPolyPolygon(): polygon is NULL");
@@ -250,44 +302,132 @@ namespace vclcanvas
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL CanvasHelper::strokePolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >&  xPolyPolygon,
-                                                                                            const rendering::ViewState&                         viewState,
-                                                                                            const rendering::RenderState&                       renderState,
-                                                                                            const rendering::StrokeAttributes&                  strokeAttributes )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokePolyPolygon( const rendering::XCanvas&                            rCanvas,
+                                                                                   const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
+                                                                                   const rendering::ViewState&                          viewState,
+                                                                                   const rendering::RenderState&                        renderState,
+                                                                                   const rendering::StrokeAttributes&                   strokeAttributes )
+    {
+        CHECK_AND_THROW( xPolyPolygon.is(),
+                         "CanvasHelper::drawPolyPolygon(): polygon is NULL");
+
+        if( mpOutDev.get() )
+        {
+            tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
+
+            ::basegfx::B2DHomMatrix aMatrix;
+            ::canvas::tools::mergeViewAndRenderTransform(aMatrix, viewState, renderState);
+
+            ::basegfx::B2DSize aLinePixelSize(strokeAttributes.StrokeWidth,
+                                              strokeAttributes.StrokeWidth);
+            aLinePixelSize *= aMatrix;
+
+            ::basegfx::B2DPolyPolygon aPolyPoly(
+                tools::polyPolygonFromXPolyPolygon2D(xPolyPolygon) );
+
+            if( aPolyPoly.areControlPointsUsed() )
+            {
+                aPolyPoly = ::basegfx::tools::adaptiveSubdivideByAngle(aPolyPoly);
+            }
+
+            // apply dashing, if any
+            if( strokeAttributes.DashArray.getLength() )
+            {
+                const ::std::vector<double>& aDashArray(
+                    ::comphelper::sequenceToContainer< ::std::vector<double> >(strokeAttributes.DashArray) );
+
+                ::basegfx::B2DPolyPolygon aDashedPolyPoly;
+
+                for( sal_uInt32 i=0; i<aPolyPoly.count(); ++i )
+                {
+                    aDashedPolyPoly.append(
+                        ::basegfx::tools::applyLineDashing( aPolyPoly.getB2DPolygon(i),
+                                                            aDashArray ) );
+                }
+
+                aPolyPoly = aDashedPolyPoly;
+            }
+
+            ::basegfx::B2DPolyPolygon aStrokedPolyPoly;
+            if( aLinePixelSize.getLength() < 1.42 )
+            {
+                // line width < 1.0 in device pixel, thus, output as a
+                // simple hairline poly-polygon
+                setupOutDevState( viewState, renderState, LINE_COLOR );
+
+                aStrokedPolyPoly = aPolyPoly;
+            }
+            else
+            {
+                // render as a 'thick' line
+                setupOutDevState( viewState, renderState, FILL_COLOR );
+
+                for( sal_uInt32 i=0; i<aPolyPoly.count(); ++i )
+                {
+                    // TODO(F2): Use MiterLimit from StrokeAttributes,
+                    // need to convert it here to angle.
+
+                    // TODO(F2): Also use Cap settings from
+                    // StrokeAttributes, the
+                    // createAreaGeometryForLineStartEnd() method does not
+                    // seem to fit very well here
+                    aStrokedPolyPoly.append(
+                        ::basegfx::tools::createAreaGeometryForPolygon( aPolyPoly.getB2DPolygon(i),
+                                                                        strokeAttributes.StrokeWidth*0.5,
+                                                                        b2DJoineFromJoin(strokeAttributes.JoinType) ) );
+                }
+            }
+
+            // transform only _now_, all the StrokeAttributes are in
+            // user coordinates.
+            aStrokedPolyPoly.transform( aMatrix );
+
+            const PolyPolygon aVCLPolyPoly( aStrokedPolyPoly );
+
+            mpOutDev->getOutDev().DrawPolyPolygon( aVCLPolyPoly );
+
+            if( mp2ndOutDev.get() )
+                mp2ndOutDev->getOutDev().DrawPolyPolygon( aVCLPolyPoly );
+        }
+
+        // TODO(P1): Provide caching here.
+        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+    }
+
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTexturedPolyPolygon( const rendering::XCanvas&                            rCanvas,
+                                                                                           const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
+                                                                                           const rendering::ViewState&                          viewState,
+                                                                                           const rendering::RenderState&                        renderState,
+                                                                                           const uno::Sequence< rendering::Texture >&           textures,
+                                                                                           const rendering::StrokeAttributes&                   strokeAttributes )
     {
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL CanvasHelper::strokeTexturedPolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >&  xPolyPolygon,
-                                                                                                    const rendering::ViewState&                         viewState,
-                                                                                                    const rendering::RenderState&                       renderState,
-                                                                                                    const uno::Sequence< rendering::Texture >&          textures,
-                                                                                                    const rendering::StrokeAttributes&                  strokeAttributes )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTextureMappedPolyPolygon( const rendering::XCanvas&                           rCanvas,
+                                                                                                const uno::Reference< rendering::XPolyPolygon2D >&  xPolyPolygon,
+                                                                                                const rendering::ViewState&                         viewState,
+                                                                                                const rendering::RenderState&                       renderState,
+                                                                                                const uno::Sequence< rendering::Texture >&          textures,
+                                                                                                const uno::Reference< geometry::XMapping2D >&       xMapping,
+                                                                                                const rendering::StrokeAttributes&                  strokeAttributes )
     {
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL CanvasHelper::strokeTextureMappedPolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
-                                                                                                         const rendering::ViewState&                        viewState,
-                                                                                                         const rendering::RenderState&                      renderState,
-                                                                                                         const uno::Sequence< rendering::Texture >&         textures,
-                                                                                                         const uno::Reference< geometry::XMapping2D >&      xMapping,
-                                                                                                         const rendering::StrokeAttributes&                 strokeAttributes )
-    {
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
-    }
-
-    uno::Reference< rendering::XPolyPolygon2D >   SAL_CALL CanvasHelper::queryStrokeShapes( const uno::Reference< rendering::XPolyPolygon2D >&  xPolyPolygon,
-                                                                                            const rendering::ViewState&                         viewState,
-                                                                                            const rendering::RenderState&                       renderState,
-                                                                                            const rendering::StrokeAttributes&                  strokeAttributes )
+    uno::Reference< rendering::XPolyPolygon2D >   CanvasHelper::queryStrokeShapes( const rendering::XCanvas&                            rCanvas,
+                                                                                   const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
+                                                                                   const rendering::ViewState&                          viewState,
+                                                                                   const rendering::RenderState&                        renderState,
+                                                                                   const rendering::StrokeAttributes&                   strokeAttributes )
     {
         return uno::Reference< rendering::XPolyPolygon2D >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL CanvasHelper::fillPolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >&    xPolyPolygon,
-                                                                                          const rendering::ViewState&                           viewState,
-                                                                                          const rendering::RenderState&                         renderState )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillPolyPolygon( const rendering::XCanvas&                          rCanvas,
+                                                                                 const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
+                                                                                 const rendering::ViewState&                        viewState,
+                                                                                 const rendering::RenderState&                      renderState )
     {
         CHECK_AND_THROW( xPolyPolygon.is(),
                          "CanvasHelper::fillPolyPolygon(): polygon is NULL");
@@ -319,68 +459,20 @@ namespace vclcanvas
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL CanvasHelper::fillTexturedPolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >&    xPolyPolygon,
-                                                                                                  const rendering::ViewState&                           viewState,
-                                                                                                  const rendering::RenderState&                         renderState,
-                                                                                                  const uno::Sequence< rendering::Texture >&            textures )
-    {
-        CHECK_AND_THROW( xPolyPolygon.is(),
-                         "CanvasHelper::fillPolyPolygon(): polygon is NULL");
-        CHECK_AND_THROW( textures.getLength(),
-                         "CanvasHelper::fillTexturedPolyPolygon: empty texture sequence");
-
-        if( mpOutDev.get() )
-        {
-            tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
-
-            const int nTransparency( setupOutDevState( viewState, renderState, IGNORE_COLOR ) );
-            const PolyPolygon aPolyPoly( tools::mapPolyPolygon( tools::polyPolygonFromXPolyPolygon2D(xPolyPolygon),
-                                                                viewState, renderState ) );
-
-            // TODO(F1): Multi-texturing
-            if( textures[0].Gradient.is() )
-            {
-                uno::Reference< lang::XServiceInfo > xRef( textures[0].Gradient,
-                                                           uno::UNO_QUERY );
-
-                if( xRef.is() &&
-                    xRef->getImplementationName().equals(
-                        ::rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME))) )
-                {
-                    // TODO(Q1): Maybe use dynamic_cast here
-
-                    // TODO(E1): Return value
-                    // TODO(F1): FillRule
-                    static_cast<ParametricPolyPolygon*>(textures[0].Gradient.get())->fill(
-                        mpOutDev->getOutDev(),
-                        mp2ndOutDev.get() ? &mp2ndOutDev->getOutDev() : (OutputDevice*)NULL,
-                        aPolyPoly,
-                        viewState,
-                        renderState,
-                        textures[0],
-                        nTransparency );
-                }
-            }
-        }
-
-        // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
-    }
-
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL CanvasHelper::fillTextureMappedPolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
-                                                                                                       const rendering::ViewState&                          viewState,
-                                                                                                       const rendering::RenderState&                        renderState,
-                                                                                                       const uno::Sequence< rendering::Texture >&           textures,
-                                                                                                       const uno::Reference< geometry::XMapping2D >&        xMapping     )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTextureMappedPolyPolygon( const rendering::XCanvas&                             rCanvas,
+                                                                                              const uno::Reference< rendering::XPolyPolygon2D >&    xPolyPolygon,
+                                                                                              const rendering::ViewState&                           viewState,
+                                                                                              const rendering::RenderState&                         renderState,
+                                                                                              const uno::Sequence< rendering::Texture >&            textures,
+                                                                                              const uno::Reference< geometry::XMapping2D >&         xMapping     )
     {
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCanvasFont > SAL_CALL CanvasHelper::createFont( const rendering::FontRequest&                   fontRequest,
-                                                                                const uno::Sequence< beans::PropertyValue >&    extraFontProperties,
-                                                                                const geometry::Matrix2D&                       fontMatrix )
+    uno::Reference< rendering::XCanvasFont > CanvasHelper::createFont( const rendering::XCanvas&                        rCanvas,
+                                                                       const rendering::FontRequest&                    fontRequest,
+                                                                       const uno::Sequence< beans::PropertyValue >&     extraFontProperties,
+                                                                       const geometry::Matrix2D&                        fontMatrix )
     {
         if( mpOutDev.get() )
         {
@@ -392,18 +484,20 @@ namespace vclcanvas
         return uno::Reference< rendering::XCanvasFont >();
     }
 
-    uno::Sequence< rendering::FontInfo > SAL_CALL CanvasHelper::queryAvailableFonts( const rendering::FontInfo&                     aFilter,
-                                                                                     const uno::Sequence< beans::PropertyValue >&   aFontProperties )
+    uno::Sequence< rendering::FontInfo > CanvasHelper::queryAvailableFonts( const rendering::XCanvas&                       rCanvas,
+                                                                            const rendering::FontInfo&                      aFilter,
+                                                                            const uno::Sequence< beans::PropertyValue >&    aFontProperties )
     {
         // TODO
         return uno::Sequence< rendering::FontInfo >();
     }
 
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL CanvasHelper::drawText( const rendering::StringContext&                  text,
-                                                                                   const uno::Reference< rendering::XCanvasFont >&  xFont,
-                                                                                   const rendering::ViewState&                      viewState,
-                                                                                   const rendering::RenderState&                    renderState,
-                                                                                   sal_Int8                                         textDirection )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawText( const rendering::XCanvas&                         rCanvas,
+                                                                          const rendering::StringContext&                   text,
+                                                                          const uno::Reference< rendering::XCanvasFont >&   xFont,
+                                                                          const rendering::ViewState&                       viewState,
+                                                                          const rendering::RenderState&                     renderState,
+                                                                          sal_Int8                                          textDirection )
     {
         CHECK_AND_THROW( xFont.is(),
                          "CanvasHelper::drawText(): font is NULL");
@@ -457,9 +551,10 @@ namespace vclcanvas
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL CanvasHelper::drawTextLayout( const uno::Reference< rendering::XTextLayout >&    xLayoutedText,
-                                                                                         const rendering::ViewState&                        viewState,
-                                                                                         const rendering::RenderState&                      renderState )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawTextLayout( const rendering::XCanvas&                       rCanvas,
+                                                                                const uno::Reference< rendering::XTextLayout >& xLayoutedText,
+                                                                                const rendering::ViewState&                     viewState,
+                                                                                const rendering::RenderState&                   renderState )
     {
         CHECK_AND_THROW( xLayoutedText.is(),
                          "CanvasHelper::drawTextLayout(): layout is NULL");
@@ -500,12 +595,14 @@ namespace vclcanvas
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL CanvasHelper::drawBitmap( const uno::Reference< rendering::XBitmap >&    xBitmap,
-                                                                                     const rendering::ViewState&                    viewState,
-                                                                                     const rendering::RenderState&                  renderState )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::implDrawBitmap( const rendering::XCanvas&                   rCanvas,
+                                                                                const uno::Reference< rendering::XBitmap >& xBitmap,
+                                                                                const rendering::ViewState&                 viewState,
+                                                                                const rendering::RenderState&               renderState,
+                                                                                bool                                        bModulateColors )
     {
         CHECK_AND_THROW( xBitmap.is(),
-                         "CanvasHelper::drawBitmap(): bitmap is NULL");
+                         "CanvasHelper::implDrawBitmap(): bitmap is NULL");
 
         if( mpOutDev.get() )
         {
@@ -519,139 +616,198 @@ namespace vclcanvas
             ::basegfx::B2DPoint aOutputPos( 0.0, 0.0 );
             aOutputPos *= aMatrix;
 
-            BitmapEx aBmpEx;
+            BitmapEx aBmpEx( tools::bitmapExFromXBitmap(xBitmap) );
 
-            if( !aMatrix.isIdentity() &&
-                (!::basegfx::fTools::equalZero( aMatrix.get(0,1) ) ||
-                 !::basegfx::fTools::equalZero( aMatrix.get(1,0) )) )
+            // TODO(F2): Implement modulation again for other color
+            // channels (currently, works only for alpha). Note: this
+            // is already implemented in transformBitmap()
+            if( bModulateColors &&
+                renderState.DeviceColor.getLength() > 3 )
             {
-                const BitmapEx& rBmpEx( tools::bitmapExFromXBitmap(xBitmap) );
-
-                // modify output position, to account for the fact
-                // that transformBitmap() always normalizes its output
-                // bitmap into the smallest enclosing box.
-                const Size              aBmpSize( rBmpEx.GetSizePixel() );
-                ::basegfx::B2DRectangle aDestRect;
-                ::canvas::tools::calcTransformedRectBounds( aDestRect,
-                                                            ::basegfx::B2DRectangle(0,
-                                                                                    0,
-                                                                                    aBmpSize.Width(),
-                                                                                    aBmpSize.Height()),
-                                                            aMatrix );
-
-                aOutputPos.setX( aDestRect.getMinX() );
-                aOutputPos.setY( aDestRect.getMinY() );
-
-                // complex transformation, use generic affine bitmap
-                // transformation
-                aBmpEx = tools::transformBitmap( rBmpEx,
-                                                 viewState, renderState );
+                // optimize away the case where alpha modulation value
+                // is 1.0 - we then simply switch off modulation at all
+                bModulateColors = !::rtl::math::approxEqual(
+                    renderState.DeviceColor[3], 1.0);
             }
-            else if( !aMatrix.isIdentity() &&
-                     (!::rtl::math::approxEqual(aMatrix.get(0,0), 1.0) ||
-                      !::rtl::math::approxEqual(aMatrix.get(1,1), 1.0)) )
+
+            // check whether we can render bitmap as-is: must not
+            // modulate colors, matrix must either be the identity
+            // transform (that's clear), _or_ contain only
+            // translational components.
+            if( !bModulateColors &&
+                (aMatrix.isIdentity() ||
+                 (::basegfx::fTools::equalZero( aMatrix.get(0,1) ) &&
+                  ::basegfx::fTools::equalZero( aMatrix.get(1,0) ) &&
+                  ::rtl::math::approxEqual(aMatrix.get(0,0), 1.0) &&
+                  ::rtl::math::approxEqual(aMatrix.get(1,1), 1.0)) ) )
             {
-                // optimized case 2: only scale changes, use available
-                // OutputDevice methods
-                aBmpEx = tools::bitmapExFromXBitmap(xBitmap);
-
-                ::Size aOutputSize( aBmpEx.GetSizePixel() );
-                aOutputSize.setWidth ( ::basegfx::fround( aOutputSize.getWidth()  * aMatrix.get(0,0) ) );
-                aOutputSize.setHeight( ::basegfx::fround( aOutputSize.getHeight() * aMatrix.get(1,1) ) );
-
+                // optimized case: identity matrix, or only
+                // translational components.
                 mpOutDev->getOutDev().DrawBitmapEx( ::vcl::unotools::pointFromB2DPoint( aOutputPos ),
-                                                    aOutputSize,
                                                     aBmpEx );
 
                 if( mp2ndOutDev.get() )
                     mp2ndOutDev->getOutDev().DrawBitmapEx( ::vcl::unotools::pointFromB2DPoint( aOutputPos ),
-                                                           aOutputSize,
                                                            aBmpEx );
 
-                // TODO(P1): Provide caching here.
+                // Returning a cache object is not useful, the XBitmap
+                // itself serves this purpose
                 return uno::Reference< rendering::XCachedPrimitive >(NULL);
             }
             else
             {
-                // optimized case: identity matrix, or only
-                // translational components.
-                aBmpEx = tools::bitmapExFromXBitmap(xBitmap);
+                // Matrix contains non-trivial transformation (or
+                // color modulation is requested), decompose to check
+                // whether GraphicObject suffices
+                ::basegfx::B2DVector aScale;
+                double               nRotate;
+                double               nShearX;
+                aMatrix.decompose( aScale, aOutputPos, nRotate, nShearX );
+
+                GraphicAttr             aGrfAttr;
+                GraphicObjectSharedPtr  pGrfObj;
+
+                const ::Size aBmpSize( aBmpEx.GetSizePixel() );
+
+                // setup alpha modulation
+                if( bModulateColors )
+                {
+                    const double nAlphaModulation( renderState.DeviceColor[3] );
+
+                    // TODO(F1): Note that the GraphicManager has a
+                    // subtle difference in how it calculates the
+                    // resulting alpha value: it's using the inverse
+                    // alpha values (i.e. 'transparency'), and
+                    // calculates transOrig + transModulate, instead
+                    // of transOrig + transModulate -
+                    // transOrig*transModulate (which would be
+                    // equivalent to the origAlpha*modulateAlpha the
+                    // DX canvas performs)
+                    aGrfAttr.SetTransparency(
+                        static_cast< BYTE >(
+                            ::basegfx::fround( 255.0*( 1.0 - nAlphaModulation ) ) ) );
+                }
+
+                if( ::basegfx::fTools::equalZero( nShearX ) )
+                {
+                    // no shear, GraphicObject is enough (the
+                    // GraphicObject only supports scaling, rotation
+                    // and translation)
+
+                    // setup GraphicAttr
+                    aGrfAttr.SetMirrorFlags(
+                        ( aScale.getX() < 0.0 ? BMP_MIRROR_HORZ : 0 ) |
+                        ( aScale.getY() < 0.0 ? BMP_MIRROR_VERT : 0 ) );
+                    aGrfAttr.SetRotation( static_cast< USHORT >(::basegfx::fround( nRotate*10.0 )) );
+
+                    pGrfObj.reset( new GraphicObject( aBmpEx ) );
+                }
+                else
+                {
+                    // modify output position, to account for the fact
+                    // that transformBitmap() always normalizes its output
+                    // bitmap into the smallest enclosing box.
+                    ::basegfx::B2DRectangle aDestRect;
+                    ::canvas::tools::calcTransformedRectBounds( aDestRect,
+                                                                ::basegfx::B2DRectangle(0,
+                                                                                        0,
+                                                                                        aBmpSize.Width(),
+                                                                                        aBmpSize.Height()),
+                                                                aMatrix );
+
+                    aOutputPos.setX( aDestRect.getMinX() );
+                    aOutputPos.setY( aDestRect.getMinY() );
+
+                    // complex transformation, use generic affine bitmap
+                    // transformation
+                    aBmpEx = tools::transformBitmap( aBmpEx,
+                                                     aMatrix,
+                                                     renderState.DeviceColor,
+                                                     tools::MODULATE_NONE );
+
+                    pGrfObj.reset( new GraphicObject( aBmpEx ) );
+
+                    // clear scale values, generated bitmap already
+                    // contains scaling
+                    aScale.setX( 0.0 ); aScale.setY( 0.0 );
+                }
+
+                // output GraphicObject
+                const ::Point aPt( ::vcl::unotools::pointFromB2DPoint( aOutputPos ) );
+                const ::Size  aSz( ::basegfx::fround( aScale.getX() * aBmpSize.Width() ),
+                                   ::basegfx::fround( aScale.getY() * aBmpSize.Height() ) );
+
+                pGrfObj->Draw( &mpOutDev->getOutDev(),
+                               aPt,
+                               aSz,
+                               &aGrfAttr );
+
+                if( mp2ndOutDev.get() )
+                    pGrfObj->Draw( &mp2ndOutDev->getOutDev(),
+                                   aPt,
+                                   aSz,
+                                   &aGrfAttr );
+
+                // created GraphicObject, which possibly cached
+                // display bitmap - return cache object, to retain
+                // that information.
+                return uno::Reference< rendering::XCachedPrimitive >(
+                    new CachedBitmap( pGrfObj,
+                                      aPt,
+                                      aSz,
+                                      aGrfAttr,
+                                      viewState,
+                                      uno::Reference< rendering::XCanvas >(
+                                          const_cast< rendering::XCanvas* >(&rCanvas)) ) );
             }
-
-            mpOutDev->getOutDev().DrawBitmapEx( ::vcl::unotools::pointFromB2DPoint( aOutputPos ),
-                                                aBmpEx );
-
-            if( mp2ndOutDev.get() )
-                mp2ndOutDev->getOutDev().DrawBitmapEx( ::vcl::unotools::pointFromB2DPoint( aOutputPos ),
-                                                       aBmpEx );
         }
 
-        // TODO(P1): Provide caching here.
+        // Nothing rendered
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL CanvasHelper::drawBitmapModulated( const uno::Reference< rendering::XBitmap >&   xBitmap,
-                                                                                              const rendering::ViewState&                   viewState,
-                                                                                              const rendering::RenderState&                 renderState )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmap( const rendering::XCanvas&                   rCanvas,
+                                                                            const uno::Reference< rendering::XBitmap >& xBitmap,
+                                                                            const rendering::ViewState&                 viewState,
+                                                                            const rendering::RenderState&               renderState )
     {
-        CHECK_AND_THROW( xBitmap.is(),
-                         "CanvasHelper::drawBitmap(): bitmap is NULL");
-
-        // no color set -> this is equivalent to a plain drawBitmap(), then
-        if( renderState.DeviceColor.getLength() < 3 )
-            return drawBitmap( xBitmap, viewState, renderState );
-
-        if( mpOutDev.get() )
-        {
-            tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
-
-            setupOutDevState( viewState, renderState, IGNORE_COLOR );
-
-            ::basegfx::B2DHomMatrix aMatrix;
-            ::canvas::tools::mergeViewAndRenderTransform(aMatrix, viewState, renderState);
-
-            ::basegfx::B2DPoint aOutputPos( 0.0, 0.0 );
-            aOutputPos *= aMatrix;
-
-            BitmapEx aBmpEx;
-
-            // TODO(P1): Have an optimized path for identity transform
-            // and color modulation
-
-            // always call transformBitmap, have to modulate colors
-            aBmpEx = tools::transformBitmap( tools::bitmapExFromXBitmap(xBitmap),
-                                             viewState, renderState,
-                                             tools::MODULATE_WITH_DEVICECOLOR );
-
-            mpOutDev->getOutDev().DrawBitmapEx( ::vcl::unotools::pointFromB2DPoint( aOutputPos ),
-                                                aBmpEx );
-
-            if( mp2ndOutDev.get() )
-                mp2ndOutDev->getOutDev().DrawBitmapEx( ::vcl::unotools::pointFromB2DPoint( aOutputPos ),
-                                                       aBmpEx );
-        }
-
-        // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        return implDrawBitmap( rCanvas,
+                               xBitmap,
+                               viewState,
+                               renderState,
+                               false );
     }
 
-    uno::Reference< rendering::XGraphicDevice > SAL_CALL CanvasHelper::getDevice()
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmapModulated( const rendering::XCanvas&                      rCanvas,
+                                                                                     const uno::Reference< rendering::XBitmap >&    xBitmap,
+                                                                                     const rendering::ViewState&                    viewState,
+                                                                                     const rendering::RenderState&                  renderState )
+    {
+        return implDrawBitmap( rCanvas,
+                               xBitmap,
+                               viewState,
+                               renderState,
+                               true );
+    }
+
+    uno::Reference< rendering::XGraphicDevice > CanvasHelper::getDevice()
     {
         return mxDevice.get();
     }
 
-    void SAL_CALL CanvasHelper::copyRect( const uno::Reference< rendering::XBitmapCanvas >&     sourceCanvas,
-                                          const geometry::RealRectangle2D&                      sourceRect,
-                                          const rendering::ViewState&                           sourceViewState,
-                                          const rendering::RenderState&                         sourceRenderState,
-                                          const geometry::RealRectangle2D&                      destRect,
-                                          const rendering::ViewState&                           destViewState,
-                                          const rendering::RenderState&                         destRenderState )
+    void CanvasHelper::copyRect( const rendering::XCanvas&                          rCanvas,
+                                 const uno::Reference< rendering::XBitmapCanvas >&  sourceCanvas,
+                                 const geometry::RealRectangle2D&                   sourceRect,
+                                 const rendering::ViewState&                        sourceViewState,
+                                 const rendering::RenderState&                      sourceRenderState,
+                                 const geometry::RealRectangle2D&                   destRect,
+                                 const rendering::ViewState&                        destViewState,
+                                 const rendering::RenderState&                      destRenderState )
     {
         // TODO(F1)
     }
 
-    geometry::IntegerSize2D SAL_CALL CanvasHelper::getSize()
+    geometry::IntegerSize2D CanvasHelper::getSize()
     {
         if( !mpOutDev.get() )
             return geometry::IntegerSize2D(); // we're disposed
@@ -659,8 +815,8 @@ namespace vclcanvas
         return ::vcl::unotools::integerSize2DFromSize( mpOutDev->getOutDev().GetOutputSizePixel() );
     }
 
-    uno::Reference< rendering::XBitmap > SAL_CALL CanvasHelper::getScaledBitmap( const geometry::RealSize2D&    newSize,
-                                                                                 sal_Bool                       beFast )
+    uno::Reference< rendering::XBitmap > CanvasHelper::getScaledBitmap( const geometry::RealSize2D& newSize,
+                                                                        sal_Bool                    beFast )
     {
         if( !mpOutDev.get() )
             return uno::Reference< rendering::XBitmap >(); // we're disposed
@@ -678,7 +834,7 @@ namespace vclcanvas
                                                                        mxDevice ) );
     }
 
-    uno::Sequence< sal_Int8 > SAL_CALL CanvasHelper::getData( const geometry::IntegerRectangle2D& rect )
+    uno::Sequence< sal_Int8 > CanvasHelper::getData( const geometry::IntegerRectangle2D& rect )
     {
         if( !mpOutDev.get() )
             return uno::Sequence< sal_Int8 >(); // we're disposed
@@ -719,8 +875,8 @@ namespace vclcanvas
         return uno::Sequence< sal_Int8 >();
     }
 
-    void SAL_CALL CanvasHelper::setData( const uno::Sequence< sal_Int8 >&    data,
-                                         const geometry::IntegerRectangle2D& rect )
+    void CanvasHelper::setData( const uno::Sequence< sal_Int8 >&    data,
+                                const geometry::IntegerRectangle2D& rect )
     {
         if( !mpOutDev.get() )
             return; // we're disposed
@@ -849,8 +1005,8 @@ namespace vclcanvas
         }
     }
 
-    void SAL_CALL CanvasHelper::setPixel( const uno::Sequence< sal_Int8 >&  color,
-                                          const geometry::IntegerPoint2D&   pos )
+    void CanvasHelper::setPixel( const uno::Sequence< sal_Int8 >&   color,
+                                 const geometry::IntegerPoint2D&    pos )
     {
         if( !mpOutDev.get() )
             return; // we're disposed
@@ -877,7 +1033,7 @@ namespace vclcanvas
                                color ) );
     }
 
-    uno::Sequence< sal_Int8 > SAL_CALL CanvasHelper::getPixel( const geometry::IntegerPoint2D& pos )
+    uno::Sequence< sal_Int8 > CanvasHelper::getPixel( const geometry::IntegerPoint2D& pos )
     {
         if( !mpOutDev.get() )
             return uno::Sequence< sal_Int8 >(); // we're disposed
@@ -901,13 +1057,13 @@ namespace vclcanvas
                                                         ::vcl::unotools::pointFromIntegerPoint2D( pos ) ) );
     }
 
-    uno::Reference< rendering::XBitmapPalette > SAL_CALL CanvasHelper::getPalette()
+    uno::Reference< rendering::XBitmapPalette > CanvasHelper::getPalette()
     {
         // TODO(F1): Provide palette support
         return uno::Reference< rendering::XBitmapPalette >();
     }
 
-    rendering::IntegerBitmapLayout SAL_CALL CanvasHelper::getMemoryLayout()
+    rendering::IntegerBitmapLayout CanvasHelper::getMemoryLayout()
     {
         // TODO(F1): finish that one
         rendering::IntegerBitmapLayout aLayout;
@@ -1049,8 +1205,14 @@ namespace vclcanvas
                     break;
 
                 case FILL_COLOR:
-                    // #i42440# Make VCL canvas comply to XCanvas polygon fill
-                    // semantics (no exclusion of rightmost/bottommost pixel).
+                    // #i42440# Make VCL canvas comply to XCanvas
+                    // polygon fill semantics (no exclusion of
+                    // rightmost/bottommost pixel).  IFF someone needs
+                    // to change that, then at least
+                    // implrenderer.cxx's META_RECT_ACTION has to be
+                    // adapted, as it can generate polygons with zero
+                    // width/height (but OutDev renders it as one
+                    // pixel wide).
                     rOutDev.SetFillColor( aColor );
                     rOutDev.SetLineColor( aColor );
 
@@ -1129,6 +1291,20 @@ namespace vclcanvas
             mp2ndOutDev->getOutDev().SetFont( aVCLFont );
 
         return true;
+    }
+
+    bool CanvasHelper::repaint( const GraphicObjectSharedPtr&   rGrf,
+                                const ::Point&                  rPt,
+                                const ::Size&                   rSz,
+                                const GraphicAttr&              rAttr ) const
+    {
+        ENSURE_AND_RETURN( rGrf,
+                           "CanvasHelper::repaint(): Invalid Graphic" );
+
+        if( !mpOutDev )
+            return false; // disposed
+        else
+            return rGrf->Draw( &mpOutDev->getOutDev(), rPt, rSz, &rAttr );
     }
 
     void CanvasHelper::flush() const
