@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-30 09:02:17 $
+ *  last change: $Author: aw $ $Date: 2001-05-08 13:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1042,6 +1042,20 @@ void XMLShapeImportHelper::restoreConnections()
             uno::Reference< beans::XPropertySet > xConnector( rHint.mxConnector, uno::UNO_QUERY );
             if( xConnector.is() )
             {
+                // #86637# remember line deltas
+                uno::Any aLine1Delta;
+                uno::Any aLine2Delta;
+                uno::Any aLine3Delta;
+                OUString aStr1(RTL_CONSTASCII_USTRINGPARAM("EdgeLine1Delta"));
+                OUString aStr2(RTL_CONSTASCII_USTRINGPARAM("EdgeLine2Delta"));
+                OUString aStr3(RTL_CONSTASCII_USTRINGPARAM("EdgeLine3Delta"));
+                aLine1Delta = xConnector->getPropertyValue(aStr1);
+                aLine2Delta = xConnector->getPropertyValue(aStr2);
+                aLine3Delta = xConnector->getPropertyValue(aStr3);
+
+                // #86637# simply setting these values WILL force the connector to do
+                // an new layout promptly. So the line delta values have to be rescued
+                // and restored around connector changes.
                 uno::Reference< drawing::XShape > xShape( getShapeFromId( rHint.nDestShapeId ) );
                 if( xShape.is() )
                 {
@@ -1051,6 +1065,11 @@ void XMLShapeImportHelper::restoreConnections()
 
                 aAny <<= rHint.nDestGlueId;
                 xConnector->setPropertyValue( rHint.bStart ? msStartGluePointIndex : msEndGluePointIndex, aAny );
+
+                // #86637# restore line deltas
+                xConnector->setPropertyValue(aStr1, aLine1Delta );
+                xConnector->setPropertyValue(aStr2, aLine2Delta );
+                xConnector->setPropertyValue(aStr3, aLine3Delta );
             }
         }
         maConnections.clear();
