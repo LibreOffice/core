@@ -2,9 +2,9 @@
  *
  *  $RCSfile: general.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-27 08:23:51 $
+ *  last change: $Author: os $ $Date: 2001-03-09 12:14:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,6 +301,7 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     sErrorPrefix(ResId(ST_ERROR_PREFIX))
 {
     aControlParentWin.Show();
+    aControlParentWin.SetHelpId(HID_BIB_CONTROL_PARENT);
      aStdSize = GetOutputSizePixel();
 
     aBibTypeArr[0] = String(ResId(ST_TYPE_ARTICLE));
