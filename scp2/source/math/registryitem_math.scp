@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registryitem_math.scp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:38:19 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,6 +362,34 @@ RegistryItem gid_Regitem_Soffice_Starmathdocument_Curver
     Value = "soffice.StarMathDocument.6";
 End
 
+RegistryItem gid_Regitem_Sxm_PersistentHandler
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = ".sxm\PersistentHandler";
+    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+End
+
+RegistryItem gid_Regitem_Sxm_Shellex_00021500_0000_0000_C000_000000000046
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = ".sxm\shellex\{00021500-0000-0000-C000-000000000046}";
+    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
+End
+
+RegistryItem gid_Regitem_Sxm_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = ".sxm\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
+End
+
+RegistryItem gid_Regitem_StarMathDocument_6_Shellex_PropertySheetHandlers_MyPropSheet1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "soffice.StarMathDocument.6\shellex\PropertySheetHandlers\MyPropSheet1";
+    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
+End
+
 RegistryItem gid_Regitem_Sxm_Contenttype
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
@@ -393,6 +421,34 @@ RegistryItem gid_Regitem__Smf
 End
 
 // new oof file extension
+
+RegistryItem gid_Regitem_Oof_PersistentHandler
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = ".oof\PersistentHandler";
+    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+End
+
+RegistryItem gid_Regitem_Oof_Shellex_00021500_0000_0000_C000_000000000046
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = ".oof\shellex\{00021500-0000-0000-C000-000000000046}";
+    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
+End
+
+RegistryItem gid_Regitem_Oof_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = ".oof\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
+End
+
+RegistryItem gid_Regitem_MathDocument_1_Shellex_PropertySheetHandlers_MyPropSheet1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "openoffice.MathDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
+    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
+End
 
 RegistryItem gid_Regitem_Oof_Contenttype
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
