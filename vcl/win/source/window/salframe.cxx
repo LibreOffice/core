@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: th $ $Date: 2001-07-30 10:58:41 $
+ *  last change: $Author: th $ $Date: 2001-08-07 12:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,54 +179,57 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
     HWND        hWnd;
     DWORD       nSysStyle = 0;
     DWORD       nExSysStyle = 0;
-    BOOL        bSaveBits = FALSE;
+    BOOL        bSubFrame = FALSE;
 
     // determine creation data
     if ( nSalFrameStyle & SAL_FRAME_STYLE_CHILD )
         nSysStyle |= WS_CHILD;
-    else if ( nSalFrameStyle & SAL_FRAME_STYLE_DEFAULT )
-    {
-        pFrame->maFrameData.mbCaption = TRUE;
-        nSysStyle |= WS_OVERLAPPED;
-#if ( WINVER >= 0x0400 )
-        nExSysStyle |= WS_EX_APPWINDOW;
-#endif
-    }
     else
     {
-        // Hack, because we want have a default position for our
-        // document windows. In the future we want use a special flag
-        // for this
-        if ( !hWndParent &&
-             (nSalFrameStyle & (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_MOVEABLE)) ==
-             (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_MOVEABLE) )
-            nSysStyle |= WS_OVERLAPPED;
-        else
+        if ( hWndParent )
+        {
             nSysStyle |= WS_POPUP;
+            bSubFrame = TRUE;
+            pFrame->maFrameData.mbNoIcon = TRUE;
+        }
+        else
+        {
+            // Only with WS_OVRLAPPED we get a useful default position/size
+            if ( (nSalFrameStyle & (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_MOVEABLE)) ==
+                 (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_MOVEABLE) )
+                nSysStyle |= WS_OVERLAPPED;
+            else
+                nSysStyle |= WS_POPUP;
+        }
+
+        if ( nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE )
+        {
+            pFrame->maFrameData.mbCaption = TRUE;
+            nSysStyle |= WS_SYSMENU | WS_CAPTION;
+            if ( !hWndParent )
+                nSysStyle |= WS_SYSMENU | WS_MINIMIZEBOX;
+            else
+                nExSysStyle |= WS_EX_DLGMODALFRAME;
+
+            if ( nSalFrameStyle & SAL_FRAME_STYLE_SIZEABLE )
+            {
+                pFrame->maFrameData.mbSizeBorder = TRUE;
+                nSysStyle |= WS_THICKFRAME;
+                if ( !hWndParent )
+                    nSysStyle |= WS_MAXIMIZEBOX;
+            }
+            else
+                pFrame->maFrameData.mbFixBorder = TRUE;
+
+            if ( nSalFrameStyle & SAL_FRAME_STYLE_DEFAULT )
+                nExSysStyle |= WS_EX_APPWINDOW;
+        }
+        else
+        {
+            pFrame->maFrameData.mbNoIcon = TRUE;
+            nExSysStyle |= WS_EX_TOOLWINDOW;
+        }
     }
-    if ( nSalFrameStyle & SAL_FRAME_STYLE_SIZEABLE )
-    {
-        pFrame->maFrameData.mbSizeBorder = TRUE;
-        nSysStyle |= WS_THICKFRAME | WS_SYSMENU;
-    }
-    else if ( nSalFrameStyle & SAL_FRAME_STYLE_BORDER )
-    {
-        pFrame->maFrameData.mbBorder = TRUE;
-        nSysStyle |= WS_BORDER;
-    }
-    if ( nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE )
-    {
-        pFrame->maFrameData.mbCaption = TRUE;
-        nSysStyle |= WS_CAPTION | WS_SYSMENU;
-    }
-#if ( WINVER >= 0x0400 )
-    else
-        nExSysStyle |= WS_EX_TOOLWINDOW;
-#endif
-    if ( nSalFrameStyle & SAL_FRAME_STYLE_MINABLE )
-        nSysStyle |= WS_MINIMIZEBOX | WS_SYSMENU;
-    if ( nSalFrameStyle & SAL_FRAME_STYLE_MAXABLE )
-        nSysStyle |= WS_MAXIMIZEBOX | WS_SYSMENU;
 
     // init frame data
     pFrame->maFrameData.mnStyle = nSalFrameStyle;
@@ -254,8 +257,7 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
 
         // Document Windows are also maximized, if the current Document Window
         // is also maximized
-        if ( (nSalFrameStyle & (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_MAXABLE)) ==
-             (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_MAXABLE) )
+        if ( (nSysStyle & (WS_POPUP | WS_MAXIMIZEBOX | WS_THICKFRAME)) == (WS_MAXIMIZEBOX | WS_THICKFRAME) )
         {
             HWND hWnd = GetForegroundWindow();
             if ( hWnd && IsMaximized( hWnd ) &&
@@ -269,8 +271,8 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
     if ( aSalShlData.mbWNT )
     {
         LPCWSTR pClassName;
-        if ( bSaveBits )
-            pClassName = SAL_FRAME_CLASSNAME_SBW;
+        if ( bSubFrame )
+            pClassName = SAL_SUBFRAME_CLASSNAMEW;
         else
             pClassName = SAL_FRAME_CLASSNAMEW;
         hWnd = CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
@@ -280,8 +282,8 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
     else
     {
         LPCSTR pClassName;
-        if ( bSaveBits )
-            pClassName = SAL_FRAME_CLASSNAME_SBA;
+        if ( bSubFrame )
+            pClassName = SAL_SUBFRAME_CLASSNAMEA;
         else
             pClassName = SAL_FRAME_CLASSNAMEA;
         hWnd = CreateWindowExA( nExSysStyle, pClassName, "", nSysStyle,
@@ -294,12 +296,30 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
         return NULL;
     }
 
-    // disable close
-    if ( !(nSalFrameStyle & SAL_FRAME_STYLE_CLOSEABLE) )
+    // If we have an Window with an Caption Bar and without
+    // an MaximizeBox, we change the SystemMenu
+    if ( (nSysStyle & (WS_CAPTION | WS_MAXIMIZEBOX)) == (WS_CAPTION) )
     {
         HMENU hSysMenu = GetSystemMenu( hWnd, FALSE );
         if ( hSysMenu )
-            EnableMenuItem( hSysMenu, SC_CLOSE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED );
+        {
+            if ( !(nSysStyle & (WS_MINIMIZEBOX | WS_MAXIMIZEBOX)) )
+                DeleteMenu( hSysMenu, SC_RESTORE, MF_BYCOMMAND );
+            else
+                EnableMenuItem( hSysMenu, SC_RESTORE, MF_BYCOMMAND | MF_GRAYED | MF_DISABLED );
+            if ( !(nSysStyle & WS_MINIMIZEBOX) )
+                DeleteMenu( hSysMenu, SC_MINIMIZE, MF_BYCOMMAND );
+            if ( !(nSysStyle & WS_MAXIMIZEBOX) )
+                DeleteMenu( hSysMenu, SC_MAXIMIZE, MF_BYCOMMAND );
+            if ( !(nSysStyle & WS_THICKFRAME) )
+                DeleteMenu( hSysMenu, SC_SIZE, MF_BYCOMMAND );
+        }
+    }
+    if ( (nSysStyle & WS_SYSMENU) && !(nSalFrameStyle & SAL_FRAME_STYLE_CLOSEABLE) )
+    {
+        HMENU hSysMenu = GetSystemMenu( hWnd, FALSE );
+        if ( hSysMenu )
+            EnableMenuItem( hSysMenu, SC_CLOSE, MF_BYCOMMAND | MF_GRAYED | MF_DISABLED );
     }
 
     // reset input context
@@ -512,8 +532,13 @@ static void ImplSalCalcBorder( const SalFrame* pFrame,
 
     if ( pFrame->maFrameData.mbSizeBorder )
     {
-        nFrameX = GetSystemMetrics( SM_CXFRAME );
-        nFrameY = GetSystemMetrics( SM_CYFRAME );
+        nFrameX = GetSystemMetrics( SM_CXSIZEFRAME );
+        nFrameY = GetSystemMetrics( SM_CYSIZEFRAME );
+    }
+    else if ( pFrame->maFrameData.mbFixBorder )
+    {
+        nFrameX = GetSystemMetrics( SM_CXFIXEDFRAME );
+        nFrameY = GetSystemMetrics( SM_CYFIXEDFRAME );
     }
     else if ( pFrame->maFrameData.mbBorder )
     {
@@ -550,8 +575,13 @@ static void ImplSalCalcFullScreenSize( const SalFrame* pFrame,
 
     if ( pFrame->maFrameData.mbSizeBorder )
     {
-        nFrameX = GetSystemMetrics( SM_CXFRAME );
-        nFrameY = GetSystemMetrics( SM_CYFRAME );
+        nFrameX = GetSystemMetrics( SM_CXSIZEFRAME );
+        nFrameY = GetSystemMetrics( SM_CYSIZEFRAME );
+    }
+    else if ( pFrame->maFrameData.mbFixBorder )
+    {
+        nFrameX = GetSystemMetrics( SM_CXFIXEDFRAME );
+        nFrameY = GetSystemMetrics( SM_CYFIXEDFRAME );
     }
     else if ( pFrame->maFrameData.mbBorder )
     {
@@ -618,6 +648,7 @@ SalFrame::SalFrame()
     maFrameData.mbGraphics          = FALSE;
     maFrameData.mbCaption           = FALSE;
     maFrameData.mbBorder            = FALSE;
+    maFrameData.mbFixBorder         = FALSE;
     maFrameData.mbSizeBorder        = FALSE;
     maFrameData.mbFullScreen        = FALSE;
     maFrameData.mbPresentation      = FALSE;
