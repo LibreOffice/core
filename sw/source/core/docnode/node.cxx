@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:38:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,232 +444,246 @@ BOOL SwNode::IsProtect() const
     // suche den PageDesc, mit dem dieser Node formatiert ist. Wenn das
     // Layout vorhanden ist wird ueber das gesucht, ansonsten gibt es nur
     // die harte Tour ueber die Nodes nach vorne suchen!!
-const SwPageDesc* SwNode::FindPageDesc( BOOL bCalcLay ) const
+const SwPageDesc* SwNode::FindPageDesc( BOOL bCalcLay,
+                                        sal_uInt32* pPgDescNdIdx ) const
 {
+    // OD 18.03.2003 #106329#
+    if ( !GetNodes().IsDocNodes() )
+    {
+        return 0;
+    }
+
     const SwPageDesc* pPgDesc = 0;
 
-    if( GetNodes().IsDocNodes() )
+    const SwCntntNode* pNd;
+    if( ND_STARTNODE & nNodeType )
     {
-        const SwCntntNode* pNd;
-        if( ND_STARTNODE & nNodeType )
-        {
-            SwNodeIndex aIdx( *this );
-            pNd = GetNodes().GoNext( &aIdx );
-        }
-        else if( ND_ENDNODE & nNodeType )
-        {
-            SwNodeIndex aIdx( *EndOfSectionNode() );
-            pNd = GetNodes().GoPrevious( &aIdx );
-        }
-        else
-        {
-            pNd = GetCntntNode();
-            if( pNd )
-                pPgDesc = ((SwFmtPageDesc&)pNd->GetAttr( RES_PAGEDESC )).GetPageDesc();
-        }
+        SwNodeIndex aIdx( *this );
+        pNd = GetNodes().GoNext( &aIdx );
+    }
+    else if( ND_ENDNODE & nNodeType )
+    {
+        SwNodeIndex aIdx( *EndOfSectionNode() );
+        pNd = GetNodes().GoPrevious( &aIdx );
+    }
+    else
+    {
+        pNd = GetCntntNode();
+        if( pNd )
+            pPgDesc = ((SwFmtPageDesc&)pNd->GetAttr( RES_PAGEDESC )).GetPageDesc();
+    }
 
-        // geht es uebers Layout?
-        if( !pPgDesc )
+    // geht es uebers Layout?
+    if( !pPgDesc )
+    {
+        const SwFrm* pFrm;
+        const SwPageFrm* pPage;
+        if( pNd && 0 != ( pFrm = pNd->GetFrm( 0, 0, bCalcLay ) ) &&
+            0 != ( pPage = pFrm->FindPageFrm() ) )
         {
-            const SwFrm* pFrm;
-            const SwPageFrm* pPage;
-            if( pNd && 0 != ( pFrm = pNd->GetFrm( 0, 0, bCalcLay ) ) &&
-                0 != ( pPage = pFrm->FindPageFrm() ) )
+            pPgDesc = pPage->GetPageDesc();
+            // OD 18.03.2003 #106329#
+            if ( pPgDescNdIdx )
             {
-                pPgDesc = pPage->GetPageDesc();
+                *pPgDescNdIdx = pNd->GetIndex();
             }
         }
+    }
 
-        if( !pPgDesc )
+    if( !pPgDesc )
+    {
+        // dann also uebers Nodes-Array
+        const SwDoc* pDoc = GetDoc();
+        const SwNode* pNd = this;
+        const SwStartNode* pSttNd;
+        if( pNd->GetIndex() < GetNodes().GetEndOfExtras().GetIndex() &&
+            0 != ( pSttNd = pNd->FindFlyStartNode() ) )
         {
-            // dann also uebers Nodes-Array
-            const SwDoc* pDoc = GetDoc();
-            const SwNode* pNd = this;
-            const SwStartNode* pSttNd;
-            if( pNd->GetIndex() < GetNodes().GetEndOfExtras().GetIndex() &&
-                0 != ( pSttNd = pNd->FindFlyStartNode() ) )
+            // dann erstmal den richtigen Anker finden
+            const SwFrmFmt* pFmt = 0;
+            const SwSpzFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
+            for( USHORT n = 0; n < rFmts.Count(); ++n )
             {
-                // dann erstmal den richtigen Anker finden
-                const SwFrmFmt* pFmt = 0;
-                const SwSpzFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
-                for( USHORT n = 0; n < rFmts.Count(); ++n )
+                SwFrmFmt* pFrmFmt = rFmts[ n ];
+                const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
+                if( rCntnt.GetCntntIdx() &&
+                    &rCntnt.GetCntntIdx()->GetNode() == (SwNode*)pSttNd )
                 {
-                    SwFrmFmt* pFrmFmt = rFmts[ n ];
-                    const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
-                    if( rCntnt.GetCntntIdx() &&
-                        &rCntnt.GetCntntIdx()->GetNode() == (SwNode*)pSttNd )
-                    {
-                        pFmt = pFrmFmt;
-                        break;
-                    }
+                    pFmt = pFrmFmt;
+                    break;
                 }
+            }
 
-                if( pFmt )
+            if( pFmt )
+            {
+                const SwFmtAnchor* pAnchor = &pFmt->GetAnchor();
+                if( FLY_PAGE != pAnchor->GetAnchorId() &&
+                    pAnchor->GetCntntAnchor() )
                 {
-                    const SwFmtAnchor* pAnchor = &pFmt->GetAnchor();
-                    if( FLY_PAGE != pAnchor->GetAnchorId() &&
-                        pAnchor->GetCntntAnchor() )
+                    pNd = &pAnchor->GetCntntAnchor()->nNode.GetNode();
+                    const SwNode* pFlyNd = pNd->FindFlyStartNode();
+                    while( pFlyNd )
                     {
-                        pNd = &pAnchor->GetCntntAnchor()->nNode.GetNode();
-                        const SwNode* pFlyNd = pNd->FindFlyStartNode();
-                        while( pFlyNd )
+                        // dann ueber den Anker nach oben "hangeln"
+                        for( n = 0; n < rFmts.Count(); ++n )
                         {
-                            // dann ueber den Anker nach oben "hangeln"
-                            for( n = 0; n < rFmts.Count(); ++n )
+                            const SwFrmFmt* pFrmFmt = rFmts[ n ];
+                            const SwNodeIndex* pIdx = pFrmFmt->GetCntnt().
+                                                        GetCntntIdx();
+                            if( pIdx && pFlyNd == &pIdx->GetNode() )
                             {
-                                const SwFrmFmt* pFrmFmt = rFmts[ n ];
-                                const SwNodeIndex* pIdx = pFrmFmt->GetCntnt().
-                                                            GetCntntIdx();
-                                if( pIdx && pFlyNd == &pIdx->GetNode() )
+                                if( pFmt == pFrmFmt )
                                 {
-                                    if( pFmt == pFrmFmt )
-                                    {
-                                        pNd = pFlyNd;
-                                        pFlyNd = 0;
-                                        break;
-                                    }
-                                    pAnchor = &pFrmFmt->GetAnchor();
-                                    if( FLY_PAGE == pAnchor->GetAnchorId() ||
-                                        !pAnchor->GetCntntAnchor() )
-                                    {
-                                        pFlyNd = 0;
-                                        break;
-                                    }
-
-                                    pFlyNd = pAnchor->GetCntntAnchor()->nNode.
-                                            GetNode().FindFlyStartNode();
+                                    pNd = pFlyNd;
+                                    pFlyNd = 0;
                                     break;
                                 }
-                            }
-                            if( n >= rFmts.Count() )
-                            {
-                                ASSERT( !this, "Fly-Section aber kein Format gefunden" );
-                                return FALSE;
-                            }
-                        }
-                    }
-                }
-                // in pNd sollte jetzt der richtige Anker Node stehen oder
-                // immer noch der this
-            }
-
-            if( pNd->GetIndex() < GetNodes().GetEndOfExtras().GetIndex() )
-            {
-                if( pNd->GetIndex() > GetNodes().GetEndOfAutotext().GetIndex() )
-                {
-                    pPgDesc = &pDoc->GetPageDesc( 0 );
-                    pNd = 0;
-                }
-                else
-                {
-                    // suche den Body Textnode
-                    if( 0 != ( pSttNd = pNd->FindHeaderStartNode() ) ||
-                        0 != ( pSttNd = pNd->FindFooterStartNode() ))
-                    {
-                        // dann in den PageDescs diesen StartNode suchen
-                        USHORT nId;
-                        UseOnPage eAskUse;
-                        if( SwHeaderStartNode == pSttNd->GetStartNodeType())
-                        {
-                            nId = RES_HEADER;
-                            eAskUse = PD_HEADERSHARE;
-                        }
-                        else
-                        {
-                            nId = RES_FOOTER;
-                            eAskUse = PD_FOOTERSHARE;
-                        }
-
-                        for( USHORT n = pDoc->GetPageDescCnt(); n && !pPgDesc; )
-                        {
-                            const SwPageDesc& rPgDsc = pDoc->GetPageDesc( --n );
-                            const SwFrmFmt* pFmt = &rPgDsc.GetMaster();
-                            int nStt = 0, nLast = 1;
-                            if( !( eAskUse & rPgDsc.ReadUseOn() )) ++nLast;
-
-                            for( ; nStt < nLast; ++nStt, pFmt = &rPgDsc.GetLeft() )
-                            {
-                                const SwFmtHeader& rHdFt = (SwFmtHeader&)
-                                                        pFmt->GetAttr( nId );
-                                if( rHdFt.GetHeaderFmt() )
+                                pAnchor = &pFrmFmt->GetAnchor();
+                                if( FLY_PAGE == pAnchor->GetAnchorId() ||
+                                    !pAnchor->GetCntntAnchor() )
                                 {
-                                    const SwFmtCntnt& rCntnt =
-                                        rHdFt.GetHeaderFmt()->GetCntnt();
-                                    if( rCntnt.GetCntntIdx() &&
-                                        &rCntnt.GetCntntIdx()->GetNode() ==
-                                        (SwNode*)pSttNd )
-                                    {
-                                        pPgDesc = &rPgDsc;
-                                        break;
-                                    }
+                                    pFlyNd = 0;
+                                    break;
                                 }
-                            }
-                        }
 
-                        if( !pPgDesc )
-                            pPgDesc = &pDoc->GetPageDesc( 0 );
-                        pNd = 0;
-                    }
-                    else if( 0 != ( pSttNd = pNd->FindFootnoteStartNode() ))
-                    {
-                        // der Anker kann nur im Bodytext sein
-                        const SwTxtFtn* pTxtFtn;
-                        const SwFtnIdxs& rFtnArr = pDoc->GetFtnIdxs();
-                        for( USHORT n = 0; n < rFtnArr.Count(); ++n )
-                            if( 0 != ( pTxtFtn = rFtnArr[ n ])->GetStartNode() &&
-                                (SwNode*)pSttNd ==
-                                &pTxtFtn->GetStartNode()->GetNode() )
-                            {
-                                pNd = &pTxtFtn->GetTxtNode();
+                                pFlyNd = pAnchor->GetCntntAnchor()->nNode.
+                                        GetNode().FindFlyStartNode();
                                 break;
                             }
+                        }
+                        if( n >= rFmts.Count() )
+                        {
+                            ASSERT( !this, "Fly-Section aber kein Format gefunden" );
+                            return FALSE;
+                        }
+                    }
+                }
+            }
+            // in pNd sollte jetzt der richtige Anker Node stehen oder
+            // immer noch der this
+        }
+
+        if( pNd->GetIndex() < GetNodes().GetEndOfExtras().GetIndex() )
+        {
+            if( pNd->GetIndex() > GetNodes().GetEndOfAutotext().GetIndex() )
+            {
+                pPgDesc = &pDoc->GetPageDesc( 0 );
+                pNd = 0;
+            }
+            else
+            {
+                // suche den Body Textnode
+                if( 0 != ( pSttNd = pNd->FindHeaderStartNode() ) ||
+                    0 != ( pSttNd = pNd->FindFooterStartNode() ))
+                {
+                    // dann in den PageDescs diesen StartNode suchen
+                    USHORT nId;
+                    UseOnPage eAskUse;
+                    if( SwHeaderStartNode == pSttNd->GetStartNodeType())
+                    {
+                        nId = RES_HEADER;
+                        eAskUse = PD_HEADERSHARE;
                     }
                     else
                     {
-                        // kann jetzt nur noch ein Seitengebundener Fly sein
-                        // oder irgendetwas neueres.
-                        // Hier koennen wir nur noch den Standard returnen
-                        ASSERT( pNd->FindFlyStartNode(),
-                                "wo befindet sich dieser Node?" );
-
-                        pPgDesc = &pDoc->GetPageDesc( 0 );
-                        pNd = 0;
+                        nId = RES_FOOTER;
+                        eAskUse = PD_FOOTERSHARE;
                     }
-                }
-            }
 
-            if( pNd )
-            {
-                SwFindNearestNode aInfo( *pNd );
-                // dann ueber alle Nodes aller PageDesc
-                const SfxPoolItem* pItem;
-                USHORT i, nMaxItems = pDoc->GetAttrPool().GetItemCount( RES_PAGEDESC );
-                for( i = 0; i < nMaxItems; ++i )
-                    if( 0 != (pItem = pDoc->GetAttrPool().GetItem( RES_PAGEDESC, i ) ) &&
-                        ((SwFmtPageDesc*)pItem)->GetDefinedIn() )
+                    for( USHORT n = pDoc->GetPageDescCnt(); n && !pPgDesc; )
                     {
-                        const SwModify* pMod = ((SwFmtPageDesc*)pItem)->GetDefinedIn();
-                        if( pMod->ISA( SwCntntNode ) )
-                            aInfo.CheckNode( *(SwCntntNode*)pMod );
-                        else if( pMod->ISA( SwFmt ))
-                            ((SwFmt*)pMod)->GetInfo( aInfo );
+                        const SwPageDesc& rPgDsc = pDoc->GetPageDesc( --n );
+                        const SwFrmFmt* pFmt = &rPgDsc.GetMaster();
+                        int nStt = 0, nLast = 1;
+                        if( !( eAskUse & rPgDsc.ReadUseOn() )) ++nLast;
+
+                        for( ; nStt < nLast; ++nStt, pFmt = &rPgDsc.GetLeft() )
+                        {
+                            const SwFmtHeader& rHdFt = (SwFmtHeader&)
+                                                    pFmt->GetAttr( nId );
+                            if( rHdFt.GetHeaderFmt() )
+                            {
+                                const SwFmtCntnt& rCntnt =
+                                    rHdFt.GetHeaderFmt()->GetCntnt();
+                                if( rCntnt.GetCntntIdx() &&
+                                    &rCntnt.GetCntntIdx()->GetNode() ==
+                                    (SwNode*)pSttNd )
+                                {
+                                    pPgDesc = &rPgDsc;
+                                    break;
+                                }
+                            }
+                        }
                     }
 
-                if( 0 != ( pNd = aInfo.GetFoundNode() ))
-                {
-                    if( pNd->IsCntntNode() )
-                        pPgDesc = ((SwFmtPageDesc&)pNd->GetCntntNode()->
-                                    GetAttr( RES_PAGEDESC )).GetPageDesc();
-                    else if( pNd->IsTableNode() )
-                        pPgDesc = pNd->GetTableNode()->GetTable().
-                                GetFrmFmt()->GetPageDesc().GetPageDesc();
-                    else if( pNd->IsSectionNode() )
-                        pPgDesc = pNd->GetSectionNode()->GetSection().
-                                GetFmt()->GetPageDesc().GetPageDesc();
+                    if( !pPgDesc )
+                        pPgDesc = &pDoc->GetPageDesc( 0 );
+                    pNd = 0;
                 }
-                if( !pPgDesc )
+                else if( 0 != ( pSttNd = pNd->FindFootnoteStartNode() ))
+                {
+                    // der Anker kann nur im Bodytext sein
+                    const SwTxtFtn* pTxtFtn;
+                    const SwFtnIdxs& rFtnArr = pDoc->GetFtnIdxs();
+                    for( USHORT n = 0; n < rFtnArr.Count(); ++n )
+                        if( 0 != ( pTxtFtn = rFtnArr[ n ])->GetStartNode() &&
+                            (SwNode*)pSttNd ==
+                            &pTxtFtn->GetStartNode()->GetNode() )
+                        {
+                            pNd = &pTxtFtn->GetTxtNode();
+                            break;
+                        }
+                }
+                else
+                {
+                    // kann jetzt nur noch ein Seitengebundener Fly sein
+                    // oder irgendetwas neueres.
+                    // Hier koennen wir nur noch den Standard returnen
+                    ASSERT( pNd->FindFlyStartNode(),
+                            "wo befindet sich dieser Node?" );
+
                     pPgDesc = &pDoc->GetPageDesc( 0 );
+                    pNd = 0;
+                }
             }
+        }
+
+        if( pNd )
+        {
+            SwFindNearestNode aInfo( *pNd );
+            // dann ueber alle Nodes aller PageDesc
+            const SfxPoolItem* pItem;
+            USHORT i, nMaxItems = pDoc->GetAttrPool().GetItemCount( RES_PAGEDESC );
+            for( i = 0; i < nMaxItems; ++i )
+                if( 0 != (pItem = pDoc->GetAttrPool().GetItem( RES_PAGEDESC, i ) ) &&
+                    ((SwFmtPageDesc*)pItem)->GetDefinedIn() )
+                {
+                    const SwModify* pMod = ((SwFmtPageDesc*)pItem)->GetDefinedIn();
+                    if( pMod->ISA( SwCntntNode ) )
+                        aInfo.CheckNode( *(SwCntntNode*)pMod );
+                    else if( pMod->ISA( SwFmt ))
+                        ((SwFmt*)pMod)->GetInfo( aInfo );
+                }
+
+            if( 0 != ( pNd = aInfo.GetFoundNode() ))
+            {
+                if( pNd->IsCntntNode() )
+                    pPgDesc = ((SwFmtPageDesc&)pNd->GetCntntNode()->
+                                GetAttr( RES_PAGEDESC )).GetPageDesc();
+                else if( pNd->IsTableNode() )
+                    pPgDesc = pNd->GetTableNode()->GetTable().
+                            GetFrmFmt()->GetPageDesc().GetPageDesc();
+                else if( pNd->IsSectionNode() )
+                    pPgDesc = pNd->GetSectionNode()->GetSection().
+                            GetFmt()->GetPageDesc().GetPageDesc();
+                // OD 18.03.2003 #106329#
+                if ( pPgDescNdIdx )
+                {
+                    *pPgDescNdIdx = pNd->GetIndex();
+                }
+            }
+            if( !pPgDesc )
+                pPgDesc = &pDoc->GetPageDesc( 0 );
         }
     }
     return pPgDesc;
