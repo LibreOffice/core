@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-26 11:18:11 $
+ *  last change: $Author: mib $ $Date: 2001-01-29 08:51:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1491,7 +1491,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
             GetExport().AddAttribute( XML_NAMESPACE_SVG, sXML_y,
                                       sValue.makeStringAndClear() );
         }
-        else if( bShape )
+        if( bShape )
             nShapeFeatures = (nShapeFeatures & ~SEF_EXPORT_Y);
     }
 
