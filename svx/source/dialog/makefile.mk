@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pb $ $Date: 2000-11-24 11:07:16 $
+#   last change: $Author: er $ $Date: 2000-12-20 11:42:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -195,6 +195,8 @@ CXXFILES = \
         tplneend.cxx \
         tpshadow.cxx   \
         transfrm.cxx \
+        txencbox.cxx \
+        txenctab.cxx \
         zoom.cxx \
         grfflt.cxx \
         $(PROJECTPCHSOURCE).cxx
@@ -242,6 +244,7 @@ SRC1FILES =  \
         textattr.src \
         thesdlg.src \
         tp3dattr.src \
+        txenctab.src \
         zoom.src	\
         dlgctrl.src \
         grfflt.src \
@@ -347,6 +350,8 @@ SLOFILES=\
         $(SLO)$/tpshadow.obj   \
         $(SLO)$/transfrm.obj \
         $(SLO)$/worient.obj    \
+        $(SLO)$/txenctab.obj \
+        $(SLO)$/txencbox.obj \
         $(SLO)$/zoom.obj	 \
         $(SLO)$/grfflt.obj
 
