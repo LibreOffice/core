@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 14:03:08 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 00:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,8 @@
 
 #define PROPERTYVALUE       ::com::sun::star::beans::PropertyValue
 #define UNO_QUERY           ::com::sun::star::uno::UNO_QUERY
+
+namespace css = ::com::sun::star;
 
 //--------------------------------------------------------------------------------------------------------
     //  --- XNameReplace ---
@@ -595,94 +597,336 @@ void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* 
     }
 }
 
+ModelCollectionEnumeration::ModelCollectionEnumeration(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+    : ModelCollectionMutexBase(                 )
+    , m_xSMGR                 (xSMGR            )
+    , m_pEnumerationIt        (m_lModels.begin())
+{
+}
+
+ModelCollectionEnumeration::~ModelCollectionEnumeration()
+{
+}
+
+void ModelCollectionEnumeration::setModelList(const TModelList& rList)
+{
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    m_lModels        = rList;
+    m_pEnumerationIt = m_lModels.begin();
+    aLock.clear();
+    // <- SAFE
+}
+
+sal_Bool SAL_CALL ModelCollectionEnumeration::hasMoreElements()
+    throw(css::uno::RuntimeException)
+{
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    return (m_pEnumerationIt != m_lModels.end());
+    // <- SAFE
+}
+
+css::uno::Any SAL_CALL ModelCollectionEnumeration::nextElement()
+    throw(css::container::NoSuchElementException,
+          css::lang::WrappedTargetException     ,
+          css::uno::RuntimeException            )
+{
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    if (m_pEnumerationIt == m_lModels.end())
+        throw css::container::NoSuchElementException(
+                    ::rtl::OUString::createFromAscii("End of model enumeration reached."),
+                    static_cast< css::container::XEnumeration* >(this));
+    css::uno::Reference< css::frame::XModel > xModel(*m_pEnumerationIt, UNO_QUERY);
+    ++m_pEnumerationIt;
+    aLock.clear();
+    // <- SAFE
+
+    return css::uno::makeAny(xModel);
+}
+
 SFX_IMPL_XSERVICEINFO( SfxGlobalEvents_Impl, "com.sun.star.frame.GlobalEventBroadcaster", "com.sun.star.comp.sfx2.GlobalEventBroadcaster" )
 SFX_IMPL_ONEINSTANCEFACTORY( SfxGlobalEvents_Impl );
 
-SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xSmgr )
-    : m_aInterfaceContainer( m_aMutex )
+//-----------------------------------------------------------------------------
+SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xSMGR)
+    : ModelCollectionMutexBase(       )
+    , m_xSMGR                 (xSMGR  )
+    , m_aInterfaceContainer   (m_aLock)
+    , pImp                    (0      )
 {
     m_refCount++;
-//  pImp = new SfxEvents_Impl( NULL, this );
-    pImp = new GlobalEventConfig();
-    m_xEvents = pImp;
-    m_xJobsBinding = REFERENCE< XJOBEXECUTOR >(xSmgr->createInstance(OUSTRING::createFromAscii("com.sun.star.task.JobExecutor")), UNO_QUERY);
-    StartListening(*SFX_APP());
+    SFX_APP();
+    pImp           = new GlobalEventConfig();
+    m_xEvents      = pImp;
+    m_xJobsBinding = css::uno::Reference< css::task::XJobExecutor >(
+                        xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.task.JobExecutor")),
+                        UNO_QUERY);
     m_refCount--;
 }
 
+//-----------------------------------------------------------------------------
 SfxGlobalEvents_Impl::~SfxGlobalEvents_Impl()
 {
 }
 
-REFERENCE< XNAMEREPLACE > SAL_CALL SfxGlobalEvents_Impl::getEvents() throw( RUNTIMEEXCEPTION )
-{
-    return m_xEvents;
-}
-
-void SAL_CALL SfxGlobalEvents_Impl::addEventListener( const REFERENCE< XDOCEVENTLISTENER >& xListener ) throw( RUNTIMEEXCEPTION )
-{
-    m_aInterfaceContainer.addInterface( xListener );
-}
-
-void SAL_CALL SfxGlobalEvents_Impl::removeEventListener( const REFERENCE< XDOCEVENTLISTENER >& xListener ) throw( RUNTIMEEXCEPTION )
-{
-    m_aInterfaceContainer.removeInterface( xListener );
-}
-
+//-----------------------------------------------------------------------------
 void SfxGlobalEvents_Impl::Notify( SfxBroadcaster& aBC, const SfxHint& aHint )
 {
-    SfxEventHint* pNamedHint = PTR_CAST( SfxEventHint, &aHint );
-    if ( pNamedHint )
-    {
-        OUSTRING aName = SfxEventConfiguration::GetEventName_Impl( pNamedHint->GetEventId() );
-        REFERENCE < XEVENTSSUPPLIER > xSup;
-        if ( pNamedHint->GetObjShell() )
-            xSup = REFERENCE < XEVENTSSUPPLIER >( pNamedHint->GetObjShell()->GetModel(), UNO_QUERY );
-//      else
-//          xSup = (XEVENTSSUPPLIER*) this;
+    SfxEventHint* pNamedHint = PTR_CAST(SfxEventHint, &aHint);
+    if (!pNamedHint)
+        return;
 
-        DOCEVENTOBJECT aEvent( xSup, aName );
-        notifyEvent(aEvent);
-    }
+    css::uno::Reference< css::document::XEventsSupplier > xSup;
+
+    ::rtl::OUString sName  = SfxEventConfiguration::GetEventName_Impl(pNamedHint->GetEventId());
+    SfxObjectShell* pShell = pNamedHint->GetObjShell();
+    if (pShell)
+        xSup = css::uno::Reference< css::document::XEventsSupplier >(pShell->GetModel(), UNO_QUERY);
+
+    css::document::EventObject aEvent(xSup, sName);
+    notifyEvent(aEvent);
 }
 
-void SAL_CALL SfxGlobalEvents_Impl::notifyEvent( const ::com::sun::star::document::EventObject& aEvent ) throw ( RUNTIMEEXCEPTION )
+//-----------------------------------------------------------------------------
+css::uno::Reference< css::container::XNameReplace > SAL_CALL SfxGlobalEvents_Impl::getEvents()
+    throw(css::uno::RuntimeException)
 {
-    // Attention: This listener is a special one. It binds the global document events
-    // to the generic job execution framework. It's a loose binding (using weak references).
-    // So we hold this listener outside our normal listener container.
-    // The implementation behind this job executor can be replaced ...
-    // but we check for this undocumented interface!
-    REFERENCE< XDOCEVENTLISTENER > xJobExecutor(m_xJobsBinding.get(), UNO_QUERY);
-    if (xJobExecutor.is())
-        xJobExecutor->notifyEvent(aEvent);
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    return m_xEvents;
+    // <- SAFE
+}
 
+//-----------------------------------------------------------------------------
+void SAL_CALL SfxGlobalEvents_Impl::addEventListener(const css::uno::Reference< css::document::XEventListener >& xListener)
+    throw(css::uno::RuntimeException)
+{
+    // container is threadsafe
+    m_aInterfaceContainer.addInterface(xListener);
+}
+
+//-----------------------------------------------------------------------------
+void SAL_CALL SfxGlobalEvents_Impl::removeEventListener(const css::uno::Reference< css::document::XEventListener >& xListener)
+    throw(css::uno::RuntimeException)
+{
+    // container is threadsafe
+    m_aInterfaceContainer.removeInterface(xListener);
+}
+
+//-----------------------------------------------------------------------------
+void SAL_CALL SfxGlobalEvents_Impl::notifyEvent(const css::document::EventObject& aEvent)
+    throw(css::uno::RuntimeException)
+{
+    implts_notifyJobExecution(aEvent);
+    implts_checkAndExecuteEventBindings(aEvent);
+    implts_notifyListener(aEvent);
+}
+
+//-----------------------------------------------------------------------------
+void SAL_CALL SfxGlobalEvents_Impl::disposing(const css::lang::EventObject& aEvent)
+    throw(css::uno::RuntimeException)
+{
+    css::uno::Reference< css::frame::XModel > xDoc(aEvent.Source, UNO_QUERY);
+
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    TModelList::iterator pIt = impl_searchDoc(xDoc);
+    if (pIt != m_lModels.end())
+        m_lModels.erase(pIt);
+    aLock.clear();
+    // <- SAFE
+}
+
+//-----------------------------------------------------------------------------
+sal_Bool SAL_CALL SfxGlobalEvents_Impl::has(const css::uno::Any& aElement)
+    throw (css::uno::RuntimeException)
+{
+    css::uno::Reference< css::frame::XModel > xDoc;
+    aElement >>= xDoc;
+
+    sal_Bool bHas = sal_False;
+
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    TModelList::iterator pIt = impl_searchDoc(xDoc);
+    if (pIt != m_lModels.end())
+        bHas = sal_True;
+    aLock.clear();
+    // <- SAFE
+
+    return bHas;
+}
+
+//-----------------------------------------------------------------------------
+void SAL_CALL SfxGlobalEvents_Impl::insert( const css::uno::Any& aElement )
+    throw (css::lang::IllegalArgumentException  ,
+           css::container::ElementExistException,
+           css::uno::RuntimeException           )
+{
+    css::uno::Reference< css::frame::XModel > xDoc;
+    aElement >>= xDoc;
+    if (!xDoc.is())
+        throw css::lang::IllegalArgumentException(
+                ::rtl::OUString::createFromAscii("Cant locate at least the model parameter."),
+                static_cast< css::container::XSet* >(this),
+                0);
+
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    TModelList::iterator pIt = impl_searchDoc(xDoc);
+    if (pIt != m_lModels.end())
+        throw css::container::ElementExistException(
+                ::rtl::OUString(),
+                static_cast< css::container::XSet* >(this));
+    m_lModels.push_back(xDoc);
+    aLock.clear();
+    // <- SAFE
+
+    css::uno::Reference< css::document::XEventBroadcaster > xDocBroadcast(xDoc, UNO_QUERY);
+    if (xDocBroadcast.is())
+        xDocBroadcast->addEventListener(static_cast< css::document::XEventListener* >(this));
+}
+
+//-----------------------------------------------------------------------------
+void SAL_CALL SfxGlobalEvents_Impl::remove( const css::uno::Any& aElement )
+    throw (css::lang::IllegalArgumentException   ,
+           css::container::NoSuchElementException,
+           css::uno::RuntimeException            )
+{
+    css::uno::Reference< css::frame::XModel > xDoc;
+    aElement >>= xDoc;
+    if (!xDoc.is())
+        throw css::lang::IllegalArgumentException(
+                ::rtl::OUString::createFromAscii("Cant locate at least the model parameter."),
+                static_cast< css::container::XSet* >(this),
+                0);
+
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    TModelList::iterator pIt = impl_searchDoc(xDoc);
+    if (pIt == m_lModels.end())
+        throw css::container::NoSuchElementException(
+                ::rtl::OUString(),
+                static_cast< css::container::XSet* >(this));
+    m_lModels.erase(pIt);
+    aLock.clear();
+    // <- SAFE
+
+    css::uno::Reference< css::document::XEventBroadcaster > xDocBroadcast(xDoc, UNO_QUERY);
+    if (xDocBroadcast.is())
+        xDocBroadcast->removeEventListener(static_cast< css::document::XEventListener* >(this));
+}
+
+//-----------------------------------------------------------------------------
+css::uno::Reference< css::container::XEnumeration > SAL_CALL SfxGlobalEvents_Impl::createEnumeration()
+    throw (css::uno::RuntimeException)
+{
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    ModelCollectionEnumeration* pEnum = new ModelCollectionEnumeration(m_xSMGR);
+    pEnum->setModelList(m_lModels);
+    css::uno::Reference< css::container::XEnumeration > xEnum(
+        static_cast< css::container::XEnumeration* >(pEnum),
+        UNO_QUERY);
+    aLock.clear();
+    // <- SAFE
+
+    return xEnum;
+}
+
+//-----------------------------------------------------------------------------
+css::uno::Type SAL_CALL SfxGlobalEvents_Impl::getElementType()
+    throw (css::uno::RuntimeException)
+{
+    return ::getCppuType(static_cast< css::uno::Reference< css::frame::XModel >* >(NULL));
+}
+
+//-----------------------------------------------------------------------------
+sal_Bool SAL_CALL SfxGlobalEvents_Impl::hasElements()
+    throw (css::uno::RuntimeException)
+{
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    return (m_lModels.size()>0);
+    // <- SAFE
+}
+
+//-----------------------------------------------------------------------------
+void SfxGlobalEvents_Impl::implts_notifyJobExecution(const css::document::EventObject& aEvent)
+{
     try
     {
-        ANY aAny = m_xEvents->getByName( aEvent.EventName );
-        Execute( aAny, 0 );
+        // SAFE ->
+        ::osl::ResettableMutexGuard aLock(m_aLock);
+        css::uno::Reference< css::document::XEventListener > xJobExecutor(m_xJobsBinding.get(), UNO_QUERY);
+        aLock.clear();
+        // <- SAFE
+        if (xJobExecutor.is())
+            xJobExecutor->notifyEvent(aEvent);
     }
-    catch ( EXCEPTION& )
-    {
-    }
+    catch(const css::uno::RuntimeException& exRun)
+        { throw exRun; }
+    catch(const css::uno::Exception&)
+        {}
+}
 
-    ::cppu::OInterfaceIteratorHelper aIt( m_aInterfaceContainer );
-    while( aIt.hasMoreElements() )
+//-----------------------------------------------------------------------------
+void SfxGlobalEvents_Impl::implts_checkAndExecuteEventBindings(const css::document::EventObject& aEvent)
+{
+    try
+    {
+        // SAFE ->
+        ::osl::ResettableMutexGuard aLock(m_aLock);
+        css::uno::Reference< css::container::XNameReplace > xEvents = m_xEvents;
+        aLock.clear();
+        // <- SAFE
+
+        css::uno::Any aAny;
+        if (xEvents.is())
+            aAny = xEvents->getByName(aEvent.EventName);
+        Execute(aAny, 0);
+    }
+    catch(const css::uno::RuntimeException& exRun)
+        { throw exRun; }
+    catch(const css::uno::Exception&)
+        {}
+}
+
+//-----------------------------------------------------------------------------
+void SfxGlobalEvents_Impl::implts_notifyListener(const css::document::EventObject& aEvent)
+{
+    // container is threadsafe
+    ::cppu::OInterfaceIteratorHelper aIt(m_aInterfaceContainer);
+    while (aIt.hasMoreElements())
     {
         try
         {
-            ((XDOCEVENTLISTENER *)aIt.next())->notifyEvent( aEvent );
+            ((css::document::XEventListener*)aIt.next())->notifyEvent(aEvent);
         }
-        catch( RUNTIMEEXCEPTION& )
-        {
-            aIt.remove();
-        }
+        catch(const css::uno::Exception&)
+            { aIt.remove(); }
     }
 }
 
-void SAL_CALL SfxGlobalEvents_Impl::disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw ( RUNTIMEEXCEPTION )
+//-----------------------------------------------------------------------------
+// not threadsafe ... must be locked from outside!
+TModelList::iterator SfxGlobalEvents_Impl::impl_searchDoc(const css::uno::Reference< css::frame::XModel >& xModel)
 {
-    // not interesting for us.
-    // It's an OneInstance-Service, which will be disposed be the global uno service manager only ...
+    if (!xModel.is())
+        return m_lModels.end();
+
+    TModelList::iterator pIt;
+    for (  pIt  = m_lModels.begin();
+           pIt != m_lModels.end()  ;
+         ++pIt                     )
+    {
+        css::uno::Reference< css::frame::XModel > xContainerDoc(*pIt, UNO_QUERY);
+        if (xContainerDoc == xModel)
+            break;
+    }
+
+    return pIt;
 }
 
