@@ -41,6 +41,8 @@ DIRLIST = \
     $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically 	\
     $(DESTDIROLEEXAMPLES)		 	\
     $(DESTDIROLEEXAMPLES)$/vbscript		 	\
+    $(DESTDIROLEEXAMPLES)$/delphi		 	\
+    $(DESTDIROLEEXAMPLES)$/delphi$/InsertTables		 	\
     {$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLDIRLIST))}
 
 CPP_OFFICECLIENT= \
@@ -66,7 +68,6 @@ JAVA_CALC= \
 
 JAVA_CALC_CHARTTYPECHANGE= \
     $(DESTDIRJAVAEXAMPLES)$/calc$/ChartTypeChange$/ChartTypeChange.java		   	\
-    $(DESTDIRJAVAEXAMPLES)$/calc$/ChartTypeChange$/ChartTypeChange.sxc		\
     $(DESTDIRJAVAEXAMPLES)$/calc$/ChartTypeChange$/makefile.mk	   		\
     $(DESTDIRJAVAEXAMPLES)$/calc$/ChartTypeChange$/Makefile	  	 		\
     $(DESTDIRJAVAEXAMPLES)$/calc$/ChartTypeChange$/README
@@ -186,7 +187,6 @@ JAVA_WRITERSELECTOR= \
     $(DESTDIRJAVAEXAMPLES)$/WriterSelector$/README
 
 BASIC_EXAMPLES= \
-    $(DESTDIRBASICEXAMPLES)$/index.html				\
     $(DESTDIRBASICEXAMPLES)$/drawing$/dirtree.txt			\
     $(DESTDIRBASICEXAMPLES)$/drawing$/importexportofasciifiles.sxd 	\
     $(DESTDIRBASICEXAMPLES)$/forms_and_controls$/beef.wmf	 	\
@@ -207,6 +207,17 @@ BASIC_EXAMPLES= \
 OLE_EXAMPLES= \
     $(DESTDIROLEEXAMPLES)$/vbscript$/readme.txt \
     $(DESTDIROLEEXAMPLES)$/vbscript$/WriterDemo.vbs
+
+OLE_EXAMPLES_DELPHI= \
+    $(DESTDIROLEEXAMPLES)$/delphi$/StarOffice_Delphi.sxw \
+    $(DESTDIROLEEXAMPLES)$/delphi$/StarOffice_and_Delphi.pdf
+
+OLE_EXAMPLES_DELPHI_INSERTTABLES= \
+    $(DESTDIROLEEXAMPLES)$/delphi$/InsertTables$/Project1.dpr \
+    $(DESTDIROLEEXAMPLES)$/delphi$/InsertTables$/Project1.res	\
+    $(DESTDIROLEEXAMPLES)$/delphi$/InsertTables$/SampleCode.pas	\
+    $(DESTDIROLEEXAMPLES)$/delphi$/InsertTables$/SampleUI.dfm	\
+    $(DESTDIROLEEXAMPLES)$/delphi$/InsertTables$/SampleUI.pas
 
 EXAMPLESLIST= \
     $(CPP_OFFICECLIENT) \
@@ -229,6 +240,8 @@ EXAMPLESLIST= \
     $(JAVA_WRITERSELECTOR)         \
     $(BASIC_EXAMPLES)              \
     $(OLE_EXAMPLES)                \
+    $(OLE_EXAMPLES_DELPHI)                \
+    $(OLE_EXAMPLES_DELPHI_INSERTTABLES)                \
     $(DESTDIREXAMPLES)$/examples.html   \
     $(DESTDIRJAVAEXAMPLES)$/debugging_java.html
     
@@ -273,7 +286,7 @@ $(DESTDIRJAVAEXAMPLES)$/% : $(PRJ)$/examples$/java$/% $(DIRLIST) $(BIN)$/$(UDKNA
 
 $(DESTDIRBASICEXAMPLES)$/% : $(PRJ)$/examples$/basic$/% $(DIRLIST) $(BIN)$/$(UDKNAME).zip
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_COPY) $? $@
 
 $(DESTDIROLEEXAMPLES)$/% : $(PRJ)$/examples$/OLE$/% $(DIRLIST) $(BIN)$/$(UDKNAME).zip
     +-rm -f $@ >& $(NULLDEV)
