@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:20:15 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 13:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,13 @@ bool implNormalizeURL(OUString & _sURL, osl::DirectoryItem& aDirItem)
     if (aNormalizedURL.getLength() == 0)
         return false;
 
-    _sURL = aNormalizedURL;
+    // #109863# sal/osl returns final slash for file URLs contradicting
+    // the URL/URI RFCs.
+    if ( aNormalizedURL.getStr()[aNormalizedURL.getLength()-1] != cURLSeparator )
+        _sURL = aNormalizedURL;
+    else
+        _sURL = aNormalizedURL.copy( 0, aNormalizedURL.getLength()-1 );
+
     return true;
 }
 // ---------------------------------------------------------------------------------------
