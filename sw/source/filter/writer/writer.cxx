@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:03:29 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 16:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,6 @@
  *
  *
  ************************************************************************/
-
-
-#pragma hdrstop
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -211,13 +208,12 @@ void Writer_Impl::InsertBkmk( const SwBookmark& rBkmk )
  */
 
 Writer::Writer()
-    : pImpl( 0 ), pStrm( 0 ), pOrigPam( 0 ), pOrigFileName( 0 ),
-    pCurPam(0), pDoc( 0 )
+    : pImpl(0), pStrm(0), pOrigPam(0), pOrigFileName(0), pDoc(0), pCurPam(0)
 {
-    bWriteAll = bShowProgress = bUCS2_WithStartChar = TRUE;
+    bWriteAll = bShowProgress = bUCS2_WithStartChar = true;
     bASCII_NoLastLineEnd = bASCII_ParaAsBlanc = bASCII_ParaAsCR =
         bWriteClipboardDoc = bWriteOnlyFirstTable = bBlock =
-        bOrganizerMode = FALSE;
+        bOrganizerMode = false;
 }
 
 Writer::~Writer()
