@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:05 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1218,7 +1218,7 @@ Menu RID_POPUP_AUDIT
             Text[ polish ] = "ŒledŸ poprzedniki";
             Text[ japanese ] = "QÆŒ³ÄÚ°½(~P)";
             Text[ chinese_traditional ] = "Àx¦s®æ«e¾É°Ñ·Ó(~P)";
-            Text[ arabic ] = "ÊÊÈÚ ÃËÑ ÇáÓÇÈŞ";
+            Text[ arabic ] = "ÊÊÈÚ ÇáÓÇÈŞÇÊ";
             Text[ greek ] = "º÷íïò ğñïçãïıìåíï~õ";
             Text[ korean ] = "¼±·Ê ÃßÀû(~P)";
             Text[ turkish ] = "Öncekini izle";
@@ -1250,7 +1250,7 @@ Menu RID_POPUP_AUDIT
             Text[ polish ] = "Usuñ strza³ki poprzedników";
             Text[ japanese ] = "QÆŒ³ÄÚ°½‚Ìíœ(~R)";
             Text[ chinese_traditional ] = "§R°£Àx¦s®æ«e¾É°Ñ·Ó(~R)";
-            Text[ arabic ] = "ãÍæ ÃËÑ ÇáÓÇÈŞ";
+            Text[ arabic ] = "ÅÒÇáÉ ÇáÓÇÈŞÇÊ";
             Text[ greek ] = "ÊáôÜñãçóç ß÷íïõò ğñïçãïıì~åíïõ";
             Text[ korean ] = "¼±·Ê »èÁ¦(~R)";
             Text[ turkish ] = "Öncekinin izini sil";
@@ -1281,7 +1281,7 @@ Menu RID_POPUP_AUDIT
             Text[ polish ] = "ŒledŸ zale¿noœci";
             Text[ japanese ] = "QÆæÄÚ°½(~T)";
             Text[ chinese_traditional ] = "Àx¦s®æ±qÄİ°Ñ·Ó(~T)";
-            Text[ arabic ] = "ÊÊÈÚ ÃËÑ ÇááÇÍŞ";
+            Text[ arabic ] = "ÊÊÈÚ ÇáÊæÇÈÚ";
             Text[ greek ] = "º÷íïò ğñïò ôï åğüìå~íï";
             Text[ korean ] = "Á¾¼Ó ÃßÀû(~T)";
             Text[ turkish ] = "Sonrakinin izini sil";
@@ -1312,7 +1312,7 @@ Menu RID_POPUP_AUDIT
             Text[ polish ] = "Usuñ strza³ki zale¿noœci";
             Text[ japanese ] = "QÆæ‚Ì‰ğœ";
             Text[ chinese_traditional ] = "§R°£Àx¦s®æ±qÄİ°Ñ·Ó";
-            Text[ arabic ] = "ãÍæ ÃËÑ ÇááÇÍŞ";
+            Text[ arabic ] = "ÅÒÇáÉ ÇáÊæÇÈÚ";
             Text[ greek ] = "Äéáãñá~öŞ ß÷íïõò ğñïò ôï åğüìåíï";
             Text[ korean ] = "Á¾¼Ó Á¦°Å";
             Text[ turkish ] = "Sonrakinin izini sil";
