@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-20 13:01:22 $
+ *  last change: $Author: cl $ $Date: 2001-07-24 15:35:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( 
     }
 
     uno::Reference< uno::XInterface > xRet( createTextField( ServiceSpecifier ) );
-    if( xRet.is() )
+    if( !xRet.is() )
         throw lang::ServiceNotRegisteredException();
 
     return xRet;
