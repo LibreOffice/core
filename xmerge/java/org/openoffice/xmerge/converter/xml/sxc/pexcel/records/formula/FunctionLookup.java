@@ -149,6 +149,7 @@ public class FunctionLookup implements SymbolLookup {
                 addEntry("ROUND", TokenConstants.TROUND, 1);
                 addEntry("SQRT", TokenConstants.TSQRT, 1);
                 addEntry("TAN", TokenConstants.TTAN, 1);
+                addEntry("SIN", TokenConstants.TSIN, 1);
                 // Financial
                 addEntry("SLN", TokenConstants.TSLN, 3);
                 addEntry("SYD", TokenConstants.TSYD, 4);

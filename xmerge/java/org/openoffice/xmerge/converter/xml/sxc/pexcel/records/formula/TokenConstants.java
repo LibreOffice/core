@@ -145,6 +145,7 @@ public interface TokenConstants {
         public static final int TATAN           = 0x12;
         public static final int TATAN2          = 0x61;
         public static final int TCOS            = 0x10;
+        public static final int TSIN            = 0x0F;
 
         public static final int TCOUNTIF        = 0x015A;
         public static final int TDEGREES        = 0x0157;
