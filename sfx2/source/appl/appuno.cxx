@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: as $ $Date: 2002-09-09 11:55:47 $
+ *  last change: $Author: mba $ $Date: 2002-09-12 15:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,7 @@ static const String sInputStream    = String::CreateFromAscii( "InputStream"    
 static const String sOutputStream   = String::CreateFromAscii( "OutputStream"    );
 static const String sHidden         = String::CreateFromAscii( "Hidden"         );
 static const String sPreview        = String::CreateFromAscii( "Preview"        );
+static const String sViewOnly       = String::CreateFromAscii( "ViewOnly"       );
 static const String sSilent         = String::CreateFromAscii( "Silent"         );
 static const String sJumpMark       = String::CreateFromAscii( "JumpMark"       );
 static const String sFileName       = String::CreateFromAscii( "FileName"       );
@@ -656,6 +657,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         if (bOK)
                             rSet.Put( SfxBoolItem( SID_PREVIEW, bVal ) );
                      }
+                else if ( aName == sViewOnly )
+                     {
+                        sal_Bool bVal = sal_False;
+                        sal_Bool bOK = (rProp.Value >>= bVal);
+                        DBG_ASSERT( bOK, "invalid type for ViewOnly" )
+                        if (bOK)
+                            rSet.Put( SfxBoolItem( SID_EDITDOC, !bVal ) );
+                     }
                 else if ( aName == sFileName )
                      {
                         ::rtl::OUString sVal;
@@ -908,6 +917,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_PREVIEW ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_EDITDOC ) == SFX_ITEM_SET )
+                nAdditional++;
             if ( rSet.GetItemState( SID_SILENT ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_JUMPMARK ) == SFX_ITEM_SET )
@@ -1000,6 +1011,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_SILENT )
                         continue;
                     if ( nId == SID_PREVIEW )
+                        continue;
+                    if ( nId == SID_EDITDOC )
                         continue;
                     if ( nId == SID_TARGETNAME )
                         continue;
@@ -1230,6 +1243,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             {
                 pValue[nProps].Name = sPreview;
                 pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_EDITDOC, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sViewOnly;
+                pValue[nProps++].Value <<= (sal_Bool) (!( ((SfxBoolItem*)pItem)->GetValue() ));
             }
             if ( rSet.GetItemState( SID_TARGETNAME, sal_False, &pItem ) == SFX_ITEM_SET )
             {
