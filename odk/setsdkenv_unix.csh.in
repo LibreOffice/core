@@ -56,9 +56,9 @@ if ( $?OO_SDK_OUTPUT_DIR ) then
 endif
 
 # check platform and set appropriate variables
-switch (`uname -s`)
-  case "SunOS":
-    if ( `uname -p` == "sparc" ) then
+switch (`./config.guess | cut -d"-" -f3,4`)
+  case "solaris*":
+    if ( `./config.guess | cut -d"-" -f1` == "sparc" ) then
         set directoryname=solsparc
 	set platform=Solaris Sparc
     else
@@ -74,7 +74,7 @@ switch (`uname -s`)
 	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OFFICE_PROGRAM_PATH}:.:${LD_LIBRARY_PATH}
     endif
   breaksw
-  case "Linux":
+  case "linux-gnu":
     set sdk_gxx_include_path=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
     setenv SDK_GXX_INCLUDE_PATH ${sdk_gxx_include_path}
 
@@ -89,7 +89,7 @@ switch (`uname -s`)
 	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OFFICE_PROGRAM_PATH}:.:${LD_LIBRARY_PATH}
     endif
   breaksw
-  case "Darwin":
+  case "darwin":
     set sdk_gxx_include_path=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
     setenv SDK_GXX_INCLUDE_PATH ${sdk_gxx_include_path}
 
@@ -104,7 +104,7 @@ switch (`uname -s`)
 	setenv DYLD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OFFICE_PROGRAM_PATH}:.:${DYLD_LIBRARY_PATH}
     endif
   breaksw
-  case "FreeBSD":
+  case "freebsd":
     set sdk_gxx_include_path=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
     setenv SDK_GXX_INCLUDE_PATH ${sdk_gxx_include_path}
 
