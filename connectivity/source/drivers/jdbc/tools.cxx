@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 14:44:26 $
+ *  last change: $Author: fs $ $Date: 2001-02-07 08:19:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ jobjectArray connectivity::createStringPropertyArray(JNIEnv *pEnv,const Sequence
     for(jsize i=0;pBegin != pEnd;++pBegin)
     {
         // this is a special property to find the jdbc driver
-        if(!pBegin->Name.compareToAscii("JDBCDRV"))
+        if(!pBegin->Name.compareToAscii("JavaDriverClass"))
         {
             ::rtl::OUString aStr;
             pBegin->Value >>= aStr;

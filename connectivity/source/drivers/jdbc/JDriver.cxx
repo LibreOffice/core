@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 13:33:31 $
+ *  last change: $Author: fs $ $Date: 2001-02-07 08:19:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUStrin
             const PropertyValue* pEnd   = pBegin + info.getLength();
             for(jsize i=0;pBegin != pEnd;++pBegin)
             {
-                if(!pBegin->Name.compareToAscii("JDBCDRV"))
+                if(!pBegin->Name.compareToAscii("JavaDriverClass"))
                 {
                     // here I try to find the class for jdbc driver
                     java_sql_SQLException_BASE::getMyClass();
