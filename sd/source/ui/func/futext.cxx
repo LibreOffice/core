@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-01 11:30:03 $
+ *  last change: $Author: af $ $Date: 2002-10-17 15:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,9 +693,8 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
     {
         const SdrMarkList& rMarkList = pView->GetMarkList();
 
-        if (rMarkList.GetMarkCount() == 1 &&
-            ( rMarkList.GetMark(0)->GetObj() == pTextObj ||
-              rMarkList.GetMark(0)->GetObj()->ISA( SdrObjGroup ) ) )
+        if (rMarkList.GetMarkCount() == 1
+            && ( rMarkList.GetMark(0)->GetObj() == pTextObj) )
         {
             // Ist pTextObj wirklich noch gueltig?
             // (Im FontWork wird z.B. das Objekt ausgetauscht!)
