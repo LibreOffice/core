@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPackageManager.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 11:50:44 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 #include <com/sun/star/deployment/XPackage.idl>
 #include <com/sun/star/ucb/XCommandEnvironment.idl>
 #include <com/sun/star/deployment/DeploymentException.idl>
-#include <com/sun/star/deployment/XPackageRegistry.idl>
 #include <com/sun/star/container/NoSuchElementException.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
@@ -115,14 +114,6 @@ interface XPackageManager
                 underlying deployment context
     */
     string getContext();
-
-    /** gets access to the underlying package registry being used when packages
-        are added or removed.
-
-        @return
-                registry
-    */
-    XPackageRegistry getPackageRegistry();
 
     /** creates a command channel to be used to asynchronously abort a command.
 

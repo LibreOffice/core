@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPackageManagerFactory.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 11:51:01 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:02:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,19 +88,16 @@ interface XPackageManagerFactory
         <p>
         Packages for context strings <code>"user"</code> and
         <code>"shared"</code> will be registered and
-        revoked persistently whilst <code>vnd.sun.star.tdoc</code> urls
-        (open documents) will be registered and revoked transiently.
+        revoked persistently.
         </p>
-        <p>
-        Document contexts (<code>"vnd.sun.star.pkg:..."</code>,
-        <code>"vnd.sun.star.tdoc:..."</code>) will get a
+        <!-- p>
+        Document contexts (<code>"vnd.sun.star.tdoc:..."</code>) will get a
         <type>XPackageManager</type> object that stores packages
         in the given document and modify the manifest.
-        </p>
+        </p -->
         <p>
-        Context strings other than <code>"user"</code>, <code>"shared"</code>,
-        <code>"vnd.sun.star.tdoc:..."</code> and
-        <code>"vnd.sun.star.pkg:..."</code> will last in an
+        Context strings other than <code>"user"</code>, <code>"shared"</code>
+        <!-- or <code>vnd.sun.star.tdoc</code --> will last in an
         <type scope="com::sun::star::lang">IllegalArgumentException</type>.
         </p>
 
@@ -115,16 +112,11 @@ interface XPackageManagerFactory
                    => persistent storage and registration into installation's
                       shared layer
                </li>
-               <li><code>"vnd.sun.star.tdoc:///4711/uno_packages"</code>
+               <!-- li><code>"vnd.sun.star.tdoc:///4711/uno_packages"</code>
                         (open document)
                    => transient storage in folder uno_packages
                       and transient registration
-               </li>
-               <li><code>"vnd.sun.star.pkg:///x.sxw/uno_packages"</code>
-               (closed document)
-                   => persistent storage in folder uno_packages,
-                      but no registration
-               </li>
+               </li -->
                </ul>
         @return
                <type>XPackageManager</type> object
