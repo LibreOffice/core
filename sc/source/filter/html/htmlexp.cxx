@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: er $ $Date: 2002-04-09 13:26:41 $
+ *  last change: $Author: er $ $Date: 2002-10-02 17:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1001,8 +1001,9 @@ void ScHTMLExport::WriteTables()
 void ScHTMLExport::WriteCell( USHORT nCol, USHORT nRow, USHORT nTab )
 {
     const ScPatternAttr* pAttr = pDoc->GetPattern( nCol, nRow, nTab );
+    const SfxItemSet* pCondItemSet = pDoc->GetCondResult( nCol, nRow, nTab );
 
-    const ScMergeFlagAttr& rMergeFlagAttr = (const ScMergeFlagAttr&) pAttr->GetItem( ATTR_MERGE_FLAG );
+    const ScMergeFlagAttr& rMergeFlagAttr = (const ScMergeFlagAttr&) pAttr->GetItem( ATTR_MERGE_FLAG, pCondItemSet );
     if ( rMergeFlagAttr.IsOverlapped() )
         return ;
 
@@ -1040,7 +1041,7 @@ void ScHTMLExport::WriteCell( USHORT nCol, USHORT nRow, USHORT nTab )
     USHORT nWidthPixel;
     USHORT nHeightPixel;
 
-    const ScMergeAttr& rMergeAttr = (const ScMergeAttr&) pAttr->GetItem( ATTR_MERGE );
+    const ScMergeAttr& rMergeAttr = (const ScMergeAttr&) pAttr->GetItem( ATTR_MERGE, pCondItemSet );
     if ( pGraphEntry || rMergeAttr.IsMerged() )
     {
         USHORT j, n, v;
@@ -1089,15 +1090,15 @@ void ScHTMLExport::WriteCell( USHORT nCol, USHORT nRow, USHORT nTab )
     // Zeilenhoehe
     (((aStrTD += ' ') += sHTML_O_height) += '=') += ByteString::CreateFromInt32( nHeightPixel );
 
-    const SvxFontItem&          rFontItem       = (const SvxFontItem&)      pAttr->GetItem( ATTR_FONT );
-    const SvxFontHeightItem&    rFontHeightItem = (const SvxFontHeightItem&)pAttr->GetItem( ATTR_FONT_HEIGHT );
-    const SvxWeightItem&        rWeightItem     = (const SvxWeightItem&)    pAttr->GetItem( ATTR_FONT_WEIGHT );
-    const SvxPostureItem&       rPostureItem    = (const SvxPostureItem&)   pAttr->GetItem( ATTR_FONT_POSTURE );
-    const SvxUnderlineItem&     rUnderlineItem  = (const SvxUnderlineItem&) pAttr->GetItem( ATTR_FONT_UNDERLINE );
-    const SvxColorItem&         rColorItem      = (const SvxColorItem&)     pAttr->GetItem( ATTR_FONT_COLOR );
-    const SvxHorJustifyItem&    rHorJustifyItem = (const SvxHorJustifyItem&)pAttr->GetItem( ATTR_HOR_JUSTIFY );
-    const SvxVerJustifyItem&    rVerJustifyItem = (const SvxVerJustifyItem&)pAttr->GetItem( ATTR_VER_JUSTIFY );
-    const SvxBrushItem&         rBrushItem      = (const SvxBrushItem&)     pAttr->GetItem( ATTR_BACKGROUND );
+    const SvxFontItem&          rFontItem       = (const SvxFontItem&)      pAttr->GetItem( ATTR_FONT, pCondItemSet );
+    const SvxFontHeightItem&    rFontHeightItem = (const SvxFontHeightItem&)pAttr->GetItem( ATTR_FONT_HEIGHT, pCondItemSet );
+    const SvxWeightItem&        rWeightItem     = (const SvxWeightItem&)    pAttr->GetItem( ATTR_FONT_WEIGHT, pCondItemSet );
+    const SvxPostureItem&       rPostureItem    = (const SvxPostureItem&)   pAttr->GetItem( ATTR_FONT_POSTURE, pCondItemSet );
+    const SvxUnderlineItem&     rUnderlineItem  = (const SvxUnderlineItem&) pAttr->GetItem( ATTR_FONT_UNDERLINE, pCondItemSet );
+    const SvxColorItem&         rColorItem      = (const SvxColorItem&)     pAttr->GetItem( ATTR_FONT_COLOR, pCondItemSet );
+    const SvxHorJustifyItem&    rHorJustifyItem = (const SvxHorJustifyItem&)pAttr->GetItem( ATTR_HOR_JUSTIFY, pCondItemSet );
+    const SvxVerJustifyItem&    rVerJustifyItem = (const SvxVerJustifyItem&)pAttr->GetItem( ATTR_VER_JUSTIFY, pCondItemSet );
+    const SvxBrushItem&         rBrushItem      = (const SvxBrushItem&)     pAttr->GetItem( ATTR_BACKGROUND, pCondItemSet );
     Color aBgColor;
     if ( rBrushItem.GetColor().GetTransparency() == 255 )
         aBgColor = aHTMLStyle.aBackgroundColor;     // #55121# keine ungewollte Hintergrundfarbe
