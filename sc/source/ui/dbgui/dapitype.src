@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:50:31 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ french ] = "S�lection ~active";
         Text[ spanish ] = "Selecci�n a~ctual";
         Text[ italian ] = "Selezione ~attuale";
-        Text[ danish ] = "Aktuel markering";
+        Text[ danish ] = "~Aktuel markering";
         Text[ swedish ] = "Aktuell markering";
         Text[ polish ] = "~Bie��ce zaznaczenie";
         Text[ portuguese_brazilian ] = "~Sele��o atual";
@@ -125,6 +125,8 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ hebrew ] = "~Aktuelle Selektion";
         Text[ hindi ] = "~प्रचलित चुनाव";
         Text[ slovak ] = "~Aktuálny výber";
+        Text[ hungarian ] = "~Aktuális kijelölés";
+        Text[ slovenian ] = "~Trenutni izbor";
     };
     RadioButton BTN_DATABASE
     {
@@ -141,7 +143,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ french ] = "Source de donn�es sous %PRODUCTNAME";
         Text[ spanish ] = "F~uente de datos registrada en %PRODUCTNAME";
         Text[ italian ] = "Sorgente dati registrata ~in %PRODUCTNAME";
-        Text[ danish ] = "Datakilde som er registreret i %PRODUCTNAME";
+        Text[ danish ] = "~Datakilde registreret i %PRODUCTNAME";
         Text[ swedish ] = "Datak�lla som �r registrerad i %PRODUCTNAME";
         Text[ polish ] = "�r�d�o ~danych zarejestrowane w %PRODUCTNAME";
         Text[ portuguese_brazilian ] = "Fonte de ~dados registrada em %PRODUCTNAME";
@@ -159,6 +161,8 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ hebrew ] = "~In %PRODUCTNAME angemeldete Datenquelle";
         Text[ hindi ] = "%PRODUCTNAME में ~ड़ॉटा मूल को रजिस्टर किया है";
         Text[ slovak ] = "Zdroj ~dát registrovaný v %PRODUCTNAME";
+        Text[ hungarian ] = "Az %PRODUCTNAME ~bejegyzett adatforrása";
+        Text[ slovenian ] = "Vir po~datkov registriran v %PRODUCTNAME";
     };
     RadioButton BTN_EXTERNAL
     {
@@ -175,7 +179,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ french ] = "Source/interface ~externe";
         Text[ spanish ] = "~Fuente externa/interfaz";
         Text[ italian ] = "Sorgente ~esterna/interfaccia";
-        Text[ danish ] = "Ekstern kilde/gr�nseflade";
+        Text[ danish ] = "~Ekstern kilde/gr�nseflade";
         Text[ swedish ] = "Extern k�lla/gr�nssnitt";
         Text[ polish ] = "~Zewn�trzne �r�d�o lub zewn�trzny interfejs";
         Text[ portuguese_brazilian ] = "Fonte / Interface ~externa";
@@ -193,6 +197,8 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ hebrew ] = "~Externe Quelle/Schnittstelle";
         Text[ hindi ] = "~बाहरी मूल/इन्टरफेस ";
         Text[ slovak ] = "~Externý zdroj/rozhranie";
+        Text[ hungarian ] = "~Külső forrás vagy illesztő";
+        Text[ slovenian ] = "~Zunanji vir/vmesnik";
     };
     FixedLine FL_FRAME
     {
@@ -226,6 +232,8 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ hebrew ] = "‮מבחר‬l";
         Text[ hindi ] = "चुनाव";
         Text[ slovak ] = "Výber";
+        Text[ hungarian ] = "Kijelölés";
+        Text[ slovenian ] = "Izbor";
     };
     Text[ english_us ] = "Select Source";
     Text[ portuguese ] = "Seleccionar fonte";
@@ -253,6 +261,8 @@ ModalDialog RID_SCDLG_DAPITYPE
     Text[ hebrew ] = "Quelle auswählen";
     Text[ hindi ] = "मूल को चुनो";
     Text[ slovak ] = "Vyberte zdroj";
+    Text[ hungarian ] = "Forrás kijelölése";
+    Text[ slovenian ] = "Izberi vir";
 };
 
 
@@ -302,7 +312,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ french ] = "~Service";
         Text[ spanish ] = "~Servicio";
         Text[ italian ] = "~Servizio";
-        Text[ danish ] = "Service";
+        Text[ danish ] = "~Service";
         Text[ swedish ] = "Service";
         Text[ polish ] = "~Us�uga";
         Text[ portuguese_brazilian ] = "~Servi�o";
@@ -320,6 +330,8 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ hebrew ] = "~Service";
         Text[ hindi ] = "~सेवा";
         Text[ slovak ] = "~Služba";
+        Text[ hungarian ] = "~Szolgáltatás";
+        Text[ slovenian ] = "~Storitev";
     };
     ListBox LB_SERVICE
     {
@@ -343,7 +355,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ french ] = "~Source";
         Text[ spanish ] = "~Fuente";
         Text[ italian ] = "Sorgente";
-        Text[ danish ] = "Kilde";
+        Text[ danish ] = "~Kilde";
         Text[ swedish ] = "K�lla";
         Text[ polish ] = "�r�d�o";
         Text[ portuguese_brazilian ] = "~Origem";
@@ -361,6 +373,8 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ hebrew ] = "~Quelle";
         Text[ hindi ] = "मू~ल";
         Text[ slovak ] = "Zd~roj";
+        Text[ hungarian ] = "F~orrás";
+        Text[ slovenian ] = "~Vir";
     };
     Edit ED_SOURCE
     {
@@ -383,7 +397,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ french ] = "Nom";
         Text[ spanish ] = "~Nombre";
         Text[ italian ] = "~Nome";
-        Text[ danish ] = "Navn";
+        Text[ danish ] = "~Navn";
         Text[ swedish ] = "Namn";
         Text[ polish ] = "~Nazwa";
         Text[ portuguese_brazilian ] = "~Nome";
@@ -401,6 +415,8 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ hebrew ] = "~Name";
         Text[ hindi ] = "~नाम";
         Text[ slovak ] = "~Názov";
+        Text[ hungarian ] = "~Név";
+        Text[ slovenian ] = "~Ime";
     };
     Edit ED_NAME
     {
@@ -423,7 +439,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ french ] = "~Utilisateur";
         Text[ spanish ] = "Usuar~io";
         Text[ italian ] = "Utente";
-        Text[ danish ] = "Bruger";
+        Text[ danish ] = "Brug~er";
         Text[ swedish ] = "Anv�ndare";
         Text[ polish ] = "~U�ytkownik";
         Text[ portuguese_brazilian ] = "~Usu�rio";
@@ -441,6 +457,8 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ hebrew ] = "~Benutzer";
         Text[ hindi ] = "उप~भोक्ता";
         Text[ slovak ] = "Užívat~eľ";
+        Text[ hungarian ] = "~Felhasználó";
+        Text[ slovenian ] = "Up~orabnik";
     };
     Edit ED_USER
     {
@@ -463,7 +481,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ french ] = "~Mot de passe";
         Text[ spanish ] = "~Contrase�a";
         Text[ italian ] = "Password";
-        Text[ danish ] = "Adgangskode";
+        Text[ danish ] = "~Adgangskode";
         Text[ swedish ] = "L�senord";
         Text[ polish ] = "~Has�o";
         Text[ portuguese_brazilian ] = "~Senha";
@@ -481,6 +499,8 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ hebrew ] = "‮סיסמה‬";
         Text[ hindi ] = "~कूटशब्द";
         Text[ slovak ] = "~Heslo";
+        Text[ hungarian ] = "~Jelszó";
+        Text[ slovenian ] = "~Geslo";
     };
     Edit ED_PASSWD
     {
@@ -522,6 +542,8 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
         Text[ slovak ] = "Výber";
+        Text[ hungarian ] = "Kijelölés";
+        Text[ slovenian ] = "Izbor";
     };
     Text[ english_us ] = "External Source";
     Text[ portuguese ] = "Fonte de dados externa";
@@ -531,7 +553,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     Text[ french ] = "Source de donn�es externe";
     Text[ spanish ] = "Fuente de datos externa";
     Text[ italian ] = "Sorgente dati esterna";
-    Text[ danish ] = "Ekstern datakilde";
+    Text[ danish ] = "Ekstern kilde";
     Text[ swedish ] = "Extern datak�lla";
     Text[ polish ] = "Zewn�trzne �r�d�o";
     Text[ portuguese_brazilian ] = "Origem Externa";
@@ -549,6 +571,8 @@ ModalDialog RID_SCDLG_DAPISERVICE
     Text[ hebrew ] = "Externe Datenquelle";
     Text[ hindi ] = "बाहरी मूल";
     Text[ slovak ] = "Externý zdroj";
+    Text[ hungarian ] = "Külső forrás";
+    Text[ slovenian ] = "Zunanji vir";
 };
 
 
@@ -599,7 +623,7 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ french ] = "~Base de donn�es";
         Text[ spanish ] = "~Base de datos";
         Text[ italian ] = "~Database";
-        Text[ danish ] = "Database";
+        Text[ danish ] = "~Database";
         Text[ swedish ] = "Databas";
         Text[ polish ] = "~Baza danych";
         Text[ portuguese_brazilian ] = "~Banco de Dados";
@@ -617,6 +641,8 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ hebrew ] = "~Datenbank";
         Text[ hindi ] = "~लेखासंचय";
         Text[ slovak ] = "~Databáza";
+        Text[ hungarian ] = "~Adatbázis";
+        Text[ slovenian ] = "Zbirka pod~atkov";
     };
     ListBox LB_DATABASE
     {
@@ -641,7 +667,7 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ french ] = "~Source de donn�es";
         Text[ spanish ] = "Fuente de d~atos";
         Text[ italian ] = "Sorgente dati";
-        Text[ danish ] = "Datakilde";
+        Text[ danish ] = "~Datakilde";
         Text[ swedish ] = "Datak�lla";
         Text[ polish ] = "�r�d�o ~danych";
         Text[ portuguese_brazilian ] = "~Fonte de dados";
@@ -659,6 +685,8 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ hebrew ] = "Daten~quelle";
         Text[ hindi ] = "ड़ॉटा मू~ल";
         Text[ slovak ] = "Zdr~oj dát";
+        Text[ hungarian ] = "~Adatforrás";
+        Text[ slovenian ] = "~Vir podatkov";
     };
     ComboBox CB_OBJECT
     {
@@ -683,7 +711,7 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ french ] = "Type";
         Text[ spanish ] = "~Tipo";
         Text[ italian ] = "Tipo";
-        Text[ danish ] = "Type";
+        Text[ danish ] = "~Type";
         Text[ swedish ] = "Typ";
         Text[ polish ] = "~Typ";
         Text[ portuguese_brazilian ] = "~Tipo";
@@ -701,6 +729,8 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "~वर्ग";
         Text[ slovak ] = "~Typ";
+        Text[ hungarian ] = "~Típus";
+        Text[ slovenian ] = "~Vrsta";
     };
     ListBox LB_OBJTYPE
     {
@@ -788,7 +818,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     };
     StringList [ danish ] =
     {
-            < "Tabel" ; Default ; > ;
+            < "Ark" ; Default ; > ;
         < "Foresp�rgsel" ; Default ; > ;
         < "Sql" ; Default ; > ;
         < "Sql [native]" ; Default ; > ;
@@ -905,6 +935,20 @@ ModalDialog RID_SCDLG_DAPIDATA
         < "Sql" ; Default ; > ;
         < "Sql [natívny]" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Munkalap" ; Default ; > ;
+        < "Lekérdezés" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [natív]" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Delovni list" ; Default ; > ;
+        < "Poizvedba" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [Izvirni]" ; Default ; > ;
+    };
     };
 
     FixedLine FL_FRAME
@@ -939,6 +983,8 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
         Text[ slovak ] = "Výber";
+        Text[ hungarian ] = "Kijelölés";
+        Text[ slovenian ] = "Izbor";
     };
     Text[ english_us ] = "Select Data Source";
     Text[ portuguese ] = "Seleccionar fonte de dados";
@@ -966,7 +1012,10 @@ ModalDialog RID_SCDLG_DAPIDATA
     Text[ hebrew ] = "Datenquelle auswählen";
     Text[ hindi ] = "ड़ॉटा मूल चुनो";
     Text[ slovak ] = "Vyber zdroj dát";
+    Text[ hungarian ] = "Adatforrás kiválasztása";
+    Text[ slovenian ] = "Izberi vir podatkov";
 };
+
 
 
 
