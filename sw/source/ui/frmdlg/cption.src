@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:42:55 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:34:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,7 @@ ModalDialog DLG_CAPTION
         Text[ chinese_simplified ] = "±êÇ©ÎÄ(~C)";
         Text[ russian ] = "Òåêñò ïîäïèñè";
         Text[ polish ] = "Tekst etykiety";
-        Text[ japanese ] = "×ÍŞÙ(~C)";
+        Text[ japanese ] = "}•\\”Ô†Ã·½Ä(~C)";
         Text[ chinese_traditional ] = "¼ĞÅÒ¤å(~C)";
         Text[ arabic ] = "äÕ ÇáÊÓãíÉ ÇáÊæÖíÍíÉ";
         Text[ greek ] = "Êåßìåíï åğéãñáöŞò";
