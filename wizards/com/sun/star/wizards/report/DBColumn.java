@@ -290,7 +290,7 @@ public class DBColumn {
         if (bAlignLeft)
         Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", new Integer(ParagraphAdjust.LEFT_value));
 
-        if (CurDBField.FieldType == com.sun.star.sdbc.DataType.BIT){
+        if (CurDBField.FieldType == com.sun.star.sdbc.DataType.BOOLEAN || CurDBField.FieldType == com.sun.star.sdbc.DataType.BIT){
             CharFontName = "StarSymbol";
             Helper.setUnoPropertyValue(xValCellCursor, "CharFontName", CharFontName);
             if (bIsGroupColumn == false)
@@ -316,7 +316,7 @@ public class DBColumn {
     try{
         XPropertyState xPropertyState;
             int FieldType = CurDBField.FieldType;
-        if (FieldType == com.sun.star.sdbc.DataType.BIT){
+        if (FieldType == com.sun.star.sdbc.DataType.BOOLEAN || FieldType == com.sun.star.sdbc.DataType.BIT){
             CharFontName = "StarSymbol";
             PropertyState = com.sun.star.beans.PropertyState.DIRECT_VALUE;
         }
