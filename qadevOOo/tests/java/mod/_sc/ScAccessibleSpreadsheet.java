@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleSpreadsheet.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2004-01-05 18:46:38 $
+ *  last change:$Date: 2005-03-01 20:29:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,13 +91,13 @@ import com.sun.star.uno.XInterface;
  * Test for accessible object of spreadsheet document.<p>
  * Object implements the following interfaces:
  * <ul>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleComponent</code>
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleComponent</code>
  *  </li>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleContext</code>
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleContext</code>
  *  </li>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleSelection
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleSelection
  *  </code></li>
- *  <li><code>drafts::com::sun::star::accessibility::XAccessibleTable</code>
+ *  <li><code>::com::sun::star::accessibility::XAccessibleTable</code>
  *  </li>
  * </ul>
  * @see com.sun.star.accessibility.XAccessibleComponent
