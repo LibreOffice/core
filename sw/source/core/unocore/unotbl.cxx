@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-06 13:38:24 $
+ *  last change: $Author: tl $ $Date: 2002-09-12 09:40:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4068,6 +4068,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
                     sal_Bool bTemp = bFirstColumnAsLabel;
                     aRet.setValue(&bTemp, ::getCppuBooleanType());
                 }
+                break;
                 default:
                 {
                     SfxItemSet aSet(pTblCrsr->GetDoc()->GetAttrPool(),
