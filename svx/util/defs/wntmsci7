@@ -20497,3 +20497,4 @@ _real@8@400cfa00000000000000
 ?queryAggregation@SvxShape@@IAEEABVType@uno@star@sun@com@@AAVAny@3456@@Z
 ?setMaster@SvxShape@@QAEXPAVSvxShapeMaster@@@Z
 ?queryAggregation@SvxOle2Shape@@UAA?AVAny@uno@star@sun@com@@ABVType@3456@@Z
+?setShapeKind@SvxShape@@QAEXK@Z
