@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:59:40 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1201,7 +1201,6 @@ void WinSalFrame::DrawMenuBar()
 // -----------------------------------------------------------------------
 HWND ImplGetParentHwnd( HWND hWnd )
 {
-#ifndef REMOTE_APPSERVER
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if( !pFrame || !pFrame->GetInstance())
         return ::GetParent( hWnd );
@@ -1210,9 +1209,6 @@ HWND ImplGetParentHwnd( HWND hWnd )
         return static_cast<WinSalFrame*>(pRealParent->mpFrame)->mhWnd;
     else
         return ::GetParent( hWnd );
-#else
-    return ::GetParent( hWnd ); // just to get it compiled for remote case, this function is never executed...
-#endif
 
 }
 
