@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUnbufferedStream.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2002-01-28 18:11:53 $
+ *  last change: $Author: mtg $ $Date: 2002-01-29 15:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #ifndef _ENCRYPTED_DATA_HEADER_HXX_
 #include <EncryptedDataHeader.hxx>
 #endif
+#include <algorithm>
 
 
 using namespace com::sun::star::packages::zip::ZipConstants;
@@ -158,7 +159,7 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
     {
         if ( mnHeaderToRead )
         {
-            sal_Int16 nToRead = nRequestedBytes > mnHeaderToRead ? mnHeaderToRead : nRequestedBytes;
+            sal_Int16 nToRead = static_cast < sal_Int16 > ( nRequestedBytes > mnHeaderToRead ? mnHeaderToRead : nRequestedBytes );
             memcpy ( aData.getArray(), maHeader.getConstArray() + maHeader.getLength() - mnHeaderToRead, nToRead );
             mnHeaderToRead -= nToRead;
             if ( mnHeaderToRead == 0 )
@@ -178,11 +179,12 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                     return nRead + nLastRead;
                 }
 
-                sal_Int64 nDiff = mnZipEnd - mnZipCurrent;
+                sal_Int32 nDiff = static_cast < sal_Int32 > ( mnZipEnd - mnZipCurrent );
                 if ( nDiff > 0 )
                 {
                     mxZipSeek->seek ( mnZipCurrent );
-                    sal_Int32 nZipRead = mxZipStream->readBytes ( maCompBuffer, static_cast < sal_Int32 > ( nDiff < nRequestedBytes ? nDiff : nRequestedBytes ) );
+                    sal_Int32 nToRead = std::min ( nDiff, std::max ( nRequestedBytes, 8192L ) );
+                    sal_Int32 nZipRead = mxZipStream->readBytes ( maCompBuffer, nToRead );
                     mnZipCurrent += nZipRead;
                     // maCompBuffer now has the uncompressed data, check if we need to decrypt
                     // before passing to the Inflater
@@ -230,8 +232,11 @@ sal_Int32 SAL_CALL XUnbufferedStream::readSomeBytes( Sequence< sal_Int8 >& aData
 void SAL_CALL XUnbufferedStream::skipBytes( sal_Int32 nBytesToSkip )
         throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
-    Sequence < sal_Int8 > aSequence ( nBytesToSkip );
-    readBytes ( aSequence, nBytesToSkip );
+    if ( nBytesToSkip )
+    {
+        Sequence < sal_Int8 > aSequence ( nBytesToSkip );
+        readBytes ( aSequence, nBytesToSkip );
+    }
 }
 
 sal_Int32 SAL_CALL XUnbufferedStream::available(  )
