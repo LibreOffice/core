@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 10:42:02 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,78 +77,23 @@ ModalDialog DLG_SAVE_AS
     Size = MAP_APPFONT ( 174 , 75 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text = "Speichern unter" ;
-    Text [ ENGLISH ] = "Save as" ;
-    Text [ english_us ] = "Save As" ;
+    Text [ de ] = "Speichern unter" ;
+    Text [ en-US ] = "Save As" ;
 
     FixedText FT_DESCRIPTION
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 174 - 12 , 16 ) ;
-        Text = "Bitte geben Sie einen Namen für das anzulegende Object an:";
-        Text [ english ] = "Please enter the name of the object to be created:";
-        Text [ english_us ] = "Please enter a name for the object to be created:";
-        Text[ portuguese ] = "Indique o nome para o objecto a ser criado:";
-        Text[ russian ] = "Ââåäèòå èìÿ ñîçäàâàåìîãî îáúåêòà:";
-        Text[ greek ] = "Ğáñáêáëş åéóÜãåôå ôï üíïìá ôïõ áíôéêåéìİíïõ ğïõ èá äçìéïõñãçèåß:";
-        Text[ dutch ] = "Vul een naam in voor het object dat u wilt aanmaken:";
-        Text[ french ] = "Saisissez un nom pour l'objet à créer :";
-        Text[ spanish ] = "Introduzca un nombre para el objeto que crear:";
-        Text[ italian ] = "Indicate il nome dell'oggetto da creare:";
-        Text[ danish ] = "Angiv et navn på det objekt, der skal oprettes:";
-        Text[ swedish ] = "Ange ett namn för objektet som ska skapas:";
-        Text[ polish ] = "Podaj nazwê obiektu, który zostanie utworzony:";
-        Text[ portuguese_brazilian ] = "Por favor digite um nome para o objeto a ser criado:";
-        Text[ japanese ] = "æ ¼ç´ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åå‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„:";
-        Text[ korean ] = "ìƒì„±í•˜ë ¤ëŠ” ê°œì²´ì˜ ì´ë¦„ì„ ì…ë ¥í•˜ì‹­ì‹œì˜¤:";
-        Text[ chinese_simplified ] = "è¯·æ‚¨è¾“å…¥ä¸€ä¸ªè¦æ–°å»ºå¯¹è±¡çš„åç§°ï¼š";
-        Text[ chinese_traditional ] = "è«‹æ‚¨è¼¸å…¥ä¸€å€‹è¦æ–°å»ºç‰©ä»¶çš„åç¨±ï¼š";
-        Text[ turkish ] = "Yaratılacak nesne için lütfen bir isim giriniz:";
-        Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÇáßÇÆä ÇáãÑÇÏ ÅäÔÇÄå:";
-        Text[ catalan ] = "Introduïu un nom per a l'objecte que s'ha de crear:";
-        Text[ finnish ] = "Kirjoita luotavan objektin nimi:";
-        Text[ thai ] = "à¸à¸£à¸¸à¸“à¸²à¹ƒà¸ªà¹ˆà¸Šà¸·à¹ˆà¸­à¹ƒà¸«à¹‰à¸à¸±à¸šà¸§à¸±à¸•à¸–à¸¸à¸—à¸µà¹ˆà¸ªà¸£à¹‰à¸²à¸‡à¸‚à¸¶à¹‰à¸™:";
-        Text[ czech ] = "Zadejte, prosÃ­m, nÃ¡zev vytvÃ¡Å™enÃ©ho objektu:";
-        Text[ hebrew ] = "Bitte geben Sie einen Namen fÃ¼r das anzulegende Object an:";
-        Text[ hindi ] = "à¤•à¥ƒà¤ªà¤¯à¤¾ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤°à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤µà¤¸à¥à¤¤à¥ à¤•à¥‡à¤²à¤¿à¤ à¤à¤• à¤¨à¤¾à¤® à¤•à¥‹ à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿ à¤•à¥€à¤œà¤¿à¤:";
-        Text[ slovak ] = "ProsÃ­m zadajte nÃ¡zov vytvÃ¡ranÃ©ho objektu:";
-        Text[ hungarian ] = "Adjon nevet az Ãºj objektumnak:";
-        Text[ slovenian ] = "Vnesite ime predmeta:";
+        Text [ de ] = "Bitte geben Sie einen Namen für das anzulegende Object an:";
+        Text [ en-US ] = "Please enter a name for the object to be created:";
     };
 
     FixedText FT_CATALOG
     {
         Pos = MAP_APPFONT ( 6 , 26 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text = "~Catalog" ;
-        Text[ENGLISH] = "~Catalog" ;
-        Text[ english_us ] = "~Catalog";
-        Text[ portuguese ] = "~Catálogo";
-        Text[ russian ] = "~Êàòàëîã";
-        Text[ greek ] = "ÊáôÜëïãïò";
-        Text[ dutch ] = "~Catalogus";
-        Text[ french ] = "~Catalogue";
-        Text[ spanish ] = "~Catálogo";
-        Text[ italian ] = "~Catalogo";
-        Text[ danish ] = "~Bibliotek";
-        Text[ swedish ] = "~Katalog";
-        Text[ polish ] = "~Katalog";
-        Text[ portuguese_brazilian ] = "~Catálogo";
-        Text[ japanese ] = "ã‚«ã‚¿ãƒ­ã‚°(~C)";
-        Text[ korean ] = "ì¹´íƒˆë¡œê·¸(~C)";
-        Text[ chinese_simplified ] = "åˆ†ç±»(~C)";
-        Text[ chinese_traditional ] = "åˆ†é¡(~C)";
-        Text[ turkish ] = "~Katalog";
-        Text[ arabic ] = "ßÊÇáæÌ";
-        Text[ catalan ] = "~Catàleg";
-        Text[ finnish ] = "~Luettelo";
-        Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¹à¸ªà¸”à¸‡~à¸£à¸²à¸¢à¸à¸²à¸£";
-        Text[ czech ] = "Katalog";
-        Text[ hebrew ] = "â€®××‘×—×¨â€¬";
-        Text[ hindi ] = "~à¤¸à¥‚à¤šà¥€à¤ªà¤¤à¥à¤°";
-        Text[ slovak ] = "~KatalÃ³g";
-        Text[ hungarian ] = "~KatalÃ³gus";
-        Text[ slovenian ] = "~Katalog";
+        Text [ de ] = "~Catalog" ;
+        Text [ en-US ] = "~Catalog";
     };
     ComboBox ET_CATALOG
     {
@@ -164,35 +109,8 @@ ModalDialog DLG_SAVE_AS
     {
         Pos = MAP_APPFONT ( 6 , 43 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text = "~Schema" ;
-        Text[ENGLISH] = "~Schema" ;
-        Text[ english_us ] = "~Schema";
-        Text[ portuguese ] = "~Esquema";
-        Text[ russian ] = "~Ñõåìà";
-        Text[ greek ] = "~Ó÷Şìá";
-        Text[ dutch ] = "~Schema";
-        Text[ french ] = "~Schéma";
-        Text[ spanish ] = "~Esquema";
-        Text[ italian ] = "~Schema";
-        Text[ danish ] = "~Skema";
-        Text[ swedish ] = "~Schema";
-        Text[ polish ] = "~Schemat";
-        Text[ portuguese_brazilian ] = "~Esquema";
-        Text[ japanese ] = "ã‚¹ã‚­ãƒ¼ãƒ(~S)";
-        Text[ korean ] = "êµ¬ì„±í‘œ(~S)";
-        Text[ chinese_simplified ] = "ç•¥å›¾(~S)";
-        Text[ chinese_traditional ] = "ç•¥åœ–(~S)";
-        Text[ turkish ] = "~Şema";
-        Text[ arabic ] = "äãæĞÌ";
-        Text[ catalan ] = "~Esquema";
-        Text[ finnish ] = "~Rakenne";
-        Text[ thai ] = "à¹~à¸šà¸šà¹à¸œà¸™";
-        Text[ czech ] = "SchÃ©ma";
-        Text[ hebrew ] = "~Schema";
-        Text[ hindi ] = "~à¤¸à¥à¤•à¥€à¤®à¤¾";
-        Text[ slovak ] = "~SchÃ©ma";
-        Text[ hungarian ] = "~SÃ©ma";
-        Text[ slovenian ] = "~Shema";
+        Text [ de ] = "~Schema" ;
+        Text [ en-US ] = "~Schema";
     };
     ComboBox ET_SCHEMA
     {
@@ -240,288 +158,44 @@ ModalDialog DLG_SAVE_AS
      // String Resourcen ------------------------------------------------------------------
     String STR_TBL_LABEL
     {
-        Text = "~Name der Tabelle" ;
-        Text [ ENGLISH ] = "Table name" ;
-        Text [ english_us ] = "~Table Name" ;
-        Text [ portuguese ] = "~Nome da tabela" ;
-        Text [ portuguese_brazilian ] = "~Nome da tabela" ;
-        Text [ swedish ] = "~Namn på tabell" ;
-        Text [ danish ] = "~Tabelnavn" ;
-        Text [ italian ] = "~Nome della tabella" ;
-        Text [ spanish ] = "~Nombre de la tabla" ;
-        Text [ french ] = "~Nom de la table" ;
-        Text [ dutch ] = "~Naam tabel" ;
-        Text[ chinese_simplified ] = "è¡¨æ ¼åç§°(~T)";
-        Text[ russian ] = "Èìÿ òàáëèöû";
-        Text[ polish ] = "Nazwa ~tabeli";
-        Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«å(~T)";
-        Text[ chinese_traditional ] = "è¡¨æ ¼åç¨±(~T)";
-        Text[ arabic ] = "ÇÓã ÇáÌÏæá";
-        Text[ greek ] = "¼íï~ìá ğßíáêá";
-        Text[ korean ] = "í…Œì´ë¸” ì´ë¦„(~T)";
-        Text[ turkish ] = "~Tablo İsmi";
-        Text[ catalan ] = "Nom de la ~taula";
-        Text[ finnish ] = "Ta~ulukon nimi";
-        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­~à¸•à¸²à¸£à¸²à¸‡";
-        Text[ czech ] = "NÃ¡zev tabulky";
-        Text[ hebrew ] = "~Name der Tabelle";
-        Text[ hindi ] = "~à¤¸à¤¾à¤°à¤£à¥€ à¤¨à¤¾à¤®";
-        Text[ slovak ] = "NÃ¡zov ~tabuÄ¾ky";
-        Text[ hungarian ] = "~TÃ¡bla neve";
-        Text[ slovenian ] = "Ime ~tabele";
+        Text [ de ] = "~Name der Tabelle" ;
+        Text [ en-US ] = "~Table Name" ;
     };
     String STR_VW_LABEL
     {
-        Text = "~Name der Tabellensicht" ;
-        Text [ ENGLISH ] = "View name" ;
-        Text [ english_us ] = "~Name of table view" ;
-        Text [ portuguese ] = "Nome da ~vista de tabela" ;
-        Text [ portuguese_brazilian ] = "Nome da ~vista da tabela" ;
-        Text [ swedish ] = "~Namn på tabellvy" ;
-        Text [ danish ] = "~Navn på tabelvisning" ;
-        Text [ italian ] = "Nome della ~vista tabella" ;
-        Text [ spanish ] = "Nombre del ~modo tabla" ;
-        Text [ french ] = "~Nom de la vue" ;
-        Text [ dutch ] = "~Naam tabelmodus" ;
-        Text[ chinese_simplified ] = "è¡¨æ ¼è§†å›¾åç§°(~N)";
-        Text[ russian ] = "Èìÿ âèäà òàáëèöû";
-        Text[ polish ] = "~Nazwa widoku tabeli";
-        Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«ãƒ“ãƒ¥ãƒ¼ã®åå‰(~N)";
-        Text[ chinese_traditional ] = "è¡¨æ ¼æª¢è¦–åç¨±(~N)";
-        Text[ arabic ] = "ÇÓã ÚÑÖ ÇáÌÏæá";
-        Text[ greek ] = "¼íï~ìá ğñïâïëŞò ğßíáêá";
-        Text[ korean ] = "í…Œì´ë¸” ë³´ê¸° ì´ë¦„(~N)";
-        Text[ turkish ] = "Tablo Görünümün ~İsmi";
-        Text[ catalan ] = "~Nom de la vista de la taula";
-        Text[ finnish ] = "Taulu~näkymän nimi";
-        Text[ thai ] = "~à¸Šà¸·à¹ˆà¸­à¸¡à¸¸à¸¡à¸¡à¸­à¸‡à¸•à¸²à¸£à¸²à¸‡";
-        Text[ czech ] = "NÃ¡zev pohledu";
-        Text[ hebrew ] = "~Name der Tabellensicht";
-        Text[ hindi ] = "~à¤¸à¤¾à¤°à¤£à¥€ à¤¦à¥ƒà¤¶à¥à¤¯ à¤•à¤¾ à¤¨à¤¾à¤®";
-        Text[ slovak ] = "~NÃ¡zov pohÄ¾adu na tabuÄ¾ku";
-        Text[ hungarian ] = "TÃ¡~blanÃ©zet neve";
-        Text[ slovenian ] = "~Ime pogleda tabele";
+        Text [ de ] = "~Name der Tabellensicht" ;
+        Text [ en-US ] = "~Name of table view" ;
     };
     String STR_QRY_LABEL
     {
-        Text = "~Name der Abfrage" ;
-        Text [ ENGLISH ] = "Query name" ;
-        Text [ english_us ] = "~Query name" ;
-        Text [ portuguese ] = "Nome da ~consulta" ;
-        Text [ portuguese_brazilian ] = "Nome da ~consulta" ;
-        Text [ swedish ] = "~Namn på sökning" ;
-        Text [ danish ] = "~Navn på forespørgsel" ;
-        Text [ italian ] = "Nome della ~ricerca" ;
-        Text [ spanish ] = "Nombre de la ~consulta" ;
-        Text [ french ] = "~Nom de la requête" ;
-        Text [ dutch ] = "~Naam query" ;
-        Text[ chinese_simplified ] = "æŸ¥è¯¢åç§°(~Q)";
-        Text[ russian ] = "Èìÿ çàïğîñà";
-        Text[ polish ] = "Nazwa ~kwerendy";
-        Text[ japanese ] = "ã‚¯ã‚¨ãƒªãƒ¼å(~Q)";
-        Text[ chinese_traditional ] = "æŸ¥è©¢åç¨±(~Q)";
-        Text[ arabic ] = "ÇÓã ÇáÇÓÊİÓÇÑ";
-        Text[ greek ] = "¼íï~ìá åñùôŞìáôïò";
-        Text[ korean ] = "ì¿¼ë¦¬ ì´ë¦„(~Q)";
-        Text[ turkish ] = "~Sorgu İsmi";
-        Text[ catalan ] = "Nom de la ~consulta";
-        Text[ finnish ] = "K~yselyn nimi";
-        Text[ thai ] = "~à¸Šà¸·à¹ˆà¸­à¹à¸šà¸šà¸ªà¸­à¸šà¸–à¸²à¸¡";
-        Text[ czech ] = "NÃ¡zev dotazu";
-        Text[ hebrew ] = "~Name der Abfrage";
-        Text[ hindi ] = "~à¤œà¤¾à¤¨à¤•à¤¾à¤°à¥€ à¤¨à¤¾à¤®";
-        Text[ slovak ] = "NÃ¡zov ~dotazu";
-        Text[ hungarian ] = "~LekÃ©rdezÃ©s neve";
-        Text[ slovenian ] = "Ime poiz~vedbe";
+        Text [ de ] = "~Name der Abfrage" ;
+        Text [ en-US ] = "~Query name" ;
     };
     String STR_FRM_LABEL
     {
-        Text = "~Name des Formulars" ;
-        Text [ ENGLISH ] = "Form name" ;
-        Text [ english_us ] = "F~orm name" ;
-        Text [ portuguese ] = "Nome do ~formulário" ;
-        Text [ portuguese_brazilian ] = "Nome do ~formulário" ;
-        Text [ swedish ] = "~Namn på formulär" ;
-        Text [ danish ] = "~Navn på formular" ;
-        Text [ italian ] = "Nome del ~formulario" ;
-        Text [ spanish ] = "Nombre del form~ulario" ;
-        Text [ french ] = "~Nom du formulaire" ;
-        Text [ dutch ] = "~Naam formulier" ;
-        Text[ chinese_simplified ] = "è¡¨å•åç§°(~O)";
-        Text[ russian ] = "Èìÿ ôîğìû";
-        Text[ polish ] = "Nazwa f~ormularza";
-        Text[ japanese ] = "ãƒ•ã‚©ãƒ¼ãƒ å(~O)";
-        Text[ chinese_traditional ] = "è¡¨å–®åç¨±(~O)";
-        Text[ arabic ] = "ÇÓã ÇáÇÓÊãÇÑÉ";
-        Text[ greek ] = "¼íï~ìá öüñìáò";
-        Text[ korean ] = "ì–‘ì‹ ì´ë¦„(~O)";
-        Text[ turkish ] = "F~orm ismi";
-        Text[ catalan ] = "Nom del f~ormulari";
-        Text[ finnish ] = "L~omakkeen nimi";
-        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹~à¸šà¸šà¸Ÿà¸­à¸£à¹Œà¸¡";
-        Text[ czech ] = "NÃ¡zev formulÃ¡Å™e";
-        Text[ hebrew ] = "~Name des Formulars";
-        Text[ hindi ] = "~à¤«à¤¼à¥‰à¤°à¥à¤® à¤•à¤¾ à¤¨à¤¾à¤®";
-        Text[ slovak ] = "NÃ¡zov f~ormulÃ¡ra";
-        Text[ hungarian ] = "~Å°rlap neve";
-        Text[ slovenian ] = "Ime ~obrazca";
+        Text [ de ] = "~Name des Formulars" ;
+        Text [ en-US ] = "F~orm name" ;
     };
     String STR_RPT_LABEL
     {
-        Text = "~Name des Berichts" ;
-        Text [ ENGLISH ] = "Report name" ;
-        Text [ english_us ] = "~Report name" ;
-        Text [ portuguese ] = "Nome do ~relatório" ;
-        Text [ portuguese_brazilian ] = "Nome do ~relatório" ;
-        Text [ swedish ] = "~Namn på rapport" ;
-        Text [ danish ] = "~Navn på rapport" ;
-        Text [ italian ] = "Nome del ra~pporto" ;
-        Text [ spanish ] = "Nombre del inform~e" ;
-        Text [ french ] = "~Nom de l'état" ;
-        Text [ dutch ] = "~Naam rapport" ;
-        Text[ chinese_simplified ] = "æŠ¥è¡¨åç§°(~R)";
-        Text[ russian ] = "Èìÿ îò÷åòà";
-        Text[ polish ] = "Nazwa ~raportu";
-        Text[ japanese ] = "ãƒ¬ãƒãƒ¼ãƒˆå(~R)";
-        Text[ chinese_traditional ] = "å ±è¡¨åç¨±(~R)";
-        Text[ arabic ] = "ÇÓã ÇáÊŞÑíÑ";
-        Text[ greek ] = "¼í~oìá áíáöïñÜò";
-        Text[ korean ] = "ë³´ê³ ì„œ ì´ë¦„(~R)";
-        Text[ turkish ] = "~Rapor ismi";
-        Text[ catalan ] = "Nom de l'~informe";
-        Text[ finnish ] = "R~aportin nimi";
-        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­~à¸£à¸²à¸¢à¸‡à¸²à¸™";
-        Text[ czech ] = "NÃ¡zev sestavy";
-        Text[ hebrew ] = "~Name des Berichts";
-        Text[ hindi ] = "~à¤°à¤¿à¤ªà¥‹à¤°à¥à¤Ÿ à¤¨à¤¾à¤®";
-        Text[ slovak ] = "NÃ¡zov sp~rÃ¡vy";
-        Text[ hungarian ] = "~JelentÃ©s neve";
-        Text[ slovenian ] = "Ime po~roÄila";
+        Text [ de ] = "~Name des Berichts" ;
+        Text [ en-US ] = "~Report name" ;
     };
     String STR_OBJECT_EXISTS_ALREADY
     {
-        Text = "Der Name '$#$' existiert bereits.\nBitte geben Sie einen neuen Namen an." ;
-        Text [ ENGLISH ] = "The name '$#$' does already exist.\nPlease enter a new name." ;
-        Text [ english_us ] = "The name '$#$' already exists.\nPlease enter another name." ;
-        Text[ language_user1 ] = " ";
-        Text[ portuguese ] = "O nome '$name$:  $' já existe.\nIndique outro.";
-        Text[ russian ] = "Èìÿ '$name$:  $' óæå ñóùåñòâóåò.\nÂâåäèòå äğóãîå èìÿ.";
-        Text[ greek ] = "Ôï üíïìá '$#$' õğÜñ÷åé Şäç.\nĞáñáêáëş åéóÜãåôå İíá íİï üíïìá.";
-        Text[ dutch ] = "De naam '$Name: not supported by cvs2svn $' bestaat reeds.\nTyp een nieuwe naam.";
-        Text[ french ] = "Le nom '$#$' existe déjà.\nSpécifiez-en un autre !";
-        Text[ spanish ] = "El nombre '$#$' ya existe.\nIntroduzca otro.";
-        Text[ italian ] = "Il nome '$name$:  $' esiste già.\nSceglietene un altro.";
-        Text[ danish ] = "Navnet '$#$' findes allerede.\nAngiv et andet navn.";
-        Text[ swedish ] = "Namnet '$#$' finns redan.\nAnge ett annat namn.";
-        Text[ polish ] = "Nazwa '$name$:  $' ju¿ istnieje.\nWpisz inn¹ nazwê.";
-        Text[ portuguese_brazilian ] = "O nome \"$name$:  $\" já existe.\nPor favor digite outro nome.";
-        Text[ japanese ] = "'$name$:  $' ã®åå‰ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚\næ–°ã—ã„åå‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚";
-        Text[ korean ] = "'$#$' ì´ë¦„ì´ ì´ë¯¸ ìˆìŠµë‹ˆë‹¤.\në‹¤ë¥¸ ì´ë¦„ì„ ì…ë ¥í•´ì£¼ì‹­ì‹œì˜¤.";
-        Text[ chinese_simplified ] = "è¿™ä¸ªåç§° '$#$' å·²ç»å­˜åœ¨ã€‚\nè¯·è¾“å…¥å…¶ä»–åç§°ã€‚";
-        Text[ chinese_traditional ] = "åç¨± '$#$' å·²ç¶“å­˜åœ¨ã€‚\nè«‹è¼¸å…¥å¦ä¸€å€‹åç¨±ã€‚";
-        Text[ turkish ] = "'$#$' halihazırda mevcut. \nLütfen başka bir isim giriniz.";
-        Text[ arabic ] = "ÇáÇÓã'$name$:  $' ãæÌæÏ ÈÇáİÚá.\nÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÌÏíÏ.";
-        Text[ catalan ] = "El nom '$name$:  $' ja existeix.\nIntroduïu-ne un altre.";
-        Text[ finnish ] = "Nimi '$name$:  $' on jo olemassa.\nAnna toinen nimi.";
-        Text[ thai ] = "à¸¡à¸µà¸Šà¸·à¹ˆà¸­ '$name$:  $' à¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§\nà¸à¸£à¸¸à¸“à¸²à¹ƒà¸ªà¹ˆà¸Šà¸·à¹ˆà¸­à¸­à¸·à¹ˆà¸™";
-        Text[ czech ] = "NÃ¡zev '$Name: not supported by cvs2svn $' jiÅ¾ existuje.\nZadejte, prosÃ­m, jinÃ½ nÃ¡zev.";
-        Text[ hebrew ] = "Der Name '$name$:  $' existiert bereits.\nBitte geben Sie einen neuen Namen an.";
-        Text[ hindi ] = "'$name$:  $' à¤¨à¤¾à¤® à¤ªà¤¹à¤¿à¤²à¥‡ à¤¸à¥‡ à¤¹à¥€ à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ à¤®à¥‡à¤‚ à¤¹à¥ˆ à¥¤\nà¤•à¥ƒà¤ªà¤¯à¤¾ à¤¦à¥‚à¤¸à¤°à¤¾ à¤¨à¤¾à¤® à¤•à¥‹ à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿ à¤•à¥€à¤œà¤¿à¤ à¥¤";
-        Text[ slovak ] = "NÃ¡zov '$Name: not supported by cvs2svn $' uÅ¾ existuje\nProsÃ­m zadajte inÃ½ nÃ¡zov.";
-        Text[ hungarian ] = "A nÃ©v mÃ¡r lÃ©tezik: '$#$'.\nAdjon meg egy mÃ¡sik nevet.";
-        Text[ slovenian ] = "Ime '$#$' Å¾e obstaja.\nVnesite drugo ime.";
+        Text [ de ] = "Der Name '$#$' existiert bereits.\nBitte geben Sie einen neuen Namen an." ;
+        Text [ en-US ] = "The name '$#$' already exists.\nPlease enter another name." ;
     };
     String STR_OBJECT_EXISTS_ALREADY_OVERWRITE
     {
-        Text = "Der Name '$#$' existiert bereits.\nWollen Sie es überschreiben?" ;
-        Text [ ENGLISH ] = "The name '$#$' does already exist.\nDo you want to overwrite it?" ;
-        Text [ english_us ] = "The name '$#$' already exists.\nDo you want to overwrite it?" ;
-        Text[ language_user1 ] = " ";
-        Text[ portuguese ] = "O nome '$name$:  $' já existe.\nSubstituir?";
-        Text[ russian ] = "Èìÿ '$name$:  $' óæå ñóùåñòâóåò.\nÇàìåíèòü?";
-        Text[ greek ] = "Ôï üíïìá '$#$' õğÜñ÷åé Şäç.\nÈİëåôå íá áíôéêáôáóôáèåß;";
-        Text[ dutch ] = "De naam '$Name: not supported by cvs2svn $' bestaat reeds.\nWilt u deze overschrijven?";
-        Text[ french ] = "Le nom '$#$' existe déjà.\nVoulez-vous l'écraser ?";
-        Text[ spanish ] = "El nombre '$#$' ya existe.\n¿Desea sobrescribirlo?";
-        Text[ italian ] = "Il nome '$name$:  $' esiste già.\nVolete soprascriverlo?";
-        Text[ danish ] = "Navnet '$#$' findes allerede.\nVil du overskrive det?";
-        Text[ swedish ] = "Namnet '$#$' finns redan.\nVill du skriva över det?";
-        Text[ polish ] = "Nazwa '$name$:  $' ju¿ istnieje.\nCzy j¹ zast¹piæ?";
-        Text[ portuguese_brazilian ] = "O nome \"$name$:  $\" já existe.\nDeseja substituí-lo?";
-        Text[ japanese ] = "'$name$:  $' ã®åå‰ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚\nä¸Šæ›¸ãã—ã¾ã™ã‹ã€‚";
-        Text[ korean ] = "ì´ë¦„ '$#$'ì´(ê°€) ì´ë¯¸ ìˆìŠµë‹ˆë‹¤.\në®ì–´ì“°ì‹œê² ìŠµë‹ˆê¹Œ?";
-        Text[ chinese_simplified ] = "è¿™ä¸ªåç§° '$#$' å·²ç»å­˜åœ¨ã€‚\nè¦è¦†ç›–å—ï¼Ÿ";
-        Text[ chinese_traditional ] = "åç¨± '$#$' å·²ç¶“å­˜åœ¨ã€‚\nè¦è¦†å¯«ï¼Ÿ";
-        Text[ turkish ] = "'$#$' halihazırda mevcut. \nÜzerine yazmak istermisiniz?";
-        Text[ arabic ] = "ÇáÇÓã '$name$:  $' ãæÌæÏ ÈÇáİÚá.\nåá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
-        Text[ catalan ] = "El nom '$name$:  $' ja existeix.\nVoleu sobreescriure'l?";
-        Text[ finnish ] = "Nimi '$name$:  $' on jo olemassa.\nHaluatko korvata sen?";
-        Text[ thai ] = "The name '$name$:  $' already exists.\nDo you want to overwrite it?";
-        Text[ czech ] = "NÃ¡zev '$Name: not supported by cvs2svn $' jiÅ¾ existuje.\nChcete jej pÅ™epsat?";
-        Text[ hebrew ] = "Der Name '$name$:  $' existiert bereits.\nWollen Sie es Ã¼berschreiben?";
-        Text[ hindi ] = "'$name$:  $' à¤¨à¤¾à¤® à¤ªà¤¹à¤¿à¤²à¥‡ à¤¸à¥‡ à¤¹à¥€ à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ à¤®à¥‡à¤‚ à¤¹à¥ˆ à¥¤\nà¤†à¤ª à¤“à¤µà¤°à¤°à¤‡à¤Ÿà¥ à¤•à¤°à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ ?";
-        Text[ slovak ] = "NÃ¡zov '$Name: not supported by cvs2svn $' uÅ¾ existuje\nChcete ho prepÃ­saÅ¥?";
-        Text[ hungarian ] = "A nÃ©v mÃ¡r lÃ©tezik: '$#$'.\nFelÃ¼lÃ­rja?";
-        Text[ slovenian ] = "Ime '$#$' Å¾e obstaja.\nAli ga Å¾elite prepisati?";
+        Text [ de ] = "Der Name '$#$' existiert bereits.\nWollen Sie es überschreiben?" ;
+        Text [ en-US ] = "The name '$#$' already exists.\nDo you want to overwrite it?" ;
     };
     String STR_TITLE_PASTE_AS
     {
-        Text = "Einfügen als";
-        Text [ english ] = "Paste as";
-        Text [ english_us ] = "Insert as";
-        Text[ portuguese ] = "Inserir como";
-        Text[ russian ] = "Ñîõğàíèòü êàê";
-        Text[ greek ] = "ÅéóáãùãŞ ùò";
-        Text[ dutch ] = "Invoegen als";
-        Text[ french ] = "Insérer comme";
-        Text[ spanish ] = "Pegar como";
-        Text[ italian ] = "Incolla come";
-        Text[ danish ] = "Indsæt som";
-        Text[ swedish ] = "Klistra in som";
-        Text[ polish ] = "Wstaw jako";
-        Text[ portuguese_brazilian ] = "Inserir como";
-        Text[ japanese ] = "åå‰ã‚’ä»˜ã‘ã¦æŒ¿å…¥";
-        Text[ korean ] = "ì‚½ì… í˜•ì‹";
-        Text[ chinese_simplified ] = "æ’å…¥æ–¹å¼ä¸º";
-        Text[ chinese_traditional ] = "æ’å…¥æ–¹å¼ç‚º";
-        Text[ turkish ] = "Farklı ekle";
-        Text[ arabic ] = "ÅÏÑÇÌ ßÜ";
-        Text[ catalan ] = "Insereix com a";
-        Text[ finnish ] = "Lisää nimellä";
-        Text[ thai ] = "à¹à¸—à¸£à¸à¹€à¸›à¹‡à¸™";
-        Text[ czech ] = "VloÅ¾it jako";
-        Text[ hebrew ] = "EinfÃ¼gen als";
-        Text[ hindi ] = "à¤œà¥‹à¤¡à¤¼à¥‹ à¤œà¥ˆà¤¸à¥‡";
-        Text[ slovak ] = "VloÅ¾iÅ¥ ako";
-        Text[ hungarian ] = "BeszÃºrÃ¡s mÃ¡skÃ©nt";
-        Text[ slovenian ] = "Vstavi kot";
+        Text [ de ] = "Einfügen als";
+        Text [ en-US ] = "Insert as";
     };
-    Text [ portuguese_brazilian ] = "Salvar como" ;
-    Text [ swedish ] = "Spara som" ;
-    Text [ danish ] = "Gem som" ;
-    Text [ italian ] = "Salva con nome" ;
-    Text [ spanish ] = "Guardar como" ;
-    Text [ french ] = "Enregistrer sous" ;
-    Text [ dutch ] = "Opslaan als" ;
-    Text [ portuguese ] = "Guardar como" ;
-    Text[ chinese_simplified ] = "å¦å­˜ä¸º";
-    Text[ russian ] = "Ñîõğàíèòü êàê";
-    Text[ polish ] = "Zapisz jako";
-    Text[ japanese ] = "åå‰ã‚’ä»˜ã‘ã¦ä¿å­˜";
-    Text[ chinese_traditional ] = "å¦å­˜æ–°æª”";
-    Text[ arabic ] = "ÍİÙ ÈÇÓã";
-    Text[ greek ] = "ÁğïèŞêåõóç ùò";
-    Text[ korean ] = "ë‹¤ë¥¸ ì´ë¦„ìœ¼ë¡œ ì €ì¥";
-    Text[ turkish ] = "Farklı kaydet";
-    Text[ catalan ] = "Anomena i desa";
-    Text[ finnish ] = "Tallenna nimellä";
-    Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¹€à¸›à¹‡à¸™";
-    Text[ czech ] = "UloÅ¾it jako";
-    Text[ hebrew ] = "â€®×©××™×¨×” ×‘×©×â€¬";
-    Text[ hindi ] = "à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹ à¤œà¥ˆà¤¸à¥‡";
-    Text[ slovak ] = "UloÅ¾iÅ¥ ako";
-    Text[ hungarian ] = "MentÃ©s mÃ¡skÃ©nt";
-    Text[ slovenian ] = "Shrani kot";
 };
 
 
