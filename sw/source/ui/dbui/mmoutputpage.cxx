@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmoutputpage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:39:56 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:27:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
+#ifndef _SFX_DINFDLG_HXX
+#include <sfx2/dinfdlg.hxx>
+#endif
 #ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
 #endif
@@ -147,11 +150,17 @@
 #ifndef _MAILMERGEGREETINGSPAGE_HXX
 #include <mmgreetingspage.hxx>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
+#include <com/sun/star/frame/XStorable.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_XCOLUMN_HPP_
 #include <com/sun/star/sdb/XColumn.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 #ifndef _BASEDLGS_HXX
 #include <sfx2/basedlgs.hxx>
@@ -182,6 +191,7 @@ using namespace svt;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+#define C2U(cChar) ::rtl::OUString::createFromAscii(cChar)
 /*-- 01.07.2004 16:47:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -479,6 +489,23 @@ SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
 
     m_aCopyToPB.SetClickHdl(LINK(this, SwMailMergeOutputPage, CopyToHdl_Impl));
 
+}
+/*-- 02.04.2004 13:15:44---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwMailMergeOutputPage::~SwMailMergeOutputPage()
+{
+    USHORT nEntryCount = m_aPrinterLB.GetEntryCount();
+    for ( USHORT i = 0; i < nEntryCount; i++ )
+        delete (QueueInfo*)m_aPrinterLB.GetEntryData( i );
+    delete m_pTempPrinter;
+    delete m_pDocumentPrinterCopy;
+}
+/*-- 31.01.2005 08:38:14---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwMailMergeOutputPage::ActivatePage()
+{
     //fill printer ListBox
     USHORT nCount = Printer::GetQueueCount();
     if ( nCount )
@@ -504,6 +531,7 @@ SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
         m_pDocumentPrinterCopy = pTargetView->GetWrtShell().GetPrt( TRUE )->Clone();
     }
     m_aPrinterLB.SelectEntry( rConfigItem.GetSelectedPrinter() );
+
     SwView* pSourceView = rConfigItem.GetSourceView();
     DBG_ASSERT(pSourceView, "no source view exists")
     if(pSourceView)
@@ -519,18 +547,6 @@ SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
     if(!rConfigItem.IsMailAvailable())
         m_aSendMailRB.Enable(sal_False);
 }
-/*-- 02.04.2004 13:15:44---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-SwMailMergeOutputPage::~SwMailMergeOutputPage()
-{
-    USHORT nEntryCount = m_aPrinterLB.GetEntryCount();
-    for ( USHORT i = 0; i < nEntryCount; i++ )
-        delete (QueueInfo*)m_aPrinterLB.GetEntryData( i );
-    delete m_pTempPrinter;
-    delete m_pDocumentPrinterCopy;
-}
-
 /*-- 05.07.2004 13:54:11---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -771,7 +787,17 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
 
     if(m_aSaveAsOneRB.IsChecked())
     {
-        pTargetView->GetViewFrame()->GetDispatcher()->Execute(SID_SAVEDOC);
+        String sFilter;
+        String sPath = SwMailMergeHelper::CallSaveAsDialog(sFilter);
+        if(!sPath.Len())
+            return 0;
+        uno::Sequence< beans::PropertyValue > aValues(1);
+        beans::PropertyValue* pValues = aValues.getArray();
+        pValues[0].Name = C2U("FilterName");
+        pValues[0].Value <<= ::rtl::OUString(sFilter);
+
+        uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
+        xStore->storeToURL( sPath, aValues );
     }
     else
     {
@@ -796,14 +822,17 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
         String sTargetTempURL = URIHelper::SmartRel2Abs(
             INetURLObject(), utl::TempFile::CreateTempName(),
             URIHelper::GetMaybeFileHdl());
-        SfxStringItem aURL( SID_FILE_NAME, sTargetTempURL );
         const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
                 String::CreateFromAscii( GetFILTER_XML() ),
                 SwDocShell::Factory().GetFilterContainer() );
 
-        SfxStringItem aFilterName( SID_FILTER_NAME, pSfxFlt->GetFilterName());
-        pTargetView->GetViewFrame()->GetDispatcher()->Execute(
-                            SID_EXPORTDOC, SFX_CALLMODE_SYNCHRON, &aURL, &aFilterName, 0);
+        uno::Sequence< beans::PropertyValue > aValues(1);
+        beans::PropertyValue* pValues = aValues.getArray();
+        pValues[0].Name = C2U("FilterName");
+        pValues[0].Value <<= ::rtl::OUString(pSfxFlt->GetFilterName());
+
+        uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
+        xStore->storeToURL( sTargetTempURL, aValues   );
 
         for(sal_uInt32 nDoc = nBegin; nDoc < nEnd; ++nDoc)
         {
@@ -840,8 +869,8 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             String sCounter('_');
             sCounter += String::CreateFromInt32(nDoc);
             sOutPath.Insert(sCounter, sPath.Len() - sExtension.Len() - 1);
-            SfxStringItem aName(SID_FILE_NAME, sOutPath);
-            SfxStringItem aFilter(SID_FILTER_NAME, sFilter);
+            //SfxStringItem aName(SID_FILE_NAME, sOutPath);
+            //SfxStringItem aFilter(SID_FILTER_NAME, sFilter);
 
             const SfxBoolItem* pBool = 0;
             while(true)
@@ -849,14 +878,27 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
                 //time for other slots is needed
                 for(sal_Int16 r = 0; r < 10; ++r)
                     Application::Reschedule();
-                pBool = (const SfxBoolItem*)
-                        pTempFrame->GetDispatcher()->Execute(
-                                SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, &aName, &aFilter, 0L );
-                if(!pBool || !pBool->GetValue())
+                bool bFailed = false;
+                try
                 {
-                    SwSaveWarningBox_Impl aWarning( pButton, aName.GetValue() );
+                    uno::Sequence< beans::PropertyValue > aValues(1);
+                    beans::PropertyValue* pValues = aValues.getArray();
+                    pValues[0].Name = C2U("FilterName");
+                    pValues[0].Value <<= ::rtl::OUString(sFilter);
+
+                    uno::Reference< frame::XStorable > xStore( xTempDocShell->GetModel(), uno::UNO_QUERY);
+                    xStore->storeToURL( sOutPath, aValues   );
+                }
+                catch( const uno::Exception& )
+                {
+                    bFailed = true;
+                }
+
+                if(bFailed)
+                {
+                    SwSaveWarningBox_Impl aWarning( pButton, sOutPath );
                     if(RET_OK == aWarning.Execute())
-                        aName.SetValue(aWarning.GetFileName());
+                        sOutPath = aWarning.GetFileName();
                     else
                     {
                         xTempDocShell->DoClose();
@@ -1169,18 +1211,26 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     String sTargetTempURL = URIHelper::SmartRel2Abs(
         INetURLObject(), utl::TempFile::CreateTempName(),
         URIHelper::GetMaybeFileHdl());
-    SfxStringItem aURL( SID_FILE_NAME, sTargetTempURL );
     const SfxFilter *pTargetSfxFlt = SwIoSystem::GetFilterOfFormat(
             String::CreateFromAscii( GetFILTER_XML() ),
             SwDocShell::Factory().GetFilterContainer() );
 
-    SfxStringItem aTargetFilterName( SID_FILTER_NAME, pTargetSfxFlt->GetFilterName());
-    pTargetView->GetViewFrame()->GetDispatcher()->Execute(
-                        SID_EXPORTDOC, SFX_CALLMODE_SYNCHRON, &aURL, &aTargetFilterName, 0);
+    uno::Sequence< beans::PropertyValue > aValues(1);
+    beans::PropertyValue* pValues = aValues.getArray();
+    pValues[0].Name = C2U("FilterName");
+    pValues[0].Value <<= ::rtl::OUString(pTargetSfxFlt->GetFilterName());
 
-    m_pWizard->EnterWait();
+    uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
+    xStore->storeToURL( sTargetTempURL, aValues   );
+
+    pDlg->SetDocumentCount( nEnd );
+    pDlg->Show();
+    //help to force painting the dialog
+    for ( sal_Int16 i = 0; i < 25; i++)
+        Application::Reschedule();
     for(sal_uInt32 nDoc = nBegin; nDoc < nEnd; ++nDoc)
     {
+        m_pWizard->EnterWait();
         SwDocMergeInfo& rInfo = rConfigItem.GetDocumentMergeInfo(nDoc);
 
         //now extract a document from the target document
@@ -1203,21 +1253,34 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         pTargetView->GetWrtShell().EndAction();
 
         //then save it
-        SfxDispatcher* pSfxDispatcher = pTempView->GetViewFrame()->GetDispatcher();
         SfxStringItem aName(SID_FILE_NAME,
                 URIHelper::SmartRel2Abs(
                     INetURLObject(), utl::TempFile::CreateTempName(0),
                     URIHelper::GetMaybeFileHdl()) );
-        SfxStringItem aFilterOptions(SID_FILE_FILTEROPTIONS, sFilterOptions);
         const SfxStringItem* pFilterOptions = 0;
-        if(MM_DOCTYPE_TEXT == nDocType)
-            pFilterOptions = &aFilterOptions;
 
-        const SfxBoolItem* pBool = (const SfxBoolItem*)
-                    pSfxDispatcher->Execute(
-                            bIsPDF ? SID_DIRECTEXPORTDOCASPDF: SID_EXPORTDOC,
-                                  SFX_CALLMODE_SYNCHRON, &aName, &aFilterName,
-                                    pFilterOptions, 0L );
+/*        if(bIsPDF)
+        {
+            SfxDispatcher* pSfxDispatcher = pTempView->GetViewFrame()->GetDispatcher();
+            pSfxDispatcher->Execute(
+                            SID_DIRECTEXPORTDOCASPDF,
+                                  SFX_CALLMODE_SYNCHRON, &aName, &aFilterName, 0L );
+        }
+        else*/
+        {
+            uno::Sequence< beans::PropertyValue > aValues(MM_DOCTYPE_TEXT == nDocType ? 2 : 1);
+            beans::PropertyValue* pValues = aValues.getArray();
+            pValues[0].Name = C2U("FilterName");
+            pValues[0].Value <<= ::rtl::OUString(pSfxFlt->GetFilterName());
+            if(MM_DOCTYPE_TEXT == nDocType)
+            {
+                pValues[1].Name = C2U("FilterOptions");
+                pValues[1].Value <<= ::rtl::OUString(sFilterOptions);
+            }
+
+            uno::Reference< frame::XStorable > xStore( pTempView->GetDocShell()->GetModel(), uno::UNO_QUERY);
+            xStore->storeToURL( aName.GetValue(), aValues );
+        }
         xTempDocShell->DoClose();
 
         sal_Int32 nTarget = rConfigItem.MoveResultSet(rInfo.nDBRow);
@@ -1314,14 +1377,22 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         aDesc.sCC = m_sCC;
         aDesc.sBCC = m_sBCC;
         pDlg->AddDocument( aDesc );
+        //help to force painting the dialog
+        for ( sal_Int16 i = 0; i < 25; i++)
+            Application::Reschedule();
+        //stop creating of data when dialog has been closed
+        if(!pDlg->IsVisible())
+        {
+            m_pWizard->LeaveWait();
+            break;
+        }
+        m_pWizard->LeaveWait();
     }
+    pDlg->EnableDesctruction();
     ::osl::File::remove( sTargetTempURL );
-    m_pWizard->LeaveWait();
 
     m_pWizard->enableButtons(WZB_FINISH, sal_True);
-
-    pDlg->Execute();
-    delete pDlg;
+    //the dialog deletes itself
+    //delete pDlg;
     return 0;
 }
-
