@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-04 07:36:02 $
+ *  last change: $Author: fs $ $Date: 2002-10-28 08:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,29 +176,29 @@ TabPage RID_PAGE_SELECTABTYPE
         Pos     = MAP_APPFONT ( 15, 68 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
-        Text = "Mozilla / Netscape 6.x";
-        Text [ english ] = "Mozilla / Netscape 6.x";
-        Text [ english_us ] = "Mozilla / Netscape 6.x";
+        Text = "Mozilla / Netscape";
+        Text [ english ] = "Mozilla / Netscape";
+        Text [ english_us ] = "Mozilla / Netscape";
         Group = TRUE;
-        Text[ portuguese ] = "Mozilla / Netscape 6.x";
-        Text[ russian ] = "Mozilla / Netscape 6.x";
-        Text[ greek ] = "Mozilla / Netscape 6.x";
-        Text[ dutch ] = "Mozilla / Netscape 6.x";
-        Text[ french ] = "Mozilla / Netscape 6.x";
-        Text[ spanish ] = "Mozilla / Netscape 6.x";
-        Text[ finnish ] = "Mozilla / Netscape 6.x";
-        Text[ italian ] = "Mozilla / Netscape 6.x";
-        Text[ danish ] = "Mozilla / Netscape 6.x";
-        Text[ swedish ] = "Mozilla/Netscape 6.x";
-        Text[ polish ] = "Mozilla / Netscape 6.x";
-        Text[ portuguese_brazilian ] = "Mozilla / Netscape 6.x";
-        Text[ japanese ] = "Mozilla / Netscape 6.x";
-        Text[ korean ] = "Mozilla / Netscape 6.x";
-        Text[ chinese_simplified ] = "Mozilla / Netscape 6.x";
-        Text[ chinese_traditional ] = "Mozilla / Netscape 6.x";
-        Text[ turkish ] = "Mozilla / Netscape 6.x";
-        Text[ arabic ] = "Mozilla / Netscape 6.x";
-        Text[ catalan ] = "Mozilla / Netscape 6.x";
+        Text[ portuguese ] = "Mozilla / Netscape";
+        Text[ russian ] = "Mozilla / Netscape";
+        Text[ greek ] = "Mozilla / Netscape";
+        Text[ dutch ] = "Mozilla / Netscape";
+        Text[ french ] = "Mozilla / Netscape";
+        Text[ spanish ] = "Mozilla / Netscape";
+        Text[ finnish ] = "Mozilla / Netscape";
+        Text[ italian ] = "Mozilla / Netscape";
+        Text[ danish ] = "Mozilla / Netscape";
+        Text[ swedish ] = "Mozilla/Netscape";
+        Text[ polish ] = "Mozilla / Netscape";
+        Text[ portuguese_brazilian ] = "Mozilla / Netscape";
+        Text[ japanese ] = "Mozilla / Netscape";
+        Text[ korean ] = "Mozilla / Netscape";
+        Text[ chinese_simplified ] = "Mozilla / Netscape";
+        Text[ chinese_traditional ] = "Mozilla / Netscape";
+        Text[ turkish ] = "Mozilla / Netscape";
+        Text[ arabic ] = "Mozilla / Netscape";
+        Text[ catalan ] = "Mozilla / Netscape";
     };
     RadioButton RB_LDAP
     {
@@ -1008,6 +1008,9 @@ Bitmap BMP_HEADERIMAGE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.32  2002/10/04 07:36:02  fs
+ *  #101089# changed the success message of the pilot
+ *
  *  Revision 1.31  2002/09/05 18:50:45  kz
  *  Merge SRC641: 05.09.02 - 20:47:18
  *
