@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:58:51 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:16:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1537,6 +1537,17 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 PRINT();
                 LINESTART();
                 ADDTEXT( "workbook: " );
+                AddUNICODEString( t, rIn, TRUE );
+                PRINT();
+            }
+            break;
+            case 0x0052:    // DCONNAME
+            {
+                ADDTEXT( "name=" );
+                AddUNICODEString( t, rIn, TRUE );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "sheet=" );
                 AddUNICODEString( t, rIn, TRUE );
                 PRINT();
             }
