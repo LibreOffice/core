@@ -37,7 +37,6 @@ SvxObjectItem RulerObject SID_RULER_OBJECT
 
     /* plugin: */
     Container = FALSE,
-    PlugComm = FALSE,
 
     /* api: */
     Export = TRUE,
