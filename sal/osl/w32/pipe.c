@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ssa $ $Date: 2001-07-19 10:11:43 $
+ *  last change: $Author: sb $ $Date: 2001-07-24 15:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -669,12 +669,6 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
         }
         else
         {
-            /* send finito message outher side */
-            if( pPipe->m_pbAbortAccept )
-            {
-                *(pPipe->m_pbAbortAccept) = sal_True;
-            }
-
             if ((pPipe->m_DstWnd != 0) && IsWindow(pPipe->m_DstWnd))
             {
                 COPYDATASTRUCT CopyData;
@@ -698,6 +692,13 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
 
                 SendMessage(pPipe->m_SrcWnd, WM_COPYDATA,
                         (WPARAM)pPipe->m_SrcWnd, (LPARAM)&CopyData);
+            }
+
+            /* send finito message outher side */
+            if( pPipe->m_pbAbortAccept )
+            {
+                *(pPipe->m_pbAbortAccept) = sal_True;
+                osl_releaseSemaphore(pPipe->m_Acception);
             }
         }
 
