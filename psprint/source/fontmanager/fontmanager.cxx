@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:45:28 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:35:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -829,10 +829,10 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
 
         if( m_aEncoding == RTL_TEXTENCODING_DONTKNOW )
             m_aEncoding = nAdobeEncoding == 1 ?
-                RTL_TEXTENCODING_MS_1252 : RTL_TEXTENCODING_SYMBOL;
+                RTL_TEXTENCODING_ADOBE_STANDARD : RTL_TEXTENCODING_SYMBOL;
     }
     else if( m_aEncoding == RTL_TEXTENCODING_DONTKNOW )
-        m_aEncoding = RTL_TEXTENCODING_MS_1252;
+        m_aEncoding = RTL_TEXTENCODING_ADOBE_STANDARD;
 
     // try to parse the font name and decide wether it might be a
     // japanese font. Who invented this PITA ?
