@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-29 16:12:17 $
+ *  last change: $Author: oj $ $Date: 2002-08-01 08:17:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,6 +687,7 @@ void FmXGridControl::addModifyListener(const Reference< ::com::sun::star::util::
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXGridControl::select( const Any& _rSelection ) throw (IllegalArgumentException, RuntimeException)
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     Reference< XSelectionSupplier > xPeer(mxPeer, UNO_QUERY);
     return xPeer->select(_rSelection);
 }
@@ -694,6 +695,7 @@ sal_Bool SAL_CALL FmXGridControl::select( const Any& _rSelection ) throw (Illega
 //------------------------------------------------------------------------------
 Any SAL_CALL FmXGridControl::getSelection(  ) throw (RuntimeException)
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     Reference< XSelectionSupplier > xPeer(mxPeer, UNO_QUERY);
     return xPeer->getSelection();
 }
