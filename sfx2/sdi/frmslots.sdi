@@ -2,7 +2,7 @@
     shell SfxViewFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: os $ $Date: 2001-01-10 15:55:44 $ $Revision: 1.2 $
+    $Author: pb $ $Date: 2001-06-12 07:56:07 $ $Revision: 1.3 $
     $Logfile:   T:/sfx2/sdi/frmslots.sdv  $ $Workfile:   FRMSLOTS.SDI  $
 =========================================================================*/
 
@@ -496,6 +496,12 @@ interface TopWindow : BrowseWindow
         StateMethod = GetState_Impl ;
     ]
 
+        SID_BACKTOWEBTOP // ole(no) api(final/play/rec)
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+
     //---------------------------------------------------------------------
     SID_BROWSE_FORWARD // ole(no) api()
     [
@@ -555,6 +561,9 @@ shell SfxViewFrame
 /*-------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/01/10 15:55:44  os
+    Ruby dialog
+
     Revision 1.1.1.1  2000/09/18 16:52:25  hr
     initial import
 
