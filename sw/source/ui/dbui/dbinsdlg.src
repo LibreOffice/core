@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: os $ $Date: 2002-09-06 13:43:55 $
+ *  last change: $Author: iha $ $Date: 2002-11-21 13:34:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,9 +477,10 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     {
         Pos = MAP_APPFONT ( 137 , 31 ) ;
         Size = MAP_APPFONT ( 75 , 8 ) ;
-        Text = "Tabe~lle" ;
-        Text [ ENGLISH ] = "Tab~le" ;
-        Text [ english_us ] = "Tab~le" ;
+
+        Text = "Tabe~llenspalte(n)" ;
+        Text [ ENGLISH ] = "Tab~le column(s)" ;
+        Text [ english_us ] = "Tab~le column(s)" ;
         Text [ portuguese_brazilian ] = "Tabe~lle" ;
         Text [ swedish ] = "Tabe~ll" ;
         Text [ danish ] = "Tabel" ;
