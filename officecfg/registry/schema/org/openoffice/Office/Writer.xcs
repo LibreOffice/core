@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 12:58:16 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 10:51:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3210,7 +3210,9 @@
                     <info>
                         <author>OS</author>
                         <desc xml:lang="en-US">Specifies if hidden paragraphs are displayed on the screen.</desc>
+                        	<desc xml:lang="zh-CN">指定是否在屏幕上显示隐入的段落。</desc>
                         <label xml:lang="en-US">Hidden text</label>
+                    	<label xml:lang="zh-CN">隐入的文字</label>
                     </info>
                     <value>false</value>
                 </prop>
@@ -48638,7 +48640,7 @@
 								<desc xml:lang="fi">W4WFL_NO_DBL_TBL_BORDER_REMOVE </desc>
 								<desc xml:lang="cs">W4WFL_NO_DBL_TBL_BORDER_REMOVE </desc>
 								<desc xml:lang="da">W4WFL_NO_DBL_TBL_BORDER_REMOVE </desc>
-								<desc xml:lang="zh-CN">W4WFL_NO_DBL_TBL_BORDER_REMOVE  </desc>
+								<desc xml:lang="zh-CN">W4WFL_NO_DBL_TBL_BORDER_REMOVE </desc>
 								<desc xml:lang="zh-TW">W4WFL_NO_DBL_TBL_BORDER_REMOVE </desc>
 								<desc xml:lang="ar">W4WFL_NO_DBL_TBL_BORDER_REMOVE </desc>
 								<desc xml:lang="he">W4WFL_NO_DBL_TBL_BORDER_REMOVE </desc>
@@ -48650,7 +48652,7 @@
 								<desc xml:lang="sv">W4WFL_NO_DBL_TBL_BORDER_REMOVE </desc>
 								<desc xml:lang="pl">W4WFL_NO_DBL_TBL_BORDER_REMOVE </desc>
 								<desc xml:lang="pt-BR">W4WFL_NO_DBL_TBL_BORDER_REMOVE </desc>
-								<desc xml:lang="ja">W4WFL_NO_DBL_TBL_BORDER_REMOVE  </desc>
+								<desc xml:lang="ja">W4WFL_NO_DBL_TBL_BORDER_REMOVE </desc>
 								<desc xml:lang="ko">W4WFL_NO_DBL_TBL_BORDER_REMOVE </desc>
 								<desc xml:lang="tr">W4WFL_NO_DBL_TBL_BORDER_REMOVE </desc>
 								<desc xml:lang="th">W4WFL_NO_DBL_TBL_BORDER_REMOVE </desc>
@@ -48894,7 +48896,7 @@
 								<desc xml:lang="fi">W4WFL_ALL_HDFT_MAINATTR </desc>
 								<desc xml:lang="cs">W4WFL_ALL_HDFT_MAINATTR </desc>
 								<desc xml:lang="da">W4WFL_ALL_HDFT_MAINATTR </desc>
-								<desc xml:lang="zh-CN">W4WFL_ALL_HDFT_MAINATTR         </desc>
+								<desc xml:lang="zh-CN">W4WFL_ALL_HDFT_MAINATTR </desc>
 								<desc xml:lang="zh-TW">W4WFL_ALL_HDFT_MAINATTR </desc>
 								<desc xml:lang="ar">W4WFL_ALL_HDFT_MAINATTR </desc>
 								<desc xml:lang="he">W4WFL_ALL_HDFT_MAINATTR </desc>
@@ -48906,7 +48908,7 @@
 								<desc xml:lang="sv">W4WFL_ALL_HDFT_MAINATTR </desc>
 								<desc xml:lang="pl">W4WFL_ALL_HDFT_MAINATTR </desc>
 								<desc xml:lang="pt-BR">W4WFL_ALL_HDFT_MAINATTR </desc>
-								<desc xml:lang="ja">W4WFL_ALL_HDFT_MAINATTR         </desc>
+								<desc xml:lang="ja">W4WFL_ALL_HDFT_MAINATTR </desc>
 								<desc xml:lang="ko">W4WFL_ALL_HDFT_MAINATTR </desc>
 								<desc xml:lang="tr">W4WFL_ALL_HDFT_MAINATTR </desc>
 								<desc xml:lang="th">W4WFL_ALL_HDFT_MAINATTR </desc>
@@ -48958,7 +48960,7 @@
 								<desc xml:lang="fi">W4WFL_NO_PCTEXT4_STP_DEC2 </desc>
 								<desc xml:lang="cs">W4WFL_NO_PCTEXT4_STP_DEC2 </desc>
 								<desc xml:lang="da">W4WFL_NO_PCTEXT4_STP_DEC2 </desc>
-								<desc xml:lang="zh-CN">W4WFL_NO_PCTEXT4_STP_DEC2    </desc>
+								<desc xml:lang="zh-CN">W4WFL_NO_PCTEXT4_STP_DEC2 </desc>
 								<desc xml:lang="zh-TW">W4WFL_NO_PCTEXT4_STP_DEC2 </desc>
 								<desc xml:lang="ar">W4WFL_NO_PCTEXT4_STP_DEC2 </desc>
 								<desc xml:lang="he">W4WFL_NO_PCTEXT4_STP_DEC2 </desc>
@@ -48970,7 +48972,7 @@
 								<desc xml:lang="sv">W4WFL_NO_PCTEXT4_STP_DEC2 </desc>
 								<desc xml:lang="pl">W4WFL_NO_PCTEXT4_STP_DEC2 </desc>
 								<desc xml:lang="pt-BR">W4WFL_NO_PCTEXT4_STP_DEC2 </desc>
-								<desc xml:lang="ja">W4WFL_NO_PCTEXT4_STP_DEC2    </desc>
+								<desc xml:lang="ja">W4WFL_NO_PCTEXT4_STP_DEC2 </desc>
 								<desc xml:lang="ko">W4WFL_NO_PCTEXT4_STP_DEC2 </desc>
 								<desc xml:lang="tr">W4WFL_NO_PCTEXT4_STP_DEC2 </desc>
 								<desc xml:lang="th">W4WFL_NO_PCTEXT4_STP_DEC2 </desc>
@@ -49121,7 +49123,7 @@
 								<desc xml:lang="fi">ALLOW_FLD_CR </desc>
 								<desc xml:lang="cs">ALLOW_FLD_CR </desc>
 								<desc xml:lang="da">ALLOW_FLD_CR </desc>
-								<desc xml:lang="zh-CN">ALLOW_FLD_CR         </desc>
+								<desc xml:lang="zh-CN">ALLOW_FLD_CR </desc>
 								<desc xml:lang="zh-TW">ALLOW_FLD_CR </desc>
 								<desc xml:lang="ar">ALLOW_FLD_CR </desc>
 								<desc xml:lang="he">ALLOW_FLD_CR </desc>
@@ -49133,7 +49135,7 @@
 								<desc xml:lang="sv">ALLOW_FLD_CR </desc>
 								<desc xml:lang="pl">ALLOW_FLD_CR </desc>
 								<desc xml:lang="pt-BR">ALLOW_FLD_CR </desc>
-								<desc xml:lang="ja">ALLOW_FLD_CR         </desc>
+								<desc xml:lang="ja">ALLOW_FLD_CR </desc>
 								<desc xml:lang="ko">ALLOW_FLD_CR </desc>
 								<desc xml:lang="tr">ALLOW_FLD_CR </desc>
 								<desc xml:lang="th">ALLOW_FLD_CR </desc>
@@ -49153,7 +49155,7 @@
 								<desc xml:lang="fi">DONT_HARD_PROTECT </desc>
 								<desc xml:lang="cs">DONT_HARD_PROTECT </desc>
 								<desc xml:lang="da">DONT_HARD_PROTECT </desc>
-								<desc xml:lang="zh-CN">DONT_HARD_PROTECT    </desc>
+								<desc xml:lang="zh-CN">DONT_HARD_PROTECT </desc>
 								<desc xml:lang="zh-TW">DONT_HARD_PROTECT </desc>
 								<desc xml:lang="ar">DONT_HARD_PROTECT </desc>
 								<desc xml:lang="he">DONT_HARD_PROTECT </desc>
@@ -49165,7 +49167,7 @@
 								<desc xml:lang="sv">DONT_HARD_PROTECT </desc>
 								<desc xml:lang="pl">DONT_HARD_PROTECT </desc>
 								<desc xml:lang="pt-BR">DONT_HARD_PROTECT </desc>
-								<desc xml:lang="ja">DONT_HARD_PROTECT    </desc>
+								<desc xml:lang="ja">DONT_HARD_PROTECT </desc>
 								<desc xml:lang="ko">DONT_HARD_PROTECT </desc>
 								<desc xml:lang="tr">DONT_HARD_PROTECT </desc>
 								<desc xml:lang="th">DONT_HARD_PROTECT </desc>
@@ -50378,7 +50380,7 @@
 								<desc xml:lang="fi">ALLOW_FLD_CR </desc>
 								<desc xml:lang="cs">ALLOW_FLD_CR </desc>
 								<desc xml:lang="da">ALLOW_FLD_CR </desc>
-								<desc xml:lang="zh-CN">ALLOW_FLD_CR         </desc>
+								<desc xml:lang="zh-CN">ALLOW_FLD_CR </desc>
 								<desc xml:lang="zh-TW">ALLOW_FLD_CR </desc>
 								<desc xml:lang="ar">ALLOW_FLD_CR </desc>
 								<desc xml:lang="he">ALLOW_FLD_CR </desc>
@@ -50390,7 +50392,7 @@
 								<desc xml:lang="sv">ALLOW_FLD_CR </desc>
 								<desc xml:lang="pl">ALLOW_FLD_CR </desc>
 								<desc xml:lang="pt-BR">ALLOW_FLD_CR </desc>
-								<desc xml:lang="ja">ALLOW_FLD_CR         </desc>
+								<desc xml:lang="ja">ALLOW_FLD_CR </desc>
 								<desc xml:lang="ko">ALLOW_FLD_CR </desc>
 								<desc xml:lang="tr">ALLOW_FLD_CR </desc>
 								<desc xml:lang="th">ALLOW_FLD_CR </desc>
@@ -50454,7 +50456,7 @@
 								<desc xml:lang="sv">DONT_HARD_PROTECT </desc>
 								<desc xml:lang="pl">DONT_HARD_PROTECT </desc>
 								<desc xml:lang="pt-BR">DONT_HARD_PROTECT </desc>
-								<desc xml:lang="ja">DONT_HARD_PROTECT    </desc>
+								<desc xml:lang="ja">DONT_HARD_PROTECT </desc>
 								<desc xml:lang="ko">DONT_HARD_PROTECT </desc>
 								<desc xml:lang="tr">DONT_HARD_PROTECT </desc>
 								<desc xml:lang="th">DONT_HARD_PROTECT </desc>
@@ -50741,7 +50743,7 @@
 						<desc xml:lang="fi">Specifies the distance between the footnote and the main text [UNIT=1/100 mm].</desc>
 						<desc xml:lang="cs">Specifies the distance between the footnote and the main text [UNIT=1/100 mm].</desc>
 						<desc xml:lang="da">Specifies the distance between the footnote and the main text [UNIT=1/100 mm].</desc>
-						<desc xml:lang="zh-CN">指定注脚和主文字之间的间隔 [UNIT=1/100 mm]。</desc>
+						<desc xml:lang="zh-CN">指定脚注和主文字之间的间隔 [UNIT=1/100 mm]。</desc>
 						<desc xml:lang="zh-TW">Specifies the distance between the footnote and the main text [UNIT=1/100 mm].</desc>
 						<desc xml:lang="ar">Specifies the distance between the footnote and the main text [UNIT=1/100 mm].</desc>
 						<desc xml:lang="he">Specifies the distance between the footnote and the main text [UNIT=1/100 mm].</desc>
