@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-13 16:29:12 $
+ *  last change: $Author: pl $ $Date: 2001-06-14 09:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1518,6 +1518,18 @@ bool SelectionManager::updateDragAction( int modifierState )
     if( m_nCurrentProtocolVersion < 0 && m_aDropWindow != None )
         nNewDropAction = DNDConstants::ACTION_COPY;
     nNewDropAction &= m_nSourceActions;
+
+    if( ! nNewDropAction && ! ( modifierState & ( ControlMask | ShiftMask )  ) )
+    {
+        // default to a default action so the user does not have to press
+        // keys explicitly
+        if( m_nSourceActions & DNDConstants::ACTION_MOVE )
+            nNewDropAction = DNDConstants::ACTION_MOVE;
+        else if( m_nSourceActions & DNDConstants::ACTION_COPY )
+            nNewDropAction = DNDConstants::ACTION_COPY;
+        else if( m_nSourceActions & DNDConstants::ACTION_LINK )
+            nNewDropAction = DNDConstants::ACTION_LINK;
+    }
 
     if( nNewDropAction != m_nUserDragAction )
     {
