@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: sb $ $Date: 2002-11-06 15:47:36 $
+#   last change: $Author: tra $ $Date: 2002-12-05 11:35:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ PROJECTPCHSOURCE=cont_pch
 
 TARGETTYPE=CUI
 
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -100,7 +101,10 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/pipe.obj   	 \
             $(SLO)$/system.obj	 \
             $(SLO)$/util.obj	 \
-            $(SLO)$/tempfile.obj
+            $(SLO)$/tempfile.obj\
+            $(SLO)$/file_url.obj\
+            $(SLO)$/file_error_transl.obj\
+            $(SLO)$/file_path_helper.obj
 
 #.IF "$(UPDATER)"=="YES"
 OBJFILES=   $(OBJ)$/conditn.obj  \
@@ -121,7 +125,10 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/pipe.obj   	 \
             $(OBJ)$/system.obj	 \
             $(OBJ)$/util.obj	 \
-            $(OBJ)$/tempfile.obj
+            $(OBJ)$/tempfile.obj\
+            $(OBJ)$/file_url.obj\
+            $(OBJ)$/file_error_transl.obj\
+            $(OBJ)$/file_path_helper.obj
 #.ENDIF
 
 # --- Targets ------------------------------------------------------
