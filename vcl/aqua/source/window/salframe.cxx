@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: bmahbod $ $Date: 2000-11-20 23:32:57 $
+ *  last change: $Author: ganaya $ $Date: 2000-11-21 01:36:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,12 +361,18 @@ void SalFrame::SetMinClientSize( long nWidth, long nHeight )
 
 void SalFrame::SetClientSize( long nWidth, long nHeight )
 {
+  VCLWindow_setSize( maFrameData.mhWnd, nWidth, nHeight );
 }
 
 // -----------------------------------------------------------------------
 
 void SalFrame::GetClientSize( long& rWidth, long& rHeight )
 {
+
+  //Copied from Windows version: not sure if it is correct for Aqua
+  rWidth  = maFrameData.mnWidth;
+  rHeight = maFrameData.mnHeight;
+
 }
 
 // -----------------------------------------------------------------------
