@@ -393,6 +393,54 @@
         <supported-service> com.sun.star.ui.UICategoryDescription </supported-service>
     </component-description>
 
+    <component-description>
+        <author> Carsten Driesner </author>
+        <name> com.sun.star.comp.framework.ToolBarFactory </name>
+        <description>
+            A factory to create toolbar instances.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> drafts.com.sun.star.ui.ToolBarFactory </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Carsten Driesner </author>
+        <name> com.sun.star.comp.framework.ToolBarControllerFactory </name>
+        <description>
+            A factory to create registered toolbar bar controller.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.ToolBarControllerFactory </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Carsten Driesner </author>
+        <name> com.sun.star.comp.framework.StatusbarFactory </name>
+        <description>
+            A factory to create registered status bar controller.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> drafts.com.sun.star.ui.StatusbarFactory </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Carsten Driesner </author>
+        <name> com.sun.star.comp.framework.StatusbarControllerFactory </name>
+        <description>
+            A factory to create registered status bar controller.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.StatusbarControllerFactory </supported-service>
+    </component-description>
+
     <project-build-dependency>  cppu        </project-build-dependency>
     <project-build-dependency>  cppuhelper  </project-build-dependency>
     <project-build-dependency>  vos         </project-build-dependency>
