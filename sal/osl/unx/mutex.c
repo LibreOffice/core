@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-07 13:05:10 $
+ *  last change: $Author: obr $ $Date: 2001-04-06 14:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,5 +451,24 @@ sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex)
     return sal_False;
 }
 
+
+/*****************************************************************************/
+/* osl_getGlobalMutex */
+/*****************************************************************************/
+
+oslMutex * SAL_CALL osl_getGlobalMutex()
+{
+    /* the static global mutex instance */
+    static oslMutexImpl globalMutexImpl = {
+        PTHREAD_MUTEX_INITIALIZER,
+        PTHREAD_NONE,
+        0
+    };
+
+    /* necessary to get a "oslMutex *" */
+    static oslMutex const globalMutex = (oslMutex) &globalMutex;
+
+    return &globalMutex
+}
 
 #endif /* #if !defined (PTHREAD_MUTEX_RECURSIVE) */
