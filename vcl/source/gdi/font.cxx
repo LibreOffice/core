@@ -2,9 +2,9 @@
  *
  *  $RCSfile: font.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2000-10-27 14:41:44 $
+ *  last change: $Author: th $ $Date: 2001-02-23 16:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ Impl_Font::Impl_Font() :
     mnRefCount          = 1;
     meCharSet           = RTL_TEXTENCODING_DONTKNOW;
     meLanguage          = LANGUAGE_DONTKNOW;
+    meCJKLanguage       = LANGUAGE_DONTKNOW;
     meFamily            = FAMILY_DONTKNOW;
     mePitch             = PITCH_DONTKNOW;
     meAlign             = ALIGN_TOP;
@@ -94,6 +95,7 @@ Impl_Font::Impl_Font() :
     meWidthType         = WIDTH_DONTKNOW;
     meUnderline         = UNDERLINE_NONE;
     meStrikeout         = STRIKEOUT_NONE;
+    meRelief            = RELIEF_NONE;
     meEmphasisMark      = EMPHASISMARK_NONE;
     meItalic            = ITALIC_NONE;
     mbWordLine          = FALSE;
@@ -117,6 +119,7 @@ Impl_Font::Impl_Font( const Impl_Font& rImplFont ) :
     mnRefCount          = 1;
     meCharSet           = rImplFont.meCharSet;
     meLanguage          = rImplFont.meLanguage;
+    meCJKLanguage       = rImplFont.meCJKLanguage;
     meFamily            = rImplFont.meFamily;
     mePitch             = rImplFont.mePitch;
     meAlign             = rImplFont.meAlign;
@@ -124,6 +127,7 @@ Impl_Font::Impl_Font( const Impl_Font& rImplFont ) :
     meWidthType         = rImplFont.meWidthType;
     meUnderline         = rImplFont.meUnderline;
     meStrikeout         = rImplFont.meStrikeout;
+    meRelief            = rImplFont.meRelief;
     meEmphasisMark      = rImplFont.meEmphasisMark;
     meItalic            = rImplFont.meItalic;
     mbWordLine          = rImplFont.mbWordLine;
@@ -334,6 +338,16 @@ void Font::SetLanguage( LanguageType eLanguage )
 
 // -----------------------------------------------------------------------
 
+void Font::SetCJKContextLanguage( LanguageType eLanguage )
+{
+    DBG_CHKTHIS( Font, NULL );
+
+    MakeUnique();
+    mpImplFont->meCJKLanguage = eLanguage;
+}
+
+// -----------------------------------------------------------------------
+
 void Font::SetPitch( FontPitch ePitch )
 {
     DBG_CHKTHIS( Font, NULL );
@@ -444,6 +458,16 @@ void Font::SetStrikeout( FontStrikeout eStrikeout )
 
 // -----------------------------------------------------------------------
 
+void Font::SetRelief( FontRelief eRelief )
+{
+    DBG_CHKTHIS( Font, NULL );
+
+    MakeUnique();
+    mpImplFont->meRelief = eRelief;
+}
+
+// -----------------------------------------------------------------------
+
 void Font::SetEmphasisMark( FontEmphasisMark eEmphasisMark )
 {
     DBG_CHKTHIS( Font, NULL );
@@ -505,6 +529,8 @@ BOOL Font::operator==( const Font& rFont ) const
          (mpImplFont->meFamily          == rFont.mpImplFont->meFamily           ) &&
          (mpImplFont->mePitch           == rFont.mpImplFont->mePitch            ) &&
          (mpImplFont->meCharSet         == rFont.mpImplFont->meCharSet          ) &&
+         (mpImplFont->meLanguage        == rFont.mpImplFont->meLanguage         ) &&
+         (mpImplFont->meCJKLanguage     == rFont.mpImplFont->meCJKLanguage      ) &&
          (mpImplFont->meAlign           == rFont.mpImplFont->meAlign            ) &&
          (mpImplFont->maName            == rFont.mpImplFont->maName             ) &&
          (mpImplFont->maStyleName       == rFont.mpImplFont->maStyleName        ) &&
@@ -514,6 +540,7 @@ BOOL Font::operator==( const Font& rFont ) const
          (mpImplFont->mnOrientation     == rFont.mpImplFont->mnOrientation      ) &&
          (mpImplFont->meUnderline       == rFont.mpImplFont->meUnderline        ) &&
          (mpImplFont->meStrikeout       == rFont.mpImplFont->meStrikeout        ) &&
+         (mpImplFont->meRelief          == rFont.mpImplFont->meRelief           ) &&
          (mpImplFont->meEmphasisMark    == rFont.mpImplFont->meEmphasisMark     ) &&
          (mpImplFont->mbWordLine        == rFont.mpImplFont->mbWordLine         ) &&
          (mpImplFont->mbOutline         == rFont.mpImplFont->mbOutline          ) &&
@@ -536,6 +563,7 @@ void Font::Merge( const Font& rFont )
         SetFamily( rFont.GetFamily() );
         SetCharSet( GetCharSet() );
         SetLanguage( rFont.GetLanguage() );
+        SetCJKContextLanguage( rFont.GetCJKContextLanguage() );
         SetPitch( rFont.GetPitch() );
     }
 
@@ -565,6 +593,7 @@ void Font::Merge( const Font& rFont )
     SetKerning( rFont.IsKerning() );
     SetOutline( rFont.IsOutline() );
     SetShadow( rFont.IsShadow() );
+    SetRelief( rFont.GetRelief() );
 }
 
 // -----------------------------------------------------------------------
@@ -600,6 +629,9 @@ SvStream& operator>>( SvStream& rIStm, Impl_Font& rImpl_Font )
     rIStm >> bTmp; rImpl_Font.mbKerning = bTmp;
 //  rIStm >> bTmp; rImpl_Font.mbTransparent = bTmp;                 // removed since SUPD396
 
+    // Relief
+    // CJKContextLanguage
+
     return rIStm;
 }
 
@@ -632,6 +664,9 @@ SvStream& operator<<( SvStream& rOStm, const Impl_Font& rImpl_Font )
     rOStm << (BOOL) rImpl_Font.mbShadow;
     rOStm << (BOOL) rImpl_Font.mbKerning;
 //  rOStm << (BOOL) rImpl_Font.mbTransparent;   // removed since SUPD396
+
+    // Relief
+    // CJKContextLanguage
 
     return rOStm;
 }
