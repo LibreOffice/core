@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-30 18:02:36 $
+ *  last change: $Author: aw $ $Date: 2000-12-01 13:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,7 +517,6 @@ XML_CONSTASCII_ACTION( sXML_endnote_citation, "endnote-citation" );
 XML_CONSTASCII_ACTION( sXML_endnote_ref, "endnote-ref" );
 XML_CONSTASCII_ACTION( sXML_endnotes_configuration, "endnotes-configuration");
 XML_CONSTASCII_ACTION( sXML_eq, "eq");
-XML_CONSTASCII_ACTION( sXML_era, "era" );
 XML_CONSTASCII_ACTION( sXML_ergo_sum, "ergo-sum" );
 XML_CONSTASCII_ACTION( sXML_error_category, "error-category" );
 XML_CONSTASCII_ACTION( sXML_error_lower_indicator, "error-lower-indicator" );
@@ -599,8 +598,8 @@ XML_CONSTASCII_ACTION( sXML_font_style, "font-style" );
 XML_CONSTASCII_ACTION( sXML_font_style_asian, "font-style-asian" );
 XML_CONSTASCII_ACTION( sXML_font_style_complex, "font-style-complex" );
 XML_CONSTASCII_ACTION( sXML_font_style_name, "font-style-name" );
-XML_CONSTASCII_ACTION( sXML_font_style_name_asian, "font-style-name-asian" );
-XML_CONSTASCII_ACTION( sXML_font_style_name_complex, "font-style-name-complex" );
+XML_CONSTASCII_ACTION( sXML_font_style_name_asian, "font-style-name-asian-complex" );
+XML_CONSTASCII_ACTION( sXML_font_style_name_complex, "font-style-name" );
 XML_CONSTASCII_ACTION( sXML_font_variant, "font-variant" );
 XML_CONSTASCII_ACTION( sXML_font_weight, "font-weight" );
 XML_CONSTASCII_ACTION( sXML_font_weight_asian, "font-weight-asian" );
@@ -1556,5 +1555,8 @@ XML_CONSTASCII_ACTION( sXML_dots2_length, "dots2-length" );
 XML_CONSTASCII_ACTION( sXML_vrp, "vrp");
 XML_CONSTASCII_ACTION( sXML_vpn, "vpn");
 XML_CONSTASCII_ACTION( sXML_vup, "vup");
+
+XML_CONSTASCII_ACTION( sXML_min_edge, "min-edge");
+XML_CONSTASCII_ACTION( sXML_max_edge, "max-edge");
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximp3dobject.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-24 16:36:47 $
+ *  last change: $Author: aw $ $Date: 2000-12-01 13:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,16 +158,6 @@ SdXML3DObjectContext::SdXML3DObjectContext(
                     mbSetTransform = aTransform.GetFullHomogenTransform(mxHomMat);
                 break;
             }
-            case XML_TOK_3DOBJECT_VIEWBOX:
-            {
-                maViewBox = sValue;
-                break;
-            }
-            case XML_TOK_3DOBJECT_D:
-            {
-                maPoints = sValue;
-                break;
-            }
         }
     }
 }
@@ -191,61 +181,6 @@ void SdXML3DObjectContext::StartElement(const uno::Reference< xml::sax::XAttribu
             uno::Any aAny;
             aAny <<= mxHomMat;
             xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DTransformMatrix")), aAny);
-        }
-
-        if(maPoints.getLength() && maViewBox.getLength())
-        {
-            SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
-            awt::Point aMinPoint(aViewBox.GetX(), aViewBox.GetY());
-            awt::Size aMaxSize(aViewBox.GetWidth(), aViewBox.GetHeight());
-            SdXMLImExSvgDElement aPoints(maPoints, aViewBox,
-                aMinPoint, aMaxSize, GetImport().GetMM100UnitConverter());
-
-            // convert to double sequences
-            drawing::PointSequenceSequence& xPoSeSe =
-                (drawing::PointSequenceSequence&)aPoints.GetPointSequenceSequence();
-            sal_Int32 nOuterSequenceCount = xPoSeSe.getLength();
-            drawing::PointSequence* pInnerSequence = xPoSeSe.getArray();
-
-            drawing::PolyPolygonShape3D xPolyPolygon3D;
-            xPolyPolygon3D.SequenceX.realloc(nOuterSequenceCount);
-            xPolyPolygon3D.SequenceY.realloc(nOuterSequenceCount);
-            xPolyPolygon3D.SequenceZ.realloc(nOuterSequenceCount);
-            drawing::DoubleSequence* pOuterSequenceX = xPolyPolygon3D.SequenceX.getArray();
-            drawing::DoubleSequence* pOuterSequenceY = xPolyPolygon3D.SequenceY.getArray();
-            drawing::DoubleSequence* pOuterSequenceZ = xPolyPolygon3D.SequenceZ.getArray();
-
-            for(sal_Int32 a(0L); a < nOuterSequenceCount; a++)
-            {
-                sal_Int32 nInnerSequenceCount(pInnerSequence->getLength());
-                awt::Point* pArray = pInnerSequence->getArray();
-
-                pOuterSequenceX->realloc(nInnerSequenceCount);
-                pOuterSequenceY->realloc(nInnerSequenceCount);
-                pOuterSequenceZ->realloc(nInnerSequenceCount);
-                double* pInnerSequenceX = pOuterSequenceX->getArray();
-                double* pInnerSequenceY = pOuterSequenceY->getArray();
-                double* pInnerSequenceZ = pOuterSequenceZ->getArray();
-
-                for(sal_Int32 b(0L); b < nInnerSequenceCount; b++)
-                {
-                    *pInnerSequenceX++ = pArray->X;
-                    *pInnerSequenceY++ = pArray->Y;
-                    *pInnerSequenceZ++ = 0.0;
-                    pArray++;
-                }
-                pInnerSequence++;
-
-                pOuterSequenceX++;
-                pOuterSequenceY++;
-                pOuterSequenceZ++;
-            }
-
-            // set poly
-            uno::Any aAny;
-            aAny <<= xPolyPolygon3D;
-            xPropSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPolyPolygon3D")), aAny);
         }
 
         // call parent
@@ -321,7 +256,7 @@ void SdXML3DObjectContext::SetStyle()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1( SdXML3DCubeObjectShapeContext, SdXML3DObjectContext );
+TYPEINIT1( SdXML3DCubeObjectShapeContext, SdXML3DObjectContext);
 
 SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
     SvXMLImport& rImport,
@@ -329,8 +264,49 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+:   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
+    maMinEdge(-2500.0, -2500.0, -2500.0),
+    maMaxEdge(2500.0, 2500.0, 2500.0),
+    mbMinEdgeUsed(FALSE),
+    mbMaxEdgeUsed(FALSE)
 {
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for(sal_Int16 i=0; i < nAttrCount; i++)
+    {
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        OUString sValue = xAttrList->getValueByIndex( i );
+        const SvXMLTokenMap& rAttrTokenMap = GetImport().GetShapeImport()->Get3DCubeObjectAttrTokenMap();
+
+        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
+        {
+            case XML_TOK_3DCUBEOBJ_MINEDGE:
+            {
+                Vector3D aNewVec;
+                GetImport().GetMM100UnitConverter().convertVector3D(aNewVec, sValue);
+
+                if(aNewVec != maMinEdge)
+                {
+                    maMinEdge = aNewVec;
+                    mbMinEdgeUsed = TRUE;
+                }
+                break;
+            }
+            case XML_TOK_3DCUBEOBJ_MAXEDGE:
+            {
+                Vector3D aNewVec;
+                GetImport().GetMM100UnitConverter().convertVector3D(aNewVec, sValue);
+
+                if(aNewVec != maMaxEdge)
+                {
+                    maMaxEdge = aNewVec;
+                    mbMaxEdgeUsed = TRUE;
+                }
+                break;
+            }
+        }
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -357,6 +333,40 @@ void SdXML3DCubeObjectShapeContext::StartElement(const uno::Reference< xml::sax:
             // call parent
             SdXML3DObjectContext::StartElement(xAttrList);
 
+            uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+            if(xPropSet.is())
+            {
+                // set parameters
+                if(mbMinEdgeUsed)
+                {
+                    drawing::Position3D aPosition3D;
+
+                    aPosition3D.PositionX = maMinEdge.X();
+                    aPosition3D.PositionY = maMinEdge.Y();
+                    aPosition3D.PositionZ = maMinEdge.Z();
+
+                    uno::Any aAny;
+                    aAny <<= aPosition3D;
+                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPosition")), aAny);
+                }
+
+                if(mbMaxEdgeUsed)
+                {
+                    drawing::Direction3D aDirection3D;
+
+                    // convert from min, max to size to be set
+                    maMaxEdge = maMaxEdge - maMinEdge;
+
+                    aDirection3D.DirectionX = maMaxEdge.X();
+                    aDirection3D.DirectionY = maMaxEdge.Y();
+                    aDirection3D.DirectionZ = maMaxEdge.Z();
+
+                    uno::Any aAny;
+                    aAny <<= aDirection3D;
+                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSize")), aAny);
+                }
+            }
+
             // add, set style and properties from base shape
             AddShape(xShape);
             SetStyle();
@@ -375,7 +385,7 @@ void SdXML3DCubeObjectShapeContext::EndElement()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1( SdXML3DSphereObjectShapeContext, SdXML3DObjectContext );
+TYPEINIT1( SdXML3DSphereObjectShapeContext, SdXML3DObjectContext);
 
 SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
     SvXMLImport& rImport,
@@ -383,8 +393,49 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+:   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
+    maCenter(0.0, 0.0, 0.0),
+    maSize(5000.0, 5000.0, 5000.0),
+    mbCenterUsed(FALSE),
+    mbSizeUsed(FALSE)
 {
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for(sal_Int16 i=0; i < nAttrCount; i++)
+    {
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        OUString sValue = xAttrList->getValueByIndex( i );
+        const SvXMLTokenMap& rAttrTokenMap = GetImport().GetShapeImport()->Get3DSphereObjectAttrTokenMap();
+
+        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
+        {
+            case XML_TOK_3DSPHEREOBJ_CENTER:
+            {
+                Vector3D aNewVec;
+                GetImport().GetMM100UnitConverter().convertVector3D(aNewVec, sValue);
+
+                if(aNewVec != maCenter)
+                {
+                    maCenter = aNewVec;
+                    mbCenterUsed = TRUE;
+                }
+                break;
+            }
+            case XML_TOK_3DSPHEREOBJ_SIZE:
+            {
+                Vector3D aNewVec;
+                GetImport().GetMM100UnitConverter().convertVector3D(aNewVec, sValue);
+
+                if(aNewVec != maSize)
+                {
+                    maSize = aNewVec;
+                    mbSizeUsed = TRUE;
+                }
+                break;
+            }
+        }
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -411,6 +462,37 @@ void SdXML3DSphereObjectShapeContext::StartElement(const uno::Reference< xml::sa
             // call parent
             SdXML3DObjectContext::StartElement(xAttrList);
 
+            uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+            if(xPropSet.is())
+            {
+                // set parameters
+                if(mbCenterUsed)
+                {
+                    drawing::Position3D aPosition3D;
+
+                    aPosition3D.PositionX = maCenter.X();
+                    aPosition3D.PositionY = maCenter.Y();
+                    aPosition3D.PositionZ = maCenter.Z();
+
+                    uno::Any aAny;
+                    aAny <<= aPosition3D;
+                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPosition")), aAny);
+                }
+
+                if(mbSizeUsed)
+                {
+                    drawing::Direction3D aDirection3D;
+
+                    aDirection3D.DirectionX = maSize.X();
+                    aDirection3D.DirectionY = maSize.Y();
+                    aDirection3D.DirectionZ = maSize.Z();
+
+                    uno::Any aAny;
+                    aAny <<= aDirection3D;
+                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSize")), aAny);
+                }
+            }
+
             // add, set style and properties from base shape
             AddShape(xShape);
             SetStyle();
@@ -429,7 +511,127 @@ void SdXML3DSphereObjectShapeContext::EndElement()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1( SdXML3DLatheObjectShapeContext, SdXML3DObjectContext );
+TYPEINIT1( SdXML3DPolygonBasedShapeContext, SdXML3DObjectContext );
+
+SdXML3DPolygonBasedShapeContext::SdXML3DPolygonBasedShapeContext(
+    SvXMLImport& rImport,
+    sal_uInt16 nPrfx,
+    const OUString& rLocalName,
+    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+    uno::Reference< drawing::XShapes >& rShapes)
+:   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+{
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for(sal_Int16 i=0; i < nAttrCount; i++)
+    {
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        OUString sValue = xAttrList->getValueByIndex( i );
+        const SvXMLTokenMap& rAttrTokenMap = GetImport().GetShapeImport()->Get3DPolygonBasedAttrTokenMap();
+
+        switch(rAttrTokenMap.Get(nPrefix, aLocalName))
+        {
+            case XML_TOK_3DPOLYGONBASED_VIEWBOX:
+            {
+                maViewBox = sValue;
+                break;
+            }
+            case XML_TOK_3DPOLYGONBASED_D:
+            {
+                maPoints = sValue;
+                break;
+            }
+        }
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+SdXML3DPolygonBasedShapeContext::~SdXML3DPolygonBasedShapeContext()
+{
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
+{
+    uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+    if(xPropSet.is())
+    {
+        // set parameters
+        if(maPoints.getLength() && maViewBox.getLength())
+        {
+            SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
+            awt::Point aMinPoint(aViewBox.GetX(), aViewBox.GetY());
+            awt::Size aMaxSize(aViewBox.GetWidth(), aViewBox.GetHeight());
+            SdXMLImExSvgDElement aPoints(maPoints, aViewBox,
+                aMinPoint, aMaxSize, GetImport().GetMM100UnitConverter());
+
+            // convert to double sequences
+            drawing::PointSequenceSequence& xPoSeSe =
+                (drawing::PointSequenceSequence&)aPoints.GetPointSequenceSequence();
+            sal_Int32 nOuterSequenceCount = xPoSeSe.getLength();
+            drawing::PointSequence* pInnerSequence = xPoSeSe.getArray();
+
+            drawing::PolyPolygonShape3D xPolyPolygon3D;
+            xPolyPolygon3D.SequenceX.realloc(nOuterSequenceCount);
+            xPolyPolygon3D.SequenceY.realloc(nOuterSequenceCount);
+            xPolyPolygon3D.SequenceZ.realloc(nOuterSequenceCount);
+            drawing::DoubleSequence* pOuterSequenceX = xPolyPolygon3D.SequenceX.getArray();
+            drawing::DoubleSequence* pOuterSequenceY = xPolyPolygon3D.SequenceY.getArray();
+            drawing::DoubleSequence* pOuterSequenceZ = xPolyPolygon3D.SequenceZ.getArray();
+
+            for(sal_Int32 a(0L); a < nOuterSequenceCount; a++)
+            {
+                sal_Int32 nInnerSequenceCount(pInnerSequence->getLength());
+                awt::Point* pArray = pInnerSequence->getArray();
+
+                pOuterSequenceX->realloc(nInnerSequenceCount);
+                pOuterSequenceY->realloc(nInnerSequenceCount);
+                pOuterSequenceZ->realloc(nInnerSequenceCount);
+                double* pInnerSequenceX = pOuterSequenceX->getArray();
+                double* pInnerSequenceY = pOuterSequenceY->getArray();
+                double* pInnerSequenceZ = pOuterSequenceZ->getArray();
+
+                for(sal_Int32 b(0L); b < nInnerSequenceCount; b++)
+                {
+                    *pInnerSequenceX++ = pArray->X;
+                    *pInnerSequenceY++ = pArray->Y;
+                    *pInnerSequenceZ++ = 0.0;
+                    pArray++;
+                }
+                pInnerSequence++;
+
+                pOuterSequenceX++;
+                pOuterSequenceY++;
+                pOuterSequenceZ++;
+            }
+
+            // set poly
+            uno::Any aAny;
+            aAny <<= xPolyPolygon3D;
+            xPropSet->setPropertyValue(
+                OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPolyPolygon3D")), aAny);
+        }
+
+        // call parent
+        SdXML3DObjectContext::StartElement(xAttrList);
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXML3DPolygonBasedShapeContext::EndElement()
+{
+    // call parent
+    SdXML3DObjectContext::EndElement();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+TYPEINIT1( SdXML3DLatheObjectShapeContext, SdXML3DPolygonBasedShapeContext);
 
 SdXML3DLatheObjectShapeContext::SdXML3DLatheObjectShapeContext(
     SvXMLImport& rImport,
@@ -437,7 +639,7 @@ SdXML3DLatheObjectShapeContext::SdXML3DLatheObjectShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+:   SdXML3DPolygonBasedShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
 {
 }
 
@@ -463,7 +665,7 @@ void SdXML3DLatheObjectShapeContext::StartElement(const uno::Reference< xml::sax
             mxShape = xShape;
 
             // call parent
-            SdXML3DObjectContext::StartElement(xAttrList);
+            SdXML3DPolygonBasedShapeContext::StartElement(xAttrList);
 
             // add, set style and properties from base shape
             AddShape(xShape);
@@ -477,13 +679,13 @@ void SdXML3DLatheObjectShapeContext::StartElement(const uno::Reference< xml::sax
 void SdXML3DLatheObjectShapeContext::EndElement()
 {
     // call parent
-    SdXML3DObjectContext::EndElement();
+    SdXML3DPolygonBasedShapeContext::EndElement();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TYPEINIT1( SdXML3DExtrudeObjectShapeContext, SdXML3DObjectContext );
+TYPEINIT1( SdXML3DExtrudeObjectShapeContext, SdXML3DPolygonBasedShapeContext);
 
 SdXML3DExtrudeObjectShapeContext::SdXML3DExtrudeObjectShapeContext(
     SvXMLImport& rImport,
@@ -491,7 +693,7 @@ SdXML3DExtrudeObjectShapeContext::SdXML3DExtrudeObjectShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+:   SdXML3DPolygonBasedShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
 {
 }
 
@@ -517,7 +719,7 @@ void SdXML3DExtrudeObjectShapeContext::StartElement(const uno::Reference< xml::s
             mxShape = xShape;
 
             // call parent
-            SdXML3DObjectContext::StartElement(xAttrList);
+            SdXML3DPolygonBasedShapeContext::StartElement(xAttrList);
 
             // add, set style and properties from base shape
             AddShape(xShape);
@@ -531,7 +733,7 @@ void SdXML3DExtrudeObjectShapeContext::StartElement(const uno::Reference< xml::s
 void SdXML3DExtrudeObjectShapeContext::EndElement()
 {
     // call parent
-    SdXML3DObjectContext::EndElement();
+    SdXML3DPolygonBasedShapeContext::EndElement();
 }
 
-
+// EOF

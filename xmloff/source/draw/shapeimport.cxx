@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-30 18:06:00 $
+ *  last change: $Author: aw $ $Date: 2000-12-01 13:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,9 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mpGraphicObjectShapeAttrTokenMap(0L),
     mp3DSceneShapeElemTokenMap(0L),
     mp3DObjectAttrTokenMap(0L),
+    mp3DPolygonBasedAttrTokenMap(0L),
+    mp3DCubeObjectAttrTokenMap(0L),
+    mp3DSphereObjectAttrTokenMap(0L),
     mp3DSceneShapeAttrTokenMap(0L),
     mp3DLightAttrTokenMap(0L),
     mpSortContext(0L)
@@ -216,6 +219,9 @@ XMLShapeImportHelper::~XMLShapeImportHelper()
     if(mpGraphicObjectShapeAttrTokenMap) delete mpGraphicObjectShapeAttrTokenMap;
     if(mp3DSceneShapeElemTokenMap) delete mp3DSceneShapeElemTokenMap;
     if(mp3DObjectAttrTokenMap) delete mp3DObjectAttrTokenMap;
+    if(mp3DPolygonBasedAttrTokenMap) delete mp3DPolygonBasedAttrTokenMap;
+    if(mp3DCubeObjectAttrTokenMap) delete mp3DCubeObjectAttrTokenMap;
+    if(mp3DSphereObjectAttrTokenMap) delete mp3DSphereObjectAttrTokenMap;
     if(mp3DSceneShapeAttrTokenMap) delete mp3DSceneShapeAttrTokenMap;
     if(mp3DLightAttrTokenMap) delete mp3DLightAttrTokenMap;
 
@@ -306,8 +312,6 @@ static __FAR_DATA SvXMLTokenMapEntry a3DObjectAttrTokenMap[] =
 {
     { XML_NAMESPACE_DRAW,           sXML_style_name,        XML_TOK_3DOBJECT_DRAWSTYLE_NAME     },
     { XML_NAMESPACE_DR3D,           sXML_transform,         XML_TOK_3DOBJECT_TRANSFORM          },
-    { XML_NAMESPACE_SVG,            sXML_viewBox,           XML_TOK_3DOBJECT_VIEWBOX            },
-    { XML_NAMESPACE_SVG,            sXML_d,                 XML_TOK_3DOBJECT_D                  },
     XML_TOKEN_MAP_END
 };
 
@@ -316,6 +320,54 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DObjectAttrTokenMap()
     if(!mp3DObjectAttrTokenMap)
         mp3DObjectAttrTokenMap = new SvXMLTokenMap(a3DObjectAttrTokenMap);
     return *mp3DObjectAttrTokenMap;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+static __FAR_DATA SvXMLTokenMapEntry a3DPolygonBasedAttrTokenMap[] =
+{
+    { XML_NAMESPACE_SVG,            sXML_viewBox,           XML_TOK_3DPOLYGONBASED_VIEWBOX      },
+    { XML_NAMESPACE_SVG,            sXML_d,                 XML_TOK_3DPOLYGONBASED_D            },
+    XML_TOKEN_MAP_END
+};
+
+const SvXMLTokenMap& XMLShapeImportHelper::Get3DPolygonBasedAttrTokenMap()
+{
+    if(!mp3DPolygonBasedAttrTokenMap)
+        mp3DPolygonBasedAttrTokenMap = new SvXMLTokenMap(a3DPolygonBasedAttrTokenMap);
+    return *mp3DPolygonBasedAttrTokenMap;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+static __FAR_DATA SvXMLTokenMapEntry a3DCubeObjectAttrTokenMap[] =
+{
+    { XML_NAMESPACE_DR3D,           sXML_min_edge,          XML_TOK_3DCUBEOBJ_MINEDGE   },
+    { XML_NAMESPACE_DR3D,           sXML_max_edge,          XML_TOK_3DCUBEOBJ_MAXEDGE   },
+    XML_TOKEN_MAP_END
+};
+
+const SvXMLTokenMap& XMLShapeImportHelper::Get3DCubeObjectAttrTokenMap()
+{
+    if(!mp3DCubeObjectAttrTokenMap)
+        mp3DCubeObjectAttrTokenMap = new SvXMLTokenMap(a3DCubeObjectAttrTokenMap);
+    return *mp3DCubeObjectAttrTokenMap;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+static __FAR_DATA SvXMLTokenMapEntry a3DSphereObjectAttrTokenMap[] =
+{
+    { XML_NAMESPACE_DR3D,           sXML_center,            XML_TOK_3DSPHEREOBJ_CENTER  },
+    { XML_NAMESPACE_DR3D,           sXML_size,              XML_TOK_3DSPHEREOBJ_SIZE    },
+    XML_TOKEN_MAP_END
+};
+
+const SvXMLTokenMap& XMLShapeImportHelper::Get3DSphereObjectAttrTokenMap()
+{
+    if(!mp3DSphereObjectAttrTokenMap)
+        mp3DSphereObjectAttrTokenMap = new SvXMLTokenMap(a3DSphereObjectAttrTokenMap);
+    return *mp3DSphereObjectAttrTokenMap;
 }
 
 //////////////////////////////////////////////////////////////////////////////

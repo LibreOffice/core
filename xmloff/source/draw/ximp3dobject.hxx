@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximp3dobject.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-24 16:36:47 $
+ *  last change: $Author: aw $ $Date: 2000-12-01 13:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,18 @@
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #endif
 
+#ifndef _SVX_VECTOR3D_HXX
+#include <goodies/vector3d.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_DIRECTION3D_HPP_
+#include <com/sun/star/drawing/Direction3D.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_POSITION3D_HPP_
+#include <com/sun/star/drawing/Position3D.hpp>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 // common shape context
 
@@ -95,12 +107,8 @@ protected:
     // the shape group this object should be created inside
     com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >  mxShapes;
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape >   mxShape;
-    com::sun::star::uno::Reference< com::sun::star::text::XTextCursor > mxCursor;
 
     rtl::OUString               maDrawStyleName;
-    rtl::OUString               maPoints;
-    rtl::OUString               maViewBox;
-
     com::sun::star::drawing::HomogenMatrix mxHomMat;
     BOOL                        mbSetTransform;
 
@@ -126,6 +134,11 @@ public:
 
 class SdXML3DCubeObjectShapeContext : public SdXML3DObjectContext
 {
+    Vector3D                maMinEdge;
+    Vector3D                maMaxEdge;
+    BOOL                    mbMinEdgeUsed;
+    BOOL                    mbMaxEdgeUsed;
+
 public:
     TYPEINFO();
 
@@ -144,6 +157,11 @@ public:
 
 class SdXML3DSphereObjectShapeContext : public SdXML3DObjectContext
 {
+    Vector3D                maCenter;
+    Vector3D                maSize;
+    BOOL                    mbCenterUsed;
+    BOOL                    mbSizeUsed;
+
 public:
     TYPEINFO();
 
@@ -158,9 +176,30 @@ public:
 };
 
 //////////////////////////////////////////////////////////////////////////////
+// polygonbased context
+
+class SdXML3DPolygonBasedShapeContext : public SdXML3DObjectContext
+{
+    rtl::OUString               maPoints;
+    rtl::OUString               maViewBox;
+
+public:
+    TYPEINFO();
+
+    SdXML3DPolygonBasedShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+        const rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
+    virtual ~SdXML3DPolygonBasedShapeContext();
+
+    virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
+    virtual void EndElement();
+};
+
+//////////////////////////////////////////////////////////////////////////////
 // dr3d:3dlathe context
 
-class SdXML3DLatheObjectShapeContext : public SdXML3DObjectContext
+class SdXML3DLatheObjectShapeContext : public SdXML3DPolygonBasedShapeContext
 {
 public:
     TYPEINFO();
@@ -178,7 +217,7 @@ public:
 //////////////////////////////////////////////////////////////////////////////
 // dr3d:3dextrude context
 
-class SdXML3DExtrudeObjectShapeContext : public SdXML3DObjectContext
+class SdXML3DExtrudeObjectShapeContext : public SdXML3DPolygonBasedShapeContext
 {
 public:
     TYPEINFO();

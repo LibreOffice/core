@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-01 11:10:35 $
+ *  last change: $Author: aw $ $Date: 2000-12-01 13:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2397,7 +2397,7 @@ void SdXMLExport::ImpExportGraphicObjectShape(SvXMLExport& rExp,
         {
             aAny = xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL")));
             aAny >>= aStr;
-            rExp.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, rExp.AddEmbeddedGraphicObject( aStr ) );
+            rExp.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, aStr );
 
             aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_simple));
             rExp.AddAttribute(XML_NAMESPACE_XLINK, sXML_type, aStr );
@@ -2491,9 +2491,7 @@ void SdXMLExport::ImpExportChartShape(SvXMLExport& rExp,
 
         if( xChartDoc.is() )
         {
-            // export chart data if the flag is not set (default)
-            sal_Bool bExportOwnData = (( nFeatures & SEF_EXPORT_NO_CHART_DATA ) == 0 );
-            rExp.GetChartExport()->exportChart( xChartDoc, bExportOwnData );
+            rExp.GetChartExport()->exportChart( xChartDoc, sal_False );
         }
         else
         {
@@ -2811,6 +2809,9 @@ void SdXMLExport::ImpExport3DShape(SvXMLExport& rExp,
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
+        OUString aStr;
+        OUStringBuffer sStringBuffer;
+
         // transformation (UNO_NAME_3D_TRANSFORM_MATRIX == "D3DTransformMatrix")
         uno::Any aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DTransformMatrix")));
         drawing::HomogenMatrix xHomMat;
@@ -2826,12 +2827,73 @@ void SdXMLExport::ImpExport3DShape(SvXMLExport& rExp,
             {
                 // write 3DCube shape
                 SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DR3D, sXML_3DCube, sal_True, sal_True);
+
+                // minEdge
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPosition")));
+                drawing::Position3D aPosition3D;
+                aAny >>= aPosition3D;
+                Vector3D aPos3D(aPosition3D.PositionX, aPosition3D.PositionY, aPosition3D.PositionZ);
+
+                // maxEdge
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSize")));
+                drawing::Direction3D aDirection3D;
+                aAny >>= aDirection3D;
+                Vector3D aDir3D(aDirection3D.DirectionX, aDirection3D.DirectionY, aDirection3D.DirectionZ);
+
+                // transform maxEdge from distance to pos
+                aDir3D = aPos3D + aDir3D;
+
+                // write minEdge
+                if(aPos3D != Vector3D(-2500.0, -2500.0, -2500.0)) // write only when not default
+                {
+                    rExp.GetMM100UnitConverter().convertVector3D(sStringBuffer, aPos3D);
+                    aStr = sStringBuffer.makeStringAndClear();
+                    rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_min_edge, aStr);
+                }
+
+                // write maxEdge
+                if(aDir3D != Vector3D(2500.0, 2500.0, 2500.0)) // write only when not default
+                {
+                    rExp.GetMM100UnitConverter().convertVector3D(sStringBuffer, aDir3D);
+                    aStr = sStringBuffer.makeStringAndClear();
+                    rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_max_edge, aStr);
+                }
+
                 break;
             }
             case XmlShapeTypeDraw3DSphereObject:
             {
                 // write 3DSphere shape
                 SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DR3D, sXML_3DSphere, sal_True, sal_True);
+
+                // Center
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPosition")));
+                drawing::Position3D aPosition3D;
+                aAny >>= aPosition3D;
+                Vector3D aPos3D(aPosition3D.PositionX, aPosition3D.PositionY, aPosition3D.PositionZ);
+
+                // Size
+                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSize")));
+                drawing::Direction3D aDirection3D;
+                aAny >>= aDirection3D;
+                Vector3D aDir3D(aDirection3D.DirectionX, aDirection3D.DirectionY, aDirection3D.DirectionZ);
+
+                // write Center
+                if(aPos3D != Vector3D(0.0, 0.0, 0.0)) // write only when not default
+                {
+                    rExp.GetMM100UnitConverter().convertVector3D(sStringBuffer, aPos3D);
+                    aStr = sStringBuffer.makeStringAndClear();
+                    rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_center, aStr);
+                }
+
+                // write Size
+                if(aDir3D != Vector3D(5000.0, 5000.0, 5000.0)) // write only when not default
+                {
+                    rExp.GetMM100UnitConverter().convertVector3D(sStringBuffer, aDir3D);
+                    aStr = sStringBuffer.makeStringAndClear();
+                    rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_size, aStr);
+                }
+
                 break;
             }
             case XmlShapeTypeDraw3DLatheObject:
@@ -2946,256 +3008,260 @@ void SdXMLExport::ImpExport3DShape(SvXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExport3DScene(SvXMLExport& rExp,
+void SdXMLExport::ImpPrepareExport3DScene(SvXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
 {
-    uno::Reference< container::XIndexAccess > xShapes(xShape, uno::UNO_QUERY);
-    if(xShapes.is() && xShapes->getCount())
+    // write 3DScene attributes
+    const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
+    if(xPropSet.is())
     {
-        // write 3DScene attributes
-        const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
-        if(xPropSet.is())
+        OUString aStr;
+        OUStringBuffer sStringBuffer;
+
+        // rectangle, prepare parameters
+        awt::Point aPoint = xShape->getPosition();
+        awt::Size aSize = xShape->getSize();
+        if( pRefPoint )
         {
-            OUString aStr;
-            OUStringBuffer sStringBuffer;
+            aPoint.X -= pRefPoint->X;
+            aPoint.Y -= pRefPoint->Y;
+        }
 
-            // rectangle, prepare parameters
-            awt::Point aPoint = xShape->getPosition();
-            awt::Size aSize = xShape->getSize();
-            if( pRefPoint )
-            {
-                aPoint.X -= pRefPoint->X;
-                aPoint.Y -= pRefPoint->Y;
-            }
-
-            // svg: x
-            if( nFeatures & SEF_EXPORT_X )
-            {
-                rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aPoint.X);
-                aStr = sStringBuffer.makeStringAndClear();
-                rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_x, aStr);
-            }
-
-            // svg: y
-            if( nFeatures & SEF_EXPORT_Y )
-            {
-                rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aPoint.Y);
-                aStr = sStringBuffer.makeStringAndClear();
-                rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_y, aStr);
-            }
-
-            // svg: width
-            if( nFeatures & SEF_EXPORT_WIDTH )
-            {
-                rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aSize.Width);
-                aStr = sStringBuffer.makeStringAndClear();
-                rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_width, aStr);
-            }
-
-            // svg: height
-            if( nFeatures & SEF_EXPORT_HEIGHT )
-            {
-                rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aSize.Height);
-                aStr = sStringBuffer.makeStringAndClear();
-                rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_height, aStr);
-            }
-
-            // world transformation (UNO_NAME_3D_TRANSFORM_MATRIX == "D3DTransformMatrix")
-            uno::Any aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DTransformMatrix")));
-            drawing::HomogenMatrix xHomMat;
-            aAny >>= xHomMat;
-            SdXMLImExTransform3D aTransform;
-            aTransform.AddHomogenMatrix(xHomMat);
-            if(aTransform.NeedsAction())
-                rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_transform, aTransform.GetExportString(rExp.GetMM100UnitConverter()));
-
-            // VRP, VPN, VUP
-            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DCameraGeometry")));
-            drawing::CameraGeometry aCamGeo;
-            aAny >>= aCamGeo;
-
-            Vector3D aVRP(aCamGeo.vrp.PositionX, aCamGeo.vrp.PositionY, aCamGeo.vrp.PositionZ);
-            if(aVRP != Vector3D(0.0, 0.0, 1.0)) // write only when not default
-            {
-                rExp.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVRP);
-                aStr = sStringBuffer.makeStringAndClear();
-                rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_vrp, aStr);
-            }
-
-            Vector3D aVPN(aCamGeo.vpn.DirectionX, aCamGeo.vpn.DirectionY, aCamGeo.vpn.DirectionZ);
-            if(aVPN != Vector3D(0.0, 0.0, 1.0)) // write only when not default
-            {
-                rExp.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVPN);
-                aStr = sStringBuffer.makeStringAndClear();
-                rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_vpn, aStr);
-            }
-
-            Vector3D aVUP(aCamGeo.vup.DirectionX, aCamGeo.vup.DirectionY, aCamGeo.vup.DirectionZ);
-            if(aVUP != Vector3D(0.0, 1.0, 0.0)) // write only when not default
-            {
-                rExp.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVUP);
-                aStr = sStringBuffer.makeStringAndClear();
-                rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_vup, aStr);
-            }
-
-            // projection "D3DScenePerspective" drawing::ProjectionMode
-            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DScenePerspective")));
-            drawing::ProjectionMode xPrjMode;
-            aAny >>= xPrjMode;
-            if(xPrjMode == drawing::ProjectionMode_PARALLEL)
-                aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_parallel));
-            else
-                aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_perspective));
-            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_projection, aStr);
-
-            // distance
-            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneDistance")));
-            sal_Int32 nDistance;
-            aAny >>= nDistance;
-            rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, nDistance);
+        // svg: x
+        if( nFeatures & SEF_EXPORT_X )
+        {
+            rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aPoint.X);
             aStr = sStringBuffer.makeStringAndClear();
-            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_distance, aStr);
+            rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_x, aStr);
+        }
 
-            // focalLength
-            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneFocalLength")));
-            sal_Int32 nFocalLength;
-            aAny >>= nFocalLength;
-            rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, nFocalLength);
+        // svg: y
+        if( nFeatures & SEF_EXPORT_Y )
+        {
+            rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aPoint.Y);
             aStr = sStringBuffer.makeStringAndClear();
-            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_focal_length, aStr);
+            rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_y, aStr);
+        }
 
-            // shadowSlant
-            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadowSlant")));
-            sal_Int16 nShadowSlant;
-            aAny >>= nShadowSlant;
-            rExp.GetMM100UnitConverter().convertNumber(sStringBuffer, (sal_Int32)nShadowSlant);
+        // svg: width
+        if( nFeatures & SEF_EXPORT_WIDTH )
+        {
+            rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aSize.Width);
             aStr = sStringBuffer.makeStringAndClear();
-            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_shadow_slant, aStr);
+            rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_width, aStr);
+        }
 
-            // shadeMode
-            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadeMode")));
-            drawing::ShadeMode xShadeMode;
-            aAny >>= xShadeMode;
-            if(xShadeMode == drawing::ShadeMode_FLAT)
-                aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_flat));
-            else if(xShadeMode == drawing::ShadeMode_PHONG)
-                aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_phong));
-            else if(xShadeMode == drawing::ShadeMode_SMOOTH)
-                aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_gouraud));
-            else
-                aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_draft));
-            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_shade_mode, aStr);
-
-            // ambientColor
-            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneAmbientColor")));
-            sal_Int32 aColTemp;
-            Color aAmbientColor;
-            aAny >>= aColTemp; aAmbientColor.SetColor(aColTemp);
-            rExp.GetMM100UnitConverter().convertColor(sStringBuffer, aAmbientColor);
+        // svg: height
+        if( nFeatures & SEF_EXPORT_HEIGHT )
+        {
+            rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aSize.Height);
             aStr = sStringBuffer.makeStringAndClear();
-            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_ambient_color, aStr);
+            rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_height, aStr);
+        }
 
-            // lightingMode
-            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneTwoSidedLighting")));
-            sal_Bool bTwoSidedLighting;
-            aAny >>= bTwoSidedLighting;
-            rExp.GetMM100UnitConverter().convertBool(sStringBuffer, bTwoSidedLighting);
+        // world transformation (UNO_NAME_3D_TRANSFORM_MATRIX == "D3DTransformMatrix")
+        uno::Any aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DTransformMatrix")));
+        drawing::HomogenMatrix xHomMat;
+        aAny >>= xHomMat;
+        SdXMLImExTransform3D aTransform;
+        aTransform.AddHomogenMatrix(xHomMat);
+        if(aTransform.NeedsAction())
+            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_transform, aTransform.GetExportString(rExp.GetMM100UnitConverter()));
+
+        // VRP, VPN, VUP
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DCameraGeometry")));
+        drawing::CameraGeometry aCamGeo;
+        aAny >>= aCamGeo;
+
+        Vector3D aVRP(aCamGeo.vrp.PositionX, aCamGeo.vrp.PositionY, aCamGeo.vrp.PositionZ);
+        if(aVRP != Vector3D(0.0, 0.0, 1.0)) // write only when not default
+        {
+            rExp.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVRP);
             aStr = sStringBuffer.makeStringAndClear();
-            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_lighting_mode, aStr);
+            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_vrp, aStr);
+        }
 
-            // write 3DScene shape
-            SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DR3D, sXML_3DScene, sal_True, sal_True);
+        Vector3D aVPN(aCamGeo.vpn.DirectionX, aCamGeo.vpn.DirectionY, aCamGeo.vpn.DirectionZ);
+        if(aVPN != Vector3D(0.0, 0.0, 1.0)) // write only when not default
+        {
+            rExp.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVPN);
+            aStr = sStringBuffer.makeStringAndClear();
+            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_vpn, aStr);
+        }
 
-            // write lamps 1..8 as content
-            {
-                // lightcolor
-                Color aLightColor[8];
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor1")));
-                aAny >>= aColTemp; aLightColor[0].SetColor(aColTemp);
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor2")));
-                aAny >>= aColTemp; aLightColor[1].SetColor(aColTemp);
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor3")));
-                aAny >>= aColTemp; aLightColor[2].SetColor(aColTemp);
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor4")));
-                aAny >>= aColTemp; aLightColor[3].SetColor(aColTemp);
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor5")));
-                aAny >>= aColTemp; aLightColor[4].SetColor(aColTemp);
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor6")));
-                aAny >>= aColTemp; aLightColor[5].SetColor(aColTemp);
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor7")));
-                aAny >>= aColTemp; aLightColor[6].SetColor(aColTemp);
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor8")));
-                aAny >>= aColTemp; aLightColor[7].SetColor(aColTemp);
+        Vector3D aVUP(aCamGeo.vup.DirectionX, aCamGeo.vup.DirectionY, aCamGeo.vup.DirectionZ);
+        if(aVUP != Vector3D(0.0, 1.0, 0.0)) // write only when not default
+        {
+            rExp.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVUP);
+            aStr = sStringBuffer.makeStringAndClear();
+            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_vup, aStr);
+        }
 
-                // lightdirection
-                Vector3D aLightDirection[8];
-                drawing::Direction3D xLightDir;
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection1")));
-                aAny >>= xLightDir; aLightDirection[0] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection2")));
-                aAny >>= xLightDir; aLightDirection[1] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection3")));
-                aAny >>= xLightDir; aLightDirection[2] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection4")));
-                aAny >>= xLightDir; aLightDirection[3] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection5")));
-                aAny >>= xLightDir; aLightDirection[4] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection6")));
-                aAny >>= xLightDir; aLightDirection[5] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection7")));
-                aAny >>= xLightDir; aLightDirection[6] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection8")));
-                aAny >>= xLightDir; aLightDirection[7] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
+        // projection "D3DScenePerspective" drawing::ProjectionMode
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DScenePerspective")));
+        drawing::ProjectionMode xPrjMode;
+        aAny >>= xPrjMode;
+        if(xPrjMode == drawing::ProjectionMode_PARALLEL)
+            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_parallel));
+        else
+            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_perspective));
+        rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_projection, aStr);
 
-                // lighton
-                sal_Bool bLightOnOff[8];
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn1")));
-                aAny >>= bLightOnOff[0];
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn2")));
-                aAny >>= bLightOnOff[1];
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn3")));
-                aAny >>= bLightOnOff[2];
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn4")));
-                aAny >>= bLightOnOff[3];
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn5")));
-                aAny >>= bLightOnOff[4];
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn6")));
-                aAny >>= bLightOnOff[5];
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn7")));
-                aAny >>= bLightOnOff[6];
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn8")));
-                aAny >>= bLightOnOff[7];
+        // distance
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneDistance")));
+        sal_Int32 nDistance;
+        aAny >>= nDistance;
+        rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, nDistance);
+        aStr = sStringBuffer.makeStringAndClear();
+        rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_distance, aStr);
 
-                for(sal_uInt32 a(0L); a < 8; a++)
-                {
-                    // lightcolor
-                    rExp.GetMM100UnitConverter().convertColor(sStringBuffer, aLightColor[a]);
-                    aStr = sStringBuffer.makeStringAndClear();
-                    rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_diffuse_color, aStr);
+        // focalLength
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneFocalLength")));
+        sal_Int32 nFocalLength;
+        aAny >>= nFocalLength;
+        rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, nFocalLength);
+        aStr = sStringBuffer.makeStringAndClear();
+        rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_focal_length, aStr);
 
-                    // lightdirection
-                    rExp.GetMM100UnitConverter().convertVector3D(sStringBuffer, aLightDirection[a]);
-                    aStr = sStringBuffer.makeStringAndClear();
-                    rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_direction, aStr);
+        // shadowSlant
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadowSlant")));
+        sal_Int16 nShadowSlant;
+        aAny >>= nShadowSlant;
+        rExp.GetMM100UnitConverter().convertNumber(sStringBuffer, (sal_Int32)nShadowSlant);
+        aStr = sStringBuffer.makeStringAndClear();
+        rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_shadow_slant, aStr);
 
-                    // lighton
-                    rExp.GetMM100UnitConverter().convertBool(sStringBuffer, bLightOnOff[a]);
-                    aStr = sStringBuffer.makeStringAndClear();
-                    rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_enabled, aStr);
+        // shadeMode
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadeMode")));
+        drawing::ShadeMode xShadeMode;
+        aAny >>= xShadeMode;
+        if(xShadeMode == drawing::ShadeMode_FLAT)
+            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_flat));
+        else if(xShadeMode == drawing::ShadeMode_PHONG)
+            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_phong));
+        else if(xShadeMode == drawing::ShadeMode_SMOOTH)
+            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_gouraud));
+        else
+            aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_draft));
+        rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_shade_mode, aStr);
 
-                    // specular
-                    rExp.GetMM100UnitConverter().convertBool(sStringBuffer, (BOOL)(a == 0L));
-                    aStr = sStringBuffer.makeStringAndClear();
-                    rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_specular, aStr);
+        // ambientColor
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneAmbientColor")));
+        sal_Int32 aColTemp;
+        Color aAmbientColor;
+        aAny >>= aColTemp; aAmbientColor.SetColor(aColTemp);
+        rExp.GetMM100UnitConverter().convertColor(sStringBuffer, aAmbientColor);
+        aStr = sStringBuffer.makeStringAndClear();
+        rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_ambient_color, aStr);
 
-                    // write light entry
-                    SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DR3D, sXML_light, sal_True, sal_True);
-                }
-            }
+        // lightingMode
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneTwoSidedLighting")));
+        sal_Bool bTwoSidedLighting;
+        aAny >>= bTwoSidedLighting;
+        rExp.GetMM100UnitConverter().convertBool(sStringBuffer, bTwoSidedLighting);
+        aStr = sStringBuffer.makeStringAndClear();
+        rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_lighting_mode, aStr);
+    }
+}
 
-            // write members
-//          rExp.ImpWriteSingleShapeStyleInfos(xShapes, nFeatures, pRefPoint );
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXMLExport::ImpExport3DLamps(SvXMLExport& rExp,
+    const uno::Reference< drawing::XShape >& xShape,
+    XmlShapeType eShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
+{
+    const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
+    if(xPropSet.is())
+    {
+        // write lamps 1..8 as content
+        uno::Any aAny;
+        OUString aStr;
+        OUStringBuffer sStringBuffer;
+
+        // lightcolor
+        Color aLightColor[8];
+        sal_Int32 aColTemp;
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor1")));
+        aAny >>= aColTemp; aLightColor[0].SetColor(aColTemp);
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor2")));
+        aAny >>= aColTemp; aLightColor[1].SetColor(aColTemp);
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor3")));
+        aAny >>= aColTemp; aLightColor[2].SetColor(aColTemp);
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor4")));
+        aAny >>= aColTemp; aLightColor[3].SetColor(aColTemp);
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor5")));
+        aAny >>= aColTemp; aLightColor[4].SetColor(aColTemp);
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor6")));
+        aAny >>= aColTemp; aLightColor[5].SetColor(aColTemp);
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor7")));
+        aAny >>= aColTemp; aLightColor[6].SetColor(aColTemp);
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor8")));
+        aAny >>= aColTemp; aLightColor[7].SetColor(aColTemp);
+
+        // lightdirection
+        Vector3D aLightDirection[8];
+        drawing::Direction3D xLightDir;
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection1")));
+        aAny >>= xLightDir; aLightDirection[0] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection2")));
+        aAny >>= xLightDir; aLightDirection[1] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection3")));
+        aAny >>= xLightDir; aLightDirection[2] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection4")));
+        aAny >>= xLightDir; aLightDirection[3] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection5")));
+        aAny >>= xLightDir; aLightDirection[4] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection6")));
+        aAny >>= xLightDir; aLightDirection[5] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection7")));
+        aAny >>= xLightDir; aLightDirection[6] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection8")));
+        aAny >>= xLightDir; aLightDirection[7] = Vector3D(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
+
+        // lighton
+        sal_Bool bLightOnOff[8];
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn1")));
+        aAny >>= bLightOnOff[0];
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn2")));
+        aAny >>= bLightOnOff[1];
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn3")));
+        aAny >>= bLightOnOff[2];
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn4")));
+        aAny >>= bLightOnOff[3];
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn5")));
+        aAny >>= bLightOnOff[4];
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn6")));
+        aAny >>= bLightOnOff[5];
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn7")));
+        aAny >>= bLightOnOff[6];
+        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn8")));
+        aAny >>= bLightOnOff[7];
+
+        for(sal_uInt32 a(0L); a < 8; a++)
+        {
+            // lightcolor
+            rExp.GetMM100UnitConverter().convertColor(sStringBuffer, aLightColor[a]);
+            aStr = sStringBuffer.makeStringAndClear();
+            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_diffuse_color, aStr);
+
+            // lightdirection
+            rExp.GetMM100UnitConverter().convertVector3D(sStringBuffer, aLightDirection[a]);
+            aStr = sStringBuffer.makeStringAndClear();
+            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_direction, aStr);
+
+            // lighton
+            rExp.GetMM100UnitConverter().convertBool(sStringBuffer, bLightOnOff[a]);
+            aStr = sStringBuffer.makeStringAndClear();
+            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_enabled, aStr);
+
+            // specular
+            rExp.GetMM100UnitConverter().convertBool(sStringBuffer, (BOOL)(a == 0L));
+            aStr = sStringBuffer.makeStringAndClear();
+            rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_specular, aStr);
+
+            // write light entry
+            SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DR3D, sXML_light, sal_True, sal_True);
         }
     }
 }
@@ -3508,8 +3574,17 @@ void SdXMLExport::ImpWriteSingleShapeStyleInfos(uno::Reference< container::XInde
 
                 if(bIsScene)
                 {
-                    // write 3DScene
-                    ImpExport3DScene(*this, xShape, XmlShapeTypeDraw3DSceneObject, nFeatures, pRefPoint);
+                    // prepare write 3DScene
+                    ImpPrepareExport3DScene(*this, xShape, XmlShapeTypeDraw3DSceneObject, nFeatures, pRefPoint);
+
+                    // write 3DScene shape
+                    SvXMLElementExport aOBJ(*this, XML_NAMESPACE_DR3D, sXML_3DScene, sal_True, sal_True);
+
+                    // write 3DSceneLights
+                    ImpExport3DLamps(*this, xShape, XmlShapeTypeDraw3DSceneObject, nFeatures, pRefPoint);
+
+                    // write members
+                    ImpWriteSingleShapeStyleInfos(xShapes, nFeatures, pRefPoint );
                 }
                 else
                 {
