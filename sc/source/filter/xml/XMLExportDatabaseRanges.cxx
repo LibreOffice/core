@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDatabaseRanges.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-18 08:48:52 $
+ *  last change: $Author: sab $ $Date: 2002-03-22 16:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,13 @@
 #endif
 #ifndef _COM_SUN_STAR_SHEET_XDATABASERANGE_HPP_
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TABLE_TABLEORIENTATION_HPP_
+#include <com/sun/star/table/TableOrientation.hpp>
+#endif
+
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
 #endif
 
 //! not found in unonames.hxx
@@ -729,6 +736,7 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
                                         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_HAS_PERSISTENT_DATA, XML_FALSE);
                             }
                             uno::Reference <sheet::XSheetFilterDescriptor> xSheetFilterDescriptor = xDatabaseRange->getFilterDescriptor();
+                            uno::Sequence <beans::PropertyValue> aSortProperties = xDatabaseRange->getSortDescriptor();
                             if (xSheetFilterDescriptor.is())
                             {
                                 uno::Reference <beans::XPropertySet> xFilterProperties (xSheetFilterDescriptor, uno::UNO_QUERY);
@@ -739,11 +747,31 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
                                     if (aContainsHeaderProperty >>= bContainsHeader)
                                         if (!bContainsHeader)
                                             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONTAINS_HEADER, XML_FALSE);
-                                    uno::Any aOrientationProperty = xFilterProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ORIENT)));
+
+                                    // #98317#; there is no orientation on the filter
+/*                                  uno::Any aOrientationProperty = xFilterProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ORIENT)));
                                     sal_Bool bOrientation = sal_False;
+                                    table::TableOrientation eFilterOrient(table::TableOrientation_ROWS);
                                     if (aOrientationProperty >>= bOrientation)
                                         if (bOrientation)
-                                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORIENTATION, XML_COLUMN);
+                                            eFilterOrient = table::TableOrientation_ROWS;*/
+
+                                    table::TableOrientation eOrient(table::TableOrientation_ROWS);
+                                    sal_Bool bFound(sal_False);
+                                    sal_uInt32 nProperty(0);
+                                    while (!bFound && (nProperty < aSortProperties.getLength()))
+                                    {
+                                        if (aSortProperties[nProperty].Name.compareToAscii(SC_UNONAME_ORIENT) == 0)
+                                        {
+                                            aSortProperties[nProperty].Value >>= eOrient;
+                                            bFound = sal_True;
+                                        }
+                                        else
+                                            ++nProperty;
+                                    }
+
+                                    if (eOrient == table::TableOrientation_COLUMNS)
+                                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORIENTATION, XML_COLUMN);
                                 }
                             }
                             sal_Int32 nRefresh( pDBData->GetRefreshDelay() );
@@ -758,7 +786,7 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
                             WriteImportDescriptor(xDatabaseRange->getImportDescriptor());
                             if (xSheetFilterDescriptor.is())
                                 WriteFilterDescriptor(xSheetFilterDescriptor, sDatabaseRangeName);
-                            WriteSortDescriptor(xDatabaseRange->getSortDescriptor());
+                            WriteSortDescriptor(aSortProperties);
                             WriteSubTotalDescriptor(xDatabaseRange->getSubTotalDescriptor(), sDatabaseRangeName);
                         }
                     }
