@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ab $ $Date: 2002-11-01 11:42:47 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,7 @@ __EXPORT BasicIDEShell::~BasicIDEShell()
 
     SetWindow( 0 );
     SetCurWindow( 0 );
+    SfxObjectShell::SetWorkingDocument( SfxObjectShell::Current() );
 
     // Alle Fenster zerstoeren:
     IDEBaseWindow* pWin = aIDEWindowTable.First();
