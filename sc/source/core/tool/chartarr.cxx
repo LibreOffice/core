@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartarr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:17 $
+ *  last change: $Author: er $ $Date: 2000-12-05 12:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,61 +191,89 @@ ScChartArray::ScChartArray( ScDocument* pDoc, const SchMemChart& rData ) :
         pDocument( pDoc ),
         pPositionMap( NULL )
 {
-    const sal_Unicode cTok = ';';
-    BOOL bInitOk = FALSE;
-    xub_StrLen nToken;
-    String aPos = ((SchMemChart&)rData).SomeData1();
-    if ( (nToken = aPos.GetTokenCount( cTok )) >= 5)
-    {
-        String aOpt = ((SchMemChart&)rData).SomeData2();
-        xub_StrLen nOptToken = aOpt.GetTokenCount( cTok );
-        BOOL bNewChart = (nOptToken >= 4);      // ab 341/342
-        aRangeListRef.Clear();
-        USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
-        xub_StrLen nInd = 0;
-        for ( xub_StrLen j=0; j < nToken; j+=5 )
-        {
-            xub_StrLen nInd2 = nInd;
-            nTab1 = (USHORT) aPos.GetToken( 0, cTok, nInd ).ToInt32();
-            // damit alte Versionen (<341/342) das ueberlesen ist der nTab2
-            // Token Separator ein ','
-            if ( bNewChart )
-                nTab2 = (USHORT) aPos.GetToken( 1, ',', nInd2 ).ToInt32();
-            else
-                nTab2 = nTab1;
-            nCol1 = (USHORT) aPos.GetToken( 0, cTok, nInd ).ToInt32();
-            nRow1 = (USHORT) aPos.GetToken( 0, cTok, nInd ).ToInt32();
-            nCol2 = (USHORT) aPos.GetToken( 0, cTok, nInd ).ToInt32();
-            nRow2 = (USHORT) aPos.GetToken( 0, cTok, nInd ).ToInt32();
-            AddToRangeList( ScRange( nCol1, nRow1, nTab1,
-                nCol2, nRow2, nTab2 ) );
-        }
+    BOOL bInitOk = bValid = FALSE;
+    com::sun::star::uno::Sequence< com::sun::star::chart::ChartSeriesAddress >
+        aSeriesSeq = ((SchMemChart&)rData).GetSeriesAddresses();
+    sal_Int32 nColCount = aSeriesSeq.getLength();
+    if ( nColCount )
+    {   // new SO6 chart format
         bValid = TRUE;
-
-        if (aOpt.Len() >= 2)
+        bColHeaders = bRowHeaders = FALSE;
+        aRangeListRef = new ScRangeList;
+        for ( sal_Int32 nCol=0; nCol < nColCount; nCol++ )
         {
-            bColHeaders = ( aOpt.GetChar(0) != '0' );
-            bRowHeaders = ( aOpt.GetChar(1) != '0' );
-            if ( aOpt.Len() >= 3 )
+            if ( aSeriesSeq[nCol].LabelAddress.getLength() )
             {
-                if ( bNewChart )
-                {
-                    bDummyUpperLeft = ( aOpt.GetChar(2) != '0' );
-                    xub_StrLen nInd = 4;    // 111;
-                    eGlue = (ScChartGlue) aOpt.GetToken( 0, cTok, nInd ).ToInt32();
-                    nStartCol = (USHORT) aOpt.GetToken( 0, cTok, nInd ).ToInt32();
-                    nStartRow = (USHORT) aOpt.GetToken( 0, cTok, nInd ).ToInt32();
-                    bInitOk = TRUE;
-                }
+                bColHeaders = TRUE;
+                ScAddress aLabelAddr;
+                aLabelAddr.Parse( aSeriesSeq[nCol].LabelAddress, pDocument );
+                aRangeListRef->Append( aLabelAddr );
             }
+            aRangeListRef->Parse( aSeriesSeq[nCol].DataRangeAddress, pDocument, SCR_ABS_3D );
         }
-        else
-            bColHeaders = bRowHeaders = FALSE;
+        String aCategories( ((SchMemChart&)rData).GetCategoriesRangeAddress() );
+        if ( aCategories.Len() )
+        {
+            bRowHeaders = TRUE;
+            aRangeListRef->Parse( aCategories, pDocument, SCR_ABS_3D );
+        }
     }
     else
-    {
-        SetRangeList( ScRange() );
-        bColHeaders = bRowHeaders = bValid = FALSE;
+    {   // old SO5 chart format
+        const sal_Unicode cTok = ';';
+        xub_StrLen nToken;
+        String aPos = ((SchMemChart&)rData).SomeData1();
+        if ( (nToken = aPos.GetTokenCount( cTok )) >= 5)
+        {
+            String aOpt = ((SchMemChart&)rData).SomeData2();
+            xub_StrLen nOptToken = aOpt.GetTokenCount( cTok );
+            BOOL bNewChart = (nOptToken >= 4);      // ab 341/342
+            USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+            xub_StrLen nInd = 0;
+            for ( xub_StrLen j=0; j < nToken; j+=5 )
+            {
+                xub_StrLen nInd2 = nInd;
+                nTab1 = (USHORT) aPos.GetToken( 0, cTok, nInd ).ToInt32();
+                // damit alte Versionen (<341/342) das ueberlesen ist der nTab2
+                // Token Separator ein ','
+                if ( bNewChart )
+                    nTab2 = (USHORT) aPos.GetToken( 1, ',', nInd2 ).ToInt32();
+                else
+                    nTab2 = nTab1;
+                nCol1 = (USHORT) aPos.GetToken( 0, cTok, nInd ).ToInt32();
+                nRow1 = (USHORT) aPos.GetToken( 0, cTok, nInd ).ToInt32();
+                nCol2 = (USHORT) aPos.GetToken( 0, cTok, nInd ).ToInt32();
+                nRow2 = (USHORT) aPos.GetToken( 0, cTok, nInd ).ToInt32();
+                AddToRangeList( ScRange( nCol1, nRow1, nTab1,
+                    nCol2, nRow2, nTab2 ) );
+            }
+            bValid = TRUE;
+
+            if (aOpt.Len() >= 2)
+            {
+                bColHeaders = ( aOpt.GetChar(0) != '0' );
+                bRowHeaders = ( aOpt.GetChar(1) != '0' );
+                if ( aOpt.Len() >= 3 )
+                {
+                    if ( bNewChart )
+                    {
+                        bDummyUpperLeft = ( aOpt.GetChar(2) != '0' );
+                        xub_StrLen nInd = 4;    // 111;
+                        eGlue = (ScChartGlue) aOpt.GetToken( 0, cTok, nInd ).ToInt32();
+                        nStartCol = (USHORT) aOpt.GetToken( 0, cTok, nInd ).ToInt32();
+                        nStartRow = (USHORT) aOpt.GetToken( 0, cTok, nInd ).ToInt32();
+                        bInitOk = TRUE;
+                    }
+                }
+            }
+            else
+                bColHeaders = bRowHeaders = FALSE;
+        }
+        else
+        {
+            SetRangeList( ScRange() );
+            bColHeaders = bRowHeaders = bValid = FALSE;
+        }
     }
     if ( !bInitOk )
     {   // muessen in GlueState neu berechnet werden
@@ -286,7 +314,7 @@ BOOL ScChartArray::IsAtCursor(const ScAddress& rPos) const
 
 void ScChartArray::SetRangeList( const ScRange& rRange )
 {
-    aRangeListRef = new ScRangeList();      // handelt auch ReleaseRef / AddRef
+    aRangeListRef = new ScRangeList;
     aRangeListRef->Append( rRange );
     InvalidateGlue();
 }
