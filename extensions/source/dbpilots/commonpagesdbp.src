@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:47:12 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ swedish ] = "Data";
         Text[ polish ] = "Dane";
         Text[ portuguese_brazilian ] = "Dados";
-        Text[ japanese ] = "配列";
+        Text[ japanese ] = "データ";
         Text[ korean ] = "데이터";
         Text[ chinese_simplified ] = "数据";
         Text[ chinese_traditional ] = "資料";
@@ -127,7 +127,7 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ swedish ] = "Formul�ret som kontrollf�ltet tillh�r �r f�r n�rvarande �nnu inte (eller inte fullst�ndigt) knutet till en datak�lla.\n\nV�lj ut en datak�lla och en tabell.\n\n\nObservera att inst�llningarna som du g�r f�r formul�ret p� den h�r sidan f�r effekt direkt n�r du l�mnar sidan.";
         Text[ polish ] = "Obecnie formularz, do kt�rego nale�y formant, nie jest (lub jest nieca�kowicie) zwi�zany ze �r�d�em danych.\n\nWybierz �r�d�o danych i tabel�.\n\n\nPami�taj, �e ustawienia dokonane na tej stronie odnios� skutek zaraz po jej opuszczeniu.";
         Text[ portuguese_brazilian ] = "O formul�rio de controle ainda n�o est� conectado (ou ent�o s� parcialmente) a nenhuma fonte de dados.\n\nSelecione uma fonte de dados e uma tabela.\n\n\nN�o se esque�a de que a configura��o do formul�rio efetuada nesta p�gina tem efeito logo ap�s voc� sair dela.";
-        Text[ japanese ] = "コントロールにあるフォームは、現時点でまだデータソースに接続されていないか、完全に終わっていない可能性があります。\n\nデータソースとテーブルを選択してください。\n\n\nまた、このページでフォームの設定を行うと、ページを閉じるとすぐ有効になりますので、ご注意ください。";
+        Text[ japanese ] = "このコントロールが属するフォームは、まだデータベースへのリンクが完了していません。\n\nデータソースとテーブルを選択してください。\n\n\nまた、このページでフォームの設定を行うと、ページを閉じるとすぐ有効になりますので、ご注意ください。";
         Text[ korean ] = "컨트롤에 속해 있는 양식은 현재 데이터 원본과 아직 관련되어 있지 않습니다 (또는 완전하게 관련되어 있지 않습니다).\n\n데이터 원본 및 테이블을 선택하십시오.\n\n\n이 페이지에서 만들어진 설정은 이 페이지를 닫은 후부터 즉시 적용된다는 점에 유의하십시오.";
         Text[ chinese_simplified ] = "当前从属于这个表单的控制尚未(或没有完全)和一个数据源连结。\n\n\n请选择一个数据源和一个数据表格。\n\n\n请注意：离开这个表单页面时所有的新设定就会立刻生效。";
         Text[ chinese_traditional ] = "目前從屬於這個表單的控制項尚未(或沒有完全)和一個資料源連結。\n\n\n請您選擇一個資料源和一個資料表格。\n\n\n請注意：离開這個表單頁面時所有的新設定就會立刻生效。";
@@ -235,7 +235,7 @@ TabPage RID_PAGE_TABLESELECTION
     Text[ swedish ] = "Data";
     Text[ polish ] = "Dane";
     Text[ portuguese_brazilian ] = "Dados";
-    Text[ japanese ] = "配列";
+    Text[ japanese ] = "データ";
     Text[ korean ] = "데이터";
     Text[ chinese_simplified ] = "数据";
     Text[ chinese_traditional ] = "資料";
@@ -438,7 +438,7 @@ TabPage RID_PAGE_FORM_DATASOURCE_STATUS
         Text[ korean ] = "양식";
         Text[ chinese_simplified ] = "表单";
         Text[ chinese_traditional ] = "表單";
-        Text[ turkish ] = "Form";
+        Text[ turkish ] = "Forum";
         Text[ arabic ] = "�������";
         Text[ catalan ] = "Formulari";
         Text[ thai ] = "แบบฟอร์ม";
@@ -631,7 +631,7 @@ String RID_STR_TYPE_COMMAND
     Text [ english_us ] = "SQL command";
     Text[ portuguese ] = "Comando SQL";
     Text[ russian ] = "������� SQL";
-    Text[ greek ] = "SQL command";
+    Text[ greek ] = "������ SQL";
     Text[ dutch ] = "SQL-opdracht";
     Text[ french ] = "Instruction SQL";
     Text[ spanish ] = "Orden SQL";
@@ -658,6 +658,13 @@ String RID_STR_TYPE_COMMAND
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.31.8.1  2003/07/03 14:40:42  ihi
+ *  rc-2 merge all languages
+ *
+ *  Revision 1.31  2003/06/13 12:47:12  hr
+ *  INTEGRATION: CWS rcmerge (1.30.26); FILE MERGED
+ *  2003/06/12 11:09:52 gh 1.30.26.1: final Merge RC
+ *
  *  Revision 1.30.26.1  2003/06/12 11:09:52  gh
  *  final Merge RC
  *
@@ -789,6 +796,7 @@ String RID_STR_TYPE_COMMAND
  *
  *  Revision 1.0 14.02.01 11:05:25  fs
  ************************************************************************/
+
 
 
 
