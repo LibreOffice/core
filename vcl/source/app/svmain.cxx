@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-07 12:31:31 $
+ *  last change: $Author: cd $ $Date: 2001-08-23 15:50:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,7 +365,7 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 
     pSVData->maAppData.mpSolarMutex->acquire(); // mutex should be aquired for startup
 
-    ImplInitRemotePrinterList();
+//    ImplInitRemotePrinterList();
     }
 
 #endif
