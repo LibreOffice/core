@@ -2,9 +2,9 @@
  *
  *  $RCSfile: replace.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2000-12-11 14:00:04 $
+ *  last change: $Author: hjs $ $Date: 2000-12-18 13:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,37 @@ int _cdecl main( int argc, char *argv[] )
 #endif
 /****************************************************************************/
 {
-    ByteString aText( argv[ 1 ] );
+    if ( argc < 4 )
+    {
+        fprintf( stderr, "ERROR: too few parameters. \n\n");
+        fprintf( stderr, "usage: txtrep.exe EnvironmentVariable Searchstring replacestring\n");
+        return 1;
+    }
+    ByteString aText( getenv( argv[ 1 ] ));
+    if ( aText.Len() == 0 )
+    {
+        fprintf( stderr, "ERROR: Variable not set. \n\n");
+        fprintf( stderr, "usage: txtrep.exe EnvironmentVariable Searchstring replacestring\n");
+        return 2;
+    }
     ByteString aSearch( argv[ 2 ] );
     ByteString aReplace( argv[ 3 ] );
 
-    aText.SearchAndReplaceAll( aSearch, aReplace );
+    ByteString aUpperText( aText );
+    aUpperText.ToUpperAscii();
+
+
+    ULONG nIndex;
+    aSearch.ToUpperAscii();
+
+    nIndex = aUpperText.Search( aSearch.GetBuffer(), 0);
+    while ( nIndex != STRING_NOTFOUND )
+    {
+        aText.Replace( nIndex, aSearch.Len(), aReplace.GetBuffer());
+        aUpperText.Replace( nIndex, aSearch.Len(), aReplace.GetBuffer());
+        nIndex = aUpperText.Search( aSearch.GetBuffer(), 0);
+    }
+
     fprintf( stdout, "%s\n", aText.GetBuffer());
+    return 0;
 }
