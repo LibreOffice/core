@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-09 08:19:33 $
+ *  last change: $Author: mtg $ $Date: 2001-07-10 16:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,10 +177,14 @@
 #ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
 #include <com/sun/star/ucb/NameClash.hpp>
 #endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
+#endif
 
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 using namespace ::rtl;
 
 const int C_NONE                = 0x00;
@@ -2199,7 +2203,7 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                     uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
 
                     SvXMLExceptionListExport aExp(rLst, sStrmName, xHandler);
-                aExp.exportDoc( sXML_block_list );
+                aExp.exportDoc( XML_BLOCK_LIST );
 
                 xStrm->Commit();
                 if( xStrm->GetError() == SVSTREAM_OK )
@@ -2824,7 +2828,7 @@ BOOL SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
                 uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
 
                 SvXMLAutoCorrectExport aExp(pAutocorr_List, sStrmName, xHandler);
-            aExp.exportDoc( sXML_block_list );
+            aExp.exportDoc( XML_BLOCK_LIST );
 
             refList->Commit();
             bRet = SVSTREAM_OK == refList->GetError();
