@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcache.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-06 11:09:10 $
+ *  last change: $Author: pl $ $Date: 2002-04-12 12:39:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,6 +466,7 @@ void FontCache::copyPrintFont( const PrintFontManager::PrintFont* pFrom, PrintFo
     pTo->m_aAliases         = pFrom->m_aAliases;
     pTo->m_nPSName          = pFrom->m_nPSName;
     pTo->m_eItalic          = pFrom->m_eItalic;
+    pTo->m_eWeight          = pFrom->m_eWeight;
     pTo->m_eWidth           = pFrom->m_eWidth;
     pTo->m_ePitch           = pFrom->m_ePitch;
     pTo->m_aEncoding        = pFrom->m_aEncoding;
