@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:01:21 $
+#   last change: $Author: tl $ $Date: 2001-03-30 14:23:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,7 @@ CFLAGS+=-D DG_DLL
 .IF "$(header)" == ""
 
 CXXFILES = \
+        clipboardctl.cxx \
         fntctl.cxx \
         fntszctl.cxx
 
@@ -95,6 +96,7 @@ SRCFILES =  \
         mnuctrls.src
 
 SLOFILES=	\
+        $(SLO)$/clipboardctl.obj \
         $(SLO)$/fntctl.obj \
         $(SLO)$/fntszctl.obj
 
@@ -104,6 +106,7 @@ HXX1TARGET=mnuctrls
 HXX1EXT=   hxx
 HXX1EXCL=  -E:*include*
 HXX1DEPN=\
+        $(INC)$/clipboardctl.hxx \
         $(INC)$/fntctl.hxx	\
         $(INC)$/fntszctl.hxx
 
