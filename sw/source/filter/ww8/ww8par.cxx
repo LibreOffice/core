@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:59:40 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,7 @@
 #define MM_250 1417             // WW-Default fuer Hor. Seitenraender: 2.5 cm
 #define MM_200 1134             // WW-Default fuer u.Seitenrand: 2.0 cm
 
+using namespace sw::types;
 
 SwMSDffManager::SwMSDffManager( SwWW8ImplReader& rRdr )
     : SvxMSDffManager(*rRdr.pTableStream, rRdr.pWwFib->fcDggInfo,
@@ -466,32 +467,6 @@ const SwNumRule* GetNumRuleFromTxtNode(const SwTxtNode &rTxtNode,
     return pRet;
 }
 
-
-const SwNumFmt* GetNumFmtFromTxtNode(const SwTxtNode &rTxtNode,
-    const SwDoc &rDoc)
-{
-    const SwNumFmt *pRet = 0;
-    const SwNumRule *pRule = 0;
-    const SwNodeNum* pNum;
-    if (
-        (pNum = rTxtNode.GetNum()) &&
-        (MAXLEVEL > pNum->GetLevel()) &&
-        (pRule = rTxtNode.GetNumRule())
-       )
-    {
-        pRet = &(pRule->Get(pNum->GetLevel()));
-    }
-    else if (
-              (pNum = rTxtNode.GetOutlineNum()) &&
-              (MAXLEVEL > pNum->GetLevel()) &&
-              (pRule = rDoc.GetOutlineNumRule())
-            )
-    {
-        pRet = &(pRule->Get(pNum->GetLevel()));
-    }
-    return pRet;
-}
-
 const SwNumFmt* SwWW8FltControlStack::GetNumFmtFromStack(const SwPosition &rPos,
     const SwTxtNode &rTxtNode)
 {
@@ -538,7 +513,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                             continue;
                         const SvxLRSpaceItem &rLR = (const SvxLRSpaceItem&)
                             pNd->GetAttr(RES_LR_SPACE);
-                        AdjustTabs(rLR.GetTxtLeft(), 0, aTabStops);
+                        AdjustTabs(aTabStops, 0, rLR.GetTxtLeft());
                         pNd->SetAttr(aTabStops);
                     }
                 }
@@ -553,6 +528,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                  b) adjust the writer style tabstops relative to the old
                   paragraph indent to be relative to the new paragraph indent
                 */
+                using namespace sw::util;
                 SwPaM aRegion(rTmpPos);
                 if (pEntry->MakeRegion(pDoc, aRegion, false))
                 {
@@ -574,7 +550,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                         pNum = GetNumFmtFromStack(*aRegion.GetPoint(),
                             *pTxtNode);
                         if (!pNum)
-                            pNum = GetNumFmtFromTxtNode(*pTxtNode, *pDoc);
+                            pNum = GetNumFmtFromTxtNode(*pTxtNode);
 
                         if (pNum)
                             SyncIndentWithList(aNewLR, *pNum);
@@ -586,8 +562,8 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
 
                         SvxTabStopItem aTabs = (const SvxTabStopItem&)
                             pNd->GetAttr(RES_PARATR_TABSTOP);
-                        if (AdjustTabs(aNewLR.GetTxtLeft(),
-                            aOldLR.GetTxtLeft(), aTabs))
+                        if (AdjustTabs(aTabs, aOldLR.GetTxtLeft(),
+                            aNewLR.GetTxtLeft()))
                         {
                             pNd->SetAttr(aTabs);
                         }
@@ -915,7 +891,8 @@ void SwWW8ImplReader::Read_Tab(USHORT , const BYTE* pData, short nLen)
     BYTE nIns = pData[nDel*2+1];
     WW8_TBD* pTyp = (WW8_TBD*)(pData + 2*nDel + 2*nIns + 2);// Typ - Array
 
-    SvxTabStopItem aAttr(0, 0, SVX_TAB_ADJUST_DEFAULT);
+    using namespace sw::util;
+    SvxTabStopItem aAttr(DefaultItemGet<SvxTabStopItem>(rDoc, RES_PARATR_TABSTOP));
 
     const SwTxtFmtColl* pSty = 0;
     USHORT nTabBase;
@@ -959,7 +936,7 @@ void SwWW8ImplReader::Read_Tab(USHORT , const BYTE* pData, short nLen)
     //writer style when we're finished importing the styles. For
     //explicit tabstops we'll have to adjust on setting into the
     //document
-    short nLeftPMgn(0);
+    long nLeftPMgn(0);
     if (pAktColl)
         nLeftPMgn = 0;  //During style import we are always 0 based (word style)
     else if (nAktColl < nColls && pCollA[nAktColl].pFmt)
@@ -969,7 +946,7 @@ void SwWW8ImplReader::Read_Tab(USHORT , const BYTE* pData, short nLen)
         nLeftPMgn = rLR.GetTxtLeft();
     }
 
-    sw::util::AdjustTabs(0, nLeftPMgn, aAttr);
+    sw::util::AdjustTabs(aAttr, nLeftPMgn, 0);
 
     SvxTabStop aTabStop;
 
@@ -1020,8 +997,8 @@ void SwWW8ImplReader::Read_Tab(USHORT , const BYTE* pData, short nLen)
         }
 
         USHORT nPos2 = aAttr.GetPos( nPos );
-        if( nPos2 != SVX_TAB_NOTFOUND )
-            aAttr.Remove( nPos2, 1 );       // sonst weigert sich das Insert()
+    if (nPos2 != SVX_TAB_NOTFOUND)
+        aAttr.Remove( nPos2, 1 ); // sonst weigert sich das Insert()
 
         aAttr.Insert( aTabStop );
     }
@@ -1472,6 +1449,11 @@ void SwWW8ImplReader::Read_HdFt(BYTE nWhichItems, BYTE grpfIhdt, int nSect, SwPa
     }
 }
 
+bool wwSectionManager::SectionIsProtected(const wwSection &rSection) const
+{
+    return (mrReader.pWDop->fProtEnabled && !rSection.IsNotProtected());
+}
+
 void wwSectionManager::SetHdFt(wwSection &rSection, int nSect,
     const wwSection *pPrevious)
 {
@@ -1521,6 +1503,10 @@ public:
 
 void SwWW8ImplReader::AppendTxtNode(SwPosition& rPos)
 {
+    SwTxtNode* pTxt = pPaM->GetNode()->GetTxtNode();
+
+#if 0 //I'm giving up on this approach, see issue #i11873# & #i20871#
+
     //If a paragraph ends in tabs and that paragraph has a tab at or beyond
     //the right of the page then word has a bug where further use of tab will
     //not wrap the paragraph around to the next page. We will, so we will
@@ -1530,7 +1516,6 @@ void SwWW8ImplReader::AppendTxtNode(SwPosition& rPos)
     //ending in redundant tabs. It is possible to have text after these flawed
     //tabs which in word will not line wrap to the next page, and this
     //solution will not fix that.
-    SwTxtNode* pTxt = pPaM->GetNode()->GetTxtNode();
     const String &rStr = pTxt->GetTxt();
     xub_StrLen nLen=rStr.Len();
 
@@ -1585,6 +1570,7 @@ void SwWW8ImplReader::AppendTxtNode(SwPosition& rPos)
             }
         }
     }
+#endif
 
     SvxULSpaceItem aUL(*(const SvxULSpaceItem*)GetFmtAttr(RES_UL_SPACE));
     const SwNumRule* pRule = GetNumRuleFromTxtNode(*pTxt, rDoc);
@@ -1767,13 +1753,14 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
         if (const BYTE *pLevel = pPlcxMan->HasParaSprm(0x6649))
             nCellLevel = *pLevel;
 
-        if (
-             SearchRowEnd(pPap, nMyStartCp, nCellLevel-1) &&
-             ParseTabPos(&aTabPos,pPap)
-           )
-        {
+        bool bHasRowEnd = SearchRowEnd(pPap, nMyStartCp, nCellLevel-1);
+
+        //Bad Table, remain unchanged in level, e.g. #i19667#
+        if (!bHasRowEnd)
+            nCellLevel = nInTable;
+
+        if (bHasRowEnd && ParseTabPos(&aTabPos,pPap))
             pTabPos = &aTabPos;
-        }
 
         pPlcxMan->GetPap()->Restore( aSave );
     }
@@ -1932,7 +1919,7 @@ bool SwWW8ImplReader::ReadPlainChars(long& rPos, long nEnd, long nCpOfs)
 #endif
     xub_StrLen nLen;
     if (nEnd - rPos <= (STRING_MAXLEN-1))
-        nLen = sw::types::writer_cast<xub_StrLen>(nEnd - rPos);
+        nLen = writer_cast<xub_StrLen>(nEnd - rPos);
     else
         nLen = STRING_MAXLEN-1;
     ASSERT(nLen, "String is 0");
@@ -2496,7 +2483,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
 
     WW8_CP nNext = pPlcxMan->Where();
     SwTxtNode* pPreviousNode = 0;
-    int nDropLines = 0;
+    BYTE nDropLines = 0;
     pStrm->Seek( pSBase->WW8Cp2Fc( nStartCp + nCpOfs, &bIsUnicode ) );
 
     WW8_CP l = nStartCp;
@@ -2520,7 +2507,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
         if (pPreviousNode && bStartLine)
         {
             SwTxtNode* pEndNd = pPaM->GetNode()->GetTxtNode();
-            const short nDropCapLen = pPreviousNode->GetTxt().Len();
+            const xub_StrLen nDropCapLen = pPreviousNode->GetTxt().Len();
 
             // Need to reset the font size and text position for the dropcap
             {
@@ -2529,35 +2516,32 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
             }
 
             // Get the default document dropcap which we can use as our template
-            const SwFmtDrop* defaultDrop = (const SwFmtDrop*) GetFmtAttr(RES_PARATR_DROP);
+            const SwFmtDrop* defaultDrop =
+                (const SwFmtDrop*) GetFmtAttr(RES_PARATR_DROP);
             SwFmtDrop aDrop(*defaultDrop);
 
-            aDrop.GetLines()    = (BYTE) nDropLines;
+            aDrop.GetLines() = nDropLines;
             aDrop.GetDistance() = nDistance;
-            aDrop.GetChars()    = nDropCapLen;
-            aDrop.GetWholeWord() = false;       // Word has no concept of a "whole word dropcap"
+            aDrop.GetChars() = writer_cast<BYTE>(nDropCapLen);
+            // Word has no concept of a "whole word dropcap"
+            aDrop.GetWholeWord() = false;
 
             SwPosition aStart(*pEndNd);
             pCtrlStck->NewAttr(aStart, aDrop);
             pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_PARATR_DROP);
             pPreviousNode = 0;
         }
-        else if(bDropCap)
+        else if (bDropCap)
         {
             // If we have found a dropcap store the textnode
             pPreviousNode = pPaM->GetNode()->GetTxtNode();
 
-            const BYTE *pDCS = pPlcxMan->GetPapPLCF()->HasSprm(0x442C);
-            if(pDCS)
-            {
-                short nDCS = SVBT16ToShort( pDCS );
-                nDropLines = nDCS >> 3;
-            }
+            if (const BYTE *pDCS = pPlcxMan->GetPapPLCF()->HasSprm(0x442C))
+                nDropLines = (*pDCS) >> 3;
             else    // There is no Drop Cap Specifier hence no dropcap
                 pPreviousNode = 0;
 
-            const BYTE *pDistance = pPlcxMan->GetPapPLCF()->HasSprm(0x842F);
-            if(pDistance)
+            if (const BYTE *pDistance = pPlcxMan->GetPapPLCF()->HasSprm(0x842F))
                 nDistance = SVBT16ToShort( pDistance );
             else
                 nDistance = 0;
@@ -2600,10 +2584,11 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
     if (pPaM->GetPoint()->nContent.GetIndex())
         AppendTxtNode(*pPaM->GetPoint());
 
-    CloseAttrEnds();
     if (!bInHyperlink)
         bJoined = JoinNode(*pPaM);
-                                            // PlcxMan noch gibt
+
+    CloseAttrEnds();
+
     delete pPlcxMan, pPlcxMan = 0;
     maTracer.LeaveEnvironment(eContext);
     return bJoined;
@@ -2728,6 +2713,23 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
 
     SetPage(rPage, rFmt, rSection, bIgnoreCols);
 
+    bool bSetBorder = false;
+    switch (rSection.maSep.pgbApplyTo)
+    {
+        case 0:
+        case 3:
+            bSetBorder = true;
+            break;
+        case 1:
+            bSetBorder = bTitlePage;
+            break;
+        case 2:
+            bSetBorder = !bTitlePage;
+            break;
+    }
+    if (bSetBorder)
+        mrReader.SetPageBorder(rFmt, rSection);
+
     mrReader.SetDocumentGrid(rFmt, rSection);
 }
 
@@ -2786,9 +2788,10 @@ void GiveNodePageDesc(SwNodeIndex &rIdx, const SwFmtPageDesc &rPgDesc,
 
 //Map a word section with to either one or two writer page descriptors
 //depending on if the word section has a title page
-bool wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter, mySegIter &rStart,
-    SwNodeIndex &rWhere, bool bIgnoreCols)
+SwFmtPageDesc wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter,
+    mySegIter &rStart, bool bIgnoreCols)
 {
+    SwFmtPageDesc aEmpty;
     if (rIter->HasTitlePage())
     {
         if (IsNewDoc() && rIter == rStart)
@@ -2805,7 +2808,7 @@ bool wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter, mySegIter &rStart,
         }
         ASSERT(rIter->mpTitlePage, "no page!");
         if (!rIter->mpTitlePage)
-            return false;
+            return aEmpty;
 
         SetSegmentToPageDesc(*rIter, true, bIgnoreCols);
     }
@@ -2825,7 +2828,7 @@ bool wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter, mySegIter &rStart,
     }
     ASSERT(rIter->mpPage, "no page!");
     if (!rIter->mpPage)
-        return false;
+        return aEmpty;
 
     const wwSection *pPrevious = 0;
     if (rIter != rStart)
@@ -2837,18 +2840,17 @@ bool wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter, mySegIter &rStart,
         SetSegmentToPageDesc(*rIter, true, bIgnoreCols);
     SetSegmentToPageDesc(*rIter, false, bIgnoreCols);
 
-    SwFmtPageDesc aPgDesc(rIter->HasTitlePage() ?
-            rIter->mpTitlePage : rIter->mpPage);
+    SwFmtPageDesc aRet(rIter->HasTitlePage() ?
+        rIter->mpTitlePage : rIter->mpPage);
 
     if (rIter->mpTitlePage)
         rIter->mpTitlePage->SetFollow(rIter->mpPage);
 
     if (rIter->PageRestartNo())
-        aPgDesc.SetNumOffset(rIter->PageStartAt());
+        aRet.SetNumOffset(rIter->PageStartAt());
 
-    GiveNodePageDesc(rWhere, aPgDesc, mrReader.rDoc);
     ++mnDesc;
-    return true;
+    return aRet;
 }
 
 bool wwSectionManager::IsNewDoc() const
@@ -2866,11 +2868,12 @@ void wwSectionManager::InsertSegments()
 
         bool bInsertSection = aIter != aStart ? aIter->IsContinous() : false;
         bool bInsertPageDesc = !bInsertSection;
+        bool bProtected = SectionIsProtected(*aIter);
 
         if (bInsertPageDesc)
         {
             /*
-             If a cont section follow this section then we won't be
+             If a cont section follows this section then we won't be
              creating a page desc with 2+ cols as we cannot host a one
              col section in a 2+ col pagedesc and make it look like
              word. But if the current section actually has columns then
@@ -2878,22 +2881,18 @@ void wwSectionManager::InsertSegments()
              descriptor.
             */
 
-            /*
-             Note for the future:
-             If we want to import "protected sections" the here is
-             where we would also test for that and force a section
-             insertion if that was true.
-            */
             bool bIgnoreCols = false;
-            if (aNext != aEnd && aNext->IsContinous())
+            if ((aNext != aEnd && aNext->IsContinous() || bProtected))
             {
                 bIgnoreCols = true;
-                if (aIter->NoCols() > 1)
+                if ((aIter->NoCols() > 1) || bProtected)
                     bInsertSection = true;
             }
 
-            if (!SetSwFmtPageDesc(aIter, aStart, aIter->maStart, bIgnoreCols))
+            SwFmtPageDesc aDesc(SetSwFmtPageDesc(aIter, aStart, bIgnoreCols));
+            if (!aDesc.GetPageDesc())
                 continue;
+            GiveNodePageDesc(aIter->maStart, aDesc, mrReader.rDoc);
         }
 
         SwTxtNode* pTxtNd = 0;
@@ -2956,18 +2955,22 @@ void wwSectionManager::InsertSegments()
             }
             if (bHasOwnHdFt)
             {
-                ULONG nStart = aSectPaM.Start()->nNode.GetIndex();
-                ULONG nEnd   = aSectPaM.End()->nNode.GetIndex();
-                for(; nStart <= nEnd; ++nStart)
+                SwFmtPageDesc aDesc(SetSwFmtPageDesc(aIter, aStart, true));
+                if (aDesc.GetPageDesc())
                 {
-                    SwNode* pNode = mrReader.rDoc.GetNodes()[nStart];
-                    if (!pNode)
-                        continue;
-                    if (sw::util::HasPageBreak(*pNode))
+                    ULONG nStart = aSectPaM.Start()->nNode.GetIndex();
+                    ULONG nEnd   = aSectPaM.End()->nNode.GetIndex();
+                    for(; nStart <= nEnd; ++nStart)
                     {
-                        SwNodeIndex aIdx(*pNode);
-                        SetSwFmtPageDesc(aIter, aStart, aIdx, true);
-                        break;
+                        SwNode* pNode = mrReader.rDoc.GetNodes()[nStart];
+                        if (!pNode)
+                            continue;
+                        if (sw::util::HasPageBreak(*pNode))
+                        {
+                            SwNodeIndex aIdx(*pNode);
+                            GiveNodePageDesc(aIdx, aDesc, mrReader.rDoc);
+                            break;
+                        }
                     }
                 }
             }
@@ -3105,17 +3108,6 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
             }
             else
                 pDataStream = pStrm;
-
-            if (pWwFib->lcbPlcfspaHdr || pWwFib->lcbPlcfspaMom || pWwFib->lcbDggInfo)
-            {
-                GrafikCtor();
-                pMSDffManager = new SwMSDffManager(*this);
-                pMSDffManager->SetModel(pDrawModel, 1440);
-                //#79055# Now the dff manager always needs a controls
-                //converter as well, but a control converter may still exist
-                //without a dffmanager. cmc
-                pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(), pPaM);
-            }
             break;
         default:
             // Programm-Fehler!
@@ -3124,7 +3116,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
             break;
         }
 
-        if( ERR_SWG_READ_ERROR != nErrRet )
+        if (ERR_SWG_READ_ERROR != nErrRet)
         {
             eTextCharSet = WW8Fib::GetFIBCharset(pWwFib->chse);
             eStructCharSet = WW8Fib::GetFIBCharset(pWwFib->chseTables);
@@ -3764,9 +3756,9 @@ BOOL SwMSDffManager::GetOLEStorageName(long nOLEId, String& rStorageName,
         long nOldPos = rReader.pStrm->Tell();
         {
             long nStartCp, nEndCp;
-            rReader.GetTxbxTextSttEndCp( nStartCp, nEndCp,
-                                        ( nOLEId >> 16 ) & 0xFFFF,
-                                        nOLEId & 0xFFFF );
+            rReader.GetTxbxTextSttEndCp(nStartCp, nEndCp,
+                static_cast<sal_uInt16>((nOLEId >> 16) & 0xFFFF),
+                static_cast<sal_uInt16>(nOLEId & 0xFFFF));
 
             WW8PLCFxSaveAll aSave;
             memset( &aSave, 0, sizeof( aSave ) );
