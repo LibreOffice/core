@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:06:32 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,6 +353,7 @@ FASTBOOL SfxApplication::Initialize_Impl()
 //    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     ResStringArray aEventNames( SfxResId( EVENT_NAMES_ARY ) );
 
+    // TODO/LATER: exchange confusing defines; CREATEDOC -> NEWDOC, DOCCREATED -> CREATEDOC
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_STARTAPP,        String(SfxResId(STR_EVENT_STARTAPP)),   aEventNames.GetString( 0 ) );
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_CLOSEAPP,        String(SfxResId(STR_EVENT_CLOSEAPP)),   aEventNames.GetString( 1 ) );
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_CREATEDOC,       String(SfxResId(STR_EVENT_CREATEDOC)),  aEventNames.GetString( 2 ) );
@@ -374,6 +375,8 @@ FASTBOOL SfxApplication::Initialize_Impl()
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_PREPARECLOSEVIEW,    String(), aEventNames.GetString( 17 ) );
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_CLOSEVIEW,           String(), aEventNames.GetString( 18 ) );
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_VISAREACHANGED,      String(), aEventNames.GetString( 19 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_DOCCREATED,          String(), aEventNames.GetString( 20 ) );
+    SfxEventConfiguration::RegisterEvent(SFX_EVENT_LOADFINISHED,        String(), aEventNames.GetString( 21 ) );
 
     // Subklasse initialisieren
     bDowning = sal_False;
