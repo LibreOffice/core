@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-27 16:31:05 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1413,8 +1413,14 @@ void CalcCntnt( SwLayoutFrm *pLay,
             if ( pFrm->IsTabFrm() )
             {
                 ((SwTabFrm*)pFrm)->bCalcLowers = TRUE;
-                if ( ((SwTabFrm*)pFrm)->IsFollow() )
+                // OD 26.08.2003 #i18103# - lock move backward of follow table,
+                // if no section content is formatted or follow table belongs
+                // to the section, which content is formatted.
+                if ( ((SwTabFrm*)pFrm)->IsFollow() &&
+                     ( !pSect || pSect == pFrm->FindSctFrm() ) )
+                {
                     ((SwTabFrm*)pFrm)->bLockBackMove = TRUE;
+                }
             }
 
             // OD 14.03.2003 #i11760# - forbid format of follow, if requested.
