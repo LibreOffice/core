@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeGeometry.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:18:05 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef _ENHANCEDCUSTOMSHAPEGEOMETRY_HXX
 #include "EnhancedCustomShapeGeometry.hxx"
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEGLUEPOINTTYPE_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEGLUEPOINTTYPE_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
 #endif
 /*
 static const SvxMSDffVertPair Vert[] =
@@ -5539,10 +5539,10 @@ const sal_Bool IsCustomShapeFilledByDefault( MSO_SPT eSpType )
 }
 const sal_Int16 GetCustomShapeConnectionTypeDefault( MSO_SPT eSpType )
 {
-    sal_Int16 nGluePointType = drafts::com::sun::star::drawing::EnhancedCustomShapeGluePointType::SEGMENTS;
+    sal_Int16 nGluePointType = com::sun::star::drawing::EnhancedCustomShapeGluePointType::SEGMENTS;
     const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( eSpType );
     if ( pDefCustomShape && pDefCustomShape->nGluePoints )
-        nGluePointType = drafts::com::sun::star::drawing::EnhancedCustomShapeGluePointType::CUSTOM;
+        nGluePointType = com::sun::star::drawing::EnhancedCustomShapeGluePointType::CUSTOM;
     else
     {
         switch( eSpType )
@@ -5555,7 +5555,7 @@ const sal_Int16 GetCustomShapeConnectionTypeDefault( MSO_SPT eSpType )
             case mso_sptFlowChartInternalStorage :
             case mso_sptTextPlainText :
             case mso_sptTextBox :
-                nGluePointType = drafts::com::sun::star::drawing::EnhancedCustomShapeGluePointType::RECT;
+                nGluePointType = com::sun::star::drawing::EnhancedCustomShapeGluePointType::RECT;
         }
     }
     return nGluePointType;
