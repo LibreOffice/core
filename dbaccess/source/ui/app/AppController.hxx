@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:14:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,8 @@ namespace dbaui
         OTableCopyHelper::DropDescriptor            m_aAsyncDrop;
         TDataSourceConnections  m_aDataSourceConnections;
         TransferableDataHelper  m_aSystemClipboard;     // content of the clipboard
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xDataSource;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xDataSource;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >         m_xModel;
         TContainerVector        m_aCurrentContainers;   // the containers where we are listener on
         TDocuments              m_aDocuments;
         ODsnTypeCollection      m_aTypeCollection;
@@ -388,6 +389,12 @@ namespace dbaui
             The SolarMutex has to be locked before calling this.
         */
         void askToReconnect();
+
+        /** suspend one document.
+            @return
+                <TRUE/> if the document could be suspended, otherwise <FALSE/>.
+        */
+        sal_Bool suspendDocument(const TDocuments::key_type& _xComponent,sal_Bool _bSuspend);
 
         /** suspend all open documents.
             @return
