@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 14:21:24 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 09:12:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ class CommandLineArgs
             CMD_STRINGPARAM_VERSION,
             CMD_STRINGPARAM_PRINTTOLIST,
             CMD_STRINGPARAM_PRINTERNAME,
+            CMD_STRINGPARAM_DISPLAY,
             CMD_STRINGPARAM_COUNT           // must be last element!
         };
 
@@ -178,6 +179,7 @@ class CommandLineArgs
         sal_Bool                GetVersionString( ::rtl::OUString& rPara) const;
         sal_Bool                GetPrintToList( ::rtl::OUString& rPara ) const;
         sal_Bool                GetPrinterName( ::rtl::OUString& rPara ) const;
+        sal_Bool                GetDisplay( ::rtl::OUString& rPara ) const;
 
         // Special analyzed states (does not match directly to a command line parameter!)
         sal_Bool                IsPrinting() const;
