@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javadep.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:26:01 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ enum {
     CONSTANT_Utf8               = 1
 };
 
-enum { NGROW_INIT = 1, NGROW = 2 };
+enum { NGROW_INIT = 10, NGROW = 2 };
 
 static char     *pprogname  = "javadep";
 static char     csep        = ';';
@@ -299,15 +299,16 @@ add_to_dependencies(struct growable *pdep,
 {
     /* create dependencies */
     int i;
-    int nlen_filt, nlen_str;
+    int nlen_filt, nlen_str, nlen_pdepstr;
     char *pstr, *ptrunc;
     char path[PATH_MAX+1];
     char cnp_class_file[PATH_MAX+1];
     char cnp_str[PATH_MAX+1];
 
-    pstr = xmalloc((strlen(pdepstr)+6+1)*sizeof(char));
-    strcpy(pstr, pdepstr);
-    strcat(pstr, ".class");
+    nlen_pdepstr = strlen(pdepstr);
+    pstr = xmalloc((nlen_pdepstr+6+1)*sizeof(char));
+    memcpy(pstr, pdepstr, nlen_pdepstr+1);
+    strncat(pstr, ".class", 6);
 
     if ( pfilt->ncur == 0 ) { /* no filters */
         if ( access(pstr, F_OK) == 0 ) {
@@ -323,19 +324,22 @@ add_to_dependencies(struct growable *pdep,
             path[nlen_filt]     = '/';
             memcpy( path+nlen_filt+1, pstr, nlen_str+1);
 
-            if ( access(path, F_OK) != 0 )
+            if ( access(path, F_OK) != 0 ) {
+                free(pstr);
+                pstr = NULL;
                 return; /* path doesn't represent a real file, don't bother */
+            }
 
             /* get the canonical path */
 #if defined (UNX)
             if ( !(realpath(pclass_file, cnp_class_file)
-                   && realpath(path, cnp_str) ) ) {
-                 err_quit("can't get the canonical path");
+                && realpath(path, cnp_str) ) ) {
+                err_quit("can't get the canonical path");
             }
 #else
             if ( !(_fullpath(cnp_class_file, pclass_file, sizeof(cnp_class_file))
-                   && _fullpath(cnp_str, path, sizeof(cnp_str)) ) ) {
-                 err_quit("can't get the canonical path");
+                && _fullpath(cnp_str, path, sizeof(cnp_str)) ) ) {
+                err_quit("can't get the canonical path");
             }
 #endif
 
@@ -345,8 +349,11 @@ add_to_dependencies(struct growable *pdep,
             ptrunc = strrchr(cnp_class_file, cpathsep);
             *ptrunc = '\0';
 
-            if ( !strcmp(cnp_str, cnp_class_file) )
+            if ( !strcmp(cnp_str, cnp_class_file) ) {
+                free(pstr);
+                pstr = NULL;
                 return; /* identical, don't bother with this one */
+            }
 
             append_to_growable(pdep, strdup(path));
         }
@@ -399,26 +406,30 @@ escape_slash(const char *pstr)
     const char *pp = pstr;
     char *p, *pnp;
     char *pnew_str;
+    int nlen_pnp, nlen_pp;
     int i = 0;
 
     while ( (p=strchr(pp, cpathsep)) != NULL ) {
         ++i;
         pp = ++p;
     }
-    pnp = pnew_str = xmalloc((strlen(pstr) + i + 1) * sizeof(char));
+
+    nlen_pnp = strlen(pstr) + i;
+    pnp = pnew_str = xmalloc((nlen_pnp+1) * sizeof(char));
 
     pp = pstr;
 
     if ( i > 0 ) {
         while ( (p=strchr(pp, cpathsep)) != NULL ) {
-            strncpy(pnp, pp, p-pp);
+            memcpy(pnp, pp, p-pp);
             pnp += p-pp;
             *pnp++ = '$';
             *pnp++ = '/';
             pp = ++p;
         }
     }
-    strcpy(pnp, pp);
+    nlen_pp = strlen(pp);
+    memcpy(pnp, pp, nlen_pp+1);
 
     return pnew_str;
 }
@@ -434,7 +445,7 @@ print_dependencies(const struct growable *pdep, const char* pclass_file)
     fprintf(pfsout, "%s:", pstr);
     free(pstr);
 
-     for( i=0; i<pdep->ncur; ++i) {
+    for( i=0; i<pdep->ncur; ++i) {
         fprintf(pfsout, "  \\\n");
         pstr=escape_slash(pdep->parray[i]);
         fprintf(pfsout, "\t%s", pstr);
@@ -587,6 +598,7 @@ process_class_file(const char *pfilename, const struct growable *pfilt)
         if ( is_inner(pstr) ) {
             free(pstr);
             pstr = NULL;
+            continue;
         }
         /* strip off evt. array indicators */
         if ( *ptmpstr == '[' ) {
@@ -757,7 +769,7 @@ void
 create_filters(struct growable *pfilt, const struct growable *pinc)
 {
     char *p, *pp, *pstr;
-    int i, nlen;
+    int i, nlen, nlen_pstr;
     /* break up includes into filter list */
     for ( i = 0; i < pinc->ncur; i++ ) {
         pp = pinc->parray[i];
@@ -765,13 +777,14 @@ create_filters(struct growable *pfilt, const struct growable *pinc)
         while ( (p = strchr(pp, csep)) != NULL) {
             nlen = p - pp;
             pstr = xmalloc((nlen+1)*sizeof(char*));
-            strncpy(pstr, pp, nlen);
+            memcpy(pstr, pp, nlen);
             pstr[nlen] = '\0';
             append_to_growable(pfilt, pstr);
             pp = p + 1;
         }
-        pstr = xmalloc((strlen(pp)+1)*sizeof(char*));
-        strcpy(pstr, pp);
+        nlen_pstr = strlen(pp);
+        pstr = xmalloc((nlen_pstr+1)*sizeof(char*));
+        memcpy(pstr, pp, nlen_pstr+1);
         append_to_growable(pfilt, pstr);
     }
 
@@ -809,16 +822,16 @@ int simple_getopt(int nargc, char *pargv[], const char *poptstring)
                 return '?';
             }
             if ( *(++popt) == ':') {
-                 if ( parg[2] != '\0' ) {
-                     optarg = ++parg;
-                 } else {
-                     optarg = pargv[++optind];
-                 }
-             } else {
-                 optarg = NULL;
-             }
-             ++optind;
-             return c;
+                if ( parg[2] != '\0' ) {
+                    optarg = ++parg;
+                } else {
+                    optarg = pargv[++optind];
+                }
+            } else {
+                optarg = NULL;
+            }
+            ++optind;
+            return c;
         }
     }
     return -1;
