@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.45 2001-05-04 15:34:10 cl Exp $
+	$Id: drawing.mod,v 1.46 2001-05-07 15:44:58 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -250,6 +250,7 @@
 <!ATTLIST draw:caption draw:id %shapeId;>
 <!ATTLIST draw:caption  %text-anchor;>
 <!ATTLIST draw:caption draw:layer %layerName; #IMPLIED>
+<!ATTLIST draw:caption draw:corner-radius %nonNegativeLength; #IMPLIED>
 
 <!ELEMENT draw:measure ( office:events?, %draw-text;)>
 <!ATTLIST draw:measure svg:x1 %coordinate; #REQUIRED>
@@ -409,6 +410,21 @@
 <!ATTLIST style:properties draw:visible-area-top %nonNegativeLength; #IMPLIED>
 <!ATTLIST style:properties draw:visible-area-width %positiveLength; #IMPLIED>
 <!ATTLIST style:properties draw:visible-area-height %positiveLength; #IMPLIED>
+
+<!-- fontwork attributes -->
+<!ATTLIST style:properties draw:fontwork-style (rotate|upright|slant-x|slant-y|none) #IMPLIED>
+<!ATTLIST style:properties draw:fontwork-adjust (left|right|autosize|center) #IMPLIED>
+<!ATTLIST style:properties draw:fontwork-distance %distance; #IMPLIED>
+<!ATTLIST style:properties draw:fontwork-start %distance; #IMPLIED>
+<!ATTLIST style:properties draw:fontwork-mirror %boolean; #IMPLIED>
+<!ATTLIST style:properties draw:fontwork-outline %boolean; #IMPLIED>
+<!ATTLIST style:properties draw:fontwork-shadow (normal|slant|none) #IMPLIED>
+<!ATTLIST style:properties draw:fontwork-shadow-color %color; #IMPLIED>
+<!ATTLIST style:properties draw:fontwork-shadow-offset-x %distance; #IMPLIED>
+<!ATTLIST style:properties draw:fontwork-shadow-offset-y %distance; #IMPLIED>
+<!ATTLIST style:properties draw:fontwork-form (none|top-circle|bottom-circle|left-circle|right-circle|top-arc|bottom-arc|left-arc|right-arc|button1|button2|button3|button4) #IMPLIED>
+<!ATTLIST style:properties draw:fontwork-hide-form %boolean; #IMPLIED>
+<!ATTLIST style:properties draw:fontwork-shadow-transparence %percentage; #IMPLIED>
 
 <!-- Animations -->
 <!ELEMENT presentation:sound EMPTY>
