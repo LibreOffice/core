@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-23 09:54:37 $
+ *  last change: $Author: dr $ $Date: 2000-10-24 08:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,15 +74,10 @@
 #include <com/sun/star/uno/Any.hxx>
 #endif
 
-#ifndef _COMPHELPER_TYPES_HXX_
-#include <comphelper/types.hxx>
-#endif
-
 #include "xmlkywd.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
-using namespace ::comphelper;
 
 void lcl_xmloff_setAny( Any& rValue, sal_Int32 nValue, sal_Int8 nBytes )
 {
