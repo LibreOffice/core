@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlehelp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-21 12:35:01 $
+ *  last change: $Author: bm $ $Date: 2001-05-21 12:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,7 +416,7 @@ double SvXMLExportHelper::GetConversionFactor(::rtl::OUStringBuffer& rUnit,
                     case MAP_TWIP:
                         // 1twip = 72 / 1440 pt (exactly)
                         fRetval = 20.0;     // 1440.0 / 72.0
-                        pUnit = sXML_unit_pt;
+                        pUnit = sXML_unit_pc;
                         break;
 
                     case MAP_INCH:
