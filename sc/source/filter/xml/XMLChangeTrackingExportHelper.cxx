@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-27 07:47:21 $
+ *  last change: $Author: rt $ $Date: 2001-07-27 08:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ void ScChangeTrackingExportHelper::WriteChangeInfo(const ScChangeAction* pAction
 {
     rtl::OUString sAuthor(pAction->GetUser());
     rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_CHG_AUTHOR, sAuthor);
-    rtl::OUStringBuffer sDate;
+    rtl::OUStringBuffer sDate;
     ScXMLConverter::ConvertDateTimeToString(pAction->GetDateTimeUTC(), sDate);
     rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_CHG_DATE_TIME, sDate.makeStringAndClear());
     SvXMLElementExport aElemInfo (rExport, XML_NAMESPACE_OFFICE, XML_CHANGE_INFO, sal_True, sal_True);
