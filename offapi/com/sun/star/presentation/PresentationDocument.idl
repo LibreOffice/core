@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PresentationDocument.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:49 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 12:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef __com_sun_star_presentation_PresentationDocument_idl__
 #define __com_sun_star_presentation_PresentationDocument_idl__
 
-#ifndef __com_sun_star_drawing_DrawingDocument_idl__
-#include <com/sun/star/drawing/DrawingDocument.idl>
+#ifndef __com_sun_star_drawing_GenericDrawingDocument_idl__
+#include <com/sun/star/drawing/GenericDrawingDocument.idl>
 #endif
 
 #ifndef __com_sun_star_presentation_XPresentationSupplier_idl__
@@ -107,7 +107,7 @@ service PresentationDocument
             <li><type>DocumentSettings</type></li>
         </ul>
      */
-    service com::sun::star::drawing::DrawingDocument;
+    service com::sun::star::drawing::GenericDrawingDocument;
 
     /** lets you access the presentation of this document.
      */
