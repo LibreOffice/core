@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigat.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:31 $
+ *  last change: $Author: os $ $Date: 2001-08-07 13:28:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,8 @@ SfxNavigatorWrapper::SfxNavigatorWrapper( Window* pParent ,
                                                 SfxChildWinInfo* pInfo )
                     : SfxChildWindow( pParent , nId )
 {
-    pWindow = new SfxNavigator( pBindings, this, pParent, WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK );
+    pWindow = new SfxNavigator( pBindings, this, pParent,
+        WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE);
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 
     pWindow->SetHelpId ( HID_NAVIGATOR_WINDOW );
