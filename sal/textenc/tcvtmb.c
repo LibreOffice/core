@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtmb.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-17 14:35:30 $
+ *  last change: $Author: sb $ $Date: 2002-01-18 10:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,7 +454,7 @@ sal_Size ImplEUCJPToUnicode( const ImplTextConverterData* pData,
                 if ( c == 0x8F )
                 {
                     /* Source buffer to small */
-                    if ( pSrcBuf+2 == pEndSrcBuf )
+                    if (pEndSrcBuf - pSrcBuf < 3)
                     {
                         *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
                         break;
