@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilelayer.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:29:29 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,8 +116,7 @@ protected :
       of sublayers of the component.
 
       @param xFactory   service factory used to access canned services
-      @param aBaseDir   base directory
-      @param aComponent subpath describing the component file
+      @param aComponentFile path describing the component file
       */
     BasicLocalFileLayer(
             const uno::Reference<lang::XMultiServiceFactory>& xFactory,
@@ -177,7 +176,8 @@ private :
   contents.
   */
 class SimpleLocalFileLayer  : public BasicLocalFileLayer
-                            , public cppu::WeakImplHelper1<backend::XLayer>
+                             , public cppu::WeakImplHelper2<backend::XLayer,
+                                                            util::XTimeStamped>
 {
 public :
     /**
@@ -215,6 +215,11 @@ public :
             const uno::Reference<backend::XLayerHandler>& xHandler)
         throw (backend::MalformedDataException, lang::NullPointerException,
                lang::WrappedTargetException, uno::RuntimeException);
+
+    // XTimeStamped
+    virtual rtl::OUString SAL_CALL getTimestamp()
+        throw (uno::RuntimeException);
+
 
 } ;
 /**
@@ -271,23 +276,76 @@ private :
 } ;
 
 /**
-  Implementation of the XUpdatableLayer and XCompositeLayer
-  interfaces for a local file access.
+  Implementation of the XCompositeLayer
+  interface for a local file access.
   The read data is accessible through a canned implementation of
-  an XML parser, and the write data is defined through a canned
-  implementation of an XML writer.
+  an XML parser.
   The layer is defined by the URL of the file containing its
   contents, and that file will be either read or updated by
   the access to the handlers.
   The timestamp is refreshed on each read operation only.
   */
-class CompositeLocalFileLayer : public BasicLocalFileLayer
-                     , public cppu::WeakImplHelper3<backend::XUpdatableLayer,
-                                                    backend::XCompositeLayer,
-                                                    util::XTimeStamped>
+class BasicCompositeLocalFileLayer : public BasicLocalFileLayer
+{
+public:
+    typedef std::vector<rtl::OUString> SubLayerFiles;
+protected:
+    /**
+      Constructor providing the base directory and the
+      file subpath describing the file to access.
+      An resource directory provides the location
+      of sublayers of the component.
+
+      @param xFactory   service factory used to access canned services
+      @param aComponent path describing the component file
+      */
+    BasicCompositeLocalFileLayer(
+            const uno::Reference<lang::XMultiServiceFactory>& xFactory,
+            const rtl::OUString& aComponent) ;
+
+    // XCompositeLayer helpers
+    uno::Sequence<rtl::OUString> SAL_CALL listSubLayerIds()
+        throw (lang::WrappedTargetException, uno::RuntimeException)
+    { return mSubLayers ; }
+
+    void SAL_CALL readSubLayerData(
+            backend::XCompositeLayer * context,
+            const uno::Reference<backend::XLayerHandler>& xHandler,
+            const rtl::OUString& aSubLayerId)
+        throw (backend::MalformedDataException, lang::NullPointerException,
+               lang::WrappedTargetException, lang::IllegalArgumentException,
+               uno::RuntimeException);
+
+    /**
+      Fills the list of available sublayers.
+
+      @param aResDir    resource directory containing potential sublayers
+      @param aComponent component subpath
+      */
+    void fillSubLayerLists(const SubLayerFiles& aSublayerDirectories,
+                           const rtl::OUString& aComponent) ;
+private :
+    /** List of available sublayers... */
+    uno::Sequence<rtl::OUString> mSubLayers ;
+    /** .. and the corresponding file URLs. */
+    SubLayerFiles mSubLayerFiles ;
+
+};
+
+/**
+  Implementation of the XCompositeLayer
+  interface for a local file access.
+  The read data is accessible through a canned implementation of
+  an XML parser.
+  The layer is defined by the URL of the file containing its
+  contents, and that file will be either read or updated by
+  the access to the handlers.
+  The timestamp is refreshed on each read operation only.
+  */
+class CompositeLocalFileLayer : public BasicCompositeLocalFileLayer
+                     , public cppu::WeakImplHelper1< backend::XCompositeLayer>
 {
 public :
-    typedef std::vector<rtl::OUString> SubLayerFiles;
     /**
       Constructor providing the base directory and the
       file subpath describing the file to access.
@@ -302,11 +360,68 @@ public :
       */
     CompositeLocalFileLayer(
             const uno::Reference<lang::XMultiServiceFactory>& xFactory,
-            const rtl::OUString& aBaseDir,
             const rtl::OUString& aComponent,
             const SubLayerFiles& aSublayerDirectories) ;
     /** Destructor */
     ~CompositeLocalFileLayer(void) ;
+    // XLayer
+    virtual void SAL_CALL readData(
+            const uno::Reference<backend::XLayerHandler>& xHandler)
+        throw (backend::MalformedDataException, lang::NullPointerException,
+               lang::WrappedTargetException, uno::RuntimeException);
+
+    // XCompositeLayer
+    virtual uno::Sequence<rtl::OUString> SAL_CALL listSubLayerIds()
+        throw (lang::WrappedTargetException, uno::RuntimeException)
+    { return BasicCompositeLocalFileLayer::listSubLayerIds() ; }
+
+    virtual void SAL_CALL readSubLayerData(
+            const uno::Reference<backend::XLayerHandler>& xHandler,
+            const rtl::OUString& aSubLayerId)
+        throw (backend::MalformedDataException, lang::NullPointerException,
+               lang::WrappedTargetException, lang::IllegalArgumentException,
+               uno::RuntimeException);
+
+private :
+    // not implemented: warn of attempts to use this here
+    void getFileUrl();
+} ;
+/**
+  Implementation of the XUpdatableLayer and XCompositeLayer
+  interfaces for a local file access.
+  The read data is accessible through a canned implementation of
+  an XML parser, and the write data is defined through a canned
+  implementation of an XML writer.
+  The layer is defined by the URL of the file containing its
+  contents, and that file will be either read or updated by
+  the access to the handlers.
+  The timestamp is refreshed on each read operation only.
+  */
+class FullCompositeLocalFileLayer : public BasicCompositeLocalFileLayer
+                     , public cppu::WeakImplHelper3<backend::XUpdatableLayer,
+                                                    backend::XCompositeLayer,
+                                                    util::XTimeStamped>
+{
+public :
+    /**
+      Constructor providing the base directory and the
+      file subpath describing the file to access.
+      An resource directory provides the location
+      of sublayers of the component.
+
+      @param xFactory   service factory used to access canned services
+      @param aBaseDir   base directory
+      @param aComponent subpath describing the component file
+      @param aResDir    resource directory, if empty it is
+                        assumed the layer does not have sublayers.
+      */
+    FullCompositeLocalFileLayer(
+            const uno::Reference<lang::XMultiServiceFactory>& xFactory,
+            const rtl::OUString& aBaseDir,
+            const rtl::OUString& aComponent,
+            const SubLayerFiles& aSublayerDirectories) ;
+    /** Destructor */
+    ~FullCompositeLocalFileLayer(void) ;
     // XLayer
     virtual void SAL_CALL readData(
             const uno::Reference<backend::XLayerHandler>& xHandler)
@@ -322,7 +437,7 @@ public :
     // XCompositeLayer
     virtual uno::Sequence<rtl::OUString> SAL_CALL listSubLayerIds()
         throw (lang::WrappedTargetException, uno::RuntimeException)
-    { return mSubLayers ; }
+    { return BasicCompositeLocalFileLayer::listSubLayerIds() ; }
 
     virtual void SAL_CALL readSubLayerData(
             const uno::Reference<backend::XLayerHandler>& xHandler,
@@ -338,19 +453,6 @@ public :
 private :
     /** XLayerHandler implementation for getWriteHandler */
     uno::Reference<backend::XLayerHandler> mLayerWriter ;
-    /** List of available sublayers... */
-    uno::Sequence<rtl::OUString> mSubLayers ;
-    /** .. and the corresponding file URLs. */
-    SubLayerFiles mSubLayerFiles ;
-
-    /**
-      Fills the list of available sublayers.
-
-      @param aResDir    resource directory containing potential sublayers
-      @param aComponent component subpath
-      */
-    void fillSubLayerLists(const SubLayerFiles& aSublayerDirectories,
-                           const rtl::OUString& aComponent) ;
 } ;
 /**
   Factory function to create the appropriate Flat- or Composite-
@@ -367,7 +469,28 @@ private :
   @param aResDir    resource directory, if empty it is
                     assumed the layer does not have sublayers.
   */
-uno::Reference<backend::XUpdatableLayer> createLocalFileLayer(
+uno::Reference<backend::XLayer> createReadonlyLocalFileLayer(
+        const uno::Reference<lang::XMultiServiceFactory>& xFactory,
+        const rtl::OUString& aBaseDir,
+        const rtl::OUString& aComponent,
+        const rtl::OUString& aResDir) ;
+
+/**
+  Factory function to create the appropriate Flat- or Composite-
+  LocalFileLayer for a set of parameters.
+
+  Arguments provide the base directory and the
+  file subpath describing the file to access.
+  An optional resource directory provides the location
+  of sublayers of the component.
+
+  @param xFactory   service factory used to access canned services
+  @param aBaseDir   base directory
+  @param aComponent subpath describing the component file
+  @param aResDir    resource directory, if empty it is
+                    assumed the layer does not have sublayers.
+  */
+uno::Reference<backend::XUpdatableLayer> createUpdatableLocalFileLayer(
         const uno::Reference<lang::XMultiServiceFactory>& xFactory,
         const rtl::OUString& aBaseDir,
         const rtl::OUString& aComponent,
