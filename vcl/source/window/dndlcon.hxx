@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndlcon.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-28 12:51:04 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:10:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,14 +86,15 @@
 #include <cppuhelper/compbase4.hxx>
 #endif
 
-class DNDListenerContainer : public ::cppu::WeakComponentImplHelper4<
+#include <unohelp2.hxx>
+
+class DNDListenerContainer :    public ::vcl::unohelper::MutexHelper,
+                                public ::cppu::WeakComponentImplHelper4<
     ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer, \
     ::com::sun::star::datatransfer::dnd::XDropTargetDragContext,
     ::com::sun::star::datatransfer::dnd::XDropTargetDropContext,
     ::com::sun::star::datatransfer::dnd::XDropTarget >
 {
-    ::osl::Mutex m_aMutex;
-
     sal_Bool m_bActive;
     sal_Int8 m_nDefaultActions;
 
