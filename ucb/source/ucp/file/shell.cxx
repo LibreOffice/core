@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 09:56:50 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1828,6 +1828,13 @@ shell::write( sal_Int32 CommandId,
               const uno::Reference< io::XInputStream >& aInputStream )
     throw()
 {
+    if( ! aInputStream.is() )
+    {
+        installError( CommandId,
+                      TASKHANDLING_INPUTSTREAM_FOR_WRITE );
+        return sal_False;
+    }
+
     // Create parent path, if necessary.
     if ( ! ensuredir( CommandId,
                       getParentName( aUnqPath ),
@@ -1881,96 +1888,85 @@ shell::write( sal_Int32 CommandId,
 
     sal_Bool bSuccess = sal_True;
 
-    if( ! aInputStream.is() )
+    sal_uInt64 nTotalNumberOfBytes = 0;
+    sal_uInt64 nWrittenBytes;
+    sal_Int32 nReadBytes = 0, nRequestedBytes = 32768 /*32k*/;
+    uno::Sequence< sal_Int8 > seq( nRequestedBytes );
+
+    do
+    {
+        try
+        {
+            nReadBytes = aInputStream->readBytes( seq,
+                                                  nRequestedBytes );
+        }
+        catch( const io::NotConnectedException& )
+        {
+            installError( CommandId,
+                          TASKHANDLING_NOTCONNECTED_FOR_WRITE );
+            bSuccess = sal_False;
+            break;
+        }
+        catch( const io::BufferSizeExceededException& )
+        {
+            installError( CommandId,
+                          TASKHANDLING_BUFFERSIZEEXCEEDED_FOR_WRITE );
+            bSuccess = sal_False;
+            break;
+        }
+        catch( const io::IOException& )
+        {
+            installError( CommandId,
+                          TASKHANDLING_IOEXCEPTION_FOR_WRITE );
+            bSuccess = sal_False;
+            break;
+        }
+
+        if( nReadBytes )
+        {
+            const sal_Int8* p = seq.getConstArray();
+
+            err = aFile.write( ((void*)(p)),
+                               sal_uInt64( nReadBytes ),
+                               nWrittenBytes );
+
+            if( err != osl::FileBase::E_None )
+            {
+                installError( CommandId,
+                              TASKHANDLING_FILEIOERROR_FOR_WRITE,
+                              err );
+                bSuccess = sal_False;
+                break;
+            }
+            else if( nWrittenBytes != sal_uInt64( nReadBytes ) )
+            {
+                installError( CommandId,
+                              TASKHANDLING_FILEIOERROR_FOR_NO_SPACE );
+                bSuccess = sal_False;
+                break;
+            }
+
+            nTotalNumberOfBytes += nWrittenBytes;
+        }
+    } while( sal_uInt64( nReadBytes ) == nRequestedBytes );
+
+    err = aFile.setSize( nTotalNumberOfBytes );
+    if( err != osl::FileBase::E_None  )
     {
         installError( CommandId,
-                      TASKHANDLING_INPUTSTREAM_FOR_WRITE );
+                      TASKHANDLING_FILESIZE_FOR_WRITE,
+                      err );
         bSuccess = sal_False;
     }
-    else
+
+    err = aFile.close();
+    if( err != osl::FileBase::E_None  )
     {
-        sal_uInt64 nTotalNumberOfBytes = 0;
-        sal_uInt64 nWrittenBytes;
-        sal_Int32 nReadBytes = 0, nRequestedBytes = 32768 /*32k*/;
-        uno::Sequence< sal_Int8 > seq( nRequestedBytes );
-
-        do
-        {
-            try
-            {
-                nReadBytes = aInputStream->readBytes( seq,
-                                                      nRequestedBytes );
-            }
-            catch( const io::NotConnectedException& )
-            {
-                installError( CommandId,
-                              TASKHANDLING_NOTCONNECTED_FOR_WRITE );
-                bSuccess = sal_False;
-                break;
-            }
-            catch( const io::BufferSizeExceededException& )
-            {
-                installError( CommandId,
-                              TASKHANDLING_BUFFERSIZEEXCEEDED_FOR_WRITE );
-                bSuccess = sal_False;
-                break;
-            }
-            catch( const io::IOException& )
-            {
-                installError( CommandId,
-                              TASKHANDLING_IOEXCEPTION_FOR_WRITE );
-                bSuccess = sal_False;
-                break;
-            }
-
-            if( nReadBytes )
-            {
-                const sal_Int8* p = seq.getConstArray();
-
-                err = aFile.write( ((void*)(p)),
-                                   sal_uInt64( nReadBytes ),
-                                   nWrittenBytes );
-
-                if( err != osl::FileBase::E_None )
-                {
-                    installError( CommandId,
-                                  TASKHANDLING_FILEIOERROR_FOR_WRITE,
-                                  err );
-                    bSuccess = sal_False;
-                    break;
-                }
-                else if( nWrittenBytes != sal_uInt64( nReadBytes ) )
-                {
-                    installError( CommandId,
-                                  TASKHANDLING_FILEIOERROR_FOR_NO_SPACE );
-                    bSuccess = sal_False;
-                    break;
-                }
-
-                nTotalNumberOfBytes += nWrittenBytes;
-            }
-        } while( sal_uInt64( nReadBytes ) == nRequestedBytes );
-
-        err = aFile.setSize( nTotalNumberOfBytes );
-        if( err != osl::FileBase::E_None  )
-        {
-            installError( CommandId,
-                          TASKHANDLING_FILESIZE_FOR_WRITE,
-                          err );
-            bSuccess = sal_False;
-        }
-
-        err = aFile.sync();
-        if( err != osl::FileBase::E_None  )
-        {
-            installError( CommandId,
-                          TASKHANDLING_FILEIOERROR_FOR_WRITE,
-                          err );
-            bSuccess = sal_False;
-        }
+        installError( CommandId,
+                      TASKHANDLING_FILEIOERROR_FOR_WRITE,
+                      err );
+        bSuccess = sal_False;
     }
-
-    aFile.close();
 
     return bSuccess;
 }
