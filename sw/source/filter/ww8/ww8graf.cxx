@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:26:42 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2632,6 +2632,10 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             break;
 
     }
+
+    //#108778# when in a header or footer word appears to treat all elements are wrap through
+    if (bIsHeader || bIsFooter)
+        pF->nwr = 3;
 
     // Umfluss-Modus ermitteln
     SfxItemSet aFlySet(rDoc.GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1);
