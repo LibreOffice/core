@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: as $ $Date: 2001-11-08 12:03:03 $
+ *  last change: $Author: mba $ $Date: 2001-11-09 15:33:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,17 +290,23 @@ sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, 
             SfxRequest aReq( nSlotId, SFX_CALLMODE_SYNCHRON, pMod->GetPool() );
             aReq.AppendItem( SfxStringItem ( SID_FILE_NAME, rURL ) );
             aReq.AppendItem( SfxFrameItem ( SID_DOCFRAME, pFrame ) );
+            aReq.AppendItem( SfxBoolItem ( SID_NEWDOCDIRECT, TRUE ) );
+
             const SfxPoolItem* pRet = pMod->ExecuteSlot( aReq );
+            SfxObjectShell* pDoc = pFrame->GetCurrentDocument();
             if ( pRet )
+            {
                 bLoadState = sal_True;
+            }
             else
             {
-                if ( !pFrame->GetCurrentDocument() )
+                if ( !pDoc )
                 {
                     Reference < XFrame > aXFrame;
                     pFrame->SetFrameInterface_Impl( aXFrame );
                     pFrame->DoClose();
                 }
+
                 bLoadState = sal_False;
             }
             return bLoadState;
