@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 10:05:25 $
+ *  last change: $Author: dg $ $Date: 2001-06-21 12:39:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,12 +417,13 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                                aSaveOptions.IsSaveRelFSys() ) ) )
                         bRet = TRUE;
                     break;
+#ifndef TF_CFGDATA
                 case SID_INET_SMTPSERVER :
                     if(rSet.Put( SfxStringItem ( rPool.GetWhich( SID_INET_SMTPSERVER),
                                 aInetOptions.GetSmtpServerName() )))
                         bRet = TRUE;
                     break;
-
+#endif
                 case SID_INET_POPSERVER :
                 case SID_INET_NNTPSERVER :
                 case SID_INET_MAXNEWS :
@@ -872,12 +873,14 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 #endif
 
     // SMTP-Server
+#ifndef TF_CFGDATA
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_SMTPSERVER), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
         aInetOptions.SetSmtpServerName(((const SfxStringItem *)pItem)->GetValue());
         bResetSession = TRUE;
     }
+#endif
     if(
         ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_POPSERVER), TRUE, &pItem))   ||
         ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_NNTPSERVER), TRUE, &pItem))   ||

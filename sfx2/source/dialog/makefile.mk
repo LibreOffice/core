@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: mba $ $Date: 2001-06-11 09:59:24 $
+#   last change: $Author: dg $ $Date: 2001-06-21 12:37:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,6 @@ SLOFILES =\
         $(SLO)$/intro.obj			\
         $(SLO)$/macropg.obj			\
         $(SLO)$/mailchildwin.obj	\
-        $(SLO)$/maillistener.obj	\
         $(SLO)$/mailmodel.obj		\
         $(SLO)$/mailwindow.obj		\
         $(SLO)$/menucfg.obj			\
@@ -119,7 +118,6 @@ EXCEPTIONSFILES=\
         $(SLO)$/filedlghelper.obj	\
         $(SLO)$/filepicker.obj		\
         $(SLO)$/folderpicker.obj	\
-        $(SLO)$/maillistener.obj	\
         $(SLO)$/mailmodel.obj
 
 SRCFILES =\
