@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 11:38:59 $
+ *  last change: $Author: dv $ $Date: 2001-05-23 10:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -971,14 +971,7 @@ BOOL SfxDocumentTemplates::CopyOrMove
     if ( !pTargetRgn )
         return FALSE;
 
-    EntryData_Impl *pTarget = pTargetRgn->GetEntry( nTargetIdx );
-
-    OUString aTitle;
-
-    if ( pTarget )
-        aTitle = pTarget->GetTitle();
-    else
-        aTitle = pSource->GetTitle();
+    OUString aTitle = pSource->GetTitle();
 
     Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
 
@@ -986,19 +979,24 @@ BOOL SfxDocumentTemplates::CopyOrMove
                                   aTitle,
                                   pSource->GetTargetURL() ) )
     {
-        if ( bMove )
-        {
-            pSourceRgn->DeleteEntry( nSourceIdx );
-            // --**-- delete the original file
-        }
-
+        INetURLObject aSourceObj( pSource->GetTargetURL() );
         INetURLObject aNewTarget( pTargetRgn->GetTargetURL() );
 
         aNewTarget.insertName( aTitle, false,
                      INetURLObject::LAST_SEGMENT, true,
                      INetURLObject::ENCODE_ALL );
+        aNewTarget.setExtension( aSourceObj.getExtension() );
 
-        pTargetRgn->AddEntry( aTitle, aNewTarget.GetMainURL() );
+        pTargetRgn->AddEntry( aTitle, aNewTarget.GetMainURL(), &nTargetIdx );
+
+        if ( bMove )
+        {
+            // --**-- delete the original file
+            sal_Bool bDeleted = xTemplates->removeTemplate( pSourceRgn->GetTitle(),
+                                                            pSource->GetTitle() );
+            if ( bDeleted )
+                pSourceRgn->DeleteEntry( nSourceIdx );
+        }
 
         return sal_True;
     }
