@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-12 11:07:45 $
+ *  last change: $Author: pb $ $Date: 2001-12-18 10:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -743,7 +743,8 @@ void AppendDateTime_Impl( const ::com::sun::star::util::DateTime& rDT,
 {
     DateTime aDT;
     CONVERT_DATETIME( rDT, aDT );
-    const LocaleDataWrapper& rLocaleData = SvtSysLocale().GetLocaleData();
+    SvtSysLocale aSysLocale;
+    const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
     String aDateStr = rLocaleData.getDate( aDT );
     aDateStr += String::CreateFromAscii( ", " );
     aDateStr += rLocaleData.getTime( aDT );
@@ -785,8 +786,9 @@ OUString CreateExactSizeText_Impl( sal_Int64 nSize )
     }
 
     String aSizeStr;
+    SvtSysLocale aSysLocale;
     SolarMath::DoubleToString(
-        aSizeStr, fSize, 'F', nDec, SvtSysLocale().GetLocaleData().getNumDecimalSep().GetChar(0) );
+        aSizeStr, fSize, 'F', nDec, aSysLocale.GetLocaleData().getNumDecimalSep().GetChar(0) );
     aSizeStr += aUnitStr;
 
     return aSizeStr;
@@ -2115,7 +2117,8 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
         // set the date, but volumes have no date
         if ( ! (*aIt)->mbIsFolder || ! (*aIt)->mbIsVolume )
         {
-            const LocaleDataWrapper& rLocaleData = SvtSysLocale().GetLocaleData();
+            SvtSysLocale aSysLocale;
+            const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
             aValue += rLocaleData.getDate( (*aIt)->maModDate );
             aValue += aDateSep;
             aValue += rLocaleData.getTime( (*aIt)->maModDate );
@@ -2424,7 +2427,8 @@ String SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString& r
     // folders don't have a size
     aValue += aTab;
     // set the date
-    const LocaleDataWrapper& rLocaleData = SvtSysLocale().GetLocaleData();
+    SvtSysLocale aSysLocale;
+    const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
     aValue += rLocaleData.getDate( pData->maModDate );
     aValue += aDateSep;
     aValue += rLocaleData.getTime( pData->maModDate );
