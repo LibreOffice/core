@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-18 14:26:29 $
+ *  last change: $Author: dr $ $Date: 2000-12-18 16:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,6 +582,7 @@ XclExpChTrAction::XclExpChTrAction(
     aDateTime( rAction.GetDateTime() ),
     nIndex( 0 ),
     pAddRecord( NULL ),
+    bAccepted( rAction.IsAccepted() ),
     rTabBuffer( *rRootData.pTabBuffer ),
     rIdBuffer( rTabIdBuffer ),
     nLength( 0 ),
@@ -616,7 +617,7 @@ void XclExpChTrAction::SaveCont( SvStream& rStrm )
     rStrm   << nLength
             << nIndex
             << nOpCode
-            << (sal_uInt16) EXC_CHTR_NOTHING;
+            << (sal_uInt16)(bAccepted ? EXC_CHTR_ACCEPT : EXC_CHTR_NOTHING);
     SaveActionData( rStrm );
 }
 

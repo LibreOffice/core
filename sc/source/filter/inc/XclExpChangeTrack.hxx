@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-18 14:19:03 $
+ *  last change: $Author: dr $ $Date: 2000-12-18 16:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,6 +408,7 @@ private:
     DateTime                    aDateTime;
     sal_uInt32                  nIndex;         // action number
     ExcRecord*                  pAddRecord;     // additional record for this action
+    sal_Bool                    bAccepted;
 
 protected:
     const ExcETabNumBuffer&     rTabBuffer;     // for table num export (sc num -> xcl num)
