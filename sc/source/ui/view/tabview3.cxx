@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-10 10:30:45 $
+ *  last change: $Author: sab $ $Date: 2002-05-31 07:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1693,6 +1693,9 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, USHORT nCol, USHOR
                     aViewData.SetEditEngine( (ScSplitPos) i, pEngine, pGridWin[i], nCol, nRow );
                 }
             }
+
+    if (aViewData.GetViewShell()->HasAccessibilityObjects())
+        aViewData.GetViewShell()->BroadcastAccessibility(SfxSimpleHint(SC_HINT_ACC_EDITMODE));
 }
 
 void ScTabView::UpdateEditView()
