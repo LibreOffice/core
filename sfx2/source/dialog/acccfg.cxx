@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:57 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:22:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,6 +521,11 @@ void SfxAcceleratorConfigPage::Init( SfxAcceleratorManager* pAccMgr )
             SvLBoxEntry* pLBEntry = aEntriesBox.GetEntry( NULL, nPos );
             CreateCustomItems( pLBEntry, aEntriesBox.GetEntryText( pLBEntry, 0 ), aText );
         }
+        else
+        {
+            // Preserve not editable accelerators
+            m_aAccelBackup.push_back( AccelBackup( aKeyCode, nId ));
+        }
     }
 
     // Map the VCL hardcoded key codes and mark them as not changeable
@@ -618,6 +623,12 @@ void SfxAcceleratorConfigPage::Apply( SfxAcceleratorManager* pAccMgr, BOOL bIsDe
             pAccMgr->AppendItem( aAccelArr[i-1], PosToKeyCode_All( i-1 ) );
         }
     }
+
+    // Apply the not editable accelerators to the accelerator manager,
+    // otherwise we would lose them.
+    std::vector< AccelBackup >::const_iterator pBackup;
+    for ( pBackup = m_aAccelBackup.begin(); pBackup != m_aAccelBackup.end(); pBackup++ )
+        pAccMgr->AppendItem( pBackup->nId, pBackup->aKeyCode );
 
     for (i=0; i<aListOfIds.Count(); i++)
     {
