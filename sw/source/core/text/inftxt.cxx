@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-07 10:57:47 $
+ *  last change: $Author: fme $ $Date: 2002-05-21 08:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,13 +698,19 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     {
         // check if accessibility options allow blinking portions:
         const ViewShell* pSh = GetTxtFrm()->GetShell();
-        if ( pSh && ! pSh->GetViewOptions()->IsStopAnimatedText() )
+        if ( pSh && ! pSh->GetViewOptions()->IsStopAnimatedText() &&
+             ! pSh->IsPreView() )
         {
             if( !pBlink )
                 pBlink = new SwBlink();
             pBlink->Insert( &rPor, aPos, GetTxtFrm() );
             if( !pBlink->IsVisible() )
                 return;
+        }
+        else
+        {
+            delete pBlink;
+            pBlink = NULL;
         }
     }
 
