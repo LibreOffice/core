@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:04:42 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1603,7 +1603,7 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_OPEN_HYPERLINK );
 
 #if defined WIN || defined WNT || defined UNX
-    if( Application::IsRemoteServer() || !mxScannerManager.is() )
+    if( !mxScannerManager.is() )
     {
         rSet.DisableItem( SID_TWAIN_SELECT );
         rSet.DisableItem( SID_TWAIN_TRANSFER );
