@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-10 10:28:51 $
+#   last change: $Author: kz $ $Date: 2003-08-27 16:44:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -187,7 +187,7 @@ DISABLECOMMANDS_FILES=\
     $(DESTDISABLECOMMANDS)$/Makefile \
     $(DESTDISABLECOMMANDS)$/DisableCommandsTest.java
 
-EXAMPLESLIST= \
+DIR_FILE_LIST= \
     $(OFFICEDEV_FILES) \
     $(CLIPBOARD_FILES) \
     $(DESKTOPENV_FILES) \
@@ -201,19 +201,19 @@ EXAMPLESLIST= \
     $(TERMINATION_FILES) \
     $(DISABLECOMMANDS_FILES)
 
+DIR_DIRECTORY_LIST=$(uniq $(DIR_FILE_LIST:d))
+DIR_CREATE_FLAG=$(MISC)$/devguide_officedev_dirs_created.txt
+DIR_FILE_FLAG=$(MISC)$/devguide_officedev.txt
 
 #--------------------------------------------------
 # TARGETS
 #--------------------------------------------------
 all : \
-    $(EXAMPLESLIST)
+    $(DIR_FILE_LIST) \
+    $(DIR_FILE_FLAG)
 
 #--------------------------------------------------
 # use global rules
 #--------------------------------------------------   
 .INCLUDE: $(PRJ)$/util$/odk_rules.pmk
     
-$(DESTDIREXAMPLES)$/%$/office_connectrc : $(PRJ)$/examples$/%$/office_connectrc
-    +-$(MKDIRHIER) $(@:d)        
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
