@@ -273,6 +273,12 @@ public interface OfficeConstants {
     /** Element tag for <i>table:table-column</i>. */
     public final static String TAG_TABLE_COLUMN = "table:table-column";
 
+    /**
+    *  Attribute tag for <i>table:default-cell-style-name</i>
+    *  of element <i>table:table-column</i>.
+    */
+    public final static String ATTRIBUTE_DEFAULT_CELL_STYLE = "table:default-cell-style-name";
+
     /** Element tag for <i>table:scenario</i>. */
     public final static String TAG_TABLE_SCENARIO = "table:scenario";
 
