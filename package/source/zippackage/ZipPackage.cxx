@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-28 10:12:00 $
+ *  last change: $Author: mtg $ $Date: 2000-11-28 11:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,17 +457,20 @@ void SAL_CALL ZipPackage::commitChanges(  )
     ZipPackageBuffer *pBuffer = new ZipPackageBuffer(65535);
     Reference < XOutputStream > xOutStream = pBuffer;
     pEntry->nVersion = -1;
-    pEntry->nFlag = -1;
+    pEntry->nFlag = 0;
     pEntry->nMethod = STORED;
     pEntry->nTime = -1;
-    pEntry->nCrc = -1;
+    pEntry->nCrc = 0;
     pEntry->nOffset = -1;
     pEntry->sName = OUString::createFromAscii("META-INF/manifest.xml");
-    pZipOut->putNextEntry(*pEntry);
     ManifestWriter aWriter ( xOutStream, xFactory, aManList);
     aWriter.Write();
     pEntry->nSize = pEntry->nCompressedSize = pBuffer->getPosition();
     pBuffer->aBuffer.realloc(pBuffer->getPosition());
+    CRC32 aCRC;
+    aCRC.update(pBuffer->aBuffer);
+    pEntry->nCrc = aCRC.getValue();
+    pZipOut->putNextEntry(*pEntry);
     pZipOut->write(pBuffer->aBuffer, 0, pBuffer->getPosition());
     pZipOut->closeEntry();
     pZipOut->finish();

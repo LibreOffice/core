@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-27 16:55:07 $
+ *  last change: $Author: mtg $ $Date: 2000-11-28 11:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,9 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
             rFoo.writeBytes(bSeq);
 #endif
             uno::Reference < io::XInputStream > xStream = pStream->getInputStream();
+            pStream->aEntry.nCrc = -1;
+            pStream->aEntry.nSize = -1;
+            pStream->aEntry.nCompressedSize = -1;
             rZipOut.putNextEntry(pStream->aEntry);
             while (1)
             {
