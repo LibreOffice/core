@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:38:53 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
 #include <svtools/accessibilityoptions.hxx>
 #endif
+#ifndef SVX_FRAMELINKARRAY_HXX
+#include <svx/framelinkarray.hxx>
+#endif
 
 #ifndef _SWMODULE_HXX
 #include "swmodule.hxx"
@@ -138,15 +141,13 @@ private:
     SwTableAutoFmt          aCurData;
     VirtualDevice           aVD;
     SvtScriptedTextHelper   aScriptedText;
+    svx::frame::Array       maArray;            /// Implementation to draw the frame borders.
     BOOL                    bFitWidth;
-    static BYTE             aFmtMap[25];        // Zuordnung: Zelle->Format
-    Rectangle               aCellArray[25];     // Position und Groesse der Zellen
-    SvxBoxItem*             aLinePtrArray[49];  // LinienAttribute
     Size                    aPrvSize;
-    const USHORT            nLabelColWidth;
-    const USHORT            nDataColWidth1;
-    const USHORT            nDataColWidth2;
-    const USHORT            nRowHeight;
+    long                    nLabelColWidth;
+    long                    nDataColWidth1;
+    long                    nDataColWidth2;
+    long                    nRowHeight;
     const String            aStrJan;
     const String            aStrFeb;
     const String            aStrMar;
@@ -161,57 +162,20 @@ private:
     void    CalcCellArray   ( BOOL bFitWidth );
     void    CalcLineMap     ();
     void    PaintCells      ();
-    void    DrawBackground  ( BYTE nIndex );
-    void    DrawFrame       ( BYTE nIndex );
-    void    DrawString      ( BYTE nIndex );
+
+    BYTE                GetFormatIndex( size_t nCol, size_t nRow ) const;
+    const SvxBoxItem&   GetBoxItem( size_t nCol, size_t nRow ) const;
+    const SvxLineItem&  GetDiagItem( size_t nCol, size_t nRow, bool bTLBR ) const;
+
+    void                DrawString( size_t nCol, size_t nRow );
+    void                DrawStrings();
+    void                DrawBackground();
+
     void    MakeFonts       ( BYTE nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont );
     String  MakeNumberString( String cellString, BOOL bAddDec );
-    void    DrawFrameLine   ( const SvxBorderLine&  rLineD,
-                              Point                 from,
-                              Point                 to,
-                              BOOL                  bHorizontal,
-                              const SvxBorderLine&  rLineLT,
-                              const SvxBorderLine&  rLineL,
-                              const SvxBorderLine&  rLineLB,
-                              const SvxBorderLine&  rLineRT,
-                              const SvxBorderLine&  rLineR,
-                              const SvxBorderLine&  rLineRB );
-    void    CheckPriority   ( USHORT            nCurLine,
-                              AutoFmtLine       eLine,
-                              SvxBorderLine&    rLine );
-    void    GetLines        ( BYTE nIndex, AutoFmtLine eLine,
-                              SvxBorderLine&    rLineD,
-                              SvxBorderLine&    rLineLT,
-                              SvxBorderLine&    rLineL,
-                              SvxBorderLine&    rLineLB,
-                              SvxBorderLine&    rLineRT,
-                              SvxBorderLine&    rLineR,
-                              SvxBorderLine&    rLineRB );
 };
 
 //========================================================================
-
-struct SwLineStruct
-{
-    short nLeft;  //Breite der linken Linie
-    short nMiddle;//Breite des Zwischenraums
-    short nRight; //Breite der rechten Linie
-};
-
-void lcl_SwLinkLine( const SwLineStruct& dLine,
-                        const SwLineStruct& ltLine,
-                        const SwLineStruct& lLine,
-                        const SwLineStruct& lbLine,
-                        const SwLineStruct& rtLine,
-                        const SwLineStruct& rLine,
-                        const SwLineStruct& rbLine,
-                        short* dxArr);
-
-//SC-Produkt!
-BOOL lcl_HasPriority(   const SvxBorderLine* pThis,
-                        const SvxBorderLine* pOther );
-
-//------------------------------------------------------------------------
 
 class SwStringInputDlg : public ModalDialog
 {
@@ -230,15 +194,6 @@ private:
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
 };
-
-
-BYTE AutoFmtPreview::aFmtMap[] = { 0,  1,  2,  1,  3, // Zuordnung:
-                                   4,  5,  6,  5,  7, // Zelle->Format
-                                   8,  9, 10,  9, 11,
-                                   4,  5,  6,  5,  7,
-                                  12, 13, 14, 13, 15  };
-
-
 
 
 SwStringInputDlg::SwStringInputDlg( Window*         pParent,
@@ -690,12 +645,11 @@ AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes ) :
         aStrMid         ( SW_RES( STR_MID ) ),
         aStrSouth       ( SW_RES( STR_SOUTH ) ),
         aStrSum         ( SW_RES( STR_SUM ) ),
-        aPrvSize        ( GetSizePixel().Width()  - 6,
-                          GetSizePixel().Height() - 30 ),
-        nLabelColWidth  ( (USHORT)(((aPrvSize.Width()-4)/4)-12) ),
-        nDataColWidth1  ( (USHORT)(((aPrvSize.Width()-4)-(nLabelColWidth*2)) / 3) ),
-        nDataColWidth2  ( (USHORT)(((aPrvSize.Width()-4)-(nLabelColWidth*2)) / 4) ),
-        nRowHeight      ( (USHORT)((aPrvSize.Height()-4) / 5) )
+        aPrvSize        ( GetSizePixel().Width() - 6, GetSizePixel().Height() - 30 ),
+        nLabelColWidth  ( (aPrvSize.Width() - 4) / 4 - 12 ),
+        nDataColWidth1  ( (aPrvSize.Width() - 4 - 2 * nLabelColWidth) / 3 ),
+        nDataColWidth2  ( (aPrvSize.Width() - 4 - 2 * nLabelColWidth) / 4 ),
+        nRowHeight      ( (aPrvSize.Height() - 4) / 5 )
 {
     Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     pNumFmt = new SvNumberFormatter( xMSF, LANGUAGE_SYSTEM );
@@ -707,446 +661,7 @@ AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes ) :
 
 __EXPORT AutoFmtPreview::~AutoFmtPreview()
 {
-    for ( USHORT i=0; i<=35; i++ )
-    {
-        delete aLinePtrArray[i];
-    }
     delete pNumFmt;
-}
-
-//------------------------------------------------------------------------
-
-void lcl_AssignLine( SvxBorderLine&       dest,
-                        const SvxBorderLine* src )
-{
-    if( src )
-    {
-        dest.SetColor( src->GetColor() );
-        dest.SetOutWidth( src->GetOutWidth() );
-        dest.SetInWidth( src->GetInWidth() );
-        dest.SetDistance( src->GetDistance() );
-    }
-    else
-    {
-        dest.SetColor( Color( COL_WHITE ) );
-        dest.SetOutWidth ( 0 );
-        dest.SetInWidth  ( 0 );
-        dest.SetDistance ( 0 );
-    }
-}
-
-//------------------------------------------------------------------------
-
-void lcl_GetLineStruct( SwLineStruct&        rLine,
-                        const SvxBorderLine& rBoxLine )
-{
-    if ( rBoxLine.GetOutWidth() > 0 )
-    {
-        rLine.nLeft     = rBoxLine.GetOutWidth();
-        rLine.nMiddle   = rBoxLine.GetDistance();
-        rLine.nRight    = rBoxLine.GetInWidth();
-
-        /* Linienstaerke auf dick/duenn abbilden:
-         *
-         * (in TWIPS, 1pt = 20 TWIPS = duenn)
-         * alles was <=0  ist -> (0,0,0)
-         * alles was <=20 ist -> (1,0,0)/(1,1,1)
-         * alles andere       -> (3,0,0)/(2,1,2)
-         */
-
-        if ( rLine.nMiddle == 0 ) // einfache Linie?
-        {
-            rLine.nRight = 0; // sicher ist sicher
-
-            if ( rLine.nLeft <= 20 )
-            {
-                rLine.nLeft = 1;
-            }
-            else if ( rLine.nLeft > 20 )
-            {
-                rLine.nLeft = 3;
-            }
-        }
-        else // doppelte Linie
-        {
-            rLine.nMiddle = 1;
-            if ( rLine.nLeft <= 20 )
-            {
-                rLine.nLeft = rLine.nRight = 1;
-            }
-            else if ( rLine.nLeft > 20 )
-            {
-                rLine.nLeft = rLine.nRight = 2;
-            }
-        }
-    }
-    else
-    {
-        rLine.nLeft     = 0;
-        rLine.nMiddle   = 0;
-        rLine.nRight    = 0;
-    }
-}
-
-//------------------------------------------------------------------------
-
-void AutoFmtPreview::CheckPriority( USHORT          nCurLine,
-                                    AutoFmtLine     eLine,
-                                    SvxBorderLine&  rLine )
-{
-
-     const SvxBorderLine*    pDrawLine;
-    USHORT                  nOther = 0;
-
-    switch ( eLine )
-    {
-        case TOP_LINE:
-            {
-                lcl_AssignLine( rLine, aLinePtrArray[nCurLine]->GetTop() );
-                nOther = nCurLine-7;
-                pDrawLine = aLinePtrArray[nOther]->GetBottom();
-
-                if ( lcl_HasPriority( pDrawLine, &rLine ) )
-                    lcl_AssignLine( rLine, pDrawLine );
-            }
-            break;
-
-        case BOTTOM_LINE:
-            {
-                lcl_AssignLine( rLine, aLinePtrArray[nCurLine]->GetBottom() );
-                nOther = nCurLine+7;
-                pDrawLine = aLinePtrArray[nOther]->GetTop();
-
-                if ( lcl_HasPriority( pDrawLine, &rLine ) )
-                    lcl_AssignLine( rLine, pDrawLine );
-            }
-            break;
-
-        case LEFT_LINE:
-            {
-                lcl_AssignLine( rLine, aLinePtrArray[nCurLine]->GetLeft() );
-                nOther = nCurLine-1;
-                pDrawLine = aLinePtrArray[nOther]->GetRight();
-
-                if ( lcl_HasPriority( pDrawLine, &rLine ) )
-                    lcl_AssignLine( rLine, pDrawLine );
-            }
-            break;
-
-        case RIGHT_LINE:
-            {
-                lcl_AssignLine( rLine, aLinePtrArray[nCurLine]->GetRight() );
-                nOther = nCurLine+1;
-                pDrawLine = aLinePtrArray[nOther]->GetLeft();
-
-                if ( lcl_HasPriority( pDrawLine, &rLine ) )
-                    lcl_AssignLine( rLine, pDrawLine );
-            }
-            break;
-    }
-
-}
-
-//------------------------------------------------------------------------
-
-void AutoFmtPreview::GetLines( BYTE nIndex, AutoFmtLine eLine,
-                               SvxBorderLine&   rLineD,
-                               SvxBorderLine&   rLineLT,
-                               SvxBorderLine&   rLineL,
-                               SvxBorderLine&   rLineLB,
-                               SvxBorderLine&   rLineRT,
-                               SvxBorderLine&   rLineR,
-                               SvxBorderLine&   rLineRB )
-{
-    {
-        SvxBorderLine aNullLine;
-
-        lcl_AssignLine( rLineD,  &aNullLine);
-        lcl_AssignLine( rLineLT, &aNullLine);
-        lcl_AssignLine( rLineL,  &aNullLine);
-        lcl_AssignLine( rLineLB, &aNullLine);
-        lcl_AssignLine( rLineRT, &aNullLine);
-        lcl_AssignLine( rLineR,  &aNullLine);
-        lcl_AssignLine( rLineRB, &aNullLine);
-    }
-
-    USHORT  nCurLine   = nIndex + 8 + ((nIndex/5)*2);
-    USHORT  nOther     = 0;
-
-    switch ( eLine )
-    {
-        case TOP_LINE:
-            {
-                // obere Linien werden nur in der
-                // ersten Zeile gemalt:
-                if ( (nIndex >= 0) && (nIndex <= 4) )
-                {
-                    // links
-                    CheckPriority( nCurLine, eLine, rLineD );
-                    nOther = nCurLine-7;
-                    CheckPriority( nOther, LEFT_LINE, rLineLT );
-                    nOther = nCurLine-1;
-                    CheckPriority( nOther, TOP_LINE, rLineL );
-                    CheckPriority( nCurLine, LEFT_LINE, rLineLB );
-                    // rechts
-                    nOther = nCurLine-7;
-                    CheckPriority( nOther, RIGHT_LINE, rLineRT );
-                    nOther = nCurLine+1;
-                    CheckPriority( nOther, TOP_LINE, rLineR );
-                    CheckPriority( nCurLine, RIGHT_LINE, rLineRB );
-                }
-            }
-            break;
-
-        case BOTTOM_LINE:
-            {
-                // links
-                CheckPriority( nCurLine, eLine, rLineD );
-                CheckPriority( nCurLine, LEFT_LINE, rLineLT );
-                nOther = nCurLine-1;
-                CheckPriority( nOther, BOTTOM_LINE, rLineL );
-                nOther = nCurLine+7;
-                CheckPriority( nOther, LEFT_LINE, rLineLB );
-                // rechts
-                CheckPriority( nCurLine, RIGHT_LINE, rLineRT );
-                nOther = nCurLine+1;
-                CheckPriority( nOther, BOTTOM_LINE, rLineR );
-                nOther = nCurLine+7;
-                CheckPriority( nOther, RIGHT_LINE, rLineRB );
-            }
-            break;
-
-        case LEFT_LINE:
-            {
-                // linke Linien werden nur in der
-                // ersten Spalte gemalt:
-                if ( (nIndex%5) == 0 )
-                {
-                    // oben
-                    CheckPriority( nCurLine, eLine, rLineD );
-                    CheckPriority( nCurLine, TOP_LINE, rLineLT );
-                    nOther = nCurLine-7;
-                    CheckPriority( nOther, LEFT_LINE, rLineL );
-                    nOther = nCurLine-1;
-                    CheckPriority( nOther, TOP_LINE, rLineLB );
-                    // unten
-                    CheckPriority( nCurLine, BOTTOM_LINE, rLineRT );
-                    nOther = nCurLine+7;
-                    CheckPriority( nOther, LEFT_LINE, rLineR );
-                    nOther = nCurLine-1;
-                    CheckPriority( nOther, BOTTOM_LINE, rLineRB );
-                }
-            }
-            break;
-
-        case RIGHT_LINE:
-            {
-                // oben
-                CheckPriority( nCurLine, eLine, rLineD );
-                nOther = nCurLine+1;
-                CheckPriority( nOther, TOP_LINE, rLineLT );
-                nOther = nCurLine-7;
-                CheckPriority( nOther, RIGHT_LINE, rLineL );
-                CheckPriority( nCurLine, TOP_LINE, rLineLB );
-                // unten
-                nOther = nCurLine+1;
-                CheckPriority( nOther, BOTTOM_LINE, rLineRT );
-                nOther = nCurLine+7;
-                CheckPriority( nOther, RIGHT_LINE, rLineR );
-                CheckPriority( nCurLine, BOTTOM_LINE, rLineRB );
-            }
-            break;
-    }
-}
-
-//------------------------------------------------------------------------
-
-void lcl_DrawHorizontalLine( OutputDevice& rDev, const Point& rStart, const Point& rEnd )
-{
-    DBG_ASSERT( rStart.Y() <= rEnd.Y(), "lcl_DrawHorizontalLine - wrong point order" );
-    Point aLineStart( rStart );
-    Point aLineEnd( rEnd.X(), rStart.Y() );
-    while( aLineStart.Y() <= rEnd.Y() )
-    {
-        rDev.DrawLine( aLineStart, aLineEnd );
-        ++aLineStart.Y();
-        ++aLineEnd.Y();
-    }
-}
-
-void lcl_DrawVerticalLine( OutputDevice& rDev, const Point& rStart, const Point& rEnd )
-{
-    DBG_ASSERT( rStart.X() <= rEnd.X(), "lcl_DrawVerticalLine - wrong point order" );
-    Point aLineStart( rStart );
-    Point aLineEnd( rStart.X(), rEnd.Y() );
-    while( aLineStart.X() <= rEnd.X() )
-    {
-        rDev.DrawLine( aLineStart, aLineEnd );
-        ++aLineStart.X();
-        ++aLineEnd.X();
-    }
-}
-
-void AutoFmtPreview::DrawFrameLine( const SvxBorderLine&    rLineD,
-                                    Point                   from,
-                                    Point                   to,
-                                    BOOL                    bHorizontal,
-                                    const SvxBorderLine&    rLineLT,
-                                    const SvxBorderLine&    rLineL,
-                                    const SvxBorderLine&    rLineLB,
-                                    const SvxBorderLine&    rLineRT,
-                                    const SvxBorderLine&    rLineR,
-                                    const SvxBorderLine&    rLineRB )
-{
-    SwLineStruct    dLine;
-    SwLineStruct    ltLine;
-    SwLineStruct    lLine;
-    SwLineStruct    lbLine;
-    SwLineStruct    rtLine;
-    SwLineStruct    rLine;
-    SwLineStruct    rbLine;
-    short           dxArr[4];
-
-    lcl_GetLineStruct( dLine,   rLineD  );
-    lcl_GetLineStruct( ltLine,  rLineLT );
-    lcl_GetLineStruct( lLine,   rLineL  );
-    lcl_GetLineStruct( lbLine,  rLineLB );
-    lcl_GetLineStruct( rtLine,  rLineRT );
-    lcl_GetLineStruct( rLine,   rLineR  );
-    lcl_GetLineStruct( rbLine,  rLineRB );
-
-    if ( dLine.nLeft > 0 )
-    {
-        Color oldColor = aVD.GetLineColor();
-        aVD.SetLineColor( rLineD.GetColor() );
-
-        USHORT  nHeight  = dLine.nLeft + dLine.nMiddle + dLine.nRight;
-        Point   from2    = from;
-        Point   to2      = to;
-
-        lcl_SwLinkLine( dLine,
-                    ltLine, lLine, lbLine,
-                    rtLine, rLine, rbLine,
-                    dxArr );
-
-        if ( bHorizontal )
-        {
-            from.Y() -= nHeight/2;
-            to.Y()   -= nHeight/2;
-            to.Y()   += (dLine.nLeft-1);
-
-            from.X() += dxArr[0];
-            to.X()   += dxArr[2];
-
-            lcl_DrawHorizontalLine( aVD, from, to );
-
-            // noch eine zweite Linie zu malen?
-            if ( dLine.nRight != 0 )
-            {
-                from2.Y() -= nHeight/2;
-                from2.Y() += dLine.nLeft+dLine.nMiddle;
-                to2.Y()   -= nHeight/2;
-                to2.Y()   += dLine.nMiddle+dLine.nLeft;
-                to2.Y()   += (dLine.nRight-1);
-
-                from2.X() += dxArr[1];
-                to2.X()   += dxArr[3];
-
-                lcl_DrawHorizontalLine( aVD, from2, to2 );
-            }
-        }
-        else
-        {
-            from.X() += nHeight/2;
-            from.X() -= (dLine.nLeft-1);
-            to.X()   += nHeight/2;
-
-            from.Y() += dxArr[0];
-            to.Y()   += dxArr[2];
-
-            lcl_DrawVerticalLine( aVD, from, to );
-
-            // noch eine zweite Linie zu malen?
-            if ( dLine.nRight != 0 )
-            {
-                from2.X() -= nHeight/2;
-                to2.X()   -= nHeight/2;
-                to2.X()   += (dLine.nRight-1);
-
-                from2.Y() += dxArr[1];
-                to2.Y()   += dxArr[3];
-
-                lcl_DrawVerticalLine( aVD, from2, to2 );
-            }
-        }
-        aVD.SetLineColor( oldColor );
-    }
-}
-
-//------------------------------------------------------------------------
-
-void AutoFmtPreview::DrawFrame( BYTE nIndex )
-{
-    //----------------------
-    // Malen des Zellrahmens
-    //----------------------
-
-    SvxBorderLine   aLineD;
-    SvxBorderLine   aLineLT;
-    SvxBorderLine   aLineL;
-    SvxBorderLine   aLineLB;
-    SvxBorderLine   aLineRT;
-    SvxBorderLine   aLineR;
-    SvxBorderLine   aLineRB;
-    Rectangle&      cellRect = aCellArray[nIndex];
-
-    //---------
-    // TopLine ---------------------------------------------
-    //---------
-    GetLines( nIndex, TOP_LINE, aLineD,
-                aLineLT, aLineL, aLineLB,
-                aLineRT, aLineR, aLineRB );
-
-    DrawFrameLine( aLineD,
-                    cellRect.TopLeft(), cellRect.TopRight(), TRUE,
-                    aLineLT,  aLineL, aLineLB,
-                    aLineRT,  aLineR, aLineRB );
-
-    //------------
-    // BottomLine ------------------------------------------
-    //------------
-    GetLines( nIndex, BOTTOM_LINE, aLineD,
-                aLineLT, aLineL, aLineLB,
-                aLineRT, aLineR, aLineRB );
-
-    DrawFrameLine( aLineD,
-                    cellRect.BottomLeft(), cellRect.BottomRight(), TRUE,
-                    aLineLT,  aLineL, aLineLB,
-                    aLineRT,  aLineR, aLineRB );
-
-    //----------
-    // LeftLine --------------------------------------------
-    //----------
-    GetLines( nIndex, LEFT_LINE, aLineD,
-                aLineLT, aLineL, aLineLB,
-                aLineRT, aLineR, aLineRB );
-
-    DrawFrameLine( aLineD,
-                    cellRect.TopLeft(), cellRect.BottomLeft(), FALSE,
-                    aLineLT,  aLineL, aLineLB,
-                    aLineRT,  aLineR, aLineRB );
-
-    //-----------
-    // RightLine -------------------------------------------
-    //-----------
-    GetLines( nIndex, RIGHT_LINE, aLineD,
-                aLineLT, aLineL, aLineLB,
-                aLineRT, aLineR, aLineRB );
-
-    DrawFrameLine( aLineD,
-                    cellRect.TopRight(), cellRect.BottomRight(), FALSE,
-                    aLineLT,  aLineL, aLineLB,
-                    aLineRT,  aLineR, aLineRB );
 }
 
 //------------------------------------------------------------------------
@@ -1193,7 +708,33 @@ void AutoFmtPreview::MakeFonts( BYTE nIndex, Font& rFont, Font& rCJKFont, Font& 
 
 //------------------------------------------------------------------------
 
-void AutoFmtPreview::DrawString( BYTE nIndex )
+BYTE AutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
+{
+    static const BYTE pnFmtMap[] =
+    {
+        0,  1,  2,  1,  3,
+        4,  5,  6,  5,  7,
+        8,  9,  10, 9,  11,
+        4,  5,  6,  5,  7,
+        12, 13, 14, 13, 15
+    };
+    return pnFmtMap[ maArray.GetCellIndex( nCol, nRow ) ];
+}
+
+const SvxBoxItem& AutoFmtPreview::GetBoxItem( size_t nCol, size_t nRow ) const
+{
+    return aCurData.GetBoxFmt( GetFormatIndex( nCol, nRow ) ).GetBox();
+}
+
+const SvxLineItem& AutoFmtPreview::GetDiagItem( size_t nCol, size_t nRow, bool bTLBR ) const
+{
+    const SwBoxAutoFmt& rBoxFmt = aCurData.GetBoxFmt( GetFormatIndex( nCol, nRow ) );
+    return bTLBR ? rBoxFmt.GetTLBR() : rBoxFmt.GetBLTR();
+}
+
+//------------------------------------------------------------------------
+
+void AutoFmtPreview::DrawString( size_t nCol, size_t nRow )
 {
     //------------------------
     // Ausgabe des Zelltextes:
@@ -1201,6 +742,8 @@ void AutoFmtPreview::DrawString( BYTE nIndex )
     ULONG   nNum;
     double  nVal;
     String cellString;
+    BYTE    nIndex = static_cast< BYTE >( maArray.GetCellIndex( nCol, nRow ) );
+
     switch( nIndex )
     {
         case  1: cellString = aStrJan;          break;
@@ -1273,9 +816,9 @@ MAKENUMSTR:
     if( cellString.Len() )
     {
         Size                aStrSize;
-        BYTE                nFmtIndex       = (BYTE) aFmtMap[nIndex];
-        Rectangle&          cellRect        = aCellArray[nIndex];
-        Point               aPos            = aCellArray[nIndex].TopLeft();
+        BYTE                nFmtIndex       = GetFormatIndex( nCol, nRow );
+        Rectangle           cellRect        = maArray.GetCellRect( nCol, nRow );
+        Point               aPos            = cellRect.TopLeft();
         USHORT              nRightX         = 0;
 //            BOOL                bJustify        = aCurData.IsJustify();
 //            ScHorJustifyAttr    aHorJustifyItem;
@@ -1364,7 +907,7 @@ MAKENUMSTR:
             //---------------------
             // Standardausrichtung:
             //---------------------
-            if ( ((nIndex%5) == 0) || (nIndex == 4) )
+            if ( (nCol == 0) || (nIndex == 4) )
             {
                 // Text-Label links oder Summe linksbuendig
                 aPos.X() += FRAME_OFFSET;
@@ -1386,20 +929,31 @@ MAKENUMSTR:
 
 //------------------------------------------------------------------------
 
-
-void AutoFmtPreview::DrawBackground( BYTE nIndex )
+void AutoFmtPreview::DrawStrings()
 {
-    SvxBrushItem aBrushItem( aCurData.GetBoxFmt( aFmtMap[nIndex])
-                                .GetBackground() );
-    Color   oldColor     = aVD.GetLineColor();
-    aVD.SetLineColor( Color(COL_TRANSPARENT) );
-    Color oldFillColor = aVD.GetFillColor();
-    aVD.SetFillColor( aBrushItem.GetColor() );
-    //-----------------------
-    aVD.DrawRect( aCellArray[nIndex] );
-    //-----------------------
-    aVD.SetLineColor( oldColor );
-    aVD.SetFillColor( oldFillColor );
+    for( size_t nRow = 0; nRow < 5; ++nRow )
+        for( size_t nCol = 0; nCol < 5; ++nCol )
+            DrawString( nCol, nRow );
+}
+
+//------------------------------------------------------------------------
+
+
+void AutoFmtPreview::DrawBackground()
+{
+    for( size_t nRow = 0; nRow < 5; ++nRow )
+    {
+        for( size_t nCol = 0; nCol < 5; ++nCol )
+        {
+            SvxBrushItem aBrushItem( aCurData.GetBoxFmt( GetFormatIndex( nCol, nRow ) ).GetBackground() );
+
+            aVD.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+            aVD.SetLineColor();
+            aVD.SetFillColor( aBrushItem.GetColor() );
+            aVD.DrawRect( maArray.GetCellRect( nCol, nRow ) );
+            aVD.Pop();
+        }
+    }
 }
 
 //------------------------------------------------------------------------
@@ -1407,37 +961,16 @@ void AutoFmtPreview::DrawBackground( BYTE nIndex )
 
 void AutoFmtPreview::PaintCells()
 {
-    BYTE i = 0;
-
-    //---------------
-    // 1. Hintergrund
-    //---------------
+    // 1) background
     if ( aCurData.IsBackground() )
-    {
-        for ( i=0; i<=24; i++ )
-        {
-            DrawBackground( i );
-        }
-    }
+        DrawBackground();
 
-    //----------
-    // 2. Rahmen
-    //----------
+    // 2) values
+    DrawStrings();
+
+    // 3) border
     if ( aCurData.IsFrame() )
-    {
-        for ( i=0; i<=24; i++ )
-        {
-            DrawFrame( i );
-        }
-    }
-
-    //---------
-    // 3. Werte
-    //---------
-    for ( i = 0; i<=24; i++ )
-    {
-        DrawString( i );
-    }
+        maArray.DrawArray( aVD );
 }
 
 //------------------------------------------------------------------------
@@ -1446,24 +979,8 @@ void AutoFmtPreview::PaintCells()
 void __EXPORT AutoFmtPreview::Init()
 {
     SetBorderStyle( GetBorderStyle() | WINDOW_BORDER_MONO );
-
-    SvxBoxItem aEmptyBoxItem;
-
-    aEmptyBoxItem.SetLine    ( NULL, BOX_LINE_TOP );
-    aEmptyBoxItem.SetLine    ( NULL, BOX_LINE_BOTTOM );
-    aEmptyBoxItem.SetLine    ( NULL, BOX_LINE_LEFT );
-    aEmptyBoxItem.SetLine    ( NULL, BOX_LINE_RIGHT );
-    aEmptyBoxItem.SetDistance( 0 );
-
-    //------------------------
-    // Linienattribut-Feld mit
-    // Null-BoxItems fuellen
-    //------------------------
-    for ( USHORT i=0; i<=48; i++ )
-    {
-        aLinePtrArray[i] = new SvxBoxItem( aEmptyBoxItem );
-    }
-
+    maArray.Initialize( 5, 5 );
+    maArray.SetUseDiagDoubleClipping( false );
     CalcCellArray( FALSE );
     CalcLineMap();
 }
@@ -1473,83 +990,48 @@ void __EXPORT AutoFmtPreview::Init()
 
 void AutoFmtPreview::CalcCellArray( BOOL bFitWidth )
 {
-    // Initialisieren des Zellfeldes (5x5 Zellen).
-    // Rectangles enthalten Position und Groesse einer Zelle.
-    // abhaengig, ob Zellbreite an Format angepasst werden soll (bFitWidth)
-    USHORT  nRow;
-    USHORT  nDataColWidth = (bFitWidth) ? nDataColWidth2 : nDataColWidth1;
+    maArray.SetXOffset( 2 );
+    maArray.SetAllColWidths( bFitWidth ? nDataColWidth2 : nDataColWidth1 );
+    maArray.SetColWidth( 0, nLabelColWidth );
+    maArray.SetColWidth( 4, nLabelColWidth );
 
-    for ( nRow=0; nRow<=4; nRow++ )
-    {
-        Point   topLeftPos ( 2, (nRowHeight * nRow) + 2 );
-        Size    rectSize   ( 0, nRowHeight );
-        USHORT  nCell;
-        USHORT  nFirst = nRow*5;
-        USHORT  nLast  = nFirst+4;
+    maArray.SetYOffset( 2 );
+    maArray.SetAllRowHeights( nRowHeight );
 
-        for ( nCell=nFirst; nCell<=nLast; nCell++ )
-        {
-            //--------------------
-            // Position berechnen:
-            //--------------------
-            if ( nCell == 0 )
-            {
-                // erste Zelle benoetigt keine Sonderbehandlung
-            }
-            else if ( (nCell <= 4) && (nCell != 0) )
-            {
-                // Zelle aus der ersten Zeile
-                topLeftPos = aCellArray[nCell-1].TopRight();
-            }
-            else
-            {
-                topLeftPos = aCellArray[nCell-5].BottomLeft();
-            }
-
-            //-------------------
-            // Groesse berechnen:
-            //-------------------
-            if ( (nCell == nFirst) || (nCell == nLast) )
-                rectSize.Width() = nLabelColWidth;
-            else
-                rectSize.Width() = nDataColWidth;
-
-            aCellArray[nCell] = Rectangle( topLeftPos, rectSize );
-        }
-    }
-    aPrvSize.Width()  = aCellArray[24].BottomRight().X() + 3;
-    aPrvSize.Height() = aCellArray[24].BottomRight().Y() + 3;
-
+    aPrvSize.Width() = maArray.GetWidth() + 4;
+    aPrvSize.Height() = maArray.GetHeight() + 4;
 }
 
 //------------------------------------------------------------------------
 
+inline void lclSetStyleFromBorder( svx::frame::Style& rStyle, const SvxBorderLine* pBorder )
+{
+    rStyle.Set( pBorder, 0.05, 5 );
+}
 
 void AutoFmtPreview::CalcLineMap()
 {
-    //----------------------------------------------------
-    // Initialisieren des Linenattributfeldes (7x7 Zellen)
-    // Ein Eintrag dieses Feldes enthaelt einen Verweis
-    // auf die Linienattribute des zugehoerigen Feldes.
-    // Dieses Feld "umschliesst" das Zellfeld mit einer
-    // Reihe "leerer" Zellen.
-    //----------------------------------------------------
-
-    SvxBoxItem aFrameItem;
-    BYTE nRow;
-
-    for ( nRow=0; nRow<=4; nRow++ )
+    for( size_t nRow = 0; nRow < 5; ++nRow )
     {
-        USHORT  nLine;
-        BYTE  nCell;
-        BYTE  nFirst = (nRow * 5);
-        BYTE  nLast  = nFirst+4;
-
-        for ( nCell=nFirst; nCell<=nLast; nCell++ )
+        for( size_t nCol = 0; nCol < 5; ++nCol )
         {
-            nLine = nCell + 8 + ((nCell/5)*2);
-                aFrameItem = aCurData.GetBoxFmt( aFmtMap[nCell]).GetBox();
-            *(aLinePtrArray[nLine]) = aFrameItem;
+            svx::frame::Style aStyle;
+
+            const SvxBoxItem& rItem = GetBoxItem( nCol, nRow );
+            lclSetStyleFromBorder( aStyle, rItem.GetLeft() );
+            maArray.SetCellStyleLeft( nCol, nRow, aStyle );
+            lclSetStyleFromBorder( aStyle, rItem.GetRight() );
+            maArray.SetCellStyleRight( nCol, nRow, aStyle );
+            lclSetStyleFromBorder( aStyle, rItem.GetTop() );
+            maArray.SetCellStyleTop( nCol, nRow, aStyle );
+            lclSetStyleFromBorder( aStyle, rItem.GetBottom() );
+            maArray.SetCellStyleBottom( nCol, nRow, aStyle );
+
+// FIXME - uncomment to draw diagonal borders
+//            lclSetStyleFromBorder( aStyle, GetDiagItem( nCol, nRow, true ).GetLine() );
+//            maArray.SetCellStyleTLBR( nCol, nRow, aStyle );
+//            lclSetStyleFromBorder( aStyle, GetDiagItem( nCol, nRow, false ).GetLine() );
+//            maArray.SetCellStyleBLTR( nCol, nRow, aStyle );
         }
     }
 }
@@ -1626,170 +1108,6 @@ void AutoFmtPreview::DoPaint( const Rectangle& rRect )
 void __EXPORT AutoFmtPreview::Paint( const Rectangle& rRect )
 {
     DoPaint( rRect );
-}
-//------------------------------------------------------------------------
-
-
-BOOL lcl_HasPriority(   const SvxBorderLine* pThis,
-                        const SvxBorderLine* pOther )
-{
-
-    if (!pThis)
-        return FALSE;
-    if (!pOther)
-        return TRUE;
-
-    USHORT nThisSize = pThis->GetOutWidth() + pThis->GetDistance() + pThis->GetInWidth();
-    USHORT nOtherSize = pOther->GetOutWidth() + pOther->GetDistance() + pOther->GetInWidth();
-
-    if (nThisSize > nOtherSize)
-        return TRUE;
-    else if (nThisSize < nOtherSize)
-        return FALSE;
-    else
-    {
-        if ( pOther->GetInWidth() && !pThis->GetInWidth() )
-            return TRUE;
-        else if ( pThis->GetInWidth() && !pOther->GetInWidth() )
-            return FALSE;
-        else
-        {
-            return TRUE;            //! ???
-        }
-    }
-}
-
-void lcl_SwLinkLine(const SwLineStruct& dLine,
-                    const SwLineStruct& ltLine,
-                    const SwLineStruct& lLine,
-                    const SwLineStruct& lbLine,
-                    const SwLineStruct& rtLine,
-                    const SwLineStruct& rLine,
-                    const SwLineStruct& rbLine,
-                    short* dxArr)
-{
-    short nDx;
-    short nDxDx;
-    short nltW = ltLine.nLeft + ltLine.nMiddle + ltLine.nRight;
-    short nlbW = lbLine.nLeft + lbLine.nMiddle + lbLine.nRight;
-    short nrtW = rtLine.nLeft + rtLine.nMiddle + rtLine.nRight;
-    short nrbW = rbLine.nLeft + rbLine.nMiddle + rbLine.nRight;
-    if (dLine.nRight == 0) // einfache Linie
-    {
-        dxArr[1] = 0;
-        dxArr[3] = 0;
-
-        // Linker Teil
-        if ((lLine.nLeft != 0) && (lLine.nRight == 0)) // links einfache Linie
-            dxArr[0] = 0;
-        else
-        {
-            nDx = Max(nltW, nlbW) / 2;
-            nDxDx = (Max(nltW, nlbW) + 1) % 2;
-            if ((nDx == 0) || (ltLine.nRight == 0) || (lbLine.nRight == 0))
-            {
-                if (lLine.nLeft == 0)
-                    dxArr[0] = nDxDx - nDx;
-                else
-                    dxArr[0] = nDxDx + nDx;
-            }
-            else
-                dxArr[0] = nDxDx + nDx;
-        }
-
-        // Rechter Teil
-        if ((rLine.nLeft != 0) && (rLine.nRight == 0)) // rechts keine Linie
-            dxArr[2] = 0;
-        else
-        {
-            nDx = Max(nrtW, nrbW) / 2;
-            if ((nDx == 0) || (rtLine.nRight == 0) || (rbLine.nRight == 0))
-            {
-                if (rLine.nLeft == 0)
-                    dxArr[2] = nDx;
-                else
-                    dxArr[2] = -nDx;
-            }
-            else
-                dxArr[2] = -nDx;
-        }
-    }
-    else
-    {
-        // Linker oberer Teil
-        if ((nltW == 0) || (ltLine.nRight == 0)) // Links oben keine oder einfache Linie
-        {
-            nDx = (nlbW + 1) / 2;
-            nDxDx = (nlbW + 1) % 2;
-            if (nDx == 0)
-                dxArr[0] = nDxDx + nDx;
-            else
-                dxArr[0] = nDxDx - (nlbW / 2) + ltLine.nLeft;
-        }
-        else
-        {
-            nDx = (nltW + 1) / 2;
-            nDxDx = (nltW + 1) % 2;
-            if (nDx == 0)
-                dxArr[0] = nDxDx - nDx;
-            else
-                dxArr[0] = nDxDx + nDx - ltLine.nRight;
-        }
-        // Linker unterer Teil
-        if ((nlbW == 0) || (lbLine.nRight == 0)) // Links unten keine oder einfache Linie
-        {
-            nDx = (nltW + 1) / 2;
-            nDxDx = (nltW + 1) % 2;
-            if (nDx == 0)
-                dxArr[1] = nDxDx + nDx;
-            else
-                dxArr[1] = nDxDx - (nltW / 2) + lbLine.nLeft;
-        }
-        else
-        {
-            nDx = (nlbW + 1) / 2;
-            nDxDx = (nlbW + 1) % 2;
-            if (nDx == 0)
-                dxArr[1] = nDxDx - nDx;
-            else
-                dxArr[1] = nDxDx + nDx - lbLine.nRight;
-        }
-
-        // Rechter oberer Teil
-        if ((nrtW == 0) || (rtLine.nRight == 0)) // Rechts oben keine oder einfache Linie
-        {
-            nDx = (nrbW + 1) / 2;
-            if (nDx == 0)
-                dxArr[2] = -nDx;
-            else
-                dxArr[2] = (nrbW / 2) - rtLine.nLeft;
-        }
-        else
-        {
-            nDx = (nrtW + 1) / 2;
-            if (nDx == 0)
-                dxArr[2] = nDx;
-            else
-                dxArr[2] = -nDx + rtLine.nLeft;
-        }
-        // Rechter unterer Teil
-        if ((nrbW == 0) || (rbLine.nRight == 0)) // Rechts unten keine oder einfache Linie
-        {
-            nDx = (nrtW + 1) / 2;
-            if (nDx == 0)
-                dxArr[3] = -nDx;
-            else
-                dxArr[3] = (nrtW / 2) - rbLine.nLeft;
-        }
-        else
-        {
-            nDx = (nrbW + 1) / 2;
-            if (nDx == 0)
-                dxArr[3] = nDx;
-            else
-                dxArr[3] = -nDx + rbLine.nLeft;
-        }
-    }
 }
 
 
