@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgimport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-05 13:40:17 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,9 +128,11 @@ sal_Bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
                     if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( aOutputURL, aOutputFile ) && aOutputFile.Len() )
                     {
-                        aJStr = aJEnv.pEnv->NewStringUTF( ByteString( aLocalFile.GetBuffer(), RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                        aJStr = aJEnv.pEnv->NewString( aLocalFile.GetBuffer(),
+                                                       aLocalFile.Len() );
                         aArgs = aJEnv.pEnv->NewObjectArray( 2, aJEnv.pEnv->FindClass( "java/lang/String" ), aJStr );
-                        aJStr = aJEnv.pEnv->NewStringUTF( ByteString( aOutputFile.GetBuffer(), RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                        aJStr = aJEnv.pEnv->NewString( aOutputFile.GetBuffer(),
+                                                       aOutputFile.Len() );
                         aJEnv.pEnv->SetObjectArrayElement( aArgs, 1, aJStr );
                         aJEnv.pEnv->CallStaticVoidMethod( aClass, aMId, aArgs );
 
