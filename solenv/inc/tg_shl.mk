@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-01 18:21:52 $
+#   last change: $Author: hjs $ $Date: 2001-11-02 11:37:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -150,6 +150,8 @@ USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
 .IF "$(GUI)" == "UNX"
 SHL$(TNR)DEPN+=$(SHL$(TNR)VERSIONOBJ:s/.o/.obj/)
+.ELSE           # "$(GUI)" == "UNX"
+SHL$(TNR)DEPN+=$(SHL$(TNR)VERSIONOBJ)
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)$/$(SHL$(TNR)VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
     +$(COPY) $(SOLARENV)$/src$/version.cxx $@

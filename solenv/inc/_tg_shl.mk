@@ -50,6 +50,8 @@ USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
 .IF "$(GUI)" == "UNX"
 SHL1DEPN+=$(SHL1VERSIONOBJ:s/.o/.obj/)
+.ELSE           # "$(GUI)" == "UNX"
+SHL1DEPN+=$(SHL1VERSIONOBJ)
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)$/$(SHL1VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
     +$(COPY) $(SOLARENV)$/src$/version.cxx $@
@@ -469,6 +471,8 @@ USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
 .IF "$(GUI)" == "UNX"
 SHL2DEPN+=$(SHL2VERSIONOBJ:s/.o/.obj/)
+.ELSE           # "$(GUI)" == "UNX"
+SHL2DEPN+=$(SHL2VERSIONOBJ)
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)$/$(SHL2VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
     +$(COPY) $(SOLARENV)$/src$/version.cxx $@
@@ -888,6 +892,8 @@ USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
 .IF "$(GUI)" == "UNX"
 SHL3DEPN+=$(SHL3VERSIONOBJ:s/.o/.obj/)
+.ELSE           # "$(GUI)" == "UNX"
+SHL3DEPN+=$(SHL3VERSIONOBJ)
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)$/$(SHL3VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
     +$(COPY) $(SOLARENV)$/src$/version.cxx $@
@@ -1307,6 +1313,8 @@ USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
 .IF "$(GUI)" == "UNX"
 SHL4DEPN+=$(SHL4VERSIONOBJ:s/.o/.obj/)
+.ELSE           # "$(GUI)" == "UNX"
+SHL4DEPN+=$(SHL4VERSIONOBJ)
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)$/$(SHL4VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
     +$(COPY) $(SOLARENV)$/src$/version.cxx $@
@@ -1726,6 +1734,8 @@ USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
 .IF "$(GUI)" == "UNX"
 SHL5DEPN+=$(SHL5VERSIONOBJ:s/.o/.obj/)
+.ELSE           # "$(GUI)" == "UNX"
+SHL5DEPN+=$(SHL5VERSIONOBJ)
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)$/$(SHL5VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
     +$(COPY) $(SOLARENV)$/src$/version.cxx $@
@@ -2145,6 +2155,8 @@ USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
 .IF "$(GUI)" == "UNX"
 SHL6DEPN+=$(SHL6VERSIONOBJ:s/.o/.obj/)
+.ELSE           # "$(GUI)" == "UNX"
+SHL6DEPN+=$(SHL6VERSIONOBJ)
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)$/$(SHL6VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
     +$(COPY) $(SOLARENV)$/src$/version.cxx $@
@@ -2564,6 +2576,8 @@ USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
 .IF "$(GUI)" == "UNX"
 SHL7DEPN+=$(SHL7VERSIONOBJ:s/.o/.obj/)
+.ELSE           # "$(GUI)" == "UNX"
+SHL7DEPN+=$(SHL7VERSIONOBJ)
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)$/$(SHL7VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
     +$(COPY) $(SOLARENV)$/src$/version.cxx $@
@@ -2983,6 +2997,8 @@ USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
 .IF "$(GUI)" == "UNX"
 SHL8DEPN+=$(SHL8VERSIONOBJ:s/.o/.obj/)
+.ELSE           # "$(GUI)" == "UNX"
+SHL8DEPN+=$(SHL8VERSIONOBJ)
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)$/$(SHL8VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
     +$(COPY) $(SOLARENV)$/src$/version.cxx $@
@@ -3402,6 +3418,8 @@ USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
 .IF "$(GUI)" == "UNX"
 SHL9DEPN+=$(SHL9VERSIONOBJ:s/.o/.obj/)
+.ELSE           # "$(GUI)" == "UNX"
+SHL9DEPN+=$(SHL9VERSIONOBJ)
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)$/$(SHL9VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
     +$(COPY) $(SOLARENV)$/src$/version.cxx $@
@@ -3821,6 +3839,8 @@ USE_VERSIONH:=$(INCCOM)$/_version.h
 .ELSE			# "$(UPDATER)"=="YES"
 .IF "$(GUI)" == "UNX"
 SHL10DEPN+=$(SHL10VERSIONOBJ:s/.o/.obj/)
+.ELSE           # "$(GUI)" == "UNX"
+SHL10DEPN+=$(SHL10VERSIONOBJ)
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)$/$(SHL10VERSIONOBJ:b).cxx : $(SOLARENV)$/src$/version.cxx $(INCCOM)$/_version.h
     +$(COPY) $(SOLARENV)$/src$/version.cxx $@
