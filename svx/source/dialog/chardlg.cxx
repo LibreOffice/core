@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-05 08:41:35 $
+ *  last change: $Author: tl $ $Date: 2001-03-06 10:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4631,7 +4631,8 @@ SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rIn
 
     m_nSuperEsc         ( (short)DFLT_ESC_SUPER ),
     m_nSubEsc           ( (short)DFLT_ESC_SUB ),
-    m_nScaleWidthItemSetVal ( (UINT16) 100 ),
+    m_nScaleWidthItemSetVal ( 100 ),
+    m_nScaleWidthInitialVal ( 100 ),
     m_nSuperProp        ( (BYTE)DFLT_ESC_PROP ),
     m_nSubProp          ( (BYTE)DFLT_ESC_PROP )
 {
@@ -4657,6 +4658,11 @@ void SvxCharPositionPage::Initialize()
     m_aHighPosBtn.SetClickHdl( aLink );
     m_aNormalPosBtn.SetClickHdl( aLink );
     m_aLowPosBtn.SetClickHdl( aLink );
+
+    aLink = LINK( this, SvxCharPositionPage, RotationHdl_Impl );
+    m_a0degRB  .SetClickHdl( aLink );
+    m_a90degRB .SetClickHdl( aLink );
+    m_a270degRB.SetClickHdl( aLink );
 
     aLink = LINK( this, SvxCharPositionPage, FontModifyHdl_Impl );
     m_aHighLowEdit.SetModifyHdl( aLink );
@@ -4745,6 +4751,19 @@ IMPL_LINK( SvxCharPositionPage, PositionHdl_Impl, RadioButton*, pBtn )
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( SvxCharPositionPage, RotationHdl_Impl, RadioButton*, pBtn )
+{
+    BOOL bEnable = FALSE;
+    if (&m_a90degRB == pBtn  ||  &m_a270degRB == pBtn)
+        bEnable = TRUE;
+    else if (&m_a0degRB != pBtn)
+        DBG_ERROR( "unexpected button" );
+    m_aFitToLineCB.Enable( bEnable );
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
 IMPL_LINK( SvxCharPositionPage, FontModifyHdl_Impl, MetricField*, EMPTYARG )
 {
     BYTE nEscProp = (BYTE)m_aFontSizeEdit.GetValue();
@@ -4776,10 +4795,10 @@ IMPL_LINK( SvxCharPositionPage, FitToLineHdl_Impl, CheckBox*, pBox )
 {
     if ( &m_aFitToLineCB == pBox)
     {
+        UINT16 nVal = m_nScaleWidthInitialVal;
         if (m_aFitToLineCB.IsChecked())
-            m_aScaleWidthMF.SetValue( m_nScaleWidthItemSetVal );
-        else
-            m_aScaleWidthMF.SetValue( 100 );
+            nVal = m_nScaleWidthItemSetVal;
+        m_aScaleWidthMF.SetValue( nVal );
     }
     return 0;
 }
@@ -5146,14 +5165,22 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
     {
         const SvxCharScaleWidthItem& rItem =
                 (SvxCharScaleWidthItem&) rSet.Get( nWhich );
-        m_nScaleWidthItemSetVal = rItem.GetValue();
-        m_aScaleWidthMF.SetValue( 100 );
+        m_nScaleWidthInitialVal = rItem.GetValue();
+        m_aScaleWidthMF.SetValue( m_nScaleWidthInitialVal );
     }
     else
         m_aScaleWidthMF.SetValue( 100 );
 
+    nWhich = GetWhich( SID_ATTR_CHAR_WIDTH_FIT_TO_LINE );
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        m_nScaleWidthItemSetVal = ((SfxUInt16Item&) rSet.Get( nWhich )).GetValue();
+    }
+
     // Rotation
     nWhich = GetWhich( SID_ATTR_CHAR_ROTATED );
+    Link aOldLink( m_aFitToLineCB.GetClickHdl() );
+    m_aFitToLineCB.SetClickHdl( Link() );
     if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
     {
         const SvxCharRotateItem& rItem =
@@ -5174,6 +5201,9 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
         m_a0degRB.Check( TRUE );
         m_aFitToLineCB.Check( FALSE );
     }
+    m_aFitToLineCB.SetClickHdl( aOldLink );
+
+    m_aFitToLineCB.Enable( !m_a0degRB.IsChecked() );
 
     m_aHighPosBtn.SaveValue();
     m_aNormalPosBtn.SaveValue();
@@ -5294,7 +5324,7 @@ BOOL SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
     nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
     if ( m_aScaleWidthMF.GetText() != m_aScaleWidthMF.GetSavedValue() )
     {
-        rSet.Put( SvxCharScaleWidthItem( m_aScaleWidthMF.GetValue() ) );
+        rSet.Put( SvxCharScaleWidthItem( m_aScaleWidthMF.GetValue(), nWhich ) );
         bModified |= TRUE;
     }
     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
@@ -5307,7 +5337,7 @@ BOOL SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
          m_a270degRB   .IsChecked() != m_a270degRB   .GetSavedValue()  ||
          m_aFitToLineCB.IsChecked() != m_aFitToLineCB.GetSavedValue() )
     {
-        SvxCharRotateItem aItem( 0, m_aFitToLineCB.IsChecked() );
+        SvxCharRotateItem aItem( 0, m_aFitToLineCB.IsChecked(), nWhich );
         sal_uInt16 nVal = 0;
         if (m_a90degRB.IsChecked())
             aItem.SetBottomToTop();
