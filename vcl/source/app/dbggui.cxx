@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 13:42:10 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,67 +133,63 @@ static sal_Char* pDbgHelpText[] =
 "\n",
 "--- Macros ---\n",
 "DBG_NAME( aName )\n",
-"Definiert die Verwaltungsdaten fuer eine Klasse. Dieses Makro darf nur in "
-"einem Source-File mit dem gleichen Namen benutzt werden.\n",
+"Defines the administration data for a class. This macro may only be used "
+" in a source file with the same name.\n",
 "\n",
 "DBG_NAMEEX( aName )\n",
-"Wie DBG_NAME, nur fuer weitere Source-Files.\n",
+"Like DBG_NAME, only for other source files.\n",
 "\n",
 "DBG_CTOR( aName, fTest )\n",
-"Muss in allen Konstruktoren einer Klasse benutzt werden (auch beim "
-"CopyCtor). Als erster Paramter muss der registrierte Name (am besten der "
-"Klassenname) uebergeben werden und als zweiter Parameter die Testfunktion "
-"oder 0.\n",
+"Must be used in all constructors of a class (also in the CopyCtor). "
+"The first parameter must be the registered name (best would be the "
+"class name) and the second parameter the test function or 0.\n",
 "\n",
 "DBG_DTOR( aName, fTest )\n",
-"Muss im Destruktor der Klasse benutzt werden. Als erster Paramter muss "
-"der registrierte Name uebergeben werden und als zweiter Parameter die "
-"Testfunktion oder 0.\n",
+"Must be used in the destructor of the class. The first parameter is "
+"the registered name and the second parameter is the test function or "
+"0.\n",
 "\n",
 "DBG_CHKTHIS( aName, fTest )\n",
-"Kann in Methoden einer Klasse benutzt werden, wo die Konstruktoren und "
-"der Destruktor der Klasse mit den entsprechenden Makros ausgestattet sind. "
-"Als erster Paramter muss der registrierte Name uebergeben werden und als "
-"zweiter Parameter die Testfunktion oder 0.\n",
+"Can be used in methods of the class when constructors and the "
+"desctructor of the class are equiped with the corresponding macros. "
+"The first parameter is the registered name, the second parameter is "
+"the test function or 0.\n",
 "\n",
 "DBG_CHKOBJ( pObj, aName, fTest )\n",
-"Kann auf Instanzen einer Klasse angewendet werden, wo die Konstruktoren und "
-"der Destruktor der Klasse mit den entsprechenden Makros ausgestattet sind. "
-"Als erster Paramter muss die Adresse des zu testenden Objects uebergeben "
-"werden, als zweiter Parameter der registrierte Name und als dritter "
-"Parameter die Testfunktion oder 0.\n",
+"Can be used on instances of a class where the constructors and the "
+"destructor of the class are equiped with the corresponding macros. "
+"The first parameter is the registered name, the second parameter is "
+"the test function or 0.\n",
 "\n",
-"Damit die Makros Wirkung haben, muss DBG_UTIL defniert sein.\n",
+"To make the macros work DBG_UTIL must be defined.\n",
 "\n",
-"--- Optionen ---\n",
+"--- Options ---\n",
 "This\n",
-"Es wird auf gueltigen This-Pointer getestet. Dadurch kann man erreichen, "
-"das bei allen Objekten die damit ausgestattet sind, geprueft wird, ob "
-"mit einem existierenden Objekt gearbeitet wird. Dadurch findet man zum "
-"Beispiel schneller Fehler durch falsche Mehrfachvererbung, Alignment oder "
-"Compilerfehler. Da fast alle Standard-Klassen von SV (String, List, Pen, "
-"Brush, Polygon, ...) mit DBG_CHKTHIS() ausgestattet sind, werden viele "
-"Fehler gefunden, jedoch kostet dadurch dieser Test auch entsprechend viel "
-"Performence.\n",
+"The This pointer is validated. This way all objects that are equiped "
+"with it can be tested to make sure one is working with existing objects. "
+"This way it's easier to find bugs in case of multiple inheritence, "
+"alignment or compiler errors. Since almost all standard classes of SV "
+"(String, List, Pen, Brush, Polygon, ...) are equiped with DBG_CHKTHIS() "
+"a lot of errors are found, although this test will impact performance "
+"accordingly.\n",
 "\n",
 "Function\n",
-"Wenn eine Funktion bei den Macros uebergeben wird, wird sie gerufen.\n",
+"When a function is passed with macros, it will be called.\n",
 "\n",
 "Exit\n",
-"This- und Func-Test wird auch beim Funktionsaustritt durchgefuehrt.\n",
+"This- and Func-Test will also run when exiting the function.\n",
 "\n",
 "Report\n",
-"Am Programmende wird die Anzahl der angelegten Objekte ausgegeben. "
-"Da alle wichtigen SV-Klassen zumindest mit DBG_CTOR()/DBG_DTOR() "
-"ausgestattet sind, kann man damit feststellen, ob man die sogenannten "
-"Resource-Leaks hat (Systemobjekte, die nicht freigegeben werden). Dazu "
-"gehoehren OutputDevice, Window, VirtualDevice, Printer und Menu. Achtung: "
-"Dtor-Aufrufe von statischen Objekten werden nicht beruecksichtigt. Deshalb "
-"bleiben bei jedem SV-Programm auch 2 Strings und eine Bitmap nach.\n",
+"At the end of the program the number of generated objects is produced "
+"as output. Because all important SV classes have at least DBG_CTOR() / "
+"DBG_DTOR() it can checked so called resource leaks (system objects which "
+" are not freed) exist. These include OutputDevice, Window, VirtualDevice, "
+" Printer and Menu. Note: Dtor calls of static objects are not taken into "
+" account. Therefor each SV program leaves 2 strings and a bitmap behind.\n",
 "\n",
 "Trace\n",
-"Erzeugung, Zerstoerung und Benutzung der mit DBG_XTOR ausgestatteten "
-"Objekte wird protokoliert.\n",
+"Creation, destruction and usage of objects which are equiped with "
+"DBG_XTOR is logged.\n",
 "\n",
 "\n",
 "Memory Test\n",
@@ -201,265 +197,238 @@ static sal_Char* pDbgHelpText[] =
 "\n",
 "--- Macros ---\n",
 "DBG_MEMTEST()\n",
-"Fuehrt die eingestellten Memory Tests durch.\n",
+"Run the specified memory tests.\n",
 "\n",
 "DBG_MEMTEST_PTR( p )\n",
-"Fuehrt die eingestellten Memory Tests durch und zusaetzlich wird der "
-"uebergebene Pointer auf Gueltigkeit geprueft, wenn Pointer Test an ist.\n",
+"Runs the specified memory tests and validates the pointer that was "
+"passed if the pointer test is enabled.\n",
 "\n",
-"--- Optionen ---\n",
+"--- Options ---\n",
 "Initilize\n",
-"Allokierter Speicher wird mit 0x77 und freier oder freigegebener Speicher "
-"wird mit 0x33 initialisiert. Diese Option kostet (fast) keine Performence "
-"und sollte deshalb waehrend der Entwicklung fast immer an sein. Denn "
-"dadurch erreicht man auch, das Abstuerze oefters reproduzierbarer "
-"auftreten.\n",
+"Allocated memory is initialized with 0x77 and free or freed memory "
+"is initialized with 0x33. This option has almost no impact on performance "
+"and should thus always be enabled during development. This will also "
+"make crashes more often reproducable.\n",
 "\n",
 "Overwrite\n",
-"Es wird getestet, ob vor/hinter die Bloecke geschrieben wird. Vor und "
-"hinter dem Block wird der Speicher mit 0x55 initialisiert. Diese Option "
-"kostet Performence, sollte jedoch auch mal eingesetzt werden um die "
-"haeufigsten Speicherueberschreiber (+-1-Fehler) zu testen. Diese Option "
-"sollte auch eingeschaltet werden, wenn das Programm im new oder "
-"delete-Operator abstuerzt.\n",
+"This test check whether writes occur before or after the blocks. Before "
+"and after the block memory is initialized with 0x55. This option costs "
+"performance, but should be enabled once in a while to test for common "
+"memory overwrites (+-1 errors). This option should also be enabled if the "
+"program crashes in a new or delete operator.\n",
 "\n",
 "Free\n",
-"Es wird getestet, ob freier Speicher ueberschrieben wird. Diese Option "
-"kostet eine ganze Menge Performence und sollte deshalb nur gelegentlich "
-"eingesetzt werden um Speicherueberschreiber zu testen. Diese Option "
-"sollte evt. auch eingeschaltet werden, wenn das Programm im new oder "
-"delete-Operator abstuerzt.\n",
+"This checks whether writes occur in free memory. This option costs lots "
+" of performance and should thus only be used to test memory overwrites. "
+" This option should perhaps also be enabled when the program crashes "
+" in the new or delete operator.\n",
 "\n",
 "Pointer\n",
-"Bei delete und DBG_MEMTEST_PTR() wird der Zeiger getestet, ob er auch mit "
-"new oder SvMemAlloc() angelegt wurde. Wenn diese Option eingeschaltet ist, "
-"werden Fehler wie doppeltes delete und delete auf Stack-Objekte oder "
-"ungueltige Zeiger gefunden. Diese Option kostet Performence und sollte "
-"deshalb nicht immer eingeschaltet sein. Jedoch sollte auch ab und zu mit "
-"dieser Option getestet werden, da der Memory-Manager nicht immer bei delete "
-"und ungueltigem Zeiger abstuerzt. Diese Option sollte auch eingeschaltet "
-"werden, wenn das Programm im new oder delete-Operator abstuerzt.\n",
+"The pointer is tested with delete and DBG_MEMTEST_PTR() to see if it was "
+"created by new or SvMemAlloc(). When this option is enabled errors such as "
+"double deletes, deletes on stack objects or invalid pointers will be found. "
+"This option has an impact on performance and should therefor not be enabled "
+"all the time. However, testing should be done with this option enabled once "
+"in a while, because the memory manager does not always crash with delete and "
+"invalid pointers. This option should also be enabled if the program crashes "
+"in new or delete operators.\n",
 "\n",
 "Report\n",
-"Am Programmende wird eine kleine Statistik und der nicht freigegebene "
-"Speicher ausgegeben. Achtung: Speicher der von globalen Objekten noch "
-"freigegeben wird, taucht auch in der Leak-Liste auf.\n",
+"At the end of the program a small statistic and memory that was not freed are "
+"output. Note: memory that is freed by global objects is also included in "
+"the leak list.\n",
 "\n",
 "Trace\n",
-"Allokation und Freigeben von Speicher wird protokoliert.\n",
+"Allocating and freeing memory is logged.\n",
 "\n",
-"Leak-Report\n",
-"Gibt unter WNT beim Programmende eine Liste der Memory-Leaks mit "
-"Stack-Trace aus. Dabei werden nur Bloecke beruecksichtigt, die innerhalb "
-"von Application::Execute() angelegt und freigegeben werden. Wenn diese "
-"Option und Overwrite gesetzt ist, wird bei einem Speicherueberschreiber "
-"auch noch versucht den Stack auszugeben, wo der Block angelegt wurde. "
-"Diese Ausgabe erfolgt erst nach Ausgabe der Fehlermeldung in die "
-"Log-Datei.\n"
+"Leak report\n",
+"Produces under WNT at the end of the program a list of memory leaks with "
+"stack trace. Only blocks which were created inside Application::Execute() "
+"are included. When this option and Overwrite are both enabled a memory "
+"overwrite results in an attempt to output the stack where the block was "
+"created. The output is included in the log file after the error message.\n"
 "\n",
 "New/Delete\n",
-"Memory-Tests werden auf den gesammten Speicher bei jedem new/delete "
-"durchgefuhert. Achtung: Diese Option macht die Programme sehr langsam "
-"und sollte nur eingeschaltet werden, wenn ein Speicherueberschreiber "
-"eingegrenzt werden soll. Ansonsten reicht es, die einzelnen Optionen "
-"einzuschalten, da (kein Leak vorrausgesetzt) jeder zu erkennende "
-"Speicherueberschreiber waehrend der Laufzeit eines Programms gefunden "
-"werden sollte.\n",
+"Memory tests are performed on the entire memory with every new/delet. "
+"Warning: this option makes programs very slow and should only be enabled "
+"to track memory overwrites. Otherwise it is sufficient to enable "
+"seperate options because (if no leak is present) every detectable "
+"memory overwrite during run time should be found.\n",
 "\n",
 "Object Test\n",
-"Memory-Tests werden auf den gesammten Speicher bei jedem Object-Test "
-"durchgefuhert. Achtung: Diese Option macht die Programme sehr langsam "
-"und sollte nur eingeschaltet werden, wenn ein Speicherueberschreiber "
-"eingegrenzt werden soll. Ansonsten reicht es, die einzelnen Optionen "
-"einzuschalten, da (kein Leak vorrausgesetzt) jeder zu erkennende "
-"Speicherueberschreiber waehrend der Laufzeit eines Programms gefunden "
-"werden sollte.\n",
+"Memory test are performed on the entire memory with every object test. "
+"Warning: this option makes programs very slow and should only be enabled "
+"to track memory overwrite. Otherwise it is sufficient to enable "
+"seperate options because (if no leak is present) every detectable "
+"memory overwrite during run time should be found.\n",
 "\n",
-"Windows 16-Bit und Debug-Tests\n",
-"Achtung: Wenn Memory-Tests an sind (ausser Initilize) wird niemals "
-"(auch nicht bei >= 64 KB) Speicher mit Offset 0 zurueckgeben. Falls man "
-"darauf angewiesen ist, muessen die Tests mit 32-Bit-Versionen der "
-"Programme durchgefuehrt werden. Teilweise reicht es aber auch schon aus, "
-"wenn man statt 64 KB nur 64 KB - 64-Bytes anlegt, da es dann nicht zu "
-"einem Segmentueberlauf kommt.\n",
-"Ausserdem sollten die Memory- genauso wie die Object-Tests nur dann "
-"eingesetzt werden, wenn nur eine SV-Applikation gleichzeitig laeuft. "
-"Ansonsten kann es zu unkontrolierten Fehlern kommen. Hier hilft dann auch "
-"nur ein ausweichen auf 32-Bit-Programme."
+"Windows 16-bit and debug tests\n",
+"Warning: when memory test are enabled (except for Initialize) memory with "
+"offset 0 is never (even not in case of >= 64KB) returned. If necessary the "
+"tests can be performed with 32-bit versions of the programs. To a certain "
+"extend it is sufficient to create 64KB - 64 bytes instead of 64KB because "
+"it will never come to a segment overflow.\n",
+"Memory and object test should only be enabled when only one SV application "
+"is running at one time. Otherwise uncontrolled errors may occur. In this "
+"case only the use of 32-bit programs can help."
 "\n",
 "\n",
-"\nWeitere Test's und Makros\n",
+"\nOther tests and macros\n",
 "------------------------------------------\n",
 "\n",
 "Profiling\n",
 "DBG_PROFSTART() / DBG_PROFSTOP() / DBG_PROFCONTINUE() / DBG_PROFPAUSE() "
-"werden ausgewertet und beim Programmende wird die Anzahl der Durchlaeufe "
-"und die dazu benoetigte Zeit (inklusive der Childaufrufe) in "
-"Millisekunden ausgegeben. Diese Macros koennen dann eingesetzt werden, wenn "
-"die gleichen Funktionsablaeufe ueber die gesammte Entwicklungszeit "
-"beobachtet werden sollen, wie zum Beispiel die Startup-Zeiten. Bei den "
-"Makros muss der registrierte Name uebergeben werden, der mit DBG_NAME() "
-"registriert wurde.\n",
+"are evaluated and at the end of the program the number of run throughs "
+"and the time this took (including calls to children) in milliseconds is "
+"output. These macros can be used to check the same function runs over the "
+"entire development period, for example the startup speed. The registered name "
+"which was registered with DBG_NAME() must be passed to the macros.\n",
 "\n",
-"Resourcen\n",
-"Bei Resource-Fehlern gibt es einen Fehler-Dialog, bevor der "
-"Exception-Handler gerufen wird.\n",
+"Resources\n",
+"In case of resource errors an error dialog is produced before the "
+"exception handler is called.\n",
 "\n",
 "Dialog\n",
-"Es werden FixedTexte, CheckBoxen, TriStateBoxen und RadioButtons mit "
-"einer anderen Hintergrundfarbe versehen, damit man feststellen kann, wie "
-"Gross die Controls sind. Ausserdem wird getestet, ob sich Controls "
-"ueberschneiden, die Tabreihenfolge in Ordnung ist und die Mnemonischen "
-"Zeichen ordentlich vergeben wurden. Bei Dialogen wird auch angemahnt, "
-"wenn kein DefPushButton oder kein OK-/CancelButton vorhanden ist. "
-"Diese Tests sind nicht 100% (es wird evt. zuviel angemahnt) und "
-"erfuellen auch keine Garantie, das alle Problemfaelle festgestellt "
-"werden, da zum Beispiel nur initial und dann nur die sichtbaren Controls "
-"getestet werden. Es werden somit keine Fehler gefunden, die waehrend der "
-"Benutzung des Dialoges auftreten.\n",
+"FixedTexts, CheckBoxes, TriStateBoxes and RadioButtons are equiped with "
+"a different background color to determine the size of the controls. This "
+"test also shows whether controls overlap, whether the tab order is correct "
+"and whether the mnemonic characters are correctly assigned. With dialogs "
+"it is indicated when no default button or no OK/CancelButton is present. "
+"These tests are not 100% correct (e.g. too many warnings are given) and "
+"do not form any guarantee that all problematic cases are covered. For "
+"example only initial and only visible controls are tested. No errors are "
+"found which will occur during the use of a dialog.\n",
 "\n",
 "Bold AppFont\n",
-"Es wird der Applikationsfont auf Fett gesetzt, damit man feststellen kann, "
-"ob der Platz fuer die Texte auf anderen Systemen oder bei anderer "
-"Systemeinstellung ausreicht. Denn bei schmalen Fonts werden die Dialoge "
-"kuenstlich breiter gemacht, da diese ansonsten zu schmal aussehen.\n",
+"The application font is set to bold to see if the position of texts is "
+"sufficient for other systems or other system settings. With very narrow "
+"fonts the dialogs are made wider because they otherwise appear too narrow.\n",
 "\n",
-"Trace-Ausgaben\n",
-"DBG_TRACE() kann verwendet werden, wenn man TRACE-Ausgaben haben moechte. "
-"DBG_TRACEFILE() gibt zu der Meldung auch noch die Datei und die Zeilennummer "
-"aus, an der das Makro steht. DBG_TRACE1() bis DBG_TRACE5() koennen "
-"verwendet werden, wenn man eine formatierte Ausgabe (printf-Formatstring) "
-"haben moechte. Die Trace-Ausgaben werden aktiviert, in dem man in der "
-"DropDown-ListBox eine entsprechende Ausgabe waehlt.\n"
+"Trace output\n",
+"DBG_TRACE() can be use to produce TRACE output. DBG_TRACEFILE() also outputs "
+"the file and line number where the macro is located. DBG_TRACE1() to "
+"DBG_TRACE5() can be used to produce formatted output (printf format string) "
+"Trace output is enabled when the corresponding option is selected in the "
+"dropdown list.\n"
 "\n",
 "Warnings\n",
-"DBG_WARNING() kann verwendet werden, wenn man Warnungen ausgeben moechte. "
-"DBG_WARNINGFILE() gibt zu der Warnung auch noch die Datei und die "
-"Zeilennummer aus, an der das Makro steht. DBG_WARNING1() bis DBG_WARNING5() "
-"koennen verwendet werden, wenn man eine formatierte Ausgabe "
-"(printf-Formatstring) haben moechte. Wenn man die Warnung von einer "
-"Bedingung abhaengig machen moechte, kann man DBG_ASSERTWARNING() "
-"benutzen. Die Warning wird ausgegeben, wenn die Bedingung nicht erfuellt "
-"wurde. Als erster Parameter muss die zu testende Bedingung und als zweiter "
-"Parameter die auszugebene Meldung uebergeben werden. Die Warnungen werden "
-"aktiviert, in dem man in der DropDown-ListBox eine entsprechende Ausgabe "
-"waehlt. Wenn None gewaehlt ist, wird auch die Bedingung bei "
-"DBG_ASSERTWARNING() nicht ausgewertet.\n",
+"DBG_WARNING() can be used to output warnings. DBG_WARNINGFILE() also outputs "
+"the file and the line number where the macro is located. DBG_WARNING1() to "
+"DBG_WARNING5() can be used to produce formatted output (printf format string). "
+"In case you want to have conditional warnings DBG_ASSERTWARNING() can be "
+"used. The warning will be produced if the condition was not met. The first "
+"parameter is the condition and the second parameter is the message to be "
+"produced. Warnings are enabled if the corresponding option is selected in the "
+"dropdown box. When none are selected the condition with DBG_ASSERTWARNING() "
+"is not evaluated.\n",
 "\n",
 "Errors\n",
-"DBG_ERROR() kann verwendet werden, wenn man Fehlermeldungen ausgeben "
-"moechte. DBG_ERRORFILE() gibt zu dem Fehler auch noch die Datei und die "
-"Zeilennummer aus, an der das Makro steht. DBG_ERROR1() bis DBG_ERROR5() "
-"koennen verwendet werden, wenn man eine formatierte Ausgabe "
-"(printf-Formatstring) haben moechte. Wenn man die Fehlerausgabe von einer "
-"Bedingung abhaengig machen moechte, kann man DBG_ASSERT() benutzen. Der "
-"Fehler wird ausgegeben, wenn die Bedingung nicht erfuellt wurde. Als erster "
-"Parameter muss die zu testende Bedingung und als zweiter Parameter die "
-"auszugebene Meldung uebergeben werden. Die Fehlermeldungen werden "
-"aktiviert, in dem man in der DropDown-ListBox eine entsprechende Ausgabe "
-"waehlt. Wenn None gewaehlt ist, wird auch die Bedingung bei "
-"DBG_ASSERT() nicht ausgewertet.\n",
+"DBG_ERROR() can be used to produce error messages. DBG_ERRORFILE() also "
+"produces the file and the line number where the macro is located. "
+"DBG_ERROR1() bis DBG_ERROR5() can be used to produce formatted output "
+"(print format string). "
+"In case you want to have conditional warnings DBG_ASSERT() can be "
+"used. The warning will be produced if the condition was not met. The first "
+"parameter is the condition and the second parameter is the message to be "
+"produced. Warnings are enabled if the corresponding option is selected in the "
+"dropdown box. When none are selected the condition with DBG_ASSERT() "
+"is not evaluated.\n",
 "\n",
 "\n",
 "Output\n",
 "------------------------------------------\n",
 "\n",
 "Overwrite - CheckBox\n",
-"Bei jedem neuen Programmstart wird das Log-File ueberschrieben, wenn "
-"eine Ausgabe stattgefunden hat.\n",
+"With every new program start the log file is overwritten if output has been "
+"generated.\n",
 "\n",
-"Include-ObjectTest-Filter\n",
-"Es werden nur die Klassen bei Object-Test ausgewertet, die einen der "
-"angegebenen Filter enthalten. Die Filter werden mit ';' getrennt und "
-"sind casesensitiv. Wildcards werden nicht unterstuetzt. Wenn kein Text "
-"angegeben wird, ist der Filter nicht aktiv.\n",
+"Include ObjectTest filters\n",
+"Only classes which contain one of the indicated filters are evaluated with "
+"the object test. Filters are seperated by ';' and are case sensitive. "
+"Wildcards are not supported. If no text is indicated the filters are not "
+"active.\n",
 "\n",
-"Exclude-ObjectTest-Filter\n",
-"Es werden die Klassen bei Object-Test ausgewertet, die einen der "
-"angegebenen Filter nicht enthalten. Die Filter werden mit ';' getrennt "
-"und sind casesensitiv. Wildcards werden nicht unterstuetzt. Wenn kein "
-"Text angegeben wird, ist der Filter nicht aktiv.\n",
+"Exclude ObjectTest filters\n",
+"Only classes which do not contain one of the indicated filters are evaluated "
+"with the object test. Filters are seperated by ';' and are case sensitive. "
+"Wildcards are not supported. If no text is indicated the filters are not "
+"active.\n",
 "\n",
-"Include-Filter\n",
-"Es werden nur die Texte ausgegeben, die einen der angegebenen Filter "
-"enthalten. Die Filter werden mit ';' getrennt und sind casesensitiv. "
-"Wildcards werden nicht unterstuetzt. Der Filter gilt fuer alle Ausgaben "
-"(jedoch nicht fuer Errors). Wenn kein Text angegeben wird, ist der Filter "
-"nicht aktiv.\n",
+"Include filters\n",
+"Only those texts which include the indicated filters are output. "
+"Filters are seperated by ';' and are case sensitive. "
+"Wildcards are not supported. The filter is used for all output (except for "
+"errors). If no text is indicated the filters are not active.\n",
 "\n",
-"Exclude-Filter\n",
-"Es werden nur die Texte ausgegeben, die einen der angegebenen Filter "
-"nicht enthalten. Die Filter werden mit ';' getrennt und sind casesensitiv. "
-"Wildcards werden nicht unterstuetzt. Der Filter gilt fuer alle Ausgaben "
-"(jedoch nicht fuer Errors). Wenn kein Text angegeben wird, ist der Filter "
-"nicht aktiv.\n",
+"Exclude filters\n",
+"Only those texts which do not include the indicated filters are output. "
+"Filters are seperated by ';' and are case sensitive. "
+"Wildcards are not supported. The filter is used for all output (except for "
+"errors). If no text is indicated the filters are not active.\n",
 "\n",
-"Ausserdem kann eingestellt werden, wohin die Daten ausgegeben werden "
-"sollen:\n",
+"Furthermore you can indicate where the data will be output:\n",
 "\n",
 "None\n",
-"Ausgabe wird unterdrueckt.\n",
+"Output is surpressed.\n",
 "\n",
 "File\n",
-"Ausgabe ins Debug-File. Dateiname kann im Editfeld eingegeben werden.\n",
+"Outputi n debug file. Filename can be entered in the Editfield.\n",
 "\n",
 "Window\n",
-"Ausgabe in ein kleines Debug-Window. Die Fenstergroesse wird gespeichert, "
-"wenn man den Debug-Dialog mit OK beendet und das Fenster sichtbar ist.\n",
+"Output to a small debug window. The window size is stored if the debug "
+"dialog is closed with OK and if the window is visible.\n",
 "\n",
 "Shell\n",
-"Ausgabe in ein Debug-System (Windows Debug-Window) wenn vorhanden oder "
-"unter Unix ins Shell-Fenster. Ansonsten das gleiche wie Window.\n",
+"Output to a debug system (Windows debug window) when available or under "
+"Unix in the shell window. Otherwise the same as Window.\n",
 "\n",
 "MessageBox\n",
-"Ausgabe in MessageBox. In dieser hat man dann die Auswahl, ob das Programm "
-"fortgesetzt, beendet (Application::Abort) oder mit CoreDump abgebrochen "
-"werden soll. Da eine MessageBox weitere Event-Verarbeitung zulaest koennen "
-"jeweils weitere Fehler zum Beispiel durch Paints, Activate/Deactivate, "
-"GetFocus/LoseFocus die Ausgabe der Meldung oder weitere und falsche "
-"Fehler und Meldungen ausloesen. Deshalb sollte bei Problemen die Meldungen "
-"evt. auch in ein File/Debugger geleitet werden um die (richtigen) Fehlermeldungen "
-"zu erhalten.\n",
+"Output to a MessageBox. In this case you can select whether the program "
+"must be continued, terminated (Application::Abort) or interrupted with "
+"CoreDump. Because a MessageBox allows further event processing other errors "
+"caused by Paint, Activate/Deactivate, GetFocus/LoseFocus can cause more "
+"errors or incorrect errors and messages. Therefor the message should also be "
+"directed to a file/debugger in case of problems in order to produce the "
+"(right) error messages.\n",
 "\n",
 "TestTool\n",
-"Wenn das TestTool laeuft, werden die Meldungen in das TestTool umgeleitet.\n",
+"When the TestTool runs messages will be redirected inside the TestTool.\n",
 "\n",
 "Debugger\n",
-"Versucht den Debugger zu aktivieren und dort die Meldung auszugeben, "
-"so das man im Debugger dann immer auch den dazugehoerenden Stacktrace "
-"erhaellt.\n",
+"Attempt to activate the debugger and produce the message there, in order to "
+"always obtain the corresponding stack trace in the debugger.\n",
 "\n",
 "CoreDump\n",
-"Erzeugt einen Absturz\n",
+"Causes a crash\n",
 "\n",
 "\n",
-"Einstellungen\n",
+"Settings\n",
 "------------------------------------------\n",
 "\n",
-"Wo standardmaessig das INI-File und LOG-File gelesen und geschrieben "
-"wird, kann folgendermassen eingestellt werden:\n",
+"Where by default the INI and LOG file is read and written the following "
+"can be set:\n",
 "\n",
-"WIN/WNT (WIN.INI, Gruppe SV, Default: dbgsv.ini und dbgsv.log):\n",
+"WIN/WNT (WIN.INI, Group SV, Default: dbgsv.ini and dbgsv.log):\n",
 "INI: dbgsv\n",
 "LOG: dbgsvlog\n",
 "\n",
-"OS2 (OS2.INI, Application SV, Default: dbgsv.ini und dbgsv.log):\n",
+"OS2 (OS2.INI, Application SV, Default: dbgsv.ini and dbgsv.log):\n",
 "INI: DBGSV\n",
 "LOG: DBGSVLOG\n",
 "\n",
-"UNIX (Environment-Variable, Default: .dbgsv.init und dbgsv.log):\n",
+"UNIX (Environment variable, Default: .dbgsv.init and dbgsv.log):\n",
 "INI: DBGSV_INIT\n",
 "LOG: DBGSV_LOG\n",
 "\n",
-"MAC (Default: dbgsv.ini und dbgsv.log):\n",
-"INI: keine Moeglichkeit\n",
-"LOG: nur Debug-Dialogeinstellung\n",
+"MAC (Default: dbgsv.ini and dbgsv.log):\n",
+"INI: not possible\n",
+"LOG: only debug dialog settings\n",
 "\n",
-"Es muss jeweils Pfad und Dateiname angegeben werden. Der Name der "
-"Log-Datei, der im Debug-Dialog eintragen wurde, hat immer vorrang.\n",
+"The path and file name must always be specified. The name of the log "
+"file that was entered in the debug dialog has always priority.\n",
 "\n",
 "\n",
-"Beispiel\n",
+"Example\n",
 "------------------------------------------\n",
 "\n",
 "DBG_NAME( String );\n",
