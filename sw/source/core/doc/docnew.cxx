@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 17:46:16 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:46:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
+#include <com/sun/star/document/UpdateDocMode.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -89,6 +92,12 @@
 #endif
 #ifndef _SFXDOCINF_HXX //autogen
 #include <sfx2/docinf.hxx>
+#endif
+#ifndef _SFXDOCFILE_HXX //autogen
+#include <sfx2/docfile.hxx>
+#endif
+#ifndef _SFXFRAME_HXX
+#include <sfx2/frame.hxx>
 #endif
 #ifndef _SFXMACITEM_HXX //autogen
 #include <svtools/macitem.hxx>
@@ -1115,5 +1124,47 @@ void SwDoc::WriteLayoutCache( SvStream& rStream )
     pLayoutCache->Write( rStream, *this );
 }
 
+// --> FME 2005-02-25 #i42634# Moved common code of SwReader::Read() and
+// SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():
+void SwDoc::UpdateLinks()
+{
+    SfxObjectCreateMode eMode;
+    USHORT nLinkMode = GetLinkUpdMode();
+    USHORT nUpdateDocMode = GetDocShell()->GetUpdateDocMode();
+    if( GetDocShell() &&
+            (nLinkMode != NEVER ||  ::com::sun::star::document::UpdateDocMode::FULL_UPDATE == nUpdateDocMode) &&
+        GetLinkManager().GetLinks().Count() &&
+        SFX_CREATE_MODE_INTERNAL !=
+                    ( eMode = GetDocShell()->GetCreateMode()) &&
+        SFX_CREATE_MODE_ORGANIZER != eMode &&
+        SFX_CREATE_MODE_PREVIEW != eMode &&
+        !GetDocShell()->IsPreview() )
+    {
+        ViewShell* pVSh = 0;
+        BOOL bAskUpdate = nLinkMode == MANUAL;
+        BOOL bUpdate = TRUE;
+        switch(nUpdateDocMode)
+        {
+            case ::com::sun::star::document::UpdateDocMode::NO_UPDATE:   bUpdate = FALSE;break;
+            case ::com::sun::star::document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = FALSE; break;
+            case ::com::sun::star::document::UpdateDocMode::FULL_UPDATE: bAskUpdate = TRUE; break;
+        }
+        if(bUpdate)
+        {
+            SfxMedium* pMedium = GetDocShell()->GetMedium();
+            SfxFrame* pFrm = pMedium ? pMedium->GetLoadTargetFrame() : 0;
+            Window* pDlgParent = pFrm ? &pFrm->GetWindow() : 0;
+            if( GetRootFrm() && !GetEditShell( &pVSh ) && !pVSh )
+            {
+                ViewShell aVSh( *this, 0, 0 );
 
+                SET_CURR_SHELL( &aVSh );
+                GetLinkManager().UpdateAllLinks( bAskUpdate , TRUE, FALSE, pDlgParent );
+            }
+            else
+                GetLinkManager().UpdateAllLinks( bAskUpdate, TRUE, FALSE, pDlgParent );
+        }
+    }
 
+}
+// <--
