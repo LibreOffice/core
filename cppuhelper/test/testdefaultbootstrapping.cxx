@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testdefaultbootstrapping.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kr $ $Date: 2001-07-24 12:20:32 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:35:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ int __cdecl main( int argc, char * argv[] )
 
             Reference<XInterface> xInterface = smgr->createInstance(arg);
             OString tmp = OUStringToOString(arg, RTL_TEXTENCODING_ASCII_US);
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf(stderr, "got the %s service %p\n", tmp.getStr(), xInterface.get());
 #endif
 
@@ -105,7 +105,7 @@ int __cdecl main( int argc, char * argv[] )
         fprintf(stderr, "an exception occurred: %s\n", message.getStr());
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OSL_TRACE("---------------------------------- %i", result);
 #endif
 
