@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:37:46 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ czech ] = "Písmo";
                 Text[ hebrew ] = "‮גופן‬";
                 Text[ hindi ] = "फ़ॉन्ट्";
+                Text[ slovak ] = "Písmo";
             };
             PageItem
             {
@@ -144,6 +145,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ czech ] = "Efekty pro písmo";
                 Text[ hebrew ] = "‮פעלולי גופנים‬";
                 Text[ hindi ] = "फ़ॉन्ट् प्रभाव";
+                Text[ slovak ] = "Efekty pre písmo";
             };
             PageItem
             {
@@ -173,6 +175,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ czech ] = "Umístění";
                 Text[ hebrew ] = "‮מיקום‬";
                 Text[ hindi ] = "स्थान";
+                Text[ slovak ] = "Umiestnenie";
             };
             PageItem
             {
@@ -202,6 +205,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ czech ] = "Asijský formát";
                 Text[ hebrew ] = "‮עיצוב דף של המזרח הרחוק‬";
                 Text[ hindi ] = "ऐशियन अभिन्यास";
+                Text[ slovak ] = "Ázijské rozloženie";
             };
             PageItem
             {
@@ -222,7 +226,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ chinese_simplified ] = "缩进和间隔";
                 Text[ russian ] = "������� � ���������";
                 Text[ polish ] = "Wci�cia i odst�py";
-                Text[ japanese ] = "インデックスと間隔";
+                Text[ japanese ] = "インデントと間隔";
                 Text[ chinese_traditional ] = "縮排和間隔";
                 Text[ arabic ] = "������� ��������";
                 Text[ greek ] = "������ ��� ����������";
@@ -234,6 +238,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ czech ] = "Odsazení a mezery";
                 Text[ hebrew ] = "‮שוליים ורווחים‬";
                 Text[ hindi ] = "इन्डेन्ट्स और अंतर देना";
+                Text[ slovak ] = "Odsadenie a medzery";
             };
             PageItem
             {
@@ -265,6 +270,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ czech ] = "Zarovnání";
                 Text[ hebrew ] = "‮יישור‬";
                 Text[ hindi ] = "पंक्तिकरण";
+                Text[ slovak ] = "Zarovnanie";
             };
             PageItem
             {
@@ -297,6 +303,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ czech ] = "Tok textu";
                 Text[ hebrew ] = "‮זרימת טקסט‬";
                 Text[ hindi ] = "टेक्स्ट् धारा";
+                Text[ slovak ] = "Tok textu";
             };
             PageItem
             {
@@ -327,6 +334,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ czech ] = "Asijská typografie";
                 Text[ hebrew ] = "‮עיצוב גופן מזרח הרחוק‬";
                 Text[ hindi ] = "ऐशियन टइपोग्रफी";
+                Text[ slovak ] = "Ázijská typografia";
             };
             PageItem
             {
@@ -359,6 +367,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ czech ] = "Pozadí";
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
+                Text[ slovak ] = "Pozadie";
             };
         };
     };
@@ -377,6 +386,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
     Text[ czech ] = "Formát textu";
     Text[ hebrew ] = "‮עיצוב טקסט‬";
     Text[ hindi ] = "टेक्स्ट् रचना";
+    Text[ slovak ] = "Formát textu";
 };
  // RID_SVXDLG_SEARCHATTRIBUTE --------------------------------------------
 ModalDialog RID_SVXDLG_SEARCHATTR
@@ -440,6 +450,7 @@ ModalDialog RID_SVXDLG_SEARCHATTR
         Text[ czech ] = "Volby";
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "चु~नाव";
+        Text[ slovak ] = "V~oľby";
     };
     OKButton BTN_ATTR_OK
     {
@@ -472,6 +483,7 @@ ModalDialog RID_SVXDLG_SEARCHATTR
     Text[ czech ] = "Atributy";
     Text[ hebrew ] = "‮תכונות‬";
     Text[ hindi ] = "ऐट्रिब्यूट्स";
+    Text[ slovak ] = "Atribúty";
 };
  // RID_SVXDLG_SEARCHSIMILARITY -------------------------------------------
 ModalDialog RID_SVXDLG_SEARCHSIMILARITY
@@ -519,6 +531,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ czech ] = "Zaměnit znaky";
         Text[ hebrew ] = "‮ החלפת תווים‬";
         Text[ hindi ] = "अक्षरों की ~विनिमय";
+        Text[ slovak ] = "Zam~eniť znaky";
     };
     NumericField NF_OTHER
     {
@@ -566,6 +579,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ czech ] = "Přidat znaky";
         Text[ hebrew ] = "‮הוספת תווים‬";
         Text[ hindi ] = "अक्षरों को ~जोड़ो";
+        Text[ slovak ] = "Prid~ať znaky";
     };
     NumericField NF_LONGER
     {
@@ -613,6 +627,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ czech ] = "Odstranit znaky";
         Text[ hebrew ] = "‮הסרת תווים‬";
         Text[ hindi ] = "अक्षरों को ~हटाओ";
+        Text[ slovak ] = "Odst~rániť znaky";
     };
     NumericField NF_SHORTER
     {
@@ -661,6 +676,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ czech ] = "Zkombinovat";
         Text[ hebrew ] = "‮שילוב‬";
         Text[ hindi ] = "~मिलाओ";
+        Text[ slovak ] = "S~kombinovať";
     };
     FixedLine FL_SIMILARITY
     {
@@ -693,6 +709,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ czech ] = "Nastavení";
         Text[ hebrew ] = "‮קביעות‬";
         Text[ hindi ] = "निर्धारण";
+        Text[ slovak ] = "Nastavenia";
     };
     OKButton BTN_ATTR_OK
     {
@@ -732,8 +749,11 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     Text[ czech ] = "Hledání synonym";
     Text[ hebrew ] = "‮חיפוש דברים דומים‬";
     Text[ hindi ] = "तुल्यता खोज";
+    Text[ slovak ] = "Hľadanie synoným";
 };
  // ********************************************************************** EOF
+
+
 
 
 
