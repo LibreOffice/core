@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-29 16:48:43 $
+ *  last change: $Author: aw $ $Date: 2001-04-04 16:55:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,7 +547,7 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
         {
             maLayerName = rValue;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_transform)) )
+        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_transform)) )
         {
             mnTransform.SetString(rValue, GetImport().GetMM100UnitConverter());
         }
@@ -558,15 +558,15 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
         {
             mbIsUserTransformed = rValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_true));
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_placeholder)) )
+        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_placeholder)) )
         {
             mbIsPlaceholder = rValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_true));
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_class)) )
+        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_class)) )
         {
             maPresentationClass = rValue;
         }
-        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_style_name)) )
+        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_style_name)) )
         {
             maDrawStyleName = rValue;
             mnStyleFamily = XML_STYLE_FAMILY_SD_PRESENTATION_ID;
@@ -589,6 +589,12 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
         else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_height)) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maSize.Height, rValue);
+        }
+        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_transform)) )
+        {
+            // because of #85127# take svg:transform into account and hanle like
+            // draw:transform for compatibility
+            mnTransform.SetString(rValue, GetImport().GetMM100UnitConverter());
         }
     }
 }
