@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2004-05-19 00:45:18 $
+#   last change: $Author: pjunck $ $Date: 2004-11-02 14:28:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -140,7 +140,13 @@ $(INCCOM)$/sddll0.hxx: makefile.mk
 .ENDIF			#  "$(USE_SHELL)"!="4nt"
 .ENDIF			# "$(GUI)"=="UNX"
 
+LOCALIZE_ME =  tbxids_tmpl.src menuids2_tmpl.src accel_tmpl.src menu_tmpl.src menuids_tmpl.src menuids4_tmpl.src popup2_tmpl.src toolbox2_tmpl.src accelids_tmpl.src menuportal_tmpl.src menuids3_tmpl.src
+
+
 .INCLUDE :  target.mk
 
 $(SRS)$/app.srs: $(SOLARINCDIR)$/svx$/globlmn.hrc
+
+
+$(SRS)$/$(SRS1NAME).srs  : $(LOCALIZE_ME_DEST)
 
