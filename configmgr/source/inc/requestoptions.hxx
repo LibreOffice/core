@@ -2,9 +2,9 @@
  *
  *  $RCSfile: requestoptions.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:02 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 16:26:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef CONFIGMGR_MISC_REQUESTOPTIONS_HXX_
 #define CONFIGMGR_MISC_REQUESTOPTIONS_HXX_
 
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -76,7 +80,8 @@ namespace configmgr
     class RequestOptions
     {
     public:
-        typedef rtl::OUString Locale;
+        typedef com::sun::star::lang::Locale Locale;
+        typedef rtl::OUString LocaleString;
         typedef rtl::OUString Entity;
     public:
         // create Request options for all locales
@@ -96,11 +101,15 @@ namespace configmgr
                 <TRUE/>,  if a locale is specified, <BR/>
                 <FALSE/>, if the default locale should be used
         */
-        bool    hasLocale() const { return m_sLocale.getLength() != 0; }
+        bool    hasLocale() const { return m_sLocale.Language.getLength() != 0; }
         /// @returns the locale to get data for
         bool    isForAllLocales() const;
+        /// @returns the locale to get data for - compatibilty version
+        LocaleString  getLocale() const { return getIsoLocale(); }
         /// @returns the locale to get data for
-        Locale  getLocale() const { return m_sLocale; }
+        LocaleString  getIsoLocale() const;
+        /// @returns the locale to get data for
+        Locale const & getUnoLocale() const { return m_sLocale; }
 
         /** @returns
             <TRUE/>,  if an entity is specified, <BR/>
@@ -113,14 +122,16 @@ namespace configmgr
         /// sets the entity to get data for to the given entity
         void setEntity(Entity const & _sEntity) { m_sEntity = _sEntity; }
         /// resets the entity to get data for to be the session user
-        void clearEntity()   { m_sEntity = rtl::OUString(); }
+        void clearEntity()   { m_sEntity = Entity(); }
 
         /// sets the locale so data is gotten for all locales
         void setAllLocales();
         /// sets the locale to get data for to the given locale
-        void setLocale(Locale const & _sLocale) { m_sLocale = _sLocale; }
-        /// resets the locale to get data for to use the default
-        void clearLocale()   { m_sLocale = rtl::OUString(); }
+        void setLocale(Locale const & _aLocale) { m_sLocale = _aLocale; }
+        /// sets the locale to get data for to the given locale
+        void setIsoLocale(LocaleString const & _sLocale);
+        /// sets a fallback locale, if no locale is set yet
+        void ensureLocaleSet();
 
         /// marks asyncronous access a enabled or disabled
         void enableAsync(bool _bEnable = true)  { m_bEnableAsync = _bEnable; }
