@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cd $ $Date: 2002-07-31 07:30:36 $
+ *  last change: $Author: mba $ $Date: 2002-08-23 10:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1786,7 +1786,11 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                     {
                         // user refuses, so don't ask again for this document
                         pInfo->SetQueryLoadTemplate(FALSE);
-                        pInfo->Save(xDocStor);
+
+                        if ( xDocStor->IsOLEStorage() )
+                            pInfo->Save(xDocStor);
+                        else
+                            SetModified( TRUE );
                     }
                 }
             }
