@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-07 15:40:34 $
+ *  last change: $Author: nf $ $Date: 2000-12-08 10:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3558,24 +3558,10 @@ String IDS_SBERR_STOREREF
     Text[ greek ] = "Ç áíáöïñÜ äåí èá áğïèçêåõôåß: ";
     Text[ korean ] = "ÂüÁ¶°¡ ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù. ";
     Text[ turkish ] = "Referans kaydedilmeyecek: ";
-#if defined( MAC ) || defined( OS2 )
-    Text = "Referenz wird nicht gesichert: " ;
-#else
-    Text = "Referenz wird nicht gespeichert: " ;
-#endif
     Text [ ENGLISH ] = "reference will not be saved: " ;
     Text [ norwegian ] = "reference will not be saved: " ;
     Text [ italian ] = "Il riferimento non viene salvato: " ;
-    Text [ portuguese_brazilian ] = "reference will not be saved: " ;
-    Text [ portuguese ] = "A referÛncia nÒo serß guardada: " ;
-    Text [ french ] = "RÚfÚrence non enregistrÚe : " ;
-    Text [ dutch ] = "Verwijzing wordt niet opgeslagen: " ;
-    Text [ spanish ] = "No se guardarß la referencia: " ;
-    Text [ danish ] = "Referencen bliver ikke gemt: " ;
-    Text [ swedish ] = "Referens sparas inte: " ;
     Text [ finnish ] = "reference will not be saved: " ;
-    Text [ english_us ] = "Reference will not be saved: " ;
-    Text = "Referenz wird nicht gespeichert: " ;
 };
 String ERRCODE_BASMGR_LIBLOAD & ERRCODE_RES_MASK
 {
