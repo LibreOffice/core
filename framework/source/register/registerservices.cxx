@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 14:38:47 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,10 @@
 #include <services/frame.hxx>
 #endif
 
+#ifndef __FRAMEWORK_SERVICES_MODULEMANAGER_HXX_
+#include <services/modulemanager.hxx>
+#endif
+
 #ifndef __FRAMEWORK_JOBS_JOBEXECUTOR_HXX_
 #include <jobs/jobexecutor.hxx>
 #endif
@@ -143,34 +147,127 @@
 #include <services/dispatchhelper.hxx>
 #endif
 
+#ifndef __FRAMEWORK_SERVICES_LAYOUTMANAGER_HXX_
+#include <services/layoutmanager.hxx>
+#endif
+
+#ifndef __FRAMEWORK_UIFACTORY_UIELEMENTFACTORYMANAGER_HXX_
+#include <uifactory/uielementfactorymanager.hxx>
+#endif
+
+#ifndef __FRAMEWORK_UIFACTORY_POPUPMENUCONTROLLERFACTORY_HXX_
+#include <uifactory/popupmenucontrollerfactory.hxx>
+#endif
+
+#ifndef __FRAMEWORK_UIELEMENT_FONTMENUCONTROLLER_HXX_
+#include <uielement/fontmenucontroller.hxx>
+#endif
+
+#ifndef __FRAMEWORK_UIELEMENT_FONTSIZEMENUCONTROLLER_HXX_
+#include <uielement/fontsizemenucontroller.hxx>
+#endif
+
+#ifndef __FRAMEWORK_UIELEMENT_FORMATMENUCONTROLLER_HXX_
+#include <uielement/formatmenucontroller.hxx>
+#endif
+
+#ifndef __FRAMEWORK_UIELEMENT_OBJECTMENUCONTROLLER_HXX_
+#include <uielement/objectmenucontroller.hxx>
+#endif
+
+#ifndef __FRAMEWORK_UIELEMENT_HEADERMENUCONTROLLER_HXX_
+#include <uielement/headermenucontroller.hxx>
+#endif
+
+#ifndef __FRAMEWORK_UIELEMENT_FOOTERMENUCONTROLLER_HXX_
+#include <uielement/footermenucontroller.hxx>
+#endif
+
+#ifndef __FRAMEWORK_UIELEMENT_CONTROLMENUCONTROLLER_HXX_
+#include <uielement/controlmenucontroller.hxx>
+#endif
+
+#ifndef __FRAMEWORK_UIELEMENT_UICOMMANDDESCRIPTION_HXX_
+#include <uielement/uicommanddescription.hxx>
+#endif
+
+#ifndef __FRAMEWORK_UICONFIGURATION_UICONFIGMANAGER_HXX_
+#include <uiconfiguration/uiconfigurationmanager.hxx>
+#endif
+
+#ifndef __FRAMEWORK_UICONFIGURATION_MODULEUICFGSUPPLIER_HXX_
+#include <uiconfiguration/moduleuicfgsupplier.hxx>
+#endif
+
+#ifndef __FRAMEWORK_UICONFIGURATION_MODULEUICONFIGMANAGER_HXX_
+#include <uiconfiguration/moduleuiconfigurationmanager.hxx>
+#endif
+
+#ifndef __FRAMEWORK_UIFACTORY_MENUBARFACTORY_HXX_
+#include <uifactory/menubarfactory.hxx>
+#endif
+
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
-COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              )
-                        COMPONENTINFO( ::framework::Desktop                     )
-                        COMPONENTINFO( ::framework::Frame                       )
-                        COMPONENTINFO( ::framework::DocumentProperties          )
-                        COMPONENTINFO( ::framework::SoundHandler                )
-                        COMPONENTINFO( ::framework::JobExecutor                 )
-                        COMPONENTINFO( ::framework::DispatchRecorderSupplier    )
-                        COMPONENTINFO( ::framework::DispatchRecorder            )
-                        COMPONENTINFO( ::framework::MailToDispatcher            )
-                        COMPONENTINFO( ::framework::ServiceHandler              )
-                        COMPONENTINFO( ::framework::JobDispatch                 )
-                        COMPONENTINFO( ::framework::BackingComp                 )
-                        COMPONENTINFO( ::framework::DispatchHelper              )
+COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer                          )
+                        COMPONENTINFO( ::framework::Desktop                                 )
+                        COMPONENTINFO( ::framework::Frame                                   )
+                        COMPONENTINFO( ::framework::DocumentProperties                      )
+                        COMPONENTINFO( ::framework::SoundHandler                            )
+                        COMPONENTINFO( ::framework::JobExecutor                             )
+                        COMPONENTINFO( ::framework::DispatchRecorderSupplier                )
+                        COMPONENTINFO( ::framework::DispatchRecorder                        )
+                        COMPONENTINFO( ::framework::MailToDispatcher                        )
+                        COMPONENTINFO( ::framework::ServiceHandler                          )
+                        COMPONENTINFO( ::framework::JobDispatch                             )
+                        COMPONENTINFO( ::framework::BackingComp                             )
+                        COMPONENTINFO( ::framework::DispatchHelper                          )
+                        COMPONENTINFO( ::framework::LayoutManager                           )
+                        COMPONENTINFO( ::framework::UIElementFactoryManager                 )
+                        COMPONENTINFO( ::framework::PopupMenuControllerFactory              )
+                        COMPONENTINFO( ::framework::FontMenuController                      )
+                        COMPONENTINFO( ::framework::FontSizeMenuController                  )
+                        COMPONENTINFO( ::framework::FormatMenuController                    )
+                        COMPONENTINFO( ::framework::ObjectMenuController                    )
+                        COMPONENTINFO( ::framework::HeaderMenuController                    )
+                        COMPONENTINFO( ::framework::FooterMenuController                    )
+                        COMPONENTINFO( ::framework::ControlMenuController                   )
+                        COMPONENTINFO( ::framework::UICommandDescription                    )
+                        COMPONENTINFO( ::framework::ModuleManager                           )
+                        COMPONENTINFO( ::framework::UIConfigurationManager                  )
+                        COMPONENTINFO( ::framework::ModuleUIConfigurationManagerSupplier    )
+                        COMPONENTINFO( ::framework::ModuleUIConfigurationManager            )
+                        COMPONENTINFO( ::framework::MenuBarFactory                          )
                     )
 
-COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  )   else
-                        IFFACTORY( ::framework::Desktop                         )   else
-                        IFFACTORY( ::framework::Frame                           )   else
-                        IFFACTORY( ::framework::DocumentProperties              )   else
-                        IFFACTORY( ::framework::SoundHandler                    )   else
-                        IFFACTORY( ::framework::JobExecutor                     )   else
-                        IFFACTORY( ::framework::DispatchRecorderSupplier        )   else
-                        IFFACTORY( ::framework::DispatchRecorder                )   else
-                        IFFACTORY( ::framework::MailToDispatcher                )   else
-                        IFFACTORY( ::framework::ServiceHandler                  )   else
-                        IFFACTORY( ::framework::JobDispatch                     )   else
-                        IFFACTORY( ::framework::BackingComp                     )   else
-                        IFFACTORY( ::framework::DispatchHelper                  )
+COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                          )   else
+                        IFFACTORY( ::framework::Desktop                                 )   else
+                        IFFACTORY( ::framework::Frame                                   )   else
+                        IFFACTORY( ::framework::DocumentProperties                      )   else
+                        IFFACTORY( ::framework::SoundHandler                            )   else
+                        IFFACTORY( ::framework::JobExecutor                             )   else
+                        IFFACTORY( ::framework::DispatchRecorderSupplier                )   else
+                        IFFACTORY( ::framework::DispatchRecorder                        )   else
+                        IFFACTORY( ::framework::MailToDispatcher                        )   else
+                        IFFACTORY( ::framework::ServiceHandler                          )   else
+                        IFFACTORY( ::framework::JobDispatch                             )   else
+                        IFFACTORY( ::framework::BackingComp                             )   else
+                        IFFACTORY( ::framework::DispatchHelper                          )   else
+                        IFFACTORY( ::framework::LayoutManager                           )   else
+                        IFFACTORY( ::framework::UIElementFactoryManager                 )   else
+                        IFFACTORY( ::framework::PopupMenuControllerFactory              )   else
+                        IFFACTORY( ::framework::FontMenuController                      )   else
+                        IFFACTORY( ::framework::FontSizeMenuController                  )   else
+                        IFFACTORY( ::framework::FormatMenuController                    )   else
+                        IFFACTORY( ::framework::ObjectMenuController                    )   else
+                        IFFACTORY( ::framework::HeaderMenuController                    )   else
+                        IFFACTORY( ::framework::FooterMenuController                    )   else
+                        IFFACTORY( ::framework::ControlMenuController                   )   else
+                        IFFACTORY( ::framework::UICommandDescription                    )   else
+                        IFFACTORY( ::framework::ModuleManager                           )   else
+                        IFFACTORY( ::framework::UIConfigurationManager                  )   else
+                        IFFACTORY( ::framework::ModuleUIConfigurationManagerSupplier    )   else
+                        IFFACTORY( ::framework::ModuleUIConfigurationManager            )   else
+                        IFFACTORY( ::framework::MenuBarFactory                          )
                     )
+
