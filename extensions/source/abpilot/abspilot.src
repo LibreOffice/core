@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-19 17:53:21 $
+ *  last change: $Author: fs $ $Date: 2002-01-09 10:43:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,6 +613,7 @@ TabPage RID_PAGE_FIELDMAPPING
     {
         Pos     = MAP_APPFONT ( BORDER_X, WINDOW_SIZE_Y - HEADER_SIZE_Y - 7 - 32 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 32 ) ;
+        WordBreak = TRUE;
     };
     Text[ portuguese ] = "Atribuiзгo de campos";
     Text[ russian ] = "Назначение поля";
@@ -1028,6 +1029,9 @@ Bitmap BMP_HEADERIMAGE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.25  2001/12/19 17:53:21  kz
+ *  Merge SRC641: 19.12.01 - 18:51:53
+ *
  *  Revision 1.24  2001/12/14 16:45:31  kz
  *  Merge SRC641: 14.12.01 - 17:43:23
  *
