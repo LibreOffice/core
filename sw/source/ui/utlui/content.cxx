@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-07-04 13:00:06 $
+ *  last change: $Author: os $ $Date: 2001-07-26 06:09:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -967,7 +967,9 @@ void SwContentTree::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 
 void SwContentTree::DragFinished( sal_Int8 nAction )
 {
-    SvTreeListBox::DragFinished( nAction );
+    //to prevent the removing of the selected entry in external drag and drop
+    // the drag action mustn't be MOVE
+    SvTreeListBox::DragFinished( bIsInternalDrag ? nAction : DND_ACTION_COPY );
     SwContentTree::SetInDrag(sal_False);
     bIsInternalDrag = sal_False;
 }
@@ -3136,6 +3138,9 @@ void SwContentLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFl
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.10  2001/07/04 13:00:06  os
+    #75450# restore scroll position
+
     Revision 1.9  2001/07/03 14:55:09  os
     #89174# don't use GetActiveView anymore
 
