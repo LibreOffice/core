@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevloc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:17:10 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 09:57:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <vcl/window.hxx>
+#include <vcl/outdev.hxx>
 #include <tools/debug.hxx>
 
 #include "prevloc.hxx"
@@ -202,7 +202,7 @@ void ScPreviewTableInfo::LimitToArea( const Rectangle& rPixelArea )
 
 //------------------------------------------------------------------
 
-ScPreviewLocationData::ScPreviewLocationData( ScDocument* pDocument, Window* pWin ) :
+ScPreviewLocationData::ScPreviewLocationData( ScDocument* pDocument, OutputDevice* pWin ) :
     pDoc( pDocument ),
     pWindow( pWin ),
     nDrawRanges( 0 ),
@@ -853,3 +853,22 @@ Rectangle ScPreviewLocationData::GetCellOutputRect(const ScAddress& rCellPos) co
     GetCellPosition(rCellPos, aRect);
     return aRect;
 }
+
+// GetMainCellRange is used for links in PDF export
+
+BOOL ScPreviewLocationData::GetMainCellRange( ScRange& rRange, Rectangle& rPixRect ) const
+{
+    ULONG nCount = aEntries.Count();
+    for (ULONG nListPos=0; nListPos<nCount; nListPos++)
+    {
+        ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)aEntries.GetObject(nListPos);
+        if ( pEntry->eType == SC_PLOC_CELLRANGE && !pEntry->bRepeatCol && !pEntry->bRepeatRow )
+        {
+            rRange = pEntry->aCellRange;
+            rPixRect = pEntry->aPixelRect;
+            return TRUE;
+        }
+    }
+    return FALSE;       // not found
+}
+
