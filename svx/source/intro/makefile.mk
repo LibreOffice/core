@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-03 19:23:52 $
+#   last change: $Author: rt $ $Date: 2004-05-21 09:44:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,8 +81,6 @@ RSCUPDVERMAC+=-DBUILD_SPECIAL=True
 .INCLUDE :  $(UPD)minor.mk
 RSCUPDVER=$(RSCREVISION)
 
-IMGLST_SRS=$(SRS)$/iso.srs $(SRS)$/ooo.srs
-
 # --- Allgemein -----------------------------------------------------------
 
 SRS1NAME= iso
@@ -90,6 +88,7 @@ SRC1FILES=	\
     $(SRS1NAME).src
 
 RESLIB1NAME=$(SRS1NAME)
+RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES= \
     $(SRS)$/$(SRS1NAME).srs
 
@@ -99,17 +98,9 @@ SRC4FILES=	\
     $(SRS4NAME).src
 
 RESLIB4NAME=$(SRS4NAME)
+RESLIB4IMAGES=$(PRJ)$/res
 RESLIB4SRSFILES= \
     $(SRS)$/$(SRS4NAME).srs
 
 .INCLUDE :  target.mk
-
-ALLTAR : $(ADD_IMGLSTTARGET)
-
-.IF "$(RESLIB1TARGET)"!=""
-$(RESLIB1TARGETN) : $(IMGLSTTARGET)
-.ENDIF          # "$(RESLIB1TARGET)"!=""
-.IF "$(RESLIB4TARGET)"!=""
-$(RESLIB4TARGETN) : $(IMGLSTTARGET)
-.ENDIF          # "$(RESLIB4TARGET)"!=""
 
