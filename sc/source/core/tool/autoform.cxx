@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoform.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 16:02:54 $
+ *  last change: $Author: er $ $Date: 2001-07-11 15:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 
 /*------------------------------------------------------------------------
 
-    $Author: er $ $Date: 2001-03-14 16:02:54 $ $Revision: 1.5 $
+    $Author: er $ $Date: 2001-07-11 15:28:50 $ $Revision: 1.6 $
     $Logfile:   T:/sc/source/core/tool/autoform.cxv  $ $Workfile:   autoform.cxx  $
     (c) Copyright 1989 - 1994, Star Division GmbH, Hamburg
 
@@ -101,7 +101,9 @@
 #include <svx/dialogs.hrc>
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
-#include <unotools/collatorwrapper.hxx>
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
+#endif
 
 #include "autoform.hxx"
 #include "zforauto.hxx"
@@ -1026,11 +1028,11 @@ short ScAutoFormat::Compare(DataObject* pKey1, DataObject* pKey2) const
     ((ScAutoFormatData*)pKey1)->GetName(aStr1);
     ((ScAutoFormatData*)pKey2)->GetName(aStr2);
     String aStrStandard = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
-    if ( ScGlobal::pCollator->compareString( aStr1, aStrStandard ) == COMPARE_EQUAL )
+    if ( ScGlobal::pTransliteration->compareString( aStr1, aStrStandard ) == COMPARE_EQUAL )
         return -1;
-    if ( ScGlobal::pCollator->compareString( aStr2, aStrStandard ) == COMPARE_EQUAL )
+    if ( ScGlobal::pTransliteration->compareString( aStr2, aStrStandard ) == COMPARE_EQUAL )
         return 1;
-    return (short) ScGlobal::pCollator->compareString( aStr1, aStr2 );
+    return (short) ScGlobal::pTransliteration->compareString( aStr1, aStr2 );
 }
 
 BOOL ScAutoFormat::Load()

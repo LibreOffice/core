@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callform.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-06-25 14:14:25 $
+ *  last change: $Author: er $ $Date: 2001-07-11 15:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,9 @@
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
-#include <unotools/collatorwrapper.hxx>
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
+#endif
 
 #include "callform.hxx"
 #include "global.hxx"
@@ -196,7 +198,7 @@ FuncData::FuncData(const FuncData& rData) :
 
 short FuncCollection::Compare(DataObject* pKey1, DataObject* pKey2) const
 {
-    return (short) ScGlobal::pCollator->compareString(
+    return (short) ScGlobal::pTransliteration->compareString(
         ((FuncData*)pKey1)->aInternalName, ((FuncData*)pKey2)->aInternalName );
 }
 
@@ -249,7 +251,7 @@ static ModuleCollection aModuleCollection;
 
 short ModuleCollection::Compare(DataObject* pKey1, DataObject* pKey2) const
 {
-    return (short) ScGlobal::pCollator->compareString(
+    return (short) ScGlobal::pTransliteration->compareString(
         ((ModuleData*)pKey1)->aName, ((ModuleData*)pKey2)->aName );
 }
 

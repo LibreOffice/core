@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userlist.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 18:10:21 $
+ *  last change: $Author: er $ $Date: 2001-07-11 15:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,9 @@
 #ifndef _UNOTOOLS_CALENDARWRAPPER_HXX
 #include <unotools/calendarwrapper.hxx>
 #endif
-#include <unotools/collatorwrapper.hxx>
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
+#endif
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -198,7 +200,7 @@ StringCompare ScUserListData::Compare(const String& rSubStr1, const String& rSub
     else if (bFound2)
         return COMPARE_GREATER;
     else
-        return (StringCompare) ScGlobal::pCaseCollator->compareString( rSubStr1, rSubStr2 );
+        return (StringCompare) ScGlobal::pCaseTransliteration->compareString( rSubStr1, rSubStr2 );
 }
 
 StringCompare ScUserListData::ICompare(const String& rSubStr1, const String& rSubStr2) const
@@ -224,7 +226,7 @@ StringCompare ScUserListData::ICompare(const String& rSubStr1, const String& rSu
     else if (bFound2)
         return COMPARE_GREATER;
     else
-        return (StringCompare) ScGlobal::pCollator->compareString( rSubStr1, rSubStr2 );
+        return (StringCompare) ScGlobal::pTransliteration->compareString( rSubStr1, rSubStr2 );
 }
 
 ScUserList::ScUserList(USHORT nLim, USHORT nDel) :

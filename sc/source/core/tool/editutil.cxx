@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-07-02 10:02:55 $
+ *  last change: $Author: er $ $Date: 2001-07-11 15:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,7 +563,7 @@ String __EXPORT ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
         else if (aType == TYPE(SvxPagesField))
             aRet = lcl_GetNumStr( (USHORT)aData.nTotalPages,aData.eNumType );
         else if (aType == TYPE(SvxTimeField))
-            aRet = ScGlobal::pSysLocale->GetLocaleData().getTime(aData.aTime);
+            aRet = ScGlobal::pLocaleData->getTime(aData.aTime);
         else if (aType == TYPE(SvxFileField))
             aRet = aData.aTitle;
         else if (aType == TYPE(SvxExtFileField))
@@ -580,7 +580,7 @@ String __EXPORT ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
         else if (aType == TYPE(SvxTableField))
             aRet = aData.aTabName;
         else if (aType == TYPE(SvxDateField))
-            aRet = ScGlobal::pSysLocale->GetLocaleData().getDate(aData.aDate);
+            aRet = ScGlobal::pLocaleData->getDate(aData.aDate);
         else
         {
             //DBG_ERROR("unbekannter Feldbefehl");

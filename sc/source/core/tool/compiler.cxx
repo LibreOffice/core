@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-10 04:54:16 $
+ *  last change: $Author: er $ $Date: 2001-07-11 15:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,8 @@
 #include <tools/rc.hxx>
 #include <tools/solar.h>
 #include <unotools/charclass.hxx>
-#include <unotools/collatorwrapper.hxx>
-#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
-#include <svtools/syslocale.hxx>
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -981,7 +980,7 @@ BOOL ScCompiler::IsReference( const String& rName )
     // englisches 1.E2 oder 1.E+2 ist wiederum Zahl 100, 1.E-2 ist 0,01
     sal_Unicode ch1 = rName.GetChar(0);
     sal_Unicode cDecSep = ( pSymbolTable == pSymbolTableEnglish ? '.' :
-        ScGlobal::pSysLocale->GetLocaleData().getNumDecimalSep().GetChar(0) );
+        ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0) );
     if ( ch1 == cDecSep )
         return FALSE;
     BOOL bMyAlpha;
@@ -1191,7 +1190,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                                 ((ScEditCell*)pCell)->GetString( aStr );
                             break;
                         }
-                        if ( ScGlobal::pCollator->compareString(
+                        if ( ScGlobal::pTransliteration->compareString(
                                 aStr, aName ) == COMPARE_EQUAL )
                         {
                             aRef.InitFlags();
@@ -1246,7 +1245,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                         ((ScEditCell*)pCell)->GetString( aStr );
                     break;
                 }
-                if ( ScGlobal::pCollator->compareString(
+                if ( ScGlobal::pTransliteration->compareString(
                         aStr, aName ) == COMPARE_EQUAL )
                 {
                     USHORT nCol = aIter.GetCol();
@@ -3488,7 +3487,7 @@ ScToken* ScCompiler::CreateStringFromToken( String& rFormula, ScToken* pToken,
             else
             {
                 SolarMath::DoubleToString( aStr, t->GetDouble(), 'A', INT_MAX,
-                    ScGlobal::pSysLocale->GetLocaleData().getNumDecimalSep().GetChar(0),
+                    ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0),
                     TRUE );
             }
             rFormula += aStr;
@@ -3658,7 +3657,7 @@ ScToken* ScCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuffer, ScToke
             else
             {
                 SolarMath::DoubleToString( aStr, t->GetDouble(), 'A', INT_MAX,
-                    ScGlobal::pSysLocale->GetLocaleData().getNumDecimalSep().GetChar(0),
+                    ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0),
                     TRUE );
             }
             rBuffer.append(aStr);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: er $ $Date: 2001-05-17 00:56:22 $
+ *  last change: $Author: er $ $Date: 2001-07-11 15:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 #include <unotools/collatorwrapper.hxx>
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
+#endif
 
 #include <stdlib.h>
 #include <string.h>
@@ -241,7 +244,8 @@ short ScInterpreter::CompareFunc( const ScCompare& rComp )
             nRes = (short) ScGlobal::pCollator->compareString(
                 *rComp.pVal[ 0 ], *rComp.pVal[ 1 ] );
         else
-            nRes = (*rComp.pVal[ 0 ]).CompareTo( *rComp.pVal[ 1 ] );
+            nRes = (short) ScGlobal::pCaseCollator->compareString(
+                *rComp.pVal[ 0 ], *rComp.pVal[ 1 ] );
     }
     return nRes;
 }
@@ -3857,7 +3861,7 @@ void ScInterpreter::ScHLookup()
                         {
                             if (pMat->IsString(i, 0))
                             {
-                                nRes = ScGlobal::pCollator->compareString(
+                                nRes = ScGlobal::pTransliteration->compareString(
                                     pMat->GetString(i,0), aParamStr );
                                 if (nRes == COMPARE_EQUAL)
                                 {
@@ -4130,7 +4134,7 @@ void ScInterpreter::ScVLookup()
                         {
                             if (pMat->IsString(0, i))
                             {
-                                nRes = ScGlobal::pCollator->compareString(
+                                nRes = ScGlobal::pTransliteration->compareString(
                                     pMat->GetString(0,i), aParamStr );
                                 if (nRes == COMPARE_EQUAL)
                                 {
@@ -4347,7 +4351,7 @@ BOOL ScInterpreter::GetDBParams(USHORT& rTab, ScQueryParam& rParam)
                 while (!bFound && (nField <= nDBCol2))
                 {
                     pDok->GetString(nField, nDBRow1, nDBTab1, aCellStr);
-                    bFound = (ScGlobal::pCollator->compareString(
+                    bFound = (ScGlobal::pTransliteration->compareString(
                         aCellStr, aStr ) == COMPARE_EQUAL);
                     if (!bFound)
                         nField++;

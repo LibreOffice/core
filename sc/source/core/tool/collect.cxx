@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collect.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-28 17:13:05 $
+ *  last change: $Author: er $ $Date: 2001-07-11 15:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,9 @@
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
-#include <unotools/collatorwrapper.hxx>
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
+#endif
 
 #include "rechead.hxx"
 #include "collect.hxx"
@@ -462,10 +464,10 @@ short TypedStrCollection::Compare( DataObject* pKey1, DataObject* pKey2 ) const
             // Strings vergleichen:
             //---------------------
             if ( bCaseSensitive )
-                nResult = (short) ScGlobal::pCaseCollator->compareString(
+                nResult = (short) ScGlobal::pCaseTransliteration->compareString(
                     rData1.aStrValue, rData2.aStrValue );
             else
-                nResult = (short) ScGlobal::pCollator->compareString(
+                nResult = (short) ScGlobal::pTransliteration->compareString(
                     rData1.aStrValue, rData2.aStrValue );
         }
     }
@@ -503,13 +505,13 @@ BOOL TypedStrCollection::FindText( const String& rStart, String& rResult,
             if (pData->nStrType)
             {
                 String aCmp = pData->aStrValue.Copy(0,nCmpLen);
-                if ( ScGlobal::pCollator->compareString( aCmp, rStart )
+                if ( ScGlobal::pTransliteration->compareString( aCmp, rStart )
                         == COMPARE_EQUAL )
                 {
                     //  If the collection is case sensitive, it may contain several entries
                     //  that are equal when compared case-insensitive. They are skipped here.
                     if ( !bCaseSensitive || !aOldResult.Len() ||
-                            ScGlobal::pCollator->compareString( pData->aStrValue, aOldResult ) != COMPARE_EQUAL )
+                            ScGlobal::pTransliteration->compareString( pData->aStrValue, aOldResult ) != COMPARE_EQUAL )
                     {
                         rResult = pData->aStrValue;
                         rPos = i;
@@ -532,13 +534,13 @@ BOOL TypedStrCollection::FindText( const String& rStart, String& rResult,
             if (pData->nStrType)
             {
                 String aCmp = pData->aStrValue.Copy(0,nCmpLen);
-                if ( ScGlobal::pCollator->compareString( aCmp, rStart )
+                if ( ScGlobal::pTransliteration->compareString( aCmp, rStart )
                         == COMPARE_EQUAL )
                 {
                     //  If the collection is case sensitive, it may contain several entries
                     //  that are equal when compared case-insensitive. They are skipped here.
                     if ( !bCaseSensitive || !aOldResult.Len() ||
-                            ScGlobal::pCollator->compareString( pData->aStrValue, aOldResult ) != COMPARE_EQUAL )
+                            ScGlobal::pTransliteration->compareString( pData->aStrValue, aOldResult ) != COMPARE_EQUAL )
                     {
                         rResult = pData->aStrValue;
                         rPos = i;
@@ -561,7 +563,7 @@ BOOL TypedStrCollection::GetExactMatch( String& rString ) const
     {
         TypedStrData* pData = (TypedStrData*) pItems[i];
         if ( pData->nStrType &&
-             ScGlobal::pCollator->compareString( pData->aStrValue, rString )
+             ScGlobal::pTransliteration->compareString( pData->aStrValue, rString )
                  == COMPARE_EQUAL )
         {
             rString = pData->aStrValue;                         // String anpassen

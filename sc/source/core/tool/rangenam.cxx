@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangenam.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-26 11:34:05 $
+ *  last change: $Author: er $ $Date: 2001-07-11 15:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #include <tools/debug.hxx>
 #include <string.h>
 #include <unotools/collatorwrapper.hxx>
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
+#endif
 
 #include "rangenam.hxx"
 #include "global.hxx"
@@ -776,7 +779,7 @@ BOOL ScRangeName::SearchName( const String& rName, USHORT& rIndex ) const
     {
         String aName;
         ((*this)[i])->GetName( aName );
-        if ( ScGlobal::pCollator->compareString(
+        if ( ScGlobal::pTransliteration->compareString(
                 aName, rName ) == COMPARE_EQUAL )
         {
             rIndex = i;
