@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:08:38 $
+ *  last change: $Author: hr $ $Date: 2001-09-12 12:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,12 +225,12 @@ void OFileTable::FileClose()
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-void SAL_CALL OFileTable::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OFileTable::acquire() throw()
 {
     OTable_TYPEDEF::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFileTable::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OFileTable::release() throw()
 {
     OTable_TYPEDEF::release();
 }
