@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableIndex.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:53 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,26 +71,27 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::text::TableIndex
-/** specifies service of table indexes within a document.@see com::sun::star::text::BaseIndex
+/** specifies service of table indexes within a document.
+    @see com::sun::star::text::BaseIndex
  */
 service TableIndex
 {
-    // DocMerge: empty anyway
     service  com::sun::star::text::BaseIndex;
 
+    //-------------------------------------------------------------------------
     /* determins if the name or the label of an object is used to create the index.
      */
-    // DocMerge: empty anyway
     [optional, property] boolean CreateFromLabels; //tables, illustrations
+
+    //-------------------------------------------------------------------------
     /* determins the name of the sequence field that is evaluated to create the index.
      */
-    // DocMerge: empty anyway
     [optional, property] string LabelCategory; //tables, illustrations
-    /* determins the way the paragraph containing a label is included in the index.
-        @see ChapterFormat*/
 
-    // DocMerge: empty anyway
+    //-------------------------------------------------------------------------
+    /* determins the way the paragraph containing a label is included in the index.
+        @see ChapterFormat
+     */
     [optional, property] short LabelDisplayType;//tables, illustrations
 };
 
