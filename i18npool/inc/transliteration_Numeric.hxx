@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_Numeric.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:45:21 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ public:
 
         virtual sal_Unicode SAL_CALL
         transliterateChar2Char( sal_Unicode inChar)
-        throw(drafts::com::sun::star::i18n::MultipleCharsOutputException,
+        throw(com::sun::star::i18n::MultipleCharsOutputException,
                 com::sun::star::uno::RuntimeException);
 
         // Methods which are shared.
