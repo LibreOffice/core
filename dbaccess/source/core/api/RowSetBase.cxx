@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-15 15:57:40 $
+ *  last change: $Author: oj $ $Date: 2000-11-17 07:50:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -623,7 +623,6 @@ sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
     if(!bWasNew)
     {
         aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
-        OSL_ENSHURE(aOldValues->isValid(),"Iterator is not valid!");
     }
     sal_Bool bRet = m_pCache->next();
     if(bRet)
