@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:57:42 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:28:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,16 +252,29 @@ sal_Bool SAL_CALL OControl::supportsService(const rtl::OUString& _rsServiceName)
 }
 
 //------------------------------------------------------------------------------
+Sequence< ::rtl::OUString > OControl::getAggregateServiceNames()
+{
+    Sequence< ::rtl::OUString > aAggServices;
+    Reference< XServiceInfo > xInfo;
+    if ( query_aggregation( m_xAggregate, xInfo ) )
+        aAggServices = xInfo->getSupportedServiceNames();
+    return aAggServices;
+}
+
+//------------------------------------------------------------------------------
 Sequence<rtl::OUString> SAL_CALL OControl::getSupportedServiceNames() throw(RuntimeException)
 {
-    Sequence< rtl::OUString > aSupported;
+    return ::comphelper::concatSequences(
+        getAggregateServiceNames(),
+        getSupportedServiceNames_Static()
+    );
+}
 
-    // ask our aggregate
-    Reference< com::sun::star::lang::XServiceInfo > xInfo;
-    if ( query_aggregation( m_xAggregate, xInfo ) )
-        aSupported = xInfo->getSupportedServiceNames();
-
-    return aSupported;
+//------------------------------------------------------------------------------
+Sequence< ::rtl::OUString > SAL_CALL OControl::getSupportedServiceNames_Static() throw( RuntimeException )
+{
+    // no own supported service names
+    return Sequence< ::rtl::OUString >();
 }
 
 // XEventListener
@@ -661,21 +674,31 @@ sal_Bool SAL_CALL OControlModel::supportsService(const rtl::OUString& _rServiceN
 }
 
 //------------------------------------------------------------------------------
+Sequence< ::rtl::OUString > OControlModel::getAggregateServiceNames()
+{
+    Sequence< ::rtl::OUString > aAggServices;
+    Reference< XServiceInfo > xInfo;
+    if ( query_aggregation( m_xAggregate, xInfo ) )
+        aAggServices = xInfo->getSupportedServiceNames();
+    return aAggServices;
+}
+
+//------------------------------------------------------------------------------
 Sequence<rtl::OUString> SAL_CALL OControlModel::getSupportedServiceNames() throw(RuntimeException)
 {
-        Sequence<rtl::OUString> aSupported;
+    return ::comphelper::concatSequences(
+        getAggregateServiceNames(),
+        getSupportedServiceNames_Static()
+    );
+}
 
-    // ask our aggregate
-        Reference<com::sun::star::lang::XServiceInfo> xInfo;
-    if (query_aggregation(m_xAggregate, xInfo))
-        aSupported = xInfo->getSupportedServiceNames();
-
-    aSupported.realloc(aSupported.getLength() + 2);
-    ::rtl::OUString* pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-2] = FRM_SUN_FORMCOMPONENT;
-    pArray[aSupported.getLength()-1] = ::rtl::OUString::createFromAscii("com.sun.star.form.FormControlModel");
-
-    return aSupported;
+//------------------------------------------------------------------------------
+Sequence< ::rtl::OUString > SAL_CALL OControlModel::getSupportedServiceNames_Static() throw( RuntimeException )
+{
+    Sequence< ::rtl::OUString > aServiceNames( 2 );
+    aServiceNames[ 0 ] = FRM_SUN_FORMCOMPONENT;
+    aServiceNames[ 1 ] = ::rtl::OUString::createFromAscii( "com.sun.star.form.FormControlModel" );
+    return aServiceNames;
 }
 
 // XEventListener
@@ -1299,14 +1322,23 @@ void SAL_CALL OBoundControlModel::disposing(const com::sun::star::lang::EventObj
 //------------------------------------------------------------------------------
 StringSequence SAL_CALL OBoundControlModel::getSupportedServiceNames() throw(RuntimeException)
 {
-    StringSequence aSupported = OControlModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 1);
-
-    ::rtl::OUString* pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-1] = ::rtl::OUString::createFromAscii("com.sun.star.form.DataAwareControlModel");
-    return aSupported;
+    return ::comphelper::concatSequences(
+        getAggregateServiceNames(),
+        getSupportedServiceNames_Static()
+    );
 }
 
+//------------------------------------------------------------------------------
+Sequence< ::rtl::OUString > SAL_CALL OBoundControlModel::getSupportedServiceNames_Static() throw( RuntimeException )
+{
+    Sequence< ::rtl::OUString > aOwnServiceNames( 1 );
+    aOwnServiceNames[ 0 ] = ::rtl::OUString::createFromAscii( "com.sun.star.form.DataAwareControlModel" );
+
+    return ::comphelper::concatSequences(
+        OControlModel::getSupportedServiceNames_Static(),
+        aOwnServiceNames
+    );
+}
 
 // XPersist
 //------------------------------------------------------------------------------
