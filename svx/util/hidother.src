@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:45:06 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,17 +266,7 @@ hidspecial HID_VALUESET_BULLET              { HelpID = HID_VALUESET_BULLET   ;};
 hidspecial HID_VALUESET_NUM                 { HelpID = HID_VALUESET_NUM      ;};
 hidspecial HID_VALUESET_NUMBMP              { HelpID = HID_VALUESET_NUMBMP   ;};
 
-hidspecial UID_PROP_DLG_FONT_TYPE           { HelpID = UID_PROP_DLG_FONT_TYPE ;};
-hidspecial UID_PROP_DLG_IMAGE_URL           { HelpID = UID_PROP_DLG_IMAGE_URL ;};
-hidspecial UID_PROP_DLG_BACKGROUNDCOLOR     { HelpID = UID_PROP_DLG_BACKGROUNDCOLOR  ;};
-hidspecial UID_PROP_DLG_GRAPHIC_IMPORT      { HelpID = UID_PROP_DLG_GRAPHIC_IMPORT   ;};
-hidspecial UID_PROP_DLG_ATTR_DATASOURCE     { HelpID = UID_PROP_DLG_ATTR_DATASOURCE  ;};
-hidspecial UID_PROP_DLG_ATTR_TARGET_URL     { HelpID = UID_PROP_DLG_ATTR_TARGET_URL  ;};
-hidspecial UID_PROP_DLG_NUMBER_FORMAT       { HelpID = UID_PROP_DLG_NUMBER_FORMAT    ;};
 hidspecial UID_EVT_MACRODLG                 { HelpID = UID_EVT_MACRODLG  ;};
-hidspecial UID_PROP_DLG_CONTROLLABEL        { HelpID = UID_PROP_DLG_CONTROLLABEL ;};
-hidspecial UID_PROP_DLG_FILLCOLOR           { HelpID = UID_PROP_DLG_FILLCOLOR ;};
-
 hidspecial HID_EVT_APPROVEACTIONPERFORMED   { HelpID = HID_EVT_APPROVEACTIONPERFORMED   ;};
 hidspecial HID_EVT_APPROVERESETTED          { HelpID = HID_EVT_APPROVERESETTED          ;};
 hidspecial HID_EVT_KEYUP                    { HelpID = HID_EVT_KEYUP                    ;};
