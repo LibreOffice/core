@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-06 13:51:33 $
+ *  last change: $Author: cmc $ $Date: 2001-04-11 14:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2063,9 +2063,6 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* pF, String& rStr )
     {
         switch( nRet )
         {
-        case '*':
-            aReadParam.SkipToNextToken();
-            break;
         case -2:
             if( !aPara.Len() )
                 aPara = aReadParam.GetResult();
@@ -2074,7 +2071,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* pF, String& rStr )
             break;
         case '*':
             //Skip over MERGEFORMAT
-            nRet = aReadParam.SkipToNextToken();
+            aReadParam.SkipToNextToken();
             break;
         }
     }
@@ -3158,12 +3155,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.17 2001-04-06 13:51:33 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.18 2001-04-11 14:34:22 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.17  2001/04/06 13:51:33  cmc
+      ##509## Fill in default content for sections that are linked to files to handle case where file is unavailable and support ww6 INCLUDE field
+
       Revision 1.16  2001/03/19 21:29:17  jp
       Bugfixes/Optimization for task #83168#
 

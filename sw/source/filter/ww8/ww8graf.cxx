@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-05 14:03:48 $
+ *  last change: $Author: cmc $ $Date: 2001-04-11 14:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2344,15 +2344,15 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
             if (pFmt)
             {
                 const SvxBoxItem &rParentBox = pFmt->GetBox();
-                rFSPA.nYaTop -= rParentBox.GetDistance();
+                pFSPA->nYaTop -= rParentBox.GetDistance();
 
                 if (eHoriRel == FRAME)
                 {
                     const SwFmtHoriOrient &rParentHori = pFmt->GetHoriOrient();
-                    rFSPA.nXaLeft += rParentHori.GetPos();
-                    rFSPA.nXaLeft += rParentBox.GetDistance();
+                    pFSPA->nXaLeft += rParentHori.GetPos();
+                    pFSPA->nXaLeft += rParentBox.GetDistance();
                     if (rParentHori.GetRelationOrient() == REL_PG_FRAME)
-                        rFSPA.nXaLeft -= nPgLeft;
+                        pFSPA->nXaLeft -= nPgLeft;
                 }
             }
 
@@ -3156,11 +3156,14 @@ void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.19 2001-04-05 14:03:48 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.20 2001-04-11 14:34:22 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.19  2001/04/05 14:03:48  cmc
+      ##640## Draw objects inside textbox import layout tweaks
+
       Revision 1.18  2001/04/03 17:21:04  cmc
       ##505## Test for special case of textbox that contains only another textbox whose size is greater than container so as to disable autogrow
 
