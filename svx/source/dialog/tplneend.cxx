@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplneend.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-14 10:07:04 $
+ *  last change: $Author: sj $ $Date: 2002-11-20 13:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,7 +617,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
         String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.soe" ) );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
-        aDlg.SetDisplayDirectory( aFile.GetMainURL() );
+        aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
 
         if( aDlg.Execute() == ERRCODE_NONE )
         {
@@ -628,7 +628,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             aPathURL.removeFinalSlash();
 
             // Liste speichern
-            XLineEndList* pLeList = new XLineEndList( aPathURL.GetMainURL(), pXPool );
+            XLineEndList* pLeList = new XLineEndList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool );
             pLeList->SetName( aURL.getName() );
             if( pLeList->Load() )
             {
@@ -707,7 +707,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "soe" ) ) );
     }
 
-    aDlg.SetDisplayDirectory( aFile.GetMainURL() );
+    aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
         INetURLObject   aURL( aDlg.GetPath() );
@@ -717,7 +717,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
         aPathURL.removeFinalSlash();
 
         pLineEndList->SetName( aURL.getName() );
-        pLineEndList->SetPath( aPathURL.GetMainURL() );
+        pLineEndList->SetPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
         if( pLineEndList->Save() )
         {
