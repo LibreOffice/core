@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: tbe $ $Date: 2002-07-10 18:09:10 $
+ *  last change: $Author: tbe $ $Date: 2002-07-11 11:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -623,6 +623,10 @@ Menu::~Menu()
     DBG_DTOR( Menu, NULL );
 
     ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
+
+    // at the window free the reference to the accessible component
+    if ( pWindow )
+        pWindow->SetAccessible( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >() );
 
     // dispose accessible components
     if ( mxAccessible.is() )
@@ -2712,6 +2716,7 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nSt
 
 MenuFloatingWindow::~MenuFloatingWindow()
 {
+    // free the reference to the accessible component
     SetAccessible( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >() );
 
     if( Application::GetAccessHdlCount() )
@@ -3760,6 +3765,7 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
 
 MenuBarWindow::~MenuBarWindow()
 {
+    // free the reference to the accessible component
     SetAccessible( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >() );
 }
 
@@ -3785,6 +3791,9 @@ void MenuBarWindow::SetMenu( MenuBar* pMen )
 
         // notify listeners, that a new menubar was set
         ImplCallEventListeners( VCLEVENT_WINDOW_MENUBAR, (void*) pMen );
+
+        // free the reference to the accessible component
+        SetAccessible( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >() );
 
         // access bridge must be notified about the addition of the new accessible menu context by an ACCESSIBLE_CHILD_EVENT
         ImplCallEventListeners( VCLEVENT_WINDOW_SHOW, this );
