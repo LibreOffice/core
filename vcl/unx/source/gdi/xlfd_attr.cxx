@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_attr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-13 20:36:59 $
+ *  last change: $Author: svesik $ $Date: 2000-12-19 01:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifndef FREEBSD
 #include <alloca.h>
+#endif
 
 #ifndef XLFD_ATTRIBUTE_HXX
 #include "xlfd_attr.hxx"
