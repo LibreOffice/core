@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-21 11:00:36 $
+ *  last change: $Author: ka $ $Date: 2001-05-21 16:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,9 +355,27 @@ void ImplCheckRect::ImplCreate( MetaAction* pAct, OutputDevice* pOut, BOOL bSpec
         case( META_TEXTARRAY_ACTION ):
         {
             MetaTextArrayAction*    pA = (MetaTextArrayAction*) mpAct;
-            const Point             aPt( pOut->LogicToPixel( pA->GetPoint() ) );
             const XubString         aString( pA->GetText(), pA->GetIndex(), pA->GetLen() );
-            mpRect = new Rectangle( pOut->PixelToLogic( pOut->ImplGetTextBoundRect( aPt.X(), aPt.Y(), aString.GetBuffer(), aString.Len(), pA->GetDXArray() ) ) );
+            const long              nLen = aString.Len();
+
+            if( nLen )
+            {
+                const Point aPtLog( pA->GetPoint() );
+                const Point aPtPix( pOut->LogicToPixel( aPtLog ) );
+                long*       pPixDX = pA->GetDXArray() ? ( new long[ nLen ] ) : NULL;
+
+                if( pPixDX )
+                {
+                    for ( long i = 0; i < ( nLen - 1 ); i++ )
+                    {
+                        const Point aNextPt( aPtLog.X() + pA->GetDXArray()[ i ], 0 );
+                        pPixDX[ i ] = pOut->LogicToPixel( aNextPt ).X() - aPtPix.X();
+                    }
+                }
+
+                mpRect = new Rectangle( pOut->PixelToLogic( pOut->ImplGetTextBoundRect( aPtPix.X(), aPtPix.Y(), aString.GetBuffer(), aString.Len(), pPixDX ) ) );
+                delete[] pPixDX;
+            }
         }
         break;
 
@@ -418,7 +436,7 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
     // separate actions which are special actions or which are affected by special actions
     if( bTransparent )
     {
-        Rectangle       aBoundPixel;
+        Rectangle       aBoundRect;
         const ULONG     nCount = rInMtf.GetActionCount();
         VirtualDevice   aPaintVDev;
         ImplCheckRect*  pRects = new ImplCheckRect[ nCount ];
@@ -495,12 +513,14 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
 
         // calculate bounding rectangle of special actions
         for( pO = pOListFirst; pO; pO = pO->mpNext )
-            aBoundPixel.Union( *pO->mpRect );
+            aBoundRect.Union( *pO->mpRect );
 
-        const Size      aSzPix( aBoundPixel.GetSize() );
-        const Size      aOutSzPix( GetOutputSizePixel() );
-        const double    fBmpArea = (double) aSzPix.Width() * aSzPix.Height();
-        const double    fOutArea = (double) aOutSzPix.Width() * aOutSzPix.Height();
+        const Rectangle aOutputRect( Point(), GetOutputSizePixel() );
+
+        aBoundRect.Intersection( aOutputRect );
+
+        const double    fBmpArea = (double) aBoundRect.GetWidth() * aBoundRect.GetHeight();
+        const double    fOutArea = (double) aOutputRect.GetWidth() * aOutputRect.GetHeight();
 
         // check if output doesn't exceed given size
         if( rPrinterOptions.IsReduceTransparency() &&
@@ -512,14 +532,9 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
         else
         {
             // create new bitmap action first
-            if( aSzPix.Width() && aSzPix.Height() )
+            if( aBoundRect.GetWidth() && aBoundRect.GetHeight() )
             {
-                const Rectangle aOutputRect( Point(), aOutSzPix );
-                const long      nStartX = aBoundPixel.Left();
-                const long      nStartY = aBoundPixel.Top();
-                const long      nLastX = nStartX + aSzPix.Width() - 1L;
-                const long      nLastY = nStartY + aSzPix.Height() - 1L;
-                Point           aDstPtPix( nStartX, nStartY );
+                Point           aDstPtPix( aBoundRect.TopLeft() );
                 Size            aDstSzPix;
                 VirtualDevice   aMapVDev;
 
@@ -531,20 +546,20 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
 
                 aMapVDev.mbOutput = FALSE;
 
-                while( aDstPtPix.Y() <= nLastY )
+                while( aDstPtPix.Y() <= aBoundRect.Bottom() )
                 {
-                    aDstPtPix.X() = nStartX;
+                    aDstPtPix.X() = aBoundRect.Left();
                     aDstSzPix = Size( MAX_TILE_WIDTH, MAX_TILE_HEIGHT );
 
-                    if( ( aDstPtPix.Y() + aDstSzPix.Height() - 1L ) > nLastY )
-                        aDstSzPix.Height() = nLastY - aDstPtPix.Y() + 1L;
+                    if( ( aDstPtPix.Y() + aDstSzPix.Height() - 1L ) > aBoundRect.Bottom() )
+                        aDstSzPix.Height() = aBoundRect.Bottom() - aDstPtPix.Y() + 1L;
 
-                    while( aDstPtPix.X() <= nLastX )
+                    while( aDstPtPix.X() <= aBoundRect.Right() )
                     {
-                        if( ( aDstPtPix.X() + aDstSzPix.Width() - 1L ) > nLastX )
-                            aDstSzPix.Width() = nLastX - aDstPtPix.X() + 1L;
+                        if( ( aDstPtPix.X() + aDstSzPix.Width() - 1L ) > aBoundRect.Right() )
+                            aDstSzPix.Width() = aBoundRect.Right() - aDstPtPix.X() + 1L;
 
-                        if( !Rectangle( aDstPtPix, aDstSzPix ).Intersection( aOutputRect ).IsEmpty() &&
+                        if( !Rectangle( aDstPtPix, aDstSzPix ).Intersection( aBoundRect ).IsEmpty() &&
                             aPaintVDev.SetOutputSizePixel( aDstSzPix ) )
                         {
                             aPaintVDev.Push();
@@ -592,6 +607,10 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
                                                               Point(), aBandBmp.GetSizePixel(),
                                                               aBandBmp, nMaxBmpDPIX, nMaxBmpDPIY );
                             }
+
+#ifdef DEBUG
+                            // aBandBmp.Invert();
+#endif
 
                             rOutMtf.AddAction( new MetaCommentAction( "PRNSPOOL_TRANSPARENTBITMAP_BEGIN" ) );
                             rOutMtf.AddAction( new MetaBmpScaleAction( aDstPtPix, aDstSzPix, aBandBmp ) );
