@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-11 12:23:55 $
+ *  last change: $Author: dvo $ $Date: 2002-06-11 13:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,10 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
+#include <com/sun/star/sdb/CommandType.hpp>
+#endif
+
 #ifndef _RTL_USTRING
 #include <rtl/ustring>
 #endif
@@ -347,6 +351,7 @@ const sal_Char sAPI_url_content[]       = "URLContent";
 const sal_Char sAPI_script_type[]       = "ScriptType";
 const sal_Char sAPI_is_hidden[]         = "IsHidden";
 const sal_Char sAPI_is_condition_true[] = "IsConditionTrue";
+const sal_Char sAPI_data_command_type[]  = "DataCommandType";
 
 const sal_Char sAPI_true[] = "TRUE";
 
@@ -1517,9 +1522,13 @@ XMLDatabaseFieldImportContext::XMLDatabaseFieldImportContext(
         sPropertyDatabaseName(
             RTL_CONSTASCII_USTRINGPARAM(sAPI_data_base_name)),
         sPropertyTableName(RTL_CONSTASCII_USTRINGPARAM(sAPI_data_table_name)),
+        sPropertyDataCommandType(
+            RTL_CONSTASCII_USTRINGPARAM(sAPI_data_command_type)),
         sDatabaseName(),
         sTableName(),
+        nCommandType( sdb::CommandType::TABLE ),
         bDatabaseOK(sal_False),
+        bCommandTypeOK(sal_False),
         bTableOK(sal_False)
 {
 }
@@ -1537,6 +1546,23 @@ void XMLDatabaseFieldImportContext::ProcessAttribute(
             sTableName = sAttrValue;
             bTableOK = sal_True;
             break;
+        case XML_TOK_TEXTFIELD_COMMAND_TYPE:
+            if( IsXMLToken( sAttrValue, XML_TABLE ) )
+            {
+                nCommandType = sdb::CommandType::TABLE;
+                bCommandTypeOK = sal_True;
+            }
+            else if( IsXMLToken( sAttrValue, XML_QUERY ) )
+            {
+                nCommandType = sdb::CommandType::QUERY;
+                bCommandTypeOK = sal_True;
+            }
+            else if( IsXMLToken( sAttrValue, XML_COMMAND ) )
+            {
+                nCommandType = sdb::CommandType::COMMAND;
+                bCommandTypeOK = sal_True;
+            }
+            break;
     }
 }
 
@@ -1550,6 +1576,14 @@ void XMLDatabaseFieldImportContext::PrepareField(
 
     aAny <<= sDatabaseName;
     xPropertySet->setPropertyValue(sPropertyDatabaseName, aAny);
+
+    // #99980# load/save command type for all fields; also load
+    //         old documents without command type
+    if( bCommandTypeOK )
+    {
+        aAny <<= nCommandType;
+        xPropertySet->setPropertyValue( sPropertyDataCommandType, aAny );
+    }
 }
 
 
