@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:55:38 $
+ *  last change: $Author: vg $ $Date: 2001-07-17 20:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,15 +394,15 @@ Menu MN_READONLY_POPUP
                         Text [ french ] = "Comme lien" ;
                         Text [ dutch ] = "Als koppeling" ;
                         Text [ portuguese ] = "Como ligação" ;
-                        Text[ chinese_simplified ] = "Á´½Ó";
+                        Text[ chinese_simplified ] = "µ±×÷Á´½Ó";
                         Text[ language_user1 ] = " ";
                         Text[ russian ] = "Êàê ññûëêó";
                         Text[ polish ] = "Jako ³¹cze";
                         Text[ japanese ] = "Øİ¸‚Æ‚µ‚Ä";
-                        Text[ chinese_traditional ] = "±¶®|";
+                        Text[ chinese_traditional ] = "·í§@±¶®|";
                         Text[ arabic ] = "ßÇÑÊÈÇØ";
                         Text[ dutch ] = "Als koppeling";
-                        Text[ chinese_simplified ] = "Á´½Ó";
+                        Text[ chinese_simplified ] = "µ±×÷Á´½Ó";
                         Text[ greek ] = "Ùò óıíäåóç";
                         Text[ korean ] = "¸µÅ©·Î¼­";
                         Text[ turkish ] = "Bağlantı olarak";
@@ -521,14 +521,14 @@ Menu MN_READONLY_POPUP
                         Text [ french ] = "Comme lien" ;
                         Text [ dutch ] = "Als koppeling" ;
                         Text [ portuguese ] = "Como ligação" ;
-                        Text[ chinese_simplified ] = "Á´½Ó";
+                        Text[ chinese_simplified ] = "µ±×÷Á´½Ó";
                         Text[ russian ] = "Êàê ññûëêó";
                         Text[ polish ] = "Jako ³¹cze";
                         Text[ japanese ] = "Øİ¸‚Æ‚µ‚Ä";
-                        Text[ chinese_traditional ] = "±¶®|";
+                        Text[ chinese_traditional ] = "·í§@±¶®|";
                         Text[ arabic ] = "ßÇÑÊÈÇØ";
                         Text[ dutch ] = "Als koppeling";
-                        Text[ chinese_simplified ] = "Á´½Ó";
+                        Text[ chinese_simplified ] = "µ±×÷Á´½Ó";
                         Text[ greek ] = "Ùò óıíäåóç";
                         Text[ korean ] = "¸µÅ©·Î¼­";
                         Text[ turkish ] = "Bağlantı olarak";
@@ -1101,14 +1101,14 @@ String STR_REDLINE_FMTCOLL
     Text[ dutch ] = "Alinea-opmaakprofiel gedefinieerd";
     Text[ spanish ] = "Aplicado estilo de párrafo";
     Text[ english_us ] = "Applied Paragraph Styles";
-    Text[ chinese_simplified ] = "Éè¶¨¶ÎÂäÑùÊ½";
+    Text[ chinese_simplified ] = "ÒÑ¾­ÁËÉè¶¨¶ÎÂäÑùÊ½";
     Text[ russian ] = "Óñòàíîâëåíû ñòèëè àáçàöåâ";
     Text[ polish ] = "Ustaw styl akapitu";
     Text[ japanese ] = "’i—½À²Ù‚Ìİ’è";
-    Text[ chinese_traditional ] = "³]©w¬q¸¨¼Ë¦¡";
+    Text[ chinese_traditional ] = "¤w?³]©w¤F¬q¸¨¼Ë¦¡";
     Text[ arabic ] = "ÊÚííä äãØ ÇáİŞÑÉ";
     Text[ dutch ] = "Alinea-opmaakprofiel gedefinieerd";
-    Text[ chinese_simplified ] = "Éè¶¨¶ÎÂäÑùÊ½";
+    Text[ chinese_simplified ] = "ÒÑ¾­ÁËÉè¶¨¶ÎÂäÑùÊ½";
     Text[ greek ] = "Êáèïñßóôçêå ğñüôõğï ğáñáãñÜöïõ";
     Text[ korean ] = "´Ü¶ô À¯Çü ¼³Á¤";
     Text[ turkish ] = "Paragraf şablonu belirlendi";
@@ -1201,6 +1201,7 @@ InfoBox MSG_READONLY_CONTENT
     MESSAGE[ catalan ] = "La marca o selección se encuentra en una posición protegida.\nPor ello no se puede aceptar una modificación.";
     MESSAGE[ finnish ] = "Vain luku -sisältöä ei voi muuttaa.\nMuokkauksia ei hyväksytä";
 };
+
 
 
 
