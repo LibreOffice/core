@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-26 10:31:31 $
+ *  last change: $Author: fs $ $Date: 2001-11-02 14:44:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,101 +179,109 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 {
     osl_incrementInterlockedCount( &m_refCount );
 
+    try
     {
-        sal_Int32 nLen = url.indexOf(':');
-        nLen = url.indexOf(':',nLen+1);
-        ::rtl::OUString aDSN(url.copy(nLen+1)),aUID,aPWD;
-
-        String aFileName = aDSN;
-        INetURLObject aURL;
-        aURL.SetSmartProtocol(INET_PROT_FILE);
         {
-            SvtPathOptions aPathOptions;
-            aFileName = aPathOptions.SubstituteVariable(aFileName);
+            sal_Int32 nLen = url.indexOf(':');
+            nLen = url.indexOf(':',nLen+1);
+            ::rtl::OUString aDSN(url.copy(nLen+1)),aUID,aPWD;
+
+            String aFileName = aDSN;
+            INetURLObject aURL;
+            aURL.SetSmartProtocol(INET_PROT_FILE);
+            {
+                SvtPathOptions aPathOptions;
+                aFileName = aPathOptions.SubstituteVariable(aFileName);
+            }
+            aURL.SetSmartURL(aFileName);
+
+            m_aURL = aURL.GetMainURL(INetURLObject::NO_DECODE);
         }
-        aURL.SetSmartURL(aFileName);
 
-        m_aURL = aURL.GetMainURL(INetURLObject::NO_DECODE);
-    }
-
-    ::rtl::OUString aExt;
-    const PropertyValue *pBegin  = info.getConstArray();
-    const PropertyValue *pEnd    = pBegin + info.getLength();
-    for(;pBegin != pEnd;++pBegin)
-    {
-        if(0 == pBegin->Name.compareToAscii("Extension"))
-            pBegin->Value >>= aExt;
-        else if(0 == pBegin->Name.compareToAscii("CharSet"))
+        ::rtl::OUString aExt;
+        const PropertyValue *pBegin  = info.getConstArray();
+        const PropertyValue *pEnd    = pBegin + info.getLength();
+        for(;pBegin != pEnd;++pBegin)
         {
-            ::rtl::OUString sIanaName;
-            pBegin->Value >>= sIanaName;
+            if(0 == pBegin->Name.compareToAscii("Extension"))
+                pBegin->Value >>= aExt;
+            else if(0 == pBegin->Name.compareToAscii("CharSet"))
+            {
+                ::rtl::OUString sIanaName;
+                pBegin->Value >>= sIanaName;
 
-            ::dbtools::OCharsetMap aLookupIanaName;
-            ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.find(sIanaName, ::dbtools::OCharsetMap::IANA());
-            if (aLookup != aLookupIanaName.end())
-                m_nTextEncoding = (*aLookup).getEncoding();
+                ::dbtools::OCharsetMap aLookupIanaName;
+                ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.find(sIanaName, ::dbtools::OCharsetMap::IANA());
+                if (aLookup != aLookupIanaName.end())
+                    m_nTextEncoding = (*aLookup).getEncoding();
+                else
+                    m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
+                if(m_nTextEncoding == RTL_TEXTENCODING_DONTKNOW)
+                    m_nTextEncoding = osl_getThreadTextEncoding();
+
+            }
+            else if (0 == pBegin->Name.compareToAscii("ShowDeleted"))
+            {
+                pBegin->Value >>= m_bShowDeleted;
+            }
+        }
+
+        if(aExt.getLength())
+            m_aFilenameExtension = aExt;
+
+
+        ::ucb::Content aFile;
+        try
+        {
+            aFile = ::ucb::Content(m_aURL,Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+        }
+        catch(ContentCreationException&e)
+        {
+            throwUrlNotValid(m_aURL,e.Message);
+        }
+
+        // set fields to fetch
+        Sequence< OUString > aProps(1);
+        OUString* pProps = aProps.getArray();
+        pProps[ 0 ] = OUString::createFromAscii( "Title" );
+
+        try
+        {
+            if (aFile.isFolder())
+            {
+                m_xDir = aFile.createDynamicCursor(aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
+                m_xContent = aFile.get();
+            }
+            else if (aFile.isDocument())
+            {
+                Reference<XContent> xParent(Reference<XChild>(aFile.get(),UNO_QUERY)->getParent(),UNO_QUERY);
+                Reference<XContentIdentifier> xIdent = xParent->getIdentifier();
+                m_xContent = xParent;
+
+                ::ucb::Content aParent(xIdent->getContentIdentifier(),Reference< XCommandEnvironment >());
+                m_xDir = aParent.createDynamicCursor(aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
+            }
             else
-                m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
-            if(m_nTextEncoding == RTL_TEXTENCODING_DONTKNOW)
-                m_nTextEncoding = osl_getThreadTextEncoding();
-
+            {
+                OSL_ENSURE(0,"OConnection::construct: ::ucb::Content isn't a folde nor a document! How that?!");
+                throw SQLException();
+            }
         }
-        else if (0 == pBegin->Name.compareToAscii("ShowDeleted"))
+        catch(Exception& e) // a execption is thrown when no file exists
         {
-            pBegin->Value >>= m_bShowDeleted;
+            throwUrlNotValid(m_aURL,e.Message);
         }
-    }
+        if(!m_xDir.is() || !m_xContent.is())
+            throwUrlNotValid(m_aURL,::rtl::OUString());
 
-    if(aExt.getLength())
-        m_aFilenameExtension = aExt;
-
-
-    ::ucb::Content aFile;
-    try
-    {
-        aFile = ::ucb::Content(m_aURL,Reference< ::com::sun::star::ucb::XCommandEnvironment >());
-    }
-    catch(ContentCreationException&e)
-    {
-        throwUrlNotValid(m_aURL,e.Message);
-    }
-
-    // set fields to fetch
-    Sequence< OUString > aProps(1);
-    OUString* pProps = aProps.getArray();
-    pProps[ 0 ] = OUString::createFromAscii( "Title" );
-
-    try
-    {
-        if (aFile.isFolder())
-        {
-            m_xDir = aFile.createDynamicCursor(aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
-            m_xContent = aFile.get();
-        }
-        else if (aFile.isDocument())
-        {
-            Reference<XContent> xParent(Reference<XChild>(aFile.get(),UNO_QUERY)->getParent(),UNO_QUERY);
-            Reference<XContentIdentifier> xIdent = xParent->getIdentifier();
-            m_xContent = xParent;
-
-            ::ucb::Content aParent(xIdent->getContentIdentifier(),Reference< XCommandEnvironment >());
-            m_xDir = aParent.createDynamicCursor(aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
-        }
-        else
-        {
-            OSL_ENSURE(0,"OConnection::construct: ::ucb::Content isn't a folde nor a document! How that?!");
+        if (m_aFilenameExtension.Search('*') != STRING_NOTFOUND || m_aFilenameExtension.Search('?') != STRING_NOTFOUND)
             throw SQLException();
-        }
     }
-    catch(Exception& e) // a execption is thrown when no file exists
+    catch( const Exception& )
     {
-        throwUrlNotValid(m_aURL,e.Message);
+        osl_decrementInterlockedCount( &m_refCount );
+        throw;
     }
-    if(!m_xDir.is() || !m_xContent.is())
-        throwUrlNotValid(m_aURL,::rtl::OUString());
-
-    if (m_aFilenameExtension.Search('*') != STRING_NOTFOUND || m_aFilenameExtension.Search('?') != STRING_NOTFOUND)
-        throw SQLException();
 
     osl_decrementInterlockedCount( &m_refCount );
 }
