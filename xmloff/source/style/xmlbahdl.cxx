@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-23 11:51:54 $
+ *  last change: $Author: mib $ $Date: 2000-12-13 09:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,7 +575,12 @@ sal_Bool XMLIsTransparentPropHdl::importXML( const OUString& rStrImpValue, Any& 
 sal_Bool XMLIsTransparentPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bRet = sal_False;
-    sal_Bool bIsTrans = (*(sal_Bool *)rValue.getValue() == bTransPropValue);
+
+    // MIB: This looks a bit strange, because bTransPropValue == bValue should
+    // do the same, but this only applies if 'true' is represented by the same
+    // 8 bit value in bValue and bTransPropValue. Who will ensure this?
+    sal_Bool bValue = *(sal_Bool *)rValue.getValue();
+    sal_Bool bIsTrans = bTransPropValue ? bValue : !bValue;
 
     if( bIsTrans )
     {
