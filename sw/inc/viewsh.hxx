@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-17 12:42:10 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,9 @@ class ViewShell : public Ring
     sal_Bool  bEndActionByVirDev:1; //Paints aus der EndAction immer ueber virtuelles
 
                                 //Device (etwa beim Browsen)
+
+    // OD 2004-06-01 #i26791# - boolean, indicating that class in in constructor
+    bool mbInConstructor:1;
 
     //Initialisierung, wird von den verschiedenen Konstruktoren gerufen.
     void Init( const SwViewOption *pNewOpt );
@@ -499,6 +502,10 @@ public:
                long nFlags = 0 );
     virtual ~ViewShell();
 
+    inline bool IsInConstructor() const
+    {
+        return mbInConstructor;
+    }
 };
 
 //---- class CurrShell verwaltet den globalen ShellPointer -------------------
