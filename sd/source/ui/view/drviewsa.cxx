@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:54:35 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:58:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,7 +681,8 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         }
     }
 
-    mxSubController = static_cast<XWeak*>(new SdUnoDrawView (*pView, *this));
+    mpController = new SdUnoDrawView (GetViewShellBase(), *this, *pView);
+    mxController = static_cast<XWeak*>(mpController);
 
     DestroyPolygons ();
     pXPolygon = new XPolygon;
