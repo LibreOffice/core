@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-07 12:52:02 $
+ *  last change: $Author: bm $ $Date: 2000-12-02 16:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,7 @@ BOOL E3dScene::AreThereTransparentParts() const
 //-/            if ( pFillAttr)
 //-/            {
 //-/            const SfxItemSet& rSet = pFillAttr->GetItemSet();
-            UINT16 nFillTrans = ITEMVALUE(GetItemSet(), XATTR_FILLTRANSPARENCE, XFillTransparenceItem);
+            UINT16 nFillTrans = ITEMVALUE( pObj->GetItemSet(), XATTR_FILLTRANSPARENCE, XFillTransparenceItem);
             if(nFillTrans)
                 bRetval = TRUE;
 //-/            }
@@ -297,7 +297,7 @@ BOOL E3dScene::AreThereTransparentParts() const
             if(!bRetval)
             {
                 // Linienattribut testen
-                UINT16 nLineTransparence = ITEMVALUE( GetItemSet(), XATTR_LINETRANSPARENCE, XLineTransparenceItem );
+                UINT16 nLineTransparence = ITEMVALUE( pObj->GetItemSet(), XATTR_LINETRANSPARENCE, XLineTransparenceItem );
                 if(nLineTransparence)
                     bRetval = TRUE;
             }
