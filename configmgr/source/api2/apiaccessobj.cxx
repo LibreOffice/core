@@ -1,0 +1,319 @@
+/*************************************************************************
+ *
+ *  $RCSfile: apiaccessobj.cxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "apiaccessobj.hxx"
+#include "confsvccomponent.hxx"
+
+namespace configmgr
+{
+//-----------------------------------------------------------------------------
+    namespace configapi
+    {
+//========================================================================
+//= service infos
+//========================================================================
+
+const AsciiServiceName c_aUserContainerServices[] =
+{
+    "com.sun.star.configuration.UserAdministration",
+    "com.sun.star.configuration.ConfigurationContainer",
+    "com.sun.star.configuration.ConfigurationUpdateAccess",
+    "com.sun.star.configuration.ConfigurationAccess",
+    NULL
+};
+const AsciiServiceName c_aContainerServices[] =
+{
+    "com.sun.star.configuration.ConfigurationContainer",
+    "com.sun.star.configuration.ConfigurationUpdateAccess",
+    "com.sun.star.configuration.ConfigurationAccess",
+    NULL
+};
+const AsciiServiceName c_aUpdateServices[] =
+{
+    "com.sun.star.configuration.ConfigurationUpdateAccess",
+    "com.sun.star.configuration.ConfigurationAccess",
+    NULL
+};
+
+const AsciiServiceName c_aAccessServices[] =
+{
+    "com.sun.star.configuration.ConfigurationAccess",
+    NULL
+};
+
+const AsciiServiceName c_aNoServices[] =
+{
+    NULL
+};
+//-----------------------------------------------------------------------------
+
+ServiceInfo const aInnerGroupInfoSI =
+{
+    "com.sun.star.configuration.configmgr.OInnerGroupInfoAccess",
+    c_aNoServices
+};
+ServiceInfo const aInnerGroupUpdateSI =
+{
+    "com.sun.star.configuration.configmgr.OInnerGroupUpdateAccess",
+    c_aNoServices
+};
+ServiceInfo const aInnerSetInfoSI =
+{
+    "com.sun.star.configuration.configmgr.OInnerSetInfoAccess",
+    c_aNoServices
+};
+ServiceInfo const aInnerTreeSetSI =
+{
+    "com.sun.star.configuration.configmgr.OInnerTreeSetUpdateAccess",
+    c_aNoServices
+};
+ServiceInfo const aInnerValueSetSI =
+{
+    "com.sun.star.configuration.configmgr.OInnerValueSetUpdateAccess",
+    c_aNoServices
+};
+//-----------------------------------------------------------------------------
+
+ServiceInfo const aSetElementGroupInfoSI =
+{
+    "com.sun.star.configuration.configmgr.OSetElementGroupInfoAccess",
+    c_aAccessServices
+};
+ServiceInfo const aSetElementGroupUpdateSI =
+{
+    "com.sun.star.configuration.configmgr.OSetElementGroupUpdateAccess",
+    c_aUpdateServices
+};
+ServiceInfo const aSetElementSetInfoSI =
+{
+    "com.sun.star.configuration.configmgr.OSetElementSetInfoAccess",
+    c_aAccessServices
+};
+ServiceInfo const aSetElementTreeSetSI =
+{
+    "com.sun.star.configuration.configmgr.OSetElementTreeSetUpdateAccess",
+    c_aContainerServices
+};
+ServiceInfo const aSetElementValueSetSI =
+{
+    "com.sun.star.configuration.configmgr.OSetElementValueSetUpdateAccess",
+    c_aContainerServices
+};
+//-----------------------------------------------------------------------------
+
+ServiceInfo const aRootElementGroupInfoSI =
+{
+    "com.sun.star.configuration.configmgr.ORootElementGroupInfoAccess",
+    c_aAccessServices
+};
+ServiceInfo const aRootElementGroupUpdateSI =
+{
+    "com.sun.star.configuration.configmgr.ORootElementGroupUpdateAccess",
+    c_aUpdateServices
+};
+ServiceInfo const aRootElementSetInfoSI =
+{
+    "com.sun.star.configuration.configmgr.ORootElementSetInfoAccess",
+    c_aAccessServices
+};
+ServiceInfo const aRootElementTreeSetUpdateSI =
+{
+    "com.sun.star.configuration.configmgr.ORootElementTreeSetUpdateAccess",
+    c_aContainerServices
+};
+ServiceInfo const aRootElementValueSetUpdateSI =
+{
+    "com.sun.star.configuration.configmgr.ORootElementValueSetUpdateAccess",
+    c_aContainerServices
+};
+//-----------------------------------------------------------------------------
+
+ServiceInfo const aRootElementReadAccessSI =
+{
+    "com.sun.star.configuration.configmgr.ORootElementReadAccess",
+    c_aAccessServices
+};
+ServiceInfo const aRootElementUpdateAccessSI =
+{
+    "com.sun.star.configuration.configmgr.ORootElementUpdateAccess",
+    c_aUpdateServices
+};
+ServiceInfo const aRootElementAdminAccessSI =
+{
+    "com.sun.star.configuration.configmgr.ORootElementUserAdminAccess",
+    c_aUserContainerServices
+};
+
+//========================================================================
+//= service info static members
+//========================================================================
+
+//-----------------------------------------------------------------------------
+// Inner Elements
+//-----------------------------------------------------------------------------
+
+template <>
+ServiceInfo const *
+const OInnerElement<NodeGroupInfoAccess>::s_pServiceInfo = &aInnerGroupInfoSI;
+
+template <>
+ServiceInfo const *
+const OInnerElement<NodeGroupAccess>::s_pServiceInfo = &aInnerGroupUpdateSI;
+
+template <>
+ServiceInfo const *
+const OInnerElement<NodeSetInfoAccess>::s_pServiceInfo = &aInnerSetInfoSI;
+
+template <>
+ServiceInfo const *
+const OInnerElement<NodeTreeSetAccess>::s_pServiceInfo = &aInnerTreeSetSI;
+
+template <>
+ServiceInfo const *
+const OInnerElement<NodeValueSetAccess>::s_pServiceInfo = &aInnerValueSetSI;
+
+
+//-----------------------------------------------------------------------------
+// Set Elements
+//-----------------------------------------------------------------------------
+
+template <>
+ServiceInfo const *
+const OSetElement<NodeGroupInfoAccess>::s_pServiceInfo = &aSetElementGroupInfoSI;
+
+template <>
+ServiceInfo const *
+const OSetElement<NodeGroupAccess>::s_pServiceInfo = &aSetElementGroupUpdateSI;
+
+template <>
+ServiceInfo const *
+const OSetElement<NodeSetInfoAccess>::s_pServiceInfo = &aSetElementSetInfoSI;
+
+template <>
+ServiceInfo const *
+const OSetElement<NodeTreeSetAccess>::s_pServiceInfo = &aSetElementTreeSetSI;
+
+template <>
+ServiceInfo const *
+const OSetElement<NodeValueSetAccess>::s_pServiceInfo = &aSetElementValueSetSI;
+
+//-----------------------------------------------------------------------------
+// Root Elements
+//-----------------------------------------------------------------------------
+
+template <>
+ServiceInfo const *
+const OReadRootElement<NodeGroupInfoAccess>::s_pServiceInfo = &aRootElementGroupInfoSI;
+
+template <>
+ServiceInfo const *
+const OUpdateRootElement<NodeGroupAccess>::s_pServiceInfo = &aRootElementGroupUpdateSI;
+
+template <>
+ServiceInfo const *
+const OReadRootElement<NodeSetInfoAccess>::s_pServiceInfo = &aRootElementSetInfoSI;
+
+template <>
+ServiceInfo const *
+const OUpdateRootElement<NodeTreeSetAccess>::s_pServiceInfo = &aRootElementTreeSetUpdateSI;
+
+template <>
+ServiceInfo const *
+const OUpdateRootElement<NodeValueSetAccess>::s_pServiceInfo = &aRootElementValueSetUpdateSI;
+
+
+
+//========================================================================
+//= Instantiations
+//========================================================================
+/*
+//-----------------------------------------------------------------------------
+// Inner Elements
+//-----------------------------------------------------------------------------
+
+template class OInnerElement<NodeGroupInfoAccess>;  // OInnerGroupInfoAccess
+template class OInnerElement<NodeGroupAccess>;      // OInnerGroupUpdateAccess
+template class OInnerElement<NodeSetInfoAccess>;    // OInnerSetInfoAccess
+template class OInnerElement<NodeTreeSetAccess>;    // OInnerTreeSetUpdateAccess
+template class OInnerElement<NodeValueSetAccess>;   // OInnerValueSetUpdateAccess
+
+//-----------------------------------------------------------------------------
+// Set Elements
+//-----------------------------------------------------------------------------
+template class OSetElement<NodeGroupInfoAccess>;    // OSetElementGroupInfoAccess
+template class OSetElement<NodeGroupAccess>;        // OSetElementGroupUpdateAccess
+template class OSetElement<NodeSetInfoAccess>;      // OSetElementSetInfoAccess
+template class OSetElement<NodeTreeSetAccess>;      // OSetElementTreeSetUpdateAccess
+template class OSetElement<NodeValueSetAccess>;     // OSetElementValueSetUpdateAccess
+
+//-----------------------------------------------------------------------------
+// Root Elements
+//-----------------------------------------------------------------------------
+
+template class OReadRootElement<NodeGroupInfoAccess>;   // ORootElementGroupInfoAccess
+template class OUpdateRootElement<NodeGroupAccess>;     // ORootElementGroupUpdateAccess
+template class OReadRootElement<NodeSetInfoAccess>;     // ORootElementSetInfoAccess
+template class OUpdateRootElement<NodeTreeSetAccess>;   // ORootElementTreeSetUpdateAccess
+template class OUpdateRootElement<NodeValueSetAccess>;  // ORootElementValueSetUpdateAccess
+*/
+//-----------------------------------------------------------------------------
+    }
+}
