@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-19 11:59:07 $
+ *  last change: $Author: kz $ $Date: 2001-12-21 21:20:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,7 +577,7 @@ ModalDialog DLG_START_PRESENTATION
         TabStop = TRUE ;
         Text [ dutch ] = "~Navigator zichtbaar" ;
         Text [ english_us ] = "~Navigator visible" ;
-        Text [ italian ] = "~Pulsanti di navigazione visibili" ;
+        Text [ italian ] = "Pulsanti di navigazione visi~bili" ;
         Text [ spanish ] = "Ver ~Navegador" ;
         Text [ french ] = "~Navigateur visible" ;
         Text [ swedish ] = "~Navigator synlig" ;
@@ -693,3 +693,4 @@ ModalDialog DLG_START_PRESENTATION
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Inicia la presentació";
 };
+
