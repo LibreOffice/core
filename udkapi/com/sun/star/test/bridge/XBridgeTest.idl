@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBridgeTest.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:58:29 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ module test
 module bridge
 {
 
-enum TestEnum
+published enum TestEnum
 {
     TEST,
     ONE,
@@ -94,7 +94,7 @@ enum TestEnum
 /**
  * simple types
  */
-struct TestSimple
+published struct TestSimple
 {
     boolean                    Bool;
     char                       Char;
@@ -112,7 +112,7 @@ struct TestSimple
 /**
  * complex types adding string, inteface, any
  */
-struct TestElement : TestSimple
+published struct TestElement : TestSimple
 {
     string                     String;
     com::sun::star::uno::XInterface   Interface;
@@ -121,7 +121,7 @@ struct TestElement : TestSimple
 /**
  * adding even more complexity, sequence< TestElement >
  */
-struct TestDataElements : TestElement
+published struct TestDataElements : TestElement
 {
     sequence< TestElement > Sequence;
 };
@@ -129,9 +129,9 @@ struct TestDataElements : TestElement
 /**
  * typedef used in interface
  */
-typedef TestDataElements TestData;
+published typedef TestDataElements TestData;
 
-interface XRecursiveCall : com::sun::star::uno::XInterface
+published interface XRecursiveCall : com::sun::star::uno::XInterface
 {
     /***
      * @param nToCall If nToCall is 0, the method returns immeadiatly.
@@ -146,7 +146,7 @@ interface XRecursiveCall : com::sun::star::uno::XInterface
  * An implementation of this object has to store given values and return whenever there
  * is an out param or return value.
  */
-interface XBridgeTestBase : com::sun::star::uno::XInterface
+published interface XBridgeTestBase : com::sun::star::uno::XInterface
 {
     /**
      * in parameter test, tests by calls reference also (complex types)
@@ -237,7 +237,7 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
 /**
  * Inherting from monster; adds raiseException(), attribute raising RuntimeException.
  */
-interface XBridgeTest : XBridgeTestBase
+published interface XBridgeTest : XBridgeTestBase
 {
     /**
      * the exception struct returned has to be filled with given arguments.
@@ -267,7 +267,7 @@ interface XBridgeTest : XBridgeTestBase
 
 /** Extended tests with sequences.
  */
-interface XBridgeTest2 : XBridgeTest
+published interface XBridgeTest2 : XBridgeTest
 {
     sequence< boolean > setSequenceBool( [in] sequence< boolean > aSeq);
     sequence< char > setSequenceChar( [in] sequence< char > aSeq);
