@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.76 $
+#   $Revision: 1.77 $
 #
-#   last change: $Author: vg $ $Date: 2002-12-10 17:41:14 $
+#   last change: $Author: vg $ $Date: 2002-12-12 16:22:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ if (defined $ENV{CWS_WORK_STAMP}) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.76 $ ';
+$id_str = ' $Revision: 1.77 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -213,6 +213,8 @@ sub GetParentDeps {
             } elsif (defined $ENV{CWS_WORK_STAMP}) {
                 &checkout_module($Prj, 'image');
             };
+        } elsif (defined $ENV{CWS_WORK_STAMP}) {
+            &check_module_consistency($Prj);
         };
         my @DepsArray;
         if (!($ParentsString = &GetParentsString($StandDir.$Prj))) {
@@ -1204,7 +1206,7 @@ sub ensure_clear_module {
     } else {
         rmtree($StandDir.$$Prj, 1, 1);
     };
-    checkout_module($$Prj);
+    &checkout_module($$Prj);
 };
 
 #
@@ -1217,4 +1219,22 @@ sub clear_module {
     }
     rmtree($StandDir.$Prj.'/'. $ENV{INPATH}, 1, 1);
     return;
+};
+
+#
+# This precedure checks if the module is consistent
+# (criterion: presence of prj/build.lst file)
+#
+sub check_module_consistency {
+    my $Prj = shift;
+    my $prj_buld_lst = $StandDir.$Prj.'/prj/build.lst';
+    if (!-f $prj_buld_lst) {
+        &checkout_module($Prj, 'image');
+        if (!-f $prj_buld_lst) {
+            print "Cannot checkout consistent $Prj\n";
+            # For Ause: Uncomment following line,
+            # remove the upper one
+            #&print_error "Cannot checkout consistent $Prj";
+        };
+    };
 };
