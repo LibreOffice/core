@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgcons.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-26 15:56:47 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,9 +143,9 @@ ULONG ImplColorMapper::ImplCalcMaskShift( ULONG nVal )
 // -----------------
 
 ImageConsumer::ImageConsumer() :
-    mnStatus( 0UL ),
-    mpPal   ( NULL ),
     mpMapper( NULL ),
+    mpPal   ( NULL ),
+    mnStatus( 0UL ),
     mbTrans ( FALSE )
 {
 }
