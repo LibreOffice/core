@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.38 2002-04-08 16:36:07 fs Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.39 2002-05-10 07:55:03 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: fs $ $Date: 2002-04-08 16:36:07 $ $Revision: 1.38 $
+//	$Author: oj $ $Date: 2002-05-10 07:55:03 $ $Revision: 1.39 $
 //
 // Description:
 //
@@ -1794,6 +1794,8 @@ unsigned_value_spec:
 general_value_spec:
 		parameter
 	  | SQL_TOKEN_USER
+	  | SQL_TOKEN_FALSE
+	  | SQL_TOKEN_TRUE
 	;
 set_fct_spec:
 		general_set_fct
@@ -3101,8 +3103,8 @@ IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_COLUMN,	"The column \"#\" is unkno
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_LIKE, "LIKE");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_NOT, "NOT");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_NULL, "NULL");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_TRUE, "sal_True");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_FALSE, "sal_False");
+IMPLEMENT_CONSTASCII_STRING(KEY_STR_TRUE, "True");
+IMPLEMENT_CONSTASCII_STRING(KEY_STR_FALSE, "False");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_IS, "IS");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_BETWEEN, "BETWEEN");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_OR, "OR");
@@ -3781,6 +3783,9 @@ int OSQLParser::SQLlex()
 /*------------------------------------------------------------------------
 
 	$Log: not supported by cvs2svn $
+	Revision 1.34.8.1.2.1  2002/05/10 07:53:46  oj
+	#98357# enable = TRUE
+	
 	Revision 1.1  2000/07/25 10:39:29  oj
 	new revision
 
