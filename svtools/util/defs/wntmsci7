@@ -9506,3 +9506,4 @@ _real@4@3ffdaaaaaaaaaaaaa800
 ?InitImpl@SvtDocumentTemplateDialog@@AAEXXZ
 ?IsFileSelected@SvtDocumentTemplateDialog@@QBEEXZ
 lpfnDrawTextW
+?ImpAdjustFormatCodeDefault@SvNumberFormatter@@AAEJPAUNumberFormatCode@i18n@star@sun@com@@J@Z
