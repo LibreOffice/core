@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuexpand.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:46:16 $
+ *  last change: $Author: dl $ $Date: 2001-02-26 10:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ FuExpandPage::FuExpandPage(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
             while (pPara)
             {
                 ULONG nParaPos = pOutl->GetAbsPos( pPara );
-                USHORT nDepth = pOutl->GetDepth( nParaPos );
+                USHORT nDepth = pOutl->GetDepth( (USHORT) nParaPos );
                 if ( nDepth == 1 )
                 {
                     // Seite mit Titel & Gliederung!
@@ -212,7 +212,7 @@ FuExpandPage::FuExpandPage(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                     pNotesPage->SetMasterPageVisibleLayers(aVisibleLayers, 0);
 
                     // Title-Textobjekt erstellen
-                    SdrTextObj* pTextObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_TITLE);
+                    SdrTextObj* pTextObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_TITLE, FALSE);
                     pTextObj->SetOutlinerParaObject(pOutl->CreateParaObject( nParaPos, 1));
                     pTextObj->SetEmptyPresObj(FALSE);
 
@@ -224,7 +224,7 @@ FuExpandPage::FuExpandPage(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                     if (nChildCount > 0)
                     {
                         // Gliederungs-Textobjekt erstellen
-                        SdrTextObj* pTextObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_OUTLINE);
+                        SdrTextObj* pTextObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_OUTLINE, FALSE);
                         pPara = pOutl->GetParagraph( ++nParaPos );
 
                         pTextObj->SetOutlinerParaObject(pOutl->CreateParaObject( nParaPos, nChildCount) );

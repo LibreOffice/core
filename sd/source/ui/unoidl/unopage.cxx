@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-15 09:52:06 $
+ *  last change: $Author: dl $ $Date: 2001-02-26 10:19:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,7 +369,7 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const uno::Reference< drawing::
     const awt::Size aSize( aRect.GetWidth(), aRect.GetHeight() );
     xShape->setSize( aSize );
 
-    SdrObject *pPresObj = mpPage->CreatePresObj( eObjKind, aRect, sal_True );
+    SdrObject *pPresObj = mpPage->CreatePresObj( eObjKind, FALSE, aRect, sal_True );
 
     if( pPresObj )
         pPresObj->SetUserCall( mpPage );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-28 15:56:04 $
+ *  last change: $Author: dl $ $Date: 2001-02-26 10:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ protected:
     Orientation eOrientation;             // Print-Orientation
     SdPageLink* pPageLink;                // PageLink (nur bei gelinkten Seiten)
 
-    BOOL        InsertPresObj(SdrObject* pObj, PresObjKind eObjKind,
+    BOOL        InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical,
                               Rectangle rRect, BOOL bInit, List& rObjList);
 
     void        AdjustBackgroundSize();
@@ -167,8 +167,9 @@ public:
     virtual FASTBOOL IsReadOnly() const;
 
     List*           GetPresObjList() { return &aPresObjList; }
-    SdrObject*      CreatePresObj(PresObjKind eObjKind, const Rectangle& rRect, BOOL bInsert=FALSE);
+    SdrObject*      CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rectangle& rRect, BOOL bInsert=FALSE);
     SdrObject*      GetPresObj(PresObjKind eObjKind, USHORT nIndex = 1);
+    SdrObject*      GetPresObject(PresObjKind eObjKind, BOOL bVertical, USHORT nIndex = 1);
     PresObjKind     GetPresObjKind(SdrObject* pObj);
     String          GetPresObjText(PresObjKind eObjKind);
     SfxStyleSheet*  GetStyleSheetForPresObj(PresObjKind eObjKind);
