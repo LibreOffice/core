@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 15:14:16 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,7 @@
 #include "docfac.hxx"
 #include "fcontnr.hxx"
 #include "commitlistener.hxx"
+#include "stormodifylistener.hxx"
 #include "openflag.hxx"
 #include "brokenpackageint.hxx"
 #include "graphhelp.hxx"
@@ -378,7 +379,7 @@ struct IMPL_SfxBaseModel_DataContainer
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_aPrintOptions;
     REFERENCE< XSCRIPTPROVIDER >                        m_xScriptProvider;
     REFERENCE< XUICONFIGURATIONMANAGER >                m_xUIConfigurationManager;
-    OChildCommitListen_Impl*                            m_pChildCommitListen;
+    OStorageModifyListen_Impl*                          m_pStorageModifyListen;
     ::rtl::OUString                                 m_aPreusedFilterName;
 
     IMPL_SfxBaseModel_DataContainer::IMPL_SfxBaseModel_DataContainer(   MUTEX&          aMutex          ,
@@ -391,7 +392,7 @@ struct IMPL_SfxBaseModel_DataContainer
             ,   m_aInterfaceContainer   ( aMutex        )
             ,   m_bClosed               ( sal_False     )
             ,   m_bClosing              ( sal_False     )
-            ,   m_pChildCommitListen    ( NULL          )
+            ,   m_pStorageModifyListen  ( NULL          )
     {
         // increase global instance counter.
         ++g_nInstanceCounter;
@@ -827,11 +828,20 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
     }
 
     // disconnect from the listener so that no more messages from substorages come
+#if 0
     if ( m_pData->m_pChildCommitListen )
     {
         m_pData->m_pChildCommitListen->OwnerIsDisposed();
         m_pData->m_pChildCommitListen->release();
         m_pData->m_pChildCommitListen = NULL;
+    }
+#endif
+
+    if ( m_pData->m_pStorageModifyListen )
+    {
+        m_pData->m_pStorageModifyListen->OwnerIsDisposed();
+        m_pData->m_pStorageModifyListen->release();
+        m_pData->m_pStorageModifyListen = NULL;
     }
 
     EVENTOBJECT aEvent( (XMODEL *)this );
@@ -2084,9 +2094,7 @@ void SAL_CALL SfxBaseModel::initNew()
         m_pData->m_pObjectShell->ResetError();
 
         if ( !bRes )
-        {
             throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), nErrCode );
-        }
     }
 }
 
@@ -2785,9 +2793,16 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
         {
             if ( SFX_EVENT_STORAGECHANGED == pNamedHint->GetEventId() )
             {
-                NotifyStorageListeners_Impl();
+                // for now this event is sent only on creation of a new storage for new document,
+                // other events are used to detect storage change
+                // NotifyStorageListeners_Impl();
+                ListenForStorage_Impl( m_pData->m_pObjectShell->GetStorage() );
             }
-            if ( SFX_EVENT_SAVEASDOC == pNamedHint->GetEventId() )
+            else if ( SFX_EVENT_LOADFINISHED == pNamedHint->GetEventId() )
+            {
+                ListenForStorage_Impl( m_pData->m_pObjectShell->GetStorage() );
+            }
+            else if ( SFX_EVENT_SAVEASDOC == pNamedHint->GetEventId() )
             {
                 // Temporary solution for storage problem
                 if ( m_pData->m_xUIConfigurationManager.is() )
@@ -2820,6 +2835,8 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                     Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNOQUERY );
                     xUIConfigStorage->setStorage( xConfigStorage );
                 }
+
+                ListenForStorage_Impl( m_pData->m_pObjectShell->GetStorage() );
             }
             else if ( SFX_EVENT_SAVEASDOCDONE == pNamedHint->GetEventId() )
             {
@@ -2844,6 +2861,8 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                     Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNOQUERY );
                     xUIConfigStorage->setStorage( xConfigStorage );
                 }
+
+                ListenForStorage_Impl( m_pData->m_pObjectShell->GetStorage() );
             }
 
             postEvent_Impl( *pNamedHint );
@@ -3050,7 +3069,8 @@ void SfxBaseModel::impl_store(  const   OUSTRING&                   sURL        
 
     if ( m_pData->m_pObjectShell )
     {
-        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEASDOC, m_pData->m_pObjectShell ) );
+        SFX_APP()->NotifyEvent( SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOC : SFX_EVENT_SAVEASDOC,
+                                                m_pData->m_pObjectShell ) );
 
         SfxAllItemSet *aParams = new SfxAllItemSet( SFX_APP()->GetPool() );
         aParams->Put( SfxStringItem( SID_FILE_NAME, String(sURL) ) );
@@ -3069,7 +3089,8 @@ void SfxBaseModel::impl_store(  const   OUSTRING&                   sURL        
         {
             m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
 
-            SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEASDOCDONE, m_pData->m_pObjectShell ) );
+            if ( !bSaveTo )
+                SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEASDOCDONE, m_pData->m_pObjectShell ) );
         }
         else
             throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), nErrCode );
@@ -3238,13 +3259,29 @@ sal_Int64 SAL_CALL SfxBaseModel::getSomething( const ::com::sun::star::uno::Sequ
 //  XDocumentSubStorageSupplier
 //____________________________________________________________________________________________________
 
+void SfxBaseModel::ListenForStorage_Impl( const uno::Reference< embed::XStorage >& xStorage )
+{
+    uno::Reference< util::XModifiable > xModifiable( xStorage, uno::UNO_QUERY );
+    if ( xModifiable.is() )
+    {
+        if ( m_pData->m_pStorageModifyListen == NULL )
+        {
+            m_pData->m_pStorageModifyListen = new OStorageModifyListen_Impl( *this );
+            m_pData->m_pStorageModifyListen->acquire();
+        }
 
-void SfxBaseModel::ChildIsCommited()
+        // no need to deregister the listening for old storage since it should be disposed automatically
+        xModifiable->addModifyListener( static_cast< util::XModifyListener* >(
+                                                m_pData->m_pStorageModifyListen ) );
+    }
+}
+
+void SfxBaseModel::StorageIsModified_Impl()
 {
     // this call can only be called by listener that listens for commit of substorages of models storage
     // there must be no locking, listener does it
 
-    if ( !impl_isDisposed() && m_pData->m_pObjectShell.Is() )
+    if ( !impl_isDisposed() && m_pData->m_pObjectShell.Is() && !m_pData->m_pObjectShell->IsModified() )
         m_pData->m_pObjectShell->SetModified( sal_True );
 }
 
@@ -3264,6 +3301,7 @@ REFERENCE< XSTORAGE > SAL_CALL SfxBaseModel::getDocumentSubStorage( const ::rtl:
             try
             {
                 xResult = xStorage->openStorageElement( aStorageName, nMode );
+#if 0
                 uno::Reference< embed::XTransactionBroadcaster > xBroadcaster( xResult, UNOQUERY );
                 if ( xBroadcaster.is() )
                 {
@@ -3275,6 +3313,7 @@ REFERENCE< XSTORAGE > SAL_CALL SfxBaseModel::getDocumentSubStorage( const ::rtl:
                     xBroadcaster->addTransactionListener( static_cast< embed::XTransactionListener* >(
                                                                             m_pData->m_pChildCommitListen ) );
                 }
+#endif
             }
             catch ( uno::Exception& )
             {
