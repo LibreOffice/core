@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-18 08:23:45 $
+ *  last change: $Author: os $ $Date: 2002-04-22 12:42:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1517,12 +1517,25 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 eKeyState = KS_KeyToView;
                 switch( rKeyCode.GetModifier() | rKeyCode.GetCode() )
                 {
-                case KEY_TAB:
-                case KEY_TAB | KEY_SHIFT:
-                    bNormalChar = FALSE;
-                    eKeyState = KS_Ende;
-                    rSh.SelectNextPrevHyperlink(
-                                        KEY_SHIFT != rKeyCode.GetModifier() );
+                    case KEY_TAB:
+                    case KEY_TAB | KEY_SHIFT:
+                        bNormalChar = FALSE;
+                        eKeyState = KS_Ende;
+                        rSh.SelectNextPrevHyperlink(
+                                            KEY_SHIFT != rKeyCode.GetModifier() );
+                    break;
+                    case KEY_RETURN:
+                    {
+                        SfxItemSet aSet(rSh.GetAttrPool(), RES_TXTATR_INETFMT, RES_TXTATR_INETFMT);
+                        rSh.GetAttr(aSet);
+                        if(SFX_ITEM_SET == aSet.GetItemState(RES_TXTATR_INETFMT, FALSE))
+                        {
+                            const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, TRUE);
+                            bNormalChar = FALSE;
+                            eKeyState = KS_Ende;
+                            rSh.ClickToINetAttr((const SwFmtINetFmt&)rItem, URLLOAD_NOFILTER);
+                        }
+                    }
                     break;
                 }
             }
