@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kr $ $Date: 2000-11-14 14:07:06 $
+ *  last change: $Author: kr $ $Date: 2000-12-19 10:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ namespace stoc_javavm {
         OModule    _javaLib;
 
     public:
-        int _error;
+        OUString _error;
 
         JavaVirtualMachine_Impl(const Reference<XMultiServiceFactory> & rSMgr) throw();
         ~JavaVirtualMachine_Impl() throw();
@@ -239,35 +239,35 @@ namespace stoc_javavm {
 
         _wait_Condition.set();
 
+        if (_pJVM) {
 #if defined(WNT) || defined(OS2)
-        suspend();
+            suspend();
 
 #else
-        if (_pJVM) {
             _start_Condition.wait();
             _start_Condition.reset();
 
             _pJavaVirtualMachine_Impl->disposeJavaVM();
 
             _wait_Condition.set();
-        }
 #endif
+        }
     }
 
     JavaVM * OCreatorThread::createJavaVM(const JVM & jvm ) throw(RuntimeException) {
         _jvm = jvm;
 
-        create();
-
         if (!_pJVM) {
+            create();
+
             _start_Condition.set();
 
             _wait_Condition.wait();
             _wait_Condition.reset();
-        }
 
-        if(!_pJVM)
-            throw _runtimeException;
+            if(!_pJVM)
+                throw _runtimeException;
+        }
 
         return _pJVM;
     }
@@ -550,7 +550,6 @@ namespace stoc_javavm {
     JavaVirtualMachine_Impl::JavaVirtualMachine_Impl(const Reference<XMultiServiceFactory> & rSMgr) throw()
         : _pVMContext(NULL),
            _xSMgr(rSMgr),
-          _error(0),
           _creatorThread(this),
            _pJava_environment(NULL)
     {
@@ -604,7 +603,10 @@ namespace stoc_javavm {
         Sequence<sal_Int8> localProcessID(16);
         rtl_getGlobalProcessId( (sal_uInt8*) localProcessID.getArray() );
 
-        if (localProcessID == processId && !_pVMContext && !_error) {
+        if (localProcessID == processId && !_pVMContext) {
+            if(_error.getLength()) // do we have an error?
+                throw RuntimeException(_error, Reference<XInterface>());
+
             uno_Environment ** ppEnviroments = NULL;
             sal_Int32 size = 0;
             OUString java(OUString::createFromAscii("java"));
@@ -631,7 +633,15 @@ namespace stoc_javavm {
 
                 if (jvm.isEnabled()) {
                     // create the java vm
-                    pJavaVM = _creatorThread.createJavaVM(jvm);
+                    try {
+                        pJavaVM = _creatorThread.createJavaVM(jvm);
+                    }
+                    catch(RuntimeException & runtimeException) {
+                        // save the error message
+                        _error = runtimeException.Message;
+
+                        throw;
+                    }
 
                     // create a context
                     _pVMContext = new JavaVMContext(pJavaVM);
