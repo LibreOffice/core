@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formula.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-23 14:22:31 $
+ *  last change: $Author: er $ $Date: 2002-09-27 17:19:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1828,17 +1828,20 @@ IMPL_LINK( ScFormulaDlg, StructSelHdl, ScStructPage*, pStruP )
 
     if(pScStructPage==pStruP)
     {
-        ScToken*  pSelToken=pScStructPage->GetSelectedToken();
+        ScToken* pSelToken = pScStructPage->GetSelectedToken();
+        ScToken* pOrigToken = ((pSelToken && pSelToken->GetType() == svFAP) ?
+                pSelToken->GetFAPOrigToken() : pSelToken);
         xub_StrLen nTokPos=1;
 
         if(pScTokA!=NULL)
         {
-            ScToken*  pToken=pScTokA->First();
+            ScToken* pToken = pScTokA->First();
 
             while(pToken!=NULL)
             {
                 String aString;
-                if(pToken==pSelToken) break;
+                if ( pToken == pOrigToken )
+                    break;
                 pComp->CreateStringFromToken( aString,pToken);
                 nTokPos+=aString.Len();
                 pToken=pScTokA->Next();
@@ -1846,10 +1849,10 @@ IMPL_LINK( ScFormulaDlg, StructSelHdl, ScStructPage*, pStruP )
             EditThisFunc(nTokPos);
         }
 
-        if(pSelToken!=NULL)
+        if( pOrigToken )
         {
             String aStr;
-            pComp->CreateStringFromToken( aStr,pSelToken);
+            pComp->CreateStringFromToken( aStr, pOrigToken );
             String aEntryTxt=pScStructPage->GetSelectedEntryText();
 
             if(aEntryTxt!=aStr)

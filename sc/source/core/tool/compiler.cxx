@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: er $ $Date: 2002-09-18 16:22:48 $
+ *  last change: $Author: er $ $Date: 2002-09-27 17:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2355,7 +2355,7 @@ void ScCompiler::Factor()
                 eOp = NextToken();
             // Jumps are just normal functions for the FunctionAutoPilot tree view
             if ( bCompileForFAP && pFacToken->GetType() == svJump )
-                pFacToken = new ScByteToken( pFacToken->GetOpCode(), SepCount );
+                pFacToken = new ScFAPToken( pFacToken->GetOpCode(), SepCount, pFacToken );
             else
                 pFacToken->SetByte( SepCount );
             PutCode( pFacToken );
@@ -3654,6 +3654,7 @@ ScToken* ScCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuffer, ScToke
             break;
         case svByte:
         case svJump:
+        case svFAP:
         case svMissing:
             break;      // Opcodes
         default:

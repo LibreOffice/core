@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2002-09-16 12:41:23 $
+ *  last change: $Author: er $ $Date: 2002-09-27 17:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,6 +334,9 @@ ScToken* ScRawToken::CreateToken() const
         case svExternal :
             return new ScExternalToken( eOp, cByte, String( cStr+1 ) );
         break;
+        case svFAP :
+            return new ScFAPToken( eOp, cByte, NULL );
+        break;
         case svMissing :
             return new ScMissingToken( eOp );
         break;
@@ -484,6 +487,9 @@ ScToken* ScToken::Clone() const
         break;
         case svExternal :
             return new ScExternalToken( *static_cast<const ScExternalToken*>(this) );
+        break;
+        case svFAP :
+            return new ScFAPToken( *static_cast<const ScFAPToken*>(this) );
         break;
         case svMissing :
             return new ScMissingToken( *static_cast<const ScMissingToken*>(this) );
@@ -693,6 +699,12 @@ BYTE* ScToken::GetUnknown() const
     return NULL;
 }
 
+ScToken* ScToken::GetFAPOrigToken() const
+{
+    DBG_ERRORFILE( "ScToken::GetFAPOrigToken: virtual dummy called" );
+    return NULL;
+}
+
 
 // real implementations of virtual functions
 
@@ -701,6 +713,13 @@ void ScByteToken::SetByte( BYTE n )                     { nByte = n; }
 BOOL ScByteToken::operator==( const ScToken& r ) const
 {
     return ScToken::operator==( r ) && nByte == r.GetByte();
+}
+
+
+ScToken* ScFAPToken::GetFAPOrigToken() const            { return pOrigToken; }
+BOOL ScFAPToken::operator==( const ScToken& r ) const
+{
+    return ScToken::operator==( r ) && pOrigToken == r.GetFAPOrigToken();
 }
 
 

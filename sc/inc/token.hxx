@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-10-18 08:56:15 $
+ *  last change: $Author: er $ $Date: 2002-09-27 17:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,8 @@ enum StackVarEnum
     svJump,
     svExternal,                         // Byte + String
 
+    svFAP,                              // FormulaAutoPilot only, ever exported
+
     svMissing = 0x70,                   // 0 or ""
     svErr                               // unknown StackType
 };
@@ -162,6 +164,7 @@ public:
     virtual short*              GetJump() const;
     virtual const String&       GetExternal() const;
     virtual BYTE*               GetUnknown() const;
+    virtual ScToken*            GetFAPOrigToken() const;
 
             ScToken*            Clone() const;
 
@@ -183,10 +186,34 @@ public:
 };
 
 
+class ScTokenRef
+{
+    ScToken* p;
+public:
+    inline ScTokenRef() { p = NULL; }
+    inline ScTokenRef( const ScTokenRef& r ) { if( ( p = r.p ) != NULL ) p->IncRef(); }
+    inline ScTokenRef( ScToken *t )          { if( ( p = t ) != NULL ) t->IncRef(); }
+    inline void Clear()                      { if( p ) p->DecRef(); }
+    inline ~ScTokenRef()                     { if( p ) p->DecRef(); }
+    inline ScTokenRef& operator=( const ScTokenRef& r ) { return *this = r.p; }
+    inline ScTokenRef& operator=( ScToken* t )
+    { if( t ) t->IncRef(); if( p ) p->DecRef(); p = t; return *this; }
+    inline BOOL Is() const                  { return p != NULL; }
+    inline BOOL operator ! () const         { return p == NULL; }
+    inline ScToken* operator&() const       { return p; }
+    inline ScToken* operator->() const      { return p; }
+    inline ScToken& operator*() const       { return *p; }
+    inline operator ScToken*() const        { return p; }
+};
+
+
 class ScByteToken : public ScToken
 {
 private:
             BYTE                nByte;
+protected:
+                                ScByteToken( OpCode e, BYTE n, StackVar v ) :
+                                    ScToken( e, v ), nByte( n ) {}
 public:
                                 ScByteToken( OpCode e, BYTE n ) :
                                     ScToken( e, svByte ), nByte( n ) {}
@@ -199,6 +226,22 @@ public:
     virtual BOOL                operator==( const ScToken& rToken ) const;
 
     DECL_FIXEDMEMPOOL_NEWDEL( ScByteToken );
+};
+
+
+// A special token for the FormulaAutoPilot only. Keeps a reference pointer of
+// the token of which it was created for comparison.
+class ScFAPToken : public ScByteToken
+{
+private:
+            ScTokenRef          pOrigToken;
+public:
+                                ScFAPToken( OpCode e, BYTE n, ScToken* p ) :
+                                    ScByteToken( e, n, svFAP ), pOrigToken( p ) {}
+                                ScFAPToken( const ScFAPToken& r ) :
+                                    ScByteToken( r ), pOrigToken( r.pOrigToken ) {}
+    virtual ScToken*            GetFAPOrigToken() const;
+    virtual BOOL                operator==( const ScToken& rToken ) const;
 };
 
 
@@ -412,27 +455,6 @@ public:
     virtual                     ~ScUnknownToken();
     virtual BYTE*               GetUnknown() const;
     virtual BOOL                operator==( const ScToken& rToken ) const;
-};
-
-
-class ScTokenRef
-{
-    ScToken* p;
-public:
-    inline ScTokenRef() { p = NULL; }
-    inline ScTokenRef( const ScTokenRef& r ) { if( ( p = r.p ) != NULL ) p->IncRef(); }
-    inline ScTokenRef( ScToken *t )          { if( ( p = t ) != NULL ) t->IncRef(); }
-    inline void Clear()                      { if( p ) p->DecRef(); }
-    inline ~ScTokenRef()                     { if( p ) p->DecRef(); }
-    inline ScTokenRef& operator=( const ScTokenRef& r ) { return *this = r.p; }
-    inline ScTokenRef& operator=( ScToken* t )
-    { if( t ) t->IncRef(); if( p ) p->DecRef(); p = t; return *this; }
-    inline BOOL Is() const                  { return p != NULL; }
-    inline BOOL operator ! () const         { return p == NULL; }
-    inline ScToken* operator&() const       { return p; }
-    inline ScToken* operator->() const      { return p; }
-    inline ScToken& operator*() const       { return *p; }
-    inline operator ScToken*() const        { return p; }
 };
 
 
