@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:24:27 $
+ *  last change: $Author: gt $ $Date: 2002-07-25 12:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3261,30 +3261,9 @@ String STR_DDE_CMD
 };
 String STR_INSTEXT
 {
-    TEXT = "Text einf~ügen" ;
-    TEXT [ English ] = "Inser~t text" ;
-    TEXT [ norwegian ] = "Insert text" ;
-    TEXT [ italian ] = "Inserisci testo" ;
-    TEXT [ portuguese_brazilian ] = "Inserir texto" ;
-    TEXT [ portuguese ] = "Inserir ~texto" ;
-    TEXT [ finnish ] = "~Lisää teksti" ;
-    TEXT [ danish ] = "Indsæt tekst" ;
-    TEXT [ french ] = "Insérer un ~texte" ;
-    TEXT [ swedish ] = "Infoga ~text" ;
-    TEXT [ dutch ] = "~Tekst invoegen" ;
-    TEXT [ spanish ] = "I~nsertar texto" ;
-    TEXT [ english_us ] = "Insert t~ext" ;
-    TEXT[ chinese_simplified ] = "²åÈëÎÄ×Ö(~E)";
-    TEXT[ russian ] = "Âñòàâèòü òåêñò";
-    TEXT[ polish ] = "Wstaw tekst";
-    TEXT[ japanese ] = "‘}“ü‚·‚éÃ·½Ä(~E)";
-    TEXT[ chinese_traditional ] = "´¡¤J¤å¦r(~E)";
-    TEXT[ arabic ] = "ÅÏÑÇÌ äÕ";
-    TEXT[ greek ] = "ÅéóáãùãŞ êåéìİíïõ";
-    TEXT[ korean ] = "ÅØ½ºÆ® »ğÀÔ(~E)";
-    TEXT[ turkish ] = "Metin ekle";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "I~nsertar texto";
+    TEXT = "~Versteckter Text" ;
+    TEXT [ english ] = "Hidde~n text" ;
+    TEXT [ english_us ] = "Hidde~n text" ;
 };
 String STR_MACNAME
 {
