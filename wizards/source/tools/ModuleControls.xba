@@ -321,6 +321,9 @@ Dim OverwriteModel as Object
 	If InitResources(&quot;&quot;, &quot;com&quot;) Then
 		QueryString = GetResText(1007)
 		QueryString = ReplaceString(QueryString, ConvertFromUrl(FilePath), &quot;&lt;PATH&gt;&quot;)
+		If Len(QueryString) &gt; 130 Then
+			QueryString = DeleteStr(QueryString, &quot;.&lt;BR&gt;&quot;)
+		End If			
 		QueryString = ReplaceString(QueryString, chr(13), &quot;&lt;BR&gt;&quot;)
 		lblYes = GetResText(1008)
 		lblYesToAll = GetResText(1009)
