@@ -1,6 +1,6 @@
  //--------------------------------------------------------------------------
  //
- // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.16 2001-08-10 20:53:41 kz Exp $
+ // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.17 2001-08-13 20:46:38 kz Exp $
  //
  // (c) Copyright 1997 by Star Division GmbH, Hamburg.
  //
@@ -8,7 +8,7 @@
  //  AWO
  //
  // Letzte Aenderung:
- //  $Author: kz $ $Date: 2001-08-10 20:53:41 $ $Revision: 1.16 $
+ //  $Author: kz $ $Date: 2001-08-13 20:46:38 $ $Revision: 1.17 $
  //
  //--------------------------------------------------------------------------
 #ifndef DBAUI_RELATIONDIALOG_HRC
@@ -430,6 +430,7 @@ ModalDialog DLG_REL_PROPERTIES
     Text[ catalan ] = "Relaciones";
     Text[ finnish ] = "Suhteet";
 };
+
 
 
 
