@@ -2,9 +2,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:16:28 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:50:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,11 +134,14 @@ static Point ImplGetItemTextPos( const Size& rRectSize, const Size& rTextSize,
 {
     long nX;
     long nY;
+    long delta = (rTextSize.Height()/4) + 1;
+    if( delta + rTextSize.Width() > rRectSize.Width() )
+        delta = 0;
 
     if ( nStyle & SIB_LEFT )
-        nX = 0;
+        nX = delta;
     else if ( nStyle & SIB_RIGHT )
-        nX = rRectSize.Width()-rTextSize.Width();
+        nX = rRectSize.Width()-rTextSize.Width()-delta;
     else // SIB_CENTER
         nX = (rRectSize.Width()-rTextSize.Width())/2;
     nY = (rRectSize.Height()-rTextSize.Height())/2 + 1;
