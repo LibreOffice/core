@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-12 13:38:21 $
+ *  last change: $Author: sj $ $Date: 2000-10-19 17:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,11 @@
 #include "impinccv.h" // etwas Testkram
 #endif
 
+#ifdef DBG_EXTRACTOLEOBJECTS
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+#endif
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 #ifndef _SVX_ADJITEM_HXX //autogen
@@ -210,6 +215,36 @@
 
 #ifndef _SVDOOLE2_HXX
 #include <svdoole2.hxx>
+#endif
+#ifndef _SVX_UNOAPI_HXX_
+#include <unoapi.hxx>
+#endif
+#ifndef _TOOLKIT_UNOHLP_HXX
+#include <toolkit/unohlp.hxx>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
+#include <com/sun/star/container/XIndexContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
+#include <com/sun/star/drawing/XShapes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XCONTROLSHAPE_HPP_
+#include <com/sun/star/drawing/XControlShape.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_XFORMCOMPONENT_HPP_
+#include <com/sun/star/form/XFormComponent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESSUPPLIER_HPP_
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XMASTERPAGESSUPPLIER_HPP_
+#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #endif
 
 #ifndef SVX_LIGHT
@@ -1518,6 +1553,101 @@ SdrPowerPointImport::~SdrPowerPointImport()
     delete pPersistPtr;
 }
 
+sal_Bool PPTConvertOCXControls::InsertControl(
+        const com::sun::star::uno::Reference<
+        com::sun::star::form::XFormComponent > &rFComp,
+        const com::sun::star::awt::Size& rSize,
+        com::sun::star::uno::Reference<
+        com::sun::star::drawing::XShape > *pShape,
+        BOOL bFloatingCtrl )
+{
+    sal_Bool bRetValue = FALSE;
+    try
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  xShape;
+
+        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > & rFormComps =
+            GetFormComps();
+
+        ::com::sun::star::uno::Any aTmp( &rFComp, ::getCppuType((const ::com::sun::star::uno::Reference<
+            com::sun::star::form::XFormComponent >*)0) );
+
+        rFormComps->insertByIndex( rFormComps->getCount(), aTmp );
+
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceFactory =
+            GetServiceFactory();
+        if( rServiceFactory.is() )
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xCreate = rServiceFactory
+                ->createInstance(String( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.ControlShape" ) ) );
+            if( xCreate.is() )
+            {
+                xShape = ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >(xCreate, ::com::sun::star::uno::UNO_QUERY);
+                if ( xShape.is() )
+                {
+                    xShape->setSize(rSize);
+//                  GetShapes()->add( xShape );
+                    // Das Control-Model am Control-Shape setzen
+                    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XControlShape >  xControlShape( xShape,
+                        ::com::sun::star::uno::UNO_QUERY );
+                    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >  xControlModel( rFComp,
+                        ::com::sun::star::uno::UNO_QUERY );
+                    if ( xControlShape.is() && xControlModel.is() )
+                    {
+                        xControlShape->setControl( xControlModel );
+                        if (pShape)
+                            *pShape = xShape;
+                        bRetValue = TRUE;
+                    }
+                }
+            }
+        }
+    }
+    catch( ... )
+    {
+        bRetValue = FALSE;
+    }
+    return bRetValue;
+};
+
+const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& PPTConvertOCXControls::GetDrawPage()
+{
+    if( !xDrawPage.is() && pDocSh )
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel( pDocSh->GetModel() );
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPages > xDrawPages;
+        switch( ePageKind )
+        {
+            case PPT_SLIDEPAGE :
+            case PPT_NOTEPAGE :
+            {
+                ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPagesSupplier >
+                        xDrawPagesSupplier( xModel, ::com::sun::star::uno::UNO_QUERY);
+                if ( xDrawPagesSupplier.is() )
+                    xDrawPages = xDrawPagesSupplier->getDrawPages();
+            }
+            break;
+
+            case PPT_MASTERPAGE :
+            {
+                ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XMasterPagesSupplier >
+                        xMasterPagesSupplier( xModel, ::com::sun::star::uno::UNO_QUERY);
+                if ( xMasterPagesSupplier.is() )
+                    xDrawPages = xMasterPagesSupplier->getMasterPages();
+            }
+            break;
+        }
+        if ( xDrawPages.is() && xDrawPages->getCount() )
+        {
+            xDrawPages->getCount();
+            ::com::sun::star::uno::Any aAny( xDrawPages->getByIndex( xDrawPages->getCount() - 1 ) );
+            aAny >>= xDrawPage;
+        }
+    }
+    return xDrawPage;
+}
+
+
 SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, const Rectangle& rBoundRect ) const
 {
     SdrObject* pRet = NULL;
@@ -1570,6 +1700,21 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, co
             aZCodec.Decompress( aSource, *pDest );
             delete pBuf;
 
+#ifdef DBG_EXTRACTOLEOBJECTS
+
+            static sal_Int32 nCount;
+
+            String aFileName( String( RTL_CONSTASCII_STRINGPARAM( "dbgole" ) ) );
+            aFileName.Append( String::CreateFromInt32( nCount++ ) );
+
+            INetURLObject aURL;
+            aURL.SetSmartURL( Application::GetAppFileName() );
+            aURL.SetName( aFileName );
+            SvFileStream aDbgOut( aURL.PathToFileName(), STREAM_TRUNC | STREAM_WRITE );
+            pDest->Seek( STREAM_SEEK_TO_END );
+            aDbgOut.Write( pDest->GetData(), pDest->Tell() );
+            pDest->Seek( STREAM_SEEK_TO_BEGIN );
+#endif
             if ( !aZCodec.EndCompression() )
                 delete pDest;
             else
@@ -1599,10 +1744,16 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, co
                                     pRet = new SdrOle2Obj( xIPObj, String(), rBoundRect,
                                                             /*TRUE*/ FALSE );
                                     // we have the Object, don't create another
-                                    bGetItAsOle = FALSE;
                                 }
                             }
-                            if ( bGetItAsOle )
+                            if ( !pRet && ( pOe->nType == PPT_PST_ExControl ) )
+                            {
+                                PPTConvertOCXControls aPPTConvertOCXControls( pOe->pShell, eAktPageKind );
+                                ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape;
+                                if ( aPPTConvertOCXControls.ReadOCXStream( xObjStor, &xShape, FALSE ) )
+                                    pRet = GetSdrObjectFromXShape( xShape );
+                            }
+                            if ( !pRet )
                             {
                                 GDIMetaFile aMtf;
                                 SvEmbeddedObject::MakeContentStream( xObjStor,
@@ -1811,7 +1962,7 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                             if ( aHd.nRecType == DFF_PST_ExOleObjStg )
                             {
                                 rStCtrl >> nId;
-                                aOleObjectList.Insert( new PPTOleEntry( aAt.nId, aHd.nFilePos, pShell ) );
+                                aOleObjectList.Insert( new PPTOleEntry( aAt.nId, aHd.nFilePos, pShell, nRecType ) );
                             }
                         }
                     }
