@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tbe $ $Date: 2002-04-29 15:14:23 $
+ *  last change: $Author: tbe $ $Date: 2002-05-02 13:38:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #ifndef _SBXCLASS_HXX //autogen
 #include <svtools/sbx.hxx>
 #endif
+#include <helpid.hrc>
 #include <basidesh.hrc>
 #include <bastypes.hxx>
 #include <bastype2.hxx>
@@ -590,6 +591,8 @@ BasicIDETabBar::BasicIDETabBar( Window* pParent ) :
 {
     pCurrentLib = NULL;
     EnableEditMode( TRUE );
+
+    SetHelpId( HID_BASICIDE_TABBAR );
 }
 
 void __EXPORT BasicIDETabBar::MouseButtonDown( const MouseEvent& rMEvt )

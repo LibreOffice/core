@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ab $ $Date: 2002-04-23 07:23:26 $
+ *  last change: $Author: tbe $ $Date: 2002-05-02 13:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <svtools/xtextedt.hxx>
 #include <svtools/txtattr.hxx>
 
+#include <helpid.hrc>
 #include <baside2.hrc>
 #include <baside2.hxx>
 #include <brkdlg.hxx>
@@ -342,6 +343,8 @@ EditorWindow::EditorWindow( Window* pParent ) :
     nCurTextWidth = 0;
     SetBackground( Wallpaper( COL_WHITE ) );
     SetPointer( Pointer( POINTER_TEXT ) );
+
+    SetHelpId( HID_BASICIDE_EDITORWINDOW );
 }
 
 
@@ -1069,6 +1072,8 @@ BreakPointWindow::BreakPointWindow( Window* pParent ) :
     // nCurYOffset merken und nicht von EditEngine holen.
     // Falls in EditEngine autom. gescrollt wurde, wuesste ich sonst nicht,
     // wo ich gerade stehe.
+
+    SetHelpId( HID_BASICIDE_BREAKPOINTWINDOW );
 }
 
 
@@ -1332,6 +1337,8 @@ WatchWindow::WatchWindow( Window* pParent ) :
 
     SetText( String( IDEResId( RID_STR_WATCHNAME ) ) );
 
+    SetHelpId( HID_BASICIDE_WATCHWINDOW );
+
     // make watch window keyboard accessible
     GetSystemWindow()->GetTaskPaneList()->AddWindow( this );
 }
@@ -1480,6 +1487,8 @@ StackWindow::StackWindow( Window* pParent ) :
     aTreeListBox.Show();
 
     SetText( String( IDEResId( RID_STR_STACKNAME ) ) );
+
+    SetHelpId( HID_BASICIDE_STACKWINDOW );
 
     aGotoCallButton.SetClickHdl( LINK( this, StackWindow, ButtonHdl ) );
     aGotoCallButton.SetPosPixel( Point( DWBORDER, 2 ) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:41 $
+ *  last change: $Author: tbe $ $Date: 2002-05-02 13:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,4 +68,8 @@ hidspecial HID_BASICIDE_OBJCAT_PROPS        { HelpID = HID_BASICIDE_OBJCAT_PROPS
 hidspecial HID_BASICIDE_OBJCAT_HELP         { HelpID = HID_BASICIDE_OBJCAT_HELP; };
 hidspecial HID_BASICIDE_MODULWINDOW         { HelpID = HID_BASICIDE_MODULWINDOW; };
 hidspecial HID_BASICIDE_DIALOGWINDOW        { HelpID = HID_BASICIDE_DIALOGWINDOW; };
-
+hidspecial HID_BASICIDE_EDITORWINDOW        { HelpID = HID_BASICIDE_EDITORWINDOW; };
+hidspecial HID_BASICIDE_BREAKPOINTWINDOW    { HelpID = HID_BASICIDE_BREAKPOINTWINDOW; };
+hidspecial HID_BASICIDE_WATCHWINDOW         { HelpID = HID_BASICIDE_WATCHWINDOW; };
+hidspecial HID_BASICIDE_STACKWINDOW         { HelpID = HID_BASICIDE_STACKWINDOW; };
+hidspecial HID_BASICIDE_TABBAR              { HelpID = HID_BASICIDE_TABBAR; };
