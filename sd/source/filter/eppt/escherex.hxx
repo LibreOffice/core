@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-29 15:44:04 $
+ *  last change: $Author: sj $ $Date: 2000-11-30 16:03:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,17 +103,6 @@ struct _Escher_GDIStruct
 
 // ---------------------------------------------------------------------------------------------
 
-struct _EscherPersistEntry
-{
-    UINT32  mnID;
-    UINT32  mnOffset;
-            _EscherPersistEntry( UINT32 nId, UINT32 nOffset ) { mnID = nId; mnOffset = nOffset; };
-
-};
-
-
-// ---------------------------------------------------------------------------------------------
-
 class SvMemoryStream;
 class _EscherBlibEntry
 {
@@ -140,26 +129,6 @@ class _EscherBlibEntry
 
 
         BOOL            operator==( const _EscherBlibEntry& ) const;
-};
-
-// ---------------------------------------------------------------------------------------------
-
-class _EscherPersistTable
-{
-
-    public:
-        List    maPersistTable;
-
-        BOOL    PtIsID( UINT32 nID );
-        void    PtInsert( UINT32 nID, UINT32 nOfs );
-        UINT32  PtDelete( UINT32 nID );
-        UINT32  PtGetOffsetByID( UINT32 nID );
-        UINT32  PtReplace( UINT32 nID, UINT32 nOfs );
-        UINT32  PtReplaceOrInsert( UINT32 nID, UINT32 nOfs );
-        UINT32  PtGetCount() const { return maPersistTable.Count(); };
-
-        _EscherPersistTable();
-        ~_EscherPersistTable();
 };
 
 // ---------------------------------------------------------------------------------------------
@@ -194,7 +163,7 @@ class Color;
 class Graphic;
 class SvMemoryStream;
 class SvStorageStream;
-class _EscherEx : public _EscherPersistTable
+class _EscherEx : public EscherPersistTable
 {
         SvStorageStream*        mpOutStrm;
         _EscherGraphicProvider* mpGraphicProvider;

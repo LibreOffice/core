@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-29 15:43:33 $
+ *  last change: $Author: sj $ $Date: 2000-11-30 16:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,99 +84,6 @@
 #ifndef _RTL_CRC_H_
 #include <rtl/crc.h>
 #endif
-
-// ---------------------------------------------------------------------------------------------
-
-_EscherPersistTable::_EscherPersistTable()
-{
-}
-
-// ---------------------------------------------------------------------------------------------
-
-_EscherPersistTable::~_EscherPersistTable()
-{
-    for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
-        delete (_EscherPersistEntry*)pPtr;
-}
-
-// ---------------------------------------------------------------------------------------------
-
-BOOL _EscherPersistTable::PtIsID( UINT32 nID )
-{
-    for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
-    {
-        if ( ((_EscherPersistEntry*)pPtr)->mnID == nID )
-            return TRUE;
-    }
-    return FALSE;
-}
-
-// ---------------------------------------------------------------------------------------------
-
-void _EscherPersistTable::PtInsert( UINT32 nID, UINT32 nOfs )
-{
-    maPersistTable.Insert( new _EscherPersistEntry( nID, nOfs ) );
-}
-
-// ---------------------------------------------------------------------------------------------
-
-UINT32 _EscherPersistTable::PtDelete( UINT32 nID )
-{
-    for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
-    {
-        if ( ((_EscherPersistEntry*)pPtr)->mnID == nID )
-        {
-            UINT32 nRetValue = ((_EscherPersistEntry*)pPtr)->mnOffset;
-            delete (_EscherPersistEntry*)maPersistTable.Remove();
-        }
-    }
-    return 0;
-}
-
-// ---------------------------------------------------------------------------------------------
-
-UINT32 _EscherPersistTable::PtGetOffsetByID( UINT32 nID )
-{
-    for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
-    {
-        if ( ((_EscherPersistEntry*)pPtr)->mnID == nID )
-            return ((_EscherPersistEntry*)pPtr)->mnOffset;
-    }
-    return 0;
-};
-
-// ---------------------------------------------------------------------------------------------
-
-UINT32 _EscherPersistTable::PtReplace( UINT32 nID, UINT32 nOfs )
-{
-    for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
-    {
-        if ( ((_EscherPersistEntry*)pPtr)->mnID == nID )
-        {
-            UINT32 nRetValue = ((_EscherPersistEntry*)pPtr)->mnOffset;
-            ((_EscherPersistEntry*)pPtr)->mnOffset = nOfs;
-            return nRetValue;
-        }
-    }
-    return 0;
-}
-
-// ---------------------------------------------------------------------------------------------
-
-UINT32 _EscherPersistTable::PtReplaceOrInsert( UINT32 nID, UINT32 nOfs )
-{
-    for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
-    {
-        if ( ((_EscherPersistEntry*)pPtr)->mnID == nID )
-        {
-            UINT32 nRetValue = ((_EscherPersistEntry*)pPtr)->mnOffset;
-            ((_EscherPersistEntry*)pPtr)->mnOffset = nOfs;
-            return nRetValue;
-        }
-    }
-    PtInsert( nID, nOfs );
-    return 0;
-}
 
 // ---------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------
@@ -678,9 +585,9 @@ void _EscherEx::InsertAtCurrentPos( UINT32 nBytes, BOOL bContainer )
     // Persist table anpassen
     for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
     {
-        UINT32 nOfs = ((_EscherPersistEntry*)pPtr)->mnOffset;
+        UINT32 nOfs = ((EscherPersistEntry*)pPtr)->mnOffset;
         if ( nOfs >= nCurPos )
-            ((_EscherPersistEntry*)pPtr)->mnOffset += nBytes;
+            ((EscherPersistEntry*)pPtr)->mnOffset += nBytes;
     }
 
     // container und atom sizes anpassen
