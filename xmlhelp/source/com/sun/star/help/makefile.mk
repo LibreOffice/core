@@ -3,9 +3,9 @@
 #*    $Workfile:$
 #*
 #*    Creation date     KR 28.06.99
-#*    last change       $Author: abi $ $Date: 2000-10-09 12:18:53 $
+#*    last change       $Author: abi $ $Date: 2000-10-16 11:51:47 $
 #*
-#*    $Revision: 1.1 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile:$
 #*
@@ -22,7 +22,7 @@ TARGET  = com_sun_star_help
 
 .INCLUDE : settings.mk
 
-JARFILES 		= sandbox.jar unoil.jar jurt.jar bdb.jar sax.jar xp.jar xt.jar
+JARFILES 		= sandbox.jar unoil.jar jurt.jar juh.jar jut.jar bdb.jar sax.jar xp.jar xt.jar
 EXTRAJARFILES 	=  
 
 CLASSGENDIR		= $(OUT)$/classgen
