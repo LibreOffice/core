@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: rt $ $Date: 2003-05-27 15:43:53 $
+#   last change: $Author: rt $ $Date: 2003-06-13 09:12:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.47 $ ';
+$id_str = ' $Revision: 1.48 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -943,6 +943,7 @@ sub hedabu_if_newer
 sub push_on_ziplist
 {
     my $file = shift;
+    return if ( $opt_check );
     # strip $dest from path since we don't want to record it in zip file
     $dest =~ s#\\#/#g;
     $common_dest =~ s#\\#/#g;
