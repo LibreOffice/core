@@ -2,9 +2,9 @@
 #
 #   $RCSfile: mail.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-30 16:37:58 $
+#   last change: $Author: rt $ $Date: 2004-08-12 15:16:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -142,7 +142,7 @@ sub send_fail_mail
     {
         my $mailinfo = installer::ziplist::getinfofromziplist($allsettingsarrayref, "mailinfo");
 
-        if ( $mailinfo ) { send_mail("ERROR", $listener, $mailinfo, $languagestringref, $errordir); }
+        if ( $$mailinfo ) { send_mail("ERROR", $listener, $mailinfo, $languagestringref, $errordir); }
         else { installer::exiter::exit_program("ERROR: Could not read mailinfo in list file!", "send_fail_mail"); }
     }
 }
@@ -159,7 +159,7 @@ sub send_success_mail
     {
         my $mailinfo = installer::ziplist::getinfofromziplist($allsettingsarrayref, "mailinfo");
 
-        if ( $mailinfo ) { send_mail("SUCCESS", $listener, $mailinfo, $languagestringref, $completeshipinstalldir); }
+        if ( $$mailinfo ) { send_mail("SUCCESS", $listener, $mailinfo, $languagestringref, $completeshipinstalldir); }
         else { installer::exiter::exit_program("ERROR: Could not read mailinfo in list file!", "send_success_mail"); }
 
     }
