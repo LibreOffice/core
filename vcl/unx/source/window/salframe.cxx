@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-05 16:38:31 $
+ *  last change: $Author: cp $ $Date: 2001-03-07 14:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,6 +570,7 @@ inline SalFrameData::SalFrameData( SalFrame *pFrame )
     nScreenSaversTimeout_       = 0;
 
     mpInputContext              = NULL;
+    mbInputFocus                = False;
 
     maResizeTimer.SetTimeoutHdl( LINK( this, SalFrameData, HandleResizeTimer ) );
     maResizeTimer.SetTimeout( 50 );
@@ -1067,6 +1068,10 @@ void SalFrameData::SetSize( const Size &rSize )
 
         aPosSize_.Right()   = aPosSize_.Left() + rSize.Width()  - 1;
         aPosSize_.Bottom()  = aPosSize_.Top()  + rSize.Height() - 1;
+
+        // allow the external status window to reposition
+        if (mbInputFocus && mpInputContext != NULL)
+            mpInputContext->SetICFocus ();
     }
 }
 
@@ -1121,6 +1126,10 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
         aPosSize_ = rPosSize;
         Call ( SALEVENT_RESIZE, NULL );
     }
+
+    // allow the external status window to reposition
+    if (mbInputFocus && mpInputContext != NULL)
+        mpInputContext->SetICFocus ();
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1606,7 +1615,8 @@ void SalFrame::SetInputContext( SalInputContext* pContext )
               maFrameData.mpInputContext->ExtendEventMask(XtWindow(maFrameData.hShell_));
               if (pContext->mnOptions & SAL_INPUTCONTEXT_CHANGELANGUAGE)
                 maFrameData.mpInputContext->SetLanguage(pContext->meLanguage);
-            maFrameData.mpInputContext->SetICFocus();
+            if (maFrameData.mbInputFocus)
+                maFrameData.mpInputContext->SetICFocus();
         }
       }
       return;
@@ -2122,10 +2132,12 @@ long SalFrameData::HandleFocusEvent( XFocusChangeEvent *pEvent )
                 }
             }
 #endif
+            mbInputFocus = True;
             return Call( SALEVENT_GETFOCUS,  0 );
         }
         else
         {
+            mbInputFocus = False;
             return Call( SALEVENT_LOSEFOCUS, 0 );
         }
     }

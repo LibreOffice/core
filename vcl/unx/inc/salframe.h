@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-02 07:51:54 $
+ *  last change: $Author: cp $ $Date: 2001-03-07 14:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,7 @@ class SalFrameData
             SystemChildData maSystemChildData;
 
             SalI18N_InputContext *mpInputContext;
+            Bool            mbInputFocus;
 
             SalGraphics    *GetGraphics();
 
