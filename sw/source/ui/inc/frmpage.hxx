@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:58:34 $
+ *  last change: $Author: os $ $Date: 2001-05-15 10:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@
 #include <prcntfld.hxx>
 #endif
 
-class SvxImportGraphicDialog;
+namespace sfx2{class FileDialogHelper;}
 class SwWrtShell;
 struct FrmMap;
 
@@ -230,7 +230,7 @@ class SwGrfExtPage: public SfxTabPage
     String          aFilterName;
     String          aGrfName, aNewGrfName;
 
-    SvxImportGraphicDialog*     pGrfDlg;
+    ::sfx2::FileDialogHelper*     pGrfDlg;
 
     BOOL            bHtmlMode;
 

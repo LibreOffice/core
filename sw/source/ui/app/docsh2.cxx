@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-08 16:29:35 $
+ *  last change: $Author: os $ $Date: 2001-05-15 09:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,8 +119,8 @@
 #ifndef _SFXNEW_HXX //autogen
 #include <sfx2/new.hxx>
 #endif
-#ifndef _IODLG_HXX
-#include <sfx2/iodlg.hxx>
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
 #endif
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
@@ -229,9 +229,6 @@
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
 #endif
-#ifndef _LTMPDLG_HXX
-#include <ltmpdlg.hxx>
-#endif
 #ifndef _SHELLIO_HXX
 #include <shellio.hxx>
 #endif
@@ -284,7 +281,25 @@
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/XFilterManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
+#include <com/sun/star/ui/XFilePicker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILEPICKERCONTROLACCESS_HPP_
+#include <com/sun/star/ui/XFilePickerControlAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_FILEPICKERELEMENTID_HPP_
+#include <com/sun/star/ui/FilePickerElementID.hpp>
+#endif
 
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
@@ -832,44 +847,73 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 BOOL bNumbering = FALSE;
                 USHORT nRet = USHRT_MAX;
                 SvtPathOptions aPathOpt;
-                SwLoadTemplateDlg* pDlg = new SwLoadTemplateDlg(0);
-                pDlg->SetPath( aPathOpt.GetWorkPath() );
+//                SwLoadTemplateDlg* pDlg = new SwLoadTemplateDlg(0);
+                Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+                Reference < XFilePicker > xFP;
+                if( xMgr.is() )
+                {
+                    Sequence <Any> aProps(1);
+                    DBG_ERROR("appropriate service not yet available!")
+//  should be something like
+//                    aProps.getArray()[0] <<= C2U("FileOpen_TemplateBoxes");
+                    aProps.getArray()[0] <<= C2U("FileOpen");
+                    xFP = Reference< XFilePicker >(
+                            xMgr->createInstanceWithArguments(
+                                C2U( "com.sun.star.ui.FilePicker" ), aProps ),
+                            UNO_QUERY );
+                }
+                xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
 
                 SfxObjectFactory &rFact = GetFactory();
+                Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
                 for( USHORT i = 0; i < rFact.GetFilterCount(); i++ )
                 {
                     const SfxFilter* pFlt = rFact.GetFilter( i );
                     if( pFlt && pFlt->IsAllowedAsTemplate() )
-                        pDlg->AddFilter( pFlt->GetUIName(),
-                                    ((WildCard&)pFlt->GetWildcard())(),
-                                    pFlt->GetTypeName() );
+                    {
+                        const String sWild = ((WildCard&)pFlt->GetWildcard()).GetWildCard();
+                        xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
+                    }
 
                     if( pFlt->GetUserData().EqualsAscii( FILTER_XML ))
-                        pDlg->SetCurFilter( pFlt->GetUIName() );
+                        xFltMgr->setCurrentFilter( pFlt->GetUIName() ) ;
+
                 }
 
-                nRet = pDlg->Execute();
+                nRet = xFP->execute();
                 if( nRet == RET_OK )
                 {
-                    aFileName = pDlg->GetPath();
+                    aFileName = xFP->getPath().getConstArray()[0];
                 }
-                else if( nRet == RET_TEMPLATE )
-                {
-                    SfxNewFileDialog* pNewDlg = pDlg->GetNewFileDlg();
+//                else if( nRet == RET_TEMPLATE )
+//                {
+//                    SfxNewFileDialog* pNewDlg = pDlg->GetNewFileDlg();
 
-                    nRet = pNewDlg->Execute();
-                    if( nRet == RET_OK )
-                        aFileName = pNewDlg->GetTemplateFileName();
-                }
+//                    nRet = pNewDlg->Execute();
+//                    if( nRet == RET_OK )
+//                        aFileName = pNewDlg->GetTemplateFileName();
+//                }
 
                 SwgReaderOption aOpt;
-                aOpt.SetFrmFmts( pDlg->IsFrameStyle() );
-                aOpt.SetTxtFmts( pDlg->IsTextStyle() );
-                aOpt.SetPageDescs( pDlg->IsPageStyle() );
-                aOpt.SetNumRules( pDlg->IsNumbering() );
-                aOpt.SetMerge( !pDlg->IsOverwrite() );
+                try
+                {
+                    Reference<XFilePickerControlAccess> xCtrlAcc(xFP, UNO_QUERY);
+                    Any aVal = xCtrlAcc->getValue( FilePickerElementID::CBX_TEXT);
+                    aOpt.SetTxtFmts( aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True);
+                    aVal = xCtrlAcc->getValue( FilePickerElementID::CBX_FRAME);
+                    aOpt.SetFrmFmts( aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True );
+                    aVal = xCtrlAcc->getValue( FilePickerElementID::CBX_PAGES);
+                    aOpt.SetPageDescs( aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True );
+                    aVal = xCtrlAcc->getValue( FilePickerElementID::CBX_NUMBERING);
+                    aOpt.SetNumRules( aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True );
+                    aVal = xCtrlAcc->getValue( FilePickerElementID::CBX_OVERWRITE);
+                    aOpt.SetMerge( !(aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True) );
+                }
+                catch(Exception& rEx)
+                {
+                    DBG_ERROR("control acces failed")
+                }
 
-                delete pDlg;
                 if( aFileName.Len() )
                     SetError( LoadStylesFromFile( aFileName, aOpt, FALSE ));
             }
@@ -1154,8 +1198,18 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                 const SwTxtFmtColl* pSplitColl = 0;
 
-                SfxFileDialog* pFileDlg =
-                    new SfxFileDialog( 0, WB_SAVEAS|WB_SVLOOK );
+                Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+                Reference < XFilePicker > xFP;
+                if( xMgr.is() )
+                {
+                    Sequence <Any> aProps(1);
+                    aProps.getArray()[0] <<= C2U("FileSave_AutoextTemplateBox");
+                    xFP = Reference< XFilePicker >(
+                            xMgr->createInstanceWithArguments(
+                                C2U( "com.sun.star.ui.FilePicker" ), aProps ),
+                            UNO_QUERY );
+                }
+
                 const SfxFilter* pFlt;
                 USHORT nStrId;
 
@@ -1179,29 +1233,65 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                 if( pFlt )
                 {
-                    pFileDlg->AddFilter( pFlt->GetUIName(),
-                                ((WildCard&)pFlt->GetWildcard())(),
-                                pFlt->GetTypeName() );
-
-                    pFileDlg->SetCurFilter( pFlt->GetUIName() );
+                    Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
+                    const String sWild = ((WildCard&)pFlt->GetWildcard()).GetWildCard();
+                    xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
+                    xFltMgr->setCurrentFilter( pFlt->GetUIName() ) ;
                 }
 
-                SvtPathOptions aPathOpt;
-                Window *pTemplateFT = AddTemplateBtn(pFileDlg);
-                pFileDlg->SetText( SW_RESSTR( nStrId ));
-                pFileDlg->SetPath( aPathOpt.GetWorkPath() );
-
-                if( RET_OK == pFileDlg->Execute() )
+                Reference<XFilePickerControlAccess> xCtrlAcc(xFP, UNO_QUERY);
+                const USHORT nCount = pWrtShell->GetTxtFmtCollCount();
+                Sequence<OUString> aListBoxEntries(nCount);
+                OUString* pEntries = aListBoxEntries.getArray();
+                sal_Int32 nIdx = 0;
+                sal_Int32 nSelect = 0;
+                OUString sStartTemplate;
+                for(USHORT i = 0; i < nCount; ++i)
                 {
-                    aFileName = pFileDlg->GetPath();
-                    sTemplateName = pTemplateFT->GetText();
-                    sTemplateName.Erase(0, String(SW_RESSTR(STR_FDLG_TEMPLATE_NAME)).Len());
+                    SwTxtFmtColl &rTxtColl = pWrtShell->GetTxtFmtColl(i);
+                    if( !rTxtColl.IsDefault() && rTxtColl.IsAtDocNodeSet() )
+                    {
+                        if(!sStartTemplate.getLength())
+                        {
+                            SwTxtFmtColl *pFnd = 0, *pAny = 0;
+                            if( MAXLEVEL >= rTxtColl.GetOutlineLevel() && ( !pFnd ||
+                                pFnd->GetOutlineLevel() > rTxtColl.GetOutlineLevel() ))
+                                    pFnd = &rTxtColl;
+                            else if( !pAny )
+                                pAny = &rTxtColl;
+                            sStartTemplate = pFnd ? pFnd->GetName() : pAny ? pAny->GetName() : OUString();
+                            nSelect = nIdx;
+                        }
+                        pEntries[nIdx++] = rTxtColl.GetName();
+                    }
+                }
+                aListBoxEntries.realloc(nIdx);
+
+                try
+                {
+                    Any aTemplates(&aListBoxEntries, ::getCppuType(&aListBoxEntries));
+                    xCtrlAcc->setValue( FilePickerElementID::CBO_TEMPLATES, aTemplates );
+                    Any aSelectPos(&nSelect, ::getCppuType(&nSelect));
+                    xCtrlAcc->setValue( FilePickerElementID::CBO_TEMPLATES, aSelectPos );
+                    xCtrlAcc->setLabel( FilePickerElementID::CBO_TEMPLATES,
+                                            String(SW_RES( STR_FDLG_TEMPLATE_NAME )));
+                }
+                catch(Exception& rEx)
+                {
+                    DBG_ERROR("control acces failed")
+                }
+
+                xFP->setTitle( SW_RESSTR( nStrId ));
+                SvtPathOptions aPathOpt;
+                xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
+                if( RET_OK == xFP->execute() )
+                {
+                    aFileName = xFP->getPath().getConstArray()[0];
+                    Any aTemplateValue = xCtrlAcc->getValue( FilePickerElementID::CBO_TEMPLATES );
 
                     if (sTemplateName.Len())
                         pSplitColl = pDoc->FindTxtFmtCollByName(sTemplateName);
                 }
-
-                delete pFileDlg;
 
                 if( aFileName.Len() )
                 {
@@ -1532,64 +1622,6 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
         pDoc->ResetModified();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-Window *SwDocShell::AddTemplateBtn(SfxFileDialog* pFileDlg)
-{
-    PushButton *pTemplateBtn = new PushButton( pFileDlg );
-    pTemplateBtn->SetText( SW_RESSTR(STR_FDLG_TEMPLATE_BUTTON) );
-    pTemplateBtn->SetClickHdl(LINK(this, SwDocShell, SelTemplateHdl));
-    pTemplateBtn->SetHelpId(HID_SELECT_TEMPLATE);
-#if (SUPD>503)
-    pFileDlg->AddControl( pTemplateBtn, TRUE );
-#else
-    pFileDlg->AddControl( pTemplateBtn );
-#endif
-    pTemplateBtn->Show();
-
-    FixedText *pTemplateFT = new FixedText( pFileDlg );
-
-    String sName( SW_RES( STR_FDLG_TEMPLATE_NAME ));
-    sName += SwSelTemplateDlg::GetStartTemplate( *pWrtShell );
-    pTemplateFT->SetText(sName);
-
-    pFileDlg->AddControl( pTemplateFT );
-    pTemplateFT->SetSizePixel(Size(pTemplateFT->LogicToPixel(Size(160, 1), MAP_APPFONT).Width(), pTemplateFT->GetSizePixel().Height()));
-    pTemplateFT->Show();
-
-    pTemplateBtn->SetData(pTemplateFT); // Verweis auf den Template-Namen
-
-    // Die hinzugefuegten Controls werden spaeter vom FileDlg geloescht
-    return pTemplateFT;
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-IMPL_LINK( SwDocShell, SelTemplateHdl, PushButton *, pBtn )
-{
-    if (pWrtShell)
-    {
-        FixedText *pFT = (FixedText*)pBtn->GetData();
-        String sFixName(SW_RES(STR_FDLG_TEMPLATE_NAME));
-
-        String sName(pFT->GetText());
-        sName.Erase(0, sFixName.Len());
-
-        SwSelTemplateDlg aDlg( pBtn, pWrtShell, sName);
-
-        if( aDlg.Execute() == RET_OK )
-        {
-            sFixName += sName;
-            pFT->SetText(sFixName);
-        }
-    }
-
-    return 0;
-}
 /* -----------------------------14.12.99 16:52--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1707,57 +1739,6 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
     return nErr;
 }
 
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.16  2001/03/08 21:21:16  jp
-    change: old data transfer API to the new
-
-    Revision 1.15  2001/02/26 07:56:31  mib
-    xml filters for templates and global docs
-
-    Revision 1.14  2001/02/09 13:17:15  mib
-    FillClass corrected
-
-    Revision 1.13  2001/02/06 15:41:26  mib
-    real 6.0 file format
-
-    Revision 1.12  2001/02/05 18:44:42  jp
-    Bug #83467#: LoadStylesFrom - initialise the reader variable
-
-    Revision 1.11  2001/02/01 14:30:13  mib
-    XML files now can be loaded/saved as own format
-
-    Revision 1.10  2001/01/15 18:47:06  jp
-    use TempFile::GetURL instead of ::GetFileName
-
-    Revision 1.9  2000/11/06 09:21:17  jp
-    must changes: tempfile
-
-    Revision 1.8  2000/11/01 10:13:28  jp
-    new method LoadStyleFromFile for docshell and uno
-
-    Revision 1.7  2000/10/31 20:32:32  jp
-    change usage of filestream to medium
-
-    Revision 1.6  2000/10/26 11:23:10  jp
-    Bug #75694#: use replace instead close & open
-
-    Revision 1.5  2000/10/23 18:12:37  jp
-    ToggleBrowserMode without GPF
-
-    Revision 1.4  2000/10/19 13:16:35  jp
-    DocSh:Execute: call DoClose after the new load is call
-
-    Revision 1.3  2000/10/06 13:31:28  jp
-    should changes: don't use IniManager
-
-    Revision 1.2  2000/09/26 13:33:18  jp
-    SFXDISPATHER removed
-
-    Revision 1.1.1.1  2000/09/18 17:14:31  hr
-    initial import
-
-------------------------------------------------------------------------*/
 
 
 

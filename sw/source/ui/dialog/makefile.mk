@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2001-02-20 10:26:04 $
+#   last change: $Author: os $ $Date: 2001-05-15 10:00:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,6 @@ CXXFILES = \
         abstract.cxx \
         ascfldlg.cxx \
         docstdlg.cxx \
-        ltmpdlg.cxx \
         macassgn.cxx \
         regionsw.cxx
 
@@ -95,7 +94,6 @@ SRCFILES =  \
         ascfldlg.src \
         dialog.src \
         docstdlg.src \
-        ltmpdlg.src \
         regionsw.src
 
 SLOFILES =  \
@@ -103,7 +101,6 @@ SLOFILES =  \
         $(SLO)$/addrdlg.obj \
         $(SLO)$/ascfldlg.obj \
         $(SLO)$/docstdlg.obj \
-        $(SLO)$/ltmpdlg.obj \
         $(SLO)$/macassgn.obj \
         $(SLO)$/regionsw.obj
 

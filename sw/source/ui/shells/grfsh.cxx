@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-22 13:46:10 $
+ *  last change: $Author: os $ $Date: 2001-05-15 09:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,9 +106,6 @@
 #ifndef _SVX_SRCHITEM_HXX
 #include <svx/srchitem.hxx>
 #endif
-#ifndef _SVX_IMPGRF_HXX //autogen
-#include <svx/impgrf.hxx>
-#endif
 #ifndef _SVX_HTMLMODE_HXX //autogen
 #include <svx/htmlmode.hxx>
 #endif
@@ -194,13 +191,31 @@
 #ifndef _SWWAIT_HXX
 #include <swwait.hxx>
 #endif
-
+#ifndef _SVX_IMPGRF_HXX
+#include <svx/impgrf.hxx>
+#endif
 #ifndef _SHELLS_HRC
 #include <shells.hrc>
 #endif
 #ifndef _POPUP_HRC
 #include <popup.hrc>
 #endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
+#include <com/sun/star/ui/XFilePicker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILEPICKERCONTROLACCESS_HPP_
+#include <com/sun/star/ui/XFilePickerControlAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_FILEPICKERELEMENTID_HPP_
+#include <com/sun/star/ui/FilePickerElementID.hpp>
+#endif
+
+using namespace ::com::sun::star::ui;
+using namespace ::com::sun::star::uno;
+using namespace ::sfx2;
 
 #define SwGrfShell
 #include "itemdef.hxx"
@@ -737,35 +752,38 @@ BOOL SwTextShell::InsertGraphicDlg()
     SwView &rVw = GetView();
     USHORT nHtmlMode = ::GetHtmlMode(rVw.GetDocShell());
     // im HTML-Mode nur verknuepft einfuegen
-    USHORT nEnable = ENABLE_ALL;
+    FileDialogHelper* pFileDlg = new FileDialogHelper( SFXWB_GRAPHIC );
+    pFileDlg->SetTitle(SW_RESSTR(STR_INSERT_GRAPHIC ));
+    Reference < XFilePicker > xFP = pFileDlg->GetFilePicker();
+    Reference < XFilePickerControlAccess > xCtrlAcc(xFP, UNO_QUERY);
     if(nHtmlMode & HTMLMODE_ON)
     {
-        nEnable &= ~ENABLE_LINK;
-        nEnable |= ENABLE_PROP_WITHOUTLINK;
+        sal_Bool bTrue = sal_True;
+        Any aVal(&bTrue, ::getBooleanCppuType());
+        xCtrlAcc->setValue( FilePickerElementID::CBX_INSERT_AS_LINK, aVal);
+        xCtrlAcc->enableControl( FilePickerElementID::CBX_INSERT_AS_LINK, sal_False);
     }
-    SvxImportGraphicDialog *pDlg =
-        new SvxImportGraphicDialog( rVw.GetWindow(),
-                            SW_RESSTR(STR_INSERT_GRAPHIC ), nEnable );
 
-    pDlg->SetPropertyHdl(LINK(this, SwTextShell, InitGraphicFrame));
-
-    ASSERT( !pInsGrfSetPtr, "who has not delete the GraphicSet pointer?" );
-    pInsGrfSetPtr = 0;
-
-    if( pDlg->Execute() == RET_OK )
+    if( ERRCODE_NONE == pFileDlg->Execute() )
     {
         GetShell().StartAction();
         GetShell().StartUndo(UNDO_INSERT);
-        Graphic* pPreViewGrf = pDlg->GetGraphic();
-
-        BOOL bAsLink =  nHtmlMode & HTMLMODE_ON ? TRUE : pDlg->AsLink();
-        USHORT nError = InsertGraphic( pDlg->GetPath(), pDlg->GetCurFilter(),
-                                bAsLink, &pDlg->GetFilter(), pPreViewGrf );
+        sal_Bool bAsLink;
+        if(nHtmlMode & HTMLMODE_ON)
+            bAsLink = sal_True;
+        else
+        {
+            Any aVal = xCtrlAcc->getValue( FilePickerElementID::CBX_INSERT_AS_LINK);
+            DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found")
+            bAsLink = aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True;
+        }
+        USHORT nError = InsertGraphic( pFileDlg->GetPath(), pFileDlg->GetCurrentFilter(),
+                                bAsLink, ::GetGrfFilter() );
 
         // Format ist ungleich Current Filter, jetzt mit auto. detection
         if( nError == GRFILTER_FORMATERROR )
-            nError = InsertGraphic( pDlg->GetPath(), aEmptyStr, bAsLink,
-                                    &pDlg->GetFilter(), pPreViewGrf );
+            nError = InsertGraphic( pFileDlg->GetPath(), aEmptyStr, bAsLink,
+                                    ::GetGrfFilter() );
 
         RESOURCE_TYPE nResId = 0;
         switch( nError )
@@ -799,17 +817,6 @@ BOOL SwTextShell::InsertGraphicDlg()
         else
         {
             // set the specific graphic attrbutes to the graphic
-            if( pInsGrfSetPtr )
-            {
-                // set the normal graphic attributes
-                SwWrtShell& rSh = GetShell();
-                rSh.SetAttr( *pInsGrfSetPtr );
-                const SfxPoolItem* pItem;
-                if( SFX_ITEM_SET == pInsGrfSetPtr->GetItemState(
-                                        FN_SET_FRM_ALT_NAME, TRUE, &pItem ))
-                    rSh.SetAlternateText(
-                                ((const SfxStringItem*)pItem)->GetValue() );
-            }
             GetShell().EndAction();
             bReturn = TRUE;
             rVw.AutoCaption( GRAPHIC_CAP );
@@ -817,223 +824,11 @@ BOOL SwTextShell::InsertGraphicDlg()
         rVw.GetWrtShell().EndUndo(UNDO_INSERT); // wegen moegl. Shellwechsel
     }
 
-    delete pInsGrfSetPtr, pInsGrfSetPtr = 0;
-
     DELETEZ( pFrmMgr );
-    delete pDlg;
+    delete pFileDlg;
 
     return bReturn;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-IMPL_LINK( SwTextShell, InitGraphicFrame, Button *, pButton )
-{
-//OS: pButton ist eigentlich der Pointer auf den GrafikEinfuegen-Dialog
-    SwWrtShell &rSh = GetShell();
-    SwViewOption    aUsrPref( *rSh.GetViewOptions() );
-    SvxImportGraphicDialog* pGrfDlg = (SvxImportGraphicDialog*) pButton;
-    if (!pFrmMgr)
-        pFrmMgr = new SwFlyFrmAttrMgr( TRUE, &rSh, FRMMGR_TYPE_GRF );
-
-    static USHORT __READONLY_DATA aGrfAttrRange[] =
-    {
-        RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
-        SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
-
-        SID_ATTR_GRAF_KEEP_ZOOM, SID_ATTR_GRAF_KEEP_ZOOM,
-        SID_ATTR_GRAF_FRMSIZE, SID_ATTR_GRAF_FRMSIZE,
-        SID_ATTR_GRAF_FRMSIZE_PERCENT, SID_ATTR_GRAF_FRMSIZE_PERCENT,
-        SID_ATTR_GRAF_GRAPHIC, SID_ATTR_GRAF_GRAPHIC,
-
-        FN_PARAM_GRF_CONNECT,   FN_PARAM_GRF_CONNECT,
-        FN_PARAM_FILTER,        FN_PARAM_FILTER,
-        RES_GRFATR_MIRRORGRF,   RES_GRFATR_CROPGRF,
-        SID_ATTR_PAGE_SIZE,     SID_ATTR_PAGE_SIZE,
-        FN_GET_PRINT_AREA,      FN_GET_PRINT_AREA,
-        FN_SET_FRM_NAME,        FN_SET_FRM_NAME,
-        FN_KEEP_ASPECT_RATIO,   FN_KEEP_ASPECT_RATIO,
-        FN_PARAM_GRF_REALSIZE,  FN_PARAM_GRF_DIALOG,
-        SID_DOCFRAME,           SID_DOCFRAME,
-        SID_HTML_MODE,          SID_HTML_MODE,
-        FN_SET_FRM_ALT_NAME,    FN_SET_FRM_ALT_NAME,
-        0
-    };
-
-    SfxItemSet aSet(GetPool(), aGrfAttrRange );
-
-    const SwRect &rPg = GetShell().GetAnyCurRect(RECT_PAGE);
-    SwFmtFrmSize aFrmSize(ATT_VAR_SIZE, rPg.Width(), rPg.Height());
-    aFrmSize.SetWhich(GetPool().GetWhich(SID_ATTR_PAGE_SIZE));
-    aSet.Put(aFrmSize);
-
-    const SwRect &rPr = GetShell().GetAnyCurRect(RECT_PAGE_PRT);
-    SwFmtFrmSize aPrtSize(ATT_VAR_SIZE, rPr.Width(), rPr.Height());
-    aPrtSize.SetWhich(GetPool().GetWhich(FN_GET_PRINT_AREA));
-    aSet.Put(aPrtSize);
-
-    aSet.Put( pFrmMgr->GetAttrSet() );
-    aSet.SetParent( pFrmMgr->GetAttrSet().GetParent() );
-
-    aSet.Put(SfxFrameItem( SID_DOCFRAME, GetView().GetViewFrame()->GetTopFrame()));
-
-    // niemals connected, sonst darf man den Grafikdialog doppelt aufrufen!
-    aSet.Put(SfxBoolItem(FN_PARAM_GRF_CONNECT, FALSE));
-    aSet.Put(SfxBoolItem(FN_KEEP_ASPECT_RATIO, aUsrPref.IsKeepRatio()));
-
-    aSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
-
-    const Graphic* pGrf = pGrfDlg->GetGraphic();
-    if(pGrf)
-    {
-        Size aSize = ::GetGraphicSizeTwip(*pGrf, &GetView().GetEditWin());
-        aSize.Width() += pFrmMgr->CalcWidthSpace();
-        aSize.Height()+= pFrmMgr->CalcHeightSpace();
-        aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, aSize.Width(), aSize.Height()));
-        aSet.Put(SvxSizeItem( FN_PARAM_GRF_REALSIZE, aSize ));
-        aSet.Put( SvxSizeItem( SID_ATTR_GRAF_FRMSIZE, aSize ));
-
-        String sGrfNm( pGrfDlg->GetPath() );
-        if( sGrfNm.Len() )
-        {
-            aSet.Put( SvxBrushItem( INetURLObject::decode( sGrfNm,
-                                    INET_HEX_ESCAPE,
-                                       INetURLObject::DECODE_UNAMBIGUOUS,
-                                    RTL_TEXTENCODING_UTF8 ),
-                                    aEmptyStr, GPOS_LT,
-                                    SID_ATTR_GRAF_GRAPHIC ));
-        }
-        else
-        {
-            aSet.Put( SvxBrushItem( *pGrf, GPOS_LT, SID_ATTR_GRAF_GRAPHIC ));
-        }
-    }
-
-
-    SwFrmDlg *pDlg = new SwFrmDlg( GetView().GetViewFrame(), pButton,
-                                    aSet, pGrf == 0, DLG_FRM_GRF );
-    if( pDlg->Execute() )
-    {
-        SfxItemSet* pSet = (SfxItemSet*)pDlg->GetOutputItemSet();
-
-        // change the 2 frmsize SizeItems to the correct SwFrmSizeItem
-        const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pSet->GetItemState(
-                        SID_ATTR_GRAF_FRMSIZE, FALSE, &pItem ))
-        {
-            SwFmtFrmSize aSize;
-            const Size& rSz = ((SvxSizeItem*)pItem)->GetSize();
-            aSize.SetWidth( rSz.Width() );
-            aSize.SetHeight( rSz.Height() );
-
-            if( SFX_ITEM_SET == pSet->GetItemState(
-                    SID_ATTR_GRAF_FRMSIZE_PERCENT, FALSE, &pItem ))
-            {
-                const Size& rSz = ((SvxSizeItem*)pItem)->GetSize();
-                aSize.SetWidthPercent( rSz.Width() );
-                aSize.SetHeightPercent( rSz.Height() );
-            }
-            pSet->Put( aSize );
-        }
-
-        pFrmMgr->SetAttrSet( *pSet );
-
-        if( SFX_ITEM_SET == pSet->GetItemState(FN_KEEP_ASPECT_RATIO, TRUE, &pItem))
-        {
-            aUsrPref.SetKeepRatio( ((const SfxBoolItem*)pItem)->GetValue() );
-            SW_MOD()->ApplyUsrPref(aUsrPref, &GetView());
-        }
-
-        if( pInsGrfSetPtr )
-            pInsGrfSetPtr->ClearItem();
-        else
-            pInsGrfSetPtr = new SfxItemSet( rSh.GetAttrPool(),
-                                    RES_GRFATR_MIRRORGRF, RES_GRFATR_CROPGRF,
-                                    FN_SET_FRM_ALT_NAME, FN_SET_FRM_ALT_NAME,
-                                    0 );
-
-        pInsGrfSetPtr->Put( *pSet );
-        if( !pInsGrfSetPtr->Count() )
-            delete pInsGrfSetPtr, pInsGrfSetPtr = 0;
-    }
-
-    delete pDlg;
-
-    return 0;
-}
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.8  2000/12/22 12:07:32  jp
-    Bug #81672#: asynch loaded graphics for status updates
-
-    Revision 1.7  2000/12/02 15:23:54  jp
-    Task #80752#: integrate the grafik filter
-
-    Revision 1.6  2000/11/28 20:36:10  jp
-    task #80795#: ReRead and InsertGrafik with GraphicObject
-
-    Revision 1.5  2000/11/24 18:01:42  jp
-    Task #80752#: control for imagefilter
-
-    Revision 1.4  2000/10/20 13:41:56  jp
-    use correct INetURL-Decode enum
-
-    Revision 1.3  2000/10/06 13:36:37  jp
-    should changes: don't use IniManager
-
-    Revision 1.2  2000/10/05 11:35:18  jp
-    should change: remove image
-
-    Revision 1.1.1.1  2000/09/18 17:14:46  hr
-    initial import
-
-    Revision 1.134  2000/09/18 16:06:04  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.133  2000/09/07 15:59:29  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.132  2000/08/25 14:08:54  jp
-    Graphic Crop-Attribut and TabPage exported to SVX
-
-    Revision 1.131  2000/08/17 11:43:17  jp
-    remove the SW graphicmanager and UI with decoded URLs
-
-    Revision 1.130  2000/08/17 06:34:11  jp
-    Bug #77713#: GetAttrState - Transparency not for animated graphics and metafiles
-
-    Revision 1.129  2000/08/08 13:44:14  os
-    #77423# separate graphic shell
-
-    Revision 1.128  2000/08/02 08:04:26  jp
-    changes for graphic attributes
-
-    Revision 1.127  2000/07/31 19:25:36  jp
-    new attributes for CJK/CTL and graphic
-
-    Revision 1.126  2000/05/26 07:21:32  os
-    old SW Basic API Slots removed
-
-    Revision 1.125  2000/05/10 11:53:02  os
-    Basic API removed
-
-    Revision 1.124  2000/04/18 14:58:24  os
-    UNICODE
-
-    Revision 1.123  2000/02/11 14:57:17  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.122  1999/11/22 14:55:36  os
-    operator precedence
-
-    Revision 1.121  1999/03/18 13:40:50  OS
-    #61169# #61489# Masseinheiten fuer Text u. HTML am Module setzen, nicht an der App
-
-------------------------------------------------------------------------*/
 
 

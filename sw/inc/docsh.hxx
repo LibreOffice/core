@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-12 12:55:02 $
+ *  last change: $Author: os $ $Date: 2001-05-15 09:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@ class   Reader;
 class   SwReader;
 class   SwCrsrShell;
 class   SwSrcView;
-class   SfxFileDialog;
 class   PushButton;
 class   FixedText;
 class   SwPaM;
@@ -142,9 +141,6 @@ class SwDocShell: public SfxObjectShell, public SfxInPlaceObject,
     //
     virtual SfxDocumentInfoDialog* CreateDocumentInfoDialog(
                                     Window *pParent, const SfxItemSet &);
-    // Template-Btn
-    Window*                 AddTemplateBtn(SfxFileDialog* pFileDlg);
-
     // OLE-Geraffel
     virtual void            Draw( OutputDevice*, const JobSetup&, USHORT);
 
@@ -170,7 +166,6 @@ class SwDocShell: public SfxObjectShell, public SfxInPlaceObject,
     void                    RemoveOLEObjects();
 
     DECL_STATIC_LINK( SwDocShell, IsLoadFinished, void* );
-    DECL_LINK( SelTemplateHdl, PushButton * );
 
 public:
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-04-18 09:08:24 $
+ *  last change: $Author: os $ $Date: 2001-05-15 09:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,6 @@
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
 #endif
-#ifndef _IODLG_HXX
-#include <sfx2/iodlg.hxx>
-#endif
 #ifndef _SVX_CHARDLG_HXX //autogen
 #include <svx/chardlg.hxx>
 #endif
@@ -146,8 +143,18 @@
 #ifndef _CHARDLG_HRC
 #include <chardlg.hrc>
 #endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
+#include <com/sun/star/ui/XFilePicker.hpp>
+#endif
 
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ui;
 
+#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 /*--------------------------------------------------------------------
     Beschreibung:   Der Traeger des Dialoges
  --------------------------------------------------------------------*/
@@ -409,16 +416,23 @@ SfxTabPage* SwCharURLPage::Create(  Window* pParent,
 
 IMPL_LINK( SwCharURLPage, InsertFileHdl, PushButton *, pBtn )
 {
-    SfxFileDialog* pFileDlg = new SfxFileDialog(pBtn, WB_OPEN);
-    pFileDlg->DisableSaveLastDirectory();
-    pFileDlg->SetHelpId(HID_FILEDLG_CHARDLG);
-
-    if(RET_OK == pFileDlg->Execute())
+    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+    Reference < XFilePicker > xFP;
+    if( xMgr.is() )
     {
-        aURLED.SetText(URIHelper::SmartRelToAbs(pFileDlg->GetPath()));
+        Sequence <Any> aProps(1);
+        aProps.getArray()[0] <<= C2U("FileOpen");
+        xFP = Reference< XFilePicker >(
+                xMgr->createInstanceWithArguments(
+                    C2U( "com.sun.star.ui.FilePicker" ), aProps ),
+                UNO_QUERY );
     }
-    delete pFileDlg;
-
+    DBG_ERROR("how to set help ids at com.sun.star.ui.FilePicker")
+//    pFileDlg->SetHelpId(HID_FILEDLG_CHARDLG);
+    if( xFP->execute() == RET_OK )
+    {
+        aURLED.SetText(URIHelper::SmartRelToAbs(xFP->getPath().getConstArray()[0]));
+    }
     return 0;
 }
 /*-----------------14.08.96 15.00-------------------
@@ -431,111 +445,5 @@ IMPL_LINK( SwCharURLPage, EventHdl, PushButton *, EMPTYARG )
                     ::GetActiveView()->GetWrtShell(), pINetItem );
     return 0;
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/11/27 10:02:09  jp
-    Task #80425#: remove tabpage two lines if drawobject selected
-
-    Revision 1.3  2000/11/27 08:58:45  jp
-    Task #80425#: new tabpages
-
-    Revision 1.2  2000/10/20 13:46:39  jp
-    use correct INetURL-Decode enum
-
-    Revision 1.1.1.1  2000/09/18 17:14:32  hr
-    initial import
-
-    Revision 1.213  2000/09/18 16:05:13  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.212  2000/08/31 11:37:50  jp
-    add missing include
-
-    Revision 1.211  2000/08/17 13:48:23  jp
-    UI with decode URL
-
-    Revision 1.210  2000/07/26 16:32:19  jp
-    use the new function GetDocPoolNm to get the collectionames
-
-    Revision 1.209  2000/07/03 10:33:17  os
-    #72742# resource warnings corrected
-
-    Revision 1.208  2000/06/26 13:06:44  os
-    INetURLObject::SmartRelToAbs removed
-
-    Revision 1.207  2000/04/19 12:56:33  os
-    include sfx2/filedlg.hxx removed
-
-    Revision 1.206  2000/02/11 14:43:26  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.205  2000/01/24 12:53:41  os
-    #72153# call SfxFileDialog::DisableSaveLastDirectory
-
-    Revision 1.204  1999/02/19 07:48:02  MA
-    #61949# CurrShell gibt es nicht mehr
-
-
-      Rev 1.203   19 Feb 1999 08:48:02   MA
-   #61949# CurrShell gibt es nicht mehr
-
-      Rev 1.202   12 Feb 1999 07:35:36   OS
-   #61800# Keine URL und kein Hintergrund fuer DrawText
-
-      Rev 1.201   02 Sep 1998 14:11:10   OM
-   #45378# HelpIDs fuer Dateidialoge
-
-      Rev 1.200   09 Jul 1998 08:57:10   OS
-   vor dem putten in jedem Fall Listbox-Inhalte auswerten #52425#
-
-      Rev 1.199   29 Jun 1998 09:39:30   OS
-   kein Blinken fuer DrawText#48019#
-
-      Rev 1.198   15 Apr 1998 14:33:06   OS
-   ::FillCharStyleListBox
-
-      Rev 1.197   28 Nov 1997 15:01:48   MA
-   includes
-
-      Rev 1.196   01 Sep 1997 13:25:14   OS
-   DLL-Umstellung
-
-      Rev 1.195   15 Aug 1997 12:12:36   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.194   09 Aug 1997 13:01:46   OS
-   paraitem/frmitems/textitem aufgeteilt
-
-      Rev 1.193   08 Aug 1997 17:29:44   OM
-   Headerfile-Umstellung
-
-      Rev 1.192   18 Jun 1997 17:30:02   OS
-   URL wird jetzt mit SfxFileDialog gesucht #40815#
-
-      Rev 1.191   21 Apr 1997 16:27:00   OS
-   TargetFrame jetzt in ComboBox
-
-      Rev 1.190   08 Apr 1997 09:22:40   MA
-   chg: falsche Definition entfernt
-
-      Rev 1.189   07 Apr 1997 14:15:08   MH
-   chg: header
-
-      Rev 1.188   20 Mar 1997 16:58:20   OS
-   Leerstring: URL zuruecksetzen
-
-      Rev 1.187   10 Mar 1997 17:28:48   OS
-   URL-Edit per GetSavedValue auf Modifikation testen
-
-      Rev 1.186   14 Feb 1997 18:04:06   OM
-   Zahlenformat-Dlg
-
-      Rev 1.185   05 Feb 1997 13:31:32   OS
-   keine Zeichenvorlagen fuer Hyperlinks im HTML
-
-
-------------------------------------------------------------------------*/
 
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: os $ $Date: 2001-03-02 14:06:33 $
+#   last change: $Author: os $ $Date: 2001-05-15 10:03:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,8 +95,7 @@ CXXFILES = \
         outline.cxx \
         pgfnote.cxx \
         redlndlg.cxx \
-        srtdlg.cxx \
-        tmpldlg.cxx
+        srtdlg.cxx
 
 SRCFILES=\
     bookmark.src \
@@ -111,8 +110,7 @@ SRCFILES=\
     outline.src \
     pgfnote.src \
     redlndlg.src \
-    srtdlg.src \
-    tmpldlg.src
+    srtdlg.src
 
 SLOFILES =	\
         $(SLO)$/bookmark.obj \
@@ -130,8 +128,7 @@ SLOFILES =	\
         $(SLO)$/outline.obj \
         $(SLO)$/pgfnote.obj \
         $(SLO)$/redlndlg.obj \
-        $(SLO)$/srtdlg.obj \
-        $(SLO)$/tmpldlg.obj
+        $(SLO)$/srtdlg.obj
 
 EXCEPTIONSFILES = \
         $(SLO)$/glosdoc.obj \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-03-15 10:44:53 $
+ *  last change: $Author: os $ $Date: 2001-05-15 10:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,6 @@
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _IODLG_HXX
-#include <sfx2/iodlg.hxx>
 #endif
 #ifndef _SVX_IMPGRF_HXX //autogen
 #include <svx/impgrf.hxx>
@@ -176,6 +173,30 @@
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
+#include <com/sun/star/ui/XFilePicker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILEPICKERCONTROLACCESS_HPP_
+#include <com/sun/star/ui/XFilePickerControlAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_FILEPICKERELEMENTID_HPP_
+#include <com/sun/star/ui/FilePickerElementID.hpp>
+#endif
+
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ui;
+using namespace ::com::sun::star;
+using namespace ::rtl;
+using namespace ::sfx2;
+
+#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 
 struct FrmMap
 {
@@ -2293,13 +2314,20 @@ int SwGrfExtPage::DeactivatePage(SfxItemSet *pSet)
 IMPL_LINK( SwGrfExtPage, BrowseHdl, Button *, EMPTYARG )
 {
     if(!pGrfDlg)
-        pGrfDlg = new SvxImportGraphicDialog( this,
-                            SW_RESSTR(STR_EDIT_GRF), ENABLE_STANDARD );
-    pGrfDlg->SetPath( aConnectED.GetText(), FALSE, TRUE );
+    {
+        pGrfDlg = new FileDialogHelper( SFXWB_GRAPHIC );
+        pGrfDlg->SetTitle(SW_RESSTR(STR_EDIT_GRF ));
+    }
+    pGrfDlg->SetDisplayDirectory( aConnectED.GetText() );
+    Reference < XFilePicker > xFP = pGrfDlg->GetFilePicker();
+    Reference < XFilePickerControlAccess > xCtrlAcc(xFP, UNO_QUERY);
+    sal_Bool bTrue = sal_True;
+    Any aVal(&bTrue, ::getBooleanCppuType());
+    xCtrlAcc->setValue( FilePickerElementID::CBX_INSERT_AS_LINK, aVal);
 
-    if ( pGrfDlg->Execute() == RET_OK )
+    if ( pGrfDlg->Execute() == ERRCODE_NONE )
     {   // ausgewaehlten Filter merken
-        aFilterName = pGrfDlg->GetCurFilter();
+        aFilterName = pGrfDlg->GetCurrentFilter();
         aNewGrfName = INetURLObject::decode( pGrfDlg->GetPath(),
                                         INET_HEX_ESCAPE,
                                            INetURLObject::DECODE_UNAMBIGUOUS,
@@ -2316,16 +2344,13 @@ IMPL_LINK( SwGrfExtPage, BrowseHdl, Button *, EMPTYARG )
         aRightPagesRB.Enable(FALSE);
         aBmpWin.MirrorHorz(FALSE);
         aBmpWin.MirrorVert(FALSE);
-        BOOL bEnable = FALSE;
-        Graphic* pGrf = pGrfDlg->GetGraphic();
-        if(pGrf)
-        {
-            aBmpWin.SetGraphic(*pGrf);
 
-            if( GRAPHIC_BITMAP      == pGrf->GetType() ||
-                GRAPHIC_GDIMETAFILE == pGrf->GetType())
-                bEnable = TRUE;
-        }
+        Graphic aGraphic;
+        ::LoadGraphic( pGrfDlg->GetPath(), aEmptyStr, aGraphic );
+        aBmpWin.SetGraphic(aGraphic);
+
+        BOOL bEnable = GRAPHIC_BITMAP      == aGraphic.GetType() ||
+                            GRAPHIC_GDIMETAFILE == aGraphic.GetType();
         aMirrorVertBox.Enable(bEnable);
         aMirrorHorzBox.Enable(bEnable);
         aAllPagesRB .Enable(bEnable);
@@ -2560,20 +2585,26 @@ SfxTabPage* SwFrmURLPage::Create(Window *pParent, const SfxItemSet &rSet)
 
 IMPL_LINK( SwFrmURLPage, InsertFileHdl, PushButton *, pBtn )
 {
-    SfxFileDialog* pFileDlg = new SfxFileDialog(pBtn, WB_OPEN);
-    pFileDlg->DisableSaveLastDirectory();
-    pFileDlg->SetHelpId(HID_FILEDLG_CHARDLG);
+    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+    Reference < XFilePicker > xFP;
+    if( xMgr.is() )
+    {
+        Sequence <Any> aProps(1);
+        aProps.getArray()[0] <<= C2U("FileOpen");
+        xFP = Reference< XFilePicker >(
+                xMgr->createInstanceWithArguments(
+                    C2U( "com.sun.star.ui.FilePicker" ), aProps ),
+                UNO_QUERY );
+    }
     String sTemp(aURLED.GetText());
     if(sTemp.Len())
-        pFileDlg->SetPath(sTemp);
-
-    if(RET_OK == pFileDlg->Execute())
+        xFP->setDisplayDirectory(sTemp);
+    if( xFP->execute() == RET_OK )
     {
-        aURLED.SetText( URIHelper::SmartRelToAbs( pFileDlg->GetPath(), FALSE,
+        aURLED.SetText( URIHelper::SmartRelToAbs( xFP->getPath().getConstArray()[0], FALSE,
                                         INetURLObject::WAS_ENCODED,
                                         INetURLObject::DECODE_UNAMBIGUOUS));
     }
-    delete pFileDlg;
 
     return 0;
 }

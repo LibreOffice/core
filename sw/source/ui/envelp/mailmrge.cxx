@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-05-09 08:15:09 $
+ *  last change: $Author: os $ $Date: 2001-05-15 10:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,9 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _COM_SUN_STAR_UI_XFOLDERPICKER_HPP_
+#include <com/sun/star/ui/XFolderPicker.hpp>
+#endif
 
 using namespace rtl;
 using namespace com::sun::star::container;
@@ -147,7 +150,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::frame;
-
+using namespace ::com::sun::star::ui;
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 #define C2U(cChar) OUString::createFromAscii(cChar)
@@ -622,17 +625,23 @@ IMPL_LINK( SwMailMergeDlg, InsertPathHdl, PushButton *, pBtn )
         SvtPathOptions aPathOpt;
         sPath = aPathOpt.GetWorkPath();
     }
-    WinBits nBits = WB_3DLOOK|WB_STDMODAL|WB_OPEN|SFXWB_PATHDIALOG;
 
-    SfxFileDialog* pFileDlg = new SfxFileDialog( this, nBits );
-    pFileDlg->DisableSaveLastDirectory();
-    pFileDlg->SetPath( sPath );
-    pFileDlg->SetHelpId(HID_FILEDLG_MAILMRGE1);
-
-    if (pFileDlg->Execute())
-        aPathED.SetText(pFileDlg->GetPath());
-
-    delete pFileDlg;
+    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+    Reference < XFolderPicker > xFP;
+    if( xMgr.is() )
+    {
+        xFP = Reference< XFolderPicker >(
+                xMgr->createInstance(
+                    C2U( "com.sun.star.ui.FolderPicker" ) ),
+                UNO_QUERY );
+    }
+    DBG_ERROR("how to set help ids at com.sun.star.ui.FolderPicker")
+//    pFileDlg->SetHelpId(HID_FILEDLG_MAILMRGE1);
+    xFP->setDisplayDirectory(sPath);
+    if( xFP->execute() == RET_OK )
+    {
+        aPathED.SetText(xFP->getDisplayDirectory());
+    }
     return 0;
 }
 

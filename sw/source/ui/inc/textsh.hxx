@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 13:01:37 $
+ *  last change: $Author: os $ $Date: 2001-05-15 10:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,6 @@ class SwTextShell: public SwBaseShell
 {
     SwFldMgr*   pPostItFldMgr;
 
-    // Itemset pointer for the Graphic-Insert Dialog. This set contains all
-    // graphic sepcifict attributes and will only be created / deletec by the
-    // methods InsertGraphicDialog and InitGraphicFrame
-    SfxItemSet* pInsGrfSetPtr;
-
     void InsertSymbol( const String& rChars, const String& rFont );
     void InsertHyperlink(const SvxHyperlinkItem& rHlnkItem);
     BOOL InsertGraphicDlg();
@@ -93,8 +88,6 @@ public:
     DECL_LINK( PostItPrevHdl, Button * );
     DECL_LINK( RedlineNextHdl, Button * );
     DECL_LINK( RedlinePrevHdl, Button * );
-
-    DECL_LINK( InitGraphicFrame, Button * );
 
     void    Execute(SfxRequest &);
     void    GetState(SfxItemSet &);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-27 14:38:37 $
+ *  last change: $Author: os $ $Date: 2001-05-15 09:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -930,7 +930,7 @@ void SwTextShell::ExecTransliteration( SfxRequest & rReq )
 
 
 SwTextShell::SwTextShell(SwView &rView) :
-    SwBaseShell(rView), pPostItFldMgr( 0 ), pInsGrfSetPtr( 0 )
+    SwBaseShell(rView), pPostItFldMgr( 0 )
 {
     SetName(String::CreateFromAscii("Text"));
     SetHelpId(SW_TEXTSHELL);
@@ -1028,6 +1028,9 @@ void SwTextShell::InsertSymbol(const String& rChars, const String& rFontName)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/02/27 14:38:37  jp
+    move transliteration menu into SVX
+
     Revision 1.5  2001/01/04 17:22:20  hr
     #65293#: typo
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-02-26 14:06:21 $
+ *  last change: $Author: os $ $Date: 2001-05-15 10:02:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,6 @@
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
-#ifndef _IODLG_HXX
-#include <sfx2/iodlg.hxx>
-#endif
 #ifndef _SVX_BACKGRND_HXX //autogen
 #include <svx/backgrnd.hxx>
 #endif
@@ -144,6 +141,15 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
+#include <com/sun/star/ui/XFilePicker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/XFilterManager.hpp>
 #endif
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
@@ -247,7 +253,10 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ui;
 using namespace ::rtl;
 
 #define C2S(cChar) UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
@@ -288,34 +297,40 @@ String lcl_CreateAutoMarkFileDlg( Window* pParent, const String& rURL,
                                 const String& rFileString, sal_Bool bOpen )
 {
     String sRet;
-    SfxFileDialog* pFileDlg = new SfxFileDialog( pParent,
-                                    bOpen ? WB_OPEN | WB_3DLOOK
-                                           : WB_SAVEAS | WB_3DLOOK );
-    pFileDlg->DisableSaveLastDirectory();
-    pFileDlg->SetHelpId(HID_FILEDLG_SRCVIEW);
+
+    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+    Reference < XFilePicker > xFP;
+    if( xMgr.is() )
     {
-        String sCurFltr( IDX_FILE_EXTENSION );
-        pFileDlg->AddFilter( rFileString, sCurFltr );
-        pFileDlg->SetCurFilter( sCurFltr );
+        Sequence <Any> aProps(1);
+        aProps.getArray()[0] <<= bOpen ? C2U("FileOpen") : C2U("FileSave");
+        xFP = Reference< XFilePicker >(
+                xMgr->createInstanceWithArguments(
+                    C2U( "com.sun.star.ui.FilePicker" ), aProps ),
+                UNO_QUERY );
     }
+
+    Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
+    String sCurFltr( IDX_FILE_EXTENSION );
+    xFltMgr->appendFilter( rFileString, sCurFltr );
+    xFltMgr->setCurrentFilter( sCurFltr ) ;
 
     String& rLastSaveDir = (String&)SFX_APP()->GetLastSaveDirectory();
     String sSaveDir = rLastSaveDir;
 
     if( rURL.Len() )
-        pFileDlg->SetPath( rURL );
+        xFP->setDisplayDirectory( rURL );
     else
     {
         SvtPathOptions aPathOpt;
-        pFileDlg->SetPath( aPathOpt.GetUserConfigPath() );
+        xFP->setDisplayDirectory( aPathOpt.GetUserConfigPath() );
     }
 
-    if( RET_OK == pFileDlg->Execute())
-        sRet = pFileDlg->GetPath();
-
-    delete pFileDlg;
+    if( xFP->execute() == RET_OK )
+    {
+        sRet = xFP->getPath().getConstArray()[0];
+    }
     rLastSaveDir = sSaveDir;
-
     return sRet;
 }
 /* -----------------------------19.01.00 11:09--------------------------------
@@ -1204,7 +1219,7 @@ long  SwIndexTreeLB::GetTabPos( SvLBoxEntry* pEntry, SvLBoxTab* pTab)
     long nData = (long)pEntry->GetUserData();
     if(nData != USHRT_MAX)
     {
-        sal_uInt16  nPos = pHeaderBar->GetItemRect( 101 + nData ).TopLeft().X();
+        long  nPos = pHeaderBar->GetItemRect( 101 + nData ).TopLeft().X();
         nData = nPos;
     }
     else
@@ -2161,7 +2176,7 @@ IMPL_LINK(SwTOXSelectTabPage, AddStylesHdl, PushButton*, pButton)
 
 IMPL_LINK(SwTOXSelectTabPage, MenuEnableHdl, Menu*, pMenu)
 {
-    pMenu->EnableItem(MN_AUTOMARK_EDIT, sAutoMarkURL.Len());
+    pMenu->EnableItem(MN_AUTOMARK_EDIT, sAutoMarkURL.Len() > 0);
     return 0;
 }
 
@@ -2417,7 +2432,7 @@ void    SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
         SvLBoxEntry* pEntry = GetEntry( aPos );
         if( pEntry )
         {
-            sal_uInt16 nLevel = GetModel()->GetAbsPos(pEntry);
+            sal_uInt32 nLevel = GetModel()->GetAbsPos(pEntry);
             String sEntry = pParent->GetLevelHelp(++nLevel);
             if('*' == sEntry)
                 sEntry = GetEntryText(pEntry);
