@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _drvwsh.sdi,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hjs $ $Date: 2003-09-25 10:40:46 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2189,11 +2189,49 @@ interface DrawView
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
     ]
+
+    SID_HEADER_AND_FOOTER // ole : no, status : ?
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetMenuState ;
+    ]
+
+    SID_INSERT_PAGE_NUMBER // ole : no, status : ?
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetMenuState ;
+    ]
+
+    SID_INSERT_DATE_TIME // ole : no, status : ?
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetMenuState ;
+    ]
+
+    SID_MASTER_LAYOUTS_SLIDE
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetMenuState ;
+    ]
+
+    SID_MASTER_LAYOUTS_NOTES
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetMenuState ;
+    ]
+
+    SID_MASTER_LAYOUTS_HANDOUTS
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetMenuState ;
+    ]
+
     SID_OPT_LOCALE_CHANGED // ole : no, status : ?
     [
         ExecMethod = ExecCtrl ;
         StateMethod = GetCtrlState ;
     ]
+
     SID_OPEN_XML_FILTERSETTINGS // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
