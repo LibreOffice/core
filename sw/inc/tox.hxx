@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-05 12:04:44 $
+ *  last change: $Author: os $ $Date: 2001-03-30 11:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,7 @@ struct SwFormToken
 
     SwFormToken(FormTokenType eType ) :
         eTokenType(eType),
-        nTabStopPosition(ULONG_MAX),
+        nTabStopPosition(0),
         nPoolId(USHRT_MAX),
         eTabAlign(0 /*SVX_TAB_ADJUST_LEFT*/),
         cTabFillChar(' '),
