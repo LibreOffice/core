@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-10 09:57:28 $
+ *  last change: $Author: sab $ $Date: 2000-11-10 17:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,202 +66,25 @@
 #include <xmloff/xmlexp.hxx>
 #endif
 
-#ifndef _ZFORLIST_HXX
-#include <svtools/zforlist.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLASTPLP_HXX
-#include <xmloff/xmlaustp.hxx>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETDOCUMENT_HPP_
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEET_HPP_
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UTIL_XMERGEABLE_HPP_
-#include <com/sun/star/util/XMergeable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_XCELLRANGE_HPP_
-#include <com/sun/star/table/XCellRange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_CELLRANGEADDRESS_HPP_
-#include <com/sun/star/table/CellRangeAddress.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_CELLADDRESS_HPP_
-#include <com/sun/star/table/CellAddress.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
-#include <com/sun/star/util/Date.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETFILTERDESCRIPTOR_HPP_
-#include <com/sun/star/sheet/XSheetFilterDescriptor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSUBTOTALDESCRIPTOR_HPP_
-#include <com/sun/star/sheet/XSubTotalDescriptor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XLABELRANGES_HPP_
-#include <com/sun/star/sheet/XLabelRanges.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_GENERALFUNCTION_HPP_
-#include <com/sun/star/sheet/GeneralFunction.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 
-#ifndef SC_SCGLOB_HXX
-#include "global.hxx"
-#endif
-
-#ifndef _XMLSTYLE_HXX
-#include "xmlstyle.hxx"
-#endif
-#ifndef SC_XMLMAPCH_HXX_
-#include "xmlmapch.hxx"
-#endif
 #ifndef _SC_XMLEXPORTITERATOR_HXX
 #include "XMLExportIterator.hxx"
 #endif
-
-class SvXMLExportItemMapper;
-class SfxPoolItem;
-class SfxItemSet;
-class OUStrings_Impl;
-class OUStringsSort_Impl;
-class SvXMLNumFmtExport;
-class ScDocument;
-class ScRange;
-class ScRangeList;
-class ScArea;
-struct ScQueryEntry;
-struct ScQueryParam;
-
-struct ScMyRowFormatRange
-{
-    com::sun::star::table::CellRangeAddress aRangeAddress;
-    sal_Int32   nStartColumn;
-    sal_Int32   nRepeatColumns;
-    sal_Int32   nRepeatRows;
-    sal_Int32   nIndex;
-    sal_Bool    bIsAutoStyle;
-
-    ScMyRowFormatRange();
-};
-
-typedef std::vector<ScMyRowFormatRange> ScMyRowFormatRangesVec;
-
-class ScRowFormatRanges
-{
-    ScMyRowFormatRangesVec      aRowFormatRanges;
-
-public:
-    ScRowFormatRanges();
-    ~ScRowFormatRanges();
-
-    void Clear();
-    void AddRange(const ScMyRowFormatRange& aFormatRange);
-    sal_Bool GetNext(ScMyRowFormatRange& aFormatRange);
-    sal_Int32 GetMaxRows();
-    sal_Int32 GetSize();
-    void Sort();
-};
-
-typedef std::vector<rtl::OUString*>     ScMyOUStringVec;
-
-struct ScMyFormatRange
-{
-    com::sun::star::table::CellRangeAddress aRangeAddress;
-    sal_Int32                               nStyleNameIndex;
-    sal_Bool                                bIsAutoStyle;
-
-    ScMyFormatRange();
-};
-
-typedef std::vector<ScMyFormatRange>            ScMyFormatRangeAddresses;
-typedef std::vector<ScMyFormatRangeAddresses*>  ScMyFormatRangeVectorVec;
-
-class ScFormatRangeStyles
-{
-    ScMyFormatRangeVectorVec    aTables;
-    ScMyOUStringVec             aStyleNames;
-    ScMyOUStringVec             aAutoStyleNames;
-
-public:
-    ScFormatRangeStyles();
-    ~ScFormatRangeStyles();
-
-    void AddNewTable(const sal_Int16 nTable);
-    sal_Int32 AddStyleName(rtl::OUString* pString, const sal_Bool bIsAutoStyle = sal_True);
-    sal_Int32 GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix, sal_Bool& bIsAutoStyle);
-    sal_Int32 GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow, sal_Bool& bIsAutoStyle);
-    void GetFormatRanges(const sal_Int32 nStartColumn, const sal_Int32 nEndColumn, const sal_Int32 nRow,
-                    const sal_Int16 nTable, ScRowFormatRanges& aFormatRanges);
-    void AddRangeStyleName(const com::sun::star::table::CellRangeAddress aCellRangeAddress, const sal_Int32 nStringIndex, const sal_Bool bIsAutoStyle);
-    rtl::OUString* GetStyleName(const sal_Int16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow);
-    rtl::OUString* GetStyleNameByIndex(const sal_Int32 nIndex, const sal_Bool bIsAutoStyle);
-    void Sort();
-};
-
-typedef std::vector<sal_Int32>          ScMysalInt32Vec;
-typedef std::vector<ScMysalInt32Vec>    ScMyVectorVec;
-
-class ScColumnRowStyles
-{
-    ScMyVectorVec               aTables;
-    ScMyOUStringVec             aStyleNames;
-
-public:
-    ScColumnRowStyles();
-    ~ScColumnRowStyles();
-
-    void AddNewTable(const sal_Int16 nTable, const sal_Int32 nFields);
-    sal_Int32 AddStyleName(rtl::OUString* pString);
-    sal_Int32 GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix);
-    sal_Int32 GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nField);
-    void AddFieldStyleName(const sal_Int16 nTable, const sal_Int32 nField, const sal_Int32 nStringIndex);
-    rtl::OUString* GetStyleName(const sal_Int16 nTable, const sal_Int32 nField);
-    rtl::OUString* GetStyleNameByIndex(const sal_Int32 nIndex);
-};
-
-struct ScMyColumnRowGroup
-{
-    sal_Int32   nField;
-    sal_Int16   nLevel;
-    sal_Bool    bDisplay;
-
-    ScMyColumnRowGroup();
-};
-
-typedef std::vector <ScMyColumnRowGroup> ScMyColumnRowGroupVec;
-typedef std::vector <sal_Int32> ScMyFieldGroupVec;
-
-class ScMyOpenCloseColumnRowGroup
-{
-    ScXMLExport&                rExport;
-    rtl::OUString               sName;
-    ScMyColumnRowGroupVec       aTableStart;
-    ScMyFieldGroupVec           aTableEnd;
-    sal_Bool                    bNamespaced;
-
-    void OpenGroup(const ScMyColumnRowGroup* pGroup);
-    void CloseGroup();
-public:
-    ScMyOpenCloseColumnRowGroup(ScXMLExport& rExport, const sal_Char *pName);
-    ~ScMyOpenCloseColumnRowGroup();
-
-    void NewTable();
-    void AddGroup(const ScMyColumnRowGroup& aGroup, const sal_Int32 nEndField);
-    sal_Bool IsGroupStart(const sal_Int32 nField);
-    void OpenGroups(const sal_Int32 nField);
-    sal_Bool IsGroupEnd(const sal_Int32 nField);
-    void CloseGroups(const sal_Int32 nField);
-    sal_Int32 GetLast();
-    void Sort();
-};
+#ifndef _SC_XMLCOLUMNROWGROUPEXPORT_HXX
+#include "XMLColumnRowGroupExport.hxx"
+#endif
+#ifndef _SC_XMLSTYLESEXPORTHELPER_HXX
+#include "XMLStylesExportHelper.hxx"
+#endif
+#ifndef _SC_XMLEXPORTDATAPILOT_HXX
+#include "XMLExportDataPilot.hxx"
+#endif
+#ifndef SC_XMLEXPORTDATABASERANGES_HXX
+#include "XMLExportDatabaseRanges.hxx"
+#endif
 
 class ScOutlineArray;
 
@@ -273,14 +96,6 @@ class ScXMLExport : public SvXMLExport
     com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet> xCurrentTable;
     com::sun::star::uno::Reference <com::sun::star::container::XIndexAccess> xCurrentShapes;
 
-//  ULONG                       nDateKey;
-//  ULONG                       nTimeKey;
-//  ULONG                       nDateTimeKey;
-
-//  SvXMLExportItemMapper       *pParaItemMapper;
-//  SvXMLExportItemMapper       *pTableItemMapper;
-
-//  SvXMLAutoStylePoolP         *pScAutoStylePool;
     UniReference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
     UniReference < XMLPropertySetMapper >       xCellStylesPropertySetMapper;
     UniReference < XMLPropertySetMapper >       xColumnStylesPropertySetMapper;
@@ -312,6 +127,8 @@ class ScXMLExport : public SvXMLExport
     ScMyValidationsContainer    aValidationsContainer;
     ScMyDetectiveObjContainer   aDetectiveObjContainer;
     ScMyNotEmptyCellsIterator*  pCellsItr;
+    ScXMLExportDataPilot        aExportDataPilot;
+    ScXMLExportDatabaseRanges   aExportDatabaseRanges;
 
     virtual void _ExportStyles( sal_Bool bUsed );
     virtual void _ExportAutoStyles();
@@ -320,12 +137,12 @@ class ScXMLExport : public SvXMLExport
 
     void CollectInternalShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
 
-    void SetLastColumn(const sal_Int32 nTable, const sal_Int32 nCol);// { if(nCol > nLastColumns[nTable]) nLastColumns[nTable] = nCol; }
-    void SetLastRow(const sal_Int32 nTable, const sal_Int32 nRow);// { if(nRow > nLastRows[nTable]) nLastRows[nTable] = nRow; }
+    void SetLastColumn(const sal_Int32 nTable, const sal_Int32 nCol);
+    void SetLastRow(const sal_Int32 nTable, const sal_Int32 nRow);
 
     com::sun::star::table::CellRangeAddress GetEndAddress(com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet>& xTable,
                                                         const sal_Int16 nTable);
-    ScMyEmptyDatabaseRangesContainer GetEmptyDatabaseRanges();
+//  ScMyEmptyDatabaseRangesContainer GetEmptyDatabaseRanges();
     void GetAreaLinks( com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc, ScMyAreaLinksContainer& rAreaLinks );
     void GetDetectiveOpList( ScMyDetectiveOpContainer& rDetOp );
     sal_Bool GetxCurrentShapes(com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess>& xShapes);
@@ -352,8 +169,6 @@ class ScXMLExport : public SvXMLExport
         const sal_Int32 nCol, const sal_Int32 nRow,
         com::sun::star::table::CellRangeAddress& aCellAddress) const;
 
-//  sal_Bool GetCell (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
-//      const sal_Int32 nCol, const sal_Int32 nRow, com::sun::star::uno::Reference <com::sun::star::table::XCell>& xTempCell) const;
     sal_Bool GetCellText (const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell,
         rtl::OUString& sOUTemp) const;
     sal_Int16 GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsStandard);
@@ -380,18 +195,6 @@ class ScXMLExport : public SvXMLExport
     void WriteTheLabelRanges(const com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument >& xSpreadDoc);
     void WriteLabelRanges( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xRangesIAccess, sal_Bool bColumn );
     void WriteNamedExpressions(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc);
-    void WriteImportDescriptor(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue> aImportDescriptor);
-    rtl::OUString getOperatorXML(const com::sun::star::sheet::FilterOperator aFilterOperator, const sal_Bool bUseRegularExpressions) const;
-    void WriteCondition(const com::sun::star::sheet::TableFilterField& aFilterField, sal_Bool bIsCaseSensitive, sal_Bool bUseRegularExpressions);
-    void WriteFilterDescriptor(const com::sun::star::uno::Reference <com::sun::star::sheet::XSheetFilterDescriptor>& xSheetFilterDescriptor, const rtl::OUString sDatabaseRangeName);
-    void WriteSortDescriptor(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue> aSortProperties);
-    void WriteSubTotalDescriptor(const com::sun::star::uno::Reference <com::sun::star::sheet::XSubTotalDescriptor> xSubTotalDescriptor, const rtl::OUString sDatabaseRangeName);
-    void WriteDatabaseRanges(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc);
-    rtl::OUString getDPOperatorXML(const ScQueryOp aFilterOperator, const sal_Bool bUseRegularExpressions,
-                                    const sal_Bool bIsString, const double dVal) const;
-    void WriteDPCondition(const ScQueryEntry& aQueryEntry, sal_Bool bIsCaseSensitive, sal_Bool bUseRegularExpressions);
-    void WriteDPFilter(const ScQueryParam& aQueryParam);
-    void WriteDataPilots(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreaDoc);
     void WriteConsolidation();  // core implementation
 protected:
     virtual SvXMLAutoStylePoolP* CreateAutoStylePool();
@@ -407,7 +210,8 @@ public:
     const com::sun::star::uno::Reference <com::sun::star::frame::XModel>& GetXModel() const { return xModel; }
 
     static sal_Int16 GetFieldUnit();
-    ScDocument* GetDocument();
+    inline ScDocument*          GetDocument()           { return pDoc; }
+    inline const ScDocument*    GetDocument() const     { return pDoc; }
     sal_Int32 GetLastColumn(const sal_Int32 nTable);// { return nLastColumns[nTable]; }
     sal_Int32 GetLastRow(const sal_Int32 nTable);// { return nLastRows[nTable]; }
     sal_Bool IsMatrix (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
@@ -417,9 +221,6 @@ public:
 
     UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() { return xCellStylesPropertySetMapper; }
 
-//  SvXMLExportItemMapper& GetParaItemMapper() { return *pParaItemMapper; }
-//  SvXMLExportItemMapper& GetTableItemMapper() { return *pTableItemMapper; }
-//  SwXMLAutoStylePool& GetAutoStylePool() { return *pAutoStylePool; }
 };
 
 #endif

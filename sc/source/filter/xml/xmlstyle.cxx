@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-07 16:11:07 $
+ *  last change: $Author: sab $ $Date: 2000-11-10 17:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 #pragma hdrstop
 
-#ifndef _XMLSTYLE_HXX
+#ifndef _SC_XMLSTYLE_HXX
 #include "xmlstyle.hxx"
 #endif
 #include "xmlexprt.hxx"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-10 16:56:12 $
+ *  last change: $Author: sab $ $Date: 2000-11-10 17:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,64 +66,80 @@
 #pragma hdrstop
 
 // INCLUDE ---------------------------------------------------------------
-
-#include <xmloff/nmspmap.hxx>
-#include <xmloff/xmlnmspe.hxx>
-#include <xmloff/xmlkywd.hxx>
-#include <xmloff/xmlmetae.hxx>
-#include <xmloff/xmlexppr.hxx>
-#include <xmloff/styleexp.hxx>
-#include <xmloff/families.hxx>
-#include <xmloff/xmluconv.hxx>
-#include <xmloff/numehelp.hxx>
-#ifndef _XMLOFF_XMLNUMFE_HXX
-#include <xmloff/xmlnumfe.hxx>
+#ifndef SC_XMLEXPRT_HXX
+#include "xmlexprt.hxx"
 #endif
 
-#include <comphelper/processfactory.hxx>
-#include <tools/lang.hxx>
-#include <tools/solmath.hxx>
-#include <tools/date.hxx>
-#include <tools/intn.hxx>
-#include <svtools/zforlist.hxx>
-#include <sfx2/objsh.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <vector>
-#include <algorithm>
+#ifndef SC_XMLMAPCH_HXX_
+#include "xmlmapch.hxx"
+#endif
+#ifndef _SC_XMLCONVERTER_HXX
+#include "XMLConverter.hxx"
+#endif
+#ifndef _SC_XMLSTYLE_HXX
+#include "xmlstyle.hxx"
+#endif
+#ifndef SC_UNONAMES_HXX
+#include "unonames.hxx"
+#endif
+#ifndef SC_DOCUMENT_HXX
+#include "document.hxx"
+#endif
+#ifndef SC_OUTLINETAB_HXX
+#include "olinetab.hxx"
+#endif
+#ifndef SC_CELLSUNO_HXX
+#include "cellsuno.hxx"
+#endif
+#ifndef SC_CELL_HXX
+#include "cell.hxx"
+#endif
+#ifndef SC_RANGENAM_HXX
+#include "rangenam.hxx"
+#endif
+#ifndef _SC_XMLTABLEMASTERPAGEEXPORT_HXX
+#include "XMLTableMasterPageExport.hxx"
+#endif
 
+#ifndef _XMLOFF_XMLKYWD_HXX
+#include <xmloff/xmlkywd.hxx>
+#endif
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include <xmloff/xmlnmspe.hxx>
+#endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmloff/xmluconv.hxx>
+#endif
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include <xmloff/nmspmap.hxx>
+#endif
+#ifndef _XMLOFF_FAMILIES_HXX_
+#include <xmloff/families.hxx>
+#endif
+#ifndef XMLOFF_NUMEHELP_HXX
+#include <xmloff/numehelp.hxx>
+#endif
+
+#include <rtl/ustring>
+
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
+#endif
 #ifndef _SVX_UNOSHAPE_HXX
 #include <svx/unoshape.hxx>
 #endif
 
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSpreadsheets.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XUSEDAREACURSOR_HPP_
 #include <com/sun/star/sheet/XUsedAreaCursor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XCELLRANGEADDRESSABLE_HPP_
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#include <com/sun/star/sheet/XSheetCellRange.hpp>
-#include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/table/CellContentType.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/util/NumberFormat.hpp>
-#include <com/sun/star/sheet/XNamedRanges.hpp>
-#include <com/sun/star/sheet/XNamedRange.hpp>
-#include <com/sun/star/sheet/XCellRangeReferrer.hpp>
-#include <com/sun/star/sheet/NamedRangeFlag.hpp>
-#include <com/sun/star/sheet/XDatabaseRanges.hpp>
-#include <com/sun/star/sheet/XDatabaseRange.hpp>
-#include <com/sun/star/sheet/XSheetFilterDescriptor.hpp>
-#include <com/sun/star/sheet/DataImportMode.hpp>
-#include <com/sun/star/util/SortField.hpp>
-#include <com/sun/star/sheet/XSubTotalField.hpp>
-#include <com/sun/star/style/XStyle.hpp>
-#include <com/sun/star/sheet/CellFlags.hpp>
-
-#ifndef _COM_SUN_STAR_SHEET_XLABELRANGE_HPP_
-#include <com/sun/star/sheet/XLabelRange.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SHEET_XAREALINKS_HPP_
 #include <com/sun/star/sheet/XAreaLinks.hpp>
@@ -131,45 +147,62 @@
 #ifndef _COM_SUN_STAR_SHEET_XAREALINK_HPP_
 #include <com/sun/star/sheet/XAreaLink.hpp>
 #endif
-
-#include "cellsuno.hxx"
-#include "xmlexprt.hxx"
-#include "document.hxx"
-#include "cell.hxx"
-#include "scitems.hxx"
-#include "attrib.hxx"
-#include "docuno.hxx"
-#include "rangenam.hxx"
-#include "globstr.hrc"
-#include "dbcolect.hxx"
-#include "global.hxx"
-#include "dpobject.hxx"
-#include "dpsave.hxx"
-#include "dpshttab.hxx"
-#include "dpsdbtab.hxx"
-#include "dociter.hxx"
-#include "patattr.hxx"
-#include "olinetab.hxx"
-#include "rangeutl.hxx"
-
-#ifndef SC_UNONAMES_HXX
-#include "unonames.hxx"
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #endif
-#ifndef _SC_XMLCONVERTER_HXX
-#include "XMLConverter.hxx"
+#ifndef _COM_SUN_STAR_TABLE_XCOLUMNROWRANGE_HPP_
+#include <com/sun/star/table/XColumnRowRange.hpp>
 #endif
-#ifndef _SC_XMLTABLEMASTERPAGEEXPORT_HXX
-#include "XMLTableMasterPageExport.hxx"
+#ifndef _COM_SUN_STAR_SHEET_XPRINTAREAS_HPP_
+#include <com/sun/star/sheet/XPrintAreas.hpp>
 #endif
-
-
-const sal_Int8 SC_MAXDIGITSCOUNT_TIME = 11;
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
+#include <com/sun/star/container/XNamed.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XPROTECTABLE_HPP_
+#include <com/sun/star/util/XProtectable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XCELLFORMATRANGESSUPPLIER_HPP_
+#include <com/sun/star/sheet/XCellFormatRangesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XCELLRANGESQUERY_HPP_
+#include <com/sun/star/sheet/XCellRangesQuery.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_CELLFLAGS_HPP_
+#include <com/sun/star/sheet/CellFlags.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMERGEABLE_HPP_
+#include <com/sun/star/util/XMergeable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XARRAYFORMULARANGE_HPP_
+#include <com/sun/star/sheet/XArrayFormulaRange.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
+#include <com/sun/star/text/XText.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XLABELRANGES_HPP_
+#include <com/sun/star/sheet/XLabelRanges.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XLABELRANGE_HPP_
+#include <com/sun/star/sheet/XLabelRange.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XNAMEDRANGES_HPP_
+#include <com/sun/star/sheet/XNamedRanges.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XNAMEDRANGE_HPP_
+#include <com/sun/star/sheet/XNamedRange.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XCELLRANGEREFERRER_HPP_
+#include <com/sun/star/sheet/XCellRangeReferrer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_NAMEDRANGEFLAG_HPP_
+#include <com/sun/star/sheet/NamedRangeFlag.hpp>
+#endif
 
 //! not found in unonames.hxx
-#define SC_USERLIST "UserList"
-#define SC_SORTASCENDING "SortAscending"
-#define SC_ENABLEUSERSORTLIST "EnableUserSortList"
-#define SC_USERSORTLISTINDEX "UserSortListIndex"
 #define SC_STANDARDFORMAT "StandardFormat"
 #define SC_LAYERID "LayerID"
 
@@ -177,546 +210,6 @@ const sal_Int8 SC_MAXDIGITSCOUNT_TIME = 11;
 
 using namespace rtl;
 using namespace com::sun::star;
-
- // -----------------------------------------------------------------------
-
-ScMyRowFormatRange::ScMyRowFormatRange()
-    : nStartColumn(0),
-    nRepeatColumns(0),
-    nRepeatRows(0),
-    nIndex(-1),
-    bIsAutoStyle(sal_True)
-{
-}
-
-ScRowFormatRanges::ScRowFormatRanges()
-    : aRowFormatRanges()
-{
-}
-
-ScRowFormatRanges::~ScRowFormatRanges()
-{
-}
-
-void ScRowFormatRanges::Clear()
-{
-    aRowFormatRanges.clear();
-}
-
-void ScRowFormatRanges::AddRange(const ScMyRowFormatRange& aFormatRange)
-{
-    aRowFormatRanges.push_back(aFormatRange);
-}
-
-sal_Bool ScRowFormatRanges::GetNext(ScMyRowFormatRange& aFormatRange)
-{
-    ScMyRowFormatRangesVec::iterator aItr = aRowFormatRanges.begin();
-    if (aItr != aRowFormatRanges.end())
-    {
-        aFormatRange = (*aItr);
-        aRowFormatRanges.erase(aItr);
-        return sal_True;
-    }
-    return sal_False;
-}
-
-sal_Int32 ScRowFormatRanges::GetMaxRows()
-{
-    ScMyRowFormatRangesVec::iterator aItr = aRowFormatRanges.begin();
-    sal_Int32 nMaxRows = MAXROW + 1;
-    if (aItr != aRowFormatRanges.end())
-        while (aItr != aRowFormatRanges.end())
-        {
-            if ((*aItr).nRepeatRows < nMaxRows)
-                nMaxRows = (*aItr).nRepeatRows;
-            aItr++;
-        }
-    else
-        nMaxRows = 0;
-    return nMaxRows;
-}
-
-sal_Int32 ScRowFormatRanges::GetSize()
-{
-    return aRowFormatRanges.size();
-}
-
-sal_Bool LessRowFormatRange (const ScMyRowFormatRange& aRange1, const ScMyRowFormatRange& aRange2)
-{
-    return (aRange1.nStartColumn < aRange2.nStartColumn);
-}
-
-void ScRowFormatRanges::Sort()
-{
-    std::sort(aRowFormatRanges.begin(), aRowFormatRanges.end(), LessRowFormatRange);
-}
-
-// ============================================================================
-ScMyFormatRange::ScMyFormatRange()
-    : nStyleNameIndex(-1),
-    bIsAutoStyle(sal_True)
-{
-}
-
-ScFormatRangeStyles::ScFormatRangeStyles()
-    : aTables(),
-    aStyleNames(),
-    aAutoStyleNames()
-{
-}
-
-ScFormatRangeStyles::~ScFormatRangeStyles()
-{
-    ScMyOUStringVec::iterator i = aStyleNames.begin();
-    while (i != aStyleNames.end())
-    {
-        delete *i;
-        i++;
-    }
-    ScMyFormatRangeVectorVec::iterator j = aTables.begin();
-    while (j != aTables.end())
-    {
-        delete *j;
-        j++;
-    }
-}
-
-void ScFormatRangeStyles::AddNewTable(const sal_Int16 nTable)
-{
-    sal_Int16 nSize = aTables.size() - 1;
-    if (nTable > nSize)
-        for (sal_Int16 i = nSize; i < nTable; i++)
-        {
-            ScMyFormatRangeAddresses* aRangeAddresses = new ScMyFormatRangeAddresses;
-            aTables.push_back(aRangeAddresses);
-        }
-}
-
-sal_Int32 ScFormatRangeStyles::AddStyleName(rtl::OUString* pString, const sal_Bool bIsAutoStyle)
-{
-    if (bIsAutoStyle)
-    {
-        aAutoStyleNames.push_back(pString);
-        return aAutoStyleNames.size() - 1;
-    }
-    else
-    {
-        sal_Int32 nCount = aStyleNames.size();
-        sal_Bool bFound(sal_False);
-        sal_Int32 i = nCount - 1;
-        while ((i >= 0) && (!bFound))
-        {
-            if (aStyleNames.at(i)->equals(*pString))
-                bFound = sal_True;
-            else
-                i--;
-        }
-        if (bFound)
-            return i;
-        else
-        {
-            aStyleNames.push_back(pString);
-            return aStyleNames.size() - 1;
-        }
-    }
-}
-
-sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix, sal_Bool& bIsAutoStyle)
-{
-    sal_Int16 nPrefixLength = rPrefix.getLength();
-    rtl::OUString sTemp = rString.copy(nPrefixLength);
-    sal_Int32 nIndex = sTemp.toInt32();
-    if (aAutoStyleNames.at(nIndex - 1)->equals(rString))
-    {
-        bIsAutoStyle = sal_True;
-        return nIndex - 1;
-    }
-    else
-    {
-        sal_Int32 i = 0;
-        sal_Bool bFound(sal_False);
-        while (!bFound && i < aStyleNames.size())
-        {
-            if (aStyleNames.at(i)->equals(rString))
-                bFound = sal_True;
-            else
-                i++;
-        }
-        if (bFound)
-        {
-            bIsAutoStyle = sal_False;
-            return i;
-        }
-        else
-        {
-            i = 0;
-            while (!bFound && i < aAutoStyleNames.size())
-            {
-                if (aAutoStyleNames.at(i)->equals(rString))
-                    bFound = sal_True;
-                else
-                    i++;
-            }
-            if (bFound)
-            {
-                bIsAutoStyle = sal_True;
-                return i;
-            }
-            else
-                return -1;
-        }
-    }
-}
-
-sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow, sal_Bool& bIsAutoStyle)
-{
-    ScMyFormatRangeAddresses* pFormatRanges = aTables[nTable];
-    ScMyFormatRangeAddresses::iterator aItr = pFormatRanges->begin();
-    while (aItr != pFormatRanges->end())
-    {
-        if (((*aItr).aRangeAddress.StartColumn <= nColumn) &&
-            ((*aItr).aRangeAddress.EndColumn >= nColumn) &&
-            ((*aItr).aRangeAddress.StartRow <= nRow) &&
-            ((*aItr).aRangeAddress.EndRow >= nRow))
-        {
-            bIsAutoStyle = (*aItr).bIsAutoStyle;
-            return (*aItr).nStyleNameIndex;
-        }
-        else
-        {
-            if ((*aItr).aRangeAddress.EndRow < nRow)
-                aItr = pFormatRanges->erase(aItr);
-            else
-                aItr++;
-        }
-    }
-    return -1;
-}
-void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sal_Int32 nEndColumn, const sal_Int32 nRow,
-                    const sal_Int16 nTable, ScRowFormatRanges& aFormatRanges)
-{
-    sal_Int32 nTotalColumns = nEndColumn - nStartColumn + 1;
-    ScMyFormatRangeAddresses* pFormatRanges = aTables[nTable];
-    ScMyFormatRangeAddresses::iterator aItr = pFormatRanges->begin();
-    sal_Int32 nColumns = 0;
-    while (aItr != pFormatRanges->end() && nColumns < nTotalColumns)
-    {
-        if (((*aItr).aRangeAddress.StartRow <= nRow) &&
-            ((*aItr).aRangeAddress.EndRow >= nRow))
-        {
-            if ((((*aItr).aRangeAddress.StartColumn <= nStartColumn) &&
-                ((*aItr).aRangeAddress.EndColumn >= nStartColumn)) ||
-                (((*aItr).aRangeAddress.StartColumn <= nEndColumn) &&
-                ((*aItr).aRangeAddress.EndColumn >= nEndColumn)) ||
-                (((*aItr).aRangeAddress.StartColumn >= nStartColumn) &&
-                ((*aItr).aRangeAddress.EndColumn <= nEndColumn)))
-            {
-                ScMyRowFormatRange aRange;
-                aRange.aRangeAddress = (*aItr).aRangeAddress;
-                aRange.nIndex = (*aItr).nStyleNameIndex;
-                aRange.bIsAutoStyle = (*aItr).bIsAutoStyle;
-                if (((*aItr).aRangeAddress.StartColumn < nStartColumn) &&
-                    ((*aItr).aRangeAddress.EndColumn >= nStartColumn))
-                {
-                    if ((*aItr).aRangeAddress.EndColumn >= nEndColumn)
-                        aRange.nRepeatColumns = nTotalColumns;
-                    else
-                        aRange.nRepeatColumns = (*aItr).aRangeAddress.EndColumn - nStartColumn + 1;
-                    aRange.nStartColumn = nStartColumn;
-                }
-                else if (((*aItr).aRangeAddress.StartColumn >= nStartColumn) &&
-                    ((*aItr).aRangeAddress.EndColumn <= nEndColumn))
-                {
-                    aRange.nRepeatColumns = (*aItr).aRangeAddress.EndColumn - (*aItr).aRangeAddress.StartColumn + 1;
-                    aRange.nStartColumn = (*aItr).aRangeAddress.StartColumn;
-                }
-                else if (((*aItr).aRangeAddress.StartColumn >= nStartColumn) &&
-                    ((*aItr).aRangeAddress.StartColumn <= nEndColumn) &&
-                    ((*aItr).aRangeAddress.EndColumn > nEndColumn))
-                {
-                    aRange.nRepeatColumns = nEndColumn - (*aItr).aRangeAddress.StartColumn + 1;
-                    aRange.nStartColumn = (*aItr).aRangeAddress.StartColumn;
-                }
-                aRange.nRepeatRows = (*aItr).aRangeAddress.EndRow - nRow + 1;
-                aFormatRanges.AddRange(aRange);
-                nColumns += aRange.nRepeatColumns;
-            }
-            aItr++;
-        }
-        else
-            if((*aItr).aRangeAddress.EndRow < nRow)
-                aItr = pFormatRanges->erase(aItr);
-            else
-                aItr++;
-    }
-    aFormatRanges.Sort();
-}
-
-void ScFormatRangeStyles::AddRangeStyleName(const table::CellRangeAddress aCellRangeAddress, const sal_Int32 nStringIndex, const sal_Bool bIsAutoStyle)
-{
-    ScMyFormatRange aFormatRange;
-    aFormatRange.aRangeAddress = aCellRangeAddress;
-    aFormatRange.nStyleNameIndex = nStringIndex;
-    aFormatRange.bIsAutoStyle = bIsAutoStyle;
-    ScMyFormatRangeAddresses* pFormatRanges = aTables[aCellRangeAddress.Sheet];
-    pFormatRanges->push_back(aFormatRange);
-}
-
-rtl::OUString* ScFormatRangeStyles::GetStyleName(const sal_Int16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow)
-{
-    sal_Bool bIsAutoStyle;
-    sal_Int32 nIndex = GetStyleNameIndex(nTable, nColumn, nRow, bIsAutoStyle);
-    if (bIsAutoStyle)
-        return aAutoStyleNames.at(nIndex);
-    else
-        return aStyleNames.at(nIndex);
-}
-
-rtl::OUString* ScFormatRangeStyles::GetStyleNameByIndex(const sal_Int32 nIndex, const sal_Bool bIsAutoStyle)
-{
-    if (bIsAutoStyle)
-        return aAutoStyleNames[nIndex];
-    else
-        return aStyleNames[nIndex];
-}
-
-sal_Bool LessFormatRange(const ScMyFormatRange& aRange1, const ScMyFormatRange& aRange2)
-{
-    if (aRange1.aRangeAddress.StartRow < aRange2.aRangeAddress.StartRow)
-        return sal_True;
-    else
-        if (aRange1.aRangeAddress.StartRow == aRange2.aRangeAddress.StartRow)
-            if (aRange1.aRangeAddress.StartColumn < aRange2.aRangeAddress.StartColumn)
-                return sal_True;
-            else
-                return sal_False;
-        else
-            return sal_False;
-}
-
-void ScFormatRangeStyles::Sort()
-{
-    sal_Int16 nTables = aTables.size();
-    for (sal_Int16 i = 0; i < nTables; i++)
-        if (aTables[i]->size() > 1)
-            std::sort(aTables[i]->begin(), aTables[i]->end(), LessFormatRange);
-}
-
-//===========================================================================
-
-ScColumnRowStyles::ScColumnRowStyles()
-    : aTables(),
-    aStyleNames()
-{
-}
-
-ScColumnRowStyles::~ScColumnRowStyles()
-{
-    ScMyOUStringVec::iterator i = aStyleNames.begin();
-    while (i != aStyleNames.end())
-    {
-        delete *i;
-        i++;
-    }
-}
-
-void ScColumnRowStyles::AddNewTable(const sal_Int16 nTable, const sal_Int32 nFields)
-{
-    sal_Int16 nSize = aTables.size() - 1;
-    if (nTable > nSize)
-        for (sal_Int32 i = nSize; i < nTable; i++)
-        {
-            ScMysalInt32Vec aFieldsVec(nFields + 1, -1);
-            aTables.push_back(aFieldsVec);
-        }
-}
-
-sal_Int32 ScColumnRowStyles::AddStyleName(rtl::OUString* pString)
-{
-    aStyleNames.push_back(pString);
-    return aStyleNames.size() - 1;
-}
-
-sal_Int32 ScColumnRowStyles::GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix)
-{
-    sal_Int16 nPrefixLength = rPrefix.getLength();
-    rtl::OUString sTemp = rString.copy(nPrefixLength);
-    sal_Int32 nIndex = sTemp.toInt32();
-    if (aStyleNames.at(nIndex - 1)->equals(rString))
-        return nIndex - 1;
-    else
-    {
-        sal_Int32 i = 0;
-        sal_Bool bFound(sal_False);
-        while (!bFound && i < aStyleNames.size())
-        {
-            if (aStyleNames.at(i)->equals(rString))
-                bFound = sal_True;
-            else
-                i++;
-        }
-        if (bFound)
-            return i;
-        else
-            return -1;
-    }
-}
-
-sal_Int32 ScColumnRowStyles::GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nField)
-{
-    if (nField < aTables[nTable].size())
-        return aTables[nTable].at(nField);
-    else
-        return aTables[nTable].at(aTables[nTable].size() - 1);
-}
-
-void ScColumnRowStyles::AddFieldStyleName(const sal_Int16 nTable, const sal_Int32 nField, const sal_Int32 nStringIndex)
-{
-    aTables[nTable].at(nField) = nStringIndex;
-}
-
-rtl::OUString* ScColumnRowStyles::GetStyleName(const sal_Int16 nTable, const sal_Int32 nField)
-{
-    return aStyleNames[GetStyleNameIndex(nTable, nField)];
-}
-
-rtl::OUString* ScColumnRowStyles::GetStyleNameByIndex(const sal_Int32 nIndex)
-{
-    return aStyleNames[nIndex];
-}
-
-//==============================================================================
-
-ScMyColumnRowGroup::ScMyColumnRowGroup()
-{
-}
-
-ScMyOpenCloseColumnRowGroup::ScMyOpenCloseColumnRowGroup(ScXMLExport& rTempExport, const sal_Char *pName)
-    : rExport(rTempExport),
-    sName(rtl::OUString::createFromAscii(pName)),
-    aTableStart(),
-    aTableEnd(),
-    bNamespaced(sal_False)
-{
-}
-
-ScMyOpenCloseColumnRowGroup::~ScMyOpenCloseColumnRowGroup()
-{
-}
-
-void ScMyOpenCloseColumnRowGroup::NewTable()
-{
-    if (!bNamespaced)
-    {
-        sName = rExport.GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, sName);
-        bNamespaced = sal_True;
-    }
-    aTableStart.clear();
-    aTableEnd.clear();
-}
-
-void ScMyOpenCloseColumnRowGroup::AddGroup(const ScMyColumnRowGroup& aGroup, sal_Int32 nEndField)
-{
-    aTableStart.push_back(aGroup);
-    aTableEnd.push_back(nEndField);
-}
-
-sal_Bool ScMyOpenCloseColumnRowGroup::IsGroupStart(const sal_Int32 nField)
-{
-    sal_Bool bGroupStart(sal_False);
-    if (aTableStart.size())
-    {
-        if (aTableStart[0].nField == nField)
-            bGroupStart = sal_True;
-    }
-    return bGroupStart;
-}
-
-void ScMyOpenCloseColumnRowGroup::OpenGroup(const ScMyColumnRowGroup* pGroup)
-{
-    if (!pGroup->bDisplay)
-        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_display, sXML_false);
-    rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
-    rExport.GetDocHandler()->startElement( sName, rExport.GetXAttrList());
-    rExport.ClearAttrList();
-}
-
-void ScMyOpenCloseColumnRowGroup::OpenGroups(const sal_Int32 nField)
-{
-    ScMyColumnRowGroupVec::iterator aItr = aTableStart.begin();
-    sal_Bool bReady(sal_False);
-    while(!bReady && aItr != aTableStart.end())
-    {
-        if (aItr->nField == nField)
-        {
-            OpenGroup(aItr);
-            aItr = aTableStart.erase(aItr);
-        }
-        else
-            bReady = sal_True;
-    }
-}
-
-sal_Bool ScMyOpenCloseColumnRowGroup::IsGroupEnd(const sal_Int32 nField)
-{
-    sal_Bool bGroupEnd(sal_False);
-    if (aTableEnd.size())
-    {
-        if (aTableEnd[0] == nField)
-            bGroupEnd = sal_True;
-    }
-    return bGroupEnd;
-}
-
-void ScMyOpenCloseColumnRowGroup::CloseGroup()
-{
-    rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
-    rExport.GetDocHandler()->endElement( sName);
-}
-
-void ScMyOpenCloseColumnRowGroup::CloseGroups(const sal_Int32 nField)
-{
-    ScMyFieldGroupVec::iterator aItr = aTableEnd.begin();
-    sal_Bool bReady(sal_False);
-    while(!bReady && aItr != aTableEnd.end())
-    {
-        if (*aItr == nField)
-        {
-            CloseGroup();
-            aItr = aTableEnd.erase(aItr);
-        }
-        else
-            bReady = sal_True;
-    }
-}
-
-sal_Bool LessGroup(const ScMyColumnRowGroup& aGroup1, const ScMyColumnRowGroup& aGroup2)
-{
-    if (aGroup1.nField < aGroup2.nField)
-        return sal_True;
-    else
-        if (aGroup1.nField == aGroup2.nField && aGroup1.nLevel < aGroup2.nLevel)
-            return sal_True;
-        else
-            return sal_False;
-}
-
-sal_Int32 ScMyOpenCloseColumnRowGroup::GetLast()
-{
-    sal_Int32 max(-1);
-    for (sal_Int32 i = 0; i < aTableEnd.size(); i++)
-        if (aTableEnd[i] > max)
-            max = aTableEnd[i];
-    return max;
-}
-
-void ScMyOpenCloseColumnRowGroup::Sort()
-{
-    std::sort(aTableStart.begin(), aTableStart.end(), LessGroup);
-    std::sort(aTableEnd.begin(), aTableEnd.end());
-}
-
-//==============================================================================
 
 void ScXMLExport::SetLastColumn(const sal_Int32 nTable, const sal_Int32 nCol)
 {
@@ -755,21 +248,6 @@ sal_Int16 ScXMLExport::GetFieldUnit()
     return 0;
 }
 
-ScDocument* ScXMLExport::GetDocument()
-{
-    if (!pDoc)
-    {
-        uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY );
-        if ( xSpreadDoc.is() )
-        {
-            ScModelObj* pDocObj = ScModelObj::getImplementation( xSpreadDoc );
-            if ( pDocObj )
-                pDoc = pDocObj->GetDocument();
-        }
-    }
-    return pDoc;
-}
-
 ScXMLExport::ScXMLExport( const uno::Reference <frame::XModel>& xTempModel, const NAMESPACE_RTL(OUString)& rFileName,
                         const uno::Reference<xml::sax::XDocumentHandler>& rHandler,
                         sal_Bool bShowProgr ) :
@@ -794,9 +272,12 @@ SvXMLExport( rFileName, rHandler, xTempModel, GetFieldUnit() ),
     bHasRowHeader(sal_False),
     bRowHeaderOpen(sal_False),
     aGroupColumns(*this, sXML_table_column_group),
-    aGroupRows(*this, sXML_table_row_group)
+    aGroupRows(*this, sXML_table_row_group),
+    aExportDataPilot(*this),
+    aExportDatabaseRanges(*this)
 {
-    pDoc = GetDocument();
+    pDoc = ScXMLConverter::GetScDocument( xTempModel );
+    DBG_ASSERT( pDoc, "ScXMLImport::ScXMLImport - no ScDocument!" );
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY );
     if ( xSpreadDoc.is() )
     {
@@ -850,61 +331,6 @@ table::CellRangeAddress ScXMLExport::GetEndAddress(uno::Reference<sheet::XSpread
         aCellAddress = xCellAddress->getRangeAddress();
     }
     return aCellAddress;
-}
-
-ScMyEmptyDatabaseRangesContainer ScXMLExport::GetEmptyDatabaseRanges()
-{
-    ScMyEmptyDatabaseRangesContainer aSkipRanges;
-    sal_Int32 nSkipRangesCount = 0;
-    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY );
-    if ( xSpreadDoc.is() )
-    {
-        uno::Reference <beans::XPropertySet> xPropertySet (xSpreadDoc, uno::UNO_QUERY);
-        if (xPropertySet.is())
-        {
-            uno::Any aDatabaseRanges = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DATABASERNG)));
-            uno::Reference <sheet::XDatabaseRanges> xDatabaseRanges;
-            CheckAttrList();
-            if (aDatabaseRanges >>= xDatabaseRanges)
-            {
-                uno::Sequence <rtl::OUString> aRanges = xDatabaseRanges->getElementNames();
-                sal_Int32 nDatabaseRangesCount = aRanges.getLength();
-                for (sal_Int32 i = 0; i < nDatabaseRangesCount; i++)
-                {
-                    rtl::OUString sDatabaseRangeName = aRanges[i];
-                    uno::Any aDatabaseRange = xDatabaseRanges->getByName(sDatabaseRangeName);
-                    uno::Reference <sheet::XDatabaseRange> xDatabaseRange;
-                    if (aDatabaseRange >>= xDatabaseRange)
-                    {
-                        uno::Reference <beans::XPropertySet> xDatabaseRangePropertySet (xDatabaseRange, uno::UNO_QUERY);
-                        if (xDatabaseRangePropertySet.is())
-                        {
-                            uno::Any aStripDataProperty = xDatabaseRangePropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_STRIPDAT)));
-                            sal_Bool bStripData = sal_False;
-                            if (aStripDataProperty >>= bStripData)
-                                if (bStripData)
-                                {
-                                    uno::Sequence <beans::PropertyValue> aImportProperties = xDatabaseRange->getImportDescriptor();
-                                    sal_Int32 nLength = aImportProperties.getLength();
-                                    sheet::DataImportMode nSourceType = sheet::DataImportMode_NONE;
-                                    for (sal_Int32 j = 0; j < nLength; j++)
-                                        if (aImportProperties[j].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SRCTYPE)))
-                                        {
-                                            uno::Any aSourceType = aImportProperties[j].Value;
-                                            aSourceType >>= nSourceType;
-                                        }
-                                    if (nSourceType != sheet::DataImportMode_NONE)
-                                        aSkipRanges.AddNewEmptyDatabaseRange(xDatabaseRange->getDataArea());
-                                }
-                        }
-                    }
-                }
-                if (nSkipRangesCount > 1)
-                    aSkipRanges.Sort();
-            }
-        }
-    }
-    return aSkipRanges;
 }
 
 void ScXMLExport::GetAreaLinks( uno::Reference< sheet::XSpreadsheetDocument>& xSpreadDoc,
@@ -1457,7 +883,7 @@ void ScXMLExport::FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRow
 
 void ScXMLExport::FillColumnRowGroups()
 {
-    ScOutlineTable* pOutlineTable = GetDocument()->GetOutlineTable( nCurrentTable, sal_False );
+    ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable( nCurrentTable, sal_False );
     if(pOutlineTable)
     {
         ScOutlineArray* pCols = pOutlineTable->GetColArray();
@@ -1483,7 +909,7 @@ void ScXMLExport::_ExportContent()
             sal_Int32 nTableCount = xIndex->getCount();
             ScMyAreaLinksContainer aAreaLinks;
             GetAreaLinks( xSpreadDoc, aAreaLinks );
-            ScMyEmptyDatabaseRangesContainer aEmptyRanges = GetEmptyDatabaseRanges();
+            ScMyEmptyDatabaseRangesContainer aEmptyRanges = aExportDatabaseRanges.GetEmptyDatabaseRanges();
             ScMyDetectiveOpContainer aDetectiveOpContainer;
             GetDetectiveOpList( aDetectiveOpContainer );
 
@@ -1570,8 +996,6 @@ void ScXMLExport::_ExportContent()
                                     {
                                         SetRepeatAttribute(nEqualCells);
                                         WriteCell(aPrevCell);
-/*                                      if (aPrevCell.bHasShape)
-                                            aCellsItr.GetNextShape();*/
                                         nEqualCells = 0;
                                         aPrevCell = aCell;
                                     }
@@ -1580,8 +1004,6 @@ void ScXMLExport::_ExportContent()
                                 {
                                     SetRepeatAttribute(nEqualCells);
                                     WriteCell(aPrevCell);
-/*                                  if (aPrevCell.bHasShape)
-                                        aCellsItr.GetNextShape();*/
                                     ExportFormatRanges(aPrevCell.aCellAddress.Column + nEqualCells + 1, aPrevCell.aCellAddress.Row,
                                         aCell.aCellAddress.Column - 1, aCell.aCellAddress.Row, nTable);
                                     nEqualCells = 0;
@@ -1605,8 +1027,8 @@ void ScXMLExport::_ExportContent()
             }
         }
         WriteNamedExpressions(xSpreadDoc);
-        WriteDatabaseRanges(xSpreadDoc);
-        WriteDataPilots(xSpreadDoc);
+        aExportDatabaseRanges.WriteDatabaseRanges(xSpreadDoc);
+        aExportDataPilot.WriteDataPilots(xSpreadDoc);
         WriteConsolidation();
     }
 }
@@ -2094,13 +1516,6 @@ sal_Bool ScXMLExport::IsMatrix (const uno::Reference <table::XCellRange>& xCellR
     return sal_False;
 }
 
-/*sal_Bool ScXMLExport::GetCell (const uno::Reference <table::XCellRange>& xCellRange,
-                                   const sal_Int32 nCol, const sal_Int32 nRow, uno::Reference <table::XCell>& xTempCell) const
-{
-    xTempCell = xCellRange->getCellByPosition(nCol, nRow);
-    return xTempCell.is();
-}*/
-
 sal_Bool ScXMLExport::GetCellText (const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell,
         rtl::OUString& sOUTemp) const
 {
@@ -2144,52 +1559,27 @@ sal_Int16 ScXMLExport::GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsS
 
 sal_Int32 ScXMLExport::GetCellNumberFormat(const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell) const
 {
-/*  uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier = GetNumberFormatsSupplier();
-    if (xNumberFormatsSupplier.is())
+    uno::Reference <beans::XPropertySet> xPropertySet (xCell, uno::UNO_QUERY);
+    if (xPropertySet.is())
     {
-        uno::Reference <util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
-        if (xNumberFormats.is())
-        {*/
-            uno::Reference <beans::XPropertySet> xPropertySet (xCell, uno::UNO_QUERY);
-            if (xPropertySet.is())
-            {
-                uno::Any aNumberFormatPropertyKey = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)));
-                sal_Int32 nNumberFormatPropertyKey;
-                if ( aNumberFormatPropertyKey>>=nNumberFormatPropertyKey )
-                {
-                    return nNumberFormatPropertyKey;
-                }
-            }
-/*      }
-    }*/
+        uno::Any aNumberFormatPropertyKey = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)));
+        sal_Int32 nNumberFormatPropertyKey;
+        if ( aNumberFormatPropertyKey>>=nNumberFormatPropertyKey )
+        {
+            return nNumberFormatPropertyKey;
+        }
+    }
     return 0;
 }
 
 sal_Bool ScXMLExport::GetCellStyleNameIndex(const ScMyCell& aCell, sal_Int32& nStyleNameIndex, sal_Bool& bIsAutoStyle)
 {
-//  uno::Reference <beans::XPropertySet> xProperties (xCell, uno::UNO_QUERY);
-//  if (xProperties.is())
-//  {
-//      uno::Any aStyle = xProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)));
-//      rtl::OUString sStyleName;
-//      if (aStyle >>= sStyleName)
-//      {
-            //std::vector< XMLPropertyState > xPropStates = pCellStylesPropertySetMapper->Filter( xProperties );
-            //rtl::OUString sName = GetAutoStylePool()->Find(XML_STYLE_FAMILY_TABLE_CELL, sStyleName, xPropStates);
-            sal_Int32 nIndex = aCellStyles.GetStyleNameIndex(aCell.aCellAddress.Sheet, aCell.aCellAddress.Column, aCell.aCellAddress.Row, bIsAutoStyle);
-            if (nIndex > -1)
-            {
-                nStyleNameIndex = nIndex;
-                return sal_True;
-            }
-            /*else
-            {
-                rtl::OUString* pTemp = new rtl::OUString(sStyleName);
-                nStyleNameIndex = aCellStyles.AddStyleName(pTemp, sal_False);
-                return sal_True;
-            }*/
-//      }
-//  }
+    sal_Int32 nIndex = aCellStyles.GetStyleNameIndex(aCell.aCellAddress.Sheet, aCell.aCellAddress.Column, aCell.aCellAddress.Row, bIsAutoStyle);
+    if (nIndex > -1)
+    {
+        nStyleNameIndex = nIndex;
+        return sal_True;
+    }
     return sal_False;
 }
 
@@ -2467,7 +1857,7 @@ void ScXMLExport::WriteDetective( const ScMyCell& rMyCell )
             OUString sString;
             for( ScMyDetectiveObjVec::const_iterator aObjItr = rObjVec.begin(); aObjItr != rObjVec.end(); aObjItr++ )
             {
-                if( (aObjItr->eObjType == SC_DETOBJ_ARROW) || (aObjItr->eObjType == SC_DETOBJ_TOOTHERTAB) )
+                if( (aObjItr->eObjType == SC_DETOBJ_ARROW) || (aObjItr->eObjType == SC_DETOBJ_TOOTHERTAB))
                 {
                     ScXMLConverter::GetStringFromRange( sString, aObjItr->aSourceRange, pDoc );
                     AddAttribute( XML_NAMESPACE_TABLE, sXML_cell_range_address, sString );
@@ -2804,961 +2194,6 @@ void ScXMLExport::WriteNamedExpressions(const com::sun::star::uno::Reference <co
                                 {
                                     AddAttribute(XML_NAMESPACE_TABLE, sXML_expression, sOUTempContent);
                                     SvXMLElementExport aElemNE(*this, XML_NAMESPACE_TABLE, sXML_named_expression, sal_True, sal_True);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-void ScXMLExport::WriteImportDescriptor(const uno::Sequence <beans::PropertyValue> aImportDescriptor)
-{
-    sal_Int32 nProperties = aImportDescriptor.getLength();
-    rtl::OUString sDatabaseName;
-    rtl::OUString sSourceObject;
-    sheet::DataImportMode nSourceType;
-    sal_Bool bNative;
-    for (sal_Int16 i = 0; i < nProperties; i++)
-    {
-        if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_DBNAME)))
-        {
-            uno::Any aDatabaseName = aImportDescriptor[i].Value;
-            aDatabaseName >>= sDatabaseName;
-        }
-        else if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SRCOBJ)))
-        {
-            uno::Any aSourceObject = aImportDescriptor[i].Value;
-            aSourceObject >>= sSourceObject;
-        }
-        else if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SRCTYPE)))
-        {
-            uno::Any aSourceType = aImportDescriptor[i].Value;
-            aSourceType >>= nSourceType;
-        }
-        else if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NATIVE)))
-        {
-            uno::Any aNative = aImportDescriptor[i].Value;
-            aNative >>= bNative;
-        }
-    }
-    switch (nSourceType)
-    {
-        case sheet::DataImportMode_NONE : break;
-        case sheet::DataImportMode_QUERY :
-        {
-            AddAttribute(XML_NAMESPACE_TABLE, sXML_database_name, sDatabaseName);
-            AddAttribute(XML_NAMESPACE_TABLE, sXML_query_name, sSourceObject);
-            SvXMLElementExport aElemID(*this, XML_NAMESPACE_TABLE, sXML_database_source_query, sal_True, sal_True);
-            CheckAttrList();
-        }
-        break;
-        case sheet::DataImportMode_TABLE :
-        {
-            AddAttribute(XML_NAMESPACE_TABLE, sXML_database_name, sDatabaseName);
-            AddAttribute(XML_NAMESPACE_TABLE, sXML_table_name, sSourceObject);
-            SvXMLElementExport aElemID(*this, XML_NAMESPACE_TABLE, sXML_database_source_table, sal_True, sal_True);
-            CheckAttrList();
-        }
-        break;
-        case sheet::DataImportMode_SQL :
-        {
-            AddAttribute(XML_NAMESPACE_TABLE, sXML_database_name, sDatabaseName);
-            AddAttribute(XML_NAMESPACE_TABLE, sXML_sql_statement, sSourceObject);
-            if (!bNative)
-                AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_parse_sql_statement, sXML_true);
-            SvXMLElementExport aElemID(*this, XML_NAMESPACE_TABLE, sXML_database_source_sql, sal_True, sal_True);
-            CheckAttrList();
-        }
-        break;
-    }
-}
-
-rtl::OUString ScXMLExport::getOperatorXML(const sheet::FilterOperator aFilterOperator, const sal_Bool bUseRegularExpressions) const
-{
-    if (bUseRegularExpressions)
-    {
-        switch (aFilterOperator)
-        {
-            case sheet::FilterOperator_EQUAL :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_match));
-                break;
-            case sheet::FilterOperator_NOT_EQUAL :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_nomatch));
-                break;
-        }
-    }
-    else
-    {
-        switch (aFilterOperator)
-        {
-            case sheet::FilterOperator_EQUAL :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
-                break;
-            case sheet::FilterOperator_NOT_EQUAL :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("!="));
-                break;
-            case sheet::FilterOperator_BOTTOM_PERCENT :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_bottom_percent));
-                break;
-            case sheet::FilterOperator_BOTTOM_VALUES :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_bottom_values));
-                break;
-            case sheet::FilterOperator_EMPTY :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_empty));
-                break;
-            case sheet::FilterOperator_GREATER :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
-                break;
-            case sheet::FilterOperator_GREATER_EQUAL :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">="));
-                break;
-            case sheet::FilterOperator_LESS :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
-                break;
-            case sheet::FilterOperator_LESS_EQUAL :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
-                break;
-            case sheet::FilterOperator_NOT_EMPTY :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_noempty));
-                break;
-            case sheet::FilterOperator_TOP_PERCENT :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_top_percent));
-                break;
-            case sheet::FilterOperator_TOP_VALUES :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_top_values));
-                break;
-        }
-    }
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
-}
-
-void ScXMLExport::WriteCondition(const sheet::TableFilterField& aFilterField, sal_Bool bIsCaseSensitive, sal_Bool bUseRegularExpressions)
-{
-    AddAttribute(XML_NAMESPACE_TABLE, sXML_field_number, rtl::OUString::valueOf(aFilterField.Field));
-    if (bIsCaseSensitive)
-        AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_case_sensitive, sXML_true);
-    if (aFilterField.IsNumeric)
-    {
-        AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_data_type, sXML_number);
-        rtl::OUStringBuffer sBuffer;
-        GetMM100UnitConverter().convertNumber(sBuffer, aFilterField.NumericValue);
-        AddAttribute(XML_NAMESPACE_TABLE, sXML_value, sBuffer.makeStringAndClear());
-    }
-    else
-        AddAttribute(XML_NAMESPACE_TABLE, sXML_value, aFilterField.StringValue);
-    AddAttribute(XML_NAMESPACE_TABLE, sXML_operator, getOperatorXML(aFilterField.Operator, bUseRegularExpressions));
-    SvXMLElementExport aElemC(*this, XML_NAMESPACE_TABLE, sXML_filter_condition, sal_True, sal_True);
-}
-
-void ScXMLExport::WriteFilterDescriptor(const uno::Reference <sheet::XSheetFilterDescriptor>& xSheetFilterDescriptor, const rtl::OUString sDatabaseRangeName)
-{
-    uno::Sequence <sheet::TableFilterField> aTableFilterFields = xSheetFilterDescriptor->getFilterFields();
-    sal_Int32 nTableFilterFields = aTableFilterFields.getLength();
-    if (nTableFilterFields > 0)
-    {
-        uno::Reference <beans::XPropertySet> xPropertySet (xSheetFilterDescriptor, uno::UNO_QUERY);
-        if (xPropertySet.is())
-        {
-            sal_Bool bCopyOutputData;
-            uno::Any aCopyOutputData = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_COPYOUT)));
-            if (aCopyOutputData >>= bCopyOutputData)
-                if (bCopyOutputData)
-                {
-                    table::CellAddress aOutputPosition;
-                    uno::Any aTempOutputPosition = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_OUTPOS)));
-                    if (aTempOutputPosition >>= aOutputPosition)
-                    {
-                        OUString sOUCellAddress;
-                        ScXMLConverter::GetStringFromAddress( sOUCellAddress, aOutputPosition, pDoc );
-                        AddAttribute(XML_NAMESPACE_TABLE, sXML_target_range_address, sOUCellAddress);
-                    }
-                }
-            ScDBCollection* pDBCollection = pDoc->GetDBCollection();
-            sal_uInt16 nIndex;
-            pDBCollection->SearchName(sDatabaseRangeName, nIndex);
-            ScDBData* pDBData = (*pDBCollection)[nIndex];
-            ScRange aAdvSource;
-            if (pDBData->GetAdvancedQuerySource(aAdvSource))
-            {
-                rtl::OUString sOUCellAddress;
-                ScXMLConverter::GetStringFromRange( sOUCellAddress, aAdvSource, pDoc );
-                AddAttribute(XML_NAMESPACE_TABLE, sXML_target_range_address, sOUCellAddress);
-            }
-
-            sal_Bool bSkipDuplicates;
-            uno::Any aSkipDuplicates = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SKIPDUP)));
-            if (aSkipDuplicates >>= bSkipDuplicates)
-                if (bSkipDuplicates)
-                    AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_display_duplicates, sXML_false);
-            SvXMLElementExport aElemF(*this, XML_NAMESPACE_TABLE, sXML_filter, sal_True, sal_True);
-            CheckAttrList();
-            sal_Bool bIsCaseSensitive = sal_False;
-            uno::Any aIsCaseSensitive = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISCASE)));
-            aIsCaseSensitive >>= bIsCaseSensitive;
-            sal_Bool bUseRegularExpressions = sal_False;
-            uno::Any aUseRegularExpressions = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_USEREGEX)));
-            aUseRegularExpressions >>= bUseRegularExpressions;
-            sal_Bool bAnd = sal_False;
-            sal_Bool bOr = sal_False;
-            for (sal_Int32 i = 1; i < nTableFilterFields; i++)
-            {
-                if (aTableFilterFields[i].Connection == sheet::FilterConnection_AND)
-                    bAnd = sal_True;
-                else
-                    bOr = sal_True;
-            }
-            if (bOr && !bAnd)
-            {
-                SvXMLElementExport aElemOr(*this, XML_NAMESPACE_TABLE, sXML_filter_or, sal_True, sal_True);
-                for (i = 0; i < nTableFilterFields; i++)
-                {
-                    WriteCondition(aTableFilterFields[i], bIsCaseSensitive, bUseRegularExpressions);
-                }
-            }
-            else if (bAnd && !bOr)
-            {
-                SvXMLElementExport aElemAnd(*this, XML_NAMESPACE_TABLE, sXML_filter_and, sal_True, sal_True);
-                for (i = 0; i < nTableFilterFields; i++)
-                {
-                    WriteCondition(aTableFilterFields[i], bIsCaseSensitive, bUseRegularExpressions);
-                }
-            }
-            else if (nTableFilterFields  == 1)
-            {
-                WriteCondition(aTableFilterFields[0], bIsCaseSensitive, bUseRegularExpressions);
-            }
-            else
-            {
-                SvXMLElementExport aElemC(*this, XML_NAMESPACE_TABLE, sXML_filter_or, sal_True, sal_True);
-                sheet::TableFilterField aPrevFilterField = aTableFilterFields[0];
-                sheet::FilterConnection aConnection = aTableFilterFields[1].Connection;
-                sal_Bool bOpenAndElement;
-                rtl::OUString aName = GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_filter_and)));
-                if (aConnection == sheet::FilterConnection_AND)
-                {
-                    GetDocHandler()->ignorableWhitespace(sWS);
-                    GetDocHandler()->startElement( aName, GetXAttrList());
-                    ClearAttrList();
-                    bOpenAndElement = sal_True;
-                }
-                else
-                    bOpenAndElement = sal_False;
-                for (i = 1; i < nTableFilterFields; i++)
-                {
-                    if (aConnection != aTableFilterFields[i].Connection)
-                    {
-                        aConnection = aTableFilterFields[i].Connection;
-                        if (aTableFilterFields[i].Connection == sheet::FilterConnection_AND)
-                        {
-                            GetDocHandler()->ignorableWhitespace(sWS);
-                            GetDocHandler()->startElement( aName, GetXAttrList());
-                            ClearAttrList();
-                            bOpenAndElement = sal_True;
-                            WriteCondition(aPrevFilterField, bIsCaseSensitive, bUseRegularExpressions);
-                            aPrevFilterField = aTableFilterFields[i];
-                            if (i == nTableFilterFields - 1)
-                            {
-                                WriteCondition(aPrevFilterField, bIsCaseSensitive, bUseRegularExpressions);
-                                GetDocHandler()->ignorableWhitespace(sWS);
-                                GetDocHandler()->endElement(aName);
-                                bOpenAndElement = sal_False;
-                            }
-                        }
-                        else
-                        {
-                            WriteCondition(aPrevFilterField, bIsCaseSensitive, bUseRegularExpressions);
-                            aPrevFilterField = aTableFilterFields[i];
-                            if (bOpenAndElement)
-                            {
-                                GetDocHandler()->ignorableWhitespace(sWS);
-                                GetDocHandler()->endElement(aName);
-                                bOpenAndElement = sal_False;
-                            }
-                            if (i == nTableFilterFields - 1)
-                            {
-                                WriteCondition(aPrevFilterField, bIsCaseSensitive, bUseRegularExpressions);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        WriteCondition(aPrevFilterField, bIsCaseSensitive, bUseRegularExpressions);
-                        aPrevFilterField = aTableFilterFields[i];
-                        if (i == nTableFilterFields - 1)
-                            WriteCondition(aPrevFilterField, bIsCaseSensitive, bUseRegularExpressions);
-                    }
-                }
-            }
-        }
-    }
-}
-
-void ScXMLExport::WriteSortDescriptor(const uno::Sequence <beans::PropertyValue> aSortProperties)
-{
-    uno::Sequence <util::SortField> aSortFields;
-    sal_Bool bBindFormatsToContent = sal_True;
-    sal_Bool bCopyOutputData = sal_False;
-    sal_Bool bIsCaseSensitive = sal_False;
-    sal_Bool bIsUserListEnabled = sal_False;
-    table::CellAddress aOutputPosition;
-    sal_Int32 nUserListIndex;
-    sal_Int32 nProperties = aSortProperties.getLength();
-    for (sal_Int32 i = 0; i < nProperties; i++)
-    {
-        if (aSortProperties[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_BINDFMT)))
-        {
-            uno::Any aBindFormatsToContent = aSortProperties[i].Value;
-            aBindFormatsToContent >>= bBindFormatsToContent;
-        }
-        else if (aSortProperties[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_COPYOUT)))
-        {
-            uno::Any aCopyOutputData = aSortProperties[i].Value;
-            aCopyOutputData >>= bCopyOutputData;
-        }
-        else if (aSortProperties[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISCASE)))
-        {
-            uno::Any aIsCaseSensitive = aSortProperties[i].Value;
-            aIsCaseSensitive >>= bIsCaseSensitive;
-        }
-        else if (aSortProperties[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISULIST)))
-        {
-            uno::Any aIsUserListEnabled = aSortProperties[i].Value;
-            aIsUserListEnabled >>= bIsUserListEnabled;
-        }
-        else if (aSortProperties[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_OUTPOS)))
-        {
-            uno::Any aTempOutputPosition = aSortProperties[i].Value;
-            aTempOutputPosition >>= aOutputPosition;
-        }
-        else if (aSortProperties[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_UINDEX)))
-        {
-            uno::Any aUserListIndex = aSortProperties[i].Value;
-            aUserListIndex >>= nUserListIndex;
-        }
-        else if (aSortProperties[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SORTFLD)))
-        {
-            uno::Any aTempSortFields = aSortProperties[i].Value;
-            aTempSortFields >>= aSortFields;
-        }
-    }
-    sal_Int32 nSortFields = aSortFields.getLength();
-    if (nSortFields > 0)
-    {
-        if (!bBindFormatsToContent)
-            AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_bind_styles_to_content, sXML_false);
-        if (bCopyOutputData)
-        {
-            OUString sOUCellAddress;
-            ScXMLConverter::GetStringFromAddress( sOUCellAddress, aOutputPosition, pDoc );
-            AddAttribute(XML_NAMESPACE_TABLE, sXML_target_range_address, sOUCellAddress);
-        }
-        if (bIsCaseSensitive)
-            AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_case_sensitive, sXML_true);
-        SvXMLElementExport aElemS(*this, XML_NAMESPACE_TABLE, sXML_sort, sal_True, sal_True);
-        CheckAttrList();
-        for (i = 0; i < nSortFields; i++)
-        {
-            AddAttribute(XML_NAMESPACE_TABLE, sXML_field_number, rtl::OUString::valueOf(aSortFields[i].Field));
-            if (!aSortFields[i].SortAscending)
-                AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_order, sXML_descending);
-            if (!bIsUserListEnabled)
-            {
-                switch (aSortFields[i].FieldType)
-                {
-                    case util::SortFieldType_ALPHANUMERIC :
-                        AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_data_type, sXML_text);
-                    break;
-                    case util::SortFieldType_AUTOMATIC :
-                        AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_data_type, sXML_automatic);
-                    break;
-                    case util::SortFieldType_NUMERIC :
-                        AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_data_type, sXML_number);
-                    break;
-                }
-            }
-            else
-                AddAttribute(XML_NAMESPACE_TABLE, sXML_data_type, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_USERLIST)) + rtl::OUString::valueOf(nUserListIndex));
-            SvXMLElementExport aElemSb(*this, XML_NAMESPACE_TABLE, sXML_sort_by, sal_True, sal_True);
-            CheckAttrList();
-        }
-    }
-}
-
-void ScXMLExport::WriteSubTotalDescriptor(const com::sun::star::uno::Reference <com::sun::star::sheet::XSubTotalDescriptor> xSubTotalDescriptor, const rtl::OUString sDatabaseRangeName)
-{
-    uno::Reference <container::XIndexAccess> xIndexAccess (xSubTotalDescriptor, uno::UNO_QUERY);
-    if (xIndexAccess.is())
-    {
-        sal_Int32 nSubTotalFields = xIndexAccess->getCount();
-        if (nSubTotalFields > 0)
-        {
-            uno::Reference <beans::XPropertySet> xPropertySet (xSubTotalDescriptor, uno::UNO_QUERY);
-            sal_Bool bEnableUserSortList = sal_False;
-            sal_Bool bSortAscending = sal_True;
-            sal_Int32 nUserSortListIndex = 0;
-            if (xPropertySet.is())
-            {
-                sal_Bool bBindFormatsToContent;
-                uno::Any aBindFormatsToContent = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_BINDFMT)));
-                if (aBindFormatsToContent >>= bBindFormatsToContent)
-                    if (!bBindFormatsToContent)
-                        AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_bind_styles_to_content, sXML_false);
-                sal_Bool bInsertPageBreaks;
-                uno::Any aInsertPageBreaks = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INSBRK)));
-                if (aInsertPageBreaks >>= bInsertPageBreaks)
-                    if (bInsertPageBreaks)
-                        AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_page_breaks_on_group_change, sXML_true);
-                sal_Bool bIsCaseSensitive;
-                uno::Any aIsCaseSensitive = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISCASE)));
-                if (aIsCaseSensitive >>= bIsCaseSensitive)
-                    if (bIsCaseSensitive)
-                        AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_case_sensitive, sXML_true);
-                uno::Any aSortAscending = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_SORTASCENDING)));
-                aSortAscending >>= bSortAscending;
-                uno::Any aEnabledUserSortList = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ENABLEUSERSORTLIST)));
-                if (aEnabledUserSortList >>= bEnableUserSortList)
-                    if (bEnableUserSortList)
-                    {
-                        uno::Any aUserSortListIndex = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_USERSORTLISTINDEX)));
-                        aUserSortListIndex >>= nUserSortListIndex;
-                    }
-            }
-            SvXMLElementExport aElemSTRs(*this, XML_NAMESPACE_TABLE, sXML_subtotal_rules, sal_True, sal_True);
-            CheckAttrList();
-            {
-                ScDBCollection* pDBCollection = pDoc->GetDBCollection();
-                sal_uInt16 nIndex;
-                pDBCollection->SearchName(sDatabaseRangeName, nIndex);
-                ScDBData* pDBData = (*pDBCollection)[nIndex];
-                ScSubTotalParam aSubTotalParam;
-                pDBData->GetSubTotalParam(aSubTotalParam);
-                if (aSubTotalParam.bDoSort)
-                {
-                    if (!aSubTotalParam.bAscending)
-                        AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_order, sXML_descending);
-                    if (aSubTotalParam.bUserDef)
-                    {
-                        rtl::OUString sUserList = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_USERLIST));
-                        sUserList += rtl::OUString::valueOf(aSubTotalParam.nUserIndex);
-                        AddAttribute(XML_NAMESPACE_TABLE, sXML_data_type, sUserList);
-                    }
-                    SvXMLElementExport aElemSGs(*this, XML_NAMESPACE_TABLE, sXML_sort_groups, sal_True, sal_True);
-                    CheckAttrList();
-                }
-            }
-            for (sal_Int32 i = 0; i < nSubTotalFields; i++)
-            {
-                uno::Reference <sheet::XSubTotalField> xSubTotalField;
-                uno::Any aSubTotalField = xIndexAccess->getByIndex(i);
-                if (aSubTotalField >>= xSubTotalField)
-                {
-                    sal_Int32 nGroupColumn = xSubTotalField->getGroupColumn();
-                    AddAttribute(XML_NAMESPACE_TABLE, sXML_group_by_field_number, rtl::OUString::valueOf(nGroupColumn));
-                    SvXMLElementExport aElemSTR(*this, XML_NAMESPACE_TABLE, sXML_subtotal_rule, sal_True, sal_True);
-                    CheckAttrList();
-                    uno::Sequence <sheet::SubTotalColumn> aSubTotalColumns = xSubTotalField->getSubTotalColumns();
-                    sal_Int32 nSubTotalColumns = aSubTotalColumns.getLength();
-                    for (sal_Int32 j = 0; j < nSubTotalColumns; j++)
-                    {
-                        AddAttribute(XML_NAMESPACE_TABLE, sXML_field_number, rtl::OUString::valueOf(aSubTotalColumns[j].Column));
-                        rtl::OUString sFunction;
-                        ScXMLConverter::GetStringFromFunction( sFunction, aSubTotalColumns[j].Function );
-                        AddAttribute(XML_NAMESPACE_TABLE, sXML_function, sFunction);
-                        SvXMLElementExport aElemSTF(*this, XML_NAMESPACE_TABLE, sXML_subtotal_field, sal_True, sal_True);
-                        CheckAttrList();
-                    }
-                }
-            }
-        }
-    }
-}
-
-void ScXMLExport::WriteDatabaseRanges(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc)
-{
-    uno::Reference <beans::XPropertySet> xPropertySet (xSpreadDoc, uno::UNO_QUERY);
-    if (xPropertySet.is())
-    {
-        uno::Any aDatabaseRanges = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DATABASERNG)));
-        uno::Reference <sheet::XDatabaseRanges> xDatabaseRanges;
-        CheckAttrList();
-        if (aDatabaseRanges >>= xDatabaseRanges)
-        {
-            uno::Sequence <rtl::OUString> aRanges = xDatabaseRanges->getElementNames();
-            sal_Int32 nDatabaseRangesCount = aRanges.getLength();
-            if (nDatabaseRangesCount > 0)
-            {
-                SvXMLElementExport aElemDRs(*this, XML_NAMESPACE_TABLE, sXML_database_ranges, sal_True, sal_True);
-                for (sal_Int32 i = 0; i < nDatabaseRangesCount; i++)
-                {
-                    rtl::OUString sDatabaseRangeName = aRanges[i];
-                    uno::Any aDatabaseRange = xDatabaseRanges->getByName(sDatabaseRangeName);
-                    uno::Reference <sheet::XDatabaseRange> xDatabaseRange;
-                    if (aDatabaseRange >>= xDatabaseRange)
-                    {
-                        String sUnbenannt = ScGlobal::GetRscString(STR_DB_NONAME);
-                        rtl::OUString sOUUnbenannt (sUnbenannt);
-                        if (sOUUnbenannt != sDatabaseRangeName)
-                            AddAttribute(XML_NAMESPACE_TABLE, sXML_name, sDatabaseRangeName);
-                        table::CellRangeAddress aRangeAddress = xDatabaseRange->getDataArea();
-                        rtl::OUString sOUAddress;
-                        ScXMLConverter::GetStringFromRange( sOUAddress, aRangeAddress, pDoc );
-                        AddAttribute (XML_NAMESPACE_TABLE, sXML_target_range_address, sOUAddress);
-                        ScDBCollection* pDBCollection = pDoc->GetDBCollection();
-                        sal_uInt16 nIndex;
-                        pDBCollection->SearchName(sDatabaseRangeName, nIndex);
-                        ScDBData* pDBData = (*pDBCollection)[nIndex];
-                        if (pDBData->HasImportSelection())
-                            AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_is_selection, sXML_true);
-                        if (pDBData->HasAutoFilter())
-                            AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_display_filter_buttons, sXML_true);
-                        uno::Reference <beans::XPropertySet> xPropertySetDatabaseRange (xDatabaseRange, uno::UNO_QUERY);
-                        if (xPropertySetDatabaseRange.is())
-                        {
-                            uno::Any aKeepFormatsProperty = xPropertySetDatabaseRange->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_KEEPFORM)));
-                            sal_Bool bKeepFormats = sal_False;
-                            if (aKeepFormatsProperty >>= bKeepFormats)
-                                if (bKeepFormats)
-                                    AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_on_update_keep_styles, sXML_true);
-                            uno::Any aMoveCellsProperty = xPropertySetDatabaseRange->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_MOVCELLS)));
-                            sal_Bool bMoveCells = sal_False;
-                            if (aMoveCellsProperty >>= bMoveCells)
-                                if (bMoveCells)
-                                    AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_on_update_keep_size, sXML_false);
-                            uno::Any aStripDataProperty = xPropertySetDatabaseRange->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_STRIPDAT)));
-                            sal_Bool bStripData = sal_False;
-                            if (aStripDataProperty >>= bStripData)
-                                if (bStripData)
-                                    AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_has_persistent_data, sXML_false);
-                        }
-                        uno::Reference <sheet::XSheetFilterDescriptor> xSheetFilterDescriptor = xDatabaseRange->getFilterDescriptor();
-                        if (xSheetFilterDescriptor.is())
-                        {
-                            uno::Reference <beans::XPropertySet> xFilterProperties (xSheetFilterDescriptor, uno::UNO_QUERY);
-                            if (xFilterProperties.is())
-                            {
-                                uno::Any aContainsHeaderProperty = xFilterProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CONTHDR)));
-                                sal_Bool bContainsHeader = sal_True;
-                                if (aContainsHeaderProperty >>= bContainsHeader)
-                                    if (!bContainsHeader)
-                                        AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_contains_header, sXML_false);
-                                uno::Any aOrientationProperty = xFilterProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ORIENT)));
-                                sal_Bool bOrientation = sal_False;
-                                if (aOrientationProperty >>= bOrientation)
-                                    if (bOrientation)
-                                        AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_orientation, sXML_column);
-                            }
-                        }
-                        SvXMLElementExport aElemDR(*this, XML_NAMESPACE_TABLE, sXML_database_range, sal_True, sal_True);
-                        CheckAttrList();
-                        WriteImportDescriptor(xDatabaseRange->getImportDescriptor());
-                        if (xSheetFilterDescriptor.is())
-                            WriteFilterDescriptor(xSheetFilterDescriptor, sDatabaseRangeName);
-                        WriteSortDescriptor(xDatabaseRange->getSortDescriptor());
-                        WriteSubTotalDescriptor(xDatabaseRange->getSubTotalDescriptor(), sDatabaseRangeName);
-                    }
-                }
-            }
-        }
-    }
-
-}
-
-rtl::OUString ScXMLExport::getDPOperatorXML(const ScQueryOp aFilterOperator, const sal_Bool bUseRegularExpressions,
-    const sal_Bool bIsString, const double dVal) const
-{
-    if (bUseRegularExpressions)
-    {
-        switch (aFilterOperator)
-        {
-            case SC_EQUAL :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_match));
-                break;
-            case SC_NOT_EQUAL :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_nomatch));
-                break;
-        }
-    }
-    else
-    {
-        switch (aFilterOperator)
-        {
-            case SC_EQUAL :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
-                break;
-            case SC_NOT_EQUAL :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("!="));
-                break;
-            case SC_BOTPERC :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_bottom_percent));
-                break;
-            case SC_BOTVAL :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_bottom_values));
-                break;
-            case SC_GREATER :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
-                break;
-            case SC_GREATER_EQUAL :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">="));
-                break;
-            case SC_LESS :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
-                break;
-            case SC_LESS_EQUAL :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
-                break;
-            case SC_TOPPERC :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_top_percent));
-                break;
-            case SC_TOPVAL :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_top_values));
-                break;
-            default:
-            {
-                if (bIsString)
-                {
-                    if (dVal == SC_EMPTYFIELDS)
-                        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_empty));
-                    else if (dVal == SC_NONEMPTYFIELDS)
-                        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_noempty));
-                }
-            }
-        }
-    }
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
-}
-
-void ScXMLExport::WriteDPCondition(const ScQueryEntry& aQueryEntry, sal_Bool bIsCaseSensitive, sal_Bool bUseRegularExpressions)
-{
-    AddAttribute(XML_NAMESPACE_TABLE, sXML_field_number, rtl::OUString::valueOf(aQueryEntry.nField));
-    if (bIsCaseSensitive)
-        AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_case_sensitive, sXML_true);
-    if (aQueryEntry.bQueryByString)
-    {
-        AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_data_type, sXML_number);
-        rtl::OUStringBuffer sBuffer;
-        GetMM100UnitConverter().convertNumber(sBuffer, aQueryEntry.nVal);
-        AddAttribute(XML_NAMESPACE_TABLE, sXML_value, sBuffer.makeStringAndClear());
-    }
-    else
-        AddAttribute(XML_NAMESPACE_TABLE, sXML_value, rtl::OUString(*aQueryEntry.pStr));
-    AddAttribute(XML_NAMESPACE_TABLE, sXML_operator, getDPOperatorXML(aQueryEntry.eOp, bUseRegularExpressions,
-        aQueryEntry.bQueryByString, aQueryEntry.nVal));
-    SvXMLElementExport aElemC(*this, XML_NAMESPACE_TABLE, sXML_filter_condition, sal_True, sal_True);
-}
-
-void ScXMLExport::WriteDPFilter(const ScQueryParam& aQueryParam)
-{
-    sal_Int16 nQueryEntryCount = aQueryParam.GetEntryCount();
-    if (nQueryEntryCount > 0)
-    {
-        sal_Bool bAnd(sal_False);
-        sal_Bool bOr(sal_False);
-        sal_Bool bHasEntries(sal_True);
-        sal_Int16 nEntries(0);
-        for (sal_Int32 j = 1; (j < nQueryEntryCount) && bHasEntries; j++)
-        {
-            ScQueryEntry aEntry = aQueryParam.GetEntry(j);
-            if (aEntry.bDoQuery)
-            {
-                nEntries++;
-                if (aEntry.eConnect == SC_AND)
-                    bAnd = sal_True;
-                else
-                    bOr = sal_True;
-            }
-            else
-                bHasEntries = sal_False;
-        }
-        nQueryEntryCount = nEntries;
-        if (nQueryEntryCount)
-        {
-            if (!aQueryParam.bInplace)
-            {
-                ScAddress aTargetAddress(aQueryParam.nDestCol, aQueryParam.nDestRow, aQueryParam.nDestTab);
-                OUString sAddress;
-                ScXMLConverter::GetStringFromAddress( sAddress, aTargetAddress, pDoc );
-                AddAttribute(XML_NAMESPACE_TABLE, sXML_target_range_address, sAddress);
-            }
-            if(!((aQueryParam.nCol1 == aQueryParam.nCol2) && (aQueryParam.nRow1 == aQueryParam.nRow2) && (aQueryParam.nCol1 == aQueryParam.nRow1)
-                && (aQueryParam.nCol1 == 0) && (aQueryParam.nTab == USHRT_MAX)))
-            {
-                ScRange aConditionRange(aQueryParam.nCol1, aQueryParam.nRow1, aQueryParam.nTab,
-                    aQueryParam.nCol2, aQueryParam.nRow2, aQueryParam.nTab);
-                rtl::OUString sConditionRange;
-                ScXMLConverter::GetStringFromRange( sConditionRange, aConditionRange, pDoc );
-                AddAttribute(XML_NAMESPACE_TABLE, sXML_condition_source_range_address, sConditionRange);
-            }
-            if (!aQueryParam.bDuplicate)
-                AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_display_duplicates, sXML_false);
-            SvXMLElementExport aElemDPF(*this, XML_NAMESPACE_TABLE, sXML_filter, sal_True, sal_True);
-            CheckAttrList();
-            if (bOr && !bAnd)
-            {
-                SvXMLElementExport aElemOr(*this, XML_NAMESPACE_TABLE, sXML_filter_or, sal_True, sal_True);
-                for (j = 0; j < nQueryEntryCount; j++)
-                {
-                    WriteDPCondition(aQueryParam.GetEntry(j), aQueryParam.bCaseSens, aQueryParam.bRegExp);
-                }
-            }
-            else if (bAnd && !bOr)
-            {
-                SvXMLElementExport aElemAnd(*this, XML_NAMESPACE_TABLE, sXML_filter_and, sal_True, sal_True);
-                for (j = 0; j < nQueryEntryCount; j++)
-                {
-                    WriteDPCondition(aQueryParam.GetEntry(j), aQueryParam.bCaseSens, aQueryParam.bRegExp);
-                }
-            }
-            else if (nQueryEntryCount  == 1)
-            {
-                    WriteDPCondition(aQueryParam.GetEntry(0), aQueryParam.bCaseSens, aQueryParam.bRegExp);
-            }
-            else
-            {
-                SvXMLElementExport aElemC(*this, XML_NAMESPACE_TABLE, sXML_filter_or, sal_True, sal_True);
-                ScQueryEntry aPrevFilterField = aQueryParam.GetEntry(0);
-                ScQueryConnect aConnection = aQueryParam.GetEntry(1).eConnect;
-                sal_Bool bOpenAndElement;
-                rtl::OUString aName = GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_filter_and)));
-                if (aConnection == SC_AND)
-                {
-                    GetDocHandler()->ignorableWhitespace(sWS);
-                    GetDocHandler()->startElement( aName, GetXAttrList());
-                    ClearAttrList();
-                    bOpenAndElement = sal_True;
-                }
-                else
-                    bOpenAndElement = sal_False;
-                for (j = 1; j < nQueryEntryCount; j++)
-                {
-                    if (aConnection != aQueryParam.GetEntry(j).eConnect)
-                    {
-                        aConnection = aQueryParam.GetEntry(j).eConnect;
-                        if (aQueryParam.GetEntry(j).eConnect == SC_AND)
-                        {
-                            GetDocHandler()->ignorableWhitespace(sWS);
-                            GetDocHandler()->startElement( aName, GetXAttrList());
-                            ClearAttrList();
-                            bOpenAndElement = sal_True;
-                            WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.bRegExp);
-                            aPrevFilterField = aQueryParam.GetEntry(j);
-                            if (j == nQueryEntryCount - 1)
-                            {
-                                WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.bRegExp);
-                                GetDocHandler()->ignorableWhitespace(sWS);
-                                GetDocHandler()->endElement(aName);
-                                bOpenAndElement = sal_False;
-                            }
-                        }
-                        else
-                        {
-                            WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.bRegExp);
-                            aPrevFilterField = aQueryParam.GetEntry(j);
-                            if (bOpenAndElement)
-                            {
-                                GetDocHandler()->ignorableWhitespace(sWS);
-                                GetDocHandler()->endElement(aName);
-                                bOpenAndElement = sal_False;
-                            }
-                            if (j == nQueryEntryCount - 1)
-                            {
-                                WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.bRegExp);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.bRegExp);
-                        aPrevFilterField = aQueryParam.GetEntry(j);
-                        if (j == nQueryEntryCount - 1)
-                            WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.bRegExp);
-                    }
-                }
-            }
-        }
-    }
-}
-
-void ScXMLExport::WriteDataPilots(const uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc)
-{
-    if (pDoc)
-    {
-        ScDPCollection* pDPs = pDoc->GetDPCollection();
-        if (pDPs)
-        {
-            sal_Int16 nDPCount = pDPs->GetCount();
-            if (nDPCount > 0)
-            {
-                SvXMLElementExport aElemDPs(*this, XML_NAMESPACE_TABLE, sXML_data_pilot_tables, sal_True, sal_True);
-                CheckAttrList();
-                for (sal_Int16 i = 0; i < nDPCount; i++)
-                {
-                    ScDPSaveData* pDPSave = (*pDPs)[i]->GetSaveData();
-                    if (pDPSave)
-                    {
-                        ScRange aOutRange = (*pDPs)[i]->GetOutRange();
-                        rtl::OUString sTargetRangeAddress;
-                        ScXMLConverter::GetStringFromRange( sTargetRangeAddress, aOutRange, pDoc );
-                        ScDocAttrIterator aAttrItr(pDoc, aOutRange.aStart.Tab(),
-                            aOutRange.aStart.Col(), aOutRange.aStart.Row(),
-                            aOutRange.aEnd.Col(), aOutRange.aEnd.Row());
-                        sal_uInt16 nCol, nRow1, nRow2;
-                        OUString sOUButtonList;
-                        const ScPatternAttr* pAttr = aAttrItr.GetNext(nCol, nRow1, nRow2);
-                        while (pAttr)
-                        {
-                            ScMergeFlagAttr& rItem = (ScMergeFlagAttr&)pAttr->GetItem(ATTR_MERGE_FLAG);
-                            if (rItem.HasButton())
-                            {
-                                for (sal_Int32 nButtonRow = nRow1; nButtonRow <= nRow2; nButtonRow++)
-                                {
-                                    ScAddress aButtonAddr(nCol, nButtonRow, aOutRange.aStart.Tab());
-                                    ScXMLConverter::GetStringFromAddress(
-                                        sOUButtonList, aButtonAddr, pDoc, sal_True );
-                                }
-                            }
-                            pAttr = aAttrItr.GetNext(nCol, nRow1, nRow2);
-                        }
-                        rtl::OUString sName((*pDPs)[i]->GetName());
-                        rtl::OUString sApplicationData((*pDPs)[i]->GetTag());
-                        sal_Bool bRowGrand = pDPSave->GetRowGrand();
-                        sal_Bool bColumnGrand = pDPSave->GetColumnGrand();
-                        AddAttribute(XML_NAMESPACE_TABLE, sXML_name, sName);
-                        AddAttribute(XML_NAMESPACE_TABLE, sXML_application_data, sApplicationData);
-                        AddAttribute(XML_NAMESPACE_TABLE, sXML_target_range_address, sTargetRangeAddress);
-                        AddAttribute(XML_NAMESPACE_TABLE, sXML_buttons, sOUButtonList);
-                        if (!(bRowGrand && bColumnGrand))
-                        {
-                            if (bRowGrand)
-                                AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_grand_total, sXML_row);
-                            else if (bColumnGrand)
-                                AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_grand_total, sXML_column);
-                            else
-                                AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_grand_total, sXML_none);
-                        }
-                        if (pDPSave->GetIgnoreEmptyRows())
-                            AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_ignore_empty_rows, sXML_true);
-                        if (pDPSave->GetRepeatIfEmpty())
-                            AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_identify_categories, sXML_true);
-                        SvXMLElementExport aElemDP(*this, XML_NAMESPACE_TABLE, sXML_data_pilot_table, sal_True, sal_True);
-                        CheckAttrList();
-                        if ((*pDPs)[i]->IsSheetData())
-                        {
-                            const ScSheetSourceDesc* pSheetSource = (*pDPs)[i]->GetSheetDesc();
-                            rtl::OUString sCellRangeAddress;
-                            ScXMLConverter::GetStringFromRange( sCellRangeAddress, pSheetSource->aSourceRange, pDoc );
-                            AddAttribute(XML_NAMESPACE_TABLE, sXML_cell_range_address, sCellRangeAddress);
-                            SvXMLElementExport aElemSCR(*this, XML_NAMESPACE_TABLE, sXML_source_cell_range, sal_True, sal_True);
-                            CheckAttrList();
-                            WriteDPFilter(pSheetSource->aQueryParam);
-                        }
-                        else if ((*pDPs)[i]->IsImportData())
-                        {
-                            const ScImportSourceDesc* pImpSource = (*pDPs)[i]->GetImportSourceDesc();
-                            switch (pImpSource->nType)
-                            {
-                                case sheet::DataImportMode_NONE : break;
-                                case sheet::DataImportMode_QUERY :
-                                {
-                                    AddAttribute(XML_NAMESPACE_TABLE, sXML_database_name, rtl::OUString(pImpSource->aDBName));
-                                    AddAttribute(XML_NAMESPACE_TABLE, sXML_query_name, rtl::OUString(pImpSource->aObject));
-                                    SvXMLElementExport aElemID(*this, XML_NAMESPACE_TABLE, sXML_database_source_query, sal_True, sal_True);
-                                    CheckAttrList();
-                                }
-                                break;
-                                case sheet::DataImportMode_TABLE :
-                                {
-                                    AddAttribute(XML_NAMESPACE_TABLE, sXML_database_name, rtl::OUString(pImpSource->aDBName));
-                                    AddAttribute(XML_NAMESPACE_TABLE, sXML_table_name, rtl::OUString(pImpSource->aObject));
-                                    SvXMLElementExport aElemID(*this, XML_NAMESPACE_TABLE, sXML_database_source_table, sal_True, sal_True);
-                                    CheckAttrList();
-                                }
-                                break;
-                                case sheet::DataImportMode_SQL :
-                                {
-                                    AddAttribute(XML_NAMESPACE_TABLE, sXML_database_name, rtl::OUString(pImpSource->aDBName));
-                                    AddAttribute(XML_NAMESPACE_TABLE, sXML_sql_statement, rtl::OUString(pImpSource->aObject));
-                                    if (!pImpSource->bNative)
-                                        AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_parse_sql_statement, sXML_true);
-                                    SvXMLElementExport aElemID(*this, XML_NAMESPACE_TABLE, sXML_database_source_sql, sal_True, sal_True);
-                                    CheckAttrList();
-                                }
-                                break;
-                            }
-                        }
-                        else if ((*pDPs)[i]->IsServiceData())
-                        {
-                            const ScDPServiceDesc* pServSource = (*pDPs)[i]->GetDPServiceDesc();
-                            AddAttribute(XML_NAMESPACE_TABLE, sXML_name, rtl::OUString(pServSource->aServiceName));
-                            AddAttribute(XML_NAMESPACE_TABLE, sXML_source_name, rtl::OUString(pServSource->aParSource));
-                            AddAttribute(XML_NAMESPACE_TABLE, sXML_object_name, rtl::OUString(pServSource->aParName));
-                            AddAttribute(XML_NAMESPACE_TABLE, sXML_username, rtl::OUString(pServSource->aParUser));
-                            // How to write the Passwort? We must know, whether the passwort shoulb be written encrypted and how or not
-                            AddAttribute(XML_NAMESPACE_TABLE, sXML_passwort, rtl::OUString(pServSource->aParPass));
-                            SvXMLElementExport aElemSD(*this, XML_NAMESPACE_TABLE, sXML_source_service, sal_True, sal_True);
-                            CheckAttrList();
-                        }
-                        List aDimensions = pDPSave->GetDimensions();
-                        sal_Int32 nDimCount = aDimensions.Count();
-                        for (sal_Int32 nDim = 0; nDim < nDimCount; nDim++)
-                        {
-                            ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimensions.GetObject(nDim);
-                            AddAttribute(XML_NAMESPACE_TABLE, sXML_source_field_name, rtl::OUString(pDim->GetName()));
-                            if (pDim->IsDataLayout())
-                                AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_is_data_layout_field, sXML_true);
-                            OUString sValueStr;
-                            ScXMLConverter::GetStringFromOrientation( sValueStr,
-                                (sheet::DataPilotFieldOrientation) pDim->GetOrientation() );
-                            if( sValueStr.getLength() )
-                                AddAttribute(XML_NAMESPACE_TABLE, sXML_orientation, sValueStr );
-                            if (pDim->GetUsedHierarchy() != 1)
-                            {
-                                rtl::OUStringBuffer sBuffer;
-                                SvXMLUnitConverter::convertNumber(sBuffer, pDim->GetUsedHierarchy());
-                                AddAttribute(XML_NAMESPACE_TABLE, sXML_used_hierarchy, sBuffer.makeStringAndClear());
-                            }
-                            ScXMLConverter::GetStringFromFunction( sValueStr,
-                                (sheet::GeneralFunction) pDim->GetFunction() );
-                            AddAttribute(XML_NAMESPACE_TABLE, sXML_function, sValueStr);
-                            SvXMLElementExport aElemDPF(*this, XML_NAMESPACE_TABLE, sXML_data_pilot_field, sal_True, sal_True);
-                            CheckAttrList();
-                            {
-                                rtl::OUStringBuffer sBuffer;
-                                SvXMLUnitConverter::convertBool(sBuffer, pDim->GetShowEmpty());
-                                AddAttribute(XML_NAMESPACE_TABLE, sXML_display_empty, sBuffer.makeStringAndClear());
-                                SvXMLElementExport aElemDPL(*this, XML_NAMESPACE_TABLE, sXML_data_pilot_level, sal_True, sal_True);
-                                CheckAttrList();
-                                sal_Int32 nSubTotalCount = pDim->GetSubTotalsCount();
-                                if (nSubTotalCount > 0)
-                                {
-                                    SvXMLElementExport aElemSTs(*this, XML_NAMESPACE_TABLE, sXML_data_pilot_subtotals, sal_True, sal_True);
-                                    CheckAttrList();
-                                    for (sal_Int32 nSubTotal = 0; nSubTotal < nSubTotalCount; nSubTotal++)
-                                    {
-                                        rtl::OUString sFunction;
-                                        ScXMLConverter::GetStringFromFunction( sFunction, (sheet::GeneralFunction)pDim->GetSubTotalFunc(nSubTotal) );
-                                        AddAttribute(XML_NAMESPACE_TABLE, sXML_function, sFunction);
-                                        SvXMLElementExport aElemST(*this, XML_NAMESPACE_TABLE, sXML_data_pilot_subtotal, sal_True, sal_True);
-                                    }
-                                }
-                                List aMembers = pDim->GetMembers();
-                                sal_Int32 nMemberCount = aMembers.Count();
-                                if (nMemberCount > 0)
-                                {
-                                    SvXMLElementExport aElemDPMs(*this, XML_NAMESPACE_TABLE, sXML_data_pilot_members, sal_True, sal_True);
-                                    CheckAttrList();
-                                    for (sal_Int32 nMember = 0; nMember < nMemberCount; nMember++)
-                                    {
-                                        AddAttribute(XML_NAMESPACE_TABLE, sXML_name, rtl::OUString(((ScDPSaveMember*)aMembers.GetObject(nMember))->GetName()));
-                                        rtl::OUStringBuffer sBuffer;
-                                        SvXMLUnitConverter::convertBool(sBuffer, ((ScDPSaveMember*)aMembers.GetObject(nMember))->GetIsVisible());
-                                        AddAttribute(XML_NAMESPACE_TABLE, sXML_display, sBuffer.makeStringAndClear());
-                                        SvXMLUnitConverter::convertBool(sBuffer, ((ScDPSaveMember*)aMembers.GetObject(nMember))->GetShowDetails());
-                                        AddAttribute(XML_NAMESPACE_TABLE, sXML_display_details, sBuffer.makeStringAndClear());
-                                        SvXMLElementExport aElemDPM(*this, XML_NAMESPACE_TABLE, sXML_data_pilot_member, sal_True, sal_True);                                        CheckAttrList();
-                                    }
                                 }
                             }
                         }
