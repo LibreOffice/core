@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:16:55 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_BITMAP_CXX
-
 #ifndef _RTL_CRC_H_
 #include <rtl/crc.h>
 #endif
@@ -73,8 +71,8 @@
 #ifndef _SV_BMPACC_HXX
 #include <bmpacc.hxx>
 #endif
-#ifndef _SV_POLY_HXX
-#include <poly.hxx>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 #ifndef _SV_OUTDEV_HXX
 #include <outdev.hxx>
@@ -83,7 +81,7 @@
 #include <impbmp.hxx>
 #endif
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 #ifndef _SV_BITMAP_HXX
 #include <bitmap.hxx>
@@ -539,8 +537,8 @@ BOOL Bitmap::Erase( const Color& rFillColor )
     if( pWriteAcc )
     {
         const ULONG nFormat = pWriteAcc->GetScanlineFormat();
-        BYTE        cIndex;
-        BOOL        bFast;
+        BYTE        cIndex = 0;
+        BOOL        bFast = FALSE;
 
         switch( nFormat )
         {
@@ -591,7 +589,7 @@ BOOL Bitmap::Erase( const Color& rFillColor )
         if( bFast )
         {
             const ULONG nBufSize = pWriteAcc->GetScanlineSize() * pWriteAcc->Height();
-            HMEMSET( pWriteAcc->GetBuffer(), cIndex, nBufSize );
+            memset( pWriteAcc->GetBuffer(), cIndex, nBufSize );
         }
         else
         {
@@ -692,9 +690,9 @@ BOOL Bitmap::Mirror( ULONG nMirrorFlags )
 
             for( long nY = 0L, nOther = nHeight1; nY < nHeight_2; nY++, nOther-- )
             {
-                HMEMCPY( pBuffer, pAcc->GetScanline( nY ), nScanSize );
-                HMEMCPY( pAcc->GetScanline( nY ), pAcc->GetScanline( nOther ), nScanSize );
-                HMEMCPY( pAcc->GetScanline( nOther ), pBuffer, nScanSize );
+                memcpy( pBuffer, pAcc->GetScanline( nY ), nScanSize );
+                memcpy( pAcc->GetScanline( nY ), pAcc->GetScanline( nOther ), nScanSize );
+                memcpy( pAcc->GetScanline( nOther ), pBuffer, nScanSize );
             }
 
             delete[] pBuffer;
@@ -1136,8 +1134,6 @@ BOOL Bitmap::Expand( ULONG nDX, ULONG nDY, const Color* pInitColor )
 
         if( pReadAcc )
         {
-// Was soll den das ?
-//          BitmapPalette       aBmpPal( pReadAcc ? pReadAcc->GetPalette() : BitmapPalette() );
             BitmapPalette       aBmpPal( pReadAcc->GetPalette() );
             Bitmap              aNewBmp( aNewSize, GetBitCount(), &aBmpPal );
             BitmapWriteAccess*  pWriteAcc = aNewBmp.AcquireWriteAccess();
@@ -1145,7 +1141,6 @@ BOOL Bitmap::Expand( ULONG nDX, ULONG nDY, const Color* pInitColor )
             if( pWriteAcc )
             {
                 BitmapColor aColor;
-                const ULONG nScanlineSize = pReadAcc->GetScanlineSize();
                 const long  nNewX = nWidth;
                 const long  nNewY = nHeight;
                 const long  nNewWidth = pWriteAcc->Width();
@@ -1426,11 +1421,6 @@ Region Bitmap::CreateRegion( const Color& rColor, const Rectangle& rRect ) const
 
     return aRegion;
 }
-
-//fuer WIN16 Borland
-#ifdef WIN
-#pragma codeseg BITMAP_SEG1
-#endif
 
 // ------------------------------------------------------------------
 
