@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-19 10:57:45 $
+ *  last change: $Author: sj $ $Date: 2002-10-30 11:37:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,6 +529,70 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
         break;
 
         case W_META_BITBLT:
+        {
+            // 0-3   : nWinROP                      #93454#
+            // 4-5   : y offset of source bitmap
+            // 6-7   : x offset of source bitmap
+            // 8-9   : used height of source bitmap
+            // 10-11 : used width  of source bitmap
+            // 12-13 : destination position y (in pixel)
+            // 14-15 : destination position x (in pixel)
+            // 16-17 : dont know
+            // 18-19 : Width Bitmap in Pixel
+            // 20-21 : Height Bitmap in Pixel
+            // 22-23 : bytes per scanline
+            // 24    : planes
+            // 25    : bitcount
+
+            sal_Int32   nWinROP;
+            sal_uInt16  nSx, nSy, nSxe, nSye, nDontKnow, nWidth, nHeight, nBytesPerScan;
+            sal_uInt8   nPlanes, nBitCount;
+
+            *pWMF >> nWinROP
+                  >> nSy >> nSx >> nSye >> nSxe;
+            Point aPoint( ReadYX() );
+            *pWMF >> nDontKnow >> nWidth >> nHeight >> nBytesPerScan >> nPlanes >> nBitCount;
+
+            if ( nWidth && nHeight && ( nPlanes == 1 ) && ( nBitCount == 1 ) )
+            {
+                Bitmap aBmp( Size( nWidth, nHeight ), nBitCount );
+                BitmapWriteAccess* pAcc;
+                pAcc = aBmp.AcquireWriteAccess();
+                if ( pAcc )
+                {
+                    sal_uInt16 y, x, scan;
+                    sal_Int8 i, nEightPixels;
+                    for ( y = 0; y < nHeight; y++ )
+                    {
+                        x = 0;
+                        for ( scan = 0; scan < nBytesPerScan; scan++ )
+                        {
+                            *pWMF >> nEightPixels;
+                            for ( i = 7; i >= 0; i-- )
+                            {
+                                if ( x < nWidth )
+                                {
+                                    pAcc->SetPixel( y, x, (nEightPixels>>i)&1 );
+                                }
+                                x++;
+                            }
+                        }
+                    }
+                    aBmp.ReleaseAccess( pAcc );
+                    if ( nSye && nSxe &&
+                        ( ( nSx + nSxe ) <= aBmp.GetSizePixel().Width() ) &&
+                            ( ( nSy + nSye <= aBmp.GetSizePixel().Height() ) ) )
+                    {
+                        Rectangle aCropRect( Point( nSx, nSy ), Size( nSxe, nSye ) );
+                        aBmp.Crop( aCropRect );
+                    }
+                    Rectangle aDestRect( aPoint, Size( nSxe, nSye ) );
+                    aBmpSaveList.Insert( new BSaveStruct( aBmp, aDestRect, nWinROP ), LIST_APPEND );
+                }
+            }
+        }
+        break;
+
         case W_META_STRETCHBLT:
         case W_META_DIBBITBLT:
         case W_META_DIBSTRETCHBLT:
@@ -803,7 +867,7 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
                                         for ( i = 0; i < nStrLen; i++ )
                                             *pUniString++ = ( pData[ i ] << 8 ) | ( (sal_uInt16)pData[ i ] >> 8 );
 #else
-                                        String aUniString( (const sal_Unicode*)pData, nStrLen );
+                                        String aUniString( (const sal_Unicode*)pData, (sal_uInt16)nStrLen );
 #endif
                                         aUnicodeEscapeString = aUniString;
                                         nUnicodeEscapeAction = nCurrentAction;
