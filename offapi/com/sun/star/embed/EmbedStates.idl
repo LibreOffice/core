@@ -1,0 +1,126 @@
+/*************************************************************************
+ *
+ *  $RCSfile: EmbedStates.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2003-09-11 10:22:33 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_embed_EmbedStates_idl__
+#define __com_sun_star_embed_EmbedStates_idl__
+
+
+//=============================================================================
+
+module com { module sun { module star { module embed {
+
+//=============================================================================
+/** There are possible states for a contained object.
+
+    @see XEmbeddedObject
+*/
+constants EmbedStates
+{
+    //-------------------------------------------------------------------------
+    /** "Loaded" - the persistent representation of the object is loaded in memory
+
+    <p> the object is created and assigned with a persistent entry,
+    and a view representation ( metafile and etc. ) can be retrieved ( if there is any ).
+    </p>
+
+     */
+    const long EMBED_LOADED = 0;
+
+    //-------------------------------------------------------------------------
+    /** "Running" - the object is connected and loaded
+
+    <p> the object has a connection to the container client and a component loaded from persistent entry;
+    in case of internal document it also means existing of document model( XModel interface implementation ).
+    </p>
+
+     */
+    const long EMBED_RUNNING = 1;
+
+    //-------------------------------------------------------------------------
+    /** "Active" - the object is activated in separate window ( outplace activation ).
+     */
+    const long EMBED_ACTIVE = 2;
+
+    //-------------------------------------------------------------------------
+    /** "Inplace active" - the object has own window in the container's window
+
+    <p> the object is activated and has it's own window in the container's window
+    that allows object to process mouse events and control own rendering.
+    </p>
+
+     */
+    const long EMBED_INPLACE_ACTIVE = 3;
+
+    //-------------------------------------------------------------------------
+    /** "UI active" - the inplace active object that has user interface
+
+    <p> the object is inplace active, allowed to have menues, toolbars, keyboard accelerators, and has the focus.
+    </p>
+
+     */
+    const long EMBED_UI_ACTIVE = 4;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
