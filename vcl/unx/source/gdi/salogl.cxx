@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:10:05 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:46:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,17 +71,19 @@
 #include <saldisp.hxx>
 #endif
 
-#ifndef _SV_SALOGL_HXX
-#include <salogl.hxx>
+#ifndef _SV_SALOGL_H
+#include <salogl.h>
 #endif
 
-#ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#ifndef _SV_SALGDI_H
+#include <salgdi.h>
 #endif
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+using namespace rtl;
 
 // ------------
 // - Lib-Name -
@@ -97,55 +99,48 @@
 // - Macros -
 // ----------
 
-// NetBSD has neither RTLD_GLOBAL nor RTLD_NOW
-#if defined NETBSD
-#define DLOPEN_MODE 0
-#else
-#define DLOPEN_MODE (RTLD_NOW | RTLD_GLOBAL)
-#endif
-
-
 // -----------------
 // - Statics init. -
 // -----------------
 
 // Members
-GLXContext      SalOpenGL::maGLXContext = 0;
-Display*        SalOpenGL::mpDisplay    = 0;
-XVisualInfo*    SalOpenGL::mpVisualInfo = 0;
-BOOL            SalOpenGL::mbHaveGLVisual = FALSE;
+GLXContext      X11SalOpenGL::maGLXContext = 0;
+Display*        X11SalOpenGL::mpDisplay    = 0;
+XVisualInfo*    X11SalOpenGL::mpVisualInfo = 0;
+BOOL            X11SalOpenGL::mbHaveGLVisual = FALSE;
 
-void *      SalOpenGL::mpGLLib    = 0;
-ULONG       SalOpenGL::mnOGLState = OGL_STATE_UNLOADED;
+void *      X11SalOpenGL::mpGLLib    = 0;
+ULONG       X11SalOpenGL::mnOGLState = OGL_STATE_UNLOADED;
 
-GLXContext (*SalOpenGL::pCreateContext)( Display *, XVisualInfo *, GLXContext, Bool ) = 0;
-void       (*SalOpenGL::pDestroyContext)( Display *, GLXContext ) = 0;
-GLXContext (*SalOpenGL::pGetCurrentContext)( ) = 0;
-Bool       (*SalOpenGL::pMakeCurrent)( Display *, GLXDrawable, GLXContext ) = 0;
-void        (*SalOpenGL::pSwapBuffers)( Display*, GLXDrawable ) = 0;
-int         (*SalOpenGL::pGetConfig)( Display*, XVisualInfo*, int, int* ) = 0;
-void       (*SalOpenGL::pFlush)() = 0;
+GLXContext (*X11SalOpenGL::pCreateContext)( Display *, XVisualInfo *, GLXContext, Bool ) = 0;
+void       (*X11SalOpenGL::pDestroyContext)( Display *, GLXContext ) = 0;
+GLXContext (*X11SalOpenGL::pGetCurrentContext)( ) = 0;
+Bool       (*X11SalOpenGL::pMakeCurrent)( Display *, GLXDrawable, GLXContext ) = 0;
+void        (*X11SalOpenGL::pSwapBuffers)( Display*, GLXDrawable ) = 0;
+int         (*X11SalOpenGL::pGetConfig)( Display*, XVisualInfo*, int, int* ) = 0;
+void       (*X11SalOpenGL::pFlush)() = 0;
 
 // -------------
-// - SalOpenGL -
+// - X11SalOpenGL -
 // -------------
 
-SalOpenGL::SalOpenGL( SalGraphics* pGraphics )
+X11SalOpenGL::X11SalOpenGL( SalGraphics* pSGraphics )
 {
-    mpDisplay    = pGraphics->maGraphicsData.GetXDisplay();
-    mpVisualInfo = pGraphics->maGraphicsData.GetDisplay()->GetVisual();
-    maDrawable   = pGraphics->maGraphicsData.GetDrawable();
+    X11SalGraphics* pGraphics = static_cast<X11SalGraphics*>(pSGraphics);
+    mpDisplay    = pGraphics->GetXDisplay();
+    mpVisualInfo = pGraphics->GetDisplay()->GetVisual();
+    maDrawable   = pGraphics->GetDrawable();
 }
 
 // ------------------------------------------------------------------------
 
-SalOpenGL::~SalOpenGL()
+X11SalOpenGL::~X11SalOpenGL()
 {
 }
 
 // ------------------------------------------------------------------------
 
-BOOL SalOpenGL::Create()
+bool X11SalOpenGL::IsValid()
 {
     if( OGL_STATE_UNLOADED == mnOGLState )
     {
@@ -244,36 +239,23 @@ BOOL SalOpenGL::Create()
 
 // ------------------------------------------------------------------------
 
-void SalOpenGL::Release()
+void X11SalOpenGL::Release()
 {
     ImplFreeLib();
 }
 
 // ------------------------------------------------------------------------
 
-void* SalOpenGL::GetOGLFnc( const String& rFncName )
+void* X11SalOpenGL::GetOGLFnc( const char *pFncName )
 {
-    if( mpGLLib )
-    {
-        return dlsym( mpGLLib, ByteString( rFncName, RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
-    }
-    return NULL;
-}
-
-void* SalOpenGL::GetOGLFnc( char *pFncName )
-{
-    if( mpGLLib )
-    {
-        return dlsym( mpGLLib, pFncName );
-    }
-    return NULL;
+    return resolveSymbol( pFncName );
 }
 
 // ------------------------------------------------------------------------
 
-void SalOpenGL::OGLEntry( SalGraphics* pGraphics )
+void X11SalOpenGL::OGLEntry( SalGraphics* pGraphics )
 {
-    GLXDrawable aDrawable = pGraphics->maGraphicsData.GetDrawable();
+    GLXDrawable aDrawable = static_cast<X11SalGraphics*>(pGraphics)->GetDrawable();
     if( aDrawable != maDrawable )
     {
         maDrawable = aDrawable;
@@ -283,19 +265,19 @@ void SalOpenGL::OGLEntry( SalGraphics* pGraphics )
 
 // ------------------------------------------------------------------------
 
-void SalOpenGL::OGLExit( SalGraphics* pGraphics )
+void X11SalOpenGL::OGLExit( SalGraphics* pGraphics )
 {
 }
 
 // ------------------------------------------------------------------------
 
-void SalOpenGL::ImplFreeLib()
+void X11SalOpenGL::ImplFreeLib()
 {
     if( mpGLLib )
     {
         if( maGLXContext && pDestroyContext )
             pDestroyContext( mpDisplay, maGLXContext );
-        dlclose( mpGLLib );
+        osl_unloadModule( mpGLLib );
 
         mpGLLib             = 0;
         pCreateContext      = 0;
@@ -309,37 +291,51 @@ void SalOpenGL::ImplFreeLib()
 
 // ------------------------------------------------------------------------
 
-BOOL SalOpenGL::ImplInit()
+void* X11SalOpenGL::resolveSymbol( const char* pSymbol )
+{
+    void* pSym = NULL;
+    if( mpGLLib )
+    {
+        OUString aSym = OUString::createFromAscii( pSymbol );
+        pSym = osl_getSymbol( mpGLLib, aSym.pData );
+    }
+    return pSym;
+}
+
+
+BOOL X11SalOpenGL::ImplInit()
 {
     if( ! mpGLLib )
     {
         ByteString sNoGL( getenv( "SAL_NOOPENGL" ) );
-        if( sNoGL.ToLowerAscii() == "true"  ) return FALSE;
-        mpGLLib = dlopen( OGL_LIBNAME, DLOPEN_MODE );
+        if( sNoGL.ToLowerAscii() == "true"  )
+            return FALSE;
+        OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( OGL_LIBNAME ) );
+        mpGLLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_NOW );
     }
     if( ! mpGLLib )
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, OGL_LIBNAME "could not be opened: %s\n", dlerror() );
+        fprintf( stderr, OGL_LIBNAME "could not be opened\n" );
 #endif
         return FALSE;
     }
 
     // Internal use
     pCreateContext     = (GLXContext(*)(Display*,XVisualInfo*,GLXContext,Bool ))
-        GetOGLFnc( "glXCreateContext" );
+        resolveSymbol( "glXCreateContext" );
     pDestroyContext    = (void(*)(Display*,GLXContext))
-        GetOGLFnc( "glXDestroyContext" );
+        resolveSymbol( "glXDestroyContext" );
     pGetCurrentContext = (GLXContext(*)())
-        GetOGLFnc( "glXGetCurrentContext" );
+        resolveSymbol( "glXGetCurrentContext" );
     pMakeCurrent       = (Bool(*)(Display*,GLXDrawable,GLXContext))
-        GetOGLFnc( "glXMakeCurrent" );
+        resolveSymbol( "glXMakeCurrent" );
     pSwapBuffers=(void(*)(Display*, GLXDrawable))
-        GetOGLFnc( "glXSwapBuffers" );
+        resolveSymbol( "glXSwapBuffers" );
     pGetConfig = (int(*)(Display*, XVisualInfo*, int, int* ))
-        GetOGLFnc( "glXGetConfig" );
+        resolveSymbol( "glXGetConfig" );
     pFlush = (void(*)())
-        GetOGLFnc( "glFlush" );
+        resolveSymbol( "glFlush" );
 
     BOOL bRet = pCreateContext && pDestroyContext && pGetCurrentContext && pMakeCurrent && pSwapBuffers && pGetConfig ? TRUE : FALSE;
 
@@ -351,14 +347,14 @@ BOOL SalOpenGL::ImplInit()
     return bRet;
 }
 
-void SalOpenGL::StartScene( SalGraphics* pGraphics )
+void X11SalOpenGL::StartScene( SalGraphics* pGraphics )
 {
     // flush pending operations which otherwise might be drawn
     // at the wrong time
     XSync( mpDisplay, False );
 }
 
-void SalOpenGL::StopScene()
+void X11SalOpenGL::StopScene()
 {
     if( maDrawable )
     {
@@ -367,7 +363,7 @@ void SalOpenGL::StopScene()
     }
 }
 
-void SalOpenGL::MakeVisualWeights( Display* pDisplay,
+void X11SalOpenGL::MakeVisualWeights( Display* pDisplay,
                                    XVisualInfo* pInfos,
                                    int *pWeights,
                                    int nVisuals )
