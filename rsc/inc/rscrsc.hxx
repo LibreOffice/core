@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscrsc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-05 14:44:05 $
+ *  last change: $Author: pl $ $Date: 2001-11-06 14:02:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,8 @@ public:
     ByteString          aOutputRcCtor;  // Name der Ctor-Ausgabedatei
     ByteString          aOutputCxx;     // Name der Cxx-Ausgabedatei
     ByteString          aOutputHxx;     // Name der Hxx-Ausgabedatei
+
+    ByteString          aTouchFile;     // create this file when done in rsc2
 
     struct OutputFile
     {

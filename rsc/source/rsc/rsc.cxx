@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-06 13:52:58 $
+ *  last change: $Author: pl $ $Date: 2001-11-06 14:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,10 @@ RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
             else if( !rsc_strnicmp( (*ppStr) + 1, "fx", 2 ) )
             { // Name fuer .src-file
                 aOutputSrc = (*ppStr) + 3;
+            }
+            else if( !rsc_strnicmp( (*ppStr) + 1, "ft", 2 ) )
+            { // touch file
+                aTouchFile = (*ppStr) + 3;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "NoSysResTest" ) )
             { // Bitmap, Pointers, Icons nicht ueberpruefen
@@ -662,6 +666,18 @@ void RscCompiler::EndCompile()
         Append( pCL->aOutputSrc, aTmpOutputSrc );
         unlink( aTmpOutputSrc.GetBuffer() );// TempDatei  loeschen
         aTmpOutputSrc = ByteString();
+    }
+
+    if( pCL->aTouchFile.Len() )
+    {
+        FILE* fp = fopen( pCL->aTouchFile.GetBuffer(), "w" );
+        if( fp )
+        {
+            fprintf( fp, "Done\n" );
+            fclose( fp );
+        }
+        else
+            pTC->pEH->FatalError( ERR_OPENFILE, RscId(), pCL->aTouchFile.GetBuffer() );
     }
 }
 
