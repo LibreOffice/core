@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
+ *  last change: $Author: sab $ $Date: 2000-11-16 18:06:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,9 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <tools/time.hxx>
 #include <com/sun/star/util/DateTime.hpp>
-#include <vector>
+#ifndef __SGI_STL_VECTOR
+#include <stl/vector>
+#endif
 #include "xmlsubti.hxx"
 #include "global.hxx"
 #ifndef _XMLSTYLE_HXX
@@ -759,6 +761,9 @@ public:
 //                                  const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     SvXMLImportContext *CreateBodyContext(
                                     const NAMESPACE_RTL(OUString)& rLocalName );
+
+    virtual void SetStatisticAttributes( const ::com::sun::star::uno::Reference<
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     inline ScDocument*          GetDocument()           { return pDoc; }
     inline const ScDocument*    GetDocument() const     { return pDoc; }

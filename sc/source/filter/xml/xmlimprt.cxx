@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
+ *  last change: $Author: sab $ $Date: 2000-11-16 18:06:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1444,6 +1444,10 @@ SvXMLImportContext *ScXMLImport::CreateMetaContext(
                                               rLocalName );
 
     return pContext;
+}
+
+void ScXMLImport::SetStatisticAttributes( const uno::Reference<xml::sax::XAttributeList>& xAttrList )
+{
 }
 
 XMLShapeImportHelper* ScXMLImport::CreateShapeImport()
