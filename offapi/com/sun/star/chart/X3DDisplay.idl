@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X3DDisplay.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:01 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 // DocMerge from xml: interface com::sun::star::chart::X3DDisplay
 /** gives access to 3D elements of a chart.@see        XChartDocument
  */
-[ uik(E2281610-33D6-11D1-AABE00A0-249D5590), ident( "X3DDisplay", 1.0 ) ]
 interface X3DDisplay: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -93,7 +92,7 @@ interface X3DDisplay: com::sun::star::uno::XInterface
 
                 @see ChartArea
      */
-    [const] com::sun::star::beans::XPropertySet getWall();
+    com::sun::star::beans::XPropertySet getWall();
 
     //-------------------------------------------------------------------------
 
@@ -103,7 +102,7 @@ interface X3DDisplay: com::sun::star::uno::XInterface
 
                 @see ChartArea
      */
-    [const] com::sun::star::beans::XPropertySet getFloor();
+    com::sun::star::beans::XPropertySet getFloor();
 
 };
 
@@ -114,6 +113,9 @@ interface X3DDisplay: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:01  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:42:35  mi
     moved from api
 

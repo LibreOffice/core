@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContentIdentifierMapping.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-09 13:05:25 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,6 @@ interface XContentIdentifier;
     @see XContentIdentifier
 */
 
-[uik(6CCC5430-4B76-11D4-9F9D0050-04526AAD), ident("XContentIdentifierMapping", 1.0)]
 interface XContentIdentifierMapping: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

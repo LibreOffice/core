@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSetup.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ok $ $Date: 2000-11-16 14:06:55 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@
  module com {  module sun {  module star {  module setup {
 
 // DocMerge: empty anyway
-[ uik(5E99A5F0-C652-4f1f-970FFA60-9BADC522), ident("XSetup", 1.0) ]
 interface XSetup: com::sun::star::uno::XInterface
 {
     // DocMerge: empty anyway

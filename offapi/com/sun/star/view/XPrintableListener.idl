@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPrintableListener.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:34 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@
 
     @see XPrintableBroadcaster
  */
-[ uik(E2280300-4356-1151-ACBE0EAF-239D6580), ident( "XPrintableListener", 1.0 ) ]
     interface XPrintableListener : com::sun::star::lang::XEventListener
 {
     /** informs the user of the new state in print progress

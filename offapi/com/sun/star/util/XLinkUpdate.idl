@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLinkUpdate.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 14:57:12 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,6 @@
 
 /** allows to initiate an update of linked parts of a document.
  */
-[ uik(F5F9EB90-B4BD-11d4-A00A0050-04526B09), ident( "XLinkUpdate", 1.0 ) ]
 
 interface XLinkUpdate: com::sun::star::uno::XInterface
 {

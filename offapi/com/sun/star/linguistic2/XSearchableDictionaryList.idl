@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSearchableDictionaryList.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-15 10:17:31 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,6 @@ module com { module sun { module star { module linguistic2 {
 
     @see com::sun::star::linguistic2::XDictionaryList
 */
-[ uik(4BD5A960-5D68-11d4-9F090050-04D8BBC5), ident( "XSearchableDictionaryList", 1.0 ) ]
 interface XSearchableDictionaryList : com::sun::star::linguistic2::XDictionaryList
 {
     //-------------------------------------------------------------------------

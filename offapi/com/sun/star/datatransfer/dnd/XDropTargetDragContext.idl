@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDropTargetDragContext.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-09 13:31:46 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 */
 
-[ uik(E6EFFA66-B551-11d4-82C90050-04D765F1), ident("XDropTargetDragContext",  0.1) ]
 interface XDropTargetDragContext: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

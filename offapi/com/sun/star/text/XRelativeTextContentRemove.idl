@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRelativeTextContentRemove.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@ interface XTextContent;
 
     @deprecated
  */
-[ uik(30816380-5673-11d4-9FBE0050-04526B09), ident( "XRelativeTextContentRemove", 1.0 ) ]
 interface XRelativeTextContentRemove: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -115,6 +114,9 @@ interface XRelativeTextContentRemove: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:27  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:05  hjs
     initial import
 

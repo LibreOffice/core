@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataPilotTable.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:12 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@
 /** represents a data pilot table which has already
     been created.@see com::sun::star::sheet::DataPilotTable
  */
-[ uik(E2281539-33D6-11D1-AABE00A0-249D5590), ident( "XDataPilotTable", 1.0 ) ]
 interface XDataPilotTable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -89,7 +88,7 @@ interface XDataPilotTable: com::sun::star::uno::XInterface
     /** returns the address of the cell range that
         contains the data pilot table.
      */
-    [const] com::sun::star::table::CellRangeAddress getOutputRange();
+    com::sun::star::table::CellRangeAddress getOutputRange();
 
     //-------------------------------------------------------------------------
 
@@ -108,6 +107,9 @@ interface XDataPilotTable: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:12  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:43:46  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCompatibilityNames.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-19 19:52:39 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,6 @@
 
 /** gives access to an AddIn's compatibility names.
  */
-[ uik(37BBBE81-0673-11d5-A02F0050-04D75D79), ident( "XCompatibilityNames", 1.0 ) ]
 interface XCompatibilityNames: com::sun::star::uno::XInterface
 {
     /** returns the compatibility names of the function.

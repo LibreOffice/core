@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnection.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:44 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,6 @@ interface XDatabaseMetaData;
      @see com::sun::star::sdbc::XStatement
      @see com::sun::star::sdbc::XDatabaseMetaData
  */
-[ uik(D6B60231-9067-11d3-9EE00010-5AD7A5C4), ident("XConnection", 1.0) ]
 interface XConnection: com::sun::star::sdbc::XCloseable
 {
 
@@ -214,7 +213,7 @@ interface XConnection: com::sun::star::sdbc::XCloseable
 
         @see setAutoCommit
      */
-    [const] boolean getAutoCommit() raises (SQLException);
+    boolean getAutoCommit() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::commit
@@ -247,7 +246,7 @@ interface XConnection: com::sun::star::sdbc::XCloseable
         anymore. Certain fatal errors also result in a closed Connection.
         </p>
      */
-    [const] boolean isClosed() raises (SQLException);
+    boolean isClosed() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::getMetaData
@@ -281,7 +280,7 @@ interface XConnection: com::sun::star::sdbc::XCloseable
     // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::isReadOnly
     /** tests to see if the connection is in read-only mode.
      */
-    [const] boolean isReadOnly() raises (SQLException);
+    boolean isReadOnly() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::setCatalog
@@ -296,7 +295,7 @@ interface XConnection: com::sun::star::sdbc::XCloseable
     // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::getCatalog
     /** returns the Connection's current catalog name.
      */
-    [const] string getCatalog() raises (SQLException);
+    string getCatalog() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::setTransactionIsolation
@@ -319,7 +318,7 @@ interface XConnection: com::sun::star::sdbc::XCloseable
     // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::getTransactionIsolation
     /** gets this Connection's current transaction isolation level.
      */
-    [const] long getTransactionIsolation() raises (SQLException);
+    long getTransactionIsolation() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::getTypeMap
@@ -332,7 +331,7 @@ interface XConnection: com::sun::star::sdbc::XCloseable
         returned will be empty.
         </p>
      */
-    [const] com::sun::star::container::XNameAccess getTypeMap() raises (SQLException);
+    com::sun::star::container::XNameAccess getTypeMap() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::setTypeMap
@@ -355,6 +354,9 @@ interface XConnection: com::sun::star::sdbc::XCloseable
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/19 16:03:44  mi
+    documentations syntax errors fixed
+
     Revision 1.4  2000/12/14 12:53:39  mi
     <true></true> -> <TRUE/> and same with FALSE
 

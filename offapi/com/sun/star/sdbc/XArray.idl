@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XArray.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 13:46:04 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@ interface XResultSet;
     reference to an SQL array.  By default, an <code>Array</code>
     is implemented using a SQL LOCATOR(array) internally.
  */
-[ uik(D6B60238-9067-11d3-9EE00010-5AD7A5C4), ident("XArray", 1.0) ]
 interface XArray: com::sun::star::uno::XInterface
 {
 
@@ -100,7 +99,7 @@ interface XArray: com::sun::star::uno::XInterface
 
         </p>
      */
-    [const] string getBaseTypeName() raises (SQLException);
+    string getBaseTypeName() raises (SQLException);
 
       //-------------------------------------------------------------------------
 
@@ -108,7 +107,7 @@ interface XArray: com::sun::star::uno::XInterface
     /** returns the SDBC type of the elements in the array designated
         by this <code>Array</code> object.
      */
-    [const] long getBaseType() raises (SQLException);
+    long getBaseType() raises (SQLException);
 
     //-------------------------------------------------------------------------
 
@@ -220,6 +219,9 @@ interface XArray: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/19 13:46:04  mi
+    syntax errors in documentation fixed
+
     Revision 1.3  2000/11/08 12:43:35  mi
     moved from api
 

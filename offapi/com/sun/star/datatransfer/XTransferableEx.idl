@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTransferableEx.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-03-01 17:53:51 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,6 @@ module com { module sun { module star { module datatransfer {
 */
 
 
-[ uik(964AFDF7-03E6-437f-848CD733-8D1A510C), ident("XTransferableEx",  0.1) ]
 interface XTransferableEx: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -96,7 +95,7 @@ interface XTransferableEx: com::sun::star::uno::XInterface
         the list of the matching supported flavors that were requested. For
         each requested top-level MIME type, all supported subtypes are returned.
     */
-    [const] sequence < DataFlavor > queryTransferDataFlavors( [in] sequence< DataFlavor > requestedFlavors );
+    sequence < DataFlavor > queryTransferDataFlavors( [in] sequence< DataFlavor > requestedFlavors );
 };
 
 //=============================================================================

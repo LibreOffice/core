@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPresentation.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:11 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 /** With this interface you can control any object that implements
     a presentation.@see Presentation
  */
-[ uik(E2281401-33D6-11D1-AABE00A0-249D5590), ident( "XPresentation", 1.0 ) ]
 interface XPresentation: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -111,6 +110,9 @@ interface XPresentation: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:11  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:43:28  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPersistentPropertySet.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-09 13:05:26 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@ interface XPropertySetRegistry;
      @version  1.0
      @author   Kai Sommerfeld
   */
-[ uik(7ACF6550-9B46-11d3-9F130050-04526AC8), ident("XPersistentPropertySet", 1.0) ]
 interface XPersistentPropertySet : com::sun::star::beans::XPropertySet
 {
     //-------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMenuProxy.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:25 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 
 
 // DocMerge: empty anyway
-[ uik(D8C91454-4B7C-11D4-9EF70050-04D8BC07), ident( "XMenuProxy", 1.0 ) ]
 interface XMenuProxy: com::sun::star::lang::XComponent
 {
     //-------------------------------------------------------------------------

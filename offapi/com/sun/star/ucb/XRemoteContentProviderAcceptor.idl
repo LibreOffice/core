@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRemoteContentProviderAcceptor.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,6 @@ interface XRemoteContentProviderDoneListener;
     @version 1.0
     @author Stephan Bergmann
 */
-[ uik(56F8A8B0-648B-11D4-9FB40050-04526AAD), ident("XRemoteContentProviderAcceptor", 1.0) ]
 interface XRemoteContentProviderAcceptor: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

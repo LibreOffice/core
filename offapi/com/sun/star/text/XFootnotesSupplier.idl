@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFootnotesSupplier.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 /** makes it possible to access the footnotes within
     the context (e.g. document).
  */
-[ uik(E2281227-33D6-11D1-AABE00A0-249D5590), ident( "XFootnotesSupplier", 1.0 ) ]
 interface XFootnotesSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -92,7 +91,7 @@ interface XFootnotesSupplier: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::text::XFootnotesSupplier::getFootnotes
     /** returns a collection of footnotes.
      */
-    [const] com::sun::star::container::XIndexAccess getFootnotes();
+    com::sun::star::container::XIndexAccess getFootnotes();
 
     //-------------------------------------------------------------------------
 
@@ -100,7 +99,7 @@ interface XFootnotesSupplier: com::sun::star::uno::XInterface
     /** @returns
                 the footnotes settings of the document.
      */
-    [const] com::sun::star::beans::XPropertySet getFootnoteSettings();
+    com::sun::star::beans::XPropertySet getFootnoteSettings();
 
 };
 
@@ -111,6 +110,9 @@ interface XFootnotesSupplier: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:27  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:04  hjs
     initial import
 

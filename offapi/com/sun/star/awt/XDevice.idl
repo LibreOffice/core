@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDevice.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 13:46:01 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@ interface XDisplayBitmap;
     offers a factory for the <em>graphics</em> which provides write
     operations on the device.
  */
-[ uik(E227A4A6-33D6-11D1-AABE00A0-249D5590), ident( "XDevice", 1.0 ) ]
 interface XDevice: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -180,6 +179,9 @@ interface XDevice: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/19 13:46:01  mi
+    syntax errors in documentation fixed
+
     Revision 1.3  2000/11/08 12:42:11  mi
     moved from api
 

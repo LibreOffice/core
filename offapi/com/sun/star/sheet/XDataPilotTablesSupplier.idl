@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataPilotTablesSupplier.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:12 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 // DocMerge from xml: interface com::sun::star::sheet::XDataPilotTablesSupplier
 /** grants access to a collection of data pilot tables.@see com::sun::star::sheet::Spreadsheet
  */
-[ uik(E2281541-33D6-11D1-AABE00A0-249D5590), ident( "XDataPilotTablesSupplier", 1.0 ) ]
 interface XDataPilotTablesSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -87,7 +86,7 @@ interface XDataPilotTablesSupplier: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::sheet::XDataPilotTablesSupplier::getDataPilotTables
     /** returns the collection of data pilot tables.@see DataPilotTables
      */
-    [const] com::sun::star::sheet::XDataPilotTables getDataPilotTables();
+    com::sun::star::sheet::XDataPilotTables getDataPilotTables();
 
 };
 
@@ -98,6 +97,9 @@ interface XDataPilotTablesSupplier: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:12  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:43:46  mi
     moved from api
 

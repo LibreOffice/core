@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCachedDynamicResultSetStubFactory.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,6 @@ module com { module sun { module star { module ucb {
     <type>XCachedDynamicResultSetFactory</type>.
 */
 
-[ uik(D5F56013-5298-11d4-8B1B0010-4BCAF449), ident( "XCachedDynamicResultSetStubFactory", 1.0 ) ]
 interface XCachedDynamicResultSetStubFactory: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

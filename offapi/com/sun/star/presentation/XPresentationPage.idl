@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPresentationPage.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:11 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 // DocMerge from xml: interface com::sun::star::presentation::XPresentationPage
 /** describes a page from a presentation.@see com::sun::star::drawing::DrawPage
  */
-[ uik(E2281400-33D6-11D1-AABE00A0-249D5590), ident( "XPresentationPage", 1.0 ) ]
 interface XPresentationPage: com::sun::star::drawing::XDrawPage
 {
     //-------------------------------------------------------------------------
@@ -86,7 +85,7 @@ interface XPresentationPage: com::sun::star::drawing::XDrawPage
         the name for the note page in the user interface note view, and one of the views
         from a presentation page.
      */
-    [const] com::sun::star::drawing::XDrawPage getNotesPage();
+    com::sun::star::drawing::XDrawPage getNotesPage();
 
 };
 
@@ -97,6 +96,9 @@ interface XPresentationPage: com::sun::star::drawing::XDrawPage
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:11  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:43:28  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPrintAreas.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:40 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,6 @@
 
     @deprecated
  */
-[ uik(E2281548-33D6-11D1-AABE00A0-249D5590), ident( "XPrintAreas", 1.0 ) ]
 interface XPrintAreas: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -102,7 +101,7 @@ interface XPrintAreas: com::sun::star::uno::XInterface
     // DocMerge from idl: method com::sun::star::sheet::XPrintAreas::getPrintAreas
     /** returns the print areas of the sheet.
      */
-    [const] sequence<com::sun::star::table::CellRangeAddress> getPrintAreas();
+    sequence<com::sun::star::table::CellRangeAddress> getPrintAreas();
 
     //-------------------------------------------------------------------------
 
@@ -122,7 +121,7 @@ interface XPrintAreas: com::sun::star::uno::XInterface
     /** returns <TRUE/> if the title columns are repeated on
         all subsequent print pages to the right.
      */
-    [const] boolean getPrintTitleColumns();
+    boolean getPrintTitleColumns();
 
     //-------------------------------------------------------------------------
 
@@ -143,7 +142,7 @@ interface XPrintAreas: com::sun::star::uno::XInterface
         <p>Title columns can be automatically repeated on all subsequent
         print pages to the right.</p>
      */
-    [const] com::sun::star::table::CellRangeAddress getTitleColumns();
+    com::sun::star::table::CellRangeAddress getTitleColumns();
 
     //-------------------------------------------------------------------------
 
@@ -167,7 +166,7 @@ interface XPrintAreas: com::sun::star::uno::XInterface
     /** returns <TRUE/> if the title rows are repeated on
         all subsequent print pages to the bottom.
      */
-    [const] boolean getPrintTitleRows();
+    boolean getPrintTitleRows();
 
     //-------------------------------------------------------------------------
 
@@ -188,7 +187,7 @@ interface XPrintAreas: com::sun::star::uno::XInterface
         <p>Title rows can be automatically repeated on all subsequent
         print pages to the bottom.</p>
      */
-    [const] com::sun::star::table::CellRangeAddress getTitleRows();
+    com::sun::star::table::CellRangeAddress getTitleRows();
 
     //-------------------------------------------------------------------------
 
@@ -215,6 +214,9 @@ interface XPrintAreas: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/14 12:53:40  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:43:47  mi
     moved from api
 

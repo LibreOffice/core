@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XScenario.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:40 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,6 @@
 
     @deprecated
  */
-[ uik(E2281532-33D6-11D1-AABE00A0-249D5590), ident( "XScenario", 1.0 ) ]
 interface XScenario: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -101,7 +100,7 @@ interface XScenario: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::sheet::XScenario::getIsScenario
     /** returns <TRUE/> if this is a scenario.
      */
-    [const] boolean getIsScenario();
+    boolean getIsScenario();
 
     //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XScenario::getScenarioComment
@@ -109,7 +108,7 @@ interface XScenario: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::sheet::XScenario::getScenarioComment
     /** returns the comment for the scenario.
      */
-    [const] string getScenarioComment();
+    string getScenarioComment();
 
     //-------------------------------------------------------------------------
 
@@ -147,6 +146,9 @@ interface XScenario: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/14 12:53:40  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:43:47  mi
     moved from api
 

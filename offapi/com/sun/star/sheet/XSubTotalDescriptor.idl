@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSubTotalDescriptor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:12 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@
 /** represents a description of how subtotals are
     to be inserted.@see com::sun::star::sheet::SubTotalDescriptor
  */
-[ uik(E2281559-33D6-11D1-AABE00A0-249D5590), ident( "XSubTotalDescriptor", 1.0 ) ]
 interface XSubTotalDescriptor: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -107,6 +106,9 @@ interface XSubTotalDescriptor: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:12  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:43:47  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFlushableClipboard.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-02 13:07:09 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,6 @@ module com { module sun { module star { module datatransfer { module clipboard {
 /** An interface for flushable clipboards.
 */
 
-[ uik(2FD0B8A6-7BA0-49b0-8CCDA4D4-C165748E), ident("XFlushableClipboard",  0.1) ]
 
 interface XFlushableClipboard: com::sun::star::uno::XInterface
 {
@@ -82,7 +81,7 @@ interface XFlushableClipboard: com::sun::star::uno::XInterface
     /**
         renders all current clipboard data
     */
-    [const] void flushClipboard();
+    void flushClipboard();
 };
 
 //=============================================================================

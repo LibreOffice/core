@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDDELink.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:12 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,6 @@
 
     @deprecated@see com::sun::star::sheet::DDELink
  */
-[ uik(E2281567-33D6-11D1-AABE00A0-249D5590), ident( "XDDELink", 1.0 ) ]
 interface XDDELink: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -93,7 +92,7 @@ interface XDDELink: com::sun::star::uno::XInterface
     /** returns the application from which data are requested
         (the DDE server application).
      */
-    [const] string getApplication();
+    string getApplication();
 
     //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XDDELink::getTopic
@@ -101,7 +100,7 @@ interface XDDELink: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::sheet::XDDELink::getTopic
     /** returns the DDE topic from which data are requested.
      */
-    [const] string getTopic();
+    string getTopic();
 
     //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XDDELink::getItem
@@ -109,7 +108,7 @@ interface XDDELink: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::sheet::XDDELink::getItem
     /** returns the DDE item from which data are requested.
      */
-    [const] string getItem();
+    string getItem();
 
 };
 
@@ -120,6 +119,9 @@ interface XDDELink: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:12  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:43:46  mi
     moved from api
 

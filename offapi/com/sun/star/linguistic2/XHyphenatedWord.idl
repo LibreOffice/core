@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XHyphenatedWord.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-04 14:15:31 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,6 @@ module com { module sun { module star { module linguistic2 {
 
     @see    com::sun::star::linguistic2::XHyphenator
 */
-[ uik(4BD5A957-5D68-11d4-9F090050-04D8BBC5), ident( "XHyphenatedWord", 1.0 ) ]
 interface XHyphenatedWord : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContentProviderFactory.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-09 13:05:25 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@ module com { module sun { module star { module ucb {
      @author   Kai Sommerfeld
      @see      XContentProvider
 */
-[ uik(1221D391-69EE-11d4-A00F0050-04526AC8), ident( "XContentProviderFactory", 1.0 ) ]
 interface XContentProviderFactory : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

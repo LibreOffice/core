@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCharacterClassification.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-02-09 20:29:15 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,7 +392,6 @@ struct ParseResult {
 };
 
 
-[ uik(2430f826-1c17-4f39-8b54e2fe-29941184), ident( "XCharacterClassification", 1.0 ) ]
 interface XCharacterClassification : com::sun::star::uno::XInterface
 
 {

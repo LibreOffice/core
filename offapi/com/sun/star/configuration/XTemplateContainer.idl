@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTemplateContainer.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: arellano $ $Date: 2001-03-01 01:19:50 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@
 
     @see XTemplateInstance
  */
-[ uik(7916BF25-A373-11D4-9F6A0050-DA6BA2A6), ident( "XTemplateContainer", 1.0 ) ]
 interface XTemplateContainer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -103,7 +102,7 @@ interface XTemplateContainer: com::sun::star::uno::XInterface
 
  <!-- Dennis: is the "@returns" a valid structure? -->
      */
-    [const] string getElementTemplateName();
+    string getElementTemplateName();
 
 };
 
@@ -114,6 +113,9 @@ interface XTemplateContainer: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/03/01 01:19:50  arellano
+    Edited by Dennis
+
     Revision 1.4  2000/12/19 16:03:24  mi
     documentations syntax errors fixed
 

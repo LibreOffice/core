@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XClipboardFactory.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-03-01 18:51:52 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,6 @@ interface XClipboard;
     @see com::sun::star::datatransfer::clipboard::XClipboard
 */
 
-[ uik(2D4F8B40-A351-11d4-82B70050-04D765F1), ident("XClipboardFactory",  0.1) ]
 interface XClipboardFactory: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

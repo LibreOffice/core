@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRangeSelection.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-09 19:50:08 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@ interface XRangeSelectionChangeListener;
 
 /** allows to let the user select a cell range.
  */
-[ uik(D0028594-B591-11d4-9FD80050-04D75D79), ident( "XRangeSelection", 1.0 ) ]
 interface XRangeSelection: com::sun::star::uno::XInterface
 {
     /** starts the range selection.

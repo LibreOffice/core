@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSheetCellRange.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:12 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@ interface XSpreadsheet;
 // DocMerge from xml: interface com::sun::star::sheet::XSheetCellRange
 /** represents a cell range in a sheet.@see com::sun::star::sheet::SheetCellRange
  */
-[ uik(E2281501-33D6-11D1-AABE00A0-249D5590), ident( "XSheetCellRange", 1.0 ) ]
 interface XSheetCellRange: com::sun::star::table::XCellRange
 {
     //-------------------------------------------------------------------------
@@ -91,7 +90,7 @@ interface XSheetCellRange: com::sun::star::table::XCellRange
                 @see com::sun::star::sheet::SheetCellRange
                 @see com::sun::star::sheet::SheetCellRanges
      */
-    [const] XSpreadsheet getSpreadsheet();
+    XSpreadsheet getSpreadsheet();
 
 };
 
@@ -102,6 +101,9 @@ interface XSheetCellRange: com::sun::star::table::XCellRange
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:12  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:43:47  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLineNumberingSupplier.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@
 
     @deprecated
  */
-[ uik(E2281209-33D6-11D1-AABE00A0-249D5590), ident( "XLineNumberingSupplier", 1.0 ) ]
 interface XLineNumberingSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -100,7 +99,7 @@ interface XLineNumberingSupplier: com::sun::star::uno::XInterface
     // DocMerge from idl: method com::sun::star::text::XLineNumberingSupplier::getLineNumberingRules
     /** @return the <type>LineNumberingsSettings</type> of the object.
      */
-    [const] sequence< sequence<com::sun::star::beans::PropertyValue> > getLineNumberingRules();
+    sequence< sequence<com::sun::star::beans::PropertyValue> > getLineNumberingRules();
 
     //-------------------------------------------------------------------------
 
@@ -123,6 +122,9 @@ interface XLineNumberingSupplier: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:27  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:04  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRowSetListener.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:35 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@
 /** is used for receiving "cursorMoved", "rowChanged", and "rowSetChanged" events
     posted by e.g. by a rowset.
  */
-[ uik(186AF2E5-9C2E-11d3-9ED30050-04D8BBD0), ident("XRowSetListener", 1.0) ]
 interface XRowSetListener: com::sun::star::lang::XEventListener
 {
 
@@ -101,6 +100,9 @@ interface XRowSetListener: com::sun::star::lang::XEventListener
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:43  hjs
     initial import
 

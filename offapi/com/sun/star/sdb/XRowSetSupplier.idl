@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRowSetSupplier.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:31 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 // DocMerge from xml: interface com::sun::star::sdb::XRowSetSupplier
 /** uses a row set as datasource.
  */
-[ uik(6A828ACC-AE4D-11d3-86B90050-04D8BBE7), ident("XRowSetSupplier", 1.0) ]
 interface XRowSetSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -84,7 +83,7 @@ interface XRowSetSupplier: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::sdb::XRowSetSupplier::getRowSet
     /** provides access to the data source.
      */
-    [const] com::sun::star::sdbc::XRowSet getRowSet();
+    com::sun::star::sdbc::XRowSet getRowSet();
 
     //-------------------------------------------------------------------------
 
@@ -103,6 +102,9 @@ interface XRowSetSupplier: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:31  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:38  hjs
     initial import
 

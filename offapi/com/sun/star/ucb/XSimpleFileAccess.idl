@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSimpleFileAccess.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,6 @@ module com { module sun { module star { module ucb {
 //=============================================================================
 /** This is the basic interface to read data from a stream.
 */
-[ uik(073F3410-5BBE-11d4-9F990050-04D8BBC7), ident( "XSimpleFileAccess", 1.0 ) ]
 interface XSimpleFileAccess: com::sun::star::uno::XInterface
 {
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInstallationCheck.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:37 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 // DocMerge from xml: interface com::sun::star::installation::XInstallationCheck
 /** a flag called "suppressed" changes the action of check and checkWithDialog@see         com::sun::star::uno::XInterface
  */
-[ uik(BF6D5A72-B53B-11D2-A17B00A0-243D2A0B), ident( "XInstallationCheck", 1.0 ) ]
 interface XInstallationCheck: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -152,6 +151,9 @@ interface XInstallationCheck: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/14 12:53:37  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:43:18  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSheetAnnotation.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:12 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 // DocMerge from xml: interface com::sun::star::sheet::XSheetAnnotation
 /** represents an annotation on a sheet.@see com::sun::star::sheet::CellAnnotation
  */
-[ uik(E2281549-33D6-11D1-AABE00A0-249D5590), ident( "XSheetAnnotation", 1.0 ) ]
 interface XSheetAnnotation: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -88,7 +87,7 @@ interface XSheetAnnotation: com::sun::star::uno::XInterface
     /** @returns
                 the position of the annotation in the document.
      */
-    [const] com::sun::star::table::CellAddress getPosition();
+    com::sun::star::table::CellAddress getPosition();
 
     //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XSheetAnnotation::getAuthor
@@ -97,7 +96,7 @@ interface XSheetAnnotation: com::sun::star::uno::XInterface
     /** @returns
                 the name of the user who last changed the annotation.
      */
-    [const] string getAuthor();
+    string getAuthor();
 
     //-------------------------------------------------------------------------
     // DOCUMENTATION CHANGED FOR XSheetAnnotation::getDate
@@ -106,7 +105,7 @@ interface XSheetAnnotation: com::sun::star::uno::XInterface
     /** @returns
                 a formatted string for the date when the annotation was last changed.
      */
-    [const] string getDate();
+    string getDate();
 
     //-------------------------------------------------------------------------
 
@@ -114,7 +113,7 @@ interface XSheetAnnotation: com::sun::star::uno::XInterface
     /** @returns
                 whether the annotation is permanently visible or not.
      */
-    [const] boolean getIsVisible();
+    boolean getIsVisible();
 
     //-------------------------------------------------------------------------
 
@@ -132,6 +131,9 @@ interface XSheetAnnotation: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:12  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:43:47  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEventListener.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-26 15:50:42 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,6 @@ module com {  module sun {  module star {  module document {
 /** makes it possible to register listeners which are called whenever
     a document or document content event occurs.
  */
-[ uik(781A1AD1-6A09-11d4-9FE50010-5AEF84A7), ident( "XEventListener", 1.0 ) ]
 interface XEventListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
@@ -99,6 +98,9 @@ interface XEventListener: com::sun::star::lang::XEventListener
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/01/26 15:50:42  mi
+    new XDocumentListener now correctly derived from lang::XEventListener
+
     Revision 1.1  2001/01/24 13:30:25  mi
     stored document events and runtime document events structurally unified
 

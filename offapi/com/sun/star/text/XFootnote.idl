@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFootnote.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:21 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 // DocMerge from xml: interface com::sun::star::text::XFootnote
 /** specifies a footnote within a Text.@see Footnote
  */
-[ uik(E2281231-33D6-11D1-AABE00A0-249D5590), ident( "XFootnote", 1.0 ) ]
 interface XFootnote: com::sun::star::text::XTextContent
 {
     //-------------------------------------------------------------------------
@@ -85,7 +84,7 @@ interface XFootnote: com::sun::star::text::XTextContent
 
          @see XFootnote::setLabel
      */
-    [const] string getLabel();
+    string getLabel();
 
     //-------------------------------------------------------------------------
 
@@ -103,6 +102,9 @@ interface XFootnote: com::sun::star::text::XTextContent
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/21 08:35:21  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.4  2000/12/19 16:03:49  mi
     documentations syntax errors fixed
 

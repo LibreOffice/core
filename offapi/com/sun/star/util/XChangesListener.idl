@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XChangesListener.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:17 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@
         @see XChangesNotifier
         @see XChangesBatch
  */
-[ uik(2B81B771-4143-11d4-9F5C0050-DA6BA2A6), ident( "XChangesListener", 1.0 ) ]
 interface XChangesListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
@@ -100,6 +99,9 @@ interface XChangesListener: com::sun::star::lang::XEventListener
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:45:17  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:19  hjs
     initial import
 

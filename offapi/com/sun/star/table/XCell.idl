@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCell.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:19 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 // DocMerge from xml: interface com::sun::star::table::XCell
 /** represents a cell in a table.@see com::sun::star::table::Cell
  */
-[ uik(E2281100-33D6-11D1-AABE00A0-249D5590), ident( "XCell", 1.0 ) ]
 interface XCell: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -99,7 +98,7 @@ interface XCell: com::sun::star::uno::XInterface
         or the formula string, including "=", of a formula
         cell.</p>
      */
-    [const] string getFormula();
+    string getFormula();
 
     //-------------------------------------------------------------------------
 
@@ -125,7 +124,7 @@ interface XCell: com::sun::star::uno::XInterface
         <em>string cell</em> zero is returned and for a <em>formula cell</em>
         the result value of a formula is returned.</p>
      */
-    [const] double getValue();
+    double getValue();
 
     //-------------------------------------------------------------------------
 
@@ -144,7 +143,7 @@ interface XCell: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::table::XCell::getType
     /** returns the type of the cell.
      */
-    [const] com::sun::star::table::CellContentType getType();
+    com::sun::star::table::CellContentType getType();
 
     //-------------------------------------------------------------------------
 
@@ -155,7 +154,7 @@ interface XCell: com::sun::star::uno::XInterface
                 <P>If the cell does not contain a formula, the error
                 is always zero.
      */
-    [const] long getError();
+    long getError();
 
 };
 
@@ -166,6 +165,9 @@ interface XCell: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:19  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:44:19  mi
     moved from api
 

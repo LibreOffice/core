@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContentAccess.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-09 13:05:25 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@ interface XContentIdentifier;
     @see        XContentIdentifier
 */
 
-[ uik(6B13BAA0-FFD5-11d3-9F960050-04526AC8), ident( "XContentAccess", 1.0 ) ]
 interface XContentAccess : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

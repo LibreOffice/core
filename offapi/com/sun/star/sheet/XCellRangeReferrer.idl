@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCellRangeReferrer.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:12 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,6 @@
         @see com::sun::star::sheet::DatabaseRange
         @see com::sun::star::sheet::SpreadsheetViewPane
  */
-[ uik(E2281503-33D6-11D1-AABE00A0-249D5590), ident( "XCellRangeReferrer", 1.0 ) ]
 interface XCellRangeReferrer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -91,7 +90,7 @@ interface XCellRangeReferrer: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::sheet::XCellRangeReferrer::getReferredCells
     /** returns the cell range that is represented.
      */
-    [const] com::sun::star::table::XCellRange getReferredCells();
+    com::sun::star::table::XCellRange getReferredCells();
 
 };
 
@@ -102,6 +101,9 @@ interface XCellRangeReferrer: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:12  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:43:46  mi
     moved from api
 

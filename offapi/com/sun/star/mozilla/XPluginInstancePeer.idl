@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPluginInstancePeer.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:25 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@ interface XPluginInstanceNotifySink;
 
 
 // DocMerge: empty anyway
-[ uik(C08D2DC0-4133-11d4-83080050-04D765F1), ident( "XPluginInstancePeer", 1.0 ) ]
 interface XPluginInstancePeer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -168,6 +167,9 @@ interface XPluginInstancePeer: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:25  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:28  hjs
     initial import
 

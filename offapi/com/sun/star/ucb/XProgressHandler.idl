@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XProgressHandler.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,6 @@ module com { module sun { module star { module ucb {
 //=============================================================================
 /** Handle a tasks notification that it has made some progress.
 */
-[uik(27C5A7D0-9C42-11d3-9EE60050-04526AAD), ident("XProgressHandler", 1.0)]
 interface XProgressHandler: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

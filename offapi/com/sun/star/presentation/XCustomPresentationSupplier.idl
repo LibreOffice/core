@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCustomPresentationSupplier.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:28 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@
     presentations of a presentation document.@see       XCustomPresentation
         @see        XCustomPresentationAccess
  */
-[ uik(E2281403-33D6-11D1-AABE00A0-249D5590), ident( "XCustomPresentationSupplier", 1.0 ) ]
 interface XCustomPresentationSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -90,7 +89,7 @@ interface XCustomPresentationSupplier: com::sun::star::uno::XInterface
     /** @returns
                 the <type>CustomPresentation</type>.
      */
-    [const] com::sun::star::container::XNameContainer getCustomPresentations();
+    com::sun::star::container::XNameContainer getCustomPresentations();
 
 };
 
@@ -101,6 +100,9 @@ interface XCustomPresentationSupplier: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:28  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:31  hjs
     initial import
 

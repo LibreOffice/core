@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XComponentRegistry.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:14 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,6 @@
 
     @deprecated@see         XFrame
  */
-[ uik(E2280101-33D6-11D1-AABE00A0-249D5590), ident( "XComponentRegistry", 1.0 ) ]
 interface XComponentRegistry: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -105,6 +104,9 @@ interface XComponentRegistry: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:14  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:21  hjs
     initial import
 

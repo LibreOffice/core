@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDriver.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 13:46:04 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,6 @@ interface XDriverManager;
     </p>@see com::sun::star::sdbc::XDriverManager
      @see com::sun::star::sdbc::XConnection
  */
-[ uik(D6B60233-9067-11d3-9EE00010-5AD7A5C4), ident("XDriver", 1.0) ]
 interface XDriver: com::sun::star::uno::XInterface
 {
 
@@ -171,13 +170,13 @@ interface XDriver: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::sdbc::XDriver::getMajorVersion
     /** gets the driver's major version number. Initially this should be 1.
      */
-    [const] long getMajorVersion();
+    long getMajorVersion();
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDriver::getMinorVersion
     /** gets the driver's minor version number. Initially this should be 0.
      */
-    [const] long getMinorVersion();
+    long getMinorVersion();
 };
 
 //=============================================================================
@@ -186,6 +185,9 @@ interface XDriver: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/19 13:46:04  mi
+    syntax errors in documentation fixed
+
     Revision 1.4  2000/12/14 12:53:39  mi
     <true></true> -> <TRUE/> and same with FALSE
 

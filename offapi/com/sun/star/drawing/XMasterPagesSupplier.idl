@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMasterPagesSupplier.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:42 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@
 /** must be supported to provide access to the
     <type>MasterPage</type>s of a multi-page drawing-layer.
  */
-[ uik(E2281320-33D6-11D1-AABE00A0-249D5590), ident( "XMasterPagesSupplier", 1.0 ) ]
 interface XMasterPagesSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -91,7 +90,7 @@ interface XMasterPagesSupplier: com::sun::star::uno::XInterface
         returns
         a collection of all <type>MasterPage</type>s of this collection
      */
-    [const] com::sun::star::drawing::XDrawPages getMasterPages();
+    com::sun::star::drawing::XDrawPages getMasterPages();
 
 };
 
@@ -102,6 +101,9 @@ interface XMasterPagesSupplier: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:42  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:15  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XGrid.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:52 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,6 @@
 
     @deprecated
  */
-[ uik(E2281701-33D6-11D1-AABE00A0-249D5590), ident( "XGrid", 1.0 ) ]
 interface XGrid: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -98,7 +97,7 @@ interface XGrid: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::form::XGrid::getCurrentColumnPosition
     /** retrieves the current column position.
      */
-    [const] short getCurrentColumnPosition();
+    short getCurrentColumnPosition();
 
     //-------------------------------------------------------------------------
 
@@ -116,6 +115,9 @@ interface XGrid: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:52  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:16  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSortedDynamicResultSetFactory.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-09 13:05:26 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@ module com { module sun { module star { module ucb {
     will be sorted according to the given sorting options.
 */
 
-[ uik(D4E3B8F0-3D1E-11d4-9F6A0050-04D81245), ident( "XSortedDynamicResultSetFactory", 1.0 ) ]
 interface XSortedDynamicResultSetFactory: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

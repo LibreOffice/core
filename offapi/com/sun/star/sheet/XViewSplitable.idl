@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XViewSplitable.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:40 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@
 
     @deprecated
  */
-[ uik(E2281544-33D6-11D1-AABE00A0-249D5590), ident( "XViewSplitable", 1.0 ) ]
 interface XViewSplitable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -105,7 +104,7 @@ interface XViewSplitable: com::sun::star::uno::XInterface
         <member>XViewFreezable::hasFrozenPanes()</member>
         can be <TRUE/>.</p>
      */
-    [const] boolean getIsWindowSplit();
+    boolean getIsWindowSplit();
 
     //-------------------------------------------------------------------------
 
@@ -113,7 +112,7 @@ interface XViewSplitable: com::sun::star::uno::XInterface
     /** returns the horizontal position in pixels where
         the view is split.
      */
-    [const] long getSplitHorizontal();
+    long getSplitHorizontal();
 
     //-------------------------------------------------------------------------
 
@@ -121,21 +120,21 @@ interface XViewSplitable: com::sun::star::uno::XInterface
     /** returns the vertical position in pixels where
         the view is split.
      */
-    [const] long getSplitVertical();
+    long getSplitVertical();
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sheet::XViewSplitable::getSplitColumn
     /** returns the column before which the view is split.
      */
-    [const] long getSplitColumn();
+    long getSplitColumn();
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sheet::XViewSplitable::getSplitRow
     /** returns the row before which the view is split.
      */
-    [const] long getSplitRow();
+    long getSplitRow();
 
     //-------------------------------------------------------------------------
 
@@ -159,6 +158,9 @@ interface XViewSplitable: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/14 12:53:40  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:43:47  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCloseSessionListener.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:25 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,6 @@
 
 
 // DocMerge: empty anyway
-[ uik(2dd7cab5-5bb6-11d4-9f110050-da6ba37d), ident( "XCloseSessionListener", 1.0 ) ]
 interface XCloseSessionListener: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInteractionHandlerSupplier.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-09 13:05:26 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@ module com { module sun { module star { module ucb {
 
     @see XCommandEnvironment.
 */
-[ uik(55321FF6-84C2-4c66-BF5A7719-71FE3C38), ident( "XInteractionHandlerSupplier", 1.0 ) ]
 interface XInteractionHandlerSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

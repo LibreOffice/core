@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSQLInput.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 13:59:40 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,6 @@ interface XClob;
     calls the <code>XSQLInput.readXXX</code> methods in its implementation for
     reading the attributes from the input stream.</p>
  */
-[ uik(D6B6023F-9067-11d3-9EE00010-5AD7A5C4), ident("XSQLInput", 1.0) ]
 interface XSQLInput: com::sun::star::uno::XInterface
 {
 
@@ -260,6 +259,9 @@ interface XSQLInput: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/19 13:59:40  mi
+    syntax errors in documentation fixed
+
     Revision 1.3  2000/11/08 12:43:35  mi
     moved from api
 

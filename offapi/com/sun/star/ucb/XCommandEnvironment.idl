@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCommandEnvironment.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-22 09:48:32 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@ module com { module sun { module star { module ucb {
     @author   Kai Sommerfeld
     @see XCommandProcessor
 */
-[ uik(A95AD9A0-00A5-11d4-9F980050-04526AC8), ident( "XCommandEnvironment", 1.0 ) ]
 interface XCommandEnvironment : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDocumentTemplates.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-09 15:06:21 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@ module com {  module sun {  module star {  module frame {
 // DocMerge from xml: interface com::sun::star::frame::XDocumentTemplates
 /** makes it possible to receive events when the state of a feature changes.
  */
-[ uik(88A794B3-1154-11d5-A00F0050-04D81245), ident( "XDocumentTemplates", 1.0 ) ]
 interface XDocumentTemplates:  com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -127,6 +126,9 @@ interface XDocumentTemplates:  com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1  2001/03/09 15:06:21  dv
+    First checkin
+
 
 =============================================================================*/
 #endif

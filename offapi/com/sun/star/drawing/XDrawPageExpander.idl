@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDrawPageExpander.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:06 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@
     of a summary on a <type>DrawPage</type> into a collection of
     <type>DrawPage</type>s.@see XDrawPageSummarizer
  */
-[ uik(E2281322-33D6-11D1-AABE00A0-249D5590), ident( "XDrawPageExpander", 1.0 ) ]
 interface XDrawPageExpander: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -105,6 +104,9 @@ interface XDrawPageExpander: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:06  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:42:42  mi
     moved from api
 

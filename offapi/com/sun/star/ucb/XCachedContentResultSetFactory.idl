@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCachedContentResultSetFactory.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@ module com { module sun { module star { module ucb {
 /** creates a <type>CachedContentResultSet</type>.
 */
 
-[ uik(1312DDB1-4EAD-11d4-8B190010-4BCAF449), ident( "XCachedContentResultSetFactory", 1.0 ) ]
 interface XCachedContentResultSetFactory: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

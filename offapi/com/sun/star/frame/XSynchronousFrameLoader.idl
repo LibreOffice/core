@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSynchronousFrameLoader.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-11-20 10:06:11 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@
      </p>
  */
 
-[ uik(F5869703-E1C8-4f28-ACB07127-228FBEA4), ident( "XSynchronousFrameLoader", 1.0 ) ]
 interface XSynchronousFrameLoader: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

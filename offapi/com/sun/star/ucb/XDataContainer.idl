@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataContainer.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-09 13:05:25 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@ module com { module sun { module star { module ucb {
     @version    1.0
     @author     Kai Sommerfeld
 */
-[ uik(DE0588FA-E3D1-4900-8AC615D8-1FC3BF9B), ident( "XDataContainer", 1.0 ) ]
 interface XDataContainer: com::sun::star::container::XIndexContainer
 {
     //-------------------------------------------------------------------------
@@ -89,7 +88,7 @@ interface XDataContainer: com::sun::star::container::XIndexContainer
         @returns
         the content type
     */
-    [const] string getContentType();
+    string getContentType();
 
     //-------------------------------------------------------------------------
     /** sets the content type (MIME Type) of the data container.
@@ -105,7 +104,7 @@ interface XDataContainer: com::sun::star::container::XIndexContainer
         @returns
         the data
     */
-    [const] sequence<byte> getData();
+    sequence<byte> getData();
 
     //-------------------------------------------------------------------------
     /** sets the data of the data container.
@@ -120,7 +119,7 @@ interface XDataContainer: com::sun::star::container::XIndexContainer
 
         @deprecated
     */
-    [const] string getDataURL();
+    string getDataURL();
 
     //-------------------------------------------------------------------------
     /** Deprecated. Do not use!

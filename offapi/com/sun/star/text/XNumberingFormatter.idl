@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNumberingFormatter.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,6 @@ module com { module sun { module star { module text {
     @version    1.0
     @author     <a href="mailto:oliver.specht@germany.sun.com">Oliver Specht</a>
 */
-[ uik(C39C70C1-A0E2-11d4-9FF70050-04526B09), ident( "XNumberingFormatter", 1.0 ) ]
 interface XNumberingFormatter : com::sun::star::uno::XInterface
 {
 /** @returns

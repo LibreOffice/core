@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XModeSelector.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:17 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 // DocMerge from xml: interface com::sun::star::util::XModeSelector
 /** is supported by objects which supply different modes.
  */
-[ uik(E2280423-33D6-11D1-AABE00A0-249D5590), ident( "XModeSelector", 1.0 ) ]
 interface XModeSelector: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -96,7 +95,7 @@ interface XModeSelector: com::sun::star::uno::XInterface
     /** @returns
                     the current mode.
      */
-    [const] string getMode();
+    string getMode();
 
     //-------------------------------------------------------------------------
 
@@ -104,14 +103,14 @@ interface XModeSelector: com::sun::star::uno::XInterface
     /** @returns
                     a sequence of all supported modes.
      */
-    [const] sequence<string> getSupportedModes();
+    sequence<string> getSupportedModes();
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::util::XModeSelector::supportsMode
     /** asks whether a mode is supported or not.
      */
-    [const] boolean supportsMode( [in] string aMode );
+    boolean supportsMode( [in] string aMode );
 
 };
 
@@ -122,6 +121,9 @@ interface XModeSelector: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:45:17  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:20  hjs
     initial import
 

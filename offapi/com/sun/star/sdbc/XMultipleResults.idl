@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMultipleResults.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:39 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,6 @@ interface XResultSet;
     </p>@see com::sun::star::sdbc::XStatement
      @see com::sun::star::sdbc::XPreparedStatement
  */
-[ uik(D6B60243-9067-11d3-9EE00010-5AD7A5C4), ident("XMultipleResults", 1.0) ]
 interface XMultipleResults: com::sun::star::uno::XInterface
 {
 
@@ -133,6 +132,9 @@ interface XMultipleResults: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/14 12:53:39  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:43:35  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDragGestureRecognizer.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-01-26 11:27:46 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,6 @@ interface XDragGestureListener;
     be a real performance issue.</p>
 */
 
-[ uik(E6EFFA60-B551-11d4-82C90050-04D765F1), ident("XDragGestureRecognizer",  0.1) ]
 interface XDragGestureRecognizer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

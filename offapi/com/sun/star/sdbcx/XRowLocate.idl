@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRowLocate.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:40 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@
     structure, so it could not be compared in a safe way. Because of that, a provider
     has to implement the compare method for bookmarks.</p>
  */
-[ uik(5FFEC2E0-9520-11d3-8168D521-22976675), ident("XRowLocate", 1.0) ]
 interface XRowLocate: com::sun::star::uno::XInterface
 {
 
@@ -130,20 +129,20 @@ interface XRowLocate: com::sun::star::uno::XInterface
         A bookmark that is not valid or incorrectly formed will cause an exception.
         </p>@see com::sun::star::sdbcx::CompareBookmark
      */
-    [const]long compareBookmarks([in]any first, [in]any second)
+    long compareBookmarks([in]any first, [in]any second)
         raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbcx::XRowLocate::hasOrderedBookmarks
     /** determines whether the bookmarks of a result set are ordered or not.@see com::sun::star::sdbc::CompareBookmark
      */
-    [const]boolean hasOrderedBookmarks() raises (com::sun::star::sdbc::SQLException);
+    boolean hasOrderedBookmarks() raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbcx::XRowLocate::hashBookmark
     /** returns the hash value for a specified bookmark.
      */
-    [const]long hashBookmark([in]any bookmark) raises (com::sun::star::sdbc::SQLException);
+    long hashBookmark([in]any bookmark) raises (com::sun::star::sdbc::SQLException);
 };
 
 //=============================================================================
@@ -152,6 +151,9 @@ interface XRowLocate: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:40  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:45  hjs
     initial import
 

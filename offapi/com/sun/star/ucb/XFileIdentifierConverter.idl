@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFileIdentifierConverter.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-09 13:05:26 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@ module com { module sun { module star { module ucb {
     @version    1.0
     @author     Andreas Bille
 */
-[ uik(802B96F0-A422-11d4-94320050-DA3F314C), ident( "XFileIdentifierConverter", 1.0 ) ]
 interface XFileIdentifierConverter : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

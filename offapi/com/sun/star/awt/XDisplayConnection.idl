@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDisplayConnection.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-01-26 13:02:36 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@ interface XEventHandler;
     to their internal message handling loop.
 */
 
-[ uik(F0535970-F142-11d4-82C90050-04D765F1), ident("XDisplayConnection",  0.1) ]
 interface XDisplayConnection: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

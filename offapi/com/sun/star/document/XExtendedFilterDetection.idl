@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XExtendedFilterDetection.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-11-23 14:16:23 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@
 /** extended filter detection
  */
 
-[ uik(DE1327E6-A682-4232-B9B881FA-ED674C3B), ident("XExtendedFilterDetection", 1.0) ]
 interface XExtendedFilterDetection: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

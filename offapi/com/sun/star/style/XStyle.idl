@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStyle.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:12 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 // DocMerge from xml: interface com::sun::star::style::XStyle
 /** specifies a template for a style (aka style sheet).
  */
-[ uik(E2280500-33D6-11D1-AABE00A0-249D5590), ident( "XStyle", 1.0 ) ]
 interface XStyle: com::sun::star::container::XNamed
 {
     //-------------------------------------------------------------------------
@@ -87,7 +86,7 @@ interface XStyle: com::sun::star::container::XNamed
     // DocMerge from xml: method com::sun::star::style::XStyle::isUserDefined
     /** identifies a style as defined by the user.
      */
-    [const] boolean isUserDefined();
+    boolean isUserDefined();
 
     //-------------------------------------------------------------------------
 
@@ -95,7 +94,7 @@ interface XStyle: com::sun::star::container::XNamed
     /** @returns
                     <TRUE/> if this type is used in the document.
      */
-    [const] boolean isInUse();
+    boolean isInUse();
 
     //-------------------------------------------------------------------------
 
@@ -103,7 +102,7 @@ interface XStyle: com::sun::star::container::XNamed
     /** @returns
                     the name of the parent style, probably empty.
      */
-    [const] string getParentStyle();
+    string getParentStyle();
 
     //-------------------------------------------------------------------------
 
@@ -122,6 +121,9 @@ interface XStyle: com::sun::star::container::XNamed
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:12  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:54  hjs
     initial import
 

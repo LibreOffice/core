@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLineNumberingProperties.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 09:10:05 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,14 +77,13 @@
 
 /** contains the settings of the line numbering in a text document.
  */
-[ uik(72611FD0-C533-11d4-A01D0050-04526B09), ident( "XLineNumberingProperties", 1.0 ) ]
 interface XLineNumberingProperties: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
     /** @return the <type>LineNumberingsProperties</type> of the object.
      */
-    [const] com::sun::star::beans::XPropertySet getLineNumberingProperties();
+    com::sun::star::beans::XPropertySet getLineNumberingProperties();
 };
 
 //=============================================================================

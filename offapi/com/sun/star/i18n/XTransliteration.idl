@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTransliteration.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bustamam $ $Date: 2001-03-09 19:31:03 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,6 @@ constants TransliterationType
  */
 
 
-[ uik(A6E5EB84-3184-49ec-8A9D3355-700064EA), ident( "XTransliteration", 1.0 ) ]
 interface XTransliteration: com::sun::star::uno::XInterface
 {
 
@@ -285,7 +284,7 @@ interface XTransliteration: com::sun::star::uno::XInterface
    For CASCADE, behavior is undefined.
   */
 
-  [const] string getName ();
+  string getName ();
 
 
   /*
@@ -295,7 +294,7 @@ interface XTransliteration: com::sun::star::uno::XInterface
      For example, for UPPERCASE_LOWERCASE,  ONE_TO_ONE is returned;
      for IGNORE_CASE, IGNORE is returned.
   */
-  [const] short  getType ();
+  short  getType ();
 
 
   /* Transliteration modules can be created by different APIs.Each

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLoadable.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:52 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@
 // DocMerge from xml: interface com::sun::star::form::XLoadable
 /** interface provides functionality to implement objects which may be loaded.
  */
-[ uik(9E77330E-A3F3-11d3-86A80050-04D8BBE7), ident( "XLoadable", 1.0 ) ]
 interface XLoadable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -133,6 +132,9 @@ interface XLoadable: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:52  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:17  hjs
     initial import
 

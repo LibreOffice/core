@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDragSource.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-20 09:55:32 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,6 @@ interface XDragSourceListener;
     be a real performance issue.</p>
 */
 
-[ uik(E6EFFA61-B551-11d4-82C90050-04D765F1), ident("XDragSource",  0.1) ]
 interface XDragSource: com::sun::star::uno::XInterface
 {
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFrame.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:30 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,6 @@ interface XFramesSupplier;
 // DocMerge from xml: interface com::sun::star::frame::XFrame
 /** makes it possible to control a <type>Frame</type>
  */
-[ uik(E2280107-33D6-11D1-AABE00A0-249D5590), ident( "XFrame", 1.0 ) ]
 interface XFrame: com::sun::star::lang::XComponent
 {
     //-------------------------------------------------------------------------
@@ -125,7 +124,7 @@ interface XFrame: com::sun::star::lang::XComponent
     /** @returns
                 the frame container that created this frame.
      */
-    [const] XFramesSupplier getCreator();
+    XFramesSupplier getCreator();
 
     //-------------------------------------------------------------------------
 
@@ -135,7 +134,7 @@ interface XFrame: com::sun::star::lang::XComponent
 
                 <p>See specification of HTML framesets for reference.
      */
-    [const] string getName();
+    string getName();
 
     //-------------------------------------------------------------------------
 
@@ -266,7 +265,7 @@ interface XFrame: com::sun::star::lang::XComponent
 
                 <p>The frame is the owner of the window.
      */
-    [const] com::sun::star::awt::XWindow getComponentWindow();
+    com::sun::star::awt::XWindow getComponentWindow();
 
     //-------------------------------------------------------------------------
 
@@ -276,7 +275,7 @@ interface XFrame: com::sun::star::lang::XComponent
 
                 <p>Normally it is set by a frame loader.
      */
-    [const] XController getController();
+    XController getController();
 
     //-------------------------------------------------------------------------
 
@@ -334,6 +333,9 @@ interface XFrame: com::sun::star::lang::XComponent
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/19 16:03:30  mi
+    documentations syntax errors fixed
+
     Revision 1.4  2000/12/14 12:53:37  mi
     <true></true> -> <TRUE/> and same with FALSE
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSimpleText.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-12 13:36:43 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,6 @@
     a document, the text for headers and footers or for single cells of a
     table.@see XText
  */
-[ uik(654C4FA0-D25D-11d3-9FBE0010-5AEF84A7), ident( "XSimpleText", 1.0 ) ]
 interface XSimpleText: com::sun::star::text::XTextRange
 {
     //-------------------------------------------------------------------------
@@ -190,6 +189,9 @@ interface XSimpleText: com::sun::star::text::XTextRange
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/01/12 13:36:43  mi
+    missing argument documentation added
+
     Revision 1.4  2000/12/21 08:35:21  mi
     @see interface/service/... ident -> @see ident - for new docu generator
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFormController.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:52 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@
 
     <p>It should represent all controls which belong to a form.</p>
  */
-[ uik(E2281726-33D6-11D1-AABE00A0-249D5590), ident( "XFormController", 1.0 ) ]
 interface XFormController: com::sun::star::awt::XTabController
 {
     //-------------------------------------------------------------------------
@@ -96,7 +95,7 @@ interface XFormController: com::sun::star::awt::XTabController
     // DocMerge from xml: method com::sun::star::form::XFormController::getCurrentControl
     /** access to the current control may be null.
      */
-    [const] com::sun::star::awt::XControl getCurrentControl();
+    com::sun::star::awt::XControl getCurrentControl();
 
     //-------------------------------------------------------------------------
 
@@ -123,6 +122,9 @@ interface XFormController: com::sun::star::awt::XTabController
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:52  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:16  hjs
     initial import
 

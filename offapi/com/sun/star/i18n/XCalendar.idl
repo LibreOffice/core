@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCalendar.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:33 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@ module com { module sun { module star { module i18n {
 /**
     This interface provides access to locale specific calendar systems.
  */
-[ uik(721dcc9d-0503-4357-a56ecdae-ea36e29f), ident( "XCalendar", 1.0 ) ]
 interface XCalendar : com::sun::star::uno::XInterface
 {
     /// load the default calendar for the given locale

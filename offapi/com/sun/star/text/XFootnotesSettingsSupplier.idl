@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFootnotesSettingsSupplier.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@
 /** makes it possible to access the <type>FootnoteSettings</type>
     with the context (e.g. document).
  */
-[ uik(E2281229-33D6-11D1-AABE00A0-249D5590), ident( "XFootnotesSettingsSupplier", 1.0 ) ]
 interface XFootnotesSettingsSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -89,7 +88,7 @@ interface XFootnotesSettingsSupplier: com::sun::star::uno::XInterface
     /** @returns
                      <type>FootnoteSettings</type> of the object.
      */
-    [const] com::sun::star::beans::XPropertySet getFootnotesSettings();
+    com::sun::star::beans::XPropertySet getFootnotesSettings();
 
 };
 
@@ -100,6 +99,9 @@ interface XFootnotesSettingsSupplier: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:27  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:04  hjs
     initial import
 

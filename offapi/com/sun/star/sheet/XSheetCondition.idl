@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSheetCondition.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:12 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 /** represents a condition in conditional formats or validation.@see com::sun::star::sheet::TableValidation
         @see com::sun::star::sheet::TableConditionalEntry
  */
-[ uik(E2281523-33D6-11D1-AABE00A0-249D5590), ident( "XSheetCondition", 1.0 ) ]
 interface XSheetCondition: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -92,7 +91,7 @@ interface XSheetCondition: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::sheet::XSheetCondition::getOperator
     /** returns the operator in the condition.
      */
-    [const] com::sun::star::sheet::ConditionOperator getOperator();
+    com::sun::star::sheet::ConditionOperator getOperator();
 
     //-------------------------------------------------------------------------
 
@@ -114,7 +113,7 @@ interface XSheetCondition: com::sun::star::uno::XInterface
         <p>This can be a formula, a numeric constant, or a
         string constant in quotes.</p>
      */
-    [const] string getFormula1();
+    string getFormula1();
 
     //-------------------------------------------------------------------------
 
@@ -144,7 +143,7 @@ interface XSheetCondition: com::sun::star::uno::XInterface
         and <const>ConditionOperator::NOT_BETWEEN</const> need two values
         each.</p>
      */
-    [const] string getFormula2();
+    string getFormula2();
 
     //-------------------------------------------------------------------------
 
@@ -167,7 +166,7 @@ interface XSheetCondition: com::sun::star::uno::XInterface
     /** returns the position in the document which
         is used as a base for relative references in the formulas.
      */
-    [const] com::sun::star::table::CellAddress getSourcePosition();
+    com::sun::star::table::CellAddress getSourcePosition();
 
     //-------------------------------------------------------------------------
 
@@ -186,6 +185,9 @@ interface XSheetCondition: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:12  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:43:47  mi
     moved from api
 

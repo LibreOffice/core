@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNumberFormatsSupplier.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:17 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 /** supplies the collection of <type>NumberFormat</type>s (for example, in a
     document) and the settings belonging to these formats.
  */
-[ uik(E2280421-33D6-11D1-AABE00A0-249D5590), ident( "XNumberFormatsSupplier", 1.0 ) ]
 interface XNumberFormatsSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -93,7 +92,7 @@ interface XNumberFormatsSupplier: com::sun::star::uno::XInterface
     /** @returns
                 the <type>NumberFormatSettings</type> of this object.
      */
-    [const] com::sun::star::beans::XPropertySet getNumberFormatSettings();
+    com::sun::star::beans::XPropertySet getNumberFormatSettings();
 
     //-------------------------------------------------------------------------
 
@@ -101,7 +100,7 @@ interface XNumberFormatsSupplier: com::sun::star::uno::XInterface
     /** @returns
                 the collection of number formats belonging to this object (e.g. to this document).
      */
-    [const] com::sun::star::util::XNumberFormats getNumberFormats();
+    com::sun::star::util::XNumberFormats getNumberFormats();
 
 };
 
@@ -112,6 +111,9 @@ interface XNumberFormatsSupplier: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:45:17  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:20  hjs
     initial import
 

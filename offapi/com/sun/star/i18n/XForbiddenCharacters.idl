@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XForbiddenCharacters.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-01-17 15:54:29 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,6 @@
 <p>In some languages particular characaters are not allowed to be placed at the beginning or
 at the end of a text line.</p>
  */
-[ uik(A4B4C040-EC77-11d4-A03C0050-04526B09), ident( "XForbiddenCharacters", 1.0 ) ]
 interface XForbiddenCharacters : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataFormatTranslator.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: arellano $ $Date: 2001-03-01 17:53:51 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@ module com { module sun { module star { module datatransfer {
     which has to be registered in order to get a valid clipboard format value.</p>
 */
 
-[ uik( C0336F40-6DF0-4477-975EF9F4-C201BDF0 ), ident("XDataFormatTranslator", 0.1) ]
 interface XDataFormatTranslator : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -92,14 +91,14 @@ interface XDataFormatTranslator : com::sun::star::uno::XInterface
         @returns
         a DataFlavor for the given system data type.
     */
-    [const] any getSystemDataTypeFromDataFlavor( [in] DataFlavor aDataFlavor );
+    any getSystemDataTypeFromDataFlavor( [in] DataFlavor aDataFlavor );
 
     //-------------------------------------------------------------------------
     /**
         @returns
         a system data type for the given DataFlavor.
     */
-    [const] DataFlavor getDataFlavorFromSystemDataType( [in] any aSysDataType );
+    DataFlavor getDataFlavorFromSystemDataType( [in] any aSysDataType );
 };
 
 }; }; }; };

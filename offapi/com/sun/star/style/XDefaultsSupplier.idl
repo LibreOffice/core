@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDefaultsSupplier.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-28 16:25:37 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@
     either be the parent of a XPropertySet or the global property defaults
     for a document.
  */
-[ uik(7F60BC27-EB20-4473-84B4A2D1-9F090F5D), ident( "XDefaultsSupplier", 1.0 ) ]
 interface XDefaultsSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XViewSettingsSupplier.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:34 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 // DocMerge from xml: interface com::sun::star::view::XViewSettingsSupplier
 /** provides access to the view settings of the object.
  */
-[ uik(E2280307-33D6-11D1-AABE00A0-249D5590), ident( "XViewSettingsSupplier", 1.0 ) ]
 interface XViewSettingsSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -88,7 +87,7 @@ interface XViewSettingsSupplier: com::sun::star::uno::XInterface
     /** @returns
                 an interface to the <type scope="com::sun::star::text">ViewSettings</type>.
      */
-    [const] com::sun::star::beans::XPropertySet getViewSettings();
+    com::sun::star::beans::XPropertySet getViewSettings();
 
 };
 
@@ -99,6 +98,9 @@ interface XViewSettingsSupplier: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:45:34  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:22  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDimensionsSupplier.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:46 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 // DocMerge from xml: interface com::sun::star::sheet::XDimensionsSupplier
 /** gives access to dimensions.
  */
-[ uik(63A76E30-864C-11D3-9F580050-042A51C9), ident( "XDimensionsSupplier", 1.0 ) ]
 interface XDimensionsSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -98,6 +97,9 @@ interface XDimensionsSupplier: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:46  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:50  hjs
     initial import
 

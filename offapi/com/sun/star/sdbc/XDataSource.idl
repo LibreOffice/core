@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataSource.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:35 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@ interface XConnection;
     by its name. A DataSource object is typically registered by a naming service
     provider.
  */
-[ uik(C76294D1-96B3-11d3-9EE40010-5AD7A5C4), ident("XDataSource", 1.0) ]
 interface XDataSource: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -115,7 +114,7 @@ interface XDataSource: com::sun::star::uno::XInterface
         DataSource object is created the login timeout is initially zero.
         </p>
      */
-    [const] long getLoginTimeout() raises (SQLException);
+    long getLoginTimeout() raises (SQLException);
 };
 
 //=============================================================================
@@ -124,6 +123,9 @@ interface XDataSource: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:41  hjs
     initial import
 

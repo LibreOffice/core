@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTransferDataAccess.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-03-01 17:53:51 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,6 @@ module com { module sun { module star { module datatransfer {
     @see com::sun::star::datatransfer::XTransferable
 */
 
-[ uik(29E1BE61-92E2-11d4-83330050-04D765F1), ident("XTransferDataAccess",  0.1) ]
 interface XTransferDataAccess: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

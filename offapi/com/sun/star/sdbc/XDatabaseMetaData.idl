@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDatabaseMetaData.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:39 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,6 @@ interface XConnection;
     either an XResultSet (which may be empty) is returned or a
     SQLException is thrown.</p>
  */
-[ uik(D6B6024B-9067-11d3-9EE00010-5AD7A5C4), ident("XDatabaseMetaData", 1.0) ]
 interface XDatabaseMetaData: com::sun::star::uno::XInterface
 {
 
@@ -105,173 +104,173 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** Can all the procedures returned by getProcedures be called by the
         current user?
      */
-    [const] boolean allProceduresAreCallable() raises (SQLException);
+    boolean allProceduresAreCallable() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::allTablesAreSelectable
     /** Can all the tables returned by getTable be SELECTed by the
         current user?
      */
-    [const] boolean allTablesAreSelectable() raises (SQLException);
+    boolean allTablesAreSelectable() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getURL
     /** returns the directory and filename of the database.
      */
-    [const] string getURL() raises (SQLException);
+    string getURL() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getUserName
     /** returns the user name from this database connection.
      */
-    [const] string getUserName() raises (SQLException);
+    string getUserName() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::isReadOnly
     /** check, if the database in read-only mode.
      */
-    [const] boolean isReadOnly() raises (SQLException);
+    boolean isReadOnly() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::nullsAreSortedHigh
     /** Are NULL values sorted high ?
      */
-    [const] boolean nullsAreSortedHigh() raises (SQLException);
+    boolean nullsAreSortedHigh() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::nullsAreSortedLow
     /** Are NULL values sorted low ?
      */
-    [const] boolean nullsAreSortedLow() raises (SQLException);
+    boolean nullsAreSortedLow() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::nullsAreSortedAtStart
     /** Are NULL values sorted at the start regardless of sort order?
      */
-    [const] boolean nullsAreSortedAtStart() raises (SQLException);
+    boolean nullsAreSortedAtStart() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::nullsAreSortedAtEnd
     /** Are NULL values sorted at the end regardless of sort order?
      */
-    [const] boolean nullsAreSortedAtEnd() raises (SQLException);
+    boolean nullsAreSortedAtEnd() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getDatabaseProductName
     /** returns the name of the database product.
      */
-    [const] string getDatabaseProductName() raises (SQLException);
+    string getDatabaseProductName() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getDatabaseProductVersion
     /** returns the version of the database product.
      */
-    [const] string getDatabaseProductVersion() raises (SQLException);
+    string getDatabaseProductVersion() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getDriverName
     /** returns the name of the SDBC driver.
      */
-    [const] string getDriverName() raises (SQLException);
+    string getDriverName() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getDriverVersion
     /** returns the version number of the SDBC driver.
      */
-    [const] string getDriverVersion() raises (SQLException);
+    string getDriverVersion() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getDriverMajorVersion
     /** returns the JDBC driver major version number.
      */
-    [const] long getDriverMajorVersion();
+    long getDriverMajorVersion();
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getDriverMinorVersion
     /** returns the SDBC driver minor version number.
      */
-    [const] long getDriverMinorVersion();
+    long getDriverMinorVersion();
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::usesLocalFiles
     /** use the database local files to save the tables.
      */
-    [const] boolean usesLocalFiles() raises (SQLException);
+    boolean usesLocalFiles() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::usesLocalFilePerTable
     /** use the database one local file to save for each table.
      */
-    [const] boolean usesLocalFilePerTable() raises (SQLException);
+    boolean usesLocalFilePerTable() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsMixedCaseIdentifiers
     /** use the database 'mixed case unquoted SQL identifiers' case sensitive.
      */
-    [const] boolean supportsMixedCaseIdentifiers() raises (SQLException);
+    boolean supportsMixedCaseIdentifiers() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::storesUpperCaseIdentifiers
     /** Does the database treat mixed case unquoted SQL identifiers as
         case insensitive and store them in upper case?
      */
-    [const] boolean storesUpperCaseIdentifiers() raises (SQLException);
+    boolean storesUpperCaseIdentifiers() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::storesLowerCaseIdentifiers
     /** Does the database treat mixed case unquoted SQL identifiers as
         case insensitive and store them in lower case?
      */
-    [const] boolean storesLowerCaseIdentifiers() raises (SQLException);
+    boolean storesLowerCaseIdentifiers() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::storesMixedCaseIdentifiers
     /** Does the database treat mixed case unquoted SQL identifiers as
         case insensitive and store them in mixed case?
      */
-    [const] boolean storesMixedCaseIdentifiers() raises (SQLException);
+    boolean storesMixedCaseIdentifiers() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsMixedCaseQuotedIdentifiers
     /** Does the database treat mixed case quoted SQL identifiers as
         case sensitive and as a result store them in mixed case?
      */
-    [const] boolean supportsMixedCaseQuotedIdentifiers() raises (SQLException);
+    boolean supportsMixedCaseQuotedIdentifiers() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::storesUpperCaseQuotedIdentifiers
     /** Does the database treat mixed case quoted SQL identifiers as
         case insensitive and store them in upper case?
      */
-    [const] boolean storesUpperCaseQuotedIdentifiers() raises (SQLException);
+    boolean storesUpperCaseQuotedIdentifiers() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::storesLowerCaseQuotedIdentifiers
     /** Does the database treat mixed case quoted SQL identifiers as
         case insensitive and store them in lower case?
      */
-    [const] boolean storesLowerCaseQuotedIdentifiers() raises (SQLException);
+    boolean storesLowerCaseQuotedIdentifiers() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::storesMixedCaseQuotedIdentifiers
     /** Does the database treat mixed case quoted SQL identifiers as
         case insensitive and store them in mixed case?
      */
-    [const] boolean storesMixedCaseQuotedIdentifiers() raises (SQLException);
+    boolean storesMixedCaseQuotedIdentifiers() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getIdentifierQuoteString
     /** What's the string used to quote SQL identifiers?
         This returns a space " " if identifier quoting isn't supported.
      */
-    [const] string getIdentifierQuoteString() raises (SQLException);
+    string getIdentifierQuoteString() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getSQLKeywords
     /** Gets a comma-separated list of all a database's SQL keywords
         that are NOT also SQL92 keywords.
      */
-    [const] string getSQLKeywords() raises (SQLException);
+    string getSQLKeywords() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getNumericFunctions
@@ -279,7 +278,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
         X/Open CLI math function names used in the SDBC function escape
         clause.
      */
-    [const] string getNumericFunctions() raises (SQLException);
+    string getNumericFunctions() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getStringFunctions
@@ -287,7 +286,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
         X/Open CLI string function names used in the SDBC function escape
         clause.
      */
-    [const] string getStringFunctions() raises (SQLException);
+    string getStringFunctions() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getSystemFunctions
@@ -295,13 +294,13 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
         X/Open CLI system function names used in the SDBC function escape
         clause.
      */
-    [const] string getSystemFunctions() raises (SQLException);
+    string getSystemFunctions() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getTimeDateFunctions
     /** Gets a comma-separated list of time and date functions.
      */
-    [const] string getTimeDateFunctions() raises (SQLException);
+    string getTimeDateFunctions() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getSearchStringEscape
@@ -316,26 +315,26 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
         more characters.
         </p>
      */
-    [const] string getSearchStringEscape() raises (SQLException);
+    string getSearchStringEscape() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getExtraNameCharacters
     /** Gets all the "extra" characters that can be used in unquoted
         identifier names (those beyond a-z, A-Z, 0-9 and _).
      */
-    [const] string getExtraNameCharacters() raises (SQLException);
+    string getExtraNameCharacters() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsAlterTableWithAddColumn
     /** support the Database "ALTER TABLE" with add column ?
      */
-    [const] boolean supportsAlterTableWithAddColumn() raises (SQLException);
+    boolean supportsAlterTableWithAddColumn() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsAlterTableWithDropColumn
     /** support the Database  "ALTER TABLE" with drop column ?
      */
-    [const] boolean supportsAlterTableWithDropColumn() raises (SQLException);
+    boolean supportsAlterTableWithDropColumn() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsColumnAliasing
@@ -346,476 +345,476 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
         computed columns or to provide alias names for columns as required.
         </p>
      */
-    [const] boolean supportsColumnAliasing() raises (SQLException);
+    boolean supportsColumnAliasing() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::nullPlusNonNullIsNull
     /** are concatenations between NULL and non-NULL values NULL?
      */
-    [const] boolean nullPlusNonNullIsNull() raises (SQLException);
+    boolean nullPlusNonNullIsNull() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsTypeConversion
     /** Support the Database the CONVERT function between SQL types ?
      */
-    [const] boolean supportsTypeConversion() raises (SQLException);
+    boolean supportsTypeConversion() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsConvert
     /** Support the Database the CONVERT between the given SQL types ?
      */
-    [const] boolean supportsConvert([in]long fromType, [in]long toType)
+    boolean supportsConvert([in]long fromType, [in]long toType)
         raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsTableCorrelationNames
     /** Are table correlation names supported?
      */
-    [const] boolean supportsTableCorrelationNames() raises (SQLException);
+    boolean supportsTableCorrelationNames() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsDifferentTableCorrelationNames
     /** If table correlation names are supported, are they restricted
         to be different from the names of the tables?
      */
-    [const] boolean supportsDifferentTableCorrelationNames()
+    boolean supportsDifferentTableCorrelationNames()
         raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsExpressionsInOrderBy
     /** Are expressions in "ORDER BY" lists supported?
      */
-    [const] boolean supportsExpressionsInOrderBy() raises (SQLException);
+    boolean supportsExpressionsInOrderBy() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsOrderByUnrelated
     /** Can an "ORDER BY" clause use columns not in the SELECT statement?
      */
-    [const] boolean supportsOrderByUnrelated() raises (SQLException);
+    boolean supportsOrderByUnrelated() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsGroupBy
     /** Is some form of "GROUP BY" clause supported?
      */
-    [const] boolean supportsGroupBy() raises (SQLException);
+    boolean supportsGroupBy() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsGroupByUnrelated
     /** Can a "GROUP BY" clause use columns not in the SELECT?
      */
-    [const] boolean supportsGroupByUnrelated() raises (SQLException);
+    boolean supportsGroupByUnrelated() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsGroupByBeyondSelect
     /** Can a "GROUP BY" clause add columns not in the SELECT
         provided it specifies all the columns in the SELECT?
      */
-    [const] boolean supportsGroupByBeyondSelect() raises (SQLException);
+    boolean supportsGroupByBeyondSelect() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsLikeEscapeClause
     /** Is the escape character in "LIKE" clauses supported?
      */
-    [const] boolean supportsLikeEscapeClause() raises (SQLException);
+    boolean supportsLikeEscapeClause() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsMultipleResultSets
     /** Are multiple XResultSets from a single execute supported?
      */
-    [const] boolean supportsMultipleResultSets() raises (SQLException);
+    boolean supportsMultipleResultSets() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsMultipleTransactions
     /** Can we have multiple transactions open at once (on different
         connections)?
      */
-    [const] boolean supportsMultipleTransactions() raises (SQLException);
+    boolean supportsMultipleTransactions() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsNonNullableColumns
     /** Can columns be defined as non-nullable?
      */
-    [const] boolean supportsNonNullableColumns() raises (SQLException);
+    boolean supportsNonNullableColumns() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsMinimumSQLGrammar
     /** support the Database ODBC Minimum SQL grammar ?
      */
-    [const] boolean supportsMinimumSQLGrammar() raises (SQLException);
+    boolean supportsMinimumSQLGrammar() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsCoreSQLGrammar
     /** support the Database ODBC Core SQL grammar ?
      */
-    [const] boolean supportsCoreSQLGrammar() raises (SQLException);
+    boolean supportsCoreSQLGrammar() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsExtendedSQLGrammar
     /** support the Database ODBC Extended SQL grammar ?
      */
-    [const] boolean supportsExtendedSQLGrammar() raises (SQLException);
+    boolean supportsExtendedSQLGrammar() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsANSI92EntryLevelSQL
     /** support the Database ANSI92 entry level SQL grammar ?
      */
-    [const] boolean supportsANSI92EntryLevelSQL() raises (SQLException);
+    boolean supportsANSI92EntryLevelSQL() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsANSI92IntermediateSQL
     /** Support the Database ANSI92 intermediate SQL grammar ?
      */
-    [const] boolean supportsANSI92IntermediateSQL() raises (SQLException);
+    boolean supportsANSI92IntermediateSQL() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsANSI92FullSQL
     /** Support the Database ANSI92 full SQL grammar ?
      */
-    [const] boolean supportsANSI92FullSQL() raises (SQLException);
+    boolean supportsANSI92FullSQL() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsIntegrityEnhancementFacility
     /** support the Database SQL Integrity Enhancement Facility ?
      */
-    [const] boolean supportsIntegrityEnhancementFacility() raises (SQLException);
+    boolean supportsIntegrityEnhancementFacility() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsOuterJoins
     /** Is some form of outer join supported?
      */
-    [const] boolean supportsOuterJoins() raises (SQLException);
+    boolean supportsOuterJoins() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsFullOuterJoins
     /** Are full nested outer joins supported?
      */
-    [const] boolean supportsFullOuterJoins() raises (SQLException);
+    boolean supportsFullOuterJoins() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsLimitedOuterJoins
     /** Is there limited support for outer joins?  (This will be true
         if supportFullOuterJoins is true.)
      */
-    [const] boolean supportsLimitedOuterJoins() raises (SQLException);
+    boolean supportsLimitedOuterJoins() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getSchemaTerm
     /** return the database vendor's preferred term for "schema"
      */
-    [const] string getSchemaTerm() raises (SQLException);
+    string getSchemaTerm() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getProcedureTerm
     /** return the database vendor's preferred term for "procedure"
      */
-    [const] string getProcedureTerm() raises (SQLException);
+    string getProcedureTerm() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getCatalogTerm
     /** return the database vendor's preferred term for "catalog"
      */
-    [const] string getCatalogTerm() raises (SQLException);
+    string getCatalogTerm() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::isCatalogAtStart
     /** Does a catalog appear at the start of a qualified table name?
         (Otherwise it appears at the end)
      */
-    [const] boolean isCatalogAtStart() raises (SQLException);
+    boolean isCatalogAtStart() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getCatalogSeparator
     /** return the separator between catalog and table name
      */
-    [const] string getCatalogSeparator() raises (SQLException);
+    string getCatalogSeparator() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsSchemasInDataManipulation
     /** Can a schema name be used in a data manipulation statement?
      */
-    [const] boolean supportsSchemasInDataManipulation() raises (SQLException);
+    boolean supportsSchemasInDataManipulation() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsSchemasInProcedureCalls
     /** Can a schema name be used in a procedure call statement?
      */
-    [const] boolean supportsSchemasInProcedureCalls() raises (SQLException);
+    boolean supportsSchemasInProcedureCalls() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsSchemasInTableDefinitions
     /** Can a schema name be used in a table definition statement?
      */
-    [const] boolean supportsSchemasInTableDefinitions() raises (SQLException);
+    boolean supportsSchemasInTableDefinitions() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsSchemasInIndexDefinitions
     /** Can a schema name be used in an index definition statement?
      */
-    [const] boolean supportsSchemasInIndexDefinitions() raises (SQLException);
+    boolean supportsSchemasInIndexDefinitions() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsSchemasInPrivilegeDefinitions
     /** Can a schema name be used in a privilege definition statement?
      */
-    [const] boolean supportsSchemasInPrivilegeDefinitions()
+    boolean supportsSchemasInPrivilegeDefinitions()
         raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsCatalogsInDataManipulation
     /** Can a catalog name be used in a data manipulation statement?
      */
-    [const] boolean supportsCatalogsInDataManipulation() raises (SQLException);
+    boolean supportsCatalogsInDataManipulation() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsCatalogsInProcedureCalls
     /** Can a catalog name be used in a procedure call statement?
      */
-    [const] boolean supportsCatalogsInProcedureCalls() raises (SQLException);
+    boolean supportsCatalogsInProcedureCalls() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsCatalogsInTableDefinitions
     /** Can a catalog name be used in a table definition statement?
      */
-    [const] boolean supportsCatalogsInTableDefinitions() raises (SQLException);
+    boolean supportsCatalogsInTableDefinitions() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsCatalogsInIndexDefinitions
     /** Can a catalog name be used in an index definition statement?
      */
-    [const] boolean supportsCatalogsInIndexDefinitions() raises (SQLException);
+    boolean supportsCatalogsInIndexDefinitions() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsCatalogsInPrivilegeDefinitions
     /** Can a catalog name be used in a privilege definition statement?
      */
-    [const] boolean supportsCatalogsInPrivilegeDefinitions()
+    boolean supportsCatalogsInPrivilegeDefinitions()
         raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsPositionedDelete
     /** Is positioned DELETE supported?
      */
-    [const] boolean supportsPositionedDelete() raises (SQLException);
+    boolean supportsPositionedDelete() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsPositionedUpdate
     /** Is positioned UPDATE supported?
      */
-    [const] boolean supportsPositionedUpdate() raises (SQLException);
+    boolean supportsPositionedUpdate() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsSelectForUpdate
     /** Is SELECT for UPDATE supported?
      */
-    [const] boolean supportsSelectForUpdate() raises (SQLException);
+    boolean supportsSelectForUpdate() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsStoredProcedures
     /** Are stored procedure calls using the stored procedure escape
         syntax supported?
      */
-    [const] boolean supportsStoredProcedures() raises (SQLException);
+    boolean supportsStoredProcedures() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsSubqueriesInComparisons
     /** Are subqueries in comparison expressions supported?
      */
-    [const] boolean supportsSubqueriesInComparisons() raises (SQLException);
+    boolean supportsSubqueriesInComparisons() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsSubqueriesInExists
     /** Are subqueries in 'exists' expressions supported?
      */
-    [const] boolean supportsSubqueriesInExists() raises (SQLException);
+    boolean supportsSubqueriesInExists() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsSubqueriesInIns
     /** Are subqueries in 'in' statements supported?
      */
-    [const] boolean supportsSubqueriesInIns() raises (SQLException);
+    boolean supportsSubqueriesInIns() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsSubqueriesInQuantifieds
     /** Are subqueries in quantified expressions supported?
      */
-    [const] boolean supportsSubqueriesInQuantifieds() raises (SQLException);
+    boolean supportsSubqueriesInQuantifieds() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsCorrelatedSubqueries
     /** Are correlated subqueries supported?
      */
-    [const] boolean supportsCorrelatedSubqueries() raises (SQLException);
+    boolean supportsCorrelatedSubqueries() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsUnion
     /** Is SQL UNION supported?
      */
-    [const] boolean supportsUnion() raises (SQLException);
+    boolean supportsUnion() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsUnionAll
     /** Is SQL UNION ALL supported?
      */
-    [const] boolean supportsUnionAll() raises (SQLException);
+    boolean supportsUnionAll() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsOpenCursorsAcrossCommit
     /** Can cursors remain open across commits?
      */
-    [const] boolean supportsOpenCursorsAcrossCommit() raises (SQLException);
+    boolean supportsOpenCursorsAcrossCommit() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsOpenCursorsAcrossRollback
     /** Can cursors remain open across rollbacks?
      */
-    [const] boolean supportsOpenCursorsAcrossRollback() raises (SQLException);
+    boolean supportsOpenCursorsAcrossRollback() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsOpenStatementsAcrossCommit
     /** Can statements remain open across commits?
      */
-    [const] boolean supportsOpenStatementsAcrossCommit() raises (SQLException);
+    boolean supportsOpenStatementsAcrossCommit() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsOpenStatementsAcrossRollback
     /** Can statements remain open across rollbacks?
      */
-    [const] boolean supportsOpenStatementsAcrossRollback()
+    boolean supportsOpenStatementsAcrossRollback()
         raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getMaxBinaryLiteralLength
     /** return the maximal number of hex characters in an inline binary literal
      */
-    [const] long getMaxBinaryLiteralLength() raises (SQLException);
+    long getMaxBinaryLiteralLength() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getMaxCharLiteralLength
     /** return the max length for a character literal
      */
-    [const] long getMaxCharLiteralLength() raises (SQLException);
+    long getMaxCharLiteralLength() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getMaxColumnNameLength
     /** return the limit on column name length
      */
-    [const] long getMaxColumnNameLength() raises (SQLException);
+    long getMaxColumnNameLength() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getMaxColumnsInGroupBy
     /** return the maximum number of columns in a "GROUP BY" clause
      */
-    [const] long getMaxColumnsInGroupBy() raises (SQLException);
+    long getMaxColumnsInGroupBy() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getMaxColumnsInIndex
     /** return the maximum number of columns allowed in an index
      */
-    [const] long getMaxColumnsInIndex() raises (SQLException);
+    long getMaxColumnsInIndex() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getMaxColumnsInOrderBy
     /** return the maximum number of columns in an "ORDER BY" clause
      */
-    [const] long getMaxColumnsInOrderBy() raises (SQLException);
+    long getMaxColumnsInOrderBy() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getMaxColumnsInSelect
     /** return the maximum number of columns in a "SELECT" list
      */
-    [const] long getMaxColumnsInSelect() raises (SQLException);
+    long getMaxColumnsInSelect() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getMaxColumnsInTable
     /** return the maximum number of columns in a table
      */
-    [const] long getMaxColumnsInTable() raises (SQLException);
+    long getMaxColumnsInTable() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getMaxConnections
     /** return the number of active connections at a time to this database.
      */
-    [const] long getMaxConnections() raises (SQLException);
+    long getMaxConnections() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getMaxCursorNameLength
     /** return the maximum cursor name length
      */
-    [const] long getMaxCursorNameLength() raises (SQLException);
+    long getMaxCursorNameLength() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getMaxIndexLength
     /** return the maximum length of an index (in bytes)
      */
-    [const] long getMaxIndexLength() raises (SQLException);
+    long getMaxIndexLength() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getMaxSchemaNameLength
     /** return the maximum length allowed for a schema name
      */
-    [const] long getMaxSchemaNameLength() raises (SQLException);
+    long getMaxSchemaNameLength() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getMaxProcedureNameLength
     /** return the maximum length of a procedure name
      */
-    [const] long getMaxProcedureNameLength() raises (SQLException);
+    long getMaxProcedureNameLength() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getMaxCatalogNameLength
     /** return the maximum length of a catalog name
      */
-    [const] long getMaxCatalogNameLength() raises (SQLException);
+    long getMaxCatalogNameLength() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getMaxRowSize
     /** return the maximum length of a single row.
      */
-    [const] long getMaxRowSize() raises (SQLException);
+    long getMaxRowSize() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::doesMaxRowSizeIncludeBlobs
     /** Did getMaxRowSize() include LONGVARCHAR and LONGVARBINARY
         blobs?
      */
-    [const] boolean doesMaxRowSizeIncludeBlobs() raises (SQLException);
+    boolean doesMaxRowSizeIncludeBlobs() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getMaxStatementLength
     /** return the maximum length of a SQL statement
      */
-    [const] long getMaxStatementLength() raises (SQLException);
+    long getMaxStatementLength() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getMaxStatements
     /** return the maximal number of open active statements at one time to this database
      */
-    [const] long getMaxStatements() raises (SQLException);
+    long getMaxStatements() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getMaxTableNameLength
     /** return the maximum length of a table name
      */
-    [const] long getMaxTableNameLength() raises (SQLException);
+    long getMaxTableNameLength() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getMaxTablesInSelect
     /** return the maximum number of tables in a SELECT statement
      */
-    [const] long getMaxTablesInSelect() raises (SQLException);
+    long getMaxTablesInSelect() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getMaxUserNameLength
     /** return the maximum length of a user name
      */
-    [const] long getMaxUserNameLength() raises (SQLException);
+    long getMaxUserNameLength() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getDefaultTransactionIsolation
     /** return the database default transaction isolation level.
         The values are defined in <type scope="com::sun::star::sdbc">TransactionIsolation</type>.@see com::sun::star::sdbc::XConnection
      */
-    [const] long getDefaultTransactionIsolation() raises (SQLException);
+    long getDefaultTransactionIsolation() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsTransactions
@@ -823,13 +822,13 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
         If not, invoking the method <code>commit</code> is a noop and the
         isolation level is TransactionIsolation_NONE.
      */
-    [const] boolean supportsTransactions() raises (SQLException);
+    boolean supportsTransactions() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsTransactionIsolationLevel
     /** Does this database support the given transaction isolation level?@see com::sun::star::sdbc::Connection
      */
-    [const] boolean supportsTransactionIsolationLevel([in]long level)
+    boolean supportsTransactionIsolationLevel([in]long level)
                             raises (SQLException);
     //-------------------------------------------------------------------------
 
@@ -837,7 +836,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** support the Database both data definition and data manipulation statements
         within a transaction?
      */
-    [const] boolean supportsDataDefinitionAndDataManipulationTransactions()
+    boolean supportsDataDefinitionAndDataManipulationTransactions()
                              raises (SQLException);
     //-------------------------------------------------------------------------
 
@@ -845,7 +844,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** are only data manipulation statements within a transaction
         supported?
      */
-    [const] boolean supportsDataManipulationTransactionsOnly()
+    boolean supportsDataManipulationTransactionsOnly()
                             raises (SQLException);
     //-------------------------------------------------------------------------
 
@@ -853,14 +852,14 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** does a data definition statement within a transaction force the
         transaction to commit?
      */
-    [const] boolean dataDefinitionCausesTransactionCommit()
+    boolean dataDefinitionCausesTransactionCommit()
                             raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::dataDefinitionIgnoredInTransactions
     /** is a data definition statement within a transaction ignored?
      */
-    [const] boolean dataDefinitionIgnoredInTransactions()
+    boolean dataDefinitionIgnoredInTransactions()
                             raises (SQLException);
     //-------------------------------------------------------------------------
 
@@ -1784,13 +1783,13 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </ul>
         </li>
         <li>
-        <b>UNSIGNED_ATTRIBUTE</b> [const] boolean =&amp;gt; is it unsigned?
+        <b>UNSIGNED_ATTRIBUTE</b> boolean =&amp;gt; is it unsigned?
         </li>
         <li>
-        <b>FIXED_PREC_SCALE</b> [const] boolean =&amp;gt; can it be a money value?
+        <b>FIXED_PREC_SCALE</b> boolean =&amp;gt; can it be a money value?
         </li>
         <li>
-        <b>AUTO_INCREMENT</b> [const] boolean =&amp;gt; can it be used for an
+        <b>AUTO_INCREMENT</b> boolean =&amp;gt; can it be used for an
         auto-increment value?
         </li>
         <li>
@@ -1835,7 +1834,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
         <b>TABLE_NAME</b> string =&amp;gt; table name
         </li>
         <li>
-        <b>NON_UNIQUE</b> [const] boolean =&amp;gt; Can index values be non-unique?
+        <b>NON_UNIQUE</b> boolean =&amp;gt; Can index values be non-unique?
         false when TYPE is tableIndexStatistic
         </li>
         <li>
@@ -1897,14 +1896,14 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsResultSetType
     /** Does the database support the given result set type?
      */
-    [const] boolean supportsResultSetType([in]long setType) raises (SQLException);
+    boolean supportsResultSetType([in]long setType) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsResultSetConcurrency
     /** Does the database support the concurrency type in combination
         with the given result set type?
      */
-    [const] boolean supportsResultSetConcurrency([in]long setType,
+    boolean supportsResultSetConcurrency([in]long setType,
                                                   [in]long concurrency)
       raises (SQLException);
     //-------------------------------------------------------------------------
@@ -1912,44 +1911,44 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::ownUpdatesAreVisible
     /** indicates whether a result set's own updates are visible.
      */
-    [const] boolean ownUpdatesAreVisible([in]long setType) raises (SQLException);
+    boolean ownUpdatesAreVisible([in]long setType) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::ownDeletesAreVisible
     /** indicates whether a result set's own deletes are visible.
      */
-    [const] boolean ownDeletesAreVisible([in]long setType) raises (SQLException);
+    boolean ownDeletesAreVisible([in]long setType) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::ownInsertsAreVisible
     /** indicates whether a result set's own inserts are visible.
      */
-    [const] boolean ownInsertsAreVisible([in]long setType) raises (SQLException);
+    boolean ownInsertsAreVisible([in]long setType) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::othersUpdatesAreVisible
     /** indicates whether updates made by others are visible.
      */
-    [const] boolean othersUpdatesAreVisible([in]long setType) raises (SQLException);
+    boolean othersUpdatesAreVisible([in]long setType) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::othersDeletesAreVisible
     /** indicates whether deletes made by others are visible.
      */
-    [const] boolean othersDeletesAreVisible([in]long setType) raises (SQLException);
+    boolean othersDeletesAreVisible([in]long setType) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::othersInsertsAreVisible
     /** indicates whether inserts made by others are visible.
      */
-    [const] boolean othersInsertsAreVisible([in]long setType) raises (SQLException);
+    boolean othersInsertsAreVisible([in]long setType) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::updatesAreDetected
     /** indicates whether or not a visible row update can be detected by
         calling the method <code>XResultSet.rowUpdated</code>.
      */
-    [const] boolean updatesAreDetected([in]long setType) raises (SQLException);
+    boolean updatesAreDetected([in]long setType) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::deletesAreDetected
@@ -1957,20 +1956,20 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
         calling XResultSet.rowDeleted().  If deletesAreDetected()
         returns <FALSE/>, then deleted rows are removed from the result set.
      */
-    [const] boolean deletesAreDetected([in]long setType) raises (SQLException);
+    boolean deletesAreDetected([in]long setType) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::insertsAreDetected
     /** indicates whether or not a visible row insert can be detected
         by calling XResultSet.rowInserted().
      */
-    [const] boolean insertsAreDetected([in]long setType) raises (SQLException);
+    boolean insertsAreDetected([in]long setType) raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::supportsBatchUpdates
     /** indicates whether the driver supports batch updates.
      */
-    [const] boolean supportsBatchUpdates() raises (SQLException);
+    boolean supportsBatchUpdates() raises (SQLException);
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getUDTs
@@ -2021,7 +2020,7 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::sdbc::XDatabaseMetaData::getConnection
     /** retrieves the connection that produced this metadata object.
      */
-    [const] XConnection getConnection() raises (SQLException);
+    XConnection getConnection() raises (SQLException);
 };
 
 //=============================================================================
@@ -2030,6 +2029,9 @@ interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/14 12:53:39  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:43:35  mi
     moved from api
 

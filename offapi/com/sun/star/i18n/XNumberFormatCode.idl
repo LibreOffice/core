@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNumberFormatCode.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-01-26 17:50:57 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,6 @@ struct NumberFormatCode {
 /**
     This interface provides access to specific number format codes.
  */
-[ uik(a0474bfe-5db2-4bb3-90381a9a-1e4d49a0), ident( "XNumberFormatCode", 1.0 ) ]
 interface XNumberFormatCode : com::sun::star::uno::XInterface
 {
     /**

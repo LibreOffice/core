@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCellRange.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-03-12 12:56:24 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,6 @@
 // DocMerge from xml: interface com::sun::star::table::XCellRange
 /** represents a range of cells in a table.@see com::sun::star::table::CellRange
  */
-[ uik(E2281101-33D6-11D1-AABE00A0-249D5590), ident( "XCellRange", 1.0 ) ]
 interface XCellRange: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -141,6 +140,9 @@ interface XCellRange: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/03/12 12:56:24  mi
+    package is a registered name in Java => renamed to packages (step1: new module packages)
+
     Revision 1.4  2000/12/21 08:35:19  mi
     @see interface/service/... ident -> @see ident - for new docu generator
 

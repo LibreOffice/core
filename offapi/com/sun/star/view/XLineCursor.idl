@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLineCursor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:28 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@
         @see com::sun::star::text::TextCursor
         @see com::sun::star::view::ViewCursor
  */
-[ uik(85DDD700-71BD-11D3-9F760010-5AEF84A7), ident( "XLineCursor", 1.0 ) ]
 interface XLineCursor: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -119,6 +118,9 @@ interface XLineCursor: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/21 08:35:28  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.4  2000/12/19 16:04:00  mi
     documentations syntax errors fixed
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAutoTextContainer.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:21 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,6 @@
 
     </p>@see AutoTextContainer
  */
-[ uik(E2281217-33D6-11D1-AABE00A0-249D5590), ident( "XAutoTextContainer", 1.0 ) ]
 interface XAutoTextContainer: com::sun::star::container::XNameAccess
 {
     //-------------------------------------------------------------------------
@@ -141,6 +140,9 @@ interface XAutoTextContainer: com::sun::star::container::XNameAccess
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:21  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:44:27  mi
     moved from api
 

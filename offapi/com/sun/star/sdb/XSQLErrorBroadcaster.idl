@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSQLErrorBroadcaster.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:31 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@
     of <type scope="com::sun::star::sdbc">SQLException</type>s posted by
     any database object.
  */
-[ uik(704A27C6-A721-11d3-86AC0050-04D8BBE7), ident("XSQLErrorListener", 1.0) ]
 interface XSQLErrorBroadcaster: com::sun::star::uno::XInterface
 {
 
@@ -103,6 +102,9 @@ interface XSQLErrorBroadcaster: com::sun::star::uno::XInterface
 #endif
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:31  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:38  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCloseable.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:35 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 // DocMerge from xml: interface com::sun::star::sdbc::XCloseable
 /** provides the releasing of resources acquired by the implementing object.
  */
-[ uik(4544AE31-AE24-11d3-9ED80050-04D8BBD0), ident("XCloseable", 1.0) ]
 interface XCloseable: com::sun::star::uno::XInterface
 {
 
@@ -91,6 +90,9 @@ interface XCloseable: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:41  hjs
     initial import
 

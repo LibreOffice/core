@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XViewFreezable.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:40 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 /** enables a <type>SpreadsheetView</type> to freeze
     columns and rows of the view.
  */
-[ uik(E2281543-33D6-11D1-AABE00A0-249D5590), ident( "XViewFreezable", 1.0 ) ]
 interface XViewFreezable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -91,7 +90,7 @@ interface XViewFreezable: com::sun::star::uno::XInterface
         <member>XViewFreezable::hasFrozenPanes()</member>
         can be <TRUE/>.</p>
      */
-    [const] boolean hasFrozenPanes();
+    boolean hasFrozenPanes();
 
     //-------------------------------------------------------------------------
 
@@ -116,6 +115,9 @@ interface XViewFreezable: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/14 12:53:40  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:43:47  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextViewCursor.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 // DocMerge from xml: interface com::sun::star::text::XTextViewCursor
 /** describes a cursor in a text document's view.
  */
-[ uik(E2281203-33D6-11D1-AABE00A0-249D5590), ident( "XTextViewCursor", 1.0 ) ]
 interface XTextViewCursor: com::sun::star::text::XTextCursor
 {
     //-------------------------------------------------------------------------
@@ -88,7 +87,7 @@ interface XTextViewCursor: com::sun::star::text::XTextCursor
     /** @returns
                 <TRUE/> if this cursor is visible for the user.
      */
-    [const] boolean isVisible();
+    boolean isVisible();
 
     //-------------------------------------------------------------------------
 
@@ -104,7 +103,7 @@ interface XTextViewCursor: com::sun::star::text::XTextCursor
                 the cursor's coordinates relative to the top left position of
                 the first page of the document.
      */
-    [const] com::sun::star::awt::Point getPosition();
+    com::sun::star::awt::Point getPosition();
 
 };
 
@@ -115,6 +114,9 @@ interface XTextViewCursor: com::sun::star::text::XTextCursor
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:27  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:05  hjs
     initial import
 

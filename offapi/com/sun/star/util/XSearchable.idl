@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSearchable.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:27 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,6 @@
     loop
     </listing>
  */
-[ uik(E2280412-33D6-11D1-AABE00A0-249D5590), ident( "XSearchable", 1.0 ) ]
 interface XSearchable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -165,6 +164,9 @@ interface XSearchable: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/21 08:35:27  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.4  2000/12/14 12:53:46  mi
     <true></true> -> <TRUE/> and same with FALSE
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDesktop.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:10 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,6 @@
 
     </p>@see Desktop
  */
-[ uik(E2280119-33D6-11D1-AABE00A0-249D5590), ident( "XDesktop", 1.0 ) ]
 interface XDesktop: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -157,7 +156,7 @@ interface XDesktop: com::sun::star::uno::XInterface
 
                 @see Components
      */
-    [const] com::sun::star::container::XEnumerationAccess getComponents();
+    com::sun::star::container::XEnumerationAccess getComponents();
 
     //-------------------------------------------------------------------------
 
@@ -169,7 +168,7 @@ interface XDesktop: com::sun::star::uno::XInterface
                 active component. If no model existsm it is the active controller
                 (view) itself.
      */
-    [const] com::sun::star::lang::XComponent getCurrentComponent();
+    com::sun::star::lang::XComponent getCurrentComponent();
 
     //-------------------------------------------------------------------------
 
@@ -178,7 +177,7 @@ interface XDesktop: com::sun::star::uno::XInterface
                 the frame of the component which has the
                 UI focus within this desktop enviroment.
      */
-    [const] com::sun::star::frame::XFrame getCurrentFrame();
+    com::sun::star::frame::XFrame getCurrentFrame();
 
 };
 
@@ -189,6 +188,9 @@ interface XDesktop: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/21 08:35:10  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.4  2000/12/14 12:53:37  mi
     <true></true> -> <TRUE/> and same with FALSE
 

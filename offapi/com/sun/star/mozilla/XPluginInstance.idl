@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPluginInstance.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 14:59:01 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@
 
 // DocMerge: empty anyway
 /// @missing
-[ uik(1217E070-3C81-11d2-83040050-04D765F1), ident( "XPluginInstance", 1.0 ) ]
 interface XPluginInstance: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -167,6 +166,9 @@ interface XPluginInstance: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/19 14:59:01  mi
+    documentation sytax errors fixed
+
     Revision 1.4  2000/11/14 11:42:10  as
     add new parameter filter for newStream/newURL
 

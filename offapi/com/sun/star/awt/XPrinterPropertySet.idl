@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPrinterPropertySet.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:11 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,6 @@
     </p>@see XPrinter
         @see XInfoPrinter
  */
-[ uik(E227A3D6-33D6-11D1-AABE00A0-249D5590), ident( "XPrinterPropertySet", 1.0 ) ]
 interface XPrinterPropertySet: com::sun::star::beans::XPropertySet
 {
     //-------------------------------------------------------------------------
@@ -112,7 +111,7 @@ interface XPrinterPropertySet: com::sun::star::beans::XPropertySet
     /** @returns
                     descriptions of all available printer forms.
      */
-    [const] sequence<string> getFormDescriptions();
+    sequence<string> getFormDescriptions();
 
     //-------------------------------------------------------------------------
 
@@ -135,7 +134,7 @@ interface XPrinterPropertySet: com::sun::star::beans::XPropertySet
     /** @returns
                     a binary encoded version of the printer setup.
      */
-    [const] sequence<byte> getBinarySetup();
+    sequence<byte> getBinarySetup();
 
     //-------------------------------------------------------------------------
 
@@ -149,7 +148,7 @@ interface XPrinterPropertySet: com::sun::star::beans::XPropertySet
 
         </p>
      */
-    [const] void setBinarySetup( [in] sequence<byte> data )
+    void setBinarySetup( [in] sequence<byte> data )
             raises( com::sun::star::beans::PropertyVetoException,
                     com::sun::star::lang::IllegalArgumentException );
 
@@ -162,6 +161,9 @@ interface XPrinterPropertySet: com::sun::star::beans::XPropertySet
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:11  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:34:53  hjs
     initial import
 

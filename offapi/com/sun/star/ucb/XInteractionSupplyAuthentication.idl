@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInteractionSupplyAuthentication.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-15 11:29:29 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,13 +80,12 @@ module com { module sun { module star { module ucb {
     <p> This continuation is typically used in conjunction with
     <type>AuthenticationRequest</type>. </p>
 */
-[ uik(E2281A25-33D6-11D1-AABE00A0-249D5590), ident( "XInteractionSupplyAuthentication", 1.0 ) ]
 interface XInteractionSupplyAuthentication: com::sun::star::task::XInteractionContinuation
 {
     //-------------------------------------------------------------------------
     /** Specifies if a new 'realm' value can be handed back.
     */
-    [const] boolean canSetRealm();
+    boolean canSetRealm();
 
     //-------------------------------------------------------------------------
     /** Set a new 'realm' value to hand back.
@@ -99,7 +98,7 @@ interface XInteractionSupplyAuthentication: com::sun::star::task::XInteractionCo
     //-------------------------------------------------------------------------
     /** Specifies if a 'user name' value can be handed back.
     */
-    [const] boolean canSetUserName();
+    boolean canSetUserName();
 
     //-------------------------------------------------------------------------
     /** Set a new 'user name' value to hand back.
@@ -112,7 +111,7 @@ interface XInteractionSupplyAuthentication: com::sun::star::task::XInteractionCo
     //-------------------------------------------------------------------------
     /** Specifies if a 'password' value can be handed back.
     */
-    [const] boolean canSetPassword();
+    boolean canSetPassword();
 
     //-------------------------------------------------------------------------
     /** Set a new 'password' value to hand back.
@@ -132,7 +131,7 @@ interface XInteractionSupplyAuthentication: com::sun::star::task::XInteractionCo
         mode should appear at most once in the sequence.  If the sequence is
         empty, a new mode cannot be handed back.
     */
-    [const] sequence<com::sun::star::ucb::RememberAuthentication> getRememberPasswordModes( [out] com::sun::star::ucb::RememberAuthentication Default );
+    sequence<com::sun::star::ucb::RememberAuthentication> getRememberPasswordModes( [out] com::sun::star::ucb::RememberAuthentication Default );
 
     //-------------------------------------------------------------------------
     /** Set a new mode of how long to remember the password.
@@ -148,7 +147,7 @@ interface XInteractionSupplyAuthentication: com::sun::star::task::XInteractionCo
     //-------------------------------------------------------------------------
     /** Specifies if an 'account' value can be handed back.
     */
-    [const] boolean canSetAccount();
+    boolean canSetAccount();
 
     //-------------------------------------------------------------------------
     /** Set a new 'account' value to hand back.
@@ -168,7 +167,7 @@ interface XInteractionSupplyAuthentication: com::sun::star::task::XInteractionCo
         mode should appear at most once in the sequence.  If the sequence is
         empty, a new mode cannot be handed back.
      */
-    [const] sequence<com::sun::star::ucb::RememberAuthentication> getRememberAccountModes( [out] com::sun::star::ucb::RememberAuthentication Default );
+    sequence<com::sun::star::ucb::RememberAuthentication> getRememberAccountModes( [out] com::sun::star::ucb::RememberAuthentication Default );
 
     //-------------------------------------------------------------------------
     /** Set a new mode of how long to remember the account.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataPilotDescriptor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:12 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@
 /** represents a description of a data pilot table.@see com::sun::star::sheet::DataPilotDescriptor
         @see com::sun::star::sheet::DataPilotTable
  */
-[ uik(E2281538-33D6-11D1-AABE00A0-249D5590), ident( "XDataPilotDescriptor", 1.0 ) ]
 interface XDataPilotDescriptor: com::sun::star::container::XNamed
 {
     //-------------------------------------------------------------------------
@@ -98,7 +97,7 @@ interface XDataPilotDescriptor: com::sun::star::container::XNamed
     /** returns an additional string stored in the
         data pilot table.
      */
-    [const] string getTag();
+    string getTag();
 
     //-------------------------------------------------------------------------
 
@@ -114,7 +113,7 @@ interface XDataPilotDescriptor: com::sun::star::container::XNamed
     /** returns the cell range containing the data
         for the data pilot table.
      */
-    [const] com::sun::star::table::CellRangeAddress getSourceRange();
+    com::sun::star::table::CellRangeAddress getSourceRange();
 
     //-------------------------------------------------------------------------
 
@@ -131,7 +130,7 @@ interface XDataPilotDescriptor: com::sun::star::container::XNamed
         which data from the source cell range are used for the
         data pilot table.
      */
-    [const] com::sun::star::sheet::XSheetFilterDescriptor getFilterDescriptor();
+    com::sun::star::sheet::XSheetFilterDescriptor getFilterDescriptor();
 
     //-------------------------------------------------------------------------
 
@@ -139,7 +138,7 @@ interface XDataPilotDescriptor: com::sun::star::container::XNamed
     /** returns the collection of all the data
         pilot fields.
      */
-    [const] com::sun::star::container::XIndexAccess getDataPilotFields();
+    com::sun::star::container::XIndexAccess getDataPilotFields();
 
     //-------------------------------------------------------------------------
 
@@ -147,7 +146,7 @@ interface XDataPilotDescriptor: com::sun::star::container::XNamed
     /** returns the collection of the data pilot
         fields used as column fields.
      */
-    [const] com::sun::star::container::XIndexAccess getColumnFields();
+    com::sun::star::container::XIndexAccess getColumnFields();
 
     //-------------------------------------------------------------------------
 
@@ -155,7 +154,7 @@ interface XDataPilotDescriptor: com::sun::star::container::XNamed
     /** returns the collection of the data pilot
         fields used as row fields.
      */
-    [const] com::sun::star::container::XIndexAccess getRowFields();
+    com::sun::star::container::XIndexAccess getRowFields();
 
     //-------------------------------------------------------------------------
 
@@ -163,7 +162,7 @@ interface XDataPilotDescriptor: com::sun::star::container::XNamed
     /** returns the collection of the data pilot
         fields used as page fields.
      */
-    [const] com::sun::star::container::XIndexAccess getPageFields();
+    com::sun::star::container::XIndexAccess getPageFields();
 
     //-------------------------------------------------------------------------
 
@@ -171,7 +170,7 @@ interface XDataPilotDescriptor: com::sun::star::container::XNamed
     /** returns the collection of the data pilot
         fields used as data fields.
      */
-    [const] com::sun::star::container::XIndexAccess getDataFields();
+    com::sun::star::container::XIndexAccess getDataFields();
 
     //-------------------------------------------------------------------------
 
@@ -179,7 +178,7 @@ interface XDataPilotDescriptor: com::sun::star::container::XNamed
     /** returns the collection of the data pilot
         fields not used as column, row, page, or data fields.
      */
-    [const] com::sun::star::container::XIndexAccess getHiddenFields();
+    com::sun::star::container::XIndexAccess getHiddenFields();
 
 };
 
@@ -190,6 +189,9 @@ interface XDataPilotDescriptor: com::sun::star::container::XNamed
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:12  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:43:46  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDatabaseAccess.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:31 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,14 +90,13 @@ interface XDatabaseAccessListener;
     database connection and provides additional informations related to the connection
     like forms, reports, or queries.
  */
-[ uik(186AF2EB-9C2E-11d3-9ED30050-04D8BBD0), ident( "XDatabaseAccess", 1.0 ) ]
 interface XDatabaseAccess: com::sun::star::sdbc::XDataSource
 {
 
     // DocMerge from xml: method com::sun::star::task::com::sun::star::sdb::XDatabaseAccess::hasConnections
     /** indicates that connections already exist.
      */
-    [const] boolean hasConnections();
+    boolean hasConnections();
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::task::com::sun::star::sdb::XDatabaseAccess::getIsolatedConnection
@@ -136,6 +135,9 @@ interface XDatabaseAccess: com::sun::star::sdbc::XDataSource
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:31  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:37  hjs
     initial import
 

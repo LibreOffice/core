@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XChartDataArray.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@
 
     <p>If used for xy-diagrams the row number 0 represents the x-values.</p>
  */
-[ uik(E2281604-33D6-11D1-AABE00A0-249D5590), ident( "XChartDataArray", 1.0 ) ]
 interface XChartDataArray: XChartData
 {
     //-------------------------------------------------------------------------
@@ -87,7 +86,7 @@ interface XChartDataArray: XChartData
     /** retrieves the numerical data as sequence of rows. Each row is
                 represented as a sequence of double values.
      */
-    [const] sequence< sequence< double > > getData();
+    sequence< sequence< double > > getData();
 
     //-------------------------------------------------------------------------
 
@@ -101,7 +100,7 @@ interface XChartDataArray: XChartData
     // DocMerge from idl: method com::sun::star::chart::XChartDataArray::getRowDescriptions
     /** retrieves the descriptions texts of all rows as a sequence of strings.
      */
-    [const] sequence<string> getRowDescriptions();
+    sequence<string> getRowDescriptions();
 
     //-------------------------------------------------------------------------
 
@@ -116,7 +115,7 @@ interface XChartDataArray: XChartData
     // DocMerge from idl: method com::sun::star::chart::XChartDataArray::getColumnDescriptions
     /** retrieves the descriptions texts of all columns as a sequence of strings.
      */
-    [const] sequence<string> getColumnDescriptions();
+    sequence<string> getColumnDescriptions();
 
     //-------------------------------------------------------------------------
 
@@ -135,6 +134,9 @@ interface XChartDataArray: XChartData
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:03  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XGraphicObjectResolver.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:11:59 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,6 @@
 
 /** this interface converts graphic object urls from one url space to another.
  */
-[ uik(49A25FCA-25CC-4FE8-B961D163-224DA240), ident( "XGraphicObjectResolver", 1.0 ) ]
 interface XGraphicObjectResolver: com::sun::star::uno::XInterface
 {
     /** converts the given url from the source url namespace to the destination

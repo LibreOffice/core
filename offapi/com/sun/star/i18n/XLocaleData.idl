@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLocaleData.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bustamam $ $Date: 2001-02-08 21:14:47 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,6 @@ constants reservedWords {
 
 
 
-[ uik(4359cf69-1409-481c-91be84ff-f4de3c75), ident( "XLocaleData", 1.0 ) ]
 interface XLocaleData: com::sun::star::uno::XInterface
 {
 

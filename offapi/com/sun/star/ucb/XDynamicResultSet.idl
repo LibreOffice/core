@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDynamicResultSet.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-09 13:05:25 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,6 @@ module com { module sun { module star { module ucb {
     </ol>
 */
 
-[ uik(55E5B802-3245-11d4-8B130010-4BCAF449), ident( "XDynamicResultSet", 1.0 ) ]
 interface XDynamicResultSet: com::sun::star::lang::XComponent
 {
     //-------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XControlShape.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:06 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 // DocMerge from xml: interface com::sun::star::drawing::XControlShape
 /** is implemented by <type>Shape</type>s that contain a control.
  */
-[ uik(E2281311-33D6-11D1-AABE00A0-249D5590), ident( "XControlShape", 1.0 ) ]
 interface XControlShape: com::sun::star::drawing::XShape
 {
     //-------------------------------------------------------------------------
@@ -87,7 +86,7 @@ interface XControlShape: com::sun::star::drawing::XShape
     // DocMerge from xml: method com::sun::star::drawing::XControlShape::getControl
     /** returns the control of this <type>Shape</type>.@see com::sun::star::awt::ControlModel
      */
-    [const] com::sun::star::awt::XControlModel getControl();
+    com::sun::star::awt::XControlModel getControl();
 
     //-------------------------------------------------------------------------
 
@@ -105,6 +104,9 @@ interface XControlShape: com::sun::star::drawing::XShape
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:06  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:42:42  mi
     moved from api
 

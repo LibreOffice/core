@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertyReplace.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:17 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,6 @@
 // DocMerge from xml: interface com::sun::star::util::XPropertyReplace
 /** makes it possible to search and replace properties.
  */
-[ uik(E2280416-33D6-11D1-AABE00A0-249D5590), ident( "XPropertyReplace", 1.0 ) ]
 interface XPropertyReplace: com::sun::star::util::XReplaceDescriptor
 {
     //-------------------------------------------------------------------------
@@ -96,7 +95,7 @@ interface XPropertyReplace: com::sun::star::util::XReplaceDescriptor
     /** provides the information if specific property values are
         searched or just the existance of the specified properties.
      */
-    [const] boolean getValueSearch();
+    boolean getValueSearch();
 
     //-------------------------------------------------------------------------
 
@@ -112,7 +111,7 @@ interface XPropertyReplace: com::sun::star::util::XReplaceDescriptor
     /** @returns
                     the attributes to search for.
      */
-    [const] sequence<com::sun::star::beans::PropertyValue> getSearchAttributes();
+    sequence<com::sun::star::beans::PropertyValue> getSearchAttributes();
 
     //-------------------------------------------------------------------------
 
@@ -129,7 +128,7 @@ interface XPropertyReplace: com::sun::star::util::XReplaceDescriptor
     /** @returns
                     the attribute values which are used to replace the found occurences.
      */
-    [const] sequence<com::sun::star::beans::PropertyValue> getReplaceAttributes();
+    sequence<com::sun::star::beans::PropertyValue> getReplaceAttributes();
 
     //-------------------------------------------------------------------------
 
@@ -149,6 +148,9 @@ interface XPropertyReplace: com::sun::star::util::XReplaceDescriptor
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:45:17  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:20  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCommandInfo.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-09 13:05:25 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@ module com { module sun { module star { module ucb {
     @version  1.0
     @author   Kai Sommerfeld
 */
-[ uik(E2281A13-33D6-11D1-AABE00A0-249D5590), ident( "XCommandInfo", 1.0 ) ]
 interface XCommandInfo: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -93,7 +92,7 @@ interface XCommandInfo: com::sun::star::uno::XInterface
         @returns
         a sequence with information for all supported commands.
     */
-    [const] sequence<com::sun::star::ucb::CommandInfo> getCommands();
+    sequence<com::sun::star::ucb::CommandInfo> getCommands();
 
     //-------------------------------------------------------------------------
     /** returns information for a specific command.
@@ -107,7 +106,7 @@ interface XCommandInfo: com::sun::star::uno::XInterface
         @throws UnsupportedCommandException
         if the command is not supported.
     */
-    [const] com::sun::star::ucb::CommandInfo getCommandInfoByName( [in] string Name )
+    com::sun::star::ucb::CommandInfo getCommandInfoByName( [in] string Name )
             raises( com::sun::star::ucb::UnsupportedCommandException );
 
     //-------------------------------------------------------------------------
@@ -122,7 +121,7 @@ interface XCommandInfo: com::sun::star::uno::XInterface
         @throws UnsupportedCommandException
         if the command is not supported.
     */
-    [const] com::sun::star::ucb::CommandInfo getCommandInfoByHandle( [in] long Handle )
+    com::sun::star::ucb::CommandInfo getCommandInfoByHandle( [in] long Handle )
             raises( com::sun::star::ucb::UnsupportedCommandException );
 
     //-------------------------------------------------------------------------
@@ -135,7 +134,7 @@ interface XCommandInfo: com::sun::star::uno::XInterface
         @param Name
         specifies the name of the requested command.
     */
-    [const] boolean hasCommandByName( [in] string Name );
+    boolean hasCommandByName( [in] string Name );
 
     //-------------------------------------------------------------------------
     /** checks whether a apecific command is supported.
@@ -147,7 +146,7 @@ interface XCommandInfo: com::sun::star::uno::XInterface
         @param Name
         specifies the handle of the requested command.
     */
-    [const] boolean hasCommandByHandle( [in] long Handle );
+    boolean hasCommandByHandle( [in] long Handle );
 
 };
 

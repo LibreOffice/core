@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEventHandler.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-01-26 13:02:36 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@ module com { module sun { module star { module awt {
     @see com::sun::star::datatransfer::dnd::X11DragAndDrop
 */
 
-[ uik(F0535971-F142-11d4-82C90050-04D765F1), ident("XEventHandler",  0.1) ]
 interface XEventHandler: com::sun::star::uno::XInterface
 {
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRemoteServiceManagerProvider.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:26 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:29 $
  *
  *  Copyright according the GNU Public License.
  *
@@ -25,7 +25,6 @@ module com { module sun { module star { module mozilla {
 /**
 */
 
-[ uik(63DD30AB-F137-4dec-9EE1BDB5-BC2E080A), ident( "XRemoteServiceManagerProvider", 1.0 ) ]
 
 
 interface XRemoteServiceManagerProvider: com::sun::star::uno::XInterface

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRecentFunctions.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:12 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 // DocMerge from xml: interface com::sun::star::sheet::XRecentFunctions
 /** represents a list of recently used functions.@see com::sun::star::sheet::RecentFunctions
  */
-[ uik(E2281522-33D6-11D1-AABE00A0-249D5590), ident( "XRecentFunctions", 1.0 ) ]
 interface XRecentFunctions: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -87,7 +86,7 @@ interface XRecentFunctions: com::sun::star::uno::XInterface
 
                 <P>The functions are represented by their identifiers.</P>
      */
-    [const] sequence<long> getRecentFunctionIds();
+    sequence<long> getRecentFunctionIds();
 
     //-------------------------------------------------------------------------
 
@@ -103,7 +102,7 @@ interface XRecentFunctions: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::sheet::XRecentFunctions::getMaxRecentFunctions
     /** returns the maximum number of entries that will be stored as recent functions.
      */
-    [const] long getMaxRecentFunctions();
+    long getMaxRecentFunctions();
 
 };
 
@@ -114,6 +113,9 @@ interface XRecentFunctions: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:12  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:43:47  mi
     moved from api
 

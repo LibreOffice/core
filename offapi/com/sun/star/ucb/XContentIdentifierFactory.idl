@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContentIdentifierFactory.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@ module com { module sun { module star { module ucb {
     @author   Kai Sommerfeld
     @see      XContentIdentifier
 */
-[ uik(E2281A05-33D6-11D1-AABE00A0-249D5590), ident( "XContentIdentifierFactory", 1.0 ) ]
 interface XContentIdentifierFactory: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

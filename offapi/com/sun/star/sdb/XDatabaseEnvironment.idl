@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDatabaseEnvironment.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:31 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,6 @@ interface XDatabaseAccess;
     to open a data access bean, which contains tables, queries, forms, and
     report documents or to open a connection to a database.
  */
-[ uik(186AF2EA-9C2E-11d3-9ED30050-04D8BBD0), ident( "XDatabaseEnvironment", 1.0 ) ]
 interface XDatabaseEnvironment: com::sun::star::sdbc::XDriverManager
 {
     //-------------------------------------------------------------------------
@@ -122,6 +121,9 @@ interface XDatabaseEnvironment: com::sun::star::sdbc::XDriverManager
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:31  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:37  hjs
     initial import
 

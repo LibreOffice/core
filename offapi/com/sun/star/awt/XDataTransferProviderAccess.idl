@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataTransferProviderAccess.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-03-12 12:36:17 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,6 @@ interface XWindow;
     drag-and-drop support.
 */
 
-[ uik(DA74D690-0651-11d4-82C90050-04D765F1), ident("XDataTransferProviderAccess",  0.1) ]
 interface XDataTransferProviderAccess: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XShape.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:42 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@
 /** lets you do a basic transformation on a <type>Shape</type> and
     get its type.
  */
-[ uik(E2281307-33D6-11D1-AABE00A0-249D5590), ident( "XShape", 1.0 ) ]
 interface XShape: com::sun::star::drawing::XShapeDescriptor
 {
     //-------------------------------------------------------------------------
@@ -96,7 +95,7 @@ interface XShape: com::sun::star::drawing::XShapeDescriptor
     // DocMerge from xml: method com::sun::star::drawing::XShape::getPosition
     /** gets the current position of this instance.
      */
-    [const] com::sun::star::awt::Point getPosition();
+    com::sun::star::awt::Point getPosition();
 
     //-------------------------------------------------------------------------
 
@@ -110,7 +109,7 @@ interface XShape: com::sun::star::drawing::XShapeDescriptor
     // DocMerge from xml: method com::sun::star::drawing::XShape::getSize
     /** gets the size of this instance.
      */
-    [const] com::sun::star::awt::Size getSize();
+    com::sun::star::awt::Size getSize();
 
     //-------------------------------------------------------------------------
 
@@ -129,6 +128,9 @@ interface XShape: com::sun::star::drawing::XShapeDescriptor
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:42  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:15  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ErrorMessageDialog.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-12 16:26:34 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,13 +153,16 @@ service ErrorMessageDialog
 
 }; }; }; };
 
-#endif  // __com_sun_star_sdb_ErrorMessageDialog_idl__
-
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/03/12 16:26:34  fs
+ *  ooops .... corrected the name of the SQLException property
+ *
  *  Revision 1.1  2001/02/20 14:32:46  fs
  *  initial checkin - service description for the ErrorMessageDialog
  *
  ************************************************************************/
+
+#endif  // __com_sun_star_sdb_ErrorMessageDialog_idl__
 

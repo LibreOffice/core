@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XControlContainer.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:11 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@
     "VclToolkit" service to create the peer components. The name is
     "com.sun.star.awt.Toolkit".<br>
  */
-[ uik(E227A46A-33D6-11D1-AABE00A0-249D5590), ident( "XControlContainer", 1.0 ) ]
 interface XControlContainer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -102,14 +101,14 @@ interface XControlContainer: com::sun::star::uno::XInterface
     /** @returns
                     all controls of this container.
      */
-    [const] sequence<com::sun::star::awt::XControl> getControls();
+    sequence<com::sun::star::awt::XControl> getControls();
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::awt::XControlContainer::getControl
     /** returns the control with the name "Name".
      */
-    [const] com::sun::star::awt::XControl getControl( [in] string aName );
+    com::sun::star::awt::XControl getControl( [in] string aName );
 
     //-------------------------------------------------------------------------
 
@@ -145,6 +144,9 @@ interface XControlContainer: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:11  mi
+    moved from api
+
     Revision 1.2  2000/10/09 14:24:53  mi
     #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
 

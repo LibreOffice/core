@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDeleteRows.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:40 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 // DocMerge from xml: interface com::sun::star::sdbcx::XDeleteRows
 /** provides for the deletion of more than one rows at a time.
  */
-[ uik(36BE6EE4-3EBC-11d3-8169C120-C5DDA22D), ident("XDeleteRows", 1.0) ]
 interface XDeleteRows: com::sun::star::uno::XInterface
 {
 
@@ -101,6 +100,9 @@ interface XDeleteRows: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:40  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:45  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XReplaceable.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:27 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,6 @@
     xFound = xDocument.replaceAll( xReplaceDescr )
     </listing>
  */
-[ uik(E2280414-33D6-11D1-AABE00A0-249D5590), ident( "XReplaceable", 1.0 ) ]
 interface XReplaceable: com::sun::star::util::XSearchable
 {
     //-------------------------------------------------------------------------
@@ -127,6 +126,9 @@ interface XReplaceable: com::sun::star::util::XSearchable
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:27  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:45:17  mi
     moved from api
 

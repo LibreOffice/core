@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDocumentIndexMark.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:21 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 // DocMerge from xml: interface com::sun::star::text::XDocumentIndexMark
 /** gives access to the mark of a document index entry.@see DocumentIndexMark
  */
-[ uik(E2281226-33D6-11D1-AABE00A0-249D5590), ident( "XDocumentIndexMark", 1.0 ) ]
 interface XDocumentIndexMark: com::sun::star::text::XTextContent
 {
     //-------------------------------------------------------------------------
@@ -86,7 +85,7 @@ interface XDocumentIndexMark: com::sun::star::text::XTextContent
 
          @see setMarkEntry
      */
-    [const] string getMarkEntry();
+    string getMarkEntry();
 
     //-------------------------------------------------------------------------
 
@@ -110,6 +109,9 @@ interface XDocumentIndexMark: com::sun::star::text::XTextContent
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/21 08:35:21  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.4  2000/12/19 16:03:49  mi
     documentations syntax errors fixed
 

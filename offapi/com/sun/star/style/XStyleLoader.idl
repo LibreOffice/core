@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStyleLoader.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-02-22 16:19:34 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,6 @@
 // DocMerge from xml: interface com::sun::star::style::XStyleLoader
 /** enables the object to import styles from documents.
  */
-[ uik(E2280502-33D6-11D1-AABE00A0-249D5590), ident( "XStyleLoader", 1.0 ) ]
 interface XStyleLoader: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -130,6 +129,9 @@ interface XStyleLoader: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/02/22 16:19:34  os
+    description changed
+
     Revision 1.4  2000/12/14 12:53:42  mi
     <true></true> -> <TRUE/> and same with FALSE
 

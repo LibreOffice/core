@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPrintableBroadcaster.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:45:34 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@
 
     @see XPrintableListener
  */
-[ uik(E2280300-43D6-11D1-AABE00A0-249D6580), ident( "XPrintableBroadcaster", 1.0 ) ]
 interface XPrintableBroadcaster : com::sun::star::uno::XInterface
 {
     /** adds an <type>XPrintableListener</type> to be informed about print progress

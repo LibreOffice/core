@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDocumentInsertable.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:40 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,6 @@
 /** makes it possible to import a document from a given URL
     into this document.
  */
-[ uik(E2280201-33D6-11D1-AABE00A0-249D5590), ident( "XDocumentInsertable", 1.0 ) ]
 interface XDocumentInsertable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -114,6 +113,9 @@ interface XDocumentInsertable: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:40  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:10  hjs
     initial import
 

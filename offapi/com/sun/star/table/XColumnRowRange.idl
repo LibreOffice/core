@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XColumnRowRange.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:19 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 /** enables accessing the columns and rows of
     a cell range.@see com::sun::star::table::CellRange
  */
-[ uik(E2281107-33D6-11D1-AABE00A0-249D5590), ident( "XColumnRowRange", 1.0 ) ]
 interface XColumnRowRange: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -93,7 +92,7 @@ interface XColumnRowRange: com::sun::star::uno::XInterface
     /** This attribute returns the collection of columns
                 in the range.
      */
-    [const] com::sun::star::table::XTableColumns getColumns();
+    com::sun::star::table::XTableColumns getColumns();
 
     //-------------------------------------------------------------------------
 
@@ -101,7 +100,7 @@ interface XColumnRowRange: com::sun::star::uno::XInterface
     /** This attribute returns the collection of rows
                 in the range.
      */
-    [const] com::sun::star::table::XTableRows getRows();
+    com::sun::star::table::XTableRows getRows();
 
 };
 
@@ -112,6 +111,9 @@ interface XColumnRowRange: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:19  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:44:19  mi
     moved from api
 

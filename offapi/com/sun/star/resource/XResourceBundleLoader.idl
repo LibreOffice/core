@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XResourceBundleLoader.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:29 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,6 @@
         @see            XResourceBundle
         @see         Locale
  */
-[ uik(3C1F4FA6-1358-11D3-ABBB00A0-249D5590), ident( "XResourceBundleLoader", 1.0 ) ]
 interface XResourceBundleLoader: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -126,6 +125,9 @@ interface XResourceBundleLoader: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:29  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:32  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSpreadsheetDocument.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:12 $
+ *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 // DocMerge from xml: interface com::sun::star::sheet::XSpreadsheetDocument
 /** a container of spreadsheets.@see com::sun::star::sheet::SpreadsheetDocument
  */
-[ uik(E2281553-33D6-11D1-AABE00A0-249D5590), ident( "XSpreadsheetDocument", 1.0 ) ]
 interface XSpreadsheetDocument: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
@@ -87,7 +86,7 @@ interface XSpreadsheetDocument: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::sheet::XSpreadsheetDocument::getSheets
     /** returns the container of sheets in the document.@see Spreadsheets
      */
-    [const] com::sun::star::sheet::XSpreadsheets getSheets();
+    com::sun::star::sheet::XSpreadsheets getSheets();
 
 };
 
@@ -98,6 +97,9 @@ interface XSpreadsheetDocument: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:12  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:43:47  mi
     moved from api
 
