@@ -9861,3 +9861,8 @@ _real@8@3ffeccccccccccccd000
 ?IsFileURL@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx33153792@@YAEABVString@@@Z
 ?SetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx33153792@@YAXAAVString@@ABV2@@Z
 ?lcl_MoveControl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx33153792@@YAXPAVControl@@JJAAJ@Z
+?IsPrettyPrinting@SvtSaveOptions@@QBEEXZ
+?SetPrettyPrinting@SvtSaveOptions@@QAEXE@Z
+??A?$Sequence@UNamedValue@beans@star@sun@com@@@uno@star@sun@com@@QBAABUNamedValue@beans@234@J@Z
+?append@OUStringBuffer@rtl@@QAEAAV12@PBGJ@Z
+?realloc@?$Sequence@UNamedValue@beans@star@sun@com@@@uno@star@sun@com@@QAAXJ@Z
