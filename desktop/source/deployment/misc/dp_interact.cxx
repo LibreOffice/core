@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_interact.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:07:46 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "com/sun/star/task/XInteractionAbort.hpp"
-#include "com/sun/star/ucb/CommandFailedException.hpp"
 
 
 using namespace ::com::sun::star;
@@ -71,14 +70,14 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using ::rtl::OUString;
 
-namespace dp_misc
-{
+namespace dp_misc {
+namespace {
 
 //==============================================================================
 class InteractionContinuationImpl : public ::cppu::OWeakObject,
                                     public task::XInteractionContinuation
 {
-    Type m_type;
+    const Type m_type;
     bool * m_pselect;
 
 public:
@@ -168,68 +167,40 @@ InteractionRequest::getContinuations() throw (RuntimeException)
     return m_conts;
 }
 
+} // anon namespace
+
 //==============================================================================
 bool interactContinuation( Any const & request,
                            Type const & continuation,
                            Reference<XCommandEnvironment> const & xCmdEnv,
-                           bool * pabort )
+                           bool * pcont, bool * pabort )
 {
     OSL_ASSERT(
         task::XInteractionContinuation::static_type().isAssignableFrom(
             continuation ) );
-    bool cont = false;
-    bool abort = false;
     if (xCmdEnv.is()) {
         Reference<task::XInteractionHandler> xInteractionHandler(
             xCmdEnv->getInteractionHandler() );
         if (xInteractionHandler.is()) {
+            bool cont = false;
+            bool abort = false;
             Sequence< Reference<task::XInteractionContinuation> > conts( 2 );
             conts[ 0 ] = new InteractionContinuationImpl(
-                task::XInteractionAbort::static_type(), &abort );
-            conts[ 1 ] = new InteractionContinuationImpl(
                 continuation, &cont );
+            conts[ 1 ] = new InteractionContinuationImpl(
+                task::XInteractionAbort::static_type(), &abort );
             xInteractionHandler->handle(
                 new InteractionRequest( request, conts ) );
+            if (cont || abort) {
+                if (pcont != 0)
+                    *pcont = cont;
+                if (pabort != 0)
+                    *pabort = abort;
+                return true;
+            }
         }
     }
-    if (pabort != 0)
-        *pabort = abort;
-    return cont;
-}
-
-//==============================================================================
-void interactContinuation_throw(
-    deployment::DeploymentException const & exc,
-    Type const & continuation,
-    Reference<XCommandEnvironment> const & xCmdEnv )
-{
-    OSL_ASSERT( exc.Cause.getValueTypeClass() == TypeClass_EXCEPTION );
-
-    RuntimeException rt_exc;
-    if (exc.Cause >>= rt_exc) {
-        OSL_ENSURE( 0, "### missing RuntimeException rethrow?" );
-        ::cppu::throwException( exc.Cause );
-    }
-    deployment::DeploymentException depl_exc;
-    if (exc.Cause >>= depl_exc) {
-        OSL_ENSURE( 0, "### missing DeploymentException rethrow?" );
-        ::cppu::throwException( exc.Cause );
-    }
-    CommandFailedException cf_exc;
-    if (exc.Cause >>= cf_exc) {
-        OSL_ENSURE( 0, "### missing CommandFailedException rethrow?" );
-        ::cppu::throwException( exc.Cause );
-    }
-
-    bool abort = false;
-    if (interactContinuation( exc.Cause, continuation, xCmdEnv, &abort )) {
-        OSL_ASSERT( ! abort );
-        return;
-    }
-    if (abort)
-        throw CommandFailedException( exc.Message, exc.Context, exc.Cause );
-    else
-        throw exc;
+    return false;
 }
 
 // XAbortChannel
@@ -241,5 +212,5 @@ void AbortChannel::sendAbort() throw (RuntimeException)
         m_xNext->sendAbort();
 }
 
-}
+} // dp_misc
 
