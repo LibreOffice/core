@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:04:43 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 21:47:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ ModalDialog RID_STYLECATALOG
         Text [ dutch ] = "Be~heren..." ;
         Text [ spanish ] = "~Administrar..." ;
         Text [ danish ] = "Administrer..." ;
-        Text [ swedish ] = "~Fφrvalta..." ;
+        Text [ swedish ] = "~Administrera..." ;
         Text [ finnish ] = "~Organize..." ;
         Text [ english_us ] = "~Organizer..." ;
         TabStop = TRUE ;
@@ -266,7 +266,7 @@ ModalDialog RID_STYLECATALOG
     Text[ chinese_traditional ] = "ΌΛ¦΅¥ΨΏύ";
     Text[ arabic ] = "ίΚΗαζΜ ΗαΓδγΗΨ";
     Text[ greek ] = "Κατάλογος προτύπων";
-    Text[ korean ] = "ΐ―Ηό Δ«Ε»·Ξ±Χ";
+    Text[ korean ] = "Ό­½ΔΖΔΐΟ Δ«Ε»·Ξ±Χ";
     Text[ turkish ] = "Biηim kataloπu";
 };
  // Strings ---------------------------------------------------------------
@@ -290,7 +290,7 @@ String DLG_STYLE_DESIGNER
     Text[ chinese_traditional ] = "¦UΓώΌΛ¦΅";
     Text[ arabic ] = "ΗαγυΥγγ";
     Text[ greek ] = "Stylist";
-    Text[ korean ] = "Stylist";
+    Text[ korean ] = "½ΊΕΈΐΟ";
     Text[ turkish ] = "Stylist";
 };
 String STR_STYLE_FILTER_HIERARCHICAL
@@ -315,7 +315,7 @@ String STR_STYLE_FILTER_HIERARCHICAL
     TEXT[ chinese_traditional ] = "µ¥―Ε¦΅";
     TEXT[ arabic ] = "ενίαν";
     TEXT[ greek ] = "Ιεραρχικά";
-    TEXT[ korean ] = "°θΓώΐϋ";
+    TEXT[ korean ] = "°θΓώ";
     TEXT[ turkish ] = "Hiyerarώik";
 };
  // DLG_STYLE_DESIGNER ----------------------------------------------------
@@ -372,7 +372,7 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text[ chinese_traditional ] = "¥R¶ρΌÒ¦΅";
                 Text[ arabic ] = "ζΦΪ ΗαΡΤΗΤΙ";
                 Text[ greek ] = "Κατάσταση γεμίσματος";
-                Text[ korean ] = "Ό­½Δ Έπµε Γ¤Ώμ±β";
+                Text[ korean ] = "Γ¤Ώμ±βΈπµε";
                 Text[ turkish ] = "Doldur kipi";
             };
             ToolBoxItem
