@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-17 10:09:01 $
+ *  last change: $Author: sab $ $Date: 2000-10-18 12:12:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,9 @@ class ScXMLExport : public SvXMLExport
     ScMyMergedCells                     aMergedCells;
     ScRowFormatRanges                   aRowFormatRanges;
     std::vector<rtl::OUString>          aTableStyles;
+    com::sun::star::table::CellRangeAddress aRowHeaderRange;
 
+    sal_Bool                    bHasRowHeader;
     sal_Bool                    mbShowProgress : 1;
     sal_Int32                   nOpenRow;
     sal_Int16                   nCurrentTable;
@@ -394,14 +396,19 @@ class ScXMLExport : public SvXMLExport
                                                         const sal_Int16 nTable);
     ScMyEmptyDatabaseRanges GetEmptyDatabaseRanges(const sal_Int16 nTableCount);
     sal_Bool GetxCurrentShapes(com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess>& xShapes);
-    void ExportColumns(const sal_Int16 nTable);
+    void WriteColumn(const sal_Int32 nRepeatColumns, const sal_Int32 nStyleIndex, const sal_Bool bIsVisible);
+    void ExportColumns(const sal_Int16 nTable, const com::sun::star::table::CellRangeAddress& aColumnHeaderRange, const sal_Bool bHasColumnHeader);
     void ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 nStartRow,
         const sal_Int32 nEndCol, const sal_Int32 nEndRow, const sal_Int16 nSheet);
     void WriteRowContent();
-    void OpenNewRow(const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nEmptyRows);
-    void OpenAndCloseRow(const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nEmptyRows);
+    void WriteRowStartTag(const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nEmptyRows);
+    void OpenHeaderRows();
+    void OpenNewRow(const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nStartRow, const sal_Int32 nEmptyRows);
+    void OpenAndCloseRow(const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nStartRow, const sal_Int32 nEmptyRows);
     void OpenRow(const sal_Int16 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow);
-    void CloseRow();
+    void CloseRow(const sal_Int32 nRow);
+    sal_Bool GetColumnHeader(com::sun::star::table::CellRangeAddress& aColumnHeaderRange) const;
+    sal_Bool GetRowHeader(com::sun::star::table::CellRangeAddress& aRowHeaderRange) const;
 
     sal_Bool IsMerged (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
         const sal_Int32 nCol, const sal_Int32 nRow,
