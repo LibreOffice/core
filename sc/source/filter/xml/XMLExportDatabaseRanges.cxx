@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDatabaseRanges.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-26 07:22:25 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,8 +112,11 @@
 #ifndef _COM_SUN_STAR_SHEET_DATAIMPORTMODE_HPP_
 #include <com/sun/star/sheet/DataImportMode.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UTIL_SORTFIELD_HPP_
-#include <com/sun/star/util/SortField.hpp>
+#ifndef _COM_SUN_STAR_TABLE_TABLESORTFIELD_HPP_
+#include <com/sun/star/table/TableSortField.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TABLE_TABLESORTFIELDTYPE_HPP_
+#include <com/sun/star/table/TableSortFieldType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SHEET_XSUBTOTALFIELD_HPP_
 #include <com/sun/star/sheet/XSubTotalField.hpp>
@@ -130,6 +133,9 @@
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
 #endif
 
 //! not found in unonames.hxx
@@ -489,15 +495,13 @@ void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <shee
 
 void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::PropertyValue> aSortProperties)
 {
-    uno::Sequence <util::SortField> aSortFields;
+    uno::Sequence <table::TableSortField> aSortFields;
     sal_Bool bBindFormatsToContent (sal_True);
     sal_Bool bCopyOutputData (sal_False);
     sal_Bool bIsCaseSensitive (sal_False);
     sal_Bool bIsUserListEnabled (sal_False);
     table::CellAddress aOutputPosition;
     sal_Int32 nUserListIndex;
-    lang::Locale aCollatorLocale;
-    rtl::OUString sCollatorAlgorithm;
     sal_Int32 nProperties = aSortProperties.getLength();
     for (sal_Int32 i = 0; i < nProperties; i++)
     {
@@ -511,11 +515,12 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
             uno::Any aCopyOutputData = aSortProperties[i].Value;
             aCopyOutputData >>= bCopyOutputData;
         }
-        else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_ISCASE) == 0)
+//      no longer supported
+/*      else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_ISCASE) == 0)
         {
             uno::Any aIsCaseSensitive = aSortProperties[i].Value;
             aIsCaseSensitive >>= bIsCaseSensitive;
-        }
+        }*/
         else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_ISULIST) == 0)
         {
             uno::Any aIsUserListEnabled = aSortProperties[i].Value;
@@ -536,7 +541,8 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
             uno::Any aTempSortFields = aSortProperties[i].Value;
             aTempSortFields >>= aSortFields;
         }
-        else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_COLLLOC) == 0)
+//      no longer supported
+/*      else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_COLLLOC) == 0)
         {
             uno::Any aTemp = aSortProperties[i].Value;
             aTemp >>= aCollatorLocale;
@@ -545,7 +551,7 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
         {
             uno::Any aTemp = aSortProperties[i].Value;
             aTemp >>= sCollatorAlgorithm;
-        }
+        }*/
     }
     sal_Int32 nSortFields = aSortFields.getLength();
     if (nSortFields > 0)
@@ -558,32 +564,61 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
             ScXMLConverter::GetStringFromAddress( sOUCellAddress, aOutputPosition, pDoc );
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, sOUCellAddress);
         }
-        if (bIsCaseSensitive)
+//      no longer supported
+//      if (bIsCaseSensitive)
+//          rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
+
+        if (aSortFields[0].IsCaseSensitive)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
-        if (aCollatorLocale.Language.getLength())
+#ifndef PRODUCT
+        sal_Bool bCaseSensitive(aSortFields[0].IsCaseSensitive);
+        for (i = 1; i < nSortFields; i++)
+        {
+            DBG_ASSERT(bCaseSensitive == aSortFields[i].IsCaseSensitive, "seems that it is now possible to have every field case sensitive");
+        }
+#endif
+//      no longer supported
+/*      if (aCollatorLocale.Language.getLength())
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_LANGUAGE, aCollatorLocale.Language);
         if (aCollatorLocale.Country.getLength())
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_COUNTRY, aCollatorLocale.Country);
         if (sCollatorAlgorithm.getLength())
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALGORITHM, sCollatorAlgorithm);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALGORITHM, sCollatorAlgorithm);*/
+        if (aSortFields[0].CollatorLocale.Language.getLength())
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_LANGUAGE, aSortFields[0].CollatorLocale.Language);
+        if (aSortFields[0].CollatorLocale.Country.getLength())
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_COUNTRY, aSortFields[0].CollatorLocale.Country);
+        if (aSortFields[0].CollatorAlgorithm.getLength())
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALGORITHM, aSortFields[0].CollatorAlgorithm);
+#ifndef PRODUCT
+        rtl::OUString sLanguage(aSortFields[0].CollatorLocale.Language);
+        rtl::OUString sCountry(aSortFields[0].CollatorLocale.Country);
+        rtl::OUString sAlgorithm(aSortFields[0].CollatorAlgorithm);
+        for (i = 1; i < nSortFields; i++)
+        {
+            DBG_ASSERT(sLanguage == aSortFields[i].CollatorLocale.Language, "seems that it is now possible to have every field localized");
+            DBG_ASSERT(sCountry == aSortFields[i].CollatorLocale.Country, "seems that it is now possible to have every field localized");
+            DBG_ASSERT(sAlgorithm == aSortFields[i].CollatorAlgorithm, "seems that it is now possible to have every field localized");
+        }
+#endif
         SvXMLElementExport aElemS(rExport, XML_NAMESPACE_TABLE, XML_SORT, sal_True, sal_True);
         rExport.CheckAttrList();
         for (i = 0; i < nSortFields; i++)
         {
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, rtl::OUString::valueOf(aSortFields[i].Field));
-            if (!aSortFields[i].SortAscending)
+            if (!aSortFields[i].IsAscending)
                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORDER, XML_DESCENDING);
             if (!bIsUserListEnabled)
             {
                 switch (aSortFields[i].FieldType)
                 {
-                    case util::SortFieldType_ALPHANUMERIC :
+                    case table::TableSortFieldType_ALPHANUMERIC :
                         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_TEXT);
                     break;
-                    case util::SortFieldType_AUTOMATIC :
+                    case table::TableSortFieldType_AUTOMATIC :
                         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_AUTOMATIC);
                     break;
-                    case util::SortFieldType_NUMERIC :
+                    case table::TableSortFieldType_NUMERIC :
                         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
                     break;
                 }
@@ -766,21 +801,21 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
                                         if (bOrientation)
                                             eFilterOrient = table::TableOrientation_ROWS;*/
 
-                                    table::TableOrientation eOrient(table::TableOrientation_ROWS);
+                                    sal_Bool bSortColumns(sal_True);
                                     sal_Bool bFound(sal_False);
                                     sal_uInt32 nProperty(0);
                                     while (!bFound && (nProperty < aSortProperties.getLength()))
                                     {
-                                        if (aSortProperties[nProperty].Name.compareToAscii(SC_UNONAME_ORIENT) == 0)
+                                        if (aSortProperties[nProperty].Name.compareToAscii(SC_UNONAME_ISSORTCOLUMNS) == 0)
                                         {
-                                            aSortProperties[nProperty].Value >>= eOrient;
+                                            bSortColumns = ::cppu::any2bool(aSortProperties[nProperty].Value);
                                             bFound = sal_True;
                                         }
                                         else
                                             ++nProperty;
                                     }
 
-                                    if (eOrient == table::TableOrientation_COLUMNS)
+                                    if (bSortColumns)
                                         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORIENTATION, XML_COLUMN);
                                 }
                             }
