@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-07 09:13:57 $
+ *  last change: $Author: mtg $ $Date: 2001-02-07 10:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,24 +144,24 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ZipPackageEntry::getPropertyS
 void SAL_CALL ZipPackageEntry::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue )
         throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    if (aPropertyName.equalsAsciiL("MediaType", 9))
+    if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaType")))
     {
         aValue >>= sMediaType;
 
         if (sMediaType.getLength() > 0)
         {
-            if ( sMediaType.indexOf (OUString::createFromAscii("text")) != -1)
+            if ( sMediaType.indexOf (OUString( RTL_CONSTASCII_USTRINGPARAM ( "text" ) ) ) != -1)
                 bToBeCompressed = sal_True;
             else
                 bToBeCompressed = sal_False;
         }
     }
-    else if (aPropertyName.equalsAsciiL("Size", 4))
+    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Size") ) )
         aValue >>= aEntry.nSize;
 #if SUPD>617
-    else if (aPropertyName.equalsAsciiL("Compressed",10))
+    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Compressed") ) )
 #else
-    else if (aPropertyName.equalsAsciiL("Compress", 8))
+    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Compress") ) )
 #endif
         aValue >>= bToBeCompressed;
     else
@@ -171,20 +171,20 @@ uno::Any SAL_CALL ZipPackageEntry::getPropertyValue( const ::rtl::OUString& Prop
         throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aAny;
-    if (PropertyName.equalsAsciiL("MediaType", 9))
+    if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
     {
         aAny <<= sMediaType;
         return aAny;
     }
-    else if (PropertyName.equalsAsciiL("Size", 4))
+    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Size" ) ) )
     {
         aAny <<= aEntry.nSize;
         return aAny;
     }
 #if SUPD>617
-    else if (PropertyName.equalsAsciiL("Compressed",10))
+    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Compressed" ) ) )
 #else
-    else if (PropertyName.equalsAsciiL("Compress", 8))
+    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Compress" ) ) )
 #endif
     {
         aAny <<= bToBeCompressed;

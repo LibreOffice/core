@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-07 09:13:57 $
+ *  last change: $Author: mtg $ $Date: 2001-02-07 10:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,10 +272,11 @@ void ZipPackage::getZipFileContents()
             }
         }
     }
-    if (hasByHierarchicalName(OUString::createFromAscii("META-INF/manifest.xml")))
+    const OUString sManifest (RTL_CONSTASCII_USTRINGPARAM( "META-INF/manifest.xml") );
+    if (hasByHierarchicalName( sManifest ) )
     {
         Reference < XUnoTunnel > xTunnel;
-        aAny = getByHierarchicalName(OUString::createFromAscii("META-INF/manifest.xml"));
+        aAny = getByHierarchicalName( sManifest );
         aAny >>= xTunnel;
         Reference < XActiveDataSink > xSink (xTunnel, UNO_QUERY);
         if (xSink.is())
@@ -325,7 +326,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
 Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
         throw(NoSuchElementException, RuntimeException)
 {
-    OUString sTemp, sRoot = OUString::createFromAscii("/");
+    OUString sTemp, sRoot( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
     sal_Int32 nOldIndex =0, nIndex;
     Any aAny;
     Reference < XNameContainer > xCurrent  (xRootFolder);
@@ -410,7 +411,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
 sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
         throw(RuntimeException)
 {
-    OUString sTemp, sRoot = OUString::createFromAscii("/");
+    OUString sTemp, sRoot( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
     sal_Int32 nOldIndex = 0, nIndex;
     Any aAny;
     Reference < XNameContainer > xCurrent  (xRootFolder);
@@ -534,15 +535,16 @@ ZipPackageBuffer & SAL_CALL ZipPackage::writeToBuffer(  )
     // are placed inside the Manifest et al. Note: saveContents is called
     // recursively.
 
-    if (xRootFolder->hasByName(OUString::createFromAscii("META-INF")))
-        xRootFolder->removeByName(OUString::createFromAscii("META-INF"));
+    const OUString sMeta ( RTL_CONSTASCII_USTRINGPARAM ( "META-INF" ) );
+    if (xRootFolder->hasByName( sMeta ) )
+        xRootFolder->removeByName( sMeta );
 
     ManifestEntry *pMan = new ManifestEntry;
     ZipPackageFolder::copyZipEntry(pMan->aEntry, pRootFolder->aEntry);
-    pMan->aEntry.sName = OUString::createFromAscii("/");
+    pMan->aEntry.sName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
     try
     {
-        Any aAny = pRootFolder->getPropertyValue(OUString::createFromAscii("MediaType"));
+        Any aAny = pRootFolder->getPropertyValue(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType") ) );
         aAny >>= pMan->sMediaType;
     }
     catch (::com::sun::star::beans::UnknownPropertyException & )
@@ -551,17 +553,17 @@ ZipPackageBuffer & SAL_CALL ZipPackage::writeToBuffer(  )
     }
 
     aManList.push_back(pMan);
-    pRootFolder->saveContents(OUString::createFromAscii(""), aManList, *pZipOut);
+    pRootFolder->saveContents(OUString(), aManList, *pZipOut);
 
     ZipPackageFolder *pMetaInfFolder = new ZipPackageFolder();
     ZipPackageStream *pManifestStream = new ZipPackageStream( pZipFile );
     aAny <<= Reference < XUnoTunnel > (pMetaInfFolder);
-    xRootFolder->insertByName(OUString::createFromAscii("META-INF"), aAny);
+    xRootFolder->insertByName(sMeta, aAny);
 
     ZipPackageBuffer *pBuffer = new ZipPackageBuffer(65535);
     Reference < XOutputStream > xManOutStream (pBuffer);
 
-    pManifestStream->aEntry.sName = OUString::createFromAscii("META-INF/manifest.xml");
+    pManifestStream->aEntry.sName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "META-INF/manifest.xml") );
     pManifestStream->aEntry.nMethod = STORED;
     pManifestStream->bPackageMember = sal_True;
 
@@ -595,7 +597,7 @@ ZipPackageBuffer & SAL_CALL ZipPackage::writeToBuffer(  )
     }
 
     aAny <<= Reference < XUnoTunnel > (pManifestStream);
-    pMetaInfFolder->insertByName(OUString::createFromAscii("manifest.xml"), aAny);
+    pMetaInfFolder->insertByName(OUString( RTL_CONSTASCII_USTRINGPARAM ( "manifest.xml") ) , aAny);
     pManifestStream->aEntry.nOffset *=-1;
 
     xContentStream = Reference < XInputStream > (pZipBuffer);
@@ -693,7 +695,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
 Sequence< OUString > ZipPackage_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.package.Package" );
+    seqNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.package.Package" ) );
     return seqNames;
 }
 
@@ -711,7 +713,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* p
         {
             Reference< XRegistryKey > xNewKey(
             reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                 OUString::createFromAscii("/com.sun.star.package.Package/UNO/SERVICES") ) );
+                 OUString( RTL_CONSTASCII_USTRINGPARAM ( "/com.sun.star.package.Package/UNO/SERVICES" ) ) ) );
             const Sequence< OUString > & rSNL = ZipPackage_getSupportedServiceNames();
             const OUString * pArray = rSNL.getConstArray();
             for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-07 09:13:57 $
+ *  last change: $Author: mtg $ $Date: 2001-02-07 10:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,7 +306,7 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
                 // Then copy it back
                 try
                 {
-                    uno::Any aAny = pFolder->getPropertyValue(OUString::createFromAscii("MediaType"));
+                    uno::Any aAny = pFolder->getPropertyValue(OUString( RTL_CONSTASCII_USTRINGPARAM ("MediaType") ) );
                     aAny >>= pMan->sMediaType;
                 }
                 catch (::com::sun::star::beans::UnknownPropertyException & )
@@ -330,7 +330,7 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
                 // First copy current data to ManifestEntry
                 ZipPackageFolder::copyZipEntry(pMan->aEntry, pFolder->aEntry);
 
-                pMan->aEntry.sName = rPath + pMan->sShortName + OUString::createFromAscii("/");
+                pMan->aEntry.sName = rPath + pMan->sShortName + OUString( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
                 pMan->aEntry.nTime = ZipOutputStream::tmDateToDosDate ( *localtime(&nTime));
                 pMan->aEntry.nCrc = 0;
                 pMan->aEntry.nSize = 0;
@@ -348,7 +348,7 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
                 }
                 try
                 {
-                    uno::Any aAny = pFolder->getPropertyValue(OUString::createFromAscii("MediaType"));
+                    uno::Any aAny = pFolder->getPropertyValue(OUString( RTL_CONSTASCII_USTRINGPARAM ( "MediaType") ) );
                     aAny >>= pMan->sMediaType;
                 }
                 catch (::com::sun::star::beans::UnknownPropertyException & )
@@ -372,9 +372,9 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
             ManifestEntry *pMan = new ManifestEntry;
             pMan->sShortName = (*aCI).first;
 #if SUPD>617
-            uno::Any aAny = pStream->getPropertyValue(OUString::createFromAscii("Compressed"));
+            uno::Any aAny = pStream->getPropertyValue(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Compressed") ) );
 #else
-            uno::Any aAny = pStream->getPropertyValue(OUString::createFromAscii("Compress"));
+            uno::Any aAny = pStream->getPropertyValue(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Compress") ) );
 #endif
             sal_Bool bToBeCompressed;
             aAny >>= bToBeCompressed;
@@ -474,7 +474,7 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
 
             try
             {
-                uno::Any aAny = pStream->getPropertyValue(OUString::createFromAscii("MediaType"));
+                uno::Any aAny = pStream->getPropertyValue(OUString( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) ) );
                 aAny >>= pMan->sMediaType;
             }
             catch (::com::sun::star::beans::UnknownPropertyException & )
