@@ -1,12 +1,7 @@
-mkdir: %_DEST%\bin%_EXT%\remote
 mkdir: %_DEST%\inc%_EXT%\bootstrp
 mkdir: %_DEST%\inc%_EXT%\tools
-mkdir: %_DEST%\lib%_EXT%\remote
-mkdir: %_DEST%\inc%_EXT%\testshl
 
 
-..\%__SRC%\bin\remote\tl?????.dll %_DEST%\bin%_EXT%\remote\tl?????.dll
-..\%__SRC%\bin\remote\tl?????.sym %_DEST%\bin%_EXT%\remote\tl?????.sym
 ..\%__SRC%\bin\soagent.dll %_DEST%\bin%_EXT%\soagent.dll
 ..\%__SRC%\bin\symbol.exe %_DEST%\bin%_EXT%\symbol.exe
 ..\%__SRC%\bin\tl?????.dll %_DEST%\bin%_EXT%\tl?????.dll
@@ -14,15 +9,12 @@ mkdir: %_DEST%\inc%_EXT%\testshl
 ..\%__SRC%\bin\wps?????.dll %_DEST%\bin%_EXT%\wps?????.dll
 ..\%__SRC%\lib\atools.lib %_DEST%\lib%_EXT%\atools.lib
 ..\%__SRC%\lib\bootstrp.lib %_DEST%\lib%_EXT%\bootstrp.lib
-..\%__SRC%\lib\bsvermap.lib %_DEST%\lib%_EXT%\bsvermap.lib
 ..\%__SRC%\lib\itools.lib %_DEST%\lib%_EXT%\itools.lib
 ..\%__SRC%\lib\lib*.a %_DEST%\lib%_EXT%\lib*.a
 ..\%__SRC%\lib\lib*.sl %_DEST%\lib%_EXT%\lib*.sl
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
 ..\%__SRC%\lib\lib*.so.* %_DEST%\lib%_EXT%\lib*.so.*
 ..\%__SRC%\lib\lib*.dylib %_DEST%\lib%_EXT%\lib*.dylib
-..\%__SRC%\lib\remote\*.so %_DEST%\lib%_EXT%\remote\*.so
-..\%__SRC%\lib\remote\itools.lib %_DEST%\lib%_EXT%\remote\itools.lib
 ..\%__SRC%\lib\stdstrm.lib %_DEST%\lib%_EXT%\stdstrm.lib
 ..\%__SRC%\lib\tools.lib %_DEST%\lib%_EXT%\tools.lib
 ..\%__SRC%\misc\tl?????.map %_DEST%\bin%_EXT%\tl?????.map
@@ -153,8 +145,6 @@ hedabu: ..\inc\poly.hxx %_DEST%\inc%_EXT%\tools\poly.hxx
 hedabu: ..\inc\line.hxx %_DEST%\inc%_EXT%\tools\line.hxx
 hedabu: ..\inc\vector2d.hxx %_DEST%\inc%_EXT%\tools\vector2d.hxx
 hedabu: ..\inc\testtoolloader.hxx %_DEST%\inc%_EXT%\tools\testtoolloader.hxx
-
-..\testshl\inc\*.hxx %_DEST%\inc%_EXT%\testshl\*.hxx
 
 ..\%__SRC%\bin\rscdep.exe %_DEST%\bin%_EXT%\rscdep.exe
 ..\%__SRC%\bin\rscdep %_DEST%\bin%_EXT%\rscdep
