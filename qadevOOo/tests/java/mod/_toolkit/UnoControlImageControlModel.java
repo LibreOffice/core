@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlImageControlModel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 14:05:44 $
+ *  last change:$Date: 2003-09-08 13:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,64 +58,38 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
 
-import com.sun.star.text.XTextDocument;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
-import lib.StatusException;
+
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-import util.WriterTools;
 import util.utils;
 
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.XInterface;
+
+
 public class UnoControlImageControlModel extends TestCase {
-
-    XTextDocument xTextDoc;
-
-    /**
-    * Creates StarOffice Writer document.
-    */
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-
-        log.println( "creating a textdocument" );
-        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)tParam.getMSF());
-    }
-
-    /**
-    * Disposes StarOffice Writer document.
-    */
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xTextDoc " );
-        xTextDoc.dispose();
-    }
-
-
-    public synchronized TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log ) {
-
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+                                                                 PrintWriter log) {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance(
-                "com.sun.star.awt.UnoControlImageControlModel");
+            oObj = (XInterface) ( (XMultiServiceFactory) Param.getMSF())
+                                     .createInstance("com.sun.star.awt.UnoControlImageControlModel");
         } catch (Exception e) {
-
         }
 
+        log.println(
+                "creating a new environment for UnoControlImageControlModel object");
 
-        log.println( "creating a new environment for UnoControlImageControlModel object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("OBJNAME", "stardiv.vcl.controlmodel.ImageControl");
-        System.out.println("ImplementationName: "+utils.getImplName(oObj));
+        System.out.println("ImplementationName: " + utils.getImplName(oObj));
 
         return tEnv;
-
     } // finish method getTestEnvironment
-
-}    // finish class UnoControlImageControlModel
-
+} // finish class UnoControlImageControlModel

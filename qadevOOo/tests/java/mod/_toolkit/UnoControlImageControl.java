@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlImageControl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 14:05:34 $
+ *  last change:$Date: 2003-09-08 13:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,25 +58,10 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
 
-import com.sun.star.awt.XControl;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.awt.XControlModel;
-import com.sun.star.awt.XDevice;
-import com.sun.star.awt.XGraphics;
-import com.sun.star.awt.XToolkit;
-import com.sun.star.awt.XWindow;
-import com.sun.star.awt.XWindowPeer;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.drawing.XControlShape;
-import com.sun.star.drawing.XShape;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.view.XControlAccess;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -86,51 +71,80 @@ import util.SOfficeFactory;
 import util.WriterTools;
 import util.utils;
 
-public class UnoControlImageControl extends TestCase {
+import com.sun.star.awt.XControl;
+import com.sun.star.awt.XControlModel;
+import com.sun.star.awt.XDevice;
+import com.sun.star.awt.XGraphics;
+import com.sun.star.awt.XToolkit;
+import com.sun.star.awt.XWindow;
+import com.sun.star.awt.XWindowPeer;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.drawing.XControlShape;
+import com.sun.star.drawing.XShape;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
+import com.sun.star.view.XControlAccess;
 
+
+public class UnoControlImageControl extends TestCase {
     XTextDocument xTextDoc;
 
-    protected void initialize ( TestParameters Param, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
+    protected void initialize(TestParameters Param, PrintWriter log) {
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) Param.getMSF());
 
         try {
-            log.println( "creating a textdocument" );
-            xTextDoc = SOF.createTextDoc( null );
-        } catch ( com.sun.star.uno.Exception e ) {
+            log.println("creating a textdocument");
+            xTextDoc = SOF.createTextDoc(null);
+        } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
         }
     }
 
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xTextDoc " );
-        xTextDoc.dispose();
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xTextDoc ");
+
+        try {
+            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                        XCloseable.class, xTextDoc);
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("couldn't close document");
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("couldn't close document");
+        }
     }
 
-    public TestEnvironment createTestEnvironment( TestParameters Param,
-                                                  PrintWriter log )
-                                                    throws StatusException {
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
+                                                    PrintWriter log) {
         XInterface oObj = null;
         XWindowPeer the_win = null;
         XToolkit the_kit = null;
         XDevice aDevice = null;
         XGraphics aGraphic = null;
         XControl aControl = null;
+
         //Insert a ControlShape and get the ControlModel
-        XControlShape aShape = FormTools.createUnoControlShape(
-            xTextDoc,3000,4500,15000,10000,"DatabaseImageControl",
-            "UnoControlImageControl");
+        XControlShape aShape = FormTools.createUnoControlShape(xTextDoc, 3000,
+                                                               4500, 15000,
+                                                               10000,
+                                                               "DatabaseImageControl",
+                                                               "UnoControlImageControl");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
 
         XControlModel the_Model = aShape.getControl();
 
         XPropertySet xPS = (XPropertySet) UnoRuntime.queryInterface(
-                                                XPropertySet.class, the_Model);
+                                   XPropertySet.class, the_Model);
 
-        XControlShape aShape2 = FormTools.createControlShape(
-                                xTextDoc,3000,4500,5000,10000,"TextField");
+        XControlShape aShape2 = FormTools.createControlShape(xTextDoc, 3000,
+                                                             4500, 5000, 10000,
+                                                             "TextField");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape2);
 
@@ -138,7 +152,8 @@ public class UnoControlImageControl extends TestCase {
 
         //Try to query XControlAccess
         XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
-                        XControlAccess.class,xTextDoc.getCurrentController());
+                                            XControlAccess.class,
+                                            xTextDoc.getCurrentController());
 
         //get the ImageControlControl for the needed Object relations
         try {
@@ -146,41 +161,41 @@ public class UnoControlImageControl extends TestCase {
             aControl = the_access.getControl(the_Model2);
             the_win = the_access.getControl(the_Model).getPeer();
             the_kit = the_win.getToolkit();
-            aDevice = the_kit.createScreenCompatibleDevice(200,200);
+            aDevice = the_kit.createScreenCompatibleDevice(200, 200);
             aGraphic = aDevice.createGraphics();
 
-            String imgUrl = util.utils.getFullTestURL("poliball.gif") ;
+            String imgUrl = util.utils.getFullTestURL("poliball.gif");
 
-            xPS.setPropertyValue("ImageURL", imgUrl) ;
-
+            xPS.setPropertyValue("ImageURL", imgUrl);
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get ImageControlControl");
             e.printStackTrace(log);
-            throw new StatusException("Couldn't get ImageControlControl", e );
+            throw new StatusException("Couldn't get ImageControlControl", e);
         }
 
-        log.println( "creating a new environment for UnoControlImageControl object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        log.println(
+                "creating a new environment for UnoControlImageControl object");
+
+        TestEnvironment tEnv = new TestEnvironment(oObj);
+
 
         //Adding ObjRelation for XView
-        tEnv.addObjRelation("GRAPHICS",aGraphic);
+        tEnv.addObjRelation("GRAPHICS", aGraphic);
+
 
         //Adding ObjRelation for XControl
-        tEnv.addObjRelation("CONTEXT",xTextDoc);
-        tEnv.addObjRelation("WINPEER",the_win);
-        tEnv.addObjRelation("TOOLKIT",the_kit);
-        tEnv.addObjRelation("MODEL",the_Model);
+        tEnv.addObjRelation("CONTEXT", xTextDoc);
+        tEnv.addObjRelation("WINPEER", the_win);
+        tEnv.addObjRelation("TOOLKIT", the_kit);
+        tEnv.addObjRelation("MODEL", the_Model);
 
-        XWindow forObjRel = (XWindow)
-                            UnoRuntime.queryInterface(XWindow.class,aControl);
+        XWindow forObjRel = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+                                                                aControl);
 
-        tEnv.addObjRelation("XWindow.AnotherWindow",forObjRel);
+        tEnv.addObjRelation("XWindow.AnotherWindow", forObjRel);
 
-        System.out.println("ImplementationName: "+utils.getImplName(oObj));
+        System.out.println("ImplementationName: " + utils.getImplName(oObj));
 
         return tEnv;
     } // finish method getTestEnvironment
-
-}    // finish class UnoControlImageControl
-
-
+} // finish class UnoControlImageControl
