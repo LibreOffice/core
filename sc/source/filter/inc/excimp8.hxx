@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2000-10-26 11:23:33 $
+ *  last change: $Author: gt $ $Date: 2000-11-17 10:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@
 #endif
 #include <string.h>
 
+class OfaFilterOptions;
 
 struct ClientAnchorData;
 class FilterProgressBar;
@@ -125,6 +126,7 @@ protected:
     virtual ULONG           Calc_nBLIPPos( ULONG nOrgVal, ULONG nStreamPos ) const;
     virtual FASTBOOL        GetColorFromPalette( USHORT nNum, Color& ) const;
     virtual BOOL            ShapeHasText( ULONG nShapeId, ULONG nFilePos ) const;
+    static UINT32           GetImportOpts( OfaFilterOptions* );
 public:
                             Biff8MSDffManager(
                                             RootData*           pRootData,
@@ -310,7 +312,7 @@ public:
     inline  void                SetBlipId( UINT32 nVal )    { nBlipId = nVal; }
 
     void                        ReadPictFmla( SvStream&, UINT16 nLen );
-    void                        CreateSdrOle( Biff8MSDffManager& );
+    void                        CreateSdrOle( Biff8MSDffManager&, UINT32 nOLEImpFlags = 0 );
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 17:09:11 $
+ *  last change: $Author: gt $ $Date: 2000-11-17 10:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -936,7 +936,7 @@ void ExcEscherOle::ReadPictFmla( SvStream& rIn, UINT16 nLen )
 }
 
 
-void ExcEscherOle::CreateSdrOle( Biff8MSDffManager& rDffMan )
+void ExcEscherOle::CreateSdrOle( Biff8MSDffManager& rDffMan, UINT32 nOLEImpFlgs )
 {
     if( pAnchor && aStorageName.Len() )
     {
@@ -946,7 +946,7 @@ void ExcEscherOle::CreateSdrOle( Biff8MSDffManager& rDffMan )
             SvStorageRef    xSrc = pExcRoot->pRootStorage;
             SvStorageRef    xDst( pExcRoot->pDoc->GetDocumentShell()->GetStorage() );
             SdrOle2Obj*     pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
-                    aStorageName, xSrc, xDst, aGraph, *pAnchor, NULL );
+                    aStorageName, xSrc, xDst, aGraph, *pAnchor, NULL, nOLEImpFlgs );
             if( pRet )
                 SetObj( pRet );
         }

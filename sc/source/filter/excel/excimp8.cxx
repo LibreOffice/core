@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:20:51 $
+ *  last change: $Author: gt $ $Date: 2000-11-17 10:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,6 +666,28 @@ BOOL Biff8MSDffManager::ShapeHasText( ULONG nShapeId, ULONG nFilePos ) const
     }
 
     return FALSE;
+}
+
+
+UINT32 Biff8MSDffManager::GetImportOpts( OfaFilterOptions* p )
+{
+    UINT32      n = 0;
+    if( p )
+    {
+        if( p->IsMathType2StarMath() )
+            n |= OLE_MATHTYPE_2_STARMATH;
+
+        if( p->IsWinWord2StarWriter() )
+            n |= OLE_WINWORD_2_STARWRITER;
+
+        if( p->IsExcel2StarCalc() )
+            n |= OLE_EXCEL_2_STARCALC;
+
+        if( p->IsPowerPoint2StarImpress() )
+            n |= OLE_POWERPOINT_2_STARIMPRESS;
+    }
+
+    return n;
 }
 
 
@@ -2868,6 +2890,21 @@ void ImportExcel8::PostDocLoad( void )
             UINT32                      nObjNum;
             BOOL                        bRangeTest;
 
+            UINT32                      nOLEImpFlags = 0;
+
+            OfaFilterOptions*           pFltOpts = OFF_APP()->GetFilterOptions();
+            if( pFltOpts )
+            {
+                if( pFltOpts->IsMathType2StarMath() )
+                    nOLEImpFlags |= OLE_MATHTYPE_2_STARMATH;
+
+                if( pFltOpts->IsWinWord2StarWriter() )
+                    nOLEImpFlags |= OLE_WINWORD_2_STARWRITER;
+
+                if( pFltOpts->IsPowerPoint2StarImpress() )
+                    nOLEImpFlags |= OLE_POWERPOINT_2_STARIMPRESS;
+            }
+
             for( n = 0 ; n < nMax ; n++ )
             {
                 p = pShpInf->GetObject( ( UINT16 ) n );
@@ -2909,7 +2946,7 @@ void ImportExcel8::PostDocLoad( void )
                                         nChartCnt++;
                                     break;
                                     case OT_OLE :
-                                        ((ExcEscherOle*)p)->CreateSdrOle( *pDffMan );
+                                        ((ExcEscherOle*)p)->CreateSdrOle( *pDffMan, nOLEImpFlags );
                                     break;
                                 }
                             }
