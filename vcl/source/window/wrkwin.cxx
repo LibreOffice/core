@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrkwin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-15 17:10:25 $
+ *  last change: $Author: mba $ $Date: 2002-10-11 18:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,5 +369,8 @@ void WorkWindow::StartPresentationMode( BOOL bPresentation, USHORT nFlags )
 
 BOOL WorkWindow::IsMinimized() const
 {
-    return mpFrameData->mbMinimized;
+    //return mpFrameData->mbMinimized;
+    SalFrameState aState;
+    mpFrame->GetWindowState(&aState);
+    return (( aState.mnState & SAL_FRAMESTATE_MINIMIZED ) != 0);
 }
