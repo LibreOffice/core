@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asynclink.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-02 15:00:58 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ class AsynchronLink
     void Call_Impl( void* pArg );
 public:
     AsynchronLink( const Link& rLink ) :
-        _pTimer( 0 ), _aLink( rLink ), _nEventId( 0 ), _bInCall( FALSE ),
+        _aLink( rLink ), _nEventId( 0 ), _pTimer( 0 ), _bInCall( FALSE ),
         _pDeleted( 0 ), _pMutex( 0 ){}
     AsynchronLink() : _nEventId( 0 ), _pTimer( 0 ), _bInCall( FALSE ),
             _pDeleted( 0 ), _pMutex( 0 ){}
