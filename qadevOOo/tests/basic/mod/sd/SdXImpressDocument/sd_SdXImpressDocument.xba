@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sd_SdXImpressDocument.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:01:48 $ 
+'*  last change:$Date: 2003-03-05 12:18:50 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -81,6 +81,10 @@ option explicit
 ' Requiered for  com.sun.star.drawing.XDrawPageDuplicator
   Global oCollection As Object ' = oDoc.DrawPages(0)
 
+' com.sun.star.frame.XModel
+  Global oXModelController as Object
+  Global oXModelSel as Object
+  Global oXModelToSel as Object
 
 Sub CreateObj()
 
@@ -89,8 +93,12 @@ Sub CreateObj()
 ' sd.SdXImpressDocument
 '*************************************************************************
 On Error Goto ErrHndl
+    Dim oControllerDoc as Object
+    Dim oRectangleShape as Object
+    Dim oPage as Object
 
     oDoc = utils.createImpressDocument(cObjectName)
+    oControllerDoc = utils.createImpressDocument(cObjectName + "XModel")
 
     oCollection = oDoc.DrawPages(0)
     oObj = oDoc
@@ -98,8 +106,24 @@ On Error Goto ErrHndl
     cServiceName = "com.sun.star.drawing.RectangleShape"
     bCreateInstanceWithoutArguments = true
     aArguments() = noargs()
+    
+    oRectangleShape = oDoc.createInstance("com.sun.star.drawing.RectangleShape")
+    oPage = oDoc.getDrawPages().getByIndex(0)
+    oPage.add(oRectangleShape)
+
+    oXModelToSel = oRectangleShape
+    oXModelController = oControllerDoc.getCurrentController()
+    oXModelSel = oDoc.getCurrentController()
+    
 Exit Sub
 ErrHndl:
     Test.Exception()
+End Sub
+
+Sub DisposeObj()
+    ' To successfully dispose oControllerDoc re-open it first.
+    Dim oControllerDoc As Object
+    oControllerDoc = utils.createDocument(cObjectName + "XModel")
+    oControllerDoc.dispose()
 End Sub
 </script:module>
