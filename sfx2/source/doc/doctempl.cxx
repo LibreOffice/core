@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-29 11:53:46 $
+ *  last change: $Author: dv $ $Date: 2001-04-02 09:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,6 @@ class EntryData_Impl
     OUString            maTitle;
     OUString            maOwnURL;
     OUString            maTargetURL;
-    sal_Bool            mbInUse     : 1;
     sal_Bool            mbIsOwner   : 1;
     sal_Bool            mbDidConvert: 1;
 
@@ -261,8 +260,6 @@ public:
 
     int                 Compare( const OUString& rTitle ) const;
 
-    void                SetInUse( sal_Bool bInUse ) { mbInUse = bInUse; }
-
     SfxObjectShellRef   CreateObjectShell();
     BOOL                DeleteObjectShell();
 };
@@ -278,7 +275,6 @@ class RegionData_Impl
     OUString                    maTitle;
     OUString                    maOwnURL;
     OUString                    maTargetURL;
-    sal_Bool                    mbInUse     : 1;
 
 private:
     long                        GetEntryPos( const OUString& rTitle,
@@ -313,8 +309,6 @@ public:
     int                 Compare( const OUString& rTitle ) const
                             { return maTitle.compareTo( rTitle ); }
     int                 Compare( RegionData_Impl* pCompareWith ) const;
-
-    void                SetInUse( sal_Bool bInUse ) { mbInUse = bInUse; }
 };
 
 DECLARE_LIST( RegionList_Impl, RegionData_Impl* );
@@ -1713,7 +1707,6 @@ EntryData_Impl::EntryData_Impl( RegionData_Impl* pParent,
 {
     mpParent    = pParent;
     maTitle     = rTitle;
-    mbInUse     = sal_True;
     mbIsOwner   = sal_False;
     mbDidConvert= sal_False;
 }
@@ -1877,7 +1870,6 @@ RegionData_Impl::RegionData_Impl( const SfxDocTemplate_Impl* pParent,
 {
     maTitle     = rTitle;
     mpParent    = pParent;
-    mbInUse     = sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -1972,7 +1964,6 @@ void RegionData_Impl::AddEntry( const OUString& rTitle,
     if ( bFound )
     {
         pEntry = maEntries.GetObject( nPos );
-        pEntry->SetInUse( sal_True );
     }
     else
     {
@@ -2176,7 +2167,6 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
 
     if ( xResultSet.is() )
     {
-        Reference< XCommandEnvironment > aCmdEnv;
         Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
         Reference< XRow > xRow( xResultSet, UNO_QUERY );
 
@@ -2334,9 +2324,7 @@ void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
 
                 EntryData_Impl* pEntry = pRegion->GetByTargetURL( aId );
 
-                if ( pEntry )
-                    pEntry->SetInUse( sal_True );
-                else
+                if ( ! pEntry )
                 {
                     OUString aFullTitle;
                     GetTitleFromURL( aId, aFullTitle );
@@ -2400,22 +2388,12 @@ sal_Bool SfxDocTemplate_Impl::InsertRegion( RegionData_Impl *pNew,
 {
     ::osl::MutexGuard   aGuard( maMutex );
     RegionData_Impl    *pData = maRegions.First();
-    sal_Bool            bFound;
-    sal_Bool            bSameName = sal_False;
 
     while ( pData && ( pData->Compare( pNew ) != 0 ) )
         pData = maRegions.Next();
 
-    if ( pData )
+    if ( ! pData )
     {
-        bFound = sal_True;
-        pData->SetInUse( sal_True );
-    }
-    else
-    {
-        bFound = sal_False;
-        pNew->SetInUse( sal_True );
-
         // compare with the name of the standard group here to insert it
         // first
 
@@ -2425,7 +2403,7 @@ sal_Bool SfxDocTemplate_Impl::InsertRegion( RegionData_Impl *pNew,
             maRegions.Insert( pNew, nPos );
     }
 
-    return ! bFound;
+    return ( pData == NULL );
 }
 
 // -----------------------------------------------------------------------
