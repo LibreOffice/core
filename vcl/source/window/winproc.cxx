@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:23:36 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 16:16:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,7 @@ static BOOL ImplHandleMouseFloatMode( Window* pChild, const Point& rMousePos,
                     if ( nPopupFlags & FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE )
                     {
                         if ( (nPopupFlags & FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE) &&
-                             (nSVEvent == EVENT_MOUSEBUTTONDOWN) )
+                             (nSVEvent == EVENT_MOUSEBUTTONUP) )
                             return TRUE;
                         pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
                         if ( nPopupFlags & FLOATWIN_POPUPMODE_PATHMOUSECANCELCLICK )
