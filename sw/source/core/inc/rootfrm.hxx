@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rootfrm.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-11 15:31:18 $
+ *  last change: $Author: mib $ $Date: 2001-10-12 13:55:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@ class SwCursor;
 class SwShellCrsr;
 class SwTableCursor;
 class SwRegionRects;
-class Sw3FrameIo;
 class OutputDevice;
 class SwLayVout;
 class SwDestroyList;
@@ -191,7 +190,6 @@ public:
     static BOOL HasSameRect( const SwRect& rRect );
 
     SwRootFrm( SwFrmFmt*, ViewShell* );
-    SwRootFrm( Sw3FrameIo&, SwLayoutFrm* );
     ~SwRootFrm();
 
     ViewShell *GetCurrShell() const { return pCurrShell; }
@@ -215,7 +213,6 @@ public:
           SdrPage* GetDrawPage()       { return pDrawPage; }
           void     SetDrawPage( SdrPage* pNew ){ pDrawPage = pNew; }
 
-    virtual void  Store( Sw3FrameIo& ) const;
     virtual BOOL  GetCrsrOfst( SwPosition *, Point&,
                                const SwCrsrMoveState* = 0 ) const;
     virtual void  Paint( const SwRect& ) const;
