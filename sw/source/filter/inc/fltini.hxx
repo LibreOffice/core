@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:50:22 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ class SwNodeIndex;
 
 class Sw6Reader: public Reader
 {
-    virtual ULONG Read( SwDoc &,SwPaM &,const String &);
+    virtual ULONG Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 };
 
 class W4WReader: public StgReader
@@ -89,7 +89,7 @@ class W4WReader: public StgReader
     String sVersion;
     USHORT nFilter;
     BOOL bStorageFlag;
-    virtual ULONG Read(SwDoc &,SwPaM &,const String &);
+    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
     // wir wollen die Streams / Storages nicht geoeffnet haben
     virtual int SetStrmStgPtr();
 public:
@@ -105,14 +105,14 @@ public:
 
 class Internal_W4WReader: public W4WReader
 {
-    virtual ULONG Read(SwDoc &,SwPaM &,const String &);
+    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 };
 
 #endif
 
 class ExcelReader : public StgReader
 {
-    virtual ULONG Read(SwDoc &,SwPaM &,const String &);
+    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 public:
     virtual int GetReaderType();
 };
@@ -120,7 +120,7 @@ public:
 class LotusReader : public Reader
 {
     CharSet eCodeSet;
-    virtual ULONG Read(SwDoc &,SwPaM &,const String &);
+    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 public:
     virtual void SetFltName( const String& rFltNm );
 };
@@ -129,7 +129,7 @@ class HTMLReader: public Reader
 {
     // wir wollen die Streams / Storages nicht geoeffnet haben
     virtual int SetStrmStgPtr();
-    virtual ULONG Read(SwDoc &,SwPaM &,const String &);
+    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
     virtual String GetTemplateName() const;
 public:
     HTMLReader();
@@ -137,12 +137,12 @@ public:
 
 class WW1Reader : public Reader
 {
-    virtual ULONG Read(SwDoc &,SwPaM &,const String &);
+    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 };
 
 class WW8Reader : public StgReader
 {
-    virtual ULONG Read(SwDoc &,SwPaM &,const String &);
+    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 public:
     virtual int GetReaderType();
 
@@ -152,7 +152,7 @@ public:
 
 class XMLReader : public Reader
 {
-    virtual ULONG Read(SwDoc &,SwPaM &,const String &);
+    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 public:
     virtual int GetReaderType();
 
@@ -166,10 +166,8 @@ public:
 
 // die speziellen Writer
 
-void GetW4WWriter( const String&, WriterRef& );
-void GetStgWriter( const String&, WriterRef& );
-void GetWWWriter( const String&, WriterRef& );
-void GetWW8Writer( const String&, WriterRef& );
+void GetW4WWriter( const String&, const String&, WriterRef& );
+void GetWW8Writer( const String&, const String&, WriterRef& );
 
 
 // JP 17.03.99 - 63049
