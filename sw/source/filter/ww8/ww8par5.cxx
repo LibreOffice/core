@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:55:52 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 #endif
 
 #ifndef _LINKMGR_HXX //autogen
-#include <so3/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #endif
 
 #ifndef _UCBHELPER_CONTENT_HXX_
@@ -2446,8 +2446,8 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* pF, String& rStr )
     {
         // Bereich aus Quelle ( kein Switch ) ?
         ConvertUFName(aBook);
-        aPara += so3::cTokenSeperator;
-        aPara += so3::cTokenSeperator;
+        aPara += sfx2::cTokenSeperator;
+        aPara += sfx2::cTokenSeperator;
         aPara += aBook;
     }
 
