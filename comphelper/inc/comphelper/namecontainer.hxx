@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namecontainer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-20 19:51:46 $
+ *  last change: $Author: cl $ $Date: 2001-03-21 10:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,82 +62,18 @@
 #ifndef _COMPHELPER_NAMECONTAINER_HXX_
 #define _COMPHELPER_NAMECONTAINER_HXX_
 
+#ifndef _COM_SUN_STAR_UNO_TYPE_HXX_
+#include <com/sun/star/uno/Type.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
-#endif
-
 namespace comphelper
 {
-    struct NameContainerBaseImpl;
-
-    /** this is the base helper class for NameContainer thats also declared in this header. */
-    class NameContainerBase : public ::cppu::WeakImplHelper1< ::com::sun::star::container::XNameContainer >
-    {
-    public:
-        NameContainerBase();
-        virtual ~NameContainerBase();
-
-        // XNameContainer
-        virtual void SAL_CALL insertByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement )
-            throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException,
-            ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL removeByName( const ::rtl::OUString& Name )
-            throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
-
-        // XNameReplace
-        virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement )
-            throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException,
-                ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
-        // XNameAccess
-        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
-            throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  )
-            throw(::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
-            throw(::com::sun::star::uno::RuntimeException);
-
-        // XElementAccess
-        virtual sal_Bool SAL_CALL hasElements(  )
-            throw(::com::sun::star::uno::RuntimeException);
-
-    private:
-        NameContainerBaseImpl* mp;
-    };
-
-    /** this is a generic name container for a uno type specified by ELEMENT.
-        No restrictions are made except that all any values must have the exact
-        type ELEMENT and must have a value. */
-    template< typename ELEMENT >
-    class NameContainer : public NameContainerBase
-    {
-    public:
-        virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
-            throw(::com::sun::star::uno::RuntimeException);
-    };
-
-
-    // XElementAccess
-    template< typename ELEMENT >
-    ::com::sun::star::uno::Type SAL_CALL NameContainer<ELEMENT>::getElementType(  )
-        throw(::com::sun::star::uno::RuntimeException)
-    {
-        return ::getCppuType((const ELEMENT *)0);
-    }
-
-    template< typename ELEMENT >
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-        NameContainer_createInstance()
-    {
-        return (::com::sun::star::container::XNameContainer*) new NameContainer< ELEMENT >;
-    }
-
+        NameContainer_createInstance( ::com::sun::star::uno::Type aType );
 }
 
 #endif // _COMPHELPER_NAMECONTAINER_HXX_
