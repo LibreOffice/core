@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridpages.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 16:49:41 $
+ *  last change: $Author: vg $ $Date: 2001-06-08 22:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,26 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
         Text = "Tabellenelement";
         Text [ english ] = "Table Control";
-        Text [ english_us ] = "Table Element";
+        Text [ english_us ] = "Table element";
+        Text[ portuguese ] = "Table Element";
+        Text[ russian ] = "Ýëåìåíò òàáëèöû";
+        Text[ greek ] = "Table Element";
+        Text[ dutch ] = "Table Element";
+        Text[ french ] = "Élément de table";
+        Text[ spanish ] = "Elemento de tabla";
+        Text[ finnish ] = "Table Element";
+        Text[ italian ] = "Elemento tabella";
+        Text[ danish ] = "Table Element";
+        Text[ swedish ] = "Tabellelement";
+        Text[ polish ] = "Element tabeli";
+        Text[ portuguese_brazilian ] = "Table Element";
+        Text[ japanese ] = "Ã°ÌÞÙ‚Ì—v‘f";
+        Text[ korean ] = "Table Element";
+        Text[ chinese_simplified ] = "±íµ¥Ôª¼þ";
+        Text[ chinese_traditional ] = "ªí³æ¤¸¥ó";
+        Text[ turkish ] = "Table Element";
+        Text[ arabic ] = "Table Element";
+        Text[ catalan ] = "Table Element";
     };
 
     FixedText FT_EXISTING_FIELDS
@@ -265,6 +284,9 @@ String RID_STR_TIMEPOSTFIX
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/05/30 16:49:41  fs
+ *  #86714# layout changes to allow displaying the form data source
+ *
  *  Revision 1.7  2001/05/17 07:45:14  kz
  *  Merge SRC632: 17.05.01 - 09:45:37 (NoBranch)
  *
@@ -289,4 +311,5 @@ String RID_STR_TIMEPOSTFIX
  *
  *  Revision 1.0 05.03.01 09:50:25  fs
  ************************************************************************/
+
 
