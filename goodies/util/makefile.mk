@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: thb $ $Date: 2001-12-06 14:18:05 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:15:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,19 +86,12 @@ SHL1TARGET= go$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= igo
 
 SHL1STDLIBS=\
-        $(TOOLSLIB)		\
-        $(SALLIB)		\
-        $(VOSLIB)		\
         $(VCLLIB)		\
-        $(SVTOOLLIB)	\
         $(SVLLIB)		\
-        $(CPPUHELPERLIB) \
-        $(CPPULIB)		\
-        $(UNOTOOLSLIB)	
-#		$(SVMEMLIB)		\
-#		$(SOTLIB)		\
-#		$(SO2LIB)		\
-#		$(INETLIBSH)	\
+        $(UNOTOOLSLIB)	\
+        $(TOOLSLIB)		\
+        $(VOSLIB)		\
+        $(SALLIB)
 
 .IF "$(GUI)"=="MAC"
 SHL1DEPN=	$(SHL1STDLIBS)
