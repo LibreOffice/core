@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digest.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:14 $
+ *  last change: $Author: mhu $ $Date: 2001-05-03 20:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,13 +54,13 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
 #ifndef _RTL_DIGEST_H_
-#define _RTL_DIGEST_H_ "$Revision: 1.1.1.1 $"
+#define _RTL_DIGEST_H_ "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -82,6 +82,10 @@ typedef enum {
     rtl_Digest_AlgorithmMD5,
     rtl_Digest_AlgorithmSHA,
     rtl_Digest_AlgorithmSHA1,
+
+    rtl_Digest_AlgorithmHMAC_MD5,
+    rtl_Digest_AlgorithmHMAC_SHA1,
+
     rtl_Digest_AlgorithmInvalid,
     rtl_Digest_Algorithm_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } rtlDigestAlgorithm;
@@ -115,7 +119,8 @@ rtlDigestError SAL_CALL rtl_digest_get (
  * rtl_digest_MD2 interface.
  *
  * Reference:
- *   RFC 1319 - The MD2 Message-Digest Algorithm (Informational)
+ *   RFC 1319 (Informational)
+ *     The MD2 Message-Digest Algorithm
  *
  *======================================================================*/
 #define RTL_DIGEST_LENGTH_MD2 16
@@ -140,7 +145,8 @@ rtlDigestError SAL_CALL rtl_digest_MD2 (
  * rtl_digest_MD5 interface.
  *
  * Reference:
- *   RFC 1321 - The MD5 Message-Digest Algorithm (Informational)
+ *   RFC 1321 (Informational)
+ *     The MD5 Message-Digest Algorithm
  *
  *======================================================================*/
 #define RTL_DIGEST_LENGTH_MD5 16
@@ -165,7 +171,8 @@ rtlDigestError SAL_CALL rtl_digest_MD5 (
  * rtl_digest_SHA interface.
  *
  * Reference:
- *   FIPS PUB 180 - Secure Hash Standard (Superseded by FIPS PUB 180-1)
+ *   FIPS PUB 180 (Superseded by FIPS PUB 180-1)
+ *     Secure Hash Standard
  *
  *======================================================================*/
 #define RTL_DIGEST_LENGTH_SHA 20
@@ -190,7 +197,8 @@ rtlDigestError SAL_CALL rtl_digest_SHA (
  * rtl_digest_SHA1 interface.
  *
  * Reference:
- *   FIPS PUB 180-1 - Secure Hash Standard (Supersedes FIPS PUB 180)
+ *   FIPS PUB 180-1 (Supersedes FIPS PUB 180)
+ *     Secure Hash Standard
  *
  *======================================================================*/
 #define RTL_DIGEST_LENGTH_SHA1 20
@@ -209,6 +217,87 @@ rtlDigestError SAL_CALL rtl_digest_getSHA1 (
 rtlDigestError SAL_CALL rtl_digest_SHA1 (
     const void *pData,   sal_uInt32 nDatLen,
     sal_uInt8  *pBuffer, sal_uInt32 nBufLen);
+
+/*========================================================================
+ *
+ * rtl_digest_HMAC_MD5 interface.
+ *
+ * Reference:
+ *   RFC 2104 (Informational)
+ *     HMAC: Keyed-Hashing for Message Authentication
+ *
+ *======================================================================*/
+#define RTL_DIGEST_LENGTH_HMAC_MD5 RTL_DIGEST_LENGTH_MD5
+
+rtlDigest SAL_CALL rtl_digest_createHMAC_MD5  (void);
+void      SAL_CALL rtl_digest_destroyHMAC_MD5 (rtlDigest Digest);
+
+rtlDigestError SAL_CALL rtl_digest_initHMAC_MD5 (
+    rtlDigest Digest,
+    const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen);
+
+rtlDigestError SAL_CALL rtl_digest_updateHMAC_MD5 (
+    rtlDigest Digest,
+    const void *pData, sal_uInt32 nDatLen);
+
+rtlDigestError SAL_CALL rtl_digest_getHMAC_MD5 (
+    rtlDigest Digest,
+    sal_uInt8 *pBuffer, sal_uInt32 nBufLen);
+
+/*========================================================================
+ *
+ * rtl_digest_HMAC_SHA1 interface.
+ *
+ * Reference:
+ *   RFC 2104 (Informational)
+ *     HMAC: Keyed-Hashing for Message Authentication
+ *   RFC 2898 (Informational)
+ *     PKCS #5: Password-Based Cryptography Specification Version 2.0
+ *
+ *======================================================================*/
+#define RTL_DIGEST_LENGTH_HMAC_SHA1 RTL_DIGEST_LENGTH_SHA1
+
+rtlDigest SAL_CALL rtl_digest_createHMAC_SHA1  (void);
+void      SAL_CALL rtl_digest_destroyHMAC_SHA1 (rtlDigest Digest);
+
+rtlDigestError SAL_CALL rtl_digest_initHMAC_SHA1 (
+    rtlDigest Digest,
+    const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen);
+
+rtlDigestError SAL_CALL rtl_digest_updateHMAC_SHA1 (
+    rtlDigest Digest,
+    const void *pData, sal_uInt32 nDatLen);
+
+rtlDigestError SAL_CALL rtl_digest_getHMAC_SHA1 (
+    rtlDigest Digest,
+    sal_uInt8 *pBuffer, sal_uInt32 nBufLen);
+
+/*========================================================================
+ *
+ * rtl_digest_PBKDF2 interface.
+ *
+ * Reference:
+ *   RFC 2898 (Informational)
+ *     PKCS #5: Password-Based Cryptography Specification Version 2.0
+ *
+ *======================================================================*/
+/** Password-Based Key Derivation Function.
+
+    @param  pKeyData  [out] derived key
+    @param  nKeyLen   [in]  derived key length
+    @param  pPassData [in]  password
+    @param  nPassLen  [in]  password length
+    @param  pSaltData [in]  salt
+    @param  nSaltLen  [in]  salt length
+    @param  nCount    [in]  iteration count
+
+    @return rtl_Digest_E_None upon success.
+*/
+rtlDigestError SAL_CALL rtl_digest_PBKDF2 (
+    sal_uInt8       *pKeyData , sal_uInt32 nKeyLen,
+    const sal_uInt8 *pPassData, sal_uInt32 nPassLen,
+    const sal_uInt8 *pSaltData, sal_uInt32 nSaltLen,
+    sal_uInt32       nCount);
 
 /*========================================================================
  *
