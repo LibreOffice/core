@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellfml.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:47:02 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 16:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,6 +385,10 @@ SwTableFormula::SwTableFormula( const String& rFormel )
 {
     eNmType = EXTRNL_NAME;
     bValidValue = FALSE;
+}
+
+SwTableFormula::~SwTableFormula()
+{
 }
 
 void SwTableFormula::_MakeFormel( const SwTable& rTbl, String& rNewStr,
