@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgio.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:56:52 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:29:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,9 +112,8 @@ public:
     BOOL Init();                    // set up an empty file
     BOOL CommitAll();               // commit everything (root commit)
 
-    static Link aErrorLink;
     static void SetErrorLink( const Link& );
-    static const Link& GetErrorLink() { return aErrorLink; }
+    static const Link& GetErrorLink();
     ULONG ValidateFATs( );
 };
 
