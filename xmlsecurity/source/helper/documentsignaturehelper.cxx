@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentsignaturehelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:55:45 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,11 +223,11 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream( const uno::R
         {
             ::rtl::OUString aSIGStreamName;
             if ( eDocSigMode == SignatureModeDocumentContent )
-                aSIGStreamName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "documentsignatures.xml" ) );
+                aSIGStreamName = DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName();
             else if ( eDocSigMode == SignatureModeMacros )
-                aSIGStreamName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "macrosignatures.xml" ) );
+                aSIGStreamName = DocumentSignatureHelper::GetScriptingContentSignatureDefaultStreamName();
             else
-                aSIGStreamName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "packagesignatures.xml" ) );
+                aSIGStreamName = DocumentSignatureHelper::GetPackageSignatureDefaultStreamName();
 
             aHelper.xSignatureStream = aHelper.xSignatureStorage->openStreamElement( aSIGStreamName, nOpenMode );
         }
@@ -241,33 +241,17 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream( const uno::R
     return aHelper;
 }
 
-void SignatureStreamHelper::Clear()
+::rtl::OUString DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName()
 {
-    // MT: bug in storage implementation, shouldn't be necessary
-    if ( xSignatureStorage.is() )
-    {
-        try
-        {
-            uno::Reference< lang::XComponent > xComp( xSignatureStorage, uno::UNO_QUERY );
-            xComp->dispose();
-        }
-        catch ( lang::DisposedException )
-        {
-        }
-    }
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "documentsignatures.xml" ) );
+}
 
-    if ( xSignatureStream.is() )
-    {
-        try
-        {
-            uno::Reference< lang::XComponent > xComp( xSignatureStream, uno::UNO_QUERY );
-            xComp->dispose();
-        }
-        catch ( lang::DisposedException )
-        {
-        }
-    }
+::rtl::OUString DocumentSignatureHelper::GetScriptingContentSignatureDefaultStreamName()
+{
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "macrosignatures.xml" ) );
+}
 
-    xSignatureStream = NULL;
-    xSignatureStorage = NULL;
+::rtl::OUString DocumentSignatureHelper::GetPackageSignatureDefaultStreamName()
+{
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "packagesignatures.xml" ) );
 }
