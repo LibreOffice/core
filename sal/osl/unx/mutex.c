@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obr $ $Date: 2001-04-09 14:45:13 $
+ *  last change: $Author: jbu $ $Date: 2001-10-17 16:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,6 @@
 #include <osl/mutex.h>
 #include <osl/diagnose.h>
 
-#ifdef PTHREAD_NONE_INIT
-static pthread_t _pthread_none_ = PTHREAD_NONE_INIT;
-#endif
-
-
 /*
     Implementation notes:
     oslMutex hides a pointer to the oslMutexImpl structure, which
@@ -77,17 +72,192 @@ static pthread_t _pthread_none_ = PTHREAD_NONE_INIT;
 */
 
 
-#if !defined(PTHREAD_MUTEX_RECURSIVE) || !defined(USE_RECURSIVE_MUTEX)
-
+/*#if defined(PTHREAD_MUTEX_RECURSIVE) && defined(USE_RECURSIVE_MUTEX)*/
+#ifdef LINUX
 
 /*
- *  mfe: if a Unix supports the recursive pthread mutex
- *       it can use the implementation beneath ...
+ *  Linux fully supports recursive mutexes, but only with
+ *  a non-standard function. So we linux, we use system recursive mutexes.
  */
 
+typedef struct _oslMutexImpl
+{
+    pthread_mutex_t mutex;
+} oslMutexImpl;
 
+
+/*****************************************************************************/
+/* osl_createMutex */
+/*****************************************************************************/
+oslMutex SAL_CALL osl_createMutex()
+{
+    oslMutexImpl* pMutex = (oslMutexImpl*) malloc(sizeof(oslMutexImpl));
+    pthread_mutexattr_t aMutexAttr;
+    int nRet=0;
+
+    OSL_ASSERT(pMutex);
+
+    if ( pMutex == 0 )
+    {
+        return 0;
+    }
+
+    pthread_mutexattr_init(&aMutexAttr);
+
+//    nRet = pthread_mutexattr_settype(&aMutexAttr, PTHREAD_MUTEX_RECURSIVE);
+    nRet = pthread_mutexattr_setkind_np( &aMutexAttr, PTHREAD_MUTEX_RECURSIVE_NP );
+
+    nRet = pthread_mutex_init(&(pMutex->mutex), &aMutexAttr);
+    if ( nRet != 0 )
+    {
+        OSL_TRACE("osl_createMutex : mutex init failed. Errno: %d; %s\n",
+                  nRet, strerror(nRet));
+
+        free(pMutex);
+        pMutex = 0;
+    }
+
+    pthread_mutexattr_destroy(&aMutexAttr);
+
+    return (oslMutex) pMutex;
+}
+
+/*****************************************************************************/
+/* osl_destroyMutex */
+/*****************************************************************************/
+void SAL_CALL osl_destroyMutex(oslMutex Mutex)
+{
+    oslMutexImpl* pMutex = (oslMutexImpl*) Mutex;
+
+    OSL_ASSERT(pMutex);
+
+    if ( pMutex != 0 )
+    {
+        int nRet=0;
+
+        nRet = pthread_mutex_destroy(&(pMutex->mutex));
+        if ( nRet != 0 )
+        {
+            OSL_TRACE("osl_destroyMutex : mutex destroy failed. Errno: %d; %s\n",
+                      nRet, strerror(nRet));
+        }
+
+        free(pMutex);
+    }
+
+    return;
+}
+
+/*****************************************************************************/
+/* osl_acquireMutex */
+/*****************************************************************************/
+sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
+{
+    oslMutexImpl* pMutex = (oslMutexImpl*) Mutex;
+
+    OSL_ASSERT(pMutex);
+
+    if ( pMutex != 0 )
+    {
+        int nRet=0;
+
+        nRet = pthread_mutex_lock(&(pMutex->mutex));
+        if ( nRet != 0 )
+        {
+            OSL_TRACE("osl_acquireMutex : mutex lock failed. Errno: %d; %s\n",
+                      nRet, strerror(nRet));
+            return sal_False;
+        }
+        return sal_True;
+    }
+
+    /* not initialized */
+    return sal_False;
+}
+
+/*****************************************************************************/
+/* osl_tryToAcquireMutex */
+/*****************************************************************************/
+sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
+{
+    oslMutexImpl* pMutex = (oslMutexImpl*) Mutex;
+
+    OSL_ASSERT(pMutex);
+
+    if ( pMutex )
+    {
+        int nRet = 0;
+        nRet = pthread_mutex_trylock(&(pMutex->mutex));
+        if ( nRet != 0  )
+        {
+            OSL_TRACE("osl_tryToacquireMutex : mutex trylock failed. Errno: %d; %s\n",
+                      nRet, strerror(nRet));
+            return sal_False;
+        }
+
+        return sal_True;
+    }
+
+    /* not initialized */
+    return sal_False;
+}
+
+/*****************************************************************************/
+/* osl_releaseMutex */
+/*****************************************************************************/
+sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex)
+{
+    oslMutexImpl* pMutex = (oslMutexImpl*) Mutex;
+
+    OSL_ASSERT(pMutex);
+
+    if ( pMutex )
+    {
+        int nRet=0;
+        nRet = pthread_mutex_unlock(&(pMutex->mutex));
+        if ( nRet != 0 )
+        {
+            OSL_TRACE("osl_releaseMutex : mutex unlock failed. Errno: %d; %s\n",
+                      nRet, strerror(nRet));
+            return sal_False;
+        }
+
+        return sal_True;
+    }
+
+    /* not initialized */
+    return sal_False;
+}
+
+/*****************************************************************************/
+/* osl_getGlobalMutex */
+/*****************************************************************************/
+
+oslMutex * SAL_CALL osl_getGlobalMutex()
+{
+    /* the static global mutex instance */
+    static oslMutexImpl globalMutexImpl = {
+        PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP
+    };
+
+    /* necessary to get a "oslMutex *" */
+    static oslMutex const globalMutex = (oslMutex) &globalMutexImpl;
+
+    return &globalMutex;
+}
+
+#else /* SOLARIS and all other platforms, use an own implementation of
+         resursive mutexes */
 /*
- *  mfe: Default implementation of recursive mutexes
+ *  jbu: Currently not used for solaris. The default implementation is buggy,
+ *       the system needs to be patched to
+ *                    SPARC       X86
+ *       Solaris 7: 106980-17   106981-18
+ *       Solaris 8: 108827-11   108828-11
+ *
+ *       As the performace advantage is not too high, it was decided to wait
+ *       some more time. Note also, that solaris 2.6 does not support
+ *       them at all.
  */
 
 typedef struct _oslMutexImpl
@@ -317,159 +487,5 @@ oslMutex * SAL_CALL osl_getGlobalMutex()
 }
 
 
-#else
-
-/*
- *  mfe: Recursive mutexes are supported from Solaris 2.7 on
- *       we should use them as the default
- *       But in the time being we don't use them ...
- */
-
-typedef struct _oslMutexImpl
-{
-    pthread_mutex_t mutex;
-} oslMutexImpl;
-
-
-/*****************************************************************************/
-/* osl_createMutex */
-/*****************************************************************************/
-oslMutex SAL_CALL osl_createMutex()
-{
-    oslMutexImpl* pMutex = (oslMutexImpl*) malloc(sizeof(oslMutexImpl));
-    pthread_mutexattr_t aMutexAttr;
-    int nRet=0;
-
-    OSL_ASSERT(pMutex);
-
-    if ( pMutex == 0 )
-    {
-        return 0;
-    }
-
-    pthread_mutexattr_init(&aMutexAttr);
-
-    nRet = pthread_mutexattr_settype(&aMutexAttr, PTHREAD_MUTEX_RECURSIVE);
-
-    nRet = pthread_mutex_init(&(pMutex->mutex), &aMutexAttr);
-    if ( nRet != 0 )
-    {
-        OSL_TRACE("osl_createMutex : mutex init failed. Errno: %d; %s\n",
-                  nRet, strerror(nRet));
-
-        free(pMutex);
-        pMutex = 0;
-    }
-
-    pthread_mutexattr_destroy(&aMutexAttr);
-
-    return (oslMutex) pMutex;
-}
-
-/*****************************************************************************/
-/* osl_destroyMutex */
-/*****************************************************************************/
-void SAL_CALL osl_destroyMutex(oslMutex Mutex)
-{
-    oslMutexImpl* pMutex = (oslMutexImpl*) Mutex;
-
-    OSL_ASSERT(pMutex);
-
-    if ( pMutex != 0 )
-    {
-        int nRet=0;
-
-        nRet = pthread_mutex_destroy(&(pMutex->mutex));
-        if ( nRet != 0 )
-        {
-            OSL_TRACE("osl_destroyMutex : mutex destroy failed. Errno: %d; %s\n",
-                      nRet, strerror(nRet));
-        }
-
-        free(pMutex);
-    }
-
-    return;
-}
-
-/*****************************************************************************/
-/* osl_acquireMutex */
-/*****************************************************************************/
-sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
-{
-    oslMutexImpl* pMutex = (oslMutexImpl*) Mutex;
-
-    OSL_ASSERT(pMutex);
-
-    if ( pMutex != 0 )
-    {
-        int nRet=0;
-
-        nRet = pthread_mutex_lock(&(pMutex->mutex));
-        if ( nRet != 0 )
-        {
-            OSL_TRACE("osl_acquireMutex : mutex lock failed. Errno: %d; %s\n",
-                      nRet, strerror(nRet));
-        }
-        return sal_True;
-    }
-
-    /* not initialized */
-    return sal_False;
-}
-
-/*****************************************************************************/
-/* osl_tryToAcquireMutex */
-/*****************************************************************************/
-sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
-{
-    oslMutexImpl* pMutex = (oslMutexImpl*) Mutex;
-
-    OSL_ASSERT(pMutex);
-
-    if ( pMutex )
-    {
-        int nRet = 0;
-        nRet = pthread_mutex_trylock(&(pMutex->mutex));
-        if ( nRet != 0  )
-        {
-            OSL_TRACE("osl_tryToacquireMutex : mutex trylock failed. Errno: %d; %s\n",
-                      nRet, strerror(nRet));
-            return sal_False;
-        }
-
-        return sal_True;
-    }
-
-    /* not initialized */
-    return sal_False;
-}
-
-/*****************************************************************************/
-/* osl_releaseMutex */
-/*****************************************************************************/
-sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex)
-{
-    oslMutexImpl* pMutex = (oslMutexImpl*) Mutex;
-
-    OSL_ASSERT(pMutex);
-
-    if ( pMutex )
-    {
-        int nRet=0;
-        nRet = pthread_mutex_unlock(&(pMutex->mutex));
-        if ( nRet != 0 )
-        {
-            OSL_TRACE("osl_releaseMutex : mutex unlock failed. Errno: %d; %s\n",
-                      nRet, strerror(nRet));
-        }
-
-        return sal_True;
-    }
-
-    /* not initialized */
-    return sal_False;
-}
-
-#endif /* #if !defined (PTHREAD_MUTEX_RECURSIVE) */
+#endif /* #ifndef LINUX */
 
