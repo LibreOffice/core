@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-21 11:03:22 $
+ *  last change: $Author: nn $ $Date: 2001-07-13 10:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,15 +324,27 @@ void lcl_TestFormat( SvxClipboardFmtItem& rFormats, const TransferableDataHelper
     if ( rDataHelper.HasFormat( nFormatId ) )
     {
         USHORT nResId = 0;
+        String aStrVal;
         switch ( nFormatId )
         {
             case SOT_FORMATSTR_ID_LINK: nResId = SCSTR_CLIP_DDE;    break;
             case SOT_FORMAT_STRING:     nResId = SCSTR_CLIP_STRING; break;
             case SOT_FORMATSTR_ID_DIF:  nResId = SCSTR_CLIP_DIF;    break;
             case SOT_FORMAT_RTF:        nResId = SCSTR_CLIP_RTF;    break;
+            case SOT_FORMATSTR_ID_EMBED_SOURCE:
+                {
+                    TransferableObjectDescriptor aDesc;
+                    if ( ((TransferableDataHelper&)rDataHelper).GetTransferableObjectDescriptor(
+                                                SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDesc ) )
+                        aStrVal = aDesc.maTypeName;
+                }
+                break;
         }
         if ( nResId )
-            rFormats.AddClipbrdFormat( nFormatId, String( ScResId( nResId ) ) );
+            aStrVal = String( ScResId( nResId ) );
+
+        if ( aStrVal.Len() )
+            rFormats.AddClipbrdFormat( nFormatId, aStrVal );
         else
             rFormats.AddClipbrdFormat( nFormatId );
     }
