@@ -55,6 +55,7 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\polygon
 ..\inc\basegfx\polygon\b2dpolypolygon.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolypolygon.hxx
 ..\inc\basegfx\polygon\b2dpolygontools.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolygontools.hxx
 ..\inc\basegfx\polygon\b2dpolypolygontools.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolypolygontools.hxx
+..\inc\basegfx\polygon\b2dlinegeometry.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dlinegeometry.hxx
 ..\inc\basegfx\polygon\b3dpolygon.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b3dpolygon.hxx
 ..\inc\basegfx\polygon\b3dpolypolygon.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b3dpolypolygon.hxx
 ..\inc\basegfx\polygon\b3dpolygontools.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b3dpolygontools.hxx
