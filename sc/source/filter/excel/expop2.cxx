@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-09 09:51:39 $
+ *  last change: $Author: dr $ $Date: 2002-11-13 13:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ extern const sal_Char*  pVBASubStorageName;
 
 
 
-ExportBiff5::ExportBiff5( SvStorage& rRootStorage, SvStream& aStream, ScDocument* pDoc, CharSet eDest ):
+ExportBiff5::ExportBiff5( SvStorage& rRootStorage, SvStream& aStream, ScDocument* pDoc, const String& rBasePath, CharSet eDest ):
     ExportTyp( aStream, pDoc, eDest )
     // Excel immer Windoofs, Quelle (SC) immer System
 {
@@ -150,6 +150,7 @@ ExportBiff5::ExportBiff5( SvStorage& rRootStorage, SvStream& aStream, ScDocument
         fColScale *= 1.027027027027;    // adjustment for export of calc documents
     }
     pExcRoot->fColScale = fColScale;
+    pExcRoot->aBasePath = rBasePath;
 
     pExcDoc = new ExcDocument( pExcRoot );
 }
@@ -211,8 +212,8 @@ FltError ExportBiff5::Write()
 
 
 
-ExportBiff8::ExportBiff8( SvStorage& rRootStorage, SvStream& aStream, ScDocument* pDoc, CharSet eZ, BOOL bStoreRel ) :
-    ExportBiff5( rRootStorage, aStream, pDoc, eZ )
+ExportBiff8::ExportBiff8( SvStorage& rRootStorage, SvStream& aStream, ScDocument* pDoc, const String& rBasePath, CharSet eZ, BOOL bStoreRel ) :
+    ExportBiff5( rRootStorage, aStream, pDoc, rBasePath, eZ )
 {
     pExcRoot->eHauptDateiTyp = Biff8;
     pExcRoot->eDateiTyp = Biff8;
@@ -222,10 +223,6 @@ ExportBiff8::ExportBiff8( SvStorage& rRootStorage, SvStream& aStream, ScDocument
     pExcRoot->pColor->SetDefaults();
 
     pExcRoot->bStoreRel = bStoreRel;
-
-    String          aBase = pDoc->GetDocumentShell()->GetBaseURL();
-    aBase.Erase( aBase.SearchBackward( '/' ) + 1 );
-    pExcRoot->pBasePath = new String( aBase );
 
     pExcRoot->pAddInNameTranslator = new XclAddInNameTranslator;
 }

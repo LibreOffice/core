@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-07 09:49:48 $
+ *  last change: $Author: dr $ $Date: 2002-11-13 13:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ ScExtDocOptions &ImportTyp::GetExtOpt( void )
 
 
 
-ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc ):
+ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc, const String& rBasePath ):
     ImportTyp( aStream, pDoc, RTL_TEXTENCODING_MS_1252 ),
     aColOutlineBuff( MAXCOL + 1 ),
     aRowOutlineBuff( MAXROW + 1 ),
@@ -273,6 +273,8 @@ ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc ):
     aDocOpt.SetIgnoreCase( TRUE );              // always in Excel
     aDocOpt.SetFormulaRegexEnabled( FALSE );    // regular expressions? what's that?
     pD->SetDocOptions( aDocOpt );
+
+    pExcRoot->aBasePath = rBasePath;
 }
 
 
@@ -586,7 +588,7 @@ void ImportExcel::Externsheet( void )
     String      aTabName;
     BOOL        bSameWorkBook = FALSE;
 
-    XclImpURLDecoder::DecodeURLByte( aIn, aFile, aTabName, bSameWorkBook );
+    XclImpURLDecoder::DecodeURLByte( aIn, *pExcRoot, aFile, aTabName, bSameWorkBook );
     ScfTools::ConvertName( aTabName );
     pExcRoot->pExtSheetBuff->Add( aFile, aTabName, bSameWorkBook );
 }

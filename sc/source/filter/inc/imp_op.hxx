@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-16 11:38:04 $
+ *  last change: $Author: dr $ $Date: 2002-11-13 13:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,7 +365,7 @@ protected:
     void                        SetMarginItem( SfxItemSet& rItemSet, double fMarginInch, XclMarginType eType );
 
 public:
-                            ImportExcel( SvStream&, ScDocument* );
+                            ImportExcel( SvStream&, ScDocument*, const String& rBasePath );
 
     virtual                 ~ImportExcel( void );
 

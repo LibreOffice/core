@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-07 09:49:48 $
+ *  last change: $Author: dr $ $Date: 2002-11-13 13:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,8 +501,8 @@ void ExcCondFormList::Apply( void )
 
 
 
-ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* pDoc, SvStorage* pPivotCache ) :
-    ImportExcel( rStream, pDoc ),
+ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* pDoc, const String& rBasePath, SvStorage* pPivotCache ) :
+    ImportExcel( rStream, pDoc, rBasePath ),
     aObjManager( *pExcRoot )
 {
     delete pFormConv;
@@ -668,7 +668,7 @@ void ImportExcel8::Dconref( void )
 
     aIn >> nR1 >> nR2 >> nC1 >> nC2;
 
-    XclImpURLDecoder::DecodeURL( aIn, aFileName, aTabName, bSelf );
+    XclImpURLDecoder::DecodeURL( aIn, *pExcRoot, aFileName, aTabName, bSelf );
 
     if( !aTabName.Len() )
     {
@@ -1593,7 +1593,7 @@ void ImportExcel8::EndAllChartObjects( void )
 
 void ImportExcel8::Supbook( void )
 {
-    pExcRoot->pExtsheetBuffer->ReadSupbook8( aIn );
+    pExcRoot->pExtsheetBuffer->ReadSupbook8( aIn, *pExcRoot );
 }
 
 void ImportExcel8::Xct( void )

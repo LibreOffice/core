@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-27 13:11:04 $
+ *  last change: $Author: dr $ $Date: 2002-11-13 13:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,7 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
 //  const SvxURLField*  pLastHlink;             // last found hyperlink
     XclHlink*           pLastHlink;
     BOOL                bStoreRel;
-    String*             pBasePath;
+    String              aBasePath;
 
                         RootData( void );       // -> exctools.cxx
                         ~RootData();            // -> exctools.cxx

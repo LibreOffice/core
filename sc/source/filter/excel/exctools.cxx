@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-27 13:10:18 $
+ *  last change: $Author: dr $ $Date: 2002-11-13 13:27:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,6 @@ RootData::RootData( void )
 
     pLastHlink = NULL;
     bStoreRel = FALSE;
-    pBasePath = NULL;
 }
 
 
@@ -283,8 +282,6 @@ RootData::~RootData()
 
     if( pLastHlink )
         delete pLastHlink;
-    if( pBasePath )
-        delete pBasePath;
 
     if( pExtDocOpt )
         delete pExtDocOpt;

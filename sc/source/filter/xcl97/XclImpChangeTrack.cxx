@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-01 11:21:37 $
+ *  last change: $Author: dr $ $Date: 2002-11-13 13:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ sal_Bool XclImpChangeTrack::Read3DTabRefInfo( sal_uInt16& rFirstTab, sal_uInt16&
         // external ref - read doc and tab name and find sc tab num
         String aDocName, aTabName;
         BOOL bSelf;
-        XclImpSupbook::ReadDocName( *pStrm, aDocName, bSelf );
+        XclImpSupbook::ReadDocName( *pStrm, *pExcRoot, aDocName, bSelf );
         pStrm->Ignore( 1 );
         XclImpSupbook::ReadTabName( *pStrm, aTabName );
         pStrm->Ignore( 1 );

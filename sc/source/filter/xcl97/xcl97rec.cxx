@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-16 09:28:09 $
+ *  last change: $Author: dr $ $Date: 2002-11-13 13:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2228,8 +2228,7 @@ XclHlink::XclHlink( RootData& rRootData, const SvxURLField& rURLField ) :
 
         if( bRel )
         {
-            DBG_ASSERT( rRootData.pBasePath, "-XclHlink::XclHlink(): on the meadow is not... :-)" );
-            aPathAndName = aURLObj.GetRelURL( *rRootData.pBasePath, aPathAndName,
+            aPathAndName = aURLObj.GetRelURL( rRootData.aBasePath, aPathAndName,
                 INetURLObject::WAS_ENCODED, INetURLObject::DECODE_WITH_CHARSET );
 
             if( aPathAndName.SearchAscii( INET_FILE_SCHEME ) == 0 )
