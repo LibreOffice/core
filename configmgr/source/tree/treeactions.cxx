@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 12:26:09 $
+ *  last change: $Author: jb $ $Date: 2001-04-03 16:29:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ namespace configmgr
 
 void OIdPropagator::propagateIdToChildren(ISubtree& rTree)
 {
-    if (rTree.hasId())
+    if (!rTree.hasId())
     {
         OIdPropagator aAction(rTree.getId());
         aAction.applyToChildren(rTree);
