@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:42:13 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SD_SLIDESORTER_SELECTION_FUNCTION_HXX
 #define SD_SLIDESORTER_SELECTION_FUNCTION_HXX
 
@@ -67,6 +66,7 @@
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
 #endif
+#include <memory>
 
 class SdSlideViewShell;
 class SdWindow;
@@ -129,11 +129,12 @@ protected:
 
 
 private:
+    class SubstitutionHandler;
+    class EventDescriptor;
+    class InsertionIndicatorHandler;
+
     /// Set in MouseButtonDown this flag indicates that a page has been hit.
     bool mbPageHit;
-
-    /// This flag indicates whether the selection rectangle is visible.
-    bool mbRectangleSelection;
 
     /// The rectangle of the mouse drag selection.
     Rectangle maDragSelectionRectangle;
@@ -141,11 +142,6 @@ private:
 
     /// Box of the insert marker in model coordinates.
     Rectangle maInsertionMarkerBox;
-    Sound* mpSound;
-    class ShowingEffectInfo;
-    ShowingEffectInfo* mpShowingEffectInfo;
-
-    model::PageDescriptor* mpRangeSelectionAnchor;
 
     /** We use this flag to filter out the cases where MouseMotion() is called
         with a pressed mouse button but without a prior MouseButtonDown()
@@ -155,27 +151,22 @@ private:
     */
     bool mbProcessingMouseButtonDown;
 
-    /** Show the effect of the specified page.
-    */
-    void ShowEffect (model::PageDescriptor& rDescriptor);
+    ::std::auto_ptr<SubstitutionHandler> mpSubstitutionHandler;
 
-    /** Return whether there is currently an effect being shown.
-    */
-    bool IsShowingEffect (void) const;
+    ::std::auto_ptr<InsertionIndicatorHandler> mpInsertionIndicatorHandler;
 
     DECL_LINK( DragSlideHdl, Timer* );
     void StartDrag (void);
 
     /** Set the selection to exactly the specified page and also set it as
-        the current page.  Furthermore, if the view on which this selection
-        function is working is the main view then the view is switched to
-        the regular editing view.
-        @param rDescriptor
-            This page descriptor represents the page which will (a) replace
-            the current selection and (b) become the current page of the
-            main view.
+        the current page.
     */
-    void SetCurrentPageAndSwitchView (model::PageDescriptor& rDescriptor);
+    void SetCurrentPage (model::PageDescriptor& rDescriptor);
+
+    /** When the view on which this selection function is working is the
+        main view then the view is switched to the regular editing view.
+    */
+    void SwitchView (model::PageDescriptor& rDescriptor);
 
     /** Make the slide nOffset slides away of the current one the new
         current slide.  When the new index is outside the range of valid
@@ -204,10 +195,6 @@ private:
     */
     void PrepareMouseMotion (const Point& aMouseModelPosition);
 
-    /** Set the current page of the main view to the one specified by the
-        given descriptor.
-    */
-    void SetCurrentPage (model::PageDescriptor& rDescriptor);
     /** Select all pages between and including the selection anchor and the
         specified page.
     */
@@ -226,21 +213,21 @@ private:
     */
     void ProcessRectangleSelection (bool bToggleSelection);
 
-
-    /** Create a substitution display of the currently selected pages and
-        use the given position as the anchor point.
+    /** Hide and clear the insertion indiciator, substitution display and
+        selection rectangle.
     */
-    void CreateSubstitution (const Point& rMouseModelPosition);
+    void ClearOverlays (void);
 
-    /** Move the substitution display by the distance the mouse has
-        travelled since the last call to this method or to
-        CreateSubstitution().  The given point becomes the new anchor.
+    /** Compute a numerical code that describes a mouse event and that can
+        be used for fast look up of the appropriate reaction.
     */
-    void UpdateSubstitution (const Point& rMouseModelPosition);
+    sal_uInt32 EncodeMouseEvent (
+        const EventDescriptor& rDescriptor,
+        const MouseEvent& rEvent) const;
 
-    /** Move the substitution display of the currently selected pages.
-    */
-    void MoveSubstitution (void);
+    void EventPreprocessing (const EventDescriptor& rEvent);
+    bool EventProcessing (const EventDescriptor& rEvent);
+    void EventPostprocessing (const EventDescriptor& rEvent);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller
