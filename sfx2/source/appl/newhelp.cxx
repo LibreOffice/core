@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-10 14:24:07 $
+ *  last change: $Author: pb $ $Date: 2000-12-10 14:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,6 +459,7 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( Window* pParent ) :
     aTabCtrl.Show();
     aTabCtrl.SetCurPageId( 1 );
     ActivatePageHdl( &aTabCtrl );
+    aActiveLB.SetSelectHdl( LINK( this, SfxHelpIndexWindow_Impl, SelectHdl ) );
     nMinWidth = aActiveLB.GetSizePixel().Width();
     Initialize();
 }
