@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-04 09:35:34 $
+ *  last change: $Author: kso $ $Date: 2000-12-11 07:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ Content::Content( const OUString& rURL,
     {
         xContent = xProvider->queryContent( xId );
     }
-    catch ( IllegalIdentifierException )
+    catch ( IllegalIdentifierException& )
     {
         throw ContentCreationException(
                     OUString::createFromAscii( "No Content!" ),
@@ -299,7 +299,7 @@ Content::Content( const Reference< XContentIdentifier >& rId,
     {
         xContent = xProvider->queryContent( rId );
     }
-    catch ( IllegalIdentifierException )
+    catch ( IllegalIdentifierException& )
     {
         throw ContentCreationException(
                     OUString::createFromAscii( "No Content!" ),
@@ -339,6 +339,111 @@ Content::Content( const Reference< XContent >& rContent,
 Content::Content( const Content& rOther )
 {
     m_xImpl = rOther.m_xImpl;
+}
+
+//=========================================================================
+// static
+sal_Bool Content::create( const OUString& rURL,
+                          const Reference< XCommandEnvironment >& rEnv,
+                          Content& rContent )
+{
+    ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
+    if ( !pBroker )
+        return sal_False;
+
+    VOS_ENSURE( pBroker->getContentProviderManagerInterface()
+                                    ->queryContentProviders().getLength(),
+                "Content Broker not configured (no providers)!" );
+
+    Reference< XContentIdentifierFactory > xIdFac
+                        = pBroker->getContentIdentifierFactoryInterface();
+    if ( !xIdFac.is() )
+        return sal_False;
+
+    Reference< XContentIdentifier > xId
+                        = xIdFac->createContentIdentifier( rURL );
+    if ( !xId.is() )
+        return sal_False;
+
+    Reference< XContentProvider > xProvider
+        = pBroker->getContentProviderInterface();
+    if ( !xProvider.is() )
+        return sal_False;
+
+    Reference< XContent > xContent;
+    try
+    {
+        xContent = xProvider->queryContent( xId );
+    }
+//  catch ( IllegalIdentifierException& )
+    catch ( Exception& )
+    {
+        return sal_False;
+    }
+
+    if ( !xContent.is() )
+        return sal_False;
+
+    rContent.m_xImpl
+        = new Content_Impl( pBroker->getServiceManager(), xContent, rEnv );
+    return sal_True;
+}
+
+//=========================================================================
+// static
+sal_Bool Content::create( const Reference< XContentIdentifier >& rId,
+                          const Reference< XCommandEnvironment >& rEnv,
+                          Content& rContent )
+{
+    ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
+    if ( !pBroker )
+        return sal_False;
+
+    VOS_ENSURE( pBroker->getContentProviderManagerInterface()
+                                    ->queryContentProviders().getLength(),
+                "Content Broker not configured (no providers)!" );
+
+    Reference< XContentProvider > xProvider
+        = pBroker->getContentProviderInterface();
+    if ( !xProvider.is() )
+        return sal_False;
+
+    Reference< XContent > xContent;
+    try
+    {
+        xContent = xProvider->queryContent( rId );
+    }
+//  catch ( IllegalIdentifierException& )
+    catch ( Exception& )
+    {
+        return sal_False;
+    }
+
+    if ( !xContent.is() )
+        return sal_False;
+
+    rContent.m_xImpl
+        = new Content_Impl( pBroker->getServiceManager(), xContent, rEnv );
+    return sal_True;
+}
+
+//=========================================================================
+// static
+sal_Bool Content::create( const Reference< XContent >& xContent,
+                          const Reference< XCommandEnvironment >& rEnv,
+                          Content& rContent )
+{
+    ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
+    if ( !pBroker )
+        return sal_False;
+
+    VOS_ENSURE( pBroker->getContentProviderManagerInterface()
+                                    ->queryContentProviders().getLength(),
+                "Content Broker not configured (no providers)!" );
+
+    rContent.m_xImpl
+        = new Content_Impl( pBroker->getServiceManager(), xContent, rEnv );
+    return sal_True;
 }
 
 //=========================================================================

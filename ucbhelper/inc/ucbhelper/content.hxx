@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-01 07:49:56 $
+ *  last change: $Author: kso $ $Date: 2000-12-11 07:55:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,65 @@ public:
       * @param rContent is the content this content shall be a copy of.
       */
     Content& operator=( const Content& rOther );
+
+    /**
+      * Constructor. This method should be used, if the exception thrown
+      * by the direct ctors of this class are to 'expensive' for your
+      * application
+      *
+      * @param rURL is the URL of the content to create.
+      * @param rEnv is the environment to use for commands executed by the
+      *        content. The command environment is used by the content
+      *        implementation to interact with the client and to propagate
+      *        errors.
+      * @param rContent will be filled by this method with the content created.
+      * @return true, if the operation was successful - false, otherwise.
+      */
+    static sal_Bool
+    create( const rtl::OUString& rURL,
+            const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::ucb::XCommandEnvironment >& rEnv,
+            Content& rContent );
+
+    /**
+      * Constructor. This method should be used, if the exception thrown
+      * by the direct ctors of this class are to 'expensive' for your
+      * application
+      *
+      * @param rId is the content identifier of the content to create.
+      * @param rEnv is the environment to use for commands executed by the
+      *        content. The command environment is used by the content
+      *        implementation to interact with the client and to propagate
+      *        errors.
+      * @param rContent will be filled by this method with the content created.
+      * @return true, if the operation was successful - false, otherwise.
+      */
+    static sal_Bool
+    create( const ::com::sun::star::uno::Reference<
+                     ::com::sun::star::ucb::XContentIdentifier >& rId,
+            const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::ucb::XCommandEnvironment >& rEnv,
+            Content& rContent );
+
+    /**
+      * Constructor. This method should be used, if the exception thrown
+      * by the direct ctors of this class are to 'expensive' for your
+      * application
+      *
+      * @param xContent is the content object of the content to create.
+      * @param rEnv is the environment to use for commands executed by the
+      *        content. The command environment is used by the content
+      *        implementation to interact with the client and to propagate
+      *        errors.
+      * @param rContent will be filled by this method with the content created.
+      * @return true, if the operation was successful - false, otherwise.
+      */
+    static sal_Bool
+    create( const ::com::sun::star::uno::Reference<
+                     ::com::sun::star::ucb::XContent >& xContent,
+            const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::ucb::XCommandEnvironment >& rEnv,
+            Content& rContent );
 
     //////////////////////////////////////////////////////////////////////
     // Direct access to UCB content.
