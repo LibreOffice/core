@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-06 13:30:51 $
+#   last change: $Author: hjs $ $Date: 2002-11-22 18:30:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,3 +101,9 @@ OBJFILES=   $(OBJ)$/rscpar.obj   \
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+$(OBJ)$/rscibas.obj : $(YACCTARGET)
+$(OBJ)$/rscinit.obj : $(YACCTARGET)
+$(OBJ)$/rscicpx.obj : $(YACCTARGET)
+$(OBJ)$/rsclex.obj  : $(YACCTARGET)
+
