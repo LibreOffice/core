@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-29 11:17:36 $
+ *  last change: $Author: ama $ $Date: 2001-05-03 14:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,6 +444,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
     // unveraendert ist, soll nichts passieren!
     if( nChgHght >= 0)
     {
+        SwTwips nChgHeight = nChgHght;
         if( nChgHght && !bHasToFit )
         {
             if( IsInFtn() && !IsInSct() )
@@ -486,6 +487,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
                 if ( aOldPos != Frm().Pos() )
                     CalcFlys( sal_True );   //#43679# Fly in Fly in ...
             }
+            nChgHeight = 0;
         }
         // Ein Grow() wird von der Layout-Seite immer akzeptiert,
         // also auch, wenn die FixSize des umgebenden Layoutframes
@@ -535,6 +537,13 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
                 else
                     SetUndersized( sal_False );
             }
+        }
+        else if( nChgHeight )
+        {
+            if( nRstHeight - Frm().Height() < nChgHeight )
+                nChgHeight = nRstHeight - Frm().Height();
+            if( nChgHeight )
+                Grow( nChgHeight, pHeight );
         }
     }
     else if ( nChgHght )
@@ -1740,6 +1749,15 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                 ASSERT( pMaster, "SwTxtFrm::Format: homeless follow" );
                 if( pMaster )
                     pMaster->Prepare( PREP_FOLLOW_FOLLOWS );
+                SwTwips nMaxY = GetUpper()->Frm().Top() +GetUpper()->Prt().Top()
+                                + GetUpper()->Prt().Height();
+                if( Frm().Top() + Frm().Height() > nMaxY )
+                {
+                    if( nMaxY < Frm().Top() )
+                        Frm().Height( 0 );
+                    else
+                        Frm().Height( nMaxY - Frm().Top() );
+                }
             }
             else
             {
