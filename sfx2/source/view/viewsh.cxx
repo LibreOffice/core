@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 10:38:59 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 10:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1696,7 +1696,11 @@ SfxMenuBarManager* SfxViewShell::GetMenuBar_Impl( BOOL bPlugin )
 SfxAcceleratorManager* SfxViewShell::GetAccMgr_Impl()
 {
     // all views of a document share the accelerators
+#if SUPD>633
     return GetObjectShell()->GetAccMgr_Impl();
+#else
+    return GetObjectShell()->GetFactory().GetAccMgr_Impl();
+#endif
 }
 
 /*
