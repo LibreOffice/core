@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2005-03-03 17:34:18 $
+#   last change: $Author: kz $ $Date: 2005-03-04 15:24:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,7 @@ CFLAGS+=-D_GNU_SOURCE
 .IF "$(CPU)" == "I"
 .IF "$(COM)" != "GCC"
 CFLAGS+=-D_KERNEL
+.ENDIF
 .ENDIF
 .ENDIF
 
