@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXAutoTextGroup.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:41 $
+ *  last change:$Date: 2003-02-06 11:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 
 /**
  * Test for object which is represented by service
@@ -138,8 +141,7 @@ public class SwXAutoTextGroup extends TestCase {
     *      {@link ifc.text._XAutoTextGroup} range of text</li>
     * </ul>
     */
-    public synchronized TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log ) throws StatusException {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;
         XAutoTextContainer oContainer;
@@ -163,12 +165,14 @@ public class SwXAutoTextGroup extends TestCase {
         try {
             int n = 0;
             int count = oContIndex.getCount();
-            oObj = (XInterface) oContIndex.getByIndex(n);
+            oObj = (XInterface) AnyConverter.toObject(
+                    new Type(XInterface.class),oContIndex.getByIndex(n));
             XElementAccess oElement = (XElementAccess)
                 UnoRuntime.queryInterface(XElementAccess.class, oObj);
             while ( ( !oElement.hasElements() ) && ( n < count ) ) {
                 n++;
-                oObj = (XInterface) oContIndex.getByIndex(n);
+                oObj = (XInterface) AnyConverter.toObject(
+                    new Type(XInterface.class),oContIndex.getByIndex(n));
                 oElement = (XElementAccess)
                     UnoRuntime.queryInterface(XElementAccess.class, oObj);
             }
@@ -176,6 +180,9 @@ public class SwXAutoTextGroup extends TestCase {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get AutoTextGroup", e);
         } catch ( com.sun.star.lang.IndexOutOfBoundsException e ) {
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't get AutoTextGroup", e);
+        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get AutoTextGroup", e);
         }
@@ -194,4 +201,3 @@ public class SwXAutoTextGroup extends TestCase {
 
 
 }    // finish class SwXAutoTextGroup
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXAutoTextEntry.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:41 $
+ *  last change:$Date: 2003-02-06 11:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@ import lib.TestParameters;
 import util.DefaultDsc;
 import util.InstCreator;
 import util.SOfficeFactory;
+
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
  * Test for object which is represented by service
@@ -180,7 +183,8 @@ public class SwXAutoTextEntry extends TestCase {
         XIndexAccess oContIndex = (XIndexAccess)
             UnoRuntime.queryInterface(XIndexAccess.class, oContainer);
         try {
-            oObj = (XInterface) oContIndex.getByIndex(n);
+            oObj = (XInterface) AnyConverter.toObject(
+                        new Type(XInterface.class),oContIndex.getByIndex(n));
             XIndexAccess oObjCount = (XIndexAccess)
                 UnoRuntime.queryInterface(XIndexAccess.class, oObj);
             nCount = oObjCount.getCount();
@@ -207,7 +211,8 @@ public class SwXAutoTextEntry extends TestCase {
         log.println("Some debugging info:");
         for ( n=0; n < oContIndex.getCount(); n++ ) {
             try {
-                dObj = (XNameAccess) oContIndex.getByIndex(n);
+                dObj = (XNameAccess) AnyConverter.toObject(
+                        new Type(XNameAccess.class),oContIndex.getByIndex(n));
             } catch ( com.sun.star.uno.Exception e ) {
                 e.printStackTrace(log);
             }
@@ -233,12 +238,15 @@ public class SwXAutoTextEntry extends TestCase {
             }
             log.println("Adding new element 'NewEntryName' to group...");
             oGroup.insertNewByName("NewEntryName", "NewEntryTitle", oTextRange);
-            oEntry = (XAutoTextEntry) oGroup.getByName("NewEntryName");
+            oEntry = (XAutoTextEntry) AnyConverter.toObject(
+                new Type(XAutoTextEntry.class),oGroup.getByName("NewEntryName"));
         } catch ( com.sun.star.container.ElementExistException e ) {
             e.printStackTrace(log);
         } catch ( com.sun.star.container.NoSuchElementException e ) {
             e.printStackTrace(log);
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
+            e.printStackTrace(log);
+        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
             e.printStackTrace(log);
         }
 
@@ -268,4 +276,3 @@ public class SwXAutoTextEntry extends TestCase {
 
 
 }    // finish class SwXAutoTextEntry
-
