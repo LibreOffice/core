@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:52:06 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 16:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,10 +286,6 @@ static USHORT CheckNumberFmtStr( const String& rNStr )
     }
     return SVX_NUM_PAGEDESC;        // default-Wert
 }
-
-extern void sw3io_ConvertFromOldField( SwDoc& rDoc, USHORT& rWhich,
-                                        USHORT& rSubType, ULONG &rFmt,
-                                        USHORT nVersion );
 
 class RtfFieldSwitch
 {
