@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hdu $ $Date: 2002-04-23 07:23:41 $
+ *  last change: $Author: hdu $ $Date: 2002-04-30 16:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -809,9 +809,9 @@ GetMaxFontHeight()
 void
 SalGraphicsData::SetFont( const ImplFontSelectData *pEntry )
 {
+    mxFallbackFont      = NULL;
     bFontGC_            = FALSE;
     xFont_              = NULL; // ->ReleaseRef()
-    mxFallbackFont      = NULL;
     aScale_             = Fraction( 1, 1 );
     nFontOrientation_   = pEntry->mnOrientation;
     bFontVertical_      = pEntry->mbVertical;
@@ -830,7 +830,7 @@ SalGraphicsData::SetFont( const ImplFontSelectData *pEntry )
     }
 #endif //USE_BUILTIN_RASTERIZER
 
-    if( pEntry->mpFontData && pEntry->mpFontData->mpSysData )
+    if( pEntry->mpFontData )
     {
 #ifdef USE_BUILTIN_RASTERIZER
         // requesting a font provided by builtin rasterizer
@@ -838,8 +838,8 @@ SalGraphicsData::SetFont( const ImplFontSelectData *pEntry )
         if( mpServerSideFont != NULL )
         {
 #ifndef _USE_PRINT_EXTENSION_
-            mpSrvFallbackFont = FontFallback::FallbackFor (pEntry);
-            if ( mpSrvFallbackFont != NULL && ! mpSrvFallbackFont->TestFont() )
+            mpSrvFallbackFont = FontFallback::FallbackFor( pEntry );
+            if ( (mpSrvFallbackFont != NULL) && ! mpSrvFallbackFont->TestFont() )
             {
                 GlyphCache::GetInstance().UncacheFont( *mpSrvFallbackFont );
                 mpSrvFallbackFont = NULL;
@@ -852,11 +852,12 @@ SalGraphicsData::SetFont( const ImplFontSelectData *pEntry )
                 mpSrvFallbackFont = NULL;
             }
 
-            if( !mpServerSideFont )
-                xFont_ = mxFallbackFont;
             return;
         }
 #endif //USE_BUILTIN_RASTERIZER
+
+    if( m_pPrinterGfx != NULL )
+        return;
 
         ExtendedXlfd *pSysFont = (ExtendedXlfd*)pEntry->mpFontData->mpSysData;
         if( !pSysFont )
@@ -1569,18 +1570,7 @@ SalGraphics::SetFont( ImplFontSelectData *pEntry )
         sal_Int32 nID = pEntry->mpFontData ? (sal_Int32)pEntry->mpFontData->mpSysData : 0;
 
         // also set the serverside font for layouting
-        void* pServerFontSysData = GlyphCache::GetInstance().GetFontHandle( nID );
-        if( pServerFontSysData )
-        {
-            // prepare fake ImplFontData for serverside font creation
-            ImplFontData aFD;
-            aFD.mpSysData = pServerFontSysData;
-            // select matching serverside font in SalGraphicsData
-            ImplFontData* pOrigFD = pEntry->mpFontData;
-            pEntry->mpFontData = &aFD;
-            maGraphicsData.SetFont( pEntry );
-            pEntry->mpFontData = pOrigFD;
-        }
+        maGraphicsData.SetFont( pEntry );
 
         // set the printer and the printer fallback font
         maGraphicsData.m_pPrinterGfx->SetFallbackFont( FontFallback::FallbackFor() );
