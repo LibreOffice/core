@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-13 13:09:16 $
+ *  last change: $Author: cp $ $Date: 2002-01-07 17:34:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1814,6 +1814,16 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
     pLine->SetEnd( nBreakPos );
 
     sal_uInt16 nEndPortion = SplitTextPortion( pParaPortion, nBreakPos, pLine );
+
+    if ( !bCompressBlank && !bHangingPunctuation )
+    {
+        // #96187# When justification is not SVX_ADJUST_LEFT, it's important to compress
+        // the trailing space even if there is enough room for the space...
+        // Don't check for SVX_ADJUST_LEFT, doesn't matter to compress in this case too...
+        DBG_ASSERT( nBreakPos > pLine->GetStart(), "ImpBreakLines - BreakPos not expected!" );
+        if ( pNode->GetChar( nBreakPos-1 ) == ' ' )
+            bCompressBlank = sal_True;
+    }
 
     if ( bCompressBlank || bHangingPunctuation )
     {
