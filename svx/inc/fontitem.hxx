@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontitem.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:27:40 $
+ *  last change: $Author: mib $ $Date: 2001-07-05 09:48:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,9 +115,6 @@ public:
     virtual SvStream&        Store(SvStream &, USHORT nItemVersion) const;
     virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
-
-    virtual BOOL             importXML( const ::rtl::OUString& rValue, USHORT nMemberId, const SvXMLUnitConverter& rUnitConverter );
-    virtual BOOL             exportXML( ::rtl::OUString& rValue, USHORT nMemberId, const SvXMLUnitConverter& rUnitConverter ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
