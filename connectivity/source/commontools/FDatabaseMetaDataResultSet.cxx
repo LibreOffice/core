@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:16:07 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 14:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,12 +159,12 @@ void ODatabaseMetaDataResultSet::disposing(void)
     m_aRowsIter = m_aRows.end();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseMetaDataResultSet::acquire() throw(RuntimeException)
+void SAL_CALL ODatabaseMetaDataResultSet::acquire() throw()
 {
     ODatabaseMetaDataResultSet_BASE::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseMetaDataResultSet::release() throw(RuntimeException)
+void SAL_CALL ODatabaseMetaDataResultSet::release() throw()
 {
     ODatabaseMetaDataResultSet_BASE::release();
 }
