@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagefrm.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: ama $ $Date: 2001-08-23 13:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,9 @@ public:
 
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
+#ifdef VERTICAL_LAYOUT
+    virtual void  CheckDirection( BOOL bVert );
+#endif
 
     //Umrandungen aller Frms innerhalb der Seite Painten.
     void PaintAllBorders( const SwRect &rRect ) const;

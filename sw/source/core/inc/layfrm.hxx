@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layfrm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-23 10:55:24 $
+ *  last change: $Author: ama $ $Date: 2001-08-23 13:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,12 +197,12 @@ inline SwFrm* SwLayoutFrm::ContainsAny()
 // Diese SwFrm-inlines sind hier, damit frame.hxx nicht layfrm.hxx includen muss
 inline BOOL SwFrm::IsColBodyFrm() const
 {
-    return nType == FRM_BODY && GetUpper()->IsColumnFrm();
+    return nType == FRMC_BODY && GetUpper()->IsColumnFrm();
 }
 
 inline BOOL SwFrm::IsPageBodyFrm() const
 {
-    return nType == FRM_BODY && GetUpper()->IsPageFrm();
+    return nType == FRMC_BODY && GetUpper()->IsPageFrm();
 }
 
 #endif  //_LAYFRM_HXX

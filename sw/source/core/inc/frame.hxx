@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-19 09:41:35 $
+ *  last change: $Author: ama $ $Date: 2001-08-23 13:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,49 @@ struct SwCrsrMoveState;
 //0100 0000 0000 0000   TXT
 //1000 0000 0000 0000   NOTXT
 
+#ifdef VERTICAL_LAYOUT
+// The type of the frame is internal represented by the 4-bit value nType,
+// which can expanded to the types above by shifting a bit (0x1 << nType)
+// Here are the corresponding defines for the compressed representation:
+
+#define FRMC_ROOT        0
+#define FRMC_PAGE        1
+#define FRMC_COLUMN      2
+#define FRMC_HEADER      3
+#define FRMC_FOOTER      4
+#define FRMC_FTNCONT     5
+#define FRMC_FTN         6
+#define FRMC_BODY        7
+#define FRMC_FLY         8
+#define FRMC_SECTION     9
+#define FRMC_UNUSED      10
+#define FRMC_TAB         11
+#define FRMC_ROW         12
+#define FRMC_CELL        13
+#define FRMC_TXT         14
+#define FRMC_NOTXT       15
+
+#else
+
+#define FRMC_ROOT        0x0001
+#define FRMC_PAGE        0x0002
+#define FRMC_COLUMN      0x0004
+#define FRMC_HEADER      0x0008
+#define FRMC_FOOTER      0x0010
+#define FRMC_FTNCONT     0x0020
+#define FRMC_FTN         0x0040
+#define FRMC_BODY        0x0080
+#define FRMC_FLY         0x0100
+#define FRMC_SECTION     0x0200
+#define FRMC_UNUSED      0x0400
+#define FRMC_TAB         0x0800
+#define FRMC_ROW         0x1000
+#define FRMC_CELL        0x2000
+#define FRMC_TXT         0x4000
+#define FRMC_NOTXT       0x8000
+
+#endif
+
 //fuer Prepare() zur Benachrichtigung des Inhaltes durch das Layout auf
 //dem kurzen Dienstweg.
 //Der Inhalt sorgt dafuer, dass beim naechsten Aufruf von ::Format() das
@@ -272,6 +315,9 @@ class SwFrm: public SwClient
     void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, BYTE & );
     SwFrm* _GetIndPrev();
     SwFrm* _GetIndNext();
+#ifdef VERTICAL_LAYOUT
+    void SetDirFlags( BOOL bVert );
+#endif
 
     SwFrm( SwFrm & );       //Kopieren ist nicht erlaubt.
 protected:
@@ -280,7 +326,23 @@ protected:
     SwRect  aFrm;   //Absolute Dokumentposition und groesse des Frm
     SwRect  aPrt;   //Position der PrtArea rel zum Frm und groesse der PrtArea
 
-    USHORT  nType;  //Was bin ich fuer ein Perverser?
+#ifdef VERTICAL_LAYOUT
+    USHORT bFlag01:         1;
+    USHORT bFlag02:         1;
+    USHORT bFlag03:         1;
+    USHORT bFlag04:         1;
+    USHORT bFlag05:         1;
+    USHORT bFlag06:         1;
+    USHORT bInvalidR2L:     1;
+    USHORT bDerivedR2L:     1;
+    USHORT bRightToLeft:    1;
+    USHORT bInvalidVert:    1;
+    USHORT bDerivedVert:    1;
+    USHORT bVertical:       1;
+    USHORT nType:         4;  //Who am I?
+#else
+    USHORT  nType; // I am what I am.
+#endif
 
     BOOL bValidPos:         1;
     BOOL bValidPrtArea:     1;
@@ -333,7 +395,11 @@ protected:
 public:
     TYPEINFO(); //Bereits in Basisklasse Client drin.
 
+#ifdef VERTICAL_LAYOUT
+    USHORT GetType() const { return 0x1 << nType; }
+#else
     USHORT GetType() const { return nType; }
+#endif
 
     static SwCache &GetCache()                { return *pCache; }
     static SwCache *GetCachePtr()             { return pCache;  }
@@ -418,7 +484,10 @@ public:
     inline BOOL IsInTab() const;
     inline BOOL IsInFly() const;
     inline BOOL IsInSct() const;
-
+#ifdef VERTICAL_LAYOUT
+    inline BOOL IsVertical() const;
+    inline BOOL IsRightToLeft() const;
+#endif
     BOOL IsMoveable() const;
 
     //Ist es fuer den (Txt)Frm in der aktuellen Umgebung erlaubt eine
@@ -427,6 +496,10 @@ public:
 
     virtual void  Modify( SfxPoolItem*, SfxPoolItem* );
     virtual void  Format( const SwBorderAttrs *pAttrs = 0 );
+
+#ifdef VERTICAL_LAYOUT
+    virtual void  CheckDirection( BOOL bVert );
+#endif
 
     void ReinitializeFrmSizeAttrFlags();
 
@@ -643,6 +716,20 @@ inline BOOL SwFrm::IsInSct() const
         ((SwFrm*)this)->SetInfFlags();
     return bInfSct;
 }
+#ifdef VERTICAL_LAYOUT
+inline BOOL SwFrm::IsVertical() const
+{
+    if( bInvalidVert )
+        ((SwFrm*)this)->SetDirFlags( TRUE );
+    return bVertical != 0;
+}
+inline BOOL SwFrm::IsRightToLeft() const
+{
+    if( bInvalidR2L )
+        ((SwFrm*)this)->SetDirFlags( FALSE );
+    return bRightToLeft != 0;
+}
+#endif
 
 inline void SwFrm::SetCompletePaint() const
 {
@@ -840,83 +927,83 @@ inline const SwFrm *SwFrm::FindPrev() const
 
 inline BOOL SwFrm::IsLayoutFrm() const
 {
-    return nType & FRM_LAYOUT ? TRUE : FALSE;
+    return GetType() & FRM_LAYOUT ? TRUE : FALSE;
 }
 inline BOOL SwFrm::IsRootFrm() const
 {
-    return nType == FRM_ROOT;
+    return nType == FRMC_ROOT;
 }
 inline BOOL SwFrm::IsPageFrm() const
 {
-    return nType == FRM_PAGE;
+    return nType == FRMC_PAGE;
 }
 inline BOOL SwFrm::IsColumnFrm() const
 {
-    return nType == FRM_COLUMN;
+    return nType == FRMC_COLUMN;
 }
 inline BOOL SwFrm::IsFtnBossFrm() const
 {
-    return nType & FRM_FTNBOSS ? TRUE : FALSE;
+    return GetType() & FRM_FTNBOSS ? TRUE : FALSE;
 }
 inline BOOL SwFrm::IsHeaderFrm() const
 {
-    return nType == FRM_HEADER;
+    return nType == FRMC_HEADER;
 }
 inline BOOL SwFrm::IsFooterFrm() const
 {
-    return nType == FRM_FOOTER;
+    return nType == FRMC_FOOTER;
 }
 inline BOOL SwFrm::IsFtnContFrm() const
 {
-    return nType == FRM_FTNCONT;
+    return nType == FRMC_FTNCONT;
 }
 inline BOOL SwFrm::IsFtnFrm() const
 {
-    return nType == FRM_FTN;
+    return nType == FRMC_FTN;
 }
 inline BOOL SwFrm::IsBodyFrm() const
 {
-    return nType == FRM_BODY;
+    return nType == FRMC_BODY;
 }
 inline BOOL SwFrm::IsFlyFrm() const
 {
-    return nType == FRM_FLY;
+    return nType == FRMC_FLY;
 }
 inline BOOL SwFrm::IsSctFrm() const
 {
-    return nType == FRM_SECTION;
+    return nType == FRMC_SECTION;
 }
 inline BOOL SwFrm::IsTabFrm() const
 {
-    return nType == FRM_TAB;
+    return nType == FRMC_TAB;
 }
 inline BOOL SwFrm::IsRowFrm() const
 {
-    return nType == FRM_ROW;
+    return nType == FRMC_ROW;
 }
 inline BOOL SwFrm::IsCellFrm() const
 {
-    return nType == FRM_CELL;
+    return nType == FRMC_CELL;
 }
 inline BOOL SwFrm::IsCntntFrm() const
 {
-    return nType & FRM_CNTNT ? TRUE : FALSE;
+    return GetType() & FRM_CNTNT ? TRUE : FALSE;
 }
 inline BOOL SwFrm::IsTxtFrm() const
 {
-    return nType == FRM_TXT;
+    return nType == FRMC_TXT;
 }
 inline BOOL SwFrm::IsNoTxtFrm() const
 {
-    return nType == FRM_NOTXT;
+    return nType == FRMC_NOTXT;
 }
 inline BOOL SwFrm::IsFlowFrm() const
 {
-    return nType & 0xCA00 ? TRUE : FALSE;   //TabFrm, CntntFrm, SectionFrm
+    return GetType() & 0xCA00 ? TRUE : FALSE;   //TabFrm, CntntFrm, SectionFrm
 }
 inline BOOL SwFrm::IsRetoucheFrm() const
 {
-    return nType & 0xCA40 ? TRUE : FALSE;   //TabFrm, CntntFrm, SectionFrm, Ftnfrm
+    return GetType() & 0xCA40 ? TRUE : FALSE;   //TabFrm, CntntFrm, SectionFrm, Ftnfrm
 }
 
 #endif

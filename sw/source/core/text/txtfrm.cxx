@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-17 13:03:59 $
+ *  last change: $Author: ama $ $Date: 2001-08-23 14:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ void SwTxtFrm::InitCtor()
     nOfst = 0;
     nAllLines = 0;
     nThisLines = 0;
-    nType = FRM_TXT;
+    nType = FRMC_TXT;
     bLocked = bFormatted = bWidow = bUndersized = bJustWidow =
         bEmpty = bInFtnConnect = bFtn = bRepaint = bBlinkPor =
         bFieldFollow = bHasAnimation = sal_False;

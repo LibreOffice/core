@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-09 17:47:47 $
+ *  last change: $Author: ama $ $Date: 2001-08-23 13:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,7 +376,7 @@ SwNoTxtFrm::SwNoTxtFrm(SwNoTxtNode * const pNode)
 
 void SwNoTxtFrm::InitCtor()
 {
-    nType = FRM_NOTXT;
+    nType = FRMC_NOTXT;
     // Das Gewicht der Grafik ist 0, wenn sie noch nicht
     // gelesen ist, < 0, wenn ein Lesefehler auftrat und
     // Ersatzdarstellung angewendet werden musste und >0,
