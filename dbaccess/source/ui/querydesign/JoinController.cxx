@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-24 18:32:45 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,17 @@ SfxUndoManager* OJoinController::getUndoMgr()
     return &m_aUndoManager;
 }
 // -----------------------------------------------------------------------------
+void OJoinController::addUndoActionAndInvalidate(SfxUndoAction *_pAction)
+{
+    // add undo action
+    m_aUndoManager.AddUndoAction(_pAction);
+    // when we add an undo action the controller was modified
+    setModified(sal_True);
+    // now inform me that or states changed
+    InvalidateFeature(ID_BROWSER_UNDO);
+    InvalidateFeature(ID_BROWSER_REDO);
+}
+// -----------------------------------------------------------------------------
 void OJoinController::setModified(sal_Bool _bModified)
 {
     m_bModified = _bModified;
@@ -314,7 +325,7 @@ FeatureState OJoinController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = isConnected() && m_bModified;
             break;
         case ID_BROWSER_ADDTABLE:
-            if (aReturn.bEnabled = const_cast< OJoinController* >( this )->getJoinView()->getTableView()->IsAddAllowed())
+            if (aReturn.bEnabled = getView() && const_cast< OJoinController* >( this )->getJoinView()->getTableView()->IsAddAllowed())
                 aReturn.aState = ::cppu::bool2any(m_pAddTabDlg && m_pAddTabDlg->IsVisible());
             else
                 aReturn.aState = ::cppu::bool2any(sal_False);
@@ -415,6 +426,7 @@ void OJoinController::AddSupportedFeatures()
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Save")]        = ID_BROWSER_SAVEDOC;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Undo")]        = ID_BROWSER_UNDO;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/Close")]    = SID_CLOSEDOC;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/AddTable")] = ID_BROWSER_ADDTABLE;
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OJoinController::suspend(sal_Bool bSuspend) throw( RuntimeException )
