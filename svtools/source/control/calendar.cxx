@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:02:18 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2961,3 +2961,18 @@ Calendar* CalendarField::GetCalendar()
 
     return mpCalendar;
 }
+
+// -----------------------------------------------------------------------
+
+void CalendarField::StateChanged( StateChangedType nStateChange )
+{
+    DateField::StateChanged( nStateChange );
+
+    if ( ( nStateChange == STATE_CHANGE_STYLE ) && GetSubEdit() )
+    {
+        WinBits nAllAlignmentBits = ( WB_LEFT | WB_CENTER | WB_RIGHT | WB_TOP | WB_VCENTER | WB_BOTTOM );
+        WinBits nMyAlignment = GetStyle() & nAllAlignmentBits;
+        GetSubEdit()->SetStyle( ( GetSubEdit()->GetStyle() & ~nAllAlignmentBits ) | nAllAlignmentBits );
+    }
+}
+
