@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-12 13:06:23 $
+#   last change: $Author: kz $ $Date: 2004-12-16 11:43:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,7 +105,7 @@ $(ASSEMBLY_ATTRIBUTES) .PHONY :
     >> $@
 
 $(OUT)$/bin$/cli_ure.dll : $(CSFILES) $(OUT)$/bin$/cli_types.dll
-    +$(WRAPCMD) csc $(CSCFLAGS) \
+    +$(CSC) $(CSCFLAGS) \
         -target:library \
         -out:$@ \
         -reference:$(OUT)$/bin$/cli_types.dll \
