@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:01:28 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-#pragma hdrstop
-
-// ============================================================================
-
 #ifndef SC_XIHELPER_HXX
 #include "xihelper.hxx"
 #endif
@@ -111,15 +104,12 @@
 #include "xistyle.hxx"
 #endif
 
-
 #include "excform.hxx"
-
 
 // Byte/Unicode strings =======================================================
 
 /** All allowed flags for import. */
 const XclStrFlags nAllowedFlags = EXC_STR_8BITLENGTH | EXC_STR_SMARTFLAGS;
-
 
 // ----------------------------------------------------------------------------
 
@@ -157,10 +147,10 @@ XclImpString::~XclImpString()
 {
 }
 
-void XclImpString::AppendFormat( sal_uInt16 nChar, sal_uInt16 nFontIx )
+void XclImpString::AppendFormat( sal_uInt16 nChar, sal_uInt16 nXclFont )
 {
     DBG_ASSERT( maFormats.empty() || ((maFormats.end() - 1)->mnChar < nChar), "XclImpString::AppendFormat - wrong char order" );
-    maFormats.push_back( XclFormatRun( nChar, nFontIx ) );
+    maFormats.push_back( XclFormatRun( nChar, nXclFont ) );
 }
 
 void XclImpString::ReadFormats( XclImpStream& rStrm )
@@ -172,16 +162,15 @@ void XclImpString::ReadFormats( XclImpStream& rStrm, sal_uInt16 nRunCount )
 {
     maFormats.resize( nRunCount );
     for( XclFormatRunVec::iterator aIt = maFormats.begin(), aEnd = maFormats.end(); aIt != aEnd; ++aIt )
-        rStrm >> aIt->mnChar >> aIt->mnFontIx;
+        rStrm >> aIt->mnChar >> aIt->mnXclFont;
 }
-
 
 // String->EditEngine conversion ==============================================
 
 EditTextObject* XclImpStringHelper::CreateTextObject(
-        const XclImpRoot& rRoot, const XclImpString& rString, sal_uInt32 nXFIndex )
+        const XclImpRoot& rRoot, const XclImpString& rString, sal_uInt16 nXFIndex )
 {
-    EditTextObject* pTextObj = NULL;
+    EditTextObject* pTextObj = 0;
 
     const XclImpXFBuffer& rXFBuffer = rRoot.GetXFBuffer();
     bool bFirstEscaped = rXFBuffer.HasEscapement( nXFIndex );
@@ -200,11 +189,11 @@ EditTextObject* XclImpStringHelper::CreateTextObject(
         ESelection aSelection;
 
         XclFormatRun aNextRun;
-        XclFormatRunVec::const_iterator aIter = rFormats.begin();
-        XclFormatRunVec::const_iterator aEndIter = rFormats.end();
+        XclFormatRunVec::const_iterator aIt = rFormats.begin();
+        XclFormatRunVec::const_iterator aEnd = rFormats.end();
 
-        if( aIter != aEndIter )
-            aNextRun = *aIter++;
+        if( aIt != aEnd )
+            aNextRun = *aIt++;
         else
             aNextRun.mnChar = 0xFFFF;
 
@@ -219,11 +208,11 @@ EditTextObject* XclImpStringHelper::CreateTextObject(
 
                 // start new item set
                 aItemSet.ClearItem();
-                rFontBuffer.FillToItemSet( aItemSet, xlFontEEIDs, aNextRun.mnFontIx );
+                rFontBuffer.FillToItemSet( aItemSet, xlFontEEIDs, aNextRun.mnXclFont );
 
                 // read new formatting information
-                if( aIter != aEndIter )
-                    aNextRun = *aIter++;
+                if( aIt != aEnd )
+                    aNextRun = *aIt++;
                 else
                     aNextRun.mnChar = 0xFFFF;
 
@@ -252,9 +241,9 @@ EditTextObject* XclImpStringHelper::CreateTextObject(
 }
 
 ScBaseCell* XclImpStringHelper::CreateCell(
-        const XclImpRoot& rRoot, const XclImpString& rString, sal_uInt32 nXFIndex )
+        const XclImpRoot& rRoot, const XclImpString& rString, sal_uInt16 nXFIndex )
 {
-    ScBaseCell* pCell = NULL;
+    ScBaseCell* pCell = 0;
 
     if( rString.GetText().Len() )
     {
@@ -270,7 +259,6 @@ ScBaseCell* XclImpStringHelper::CreateCell(
 
     return pCell;
 }
-
 
 // Header/footer conversion ===================================================
 
@@ -541,7 +529,7 @@ void XclImpHFConverter::SetAttribs()
     if( (rSel.nStartPara != rSel.nEndPara) || (rSel.nStartPos != rSel.nEndPos) )
     {
         SfxItemSet aItemSet( mrEE.GetEmptyItemSet() );
-        XclImpFont aFont( *this, *mxFontData );
+        XclImpFont aFont( GetRoot(), *mxFontData );
         aFont.FillToItemSet( aItemSet, xlFontHFIDs );
         mrEE.QuickSetAttribs( aItemSet, rSel );
         rSel.nStartPara = rSel.nEndPara;
@@ -610,7 +598,6 @@ void XclImpHFConverter::SetNewPortion( XclImpHFPortion eNew )
         ResetFontData();
     }
 }
-
 
 // URL conversion =============================================================
 
@@ -768,7 +755,6 @@ bool XclImpUrlHelper::DecodeLink( String& rApplic, String& rTopic, const String 
     return false;
 }
 
-
 // Cached Values ==============================================================
 
 XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm ) :
@@ -785,7 +771,7 @@ XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm ) :
             rStrm >> mfValue;
         break;
         case EXC_CACHEDVAL_STRING:
-            mpStr.reset( new String( rStrm.ReadUniString() ) );
+            mxStr.reset( new String( rStrm.ReadUniString() ) );
         break;
         case EXC_CACHEDVAL_BOOL:
         case EXC_CACHEDVAL_ERROR:
@@ -798,7 +784,7 @@ XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm ) :
             const ScTokenArray* pScTokArr = rStrm.GetRoot().GetFmlaConverter().GetBoolErr(
                 XclTools::ErrorToEnum( fVal, mnType == EXC_CACHEDVAL_ERROR, mnBoolErr ) );
             if( pScTokArr )
-                mpTokArr.reset( pScTokArr->Clone() );
+                mxTokArr.reset( pScTokArr->Clone() );
         }
         break;
         default:
@@ -814,7 +800,6 @@ USHORT XclImpCachedValue::GetError() const
 {
     return (mnType == EXC_CACHEDVAL_ERROR) ? XclTools::GetScErrorCode( mnBoolErr ) : 0;
 }
-
 
 // Matrix Cached Values ==============================================================
 
@@ -849,11 +834,11 @@ XclImpCachedMatrix::~XclImpCachedMatrix()
 
 ScMatrixRef XclImpCachedMatrix::CreateScMatrix() const
 {
-    ScMatrixRef pScMatrix;
+    ScMatrixRef xScMatrix;
     DBG_ASSERT( mnScCols * mnScRows == maValueList.Count(), "XclImpCachedMatrix::CreateScMatrix - element count mismatch" );
-    if( mnScCols && mnScRows && static_cast< sal_uInt32 >( mnScCols * mnScRows ) <= maValueList.Count() )
+    if( mnScCols && mnScRows && static_cast< ULONG >( mnScCols * mnScRows ) <= maValueList.Count() )
     {
-        pScMatrix = new ScMatrix( mnScCols, mnScRows );
+        xScMatrix = new ScMatrix( mnScCols, mnScRows );
         const XclImpCachedValue* pValue = maValueList.First();
         for( SCSIZE nScRow = 0; nScRow < mnScRows; ++nScRow )
         {
@@ -863,31 +848,30 @@ ScMatrixRef XclImpCachedMatrix::CreateScMatrix() const
                 {
                     case EXC_CACHEDVAL_EMPTY:
                         // Excel shows 0.0 here, not an empty cell
-                        pScMatrix->PutDouble( 0.0, nScCol, nScRow );
+                        xScMatrix->PutDouble( 0.0, nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_DOUBLE:
-                        pScMatrix->PutDouble( pValue->GetValue(), nScCol, nScRow );
+                        xScMatrix->PutDouble( pValue->GetValue(), nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_STRING:
-                        pScMatrix->PutString( pValue->GetString(), nScCol, nScRow );
+                        xScMatrix->PutString( pValue->GetString(), nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_BOOL:
-                        pScMatrix->PutDouble( pValue->GetBool() ? 1.0 : 0.0, nScCol, nScRow );
+                        xScMatrix->PutDouble( pValue->GetBool() ? 1.0 : 0.0, nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_ERROR:
-                        pScMatrix->PutError( pValue->GetError(), nScCol, nScRow );
+                        xScMatrix->PutError( pValue->GetError(), nScCol, nScRow );
                     break;
                     default:
                         DBG_ERRORFILE( "XclImpCachedMatrix::CreateScMatrix - unknown value type" );
-                        pScMatrix->PutEmpty( nScCol, nScRow );
+                        xScMatrix->PutEmpty( nScCol, nScRow );
                 }
                 pValue = maValueList.Next();
             }
         }
     }
-    return pScMatrix;
+    return xScMatrix;
 }
-
 
 // ============================================================================
 
