@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-30 10:16:42 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 12:46:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ namespace connectivity
         protected:
             virtual void FileClose();
 //          using ::connectivity::sdbcx::OTableDescriptor_BASE::rBHelper;
-            ::cppu::OBroadcastHelper& rBHelper;
+
         public:
             virtual void refreshColumns();
             virtual void refreshIndexes();

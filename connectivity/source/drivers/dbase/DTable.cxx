@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 12:07:07 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 12:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@
 #endif
 
 using namespace connectivity;
+using namespace connectivity::sdbcx;
 using namespace connectivity::dbase;
 using namespace connectivity::file;
 using namespace ::ucb;
@@ -304,7 +305,6 @@ ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection)
         :ODbaseTable_BASE(_pConnection)
         ,m_pMemoStream(NULL)
         ,m_bWriteableMemo(sal_False)
-        ,rBHelper(OTable_TYPEDEF::rBHelper)
 {
     // initialize the header
     m_aHeader.db_typ    = dBaseIII;
@@ -326,7 +326,6 @@ ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection,
                                   _CatalogName)
                 ,m_pMemoStream(NULL)
                 ,m_bWriteableMemo(sal_False)
-                ,rBHelper(OTable_TYPEDEF::rBHelper)
 {
 }
 // -----------------------------------------------------------------------------
@@ -1921,7 +1920,7 @@ BOOL ODbaseTable::WriteBuffer()
 void SAL_CALL ODbaseTable::alterColumnByName( const ::rtl::OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (rBHelper.bDisposed)
+    if (OTableDescriptor_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
     Reference<XDataDescriptorFactory> xOldColumn;
@@ -1933,7 +1932,7 @@ void SAL_CALL ODbaseTable::alterColumnByName( const ::rtl::OUString& colName, co
 void SAL_CALL ODbaseTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (rBHelper.bDisposed)
+    if (OTableDescriptor_BASE::rBHelper.bDisposed)
         throw DisposedException();
     if(index < 0 || index >= m_pColumns->getCount())
         throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
@@ -2035,7 +2034,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
 void SAL_CALL ODbaseTable::rename( const ::rtl::OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (rBHelper.bDisposed)
+    if (OTableDescriptor_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
     FileClose();
