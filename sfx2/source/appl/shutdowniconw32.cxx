@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 16:27:10 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 18:30:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 
 // Support Windows 95 too
 #define WINVER 0x0400
-
+#define USE_APP_SHORTCUTS
 //
 // the systray icon is only available on windows
 //
@@ -71,6 +71,8 @@
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
 #endif
+
+#include <svtools/dynamicmenuoptions.hxx>
 
 #include "shutdownicon.hxx"
 #include "app.hrc"
@@ -119,10 +121,11 @@ using namespace ::osl;
 #   define IDM_CALC                    5
 #   define IDM_IMPRESS                 6
 #   define IDM_DRAW                    7
-#   define IDM_TEMPLATE                8
+#   define IDM_BASE                    8
+#   define IDM_TEMPLATE                9
 #endif
-#define IDM_INSTALL                 9
-#define IDM_UNINSTALL               10
+#define IDM_INSTALL                 10
+#define IDM_UNINSTALL               11
 
 
 #if defined(USE_APP_SHORTCUTS)
@@ -132,6 +135,7 @@ using namespace ::osl;
 #define IMPRESS_WIZARD_URL     "private:factory/simpress?slot=10425"
 #define DRAW_URL        "private:factory/sdraw"
 #define MATH_URL        "private:factory/smath"
+#define BASE_URL        "private:factory/sdatabase?Interactive"
 #endif
 
 #define ICON_SO_DEFAULT                 1
@@ -267,6 +271,31 @@ static HMENU createSystrayMenu( )
     if ( aModuleOptions.IsDraw() )
         addMenuItem( hMenu, IDM_DRAW, ICON_DRAWING_DOCUMENT,
             pShutdownIcon->GetUrlDescription( OUString( RTL_CONSTASCII_USTRINGPARAM ( DRAW_URL ) ) ), pos, true );
+    if ( aModuleOptions.IsDataBase() )
+    {
+        SvtDynamicMenuOptions aOpt;
+        Sequence < Sequence < PropertyValue > > aMenu = aOpt.GetMenu( E_NEWMENU );
+        for ( sal_Int32 n=0; n<aMenu.getLength(); n++ )
+        {
+            ::rtl::OUString aURL;
+            ::rtl::OUString aDescription;
+            Sequence < PropertyValue >& aEntry = aMenu[n];
+            for ( sal_Int32 m=0; m<aEntry.getLength(); m++ )
+            {
+                if ( aEntry[m].Name.equalsAsciiL( "URL", 3 ) )
+                    aEntry[m].Value >>= aURL;
+                if ( aEntry[m].Name.equalsAsciiL( "Title", 5 ) )
+                    aEntry[m].Value >>= aDescription;
+            }
+
+            if ( aURL.equalsAscii( BASE_URL ) && aDescription.getLength() )
+            {
+                addMenuItem( hMenu, IDM_BASE, ICON_DATABASE_DOCUMENT, aDescription, pos, true );
+                break;
+            }
+        }
+    }
+
     addMenuItem( hMenu, IDM_TEMPLATE, ICON_TEMPLATE,
         pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), pos, true);
     addMenuItem( hMenu, -1,         0, OUString(), pos, false );
@@ -413,6 +442,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                         case IDM_IMPRESS:
                         case IDM_DRAW:
                         case IDM_TEMPLATE:
+                        case IDM_BASE:
                             break;
 #endif
                         case IDM_INSTALL:
@@ -512,6 +542,10 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 case IDM_DRAW:
                     if (checkOEM())
                     ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( DRAW_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
+                break;
+                case IDM_BASE:
+                    if (checkOEM())
+                    ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( BASE_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
                 break;
                 case IDM_TEMPLATE:
                     if ( !bModalMode && checkOEM())
