@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:13:44 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 21:03:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -938,7 +938,7 @@ String STR_AUTOFORMAT
     TEXT [ english_us ] = "AutoFormat" ;
     TEXT[ chinese_simplified ] = "×Ô¶¯¸ñÊ½";
     TEXT[ russian ] = "Àâòîôîğìàò";
-    TEXT[ polish ] = "Autoformatowanie";
+    TEXT[ polish ] = "Autoformat";
     TEXT[ japanese ] = "µ°ÄÌ«°Ï¯Ä";
     TEXT[ chinese_traditional ] = "¦Û°Ê®æ¦¡";
     TEXT[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí";
@@ -1606,7 +1606,7 @@ String STR_MERGE_TABLE
     Text[ portuguese ] = "Unir tabela";
     Text[ russian ] = "Îáúåäèíèòü òàáëèöó";
     Text[ dutch ] = "Tabel verbinden";
-    Text[ french ] = "Fusionner des tableaux";
+    Text[ french ] = "Fusionner les tableaux";
     Text[ spanish ] = "unir tablas";
     Text[ italian ] = "Collega tabella";
     Text[ danish ] = "Flet tabeller";
@@ -1635,15 +1635,15 @@ String STR_TRANSLITERATE
     TEXT[ greek ] = "Êåöáëáßá/ĞåæÜ";
     TEXT[ dutch ] = "Change case";
     TEXT[ french ] = "Change case";
-    TEXT[ spanish ] = "Change case";
+    TEXT[ spanish ] = "Mayúsculas/minúsculas";
     TEXT[ italian ] = "Change case";
     TEXT[ danish ] = "Change case";
-    TEXT[ swedish ] = "Change case";
+    TEXT[ swedish ] = "Versalkänslig";
     TEXT[ polish ] = "Wielkie i ma³e litery";
     TEXT[ portuguese_brazilian ] = "Change case";
-    TEXT[ japanese ] = "Change case";
+    TEXT[ japanese ] = "‘å•¶š/¬•¶š";
     TEXT[ korean ] = "Change case";
-    TEXT[ chinese_simplified ] = "Change case";
+    TEXT[ chinese_simplified ] = "×ÖÄ¸´óĞ¡Ğ´";
     TEXT[ chinese_traditional ] = "¦r¥À¤j¤p¼g";
     TEXT[ turkish ] = "Change case";
     TEXT[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ";
@@ -1900,7 +1900,7 @@ String STR_TABLE_AUTOFMT
     Text [ portuguese_brazilian ] = "Autoformat Tabelle" ;
     Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½ ±í¸ñ";
     Text[ russian ] = "Àâòîôîğìàò òàáëèöû";
-    Text[ polish ] = "Autoformatowanie Tabela";
+    Text[ polish ] = "Autoformat tabeli";
     Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä •\\";
     Text[ chinese_traditional ] = "¦Û°Ê®æ¦¡ ªí®æ";
     Text[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí ááÌÏæá";
@@ -2365,24 +2365,24 @@ String STR_UNDO_SETRUBYATTR
 {
     Text = "Phonetische Symbole setzen" ;
     Text [ ENGLISH ] = "Set phonetic Symbols" ;
-    Text[ english_us ] = "Set phonetic Symbols";
+    Text[ english_us ] = "Set ruby symbols";
     Text[ portuguese ] = "Set phonetic Symbols";
     Text[ russian ] = "Ïîìåñòèòü äèàêğèòè÷åñêèå çíàêè";
     Text[ greek ] = "Ïñéóìüò öùíçôéêşí óõìâüëùí";
     Text[ dutch ] = "Set phonetic Symbols";
     Text[ french ] = "Set phonetic Symbols";
-    Text[ spanish ] = "Set phonetic Symbols";
+    Text[ spanish ] = "Aplicar símbolos fonéticos";
     Text[ italian ] = "Set phonetic Symbols";
     Text[ danish ] = "Set phonetic Symbols";
     Text[ swedish ] = "Sätt fonetiska symboler";
     Text[ polish ] = "OsadŸ znaki diakrytyczne";
     Text[ portuguese_brazilian ] = "Set phonetic Symbols";
-    Text[ japanese ] = "Set phonetic Symbols";
+    Text[ japanese ] = "ÙËŞİ’è";
     Text[ korean ] = "Set phonetic Symbols";
-    Text[ chinese_simplified ] = "Set phonetic Symbols";
+    Text[ chinese_simplified ] = "Éè¶¨Æ´ÒôºÍ×¢Òô·ûºÅ";
     Text[ chinese_traditional ] = "³]©wª`­µ²Å¸¹";
     Text[ turkish ] = "Set phonetic Symbols";
-    Text[ arabic ] = "Set phonetic Symbols";
+    Text[ arabic ] = "ÊÚííä ÑãæÒ ÕæÊíÉ";
 };
 String STR_INSERT_FOOTNOTE
 {
@@ -2576,7 +2576,7 @@ String STR_DDEERROR_DATA2
     TEXT [ finnish ] = "] ei saatu" ;
     TEXT [ danish ] = "] kan ikke bestemmes" ;
     TEXT [ french ] = "] ne peuvent pas être obtenues" ;
-    TEXT [ swedish ] = "] kan inte erhållas" ;
+    TEXT [ swedish ] = "] kan inte bestämmas" ;
     TEXT [ dutch ] = "] onmogelijk" ;
     TEXT [ spanish ] = "] no pueden ser determinados" ;
     TEXT [ english_us ] = "] cannot be obtained" ;
