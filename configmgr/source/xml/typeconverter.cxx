@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeconverter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-13 13:12:24 $
+ *  last change: $Author: dg $ $Date: 2000-11-17 08:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_TYPE_HXX_
 #include <com/sun/star/uno/Type.hxx>
+#endif
+#ifndef _CONFIGMGR_STRDECL_HXX_
+#include <strdecl.hxx>
 #endif
 
 #ifndef _TYPELIB_TYPEDESCRIPTION_HXX_
@@ -160,15 +163,14 @@ namespace configmgr
         ::rtl::OUString aRet;
         switch(_rTypeClass)
         {
-        case uno::TypeClass_BOOLEAN:  aRet = ::rtl::OUString::createFromAscii("boolean"); break;
-        case uno::TypeClass_SHORT:    aRet = ::rtl::OUString::createFromAscii("short"); break;
-        case uno::TypeClass_LONG:     aRet = ::rtl::OUString::createFromAscii("integer"); break;
-        case uno::TypeClass_HYPER:    aRet = ::rtl::OUString::createFromAscii("long"); break;
-        case uno::TypeClass_DOUBLE:   aRet = ::rtl::OUString::createFromAscii("double"); break;
-        case uno::TypeClass_STRING:   aRet = ::rtl::OUString::createFromAscii("string"); break;
-        case uno::TypeClass_SEQUENCE: aRet = ::rtl::OUString::createFromAscii("binary"); break;
-
-        case uno::TypeClass_ANY: aRet = ::rtl::OUString::createFromAscii("any"); break;
+        case uno::TypeClass_BOOLEAN:  aRet = TYPE_BOOLEAN; break;
+        case uno::TypeClass_SHORT:    aRet = TYPE_SHORT; break;
+        case uno::TypeClass_LONG:     aRet = TYPE_INT; break;
+        case uno::TypeClass_HYPER:    aRet = TYPE_LONG; break;
+        case uno::TypeClass_DOUBLE:   aRet = TYPE_DOUBLE; break;
+        case uno::TypeClass_STRING:   aRet = TYPE_STRING; break;
+        case uno::TypeClass_SEQUENCE: aRet = TYPE_BINARY; break;
+        case uno::TypeClass_ANY: aRet = TYPE_ANY; break;
         default:
         {
             ::rtl::OString aStr("Wrong typeclass! ");
@@ -183,16 +185,15 @@ namespace configmgr
     {
         uno::TypeClass aRet = uno::TypeClass_VOID;
 
-        if     (_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("boolean")))  aRet = uno::TypeClass_BOOLEAN;
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("short")))    aRet = uno::TypeClass_SHORT;
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("int")))      aRet = uno::TypeClass_LONG;
+        if     (_rType.equalsIgnoreCase(TYPE_BOOLEAN))  aRet = uno::TypeClass_BOOLEAN;
+        else if(_rType.equalsIgnoreCase(TYPE_SHORT))       aRet = uno::TypeClass_SHORT;
+        else if(_rType.equalsIgnoreCase(TYPE_INT))     aRet = uno::TypeClass_LONG;
         else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("integer")))  aRet = uno::TypeClass_LONG;
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("long")))     aRet = uno::TypeClass_HYPER;
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("double")))   aRet = uno::TypeClass_DOUBLE;
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("string")))   aRet = uno::TypeClass_STRING;
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("binary")))   aRet = uno::TypeClass_SEQUENCE;
-
-        else if(_rType.equalsIgnoreCase(::rtl::OUString::createFromAscii("any")))   aRet = uno::TypeClass_ANY;
+        else if(_rType.equalsIgnoreCase(TYPE_LONG))    aRet = uno::TypeClass_HYPER;
+        else if(_rType.equalsIgnoreCase(TYPE_DOUBLE))   aRet = uno::TypeClass_DOUBLE;
+        else if(_rType.equalsIgnoreCase(TYPE_STRING))   aRet = uno::TypeClass_STRING;
+        else if(_rType.equalsIgnoreCase(TYPE_BINARY))   aRet = uno::TypeClass_SEQUENCE;
+        else if(_rType.equalsIgnoreCase(TYPE_ANY))   aRet = uno::TypeClass_ANY;
         else
         {
             ::rtl::OString aStr("Wrong typeclass! ");
