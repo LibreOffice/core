@@ -537,8 +537,9 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
         // Does the cell contain a formula?
         if (contents.startsWith("=")) {
 
-            cellElement.setAttribute(ATTRIBUTE_TABLE_FORMULA,
-                                     contents);
+            cellElement.setAttribute(ATTRIBUTE_TABLE_FORMULA, contents);
+
+            cellElement.setAttribute(ATTRIBUTE_TABLE_VALUE, decoder.getCellValue());
             // String data does not require any additional attributes
         } else if (!type.equals(CELLTYPE_STRING)) {
 
