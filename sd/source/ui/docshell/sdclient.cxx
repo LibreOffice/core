@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdclient.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-29 13:55:44 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ SdClient::SdClient(SdrOle2Obj* pObj, SdViewShell* pSdViewShell, Window* pWindow)
 |*
 \************************************************************************/
 
-__EXPORT SdClient::~SdClient()
+SdClient::~SdClient()
 {
 }
 
@@ -133,7 +133,7 @@ __EXPORT SdClient::~SdClient()
 |*
 \************************************************************************/
 
-void __EXPORT SdClient::RequestObjAreaPixel(const Rectangle& rRect)
+void SdClient::RequestObjAreaPixel(const Rectangle& rRect)
 {
     Window* pWin = pViewShell->GetWindow();
     Rectangle aObjRect( pWin->PixelToLogic( rRect.TopLeft() ),
@@ -209,7 +209,7 @@ void __EXPORT SdClient::RequestObjAreaPixel(const Rectangle& rRect)
 |*
 \************************************************************************/
 
-void __EXPORT SdClient::ViewChanged(USHORT nAspect)
+void SdClient::ViewChanged(USHORT nAspect)
 {
     // Eventuell neues MetaFile holen
     SfxInPlaceClient::ViewChanged(nAspect);
@@ -263,7 +263,7 @@ void __EXPORT SdClient::ViewChanged(USHORT nAspect)
 |*
 \************************************************************************/
 
-void __EXPORT SdClient::UIActivate(BOOL bActivate)
+void SdClient::UIActivate(BOOL bActivate)
 {
     SfxInPlaceClient::UIActivate(bActivate);
 
@@ -292,7 +292,7 @@ void __EXPORT SdClient::UIActivate(BOOL bActivate)
 |*
 \************************************************************************/
 
-void __EXPORT SdClient::MakeViewData()
+void SdClient::MakeViewData()
 {
     SfxInPlaceClient::MakeViewData();
 
@@ -322,7 +322,7 @@ void __EXPORT SdClient::MakeViewData()
 |*
 \************************************************************************/
 
-void __EXPORT SdClient::MakeVisible()
+void SdClient::MakeVisible()
 {
     SfxInPlaceClient::MakeVisible();
 

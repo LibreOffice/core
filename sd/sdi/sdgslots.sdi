@@ -5,8 +5,8 @@
 #*    Beschreibung      IDL-Modul
 #*
 #*    Ersterstellung    SOH (04.04.97)
-#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-18 16:48:29 $
-#*    $Revision: 1.1.1.1 $
+#*    Letzte Aenderung  $Author: ka $ $Date: 2001-10-22 13:36:31 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile:   T:/sd/sdi/sdgslots.sdv  $
 #*
@@ -16,7 +16,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sd/sdi/sdgslots.sdi,v 1.1.1.1 2000-09-18 16:48:29 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sd/sdi/sdgslots.sdi,v 1.2 2001-10-22 13:36:31 ka Exp $
 
 *************************************************************************/
 
@@ -101,6 +101,9 @@ ModulePrefix( "Sd" )
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 16:48:29  hr
+      initial import
+
       Revision 1.5  1999/06/18 07:01:00  KA
       new: Graphics objectbar
 

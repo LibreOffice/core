@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-16 09:30:36 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ SdStyleSheet::SdStyleSheet(const String& rName, SfxStyleSheetBasePool& rPool,
 |*
 \************************************************************************/
 
-__EXPORT SdStyleSheet::~SdStyleSheet()
+SdStyleSheet::~SdStyleSheet()
 {
     delete pSet;
     pSet = NULL;    // damit nachfolgende Destruktoren eine Chance haben
@@ -140,7 +140,7 @@ __EXPORT SdStyleSheet::~SdStyleSheet()
 |*
 \************************************************************************/
 
-void __EXPORT SdStyleSheet::Load (SvStream& rIn, USHORT nVersion)
+void SdStyleSheet::Load (SvStream& rIn, USHORT nVersion)
 {
     SfxStyleSheetBase::Load(rIn, nVersion);
 
@@ -159,7 +159,7 @@ void __EXPORT SdStyleSheet::Load (SvStream& rIn, USHORT nVersion)
 |*
 \************************************************************************/
 
-void __EXPORT SdStyleSheet::Store(SvStream& rOut)
+void SdStyleSheet::Store(SvStream& rOut)
 {
     SfxStyleSheetBase::Store(rOut);
 }
@@ -170,7 +170,7 @@ void __EXPORT SdStyleSheet::Store(SvStream& rOut)
 |*
 \************************************************************************/
 
-BOOL __EXPORT SdStyleSheet::SetParent(const String& rParentName)
+BOOL SdStyleSheet::SetParent(const String& rParentName)
 {
     BOOL bResult = FALSE;
 
@@ -202,7 +202,7 @@ BOOL __EXPORT SdStyleSheet::SetParent(const String& rParentName)
 |*
 \************************************************************************/
 
-SfxItemSet& __EXPORT SdStyleSheet::GetItemSet()
+SfxItemSet& SdStyleSheet::GetItemSet()
 {
     if (nFamily == SFX_STYLE_FAMILY_PARA || nFamily == SD_LT_FAMILY)
     {
@@ -278,7 +278,7 @@ SfxItemSet& __EXPORT SdStyleSheet::GetItemSet()
 |*
 \************************************************************************/
 
-BOOL __EXPORT SdStyleSheet::IsUsed() const
+BOOL SdStyleSheet::IsUsed() const
 {
     BOOL bResult = FALSE;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unprlout.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:37 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ SdPresentationLayoutUndoAction::SdPresentationLayoutUndoAction(
 |*
 \************************************************************************/
 
-void __EXPORT SdPresentationLayoutUndoAction::Undo()
+void SdPresentationLayoutUndoAction::Undo()
 {
     pPage->SetPresentationLayout(aOldLayoutName, TRUE, TRUE, TRUE);
     if (bSetAutoLayout)
@@ -119,7 +119,7 @@ void __EXPORT SdPresentationLayoutUndoAction::Undo()
 |*
 \************************************************************************/
 
-void __EXPORT SdPresentationLayoutUndoAction::Redo()
+void SdPresentationLayoutUndoAction::Redo()
 {
     pPage->SetPresentationLayout(aNewLayoutName);
     if (bSetAutoLayout)
@@ -132,7 +132,7 @@ void __EXPORT SdPresentationLayoutUndoAction::Redo()
 |*
 \************************************************************************/
 
-void __EXPORT SdPresentationLayoutUndoAction::Repeat()
+void SdPresentationLayoutUndoAction::Repeat()
 {
     DBG_ASSERT(FALSE, "SdPresentationLayoutUndoAction::Repeat: nicht implementiert");
 }
@@ -143,7 +143,7 @@ void __EXPORT SdPresentationLayoutUndoAction::Repeat()
 |*
 \************************************************************************/
 
-__EXPORT SdPresentationLayoutUndoAction::~SdPresentationLayoutUndoAction()
+SdPresentationLayoutUndoAction::~SdPresentationLayoutUndoAction()
 {
 }
 
@@ -153,7 +153,7 @@ __EXPORT SdPresentationLayoutUndoAction::~SdPresentationLayoutUndoAction()
 |*
 \************************************************************************/
 
-String __EXPORT SdPresentationLayoutUndoAction::GetComment() const
+String SdPresentationLayoutUndoAction::GetComment() const
 {
     return aComment;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2001-09-27 10:32:01 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@ SdDrawDocShell::SdDrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
 |*
 \************************************************************************/
 
-__EXPORT  SdDrawDocShell::~SdDrawDocShell()
+SdDrawDocShell::~SdDrawDocShell()
 {
     bInDestruction = TRUE;
     delete pFuActual;

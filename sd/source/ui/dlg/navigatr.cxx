@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 15:40:02 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ SFX_IMPL_CHILDWINDOWCONTEXT( SdNavigatorChildWindow, SID_NAVIGATOR )
 |*  SdNavigatorWin - FloatingWindow
 \************************************************************************/
 
-__EXPORT SdNavigatorWin::SdNavigatorWin( Window* pParent,
+SdNavigatorWin::SdNavigatorWin( Window* pParent,
                 SdNavigatorChildWindow* pChWinCtxt,
                 const SdResId& rSdResId, SfxBindings* pInBindings ) :
         Window          ( pParent, rSdResId ),
@@ -172,7 +172,7 @@ __EXPORT SdNavigatorWin::SdNavigatorWin( Window* pParent,
 
 // -----------------------------------------------------------------------
 
-__EXPORT SdNavigatorWin::~SdNavigatorWin()
+SdNavigatorWin::~SdNavigatorWin()
 {
     pBindings->GetImageManager()->ReleaseToolBox( &aToolbox );
 
@@ -495,7 +495,7 @@ IMPL_LINK( SdNavigatorWin, MenuSelectHdl, Menu *, pMenu )
 
 // -----------------------------------------------------------------------
 
-void __EXPORT SdNavigatorWin::Resize()
+void SdNavigatorWin::Resize()
 {
     Size aWinSize( GetOutputSizePixel() );
     if( aWinSize.Height() >= aMinSize.Height() )
@@ -733,7 +733,7 @@ NavDocInfo* SdNavigatorWin::GetDocInfo()
 |*
 \************************************************************************/
 
-long __EXPORT SdNavigatorWin::ParentNotify(NotifyEvent& rNEvt)
+long SdNavigatorWin::ParentNotify(NotifyEvent& rNEvt)
 {
     long nOK = FALSE;
 
@@ -810,7 +810,7 @@ void SdNavigatorWin::KeyInput( const KeyEvent& rKEvt )
 |*
 \************************************************************************/
 
-__EXPORT SdNavigatorChildWindow::SdNavigatorChildWindow( Window* pParent,
+SdNavigatorChildWindow::SdNavigatorChildWindow( Window* pParent,
                                                          USHORT nId,
                                                          SfxBindings* pBindings,
                                                          SfxChildWinInfo* pInfo ) :
@@ -842,7 +842,7 @@ SdNavigatorControllerItem::SdNavigatorControllerItem( USHORT nId,
 
 // -----------------------------------------------------------------------
 
-void __EXPORT SdNavigatorControllerItem::StateChanged( USHORT nSId,
+void SdNavigatorControllerItem::StateChanged( USHORT nSId,
                         SfxItemState eState, const SfxPoolItem* pItem )
 {
     if( eState >= SFX_ITEM_AVAILABLE && nSId == SID_NAVIGATOR_STATE )
@@ -942,7 +942,7 @@ SdPageNameControllerItem::SdPageNameControllerItem( USHORT nId,
 
 // -----------------------------------------------------------------------
 
-void __EXPORT SdPageNameControllerItem::StateChanged( USHORT nSId,
+void SdPageNameControllerItem::StateChanged( USHORT nSId,
                         SfxItemState eState, const SfxPoolItem* pItem )
 {
     if( eState >= SFX_ITEM_AVAILABLE && nSId == SID_NAVIGATOR_PAGENAME )

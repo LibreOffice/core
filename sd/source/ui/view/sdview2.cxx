@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-18 16:11:29 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ void SdView::UpdateSelectionClipboard( BOOL bForceDeselect )
 
 // -----------------------------------------------------------------------------
 
-void __EXPORT SdView::DoCut(Window* pWindow)
+void SdView::DoCut(Window* pWindow)
 {
     const OutlinerView* pOLV = GetTextEditOutlinerView();
 
@@ -327,7 +327,7 @@ void __EXPORT SdView::DoCut(Window* pWindow)
 
 // -----------------------------------------------------------------------------
 
-void __EXPORT SdView::DoCopy(Window* pWindow)
+void SdView::DoCopy(Window* pWindow)
 {
     const OutlinerView* pOLV = GetTextEditOutlinerView();
 
@@ -342,7 +342,7 @@ void __EXPORT SdView::DoCopy(Window* pWindow)
 
 // -----------------------------------------------------------------------------
 
-void __EXPORT SdView::DoPaste( Window* pWindow )
+void SdView::DoPaste( Window* pWindow )
 {
     const OutlinerView* pOLV = GetTextEditOutlinerView();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diactrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-30 15:45:02 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ DiaEffectControl::DiaEffectControl( Window* pParent, SfxBindings& rBdx, WinBits 
 
 //------------------------------------------------------------------------
 
-__EXPORT DiaEffectControl::~DiaEffectControl()
+DiaEffectControl::~DiaEffectControl()
 {
 }
 
@@ -200,7 +200,7 @@ DiaSpeedControl::DiaSpeedControl( Window* pParent, SfxBindings& rBdx, WinBits nS
 
 //------------------------------------------------------------------------
 
-__EXPORT DiaSpeedControl::~DiaSpeedControl()
+DiaSpeedControl::~DiaSpeedControl()
 {
 }
 
@@ -276,7 +276,7 @@ DiaAutoControl::DiaAutoControl( Window* pParent, SfxBindings& rBdx, WinBits nSty
 
 //------------------------------------------------------------------------
 
-__EXPORT DiaAutoControl::~DiaAutoControl()
+DiaAutoControl::~DiaAutoControl()
 {
 }
 
@@ -357,7 +357,7 @@ DiaTimeControl::DiaTimeControl( Window* pParent, SfxBindings& rBdx, ResId nRId )
 
 //------------------------------------------------------------------------
 
-__EXPORT DiaTimeControl::~DiaTimeControl()
+DiaTimeControl::~DiaTimeControl()
 {
 }
 
@@ -444,13 +444,13 @@ SdPagesField::SdPagesField( Window* pParent, SfxBindings& rBdx, WinBits nBits ) 
 
 // -----------------------------------------------------------------------
 
-__EXPORT SdPagesField::~SdPagesField()
+SdPagesField::~SdPagesField()
 {
 }
 
 // -----------------------------------------------------------------------
 
-void __EXPORT SdPagesField::Update( const SfxUInt16Item* pItem )
+void SdPagesField::Update( const SfxUInt16Item* pItem )
 {
     if( pItem )
     {
@@ -467,7 +467,7 @@ void __EXPORT SdPagesField::Update( const SfxUInt16Item* pItem )
 
 // -----------------------------------------------------------------------
 
-void __EXPORT SdPagesField::Modify()
+void SdPagesField::Modify()
 {
     SfxUInt16Item aItem( SID_PAGES_PER_ROW, (UINT16) GetValue() );
     rBindings.GetDispatcher()->Execute(
@@ -491,7 +491,7 @@ SdTbxCtlDiaEffect::SdTbxCtlDiaEffect( USHORT nId, ToolBox& rTbx,
 
 /*************************************************************************/
 
-void __EXPORT SdTbxCtlDiaEffect::StateChanged( USHORT nSId,
+void SdTbxCtlDiaEffect::StateChanged( USHORT nSId,
                         SfxItemState eState, const SfxPoolItem* pState )
 {
     // FadeEffecListBox vom Window (DiaEffectControl) holen
@@ -522,7 +522,7 @@ void __EXPORT SdTbxCtlDiaEffect::StateChanged( USHORT nSId,
 
 /*************************************************************************/
 
-Window* __EXPORT SdTbxCtlDiaEffect::CreateItemWindow( Window *pParent )
+Window* SdTbxCtlDiaEffect::CreateItemWindow( Window *pParent )
 {
     if( GetId() == SID_DIA_EFFECT )
     {
@@ -542,7 +542,7 @@ SdTbxCtlDiaSpeed::SdTbxCtlDiaSpeed( USHORT nId, ToolBox& rTbx, SfxBindings& rBin
 
 /*************************************************************************/
 
-void __EXPORT SdTbxCtlDiaSpeed::StateChanged( USHORT nSId,
+void SdTbxCtlDiaSpeed::StateChanged( USHORT nSId,
                         SfxItemState eState, const SfxPoolItem* pState )
 {
     // ListBox vom Window (DiaSpeedControl) holen
@@ -573,7 +573,7 @@ void __EXPORT SdTbxCtlDiaSpeed::StateChanged( USHORT nSId,
 
 /*************************************************************************/
 
-Window* __EXPORT SdTbxCtlDiaSpeed::CreateItemWindow( Window *pParent )
+Window* SdTbxCtlDiaSpeed::CreateItemWindow( Window *pParent )
 {
     if( GetId() == SID_DIA_SPEED )
     {
@@ -593,7 +593,7 @@ SdTbxCtlDiaAuto::SdTbxCtlDiaAuto( USHORT nId, ToolBox& rTbx, SfxBindings& rBindi
 
 /*************************************************************************/
 
-void __EXPORT SdTbxCtlDiaAuto::StateChanged( USHORT nSId,
+void SdTbxCtlDiaAuto::StateChanged( USHORT nSId,
                         SfxItemState eState, const SfxPoolItem* pState )
 {
     // ListBox vom Window (DiaAutoControl) holen
@@ -630,7 +630,7 @@ void __EXPORT SdTbxCtlDiaAuto::StateChanged( USHORT nSId,
 
 /*************************************************************************/
 
-Window* __EXPORT SdTbxCtlDiaAuto::CreateItemWindow( Window *pParent )
+Window* SdTbxCtlDiaAuto::CreateItemWindow( Window *pParent )
 {
     if( GetId() == SID_DIA_AUTO )
     {
@@ -650,7 +650,7 @@ SdTbxCtlDiaTime::SdTbxCtlDiaTime( USHORT nId, ToolBox& rTbx, SfxBindings& rBindi
 
 /*************************************************************************/
 
-void __EXPORT SdTbxCtlDiaTime::StateChanged( USHORT nSId,
+void SdTbxCtlDiaTime::StateChanged( USHORT nSId,
                         SfxItemState eState, const SfxPoolItem* pState )
 {
     DiaTimeControl* pDTC = (DiaTimeControl*) GetToolBox().GetItemWindow( SID_DIA_TIME );
@@ -695,7 +695,7 @@ void __EXPORT SdTbxCtlDiaTime::StateChanged( USHORT nSId,
 
 /*************************************************************************/
 
-Window* __EXPORT SdTbxCtlDiaTime::CreateItemWindow( Window *pParent )
+Window* SdTbxCtlDiaTime::CreateItemWindow( Window *pParent )
 {
     if( GetId() == SID_DIA_TIME )
     {
@@ -726,7 +726,7 @@ SdTbxCtlDiaPages::~SdTbxCtlDiaPages()
 
 //========================================================================
 
-void __EXPORT SdTbxCtlDiaPages::StateChanged( USHORT nSID,
+void SdTbxCtlDiaPages::StateChanged( USHORT nSID,
                 SfxItemState eState, const SfxPoolItem* pState )
 {
     SdPagesField* pFld = (SdPagesField*) GetToolBox().GetItemWindow( GetId() );
@@ -753,7 +753,7 @@ void __EXPORT SdTbxCtlDiaPages::StateChanged( USHORT nSID,
 
 //========================================================================
 
-Window* __EXPORT SdTbxCtlDiaPages::CreateItemWindow( Window* pParent )
+Window* SdTbxCtlDiaPages::CreateItemWindow( Window* pParent )
 {
     return new SdPagesField( pParent, rBindings );
 }

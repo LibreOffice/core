@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: thb $ $Date: 2001-09-25 12:09:02 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,7 +536,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
 |*
 \************************************************************************/
 
-__EXPORT SdDrawDocument::~SdDrawDocument()
+SdDrawDocument::~SdDrawDocument()
 {
     if (pWorkStartupTimer)
     {
@@ -627,7 +627,7 @@ __EXPORT SdDrawDocument::~SdDrawDocument()
 |*
 \************************************************************************/
 
-SdrModel* __EXPORT SdDrawDocument::AllocModel() const
+SdrModel* SdDrawDocument::AllocModel() const
 {
     SdDrawDocument* pNewModel = NULL;
 
@@ -706,7 +706,7 @@ SdrModel* __EXPORT SdDrawDocument::AllocModel() const
 |*
 \************************************************************************/
 
-SdrPage* __EXPORT SdDrawDocument::AllocPage(FASTBOOL bMasterPage)
+SdrPage* SdDrawDocument::AllocPage(FASTBOOL bMasterPage)
 {
     return new SdPage(*this, NULL, bMasterPage);
 }
@@ -1260,7 +1260,7 @@ void SdDrawDocument::SetPresFirstPage(ULONG nNewPresFirstPage)
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawDocument::SetChanged(FASTBOOL bFlag)
+void SdDrawDocument::SetChanged(FASTBOOL bFlag)
 {
 #ifndef SVX_LIGHT
     if (pDocSh)

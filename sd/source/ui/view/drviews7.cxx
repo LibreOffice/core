@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-31 12:56:26 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ IMPL_LINK( SdDrawViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelp
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
+void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
 {
     SdViewShell::GetMenuState(rSet);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unmodpg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-30 14:13:00 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ ModifyPageUndoAction::ModifyPageUndoAction(
 |*
 \************************************************************************/
 
-void __EXPORT ModifyPageUndoAction::Undo()
+void ModifyPageUndoAction::Undo()
 {
     pPage->SetAutoLayout(eOldAutoLayout, TRUE);
 
@@ -181,7 +181,7 @@ void __EXPORT ModifyPageUndoAction::Undo()
 |*
 \************************************************************************/
 
-void __EXPORT ModifyPageUndoAction::Redo()
+void ModifyPageUndoAction::Redo()
 {
     pPage->SetAutoLayout(eNewAutoLayout, TRUE);
 
@@ -229,7 +229,7 @@ void __EXPORT ModifyPageUndoAction::Redo()
 |*
 \************************************************************************/
 
-void __EXPORT ModifyPageUndoAction::Repeat()
+void ModifyPageUndoAction::Repeat()
 {
     DBG_ASSERT(FALSE, "ModifyPageUndoAction::Repeat: nicht implementiert");
 }
@@ -240,7 +240,7 @@ void __EXPORT ModifyPageUndoAction::Repeat()
 |*
 \************************************************************************/
 
-__EXPORT ModifyPageUndoAction::~ModifyPageUndoAction()
+ModifyPageUndoAction::~ModifyPageUndoAction()
 {
 }
 
@@ -250,7 +250,7 @@ __EXPORT ModifyPageUndoAction::~ModifyPageUndoAction()
 |*
 \************************************************************************/
 
-String __EXPORT ModifyPageUndoAction::GetComment() const
+String ModifyPageUndoAction::GetComment() const
 {
     return aComment;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdundogr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:36 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ TYPEINIT1(SdUndoGroup, SdUndoAction);
 |*
 \************************************************************************/
 
-__EXPORT SdUndoGroup::~SdUndoGroup()
+SdUndoGroup::~SdUndoGroup()
 {
     ULONG nLast = aCtn.Count();
     for (ULONG nAction = 0; nAction < nLast; nAction++)
@@ -88,7 +88,7 @@ __EXPORT SdUndoGroup::~SdUndoGroup()
 |*
 \************************************************************************/
 
-void __EXPORT SdUndoGroup::Undo()
+void SdUndoGroup::Undo()
 {
     long nLast = aCtn.Count();
     for (long nAction = nLast - 1; nAction >= 0; nAction--)
@@ -104,7 +104,7 @@ void __EXPORT SdUndoGroup::Undo()
 |*
 \************************************************************************/
 
-void __EXPORT SdUndoGroup::Redo()
+void SdUndoGroup::Redo()
 {
     ULONG nLast = aCtn.Count();
     for (ULONG nAction = 0; nAction < nLast; nAction++)

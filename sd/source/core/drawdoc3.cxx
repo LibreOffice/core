@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-18 15:09:14 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1176,7 +1176,7 @@ void SdDrawDocument::CloseBookmarkDoc()
 \************************************************************************/
 
 #ifndef SVX_LIGHT
-const SdrModel* __EXPORT SdDrawDocument::LoadModel(const String& rFileName)
+const SdrModel* SdDrawDocument::LoadModel(const String& rFileName)
 {
     return ( OpenBookmarkDoc(rFileName) );
 }
@@ -1190,7 +1190,7 @@ const SdrModel* __EXPORT SdDrawDocument::LoadModel(const String& rFileName)
 \************************************************************************/
 
 #ifndef SVX_LIGHT
-void __EXPORT SdDrawDocument::DisposeLoadedModels()
+void SdDrawDocument::DisposeLoadedModels()
 {
     CloseBookmarkDoc();
 }
@@ -1203,7 +1203,7 @@ void __EXPORT SdDrawDocument::DisposeLoadedModels()
 |*
 \************************************************************************/
 
-FASTBOOL __EXPORT SdDrawDocument::IsReadOnly() const
+FASTBOOL SdDrawDocument::IsReadOnly() const
 {
     BOOL bReadOnly = FALSE;
 

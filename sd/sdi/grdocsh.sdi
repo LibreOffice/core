@@ -5,8 +5,8 @@
 #*    Beschreibung      Draw (Graphic) -DocShell-IDL
 #*
 #*    Ersterstellung    SOH 04.04.97
-#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-18 16:48:29 $
-#*    $Revision: 1.1.1.1 $
+#*    Letzte Aenderung  $Author: ka $ $Date: 2001-10-22 13:36:31 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile:   T:/sd/idl/grdocsh.idv  $
 #*
@@ -16,7 +16,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sd/sdi/grdocsh.sdi,v 1.1.1.1 2000-09-18 16:48:29 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sd/sdi/grdocsh.sdi,v 1.2 2001-10-22 13:36:31 ka Exp $
 
 *************************************************************************/
 
@@ -38,6 +38,9 @@ shell SdGraphicDocShell : SfxObjectShell
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 16:48:29  hr
+      initial import
+
       Revision 1.2  1997/08/28 10:33:08  MBA
       Neue Interface-Namen
 

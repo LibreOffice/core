@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgchar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-27 08:14:11 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 |*
 \************************************************************************/
 
-__EXPORT SdCharDlg::SdCharDlg( Window* pParent, const SfxItemSet* pAttr,
+SdCharDlg::SdCharDlg( Window* pParent, const SfxItemSet* pAttr,
                     const SfxObjectShell* pDocShell ) :
         SfxTabDialog        ( pParent, SdResId( TAB_CHAR ), pAttr ),
         rOutAttrs           ( *pAttr ),
@@ -97,7 +97,7 @@ __EXPORT SdCharDlg::SdCharDlg( Window* pParent, const SfxItemSet* pAttr,
 
 // -----------------------------------------------------------------------
 
-void __EXPORT SdCharDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
+void SdCharDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
     switch( nId )
     {

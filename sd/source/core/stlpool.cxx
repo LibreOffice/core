@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: thb $ $Date: 2001-09-26 16:19:08 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ SdStyleSheetPool::SdStyleSheetPool(SfxItemPool& rPool, SdDrawDocument* pDocument
 |*
 \************************************************************************/
 
-__EXPORT SdStyleSheetPool::~SdStyleSheetPool()
+SdStyleSheetPool::~SdStyleSheetPool()
 {
 }
 
@@ -187,7 +187,7 @@ __EXPORT SdStyleSheetPool::~SdStyleSheetPool()
 |*
 \************************************************************************/
 
-SfxStyleSheetBase* __EXPORT SdStyleSheetPool::Create(const String& rName,
+SfxStyleSheetBase* SdStyleSheetPool::Create(const String& rName,
                                             SfxStyleFamily eFamily,
                                             USHORT nMask )
 {
@@ -201,7 +201,7 @@ SfxStyleSheetBase* __EXPORT SdStyleSheetPool::Create(const String& rName,
 |*
 \************************************************************************/
 
-SfxStyleSheetBase* __EXPORT SdStyleSheetPool::Create(const SdStyleSheet& rStyle)
+SfxStyleSheetBase* SdStyleSheetPool::Create(const SdStyleSheet& rStyle)
 {
     return new SdStyleSheet(rStyle);
 }

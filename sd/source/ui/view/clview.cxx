@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clview.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:43 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ SdClientView::SdClientView(SdDrawDocShell* pDocSh, OutputDevice* pOutDev,
 |*
 \************************************************************************/
 
-__EXPORT SdClientView::~SdClientView()
+SdClientView::~SdClientView()
 {
 }
 
@@ -103,7 +103,7 @@ __EXPORT SdClientView::~SdClientView()
 |*
 \************************************************************************/
 
-void __EXPORT SdClientView::InvalidateOneWin(Window& rWin)
+void SdClientView::InvalidateOneWin(Window& rWin)
 {
     Region aRegion;
     InitRedraw(&rWin, aRegion);
@@ -116,7 +116,7 @@ void __EXPORT SdClientView::InvalidateOneWin(Window& rWin)
 |*
 \************************************************************************/
 
-void __EXPORT SdClientView::InvalidateOneWin(Window& rWin, const Rectangle& rRect)
+void SdClientView::InvalidateOneWin(Window& rWin, const Rectangle& rRect)
 {
     InitRedraw(&rWin, rRect);
 }
@@ -128,7 +128,7 @@ void __EXPORT SdClientView::InvalidateOneWin(Window& rWin, const Rectangle& rRec
 |*
 \************************************************************************/
 
-void __EXPORT SdClientView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
+void SdClientView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
 {
     SdDrawView::InitRedraw(pOutDev, rReg);
 

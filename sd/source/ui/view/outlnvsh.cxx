@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: aw $ $Date: 2001-09-27 10:34:57 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,7 @@ SdOutlineViewShell::SdOutlineViewShell(SfxViewFrame* pFrame,
 |*
 \************************************************************************/
 
-__EXPORT SdOutlineViewShell::~SdOutlineViewShell()
+SdOutlineViewShell::~SdOutlineViewShell()
 {
     if (pFuActual)
     {
@@ -377,7 +377,7 @@ __EXPORT SdOutlineViewShell::~SdOutlineViewShell()
 |*
 \************************************************************************/
 
-void __EXPORT SdOutlineViewShell::Paint(const Rectangle& rRect, SdWindow* pWin)
+void SdOutlineViewShell::Paint(const Rectangle& rRect, SdWindow* pWin)
 {
     if (pOlView)
     {
@@ -396,7 +396,7 @@ void __EXPORT SdOutlineViewShell::Paint(const Rectangle& rRect, SdWindow* pWin)
 |*
 \************************************************************************/
 
-void __EXPORT SdOutlineViewShell::InnerResizePixel(const Point &rPos, const Size &rSize)
+void SdOutlineViewShell::InnerResizePixel(const Point &rPos, const Size &rSize)
 {
     SdViewShell::InnerResizePixel(rPos, rSize);
 }
@@ -407,7 +407,7 @@ void __EXPORT SdOutlineViewShell::InnerResizePixel(const Point &rPos, const Size
 |*
 \************************************************************************/
 
-void __EXPORT SdOutlineViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
+void SdOutlineViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
 {
     SdViewShell::OuterResizePixel(rPos, rSize);
 }
@@ -604,7 +604,7 @@ void SdOutlineViewShell::Deactivate( BOOL bIsMDIActivate )
 |* Status von Controller-SfxSlots setzen
 |*
 \************************************************************************/
-void __EXPORT SdOutlineViewShell::GetCtrlState(SfxItemSet &rSet)
+void SdOutlineViewShell::GetCtrlState(SfxItemSet &rSet)
 {
     if (rSet.GetItemState(SID_RELOAD) != SFX_ITEM_UNKNOWN)
     {
@@ -1669,7 +1669,7 @@ void SdOutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
 |*
 \************************************************************************/
 
-void __EXPORT SdOutlineViewShell::Command( const CommandEvent& rCEvt, SdWindow* pWin )
+void SdOutlineViewShell::Command( const CommandEvent& rCEvt, SdWindow* pWin )
 {
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
@@ -1749,7 +1749,7 @@ BOOL SdOutlineViewShell::KeyInput(const KeyEvent& rKEvt, SdWindow* pWin)
 |*
 \************************************************************************/
 
-Size __EXPORT SdOutlineViewShell::GetOptimalSizePixel() const
+Size SdOutlineViewShell::GetOptimalSizePixel() const
 {
     Size aResult(200, 200);
     if (pOlView)
@@ -1782,7 +1782,7 @@ Size __EXPORT SdOutlineViewShell::GetOptimalSizePixel() const
 |*
 \************************************************************************/
 
-String __EXPORT SdOutlineViewShell::GetSelectionText(BOOL bCompleteWords)
+String SdOutlineViewShell::GetSelectionText(BOOL bCompleteWords)
 {
     String aStrSelection;
     Outliner* pOl = pOlView->GetOutliner();
@@ -1839,7 +1839,7 @@ BOOL SdOutlineViewShell::HasSelection(BOOL bText) const
 |*
 \************************************************************************/
 
-void __EXPORT SdOutlineViewShell::GetAttrState( SfxItemSet& rSet )
+void SdOutlineViewShell::GetAttrState( SfxItemSet& rSet )
 {
     SfxWhichIter  aIter( rSet );
     USHORT        nWhich = aIter.FirstWhich();

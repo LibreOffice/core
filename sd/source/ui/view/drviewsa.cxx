@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-13 13:00:14 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,7 @@ SdDrawViewShell::SdDrawViewShell(SfxViewFrame* pFrame,
 |*
 \************************************************************************/
 
-__EXPORT SdDrawViewShell::~SdDrawViewShell()
+SdDrawViewShell::~SdDrawViewShell()
 {
     if( mxScannerListener.is() )
         static_cast< ScannerEventListener* >( mxScannerListener.get() )->ParentDestroyed();
@@ -794,7 +794,7 @@ void SdDrawViewShell::SetupPage (Size &rSize,
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawViewShell::GetStatusBarState(SfxItemSet& rSet)
+void SdDrawViewShell::GetStatusBarState(SfxItemSet& rSet)
 {
     // Zoom-Item
     // Hier sollte der entsprechende Wert (Optimal ?, Seitenbreite oder

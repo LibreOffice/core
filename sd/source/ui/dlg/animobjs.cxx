@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-15 18:16:50 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ SdDisplay::~SdDisplay()
 
 // -----------------------------------------------------------------------
 
-void __EXPORT SdDisplay::Paint( const Rectangle& rRect )
+void SdDisplay::Paint( const Rectangle& rRect )
 {
     if( pBitmapEx )
     {
@@ -161,7 +161,7 @@ void SdDisplay::SetScale( const Fraction& rFrac )
 |*  SdAnimationWin - FloatingWindow
 \************************************************************************/
 
-__EXPORT SdAnimationWin::SdAnimationWin( SfxBindings* pInBindings,
+SdAnimationWin::SdAnimationWin( SfxBindings* pInBindings,
                 SfxChildWindow *pCW, Window* pParent, const SdResId& rSdResId ) :
         SfxDockingWindow    ( pInBindings, pCW, pParent, rSdResId ),
         aCtlDisplay         ( this, SdResId( CTL_DISPLAY ) ),
@@ -245,7 +245,7 @@ __EXPORT SdAnimationWin::SdAnimationWin( SfxBindings* pInBindings,
 
 // -----------------------------------------------------------------------
 
-__EXPORT SdAnimationWin::~SdAnimationWin()
+SdAnimationWin::~SdAnimationWin()
 {
     delete pControllerItem;
 
@@ -742,7 +742,7 @@ Fraction SdAnimationWin::GetScale()
 
 // -----------------------------------------------------------------------
 
-void __EXPORT SdAnimationWin::Resize()
+void SdAnimationWin::Resize()
 {
     //if( !IsZoomedIn() )
     if ( !IsFloatingMode() ||
@@ -852,7 +852,7 @@ void __EXPORT SdAnimationWin::Resize()
 
 // -----------------------------------------------------------------------
 
-BOOL __EXPORT SdAnimationWin::Close()
+BOOL SdAnimationWin::Close()
 {
     SfxBoolItem aItem( SID_ANIMATION_OBJECTS, FALSE );
 
@@ -866,7 +866,7 @@ BOOL __EXPORT SdAnimationWin::Close()
 
 // -----------------------------------------------------------------------
 
-void __EXPORT SdAnimationWin::FillInfo( SfxChildWinInfo& rInfo ) const
+void SdAnimationWin::FillInfo( SfxChildWinInfo& rInfo ) const
 {
     SfxDockingWindow::FillInfo( rInfo ) ;
 }
@@ -1385,7 +1385,7 @@ void SdAnimationWin::CreateAnimObj( SdView& rView )
 |*
 \************************************************************************/
 
-__EXPORT SdAnimationChildWindow::SdAnimationChildWindow( Window* pParent,
+SdAnimationChildWindow::SdAnimationChildWindow( Window* pParent,
                                                          USHORT nId,
                                                          SfxBindings* pBindings,
                                                          SfxChildWinInfo* pInfo ) :
@@ -1431,7 +1431,7 @@ SdAnimationControllerItem::SdAnimationControllerItem( USHORT nId,
 
 // -----------------------------------------------------------------------
 
-void __EXPORT SdAnimationControllerItem::StateChanged( USHORT nSId,
+void SdAnimationControllerItem::StateChanged( USHORT nSId,
                         SfxItemState eState, const SfxPoolItem* pItem )
 {
     if( eState >= SFX_ITEM_AVAILABLE && nSId == SID_ANIMATOR_STATE )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: showview.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:44 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ BOOL ShowView::IsInvalidateAllowed() const
 |*
 \************************************************************************/
 
-void __EXPORT ShowView::InvalidateOneWin(Window& rWin)
+void ShowView::InvalidateOneWin(Window& rWin)
 {
     if (IsInvalidateAllowed())
     {
@@ -163,7 +163,7 @@ void __EXPORT ShowView::InvalidateOneWin(Window& rWin)
 |*
 \************************************************************************/
 
-void __EXPORT ShowView::InvalidateOneWin(Window& rWin, const Rectangle& rRect)
+void ShowView::InvalidateOneWin(Window& rWin, const Rectangle& rRect)
 {
     if (IsInvalidateAllowed())
     {
@@ -177,7 +177,7 @@ void __EXPORT ShowView::InvalidateOneWin(Window& rWin, const Rectangle& rRect)
 |*
 \************************************************************************/
 
-void __EXPORT ShowView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
+void ShowView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
 {
     BOOL bMPCache = FALSE;
 
@@ -215,7 +215,7 @@ void __EXPORT ShowView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
 |*
 \************************************************************************/
 
-void __EXPORT ShowView::DoConnect(SdrOle2Obj* pOleObj)
+void ShowView::DoConnect(SdrOle2Obj* pOleObj)
 {
     // connected wird jetzt in FuSlideShow::ShowPlugIns()
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoaprms.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:37 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ SdAnimationPrmsUndoAction::SdAnimationPrmsUndoAction(
 |*
 \************************************************************************/
 
-void __EXPORT SdAnimationPrmsUndoAction::Undo()
+void SdAnimationPrmsUndoAction::Undo()
 {
     // keine neu Info erzeugt: Daten restaurieren
     if (!bInfoCreated)
@@ -173,7 +173,7 @@ void __EXPORT SdAnimationPrmsUndoAction::Undo()
 |*
 \************************************************************************/
 
-void __EXPORT SdAnimationPrmsUndoAction::Redo()
+void SdAnimationPrmsUndoAction::Redo()
 {
     SdAnimationInfo* pInfo = NULL;
 
@@ -223,7 +223,7 @@ void __EXPORT SdAnimationPrmsUndoAction::Redo()
 |*
 \************************************************************************/
 
-void __EXPORT SdAnimationPrmsUndoAction::Repeat()
+void SdAnimationPrmsUndoAction::Repeat()
 {
 }
 
@@ -233,7 +233,6 @@ void __EXPORT SdAnimationPrmsUndoAction::Repeat()
 |*
 \************************************************************************/
 
-__EXPORT
 SdAnimationPrmsUndoAction::~SdAnimationPrmsUndoAction()
 {
 }

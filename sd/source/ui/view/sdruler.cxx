@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdruler.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:44 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ SdRulerCtrlItem::SdRulerCtrlItem(USHORT nId, SdRuler& rRlr,
 |*
 \************************************************************************/
 
-void __EXPORT SdRulerCtrlItem::StateChanged( USHORT nSId,
+void SdRulerCtrlItem::StateChanged( USHORT nSId,
                         SfxItemState eState, const SfxPoolItem* pState )
 {
     switch( nSId )
@@ -175,7 +175,7 @@ SdRuler::~SdRuler()
 |*
 \************************************************************************/
 
-void __EXPORT SdRuler::MouseButtonDown(const MouseEvent& rMEvt)
+void SdRuler::MouseButtonDown(const MouseEvent& rMEvt)
 {
     Point aMPos = rMEvt.GetPosPixel();
     RulerType eType = GetType(aMPos);
@@ -196,7 +196,7 @@ void __EXPORT SdRuler::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-void __EXPORT SdRuler::MouseMove(const MouseEvent& rMEvt)
+void SdRuler::MouseMove(const MouseEvent& rMEvt)
 {
     SvxRuler::MouseMove(rMEvt);
 }
@@ -207,7 +207,7 @@ void __EXPORT SdRuler::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-void __EXPORT SdRuler::MouseButtonUp(const MouseEvent& rMEvt)
+void SdRuler::MouseButtonUp(const MouseEvent& rMEvt)
 {
     SvxRuler::MouseButtonUp(rMEvt);
 }

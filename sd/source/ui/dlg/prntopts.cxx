@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dl $ $Date: 2001-08-23 13:37:03 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ SdPrintOptions::SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs ) :
 
 // -----------------------------------------------------------------------
 
-__EXPORT SdPrintOptions::~SdPrintOptions()
+SdPrintOptions::~SdPrintOptions()
 {
 }
 
@@ -201,7 +201,7 @@ BOOL SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
 
 // -----------------------------------------------------------------------
 
-void __EXPORT SdPrintOptions::Reset( const SfxItemSet& rAttrs )
+void SdPrintOptions::Reset( const SfxItemSet& rAttrs )
 {
     const SdOptionsPrintItem* pPrintOpts = NULL;
     if( SFX_ITEM_SET == rAttrs.GetItemState( ATTR_OPTIONS_PRINT, FALSE,
@@ -263,7 +263,7 @@ void __EXPORT SdPrintOptions::Reset( const SfxItemSet& rAttrs )
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT SdPrintOptions::Create( Window* pWindow,
+SfxTabPage* SdPrintOptions::Create( Window* pWindow,
                 const SfxItemSet& rOutAttrs )
 {
     return( new SdPrintOptions( pWindow, rOutAttrs ) );
@@ -271,7 +271,7 @@ SfxTabPage* __EXPORT SdPrintOptions::Create( Window* pWindow,
 
 //-----------------------------------------------------------------------
 
-USHORT* __EXPORT SdPrintOptions::GetRanges()
+USHORT* SdPrintOptions::GetRanges()
 {
     return pPrintOptRanges;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-18 13:58:48 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ SO2_DECL_REF(SvStorage)
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawViewShell::Activate(BOOL bIsMDIActivate)
+void SdDrawViewShell::Activate(BOOL bIsMDIActivate)
 {
     SdViewShell::Activate(bIsMDIActivate);
     if (nCurrentObjectBar == 0)    // nur wenn noch kein Object Bar existent
@@ -200,7 +200,7 @@ void __EXPORT SdDrawViewShell::Activate(BOOL bIsMDIActivate)
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawViewShell::Deactivate(BOOL bIsMDIActivate)
+void SdDrawViewShell::Deactivate(BOOL bIsMDIActivate)
 {
     SdViewShell::Deactivate(bIsMDIActivate);
 }
@@ -837,7 +837,7 @@ void SdDrawViewShell::ResetActualPage()
 \************************************************************************/
 
 
-ErrCode __EXPORT SdDrawViewShell::DoVerb(long nVerb)
+ErrCode SdDrawViewShell::DoVerb(long nVerb)
 {
     if ( pDrView->HasMarkedObj() )
     {

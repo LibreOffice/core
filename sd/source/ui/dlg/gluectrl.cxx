@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gluectrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:11:35 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ GlueEscDirLB::GlueEscDirLB( Window* pParent ) :
 |*
 \************************************************************************/
 
-__EXPORT GlueEscDirLB::~GlueEscDirLB()
+GlueEscDirLB::~GlueEscDirLB()
 {
 }
 
@@ -144,7 +144,7 @@ __EXPORT GlueEscDirLB::~GlueEscDirLB()
 |*
 \************************************************************************/
 
-void __EXPORT GlueEscDirLB::Select()
+void GlueEscDirLB::Select()
 {
     UINT16 nPos = GetSelectEntryPos();
     SfxUInt16Item aItem( SID_GLUE_ESCDIR, aEscDirArray[ nPos ] );
@@ -196,7 +196,7 @@ SdTbxCtlGlueEscDir::SdTbxCtlGlueEscDir( USHORT nId, ToolBox& rTbx,
 |*
 \************************************************************************/
 
-void __EXPORT SdTbxCtlGlueEscDir::StateChanged( USHORT nSId,
+void SdTbxCtlGlueEscDir::StateChanged( USHORT nSId,
                         SfxItemState eState, const SfxPoolItem* pState )
 {
     if( eState == SFX_ITEM_AVAILABLE )
@@ -235,7 +235,7 @@ void __EXPORT SdTbxCtlGlueEscDir::StateChanged( USHORT nSId,
 |*
 \************************************************************************/
 
-Window* __EXPORT SdTbxCtlGlueEscDir::CreateItemWindow( Window *pParent )
+Window* SdTbxCtlGlueEscDir::CreateItemWindow( Window *pParent )
 {
     if( GetId() == SID_GLUE_ESCDIR )
     {
@@ -261,147 +261,3 @@ UINT16 SdTbxCtlGlueEscDir::GetEscDirPos( UINT16 nEscDir )
     }
     return( 99 );
 }
-
-/*************************************************************************
-
-      Source Code Control System - History
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/18 16:48:32  hr
-      initial import
-
-      Revision 1.12  2000/09/17 15:23:35  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.11  2000/09/06 13:47:52  willem.vandorp
-      Header and footer replaced.
-
-      Revision 1.10  2000/05/24 16:11:27  aw
-      UNICODE some sal_Unicode casts and some CreateFromInt32()
-
-      Revision 1.9  2000/05/23 14:35:43  hr
-      prevent conflict between STLPORT and Workshop
-
-      Revision 1.8  2000/05/09 11:40:37  pw
-      UNICODE
-
-      Revision 1.7  2000/02/11 12:46:46  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.6  1998/01/14 16:41:54  DL
-      includes
-
-
-      Rev 1.5   14 Jan 1998 17:41:54   DL
-   includes
-
-      Rev 1.4   14 Nov 1996 09:55:34   TRI
-   includes
-
-      Rev 1.3   29 Oct 1996 10:51:28   DL
-   Neu: SdResId
-
-      Rev 1.2   07 Aug 1996 12:15:34   SOH
-   Aufteilung und Entfernung von svdraw
-
-      Rev 1.1   30 Jul 1996 16:31:16   SOH
-   Noch nicht unterstuetzte EscDirs auskommentiert
-
-      Rev 1.0   19 Jul 1996 09:51:28   SOH
-   Initial revision.
-
-      Rev 1.17   10 Jul 1996 19:07:48   NF
-   includes
-
-      Rev 1.16   27 Jun 1996 08:51:34   SOH
-   SfxDispatcher.Execute()-Umstellung (2. Parameter wird jetzt verodert)
-
-      Rev 1.15   04 Jun 1996 15:49:32   SOH
-   #28246#: Fehlende __EXPORTs
-
-      Rev 1.14   14 Mar 1996 17:10:18   SOH
-   Neu: SdTbxCtlDiaPages und SdPagesField
-
-      Rev 1.13   04 Dec 1995 13:32:14   DL
-   Neuer Link
-
-      Rev 1.12   17 Nov 1995 08:40:10   DL
-   max() -> Max()
-
-      Rev 1.11   16 Nov 1995 17:01:30   SOH
-   StateChanged-Aenderungen (303)
-
-      Rev 1.10   07 Nov 1995 16:15:48   TRI
-   Change->Set
-
-      Rev 1.9   01 Nov 1995 16:24:28   SOH
-   String-Optimierung
-
-      Rev 1.8   12 Oct 1995 17:16:50   SOH
-   Umstellung auf Large Fonts und andere Systeme
-
-      Rev 1.7   20 Jul 1995 13:12:46   SOH
-   GetFocusHdl(): setzt Cursor auf Sec.
-
-      Rev 1.6   04 Jul 1995 16:54:22   TRI
-   EXPORTS
-
-      Rev 1.5   03 May 1995 17:50:24   SOH
-   Umstellung auf 246
-
-      Rev 1.4   27 Mar 1995 14:08:50   SOH
-   Umstellung auf 242.a
-
-      Rev 1.3   23 Mar 1995 14:35:42   TRI
-   __EXPORT eingebaut
-
-      Rev 1.2   23 Mar 1995 11:31:44   TRI
-   Segmentierung
-
-      Rev 1.1   14 Feb 1995 01:37:38   MH
-   Kommentar gerichtet
-
-      Rev 1.0   13 Feb 1995 17:15:40   SOH
-   Initial revision.
-
-      Rev 1.12   11 Feb 1995 18:36:18   SOH
-   Raus: Linien- und Flaechen-Control
-
-      Rev 1.11   04 Feb 1995 15:18:34   TRI
-   ExecuteCall ambiguos
-
-      Rev 1.10   01 Feb 1995 12:22:40   TRI
-   Pragmas zur Segmentierung eingebaut
-
-      Rev 1.9   20 Jan 1995 11:41:00   ESO
-   sfxdoc.hxx und sfxdlg.hxx
-
-      Rev 1.8   19 Jan 1995 16:48:12   ESO
-   Dispatcher-Aufrufe auf asynchron gesetzt
-
-      Rev 1.7   19 Jan 1995 15:53:06   SOH
-   Umstellung der SID_s von app.hrc -> dialogs.hrc
-
-      Rev 1.6   17 Jan 1995 15:21:30   SOH
-   Strings -> Resourcen
-
-      Rev 1.5   16 Jan 1995 15:22:50   SOH
-   Farbverlauf und Schraffuren: keine Dummys mehr
-
-      Rev 1.4   11 Jan 1995 12:56:58   SOH
-   DiaHdl erweitert
-
-      Rev 1.3   06 Jan 1995 10:23:54   SOH
-   Neu: Dia-TbxCtrls
-
-      Rev 1.2   22 Dec 1994 15:53:16   SOH
-   Doc-Ref wird zur Laufzeit geholt; EXECUTE wird nur ausgefuehrt, wenn vom User gerufen
-
-      Rev 1.1   22 Dec 1994 12:00:28   SOH
-   Groessen-Anpassung
-
-      Rev 1.0   20 Dec 1994 10:01:54   SOH
-   Initial revision.
-
-*************************************************************************/
-

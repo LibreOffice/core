@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2001-09-25 12:06:30 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ BOOL SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
 
 // -----------------------------------------------------------------------
 
-void __EXPORT SdTpOptionsSnap::Reset( const SfxItemSet& rAttrs )
+void SdTpOptionsSnap::Reset( const SfxItemSet& rAttrs )
 {
     SvxGridTabPage::Reset(rAttrs);
 
@@ -174,7 +174,7 @@ void __EXPORT SdTpOptionsSnap::Reset( const SfxItemSet& rAttrs )
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT SdTpOptionsSnap::Create( Window* pWindow,
+SfxTabPage* SdTpOptionsSnap::Create( Window* pWindow,
                 const SfxItemSet& rAttrs )
 {
     return( new SdTpOptionsSnap( pWindow, rAttrs ) );
@@ -286,7 +286,7 @@ void SdTpOptionsContents::Reset( const SfxItemSet& rAttrs )
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT SdTpOptionsContents::Create( Window* pWindow,
+SfxTabPage* SdTpOptionsContents::Create( Window* pWindow,
                 const SfxItemSet& rAttrs )
 {
     return( new SdTpOptionsContents( pWindow, rAttrs ) );
@@ -620,7 +620,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT SdTpOptionsMisc::Create( Window* pWindow,
+SfxTabPage* SdTpOptionsMisc::Create( Window* pWindow,
                 const SfxItemSet& rAttrs )
 {
     return( new SdTpOptionsMisc( pWindow, rAttrs ) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unmovss.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:37 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ SdMoveStyleSheetsUndoAction::SdMoveStyleSheetsUndoAction(
 |*
 \************************************************************************/
 
-void __EXPORT SdMoveStyleSheetsUndoAction::Undo()
+void SdMoveStyleSheetsUndoAction::Undo()
 {
     SfxStyleSheetBasePool* pPool  = pDoc->GetStyleSheetPool();
     SdStyleSheet*          pSheet = NULL;
@@ -164,7 +164,7 @@ void __EXPORT SdMoveStyleSheetsUndoAction::Undo()
 |*
 \************************************************************************/
 
-void __EXPORT SdMoveStyleSheetsUndoAction::Redo()
+void SdMoveStyleSheetsUndoAction::Redo()
 {
     Undo();
 }
@@ -175,7 +175,7 @@ void __EXPORT SdMoveStyleSheetsUndoAction::Redo()
 |*
 \************************************************************************/
 
-void __EXPORT SdMoveStyleSheetsUndoAction::Repeat()
+void SdMoveStyleSheetsUndoAction::Repeat()
 {
     DBG_ASSERT(FALSE, "SdMoveStyleSheetsUndoAction::Repeat: nicht implementiert");
 }
@@ -186,7 +186,7 @@ void __EXPORT SdMoveStyleSheetsUndoAction::Repeat()
 |*
 \************************************************************************/
 
-__EXPORT SdMoveStyleSheetsUndoAction::~SdMoveStyleSheetsUndoAction()
+SdMoveStyleSheetsUndoAction::~SdMoveStyleSheetsUndoAction()
 {
     if (bMySheets)
     {
@@ -216,7 +216,7 @@ __EXPORT SdMoveStyleSheetsUndoAction::~SdMoveStyleSheetsUndoAction()
 |*
 \************************************************************************/
 
-String __EXPORT SdMoveStyleSheetsUndoAction::GetComment() const
+String SdMoveStyleSheetsUndoAction::GetComment() const
 {
     return String();
 }

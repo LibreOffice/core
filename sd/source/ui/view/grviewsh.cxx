@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grviewsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:44 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ SdGraphicViewShell::SdGraphicViewShell(SfxViewFrame* pFrame,
 |*
 \************************************************************************/
 
-__EXPORT SdGraphicViewShell::~SdGraphicViewShell()
+SdGraphicViewShell::~SdGraphicViewShell()
 {
 }
 

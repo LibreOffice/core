@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grdocsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-19 13:35:25 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ SdGraphicDocShell::SdGraphicDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode e
 |*
 \************************************************************************/
 
-__EXPORT  SdGraphicDocShell::~SdGraphicDocShell()
+SdGraphicDocShell::~SdGraphicDocShell()
 {
 }
 

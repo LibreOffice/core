@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-16 13:45:02 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,7 +464,7 @@ void SdDrawDocument::UpdatePageObjectsInNotes(USHORT nStartPos)
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawDocument::MovePage(USHORT nPgNum, USHORT nNewPos)
+void SdDrawDocument::MovePage(USHORT nPgNum, USHORT nNewPos)
 {
     // Seite verschieben
     FmFormModel::MovePage(nPgNum, nNewPos);
@@ -480,7 +480,7 @@ void __EXPORT SdDrawDocument::MovePage(USHORT nPgNum, USHORT nNewPos)
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawDocument::InsertPage(SdrPage* pPage, USHORT nPos)
+void SdDrawDocument::InsertPage(SdrPage* pPage, USHORT nPos)
 {
     FmFormModel::InsertPage(pPage, nPos);
 
@@ -497,7 +497,7 @@ void __EXPORT SdDrawDocument::InsertPage(SdrPage* pPage, USHORT nPos)
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawDocument::DeletePage(USHORT nPgNum)
+void SdDrawDocument::DeletePage(USHORT nPgNum)
 {
     FmFormModel::DeletePage(nPgNum);
 
@@ -510,7 +510,7 @@ void __EXPORT SdDrawDocument::DeletePage(USHORT nPgNum)
 |*
 \************************************************************************/
 
-SdrPage* __EXPORT SdDrawDocument::RemovePage(USHORT nPgNum)
+SdrPage* SdDrawDocument::RemovePage(USHORT nPgNum)
 {
     SdrPage* pPage = FmFormModel::RemovePage(nPgNum);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dl $ $Date: 2001-09-28 12:22:20 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ SdView::SdView(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
 |*
 \************************************************************************/
 
-__EXPORT SdView::~SdView()
+SdView::~SdView()
 {
     // release content of selection clipboard, if we own the content
     UpdateSelectionClipboard( TRUE );
@@ -213,7 +213,7 @@ __EXPORT SdView::~SdView()
 |*
 \************************************************************************/
 
-void __EXPORT SdView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
+void SdView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
 {
     // ausfuehren ??
     if (nLockRedrawSmph == 0)
@@ -259,7 +259,7 @@ void __EXPORT SdView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
 |*
 \************************************************************************/
 
-void __EXPORT SdView::MarkListHasChanged()
+void SdView::MarkListHasChanged()
 {
     FmFormView::MarkListHasChanged();
 }
@@ -383,7 +383,7 @@ void SdView::SelectAll()
 |*
 \************************************************************************/
 
-void __EXPORT SdView::ModelHasChanged()
+void SdView::ModelHasChanged()
 {
     // Erst SdrView benachrichtigen
     FmFormView::ModelHasChanged();

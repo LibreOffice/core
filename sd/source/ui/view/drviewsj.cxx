@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dl $ $Date: 2001-09-10 11:38:27 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
+void SdDrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 {
     // Status der Menueintraege, bzw. Buttons
     // Einfachselektion

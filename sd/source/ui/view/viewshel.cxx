@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dl $ $Date: 2001-09-13 11:20:53 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,7 +398,7 @@ void SdViewShell::Cancel()
 |*
 \************************************************************************/
 
-void __EXPORT SdViewShell::Activate(BOOL bIsMDIActivate)
+void SdViewShell::Activate(BOOL bIsMDIActivate)
 {
     SfxViewShell::Activate(bIsMDIActivate);
 

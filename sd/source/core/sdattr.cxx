@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdattr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:46 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,13 +85,13 @@ DiaEffectItem::DiaEffectItem( SvStream& rIn ) :
 }
 
 
-SfxPoolItem* __EXPORT DiaEffectItem::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* DiaEffectItem::Clone( SfxItemPool* pPool ) const
 {
     return new DiaEffectItem( *this );
 }
 
 
-SfxPoolItem* __EXPORT DiaEffectItem::Create( SvStream& rIn, USHORT nVer ) const
+SfxPoolItem* DiaEffectItem::Create( SvStream& rIn, USHORT nVer ) const
 {
     return new DiaEffectItem( rIn );
 }
@@ -116,13 +116,13 @@ DiaSpeedItem::DiaSpeedItem( SvStream& rIn ) :
 }
 
 
-SfxPoolItem* __EXPORT DiaSpeedItem::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* DiaSpeedItem::Clone( SfxItemPool* pPool ) const
 {
     return new DiaSpeedItem( *this );
 }
 
 
-SfxPoolItem* __EXPORT DiaSpeedItem::Create( SvStream& rIn, USHORT nVer ) const
+SfxPoolItem* DiaSpeedItem::Create( SvStream& rIn, USHORT nVer ) const
 {
     return new DiaSpeedItem( rIn );
 }
@@ -146,13 +146,13 @@ DiaAutoItem::DiaAutoItem( SvStream& rIn ) :
 }
 
 
-SfxPoolItem* __EXPORT DiaAutoItem::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* DiaAutoItem::Clone( SfxItemPool* pPool ) const
 {
     return new DiaAutoItem( *this );
 }
 
 
-SfxPoolItem* __EXPORT DiaAutoItem::Create( SvStream& rIn, USHORT nVer ) const
+SfxPoolItem* DiaAutoItem::Create( SvStream& rIn, USHORT nVer ) const
 {
     return new DiaAutoItem( rIn );
 }
@@ -171,7 +171,7 @@ DiaTimeItem::DiaTimeItem( UINT32 nValue ) :
 }
 
 
-SfxPoolItem* __EXPORT DiaTimeItem::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* DiaTimeItem::Clone( SfxItemPool* pPool ) const
 {
     return new DiaTimeItem( *this );
 }

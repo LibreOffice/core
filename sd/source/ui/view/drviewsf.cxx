@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-26 11:32:08 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ using namespace ::com::sun::star;
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawViewShell::GetCtrlState(SfxItemSet &rSet)
+void SdDrawViewShell::GetCtrlState(SfxItemSet &rSet)
 {
 //  rSet.Put(SfxUInt16Item(SID_SWITCHPAGE, aTabControl.GetCurPageId()));
 //  rSet.Put(SfxUInt16Item(SID_SWITCHLAYER, aLayerTab.GetCurPageId()));
@@ -352,7 +352,7 @@ void __EXPORT SdDrawViewShell::GetCtrlState(SfxItemSet &rSet)
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawViewShell::GetAttrState( SfxItemSet& rSet )
+void SdDrawViewShell::GetAttrState( SfxItemSet& rSet )
 {
     SfxWhichIter    aIter( rSet );
     USHORT          nWhich = aIter.FirstWhich();
@@ -579,7 +579,7 @@ void __EXPORT SdDrawViewShell::GetAttrState( SfxItemSet& rSet )
 |*
 \************************************************************************/
 
-String __EXPORT SdDrawViewShell::GetSelectionText(BOOL bCompleteWords)
+String SdDrawViewShell::GetSelectionText(BOOL bCompleteWords)
 {
     String aStrSelection;
     Outliner* pOl = pDrView->GetTextEditOutliner();

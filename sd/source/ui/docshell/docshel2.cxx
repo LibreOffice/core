@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-21 15:21:53 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawDocShell::Draw(OutputDevice* pOut, const JobSetup& rSetup,
+void SdDrawDocShell::Draw(OutputDevice* pOut, const JobSetup& rSetup,
                                    USHORT nAspect)
 {
     if (nAspect == ASPECT_THUMBNAIL)
@@ -184,7 +184,7 @@ void __EXPORT SdDrawDocShell::Draw(OutputDevice* pOut, const JobSetup& rSetup,
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawDocShell::SetVisArea(const Rectangle& rRect)
+void SdDrawDocShell::SetVisArea(const Rectangle& rRect)
 {
 //    SfxInPlaceObject::SetVisArea(rRect);
 
@@ -205,7 +205,7 @@ void __EXPORT SdDrawDocShell::SetVisArea(const Rectangle& rRect)
 |*
 \************************************************************************/
 
-Rectangle __EXPORT SdDrawDocShell::GetVisArea(USHORT nAspect) const
+Rectangle SdDrawDocShell::GetVisArea(USHORT nAspect) const
 {
     Rectangle aVisArea;
 
@@ -244,7 +244,7 @@ Rectangle __EXPORT SdDrawDocShell::GetVisArea(USHORT nAspect) const
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawDocShell::Connect(SdViewShell* pViewSh)
+void SdDrawDocShell::Connect(SdViewShell* pViewSh)
 {
     pViewShell = pViewSh;
 }
@@ -255,7 +255,7 @@ void __EXPORT SdDrawDocShell::Connect(SdViewShell* pViewSh)
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawDocShell::Disconnect(SdViewShell* pViewSh)
+void SdDrawDocShell::Disconnect(SdViewShell* pViewSh)
 {
     if (pViewShell == pViewSh)
     {
@@ -269,7 +269,7 @@ void __EXPORT SdDrawDocShell::Disconnect(SdViewShell* pViewSh)
 |*
 \************************************************************************/
 
-FrameView* __EXPORT SdDrawDocShell::GetFrameView()
+FrameView* SdDrawDocShell::GetFrameView()
 {
     FrameView* pFrameView = NULL;
 
@@ -287,7 +287,7 @@ FrameView* __EXPORT SdDrawDocShell::GetFrameView()
 |*
 \************************************************************************/
 
-Size __EXPORT SdDrawDocShell::GetFirstPageSize()
+Size SdDrawDocShell::GetFirstPageSize()
 {
     return SfxObjectShell::GetFirstPageSize();
 }
@@ -298,7 +298,7 @@ Size __EXPORT SdDrawDocShell::GetFirstPageSize()
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawDocShell::UIActivate( BOOL bActive )
+void SdDrawDocShell::UIActivate( BOOL bActive )
 {
     bUIActive = bActive;
     SfxInPlaceObject::UIActivate( bActive );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-03 15:28:32 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,7 +528,7 @@ void SdTPAction::Construct()
 
 // -----------------------------------------------------------------------
 
-BOOL __EXPORT SdTPAction::FillItemSet( SfxItemSet& rAttrs )
+BOOL SdTPAction::FillItemSet( SfxItemSet& rAttrs )
 {
     BOOL bModified = FALSE;
     presentation::ClickAction eCA = presentation::ClickAction_NONE;
@@ -643,7 +643,7 @@ BOOL __EXPORT SdTPAction::FillItemSet( SfxItemSet& rAttrs )
 
 //------------------------------------------------------------------------
 
-void __EXPORT SdTPAction::Reset( const SfxItemSet& rAttrs )
+void SdTPAction::Reset( const SfxItemSet& rAttrs )
 {
     presentation::ClickAction eCA = presentation::ClickAction_NONE;
     String      aFileName;
@@ -772,7 +772,7 @@ void __EXPORT SdTPAction::Reset( const SfxItemSet& rAttrs )
 
 // -----------------------------------------------------------------------
 
-void __EXPORT SdTPAction::ActivatePage( const SfxItemSet& rSet )
+void SdTPAction::ActivatePage( const SfxItemSet& rSet )
 {
     const SvxColorItem* pColorItem;
     if( SFX_ITEM_SET == rSet.GetItemState( ATTR_ANIMATION_TRANSPCOLOR, FALSE,
@@ -785,7 +785,7 @@ void __EXPORT SdTPAction::ActivatePage( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-int __EXPORT SdTPAction::DeactivatePage( SfxItemSet* pSet )
+int SdTPAction::DeactivatePage( SfxItemSet* pSet )
 {
     if( pSet &&
         GetActualClickAction() == presentation::ClickAction_VANISH )
@@ -803,7 +803,7 @@ int __EXPORT SdTPAction::DeactivatePage( SfxItemSet* pSet )
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT SdTPAction::Create( Window* pWindow,
+SfxTabPage* SdTPAction::Create( Window* pWindow,
                 const SfxItemSet& rAttrs )
 {
     return( new SdTPAction( pWindow, rAttrs ) );
@@ -811,7 +811,7 @@ SfxTabPage* __EXPORT SdTPAction::Create( Window* pWindow,
 
 //------------------------------------------------------------------------
 
-USHORT* __EXPORT SdTPAction::GetRanges()
+USHORT* SdTPAction::GetRanges()
 {
     return( pActionRanges );
 }

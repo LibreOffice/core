@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pglink.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-02 11:24:30 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ SdPageLink::SdPageLink(SdPage* pPg, const String& rFileName,
 \************************************************************************/
 
 
-__EXPORT SdPageLink::~SdPageLink()
+SdPageLink::~SdPageLink()
 {
 }
 
@@ -103,7 +103,7 @@ __EXPORT SdPageLink::~SdPageLink()
 |*
 \************************************************************************/
 
-void __EXPORT SdPageLink::DataChanged( const String& ,
+void SdPageLink::DataChanged( const String& ,
                                        const ::com::sun::star::uno::Any& )
 {
     SdDrawDocument* pDoc = (SdDrawDocument*) pPage->GetModel();
@@ -167,7 +167,7 @@ void __EXPORT SdPageLink::DataChanged( const String& ,
 |*
 \************************************************************************/
 
-void __EXPORT SdPageLink::Closed()
+void SdPageLink::Closed()
 {
     // Die Verbindung wird aufgehoben
     pPage->SetFileName(String());

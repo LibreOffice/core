@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-24 13:41:22 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,7 +624,7 @@ IMPL_LINK_INLINE_END( FuPoor, DelayHdl, Timer *, pTimer )
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuPoor::MouseButtonUp (const MouseEvent& rMEvt)
+BOOL FuPoor::MouseButtonUp (const MouseEvent& rMEvt)
 {
     aDelayToScrollTimer.Stop ();
     return bScrollable  =
@@ -637,7 +637,7 @@ BOOL __EXPORT FuPoor::MouseButtonUp (const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-void __EXPORT FuPoor::StartDelayToScrollTimer ()
+void FuPoor::StartDelayToScrollTimer ()
 {
     bDelayActive = TRUE;
     aDelayToScrollTimer.Start ();

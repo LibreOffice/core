@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-28 11:55:47 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@
 |*
 \************************************************************************/
 
-void __EXPORT SdDrawDocShell::Execute( SfxRequest& rReq )
+void SdDrawDocShell::Execute( SfxRequest& rReq )
 {
     if (pViewShell)
     {

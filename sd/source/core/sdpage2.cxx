@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-12 16:18:35 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:34:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,7 +357,7 @@ void SdPage::EndListenOutlineText()
 \************************************************************************/
 
 #ifndef SVX_LIGHT
-void __EXPORT SdPage::WriteData(SvStream& rOut) const
+void SdPage::WriteData(SvStream& rOut) const
 {
     FmFormPage::WriteData( rOut );
     // #90477# rOut.SetStreamCharSet( ::GetStoreCharSet( gsl_getSystemTextEncoding()));
@@ -471,7 +471,7 @@ void __EXPORT SdPage::WriteData(SvStream& rOut) const
 |*
 \************************************************************************/
 
-void __EXPORT SdPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
+void SdPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
 {
     FmFormPage::ReadData( rHead, rIn );
 
@@ -626,7 +626,7 @@ void __EXPORT SdPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
 |*
 \************************************************************************/
 
-void __EXPORT SdPage::SetModel(SdrModel* pNewModel)
+void SdPage::SetModel(SdrModel* pNewModel)
 {
 #ifndef SVX_LIGHT
     DisconnectLink();
@@ -648,7 +648,7 @@ void __EXPORT SdPage::SetModel(SdrModel* pNewModel)
 |*
 \************************************************************************/
 
-FASTBOOL __EXPORT SdPage::IsReadOnly() const
+FASTBOOL SdPage::IsReadOnly() const
 {
     BOOL bReadOnly = FALSE;
 

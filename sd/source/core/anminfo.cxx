@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anminfo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-06 08:34:08 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ SdAnimationInfo::~SdAnimationInfo()
 |*
 \************************************************************************/
 
-SdrObjUserData* __EXPORT SdAnimationInfo::Clone(SdrObject* pObj) const
+SdrObjUserData* SdAnimationInfo::Clone(SdrObject* pObj) const
 {
     return new SdAnimationInfo(*this);
 }
@@ -449,7 +449,7 @@ void SdAnimationInfo::SetPath(SdrPathObj* pPath)
 |*
 \************************************************************************/
 
-void __EXPORT SdAnimationInfo::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
+void SdAnimationInfo::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
 {
     SdrHint* pSdrHint = PTR_CAST(SdrHint,&rHint);
     if (pSdrHint)
@@ -478,7 +478,7 @@ void __EXPORT SdAnimationInfo::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBC
 |*
 \************************************************************************/
 
-void __EXPORT SdAnimationInfo::AfterRead()
+void SdAnimationInfo::AfterRead()
 {
     if (pPathSuro)
     {

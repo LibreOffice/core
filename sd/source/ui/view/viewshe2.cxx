@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dl $ $Date: 2001-09-27 15:01:49 $
+ *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -921,7 +921,7 @@ void SdViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
 |*
 \************************************************************************/
 
-void __EXPORT SdViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY)
+void SdViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY)
 {
     long nZoom = (long)((double) rZoomX * 100);
     SetZoom(nZoom);
@@ -1240,7 +1240,7 @@ void SdViewShell::CancelSearching()
 |*
 \************************************************************************/
 
-void __EXPORT SdViewShell::ReadUserData(const String& rString)
+void SdViewShell::ReadUserData(const String& rString)
 {
     SfxViewShell::ReadUserData(rString);
 
@@ -1255,7 +1255,7 @@ void __EXPORT SdViewShell::ReadUserData(const String& rString)
 |*
 \************************************************************************/
 
-void __EXPORT SdViewShell::WriteUserData(String& rString)
+void SdViewShell::WriteUserData(String& rString)
 {
     SfxViewShell::WriteUserData(rString);
 
