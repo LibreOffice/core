@@ -6769,3 +6769,4 @@ __CTA3?AVDisposedException@lang@star@sun@com@@
 ?GetPresentation@SfxFrameDescriptorItem@@UBE?AW4SfxItemPresentation@@W42@W4SfxMapUnit@@1AAVString@@PBVIntlWrapper@@@Z
 ?GetPresentation@SvxSearchItem@@UBE?AW4SfxItemPresentation@@W42@W4SfxMapUnit@@1AAVString@@PBVIntlWrapper@@@Z
 ?set@?$Reference@VXPluginInstance@mozilla@star@sun@com@@@uno@star@sun@com@@QAAEPAVXPluginInstance@mozilla@345@@Z
+?set@?$Reference@VXTypeDetection@document@star@sun@com@@@uno@star@sun@com@@QAAEPAVXTypeDetection@document@345@@Z
