@@ -1,0 +1,479 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dbimagelists.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:51:22 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
+#endif
+#ifndef DBACCESS_UI_BROWSER_ID_HXX
+#include "browserids.hxx"
+#endif
+
+#define IL_TABLESUBCRIPTION \
+\
+    IdList = {\
+        ID_NEW_TABLE_DESIGN;\
+        ID_NEW_VIEW_DESIGN;\
+        ID_NEW_VIEW_SQL;\
+        ID_EDIT_TABLE;\
+        ID_DROP_TABLE;\
+        ID_RENAME_ENTRY;\
+        SID_DB_TABLE_OPEN;\
+        ID_NEW_TABLE_DESIGN_AUTO_PILOT;\
+        };\
+    IdCount = {\
+    8;\
+    }
+
+#define MASKCOLOR MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; }
+
+ImageList IMG_TABLESUBCRIPTION_SC
+{
+    prefix = "sc";
+    MASKCOLOR;
+    IL_TABLESUBCRIPTION ;
+};
+ImageList IMG_TABLESUBCRIPTION_SCH
+{
+    prefix = "sch";
+    MASKCOLOR;
+    IL_TABLESUBCRIPTION ;
+};
+ImageList IMG_TABLESUBCRIPTION_LC
+{
+    prefix = "lc";
+    MASKCOLOR;
+    IL_TABLESUBCRIPTION ;
+};
+ImageList IMG_TABLESUBCRIPTION_LCH
+{
+    prefix = "lch";
+    MASKCOLOR;
+    IL_TABLESUBCRIPTION ;
+};
+
+
+//-------------------------------------------------------------------------
+#define IL_QUERYADMINISTRATION \
+\
+    IdList = {\
+        ID_NEW_QUERY_DESIGN;\
+        ID_NEW_QUERY_SQL;\
+        ID_EDIT_QUERY_DESIGN;\
+        ID_EDIT_QUERY_SQL;\
+        ID_DROP_QUERY;\
+        ID_RENAME_ENTRY;\
+        SID_DB_QUERY_OPEN;\
+        ID_APP_NEW_QUERY_AUTO_PILOT;\
+        SID_DB_QUERY_EDIT;\
+        };\
+    IdCount = {\
+    9;\
+    }
+
+ImageList IMG_QUERYADMINISTRATION_SC
+{
+    prefix = "sc";
+    MASKCOLOR;
+    IL_QUERYADMINISTRATION ;
+};
+ImageList IMG_QUERYADMINISTRATION_SCH
+{
+    prefix = "sch";
+    MASKCOLOR;
+    IL_QUERYADMINISTRATION ;
+};
+ImageList IMG_QUERYADMINISTRATION_LC
+{
+    prefix = "lc";
+    MASKCOLOR;
+    IL_QUERYADMINISTRATION ;
+};
+ImageList IMG_QUERYADMINISTRATION_LCH
+{
+    prefix = "lch";
+    MASKCOLOR;
+    IL_QUERYADMINISTRATION ;
+};
+//-------------------------------------------------------------------------
+#define IL_DOCUMENTLINKS \
+\
+    IdList = {\
+        ID_OPEN_DOCUMENT;\
+        ID_EDIT_DOCUMENT;\
+        ID_CREATE_NEW_DOC;\
+        ID_APP_NEW_FORM; \
+        ID_FORM_NEW_PILOT;\
+        ID_DOCUMENT_CREATE_REPWIZ;\
+        };\
+    IdCount = {\
+    4;\
+    }
+
+ImageList IMG_DOCUMENTLINKS_SC
+{
+    prefix = "sc";
+    MASKCOLOR;
+    IL_DOCUMENTLINKS ;
+};
+ImageList IMG_DOCUMENTLINKS_SCH
+{
+    MASKCOLOR;
+    prefix = "sch";
+    IL_DOCUMENTLINKS ;
+};
+ImageList IMG_DOCUMENTLINKS_LC
+{
+    MASKCOLOR;
+    prefix = "lc";
+    IL_DOCUMENTLINKS ;
+};
+ImageList IMG_DOCUMENTLINKS_LCH
+{
+    MASKCOLOR;
+    prefix = "lch";
+    IL_DOCUMENTLINKS ;
+};
+//-------------------------------------------------------------------------
+#define IL_TOOL_1 \
+\
+    IdList = {\
+        ID_BROWSER_EXPLORER;\
+        ID_BROWSER_SEARCH;\
+        ID_BROWSER_REFRESH;\
+        ID_BROWSER_SORTUP;\
+        ID_BROWSER_SORTDOWN;\
+        ID_BROWSER_ORDERCRIT;\
+        ID_BROWSER_FILTERCRIT;\
+        ID_BROWSER_AUTOFILTER;\
+        ID_BROWSER_COUNTALL;\
+        ID_BROWSER_INSERTCOLUMNS;\
+        ID_BROWSER_INSERTCONTENT;\
+        ID_BROWSER_FORMLETTER;\
+        ID_BROWSER_SQL;\
+        ID_BROWSER_ADDTABLE;\
+        ID_BROWSER_DESIGN;\
+        ID_BROWSER_REMOVEFILTER;\
+        ID_BROWSER_UNDO;\
+        ID_BROWSER_SAVEDOC;\
+        ID_BROWSER_EDITDOC;\
+        ID_BROWSER_CUT;\
+        ID_BROWSER_COPY;\
+        ID_BROWSER_PASTE;\
+        SID_WIN_FULLSCREEN;\
+        SID_NEWDOC;\
+        SID_OPENDOC;\
+        SID_HELP_INDEX;\
+        SID_PRINTDOCDIRECT;\
+        ID_BROWSER_REDO;\
+        ID_BROWSER_FILTERED;\
+        ID_BROWSER_QUERY_EXECUTE;\
+        ID_BROWSER_CLEAR_QUERY;\
+        ID_BROWSER_QUERY_VIEW_FUNCTIONS;\
+        ID_BROWSER_QUERY_VIEW_TABLES;\
+        ID_BROWSER_QUERY_VIEW_ALIASES;\
+        ID_BROWSER_QUERY_DISTINCT_VALUES;\
+        ID_BROWSER_ESACPEPROCESSING;\
+        ID_BROWSER_SAVEASDOC;\
+        ID_QUERY_ZOOM_IN;\
+        ID_QUERY_ZOOM_OUT;\
+        ID_RELATION_ADD_RELATION;\
+        SID_INDEXDESIGN; \
+        ID_BROWSER_DOCUMENT_DATASOURCE;\
+        ID_BROWSER_SAVERECORD; \
+        ID_BROWSER_UNDORECORD; \
+        ID_BROWSER_CLOSE; \
+    };\
+    IdCount = {\
+    45;\
+    }
+
+ // Default Image-Liste ----------------------------------------------------------------
+
+ImageList RID_DEFAULTIMAGELIST_SC
+{
+    prefix = "sc";
+    MASKCOLOR;
+    IL_TOOL_1 ;
+};
+
+ImageList RID_DEFAULTIMAGELIST_LC
+{
+    prefix = "lc";
+    MASKCOLOR;
+    IL_TOOL_1 ;
+};
+
+ImageList RID_DEFAULTIMAGELIST_SCH
+{
+    prefix = "sch";
+    MASKCOLOR;
+    IL_TOOL_1 ;
+};
+
+ImageList RID_DEFAULTIMAGELIST_LCH
+{
+    prefix = "lch";
+    MASKCOLOR;
+    IL_TOOL_1 ;
+};
+
+
+#define IL_TOOL_2 \
+\
+    IdList = {\
+        ID_INDEX_NEW;\
+        ID_INDEX_DROP;\
+        ID_INDEX_RENAME;\
+        ID_INDEX_SAVE;\
+        ID_INDEX_RESET;\
+        };\
+    IdCount = {\
+    5;\
+    }
+
+ImageList IMG_INDEX_DLG_SC
+{
+    MASKCOLOR;
+    prefix = "sc";
+    IL_TOOL_2 ;
+};
+ImageList IMG_INDEX_DLG_SCH
+{
+    MASKCOLOR;
+    prefix = "sch";
+    IL_TOOL_2 ;
+};
+ImageList IMG_INDEX_DLG_LC
+{
+    MASKCOLOR;
+    prefix = "lc";
+    IL_TOOL_2 ;
+};
+ImageList IMG_INDEX_DLG_LCH
+{
+    MASKCOLOR;
+    prefix = "lch";
+    IL_TOOL_2 ;
+};
+
+#define IL_FORM \
+\
+    IdList = {\
+        SID_DB_FORM_DELETE;\
+        SID_DB_FORM_RENAME;\
+        SID_DB_FORM_EDIT;\
+        SID_DB_FORM_OPEN;\
+        };\
+    IdCount = {\
+    4;\
+    }
+
+ImageList IMP_FORM_SC
+{
+    MASKCOLOR;
+    prefix = "sc";
+    IL_FORM ;
+};
+ImageList IMP_FORM_SCH
+{
+    MASKCOLOR;
+    prefix = "sch";
+    IL_FORM ;
+};
+ImageList IMP_FORM_LC
+{
+    MASKCOLOR;
+    prefix = "lc";
+    IL_FORM ;
+};
+ImageList IMP_FORM_LCH
+{
+    MASKCOLOR;
+    prefix = "lch";
+    IL_FORM ;
+};
+
+
+#define IL_REPORT \
+\
+    IdList = {\
+        SID_DB_REPORT_DELETE;\
+        SID_DB_REPORT_RENAME;\
+        SID_DB_REPORT_EDIT;\
+        SID_DB_REPORT_OPEN;\
+        };\
+    IdCount = {\
+    4;\
+    }
+
+ImageList IMP_REPORT_SC
+{
+    MASKCOLOR;
+    prefix = "sc";
+    IL_REPORT ;
+};
+ImageList IMP_REPORT_SCH
+{
+    MASKCOLOR;
+    prefix = "sch";
+    IL_REPORT ;
+};
+ImageList IMP_REPORT_LC
+{
+    MASKCOLOR;
+    prefix = "lc";
+    IL_REPORT ;
+};
+ImageList IMP_REPORT_LCH
+{
+    MASKCOLOR;
+    prefix = "lch";
+    IL_REPORT ;
+};
+
+Image IMG_FORMFOLDER_TREE_L
+{
+    ImageBitmap = Bitmap { File = "forms_32.bmp"; };
+    MASKCOLOR;
+};
+Image IMG_FORMFOLDER_TREE_LHC
+{
+    ImageBitmap = Bitmap { File = "forms_32_h.bmp"; };
+    MASKCOLOR;
+};
+Image IMG_REPORTFOLDER_TREE_L
+{
+    ImageBitmap = Bitmap { File = "reports_32.bmp"; };
+    MASKCOLOR;
+};
+Image IMG_REPORTFOLDER_TREE_LHC
+{
+    ImageBitmap = Bitmap { File = "reports_32_h.bmp"; };
+    MASKCOLOR;
+};
+Image IMG_QUERYFOLDER_TREE_L
+{
+    ImageBitmap = Bitmap { File = "queries_32.bmp"; };
+    MASKCOLOR;
+};
+Image IMG_QUERYFOLDER_TREE_LHC
+{
+    ImageBitmap = Bitmap { File = "queries_32_h.bmp"; };
+    MASKCOLOR;
+};
+Image IMG_TABLEFOLDER_TREE_L
+{
+    ImageBitmap = Bitmap { File = "tables_32.bmp"; };
+    MASKCOLOR;
+};
+Image IMG_TABLEFOLDER_TREE_LHC
+{
+    ImageBitmap = Bitmap { File = "tables_32_h.bmp"; };
+    MASKCOLOR;
+};
+
+Image FORM_TREE_ICON
+{
+    ImageBitmap = Bitmap { File = "form_16.bmp"; };
+    MASKCOLOR;
+};
+
+Image FORM_TREE_ICON_SCH
+{
+    ImageBitmap = Bitmap { File = "form_16_h.bmp"; };
+    MASKCOLOR;
+};
+
+Image REPORT_TREE_ICON
+{
+    ImageBitmap = Bitmap { File = "report_16.bmp"; };
+    MASKCOLOR;
+};
+
+Image REPORT_TREE_ICON_SCH
+{
+    ImageBitmap = Bitmap { File = "report_16_h.bmp"; };
+    MASKCOLOR;
+};
+Image IMG_FORMFOLDER_TREE_S
+{
+    ImageBitmap = Bitmap { File = "forms_16.bmp"; };
+    MASKCOLOR;
+};
+
+Image IMG_FORMFOLDER_TREE_SCH
+{
+    ImageBitmap = Bitmap { File = "forms_16_h.bmp"; };
+    MASKCOLOR;
+};
+
+Image IMG_REPORTFOLDER_TREE_S
+{
+    ImageBitmap = Bitmap { File = "reports_16.bmp"; };
+    MASKCOLOR;
+};
+
+Image IMG_REPORTFOLDER_TREE_SCH
+{
+    ImageBitmap = Bitmap { File = "reports_16_h.bmp"; };
+    MASKCOLOR;
+};
+
