@@ -70,12 +70,14 @@
     <type> com.sun.star.sdbc.XResultSetMetaData                </type>
     <type> com.sun.star.sdbc.XResultSetMetaDataSupplier        </type>
     <type> com.sun.star.sdbc.XRow                              </type>
-    <type> com.sun.star.task.XInteractionRequest               </type>
     <type> com.sun.star.task.XInteractionAbort                 </type>
-    <type> com.sun.star.task.XInteractionRetry                 </type>
     <type> com.sun.star.task.XInteractionApprove               </type>
     <type> com.sun.star.task.XInteractionDisapprove            </type>
+    <type> com.sun.star.task.XInteractionHandler               </type>
+    <type> com.sun.star.task.XInteractionRequest               </type>
+    <type> com.sun.star.task.XInteractionRetry                 </type>
     <type> com.sun.star.ucb.AuthenticationRequest              </type>
+    <type> com.sun.star.ucb.CommandFailedException             </type>
     <type> com.sun.star.ucb.CommandInfoChange                  </type>
     <type> com.sun.star.ucb.ContentAction                      </type>
     <type> com.sun.star.ucb.ContentCreationError               </type>
