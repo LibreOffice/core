@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:38:20 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ portuguese_brazilian ] = "~Password";
         Text[ japanese ] = "Êß½Ü°ÄŞ(~P)";
         Text[ korean ] = "ÆĞ½º¿öµå(~P)";
-        Text[ chinese_simplified ] = "¿ÚÁî(~P)";
+        Text[ chinese_simplified ] = "ÃÜÂë(~P)";
         Text[ chinese_traditional ] = "±K½X(~P)";
         Text[ arabic ] = "ßáãÉ ÇáÓÑ";
         Text[ turkish ] = "~Şifre";
@@ -331,6 +331,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ chinese_simplified ] = "ÍòÎ¬Íøä¯ÀÀÆ÷";
         QuickHelpText[ chinese_traditional ] = "WWW ÂsÄı¾¹";
         QuickHelpText[ arabic ] = "ãÊÕİÍ æíÈ";
+        QuickHelpText[ turkish ] = "WWW-Browser";
     };
     ImageButton BTN_TARGET
     {
@@ -361,6 +362,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ chinese_simplified ] = "Ä¿±ê";
         QuickHelpText[ chinese_traditional ] = "¤å¥ó¤ºªº¥Ø¼Ğ";
         QuickHelpText[ arabic ] = "ÇáåÏİ İí ÇáãÓÊäÏ";
+        QuickHelpText[ turkish ] = "Target";
     };
 
     Text[ portuguese ] = "Hiperligação";
@@ -671,6 +673,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ chinese_simplified ] = "ÊÂ¼ş";
         QuickHelpText[ chinese_traditional ] = "¨Æ¥ó";
         QuickHelpText[ arabic ] = "ÃÍÏÇË";
+        QuickHelpText[ turkish ] = "Ereignisse";
     };
     Text[ turkish ] = "Hyperlink";
 };
@@ -854,6 +857,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ chinese_simplified ] = "Í¨Ñ¶²¾";
         QuickHelpText[ chinese_traditional ] = "³q°T¿ı";
         QuickHelpText[ arabic ] = "ÏİÊÑ ÇáÚäÇæíä";
+        QuickHelpText[ turkish ] = "Adressbuch";
     };
 
     GroupBox GRP_MORE
@@ -1146,6 +1150,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ chinese_simplified ] = "ÊÂ¼ş";
         QuickHelpText[ chinese_traditional ] = "¨Æ¥ó";
         QuickHelpText[ arabic ] = "ÃÍÏÇË";
+        QuickHelpText[ turkish ] = "Ereignisse";
     };
 
     Text[ portuguese ] = "Hiperligação";
@@ -1265,6 +1270,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ chinese_traditional ] = "¶}±ÒÂÂÀÉ";
         QuickHelpText[ arabic ] = "İÊÍ Çáãáİ";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Datei öffnen";
     };
 
     GroupBox GRP_TARGET
@@ -1404,6 +1410,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ chinese_simplified ] = "ÎÄµµÄÚµÄÄ¿±ê";
         QuickHelpText[ chinese_traditional ] = "¤å¥ó¤§¤ºªº¥Ø¼Ğ";
         QuickHelpText[ arabic ] = "ÇáåÏİ İí ÇáãÓÊäÏ";
+        QuickHelpText[ turkish ] = "Ziel im Dokument";
     };
 
     GroupBox GRP_MORE
@@ -1696,6 +1703,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ chinese_simplified ] = "ÊÂ¼ş";
         QuickHelpText[ chinese_traditional ] = "¨Æ¥ó";
         QuickHelpText[ arabic ] = "ÃÍÏÇË";
+        QuickHelpText[ turkish ] = "Ereignisse";
     };
     Text[ portuguese ] = "Hiperligação";
     Text[ russian ] = "Ãèïåğññûëêà";
@@ -1905,6 +1913,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         QuickHelpText[ chinese_simplified ] = "Ñ¡ÔñÂ·¾¶";
         QuickHelpText[ chinese_traditional ] = "¿ï¾Ü¸ô®|";
         QuickHelpText[ arabic ] = "ÇÎÊíÇÑ ÇáãÓÇÑ";
+        QuickHelpText[ turkish ] = "Pfad auswählen";
     };
 
     GroupBox GRP_MORE
@@ -2197,6 +2206,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         QuickHelpText[ chinese_simplified ] = "ÊÂ¼ş";
         QuickHelpText[ chinese_traditional ] = "¨Æ¥ó";
         QuickHelpText[ arabic ] = "ÃÍÏÇË";
+        QuickHelpText[ turkish ] = "Ereignisse";
     };
     Text[ portuguese ] = "Hiperligação";
     Text[ russian ] = "Ãèïåğññûëêà";
