@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemabuilder.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-04 08:18:42 $
+ *  last change: $Author: jb $ $Date: 2002-08-20 10:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,8 +206,10 @@ bool SchemaBuilder::isExtensible(sal_Int16 aSchemaAttributes)
 void SAL_CALL SchemaBuilder::startGroupTemplate( const TemplateIdentifier& aTemplate, sal_Int16 aAttributes )
         throw (MalformedDataException, container::ElementExistException, lang::IllegalArgumentException, lang::NoSupportException, uno::RuntimeException)
 {
-    if (aTemplate.Component.getLength() == NULL)
+    if (aTemplate.Component.getLength() == 0)
         m_aContext.raiseIllegalArgumentException("Schema builder: Starting template without owning component",1);
+
+    m_aContext.startActiveComponent(aTemplate.Component);
 
     if (m_aData.hasTemplate(aTemplate))
         m_aContext.raiseElementExistException("Schema builder: Template already exists",aTemplate.Name);
@@ -220,8 +222,6 @@ void SAL_CALL SchemaBuilder::startGroupTemplate( const TemplateIdentifier& aTemp
 
     ISubtree * pTree = m_aData.addTemplate(aTemplateTree,aTemplate);
 
-    m_aContext.startActiveComponent(aTemplate.Component);
-
     m_aContext.pushNode(pTree);
 }
 // -----------------------------------------------------------------------------
@@ -229,8 +229,10 @@ void SAL_CALL SchemaBuilder::startGroupTemplate( const TemplateIdentifier& aTemp
 void SAL_CALL SchemaBuilder::startSetTemplate( const TemplateIdentifier& aTemplate, sal_Int16 aAttributes, const TemplateIdentifier& aItemType )
         throw (MalformedDataException, container::ElementExistException, container::NoSuchElementException, lang::IllegalArgumentException, lang::NoSupportException, uno::RuntimeException)
 {
-    if (aTemplate.Component.getLength() == NULL)
+    if (aTemplate.Component.getLength() == 0)
         m_aContext.raiseIllegalArgumentException("Schema builder: Starting template without owning component",1);
+
+    m_aContext.startActiveComponent(aTemplate.Component);
 
     if (m_aData.hasTemplate(aTemplate))
         m_aContext.raiseElementExistException("Schema builder: Template already exists",aTemplate.Name);
@@ -243,8 +245,6 @@ void SAL_CALL SchemaBuilder::startSetTemplate( const TemplateIdentifier& aTempla
         m_aFactory.createSet( aName,aFullType,bExtensible,getTemplateBaseAttributes());
 
     ISubtree * pTree = m_aData.addTemplate(aTemplateTree,aTemplate);
-
-    m_aContext.startActiveComponent(aTemplate.Component);
 
     m_aContext.pushNode(pTree);
 }
