@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.89 $
+#   $Revision: 1.90 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 14:33:51 $
+#   last change: $Author: rt $ $Date: 2005-02-02 13:55:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -330,7 +330,10 @@ SHL4OBJS=       \
                 $(SLO)$/progressbarwrapper.obj          \
                 $(SLO)$/statusindicatorinterfacewrapper.obj \
                 $(SLO)$/uicategorydescription.obj       \
-                $(SLO)$/vclstatusindicator.obj
+                $(SLO)$/vclstatusindicator.obj          \
+                $(SLO)$/wakeupthread.obj               \
+                $(SLO)$/sessionlistener.obj               
+                
 
 SHL4STDLIBS=	\
                 $(FWILIB)                           \
