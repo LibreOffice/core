@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 07:33:50 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 07:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ Menu RID_SVXMN_RULER
             Text[ russian ] = "Äşéìû";
             Text[ polish ] = "Cal";
             Text[ japanese ] = "²İÁ";
-            Text[ chinese_traditional ] = "­^¤o";
+            Text[ chinese_traditional ] = "­^¦T";
             Text[ arabic ] = "ÈæÕÉ";
             Text[ greek ] = "ºíôóá";
             Text[ korean ] = "ÀÎÄ¡";
