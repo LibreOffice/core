@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.64 $
+#   $Revision: 1.65 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-07 09:27:45 $
+#   last change: $Author: kz $ $Date: 2005-01-13 18:16:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,11 +65,13 @@ PRJ=..
 PRJNAME=vcl
 TARGET=vcl
 VERSION=$(UPD)
+USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :  settings.mk
 .INCLUDE :  makefile.pmk
+.INCLUDE :  makefile2.pmk
 
 
 # --- Allgemein ----------------------------------------------------------
@@ -87,6 +89,7 @@ HXXDEPNLST= $(INC)$/accel.hxx       \
             $(INC)$/cmdevt.hxx      \
             $(INC)$/decoview.hxx    \
             $(INC)$/dialog.hxx      \
+            $(INC)$/dllapi.h        \
             $(INC)$/dockwin.hxx     \
             $(INC)$/edit.hxx        \
             $(INC)$/event.hxx       \
@@ -193,7 +196,8 @@ SHL1STDLIBS+=\
             $(SALLIB)			\
             $(ICUUCLIB)			\
             $(ICULELIB)			\
-            $(JVMACCESSLIB)		
+            $(JVMACCESSLIB)
+SHL1USE_EXPORTS=ordinal
 
 .IF "$(USE_BUILTIN_RASTERIZER)"!=""
     LIB1FILES +=    $(SLB)$/glyphs.lib
@@ -220,8 +224,7 @@ SHL1RES=    $(RES)$/salsrc.res
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME    =$(SHL1TARGET)
-DEF1DEPN    =   $(MISC)$/$(SHL1TARGET).flt \
-                $(HXXDEPNLST) \
+DEF1DEPN    =   $(HXXDEPNLST) \
                 $(LIB1TARGET)
 DEF1DES     =VCL
 DEFLIB1NAME =vcl
@@ -402,30 +405,3 @@ SHL5STDLIBS+=$(SHL3STDLIBS) -lX11 -ldl
 
 .INCLUDE :  target.mk
 
-# --- Targets ------------------------------------------------------------
-
-# --- VCL-Filter-Datei ---
-
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo Impl > $@
-    @echo Sal>> $@
-    @echo Dbg>> $@
-    @echo HelpTextWindow>> $@
-    @echo MenuBarWindow>> $@
-    @echo MenuFloatingWindow>> $@
-    @echo MenuItemList>> $@
-    @echo LibMain>> $@
-    @echo LIBMAIN>> $@
-    @echo Wep>> $@
-    @echo WEP>> $@
-    @echo RmEvent>> $@
-    @echo RmFrameWindow>> $@
-    @echo RmPrinter>> $@
-    @echo RmBitmap>> $@
-    @echo RmSound>> $@
-    @echo __CT>> $@
-    @echo DNDEventDispatcher>> $@
-    @echo DNDListenerContainer>> $@
-    @echo vcl\ >> $@
