@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-10 15:13:51 $
+ *  last change: $Author: kso $ $Date: 2000-12-21 09:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,8 @@ HierarchyEntry::HierarchyEntry(
                 const Reference< XMultiServiceFactory >& rSMgr,
                 HierarchyContentProvider* pProvider,
                 const OUString& rURL )
-: m_xSMgr( rSMgr )
+: m_xSMgr( rSMgr ),
+  m_bTriedToGetRootReadAccess( sal_False )
 {
     if ( pProvider )
     {
@@ -1038,6 +1039,14 @@ Reference< XHierarchicalNameAccess > HierarchyEntry::getRootReadAccess()
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if ( !m_xRootReadAccess.is() )
         {
+            if ( m_bTriedToGetRootReadAccess ) // #82494#
+            {
+                OSL_ENSURE( sal_False,
+                            "HierarchyEntry::getRootReadAccess - "
+                            "Unable to read any config data! -> #82494#" );
+                return Reference< XHierarchicalNameAccess >();
+            }
+
             try
             {
                 if ( !m_xConfigProvider.is() )
@@ -1055,6 +1064,8 @@ Reference< XHierarchicalNameAccess > HierarchyEntry::getRootReadAccess()
                     Sequence< Any > aArguments( 1 );
                     aArguments[ 0 ]
                         <<= OUString::createFromAscii( HIERARCHY_ROOT_DB_KEY );
+
+                    m_bTriedToGetRootReadAccess = sal_True;
 
                     m_xRootReadAccess = Reference< XHierarchicalNameAccess >(
                         m_xConfigProvider->createInstanceWithArguments(

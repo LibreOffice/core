@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchyprovider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-10 15:13:51 $
+ *  last change: $Author: kso $ $Date: 2000-12-21 09:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,8 @@ using namespace hierarchy_ucp;
 
 HierarchyContentProvider::HierarchyContentProvider(
                         const Reference< XMultiServiceFactory >& rXSMgr )
-: ::ucb::ContentProviderImplHelper( rXSMgr )
+: ::ucb::ContentProviderImplHelper( rXSMgr ),
+  m_bTriedToGetRootReadAccess( sal_False )
 {
 }
 
@@ -268,6 +269,14 @@ HierarchyContentProvider::getRootConfigReadNameAccess()
         vos::OGuard aGuard( m_aMutex );
         if ( !m_xRootConfigReadNameAccess.is() )
         {
+            if ( m_bTriedToGetRootReadAccess ) // #82494#
+            {
+                OSL_ENSURE( sal_False,
+                    "HierarchyContentProvider::getRootConfigReadNameAccess - "
+                    "Unable to read any config data! -> #82494#" );
+                return Reference< XHierarchicalNameAccess >();
+            }
+
             try
             {
                 getConfigProvider();
@@ -277,6 +286,8 @@ HierarchyContentProvider::getRootConfigReadNameAccess()
                     Sequence< Any > aArguments( 1 );
                     aArguments[ 0 ] <<= OUString::createFromAscii(
                                         "/org.openoffice.ucb.Hierarchy/Root" );
+
+                    m_bTriedToGetRootReadAccess = sal_True;
 
                     m_xRootConfigReadNameAccess
                         = Reference< XHierarchicalNameAccess >(

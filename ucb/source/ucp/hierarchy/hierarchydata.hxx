@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-10 15:13:51 $
+ *  last change: $Author: kso $ $Date: 2000-12-21 09:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ class HierarchyEntry
     ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XHierarchicalNameAccess >
                                                            m_xRootReadAccess;
+    sal_Bool m_bTriedToGetRootReadAccess;  // #82494#
 
 private:
     ::rtl::OUString createPathFromHierarchyURL( const ::rtl::OUString& rURL );
