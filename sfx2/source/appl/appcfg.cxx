@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: as $ $Date: 2000-12-01 14:17:04 $
+ *  last change: $Author: pb $ $Date: 2000-12-01 16:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,7 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                     break;
                 case SID_ATTR_AUTOSAVEMINUTE :
                     if(rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_ATTR_AUTOSAVEMINUTE ),
-                                aSaveOptions.GetAutoSaveTime())))
+                                (UINT16)aSaveOptions.GetAutoSaveTime())))
                         bRet = TRUE;
                     break;
                 case SID_ATTR_DOCINFO :
@@ -322,7 +322,7 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                     break;
                 case SID_ATTR_UNDO_COUNT :
                     if(rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_ATTR_UNDO_COUNT ),
-                                 aUndoOptions.GetUndoCount() ) ) )
+                                 (UINT16)aUndoOptions.GetUndoCount() ) ) )
                         bRet = TRUE;
                     break;
 
@@ -524,7 +524,7 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                     break;
                 case SID_INET_PROXY_TYPE :
                     if(rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_INET_PROXY_TYPE ),
-                                aInetOptions.GetProxyType() )))
+                            (UINT16)aInetOptions.GetProxyType() )))
                         bRet = TRUE;
                     break;
                 case SID_INET_FTP_PROXY_NAME :
@@ -575,16 +575,17 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                     SfxAllEnumItem aNames(rPool.GetWhich(SID_ATTR_PATHGROUP));
                     SfxAllEnumItem aValues(rPool.GetWhich(SID_ATTR_PATHNAME));
                     SvtPathOptions aPathCfg;
-                    for ( int nProp = SvtPathOptions::PATH_ADDIN; nProp < SvtPathOptions::PATH_WORK; nProp++ )
+                    for ( int nProp = SvtPathOptions::PATH_ADDIN;
+                          nProp <= SvtPathOptions::PATH_WORK; nProp++ )
                     {
-                        if ( nProp == 21 )
+                        if ( 21 == nProp )
+                            // temp path without name
                             aNames.InsertValue( nProp, String() );
                         else
                         {
                             const String aName( SfxResId( CONFIG_PATH_START + nProp ) );
                             aNames.InsertValue( nProp, aName );
                         }
-
                         String aValue;
                         switch ( nProp )
                         {
@@ -871,7 +872,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_REVEAL_MAILADDR), TRUE, &pItem))
     {
         DBG_ASSERT( pItem->ISA(SfxBoolItem), "BoolItem expected" );
-        aInetOptions.SetProtocolRevealMailAddress( ((const SfxBoolItem*)pItem)->GetValue() );
+        aInetOptions.SetProtocolRevealMailAddress( ( (const SfxBoolItem*)pItem )->GetValue() == TRUE );
         bResetSession = TRUE;
     }
 #endif
@@ -1145,15 +1146,15 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 
                 aProxyCfg.setHttpProxy (
                     aInetOptions.GetProxyHttpName(),
-                    aInetOptions.GetProxyHttpPort());
+                    (sal_uInt16)aInetOptions.GetProxyHttpPort());
 
                 aProxyCfg.setFtpProxy (
                     aInetOptions.GetProxyFtpName(),
-                    aInetOptions.GetProxyFtpPort());
+                    (sal_uInt16)aInetOptions.GetProxyFtpPort());
 
                 aProxyCfg.setSocksProxy (
                     aInetOptions.GetProxySocksName(),
-                    aInetOptions.GetProxySocksPort());
+                    (sal_uInt16)aInetOptions.GetProxySocksPort());
 
                 xINetConfig->setProxyConfig (aProxyCfg);
             }
@@ -1232,74 +1233,47 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
         DBG_ASSERT(pItem->ISA(SfxAllEnumItem), "AllEnumItem expected");
         const SfxAllEnumItem* pEnumItem = (const SfxAllEnumItem *)pItem;
         sal_uInt32 nCount = pEnumItem->GetValueCount();
+        String aNoChangeStr( ' ' );
         for( sal_uInt32 nPath=0; nPath<nCount; ++nPath )
         {
-            String sValue = pEnumItem->GetValueTextByPos(nPath);
-            switch( nPath )
+            String sValue = pEnumItem->GetValueTextByPos((USHORT)nPath);
+            if ( sValue != aNoChangeStr )
             {
-            case 51 :   aPathOptions.SetConfigPath( sValue );
-                        break;
-            case 52 :   aPathOptions.SetWorkPath( sValue );
-                        break;
-            case 53 :   break;  // GRAPHICSPATH
-            case 54 :   aPathOptions.SetBitmapPath( sValue );
-                        break;
-            case 55 :   aPathOptions.SetBasicPath( sValue );
-                        break;
-            case 56 :   //aPathOptions.SetDatabasePath( sValue );
-                        break;
-            case 57 :   aPathOptions.SetPalettePath( sValue );
-                        break;
-            case 58 :   aPathOptions.SetBackupPath( sValue );
-                        break;
-            case 59 :   aPathOptions.SetModulePath( sValue );
-                        break;
-            case 60 :   aPathOptions.SetTemplatePath( sValue );
-                        break;
-            case 61 :   aPathOptions.SetAutoTextPath( sValue );
-                        break;
-            case 62 :   aPathOptions.SetDictionaryPath( sValue );
-                        break;
-            case 63 :   break;  // DESKTOPPATH
-            case 64 :   aPathOptions.SetHelpPath( sValue );
-                        break;
-            case 65 :   break;  // BOOKMARKPATH
-            case 66 :   aPathOptions.SetGalleryPath( sValue );
-                        break;
-            case 67 :   aPathOptions.SetNewMenuPath( sValue );
-                        break;
-            case 68 :   break;  // AGENTPATH
-            case 69 :   aPathOptions.SetAutoPilotPath( sValue );
-                        break;
-            case 70 :   break;  // EXPLORERPATH
-            case 71 :   //aPathOptions.SetTrashPath( sValue );
-                        break;
-            case 72 :   aPathOptions.SetStoragePath( sValue );
-                        break;
-            case 73 :   break;     //SFX_KEY_STARTMENU_DIR
-            case 74 :   break;     //SFX_KEY_DOWNLOAD_DIR
-            case 75 :   break;     //SFX_KEY_AUTOSTART_DIR
-            case 76 :   break;     //SFX_KEY_QUICKSTART_DIR
-            case 77 :   break;     //SFX_KEY_GROUP_DIR
-            case 78 :   aPathOptions.SetPluginPath( sValue );
-                        break;
-            case 79 :   aPathOptions.SetFavoritesPath( sValue );
-                        break;
-            case 80 :   aPathOptions.SetFilterPath( sValue );
-                        break;
-            case 81 :   aPathOptions.SetAddinPath( sValue );
-                        break;
-            case 82 :   aPathOptions.SetUserConfigPath( sValue );
-                        break;
-            case 83 :   aPathOptions.SetUserDictionaryPath( sValue );
-                        break;
-            case 84 :   aPathOptions.SetLinguisticPath( sValue );
-                        break;
-            case 85 :   aPathOptions.SetAutoCorrectPath( sValue );
-                        break;
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-            default: DBG_ASSERT(sal_False, "SfxApplication::SetOptions_Impl()\nInvalid path number found for set directories!\n");
+                switch( nPath )
+                {
+                    case SvtPathOptions::PATH_ADDIN:        aPathOptions.SetAddinPath( sValue );break;
+                    case SvtPathOptions::PATH_AUTOCORRECT:  aPathOptions.SetAutoCorrectPath( sValue );break;
+                    case SvtPathOptions::PATH_AUTOPILOT:    aPathOptions.SetAutoPilotPath( sValue );break;
+                    case SvtPathOptions::PATH_AUTOTEXT:     aPathOptions.SetAutoTextPath( sValue );break;
+                    case SvtPathOptions::PATH_BACKUP:       aPathOptions.SetBackupPath( sValue );break;
+                    case SvtPathOptions::PATH_BASIC:        aPathOptions.SetBasicPath( sValue );break;
+                    case SvtPathOptions::PATH_BITMAP:       aPathOptions.SetBitmapPath( sValue );break;
+                    case SvtPathOptions::PATH_CONFIG:       aPathOptions.SetConfigPath( sValue );break;
+#if SUPD < 615
+                    case SvtPathOptions::PATH_DATABASE:     break;
 #endif
+                    case SvtPathOptions::PATH_DICTIONARY:   aPathOptions.SetDictionaryPath( sValue );break;
+                    case SvtPathOptions::PATH_FAVORITES:    aPathOptions.SetFavoritesPath( sValue );break;
+                    case SvtPathOptions::PATH_FILTER:       aPathOptions.SetFilterPath( sValue );break;
+                    case SvtPathOptions::PATH_GALLERY:      aPathOptions.SetGalleryPath( sValue );break;
+                    case SvtPathOptions::PATH_GRAPHIC:      aPathOptions.SetGraphicPath( sValue );break;
+                    case SvtPathOptions::PATH_HELP:         aPathOptions.SetHelpPath( sValue );break;
+                    case SvtPathOptions::PATH_LINGUISTIC:   aPathOptions.SetLinguisticPath( sValue );break;
+                    case SvtPathOptions::PATH_MODULE:       aPathOptions.SetModulePath( sValue );break;
+                    case SvtPathOptions::PATH_NEWMENU:      aPathOptions.SetNewMenuPath( sValue );break;
+                    case SvtPathOptions::PATH_PALETTE:      aPathOptions.SetPalettePath( sValue );break;
+                    case SvtPathOptions::PATH_PLUGIN:       aPathOptions.SetPluginPath( sValue );break;
+                    case SvtPathOptions::PATH_STORAGE:      aPathOptions.SetStoragePath( sValue );break;
+                    case SvtPathOptions::PATH_TEMP:         aPathOptions.SetTempPath( sValue );break;
+                    case SvtPathOptions::PATH_TEMPLATE:     aPathOptions.SetTemplatePath( sValue );break;
+#if SUPD < 615
+                    case SvtPathOptions::PATH_TRASH:        break;
+#endif
+                    case SvtPathOptions::PATH_USERCONFIG:   aPathOptions.SetUserConfigPath( sValue );break;
+                    case SvtPathOptions::PATH_USERDICTIONARY:aPathOptions.SetUserDictionaryPath( sValue );break;
+                    case SvtPathOptions::PATH_WORK:         aPathOptions.SetWorkPath( sValue );break;
+                    default: DBG_ERRORFILE("SfxApplication::SetOptions_Impl()\nInvalid path number found for set directories!");
+                }
             }
         }
 
