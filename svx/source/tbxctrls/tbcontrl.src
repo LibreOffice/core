@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:29:55 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 19:39:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ String RID_SVXSTR_TRANSPARENT
     Text[ korean ] = "Ã¤¿ì±â ¾øÀ½";
     Text[ turkish ] = "Dolgu yok";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sin relleno";
 };
 String RID_SVXSTR_FILLPATTERN
 {
@@ -131,6 +132,7 @@ String RID_SVXSTR_FILLPATTERN
     Text[ korean ] = "ÆÐÅÏ";
     Text[ turkish ] = "Desen";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modelo";
 };
 String RID_SVXSTR_FRAME
 {
@@ -157,6 +159,7 @@ String RID_SVXSTR_FRAME
     Text[ korean ] = "Å×µÎ¸®";
     Text[ turkish ] = "Kenarlýk";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Borde";
 };
 String RID_SVXSTR_FRAME_STYLE
 {
@@ -183,6 +186,7 @@ String RID_SVXSTR_FRAME_STYLE
     Text[ korean ] = "Å×µÎ¸® À¯Çü";
     Text[ turkish ] = "Kenarlýk biçimi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Estilo de borde";
 };
 String RID_SVXSTR_FRAME_COLOR
 {
@@ -209,6 +213,7 @@ String RID_SVXSTR_FRAME_COLOR
     Text[ korean ] = "Å×µÎ¸® »ö";
     Text[ turkish ] = "Kenarlýk rengi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Color del borde";
 };
 ListBox RID_SVXTBX_STYLE
 {
@@ -244,6 +249,7 @@ String RID_SVXSTR_EXTRAS_CHARBACKGROUND
     Text[ korean ] = "°­Á¶";
     Text[ turkish ] = "Vurgu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Fondo de carácter";
 };
 String RID_SVXSTR_BACKGROUND
 {
@@ -267,6 +273,7 @@ String RID_SVXSTR_BACKGROUND
     Text[ chinese_traditional ] = "­I´º";
     Text[ arabic ] = "ÇáÎáÝíÉ";
     Text[ turkish ] = "Artalan";
+    Text[ catalan ] = "Fondo";
 };
 String RID_SVXSTR_AUTOMATIC
 {
@@ -290,6 +297,7 @@ String RID_SVXSTR_AUTOMATIC
     Text[ chinese_traditional ] = "¦Û°Ê";
     Text[ turkish ] = "Automatic";
     Text[ arabic ] = "ÊáÞÇÆí";
+    Text[ catalan ] = "Automatic";
 };
 Image RID_SVXIMG_GRAF_RED
 {
