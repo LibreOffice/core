@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgattr.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:14:28 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,19 +78,8 @@ TabDialog DLG_ATTR
     Closeable = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text = "Feldformatierung" ;
-    Text [ ENGLISH ] = "Column Format" ;
-    Text [ norwegian ] = "Column Format" ;
-    Text [ italian ] = "Formattazione di campo" ;
-    Text [ portuguese_brazilian ] = "Formato do campo" ;
-    Text [ portuguese ] = "Formatar campo" ;
-    Text [ finnish ] = "Kentän muoto" ;
-    Text [ danish ] = "Feltformatering" ;
-    Text [ french ] = "Formatage de champ" ;
-    Text [ swedish ] = "Fältformatering" ;
-    Text [ dutch ] = "Veldopmaak" ;
-    Text [ spanish ] = "Formato de campo" ;
-    Text [ english_us ] = "Field Format" ;
+    Text [ de ] = "Feldformatierung" ;
+    Text [ en-US ] = "Field Format" ;
     TabControl 1
     {
         OutputSize = TRUE ;
@@ -115,186 +104,30 @@ TabDialog DLG_ATTR
     {
         TabStop = TRUE ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
-        Text = "~Zurück" ;
-        Text [ ENGLISH ] = "Undo" ;
-        Text [ norwegian ] = "Undo" ;
-        Text [ italian ] = "~Indietro" ;
-        Text [ portuguese_brazilian ] = "~Anterior" ;
-        Text [ portuguese ] = "~Anterior" ;
-        Text [ finnish ] = "Edellin~en" ;
-        Text [ danish ] = "~Tilbage" ;
-        Text [ french ] = "Précédent" ;
-        Text [ swedish ] = "~Tillbaka" ;
-        Text [ dutch ] = "~Vorige" ;
-        Text [ spanish ] = "Regresar" ;
-        Text [ english_us ] = "Bac~k" ;
-        Text[ chinese_simplified ] = "è¿”å›(~K)";
-        Text[ russian ] = "Íàçàä";
-        Text[ polish ] = "~Wstecz";
-        Text[ japanese ] = "æˆ»ã‚‹(~K)";
-        Text[ chinese_traditional ] = "è¿”å›(~K)";
-        Text[ arabic ] = "ÇáÓÇÈŞ";
-        Text[ greek ] = "Ğßóù";
-        Text[ korean ] = "ë’¤ë¡œ(~K)";
-        Text[ turkish ] = "Geri";
-        Text[ catalan ] = "Enre~re";
-        Text[ thai ] = "~à¸à¸¥à¸±à¸šà¹„à¸›";
-        Text[ czech ] = "ZpÄ›t";
-        Text[ hebrew ] = "â€®×”×§×•×“×â€¬";
-        Text[ hindi ] = "~à¤ªà¥€à¤›à¥‡";
-        Text[ slovak ] = "S~pÃ¤Å¥";
-        Text[ hungarian ] = "~Vissza";
-        Text[ slovenian ] = "Na~zaj";
+        Text [ de ] = "~Zurück" ;
+        Text [ en-US ] = "Bac~k" ;
     };
     String TP_ATTR_CHAR
     {
         /* ### ACHTUNG: Neuer Text in Resource? Schrift : Zeichen */
-        Text = "Schrift" ;
-        Text [ ENGLISH ] = "Character" ;
-        Text [ norwegian ] = "Character" ;
-        Text [ italian ] = "Carattere" ;
-        Text [ portuguese_brazilian ] = "Fonte" ;
-        Text [ portuguese ] = "Tipo de letra" ;
-        Text [ finnish ] = "Fontti" ;
-        Text [ danish ] = "Skrifttype" ;
-        Text [ french ] = "Police" ;
-        Text [ swedish ] = "Teckensnitt" ;
-        Text [ dutch ] = "Lettertype" ;
-        Text [ spanish ] = "Fuente" ;
-        Text [ english_us ] = "Font" ;
-        Text[ chinese_simplified ] = "å­—ä½“";
-        Text[ russian ] = "Øğèôò";
-        Text[ polish ] = "Czcionka";
-        Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆ";
-        Text[ chinese_traditional ] = "å­—å‹";
-        Text[ arabic ] = "ÎØ";
-        Text[ greek ] = "ÃñáììáôïóåéñÜ";
-        Text[ korean ] = "ê¸€ê¼´";
-        Text[ turkish ] = "Yazıtipi";
-        Text[ catalan ] = "Tipus de lletra";
-        Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
-        Text[ czech ] = "PÃ­smo";
-        Text[ hebrew ] = "â€®×’×•×¤×Ÿâ€¬";
-        Text[ hindi ] = "à¤«à¤¼à¥‰à¤¨à¥à¤Ÿ";
-        Text[ slovak ] = "PÃ­smo";
-        Text[ hungarian ] = "BetÅ±kÃ©szlet";
-        Text[ slovenian ] = "Pisava";
+        Text [ de ] = "Schrift" ;
+        Text [ en-US ] = "Font" ;
     };
     String TP_ATTR_NUMBER
     {
-        Text = "Format" ;
-        Text [ ENGLISH ] = "Number" ;
-        Text [ norwegian ] = "Number" ;
-        Text [ italian ] = "Formato" ;
-        Text [ portuguese_brazilian ] = "Formato" ;
-        Text [ portuguese ] = "Formato" ;
-        Text [ finnish ] = "Muoto" ;
-        Text [ danish ] = "Format" ;
-        Text [ french ] = "Format" ;
-        Text [ swedish ] = "Format" ;
-        Text [ dutch ] = "Formaat" ;
-        Text [ spanish ] = "Formato" ;
-        Text [ english_us ] = "Format" ;
-        Text[ chinese_simplified ] = "æ ¼å¼";
-        Text[ russian ] = "Ôîğìàò";
-        Text[ polish ] = "Format";
-        Text[ japanese ] = "æ›¸å¼";
-        Text[ chinese_traditional ] = "æ ¼å¼";
-        Text[ arabic ] = "ÊäÓíŞ";
-        Text[ greek ] = "ÌïñöŞ";
-        Text[ korean ] = "ì„œì‹";
-        Text[ turkish ] = "Format";
-        Text[ catalan ] = "Format";
-        Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸š";
-        Text[ czech ] = "FormÃ¡t";
-        Text[ hebrew ] = "â€®×¢×™×¦×•×‘â€¬";
-        Text[ hindi ] = "à¤°à¤šà¤¨à¤¾";
-        Text[ slovak ] = "FormÃ¡t";
-        Text[ hungarian ] = "FormÃ¡tum";
-        Text[ slovenian ] = "Oblika";
+        Text [ de ] = "Format" ;
+        Text [ en-US ] = "Format" ;
     };
     String TP_ATTR_ALIGN
     {
-        Text = "Ausrichtung" ;
-        Text [ ENGLISH ] = "Align" ;
-        Text [ norwegian ] = "Align" ;
-        Text [ italian ] = "Allineamento" ;
-        Text [ portuguese_brazilian ] = "Alinhamento" ;
-        Text [ portuguese ] = "Alinhamento" ;
-        Text [ finnish ] = "Tasaus" ;
-        Text [ danish ] = "Justering" ;
-        Text [ french ] = "Alignement" ;
-        Text [ swedish ] = "Justering" ;
-        Text [ dutch ] = "Uitlijning" ;
-        Text [ spanish ] = "Alineación" ;
-        Text [ english_us ] = "Alignment" ;
-        Text[ chinese_simplified ] = "å¯¹é½";
-        Text[ russian ] = "Âûğàâíèâàíèå";
-        Text[ polish ] = "Wyrównanie";
-        Text[ japanese ] = "é…ç½®";
-        Text[ chinese_traditional ] = "å°é½Š";
-        Text[ arabic ] = "ãÍÇĞÇÉ";
-        Text[ greek ] = "Óôïß÷éóç";
-        Text[ korean ] = "ë§ì¶¤";
-        Text[ turkish ] = "Hizalama";
-        Text[ catalan ] = "Alineament";
-        Text[ thai ] = "à¸à¸²à¸£à¸ˆà¸±à¸”à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
-        Text[ czech ] = "ZarovnÃ¡nÃ­";
-        Text[ hebrew ] = "â€®×™×©×•×¨â€¬";
-        Text[ hindi ] = "à¤ªà¤‚à¤•à¥à¤¤à¤¿à¤•à¤°à¤£";
-        Text[ slovak ] = "Zarovnanie";
-        Text[ hungarian ] = "IgazÃ­tÃ¡s";
-        Text[ slovenian ] = "Poravnava";
+        Text [ de ] = "Ausrichtung" ;
+        Text [ en-US ] = "Alignment" ;
     };
     String ST_ROW
     {
-        Text = "Tabellenformatierung" ;
-        Text [ ENGLISH ] = "Table format" ;
-        Text [ english_us ] = "Table Format" ;
-        Text [ italian ] = "Formattazione tabella" ;
-        Text [ spanish ] = "Formateado de tabla" ;
-        Text [ french ] = "Formatage de table" ;
-        Text [ dutch ] = "Tabelopmaak" ;
-        Text [ swedish ] = "Tabellformatering" ;
-        Text [ danish ] = "Tabelformat" ;
-        Text [ portuguese_brazilian ] = "Formato da tabela" ;
-        Text [ portuguese ] = "Formatar tabela" ;
-        Text[ chinese_simplified ] = "è¡¨æ ¼æ ¼å¼";
-        Text[ russian ] = "Îôîğìëåíèå òàáëèöû";
-        Text[ polish ] = "Format tabeli";
-        Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«ã®æ›¸å¼è¨­å®š";
-        Text[ chinese_traditional ] = "è¡¨æ ¼æ ¼å¼";
-        Text[ arabic ] = "ÊäÓíŞ ÇáÌÏæá";
-        Text[ greek ] = "Ìïñöïğïßçóç ğßíáêá";
-        Text[ korean ] = "í…Œì´ë¸” ì„œì‹";
-        Text[ turkish ] = "Tablo Biçemi";
-        Text[ catalan ] = "Format de la taula";
-        Text[ finnish ] = "Taulun muotoilu";
-        Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¸•à¸²à¸£à¸²à¸‡";
-        Text[ czech ] = "FormÃ¡t tabulky";
-        Text[ hebrew ] = "Tabellenformatierung";
-        Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€ à¤°à¤šà¤¨à¤¾";
-        Text[ slovak ] = "FormÃ¡t tabuÄ¾ky";
-        Text[ hungarian ] = "TÃ¡bla formÃ¡tuma";
-        Text[ slovenian ] = "Oblika tabele";
+        Text [ de ] = "Tabellenformatierung" ;
+        Text [ en-US ] = "Table Format" ;
     };
-    Text[ chinese_simplified ] = "å­—æ®µæ ¼å¼";
-    Text[ russian ] = "Ôîğìàò ïîëÿ";
-    Text[ polish ] = "Formatowanie pola";
-    Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®æ›¸å¼è¨­å®š";
-    Text[ chinese_traditional ] = "æ¬„ä½æ ¼å¼";
-    Text[ arabic ] = "ÊäÓíŞ ÇáÍŞá";
-    Text[ greek ] = "Ìïñöïğïßçóç ğåäßïõ";
-    Text[ korean ] = "í•„ë“œ ì„œì‹";
-    Text[ turkish ] = "Alan Biçemi";
-    Text[ catalan ] = "Format del camp";
-    Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "FormÃ¡t pole";
-    Text[ hebrew ] = "Feldformatierung";
-    Text[ hindi ] = "à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤°à¤šà¤¨à¤¾";
-    Text[ slovak ] = "FormÃ¡t poÄ¾a";
-    Text[ hungarian ] = "MezÅ‘ formÃ¡tuma";
-    Text[ slovenian ] = "Oblika polja";
 };
 
 
