@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-24 15:38:27 $
+ *  last change: $Author: ama $ $Date: 2000-11-29 13:20:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,7 +425,8 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
             LanguageType aLang = rInf.GetFont()->GetLanguage();
             ForbiddenCharacters &aForbidden = pBreakIt->GetForbidden( aLang );
             LineBreakUserOptions aUserOpt( aForbidden.beginLine,
-                aForbidden.endLine, sal_True, rInf.IsHanging(), sal_False );
+                aForbidden.endLine, rInf.HasForbiddenChars(), rInf.IsHanging(),
+                sal_False );
             LineBreakResults aResult =
                 pBreakIt->xBreak->getLineBreak( rInf.GetTxt(), nRightPos,
                 pBreakIt->GetLocale(aLang), rInf.GetIdx(), aHyphOpt, aUserOpt );

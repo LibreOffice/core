@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-24 15:40:03 $
+ *  last change: $Author: ama $ $Date: 2000-11-29 13:22:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,7 @@ protected:
     sal_Bool bRuby : 1;         // during the formatting of a phonetic line
     sal_Bool bHanging : 1;      // formatting of hanging punctuation allowed
     sal_Bool bScriptSpace : 1;  // space between different scripts (Asian/Latin)
+    sal_Bool bForbiddenChars : 1; // Forbidden start/endline characters
 
 protected:
     void _NoteAnimation();
@@ -239,6 +240,8 @@ public:
     inline void SetHanging( const sal_Bool bNew ) { bHanging = bNew; }
     inline sal_Bool HasScriptSpace() const { return bScriptSpace; }
     inline void SetScriptSpace( const sal_Bool bNew ) { bScriptSpace = bNew; }
+    inline sal_Bool HasForbiddenChars() const { return bForbiddenChars; }
+    inline void SetForbiddenChars( const sal_Bool bN ) { bForbiddenChars = bN; }
     inline ViewShell *GetVsh() { return pVsh; }
     inline const ViewShell *GetVsh() const { return pVsh; }
     inline OutputDevice *GetOut() { return pOut; }

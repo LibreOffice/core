@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-24 15:40:56 $
+ *  last change: $Author: ama $ $Date: 2000-11-29 13:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,8 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       bFirstMulti( rNew.IsFirstMulti() ),
       bRuby( rNew.IsRuby() ),
       bHanging( rNew.IsHanging() ),
-      bScriptSpace( rNew.HasScriptSpace() )
+      bScriptSpace( rNew.HasScriptSpace() ),
+      bForbiddenChars( rNew.HasForbiddenChars() )
 {
 #ifndef PRODUCT
     ChkOutDev( *this );
@@ -351,7 +352,8 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
     bNotEOL = sal_False;
     bStopUnderFlow = sal_False;
     bSpecialUnderline = sal_False;
-    bMulti = bFirstMulti = bRuby = bHanging = bScriptSpace = sal_False;
+    bMulti = bFirstMulti = bRuby = bHanging = bScriptSpace =
+        bForbiddenChars = sal_False;
     SetLen( GetMinLen( *this ) );
 }
 
@@ -376,7 +378,8 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       bFirstMulti( rNew.IsFirstMulti() ),
       bRuby( rNew.IsRuby() ),
       bHanging( rNew.IsHanging() ),
-      bScriptSpace( rNew.HasScriptSpace() )
+      bScriptSpace( rNew.HasScriptSpace() ),
+      bForbiddenChars( rNew.HasForbiddenChars() )
 {
 #ifndef PRODUCT
     ChkOutDev( *this );
@@ -748,6 +751,7 @@ sal_Bool SwTxtFormatInfo::InitHyph( const sal_Bool bAutoHyph )
     const SwAttrSet& rAttrSet = GetTxtFrm()->GetTxtNode()->GetSwAttrSet();
     SetHanging( rAttrSet.GetHangingPunctuation().GetValue() );
     SetScriptSpace( rAttrSet.GetScriptSpace().GetValue() );
+    SetForbiddenChars( TRUE /*rAttrSet.GetForbiddenRule().GetValue()*/ );
     const SvxHyphenZoneItem &rAttr = rAttrSet.GetHyphenZone();
     MaxHyph() = rAttr.GetMaxHyphens();
     sal_Bool bAuto = bAutoHyph || rAttr.IsHyphen();
