@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-07 17:25:09 $
+ *  last change: $Author: fs $ $Date: 2000-11-07 17:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,8 @@ using namespace ::utl;
 namespace dbaccess
 {
     // -----------------------------------------------------------------------------
-    class OPrivateColumns : public connectivity::sdbcx::OCollection
+    typedef connectivity::sdbcx::OCollection OPrivateColumns_Base;
+    class OPrivateColumns : public OPrivateColumns_Base
     {
         OSQLColumns m_aColumns;
     protected:
@@ -174,7 +175,7 @@ namespace dbaccess
             clear_NoDispose();
                 // we're not owner of the objects we're holding, instead the object we got in our ctor is
                 // So we're not allowed to dispose our elements.
-            OPrivateTables_BASE::disposing();
+            OPrivateColumns_Base::disposing();
         }
     };
     // -------------------------------------------------------------------------
