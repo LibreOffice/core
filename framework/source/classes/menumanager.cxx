@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:44:45 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,8 +238,14 @@ const ::rtl::OUString aSpecialWindowCommand( RTL_CONSTASCII_USTRINGPARAM( "Windo
 
 const ::rtl::OUString UNO_COMMAND( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
 
-MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren ) :
-    ThreadHelpBase( &Application::GetSolarMutex() ), OWeakObject()
+// #110897#
+MenuManager::MenuManager(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
+:   // #110897#
+    mxServiceFactory(xServiceFactory),
+    ThreadHelpBase( &Application::GetSolarMutex() ),
+    OWeakObject()
 {
     m_bActive           = sal_False;
     m_bDeleteMenu       = bDelete;
@@ -277,7 +283,10 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
                 ( aItemCommand.indexOf( ADDONSPOPUPMENU_URL_PREFIX ) == 0 ))
             {
                 // A special addon popup menu, must be created with a different ctor
-                MenuManager* pSubMenuManager = new MenuManager( rFrame, (AddonPopupMenu *)pPopupMenu, bDeleteChildren, bDeleteChildren );
+
+                // #110897#
+                // MenuManager* pSubMenuManager = new MenuManager( rFrame, (AddonPopupMenu *)pPopupMenu, bDeleteChildren, bDeleteChildren );
+                MenuManager* pSubMenuManager = new MenuManager( getServiceFactory(), rFrame, (AddonPopupMenu *)pPopupMenu, bDeleteChildren, bDeleteChildren );
 
                 // store menu item command as we later have to know which menu is active (see Activate handler)
                 pSubMenuManager->m_aMenuItemCommand = aItemCommand;
@@ -291,7 +300,9 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
             }
             else
             {
-                MenuManager* pSubMenuManager = new MenuManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
+                // #110897#
+                // MenuManager* pSubMenuManager = new MenuManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
+                MenuManager* pSubMenuManager = new MenuManager( getServiceFactory(), rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
 
                 // store menu item command as we later have to know which menu is active (see Activate handler)
                 pSubMenuManager->m_aMenuItemCommand = aItemCommand;
@@ -328,7 +339,10 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
                         aItemCommand += ::rtl::OUString::valueOf( (sal_Int32)ITEMID_ADDONLIST );
                         pPopupMenu->SetItemCommand( ITEMID_ADDONLIST, aItemCommand );
 
-                        MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
+                        // #110897#
+                        // MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
+                        MenuManager* pSubMenuManager = new MenuManager( getServiceFactory(), rFrame, pSubMenu, sal_True, sal_False );
+
                         REFERENCE< XDISPATCH > aXDispatchRef;
                         MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
                                                                     nItemId,
@@ -356,11 +370,17 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
             if ( nItemId == SID_NEWDOCDIRECT ||
                  aItemCommand == aSlotNewDocDirect )
             {
-                Reference< ::com::sun::star::lang::XMultiServiceFactory > aMultiServiceFactory(::comphelper::getProcessServiceFactory());
-                MenuConfiguration aMenuCfg( aMultiServiceFactory );
+                // #110897#
+                // Reference< ::com::sun::star::lang::XMultiServiceFactory > aMultiServiceFactory(::comphelper::getProcessServiceFactory());
+                // MenuConfiguration aMenuCfg( aMultiServiceFactory );
+                MenuConfiguration aMenuCfg( getServiceFactory() );
                 BmkMenu* pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_NEWMENU );
                 pMenu->SetPopupMenu( nItemId, pSubMenu );
-                MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
+
+                // #110897#
+                // MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
+                MenuManager* pSubMenuManager = new MenuManager( getServiceFactory(), rFrame, pSubMenu, sal_True, sal_False );
+
                 REFERENCE< XDISPATCH > aXDispatchRef;
                 MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
                                                             nItemId,
@@ -380,11 +400,17 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
             else if ( nItemId == SID_AUTOPILOTMENU ||
                       aItemCommand == aSlotAutoPilot )
             {
-                Reference< ::com::sun::star::lang::XMultiServiceFactory > aMultiServiceFactory(::comphelper::getProcessServiceFactory());
-                MenuConfiguration aMenuCfg( aMultiServiceFactory );
+                // #110897#
+                // Reference< ::com::sun::star::lang::XMultiServiceFactory > aMultiServiceFactory(::comphelper::getProcessServiceFactory());
+                // MenuConfiguration aMenuCfg( aMultiServiceFactory );
+                MenuConfiguration aMenuCfg( getServiceFactory() );
                 BmkMenu* pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_WIZARDMENU );
                 pMenu->SetPopupMenu( nItemId, pSubMenu );
-                MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
+
+                // #110897#
+                // MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
+                MenuManager* pSubMenuManager = new MenuManager( getServiceFactory(), rFrame, pSubMenu, sal_True, sal_False );
+
                 REFERENCE< XDISPATCH > aXDispatchRef;
                 MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
                                                             nItemId,
@@ -476,8 +502,14 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
 }
 
 
-MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, BmkMenu* pBmkMenu, sal_Bool bDelete, sal_Bool bDeleteChildren ) :
-    ThreadHelpBase( &Application::GetSolarMutex() ), OWeakObject()
+// #110897#
+MenuManager::MenuManager(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    REFERENCE< XFRAME >& rFrame, BmkMenu* pBmkMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
+:   // #110897#
+    mxServiceFactory(xServiceFactory),
+    ThreadHelpBase( &Application::GetSolarMutex() ),
+    OWeakObject()
 {
     m_bActive           = sal_False;
     m_bDeleteMenu       = bDelete;
@@ -508,7 +540,9 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, BmkMenu* pBmkMenu, sal_Bo
         PopupMenu* pPopupMenu = pBmkMenu->GetPopupMenu( nItemId );
         if ( pPopupMenu )
         {
-            MenuManager* pSubMenuManager = new MenuManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
+            // #110897#
+            // MenuManager* pSubMenuManager = new MenuManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
+            MenuManager* pSubMenuManager = new MenuManager( getServiceFactory(), rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
 
             // store menu item command as we later have to know which menu is active (see Acivate handler)
             pSubMenuManager->m_aMenuItemCommand = aItemCommand;
@@ -546,8 +580,14 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, BmkMenu* pBmkMenu, sal_Bo
 }
 
 
-MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, AddonMenu* pAddonMenu, sal_Bool bDelete, sal_Bool bDeleteChildren ) :
-    ThreadHelpBase( &Application::GetSolarMutex() ), OWeakObject()
+// #110897#
+MenuManager::MenuManager(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    REFERENCE< XFRAME >& rFrame, AddonMenu* pAddonMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
+:   // #110897#
+    mxServiceFactory(xServiceFactory),
+    ThreadHelpBase( &Application::GetSolarMutex() ),
+    OWeakObject()
 {
     m_bActive           = sal_False;
     m_bDeleteMenu       = bDelete;
@@ -578,7 +618,9 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, AddonMenu* pAddonMenu, sa
         PopupMenu* pPopupMenu = pAddonMenu->GetPopupMenu( nItemId );
         if ( pPopupMenu )
         {
-            MenuManager* pSubMenuManager = new MenuManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
+            // #110897#
+            // MenuManager* pSubMenuManager = new MenuManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
+            MenuManager* pSubMenuManager = new MenuManager( getServiceFactory(), rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
 
             // store menu item command as we later have to know which menu is active (see Acivate handler)
             pSubMenuManager->m_aMenuItemCommand = aItemCommand;
@@ -616,8 +658,14 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, AddonMenu* pAddonMenu, sa
 }
 
 
-MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, AddonPopupMenu* pAddonPopupMenu, sal_Bool bDelete, sal_Bool bDeleteChildren ) :
-    ThreadHelpBase( &Application::GetSolarMutex() ), OWeakObject()
+// #110897#
+MenuManager::MenuManager(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    REFERENCE< XFRAME >& rFrame, AddonPopupMenu* pAddonPopupMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
+:   // #110897#
+    mxServiceFactory(xServiceFactory),
+    ThreadHelpBase( &Application::GetSolarMutex() ),
+    OWeakObject()
 {
     m_bActive           = sal_False;
     m_bDeleteMenu       = bDelete;
@@ -648,7 +696,9 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, AddonPopupMenu* pAddonPop
         PopupMenu* pPopupMenu = pAddonPopupMenu->GetPopupMenu( nItemId );
         if ( pPopupMenu )
         {
-            MenuManager* pSubMenuManager = new MenuManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
+            // #110897#
+            // MenuManager* pSubMenuManager = new MenuManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
+            MenuManager* pSubMenuManager = new MenuManager( getServiceFactory(), rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
 
             // store menu item command as we later have to know which menu is active (see Acivate handler)
             pSubMenuManager->m_aMenuItemCommand = aItemCommand;
@@ -777,7 +827,10 @@ throw ( RuntimeException )
             URL aTargetURL;
             aTargetURL.Complete = pStatusChangedMenu->aMenuItemURL;
 
-            REFERENCE< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+            // #110897#
+            // REFERENCE< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+            //      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
+            REFERENCE< XURLTransformer > xTrans( getServiceFactory()->createInstance(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
             xTrans->parseStrict( aTargetURL );
 
@@ -802,7 +855,11 @@ void MenuManager::RemoveListener()
 
     // disposing called from parent dispatcher
     // remove all listener to prepare shutdown
-    REFERENCE< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+
+    // #110897#
+    //REFERENCE< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+    //  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
+    REFERENCE< XURLTransformer > xTrans( getServiceFactory()->createInstance(
         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
 
     std::vector< MenuItemHandler* >::iterator p;
@@ -834,7 +891,11 @@ void SAL_CALL MenuManager::disposing( const EVENTOBJECT& Source ) throw ( RUNTIM
 
         // disposing called from parent dispatcher
         // remove all listener to prepare shutdown
-        REFERENCE< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+
+        // #110897#
+        // REFERENCE< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+        //  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
+        REFERENCE< XURLTransformer > xTrans( getServiceFactory()->createInstance(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
 
         std::vector< MenuItemHandler* >::iterator p;
@@ -880,7 +941,10 @@ void SAL_CALL MenuManager::disposing( const EVENTOBJECT& Source ) throw ( RUNTIM
                 URL aTargetURL;
                 aTargetURL.Complete = pMenuItemDisposing->aMenuItemURL;
 
-                REFERENCE< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+                // #110897#
+                // REFERENCE< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+                //  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
+                REFERENCE< XURLTransformer > xTrans( getServiceFactory()->createInstance(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
                 xTrans->parseStrict( aTargetURL );
 
@@ -934,8 +998,13 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
     {
         URL aTargetURL;
         REFERENCE< XDISPATCHPROVIDER > xDispatchProvider( m_xFrame, UNO_QUERY );
-        REFERENCE< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+
+        // #110897#
+        // REFERENCE< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+        //          rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
+        REFERENCE< XURLTransformer > xTrans( getServiceFactory()->createInstance(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
+
         REFERENCE< XDISPATCH > xMenuItemDispatch;
 
         // query for dispatcher
@@ -1061,8 +1130,12 @@ void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu )
 {
     // update window list
     ::std::vector< ::rtl::OUString > aNewWindowListVector;
-    Reference< XDesktop > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
-                                    DESKTOP_SERVICE ), UNO_QUERY );
+
+    // #110897#
+    // Reference< XDesktop > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
+    //  DESKTOP_SERVICE ), UNO_QUERY );
+    Reference< XDesktop > xDesktop( getServiceFactory()->createInstance(
+        DESKTOP_SERVICE ), UNO_QUERY );
 
     USHORT  nActiveItemId = 0;
     USHORT  nItemId = START_ITEMID_WINDOWLIST;
@@ -1264,8 +1337,12 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
         else
         {
             URL aTargetURL;
-            REFERENCE< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
+
+            // #110897#
+            // REFERENCE< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+            //      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
+            REFERENCE< XURLTransformer > xTrans( getServiceFactory()->createInstance(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
 
             ResetableGuard aGuard( m_aLock );
 
@@ -1348,8 +1425,13 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
                  nCurItemId <= END_ITEMID_WINDOWLIST )
             {
                 // window list menu item selected
-                Reference< XFramesSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                DESKTOP_SERVICE ), UNO_QUERY );
+
+                // #110897#
+                // Reference< XFramesSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
+                //  DESKTOP_SERVICE ), UNO_QUERY );
+                Reference< XFramesSupplier > xDesktop( getServiceFactory()->createInstance(
+                    DESKTOP_SERVICE ), UNO_QUERY );
+
                 USHORT  nWindowItemId = START_ITEMID_WINDOWLIST;
 
                 if ( xDesktop.is() )
@@ -1379,8 +1461,12 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
                 MenuItemHandler* pMenuItemHandler = GetMenuItemHandler( nCurItemId );
                 if ( pMenuItemHandler && pMenuItemHandler->xMenuItemDispatch.is() )
                 {
-                    REFERENCE< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
+                    // #110897#
+                    // REFERENCE< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+                    //  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
+                    REFERENCE< XURLTransformer > xTrans( getServiceFactory()->createInstance(
+                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
+
                     aTargetURL.Complete = pMenuItemHandler->aMenuItemURL;
                     xTrans->parseStrict( aTargetURL );
 
@@ -1416,6 +1502,13 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
 IMPL_LINK( MenuManager, Highlight, Menu *, pMenu )
 {
     return 0;
+}
+
+// #110897#
+const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& MenuManager::getServiceFactory()
+{
+    // #110897#
+    return mxServiceFactory;
 }
 
 }
