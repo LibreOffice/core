@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commands.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:35:21 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,17 +271,8 @@ Menu RID_COMMANDMENU
         {
             Identifier = RID_UNBINOPS_MENU ;
             HelpId = HID_SMA_UNBINOPS_TBX ;
-            Text = "~Unäre/Binäre Operatoren" ;
-            Text [ ENGLISH ] = "Unary/binary operators" ;
-            Text [ english_us ] = "~Unary/Binary Operators" ;
-            Text [ portuguese_brazilian ] = "Operadores ~Unários/Binários" ;
-            Text [ swedish ] = "~Unära/binära operatorer" ;
-            Text [ danish ] = "~Monadiske/binære operatorer" ;
-            Text [ italian ] = "Operatori unari/binari" ;
-            Text [ spanish ] = "Operadores ~unarios/binarios" ;
-            Text [ french ] = "Opérateurs u~naires/binaires" ;
-            Text [ dutch ] = "~Unaire/binaire operatoren" ;
-            Text [ portuguese ] = "Operadores ~unários/binários" ;
+            Text [ de ] = "~Unäre/Binäre Operatoren" ;
+            Text [ en-US ] = "~Unary/Binary Operators" ;
             SubMenu = Menu
             {
                 ItemList =
@@ -408,43 +399,14 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "ä¸€å…ƒ/äºŒå…ƒè¿ç®—ç¬¦(~U)";
-            Text[ russian ] = "Óíàğíûå/áèíàğíûå îïåğàòîğû";
-            Text[ polish ] = "Operatory ~jedno- lub dwuargumentowe";
-            Text[ japanese ] = "å˜é …ãƒ»äºŒé …æ¼”ç®—å­(~U)";
-            Text[ chinese_traditional ] = "ä¸€å…ƒ/äºŒå…ƒé‹ç®—ç¬¦(~U)";
-            Text[ dutch ] = "~Unaire/binaire operatoren";
-            Text[ chinese_simplified ] = "ä¸€å…ƒ/äºŒå…ƒè¿ç®—ç¬¦(~U)";
-            Text[ greek ] = "Åíá~äéêïß/Äõáäéêïß ôåëåóôİò";
-            Text[ korean ] = "ë‹¨í•­/ì´í•­ ì—°ì‚°ì(~U)";
-            Text[ arabic ] = "ÚæÇãá ÊÔÛíá ÃÍÇÏíÉ/ËäÇÆíÉ";
-            Text[ turkish ] = "Birli/ikili işleçler";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Operadors Monaris/Binaris";
-            Text[ finnish ] = "~Yksi- ja kaksipaikkaiset operaattorit";
-            Text[ thai ] = "à¸•à¸±à¸§à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£~Unary/Binary ";
-            Text[ czech ] = "UnÃ¡rnÃ­/binÃ¡rnÃ­ operÃ¡tory";
-            Text[ hebrew ] = "â€®××•×¤×¨×˜×•×¨×™× ××•× ×¨×™×™×\\×‘×™× ×¨×™×™×â€¬";
-            Text[ hindi ] = "~à¤¯à¥‚à¤¨à¤¾à¤°à¤¿/à¤¬à¥ˆà¤¨à¤¾à¤°à¤¿ à¤ªà¥à¤°à¤µà¤°à¥à¤¤à¤•";
-            Text[ slovak ] = "~UnÃ¡rne/binÃ¡rne operÃ¡tory";
-            Text[ hungarian ] = "~Egy- Ã©s kÃ©toperandusÃº operÃ¡torok";
-            Text[ slovenian ] = "~Unarni/binarni operatorji";
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = RID_RELATIONS_MENU ;
             HelpId = HID_SMA_RELATIONS_TBX ;
-            Text = "~Relationen" ;
-            Text [ ENGLISH ] = "Relations" ;
-            Text [ english_us ] = "~Relations" ;
-            Text [ portuguese_brazilian ] = "~Relações" ;
-            Text [ swedish ] = "~Relationer" ;
-            Text [ danish ] = "~Relationer" ;
-            Text [ italian ] = "Relazioni" ;
-            Text [ spanish ] = "~Relaciones" ;
-            Text [ french ] = "~Relations" ;
-            Text [ dutch ] = "~Relaties" ;
-            Text [ portuguese ] = "~Relações" ;
+            Text [ de ] = "~Relationen" ;
+            Text [ en-US ] = "~Relations" ;
             SubMenu = Menu
             {
                 ItemList =
@@ -585,43 +547,14 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "å…³ç³»(~R)";
-            Text[ russian ] = "Îòíîøåíèÿ";
-            Text[ polish ] = "~Relacje";
-            Text[ japanese ] = "æ¯”è¼ƒæ¼”ç®—(~R)";
-            Text[ chinese_traditional ] = "é—œä¿‚(~R)";
-            Text[ dutch ] = "~Relaties";
-            Text[ chinese_simplified ] = "å…³ç³»(~R)";
-            Text[ greek ] = "~Ó÷İóåéò";
-            Text[ korean ] = "ê´€ê³„(~R)";
-            Text[ arabic ] = "ÚáÇŞÇÊ";
-            Text[ turkish ] = "İlişkiler";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Relacions";
-            Text[ finnish ] = "~Relaatiot";
-            Text[ thai ] = "~à¸„à¸§à¸²à¸¡à¸ªà¸±à¸¡à¸à¸±à¸™à¸˜à¹Œ";
-            Text[ czech ] = "Relace";
-            Text[ hebrew ] = "â€®×™×—×¡×™×â€¬";
-            Text[ hindi ] = "~à¤¸à¤®à¥à¤¬à¤¨à¥à¤§à¥‡à¤‚";
-            Text[ slovak ] = "~RelÃ¡cie";
-            Text[ hungarian ] = "~RelÃ¡ciÃ³k";
-            Text[ slovenian ] = "~Relacije";
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = RID_SETOPERATIONS_MENU ;
             HelpId = HID_SMA_SETOPERATIONS_TBX ;
-            Text = "~Mengenoperationen" ;
-            Text [ ENGLISH ] = "Set operations" ;
-            Text [ english_us ] = "~Set Operations" ;
-            Text [ portuguese_brazilian ] = "Operações de ~Conjuntos" ;
-            Text [ swedish ] = "~Mängdoperationer" ;
-            Text [ danish ] = "~Mængdeoperationer" ;
-            Text [ italian ] = "Operazioni degli insiemi" ;
-            Text [ spanish ] = "~Operaciones de conjuntos" ;
-            Text [ french ] = "O~pérateurs d'ensemble" ;
-            Text [ dutch ] = "~Definities" ;
-            Text [ portuguese ] = "~Operações de conjuntos" ;
+            Text [ de ] = "~Mengenoperationen" ;
+            Text [ en-US ] = "~Set Operations" ;
             SubMenu = Menu
             {
                 ItemList =
@@ -768,43 +701,14 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "é›†åˆè¿ç®—(~S)";
-            Text[ russian ] = "Îïåğàöèè íàä ìíîæåñòâîì";
-            Text[ polish ] = "~Operacje na zbiorach";
-            Text[ japanese ] = "é›†åˆæ¼”ç®—(~S)";
-            Text[ chinese_traditional ] = "é›†åˆé‹ç®—(~S)";
-            Text[ dutch ] = "~Definities";
-            Text[ chinese_simplified ] = "é›†åˆè¿ç®—(~S)";
-            Text[ greek ] = "~ĞñÜîåéò óõíüëùí";
-            Text[ korean ] = "ì§‘í•© ì—°ì‚°(~S)";
-            Text[ arabic ] = "ãÌãæÚÉ ÚãáíÇÊ";
-            Text[ turkish ] = "Küme işlemleri";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Operacions de conjunts";
-            Text[ finnish ] = "~Joukko-operaattorit";
-            Text[ thai ] = "~à¸•à¸±à¹‰à¸‡à¸à¸²à¸£à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£";
-            Text[ czech ] = "MnoÅ¾inovÃ© operace";
-            Text[ hebrew ] = "â€®×¤×¢×•×œ×•×ª ×¢×œ ×¡×˜×™×â€¬";
-            Text[ hindi ] = "~à¤•à¤¾à¤°à¥à¤¯ à¤¸à¥‡à¤Ÿà¥à¤Ÿ à¤•à¤°à¥‹";
-            Text[ slovak ] = "MnoÅ¾inovÃ© o~perÃ¡cie";
-            Text[ hungarian ] = "~HalmazmÅ±veletek";
-            Text[ slovenian ] = "Na~stavi operacije";
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = RID_FUNCTIONS_MENU ;
             HelpId = HID_SMA_FUNCTIONS_TBX ;
-            Text = "~Funktionen" ;
-            Text [ ENGLISH ] = "Functions" ;
-            Text [ english_us ] = "~Functions" ;
-            Text [ portuguese_brazilian ] = "~Funções" ;
-            Text [ swedish ] = "~Funktioner" ;
-            Text [ danish ] = "~Funktioner" ;
-            Text [ italian ] = "Funzioni" ;
-            Text [ spanish ] = "~Funciones" ;
-            Text [ french ] = "~Fonctions" ;
-            Text [ dutch ] = "~Functies" ;
-            Text [ portuguese ] = "~Funções" ;
+            Text [ de ] = "~Funktionen" ;
+            Text [ en-US ] = "~Functions" ;
             SubMenu = Menu
             {
                 ItemList =
@@ -923,17 +827,8 @@ Menu RID_COMMANDMENU
                     {
                         Identifier = RID_FUNCTIONSOTHER1_MENU;
                         HelpId = HID_SMA_FUNCTIONSOTHER1_MENU;
-                        Text = "andere";
-                        Text [ ENGLISH ] = "other";
-                        TEXT[ italian ] = "altri";
-                        TEXT[ portuguese_brazilian ] = "Mais";
-                        TEXT[ portuguese ] = "Outros";
-                        TEXT[ danish ] = "Mere";
-                        TEXT[ french ] = "Autres";
-                        TEXT[ swedish ] = "andra";
-                        TEXT[ dutch ] = "andere";
-                        TEXT[ spanish ] = "otros";
-                        TEXT[ english_us ] = "More";
+                        Text [ de ] = "andere";
+                        Text [ en-US ] = "More";
                         SubMenu = Menu
                         {
                             ItemList =
@@ -988,67 +883,18 @@ Menu RID_COMMANDMENU
                                 };
                             };
                         };
-                        TEXT[ chinese_simplified ] = "å…¶ä»–";
-                        TEXT[ russian ] = "Äğóãèå";
-                        TEXT[ polish ] = "inne";
-                        TEXT[ japanese ] = "ãã®ä»–";
-                        TEXT[ chinese_traditional ] = "å…¶ä»–";
-                        TEXT[ language_user1 ] = " ";
-                        TEXT[ dutch ] = "andere";
-                        TEXT[ chinese_simplified ] = "å…¶ä»–";
-                        TEXT[ greek ] = "Üëëá";
-                        TEXT[ korean ] = "ê¸°íƒ€";
-                        TEXT[ arabic ] = "ÛíÑ Ğáß";
-                        TEXT[ turkish ] = "Diğer";
-                        TEXT[ catalan ] = "altres";
-                        TEXT[ finnish ] = "Lisää";
-                        TEXT[ thai ] = "à¸¡à¸²à¸à¸à¸§à¹ˆà¸²";
-                        TEXT[ czech ] = "VÃ­ce";
-                        TEXT[ hebrew ] = "â€®×¢×•×“â€¬";
-                        TEXT[ hindi ] = "à¤…à¤§à¤¿à¤•";
-                        TEXT[ slovak ] = "Viac";
-                        TEXT[ hungarian ] = "TovÃ¡bbi";
-                        TEXT[ slovenian ] = "Dodatno";
+                        Text [ x-comment ] = " ";
                     };
                 };
             };
-            Text[ chinese_simplified ] = "å‡½æ•°(~F)";
-            Text[ russian ] = "Ôóíêöèè";
-            Text[ polish ] = "~Funkcje";
-            Text[ japanese ] = "é–¢æ•°(~F)";
-            Text[ chinese_traditional ] = "å‡½æ•¸(~F)";
-            Text[ dutch ] = "~Functies";
-            Text[ chinese_simplified ] = "å‡½æ•°(~F)";
-            Text[ greek ] = "~ÓõíáñôŞóåéò";
-            Text[ korean ] = "í•¨ìˆ˜(~F)";
-            Text[ arabic ] = "ÏÇáÇÊ";
-            Text[ turkish ] = "Fonksiyonlar";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Funcions";
-            Text[ finnish ] = "~Funktiot";
-            Text[ thai ] = "~à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™";
-            Text[ czech ] = "Funkce";
-            Text[ hebrew ] = "â€®×ª×¤×§×•×“×™×â€¬";
-            Text[ hindi ] = "~à¤«à¤‚à¤•à¥à¤¶à¤¨à¥";
-            Text[ slovak ] = "~Funkcie";
-            Text[ hungarian ] = "~FÃ¼ggvÃ©nyek";
-            Text[ slovenian ] = "~Funkcije";
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = RID_OPERATORS_MENU ;
             HelpId = HID_SMA_OPERATORS_TBX ;
-            Text = "~Operatoren" ;
-            Text [ ENGLISH ] = "Operators" ;
-            Text [ english_us ] = "O~perators" ;
-            Text [ portuguese_brazilian ] = "~Operadores" ;
-            Text [ swedish ] = "~Operatorer" ;
-            Text [ danish ] = "~Operatorer" ;
-            Text [ italian ] = "Operatori" ;
-            Text [ spanish ] = "~Operadores" ;
-            Text [ french ] = "~Opérateurs" ;
-            Text [ dutch ] = "O~peratoren" ;
-            Text [ portuguese ] = "~Operadores" ;
+            Text [ de ] = "~Operatoren" ;
+            Text [ en-US ] = "O~perators" ;
             SubMenu = Menu
             {
                 ItemList =
@@ -1137,43 +983,14 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "è¿ç®—ç¬¦(~P)";
-            Text[ russian ] = "Îïåğàòîğû";
-            Text[ polish ] = "O~peratory";
-            Text[ japanese ] = "æ¼”ç®—å­(~P)";
-            Text[ chinese_traditional ] = "é‹ç®—ç¬¦(~P)";
-            Text[ dutch ] = "O~peratoren";
-            Text[ chinese_simplified ] = "è¿ç®—ç¬¦(~P)";
-            Text[ greek ] = "~Ôåëåóôİò";
-            Text[ korean ] = "ì—°ì‚°ì(~P)";
-            Text[ arabic ] = "ÚæÇãá ÇáÊÔÛíá";
-            Text[ turkish ] = "İşleçler";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "O~peradors";
-            Text[ finnish ] = "~Operaattorit";
-            Text[ thai ] = "à¸•à¸±~à¸§à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£";
-            Text[ czech ] = "OperÃ¡tory";
-            Text[ hebrew ] = "â€®××•×¤×¨×˜×•×¨×™×â€¬";
-            Text[ hindi ] = "~à¤ªà¥à¤°à¤µà¤°à¥à¤¤à¤•";
-            Text[ slovak ] = "O~perÃ¡tory";
-            Text[ hungarian ] = "~OperÃ¡torok";
-            Text[ slovenian ] = "O~peratorji";
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = RID_ATTRIBUTES_MENU ;
             HelpId = HID_SMA_ATTRIBUTES_TBX ;
-            Text = "~Attribute" ;
-            Text [ ENGLISH ] = "Attributes" ;
-            Text [ portuguese ] = "~Atributos" ;
-            Text [ english_us ] = "~Attributes" ;
-            Text [ portuguese_brazilian ] = "~Atributos" ;
-            Text [ swedish ] = "~Attribut" ;
-            Text [ danish ] = "~Attributter" ;
-            Text [ italian ] = "Attributi" ;
-            Text [ spanish ] = "Atributos" ;
-            Text [ french ] = "~Attributs" ;
-            Text [ dutch ] = "~Attributen" ;
+            Text [ de ] = "~Attribute" ;
+            Text [ en-US ] = "~Attributes" ;
             SubMenu = Menu
             {
                 ItemList =
@@ -1326,43 +1143,14 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "å±æ€§(~A)";
-            Text[ russian ] = "Àòğèáóòû";
-            Text[ polish ] = "~Atrybuty";
-            Text[ japanese ] = "å±æ€§(~A)";
-            Text[ chinese_traditional ] = "å±¬æ€§(~A)";
-            Text[ dutch ] = "~Attributen";
-            Text[ chinese_simplified ] = "å±æ€§(~A)";
-            Text[ greek ] = "~Éäéüôçôåò";
-            Text[ korean ] = "ì†ì„±(~A)";
-            Text[ arabic ] = "ÓãÇÊ";
-            Text[ turkish ] = "Öznitelikler";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Atributs";
-            Text[ finnish ] = "~Määritteet";
-            Text[ thai ] = "~à¸„à¸¸à¸“à¸¥à¸±à¸à¸©à¸“à¸°";
-            Text[ czech ] = "PÅ™Ã­znaky";
-            Text[ hebrew ] = "â€®×ª×›×•× ×•×ªâ€¬";
-            Text[ hindi ] = "~à¤à¤Ÿà¥à¤°à¤¿à¤¬à¥à¤¯à¥‚à¤Ÿà¥à¤¸";
-            Text[ slovak ] = "PrÃ­zn~aky";
-            Text[ hungarian ] = "~JellemzÅ‘k";
-            Text[ slovenian ] = "~Atributi";
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = RID_BRACKETS_MENU ;
             HelpId = HID_SMA_BRACKETS_TBX ;
-            Text = "~Klammern" ;
-            Text [ ENGLISH ] = "Parentheses" ;
-            Text [ english_us ] = "~Brackets" ;
-            Text [ portuguese_brazilian ] = "~Colchetes" ;
-            Text [ swedish ] = "~Parenteser" ;
-            Text [ danish ] = "~Parenteser" ;
-            Text [ italian ] = "Parentesi" ;
-            Text [ spanish ] = "~Paréntesis" ;
-            Text [ french ] = "~Parenthèses" ;
-            Text [ dutch ] = "~Haakjes" ;
-            Text [ portuguese ] = "~Parênteses" ;
+            Text [ de ] = "~Klammern" ;
+            Text [ en-US ] = "~Brackets" ;
             SubMenu = Menu
             {
                 ItemList =
@@ -1519,43 +1307,14 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "æ‹¬å·(~B)";
-            Text[ russian ] = "Ñêîáêè";
-            Text[ polish ] = "~Nawiasy";
-            Text[ japanese ] = "ã‹ã£ã“(~B)";
-            Text[ chinese_traditional ] = "æ‹¬è™Ÿ(~B)";
-            Text[ dutch ] = "~Haakjes";
-            Text[ chinese_simplified ] = "æ‹¬å·(~B)";
-            Text[ greek ] = "~Ğáñåíèİóåéò";
-            Text[ korean ] = "ê´„í˜¸(~B)";
-            Text[ arabic ] = "ÃŞæÇÓ";
-            Text[ turkish ] = "Ayraçlar";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Parèntesi";
-            Text[ finnish ] = "~Sulkeet";
-            Text[ thai ] = "~à¸§à¸‡à¹€à¸¥à¹‡à¸šà¸à¹‰à¸²à¸¡à¸›à¸¹";
-            Text[ czech ] = "ZÃ¡vorky";
-            Text[ hebrew ] = "â€®×¡×•×’×¨×™×™× ××¨×•×‘×¢×•×ªâ€¬";
-            Text[ hindi ] = "~à¤•à¥‹à¤·à¥à¤ à¤•à¥‡à¤‚";
-            Text[ slovak ] = "ZÃ¡tv~orky";
-            Text[ hungarian ] = "~ZÃ¡rÃ³jel";
-            Text[ slovenian ] = "O~klepaji";
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = RID_FORMAT_MENU ;
             HelpId = HID_SMA_FORMAT_TBX ;
-            Text = "Formatieru~ngen" ;
-            Text [ ENGLISH ] = "Format" ;
-            Text [ english_us ] = "For~mats" ;
-            Text [ portuguese_brazilian ] = "~Formatos" ;
-            Text [ swedish ] = "~Formateringar" ;
-            Text [ danish ] = "Forma~ter" ;
-            Text [ italian ] = "Formattazioni" ;
-            Text [ spanish ] = "~Formatos" ;
-            Text [ french ] = "Format~age" ;
-            Text [ dutch ] = "~Opmaak" ;
-            Text [ portuguese ] = "~Formatos" ;
+            Text [ de ] = "Formatieru~ngen" ;
+            Text [ en-US ] = "For~mats" ;
             SubMenu = Menu
             {
                 ItemList =
@@ -1604,112 +1363,25 @@ Menu RID_COMMANDMENU
                     {
                         Identifier = RID_NEWLINE;
                         HelpId = HID_SMA_NEWLINE;
-                        Text = "neue Zeile";
-                        Text [ ENGLISH ] = "new line" ;
-                        Text[ italian ] = "Nuova riga";
-                        Text[ portuguese_brazilian ] = "nova linha";
-                        Text[ portuguese ] = "nova linha";
-                        Text[ danish ] = "ny linje";
-                        Text[ french ] = "nouvelle ligne";
-                        Text[ swedish ] = "ny rad";
-                        Text[ dutch ] = "nieuwe regel";
-                        Text[ spanish ] = "línea nueva";
-                        Text[ english_us ] = "New Line";
-                        Text[ chinese_simplified ] = "æ¢è¡Œ";
-                        Text[ russian ] = "Ñîçäàòü íîâóş ñòğîêó";
-                        Text[ polish ] = "nowy wiersz";
-                        Text[ japanese ] = "newline";
-                        Text[ chinese_traditional ] = "æ›è¡Œ";
-                        Text[ dutch ] = "nieuwe regel";
-                        Text[ chinese_simplified ] = "æ¢è¡Œ";
-                        Text[ greek ] = "Íİá ãñáììŞ";
-                        Text[ korean ] = "ìƒˆ í–‰";
-                        Text[ arabic ] = "ÎØ ÌÏíÏ";
-                        Text[ turkish ] = "Yeni satır";
-                        Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "línia nova";
-                        Text[ finnish ] = "Rivinvaihto";
-                        Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”à¹ƒà¸«à¸¡à¹ˆ";
-                        Text[ czech ] = "NovÃ½ Å™Ã¡dek";
-                        Text[ hebrew ] = "â€®×§×• ×—×“×©â€¬";
-                        Text[ hindi ] = "à¤¨à¤¯à¤¾ à¤°à¥‡à¤–à¤¾";
-                        Text[ slovak ] = "NovÃ½ riadok";
-                        Text[ hungarian ] = "Ãšj sor";
-                        Text[ slovenian ] = "Nova vrstica";
+                        Text [ de ] = "neue Zeile";
+                        Text [ en-US ] = "New Line";
+                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = RID_SBLANK;
                         HelpId = HID_SMA_SBLANK;
-                        Text = "kleiner Zwischenraum";
-                        Text [ ENGLISH ] = "small space" ;
-                        Text[ italian ] = "Spazio intemedio piccolo";
-                        Text[ portuguese_brazilian ] = "Intervalo Pequeno";
-                        Text[ portuguese ] = "espaçamento pequeno";
-                        Text[ danish ] = "Lille frirum";
-                        Text[ french ] = "Petit espace";
-                        Text[ swedish ] = "Litet mellanrum";
-                        Text[ dutch ] = "kleine spatie";
-                        Text[ spanish ] = "espacio pequeño";
-                        Text[ english_us ] = "Small Gap";
-                        Text[ chinese_simplified ] = "å°é—´éš”";
-                        Text[ russian ] = "Êîğîòêèé ïğîáåë";
-                        Text[ polish ] = "Ma³y odstêp";
-                        Text[ japanese ] = "ã‚¹ãƒšãƒ¼ã‚¹å°";
-                        Text[ chinese_traditional ] = "å°é–“éš”";
-                        Text[ dutch ] = "kleine spatie";
-                        Text[ chinese_simplified ] = "å°é—´éš”";
-                        Text[ greek ] = "ìéêñü äéÜêåíï";
-                        Text[ korean ] = "ì‘ì€ ê°„ê²©";
-                        Text[ arabic ] = "ÊÈÇÚÏ ÕÛíÑ";
-                        Text[ turkish ] = "Küçük aralık";
-                        Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "espai petit";
-                        Text[ finnish ] = "Kapea väli";
-                        Text[ thai ] = "à¸Šà¹ˆà¸­à¸‡à¸§à¹ˆà¸²à¸‡à¹€à¸¥à¹‡à¸";
-                        Text[ czech ] = "MalÃ¡ mezera";
-                        Text[ hebrew ] = "â€®××¨×•×•×— ×§×˜×Ÿâ€¬";
-                        Text[ hindi ] = "à¤›à¥‹à¤Ÿà¤¾ à¤…à¤‚à¤¤à¤°";
-                        Text[ slovak ] = "MalÃ¡ medzera";
-                        Text[ hungarian ] = "Kis hÃ©zag";
-                        Text[ slovenian ] = "Majhna vrzel";
+                        Text [ de ] = "kleiner Zwischenraum";
+                        Text [ en-US ] = "Small Gap";
+                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = RID_BLANK;
                         HelpId = HID_SMA_BLANK;
-                        Text = "Zwischenraum";
-                        Text [ ENGLISH ] = "space" ;
-                        Text[ italian ] = "Spazio intermedio";
-                        Text[ portuguese_brazilian ] = "Intervalo";
-                        Text[ portuguese ] = "espaçamento";
-                        Text[ danish ] = "Frirum";
-                        Text[ french ] = "Espace";
-                        Text[ swedish ] = "mellanrum";
-                        Text[ dutch ] = "spatie";
-                        Text[ spanish ] = "espacio";
-                        Text[ english_us ] = "Gap";
-                        Text[ chinese_simplified ] = "é—´éš”";
-                        Text[ russian ] = "Ïğîáåë";
-                        Text[ polish ] = "Odstêp";
-                        Text[ japanese ] = "ã‚¹ãƒšãƒ¼ã‚¹";
-                        Text[ chinese_traditional ] = "é–“éš”";
-                        Text[ dutch ] = "spatie";
-                        Text[ chinese_simplified ] = "é—´éš”";
-                        Text[ greek ] = "ÄéÜêåíï";
-                        Text[ korean ] = "ê°„ê²©";
-                        Text[ arabic ] = "ÊÈÇÚÏ";
-                        Text[ turkish ] = "Aralık";
-                        Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "Espai";
-                        Text[ finnish ] = "Väli";
-                        Text[ thai ] = "à¸Šà¹ˆà¸­à¸‡à¸§à¹ˆà¸²à¸‡";
-                        Text[ czech ] = "Mezera";
-                        Text[ hebrew ] = "â€®××¨×•×•×—â€¬";
-                        Text[ hindi ] = "à¤…à¤‚à¤¤à¤°";
-                        Text[ slovak ] = "VoÄ¾nÃ½ priestor";
-                        Text[ hungarian ] = "HÃ©zag";
-                        Text[ slovenian ] = "Vrzel";
+                        Text [ de ] = "Zwischenraum";
+                        Text [ en-US ] = "Gap";
+                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
@@ -1753,43 +1425,14 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "æ ¼å¼åŒ–(~M)";
-            Text[ russian ] = "Ôîğìàòû";
-            Text[ polish ] = "For~maty";
-            Text[ japanese ] = "æ›¸å¼è¨­å®š(~M)";
-            Text[ chinese_traditional ] = "æ ¼å¼åŒ–(~M)";
-            Text[ dutch ] = "~Opmaak";
-            Text[ chinese_simplified ] = "æ ¼å¼åŒ–(~M)";
-            Text[ greek ] = "Ìïñ~öïğïéŞóåéò";
-            Text[ korean ] = "ì„œì‹(~M)";
-            Text[ arabic ] = "ÊäÓíŞ";
-            Text[ turkish ] = "Formatlar";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "For~mats";
-            Text[ finnish ] = "~Muotoilu";
-            Text[ thai ] = "à¸£à¸¹à¸›à¹~à¸šà¸š";
-            Text[ czech ] = "FormÃ¡t";
-            Text[ hebrew ] = "â€®×¦×•×¨×•×ªâ€¬";
-            Text[ hindi ] = "~à¤°à¤šà¤¨à¤¾";
-            Text[ slovak ] = "Fo~rmÃ¡ty";
-            Text[ hungarian ] = "For~mÃ¡tumok";
-            Text[ slovenian ] = "Ob~like";
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = RID_MISC_MENU ;
             HelpId = HID_SMA_MISC_MENU ;
-            Text = "~Sonstiges" ;
-            Text [ ENGLISH ] = "Misc" ;
-            Text [ english_us ] = "~Others" ;
-            Text [ portuguese_brazilian ] = "~Outros" ;
-            Text [ swedish ] = "Ö~vrigt" ;
-            Text [ danish ] = "~Andre" ;
-            Text [ italian ] = "Altro" ;
-            Text [ spanish ] = "~Otros" ;
-            Text [ french ] = "~Autres" ;
-            Text [ dutch ] = "Over~ige" ;
-            Text [ portuguese ] = "~Outros" ;
+            Text [ de ] = "~Sonstiges" ;
+            Text [ en-US ] = "~Others" ;
             SubMenu = Menu
             {
                 ItemList =
@@ -1918,27 +1561,7 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "å…¶ä»–(~O)";
-            Text[ russian ] = "Ïğî÷åå";
-            Text[ polish ] = "~Inne";
-            Text[ japanese ] = "ãã®ä»–(~O)";
-            Text[ chinese_traditional ] = "å…¶ä»–(~O)";
-            Text[ dutch ] = "Over~ige";
-            Text[ chinese_simplified ] = "å…¶ä»–(~O)";
-            Text[ greek ] = "~ÄéÜöïñá";
-            Text[ korean ] = "ê¸°íƒ€(~O)";
-            Text[ arabic ] = "ãÇ ÚÏì Ğáß";
-            Text[ turkish ] = "Diğerleri";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Altres";
-            Text[ finnish ] = "~Muut";
-            Text[ thai ] = "~à¸­à¸·à¹ˆà¸™ à¹†";
-            Text[ czech ] = "OstatnÃ­";
-            Text[ hebrew ] = "â€®××—×¨×™×â€¬";
-            Text[ hindi ] = "~à¤…à¤¨à¥à¤¯";
-            Text[ slovak ] = "~OstatnÃ©";
-            Text[ hungarian ] = "~Egyebek";
-            Text[ slovenian ] = "~Ostali";
+            Text [ x-comment ] = " ";
         };
     };
 };
