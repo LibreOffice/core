@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericunodialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:39:46 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
 #endif
 
 // --- needed because of the solar mutex
@@ -337,15 +341,20 @@ void SAL_CALL OGenericUnoDialog::endExecute(  ) throw(RuntimeException)
 void OGenericUnoDialog::implInitialize(const Any& _rValue)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    PropertyValue aProperty;
-    if (_rValue >>= aProperty)
+    try
     {
-        try
+        PropertyValue aProperty;
+        NamedValue aValue;
+        if ( _rValue >>= aProperty )
         {
-            setPropertyValue(aProperty.Name, aProperty.Value);
+            setPropertyValue( aProperty.Name, aProperty.Value );
         }
-        catch(Exception&) { }
+        else if ( _rValue >>= aValue )
+        {
+            setPropertyValue( aValue.Name, aValue.Value );
+        }
     }
+    catch(Exception&) { }
 }
 
 //-------------------------------------------------------------------------
