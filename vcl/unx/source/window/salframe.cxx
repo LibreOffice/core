@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.178 $
+ *  $Revision: 1.179 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:44:17 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1970,7 +1970,7 @@ X11SalFrame::PostExtTextEvent (sal_uInt16 nExtTextEventType, void *pExtTextEvent
     aEvent.xclient.message_type = nEventAtom;
     aEvent.xclient.format       = 32;
 
-#if __SIZEOFLONG > 4
+#if SAL_TYPES_SIZEOFLONG > 4
     aEvent.xclient.data.l[0] = (sal_uInt32)((long)pExtTextEvent & 0xffffffff);
     aEvent.xclient.data.l[1] = (sal_uInt32)((long)pExtTextEvent >> 32);
 #else
@@ -1987,7 +1987,7 @@ X11SalFrame::PostExtTextEvent (sal_uInt16 nExtTextEventType, void *pExtTextEvent
 void
 X11SalFrame::HandleExtTextEvent (XClientMessageEvent *pEvent)
 {
-    #if __SIZEOFLONG > 4
+    #if SAL_TYPES_SIZEOFLONG > 4
     void* pExtTextEvent = (void*)(  (pEvent->data.l[0] & 0xffffffff)
                                   | (pEvent->data.l[1] << 32) );
     #else
