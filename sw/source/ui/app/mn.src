@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-21 20:49:07 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,10 +190,10 @@ Menu MN_TAB_POPUPMENU
             Text[ swedish ] = "Talig~enkänning";
             Text[ polish ] = "Rozpoznawanie liczb";
             Text[ portuguese_brazilian ] = "Number recognition";
-            Text[ japanese ] = "”š‚Ì”F¯";
-            Text[ korean ] = "¼ıÀÚ ÀÎ½Ä";
-            Text[ chinese_simplified ] = "Êı×ÖÊ¶±ğ";
-            Text[ chinese_traditional ] = "ÃÑ§O¼Æ¦r";
+            Text[ japanese ] = "”š‚Ì”F¯(~N)";
+            Text[ korean ] = "¼ıÀÚ ÀÎ½Ä(~N)";
+            Text[ chinese_simplified ] = "Êı×ÖÊ¶±ğ(~N)";
+            Text[ chinese_traditional ] = "ÃÑ§O¼Æ¦r(~N)";
             Text[ arabic ] = "ÊÚÑíİ ÇáÃÑŞÇã";
             Text[ turkish ] = "Sayı tanıma";
         };
