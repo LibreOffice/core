@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Ref.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:21:39 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,15 @@ using namespace connectivity;
 //**************************************************************
 
 jclass java_sql_Ref::theClass = 0;
-
+java_sql_Ref::java_sql_Ref( JNIEnv * pEnv, jobject myObj )
+: java_lang_Object( pEnv, myObj )
+{
+    SDBThreadAttach::addRef();
+}
 java_sql_Ref::~java_sql_Ref()
-{}
+{
+    SDBThreadAttach::releaseRef();
+}
 
 jclass java_sql_Ref::getMyClass()
 {
@@ -103,15 +109,16 @@ void java_sql_Ref::saveClassRef( jclass pClass )
     ::rtl::OUString aStr;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        char * cSignature = "()Ljava/lang/String;";
-        char * cMethodName = "getBaseTypeName";
+        static char * cSignature = "()Ljava/lang/String;";
+        static char * cMethodName = "getBaseTypeName";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID);
             ThrowSQLException(t.pEnv,*this);
-            if(out)
-                aStr = JavaString2String(t.pEnv,out);
+            aStr = JavaString2String(t.pEnv,out);
             // und aufraeumen
         } //mID
     } //t.pEnv
