@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-10-17 17:38:56 $
+ *  last change: $Author: nn $ $Date: 2002-08-28 09:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,8 @@ IMPL_LINK( ScInsertTableDlg, BrowseHdl_Impl, PushButton*, EMPTYARG )
 
         if (pDocShTables)
             pDocShTables->DoClose();        // delete passiert beim Zuweisen auf die Ref
+
+        pMed->UseInteractionHandler( TRUE );    // to enable the filter options dialog
 
         pDocShTables = new ScDocShell;
         aDocShTablesRef = pDocShTables;

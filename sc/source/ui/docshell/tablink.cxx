@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2001-08-06 10:21:02 $
+ *  last change: $Author: nn $ $Date: 2002-08-28 09:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ ScTableLink::ScTableLink(ScDocShell* pDocSh, const String& rFile,
     aFilterName(rFilter),
     aOptions(rOpt),
     bInCreate( FALSE ),
+    bInEdit( FALSE ),
     bAddUndo( TRUE ),
     bDoPaint( TRUE )
 {
@@ -126,6 +127,7 @@ ScTableLink::ScTableLink(SfxObjectShell* pShell, const String& rFile,
     aFilterName(rFilter),
     aOptions(rOpt),
     bInCreate( FALSE ),
+    bInEdit( FALSE ),
     bAddUndo( TRUE ),
     bDoPaint( TRUE )
 {
@@ -155,7 +157,11 @@ BOOL __EXPORT ScTableLink::Edit(Window* pParent)
     if (pParent)
         Application::SetDefDialogParent(pParent);
 
+    bInEdit = TRUE;
+
     BOOL bRet = SvBaseLink::Edit(pParent);
+
+    bInEdit = FALSE;
 
     Application::SetDefDialogParent(pOldParent);
 
@@ -237,6 +243,9 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
         pSet->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );
 
     SfxMedium* pMed = new SfxMedium(aNewUrl, STREAM_STD_READ, FALSE, pFilter, pSet);
+
+    if ( bInEdit )                              // only if using the edit dialog,
+        pMed->UseInteractionHandler( TRUE );    // enable the filter options dialog
 
     ScDocShell* pSrcShell = new ScDocShell(SFX_CREATE_MODE_INTERNAL);
     SvEmbeddedObjectRef aRef = pSrcShell;
@@ -459,7 +468,7 @@ void ScDocumentLoader::RemoveAppPrefix( String& rFilterName )       // static
 
 ScDocumentLoader::ScDocumentLoader( const String& rFileName,
                                     String& rFilterName, String& rOptions,
-                                    UINT32 nRekCnt ) :
+                                    UINT32 nRekCnt, BOOL bWithInteraction ) :
         pDocShell(0),
         pMedium(0)
 {
@@ -477,6 +486,9 @@ ScDocumentLoader::ScDocumentLoader( const String& rFileName,
     pMedium = new SfxMedium( rFileName, STREAM_STD_READ, FALSE, pFilter, pSet );
     if ( pMedium->GetError() != ERRCODE_NONE )
         return ;
+
+    if ( bWithInteraction )
+        pMedium->UseInteractionHandler( TRUE ); // to enable the filter options dialog
 
     pDocShell = new ScDocShell( SFX_CREATE_MODE_INTERNAL );
     aRef = pDocShell;

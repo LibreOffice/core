@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-09 14:45:16 $
+ *  last change: $Author: nn $ $Date: 2002-08-28 09:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,8 @@ IMPL_LINK( ScLinkedAreaDlg, BrowseHdl, PushButton*, EMPTYARG )
         if (pSourceShell)
             pSourceShell->DoClose();        // deleted when assigning aSourceRef
 
+        pMed->UseInteractionHandler( TRUE );    // to enable the filter options dialog
+
         pSourceShell = new ScDocShell;
         aSourceRef = pSourceShell;
         pSourceShell->DoLoad( pMed );
@@ -220,7 +222,7 @@ void ScLinkedAreaDlg::LoadDocument( const String& rFile, const String& rFilter, 
 
         SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, rFile );
 
-        ScDocumentLoader aLoader( rFile, aNewFilter, aNewOptions );
+        ScDocumentLoader aLoader( rFile, aNewFilter, aNewOptions, 0, TRUE );    // with interaction
         pSourceShell = aLoader.GetDocShell();
         if ( pSourceShell )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-29 20:20:06 $
+ *  last change: $Author: nn $ $Date: 2002-08-28 09:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ private:
     String      aFilterName;
     String      aOptions;
     BOOL        bInCreate;
+    BOOL        bInEdit;
     BOOL        bAddUndo;
     BOOL        bDoPaint;
 
@@ -136,7 +137,7 @@ private:
 public:
                         ScDocumentLoader( const String& rFileName,
                                             String& rFilterName, String& rOptions,
-                                            UINT32 nRekCnt = 0 );
+                                            UINT32 nRekCnt = 0, BOOL bWithInteraction = FALSE );
                         ~ScDocumentLoader();
     ScDocument*         GetDocument();
     ScDocShell*         GetDocShell()       { return pDocShell; }
