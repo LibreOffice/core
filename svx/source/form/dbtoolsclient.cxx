@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtoolsclient.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 16:57:06 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,12 +276,14 @@ namespace svxform
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString OStaticDataAccessTools::quoteTableName(const Reference< XDatabaseMetaData>& _rxMeta, const ::rtl::OUString& _rName) const
+    ::rtl::OUString OStaticDataAccessTools::quoteTableName(const Reference< XDatabaseMetaData>& _rxMeta, const ::rtl::OUString& _rName
+                                    ,sal_Bool _bUseCatalogInSelect
+                                    ,sal_Bool _bUseSchemaInSelect) const
     {
         ::rtl::OUString sReturn;
         checkIfLoaded();
         if (m_xDataAccessTools.is())
-            sReturn = m_xDataAccessTools->quoteTableName(_rxMeta, _rName);
+            sReturn = m_xDataAccessTools->quoteTableName(_rxMeta, _rName,_bUseCatalogInSelect,_bUseSchemaInSelect);
         return sReturn;
     }
 
@@ -365,6 +367,17 @@ namespace svxform
                 _rCommand, _pErrorInfo );
 
         return aNames;
+    }
+    //----------------------------------------------------------------
+    sal_Bool OStaticDataAccessTools::isDataSourcePropertyEnabled(const Reference< XInterface>& _xProp
+                                        ,const ::rtl::OUString& _sProperty,
+                                        sal_Bool _bDefault) const
+    {
+        sal_Bool bRet = _bDefault;
+        checkIfLoaded();
+        if ( m_xDataAccessTools.is() )
+            bRet = m_xDataAccessTools->isDataSourcePropertyEnabled( _xProp,_sProperty ,_bDefault );
+        return bRet;
     }
 
 //........................................................................
