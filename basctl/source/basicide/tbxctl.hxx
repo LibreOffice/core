@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:14:21 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:19:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #ifndef _SFXTBXMGR_HXX
 #include <sfx2/tbxmgr.hxx>
 #endif
-
+/*
 #ifdef _BASIDE_POPUPWINDOWTBX
 
 // class PopupWindowTbx --------------------------------------------------
@@ -95,7 +95,7 @@ public:
     virtual void            PopupModeEnd();
 };
 #endif
-
+*/
 //-------------------
 // class TbxControls
 //-------------------
@@ -109,7 +109,7 @@ protected:
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    TbxControls(USHORT nId, ToolBox& rTbx, SfxBindings& rBind );
+    TbxControls(USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~TbxControls() {}
 
     virtual SfxPopupWindowType  GetPopupWindowType() const;
