@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-26 11:05:12 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:32:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #include "app.hxx"
 #include "frame.hxx"
 
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
 #endif
@@ -116,6 +119,7 @@
 #endif
 
 #include <svtools/svdde.hxx>
+#include <tools/urlobj.hxx>
 #include <tools/tempfile.hxx>
 #pragma hdrstop
 
@@ -207,6 +211,10 @@
 #define DDE_AVAILABLE
 #endif
 
+#include <svtools/saveopt.hxx>
+#include <svtools/undoopt.hxx>
+#include <svtools/helpopt.hxx>
+
 // Static member
 SfxApplication* SfxApplication::pApp = NULL;
 
@@ -286,6 +294,10 @@ SfxApplication::SfxApplication()
     pAppData_Impl->UpdateApplicationSettings( pAppIniMgr->IsDontHideDisabledEntries() );
     pApp->PreInit();
 
+    pAppData_Impl->pSaveOptions = new SvtSaveOptions;
+    pAppData_Impl->pUndoOptions = new SvtUndoOptions;
+    pAppData_Impl->pHelpOptions = new SvtHelpOptions;
+
 #ifdef DDE_AVAILABLE
 #ifdef PRODUCT
     InitializeDde();
@@ -305,12 +317,14 @@ SfxApplication::SfxApplication()
 
 SfxApplication::~SfxApplication()
 {
+    DELETEZ( pAppData_Impl->pSaveOptions );
     if ( !bDowning )
         Deinitialize();
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
     delete pImp;
     delete pAppData_Impl;
     SfxIniManager::Close();
+    utl::ConfigManager::RemoveConfigManager();
     pApp = 0;
 }
 
@@ -507,6 +521,8 @@ sal_Bool IsTemplate_Impl( const String& aPath )
 
     return sal_False;
 }
+
+extern void FATToVFat_Impl( String& );
 
 void SfxApplication::HandleAppEvent( const ApplicationEvent& rAppEvent )
 {
@@ -1002,8 +1018,7 @@ ErrCode SfxApplication::FileOpenDialog_Impl
     while ( pFrame->GetParentViewFrame_Impl() )
         pFrame = pFrame->GetParentViewFrame_Impl();
 
-    SfxFileDialog* pDlg =
-        GetISfxModule( pFrame )->CreateDocFileDialog( nFlags ?  nFlags : WB_OPEN | WB_3DLOOK, rFact );
+    SfxFileDialog* pDlg = CreateDocFileDialog( nFlags ?  nFlags : WB_OPEN | WB_3DLOOK, rFact );
     const short nRet = pDlg->Execute();
     if ( nRet == RET_OK )
     {
@@ -1590,61 +1605,6 @@ void SfxApplication::SetTopWindow( WorkWindow *pWindow )
 */
 }
 
-//--------------------------------------------------------------------
-
-void SfxApplication::StartPresentationMode
-(
-    WorkWindow*     pWindow,    //  Presentations-Top-Window
-    sal_uInt16          nFlags      /*  0 oder arithmetische Veroderung von:
-                                    PRESENTATION_HIDEALLAPPS
-                                    PRESENTATION_LIVEMODE */
-)
-
-/*  [Beschreibung]
-
-    Wie SV, nur da\s zust"atzlich der Live-Modus ein und ausgeschaltet
-    werden kann.
-*/
-
-{
-//    SfxApplicationWindow::Get()->SetPresentationMode( sal_True, pWindow );
-//    Application::StartPresentationMode( pWindow, nFlags );
-}
-
-//--------------------------------------------------------------------
-
-void SfxApplication::EndPresentationMode()
-
-/*  [Beschreibung]
-
-    Wie SV, nur da\s zust"atzlich der Live-Modus ber"ucksichtigt wird.
-*/
-
-{
-//    Application::EndPresentationMode();
-//    SfxApplicationWindow::Get()->SetPresentationMode( sal_False, NULL );
-}
-
-//--------------------------------------------------------------------
-
-sal_Bool SfxApplication::IsPresentationMode( sal_uInt16 nFlags )
-
-/*  [Beschreibung]
-
-    Pr"uft, ob der Presentationsmodus aktiv ist. Falls Flags angegeben sind,
-    ob auch diese mit dem Modus "ubereinstimmen.
-
-
-    [Beispiel]
-
-    SfxApplication::StartPresentation( pWin, PRESENTATION_LIVAMODE );
-    DBG_ASSERT( sal_True == SfxApplication::IsPresentation(PRESENTATION_LIVAMODE) );
-*/
-
-{
-    return FALSE /*!!! (pb) Application::IsPresentationMode()*/;
-}
-
 sal_Bool SfxApplication::IsPlugin()
 {
 /*  Reference < XPluginInstance > xPlugin ( pImp->xFrame, UNO_QUERY );
@@ -1752,7 +1712,7 @@ IMPL_STATIC_LINK( SfxApplication, CookieAlertHdl_Impl, void*, EMPTYARG )
 
 void SfxApplication::SetUserEMailAddress( const String &rEMail )
 {
-    pAppData_Impl->aUserEMailAddr = rEMail;
+    DBG_ERROR( "Obsolete call!" );
 }
 
 //-------------------------------------------------------------------------
@@ -1796,20 +1756,12 @@ void SfxApplication::GrabFocus( Window *pAlternate )
     pAppData_Impl->pDefFocusWin = 0;
 }
 
-//-------------------------------------------------------------------------
-
-SfxFrame* SfxApplication::GetTargetFrame( const SfxItemSet* pSet,
-                                          sal_Bool& rbOwner  )
-
-/*  [Beschreibung]
-
-    Mit dieser Methode wird <GetTargetFrame_Impl(const SfxItemSet*, sal_Bool&)>
-    exportiert.
-*/
-
+#if 0
+SfxFrame* SfxApplication::GetTargetFrame( const SfxItemSet* pSet, sal_Bool& rbOwner  )
 {
     return GetTargetFrame_Impl( pSet, rbOwner  );
 }
+#endif
 
 SfxStatusBarManager* SfxApplication::GetStatusBarManager() const
 {
@@ -1856,8 +1808,10 @@ SfxObjectShellArr_Impl&     SfxApplication::GetObjectShells_Impl() const
     return *pImp->pObjShells;
 }
 
+#if SUPD>605
 void SfxApplication::Invalidate( USHORT nId )
 {
     for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame ) )
         Invalidate_Impl( pFrame->GetBindings(), nId );
 }
+#endif
