@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obr $ $Date: 2001-01-26 11:51:35 $
+#   last change: $Author: mi $ $Date: 2001-03-09 15:58:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,11 @@ TARGET=offapi_db
 
 # ------------------------------------------------------------------
 
+regcheck .PHONY: 
+    $(COMSPEC) /c checkrdb.btm o:\comptest\swt614.rdb $(PRJ)$/$(OUTPATH)$/bin$/$(PRJNAME).rdb 
+
+# ------------------------------------------------------------------
+
 UNOIDLDBREGS= \
     $(SOLARBINDIR)$/udkapi.rdb
 
@@ -94,6 +99,7 @@ UNOIDLDBFILES= \
     $(UCR)$/csslinguistic2.db \
     $(UCR)$/cssmozilla.db \
     $(UCR)$/csspackage.db \
+    $(UCR)$/csspackages.db \
     $(UCR)$/csspgp.db \
     $(UCR)$/cssplugin.db \
     $(UCR)$/csspresentation.db \

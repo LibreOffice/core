@@ -17,6 +17,7 @@ oa	offapi\com\sun\star\installation		nmake	-	all	oa_inst NULL
 oa	offapi\com\sun\star\linguistic2			nmake	-	all	oa_ling2 NULL
 oa	offapi\com\sun\star\mozilla				nmake	-	all	oa_mozilla NULL
 oa	offapi\com\sun\star\package				nmake	-	all	oa_package NULL
+oa	offapi\com\sun\star\packages			nmake	-	all	oa_packages NULL
 oa	offapi\com\sun\star\pgp					nmake	-	all	oa_pgp NULL
 oa	offapi\com\sun\star\plugin				nmake	-	all	oa_plug NULL
 oa	offapi\com\sun\star\presentation		nmake	-	all	oa_pres NULL
@@ -41,4 +42,4 @@ oa	offapi\com\sun\star\view				nmake	-	all	oa_view NULL
 oa	offapi\com\sun\star\sdbcx				nmake	-	all	oa_sdbcx NULL
 oa	offapi\com\sun\star\sdbc				nmake	-	all	oa_sdbc NULL
 oa	offapi\com\sun\star\sdb					nmake	-	all	oa_sdb NULL
-oa	offapi\util								nmake	-	all	oa_util oa_awt oa_chart oa_config oa_datatrans_clip oa_datatrans_dnd oa_datatransfer oa_docu oa_draw oa_fcomp oa_fieldmaster oa_form oa_formula oa_frame oa_i18n oa_inst oa_ling2 oa_mozilla oa_package oa_pgp oa_plug oa_pres oa_putil oa_resrc oa_sax oa_scan oa_sdb oa_sdbc oa_sdbcx oa_setup oa_sheet oa_style oa_svg oa_sync oa_table oa_task oa_text oa_textfield oa_ucb oa_ui oa_view oa_xml NULL
+oa	offapi\util								nmake	-	all	oa_util oa_awt oa_chart oa_config oa_datatrans_clip oa_datatrans_dnd oa_datatransfer oa_docu oa_draw oa_fcomp oa_fieldmaster oa_form oa_formula oa_frame oa_i18n oa_inst oa_ling2 oa_mozilla oa_package oa_packages oa_pgp oa_plug oa_pres oa_putil oa_resrc oa_sax oa_scan oa_sdb oa_sdbc oa_sdbcx oa_setup oa_sheet oa_style oa_svg oa_sync oa_table oa_task oa_text oa_textfield oa_ucb oa_ui oa_view oa_xml NULL
