@@ -1,0 +1,13 @@
+    <node oor:name="MS PowerPoint 97" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>impress_MS_PowerPoint_97</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"><value>emp</value></prop>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Microsoft PowerPoint 97/2000/XP</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN</value></prop>
+    </node>
