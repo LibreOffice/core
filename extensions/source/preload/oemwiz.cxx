@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oemwiz.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-05 16:41:03 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:30:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,17 +86,11 @@
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
-#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
-#include <svtools/useroptions.hxx>
-#endif
 #ifndef _EXTENSIONS_PRELOAD_PRELOAD_HRC_
 #include "preload.hrc"
 #endif
-#ifndef _SVX_ADRITEM_HXX
-#include <svx/adritem.hxx>
-#endif
-#ifndef _SFXSIDS_HRC
-#include <sfx2/sfxsids.hrc>
+#ifndef _SVX_SVXIDS_HRC
+#include <svx/svxids.hrc>
 #endif
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
@@ -122,7 +116,6 @@ namespace preload
     struct OEMPreloadDialog_Impl
     {
         SfxItemSet*     pSet;
-        SvtUserOptions  aOptions;
         TabPage* pWelcomePage;
         TabPage* pLicensePage;
         TabPage* pUserDataPage;
@@ -143,24 +136,7 @@ namespace preload
     OEMPreloadDialog_Impl::OEMPreloadDialog_Impl(OEMPreloadDialog* pDialog)
         {
             SfxItemPool& rPool = SFX_APP()->GetPool();
-            pSet = new SfxItemSet(rPool, SID_ATTR_ADDRESS, SID_ATTR_ADDRESS);
-            String sTmp;
-            SvxAddressItem aAddressItem(sTmp,
-                aOptions.GetID(), aOptions.GetFirstName(), aOptions.GetLastName(), SID_ATTR_ADDRESS);
-
-            aAddressItem.SetToken(POS_COMPANY, aOptions.GetCompany() );
-            aAddressItem.SetToken(POS_STREET, aOptions.GetStreet()) ;
-            aAddressItem.SetToken(POS_CITY, aOptions.GetCity() );
-            aAddressItem.SetToken(POS_STATE, aOptions.GetState() );
-            aAddressItem.SetToken(POS_PLZ, aOptions.GetZip() );
-            aAddressItem.SetToken(POS_COUNTRY, aOptions.GetCountry() );
-            aAddressItem.SetToken(POS_POSITION, aOptions.GetPosition() );
-            aAddressItem.SetToken(POS_TITLE, aOptions.GetTitle() );
-            aAddressItem.SetToken(POS_TEL_PRIVATE, aOptions.GetTelephoneHome() );
-            aAddressItem.SetToken(POS_TEL_COMPANY, aOptions.GetTelephoneWork() );
-            aAddressItem.SetToken(POS_FAX, aOptions.GetFax() );
-            aAddressItem.SetToken(POS_EMAIL, aOptions.GetEmail() );
-            pSet->Put(aAddressItem);
+            pSet = new SfxItemSet(rPool, SID_FIELD_GRABFOCUS, SID_FIELD_GRABFOCUS);
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             if ( pFact )
             {
@@ -170,7 +146,6 @@ namespace preload
             }
             else
                 pUserDataPage = NULL;
-
             pWelcomePage = new OEMWelcomeTabPage(pDialog);
             pLicensePage = new OEMLicenseTabPage(pDialog);
         }
@@ -181,23 +156,6 @@ namespace preload
         {
             if ( pUserDataPage )
                 ((SfxTabPage*)pUserDataPage)->FillItemSet(*pSet);
-            const SvxAddressItem& rAddressItem = (const SvxAddressItem&)pSet->Get(SID_ATTR_ADDRESS);
-            aOptions.SetID(rAddressItem.GetShortName());
-            aOptions.SetFirstName(rAddressItem.GetFirstName());
-            aOptions.SetLastName(rAddressItem.GetName());
-
-            aOptions.SetCompany(rAddressItem.GetToken(POS_COMPANY) );
-            aOptions.SetStreet(rAddressItem.GetToken(POS_STREET)) ;
-            aOptions.SetCity(rAddressItem.GetToken(POS_CITY ) );
-            aOptions.SetState(rAddressItem.GetToken(POS_STATE) );
-            aOptions.SetZip(rAddressItem.GetToken(POS_PLZ ) );
-            aOptions.SetCountry(rAddressItem.GetToken(POS_COUNTRY) );
-            aOptions.SetPosition(rAddressItem.GetToken(POS_POSITION ));
-            aOptions.SetTitle(rAddressItem.GetToken(POS_TITLE ) );
-            aOptions.SetTelephoneHome(rAddressItem.GetToken(POS_TEL_PRIVATE ) );
-            aOptions.SetTelephoneWork(rAddressItem.GetToken(POS_TEL_COMPANY ) );
-            aOptions.SetFax(rAddressItem.GetToken(POS_FAX ) );
-            aOptions.SetEmail(rAddressItem.GetToken(POS_EMAIL ) );
         }
 
 /* -----------------------------14.11.2001 11:33------------------------------
