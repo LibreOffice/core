@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-08 11:50:20 $
+ *  last change: $Author: dvo $ $Date: 2001-01-10 11:39:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,6 +591,8 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
             nEndIndex++;
         //nMovePos legt die neue EndPosition fest
         sal_uInt16 nMovePos = nNextStart > nCurrentIndex && nNextStart < nNextEnd ? nNextStart : nNextEnd;
+        if (nMovePos <= nCurrentIndex)
+            nMovePos = pUnoCrsr->GetCntntNode()->Len();
 
         if(aBkmArr.Count() && aBkmArr.GetObject(0)->nIndex < nMovePos)
         {
@@ -610,7 +612,10 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
         if(nMovePos > nCurrentIndex)
             pUnoCrsr->Right(nMovePos - nCurrentIndex);
         else
+        {
+            DBG_ERROR("else obsoleted by 'if (nMovePos <= nCurrentIndex)' above");
             pUnoCrsr->MovePara(fnParaCurr, fnParaEnd);
+        }
     }
     return xRef;
 }
