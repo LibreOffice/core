@@ -2,9 +2,6 @@
 #
 #   $RCSfile: javainstaller.pm,v $
 #
-#   $Revision: 1.5 $
-#
-#   last change: $Author: obo $ $Date: 2004-10-18 13:52:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -198,8 +195,8 @@ sub set_productname_and_productversion
 
     for ( my $i = 0; $i <= $#{$templatefile}; $i++ )
     {
-        ${$templatefile}[$i] =~ s/\{0\}/$productname/g;
-        ${$templatefile}[$i] =~ s/\{1\}/$productversion/g;
+        ${$templatefile}[$i] =~ s/\{PRODUCTNAME\}/$productname/g;
+        ${$templatefile}[$i] =~ s/\{PRODUCTVERSION\}/$productversion/g;
     }
 
     $infoline = "End of: Setting component names and description in Java template file\n\n";
@@ -281,6 +278,9 @@ sub translate_javafile
             my $language_block = get_language_block_from_language_file($oldstring, $languagefile);
             my $newstring = get_language_string_from_language_block($language_block, $onelanguage, $oldstring);
 
+            $newstring =~ s/\"/\\\"/g;  # masquerading the "
+            $newstring =~ s/\\\\\"/\\\"/g;  # unmasquerading if \" was converted to \\" (because " was already masked)
+
             # if (!( $newstring eq "" )) { ${$idtfile}[$i] =~ s/$oldstring/$newstring/; }
             ${$templatefile}[$i] =~ s/$oldstring/$newstring/;   # always substitute, even if $newstring eq ""
         }
@@ -327,6 +327,88 @@ sub get_licensefilesource
 }
 
 #######################################################
+# Converting the license string into the
+# Java specific encoding.
+#######################################################
+
+sub convert_licenstring
+{
+    my ($licensefile, $includepatharrayref, $javadir, $onelanguage) = @_;
+
+    my $licensedir = $javadir . $installer::globals::separator . "license";
+    installer::systemactions::create_directory($licensedir);
+
+    # saving the original license file
+
+    my $licensefilename = $licensedir . $installer::globals::separator . "licensefile.txt";
+    installer::files::save_file($licensefilename, $licensefile);
+
+    # creating the ulf file from the license file
+
+    $licensefilename = $licensedir . $installer::globals::separator . "licensefile.ulf";
+    my @licensearray = ();
+
+    my $section = "\[TRANSLATE\]\n";
+    push(@licensearray, $section);
+
+    for ( my $i = 0; $i <= $#{$licensefile}; $i++ )
+    {
+        my $oneline = ${$licensefile}[$i];
+        $oneline =~ s/\s*$//;
+        $oneline =~ s/\"/\\\"/g;    # masquerading the "
+        $oneline =~ s/\'/\\\'/g;    # masquerading the '
+
+        my $ulfstring = $onelanguage . " = " . "\"" . $oneline . "\"\n";
+        push(@licensearray, $ulfstring);
+    }
+
+    installer::files::save_file($licensefilename, \@licensearray);
+
+    # converting the ulf file to the jlf file with ulfconv
+
+    @licensearray = ();
+
+    my $converter = "ulfconv";
+
+    my $converterref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$converter, $includepatharrayref, 0);
+    if ($$converterref eq "") { installer::exiter::exit_program("ERROR: Could not find converter $converter!", "convert_licenstring"); }
+
+    my $infoline = "Found converter file $converter: $$converterref \n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    my $systemcall = "$$converterref $licensefilename |";
+    open (CONV, "$systemcall");
+    @licensearray = <CONV>;
+    close (CONV);
+
+    $licensefilename = $licensedir . $installer::globals::separator . "licensefile.jlf";
+    installer::files::save_file($licensefilename, \@licensearray);
+
+    # creating the license string from the jlf file
+
+    $licensestring = "";
+
+    for ( my $i = 1; $i <= $#licensearray; $i++ )   # not the first line!
+    {
+        my $oneline = $licensearray[$i];
+        $oneline =~ s/^\s*$onelanguage\s*\=\s*\"//;
+        $oneline =~ s/\"\s*$//;
+        $licensestring = $licensestring . $oneline . "\\n";
+    }
+
+    $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ( $licensestring eq "" )
+    {
+        $infoline = "ERROR: Could not convert $licensefilename !\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    return $licensestring;
+}
+
+#######################################################
 # Adding the license file into the java file
 # In the template java file there are two
 # occurences of INSTALLSDK_GUI_LICENSE
@@ -335,18 +417,13 @@ sub get_licensefilesource
 
 sub add_license_file_into_javafile
 {
-    my ( $templatefile, $licensefile ) = @_;
+    my ( $templatefile, $licensefile, $includepatharrayref, $javadir, $onelanguage ) = @_;
 
-    my $licensestring = "";
+    my $licensestring = convert_licenstring($licensefile, $includepatharrayref, $javadir, $onelanguage);
 
-    for ( my $i = 0; $i <= $#{$licensefile}; $i++ )
-    {
-        my $oneline = ${$licensefile}[$i];
-        $oneline =~ s/\s*$//;
-        $oneline =~ s/\"/\\\"/g;    # masquerading the "
-        $oneline =~ s/\'/\\\'/g;    # masquerading the '
-        $licensestring = $licensestring . $oneline . "\\n";
-    }
+    # saving the licensestring in an ulf file
+    # converting the file using "ulfconv license.ulf"
+    # including the new string into the java file
 
     for ( my $i = 0; $i <= $#{$templatefile}; $i++ )
     {
@@ -683,6 +760,42 @@ sub remove_ada_from_xmlfile
     }
 }
 
+#######################################################################
+# Removing w4w filter module from xml file for Solaris x86 and Linux
+#######################################################################
+
+sub remove_w4w_from_xmlfile
+{
+    my ($xmlfile) = @_;
+
+    # Component begins with "<component selected='true' name='gid_Module_Prg_Wrt_Flt_W4w' componentVersion="8">"
+    # and ends with "</component>"
+
+    for ( my $i = 0; $i <= $#{$xmlfile}; $i++ )
+    {
+        if ( ${$xmlfile}[$i] =~ /name\s*\=\'\s*gid_Module_Prg_Wrt_Flt_W4w/ )
+        {
+            # Counting the lines till "</component>"
+
+            my $linecounter = 1;
+            my $startline = $i+1;
+            my $line = ${$xmlfile}[$startline];
+
+            while ((!( $line =~ /^\s*\<\/component\>\s*$/ )) && ( $startline <= $#{$xmlfile} ))
+            {
+                $linecounter++;
+                $startline++;
+                $line = ${$xmlfile}[$startline];
+            }
+
+            $linecounter = $linecounter + 2;     # last line and following empty line
+
+            splice(@{$xmlfile},$i, $linecounter);   # removing $linecounter lines, beginning in line $i
+            last;
+        }
+    }
+}
+
 ###########################################################
 # Adding the lowercase variables into the variableshashref
 ###########################################################
@@ -715,7 +828,7 @@ sub create_empty_packages
 {
     my ( $xmlfile ) = @_;
 
-    if ( $installer::globals::issolarisbuild )
+    if ( $installer::globals::issolarispkgbuild )
     {
         my $path = "";
 
@@ -840,7 +953,12 @@ sub create_java_installer
 
     # copying the content from directory install_sdk into the java directory
 
-    my $sourcedir = "../inc_global/unix/install_sdk";
+    my $projectroot = "";
+    if ( $ENV{'PRJ'} ) { $projectroot = $ENV{'PRJ'}; }
+    else { installer::exiter::exit_program("ERROR: Environment variable PRJ not set", "create_java_installer"); }
+
+    $projectroot =~ s/\/\s*$//;
+    my $sourcedir = "$projectroot/inc_global/unix/install_sdk";
     installer::systemactions::copy_complete_directory_without_cvs($sourcedir, $javadir);
 
     # determining the java template file
@@ -860,7 +978,7 @@ sub create_java_installer
     $infoline = "Translating the Java template file\n";
     push( @installer::globals::logfileinfo, $infoline);
 
-    # For Unix multi installation sets, $languagesarrayref contains only the first langugage
+    # For Unix multi installation sets, $languagesarrayref contains only the first language
     # Therefore the complete @installer::globals::languageproducts has to be used
 
     my $buildlanguagesref = "";
@@ -884,7 +1002,7 @@ sub create_java_installer
 
         my $licensefilesource = get_licensefilesource($onelanguage, $firstlanguage, $filesarrayref, $includepatharrayref);
         my $licensefile = installer::files::read_file($licensefilesource);
-        add_license_file_into_javafile($templatefile, $licensefile);
+        add_license_file_into_javafile($templatefile, $licensefile, $includepatharrayref, $javadir, $onelanguage);
 
         # setting productname and productversion
 
@@ -970,7 +1088,7 @@ sub create_java_installer
     my $xmlfilename = "";
     my $subdir = "";
 
-    if ( $installer::globals::issolarisbuild )
+    if ( $installer::globals::issolarispkgbuild )
     {
         $xmlfilename = "pkgUnit.xml";
     }
@@ -990,6 +1108,7 @@ sub create_java_installer
     add_lowercasevariables_to_allvariableshashref($allvariableshashref);
     substitute_variables($xmlfile, $allvariableshashref);
     if ( $installer::globals::issolarisx86build ) { remove_ada_from_xmlfile($xmlfile); }
+    if ( $installer::globals::issolarisx86build || $installer::globals::islinuxbuild ) { remove_w4w_from_xmlfile($xmlfile); }
     installer::files::save_file($xmlfilename, $xmlfile);
     $infoline = "Saving xml file: $xmlfilename\n";
     push( @installer::globals::logfileinfo, $infoline);
