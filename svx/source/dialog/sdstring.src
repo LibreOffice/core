@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 20:41:55 $
+ *  last change: $Author: dl $ $Date: 2001-06-08 14:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,8 @@ String RID_SVXSTR_ASK_CHANGE_GRADIENT
 String RID_SVXSTR_BITMAP
 {
     Text = "Bitmap" ;
+    Text [ ENGLISH ] = "Bitmap" ;
+    Text [ english_us ] = "Bitmap" ;
 };
 String RID_SVXSTR_DESC_NEW_BITMAP
 {
