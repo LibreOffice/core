@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adc_cmds.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 11:06:13 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,83 +104,11 @@ class CreateHtml : public Command
     // DATA
     String              sOutputRootDirectory;
     String              sDevelopersManual_HtmlRoot;
-    bool                bSimpleLinks;
 };
 
 inline const String &
 CreateHtml::OutputDir() const
     { return sOutputRootDirectory; }
-
-
-#if 0 // KORR_FUTUREs
-//class CreateXml : public Command
-//{
-//  public:
-//                        CreateXml();
-//                        ~CreateXml();
-//
-//    const String &     OutputDir() const;
-//
-//  private:
-//    // Interface Command:
-//    virtual char * *    do_Init(
-//                            opt_iter &          i_nCurArgsBegin,
-//                            opt_iter            i_nEndOfAllArgs );
-//    // DATA
-//    String              sOutputRootDirectory;
-//};
-//
-//inline const String &
-//CreateXml::OutputDir() const
-//    { return sOutputRootDirectory; }
-//
-//class Load : public Command
-//{
-//  public:
-//                        Load(
-//                            const char *        i_sRepositoryDirectory = "" );
-//                        ~Load();
-//
-//    const String &      ReposyDir() const;
-//
-//  private:
-//    // Interface Command:
-//    virtual char * *    do_Init(
-//                            opt_iter &          i_nCurArgsBegin,
-//                            opt_iter            i_nEndOfAllArgs );
-//    virtual void        do_Run() const;
-//
-//    // DATA
-//    String              sRepositoryDirectory;
-//};
-//
-//inline const String &
-//Load::ReposyDir() const
-//    { return sRepositoryDirectory; }
-//
-//class Save : public Command
-//{
-//  public:
-//                        Save();
-//                        ~Save();
-//
-//    const String &      ReposyDir() const;
-//
-//  private:
-//    // Interface Command:
-//    virtual char * *    do_Init(
-//                            opt_iter &          i_nCurArgsBegin,
-//                            opt_iter            i_nEndOfAllArgs );
-//    // DATA
-//    String              sRepositoryDirectory;
-//};
-//
-//inline const String &
-//Save::ReposyDir() const
-//    { return sRepositoryDirectory; }
-#endif // 0  - KORR_FUTURE
-
-
 
 
 extern const String C_opt_Verbose;
@@ -190,6 +118,7 @@ extern const String C_opt_Name;
 extern const String C_opt_LangAll;
 extern const String C_opt_ExtensionsAll;
 extern const String C_opt_DevmanFile;
+extern const String C_opt_SinceFile;
 
 extern const String C_arg_Cplusplus;
 extern const String C_arg_Idl;
@@ -204,7 +133,6 @@ extern const String C_opt_SourceFile;
 
 extern const String C_opt_CreateHtml;
 extern const String C_opt_DevmanRoot;
-extern const String C_opt_SimpleLinks;
 
 //extern const String C_opt_CreateXml;
 //extern const String C_opt_Load;
@@ -226,4 +154,3 @@ CHECKOPT( bool b, const char * miss, const String & opt )
 
 
 #endif
-
