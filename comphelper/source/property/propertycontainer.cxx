@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycontainer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:45:55 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 09:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ void OPropertyContainer::registerPropertyNoMember(const ::rtl::OUString& _rName,
     OSL_ENSURE(!m_bAlreadyAccessed, "OPropertyContainer::registerMayBeVoidProperty : invalid call, the property sequence was already accessed !");
     OSL_ENSURE(!_rType.equals(::getCppuType(static_cast< Any* >(NULL))),
         "OPropertyContainer::registerPropertyNoMember : don't give my the type of an uno::Any ! Really can't handle this !");
-    OSL_ENSURE(!_pInitialValue || ((_nAttributes & PropertyAttribute::MAYBEVOID) != 0),
+    OSL_ENSURE(_pInitialValue || ((_nAttributes & PropertyAttribute::MAYBEVOID) != 0),
         "OPropertyContainer::registerPropertyNoMember : you should not ommit the initial value if the property can't be void ! This will definitivly crash later !");
 
     PropertyDescription aNewProp;
