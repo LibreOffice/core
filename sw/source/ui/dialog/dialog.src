@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:34 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:42:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ String STR_PATH_NOT_FOUND1
     Text [ finnish ] = "Hakemistoa '" ;
     Text [ danish ] = "Biblioteket '" ;
     Text [ french ] = "Le répertoire'" ;
-    Text [ swedish ] = "Mappen '" ;
+    Text [ swedish ] = "Katalogen '" ;
     Text [ dutch ] = "Map '" ;
     Text [ spanish ] = "El directorio '" ;
     Text [ english_us ] = "The directory '" ;
