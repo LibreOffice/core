@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-09 08:41:49 $
+ *  last change: $Author: oj $ $Date: 2000-11-10 13:33:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ namespace sdbc {
     class XConnection;
     class XDatabaseMetaData;
     class XRowSet;
+    class XDataSource;
     class SQLException;
 }
 namespace beans {
@@ -231,6 +232,9 @@ namespace dbtools
 
     sal_Int32 getSearchColumnFlag( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
                                     sal_Int32 _nDataType);
+    // return the datasource for the given datasource name
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> getDataSource(const ::rtl::OUString& _rsDataSourceName,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
 //.........................................................................
 }   // namespace dbtools
