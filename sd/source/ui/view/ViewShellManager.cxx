@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellManager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:34:05 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ ViewShellManager::ViewShellManager (ViewShellBase& rBase)
               new ActiveShellList())),
       mpCache (new ViewShellCache(*this)),
       mnUpdateLockCount(0),
-      mbKeepMainViewShellOnTop(false),
+      mbKeepMainViewShellOnTop(true),
       mbIsValid (true)
 {
 }
@@ -329,19 +329,11 @@ void ViewShellManager::MoveToTop (const ViewShell* pShell)
         ViewShell* pNonConstViewShell = aI->mpViewShell;
         ShellId nId = aI->mnId;
         mpActiveViewShells->erase (aI);
-
-        // Find out whether to insert at the top or one below.
-        ActiveShellList::iterator aInsertPosition (
-            mpActiveViewShells->begin());
-        if (mbKeepMainViewShellOnTop && ! aI->mpViewShell->IsMainViewShell())
-        {
-            if (mpActiveViewShells->back().mpViewShell->IsMainViewShell())
-                aInsertPosition++;
-        }
-
-        mpActiveViewShells->insert (
-            aInsertPosition,
+        mpActiveViewShells->insert(
+            mpActiveViewShells->begin(),
             ActiveShellDescriptor(pNonConstViewShell,nId));
+
+        InvalidateShellStack();
     }
 }
 
@@ -582,10 +574,8 @@ void ViewShellManager::PrepareStackModification (void)
 {
     if (mbTakeShellsFromStackPending)
     {
-        TakeShellsFromStack();
-        // Now that the stack is empty we can reset the flag so that this is
-        // not attempted a second time.
         mbTakeShellsFromStackPending = false;
+        TakeShellsFromStack();
     }
 }
 
