@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cd $ $Date: 2001-09-28 13:27:58 $
+ *  last change: $Author: mba $ $Date: 2001-12-03 17:49:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,7 +613,10 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
                                                   break;
         case SvtModuleOptions::E_CHART         :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("schart"));
                                                   break;
+        case SvtModuleOptions::E_BASIC         :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sbasic"));
+                                                  break;
     }
+
     return sShortName;
 }
 
@@ -669,6 +672,8 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
         case SvtModuleOptions::E_MATH          :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/smath"));
                                                   break;
         case SvtModuleOptions::E_CHART         :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/schart"));
+                                                  break;
+        case SvtModuleOptions::E_BASIC         :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/sbasic"));
                                                   break;
     }
     return sURL;
@@ -1128,3 +1133,39 @@ sal_uInt32 SvtModuleOptions::GetFeatures( sal_Bool bClient ) const
     // Return new created or already existing mutex object.
     return *pMutex;
 }
+
+::rtl::OUString SvtModuleOptions::GetModuleName( EModule eModule ) const
+{
+    switch( eModule )
+    {
+        case SvtModuleOptions::E_SWRITER    :   { return ::rtl::OUString::createFromAscii("Writer"); break; }
+        case SvtModuleOptions::E_SCALC      :   { return ::rtl::OUString::createFromAscii("Calc"); break; }
+        case SvtModuleOptions::E_SDRAW      :   { return ::rtl::OUString::createFromAscii("Draw"); break; }
+        case SvtModuleOptions::E_SIMPRESS   :   { return ::rtl::OUString::createFromAscii("Impress"); break; }
+        case SvtModuleOptions::E_SMATH      :   { return ::rtl::OUString::createFromAscii("Math"); break; }
+        case SvtModuleOptions::E_SCHART     :   { return ::rtl::OUString::createFromAscii("Chart"); break; }
+        case SvtModuleOptions::E_SBASIC     :   { return ::rtl::OUString::createFromAscii("Basic"); break; }
+    }
+
+    return ::rtl::OUString();
+}
+
+::rtl::OUString SvtModuleOptions::GetModuleName( EFactory eFactory ) const
+{
+    switch( eFactory )
+    {
+        case SvtModuleOptions::E_WRITER         :   { return ::rtl::OUString::createFromAscii("Writer"); break; }
+        case SvtModuleOptions::E_WRITERWEB      :   { return ::rtl::OUString::createFromAscii("Writer"); break; }
+        case SvtModuleOptions::E_WRITERGLOBAL   :   { return ::rtl::OUString::createFromAscii("Writer"); break; }
+        case SvtModuleOptions::E_CALC           :   { return ::rtl::OUString::createFromAscii("Calc"); break; }
+        case SvtModuleOptions::E_DRAW           :   { return ::rtl::OUString::createFromAscii("Draw"); break; }
+        case SvtModuleOptions::E_IMPRESS        :   { return ::rtl::OUString::createFromAscii("Impress"); break; }
+        case SvtModuleOptions::E_MATH           :   { return ::rtl::OUString::createFromAscii("Math"); break; }
+        case SvtModuleOptions::E_CHART          :   { return ::rtl::OUString::createFromAscii("Chart"); break; }
+        case SvtModuleOptions::E_BASIC          :   { return ::rtl::OUString::createFromAscii("Basic"); break; }
+    }
+
+    return ::rtl::OUString();
+}
+
+
