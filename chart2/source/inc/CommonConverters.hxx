@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonConverters.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-04 10:22:38 $
+ *  last change: $Author: iha $ $Date: 2003-11-04 13:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,9 +152,16 @@ com::sun::star::drawing::Direction3D
 //-----------------------------------------------------------------------------
 /** PolyPolygonShape3D + drawing::Position3D -> PolyPolygonShape3D
 */
-void AddPointToPoly( com::sun::star::drawing::PolyPolygonShape3D& rPoly
+void AddPointToPoly( ::com::sun::star::drawing::PolyPolygonShape3D& rPoly
                 , const com::sun::star::drawing::Position3D& rPos
                 , sal_Int32 nSequenceIndex=0 );
+
+//-----------------------------------------------------------------------------
+/** get a single Point from a Polygon
+*/
+::com::sun::star::drawing::Position3D getPointFromPoly(
+                  const ::com::sun::star::drawing::PolyPolygonShape3D& rPolygon
+                , sal_Int32 nPointIndex, sal_Int32 nPolyIndex=0 );
 
 //-----------------------------------------------------------------------------
 /** PolyPolygonShape3D + PolyPolygonShape3D -> PolyPolygonShape3D

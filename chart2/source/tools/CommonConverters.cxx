@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonConverters.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-04 10:23:04 $
+ *  last change: $Author: iha $ $Date: 2003-11-04 13:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,6 +293,30 @@ void AddPointToPoly( drawing::PolyPolygonShape3D& rPoly, const drawing::Position
     pInnerSequenceX[nOldPointCount] = rPos.PositionX;
     pInnerSequenceY[nOldPointCount] = rPos.PositionY;
     pInnerSequenceZ[nOldPointCount] = rPos.PositionZ;
+}
+
+drawing::Position3D getPointFromPoly( const drawing::PolyPolygonShape3D& rPolygon, sal_Int32 nPointIndex, sal_Int32 nPolyIndex )
+{
+    drawing::Position3D aRet(0.0,0.0,0.0);
+
+    if( nPolyIndex>=0 && nPolyIndex<rPolygon.SequenceX.getLength())
+    {
+        if(nPointIndex<rPolygon.SequenceX[nPolyIndex].getLength())
+        {
+            aRet.PositionX = rPolygon.SequenceX[nPolyIndex][nPointIndex];
+            aRet.PositionY = rPolygon.SequenceY[nPolyIndex][nPointIndex];
+            aRet.PositionZ = rPolygon.SequenceZ[nPolyIndex][nPointIndex];
+        }
+        else
+        {
+            ;DBG_ERROR("polygon was accessed with a wrong index");
+        }
+    }
+    else
+    {
+        ;DBG_ERROR("polygon was accessed with a wrong index");
+    }
+    return aRet;
 }
 
 void appendPoly( drawing::PolyPolygonShape3D& rRet, const drawing::PolyPolygonShape3D& rAdd )
