@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:52:26 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,13 +64,16 @@
 #ifndef SC_XLCONST_HXX
 #define SC_XLCONST_HXX
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
 #ifndef _SOLAR_H_
 #include <tools/solar.h>
 #endif
-
 
 // Common =====================================================================
 
@@ -96,8 +99,8 @@ const sal_uInt16 EXC_MAXCOL8                = EXC_MAXCOL5;
 const sal_uInt16 EXC_MAXROW8                = 65535;
 const sal_uInt16 EXC_MAXTAB8                = EXC_MAXTAB5;
 
-const USHORT SCNOTAB                        = 0xFFFF;   /// An invalid Calc sheet index, for common use.
-const sal_uInt16 EXC_NOTAB                  = 0xFFFF;   /// An invalid Excel sheet index, for common use.
+const SCTAB  SCNOTAB                        = SCTAB_MAX;  /// An invalid Calc sheet index, for common use.
+const sal_uInt16 EXC_NOTAB                  = 0xFFFF;     /// An invalid Excel sheet index, for common use.
 
 
 // In/out stream --------------------------------------------------------------
