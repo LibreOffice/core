@@ -32,8 +32,6 @@ hedabu: ..\inc\app.hxx %_DEST%\inc%_EXT%\sfx2\app.hxx
 hedabu: ..\inc\basedlgs.hxx %_DEST%\inc%_EXT%\sfx2\basedlgs.hxx
 hedabu: ..\inc\bindings.hxx %_DEST%\inc%_EXT%\sfx2\bindings.hxx
 hedabu: ..\inc\brokenpackageint.hxx %_DEST%\inc%_EXT%\sfx2\brokenpackageint.hxx
-hedabu: ..\inc\cfgitem.hxx %_DEST%\inc%_EXT%\sfx2\cfgitem.hxx
-hedabu: ..\inc\configmgr.hxx %_DEST%\inc%_EXT%\sfx2\configmgr.hxx
 hedabu: ..\inc\chalign.hxx %_DEST%\inc%_EXT%\sfx2\chalign.hxx
 hedabu: ..\inc\childwin.hxx %_DEST%\inc%_EXT%\sfx2\childwin.hxx
 hedabu: ..\inc\ctrlitem.hxx %_DEST%\inc%_EXT%\sfx2\ctrlitem.hxx
@@ -97,12 +95,10 @@ hedabu: ..\inc\sfxhtml.hxx %_DEST%\inc%_EXT%\sfx2\sfxhtml.hxx
 hedabu: ..\inc\sfxsids.hrc %_DEST%\inc%_EXT%\sfx2\sfxsids.hrc
 hedabu: ..\inc\shell.hxx %_DEST%\inc%_EXT%\sfx2\shell.hxx
 hedabu: ..\inc\stbitem.hxx %_DEST%\inc%_EXT%\sfx2\stbitem.hxx
-hedabu: ..\inc\stbmgr.hxx %_DEST%\inc%_EXT%\sfx2\stbmgr.hxx
 hedabu: ..\inc\styfitem.hxx %_DEST%\inc%_EXT%\sfx2\styfitem.hxx
 hedabu: ..\inc\styledlg.hxx %_DEST%\inc%_EXT%\sfx2\styledlg.hxx
 hedabu: ..\inc\tabdlg.hxx %_DEST%\inc%_EXT%\sfx2\tabdlg.hxx
 hedabu: ..\inc\tbxctrl.hxx %_DEST%\inc%_EXT%\sfx2\tbxctrl.hxx
-hedabu: ..\inc\tbxmgr.hxx %_DEST%\inc%_EXT%\sfx2\tbxmgr.hxx
 hedabu: ..\inc\templdlg.hxx %_DEST%\inc%_EXT%\sfx2\templdlg.hxx
 hedabu: ..\inc\tplpitem.hxx %_DEST%\inc%_EXT%\sfx2\tplpitem.hxx
 hedabu: ..\inc\viewfrm.hxx %_DEST%\inc%_EXT%\sfx2\viewfrm.hxx
