@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmprop.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:22:08 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:15:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,6 +410,7 @@ namespace svxform
     DECLARE_CONSTASCII_USTRING( FM_PROP_SPINVALUE_MAX );
     DECLARE_CONSTASCII_USTRING( FM_PROP_DEFAULT_SPINVALUE );
     DECLARE_CONSTASCII_USTRING( FM_PROP_SPININCREMENT );
+    DECLARE_CONSTASCII_USTRING( FM_PROP_LINEENDFORMAT );
 
 }   // namespace svxform
 
