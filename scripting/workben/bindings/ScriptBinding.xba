@@ -839,7 +839,7 @@ sub KeyComboListener()
 	case &quot;SHIFT + F keys&quot;
 		PopulateKeyBindingList( 95, 105 )
 	case else
-		MsgBox (&quot;Error: Unknown Key Combination&quot; + chr$(10) + chr$(10) + &quot;Action: Please reinstall Scripting Framework&quot;,0,&quot;Error&quot; )
+		MsgBox (&quot;Error: Unknown Key Combination&quot;,0,&quot;Error&quot; )
 	end select
 end sub
 
