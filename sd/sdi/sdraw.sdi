@@ -2204,7 +2204,7 @@ SfxBoolItem DiaMode SID_DIAMODE
 
 //--------------------------------------------------------------------------
 DiaSpeedItem DiaSpeed SID_DIA_SPEED
-(SfxStringItem PageName ID_VAL_PAGENAME,SfxUInt32Item WhatLayout ID_VAL_WHATLAYOUT,SfxBoolItem IsPageBack ID_VAL_ISPAGEBACK,SfxBoolItem IsPageObj ID_VAL_ISPAGEOBJ)
+
 [
     /* flags: */
     AutoUpdate = TRUE,
