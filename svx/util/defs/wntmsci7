@@ -23604,3 +23604,5 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?XOutGetTextOutline@@YA?AVXPolyPolygon@@ABVString@@AAVOutputDevice@@GGG@Z
 ?InsertText@EditView@@QAEXV?$Reference@VXTransferable@datatransfer@star@sun@com@@@uno@star@sun@com@@E@Z
 ?InitBitmap@SvxRectCtl@@AAEXXZ
+?SetPosAndSize@?%O:\SRX643\src\svx\source\fmcomp\gridctrl.cxx711827838@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?getColumnPropertyFromPeer@?%O:\SRX643\src\svx\source\fmcomp\fmgridcl.cxx456530271@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
