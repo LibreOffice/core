@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexch.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:13:30 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,7 @@
 #include "fmexch.hxx"
 #endif
 
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
