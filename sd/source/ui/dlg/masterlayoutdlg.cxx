@@ -2,9 +2,9 @@
  *
  *  $RCSfile: masterlayoutdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:17:08 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,6 @@ MasterLayoutDialog::MasterLayoutDialog( Window* pParent, SdDrawDocument* pDoc, S
     mpDoc( pDoc ),
     mpCurrentPage( pCurrentPage )
 {
-    String aTitle;
-
     if( mpCurrentPage == 0 )
     {
         mpCurrentPage = pDoc->GetMasterSdPage( 0, PK_STANDARD );
@@ -100,7 +98,11 @@ MasterLayoutDialog::MasterLayoutDialog( Window* pParent, SdDrawDocument* pDoc, S
     }
     else if( !mpCurrentPage->IsMasterPage() )
     {
-        mpCurrentPage = (SdPage*)(&(mpCurrentPage->TRG_GetMasterPage()));
+        //      mpCurrentPage = (SdPage*)(&(mpCurrentPage->TRG_GetMasterPage()));
+        maCBHeader.Enable( FALSE );
+        maCBDate.Enable( FALSE );
+        maCBFooter.Enable( FALSE );
+        maCBPageNumber.Enable( FALSE );
     }
 
 
@@ -108,19 +110,20 @@ MasterLayoutDialog::MasterLayoutDialog( Window* pParent, SdDrawDocument* pDoc, S
     {
     case PK_STANDARD:
     {
-        aTitle = String( SdResId( STR_MASTER_LAYOUT_TITLE ) );
+        //      aTitle = String( SdResId( STR_MASTER_LAYOUT_TITLE ) );
         maCBHeader.Enable( FALSE );
     String aSlideNumberStr( SdResId( STR_SLIDE_NUMBER ) );
         maCBPageNumber.SetText( aSlideNumberStr );
         break;
     }
     case PK_NOTES:
-        aTitle = String( SdResId( STR_NOTES_MASTER_LAYOUT_TITLE ) );
+        //      aTitle = String( SdResId( STR_NOTES_MASTER_LAYOUT_TITLE ) );
         break;
     case PK_HANDOUT:
-        aTitle = String( SdResId( STR_HANDOUT_TEMPLATE_LAYOUT_TITLE ) );
+        //      aTitle = String( SdResId( STR_HANDOUT_TEMPLATE_LAYOUT_TITLE ) );
         break;
     }
+    String aTitle (SdResId( STR_MASTER_LAYOUT_TITLE ) );
 
     SetText( aTitle );
 
