@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:04:26 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ class ScMySharedData;
 #include <tools/errcode.hxx>
 
 namespace com { namespace sun { namespace star {
-    namespace beans { class PropertyValue; }
+    namespace beans { struct PropertyValue; }
     namespace frame { class XModel; }
     namespace task { class XStatusIndicator; }
     namespace lang { class XMultiServiceFactory; }
