@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:36:13 $
+ *  last change: $Author: sab $ $Date: 2001-03-20 10:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,8 @@ String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uIn
 {
     sal_Bool bForceNew = sal_False;
 
-    String aUniqueName( pCheckItem->GetName() );
+    String aUniqueName;
+    SvxUnogetInternalNameForItem( nWhich, pCheckItem->GetName(), aUniqueName );
 
     // 2. if we have a name check if there is already an item with the
     // same name in the documents pool with a different line end or start
