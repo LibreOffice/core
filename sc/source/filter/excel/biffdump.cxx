@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-01 10:20:31 $
+ *  last change: $Author: dr $ $Date: 2001-11-07 12:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -987,6 +987,23 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
 
         switch( nR )
         {
+            case 0x0000:        // DIMENSIONS - used area
+            case 0x0200:
+            {
+                LINESTART();
+                UINT32 nR1, nR2;
+                UINT16 nC1, nC2;
+                rIn >> nR1 >> nR2 >> nC1 >> nC2;
+                ADDTEXT( "first row: " );             __AddHex( t, nR1 );
+                ADDTEXT( "   last row+1: " );         __AddHex( t, nR2 );
+                ADDTEXT( "   first col: " );          __AddHex( t, nC1 );
+                ADDTEXT( "   last col+1: " );         __AddHex( t, nC2 );
+                ADDTEXT( "   (" );                    __AddRef( t, nC1, (UINT16)nR1 );
+                ADDTEXT( ":" );                       __AddRef( t, nC2-1, (UINT16)nR2-1 );
+                ADDTEXT( ")" );
+                PRINT();
+            }
+            break;
             case 0x06:
             {
                 ADDCELLHEAD();
