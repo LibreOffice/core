@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfnum.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:27:31 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 16:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,6 @@
  *
  *
  ************************************************************************/
-
-
-#pragma hdrstop
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -396,7 +393,6 @@ void SwRTFParser::ReadListTable()
     int nOpenBrakets = 1;       // die erste wurde schon vorher erkannt !!
     bNewNumList = TRUE;
 
-    USHORT nRuleCount = 0;
     BYTE nNumLvl = 0;
     SwNumRule* pCurRule = 0;
     SwListEntry aEntry;
