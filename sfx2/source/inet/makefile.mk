@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:52:35 $
+#   last change: $Author: mba $ $Date: 2001-11-15 15:11:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,13 +84,11 @@ AUTOSEG=true
 
 CXXFILES = \
     inettbc.cxx  \
-    inetslot.cxx \
     $(PROJECTPCHSOURCE).cxx
 
 
 SLOFILES =	\
-        $(SLO)$/inettbc.obj  \
-        $(SLO)$/inetslot.obj
+                $(SLO)$/inettbc.obj
 
 # --- Targets -------------------------------------------------------
 
