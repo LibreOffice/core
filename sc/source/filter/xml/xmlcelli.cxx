@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-12 12:53:53 $
+ *  last change: $Author: sab $ $Date: 2001-06-18 07:09:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 break;
         }
     }
+    if (bIsFormula)
+        nCellType = util::NumberFormat::TEXT; // don't set type if cell content is a formula
     GetScImport().GetStylesImportHelper()->SetAttributes(sStyleName, sCurrencySymbol, nCellType);
 }
 
