@@ -2,8 +2,8 @@
  *
  *  $RCSfile: config.h,v $
  *
- *  $Revision: 1.17 $
- *  last change: $Author: vg $ $Date: 2003-04-15 17:41:06 $
+ *  $Revision: 1.18 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 17:12:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,10 @@ extern "C" {
 }
 #endif
 
+#ifndef INCLUDED_STDLIB_H
 #include <stdlib.h>
+#define INCLUDED_STDLIB_H
+#endif
 
 #ifdef WIN32
 #define SAL_W32
@@ -94,7 +97,7 @@ extern "C" {
 /* No warning for: identifier was truncated to '255' characters in the browser information */
 #pragma warning( disable : 4786 )
 #endif
-#endif /* _MSC_VER < 1300 */
+#endif /* defined _MSC_VER < 1300 */
 
 /* Provide ISO C99 compatible versions of snprint and vsnprintf */
 #ifndef _SNPRINTF_H
