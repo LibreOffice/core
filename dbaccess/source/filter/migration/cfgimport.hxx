@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgimport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:18:07 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
 #ifndef _COM_SUN_STAR_TASK_XJOB_HPP_
 #include <com/sun/star/task/XJob.hpp>
 #endif
@@ -104,6 +107,7 @@ namespace dbacfg
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::frame;
 
 typedef ::cppu::WeakImplHelper4 <       ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::lang::XInitialization
@@ -124,6 +128,7 @@ private:
     Reference< XMultiServiceFactory >                               m_xOldORB;
     Reference< ::com::sun::star::configuration::backend::XLayer>    m_xLayer;
     Reference<XPropertySet>                                         m_xCurrentDS;
+    Reference<XModel>                                               m_xModel;
     Reference<XPropertySet>                                         m_xCurrentObject; /// can either be a query or a table
     Reference<XPropertySet>                                         m_xCurrentColumn;
     Sequence< ::rtl::OUString>                                      m_aProperties;
