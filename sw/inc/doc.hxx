@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:18:58 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1579,7 +1579,7 @@ public:
                     const xub_StrLen nOffset = 0, sal_Bool bMoveCrsr = sal_False );
 
         // GliederungsRegeln erfragen / setzen
-    SwNumRule* GetOutlineNumRule() const { return pOutlineRule; }
+    SwNumRule* GetOutlineNumRule() const;
     void SetOutlineNumRule( const SwNumRule& rRule );
     // Gliederung - hoch-/runterstufen
     sal_Bool OutlineUpDown( const SwPaM& rPam, short nOffset = 1 );
