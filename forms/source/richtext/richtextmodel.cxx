@@ -2,9 +2,9 @@
  *
  *  $RCSfile: richtextmodel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:13:25 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,19 +143,20 @@ namespace frm
         DBG_CTOR( ORichTextModel, NULL );
         m_nClassId = FormComponentType::TEXTFIELD;
 
-        getPropertyDefaultByHandle( PROPERTY_ID_DEFAULTCONTROL     ) >>= m_sDefaultControl;
-        getPropertyDefaultByHandle( PROPERTY_ID_BORDER             ) >>= m_nBorder;
-        getPropertyDefaultByHandle( PROPERTY_ID_ENABLED            ) >>= m_bEnabled;
-        getPropertyDefaultByHandle( PROPERTY_ID_HARDLINEBREAKS     ) >>= m_bHardLineBreaks;
-        getPropertyDefaultByHandle( PROPERTY_ID_HSCROLL            ) >>= m_bHScroll;
-        getPropertyDefaultByHandle( PROPERTY_ID_VSCROLL            ) >>= m_bVScroll;
-        getPropertyDefaultByHandle( PROPERTY_ID_READONLY           ) >>= m_bReadonly;
-        getPropertyDefaultByHandle( PROPERTY_ID_PRINTABLE          ) >>= m_bPrintable;
-        getPropertyDefaultByHandle( PROPERTY_ID_ALIGN              ) >>= m_aAlign;
-        getPropertyDefaultByHandle( PROPERTY_ID_ECHO_CHAR          ) >>= m_nEchoChar;
-        getPropertyDefaultByHandle( PROPERTY_ID_MAXTEXTLEN         ) >>= m_nMaxTextLength;
-        getPropertyDefaultByHandle( PROPERTY_ID_MULTILINE          ) >>= m_bMultiLine;
-        getPropertyDefaultByHandle( PROPERTY_ID_RICH_TEXT          ) >>= m_bReallyActAsRichText;
+        getPropertyDefaultByHandle( PROPERTY_ID_DEFAULTCONTROL          ) >>= m_sDefaultControl;
+        getPropertyDefaultByHandle( PROPERTY_ID_BORDER                  ) >>= m_nBorder;
+        getPropertyDefaultByHandle( PROPERTY_ID_ENABLED                 ) >>= m_bEnabled;
+        getPropertyDefaultByHandle( PROPERTY_ID_HARDLINEBREAKS          ) >>= m_bHardLineBreaks;
+        getPropertyDefaultByHandle( PROPERTY_ID_HSCROLL                 ) >>= m_bHScroll;
+        getPropertyDefaultByHandle( PROPERTY_ID_VSCROLL                 ) >>= m_bVScroll;
+        getPropertyDefaultByHandle( PROPERTY_ID_READONLY                ) >>= m_bReadonly;
+        getPropertyDefaultByHandle( PROPERTY_ID_PRINTABLE               ) >>= m_bPrintable;
+        getPropertyDefaultByHandle( PROPERTY_ID_ALIGN                   ) >>= m_aAlign;
+        getPropertyDefaultByHandle( PROPERTY_ID_ECHO_CHAR               ) >>= m_nEchoChar;
+        getPropertyDefaultByHandle( PROPERTY_ID_MAXTEXTLEN              ) >>= m_nMaxTextLength;
+        getPropertyDefaultByHandle( PROPERTY_ID_MULTILINE               ) >>= m_bMultiLine;
+        getPropertyDefaultByHandle( PROPERTY_ID_RICH_TEXT               ) >>= m_bReallyActAsRichText;
+        getPropertyDefaultByHandle( PROPERTY_ID_HIDEINACTIVESELECTION   ) >>= m_bHideInactiveSelection;
 
         implInit();
     }
@@ -170,19 +171,22 @@ namespace frm
     {
         DBG_CTOR( ORichTextModel, NULL );
 
-        m_aTabStop             = _pOriginal->m_aTabStop;
-        m_aBackgroundColor     = _pOriginal->m_aBackgroundColor;
-        m_sDefaultControl      = _pOriginal->m_sDefaultControl;
-        m_sHelpText            = _pOriginal->m_sHelpText;
-        m_sHelpURL             = _pOriginal->m_sHelpURL;
-        m_nBorder              = _pOriginal->m_nBorder;
-        m_bEnabled             = _pOriginal->m_bEnabled;
-        m_bHardLineBreaks      = _pOriginal->m_bHardLineBreaks;
-        m_bHScroll             = _pOriginal->m_bHScroll;
-        m_bVScroll             = _pOriginal->m_bVScroll;
-        m_bReadonly            = _pOriginal->m_bReadonly;
-        m_bPrintable           = _pOriginal->m_bPrintable;
-        m_bReallyActAsRichText = _pOriginal->m_bReallyActAsRichText;
+        m_aTabStop               = _pOriginal->m_aTabStop;
+        m_aBackgroundColor       = _pOriginal->m_aBackgroundColor;
+        m_aBorderColor           = _pOriginal->m_aBorderColor;
+        m_sDefaultControl        = _pOriginal->m_sDefaultControl;
+        m_sHelpText              = _pOriginal->m_sHelpText;
+        m_sHelpURL               = _pOriginal->m_sHelpURL;
+        m_nBorder                = _pOriginal->m_nBorder;
+        m_bEnabled               = _pOriginal->m_bEnabled;
+        m_bHardLineBreaks        = _pOriginal->m_bHardLineBreaks;
+        m_bHScroll               = _pOriginal->m_bHScroll;
+        m_bVScroll               = _pOriginal->m_bVScroll;
+        m_bReadonly              = _pOriginal->m_bReadonly;
+        m_bPrintable             = _pOriginal->m_bPrintable;
+        m_bReallyActAsRichText   = _pOriginal->m_bReallyActAsRichText;
+        m_bHideInactiveSelection = _pOriginal->m_bHideInactiveSelection;
+
 
         m_aAlign               = _pOriginal->m_aAlign;
         m_nEchoChar            = _pOriginal->m_nEchoChar;
@@ -233,21 +237,23 @@ namespace frm
     //------------------------------------------------------------------
     void ORichTextModel::implRegisterProperties()
     {
-        REGISTER_PROP_2( DEFAULTCONTROL,    m_sDefaultControl,      BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( HELPTEXT,          m_sHelpText,            BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( HELPURL,           m_sHelpURL,             BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( ENABLED,           m_bEnabled,             BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( BORDER,            m_nBorder,              BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( HARDLINEBREAKS,    m_bHardLineBreaks,      BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( HSCROLL,           m_bHScroll,             BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( VSCROLL,           m_bVScroll,             BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( READONLY,          m_bReadonly,            BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( PRINTABLE,         m_bPrintable,           BOUND, MAYBEDEFAULT );
-        REGISTER_PROP_2( REFERENCE_DEVICE,  m_xReferenceDevice,     BOUND, TRANSIENT );
-        REGISTER_PROP_2( RICH_TEXT,         m_bReallyActAsRichText, BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( DEFAULTCONTROL,        m_sDefaultControl,          BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( HELPTEXT,              m_sHelpText,                BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( HELPURL,               m_sHelpURL,                 BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( ENABLED,               m_bEnabled,                 BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( BORDER,                m_nBorder,                  BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( HARDLINEBREAKS,        m_bHardLineBreaks,          BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( HSCROLL,               m_bHScroll,                 BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( VSCROLL,               m_bVScroll,                 BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( READONLY,              m_bReadonly,                BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( PRINTABLE,             m_bPrintable,               BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( REFERENCE_DEVICE,      m_xReferenceDevice,         BOUND, TRANSIENT    );
+        REGISTER_PROP_2( RICH_TEXT,             m_bReallyActAsRichText,     BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( HIDEINACTIVESELECTION, m_bHideInactiveSelection,   BOUND, MAYBEDEFAULT );
 
-        REGISTER_VOID_PROP_2( TABSTOP,            m_aTabStop,         sal_Bool,  BOUND, MAYBEDEFAULT );
-        REGISTER_VOID_PROP_2( BACKGROUNDCOLOR,    m_aBackgroundColor, sal_Int32, BOUND, MAYBEDEFAULT );
+        REGISTER_VOID_PROP_2( TABSTOP,          m_aTabStop,         sal_Bool,  BOUND, MAYBEDEFAULT );
+        REGISTER_VOID_PROP_2( BACKGROUNDCOLOR,  m_aBackgroundColor, sal_Int32, BOUND, MAYBEDEFAULT );
+        REGISTER_VOID_PROP_2( BORDERCOLOR,      m_aBorderColor,     sal_Int32, BOUND, MAYBEDEFAULT );
 
         // properties which exist only for compatibility with the css.swt.UnoControlEditModel,
         // since we intend to replace the default implementation for this service
@@ -465,11 +471,13 @@ namespace frm
 
         case PROPERTY_ID_TABSTOP:
         case PROPERTY_ID_BACKGROUNDCOLOR:
+        case PROPERTY_ID_BORDERCOLOR:
             /* void */
             break;
 
         case PROPERTY_ID_ENABLED:
         case PROPERTY_ID_PRINTABLE:
+        case PROPERTY_ID_HIDEINACTIVESELECTION:
             aDefault <<= (sal_Bool)sal_True;
             break;
 
