@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:31:00 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,4 +350,12 @@ String S_DIRECTORY_NOT_EMPTY
 String S_DEPRECATED
 {
     Text = "Deprecated! Please change the script.";
+};
+String S_SIZE_BELOW_MINIMUM
+{
+    Text = "The Size is below the minimum. x=($Arg1) ,y=($Arg2)";
+};
+String S_CANNOT_FIND_FLOATING_WIN
+{
+    Text = "Cannot find FloatingWindow for Floating DockingWindow at ($Arg1).";
 };
