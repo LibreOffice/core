@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlocalid.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-21 15:43:45 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,20 @@
 #define TABPAGE_CHARACTERS      1
 #define TABPAGE_CHARACTERS_EXT  2
 
+#define IMG_PLUS    1
+#define IMG_MINUS   2
+
 #endif // _EXTENSIONS_PROPCTRLR_FORMLOCALID_HRC_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1.246.1  2004/04/26 11:32:47  fs
+ *  new ids
+ *
+ *  Revision 1.1  2001/03/21 15:43:45  fs
+ *  initial checkin - local ids for this sub project
+ *
  *
  *  Revision 1.0 21.03.01 09:46:31  fs
  ************************************************************************/
