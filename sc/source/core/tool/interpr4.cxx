@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:37:07 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3458,6 +3458,7 @@ StackVar ScInterpreter::Interpret()
                 case ocConvert          : ScConvert();                  break;
                 case ocRoman            : ScRoman();                    break;
                 case ocArabic           : ScArabic();                   break;
+                case ocHyperLink        : ScHyperLink();                break;
                 case ocAnswer           : ScAnswer();                   break;
                 case ocTeam             : ScCalcTeam();                 break;
                 case ocTTT              : ScTTT();                      break;
