@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:25:09 $
+ *  last change: $Author: kz $ $Date: 2003-08-27 16:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5069,6 +5069,7 @@ const SvInPlaceObjectRef SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConver
                             }
                             xObjShell->DoSaveAs( xObjStor );
                             xObjShell->DoSaveCompleted( xObjStor );
+                            xObjShell->RemoveOwnerLock();
                             pMed = 0;
                         }
                     }
