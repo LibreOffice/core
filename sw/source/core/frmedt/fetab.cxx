@@ -2,17 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
-<<<<<<< fetab.cxx
- *  $Revision: 1.12 $
-=======
- *  $Revision: 1.12 $
->>>>>>> 1.4.2.6.2.1.20.2
+ *  $Revision: 1.13 $
  *
-<<<<<<< fetab.cxx
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:03 $
-=======
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:03 $
->>>>>>> 1.4.2.6.2.1.20.2
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:31:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
