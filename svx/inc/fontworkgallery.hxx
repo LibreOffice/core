@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontworkgallery.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-21 16:37:49 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:46:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,23 +75,180 @@
 #ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
 #endif
+#ifndef _SFXTBXCTRL_HXX //autogen
+#include <sfx2/tbxctrl.hxx>
+#endif
 
 #include <vector>
 
 class FmFormModel;
 class SdrView;
 class Window;
+class SdrTextObj;
+class SdrObject;
+class SdrModel;
+
+class SfxBindings;
+class ToolbarMenu;
+class SfxStatusForwarder;
+class SvxTbxButtonColorUpdater_Impl;
 
 //------------------------------------------------------------------------
+
 namespace svx
 {
+
+
+class FontWorkAlignmentWindow : public SfxPopupWindow
+{
+private:
+    ToolbarMenu* mpMenu;
+
+    Image maImgAlgin1;
+    Image maImgAlgin2;
+    Image maImgAlgin3;
+    Image maImgAlgin4;
+    Image maImgAlgin5;
+    Image maImgAlgin1h;
+    Image maImgAlgin2h;
+    Image maImgAlgin3h;
+    Image maImgAlgin4h;
+    Image maImgAlgin5h;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
+
+    bool        mbPopupMode;
+
+    DECL_LINK( SelectHdl, void * );
+
+    void    implSetAlignment( int nAlignmentMode, bool bEnabled );
+
+protected:
+    virtual BOOL    Close();
+    virtual void    PopupModeEnd();
+
+    /** This function is called when the window gets the focus.  It grabs
+        the focus to the line ends value set so that it can be controlled with
+        the keyboard.
+    */
+    virtual void GetFocus (void);
+
+public:
+    FontWorkAlignmentWindow( USHORT nId,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+    ~FontWorkAlignmentWindow();
+
+    void            StartSelection();
+
+    virtual SfxPopupWindow* Clone() const;
+
+    virtual void StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+};
+
+class FontWorkAlignmentControl : public SfxToolBoxControl
+{
+public:
+    SFX_DECL_TOOLBOX_CONTROL();
+    FontWorkAlignmentControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    ~FontWorkAlignmentControl();
+
+    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+                                              const SfxPoolItem* pState );
+    virtual SfxPopupWindowType  GetPopupWindowType() const;
+    virtual SfxPopupWindow*     CreatePopupWindow();
+};
+
+//------------------------------------------------------------------------
+
+class FontWorkCharacterSpacingWindow : public SfxPopupWindow
+{
+private:
+    ToolbarMenu* mpMenu;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
+
+    bool        mbPopupMode;
+
+    DECL_LINK( SelectHdl, void * );
+
+    void    implSetCharacterSpacing( sal_Int32 nCharacterSpacing, bool bEnabled );
+    void    implSetKernCharacterPairs( sal_Bool bKernOnOff, bool bEnabled );
+
+protected:
+    virtual BOOL    Close();
+    virtual void    PopupModeEnd();
+
+    /** This function is called when the window gets the focus.  It grabs
+        the focus to the line ends value set so that it can be controlled with
+        the keyboard.
+    */
+    virtual void GetFocus (void);
+
+public:
+    FontWorkCharacterSpacingWindow( USHORT nId,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+    ~FontWorkCharacterSpacingWindow();
+
+    void            StartSelection();
+
+    virtual SfxPopupWindow* Clone() const;
+
+    virtual void StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+};
+
+class FontWorkCharacterSpacingControl : public SfxToolBoxControl
+{
+public:
+    SFX_DECL_TOOLBOX_CONTROL();
+    FontWorkCharacterSpacingControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    ~FontWorkCharacterSpacingControl();
+
+    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+                                              const SfxPoolItem* pState );
+    virtual SfxPopupWindowType  GetPopupWindowType() const;
+    virtual SfxPopupWindow*     CreatePopupWindow();
+};
+
+//------------------------------------------------------------------------
+
+class FontWorkShapeTypeControl : public SfxToolBoxControl
+{
+public:
+    SFX_DECL_TOOLBOX_CONTROL();
+    FontWorkShapeTypeControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    ~FontWorkShapeTypeControl();
+
+    virtual void                Select( BOOL bMod1 = FALSE );
+    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+                                              const SfxPoolItem* pState );
+    virtual SfxPopupWindowType  GetPopupWindowType() const;
+    virtual SfxPopupWindow*     CreatePopupWindow();
+};
+
+//------------------------------------------------------------------------
+
+class FontworkCharacterSpacingDialog : public ModalDialog
+{
+    FixedText           maFLScale;
+    MetricField         maMtrScale;
+    OKButton            maOKButton;
+    CancelButton        maCancelButton;
+    HelpButton          maHelpButton;
+
+public:
+    FontworkCharacterSpacingDialog( Window* pParent, sal_Int32 nScale );
+    ~FontworkCharacterSpacingDialog();
+
+    sal_Int32 getScale() const;
+};
+
 
 class FontWorkGalleryDialog : public ModalDialog
 {
     ValueSet            maCtlFavorites;
     FixedLine           maFLFavorites;
-    ImageButton         maBtnLTR;
-    ImageButton         maBtnTTB;
     OKButton            maOKButton;
     CancelButton        maCancelButton;
 
@@ -106,17 +263,22 @@ class FontWorkGalleryDialog : public ModalDialog
     DECL_LINK( ClickOKHdl, void * );
     DECL_LINK( ClickTextDirectionHdl, ImageButton * );
 
+    SdrObject**         mppSdrObject;
+    SdrModel*           mpDestModel;
+
     void            initfavorites(sal_uInt16 nThemeId, std::vector< Bitmap * >& rFavorites);
     void            insertSelectedFontwork();
     void            changeText( SdrTextObj* pObj );
     void            fillFavorites( sal_uInt16 nThemeId, std::vector< Bitmap * >& rFavorites );
 
-    std::vector< Bitmap * > maFavoritesVertical;
     std::vector< Bitmap * > maFavoritesHorizontal;
 
 public:
     FontWorkGalleryDialog( SdrView* pView, Window* pParent, sal_uInt16 nSID );
     ~FontWorkGalleryDialog();
+
+    // SJ: if the SdrObject** is set, the SdrObject is not inserted into the page when executing the dialog
+    void SetSdrObjectRef( SdrObject**, SdrModel* pModel );
 };
 
 };
