@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="DialogConvert" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="2" dlg:help-url="HID:34660" dlg:closeable="true" dlg:moveable="true">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="DialogConvert" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="1" dlg:help-url="HID:34660" dlg:closeable="true" dlg:moveable="true">
  <dlg:bulletinboard>
-  <dlg:text dlg:id="lblCurrencies" dlg:tab-index="0" dlg:left="170" dlg:top="39" dlg:width="89" dlg:height="8" dlg:value="lblCurrencies"/>
-  <dlg:checkbox dlg:id="chkComplete" dlg:tab-index="1" dlg:left="12" dlg:top="43" dlg:width="129" dlg:height="10" dlg:page="1" dlg:help-url="HID:34661" dlg:value="chkComplete" dlg:checked="true">
+  <dlg:text dlg:id="lblCurrencies" dlg:tab-index="1" dlg:left="170" dlg:top="39" dlg:width="89" dlg:height="8" dlg:value="lblCurrencies"/>
+  <dlg:checkbox dlg:id="chkComplete" dlg:tab-index="0" dlg:left="12" dlg:top="43" dlg:width="129" dlg:height="10" dlg:page="1" dlg:help-url="HID:34661" dlg:value="chkComplete" dlg:checked="true">
    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="Euro.ConvertRun.RetrieveEnableValue" script:language="StarBasic"/>
   </dlg:checkbox>
   <dlg:menulist dlg:id="lstCurrencies" dlg:tab-index="2" dlg:left="170" dlg:top="51" dlg:width="90" dlg:height="12" dlg:help-url="HID:34669" dlg:spin="true" dlg:linecount="12">
@@ -19,13 +19,11 @@
    <dlg:radio dlg:id="optDocRanges" dlg:tab-index="5" dlg:left="12" dlg:top="124" dlg:width="130" dlg:height="10" dlg:page="1" dlg:help-url="HID:34664" dlg:value="optDocRanges">
     <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Euro.Hard.CreateRangeList" script:language="StarBasic"/>
    </dlg:radio>
-  </dlg:radiogroup>
-  <dlg:text dlg:id="lblSelection" dlg:tab-index="6" dlg:left="170" dlg:top="84" dlg:width="73" dlg:height="8" dlg:page="1" dlg:value="lblSelection"/>
-  <dlg:radiogroup>
-   <dlg:radio dlg:id="optSelRange" dlg:tab-index="7" dlg:left="12" dlg:top="138" dlg:width="130" dlg:height="10" dlg:page="1" dlg:help-url="HID:34665" dlg:value="optSelRange">
+   <dlg:radio dlg:id="optSelRange" dlg:tab-index="6" dlg:left="12" dlg:top="138" dlg:width="130" dlg:height="10" dlg:page="1" dlg:help-url="HID:34665" dlg:value="optSelRange">
     <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Euro.ConvertRun.CheckRangeSelection" script:language="StarBasic"/>
    </dlg:radio>
   </dlg:radiogroup>
+  <dlg:text dlg:id="lblSelection" dlg:tab-index="7" dlg:left="170" dlg:top="84" dlg:width="73" dlg:height="8" dlg:page="1" dlg:value="lblSelection"/>
   <dlg:menulist dlg:id="lstSelection" dlg:tab-index="8" dlg:left="170" dlg:top="96" dlg:width="90" dlg:height="52" dlg:page="1" dlg:help-url="HID:34666" dlg:multiselection="true">
    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="Euro.ConvertRun.SelectListItem" script:language="StarBasic"/>
   </dlg:menulist>
