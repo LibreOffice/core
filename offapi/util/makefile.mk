@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
 #
-#   last change: $Author: mi $ $Date: 2002-11-20 15:16:30 $
+#   last change: $Author: jsc $ $Date: 2002-12-02 11:34:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -159,9 +159,11 @@ REGISTRYCHECKFLAG=$(MISC)$/registrycheck.flag
 ALLTAR : $(UCR)$/types.db $(OUT)$/ucrdoc$/types_doc.db
 
 $(UCR)$/types.db : $(UCR)$/offapi.db $(SOLARBINDIR)$/udkapi.rdb
+    +-$(RM) $(REGISTRYCHECKFLAG) 
     +$(GNUCOPY) -f $(UCR)$/offapi.db $@
     +$(REGMERGE) $@ / $(SOLARBINDIR)$/udkapi.rdb
 $(OUT)$/ucrdoc$/types_doc.db : $(OUT)$/ucrdoc$/offapi_doc.db $(SOLARBINDIR)$/udkapi_doc.rdb
+    +-$(RM) $(REGISTRYCHECKFLAG) 
     +$(GNUCOPY) -f $(OUT)$/ucrdoc$/offapi_doc.db $@
     +$(REGMERGE) $@ / $(SOLARBINDIR)$/udkapi_doc.rdb
 
@@ -175,9 +177,11 @@ ALL : ALLDEP
 
 ALLTAR: $(REGISTRYCHECKFLAG) autodoc
 
-$(REGISTRYCHECKFLAG) : $(UNOIDLDBTARGET)
-    +$(REGCOMPARE) -t -r1 $(REFERENCE_SO_60_RDB) -r2 $(UNOIDLDBTARGET)
-    +$(REGCOMPARE) -t -r1 $(REFERENCE_SO_60_DOC_RDB) -r2 $(UNOIDLDBTARGET) && echo > $(REGISTRYCHECKFLAG)
+# special work necessary for i18n reservedWords
+# ATTENTION: no special handling for other types is allowed.
+$(REGISTRYCHECKFLAG) : $(UCR)$/types.db $(OUT)$/ucrdoc$/types_doc.db
+    +$(REGCOMPARE) -t -r1 $(REFERENCE_SO_60_RDB) -r2 $(UCR)$/types.db -x /UCR/com/sun/star/i18n/reservedWords
+    +$(REGCOMPARE) -t -r1 $(REFERENCE_SO_60_DOC_RDB) -r2 $(OUT)$/ucrdoc$/types_doc.db -x /UCR/com/sun/star/i18n/reservedWords && echo > $@
 
 autodoc: $(OUT)$/misc$/offapi.autodoc 
 
