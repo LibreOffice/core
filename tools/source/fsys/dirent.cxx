@@ -2,8 +2,8 @@
  *
  *  $RCSfile: dirent.cxx,v $
  *
- *  $Revision: 1.12 $
- *  last change: $Author: hr $ $Date: 2003-03-27 17:04:01 $
+ *  $Revision: 1.13 $
+ *  last change: $Author: vg $ $Date: 2003-05-02 14:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1944,8 +1944,12 @@ BOOL DirEntry::ImpToRel( String aCurStr )
         DirEntry aThis(*this);
     aThis.ToAbs();
     String aThisStr( aThis.GetFull( FSYS_STYLE_HPFS ) );
-    aThisStr = String( aThisStr ).ToLowerAscii();
-    aCurStr = String( aCurStr ).ToLowerAscii();
+
+    if ( ! IsCaseSensitive() )
+    {
+        aThisStr = String( aThisStr ).ToLowerAscii();
+        aCurStr = String( aCurStr ).ToLowerAscii();
+    }
 
     // "Ubereinstimmung pr"ufen
     USHORT nPos = aThisStr.Match( aCurStr );
