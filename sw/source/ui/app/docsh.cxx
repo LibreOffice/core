@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:22:53 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:24:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,11 +149,9 @@
 #include <svx/svxmsbas.hxx>
 #endif
 #ifndef _SOERR_HXX
-#include <so3/soerr.hxx>
+#include <svtools/soerr.hxx>
 #endif
-#ifndef _SO_CLSIDS_HXX
-#include <so3/clsids.hxx>
-#endif
+#include <sot/clsids.hxx>
 #ifndef _BASMGR_HXX //autogen
 #include <basic/basmgr.hxx>
 #endif
@@ -218,9 +216,6 @@
 #ifndef _SHELLIO_HXX
 #include <shellio.hxx>      // I/O
 #endif
-#ifndef _SW3IO_HXX
-#include <sw3io.hxx>        // I/O, Hausformat
-#endif
 #ifndef _DOCSTYLE_HXX
 #include <docstyle.hxx>
 #endif
@@ -282,6 +277,8 @@
 #include <svtools/fltrcfg.hxx>
 #include <svx/htmlcfg.hxx>
 #include <sfx2/fcontnr.hxx>
+#include <sfx2/objface.hxx>
+#include <comphelper/storagehelper.hxx>
 
 using namespace rtl;
 using namespace ::com::sun::star::uno;
@@ -297,27 +294,12 @@ using namespace ::com::sun::star::uno;
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #endif
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::container;
 
 #define C2S(cChar) String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
-
-class SwTmpPersist : public SvPersist
-{
-    SwDocShell* pDShell;
-    virtual void FillClass( SvGlobalName * pClassName,
-                            ULONG * pClipFormat,
-                            String * pAppName,
-                            String * pLongUserName,
-                            String * pUserName,
-                            long nFileFormat=SOFFICE_FILEFORMAT_CURRENT ) const;
-    virtual BOOL Save();
-    virtual BOOL SaveCompleted( SvStorage * );
-public:
-    SwTmpPersist( SwDocShell& rDSh ) : pDShell( &rDSh ) {}
-};
-
 
 SFX_IMPL_INTERFACE( SwDocShell, SfxObjectShell, SW_RES(0) )
 {
@@ -327,13 +309,7 @@ SFX_IMPL_INTERFACE( SwDocShell, SfxObjectShell, SW_RES(0) )
 TYPEINIT2(SwDocShell, SfxObjectShell, SfxListener);
 
 //-------------------------------------------------------------------------
-SFX_IMPL_OBJECTFACTORY(SwDocShell, SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU, swriter, SvGlobalName(SO3_SW_CLASSID) )
-{
-    SfxObjectFactory& rFactory = (SfxObjectFactory&)Factory();
-    rFactory.SetDocumentServiceName(C2S("com.sun.star.text.TextDocument"));
-    SwDocShell::Factory().RegisterMenuBar(SW_RES(CFG_SW_MENU));
-    SwDocShell::Factory().RegisterAccel(SW_RES(CFG_SW_ACCEL));
-}
+SFX_IMPL_OBJECTFACTORY(SwDocShell, SvGlobalName(SO3_SW_CLASSID), SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU, "swriter"  )
 
 /*--------------------------------------------------------------------
     Beschreibung: Laden vorbereiten
@@ -400,34 +376,26 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         {
             InfoBox( 0, SW_RES(MSG_ERROR_PASSWD)).Execute();
                 delete *ppRdr;
-//JP: SFX-Aenderung - kein close rufen
-//            if( !rMedium.IsStorage() )
-//                rMedium.CloseInStream();
             return 0;
         }
     }
     if(rMedium.IsStorage())
     {
-        SvStorageRef aStor( rMedium.GetStorage() );
+        //SvStorageRef aStor( rMedium.GetStorage() );
         const SfxItemSet* pSet = rMedium.GetItemSet();
         const SfxPoolItem *pItem;
         if(pSet && SFX_ITEM_SET == pSet->GetItemState(SID_PASSWORD, TRUE, &pItem))
         {
             DBG_ASSERT(pItem->IsA( TYPE(SfxStringItem) ), "Fehler Parametertype");
-            ByteString aPasswd( ((const SfxStringItem *)pItem)->GetValue(),
-                                gsl_getSystemTextEncoding() );
-            aStor->SetKey( aPasswd );
+            comphelper::OStorageHelper::SetCommonStoragePassword( rMedium.GetStorage(), ((const SfxStringItem *)pItem)->GetValue() );
         }
         // Fuer's Dokument-Einfuegen noch die FF-Version, wenn's der
         // eigene Filter ist.
         ASSERT( pRead != ReadSw3 || pRead != ReadXML || pFlt->GetVersion(),
                 "Am Filter ist keine FF-Version gesetzt" );
-        if( (pRead == ReadSw3 || pRead == ReadXML) && pFlt->GetVersion() )
-            aStor->SetVersion( (long)pFlt->GetVersion() );
+        //if( (pRead == ReadSw3 || pRead == ReadXML) && pFlt->GetVersion() )
+        //    aStor->SetVersion( (long)pFlt->GetVersion() );
     }
-    // beim Sw3-Reader noch den pIo-Pointer setzen
-    if( pRead == ReadSw3 )
-        ((Sw3Reader*)pRead)->SetSw3Io( pIo );
 
     if( pFlt->GetDefaultTemplate().Len() )
         pRead->SetTemplateName( pFlt->GetDefaultTemplate() );
@@ -481,12 +449,18 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
     pDoc = pRdr->GetDoc();
 
     // die DocInfo vom Doc am DocShell-Medium setzen
+    //TODO/LATER: export DocumentInfo!
     if( GetMedium()->GetFilter() &&
+        //TODO/LATER: OLEStorage! Obviously it's for MS import ?!
         GetMedium()->GetFilter()->UsesStorage() )
     {
+        // the code below does not work even in the current build, because it's not possible to store
+        // a DocumentInfo into a package in this way!
+        /*
         SvStorageRef aRef = GetMedium()->GetStorage();
         if( aRef.Is() )
-            pDoc->GetInfo()->Save(aRef);
+            pDoc->GetInfo()->Save(aRef);*/
+        GetDocInfo() = *pDoc->GetInfo();
     }
 
     AddLink();
@@ -520,7 +494,6 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
 BOOL SwDocShell::Save()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::Save" );
-    sal_Bool bXML = pIo->GetStorage()->GetVersion() >= SOFFICE_FILEFORMAT_60;
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     if(pView)
         pView->GetEditWin().StopQuickHelp();
@@ -529,7 +502,7 @@ BOOL SwDocShell::Save()
     CalcLayoutForOLEObjects();  // format for OLE objets
 
     ULONG nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
-    if( SfxInPlaceObject::Save() )
+    if( SfxObjectShell::Save() )
     {
         switch( GetCreateMode() )
         {
@@ -538,17 +511,15 @@ BOOL SwDocShell::Save()
             break;
 
         case SFX_CREATE_MODE_ORGANIZER:
-            if( bXML )
             {
                 WriterRef xWrt;
                 ::GetXMLWriter( aEmptyStr, xWrt );
                 xWrt->SetOrganizerMode( TRUE );
-                SwWriter aWrt( *pIo->GetStorage(), *pDoc );
+
+                SwWriter aWrt( GetStorage(), *pDoc );
                 nErr = aWrt.Write( xWrt );
                 xWrt->SetOrganizerMode( FALSE );
             }
-            else
-                nErr = pIo->SaveStyles();
             break;
 
         case SFX_CREATE_MODE_EMBEDDED:
@@ -562,33 +533,21 @@ BOOL SwDocShell::Save()
             {
                 if( pDoc->ContainsMSVBasic() )
                 {
-                    SvxImportMSVBasic aTmp( *this, *pIo->GetStorage() );
-                    aTmp.SaveOrDelMSVBAStorage( FALSE, aEmptyStr );
+                    //TODO/MBA: it looks as that this code can be removed!
+                    //SvxImportMSVBasic aTmp( *this, pIo->GetStorage() );
+                    //aTmp.SaveOrDelMSVBAStorage( FALSE, aEmptyStr );
                     if( SvtFilterOptions::Get()->IsLoadWordBasicStorage() )
                         nVBWarning = SvxImportMSVBasic::
                                         GetSaveWarningOfMSVBAStorage( *this );
                     pDoc->SetContainsMSVBasic( FALSE );
                 }
 
-                if( !bXML &&
-                    !ISA( SwGlobalDocShell ) && !ISA( SwWebDocShell ) &&
-                    SFX_CREATE_MODE_EMBEDDED != GetCreateMode() )
-                    AddXMLAsZipToTheStorage( *pIo->GetStorage() );
-
                 // TabellenBox Edit beenden!
                 if( pWrtShell )
                     pWrtShell->EndAllTblBoxEdit();
 
                 WriterRef xWrt;
-                if( bXML )
-                {
-                    ::GetXMLWriter( aEmptyStr, xWrt );
-                }
-                else
-                {
-                    ::GetSw3Writer( aEmptyStr, xWrt );
-                    ((Sw3Writer*)&xWrt)->SetSw3Io( pIo, FALSE );
-                }
+                ::GetXMLWriter( aEmptyStr, xWrt );
 
                 BOOL bLockedView(FALSE);
                 if ( pWrtShell )
@@ -597,7 +556,7 @@ BOOL SwDocShell::Save()
                     pWrtShell->LockView( TRUE );    //lock visible section
                 }
 
-                SwWriter aWrt( *pIo->GetStorage(), *pDoc );
+                SwWriter aWrt( GetStorage(), *pDoc );
                 nErr = aWrt.Write( xWrt );
 
                 if ( pWrtShell )
@@ -622,10 +581,9 @@ BOOL SwDocShell::Save()
  --------------------------------------------------------------------*/
 
 
-BOOL SwDocShell::SaveAs( SvStorage * pStor )
+sal_Bool SwDocShell::SaveAs( const uno::Reference < embed::XStorage >& xStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SaveAs" );
-    sal_Bool bXML = pStor->GetVersion() >= SOFFICE_FILEFORMAT_60;
 
     SwWait aWait( *this, TRUE );
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
@@ -660,7 +618,7 @@ BOOL SwDocShell::SaveAs( SvStorage * pStor )
     CalcLayoutForOLEObjects();  // format for OLE objets
 
     ULONG nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
-    if( SfxInPlaceObject::SaveAs( pStor ) )
+    if( SfxObjectShell::SaveAs( xStor ) )
     {
         if( GetDoc()->IsGlobalDoc() && !ISA( SwGlobalDocShell ) )
         {
@@ -674,25 +632,20 @@ BOOL SwDocShell::SaveAs( SvStorage * pStor )
             String aAppName, aLongUserName, aUserName;
             SfxObjectShellRef xDocSh =
                 new SwGlobalDocShell( SFX_CREATE_MODE_INTERNAL );
-            xDocSh->FillClass( &aClassName, &nClipFormat, &aAppName,
-                                &aLongUserName, &aUserName,
-                                pStor->GetVersion() );
-            pStor->SetClass( aClassName, nClipFormat, aUserName );
+            xDocSh->SetupStorage( xStor, SotStorage::GetVersion( xStor ) );
+            xDocSh->DoClose();
         }
 
         if( pDoc->ContainsMSVBasic() )
         {
-            SvxImportMSVBasic aTmp( *this, *pIo->GetStorage() );
-            aTmp.SaveOrDelMSVBAStorage( FALSE, aEmptyStr );
-                    if( SvtFilterOptions::Get()->IsLoadWordBasicStorage() )
-                        nVBWarning = SvxImportMSVBasic::
-                                        GetSaveWarningOfMSVBAStorage( *this );
+            //TODO/MBA: it looks as that this code can be removed!
+            //SvxImportMSVBasic aTmp( *this, pIo->GetStorage() );
+            //aTmp.SaveOrDelMSVBAStorage( FALSE, aEmptyStr );
+            if( SvtFilterOptions::Get()->IsLoadWordBasicStorage() )
+                nVBWarning = SvxImportMSVBasic::
+                                GetSaveWarningOfMSVBAStorage( *this );
             pDoc->SetContainsMSVBasic( FALSE );
         }
-
-        if( !bXML && !ISA( SwGlobalDocShell ) && !ISA( SwWebDocShell ) &&
-            SFX_CREATE_MODE_EMBEDDED != GetCreateMode() )
-            AddXMLAsZipToTheStorage( *pStor );
 
         // TabellenBox Edit beenden!
         if( pWrtShell )
@@ -709,15 +662,7 @@ BOOL SwDocShell::SaveAs( SvStorage * pStor )
                             SFX_CREATE_MODE_EMBEDDED == GetCreateMode() );
 
         WriterRef xWrt;
-        if( bXML )
-        {
-            ::GetXMLWriter( aEmptyStr, xWrt );
-        }
-        else
-        {
-            ::GetSw3Writer( aEmptyStr, xWrt );
-            ((Sw3Writer*)&xWrt)->SetSw3Io( pIo, TRUE );
-        }
+        ::GetXMLWriter( aEmptyStr, xWrt );
 
         BOOL bLockedView(FALSE);
         if ( pWrtShell )
@@ -726,7 +671,7 @@ BOOL SwDocShell::SaveAs( SvStorage * pStor )
             pWrtShell->LockView( TRUE );    //lock visible section
         }
 
-        SwWriter aWrt( *pStor, *pDoc );
+        SwWriter aWrt( xStor, *pDoc );
         nErr = aWrt.Write( xWrt );
 
         if ( pWrtShell )
@@ -785,20 +730,24 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
     if(pView)
         pView->GetEditWin().StopQuickHelp();
     ULONG nVBWarning = 0;
+
     if( pDoc->ContainsMSVBasic() )
     {
         BOOL bSave = pFlt->GetUserData().EqualsAscii( "CWW8" )
              && SvtFilterOptions::Get()->IsLoadWordBasicStorage();
 
-        SvStorage* pStg;
-        if( xWriter->IsStgWriter() )
-            pStg = rMedium.GetStorage();
-        else
-            pStg = pIo->GetStorage();
-        SvxImportMSVBasic aTmp( *this, *pStg );
-        nVBWarning = aTmp.SaveOrDelMSVBAStorage( bSave,
-                                String::CreateFromAscii("Macros") );
-        pDoc->SetContainsMSVBasic( bSave );
+        if ( bSave )
+        {
+            SvStorageRef xStg = new SotStorage( rMedium.GetOutStream(), FALSE );
+            DBG_ASSERT( !xStg->GetError(), "No storage available for storing VBA macros!" );
+            if ( !xStg->GetError() )
+            {
+                SvxImportMSVBasic aTmp( *this, *xStg );
+                nVBWarning = aTmp.SaveOrDelMSVBAStorage( bSave, String::CreateFromAscii("Macros") );
+                xStg->Commit();
+                pDoc->SetContainsMSVBasic( TRUE );
+            }
+        }
     }
 
     // TabellenBox Edit beenden!
@@ -901,13 +850,17 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
                 xDocSh = new SwGlobalDocShell( SFX_CREATE_MODE_INTERNAL );
                 break;
             }
-            xDocSh->FillClass( &aClassName, &nClipFormat, &aAppName,
-                                &aLongUserName, &aUserName,
-                                pFlt->GetVersion() );
-            ASSERT( nClipFormat == nSaveClipId,
-                    "FillClass hat falsche Clipboard-Id gesetzt" );
-            rMedium.GetStorage()->SetClass( aClassName, nClipFormat,
-                                            aUserName );
+
+            try
+            {
+                // TODO/MBA: testing
+                uno::Reference < beans::XPropertySet > xSet( rMedium.GetStorage(), uno::UNO_QUERY );
+                if ( xSet.is() )
+                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("MediaType"), uno::makeAny( ::rtl::OUString( SotExchange::GetFormatMimeType( nSaveClipId ) ) ) );
+            }
+            catch ( uno::Exception& )
+            {
+            }
         }
 
         return bRet;
@@ -985,21 +938,15 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
  --------------------------------------------------------------------*/
 
 
-void SwDocShell::HandsOff()
-{
-    pIo->HandsOff();
-    SfxInPlaceObject::HandsOff();
-}
-
 /*--------------------------------------------------------------------
     Beschreibung: ??? noch nicht zu aktivieren, muss TRUE liefern
  --------------------------------------------------------------------*/
 
 
-BOOL SwDocShell::SaveCompleted( SvStorage * pStor )
+sal_Bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor  )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SaveCompleted" );
-    BOOL bRet = SfxInPlaceObject::SaveCompleted( pStor );
+    BOOL bRet = SfxObjectShell::SaveCompleted( xStor );
     if( bRet )
     {
         // erst hier entscheiden, ob das Speichern geklappt hat oder nicht
@@ -1007,26 +954,26 @@ BOOL SwDocShell::SaveCompleted( SvStorage * pStor )
             pDoc->SetModified();
         else
             pDoc->ResetModified();
-
-        bRet = pIo->SaveCompleted( pStor );
     }
 
-    if( xOLEChildList.Is() )
+    if( pOLEChildList )
     {
         BOOL bResetModified = IsEnableSetModified();
         if( bResetModified )
             EnableSetModified( FALSE );
 
-        SvPersist* pPersist = this;
-        const SvInfoObjectMemberList* pInfList = xOLEChildList->GetObjectList();
-
-        for( ULONG n = pInfList->Count(); n; )
+        uno::Sequence < rtl::OUString > aNames = pOLEChildList->GetObjectNames();
+        for( sal_Int32 n = aNames.getLength(); n; n-- )
         {
-            SvInfoObjectRef aRef( pInfList->GetObject( --n ));
-            pPersist->Move( &aRef, aRef->GetStorageName() );
+            if ( !pOLEChildList->MoveEmbeddedObject( aNames[n], GetEmbeddedObjectContainer() ) )
+                DBG_ERROR( "Copying of objects didn't work!" );
+
+            //SvPersist* pPersist = this;
+            //SvInfoObjectRef aRef( pInfList->GetObject( --n ));
+            //pPersist->Move( &aRef, aRef->GetStorageName() );
         }
 
-        xOLEChildList.Clear();
+        DELETEZ( pOLEChildList );
         if( bResetModified )
             EnableSetModified( TRUE );
     }
@@ -1059,7 +1006,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     }
 
     Rectangle aRect( nAspect == ASPECT_THUMBNAIL ?
-            GetVisArea( nAspect ) : ((SvEmbeddedObject*)this)->GetVisArea() );
+            GetVisArea( nAspect ) : GetVisArea( ASPECT_CONTENT ) );
 
     pDev->Push();
     pDev->SetFillColor();
@@ -1101,7 +1048,7 @@ void SwDocShell::SetVisArea( const Rectangle &rRect )
         pView->SetVisArea( aRect, TRUE );
     }
     else
-        SfxInPlaceObject::SetVisArea( aRect );
+        SfxObjectShell::SetVisArea( aRect );
 }
 
 
@@ -1136,7 +1083,7 @@ Rectangle SwDocShell::GetVisArea( USHORT nAspect ) const
         const Rectangle aRect( aPt, aSz );
         return aRect;
     }
-    return SvEmbeddedObject::GetVisArea( nAspect );
+    return SfxObjectShell::GetVisArea( nAspect );
 }
 
 Printer *SwDocShell::GetDocumentPrinter()
@@ -1159,8 +1106,7 @@ void SwDocShell::OnDocumentPrinterChanged( Printer * pNewPrinter )
 
 ULONG SwDocShell::GetMiscStatus() const
 {
-    return SfxInPlaceObject::GetMiscStatus() |
-           SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE;
+    return SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE;
 }
 
 // --> FME 2004-08-05 #i20883# Digital Signatures and Encryption
@@ -1376,14 +1322,14 @@ void SwDocShell::StartLoadFinishedTimer()
                   : SW_MOD()->GetUsrPref(TRUE)->IsGraphic() )
     {
         const SvxLinkManager& rLnkMgr = pDoc->GetLinkManager();
-        const ::so3::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
+        const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
         for( USHORT n = 0; n < rLnks.Count(); ++n )
         {
-            ::so3::SvBaseLink* pLnk = &(*rLnks[ n ]);
+            ::sfx2::SvBaseLink* pLnk = &(*rLnks[ n ]);
             if( pLnk && OBJECT_CLIENT_GRF == pLnk->GetObjType() &&
                 pLnk->ISA( SwBaseLink ) )
             {
-                ::so3::SvLinkSource* pLnkObj = pLnk->GetObj();
+                ::sfx2::SvLinkSource* pLnkObj = pLnk->GetObj();
                 if( !pLnkObj )
                 {
                     String sFileNm;
@@ -1475,14 +1421,14 @@ IMPL_STATIC_LINK( SwDocShell, IsLoadFinished, void*, EMPTYARG )
     if( !pThis->IsAbortingImport() )
     {
         const SvxLinkManager& rLnkMgr = pThis->pDoc->GetLinkManager();
-        const ::so3::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
+        const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
         for( USHORT n = rLnks.Count(); n; )
         {
-            ::so3::SvBaseLink* pLnk = &(*rLnks[ --n ]);
+            ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
             if( pLnk && OBJECT_CLIENT_GRF == pLnk->GetObjType() &&
                 pLnk->ISA( SwBaseLink ) )
             {
-                ::so3::SvLinkSource* pLnkObj = pLnk->GetObj();
+                ::sfx2::SvLinkSource* pLnkObj = pLnk->GetObj();
                 if( pLnkObj && pLnkObj->IsPending() &&
                     !((SwBaseLink*)pLnk)->IsShowQuickDrawBmp() )
                 {
@@ -1524,7 +1470,6 @@ SwFEShell* SwDocShell::GetFEShell()
 
 void SwDocShell::RemoveOLEObjects()
 {
-    SvPersist* pPersist = this;
     SwClientIter aIter( *(SwModify*)pDoc->GetDfltGrfFmtColl() );
     for( SwCntntNode* pNd = (SwCntntNode*)aIter.First( TYPE( SwCntntNode ) );
             pNd; pNd = (SwCntntNode*)aIter.Next() )
@@ -1533,19 +1478,11 @@ void SwDocShell::RemoveOLEObjects()
         if( pOLENd && ( pOLENd->IsOLEObjectDeleted() ||
                         pOLENd->IsInGlobalDocSection() ) )
         {
-            SvInfoObjectRef aRef( pPersist->Find(
-                                    pOLENd->GetOLEObj().GetName() ) );
-            if( aRef.Is() )
-            {
-                if( !xOLEChildList.Is() )
-                {
-                    xOLEChildList = new SwTmpPersist( *this );
-                    xOLEChildList->DoInitNew( 0 );
-                }
+            if( !pOLEChildList )
+                pOLEChildList = new comphelper::EmbeddedObjectContainer;
 
-                xOLEChildList->Move( &aRef, aRef->GetStorageName(), TRUE );
-                pPersist->Remove( &aRef );
-            }
+            ::rtl::OUString aObjName = pOLENd->GetOLEObj().GetCurrentPersistName();
+            GetEmbeddedObjectContainer().MoveEmbeddedObject( aObjName, *pOLEChildList );
         }
     }
 }
@@ -1589,12 +1526,13 @@ Sequence< OUString >    SwDocShell::GetEventNames()
     return aRet;
 }
 #endif
+/*
 void SwTmpPersist::FillClass( SvGlobalName * pClassName,
                             ULONG * pClipFormat,
                             String * pAppName,
                             String * pLongUserName,
                             String * pUserName,
-                            long nFileFormat ) const
+                            sal_Int32 nFileFormat ) const
 {
     pDShell->SwDocShell::FillClass( pClassName, pClipFormat, pAppName,
                                     pLongUserName, pUserName, nFileFormat );
@@ -1612,7 +1550,7 @@ BOOL SwTmpPersist::SaveCompleted( SvStorage * pStor )
     if( SaveCompletedChilds( pStor ) )
         return SvPersist::SaveCompleted( pStor );
     return FALSE;
-}
+} */
 
 
 
