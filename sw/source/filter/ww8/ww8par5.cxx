@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-12 12:30:08 $
+ *  last change: $Author: cmc $ $Date: 2001-11-27 10:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1765,8 +1765,9 @@ eF_ResT SwWW8ImplReader::Read_F_Set( WW8FieldDesc* pF, String& rStr )
 eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
 {                                                       // Reference - Field
     String aBkmName;
+    REFERENCEMARK eMark = REF_CONTENT;
     BOOL bChapterNr = FALSE;
-    BOOL bObenUnten = FALSE;
+    BOOL bAboveBelow = FALSE;
 
     long nRet;
     _ReadFieldParams aReadParam( rStr );
@@ -1776,17 +1777,16 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
         {
         case -2:
             if( !aBkmName.Len() ) // get name of bookmark
-            {
                 aBkmName = aReadParam.GetResult();
-            }
             break;
-
+        case 'n':
         case 'r':
+        case 'w':
             bChapterNr = TRUE; // activate flag 'Chapter Number'
             break;
 
         case 'p':
-            bObenUnten = TRUE;
+            bAboveBelow = TRUE;
             break;
         case 'h':
             break;
@@ -1799,39 +1799,34 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
     if ( SwFltGetFlag( nFieldFlags, SwFltControlStack::HYPO ) )
     {
         SwGetExpField aFld( (SwGetExpFieldType*)
-                        rDoc.GetSysFldType( RES_GETEXPFLD ),
-                        aBkmName, GSE_STRING, VVF_SYS );
+            rDoc.GetSysFldType( RES_GETEXPFLD ),aBkmName, GSE_STRING, VVF_SYS );
         rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
         pEndStck->SetBookRef( aBkmName, FALSE );
     }
     else
     {
+        if (bChapterNr || bAboveBelow)
+            eMark = REF_CHAPTER;
         SwGetRefField aFld( (SwGetRefFieldType*)
-                    rDoc.GetSysFldType( RES_GETREFFLD ),
-                    aBkmName,
-                    REF_BOOKMARK,
-                    0,
-                    REF_CONTENT );
+            rDoc.GetSysFldType( RES_GETREFFLD ),aBkmName,REF_BOOKMARK,0,eMark);
         rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
-        if( bObenUnten )
+        if( bAboveBelow )
         {
             SwGetRefField aFld2( (SwGetRefFieldType*)
-                        rDoc.GetSysFldType( RES_GETREFFLD ),
-                        aBkmName,
-                        REF_BOOKMARK,
-                        0,
-                        REF_UPDOWN );
+                rDoc.GetSysFldType( RES_GETREFFLD ), aBkmName, REF_BOOKMARK, 0,
+                REF_UPDOWN );
             rDoc.Insert( *pPaM, SwFmtFld( aFld2 ) );
         }
     }
     return F_OK;
 }
 
+// Note Reference - Field
 eF_ResT SwWW8ImplReader::Read_F_NoteReference( WW8FieldDesc*, String& rStr )
-{                                                   // Note Reference - Field
+{
     String aBkmName;
     BOOL bChapterNr = FALSE;
-    BOOL bObenUnten = FALSE;
+    BOOL bAboveBelow = FALSE;
 
     long nRet;
     _ReadFieldParams aReadParam( rStr );
@@ -1841,17 +1836,13 @@ eF_ResT SwWW8ImplReader::Read_F_NoteReference( WW8FieldDesc*, String& rStr )
         {
         case -2:
             if( !aBkmName.Len() ) // get name of foot/endnote
-            {
                 aBkmName = aReadParam.GetResult();
-            }
             break;
-
         case 'r':
             bChapterNr = TRUE; // activate flag 'Chapter Number'
             break;
-
         case 'p':
-            bObenUnten = TRUE;
+            bAboveBelow = TRUE;
             break;
         case 'h':
             break;
@@ -1864,8 +1855,7 @@ eF_ResT SwWW8ImplReader::Read_F_NoteReference( WW8FieldDesc*, String& rStr )
     if ( SwFltGetFlag( nFieldFlags, SwFltControlStack::HYPO ) )
     {
         SwGetExpField aFld( (SwGetExpFieldType*)
-                        rDoc.GetSysFldType( RES_GETEXPFLD ),
-                        aBkmName, GSE_STRING, VVF_SYS );
+            rDoc.GetSysFldType( RES_GETEXPFLD ), aBkmName, GSE_STRING, VVF_SYS);
         rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
         pEndStck->SetBookRef( aBkmName, FALSE );
     }
@@ -1873,23 +1863,14 @@ eF_ResT SwWW8ImplReader::Read_F_NoteReference( WW8FieldDesc*, String& rStr )
     {   // set Sequence No of corresponding Foot-/Endnote to Zero
         // (will be corrected in
         SwGetRefField aFld( (SwGetRefFieldType*)
-                    rDoc.GetSysFldType( RES_GETREFFLD ),
-                    aBkmName,
-                    REF_FOOTNOTE,
-                    0,
-                    REF_ONLYNUMBER
-                    );
+            rDoc.GetSysFldType( RES_GETREFFLD ), aBkmName, REF_FOOTNOTE, 0,
+            REF_ONLYNUMBER );
         pRefFldStck->NewAttr(*pPaM->GetPoint(), SwFmtFld( aFld ));
-        if( bObenUnten )
+        if( bAboveBelow )
         {
-//          rDoc.Insert( *pPaM, SwFmtHardBlank(' ') );
             SwGetRefField aFld2( (SwGetRefFieldType*)
-                        rDoc.GetSysFldType( RES_GETREFFLD ),
-                        aBkmName,
-                        REF_FOOTNOTE,
-                        0,
-                        REF_UPDOWN
-                        );
+                rDoc.GetSysFldType( RES_GETREFFLD ),aBkmName, REF_FOOTNOTE, 0,
+                REF_UPDOWN );
             pRefFldStck->NewAttr(*pPaM->GetPoint(), SwFmtFld( aFld2 ));
         }
     }
