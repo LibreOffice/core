@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsh.sdi,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:22:03 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:42:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,26 +63,6 @@ interface ImpressEditView : DrawView
     uuid ( "661B07E0-2FB4-11CF-89CA-008029E4B0B1" ) ;
 ]
 {
-    SID_DIAMODE // ole : no, status : play rec
-    [
-        ExecMethod = FuSupport ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_OUTLINEMODE // ole : no, status : play rec
-    [
-        ExecMethod = FuSupport ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_NOTESMODE // ole : no, status : play rec
-    [
-        ExecMethod = FuSupport ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_HANDOUTMODE // ole : no, status : play rec
-    [
-        ExecMethod = FuSupport ;
-        StateMethod = GetMenuState ;
-    ]
     SID_DIA // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
@@ -260,6 +240,11 @@ interface ImpressEditView : DrawView
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
+    ]
+    SID_LAYER_DIALOG_WIN // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
     ]
 }
 
