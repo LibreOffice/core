@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdclient.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:10:54 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "Client.hxx"
+
 #ifndef _IPOBJ_HXX //autogen
 #include <so3/ipobj.hxx>
 #endif
@@ -91,14 +93,21 @@
 
 #include "strings.hrc"
 
-#include "sdclient.hxx"
-#include "viewshel.hxx"
-#include "drviewsh.hxx"
-#include "sdview.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include "sdresid.hxx"
 
-
+namespace sd {
 
 /*************************************************************************
 |*
@@ -106,9 +115,9 @@
 |*
 \************************************************************************/
 
-SdClient::SdClient(SdrOle2Obj* pObj, SdViewShell* pSdViewShell, Window* pWindow) :
-    SfxInPlaceClient(pSdViewShell, pWindow),
-    pViewShell(pSdViewShell),
+Client::Client(SdrOle2Obj* pObj, ViewShell* pViewShell, ::Window* pWindow) :
+    SfxInPlaceClient(pViewShell->GetViewShell(), pWindow),
+    pViewShell(pViewShell),
     pSdrOle2Obj(pObj),
     pSdrGrafObj(NULL),
     pOutlinerParaObj (NULL)
@@ -121,7 +130,7 @@ SdClient::SdClient(SdrOle2Obj* pObj, SdViewShell* pSdViewShell, Window* pWindow)
 |*
 \************************************************************************/
 
-SdClient::~SdClient()
+Client::~Client()
 {
 }
 
@@ -133,13 +142,13 @@ SdClient::~SdClient()
 |*
 \************************************************************************/
 
-void SdClient::RequestObjAreaPixel(const Rectangle& rRect)
+void Client::RequestObjAreaPixel(const Rectangle& rRect)
 {
-    Window* pWin = pViewShell->GetWindow();
+    ::Window* pWin = pViewShell->GetWindow();
     Rectangle aObjRect( pWin->PixelToLogic( rRect.TopLeft() ),
                         pWin->PixelToLogic( rRect.GetSize() ) );
 
-    SdView* pView = pViewShell->GetView();
+    ::sd::View* pView = pViewShell->GetView();
     Rectangle aWorkArea( pView->GetWorkArea() );
 
     if (!aWorkArea.IsInside(aObjRect))
@@ -209,14 +218,14 @@ void SdClient::RequestObjAreaPixel(const Rectangle& rRect)
 |*
 \************************************************************************/
 
-void SdClient::ViewChanged(USHORT nAspect)
+void Client::ViewChanged(USHORT nAspect)
 {
     // Eventuell neues MetaFile holen
     SfxInPlaceClient::ViewChanged(nAspect);
 
     if (pViewShell->GetActiveWindow())
     {
-        SdView* pView = pViewShell->GetView();
+        ::sd::View* pView = pViewShell->GetView();
 
         if (pView)
         {
@@ -254,7 +263,7 @@ void SdClient::ViewChanged(USHORT nAspect)
 |*
 \************************************************************************/
 
-void SdClient::UIActivate(BOOL bActivate)
+void Client::UIActivate(BOOL bActivate)
 {
     SfxInPlaceClient::UIActivate(bActivate);
 
@@ -283,7 +292,7 @@ void SdClient::UIActivate(BOOL bActivate)
 |*
 \************************************************************************/
 
-void SdClient::MakeViewData()
+void Client::MakeViewData()
 {
     SfxInPlaceClient::MakeViewData();
 
@@ -313,15 +322,17 @@ void SdClient::MakeViewData()
 |*
 \************************************************************************/
 
-void SdClient::MakeVisible()
+void Client::MakeVisible()
 {
     SfxInPlaceClient::MakeVisible();
 
-    if (pViewShell->ISA(SdDrawViewShell))
+    if (pViewShell->ISA(DrawViewShell))
     {
-        ((SdDrawViewShell*) pViewShell)->MakeVisible(pSdrOle2Obj->GetLogicRect(),
-                                                     *pViewShell->GetActiveWindow());
+        static_cast<DrawViewShell*>(pViewShell)->MakeVisible(
+            pSdrOle2Obj->GetLogicRect(),
+            *pViewShell->GetActiveWindow());
     }
 }
 
 
+} // end of namespace sd
