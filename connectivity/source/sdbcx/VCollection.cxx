@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 06:13:56 $
+ *  last change: $Author: oj $ $Date: 2002-05-10 07:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,12 +92,13 @@ using namespace ::com::sun::star::util;
 
 IMPLEMENT_SERVICE_INFO(OCollection,"com.sun.star.sdbcx.VContainer" , "com.sun.star.sdbcx.Container")
 
-OCollection::OCollection(::cppu::OWeakObject& _rParent,sal_Bool _bCase, ::osl::Mutex& _rMutex,const TStringVector &_rVector)
+OCollection::OCollection(::cppu::OWeakObject& _rParent,sal_Bool _bCase, ::osl::Mutex& _rMutex,const TStringVector &_rVector,sal_Bool _bUseIndexOnly)
                      : m_rParent(_rParent)
                      ,m_rMutex(_rMutex)
                      ,m_aContainerListeners(_rMutex)
                      ,m_aRefreshListeners(_rMutex)
                      ,m_aNameMap(_bCase ? true : false)
+                     ,m_bUseIndexOnly(_bUseIndexOnly)
 {
     m_aElements.reserve(_rVector.size());
     for(TStringVector::const_iterator i=_rVector.begin(); i != _rVector.end();++i)
@@ -107,7 +108,39 @@ OCollection::OCollection(::cppu::OWeakObject& _rParent,sal_Bool _bCase, ::osl::M
 OCollection::~OCollection()
 {
 }
+// -----------------------------------------------------------------------------
+Any SAL_CALL OCollection::queryInterface( const Type & rType ) throw (RuntimeException)
+{
+    if ( m_bUseIndexOnly && rType == ::getCppuType(static_cast< Reference< XNameAccess > *> (NULL)) )
+    {
+        return Any();
+    }
+    return OCollectionBase::queryInterface( rType );
+}
+// -----------------------------------------------------------------------------
+Sequence< Type > SAL_CALL OCollection::getTypes() throw (RuntimeException)
+{
+    if ( m_bUseIndexOnly )
+    {
+        Sequence< Type > aTypes(OCollectionBase::getTypes());
+        Type* pBegin    = aTypes.getArray();
+        Type* pEnd      = pBegin + aTypes.getLength();
 
+        Sequence< Type > aRetType(aTypes.getLength()-1);
+        Type aType = ::getCppuType(static_cast< Reference<XNameAccess> *>(NULL));
+        sal_Int32 i=0;
+        for(;pBegin != pEnd; ++pBegin)
+        {
+            if ( *pBegin != aType )
+            {
+                aRetType.getArray()[i++] = *pBegin;
+            }
+        }
+
+        return aRetType;
+    }
+    return OCollectionBase::getTypes( );
+}
 // -------------------------------------------------------------------------
 void OCollection::clear_NoDispose()
 {
