@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResourceCreator.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:06:33 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 09:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,7 +37,6 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-
 // base classes
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.ucb.*;
@@ -273,7 +272,7 @@ public class ResourceCreator {
         }
 
         if ( m_name == null || m_name.equals( "" )) {
-            m_name = "newfile-" + System.currentTimeMillis();
+            m_name = "created-resource-" + System.currentTimeMillis();
         }
 
         if ( m_srcURL == null || m_srcURL.equals( "" )) {
@@ -286,11 +285,11 @@ public class ResourceCreator {
      */
     public void printCmdLineUsage() {
         System.out.println(
-            "Usage   : ResourceCreator -connect=socket,host=...,port=... -url=...-srcURL=... -name=...n" );
+            "Usage   : ResourceCreator -connect=socket,host=...,port=... -url=... -name=... -srcURL=..." );
         System.out.println(
-            "Defaults: -connect=socket,host=localhost,port=2083 -url=<workdir> -name=newfile.txt -srcURL=<workdir>/data/data.txt>" );
+            "Defaults: -connect=socket,host=localhost,port=2083 -url=<workdir> -name=created-resource-<uniquepostfix> -srcURL=<workdir>/data/data.txt>" );
         System.out.println(
-            "\nExample : -url=file:///home/kai/ -name=newfile-<uniquepostfix> -srcURL=file:///home/kai/sourcefile.txt" );
+            "\nExample : -url=file:///home/kai/ -name=newfile.txt -srcURL=file:///home/kai/sourcefile.txt" );
     }
 
     /**
