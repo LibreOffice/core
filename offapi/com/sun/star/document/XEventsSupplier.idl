@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEventsSupplier.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-24 13:21:26 $
+ *  last change: $Author: mi $ $Date: 2001-01-24 16:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module document {
 /** gives access to a list of URLs bound to events of this object.
  */
 [ uik(E2280200-33D6-11D1-AABE00A0-249D5590), ident( "XEventSupplier", 1.0 ) ]
-interface XEventSupplier: com::sun::star::uno::XInterface
+interface XEventsSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** offers a list of event handlers which are be bound to events of
@@ -87,7 +87,7 @@ interface XEventSupplier: com::sun::star::uno::XInterface
 
 //=============================================================================
 
-typedef XEventsSupplier XEventsupplier;
+typedef XEventsSupplier XEventSupplier;
 
 //=============================================================================
 
@@ -96,6 +96,9 @@ typedef XEventsSupplier XEventsupplier;
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1  2001/01/24 13:21:26  mi
+    stored document events and runtime document events structurally unified
+
     Revision 1.4  2001/01/23 10:08:08  mi
     optional interfaces now marked as [optional] instead of just a prosa description of this fact
 

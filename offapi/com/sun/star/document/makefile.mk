@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: mi $ $Date: 2001-01-24 13:21:26 $
+#   last change: $Author: mi $ $Date: 2001-01-24 16:26:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ IDLFILES=\
     XGraphicObjectResolver.idl\
     XEventBroadcaster.idl\
     XEventListener.idl\
-    XEventSupploer.idl\
+    XEventsSupplier.idl\
     EventDescriptor.idl\
     Events.idl\
     EventObject.idl\

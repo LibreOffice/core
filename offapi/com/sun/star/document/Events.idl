@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Events.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-24 16:17:49 $
+ *  last change: $Author: mi $ $Date: 2001-01-24 16:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef __com_sun_star_document_DocumentEvent_idl__
 #define __com_sun_star_document_DocumentEvent_idl__
 
-#ifndef __com_sun_star_comtainer_XIndexReplace_idl__
-#include <com/sun/star/container/XIndexReplace.idl>
+#ifndef __com_sun_star_container_XNameReplace_idl__
+#include <com/sun/star/container/XNameReplace.idl>
 #endif
 
 //=============================================================================
@@ -117,7 +117,7 @@ service Events
         </dl>
 
         */
-    interface com::sun::star::XNameReplace;
+    interface com::sun::star::container::XNameReplace;
 };
 
 //=============================================================================
@@ -127,6 +127,9 @@ service Events
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1  2001/01/24 16:17:49  mi
+    stored document events and runtime document events structurally unified
+
     Revision 1.1  2001/01/23 10:08:08  mi
     optional interfaces now marked as [optional] instead of just a prosa description of this fact
 
