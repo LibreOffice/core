@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 12:15:19 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:42:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -989,22 +989,30 @@ void GenericSalLayout::Justify( long nNewWidth )
     const long nBasePos = maBasePoint.X();
     pGRight->maLinearPos.X() = nBasePos + nNewWidth;
 
-    // interpolate inbetween glyph positions
+    // count stretchable glyphs
     GlyphItem* pG;
-    double fFactor = (double)nNewWidth / nOldWidth;
+    int nStretchable = 0;
     for( pG = mpGlyphItems; pG < pGRight; ++pG )
+        if( pG->mnOrigWidth > 0 )
+            ++nStretchable;
+
+    // interpolate inbetween glyph positions
+    int nDiffWidth = nNewWidth - nOldWidth;
+    int nDeltaSum = 0;
+    for( pG = mpGlyphItems; (pG < pGRight) && (nStretchable > 0); ++pG )
     {
-        long nOldPos = pG->maLinearPos.X();
-        long nNewPos = nBasePos + (long)(fFactor * (nOldPos - nBasePos) + 0.5);
-        pG->maLinearPos.X() += nNewPos - nOldPos;
+        if( pG->mnOrigWidth <= 0 )
+            continue;
+
+        int nDeltaWidth = nDiffWidth / nStretchable;
+        nDiffWidth -= nDeltaWidth;
+        --nStretchable;
+
+        pG->mnNewWidth += nDeltaWidth;
+        pG->maLinearPos.X() += nDeltaSum;
+    nDeltaSum += nDeltaWidth;
     }
-
-    // adjust new glyph advance widths to glyph movements above,
-    // the rightmost glyph keeps it's original advance width
-    for( pG = mpGlyphItems; pG < pGRight; ++pG )
-        pG[0].mnNewWidth = pG[1].maLinearPos.X() - pG[0].maLinearPos.X();
 }
-
 
 // -----------------------------------------------------------------------
 
@@ -1396,22 +1404,40 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         int nCharCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
         long* pJustificationArray = (long*)alloca( nCharCount * sizeof(long) );
         FillDXArray( pJustificationArray );
-        // #i17359# multilayout is not simplified yet, so origwidth needs handholding
+        // #i17359# multilayout is not simplified yet, so calculating the
+        // unjustified width needs handholding; also count the number of
+        // stretchable virtual char widths
         long nOrigWidth = 0;
+        int nStretchable = 0;
         for( int i = 0; i < nCharCount; ++i )
         {
             // convert array from widths to sum of widths
             nOrigWidth += pJustificationArray[i];
-            pJustificationArray[i] = nOrigWidth;
+            if( pJustificationArray[i] > 0 )
+                ++nStretchable;
         }
 
-        // now we are able to distribute the width over the virtual char widths
+        // now we are able to distribute the extra width over the virtual char widths
         if( nOrigWidth && (nTargetWidth != nOrigWidth) )
         {
-            const float fStretch = (float)nTargetWidth / nOrigWidth;
-            long nWidthSum = 0.0;
+            int nDiffWidth = nTargetWidth - nOrigWidth;
+            int nWidthSum = 0;
             for( int i = 0; i < nCharCount; ++i )
-                pJustificationArray[i] = (long)(pJustificationArray[i] * fStretch + 0.5);
+            {
+                int nJustWidth = pJustificationArray[i];
+                if( (nJustWidth > 0) && (nStretchable > 0) )
+                {
+                    int nDeltaWidth = nDiffWidth / nStretchable;
+                    nJustWidth += nDeltaWidth;
+                    nDiffWidth -= nDeltaWidth;
+                    --nStretchable;
+                }
+                nWidthSum += nJustWidth;
+                pJustificationArray[i] = nWidthSum;
+            }
+            if( nWidthSum != nTargetWidth )
+                pJustificationArray[ nCharCount-1 ] = nTargetWidth;
+
             // temporarily change the pDXArray
             aMultiArgs.mpDXArray = pJustificationArray;
         }
