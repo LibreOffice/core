@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-07 14:09:19 $
+ *  last change: $Author: gt $ $Date: 2001-05-14 09:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,6 +543,8 @@ class ImportExcel8 : public ImportExcel
         XclImpWebQueryBuffer*   pWebQBuffer;        // data for web queries
 
         BOOL                    bHasBasic;
+
+        BOOL                    bFirstScl;          // only one Scl-Record has to be read per chart!
 
         void                    Formula( void );                // 0x06
         void                    RecString( void );              // 0x07
