@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-17 16:35:55 $
+ *  last change: $Author: sab $ $Date: 2000-11-17 17:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1161,7 +1161,7 @@ BOOL ScDocument::GetDdeLinkData( USHORT nPos, String& rAppl, String& rTopic, Str
     return FALSE;
 }
 
-BOOL ScDocument::GetDdeLinkResultDimension( USHORT nPos, USHORT& nCol, USHORT& nRow, ScMatrix* pMatrix)
+BOOL ScDocument::GetDdeLinkResultDimension( USHORT nPos, USHORT& nCol, USHORT& nRow, ScMatrix*& pMatrix)
 {
     USHORT nDdeCount = 0;
     if (pLinkManager)
