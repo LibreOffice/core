@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2000-10-31 11:30:00 $
+ *  last change: $Author: os $ $Date: 2000-11-01 16:09:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,6 +352,9 @@ using namespace ::rtl;
 
 SwUnoPropertyMapProvider aSwMapProvider;
 
+#ifndef MID_TXT_LMARGIN
+#define MID_TXT_LMARGIN 11
+#endif
 /******************************************************************************
     UI-Maps
 ******************************************************************************/
@@ -483,7 +486,7 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
         { SW_PROP_NAME(UNO_NAME_PARA_GRAPHIC_URL      ),        RES_BACKGROUND,         &::getCppuType((const OUString*)0),         PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_URL    },                                          \
         { SW_PROP_NAME(UNO_NAME_PARA_GRAPHIC_FILTER  ),         RES_BACKGROUND,         &::getCppuType((const OUString*)0),         PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_FILTER    },                                       \
         { SW_PROP_NAME(UNO_NAME_PARA_GRAPHIC_LOCATION),         RES_BACKGROUND,         &::getCppuType((const style::GraphicLocation*)0), PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_POSITION},                                \
-        { SW_PROP_NAME(UNO_NAME_PARA_LEFT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0),            PropertyAttribute::MAYBEVOID, MID_L_MARGIN|CONVERT_TWIPS},                                   \
+        { SW_PROP_NAME(UNO_NAME_PARA_LEFT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0),            PropertyAttribute::MAYBEVOID, MID_TXT_LMARGIN|CONVERT_TWIPS},                                   \
         { SW_PROP_NAME(UNO_NAME_PARA_RIGHT_MARGIN),             RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0),            PropertyAttribute::MAYBEVOID, MID_R_MARGIN|CONVERT_TWIPS},                                  \
         { SW_PROP_NAME(UNO_NAME_PARA_FIRST_LINE_INDENT),        RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0),            PropertyAttribute::MAYBEVOID, MID_FIRST_LINE_INDENT|CONVERT_TWIPS},                         \
         { SW_PROP_NAME(UNO_NAME_CHAR_KERNING            ),  RES_CHRATR_KERNING    , &::getCppuType((const sal_Int16*)0)  ,          PropertyAttribute::MAYBEVOID,   0},                                                           \
@@ -673,7 +676,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_WEIGHT),                   RES_CHRATR_WEIGHT    ,  &::getCppuType((const Float*)0),    PROPERTY_NONE, MID_WEIGHT},
                     { SW_PROP_NAME(UNO_NAME_CHAR_POSTURE),              RES_CHRATR_POSTURE   ,  &::getCppuType((const awt::FontSlant*)0),   PROPERTY_NONE, MID_POSTURE},
                     { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE),            RES_CHRATR_UNDERLINE ,  &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_UNDERLINE},
-                    { SW_PROP_NAME(UNO_NAME_PARA_LEFT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_L_MARGIN|CONVERT_TWIPS},
+                    { SW_PROP_NAME(UNO_NAME_PARA_LEFT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_TXT_LMARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_RIGHT_MARGIN),             RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_LEFT_MARGIN_RELATIVE),  RES_LR_SPACE,         &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,     MID_L_REL_MARGIN},
                     { SW_PROP_NAME(UNO_NAME_PARA_RIGHT_MARGIN_RELATIVE), RES_LR_SPACE,         &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,     MID_R_REL_MARGIN},
@@ -1010,7 +1013,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_FONT_PITCH),           RES_CHRATR_FONT,        &::getCppuType((const sal_Int16*)0),                    PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },
                     { SW_PROP_NAME(UNO_NAME_CHAR_POSTURE),              RES_CHRATR_POSTURE   ,  &::getCppuType((const awt::FontSlant*)0),   PROPERTY_NONE, MID_POSTURE},
                     { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE),            RES_CHRATR_UNDERLINE ,  &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_UNDERLINE},
-                    { SW_PROP_NAME(UNO_NAME_PARA_LEFT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_L_MARGIN|CONVERT_TWIPS},
+                    { SW_PROP_NAME(UNO_NAME_PARA_LEFT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_TXT_LMARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_RIGHT_MARGIN),             RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_FIRST_LINE_INDENT),        RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_FIRST_LINE_INDENT|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_CHAR_KERNING            ),  RES_CHRATR_KERNING    , &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,  0},
@@ -1572,7 +1575,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_WEIGHT),                   RES_CHRATR_WEIGHT    ,  &::getCppuType((const Float*)0),    PROPERTY_NONE, MID_WEIGHT},
                     { SW_PROP_NAME(UNO_NAME_CHAR_POSTURE),              RES_CHRATR_POSTURE   ,  &::getCppuType((const awt::FontSlant*)0),   PROPERTY_NONE, MID_POSTURE},
                     { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE),            RES_CHRATR_UNDERLINE ,  &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_UNDERLINE},
-                    { SW_PROP_NAME(UNO_NAME_PARA_LEFT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_L_MARGIN|CONVERT_TWIPS},
+                    { SW_PROP_NAME(UNO_NAME_PARA_LEFT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_TXT_LMARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_RIGHT_MARGIN),             RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_FIRST_LINE_INDENT),        RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_FIRST_LINE_INDENT|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_CHAR_KERNING            ),  RES_CHRATR_KERNING    , &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,  0},
