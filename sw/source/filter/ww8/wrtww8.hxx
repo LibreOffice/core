@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:16:45 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 11:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,6 @@
 #ifndef WRT_FN_HXX
 #include <wrt_fn.hxx>
 #endif
-#ifndef _FLYPOS_HXX
-#include <flypos.hxx>
-#endif
 #ifndef _ORNTENUM_HXX
 #include <orntenum.hxx>
 #endif
@@ -106,6 +103,13 @@
 #endif
 #ifndef WW_FIELDS_HXX
 #include "fields.hxx"
+#endif
+
+#ifndef WW_TYPES
+#include "types.hxx"
+#endif
+#ifndef SW_WRITERHELPER
+#include "writerhelper.hxx"
 #endif
 
 // einige Forward Deklarationen
@@ -182,8 +186,6 @@ struct WW8_PdAttrDesc;
 class SvxBrushItem;
 
 #define WWFL_ULSPACE_LIKE_SWG   0x00000001
-#define WWFL_NO_GRAF            0x00000080
-#define WWFL_NO_OLE             0x00020000
 
 #define GRF_MAGIC_1 0x12    // 3 magic Bytes fuer PicLocFc-Attribute
 #define GRF_MAGIC_2 0x34
@@ -340,15 +342,15 @@ public:
 class DrawObj
 {
 public:
-    WW8_CP mnCp;                // CP-Pos der Verweise
-    UINT32 mnShapeId;           // ShapeId for the SwFrmFmts
-    const SwFrmFmt &mrCntnt;    // SwFrmFmt
-    Point maParentPos;          // Points
-    INT32 mnThick;              // Border Thicknesses
-    short mnDirection;               // If BiDi or not
+    WW8_CP mnCp;          // CP-Pos der Verweise
+    UINT32 mnShapeId;     // ShapeId for the SwFrmFmts
+    sw::Frame maCntnt;    // the frame
+    Point maParentPos;    // Points
+    INT32 mnThick;        // Border Thicknesses
+    short mnDirection;    // If BiDi or not
 
-    DrawObj(const SwFrmFmt &rCntnt, WW8_CP nCp, Point aParentPos, short nDir)
-        : mnCp(nCp), mnShapeId(0), mrCntnt(rCntnt), maParentPos(aParentPos),
+    DrawObj(const sw::Frame &rCntnt, WW8_CP nCp, Point aParentPos, short nDir)
+        : mnCp(nCp), mnShapeId(0), maCntnt(rCntnt), maParentPos(aParentPos),
         mnThick(0), mnDirection(nDir) {}
 private:
     //No assignment
@@ -366,8 +368,8 @@ protected:
 public:
     PlcDrawObj() {}
     void WritePlc(SwWW8Writer& rWrt) const;
-    bool Append( SwWW8Writer&, WW8_CP nCp, const SwFrmFmt& rFmt,
-        const Point& rNdTopLeft );
+    bool Append(SwWW8Writer&, WW8_CP nCp, const sw::Frame& rFmt,
+        const Point& rNdTopLeft);
     int size() { return maDrawObjs.size(); };
     std::vector<DrawObj> &GetObjArr() { return maDrawObjs; }
     void SetShapeDetails(DrawObj &rShape, UINT32 nId, INT32 nThick );
@@ -406,11 +408,6 @@ private:
     HdFtPlcDrawObj& operator=(const HdFtPlcDrawObj&);
 };
 
-namespace ww
-{
-    typedef std::vector<sal_uInt8> bytes;
-}
-
 // der WW8-Writer
 class SwWW8Writer: public StgWriter
 {
@@ -419,11 +416,14 @@ friend void WW8_WrPlcSepx::WriteOlst( SwWW8Writer& rWrt, USHORT i );
 friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
 
     wwFontHelper maFontHelper;
+    std::vector<ULONG> maChapterFieldLocs;
+    typedef std::vector<ULONG>::const_iterator mycCFIter;
     String aMainStg;
     SvPtrarr aTOXArr;
     const SfxItemSet* pISet;    // fuer Doppel-Attribute
     WW8_WrPct*  pPiece;         // Pointer auf Piece-Table
     SwNumRuleTbl* pUsedNumTbl;  // alle used NumRules
+    const SwTxtNode *mpTopNodeOfHdFtPage; //top node of host page when in hd/ft
     std::map<USHORT, USHORT> aRuleDuplicates; //map to Duplicated numrules
     std::stack<xub_StrLen> maCurrentCharPropStarts;
     WW8_WrtBookmarks* pBkmks;
@@ -476,9 +476,12 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
     bool MiserableFormFieldExportHack(const SwFrmFmt& rFrmFmt);
     void DoComboBox(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xPropSet);
     void DoCheckBox(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xPropSet);
+    void GatherChapterFields();
+    bool FmtHdFtContainsChapterField(const SwFrmFmt &rFmt) const;
+    bool CntntContainsChapterField(const SwFmtCntnt &rCntnt) const;
 public:
-    SwPosFlyFrms maFlyPos;      // Pointer auf die aktuelle "FlyFrmTabelle"
-    const SwPageDesc* pAktPageDesc;
+    sw::Frames maFrames;             // The floating frames in this document
+    const SwPageDesc *pAktPageDesc;
     WW8Fib* pFib;
     WW8Dop* pDop;
     WW8_WrPlcPn* pPapPlc;
@@ -491,8 +494,8 @@ public:
     WW8_WrPlcPostIt* pAtn;
     WW8_WrPlcTxtBoxes *pTxtBxs, *pHFTxtBxs;
 
-    SwFlyFrmFmt* pFlyFmt;           // liegt der Node in einem FlyFrame, ist
-                                    // das Format gesetzt, sonst 0
+    const sw::Frame *mpParentFrame; //If set we are exporting content inside
+                                    //a frame, e.g. a graphic node
 
     Point* pFlyOffset;              // zur Justierung eines im Writer als
     RndStdIds eNewAnchorType;       // Zeichen gebundenen Flys, der im WW
@@ -577,10 +580,9 @@ public:
     const SvxBrushItem* GetCurrentPageBgBrush() const;
     SvxBrushItem TrueFrameBgBrush(const SwFrmFmt &rFlyFmt) const;
     void OutWW8FlyFrmsInCntnt( const SwTxtNode& rNd );
-    void OutWW8FlyFrm( const SwFrmFmt& rFlyFrmFmt, const Point& rNdTopLeft );
-    void OutFlyFrm(const SwCntntNode& rNode, const SwFrmFmt& rFmt);
-    void AppendFlyInFlys( WW8_CP& rCP, const SwFrmFmt& rFrmFmt,
-                            const Point& rNdTopLeft );
+    void OutWW8FlyFrm(const sw::Frame& rFmt, const Point& rNdTopLeft);
+    void OutFlyFrm(const sw::Frame& rFmt);
+    void AppendFlyInFlys(const sw::Frame& rFrmFmt, const Point& rNdTopLeft);
     void WriteSdrTextObj(const SdrObject& rObj, BYTE nTyp);
 
     UINT32 GetSdrOrdNum( const SwFrmFmt& rFmt ) const;
@@ -595,7 +597,7 @@ public:
         const String& rFldCmd, BYTE nMode = WRITEFIELD_ALL);
     void StartCommentOutput( const String& rName );
     void EndCommentOutput(   const String& rName );
-    void OutGrf( const SwNoTxtNode* pNd );
+    void OutGrf(const sw::Frame &rFrame);
     bool TestOleNeedsGraphic(const SwAttrSet& rSet, SvStorageRef xOleStg,
         SvStorageRef xObjStg, String &rStorageName, SwOLENode *pOLENd);
     void AppendBookmarks( const SwTxtNode& rNd, xub_StrLen nAktPos,
@@ -635,7 +637,8 @@ public:
 
     void Out_SfxItemSet(const SfxItemSet& rSet, bool bPapFmt, bool bChpFmt,
         USHORT nScript);
-    void Out_SfxBreakItems( const SfxItemSet& rSet, const SwNode& rNd );
+    void Out_SfxBreakItems(const SfxItemSet *pSet, const SwNode& rNd);
+    bool SetAktPageDescFromNode(const SwNode &rNd);
 
     void Out_SwFmtBox(const SvxBoxItem& rBox, bool bShadow);
     void Out_SwFmtTableBox( WW8Bytes& rO, const SvxBoxItem& rBox );
@@ -709,6 +712,8 @@ public:
     xub_StrLen top_charpropstart() const;
     bool empty_charpropstart() const;
     void GetCurrentItems(WW8Bytes &rItems) const;
+    void SetHdFtPageRoot(const SwTxtNode *pNd) { mpTopNodeOfHdFtPage = pNd; }
+    const SwTxtNode *GetHdFtPageRoot() const { return mpTopNodeOfHdFtPage; }
 private:
     //No copying
     SwWW8Writer(const SwWW8Writer&);
@@ -867,20 +872,20 @@ public:
 class GraphicDetails
 {
 public:
-    const SwNoTxtNode* mpNd;    // Positionen der SwGrfNodes und SwOleNodes
-    const SwFlyFrmFmt* mpFly;   // Umgebende FlyFrms dazu
-    ULONG mnPos;        // FilePos der Grafiken
-    UINT16 mnWid;       // Breite der Grafiken
-    UINT16 mnHei;       // Hoehe der Grafiken
-    GraphicDetails(const SwNoTxtNode* pNd, const SwFlyFrmFmt* pFly,
-        UINT16 nWid, UINT16 nHei)
-    : mpNd(pNd), mpFly(pFly), mnPos(0), mnWid(nWid), mnHei(nHei)
+    const sw::Frame maFly;      // Umgebende FlyFrms dazu
+    ULONG mnPos;                // FilePos der Grafiken
+    UINT16 mnWid;               // Breite der Grafiken
+    UINT16 mnHei;               // Hoehe der Grafiken
+    GraphicDetails(const sw::Frame &rFly, UINT16 nWid, UINT16 nHei)
+        : maFly(rFly), mnPos(0), mnWid(nWid), mnHei(nHei)
     {}
 
     bool operator==(const GraphicDetails& rIn) const
     {
-        return
-           ((mpNd == rIn.mpNd) && (mnWid == rIn.mnWid) && (mnHei == rIn.mnHei));
+        return (
+                 (mnWid == rIn.mnWid) && (mnHei == rIn.mnHei) &&
+                 (maFly.RefersToSameFrameAs(rIn.maFly))
+               );
     }
 };
 
@@ -893,19 +898,19 @@ private:
     typedef std::vector<GraphicDetails>::iterator myiter;
     USHORT mnIdx;       // Index in File-Positionen
 
-    void WritePICFHeader(SvStream& rStrm, const SwNoTxtNode* pNd,
-        const SwFlyFrmFmt* pFly, UINT16 mm, UINT16 nWidth, UINT16 nHeight);
-    void WriteGraphicNode(SvStream& rStrm, const SwNoTxtNode* pGrfNd,
-        const SwFlyFrmFmt* pFly, UINT16 nWidth, UINT16 nHeight);
-    void WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode* pNd,
-        const SwFlyFrmFmt* pFly, UINT16 nWidth, UINT16 nHeight);
+    void WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
+            UINT16 mm, UINT16 nWidth, UINT16 nHeight,
+            const SwAttrSet* pAttrSet = 0);
+    void WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem);
+    void WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rNd,
+        const sw::Frame &rFly, UINT16 nWidth, UINT16 nHeight);
 
     //No copying
     SwWW8WrGrf(const SwWW8WrGrf&);
     SwWW8WrGrf& operator=(const SwWW8WrGrf&);
 public:
     SwWW8WrGrf(SwWW8Writer& rW) : rWrt(rW), mnIdx(0) {}
-    void Insert(const SwNoTxtNode* pNd, const SwFlyFrmFmt* pFly);
+    void Insert(const sw::Frame &rFly);
     void Write();
     ULONG GetFPos()
         { return (mnIdx < maDetails.size()) ? maDetails[mnIdx++].mnPos : 0; }
@@ -975,7 +980,7 @@ public:
     RndStdIds eOldAnchorType;
     WW8Bytes* pOOld;
     SwPaM* pOldPam, *pOldEnd;
-    SwFlyFrmFmt* pOldFlyFmt;
+    const sw::Frame* pOldFlyFmt;
     const SwPageDesc* pOldPageDesc;
 
     BYTE bOldWriteAll : 1;
