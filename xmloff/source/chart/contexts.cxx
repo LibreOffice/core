@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contexts.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+ *  last change: $Author: bm $ $Date: 2001-01-11 17:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,12 +72,16 @@
 #ifndef _XMLOFF_XMLMETAI_HXX
 #include "xmlmetai.hxx"
 #endif
+#ifndef _XMLOFF_XMLSTYLE_HXX
+#include "xmlstyle.hxx"
+#endif
 #ifndef SCH_XMLIMPORT_HXX_
 #include "SchXMLImport.hxx"
 #endif
-#ifndef _XMLOFF_XMLCHARTSTYLECONTEXT_HXX_
-#include "XMLChartStyleContext.hxx"
-#endif
+
+//  #ifndef _XMLOFF_XMLCHARTSTYLECONTEXT_HXX_
+//  #include "XMLChartStyleContext.hxx"
+//  #endif
 
 #ifndef _COM_SUN_STAR_CHART_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -128,6 +132,10 @@ SvXMLImportContext* SchXMLDocContext::CreateChildContext(
                 mrImportHelper.SetAutoStylesContext( pStylesCtxt );
                 pContext = pStylesCtxt;
             }
+            break;
+        case XML_TOK_DOC_STYLES:
+            // for draw styles containing gradients/hatches/markers and dashes
+            pContext = new SvXMLStylesContext( GetImport(), nPrefix, rLocalName, xAttrList );
             break;
         case XML_TOK_DOC_META:
             pContext = new SfxXMLMetaContext( GetImport(), nPrefix, rLocalName, GetImport().GetModel());
