@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeimpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:35:59 $
+ *  last change: $Author: jb $ $Date: 2001-02-07 16:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,8 @@ namespace configmgr
 
         public:
         // related/affected nodes and trees
-            /// checks, if this represents an actual change
-            bool isChange() const;
+            /// checks, if this represents an actual change - with or without requiring a preceding test
+            bool isChange(bool bAllowUntested) const;
 
             /// fills in pre- and post-change values, returns wether they differ
             bool fillChange(NodeChangeInfo& rChange) const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechange.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-16 18:03:39 $
+ *  last change: $Author: jb $ $Date: 2001-02-07 16:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,9 +128,15 @@ NodeChange::~NodeChange()
 }
 //-----------------------------------------------------------------------------
 
+bool NodeChange::maybeChange() const
+{
+    return m_pImpl && m_pImpl->isChange(true);
+}
+//-----------------------------------------------------------------------------
+
 bool NodeChange::isChange() const
 {
-    return m_pImpl && m_pImpl->isChange();
+    return m_pImpl && m_pImpl->isChange(false);
 }
 //-----------------------------------------------------------------------------
 
