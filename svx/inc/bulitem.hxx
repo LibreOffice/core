@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bulitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:27:40 $
+ *  last change: $Author: ka $ $Date: 2001-10-31 16:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,33 +99,28 @@
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
 #endif
-
 #ifndef _VCL_FONT_HXX //autogen
 #include <vcl/font.hxx>
 #endif
-
 #ifndef _GRFMGR_HXX //autogen
 #include <goodies/grfmgr.hxx>
 #endif
-
-
 
 // class SvxBulletItem ---------------------------------------------------
 
 class SvxBulletItem : public SfxPoolItem
 {
-    Font    aFont;
-    GraphicObject aGraphicObject;
-    String  aPrevText;
-    String  aFollowText;
-    USHORT  nStart;
-    USHORT  nStyle;
-    long    nWidth;
-    USHORT  nScale;
-    sal_Unicode cSymbol;
-    BYTE    nJustify;
-
-    USHORT  nValidMask; // Nur temporaer fuer GetAttribs/SetAttribs, wegen des grossen Bullets
+    Font            aFont;
+    GraphicObject*  pGraphicObject;
+    String          aPrevText;
+    String          aFollowText;
+    USHORT          nStart;
+    USHORT          nStyle;
+    long            nWidth;
+    USHORT          nScale;
+    sal_Unicode     cSymbol;
+    BYTE            nJustify;
+    USHORT          nValidMask; // Nur temporaer fuer GetAttribs/SetAttribs, wegen des grossen Bullets
 
 #ifdef _SVX_BULITEM_CXX
     void    SetDefaultFont_Impl();
@@ -136,18 +131,17 @@ public:
     TYPEINFO();
 
     SvxBulletItem( USHORT nWhich = 0 );
-    SvxBulletItem( BYTE nStyle, const Font& rFont, USHORT nStart = 0,
-                   USHORT nWhich = 0 );
+    SvxBulletItem( BYTE nStyle, const Font& rFont, USHORT nStart = 0, USHORT nWhich = 0 );
     SvxBulletItem( const Font& rFont, sal_Unicode cSymbol, USHORT nWhich=0 );
     SvxBulletItem( const Bitmap&, USHORT nWhich = 0 );
     SvxBulletItem( const GraphicObject&, USHORT nWhich = 0 );
     SvxBulletItem( SvStream& rStrm, USHORT nWhich = 0 );
     SvxBulletItem( const SvxBulletItem& );
-    ~SvxBulletItem() {}
+    ~SvxBulletItem();
 
-    virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem* Create( SvStream&, USHORT nVersion ) const;
-    virtual SvStream& Store( SvStream & , USHORT nItemVersion ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*    Create( SvStream&, USHORT nVersion ) const;
+    virtual SvStream&       Store( SvStream & , USHORT nItemVersion ) const;
 
     String              GetFullText() const;
     sal_Unicode         GetSymbol() const { return cSymbol; }
@@ -160,8 +154,12 @@ public:
     BYTE                GetJustification() const { return nJustify; }
     Font                GetFont() const { return aFont; }
     USHORT              GetScale() const { return nScale; }
-    Bitmap              GetBitmap() const { return aGraphicObject.GetGraphic().GetBitmap(); }
-    const GraphicObject& GetGraphicObject() const { return aGraphicObject; }
+
+    Bitmap              GetBitmap() const;
+    void                SetBitmap( const Bitmap& rBmp );
+
+    const GraphicObject& GetGraphicObject() const;
+    void                 SetGraphicObject( const GraphicObject& rGraphicObject );
 
     void                SetSymbol( sal_Unicode c) { cSymbol = c; }
     void                SetPrevText( const String& rStr) { aPrevText = rStr;}
@@ -173,8 +171,6 @@ public:
     void                SetJustification( BYTE nNew ) { nJustify = nNew; }
     void                SetFont( const Font& rNew) { aFont = rNew; }
     void                SetScale( USHORT nNew ) { nScale = nNew; }
-    void                SetBitmap( const Bitmap& rBmp ) { aGraphicObject.SetGraphic( rBmp ); }
-    void                SetGraphicObject( const GraphicObject& rGraphicObject ) { aGraphicObject = rGraphicObject; }
 
     virtual USHORT      GetVersion(USHORT nFileVersion) const;
     virtual int         operator==( const SfxPoolItem& ) const;
