@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:27:36 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:12:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,10 +155,11 @@ SdUnoDrawView::~SdUnoDrawView() throw()
 
 
 
-DrawViewShell& SdUnoDrawView::GetDrawViewShell (void) const
+DrawViewShell* SdUnoDrawView::GetDrawViewShell (void) const
 {
     ThrowIfDisposed();
-    return static_cast<DrawViewShell&>(mrViewShell);
+
+    return static_cast<DrawViewShell*>(mpViewShell);
 }
 
 
@@ -167,7 +168,10 @@ DrawViewShell& SdUnoDrawView::GetDrawViewShell (void) const
 sal_Bool SdUnoDrawView::getMasterPageMode(void) const throw()
 {
     ThrowIfDisposed();
-    return GetDrawViewShell().GetEditMode() == EM_MASTERPAGE;
+    if (mpViewShell != NULL)
+        return GetDrawViewShell()->GetEditMode() == EM_MASTERPAGE;
+    else
+        return sal_False;
 }
 
 
@@ -176,10 +180,14 @@ sal_Bool SdUnoDrawView::getMasterPageMode(void) const throw()
 void SdUnoDrawView::setMasterPageMode (sal_Bool bMasterPageMode) throw()
 {
     ThrowIfDisposed();
-    if ((GetDrawViewShell().GetEditMode() == EM_MASTERPAGE) != bMasterPageMode)
-        GetDrawViewShell().ChangeEditMode (
+
+    if (mpViewShell!=NULL
+        &&(GetDrawViewShell()->GetEditMode() == EM_MASTERPAGE) != bMasterPageMode)
+    {
+        GetDrawViewShell()->ChangeEditMode (
             bMasterPageMode ? EM_MASTERPAGE : EM_PAGE,
-            GetDrawViewShell().IsLayerModeActive());
+            GetDrawViewShell()->IsLayerModeActive());
+    }
 }
 
 
@@ -188,7 +196,10 @@ void SdUnoDrawView::setMasterPageMode (sal_Bool bMasterPageMode) throw()
 sal_Bool SdUnoDrawView::getLayerMode(void) const throw()
 {
     ThrowIfDisposed();
-    return GetDrawViewShell().IsLayerModeActive();
+    if (mpViewShell != NULL)
+        return GetDrawViewShell()->IsLayerModeActive();
+    else
+        return sal_False;
 }
 
 
@@ -197,10 +208,13 @@ sal_Bool SdUnoDrawView::getLayerMode(void) const throw()
 void SdUnoDrawView::setLayerMode (sal_Bool bLayerMode) throw()
 {
     ThrowIfDisposed();
-    if (GetDrawViewShell().IsLayerModeActive() != (bLayerMode==sal_True))
-        GetDrawViewShell().ChangeEditMode (
-            GetDrawViewShell().GetEditMode(),
+    if (mpViewShell!=NULL
+        && GetDrawViewShell()->IsLayerModeActive() != (bLayerMode==sal_True))
+    {
+        GetDrawViewShell()->ChangeEditMode (
+            GetDrawViewShell()->GetEditMode(),
             bLayerMode);
+    }
 }
 
 
@@ -213,28 +227,35 @@ Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer (void) throw ()
 
     Reference<drawing::XLayer> xCurrentLayer;
 
-    // Retrieve the layer manager from the model.
-    SdXImpressDocument* pModel = GetModel();
-    if (pModel != NULL)
+    do
     {
+        // Retrieve the layer manager from the model.
+        SdXImpressDocument* pModel = GetModel();
+        if (pModel == NULL)
+            break;
+
         SdDrawDocument* pSdModel = pModel->GetDoc();
-        if (pSdModel != NULL)
-        {
-            // From the model get the current SdrLayer object via the layer admin.
-            SdrLayerAdmin& rLayerAdmin = pSdModel->GetLayerAdmin ();
-            SdrLayer* pLayer = rLayerAdmin.GetLayer (
-                mrView.GetActiveLayer(), TRUE);
-            if (pLayer != NULL)
-            {
-                // Get the corresponding XLayer object from the
-                // implementation object of the layer manager.
-                Reference<drawing::XLayerManager> xManager (pModel->getLayerManager(), uno::UNO_QUERY);
-                SdLayerManager* pManager = SdLayerManager::getImplementation (xManager);
-                if (pManager != NULL)
-                    xCurrentLayer = pManager->GetLayer (pLayer);
-            }
-        }
+        if (pSdModel == NULL)
+            break;
+
+        if (mpView == NULL)
+            break;
+
+        // From the model get the current SdrLayer object via the layer admin.
+        SdrLayerAdmin& rLayerAdmin = pSdModel->GetLayerAdmin ();
+        SdrLayer* pLayer = rLayerAdmin.GetLayer (mpView->GetActiveLayer(), TRUE);
+        if (pLayer == NULL)
+            break;
+
+        // Get the corresponding XLayer object from the implementation
+        // object of the layer manager.
+        Reference<drawing::XLayerManager> xManager (pModel->getLayerManager(), uno::UNO_QUERY);
+        SdLayerManager* pManager = SdLayerManager::getImplementation (xManager);
+        if (pManager != NULL)
+            xCurrentLayer = pManager->GetLayer (pLayer);
     }
+    while (false);
+
     return xCurrentLayer;
 }
 
@@ -246,21 +267,28 @@ void SdUnoDrawView::setActiveLayer (const Reference<drawing::XLayer>& rxLayer) t
     ThrowIfDisposed();
     OGuard aGuard( Application::GetSolarMutex() );
 
-    // Get the SdrLayer object corresponding to the given reference.
-    if (rxLayer.is())
+    do
     {
+        // Get the SdrLayer object corresponding to the given reference.
+        if ( ! rxLayer.is())
+            break;
+
         SdLayer* pLayer = SdLayer::getImplementation (rxLayer);
-        if (pLayer != NULL)
-        {
-            SdrLayer* pSdrLayer = pLayer->GetSdrLayer();
-            if (pSdrLayer != NULL)
-            {
-                // Set the new active layer and make the change visible.
-                mrView.SetActiveLayer (pSdrLayer->GetName());
-                GetDrawViewShell().ResetActualLayer ();
-            }
-        }
+        if (pLayer == NULL)
+            break;
+
+        SdrLayer* pSdrLayer = pLayer->GetSdrLayer();
+        if (pSdrLayer == NULL)
+            break;
+
+        if (mpView == NULL)
+            break;
+
+        // Set the new active layer and make the change visible.
+        mpView->SetActiveLayer (pSdrLayer->GetName());
+        GetDrawViewShell()->ResetActualLayer ();
     }
+    while (false);
 }
 
 
@@ -359,33 +387,29 @@ sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName )
 
     sal_Bool bServiceIsSupported = sal_False;
 
-    switch (mrViewShell.GetShellType())
+    switch (meViewShellType)
     {
         case ViewShell::ST_PREVIEW:
-            bServiceIsSupported = ServiceName.equalsAscii(
-                pImplSdUnoPreviewViewService);
+            bServiceIsSupported = ServiceName.equalsAscii(pImplSdUnoPreviewViewService);
             break;
 
         case ViewShell::ST_NOTES:
-            bServiceIsSupported = ServiceName.equalsAscii(
-                pImplSdUnoNotesViewService)
+            bServiceIsSupported = ServiceName.equalsAscii(pImplSdUnoNotesViewService)
                 || ServiceName.equalsAscii( pImplSdUnoDrawViewService );
             break;
 
         case ViewShell::ST_HANDOUT:
-            bServiceIsSupported = ServiceName.equalsAscii(
-                pImplSdUnoHandoutViewService )
+            bServiceIsSupported = ServiceName.equalsAscii(pImplSdUnoHandoutViewService )
                 || ServiceName.equalsAscii( pImplSdUnoDrawViewService );
             break;
 
         case ViewShell::ST_IMPRESS:
-            bServiceIsSupported = ServiceName.equalsAscii(
-                pImplSdUnoDrawViewService );
+            bServiceIsSupported = ServiceName.equalsAscii(pImplSdUnoDrawViewService );
             break;
 
         default:
             // Shell type is not handled by this object.
-            return sal_False;
+            bServiceIsSupported = sal_False;
     }
 
     return bServiceIsSupported;
@@ -397,16 +421,15 @@ Sequence<OUString> SAL_CALL SdUnoDrawView::getSupportedServiceNames (void)
     throw(RuntimeException)
 {
     ThrowIfDisposed();
-    ViewShell::ShellType eShellType = mrViewShell.GetShellType();
     Sequence<OUString> aServices (
-           (eShellType == ViewShell::ST_NOTES)
-        || (eShellType == ViewShell::ST_HANDOUT)
-        || (eShellType == ViewShell::ST_PRESENTATION)
+           (meViewShellType == ViewShell::ST_NOTES)
+        || (meViewShellType == ViewShell::ST_HANDOUT)
+        || (meViewShellType == ViewShell::ST_PRESENTATION)
            ? 2 : 1);
     OUString* pServices = aServices.getArray();
 
     int nIndex = 0;
-    switch (eShellType)
+    switch (meViewShellType)
     {
         case ViewShell::ST_PREVIEW:
             pServices[nIndex++] = OUString(
@@ -424,7 +447,7 @@ Sequence<OUString> SAL_CALL SdUnoDrawView::getSupportedServiceNames (void)
         break;
     }
 
-    switch (eShellType)
+    switch (meViewShellType)
     {
         case ViewShell::ST_NOTES:
         case ViewShell::ST_HANDOUT:
@@ -449,95 +472,101 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
     ThrowIfDisposed();
     OGuard aGuard( Application::GetSolarMutex() );
 
-    vector<SdrObject*> aObjects;
-
-    SdrPage* pSdrPage = NULL;
-
-    Reference< drawing::XShape > xShape;
-    aSelection >>= xShape;
-
     bool bOk = true;
 
-    if(xShape.is())
+    if (mpViewShell != NULL)
     {
-        SvxShape* pShape = SvxShape::getImplementation( xShape );
-        if( pShape && (pShape->GetSdrObject() != NULL) )
+
+        vector<SdrObject*> aObjects;
+
+        SdrPage* pSdrPage = NULL;
+
+        Reference< drawing::XShape > xShape;
+        aSelection >>= xShape;
+
+        if(xShape.is())
         {
-            SdrObject* pObj = pShape->GetSdrObject();
-            pSdrPage = pObj->GetPage();
-            aObjects.push_back( pObj );
+            SvxShape* pShape = SvxShape::getImplementation( xShape );
+            if( pShape && (pShape->GetSdrObject() != NULL) )
+            {
+                SdrObject* pObj = pShape->GetSdrObject();
+                pSdrPage = pObj->GetPage();
+                aObjects.push_back( pObj );
+            }
+            else
+            {
+                bOk = false;
+            }
         }
         else
         {
-            bOk = false;
-        }
-    }
-    else
-    {
-        Reference< drawing::XShapes > xShapes;
-        aSelection >>= xShapes;
-        if( xShapes.is() )
-        {
-            const sal_uInt32 nCount = xShapes->getCount();
-            for( sal_uInt32 i = 0; i < nCount; i++ )
+            Reference< drawing::XShapes > xShapes;
+            aSelection >>= xShapes;
+            if( xShapes.is() )
             {
-                xShapes->getByIndex(i) >>= xShape;
-                if( xShape.is() )
+                const sal_uInt32 nCount = xShapes->getCount();
+                for( sal_uInt32 i = 0; i < nCount; i++ )
                 {
-                    SvxShape* pShape = SvxShape::getImplementation(xShape);
-                    if( (pShape == NULL) || (pShape->GetSdrObject() == NULL) )
+                    xShapes->getByIndex(i) >>= xShape;
+                    if( xShape.is() )
                     {
-                        bOk = false;
-                        break;
-                    }
+                        SvxShape* pShape = SvxShape::getImplementation(xShape);
+                        if( (pShape == NULL) || (pShape->GetSdrObject() == NULL) )
+                        {
+                            bOk = false;
+                            break;
+                        }
 
-                    SdrObject* pObj = pShape->GetSdrObject();
+                        SdrObject* pObj = pShape->GetSdrObject();
 
-                    if( pSdrPage == NULL )
-                    {
-                        pSdrPage = pObj->GetPage();
-                    }
-                    else if( pSdrPage != pObj->GetPage() )
-                    {
-                        bOk = false;
-                        break;
-                    }
+                        if( pSdrPage == NULL )
+                        {
+                            pSdrPage = pObj->GetPage();
+                        }
+                        else if( pSdrPage != pObj->GetPage() )
+                        {
+                            bOk = false;
+                            break;
+                        }
 
-                    aObjects.push_back( pObj );
+                        aObjects.push_back( pObj );
+                    }
                 }
             }
         }
-    }
 
-    if( bOk )
-    {
-        if( pSdrPage )
+        if( bOk )
         {
-            setMasterPageMode( pSdrPage->IsMasterPage() );
-            GetDrawViewShell().SwitchPage( (pSdrPage->GetPageNum() - 1) >> 1 );
-            GetDrawViewShell().WriteFrameViewData();
-        }
-
-        SdrPageView *pPV = mrView.GetPageViewPvNum(0);
-
-        if(pPV)
-        {
-            // first deselect all
-            mrView.UnmarkAllObj( pPV );
-
-            vector<SdrObject*>::iterator aIter( aObjects.begin() );
-            const vector<SdrObject*>::iterator aEnd( aObjects.end() );
-            while( aIter != aEnd )
+            if( pSdrPage )
             {
-                SdrObject* pObj = (*aIter++);
-                mrView.MarkObj( pObj, pPV );
+                setMasterPageMode( pSdrPage->IsMasterPage() );
+                GetDrawViewShell()->SwitchPage( (pSdrPage->GetPageNum() - 1) >> 1 );
+                GetDrawViewShell()->WriteFrameViewData();
+            }
+
+            SdrPageView *pPV = mpView->GetPageViewPvNum(0);
+
+            if(pPV)
+            {
+                // first deselect all
+                mpView->UnmarkAllObj( pPV );
+
+                vector<SdrObject*>::iterator aIter( aObjects.begin() );
+                const vector<SdrObject*>::iterator aEnd( aObjects.end() );
+                while( aIter != aEnd )
+                {
+                    SdrObject* pObj = (*aIter++);
+                    mpView->MarkObj( pObj, pPV );
+                }
+            }
+            else
+            {
+                bOk = false;
             }
         }
-        else
-        {
-            bOk = false;
-        }
     }
+    else
+        bOk = false;
 
     return bOk;
 }
@@ -553,43 +582,46 @@ Any SAL_CALL SdUnoDrawView::getSelection()
 
     Any aAny;
 
-    if( mrView.IsTextEdit() )
-        mrView.getTextSelection( aAny );
-
-
-    if( !aAny.hasValue() )
+    if (mpView != NULL)
     {
-        const SdrMarkList& rMarkList = mrView.GetMarkedObjectList();
-        sal_uInt32 nCount = rMarkList.GetMarkCount();
-        if( nCount )
+        if( mpView->IsTextEdit() )
+            mpView->getTextSelection( aAny );
+
+
+        if( !aAny.hasValue() )
         {
-            Reference< drawing::XShapes > xShapes( SvxShapeCollection_NewInstance(), UNO_QUERY );
-            for( sal_uInt32 nNum = 0; nNum < nCount; nNum++)
+            const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+            sal_uInt32 nCount = rMarkList.GetMarkCount();
+            if( nCount )
             {
-                SdrMark *pMark = rMarkList.GetMark(nNum);
-                if(pMark==NULL)
-                    continue;
+                Reference< drawing::XShapes > xShapes( SvxShapeCollection_NewInstance(), UNO_QUERY );
+                for( sal_uInt32 nNum = 0; nNum < nCount; nNum++)
+                {
+                    SdrMark *pMark = rMarkList.GetMark(nNum);
+                    if(pMark==NULL)
+                        continue;
 
-                SdrObject *pObj = pMark->GetObj();
-                if(pObj==NULL || pObj->GetPage() == NULL)
-                    continue;
+                    SdrObject *pObj = pMark->GetObj();
+                    if(pObj==NULL || pObj->GetPage() == NULL)
+                        continue;
 
-                Reference< drawing::XDrawPage > xPage( pObj->GetPage()->getUnoPage(), UNO_QUERY);
+                    Reference< drawing::XDrawPage > xPage( pObj->GetPage()->getUnoPage(), UNO_QUERY);
 
-                if(!xPage.is())
-                    continue;
+                    if(!xPage.is())
+                        continue;
 
-                SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xPage );
+                    SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xPage );
 
-                if(pDrawPage==NULL)
-                    continue;
+                    if(pDrawPage==NULL)
+                        continue;
 
-                Reference< drawing::XShape > xShape( pObj->getUnoShape(), UNO_QUERY );
+                    Reference< drawing::XShape > xShape( pObj->getUnoShape(), UNO_QUERY );
 
-                if(xShape.is())
-                    xShapes->add(xShape);
+                    if(xShape.is())
+                        xShapes->add(xShape);
+                }
+                aAny <<= xShapes;
             }
-            aAny <<= xShapes;
         }
     }
 
@@ -927,21 +959,23 @@ void SAL_CALL SdUnoDrawView::setCurrentPage (
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    DBG_ASSERT (&mrView!=NULL,
-        "view is NULL in SdUnoDrawView::setCurrentPage");
+    DBG_ASSERT (mpView!=NULL, "View is NULL in SdUnoDrawView::setCurrentPage");
 
-    SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xPage );
-    SdrPage *pSdrPage = pDrawPage ? pDrawPage->GetSdrPage() : NULL;
-
-    if(pSdrPage)
+    if (mpViewShell != NULL)
     {
-        // End editing of text.  Otherwise the edited text object would
-        // still be visible on the new page.
-        GetDrawViewShell().GetView()->EndTextEdit();
+        SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xPage );
+        SdrPage *pSdrPage = pDrawPage ? pDrawPage->GetSdrPage() : NULL;
 
-        setMasterPageMode( pSdrPage->IsMasterPage() );
-        GetDrawViewShell().SwitchPage( (pSdrPage->GetPageNum() - 1) >> 1 );
-        GetDrawViewShell().WriteFrameViewData();
+        if(pSdrPage)
+        {
+            // End editing of text.  Otherwise the edited text object would
+            // still be visible on the new page.
+            GetDrawViewShell()->GetView()->EndTextEdit();
+
+            setMasterPageMode( pSdrPage->IsMasterPage() );
+            GetDrawViewShell()->SwitchPage( (pSdrPage->GetPageNum() - 1) >> 1 );
+            GetDrawViewShell()->WriteFrameViewData();
+        }
     }
 }
 
@@ -955,15 +989,16 @@ Reference< drawing::XDrawPage > SAL_CALL SdUnoDrawView::getCurrentPage()
 
     Reference< drawing::XDrawPage >  xPage;
 
-    DBG_ASSERT (&mrView!=NULL,
-        "view is NULL in SdUnoDrawView::getCurrentPage");
+    DBG_ASSERT (mpView!=NULL, "View is NULL in SdUnoDrawView::getCurrentPage");
+    if (mpView != NULL)
+    {
+        SdXImpressDocument* pModel = GetModel();
+        SdrPageView *pPV = mpView->GetPageViewPvNum(0);
+        SdrPage* pPage = pPV ? pPV->GetPage() : NULL;
 
-    SdXImpressDocument* pModel = GetModel();
-    SdrPageView *pPV = mrView.GetPageViewPvNum(0);
-    SdrPage* pPage = pPV ? pPV->GetPage() : NULL;
-
-    if(pPage)
-        xPage = Reference< drawing::XDrawPage >::query( pPage->getUnoPage() );
+        if(pPage)
+            xPage = Reference< drawing::XDrawPage >::query( pPage->getUnoPage() );
+    }
 
     return xPage;
 }
@@ -971,9 +1006,9 @@ Reference< drawing::XDrawPage > SAL_CALL SdUnoDrawView::getCurrentPage()
 
 sal_Int16 SdUnoDrawView::GetZoom(void) const
 {
-    if (GetDrawViewShell().GetActiveWindow() )
+    if (mpViewShell!=NULL && GetDrawViewShell()->GetActiveWindow() )
     {
-        return (sal_Int16)GetDrawViewShell().GetActiveWindow()->GetZoom();
+        return (sal_Int16)GetDrawViewShell()->GetActiveWindow()->GetZoom();
     }
     else
     {
@@ -985,9 +1020,9 @@ void SdUnoDrawView::SetZoom( sal_Int16 nZoom )
 {
     SvxZoomItem aZoomItem( SVX_ZOOM_PERCENT, nZoom );
 
-    if (&mrViewShell != NULL)
+    if (mpViewShell != NULL)
     {
-        SfxViewFrame* pViewFrame = mrViewShell.GetViewFrame();
+        SfxViewFrame* pViewFrame = mpViewShell->GetViewFrame();
         if( pViewFrame )
         {
             SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
@@ -1002,59 +1037,63 @@ void SdUnoDrawView::SetZoom( sal_Int16 nZoom )
 
 void SdUnoDrawView::SetViewOffset(const awt::Point& rWinPos )
 {
-    DBG_ASSERT (&mrViewShell != NULL,
-        "view shell is NULL in SdUnoDrawView::SetViewOffset");
+    DBG_ASSERT (mpViewShell != NULL, "ViewShell is NULL in SdUnoDrawView::SetViewOffset");
+    if (mpViewShell != NULL)
+    {
 
-    Point aWinPos( rWinPos.X, rWinPos.Y );
-    aWinPos += mrViewShell.GetViewOrigin();
-    mrViewShell.SetWinViewPos( aWinPos, true );
+        Point aWinPos( rWinPos.X, rWinPos.Y );
+        aWinPos += mpViewShell->GetViewOrigin();
+        mpViewShell->SetWinViewPos( aWinPos, true );
+    }
 }
 
 awt::Point SdUnoDrawView::GetViewOffset() const
 {
     Point aRet;
 
-    DBG_ASSERT (&mrViewShell != NULL,
-        "view shell is NULL in SdUnoDrawView::GetViewOffset");
-
-    aRet = mrViewShell.GetWinViewPos();
-    aRet -= mrViewShell.GetViewOrigin();
+    DBG_ASSERT (mpViewShell!=NULL, "ViewShell is NULL in SdUnoDrawView::GetViewOffset");
+    if (mpViewShell != NULL)
+    {
+        aRet = mpViewShell->GetWinViewPos();
+        aRet -= mpViewShell->GetViewOrigin();
+    }
 
     return awt::Point( aRet.X(), aRet.Y() );
 }
 
 void SdUnoDrawView::SetZoomType ( sal_Int16 nType )
 {
-    DBG_ASSERT (&mrViewShell != NULL,
-        "view shell is NULL in SdUnoDrawView::SetZoomType");
-
-    SfxViewFrame* pViewFrame = mrViewShell.GetViewFrame();
-    if( pViewFrame )
+    DBG_ASSERT (mpViewShell!= NULL, "ViewShell is NULL in SdUnoDrawView::SetZoomType");
+    if (mpViewShell != NULL)
     {
-        SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
-        if( pDispatcher )
+        SfxViewFrame* pViewFrame = mpViewShell->GetViewFrame();
+        if( pViewFrame )
         {
-            SvxZoomType eZoomType;
-            switch( nType )
+            SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
+            if( pDispatcher )
             {
-                case com::sun::star::view::DocumentZoomType::OPTIMAL:
-                    eZoomType = SVX_ZOOM_OPTIMAL;
-                    break;
+                SvxZoomType eZoomType;
+                switch( nType )
+                {
+                    case com::sun::star::view::DocumentZoomType::OPTIMAL:
+                        eZoomType = SVX_ZOOM_OPTIMAL;
+                        break;
 
-                case com::sun::star::view::DocumentZoomType::PAGE_WIDTH:
-                case com::sun::star::view::DocumentZoomType::PAGE_WIDTH_EXACT:
-                    eZoomType = SVX_ZOOM_PAGEWIDTH;
-                    break;
+                    case com::sun::star::view::DocumentZoomType::PAGE_WIDTH:
+                    case com::sun::star::view::DocumentZoomType::PAGE_WIDTH_EXACT:
+                        eZoomType = SVX_ZOOM_PAGEWIDTH;
+                        break;
 
-                case com::sun::star::view::DocumentZoomType::ENTIRE_PAGE:
-                    eZoomType = SVX_ZOOM_WHOLEPAGE;
-                    break;
+                    case com::sun::star::view::DocumentZoomType::ENTIRE_PAGE:
+                        eZoomType = SVX_ZOOM_WHOLEPAGE;
+                        break;
 
-                default:
-                    return;
+                    default:
+                        return;
+                }
+                SvxZoomItem aZoomItem( eZoomType );
+                pDispatcher->Execute(SID_ATTR_ZOOM,SFX_CALLMODE_SYNCHRON,&aZoomItem, 0L);
             }
-            SvxZoomItem aZoomItem( eZoomType );
-            pDispatcher->Execute(SID_ATTR_ZOOM,SFX_CALLMODE_SYNCHRON,&aZoomItem, 0L);
         }
     }
 }
