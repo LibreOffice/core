@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bib.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 22:57:30 $
+ *  last change: $Author: obo $ $Date: 2001-12-14 16:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ String RID_BIB_STR_FIELDSELECTION
     Text[ swedish ] = "F�lturval:";
     Text[ polish ] = "Wyb�r pola:";
     Text[ portuguese_brazilian ] = "Fieldselection:";
-    Text[ japanese ] = "ﾌｨｰﾙﾄﾞ選択:";
+    Text[ japanese ] = "フィールド選択:";
     Text[ korean ] = "필드 선택:";
     Text[ chinese_simplified ] = "选择字段：";
     Text[ chinese_traditional ] = "選擇欄位：";
@@ -110,7 +110,7 @@ String RID_BIB_STR_TABWIN_PREFIX
     Text[ swedish ] = "Tabell;S�kning;Sql;Sql [Native]";
     Text[ polish ] = "Tabela;Kwerenda;Sql;Sql [Native]";
     Text[ portuguese_brazilian ] = "Table;Query;Sql;Sql [Native]";
-    Text[ japanese ] = "ﾃｰﾌﾞﾙ;ｸｴﾘｰ;Sql;Sql [Native]";
+    Text[ japanese ] = "テーブル;クエリー;Sql;Sql [Native]";
     Text[ korean ] = "표;질의;Sql;Sql [Native]";
     Text[ chinese_simplified ] = "表格;查询;Sql;Sql [Native]";
     Text[ chinese_traditional ] = "表格;查詢;Sql;Sql [Native]";
@@ -135,7 +135,7 @@ String RID_BIB_STR_FRAME_TITLE
     Text[ swedish ] = "Litteraturdatabas";
     Text[ polish ] = "Bibliograficzna baza danych";
     Text[ portuguese_brazilian ] = "Bibliography database";
-    Text[ japanese ] = "蔵書管理ﾃﾞｰﾀﾍﾞｰｽ";
+    Text[ japanese ] = "蔵書管理データベース";
     Text[ korean ] = "참고문헌 데이터베이스";
     Text[ chinese_simplified ] = "文献数据库";
     Text[ chinese_traditional ] = "文獻資料庫";
@@ -169,6 +169,7 @@ String RID_MAP_QUESTION
     Text[ catalan ] = "Voleu editar la disposici� de les columnes?";
     Text[ finnish ] = "Haluatko muokata sarakej�rjestyst�?";
 };
+
 
 
 
