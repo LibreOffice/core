@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 10:51:53 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,7 @@ TabPage TP_LAB_LAB
         Text [ portuguese ] = "Endereço" ;
         Text [ finnish ] = "Osoite" ;
         Text [ danish ] = "Adresse" ;
-        Text [ french ] = "Adre~sse" ;
+        Text [ french ] = "Adresse" ;
         Text [ swedish ] = "Adre~ss" ;
         Text [ dutch ] = "Adre~s" ;
         Text [ spanish ] = "~Dirección" ;
@@ -451,7 +451,7 @@ TabPage TP_LAB_LAB
         Text [ portuguese ] = "Campo base de dados" ;
         Text [ finnish ] = "Tietokantakenttä" ;
         Text [ danish ] = "Databasefelt" ;
-        Text [ french ] = "~Champ de BD" ;
+        Text [ french ] = "Champ de BD" ;
         Text [ swedish ] = "Databas~fält" ;
         Text [ dutch ] = "~Databaseveld" ;
         Text [ spanish ] = "~Campo base de datos" ;
@@ -520,7 +520,7 @@ TabPage TP_LAB_LAB
         Text [ portuguese ] = "~Contínuo" ;
         Text [ finnish ] = "~Jatkuva" ;
         Text [ danish ] = "Endeløs" ;
-        Text [ french ] = "~Continu" ;
+        Text [ french ] = "Continu" ;
         Text [ swedish ] = "~Kontinuerlig" ;
         Text [ dutch ] = "~Eindeloos" ;
         Text [ spanish ] = "Cont~inuo" ;
@@ -906,7 +906,7 @@ TabPage TP_PRIVATE_DATA
         Text[ russian ] = "Ôàìèëèÿ/èìÿ/èíèöèàëû";
         Text[ greek ] = "¼íïìá/Åğşíõìï/Áñ~÷éêÜ";
         Text[ dutch ] = "~Voor-/achternaam/Initialen";
-        Text[ french ] = "~Prénom/Nom/Initiales";
+        Text[ french ] = "Prénom/Nom/Initiales";
         Text[ spanish ] = "No~mbre/Apellidos/Iniciales";
         Text[ italian ] = "Nome/Cognome/Iniziali";
         Text[ danish ] = "For-/Efternavn/Initialer";
@@ -952,7 +952,7 @@ TabPage TP_PRIVATE_DATA
         Text[ russian ] = "Ôàìèëèÿ/èìÿ/ñîêğàùåíèå 2";
         Text[ greek ] = "¼íïìá/Åğßèåôï/Áñ~÷éêÜ 2";
         Text[ dutch ] = "Voor/achter ~naam 2";
-        Text[ french ] = "~Prénom/Nom/Initiales 2";
+        Text[ french ] = "Prénom/Nom/Initiales 2";
         Text[ spanish ] = "Nombre/Apellidos/Iniciales 2";
         Text[ italian ] = "Nome/Cognome/Iniziali 2";
         Text[ danish ] = "For-/Efternavn/Initialer 2";
@@ -997,7 +997,7 @@ TabPage TP_PRIVATE_DATA
         Text[ russian ] = "Óëèöà";
         Text[ greek ] = "Ïäüò";
         Text[ dutch ] = "~Straat";
-        Text[ french ] = "~Rue";
+        Text[ french ] = "Rue";
         Text[ spanish ] = "~Calle";
         Text[ italian ] = "Via";
         Text[ danish ] = "Gade";
@@ -1400,7 +1400,7 @@ TabPage TP_BUSINESS_DATA
         Text[ russian ] = "Óëèöà";
         Text[ greek ] = "Ïäüò";
         Text[ dutch ] = "~Straat";
-        Text[ french ] = "~Rue";
+        Text[ french ] = "Rue";
         Text[ spanish ] = "~Calle";
         Text[ italian ] = "Via";
         Text[ danish ] = "Gade";
