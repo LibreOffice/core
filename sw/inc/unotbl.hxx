@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-06-05 07:43:18 $
+ *  last change: $Author: mib $ $Date: 2001-06-12 07:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ class SwXCell : public SwXCellBaseClass,
     const SwStartNode*      pStartNode; // only set in XML import
 
 protected:
+    virtual const SwStartNode *GetStartNode() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor();
     sal_Bool                            IsValid();
 public:

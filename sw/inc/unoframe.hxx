@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-04-05 13:25:40 $
+ *  last change: $Author: mib $ $Date: 2001-06-12 07:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,8 @@ class SwXTextFrame : public SwXTextFrameBaseClass,
     const SfxItemPropertyMap*   _pMap;
 
 protected:
+    virtual const SwStartNode *GetStartNode() const;
+
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor();
 public:
     SwXTextFrame();

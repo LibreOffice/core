@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-05-23 08:27:04 $
+ *  last change: $Author: mib $ $Date: 2001-06-12 07:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,6 +314,7 @@ class SwXText : public ::com::sun::star::text::XText,
     BOOL                bObjectValid;
     CursorType          eCrsrType;
 protected:
+    virtual const SwStartNode *GetStartNode() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor();
 
 public:
@@ -950,6 +951,7 @@ class SwXFootnote : public SwXFootnoteBaseClass,
     BOOL                        m_bIsEndnote;
 
 protected:
+    virtual const SwStartNode *GetStartNode() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor();
 public:
     SwXFootnote(BOOL bEndnote);
@@ -1286,6 +1288,7 @@ class SwXHeadFootText : public SwXHeadFootTextBaseClass,
     SwFrmFmt*           GetFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
     BOOL                bIsHeader;
 protected:
+    virtual const SwStartNode *GetStartNode() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor();
 public:
     SwXHeadFootText(SwFrmFmt& rHeadFootFmt, BOOL bHeader);
