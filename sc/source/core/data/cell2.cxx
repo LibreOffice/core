@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-31 17:19:10 $
+ *  last change: $Author: er $ $Date: 2001-02-06 17:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,7 +481,19 @@ USHORT ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
                     }
                 }
                 else
-                    return 0;           // dumm gelaufen..
+                {
+#ifndef PRODUCT
+                    String aTmp;
+                    ByteString aMsg( "broken Matrix, no MatFormula at origin, Pos: " );
+                    aPos.Format( aTmp, SCA_VALID_COL | SCA_VALID_ROW, pDocument );
+                    aMsg += ByteString( aTmp, RTL_TEXTENCODING_ASCII_US );
+                    aMsg += ", MatOrg: ";
+                    aOrg.Format( aTmp, SCA_VALID_COL | SCA_VALID_ROW, pDocument );
+                    aMsg += ByteString( aTmp, RTL_TEXTENCODING_ASCII_US );
+                    DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
+                    return 0;           // bad luck ...
+                }
             }
             // here we are, healthy and clean, somewhere in between
             short dC = aPos.Col() - aOrg.Col();
@@ -504,20 +516,20 @@ USHORT ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
             else
             {
                 String aTmp;
-                ByteString aMsg( "kaputte Matrix, Pos: " );
+                ByteString aMsg( "broken Matrix, Pos: " );
                 aPos.Format( aTmp, SCA_VALID_COL | SCA_VALID_ROW, pDocument );
                 aMsg += ByteString( aTmp, RTL_TEXTENCODING_ASCII_US );
                 aMsg += ", MatOrg: ";
                 aOrg.Format( aTmp, SCA_VALID_COL | SCA_VALID_ROW, pDocument );
                 aMsg += ByteString( aTmp, RTL_TEXTENCODING_ASCII_US );
                 aMsg += ", MatCols: ";
-                aMsg += nC;
+                aMsg += ByteString::CreateFromInt32( nC );
                 aMsg += ", MatRows: ";
-                aMsg += nR;
+                aMsg += ByteString::CreateFromInt32( nR );
                 aMsg += ", DiffCols: ";
-                aMsg += dC;
+                aMsg += ByteString::CreateFromInt32( dC );
                 aMsg += ", DiffRows: ";
-                aMsg += dR;
+                aMsg += ByteString::CreateFromInt32( dR );
                 DBG_ERRORFILE( aMsg.GetBuffer() );
             }
 #endif
