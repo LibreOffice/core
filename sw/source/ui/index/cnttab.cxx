@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-31 21:24:21 $
+ *  last change: $Author: os $ $Date: 2000-11-03 11:29:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,7 +437,7 @@ IdxExampleResource::IdxExampleResource(const ResId& rResId) :
  --------------------------------------------------*/
 SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet,
                     SwWrtShell &rShell,
-                    const SwTOXBase* pCurTOX,
+                    SwTOXBase* pCurTOX,
                     sal_uInt16 nToxType, sal_Bool bGlobal) :
         SfxTabDialog(   pParent, SW_RES(DLG_MULTI_TOX), &rSet),
         aExampleContainerWIN(this, ResId(WIN_EXAMPLE)),
@@ -445,6 +445,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
         aShowExampleCB( this, ResId(CB_SHOWEXAMPLE)),
         sUserDefinedIndex(ResId(ST_USERDEFINEDINDEX)),
         pMgr( new SwTOXMgr( &rShell ) ),
+        pParamTOXBase(pCurTOX),
         rSh(rShell),
         nInitialTOXType(nToxType),
         bEditTOX(sal_False),
@@ -604,6 +605,9 @@ short   SwMultiTOXTabDialog::Ok()
     if(!bGlobalFlag)
         pMgr->UpdateOrInsertTOX(
                 rDesc, 0, GetOutputItemSet());
+    else if(bEditTOX)
+        pMgr->UpdateOrInsertTOX(
+                rDesc, &pParamTOXBase, GetOutputItemSet());
 
     if(!eCurrentTOXType.nIndex)
         rSh.SetDefaultTOXBase(aNewDef);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 13:42:18 $
+ *  last change: $Author: os $ $Date: 2000-11-03 11:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #include <vcl/sound.hxx>
 #endif
 
+#ifndef _UIITEMS_HXX
+#include <uiitems.hxx>
+#endif
 #ifndef _FMTINFMT_HXX //autogen
 #include <fmtinfmt.hxx>
 #endif
@@ -2850,7 +2853,13 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
             {
                 case EDIT_MODE_EDIT:
                     if(pBase)
-                        nSlot = FN_INSERT_MULTI_TOX;
+                    {
+                        SwPtrItem aPtrItem( FN_INSERT_MULTI_TOX, (void*)pBase);
+                        pActiveShell->GetView().GetViewFrame()->
+                            GetDispatcher()->Execute(FN_INSERT_MULTI_TOX,
+                                            SFX_CALLMODE_ASYNCHRON, &aPtrItem, 0);
+
+                    }
                 break;
                 case EDIT_MODE_UPD_IDX:
                     nSlot = FN_UPDATE_CUR_TOX;
@@ -3171,6 +3180,9 @@ void SwContentLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFl
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/20 13:42:18  jp
+    use correct INetURL-Decode enum
+
     Revision 1.1.1.1  2000/09/18 17:14:50  hr
     initial import
 

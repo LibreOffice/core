@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxmgr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *  last change: $Author: os $ $Date: 2000-11-03 11:29:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,7 +573,7 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
 {
     SwWait aWait( *pSh->GetView().GetDocShell(), TRUE );
     BOOL bRet = TRUE;
-    const SwTOXBase* pCurTOX = GetCurTOX();
+    const SwTOXBase* pCurTOX = ppBase && *ppBase ? *ppBase : GetCurTOX();
     SwTOXBase* pTOX = (SwTOXBase*)pCurTOX;
     TOXTypes eCurTOXType = rDesc.GetTOXType();
     if(pCurTOX && !ppBase && pSh->HasSelection())
@@ -583,7 +583,7 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
     {
         case TOX_INDEX :
         {
-            if(!pCurTOX || ppBase)
+            if(!pCurTOX || (ppBase && !(*ppBase)))
             {
                 const SwTOXType* pType = pSh->GetTOXType(eCurTOXType, 0);
                 SwForm aForm(eCurTOXType);
@@ -597,7 +597,7 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
         break;
         case TOX_CONTENT :
         {
-            if(!pCurTOX || ppBase)
+            if(!pCurTOX || (ppBase && !(*ppBase)))
             {
                 const SwTOXType* pType = pSh->GetTOXType(eCurTOXType, 0);
                 SwForm aForm(eCurTOXType);
@@ -609,7 +609,7 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
         break;
         case TOX_USER :
         {
-            if(!pCurTOX || ppBase)
+            if(!pCurTOX || (ppBase && !(*ppBase)))
             {
                 USHORT nPos  = 0;
                 USHORT nSize = pSh->GetTOXTypeCount(eCurTOXType);
@@ -660,7 +660,7 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
                 }
             }
             // TODO: consider properties of the current TOXType
-            if(!pCurTOX || ppBase)
+            if(!pCurTOX || (ppBase && !(*ppBase)))
             {
                 const SwTOXType* pType = pSh->GetTOXType(eCurTOXType, 0);
                 SwForm aForm(eCurTOXType);
@@ -670,7 +670,7 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             }
             else
             {
-                if(pSh->HasSelection())
+                if((!ppBase || !(*ppBase)) && pSh->HasSelection())
                     pSh->DelRight();
                 pTOX = (SwTOXBase*)pCurTOX;
             }
@@ -697,7 +697,7 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
         pTOX->SetTitle(*rDesc.GetTitle());
     if(rDesc.GetForm())
         pTOX->SetTOXForm(*rDesc.GetForm());
-    if(!pCurTOX || ppBase)
+    if(!pCurTOX || (ppBase && !(*ppBase)) )
     {
         // wird ppBase uebergeben, dann wird das TOXBase hier nur erzeugt
         // und dann ueber den Dialog in ein Globaldokument eingefuegt
@@ -762,6 +762,9 @@ void SwTOXDescription::ApplyTo(SwTOXBase& rTOXBase)
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:44  hr
+    initial import
+
     Revision 1.59  2000/09/18 16:05:53  willem.vandorp
     OpenOffice header added.
 

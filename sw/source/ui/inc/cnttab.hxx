@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:39 $
+ *  last change: $Author: os $ $Date: 2000-11-03 11:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,8 @@ class SwMultiTOXTabDialog : public SfxTabDialog
     SwForm**                pFormArr; //
     SwIndexSections_Impl**  pxIndexSectionsArr;
 
+    SwTOXBase*              pParamTOXBase;
+
     CurTOXType              eCurrentTOXType;
 
     String                  sUserDefinedIndex;
@@ -178,7 +180,7 @@ class SwMultiTOXTabDialog : public SfxTabDialog
 public:
     SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet,
                         SwWrtShell &rShell,
-                        const SwTOXBase* pCurTOX, USHORT nToxType = USHRT_MAX,
+                        SwTOXBase* pCurTOX, USHORT nToxType = USHRT_MAX,
                         BOOL bGlobal = FALSE);
     ~SwMultiTOXTabDialog();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textidx.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:47 $
+ *  last change: $Author: os $ $Date: 2000-11-03 11:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,9 @@
 #ifndef _FLDBAS_HXX
 #include <fldbas.hxx>
 #endif
-
+#ifndef _UIITEMS_HXX
+#include <uiitems.hxx>
+#endif
 #include "viewopt.hxx"
 #include "cmdid.h"
 #include "view.hxx"
@@ -192,7 +194,15 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
             // Hoehe=Breite fuer konsistentere Vorschau (analog zu Bereich bearbeiten)
             aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
-            const SwTOXBase* pCurTOX = rSh.GetCurTOX();
+            const SwTOXBase* pCurTOX = 0;
+            BOOL bGlobal = FALSE;
+            if(pItem)
+            {
+                pCurTOX = (const SwTOXBase* )((SwPtrItem*)pItem)->GetValue();
+                bGlobal = TRUE;
+            }
+            else
+                pCurTOX = rSh.GetCurTOX();
             if(pCurTOX)
             {
                 const SfxItemSet* pSet = pCurTOX->GetAttrSet();
@@ -200,7 +210,8 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
                     aSet.Put(*pSet);
             }
 
-            SwMultiTOXTabDialog* pDlg = new SwMultiTOXTabDialog(pMDI, aSet, rSh, pCurTOX);
+            SwMultiTOXTabDialog* pDlg = new SwMultiTOXTabDialog(pMDI, aSet, rSh, (SwTOXBase* )pCurTOX,
+                                                                            USHRT_MAX, bGlobal);
             pDlg->Execute();
             delete pDlg;
         }
@@ -300,138 +311,4 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
 }
 
 // -----------------------------------------------------------------------
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.42  2000/09/18 16:06:06  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.41  2000/09/08 08:12:52  os
-    Change: Set/Toggle/Has/Knows/Show/GetChildWindow
-
-    Revision 1.40  2000/05/26 07:21:33  os
-    old SW Basic API Slots removed
-
-    Revision 1.39  2000/02/11 14:57:51  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.38  2000/01/17 13:33:00  os
-    #70703# apply to all similar texts: search options case sensitive and word only
-
-    Revision 1.37  1999/12/10 15:17:04  os
-    #70711# readonly check for index entries now in GetIdxState
-
-    Revision 1.36  1999/10/15 11:44:08  os
-    new: FN_REMOVE_TOX
-
-    Revision 1.35  1999/10/06 12:15:01  os
-    edit tox entry dialogs now modal
-
-    Revision 1.34  1999/09/15 13:57:53  os
-    dialog for authorities
-
-    Revision 1.33  1999/09/08 12:43:18  os
-    GetIdxState corrected
-
-    Revision 1.32  1999/09/07 13:55:52  os
-    Insert/EditIndexEntry as FloatingWindow
-
-    Revision 1.31  1999/08/25 13:27:20  OS
-    extended indexes: remove old code
-
-
-      Rev 1.30   25 Aug 1999 15:27:20   OS
-   extended indexes: remove old code
-
-      Rev 1.29   23 Aug 1999 09:51:52   OS
-   extended indexes: InsertTOXMark simplified
-
-      Rev 1.28   17 Aug 1999 13:59:02   OS
-   extended indexes: get/set section attributes
-
-      Rev 1.27   30 Jul 1999 13:14:36   OS
-   indexes: check readonly in status method
-
-      Rev 1.26   07 Jul 1999 08:13:46   OS
-   extended indexes: SwTOXMgr interface changed
-
-      Rev 1.25   02 Jul 1999 11:07:50   OS
-   extended indexes: smaller interface SwTOXMgr
-
-      Rev 1.24   21 Jun 1999 10:00:52   OS
-   extended indexes
-
-      Rev 1.23   29 Mar 1999 14:37:24   OS
-   #63929# Range fuer ItemSet festlegen
-
-      Rev 1.22   29 Mar 1999 12:19:30   OS
-   #63929# neuer Verzeichnisdialog vollstaendig
-
-      Rev 1.21   26 Mar 1999 11:38:26   OS
-   #63929# Neuer Verzeichnisdialog
-
-      Rev 1.20   20 Jan 1999 11:35:58   OS
-   #60881# Verzeichniseintraege mehrfach einf?gen
-
-      Rev 1.19   24 Nov 1997 09:47:10   MA
-   includes
-
-      Rev 1.18   03 Nov 1997 13:55:44   MA
-   precomp entfernt
-
-      Rev 1.17   05 Sep 1997 13:36:00   OS
-   pBase initialisieren, Rahmenslektion schliesst TextShell aus
-
-      Rev 1.16   28 Aug 1997 19:48:02   JP
-   GetIdxState: optimiert, im Verzeichnis InsertEntry abklemmen
-
-      Rev 1.15   23 Jul 1997 21:28:56   HJS
-   includes
-
-      Rev 1.14   07 Jul 1997 09:39:34   OS
-   fuer Userverzeichnisse aus Vorlagen muss immer ein Strin uebergeben werden
-
-      Rev 1.13   03 Jul 1997 09:16:42   JP
-   FN_INSERT_CNTNTIDX_ENTRY: Level auf 1 defaulten
-
-      Rev 1.12   16 Jun 1997 12:02:26   OS
-   Verzeichnisfunktionen und -dialoge ohne Record-Flag
-
-      Rev 1.11   07 Apr 1997 17:44:46   MH
-   chg: header
-
-      Rev 1.10   27 Jan 1997 16:30:36   OS
-   HtmlMode entfernt
-
-      Rev 1.9   11 Dec 1996 10:50:56   MA
-   Warnings
-
-      Rev 1.8   23 Nov 1996 13:24:46   OS
-   im HtmlMode Verzeichnis einfuegen disabled
-
-      Rev 1.7   24 Oct 1996 20:59:38   JP
-   State: bei Selektion darf kein VerzeichnisEintrag bearbeitet werden
-
-      Rev 1.6   09 Sep 1996 21:16:28   MH
-   Umstellungen wg. internal Compiler Errors
-
-      Rev 1.5   28 Aug 1996 15:54:52   OS
-   includes
-
-      Rev 1.4   07 Jun 1996 09:12:44   OS
-   CreateForm fuer Inhaltsverzeichnis abgesichert Bug #28429#
-
-      Rev 1.3   03 Jun 1996 10:18:06   OS
-   vohandene Verzeichnisse beim Einfuegen updaten (Basic) Bug #28233#
-
-      Rev 1.2   22 Mar 1996 15:29:32   TRI
-   sfxiiter.hxx included
-
-      Rev 1.1   30 Nov 1995 15:09:58   OM
-   Segs
-
-      Rev 1.0   30 Nov 1995 14:26:00   OM
-   Initial revision.
-
-------------------------------------------------------------------------*/
 
