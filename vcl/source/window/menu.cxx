@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: tbe $ $Date: 2002-06-19 13:05:26 $
+ *  last change: $Author: ssa $ $Date: 2002-06-28 14:03:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3800,7 +3800,9 @@ void MenuBarWindow::ImplCreatePopup( BOOL bPreSelectFirst )
                 aItemBottomRight.Y() += pData->aSz.Height();
 
             // ImplExecute ist doch nicht modal...
-            GrabFocus();
+            // #99071# do not grab the focus, otherwise it will be restored to the menubar
+            // when the frame is reactivated later
+            //GrabFocus();
             pActivePopup->ImplExecute( this, Rectangle( aItemTopLeft, aItemBottomRight ), FLOATWIN_POPUPMODE_DOWN, pMenu, bPreSelectFirst );
             if ( pActivePopup )
             {
