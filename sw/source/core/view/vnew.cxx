@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 12:03:41 $
+ *  last change: $Author: jp $ $Date: 2001-07-23 17:18:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
 #endif
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -126,6 +129,8 @@
 
 void ViewShell::Init( const SwViewOption *pNewOpt )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "ViewShell::Init" );
+
     bDocSizeChgd = FALSE;
 
     // Wir gehen auf Nummer sicher:
@@ -165,8 +170,10 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
     if( pDShell && pDShell->IsReadOnly() )
         pOpt->SetReadonly( TRUE );
 
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "View::Init - before InitPrt" );
     if( GetPrt( TRUE ^ pDoc->IsBrowseMode() ) )
         InitPrt( GetPrt() );
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "View::Init - after InitPrt" );
 
     if( GetWin() )
     {
@@ -208,6 +215,8 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     pImp( new SwViewImp( this ) ),
     aBrowseBorder()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "ViewShell::SwViewShell" );
+
     bPaintInProgress = bViewLocked = bInEndAction = bFrameView =
     bEndActionByVirDev = FALSE;
     bPaintWorks = bEnableSmooth = TRUE;
@@ -258,6 +267,7 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     pImp( new SwViewImp( this ) ),
     aBrowseBorder( rShell.GetBrowseBorder() )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "ViewShell::SwViewShell" );
     bPaintWorks = bEnableSmooth = TRUE;
     bPaintInProgress = bViewLocked = bInEndAction = bFrameView =
     bEndActionByVirDev = FALSE;
@@ -384,6 +394,9 @@ SdrView* ViewShell::GetDrawViewWithValidMarkList()
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/10/25 12:03:41  jp
+      Spellchecker/Hyphenator are not longer member of the shells
+
       Revision 1.2  2000/09/28 11:30:29  jp
       remove old code of using no graphicobject
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-18 18:05:16 $
+ *  last change: $Author: jp $ $Date: 2001-07-23 17:20:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
 #endif
 
 #ifndef _ERRHDL_HXX
@@ -1623,6 +1626,12 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
 
 IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
 {
+#ifdef TIMELOG
+    static ::rtl::Logfile* pModLogFile = 0;
+    if( !pModLogFile )
+        pModLogFile = new ::rtl::Logfile( "First DoIdleJobs" );
+#endif
+
     if( !SfxProgress::GetActiveProgress( pDocShell ) &&
         GetRootFrm() && GetRootFrm()->GetCurrShell() )
     {
@@ -1665,6 +1674,10 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
             GetUpdtFlds().SetFieldsDirty( sal_False );
         }
     }
+#ifdef TIMELOG
+    if( pModLogFile && 1 != (long)pModLogFile )
+        delete pModLogFile, ((long&)pModLogFile) = 1;
+#endif
     return 0;
 }
 

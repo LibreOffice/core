@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2001-07-12 13:10:26 $
+ *  last change: $Author: jp $ $Date: 2001-07-23 17:17:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #include <hintids.hxx>
 #endif
 
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 #ifndef _SV_GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
@@ -804,6 +807,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     nSelectionType( INT_MAX ),
     nLastPasteDestination( 0xFFFF )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "SwView::SwView" );
     bCenterCrsr = bTopCrsr = bAllwaysShowSel = bTabColFromDoc =
     bSetTabColFromDoc = bAttrChgNotified = bAttrChgNotifiedWithRegistrations =
     bVerbsActive = bIsApi = bDrawRotate = bInOuterResizePixel =
@@ -848,6 +852,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
         sNewCrsrPos = ((SwPagePreView*)pOldSh)->GetNewCrsrPos();
     }
 
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create WrtShell" );
     if(PTR_CAST( SwView, pOldSh))
     {
         pWrtShell = new SwWrtShell( *((SwView*)pOldSh)->pWrtShell,
@@ -872,6 +877,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
             aUsrPref.SetZoomType( SVX_ZOOM_WHOLEPAGE );
         pWrtShell = new SwWrtShell( rDoc, pEditWin, *this, 0, &aUsrPref );
     }
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "after create WrtShell" );
 
     // JP 05.02.99: Bug 61495 - damit unter anderem das HLineal im
     //              ReadonlyFall nicht angezeigt wird

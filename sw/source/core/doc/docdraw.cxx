@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-26 14:15:18 $
+ *  last change: $Author: jp $ $Date: 2001-07-23 17:20:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #include <hintids.hxx>
 #endif
 
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 #ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
 #endif
@@ -463,6 +466,8 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
 
 void SwDoc::InitDrawModel()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "SwDoc::InitDrawModel" );
+
     //!!Achtung im sw3-Reader (sw3imp.cxx) gibt es aehnlichen Code, der
     //mitgepfelgt werden muss.
     if ( pDrawModel )
@@ -483,6 +488,7 @@ void SwDoc::InitDrawModel()
     else
         pSdrPool->FreezeIdRanges();
 
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create DrawDocument" );
     //Das SdrModel gehoert dem Dokument, wir haben immer zwei Layer und eine
     //Seite.
     pDrawModel = new SwDrawDocument( this );
@@ -498,10 +504,14 @@ void SwDoc::InitDrawModel()
     nControls = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
 
     pDrawModel->InsertPage( pDrawModel->AllocPage( FALSE ) );
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "after create DrawDocument" );
+
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create Spellchecker/Hyphenator" );
     SdrOutliner& rOutliner = pDrawModel->GetDrawOutliner();
     uno::Reference< XSpellChecker1 > xSpell = ::GetSpellChecker();
     rOutliner.SetSpeller( xSpell );
     rOutliner.SetHyphenator( ::GetHyphenator() );
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "after create Spellchecker/Hyphenator" );
 
     SetCalcFieldValueHdl(&rOutliner);
     SetCalcFieldValueHdl(&pDrawModel->GetHitTestOutliner());

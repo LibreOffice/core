@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdll.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-07-10 10:56:37 $
+ *  last change: $Author: jp $ $Date: 2001-07-23 17:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,28 +68,33 @@
 #ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
 #endif
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 
 
-#include "swdll.hxx"
-#ifndef _SWWDOCSH_HXX //autogen
+#ifndef _SWDLL_HXX
+#include <swdll.hxx>
+#endif
+#ifndef _SWWDOCSH_HXX
 #include <wdocsh.hxx>
 #endif
-#ifndef _SWGLOBDOCSH_HXX //autogen
+#ifndef _SWGLOBDOCSH_HXX
 #include <globdoc.hxx>
 #endif
 #ifndef _INITUI_HXX
 #include <initui.hxx>
 #endif
-#ifndef _SWMODULE_HXX //autogen
+#ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
-#ifndef _SWTYPES_HXX //autogen
+#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
 #ifndef _INIT_HXX
 #include <init.hxx>
 #endif
-#ifndef _DOBJFAC_HXX //autogen
+#ifndef _DOBJFAC_HXX
 #include <dobjfac.hxx>
 #endif
 #ifndef _CFGID_H
@@ -104,6 +109,8 @@
 
 void SwDLL::Init()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "SwDLL" );
+
     // called directly after loading the DLL
     // do whatever you want, you may use Sw-DLL too
 
@@ -135,6 +142,9 @@ void SwDLL::Init()
     SwWebDocShell::Factory().RegisterAccel(SW_RES(CFG_SWWEB_ACCEL));
 
     SdrObjFactory::InsertMakeObjectHdl( LINK( &aSwObjectFactory, SwObjectFactory, MakeObject ) );
+
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "Init Core/UI/Filter" );
+
     //Initialisierung der Statics
     ::_InitCore();
     ::_InitFilter();

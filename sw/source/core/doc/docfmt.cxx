@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:21:10 $
+ *  last change: $Author: jp $ $Date: 2001-07-23 17:20:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #include <hintids.hxx>
 #endif
 
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 #ifndef _SFXITEMITER_HXX //autogen
 #include <svtools/itemiter.hxx>
 #endif
@@ -2121,6 +2124,8 @@ SwTableLineFmt* SwDoc::MakeTableLineFmt()
 
 void SwDoc::_CreateNumberFormatter()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "SwDoc::_CreateNumberFormatter" );
+
     ASSERT( !pNumberFormatter, "ist doch schon vorhanden" );
 
 

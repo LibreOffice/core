@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-14 11:41:46 $
+ *  last change: $Author: jp $ $Date: 2001-07-23 17:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #include <hintids.hxx>
 #endif
 
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 #ifndef _MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
@@ -460,6 +463,8 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
 
 BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "SwDocShell::ConvertFrom" );
+
     SwReader* pRdr;
     SwRead pRead = StartConvertFrom(rMedium, &pRdr);
     if (!pRead)
@@ -527,6 +532,7 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
 
 BOOL SwDocShell::Save()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "SwDocShell::Save" );
     sal_Bool bXML = pIo->GetStorage()->GetVersion() >= SOFFICE_FILEFORMAT_60;
 
     SwWait aWait( *this, TRUE );
@@ -616,6 +622,7 @@ BOOL SwDocShell::Save()
 
 BOOL SwDocShell::SaveAs( SvStorage * pStor )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "SwDocShell::SaveAs" );
     sal_Bool bXML = pStor->GetVersion() >= SOFFICE_FILEFORMAT_60;
 
     SwWait aWait( *this, TRUE );
@@ -732,6 +739,7 @@ SwSrcView* lcl_GetSourceView( SwDocShell* pSh )
 
 BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "SwDocShell::ConvertTo" );
     const SfxFilter* pFlt = rMedium.GetFilter();
     if( !pFlt )
         return FALSE;
@@ -979,6 +987,7 @@ void SwDocShell::HandsOff()
 
 BOOL SwDocShell::SaveCompleted( SvStorage * pStor )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "SwDocShell::SaveCompleted" );
     BOOL bRet = SfxInPlaceObject::SaveCompleted( pStor );
     if( bRet )
     {

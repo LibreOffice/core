@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-26 14:14:12 $
+ *  last change: $Author: jp $ $Date: 2001-07-23 17:20:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
 #endif
@@ -326,6 +329,8 @@ SwDoc::SwDoc() :
     nLinkUpdMode( GLOBALSETTING ),
     nFldUpdMode( AUTOUPD_GLOBALSETTING )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "SwDoc::SwDoc" );
+
     bGlossDoc =
     bModified =
     bDtor =
