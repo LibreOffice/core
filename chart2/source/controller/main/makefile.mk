@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: iha $ $Date: 2003-10-28 16:05:25 $
+#   last change: $Author: iha $ $Date: 2003-12-09 17:14:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,7 @@ SLOFILES =  \
             $(SLO)$/ChartController_Properties.obj	\
             $(SLO)$/ChartController_Insert.obj	\
             $(SLO)$/ChartController_TextEdit.obj \
+            $(SLO)$/ChartController_Position.obj \
             $(SLO)$/ChartFrameloader.obj \
             $(SLO)$/_serviceregistration_controller.obj
 
