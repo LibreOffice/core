@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:51:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 08:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1107,7 +1107,7 @@ SwCntntNotify::~SwCntntNotify()
     {
         if ( mnHeightOfLastLine != static_cast<SwTxtFrm*>(pCnt)->GetHeightOfLastLine() )
         {
-            static_cast<SwTxtFrm*>(pCnt)->InvalidateNextPrtArea();
+            pCnt->InvalidateNextPrtArea();
         }
     }
 }
