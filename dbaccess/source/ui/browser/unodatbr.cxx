@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-17 10:31:48 $
+ *  last change: $Author: oj $ $Date: 2001-07-17 11:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3458,7 +3458,6 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
                 {
                     aContextMenu.EnableItem(ID_NEW_TABLE_DESIGN,sal_False);
                     aContextMenu.EnableItem(ID_NEW_VIEW_DESIGN,sal_False);
-                    aContextMenu.EnableItem(ID_TREE_RELATION_DESIGN,sal_False);
                 }
             }
             break;
@@ -3478,7 +3477,6 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
                 {
                     aContextMenu.EnableItem(ID_NEW_TABLE_DESIGN,sal_False);
                     aContextMenu.EnableItem(ID_NEW_VIEW_DESIGN,sal_False);
-                    aContextMenu.EnableItem(ID_TREE_RELATION_DESIGN,sal_False);
                 }
             }
             break;
