@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-26 16:16:55 $
+ *  last change: $Author: mba $ $Date: 2001-11-13 10:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -625,8 +625,10 @@ BaseStorage* Storage::OpenStorage( const String& rName, StreamMode m, BOOL bDire
 
 // Open a stream
 
-BaseStorageStream* Storage::OpenStream( const String& rName, StreamMode m, BOOL )
+BaseStorageStream* Storage::OpenStream( const String& rName, StreamMode m, BOOL, const ByteString* pB )
 {
+    DBG_ASSERT(!pB, "Encryption not supported");
+
     if( !Validate() || !ValidateMode( m ) )
         return new StorageStream( pIo, NULL, m );
     StgDirEntry* p = pIo->pTOC->Find( *pEntry, rName );

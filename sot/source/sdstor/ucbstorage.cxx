@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: mh $ $Date: 2001-11-06 21:36:50 $
+ *  last change: $Author: mba $ $Date: 2001-11-13 10:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@
 #include <com/sun/star/packages/manifest/XManifestReader.hpp>
 #endif
 
+#include <rtl/digest.h>
 #include <tools/ref.hxx>
 #include <tools/debug.hxx>
 #include <unotools/streamhelper.hxx>
@@ -236,7 +237,7 @@ public:
                                                 // reference is destroyed
     BOOL                        m_bIsOLEStorage;// an OLEStorage on a UCBStorageStream makes this an Autocommit-stream
 
-                                UCBStorageStream_Impl( const String&, StreamMode, UCBStorageStream*, BOOL );
+                                UCBStorageStream_Impl( const String&, StreamMode, UCBStorageStream*, BOOL, const ByteString* pKey=0 );
 
     BOOL                        Clear();
     sal_Int16                   Commit();       // if modified and commited: transfer an XInputStream to the content
@@ -299,7 +300,7 @@ public:
     BOOL                        Revert();
     BOOL                        Insert( ::ucb::Content *pContent );
     UCBStorage_Impl*            OpenStorage( UCBStorageElement_Impl* pElement, StreamMode nMode, BOOL bDirect );
-    UCBStorageStream_Impl*      OpenStream( UCBStorageElement_Impl* pElement, StreamMode nMode, BOOL bDirect );
+    UCBStorageStream_Impl*      OpenStream( UCBStorageElement_Impl*, StreamMode, BOOL, const ByteString* pKey=0 );
     void                        SetProps( const Sequence < Sequence < PropertyValue > >& rSequence, const String& );
     void                        GetProps( sal_Int32&, Sequence < Sequence < PropertyValue > >& rSequence, const String& );
     sal_Int32                   GetObjectCount();
@@ -413,7 +414,7 @@ BOOL UCBStorageElement_Impl::IsModified()
     return bModified;
 }
 
-UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nMode, UCBStorageStream* pStream, BOOL bDirect )
+UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nMode, UCBStorageStream* pStream, BOOL bDirect, const ByteString* pKey )
     : m_pAntiImpl( pStream )
     , m_bModified( FALSE )
     , m_bCommited( FALSE )
@@ -435,6 +436,21 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
     {
         // create the content
         m_pContent = new ::ucb::Content( rName, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+
+        if ( pKey )
+        {
+            // stream is encrypted and should be decrypted (without setting the key we'll get the raw data)
+            sal_uInt8 aBuffer[RTL_DIGEST_LENGTH_SHA1];
+            rtlDigestError nError = rtl_digest_SHA1( pKey->GetBuffer(), pKey->Len(), aBuffer, RTL_DIGEST_LENGTH_SHA1 );
+            if ( nError == rtl_Digest_E_None )
+            {
+                sal_uInt8* pBuffer = aBuffer;
+                ::com::sun::star::uno::Sequence < sal_Int8 > aSequ( (sal_Int8*) pBuffer, RTL_DIGEST_LENGTH_SHA1 );
+                ::com::sun::star::uno::Any aAny;
+                aAny <<= aSequ;
+                m_pContent->setPropertyValue( ::rtl::OUString::createFromAscii("EncryptionKey"), aAny );
+            }
+        }
 
         // open it using ( readonly, because writing is never done directly into the original stream )
         m_pSource = ::utl::UcbStreamHelper::CreateStream( rName, STREAM_STD_READ );
@@ -684,11 +700,11 @@ BOOL UCBStorageStream_Impl::Clear()
     return bRet;
 }
 
-UCBStorageStream::UCBStorageStream( const String& rName, StreamMode nMode, BOOL bDirect )
+UCBStorageStream::UCBStorageStream( const String& rName, StreamMode nMode, BOOL bDirect, const ByteString* pKey )
 {
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
     // to class UCBStorageStream !
-    pImp = new UCBStorageStream_Impl( rName, nMode, this, bDirect );
+    pImp = new UCBStorageStream_Impl( rName, nMode, this, bDirect, pKey );
     pImp->AddRef();             // use direct refcounting because in header file only a pointer should be used
     StorageBase::nMode = pImp->m_nMode;
 }
@@ -2032,7 +2048,7 @@ BOOL UCBStorage::Revert()
     return pImp->Revert();
 }
 
-BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nMode, BOOL bDirect )
+BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nMode, BOOL bDirect, const ByteString* pKey )
 {
     if( !rEleName.Len() )
         return NULL;
@@ -2048,7 +2064,7 @@ BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nM
             String aName( pImp->m_aURL );
             aName += '/';
             aName += rEleName;
-            UCBStorageStream* pStream = new UCBStorageStream( aName, nMode, bDirect );
+            UCBStorageStream* pStream = new UCBStorageStream( aName, nMode, bDirect, pKey );
             pStream->SetError( GetError() );
             pStream->pImp->m_aName = rEleName;
             return pStream;
@@ -2097,12 +2113,12 @@ BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nM
     return NULL;
 }
 
-UCBStorageStream_Impl* UCBStorage_Impl::OpenStream( UCBStorageElement_Impl* pElement, StreamMode nMode, BOOL bDirect )
+UCBStorageStream_Impl* UCBStorage_Impl::OpenStream( UCBStorageElement_Impl* pElement, StreamMode nMode, BOOL bDirect, const ByteString* pKey )
 {
     String aName( m_aURL );
     aName += '/';
     aName += pElement->m_aOriginalName;
-    pElement->m_xStream = new UCBStorageStream_Impl( aName, nMode, NULL, bDirect );
+    pElement->m_xStream = new UCBStorageStream_Impl( aName, nMode, NULL, bDirect, pKey );
     return pElement->m_xStream;
 }
 

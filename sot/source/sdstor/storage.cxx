@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mm $ $Date: 2001-09-06 10:50:06 $
+ *  last change: $Author: mba $ $Date: 2001-11-13 10:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -972,12 +972,37 @@ BOOL SotStorage::Revert()
 |*
 |*    Beschreibung
 *************************************************************************/
+SotStorageStream * SotStorage::OpenEncryptedSotStream( const String & rEleName, const ByteString& rKey,
+                                             StreamMode nMode,
+                                             StorageMode nStorageMode )
+{
+    DBG_ASSERT( !nStorageMode, "StorageModes ignored" )
+    SotStorageStream * pStm = NULL;
+    DBG_ASSERT( Owner(), "must be owner" )
+    if( pOwnStg )
+    {
+        // volle Ole-Patches einschalten
+        // egal was kommt, nur exclusiv gestattet
+        nMode |= STREAM_SHARE_DENYALL;
+        ErrCode nE = pOwnStg->GetError();
+        BaseStorageStream* p = pOwnStg->OpenStream( rEleName, nMode,
+                            (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE, &rKey );
+        pStm = new SotStorageStream( p );
+        if( !nE )
+            pOwnStg->ResetError(); // kein Fehler setzen
+        if( nMode & STREAM_TRUNC )
+            pStm->SetSize( 0 );
+    }
+    else
+        SetError( SVSTREAM_GENERALERROR );
+    return pStm;
+}
+
 SotStorageStream * SotStorage::OpenSotStream( const String & rEleName,
                                              StreamMode nMode,
                                              StorageMode nStorageMode )
 {
     DBG_ASSERT( !nStorageMode, "StorageModes ignored" )
-
     SotStorageStream * pStm = NULL;
     DBG_ASSERT( Owner(), "must be owner" )
     if( pOwnStg )

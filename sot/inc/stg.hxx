@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-21 10:51:05 $
+ *  last change: $Author: mba $ $Date: 2001-11-13 10:28:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ public:
     virtual BOOL                Revert() = 0;
     virtual BaseStorageStream*  OpenStream( const String & rEleName,
                                   StreamMode = STREAM_STD_READWRITE,
-                                  BOOL bDirect = TRUE ) = 0;
+                                  BOOL bDirect = TRUE, const ByteString* pKey=0 ) = 0;
     virtual BaseStorage*        OpenStorage( const String & rEleName,
                                    StreamMode = STREAM_STD_READWRITE,
                                    BOOL bDirect = FALSE ) = 0;
@@ -250,7 +250,7 @@ public:
     virtual BOOL                Revert();
     virtual BaseStorageStream*  OpenStream( const String & rEleName,
                                   StreamMode = STREAM_STD_READWRITE,
-                                  BOOL bDirect = TRUE );
+                                  BOOL bDirect = TRUE, const ByteString* pKey=0 );
     virtual BaseStorage*        OpenStorage( const String & rEleName,
                                        StreamMode = STREAM_STD_READWRITE,
                                        BOOL bDirect = FALSE );
@@ -286,7 +286,7 @@ protected:
                                 ~UCBStorageStream();
 public:
                                 TYPEINFO();
-                                UCBStorageStream( const String& rName, StreamMode nMode, BOOL bDirect );
+                                UCBStorageStream( const String& rName, StreamMode nMode, BOOL bDirect, const ByteString* pKey=0 );
                                 UCBStorageStream( UCBStorageStream_Impl* );
 
     virtual ULONG               Read( void * pData, ULONG nSize );
@@ -352,7 +352,7 @@ public:
     virtual BOOL                Revert();
     virtual BaseStorageStream*  OpenStream( const String & rEleName,
                                   StreamMode = STREAM_STD_READWRITE,
-                                  BOOL bDirect = TRUE );
+                                  BOOL bDirect = TRUE, const ByteString* pKey=0 );
     virtual BaseStorage*        OpenStorage( const String & rEleName,
                                        StreamMode = STREAM_STD_READWRITE,
                                        BOOL bDirect = FALSE );
