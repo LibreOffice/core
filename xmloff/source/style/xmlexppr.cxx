@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-02 17:25:53 $
+ *  last change: $Author: sab $ $Date: 2001-03-05 12:02:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,29 +342,20 @@ void MyToFilterProperties::FillPropertyStateArray(vector< XMLPropertyState >& aP
     MyPropertyStates aPropsList;
     for(sal_uInt32 i = 0; i < nCount; i++, aItr++ )
     {
-        if( pStates[i] == PropertyState_DIRECT_VALUE )
+        std::list<sal_uInt32>::iterator aIndexItr = aItr->aIndexes.begin();
+        if( (pStates[i] == PropertyState_DIRECT_VALUE) || (bDefault && ((maPropMapper->GetEntryFlags( *aIndexItr ) &
+                    MID_FLAG_DEFAULT_ITEM_EXPORT) != 0)) )
         {
             // The value is stored in the PropertySet itself, add to list.
-            std::list<sal_uInt32>::iterator aIndexItr = aItr->aIndexes.begin();
             XMLPropertyState aNewProperty( *aIndexItr,
                     xPropSet->getPropertyValue( aItr->sApiName ) );
-            if (!bDefault || (bDefault && ((maPropMapper->GetEntryFlags( *aIndexItr ) &
-                    MID_FLAG_DEFAULT_ITEM_EXPORT) != 0)))
-                aPropsList.AddPropertyState( aNewProperty );
-            if (aItr->nCount > 1)
+            do
             {
+                aNewProperty.mnIndex = *aIndexItr;
+                aPropsList.AddPropertyState( aNewProperty );
                 aIndexItr++;
-                while(aIndexItr != aItr->aIndexes.end())
-                {
-                    if (!bDefault || (bDefault && ((maPropMapper->GetEntryFlags( *aIndexItr ) &
-                            MID_FLAG_DEFAULT_ITEM_EXPORT) != 0)))
-                    {
-                        aNewProperty.mnIndex = *aIndexItr;
-                        aPropsList.AddPropertyState( aNewProperty );
-                    }
-                    aIndexItr++;
-                }
             }
+            while(aIndexItr != aItr->aIndexes.end());
         }
     }
     aPropsList.FillPropertyStateVector(aPropStates);
