@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-16 06:27:38 $
+ *  last change: $Author: gt $ $Date: 2004-07-16 07:51:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include <xmlsecurity/macrosecurity.hxx>
+#include <xmlsecurity/certificatechooser.hxx>
 #include <xmlsecurity/certificateviewer.hxx>
 
 #ifndef _COM_SUN_STAR_XML_CRYPTO_XSECURITYENVIRONMENT_HPP_
@@ -90,13 +91,14 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
 
-MacroSecurity::MacroSecurity( Window* _pParent, cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment )
-    :TabDialog      ( _pParent, XMLSEC_RES( RID_XMLSECTP_MACROSEC ) )
-    ,maTabCtrl      ( this, ResId( 1 ) )
-    ,maOkBtn        ( this, ResId( BTN_OK ) )
-    ,maCancelBtn    ( this, ResId( BTN_CANCEL ) )
-    ,maHelpBtn      ( this, ResId( BTN_HELP ) )
-    ,maResetBtn     ( this, ResId( BTN_RESET ) )
+MacroSecurity::MacroSecurity( Window* _pParent, cssu::Reference< lang::XMultiServiceFactory >& rxMSF, cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment )
+    :TabDialog          ( _pParent, XMLSEC_RES( RID_XMLSECTP_MACROSEC ) )
+    ,maSignatureHelper  ( rxMSF )
+    ,maTabCtrl          ( this, ResId( 1 ) )
+    ,maOkBtn            ( this, ResId( BTN_OK ) )
+    ,maCancelBtn        ( this, ResId( BTN_CANCEL ) )
+    ,maHelpBtn          ( this, ResId( BTN_HELP ) )
+    ,maResetBtn         ( this, ResId( BTN_RESET ) )
 {
     FreeResource();
 
@@ -137,11 +139,37 @@ void MacroSecurityLevelTP::ActivatePage()
 
 IMPL_LINK( MacroSecurityTrustedSourcesTP, AddCertPBHdl, void*, EMTYARG )
 {
+    CertificateChooser  aChooser( this, mpDlg->mxSecurityEnvironment, mpDlg->maCurrentSignatureInformations );
+    if( aChooser.Execute() )
+    {
+        uno::Reference< css::security::XCertificate > xCert = aChooser.GetSelectedCertificate();
+
+//      InsertCert( xCert );
+
+        FillCertLB();
+    }
+
     return 0;
 }
 
 IMPL_LINK( MacroSecurityTrustedSourcesTP, ViewCertPBHdl, void*, EMTYARG )
 {
+    if( maTrustCertLB.FirstSelected() )
+    {
+        USHORT nSelected = (USHORT) maTrustCertLB.FirstSelected()->GetUserData();
+        const SignatureInformation& rInfo = mpDlg->maCurrentSignatureInformations[ nSelected ];
+        uno::Reference< dcss::security::XCertificate > xCert = mpDlg->maSignatureHelper.GetSecurityEnvironment()->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
+
+        // If we don't get it, create it from signature data:
+        if ( !xCert.is() )
+            xCert = mpDlg->maSignatureHelper.GetSecurityEnvironment()->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
+
+        DBG_ASSERT( xCert.is(), "*MacroSecurityTrustedSourcesTP::ViewCertPBHdl(): Certificate not found and can't be created!" );
+
+        uno::Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv = mpDlg->maSignatureHelper.GetSecurityEnvironment();
+        CertificateViewer aViewer( this, xSecEnv, xCert );
+        aViewer.Execute();
+    }
     return 0;
 }
 
@@ -158,6 +186,77 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, AddLocPBHdl, void*, EMTYARG )
 IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, void*, EMTYARG )
 {
     return 0;
+}
+
+IMPL_LINK( MacroSecurityTrustedSourcesTP, TrustCertLBSelectHdl, void*, EMTYARG )
+{
+    bool    bSel = maTrustCertLB.FirstSelected() != NULL;
+    maViewCertPB.Enable( bSel );
+    maRemoveCertPB.Enable( bSel );
+
+    return 0;
+}
+
+IMPL_LINK( MacroSecurityTrustedSourcesTP, TrustFileLocLBSelectHdl, void*, EMTYARG )
+{
+    maRemoveLocPB.Enable( maTrustFileLocLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND );
+
+    return 0;
+}
+
+/*void MacroSecurityTrustedSourcesTP::InsertCert( uno::Reference< css::security::XCertificate >& _rxCert, USHORT _nInd )
+{
+        String  aCN_Id( String::CreateFromAscii( "CN" ) );
+
+        SvLBoxEntry*    pEntry = maTrustCertLB.InsertEntry( XmlSec::GetContentPart( _rxCert->getIssuerName(), aCN_Id ) );
+        maTrustCertLB.SetEntryText( XmlSec::GetContentPart( _rxCert->getIssuerName(), aCN_Id ), pEntry, 1 );
+        maTrustCertLB.SetEntryText( XmlSec::GetDateString( _rxCert->getNotAfter() ), pEntry, 2 );
+        pEntry->SetUserData( ( void* ) _nInd );
+}*/
+
+void MacroSecurityTrustedSourcesTP::FillCertLB( void )
+{
+    maTrustCertLB.Clear();
+
+    uno::Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv = mpDlg->maSignatureHelper.GetSecurityEnvironment();
+    uno::Reference< css::security::XCertificate > xCert;
+
+    String  aCN_Id( String::CreateFromAscii( "CN" ) );
+    int     nInfos = mpDlg->maCurrentSignatureInformations.size();
+    for( int n = 0; n < nInfos; ++n )
+    {
+        const SignatureInformation& rInfo = mpDlg->maCurrentSignatureInformations[n];
+        xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
+
+        // If we don't get it, create it from signature data:
+        if ( !xCert.is() )
+            xCert = xSecEnv->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
+
+        DBG_ASSERT( xCert.is(), "Certificate not found and can't be created!" );
+
+        String  aSubject;
+        String  aIssuer;
+        String  aDateTimeStr;
+        if( xCert.is() )
+        {
+            aSubject = XmlSec::GetContentPart( xCert->getSubjectName(), aCN_Id );
+            aIssuer = XmlSec::GetContentPart( rInfo.ouX509IssuerName, aCN_Id );
+//          aDateTimeStr = XmlSec::GetDateString( xCert->getNotAfter() );
+            aDateTimeStr = XmlSec::GetDateTimeString( rInfo.ouDate, rInfo.ouTime );
+        }
+        else
+        {
+#if OSL_DEBUG_LEVEL > 1
+            aSubject = String::CreateFromAscii( "ERROR getting certificate!" );
+#endif
+        }
+        SvLBoxEntry* pEntry = maTrustCertLB.InsertEntry( aSubject );
+        maTrustCertLB.SetEntryText( aIssuer, pEntry, 1 );
+        maTrustCertLB.SetEntryText( aDateTimeStr, pEntry, 2 );
+        pEntry->SetUserData( ( void* ) n );     // missuse user data as index
+    }
+
+    TrustCertLBSelectHdl( NULL );
 }
 
 MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP( Window* _pParent, MacroSecurity* _pDlg )
@@ -178,6 +277,17 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP( Window* _pParent, 
     maTrustCertLB.InsertHeaderEntry( String( ResId( STR_HEADERBAR ) ) );
 
     FreeResource();
+
+    maAddCertPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, AddCertPBHdl ) );
+    maViewCertPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, ViewCertPBHdl ) );
+    maViewCertPB.Disable();
+    maRemoveCertPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, RemoveCertPBHdl ) );
+    maRemoveCertPB.Disable();
+    maAddLocPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, AddLocPBHdl ) );
+    maRemoveLocPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, RemoveLocPBHdl ) );
+    maRemoveLocPB.Disable();
+
+    FillCertLB();
 }
 
 void MacroSecurityTrustedSourcesTP::ActivatePage()

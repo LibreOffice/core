@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-16 06:23:45 $
+ *  last change: $Author: gt $ $Date: 2004-07-16 07:52:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #include <svx/simptabl.hxx>
 #include <svtools/svmedit.hxx>
 
+#include <xmlsecurity/documentsignaturehelper.hxx>
+#include <xmlsecurity/xmlsignaturehelper.hxx>
+
 namespace com {
 namespace sun {
 namespace star {
@@ -79,6 +82,17 @@ namespace security {
     class XCertificate; }
 namespace xml { namespace crypto {
     class XSecurityEnvironment; }}
+}}}
+
+namespace com {
+namespace sun {
+namespace star {
+namespace lang {
+    class XMultiServiceFactory; }
+namespace io {
+    class XStream; }
+namespace embed {
+    class XStorage; }
 }}}
 
 namespace css = com::sun::star;
@@ -97,10 +111,13 @@ private:
     HelpButton          maHelpBtn;
     PushButton          maResetBtn;
 
+    XMLSignatureHelper      maSignatureHelper;
     cssu::Reference< dcss::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
-//  cssu::Reference< dcss::security::XCertificate > mxCert;
+    SignatureInformations   maCurrentSignatureInformations;
 public:
-    MacroSecurity( Window* pParent, cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment );
+    MacroSecurity( Window* pParent,
+                    cssu::Reference< css::lang::XMultiServiceFactory >& rxMSF,
+                    cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment );
     virtual             ~MacroSecurity();
 };
 
@@ -108,7 +125,7 @@ public:
 class MacroSecurityTP : public TabPage
 {
 protected:
-    MacroSecurity*  mpDlg;
+    MacroSecurity*      mpDlg;
 public:
                         MacroSecurityTP( Window* _pParent, const ResId& _rResId, MacroSecurity* _pDlg );
     inline void         SetTabDlg( MacroSecurity* pTabDlg );
@@ -154,6 +171,11 @@ private:
     DECL_LINK(          RemoveCertPBHdl, void* );
     DECL_LINK(          AddLocPBHdl, void* );
     DECL_LINK(          RemoveLocPBHdl, void* );
+    DECL_LINK(          TrustCertLBSelectHdl, void* );
+    DECL_LINK(          TrustFileLocLBSelectHdl, void* );
+
+//  void                InsertCert( cssu::Reference< css::security::XCertificate >& _rxCert, USHORT _nInd );
+    void                FillCertLB( void );
 public:
                         MacroSecurityTrustedSourcesTP( Window* pParent, MacroSecurity* _pDlg );
 
