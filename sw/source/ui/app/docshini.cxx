@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-12 12:43:20 $
+ *  last change: $Author: os $ $Date: 2002-08-20 13:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,14 +379,20 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
             FONT_OUTLINE_CJK,   RES_POOLCOLL_HEADLINE_BASE,
             FONT_LIST_CJK,      RES_POOLCOLL_NUMBUL_BASE,
             FONT_CAPTION_CJK,   RES_POOLCOLL_LABEL,
-            FONT_INDEX_CJK,     RES_POOLCOLL_REGISTER_BASE
+            FONT_INDEX_CJK,     RES_POOLCOLL_REGISTER_BASE,
+            FONT_OUTLINE_CTL,   RES_POOLCOLL_HEADLINE_BASE,
+            FONT_LIST_CTL,      RES_POOLCOLL_NUMBUL_BASE,
+            FONT_CAPTION_CTL,   RES_POOLCOLL_LABEL,
+            FONT_INDEX_CTL,     RES_POOLCOLL_REGISTER_BASE
         };
 
         USHORT nFontWhich = RES_CHRATR_FONT;
-        for(USHORT nIdx = 0; nIdx < 16; nIdx += 2)
+        for(USHORT nIdx = 0; nIdx < 24; nIdx += 2)
         {
             if(nIdx == 8)
                 nFontWhich = RES_CHRATR_CJK_FONT;
+            else if(nIdx == 16)
+                nFontWhich = RES_CHRATR_CTL_FONT;
             if(!pStdFont->IsFontDefault(aFontIdPoolId[nIdx]))
             {
                 sEntry = pStdFont->GetFontFor(aFontIdPoolId[nIdx]);
