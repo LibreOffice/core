@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: bm $ $Date: 2002-11-04 17:42:47 $
+ *  last change: $Author: af $ $Date: 2002-11-19 15:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,10 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _SFXREQUEST_HXX
+#include <sfx2/request.hxx>
+#endif
+
 #pragma hdrstop
 
 #include <svx/pfiledlg.hxx>
@@ -1618,3 +1622,52 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
 
 
 
+
+void SdDrawViewShell::GetState (SfxItemSet& rSet)
+{
+    // Iterate over all requested items in the set.
+    SfxWhichIter aIter( rSet );
+    USHORT nWhich = aIter.FirstWhich();
+    while (nWhich)
+    {
+        switch (nWhich)
+        {
+            case SID_SEARCH_ITEM:
+            case SID_SEARCH_OPTIONS:
+                // Forward this request to the the common (old) code of the
+                // document shell.
+                pDocSh->GetState (rSet);
+                break;
+            default:
+                OSL_TRACE ("SdDrawViewShell::GetState(): can not handle which id %d", nWhich);
+                break;
+        }
+        nWhich = aIter.NextWhich();
+    }
+}
+
+
+
+
+void SdDrawViewShell::Execute (SfxRequest& rReq)
+{
+    FuSlideShow* pFuSlideShow = GetSlideShow();
+    if (pFuSlideShow!=NULL && !pFuSlideShow->IsLivePresentation())
+    {
+        // Do not execute anything during a native slide show.
+        return;
+    }
+
+    switch (rReq.GetSlot())
+    {
+        case SID_SEARCH_ITEM:
+            // Forward this request to the the common (old) code of the
+            // document shell.
+            pDocSh->Execute (rReq);
+        break;
+
+        default:
+            OSL_TRACE ("SdDrawViewShell::Execute(): can not handle slot %d", rReq.GetSlot());
+            break;
+    }
+}

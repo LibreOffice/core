@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-13 20:41:26 $
+ *  last change: $Author: af $ $Date: 2002-11-19 15:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,12 @@
 #ifndef _CLIPLISTENER_HXX
 #include <svtools/cliplistener.hxx>
 #endif
+#ifndef _EEITEMID_HXX
+#include <svx/eeitemid.hxx>
+#endif
+#ifndef _SFX_SRCHITEM_HXX
+#include <sfx2/srchitem.hxx>
+#endif
 
 #ifndef _SD_OPTSITEM_HXX
 #include "optsitem.hxx"
@@ -211,6 +217,7 @@ SFX_IMPL_INTERFACE(SdOutlineViewShell, SfxViewShell, SdResId(STR_OUTLINEVIEWSHEL
     SFX_CHILDWINDOW_REGISTRATION( SvxHyperlinkDlgWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SdPreviewChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxHlinkDlgWrapper::GetChildWindowId() );
+    SFX_CHILDWINDOW_REGISTRATION( SID_SEARCH_DLG );
 }
 
 SFX_IMPL_VIEWFACTORY(SdOutlineViewShell, SdResId(STR_SPECIALVIEW) )
@@ -1151,7 +1158,7 @@ void SdOutlineViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem(SID_OUTLINE_COLLAPSE_ALL);
 
 
-    if ( pDocSh->GetActualFunction() )
+    /*  if ( pDocSh->GetActualFunction() )
     {
         rSet.ClearItem( SID_DRAWINGMODE );
         rSet.DisableItem( SID_DRAWINGMODE );
@@ -1175,12 +1182,12 @@ void SdOutlineViewShell::GetMenuState( SfxItemSet &rSet )
     }
     else
     {
-        aDrawBtn.Enable();
+    */      aDrawBtn.Enable();
         aNotesBtn.Enable();
         aHandoutBtn.Enable();
         aOutlineBtn.Enable();
         aSlideBtn.Enable();
-    }
+        //  }
 
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE ) )
     {
@@ -2480,5 +2487,30 @@ void SdOutlineViewShell::VisAreaChanged(const Rectangle& rRect)
     {
         OSL_TRACE ("SdOutlineViewShell::CreateAccessibleDocumentView: no controller");
         return SdViewShell::CreateAccessibleDocumentView (pWindow);
+    }
+}
+
+
+
+
+void SdOutlineViewShell::GetState (SfxItemSet& rSet)
+{
+    // Iterate over all requested items in the set.
+    SfxWhichIter aIter( rSet );
+    USHORT nWhich = aIter.FirstWhich();
+    while (nWhich)
+    {
+        switch (nWhich)
+        {
+            case SID_SEARCH_ITEM:
+            case SID_SEARCH_OPTIONS:
+                // Call common (old) implementation in the document shell.
+                pDocSh->GetState (rSet);
+                break;
+            default:
+                OSL_TRACE ("SdOutlineViewShell::GetState(): can not handle which id %d", nWhich);
+                break;
+        }
+        nWhich = aIter.NextWhich();
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drvwshrg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-29 14:03:56 $
+ *  last change: $Author: af $ $Date: 2002-11-19 15:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ SFX_IMPL_INTERFACE(SdDrawViewShell, SfxViewShell, SdResId(STR_DRAWVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION( SvxIMapDlgChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxHyperlinkDlgWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxHlinkDlgWrapper::GetChildWindowId() );
+    SFX_CHILDWINDOW_REGISTRATION( SID_SEARCH_DLG );
 }
 
 SFX_IMPL_VIEWFACTORY(SdDrawViewShell, SdResId(STR_DEFAULTVIEW) )
@@ -181,6 +182,7 @@ SFX_IMPL_INTERFACE(SdGraphicViewShell, SfxViewShell, SdResId(STR_DRAWVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION( SvxIMapDlgChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxHyperlinkDlgWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxHlinkDlgWrapper::GetChildWindowId() );
+    SFX_CHILDWINDOW_REGISTRATION( SID_SEARCH_DLG );
 }
 
 SFX_IMPL_VIEWFACTORY(SdGraphicViewShell, SdResId(STR_DEFAULTVIEW) )
