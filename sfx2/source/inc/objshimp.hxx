@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:29 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,9 +233,6 @@ struct SfxObjectShell_Impl
     ~SfxObjectShell_Impl();
 
 };
-
-extern void GetFileTitle_Impl( String& aName );
-
 
 #endif
 
