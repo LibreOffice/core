@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.138 $
+#   $Revision: 1.139 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 10:00:31 $
+#   last change: $Author: rt $ $Date: 2003-06-13 10:44:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2373,7 +2373,7 @@ $(RSC_MULTI1) $(RSC_MULTI2) $(RSC_MULTI3) $(RSC_MULTI4) $(RSC_MULTI5) $(RSC_MULT
 .IF "$(MAKEFILERC)"==""
 .IF "$(CXXFILES)$(CFILES)$(RCFILES)$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(PARFILES)" != ""
 .IF "$(DEPFILES)" != ""
-.IGNORE: .INCLUDE : $(DEPFILES)
+.INCLUDE : $(DEPFILES)
 .ENDIF			# "$(DEPFILES)" != ""
 .INCLUDE : $(MISC)$/$(TARGET).dpc
 .IF "$(GROUP)"=="WRITER"
