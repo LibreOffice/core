@@ -10979,3 +10979,5 @@ _real@8@3ffdaaaaaaaaaaaaa800
 ??0?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@QAE@ABVBaseReference@1234@W4UnoReference_Query@1234@@Z
 ?exportRelativeTargetLocation@OPropertyExport@xmloff@@AAEXABUConstAsciiString@2@J@Z
 ??0?$Reference@VX3DDisplay@chart@star@sun@com@@@uno@star@sun@com@@QAE@ABVBaseReference@1234@W4UnoReference_Query@1234@@Z
+??0XMLBackgroundImageContext@@QAE@AAVSvXMLImport@@GABVOUString@rtl@@ABV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@ABUXMLPropertyState@@JJJAAV?$vector@UXMLPropertyState@@V?$allocator@UXMLPropertyState@@@_STL@@@_STL@@@Z
+?exportXML@XMLBackgroundImageExport@@QAEXABVAny@uno@star@sun@com@@PBV23456@11GABVOUString@rtl@@@Z
