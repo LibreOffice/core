@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:49:06 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,137 @@ static width::type parseWidth( const ByteString& rWidth )
 }
 
 // -------------------------------------------------------------------------
+bool PrintFontManager::XLFDEntry::operator<(const PrintFontManager::XLFDEntry& rRight) const
+{
+    sal_Int32 nCmp = 0;
+    if( (nMask & MaskFamily) && (rRight.nMask & MaskFamily) )
+    {
+        nCmp =  rtl_str_compareIgnoreAsciiCase_WithLength( aFamily.pData->buffer,
+                                                           aFamily.pData->length,
+                                                           rRight.aFamily.pData->buffer,
+                                                           rRight.aFamily.pData->length );
+        if( nCmp != 0 )
+            return nCmp < 0;
+    }
+
+    if( (nMask & MaskFoundry) && (rRight.nMask & MaskFoundry) )
+    {
+        nCmp =  rtl_str_compareIgnoreAsciiCase_WithLength( aFoundry.pData->buffer,
+                                                           aFoundry.pData->length,
+                                                           rRight.aFoundry.pData->buffer,
+                                                           rRight.aFoundry.pData->length );
+        if( nCmp != 0 )
+            return nCmp < 0;
+    }
+
+    if( (nMask & MaskItalic) && (rRight.nMask & MaskItalic) )
+    {
+        if( eItalic != rRight.eItalic )
+            return (int)eItalic < (int)rRight.eItalic;
+    }
+
+    if( (nMask & MaskWeight) && (rRight.nMask & MaskWeight) )
+    {
+        if( eWeight != rRight.eWeight )
+            return (int)eWeight < (int)rRight.eWeight;
+    }
+
+    if( (nMask & MaskWidth) && (rRight.nMask & MaskWidth) )
+    {
+        if( eWidth != rRight.eWidth )
+            return (int)eWidth < (int)rRight.eWidth;
+    }
+
+    if( (nMask & MaskPitch) && (rRight.nMask & MaskPitch) )
+    {
+        if( ePitch != rRight.ePitch )
+            return (int)ePitch < (int)rRight.ePitch;
+    }
+
+    if( (nMask & MaskAddStyle) && (rRight.nMask & MaskAddStyle) )
+    {
+        nCmp =  rtl_str_compareIgnoreAsciiCase_WithLength( aAddStyle.pData->buffer,
+                                                           aAddStyle.pData->length,
+                                                           rRight.aAddStyle.pData->buffer,
+                                                           rRight.aAddStyle.pData->length );
+        if( nCmp != 0 )
+            return nCmp < 0;
+    }
+
+    if( (nMask & MaskEncoding) && (rRight.nMask & MaskEncoding) )
+    {
+        if( aEncoding != rRight.aEncoding )
+            return aEncoding < rRight.aEncoding;
+    }
+
+    return false;
+}
+
+bool PrintFontManager::XLFDEntry::operator==(const PrintFontManager::XLFDEntry& rRight) const
+{
+    sal_Int32 nCmp = 0;
+    if( (nMask & MaskFamily) && (rRight.nMask & MaskFamily) )
+    {
+        nCmp =  rtl_str_compareIgnoreAsciiCase_WithLength( aFamily.pData->buffer,
+                                                           aFamily.pData->length,
+                                                           rRight.aFamily.pData->buffer,
+                                                           rRight.aFamily.pData->length );
+        if( nCmp != 0 )
+            return false;
+    }
+
+    if( (nMask & MaskFoundry) && (rRight.nMask & MaskFoundry) )
+    {
+        nCmp =  rtl_str_compareIgnoreAsciiCase_WithLength( aFoundry.pData->buffer,
+                                                           aFoundry.pData->length,
+                                                           rRight.aFoundry.pData->buffer,
+                                                           rRight.aFoundry.pData->length );
+        if( nCmp != 0 )
+            return false;
+    }
+
+    if( (nMask & MaskItalic) && (rRight.nMask & MaskItalic) )
+    {
+        if( eItalic != rRight.eItalic )
+            return false;
+    }
+
+    if( (nMask & MaskWeight) && (rRight.nMask & MaskWeight) )
+    {
+        if( eWeight != rRight.eWeight )
+            return false;
+    }
+
+    if( (nMask & MaskWidth) && (rRight.nMask & MaskWidth) )
+    {
+        if( eWidth != rRight.eWidth )
+            return false;
+    }
+
+    if( (nMask & MaskPitch) && (rRight.nMask & MaskPitch) )
+    {
+        if( ePitch != rRight.ePitch )
+            return false;
+    }
+
+    if( (nMask & MaskAddStyle) && (rRight.nMask & MaskAddStyle) )
+    {
+        nCmp =  rtl_str_compareIgnoreAsciiCase_WithLength( aAddStyle.pData->buffer,
+                                                           aAddStyle.pData->length,
+                                                           rRight.aAddStyle.pData->buffer,
+                                                           rRight.aAddStyle.pData->length );
+        if( nCmp != 0 )
+            return false;
+    }
+
+    if( (nMask & MaskEncoding) && (rRight.nMask & MaskEncoding) )
+    {
+        if( aEncoding != rRight.aEncoding )
+            return false;
+    }
+
+    return true;
+}
 
 /*
  *  PrintFont implementations
@@ -1143,7 +1274,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bo
                 pFont->m_aMetricFile    = aAfmFile;
 
                 if( rXLFDs.size() )
-                    getFontAttributesFromXLFD( pFont, rXLFDs.front() );
+                    getFontAttributesFromXLFD( pFont, rXLFDs );
                 else if( ! pFont->readAfmMetrics( getAfmFile( pFont ), m_pAtoms ) )
                 {
                     delete pFont;
@@ -1177,8 +1308,8 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bo
         pFont->m_nCollectionEntry   = -1;
 
         if( rXLFDs.size() )
-            getFontAttributesFromXLFD( pFont, rXLFDs.front() );
-        // need to read the font anyway to get aliases
+            getFontAttributesFromXLFD( pFont, rXLFDs );
+        // need to read the font anyway to get aliases inside the font file
         if( ! analyzeTrueTypeFile( pFont ) )
         {
             delete pFont;
@@ -1196,24 +1327,14 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bo
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "%s contains %d fonts\n", aFullPath.getStr(), nLength );
 #endif
-            ::std::list<OString>::const_iterator xlfd_it = rXLFDs.begin();
             for( int i = 0; i < nLength; i++ )
             {
-                OString aXLFD;
-                if( xlfd_it != rXLFDs.end() )
-                {
-                    aXLFD = *xlfd_it;
-                    ++xlfd_it;
-                }
-#if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "   XLFD=\"%s\"\n", aXLFD.getStr() );
-#endif
                 TrueTypeFontFile* pFont     = new TrueTypeFontFile();
                 pFont->m_nDirectory         = nDirID;
                 pFont->m_aFontFile          = rFontFile;
                 pFont->m_nCollectionEntry   = i;
-                if( aXLFD.getLength() )
-                    getFontAttributesFromXLFD( pFont, aXLFD );
+                if( nLength == 1 )
+                    getFontAttributesFromXLFD( pFont, rXLFDs );
                 if( ! analyzeTrueTypeFile( pFont ) )
                 {
                     delete pFont;
@@ -1294,82 +1415,187 @@ fontID PrintFontManager::findFontFileID( int nDirID, const OString& rFontFile ) 
 
 // -------------------------------------------------------------------------
 
-void PrintFontManager::getFontAttributesFromXLFD( PrintFont* pFont, const ByteString& rXLFD ) const
+bool PrintFontManager::parseXLFD( const OString& rXLFD, XLFDEntry& rEntry )
 {
-    if( rXLFD.GetTokenCount( '-' ) != 15 )
-        return;
+    sal_Int32 nIndex = 0;
+    OString aFoundry        = WhitespaceToSpace( rXLFD.getToken( 1, '-', nIndex ) );
+    if( nIndex < 0 ) return false;
+    OString aFamilyXLFD     = WhitespaceToSpace( rXLFD.getToken( 0, '-', nIndex ) );
+    if( nIndex < 0 ) return false;
+    OString aWeight         = rXLFD.getToken( 0, '-', nIndex ).toAsciiLowerCase();
+    if( nIndex < 0 ) return false;
+    OString aSlant          = rXLFD.getToken( 0, '-', nIndex ).toAsciiLowerCase();
+    if( nIndex < 0 ) return false;
+    OString aWidth          = rXLFD.getToken( 0, '-', nIndex ).toAsciiLowerCase();
+    if( nIndex < 0 ) return false;
+    OString aAddStyle       = rXLFD.getToken( 0, '-', nIndex ).toAsciiLowerCase();
+    if( nIndex < 0 ) return false;
+    OString aPitch          = rXLFD.getToken( 4, '-', nIndex ).toAsciiLowerCase();
+    if( nIndex < 0 ) return false;
+    OString aRegEnc         = WhitespaceToSpace( rXLFD.getToken( 1, '-', nIndex ).toAsciiLowerCase() );
+    if( nIndex < 0 ) return false;
+    OString aEnc            = WhitespaceToSpace( rXLFD.getToken( 0, '-', nIndex ).toAsciiLowerCase() );
 
-    ByteString aFamilyXLFD( WhitespaceToSpace( rXLFD.GetToken( 2, '-' ) ) );
-    int nTokens = aFamilyXLFD.GetTokenCount( ' ' );
-    ByteString aFamilyName;
-    for( int nToken = 0; nToken < nTokens; nToken++ )
+    // capitalize words
+    sal_Int32 nFamIndex = 0;
+    OStringBuffer aFamilyName;
+    while( nFamIndex >= 0 )
     {
-        ByteString aToken( aFamilyXLFD.GetToken( nToken, ' ' ) );
-        ByteString aNewToken( aToken.GetChar( 0 ) );
-        aNewToken.ToUpperAscii();
-        aNewToken += aToken.Copy( 1 );
-        if( nToken > 0 )
-            aFamilyName.Append( ' ' );
-        aFamilyName += aNewToken;
+        OString aToken = aFamilyXLFD.getToken( 0, ' ', nFamIndex );
+        sal_Char aFirst = aToken.toChar();
+        if( aFirst >= 'a' && aFirst <= 'z' )
+            aFirst = aFirst - 'a' + 'A';
+        OStringBuffer aNewToken( aToken.getLength() );
+        aNewToken.append( aToken );
+        aNewToken.setCharAt( 0, aFirst );
+        if( aFamilyName.getLength() > 0 )
+            aFamilyName.append( ' ' );
+        aFamilyName.append( aNewToken.makeStringAndClear() );
     }
 
-    ByteString aAddStyle( rXLFD.GetToken( 6, '-' ) );
-    pFont->m_nFamilyName =
-        m_pAtoms->getAtom( ATOM_FAMILYNAME,
-                           String( aFamilyName, aAddStyle.Search( "utf8" ) != STRING_NOTFOUND ? RTL_TEXTENCODING_UTF8 : RTL_TEXTENCODING_ISO_8859_1 ),
-                           sal_True );
-    ByteString aToken;
-
+    rEntry.aFoundry     = aFoundry;
+    rEntry.aFamily      = aFamilyName.makeStringAndClear();
+    rEntry.aAddStyle    = aAddStyle;
     // evaluate weight
-    aToken = rXLFD.GetToken( 3,  '-' ).ToLowerAscii();
-    pFont->m_eWeight = parseWeight( aToken );
-
+    rEntry.eWeight = parseWeight( aWeight );
     // evaluate slant
-    aToken = rXLFD.GetToken( 4, '-' );
-    pFont->m_eItalic = parseItalic( aToken );
-
+    rEntry.eItalic = parseItalic( aSlant );
     // evaluate width
-    aToken = rXLFD.GetToken( 5,  '-' ).ToLowerAscii();
-    pFont->m_eWidth = parseWidth( aToken );
+    rEntry.eWidth = parseWidth( aWidth );
 
     // evaluate pitch
-    aToken = rXLFD.GetToken( 11,  '-' ).ToLowerAscii();
-    if( aToken.Equals( "c" ) || aToken.Equals( "m" ) )
-        pFont->m_ePitch = pitch::Fixed;
+    if( aPitch.toChar() == 'c' || aPitch.toChar() == 'm' )
+        rEntry.ePitch = pitch::Fixed;
     else
-        pFont->m_ePitch = pitch::Variable;
+        rEntry.ePitch = pitch::Variable;
 
+    OString aToken = aEnc.toAsciiLowerCase();
     // get encoding
-    aToken = rXLFD.GetToken( 6, '-' ).ToLowerAscii();
-    if( aToken.Search( "symbol" ) != STRING_NOTFOUND )
-        pFont->m_aEncoding = RTL_TEXTENCODING_SYMBOL;
+    if( aAddStyle.indexOf( "symbol" ) != -1 )
+        rEntry.aEncoding = RTL_TEXTENCODING_SYMBOL;
     else
     {
-        aToken =WhitespaceToSpace(  rXLFD.GetToken( 14 ) );
-        if( aToken.EqualsIgnoreCaseAscii( "symbol" ) )
-            pFont->m_aEncoding = RTL_TEXTENCODING_SYMBOL;
+        if( aToken.equals( "symbol" ) )
+            rEntry.aEncoding = RTL_TEXTENCODING_SYMBOL;
         else
         {
-            aToken = rXLFD.GetToken( 13, '-' );
-            aToken += '-';
-            aToken += WhitespaceToSpace( rXLFD.GetToken( 14, '-' ) );
-            pFont->m_aEncoding = rtl_getTextEncodingFromUnixCharset( aToken.GetBuffer() );
+            OStringBuffer aCharset( aRegEnc.getLength() + aEnc.getLength() + 1 );
+            aCharset.append( aRegEnc );
+            aCharset.append( '-' );
+            aCharset.append( aEnc );
+            rEntry.aEncoding = rtl_getTextEncodingFromUnixCharset( aCharset.getStr() );
         }
+    }
+
+    // set correct mask flags
+    rEntry.nMask = 0;
+    if( rEntry.aFoundry != "*" )        rEntry.nMask |= XLFDEntry::MaskFoundry;
+    if( rEntry.aFamily != "*" )         rEntry.nMask |= XLFDEntry::MaskFamily;
+    if( rEntry.aAddStyle != "*" )       rEntry.nMask |= XLFDEntry::MaskAddStyle;
+    if( aWeight != "*" )                rEntry.nMask |= XLFDEntry::MaskWeight;
+    if( aSlant != "*" )                 rEntry.nMask |= XLFDEntry::MaskItalic;
+    if( aWidth != "*" )                 rEntry.nMask |= XLFDEntry::MaskWidth;
+    if( aPitch != "*" )                 rEntry.nMask |= XLFDEntry::MaskPitch;
+    if( aRegEnc != "*" && aEnc != "*" ) rEntry.nMask |= XLFDEntry::MaskEncoding;
+
+    return true;
+}
+
+// -------------------------------------------------------------------------
+
+void PrintFontManager::parseXLFD_appendAliases( const std::list< OString >& rXLFDs, std::list< XLFDEntry >& rEntries ) const
+{
+    for( std::list< OString >::const_iterator it = rXLFDs.begin(); it != rXLFDs.end(); ++it )
+    {
+        XLFDEntry aEntry;
+        if( ! parseXLFD(*it, aEntry) )
+            continue;
+        rEntries.push_back( aEntry );
+        std::map< XLFDEntry, std::list< XLFDEntry > >::const_iterator alias_it =
+            m_aXLFD_Aliases.find( aEntry );
+        if( alias_it != m_aXLFD_Aliases.end() )
+        {
+            rEntries.insert( rEntries.end(), alias_it->second.begin(), alias_it->second.end() );
+        }
+    }
+}
+
+// -------------------------------------------------------------------------
+
+void PrintFontManager::getFontAttributesFromXLFD( PrintFont* pFont, const std::list< OString >& rXLFDs ) const
+{
+    bool bFamilyName = false;
+
+    std::list< XLFDEntry > aXLFDs;
+
+    parseXLFD_appendAliases( rXLFDs, aXLFDs );
+
+    for( std::list< XLFDEntry >::const_iterator it = aXLFDs.begin();
+         it != aXLFDs.end(); ++it )
+    {
+        // set family name or alias
+        int nFam =
+            m_pAtoms->getAtom( ATOM_FAMILYNAME,
+                               OStringToOUString( it->aFamily, it->aAddStyle.indexOf( "utf8" ) != -1 ? RTL_TEXTENCODING_UTF8 : RTL_TEXTENCODING_ISO_8859_1 ),
+                               sal_True );
+        if( ! bFamilyName )
+        {
+            bFamilyName = true;
+            pFont->m_nFamilyName = nFam;
+            switch( pFont->m_eType )
+            {
+                case fonttype::Type1:
+                    static_cast<Type1FontFile*>(pFont)->m_aXLFD = rXLFDs.front();
+                    break;
+                case fonttype::TrueType:
+                    static_cast<TrueTypeFontFile*>(pFont)->m_aXLFD = rXLFDs.front();
+                    break;
+            }
+        }
+        else
+        {
+            // make sure that aliases are unique
+            if( nFam != pFont->m_nFamilyName )
+            {
+                std::list< int >::const_iterator al_it;
+                for( al_it = pFont->m_aAliases.begin(); al_it != pFont->m_aAliases.end() && *al_it != nFam; ++al_it )
+                    ;
+                if( al_it == pFont->m_aAliases.end() )
+                    pFont->m_aAliases.push_back( nFam );
+
+            }
+            // for the rest of the attributes there can only be one value;
+            // we'll trust the first one
+            continue;
+        }
+
+        // fill in weight
+        pFont->m_eWeight    = it->eWeight;
+        // fill in slant
+        pFont->m_eItalic    = it->eItalic;
+        // fill in width
+        pFont->m_eWidth     = it->eWidth;
+        // fill in pitch
+        pFont->m_ePitch     = it->ePitch;
+        // fill in encoding
+        pFont->m_aEncoding  = it->aEncoding;
     }
 
     // handle iso8859-1 as ms1252 to fill the "gap" starting at 0x80
     if( pFont->m_aEncoding == RTL_TEXTENCODING_ISO_8859_1 )
         pFont->m_aEncoding = RTL_TEXTENCODING_MS_1252;
-
-    switch( pFont->m_eType )
+    if( rXLFDs.begin() != rXLFDs.end() )
     {
-        case fonttype::Type1:
-            static_cast<Type1FontFile*>(pFont)->m_aXLFD = rXLFD;
-            break;
-        case fonttype::TrueType:
-            static_cast<TrueTypeFontFile*>(pFont)->m_aXLFD = rXLFD;
-            break;
-        default: break;
+        switch( pFont->m_eType )
+        {
+            case fonttype::Type1:
+                static_cast<Type1FontFile*>(pFont)->m_aXLFD = rXLFDs.front();
+                break;
+            case fonttype::TrueType:
+                static_cast<TrueTypeFontFile*>(pFont)->m_aXLFD = rXLFDs.front();
+                break;
+            default: break;
+        }
     }
 }
 
@@ -1596,14 +1822,19 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
                  pFont->m_nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OStringToOUString( pTTFontFile->m_aFontFile.copy( 0, dotIndex ), aEncoding ), sal_True );
             }
         }
-        pFont->m_aAliases.clear();
         for( ::std::list< OUString >::iterator it = aNames.begin(); it != aNames.end(); ++it )
         {
             if( it->getLength() )
             {
                 int nAlias = m_pAtoms->getAtom( ATOM_FAMILYNAME, *it, sal_True );
                 if( nAlias != pFont->m_nFamilyName )
-                    pFont->m_aAliases.push_back( nAlias );
+                {
+                    std::list< int >::const_iterator al_it;
+                    for( al_it = pFont->m_aAliases.begin(); al_it != pFont->m_aAliases.end() && *al_it != nAlias; ++al_it )
+                        ;
+                    if( al_it == pFont->m_aAliases.end() )
+                        pFont->m_aAliases.push_back( nAlias );
+                }
             }
         }
 
@@ -1752,6 +1983,45 @@ void PrintFontManager::getServerDirectories()
 #endif
 }
 
+void PrintFontManager::initFontsAlias()
+{
+    m_aXLFD_Aliases.clear();
+    rtl_TextEncoding aEnc = osl_getThreadTextEncoding();
+    for( std::list< OString >::const_iterator dir_it = m_aFontDirectories.begin();
+         dir_it != m_aFontDirectories.end(); ++dir_it )
+    {
+        OStringBuffer aDirName(512);
+        aDirName.append( *dir_it );
+        aDirName.append( "/fonts.alias" );
+        SvFileStream aStream( OStringToOUString( aDirName.makeStringAndClear(), aEnc ), STREAM_READ );
+        if( ! aStream.IsOpen() )
+            continue;
+
+        do
+        {
+            ByteString aLine;
+            aStream.ReadLine( aLine );
+
+            // get the alias and the pattern it gets translated to
+            ByteString aAlias   = GetCommandLineToken( 0, aLine );
+            ByteString aMap     = GetCommandLineToken( 1, aLine );
+
+            // remove eventual quotes
+            aAlias.EraseLeadingChars( '"' );
+            aAlias.EraseTrailingChars( '"' );
+            aMap.EraseLeadingChars( '"' );
+            aMap.EraseTrailingChars( '"' );
+
+            XLFDEntry aAliasEntry, aMapEntry;
+            parseXLFD( aAlias, aAliasEntry );
+            parseXLFD( aMap, aMapEntry );
+
+            if( aAliasEntry.nMask && aMapEntry.nMask )
+                m_aXLFD_Aliases[ aMapEntry ].push_back( aAliasEntry );
+        } while( ! aStream.IsEof() );
+    }
+}
+
 void PrintFontManager::initialize( void* pInitDisplay )
 {
     long aDirEntBuffer[ (sizeof(struct dirent)+_PC_NAME_MAX)+1 ];
@@ -1857,8 +2127,10 @@ void PrintFontManager::initialize( void* pInitDisplay )
         }
 
         // insert some standard directories
+        m_aFontDirectories.push_back( "/usr/openwin/lib/X11/fonts/TrueType" );
         m_aFontDirectories.push_back( "/usr/openwin/lib/X11/fonts/Type1" );
         m_aFontDirectories.push_back( "/usr/openwin/lib/X11/fonts/Type1/sun" );
+        m_aFontDirectories.push_back( "/usr/X11R6/lib/X11/fonts/truetype" );
         m_aFontDirectories.push_back( "/usr/X11R6/lib/X11/fonts/Type1" );
 
 #ifdef SOLARIS
@@ -1895,11 +2167,21 @@ void PrintFontManager::initialize( void* pInitDisplay )
 #endif /* SOLARIS */
     } // ! bFontconfigSuccess
 
+    // fill XLFD aliases from fonts.alias files
+    initFontsAlias();
+
     // search for font files in each path
-    ::std::list< OString >::iterator dir_it;
+    std::list< OString >::iterator dir_it;
+    // protect against duplicate paths
+    std::hash_map< OString, int, OStringHash > visited_dirs;
     for( dir_it = m_aFontDirectories.begin(); dir_it != m_aFontDirectories.end(); ++dir_it )
     {
         OString aPath( *dir_it );
+        // see if we were here already
+        if( visited_dirs.find( aPath ) != visited_dirs.end() )
+            continue;
+        visited_dirs[ aPath ] = 1;
+
         // there may be ":unscaled" directories (see XFree86)
         // it should be safe to ignore them since they should not
         // contain any of our recognizeable fonts
@@ -2767,9 +3049,6 @@ bool PrintFontManager::getMetrics( fontID nFontID, sal_Unicode minCharacter, sal
 static bool createPath( const ByteString& rPath )
 {
     bool bSuccess = false;
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "createPath( %s )\n", rPath.GetBuffer() );
-#endif
 
     if( access( rPath.GetBuffer(), F_OK ) )
     {
@@ -2780,13 +3059,7 @@ static bool createPath( const ByteString& rPath )
 
         if( nPos != STRING_NOTFOUND && nPos != 0 && createPath( rPath.Copy( 0, nPos+1 ) ) )
         {
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "mkdir ", rPath.GetBuffer() );
-#endif
             bSuccess = mkdir( rPath.GetBuffer(), 0777 ) ? false : true;
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "%s\n", bSuccess ? "succeeded" : "failed" );
-#endif
         }
     }
     else
@@ -3172,7 +3445,9 @@ bool PrintFontManager::changeFontProperties( fontID nFontID, const ::rtl::OUStri
             aFontsDir.WriteLine( aLines.front() );
             aLines.pop_front();
         }
-        getFontAttributesFromXLFD( pFont, aXLFD );
+        std::list< OString > aDummyList;
+        aDummyList.push_back( aXLFD );
+        getFontAttributesFromXLFD( pFont, aDummyList );
         m_pFontCache->updateFontCacheEntry( pFont, true );
     }
     return bSuccess;
