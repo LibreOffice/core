@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActiveMSPList.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:27:33 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,17 +88,11 @@ namespace func_provider
 //=============================================================================
 
 
-struct MspInst
-{
-    css::uno::Reference< dcsss::provider::XScriptProvider > provider;
-    css::uno::Reference< dcsss::browse::XBrowseNode > node;
-};
-
 typedef ::std::map < css::uno::Reference< css::frame::XModel >,
-                     MspInst > Model_map;
+                     css::uno::Reference< dcsss::provider::XScriptProvider > > Model_map;
 
 typedef ::std::hash_map< ::rtl::OUString,
-    MspInst,
+    css::uno::Reference< dcsss::provider::XScriptProvider >,
     ::rtl::OUStringHash,
             ::std::equal_to< ::rtl::OUString > > Msp_hash;
 
@@ -108,38 +102,30 @@ class ActiveMSPList : public ::cppu::WeakImplHelper1< css::lang::XEventListener 
 public:
     static ActiveMSPList& instance( const css::uno::Reference<
         css::uno::XComponentContext >& xContext );
-    ~ActiveMSPList();
-    void addActiveMSP( const css::uno::Reference< css::frame::XModel >& xModel,
-                       const css::uno::Reference< dcsss::provider::XScriptProvider >& msp );
 
+    ActiveMSPList(  const css::uno::Reference<
+        css::uno::XComponentContext > & xContext  );
+    ~ActiveMSPList();
+    css::uno::Reference< dcsss::provider::XScriptProvider >
+        createMSP( const ::rtl::OUString& context )
+            throw ( css::uno::RuntimeException );
+    css::uno::Reference< dcsss::provider::XScriptProvider >
+        createMSP( const css::uno::Any& context )
+            throw ( css::uno::RuntimeException );
+    css::uno::Sequence< css::uno::Reference< dcsss::provider::XScriptProvider > >
+        getActiveProviders();
     //XEventListener
     //======================================================================
 
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
         throw ( css::uno::RuntimeException );
 
-    // Factory method for create MasterScriptProviders
-    css::uno::Reference< dcsss::provider::XScriptProvider >
-        createMSP( const css::uno::Any& context )
-            throw ( css::uno::RuntimeException );
 private:
-    ActiveMSPList(  const css::uno::Reference<
-        css::uno::XComponentContext > & xContext  );
-    ::rtl::OUString
-        getDocNameOrURLFromModel( const css::uno::Reference< css::frame::XModel >& xModel  );
-
+    void addActiveMSP( const css::uno::Reference< css::frame::XModel >& xModel,
+                       const css::uno::Reference< dcsss::provider::XScriptProvider >& msp );
     css::uno::Reference< dcsss::provider::XScriptProvider >
-        createMSP( const ::rtl::OUString& context )
+        createNewMSP( const ::rtl::OUString& )
             throw ( css::uno::RuntimeException );
-
-    css::uno::Reference< dcsss::provider::XScriptProvider >
-        createMSP( const css::uno::Reference< css::frame::XModel >& xModel )
-            throw ( css::uno::RuntimeException );
-
-    css::uno::Reference< dcsss::provider::XScriptProvider >
-        createNewMSP(  const css::uno::Any& )
-            throw ( css::uno::RuntimeException );
-
     void createNonDocMSPs();
     Msp_hash m_hMsps;
     Model_map m_mModels;
