@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-31 21:42:32 $
+ *  last change: $Author: kz $ $Date: 2001-11-02 21:10:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -10955,7 +10955,7 @@ String RID_ERR_COLOREXPECTED
     Text[ russian ] = "Ξζθδΰεςρÿ φβες";
     Text[ polish ] = "Oczekiwany kolor";
     Text[ japanese ] = "θ‰²γεΏ…θ¦γ§γ™";
-    Text[ chinese_traditional ] = "ζεΎ…ι΅”θ‰²";
+    Text[ chinese_traditional ] = "ζεΎ…ι΅θ‰²";
     Text[ arabic ] = "γΨαζΘ αζδ";
     Text[ greek ] = "Απαιτείται χρώμα";
     Text[ korean ] = "μƒ‰μƒ,  ν•„μ”ν•";
@@ -11329,6 +11329,7 @@ String RID_MATH_TOOLBOX
     Text[ catalan ] = "Barra de herramientas";
     Text[ finnish ] = "Pδδtyφkalurivi";
 };
+
 
 
 
