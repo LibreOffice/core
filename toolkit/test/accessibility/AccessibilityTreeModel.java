@@ -7,6 +7,7 @@ import javax.swing.event.TreeModelEvent;
 import java.util.Vector;
 import java.util.HashMap;
 import java.util.Enumeration;
+import java.util.LinkedList;
 
 import drafts.com.sun.star.accessibility.*;
 
@@ -31,6 +32,11 @@ public class AccessibilityTreeModel
         aChildren = new HashMap();
         aNodes = new HashMap();
         aNodes.put( normalize(maRoot), maRoot );
+
+        // syncronous or asyncronous event delivery? (i.e. same thread
+        // or in s seperate event delivery thread)
+        // xListener = this;                // syncronous event delivery
+        xListener = new QueuedListener();   // asyncronous event delivery
     }
 
 
@@ -266,40 +272,40 @@ public class AccessibilityTreeModel
         aListeners.remove(l);
     }
 
-    protected void fireTreeNodesChanged(final TreeModelEvent e)
+    protected void fireTreeNodesChanged(TreeModelEvent e)
     {
         System.out.println("treeNodesChanges: " + e);
-        new Thread( new EventRunner() {
-                protected void fire( TreeModelListener l )
-                { l.treeNodesChanged(e); }
-            } ).start();
+        for(int i = 0; i < aListeners.size(); i++)
+        {
+            ((TreeModelListener)aListeners.get(i)).treeNodesChanged(e);
+        }
     }
 
     protected void fireTreeNodesInserted(final TreeModelEvent e)
     {
         System.out.println("treeNodesInserted: " + e);
-        new Thread( new EventRunner() {
-                protected void fire( TreeModelListener l )
-                { l.treeNodesInserted(e); }
-            } ).start();
+        for(int i = 0; i < aListeners.size(); i++)
+        {
+            ((TreeModelListener)aListeners.get(i)).treeNodesInserted(e);
+        }
     }
 
     protected void fireTreeNodesRemoved(final TreeModelEvent e)
     {
         System.out.println("treeNodesRemoved: " + e);
-        new Thread( new EventRunner() {
-                protected void fire( TreeModelListener l )
-                { l.treeNodesRemoved(e); }
-            } ).start();
+        for(int i = 0; i < aListeners.size(); i++)
+        {
+            ((TreeModelListener)aListeners.get(i)).treeNodesRemoved(e);
+        }
     }
 
     protected void fireTreeStructureChanged(final TreeModelEvent e)
     {
         System.out.println("treeStructureChanged: " + e);
-        new Thread( new EventRunner() {
-                protected void fire( TreeModelListener l )
-                { l.treeStructureChanged(e); }
-            } ).start();
+        for(int i = 0; i < aListeners.size(); i++)
+        {
+            ((TreeModelListener)aListeners.get(i)).treeStructureChanged(e);
+        }
     }
 
     protected TreeModelEvent createEvent( Object aNode )
@@ -358,6 +364,13 @@ public class AccessibilityTreeModel
         protected void fire( TreeModelListener l) { }
     }
 
+    /** The listener to be registered with the accessible objects.
+     * Could be set to 'this' for same-thread event delivery, or to an
+     * instance of QueuedListener for multi-threaded delivery.  May
+     * not be changed, since this would trip the
+     * register/removeAccListener logic. */
+    private final XAccessibleEventListener xListener;
+
 
     protected XAccessibleEventBroadcaster getBroadcaster( Object aObject )
     {
@@ -374,7 +387,7 @@ public class AccessibilityTreeModel
         XAccessibleEventBroadcaster xBroadcaster = getBroadcaster( aObject );
         if (xBroadcaster != null)
         {
-            xBroadcaster.addEventListener( this );
+            xBroadcaster.addEventListener( xListener );
         }
     }
 
@@ -383,7 +396,7 @@ public class AccessibilityTreeModel
         XAccessibleEventBroadcaster xBroadcaster = getBroadcaster( aObject );
         if (xBroadcaster != null)
         {
-            xBroadcaster.removeEventListener( this );
+            xBroadcaster.removeEventListener( xListener );
         }
     }
 
@@ -668,6 +681,118 @@ public class AccessibilityTreeModel
         if( (maCanvas != null) && (xContext != null) )
             maCanvas.updateContext( xContext );
     }
+
+
+
+
+
+    /** QueuedListener implements an AccessibleEventListener which
+     * delegates all events to another such listener, but does so in a
+     * seperate thread */
+    class QueuedListener
+        implements XAccessibleEventListener, Runnable
+    {
+        public QueuedListener()
+        {
+            // initiate thread
+            new Thread(this).start();
+        }
+
+        /** The queue of event objects, LinkedList<Runnable>
+         * The queue object will also serve as lock for the
+         * consumer/producer type syncronization.
+         */
+        protected LinkedList aQueue = new LinkedList();
+
+        /// This thread's main method: deliver all events
+        public void run()
+        {
+            // in an infinite loop, check for events to deliver, then
+            // wait on lock (which will be notified when new events arrive)
+            while( true )
+            {
+                Runnable aEvent = null;
+                do
+                {
+                    synchronized( aQueue )
+                    {
+                        aEvent = (aQueue.size() > 0) ?
+                            (Runnable)aQueue.removeFirst() : null;
+                    }
+                    if( aEvent != null )
+                    {
+                        System.out.println("Deliver event: " +
+                                           aEvent.hashCode());
+                        try
+                        {
+                            aEvent.run();
+                        }
+                        catch( Throwable e )
+                        {
+                            System.out.println(
+                                "Exception during event delivery: " + e );
+                        }
+                    }
+                }
+                while( aEvent != null );
+
+                try
+                {
+                    synchronized( aQueue )
+                    {
+                        aQueue.wait();
+                    }
+                }
+                catch( Exception e )
+                {
+                    // can't wait? odd!
+                    System.err.println("Can't wait!");
+                }
+            }
+        }
+
+
+        public void disposing( final EventObject aEvent)
+        {
+            System.out.println( "Queue disposing: " + aEvent.hashCode() );
+            synchronized( aQueue )
+            {
+                aQueue.addLast( new Runnable()
+                    {
+                        public void run()
+                        {
+                            AccessibilityTreeModel.this.disposing( aEvent );
+                        }
+                        public int hashCode()
+                        {
+                            return aEvent.hashCode();
+                        }
+                    } );
+                aQueue.notify();
+            }
+        }
+
+        public void notifyEvent( final AccessibleEventObject aEvent )
+        {
+            System.out.println( "Queue notifyEvent: " + aEvent.hashCode() );
+            synchronized( aQueue )
+            {
+                aQueue.addLast( new Runnable()
+                    {
+                        public void run()
+                        {
+                            AccessibilityTreeModel.this.notifyEvent( aEvent );
+                        }
+                        public int hashCode()
+                        {
+                            return aEvent.hashCode();
+                        }
+                    } );
+                aQueue.notify();
+            }
+        }
+    }
+
 }
 
 
