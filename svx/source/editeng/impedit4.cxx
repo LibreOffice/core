@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mt $ $Date: 2002-01-16 10:38:32 $
+ *  last change: $Author: mt $ $Date: 2002-01-17 13:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2248,7 +2248,8 @@ BOOL ImpEditEngine::ImplHasText() const
 long ImpEditEngine::LogicToTwips( long n )
 {
     Size aSz( n, 0 );
-    aSz = pRefDev->LogicToLogic( aSz, NULL, &MapMode( MAP_TWIP ) );
+    MapMode aTwipsMode( MAP_TWIP );
+    aSz = pRefDev->LogicToLogic( aSz, NULL, &aTwipsMode );
     return aSz.Width();
 }
 
