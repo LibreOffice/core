@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-07-09 09:03:30 $
+ *  last change: $Author: mtg $ $Date: 2001-07-20 10:01:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,12 +357,6 @@ public:
     // erfrage ob die Absatz-/Zeichen-/Rahmen-/Seiten - Vorlage benutzt wird
     BOOL IsUsed( const SwModify& ) const;
     BOOL IsUsed( const SwNumRule& ) const;
-        // ist der Name ein Pool-Vorlagen-Name, returne seine ID,
-        // sonst USHRT_MAX
-    USHORT GetPoolId( const String& rName, SwGetPoolIdFromName eFlag ) const;
-
-    const SvStringsDtor& GetChrFmtNmArray() const;
-    const SvStringsDtor& GetHTMLChrFmtNmArray() const;
 
         // returne das geforderte automatische Format
     SwFrmFmt* GetFrmFmtFromPool( USHORT nId )
