@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:57:33 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 10:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,6 @@
 #include "txtcfg.hxx"
 #include "notxtfrm.hxx"
 #include "flyfrms.hxx"
-#include "drawfont.hxx" // SwDrawTextInfo
 #include "fmtcnct.hxx"  // SwFmtChain
 
 #ifndef PRODUCT
@@ -651,7 +650,18 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
                 nFrmLeft += GetTxtFrm()->Prt().Left();
             if( aInter.Left() < nFrmLeft )
                 aInter.Left( nFrmLeft );
-            aInter.Width( aInter.Width() + nLeftMar - nFrmLeft );
+
+            long nAddMar = 0;
+            if ( pFrm->IsRightToLeft() )
+            {
+                nAddMar = pFrm->Frm().Right() - Right();
+                if ( nAddMar < 0 )
+                    nAddMar = 0;
+            }
+            else
+                nAddMar = nLeftMar - nFrmLeft;
+
+            aInter.Width( aInter.Width() + nAddMar );
             // Bei negativem Erstzeileneinzug setzen wir das Flag,
             // um anzuzeigen, dass der Einzug/Rand verschoben wurde
             // Dies muss beim DefaultTab an der Nullposition beruecksichtigt
