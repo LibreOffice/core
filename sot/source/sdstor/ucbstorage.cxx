@@ -1368,7 +1368,7 @@ BOOL UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
         BOOL bOpenUCBStorage = pUCBDest && pUCBCopy;
         BaseStorage* pOtherStorage = bOpenUCBStorage ?
                 pDest->OpenUCBStorage( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pImp->m_bDirect ) :
-                pDest->OpenStorage( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pImp->m_bDirect );
+                pDest->OpenOLEStorage( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pImp->m_bDirect );
 
         pOtherStorage->SetClassId( pStorage->GetClassId() );
         pStorage->CopyTo( pOtherStorage );
@@ -1424,7 +1424,6 @@ BOOL UCBStorage::CopyTo( BaseStorage* pDestStg ) const
     if( !bRet )
         SetError( pDestStg->GetError() );
     return BOOL( Good() && pDestStg->Good() );
-
 }
 
 BOOL UCBStorage::CopyTo( const String& rElemName, BaseStorage* pDest, const String& rNew )
