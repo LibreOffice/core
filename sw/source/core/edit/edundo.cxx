@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edundo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-09 07:21:25 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-11-22 15:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,9 @@ BOOL SwEditShell::Undo( USHORT nUndoId, USHORT nCnt )
 {
     SET_CURR_SHELL( this );
 
+    // #105332# current undo state was not saved
     BOOL bRet = FALSE;
+    BOOL bSaveDoesUndo = GetDoc()->DoesUndo();
 
     GetDoc()->DoUndo( FALSE );
     StartAllAction();
@@ -192,7 +194,9 @@ BOOL SwEditShell::Undo( USHORT nUndoId, USHORT nCnt )
         SaveTblBoxCntnt();
     }
     EndAllAction();
-    GetDoc()->DoUndo( TRUE );
+
+    // #105332# undo state was not restored but set to FALSE everytime
+    GetDoc()->DoUndo( bSaveDoesUndo );
     return bRet;
 }
 
@@ -202,6 +206,10 @@ USHORT SwEditShell::Redo( USHORT nCnt )
     SET_CURR_SHELL( this );
 
     BOOL bRet = FALSE;
+
+    // #105332# undo state was not saved
+    BOOL bSaveDoesUndo = GetDoc()->DoesUndo();
+
     GetDoc()->DoUndo( FALSE );
     StartAllAction();
 
@@ -282,7 +290,9 @@ USHORT SwEditShell::Redo( USHORT nCnt )
     }
 
     EndAllAction();
-    GetDoc()->DoUndo( TRUE );
+
+    // #105332# undo state was not restored but set FALSE everytime
+    GetDoc()->DoUndo( bSaveDoesUndo );
     return bRet;
 }
 
