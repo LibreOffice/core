@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: aw $ $Date: 2001-10-15 16:28:37 $
+ *  last change: $Author: kz $ $Date: 2001-10-22 04:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5803,6 +5803,26 @@ ModalDialog RID_UNDO_DELETE_WARNING
         Size = MAP_APPFONT( 50, 14 );
         DefButton = TRUE;
     };
+    Text[ english_us ] = "Hint";
+    Text[ portuguese ] = "Hint";
+    Text[ russian ] = "Hint";
+    Text[ greek ] = "Hint";
+    Text[ dutch ] = "Hint";
+    Text[ french ] = "Hint";
+    Text[ spanish ] = "Hint";
+    Text[ finnish ] = "Hint";
+    Text[ italian ] = "Hint";
+    Text[ danish ] = "Hint";
+    Text[ swedish ] = "Hänvisning";
+    Text[ polish ] = "Hint";
+    Text[ portuguese_brazilian ] = "Hint";
+    Text[ japanese ] = "Hint";
+    Text[ korean ] = "Hint";
+    Text[ chinese_simplified ] = "Hint";
+    Text[ chinese_traditional ] = "æç¤º";
+    Text[ turkish ] = "Hint";
+    Text[ arabic ] = "Hint";
+    Text[ catalan ] = "Hint";
 };
 
 String STR_DEL_SHAPE
@@ -6796,7 +6816,7 @@ String STR_PRINT_NOTES
     Text [ portuguese ] = "(Anotações)" ;
     Text [ portuguese_brazilian ] = "(Notizen)" ;
     Text[ chinese_simplified ] = "(å¤‡æ³¨)";
-    Text[ russian ] = "(Ïğèìå÷àíèå)";
+    Text[ russian ] = " (Ïğèìå÷àíèÿ)";
     Text[ polish ] = "(Notatki)";
     Text[ japanese ] = "(ï¾‰ï½°ï¾„)";
     Text[ greek ] = "(Óçìåéşóåéò)";
@@ -13655,6 +13675,7 @@ String STR_UNDO_GRAFTRANSPARENCY
     Text[ catalan ] = "Transparencia";
     Text[ finnish ] = "Läpikuultavuus";
 };
+
 
 
 
