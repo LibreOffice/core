@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-27 09:28:19 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:37:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@ sal_Bool connectivity::isExceptionOccured(JNIEnv *pEnv,sal_Bool _bClear)
     {
         if ( _bClear )
             pEnv->ExceptionClear();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         if(pEnv->IsInstanceOf(pThrowable,java_sql_SQLException_BASE::getMyClass()))
         {
 
