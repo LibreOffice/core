@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:10:37 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,9 @@ struct XclRootData
 
     XclBiff             meBiff;         /// Current BIFF version.
     SfxMedium&          mrMedium;       /// The medium to import from.
+    SotStorageRef       mxRootStrg;     /// The root OLE storage of imported/exported file.
+    SvStream&           mrBookStrm;     /// The workbook stream of imported/exported file.
     ScDocument&         mrDoc;          /// The source or destination document.
-    SotStorageRef       mrStorage;      /// The root OLE storage of imported/exported file.
     String              maDocUrl;       /// Document URL of imported/exported file.
     String              maBasePath;     /// Base path of imported/exported file (path of maDocUrl).
     String              maPassw;        /// Entered password for stream encryption/decryption.
@@ -128,12 +129,9 @@ struct XclRootData
     sal_Int32           mnObjCnt;       /// Object counter for mem leak tests.
 #endif
 
-    explicit            XclRootData(
-                            XclBiff eBiff,
-                            SfxMedium& rMedium,
-                            ScDocument& rDocument,
-                            CharSet eCharSet,
-                            bool bExport );
+    explicit            XclRootData( XclBiff eBiff, SfxMedium& rMedium,
+                            SotStorageRef xRootStrg, SvStream& rBookStrm,
+                            ScDocument& rDoc, CharSet eCharSet, bool bExport );
     virtual             ~XclRootData();
 };
 
@@ -153,7 +151,9 @@ struct XclFontData;
 class XclRoot
 {
 public:
+    explicit            XclRoot( XclRootData& rRootData );
                         XclRoot( const XclRoot& rRoot );
+
     virtual             ~XclRoot();
 
     XclRoot&            operator=( const XclRoot& rRoot );
@@ -194,15 +194,18 @@ public:
 
     /** Returns the OLE2 root storage of the imported/exported file.
         @return  Pointer to root storage or 0, if the file is a simple stream. */
-    SotStorage*          GetRootStorage() const;
-    /** Tries to open a storage as child of the specified storage for writing. */
-    SotStorageRef        OpenStorage( SotStorage* pStrg, const String& rStrgName ) const;
-    /** Tries to open a storage as child of the root storage for writing. */
-    SotStorageRef        OpenStorage( const String& rStrgName ) const;
-    /** Tries to open a new stream in the specified storage for writing. */
-    SotStorageStreamRef  OpenStream( SotStorage* pStrg, const String& rStrmName ) const;
-    /** Tries to open a new stream in the root storage for writing. */
-    SotStorageStreamRef  OpenStream( const String& rStrmName ) const;
+    inline SotStorageRef GetRootStorage() const { return mrData.mxRootStrg; }
+    /** Returns the main import/export stream in the Excel file. */
+    inline SvStream&    GetBookStream() const { return mrData.mrBookStrm; }
+
+    /** Tries to open a storage as child of the specified storage for reading or writing. */
+    SotStorageRef       OpenStorage( SotStorageRef xStrg, const String& rStrgName ) const;
+    /** Tries to open a storage as child of the root storage for reading or writing. */
+    SotStorageRef       OpenStorage( const String& rStrgName ) const;
+    /** Tries to open a new stream in the specified storage for reading or writing. */
+    SotStorageStreamRef OpenStream( SotStorageRef xStrg, const String& rStrmName ) const;
+    /** Tries to open a new stream in the root storage for reading or writing. */
+    SotStorageStreamRef OpenStream( const String& rStrmName ) const;
 
     /** Returns the destination document (import) or source document (export). */
     inline ScDocument&  GetDoc() const { return mrData.mrDoc; }
@@ -242,9 +245,6 @@ public:
     inline const ScAddress& GetXclMaxPos() const { return mrData.maXclMaxPos; }
     /** Returns the highest possible cell address valid in Calc and Excel (using current BIFF version). */
     inline const ScAddress& GetMaxPos() const { return mrData.maMaxPos; }
-
-protected:
-    explicit            XclRoot( XclRootData& rRootData );
 
     /** Sets the document language. */
     inline void         SetDocLanguage( LanguageType eLang ) { mrData.meDocLang = eLang; }
