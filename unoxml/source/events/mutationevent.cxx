@@ -1,7 +1,7 @@
 #include "mutationevent.hxx"
 
 namespace DOM { namespace events
-{    
+{
     CMutationEvent::~CMutationEvent()
     {
     }
@@ -31,10 +31,10 @@ namespace DOM { namespace events
         return m_attrChangeType;
     }
 
-    void SAL_CALL CMutationEvent::initMutationEvent(const OUString& typeArg, 
-        sal_Bool canBubbleArg, sal_Bool cancelableArg, 
-        const Reference< XNode >& relatedNodeArg, const OUString& prevValueArg, 
-        const OUString& newValueArg, const OUString& attrNameArg, 
+    void SAL_CALL CMutationEvent::initMutationEvent(const OUString& typeArg,
+        sal_Bool canBubbleArg, sal_Bool cancelableArg,
+        const Reference< XNode >& relatedNodeArg, const OUString& prevValueArg,
+        const OUString& newValueArg, const OUString& attrNameArg,
         AttrChangeType attrChangeArg) throw (RuntimeException)
     {
         initEvent(typeArg, canBubbleArg, cancelableArg);
@@ -90,7 +90,7 @@ namespace DOM { namespace events
         CEvent::preventDefault();
     }
 
-    void SAL_CALL CMutationEvent::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg, 
+    void SAL_CALL CMutationEvent::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg,
         sal_Bool cancelableArg) throw (RuntimeException)
     {
         // base initializer
