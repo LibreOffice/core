@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 10:44:32 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 13:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _EXTENSIONS_PROPCTRLR_PROPCONTROLLER_HXX_
 #define _EXTENSIONS_PROPCTRLR_PROPCONTROLLER_HXX_
 
+#ifndef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
+#include <com/sun/star/awt/XFocusListener.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
 #endif
@@ -151,7 +154,7 @@ namespace pcr
     typedef ::cppu::WeakImplHelper4 <   ::com::sun::star::frame::XController
                                     ,   ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::lang::XInitialization
-                                    ,   ::com::sun::star::lang::XEventListener
+                                    ,   ::com::sun::star::awt::XFocusListener
                                     >   OPropertyBrowserController_Base;
     typedef ::comphelper::OPropertyContainer    OPropertyBrowserController_PropertyBase1;
 
@@ -219,10 +222,10 @@ namespace pcr
 
     private:
 
-        sal_Bool    m_bFontInserted     : 1;
-        sal_Bool    m_bHasListSource    : 1;
-        sal_Bool    m_bHasCursorSource  : 1;
-        sal_Bool    m_bInitialized      : 1;
+        sal_Bool    m_bHasListSource            : 1;
+        sal_Bool    m_bHasCursorSource          : 1;
+        sal_Bool    m_bInitialized              : 1;
+        sal_Bool    m_bContainerFocusListening  : 1;
 
     protected:
         // good callback candidates:
@@ -263,6 +266,10 @@ namespace pcr
         // XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
+
+        // XFocusListener
+        virtual void SAL_CALL focusGained( const ::com::sun::star::awt::FocusEvent& _rSource ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL focusLost( const ::com::sun::star::awt::FocusEvent& _rSource ) throw (::com::sun::star::uno::RuntimeException);
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
@@ -309,6 +316,9 @@ namespace pcr
         /// stop listening for property changes
         void stopPropertyListening();
         sal_Bool    isListening() const { return NULL != m_pChangeMultiplexer; }
+
+        void startContainerWindowListening();
+        void stopContainerWindowListening();
 
         // stop the inspection
         void stopIntrospection();
@@ -373,6 +383,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/05/29 10:44:32  fs
+ *  #87461# +OnImageURLClicked
+ *
  *  Revision 1.6  2001/04/12 06:28:14  fs
  *  #84694# +recalcConnection
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-22 10:04:09 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 13:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,7 @@ namespace pcr
             ,m_nEventPageId(0)
             ,m_sStandard(ModuleRes(RID_STR_STANDARD))
             ,m_bInitialized(sal_False)
+            ,m_bContainerFocusListening(sal_False)
     {
         DBG_CTOR(OPropertyBrowserController,NULL);
 
@@ -207,10 +208,51 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
+    void OPropertyBrowserController::startContainerWindowListening()
+    {
+        if (m_bContainerFocusListening)
+            return;
+
+        if (m_xFrame.is())
+        {
+            Reference< XWindow > xContainerWindow = m_xFrame->getContainerWindow();
+            if (xContainerWindow.is())
+            {
+                xContainerWindow->addFocusListener(this);
+                m_bContainerFocusListening = sal_True;
+            }
+        }
+
+        DBG_ASSERT(m_bContainerFocusListening, "OPropertyBrowserController::stopContainerWindowListening: unable to start listening (inconsistence)!");
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::stopContainerWindowListening()
+    {
+        if (!m_bContainerFocusListening)
+            return;
+
+        if (m_xFrame.is())
+        {
+            Reference< XWindow > xContainerWindow = m_xFrame->getContainerWindow();
+            if (xContainerWindow.is())
+            {
+                xContainerWindow->removeFocusListener(this);
+                m_bContainerFocusListening = sal_False;
+            }
+        }
+
+        DBG_ASSERT(!m_bContainerFocusListening, "OPropertyBrowserController::stopContainerWindowListening: unable to stop listening (inconsistence)!");
+    }
+
+    //------------------------------------------------------------------------
     void SAL_CALL OPropertyBrowserController::attachFrame( const Reference< XFrame >& _rxFrame ) throw(RuntimeException)
     {
         if (_rxFrame.is() && haveView())
             throw RuntimeException(::rtl::OUString::createFromAscii("Unable to attach to a second frame."),*this);
+
+        // revoke as focus listener from the old container window
+        stopContainerWindowListening();
 
         m_xFrame = _rxFrame;
         if (!m_xFrame.is())
@@ -227,6 +269,8 @@ namespace pcr
 
         if (Construct(pParentWin))
             m_xFrame->setComponent(VCLUnoHelper::GetInterface(m_pView), this);
+
+        startContainerWindowListening();
     }
 
     //------------------------------------------------------------------------
@@ -239,6 +283,7 @@ namespace pcr
     //------------------------------------------------------------------------
     sal_Bool SAL_CALL OPropertyBrowserController::suspend( sal_Bool bSuspend ) throw(RuntimeException)
     {
+        stopContainerWindowListening();
         // TODO
         return sal_True;
     }
@@ -410,12 +455,44 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
+    void SAL_CALL OPropertyBrowserController::focusGained( const FocusEvent& _rSource ) throw (RuntimeException)
+    {
+        Reference< XWindow > xSourceWindow(_rSource.Source, UNO_QUERY);
+        Reference< XWindow > xContainerWindow;
+        if (m_xFrame.is())
+            xContainerWindow = m_xFrame->getContainerWindow();
+
+        if (xContainerWindow.get() == xSourceWindow.get())
+        {   // our container window got the focus
+            if (getPropertyBox())
+                getPropertyBox()->GrabFocus();
+        }
+    }
+
+    //------------------------------------------------------------------------
+    void SAL_CALL OPropertyBrowserController::focusLost( const FocusEvent& _rSource ) throw (RuntimeException)
+    {
+        // not interested in
+    }
+
+    //------------------------------------------------------------------------
     void SAL_CALL OPropertyBrowserController::disposing( const EventObject& _rSource ) throw(RuntimeException)
     {
-        DBG_ASSERT( Reference< XWindow >(_rSource.Source, UNO_QUERY).get() == m_xView.get(),
-                "OPropertyBrowserController::disposing: where does this come from?");
-        m_xView = NULL;
-        m_pView = NULL;
+        Reference< XWindow > xSourceWindow(_rSource.Source, UNO_QUERY);
+        if (xSourceWindow.get() == m_xView.get())
+        {
+            m_xView = NULL;
+            m_pView = NULL;
+        }
+#ifdef DBG_UTIL
+        else
+        {
+            Reference< XWindow > xContainer;
+            if (m_xFrame.is())
+                xContainer = m_xFrame->getContainerWindow();
+            DBG_ASSERT(xContainer.get() == xSourceWindow.get(), "OPropertyBrowserController::disposing: where does this come from?");
+        }
+#endif
     }
 
     //------------------------------------------------------------------------
@@ -970,6 +1047,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/03/22 10:04:09  fs
+ *  when binding to a new object, _first_ destroy the view, _then_ stop listening
+ *
  *  Revision 1.11  2001/03/20 08:37:11  fs
  *  #85148# when inspecting the control, care for a NULL access
  *
