@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datalistener.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:28:29 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,14 @@
 #ifndef _SVX_DATALISTENER_HXX
 #define _SVX_DATALISTENER_HXX
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
 #include <com/sun/star/container/XContainerListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAMEACTIONLISTENER_HPP_
+#include <com/sun/star/frame/XFrameActionListener.hpp>
 #endif
 #ifndef _COM_SUN_STAR_XML_DOM_EVENTS_XEVENTLISTENER_HPP_
 #include <com/sun/star/xml/dom/events/XEventListener.hpp>
@@ -78,8 +81,9 @@ namespace svxform
 
     class DataNavigatorWindow;
 
-    typedef cppu::WeakImplHelper2<
+    typedef cppu::WeakImplHelper3<
         com::sun::star::container::XContainerListener,
+        com::sun::star::frame::XFrameActionListener,
         com::sun::star::xml::dom::events::XEventListener > DataListener_t;
 
     class DataListener : public DataListener_t
@@ -98,6 +102,9 @@ namespace svxform
         virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XFrameActionListener
+        virtual void SAL_CALL frameAction( const ::com::sun::star::frame::FrameActionEvent& Action ) throw (::com::sun::star::uno::RuntimeException);
 
         // xml::dom::events::XEventListener
         virtual void SAL_CALL handleEvent( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::events::XEvent >& evt ) throw (::com::sun::star::uno::RuntimeException);
