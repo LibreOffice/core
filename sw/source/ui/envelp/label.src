@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:21:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ TabDialog DLG_LAB
         Text[ korean ] = "Αί°£";
         Text[ chinese_simplified ] = "Φ½ΥΕ";
         Text[ chinese_traditional ] = "―Θ±i";
-        Text[ arabic ] = "ζΣΗΖΨ";
+        Text[ arabic ] = "ΗαζΗΣΨΙ";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Kaπύt";
     };
@@ -1224,7 +1224,7 @@ TabPage TP_PRIVATE_DATA
         Text[ english_us ] = "Homepage / e-mail";
         Text[ portuguese ] = "Homepage / e-mail";
         Text[ russian ] = "Δξμ.ρςπΰνθφΰ / ύλ.οξχςΰ";
-        Text[ greek ] = "Κεντρική σελίδα / E-Mail";
+        Text[ greek ] = "Αρχική σελίδα / E-Mail";
         Text[ dutch ] = "Homepage / e-mail";
         Text[ french ] = "Homepage / E-mail";
         Text[ spanish ] = "Pαgina principal / e-mail";
@@ -1574,7 +1574,7 @@ TabPage TP_BUSINESS_DATA
         Text[ english_us ] = "Ho~mepage / e-mail";
         Text[ portuguese ] = "Ho~mepage / e-mail";
         Text[ russian ] = "Δξμ.ρςπΰνθφΰ /ύλ.οξχςΰ";
-        Text[ greek ] = "Κεντρική σελίδα / E-Mail";
+        Text[ greek ] = "Αρχική σελίδα / E-Mail";
         Text[ dutch ] = "Ho~mepage / e-mail";
         Text[ french ] = "~Homepage / E-mail";
         Text[ spanish ] = "Pαgina principal / ~e-mail";
