@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:31:54 $
+#   last change: $Author: vg $ $Date: 2003-07-02 15:17:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -189,7 +189,7 @@ SHL1VERSIONMAP=msvc_win32_intel.map
 .ELIF "$(COMNAME)"=="sunpro5"
 SHL1VERSIONMAP=cc5_solaris_sparc.map
 .ELIF "$(OS)$(CPU)$(COMNAME)"=="LINUXIgcc2"
-"ERROR: gcc2_linux_intel.map lacks symbols from cppuhelper/unourl.hxx"
+#"ERROR: gcc2_linux_intel.map lacks symbols from cppuhelper/unourl.hxx"
 SHL1VERSIONMAP=gcc2_linux_intel.map
 .ELIF "$(OS)$(CPU)$(COMNAME)"=="LINUXIgcc3"
 SHL1VERSIONMAP=gcc3_linux_intel.map
