@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tl $ $Date: 2001-10-04 12:25:13 $
+ *  last change: $Author: tl $ $Date: 2001-10-05 09:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1421,6 +1421,8 @@ IMPL_LINK( SmSymbolDialog, EditClickHdl, Button *, pButton )
     // altes SymbolSet merken
     XubString  aOldSymbolSet (aSymbolSets.GetSelectEntry());
 
+    USHORT nSymPos = GetSelectedSymbol();
+
     // Dialog an evtl geänderte Daten des SymbolSet Manager anpassen
     if (pDialog->Execute() == RET_OK  &&  rSymSetMgr.IsModified())
         FillSymbolSets();
@@ -1429,6 +1431,8 @@ IMPL_LINK( SmSymbolDialog, EditClickHdl, Button *, pButton )
     // (soweit eines vorhanden ist)
     if (!SelectSymbolSet(aOldSymbolSet)  &&  aSymbolSets.GetEntryCount() > 0)
         SelectSymbolSet(aSymbolSets.GetEntry(0));
+
+    SelectSymbol( nSymPos );
 
     delete pDialog;
     return 0;

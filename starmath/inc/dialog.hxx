@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2001-09-13 11:14:38 $
+ *  last change: $Author: tl $ $Date: 2001-10-05 09:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,7 +447,8 @@ public:
     virtual ~SmSymbolDialog();
 
     BOOL    SelectSymbolSet(const XubString &rSymbolSetName);
-    void    SelectSymbol(USHORT nSymbolNo);
+    void    SelectSymbol(USHORT nSymbolPos);
+    USHORT  GetSelectedSymbol() const   { return aSymbolSetDisplay.GetSelectSymbol(); }
 };
 
 ////////////////////////////////////////////////////////////////////////////////
