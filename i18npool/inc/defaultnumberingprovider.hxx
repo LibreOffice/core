@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: khong $ $Date: 2002-07-11 00:03:13 $
+ *  last change: $Author: khong $ $Date: 2002-09-24 23:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,8 +139,9 @@ public:
 private:
     com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xSMgr;
     TransliterationImpl* translit;
+    rtl::OUString SAL_CALL makeNumberingIdentifier( sal_Int16 index )
+        throw(com::sun::star::uno::RuntimeException);
 };
-
 } } } }
 
 #endif

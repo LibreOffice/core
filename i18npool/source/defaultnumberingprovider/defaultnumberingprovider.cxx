@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: khong $ $Date: 2002-09-07 01:31:37 $
+ *  last change: $Author: khong $ $Date: 2002-09-24 23:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,10 +489,33 @@ static const Supported_NumberingType aSupportedTypes[] =
     {style::NumberingType::HANGUL_CIRCLED_JAMO_KO,  NULL},
     {style::NumberingType::HANGUL_CIRCLED_SYLLABLE_KO,  NULL},
 };
-    static const sal_Int32 nSupported_NumberingTypes = sizeof(aSupportedTypes) / sizeof(Supported_NumberingType);
+static const sal_Int32 nSupported_NumberingTypes = sizeof(aSupportedTypes) / sizeof(Supported_NumberingType);
 /* -----------------------------21.02.01 15:57--------------------------------
 
  ---------------------------------------------------------------------------*/
+
+OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
+                throw(RuntimeException)
+{
+    if (aSupportedTypes[index].cSymbol)
+        return OUString::createFromAscii(aSupportedTypes[index].cSymbol);
+    else {
+        OUString result;
+        Locale aLocale(OUString::createFromAscii("en"), OUString(), OUString());
+        Sequence<beans::PropertyValue> aProperties(2);
+        aProperties[0].Name = OUString::createFromAscii("NumberingType");
+        aProperties[0].Value <<= aSupportedTypes[index].nType;
+        aProperties[1].Name = OUString::createFromAscii("Value");
+        for (sal_Int32 j = 1; j <= 3; j++) {
+        aProperties[1].Value <<= j;
+        result += makeNumberingString( aProperties, aLocale );
+        result += OUString::createFromAscii(", ");
+        }
+        result += OUString::createFromAscii("...");
+        return result;
+    }
+}
+
 Sequence< sal_Int16 > DefaultNumberingProvider::getSupportedNumberingTypes(  )
                 throw(RuntimeException)
 {
@@ -509,7 +532,7 @@ sal_Int16 DefaultNumberingProvider::getNumberingType( const OUString& rNumbering
                 throw(RuntimeException)
 {
     for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
-        if(!rNumberingIdentifier.compareToAscii(aSupportedTypes[i].cSymbol))
+        if(rNumberingIdentifier.equals(makeNumberingIdentifier(i)))
             return aSupportedTypes[i].nType;
     throw RuntimeException();
     return -1;
@@ -521,7 +544,7 @@ sal_Bool DefaultNumberingProvider::hasNumberingType( const OUString& rNumberingI
                 throw(RuntimeException)
 {
     for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
-        if(!rNumberingIdentifier.compareToAscii(aSupportedTypes[i].cSymbol))
+        if(rNumberingIdentifier.equals(makeNumberingIdentifier(i)))
             return sal_True;
     return sal_False;
 }
@@ -532,25 +555,8 @@ OUString DefaultNumberingProvider::getNumberingIdentifier( sal_Int16 nNumberingT
                 throw(RuntimeException)
 {
     for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
-        if(nNumberingType == aSupportedTypes[i].nType) {
-        if (aSupportedTypes[i].cSymbol)
-            return OUString::createFromAscii(aSupportedTypes[i].cSymbol);
-        else {
-            OUString result;
-            Locale aLocale(OUString::createFromAscii("en"), OUString(), OUString());
-            Sequence<beans::PropertyValue> aProperties(2);
-            aProperties[0].Name = OUString::createFromAscii("NumberingType");
-            aProperties[0].Value <<= nNumberingType;
-            aProperties[1].Name = OUString::createFromAscii("Value");
-            for (sal_Int32 j = 1; j <= 3; j++) {
-            aProperties[1].Value <<= j;
-            result += makeNumberingString( aProperties, aLocale );
-            result += OUString::createFromAscii(", ");
-            }
-            result += OUString::createFromAscii("...");
-            return result;
-        }
-        }
+        if(nNumberingType == aSupportedTypes[i].nType)
+        return makeNumberingIdentifier(i);
     return OUString();
 }
 /* -----------------------------05.07.01 13:34--------------------------------
