@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:26:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-22 11:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -622,7 +622,7 @@ void SimpleWinLayout::DrawText( SalGraphics& rGraphics ) const
     Point aPos = GetDrawPosition( Point( mnBaseAdv, 0 ) );
 
     // #108267#, limit the number of glyphs to avoid paint errors
-    UINT limitedGlyphCount = std::min( 8192, mnGlyphCount );
+    UINT limitedGlyphCount = min( 8192, mnGlyphCount );
     if( mnDrawOptions || aSalShlData.mbWNT )
     {
         ::ExtTextOutW( aHDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL,
