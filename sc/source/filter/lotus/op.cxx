@@ -2,9 +2,9 @@
  *
  *  $RCSfile: op.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:30 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,39 +129,42 @@ void OP_EOF( SvStream& r, UINT16 n )
 void OP_Integer( SvStream& r, UINT16 n )
 {
     BYTE            nFormat;
-    UINT16          nCol, nRow, nTab = 0;
+    UINT16          nCol, nRow;
+    SCTAB           nTab = 0;
     INT16           nValue;
 
     r >> nFormat >> nCol >> nRow >> nValue;
 
     ScValueCell*    pZelle = new ScValueCell( ( double ) nValue );
-    pDoc->PutCell( nCol, nRow, nTab, pZelle, ( BOOL ) TRUE );
+    pDoc->PutCell( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, pZelle, ( BOOL ) TRUE );
 
     // 0 Stellen nach'm Komma!
-    SetFormat( nCol, nRow, nTab, nFormat, 0 );
+    SetFormat( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, nFormat, 0 );
 }
 
 
 void OP_Number( SvStream& r, UINT16 n )
 {
     BYTE            nFormat;
-    UINT16          nCol, nRow, nTab = 0;
+    UINT16          nCol, nRow;
+    SCTAB           nTab = 0;
     double          fValue;
 
     r >> nFormat >> nCol >> nRow >> fValue;
 
     fValue = ::rtl::math::round( fValue, 15 );
     ScValueCell*    pZelle = new ScValueCell( fValue );
-    pDoc->PutCell( nCol, nRow, nTab, pZelle, ( BOOL ) TRUE );
+    pDoc->PutCell( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, pZelle, ( BOOL ) TRUE );
 
-    SetFormat( nCol, nRow, nTab, nFormat, nDezFloat );
+    SetFormat( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, nFormat, nDezFloat );
 }
 
 
 void OP_Label( SvStream& r, UINT16 n )
 {
     BYTE            nFormat;
-    UINT16          nCol, nRow, nTab = 0;
+    UINT16          nCol, nRow;
+    SCTAB           nTab = 0;
     sal_Char        pText[ 256 ];
 
     r >> nFormat >> nCol >> nRow;
@@ -176,9 +179,9 @@ void OP_Label( SvStream& r, UINT16 n )
     // Sonderzeichenanpassung
     DosToSystem( pText );
 
-    PutFormString( nCol, nRow, nTab, pText );
+    PutFormString( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, pText );
 
-    SetFormat( nCol, nRow, nTab, nFormat, nDezStd );
+    SetFormat( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, nFormat, nDezStd );
 }
 
 
@@ -194,14 +197,15 @@ void OP_Text( SvStream& r, UINT16 n )        // WK3
     r.Read( pText, n );
     pText[ n ] = 0;   // zur Sicherheit Nullterminator anhaengen
 
-    PutFormString( nCol, nRow, nTab, pText );
+    PutFormString( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), static_cast<SCTAB> (nTab), pText );
 }
 
 
 void OP_Formula( SvStream& r, UINT16 n )
 {
     BYTE                nFormat;
-    UINT16              nCol, nRow, nTab = 0, nFormulaSize;
+    UINT16              nCol, nRow, nFormulaSize;
+    SCTAB                   nTab = 0;
 
     r >> nFormat >> nCol >> nRow;
     r.SeekRel( 8 );    // Ergebnis ueberspringen
@@ -209,7 +213,7 @@ void OP_Formula( SvStream& r, UINT16 n )
 
     const ScTokenArray* pErg;
     INT32               nBytesLeft = nFormulaSize;
-    ScAddress           aAddress( nCol, nRow, nTab );
+    ScAddress           aAddress( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab );
 
     LotusToSc           aConv( r, pLotusRoot->eCharsetQ );
     aConv.Reset( aAddress );
@@ -219,17 +223,18 @@ void OP_Formula( SvStream& r, UINT16 n )
 
     pZelle->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
 
-    pDoc->PutCell( nCol, nRow, nTab, pZelle, ( BOOL ) TRUE );
+    pDoc->PutCell( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, pZelle, ( BOOL ) TRUE );
 
     // nFormat = Standard -> Nachkommastellen wie Float
-    SetFormat( nCol, nRow, nTab, nFormat, nDezFloat );
+    SetFormat( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, nFormat, nDezFloat );
 }
 
 
 void OP_ColumnWidth( SvStream& r, UINT16 n )
 {
-    UINT16              nCol, nBreite, nTab = 0;
+    UINT16              nCol, nBreite;
     BYTE                nWidthSpaces;
+    SCTAB                   nTab = 0;
 
     r >> nCol >> nWidthSpaces;
 
@@ -238,11 +243,11 @@ void OP_ColumnWidth( SvStream& r, UINT16 n )
         nBreite = ( UINT16 ) ( TWIPS_PER_CHAR * nWidthSpaces );
     else
     {
-        pDoc->SetColFlags( nCol, 0, pDoc->GetColFlags( nCol, 0 ) | CR_HIDDEN );
+        pDoc->SetColFlags( static_cast<SCCOL> (nCol), 0, pDoc->GetColFlags( static_cast<SCCOL> (nCol), 0 ) | CR_HIDDEN );
         nBreite = nDefWidth;
     }
 
-    pDoc->SetColWidth( nCol, nTab, nBreite );
+    pDoc->SetColWidth( static_cast<SCCOL> (nCol), nTab, nBreite );
 }
 
 
@@ -259,9 +264,9 @@ void OP_NamedRange( SvStream& r, UINT16 n )
     LotusRange*         pRange;
 
     if( nColSt == nColEnd && nRowSt == nRowEnd )
-        pRange = new LotusRange( nColSt, nRowSt );
+        pRange = new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt) );
     else
-        pRange = new LotusRange( nColSt, nRowSt, nColEnd, nRowEnd );
+        pRange = new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt), static_cast<SCCOL> (nColEnd), static_cast<SCROW> (nRowEnd) );
 
     if( isdigit( *cPuffer ) )
     {   // erstes Zeichen im Namen eine Zahl -> 'A' vor Namen setzen
@@ -298,9 +303,9 @@ void OP_SymphNamedRange( SvStream& r, UINT16 n )
     LotusRange*         pRange;
 
     if( nType )
-        pRange = new LotusRange( nColSt, nRowSt );
+        pRange = new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt) );
     else
-        pRange = new LotusRange( nColSt, nRowSt, nColEnd, nRowEnd );
+        pRange = new LotusRange( static_cast<SCCOL> (nColSt), static_cast<SCROW> (nRowSt), static_cast<SCCOL> (nColEnd), static_cast<SCROW> (nRowEnd) );
 
     if( isdigit( *cPuffer ) )
     {   // erstes Zeichen im Namen eine Zahl -> 'A' vor Namen setzen
@@ -339,7 +344,8 @@ void OP_Margins( SvStream& r, UINT16 n )
 
 void OP_HiddenCols( SvStream& r, UINT16 n )
 {
-    UINT16      nByte, nBit, nCount;
+    UINT16      nByte, nBit;
+    SCCOL       nCount;
     BYTE        nAkt;
     nCount = 0;
 
@@ -374,7 +380,7 @@ void OP_Window1( SvStream& r, UINT16 n )
     nDefWidth = ( UINT16 ) ( TWIPS_PER_CHAR * nDefWidth );
 
     // statt Defaulteinstellung in SC alle Cols zu Fuss setzen
-    for( UINT16 nCol = 0 ; nCol <= MAXCOL ; nCol++ )
+    for( SCCOL nCol = 0 ; nCol <= MAXCOL ; nCol++ )
         pDoc->SetColWidth( nCol, 0, nDefWidth );
 }
 
@@ -385,7 +391,7 @@ void OP_Blank( SvStream& r, UINT16 n )
     BYTE        nFormat;
     r >> nFormat >> nCol >> nRow;
 
-    SetFormat( nCol, nRow, 0, nFormat, nDezFloat );
+    SetFormat( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), 0, nFormat, nDezFloat );
 }
 
 
