@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pl $ $Date: 2001-04-26 14:01:11 $
+ *  last change: $Author: ssa $ $Date: 2001-05-18 09:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,8 @@
 #endif
 
 #include <osl/module.h>
+
+using namespace ::com::sun::star::uno;
 
 
 // #include <usr/refl.hxx>
@@ -1478,8 +1480,16 @@ SystemInfoType Application::GetClientSystem()
         ImplSVData* pSVData = ImplGetSVData();
         if ( pSVData->mxStatus.is() )
         {
-            CHECK_FOR_RVPSYNC_NORMAL()
-            nImplClientSystemInfo = (SystemInfoType)pSVData->mxStatus->GetSystemType();
+            CHECK_FOR_RVPSYNC_NORMAL();
+            try
+            {
+                nImplClientSystemInfo = (SystemInfoType)pSVData->mxStatus->GetSystemType();
+            }
+            catch( RuntimeException &e )
+            {
+                rvpExceptionHandler();
+                nImplClientSystemInfo = 0;
+            }
         }
     }
 

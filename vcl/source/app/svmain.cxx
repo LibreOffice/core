@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-11 16:19:19 $
+ *  last change: $Author: ssa $ $Date: 2001-05-18 09:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,8 +401,15 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 //          CHECK_FOR_RVPSYNC_NORMAL()
 //          pSVData->mxStatus->ShowError(
 //              OUString( RTL_CONSTASCII_USTRINGPARAM("Wrong Office-Version")), 0 );
-            CHECK_FOR_RVPSYNC_NORMAL()
-            pSVData->mxStatus->Quit();
+            CHECK_FOR_RVPSYNC_NORMAL();
+            try
+            {
+                pSVData->mxStatus->Quit();
+            }
+            catch( RuntimeException &e )
+            {
+                rvpExceptionHandler();
+            }
             return sal_False;
         }
     }
