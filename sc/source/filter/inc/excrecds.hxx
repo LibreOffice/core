@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:06:03 $
+ *  last change: $Author: dr $ $Date: 2002-04-04 12:58:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1329,9 +1329,11 @@ public:
     virtual                 ~ExcPalette2();
 
     UINT32                  InsertColor( const Color& rCol, UINT16 nColorType );
+    UINT32                  InsertFontColor( const Color& rCol, UINT16 nColorType );
     UINT32                  InsertIndex( UINT16 nIndex );
     void                    ReduceColors();
     UINT16                  GetColorIndex( const Color& rCol ) const;
+    UINT16                  GetFontColorIndex( const Color& rCol ) const;
     UINT16                  GetColorIndex( UINT32 nSerial ) const;
     void                    GetMixedColors( UINT32 nForeSer, UINT32 nBackSer,
                                 UINT16& rForeInd, UINT16& rBackInd, UINT16& rPatt ) const;

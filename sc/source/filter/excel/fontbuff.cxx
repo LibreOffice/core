@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontbuff.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-28 16:38:09 $
+ *  last change: $Author: dr $ $Date: 2002-04-04 12:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,7 @@ ColorBuffer::ColorBuffer( RootData* pRD  ) : ExcRoot( pRD )
     bAuto = FALSE;
 
     pDefault = new SvxColorItem( Color( COL_BLACK ) );
+    pAutoColor = new SvxColorItem( Color( COL_AUTO ) );
 }
 
 
@@ -247,6 +248,7 @@ ColorBuffer::~ColorBuffer()
     delete[] pArray;
 
     delete pDefault;
+    delete pAutoColor;
 }
 
 
@@ -314,6 +316,13 @@ const SvxColorItem* ColorBuffer::GetColor( UINT16 nIndex, const BOOL bOptGetDefa
         bAuto = TRUE;
         return bOptGetDefault? pDefault : NULL;
     }
+}
+
+
+const SvxColorItem* ColorBuffer::GetFontColor( sal_uInt16 nIndex )
+{
+    const SvxColorItem* pItem = GetColor( nIndex, sal_False );
+    return pItem ? pItem : pAutoColor;
 }
 
 

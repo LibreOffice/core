@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 14:05:34 $
+ *  last change: $Author: dr $ $Date: 2002-04-04 12:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,7 +644,7 @@ ExcFont::ExcFont( Font* pFont, RootData& rRootData ) :
     SetShadow( pFont->IsShadow() );
 
     SetHeight( (UINT16) pFont->GetSize().Height() );
-    SetColor( pPalette2->InsertColor( pFont->GetColor(), EXC_COLOR_CELLTEXT ) );
+    SetColor( pPalette2->InsertFontColor( pFont->GetColor(), EXC_COLOR_CELLTEXT ) );
     SetWeight( pFont->GetWeight() );
     SetUnderline( pFont->GetUnderline() );
     SetFamily( pFont->GetFamily() );
@@ -1342,8 +1342,7 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
 
         // first font is the cell font, following font changes are stored in richstring
         Font*               pFont = new Font;
-        //! #97022# change to SC_AUTOCOL_RAW and handle COL_AUTO
-        pAttr->GetFont( *pFont, SC_AUTOCOL_BLACK );
+        pAttr->GetFont( *pFont, SC_AUTOCOL_RAW );
         USHORT              nLastFontIndex = rFontList.Add( pFont );
 
         for( nPar = 0 ; nPar < nParCnt ; )
@@ -1420,8 +1419,7 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
                         aPatAttr.GetFromEditItemSet( &aItemSet );
 
                         Font* pFont = new Font;
-                        //! #97022# change to SC_AUTOCOL_RAW and handle COL_AUTO
-                        aPatAttr.GetFont( *pFont, SC_AUTOCOL_BLACK );
+                        aPatAttr.GetFont( *pFont, SC_AUTOCOL_RAW );
                         if( bWasHLink )
                         {
                             pFont->SetColor( Color( COL_LIGHTBLUE ) );
@@ -3130,6 +3128,12 @@ UINT32 ExcPalette2::InsertColor( const Color& rCol, UINT16 nColorType )
     return pEntry->GetSerial();
 }
 
+UINT32 ExcPalette2::InsertFontColor( const Color& rCol, UINT16 nColorType )
+{
+    return (rCol.GetColor() == COL_AUTO) ?
+        InsertIndex( 0x7FFF ) : InsertColor( rCol, nColorType );
+}
+
 UINT32 ExcPalette2::InsertIndex( UINT16 nIndex )
 {
     return EXC_PAL2_INDEXBASE | nIndex;
@@ -3283,6 +3287,11 @@ UINT16 ExcPalette2::GetColorIndex( const Color& rCol ) const
 {
     UINT32 nIndex = GetNearestColor( rCol, EXC_PAL2_IGNORE );
     return (UINT16)(nIndex + ColorBuffer::GetIndCorrect());
+}
+
+UINT16 ExcPalette2::GetFontColorIndex( const Color& rCol ) const
+{
+    return (rCol.GetColor() == COL_AUTO) ? 0x7FFF : GetColorIndex( rCol );
 }
 
 UINT16 ExcPalette2::GetColorIndex( UINT32 nSerial ) const
@@ -3666,8 +3675,7 @@ void UsedAttrList::AddNewXF( const ScPatternAttr* pAttr, const BOOL bStyle, cons
     if( pAttr )
     {
         Font*       pFont = new Font;
-        //! #97022# change to SC_AUTOCOL_RAW and handle COL_AUTO
-        pAttr->GetFont( *pFont, SC_AUTOCOL_BLACK );
+        pAttr->GetFont( *pFont, SC_AUTOCOL_RAW );
         nFontIndex = rFntLst.Add( pFont );
 
         if ( bForceAltNumForm )
