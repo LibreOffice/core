@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:56:11 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,7 @@ void InitCpp2()
 
 
 int
-control(counter)
-int             counter;        /* Pending newline counter              */
+control(int counter)
 /*
  * Process #control lines.  Simple commands are processed inline,
  * while complex commands have their own subroutines.
@@ -213,7 +212,7 @@ dump_line:      skipnl();                       /* Ignore rest of line  */
              * We subtract 1 as we want the number of the next line.
              */
             line = atoi(work) - 1;              /* Reset line number    */
-            for (tp = work; isdigit(*tp) || type[*tp] == SPA; tp++)
+            for (tp = work; isdigit(*tp) || type[(int)*tp] == SPA; tp++)
                 ;                               /* Skip over digits     */
             if (*tp != EOS) {                   /* Got a filename, so:  */
                 if (*tp == '"' && (ep = strrchr(tp + 1, '"')) != NULL) {
@@ -317,8 +316,6 @@ nest_err:       cerror("#%s must be in an #if", token);
 #endif
         case L_error:                       /* BP 5.3.92, #error */
         {
-            char sTxt[MAXLINE];
-            int i = 0;
             fprintf( pCppOut, "cpp: line %u, Error directive: ", line );
             while ((c = get()) != '\n' && c != EOF_CHAR)
                 cput(c);
@@ -355,7 +352,7 @@ nest_err:       cerror("#%s must be in an #if", token);
 }
 
 FILE_LOCAL
-doif(hash)
+void doif(hash)
 int             hash;
 /*
  * Process an #if, #ifdef, or #ifndef.  The latter two are straightforward,
@@ -401,7 +398,7 @@ badif:  cerror("#if, #ifdef, or #ifndef without an argument", NULLST);
 }
 
 FILE_LOCAL
-doinclude()
+void doinclude()
 /*
  * Process the #include control line.
  * There are three variations:
