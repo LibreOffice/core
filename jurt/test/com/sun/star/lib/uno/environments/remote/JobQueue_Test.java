@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobQueue_Test.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-09-28 11:33:47 $
+ *  last change: $Author: kr $ $Date: 2001-01-17 10:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,13 +73,6 @@ import com.sun.star.uno.UnoRuntime;
 
 
 public class JobQueue_Test {
-    static interface MyInterface {
-        int getNext();
-
-        Object syncCall(Object param) throws Exception;
-        Object asyncCall(Object param) throws Exception;
-    }
-
     static class MyContext {
     }
 

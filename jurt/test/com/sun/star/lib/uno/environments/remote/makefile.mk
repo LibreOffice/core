@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:27:55 $
+#   last change: $Author: kr $ $Date: 2001-01-17 10:06:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ TARGET  := test_com_sun_star_lib_uno_environments_remote
 # Files --------------------------------------------------------
 
 JAVACLASSFILES= \
+    $(CLASSDIR)$/$(PACKAGE)$/MyInterface.class					\
     $(CLASSDIR)$/$(PACKAGE)$/JobQueue_Test.class				\
     $(CLASSDIR)$/$(PACKAGE)$/MyMessage.class					\
     $(CLASSDIR)$/$(PACKAGE)$/MyReceiver.class					\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ThreadPool_Test.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-09-28 11:36:14 $
+ *  last change: $Author: kr $ $Date: 2001-01-17 10:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,6 @@ public class ThreadPool_Test {
     static int __requestId = 0;
     static int __running_thread_count;
 
-    static interface MyInterface {
-        Object syncCall(Object param) throws Exception;
-        Object asyncCall(Object param) throws Exception;
-    }
-
     static interface IReadyListener {
         void readyEvent();
     }
@@ -97,7 +92,7 @@ public class ThreadPool_Test {
         MyImpl() {
         }
 
-        int getNext() {
+        public int getNext() {
             return _send_requestId ++;
         }
 
