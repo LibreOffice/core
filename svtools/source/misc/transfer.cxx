@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-14 14:26:31 $
+ *  last change: $Author: ka $ $Date: 2001-02-14 16:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,9 +591,7 @@ void TransferableHelper::ObjectReleased()
 void TransferableHelper::CopyToClipboard() const
 {
     if( !mpxClipboard )
-        ( (TransferableHelper*) this )->mpxClipboard = new Reference< XClipboard >;
-
-    *mpxClipboard = GetSystemClipboard();
+        ( (TransferableHelper*) this )->mpxClipboard = new Reference< XClipboard >( GetSystemClipboard() );
 
     if( mpxClipboard->is() )
     {
@@ -1127,8 +1125,11 @@ sal_Bool TransferableDataHelper::GetInterface( const DataFlavor& rFlavor, Refere
 
 TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard()
 {
-    TransferableDataHelper  aRet;
-    Reference< XClipboard > xClipboard( TransferableHelper::GetSystemClipboard() );
+    static Reference< XClipboard >  xClipboard;
+    TransferableDataHelper          aRet;
+
+    if( !xClipboard.is() )
+        xClipboard = TransferableHelper::GetSystemClipboard();
 
     if( xClipboard.is() )
     {
