@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txencbox.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2002-07-29 15:07:41 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
+#ifndef _RTL_TEXTENC_H
+#include <rtl/textenc.h>
+#endif
 
 class SvxTextEncodingTable;
 
@@ -122,10 +125,16 @@ public:
                             sal_uInt32 nButIncludeInfoFlags = 0
                             );
 
-    /** Fill with all known MIME encodings and select the best one matching
-        the system encoding.
+    /** Fill with all known MIME encodings and select the best according to
+        <method>GetBestMimeEncoding</method>
      */
     void                FillWithMimeAndSelectBest();
+
+    /** Get the best MIME encoding matching the system locale, or if that isn't
+        determinable one that matches the UI locale, or UTF8 if everything else
+        fails.
+     */
+    static  rtl_TextEncoding    GetBestMimeEncoding();
 
     const SvxTextEncodingTable*     GetTextEncodingTable() const
                             { return m_pEncTable; }
