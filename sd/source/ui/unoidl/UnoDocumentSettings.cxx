@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-30 15:10:08 $
+ *  last change: $Author: cl $ $Date: 2001-05-04 14:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,8 @@ enum SdDocumentSettingsPropertyHandles
     HANDLE_SCALE_DOM, HANDLE_TABSTOP, HANDLE_PRINTPAGENAME, HANDLE_PRINTDATE, HANDLE_PRINTTIME,
     HANDLE_PRINTHIDENPAGES, HANDLE_PRINTFITPAGE, HANDLE_PRINTTILEPAGE, HANDLE_PRINTBOOKLET, HANDLE_PRINTBOOKLETFRONT,
     HANDLE_PRINTBOOKLETBACK, HANDLE_PRINTQUALITY, HANDLE_COLORTABLEURL, HANDLE_DASHTABLEURL, HANDLE_LINEENDTABLEURL, HANDLE_HATCHTABLEURL,
-    HANDLE_GRADIENTTABLEURL, HANDLE_BITMAPTABLEURL, HANDLE_FORBIDDENCHARS, HANDLE_APPLYUSERDATA, HANDLE_PAGENUMFMT
+    HANDLE_GRADIENTTABLEURL, HANDLE_BITMAPTABLEURL, HANDLE_FORBIDDENCHARS, HANDLE_APPLYUSERDATA, HANDLE_PAGENUMFMT,
+    HANDLE_PRINTERNAME, HANDLE_PRINTERJOB
 };
 
 #define MID_PRINTER 1
@@ -234,6 +235,8 @@ enum SdDocumentSettingsPropertyHandles
         static PropertyMapEntry aCommonSettingsInfoMap[] =
         {
             { MAP_LEN("DefaultTabStop"),        HANDLE_TABSTOP,             &::getCppuType((const sal_Int32*)0),    0,  0 },
+            { MAP_LEN("PrinterName"),           HANDLE_PRINTERNAME,         &::getCppuType((const OUString*)0),     0,  0 },
+            { MAP_LEN("PrinterSetup"),          HANDLE_PRINTERJOB,          &::getCppuType((const uno::Sequence < sal_Int8 > *)0),  0, 0 },
 #ifndef SVX_LIGHT
 
             { MAP_LEN("IsPrintPageName"),       HANDLE_PRINTPAGENAME,       &::getBooleanCppuType(),                0,  MID_PRINTER },
@@ -632,6 +635,49 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                     }
                 }
                 break;
+            case HANDLE_PRINTERNAME:
+                {
+                    OUString aPrinterName;
+                    if( *pValues >>= aPrinterName )
+                    {
+                        bOk = sal_True;
+#ifndef SVX_LIGHT
+                        SfxPrinter *pPrinter = pDocSh->GetPrinter( sal_True );
+                        if (pPrinter)
+                        {
+                            SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), aPrinterName );
+                            pDocSh->SetPrinter( pNewPrinter );
+                        }
+#endif
+                    }
+                }
+                break;
+            case HANDLE_PRINTERJOB:
+                {
+                    Sequence < sal_Int8 > aSequence;
+                    if ( *pValues >>= aSequence )
+                    {
+                        bOk = sal_True;
+#ifndef SVX_LIGHT
+                        sal_uInt32 nSize = aSequence.getLength();
+                        SvMemoryStream aStream;
+                        aStream.Write ( aSequence.getArray(), nSize );
+                        aStream.Flush();
+                        aStream.Seek ( STREAM_SEEK_TO_BEGIN );
+                        SfxItemSet* pItemSet = new SfxItemSet(pDoc->GetPool(),
+                                        SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
+                                        SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
+                                        ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT,
+                                        0 );
+
+                        SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
+
+                        pDocSh->SetPrinter( pPrinter );
+#endif
+                    }
+                }
+                break;
+
             default:
                 throw UnknownPropertyException();
 
@@ -823,6 +869,30 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
                 break;
             case HANDLE_PAGENUMFMT:
                 *pValue <<= (sal_Int32)pDoc->GetPageNumType();
+                break;
+            case HANDLE_PRINTERNAME:
+#ifndef SVX_LIGHT
+                {
+                    SfxPrinter *pPrinter = pDocSh->GetPrinter( sal_False );
+                    *pValue <<= pPrinter ? OUString ( pPrinter->GetName()) : OUString();
+                }
+#endif
+                break;
+            case HANDLE_PRINTERJOB:
+                {
+#ifndef SVX_LIGHT
+                    SfxPrinter *pPrinter = pDocSh->GetPrinter( sal_False );
+                    if (pPrinter)
+                    {
+                        SvMemoryStream aStream;
+                        pPrinter->Store( aStream );
+                        sal_uInt32 nSize = aStream.GetSize();
+                        Sequence < sal_Int8 > aSequence ( nSize );
+                        memcpy ( aSequence.getArray(), aStream.GetData(), nSize );
+                        *pValue <<= aSequence;
+                    }
+#endif
+                }
                 break;
             default:
                 throw UnknownPropertyException();
