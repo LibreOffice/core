@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rolbck.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:41:23 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,8 +161,9 @@
 #include <ndindex.hxx>          // fuer SwNodeIndex
 #endif
 
-
-
+#ifndef _CHARFMT_HXX
+#include <charfmt.hxx> // #i27615#
+#endif
 
 SV_IMPL_PTRARR( SwpHstry, SwHstryHintPtr)
 
@@ -991,6 +992,21 @@ void SwHstryChgFlyChain::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
 }
 
 
+// -> #i27615#
+SwHstryChgCharFmt::SwHstryChgCharFmt(const SfxItemSet & rSet,
+                                     const String & _sFmt)
+    : SwHstryHint(HSTRY_CHGCHARFMT), aOldSet(rSet), sFmt(_sFmt)
+{
+}
+
+void SwHstryChgCharFmt::SetInDoc(SwDoc * pDoc, BOOL bTmpSet)
+{
+    SwCharFmt * pCharFmt = pDoc->FindCharFmtByName(sFmt);
+
+    if (pCharFmt)
+        pCharFmt->SetAttr(aOldSet);
+}
+// <- #i27615#
 
 /*  */
 
@@ -1160,6 +1176,13 @@ void SwHistory::Add( const SwTxtFtn& rFtn )
     Insert( pHt, Count() );
 }
 
+// #i27615#
+void SwHistory::Add(const SfxItemSet & rSet, const SwCharFmt & rFmt)
+{
+    SwHstryHint * pHt = new SwHstryChgCharFmt(rSet, rFmt.GetName());
+
+    Insert(pHt, Count());
+}
 
 /*************************************************************************
 |*
