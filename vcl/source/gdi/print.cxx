@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pl $ $Date: 2002-02-14 11:46:32 $
+ *  last change: $Author: pl $ $Date: 2002-03-13 16:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1413,7 +1413,7 @@ BOOL Printer::SetPaperSizeUser( const Size& rSize )
 #else
         RmJobSetup aRmJobSetup;
         aJobSetup.SetRmJobSetup( aRmJobSetup );
-        if ( mpInfoPrinter->SetPaperSizeUser( aPixSize.Width(), aPixSize.Height(), aRmJobSetup ) )
+        if ( mpInfoPrinter->SetPaperSizeUser( aPageSize.Width(), aPageSize.Height(), aRmJobSetup ) )
         {
             aJobSetup = aRmJobSetup;
 #endif
@@ -1980,10 +1980,29 @@ BOOL Printer::EndPage()
 #ifdef REMOTE_APPSERVER
 void Printer::PrintRemotePage( ULONG nPage )
 {
+#ifdef DEBUG
+    fprintf( stderr, "printing page %d of %d\n", nPage, mpRemotePages->size() );
+#endif
     if ( mpPrinter && mpPrinter->mxRemotePrinter.is() )
     {
+#ifdef DEBUG
+        fprintf( stderr, "have printer\n", nPage );
+#endif
         if( nPage >=  mpRemotePages->size() )
+        {
+            try
+            {
+                CHECK_FOR_RVPSYNC_NORMAL();
+                mpPrinter->mxRemotePrinter->StartPage();
+                CHECK_FOR_RVPSYNC_NORMAL();
+                mpPrinter->mxRemotePrinter->EndPage();
+            }
+            catch( RuntimeException &e )
+            {
+                rvpExceptionHandler();
+            }
             return;
+        }
 
         if( mpGraphics ) {
             REF( XRmOutputDevice ) aTmp;
@@ -1992,20 +2011,24 @@ void Printer::PrintRemotePage( ULONG nPage )
         }
 
         PrinterPage* pPage = (*mpRemotePages)[nPage];
-        if( pPage->IsNewJobSetup() )
-        {
-            RmJobSetup aSetup;
-            pPage->GetJobSetup().SetRmJobSetup( aSetup );
-            mpPrinter->SetJobSetup( aSetup );
-        }
+
+        RmJobSetup aSetup;
+        pPage->GetJobSetup().SetRmJobSetup( aSetup );
+        mpPrinter->SetJobSetup( aSetup );
 
         CHECK_FOR_RVPSYNC_NORMAL();
         try
         {
             mpPrinter->mxRemotePrinter->StartPage();
+#ifdef DEBUG
+            fprintf( stderr, "page started\n" );
+#endif
         }
         catch( RuntimeException &e )
         {
+#ifdef DEBUG
+            fprintf( stderr, "page started exception\n" );
+#endif
             rvpExceptionHandler();
         }
 
@@ -2021,13 +2044,23 @@ void Printer::PrintRemotePage( ULONG nPage )
         pPage->GetGDIMetaFile()->WindStart();
         pPage->GetGDIMetaFile()->Play( this );
 
+#ifdef DEBUG
+            fprintf( stderr, "metafile played %d actions\n", pPage->GetGDIMetaFile()->GetActionCount() );
+#endif
+
         CHECK_FOR_RVPSYNC_NORMAL();
         try
         {
             mpPrinter->mxRemotePrinter->EndPage();
+#ifdef DEBUG
+            fprintf( stderr, "page ended\n" );
+#endif
         }
         catch( RuntimeException &e )
         {
+#ifdef DEBUG
+            fprintf( stderr, "page ended exception\n" );
+#endif
             rvpExceptionHandler();
         }
         mbDevOutput = FALSE;
