@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xecontent.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:02:37 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:02:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@
 #ifndef SC_RANGENAM_HXX
 #include "rangenam.hxx"
 #endif
+#ifndef SC_TOKENARRAY_HXX
+#include "tokenarray.hxx"
+#endif
 #ifndef SC_STLPOOL_HXX
 #include "stlpool.hxx"
 #endif
@@ -128,8 +131,8 @@
 #ifndef SC_XESTYLE_HXX
 #include "xestyle.hxx"
 #endif
-#ifndef SC_XEFORMULA_HXX
-#include "xeformula.hxx"
+#ifndef SC_XENAME_HXX
+#include "xename.hxx"
 #endif
 
 using ::rtl::OUString;
@@ -142,8 +145,6 @@ using ::com::sun::star::frame::XModel;
 using ::com::sun::star::table::CellRangeAddress;
 using ::com::sun::star::sheet::XAreaLinks;
 using ::com::sun::star::sheet::XAreaLink;
-
-#include "excrecds.hxx"
 
 // Shared string table ========================================================
 
@@ -689,12 +690,12 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
     XclExpFormulaCompiler& rFmlaComp = GetFormulaCompiler();
 
     ::std::auto_ptr< ScTokenArray > xScTokArr( mrFormatEntry.CreateTokenArry( 0 ) );
-    mxTokArr1 = rFmlaComp.CreateCondFormula( *xScTokArr );
+    mxTokArr1 = rFmlaComp.CreateFormula( EXC_FMLATYPE_CONDFMT, *xScTokArr );
 
     if( bFmla2 )
     {
         xScTokArr.reset( mrFormatEntry.CreateTokenArry( 1 ) );
-        mxTokArr2 = rFmlaComp.CreateCondFormula( *xScTokArr );
+        mxTokArr2 = rFmlaComp.CreateFormula( EXC_FMLATYPE_CONDFMT, *xScTokArr );
     }
 }
 
@@ -820,7 +821,7 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
     if( maRanges.Count() )
         for( USHORT nIndex = 0, nCount = rCondFormat.Count(); nIndex < nCount; ++nIndex )
             if( const ScCondFormatEntry* pEntry = rCondFormat.GetEntry( nIndex ) )
-                maCFList.AppendRecord( XclExpCFList::RecordRefType( new XclExpCF( GetRoot(), *pEntry ) ) );
+                maCFList.AppendNewRecord( new XclExpCF( GetRoot(), *pEntry ) );
 }
 
 XclExpCondfmt::~XclExpCondfmt()
@@ -872,9 +873,10 @@ void XclExpCondfmt::WriteBody( XclExpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot )
+XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot ) :
+    XclExpRoot( rRoot )
 {
-    if( const ScConditionalFormatList* pCondFmtList = rRoot.GetDoc().GetCondFormList() )
+    if( const ScConditionalFormatList* pCondFmtList = GetDoc().GetCondFormList() )
     {
         if( const ScConditionalFormatPtr* ppCondFmt = pCondFmtList->GetData() )
         {
@@ -883,9 +885,9 @@ XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot )
             {
                 if( *ppCondFmt )
                 {
-                    ::std::auto_ptr< XclExpCondfmt > xCondfmtRec( new XclExpCondfmt( rRoot, **ppCondFmt ) );
+                    XclExpCondfmtList::RecordRefType xCondfmtRec( new XclExpCondfmt( GetRoot(), **ppCondFmt ) );
                     if( xCondfmtRec->IsValid() )
-                        maCondfmtList.AppendRecord( XclExpCondfmtList::RecordRefType( xCondfmtRec.release() ) );
+                        maCondfmtList.AppendRecord( xCondfmtRec );
                 }
             }
         }
@@ -1039,26 +1041,30 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, ULONG nScHandle ) :
                         2) List is taken from A1    -> formula is =A1 -> writes tRefNR token
                         Formula compiler supports this by offering two different functions
                         CreateDataValFormula() and CreateListValFormula(). */
-                    mxTokArr1 = rFmlaComp.CreateListValFormula( *xScTokArr );
+                    mxTokArr1 = rFmlaComp.CreateFormula( EXC_FMLATYPE_LISTVAL, *xScTokArr );
                 }
             }
             else
             {
                 // no list validation -> convert the formula
-                mxTokArr1 = rFmlaComp.CreateDataValFormula( *xScTokArr );
+                mxTokArr1 = rFmlaComp.CreateFormula( EXC_FMLATYPE_DATAVAL, *xScTokArr );
             }
         }
 
         // second formula
         xScTokArr.reset( pValData->CreateTokenArry( 1 ) );
         if( xScTokArr.get() )
-            mxTokArr2 = rFmlaComp.CreateDataValFormula( *xScTokArr );
+            mxTokArr2 = rFmlaComp.CreateFormula( EXC_FMLATYPE_DATAVAL, *xScTokArr );
     }
     else
     {
         DBG_ERRORFILE( "XclExpDV::XclExpDV - missing core data" );
         mnScHandle = ULONG_MAX;
     }
+}
+
+XclExpDV::~XclExpDV()
+{
 }
 
 void XclExpDV::InsertCellRange( const ScRange& rRange )
@@ -1091,6 +1097,10 @@ void XclExpDV::WriteBody( XclExpStream& rStrm )
 XclExpDval::XclExpDval( const XclExpRoot& rRoot ) :
     XclExpRecord( EXC_ID_DVAL, 18 ),
     XclExpRoot( rRoot )
+{
+}
+
+XclExpDval::~XclExpDval()
 {
 }
 
@@ -1306,7 +1316,7 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
         if( aLinkAny >>= xAreaLink )
         {
             CellRangeAddress aDestRange( xAreaLink->getDestArea() );
-            if( aDestRange.Sheet == nScTab )
+            if( static_cast< SCTAB >( aDestRange.Sheet ) == nScTab )
             {
                 Reference< XPropertySet > xLinkProp( xAreaLink, UNO_QUERY );
                 if( xLinkProp.is() && ::getPropValue( aFilter, xLinkProp, aPropFilter ) && (aFilter == aWebQueryFilter) )
@@ -1325,19 +1335,25 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
                     // find range or create a new range
                     ScRange aScDestRange;
                     ScUnoConversion::FillScRange( aScDestRange, aDestRange );
-                    ScRangeData* pRangeData = rDoc.GetRangeName()->GetRangeAtBlock( aScDestRange );
-                    if( pRangeData )
+                    if( const ScRangeData* pRangeData = rDoc.GetRangeName()->GetRangeAtBlock( aScDestRange ) )
+                    {
                         aRangeName = pRangeData->GetName();
+                    }
                     else
                     {
-                        ExcName* pExcName = new ExcName( *rRoot.mpRD, aScDestRange, aUrlObj.getBase() );
-                        aRangeName = pExcName->GetName();
-                        rRoot.mpRD->pNameList->InsertSorted( *rRoot.mpRD, pExcName, static_cast<sal_uInt16>(nScTab) );
+                        XclExpFormulaCompiler& rFmlaComp = rRoot.GetFormulaCompiler();
+                        XclExpNameManager& rNameMgr = rRoot.GetNameManager();
+
+                        // create a new unique defined name containing the range
+                        XclExpTokenArrayRef xTokArr = rFmlaComp.CreateFormula( EXC_FMLATYPE_WQUERY, aScDestRange );
+                        sal_uInt16 nNameIdx = rNameMgr.InsertUniqueName( aUrlObj.getBase(), xTokArr, nScTab );
+                        aRangeName = rNameMgr.GetOrigName( nNameIdx );
                     }
 
                     // create and store the web query record
-                    AppendRecord( RecordRefType(
-                        new XclExpWebQuery( aRangeName, aWebQueryUrl, xAreaLink->getSourceArea(), nRefresh ) ) );
+                    if( aRangeName.Len() )
+                        AppendNewRecord( new XclExpWebQuery(
+                            aRangeName, aWebQueryUrl, xAreaLink->getSourceArea(), nRefresh ) );
                 }
             }
         }
