@@ -1,0 +1,839 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="ScriptBinding" script:language="StarBasic">REM  *****  BASIC  *****
+
+REM ----- Global Variables -----
+
+private bindingDialog as object
+private helpDialog as object
+
+private xmlFile() as string
+private xmlFileName as string
+
+private menuItems() as string
+private menuItemLinePosition() as integer 
+private menuCount as integer
+
+private subMenuItems() as string
+private subMenuItemLinePosition() as integer 
+private subMenuCount as integer
+
+private scriptNames() as string
+private scriptLinePosition as integer
+private scriptCount as integer
+
+private allKeyBindings() as string
+
+private numberOfLines as integer
+
+
+
+REM ------ Storage Refresh Function ------
+
+
+function RefreshUserScripts()
+   smgr = getProcessServiceManager()
+   context = smgr.getPropertyValue( &quot;DefaultContext&quot; )
+   scriptstoragemgr = context.getValueByName( &quot;/singletons/drafts.com.sun.star.script.framework.storage.theScriptStorageManager&quot; )
+
+   storage = scriptstoragemgr.getScriptStorage( 1 )
+   storage.refresh()
+end function 
+
+
+REM ----- Launch Functions -----
+
+function ExecuteKeyBinding()
+	bindingDialog = LoadDialog( &quot;ScriptBindingLibrary&quot;, &quot;KeyBinding&quot; )
+	xmlFileName = GetDocumentType( &quot;Key&quot; )
+	officePath = GetOfficePath()
+	ReadXMLToArray( &quot;Key&quot; )
+	PopulateScriptList()
+	CreateAllKeyBindings()
+	PopulateTopLevelKeyBindingList()
+	PopulateKeyBindingList( 1, 11 )
+	bindingDialog.execute()
+end function
+
+
+function ExecuteMenuBinding()
+	bindingDialog = LoadDialog( &quot;ScriptBindingLibrary&quot;, &quot;MenuBinding&quot; )
+	xmlFileName = GetDocumentType( &quot;Menu&quot; )
+	officePath = GetOfficePath()
+	ReadXMLToArray( &quot;Menu&quot; )
+	PopulateScriptList()
+	PopulateMenuCombo()
+	PopulateSubMenuList( 1 )
+	MenuLabelBoxListener()
+	bindingDialog.execute()	
+end function
+
+
+REM ----- Initialising functions -----
+
+
+function LoadDialog( libName as string, dialogName as string ) as object
+	dim library as object
+	dim libDialog as object
+	dim runtimeDialog as object
+
+	libContainer = DialogLibraries
+	libContainer.LoadLibrary( libName )
+	library = libContainer.getByName( libname )
+	libDialog = library.getByName( dialogName )
+	runtimeDialog = CreateUnoDialog( libDialog )
+	
+    LoadDialog() = runtimeDialog
+end function
+
+
+function GetDocumentType( bindingType as string ) as string
+	document = StarDesktop.ActiveFrame.Controller.Model
+	if document.SupportsService(&quot;com.sun.star.sheet.SpreadsheetDocument&quot;) then
+		if bindingType = &quot;Key&quot; then
+			GetDocumentType() = &quot;calckeybinding.xml&quot;
+		else
+			if bindingType = &quot;Menu&quot; then
+				GetDocumentType() = &quot;calcmenubar.xml&quot;
+			end if
+		end if
+	else 
+		if document.SupportsService(&quot;com.sun.star.text.TextDocument&quot;) then
+			if bindingType = &quot;Key&quot; then
+				GetDocumentType() = &quot;writerkeybinding.xml&quot;
+			else
+				if bindingType = &quot;Menu&quot; then
+					GetDocumentType() = &quot;writermenubar.xml&quot;
+				end if
+			end if
+		else
+			msgbox &quot;Couldn&apos;t determine file type&quot;
+		end if
+	end if
+end function
+
+
+function ReadXMLToArray( bindingType as string )
+
+	simplefileaccess = CreateUnoService( &quot;com.sun.star.ucb.SimpleFileAccess&quot; )
+	filestream = simplefileaccess.openFileRead( &quot;file://&quot; + GetOfficePath() + &quot;/user/config/soffice.cfg/&quot; + xmlFileName )
+
+    textin = CreateUnoService( &quot;com.sun.star.io.TextInputStream&quot; )
+    textin.setInputStream( filestream )
+
+    reDim xmlFile( 500 ) as String
+    reDim menuItems( 30 ) as String
+    reDim menuItemLinePosition( 30 ) as Integer
+    reDim scriptNames( 120 ) as string
+    redim scriptLinePosition( 120) as integer
+    
+    lineCount = 1
+    menuCount = 1
+    scriptCount = 1
+    
+    while not textin.isEOF()
+    	xmlline = textin.readLine()
+    	xmlFile( lineCount ) = xmlline
+
+ 		const menuItemWhiteSpace = 2
+ 		const menuXMLTag = &quot;&lt;menu:menu&quot;
+
+		&apos;If line read from XML file is a Menu title
+		if bindingType = &quot;Menu&quot; then
+			if instr( xmlFile( lineCount ), menuXMLTag ) = menuItemWhiteSpace then
+				menuLabel = ExtractLabelFromXMLLine( xmlFile( lineCount ) )
+				menuItems( menuCount ) = menuLabel
+				menuItemLinePosition( menuCount ) = lineCount
+				menuCount = menuCount + 1
+			end if
+		end if
+	
+		if bindingType = &quot;Key&quot; then
+			if not( instr( xmlFile( lineCount ), &quot;&lt;accel:item&quot; ) = 0 ) then
+				scriptName = &quot;&quot;
+				if not( instr( xmlFile( lineCount ), &quot;accel:shift=&quot;+chr$(34)+&quot;true&quot;+chr$(34) ) = 0 ) then
+					scriptName = scriptName + &quot;SHIFT + &quot;
+				end if
+				if not( instr( xmlFile( lineCount ), &quot;accel:mod1=&quot;+chr$(34)+&quot;true&quot;+chr$(34) ) = 0 ) then
+					scriptName = scriptName + &quot;CONTROL + &quot;
+				end if				
+				scriptName = scriptName + ExtractKeyCodeFromXMLLine( xmlFile( lineCount ) )
+				scriptNames( scriptCount ) = scriptName
+				scriptLinePosition( scriptCount ) = lineCount
+				scriptCount = scriptCount + 1
+			end if
+		end if
+
+        lineCount = lineCount + 1
+    wend
+
+	numberOfLines = lineCount
+    filestream.closeInput()
+end function
+
+
+function GetOfficePath() as string
+REM Error check and prompt user to manually input Office Path
+	settings =  CreateUnoService( &quot;com.sun.star.frame.Settings&quot; )
+	path = settings.getByName( &quot;PathSettings&quot; )
+	unformattedOfficePath = path.getPropertyValue( &quot;UserPath&quot; )
+
+	dim officePath as string 
+	const removeFromEnd = &quot;/user&quot;
+	const removeFromEndWindows = &quot;\user&quot;
+
+	REM If Solaris or Linux
+	if not ( instr( unformattedOfficePath, removeFromEnd ) = 0 ) then
+		endPosition = instr( unformattedOfficePath, removeFromEnd )&apos; - len( removeFromStart )
+		officePath = mid( unformattedOfficePath, 1, endPosition )
+	REM If Windows
+	else if not ( instr( unformattedOfficePath, removeFromEndWindows ) = 0 ) then
+			endPosition = instr( unformattedOfficePath, removeFromEndWindows )
+			officePath = mid( unformattedOfficePath, 1, endPosition )
+			while instr( officePath, &quot;\&quot; ) &gt; 0
+				backSlash = instr( officePath, &quot;\&quot; )
+				startPath = mid( officePath, 1, backSlash - 1 )
+				endPath = mid( officePath, backslash + 1, len( officePath ) - backSlash )
+				officePath = startPath + &quot;/&quot; + endPath
+			wend
+		else
+			msgbox &quot;Office path not found&quot;
+			REM Prompt user
+		end if
+	end if
+	
+	GetOfficePath() = officePath
+end function
+
+
+
+REM ----- File Output functions -----
+
+function AddNewMenuBinding( newScript as string, newMenuLabel as string, newLinePosition as integer )
+	simplefileaccess = CreateUnoService( &quot;com.sun.star.ucb.SimpleFileAccess&quot; )
+	simplefileaccess.kill( &quot;file:///&quot; + GetOfficePath() + &quot;user/config/soffice.cfg/&quot; + xmlFileName )
+	outfilestream = simplefileaccess.openFileWrite( &quot;file:///&quot; + GetOfficePath() + &quot;user/config/soffice.cfg/&quot; + xmlFileName )
+
+	textout = CreateUnoService( &quot;com.sun.star.io.TextOutputStream&quot; )
+    textout.setOutputStream( outfilestream )
+
+	for n = 1 to numberOfLines - 1
+	    if n = newLinePosition + 1 then
+	    	indent = GetMenuWhiteSpace( xmlFile( newLinePosition ) )
+	    	textout.writeString(indent + &quot;&lt;menu:menuitem menu:id=&quot;+chr$(34)+&quot;script://&quot; + newScript + chr$(34)+&quot; menu:helpid=&quot;+chr$(34)+&quot;1929&quot;+chr$(34)+&quot; menu:label=&quot;+chr$(34)+ newMenuLabel + chr$(34)+&quot;/&gt;&quot;+ chr$(10) )
+	    	&apos;msgbox (indent + &quot;&lt;menu:menuitem menu:id=&quot;+chr$(34)+&quot;script://&quot; + newScript + chr$(34)+&quot; menu:helpid=&quot;+chr$(34)+&quot;1929&quot;+chr$(34)+&quot; menu:label=&quot;+chr$(34)+ newMenuLabel + chr$(34)+&quot;/&gt;&quot;+ chr$(10) + &quot; newLinePosition is &quot; + newLinePosition)
+    		textout.writeString( xmlFile(n) + chr$(10) )
+	    else if n = numberOfLines - 1 then
+	    		textout.writeString( xmlFile(n) )
+	    	else
+				textout.writeString( xmlFile(n) + chr$(10) )
+			end if
+		end if
+	next n
+	
+	outfilestream.flush()
+	outfilestream.closeOutput()
+	&apos;bindingDialog.endExecute()
+	
+	&apos;msgbox ( &quot;Menu Label: &quot; + newMenuLabel + &quot; Function Name: &quot; + newScript )
+end function
+
+
+function AddNewKeyBinding( scriptName as string, shift as boolean, control as boolean, key as string )
+	simplefileaccess = CreateUnoService( &quot;com.sun.star.ucb.SimpleFileAccess&quot; )
+	simplefileaccess.kill( &quot;file:///&quot; + GetOfficePath() + &quot;user/config/soffice.cfg/&quot; + xmlFileName )
+	outfilestream = simplefileaccess.openFileWrite( &quot;file:///&quot; + GetOfficePath() + &quot;user/config/soffice.cfg/&quot; + xmlFileName )
+
+	textout = CreateUnoService( &quot;com.sun.star.io.TextOutputStream&quot; )
+    textout.setOutputStream( outfilestream )
+	
+	dim keyCombo as string
+	newLine = &quot; &lt;accel:item accel:code=&quot;+chr$(34)+&quot;KEY_&quot; + key +chr$(34)
+	if shift then
+		keyCombo = &quot;SHIFT + &quot;
+		newLine = newLine + &quot; accel:shift=&quot;+chr$(34)+&quot;true&quot;+chr$(34)
+	end if
+	if control then
+		keyCombo = keyCombo + &quot;CONTROL + &quot;
+		newLine = newLine + &quot; accel:mod1=&quot;+chr$(34)+&quot;true&quot;+chr$(34)
+	end if
+	keyCombo = keyCombo + key
+	newLine = newLine + &quot; xlink:href=&quot;+chr$(34)+&quot;script://&quot; + scriptName
+	
+	&apos;For this release of the scripting framework only use application binding
+	applicationBinding = true
+	if applicationBinding then
+		newLine = newLine + &quot;?location=application&quot;+chr$(34)+&quot;/&gt;&quot;
+	else
+		newLine = newLine + &quot;?location=document&quot;+chr$(34)+&quot;/&gt;&quot;
+	end if
+	
+	&apos;msgbox ( &quot;New key binding: &quot; + newLine )
+	
+	for n = 1 to numberOfLines - 1
+		if n = numberOfLines - 1 then
+			textout.writeString( newLine + chr$(10) )
+			textout.writeString( xmlFile( n ) )&apos; + chr$(10) )
+		else if n = numberOfLines - 1 then
+	    		textout.writeString( xmlFile( n ) )
+	    	else
+				textout.writeString( xmlFile( n ) + chr$(10) )
+			end if
+		end if
+			
+	next n
+
+	outfilestream.flush()
+	outfilestream.closeOutput()
+	&apos;bindingDialog.endExecute()
+	
+	&apos;msgbox ( &quot;Key: &quot; + keyCombo + &quot; Function Name: &quot; + scriptName )
+end function
+
+
+function RemoveBinding( removeLinePosition as integer )
+	simplefileaccess = CreateUnoService( &quot;com.sun.star.ucb.SimpleFileAccess&quot; )
+	simplefileaccess.kill( &quot;file:///&quot; + GetOfficePath() + &quot;user/config/soffice.cfg/&quot; + xmlFileName )
+	outfilestream = simplefileaccess.openFileWrite( &quot;file:///&quot; + GetOfficePath() + &quot;user/config/soffice.cfg/&quot; + xmlFileName )
+
+	textout = CreateUnoService( &quot;com.sun.star.io.TextOutputStream&quot; )
+    textout.setOutputStream( outfilestream )
+
+	for n = 1 to numberOfLines - 1
+    	if not( n = removeLinePosition ) then
+			if n = numberOfLines - 1 then
+    			textout.writeString( xmlFile( n ) )
+    		else
+				textout.writeString( xmlFile( n ) + chr$(10) )
+			end if
+		&apos;else
+		&apos;	msgbox (&quot;Deleting: &quot; + xmlFile( n ) )
+		end if
+	next n
+	
+	outfilestream.flush()
+	outfilestream.closeOutput()
+	&apos;bindingDialog.endExecute()
+end function
+
+
+
+REM ----- Populating Dialog Controls -----
+
+
+function PopulateScriptList()
+	scriptList = bindingDialog.getControl( &quot;ScriptList&quot; )
+	scriptList.removeItems( 0, scriptList.getItemCount() )
+
+	smgr = getProcessServiceManager()
+   	context = smgr.getPropertyValue( &quot;DefaultContext&quot; )
+   	scriptstoragemgr = context.getValueByName( &quot;/singletons/drafts.com.sun.star.script.framework.storage.theScriptStorageManager&quot; ) 
+
+   	storage = scriptstoragemgr.getScriptStorage( 1 )
+	logicalNames() = storage.getScriptLogicalNames()
+
+	for n = 1 to ubound( logicalNames() ) + 1
+		scriptList.addItem( logicalNames( n - 1 ), n )
+	next n
+	
+	scriptList.selectItemPos( 0, true )
+end function
+
+
+function PopulateMenuCombo()
+	menuComboBox = bindingDialog.getControl( &quot;MenuCombo&quot; )
+	menuComboBox.removeItems( 0, menuComboBox.getItemCount() )
+	for n = 1 to menuCount - 1
+		menuComboBox.addItem( menuItems( n ), n - 1 )
+	next n
+	menuComboBox.setDropDownLineCount( 8 ) 
+	menuComboBox.text = menuComboBox.getItem( 0 )
+end function
+
+
+function PopulateSubMenuList( menuItemPosition as integer )
+	redim subMenuItems( 100 ) as string
+	redim subMenuItemLinePosition( 100 ) as integer
+	dim lineNumber as integer
+	const menuItemWhiteSpace = 4
+	const menuXMLTag = &quot;&lt;menu:menu&quot;
+	subMenuCount = 1
+
+	xmlStartLine = menuItemLinePosition( menuItemPosition ) + 1
+	&apos;If last menu item is chosen
+	if menuItemPosition = menuCount - 1 then
+		xmlEndLine = numberOfLines
+	else
+		xmlEndLine = menuItemLinePosition( menuItemPosition + 1 ) - 1
+	end if
+	for lineNumber = xmlStartLine to xmlEndLine
+		&apos;Insert all sub-menus and sub-popupmenus
+		if not( instr( xmlFile( lineNumber ), menuXMLTag ) = 0 ) and instr( xmlFile( lineNumber ), &quot;menupopup&quot;) = 0 then
+			subMenuIndent = GetMenuWhiteSpace( xmlFile( lineNumber ) )
+			if subMenuIndent = &quot; &quot; then
+				subMenuIndent = &quot;&quot;
+			else
+				subMenuIndent = subMenuIndent + subMenuIndent 
+			end if
+			if not( instr( xmlFile( lineNumber ), &quot;menuseparator&quot; ) = 0 ) then
+				subMenuItems( subMenuCount ) = subMenuIndent + &quot;----------------&quot;	
+			else
+				subMenuName = ExtractLabelFromXMLLine( xmlFile( lineNumber ) )
+				&apos;Add script Name if there is one bound to menu item
+				if instr( xmlFile( lineNumber ), &quot;script://&quot; ) &gt; 0 then
+					script = ExtractScriptIdFromXMLLine( xmlFile( lineNumber ) )
+					subMenuItems( subMenuCount ) = ( subMenuIndent + subMenuName + &quot; [&quot; + script + &quot;]&quot; )
+				else
+					&apos;ZZZZZ Test to change text properties
+					&apos;tcolor = rgb( 255, 0, 0 )
+					&apos;subMenuName.textcolor = tcolor
+					subMenuItems( subMenuCount ) = subMenuIndent + subMenuName
+				end if
+			end if
+			subMenuItemLinePosition( subMenuCount ) = lineNumber
+			subMenuCount = subMenuCount + 1
+		end if
+	next lineNumber
+
+	subMenuList = bindingDialog.getControl( &quot;SubMenuList&quot; )
+	subMenuList.removeItems( 0, subMenuList.getItemCount() )
+	for n = 1 to subMenuCount - 1
+		subMenuList.addItem( subMenuItems( n ), n - 1 )
+	next n
+	subMenuList.selectItemPos( 0, true )
+	&apos;ZZZZZ Test to change text properties
+	&apos;control = CreateUnoService( &quot;com.sun.star.awt.UnoControlEditModel&quot; )
+	&apos;msgbox ( subMenuName.dbg_methods )
+	&apos;control.setModel( bindingDialog.Model )
+	&apos;tcolor = rgb( 255, 0, 0 )
+	&apos;bindingDialog.Model.subMenuList.textcolor = tcolor
+	SubMenuListListener()
+end function
+
+
+
+function PopulateTopLevelKeyBindingList()
+	keyCombo = bindingDialog.getControl( &quot;KeyCombo&quot; )
+	keyCombo.removeItems( 0, keyCombo.getItemCount() )
+	keyCombo.addItem( &quot;SHIFT + CONTROL + F keys&quot;, 0 )
+	keyCombo.addItem( &quot;SHIFT + CONTROL + digits&quot;, 1 )
+	keyCombo.addItem( &quot;SHIFT + CONTROL + letters&quot;, 2 )
+	keyCombo.addItem( &quot;CONTROL + F keys&quot;, 3 )
+	keyCombo.addItem( &quot;CONTROL + digits&quot;, 4 )
+	keyCombo.addItem( &quot;CONTROL + letters&quot;, 5 )
+	keyCombo.addItem( &quot;SHIFT + F keys&quot;, 6 )
+	
+	keyCombo.setDropDownLineCount( 7 ) 
+	keyCombo.text = keyCombo.getItem( 0 )
+end function
+
+
+function PopulateKeyBindingList( startPosition as integer, endPosition as integer )
+	dim formattedKeyBinding( 47 ) as string
+	counter = 1
+	
+	keyList = bindingDialog.getControl( &quot;KeyList&quot; )
+	
+	for n = startPosition to endPosition
+		if IsAllocatedKeyCombo( allKeyBindings( n ) ) &gt; 1 then
+			formattedKeyBinding( counter ) =  ( allKeyBindings( n ) + &quot; [Allocated to &quot; + ExtractScriptIdFromXMLLine( xmlFile( isAllocatedKeyCombo( allKeyBindings( n ) ) ) ) + &quot;]&quot; )
+		else if IsAllocatedKeyCombo( allKeyBindings( n ) ) = 1 then
+				formattedKeyBinding( counter ) =  ( allKeyBindings( n ) + &quot; [Allocated to Office function]&quot; )
+			else
+				formattedKeyBinding( counter ) = allKeyBindings( n )
+			end if
+		end if
+		counter = counter + 1
+	next n
+	
+	keyList.removeItems( 0, keyList.getItemCount() )
+	for n = 1 to counter - 1
+		keyList.addItem( formattedKeyBinding( n ), n - 1 )
+	next n
+	
+	keyList.selectItemPos( 0, true )
+	KeyListListener()
+end function
+
+
+
+function CreateAllKeyBindings()
+	reDim allKeyBindings( 105 ) as string
+	keyBindingPosition = 1
+&apos;SHIFT + CONTROL for shftctrl = 1 to 46
+	for FKey = 2 to 12
+		allKeyBindings( keyBindingPosition ) = &quot;SHIFT + CONTROL + F&quot; + FKey
+		keyBindingPosition = keyBindingPosition + 1
+	next FKey
+	for Digit = 0 to 9
+		allKeyBindings( keyBindingPosition ) = &quot;SHIFT + CONTROL + &quot; + Digit
+			keyBindingPosition = keyBindingPosition + 1
+	next Digit
+	for Alpha = 65 to 90
+		allKeyBindings( keyBindingPosition ) = &quot;SHIFT + CONTROL + &quot; + chr$( Alpha )
+		keyBindingPosition = keyBindingPosition + 1
+	next Alpha
+&apos;FOR for ctrl = 1 to 46
+	for FKey = 2 to 12
+		allKeyBindings( keyBindingPosition ) = &quot;CONTROL + F&quot; + FKey
+		keyBindingPosition = keyBindingPosition + 1
+	next FKey
+	for Digit = 0 to 9
+		allKeyBindings( keyBindingPosition ) = &quot;CONTROL + &quot; + Digit
+		keyBindingPosition = keyBindingPosition + 1
+	next Digit
+	for Alpha = 65 to 90
+		allKeyBindings( keyBindingPosition ) = &quot;CONTROL + &quot; + chr$( Alpha )
+		keyBindingPosition = keyBindingPosition + 1
+	next Alpha
+&apos;SHIFT for shift = 1 to 46
+	for FKey = 2 to 12
+		allKeyBindings( keyBindingPosition ) = &quot;SHIFT + F&quot; + FKey
+		keyBindingPosition = keyBindingPosition + 1
+	next FKey
+end function
+
+
+
+REM ----- Text Handling Functions -----
+
+
+function ExtractLabelFromXMLLine( XMLLine as string ) as string
+	labelStart = instr( XMLLine, &quot;label=&quot;+chr$(34)) + 7
+	labelEnd = instr( XMLLine, chr$(34)+&quot;&gt;&quot; )
+	if labelEnd = 0 then
+	    labelEnd = instr( XMLLine, chr$(34)+&quot;/&gt;&quot; )
+	end if
+	labelLength = labelEnd - labelStart
+
+	menuLabelUnformatted = mid( XMLLine, labelStart, labelLength )
+	tildePosition = instr( menuLabelUnformatted, &quot;~&quot; )
+	select case tildePosition
+		case 0
+			menuLabel = menuLabelUnformatted
+		case 1
+			menuLabel = right( menuLabelUnformatted, labelLength - 1 )
+		case else
+			menuLabelLeft = left( menuLabelUnformatted, tildePosition - 1 )
+			menuLabelRight = right( menuLabelUnformatted, labelLength - tildePosition )
+			menuLabel = menuLabelLeft + menuLabelRight
+	end select
+
+	ExtractLabelFromXMLLine() = menuLabel
+end function
+
+
+function ExtractScriptIdFromXMLLine( XMLLine as string ) as string
+	idStart = instr( XMLLine, &quot;script://&quot;) + 9
+	if instr( XMLLine, &quot;&quot;+chr$(34)+&quot; menu:helpid=&quot; ) = 0 then
+		idEnd = instr( XMLLIne, &quot;?location=&quot; )
+	else
+		idEnd = instr( XMLLine, &quot;&quot;+chr$(34)+&quot; menu:helpid=&quot; )
+	end if
+	idLength = idEnd - idStart
+	scriptId = mid( XMLLine, idStart, idLength )
+
+	ExtractScriptIdFromXMLLine() = scriptId
+end function
+
+
+function ExtractKeyCodeFromXMLLine( XMLLine as string ) as string
+	keyStart = instr( XMLLine, &quot;code=&quot;+chr$(34)+&quot;KEY_&quot;) + 10
+	keyCode = mid( XMLLine, keyStart, ( len( XMLLine ) - keyStart ) )
+	keyEnd = instr( keyCode, chr$(34) )
+	keyCode = mid( keyCode, 1, keyEnd - 1 )
+	
+	ExtractKeyCodeFromXMLLine() = keyCode
+end function
+
+
+function GetMenuWhiteSpace( MenuXMLLine as string ) as string
+	whiteSpace = &quot;&quot;
+	numberOfSpaces = instr( MenuXMLLine, &quot;&lt;&quot; ) - 1
+	for i = 1 to numberOfSpaces
+		whiteSpace = whiteSpace + &quot; &quot;
+	next i
+	
+	GetMenuWhiteSpace() = whiteSpace
+end function
+
+
+function IsAllocatedKeyCombo( script as string ) as integer
+	const NotAllocated = 0
+	const AllocatedToOfficeFunction = 1
+	const AllocatedToScript = 2
+	dim Allocation as integer
+	
+	if instr( script, &quot; [Allocated&quot; ) &gt; 0 then
+		endPosition = instr( script, &quot; [Allocated&quot; ) - 1
+		script = mid( script, 1, endPosition )
+	end if
+	
+	Allocation = NotAllocated
+	count = 1
+	while Allocation = NotAllocated and count &lt; scriptCount
+		linePosition = scriptLinePosition( count )
+		if strcomp( script, scriptNames( count ) ) = 0 then
+			if instr( xmlFile( linePosition ), &quot;script://&quot; ) &gt; 0 then
+				Allocation = linePosition
+			else 
+				Allocation = AllocatedToOfficeFunction
+			end if
+		end if
+		count = count + 1
+	wend
+	IsAllocatedKeyCombo() = Allocation
+end Function
+
+
+function IsAllocatedMenuItem( script as string ) as boolean
+	foundMenuItem = false
+	Allocated = false
+	count = 0
+	do 
+		count = count + 1
+		if strcomp( script, subMenuItems( count ) ) = 0 then
+			foundMenuItem = true
+		end if	
+	loop while not( foundMenuItem ) and count &lt; subMenuCount
+
+	linePosition = subMenuItemLinePosition( count )
+
+	if not( instr( xmlFile( linePosition ), &quot;script://&quot; ) = 0 ) then
+		Allocated = true
+	end if
+
+	isAllocatedMenuItem() = Allocated
+end Function
+
+
+function HasShiftKey( keyCombo ) as boolean
+	if instr( keyCombo, &quot;SHIFT&quot; ) = 0 then
+		hasShift = false
+	else
+		hasShift = true
+	end if
+		
+	HasShiftKey = hasShift
+end function
+
+
+function HasControlKey( keyCombo ) as boolean
+	if instr( keyCombo, &quot;CONTROL&quot; ) = 0 then
+		hasControl = false
+	else
+		hasControl = true
+	end if
+		
+	HasControlKey = hasControl
+end function
+
+
+function ExtractKeyFromCombo( keyString as string ) as string
+	while not( instr( keyString, &quot;+&quot; ) = 0 )
+		removeTo = instr( keyString, &quot;+ &quot; ) + 2
+		keyString = mid( keyString, removeTo, ( len( keyString ) - removeTo ) + 1 )
+	wend
+
+	ExtractKeyFromCombo() = keyString
+end function
+
+
+
+REM ------ Event Handling Functions ------
+
+
+function KeyListListener()
+	keyList = bindingDialog.getControl( &quot;KeyList&quot; )
+	selectedKeyCombo = keyList.getSelectedItem()
+	
+	if isAllocatedKeyCombo( selectedKeyCombo ) &gt; 1 then
+		bindingDialog.Model.Delete.enabled = true
+		bindingDialog.Model.NewButton.enabled = false
+	else
+		if isAllocatedKeyCombo( selectedKeyCombo ) = 1 then
+			bindingDialog.Model.Delete.enabled = false
+			bindingDialog.Model.NewButton.enabled = false
+		else
+			bindingDialog.Model.Delete.enabled = false
+			bindingDialog.Model.NewButton.enabled = true
+		end if
+	end if
+end function
+
+
+function SubMenuListListener()
+	subMenuList = bindingDialog.getControl( &quot;SubMenuList&quot; )
+	selectedMenuItem = subMenuList.getSelectedItem()
+	if IsAllocatedMenuItem( selectedMenuItem ) then
+		bindingDialog.Model.Delete.enabled = true
+	else
+		bindingDialog.Model.Delete.enabled = false
+	end if
+end function
+
+
+&apos;Populates the SubMenuList with the appropriate menu items from the Top-level menu selected from the combo box
+function MenuComboListener()
+	combo = bindingDialog.getControl( &quot;MenuCombo&quot; ) 
+	newToplevelMenu = combo.text
+	counter = 0
+	do
+		counter = counter + 1
+	loop while not( newToplevelMenu = menuItems( counter ) )
+	
+	PopulateSubMenuList( counter )
+end function
+
+
+&apos;Populates the KeyList with the appropriate key combos from the Top-level key group selected from the combo box
+function KeyComboListener()
+	combo = bindingDialog.getControl( &quot;KeyCombo&quot; ) 
+	itemSelected = combo.text
+
+	select case itemSelected
+	case &quot;SHIFT + CONTROL + F keys&quot;
+		PopulateKeyBindingList( 1, 11 )
+	case &quot;SHIFT + CONTROL + digits&quot;
+		PopulateKeyBindingList( 12, 21 )
+	case &quot;SHIFT + CONTROL + letters&quot;
+		PopulateKeyBindingList( 22, 47 )
+	case &quot;CONTROL + F keys&quot;
+		PopulateKeyBindingList( 48, 58 )
+	case &quot;CONTROL + digits&quot;
+		PopulateKeyBindingList( 59, 68 )
+	case &quot;CONTROL + letters&quot;
+		PopulateKeyBindingList( 69, 94 )
+	case &quot;SHIFT + F keys&quot;
+		PopulateKeyBindingList( 95, 105 )
+	case else
+		msgbox &quot;Error&quot;
+	end select
+end function
+
+
+function MenuLabelBoxListener()
+	if bindingDialog.Model.MenuLabelBox.text = &quot;&quot; then
+		bindingDialog.Model.NewButton.enabled = false
+	else
+		bindingDialog.Model.NewButton.enabled = true
+	end if
+end function
+
+
+function MenuOKButton()
+	msgbox (&quot;Office must be restarted before your changes will take effect.&quot; )
+	bindingDialog.endExecute()
+end function
+
+
+function MenuCancelButton()
+	bindingDialog.endExecute()
+end function
+
+
+function MenuHelpButton()
+	helpDialog = LoadDialog( &quot;ScriptBindingLibrary&quot;, &quot;HelpBinding&quot; )
+	helpDialog.execute()
+end function
+
+
+function MenuDeleteButton()
+	subMenuList = bindingDialog.getControl( &quot;SubMenuList&quot; )
+	linePos = subMenuItemLinePosition( subMenuList.getSelectedItemPos() + 1 )
+	RemoveBinding( linePos )
+	
+	menuLabel = ExtractLabelFromXMLLine( xmlFile( linePos ) )
+	script = ExtractScriptIdFromXMLLine( xmlFile( linePos ) )
+	ReadXMLToArray( &quot;Menu&quot; )
+REM !!!
+	MenuComboListener()
+	&apos;PopulateSubMenuList( menuItemPosition as integer )
+end function
+
+
+function MenuNewButton()
+	menuScriptList = bindingDialog.getControl( &quot;ScriptList&quot; )
+	script = menuScriptList.getSelectedItem()
+	newMenuLabel = bindingDialog.Model.MenuLabelBox.text
+	if newMenuLabel = &quot;&quot; then
+		msgbox &quot;Error. Please enter new Menu Label&quot;
+	end if
+	subMenuList = bindingDialog.getControl( &quot;SubMenuList&quot; )
+	linePos = subMenuItemLinePosition( subMenuList.getSelectedItemPos() + 1 )
+	AddNewMenuBinding( script, newMenuLabel, linePos )
+	
+	&apos;topLevelMenu = bindingDialog.Model.MenuCombo.text
+	&apos;subMenu = subMenuList.getSelectedItem()
+	ReadXMLToArray( &quot;Menu&quot; )
+REM !!!
+	MenuComboListener()
+	&apos;PopulateSubMenuList( menuItemPosition as integer )	
+	&apos;msgbox ( &quot;Menu: &quot; + topLevelMenu + &quot; -&gt; &quot; + newMenuLabel + &quot; Function Name: &quot; + script )
+end function
+
+
+function KeyOKButton()
+	msgbox (&quot;Office must be restarted before your changes will take effect.&quot; )
+	bindingDialog.endExecute()
+end function
+
+
+function KeyCancelButton()
+	bindingDialog.endExecute()
+end function
+
+
+function KeyHelpButton()
+	helpDialog = LoadDialog( &quot;ScriptBindingLibrary&quot;, &quot;HelpBinding&quot; )
+	helpDialog.execute()
+end function
+
+
+function KeyNewButton()
+	menuScriptList = bindingDialog.getControl( &quot;ScriptList&quot; )
+	script = menuScriptList.getSelectedItem()
+	
+	keyList = bindingDialog.getControl( &quot;KeyList&quot; )
+	REM Check that combo has not already been allocated	
+	keyCombo = keyList.getSelectedItem()
+	
+	AddNewKeyBinding( script, HasShiftKey( keyCombo ), HasControlKey( keyCombo ), ExtractKeyFromCombo( keyCombo ) ) 
+	ReadXMLToArray( &quot;Key&quot; )
+REM !!!
+	KeyComboListener()
+	&apos;PopulateKeyBindingList( startPosition as integer, endPosition as integer )	
+end function
+
+
+function KeyDeleteButton()
+	keyList = bindingDialog.getControl( &quot;KeyList&quot; )
+	REM Check that combo is a script
+	keyCombo = keyList.getSelectedItem()
+	
+	if instr( keyCombo, &quot; [Allocated&quot; ) &gt; 0 then
+		endPosition = instr( keyCombo, &quot; [Allocated&quot; ) - 1
+		keyCombo = mid( keyCombo, 1, endPosition )
+	end if
+	
+	for n = 1 to scriptCount
+		if strcomp( keyCombo, scriptNames( n ) ) = 0 then
+			keyComboPosition = n
+			exit for
+		end if
+	next n
+		
+	linePosition = scriptLinePosition( keyComboPosition )
+	RemoveBinding( linePosition )
+	
+	script = ExtractScriptIdFromXMLLine( xmlFile( linePosition ) )
+	ReadXMLToArray( &quot;Key&quot; )
+REM !!!
+	KeyComboListener()
+	&apos;PopulateKeyBindingList( startPosition as integer, endPosition as integer )
+end function
+
+
+function HelpOKButton()
+	helpDialog.endExecute()
+end function</script:module>
