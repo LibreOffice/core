@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:05:18 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1084,7 +1084,7 @@ String STR_ObjNameSingulCCUT
     Text[ dutch ] = "Segment";
     Text[ chinese_simplified ] = "ÉÈĞÎ";
     Text[ greek ] = "ÔìŞìá êıêëïõ";
-    Text[ korean ] = "¿øÀÇ ÀıÆí";
+    Text[ korean ] = "¿ø ¼¼±×¸ÕÆ®";
     Text[ turkish ] = "Daire parçası";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Segmento de círculo";
@@ -1113,7 +1113,7 @@ String STR_ObjNamePluralCCUT
     Text[ dutch ] = "Cirkelsegmenten";
     Text[ chinese_simplified ] = "Ô²»¡¶Î";
     Text[ greek ] = "ÔìŞìáôá êıêëïõ";
-    Text[ korean ] = "¿øÀÇ ÀıÆí";
+    Text[ korean ] = "¿ø ¼¼±×¸ÕÆ®";
     Text[ turkish ] = "Daire parçaları";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Segmentos de círculo";
@@ -1316,7 +1316,7 @@ String STR_ObjNameSingulCCUTE
     Text[ dutch ] = "Ellipssegment";
     Text[ chinese_simplified ] = "ÍÖÔ²È±";
     Text[ greek ] = "ÔìŞìá İëëåéøçò";
-    Text[ korean ] = "Å¸¿ø ÀıÆí";
+    Text[ korean ] = "Å¸¿ø ¼¼±×¸ÕÆ®";
     Text[ turkish ] = "Elips parçası";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Segmento elíptico";
@@ -1345,7 +1345,7 @@ String STR_ObjNamePluralCCUTE
     Text[ dutch ] = "Ellips-segmenten";
     Text[ chinese_simplified ] = "ÍÖÔ²È±";
     Text[ greek ] = "ÔìŞìáôá İëëåéøçò";
-    Text[ korean ] = "Å¸¿ø ÀıÆí";
+    Text[ korean ] = "Å¸¿ø ¼¼±×¸ÕÆ®";
     Text[ turkish ] = "Elips parçaları";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Segmentos elípticos";
@@ -1573,7 +1573,7 @@ String STR_ObjNamePluralPATHLINE
     Text[ russian ] = "Êğèâàÿ Áåçüå";
     Text[ polish ] = "Krzywa Beziera";
     Text[ japanese ] = "ÍŞ¼Şª‹Èü";
-    Text[ chinese_traditional ] = "¦±§Î½u¬q";
+    Text[ chinese_traditional ] = "¦±§Î½u±ø";
     Text[ arabic ] = "ãäÍäíÇÊ Bézier";
     Text[ dutch ] = "Bézierbogen";
     Text[ chinese_simplified ] = "ÇúĞÎÏßÌõ";
@@ -1631,7 +1631,7 @@ String STR_ObjNamePluralPATHFILL
     Text[ russian ] = "Êğèâàÿ Áåçüå";
     Text[ polish ] = "Krzywa Beziera";
     Text[ japanese ] = "ÍŞ¼Şª‹Èü";
-    Text[ chinese_traditional ] = "¦±§Î½u¬q";
+    Text[ chinese_traditional ] = "¦±§Î½u±ø";
     Text[ arabic ] = "ãäÍäíÇÊ Bézier";
     Text[ dutch ] = "Bézierbogen";
     Text[ chinese_simplified ] = "ÇúĞÎÏßÌõ";
@@ -2150,7 +2150,7 @@ String STR_ObjNameSingulFITTEXT
     Text[ russian ] = "ñîãëàñîâàííûé îáúåêò òåêñòà";
     Text[ polish ] = "dostosowany obiekt tekstowy";
     Text[ japanese ] = "“K‡‚µ‚½Ã·½Ä µÌŞ¼Şª¸Ä";
-    Text[ chinese_traditional ] = "½Õ¾ã¹Lªº¤å¥»¹ï¶H";
+    Text[ chinese_traditional ] = "½Õ¾ã¹Lªº¤å¦rª«¥ó";
     Text[ arabic ] = "ÚäÕÑ äÕ Êã ãáÇÁãÊå";
     Text[ dutch ] = "Aangepast tekstobject";
     Text[ chinese_simplified ] = "µ÷Õû¹ıµÄÎÄ×Ö¶ÔÏó";
@@ -3037,11 +3037,11 @@ String STR_ObjNamePluralUno
     Text[ polish ] = "Pola kontrolne";
     Text[ portuguese_brazilian ] = "Uno-Control Objekte";
     Text[ japanese ] = "ºİÄÛ°Ù";
-    Text[ chinese_simplified ] = "¿ØÖÆ×Ö¶Î";
+    Text[ chinese_simplified ] = "¿ØÖÆ";
     Text[ chinese_traditional ] = "±±¨î¶µ";
     Text[ arabic ] = "ÚäÇÕÑ ÊÍßã";
     Text[ dutch ] = "Controlevelden";
-    Text[ chinese_simplified ] = "¿ØÖÆ×Ö¶Î";
+    Text[ chinese_simplified ] = "¿ØÖÆ";
     Text[ greek ] = "Ğåäßá åëİã÷ïõ";
     Text[ korean ] = "ÄÁÆ®·Ñ ÇÊµå";
     Text[ turkish ] = "Komut alanı";
@@ -3151,7 +3151,7 @@ String STR_ObjNameSingulFrame
     Text[ russian ] = "Êàäğ";
     Text[ polish ] = "Ramka";
     Text[ japanese ] = "ÌÚ°Ñ";
-    Text[ chinese_traditional ] = "®Ø";
+    Text[ chinese_traditional ] = "°T®Ø";
     Text[ arabic ] = "ÅØÇÑ";
     Text[ dutch ] = "Frame";
     Text[ chinese_simplified ] = "¿ò¶ÔÏó";
@@ -3179,7 +3179,7 @@ String STR_ObjNamePluralFrame
     Text[ russian ] = "Êàäğû";
     Text[ polish ] = "Ramki";
     Text[ japanese ] = "ÌÚ°Ñ";
-    Text[ chinese_traditional ] = "®Ø";
+    Text[ chinese_traditional ] = "°T®Ø";
     Text[ arabic ] = "ÅØÇÑÇÊ";
     Text[ dutch ] = "Frames";
     Text[ chinese_simplified ] = "¿ò¶ÔÏó";
@@ -3207,7 +3207,7 @@ String STR_ObjFrameNamePrefix
     Text[ russian ] = "Êàäğ";
     Text[ polish ] = "Ramka";
     Text[ japanese ] = "ÌÚ°Ñ";
-    Text[ chinese_traditional ] = "®Ø";
+    Text[ chinese_traditional ] = "°T®Ø";
     Text[ arabic ] = "ÅØÇÑ";
     Text[ dutch ] = "Frame";
     Text[ chinese_simplified ] = "¿ò¶ÔÏó";
@@ -3413,7 +3413,7 @@ String STR_ObjNameSingulMEASURE
     Text[ russian ] = "Îáúåêò äëÿ èçìåğåíèÿ";
     Text[ polish ] = "Obiekt do wymiarowania";
     Text[ japanese ] = "¡–@‹L“ü‚·‚éµÌŞ¼Şª¸Ä";
-    Text[ chinese_traditional ] = "©w¤Ø«×ª«¥ó";
+    Text[ chinese_traditional ] = "©w¤Ø¤oª«¥ó";
     Text[ arabic ] = "ßÇÆä ÇáŞíÇÓ";
     Text[ dutch ] = "Objectafmetingen";
     Text[ chinese_simplified ] = "¶¨³ß´ç¶ÔÏó";
@@ -3443,7 +3443,7 @@ String STR_ObjNamePluralMEASURE
     Text[ russian ] = "Îáúåêòû äëÿ èçìåğåíèÿ";
     Text[ polish ] = "Obiekty do wymiarowania";
     Text[ japanese ] = "¡–@‹L“ü‚·‚éµÌŞ¼Şª¸Ä";
-    Text[ chinese_traditional ] = "©w¤Ø«×ª«¥ó";
+    Text[ chinese_traditional ] = "©w¤Ø¤oª«¥ó";
     Text[ arabic ] = "ßÇÆäÇÊ ÇáŞíÇÓ";
     Text[ dutch ] = "Objectafmetingen";
     Text[ chinese_simplified ] = "¶¨³ß¶È¶ÔÏó";
@@ -4170,14 +4170,14 @@ String STR_EditPutToTop
     Text [ dutch ] = "%O naar voren verplaatsen" ;
     Text [ spanish ] = "Desplazar %O al frente" ;
     Text [ english_us ] = "Move %O to front" ;
-    Text[ chinese_simplified ] = "ÔÙÇ°ÖÃ %O";
+    Text[ chinese_simplified ] = "%O ÏòÇ°";
     Text[ russian ] = "Ïîìåñòèòü ñïåğåäè %O";
     Text[ polish ] = "Przenieœ %O do przodu";
     Text[ japanese ] = "%O‚ğ‘O•û‚ÖˆÚ“®";
-    Text[ chinese_traditional ] = "¦A«e¸m %O";
+    Text[ chinese_traditional ] = "%O ¦V«e";
     Text[ arabic ] = "ÅÒÇÍÉ %O Åáì ÇáÃãÇã";
     Text[ dutch ] = "%O naar voren verplaatsen";
-    Text[ chinese_simplified ] = "ÔÙÇ°ÖÃ %O";
+    Text[ chinese_simplified ] = "%O ÏòÇ°";
     Text[ greek ] = "Ìåôáêßíçóç %O ğñïò ôá åìğñüò";
     Text[ korean ] = "%O ¾ÕÀ¸·Î ÀÌµ¿";
     Text[ turkish ] = "En öne getir: %O";
@@ -4199,14 +4199,14 @@ String STR_EditPutToBtm
     Text [ dutch ] = "%O naar achteren verplaatsen" ;
     Text [ spanish ] = "Desplazar %O hacia atrás" ;
     Text [ english_us ] = "Move %O to back" ;
-    Text[ chinese_simplified ] = "ÔÙºóÖÃ %O";
+    Text[ chinese_simplified ] = "%O Ïòºó";
     Text[ russian ] = "Ïîìåñòèòü %O ñçàäè";
     Text[ polish ] = "Przenieœ %O do ty³u";
     Text[ japanese ] = "%O‚ğŒã•û‚ÖˆÚ“®";
-    Text[ chinese_traditional ] = "¦A«á¸m %O";
+    Text[ chinese_traditional ] = "%O ¦V«á";
     Text[ arabic ] = "ÅÒÇÍÉ %O Åáì ÇáÎáİ";
     Text[ dutch ] = "%O naar achteren verplaatsen";
-    Text[ chinese_simplified ] = "ÔÙºóÖÃ %O";
+    Text[ chinese_simplified ] = "%O Ïòºó";
     Text[ greek ] = "Ìåôáêßíçóç %O ğñïò ôá ğßóù";
     Text[ korean ] = "%O µÚ·Î ÀÌµ¿";
     Text[ turkish ] = "En alta gönder: %O";
@@ -4857,7 +4857,7 @@ String STR_EditSetAttributes
     Text[ dutch ] = "Attributen op %O toepassen";
     Text[ chinese_simplified ] = "·ÖÅäÊôĞÔ¸ø %O";
     Text[ greek ] = "ÅöáñìïãŞ éäéïôŞôùí óå %O";
-    Text[ korean ] = "¼Ó¼º %O¿¡ Àû¿ë";
+    Text[ korean ] = "%O·Î ¼Ó¼º Àû¿ë";
     Text[ turkish ] = "Öznitelikleri uygula: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Aplicar atributos a %O";
@@ -5182,7 +5182,7 @@ String STR_EditAlignVCenter
     Text = "%O horizontal zentrieren" ;
     Text [ ENGLISH ] = "Center %O horizontal" ;
     Text [ norwegian ] = "Midtstill %O horisontal" ;
-    Text [ italian ] = "Centra %O orizzontalmente" ;
+    Text [ italian ] = "Centra %O in orizzontale" ;
     Text [ portuguese_brazilian ] = "Centralizar %O horizontalmente" ;
     Text [ portuguese ] = "Centrar %O na horizontal" ;
     Text [ finnish ] = "Keskitä %O vaakasuunnassa" ;
@@ -5273,7 +5273,7 @@ String STR_EditAlignHCenter
     Text = "%O vertikal zentrieren" ;
     Text [ ENGLISH ] = "Center %O vertical" ;
     Text [ norwegian ] = "Midtstill %O vertikal" ;
-    Text [ italian ] = "Centra %O verticalmente" ;
+    Text [ italian ] = "Centra %O in verticale" ;
     Text [ portuguese_brazilian ] = "Centralizar %O verticalmente" ;
     Text [ portuguese ] = "Centrar %O na vertical" ;
     Text [ finnish ] = "Keskitä %O pystysuunnassa" ;
@@ -5451,7 +5451,7 @@ String STR_EditMergeIntersectPoly
     Text[ portuguese_brazilian ] = "Intersect %O";
     Text[ japanese ] = "%O‚Ìˆê•”‚ğØ‚èæ‚é";
     Text[ korean ] = "%O ÀÚ¸£±â";
-    Text[ chinese_simplified ] = "%O ¼ô³ı";
+    Text[ chinese_simplified ] = "%O ¼ôÇĞ";
     Text[ chinese_traditional ] = "°£¥h %O";
     Text[ arabic ] = "ÔØÑ %O";
     Text[ turkish ] = "%O kes";
@@ -5475,7 +5475,7 @@ String STR_DistributeMarkedObjects
     Text[ polish ] = "Rozdziel wybrane obiekty";
     Text[ portuguese_brazilian ] = "Distribute selection";
     Text[ japanese ] = "‘I‘ğ‚µ‚½µÌŞ¼Şª¸Ä‚Ì•ª•z";
-    Text[ korean ] = "¼±ÅÃÀÇ¡¡°³Ã¼ ¹èºĞ";
+    Text[ korean ] = "¼±ÅÃ °³Ã¼ ºĞÇÒ";
     Text[ chinese_simplified ] = "·ÖÅäÑ¡ÖĞµÄ¶ÔÏó";
     Text[ chinese_traditional ] = "¤À¥¬¿ï¾Üªºª«¥ó";
     Text[ arabic ] = "ÊæÒíÚ ÇáßÇÆäÇÊ ÇáãÍÏÏÉ";
@@ -5654,14 +5654,14 @@ String STR_ExchangeClpCut
     Text [ dutch ] = "%O knippen" ;
     Text [ spanish ] = "Recortar %O" ;
     Text [ english_us ] = "Cut %O" ;
-    Text[ chinese_simplified ] = "¼ô³ı %O";
+    Text[ chinese_simplified ] = "¼ôÇĞ %O";
     Text[ russian ] = "Âûğåçàòü %O";
     Text[ polish ] = "Wytnij %O";
     Text[ japanese ] = "%O‚ğØ‚èæ‚é";
     Text[ chinese_traditional ] = "°Å¤U %O";
     Text[ arabic ] = "ŞÕ %O";
     Text[ dutch ] = "%O knippen";
-    Text[ chinese_simplified ] = "¼ô³ı %O";
+    Text[ chinese_simplified ] = "¼ôÇĞ %O";
     Text[ greek ] = "ÁğïêïğŞ %O";
     Text[ korean ] = "%O Àß¶ó³»±â";
     Text[ turkish ] = "Kes: %O";
@@ -5704,7 +5704,7 @@ String STR_ExchangeDD
     Text = "Drag&Drop %O" ;
     Text [ ENGLISH ] = "Drag&Drop %O" ;
     Text [ norwegian ] = "Dra og Slipp %O" ;
-    Text [ italian ] = "Trascina&Rilascia %O" ;
+    Text [ italian ] = "Drag&Drop %O" ;
     Text [ portuguese_brazilian ] = "Arrastar e Soltar %O" ;
     Text [ portuguese ] = "Arrastar & Largar %O" ;
     Text [ finnish ] = "Vedä ja pudota %O" ;
@@ -5735,7 +5735,7 @@ String STR_ExchangeDDPaste
     Text = "Drag&Drop einfügen" ;
     Text [ ENGLISH ] = "Paste Drag&Drop" ;
     Text [ norwegian ] = "Lim inn Dra og Slipp" ;
-    Text [ italian ] = "Incolla Trascina&Rilascia" ;
+    Text [ italian ] = "Incolla Drag&Drop" ;
     Text [ portuguese_brazilian ] = "Colar Arrastar e Soltar" ;
     Text [ portuguese ] = "Inserir Arrastar & Largar" ;
     Text [ finnish ] = "Lisää vetämällä ja pudottamalla" ;
@@ -7867,7 +7867,7 @@ String STR_ItemValTEXTVADJBLOCK
     Text[ russian ] = "Èñïîëüçîâàíèå âñåé âûñîòû";
     Text[ polish ] = "Wykorzystanie ca³ej wysokoœci";
     Text[ japanese ] = "‚‚³‚¢‚Á‚Ï‚¢g—p";
-    Text[ chinese_traditional ] = "³ÌÓì¨Ï¥Î¾ã­Ó°ª«×";
+    Text[ chinese_traditional ] = "³Ì¾A¨Ï¥Î¾ã­Ó°ª«×";
     Text[ arabic ] = "ÇÓÊÛáÇá ßá ÇáÇÑÊİÇÚ";
     Text[ dutch ] = "De gehele hoogte benutten";
     Text[ chinese_simplified ] = "×î¼ÑÊ¹ÓÃÕû¸ö¸ß¶È";
@@ -8007,7 +8007,7 @@ String STR_ItemValTEXTHADJBLOCK
     Text[ russian ] = "Èñïîëüçîâàíèå âñåé øèğèíû";
     Text[ polish ] = "Wykorzystanie ca³ej szerokoœci";
     Text[ japanese ] = "•‚¢‚Á‚Ï‚¢g—p";
-    Text[ chinese_traditional ] = "³ÌÓì¨Ï¥Î¾ã­Ó¼e«×";
+    Text[ chinese_traditional ] = "³Ì¾A¨Ï¥Î¾ã­Ó¼e«×";
     Text[ arabic ] = "ÇÓÊÛáÇá ßá ÇáÚÑÖ";
     Text[ dutch ] = "De gehele breedte benutten";
     Text[ chinese_simplified ] = "×î¼ÑÊ¹ÓÃÕû¸ö¿í¶È";
@@ -8748,7 +8748,7 @@ String STR_ItemValCIRC_FULL
     Text[ dutch ] = "Volle cirkel";
     Text[ chinese_simplified ] = "ÕûÔ²";
     Text[ greek ] = "ĞëŞñçò êıêëïò";
-    Text[ korean ] = "¿ÏÀüÇÑ ¿ø";
+    Text[ korean ] = "¿ÏÀü ¿ø";
     Text[ turkish ] = "Tam daire";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Círculo completo";
@@ -8804,7 +8804,7 @@ String STR_ItemValCIRC_CUT
     Text[ dutch ] = "Cirkelsegment";
     Text[ chinese_simplified ] = "Ô²»¡¶Î";
     Text[ greek ] = "ÔìŞìá êıêëïõ";
-    Text[ korean ] = "¿øÀÇ ÀıÆí";
+    Text[ korean ] = "¿ø ¼¼±×¸ÕÆ®";
     Text[ turkish ] = "Daire parçası";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Segmento de círculo";
@@ -9025,7 +9025,7 @@ String STR_ItemNam_SHADOWPERSP
     Text[ russian ] = "Ïåğñïåêòèâíàÿ òåíü";
     Text[ polish ] = "Cieñ perspektywiczny";
     Text[ japanese ] = "‰“‹ß‚ğ‚Â‚¯‚½‰e";
-    Text[ chinese_traditional ] = "³zµø³±¼v";
+    Text[ chinese_traditional ] = "«e´º³±¼v";
     Text[ arabic ] = "Ùá ãäÙæÑí";
     Text[ dutch ] = "Perspectivische schaduw";
     Text[ chinese_simplified ] = "Í¸ÊÓÒõÓ°";
@@ -9732,7 +9732,7 @@ String STR_ItemNam_TEXT_VERTADJUST
 {
     Text = "Vertikale Textverankerung" ;
     Text [ ENGLISH ] = "Vertical Textanchor" ;
-    Text [ portuguese ] = "Âncora de texto vertical" ;
+    Text [ portuguese ] = "Âncora vertical do texto" ;
     Text [ english_us ] = "Vertical text anchor" ;
     Text [ portuguese_brazilian ] = "Vertikale Textverankerung" ;
     Text [ swedish ] = "Vertikal textförankring" ;
@@ -9760,7 +9760,7 @@ String STR_ItemNam_TEXT_HORZADJUST
 {
     Text = "Horizontale Textverankerung" ;
     Text [ ENGLISH ] = "Horizontal Textanchor" ;
-    Text [ portuguese ] = "Âncora de texto horizontal" ;
+    Text [ portuguese ] = "Âncora horizontal do texto" ;
     Text [ english_us ] = "Horizontal text anchor" ;
     Text [ portuguese_brazilian ] = "Horizontale Textverankerung" ;
     Text [ swedish ] = "Horisontell textförankring" ;
@@ -10525,7 +10525,7 @@ String SIP_XA_LINESTYLE
     Text[ portuguese_brazilian ] = "Linestyle";
     Text[ japanese ] = "ü½À²Ù";
     Text[ chinese_simplified ] = "ÏßÌõÊ½Ñù";
-    Text[ chinese_traditional ] = "½u±ø¼Ë¦¡";
+    Text[ chinese_traditional ] = "½u±ø¦¡¼Ë";
     Text[ arabic ] = "äãØ ÇáÎØ";
     Text[ dutch ] = "Lijntype";
     Text[ chinese_simplified ] = "ÏßÌõÊ½Ñù";
@@ -10666,11 +10666,11 @@ String SIP_XA_LINEEND
     Text[ polish ] = "Koniec linii";
     Text[ portuguese_brazilian ] = "Lineend";
     Text[ japanese ] = "ü‚ÌI“_";
-    Text[ chinese_simplified ] = "ÏßÌõÎ²¶Ë";
-    Text[ chinese_traditional ] = "½u±ø§Àºİ";
+    Text[ chinese_simplified ] = "ÏßÌõ¼ıÍ·";
+    Text[ chinese_traditional ] = "½u±ø½bÀY";
     Text[ arabic ] = "äåÇíÉ ÇáÎØ";
     Text[ dutch ] = "Lijnuiteinde";
-    Text[ chinese_simplified ] = "ÏßÌõÎ²¶Ë";
+    Text[ chinese_simplified ] = "ÏßÌõ¼ıÍ·";
     Text[ greek ] = "Ôİëïò ãñáììŞò";
     Text[ korean ] = "¼± ³¡";
     Text[ turkish ] = "Çizgi sonu";
@@ -10722,11 +10722,11 @@ String SIP_XA_LINEENDWIDTH
     Text[ polish ] = "Szerokoœæ koñca linii";
     Text[ portuguese_brazilian ] = "Width of lineend";
     Text[ japanese ] = "ü‚ÌI“_‚Ì‘¾‚³";
-    Text[ chinese_simplified ] = "ÏßÌõÎ²¶Ë¿í¶È";
-    Text[ chinese_traditional ] = "½u±ø§Àºİ¼e«×";
+    Text[ chinese_simplified ] = "ÏßÌõ¼ıÍ·¿í¶È";
+    Text[ chinese_traditional ] = "½u±ø½bÀY¼e«×";
     Text[ arabic ] = "ÚÑÖ äåÇíÉ ÇáÎØ";
     Text[ dutch ] = "Dikte lijnuiteinde";
-    Text[ chinese_simplified ] = "ÏßÌõÎ²¶Ë¿í¶È";
+    Text[ chinese_simplified ] = "ÏßÌõ¼ıÍ·¿í¶È";
     Text[ greek ] = "ĞëÜôïò ôİëïõò ãñáììŞò";
     Text[ korean ] = "¼± ³¡ÀÇ ³Êºñ";
     Text[ turkish ] = "Çizgi sonu genişliği";
@@ -10778,11 +10778,11 @@ String SIP_XA_LINEENDCENTER
     Text[ polish ] = "Wyœrodkuj koniec linii";
     Text[ portuguese_brazilian ] = "Center lineend";
     Text[ japanese ] = "ü‚ÌI“_‚ğ’†‰›‘µ‚¦";
-    Text[ chinese_simplified ] = "ÏßÌõÎ²¶Ë¾ÓÖĞ";
-    Text[ chinese_traditional ] = "½u±ø§Àºİ¸m¤¤";
+    Text[ chinese_simplified ] = "ÏßÌõ¼ıÍ·¾ÓÖĞ";
+    Text[ chinese_traditional ] = "½u±ø½bÀY¸m¤¤";
     Text[ arabic ] = "äåÇíÉ ÇáÎØ¡ ÊæÓíØ";
     Text[ dutch ] = "Lijnuiteinde gecentreerd";
-    Text[ chinese_simplified ] = "ÏßÌõÎ²¶Ë¾ÓÖĞ";
+    Text[ chinese_simplified ] = "ÏßÌõ¼ıÍ·¾ÓÖĞ";
     Text[ greek ] = "Êåíôñáñéóìİíï ôİëïò ãñáììŞò";
     Text[ korean ] = "¼± ³¡ - °¡¿îµ¥";
     Text[ turkish ] = "Çizgi sonunu ortala";
@@ -12579,11 +12579,11 @@ String SIP_SA_SHADOWPERSP
     Text[ polish ] = "Cieñ perspektywiczny";
     Text[ portuguese_brazilian ] = "Perspective shadow";
     Text[ japanese ] = "‰“‹ß‚ğ‚Â‚¯‚½‰e";
-    Text[ chinese_simplified ] = "Ç°¾°ÒõÓ°";
-    Text[ chinese_traditional ] = "«e´º³±¼v";
+    Text[ chinese_simplified ] = "Í¸ÊÓÒõÓ°";
+    Text[ chinese_traditional ] = "³zµø³±¼v";
     Text[ arabic ] = "Ùá ãäÙæÑí";
     Text[ dutch ] = "Perspectivische schaduw";
-    Text[ chinese_simplified ] = "Ç°¾°ÒõÓ°";
+    Text[ chinese_simplified ] = "Í¸ÊÓÒõÓ°";
     Text[ greek ] = "ĞñïïğôéêŞ óêéÜ";
     Text[ korean ] = "¿ø±Ù°¨ÀÖ´Â À½¿µ";
     Text[ turkish ] = "Perspektifli gölge";
@@ -13243,7 +13243,7 @@ String SIP_SA_ECKENRADIUS
     Text = "Eckenradius";
     Text [ ENGLISH ] = "Edge radius" ;
     Text[ english_us ] = "Corner radius";
-    Text[ portuguese ] = "Raio de ângulo";
+    Text[ portuguese ] = "Raio do ângulo";
     Text[ russian ] = "Ğàäèóñ çàêğóãëåííîãî óãëà";
     Text[ dutch ] = "Hoekradius";
     Text[ french ] = "Rayon d'angle";
@@ -13311,7 +13311,7 @@ String SIP_SA_TEXT_AUTOGROWHEIGHT
     Text[ portuguese_brazilian ] = "Automatic height adjustment";
     Text[ japanese ] = "©“®“I‚É‚‚³’²®";
     Text[ chinese_simplified ] = "×Ô¶¯µ÷Õû¸ß¶È";
-    Text[ chinese_traditional ] = "¦Û°Ê½ÕÓì°ª«×";
+    Text[ chinese_traditional ] = "¦Û°Ê½Õ¾ã°ª«×";
     Text[ arabic ] = "ãáÇÁãÉ ÇáÇÑÊİÇÚ ÊáŞÇÆíÇğ";
     Text[ dutch ] = "Automatische hoogte-instelling";
     Text[ chinese_simplified ] = "×Ô¶¯µ÷Õû¸ß¶È";
@@ -13595,7 +13595,7 @@ String SIP_SA_TEXT_AUTOGROWWIDTH
     Text[ portuguese_brazilian ] = "Automatic adjustment of width";
     Text[ japanese ] = "©“®“I‚É•’²®";
     Text[ chinese_simplified ] = "×Ô¶¯µ÷Õû¿í¶È";
-    Text[ chinese_traditional ] = "¦Û°Ê½ÕÓì¼e«×";
+    Text[ chinese_traditional ] = "¦Û°Ê½Õ¾A¼e«×";
     Text[ arabic ] = "ãáÇÁãÉ ÇáÚÑÖ ÊáŞÇÆíÇğ";
     Text[ dutch ] = "Automatische breedte-instelling";
     Text[ chinese_simplified ] = "×Ô¶¯µ÷Õû¿í¶È";
@@ -13652,7 +13652,7 @@ String SIP_SA_TEXT_ANIKIND
     Text[ portuguese_brazilian ] = "Ticker";
     Text[ japanese ] = "Ã·½Ä±ÆÒ°¼®İ";
     Text[ chinese_simplified ] = "»î¶¯±êÌâ";
-    Text[ chinese_traditional ] = "²¾°Ê¤å¦r";
+    Text[ chinese_traditional ] = "°ÊºA¤å¦r";
     Text[ arabic ] = "ÇáßÊÇÈÉ ÇáãÊÍÑßÉ";
     Text[ dutch ] = "Tekstanimatie";
     Text[ chinese_simplified ] = "»î¶¯±êÌâ";
@@ -13877,7 +13877,7 @@ String SIP_SA_AUTOSHAPE_ADJUSTMENT
     Text[ polish ] = "Justowanie form automatycznych";
     Text[ portuguese_brazilian ] = "SvDraw Autoshape Adjustment";
     Text[ japanese ] = "µ°Ä¼ª²Ìß’²®";
-    Text[ korean ] = "ÀÚµ¿Çü»ó¡¡Á¶Á¤";
+    Text[ korean ] = "Á¶Á¤";
     Text[ chinese_simplified ] = "ĞÎ×´×Ô¶¯µ÷ÊÊ";
     Text[ chinese_traditional ] = "§Îª¬¦Û°Ê½Õ¾A";
     Text[ turkish ] = "SvDraw Autoshape Adjustment";
@@ -14660,7 +14660,7 @@ String SIP_SA_MEASUREKIND
     Text[ portuguese_brazilian ] = "Type of dimensioning";
     Text[ japanese ] = "¡–@‚Ìí—Ş";
     Text[ chinese_simplified ] = "¶¨³ß¶ÈµÄÀàĞÍ";
-    Text[ chinese_traditional ] = "©w¤Ø«×Ãş«¬";
+    Text[ chinese_traditional ] = "©w¤Ø¤oÃş«¬";
     Text[ arabic ] = "äæÚ ÇáŞíÇÓ";
     Text[ dutch ] = "Afmetingstype";
     Text[ chinese_simplified ] = "¶¨³ß¶ÈµÄÀàĞÍ";
@@ -14886,11 +14886,11 @@ String SIP_SA_MEASUREBELOWREFEDGE
     Text[ polish ] = "Wymiarowanie krawêdzi dolnej";
     Text[ portuguese_brazilian ] = "lower edge dimensioning";
     Text[ japanese ] = "‰º‚ÌŠp‚Ì¡–@‹L“ü";
-    Text[ chinese_simplified ] = "ÏÂ±ßÔµ¶¨³ß¶È";
-    Text[ chinese_traditional ] = "¤UÃä½t©w¤Ø«×";
+    Text[ chinese_simplified ] = "ÏÂ±ßÔµ¶¨³ß´ç";
+    Text[ chinese_traditional ] = "¤UÃä½t©w¤Ø¤o";
     Text[ arabic ] = "ŞíÇÓ ÇáÍæÇİ ÇáÓİáíÉ";
     Text[ dutch ] = "Afmetingen onderkant";
-    Text[ chinese_simplified ] = "ÏÂ±ßÔµ¶¨³ß¶È";
+    Text[ chinese_simplified ] = "ÏÂ±ßÔµ¶¨³ß´ç";
     Text[ greek ] = "Äéáóôáóéïëüãçóç êÜôù Üêñïõ";
     Text[ korean ] = "¾Æ·¡ ¸ğ¼­¸® Ä¡¼ö";
     Text[ turkish ] = "Alt kenar ölçüsü";
@@ -15224,7 +15224,7 @@ String SIP_SA_MEASURERESERVE04
     Text[ portuguese_brazilian ] = "Dimensioning reserved 4";
     Text[ japanese ] = "¡–@‹L“ü —\\”õ4";
     Text[ chinese_simplified ] = "¶¨³ß´çÔ¤Áô 4";
-    Text[ chinese_traditional ] = "©w¤Ø«×¹w¯d 4";
+    Text[ chinese_traditional ] = "©w¤Ø¤o¹w¯d 4";
     Text[ arabic ] = "ÇáŞíÇÓ ãÍÌæÒ áÜ 4";
     Text[ dutch ] = "Afmetingsreserve 4";
     Text[ chinese_simplified ] = "¶¨³ß´çÔ¤Áô 4";
@@ -15252,7 +15252,7 @@ String SIP_SA_MEASURERESERVE05
     Text[ portuguese_brazilian ] = "Dimensioning reserved 5";
     Text[ japanese ] = "¡–@‹L“ü —\\”õ5";
     Text[ chinese_simplified ] = "¶¨³ß´çÔ¤Áô 5";
-    Text[ chinese_traditional ] = "©w¤Ø«×¹w¯d 5";
+    Text[ chinese_traditional ] = "©w¤Ø¤o¹w¯d 5";
     Text[ arabic ] = "ÇáŞíÇÓ ãÍÌæÒ áÜ 5";
     Text[ dutch ] = "Afmetingsreserve 5";
     Text[ chinese_simplified ] = "¶¨³ß´çÔ¤Áô 5";
@@ -15280,7 +15280,7 @@ String SIP_SA_MEASURERESERVE06
     Text[ portuguese_brazilian ] = "Dimensioning reserved 6";
     Text[ japanese ] = "¡–@‹L“ü —\\”õ6";
     Text[ chinese_simplified ] = "¶¨³ß´çÔ¤Áô 6";
-    Text[ chinese_traditional ] = "©w¤Ø«×¹w¯d 6";
+    Text[ chinese_traditional ] = "©w¤Ø¤o¹w¯d 6";
     Text[ arabic ] = "ÇáŞíÇÓ ãÍÌæÒ áÜ 6";
     Text[ dutch ] = "Afmetingsreserve 6";
     Text[ chinese_simplified ] = "¶¨³ß´çÔ¤Áô 6";
@@ -15308,7 +15308,7 @@ String SIP_SA_MEASURERESERVE07
     Text[ portuguese_brazilian ] = "Dimensioning reserved 7";
     Text[ japanese ] = "¡–@‹L“ü —\\”õ7";
     Text[ chinese_simplified ] = "¶¨³ß´çÔ¤Áô 7";
-    Text[ chinese_traditional ] = "©w¤Ø«×¹w¯d 7";
+    Text[ chinese_traditional ] = "©w¤Ø¤o¹w¯d 7";
     Text[ arabic ] = "ÇáŞíÇÓ ãÍÌæÒ áÜ 7";
     Text[ dutch ] = "Afmetingsreserve 7";
     Text[ chinese_simplified ] = "¶¨³ß´çÔ¤Áô 7";
@@ -15336,7 +15336,7 @@ String SIP_SDRATTRSET_MEASURE
     Text[ portuguese_brazilian ] = "Attributes of dimensioning";
     Text[ japanese ] = "¡–@‹L“ü‚Ì‘®«";
     Text[ chinese_simplified ] = "¶¨³ß´çÊôĞÔ";
-    Text[ chinese_traditional ] = "©w¤Ø«×Äİ©Ê";
+    Text[ chinese_traditional ] = "©w¤Ø¤oÄİ©Ê";
     Text[ arabic ] = "ÓãÇÊ ÇáŞíÇÓ";
     Text[ dutch ] = "Afmetingsattributen";
     Text[ chinese_simplified ] = "¶¨³ß´çÊôĞÔ";
@@ -15421,11 +15421,11 @@ String SIP_SA_CIRCENDANGLE
     Text[ polish ] = "K¹t koñcowy";
     Text[ portuguese_brazilian ] = "End angle";
     Text[ japanese ] = "I‚¦‚éŠp“x";
-    Text[ chinese_simplified ] = "ÖÕ½áµÄ½Ç¶È";
-    Text[ chinese_traditional ] = "²×ºİ¨¤«×";
+    Text[ chinese_simplified ] = "×îÖÕ½Ç¶È";
+    Text[ chinese_traditional ] = "³Ì²×¨¤«×";
     Text[ arabic ] = "ÒÇæíÉ ÇáäåÇíÉ";
     Text[ dutch ] = "Eindhoek";
-    Text[ chinese_simplified ] = "ÖÕ½áµÄ½Ç¶È";
+    Text[ chinese_simplified ] = "×îÖÕ½Ç¶È";
     Text[ greek ] = "ÔåëéêŞ ãùíßá";
     Text[ korean ] = "³¡ °¢µµ";
     Text[ turkish ] = "Bitiş açısı";
@@ -15676,7 +15676,7 @@ String SIP_SA_LAYERID
     Text[ portuguese_brazilian ] = "Layer ID";
     Text[ japanese ] = "‘w‚Ì”F¯";
     Text[ chinese_simplified ] = "²ã±êÊ¶";
-    Text[ chinese_traditional ] = "¼h¼ĞÃÑ";
+    Text[ chinese_traditional ] = "¤À¼h¼ĞÃÑ";
     Text[ arabic ] = "ÊÚÑíİ ÇáØÈŞÉ";
     Text[ dutch ] = "Niveau-ID";
     Text[ chinese_simplified ] = "²ã±êÊ¶";
@@ -16382,11 +16382,11 @@ String SIP_SA_HORZSHEARALL
     Text[ polish ] = "Ciêcie w poziomie ³¹cznie";
     Text[ portuguese_brazilian ] = "All shear horizontal";
     Text[ japanese ] = "¶‰E‚ÉØ‚èæ‚é ‘S‘Ì";
-    Text[ chinese_simplified ] = "È«²¿Ë®Æ½·½ÏòµÄ¼ôÏÂ";
+    Text[ chinese_simplified ] = "È«²¿Ë®Æ½·½ÏòµÄ¼ôÇĞ";
     Text[ chinese_traditional ] = "¥ş³¡¤ô¥­¤è¦V¾U¨¤";
     Text[ arabic ] = "ŞÕ ÃİŞí ßáí";
     Text[ dutch ] = "Scheren, compleet";
-    Text[ chinese_simplified ] = "È«²¿Ë®Æ½·½ÏòµÄ¼ôÏÂ";
+    Text[ chinese_simplified ] = "È«²¿Ë®Æ½·½ÏòµÄ¼ôÇĞ";
     Text[ greek ] = "Ïñéæüíôéá äéÜôìçóç, óıíïëï";
     Text[ korean ] = "¼öÆòÀ¸·Î ÀüÃ¼ È¸Àü";
     Text[ turkish ] = "Yatay kesişme (tümü)";
@@ -16411,11 +16411,11 @@ String SIP_SA_VERTSHEARALL
     Text[ polish ] = "Ciêcie w pionie ³¹cznie";
     Text[ portuguese_brazilian ] = "All shear vertical";
     Text[ japanese ] = "ã‰º‚ÉØ‚èæ‚é ‘S‘Ì";
-    Text[ chinese_simplified ] = "È«²¿´¹Ö±·½ÏòµÄ¼ôÏÂ";
+    Text[ chinese_simplified ] = "È«²¿´¹Ö±·½ÏòµÄ¼ôÇĞ";
     Text[ chinese_traditional ] = "¥ş³¡««ª½¤è¦Vªº¾U¨¤";
     Text[ arabic ] = "ŞÕ ÑÃÓí ßáí";
     Text[ dutch ] = "Verticaal scheren, compleet";
-    Text[ chinese_simplified ] = "È«²¿´¹Ö±·½ÏòµÄ¼ôÏÂ";
+    Text[ chinese_simplified ] = "È«²¿´¹Ö±·½ÏòµÄ¼ôÇĞ";
     Text[ greek ] = "Êáôáêüñõöç äéÜôìçóç, óõíïëéêÜ";
     Text[ korean ] = "¼öÁ÷À¸·Î ÀüÃ¼ ±³Â÷";
     Text[ turkish ] = "Dikey kesişme (tümü)";
@@ -16584,11 +16584,11 @@ String SIP_EE_PARA_BULLETSTATE
     Text[ polish ] = "Poka¿ znaki wypunktowania";
     Text[ portuguese_brazilian ] = "Show bullet";
     Text[ japanese ] = "‰Óğ‘‚«‘•ü‹L†‚Ì•\\¦";
-    Text[ chinese_simplified ] = "ÏÔÊ¾±àºÅ";
-    Text[ chinese_traditional ] = "Åã¥Ü½s¸¹";
+    Text[ chinese_simplified ] = "ÏÔÊ¾±àºÅ×Ö·û";
+    Text[ chinese_traditional ] = "Åã¥Ü¶µ¥Ø²Å¸¹";
     Text[ arabic ] = "ÅÙåÇÑ ÚáÇãÇÊ ÇáÊÚÏÇÏ";
     Text[ dutch ] = "Opsommingsteken weergeven";
-    Text[ chinese_simplified ] = "ÏÔÊ¾±àºÅ";
+    Text[ chinese_simplified ] = "ÏÔÊ¾±àºÅ×Ö·û";
     Text[ greek ] = "ÅìöÜíéóç óõìâüëùí áñßèìçóçò";
     Text[ korean ] = "±Û¸Ó¸®±âÈ£  ³ªÅ¸³»±â";
     Text[ turkish ] = "Madde işaretlerini göster";
@@ -16642,11 +16642,11 @@ String SIP_EE_PARA_OUTLLEVEL
     Text[ polish ] = "Warstwa wypunktowania";
     Text[ portuguese_brazilian ] = "Layer of enumeration";
     Text[ japanese ] = "±³Ä×²İ‚ÌÚÍŞÙ";
-    Text[ chinese_simplified ] = "±àºÅ²ã";
-    Text[ chinese_traditional ] = "½s¸¹¼h¦¸";
+    Text[ chinese_simplified ] = "±àºÅ²ã´Î";
+    Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹¼h¦¸";
     Text[ arabic ] = "ãÓÊæì ÇáÊÚÏÇÏ";
     Text[ dutch ] = "Nummeringsniveau";
-    Text[ chinese_simplified ] = "±àºÅ²ã";
+    Text[ chinese_simplified ] = "±àºÅ²ã´Î";
     Text[ greek ] = "Åğßğåäï áñßèìçóçò";
     Text[ korean ] = "±Û¸Ó¸®±âÈ£¡¡¼öÁØ";
     Text[ turkish ] = "Numaralama düzeyi";
@@ -16671,11 +16671,11 @@ String SIP_EE_PARA_BULLET
     Text[ polish ] = "Znaki wypunktowania";
     Text[ portuguese_brazilian ] = "Character of enumeration";
     Text[ japanese ] = "‰Óğ‘‚«‘•ü‹L†";
-    Text[ chinese_simplified ] = "±àºÅ·û";
-    Text[ chinese_traditional ] = "½s¸¹²Å";
+    Text[ chinese_simplified ] = "±àºÅ×Ö·û";
+    Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹";
     Text[ arabic ] = "ÚáÇãÇÊ ÊÚÏÇÏ";
     Text[ dutch ] = "Nummeringsteken";
-    Text[ chinese_simplified ] = "±àºÅ·û";
+    Text[ chinese_simplified ] = "±àºÅ×Ö·û";
     Text[ greek ] = "Óıìâïëá áñßèìçóçò";
     Text[ korean ] = "±Û¸Ó¸®±âÈ£";
     Text[ turkish ] = "Numaralama ve madde işaretleri";
@@ -16839,7 +16839,7 @@ String SIP_EE_CHAR_COLOR
     Text[ italian ] = "Colore carattere";
     Text[ danish ] = "Skriftfarve";
     Text[ swedish ] = "Teckenfärg";
-    Text[ polish ] = "Kolor czcionki";
+    Text[ polish ] = "Kolor";
     Text[ portuguese_brazilian ] = "Text color";
     Text[ japanese ] = "Ì«İÄ‚ÌF";
     Text[ chinese_simplified ] = "ÎÄ×ÖÑÕÉ«";
@@ -17632,6 +17632,7 @@ Bitmap SIP_SA_FINE_MARKERS
 };
 
 // ******************************************************************* EOF
+
 
 
 
