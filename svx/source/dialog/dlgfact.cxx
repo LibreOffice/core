@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:45:45 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:51:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,19 @@
 #include "measure.hxx" //add for SvxMeasureDialog
 #include "connect.hxx" //add for SvxConnectionDialog
 #include "cuioptgenrl.hxx"  //add for SvxGeneralTabPage
+#define ITEMID_TABSTOP  0 //add for #include "tabstpge.hxx"
+#include "numpages.hxx" // add for
+#include "paragrph.hxx" //add for
+#include "tabstpge.hxx" // add  for
+#include "textattr.hxx" // add for SvxTextAttrPage
+#include "align.hxx" //add for SvxAlignmentTabPage
+#include "backgrnd.hxx" //add for SvxBackgroundTabPage
+#include "border.hxx" //add for SvxBorderTabPage
+#include "chardlg.hxx" //add for SvxCharNamePage,SvxCharEffectsPage,SvxCharPositionPage,SvxCharTwoLinesPage
+#include "numfmt.hxx" //add for SvxNumberFormatTabPage
+#include "page.hxx" //add for SvxPageDescPage
+#include "postdlg.hxx" //add for SvxPostItDialog
+#include "grfpage.hxx" //add for SvxGrfCropPage
 
 using namespace svx;
 // AbstractTabDialog implementations just forwards everything to the dialog
@@ -143,6 +156,7 @@ IMPL_ABSTDLG_BASE(AbstractFmSearchDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractGraphicFilterDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxAreaTabDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSfxSingleTabDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractSvxPostItDialog_Impl);
 
 void AbstractTabDialog_Impl::SetCurPageId( USHORT nId )
 {
@@ -576,7 +590,11 @@ void AbstractSvxNameDialog_Impl::GetName( String& rName )
 }
 void AbstractSvxNameDialog_Impl::SetCheckNameHdl( const Link& rLink, bool bCheckImmediately )
 {
-    pDlg->SetCheckNameHdl( rLink, bCheckImmediately );
+    aCheckNameHdl = rLink;
+    if( rLink.IsSet() )
+        pDlg->SetCheckNameHdl( LINK(this, AbstractSvxNameDialog_Impl, CheckNameHdl), bCheckImmediately );
+    else
+        pDlg->SetCheckNameHdl( Link(), bCheckImmediately );
 }
 void AbstractSvxNameDialog_Impl::SetEditHelpId(ULONG nHelpId)
 {
@@ -589,6 +607,12 @@ void AbstractSvxNameDialog_Impl::SetHelpId( ULONG nHelpId )
 void AbstractSvxNameDialog_Impl::SetText( const XubString& rStr )
 {
     pDlg->SetText( rStr );
+}
+IMPL_LINK( AbstractSvxNameDialog_Impl, CheckNameHdl, Window*, pWin )
+{
+    if( aCheckNameHdl.IsSet() )
+        return aCheckNameHdl.Call(this);
+    return 0;
 }
 //for SvxNameDialog end
 
@@ -714,7 +738,83 @@ const SfxItemSet* AbstractSfxSingleTabDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
 }
-// SvxMeasureDialog & SvxConnectionDialog begin end
+// SvxMeasureDialog & SvxConnectionDialog end
+
+// add SvxPostItDialog begin
+void AbstractSvxPostItDialog_Impl::SetText( const XubString& rStr )
+{
+    pDlg->SetText( rStr );
+}
+const SfxItemSet* AbstractSvxPostItDialog_Impl::GetOutputItemSet() const
+{
+    return pDlg->GetOutputItemSet();
+}
+void AbstractSvxPostItDialog_Impl::EnableTravel(BOOL bNext, BOOL bPrev)
+{
+    pDlg->EnableTravel( bNext, bPrev );
+}
+String AbstractSvxPostItDialog_Impl::GetNote()
+{
+    return pDlg->GetNote();
+}
+void AbstractSvxPostItDialog_Impl::SetNote(const String& rTxt)
+{
+    pDlg->SetNote( rTxt );
+}
+void AbstractSvxPostItDialog_Impl::ShowLastAuthor(const String& rAuthor, const String& rDate)
+{
+    pDlg->ShowLastAuthor( rAuthor, rDate );
+}
+void AbstractSvxPostItDialog_Impl::DontChangeAuthor()
+{
+    pDlg->DontChangeAuthor();
+}
+void AbstractSvxPostItDialog_Impl::HideAuthor()
+{
+    pDlg->HideAuthor();
+}
+void AbstractSvxPostItDialog_Impl::SetReadonlyPostIt(BOOL bDisable)
+{
+    pDlg->SetReadonlyPostIt( bDisable );
+}
+BOOL AbstractSvxPostItDialog_Impl::IsOkEnabled() const
+{
+    return pDlg->IsOkEnabled();
+}
+void AbstractSvxPostItDialog_Impl::SetNextHdl( const Link& rLink )
+{
+    aNextHdl = rLink;
+    if( rLink.IsSet() )
+        pDlg->SetNextHdl( LINK(this, AbstractSvxPostItDialog_Impl, NextHdl ) );
+    else
+        pDlg->SetNextHdl( Link() );
+}
+void AbstractSvxPostItDialog_Impl::SetPrevHdl( const Link& rLink )
+{
+    aPrevHdl = rLink;
+    if( rLink.IsSet() )
+        pDlg->SetPrevHdl( LINK(this, AbstractSvxPostItDialog_Impl, PrevHdl ) );
+    else
+        pDlg->SetPrevHdl( Link() );
+}
+IMPL_LINK( AbstractSvxPostItDialog_Impl, NextHdl, Window*, pWin )
+{
+    if( aNextHdl.IsSet() )
+        aNextHdl.Call(this);
+    return 0;
+}
+IMPL_LINK( AbstractSvxPostItDialog_Impl, PrevHdl, Window*, pWin )
+{
+    if( aPrevHdl.IsSet() )
+        aPrevHdl.Call(this);
+    return 0;
+}
+Window * AbstractSvxPostItDialog_Impl::GetWindow()
+{
+    return (Window *)pDlg;
+}
+
+// SvxPostItDialog end
 
 //--------------------------------------------------------------
 // Create dialogs with simplest interface
@@ -1581,7 +1681,29 @@ AbstractSfxSingleTabDialog* AbstractDialogFactory_Impl::CreateSfxSingleTabDialog
         return new AbstractSfxSingleTabDialog_Impl( pDlg );
     return 0;
 }
-//CHINA001   SvxMeasureDialog & SvxConnectionDialogend
+
+//CHINA001 SvxPostItDialog begin
+AbstractSvxPostItDialog* AbstractDialogFactory_Impl::CreateSvxPostItDialog( Window* pParent,
+                                                                        const SfxItemSet& rCoreSet,
+                                                                        const ResId& rResId,
+                                                                        BOOL bPrevNext, BOOL bRedline )
+{
+    SvxPostItDialog* pDlg=NULL;
+    switch ( rResId.GetId() )
+    {
+        case RID_SVXDLG_POSTIT :
+            pDlg = new SvxPostItDialog( pParent, rCoreSet, bPrevNext, bRedline );
+            break;
+        default:
+            break;
+    }
+
+    if ( pDlg )
+        return new AbstractSvxPostItDialog_Impl( pDlg );
+    return 0;
+}
+//CHINA001   SvxPostItDialog end
+
 //STRIP001 AbstractSvxSpellCheckDialog * AbstractDialogFactory_Impl::CreateSvxSpellCheckDialog( Window* pParent,  //add for SvxSpellCheckDialog
 //STRIP001 ::com::sun::star::uno::Reference<
 //STRIP001 ::com::sun::star::linguistic2::XSpellChecker1 >  &xChecker,
@@ -1645,6 +1767,73 @@ CreateTabPage AbstractDialogFactory_Impl::GetTabPageCreatorFunc( USHORT nId )
         case RID_SFXPAGE_GENERAL :
             return SvxGeneralTabPage::Create;
             break;
+        case RID_SVXPAGE_PICK_SINGLE_NUM :
+            return SvxSingleNumPickTabPage::Create;
+            break;
+        case RID_SVXPAGE_PICK_BMP :
+            return SvxBitmapPickTabPage::Create;
+            break;
+        case RID_SVXPAGE_PICK_BULLET :
+            return SvxBulletPickTabPage::Create;
+            break;
+        case RID_SVXPAGE_NUM_OPTIONS :
+            return SvxNumOptionsTabPage::Create;
+            break;
+        case RID_SVXPAGE_PICK_NUM :
+            return SvxNumPickTabPage::Create;
+            break;
+        case RID_SVXPAGE_NUM_POSITION :
+            return SvxNumPositionTabPage::Create;
+            break;
+        case RID_SVXPAGE_PARA_ASIAN :
+            return SvxAsianTabPage::Create;
+            break;
+        case RID_SVXPAGE_EXT_PARAGRAPH :
+            return SvxExtParagraphTabPage::Create;
+            break;
+        case RID_SVXPAGE_ALIGN_PARAGRAPH :
+            return SvxParaAlignTabPage::Create;
+            break;
+        case RID_SVXPAGE_STD_PARAGRAPH :
+            return SvxStdParagraphTabPage::Create;
+            break;
+        case RID_SVXPAGE_TABULATOR :
+            return SvxTabulatorTabPage::Create;
+            break;
+        case RID_SVXPAGE_TEXTATTR :
+            return SvxTextAttrPage::Create;
+            break;
+        case RID_SVXPAGE_ALIGNMENT :
+            return SvxAlignmentTabPage::Create;
+            break;
+        case RID_SW_TP_BACKGROUND :
+        case RID_SVXPAGE_BACKGROUND :
+            return SvxBackgroundTabPage::Create;
+            break;
+        case RID_SVXPAGE_BORDER :
+            return SvxBorderTabPage::Create;
+            break;
+        case RID_SVXPAGE_CHAR_NAME :
+            return SvxCharNamePage::Create;
+            break;
+        case RID_SVXPAGE_CHAR_EFFECTS :
+            return SvxCharEffectsPage::Create;
+            break;
+        case RID_SVXPAGE_CHAR_POSITION :
+            return SvxCharPositionPage::Create;
+            break;
+        case RID_SVXPAGE_CHAR_TWOLINES :
+            return SvxCharTwoLinesPage::Create;
+            break;
+        case RID_SVXPAGE_NUMBERFORMAT :
+            return SvxNumberFormatTabPage::Create;
+            break;
+        case RID_SVXPAGE_PAGE :
+            return SvxPageDescPage::Create;
+            break;
+        case RID_SVXPAGE_GRFCROP :
+            return SvxGrfCropPage::Create;
+            break;
 
         default:
             break;
@@ -1665,8 +1854,19 @@ CreateSvxDistributePage AbstractDialogFactory_Impl::GetSvxDistributePageCreatorF
 
     return 0;
 }
+DialogGetRanges AbstractDialogFactory_Impl::GetDialogGetRangesFunc( USHORT nId )
+{
+        switch ( nId )
+    {
+        case RID_SVXDLG_POSTIT:
+            return SvxPostItDialog::GetRanges;  //add for SvxPostItDialog
+            break;
+        default:
+            break;
+    }
 
-
+    return 0;
+}
 GetTabPageRanges AbstractDialogFactory_Impl::GetTabPageRangesFunc( USHORT nId )
 {
     switch ( nId )
@@ -1698,6 +1898,53 @@ GetTabPageRanges AbstractDialogFactory_Impl::GetTabPageRangesFunc( USHORT nId )
         case RID_SVXPAGE_MEASURE :
             return SvxMeasurePage::GetRanges;
             break;
+        case RID_SVXPAGE_PARA_ASIAN :
+            return SvxAsianTabPage::GetRanges;
+            break;
+        case RID_SVXPAGE_EXT_PARAGRAPH :
+            return SvxExtParagraphTabPage::GetRanges;
+            break;
+        case RID_SVXPAGE_ALIGN_PARAGRAPH :
+            return SvxParaAlignTabPage::GetRanges;
+            break;
+        case RID_SVXPAGE_STD_PARAGRAPH :
+            return SvxStdParagraphTabPage::GetRanges;
+            break;
+        case RID_SVXPAGE_TABULATOR :
+            return SvxTabulatorTabPage::GetRanges;
+            break;
+        case RID_SVXPAGE_TEXTATTR :
+            return SvxTextAttrPage::GetRanges;
+            break;
+        case RID_SVXPAGE_ALIGNMENT :
+            return SvxAlignmentTabPage::GetRanges;
+            break;
+        case RID_SW_TP_BACKGROUND :
+        case RID_SVXPAGE_BACKGROUND :
+            return SvxBackgroundTabPage::GetRanges;
+            break;
+        case RID_SVXPAGE_BORDER :
+            return SvxBorderTabPage::GetRanges;
+            break;
+        case RID_SVXPAGE_CHAR_NAME :
+            return SvxCharNamePage::GetRanges;
+            break;
+        case RID_SVXPAGE_CHAR_EFFECTS :
+            return SvxCharEffectsPage::GetRanges;
+            break;
+        case RID_SVXPAGE_CHAR_POSITION :
+            return SvxCharPositionPage::GetRanges;
+            break;
+        case RID_SVXPAGE_CHAR_TWOLINES :
+            return SvxCharTwoLinesPage::GetRanges;
+            break;
+        case RID_SVXPAGE_NUMBERFORMAT :
+            return SvxNumberFormatTabPage::GetRanges;
+            break;
+        case RID_SVXPAGE_PAGE :
+            return SvxPageDescPage::GetRanges;
+            break;
+
         default:
             break;
     }
