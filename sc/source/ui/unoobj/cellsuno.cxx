@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:00:27 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:15:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -674,6 +674,7 @@ const SfxItemPropertyMap* lcl_GetSheetPropertyMap()
     {
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_AUTOPRINT),SC_WID_UNO_AUTOPRINT,&getBooleanCppuType(),                 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_BORDCOL),  SC_WID_UNO_BORDCOL, &getCppuType((sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,    &getCppuType((sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNONAME_CELLPRO),  ATTR_PROTECTION,    &getCppuType((util::CellProtection*)0), 0, 0 },
@@ -722,7 +723,11 @@ const SfxItemPropertyMap* lcl_GetSheetPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),  SC_WID_UNO_CONDFMT, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),  SC_WID_UNO_CONDLOC, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDXML),  SC_WID_UNO_CONDXML, &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_COPYBACK), SC_WID_UNO_COPYBACK,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_COPYFORM), SC_WID_UNO_COPYFORM,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_COPYSTYL), SC_WID_UNO_COPYSTYL,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &getCppuType((table::CellHoriJustify*)0), 0, MID_HORJUST_HORJUST },
+        {MAP_CHAR_LEN(SC_UNONAME_ISACTIVE), SC_WID_UNO_ISACTIVE,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    &getBooleanCppuType(),                  0, MID_GRAPHIC_TRANSPARENT },
         {MAP_CHAR_LEN(SC_UNONAME_WRAP),     ATTR_LINEBREAK,     &getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVIS),  SC_WID_UNO_CELLVIS, &getBooleanCppuType(),                  0, 0 },
@@ -745,10 +750,13 @@ const SfxItemPropertyMap* lcl_GetSheetPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_PRMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_PTMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_POS),      SC_WID_UNO_POS,     &getCppuType((awt::Point*)0),           0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PRINTBORD),SC_WID_UNO_PRINTBORD,&getBooleanCppuType(),                 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PROTECT),  SC_WID_UNO_PROTECT, &getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_RIGHTBORDER),ATTR_BORDER,      &::getCppuType((const table::BorderLine*)0), 0, RIGHT_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_ROTANG),   ATTR_ROTATE_VALUE,  &getCppuType((sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ROTREF),   ATTR_ROTATE_MODE,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_SHADOW),   ATTR_SHADOW,        &getCppuType((table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_SHOWBORD), SC_WID_UNO_SHOWBORD,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_SIZE),     SC_WID_UNO_SIZE,    &getCppuType((awt::Size*)0),            0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD, &getCppuType((table::TableBorder*)0),   0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_TABLAYOUT),SC_WID_UNO_TABLAYOUT,&getCppuType((sal_Int16*)0),           0, 0 },
@@ -6397,6 +6405,7 @@ uno::Any SAL_CALL ScTableSheetObj::queryInterface( const uno::Type& rType ) thro
     SC_QUERYINTERFACE( sheet::XSheetOutline )
     SC_QUERYINTERFACE( util::XProtectable )
     SC_QUERYINTERFACE( sheet::XScenario )
+    SC_QUERYINTERFACE( sheet::XScenarioEnhanced )
     SC_QUERYINTERFACE( sheet::XSheetLinkable )
 
     return ScCellRangeObj::queryInterface( rType );
@@ -6421,7 +6430,7 @@ uno::Sequence<uno::Type> SAL_CALL ScTableSheetObj::getTypes() throw(uno::Runtime
         long nParentLen = aParentTypes.getLength();
         const uno::Type* pParentPtr = aParentTypes.getConstArray();
 
-        aTypes.realloc( nParentLen + 15 );
+        aTypes.realloc( nParentLen + 16 );
         uno::Type* pPtr = aTypes.getArray();
         pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XSpreadsheet>*)0);
         pPtr[nParentLen + 1] = getCppuType((const uno::Reference<container::XNamed>*)0);
@@ -6437,7 +6446,8 @@ uno::Sequence<uno::Type> SAL_CALL ScTableSheetObj::getTypes() throw(uno::Runtime
         pPtr[nParentLen +11] = getCppuType((const uno::Reference<sheet::XSheetOutline>*)0);
         pPtr[nParentLen +12] = getCppuType((const uno::Reference<util::XProtectable>*)0);
         pPtr[nParentLen +13] = getCppuType((const uno::Reference<sheet::XScenario>*)0);
-        pPtr[nParentLen +14] = getCppuType((const uno::Reference<sheet::XSheetLinkable>*)0);
+        pPtr[nParentLen +14] = getCppuType((const uno::Reference<sheet::XScenarioEnhanced>*)0);
+        pPtr[nParentLen +15] = getCppuType((const uno::Reference<sheet::XSheetLinkable>*)0);
 
         for (long i=0; i<nParentLen; i++)
             pPtr[i] = pParentPtr[i];                // parent types first
@@ -7564,29 +7574,75 @@ void SAL_CALL ScTableSheetObj::addRanges( const uno::Sequence<table::CellRangeAd
         ScDocument* pDoc = pDocSh->GetDocument();
         USHORT nTab = GetTab_Impl();
 
-        ScMarkData aMarkData;
-        aMarkData.SelectTable( nTab, TRUE );
-
-        USHORT nRangeCount = (USHORT)aRanges.getLength();
-        if (nRangeCount)
+        if (pDoc->IsScenario(nTab))
         {
-            const table::CellRangeAddress* pAry = aRanges.getConstArray();
-            for (USHORT i=0; i<nRangeCount; i++)
-            {
-                DBG_ASSERT( pAry[i].Sheet == nTab, "addRanges mit falscher Tab" );
-                ScRange aRange( (USHORT)pAry[i].StartColumn, (USHORT)pAry[i].StartRow, nTab,
-                                (USHORT)pAry[i].EndColumn,   (USHORT)pAry[i].EndRow,   nTab );
+            ScMarkData aMarkData;
+            aMarkData.SelectTable( nTab, TRUE );
 
-                aMarkData.SetMultiMarkArea( aRange );
+            USHORT nRangeCount = (USHORT)aRanges.getLength();
+            if (nRangeCount)
+            {
+                const table::CellRangeAddress* pAry = aRanges.getConstArray();
+                for (USHORT i=0; i<nRangeCount; i++)
+                {
+                    DBG_ASSERT( pAry[i].Sheet == nTab, "addRanges mit falscher Tab" );
+                    ScRange aRange( (USHORT)pAry[i].StartColumn, (USHORT)pAry[i].StartRow, nTab,
+                                    (USHORT)pAry[i].EndColumn,   (USHORT)pAry[i].EndRow,   nTab );
+
+                    aMarkData.SetMultiMarkArea( aRange );
+                }
             }
+
+            //  Szenario-Ranges sind durch Attribut gekennzeichnet
+            ScPatternAttr aPattern( pDoc->GetPool() );
+            aPattern.GetItemSet().Put( ScMergeFlagAttr( SC_MF_SCENARIO ) );
+            aPattern.GetItemSet().Put( ScProtectionAttr( TRUE ) );
+            ScDocFunc aFunc(*pDocSh);
+            aFunc.ApplyAttributes( aMarkData, aPattern, TRUE, TRUE );
         }
 
-        //  Szenario-Ranges sind durch Attribut gekennzeichnet
-        ScPatternAttr aPattern( pDoc->GetPool() );
-        aPattern.GetItemSet().Put( ScMergeFlagAttr( SC_MF_SCENARIO ) );
-        aPattern.GetItemSet().Put( ScProtectionAttr( TRUE ) );
-        ScDocFunc aFunc(*pDocSh);
-        aFunc.ApplyAttributes( aMarkData, aPattern, TRUE, TRUE );
+        // don't use. We should use therefor a private interface, so we can also set the flags.
+/*      else if (nTab > 0 && pDoc->IsImportingXML()) // make this sheet as an scenario and only if it is not the first sheet and only if it is ImportingXML,
+            // because than no UNDO and repaint is necessary.
+        {
+            USHORT nRangeCount = (USHORT)aRanges.getLength();
+            if (nRangeCount)
+            {
+                pDoc->SetScenario( nTab, TRUE );
+
+                // default flags
+                Color aColor( COL_LIGHTGRAY );  // Default
+                USHORT nFlags = SC_SCENARIO_SHOWFRAME | SC_SCENARIO_PRINTFRAME | SC_SCENARIO_TWOWAY;
+                String aComment;
+
+                pDoc->SetScenarioData( nTab, aComment, aColor, nFlags );
+                const table::CellRangeAddress* pAry = aRanges.getConstArray();
+                for (USHORT i=0; i<nRangeCount; i++)
+                {
+                    DBG_ASSERT( pAry[i].Sheet == nTab, "addRanges mit falscher Tab" );
+                    pDoc->ApplyFlagsTab( (USHORT)pAry[i].StartColumn, (USHORT)pAry[i].StartRow,
+                            (USHORT)pAry[i].EndColumn, (USHORT)pAry[i].EndRow, nTab, SC_MF_SCENARIO );
+                }
+                pDoc->SetActiveScenario( nTab, TRUE );
+
+                // set to next visible tab
+                USHORT j = nTab - 1;
+                BOOL bFinished = FALSE;
+                while (j < nTab && !bFinished)
+                {
+                    if (pDoc->IsVisible(j))
+                    {
+                        pDoc->SetVisibleTab(j);
+                        bFinished = TRUE;
+                    }
+                    else
+                        --j;
+                }
+
+                ScDocFunc aFunc(*pDocSh);
+                aFunc.SetTableVisible( nTab, FALSE, TRUE );
+            }
+        }*/
     }
 }
 
@@ -7610,6 +7666,39 @@ void SAL_CALL ScTableSheetObj::apply() throw(uno::RuntimeException)
 
         //! sonst Fehler oder so
     }
+}
+
+// XScenarioEnhanced
+
+uno::Sequence< table::CellRangeAddress > SAL_CALL ScTableSheetObj::getRanges(  )
+                                    throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    ScDocShell* pDocSh = GetDocShell();
+    if ( pDocSh )
+    {
+        ScDocument* pDoc = pDocSh->GetDocument();
+        USHORT nTab = GetTab_Impl();
+        const ScRangeList* pRangeList = pDoc->GetScenarioRanges(nTab);
+        if (pRangeList)
+        {
+            sal_Int32 nCount = pRangeList->Count();
+            uno::Sequence< table::CellRangeAddress > aRanges(nCount);
+            table::CellRangeAddress* pAry = aRanges.getArray();
+            for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+            {
+                const ScRange* pRange = pRangeList->GetObject( nIndex );
+                pAry->StartColumn = pRange->aStart.Col();
+                pAry->StartRow = pRange->aStart.Row();
+                pAry->EndColumn = pRange->aEnd.Col();
+                pAry->EndRow = pRange->aEnd.Row();
+                pAry->Sheet = pRange->aStart.Tab();
+                ++pAry;
+            }
+            return aRanges;
+        }
+    }
+    return NULL;
 }
 
 // XPropertySet erweitert fuer Sheet-Properties
@@ -7675,6 +7764,229 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const
             BOOL bVis = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             aFunc.SetTableVisible( nTab, bVis, TRUE );
         }
+        else if ( pMap->nWID == SC_WID_UNO_ISACTIVE )
+        {
+            if (pDoc->IsScenario(nTab))
+                pDoc->SetActiveScenario( nTab, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        }
+        else if ( pMap->nWID == SC_WID_UNO_BORDCOL )
+        {
+            if (pDoc->IsScenario(nTab))
+            {
+                sal_Int32 nNewColor;
+                if (aValue >>= nNewColor)
+                {
+                    String aName;
+                    String aComment;
+                    Color  aColor;
+                    USHORT nFlags;
+                    pDoc->GetName( nTab, aName );
+                    pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
+
+                    aColor = Color(static_cast<sal_uInt32>(nNewColor));
+
+                    pDocSh->ModifyScenario( nTab, aName, aComment, aColor, nFlags );
+                }
+            }
+        }
+        else if ( pMap->nWID == SC_WID_UNO_PROTECT )
+        {
+            if (pDoc->IsScenario(nTab))
+            {
+                String aName;
+                String aComment;
+                Color  aColor;
+                USHORT nFlags;
+                pDoc->GetName( nTab, aName );
+                pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
+                sal_Bool bModify(sal_False);
+
+                if (ScUnoHelpFunctions::GetBoolFromAny( aValue ))
+                {
+                    if (!(nFlags & SC_SCENARIO_PROTECT))
+                    {
+                        nFlags |= SC_SCENARIO_PROTECT;
+                        bModify = sal_True;
+                    }
+                }
+                else
+                {
+                    if (nFlags & SC_SCENARIO_PROTECT)
+                    {
+                        nFlags -= SC_SCENARIO_PROTECT;
+                        bModify = sal_True;
+                    }
+                }
+
+                if (bModify)
+                    pDocSh->ModifyScenario( nTab, aName, aComment, aColor, nFlags );
+            }
+        }
+        else if ( pMap->nWID == SC_WID_UNO_SHOWBORD )
+        {
+            if (pDoc->IsScenario(nTab))
+            {
+                String aName;
+                String aComment;
+                Color  aColor;
+                USHORT nFlags;
+                pDoc->GetName( nTab, aName );
+                pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
+                sal_Bool bModify(sal_False);
+
+                if (ScUnoHelpFunctions::GetBoolFromAny( aValue ))
+                {
+                    if (!(nFlags & SC_SCENARIO_SHOWFRAME))
+                    {
+                        nFlags |= SC_SCENARIO_SHOWFRAME;
+                        bModify = sal_True;
+                    }
+                }
+                else
+                {
+                    if (nFlags & SC_SCENARIO_SHOWFRAME)
+                    {
+                        nFlags -= SC_SCENARIO_SHOWFRAME;
+                        bModify = sal_True;
+                    }
+                }
+
+                if (bModify)
+                    pDocSh->ModifyScenario( nTab, aName, aComment, aColor, nFlags );
+            }
+        }
+        else if ( pMap->nWID == SC_WID_UNO_PRINTBORD )
+        {
+            if (pDoc->IsScenario(nTab))
+            {
+                String aName;
+                String aComment;
+                Color  aColor;
+                USHORT nFlags;
+                pDoc->GetName( nTab, aName );
+                pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
+                sal_Bool bModify(sal_False);
+
+                if (ScUnoHelpFunctions::GetBoolFromAny( aValue ))
+                {
+                    if (!(nFlags & SC_SCENARIO_PRINTFRAME))
+                    {
+                        nFlags |= SC_SCENARIO_PRINTFRAME;
+                        bModify = sal_True;
+                    }
+                }
+                else
+                {
+                    if (nFlags & SC_SCENARIO_PRINTFRAME)
+                    {
+                        nFlags -= SC_SCENARIO_PRINTFRAME;
+                        bModify = sal_True;
+                    }
+                }
+
+                if (bModify)
+                    pDocSh->ModifyScenario( nTab, aName, aComment, aColor, nFlags );
+            }
+        }
+        else if ( pMap->nWID == SC_WID_UNO_COPYBACK )
+        {
+            if (pDoc->IsScenario(nTab))
+            {
+                String aName;
+                String aComment;
+                Color  aColor;
+                USHORT nFlags;
+                pDoc->GetName( nTab, aName );
+                pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
+                sal_Bool bModify(sal_False);
+
+                if (ScUnoHelpFunctions::GetBoolFromAny( aValue ))
+                {
+                    if (!(nFlags & SC_SCENARIO_TWOWAY))
+                    {
+                        nFlags |= SC_SCENARIO_TWOWAY;
+                        bModify = sal_True;
+                    }
+                }
+                else
+                {
+                    if (nFlags & SC_SCENARIO_TWOWAY)
+                    {
+                        nFlags -= SC_SCENARIO_TWOWAY;
+                        bModify = sal_True;
+                    }
+                }
+
+                if (bModify)
+                    pDocSh->ModifyScenario( nTab, aName, aComment, aColor, nFlags );
+            }
+        }
+        else if ( pMap->nWID == SC_WID_UNO_COPYSTYL )
+        {
+            if (pDoc->IsScenario(nTab))
+            {
+                String aName;
+                String aComment;
+                Color  aColor;
+                USHORT nFlags;
+                pDoc->GetName( nTab, aName );
+                pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
+                sal_Bool bModify(sal_False);
+
+                if (ScUnoHelpFunctions::GetBoolFromAny( aValue ))
+                {
+                    if (!(nFlags & SC_SCENARIO_ATTRIB))
+                    {
+                        nFlags |= SC_SCENARIO_ATTRIB;
+                        bModify = sal_True;
+                    }
+                }
+                else
+                {
+                    if (nFlags & SC_SCENARIO_ATTRIB)
+                    {
+                        nFlags -= SC_SCENARIO_ATTRIB;
+                        bModify = sal_True;
+                    }
+                }
+
+                if (bModify)
+                    pDocSh->ModifyScenario( nTab, aName, aComment, aColor, nFlags );
+            }
+        }
+        else if ( pMap->nWID == SC_WID_UNO_COPYFORM )
+        {
+            if (pDoc->IsScenario(nTab))
+            {
+                String aName;
+                String aComment;
+                Color  aColor;
+                USHORT nFlags;
+                pDoc->GetName( nTab, aName );
+                pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
+                sal_Bool bModify(sal_False);
+
+                if (ScUnoHelpFunctions::GetBoolFromAny( aValue ))
+                {
+                    if (nFlags & SC_SCENARIO_VALUE)
+                    {
+                        nFlags -= SC_SCENARIO_VALUE;
+                        bModify = sal_True;
+                    }
+                }
+                else
+                {
+                    if (!(nFlags & SC_SCENARIO_VALUE))
+                    {
+                        nFlags |= SC_SCENARIO_VALUE;
+                        bModify = sal_True;
+                    }
+                }
+
+                if (bModify)
+                    pDocSh->ModifyScenario( nTab, aName, aComment, aColor, nFlags );
+            }
+        }
         else if ( pMap->nWID == SC_WID_UNO_TABLAYOUT )
         {
             sal_Int16 nValue;
@@ -7734,6 +8046,95 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertyMap* pMap,
         {
             //  LinkDisplayName for hyperlink dialog
             rAny <<= getName();     // sheet name
+        }
+        else if ( pMap->nWID == SC_WID_UNO_ISACTIVE )
+        {
+            if (pDoc->IsScenario(nTab))
+                ScUnoHelpFunctions::SetBoolInAny( rAny, pDoc->IsActiveScenario( nTab ));
+        }
+        else if ( pMap->nWID == SC_WID_UNO_BORDCOL )
+        {
+            if (pDoc->IsScenario(nTab))
+            {
+                String aComment;
+                Color  aColor;
+                USHORT nFlags;
+                pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
+
+                rAny <<= static_cast<sal_Int32>(aColor.GetColor());
+            }
+        }
+        else if ( pMap->nWID == SC_WID_UNO_PROTECT )
+        {
+            if (pDoc->IsScenario(nTab))
+            {
+                String aComment;
+                Color  aColor;
+                USHORT nFlags;
+                pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
+
+                ScUnoHelpFunctions::SetBoolInAny( rAny, (nFlags & SC_SCENARIO_PROTECT));
+            }
+        }
+        else if ( pMap->nWID == SC_WID_UNO_SHOWBORD )
+        {
+            if (pDoc->IsScenario(nTab))
+            {
+                String aComment;
+                Color  aColor;
+                USHORT nFlags;
+                pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
+
+                ScUnoHelpFunctions::SetBoolInAny( rAny, (nFlags & SC_SCENARIO_SHOWFRAME));
+            }
+        }
+        else if ( pMap->nWID == SC_WID_UNO_PRINTBORD )
+        {
+            if (pDoc->IsScenario(nTab))
+            {
+                String aComment;
+                Color  aColor;
+                USHORT nFlags;
+                pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
+
+                ScUnoHelpFunctions::SetBoolInAny( rAny, (nFlags & SC_SCENARIO_PRINTFRAME));
+            }
+        }
+        else if ( pMap->nWID == SC_WID_UNO_COPYBACK )
+        {
+            if (pDoc->IsScenario(nTab))
+            {
+                String aComment;
+                Color  aColor;
+                USHORT nFlags;
+                pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
+
+                ScUnoHelpFunctions::SetBoolInAny( rAny, (nFlags & SC_SCENARIO_TWOWAY));
+            }
+        }
+        else if ( pMap->nWID == SC_WID_UNO_COPYSTYL )
+        {
+            if (pDoc->IsScenario(nTab))
+            {
+                String aComment;
+                Color  aColor;
+                USHORT nFlags;
+                pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
+
+                ScUnoHelpFunctions::SetBoolInAny( rAny, (nFlags & SC_SCENARIO_ATTRIB));
+            }
+        }
+        else if ( pMap->nWID == SC_WID_UNO_COPYFORM )
+        {
+            if (pDoc->IsScenario(nTab))
+            {
+                String aComment;
+                Color  aColor;
+                USHORT nFlags;
+                pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
+
+                ScUnoHelpFunctions::SetBoolInAny( rAny, !(nFlags & SC_SCENARIO_VALUE));
+            }
         }
         else if ( pMap->nWID == SC_WID_UNO_TABLAYOUT )
         {
