@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BConnection.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-23 13:20:10 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 09:41:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ SQLRETURN OAdabasConnection::Construct( const ::rtl::OUString& url,const Sequenc
     ::osl::MutexGuard aGuard( m_aMutex );
 
     m_aConnectionHandle  = SQL_NULL_HANDLE;
-    m_aURL  = url;
+    setURL(url);
     m_aInfo = info;
 
     // Connection allozieren
