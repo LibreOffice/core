@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2002-07-02 09:32:46 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-09-12 08:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,6 +408,10 @@ void SwFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
         case RES_LR_SPACE:
         case RES_UL_SPACE:
             rInvFlags |= 0x0B;
+            break;
+
+        case RES_HEADER_FOOTER_EAT_SPACING:
+            rInvFlags |= 0x03;
             break;
 
         case RES_BACKGROUND:
