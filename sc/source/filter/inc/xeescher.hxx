@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeescher.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:44:08 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,8 @@ public:
                             const XclExpRoot& rRoot,
                             const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::drawing::XShape >& rxShape,
+                            const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::awt::XControlModel >& rxCtrlModel,
                             const String& rClassName,
                             sal_uInt32 nStrmStart, sal_uInt32 nStrmSize );
 
@@ -164,7 +166,8 @@ private:
     sal_Int16           mnScrollMax;    /// Scrollbar: Maximum value.
     sal_Int16           mnScrollStep;   /// Scrollbar: Single step.
     sal_Int16           mnScrollPage;   /// Scrollbar: Page step.
-    bool                mb3DStyle;      /// true = 3D style.
+    bool                mbFlatButton;   /// False = 3D button style; True = Flat button style.
+    bool                mbFlatBorder;   /// False = 3D border style; True = Flat border style.
     bool                mbMultiSel;     /// true = Multi selection in listbox.
     bool                mbScrollHor;    /// Scrollbar: true = horizontal.
 };
