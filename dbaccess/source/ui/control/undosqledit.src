@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undosqledit.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:14:29 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:11:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ String STR_QUERY_UNDO_MODIFYSQLEDIT
     Text [ english_us ] = "Modify SQL statement(s)" ;
     Text [ portuguese_brazilian ] = "Modificar os comando(s) SQL" ;
     Text [ swedish ] = "Modifiera SQL" ;
-    Text [ danish ] = "Modificer SQL" ;
+    Text [ danish ] = "Rediger SQL-udtryk" ;
     Text [ italian ] = "Modifica SQL" ;
     Text [ spanish ] = "Modificar SQL" ;
     Text [ french ] = "Modifier les instructions SQL" ;
@@ -95,7 +95,10 @@ String STR_QUERY_UNDO_MODIFYSQLEDIT
     Text[ hebrew ] = "SQL modifizieren";
     Text[ hindi ] = "SQL वाक्यों को सुधारो";
     Text[ slovak ] = "Upraviť SQL príkaz(y)";
+    Text[ hungarian ] = "SQL-utasítás(ok) módosítása";
+    Text[ slovenian ] = "Spremeni SQL izjavo(e)";
 };
+
 
 
 
