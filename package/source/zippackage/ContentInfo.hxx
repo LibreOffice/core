@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentInfo.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 17:10:52 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 21:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,8 @@ public:
     {
         if ( bFolder )
             pFolder->releaseUpwardRef();
+        else
+            pStream->clearParent();
     }
 };
 } } } };
