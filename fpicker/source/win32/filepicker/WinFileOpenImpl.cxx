@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-21 07:37:13 $
+ *  last change: $Author: tra $ $Date: 2002-03-27 10:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1025,7 +1025,7 @@ void SAL_CALL CWinFileOpenImpl::InitialSetDefaultName()
         // of an edit field for the file name edit field
         // the control id of this box is cmb13 and not
         // edt1 as before so we must use this id
-        if (IsWindows2000())
+        if (IsWindows2000Platform())
             edt1Id = cmb13;
 
         HWND hwndEdt1 = GetDlgItem(m_hwndFileOpenDlg, edt1Id);
