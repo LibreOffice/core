@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:42:33 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,7 @@
 #define WID_DOC_APPLY_FORM_DESIGN_MODE          1013
 #define WID_DOC_BASIC_LIBRARIES                 1014
 #define WID_DOC_RUNTIME_UID                     1015
+#define WID_DOC_LOCK_UPDATES                    1016
 
 //MailMerge
 #define WID_SELECTION                           1071
