@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-22 16:37:56 $
+ *  last change: $Author: nn $ $Date: 2001-12-14 10:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1946,16 +1946,24 @@ void ScOutputData::DrawRotatedFrame()
                         const Color& rColor = pBackground->GetColor();
                         if ( rColor.GetTransparency() != 255 )
                         {
-                            Polygon aPoly( 4, aPoints );
+                            //  #95879# draw background only for the changed row itself
+                            //  (background doesn't extend into other cells).
+                            //  For the borders (rotated and normal), clipping should be
+                            //  set if the row isn't changed, but at least the borders
+                            //  don't cover the cell contents.
+                            if ( pThisRowInfo->bChanged )
+                            {
+                                Polygon aPoly( 4, aPoints );
 
-                            //  ohne Pen wird bei DrawPolygon rechts und unten
-                            //  ein Pixel weggelassen...
-                            if ( rColor.GetTransparency() == 0 )
-                                pDev->SetLineColor(rColor);
-                            else
-                                pDev->SetLineColor();
-                            pDev->SetFillColor(rColor);
-                            pDev->DrawPolygon( aPoly );
+                                //  ohne Pen wird bei DrawPolygon rechts und unten
+                                //  ein Pixel weggelassen...
+                                if ( rColor.GetTransparency() == 0 )
+                                    pDev->SetLineColor(rColor);
+                                else
+                                    pDev->SetLineColor();
+                                pDev->SetFillColor(rColor);
+                                pDev->DrawPolygon( aPoly );
+                            }
                         }
 
                         const SvxBorderLine* pTopLine =
