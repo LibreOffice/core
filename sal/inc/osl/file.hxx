@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obr $ $Date: 2001-10-12 13:27:05 $
+ *  last change: $Author: tra $ $Date: 2001-11-08 13:55:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -800,6 +800,31 @@ public:
         return (RC) osl_getFilePos( _pData, &uPos );
     }
 
+    /** Tests if the end of a file is reached.
+     @param pIsEOF [out] Points to a variable that receives the end of file
+     status.
+     @return E_None on success otherwise one of the following errorcodes:<p>
+     E_INVAL the format of the parameter was not valid<br>
+
+    These errorcodes can (eventually) be returned:<p>
+    E_INTR      function call was interrupted<br>
+    E_IO        I/O error<br>
+    E_ISDIR     Is a directory<br>
+    E_BADF      Bad file<br>
+    E_FAULT     Bad address<br>
+    E_AGAIN     Operation would block<br>
+    E_NOLINK    Link has been severed<p>
+
+    @see    open
+    @see    read
+    @see    readLine
+    @see    setFilePos
+    */
+
+    inline RC isEndOfFile( sal_Bool *pIsEOF )
+    {
+        return (RC) osl_isEndOfFile( _pData, pIsEOF );
+    }
 
     /** Sets the file size of an open file. The file can be truncated or enlarged by the function.
      The position of the file pointer is not affeced by this function.
