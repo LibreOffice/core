@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-11 16:15:15 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1766,8 +1766,13 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     width that the table is in to work out the true widths.
     */
     SwFmtHoriOrient aHori(pFmt->GetHoriOrient());
-    bool bRelBoxSize = (pFmt->GetHoriOrient().GetHoriOrient() == HORI_NONE);
+    bool bRelBoxSize = (pFmt->GetHoriOrient().GetHoriOrient() == HORI_FULL);
     unsigned long nTblSz = static_cast<unsigned long>(pFmt->GetFrmSize().GetWidth());
+    if (nTblSz == USHRT_MAX && !bRelBoxSize)
+    {
+        ASSERT(bRelBoxSize, "huge table width but not relative");
+        bRelBoxSize = true;
+    }
 
     unsigned long nPageSize = nTblSz;
     {
@@ -2308,11 +2313,14 @@ void SwWW8Writer::OutWW8FlyFrm(const SwFrmFmt& rFrmFmt, const Point& rNdTopLeft)
     Note that something anchored as a character must be
     exported using the older WW6 mechanism
     */
-    if( !bWrtWW8 || (FLY_IN_CNTNT == rAnch.GetAnchorId()) )
+    if (!bWrtWW8 || (FLY_IN_CNTNT == rAnch.GetAnchorId()))
     {
-        if( RES_DRAWFRMFMT == rFrmFmt.Which() )
+        if (RES_DRAWFRMFMT == rFrmFmt.Which())
         {
-            ASSERT( !this, "OutWW8FlyFrm: DrawInCnt-Baustelle " );
+            bool bComboBoxHack = false;
+            if (bWrtWW8 && (FLY_IN_CNTNT == rAnch.GetAnchorId())) //#110185#
+                bComboBoxHack = MiserableFormFieldExportHack(rFrmFmt);
+            ASSERT(bComboBoxHack , "OutWW8FlyFrm: DrawInCnt-Baustelle " );
             return ;
         }
 
