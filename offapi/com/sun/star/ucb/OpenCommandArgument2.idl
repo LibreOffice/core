@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OpenCommandArgument2.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 13:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,17 +74,22 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** The argument for the commands "open", "update", and "synchronize". This
-    strcut extends the original OpenCommandArgument, which must not be
+/** The argument for the commands like "open", "update", and "synchronize".
+
+    <p>This strcut extends the original OpenCommandArgument, which must not be
     changed for compatibility reasons.
+
+    @see XCommandProcessor
 */
 struct OpenCommandArgument2 : OpenCommandArgument
 {
     //-------------------------------------------------------------------------
-    /** The sort criteria for the rows of the result set. The result set
-        implementation may ignore this parameter, if it cannot sort the
-        data by the given criteria in an efficient way ( i.e. directly
-        using the underlying data source --> SQL-database -> ORDER BY ).
+    /** The sort criteria for the rows of the returned
+        <type>ContentResultSet</type>.
+
+        <p>The resultset implementation may ignore this parameter, if it
+        cannot sort the data by the given criteria in an efficient way (i.e.
+        directly using the underlying data source -> SQL-database -> ORDER BY).
     */
     sequence< com::sun::star::ucb::NumberedSortingInfo > SortingInfo;
 };

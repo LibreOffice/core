@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WelcomeDynamicResultSetStruct.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 13:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,17 +71,24 @@ module com { module sun { module star { module ucb {
 
 //=============================================================================
 /** This struct is to be contained in the first notification of an
-<type>XDynamicResultSet</type>
+    <type>XDynamicResultSet</type>
 
-@see XDynamicResultSet
-@see ListEvent
-@see ListAction
-@see ListActionType
+    @see XDynamicResultSet
+    @see ListEvent
+    @see ListAction
+    @see ListActionType
 */
 
 struct WelcomeDynamicResultSetStruct
 {
+    //-------------------------------------------------------------------------
+    /** The static resultset containing the previous version of resultset data.
+    */
     com::sun::star::sdbc::XResultSet    Old;
+
+    //-------------------------------------------------------------------------
+    /** The static resultset containing the new version of resultset data.
+    */
     com::sun::star::sdbc::XResultSet    New;
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListAction.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 13:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,24 +68,25 @@ module com { module sun { module star { module ucb {
 
 //=============================================================================
 /** This struct contains information needed in the notifications of a
-<type>XDynamicResultSet</type>
+    <type>XDynamicResultSet</type>.
 
-@see ListEvent
+    @see ListEvent
 */
 
 struct ListAction
 {
     //-------------------------------------------------------------------------
-    /** The position where something has happened ( index begins with 1 as
-    usual with JDBC ).
-    Its value does not necessary indicate the new position in the new
-    <type>XResultSet</type>, but a position while doing the changes step by
-    step beginning with the old <type>XResultSet</type>.
+    /** The position where something has happened (index begins with
+        <code>1</code> as usual with JDBC ).
+
+        <p>Its value does not necessary indicate the new position in the new
+        <type>XResultSet</type>, but a position while doing the changes step by
+        step beginning with the old <type>XResultSet</type>.
     */
     long Position;
 
     //-------------------------------------------------------------------------
-    /** The Count of involved rows.
+    /** The count of involved rows.
     */
     long Count;
 
@@ -93,16 +94,8 @@ struct ListAction
     //-------------------------------------------------------------------------
     /** specifies the kind of modification happened to all assigned rows.
 
-        <p>The <member>ListAction::ListActionType</member> must contain a
-        constant of the <type>ListActionType</type> constants group.
-
-        <p><type>ListAction</type>s with different contents of
-        <member>ListAction::ListActionType</member> need or can contain
-        different values for <member>ListAction::Position</member>,
-        <member>ListAction::Count</member> and
-        <member>ListAction::ActionInfo</member>:
-
-        <p>So this member is to be filled as follows:
+        <p>The value of the other members of this struct depend on the value
+        of this member:
 
         <table border=1>
         <tr align=left> <th>ListActionType</th>
@@ -110,46 +103,46 @@ struct ListAction
                         <th>Count</th>
                         <th>ActionInfo</th></tr>
 
-        <tr align=left> <th><br></th><th><br></th>
-                        <th><br></th><th><br></th></tr>
+        <tr align=left> <td>WELCOME</td>
+                        <td>n/a</td>
+                        <td>n/a</td>
+                        <td><type>WelcomeDynamicResultSetStruct</type> required</td></tr>
 
-        <tr align=left> <th>WELCOME</th>
-                        <th>useless</th>
-                        <th>useless</th>
-                        <th>type WelcomeDynamicResultSetStruct required</th></tr>
+        <tr align=left> <td>CLEARED</td>
+                        <td>n/a</td>
+                        <td>n/a</td>
+                        <td>n/a</td></tr>
 
-        <tr align=left> <th>CLEARED</th>
-                        <th>useless</th>
-                        <th>useless</th>
-                        <th>useless</th></tr>
+        <tr align=left> <td>INSERTED</td>
+                        <td>required 1-x</td>
+                        <td>required 1-x</td>
+                        <td>allowed but not required... @todo </td></tr>
 
-        <tr align=left> <th>INSERTED</th>
-                        <th>required 1-x</th>
-                        <th>required 1-x</th>
-                        <th>allowed but not required... @todo </th></tr>
+        <tr align=left> <td>REMOVED</td>
+                        <td>required 1-x</td>
+                        <td>required 1-x</td>
+                        <td>n/a</td></tr>
 
-        <tr align=left> <th>REMOVED</th>
-                        <th>required 1-x</th>
-                        <th>required 1-x</th>
-                        <th>useless</th></tr>
+        <tr align=left> <td>MOVED</td>
+                        <td>required 1-x</td>
+                        <td>required 1-x</td>
+                        <td>type long required</td></tr>
 
-        <tr align=left> <th>MOVED</th>
-                        <th>required 1-x</th>
-                        <th>required 1-x</th>
-                        <th>type long required</th></tr>
-
-        <tr align=left> <th>PROPERTIES_CHANGED</th>
-                        <th>required 1-x</th>
-                        <th>required 1-x</th>
-                        <th>allowed but not required... @todo</th></tr>
+        <tr align=left> <td>PROPERTIES_CHANGED</td>
+                        <td>required 1-x</td>
+                        <td>required 1-x</td>
+                        <td>allowed but not required... @todo</td></tr>
         </table>
+
+        <p>The value for this member can be one of the
+        <type>ListActionType</type> constants group.
     */
     long ListActionType;
 
     //-------------------------------------------------------------------------
     /** dependend on the content of <member>ListAction::ListActionType</member>
         the <member>ListAction::ActionInfo</member> could contain additional
-        information about the changes happened ( see table above ).
+        information about the changes happened (see table above).
     */
 
     any ActionInfo;

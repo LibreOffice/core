@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OpenCommandArgument.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 13:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,31 +74,34 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** The argument for the commands "open", "update", and "synchronize".
+/** The argument for commands like "open", "update", and "synchronize".
+
+    @see XCommandProcessor
 */
 struct OpenCommandArgument
 {
     //-------------------------------------------------------------------------
-    /** The mode should be one of the com::sun::star::ucb::OpenMode constants.
+    /** The mode should be one of the <type>OpenMode</type> constants.
     */
     long Mode;
 
     //-------------------------------------------------------------------------
-    /** The tasks priority, in the range 0 (highest) to 65535 (lowest).
+    /** The tasks priority, in the range <code>0</code> (highest) to
+        <code>65535</code> (lowest).
     */
     long Priority;
 
     //-------------------------------------------------------------------------
     /** The data sink to write the contents into ( supporting either
         <type scope="com::sun::star::io">XActiveDataSink</type> or
-        <type scope="com::sun::star::io">XOutputStream</type> ). This gives the
-        caller read-only access to the contents.
+        <type scope="com::sun::star::io">XOutputStream</type> ) or
+        <type scope="com::sun::star::io">XActiveDataStreamer</type>.
 
-        The data streamer, of type
-        <type scope="com::sun::star::io">XActiveDataStreamer</type>, providing
-        both read and write access to the contents.
+        <p>XActiveDataSink and XOutputStream give the caller read-only
+        access to the contents. XActiveDataStreamer offers both read and
+        write access to the contents.
 
-        If an XActiveDataSink is supplied, the implementation of the command
+        <p>If an XActiveDataSink is supplied, the implementation of the command
         needs to provide an implementation of an object implementing the
         interface <type scope="com::sun::star::io">XInputStream</type>. It is
         highly recommended that this object also implements the interface
@@ -109,9 +112,8 @@ struct OpenCommandArgument
     com::sun::star::uno::XInterface Sink;
 
     //-------------------------------------------------------------------------
-    /** The properties, for that the values shall be provided through the
-        result set of the command ( Usually the result will be of type
-        <type scope="com::sun::star::sdbc">XResultSet</type> ).
+    /** The properties, for that the values shall be provided by the
+        <type>ContentResultSet</type> returned by the command).
     */
     sequence< com::sun::star::beans::Property > Properties;
 };

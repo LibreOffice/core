@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Rule.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 13:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,27 +71,48 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/**This struct describes a rule. A rule consists of a sequence of terms
-    describing the documents to which the rule should apply, the action
-    which should be used on the selected documents, and a parameter.
+/** describes a rule that can be applies to a number of objects.
+
+    <p>A rule consists of a sequence of <type>RuleTerm>/type>s describing the
+    objects to which the rule should be applied, the <type>RuleAction</type>
+    which should be used on the matching objects, and a parameter.
 */
 struct Rule
 {
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR Rule::Terms
+    /** the rule terms describing the objects to which the rule should be
+        applied.
+    */
     sequence<com::sun::star::ucb::RuleTerm> Terms;
 
     //-------------------------------------------------------------------------
-    /** The parameter is needed for some actions. For copy, move and
-    create link actions, the parameter contains the URL to the
-    destination folder. For the forward action, the parameter contains
-    the address of the recepient.
+    /** Some <type>RuleAction</type>s require a parameter.
+
+        <table border =1>
+        <tr>
+            <th>Action</th>
+            <th>Parameter</th>
+        </tr>
+        <tr>
+            <td>COPY, MOVE, LINK</td>
+            <td>The URL to the destination folder.</td>
+        </tr>
+        <tr>
+            <td>FORWARD</td>
+            <td>The email address of the recepient</td>
+        </tr>
+        <tr>
+            <td>All other actions</td>
+            <td>n/a</td>
+        </tr>
+        </table>
     */
     string Parameter;
 
     //-------------------------------------------------------------------------
-    /**Flags describing the action (e.g. copy document or
-        hide document, RuleAction* see above)
+    /** the action to perform on the matching objects.
+
+        <p>The value can be one of the <type>RuleAction</type> constants.
     */
     short Action;
 

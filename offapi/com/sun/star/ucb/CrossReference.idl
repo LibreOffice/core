@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CrossReference.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 13:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,19 +67,21 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/**This struct contains information describing a cross-reference. Such
-    references are kept by news servers for managing articles contained in
-    multiple groups. An article can have a sequence of cross-references.
+/** This struct contains information describing a cross reference.
+
+    <p>Such references are kept by news servers for managing articles
+    contained in multiple groups. An article can have a sequence of
+    cross references.
 */
 struct CrossReference
 {
     //-------------------------------------------------------------------------
-    /** the name of a news group.
+    /** The name of a news group.
     */
     string Group;
 
     //-------------------------------------------------------------------------
-    /**the unique identifier (relative to the server) of an article in the
+    /** The unique identifier (relative to the server) of an article in the
         given group.
     */
     long Id;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentEvent.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 13:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ struct ContentEvent: com::sun::star::lang::EventObject
     //-------------------------------------------------------------------------
     /** The action.
 
-        @see ContentAction
+        <p>The value can be one of the <type>ContentAction</type> constants.
     */
     long Action;
 
@@ -88,13 +88,26 @@ struct ContentEvent: com::sun::star::lang::EventObject
     /** The content the action is related to (e.g., the content that was just
         physically destroyed, the content just inserted into a folder content).
 
-        This member must be filled as follows:
+        <p>This member must be filled as follows:
 
-        ContentAction::INSERTED       - The content inserted into a folder.
-        ContentAction::REMOVED        - The content removed from a folder.
-        ContentAction::DELETED        - The deleted content.
-        ContentAction::EXCHANGED      - The exchanged content (that already has
-                                        the new content id).
+        <table border=1>
+        <tr align=left>
+            <td><member>ContentAction::INSERTED</member></td>
+            <td>The content inserted into a folder</td>
+        </tr>
+        <tr align=left>
+            <td><member>ContentAction::REMOVED</member></td>
+            <td>The content removed from a folder</td>
+        </tr>
+        <tr align=left>
+            <td><member>ContentAction::DELETED</member></td>
+            <td>The deleted content</td>
+        </tr>
+        <tr align=left>
+            <td><member>ContentAction::EXCHANGED</member></td>
+            <td>The exchanged content (that already has the new content id)</td>
+        </tr>
+        </table>
     */
     XContent Content;
 
@@ -103,15 +116,26 @@ struct ContentEvent: com::sun::star::lang::EventObject
         notified (e.g., the id of the folder content into which another content
         was inserted).
 
-        This member must be filled as follows:
+        <p>This member must be filled as follows:
 
-        ContentAction::INSERTED       - Id of the folder the content was
-                                        inserted into.
-        ContentAction::REMOVED        - Id of the folder the content was
-                                        removed from.
-        ContentAction::DELETED        - Id of the deleted content.
-        ContentAction::EXCHANGED      - Previous(!) id of the exchanged
-                                        content.
+        <table border=1>
+        <tr align=left>
+            <td><member>ContentAction::INSERTED</member></td>
+            <td>Id of the folder the content was inserted into</td>
+        </tr>
+        <tr align=left>
+            <td><member>ContentAction::REMOVED</member></td>
+            <td>Id of the folder the content was removed from</td>
+        </tr>
+        <tr align=left>
+            <td><member>ContentAction::DELETED</member></td>
+            <td>Id of the deleted content</td>
+        </tr>
+        <tr align=left>
+            <td><member>ContentAction::EXCHANGED</member></td>
+            <td>Previous(!) id of the exchanged content</td>
+        </tr>
+        </table>
     */
     XContentIdentifier Id;
 };

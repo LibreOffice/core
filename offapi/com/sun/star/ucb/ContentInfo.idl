@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentInfo.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-31 08:22:51 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 13:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,11 @@ struct ContentInfo
 {
     //-------------------------------------------------------------------------
     /** A type identifier string for a content.
+
+        <p>This is an implementation specific string characterizing the
+        kind of a content (e.g. "application/vnd.sun.star.hierarchy-link").
+        The value of this member should match the value returned by
+        <member>XContent::getContentType</member> of an appropriate content.
     */
     string Type;
 
@@ -86,9 +91,11 @@ struct ContentInfo
     /** Additional attributes.
 
         <p>These flags contain extra information on the content, like it's kind
-        ( KIND_FOLDER, KIND_DOCUMENT, KIND_LINK ). It is highly recommended to
-        fill these flags very accurately, as they are very important when
-        transferring contents between different Content Providers.
+        ( KIND_FOLDER, KIND_DOCUMENT, KIND_LINK ).
+
+        <p>It is highly recommended to fill these flags very accurately, as
+        they are very important when transferring contents between different
+        <type>ContentProvider</type>s.
 
         <p>The value can be one of the <type>ContentInfoAttribute</type>
            constants.

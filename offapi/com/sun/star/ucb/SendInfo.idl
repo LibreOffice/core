@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SendInfo.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 13:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,18 +67,20 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/**This struct contains information related to a send protocol. It can
-    contain any string values (server names, user names, paswords, etc.).
+/** contains information related to a send protocol.
+
+    <p>It can contain any string values (server names, user names, passwords,
+    ...).
 */
 struct SendInfo
 {
     //-------------------------------------------------------------------------
-    /** the protocol to which the info is related (i.e. &quot;NNTP&quot;, &quot;SMTP&quot;, &quot;VIM&quot;).
+    /** the protocol to which the info is related (i.e. "NNTP", "SMTP", "VIM").
     */
     string ProtocolType;
 
     //-------------------------------------------------------------------------
-    /** The value.
+    /** the value.
     */
     string Value;
 
