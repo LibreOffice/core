@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:22 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:18:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -830,7 +830,8 @@ BOOL ODbaseTable::CreateImpl()
     if(!aName.Len())
     {
         ::rtl::OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
-        aIdent += ::rtl::OUString::createFromAscii("/");
+        if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
+            aIdent += ::rtl::OUString::createFromAscii("/");
         aIdent += m_Name;
         aName = aIdent.getStr();
     }
@@ -1809,7 +1810,8 @@ namespace
         if(!aName.Len())
         {
             ::rtl::OUString aIdent = _pConenction->getContent()->getIdentifier()->getContentIdentifier();
-            aIdent += ::rtl::OUString::createFromAscii("/");
+            if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
+                aIdent += ::rtl::OUString::createFromAscii("/");
             aIdent += oldName;
             aName = aIdent;
         }
@@ -1984,7 +1986,8 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
 String ODbaseTable::createTempFile()
 {
     ::rtl::OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
-    aIdent += ::rtl::OUString::createFromAscii("/");
+    if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
+        aIdent += ::rtl::OUString::createFromAscii("/");
     String sTempName(aIdent);
     String sExt;
     sExt.AssignAscii(".");
