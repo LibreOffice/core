@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2001-09-27 13:13:37 $
+ *  last change: $Author: mba $ $Date: 2001-10-02 07:31:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,10 @@ SfxObjectShell::~SfxObjectShell()
     if ( pImp->xModel.is() )
         pImp->xModel->dispose();
 
-    String aPhysName = pMedium->GetPhysicalName();
+    String aPhysName;
+    if ( pMedium )
+        aPhysName = pMedium->GetPhysicalName();
+
     DELETEX(pImp->pEventConfig);
     DELETEX(pImp->pImageManager);
     DELETEX(pImp->pTbxConfig);
@@ -283,7 +286,7 @@ SfxObjectShell::~SfxObjectShell()
     if ( pImp->xModel.is() )
         pImp->xModel = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > ();
 
-    if ( pMedium->IsTemporary() )
+    if ( pMedium && pMedium->IsTemporary() )
         HandsOff();
 
     DELETEX( pMedium );
