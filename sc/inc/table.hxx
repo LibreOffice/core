@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2004-09-07 10:38:50 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:28:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,6 +463,7 @@ public:
                                 BOOL bRefresh, BOOL bAttrs );
     const SfxPoolItem*      GetAttr( SCCOL nCol, SCROW nRow, USHORT nWhich ) const;
     const ScPatternAttr*    GetPattern( SCCOL nCol, SCROW nRow ) const;
+    const ScPatternAttr*    GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const;
 
     ULONG                   GetNumberFormat( const ScAddress& rPos ) const
                                 { return aCol[rPos.Col()].GetNumberFormat( rPos.Row() ); }
