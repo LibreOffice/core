@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:32:57 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:44:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1163,212 +1163,136 @@ USHORT ScDocument::GetDdeLinkCount() const
     return nDdeCount;
 }
 
-BOOL ScDocument::GetDdeLinkData( USHORT nPos, String& rAppl, String& rTopic, String& rItem ) const
+// ----------------------------------------------------------------------------
+
+namespace {
+
+/** Tries to find the specified DDE link.
+    @param pnDdePos  (out-param) if not 0, the index of the DDE link is returned here
+                     (does not include other links from link manager).
+    @return  The DDE link, if it exists, otherwise 0. */
+ScDdeLink* lclGetDdeLink(
+        const SvxLinkManager* pLinkManager,
+        const String& rAppl, const String& rTopic, const String& rItem, BYTE nMode,
+        USHORT* pnDdePos = NULL )
 {
-    USHORT nDdeCount = 0;
-    if (pLinkManager)
+    if( pLinkManager )
     {
         const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
-        for (USHORT i=0; i<nCount; i++)
+        if( pnDdePos ) *pnDdePos = 0;
+        for( USHORT nIndex = 0; nIndex < nCount; ++nIndex )
         {
-            ::so3::SvBaseLink* pBase = *rLinks[i];
-            if (pBase->ISA(ScDdeLink))
+            ::so3::SvBaseLink* pLink = *rLinks[ nIndex ];
+            if( ScDdeLink* pDdeLink = PTR_CAST( ScDdeLink, pLink ) )
             {
-                if ( nDdeCount == nPos )
-                {
-                    ScDdeLink* pDde = (ScDdeLink*)pBase;
-                    rAppl  = pDde->GetAppl();
-                    rTopic = pDde->GetTopic();
-                    rItem  = pDde->GetItem();
-                    return TRUE;
-                }
-                ++nDdeCount;
+                if( (pDdeLink->GetAppl() == rAppl) &&
+                    (pDdeLink->GetTopic() == rTopic) &&
+                    (pDdeLink->GetItem() == rItem) &&
+                    ((nMode == SC_DDE_IGNOREMODE) || (nMode == pDdeLink->GetMode())) )
+                    return pDdeLink;
+                if( pnDdePos ) ++*pnDdePos;
             }
         }
     }
-    return FALSE;
+    return NULL;
 }
 
-BOOL ScDocument::GetDdeLinkMode(USHORT nPos, USHORT& nMode)
+/** Returns a pointer to the specified DDE link.
+    @param nDdePos  Index of the DDE link (does not include other links from link manager).
+    @return  The DDE link, if it exists, otherwise 0. */
+ScDdeLink* lclGetDdeLink( const SvxLinkManager* pLinkManager, USHORT nDdePos )
 {
-    USHORT nDdeCount = 0;
-    if (pLinkManager)
+    if( pLinkManager )
     {
         const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
-        for (USHORT i=0; i<nCount; i++)
+        USHORT nDdeIndex = 0;       // counts only the DDE links
+        for( USHORT nIndex = 0; nIndex < nCount; ++nIndex )
         {
-            ::so3::SvBaseLink* pBase = *rLinks[i];
-            if (pBase->ISA(ScDdeLink))
+            ::so3::SvBaseLink* pLink = *rLinks[ nIndex ];
+            if( ScDdeLink* pDdeLink = PTR_CAST( ScDdeLink, pLink ) )
             {
-                if ( nDdeCount == nPos )
-                {
-                    ScDdeLink* pDde = (ScDdeLink*)pBase;
-                    nMode = pDde->GetMode();
-                    return TRUE;
-                }
-                ++nDdeCount;
+                if( nDdeIndex == nDdePos )
+                    return pDdeLink;
+                ++nDdeIndex;
             }
         }
     }
-    return FALSE;
+    return NULL;
 }
 
-BOOL ScDocument::GetDdeLinkResultDimension( USHORT nPos, USHORT& nCol, USHORT& nRow, ScMatrix*& pMatrix)
+} // namespace
+
+// ----------------------------------------------------------------------------
+
+bool ScDocument::FindDdeLink( const String& rAppl, const String& rTopic, const String& rItem, BYTE nMode, USHORT& rnDdePos )
 {
-    USHORT nDdeCount = 0;
-    if (pLinkManager)
-    {
-        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        USHORT nCount = rLinks.Count();
-        for (USHORT i=0; i<nCount; i++)
-        {
-            ::so3::SvBaseLink* pBase = *rLinks[i];
-            if (pBase->ISA(ScDdeLink))
-            {
-                if ( nDdeCount == nPos )
-                {
-                    ScDdeLink* pDde = (ScDdeLink*)pBase;
-                    pMatrix = pDde->GetResult();
-                    if (pMatrix)
-                    {
-                        pMatrix->GetDimensions(nCol, nRow);
-                        return TRUE;
-                    }
-                }
-                ++nDdeCount;
-            }
-        }
-    }
-    return FALSE;
+    return lclGetDdeLink( pLinkManager, rAppl, rTopic, rItem, nMode, &rnDdePos ) != NULL;
 }
 
-BOOL ScDocument::GetDdeLinkResult(const ScMatrix* pMatrix, USHORT nCol, USHORT nRow, String& rStrValue, double& rDoubValue, BOOL& bIsString)
+bool ScDocument::GetDdeLinkData( USHORT nDdePos, String& rAppl, String& rTopic, String& rItem ) const
 {
-    if (pMatrix)
+    if( const ScDdeLink* pDdeLink = lclGetDdeLink( pLinkManager, nDdePos ) )
     {
-        BOOL bIsEmpty = pMatrix->IsEmpty(nCol, nRow);
-        if (bIsEmpty)
-        {
-            bIsString = TRUE;
-            rStrValue.Erase();
-        }
-        else
-        {
-            bIsString = pMatrix->IsString(nCol, nRow);
-            if (bIsString)
-                rStrValue = pMatrix->GetString(nCol, nRow);
-            else
-                rDoubValue = pMatrix->GetDouble(nCol, nRow);
-        }
-        return bIsEmpty;
+        rAppl  = pDdeLink->GetAppl();
+        rTopic = pDdeLink->GetTopic();
+        rItem  = pDdeLink->GetItem();
+        return true;
     }
-    return TRUE;
+    return false;
 }
 
-void ScDocument::CreateDdeLink(const String& rAppl, const String& rTopic, const String& rItem, const BYTE nMode )
+bool ScDocument::GetDdeLinkMode( USHORT nDdePos, BYTE& rnMode ) const
 {
-    //  DDE-Link anlegen und nicht updaten (z.B. fuer Excel-Import,
-    //  damit nicht ohne Nachfrage Verbindungen aufgebaut werden)
-    //  zuerst suchen, ob schon vorhanden
-    //! Dde-Links (zusaetzlich) effizienter am Dokument speichern?
-    if (pLinkManager)
+    if( const ScDdeLink* pDdeLink = lclGetDdeLink( pLinkManager, nDdePos ) )
     {
-        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        USHORT nCount = rLinks.Count();
-        for (USHORT i=0; i<nCount; i++)
-        {
-            ::so3::SvBaseLink* pBase = *rLinks[i];
-            if (pBase->ISA(ScDdeLink))
-            {
-                ScDdeLink* pLink = (ScDdeLink*)pBase;
-                if ( pLink->GetAppl() == rAppl &&
-                     pLink->GetTopic() == rTopic &&
-                     pLink->GetItem() == rItem &&
-                     pLink->GetMode() == nMode )
-                    return;                                     // dann nichts tun
-            }
-        }
-
-        //  neu anlegen, aber kein TryUpdate
-        ScDdeLink* pNew = new ScDdeLink( this, rAppl, rTopic, rItem, nMode );
-        pLinkManager->InsertDDELink( pNew, rAppl, rTopic, rItem );
+        rnMode = pDdeLink->GetMode();
+        return true;
     }
+    return false;
 }
 
-BOOL ScDocument::FindDdeLink(const String& rAppl, const String& rTopic, const String& rItem, const BYTE nMode, USHORT& nPos )
+const ScMatrix* ScDocument::GetDdeLinkResultMatrix( USHORT nDdePos ) const
 {
-    if (pLinkManager)
-    {
-        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        USHORT nCount = rLinks.Count();
-        USHORT nDdeCount = 0;
-        for (USHORT i=0; i<nCount; i++)
-        {
-            ::so3::SvBaseLink* pBase = *rLinks[i];
-            if (pBase->ISA(ScDdeLink))
-            {
-                ScDdeLink* pLink = (ScDdeLink*)pBase;
-                if ( pLink->GetAppl() == rAppl &&
-                     pLink->GetTopic() == rTopic &&
-                     pLink->GetItem() == rItem &&
-                     (nMode == SC_DDE_IGNOREMODE || pLink->GetMode() == nMode) )
-                {
-                    nPos = nDdeCount;
-                    return TRUE;
-                }
-                nDdeCount++;
-            }
-        }
-    }
-    return FALSE;
+    const ScDdeLink* pDdeLink = lclGetDdeLink( pLinkManager, nDdePos );
+    return pDdeLink ? pDdeLink->GetResult() : NULL;
 }
 
-BOOL ScDocument::CreateDdeLinkResultDimension(USHORT nPos, USHORT nCols, USHORT nRows, ScMatrix*& pMatrix)
+bool ScDocument::CreateDdeLink( const String& rAppl, const String& rTopic, const String& rItem, BYTE nMode, ScMatrix* pResults )
 {
-    USHORT nDdeCount = 0;
-    if (pLinkManager)
+    /*  Create a DDE link without updating it (i.e. for Excel import), to prevent
+        unwanted connections. First try to find existing link. Set result array
+        on existing and new links. */
+    //! store DDE links additionally at document (for efficiency)?
+    DBG_ASSERT( nMode != SC_DDE_IGNOREMODE, "ScDocument::CreateDdeLink - SC_DDE_IGNOREMODE not allowed here" );
+    if( pLinkManager && (nMode != SC_DDE_IGNOREMODE) )
     {
-        const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        USHORT nCount = rLinks.Count();
-        for (USHORT i=0; i<nCount; i++)
+        ScDdeLink* pDdeLink = lclGetDdeLink( pLinkManager, rAppl, rTopic, rItem, nMode );
+        if( !pDdeLink )
         {
-            ::so3::SvBaseLink* pBase = *rLinks[i];
-            if (pBase->ISA(ScDdeLink))
-            {
-                if ( nDdeCount == nPos )
-                {
-                    ScDdeLink* pDde = (ScDdeLink*)pBase;
-                    pDde->NewData(nCols, nRows);
-                    pMatrix = pDde->GetResult();
-                    if (pMatrix)
-                        return TRUE;
-                    else
-                        return FALSE;
-                }
-                ++nDdeCount;
-            }
+            // create a new DDE link, but without TryUpdate
+            pDdeLink = new ScDdeLink( this, rAppl, rTopic, rItem, nMode );
+            pLinkManager->InsertDDELink( pDdeLink, rAppl, rTopic, rItem );
         }
+
+        // insert link results
+        if( pResults )
+            pDdeLink->SetResult( pResults );
+
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
-void ScDocument::SetDdeLinkResult(ScMatrix* pMatrix, const USHORT nCol, const USHORT nRow, const String& rStrValue, const double& rDoubValue, BOOL bString, BOOL bEmpty)
+bool ScDocument::SetDdeLinkResultMatrix( USHORT nDdePos, ScMatrix* pResults )
 {
-    DBG_ASSERT(pMatrix, "there is no matrix");
-    if (pMatrix)
+    if( ScDdeLink* pDdeLink = lclGetDdeLink( pLinkManager, nDdePos ) )
     {
-        if(bEmpty)
-            pMatrix->PutEmpty(nCol, nRow);
-        else
-        {
-            if (bString)
-                pMatrix->PutString(rStrValue, nCol, nRow);
-            else
-                pMatrix->PutDouble(rDoubValue, nCol, nRow);
-        }
+        pDdeLink->SetResult( pResults );
+        return true;
     }
+    return false;
 }
 
 //------------------------------------------------------------------------
