@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.33 $
- *  last change: $Author: bmahbod $ $Date: 2000-12-21 20:19:31 $
+ *  $Revision: 1.34 $
+ *  last change: $Author: pluby $ $Date: 2000-12-24 03:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,22 @@
 
 // =======================================================================
 
-static inline unsigned long AbsoluteValue ( const long  nValue ){ unsigned long   nAbsValue = 0;        if ( nValue < 0 )  {      nAbsValue = -nValue;   } // if    else   {      nAbsValue = nValue;    } // else             return nAbsValue;} // AbsoluteValue
+static inline unsigned long AbsoluteValue ( const long  nValue )
+{
+    unsigned long   nAbsValue = 0;
+
+    if ( nValue < 0 )
+    {
+        nAbsValue = -nValue;
+    } // if
+    else
+    {
+        nAbsValue = nValue;
+    } // else
+
+    return nAbsValue;
+} // AbsoluteValue
+
 
 // =======================================================================
 
@@ -213,23 +228,79 @@ static inline short SelectCopyMode ( const SalGraphicsDataPtr pSalGraphicsData )
 // =======================================================================
 
 // =======================================================================
-static unsigned long  Compress32BitRGBColor ( const RGBColor *pRGBColor ){   unsigned long nCTableIndex = 0;
 
-    nCTableIndex  = ( pRGBColor->red   >> kOneByte ) << kTwoBytes; nCTableIndex |= ( pRGBColor->green >> kOneByte ) << kOneByte;  nCTableIndex |=   pRGBColor->blue  >> kOneByte;       return nCTableIndex;} // Compress32BitRGBColor    // -----------------------------------------------------------------------
+static unsigned long  Compress32BitRGBColor ( const RGBColor *pRGBColor )
+{
+    unsigned long nCTableIndex = 0;
 
-static unsigned long  Compress16BitRGBColor ( const RGBColor *pRGBColor ){    unsigned long nCTableIndex = 0;           nCTableIndex  = ( pRGBColor->red   >> kElevenBits ) << kTenBits;   nCTableIndex |= ( pRGBColor->green >> kElevenBits ) << kFiveBits;  nCTableIndex |=   pRGBColor->blue  >> kElevenBits;        return nCTableIndex;} // Compress16BitRGBColor    // -----------------------------------------------------------------------
+    nCTableIndex  = ( pRGBColor->red   >> kOneByte ) << kTwoBytes;
+    nCTableIndex |= ( pRGBColor->green >> kOneByte ) << kOneByte;
+    nCTableIndex |=   pRGBColor->blue  >> kOneByte;
+
+    return nCTableIndex;
+} // Compress32BitRGBColor
+
+// -----------------------------------------------------------------------
+
+static unsigned long  Compress16BitRGBColor ( const RGBColor *pRGBColor )
+{
+    unsigned long nCTableIndex = 0;
+
+    nCTableIndex  = ( pRGBColor->red   >> kElevenBits ) << kTenBits;
+    nCTableIndex |= ( pRGBColor->green >> kElevenBits ) << kFiveBits;
+    nCTableIndex |=   pRGBColor->blue  >> kElevenBits;
+
+    return nCTableIndex;
+} // Compress16BitRGBColor
+
+// -----------------------------------------------------------------------
 
 static void CompressRGBColor ( const PixMapPtr   pPixMap,
-                               const RGBColor   *pRGBColor,                               SalColor         *rSalColor
-                             ){
-    if ( pPixMap->pixelSize == k32BitScreenDepth ) {      *rSalColor = Compress32BitRGBColor( pRGBColor );   } // if    else   {      *rSalColor = Compress16BitRGBColor( pRGBColor );   } // else} // CompressRGBColor    // -----------------------------------------------------------------------
+                               const RGBColor   *pRGBColor,
+                               SalColor         *rSalColor
+                             )
+{
+    if ( pPixMap->pixelSize == k32BitScreenDepth )
+    {
+        *rSalColor = Compress32BitRGBColor( pRGBColor );
+    } // if
+    else
+    {
+        *rSalColor = Compress16BitRGBColor( pRGBColor );
+    } // else
+} // CompressRGBColor
 
-static unsigned long  RGBDistance ( const RGBColor  *pRGBColor1,                                    const RGBColor  *pRGBColor2
-                                  ){  unsigned long   nRGBDist    = 0;   long            nDeltaRed   = 0;   long            nDeltaGreen = 0;   long            nDeltaBlue  = 0;          nDeltaRed   = (long)pRGBColor2->red   - (long)pRGBColor1->red; nDeltaGreen = (long)pRGBColor2->green - (long)pRGBColor1->green;   nDeltaBlue  = (long)pRGBColor2->blue  - (long)pRGBColor1->blue;           nRGBDist =   AbsoluteValue(nDeltaRed)         + AbsoluteValue(nDeltaGreen)           + AbsoluteValue(nDeltaBlue);           return nRGBDist;} // RGBDistance
-// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 
-static BOOL QDColorsMatch ( const RGBColor  *pRGBColor1,                            const RGBColor  *pRGBColor2
-                          ){  if (    ( pRGBColor2->red   == pRGBColor1->red   )          && ( pRGBColor2->green == pRGBColor1->green )      && ( pRGBColor2->blue  == pRGBColor1->blue  )
+static unsigned long  RGBDistance ( const RGBColor  *pRGBColor1,
+                                    const RGBColor  *pRGBColor2
+                                  )
+{
+    unsigned long   nRGBDist    = 0;
+    long            nDeltaRed   = 0;
+    long            nDeltaGreen = 0;
+    long            nDeltaBlue  = 0;
+
+    nDeltaRed   = (long)pRGBColor2->red   - (long)pRGBColor1->red;
+    nDeltaGreen = (long)pRGBColor2->green - (long)pRGBColor1->green;
+    nDeltaBlue  = (long)pRGBColor2->blue  - (long)pRGBColor1->blue;
+
+    nRGBDist =   AbsoluteValue(nDeltaRed)
+           + AbsoluteValue(nDeltaGreen)
+           + AbsoluteValue(nDeltaBlue);
+
+    return nRGBDist;
+} // RGBDistance
+
+// -----------------------------------------------------------------------
+
+static BOOL QDColorsMatch ( const RGBColor  *pRGBColor1,
+                            const RGBColor  *pRGBColor2
+                          )
+{
+    if (    ( pRGBColor2->red   == pRGBColor1->red   )
+         && ( pRGBColor2->green == pRGBColor1->green )
+         && ( pRGBColor2->blue  == pRGBColor1->blue  )
            )
     {
         return TRUE;
@@ -237,28 +308,87 @@ static BOOL QDColorsMatch ( const RGBColor  *pRGBColor1,                       
     else
     {
         return FALSE;
-    } // else} // QDColorsMatch
+    } // else
+} // QDColorsMatch
 
 // -----------------------------------------------------------------------
 
 static void GetBestSalColor ( const CTabPtr    pCTable,
-                              const RGBColor  *pRGBColor,                              unsigned long   *pBestSalColor
-                            ){    unsigned short   nCTableSize     = 0;  unsigned long    nCTableIndex    = 0;  unsigned long    nRGBNewDistance = 0;  unsigned long    nRGBMinDistance = UID_MAX;    RGBColor        *pRGBNextColor   = NULL;   BOOL             bRGBColorsMatch = FALSE; *pBestSalColor = 0;           nCTableSize = pCTable->ctSize;        while ( ( nCTableIndex < nCTableSize ) && ( bRGBColorsMatch == FALSE ) )   {      pRGBNextColor = &pCTable->ctTable[nCTableIndex].rgb;
+                              const RGBColor  *pRGBColor,
+                              unsigned long   *pBestSalColor
+                            )
+{
+    unsigned short   nCTableSize     = 0;
+    unsigned long    nCTableIndex    = 0;
+    unsigned long    nRGBNewDistance = 0;
+    unsigned long    nRGBMinDistance = UID_MAX;
+    RGBColor        *pRGBNextColor   = NULL;
+    BOOL             bRGBColorsMatch = FALSE;
+
+    *pBestSalColor = 0;
+
+    nCTableSize = pCTable->ctSize;
+
+    while ( ( nCTableIndex < nCTableSize ) && ( bRGBColorsMatch == FALSE ) )
+    {
+        pRGBNextColor = &pCTable->ctTable[nCTableIndex].rgb;
+
         bRGBColorsMatch = QDColorsMatch( pRGBColor, pRGBNextColor );
-       if ( bRGBColorsMatch == TRUE )     {          *pBestSalColor= nCTableIndex;      } // if        else       {          nRGBNewDistance = RGBDistance( pRGBColor, pRGBNextColor );                        if ( nRGBNewDistance < nRGBMinDistance )           {               nRGBMinDistance = nRGBNewDistance;                *pBestSalColor   = nCTableIndex;           } // if                               nCTableIndex++;        } //else   } // while} // GetBestSalColor    // -----------------------------------------------------------------------
+
+        if ( bRGBColorsMatch == TRUE )
+        {
+            *pBestSalColor= nCTableIndex;
+        } // if
+        else
+        {
+            nRGBNewDistance = RGBDistance( pRGBColor, pRGBNextColor );
+
+            if ( nRGBNewDistance < nRGBMinDistance )
+            {
+                 nRGBMinDistance = nRGBNewDistance;
+                *pBestSalColor   = nCTableIndex;
+            } // if
+
+            nCTableIndex++;
+        } //else
+    } // while
+} // GetBestSalColor
+
+// -----------------------------------------------------------------------
 
 static void GetCTableIndex ( const PixMapPtr   pPixMap,
-                             const RGBColor   *pRGBColor,                             SalColor         *rSalColor
-                           ){ CTabPtr pCTable = NULL;   pCTable = *(*pPixMap).pmTable;
+                             const RGBColor   *pRGBColor,
+                             SalColor         *rSalColor
+                           )
+{
+    CTabPtr pCTable = NULL;
+
+    pCTable = *(*pPixMap).pmTable;
+
     if ( pCTable != NULL )
-    {          GetBestSalColor( pCTable, pRGBColor, rSalColor );                                                                 if ( *rSalColor > pCTable->ctSize )        {          *rSalColor = 255;      } // if
-    } // if} // GetCTableIndex    // -----------------------------------------------------------------------
+    {
+        GetBestSalColor( pCTable, pRGBColor, rSalColor );
+
+        if ( *rSalColor > pCTable->ctSize )
+        {
+            *rSalColor = 255;
+        } // if
+    } // if
+} // GetCTableIndex
+
+// -----------------------------------------------------------------------
 //
 // Convert RGB color to Sal color.
 //
 // -----------------------------------------------------------------------
 
-static SalColor RGBColor2SALColor ( const RGBColor *pRGBColor ){  GDPtr      pGDevice  = NULL;   SalColor   nSalColor = 0;                 pGDevice = *GetGDevice ( );
+static SalColor RGBColor2SALColor ( const RGBColor *pRGBColor )
+{
+    GDPtr      pGDevice  = NULL;
+    SalColor   nSalColor = 0;
+
+    pGDevice = *GetGDevice ( );
+
     if ( pGDevice != NULL )
     {
         PixMapPtr  pPixMap = NULL;
@@ -266,34 +396,87 @@ static SalColor RGBColor2SALColor ( const RGBColor *pRGBColor ){  GDPtr      p
         pPixMap = *(*pGDevice).gdPMap;
 
         if ( pPixMap != NULL )
-        {          if ( pGDevice->gdType == directType )          {              CompressRGBColor( pPixMap, pRGBColor, &nSalColor );            } // if            else           {              GetCTableIndex( pPixMap, pRGBColor, &nSalColor );          } // else
+        {
+            if ( pGDevice->gdType == directType )
+            {
+                CompressRGBColor( pPixMap, pRGBColor, &nSalColor );
+            } // if
+            else
+            {
+                GetCTableIndex( pPixMap, pRGBColor, &nSalColor );
+            } // else
         } // if
-    } // if                   return  nSalColor;} // RGBColor2SALColor// =======================================================================
-// =======================================================================
-static unsigned short SalColorTo32BitDeviceColor ( SalColor  *rSalColor ){   unsigned short  nDirectColor = 0;  unsigned short  nUpperByte   = 0;  unsigned short  nLowerByte   = 0;
+    } // if
 
-     nLowerByte     = *rSalColor   & kByteMask;     nUpperByte     =  nLowerByte << kOneByte;  nDirectColor   =  nUpperByte  | nLowerByte;   *rSalColor    >>=  kOneByte;          return  nDirectColor;} // SalColorTo32BitDeviceColor
+    return  nSalColor;
+} // RGBColor2SALColor
+
+// =======================================================================
+
+// =======================================================================
+
+static unsigned short SalColorTo32BitDeviceColor ( SalColor  *rSalColor )
+{
+    unsigned short  nDirectColor = 0;
+    unsigned short  nUpperByte   = 0;
+    unsigned short  nLowerByte   = 0;
+
+     nLowerByte     = *rSalColor   & kByteMask;
+     nUpperByte     =  nLowerByte << kOneByte;
+     nDirectColor   =  nUpperByte  | nLowerByte;
+    *rSalColor    >>=  kOneByte;
+
+    return  nDirectColor;
+} // SalColorTo32BitDeviceColor
+
 
 // -----------------------------------------------------------------------
 
-static void SalColor2DirectColor ( const SalColor   nSalColor,                                   RGBColor        *rRGBColor
-                                 ){
+static void SalColor2DirectColor ( const SalColor   nSalColor,
+                                   RGBColor        *rRGBColor
+                                 )
+{
     SalColor  nIndexedColor = nSalColor;
-   rRGBColor->blue  = SalColorTo32BitDeviceColor( &nIndexedColor );   rRGBColor->green = SalColorTo32BitDeviceColor( &nIndexedColor );   rRGBColor->red   = SalColorTo32BitDeviceColor( &nIndexedColor );
-} // SalColor2DirectColor      
+
+    rRGBColor->blue  = SalColorTo32BitDeviceColor( &nIndexedColor );
+    rRGBColor->green = SalColorTo32BitDeviceColor( &nIndexedColor );
+    rRGBColor->red   = SalColorTo32BitDeviceColor( &nIndexedColor );
+
+} // SalColor2DirectColor
+
+
 // -----------------------------------------------------------------------
 
 static void SalColor2EightBitColor ( const GDPtr      pGDevice,
-                                     const SalColor   nSalColor,                                     RGBColor        *rRGBColor
-                                   ){ CTabPtr    pCTable = NULL; PixMapPtr  pPixMap = NULL;        pPixMap = *(*pGDevice).gdPMap;
+                                     const SalColor   nSalColor,
+                                     RGBColor        *rRGBColor
+                                   )
+{
+    CTabPtr    pCTable = NULL;
+    PixMapPtr  pPixMap = NULL;
+
+    pPixMap = *(*pGDevice).gdPMap;
 
     if ( pPixMap != NULL )
-    {      pCTable = *(*pPixMap).pmTable;
+    {
+        pCTable = *(*pPixMap).pmTable;
 
         if ( pCTable != NULL )
-        {          if ( nSalColor <= pCTable->ctSize )            {              RGBColor  aRGBColor;                      aRGBColor        = pCTable->ctTable[nSalColor].rgb;                rRGBColor->red   = aRGBColor.red;              rRGBColor->green = aRGBColor.green;                rRGBColor->blue  = aRGBColor.blue;         } // if
+        {
+            if ( nSalColor <= pCTable->ctSize )
+            {
+                RGBColor  aRGBColor;
+
+                aRGBColor        = pCTable->ctTable[nSalColor].rgb;
+                rRGBColor->red   = aRGBColor.red;
+                rRGBColor->green = aRGBColor.green;
+                rRGBColor->blue  = aRGBColor.blue;
+            } // if
         } // if
-    } // if} // SalColor2EightBitColor
+    } // if
+} // SalColor2EightBitColor
+
+
 // -----------------------------------------------------------------------
 //
 // Here we will convert SAL color to either 8-bit or 32-bit color.
@@ -305,12 +488,25 @@ static void SalColor2EightBitColor ( const GDPtr      pGDevice,
 
 static RGBColor SALColor2RGBColor ( const SalColor nSalColor )
 {
-    GDPtr     pGDevice = NULL; RGBColor  aRGBColor;
-           memset( &aRGBColor, 0, sizeof(RGBColor) );
-   pGDevice = *GetGDevice();
+    GDPtr     pGDevice = NULL;
+    RGBColor  aRGBColor;
+
+    memset( &aRGBColor, 0, sizeof(RGBColor) );
+
+    pGDevice = *GetGDevice();
+
     if ( pGDevice != NULL )
-    {          if ( pGDevice->gdType == directType )      {          SalColor2DirectColor( nSalColor, &aRGBColor );     } // if        else       {          SalColor2EightBitColor( pGDevice, nSalColor, &aRGBColor );     } // else
+    {
+        if ( pGDevice->gdType == directType )
+        {
+            SalColor2DirectColor( nSalColor, &aRGBColor );
+        } // if
+        else
+        {
+            SalColor2EightBitColor( pGDevice, nSalColor, &aRGBColor );
+        } // else
     } // if
+
 
     return aRGBColor;
 } // SALColor2RGBColor
@@ -353,8 +549,13 @@ static SalColor GetROPSalColor( SalROPColor nROPColor )
 
 static OSStatus GetGDeviceBitDepth ( unsigned short  *rGDeviceBitDepth )
 {
-    GDPtr     pGDevice  = NULL;    OSStatus  nQDStatus = noErr;                                  pGDevice = *GetGDevice ( );
+    GDPtr     pGDevice  = NULL;
+    OSStatus  nQDStatus = noErr;
+
+    pGDevice = *GetGDevice ( );
+
     nQDStatus = QDErr();
+
     if ( ( pGDevice != NULL ) && ( nQDStatus == noErr ) )
     {
         PixMapPtr  pPixMap = NULL;
@@ -380,9 +581,12 @@ static OSStatus GetGDeviceResolution ( long  *rGDeviceHRes,
                                      )
 {
     GDPtr     pGDevice  = NULL;
-    OSStatus  nQDStatus = noErr;                  pGDevice = *GetGDevice ( );
+    OSStatus  nQDStatus = noErr;
+
+    pGDevice = *GetGDevice ( );
 
     nQDStatus = QDErr();
+
     if ( ( pGDevice != NULL ) && ( nQDStatus == noErr ) )
     {
         long  nGDeviceTop    = pGDevice->gdRect.top;
@@ -560,6 +764,7 @@ static void InitPen ( SalGraphicsDataPtr rSalGraphicsData )
 
 static void InitQD ( SalGraphicsDataPtr rSalGraphicsData )
 {
+    rSalGraphicsData->mhDC              = NULL;
     rSalGraphicsData->mpCGrafPort       = NULL;
     rSalGraphicsData->mpOffscreenGWorld = NULL;
     rSalGraphicsData->mhGDevice         = NULL;
@@ -570,12 +775,18 @@ static void InitQD ( SalGraphicsDataPtr rSalGraphicsData )
 static void InitRegions ( SalGraphicsDataPtr rSalGraphicsData )
 {
     rSalGraphicsData->mhClipRgn = NULL;
+    rSalGraphicsData->mhGrowRgn = NULL;
+    rSalGraphicsData->mbClipRegionChanged = FALSE;
 } // InitRegions
 
 // -----------------------------------------------------------------------
 
 static void InitStatusFlags ( SalGraphicsDataPtr rSalGraphicsData )
 {
+    rSalGraphicsData->mbPrinter = FALSE;
+    rSalGraphicsData->mbVirDev = FALSE;
+    rSalGraphicsData->mbWindow = FALSE;
+    rSalGraphicsData->mbScreen = FALSE;
     rSalGraphicsData->mnMacOSStatus = noErr;
 } // InitStatusFlags
 
@@ -724,6 +935,15 @@ SalGraphics::~SalGraphics()
     {
         DisposeRgn( maGraphicsData.mhGrowRgn );
     } // if
+    if ( maGraphicsData.mpOffscreenGWorld != NULL )
+    {
+        DisposeGWorld( maGraphicsData.mpOffscreenGWorld );
+    } // if
+    if ( maGraphicsData.mhGDevice != NULL )
+    {
+        DisposeGDevice( maGraphicsData.mhGDevice );
+    } // if
+
 } // SalGraphics Class Destructor
 
 // =======================================================================
@@ -1590,6 +1810,7 @@ SalColor SalGraphics::GetPixel( long nX,
     nSalColor = RGBColor2SALColor ( &aRGBColor );
 
     return nSalColor;
+
 } // SalGraphics::GetPixel
 
 // -----------------------------------------------------------------------

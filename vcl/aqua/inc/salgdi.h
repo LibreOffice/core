@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: bmahbod $ $Date: 2000-12-21 19:37:40 $
+ *  last change: $Author: pluby $ $Date: 2000-12-24 03:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,36 +95,35 @@ struct SalGraphicsData
     // NSView and NSWindow
 
     VCLVIEW         mhDC;           // VCLVIEW
-    VCLWINDOW       mhWnd;          // Window-Handle, when Window-Graphics
 
     // QuickDraw graph port, offscreen graphic world, and graphic device handle
 
     CGrafPtr        mpCGrafPort;        // QD color graphics port
-    GWorldPtr               mpOffscreenGWorld;      // QD offscreen GWorld
-    GDHandle                mhGDevice;              // QD GDevice
+    GWorldPtr       mpOffscreenGWorld;  // QD offscreen GWorld
+    GDHandle        mhGDevice;          // QD GDevice
 
     // Regions within a current port
 
     RgnHandle       mhClipRgn;      // Clip Region Handle
-        RgnHandle       mhGrowRgn;      // Grow Region Handle
+    RgnHandle       mhGrowRgn;      // Grow Region Handle
 
     // Font attributes
 
-    int         mnFontID;       // Mac FontFamilyId
-    int         mnFontSize;     // Mac Font Size
-        RGBColor                maFontColor;        // Text Color
-    Style           mnFontStyle;        // Mac Font Style
+    int             mnFontID;       // Mac FontFamilyId
+    int             mnFontSize;     // Mac Font Size
+    RGBColor        maFontColor;    // Text Color
+    Style           mnFontStyle;    // Mac Font Style
 
     // Pen attributes and status
 
     BOOL            mbTransparentPen;   // Is pen transparent?
-    int         mnPenMode;      // Pen Mode
-        RGBColor                maPenColor;     // Pen Color
+    int             mnPenMode;      // Pen Mode
+    RGBColor        maPenColor;     // Pen Color
 
     // Brush attributes and status
 
     BOOL            mbTransparentBrush; // Is brush transparent?
-        RGBColor                maBrushColor;       // Brush Color
+    RGBColor        maBrushColor;       // Brush Color
 
     // Miscellaneous status flags
 
