@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:51:24 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,10 @@
 
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
 #include "convert.hxx"
@@ -289,6 +293,7 @@ uno::Reference< frame::XModel > OCommonEmbeddedObject::InitNewDocument_Impl()
     try
     {
         xLoadable->initNew();
+        xDocument->attachResource( xDocument->getURL(),m_aDocMediaDescriptor);
     }
     catch( uno::Exception& )
     {
@@ -373,23 +378,37 @@ uno::Reference< frame::XModel > OCommonEmbeddedObject::LoadDocumentFromStorage_I
     if ( !aFilterName.getLength() )
         throw uno::RuntimeException(); // this point should not be reachable
 
-    uno::Sequence< beans::PropertyValue > aArgs( 5 );
+    ::rtl::OUString aTempFileURL;
+    try
+    {
+        // no need to let the file stay after the stream is removed since the embedded document
+        // can not be stored directly
+        uno::Reference< beans::XPropertySet > xTempStreamProps( xTempInpStream, uno::UNO_QUERY_THROW );
+        xTempStreamProps->getPropertyValue( ::rtl::OUString::createFromAscii( "Uri" ) ) >>= aTempFileURL;
+    }
+    catch( uno::Exception& )
+    {
+    }
+
+    OSL_ENSURE( aTempFileURL.getLength(), "Coudn't retrieve temporary file URL!\n" );
+
+    uno::Sequence< beans::PropertyValue > aArgs( 4 );
     aArgs[0].Name = ::rtl::OUString::createFromAscii( "URL" );
-    aArgs[0].Value <<= ::rtl::OUString::createFromAscii( "private:stream" );
+    aArgs[0].Value <<= aTempFileURL;
     aArgs[1].Name = ::rtl::OUString::createFromAscii( "InputStream" );
     aArgs[1].Value <<= xTempInpStream;
     aArgs[2].Name = ::rtl::OUString::createFromAscii( "ReadOnly" );
     aArgs[2].Value <<= m_bReadOnly;
     aArgs[3].Name = ::rtl::OUString::createFromAscii( "FilterName" );
     aArgs[3].Value <<= aFilterName;
-    aArgs[4].Name = ::rtl::OUString::createFromAscii( "AsTemplate" );
-    aArgs[4].Value <<= sal_True;
+    // aArgs[4].Name = ::rtl::OUString::createFromAscii( "AsTemplate" );
+    // aArgs[4].Value <<= sal_True;
 
     for ( sal_Int32 nInd = 0; nInd < m_aDocMediaDescriptor.getLength(); nInd++ )
     {
         aArgs.realloc( nInd + 5 );
-        aArgs[nInd+5].Name = m_aDocMediaDescriptor[nInd].Name;
-        aArgs[nInd+5].Value = m_aDocMediaDescriptor[nInd].Value;
+        aArgs[nInd+4].Name = m_aDocMediaDescriptor[nInd].Name;
+        aArgs[nInd+4].Value = m_aDocMediaDescriptor[nInd].Value;
     }
 
     try
@@ -509,7 +528,7 @@ uno::Reference< frame::XModel > OCommonEmbeddedObject::CreateDocFromMediaDescr_I
 
     try
     {
-        xLoadable->load( addAsTemplate( aMedDescr ) );
+        xLoadable->load( aMedDescr ); // addAsTemplate( aMedDescr ) );
     }
     catch( uno::Exception& )
     {
@@ -542,25 +561,41 @@ uno::Reference< frame::XModel > OCommonEmbeddedObject::CreateTempDocFromLink_Imp
 
     if ( m_pDocHolder->GetDocument().is() )
     {
-        aTempMediaDescr.realloc( 4 );
+        aTempMediaDescr.realloc( 3 );
+
+        ::rtl::OUString aTempFileURL;
+        uno::Reference< io::XInputStream > xTempStream = StoreDocumentToTempStream_Impl();
+        try
+        {
+            // no need to let the file stay after the stream is removed since the embedded document
+            // can not be stored directly
+            uno::Reference< beans::XPropertySet > xTempStreamProps( xTempStream, uno::UNO_QUERY_THROW );
+            xTempStreamProps->getPropertyValue( ::rtl::OUString::createFromAscii( "Uri" ) ) >>= aTempFileURL;
+        }
+        catch( uno::Exception& )
+        {
+        }
+
+        OSL_ENSURE( aTempFileURL.getLength(), "Coudn't retrieve temporary file URL!\n" );
+
         aTempMediaDescr[0].Name = ::rtl::OUString::createFromAscii( "URL" );
-        aTempMediaDescr[0].Value <<= ::rtl::OUString::createFromAscii( "private:stream" );
+        aTempMediaDescr[0].Value <<= aTempFileURL;
         aTempMediaDescr[1].Name = ::rtl::OUString::createFromAscii( "InputStream" );
-        aTempMediaDescr[1].Value <<= StoreDocumentToTempStream_Impl();
+        aTempMediaDescr[1].Value <<= xTempStream;
         aTempMediaDescr[2].Name = ::rtl::OUString::createFromAscii( "FilterName" );
         aTempMediaDescr[2].Value <<= GetDefaultFilterFromServName( GetDocumentServiceName() );
-        aTempMediaDescr[3].Name = ::rtl::OUString::createFromAscii( "AsTemplate" );
-        aTempMediaDescr[3].Value <<= sal_True;
+        // aTempMediaDescr[3].Name = ::rtl::OUString::createFromAscii( "AsTemplate" );
+        // aTempMediaDescr[3].Value <<= sal_True;
     }
     else
     {
-        aTempMediaDescr.realloc( 3 );
+        aTempMediaDescr.realloc( 2 );
         aTempMediaDescr[0].Name = ::rtl::OUString::createFromAscii( "URL" );
         aTempMediaDescr[0].Value <<= m_aLinkURL;
         aTempMediaDescr[1].Name = ::rtl::OUString::createFromAscii( "FilterName" );
         aTempMediaDescr[1].Value <<= m_aLinkFilterName;
-        aTempMediaDescr[2].Name = ::rtl::OUString::createFromAscii( "AsTemplate" );
-        aTempMediaDescr[2].Value <<= sal_True;
+        // aTempMediaDescr[2].Name = ::rtl::OUString::createFromAscii( "AsTemplate" );
+        // aTempMediaDescr[2].Value <<= sal_True;
     }
 
     xResult = CreateDocFromMediaDescr_Impl( aTempMediaDescr );
