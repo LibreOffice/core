@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnection.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #endif
 
  module com {  module sun {  module star {  module container {
-interface XNameAccess;
+ published interface XNameAccess;
 };};};};
 
 #ifndef __com_sun_star_sdbc_SQLException_idl__
@@ -79,9 +79,9 @@ interface XNameAccess;
 
  module com {  module sun {  module star {  module sdbc {
 
-interface XStatement;
-interface XPreparedStatement;
-interface XDatabaseMetaData;
+ published interface XStatement;
+ published interface XPreparedStatement;
+ published interface XDatabaseMetaData;
 
 
 // DocMerge from xml: interface com::sun::star::container::com::sun::star::sdbc::XConnection
@@ -103,7 +103,7 @@ interface XDatabaseMetaData;
     @see com::sun::star::sdbc::XStatement
     @see com::sun::star::sdbc::XDatabaseMetaData
  */
-interface XConnection: com::sun::star::sdbc::XCloseable
+published interface XConnection: com::sun::star::sdbc::XCloseable
 {
 
     // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XConnection::createStatement
