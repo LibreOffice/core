@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-14 17:29:54 $
+ *  last change: $Author: dvo $ $Date: 2001-11-30 17:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,8 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
     {SW_PROP_NMID(UNO_NAME_REDLINE_SUCCESSOR_DATA), 0, CPPU_E2T(CPPUTYPE_PROPERTYVALUE),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
     {SW_PROP_NMID(UNO_NAME_REDLINE_IDENTIFIER), 0, CPPU_E2T(CPPUTYPE_OUSTRING),                         PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0},\
     {SW_PROP_NMID(UNO_NAME_IS_IN_HEADER_FOOTER), 0, CPPU_E2T(CPPUTYPE_BOOLEAN),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0},\
-    {SW_PROP_NMID(UNO_NAME_REDLINE_TEXT), 0, CPPU_E2T(CPPUTYPE_REFTEXT),                    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
+    {SW_PROP_NMID(UNO_NAME_REDLINE_TEXT), 0, CPPU_E2T(CPPUTYPE_REFTEXT),                    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
+    {SW_PROP_NMID(UNO_NAME_MERGE_LAST_PARA), 0, CPPU_E2T(CPPUTYPE_BOOLEAN),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0},
 
 /* -----------------24.06.98 18:12-------------------
  *

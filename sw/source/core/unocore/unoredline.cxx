@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-11-28 12:50:47 $
+ *  last change: $Author: dvo $ $Date: 2001-11-30 17:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,6 +450,11 @@ Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, const S
             rRedline.GetDoc()->IsInHeaderFooter( rRedline.GetPoint()->nNode );
         aRet.setValue(&bRet, ::getBooleanCppuType());
     }
+    else if (rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_MERGE_LAST_PARA)))
+    {
+        sal_Bool bRet = !rRedline.IsDelLastPara();
+        aRet.setValue( &bRet, ::getBooleanCppuType() );
+    }
     return aRet;
 }
 /* -----------------------------11.01.01 11:22--------------------------------
@@ -458,7 +463,7 @@ Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, const S
 Sequence< PropertyValue > SwXRedlinePortion::CreateRedlineProperties(
     const SwRedline& rRedline, sal_Bool bIsStart ) throw()
 {
-    Sequence< PropertyValue > aRet(10);
+    Sequence< PropertyValue > aRet(11);
     const SwRedlineData* pNext = rRedline.GetRedlineData().Next();
     PropertyValue* pRet = aRet.getArray();
 
@@ -482,6 +487,10 @@ Sequence< PropertyValue > SwXRedlinePortion::CreateRedlineProperties(
 
     pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_IS_START));
     pRet[nPropIdx++].Value.setValue(&bIsStart, ::getBooleanCppuType()) ;
+
+    bTmp = !rRedline.IsDelLastPara();
+    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_MERGE_LAST_PARA));
+    pRet[nPropIdx++].Value.setValue(&bTmp, ::getBooleanCppuType()) ;
 
     SwNodeIndex* pNodeIdx = rRedline.GetContentIdx();
     if(pNodeIdx )
