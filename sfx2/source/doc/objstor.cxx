@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 17:00:48 $
+ *  last change: $Author: mba $ $Date: 2001-12-04 13:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1302,9 +1302,11 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
         else
             aArgs.realloc ( i-1 );
         xLoader->filter( aArgs );
+        FinishedLoading( SFX_LOADED_ALL );
         return sal_True;
     }
 
+    FinishedLoading( SFX_LOADED_ALL );
     return sal_False;
 }
 
