@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TitleHelper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:32 $
+ *  last change: $Author: bm $ $Date: 2003-10-06 12:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,8 +135,10 @@ uno::Reference< XTitled > lcl_getTitleParent( TitleHelper::eTitleType nTitleInde
             break;
         default:
             OSL_ENSURE( false, "Unsupported Title-Type requested" );
-            return NULL;
+            break;
     }
+
+    return uno::Reference< XTitled >();
 }
 
 uno::Reference< XTitle > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIndex
