@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-12 12:30:23 $
+ *  last change: $Author: mt $ $Date: 2001-10-17 08:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1323,6 +1323,7 @@ UnoControlButtonModel::UnoControlButtonModel()
     ImplRegisterProperty( BASEPROPERTY_IMAGEURL );
     ImplRegisterProperty( BASEPROPERTY_LABEL );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
+    ImplRegisterProperty( BASEPROPERTY_PUSHBUTTONTYPE );
     ImplRegisterProperty( BASEPROPERTY_STATE );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
 }
@@ -1408,7 +1409,27 @@ UnoButtonControl::UnoButtonControl()
 
 ::rtl::OUString UnoButtonControl::GetComponentServiceName()
 {
-    return ::rtl::OUString::createFromAscii( "pushbutton" );
+    ::rtl::OUString aName( ::rtl::OUString::createFromAscii( "pushbutton" ) );
+    uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_PUSHBUTTONTYPE ) );
+    sal_Int16 n;
+    if ( ( aVal >>= n ) && n )
+    {
+        // Use PushButtonType later when available...
+        switch ( n )
+        {
+            case 1 /*PushButtonType::OK*/:      aName= ::rtl::OUString::createFromAscii( "okbutton" );
+                                                break;
+            case 2 /*PushButtonType::CANCEL*/:  aName= ::rtl::OUString::createFromAscii( "cancelbutton" );
+                                                break;
+            case 3 /*PushButtonType::HELP*/:    aName= ::rtl::OUString::createFromAscii( "helpbutton" );
+                                                break;
+            default:
+            {
+                DBG_ERROR( "Unknown Button Type!" );
+            }
+        }
+    }
+    return aName;
 }
 
 // uno::XInterface
