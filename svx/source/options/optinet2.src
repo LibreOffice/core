@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:43:19 $
+ *  last change: $Author: hr $ $Date: 2005-04-04 15:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -753,7 +753,7 @@ TabPage RID_SVXPAGE_INET_MAIL
     FixedText FT_MAILERURL
     {
         Pos = MAP_APPFONT ( 14 , 20 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Size = MAP_APPFONT ( 43 , 8 ) ;
         Text [ de ] = "~E-Mail-Programm" ;
         Text [ en-US ] = "~E-mail program";
     };
@@ -761,14 +761,14 @@ TabPage RID_SVXPAGE_INET_MAIL
     Edit ED_MAILERURL
     {
         Pos = MAP_APPFONT ( 60 , 18 ) ;
-        Size = MAP_APPFONT ( 173 , 12 ) ;
+        Size = MAP_APPFONT ( 171 , 12 ) ;
         Border = TRUE;
     };
 
     PushButton PB_MAILERURL
     {
-        Pos = MAP_APPFONT ( 239 , 18 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 234 , 17 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
         Text = "..." ;
     };
 
