@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:45:48 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:37:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,10 @@
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
 #endif
+/* #109700# */
+#ifndef _SVX_LRSPITEM_HXX
+#include <svx/lrspitem.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -174,6 +178,7 @@ struct SwTextSectionProperties_Impl
     SvXMLAttrContainerItem *pXMLAttr;
     SwFmtNoBalancedColumns *pNoBalanceItem;
     SvxFrameDirectionItem *pFrameDirItem;
+    SvxLRSpaceItem *pLRSpaceItem; // #109700#
     sal_Bool    bDDE;
     sal_Bool    bHidden;
     sal_Bool    bCondHidden;
@@ -192,6 +197,7 @@ struct SwTextSectionProperties_Impl
         pXMLAttr(0),
         pNoBalanceItem(0),
         pFrameDirItem(0),
+        pLRSpaceItem(0), // #109700#
         bUpdateType(sal_True){}
 
     ~SwTextSectionProperties_Impl()
@@ -203,6 +209,7 @@ struct SwTextSectionProperties_Impl
         delete pXMLAttr;
         delete pNoBalanceItem;
         delete pFrameDirItem;
+        delete pLRSpaceItem; // #109700#
     }
 };
 /* -----------------------------11.07.00 12:10--------------------------------
@@ -397,6 +404,7 @@ void SwXTextSection::attachToRange(const uno::Reference< text::XTextRange > & xT
                     RES_COL, RES_COL,
                     RES_BACKGROUND, RES_BACKGROUND,
                     RES_FTN_AT_TXTEND, RES_FRAMEDIR,
+                    RES_LR_SPACE, RES_LR_SPACE, // #109700#
                     RES_UNKNOWNATR_CONTAINER,RES_UNKNOWNATR_CONTAINER,
                     0);
             if(pProps->pBrushItem)
@@ -413,6 +421,9 @@ void SwXTextSection::attachToRange(const uno::Reference< text::XTextRange > & xT
                 aSet.Put(*pProps->pNoBalanceItem);
             if(pProps->pFrameDirItem)
                 aSet.Put(*pProps->pFrameDirItem);
+            /* #109700# */
+            if(pProps->pLRSpaceItem)
+                aSet.Put(*pProps->pLRSpaceItem);
 
         // section password
         if (pProps->aPassword.getLength() > 0)
@@ -773,6 +784,13 @@ void SwXTextSection::setPropertyValues(
                                     pProps->pFrameDirItem = new SvxFrameDirectionItem( FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR );
                                 pPutItem = pProps->pFrameDirItem;
                             }
+                            else if(RES_LR_SPACE == pMap->nWID)
+                            {
+                                // #109700#
+                                if(!pProps->pLRSpaceItem)
+                                    pProps->pLRSpaceItem = new SvxLRSpaceItem( RES_LR_SPACE );
+                                pPutItem = pProps->pLRSpaceItem;
+                            }
                             if(pPutItem)
                                 pPutItem->PutValue(pValues[nProperty], pMap->nMemberId);
                         }
@@ -1055,6 +1073,14 @@ Sequence< Any > SwXTextSection::getPropertyValues(
                                     pProps->pFrameDirItem = new SvxFrameDirectionItem;
                                 pQueryItem = pProps->pFrameDirItem;
                             }
+                            /* -> #109700# */
+                            else if(RES_LR_SPACE == pMap->nWID)
+                            {
+                                if(!pProps->pLRSpaceItem)
+                                    pProps->pLRSpaceItem = new SvxLRSpaceItem;
+                                pQueryItem = pProps->pLRSpaceItem;
+                            }
+                            /* <- #109700# */
                             if(pQueryItem)
                                 pQueryItem->QueryValue(pRet[nProperty], pMap->nMemberId);
                         }
