@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-25 13:48:47 $
+ *  last change: $Author: fme $ $Date: 2001-06-29 15:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,7 +527,7 @@ xub_StrLen SwTxtPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf,
 
 long SwTxtPortion::CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) const
 {
-    xub_StrLen nCnt = 0;
+     xub_StrLen nCnt = 0;
     if ( InExpGrp() )
     {
         if( !IsBlankPortion() && !InNumberGrp() )
@@ -570,6 +570,17 @@ long SwTxtPortion::CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) con
         {
             nSpaceAdd = -nSpaceAdd;
             nCnt = GetLen();
+            SwLinePortion* pPor = GetPortion();
+
+            // we do not want an extra space in front of margin portions
+            if ( ! nCnt )
+                return 0;
+
+            while ( pPor && !pPor->Width() && ! pPor->IsHolePortion() )
+                pPor = pPor->GetPortion();
+
+            if ( !pPor || pPor->InFixMargGrp() || pPor->IsHolePortion() )
+                return ( nCnt - 1 ) * nSpaceAdd;
         }
     }
     return nCnt * nSpaceAdd;

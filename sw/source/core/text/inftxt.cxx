@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-10 06:18:59 $
+ *  last change: $Author: fme $ $Date: 2001-06-29 15:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -909,12 +909,6 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
     SwRect aIntersect;
 
     lcl_CalcRect( this, rPor, 0, &aIntersect );
-
-    if( GetSpaceAdd() < 0 )
-    {
-        if( !rPor.GetPortion() || rPor.GetPortion()->InFixMargGrp() )
-            aIntersect.Width( aIntersect.Width() + GetSpaceAdd() );
-    }
 
     if ( aIntersect.HasArea() )
     {

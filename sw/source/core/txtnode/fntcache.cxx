@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-10 09:16:26 $
+ *  last change: $Author: fme $ $Date: 2001-06-29 15:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1297,7 +1297,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 
 xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 {
-    short nSpaceAdd = rInf.GetSpace();
+    short nSpaceAdd = rInf.GetSpace() ? rInf.GetSpace() : - rInf.GetSperren();
     short nKern = rInf.GetKern();
 
     if( nSpaceAdd < 0 )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 16:52:52 $
+ *  last change: $Author: fme $ $Date: 2001-06-29 15:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,20 +413,20 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
             {
                 if( pPor->IsMarginPortion() )
                     bNoTxt = sal_False;
-
-                // fix margin portion => next SpaceAdd, KanaComp value
-                if( pSpaceAdd )
+                else
                 {
-                    if( nSpaceAdd < 0 )
-                        nX += nSpaceAdd;
-                    if ( ++nSpaceIdx < pSpaceAdd->Count() )
-                        nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
-                    else
-                        nSpaceAdd = 0;
-                }
+                    // fix margin portion => next SpaceAdd, KanaComp value
+                    if( pSpaceAdd )
+                    {
+                        if ( ++nSpaceIdx < pSpaceAdd->Count() )
+                            nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
+                        else
+                            nSpaceAdd = 0;
+                    }
 
-                if( pKanaComp && ( nKanaIdx + 1 ) < pKanaComp->Count() )
-                    ++nKanaIdx;
+                    if( pKanaComp && ( nKanaIdx + 1 ) < pKanaComp->Count() )
+                        ++nKanaIdx;
+                }
             }
             pPor = pPor->GetPortion();
         }
@@ -461,13 +461,11 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                               pPor->CalcSpacing( nSpaceAdd, aInf );
                     else
                     {
-                        if( pPor->InFixMargGrp()  )
+                        if( pPor->InFixMargGrp() && ! pPor->IsMarginPortion() )
                         {
                             // update to current SpaceAdd, KanaComp values
                             if ( pSpaceAdd )
                             {
-                                if( nSpaceAdd < 0 )
-                                    nX += nSpaceAdd;
                                 if ( ++nSpaceIdx < pSpaceAdd->Count() )
                                     nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
                                 else
@@ -706,12 +704,10 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                           pPor->CalcSpacing( nSpaceAdd, aInf );
                 else
                 {
-                    if( pPor->InFixMargGrp() )
+                    if( pPor->InFixMargGrp() && ! pPor->IsMarginPortion() )
                     {
                         if ( pSpaceAdd )
                         {
-                            if( nSpaceAdd < 0 )
-                                nX += nSpaceAdd;
                             if ( ++nSpaceIdx < pSpaceAdd->Count() )
                                 nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
                             else
@@ -963,8 +959,9 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             ((SwTxtSizeInfo&)GetInfo()).SetIdx( nCurrStart );
             nWidth += USHORT( pPor->CalcSpacing( nSpaceAdd, GetInfo() ) );
         }
-        if( pPor->InFixMargGrp() ||
-            (pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->HasTabulator()))
+        if( ( pPor->InFixMargGrp() && ! pPor->IsMarginPortion() ) ||
+            ( pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->HasTabulator() )
+          )
         {
             if ( pSpaceAdd )
             {
@@ -1005,8 +1002,10 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 ((SwTxtSizeInfo&)GetInfo()).SetIdx( nCurrStart );
                 nWidth += USHORT( pPor->CalcSpacing( nSpaceAdd, GetInfo() ) );
             }
-            if( pPor->InFixMargGrp() || ( pPor->IsMultiPortion() &&
-                ((SwMultiPortion*)pPor)->HasTabulator() ) )
+
+            if( ( pPor->InFixMargGrp() && ! pPor->IsMarginPortion() ) ||
+                ( pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->HasTabulator() )
+              )
             {
                 if ( pSpaceAdd )
                 {
@@ -1154,8 +1153,16 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             // we also want to skip the first line, if we are inside ruby
             if ( ( ((SwTxtSizeInfo*)pInf)->IsMulti() &&
                    ((SwTxtSizeInfo*)pInf)->IsFirstMulti() ) ||
-                   ((SwMultiPortion*)pPor)->IsRuby() )
+                 ( ((SwMultiPortion*)pPor)->IsRuby() &&
+                   ((SwMultiPortion*)pPor)->OnTop() ) )
                 nTmpY += ((SwMultiPortion*)pPor)->Height();
+
+            // Important for cursor traveling in ruby portions:
+            // We have to set nTmpY to 0 in order to stay in the first row
+            // if the phonetic line is the second row
+            if (   ((SwMultiPortion*)pPor)->IsRuby() &&
+                 ! ((SwMultiPortion*)pPor)->OnTop() )
+                nTmpY = 0;
 
             SwTxtCursorSave aSave( (SwTxtCursor*)this, (SwMultiPortion*)pPor,
                 nTmpY,  nCurrStart, nSpaceAdd );
