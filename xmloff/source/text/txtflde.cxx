@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-30 16:02:11 $
+ *  last change: $Author: mib $ $Date: 2001-11-07 15:10:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1034,8 +1034,8 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
     // except for combined characters field)
     if (FIELD_ID_COMBINED_CHARACTERS != nToken)
     {
-        OUString sStyle = GetExport().GetTextParagraphExport()->Find(
-            XML_STYLE_FAMILY_TEXT_TEXT, xRangePropSet, sEmpty);
+        sal_Bool bDummy;
+        OUString sStyle = GetExport().GetTextParagraphExport()->FindTextStyleAndHyperlink( xRangePropSet, bDummy );
         if( sStyle.getLength() )
         {
             // export <text:span> element
@@ -1700,10 +1700,9 @@ void XMLTextFieldExport::ExportFieldHelper(
     {
         // get style name for current style + combine letters and export a span
         const XMLPropertyState *aStates[] = { pCombinedCharactersPropertyState, 0 };
+        sal_Bool bDummy;
         ProcessString(XML_STYLE_NAME,
-                      GetExport().GetTextParagraphExport()->Find(
-                          XML_STYLE_FAMILY_TEXT_TEXT, rRangePropSet,
-                          sEmpty, aStates) );
+                      GetExport().GetTextParagraphExport()->FindTextStyleAndHyperlink( rRangePropSet, bDummy, aStates) );
         ExportElement(XML_SPAN, sPresentation);
         break;
     }
