@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 09:04:13 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ class SvGlobalName;
 class SvtAccessibilityOptions;
 class SwPrtOptions;
 class SwTransferable;
+class SwMailMergeConfigItem;
 class SwTxtNode; // #i23726#
 struct SwPrintData;
 class SwFormatClipboard;
@@ -153,6 +154,8 @@ const long nScrollY  =   30;
 
 #define MAX_MARKS 5
 
+#define CHILDWIN_LABEL      1
+#define CHILDWIN_MAILMERGE  2
 
 enum ShellModes
 {
@@ -657,6 +660,13 @@ public:
     SfxObjectShellRef & GetOrCreateTmpSelectionDoc();
 
     void        AddTransferable(SwTransferable& rTransferable);
+
+    // store MailMerge data while "Back to Mail Merge Wizard" FloatingWindow is active
+    // or to support printing
+    void   SetMailMergeConfigItem(SwMailMergeConfigItem*  pConfigItem, sal_uInt16 nRestart, sal_Bool bIsSource);
+    SwMailMergeConfigItem*  GetMailMergeConfigItem();
+    sal_uInt16              GetMailMergeRestartPage() const;
+    sal_Bool                IsMailMergeSourceView() const;
 
     void ExecFormatPaintbrush(SfxRequest &);
     void StateFormatPaintbrush(SfxItemSet &);
