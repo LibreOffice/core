@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:08:48 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,9 +257,9 @@
 #include <comphelper/processfactory.hxx>
 #endif
 #ifndef SVX_SOURCE_INC_FMDOCUMENTCLASSIFICATION_HXX
-#include <fmdocumentclassification.hxx>
+#include "fmdocumentclassification.hxx"
 #endif
-#ifndef IMPROVEFORMS_SVX_SOURCE_FORM_FORMTOOLBARS_HXX
+#ifndef SVX_SOURCE_INC_FORMTOOLBARS_HXX
 #include "formtoolbars.hxx"
 #endif
 
@@ -530,10 +530,7 @@ FmFormShell::FmFormShell( SfxViewShell* _pParent, FmFormView* pView )
 {
     m_pImpl->acquire();
     SetPool( &SFX_APP()->GetPool() );
-    String sName;
-    sName.AssignAscii("Form");
-    SetName( sName );
-    // SetHelpId( SVX_INTERFACE_FORM_SH );
+    SetName( String::CreateFromAscii( "Form" ) );
 
     SetView(m_pFormView);
 }
