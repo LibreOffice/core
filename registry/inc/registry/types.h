@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:33:56 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,24 @@ enum RTTypeClass {
     /** @deprecated
         a union type was evaluated but currently not supported.
      */
-    RT_TYPE_UNION
+    RT_TYPE_UNION,
+
+    /**
+       Flag for published entities.
+
+       Used in combination with RT_TYPE_INTERFACE, RT_TYPE_STRUCT, RT_TYPE_ENUM,
+       RT_TYPE_EXCEPTION, RT_TYPE_TYPEDEF, RT_TYPE_SERVICE, RT_TYPE_SINGLETON,
+       or RT_TYPE_CONSTANTS to mark an entity as published.
+
+       (The value of this enumerator is chosen so that it is unlikely that its
+       addition changes the underlying type of this enumeration for any C/C++
+       compiler.)
+
+       @internal
+
+       @since #i21150#
+     */
+    RT_TYPE_PUBLISHED = 0x4000
 };
 
 /** specifies the type for the field access.
@@ -154,6 +171,8 @@ enum RTTypeClass {
     @see RT_ACCESS_CONST
     @see RT_ACCESS_READWRITE
     @see RT_ACCESS_DEFAULT
+    @see RT_ACCESS_PARAMETERIZED_TYPE
+    @see RT_ACCESS_PUBLISHED
  */
 typedef sal_uInt16 RTFieldAccess;
 
@@ -187,6 +206,27 @@ typedef sal_uInt16 RTFieldAccess;
 #define RT_ACCESS_READWRITE 0x1000
 /// only to describe a union default label
 #define RT_ACCESS_DEFAULT 0x2000
+
+/**
+   Indicates that a member of a polymorphic struct type template is of a
+   parameterized type.
+
+   Only valid for fields that represent members of polymorphic struct type
+   templates.
+
+   @since #i21150#
+ */
+#define RT_ACCESS_PARAMETERIZED_TYPE 0x4000
+
+/**
+   Flag for published individual constants.
+
+   Used in combination with RT_ACCESS_CONST for individual constants (which are
+   not members of constant groups).
+
+   @since #i21150#
+ */
+#define RT_ACCESS_PUBLISHED 0x8000
 
 /** specifies the type of a field value.
 
@@ -317,7 +357,14 @@ enum RTReferenceType {
         the service needs the specified service that means in the context of
         this service the specified service will be used or must be available.
      */
-    RT_REF_NEEDS
+    RT_REF_NEEDS,
+
+    /**
+       Indicates a type parameter of a polymorphic struct type template.
+
+       @since #i21150#
+     */
+    RT_REF_TYPE_PARAMETER
 };
 
 #ifdef __cplusplus
