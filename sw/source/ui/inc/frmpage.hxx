@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 14:08:21 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:00:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #ifndef _PRCNTFLD_HXX
 #include <prcntfld.hxx>
 #endif
+#ifndef _GLOBALS_HRC
+#include <globals.hrc>
+#endif
 
 namespace sfx2{class FileDialogHelper;}
 class SwWrtShell;
@@ -105,13 +108,16 @@ class SwFrmPage: public SfxTabPage
 {
     // Size
     FixedText       aWidthFT;
+    FixedText       aWidthAutoFT;
     PercentField    aWidthED;
     CheckBox        aRelWidthCB;
+    CheckBox        aAutoWidthCB;
     FixedText       aHeightFT;
+    FixedText       aHeightAutoFT;
     PercentField    aHeightED;
     CheckBox        aRelHeightCB;
-    CheckBox        aFixedRatioCB;
     CheckBox        aAutoHeightCB;
+    CheckBox        aFixedRatioCB;
     PushButton      aRealSizeBT;
     FixedLine       aSizeFL;
     BOOL            bWidthLastChanged;
@@ -192,6 +198,9 @@ class SwFrmPage: public SfxTabPage
 
     DECL_LINK( ManualHdl, Button * );
 
+    DECL_LINK( AutoWidthClickHdl, void* );
+    DECL_LINK( AutoHeightClickHdl, void* );
+
     // Beispiel aktualisieren
     void            UpdateExample();
     DECL_LINK( ModifyHdl, Edit * );
@@ -216,6 +225,8 @@ class SwFrmPage: public SfxTabPage
     USHORT          GetRelation(FrmMap *pMap, ListBox &rRelationLB);
     USHORT          GetAnchor();
 
+    void            EnableGraficMode( void );   // hides auto check boxes and re-org controls for "Real Size" button
+
     SwFrmPage(Window *pParent, const SfxItemSet &rSet);
     ~SwFrmPage();
 
@@ -229,6 +240,7 @@ public:
     void            SetNewFrame(BOOL bNewFrame) { bNew      = bNewFrame; }
     void            SetFormatUsed(BOOL bFmt);
     void            SetFrmType(USHORT nType)    { nDlgType  = nType;     }
+    inline BOOL     IsInGraficMode( void )      { return nDlgType == DLG_FRM_GRF || nDlgType == DLG_FRM_OLE; }
 };
 
 class SwGrfExtPage: public SfxTabPage
