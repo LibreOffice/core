@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:13:35 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:34:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
         Text[ japanese ] = "ε·¦δ½™η™½(~L)";                                 \
         Text[ chinese_traditional ] = "ε·¦ι‚ζ΅†(~L)";                      \
         Text[ arabic ] = "ΗαεΗγΤ ΗαΓνΣΡ";                                   \
-        Text[ greek ] = "Αριστερό περιθώριο";                               \
+        Text[ greek ] = "Α~ριστερό περιθώριο";                               \
         Text[ korean ] = "μ™Όμª½ μ—¬λ°±(~L)";                               \
         Text[ turkish ] = "~Sol kenar boώluπu";                                     \
         Text[ language_user1 ] = " ";                                       \
@@ -115,7 +115,7 @@
         Text[ japanese ] = "ε³δ½™η™½(~I)";                                 \
         Text[ chinese_traditional ] = "ε³ι‚ζ΅†(~I)";                      \
         Text[ arabic ] = "ΗαεΗγΤ ΗαΓνγδ";                                   \
-        Text[ greek ] = "Δεξιό περιθώριο";                                  \
+        Text[ greek ] = "Δε~ξιό περιθώριο";                                  \
         Text[ korean ] = "μ¤λ¥Έμª½ μ—¬λ°±(~I)";                            \
         Text[ turkish ] = "S~aπ kenar boώluklarύ";                                     \
         Text[ language_user1 ] = " ";                                       \
@@ -169,7 +169,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ japanese ] = "γƒγƒƒγƒ€γ‚’δ»γ‘γ‚‹(~D)";
         Text[ chinese_traditional ] = "ι΅―η¤Ίι ι¦–(~D)";
         Text[ arabic ] = "ΕΩεΗΡ ΡΓΣ ΗαΥέΝΙ";
-        Text[ greek ] = "Ενεργοποίηση κεφαλίδας";
+        Text[ greek ] = "Ε~νεργοποίηση κεφαλίδας";
         Text[ korean ] = "λ¨Έλ¦¬κΈ€ μ‚½μ…(~D)";
         Text[ turkish ] = "άstbilgi oluώtur";
         Text[ language_user1 ] = " ";
@@ -325,11 +325,11 @@ TabPage RID_SVXPAGE_HEADER
         Text[ danish ] = "Use d~ynamic spacing";
         Text[ swedish ] = "Anvδnd d~ynamiskt avstεnd";
         Text[ polish ] = "Use d~ynamic spacing";
-        Text[ portuguese_brazilian ] = "Use d~ynamic spacing";
+        Text[ portuguese_brazilian ] = "Usar afastamento dinβmico";
         Text[ japanese ] = "ι–“ι”θ‡ªε‹•θªΏζ•΄(~Y)";
-        Text[ korean ] = "λ™μ  λ¬Έμ κ°„κ²© μ‚¬μ©";
-        Text[ chinese_simplified ] = "δ½Ώη”¨θ‡ªε¨ζ€δ½³θ°ƒζ•΄η„ι—΄ι”";
-        Text[ chinese_traditional ] = "δ½Ώη”¨θ‡ªε‹•ζ€ι©θªΏζ•΄η„ι–“ι”";
+        Text[ korean ] = "λ™μ  λ¬Έμ κ°„κ²© μ‚¬μ©(~Y)";
+        Text[ chinese_simplified ] = "δ½Ώη”¨θ‡ªε¨ζ€δ½³θ°ƒζ•΄η„ι—΄ι”(~Y)";
+        Text[ chinese_traditional ] = "δ½Ώη”¨θ‡ªε‹•ζ€ι©θªΏζ•΄η„ι–“ι”(~Y)";
         Text[ turkish ] = "Di~namik boώluk kullan";
         Text[ arabic ] = "Use d~ynamic spacing";
         Text[ catalan ] = "Use d~ynamic spacing";
@@ -360,7 +360,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ japanese ] = "ι«γ•(~H)";
         Text[ chinese_traditional ] = "ι«εΊ¦(~H)";
         Text[ arabic ] = "ΗαΗΡΚέΗΪ";
-        Text[ greek ] = "Ύψος";
+        Text[ greek ] = "Ύ~ψος";
         Text[ korean ] = "λ†’μ΄(~H)";
         Text[ turkish ] = "Yόkseklik";
         Text[ language_user1 ] = " ";
@@ -403,7 +403,7 @@ TabPage RID_SVXPAGE_HEADER
         Text [ spanish ] = "Ajus~te dinαmico de la altura" ;
         Text [ french ] = "Adaptation dynamique de la hauteur" ;
         Text [ portuguese ] = "Ajuste ~dinβmico da altura" ;
-        Text [ portuguese_brazilian ] = "AutoA~juste da altura" ;
+        Text [ portuguese_brazilian ] = "A~juste automαtico da altura" ;
         Text[ chinese_simplified ] = "θ‡ªε¨θ°ƒζ•΄ι«εΊ¦(~A)";
         Text[ russian ] = "ΐβςξοξδαξπ βϋρξςϋ";
         Text[ polish ] = "~Autodopasowanie wysokoci";
@@ -554,7 +554,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ japanese ] = "γƒ•γƒƒγ‚Ώγ‚’δ»γ‘γ‚‹(~F)";
         Text[ chinese_traditional ] = "ι΅―η¤Ίι ε°Ύ(~F)";
         Text[ arabic ] = "ΕΩεΗΡ ΚΠννα ΗαΥέΝΙ";
-        Text[ greek ] = "Ενεργοποίηση υποσέλιδο";
+        Text[ greek ] = "Ε~νεργοποίηση υποσέλιδου";
         Text[ korean ] = "λ°”λ‹¥κΈ€ μ‚½μ…(~F)";
         Text[ turkish ] = "Altbilgi oluώtur";
         Text[ language_user1 ] = " ";
@@ -709,11 +709,11 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ danish ] = "Use d~ynamic spacing";
         Text[ swedish ] = "Anvδnd d~ynamiskt avstεnd";
         Text[ polish ] = "Use d~ynamic spacing";
-        Text[ portuguese_brazilian ] = "Use d~ynamic spacing";
+        Text[ portuguese_brazilian ] = "Usar afastamento dinβmico";
         Text[ japanese ] = "ι–“ι”θ‡ªε‹•θªΏζ•΄(~Y)";
-        Text[ korean ] = "λ™μ  λ¬Έμ κ°„κ²© μ‚¬μ©";
-        Text[ chinese_simplified ] = "δ½Ώη”¨θ‡ªε¨ζ€δ½³θ°ƒζ•΄η„ι—΄ι”";
-        Text[ chinese_traditional ] = "δ½Ώη”¨θ‡ªε‹•ζ€ι©θªΏζ•΄η„ι–“ι”";
+        Text[ korean ] = "λ™μ  λ¬Έμ κ°„κ²© μ‚¬μ©(~Y)";
+        Text[ chinese_simplified ] = "δ½Ώη”¨θ‡ªε¨ζ€δ½³θ°ƒζ•΄η„ι—΄ι”(~Y)";
+        Text[ chinese_traditional ] = "δ½Ώη”¨θ‡ªε‹•ζ€ι©θªΏζ•΄η„ι–“ι”(~Y)";
         Text[ turkish ] = "D~inamik boώluk kullan";
         Text[ arabic ] = "Use d~ynamic spacing";
         Text[ catalan ] = "Use d~ynamic spacing";
@@ -745,7 +745,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ japanese ] = "ι«γ•(~H)";
         Text[ chinese_traditional ] = "ι«εΊ¦(~H)";
         Text[ arabic ] = "ΗαΗΡΚέΗΪ";
-        Text[ greek ] = "Ύψος";
+        Text[ greek ] = "Ύ~ψος";
         Text[ korean ] = "λ†’μ΄(~H)";
         Text[ turkish ] = "Yόkseklik";
         Text[ language_user1 ] = " ";
@@ -782,7 +782,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text [ ENGLISH ] = "~AutoFit height" ;
         Text [ norwegian ] = "Footer height ~dynamic" ;
         Text [ italian ] = "Adatta altezza din~amicamente" ;
-        Text [ portuguese_brazilian ] = "AutoA~juste da altura" ;
+        Text [ portuguese_brazilian ] = "A~juste automαtico da altura" ;
         Text [ portuguese ] = "Ajuste dinβmico da altura" ;
         Text [ finnish ] = "A~utomaattinen korkeuden sovitus" ;
         Text [ danish ] = "Juster hψjde dynamisk" ;
@@ -935,6 +935,7 @@ QueryBox RID_SVXQBX_DELETE_HEADFOOT
 };
 
  // ********************************************************************** EOF
+
 
 
 
