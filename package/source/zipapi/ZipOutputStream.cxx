@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-14 15:01:22 $
+ *  last change: $Author: mtg $ $Date: 2001-09-18 12:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,7 @@ void SAL_CALL ZipOutputStream::finish(  )
         writeCEN( *aZipList[i] );
     writeEND( nOffset, static_cast < sal_Int32 > (aChucker.getPosition()) - nOffset);
     bFinished = sal_True;
+    xStream->flush();
 }
 
 void ZipOutputStream::doDeflate()
