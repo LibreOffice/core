@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: sj $ $Date: 2002-01-11 11:48:06 $
+ *  last change: $Author: sj $ $Date: 2002-01-14 11:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2635,7 +2635,7 @@ SdrObject* SdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, void* p
                                     // #94897# do not use standard effect if the object uses texteffect if
                                     // no line and fill style is set
                                     if ( ( pInfo->eEffect != ::com::sun::star::presentation::AnimationEffect_NONE )
-                                        && ( pInfo->eEffect != ::com::sun::star::presentation::AnimationEffect_NONE )
+                                        && ( pInfo->eTextEffect != ::com::sun::star::presentation::AnimationEffect_NONE )
                                             && ( pObj->ISA( SdrObjGroup ) != TRUE ) )
                                     {
                                         XFillStyle eFillStyle = ((XFillStyleItem&)(pObj->GetItem(XATTR_FILLSTYLE))).GetValue();
