@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:10:37 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,8 +451,8 @@ void SfxStateCache::SetState_Impl
 
     DBG_ASSERT( pController->GetId()==nId, "Cache mit falschem ControllerItem" );
     DBG_ASSERT( bMaybeDirty || !bSlotDirty, "setting state of dirty message" );
-    DBG_ASSERT( bCtrlDirty || ( aSlotServ.GetSlot() && aSlotServ.GetSlot()->IsMode(SFX_SLOT_VOLATILE) ),
-                "setting state of non dirty controller" );
+//  DBG_ASSERT( bCtrlDirty || ( aSlotServ.GetSlot() && aSlotServ.GetSlot()->IsMode(SFX_SLOT_VOLATILE) ), ! Discussed with MBA
+//              "setting state of non dirty controller" );
     DBG_ASSERT( SfxControllerItem::GetItemState(pState) == eState,
                 "invalid SfxItemState" );
     DBG_PROFSTART(SfxStateCacheSetState);
