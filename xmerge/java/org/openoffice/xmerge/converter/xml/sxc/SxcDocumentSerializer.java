@@ -72,7 +72,7 @@ import org.openoffice.xmerge.DocumentSerializer;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.converter.xml.sxc.SxcDocument;
 import org.openoffice.xmerge.converter.xml.ParaStyle;
-import org.openoffice.xmerge.converter.xml.TextStyle;
+import org.openoffice.xmerge.converter.xml.sxc.CellStyle;
 import org.openoffice.xmerge.converter.xml.StyleCatalog;
 
 import org.openoffice.xmerge.util.Debug;
@@ -186,7 +186,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
         NodeList nl = null;
         String families[] = new String[] { SxcConstants.TABLE_CELL_STYLE_FAMILY };
-        Class classes[]   = new Class[] { TextStyle.class };
+        Class classes[]   = new Class[] { CellStyle.class };
 
         /*
          * Process the content XML for any other style info.
@@ -546,13 +546,24 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
         } else {
 
-            TextStyle tstyle = (TextStyle)styleCat.lookup(styleName,
+            CellStyle cStyle = (CellStyle)styleCat.lookup(styleName,
                                 SxcConstants.TABLE_CELL_STYLE_FAMILY, null,
-                                TextStyle.class);
+                                CellStyle.class);
 
-            fmt.setItalic(tstyle.getAttribute(TextStyle.ITALIC));
-            fmt.setBold(tstyle.getAttribute(TextStyle.BOLD));
-            fmt.setUnderline(tstyle.getAttribute(TextStyle.UNDERLINE));
+            fmt.setItalic(cStyle.getAttribute(CellStyle.ITALIC));
+            fmt.setBold(cStyle.getAttribute(CellStyle.BOLD));
+            fmt.setUnderline(cStyle.getAttribute(CellStyle.UNDERLINE));
+
+            String align;
+
+            if(cStyle.getAttribute(CellStyle.ALIGN_CENTER))
+                align = "center";
+            else if(cStyle.getAttribute(CellStyle.ALIGN_RIGHT))
+                align = "right";
+            else
+                align = "left";
+
+            fmt.setAlign(align);
         }
 
         // There is a number of cols repeated attribute

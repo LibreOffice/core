@@ -405,6 +405,8 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
         fmt.setBold(fd.isBold());
         fmt.setUnderline(fd.isUnderline());
 
+        fmt.setAlign(xf.getAlign());
+
         fmt.setCategory(getCellDataType());
 
     }

@@ -69,7 +69,7 @@ import org.openoffice.xmerge.DocumentDeserializer;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.converter.xml.sxc.SxcDocument;
 import org.openoffice.xmerge.converter.xml.sxc.NameDefinition;
-import org.openoffice.xmerge.converter.xml.TextStyle;
+import org.openoffice.xmerge.converter.xml.sxc.CellStyle;
 import org.openoffice.xmerge.converter.xml.Style;
 import org.openoffice.xmerge.converter.xml.StyleCatalog;
 import org.openoffice.xmerge.util.Debug;
@@ -462,9 +462,6 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
             // Create an element node for the cell
             cellElement = (Element) doc.createElement(TAG_TABLE_CELL);
 
-            // TODO - style currently hardcoded - get real value
-            // Set cell style-name attribute
-
             Node bodyNode = doc.getElementsByTagName(TAG_OFFICE_BODY).item(0);
 
             // Not every document has an automatic style tag
@@ -476,7 +473,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
                 doc.insertBefore(autoStylesNode, bodyNode);
                }
 
-            TextStyle tStyle = fmt.getTextStyle();
+            CellStyle tStyle = fmt.getCellStyle();
             String styleName;
             Style result[] = (Style[]) styleCat.getMatching(tStyle);
             if(result.length==0) {
@@ -486,7 +483,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
                     Debug.log(Debug.TRACE,"No existing style found, adding " + styleName);
                     styleCat.add(tStyle);
             } else {
-                    TextStyle existingStyle = (TextStyle) result[0];
+                    CellStyle existingStyle = (CellStyle) result[0];
                     styleName = existingStyle.getName();
                     Debug.log(Debug.TRACE,"Existing style found : " + styleName);
             }

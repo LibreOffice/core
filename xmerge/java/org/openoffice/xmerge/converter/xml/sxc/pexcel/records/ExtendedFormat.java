@@ -116,7 +116,17 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
         }
         this.fattributes    = new byte[] {(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF};
         this.fBaseAttr      = new byte[] {(byte)0x02,(byte)0x00};
-        this.fTextAttr      = new byte[] {(byte)0x30,(byte)0x00};
+
+        String align = fmt.getAlign();
+        if(align.equals("center")) {
+            this.fTextAttr      = new byte[] {(byte)0x32,(byte)0x00};
+        } else if(align.equals("left")) {
+            this.fTextAttr      = new byte[] {(byte)0x31,(byte)0x00};
+        } else if(align.equals("right")) {
+            this.fTextAttr      = new byte[] {(byte)0x33,(byte)0x00};
+        } else {
+            this.fTextAttr      = new byte[] {(byte)0x30,(byte)0x00};
+        }
         this.icvFore        = new byte[] {(byte)0xFF,(byte)0x00};
         this.icvFill        = new byte[] {(byte)0xFF,(byte)0x00};
         this.bRight         = (byte) 0xFF;
@@ -145,6 +155,34 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
     public int getFormatIndex() {
         return EndianConverter.readShort(ixnf);
     }
+
+    /**
+     * Get the alignment for this Format
+     *
+     * @return the alignment
+     */
+    public String getAlign() {
+
+        String align;
+
+        switch(EndianConverter.readShort(fTextAttr)) {
+            case 0x31:
+                align = "left";
+                break;
+            case 0x32:
+                align = "center";
+                break;
+            case 0x33:
+                align = "right";
+                break;
+            default:
+                align = "left";
+                break;
+        }
+
+        return align;
+    }
+
     /**
      * Compare two ExtendedFormat to see if the font index is the same
      *
@@ -153,8 +191,11 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
      */
     public boolean compareTo(ExtendedFormat rhs) {
 
+        String currentAlignment = this.getAlign();
+
         if (this.getFontIndex() == rhs.getFontIndex() &&
-            this.getFormatIndex() == rhs.getFormatIndex())
+            this.getFormatIndex() == rhs.getFormatIndex() &&
+            currentAlignment.equals(rhs.getAlign()))
             return true;
         else
             return false;

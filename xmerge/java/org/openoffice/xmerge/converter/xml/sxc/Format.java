@@ -57,7 +57,6 @@ package org.openoffice.xmerge.converter.xml.sxc;
 
 import java.awt.Color;
 
-import org.openoffice.xmerge.converter.xml.TextStyle;
 import org.openoffice.xmerge.util.Debug;
 
 /**
@@ -76,6 +75,7 @@ public class Format implements Cloneable {
     private boolean underline;
     private String font;
     private Color foreground, background;
+    private String align;
 
 
     /**
@@ -86,6 +86,7 @@ public class Format implements Cloneable {
         value = "";
         formatSpecifier = "";
         font = "";
+        align = "";
         foreground = Color.black;
         background = Color.white;
     }
@@ -106,6 +107,7 @@ public class Format implements Cloneable {
         italic = fmt.isItalic();
         underline = fmt.isUnderline();
         font = fmt.getFont();
+        align = fmt.getAlign();
         foreground = fmt.getForeground();
         background = fmt.getBackground();
     }
@@ -122,6 +124,7 @@ public class Format implements Cloneable {
        bold = false;
        italic = false;
        underline = false;
+       align = "";
        font = "";
        foreground = Color.black;
        background = Color.white;
@@ -294,7 +297,24 @@ public class Format implements Cloneable {
          return font;
      }
 
+      /**
+      *  Set the alignmen used for this cell.
+      *
+      *  @param  fontName  The name of the font.
+      */
+     public void setAlign(String align) {
+         this.align = align;
+     }
 
+
+     /**
+      *  Get the alignment used for this cell.
+      *
+      *  @return  The font name.
+      */
+     public String getAlign() {
+         return align;
+     }
      /**
       *  Set the Foreground <code>Color</code> for this cell.
       *
@@ -346,31 +366,39 @@ public class Format implements Cloneable {
      }
 
      /**
-      * Return a <code>TextStyle</code> for this cell Format
+      * Return a <code>CellStyle</code> for this cell Format
       *
-      *  @return    the <code>TextStyle</code> representing this format
+      *  @return    the <code>CellStyle</code> representing this format
       */
-    public TextStyle getTextStyle() {
+    public CellStyle getCellStyle() {
 
-        // Setup text style information
-        int mask = TextStyle.BOLD | TextStyle.ITALIC | TextStyle.UNDERLINE
-                    | TextStyle.STRIKETHRU;
+        // Setup cell style information
+        int mask = CellStyle.BOLD | CellStyle.ITALIC | CellStyle.UNDERLINE
+                    | CellStyle.STRIKETHRU
+                    | CellStyle.ALIGN_CENTER | CellStyle.ALIGN_RIGHT | CellStyle.ALIGN_LEFT;
 
         int modifiers = 0;
 
         if(italic) {
-            modifiers |= TextStyle.ITALIC;
+            modifiers |= CellStyle.ITALIC;
         }
         if(bold) {
-            modifiers |= TextStyle.BOLD;
+            modifiers |= CellStyle.BOLD;
         }
         if(underline) {
-            modifiers |= TextStyle.UNDERLINE;
+            modifiers |= CellStyle.UNDERLINE;
         }
 
-        return new TextStyle("Default", SxcConstants.TABLE_CELL_STYLE_FAMILY, SxcConstants.DEFAULT_STYLE,
+        if(align.equals("center")) {
+            modifiers |= CellStyle.ALIGN_CENTER;
+        } else if(align.equals("right")) {
+            modifiers |= CellStyle.ALIGN_RIGHT;
+        } else if(align.equals("left")) {
+            modifiers |= CellStyle.ALIGN_LEFT;
+        }
+
+        return new CellStyle("Default", SxcConstants.TABLE_CELL_STYLE_FAMILY, SxcConstants.DEFAULT_STYLE,
                                         mask, modifiers, 0, null, null);
-                                        // mask, modifiers, fontSize, fontName, null);
      }
 }
 
