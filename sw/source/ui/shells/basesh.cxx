@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:47:41 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,7 +741,6 @@ void SwBaseShell::Execute(SfxRequest &rReq)
     const SfxPoolItem *pItem;
     SwWrtShell &rSh = GetShell();
     const SfxItemSet* pArgs = rReq.GetArgs();
-    BOOL bUp = FALSE;
     BOOL bMore = FALSE;
 
     USHORT nSlot = rReq.GetSlot();
@@ -782,13 +781,14 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case FN_UPDATE_ALL:
             {
                 rSh.EnterStdMode();
+                SwView& rView = GetView();
                 if( rSh.GetLinkManager().GetLinks().Count() )
                 {
                     rSh.StartAllAction();
                     rSh.GetLinkManager().UpdateAllLinks( FALSE, TRUE, TRUE );
                     rSh.EndAllAction();
                 }
-                SfxDispatcher &rDis = *GetView().GetViewFrame()->GetDispatcher();
+                SfxDispatcher &rDis = *rView.GetViewFrame()->GetDispatcher();
                 rDis.Execute( FN_UPDATE_FIELDS );
                 rDis.Execute( FN_UPDATE_TOX );
                 rDis.Execute( FN_UPDATE_CHARTS );
@@ -1286,13 +1286,6 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 DBG_ERROR("falscher Dispatcher");
         }
 
-    }
-
-    if(bUp)
-    {
-        SfxBindings &rBnd = GetView().GetViewFrame()->GetBindings();
-        rBnd.Invalidate(rReq.GetSlot());
-        rBnd.Update(rReq.GetSlot());
     }
 }
 
