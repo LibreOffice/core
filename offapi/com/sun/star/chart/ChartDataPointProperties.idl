@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartDataPointProperties.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-23 10:08:03 $
+ *  last change: $Author: cl $ $Date: 2001-03-07 13:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,12 @@
 #ifndef __com_sun_star_chart_ChartDataPointProperties_idl__
 #define __com_sun_star_chart_ChartDataPointProperties_idl__
 
-#ifndef __com_sun_star_drawing_AreaShapeDescriptor_idl__
-#include <com/sun/star/drawing/AreaShapeDescriptor.idl>
+#ifndef __com_sun_star_drawing_FillProperties_idl__
+#include <com/sun/star/drawing/FillProperties.idl>
 #endif
 
-#ifndef __com_sun_star_drawing_LineShapeDescriptor_idl__
-#include <com/sun/star/drawing/LineShapeDescriptor.idl>
+#ifndef __com_sun_star_drawing_LineProperties_idl__
+#include <com/sun/star/drawing/LineProperties.idl>
 #endif
 
 #ifndef __com_sun_star_style_CharacterProperties_idl__
@@ -102,10 +102,10 @@
 service ChartDataPointProperties
 {
     // DocMerge: empty anyway
-    service com::sun::star::drawing::AreaShapeDescriptor;
+    service com::sun::star::drawing::FillProperties;
 
     // DocMerge: empty anyway
-    service com::sun::star::drawing::LineShapeDescriptor;
+    service com::sun::star::drawing::LineProperties;
 
     // DocMerge: empty anyway
     service com::sun::star::style::CharacterProperties;
@@ -159,6 +159,9 @@ service ChartDataPointProperties
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/01/23 10:08:03  mi
+    optional interfaces now marked as [optional] instead of just a prosa description of this fact
+
     Revision 1.5  2000/11/20 14:48:39  bm
     SymbolBitmapURL is a string not an XBitmap
 

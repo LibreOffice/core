@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartArea.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+ *  last change: $Author: cl $ $Date: 2001-03-07 13:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,12 @@
 #ifndef __com_sun_star_chart_ChartArea_idl__
 #define __com_sun_star_chart_ChartArea_idl__
 
-#ifndef __com_sun_star_drawing_AreaShapeDescriptor_idl__
-#include <com/sun/star/drawing/AreaShapeDescriptor.idl>
+#ifndef __com_sun_star_drawing_FillProperties_idl__
+#include <com/sun/star/drawing/FillProperties.idl>
 #endif
 
-#ifndef __com_sun_star_drawing_LineShapeDescriptor_idl__
-#include <com/sun/star/drawing/LineShapeDescriptor.idl>
+#ifndef __com_sun_star_drawing_LineProperties_idl__
+#include <com/sun/star/drawing/LineProperties.idl>
 #endif
 
 #ifndef __com_sun_star_beans_XPropertySet_idl__
@@ -88,10 +88,10 @@
 service ChartArea
 {
     // DocMerge: empty anyway
-    service com::sun::star::drawing::AreaShapeDescriptor;
+    service com::sun::star::drawing::FillProperties;
 
     // DocMerge: empty anyway
-    service com::sun::star::drawing::LineShapeDescriptor;
+    service com::sun::star::drawing::LineProperties;
 
     // DocMerge: empty anyway
     interface com::sun::star::beans::XPropertySet;
@@ -105,6 +105,9 @@ service ChartArea
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:00  hjs
     initial import
 
