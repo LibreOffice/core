@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colorlistener.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:33:02 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:14:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,45 +159,92 @@ ColorListener::~ColorListener()
 }
 
 //__________________________________________
-
-/** callback for color changes.
+/** callback if color config was changed.
 
     @param  rBroadcaster
-                should be our referenced config item (or any helper of it!)
+            should be our referenced config item (or any helper of it!)
 
     @param  rHint
-                transport an ID, which identify the broadcasted message
+            transport an ID, which identify the broadcasted message
  */
-
-void ColorListener::Notify( SfxBroadcaster& rBroadCaster, const SfxHint& rHint )
+void ColorListener::Notify(SfxBroadcaster& rBroadCaster, const SfxHint& rHint)
 {
     if (((SfxSimpleHint&)rHint).GetId()==SFX_HINT_COLORS_CHANGED)
         impl_applyColor(sal_True);
 }
 
-void ColorListener::impl_applyColor( sal_Bool bInvalidate )
+//__________________________________________
+/** callback if window color was changed by any other!
+    We own this window .. and we are the only ones, which
+    define the background color of this window.
+ */
+IMPL_LINK(ColorListener, impl_SettingsChanged, void*, pVoid)
 {
-    /* SAFE { */
+    // ignore uninteressting notifications
+    VclWindowEvent* pEvent = (VclWindowEvent*)pVoid;
+    if (pEvent->GetId() != VCLEVENT_WINDOW_DATACHANGED)
+        return 0L;
+
+    // SAFE ->
+    ReadGuard aReadLock(m_aLock);
+    css::uno::Reference< css::awt::XWindow > xWindow       = m_xWindow;
+    long                                     nCurrentColor = m_nColor ;
+    aReadLock.unlock();
+    // <- SAFE
+
+    if (!xWindow.is())
+        return 0L;
+
+    Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+    if (!pWindow)
+        return 0L;
+
+    OutputDevice* pDevice   = (OutputDevice*)pWindow;
+    long          nNewColor = (long)(pDevice->GetBackground().GetColor().GetColor());
+
+    // Was window background changed?
+    // NO  -> do nothing
+    // YES -> apply our color!
+    if (nCurrentColor != nNewColor)
+        impl_applyColor(sal_False);
+
+    return 0L;
+}
+
+//__________________________________________
+/** set a new background color (retrieved from the configuration)
+    on the window.
+
+    @param  bInvalidate
+            If it's setto TRUE it forces a synchronous update
+            of the window background.
+ */
+void ColorListener::impl_applyColor(sal_Bool bInvalidate)
+{
+    // SAFE ->
     WriteGuard aWriteLock(m_aLock);
 
-    if (m_pConfig)
-    {
-        css::uno::Reference< css::awt::XWindowPeer > xPeer(m_xWindow, css::uno::UNO_QUERY);
-        ::svtools::ColorConfigValue aBackgroundColor = m_pConfig->GetColorValue( ::svtools::APPBACKGROUND );
-        if (xPeer.is())
-        {
-            m_nColor = aBackgroundColor.nColor;
-            xPeer->setBackground(m_nColor);
-            if (bInvalidate)
-            {
-                xPeer->invalidate(
-                    css::awt::InvalidateStyle::UPDATE | css::awt::InvalidateStyle::CHILDREN | css::awt::InvalidateStyle::NOTRANSPARENT );
-            }
-        }
-    }
+    if (!m_pConfig)
+        return;
+    ::svtools::ColorConfigValue aBackgroundColor = m_pConfig->GetColorValue(::svtools::APPBACKGROUND);
+    m_nColor = aBackgroundColor.nColor;
+
+    css::uno::Reference< css::awt::XWindowPeer > xPeer(m_xWindow, css::uno::UNO_QUERY);
 
     aWriteLock.unlock();
-    /* } SAFE */
+    // <- SAFE
+
+    if (!xPeer.is())
+        return;
+
+    xPeer->setBackground(aBackgroundColor.nColor);
+    if (bInvalidate)
+    {
+        xPeer->invalidate(
+            css::awt::InvalidateStyle::UPDATE        |
+            css::awt::InvalidateStyle::CHILDREN      |
+            css::awt::InvalidateStyle::NOTRANSPARENT );
+    }
 }
 
 //__________________________________________
@@ -229,29 +276,6 @@ void SAL_CALL ColorListener::disposing( const css::lang::EventObject& aEvent ) t
     /* } SAFE */
 }
 
-IMPL_LINK( ColorListener, impl_SettingsChanged, void*, pVoid )
-{
-    VclWindowEvent* pEvent = (VclWindowEvent*)pVoid;
-    if (pEvent->GetId() != VCLEVENT_APPLICATION_DATACHANGED)
-        return 0L;
-
-    /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
-    Window* pWindow = VCLUnoHelper::GetWindow(m_xWindow);
-    if (!pWindow)
-        return 0L;
-
-    OutputDevice* pDevice = (OutputDevice*)pWindow;
-    long nNewColor = (long)(pDevice->GetBackground().GetColor().GetColor());
-
-    if (m_nColor != nNewColor)
-        impl_applyColor(sal_False);
-    aReadLock.unlock();
-    /* } SAFE */
-
-    return 0L;
-}
-
 //__________________________________________
 
 /** starts listening for color changes and window destroy.
@@ -266,7 +290,9 @@ void ColorListener::impl_startListening()
 
     if (!m_bListen)
     {
-        Application::AddEventListener( LINK( this, ColorListener, impl_SettingsChanged ) );
+        Window* pWindow = VCLUnoHelper::GetWindow(m_xWindow);
+        if (pWindow)
+            pWindow->AddEventListener(LINK(this, ColorListener, impl_SettingsChanged));
 
         if (!m_pConfig)
             m_pConfig = new ::svtools::ColorConfig();
@@ -295,7 +321,9 @@ void ColorListener::impl_stopListening()
 
     if (m_bListen)
     {
-        Application::RemoveEventListener( LINK( this, ColorListener, impl_SettingsChanged ) );
+        Window* pWindow = VCLUnoHelper::GetWindow(m_xWindow);
+        if (pWindow)
+            pWindow->RemoveEventListener( LINK( this, ColorListener, impl_SettingsChanged ) );
 
         EndListeningAll();
 
