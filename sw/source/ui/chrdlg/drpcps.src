@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-16 21:44:34 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,7 @@ TabPage TP_DROPCAPS
         Text[ chinese_traditional ] = "¦Ü¤º¤åªº¶ZÖÃ(~D)";
         Text[ arabic ] = "ÇáãÓÇİÉ ÍÊì ÇáäÕ";
         Text[ greek ] = "Á~ğüóôáóç áğü ôï êåßìåíï";
-        Text[ korean ] = "ÅØ½ºÆ®¿¡¡¡´ëÇÑ¡¡°£°İ(~D)";
+        Text[ korean ] = "ÅØ½ºÆ®¿¡¡¡´ëÇÑ¡¡°£°İ";
         Text[ turkish ] = "Metne uzaklık";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Distancia hasta el texto";
@@ -386,7 +386,7 @@ TabPage TP_DROPCAPS
         Text[ chinese_traditional ] = "¤j¼g¦r(~T)";
         Text[ arabic ] = "ÇáäÕ";
         Text[ greek ] = "Êåßìåíï";
-        Text[ korean ] = "Ã¹ÅØ½ºÆ®(~T)";
+        Text[ korean ] = "ÅØ½ºÆ®(~T)";
         Text[ turkish ] = "Başharf metni";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Te~xto";
@@ -468,6 +468,7 @@ TabPage TP_DROPCAPS
     };
 };
  // ********************************************************************** EOF
+
 
 
 
