@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibilityoptions.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2002-11-01 13:15:49 $
+ *  last change: $Author: fme $ $Date: 2002-12-06 09:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,13 +70,11 @@ struct SwAccessibilityOptions
     BOOL bIsAlwaysAutoColor         :1;
     BOOL bIsStopAnimatedText        :1;
     BOOL bIsStopAnimatedGraphics    :1;
-    BOOL bUseAutomaticBorderColor   :1;
 
     SwAccessibilityOptions() :
         bIsAlwaysAutoColor(FALSE),
         bIsStopAnimatedText(FALSE),
-        bIsStopAnimatedGraphics(FALSE),
-        bUseAutomaticBorderColor(FALSE){}
+        bIsStopAnimatedGraphics(FALSE) {}
 
     inline BOOL IsAlwaysAutoColor() const       { return bIsAlwaysAutoColor; }
     inline void SetAlwaysAutoColor( BOOL b )    { bIsAlwaysAutoColor = b; }
@@ -86,9 +84,6 @@ struct SwAccessibilityOptions
 
     inline BOOL IsStopAnimatedText() const       { return bIsStopAnimatedGraphics; }
     inline void SetStopAnimatedText( BOOL b )    { bIsStopAnimatedGraphics = b;}
-
-    inline BOOL IsUseAutomaticBorderColor() const       { return bUseAutomaticBorderColor; }
-    inline void SetUseAutomaticBorderColor( BOOL b )    { bUseAutomaticBorderColor = b; }
 };
 #endif
 
