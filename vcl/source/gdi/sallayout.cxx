@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hdu $ $Date: 2002-05-28 18:15:25 $
+ *  last change: $Author: hdu $ $Date: 2002-05-29 17:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,8 +292,8 @@ bool GenericSalLayout::GetCharWidths( long* pCharWidths ) const
 {
     // initialize character extents buffer
     int nCharCapacity = mnEndCharIndex - mnFirstCharIndex;
-    long* pMinPos = (long*)alloca( 2*nCharCapacity * sizeof(long) );
-    long* pMaxPos = pMinPos + nCharCapacity;
+    long* pMinPos  = (long*)alloca( 2*nCharCapacity * sizeof(long) );
+    long* pMaxPos  = pMinPos + nCharCapacity;
 
     int i;
     for( i = 0; i < nCharCapacity; ++i )
@@ -321,11 +321,13 @@ bool GenericSalLayout::GetCharWidths( long* pCharWidths ) const
             pMinPos[n] = nXPos;
 
         // maximum right extent of character
-        nXPos += pG->mnWidth;
+        // either right edge of glyph or left edge of next glyph
+        nXPos = (i==0) ? (nXPos + pG->mnWidth) : pG[1].maLinearPos.X();
         if( pMaxPos[n] < nXPos )
             pMaxPos[n] = nXPos;
 
         // special case for zero width glyphs in cluster, e.g. in Thai
+        // => they are aligned to cluster start
         if( !pG->mnWidth )
         {
             int m = nClusterIndex - mnFirstCharIndex;
