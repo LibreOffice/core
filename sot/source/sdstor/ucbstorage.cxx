@@ -2131,15 +2131,27 @@ String UCBStorage::CreateLinkFile( const String& rName )
     BOOL bRet = ::utl::UCBContentHelper::MakeFolder( aFolder, aTitle, aNewFolder );
     if ( !bRet )
     {
-        // append a number until the name can be used for a new folder
-        aTitle += '.';
-        for ( sal_Int32 i=0; !bRet; i++ )
+        aFolderObj.insertName( aTitle );
+        if ( ::utl::UCBContentHelper::Exists( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ) ) )
         {
-            String aTmp( aTitle );
-            aTmp += String::CreateFromInt32( i );
-            bRet = ::utl::UCBContentHelper::MakeFolder( aFolder, aTmp, aNewFolder );
-            if ( bRet )
-                aTitle = aTmp;
+            // Hack, because already existing files give the same CommandAbortedException as any other error !
+            // append a number until the name can be used for a new folder
+            aTitle += '.';
+            for ( sal_Int32 i=0; !bRet; i++ )
+            {
+                String aTmp( aTitle );
+                aTmp += String::CreateFromInt32( i );
+                bRet = ::utl::UCBContentHelper::MakeFolder( aFolder, aTmp, aNewFolder );
+                if ( bRet )
+                    aTitle = aTmp;
+                else
+                {
+                    aFolderObj.SetName( aTmp );
+                    if ( !::utl::UCBContentHelper::Exists( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ) ) )
+                        // Hack, because already existing files give the same CommandAbortedException as any other error !
+                        break;
+                }
+            }
         }
     }
 
