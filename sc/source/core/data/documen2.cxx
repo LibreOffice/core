@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 18:05:58 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,6 @@
  *
  *
  ************************************************************************/
-
-#ifdef PCH
-#include "core_pch.hxx"
-#endif
-
-#pragma hdrstop
 
 #define _BIGINT_HXX
 #define _SFXMULTISEL_HXX
@@ -313,93 +307,95 @@
 #include "scrdata.hxx"
 #include "poolhelp.hxx"
 #include "listenercalls.hxx"
+#include "recursionhelper.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
 ScDocument::ScDocument( ScDocumentMode  eMode,
                         SfxObjectShell* pDocShell ) :
         xServiceManager( ::comphelper::getProcessServiceFactory() ),
-        pDrawLayer( NULL ),
-        pColorTable( NULL ),
+        pEditEngine( NULL ),
+        pNoteEngine( NULL ),
+        pNoteItemPool( NULL ),
         pShell( pDocShell ),
         pPrinter( NULL ),
+        pDrawLayer( NULL ),
+        pColorTable( NULL ),
+        pCondFormList( NULL ),
+        pValidationList( NULL ),
+        pFormatExchangeList( NULL ),
+        pDPCollection( NULL ),
+        pLinkManager( NULL ),
+        pFormulaTree( NULL ),
+        pEOFormulaTree( NULL ),
+        pFormulaTrack( NULL ),
+        pEOFormulaTrack( NULL ),
+        pOtherObjects( NULL ),
+        pClipData( NULL ),
+        pDetOpList(NULL),
+        pChangeTrack( NULL ),
+        pUnoBroadcaster( NULL ),
+        pUnoListenerCalls( NULL ),
+        pChangeViewSettings( NULL ),
+        pScriptTypeData( NULL ),
+        pCacheFieldEditEngine( NULL ),
+        pViewOptions( NULL ),
+        pDocOptions( NULL ),
+        pExtDocOptions( NULL ),
+        pConsolidateDlgData( NULL ),
+        pLoadedSymbolStringCellList( NULL ),
+        pRecursionHelper( NULL ),
+        nRangeOverflowType( 0 ),
+        aCurTextWidthCalcPos(MAXCOL,0,0),
+        nFormulaCodeInTree(0),
+        nXMLImportedFormulaCount( 0 ),
+        nInterpretLevel(0),
+        nMacroInterpretLevel(0),
+        nInterpreterTableOpLevel(0),
+        nMaxTableNumber( 0 ),
+        nSrcVer( SC_CURRENT_VERSION ),
+        nSrcMaxRow( MAXROW ),
+        nFormulaTrackCount(0),
+        nHardRecalcState(0),
+        nVisibleTab( 0 ),
+        eLinkMode(LM_UNKNOWN),
+        bProtected( FALSE ),
         bAutoCalc( eMode == SCDOCMODE_DOCUMENT ),
         bAutoCalcShellDisabled( FALSE ),
         bForcedFormulaPending( FALSE ),
         bCalculatingFormulaTree( FALSE ),
-        bIsUndo( eMode == SCDOCMODE_UNDO ),
         bIsClip( eMode == SCDOCMODE_CLIP ),
-        bIsVisible( FALSE ),
         bCutMode( FALSE ),
-        nMaxTableNumber( 0 ),
-        pCondFormList( NULL ),
-        pValidationList( NULL ),
-        pFormatExchangeList( NULL ),
+        bIsUndo( eMode == SCDOCMODE_UNDO ),
+        bIsVisible( FALSE ),
         bIsEmbedded( FALSE ),
-        bProtected( FALSE ),
-        pLinkManager( NULL ),
-        pDocOptions( NULL ),
-        pViewOptions( NULL ),
-        pExtDocOptions( NULL ),
-        pConsolidateDlgData( NULL ),
-        pFormulaTree( NULL ),
-        pEOFormulaTree( NULL ),
-        aCurTextWidthCalcPos(MAXCOL,0,0),
 //      bNoSetDirty( TRUE ),
         bNoSetDirty( FALSE ),
-        pFormulaTrack( NULL ),
-        pEOFormulaTrack( NULL ),
-        nFormulaTrackCount(0),
         bInsertingFromOtherDoc( FALSE ),
         bImportingXML( FALSE ),
-        nHardRecalcState(0),
         bCalcingAfterLoad( FALSE ),
         bNoListening( FALSE ),
         bLoadingDone( TRUE ),
-        nVisibleTab( 0 ),
         bIdleDisabled( FALSE ),
         bInLinkUpdate( FALSE ),
+        bChartListenerCollectionNeedsUpdate( FALSE ),
+        bHasForcedFormulas( FALSE ),
+        bLostData(FALSE),
+        bInDtorClear( FALSE ),
+        bExpandRefs( FALSE ),
         bDetectiveDirty( FALSE ),
         nMacroCallMode( SC_MACROCALL_ALLOWED ),
         bHasMacroFunc( FALSE ),
-        bChartListenerCollectionNeedsUpdate( FALSE ),
-        bHasForcedFormulas( FALSE ),
         nVisSpellState( 0 ),
-        pOtherObjects( NULL ),
-        pClipData( NULL ),
-        nFormulaCodeInTree(0),
-        nInterpretLevel(0),
-        nMacroInterpretLevel(0),
-        nInterpreterTableOpLevel(0),
-        bLostData(FALSE),
-        pDetOpList(NULL),
-        bInDtorClear( FALSE ),
-        bExpandRefs( FALSE ),
-        pUnoBroadcaster( NULL ),
-        pUnoListenerCalls( NULL ),
-        pChangeTrack( NULL ),
-        pChangeViewSettings( NULL ),
-        pEditEngine( NULL ),
-        pNoteEngine( NULL ),
-        pNoteItemPool( NULL ),
-        eLinkMode(LM_UNKNOWN),
-        pDPCollection( NULL ),
-        pScriptTypeData( NULL ),
         nAsianCompression(SC_ASIANCOMPRESSION_INVALID),
         nAsianKerning(SC_ASIANKERNING_INVALID),
-        pLoadedSymbolStringCellList( NULL ),
-        nRangeOverflowType( 0 ),
         bPastingDrawFromOtherDoc( FALSE ),
-        pCacheFieldEditEngine( NULL ),
         nInDdeLinkUpdate( 0 ),
-        nXMLImportedFormulaCount( 0 ),
         bInUnoBroadcast( FALSE ),
         bInUnoListenerCall( FALSE ),
         bStyleSheetUsageInvalid( TRUE )
 {
     eSrcSet = gsl_getSystemTextEncoding();
-    nSrcVer = SC_CURRENT_VERSION;
-    nSrcMaxRow = MAXROW;
 
     if ( eMode == SCDOCMODE_DOCUMENT )
     {
@@ -601,6 +597,7 @@ ScDocument::~ScDocument()
     DeleteColorTable();
     delete pScriptTypeData;
     delete pOtherObjects;
+    delete pRecursionHelper;
 
 }
 
@@ -1953,3 +1950,10 @@ void ScDocument::DisposeFieldEditEngine(ScFieldEditEngine*& rpEditEngine)
     rpEditEngine = NULL;
 }
 
+//  ----------------------------------------------------------------------------
+
+// static
+ScRecursionHelper* ScDocument::CreateRecursionHelperInstance()
+{
+    return new ScRecursionHelper;
+}
