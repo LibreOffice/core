@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmethnode.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:01:20 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,12 @@
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #endif
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 #ifndef _SB_SBSTAR_HXX
 #include <basic/sbstar.hxx>
 #endif
@@ -122,7 +128,7 @@ namespace basprov
 
     BasicMethodNodeImpl::BasicMethodNodeImpl( const Reference< XComponentContext >& rxContext,
         const ::rtl::OUString& sScriptingContext, SbMethod* pMethod, bool isAppScript )
-        : ::scripting_helper::OBroadcastHelperHolder( StarBASIC::GetGlobalMutex() )
+        : ::scripting_helper::OBroadcastHelperHolder( m_aMutex )
         ,OPropertyContainer( GetBroadcastHelper() )
         ,m_xContext( rxContext )
         ,m_sScriptingContext( sScriptingContext )
@@ -181,7 +187,7 @@ namespace basprov
 
     ::rtl::OUString BasicMethodNodeImpl::getName(  ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         ::rtl::OUString sMethodName;
         if ( m_pMethod )
@@ -194,7 +200,7 @@ namespace basprov
 
     Sequence< Reference< browse::XBrowseNode > > BasicMethodNodeImpl::getChildNodes(  ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         return Sequence< Reference< browse::XBrowseNode > >();
     }
@@ -203,7 +209,7 @@ namespace basprov
 
     sal_Bool BasicMethodNodeImpl::hasChildNodes(  ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         return sal_False;
     }
@@ -212,7 +218,7 @@ namespace basprov
 
     sal_Int16 BasicMethodNodeImpl::getType(  ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         return browse::BrowseNodeTypes::SCRIPT;
     }
