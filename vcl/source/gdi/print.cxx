@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hjs $ $Date: 2001-11-07 19:41:41 $
+ *  last change: $Author: pl $ $Date: 2001-12-19 15:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@
 #ifndef _VCL_UNOHELP_HXX
 #include <unohelp.hxx>
 #endif
+
+using namespace com::sun::star::portal::client;
 
 struct SalPrinterQueueInfo
 {
@@ -236,6 +238,7 @@ static void doTab( Printer* pPrinter )
         pPrinter->SetTextColor( Color( COL_BLACK ) );
         pPrinter->SetLineColor( Color( COL_BLACK ) );
         pPrinter->SetFillColor( Color( COL_WHITE ) );
+        pPrinter->SetClipRegion();
 
         Size aPaperSize( pPrinter->GetOutputSize() );
         Font aNormalFont( String( RTL_CONSTASCII_USTRINGPARAM( "Helvetica" ) ), Size( 0, 40 ) );
@@ -293,23 +296,6 @@ static void doTab( Printer* pPrinter )
 #endif
 
 int nImplSysDialog = 0;
-
-#define PRINTERSEQ_GET( _def_Seq, _def_Obj )                                                        \
-{                                                                                                   \
-    SvMemoryStream* _def_pStm = new SvMemoryStream( (char*)_def_Seq.getConstArray(), _def_Seq.getLength(), STREAM_READ );   \
-    _def_pStm->SetCompressMode( COMPRESSMODE_FULL );                                                \
-    *_def_pStm >> _def_Obj;                                                                         \
-    delete _def_pStm;                                                                               \
-}
-
-#define PRINTERSEQ_SET( _def_Obj, _def_Seq, _def_Type  )                                \
-{                                                                                       \
-    SvMemoryStream* _def_pStm = new SvMemoryStream( 8192, 8192 );                       \
-    _def_pStm->SetCompressMode( COMPRESSMODE_FULL );                                    \
-    *_def_pStm << _def_Obj;                                                             \
-    _def_Seq = _def_Type( (sal_Int8*) (_def_pStm)->GetData(), (_def_pStm)->Tell() );    \
-    delete _def_pStm;                                                                   \
-}
 
 // =======================================================================
 
@@ -508,54 +494,22 @@ static void ImplInitPrnQueueList()
 #ifndef REMOTE_APPSERVER
     pSVData->mpDefInst->GetPrinterQueueInfo( pSVData->maGDIData.mpPrinterQueueList );
 #else
-    if ( pSVData->mpRemotePrinterList && pSVData->mpRemotePrinterList->GetPrinterCount() )
+    BOOL        bPrinterInfoOk = FALSE;
+    const ULONG nCount = pSVData->mpPrinterEnvironment->Infos.getLength();
+    const RmQueueInfo* pInfos = pSVData->mpPrinterEnvironment->Infos.getConstArray();
+
+    for( ULONG i = 0; i < nCount; i++ )
     {
-        BOOL        bPrinterInfoOk = FALSE;
-        const ULONG nCount = pSVData->mpRemotePrinterList->GetPrinterCount();
+        SalPrinterQueueInfo*        pNewInfo = new SalPrinterQueueInfo;
 
-        for( ULONG i = 0; i < nCount; i++ )
-        {
-            QueueInfo                   aQInfo;
-            SalPrinterQueueInfo*        pNewInfo = new SalPrinterQueueInfo;
-
-            RemotePrinterInfo* pPrinterInfo = pSVData->mpRemotePrinterList->GetPrinter( i );
-            if ( pPrinterInfo->aServerName.CompareToAscii( RVP_CLIENT_SERVER_NAME ) != COMPARE_EQUAL )
-            {
-                REF( NMSP_CLIENT::XRmPrinterEnvironment ) xPrinterEnv( pSVData->mpRemotePrinterList->GetPrinterEnv( pPrinterInfo->aServerName ) );
-                if ( xPrinterEnv.is() )
-                {
-                    CHECK_FOR_RVPSYNC_NORMAL();
-                    try
-                    {
-                        if ( xPrinterEnv->GetPrinterInfo( pPrinterInfo->aPrinterName.GetBuffer(), pPrinterInfo->aRmQueueInfo ) )
-                            bPrinterInfoOk = TRUE;
-                    }
-                    catch( RuntimeException &e )
-                    {
-                        rvpExceptionHandler();
-                        bPrinterInfoOk = FALSE;
-                    }
-                }
-            }
-            else
-            {
-                // short cut for client printers, info was sent before by the rvp Start command
-                bPrinterInfoOk = TRUE;
-            }
-
-            if ( bPrinterInfoOk )
-            {
-                PRINTERSEQ_GET( pPrinterInfo->aRmQueueInfo, aQInfo );
-                pNewInfo->maPrinterName = pPrinterInfo->GetFullName();
-                pNewInfo->maDriver      = aQInfo.GetDriver();
-                pNewInfo->maLocation    = aQInfo.GetLocation();
-                pNewInfo->maComment     = aQInfo.GetComment();
-                pNewInfo->mnStatus      = aQInfo.GetStatus();
-                pNewInfo->mnJobs        = aQInfo.GetJobs();
-                pNewInfo->mpSysData     = NULL;
-                pSVData->maGDIData.mpPrinterQueueList->Add( pNewInfo );
-            }
-        }
+        pNewInfo->maPrinterName = pInfos[i].PrinterName;
+        pNewInfo->maDriver      = pInfos[i].Driver;
+        pNewInfo->maLocation    = pInfos[i].Location;
+        pNewInfo->maComment     = pInfos[i].Comment;
+        pNewInfo->mnStatus      = pInfos[i].PrinterStatus;
+        pNewInfo->mnJobs        = pInfos[i].Jobs;
+        pNewInfo->mpSysData     = NULL;
+        pSVData->maGDIData.mpPrinterQueueList->Add( pNewInfo );
     }
     if ( !pSVData->maGDIData.mpPrinterQueueList->Count() )
     {
@@ -658,15 +612,7 @@ XubString Printer::GetDefaultPrinterName()
 #ifndef REMOTE_APPSERVER
     return pSVData->mpDefInst->GetDefaultPrinter();
 #else
-    XubString aDefPrinterName;
-    if ( pSVData->mpRemotePrinterList )
-    {
-        RemotePrinterInfo* pDefPrinter = pSVData->mpRemotePrinterList->GetDefaultPrinter();
-        if ( pDefPrinter )
-            aDefPrinterName = pDefPrinter->GetFullName();
-
-    }
-    return aDefPrinterName;
+    return pSVData->mpPrinterEnvironment->DefaultPrinter;
 #endif
 }
 
@@ -756,26 +702,14 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
     }
 #else
 
-    String aPrinterName( maPrinterName.GetToken( 0, '@' ) );
-    String aPrintServerName( maPrinterName.GetToken( 1, '@' ) );
-
-
     mpInfoPrinter = new RmPrinter;
 
-    Reference< ::com::sun::star::lang::XMultiServiceFactory > xPrinterFactory;
-    Reference< NMSP_CLIENT::XRmPrinter > xPrinter;
+    Reference< XRmPrinter > xPrinter;
 
-    if (pSVData->mpRemotePrinterList)
+    if (pSVData->mxClientFactory.is() )
     {
-//          if ( !aPrintServerName.Len() )
-//              aPrintServerName = pSVData->mpRemotePrinterList->FindLocalPrintServer( aPrinterName );
-
-        xPrinterFactory = pSVData->mpRemotePrinterList->GetServerFactory( aPrintServerName );
-        if( xPrinterFactory.is() )
-        {
-            xPrinter = Reference< NMSP_CLIENT::XRmPrinter >( xPrinterFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OfficePrinter.stardiv.de" ) ) ), NMSP_UNO::UNO_QUERY );
-            mpInfoPrinter->SetInterface( xPrinter );
-        }
+        xPrinter = Reference< XRmPrinter >( pSVData->mxClientFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OfficePrinter.stardiv.de" ) ) ), NMSP_UNO::UNO_QUERY );
+        mpInfoPrinter->SetInterface( xPrinter );
     }
 
     if ( ! xPrinter.is() )
@@ -787,26 +721,32 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
     }
     else
     {
-        QueueInfo                               aQInfo;
-        NMSP_CLIENT::RmQueueInfo                aRmQInfo;
-        NMSP_CLIENT::RmJobSetup                 aRmJobSetup;
-        const REF( NMSP_CLIENT::XRmPrinter )&   rxPrinter = mpInfoPrinter->GetInterface();
+        QueueInfo               aQInfo;
+        RmJobSetup              aRmJobSetup;
+        const REF( XRmPrinter )&    rxPrinter = mpInfoPrinter->GetInterface();
 
-        aQInfo.maPrinterName    = aPrinterName;
-        aQInfo.maDriver         = pInfo->maDriver;
-        aQInfo.maLocation       = pInfo->maLocation;
-        aQInfo.maComment        = pInfo->maComment;
-        aQInfo.mnStatus         = pInfo->mnStatus;
-        aQInfo.mnJobs           = pInfo->mnJobs;
+        const RmQueueInfo*      pInfos = pSVData->mpPrinterEnvironment->Infos.getConstArray();
+        const RmQueueInfo*      pSelectedInfo = NULL;
+        ::rtl::OUString aCompare( maPrinterName );
+        for( int i = 0; i < pSVData->mpPrinterEnvironment->Infos.getLength(); i++ )
+        {
+            if( pInfos[i].PrinterName == aCompare )
+            {
+                pSelectedInfo = pInfos+i;
+                break;
+            }
+        }
 
-        PRINTERSEQ_SET( aQInfo, aRmQInfo, NMSP_CLIENT::RmQueueInfo );
-        mpInfoPrinter->Create( aRmQInfo, aRmJobSetup );
-        PRINTERSEQ_GET( aRmJobSetup, maJobSetup );
+        if( pSelectedInfo )
+        {
+            mpInfoPrinter->CreateInfoInstance( *pSelectedInfo, aRmJobSetup );
+            maJobSetup = aRmJobSetup;
+        }
 
         if( rxPrinter.is() )
         {
-            mpGraphics = new ImplServerGraphics( pSVData->mpRemotePrinterList->GetServerAtoms( aPrintServerName ) );
-        REF( NMSP_CLIENT::XRmOutputDevice ) aTmp( rxPrinter, NMSP_UNO::UNO_QUERY );
+            mpGraphics = new ImplServerGraphics( pSVData->mpAtoms );
+            REF( XRmOutputDevice ) aTmp( rxPrinter, UNO_QUERY );
             mpGraphics->SetInterface( aTmp );
         }
 
@@ -1061,7 +1001,7 @@ Printer::~Printer()
     if ( mpInfoPrinter )
     {
         if( mpGraphics ) {
-           REF( NMSP_CLIENT::XRmOutputDevice ) aTmp;
+           REF( XRmOutputDevice ) aTmp;
             mpGraphics->SetInterface( aTmp );
         }
 
@@ -1184,14 +1124,13 @@ BOOL Printer::SetJobSetup( const JobSetup& rSetup )
 #else
     if ( mpInfoPrinter )
     {
-        NMSP_CLIENT::RmJobSetup aRmJobSetup;
+        RmJobSetup aRmJobSetup;
 
-        PRINTERSEQ_SET( aJobSetup, aRmJobSetup, NMSP_CLIENT::RmJobSetup );
+        maJobSetup.SetRmJobSetup( aRmJobSetup );
         if ( mpInfoPrinter->SetJobSetup( aRmJobSetup ) )
         {
-            PRINTERSEQ_GET( aRmJobSetup, aJobSetup );
             mbNewJobSetup = TRUE;
-            maJobSetup = aJobSetup;
+            maJobSetup = aRmJobSetup;
             ImplUpdatePageData();
             ImplUpdateFontList();
             return TRUE;
@@ -1217,8 +1156,7 @@ IMPL_LINK( Printer, UserSetupCompleted, ::com::sun::star::uno::Any*, pResult )
         ::com::sun::star::portal::client::RmJobSetup aRmJobSetup;
         *pResult >>= aRmJobSetup;
         JobSetup aJobSetup;
-        PRNSEQ_GET( aRmJobSetup, aJobSetup );
-
+        aJobSetup = aRmJobSetup;
         ImplUpdateJobSetupPaper( aJobSetup );
         mbNewJobSetup = TRUE;
         maJobSetup = aJobSetup;
@@ -1266,8 +1204,8 @@ BOOL Printer::Setup( Window* pWindow )
     }
     return FALSE;
 #else
-    NMSP_CLIENT::RmJobSetup aRmJobSetup;
-    PRNSEQ_SET( aRmJobSetup, maJobSetup );
+    RmJobSetup aRmJobSetup;
+    maJobSetup.SetRmJobSetup( aRmJobSetup );
     mpInfoPrinter->SetJobSetup( aRmJobSetup );
     RmFrameWindow* pFrame;
     if ( !pWindow )
@@ -1311,7 +1249,7 @@ BOOL Printer::SetPrinterProps( const Printer* pPrinter )
             if ( mpInfoPrinter )
             {
                 if( mpGraphics ) {
-                    REF( NMSP_CLIENT::XRmOutputDevice ) aTmp;
+                    REF( XRmOutputDevice ) aTmp;
                     mpGraphics->SetInterface( aTmp );
                 }
 
@@ -1366,7 +1304,7 @@ BOOL Printer::SetPrinterProps( const Printer* pPrinter )
             if ( mpInfoPrinter )
             {
                 if( mpGraphics ) {
-                    REF( NMSP_CLIENT::XRmOutputDevice ) aTmp;
+                    REF( XRmOutputDevice ) aTmp;
                     mpGraphics->SetInterface( aTmp );
                 }
 
@@ -1441,11 +1379,11 @@ BOOL Printer::SetOrientation( Orientation eOrientation )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
 #else
-        NMSP_CLIENT::RmJobSetup aRmJobSetup;
-        PRINTERSEQ_SET( aJobSetup, aRmJobSetup, NMSP_CLIENT::RmJobSetup );
+        RmJobSetup aRmJobSetup;
+        aJobSetup.SetRmJobSetup( aRmJobSetup );
         if ( mpInfoPrinter->SetOrientation( (unsigned short)eOrientation, aRmJobSetup ) )
         {
-            PRINTERSEQ_GET( aRmJobSetup, aJobSetup );
+            aJobSetup = aRmJobSetup;
 #endif
             mbNewJobSetup = TRUE;
             maJobSetup = aJobSetup;
@@ -1494,11 +1432,11 @@ BOOL Printer::SetPaperBin( USHORT nPaperBin )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
 #else
-        NMSP_CLIENT::RmJobSetup aRmJobSetup;
-        PRINTERSEQ_SET( aJobSetup, aRmJobSetup, NMSP_CLIENT::RmJobSetup );
+        RmJobSetup aRmJobSetup;
+        aJobSetup.SetRmJobSetup( aRmJobSetup );
         if ( mpInfoPrinter->SetPaperBin( nPaperBin, aRmJobSetup ) )
         {
-            PRINTERSEQ_GET( aRmJobSetup, aJobSetup );
+            aJobSetup = aRmJobSetup;
 #endif
             mbNewJobSetup = TRUE;
             maJobSetup = aJobSetup;
@@ -1551,11 +1489,11 @@ BOOL Printer::SetPaper( Paper ePaper )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
 #else
-        NMSP_CLIENT::RmJobSetup aRmJobSetup;
-        PRINTERSEQ_SET( aJobSetup, aRmJobSetup, NMSP_CLIENT::RmJobSetup );
+        RmJobSetup aRmJobSetup;
+        aJobSetup.SetRmJobSetup( aRmJobSetup );
         if ( mpInfoPrinter->SetPaper( (unsigned short)ePaper, aRmJobSetup ) )
         {
-            PRINTERSEQ_GET( aRmJobSetup, aJobSetup );
+            aJobSetup = aRmJobSetup;
 #endif
             mbNewJobSetup = TRUE;
             maJobSetup = aJobSetup;
@@ -1603,11 +1541,11 @@ BOOL Printer::SetPaperSizeUser( const Size& rSize )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
 #else
-        NMSP_CLIENT::RmJobSetup aRmJobSetup;
-        PRINTERSEQ_SET( aJobSetup, aRmJobSetup, NMSP_CLIENT::RmJobSetup );
+        RmJobSetup aRmJobSetup;
+        aJobSetup.SetRmJobSetup( aRmJobSetup );
         if ( mpInfoPrinter->SetPaperSizeUser( aPixSize.Width(), aPixSize.Height(), aRmJobSetup ) )
         {
-            PRINTERSEQ_GET( aRmJobSetup, aJobSetup );
+            aJobSetup = aRmJobSetup;
 #endif
             mbNewJobSetup = TRUE;
             maJobSetup = aJobSetup;
@@ -1749,18 +1687,6 @@ IMPL_LINK( Printer, ImplDestroyPrinterAsync, void*, pSalPrinter )
 
 // -----------------------------------------------------------------------
 
-#else
-
-// -----------------------------------------------------------------------
-
-static void ImplDeletePrintSpooler( PrintSpooler* pPrintSpooler )
-{
-    if( pPrintSpooler != 0 )
-    {
-        pPrintSpooler->mxPrintSpooler = REF( NMSP_CLIENT::XRmPrintSpooler )();
-    }
-}
-
 #endif
 
 // -----------------------------------------------------------------------
@@ -1876,69 +1802,39 @@ BOOL Printer::StartJob( const XubString& rJobName )
     BOOL                bResult = FALSE;
     ImplSVData* pSVData = ImplGetSVData();
 
-    String aServerName( maPrinterName.GetToken( 1, '@' ) );
-
-    // build a new connection if not client
-    Reference< ::com::sun::star::lang::XMultiServiceFactory > xServerFactory;
-    Reference< ::com::sun::star::connection::XConnection > xConnection;
-    Reference< ::com::sun::star::bridge::XBridgeFactory > xBridgeFactory;
-
-    pSVData->mpRemotePrinterList->CreateNewPrinterConnection( maPrinterName.GetToken( 1, '@' ), xServerFactory, xConnection, xBridgeFactory );
-    if( xServerFactory.is() )
+    try
     {
-        REF( NMSP_CLIENT::XRmSpoolLauncher ) xLauncher( xServerFactory->createInstance( ::rtl::OUString::createFromAscii( "OfficeSpoolLauncher.stardiv.de" ) ), NMSP_UNO::UNO_QUERY );
-        if( xLauncher.is() )
+        mpPrinter = new RmPrinter();
+        mpPrinter->mxRemotePrinter = REF( XRmPrinter )( pSVData->mxClientFactory->createInstance( ::rtl::OUString::createFromAscii( "OfficePrinter.stardiv.de" ) ), NMSP_UNO::UNO_QUERY );
+        RmJobSetup aRmJobSetup;
+        maJobSetup.SetRmJobSetup( aRmJobSetup );
+        mpPrinter->CreatePrintInstance( aRmJobSetup );
+        if( mpPrinter->mxRemotePrinter.is() )
         {
             CHECK_FOR_RVPSYNC_NORMAL();
-            try
-            {
-                if ( xLauncher->LaunchSpooler( pSVData->mpUserInfo->sName,
-                                      pSVData->mpUserInfo->sPassword ) )
-                {
-                    if( xBridgeFactory.is() ) // else this a the client connection
-                    {
-                        // get objects from transferred sospool connection
-                        xServerFactory = Reference< ::com::sun::star::lang::XMultiServiceFactory >();
-                        Reference< ::com::sun::star::bridge::XBridge >
-                        xBridge( xBridgeFactory->createBridge( ::rtl::OUString(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "iiop" ) ), xConnection, Reference< ::com::sun::star::bridge::XInstanceProvider >() ) );
-                        xServerFactory = Reference< ::com::sun::star::lang::XMultiServiceFactory >( xBridge->getInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SpoolMultiServiceFactory.sprintd.daemons.stardiv.de" ) ) ), UNO_QUERY );
-                    }
+            bResult = mpPrinter->mxRemotePrinter->StartJob( mnCopyCount, mbCollateCopy, rJobName, maPrintFile, mbPrintFile );
+        }
+    }
+    catch( RuntimeException &e )
+    {
+        rvpExceptionHandler();
+        bResult = FALSE;
+        mpPrinter = NULL;
+    }
 
-                    mpPrinter = new PrintSpooler();
-                    mpPrinter->mxPrintSpooler = REF( NMSP_CLIENT::XRmPrintSpooler )( xServerFactory->createInstance( ::rtl::OUString::createFromAscii( "OfficePrintSpooler.stardiv.de" ) ), NMSP_UNO::UNO_QUERY );
-                    if( mpPrinter->mxPrintSpooler.is() )
-                    {
-                        NMSP_CLIENT::RmJobSetup aRmJobSetup;
-                        PRNSEQ_SET( aRmJobSetup, maJobSetup );
-                        CHECK_FOR_RVPSYNC_NORMAL()
-                        mpPrinter->mxPrintSpooler->Create( aRmJobSetup );
-                        CHECK_FOR_RVPSYNC_NORMAL()
-                        bResult = mpPrinter->mxPrintSpooler->StartJob( mnCopyCount, mbCollateCopy, rJobName, maPrintFile, mbPrintFile );
-                    }
-                }
-            }
-            catch( RuntimeException &e )
-            {
-                rvpExceptionHandler();
-                bResult = FALSE;
-                mpPrinter = NULL;
-            }
-        }
-
-        if ( bResult )
-        {
-            mbNewJobSetup   = FALSE;
-            maJobName       = rJobName;
-            mnCurPage       = 1;
-            mnCurPrintPage  = 1;
-            mbJobActive     = TRUE;
-            mbPrinting      = TRUE;
-        }
-        else if ( mpPrinter && mpPrinter->mxPrintSpooler.is() )
-        {
-            ImplDeletePrintSpooler( mpPrinter );
-            mpPrinter = NULL;
-        }
+    if ( bResult )
+    {
+        mbNewJobSetup   = FALSE;
+        maJobName       = rJobName;
+        mnCurPage       = 1;
+        mnCurPrintPage  = 1;
+        mbJobActive     = TRUE;
+        mbPrinting      = TRUE;
+    }
+    else if ( mpPrinter )
+    {
+        delete mpPrinter;
+        mpPrinter = NULL;
     }
 
     if ( !bResult )
@@ -1994,19 +1890,20 @@ BOOL Printer::EndJob()
         CHECK_FOR_RVPSYNC_NORMAL();
         try
         {
-            mpPrinter->mxPrintSpooler->EndJob( vcl::unohelper::GetMultiServiceFactory() );
+            mpPrinter->mxRemotePrinter->EndJob( vcl::unohelper::GetMultiServiceFactory() );
         }
         catch( RuntimeException &e )
         {
             rvpExceptionHandler();
         }
         mbPrinting = FALSE;
+        mbDevOutput = FALSE;
         mnCurPage = 0;
         mnCurPrintPage = 0;
         maJobName.Erase();
         EndPrint();
 
-        ImplDeletePrintSpooler( mpPrinter );
+        delete mpPrinter;
         mpPrinter = NULL;
 
         return TRUE;
@@ -2068,24 +1965,18 @@ BOOL Printer::AbortJob()
         CHECK_FOR_RVPSYNC_NORMAL();
         try
         {
-            mpPrinter->mxPrintSpooler->AbortJob();
+            mpPrinter->mxRemotePrinter->AbortJob();
         }
         catch( RuntimeException &e )
         {
             rvpExceptionHandler();
         }
-        if ( mpQMtf )
-        {
-            mpQMtf->Clear();
-            delete mpQMtf;
-            mpQMtf = NULL;
-        }
-
         mbPrinting      = FALSE;
+        mbDevOutput = FALSE;
         mnCurPage       = 0;
         mnCurPrintPage  = 0;
         maJobName.Erase();
-        ImplDeletePrintSpooler( mpPrinter );
+        delete mpPrinter;
         mpPrinter = NULL;
         EndPrint();
 
@@ -2144,15 +2035,23 @@ BOOL Printer::StartPage()
         return TRUE;
     }
 #else
-    if ( mpPrinter )
+    if ( mpPrinter && mpPrinter->mxRemotePrinter.is() )
     {
-        mpQMtf = new GDIMetaFile;
-        mpQMtf->Record( this );
-        mpQMtf->SaveStatus();
+        if( mpGraphics ) {
+            REF( XRmOutputDevice ) aTmp;
+            mpGraphics->SetInterface( aTmp );
+            delete mpGraphics;
+        }
 
+        mpGraphics = new ImplServerGraphics( ImplGetSVData()->mpAtoms );
+        mpGraphics->SetInterface( Reference< XRmOutputDevice >( mpPrinter->mxRemotePrinter, UNO_QUERY ) );
+
+        mbDevOutput = TRUE;
         mbInPrintPage = TRUE;
         mnCurPage++;
         mnCurPrintPage++;
+        CHECK_FOR_RVPSYNC_NORMAL();
+        mpPrinter->mxRemotePrinter->StartPage();
         PrintPage();
 
         return TRUE;
@@ -2201,24 +2100,18 @@ BOOL Printer::EndPage()
         return TRUE;
     }
 #else
-    if ( mpPrinter && mpQMtf )
+    if ( mpPrinter )
     {
-        mpQMtf->Stop();
-        mpQMtf->WindStart();
-
-        PrinterPage                 aPage( mpQMtf, mbNewJobSetup, GetJobSetup() );
-        NMSP_CLIENT::RmPrinterPage  aRmPage;
-        PRINTERSEQ_SET( aPage, aRmPage, NMSP_CLIENT::RmPrinterPage );
         CHECK_FOR_RVPSYNC_NORMAL();
         try
         {
-            mpPrinter->mxPrintSpooler->SpoolPage( aRmPage );
+            mpPrinter->mxRemotePrinter->EndPage();
         }
         catch( RuntimeException &e )
         {
             rvpExceptionHandler();
         }
-        mpQMtf = NULL;
+        mbDevOutput = FALSE;
         mbNewJobSetup = FALSE;
 
         return TRUE;
