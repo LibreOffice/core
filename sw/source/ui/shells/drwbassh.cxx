@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-02 13:19:20 $
+ *  last change: $Author: jp $ $Date: 2001-08-21 12:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,7 +543,7 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
             case FN_FRAME_DOWN:
             case SID_DELETE:
             case FN_BACKSPACE:
-                if (bProtected)
+                if( bProtected || !rSh.IsObjSelected() )
                     rSet.DisableItem( nWhich );
                 break;
             case SID_GROUP:
