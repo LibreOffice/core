@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:01:06 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ Menu RID_SVXMN_RULER
             Text [ swedish ] = "Millimeter" ;
             Text [ danish ] = "Millimeter" ;
             Text [ portuguese ] = "Mil�metro" ;
-            Text [ portuguese_brazilian ] = "Millimeter" ;
+            Text [ portuguese_brazilian ] = "Mil�metro" ;
             Text[ chinese_simplified ] = "毫米";
             Text[ russian ] = "����������";
             Text[ polish ] = "Milimetr";
@@ -93,6 +93,9 @@ Menu RID_SVXMN_RULER
             Text[ catalan ] = "Milimetres";
             Text[ finnish ] = "Millimetri";
             Text[ thai ] = "มิลลิเมตร";
+            Text[ czech ] = "Milimetr";
+            Text[ hebrew ] = "‮מילימטר‬";
+            Text[ hindi ] = "मिल्लीमीटर";
         };
         MenuItem
         {
@@ -102,7 +105,7 @@ Menu RID_SVXMN_RULER
             Text [ English ] = "Centimeter" ;
             Text [ norwegian ] = "Centimeter" ;
             Text [ italian ] = "Centimetro" ;
-            Text [ portuguese_brazilian ] = "Cent?metro" ;
+            Text [ portuguese_brazilian ] = "Cent�metro" ;
             Text [ portuguese ] = "Cent�metro" ;
             Text [ finnish ] = "Senttimetri" ;
             Text [ danish ] = "Centimeter" ;
@@ -115,7 +118,7 @@ Menu RID_SVXMN_RULER
             Text[ russian ] = "����������";
             Text[ polish ] = "Centymetr";
             Text[ japanese ] = "センチメートル";
-            Text[ chinese_traditional ] = "厘米";
+            Text[ chinese_traditional ] = "公分";
             Text[ arabic ] = "�������";
             Text[ greek ] = "��������";
             Text[ korean ] = "센티미터";
@@ -123,6 +126,9 @@ Menu RID_SVXMN_RULER
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Cent�metres";
             Text[ thai ] = "เซนติเมตร";
+            Text[ czech ] = "Centimetr";
+            Text[ hebrew ] = "‮סנטימטר‬";
+            Text[ hindi ] = "सेंटिमीटर";
         };
         MenuItem
         {
@@ -138,7 +144,7 @@ Menu RID_SVXMN_RULER
             Text [ swedish ] = "Meter" ;
             Text [ danish ] = "Meter" ;
             Text [ portuguese ] = "Metro" ;
-            Text [ portuguese_brazilian ] = "Meter" ;
+            Text [ portuguese_brazilian ] = "Metro" ;
             Text[ chinese_simplified ] = "米";
             Text[ russian ] = "�����";
             Text[ polish ] = "Metr";
@@ -152,6 +158,9 @@ Menu RID_SVXMN_RULER
             Text[ catalan ] = "Metres";
             Text[ finnish ] = "Metri";
             Text[ thai ] = "เมตร";
+            Text[ czech ] = "Metr";
+            Text[ hebrew ] = "‮מטר‬";
+            Text[ hindi ] = "मीटर";
         };
         MenuItem
         {
@@ -167,7 +176,7 @@ Menu RID_SVXMN_RULER
             Text [ swedish ] = "Kilometer" ;
             Text [ danish ] = "Kilometer" ;
             Text [ portuguese ] = "Quil�metro" ;
-            Text [ portuguese_brazilian ] = "Kilometer" ;
+            Text [ portuguese_brazilian ] = "Quilometro" ;
             Text[ chinese_simplified ] = "公里";
             Text[ russian ] = "���������";
             Text[ polish ] = "Kilometr";
@@ -181,6 +190,9 @@ Menu RID_SVXMN_RULER
             Text[ catalan ] = "Kil�metres";
             Text[ finnish ] = "Kilometri";
             Text[ thai ] = "กิโลเมตร";
+            Text[ czech ] = "Kilometr";
+            Text[ hebrew ] = "‮קילומטר‬";
+            Text[ hindi ] = "किलोमीटर";
         };
         MenuItem
         {
@@ -196,7 +208,7 @@ Menu RID_SVXMN_RULER
             Text [ swedish ] = "Tum" ;
             Text [ danish ] = "Tommer" ;
             Text [ portuguese ] = "Polegada" ;
-            Text [ portuguese_brazilian ] = "Zoll" ;
+            Text [ portuguese_brazilian ] = "Polegada" ;
             Text[ chinese_simplified ] = "英寸";
             Text[ russian ] = "�����";
             Text[ polish ] = "Cal";
@@ -210,6 +222,9 @@ Menu RID_SVXMN_RULER
             Text[ catalan ] = "Polzades";
             Text[ finnish ] = "Tuuma";
             Text[ thai ] = "นิ้ว";
+            Text[ czech ] = "Palec";
+            Text[ hebrew ] = "‮אינצ'‬";
+            Text[ hindi ] = "इंच";
         };
         MenuItem
         {
@@ -227,7 +242,7 @@ Menu RID_SVXMN_RULER
             Text [ swedish ] = "Fot" ;
             Text [ danish ] = "Fod" ;
             Text [ portuguese ] = "P�s" ;
-            Text [ portuguese_brazilian ] = "Fu?" ;
+            Text [ portuguese_brazilian ] = "P�" ;
             Text[ chinese_simplified ] = "英尺";
             Text[ russian ] = "����";
             Text[ polish ] = "Stopa";
@@ -236,11 +251,14 @@ Menu RID_SVXMN_RULER
             Text[ arabic ] = "���";
             Text[ greek ] = "����";
             Text[ korean ] = "피트";
-            Text[ turkish ] = "Ft";
+            Text[ turkish ] = "Ayak";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Peus";
             Text[ finnish ] = "Jalka";
             Text[ thai ] = "ฟุต";
+            Text[ czech ] = "Stopa";
+            Text[ hebrew ] = "‮רגל‬";
+            Text[ hindi ] = "फ़ूट्";
         };
         MenuItem
         {
@@ -256,7 +274,7 @@ Menu RID_SVXMN_RULER
             Text [ swedish ] = "Mil" ;
             Text [ danish ] = "Mil" ;
             Text [ portuguese ] = "Milhas" ;
-            Text [ portuguese_brazilian ] = "Meilen" ;
+            Text [ portuguese_brazilian ] = "Milhas" ;
             Text[ chinese_simplified ] = "英里";
             Text[ russian ] = "����";
             Text[ polish ] = "Mile";
@@ -270,6 +288,9 @@ Menu RID_SVXMN_RULER
             Text[ catalan ] = "Milles";
             Text[ finnish ] = "Mailit";
             Text[ thai ] = "ไมล์";
+            Text[ czech ] = "Míle";
+            Text[ hebrew ] = "‮מילים‬";
+            Text[ hindi ] = "मइल्स्";
         };
         MenuItem
         {
@@ -300,6 +321,9 @@ Menu RID_SVXMN_RULER
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Punt";
             Text[ thai ] = "พ้อยท์";
+            Text[ czech ] = "Bod";
+            Text[ hebrew ] = "‮נקודה‬";
+            Text[ hindi ] = "बिन्दु";
         };
         MenuItem
         {
@@ -315,7 +339,7 @@ String RID_SVXSTR_RULER_TAB_LEFT
     TEXT [ English ] = "Left" ;
     TEXT [ norwegian ] = "Left" ;
     TEXT [ italian ] = "Sinistra" ;
-    TEXT [ portuguese_brazilian ] = "A Esquerda" ;
+    TEXT [ portuguese_brazilian ] = "Esquerda" ;
     TEXT [ portuguese ] = "Esquerda" ;
     TEXT [ finnish ] = "Vasen" ;
     TEXT [ danish ] = "Venstre" ;
@@ -336,6 +360,9 @@ String RID_SVXSTR_RULER_TAB_LEFT
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Esquerra";
     TEXT[ thai ] = "ซ้าย";
+    TEXT[ czech ] = "Vlevo";
+    TEXT[ hebrew ] = "‮שמאל‬";
+    TEXT[ hindi ] = "बायाँ";
 };
 String RID_SVXSTR_RULER_TAB_RIGHT
 {
@@ -343,7 +370,7 @@ String RID_SVXSTR_RULER_TAB_RIGHT
     TEXT [ English ] = "Right" ;
     TEXT [ norwegian ] = "Right" ;
     TEXT [ italian ] = "Destra" ;
-    TEXT [ portuguese_brazilian ] = "A Direita" ;
+    TEXT [ portuguese_brazilian ] = "Direita" ;
     TEXT [ portuguese ] = "Direita" ;
     TEXT [ finnish ] = "Oikea" ;
     TEXT [ danish ] = "H�jre" ;
@@ -364,6 +391,9 @@ String RID_SVXSTR_RULER_TAB_RIGHT
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Dreta";
     TEXT[ thai ] = "ขวา";
+    TEXT[ czech ] = "Vpravo";
+    TEXT[ hebrew ] = "‮ימין‬";
+    TEXT[ hindi ] = "दाहिना";
 };
 String RID_SVXSTR_RULER_TAB_DECIMAL
 {
@@ -392,6 +422,9 @@ String RID_SVXSTR_RULER_TAB_DECIMAL
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Decimal";
     TEXT[ thai ] = "ทศนิยม";
+    TEXT[ czech ] = "Desítkově";
+    TEXT[ hebrew ] = "‮עשרוני‬";
+    TEXT[ hindi ] = "दशांश";
 };
 String RID_SVXSTR_RULER_TAB_CENTER
 {
@@ -399,7 +432,7 @@ String RID_SVXSTR_RULER_TAB_CENTER
     TEXT [ English ] = "Centered" ;
     TEXT [ norwegian ] = "Centered" ;
     TEXT [ italian ] = "Centrato" ;
-    TEXT [ portuguese_brazilian ] = "Centralizado" ;
+    TEXT [ portuguese_brazilian ] = "Centro" ;
     TEXT [ portuguese ] = "Centrado" ;
     TEXT [ finnish ] = "Keskell�" ;
     TEXT [ danish ] = "Centreret" ;
@@ -420,7 +453,19 @@ String RID_SVXSTR_RULER_TAB_CENTER
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Centre";
     TEXT[ thai ] = "ตรงกลาง";
+    TEXT[ czech ] = "Na střed";
+    TEXT[ hebrew ] = "‮מרכז‬";
+    TEXT[ hindi ] = "मध्यभाग";
 };
+
+
+
+
+
+
+
+
+
 
 
 
