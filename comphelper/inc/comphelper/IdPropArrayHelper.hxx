@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IdPropArrayHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:24:20 $
+ *  last change: $Author: oj $ $Date: 2000-11-06 08:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
+#include <cppuhelper/propshlp.hxx>
 
 namespace comphelper
 {
