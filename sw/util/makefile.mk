@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-27 10:32:57 $
+#   last change: $Author: rt $ $Date: 2004-09-29 09:37:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -220,6 +220,7 @@ SHL3STDLIBS= \
             $(SVTOOLLIB) \
             $(TKLIB) \
             $(VCLLIB) \
+            $(SOTLIB) \
             $(SVLLIB) \
             $(UNOTOOLSLIB) \
             $(TOOLSLIB) \
