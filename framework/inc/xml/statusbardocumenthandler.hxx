@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusbardocumenthandler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:10:44 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ class OReadStatusBarDocumentHandler :   public ::com::sun::star::xml::sax::XDocu
             SB_ATTRIBUTE_OWNERDRAW,
             SB_ATTRIBUTE_WIDTH,
             SB_ATTRIBUTE_OFFSET,
+            SB_ATTRIBUTE_HELPURL,
             SB_XML_ENTRY_COUNT
         };
 
@@ -131,7 +132,7 @@ class OReadStatusBarDocumentHandler :   public ::com::sun::star::xml::sax::XDocu
             SB_XML_NAMESPACES_COUNT
         };
 
-        OReadStatusBarDocumentHandler( StatusBarDescriptor& aStatusBarItems );
+        OReadStatusBarDocumentHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& aStatusBarItems );
         virtual ~OReadStatusBarDocumentHandler();
 
         // XInterface
@@ -194,20 +195,20 @@ class OReadStatusBarDocumentHandler :   public ::com::sun::star::xml::sax::XDocu
                 }
         };
 
-        sal_Bool                                                                    m_bStatusBarStartFound;
-        sal_Bool                                                                    m_bStatusBarEndFound;
-        sal_Bool                                                                    m_bStatusBarItemStartFound;
-        StatusBarHashMap                                                            m_aStatusBarMap;
-        StatusBarDescriptor&                                                        m_aStatusBarItems;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >    m_xLocator;
+        sal_Bool                                                                            m_bStatusBarStartFound;
+        sal_Bool                                                                            m_bStatusBarEndFound;
+        sal_Bool                                                                            m_bStatusBarItemStartFound;
+        StatusBarHashMap                                                                    m_aStatusBarMap;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >    m_aStatusBarItems;
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >            m_xLocator;
 };
 
 class OWriteStatusBarDocumentHandler : private ThreadHelpBase // Struct for right initalization of lock member! Must be first of baseclasses.
 {
     public:
         OWriteStatusBarDocumentHandler(
-            const StatusBarDescriptor& aStatusBarItems,
-            ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rStatusBarItems,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& rWriteDocHandler );
         virtual ~OWriteStatusBarDocumentHandler();
 
         void WriteStatusBarDocument() throw
@@ -215,11 +216,16 @@ class OWriteStatusBarDocumentHandler : private ThreadHelpBase // Struct for righ
               ::com::sun::star::uno::RuntimeException );
 
     protected:
-        virtual void WriteStatusBarItem( const StatusBarItemDescriptor* ) throw
+        virtual void WriteStatusBarItem(
+            const rtl::OUString& rCommandURL,
+            const rtl::OUString& rHelpURL,
+            sal_Int16            nOffset,
+            sal_Int16            nStyle,
+            sal_Int16            nWidth ) throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
 
-        const StatusBarDescriptor&                                                          m_aStatusBarItems;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >       m_aStatusBarItems;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >      m_xEmptyList;
         ::rtl::OUString                                                                     m_aXMLStatusBarNS;
