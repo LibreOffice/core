@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-12 15:52:39 $
+ *  last change: $Author: mt $ $Date: 2001-02-16 11:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,36 +499,52 @@ void UnoDialogControl::ImplSetPosSize( uno::Reference< awt::XControl >& rxCtrl )
     xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) ) ) >>= nWidth;
     xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ) ) ) >>= nHeight;
 
-
-    uno::Reference< awt::XWindowPeer > xPeer = ImplGetCompatiblePeer( sal_True );
-    uno::Reference< awt::XDevice > xD( xPeer, uno::UNO_QUERY );
-
-    awt::SimpleFontMetric aFM;
-    awt::FontDescriptor aFD;
-    uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_FONTDESCRIPTOR ) );
-    aVal >>= aFD;
-    if ( aFD.StyleName.getLength() )
+    // Currentley we are simply using MAP_APPFONT
+    OutputDevice*pOutDev = Application::GetDefaultDevice();
+    DBG_ASSERT( pOutDev, "Missing Default Device!" );
+    if ( pOutDev )
     {
-        uno::Reference< awt::XFont > xFont = xD->getFont( aFD );
-        aFM = xFont->getFontMetric();
+        Size aTmp( nX, nY );
+        aTmp = pOutDev->LogicToPixel( aTmp, MAP_APPFONT );
+        nX = aTmp.Width();
+        nY = aTmp.Height();
+        aTmp = Size( nWidth, nHeight );
+        aTmp = pOutDev->LogicToPixel( aTmp, MAP_APPFONT );
+        nWidth = aTmp.Width();
+        nHeight = aTmp.Height();
     }
     else
     {
-        uno::Reference< awt::XGraphics > xG = xD->createGraphics();
-        aFM = xG->getFontMetric();
+        uno::Reference< awt::XWindowPeer > xPeer = ImplGetCompatiblePeer( sal_True );
+        uno::Reference< awt::XDevice > xD( xPeer, uno::UNO_QUERY );
+
+        awt::SimpleFontMetric aFM;
+        awt::FontDescriptor aFD;
+        uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_FONTDESCRIPTOR ) );
+        aVal >>= aFD;
+        if ( aFD.StyleName.getLength() )
+        {
+            uno::Reference< awt::XFont > xFont = xD->getFont( aFD );
+            aFM = xFont->getFontMetric();
+        }
+        else
+        {
+            uno::Reference< awt::XGraphics > xG = xD->createGraphics();
+            aFM = xG->getFontMetric();
+        }
+
+        sal_Int16 nH = aFM.Ascent + aFM.Descent;
+        sal_Int16 nW = nH/2;    // calculate avarage width?!
+
+        nX *= nW;
+        nX /= 4;
+        nWidth *= nW;
+        nWidth /= 4;
+        nY *= nH;
+        nY /= 8;
+        nHeight *= nH;
+        nHeight /= 8;
     }
-
-    sal_Int16 nH = aFM.Ascent + aFM.Descent;
-
-    nX *= nH;
-    nX /= 4;
-    nWidth *= nH;
-    nWidth /= 4;
-    nY *= nH;
-    nY /= 8;
-    nHeight *= nH;
-    nHeight /= 8;
-
     uno::Reference < awt::XWindow > xW( rxCtrl, uno::UNO_QUERY );
     xW->setPosSize( nX, nY, nWidth, nHeight, awt::PosSize::POSSIZE );
 }
@@ -632,6 +648,7 @@ void UnoDialogControl::elementReplaced( const ::com::sun::star::container::Conta
 // beans::XPropertiesChangeListener
 void UnoDialogControl::propertiesChange( const uno::Sequence< beans::PropertyChangeEvent >& rEvents ) throw(::com::sun::star::uno::RuntimeException)
 {
+    sal_Bool bDone = sal_False;
     if( !IsUpdatingModel() && !mbCreatingCompatiblePeer )
     {
         ::rtl::OUString s1( RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) );
@@ -656,9 +673,12 @@ void UnoDialogControl::propertiesChange( const uno::Sequence< beans::PropertyCha
                     ImplSetPosSize( StdTabController::FindControl( getControls(), xModel ) );
                 }
                 break;
+                bDone = sal_True;
             }
         }
     }
+    if ( !bDone )
+        UnoControlContainer::propertiesChange( rEvents );
 }
 
 void UnoDialogControl::setTitle( const ::rtl::OUString& Title ) throw(uno::RuntimeException)
