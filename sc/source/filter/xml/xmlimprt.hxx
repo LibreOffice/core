@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 12:57:09 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,6 +422,8 @@ enum ScXMLDatabaseRangeAttrTokens
 enum ScXMLDatabaseRangeSourceSQLAttrTokens
 {
     XML_TOK_SOURCE_SQL_ATTR_DATABASE_NAME,
+    XML_TOK_SOURCE_SQL_ATTR_HREF,
+    XML_TOK_SOURCE_SQL_ATTR_CONNECTION_RESSOURCE,
     XML_TOK_SOURCE_SQL_ATTR_SQL_STATEMENT,
     XML_TOK_SOURCE_SQL_ATTR_PARSE_SQL_STATEMENT
 };
@@ -429,12 +431,16 @@ enum ScXMLDatabaseRangeSourceSQLAttrTokens
 enum ScXMLDatabaseRangeSourceTableAttrTokens
 {
     XML_TOK_SOURCE_TABLE_ATTR_DATABASE_NAME,
+    XML_TOK_SOURCE_TABLE_ATTR_HREF,
+    XML_TOK_SOURCE_TABLE_ATTR_CONNECTION_RESSOURCE,
     XML_TOK_SOURCE_TABLE_ATTR_TABLE_NAME
 };
 
 enum ScXMLDatabaseRangeSourceQueryAttrTokens
 {
     XML_TOK_SOURCE_QUERY_ATTR_DATABASE_NAME,
+    XML_TOK_SOURCE_QUERY_ATTR_HREF,
+    XML_TOK_SOURCE_QUERY_ATTR_CONNECTION_RESSOURCE,
     XML_TOK_SOURCE_QUERY_ATTR_QUERY_NAME
 };
 
