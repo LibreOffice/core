@@ -2,9 +2,9 @@
  *
  *  $RCSfile: useroptions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-26 12:56:39 $
+ *  last change: $Author: pb $ $Date: 2000-11-06 12:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ private:
 
     String          m_aEmptyString;
     String          m_aFullName;
+    String          m_aLocale;
 
     ::osl::Mutex    m_aMutex;
 
@@ -158,6 +159,7 @@ public:
     const String&   GetCustomerNumber() { return GetToken( &SvtUserOptions_Impl::m_aCustomerNumber ); }
 
     const String&   GetFullName();
+    const String&   GetLocale() const { return m_aLocale; }
 
     // set the address token
     void            SetCompany( const String& rNewToken )
@@ -315,6 +317,15 @@ SvtUserOptions_Impl::SvtUserOptions_Impl() :
         }
     }
     InitFullName();
+
+    Any aAny = ConfigManager::GetConfigManager()->GetDirectConfigProperty( ConfigManager::LOCALE );
+    OUString aLocale;
+    if ( aAny >>= aLocale )
+        m_aLocale = String( aLocale );
+    else
+    {
+        DBG_ERRORFILE( "no locale found" );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -517,6 +528,13 @@ const String& SvtUserOptions::GetCustomerNumber() const
 const String& SvtUserOptions::GetFullName() const
 {
     return pImp->GetFullName();
+}
+
+// -----------------------------------------------------------------------
+
+const String& SvtUserOptions::GetLocale() const
+{
+    return pImp->GetLocale();
 }
 
 // -----------------------------------------------------------------------
