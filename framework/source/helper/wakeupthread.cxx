@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wakeupthread.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:53:40 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 00:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,8 @@ void SAL_CALL WakeUpThread::run()
     ::osl::Condition aSleeper;
 
     TimeValue aTime;
-    aTime.Seconds =     0;
-    aTime.Nanosec = 25000;
+    aTime.Seconds = 0;
+    aTime.Nanosec = 25000000; // 25 msec
 
     while(schedule())
     {
