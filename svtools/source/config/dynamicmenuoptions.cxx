@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dynamicmenuoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-04-26 13:51:15 $
+ *  last change: $Author: as $ $Date: 2001-05-10 09:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,14 +534,27 @@ Sequence< OUString > SvtDynamicMenuOptions_Impl::impl_GetPropertyNames( sal_uInt
     // 4 properties for every item
     Sequence< OUString > lProperties( (nNewCount+nWizardCount)*PROPERTYCOUNT );
 
-    sal_uInt32 nPosition = 0;
-    sal_uInt32 nItem     = 0;
+    sal_uInt32  nPosition = 0   ;
+    sal_uInt32  nItem     = 0   ;
+    OUString    sPosition       ;
+
+    // BUT ... we must sort our name lists!
+    // Because our configuration give it sorted by name ...
+    // We need it sorted by number! And "m2" comes later then "m10" ... but 10 should be come later then 2!!!
+    // We do it dureing creating of our return list.
+    // We reserve lProperties[0...nNewCount-1] for new menu and lProperties[nNewCount...nNewCount+nWizardCount-1] for wizard menu.
+    // In this ranges we can set our entries directly. Look for expandation of one entry to four properties too!!!
+
     // Add names for new menu to list.
     // 4 subkeys for every item!
     // nPosition is the start point of an menu item,
     // nItem an index into right list of node names!
     for( nItem=0; nItem<nNewCount; ++nItem )
     {
+        sPosition  = lNewItems[nItem].copy( 1, lNewItems[nItem].getLength()-1 );
+        nPosition  = sPosition.toInt32();
+        nPosition *= PROPERTYCOUNT;
+
         lProperties[nPosition] = SETNODE_NEWMENU + PATHDELIMITER + lNewItems[nItem] + PATHDELIMITER + PROPERTYNAME_URL              ;
         ++nPosition;
         lProperties[nPosition] = SETNODE_NEWMENU + PATHDELIMITER + lNewItems[nItem] + PATHDELIMITER + PROPERTYNAME_TITLE            ;
@@ -558,6 +571,10 @@ Sequence< OUString > SvtDynamicMenuOptions_Impl::impl_GetPropertyNames( sal_uInt
     // 4 subkeys for every item!
     for( nItem=0; nItem<nWizardCount; ++nItem )
     {
+        sPosition  = lNewItems[nItem].copy( 1, lNewItems[nItem].getLength()-1 );
+        nPosition  = sPosition.toInt32();
+        nPosition *= PROPERTYCOUNT;
+
         lProperties[nPosition] = SETNODE_WIZARDMENU + PATHDELIMITER + lWizardItems[nItem] + PATHDELIMITER + PROPERTYNAME_URL            ;
         ++nPosition;
         lProperties[nPosition] = SETNODE_WIZARDMENU + PATHDELIMITER + lWizardItems[nItem] + PATHDELIMITER + PROPERTYNAME_TITLE          ;
