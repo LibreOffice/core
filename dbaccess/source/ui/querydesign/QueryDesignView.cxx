@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:33:37 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,8 +360,15 @@ namespace
             sError.SearchAndReplaceAscii("$name$",aColumnName);
             _pView->getController()->appendError(SQLException(sError,NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY0000") ),1000,Any()));
 
-            if ( _pView->getController()->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers() )
-                _pView->getController()->appendError(SQLException(String(ModuleRes(STR_QRY_CHECK_CASESENSITIVE)),NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY0000") ),1000,Any()));
+            try
+            {
+                Reference<XDatabaseMetaData> xMeta = _pView->getController()->getConnection()->getMetaData();
+                if ( xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers() )
+                    _pView->getController()->appendError(SQLException(String(ModuleRes(STR_QRY_CHECK_CASESENSITIVE)),NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY0000") ),1000,Any()));
+            }
+            catch(Exception&)
+            {
+            }
         }
 
         return eErrorCode;
@@ -2829,6 +2836,7 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
         if ( nType == DataType::OTHER )
             nType = DataType::DOUBLE;
 
+        Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
         parse::OParseColumn* pColumn = new parse::OParseColumn( pEntry->GetField(),
                                                                 ::rtl::OUString(),
                                                                 ::rtl::OUString(),
@@ -2838,7 +2846,7 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
                                                                 nType,
                                                                 sal_False,
                                                                 sal_False,
-                                                                xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+                                                                xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers());
         _rxColumn = pColumn;
         pColumn->setFunction(sal_True);
         pColumn->setRealName(pEntry->GetField());
@@ -2904,4 +2912,5 @@ sal_Bool OQueryDesignView::HasTable() const
     return !m_pTableView->GetTabWinMap()->empty();
 }
 // -----------------------------------------------------------------------------
+
 
