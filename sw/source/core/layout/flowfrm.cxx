@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-16 11:58:00 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1133,7 +1133,9 @@ BOOL SwFlowFrm::IsPrevObjMove() const
         for ( USHORT i = 0; i < pPre->GetDrawObjs()->Count(); ++i )
         {
             const SdrObject *pObj = (*pPre->GetDrawObjs())[i];
-            if ( pObj->ISA(SwVirtFlyDrawObj) )
+            // OD 2004-01-20 #110582# - do not consider hidden fly frames
+            if ( pObj->ISA(SwVirtFlyDrawObj) &&
+                 rThis.GetUpper()->GetFmt()->GetDoc()->IsVisibleLayerId( pObj->GetLayer() ) )
             {
                 const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
 
