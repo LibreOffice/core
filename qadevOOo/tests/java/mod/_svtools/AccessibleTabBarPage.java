@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTabBarPage.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-04-28 12:17:44 $
+ *  last change:$Date: 2003-05-27 13:33:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@ import java.io.PrintWriter;
 import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -148,7 +149,7 @@ public class AccessibleTabBarPage extends TestCase {
         if (xDoc != null) xDoc.dispose();
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
 
         try {
             log.println( "creating a document" );
@@ -164,7 +165,7 @@ public class AccessibleTabBarPage extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) tParam.getMSF().createInstance
+            oObj = (XInterface) ((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.awt.Toolkit") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
