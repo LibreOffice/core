@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:49:43 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ Window DLG_NAVIGATION_PI
                 Text [ English ] = "Backward" ;
                 Text [ norwegian ] = "Bakover" ;
                 Text [ italian ] = "Indietro" ;
-                Text [ portuguese_brazilian ] = "Para trás" ;
+                Text [ portuguese_brazilian ] = "Para tr?s" ;
                 Text [ portuguese ] = "Anterior" ;
                 Text [ finnish ] = "Takaisin" ;
                 Text [ danish ] = "Tilbage" ;
@@ -322,7 +322,7 @@ Window DLG_NAVIGATION_PI
                 Text [ English ] = "Chapter up" ;
                 Text [ norwegian ] = "Kapittel opp" ;
                 Text [ italian ] = "Capitolo superiore" ;
-                Text [ portuguese_brazilian ] = "Capítulo acima" ;
+                Text [ portuguese_brazilian ] = "Cap?tulo acima" ;
                 Text [ portuguese ] = "Subir um capítulo" ;
                 Text [ finnish ] = "Pienennä kappaleen sisennystä" ;
                 Text [ danish ] = "Kapitel op" ;
@@ -352,7 +352,7 @@ Window DLG_NAVIGATION_PI
                 Text [ English ] = "Chapter down" ;
                 Text [ norwegian ] = "Kapittel ned" ;
                 Text [ italian ] = "Capitolo inferiore" ;
-                Text [ portuguese_brazilian ] = "Capítulo abaixo" ;
+                Text [ portuguese_brazilian ] = "Cap?tulo abaixo" ;
                 Text [ portuguese ] = "Descer um capítulo" ;
                 Text [ finnish ] = "Suurenna kappaleen sisennystä" ;
                 Text [ danish ] = "Kapitel ned" ;
@@ -420,7 +420,7 @@ Window DLG_NAVIGATION_PI
                 Text [ portuguese ] = "Comutar vista do conteúdo" ;
                 Text[ chinese_simplified ] = "ÇĞ»»ÄÚÈİÊÓÍ¼";
                 Text[ russian ] = "Ïåğåêëş÷èòü âèä ñîäåğæèìîãî";
-                Text[ polish ] = "Prze³¹cz widok treœci";
+                Text[ polish ] = "Prze³¹cz widok tre?ci";
                 Text[ japanese ] = "“à—eËŞ­°‚ÌØ‚èŠ·‚¦";
                 Text[ chinese_traditional ] = "¤Á´«¤º®eÀËµø";
                 Text[ arabic ] = "ÊÈÏíá ØÑíŞÉ ÚÑÖ ÇáãÍÊæíÇÊ";
@@ -454,7 +454,7 @@ Window DLG_NAVIGATION_PI
                 Text [ english_us ] = "Set Reminder" ;
                 Text[ chinese_simplified ] = "ÉèÖÃ±ê¼Ç";
                 Text[ russian ] = "Óñòàíîâèòü ïîìåòêó";
-                Text[ polish ] = "OsadŸ znaczniki";
+                Text[ polish ] = "Osad? znaczniki";
                 Text[ japanese ] = "Šo‚¦~‚ß‚ğ•t‚¯‚é";
                 Text[ chinese_traditional ] = "³]©w´£¿ô";
                 Text[ arabic ] = "æÖÚ ÚáÇãÉ ÊĞßíÑ";
@@ -476,7 +476,7 @@ Window DLG_NAVIGATION_PI
                 Text [ English ] = "Header" ;
                 Text [ norwegian ] = "Header" ;
                 Text [ italian ] = "Intestazione" ;
-                Text [ portuguese_brazilian ] = "Cabeçalho" ;
+                Text [ portuguese_brazilian ] = "Cabe?alho" ;
                 Text [ portuguese ] = "Cabeçalho" ;
                 Text [ finnish ] = "Yläotsikko" ;
                 Text [ danish ] = "Sidehoved" ;
@@ -506,7 +506,7 @@ Window DLG_NAVIGATION_PI
                 Text [ English ] = "Footer" ;
                 Text [ norwegian ] = "Footer" ;
                 Text [ italian ] = "Piè di pagina" ;
-                Text [ portuguese_brazilian ] = "Rodapé" ;
+                Text [ portuguese_brazilian ] = "Rodap?" ;
                 Text [ portuguese ] = "Rodapé" ;
                 Text [ finnish ] = "Alaselite" ;
                 Text [ danish ] = "Sidefod" ;
@@ -536,7 +536,7 @@ Window DLG_NAVIGATION_PI
                 Text [ English ] = "Anchor<->Text" ;
                 Text [ norwegian ] = "Anker<->Tekst" ;
                 Text [ italian ] = "Ancoraggio<->Testo" ;
-                Text [ portuguese_brazilian ] = "Âncora<->Texto" ;
+                Text [ portuguese_brazilian ] = "?ncora<->Texto" ;
                 Text [ portuguese ] = "Âncora<->Texto" ;
                 Text [ finnish ] = "Ankkuri<->Teksti" ;
                 Text [ danish ] = "Anker<->Tekst" ;
@@ -576,11 +576,11 @@ Window DLG_NAVIGATION_PI
                 Text [ french ] = "Niveaux de titres affichés" ;
                 Text [ swedish ] = "Visade överskriftsnivåer" ;
                 Text [ danish ] = "Viste overskriftsniveauer" ;
-                Text [ portuguese_brazilian ] = "Angezeigte Überschriftenebenen" ;
+                Text [ portuguese_brazilian ] = "Angezeigte ?berschriftenebenen" ;
                 Text [ portuguese ] = "Níveis de títulos mostrados" ;
                 Text[ chinese_simplified ] = "ÏÔÊ¾µÄ´ó¸Ù¼¶";
                 Text[ russian ] = "Ïîêàç óğîâíåé çàãîëîâêîâ";
-                Text[ polish ] = "Wyœwietlone poziomy konspektu";
+                Text[ polish ] = "Wy?wietlone poziomy konspektu";
                 Text[ japanese ] = "Œ©o‚µÚÍŞÙ";
                 Text[ chinese_traditional ] = "Åã¥Üªº¤jºõ¯Å";
                 Text[ arabic ] = "ãÓÊæíÇÊ ÇáÚäÇæíä ÇáÙÇåÑÉ";
@@ -603,7 +603,7 @@ Window DLG_NAVIGATION_PI
                 Text [ English ] = "Increase Level" ;
                 Text [ norwegian ] = "+++Increase Level" ;
                 Text [ italian ] = "Livello superiore" ;
-                Text [ portuguese_brazilian ] = "Aumentar Nível" ;
+                Text [ portuguese_brazilian ] = "Aumentar N?vel" ;
                 Text [ portuguese ] = "Subir um nível" ;
                 Text [ finnish ] = "Pienennä tason sisennystä" ;
                 Text [ danish ] = "Niveau op" ;
@@ -632,7 +632,7 @@ Window DLG_NAVIGATION_PI
                 Text [ English ] = "Decrease Level" ;
                 Text [ norwegian ] = "+++Decrease Level" ;
                 Text [ italian ] = "Livello inferiore" ;
-                Text [ portuguese_brazilian ] = "Diminuir Nível" ;
+                Text [ portuguese_brazilian ] = "Diminuir N?vel" ;
                 Text [ portuguese ] = "Descer um nível" ;
                 Text [ finnish ] = "Suurenna tason sisennystä" ;
                 Text [ danish ] = "Niveau ned" ;
@@ -755,7 +755,7 @@ Window DLG_NAVIGATION_PI
                 Text = "Einfügen" ;
                 Text [ English ] = "Insert" ;
                 Text [ english_us ] = "Insert" ;
-                Text [ portuguese_brazilian ] = "Einfügen" ;
+                Text [ portuguese_brazilian ] = "Einf?en" ;
                 Text [ swedish ] = "Infoga" ;
                 Text [ danish ] = "Sæt ind" ;
                 Text [ italian ] = "Inserisci" ;
@@ -795,7 +795,7 @@ Window DLG_NAVIGATION_PI
                 Text [ dutch ] = "Inhoud opslaan" ;
                 Text [ portuguese ] = "Guardar também conteúdos" ;
                 Text[ russian ] = "Ñîõğàíèòü ñîäåğæèìîå";
-                Text[ polish ] = "Zapisz zawartoœæ";
+                Text[ polish ] = "Zapisz zawarto?æ";
                 Text[ japanese ] = "“à—e‚ğ•Û‘¶‚·‚é";
                 Text[ chinese_simplified ] = "´æÅÌÄÚÈİ";
                 Text[ chinese_traditional ] = "Àx¦s¤º®e";
@@ -828,7 +828,7 @@ Window DLG_NAVIGATION_PI
                 Text [ portuguese ] = "Mover para cima" ;
                 Text[ chinese_simplified ] = "ÏòÉÏÒÆ¶¯";
                 Text[ russian ] = "Ïåğåìåñòèòü ââåğõ";
-                Text[ polish ] = "Przenieœ w górê";
+                Text[ polish ] = "Przenie? w górê";
                 Text[ japanese ] = "ã•û‚ÖˆÚ“®";
                 Text[ chinese_traditional ] = "¦V¤W²¾°Ê";
                 Text[ arabic ] = "ÅÒÇÍÉ Åáì ÃÚáì";
@@ -856,7 +856,7 @@ Window DLG_NAVIGATION_PI
                 Text [ portuguese ] = "Mover para baixo" ;
                 Text[ chinese_simplified ] = "ÏòÏÂÒÆ¶¯";
                 Text[ russian ] = "Ïåğåìåñòèòü âíèç";
-                Text[ polish ] = "Przenieœ w dó³";
+                Text[ polish ] = "Przenie? w dó³";
                 Text[ japanese ] = "‰º•û‚ÖˆÚ“®";
                 Text[ chinese_traditional ] = "¦V¤U²¾°Ê";
                 Text[ arabic ] = "ÅÒÇÍÉ Åáì ÃÓİá";
@@ -994,7 +994,7 @@ Window DLG_NAVIGATION_PI
         Text = "Als Verknüpfung einfügen" ;
         Text [ English ] = "Insert as link" ;
         Text [ english_us ] = "Insert as Link" ;
-        Text [ portuguese_brazilian ] = "Verknüpfung" ;
+        Text [ portuguese_brazilian ] = "Verkn?fung" ;
         Text [ swedish ] = "Infoga som länk" ;
         Text [ danish ] = "Indsæt som kæde" ;
         Text [ italian ] = "Inserisci come collegamento" ;
@@ -1055,7 +1055,7 @@ Window DLG_NAVIGATION_PI
         Text [ portuguese ] = "Mostrar" ;
         Text[ chinese_simplified ] = "ÏÔÊ¾";
         Text[ russian ] = "Ïîêàçàòü";
-        Text[ polish ] = "Wyœwietlenie";
+        Text[ polish ] = "Wy?wietlenie";
         Text[ japanese ] = "•\\¦";
         Text[ chinese_traditional ] = "Åã¥Ü";
         Text[ arabic ] = "ÇáÚÑÖ";
@@ -1283,7 +1283,7 @@ Window DLG_NAVIGATION_PI
         Text[ danish ] = "Indeks";
         Text[ swedish ] = "~Förteckning";
         Text[ polish ] = "Indeks";
-        Text[ portuguese_brazilian ] = "Ín~ice";
+        Text[ portuguese_brazilian ] = "?n~ice";
         Text[ japanese ] = "–ÚŸ‚Æõˆø";
         Text[ korean ] = "»öÀÎ(~I)";
         Text[ chinese_simplified ] = "Ä¿Â¼(~I)";
@@ -1477,7 +1477,7 @@ Window DLG_NAVIGATION_PI
         Text = "Verknüpfungen" ;
         Text [ English ] = "Links" ;
         Text [ english_us ] = "Links" ;
-        Text [ portuguese_brazilian ] = "Verknüpfungen" ;
+        Text [ portuguese_brazilian ] = "Verkn?fungen" ;
         Text [ swedish ] = "Länkar" ;
         Text [ danish ] = "Kæder" ;
         Text [ italian ] = "Collegamenti" ;
