@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueconverter.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:49:23 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ unsigned makeHexNibble(unsigned char ch) CFG_THROW1 ( script::CannotConvertExcep
 
     else throwConversionError("Invalid Hex Character in binary value");
 
-    return nRet; // not reachable
+    return nRet;
 }
 
 // -----------------------------------------------------------------------------
