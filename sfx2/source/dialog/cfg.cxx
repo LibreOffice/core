@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:48:13 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,7 @@ SfxMenuConfigEntry::SfxMenuConfigEntry( USHORT nInitId, const String& rInitStr,
     , aHelpText(rHelpText)
     , aStr(rInitStr)
     , bConfigure( TRUE )
+    , bStrEdited( FALSE )
 {
     if ( SfxMacroConfig::IsMacroSlot( nId ) )
     {
@@ -182,6 +183,7 @@ SfxMenuConfigEntry::SfxMenuConfigEntry( USHORT nInitId, const String& rInitStr,
         SfxMacroInfo* pInfo = SFX_APP()->GetMacroConfig()->GetMacroInfo( nId );
         if ( pInfo )
             aCommand = pInfo->GetURL();
+        bStrEdited = TRUE;
     }
 }
 
@@ -196,6 +198,7 @@ void SfxMenuConfigEntry::SetId( USHORT nNew )
         SfxMacroInfo* pInfo = SFX_APP()->GetMacroConfig()->GetMacroInfo( nId );
         if ( pInfo )
             aCommand = pInfo->GetURL();
+        bStrEdited = TRUE;
     }
     else
     {
