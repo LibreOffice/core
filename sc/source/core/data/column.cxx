@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 09:43:35 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #include "compiler.hxx"
 #include "brdcst.hxx"
 #include "markdata.hxx"
+#include "detfunc.hxx"          // for Notes in Sort/Swap
 
 //#pragma optimize ( "", off )
 //  nur Search ohne Optimierung!
@@ -984,6 +985,20 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
             pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED,
                 ScAddress( nCol, nRow2, nTab ), pNew ) );
         }
+        ScPostIt aCellNote(pDocument);
+        // Hide the visible note if doing a swap.
+        if(pCell1 && pCell1->GetNote(aCellNote) && aCellNote.IsShown())
+        {
+            ScDetectiveFunc( pDocument, nTab ).HideComment( nCol, nRow1 );
+            aCellNote.SetShown(FALSE);
+            pCell1->SetNote(aCellNote);
+        }
+        if(pCell2 && pCell2->GetNote(aCellNote) && aCellNote.IsShown())
+        {
+            ScDetectiveFunc( pDocument, nTab ).HideComment( nCol, nRow2 );
+            aCellNote.SetShown(FALSE);
+            pCell2->SetNote(aCellNote);
+        }
 
         return ;
     }
@@ -1035,6 +1050,14 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
         pBC1 = pCell1->GetBroadcaster();
         if ( pBC1 )
             pCell1->ForgetBroadcaster();
+        ScPostIt aCellNote(pDocument);
+        // Hide the visible note if doing a swap.
+        if(pCell1->GetNote(aCellNote) && aCellNote.IsShown())
+        {
+            ScDetectiveFunc( pDocument, nTab ).HideComment( nCol, nRow1 );
+            aCellNote.SetShown(FALSE);
+            pCell1->SetNote(aCellNote);
+        }
         if ( eType1 == CELLTYPE_FORMULA )
         {
             pNew2 = new ScFormulaCell( pDocument, ScAddress( nCol, nRow2, nTab ),
@@ -1056,6 +1079,14 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
         pBC2 = pCell2->GetBroadcaster();
         if ( pBC2 )
             pCell2->ForgetBroadcaster();
+        ScPostIt aCellNote(pDocument);
+        // Hide the visible note if doing a swap.
+        if(pCell2->GetNote(aCellNote) && aCellNote.IsShown())
+        {
+            ScDetectiveFunc( pDocument, nTab ).HideComment( nCol, nRow2 );
+            aCellNote.SetShown(FALSE);
+            pCell2->SetNote(aCellNote);
+        }
         if ( eType2 == CELLTYPE_FORMULA )
         {
             pNew1 = new ScFormulaCell( pDocument, ScAddress( nCol, nRow1, nTab ),
@@ -1121,6 +1152,20 @@ void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
         // Tauschen
         ScFormulaCell* pCell1 = (ScFormulaCell*) pItems[nIndex1].pCell;
         ScFormulaCell* pCell2 = (ScFormulaCell*) rCol.pItems[nIndex2].pCell;
+        ScPostIt aCellNote(pDocument);
+        // Hide the visible note if doing a swap.
+        if(pCell1->GetNote(aCellNote) && aCellNote.IsShown())
+        {
+            ScDetectiveFunc( pDocument, nTab ).HideComment( nCol, nRow );
+            aCellNote.SetShown(FALSE);
+            pCell1->SetNote(aCellNote);
+        }
+        if(pCell2->GetNote(aCellNote) && aCellNote.IsShown())
+        {
+            ScDetectiveFunc( pDocument, nTab ).HideComment( rCol.nCol, nRow );
+            aCellNote.SetShown(FALSE);
+            pCell2->SetNote(aCellNote);
+        }
         pItems[nIndex1].pCell = pCell2;
         rCol.pItems[nIndex2].pCell = pCell1;
         // Referenzen aktualisieren
@@ -1143,6 +1188,13 @@ void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
     else if (bFound1)
     {
         ScFormulaCell* pCell = (ScFormulaCell*) pItems[nIndex1].pCell;
+        ScPostIt aCellNote(pDocument);
+        if(pCell->GetNote(aCellNote) && aCellNote.IsShown())
+        {
+            ScDetectiveFunc( pDocument, nTab ).HideComment( nCol, nRow );
+            aCellNote.SetShown(FALSE);
+            pCell->SetNote(aCellNote);
+        }
         // Loeschen
         --nCount;
         memmove( &pItems[nIndex1], &pItems[nIndex1 + 1], (nCount - nIndex1) * sizeof(ColEntry) );
@@ -1163,6 +1215,13 @@ void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
     else if (bFound2)
     {
         ScFormulaCell* pCell = (ScFormulaCell*) rCol.pItems[nIndex2].pCell;
+        ScPostIt aCellNote(pDocument);
+        if(pCell->GetNote(aCellNote) && aCellNote.IsShown())
+        {
+            ScDetectiveFunc( pDocument, nTab ).HideComment( rCol.nCol, nRow );
+            aCellNote.SetShown(FALSE);
+            pCell->SetNote(aCellNote);
+        }
         // Loeschen
         --(rCol.nCount);
         memmove( &rCol.pItems[nIndex2], &rCol.pItems[nIndex2 + 1], (rCol.nCount - nIndex2) * sizeof(ColEntry) );
