@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-05 14:14:41 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 10:51:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     ,m_bModified(_bModified)
     ,m_pMatrix(NULL)
     ,m_pInsertMatrix(NULL)
+    ,m_pCacheSet(NULL)
 {
     // check if all keys of the updateable table are fetched
     sal_Bool bAllKeysFound = sal_False;
@@ -1806,6 +1807,9 @@ void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRo
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.29  2001/04/05 14:14:41  oj
+    #85788# absolut(-1) is last record
+
     Revision 1.28  2001/04/05 07:51:27  oj
     #85735# insert more exceptions when using in wrong order
 
