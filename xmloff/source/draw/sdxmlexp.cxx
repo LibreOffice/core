@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:34:20 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 10:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1775,7 +1775,7 @@ void SdXMLExport::ImpWriteHeaderFooterDecls()
             sBuffer.append( nIndex );
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_NAME, sBuffer.makeStringAndClear());
 
-            SvXMLElementExport aElem(*this, XML_NAMESPACE_PRESENTATION, XML_FOOTER_DECL, sal_True, sal_True);
+            SvXMLElementExport aElem(*this, XML_NAMESPACE_PRESENTATION, XML_FOOTER_DECL, sal_False, sal_False);
             Characters((*aIter));
         }
     }
@@ -1799,7 +1799,7 @@ void SdXMLExport::ImpWriteHeaderFooterDecls()
             if( !rDecl.mbFixed )
                 AddAttribute( XML_NAMESPACE_STYLE, XML_DATA_STYLE_NAME, getDataStyleName( rDecl.mnFormat ) );
 
-            SvXMLElementExport aElem(*this, XML_NAMESPACE_PRESENTATION, XML_DATE_TIME_DECL, sal_True, sal_True);
+            SvXMLElementExport aElem(*this, XML_NAMESPACE_PRESENTATION, XML_DATE_TIME_DECL, sal_False, sal_False);
             if( rDecl.mbFixed )
                 Characters(rDecl.maStrText);
         }
