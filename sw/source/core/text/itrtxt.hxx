@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-04 12:26:57 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,6 +349,7 @@ class SwHookOut
 {
     SwTxtSizeInfo* pInf;
     OutputDevice* pOut;
+    sal_Bool bOnWin;
 public:
     SwHookOut( SwTxtSizeInfo& rInfo );
     ~SwHookOut();
