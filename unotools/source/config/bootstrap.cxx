@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-08-02 10:30:29 $
+ *  last change: $Author: jb $ $Date: 2001-08-06 16:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,12 +452,12 @@ static void describeError(OUStringBuffer& _rBuf, Bootstrap::Impl const& _rData)
             switch (_rData.aBootstrapINI_.status)
             {
             case Bootstrap::PATH_EXISTS:
-                addFileError(_rBuf, _rData.aVersionINI_.path, "is corrupt");
+                addFileError(_rBuf, _rData.aBootstrapINI_.path, "is corrupt");
                 break;
 
             case Bootstrap::DATA_INVALID: OSL_ASSERT(false);
             case Bootstrap::PATH_VALID:
-                addFileError(_rBuf, _rData.aVersionINI_.path, "is missing");
+                addFileError(_rBuf, _rData.aBootstrapINI_.path, "is missing");
                 break;
 
             default:
@@ -474,30 +474,6 @@ static void describeError(OUStringBuffer& _rBuf, Bootstrap::Impl const& _rData)
     }
 }
 // ---------------------------------------------------------------------------------------
-
-static void describeResolution(OUStringBuffer& _rBuf, Bootstrap::Impl const& _rData)
-{
-    OUString aProductName = _rData.getBootstrapValue( BOOTSTRAP_ITEM_PRODUCT_KEY,_rData.sExename_);
-
-    _rBuf.appendAscii("Please start ").append(aProductName).appendAscii(" setup");
-    switch (_rData.status_)
-    {
-    case Bootstrap::MISSING_USER_INSTALL:
-        _rBuf.appendAscii(" from ").append(_rData.aBaseInstall_.path);
-        _rBuf.appendAscii(" to complete the installation. ");
-        break;
-
-    case Bootstrap::INVALID_BASE_INSTALL:
-    case Bootstrap::INVALID_USER_INSTALL:
-        _rBuf.appendAscii(" and choose the Repair option to solve the problem. ");
-        break;
-
-    default: OSL_ASSERT(false);
-    case Bootstrap::DATA_OK: // what happened ?
-        _rBuf.appendAscii(" to repair or reinstall the product. ");
-    }
-}
-
 // ---------------------------------------------------------------------------------------
 // class Bootstrap
 // ---------------------------------------------------------------------------------------
@@ -593,7 +569,6 @@ Bootstrap::Status Bootstrap::checkBootstrapStatus(OUString& _rDiagnosticMessage)
     if (result != DATA_OK)
     {
         describeError(sErrorBuffer,aData);
-        describeResolution(sErrorBuffer,aData);
     }
     _rDiagnosticMessage = sErrorBuffer.makeStringAndClear();
 
