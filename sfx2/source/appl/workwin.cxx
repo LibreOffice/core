@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-26 13:31:23 $
+ *  last change: $Author: mba $ $Date: 2001-05-21 12:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2903,12 +2903,15 @@ BOOL SfxWorkWindow::ActivateNextChild_Impl( BOOL bForward )
         }
     }
 
+    if ( aList.Count() == 0 )
+        return FALSE;
+
     // Wenn der Focus in der Task liegt, ist pActiveChild zu ignorieren
     SfxFrame *pTask = SfxViewFrame::Current()->GetFrame();
     BOOL bTaskActive = pTask->GetWindow().HasChildPathFocus();
 
     // F"ur das Taskfenster einen Dummy-Eintrag in die Liste
-    USHORT nDummy =0xFFFF;
+//    USHORT nDummy =0xFFFF;
     USHORT nTopValue  = ChildTravelValue( SFX_ALIGN_LOWESTTOP );
     for ( i=0; i<aList.Count(); i++ )
     {
@@ -2917,7 +2920,7 @@ BOOL SfxWorkWindow::ActivateNextChild_Impl( BOOL bForward )
             break;
     }
 
-    aList.Insert( nDummy, i );
+//    aList.Insert( nDummy, i );
 
     USHORT n = bForward ? 0 : aList.Count()-1;
     if ( bTaskActive )
@@ -2929,8 +2932,8 @@ BOOL SfxWorkWindow::ActivateNextChild_Impl( BOOL bForward )
         // Das aktive Fenster suchen
         for ( n=0; n<aList.Count(); n++ )
         {
-            if ( aList[n] == nDummy )
-                continue;
+//            if ( aList[n] == nDummy )
+//                continue;
 
             SfxChild_Impl* pCli = (*pChilds)[aList[n]];
             if ( pCli && pCli->pWin && ( pCli->pWin == pActiveChild || !pActiveChild ) )
@@ -2966,6 +2969,7 @@ BOOL SfxWorkWindow::ActivateNextChild_Impl( BOOL bForward )
     USHORT nStart = n;
     for( ;; )
     {
+/*
         if ( aList[n] == nDummy )
         {
             // Das n"achste Fenster ist das Taskfenster
@@ -2976,6 +2980,7 @@ BOOL SfxWorkWindow::ActivateNextChild_Impl( BOOL bForward )
                 return TRUE;
         }
         else
+ */
         {
             SfxChild_Impl* pCli = (*pChilds)[aList[n]];
             if ( pCli == pAct )
