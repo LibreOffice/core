@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-19 12:39:46 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 08:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ UnoDataBrowserView::UnoDataBrowserView(Window* pParent, const Reference< ::com::
     ,m_pVclControl(NULL)
     ,m_pSplitter(NULL)
     ,m_pTreeView(NULL)
+    ,m_pStatus(NULL)
 {
 }
 // -------------------------------------------------------------------------
@@ -195,6 +196,33 @@ void UnoDataBrowserView::setTreeView(DBTreeView* _pTreeView)
     }
 }
 // -------------------------------------------------------------------------
+void UnoDataBrowserView::showStatus( String& _rStatus )
+{
+    if (0 == _rStatus.Len())
+        hideStatus();
+    else
+    {
+        if (!m_pStatus)
+            m_pStatus = new FixedText(this);
+        m_pStatus->SetText(_rStatus);
+        m_pStatus->Show();
+        Resize();
+        Update();
+    }
+}
+
+// -------------------------------------------------------------------------
+void UnoDataBrowserView::hideStatus()
+{
+    if (!m_pStatus || !m_pStatus->IsVisible())
+        // nothing to do
+        return;
+    m_pStatus->Hide();
+    Resize();
+    Update();
+}
+
+// -------------------------------------------------------------------------
 void UnoDataBrowserView::resizeControl(Rectangle& _rRect)
 {
     Point   aSplitPos(0,0);
@@ -211,7 +239,6 @@ void UnoDataBrowserView::resizeControl(Rectangle& _rRect)
 
     if (m_pTreeView && m_pTreeView->IsVisible() && m_pSplitter)
     {
-
         aSplitPos   = m_pSplitter->GetPosPixel();
         aSplitPos.Y() = aToolBoxSize.Height();
         aSplitSize  = m_pSplitter->GetOutputSizePixel();
@@ -223,9 +250,23 @@ void UnoDataBrowserView::resizeControl(Rectangle& _rRect)
         if( aSplitPos.X() <= 0)
             aSplitPos.X() = LogicToPixel( Size(sal_Int32(aNewSize.Width() * 0.2), 0 ), MAP_APPFONT ).Width();
 
+        Point   aTreeViewPos( 0, aToolBoxSize.Height() );
+        Size    aTreeViewSize( aSplitPos.X(), aNewSize.Height() - aToolBoxSize.Height() );
+
+        if (m_pStatus && m_pStatus->IsVisible())
+        {
+            Size aStatusSize(0, GetTextHeight() + 2);
+            aStatusSize = LogicToPixel(aStatusSize, MAP_APPFONT);
+            aStatusSize.Width() = aTreeViewSize.Width() - 2 - 2;
+
+            Point aStatusPos( 2, aTreeViewPos.Y() + aTreeViewSize.Height() - aStatusSize.Height() );
+            m_pStatus->SetPosSizePixel( aStatusPos, aStatusSize );
+            aTreeViewSize.Height() -= aStatusSize.Height();
+        }
+
         // set the size of treelistbox
-        m_pTreeView->SetPosSizePixel(   Point( 0, aToolBoxSize.Height() ),
-                                        Size( aSplitPos.X(), aNewSize.Height() - aToolBoxSize.Height() ) );
+        m_pTreeView->SetPosSizePixel( aTreeViewPos, aTreeViewSize );
+
         //set the size of the splitter
         m_pSplitter->SetPosSizePixel( aSplitPos, Size( aSplitSize.Width(), aNewSize.Height() - aToolBoxSize.Height() ) );
         m_pSplitter->SetDragRectPixel(  Rectangle( Point( 0, aToolBoxSize.Height() ),
