@@ -1,0 +1,803 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dapitype.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "sc.hrc"
+#include "dapitype.hrc"
+
+
+ModalDialog RID_SCDLG_DAPITYPE
+{
+    OutputSize = TRUE ;
+    HelpId = HID_DATAPILOT_TYPE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 191 , 75 ) ;
+    Text = "Quelle auswählen" ;
+    Text [ ENGLISH ] = "Select source" ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 135 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 135 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 135 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    RadioButton BTN_SELECTION
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 114 , 10 ) ;
+        Text = "~Aktuelle Selektion" ;
+        Text [ ENGLISH ] = "Current selection" ;
+        TabStop = TRUE ;
+        Text[ english_us ] = "~Current selection";
+        Text[ portuguese ] = "Selecção ~activa";
+        Text[ russian ] = "~Òåêóùåå âûäåëåíèå";
+        Text[ greek ] = "Ôñİ÷ïõóá åğéëïãŞ";
+        Text[ dutch ] = "~Actuele selectie";
+        Text[ french ] = "Sélection ~active";
+        Text[ spanish ] = "Selección a~ctual";
+        Text[ italian ] = "Selezione ~attuale";
+        Text[ danish ] = "Aktuel markering";
+        Text[ swedish ] = "Aktuell markering";
+        Text[ polish ] = "~Aktualna selekcja";
+        Text[ portuguese_brazilian ] = "Current selection";
+        Text[ japanese ] = "Œ»İ‚Ì‘I‘ğ(~C)";
+        Text[ korean ] = "ÇöÀç ¼±ÅÃ(~C)";
+        Text[ chinese_simplified ] = "µ±Ç°µÄÑ¡Ôñ(~C)";
+        Text[ chinese_traditional ] = "·í«eªº¿ï¤¤(~C)";
+        Text[ arabic ] = "ÇáÊÍÏíÏ ÇáÍÇáí";
+        Text[ turkish ] = "~Yürürlükteki seçim";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton BTN_DATABASE
+    {
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 114 , 10 ) ;
+        Text = "~In StarOffice angemeldete Datenquelle" ;
+        Text [ ENGLISH ] = "Database source" ;
+        TabStop = TRUE ;
+        Text[ english_us ] = "~Data source registered in StarOffice";
+        Text[ portuguese ] = "~Fonte de dados ligada ao StarOffice";
+        Text[ russian ] = "~Èñòî÷íèê äàííûõ, çàğåã. â StarOffice";
+        Text[ greek ] = "Óôï StarOffice äçëùìİíï áñ÷åßï ğñïİëåõóçò äåäïìİíùí";
+        Text[ dutch ] = "~In StarOffice aangemelde gegevensbron";
+        Text[ french ] = "Source de données sous StarOffice";
+        Text[ spanish ] = "F~uente de datos registrada en StarOffice";
+        Text[ italian ] = "Sorgente dati registrata ~in StarOffice";
+        Text[ danish ] = "Datakilde som er registreret i StarOffice";
+        Text[ swedish ] = "Datakälla som är registrerad i StarOffice";
+        Text[ polish ] = "Zarejestr. ~w StarOffice Ÿród³o danych";
+        Text[ portuguese_brazilian ] = "Database source";
+        Text[ japanese ] = "StarOffice‚É“o˜^‚³‚ê‚½ÃŞ°À¿°½(~I)";
+        Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ¼Ò½º(~D)";
+        Text[ chinese_simplified ] = "ÔÚ StarOffice ÖĞµÇ¼ÇµÄÊı¾İÔ´(~I)";
+        Text[ chinese_traditional ] = "StarOffice ¤w¸gµn°Oªº¼ÆÕu·½(~I)";
+        Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ ÇáãÓÌá İí StarOffice";
+        Text[ turkish ] = "~StarOffice'de kayıtlı veri kaynağı";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton BTN_EXTERNAL
+    {
+        Pos = MAP_APPFONT ( 12 , 40 ) ;
+        Size = MAP_APPFONT ( 114 , 10 ) ;
+        Text = "~Externe Quelle/Schnittstelle" ;
+        Text [ ENGLISH ] = "External source/interface" ;
+        TabStop = TRUE ;
+        Text[ english_us ] = "~External source/interface";
+        Text[ portuguese ] = "F~onte externa/interface";
+        Text[ russian ] = "~Âíåøíèé èñòî÷íèê/èíòåğôåéñ";
+        Text[ greek ] = "Åîùôåñéêü áñ÷åßï ğñïİëåõóçò/Äéáóıíäåóç";
+        Text[ dutch ] = "~Externe bron/interface";
+        Text[ french ] = "Source/interface ~externe";
+        Text[ spanish ] = "~Fuente externa/Interfaz";
+        Text[ italian ] = "Sorgente ~esterna/interfaccia";
+        Text[ danish ] = "Ekstern kilde/grænseflade";
+        Text[ swedish ] = "Extern källa/gränssnitt";
+        Text[ polish ] = "~Zewnêtrzne(y) Ÿród³o/interfejs";
+        Text[ portuguese_brazilian ] = "External source/interface";
+        Text[ japanese ] = "ŠO•”¿°½/²İÀ°Ìª²½(~E)";
+        Text[ korean ] = "¿ÜºÎ ¼Ò½º/ÀÎÅÍ ÆäÀÌ½º(~E)";
+        Text[ chinese_simplified ] = "Íâ²¿Ô´/½çÃæ(~E)";
+        Text[ chinese_traditional ] = "¥~¨Ó¼ÆÕu·½/¬É­±";
+        Text[ arabic ] = "ãÕÏÑ ÎÇÑÌí/æÇÌåÉ ÎÇÑÌíÉ";
+        Text[ turkish ] = "~Dış kaynak/arabirim";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_FRAME
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 123 , 69 ) ;
+        Text = "Auswahl" ;
+        Text [ ENGLISH ] = "Select" ;
+        Text[ english_us ] = "Selection";
+        Text[ portuguese ] = "Selecção";
+        Text[ russian ] = "Âûáîğ";
+        Text[ greek ] = "ÅğéëïãŞ";
+        Text[ dutch ] = "Selectie";
+        Text[ french ] = "Sélection";
+        Text[ spanish ] = "Selección";
+        Text[ italian ] = "Selezione";
+        Text[ danish ] = "Udvalg";
+        Text[ swedish ] = "Urval";
+        Text[ polish ] = "Wybór";
+        Text[ portuguese_brazilian ] = "Select";
+        Text[ japanese ] = "‘I‘ğ";
+        Text[ korean ] = "¼±ÅÃ";
+        Text[ chinese_simplified ] = "Ñ¡Ôñ";
+        Text[ chinese_traditional ] = "¿ï¾Ü";
+        Text[ arabic ] = "ÊÍÏíÏ";
+        Text[ turkish ] = "Seçim";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ english_us ] = "Select Source";
+    Text[ portuguese ] = "Seleccionar fonte";
+    Text[ russian ] = "Âûáîğ èñòî÷íèêà";
+    Text[ greek ] = "ÅğéëïãŞ ğñïİëåõóçò";
+    Text[ dutch ] = "Bron selecteren";
+    Text[ french ] = "Sélection de la source";
+    Text[ spanish ] = "Seleccionar fuente";
+    Text[ italian ] = "Seleziona sorgente";
+    Text[ danish ] = "Vælg kilde";
+    Text[ swedish ] = "Välj ut källa";
+    Text[ polish ] = "Wybierz Ÿród³o";
+    Text[ portuguese_brazilian ] = "Select source";
+    Text[ japanese ] = "¿°½‚Ì‘I‘ğ";
+    Text[ korean ] = "¼Ò½º ¼±ÅÃ";
+    Text[ chinese_simplified ] = "Ñ¡ÔñÔ´";
+    Text[ chinese_traditional ] = "¿ï¾Ü¼ÆÕu·½";
+    Text[ arabic ] = "ÊÍÏíÏ ãÕÏÑ";
+    Text[ turkish ] = "Kaynak seç";
+    Text[ language_user1 ] = " ";
+};
+
+
+//------------------------------------------------------------------------
+
+
+ModalDialog RID_SCDLG_DAPISERVICE
+{
+    OutputSize = TRUE ;
+    HelpId = HID_DATAPILOT_SERVICE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 241 , 95 ) ;
+    Text = "Externe Datenquelle" ;
+    Text [ ENGLISH ] = "External source" ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 185 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 185 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 185 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_SERVICE
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "~Service" ;
+        Text [ ENGLISH ] = "Service" ;
+        Text[ english_us ] = "~Service";
+        Text[ portuguese ] = "~Serviço";
+        Text[ russian ] = "Ñåğâèñ";
+        Text[ greek ] = "Õğçñåóßá";
+        Text[ dutch ] = "~Service";
+        Text[ french ] = "~Service";
+        Text[ spanish ] = "~Servicio";
+        Text[ italian ] = "~Servizio";
+        Text[ danish ] = "Service";
+        Text[ swedish ] = "Service";
+        Text[ polish ] = "Serwis";
+        Text[ portuguese_brazilian ] = "Service";
+        Text[ japanese ] = "»°ËŞ½(~S)";
+        Text[ korean ] = "¼­ºñ½º(~S)";
+        Text[ chinese_simplified ] = "·şÎñ(~S)";
+        Text[ chinese_traditional ] = "¦øªA(~S)";
+        Text[ arabic ] = "ÎÏãÉ";
+        Text[ turkish ] = "~Hizmet";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_SERVICE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 55 , 12 ) ;
+        Size = MAP_APPFONT ( 116 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_SOURCE
+    {
+        Pos = MAP_APPFONT ( 12 , 29 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "~Quelle" ;
+        Text [ ENGLISH ] = "Source" ;
+        Text[ english_us ] = "So~urce";
+        Text[ portuguese ] = "~Fonte";
+        Text[ russian ] = "Èñòî÷íèê";
+        Text[ greek ] = "Ğñïİëåõóç";
+        Text[ dutch ] = "~Bron";
+        Text[ french ] = "~Source";
+        Text[ spanish ] = "~Fuente";
+        Text[ italian ] = "Sorgente";
+        Text[ danish ] = "Kilde";
+        Text[ swedish ] = "Källa";
+        Text[ polish ] = "ród³o";
+        Text[ portuguese_brazilian ] = "Source";
+        Text[ japanese ] = "¿°½(~U)";
+        Text[ korean ] = "¼Ò½º(~U)";
+        Text[ chinese_simplified ] = "Ô´(~U)";
+        Text[ chinese_traditional ] = "¼ÆÕu·½(~U)";
+        Text[ arabic ] = "ÇáãÕÏÑ";
+        Text[ turkish ] = "~Kaynak";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_SOURCE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 55 , 28 ) ;
+        Size = MAP_APPFONT ( 116 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "~Name" ;
+        Text [ ENGLISH ] = "Name" ;
+        Text[ english_us ] = "~Name";
+        Text[ portuguese ] = "~Nome";
+        Text[ russian ] = "Èìÿ";
+        Text[ greek ] = "¼íïìá";
+        Text[ dutch ] = "~Naam";
+        Text[ french ] = "~Nom";
+        Text[ spanish ] = "~Nombre";
+        Text[ italian ] = "~Nome";
+        Text[ danish ] = "Navn";
+        Text[ swedish ] = "Namn";
+        Text[ polish ] = "Nazwa";
+        Text[ portuguese_brazilian ] = "Name";
+        Text[ japanese ] = "–¼‘O(~N)";
+        Text[ korean ] = "ÀÌ¸§(~N)";
+        Text[ chinese_simplified ] = "Ãû³Æ(~N)";
+        Text[ chinese_traditional ] = "¦WºÙ(~N)";
+        Text[ arabic ] = "ÇáÇÓã";
+        Text[ turkish ] = "~Ad";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_NAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 55 , 43 ) ;
+        Size = MAP_APPFONT ( 116 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_USER
+    {
+        Pos = MAP_APPFONT ( 12 , 59 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "~Benutzer" ;
+        Text [ ENGLISH ] = "User" ;
+        Text[ english_us ] = "Us~er";
+        Text[ portuguese ] = "~Utilizador";
+        Text[ russian ] = "Ïîëüçîâàòåëü";
+        Text[ greek ] = "×ñŞóôçò";
+        Text[ dutch ] = "~Gebruiker";
+        Text[ french ] = "~Utilisateur";
+        Text[ spanish ] = "Usuar~io";
+        Text[ italian ] = "Utente";
+        Text[ danish ] = "Bruger";
+        Text[ swedish ] = "Användare";
+        Text[ polish ] = "U¿ytkownik";
+        Text[ portuguese_brazilian ] = "User";
+        Text[ japanese ] = "Õ°»Ş°(~E)";
+        Text[ korean ] = "»ç¿ëÀÚ(~E)";
+        Text[ chinese_simplified ] = "Ê¹ÓÃÕß(~E)";
+        Text[ chinese_traditional ] = "¨Ï¥ÎªÌ(~E)";
+        Text[ arabic ] = "ÇáãÓÊÎÏã";
+        Text[ turkish ] = "~Kullanıcı";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_USER
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 55 , 58 ) ;
+        Size = MAP_APPFONT ( 116 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_PASSWD
+    {
+        Pos = MAP_APPFONT ( 12 , 74 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "~Kennwort" ;
+        Text [ ENGLISH ] = "Password" ;
+        Text[ english_us ] = "~Password";
+        Text[ portuguese ] = "~Senha";
+        Text[ russian ] = "Ïàğîëü";
+        Text[ greek ] = "Êùäéêüò ğñüóâáóçò";
+        Text[ dutch ] = "~Wachtwoord";
+        Text[ french ] = "~Mot de passe";
+        Text[ spanish ] = "~Contraseña";
+        Text[ italian ] = "Password";
+        Text[ danish ] = "Adgangskode";
+        Text[ swedish ] = "Lösenord";
+        Text[ polish ] = "Has³o";
+        Text[ portuguese_brazilian ] = "Password";
+        Text[ japanese ] = "Êß½Ü°ÄŞ(~P)";
+        Text[ korean ] = "ÆĞ½º¿öµå(~P)";
+        Text[ chinese_simplified ] = "¿ÚÁî(~P)";
+        Text[ chinese_traditional ] = "±K½X(~P)";
+        Text[ arabic ] = "ßáãÉ ÇáÓÑ";
+        Text[ turkish ] = "~Şifre";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_PASSWD
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 55 , 73 ) ;
+        Size = MAP_APPFONT ( 116 , 12 ) ;
+        TabStop = TRUE ;
+        PassWord = TRUE ;
+    };
+    GroupBox GB_FRAME
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 173 , 89 ) ;
+        Text = "Auswahl" ;
+        Text [ ENGLISH ] = "Select" ;
+        Text[ english_us ] = "Selection";
+        Text[ portuguese ] = "Selecção";
+        Text[ russian ] = "Âûáîğ";
+        Text[ greek ] = "ÅğéëïãŞ";
+        Text[ dutch ] = "Selectie";
+        Text[ french ] = "Sélection";
+        Text[ spanish ] = "Selección";
+        Text[ italian ] = "Selezione";
+        Text[ danish ] = "Udvalg";
+        Text[ swedish ] = "Urval";
+        Text[ polish ] = "Wybór";
+        Text[ portuguese_brazilian ] = "Select";
+        Text[ japanese ] = "‘I‘ğ";
+        Text[ korean ] = "¼±ÅÃ";
+        Text[ chinese_simplified ] = "Ñ¡Ôñ";
+        Text[ chinese_traditional ] = "¿ï¾Ü";
+        Text[ arabic ] = "ÊÍÏíÏ";
+        Text[ turkish ] = "Seçim";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ english_us ] = "External Source";
+    Text[ portuguese ] = "Fonte de dados externa";
+    Text[ russian ] = "Âíåøíèé èñòî÷íèê äàííûõ";
+    Text[ greek ] = "Åîùôåñéêü áñ÷åßï ğñïİëåõóçò";
+    Text[ dutch ] = "Externe bron";
+    Text[ french ] = "Source de données externe";
+    Text[ spanish ] = "Fuente de datos externa";
+    Text[ italian ] = "Sorgente dati esterna";
+    Text[ danish ] = "Ekstern datakilde";
+    Text[ swedish ] = "Extern datakälla";
+    Text[ polish ] = "Zewnêtrzne Ÿród³o danych";
+    Text[ portuguese_brazilian ] = "External source";
+    Text[ japanese ] = "ŠO•”ÃŞ°À¿°½";
+    Text[ korean ] = "¿ÜºÎ ¼Ò½º";
+    Text[ chinese_simplified ] = "Íâ²¿Êı¾İÔ´";
+    Text[ chinese_traditional ] = "¥~¨Ó¼ÆÕu·½";
+    Text[ arabic ] = "ãÕÏÑ ÈíÇäÇÊ ÎÇÑÌí";
+    Text[ turkish ] = "Dış veri kaynağı";
+    Text[ language_user1 ] = " ";
+};
+
+
+//------------------------------------------------------------------------
+
+
+ModalDialog RID_SCDLG_DAPIDATA
+{
+    OutputSize = TRUE ;
+    HelpId = HID_DATAPILOT_DATABASE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 241 , 75 ) ;
+    Text = "Datenquelle auswählen" ;
+    Text [ ENGLISH ] = "Select data source" ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 185 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 185 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 185 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+
+    FixedText FT_DATABASE
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "~Datenbank" ;
+        Text [ ENGLISH ] = "Database" ;
+        Text[ english_us ] = "~Database";
+        Text[ portuguese ] = "~Base de dados";
+        Text[ russian ] = "Áàçà äàííûõ";
+        Text[ greek ] = "ÂÜóç äåäïìİíùí";
+        Text[ dutch ] = "~Database";
+        Text[ french ] = "~Base de données";
+        Text[ spanish ] = "~Base de datos";
+        Text[ italian ] = "~Database";
+        Text[ danish ] = "Database";
+        Text[ swedish ] = "Databas";
+        Text[ polish ] = "Baza danych";
+        Text[ portuguese_brazilian ] = "Database";
+        Text[ japanese ] = "ÃŞ°ÀÍŞ°½(~D)";
+        Text[ korean ] = "µ¥ÀÌÅÍ º£ÀÌ½º(~D)";
+        Text[ chinese_simplified ] = "Êı¾İ¿â(~D)";
+        Text[ chinese_traditional ] = "¸ê®Æ®w(~D)";
+        Text[ arabic ] = "ŞÇÚÏÉ ÈíÇäÇÊ";
+        Text[ turkish ] = "~Veritabanı";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_DATABASE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 55 , 12 ) ;
+        Size = MAP_APPFONT ( 116 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+
+    FixedText FT_OBJECT
+    {
+        Pos = MAP_APPFONT ( 12 , 29 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "Daten~quelle" ;
+        Text [ ENGLISH ] = "Data source" ;
+        Text[ english_us ] = "Data so~urce";
+        Text[ portuguese ] = "Fonte de ~dados";
+        Text[ russian ] = "Èñòî÷íèê äàííûõ";
+        Text[ greek ] = "Ğñïİëåõóç äåäïìİíùí";
+        Text[ dutch ] = "~Gegevensbron";
+        Text[ french ] = "~Source de données";
+        Text[ spanish ] = "Fuente de d~atos";
+        Text[ italian ] = "Sorgente dati";
+        Text[ danish ] = "Datakilde";
+        Text[ swedish ] = "Datakälla";
+        Text[ polish ] = "ród³o danych";
+        Text[ portuguese_brazilian ] = "Data source";
+        Text[ japanese ] = "ÃŞ°À¿°½(~U)";
+        Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º(~U)";
+        Text[ chinese_simplified ] = "Êı¾İÔ´(~U)";
+        Text[ chinese_traditional ] = "¼ÆÕu·½(~U)";
+        Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ";
+        Text[ turkish ] = "Veri ka~ynağı";
+        Text[ language_user1 ] = " ";
+    };
+    ComboBox CB_OBJECT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 55 , 27 ) ;
+        Size = MAP_APPFONT ( 116 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+
+    FixedText FT_OBJTYPE
+    {
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "~Art" ;
+        Text [ ENGLISH ] = "Type" ;
+        Text[ english_us ] = "~Type";
+        Text[ portuguese ] = "~Tipo";
+        Text[ russian ] = "Òèï";
+        Text[ greek ] = "Ôığïò";
+        Text[ dutch ] = "~Type";
+        Text[ french ] = "~Type";
+        Text[ spanish ] = "~Tipo";
+        Text[ italian ] = "Tipo";
+        Text[ danish ] = "Type";
+        Text[ swedish ] = "Typ";
+        Text[ polish ] = "Typ";
+        Text[ portuguese_brazilian ] = "Type";
+        Text[ japanese ] = "À²Ìß(~T)";
+        Text[ korean ] = "Å¸ÀÔ(~T)";
+        Text[ chinese_simplified ] = "ÀàĞÍ(~T)";
+        Text[ chinese_traditional ] = "Ãş«¬(~T)";
+        Text[ arabic ] = "ÇáäæÚ";
+        Text[ turkish ] = "~Tür";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_OBJTYPE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 55 , 42 ) ;
+        Size = MAP_APPFONT ( 116 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Tabelle" ; Default ; > ;
+            < "Abfrage" ; Default ; > ;
+            < "Sql" ; Default ; > ;
+            < "Sql [Native]" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Table" ; Default ; > ;
+            < "Query" ; Default ; > ;
+            < "Sql" ; Default ; > ;
+            < "Sql [Native]" ; Default ; > ;
+        };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+    };
+    StringList [ english_us ] =
+    {
+            < "Sheet" ; Default ; > ;
+        < "Query" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [Native]" ; Default ; > ;
+    };
+    StringList [ portuguese ] =
+    {
+            < "Tabela" ; Default ; > ;
+        < "Consulta" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [Native]" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "Òàáëèöà" ; Default ; > ;
+        < "Çàïğîñ" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [Native]" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "Ğßíáêáò" ; Default ; > ;
+        < "Åñşôçìá" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [Native]" ; Default ; > ;
+    };
+    StringList [ dutch ] =
+    {
+            < "Werkblad" ; Default ; > ;
+        < "Query" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [Native]" ; Default ; > ;
+    };
+    StringList [ french ] =
+    {
+            < "Table" ; Default ; > ;
+        < "Requête" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [natif]" ; Default ; > ;
+    };
+    StringList [ spanish ] =
+    {
+            < "Tabla" ; Default ; > ;
+        < "Consulta" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [Native]" ; Default ; > ;
+    };
+    StringList [ italian ] =
+    {
+            < "Tabella" ; Default ; > ;
+        < "Ricerca" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [native]" ; Default ; > ;
+    };
+    StringList [ danish ] =
+    {
+            < "Tabel" ; Default ; > ;
+        < "Forespørgsel" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [native]" ; Default ; > ;
+    };
+    StringList [ swedish ] =
+    {
+            < "Tabell" ; Default ; > ;
+        < "Sökning" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [Native]" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Tabela" ; Default ; > ;
+        < "Kwerenda" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [Native]" ; Default ; > ;
+    };
+    StringList [ portuguese_brazilian ] =
+    {
+            < "Tabelle" ; Default ; > ;
+        < "Abfrage" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [Native]" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "Ã°ÌŞÙ" ; Default ; > ;
+        < "¸´Ø°" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [Native]" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "½ÃÆ®" ; Default ; > ;
+        < "ÁúÀÇ" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [Native]" ; Default ; > ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+            < "¹¤×÷±í" ; Default ; > ;
+        < "²éÑ¯" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [Native]" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "ªí®æ" ; Default ; > ;
+        < "¬d¸ß" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [Native]" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "ÇáÌÏæá" ; Default ; > ;
+        < "ÇÓÊİÓÇÑ" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [Native]" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "Tablo" ; Default ; > ;
+        < "Sorgu" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [Native]" ; Default ; > ;
+    };
+    };
+
+    GroupBox GB_FRAME
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 173 , 69 ) ;
+        Text = "Auswahl" ;
+        Text [ ENGLISH ] = "Select" ;
+        Text[ english_us ] = "Selection";
+        Text[ portuguese ] = "Selecção";
+        Text[ russian ] = "Âûáîğ";
+        Text[ greek ] = "ÅğéëïãŞ";
+        Text[ dutch ] = "Selectie";
+        Text[ french ] = "Sélection";
+        Text[ spanish ] = "Selección";
+        Text[ italian ] = "Selezione";
+        Text[ danish ] = "Udvalg";
+        Text[ swedish ] = "Urval";
+        Text[ polish ] = "Wybór";
+        Text[ portuguese_brazilian ] = "Select";
+        Text[ japanese ] = "‘I‘ğ";
+        Text[ korean ] = "¼±ÅÃ";
+        Text[ chinese_simplified ] = "Ñ¡Ôñ";
+        Text[ chinese_traditional ] = "¿ï¾Ü";
+        Text[ arabic ] = "ÊÍÏíÏ";
+        Text[ turkish ] = "Seçim";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ english_us ] = "Select Data Source";
+    Text[ portuguese ] = "Seleccionar fonte de dados";
+    Text[ russian ] = "Âûáğàòü èñòî÷íèê äàííûõ";
+    Text[ greek ] = "ÅğéëïãŞ ğñïİëåõóçò äåäïìİíùí";
+    Text[ dutch ] = "Gegevensbron selecteren";
+    Text[ french ] = "Sélection de la source de données";
+    Text[ spanish ] = "Seleccionar fuente de datos";
+    Text[ italian ] = "Seleziona sorgente dati";
+    Text[ danish ] = "Vælg datakilde";
+    Text[ swedish ] = "Välj ut datakälla";
+    Text[ polish ] = "Wybierz Ÿród³o danych";
+    Text[ portuguese_brazilian ] = "Select data source";
+    Text[ japanese ] = "ÃŞ°À¿°½‚Ì‘I‘ğ";
+    Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º ¼±ÅÃ";
+    Text[ chinese_simplified ] = "Ñ¡ÔñÊı¾İÔ´";
+    Text[ chinese_traditional ] = "¿ï¾Ü¼ÆÕu·½";
+    Text[ arabic ] = "ÊÍÏíÏ ãÕÏÑ ÇáÈíÇäÇÊ";
+    Text[ turkish ] = "Veri kaynağı seç";
+    Text[ language_user1 ] = " ";
+};
+
+

@@ -1,0 +1,952 @@
+/*************************************************************************
+ *
+ *  $RCSfile: subtdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:06 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "subtdlg.hrc"
+
+TabPage RID_SCPAGE_SUBT_OPTIONS
+{
+    HelpId = HID_SCPAGE_SUBT_OPTIONS ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 240 , 150 ) ;
+    Hide = TRUE ;
+    CheckBox BTN_PAGEBREAK
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 170 , 10 ) ;
+        Text = "Neue Seite bei Gru~ppenwechsel" ;
+        Text [ ENGLISH ] = "Pagebreak for each grou~p" ;
+        Text [ NORWEGIAN ] = "Sideskift for hver grupp~e" ;
+        Text [ DANISH ] = "Sideskift mellem grupper" ;
+        Text [ ENGLISH_US ] = "~Page break between groups" ;
+        Text [ SPANISH ] = "~Nueva página entre grupos" ;
+        Text [ FINNISH ] = "Sivunvaihto joka ~ryhmõssõ" ;
+        Text [ FRENCH ] = "Saut de page entre les grou~pes" ;
+        Text [ ITALIAN ] = "Interruzione di pagina ~per ogni cambio di gruppo" ;
+        Text [ DUTCH ] = "~Nieuwe pagina voor elke groep" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Quebra de pßgina para cada grup~o" ;
+        Text [ SWEDISH ] = "Sidbrytning för varje grupp" ;
+        Text [ PORTUGUESE ] = "Nova página para cada grupo" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "Ğ¡×éÖ®¼ä»»Ò³(~P)";
+        Text[ russian ] = "Ğàçğûâ ñòğàíèöû ìåæäó ãğóïïàìè";
+        Text[ polish ] = "Nowa strona przy podziale grup";
+        Text[ japanese ] = "¸ŞÙ°Ìß‚²‚Æ‚É‰üÍß°¼Ş(~P)";
+        Text[ chinese_traditional ] = "¸s²Õ¤§¶¡´«­¶(~P)";
+        Text[ arabic ] = "ÕİÍÉ ÌÏíÏÉ ÚäÏ ÊÛííÑ ÇáãÌãæÚÉ";
+        Text[ greek ] = "Íİá óåëßäá ìå êÜèå áëëáãŞ ïìÜäáò";
+        Text[ korean ] = "±×·ì »çÀÌ¿¡ ÆäÀÌÁö ³ª´©±â(~P)";
+        Text[ turkish ] = "~Her grup için yeni sayfa başlat";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox BTN_CASE
+    {
+        Pos = MAP_APPFONT ( 6 , 19 ) ;
+        Size = MAP_APPFONT ( 170 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Groß-/Kleinschreibung beachten : ~Gro˜-/Kleinschreibung beachten */
+        Text = "~Groß-/Kleinschreibung beachten" ;
+        Text [ ENGLISH ] = "~Case sensitive" ;
+        Text [ NORWEGIAN ] = "~Case sensitive" ;
+        Text [ DANISH ] = "Forskel på store og små bogstaver" ;
+        Text [ ENGLISH_US ] = "~Case sensitive" ;
+        Text [ SPANISH ] = "~Mayúsculas/minúsculas" ;
+        Text [ FINNISH ] = "~Kirjainkoko vaikuttaa" ;
+        Text [ FRENCH ] = "~Respecter la casse" ;
+        Text [ ITALIAN ] = "~Maiuscole/minuscole" ;
+        Text [ DUTCH ] = "~Hoofdletters/kleine letters belangrijk" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Sensİvel a mai sculas/min sculas" ;
+        Text [ SWEDISH ] = "Observera ~versaler/gemener" ;
+        Text [ PORTUGUESE ] = "~Maiúsculas/Minúsculas" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "Çø·Ö×ÖÄ¸´óĞ¡Ğ´(~C)";
+        Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ";
+        Text[ polish ] = "U~wzglêdnij du¿e i ma³e litery";
+        Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê(~C)";
+        Text[ chinese_traditional ] = "°Ï¤À¦r¥À¤j¤p¼g(~C)";
+        Text[ arabic ] = "ãÑÇÚÇÉ ÇáÃÍÑİ ÇáßÈíÑÉ/ÇáÕÛíÑÉ";
+        Text[ greek ] = "Óõìöùíßá ğåæşí-êåöáëáßùí";
+        Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºĞ(~C)";
+        Text[ turkish ] = "~Büyük/küçük harf duyarlı";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox BTN_SORT
+    {
+        Pos = MAP_APPFONT ( 6 , 32 ) ;
+        Size = MAP_APPFONT ( 170 , 10 ) ;
+        Text = "Bereich vorher nach Gruppen ~sortieren" ;
+        Text [ ENGLISH ] = "~Sort area" ;
+        Text [ NORWEGIAN ] = "~Sorter omrÕde" ;
+        Text [ DANISH ] = "Sorter området først efter grupper" ;
+        Text [ ENGLISH_US ] = "Pre-~sort area according to groups" ;
+        Text [ SPANISH ] = "Ordenar primero e~l área por grupos" ;
+        Text [ FINNISH ] = "~Lajittelualue" ;
+        Text [ FRENCH ] = "~Trier au préalable la plage selon les groupes" ;
+        Text [ ITALIAN ] = "Ordinare prima l'area a gruppi" ;
+        Text [ DUTCH ] = "~Bereik eerst op groepen sorteren" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Pre~classificar área de acordo com os grupos" ;
+        Text [ SWEDISH ] = "~Sortera området efter grupper först" ;
+        Text [ PORTUGUESE ] = "~Ordenar primeiro área de acordo com os grupos" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "ÇøÓòÏÈ°´ÕÕĞ¡×éÅÅĞò(~S)";
+        Text[ russian ] = "Ñîğòèğîâàòü îáëàñòü ñíà÷àëà ïî ãğóïïàì";
+        Text[ polish ] = "Przesortuj wczeœniej o~bszar wed³ug grup";
+        Text[ japanese ] = "”ÍˆÍ‚ğ‚ ‚ç‚©‚¶‚ß¸ŞÙ°Ìß•Ê‚É•À‚×‚é(~S)";
+        Text[ chinese_traditional ] = "°Ï°ì¥ı«ö·Ó¸s²Õ±Æ§Ç(~S)";
+        Text[ arabic ] = "İÑÒ ÇáäØÇŞ ŞÈá Ğáß ÍÓÈ ÇáãÌãæÚÇÊ";
+        Text[ greek ] = "Íá ãßíåé ğñéí ôáîéíüìç~óç ôçò ğåñéï÷Şò êáôÜ ïìÜäåò";
+        Text[ korean ] = "±×·ì¿¡ µû¶ó ¿µ¿ªÀ» ¹Ì¸® Á¤·Ä(~S)";
+        Text[ turkish ] = "Bölümü önce gruplara göre ~sırala";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox BTN_FORMATS
+    {
+        Pos = MAP_APPFONT ( 12 , 59 ) ;
+        Size = MAP_APPFONT ( 137 , 12 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Formate einschließen : ~Formate einschlie˜en */
+        Text = "~Formate einschließen" ;
+        Text [ ENGLISH ] = "Include ~formats" ;
+        Text [ NORWEGIAN ] = "Inkluder formater " ;
+        Text [ DANISH ] = "Inkluder formater" ;
+        Text [ ENGLISH_US ] = "I~nclude formats" ;
+        Text [ SPANISH ] = "~Incluir formatos" ;
+        Text [ FINNISH ] = "Sisõllytõ ~muodot" ;
+        Text [ FRENCH ] = "Inclure ~formats" ;
+        Text [ ITALIAN ] = "Includi ~formati" ;
+        Text [ DUTCH ] = "Op~maak opnemen" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Inserir ~formatos" ;
+        Text [ SWEDISH ] = "Inkludera ~format" ;
+        Text [ PORTUGUESE ] = "Incluir ~formatos" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "°üº¬¸ñÊ½(~F)";
+        Text[ russian ] = "Âêëş÷àòü ôîğìàòû";
+        Text[ polish ] = "Uwzglêdnij f~ormaty";
+        Text[ japanese ] = "‘®‚ğŠÜ‚Ş(~F)";
+        Text[ chinese_traditional ] = "¥]§t®æ¦¡(~F)";
+        Text[ arabic ] = "ÊÖãíä ÇáÊäÓíŞÇÊ";
+        Text[ greek ] = "Íá óõìğåñéëç~öèïıí ïé ìïñöİò";
+        Text[ korean ] = "¼­½Ä Æ÷ÇÔ(~N)";
+        Text[ turkish ] = "~Formatlamayı da dikkate al";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox BTN_USERDEF
+    {
+        Pos = MAP_APPFONT ( 12 , 72 ) ;
+        Size = MAP_APPFONT ( 130 , 12 ) ;
+        Text = "~Benutzerdefinierte Sortierreihenfolge" ;
+        Text [ ENGLISH ] = "~Userdefined sort precedence" ;
+        Text [ NORWEGIAN ] = "~Brukerdefinert sorteringsrekkef°lge " ;
+        Text [ DANISH ] = "Brugerdefineret sorteringsrækkefølge" ;
+        Text [ ENGLISH_US ] = "C~ustom sort order" ;
+        Text [ SPANISH ] = "~Orden de clasificación definido por el usuario" ;
+        Text [ FINNISH ] = "Mukautettu laj~ittelujõrjestys" ;
+        Text [ FRENCH ] = "Ordre de tri ~utilisateur" ;
+        Text [ ITALIAN ] = "Sequenza d'ordine ~definita dall'utente" ;
+        Text [ DUTCH ] = "~Gebruikergedefinieerde sorteervolgorde" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~PrecedÛncia de ordenaşÒo definida pelo usußrio" ;
+        Text [ SWEDISH ] = "A~nvändardefinierad sorteringsordning" ;
+        Text [ PORTUGUESE ] = "Ordem de classificação definida pelo ~utilizador" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "Ê¹ÓÃÕß×Ô¶¨µÄÅÅĞò¹æÔò(~C)";
+        Text[ russian ] = "Ïîğÿäîê ñîğòèğîâêè ïîëüçîâàòåëÿ";
+        Text[ polish ] = "~Kolejnoœæ sortowania okreœl. przez u¿ytkownika";
+        Text[ japanese ] = "‡˜‚Ìw’è(~C)";
+        Text[ chinese_traditional ] = "¦Û­q±Æ§Ç³W«h(~C)";
+        Text[ arabic ] = "ÊÑÊíÈ ÇáİÑÒ ÊÈÚÇğ áÊÚÑíİ ÇáãÓÊÎÏã";
+        Text[ greek ] = "ÓåéñÜ ôáîéíüìçóçò ïñéæüìåíç áğü ôïí ÷ñŞóôç";
+        Text[ korean ] = "¿ÜºÎ Á¤·Ä ¼ø¼­(~U)";
+        Text[ turkish ] = "~Kullanıcı tanımlı sıralama düzeni";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_USERDEF
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 23 , 85 ) ;
+        Size = MAP_APPFONT ( 200 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    RadioButton BTN_ASCENDING
+    {
+        Pos = MAP_APPFONT ( 12 , 102 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "A~ufsteigend" ;
+        Text [ ENGLISH ] = "~Ascending" ;
+        Text [ NORWEGIAN ] = "St~igende" ;
+        Text [ DANISH ] = "Stigende" ;
+        Text [ ENGLISH_US ] = "~Ascending" ;
+        Text [ SPANISH ] = "~Ascendente" ;
+        Text [ FINNISH ] = "~Nouseva" ;
+        Text [ FRENCH ] = "~Croissant" ;
+        Text [ ITALIAN ] = "Crescente" ;
+        Text [ DUTCH ] = "~Oplopend" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Ascendente" ;
+        Text [ SWEDISH ] = "Stig~ande" ;
+        Text [ PORTUGUESE ] = "~Ascendente" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "ÏòÉÏ(~A)";
+        Text[ russian ] = "Ïî âîçğàñòàíèş";
+        Text[ polish ] = "Rosn¹co";
+        Text[ japanese ] = "¸‡(~A)";
+        Text[ chinese_traditional ] = "¦V¤W(~A)";
+        Text[ arabic ] = "ÊÕÇÚÏí";
+        Text[ greek ] = "Áıîïõóá";
+        Text[ korean ] = "¿À¸§Â÷¼ø(~A)";
+        Text[ turkish ] = "A~rtan düzende";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton BTN_DESCENDING
+    {
+        Pos = MAP_APPFONT ( 12 , 115 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "A~bsteigend" ;
+        Text [ ENGLISH ] = "~Descending" ;
+        Text [ NORWEGIAN ] = "~Synkende" ;
+        Text [ DANISH ] = "Faldende" ;
+        Text [ ENGLISH_US ] = "D~escending" ;
+        Text [ SPANISH ] = "~Descendente" ;
+        Text [ FINNISH ] = "~Laskeva" ;
+        Text [ FRENCH ] = "~Décroissant" ;
+        Text [ ITALIAN ] = "Descrescente" ;
+        Text [ DUTCH ] = "~Aflopend" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Descendente" ;
+        Text [ SWEDISH ] = "Fallan~de" ;
+        Text [ PORTUGUESE ] = "~Descendente" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "ÏòÏÂ(~E)";
+        Text[ russian ] = "Ïî óáûâàíèş";
+        Text[ polish ] = "Malej¹co";
+        Text[ japanese ] = "~‡";
+        Text[ chinese_traditional ] = "¦V¤U(~E)";
+        Text[ arabic ] = "ÊäÇÒáí";
+        Text[ greek ] = "Öèßíïõóá";
+        Text[ korean ] = "³»¸²Â÷¼ø(~E)";
+        Text[ turkish ] = "A~zalan düzende";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 5 , 48 ) ;
+        Size = MAP_APPFONT ( 228 , 84 ) ;
+        Text = "Sortieren" ;
+        Text [ ENGLISH ] = "Sort" ;
+        Text [ NORWEGIAN ] = "Sorter" ;
+        Text [ DANISH ] = "Sorter" ;
+        Text [ ENGLISH_US ] = "Sort" ;
+        Text [ SPANISH ] = "Ordenar" ;
+        Text [ FINNISH ] = "Lajittelu" ;
+        Text [ FRENCH ] = "Trier" ;
+        Text [ ITALIAN ] = "Ordina" ;
+        Text [ DUTCH ] = "Sorteren" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Ordenar" ;
+        Text [ SWEDISH ] = "Sortera" ;
+        Text [ PORTUGUESE ] = "Ordenar" ;
+        Text[ chinese_simplified ] = "ÅÅĞò";
+        Text[ russian ] = "Ñîğòèğîâàòü";
+        Text[ polish ] = "Sortuj";
+        Text[ japanese ] = "•À‚×‘Ö‚¦";
+        Text[ chinese_traditional ] = "±Æ§Ç";
+        Text[ arabic ] = "İÑÒ";
+        Text[ greek ] = "Ôáîéíüìçóç";
+        Text[ korean ] = "Á¤·Ä";
+        Text[ turkish ] = "Sıralama";
+        Text[ language_user1 ] = " ";
+    };
+};
+
+
+TabPage RID_SUBTBASE
+{
+     // Die Elemente haben hart vergebene Hilfe-IDs, weil automatisch generierte
+     // aus den Ableitungen nicht in der HID-Liste auftauchen wuerden
+    HelpId = HID_SCPAGE_SUBT_GROUP ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 240 , 150 ) ;
+    Hide = TRUE ;
+    FixedText FT_GROUP
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text = "~Gruppieren nach" ;
+        Text [ ENGLISH ] = "~Group by" ;
+        Text [ norwegian ] = "~Gruppe ved " ;
+        Text [ italian ] = "~Raggruppa per" ;
+        Text [ portuguese_brazilian ] = "~Agrupar por" ;
+        Text [ portuguese ] = "~Agrupar por" ;
+        Text [ finnish ] = "Ry~hmitä" ;
+        Text [ danish ] = "~Grupper efter" ;
+        Text [ french ] = "~Grouper selon" ;
+        Text [ swedish ] = "~Gruppera efter" ;
+        Text [ dutch ] = "~Groeperen per" ;
+        Text [ spanish ] = "~Agrupar por" ;
+        Text [ english_us ] = "~Group by" ;
+        Text[ chinese_simplified ] = "·Ö×é°´ÕÕ(~G)";
+        Text[ russian ] = "Ãğóïïèğîâàòü ïî";
+        Text[ polish ] = "Grupuj wed³ug";
+        Text[ japanese ] = "¸ŞÙ°Ìß‚ÌŠî€(~G)";
+        Text[ chinese_traditional ] = "¸s²Õ«ö·Ó(~G)";
+        Text[ arabic ] = "ÊÌãíÚ ÍÓÈ";
+        Text[ greek ] = "Ïìáäïğïßçóç êáôÜ";
+        Text[ korean ] = "¿¡ÀÇÇÑ ±×·ì(~G)";
+        Text[ turkish ] = "~Gruplama esası";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_GROUP
+    {
+        HelpId = HID_SC_SUBT_GROUP ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 16 ) ;
+        Size = MAP_APPFONT ( 110 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_COLUMNS
+    {
+        Pos = MAP_APPFONT ( 6 , 34 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Teilergebnisse berechnen für : ~Teilergebnisse berechnen f³r */
+        Text = "~Teilergebnisse berechnen für" ;
+        Text [ ENGLISH ] = "Calculate sub~totals on" ;
+        Text [ norwegian ] = "Regn ut  su~m på" ;
+        Text [ italian ] = "Calcola sub~totali per" ;
+        Text [ portuguese_brazilian ] = "Calcular sub~totais em" ;
+        Text [ portuguese ] = "Calcular sub~totais para" ;
+        Text [ finnish ] = "Laske ~välisummat" ;
+        Text [ danish ] = "Beregn subtotaler for" ;
+        Text [ french ] = "~Calculer les sous-totaux pour" ;
+        Text [ swedish ] = "Beräkna delresul~tat för" ;
+        Text [ dutch ] = "~Subtotalen berekenen van" ;
+        Text [ spanish ] = "~Calcular subtotales para" ;
+        Text [ english_us ] = "~Calculate subtotals for" ;
+        Text[ chinese_simplified ] = "·ÖÀà»ã×Ü¼ÆËã(~C)";
+        Text[ russian ] = "Âû÷èñëèòü ïğîìåæóòî÷íûå èòîãè äëÿ";
+        Text[ polish ] = "Oblicz sumy poœrednie dla";
+        Text[ japanese ] = "¬Œv‚ğo‚·€–Ú(~C)";
+        Text[ chinese_traditional ] = "¤p­p¥Î©ó(~C)";
+        Text[ arabic ] = "ÍÓÇÈ ÇáäÊÇÆÌ ÇáÌÒÆíÉ áÜ";
+        Text[ greek ] = "Õğïëïãéóìüò ìåñéêşí áèñïéóìÜ~ôùí ãéá";
+        Text[ korean ] = "¿¡ ´ëÇÑ ¼Ò°è °è»ê(~C)";
+        Text[ turkish ] = "~Ara toplamları hesaplanacak sütun(lar)";
+        Text[ language_user1 ] = " ";
+    };
+    Control WND_COLUMNS
+    {
+        HelpId = HID_SC_SUBT_COLS ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 47 ) ;
+        Size = MAP_APPFONT ( 110 , 90 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_FUNCTIONS
+    {
+        Pos = MAP_APPFONT ( 123 , 34 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text = "~Berechnungsvorschrift" ;
+        Text [ ENGLISH ] = "Funct~ion" ;
+        Text [ norwegian ] = "Funks~jon" ;
+        Text [ italian ] = "Funz~ione" ;
+        Text [ portuguese_brazilian ] = "Funç~ao" ;
+        Text [ portuguese ] = "Usar fu~nção" ;
+        Text [ finnish ] = "~Funktio" ;
+        Text [ danish ] = "Beregningsfunktion" ;
+        Text [ french ] = "~Fonction" ;
+        Text [ swedish ] = "~Beräkningsregler" ;
+        Text [ dutch ] = "~Functie" ;
+        Text [ spanish ] = "~Usar función" ;
+        Text [ english_us ] = "Use ~function" ;
+        Text[ chinese_simplified ] = "¼ÆËã¹æÔò(~F)";
+        Text[ russian ] = "Èíñòğóêöèÿ ïî âû÷èñëåíèÿì";
+        Text[ polish ] = "Instrukcja obliczania";
+        Text[ japanese ] = "ŒvZ•û–@(~F)";
+        Text[ chinese_traditional ] = "­pºâ³W«h(~F)";
+        Text[ arabic ] = "ÇáÏÇáÉ";
+        Text[ greek ] = "Êáíüíáò õğïëïãéóìïı";
+        Text[ korean ] = "ÇÔ¼ö »ç¿ë(~F)";
+        Text[ turkish ] = "K~ullanılacak fonksiyon";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_FUNCTIONS
+    {
+        HelpId = HID_SC_SUBT_FUNC ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 123 , 47 ) ;
+        Size = MAP_APPFONT ( 110 , 90 ) ;
+        TabStop = TRUE ;
+        StringList =
+        {
+            < "Summe" ; Default ; > ;
+            < "Anzahl" ; Default ; > ;
+            < "Mittelwert" ; Default ; > ;
+            < "Max" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Produkt" ; Default ; > ;
+            /* ### ACHTUNG: Neuer Eintrag in Liste? 7 : Anzahl (nur Zahlen)*/
+            < "Anzahl (nur Zahlen)" ; Default ; > ;
+            < "StAbw (Stichprobe)" ; Default ; > ;
+            < "StAbwN (Grundgesamtheit)" ; Default ; > ;
+            < "Varianz (Stichprobe)" ; Default ; > ;
+            < "Varianzen (Grundgesamtheit)" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Summe" ; Default ; > ;
+            < "Anzahl" ; Default ; > ;
+            < "Mittelwert" ; Default ; > ;
+            < "Max" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Produkt" ; Default ; > ;
+            < "Anzahl (nur Zahlen)" ; Default ; > ;
+            < "StAbw (Stichprobe)" ; Default ; > ;
+            < "StAbwN (Grundgesamtheit)" ; Default ; > ;
+            < "Varianz (Stichprobe)" ; Default ; > ;
+            < "Varianzen (Grundgesamtheit)" ; Default ; > ;
+        };
+        StringList [ norwegian ] =
+        {
+            < "Summe" ; Default ; > ;
+            < "Anzahl" ; Default ; > ;
+            < "Mittelwert" ; Default ; > ;
+            < "Max" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Produkt" ; Default ; > ;
+            < "Anzahl (nur Zahlen)" ; Default ; > ;
+            < "StAbw (Stichprobe)" ; Default ; > ;
+            < "StAbwN (Grundgesamtheit)" ; Default ; > ;
+            < "Varianz (Stichprobe)" ; Default ; > ;
+            < "Varianzen (Grundgesamtheit)" ; Default ; > ;
+        };
+        StringList [ italian ] =
+        {
+            < "Somma" ; Default ; > ;
+            < "Numero" ; Default ; > ;
+            < "Valore medio" ; Default ; > ;
+            < "Max" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Prodotto" ; Default ; > ;
+            < "Numero (solo numeri)" ; Default ; > ;
+            < "DevStd (campione)" ; Default ; > ;
+            < "DevStdP (popolazione)" ; Default ; > ;
+            < "Varianza (campione)" ; Default ; > ;
+            < "VarP (popolazione)" ; Default ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+            < "Summe" ; Default ; > ;
+            < "Anzahl" ; Default ; > ;
+            < "Mittelwert" ; Default ; > ;
+            < "Max" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Produkt" ; Default ; > ;
+            < "Anzahl2 (nur Zahlen)" ; Default ; > ;
+            < "StAbw (Stichprobe)" ; Default ; > ;
+            < "StAbwN (Grundgesamtheit)" ; Default ; > ;
+            < "Varianz (Stichprobe)" ; Default ; > ;
+            < "VarP" ; Default ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+            < "Total" ; Default ; > ;
+            < "Quantidade" ; Default ; > ;
+            < "Valor médio" ; Default ; > ;
+            < "Máx." ; Default ; > ;
+            < "Min." ; Default ; > ;
+            < "Produto" ; Default ; > ;
+            < "Contar (só números)" ; Default ; > ;
+            < "DesvPad (amostra)" ; Default ; > ;
+            < "DesvPadN (população)" ; Default ; > ;
+            < "Variância (amostra)" ; Default ; > ;
+            < "Variâncias (população)" ; Default ; > ;
+        };
+        StringList [ finnish ] =
+        {
+            < "Summe" ; Default ; > ;
+            < "Anzahl" ; Default ; > ;
+            < "Mittelwert" ; Default ; > ;
+            < "Max" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Produkt" ; Default ; > ;
+            < "Anzahl (nur Zahlen)" ; Default ; > ;
+            < "StAbw (Stichprobe)" ; Default ; > ;
+            < "StAbwN (Grundgesamtheit)" ; Default ; > ;
+            < "Varianz (Stichprobe)" ; Default ; > ;
+            < "Varianzen (Grundgesamtheit)" ; Default ; > ;
+        };
+        StringList [ danish ] =
+        {
+            < "Sum" ; Default ; > ;
+            < "Antal" ; Default ; > ;
+            < "Middel" ; Default ; > ;
+            < "Maks" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Produkt" ; Default ; > ;
+            < "Antal (kun tal)" ; Default ; > ;
+            < "Stdafv (stikprøve)" ; Default ; > ;
+            < "StdafvP (population)" ; Default ; > ;
+            < "Varians (stikprøve)" ; Default ; > ;
+            < "VariansP (population)" ; Default ; > ;
+        };
+        StringList [ french ] =
+        {
+            < "Total" ; Default ; > ;
+            < "Nombre" ; Default ; > ;
+            < "Moyenne" ; Default ; > ;
+            < "Max" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Produit" ; Default ; > ;
+            < "Nombre (uniquement les nombres)" ; Default ; > ;
+            < "Ecartype (échantillon)" ; Default ; > ;
+            < "EcarTypeP (population)" ; Default ; > ;
+            < "Variance (échantillon)" ; Default ; > ;
+            < "VarP (population)" ; Default ; > ;
+        };
+        StringList [ swedish ] =
+        {
+            < "Summa" ; Default ; > ;
+            < "Antal" ; Default ; > ;
+            < "Medelvärde" ; Default ; > ;
+            < "Max" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Produkt" ; Default ; > ;
+            < "Antal (endast tal)" ; Default ; > ;
+            < "StdAv (stickprov)" ; Default ; > ;
+            < "StdAvP (population)" ; Default ; > ;
+            < "Varians (stickprov)" ; Default ; > ;
+            < "Varians (population)" ; Default ; > ;
+        };
+        StringList [ dutch ] =
+        {
+            < "Som" ; Default ; > ;
+            < "Aantal" ; Default ; > ;
+            < "Gemiddelde" ; Default ; > ;
+            < "Max" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Product" ; Default ; > ;
+            < "Aantal (alleen getallen)" ; Default ; > ;
+            < "StAfw (steekproef)" ; Default ; > ;
+            < "StAfwN (populatie)" ; Default ; > ;
+            < "Var (steekproef)" ; Default ; > ;
+            < "VarP (populatie)" ; Default ; > ;
+        };
+        StringList [ spanish ] =
+        {
+            < "Suma" ; Default ; > ;
+            < "Cantidad" ; Default ; > ;
+            < "Promedio" ; Default ; > ;
+            < "Máx." ; Default ; > ;
+            < "Mín." ; Default ; > ;
+            < "Producto" ; Default ; > ;
+            < "Cantidad (solo números)" ; Default ; > ;
+            < "DesvEst (Muestra)" ; Default ; > ;
+            < "DesvEstP (Población)" ; Default ; > ;
+            < "Varianza (Muestra)" ; Default ; > ;
+            < "VarP (Población)" ; Default ; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "Sum" ; Default ; > ;
+            < "Count" ; Default ; > ;
+            < "Average" ; Default ; > ;
+            < "Max" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Product" ; Default ; > ;
+            < "Count (numbers only)" ; Default ; > ;
+            < "StDev (Sample)" ; Default ; > ;
+            < "StDevP (Population)" ; Default ; > ;
+            < "Var (Sample)" ; Default ; > ;
+            < "VarP (Population)" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "×Ü¼Æ" ; Default ; > ;
+        < "ÊıÄ¿" ; Default ; > ;
+        < "Æ½¾ùÖµ" ; Default ; > ;
+        < "×î´óÖµ" ; Default ; > ;
+        < "×îĞ¡Öµ" ; Default ; > ;
+        < "³Ë»ı" ; Default ; > ;
+        < "ÊıÄ¿(Ö»ÊÇÊı×Ö)" ; Default ; > ;
+        < "±ê×¼Æ«²î(³éÑù)" ; Default ; > ;
+        < "±ê×¼Æ«²î(È«²¿»ùÊı)" ; Default ; > ;
+        < "·½²î(³éÑù)" ; Default ; > ;
+        < "·½²î(È«²¿»ùÊı)" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "Ñóììà" ; Default ; > ;
+        < "Êîëè÷åñòâî" ; Default ; > ;
+        < "Ñğåäíåå çíà÷åíèå" ; Default ; > ;
+        < "Ìàêñèìóì" ; Default ; > ;
+        < "Ìèíèìóì" ; Default ; > ;
+        < "Ïğîèçâåäåíèå" ; Default ; > ;
+        < "Êîëè÷åñòâî (òîëüêî ÷èñëà)" ; Default ; > ;
+        < "Ñìåùåííîå îòêëîíåíèå (îáğàçåö)" ; Default ; > ;
+        < "Íåñìåùåííîå îòêëîíåíèå (ñîâîêóïíîñòü)" ; Default ; > ;
+        < "Ñìåùåííàÿ äèñïåğñèÿ (îáğàçåö)" ; Default ; > ;
+        < "Ñìåùåííàÿ äèñïåğñèÿ (ñîâîêóïíîñòü)" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Suma" ; Default ; > ;
+        < "Liczba" ; Default ; > ;
+        < "Œrednia wartoœæ" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Produkt" ; Default ; > ;
+        < "Iloœæ (tylko cyfry)" ; Default ; > ;
+        < "Odchylenie standardowe (Próbka)" ; Default ; > ;
+        < "OdchStdc (Populacja)" ; Default ; > ;
+        < "Wariancja (Próbka)" ; Default ; > ;
+        < "Wariancje (Populacja)" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "‡Œv" ; Default ; > ;
+        < "‘”" ; Default ; > ;
+        < "•½‹Ï" ; Default ; > ;
+        < "Å‘å" ; Default ; > ;
+        < "Å¬" ; Default ; > ;
+        < "Ï" ; Default ; > ;
+        < "‘”(”’l‚Ì‚İ)" ; Default ; > ;
+        < "•W€•Î·(•W–{’²¸)" ; Default ; > ;
+        < "•W€•Î·(•êW’c)" ; Default ; > ;
+        < "•ªU(•W–{’²¸)" ; Default ; > ;
+        < "•ªU(•êW’c)" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "Á`¼Æ" ; Default ; > ;
+        < "¼Æ¥Ø" ; Default ; > ;
+        < "¥­§¡­È" ; Default ; > ;
+        < "³Ì¤j­È" ; Default ; > ;
+        < "³Ì¤p­È" ; Default ; > ;
+        < "­¼¿n" ; Default ; > ;
+        < "¼Æ¥Ø(¥u¬O¼Æ¦r)" ; Default ; > ;
+        < "¼Ğ·Ç°¾®t(©â¼Ë)" ; Default ; > ;
+        < "¼Ğ·Ç°¾®t(¥ş³¡°ò¼Æ)" ; Default ; > ;
+        < "¤è®t(©â¼Ë)" ; Default ; > ;
+        < "¤è®t(¥ş³¡°ò¼Æ)" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "ÇáãÌãæÚ" ; Default ; > ;
+        < "Count" ; Default ; > ;
+        < "Average" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Product" ; Default ; > ;
+        < "Count (ÇáÃÑŞÇã İŞØ)" ; Default ; > ;
+        < "StDev (ÚíäÉ)" ; Default ; > ;
+        < "StDevP (ÇáãÌÊãÚ)" ; Default ; > ;
+        < "Variance (ÚíäÉ)" ; Default ; > ;
+        < "VarP (ÇáãÌÊãÚ)" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "¢èñïéóìá" ; Default ; > ;
+        < "ĞëŞèïò" ; Default ; > ;
+        < "Ìİóç ôéìŞ" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Ãéíüìåíï" ; Default ; > ;
+        < "ĞëŞèïò (ìüíï áñéèìïß)" ; Default ; > ;
+        < "StDev (Äåßãìá)" ; Default ; > ;
+        < "StDevP (Ğëçèõóìüò)" ; Default ; > ;
+        < "Variance (Äåßãìá)" ; Default ; > ;
+        < "VarP (Ğëçèõóìïı)" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "ÇÕ°è" ; Default ; > ;
+        < "Ä«¿îÆ®" ; Default ; > ;
+        < "Æò±Õ" ; Default ; > ;
+        < "ÃÖ´ë" ; Default ; > ;
+        < "ÃÖ¼Ò" ; Default ; > ;
+        < "Á¦Ç°" ; Default ; > ;
+        < "Ä«¿îÆ® (¼ıÀÚ ¸¸)" ; Default ; > ;
+        < "StDev (»ùÇÃ)" ; Default ; > ;
+        < "Ç¥ÁØ ÆíÂ÷(¸ğÁı´Ü)" ; Default ; > ;
+        < "º¯¼ö (»ùÇÃ)" ; Default ; > ;
+        < "ºĞ»ê (¸ğÁı´Ü)" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "Sum" ; Default ; > ;
+        < "Count" ; Default ; > ;
+        < "Average" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Product" ; Default ; > ;
+        < "Count (numbers only)" ; Default ; > ;
+        < "StDev (sample)" ; Default ; > ;
+        < "StDevP (population)" ; Default ; > ;
+        < "Var (sample)" ; Default ; > ;
+        < "VarP (population)" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+    };
+    };
+};
+
+ // "Control" braucht immer eigene HelpId - ansonsten aus RID_SUBTBASE kopiert
+
+TabPage RID_SCPAGE_SUBT_GROUP1 < RID_SUBTBASE
+{
+    HelpId = HID_SCPAGE_SUBT_GROUP1 ;
+};
+TabPage RID_SCPAGE_SUBT_GROUP2 < RID_SUBTBASE
+{
+    HelpId = HID_SCPAGE_SUBT_GROUP2 ;
+};
+TabPage RID_SCPAGE_SUBT_GROUP3 < RID_SUBTBASE
+{
+    HelpId = HID_SCPAGE_SUBT_GROUP3 ;
+};
+
+TabDialog RID_SCDLG_SUBTOTALS
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 294 , 176 ) ;
+    Text = "Teilergebnisse" ;
+    Text [ ENGLISH ] = "Subtotals" ;
+    Text [ norwegian ] = "Subtotals" ;
+    Text [ italian ] = "Subtotali" ;
+    Text [ portuguese_brazilian ] = "Sub-totais" ;
+    Text [ portuguese ] = "Subtotais" ;
+    Text [ finnish ] = "Välisummat" ;
+    Text [ danish ] = "Subtotaler" ;
+    Text [ french ] = "Sous-totaux" ;
+    Text [ swedish ] = "Delresultat" ;
+    Text [ dutch ] = "Subtotalen" ;
+    Text [ spanish ] = "Subtotales" ;
+    Text [ english_us ] = "Subtotals" ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 3 ) ;
+        Size = MAP_APPFONT ( 240 , 150 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = PAGE_GROUP1 ;
+                Text = "1. Gruppe" ;
+                Text [ ENGLISH ] = "1. Group" ;
+                Text [ norwegian ] = "1. Gruppe" ;
+                Text [ italian ] = "1. Gruppo" ;
+                Text [ portuguese_brazilian ] = "1. Grupo" ;
+                Text [ portuguese ] = "1° Grupo" ;
+                Text [ finnish ] = "1. ryhmä" ;
+                Text [ danish ] = "1. gruppe" ;
+                Text [ french ] = "1er groupe" ;
+                Text [ swedish ] = "Grupp 1" ;
+                Text [ dutch ] = "Groep 1" ;
+                Text [ spanish ] = "Grupo 1" ;
+                Text [ english_us ] = "1st Group" ;
+                Text[ chinese_simplified ] = "µÚÒ»×é";
+                Text[ russian ] = "1-àÿ ãğóïïà";
+                Text[ polish ] = "1. grupa";
+                Text[ japanese ] = "¸ŞÙ°Ìß 1";
+                Text[ chinese_traditional ] = "²Ä¤@²Õ";
+                Text[ arabic ] = "ÇáãÌãæÚÉ ÇáÃæáì";
+                Text[ greek ] = "1ç ÏìÜäá";
+                Text[ korean ] = "1¹øÂ° ±×·ì";
+                Text[ turkish ] = "1. Grup";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = PAGE_GROUP2 ;
+                Text = "2. Gruppe" ;
+                Text [ ENGLISH ] = "2. Group" ;
+                Text [ norwegian ] = "2. Gruppe" ;
+                Text [ italian ] = "2. Gruppo" ;
+                Text [ portuguese_brazilian ] = "2. Grupo" ;
+                Text [ portuguese ] = "2° Grupo" ;
+                Text [ finnish ] = "2. ryhmä" ;
+                Text [ danish ] = "2. gruppe" ;
+                Text [ french ] = "2ème groupe" ;
+                Text [ swedish ] = "Grupp 2" ;
+                Text [ dutch ] = "Groep 2" ;
+                Text [ spanish ] = "Grupo 2" ;
+                Text [ english_us ] = "2nd Group" ;
+                Text[ chinese_simplified ] = "µÚ¶ş×é";
+                Text[ russian ] = "2-àÿ ãğóïïà";
+                Text[ polish ] = "2. grupa";
+                Text[ japanese ] = "¸ŞÙ°Ìß 2";
+                Text[ chinese_traditional ] = "²Ä¤G²Õ";
+                Text[ arabic ] = "ÇáãÌãæÚÉ ÇáËÇäíÉ";
+                Text[ greek ] = "2ç. ÏìÜäá";
+                Text[ korean ] = "2¹øÂ° ±×·ì";
+                Text[ turkish ] = "2. Grup";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = PAGE_GROUP3 ;
+                Text = "3. Gruppe" ;
+                Text [ ENGLISH ] = "3. Group" ;
+                Text [ norwegian ] = "3. Gruppe" ;
+                Text [ italian ] = "3. Gruppo" ;
+                Text [ portuguese_brazilian ] = "3. Grupo" ;
+                Text [ portuguese ] = "3° Grupo" ;
+                Text [ finnish ] = "3. ryhmä" ;
+                Text [ danish ] = "3. gruppe" ;
+                Text [ french ] = "3ème groupe" ;
+                Text [ swedish ] = "Grupp 3" ;
+                Text [ dutch ] = "Groep 3" ;
+                Text [ spanish ] = "Grupo 3" ;
+                Text [ english_us ] = "3rd Group" ;
+                Text[ chinese_simplified ] = "µÚÈı×é";
+                Text[ russian ] = "3-üÿ ãğóïïà";
+                Text[ polish ] = "3. grupa";
+                Text[ japanese ] = "¸ŞÙ°Ìß 3";
+                Text[ chinese_traditional ] = "²Ä¤T²Õ";
+                Text[ arabic ] = "ÇáãÌãæÚÉ ÇáËÇáËÉ";
+                Text[ greek ] = "3ç ÏìÜäá";
+                Text[ korean ] = "3¹øÂ° ±×·ì";
+                Text[ turkish ] = "3. Grup";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = PAGE_OPTIONS ;
+                Text = "Optionen" ;
+                Text [ ENGLISH ] = "Options" ;
+                Text [ norwegian ] = "Options" ;
+                Text [ italian ] = "Opzioni" ;
+                Text [ portuguese_brazilian ] = "Opções" ;
+                Text [ portuguese ] = "Opções" ;
+                Text [ finnish ] = "Määritykset" ;
+                Text [ danish ] = "Indstillinger" ;
+                Text [ french ] = "Options" ;
+                Text [ swedish ] = "Alternativ" ;
+                Text [ dutch ] = "Opties" ;
+                Text [ spanish ] = "Opciones" ;
+                Text [ english_us ] = "Options" ;
+                Text[ chinese_simplified ] = "Ñ¡Ïî";
+                Text[ russian ] = "Ïàğàìåòğû";
+                Text[ polish ] = "Opcje";
+                Text[ japanese ] = "µÌß¼®İ";
+                Text[ chinese_traditional ] = "¿ï¶µ";
+                Text[ arabic ] = "ÇáÎíÇÑÇÊ";
+                Text[ greek ] = "Åğéëïãİò";
+                Text[ korean ] = "¿É¼Ç";
+                Text[ turkish ] = "Seçenekler";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    PushButton BTN_REMOVE
+    {
+        Pos = MAP_APPFONT ( 143 , 160 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
+        Text = "~Löschen" ;
+        Text [ ENGLISH ] = "~Remove" ;
+        Text [ norwegian ] = "~Fjern" ;
+        Text [ italian ] = "Elimina" ;
+        Text [ portuguese_brazilian ] = "~Remover" ;
+        Text [ portuguese ] = "~Remover" ;
+        Text [ finnish ] = "~Poista" ;
+        Text [ danish ] = "Slet" ;
+        Text [ french ] = "~Supprimer" ;
+        Text [ swedish ] = "~Radera" ;
+        Text [ dutch ] = "~Wissen" ;
+        Text [ spanish ] = "~Eliminar" ;
+        Text [ english_us ] = "~Delete" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ russian ] = "Óäàëèòü";
+        Text[ polish ] = "Usuñ";
+        Text[ japanese ] = "íœ(~D)";
+        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ arabic ] = "ÍĞİ";
+        Text[ greek ] = "ÄéáãñáöŞ";
+        Text[ korean ] = "»èÁ¦(~D)";
+        Text[ turkish ] = "~Sil";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "·ÖÀà»ã×Ü";
+    Text[ russian ] = "Ïğîìåæóòî÷íûå èòîãè";
+    Text[ polish ] = "Sumy poœrednie";
+    Text[ japanese ] = "¬Œv";
+    Text[ chinese_traditional ] = "¤p­p";
+    Text[ arabic ] = "ÇáãÌÇãíÚ ÇáÌÒÆíÉ";
+    Text[ greek ] = "ÌåñéêÜ áèñïßóìáôá";
+    Text[ korean ] = "¼Ò°è";
+    Text[ turkish ] = "Ara toplamlar";
+    Text[ language_user1 ] = " ";
+};
+
+

@@ -1,0 +1,111 @@
+/*************************************************************************
+ *
+ *  $RCSfile: asciiopt.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:44:53 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "sc.hrc"
+//#define RID_SCDLG_ASCII 256
+#define RB_SEPARATED 1
+#define RB_FIXED 2
+#define FT_CHARSET 3
+#define LB_CHARSET 4
+#define GB_SEPOPT 5
+#define FT_FIELDSEP 6
+#define CB_FIELDSEP 7
+#define FT_TEXTSEP 8
+#define CB_TEXTSEP 9
+#define GB_FIELDOPT 10
+#define FT_WIDTH 11
+#define FT_TYPE 12
+#define FT_PREVIEW 13
+#define FT_COL1 14
+#define FT_COL2 15
+#define FT_COL3 16
+#define FT_START1 17
+#define FT_START2 18
+#define FT_START3 19
+#define NF_END1 20
+#define NF_END2 21
+#define NF_END3 22
+#define LB_TYPE1 23
+#define LB_TYPE2 24
+#define LB_TYPE3 25
+#define FT_PREVIEW1 26
+#define FT_PREVIEW2 27
+#define FT_PREVIEW3 28
+#define SB_COLUMN 29
+#define GB_WIDTH 30
+#define BTN_OK 31
+#define BTN_CANCEL 32
+#define BTN_HELP 33
+#define STR_COL 34
+#define STR_TO 35
+#define SB_ROW 36
+#define CTR_TABLE 42
+#define CTR_RULER 43
+#define CKB_TAB 51
+#define CKB_SPACE 52
+#define CKB_SEMICOLON 53
+#define CKB_COMMA 54
+#define CKB_OTHER 55
+#define ED_OTHER 56
+#define FT_NAME 57
+#define FT_FILE 58
+#define FT_AT_ROW 59
+#define NF_AT_ROW 60
+#define CB_ASONCE 90

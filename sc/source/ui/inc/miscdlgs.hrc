@@ -1,0 +1,213 @@
+/*************************************************************************
+ *
+ *  $RCSfile: miscdlgs.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "sc.hrc"   // -> RID_SCDLG_DELCELL
+                    // -> RID_SCDLG_INSCELL
+                    // -> RID_SCDLG_DELCONT
+                    // -> RID_SCDLG_INSCONT
+                    // -> RID_SCDLG_MOVETAB
+                    // -> RID_SCDLG_STRINPUT
+                    // -> RID_SCDLG_MTRINPUT
+                    // -> RID_SCDLG_SELENTRY
+                    // -> RID_SCDLG_FILLSERIES
+                    // -> RID_SCDLG_AUTOFORMAT
+
+// Fuer den DesignEditor:
+/*
+#define RID_SCDLG_DELCELL 1256
+#define RID_SCDLG_INSCELL 1257
+#define RID_SCDLG_DELCONT 1258
+#define RID_SCDLG_INSCONT 1259
+#define RID_SCDLG_MOVETAB 1260
+#define RID_SCDLG_STRINPUT 1261
+#define RID_SCDLG_MTRINPUT 1262
+#define RID_SCDLG_SELENTRY 1263
+#define RID_SCDLG_FILLSERIES 1264
+#define RID_SCDLG_AUTOFORMAT 1255
+*/
+
+// allgemein
+#define BTN_OK          100
+#define BTN_CANCEL      102
+#define BTN_HELP        103
+#define BTN_MORE        104
+#define BTN_ADD         105
+#define BTN_REMOVE      106
+#define FT_LABEL        110
+#define GB_FRAME        111
+#define STR_BTN_CLOSE   200
+
+// Zellen loeschen/einfuegen Dialog
+#define BTN_CELLSUP     10
+#define BTN_CELLSDOWN   11
+#define BTN_CELLSRIGHT  12
+#define BTN_CELLSLEFT   13
+#define BTN_DELROWS     14
+#define BTN_DELCOLS     15
+#define BTN_INSROWS     16
+#define BTN_INSCOLS     17
+
+// Inhalte loeschen/einfuegen Dialog
+#define BTN_DELALL      10
+#define BTN_DELSTRINGS  11
+#define BTN_DELNUMBERS  12
+#define BTN_DELDATETIME 13
+#define BTN_DELFORMULAS 14
+#define BTN_DELATTRS    15
+#define BTN_DELNOTES    16
+#define BTN_DELOBJECTS  17
+#define BTN_INSALL      20
+#define BTN_INSSTRINGS  21
+#define BTN_INSNUMBERS  22
+#define BTN_INSDATETIME 23
+#define BTN_INSFORMULAS 24
+#define BTN_INSATTRS    25
+#define BTN_INSNOTES    26
+#define BTN_OP_NOOP 27
+#define BTN_OP_ADD  28
+#define BTN_OP_SUB      29
+#define BTN_OP_MUL      30
+#define BTN_OP_DIV      31
+#define GB_OPERATION    32
+#define BTN_SKIP_EMPTY  33
+#define BTN_TRANSPOSE 34
+#define BTN_LINK        35
+#define GB_OPTIONS      36
+#define BTN_MV_NONE     37
+#define BTN_MV_DOWN     38
+#define BTN_MV_RIGHT    39
+#define GB_MOVE         40
+
+// Tabelle einfügen/löschen
+#define FT_DEST         1
+#define LB_DEST         2
+#define FT_INSERT       3
+#define LB_INSERT       4
+#define BTN_COPY        5
+#define STR_NEWDOC      6
+
+// Eingabe eines Strings
+#define ED_INPUT        10
+
+// Eingabe einer Metrik
+#define ED_VALUE        1
+#define BTN_DEFVAL      1
+
+// Auswahl aus einer (String-)ListBox
+#define LB_ENTRYLIST    10
+
+// Reihen fuellen
+#define BTN_LEFT        1
+#define BTN_RIGHT       2
+#define BTN_TOP         3
+#define BTN_BOTTOM      4
+#define GB_DIRECTION    9
+#define BTN_ARITHMETIC  10
+#define BTN_GEOMETRIC   11
+#define BTN_DATE        12
+#define BTN_AUTOFILL    13
+#define GB_TYPE         19
+#define BTN_DAY         20
+#define BTN_DAY_OF_WEEK 21
+#define BTN_MONTH       22
+#define BTN_YEAR        23
+#define GB_TIME_UNIT    29
+#define FT_INCREMENT    30
+#define ED_INCREMENT    39
+#define FT_END_VALUE    40
+#define ED_END_VALUES   49
+#define STR_VALERR      50
+#define FT_START_VALUE  51
+#define ED_START_VALUES 52
+
+// Autoformat
+#define LB_FORMAT           1
+#define FT_FORMAT           9
+#define GB_PREVIEW          10
+#define WND_PREVIEW         19
+#define BTN_NUMFORMAT       20
+#define BTN_BORDER          21
+#define BTN_FONT            23
+#define BTN_PATTERN         24
+#define BTN_ALIGNMENT       25
+#define BTN_ADJUST          26
+#define BTN_RENAME          27
+#define GB_FORMAT           29
+#define STR_ADD_TITLE       100
+#define STR_ADD_LABEL       101
+#define STR_DEL_TITLE       102
+#define STR_DEL_MSG         103
+#define STR_RENAME_TITLE    104
+    // Autoformat-Preview:
+#define STR_JAN         121
+#define STR_FEB         122
+#define STR_MAR         123
+#define STR_NORTH       124
+#define STR_MID         125
+#define STR_SOUTH       126
+#define STR_SUM         127
+
+// Gruppierung setzen/aufheben:
+#define BTN_GROUP_COLS  1
+#define BTN_GROUP_ROWS  3
+#define STR_GROUP       1
+#define STR_UNGROUP     2
+

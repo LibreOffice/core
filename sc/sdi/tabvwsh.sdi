@@ -1,0 +1,282 @@
+ //============================================================================
+ //
+ // StarCalc
+ //
+ // (C) 1994 StarDivision GmbH, Hamburg, Germany
+ // $Author: hr $ $Date: 2000-09-18 16:44:52 $ $Revision: 1.1.1.1 $
+ // $Logfile:   T:/sc/sdi/tabvwsh.sdv  $ $Workfile:   tabvwsh.sdi  $
+ //----------------------------------------------------------------------------
+
+
+ // ===========================================================================
+interface TableOLEObject : Selection
+[
+    uuid ( "C04AA960-137B-11D3-B25B-006097DA68F3" )
+]
+{
+    SID_ACTIVE_OBJ_NAME [ StateMethod = GetObjectState; ]
+    SID_OLE_OBJECT      [ StateMethod = GetObjectState; ]
+    SID_OLE_ACTIVATE    [ ExecMethod = ExecuteObject; ]
+    SID_OLE_DEACTIVATE  [ ExecMethod = ExecuteObject; ]
+    SID_OLE_SELECT      [ ExecMethod = ExecuteObject; ] // api:
+    SID_OBJECT_LEFT     [ ExecMethod = ExecuteObject; StateMethod = GetObjectState; ]
+    SID_OBJECT_TOP      [ ExecMethod = ExecuteObject; StateMethod = GetObjectState; ]
+    SID_OBJECT_WIDTH    [ ExecMethod = ExecuteObject; StateMethod = GetObjectState; ]
+    SID_OBJECT_HEIGHT   [ ExecMethod = ExecuteObject; StateMethod = GetObjectState; ]
+}
+
+ //============================================================================
+interface Tables : Collection
+[
+    uuid = "5692EFC0-355B-11cf-89CB-008029E4B0B1" ;
+]
+{
+    FID_TAB_SELECTALL   [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_TAB_MENU_RENAME [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_TAB_APPEND  [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_INS_TABLE   [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_TABLE_HIDE  [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_TABLE_SHOW  [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+}
+
+ // ===========================================================================
+interface BaseSelection : Selection
+[
+    uuid = "02ABE040-137B-11D3-B25B-006097DA68F3" ;
+]
+{
+    // Einfuegen von Objekten {
+
+    SID_INSERT_GRAPHIC          [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_INSERT_FRAME            [ ExecMethod = ExecDraw; StateMethod = GetDrawState; Export = FALSE; ]
+    SID_INSERT_OBJECT           [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_INSERT_PLUGIN           [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_INSERT_SOUND            [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_INSERT_VIDEO            [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_INSERT_APPLET           [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_INSERT_FLOATINGFRAME    [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+
+    SID_IMAP                    [ ExecMethod = ExecImageMap; StateMethod = GetImageMapState; ]
+    SID_IMAP_EXEC               [ ExecMethod = ExecImageMap; StateMethod = GetImageMapState; ]
+
+    SfxVoidItem InsertObjectStarChart SID_INSERT_DIAGRAM
+    (
+        SfxBoolItem ColHeaders SID_ATTR_COLHEADERS,
+        SfxBoolItem RowHeaders SID_ATTR_ROWHEADERS,
+        SfxBoolItem InNewTable FN_PARAM_4,
+        SfxStringItem RangeList FN_PARAM_5
+    )
+    [
+        ExecMethod = ExecDrawIns ;
+        StateMethod = GetDrawInsState ;
+        Cachable , Asynchron ;
+    ]
+
+    SID_PIVOT_CREATE        [ ExecMethod = ExecuteSbx; StateMethod = GetSbxState; ]
+    SID_RANGE_OFFSET        [ ExecMethod = ExecuteSbx; ]
+    SID_RANGE_REGION        [ StateMethod = GetSbxState; ]
+
+
+    SID_INSERT_SIMAGE       [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_INSERT_SMATH        [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_GALLERY_FORMATS     [ ExecMethod = ExecGallery; StateMethod = GetGalleryState; ]
+    SID_GALLERY             [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_DRAW_NOTEEDIT       [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_OBJECTRESIZE        [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+
+     //SID_CHOOSE_CONTROLS  [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_OBJECT_SELECT       [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_SHOW_HIDDEN         [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ] // status()
+    SID_SHOW_FORMS          [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ] // status()
+    SID_INSERT_DRAW         [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_FM_CREATE_CONTROL   [ ExecMethod = ExecDraw ; ]
+    SID_LINKS               [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
+    SID_DRAW_CHART          [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_OPENDLG_MODCHART    [ ExecMethod = Execute; StateMethod = NoState; ]
+
+    // } Einfuegen von Objekten
+
+}
+
+interface TableEditView : View
+[
+    uuid ( "16D7E4A0-2FB4-11CF-89CB-008029E4B0B1" )
+]
+{
+    SbxObject SearchSettings
+    [
+        Readonly ;
+    ]
+
+    SbxObject Table
+    [
+    ]
+    SbxObject Range
+    [
+        Export = FALSE ;
+    ]
+
+    FID_TOGGLEINPUTLINE     [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_DEFINE_PRINTAREA    [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_ADD_PRINTAREA       [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_ADJUST_PRINTZOOM    [ ExecMethod = Execute; StateMethod = GetState; ]
+
+        SID_CURRENTDOC      [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_WINDOW_SPLIT    [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_WINDOW_FIX      [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_SAVEDOC
+    [
+        ExecMethod = ExecuteSave ;
+        StateMethod = GetSaveState ;
+        Export = FALSE ;
+    ]
+    SID_SAVEASDOC
+    [
+        ExecMethod = ExecuteSave ;
+        StateMethod = GetSaveState ;
+        Export = FALSE ;
+    ]
+     // hat zwar ein SW im Namen, wird aber im Calc auch gebraucht
+    SID_CREATE_SW_DRAWVIEW [ ExecMethod = Execute; ]
+    SID_ATTR_ZOOM       [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_INSERT_FILE [ ExecMethod = Execute; StateMethod = GetState; ]
+     // Save / SaveAs ueberladen, um die Eingabe abzuschliessen
+
+    FID_SCALE           [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_FUNCTION_BOX    [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_CHG_SHOW        [ ExecMethod = Execute; StateMethod = GetState; ]
+    WID_SIMPLE_REF      [ ExecMethod = Execute; StateMethod = NoState; ]
+    FID_CHG_ACCEPT      [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_CHG_COMMENT     [ ExecMethod = Execute; StateMethod = GetState; ]
+
+    FID_SCALESTATUS     [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_TOGGLESYNTAX    [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_TOGGLEHEADERS   [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_PAGEBREAKMODE   [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_REPAINT         [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_CURRENTCELL     [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_CURRENTOBJECT   [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_JUMPTOMARK      [ ExecMethod = Execute; StateMethod = NoState; ] // status(final|play)
+
+    SID_PRINTPREVIEW    [ ExecMethod = Execute; StateMethod = GetState; ]
+
+
+         // Suchen/Eersetzen:
+    FID_SEARCH_NOW      [ ExecMethod = ExecSearch; StateMethod = NoState;  ]
+    SID_SEARCH_ITEM     [ ExecMethod = ExecSearch;  StateMethod = GetState; ]
+    SID_SEARCH_OPTIONS  [ ExecMethod = NoExec;      StateMethod = GetState; ]
+     // Suchen/Ersetzen von Basic aus:
+    FID_SEARCH          [ ExecMethod = ExecSearch; ]
+    FID_REPLACE         [ ExecMethod = ExecSearch; ]
+    FID_SEARCH_ALL      [ ExecMethod = ExecSearch; ]
+    FID_REPLACE_ALL     [ ExecMethod = ExecSearch; ]
+    FID_REPEAT_SEARCH   [ ExecMethod = ExecSearch; ]
+
+    SID_CURRENTTAB      [ ExecMethod = Execute; StateMethod = GetState; ]
+
+    //  view options for drawing layer are needed here because they
+    //  can be set without a drawing object selected (#75361#)
+    SID_GRID_VISIBLE    [ ExecMethod = ExecDrawOpt; StateMethod = GetDrawOptState; Export = FALSE; ]
+    SID_GRID_USE        [ ExecMethod = ExecDrawOpt; StateMethod = GetDrawOptState; Export = FALSE; ]
+    SID_HELPLINES_MOVE  [ ExecMethod = ExecDrawOpt; StateMethod = GetDrawOptState; Export = FALSE; ]
+}
+
+
+ //
+ //     Pivot-Krempel
+ //
+
+interface DataPilotTables : Collection
+[
+    uuid ( "86DB0400-4EE6-11d1-89CB-008029E4B0B1" )
+]
+{
+}
+
+interface DataPilotTable : Selection
+[
+    uuid ( "E8DBA2C1-4C5E-11d1-89CB-008029E4B0B1" )
+]
+{
+    SbxObject DataPilotFields SID_PIVOT_FIELDS
+    [ HelpText = "" ; ]
+}
+
+interface DataPilotFields : Collection
+[
+    uuid ( "BA09AF20-4C70-11d1-89CB-008029E4B0B1" )
+]
+{
+}
+
+interface DataPilotField : Object
+[
+    uuid ( "D2C2C540-4C8B-11d1-89CB-008029E4B0B1" )
+]
+{
+    String FieldName SID_PFIELD_NAME
+    [ HelpText = "" ; ]
+    UINT16 Orientation SID_PFIELD_ORIENTATION
+    [ HelpText = "" ; ]
+    UINT16 Function SID_PFIELD_FUNCTION
+    [ HelpText = "" ; ]
+}
+
+ // ===========================================================================
+shell ScTabViewShell : SfxViewShell
+{
+    import TableSelection "ActiveDocument.ActiveTable";
+    import TableOLEObject "SelectedObject";
+    import Tables "ActiveDocument.Tables";
+    import BaseSelection;
+    import TableEditView[Automation];
+//  import SearchSettings;
+
+
+    SID_STATUS_PAGESTYLE    [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_TBXCTL_INSERT       [ ExecMethod = ExecTbx; StateMethod = GetTbxState; ]
+    SID_TBXCTL_INSCELLS     [ ExecMethod = ExecTbx; StateMethod = GetTbxState; ]
+    SID_TBXCTL_INSOBJ       [ ExecMethod = ExecTbx; StateMethod = GetTbxState; ]
+
+}
+
+/*------------------------------------------------------------------------
+    $Log: not supported by cvs2svn $
+    Revision 1.250  2000/06/21 12:33:27  nn
+    #75361# slots for grid options moved to tabvwsh
+
+    Revision 1.249  2000/05/11 17:01:05  nn
+    slots for old basic api removed2
+
+    Revision 1.248  1999/08/24 14:12:30  ANK
+    #68244# JumpToTable moved
+
+
+      Rev 1.247   24 Aug 1999 16:12:30   ANK
+   #68244# JumpToTable moved
+
+      Rev 1.246   09 Aug 1999 19:07:32   NN
+   sound/video
+
+      Rev 1.245   21 Jun 1999 20:38:22   ANK
+   #66547# Slot's moved
+
+      Rev 1.244   02 Jun 1999 21:42:24   ANK
+   #66547# SubShells
+
+------------------------------------------------------------------------*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

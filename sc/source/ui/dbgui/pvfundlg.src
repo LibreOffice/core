@@ -1,0 +1,651 @@
+/*************************************************************************
+ *
+ *  $RCSfile: pvfundlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "pvfundlg.hrc"
+ModalDialog RID_SCDLG_PIVOTSUBT
+{
+    OutputSize = TRUE ;
+    HelpId = HID_SC_PIVOTSUBT ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 220 , 188 ) ;
+    Text = "Datenfeld" ;
+    Text [ ENGLISH ] = "Data Field" ;
+    Text [ norwegian ] = "Data Field" ;
+    Text [ italian ] = "Campo di dati" ;
+    Text [ portuguese_brazilian ] = "Data Field" ;
+    Text [ portuguese ] = "Campo de dados" ;
+    Text [ english_us ] = "Data Field" ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    Hide = TRUE ;
+    RadioButton BTN_NONE
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text = "~Keine" ;
+        Text [ ENGLISH ] = "~None" ;
+        Text [ norwegian ] = "~Ingen " ;
+        Text [ italian ] = "~Nessuna" ;
+        Text [ portuguese_brazilian ] = "~Nenhum" ;
+        Text [ portuguese ] = "~Nenhum" ;
+        Text [ finnish ] = "~Ei ole" ;
+        Text [ danish ] = "Ingen" ;
+        Text [ french ] = "~Aucun(e)" ;
+        Text [ swedish ] = "~Inga" ;
+        Text [ dutch ] = "~Geen" ;
+        Text [ spanish ] = "~Ning˙n" ;
+        Text [ english_us ] = "~None" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "Œﬁ(~N)";
+        Text[ russian ] = "·ÂÁ";
+        Text[ polish ] = "Brak";
+        Text[ japanese ] = "Ç»Çµ(~N)";
+        Text[ chinese_traditional ] = "µL(~N)";
+        Text[ arabic ] = "»œÊ‰";
+        Text[ greek ] = " ·Ì›Ì·";
+        Text[ korean ] = "æ¯¿Ω(~N)";
+        Text[ turkish ] = "~Yok";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton BTN_AUTO
+    {
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text = "~Automatisch" ;
+        Text [ ENGLISH ] = "~Auto" ;
+        Text [ norwegian ] = "~Auto" ;
+        Text [ italian ] = "~Automatico" ;
+        Text [ portuguese_brazilian ] = "~Auto" ;
+        Text [ portuguese ] = "~Automaticamente" ;
+        Text [ finnish ] = "~Automaattinen" ;
+        Text [ danish ] = "Automatisk" ;
+        Text [ french ] = "~Automatique" ;
+        Text [ swedish ] = "~Automatisk" ;
+        Text [ dutch ] = "~Automatisch" ;
+        Text [ spanish ] = "~Autom·tico" ;
+        Text [ english_us ] = "~Automatic" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "◊‘∂Ø(~A)";
+        Text[ russian ] = "¿‚ÚÓÏ‡ÚË˜ÂÒÍË";
+        Text[ polish ] = "Automatycznie";
+        Text[ japanese ] = "é©ìÆ(~A)";
+        Text[ chinese_traditional ] = "¶€∞ (~A)";
+        Text[ arabic ] = " ·ﬁ«∆Ì";
+        Text[ greek ] = "¡ıÙ¸Ï·Ù·";
+        Text[ korean ] = "¿⁄µø(~A)";
+        Text[ turkish ] = "~Otomatik";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton BTN_USER
+    {
+        Pos = MAP_APPFONT ( 12 , 40 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text = "~Benutzerdefiniert" ;
+        Text [ ENGLISH ] = "~Userdefined" ;
+        Text [ norwegian ] = "~Brukerdefinert " ;
+        Text [ italian ] = "Definito dall'utente" ;
+        Text [ portuguese_brazilian ] = "~Definido pelo usu·rio" ;
+        Text [ portuguese ] = "Definido pelo ~utilizador" ;
+        Text [ finnish ] = "~K‰ytt‰j‰n" ;
+        Text [ danish ] = "Brugerdefineret" ;
+        Text [ french ] = "DÈfini par l'~utilisateur" ;
+        Text [ swedish ] = "~Anv‰ndardefinierade" ;
+        Text [ dutch ] = "Ge~bruikergedefinieerd" ;
+        Text [ spanish ] = "Definido por el ~usuario" ;
+        Text [ english_us ] = "~User-defined" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = " π”√’ﬂ◊‘…Ë(~U)";
+        Text[ russian ] = "«‡‰‡ÌÓ ÔÓÎ¸ÁÓ‚‡ÚÂÎÂÏ";
+        Text[ polish ] = "Zdefinowany przez uøytkownika";
+        Text[ japanese ] = "’∞ªﬁ∞íËã`(~U)";
+        Text[ chinese_traditional ] = "¶€≥](~U)";
+        Text[ arabic ] = "„⁄—› „‰ ﬁ»· «·„” Œœ„";
+        Text[ greek ] = "œÒÈÊ¸ÏÂÌÔ ·¸ ÙÔÌ ˜ÒﬁÛÙÁ";
+        Text[ korean ] = "ªÁøÎ¿⁄ ¡§¿«(~U)";
+        Text[ turkish ] = "~Kullan˝c˝ tan˝ml˝";
+        Text[ language_user1 ] = " ";
+    };
+    MultiListBox LB_FUNC
+    {
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 56 ) ;
+        Size = MAP_APPFONT ( 140 , 90 ) ;
+        TabStop = TRUE ;
+        AutoHScroll = TRUE ;
+        StringList =
+        {
+            < "Summe" ; Default ; > ;
+            < "Anzahl" ; Default ; > ;
+            < "Mittelwert" ; Default ; > ;
+            < "Max" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Produkt" ; Default ; > ;
+            /* ### ACHTUNG: Neuer Eintrag in Liste? 7 : Anzahl (nur Zahlen)*/
+            < "Anzahl (nur Zahlen)" ; Default ; > ;
+            < "StAbw (Stichprobe)" ; Default ; > ;
+            /* ### ACHTUNG: Neuer Eintrag in Liste? 9 : StAbwN (Grundgesamtheit)*/
+            < "StAbwN (Grundgesamtheit)" ; Default ; > ;
+            < "Varianz (Stichprobe)" ; Default ; > ;
+            < "Varianzen (Grundgesamtheit)" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Summe" ; Default ; > ;
+            < "Anzahl" ; Default ; > ;
+            < "Mittelwert" ; Default ; > ;
+            < "Max" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Produkt" ; Default ; > ;
+            < "Anzahl (nur Zahlen)" ; Default ; > ;
+            < "StAbw (Stichprobe)" ; Default ; > ;
+            < "StAbwN (Grundgesamtheit)" ; Default ; > ;
+            < "Varianz (Stichprobe)" ; Default ; > ;
+            < "Varianzen (Grundgesamtheit)" ; Default ; > ;
+        };
+        StringList [ norwegian ] =
+        {
+            < "Summe" ; Default ; > ;
+            < "Anzahl" ; Default ; > ;
+            < "Mittelwert" ; Default ; > ;
+            < "Max" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Produkt" ; Default ; > ;
+            < "Anzahl (nur Zahlen)" ; Default ; > ;
+            < "StAbw (Stichprobe)" ; Default ; > ;
+            < "StAbwN (Grundgesamtheit)" ; Default ; > ;
+            < "Varianz (Stichprobe)" ; Default ; > ;
+            < "Varianzen (Grundgesamtheit)" ; Default ; > ;
+        };
+        StringList [ italian ] =
+        {
+            < "Somma" ; Default ; > ;
+            < "Numero" ; Default ; > ;
+            < "Media" ; Default ; > ;
+            < "Max" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Prodotto" ; Default ; > ;
+            < "Numero (solo numeri)" ; Default ; > ;
+            < "DevSt (campione)" ; Default ; > ;
+            < "DevStP (popolazione)" ; Default ; > ;
+            < "Varianza (campione)" ; Default ; > ;
+            < "VarP (popolazione)" ; Default ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+            < "Summe" ; Default ; > ;
+            < "Anzahl" ; Default ; > ;
+            < "Mittelwert" ; Default ; > ;
+            < "Max" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Produkt" ; Default ; > ;
+            < "Anzahl2 (nur Zahlen)" ; Default ; > ;
+            < "StAbw (Stichprobe)" ; Default ; > ;
+            < "StAbwN(Grundgesamtheit)" ; Default ; > ;
+            < "Varianz (Stichprobe)" ; Default ; > ;
+            < "VarP" ; Default ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+            < "Total" ; Default ; > ;
+            < "Contar" ; Default ; > ;
+            < "Valor mÈdio" ; Default ; > ;
+            < "M·x." ; Default ; > ;
+            < "Min." ; Default ; > ;
+            < "Produto" ; Default ; > ;
+            < "Contar (sÛ n˙meros)" ; Default ; > ;
+            < "DesvPad (amostra)" ; Default ; > ;
+            < "DesvPadN (populaÁ„o)" ; Default ; > ;
+            < "Vari‚ncia (amostra)" ; Default ; > ;
+            < "Vari‚ncia P (populaÁ„o)" ; Default ; > ;
+        };
+        StringList [ finnish ] =
+        {
+            < "Summe" ; Default ; > ;
+            < "Anzahl" ; Default ; > ;
+            < "Mittelwert" ; Default ; > ;
+            < "Max" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Produkt" ; Default ; > ;
+            < "Anzahl (nur Zahlen)" ; Default ; > ;
+            < "StAbw (Stichprobe)" ; Default ; > ;
+            < "StAbwN (Grundgesamtheit)" ; Default ; > ;
+            < "Varianz (Stichprobe)" ; Default ; > ;
+            < "Varianzen (Grundgesamtheit)" ; Default ; > ;
+        };
+        StringList [ danish ] =
+        {
+            < "Sum" ; Default ; > ;
+            < "Antal" ; Default ; > ;
+            < "Middel" ; Default ; > ;
+            < "Maks" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Produkt" ; Default ; > ;
+            < "Antal (kun tal)" ; Default ; > ;
+            < "Stdafv (stikpr¯ve)" ; Default ; > ;
+            < "StdafvP (population)" ; Default ; > ;
+            < "Varians (stikpr¯ve)" ; Default ; > ;
+            < "VariansP (population)" ; Default ; > ;
+        };
+        StringList [ french ] =
+        {
+            < "Total" ; Default ; > ;
+            < "Nombre" ; Default ; > ;
+            < "Moyenne" ; Default ; > ;
+            < "Max" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Produit" ; Default ; > ;
+            < "Nombre (uniquement les nombres)" ; Default ; > ;
+            < "Ecartype (Èchantillon)" ; Default ; > ;
+            < "EcarTypeP (population)" ; Default ; > ;
+            < "Variance (Èchantillon)" ; Default ; > ;
+            < "VarP (population)" ; Default ; > ;
+        };
+        StringList [ swedish ] =
+        {
+            < "Summa" ; Default ; > ;
+            < "Antal" ; Default ; > ;
+            < "Medelv‰rde" ; Default ; > ;
+            < "Max" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Produkt" ; Default ; > ;
+            < "Antal (endast tal)" ; Default ; > ;
+            < "StdAv (stickprov)" ; Default ; > ;
+            < "StdAvP(population)" ; Default ; > ;
+            < "Varians (stickprov)" ; Default ; > ;
+            < "VariansP (population)" ; Default ; > ;
+        };
+        StringList [ dutch ] =
+        {
+            < "Som" ; Default ; > ;
+            < "Aantal" ; Default ; > ;
+            < "Gemiddelde waarde" ; Default ; > ;
+            < "Max" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Product" ; Default ; > ;
+            < "Aantal (alleen getallen)" ; Default ; > ;
+            < "StAfw (steekproef)" ; Default ; > ;
+            < "StAfwN (populatie)" ; Default ; > ;
+            < "Variantie (steekproef)" ; Default ; > ;
+            < "VarP (steekproef)" ; Default ; > ;
+        };
+        StringList [ spanish ] =
+        {
+            < "Suma" ; Default ; > ;
+            < "Cantidad" ; Default ; > ;
+            < "Promedio" ; Default ; > ;
+            < "M·x" ; Default ; > ;
+            < "MÌn" ; Default ; > ;
+            < "Producto" ; Default ; > ;
+            < "Cantidad2 (solo n˙meros)" ; Default ; > ;
+            < "DesvEst (Muestra)" ; Default ; > ;
+            < "DesvEstP (PoblaciÛn)" ; Default ; > ;
+            < "Varianza (Muestra)" ; Default ; > ;
+            < "Varianzas (PoblaciÛn)" ; Default ; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "Sum" ; Default ; > ;
+            < "Count" ; Default ; > ;
+            < "Average" ; Default ; > ;
+            < "Max" ; Default ; > ;
+            < "Min" ; Default ; > ;
+            < "Product" ; Default ; > ;
+            < "Count (Numbers only)" ; Default ; > ;
+            < "StDev (Sample)" ; Default ; > ;
+            < "StDevP (Population)" ; Default ; > ;
+            < "Var (Sample)" ; Default ; > ;
+            < "VarP (Population)" ; Default ; > ;
+        };
+        SimpleMode = TRUE ;
+    StringList [ chinese_simplified ] =
+    {
+            < "◊‹º∆" ; Default ; > ;
+        < "º∆ ˝" ; Default ; > ;
+        < "∆Ωæ˘÷µ" ; Default ; > ;
+        < "◊Ó¥Û" ; Default ; > ;
+        < "◊Ó–°" ; Default ; > ;
+        < "≥Àª˝" ; Default ; > ;
+        < "º∆ ˝(÷ª ˝◊÷)" ; Default ; > ;
+        < "±Í◊º∆´≤Ó(≥È—˘)" ; Default ; > ;
+        < "±Í◊º∆´≤Ó(»´≤øª˘ ˝)" ; Default ; > ;
+        < "∑Ω≤Ó(≥È—˘)" ; Default ; > ;
+        < "∑Ω≤Ó(»´≤øª˘ ˝)" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "—ÛÏÏ‡" ; Default ; > ;
+        < " ÓÎË˜ÂÒÚ‚Ó" ; Default ; > ;
+        < "—Â‰ÌÂÂ ÁÌ‡˜ÂÌËÂ" ; Default ; > ;
+        < "Ã‡ÍÒËÏÛÏ" ; Default ; > ;
+        < "ÃËÌËÏÛÏ" ; Default ; > ;
+        < "œÓËÁ‚Â‰ÂÌËÂ" ; Default ; > ;
+        < " ÓÎË˜ÂÒÚ‚Ó (ÚÓÎ¸ÍÓ ˜ËÒÂÎ)" ; Default ; > ;
+        < "—ÏÂ˘ÂÌÌÓÂ ÓÚÍÎÓÌÂÌËÂ (Œ·‡ÁÂˆ)" ; Default ; > ;
+        < "ÕÂÒÏÂ˘ÂÌÌÓÂ ÓÚÍÎÓÌÂÌËÂ (—Ó‚ÓÍÛÔÌÓÒÚ¸)" ; Default ; > ;
+        < "—ÏÂ˘ÂÌÌ‡ˇ ‰ËÒÔÂÒËˇ (Œ·‡ÁÂˆ)" ; Default ; > ;
+        < "ÕÂÒÏÂ˘ÂÌÌ‡ˇ ‰ËÒÔÂÒËˇ (—Ó‚ÓÍÛÔÌÓÒÚ¸)" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Suma" ; Default ; > ;
+        < "IloúÊ" ; Default ; > ;
+        < "årednia wartoúÊ" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Iloczyn" ; Default ; > ;
+        < "IloúÊ (tylko liczby)" ; Default ; > ;
+        < "Odchylenie standardowe (PrÛbka)" ; Default ; > ;
+        < "Odch.stdc (populacja)" ; Default ; > ;
+        < "Wariancja (PrÛbka)" ; Default ; > ;
+        < "Wariancja (ZbiorowoúÊ generalna)" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "çáåv" ; Default ; > ;
+        < "ëçêî" ; Default ; > ;
+        < "ïΩãœíl" ; Default ; > ;
+        < "ç≈ëÂíl" ; Default ; > ;
+        < "ç≈è¨íl" ; Default ; > ;
+        < "êœ" ; Default ; > ;
+        < "ëçêî(êîílÇÃÇ›)" ; Default ; > ;
+        < "StDev(ïWñ{)" ; Default ; > ;
+        < "StDevP(ïÍèWíc)" ; Default ; > ;
+        < "ï™éU(ïWñ{)" ; Default ; > ;
+        < "ï™éU(ïÍèWíc)" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "¡`≠p" ; Default ; > ;
+        < "≠pº∆" ; Default ; > ;
+        < "•≠ß°≠»" ; Default ; > ;
+        < "≥Ã§j" ; Default ; > ;
+        < "≥Ã§p" ; Default ; > ;
+        < "≠ºøn" ; Default ; > ;
+        < "≠pº∆(•uº∆¶r)" ; Default ; > ;
+        < "º–∑«∞æÆt(©‚ºÀ)" ; Default ; > ;
+        < "º–∑«∞æÆt(•˛≥°∞Úº∆)" ; Default ; > ;
+        < "§ËÆt(©‚ºÀ)" ; Default ; > ;
+        < "§ËÆt(•˛≥°∞Úº∆)" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "Sum" ; Default ; > ;
+        < "Count" ; Default ; > ;
+        < "Average" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Product" ; Default ; > ;
+        < "Count (√—ﬁ«„ ›ﬁÿ)" ; Default ; > ;
+        < "StDev (⁄Ì‰…)" ; Default ; > ;
+        < "StDevP («·„Ã „⁄)" ; Default ; > ;
+        < "VAR (⁄‰Ì…)" ; Default ; > ;
+        < "VarP («·„Ã „⁄)" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "¢ËÒÔÈÛÏ·" ; Default ; > ;
+        < "¡ÒÈËÏ¸Ú" ; Default ; > ;
+        < "Ã›ÛÁ ÙÈÏﬁ" ; Default ; > ;
+        < "ÃÂ„." ; Default ; > ;
+        < "≈Î·˜." ; Default ; > ;
+        < "√ÈÌ¸ÏÂÌÔ" ; Default ; > ;
+        < "–ÎﬁËÔÚ (Ï¸ÌÔ ·ÒÈËÏÔﬂ)" ; Default ; > ;
+        < "StDev (ƒÂﬂ„Ï·)" ; Default ; > ;
+        < "StDevP (–ÎÁËıÛÏÔ˝)" ; Default ; > ;
+        < "Var (ƒÂﬂ„Ï·)" ; Default ; > ;
+        < "VarP (–ÎÁËıÛÏÔ˝)" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "«’∞Ë" ; Default ; > ;
+        < "ƒ´øÓ∆Æ" ; Default ; > ;
+        < "∆Ú±’" ; Default ; > ;
+        < "√÷¥Î" ; Default ; > ;
+        < "√÷º“" ; Default ; > ;
+        < "¡¶«∞" ; Default ; > ;
+        < "ƒ´øÓ∆Æ (π¯»£∏∏)" ; Default ; > ;
+        < "StDev (ª˘«√)" ; Default ; > ;
+        < "«•¡ÿ ∆Ì¬˜ (∏¡˝¥‹)" ; Default ; > ;
+        < "«•¡ÿ ∆Ì¬˜(ª˘«√)" ; Default ; > ;
+        < "∫–ªÍ (∏¡˝¥‹)" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "Toplam" ; Default ; > ;
+        < "Count" ; Default ; > ;
+        < "Ortalama deer" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "«arp˝m" ; Default ; > ;
+        < "Count (yaln˝zca say˝)" ; Default ; > ;
+        < "StDev (sample)" ; Default ; > ;
+        < "StAbwN (population)" ; Default ; > ;
+        < "Var (sample)" ; Default ; > ;
+        < "VarP (population)" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+    };
+    };
+    GroupBox GB_FUNC
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 152 , 150 ) ;
+    };
+    CheckBox CB_SHOWALL
+    {
+        Pos = MAP_APPFONT ( 6 , 159 ) ;
+        Size = MAP_APPFONT ( 152 , 10 ) ;
+        Text = "~Elemente ohne Daten anzeigen" ;
+        Text [ ENGLISH ] = "Show elements without data" ;
+        TabStop = TRUE ;
+        Text[ english_us ] = "Show ~elements without data";
+        Text[ portuguese ] = "Mostrar ~elementos sem data";
+        Text[ russian ] = "œÓÍ‡Á‡Ú¸ ˝ÎÂÏÂÌÚ˚ ·ÂÁ ‰‡ÌÌ˚ı";
+        Text[ greek ] = "≈Ïˆ‹ÌÈÛÁ ÛÙÔÈ˜Âﬂ˘Ì ‰ﬂ˜˘Ú ‰Â‰ÔÏ›Ì·";
+        Text[ dutch ] = "~Elementen weergeven zonder gegevens";
+        Text[ french ] = "Afficher les ~ÈlÈments sans donnÈes";
+        Text[ spanish ] = "~Mostrar elementos sin datos";
+        Text[ italian ] = "Mostra ~elementi senza dati";
+        Text[ danish ] = "Vis elementer uden data";
+        Text[ swedish ] = "Visa objekt utan data";
+        Text[ polish ] = "Pokaø elementy bez danych";
+        Text[ portuguese_brazilian ] = "Show elements without data";
+        Text[ japanese ] = "óvëfÇ√ﬁ∞¿Ç»ÇµÇ≈ï\\é¶(~E)";
+        Text[ korean ] = "µ•¿Ã≈Õ æ¯¿Ã ø‰º“ ∫∏±‚(~E)";
+        Text[ chinese_simplified ] = "œ‘ æ≤ª∫¨ ˝æ›µƒÃıƒø(~E)";
+        Text[ chinese_traditional ] = "≈„•‹µLº∆’u™∫≥Ê§∏(~E)";
+        Text[ arabic ] = "≈ŸÂ«— «·⁄‰«’— »œÊ‰ »Ì«‰« ";
+        Text[ turkish ] = "~÷geleri veriler olmadan gˆr¸nt¸le";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_NAMELABEL
+    {
+        Pos = MAP_APPFONT ( 6 , 174 ) ;
+        Size = MAP_APPFONT ( 25 , 10 ) ;
+        Text = "Name:" ;
+        Text [ ENGLISH ] = "Name:" ;
+        Text [ norwegian ] = "Navn:" ;
+        Text [ italian ] = "Nome:" ;
+        Text [ portuguese_brazilian ] = "Nome:" ;
+        Text [ portuguese ] = "Nome:" ;
+        Text [ finnish ] = "Nimi:" ;
+        Text [ danish ] = "Navn:" ;
+        Text [ french ] = "Nom :" ;
+        Text [ swedish ] = "Namn:" ;
+        Text [ dutch ] = "Naam:" ;
+        Text [ spanish ] = "Nombre:" ;
+        Text [ english_us ] = "Name:" ;
+        Text[ chinese_simplified ] = "√˚≥∆£∫";
+        Text[ russian ] = "»Ïˇ:";
+        Text[ polish ] = "Nazwa:";
+        Text[ japanese ] = "ñºëO:";
+        Text[ chinese_traditional ] = "¶W∫Ÿ°G";
+        Text[ arabic ] = "«·«”„:";
+        Text[ greek ] = "ºÌÔÏ·:";
+        Text[ korean ] = "¿Ã∏ß:";
+        Text[ turkish ] = "Ad:";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 32 , 174 ) ;
+        Size = MAP_APPFONT ( 125 , 10 ) ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 164 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 164 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 164 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    String STR_SUBTOTALS
+    {
+        Text = "Teilergebnisse" ;
+        Text [ ENGLISH ] = "Sub Totals" ;
+        Text [ norwegian ] = "Sum" ;
+        Text [ italian ] = "Subtotali" ;
+        Text [ portuguese_brazilian ] = "Sub Totais" ;
+        Text [ portuguese ] = "Subtotais" ;
+        Text [ finnish ] = "V‰lisummat" ;
+        Text [ danish ] = "Subtotaler" ;
+        Text [ french ] = "Sous-totaux" ;
+        Text [ swedish ] = "Delresultat" ;
+        Text [ dutch ] = "Subtotalen" ;
+        Text [ spanish ] = "Subtotales" ;
+        Text [ english_us ] = "Subtotals" ;
+        Text[ chinese_simplified ] = "∑÷¿‡ª„◊‹";
+        Text[ russian ] = "œÓÏÂÊÛÚÓ˜Ì˚Â ËÚÓ„Ë";
+        Text[ polish ] = "Sumy poúrednie";
+        Text[ japanese ] = "è¨åv";
+        Text[ chinese_traditional ] = "§p≠p";
+        Text[ arabic ] = "Subtotals";
+        Text[ greek ] = "ÃÂÒÈÍ‹ ·ËÒÔﬂÛÏ·Ù·";
+        Text[ korean ] = "º“∞Ë";
+        Text[ turkish ] = "Ara toplam";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_DATAFUNC
+    {
+        Text = "Funktion" ;
+        Text [ ENGLISH ] = "Function" ;
+        Text [ norwegian ] = "Funksjon" ;
+        Text [ italian ] = "Funzione" ;
+        Text [ portuguese_brazilian ] = "FunÁ„o" ;
+        Text [ portuguese ] = "FunÁ„o" ;
+        Text [ finnish ] = "Funktio" ;
+        Text [ danish ] = "Funktion" ;
+        Text [ french ] = "Fonction" ;
+        Text [ swedish ] = "Funktion" ;
+        Text [ dutch ] = "Functie" ;
+        Text [ spanish ] = "FunciÛn" ;
+        Text [ english_us ] = "Function" ;
+        Text[ chinese_simplified ] = "∫Ø ˝";
+        Text[ russian ] = "‘ÛÌÍˆËˇ";
+        Text[ polish ] = "Funkcja";
+        Text[ japanese ] = "ä÷êî";
+        Text[ chinese_traditional ] = "®Áº∆";
+        Text[ arabic ] = "Function";
+        Text[ greek ] = "”ıÌ‹ÒÙÁÛÁ";
+        Text[ korean ] = "«‘ºˆ";
+        Text[ turkish ] = "Fonksiyon";
+        Text[ language_user1 ] = " ";
+    };
+    Text [ spanish ] = "Campo de datos" ;
+    Text [ french ] = "Champ de donnÈes" ;
+    Text [ dutch ] = "Gegevensveld" ;
+    Text [ swedish ] = "Dataf‰lt" ;
+    Text [ danish ] = "Datafelt" ;
+    Text[ chinese_simplified ] = " ˝æ›¿∏";
+    Text[ russian ] = "œÓÎÂ ‰‡ÌÌ˚ı";
+    Text[ polish ] = "Pole danych";
+    Text[ japanese ] = "√ﬁ∞¿Ã®∞Ÿƒﬁ";
+    Text[ chinese_traditional ] = "∏ÍÆ∆ƒÊ";
+    Text[ arabic ] = "Õﬁ· »Ì«‰« ";
+    Text[ greek ] = "–Â‰ﬂÔ ‰Â‰ÔÏ›Ì˘Ì";
+    Text[ korean ] = "µ•¿Ã≈Õ « µÂ";
+    Text[ turkish ] = "Veri alan˝";
+    Text[ language_user1 ] = " ";
+};

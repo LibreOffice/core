@@ -1,0 +1,212 @@
+/*************************************************************************
+ *
+ *  $RCSfile: scmod2.cxx,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:44:53 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifdef PCH
+#include "ui_pch.hxx"
+#endif
+
+#pragma hdrstop
+
+//------------------------------------------------------------------
+
+#ifdef ONE_LINGU
+
+#include <unotools/processfactory.hxx>
+#include <vos/xception.hxx>
+
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/linguistic/XThesaurus.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+
+using namespace com::sun::star;
+
+#include "scmod.hxx"
+#include "convuno.hxx"
+
+//------------------------------------------------------------------
+
+#define SERVICE_LINGUPROP   "com.sun.star.linguistic.LinguProperties"
+#define SERVICE_THESAURUS   "com.sun.star.linguistic.Thesaurus"
+
+#define LINGUPROP_DEFAULTLANG       "DefaultLanguage"
+#define LINGUPROP_AUTOSPELL         "IsSpellAuto"
+#define LINGUPROP_HIDEAUTO          "IsSpellHide"
+
+//------------------------------------------------------------------
+
+// static
+void ScModule::GetSpellSettings( USHORT& rDefLang, BOOL& rAutoSpell, BOOL& rHideAuto )
+{
+    // GetLinguConfig is no longer needed, LinguProperties load themselves
+
+    rDefLang = LANGUAGE_SYSTEM;
+    rAutoSpell = rHideAuto = FALSE;
+
+    TRY
+    {
+        uno::Reference< lang::XMultiServiceFactory > xManager = utl::getProcessServiceFactory();
+        uno::Reference< beans::XPropertySet > xProp( xManager->createInstance(
+                            rtl::OUString::createFromAscii( SERVICE_LINGUPROP ) ),
+                        uno::UNO_QUERY );
+        if ( xProp.is() )
+        {
+            uno::Any aAny = xProp->getPropertyValue(
+                rtl::OUString::createFromAscii( LINGUPROP_DEFAULTLANG ) );
+            aAny >>= rDefLang;
+            aAny = xProp->getPropertyValue(
+                rtl::OUString::createFromAscii( LINGUPROP_AUTOSPELL ) );
+            aAny >>= rAutoSpell;
+            aAny = xProp->getPropertyValue(
+                rtl::OUString::createFromAscii( LINGUPROP_HIDEAUTO ) );
+            aAny >>= rHideAuto;
+        }
+    }
+    CATCH_ALL()
+    {
+        DBG_ERROR("Error in LinguProperties");
+    }
+    END_CATCH
+}
+
+// static
+void ScModule::SetAutoSpellProperty( BOOL bSet )
+{
+    //  config item must be loaded/stored from outside
+    TRY
+    {
+        uno::Reference< lang::XMultiServiceFactory > xManager = utl::getProcessServiceFactory();
+        uno::Reference< beans::XPropertySet > xProp( xManager->createInstance(
+                            rtl::OUString::createFromAscii( SERVICE_LINGUPROP ) ),
+                        uno::UNO_QUERY );
+        if ( xProp.is() )
+        {
+            uno::Any aAny;
+            aAny <<= bSet;
+            xProp->setPropertyValue( rtl::OUString::createFromAscii( LINGUPROP_AUTOSPELL ), aAny );
+        }
+    }
+    CATCH_ALL()
+    {
+        DBG_ERROR("Error in LinguProperties");
+    }
+    END_CATCH
+}
+
+// static
+void ScModule::SetHideAutoProperty( BOOL bSet )
+{
+    //  config item must be loaded/stored from outside
+    TRY
+    {
+        uno::Reference< lang::XMultiServiceFactory > xManager = utl::getProcessServiceFactory();
+        uno::Reference< beans::XPropertySet > xProp( xManager->createInstance(
+                            rtl::OUString::createFromAscii( SERVICE_LINGUPROP ) ),
+                        uno::UNO_QUERY );
+        if ( xProp.is() )
+        {
+            uno::Any aAny;
+            aAny <<= bSet;
+            xProp->setPropertyValue( rtl::OUString::createFromAscii( LINGUPROP_HIDEAUTO ), aAny );
+        }
+    }
+    CATCH_ALL()
+    {
+        DBG_ERROR("Error in LinguProperties");
+    }
+    END_CATCH
+}
+
+
+// static
+BOOL ScModule::HasThesaurusLanguage( USHORT nLang )
+{
+    if ( nLang == LANGUAGE_NONE )
+        return FALSE;
+
+    lang::Locale aLocale;
+    ScUnoConversion::FillLocale( aLocale, nLang );
+
+    BOOL bHasLang = FALSE;
+    TRY
+    {
+        uno::Reference< lang::XMultiServiceFactory > xManager = utl::getProcessServiceFactory();
+        uno::Reference< linguistic::XThesaurus > xThes( xManager->createInstance(
+                            rtl::OUString::createFromAscii( SERVICE_THESAURUS ) ),
+                        uno::UNO_QUERY );
+        if ( xThes.is() )
+            bHasLang = xThes->hasLocale( aLocale );
+    }
+    CATCH_ALL()
+    {
+        DBG_ERROR("Error in Thesaurus");
+    }
+    END_CATCH
+
+    return bHasLang;
+}
+
+
+#endif  // ONE_LINGU
+
+
+
+

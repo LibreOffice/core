@@ -1,0 +1,279 @@
+/*************************************************************************
+ *
+ *  $RCSfile: imoptdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+#include "imoptdlg.hrc"
+
+//! modify CharSet handling like in asciiopt
+
+#define FONTLISTBOX \
+    Border = TRUE;                              \
+    StringList = {                              \
+        < "Ansi";        1; >;      \
+        < "Mac";         2; >;      \
+        < "IBMPC";       4; >;      \
+        < "IBMPC (437)"; 3; >;  \
+        < "IBMPC (850)"; 4; >;  \
+        < "IBMPC (860)"; 5; >;  \
+        < "IBMPC (861)"; 6; >;  \
+        < "IBMPC (863)"; 7; >;  \
+        < "IBMPC (865)"; 8; >;  \
+        < "System";      9; >;      \
+    };
+
+
+ModalDialog RID_SCDLG_IMPORTOPT
+{
+    HelpId = HID_SC_INPORTOPT ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 196 , 77 ) ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    Text = "Datei Importieren" ;
+    Text [ ENGLISH ] = "Import File" ;
+    Text [ norwegian ] = "Import File" ;
+    Text [ italian ] = "Importa file" ;
+    Text [ portuguese_brazilian ] = "Import File" ;
+    Text [ portuguese ] = "Importar ficheiro" ;
+    Text [ french ] = "Import de fichier" ;
+    Text [ dutch ] = "Bestand importeren" ;
+    Text [ spanish ] = "Importar archivo" ;
+    Text [ danish ] = "Importer fil" ;
+    Text [ swedish ] = "Importera fil" ;
+    Text [ finnish ] = "Import File" ;
+    Text [ english_us ] = "Import File" ;
+    FixedText FT_FIELDSEP
+    {
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 55 , 10 ) ;
+        Text = "~Feldtrenner" ;
+        Text [ ENGLISH ] = "~Field delimiter" ;
+        Text [ norwegian ] = "~Field delimiter" ;
+        Text [ italian ] = "Separatore di campo" ;
+        Text [ portuguese_brazilian ] = "~Field delimiter" ;
+        Text [ portuguese ] = "Separador de ~campo" ;
+        Text [ french ] = "~SÈparateur de champ" ;
+        Text [ dutch ] = "~Veldbegrenzing" ;
+        Text [ spanish ] = "Separador de campos" ;
+        Text [ danish ] = "Feltseparator" ;
+        Text [ swedish ] = "~F‰ltdelare" ;
+        Text [ finnish ] = "~Field delimiter" ;
+        Text [ english_us ] = "~Field delimiter" ;
+        Text[ chinese_simplified ] = "◊÷∂Œ∑÷∏Ù∑˚(~F)";
+        Text[ russian ] = "–‡Á‰ÂÎËÚÂÎ¸ ÔÓÎˇ";
+        Text[ polish ] = "Ogranicznik pola";
+        Text[ japanese ] = "Ã®∞ŸƒﬁÇÃãÊêÿÇËãLçÜ(~F)";
+        Text[ chinese_traditional ] = "ƒÊ¶Ï§¿πj≤≈(~F)";
+        Text[ arabic ] = "›«’· «·Õﬁ·";
+        Text[ greek ] = "ƒÈ·˜˘ÒÈÛÙÈÍ¸ Â‰ﬂ˘Ì";
+        Text[ korean ] = "« µÂ ±∏∫– ±‚»£(~F)";
+        Text[ turkish ] = "~Ay˝rma i˛areti";
+        Text[ language_user1 ] = " ";
+    };
+    ComboBox ED_FIELDSEP
+    {
+        Pos = MAP_APPFONT ( 70 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 60 ) ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_TEXTSEP
+    {
+        Pos = MAP_APPFONT ( 12 , 35 ) ;
+        Size = MAP_APPFONT ( 55 , 10 ) ;
+        Text = "~Texttrenner" ;
+        Text [ ENGLISH ] = "~Text delimiter" ;
+        Text [ norwegian ] = "~Text delimiter" ;
+        Text [ italian ] = "Separatore di ~testo" ;
+        Text [ portuguese_brazilian ] = "~Text delimiter" ;
+        Text [ portuguese ] = "Delimitador de ~texto" ;
+        Text [ french ] = "SÈparateur de ~texte" ;
+        Text [ dutch ] = "~Tekstbegrenzing" ;
+        Text [ spanish ] = "S~eparador de texto" ;
+        Text [ danish ] = "Tekstseparator" ;
+        Text [ swedish ] = "~Textavgr‰nsare" ;
+        Text [ finnish ] = "~Text delimiter" ;
+        Text [ english_us ] = "~Text delimiter" ;
+        Text[ chinese_simplified ] = "Œƒ◊÷∑÷∏Ù∑˚(~T)";
+        Text[ russian ] = "–‡Á‰ÂÎËÚÂÎ¸ ÚÂÍÒÚ‡";
+        Text[ polish ] = "Ogranicznik tekstu";
+        Text[ japanese ] = "√∑ΩƒÇÃãÊêÿÇËãLçÜ(~T)";
+        Text[ chinese_traditional ] = "§Â¶r§¿πj≤≈(~T)";
+        Text[ arabic ] = "›«’· «·‰’";
+        Text[ greek ] = "ƒÈ·˜˘ÒÈÛÙÈÍ¸ ÍÂÈÏ›ÌÔı";
+        Text[ korean ] = "≈ÿΩ∫∆Æ ±∏∫– ±‚»£(~T)";
+        Text[ turkish ] = "~Metin ay˝rma i˛a.";
+        Text[ language_user1 ] = " ";
+    };
+    ComboBox ED_TEXTSEP
+    {
+        Pos = MAP_APPFONT ( 70 , 33 ) ;
+        Size = MAP_APPFONT ( 60 , 60 ) ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_FONT
+    {
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Size = MAP_APPFONT ( 55 , 10 ) ;
+        Text = "~Zeichensatz" ;
+        Text [ ENGLISH ] = "F~ont" ;
+        Text [ norwegian ] = "F~ont" ;
+        Text [ italian ] = "~Tipo di carattere" ;
+        Text [ portuguese_brazilian ] = "F~onte" ;
+        Text [ portuguese ] = "~Conjunto de caracteres" ;
+        Text [ french ] = "~Jeu de caractËres" ;
+        Text [ dutch ] = "~Tekenset" ;
+        Text [ spanish ] = "J~uego de caracteres" ;
+        Text [ danish ] = "TegnsÊt" ;
+        Text [ swedish ] = "~Teckenupps‰ttning" ;
+        Text [ finnish ] = "F~ont" ;
+        Text [ english_us ] = "~Character set" ;
+        Text[ chinese_simplified ] = "◊÷ÃÂ(~C)";
+        Text[ russian ] = "Õ‡·Ó ÒËÏ‚ÓÎÓ‚";
+        Text[ polish ] = "ZbiÛr znakÛw";
+        Text[ japanese ] = "ï∂éöóÒ(~C)";
+        Text[ chinese_traditional ] = "¶r´¨(~C)";
+        Text[ arabic ] = "„Ã„Ê⁄… √Õ—›";
+        Text[ greek ] = "~”ÂÙ ˜·Ò·ÍÙﬁÒ˘Ì";
+        Text[ korean ] = "πÆ¿⁄ ºº∆Æ(~C)";
+        Text[ turkish ] = "~Karakter k¸mesi";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox DDLB_FONT
+    {
+        FONTLISTBOX
+        DropDown = TRUE ;
+        Pos = MAP_APPFONT ( 70 , 51 ) ;
+        Size = MAP_APPFONT ( 60 , 81 ) ;
+    };
+    ListBox LB_FONT
+    {
+        FONTLISTBOX
+        DropDown = FALSE ;
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 119 , 50 ) ;
+    };
+    GroupBox GB_FIELDOPT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 130 , 68 ) ;
+        Text = "Feld Optionen" ;
+        Text [ ENGLISH ] = "Field Options" ;
+        Text [ norwegian ] = "Field Options" ;
+        Text [ italian ] = "Opzioni campo" ;
+        Text [ portuguese_brazilian ] = "OpÁıes de Campo" ;
+        Text [ portuguese ] = "OpÁıes de campo" ;
+        Text [ french ] = "Options de champ" ;
+        Text [ dutch ] = "Veldopties" ;
+        Text [ spanish ] = "Opciones de campo" ;
+        Text [ danish ] = "Feltindstillinger" ;
+        Text [ swedish ] = "F‰ltalternativ" ;
+        Text [ finnish ] = "Field Options" ;
+        Text [ english_us ] = "Field options" ;
+        Text[ chinese_simplified ] = "◊÷∂Œ—°œÓ";
+        Text[ russian ] = "œ‡‡ÏÂÚ˚ ÔÓÎˇ";
+        Text[ polish ] = "Opcje pola";
+        Text[ japanese ] = "Ã®∞ŸƒﬁµÃﬂºÆ›";
+        Text[ chinese_traditional ] = "ƒÊ¶ÏøÔ∂µ";
+        Text[ arabic ] = "ŒÌ«—«  «·Õﬁ·";
+        Text[ greek ] = "≈ÈÎÔ„›Ú Â‰ﬂÔı";
+        Text[ korean ] = "« µÂ ø…º«";
+        Text[ turkish ] = "Alan seÁenekleri";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 142 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 142 , 24 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 142 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    String STR_CHARSETKEYS // DO NOT TRANSLATE
+     // DO NOT TRANSLATE
+     // DO NOT TRANSLATE
+     // DO NOT TRANSLATE
+     // DO NOT TRANSLATE
+     // DO NOT TRANSLATE
+    {
+         // DO NOT TRANSLATE
+        Text = "ANSI;MAC;IBMPC;IBMPC_437;IBMPC_850;IBMPC_860;IBMPC_861;IBMPC_863;IBMPC_865;SYSTEM" ;
+    };
+    Text[ chinese_simplified ] = " ‰»ÎŒƒº˛";
+    Text[ russian ] = "»ÏÔÓÚ Ù‡ÈÎ‡";
+    Text[ polish ] = "Importuj plik";
+    Text[ japanese ] = "Ãß≤ŸÇÃ≤›Œﬂ∞ƒ";
+    Text[ chinese_traditional ] = "øÈ§J¿…Æ◊";
+    Text[ arabic ] = "«” Ì—«œ „·›";
+    Text[ greek ] = "≈ÈÛ·„˘„ﬁ ·Ò˜ÂﬂÔı";
+    Text[ korean ] = "∆ƒ¿œ ∞°¡Æø¿±‚";
+    Text[ turkish ] = "Dosyay˝ iÁe aktar";
+    Text[ language_user1 ] = " ";
+};
+

@@ -1,0 +1,1288 @@
+/*************************************************************************
+ *
+ *  $RCSfile: validate.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:44:55 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+#include "validate.hrc"
+
+
+TabDialog TAB_DLG_VALIDATION
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 289 , 176 ) ;
+    /* ### ACHTUNG: Neuer Text in Resource? Gültigkeit : G³ltigkeit */
+    Text = "Gültigkeit" ;
+    Text [ ENGLISH ] = "Validation" ;
+    Moveable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TP_VALIDATION_VALUES ;
+                Text = "Werte" ;
+                Text [ ENGLISH ] = "Values" ;
+                PageResID = TP_VALIDATION_VALUES ;
+                Text [ english_us ] = "Values" ;
+                Text [ swedish ] = "Värden" ;
+                Text [ danish ] = "Værdier" ;
+                Text [ italian ] = "Valori" ;
+                Text [ spanish ] = "Valores" ;
+                Text [ french ] = "Valeurs" ;
+                Text [ dutch ] = "Waarden" ;
+                Text [ portuguese ] = "Valores" ;
+                Text [ portuguese_brazilian ] = "Werte" ;
+                Text[ chinese_simplified ] = "ÊıÖµ";
+                Text[ russian ] = "Çíà÷åíèå";
+                Text[ polish ] = "Wartoœci";
+                Text[ japanese ] = "İ’è";
+                Text[ chinese_traditional ] = "¼Æ­È";
+                Text[ arabic ] = "ÇáŞíã";
+                Text[ greek ] = "Ôéìİò";
+                Text[ korean ] = "°ª";
+                Text[ turkish ] = "Değerler";
+            };
+            PageItem
+            {
+                Identifier = TP_VALIDATION_INPUTHELP ;
+                Text = "Eingabehilfe" ;
+                Text [ ENGLISH ] = "Input help" ;
+                PageResID = TP_VALIDATION_INPUTHELP ;
+                Text [ english_us ] = "Input Help" ;
+                Text [ swedish ] = "Inmatningshjälp" ;
+                Text [ danish ] = "Inputhjælp" ;
+                Text [ italian ] = "Aiuto per la digitazione" ;
+                Text [ spanish ] = "Ayuda de entrada" ;
+                Text [ french ] = "Aide à la saisie" ;
+                Text [ dutch ] = "Invoerhulp" ;
+                Text [ portuguese ] = "Ajuda de entrada" ;
+                Text [ portuguese_brazilian ] = "Eingabehilfe" ;
+                Text[ chinese_simplified ] = "ÊäÈë°ïÖú";
+                Text[ russian ] = "Ïîìîùü ââîäà";
+                Text[ polish ] = "Pomoc przy wprow.";
+                Text[ japanese ] = "“ü—ÍÒ¯¾°¼Ş";
+                Text[ chinese_traditional ] = "¿é¤JÀ°§U";
+                Text[ arabic ] = "ãÓÇÚÏÉ ÇáÅÏÎÇá";
+                Text[ greek ] = "ÂïŞèåéá åéóáãùãŞò";
+                Text[ korean ] = "µµ¿ò¸» »ğÀÔ";
+                Text[ turkish ] = "Giriş yardımı";
+            };
+            PageItem
+            {
+                Identifier = TP_VALIDATION_ERROR ;
+                Text = "Fehlermeldung" ;
+                Text [ ENGLISH ] = "Error message" ;
+                PageResID = TP_VALIDATION_ERROR ;
+                Text [ english_us ] = "Error Alert" ;
+                Text [ swedish ] = "Felmeddelande" ;
+                Text [ danish ] = "Fejlmelding" ;
+                Text [ italian ] = "Messaggio di errore" ;
+                Text [ spanish ] = "Mensaje de error" ;
+                Text [ french ] = "Message d'erreur" ;
+                Text [ dutch ] = "Foutmelding" ;
+                Text [ portuguese ] = "Mensagem de erro" ;
+                Text [ portuguese_brazilian ] = "Fehlermeldung" ;
+                Text[ chinese_simplified ] = "´íÎó±¨¸æ";
+                Text[ russian ] = "Ñîîáùåíèå îá îøèáêå";
+                Text[ polish ] = "Komunikat o b³êdzie";
+                Text[ japanese ] = "´×°Ò¯¾°¼Ş";
+                Text[ chinese_traditional ] = "¿ù»~³ø§i";
+                Text[ arabic ] = "ÑÓÇáÉ ÎØÃ";
+                Text[ greek ] = "ÌŞíõìá óöÜëìáôïò";
+                Text[ korean ] = "¿À·ù °æ°í";
+                Text[ turkish ] = "Hata iletisi";
+            };
+        };
+    };
+    Text [ english_us ] = "Validity" ;
+    Text [ swedish ] = "Validitet" ;
+    Text [ danish ] = "Validitet" ;
+    Text [ italian ] = "Validità" ;
+    Text [ spanish ] = "Validez" ;
+    Text [ french ] = "Validité" ;
+    Text [ dutch ] = "Geldigheid" ;
+    Text [ portuguese ] = "Validade" ;
+    Text [ portuguese_brazilian ] = "Gültigkeit" ;
+    Text[ chinese_simplified ] = "ÓĞĞ§ĞÔ";
+    Text[ russian ] = "Ïğîâåğêà";
+    Text[ polish ] = "Wa¿noœæ";
+    Text[ japanese ] = "ÃŞ°À‚Ì“ü—Í‹K‘¥";
+    Text[ chinese_traditional ] = "¦³®Ä";
+    Text[ arabic ] = "ÇáÕáÇÍíÉ";
+    Text[ greek ] = "Éó÷ıò";
+    Text[ korean ] = "À¯È¿¼º";
+    Text[ turkish ] = "Geçerlilik";
+};
+
+TabPage TP_VALIDATION_VALUES
+{
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Text = "Werte" ;
+    Text [ ENGLISH ] = "Values" ;
+    FixedText FT_ALLOW
+    {
+        Pos = MAP_APPFONT ( 12 , 20 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Text = "~Zulassen" ;
+        Text [ ENGLISH ] = "~Allow" ;
+        Text [ dutch ] = "~Toestaan" ;
+        Text [ english_us ] = "~Allow" ;
+        Text [ swedish ] = "T~illåt" ;
+        Text [ danish ] = "Tillad" ;
+        Text [ italian ] = "Permetti" ;
+        Text [ spanish ] = "Per~mitir" ;
+        Text [ french ] = "~Autoriser" ;
+        Text [ portuguese_brazilian ] = "~Zulassen" ;
+        Text [ portuguese ] = "~Permitir" ;
+        Text[ chinese_simplified ] = "ÔÊĞí(~A)";
+        Text[ russian ] = "Ğàçğåøèòü";
+        Text[ polish ] = "Pozwól";
+        Text[ japanese ] = "“ü—Í’l‚Ìí—Ş(~A)";
+        Text[ chinese_traditional ] = "®e³\\(~A)";
+        Text[ arabic ] = "ÓãÇÍ";
+        Text[ greek ] = "Íá åğéôñáğåß";
+        Text[ korean ] = "Çã¿ë(~A)";
+        Text[ turkish ] = "~Geçerli";
+    };
+    ListBox LB_ALLOW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 18 ) ;
+        Size = MAP_APPFONT ( 91 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+         // Reihenfolge entspricht enum ScValidationMode
+        StringList =
+        {
+            < "Jeden Wert" ; Default ; > ;
+            < "Ganze Zahl" ; Default ; > ;
+            < "Dezimal" ; Default ; > ;
+            < "Datum" ; Default ; > ;
+            < "Zeit" ; Default ; > ;
+            /* ### ACHTUNG: Neuer Eintrag in Liste? 6 : Textlänge*/
+            < "Textlänge" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Jeden Wert" ; Default ; > ;
+            < "Ganze Zahl" ; Default ; > ;
+            < "Dezimal" ; Default ; > ;
+            < "Datum" ; Default ; > ;
+            < "Zeit" ; Default ; > ;
+            < "Textlänge" ; Default ; > ;
+        };
+        stringlist [ portuguese ] =
+        {
+            < "Todos os valores" ; Default ; > ;
+            < "Números inteiros" ; Default ; > ;
+            < "Decimal" ; Default ; > ;
+            < "Data" ; Default ; > ;
+            < "Hora" ; Default ; > ;
+            < "Comprimento do texto" ; Default ; > ;
+        };
+        stringlist [ english_us ] =
+        {
+            < "All values" ; Default ; > ;
+            < "Whole Numbers" ; Default ; > ;
+            < "Decimal" ; Default ; > ;
+            < "Date" ; Default ; > ;
+            < "Time" ; Default ; > ;
+            < "Text Length" ; Default ; > ;
+        };
+        stringlist [ portuguese_brazilian ] =
+        {
+            < "Jeden Wert" ; Default ; > ;
+            < "Ganze Zahl" ; Default ; > ;
+            < "Dezimal" ; Default ; > ;
+            < "Datum" ; Default ; > ;
+            < "Zeit" ; Default ; > ;
+            < "Textlänge" ; Default ; > ;
+        };
+        stringlist [ swedish ] =
+        {
+            < "Varje värde" ; Default ; > ;
+            < "Heltal" ; Default ; > ;
+            < "Decimal" ; Default ; > ;
+            < "Datum" ; Default ; > ;
+            < "Tid" ; Default ; > ;
+            < "Textlängd" ; Default ; > ;
+        };
+        stringlist [ danish ] =
+        {
+            < "Vilkårlig værdi" ; Default ; > ;
+            < "Helt tal" ; Default ; > ;
+            < "Decimal" ; Default ; > ;
+            < "Dato" ; Default ; > ;
+            < "Tid" ; Default ; > ;
+            < "Tekstlængde" ; Default ; > ;
+        };
+        stringlist [ italian ] =
+        {
+            < "Ogni valore" ; Default ; > ;
+            < "Numero intero" ; Default ; > ;
+            < "Decimale" ; Default ; > ;
+            < "Data" ; Default ; > ;
+            < "Orario" ; Default ; > ;
+            < "Lunghezza testo" ; Default ; > ;
+        };
+        stringlist [ spanish ] =
+        {
+            < "Cada valor" ; Default ; > ;
+            < "Entero" ; Default ; > ;
+            < "Decimal" ; Default ; > ;
+            < "Fecha" ; Default ; > ;
+            < "Hora" ; Default ; > ;
+            < "Longitud del texto" ; Default ; > ;
+        };
+        stringlist [ french ] =
+        {
+            < "Toutes les valeurs" ; Default ; > ;
+            < "Nombre entier" ; Default ; > ;
+            < "Nombre décimal" ; Default ; > ;
+            < "Date" ; Default ; > ;
+            < "Heure" ; Default ; > ;
+            < "Longueur du texte" ; Default ; > ;
+        };
+        stringlist [ dutch ] =
+        {
+            < "Iedere waarde" ; Default ; > ;
+            < "Geheel getal" ; Default ; > ;
+            < "Decimaal" ; Default ; > ;
+            < "Datum" ; Default ; > ;
+            < "Tijd" ; Default ; > ;
+            < "Tekstlengte" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "ËùÓĞµÄÊıÖµ" ; Default ; > ;
+        < "ÕûÊı" ; Default ; > ;
+        < "Ê®½øÖÆ" ; Default ; > ;
+        < "ÈÕÆÚ" ; Default ; > ;
+        < "Ê±¼ä" ; Default ; > ;
+        < "ÎÄ×Ö³¤¶È" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "Âñå çíà÷åíèÿ" ; Default ; > ;
+        < "Öåëîå ÷èñëî" ; Default ; > ;
+        < "Äğîáü" ; Default ; > ;
+        < "Äàòà" ; Default ; > ;
+        < "Âğåìÿ" ; Default ; > ;
+        < "Äëèíà òåêñòà" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Ka¿d¹ wartoœæ" ; Default ; > ;
+        < "Liczba ca³kowita" ; Default ; > ;
+        < "Dziesiêtny" ; Default ; > ;
+        < "Data" ; Default ; > ;
+        < "Czas" ; Default ; > ;
+        < "D³ugoœæ tekstu" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "‚·‚×‚Ä‚Ì’l" ; Default ; > ;
+        < "®”" ; Default ; > ;
+        < "¬”“_”" ; Default ; > ;
+        < "“ú•t" ; Default ; > ;
+        < "" ; Default ; > ;
+        < "Ã·½Ä‚Ì’·‚³" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "©Ò¦³ªº¼Æ­È" ; Default ; > ;
+        < "¾ã¼Æ" ; Default ; > ;
+        < "¤Q¶i¨î" ; Default ; > ;
+        < "¤é´Á" ; Default ; > ;
+        < "®É¶¡" ; Default ; > ;
+        < "¥»¤åªø«×" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "ßá ÇáŞíã" ; Default ; > ;
+        < "ÃÑŞÇã ßÇãáÉ" ; Default ; > ;
+        < "ÚÔÑíÉ" ; Default ; > ;
+        < "ÇáÊÇÑíÎ" ; Default ; > ;
+        < "ÇáæŞÊ" ; Default ; > ;
+        < "Øæá ÇáäÕ" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "¼ëåò ôéò ôéìİò" ; Default ; > ;
+        < "Áêİñáéïé áñéèìïß" ; Default ; > ;
+        < "Äåêáäéêü" ; Default ; > ;
+        < "Çìåñïìçíßá" ; Default ; > ;
+        < "¿ñá" ; Default ; > ;
+        < "ÌŞêïò êåéìİíïõ" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "¸ğµç °ª" ; Default ; > ;
+        < "ÀüÃ¼ ¹øÈ£" ; Default ; > ;
+        < "¼Ò¼ö" ; Default ; > ;
+        < "ÀÏÀÚ" ; Default ; > ;
+        < "½Ã°£" ; Default ; > ;
+        < "ÅØ½ºÆ® ±æÀÌ" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < "Jeden Wert" ; Default ; > ;
+        < "Ganze Zahl" ; Default ; > ;
+        < "Dezimal" ; Default ; > ;
+        < "Datum" ; Default ; > ;
+        < "Zeit" ; Default ; > ;
+        < "Textlänge" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "Her değer" ; Default ; > ;
+        < "Tamsayı" ; Default ; > ;
+        < "Ondalık" ; Default ; > ;
+        < "Tarih" ; Default ; > ;
+        < "Saat" ; Default ; > ;
+        < "Metin uzunluğu" ; Default ; > ;
+    };
+    };
+    FixedText FT_VALUE
+    {
+        Pos = MAP_APPFONT ( 12 , 62 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Text = "~Daten" ;
+        Text [ ENGLISH ] = "~Data" ;
+        Text [ english_us ] = "~Data" ;
+        Text [ swedish ] = "~Data" ;
+        Text [ danish ] = "Data" ;
+        Text [ italian ] = "~Dati" ;
+        Text [ spanish ] = "~Datos" ;
+        Text [ french ] = "~Données" ;
+        Text [ dutch ] = "~Gegevens" ;
+        Text [ portuguese ] = "~Dados" ;
+        Text [ portuguese_brazilian ] = "~Daten" ;
+        Text[ chinese_simplified ] = "Êı¾İ(~D)";
+        Text[ russian ] = "Äàííûå";
+        Text[ polish ] = "Dane";
+        Text[ japanese ] = "ÃŞ°À(~D)";
+        Text[ chinese_traditional ] = "¸ê®Æ(~D)";
+        Text[ arabic ] = "ÈíÇäÇÊ";
+        Text[ greek ] = "Äåäïìİíá";
+        Text[ korean ] = "µ¥ÀÌÅÍ(~D)";
+        Text[ turkish ] = "~Veriler";
+    };
+    ListBox LB_VALUE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 60 ) ;
+        Size = MAP_APPFONT ( 91 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+         // Reihenfolge entspricht enum ScConditionMode
+        StringList =
+        {
+            < "gleich" ; Default ; > ;
+            < "kleiner als" ; Default ; > ;
+            /* ### ACHTUNG: Neuer Eintrag in Liste? 3 : größer als*/
+            < "größer als" ; Default ; > ;
+            < "kleiner oder gleich" ; Default ; > ;
+            /* ### ACHTUNG: Neuer Eintrag in Liste? 5 : größer oder gleich*/
+            < "größer oder gleich" ; Default ; > ;
+            < "ungleich" ; Default ; > ;
+            < "zwischen" ; Default ; > ;
+            < "nicht zwischen" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "gleich" ; Default ; > ;
+            < "kleiner als" ; Default ; > ;
+            < "größer als" ; Default ; > ;
+            < "kleiner oder gleich" ; Default ; > ;
+            < "größer oder gleich" ; Default ; > ;
+            < "ungleich" ; Default ; > ;
+            < "zwischen" ; Default ; > ;
+            < "nicht zwischen" ; Default ; > ;
+        };
+        stringlist [ english_us ] =
+        {
+            < "equal" ; Default ; > ;
+            < "less than" ; Default ; > ;
+            < "greater than" ; Default ; > ;
+            < "less than or equal" ; Default ; > ;
+            < "greater or equal" ; Default ; > ;
+            < "not equal" ; Default ; > ;
+            < "between" ; Default ; > ;
+            < "not between" ; Default ; > ;
+        };
+        stringlist [ portuguese_brazilian ] =
+        {
+            < "gleich" ; Default ; > ;
+            < "kleiner als" ; Default ; > ;
+            < "größer als" ; Default ; > ;
+            < "kleiner oder gleich" ; Default ; > ;
+            < "größer oder gleich" ; Default ; > ;
+            < "ungleich" ; Default ; > ;
+            < "zwischen" ; Default ; > ;
+            < "nicht zwischen" ; Default ; > ;
+        };
+        stringlist [ swedish ] =
+        {
+            < "lika med" ; Default ; > ;
+            < "mindre än" ; Default ; > ;
+            < "större än" ; Default ; > ;
+            < "mindre än eller lika med" ; Default ; > ;
+            < "större än eller lika med" ; Default ; > ;
+            < "inte lika med" ; Default ; > ;
+            < "mellan" ; Default ; > ;
+            < "inte mellan" ; Default ; > ;
+        };
+        stringlist [ danish ] =
+        {
+            < "lig med" ; Default ; > ;
+            < "mindre end" ; Default ; > ;
+            < "større end" ; Default ; > ;
+            < "mindre end eller lig med" ; Default ; > ;
+            < "større end eller lig med" ; Default ; > ;
+            < "forskellig fra" ; Default ; > ;
+            < "mellem" ; Default ; > ;
+            < "ikke mellem" ; Default ; > ;
+        };
+        stringlist [ italian ] =
+        {
+            < "uguale" ; Default ; > ;
+            < "più piccolo di" ; Default ; > ;
+            < "maggiore di" ; Default ; > ;
+            < "inferiore o uguale" ; Default ; > ;
+            < "maggiore o uguale" ; Default ; > ;
+            < "diverso" ; Default ; > ;
+            < "tra" ; Default ; > ;
+            < "non tra" ; Default ; > ;
+        };
+        stringlist [ spanish ] =
+        {
+            < "igual" ; Default ; > ;
+            < "menor que" ; Default ; > ;
+            < "mayor que" ; Default ; > ;
+            < "menor o igual que" ; Default ; > ;
+            < "mayor o igual que" ; Default ; > ;
+            < "distinto de" ; Default ; > ;
+            < "entre" ; Default ; > ;
+            < "no entre" ; Default ; > ;
+        };
+        stringlist [ french ] =
+        {
+            < "égal à" ; Default ; > ;
+            < "inférieur à" ; Default ; > ;
+            < "supérieure à" ; Default ; > ;
+            < "inférieur ou égal à" ; Default ; > ;
+            < "supérieure ou égale à" ; Default ; > ;
+            < "différent de" ; Default ; > ;
+            < "entre" ; Default ; > ;
+            < "non compris entre" ; Default ; > ;
+        };
+        stringlist [ dutch ] =
+        {
+            < "gelijk aan" ; Default ; > ;
+            < "kleiner dan" ; Default ; > ;
+            < "groter dan" ; Default ; > ;
+            < "kleiner dan of gelijk aan" ; Default ; > ;
+            < "groter dan of gelijk aan" ; Default ; > ;
+            < "niet gelijk aan" ; Default ; > ;
+            < "tussen" ; Default ; > ;
+            < "niet tussen" ; Default ; > ;
+        };
+        stringlist [ portuguese ] =
+        {
+            < "igual" ; Default ; > ;
+            < "menor" ; Default ; > ;
+            < "maior" ; Default ; > ;
+            < "menor ou igual a" ; Default ; > ;
+            < "maior ou igual a" ; Default ; > ;
+            < "desigual" ; Default ; > ;
+            < "entre" ; Default ; > ;
+            < "não entre" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "µÈÓÚ" ; Default ; > ;
+        < "Ğ¡ÓÚ" ; Default ; > ;
+        < "´óÓÚ" ; Default ; > ;
+        < "Ğ¡ÓÚ»òµÈÓÚ" ; Default ; > ;
+        < "´óÓÚ»òµÈÓÚ" ; Default ; > ;
+        < "²»µÈÓÚ" ; Default ; > ;
+        < "ÔÚÖ®¼ä" ; Default ; > ;
+        < "²»ÔÚÖ®¼ä" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "ğàâíî" ; Default ; > ;
+        < "ìåíüøå ÷åì" ; Default ; > ;
+        < "áîëüøå ÷åì" ; Default ; > ;
+        < "ìåíüøå èëè ğàâíî" ; Default ; > ;
+        < "áîëüøå èëè ğàâíî" ; Default ; > ;
+        < "íåğàâíî" ; Default ; > ;
+        < "ìåæäó" ; Default ; > ;
+        < "âíå" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "równy" ; Default ; > ;
+        < "mniejszy ni¿" ; Default ; > ;
+        < "wiêkszy ni¿" ; Default ; > ;
+        < "mniejszy lub równy" ; Default ; > ;
+        < "wiêkszy lub równy" ; Default ; > ;
+        < "nie równy" ; Default ; > ;
+        < "miêdzy" ; Default ; > ;
+        < "nie miêdzy" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "Ÿ‚Ì’l‚É“™‚µ‚¢" ; Default ; > ;
+        < "Ÿ‚Ì’l‚æ‚è¬‚³‚¢" ; Default ; > ;
+        < "Ÿ‚Ì’l‚æ‚è‘å‚«‚¢" ; Default ; > ;
+        < "Ÿ‚Ì’lˆÈ‰º" ; Default ; > ;
+        < "Ÿ‚Ì’lˆÈã" ; Default ; > ;
+        < "Ÿ‚Ì’l‚É“™‚µ‚­‚È‚¢" ; Default ; > ;
+        < "Ÿ‚Ì’l‚ÌŠÔ" ; Default ; > ;
+        < "Ÿ‚Ì’l‚ÌŠÔ‚Å‚È‚¢" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "µ¥©ó" ; Default ; > ;
+        < "¤p©ó" ; Default ; > ;
+        < "¤j©ó" ; Default ; > ;
+        < "¤p©ó©Îµ¥©ó" ; Default ; > ;
+        < "¤j©ó©Îµ¥©ó" ; Default ; > ;
+        < "¤£µ¥©ó" ; Default ; > ;
+        < "¦b¤§¶¡" ; Default ; > ;
+        < "¤£¦b¤§¶¡" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "íÓÇæí" ; Default ; > ;
+        < "ÃŞá ãä" ; Default ; > ;
+        < "ÃßÈÑ ãä" ; Default ; > ;
+        < "ÃÕÛÑ ãä Ãæ íÓÇæí" ; Default ; > ;
+        < "ÃßÈÑ ãä Ãæ íÓÇæí" ; Default ; > ;
+        < "ÛíÑ ãÊÓÇæí" ; Default ; > ;
+        < "Èíä" ; Default ; > ;
+        < "áíÓ Èíä" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "ºóïí" ; Default ; > ;
+        < "ìéêñüôåñï áğü" ; Default ; > ;
+        < "ìåãáëıôåñï áğü" ; Default ; > ;
+        < "ìéêñüôåñï Ş ßóï" ; Default ; > ;
+        < "ìåãáëıôåñï Ş ßóï" ; Default ; > ;
+        < "ÄéÜöïñï" ; Default ; > ;
+        < "ìåôáîı" ; Default ; > ;
+        < "ü÷é ìåôáîı" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "µ¿µî" ; Default ; > ;
+        < "´ÙÀ½ÀÇ ¹Ì¸¸ÀÓ" ; Default ; > ;
+        < "´ÙÀ½ÀÇ ÃÊ°úÀÓ" ; Default ; > ;
+        < "ÀÌÇÏ" ; Default ; > ;
+        < "ÀÌ»ó" ; Default ; > ;
+        < "´ÙÀ½°ú °°Áö ¾ÊÀ½" ; Default ; > ;
+        < "´ÙÀ½ÀÇ »çÀÌÀÓ" ; Default ; > ;
+        < "»çÀÌ°¡ ¾Æ´Ñ" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < "gleich" ; Default ; > ;
+        < "kleiner als" ; Default ; > ;
+        < "größer als" ; Default ; > ;
+        < "kleiner oder gleich" ; Default ; > ;
+        < "größer oder gleich" ; Default ; > ;
+        < "ungleich" ; Default ; > ;
+        < "zwischen" ; Default ; > ;
+        < "nicht zwischen" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "eşittir" ; Default ; > ;
+        < "küçüktür" ; Default ; > ;
+        < "büyüktür" ; Default ; > ;
+        < "küçük ya da eşittir" ; Default ; > ;
+        < "büyük ya da eşittir" ; Default ; > ;
+        < "eşit değil" ; Default ; > ;
+        < "arada" ; Default ; > ;
+        < "arada değil" ; Default ; > ;
+    };
+    };
+    FixedText FT_MIN
+    {
+        Pos = MAP_APPFONT ( 12 , 90 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Text = "~Minimum" ;
+        Text [ ENGLISH ] = "~Minimum" ;
+        Text [ english_us ] = "~Minimum" ;
+        Text [ swedish ] = "~Minimum" ;
+        Text [ danish ] = "Minimum" ;
+        Text [ italian ] = "~Minimo" ;
+        Text [ spanish ] = "~Mínimo" ;
+        Text [ french ] = "~Minimum" ;
+        Text [ dutch ] = "~Minimum" ;
+        Text [ portuguese ] = "~Mínimo" ;
+        Text [ portuguese_brazilian ] = "~Minimum" ;
+        Text[ chinese_simplified ] = "×îĞ¡(~M)";
+        Text[ russian ] = "Ìèíèìóì";
+        Text[ polish ] = "Minimum";
+        Text[ japanese ] = "Å¬’l(~M)";
+        Text[ chinese_traditional ] = "³Ì¤p(~M)";
+        Text[ arabic ] = "ÇáÍÏ ÇáÃŞÕì";
+        Text[ greek ] = "ÅëÜ÷éóôï";
+        Text[ korean ] = "ÃÖ¼Ò(~M)";
+        Text[ turkish ] = "A~sgari";
+    };
+    Edit EDT_MIN
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 88 ) ;
+        Size = MAP_APPFONT ( 160 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_MAX
+    {
+        Pos = MAP_APPFONT ( 12 , 106 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Text = "M~aximum" ;
+        Text [ ENGLISH ] = "Ma~ximum" ;
+        Text [ english_us ] = "Ma~ximum" ;
+        Text [ swedish ] = "M~aximum" ;
+        Text [ danish ] = "Maksimum" ;
+        Text [ italian ] = "M~assimo" ;
+        Text [ spanish ] = "M~áximo" ;
+        Text [ french ] = "M~aximum" ;
+        Text [ dutch ] = "M~aximum" ;
+        Text [ portuguese ] = "M~áximo" ;
+        Text [ portuguese_brazilian ] = "M~aximum" ;
+        Text[ chinese_simplified ] = "×î´óÖµ(~X)";
+        Text[ russian ] = "Ìàêñèìóì";
+        Text[ polish ] = "Maksimum";
+        Text[ japanese ] = "Å‘å’l(~X)";
+        Text[ chinese_traditional ] = "³Ì¤j(~X)";
+        Text[ arabic ] = "ÇáÃŞÕì";
+        Text[ greek ] = "Ìİãéóôï";
+        Text[ korean ] = "ÃÖ´ë(~X)";
+        Text[ turkish ] = "A~zami";
+    };
+    Edit EDT_MAX
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 104 ) ;
+        Size = MAP_APPFONT ( 160 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    TriStateBox TSB_ALLOW_BLANKS
+    {
+        Pos = MAP_APPFONT ( 80 , 36 ) ;
+        Size = MAP_APPFONT ( 99 , 12 ) ;
+        Text = "~Leerzellen zulassen" ;
+        Text [ ENGLISH ] = "Allow ~blanks" ;
+        TabStop = TRUE ;
+        Text [ dutch ] = "~Lege cellen toestaan" ;
+        Text [ english_us ] = "Allow ~blanks" ;
+        Text [ swedish ] = "Tillåt tomma ce~ller" ;
+        Text [ danish ] = "Ignorer tomme" ;
+        Text [ italian ] = "Permetti celle vuote" ;
+        Text [ spanish ] = "~Permitir celdas vacías" ;
+        Text [ french ] = "Autoriser ~cellules vides" ;
+        Text [ portuguese_brazilian ] = "~Leerzellen zulassen" ;
+        Text [ portuguese ] = "~Permitir células vazias" ;
+        Text[ chinese_simplified ] = "ÔÊĞí¿Õµ¥Ôª¸ñ(~B)";
+        Text[ russian ] = "Ïğîïóñê ïóñòûõ ÿ÷ååê";
+        Text[ polish ] = "Dopuœæ puste komórki";
+        Text[ japanese ] = "‹ó”’¾Ù‚ğ‹–‚·(~B)";
+        Text[ chinese_traditional ] = "®e³\\ªÅ®æ(~B)";
+        Text[ arabic ] = "ÇáÓãÇÍ ÈÇáÎáÇíÇ ÇáİÇÑÛÉ";
+        Text[ greek ] = "Íá åğéôñáğïıí êåíÜ êåëéÜ";
+        Text[ korean ] = "ºí·©Å© ¹«½Ã(~B)";
+        Text[ turkish ] = "~Boş hücre geçerli";
+    };
+    GroupBox GRP_VALUES
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 126 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Gültigkeitskriterien : G³ltigkeitskriterien */
+        Text = "Gültigkeitskriterien" ;
+        Text [ ENGLISH ] = "Validation settings" ;
+        Text [ english_us ] = "Validity criteria" ;
+        Text [ swedish ] = "Validitetskriterier" ;
+        Text [ danish ] = "Validitetskriterier" ;
+        Text [ italian ] = "Criteri di validità" ;
+        Text [ spanish ] = "Criterios de validez" ;
+        Text [ french ] = "Critères de validité" ;
+        Text [ dutch ] = "Geldigheidscriteria" ;
+        Text [ portuguese ] = "Critérios de validade" ;
+        Text [ portuguese_brazilian ] = "Gültigkeitskriterien" ;
+        Text[ chinese_simplified ] = "ÓĞĞ§±ê×¼";
+        Text[ russian ] = "Óñëîâèÿ ïğîâåğêè";
+        Text[ polish ] = "Kryteria wa¿noœci";
+        Text[ japanese ] = "ğŒ‚Ìİ’è";
+        Text[ chinese_traditional ] = "¦³®Ä¼Ğ·Ç";
+        Text[ arabic ] = "ãÚÇííÑ ÇáÕáÇÍíÉ";
+        Text[ greek ] = "ÊñéôŞñéï éó÷ıïò";
+        Text[ korean ] = "À¯È¿¼º ±âÁØ";
+        Text[ turkish ] = "Geçerlilik ölçütleri";
+    };
+    Text [ dutch ] = "Waarden" ;
+    Text [ english_us ] = "Values" ;
+    Text [ swedish ] = "Värden" ;
+    Text [ danish ] = "Værdier" ;
+    Text [ italian ] = "Valori" ;
+    Text [ spanish ] = "Valores" ;
+    Text [ french ] = "Valeurs" ;
+    Text [ portuguese_brazilian ] = "Werte" ;
+    Text [ portuguese ] = "Valores" ;
+    Text[ chinese_simplified ] = "ÊıÖµ";
+    Text[ russian ] = "Çíà÷åíèÿ";
+    Text[ polish ] = "Wartoœci";
+    Text[ japanese ] = "İ’è";
+    Text[ chinese_traditional ] = "¼Æ­È";
+    Text[ arabic ] = "ÇáŞíã";
+    Text[ greek ] = "Ôéìİò";
+    Text[ korean ] = "°ª";
+    Text[ turkish ] = "Değerler";
+};
+
+TabPage TP_VALIDATION_INPUTHELP
+{
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Text = "Eingabehilfe" ;
+    TriStateBox TSB_HELP
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 248 , 12 ) ;
+        Text = "E~ingabehilfen bei Selektion einer Zelle anbieten" ;
+        Text [ ENGLISH ] = "~Show input help when cell is selected" ;
+        TabStop = TRUE ;
+        Text [ dutch ] = "I~nvoerhulp bij selectie van een cel aanbieden" ;
+        Text [ english_us ] = "~Show input help when cell is selected" ;
+        Text [ swedish ] = "Erbjud ~inmatningshjälp vid markering av en cell" ;
+        Text [ danish ] = "Tilbyd inputhjælp ved markering af en celle" ;
+        Text [ italian ] = "Offri aiuti per la digitazione nella cella" ;
+        Text [ spanish ] = "~Mostrar Ayuda de entrada al seleccionar una celda" ;
+        Text [ french ] = "~Aide à la saisie lors de la sélection de cellules" ;
+        Text [ portuguese_brazilian ] = "E~ingabehilfen bei Selektion einer Zelle anbieten" ;
+        Text [ portuguese ] = "~Mostrar ajuda de digitação quando seleccionar célula" ;
+        Text[ chinese_simplified ] = "ÔÚÑ¡¶¨µ¥Ôª¸ñÊ±ÏÔÊ¾ÊäÈë°ïÖú(~S)";
+        Text[ russian ] = "Ïğåäëàãàòü ïîìîùü ââîäà ïğè âûäåëåíèè ÿ÷åéêè";
+        Text[ polish ] = "Z~aproponuj pomoc przy wprowadzaniu w przypadku zaznaczonej komórki";
+        Text[ japanese ] = "¾Ù‚Ì‘I‘ğ‚ÉÒ¯¾°¼Ş‚ğ•\\¦‚·‚é(~S)";
+        Text[ chinese_traditional ] = "¦b¿ï¨úÀx¦s®æ®ÉÅã¥Ü¿é¤J»¡©ú(~S)";
+        Text[ arabic ] = "ÅÙåÇÑ ãÓÇÚÏÉ ÇáÅÏÎÇá ÚäÏ ÊÍÏíÏ ÇáÎáíÉ";
+        Text[ greek ] = "ÅìöÜíéóç âïŞèåéáò åéóáãùãŞò êáôÜ ôçí åğéëïãŞ åíüò êåëéïı";
+        Text[ korean ] = "¼¿ÀÌ ¼±ÅÃµÇ¾îÁ³À» ¶§ µµ¿ò¸» »ğÀÔ º¸±â(~S)";
+        Text[ turkish ] = "Hücre se~çildiğinde giriş yardımı öner";
+    };
+    GroupBox GRP_CONTENT
+    {
+        Pos = MAP_APPFONT ( 6 , 20 ) ;
+        Size = MAP_APPFONT ( 248 , 109 ) ;
+        Text = "Inhalt" ;
+        Text [ ENGLISH ] = "Content" ;
+        Text [ english_us ] = "Contents" ;
+        Text [ swedish ] = "Innehåll" ;
+        Text [ danish ] = "Indhold" ;
+        Text [ italian ] = "Contenuto" ;
+        Text [ spanish ] = "Contenido" ;
+        Text [ french ] = "Contenu" ;
+        Text [ dutch ] = "Inhoud" ;
+        Text [ portuguese ] = "Conteúdo" ;
+        Text [ portuguese_brazilian ] = "Inhalt" ;
+        Text[ chinese_simplified ] = "ÄÚÈİ";
+        Text[ russian ] = "Ñîäåğæèìîå";
+        Text[ polish ] = "Zawartoœæ";
+        Text[ japanese ] = "“à—e";
+        Text[ chinese_traditional ] = "¤º®e";
+        Text[ arabic ] = "ÇáãÍÊæíÇÊ";
+        Text[ greek ] = "Ğåñéå÷üìåíá";
+        Text[ korean ] = "³»¿ë";
+        Text[ turkish ] = "İçerik";
+    };
+    FixedText FT_TITLE
+    {
+        Pos = MAP_APPFONT ( 12 , 33 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Text = "~Titel" ;
+        Text [ ENGLISH ] = "~Title" ;
+        Text [ english_us ] = "~Title" ;
+        Text [ swedish ] = "~Titel" ;
+        Text [ danish ] = "Titel" ;
+        Text [ italian ] = "~Titolo" ;
+        Text [ spanish ] = "~Título" ;
+        Text [ french ] = "~Titre" ;
+        Text [ dutch ] = "~Titel" ;
+        Text [ portuguese ] = "~Título" ;
+        Text [ portuguese_brazilian ] = "~Titel" ;
+        Text[ chinese_simplified ] = "±êÌâ(~T)";
+        Text[ russian ] = "Çàãîëîâîê";
+        Text[ polish ] = "Tytu³";
+        Text[ japanese ] = "À²ÄÙ(~T)";
+        Text[ chinese_traditional ] = "¼ĞÃD(~T)";
+        Text[ arabic ] = "ÇáÚäæÇä";
+        Text[ greek ] = "~Ôßôëïò";
+        Text[ korean ] = "Á¦¸ñ(~T)";
+        Text[ turkish ] = "~Başlık";
+    };
+    FixedText FT_INPUTHELP
+    {
+        Pos = MAP_APPFONT ( 12 , 48 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Text = "~Eingabehilfe" ;
+        Text [ ENGLISH ] = "~Input help" ;
+        Text [ dutch ] = "~Invoerhulp" ;
+        Text [ english_us ] = "~Input help" ;
+        Text [ swedish ] = "~Inmatningshjälp" ;
+        Text [ danish ] = "Inputhjælp" ;
+        Text [ italian ] = "Aiuto per la digitazione" ;
+        Text [ spanish ] = "Ayuda de ~entrada" ;
+        Text [ french ] = "~Aide à la saisie" ;
+        Text [ portuguese_brazilian ] = "~Eingabehilfe" ;
+        Text [ portuguese ] = "~Ajuda de entradas" ;
+        Text[ chinese_simplified ] = "ÊäÈë°ïÖú(~I)";
+        Text[ russian ] = "Ïîìîùü ââîäà";
+        Text[ polish ] = "Pomoc przy wprow.";
+        Text[ japanese ] = "“ü—ÍÒ¯¾°¼Ş(~I)";
+        Text[ chinese_traditional ] = "¿é¤JÀ°§U(~I)";
+        Text[ arabic ] = "ãÓÇÚÏÉ ÇáÅÏÎÇá";
+        Text[ greek ] = "ÂïŞèåéá åéóáãùãŞò";
+        Text[ korean ] = "µµ¿ò¸» »ğÀÔ(~I)";
+        Text[ turkish ] = "~Giriş yardımı";
+    };
+    Edit EDT_TITLE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 32 ) ;
+        Size = MAP_APPFONT ( 166 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    MultiLineEdit EDT_INPUTHELP
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 48 ) ;
+        Size = MAP_APPFONT ( 166 , 74 ) ;
+        TabStop = TRUE ;
+        VScroll = TRUE ;
+        IgnoreTab = TRUE ;
+    };
+};
+
+TabPage TP_VALIDATION_ERROR
+{
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Text = "Fehlermeldung" ;
+    Text [ ENGLISH ] = "Error message" ;
+    GroupBox GRP_CONTENT
+    {
+        Pos = MAP_APPFONT ( 6 , 20 ) ;
+        Size = MAP_APPFONT ( 248 , 109 ) ;
+        Text = "Inhalt" ;
+        Text [ ENGLISH ] = "Content" ;
+        Text [ english_us ] = "Contents" ;
+        Text [ swedish ] = "Innehåll" ;
+        Text [ danish ] = "Indhold" ;
+        Text [ italian ] = "Contenuto" ;
+        Text [ spanish ] = "Contenido" ;
+        Text [ french ] = "Contenu" ;
+        Text [ dutch ] = "Inhoud" ;
+        Text [ portuguese ] = "Conteúdo" ;
+        Text [ portuguese_brazilian ] = "Inhalt" ;
+        Text[ chinese_simplified ] = "ÄÚÈİ";
+        Text[ russian ] = "Ñîäåğæèìîå";
+        Text[ polish ] = "Zawartoœæ";
+        Text[ japanese ] = "“à—e";
+        Text[ chinese_traditional ] = "¤º®e";
+        Text[ arabic ] = "ÇáãÍÊæíÇÊ";
+        Text[ greek ] = "Ğåñéå÷üìåíá";
+        Text[ korean ] = "³»¿ë";
+        Text[ turkish ] = "İçerik";
+    };
+    TriStateBox TSB_SHOW
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 248 , 12 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Fehlermeldung bei Eingabe ungültiger Werte anzeigen : ~Fehlermeldung bei Eingabe ung³ltiger Werte anzeigen */
+        Text = "~Fehlermeldung bei Eingabe ungültiger Werte anzeigen" ;
+        Text [ ENGLISH ] = "Show error ~message after invalid values are entered" ;
+        TabStop = TRUE ;
+        Text [ dutch ] = "Fout~melding bij invoer van ongeldige gegevens weergeven" ;
+        Text [ english_us ] = "Show error ~message when invalid values are entered" ;
+        Text [ swedish ] = "Visa ~felmeddelande när ogiltiga värden matas in" ;
+        Text [ danish ] = "Vis fejlmelding ved input af ugyldige værdier" ;
+        Text [ italian ] = "~Mostra messaggio di errore se si digitano dei valori non validi" ;
+        Text [ spanish ] = "Mostrar mensaje de ~error al entrar valores incorrectos" ;
+        Text [ french ] = "Afficher un ~message d'erreur en cas de saisie de valeurs incorrectes" ;
+        Text [ portuguese_brazilian ] = "~Fehlermeldung bei Eingabe ungültiger Werte anzeigen" ;
+        Text [ portuguese ] = "~Mostrar mensagem de erro na entrada de valores incorrectos." ;
+        Text[ chinese_simplified ] = "ÊäÈëÎŞĞ§ÊıÖµÊ±ÏÔÊ¾´íÎó±¨¸æ(~M)";
+        Text[ russian ] = "Âûäàâàòü ñîîáùåíèå îá îøèáêå ïğè ââîäå íåäîïóñòèìûõ çíà÷åíèé";
+        Text[ polish ] = "Poka¿ ko~munikat o b³êdzie przy wpisywaniu nieprawid³owych wartoœci";
+        Text[ japanese ] = "—LŒø‚Å‚È‚¢’l‚ğ“ü—Í‚µ‚½Û‚É´×°Ò¯¾°¼Ş‚ğ•\\¦(~M)";
+        Text[ chinese_traditional ] = "¦b¿é¤JµL®Ä¼Æ­È®ÉÅã¥Ü¿ù»~³ø§i(~M)";
+        Text[ arabic ] = "ÅÙåÇÑ ÑÓÇáÉ ÎØÃ ÚäÏ ÅÏÎÇá Şíã ÛíÑ ÕÇáÍÉ";
+        Text[ greek ] = "ÅìöÜíéóç ìçíıìáôïò óöÜëìáôïò óå ğåñßğôùóç åéóáãùãŞò ìç İãêõñùí ôéìşí";
+        Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº °ª ÀÔ·Â½Ã ¿À·ù ¸Ş¼¼Áö º¸ÀÌ±â(~M)";
+        Text[ turkish ] = "~Geçersiz değer girildiğinde hata iletisi görüntüle";
+    };
+    MultiLineEdit EDT_ERROR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 61 ) ;
+        Size = MAP_APPFONT ( 166 , 61 ) ;
+        TabStop = TRUE ;
+        VScroll = TRUE ;
+        IgnoreTab = TRUE ;
+    };
+    Edit EDT_TITLE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 47 ) ;
+        Size = MAP_APPFONT ( 166 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_ERROR
+    {
+        Pos = MAP_APPFONT ( 12 , 61 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Text = "~Fehlermeldung" ;
+        Text [ ENGLISH ] = "~Error message" ;
+        Text [ english_us ] = "~Error message" ;
+        Text [ swedish ] = "~Felmeddelande" ;
+        Text [ danish ] = "Fejlmelding" ;
+        Text [ italian ] = "Messaggio di errore" ;
+        Text [ spanish ] = "~Mensaje de error" ;
+        Text [ french ] = "~Message d'erreur" ;
+        Text [ dutch ] = "~Foutmelding" ;
+        Text [ portuguese ] = "~Mensagem de erro" ;
+        Text [ portuguese_brazilian ] = "~Fehlermeldung" ;
+        Text[ chinese_simplified ] = "´íÎó±¨¸æ(~E)";
+        Text[ russian ] = "Ñîîáùåíèå îá îøèáêå";
+        Text[ polish ] = "Komunikat o b³êdzie";
+        Text[ japanese ] = "´×°Ò¯¾°¼Ş(~E)";
+        Text[ chinese_traditional ] = "¿ù»~³ø§i(~E)";
+        Text[ arabic ] = "ÑÓÇáÉ ÎØÃ";
+        Text[ greek ] = "ÌŞíõìá óöÜëìáôïò";
+        Text[ korean ] = "¿À·ù ¸Ş¼¼Áö(~E)";
+        Text[ turkish ] = "~Hata iletisi";
+    };
+    FixedText FT_TITLE
+    {
+        Pos = MAP_APPFONT ( 12 , 48 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Text = "~Titel" ;
+        Text [ ENGLISH ] = "~Title" ;
+        Text [ english_us ] = "~Title" ;
+        Text [ swedish ] = "~Titel" ;
+        Text [ danish ] = "Titel" ;
+        Text [ italian ] = "~Titolo" ;
+        Text [ spanish ] = "~Título" ;
+        Text [ french ] = "~Titre" ;
+        Text [ dutch ] = "~Titel" ;
+        Text [ portuguese ] = "~Título" ;
+        Text [ portuguese_brazilian ] = "~Titel" ;
+        Text[ chinese_simplified ] = "±êÌâ(~T)";
+        Text[ russian ] = "Çàãîëîâîê";
+        Text[ polish ] = "Tytu³";
+        Text[ japanese ] = "À²ÄÙ(~T)";
+        Text[ chinese_traditional ] = "¼ĞÃD(~T)";
+        Text[ arabic ] = "ÇáÚäæÇä";
+        Text[ greek ] = "~Ôßôëïò";
+        Text[ korean ] = "Á¦¸ñ(~T)";
+        Text[ turkish ] = "~Başlık";
+    };
+    FixedText FT_ACTION
+    {
+        Pos = MAP_APPFONT ( 12 , 33 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Text = "~Aktion" ;
+        Text [ ENGLISH ] = "~Action" ;
+        Text [ english_us ] = "~Action" ;
+        Text [ swedish ] = "~Åtgärd" ;
+        Text [ danish ] = "Handling" ;
+        Text [ italian ] = "Oper~azione" ;
+        Text [ spanish ] = "~Acción" ;
+        Text [ french ] = "~Action" ;
+        Text [ dutch ] = "~Activiteit" ;
+        Text [ portuguese ] = "~Acção" ;
+        Text [ portuguese_brazilian ] = "~Aktion" ;
+        Text[ chinese_simplified ] = "²Ù×÷(~A)";
+        Text[ russian ] = "Äåéñòâèå";
+        Text[ polish ] = "Akcja";
+        Text[ japanese ] = "±¸¼®İ(~A)";
+        Text[ chinese_traditional ] = "¾Ş§@(~A)";
+        Text[ arabic ] = "ÅÌÑÇÁ";
+        Text[ greek ] = "~Åíİñãåéá";
+        Text[ korean ] = "µ¿ÀÛ(~A)";
+        Text[ turkish ] = "~İşlem";
+    };
+    ListBox LB_ACTION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 30 ) ;
+        Size = MAP_APPFONT ( 102 , 76 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+         // Reihenfolge entspricht enum ScValidErrorStyle
+        StringList =
+        {
+            < "Stopp" ; Default ; > ;
+            < "Warnung" ; Default ; > ;
+            < "Information" ; Default ; > ;
+            < "Makro" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Stop" ; Default ; > ;
+            < "Warnung" ; Default ; > ;
+            < "Information" ; Default ; > ;
+            < "Makro" ; Default ; > ;
+        };
+        stringlist [ portuguese ] =
+        {
+            < "Stop" ; Default ; > ;
+            < "Aviso" ; Default ; > ;
+            < "Informação" ; Default ; > ;
+            < "Macro" ; Default ; > ;
+        };
+        stringlist [ english_us ] =
+        {
+            < "Stop" ; Default ; > ;
+            < "Warning" ; Default ; > ;
+            < "Information" ; Default ; > ;
+            < "Macro" ; Default ; > ;
+        };
+        stringlist [ portuguese_brazilian ] =
+        {
+            < "Stop" ; Default ; > ;
+            < "Warnung" ; Default ; > ;
+            < "Information" ; Default ; > ;
+            < "Makro" ; Default ; > ;
+        };
+        stringlist [ swedish ] =
+        {
+            < "Stopp" ; Default ; > ;
+            < "Varning" ; Default ; > ;
+            < "Information" ; Default ; > ;
+            < "Makro" ; Default ; > ;
+        };
+        stringlist [ danish ] =
+        {
+            < "Stop" ; Default ; > ;
+            < "Advarsel" ; Default ; > ;
+            < "Information" ; Default ; > ;
+            < "Makro" ; Default ; > ;
+        };
+        stringlist [ italian ] =
+        {
+            < "Stop" ; Default ; > ;
+            < "Avviso" ; Default ; > ;
+            < "Informazione" ; Default ; > ;
+            < "Macro" ; Default ; > ;
+        };
+        stringlist [ spanish ] =
+        {
+            < "Stop" ; Default ; > ;
+            < "Advertencia" ; Default ; > ;
+            < "Información" ; Default ; > ;
+            < "Macro" ; Default ; > ;
+        };
+        stringlist [ french ] =
+        {
+            < "Stop" ; Default ; > ;
+            < "Avertissement" ; Default ; > ;
+            < "Information" ; Default ; > ;
+            < "Macro" ; Default ; > ;
+        };
+        stringlist [ dutch ] =
+        {
+            < "Stop" ; Default ; > ;
+            < "Waarschuwing" ; Default ; > ;
+            < "Informatie" ; Default ; > ;
+            < "Macro" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "ÔİÍ£" ; Default ; > ;
+        < "¾¯¸æ" ; Default ; > ;
+        < "ĞÅÏ¢" ; Default ; > ;
+        < "ºê" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "Ñòîï" ; Default ; > ;
+        < "Ïğåäóïğåæäåíèå" ; Default ; > ;
+        < "Èíôîğìàöèÿ" ; Default ; > ;
+        < "Ìàêğîñ" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Zatrzymaj" ; Default ; > ;
+        < "Ostrze¿enie" ; Default ; > ;
+        < "Informacja" ; Default ; > ;
+        < "Makro" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "’†~" ; Default ; > ;
+        < "Œx" ; Default ; > ;
+        < "²İÌ«Ò°¼®İ" ; Default ; > ;
+        < "Ï¸Û" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "¼È°±" ; Default ; > ;
+        < "Äµ§i" ; Default ; > ;
+        < "¸ê°T" ; Default ; > ;
+        < "¥¨¶°" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "ÅíŞÇİ" ; Default ; > ;
+        < "ÊÍĞíÑ" ; Default ; > ;
+        < "ãÚáæãÉ" ; Default ; > ;
+        < "ãÇßÑæ" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "ÄéáêïğŞ" ; Default ; > ;
+        < "Ğñïåéäïğïßçóç" ; Default ; > ;
+        < "Ğëçñïöïñßåò" ; Default ; > ;
+        < "ÌáêñïåíôïëŞ" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "ÁßÁö" ; Default ; > ;
+        < "°æ°í" ; Default ; > ;
+        < "Á¤º¸" ; Default ; > ;
+        < "¸ÅÅ©·Î" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < "Stopp" ; Default ; > ;
+        < "Warnung" ; Default ; > ;
+        < "Information" ; Default ; > ;
+        < "Makro" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "Dur" ; Default ; > ;
+        < "Uyarı" ; Default ; > ;
+        < "Bilgi" ; Default ; > ;
+        < "Makro" ; Default ; > ;
+    };
+    };
+    PushButton BTN_SEARCH
+    {
+        Pos = MAP_APPFONT ( 186 , 30 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text = "~Durchsuchen..." ;
+        Text [ ENGLISH ] = "~Search..." ;
+        TabStop = TRUE ;
+        Text [ dutch ] = "~Bladeren..." ;
+        Text [ english_us ] = "~Browse..." ;
+        Text [ swedish ] = "~Genomsök..." ;
+        Text [ danish ] = "Gennemse..." ;
+        Text [ italian ] = "~Sfoglia..." ;
+        Text [ spanish ] = "E~xaminar..." ;
+        Text [ french ] = "~Parcourir..." ;
+        Text [ portuguese_brazilian ] = "~Durchsuchen..." ;
+        Text [ portuguese ] = "~Pesquisar..." ;
+        Text[ chinese_simplified ] = "ä¯ÀÀ(~B)...";
+        Text[ russian ] = "Îáçîğ...";
+        Text[ polish ] = "Przegl¹~daj...";
+        Text[ japanese ] = "ŒŸõ(~B)...";
+        Text[ chinese_traditional ] = "ÂsÄı(~B)...";
+        Text[ arabic ] = "ÇÓÊÚÑÇÖ...";
+        Text[ greek ] = "ÁíáæŞôçóç...";
+        Text[ korean ] = "Ã£¾Æº¸±â(~B)...";
+        Text[ turkish ] = "~Tara...";
+    };
+    Text [ dutch ] = "Foutmelding" ;
+    Text [ english_us ] = "Error Alert" ;
+    Text [ swedish ] = "Felmeddelande" ;
+    Text [ danish ] = "Fejlmelding" ;
+    Text [ italian ] = "Messaggio di errore" ;
+    Text [ spanish ] = "Mensaje de error" ;
+    Text [ french ] = "Message d'erreur" ;
+    Text [ portuguese_brazilian ] = "Fehlermeldung" ;
+    Text [ portuguese ] = "Mensagem de erro" ;
+    Text[ chinese_simplified ] = "´íÎó±¨¸æ";
+    Text[ russian ] = "Ñîîáùåíèå îá îøèáêå";
+    Text[ polish ] = "Komunikat o b³êdzie";
+    Text[ japanese ] = "´×°Ò¯¾°¼Ş";
+    Text[ chinese_traditional ] = "¿ù»~³ø§i";
+    Text[ arabic ] = "ÑÓÇáÉ ÎØÃ";
+    Text[ greek ] = "ÌŞíõìá óöÜëìáôïò";
+    Text[ korean ] = "¿À·ù °æ°í";
+    Text[ turkish ] = "Hata iletisi";
+};
+

@@ -1,0 +1,861 @@
+/*************************************************************************
+ *
+ *  $RCSfile: autofmt.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:04 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "miscdlgs.hrc"
+
+ModalDialog RID_SCDLG_AUTOFORMAT
+{
+    OutputSize = TRUE ;
+    HelpId = SID_AUTOFORMAT ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 312 , 120 ) ;
+    /* ### ACHTUNG: Neuer Text in Resource? AutoFormat : Autoformat */
+    /* ### ACHTUNG: Neuer Text in Resource? AutoFormat : Autoformat */
+    Text = "AutoFormat" ;
+    Text [ ENGLISH ] = "AutoFormat" ;
+    Text [ norwegian ] = "AutoFormat" ;
+    Text [ italian ] = "Formattazione automatica" ;
+    Text [ portuguese_brazilian ] = "Formatação Automática" ;
+    Text [ portuguese ] = "AutoFormato" ;
+    Text [ finnish ] = "Automaattimuoto" ;
+    Text [ danish ] = "AutoFormat" ;
+    Text [ french ] = "AutoFormat" ;
+    Text [ swedish ] = "AutoFormat" ;
+    Text [ dutch ] = "AutoOpmaak" ;
+    Text [ spanish ] = "AutoFormato" ;
+    Text [ english_us ] = "AutoFormat" ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    ListBox LB_FORMAT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 16 ) ;
+        Size = MAP_APPFONT ( 65 , 98 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_FORMAT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "~Format" ;
+        Text [ ENGLISH ] = "~Format" ;
+        Text [ norwegian ] = "~Format" ;
+        Text [ italian ] = "~Formatta" ;
+        Text [ portuguese_brazilian ] = "~Formato" ;
+        Text [ portuguese ] = "Fo~rmatar" ;
+        Text [ finnish ] = "~Muoto" ;
+        Text [ danish ] = "~Format" ;
+        Text [ french ] = "Forma~t" ;
+        Text [ swedish ] = "Cell~format" ;
+        Text [ dutch ] = "~Formaat" ;
+        Text [ spanish ] = "~Formato" ;
+        Text [ english_us ] = "F~ormat" ;
+        Text[ chinese_simplified ] = "¸ñÊ½(~O)";
+        Text[ russian ] = "Ôîğ~ìàò";
+        Text[ polish ] = "Format";
+        Text[ japanese ] = "‘®(~O)";
+        Text[ chinese_traditional ] = "®æ¦¡(~O)";
+        Text[ arabic ] = "ÇáÊäÓíŞ";
+        Text[ greek ] = "Ìïñöïğïßçóç";
+        Text[ korean ] = "¼­½Ä(~O)";
+        Text[ turkish ] = "~Format";
+        Text[ language_user1 ] = " ";
+    };
+    Window WND_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 83 , 23 ) ;
+        Size = MAP_APPFONT ( 161 , 86 ) ;
+    };
+    GroupBox GB_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 77 , 12 ) ;
+        Size = MAP_APPFONT ( 172 , 102 ) ;
+        Text = "Vorschau" ;
+        Text [ ENGLISH ] = "Preview" ;
+        Text [ norwegian ] = "Preview" ;
+        Text [ italian ] = "Anteprima" ;
+        Text [ portuguese_brazilian ] = "Examinar" ;
+        Text [ portuguese ] = "Previsualizar" ;
+        Text [ finnish ] = "Esikatselu" ;
+        Text [ danish ] = "Eksempel" ;
+        Text [ french ] = "Aperçu" ;
+        Text [ swedish ] = "Förhandsvisning" ;
+        Text [ dutch ] = "Voorbeeld" ;
+        Text [ spanish ] = "Previsualización" ;
+        Text [ english_us ] = "Preview" ;
+        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ russian ] = "Ïğîñìîòğ";
+        Text[ polish ] = "Podgl¹d";
+        Text[ japanese ] = "ÌßÚËŞ­°";
+        Text[ chinese_traditional ] = "¹wÄı";
+        Text[ arabic ] = "ãÚÇíäÉ";
+        Text[ greek ] = "Ğñïåğéóêüğçóç";
+        Text[ korean ] = "¹Ì¸®º¸±â";
+        Text[ turkish ] = "Önizleme";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox BTN_ADJUST
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 150 , 147 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Breite/Höhe anpassen : ~Breite/H÷he anpassen */
+        Text = "Breite/Höhe an~passen" ;
+        Text [ ENGLISH ] = "Fit ~width and height" ;
+        Text [ norwegian ] = "Fit ~width and height" ;
+        Text [ italian ] = "Adatta ~larghezza/altezza" ;
+        Text [ portuguese_brazilian ] = "Ajustar ~largura e altura" ;
+        Text [ portuguese ] = "Ajustar ~largura/altura" ;
+        Text [ finnish ] = "Sovita le~veys ja korkeus" ;
+        Text [ danish ] = "Tilpas bredde/højde" ;
+        Text [ french ] = "Ajuster la largeur/hauteur" ;
+        Text [ swedish ] = "An~passa bredd och höjd" ;
+        Text [ dutch ] = "~Breedte/hoogte aanpassen" ;
+        Text [ spanish ] = "Ajustar anc~ho/alto" ;
+        Text [ english_us ] = "A~utoFit width and height" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "µ÷Õû¿í/¸ß(~A)";
+        Text[ russian ] = "Ïîäáîğ øèğèíû/âûñîòû";
+        Text[ polish ] = "Dostosuj szerokoœæ/wysokoœæ";
+        Text[ japanese ] = "•/‚‚³‚ğ’²®(~A)";
+        Text[ chinese_traditional ] = "½Õ¾ã¼e/°ª(~A)";
+        Text[ arabic ] = "ãáÇÁãÉ ÇáÚÑÖ æÇáÇÑÊİÇÚ";
+        Text[ greek ] = "Ñıèìéóç ğëÜôïõò/ıøïõò";
+        Text[ korean ] = "³Êºñ¿Í ³ôÀÌ Á¶Àı(~U)";
+        Text[ turkish ] = "Genişlik/yüksekliği ayarla";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox BTN_BORDER
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 147 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "~Umrandung" ;
+        Text [ ENGLISH ] = "~Border" ;
+        Text [ norwegian ] = "~Border" ;
+        Text [ italian ] = "~Bordo" ;
+        Text [ portuguese_brazilian ] = "~Borda" ;
+        Text [ portuguese ] = "~Contornos" ;
+        Text [ finnish ] = "~Reunaviiva" ;
+        Text [ danish ] = "Ramme" ;
+        Text [ french ] = "~Bordure" ;
+        Text [ swedish ] = "~Inramning" ;
+        Text [ dutch ] = "~Omranding" ;
+        Text [ spanish ] = "~Borde" ;
+        Text [ english_us ] = "~Borders" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "±ß¿ò(~B)";
+        Text[ russian ] = "Îáğàìëåíèå";
+        Text[ polish ] = "Obramowanie";
+        Text[ japanese ] = "Œrü(~B)";
+        Text[ chinese_traditional ] = "Ãä®Ø(~B)";
+        Text[ arabic ] = "ÇáÍÏæÏ";
+        Text[ greek ] = "Ğåñßãñáììá";
+        Text[ korean ] = "°æ°è¼±(~B)";
+        Text[ turkish ] = "~Kenarlık";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox BTN_FONT
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 85 , 131 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "~Schriftart" ;
+        Text [ ENGLISH ] = "F~ont" ;
+        Text [ norwegian ] = "F~ont" ;
+        Text [ italian ] = "~Tipo di carattere" ;
+        Text [ portuguese_brazilian ] = "F~onte" ;
+        Text [ portuguese ] = "~Tipo de letra" ;
+        Text [ finnish ] = "~Fontti" ;
+        Text [ danish ] = "Skrifttype" ;
+        Text [ french ] = "~Police" ;
+        Text [ swedish ] = "Tecken~snitt" ;
+        Text [ dutch ] = "~Lettertype" ;
+        Text [ spanish ] = "Fuen~te" ;
+        Text [ english_us ] = "F~ont" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "×ÖÌå(~O)";
+        Text[ russian ] = "Øğèôò";
+        Text[ polish ] = "Czcionka";
+        Text[ japanese ] = "Ì«İÄ‚Ìí—Ş(~O)";
+        Text[ chinese_traditional ] = "¦r«¬(~O)";
+        Text[ arabic ] = "äæÚ ÇáÎØ";
+        Text[ greek ] = "ÃñáììáôïóåéñÜ";
+        Text[ korean ] = "±Û²Ã(~O)";
+        Text[ turkish ] = "~Yazıtipi";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox BTN_PATTERN
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 85 , 147 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "~Muster" ;
+        Text [ ENGLISH ] = "~Pattern" ;
+        Text [ norwegian ] = "~Pattern" ;
+        Text [ italian ] = "~Modello" ;
+        Text [ portuguese_brazilian ] = "~Estampa" ;
+        Text [ portuguese ] = "~Padrão" ;
+        Text [ finnish ] = "~Kuvio" ;
+        Text [ danish ] = "Mønstre" ;
+        Text [ french ] = "~Motif" ;
+        Text [ swedish ] = "~Mönster" ;
+        Text [ dutch ] = "~Patroon" ;
+        Text [ spanish ] = "~Modelo" ;
+        Text [ english_us ] = "~Pattern" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "Í¼°¸(~P)";
+        Text[ russian ] = "Îáğàçåö";
+        Text[ polish ] = "Deseñ";
+        Text[ japanese ] = "ÊßÀ°İ(~P)";
+        Text[ chinese_traditional ] = "¹Ï®×(~P)";
+        Text[ arabic ] = "äãæĞÌ";
+        Text[ greek ] = "Ìïôßâï";
+        Text[ korean ] = "ÆĞÅÏ(~P)";
+        Text[ turkish ] = "~Örnek";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox BTN_ALIGNMENT
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 150 , 131 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "~Ausrichtung" ;
+        Text [ ENGLISH ] = "Orien~tation" ;
+        Text [ norwegian ] = "Orien~tation" ;
+        Text [ italian ] = "Orien~tamento" ;
+        Text [ portuguese_brazilian ] = "Orien~tação" ;
+        Text [ portuguese ] = "~Alinhamento" ;
+        Text [ finnish ] = "S~uunta" ;
+        Text [ danish ] = "Justering" ;
+        Text [ french ] = "~Alignement" ;
+        Text [ swedish ] = "~Justering" ;
+        Text [ dutch ] = "~Positie" ;
+        Text [ spanish ] = "A~lineación" ;
+        Text [ english_us ] = "Alignmen~t" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "¶ÔÆë(~T)";
+        Text[ russian ] = "Âûğàâíèâàíèå";
+        Text[ polish ] = "Orientacja";
+        Text[ japanese ] = "”z’u(~T)";
+        Text[ chinese_traditional ] = "¹ï»ô(~T)";
+        Text[ arabic ] = "ÇáãÍÇĞÇÉ";
+        Text[ greek ] = "~Óôïß÷éóç";
+        Text[ korean ] = "¸ÂÃã(~T)";
+        Text[ turkish ] = "~Hizalama";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox BTN_NUMFORMAT
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 131 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "Zahlenf~ormat" ;
+        Text [ ENGLISH ] = "~Numberformat" ;
+        Text [ norwegian ] = "~Numberformat" ;
+        Text [ italian ] = "Formato ~numero" ;
+        Text [ portuguese_brazilian ] = "~Formatodonúmero" ;
+        Text [ portuguese ] = "~Formato dos números" ;
+        Text [ finnish ] = "~Numeromuoto" ;
+        Text [ danish ] = "Talformat" ;
+        Text [ french ] = "~Format numérique" ;
+        Text [ swedish ] = "Talf~ormat" ;
+        Text [ dutch ] = "~Getalnotatie" ;
+        Text [ spanish ] = "~Formato de números" ;
+        Text [ english_us ] = "~Number format" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "Êı×Ö¸ñÊ½(~N)";
+        Text[ russian ] = "×èñëîâîé ôîğìàò";
+        Text[ polish ] = "Format liczb";
+        Text[ japanese ] = "”‚Ì‘®(~N)";
+        Text[ chinese_traditional ] = "¼Æ¦r®æ¦¡(~N)";
+        Text[ arabic ] = "ÊäÓíŞ ÇáÃÑŞÇã";
+        Text[ greek ] = "ÌïñöŞ áñéèìşí";
+        Text[ korean ] = "¼ıÀÚ ¼­½Ä(~N)";
+        Text[ turkish ] = "Sayı f~ormatı";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_FORMAT
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 120 ) ;
+        Size = MAP_APPFONT ( 243 , 43 ) ;
+        Text = "Formatierung" ;
+        Text [ ENGLISH ] = "For~mats" ;
+        Text [ norwegian ] = "For~mats" ;
+        Text [ italian ] = "Formattazione" ;
+        Text [ portuguese_brazilian ] = "Formatos" ;
+        Text [ portuguese ] = "Formatar" ;
+        Text [ finnish ] = "Mu~odot" ;
+        Text [ danish ] = "Formatering" ;
+        Text [ french ] = "Mise en forme" ;
+        Text [ swedish ] = "Formatering" ;
+        Text [ dutch ] = "Opmaken" ;
+        Text [ spanish ] = "Formato" ;
+        Text [ english_us ] = "Formatting" ;
+        Text[ chinese_simplified ] = "¸ñÊ½»¯";
+        Text[ russian ] = "Ôîğìàòèğîâàíèå";
+        Text[ polish ] = "Formatowanie";
+        Text[ japanese ] = "‘®İ’è";
+        Text[ chinese_traditional ] = "®æ¦¡¤Æ";
+        Text[ arabic ] = "ÊäÓíŞ";
+        Text[ greek ] = "Ìïñöïğïßçóç";
+        Text[ korean ] = "¼­½Ä";
+        Text[ turkish ] = "Formatlama";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 255 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 255 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    MoreButton BTN_MORE
+    {
+        Pos = MAP_APPFONT ( 255 , 101 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /*
+        Text = "~Zusätze";
+        Text[ ENGLISH ] = "~More";
+        Text[norwegian] = "~Mer";
+        Text[italian] = "~Altro";
+        Text[portuguese_brazilian] = "~Mais";
+        Text[portuguese] = "~Mais";
+        Text[finnish] = "~Enemmän";
+        Text[danish] = "~Flere";
+        Text[french] = " S~uite";
+        Text[swedish] = "~Fler";
+        Text[dutch] = "~Overige";
+        Text[spanish] = "~Más";
+        Text[english_us] = "~More";
+        */
+        TabStop = TRUE ;
+        MapUnit = MAP_APPFONT ;
+        Delta = 48 ;
+    };
+    PushButton BTN_ADD
+    {
+        Pos = MAP_APPFONT ( 255 , 64 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Einfügen... : ~Einf³gen... */
+        Text = "Hi~nzufügen..." ;
+        Text [ ENGLISH ] = "~Add..." ;
+        Text [ norwegian ] = "~Add..." ;
+        Text [ italian ] = "~Inserisci..." ;
+        Text [ portuguese_brazilian ] = "~Add..." ;
+        Text [ portuguese ] = "~Adicionar..." ;
+        Text [ finnish ] = "~Lisää..." ;
+        Text [ danish ] = "Tilføj..." ;
+        Text [ french ] = "A~jouter..." ;
+        Text [ swedish ] = "Lägg ti~ll..." ;
+        Text [ dutch ] = "~Toevoegen..." ;
+        Text [ spanish ] = "~Añadir..." ;
+        Text [ english_us ] = "~Add..." ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "²åÈë(~I)...";
+        Text[ russian ] = "Äîáàâèòü...";
+        Text[ polish ] = "Dodaj...";
+        Text[ japanese ] = "’Ç‰Á...";
+        Text[ russian ] = "Äîáàâèòü...";
+    Text[ polish ] = "Dodaj...";
+    Text[ japanese ] = "’Ç‰Á...";
+    Text[ chinese_simplified ] = "²åÈë(~I)...";
+    Text[ chinese_traditional ] = "´¡¤J(~I)...";
+        Text[ arabic ] = "ÅÖÇİÉ...";
+        Text[ greek ] = "ĞñïóèŞêç...";
+        Text[ korean ] = "Ãß°¡(~A)...";
+        Text[ turkish ] = "~Ekle...";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_REMOVE
+    {
+        Pos = MAP_APPFONT ( 255 , 81 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
+        Text = "~Löschen" ;
+        Text [ ENGLISH ] = "Remo~ve" ;
+        Text [ norwegian ] = "Remo~ve" ;
+        Text [ italian ] = "~Elimina" ;
+        Text [ portuguese_brazilian ] = "Remo~ver" ;
+        Text [ portuguese ] = "E~liminar" ;
+        Text [ finnish ] = "~Poista" ;
+        Text [ danish ] = "Slet" ;
+        Text [ french ] = "~Supprimer" ;
+        Text [ swedish ] = "~Radera" ;
+        Text [ dutch ] = "~Wissen" ;
+        Text [ spanish ] = "~Eliminar" ;
+        Text [ english_us ] = "~Delete" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ russian ] = "Óäàëèòü";
+        Text[ polish ] = "Usuñ";
+        Text[ japanese ] = "íœ(~D)";
+        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ arabic ] = "ÍĞİ";
+        Text[ greek ] = "ÄéáãñáöŞ";
+        Text[ korean ] = "»èÁ¦(~D)";
+        Text[ turkish ] = "~Sil";
+        Text[ language_user1 ] = " ";
+    };
+
+    PushButton BTN_RENAME
+    {
+        Pos = MAP_APPFONT ( 255 , 123 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        HelpId=HID_SC_RENAME_AUTOFMT;
+        Text = "Um~benennen" ;
+        Text [ ENGLISH ] = "Ren~ame" ;
+        TabStop = TRUE ;
+        Text [ portuguese ] = "Mudar ~nome" ;
+        Text [ english_us ] = "Ren~ame" ;
+        Text [ portuguese_brazilian ] = "Um~benennen" ;
+        Text [ swedish ] = "B~yt namn" ;
+        Text [ danish ] = "Omdøb" ;
+        Text [ italian ] = "~Rinomina" ;
+        Text [ spanish ] = "Cambiar ~nombre" ;
+        Text [ french ] = "Re~nommer" ;
+        Text [ dutch ] = "~Naam wijzigen" ;
+        Text[ chinese_simplified ] = "ÖØÃüÃû(~A)";
+        Text[ russian ] = "Ïåğåèìåíîâàòü";
+        Text[ polish ] = "Zmieñ nazwê";
+        Text[ japanese ] = "–¼‘O‚Ì•ÏX(~A)";
+        Text[ chinese_traditional ] = "­«·s©R¦W(~A)";
+        Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ";
+        Text[ greek ] = "Ìåôïíïìáóßá";
+        Text[ korean ] = "ÀÌ¸§ ¹Ù²Ù±â(~A)";
+        Text[ turkish ] = "~Yeniden adlandır";
+        Text[ language_user1 ] = " ";
+    };
+
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 255 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    String STR_ADD_TITLE
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? AutoFormat hinzufügen : Autoformat hinzufügen */
+        /* ### ACHTUNG: Neuer Text in Resource? AutoFormat hinzufügen : Autoformat hinzufügen */
+        /* ### ACHTUNG: Neuer Text in Resource? AutoFormat hinzufügen : AutoFormat hinzuf³gen */
+        Text = "AutoFormat hinzufügen" ;
+        Text [ ENGLISH ] = "Add AutoFormat" ;
+        Text [ norwegian ] = "Add AutoFormat" ;
+        Text [ italian ] = "Aggiungi formattazione automatica" ;
+        Text [ portuguese_brazilian ] = "Acrescentar Formato automático" ;
+        Text [ portuguese ] = "Adicionar AutoFormato" ;
+        Text [ finnish ] = "Lisää automaattimuoto" ;
+        Text [ danish ] = "Tilføj AutoFormat" ;
+        Text [ french ] = "Ajouter AutoFormat" ;
+        Text [ swedish ] = "Lägg till AutoFormat" ;
+        Text [ dutch ] = "AutoOpmaak toevoegen" ;
+        Text [ spanish ] = "Añadir AutoFormato" ;
+        Text [ english_us ] = "Add AutoFormat" ;
+        Text[ chinese_simplified ] = "ĞÂÔö×Ô¶¯¸ñÊ½";
+        Text[ russian ] = "Äîáàâèòü àâòîôîğìàò";
+        Text[ polish ] = "Dodaj autoformatowanie";
+        Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä‚Ì’Ç‰Á";
+        Text[ chinese_traditional ] = "·s¼W¦Û°Ê®æ¦¡";
+        Text[ arabic ] = "ÅÖÇİÉ ÊäÓíŞ ÊáŞÇÆí";
+        Text[ greek ] = "ĞñïóèŞêç ÁõôïÌïñöïğïßçóçò";
+        Text[ korean ] = "ÀÚµ¿ ¼­½Ä Ãß°¡";
+        Text[ turkish ] = "Otomatik formatlama ekle";
+        Text[ language_user1 ] = " ";
+    };
+
+    String STR_RENAME_TITLE
+    {
+        Text = "Autoformat umbenennen" ;
+        Text [ ENGLISH ] = "Rename Autoformat" ;
+        Text [ english_us ] = "Rename AutoFormat" ;
+        Text [ portuguese ] = "Mudar nome do AutoFormato" ;
+        Text [ portuguese_brazilian ] = "Autoformat umbenennen" ;
+        Text [ swedish ] = "Byt namn på AutoFormat" ;
+        Text [ danish ] = "Omdøb AutoFormat" ;
+        Text [ italian ] = "Rinomina formattazione automatica" ;
+        Text [ spanish ] = "Cambiar nombre del AutoFormato" ;
+        Text [ french ] = "Renommer l'AutoFormat" ;
+        Text [ dutch ] = "AutoOpmaak nieuwe naam geven" ;
+        Text[ chinese_simplified ] = "ÖØÃüÃû×Ô¶¯¸ñÊ½";
+        Text[ russian ] = "Ïåğåèìåíîâàòü àâòîôîğìàò";
+        Text[ polish ] = "Zmieñ nazwê autoformatowania";
+        Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä‚Ì–¼‘O‚Ì•ÏX";
+        Text[ chinese_traditional ] = "­«·s©R¦W¦Û°Ê®æ¦¡";
+        Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ ÇáÊäÓíŞ ÇáÊáŞÇÆí";
+        Text[ greek ] = "Ìåôïíïìáóßá ÁõôïÌïñöïğïßçóçò";
+        Text[ korean ] = "ÀÚµ¿¼­½Ä ÀÌ¸§ ¹Ù²Ù±â";
+        Text[ turkish ] = "Otom. formatlamayı yen. adlandır";
+        Text[ language_user1 ] = " ";
+    };
+
+    String STR_ADD_LABEL
+    {
+        Text = "Name" ;
+        Text [ ENGLISH ] = "Name" ;
+        Text [ norwegian ] = "Navn" ;
+        Text [ italian ] = "Nome" ;
+        Text [ portuguese_brazilian ] = "Nomear" ;
+        Text [ portuguese ] = "Nome" ;
+        Text [ finnish ] = "Nimi" ;
+        Text [ danish ] = "Navn" ;
+        Text [ french ] = "Nom" ;
+        Text [ swedish ] = "Namn" ;
+        Text [ dutch ] = "Naam" ;
+        Text [ spanish ] = "Nombre" ;
+        Text [ english_us ] = "Name" ;
+        Text[ chinese_simplified ] = "Ãû³Æ";
+        Text[ russian ] = "Èìÿ";
+        Text[ polish ] = "Nazwa";
+        Text[ japanese ] = "–¼‘O";
+        Text[ chinese_traditional ] = "¦WºÙ";
+        Text[ arabic ] = "ÇáÇÓã";
+        Text[ greek ] = "¼íïìá";
+        Text[ korean ] = "ÀÌ¸§";
+        Text[ turkish ] = "Ad";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_DEL_TITLE
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? AutoFormat löschen : Autoformat löschen */
+        /* ### ACHTUNG: Neuer Text in Resource? AutoFormat löschen : Autoformat löschen */
+        /* ### ACHTUNG: Neuer Text in Resource? AutoFormat löschen : AutoFormat l÷schen */
+        Text = "AutoFormat löschen" ;
+        Text [ ENGLISH ] = "Delete AutoFormat" ;
+        Text [ norwegian ] = "Delete AutoFormat" ;
+        Text [ italian ] = "Cancella formattazione automatica" ;
+        Text [ portuguese_brazilian ] = "Apagar Formato Automático" ;
+        Text [ portuguese ] = "Eliminar AutoFormato" ;
+        Text [ finnish ] = "Poista automaattimuoto" ;
+        Text [ danish ] = "Slet AutoFormat" ;
+        Text [ french ] = "Supprimer l'AutoFormat" ;
+        Text [ swedish ] = "Radera AutoFormat" ;
+        Text [ dutch ] = "AutoOpmaak wissen" ;
+        Text [ spanish ] = "Eliminar AutoFormato" ;
+        Text [ english_us ] = "Delete AutoFormat" ;
+        Text[ chinese_simplified ] = "É¾³ı×Ô¶¯¸ñÊ½";
+        Text[ russian ] = "Óäàëèòü àâòîôîğìàò";
+        Text[ polish ] = "Usuñ autoformatowanie";
+        Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä‚Ìíœ";
+        Text[ chinese_traditional ] = "§R°£¦Û°Ê®æ¦¡";
+        Text[ arabic ] = "ÍĞİ ÊäÓíŞ ÊáŞÇÆí";
+        Text[ greek ] = "ÄéáãñáöŞ ÁõôïÌïñöïğïßçóçò";
+        Text[ korean ] = "ÀÚµ¿¼­½Ä »èÁ¦";
+        Text[ turkish ] = "Otomatik formatlamayı sil";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_DEL_MSG
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Wollen Sie das AutoFormat # wirklich löschen? : Wollen Sie das Autoformat # wirklich löschen? */
+        /* ### ACHTUNG: Neuer Text in Resource? Wollen Sie das AutoFormat # wirklich löschen? : Wollen Sie das Autoformat # wirklich löschen? */
+        /* ### ACHTUNG: Neuer Text in Resource? Wollen Sie das AutoFormat # wirklich löschen? : Wollen Sie das AutoFormat # wirklich l÷schen? */
+        Text = "Wollen Sie das AutoFormat # wirklich löschen?" ;
+        Text [ ENGLISH ] = "Do you really want to delete the # autoFormat?" ;
+        Text [ norwegian ] = "Do you really want to delete the # autoFormat?" ;
+        Text [ italian ] = "Cancellare la formattazione automatica #?" ;
+        Text [ portuguese_brazilian ] = "Deseja realmente apagar o formato automático #?" ;
+        Text [ portuguese ] = "Deseja realmente eliminar o formato automático #?" ;
+        Text [ finnish ] = "Haluatko varmasti poistaa automaattimuodon #?" ;
+        Text [ danish ] = "Er du sikker på, at du vil slette AutoFormat #?" ;
+        Text [ french ] = "Confirmez-vous la suppression de l'AutoFormat # ?" ;
+        Text [ swedish ] = "Skall AutoFormat # verkligen raderas?" ;
+        Text [ dutch ] = "Wilt u AutoOpmaak # werkelijk verwijderen?" ;
+        Text [ spanish ] = "¿Desea realmente eliminar el AutoFormato #?" ;
+        Text [ english_us ] = "Do you really want to delete the # AutoFomat?" ;
+        Text[ chinese_simplified ] = "ÄúÕæÒªÉ¾³ı×Ô¶¯¸ñÊ½ # ?";
+        Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü àâòîôîğìàò #?";
+        Text[ polish ] = "Chcesz na pewno skasowaæ autoformatowanie #?";
+        Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä#‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©?";
+        Text[ chinese_traditional ] = "±z¯u­n§R°£¦Û°Ê®æ¦¡ # ?";
+        Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ ÇáÊäÓíŞ ÇáÊáŞÇÆí #¿";
+        Text[ greek ] = "Èİëåôå ğñáãìáôéêÜ íá äéáãñáöåß ç ÁõôïÌïñöïğïßçóç #;";
+        Text[ korean ] = "# ÀÚµ¿¼­½Ä À» »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+        Text[ turkish ] = "Otomatik formatlama # gerçekten silinsin mi?";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_BTN_CLOSE
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Schlie~ßen : Schlie~˜en */
+        Text = "Schlie~ßen" ;
+        Text [ ENGLISH ] = "~Close" ;
+        Text [ norwegian ] = "~Lukk" ;
+        Text [ italian ] = "~Chiudi" ;
+        Text [ portuguese_brazilian ] = "~Fechar" ;
+        Text [ portuguese ] = "~Fechar" ;
+        Text [ finnish ] = "~Sulje" ;
+        Text [ danish ] = "Luk" ;
+        Text [ french ] = "~Fermer" ;
+        Text [ swedish ] = "Stä~ng" ;
+        Text [ dutch ] = "~Sluiten" ;
+        Text [ spanish ] = "~Cerrar" ;
+        Text [ english_us ] = "~Close" ;
+        Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
+        Text[ russian ] = "Çàêğûòü";
+        Text[ polish ] = "Zamknij";
+        Text[ japanese ] = "•Â‚¶‚é(~C)";
+        Text[ chinese_traditional ] = "Ãö³¬(~C)";
+        Text[ arabic ] = "ÅÛáÇŞ";
+        Text[ greek ] = "Êëåßóéìï";
+        Text[ korean ] = "´İ±â(~C)";
+        Text[ turkish ] = "K~apat";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_JAN
+    {
+        Text = "Jan" ;
+        Text [ ENGLISH ] = "Jan" ;
+        Text [ norwegian ] = "Jan" ;
+        Text [ italian ] = "Gen" ;
+        Text [ portuguese_brazilian ] = "Jan" ;
+        Text [ portuguese ] = "Jan" ;
+        Text [ finnish ] = "Tam" ;
+        Text [ danish ] = "Jan" ;
+        Text [ french ] = "Janv." ;
+        Text [ swedish ] = "Jan" ;
+        Text [ dutch ] = "Jan" ;
+        Text [ spanish ] = "Ene" ;
+        Text [ english_us ] = "Jan" ;
+        Text[ chinese_simplified ] = "Ò»ÔÂ";
+        Text[ russian ] = "ßíâ";
+        Text[ polish ] = "Styczeñ";
+        Text[ japanese ] = "1Œ";
+        Text[ chinese_traditional ] = "¤@¤ë";
+        Text[ arabic ] = "íäÇíÑ";
+        Text[ greek ] = "Éáí";
+        Text[ korean ] = "1¿ù";
+        Text[ turkish ] = "Oca";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_FEB
+    {
+        Text = "Feb" ;
+        Text [ ENGLISH ] = "Feb" ;
+        Text [ norwegian ] = "Feb" ;
+        Text [ italian ] = "Feb" ;
+        Text [ portuguese_brazilian ] = "Fev" ;
+        Text [ portuguese ] = "Fev" ;
+        Text [ finnish ] = "Hel" ;
+        Text [ danish ] = "Feb" ;
+        Text [ french ] = "Févr." ;
+        Text [ swedish ] = "Feb" ;
+        Text [ dutch ] = "Feb" ;
+        Text [ spanish ] = "Feb" ;
+        Text [ english_us ] = "Feb" ;
+        Text[ chinese_simplified ] = "¶şÔÂ";
+        Text[ russian ] = "Ôåâ";
+        Text[ polish ] = "Luty";
+        Text[ japanese ] = "2Œ";
+        Text[ chinese_traditional ] = "¤G¤ë";
+        Text[ arabic ] = "İÈÑÇíÑ";
+        Text[ greek ] = "Öåâ";
+        Text[ korean ] = "2¿ù";
+        Text[ turkish ] = "Şub";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_MAR
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Mär : Mõr */
+        Text = "Mär" ;
+        Text [ ENGLISH ] = "Mar" ;
+        Text [ norwegian ] = "Mar" ;
+        Text [ italian ] = "Mar" ;
+        Text [ portuguese_brazilian ] = "Mar" ;
+        Text [ portuguese ] = "Mar" ;
+        Text [ finnish ] = "Maa" ;
+        Text [ danish ] = "Mar" ;
+        Text [ french ] = "Mars" ;
+        Text [ swedish ] = "Mar" ;
+        Text [ dutch ] = "Mrt" ;
+        Text [ spanish ] = "Mar" ;
+        Text [ english_us ] = "Mar" ;
+        Text[ chinese_simplified ] = "ÈıÔÂ";
+        Text[ russian ] = "Ìàğ";
+        Text[ polish ] = "Marzec";
+        Text[ japanese ] = "3Œ";
+        Text[ chinese_traditional ] = "¤T¤ë";
+        Text[ arabic ] = "ãÇÑÓ";
+        Text[ greek ] = "Máñ";
+        Text[ korean ] = "3¿ù";
+        Text[ turkish ] = "Mar";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_NORTH
+    {
+        Text = "Nord" ;
+        Text [ ENGLISH ] = "North" ;
+        Text [ norwegian ] = "North" ;
+        Text [ italian ] = "Nord" ;
+        Text [ portuguese_brazilian ] = "Norte" ;
+        Text [ portuguese ] = "Norte" ;
+        Text [ finnish ] = "Pohjoinen" ;
+        Text [ danish ] = "Nord" ;
+        Text [ french ] = "Nord" ;
+        Text [ swedish ] = "Norr" ;
+        Text [ dutch ] = "Noord" ;
+        Text [ spanish ] = "Norte" ;
+        Text [ english_us ] = "North" ;
+        Text[ chinese_simplified ] = "±±";
+        Text[ russian ] = "Ñåâåğ";
+        Text[ polish ] = "Pó³noc";
+        Text[ japanese ] = "–k";
+        Text[ chinese_traditional ] = "¥_";
+        Text[ arabic ] = "ÇáÔãÇá";
+        Text[ greek ] = "ÂïññÜò";
+        Text[ korean ] = "ºÏÂÊ";
+        Text[ turkish ] = "Kuzey";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_MID
+    {
+        Text = "Mitte" ;
+        Text [ ENGLISH ] = "Mid" ;
+        Text [ norwegian ] = "Mid" ;
+        Text [ italian ] = "Centro" ;
+        Text [ portuguese_brazilian ] = "Centro" ;
+        Text [ portuguese ] = "Centro" ;
+        Text [ finnish ] = "Keski" ;
+        Text [ danish ] = "Midte" ;
+        Text [ french ] = "Milieu" ;
+        Text [ swedish ] = "Mitten" ;
+        Text [ dutch ] = "Midden" ;
+        Text [ spanish ] = "Centro" ;
+        Text [ english_us ] = "Mid" ;
+        Text[ chinese_simplified ] = "ÖĞ";
+        Text[ russian ] = "Ñåğåäèíà";
+        Text[ polish ] = "Œrodek";
+        Text[ japanese ] = "’†‰›";
+        Text[ chinese_traditional ] = "¤¤";
+        Text[ arabic ] = "ÇáæÓØ";
+        Text[ greek ] = "Êİíôñï";
+        Text[ korean ] = "Áß°£";
+        Text[ turkish ] = "Orta";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_SOUTH
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Süd : S³d */
+        Text = "Süd" ;
+        Text [ ENGLISH ] = "South" ;
+        Text [ norwegian ] = "South" ;
+        Text [ italian ] = "Sud" ;
+        Text [ portuguese_brazilian ] = "Sul" ;
+        Text [ portuguese ] = "Sul" ;
+        Text [ finnish ] = "Etelä" ;
+        Text [ danish ] = "Syd" ;
+        Text [ french ] = "Sud" ;
+        Text [ swedish ] = "Söder" ;
+        Text [ dutch ] = "Zuid" ;
+        Text [ spanish ] = "Sur" ;
+        Text [ english_us ] = "South" ;
+        Text[ chinese_simplified ] = "ÄÏ";
+        Text[ russian ] = "Şã";
+        Text[ polish ] = "Po³udnie";
+        Text[ japanese ] = "“ì";
+        Text[ chinese_traditional ] = "«n";
+        Text[ arabic ] = "ÇáÌäæÈ";
+        Text[ greek ] = "Íüôïò";
+        Text[ korean ] = "³²ÂÊ";
+        Text[ turkish ] = "Güney";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_SUM
+    {
+        Text = "Summe" ;
+        Text [ ENGLISH ] = "Sum" ;
+        Text [ norwegian ] = "Sum" ;
+        Text [ italian ] = "Somma" ;
+        Text [ portuguese_brazilian ] = "Soma" ;
+        Text [ portuguese ] = "Soma" ;
+        Text [ finnish ] = "Summa" ;
+        Text [ danish ] = "Total" ;
+        Text [ french ] = "Somme" ;
+        Text [ swedish ] = "Summa" ;
+        Text [ dutch ] = "Som" ;
+        Text [ spanish ] = "Suma" ;
+        Text [ english_us ] = "Total" ;
+        Text[ chinese_simplified ] = "×Ü¼Æ";
+        Text[ russian ] = "Ñóììà";
+        Text[ polish ] = "Suma";
+        Text[ japanese ] = "‡Œv";
+        Text[ chinese_traditional ] = "Á`­p";
+        Text[ arabic ] = "ÇáãÌãæÚ";
+        Text[ greek ] = "¢èñïéóìá";
+        Text[ korean ] = "ÇÕ°è";
+        Text[ turkish ] = "Toplam";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½";
+    Text[ russian ] = "Àâòîôîğìàò";
+    Text[ polish ] = "Autoformatowanie";
+    Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä";
+    Text[ chinese_traditional ] = "¦Û°Ê®æ¦¡";
+    Text[ arabic ] = "ÇáÊäÓíŞ ÇáÊáŞÇÆí";
+    Text[ greek ] = "ÁõôïÌïñöïğïßçóç";
+    Text[ korean ] = "ÀÚµ¿ ¼­½Ä";
+    Text[ turkish ] = "Otomatik formatlama";
+    Text[ language_user1 ] = " ";
+};

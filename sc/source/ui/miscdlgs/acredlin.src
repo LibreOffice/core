@@ -1,0 +1,838 @@
+/*************************************************************************
+ *
+ *  $RCSfile: acredlin.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "acredlin.hrc"
+ModelessDialog RID_SCDLG_CHANGES
+{
+    OutputSize = TRUE ;
+    HelpId = FID_CHG_ACCEPT ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 282 , 142 ) ;
+    Text = "Änderungen akzeptieren oder verwerfen" ;
+    Text [ ENGLISH ] = "Accept or reject changes" ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+     // Dieser Dialog hat einen Cancel-Button !
+    Control CTR_REDLINING
+    {
+        HelpId = HID_SC_REDLIN_CTR ;
+        Pos = MAP_APPFONT ( 2 , 2 ) ;
+        Size = MAP_APPFONT ( 270 , 105 ) ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 271 , 105 ) ;
+        Size = MAP_APPFONT ( 1 , 1 ) ;
+        TabStop = FALSE ;
+    };
+    FixedText FT_ASSIGN
+    {
+        Text = "Bereich" ;
+        Text [ ENGLISH ] = "Range" ;
+        Hide = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 105 ) ;
+        Size = MAP_APPFONT ( 128 , 12 ) ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Range" ;
+        Text [ portuguese_brazilian ] = "Bereich" ;
+        Text [ swedish ] = "Område" ;
+        Text [ danish ] = "Område" ;
+        Text [ italian ] = "Area" ;
+        Text [ spanish ] = "Área" ;
+        Text [ french ] = "Plage" ;
+        Text [ dutch ] = "Bereik" ;
+        Text [ portuguese ] = "Intervalo" ;
+        Text[ chinese_simplified ] = "ÇøÓò";
+        Text[ russian ] = "Äèàïàçîí";
+        Text[ polish ] = "Zakres";
+        Text[ japanese ] = "”ÍˆÍ";
+        Text[ chinese_traditional ] = "°Ï°ì";
+        Text[ arabic ] = "äØÇŞ";
+        Text[ dutch ] = "Bereik";
+        Text[ chinese_simplified ] = "ÇøÓò";
+        Text[ greek ] = "Ğåñéï÷Ş";
+        Text[ korean ] = "¹üÀ§";
+        Text[ turkish ] = "Aralık";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_ASSIGN
+    {
+        Hide = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 119 ) ;
+        Size = MAP_APPFONT ( 128 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton RB_ASSIGN
+    {
+        Hide = TRUE ;
+        QuickHelpText = "Verkleinern/Vergrößern" ;
+        QuickHelpText [ ENGLISH ] = "Shrink/Expand" ;
+        Pos = MAP_APPFONT ( 142 , 119 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ english_us ] = "Minimize/Maximize" ;
+        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ swedish ] = "Förminska/Förstora" ;
+        QuickHelpText [ danish ] = "Formindsk/Forstør" ;
+        QuickHelpText [ italian ] = "Zoom indietro/avanti" ;
+        QuickHelpText [ spanish ] = "Reducir/Aumentar" ;
+        QuickHelpText [ french ] = "Réduire/agrandir" ;
+        QuickHelpText [ dutch ] = "Verkleinen/vergroten" ;
+        QuickHelpText [ portuguese ] = "Afastar/Aproximar" ;
+    QuickHelpText[ russian ] = "Óìåíüøèòü/Óâåëè÷èòü";
+        QuickHelpText[ polish ] = "Pomniejsz/Powiêksz";
+        QuickHelpText[ japanese ] = "k¬/Šg‘å";
+        QuickHelpText[ chinese_simplified ] = "ËõĞ¡/·Å´ó";
+        QuickHelpText[ chinese_traditional ] = "ÁY¤p/©ñ¤j";
+        QuickHelpText[ arabic ] = "ÊÕÛíÑ/ÊßÈíÑ";
+        QuickHelpText[ dutch ] = "Verkleinen/vergroten";
+        QuickHelpText[ chinese_simplified ] = "ËõĞ¡/·Å´ó";
+        QuickHelpText[ greek ] = "Óìßêñõíóç/Ìåãİèõíóç";
+        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    String STR_INSERT_COLS
+    {
+        Text = "Spalte eingefügt" ;
+        Text [ ENGLISH ] = "Inserted Column" ;
+        Text [ portuguese ] = "Coluna inserida" ;
+        Text [ english_us ] = "Column inserted" ;
+        Text [ portuguese_brazilian ] = "Spalte eingefügt" ;
+        Text [ swedish ] = "Kolumn infogad" ;
+        Text [ danish ] = "Kolonne indsat" ;
+        Text [ italian ] = "Colonna inserita" ;
+        Text [ spanish ] = "Columna insertada" ;
+        Text [ french ] = "Colonne insérée" ;
+        Text [ dutch ] = "Kolom ingevoegd" ;
+        Text[ chinese_simplified ] = "¼ÓÈëµÄÁĞ";
+        Text[ russian ] = "Ñòîëáåö âñòàâëåí";
+        Text[ polish ] = "Wstawiona kolumna";
+        Text[ japanese ] = "—ñ‚ª‘}“ü‚³‚ê‚Ü‚µ‚½";
+        Text[ english_us ] = "Column inserted";
+    Text[ portuguese ] = "Coluna inserida";
+    Text[ russian ] = "Ñòîëáåö âñòàâëåí";
+    Text[ dutch ] = "Kolom ingevoegd";
+    Text[ french ] = "Colonne insérée";
+    Text[ spanish ] = "Columna insertada";
+    Text[ italian ] = "Colonna inserita";
+    Text[ danish ] = "Kolonne indsat";
+    Text[ swedish ] = "Kolumn infogad";
+    Text[ polish ] = "Wstawiona kolumna";
+    Text[ portuguese_brazilian ] = "Spalte eingefügt";
+    Text[ japanese ] = "—ñ‚ª‘}“ü‚³‚ê‚Ü‚µ‚½";
+    Text[ chinese_simplified ] = "¼ÓÈëµÄÁĞ";
+    Text[ chinese_traditional ] = "Äæ¤w¸g´¡¤J";
+        Text[ arabic ] = "ÚãæÏ ãÏÑÌ";
+        Text[ dutch ] = "Kolom ingevoegd";
+        Text[ chinese_simplified ] = "¼ÓÈëµÄÁĞ";
+        Text[ greek ] = "Óõìğëçñşèçêå ç åéóáãùãŞ ôçò óôŞëçò";
+        Text[ korean ] = "¿­ÀÌ »ğÀÔµÇ¾ú½À´Ï´Ù.";
+        Text[ turkish ] = "Sütun eklendi";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_INSERT_ROWS
+    {
+        Text = "Zeile eingefügt" ;
+        Text [ ENGLISH ] = "Inserted Row" ;
+        Text [ portuguese ] = "Linha inserida" ;
+        Text [ english_us ] = "Row inserted " ;
+        Text [ portuguese_brazilian ] = "Zeile eingefügt" ;
+        Text [ swedish ] = "Rad infogad" ;
+        Text [ danish ] = "Række indsat" ;
+        Text [ italian ] = "Riga inserita" ;
+        Text [ spanish ] = "Fila insertada" ;
+        Text [ french ] = "Ligne insérée" ;
+        Text [ dutch ] = "Rij ingevoegd" ;
+        Text[ chinese_simplified ] = "ĞĞ±»²åÈë";
+        Text[ russian ] = "Ñòğîêà âñòàâëåíà";
+        Text[ polish ] = "Usuniêty wiersz";
+        Text[ japanese ] = "s‚ª‘}“ü‚³‚ê‚Ü‚µ‚½";
+        Text[ chinese_traditional ] = "¦C³Q´¡¤J";
+        Text[ arabic ] = "ÓØÑ ãÏÑÌ";
+        Text[ dutch ] = "Rij ingevoegd";
+        Text[ chinese_simplified ] = "ĞĞ±»²åÈë";
+        Text[ greek ] = "Ç óôŞëç åéóÜ÷èçêå";
+        Text[ korean ] = "ÇàÀÌ »ğÀÔµÇ¾ú½À´Ï´Ù.";
+        Text[ turkish ] = "Satır eklendi";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_INSERT_TABS
+    {
+        Text = "Tabelle eingefügt" ;
+        Text [ ENGLISH ] = "Inserted Sheet" ;
+        Text [ portuguese ] = "Tabela inserida" ;
+        Text [ english_us ] = "Sheet inserted " ;
+        Text [ portuguese_brazilian ] = "Tabelle eingefügt" ;
+        Text [ swedish ] = "Tabell infogad" ;
+        Text [ danish ] = "Ark indsat" ;
+        Text [ italian ] = "Tabella inserita" ;
+        Text [ spanish ] = "Hoja insertada" ;
+        Text [ french ] = "Feuille insérée" ;
+        Text [ dutch ] = "Tabelle ingevoegd" ;
+        Text[ chinese_simplified ] = "¼ÓÈë¹¤×÷±í";
+        Text[ russian ] = "Òàáëèöà âñòàâëåíà";
+        Text[ polish ] = "Wstawiona tabela";
+        Text[ japanese ] = "•\\‚ª‘}“ü‚³‚ê‚Ä‚Ü‚µ‚½";
+        Text[ chinese_traditional ] = "¥[¤J¤u§@ªí";
+        Text[ arabic ] = "ÌÏæá ãÏÑÌ";
+        Text[ dutch ] = "Tabelle ingevoegd";
+        Text[ chinese_simplified ] = "¼ÓÈë¹¤×÷±í";
+        Text[ greek ] = "Ï ğßíáêáò åéóÜ÷èçêå";
+        Text[ korean ] = "½ÃÆ®°¡ »ğÀÔµÇ¾ú½À´Ï´Ù.";
+        Text[ turkish ] = "Tablo eklendi";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_DELETE_COLS
+    {
+        Text = "Spalte gelöscht" ;
+        Text [ ENGLISH ] = "Deleted Column" ;
+        Text [ portuguese ] = "Coluna eliminada" ;
+        Text [ english_us ] = "Column deleted" ;
+        Text [ portuguese_brazilian ] = "Spalte gelöscht" ;
+        Text [ swedish ] = "Kolumn raderad" ;
+        Text [ danish ] = "Kolonne slettet" ;
+        Text [ italian ] = "Colonna cancellata" ;
+        Text [ spanish ] = "Columna eliminada" ;
+        Text [ french ] = "Colonne supprimée" ;
+        Text [ dutch ] = "Kolom verwijderd" ;
+        Text[ chinese_simplified ] = "É¾³ıµÄÁĞ";
+        Text[ russian ] = "Ñòîëáåö óäàëåí";
+        Text[ polish ] = "Usuniêta kolumna";
+        Text[ japanese ] = "—ñ‚ªíœ‚³‚ê‚Ü‚µ‚½";
+        Text[ chinese_traditional ] = "Äæ¤w¸g§R°£";
+        Text[ arabic ] = "ÚãæÏ ãÍĞæİ";
+        Text[ dutch ] = "Kolom verwijderd";
+        Text[ chinese_simplified ] = "É¾³ıµÄÁĞ";
+        Text[ greek ] = "Ç óôŞëç İ÷åé äéáãñáöåß";
+        Text[ korean ] = "¿­ÀÌ »èÁ¦µÇ¾ú½À´Ï´Ù.";
+        Text[ turkish ] = "Sütun silindi";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_DELETE_ROWS
+    {
+        Text = "Zeile gelöscht" ;
+        Text [ ENGLISH ] = "Deleted Row" ;
+        Text [ portuguese ] = "Linha eliminada" ;
+        Text [ english_us ] = "Row deleted" ;
+        Text [ portuguese_brazilian ] = "Zeile gelöscht" ;
+        Text [ swedish ] = "Rad raderad" ;
+        Text [ danish ] = "Række slettet" ;
+        Text [ italian ] = "Riga cancellata" ;
+        Text [ spanish ] = "Fila eliminada" ;
+        Text [ french ] = "Ligne supprimée" ;
+        Text [ dutch ] = "Rij verwijderd" ;
+        Text[ chinese_simplified ] = "ĞĞ±»É¾³ı";
+        Text[ russian ] = "Ñòğîêà óäàëåíà";
+        Text[ polish ] = "Usuniêty wiersz";
+        Text[ japanese ] = "s‚ªíœ‚³‚ê‚Ü‚µ‚½";
+        Text[ chinese_traditional ] = "¦C³Q§R°£";
+        Text[ arabic ] = "ÓØÑ ãÍĞæİ";
+        Text[ dutch ] = "Rij verwijderd";
+        Text[ chinese_simplified ] = "ĞĞ±»É¾³ı";
+        Text[ greek ] = "Ç ãñáììŞ İ÷åé äéáãñáöåß";
+        Text[ korean ] = "ÇàÀÌ »èÁ¦µÇ¾ú½À´Ï´Ù.";
+        Text[ turkish ] = "Satır silindi";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_DELETE_TABS
+    {
+        Text = "Tabelle gelöscht" ;
+        Text [ ENGLISH ] = "Deleted Sheet" ;
+        Text [ portuguese ] = "Tabela eliminada" ;
+        Text [ english_us ] = "Sheet deleted" ;
+        Text [ portuguese_brazilian ] = "Tabelle gelöscht" ;
+        Text [ swedish ] = "Tabell raderad" ;
+        Text [ danish ] = "Ark slettet" ;
+        Text [ italian ] = "Tabella cancellata" ;
+        Text [ spanish ] = "Hoja eliminada" ;
+        Text [ french ] = "Feuille supprimée" ;
+        Text [ dutch ] = "Tabel gewist" ;
+        Text[ chinese_simplified ] = "É¾³ıµÄ¹¤×÷±í";
+        Text[ russian ] = "Òàáëèöà óäàëåíà";
+        Text[ polish ] = "Usuniêta tabela";
+        Text[ japanese ] = "•\\‚ªíœ‚³‚ê‚Ü‚µ‚½";
+        Text[ chinese_traditional ] = "§R°£ªº¤u§@ªí";
+        Text[ arabic ] = "ÌÏæá ãÍĞæİ";
+        Text[ dutch ] = "Tabel gewist";
+        Text[ chinese_simplified ] = "É¾³ıµÄ¹¤×÷±í";
+        Text[ greek ] = "Äéáãñáììİíïé ğßíáêåò";
+        Text[ korean ] = "½ÃÆ®°¡ »èÁ¦µÇ¾ú½À´Ï´Ù.";
+        Text[ turkish ] = "Tablo silindi";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_MOVE
+    {
+        Text = "Bereich verschoben" ;
+        Text [ ENGLISH ] = "Moved Cells" ;
+        Text [ portuguese ] = "Área movida" ;
+        Text [ english_us ] = "Range moved" ;
+        Text [ portuguese_brazilian ] = "Bereich verschoben" ;
+        Text [ swedish ] = "Område förflyttat" ;
+        Text [ danish ] = "Område forskudt" ;
+        Text [ italian ] = "Area spostata" ;
+        Text [ spanish ] = "Área desplazada" ;
+        Text [ french ] = "Plage déplacée" ;
+        Text [ dutch ] = "Bereik verplaatst" ;
+        Text[ chinese_simplified ] = "ÒÆ¶¯ÇøÓò";
+        Text[ russian ] = "Îáëàñòü ïåğåìåùåíà";
+        Text[ polish ] = "Przesuniêty obszar";
+        Text[ japanese ] = "”ÍˆÍ‚ÌˆÚ“®";
+        Text[ chinese_traditional ] = "²¾°Ê°Ï°ì";
+        Text[ arabic ] = "äØÇŞ ãÍÑß";
+        Text[ dutch ] = "Bereik verplaatst";
+        Text[ chinese_simplified ] = "ÒÆ¶¯ÇøÓò";
+        Text[ greek ] = "Ç ğåñéï÷Ş åğéëïãŞò ìåôáêéíŞèçêå";
+        Text[ korean ] = "¿µ¿ªÀÌ ÀÌµ¿Çß½À´Ï´Ù.";
+        Text[ turkish ] = "Aralık kaydırıldı";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_CONTENT
+    {
+        Text = "Inhaltsänderung" ;
+        Text [ ENGLISH ] = "Changed Cell" ;
+        Text [ portuguese ] = "Conteúdo modificado" ;
+        Text [ english_us ] = "Changed contents" ;
+        Text [ portuguese_brazilian ] = "Inhaltsänderung" ;
+        Text [ swedish ] = "Innehållsändring" ;
+        Text [ danish ] = "Indholdsændring" ;
+        Text [ italian ] = "Modifica contenuto" ;
+        Text [ spanish ] = "Modificación de contenido" ;
+        Text [ french ] = "Modification de contenu" ;
+        Text [ dutch ] = "Inhoudsverandering" ;
+        Text[ chinese_simplified ] = "ÄÚÈİ¸ü¸Ä";
+        Text[ russian ] = "Èçìåíåíèå ñîäåğæèìîãî";
+        Text[ polish ] = "Zmiana zawartoœci";
+        Text[ japanese ] = "“à—e‚Ì•ÏX";
+        Text[ chinese_traditional ] = "¤º®eÅÜ§ó";
+        Text[ arabic ] = "ÊÛííÑ ÇáãÍÊæíÇÊ";
+        Text[ dutch ] = "Inhoudsverandering";
+        Text[ chinese_simplified ] = "ÄÚÈİ¸ü¸Ä";
+        Text[ greek ] = "Áëëáãİò ğåñéå÷ïìİíùí";
+        Text[ korean ] = "º¯°æ ³»¿ë";
+        Text[ turkish ] = "İçerik değişikliği";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_CONTENT_WITH_CHILD
+    {
+        Text = "Inhaltsänderung" ;
+        Text [ ENGLISH ] = "Changed Cell" ;
+        Text [ portuguese ] = "Conteúdo modificado" ;
+        Text [ english_us ] = "Changed contents" ;
+        Text [ portuguese_brazilian ] = "Inhaltsänderung" ;
+        Text [ swedish ] = "Innehållsändring" ;
+        Text [ danish ] = "Indholdsændring" ;
+        Text [ italian ] = "Modifica contenuto" ;
+        Text [ spanish ] = "Modificación de contenido" ;
+        Text [ french ] = "Modification de contenu" ;
+        Text [ dutch ] = "Inhoudsverandering" ;
+        Text[ chinese_simplified ] = "ÄÚÈİ¸ü¸Ä";
+        Text[ russian ] = "Èçìåíåíèå ñîäåğæèìîãî";
+        Text[ polish ] = "Zmiana zawartoœci";
+        Text[ japanese ] = "“à—e‚Ì•ÏX";
+        Text[ chinese_traditional ] = "¤º®eÅÜ§ó";
+        Text[ arabic ] = "ÊÛííÑ ÇáãÍÊæíÇÊ";
+        Text[ dutch ] = "Inhoudsverandering";
+        Text[ chinese_simplified ] = "ÄÚÈİ¸ü¸Ä";
+        Text[ greek ] = "Áëëáãİò ğåñéå÷ïìİíùí";
+        Text[ korean ] = "º¯°æ ³»¿ë";
+        Text[ turkish ] = "İçerik değişikliği";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_CHILD_CONTENT
+    {
+        Text = "Änderung zu " ;
+        Text [ ENGLISH ] = "acceptable Changing to " ;
+        Text [ portuguese ] = "Modificado para " ;
+        Text [ english_us ] = "Changed to " ;
+        Text [ portuguese_brazilian ] = "Änderung zu " ;
+        Text [ swedish ] = "Ändring till  " ;
+        Text [ danish ] = "Ændring til " ;
+        Text [ italian ] = "Modificato in " ;
+        Text [ spanish ] = "Cambiada a  " ;
+        Text [ french ] = "Modification dans " ;
+        Text [ dutch ] = "Wijziging in  " ;
+        Text[ chinese_simplified ] = "¸ü¸Ä³É ";
+        Text[ russian ] = "Èçìåíåíèÿ ê ";
+        Text[ polish ] = "Zmieniony na  ";
+        Text[ japanese ] = "•ÏX ";
+        Text[ chinese_traditional ] = "ÅÜ§ó¦Ü ";
+        Text[ arabic ] = "ÊÛííÑ Åáì ";
+        Text[ dutch ] = "Wijziging in  ";
+        Text[ chinese_simplified ] = "¸ü¸Ä³É ";
+        Text[ greek ] = "ÁëëáãŞ ğñïò ";
+        Text[ korean ] = "·Î º¯°æ. ";
+        Text[ turkish ] = "Değişiklikler: ";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_CHILD_ORGCONTENT
+    {
+        Text = "Original" ;
+        Text [ ENGLISH ] = "Original" ;
+        Text [ portuguese ] = "Original" ;
+        Text [ english_us ] = "Original" ;
+        Text [ portuguese_brazilian ] = "Original" ;
+        Text [ swedish ] = "Original" ;
+        Text [ danish ] = "Original" ;
+        Text [ italian ] = "Originale" ;
+        Text [ spanish ] = "Original" ;
+        Text [ french ] = "Original" ;
+        Text [ dutch ] = "Origineel" ;
+        Text[ chinese_simplified ] = "Ô­¼ş";
+        Text[ russian ] = "Îğèãèíàë";
+        Text[ polish ] = "Orygina³";
+        Text[ japanese ] = "µØ¼ŞÅÙ";
+        Text[ chinese_traditional ] = "­ì¥ó";
+        Text[ arabic ] = "ÇáÃÕá";
+        Text[ dutch ] = "Origineel";
+        Text[ chinese_simplified ] = "Ô­¼ş";
+        Text[ greek ] = "Áñ÷éêü";
+        Text[ korean ] = "º»·¡ÀÇ";
+        Text[ turkish ] = "Özgün hali";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_REJECT
+    {
+        Text = "Änderung verworfen" ;
+        Text [ ENGLISH ] = "Reject Changes" ;
+        Text [ portuguese ] = "Modificações rejeitadas" ;
+        Text [ english_us ] = "Changes rejected" ;
+        Text [ portuguese_brazilian ] = "Änderung verworfen" ;
+        Text [ swedish ] = "Ändring tillbakavisad" ;
+        Text [ danish ] = "Ændring forkastet" ;
+        Text [ italian ] = "Modifiche rigettate" ;
+        Text [ spanish ] = "Modificación rechazada" ;
+        Text [ french ] = "Modification refusée" ;
+        Text [ dutch ] = "Wijziging verworpen" ;
+        Text[ chinese_simplified ] = "È¡Ïû¸ü¸Ä";
+        Text[ russian ] = "Èçìåíåíèÿ îòêëîíåíû";
+        Text[ polish ] = "Zmiany odrzucono";
+        Text[ japanese ] = "•ÏX‚µ‚È‚¢";
+        Text[ chinese_traditional ] = "¨ú®øÅÜ§ó";
+        Text[ arabic ] = "ÑİÖ ÇáÊÛííÑÇÊ";
+        Text[ dutch ] = "Wijziging verworpen";
+        Text[ chinese_simplified ] = "È¡Ïû¸ü¸Ä";
+        Text[ greek ] = "Áëëáãİò áğïññßöèçêáí";
+        Text[ korean ] = "º¯°æÀÌ Ãë¼ÒµÇ¾ú½À´Ï´Ù.";
+        Text[ turkish ] = "Değişiklikler reddedildi";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_ACCEPTED
+    {
+        Text = "Akzeptierte" ;
+        Text [ ENGLISH ] = "Accepted" ;
+        Text [ portuguese ] = "Aceites" ;
+        Text [ english_us ] = "Accepted" ;
+        Text [ portuguese_brazilian ] = "Akzeptierte" ;
+        Text [ swedish ] = "Accepterade" ;
+        Text [ danish ] = "Accepterede" ;
+        Text [ italian ] = "Accettate" ;
+        Text [ spanish ] = "Aceptadas" ;
+        Text [ french ] = "Acceptées" ;
+        Text [ dutch ] = "Geaccepteerde" ;
+        Text[ chinese_simplified ] = "½ÓÊÜµÄ";
+        Text[ russian ] = "Ïğèíÿòûå";
+        Text[ polish ] = "Zaakceptowane";
+        Text[ japanese ] = "”F‚ß‚½";
+        Text[ chinese_traditional ] = "±µ¨üªº";
+        Text[ arabic ] = "ãŞÈæáÉ";
+        Text[ dutch ] = "Geaccepteerde";
+        Text[ chinese_simplified ] = "½ÓÊÜµÄ";
+        Text[ greek ] = "Áğïäå÷üìåíá";
+        Text[ korean ] = "¼ö¿ëµÊ";
+        Text[ turkish ] = "Kabul edilenler";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_REJECTED
+    {
+        Text = "Abgelehnte" ;
+        Text [ ENGLISH ] = "Rejected" ;
+        Text [ portuguese ] = "Rejeitados" ;
+        Text [ english_us ] = "Rejected" ;
+        Text [ portuguese_brazilian ] = "Abgelehnte" ;
+        Text [ swedish ] = "Tillbakavisade" ;
+        Text [ danish ] = "Forkastede" ;
+        Text [ italian ] = "Rigettate" ;
+        Text [ spanish ] = "Rechazadas" ;
+        Text [ french ] = "Refusées" ;
+        Text [ dutch ] = "Geweigerde" ;
+        Text[ chinese_simplified ] = "±»¾Ü¾øµÄ";
+        Text[ russian ] = "Îòêëîíåííûå";
+        Text[ polish ] = "Odrzucone";
+        Text[ japanese ] = "”F‚ß‚È‚¢";
+        Text[ chinese_traditional ] = "³Q©Úµ´ªº";
+        Text[ arabic ] = "ãÑİæÖÉ";
+        Text[ dutch ] = "Geweigerde";
+        Text[ chinese_simplified ] = "±»¾Ü¾øµÄ";
+        Text[ greek ] = "Áğïññéğôüìåíá";
+        Text[ korean ] = "°ÅºÎµÊ";
+        Text[ turkish ] = "Reddedilenler";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_NO_ENTRY
+    {
+        Text = "Kein Eintrag" ;
+        Text [ ENGLISH ] = "No Entry" ;
+        Text [ portuguese ] = "Nenhum registo" ;
+        Text [ english_us ] = "No Entry" ;
+        Text [ portuguese_brazilian ] = "Kein Eintrag" ;
+        Text [ swedish ] = "Ingen post" ;
+        Text [ danish ] = "Intet element" ;
+        Text [ italian ] = "Nessuna voce" ;
+        Text [ spanish ] = "Ninguna entrada" ;
+        Text [ french ] = "Pas d'entrée" ;
+        Text [ dutch ] = "Geen item" ;
+        Text[ chinese_simplified ] = "ÎŞÌõÄ¿";
+        Text[ russian ] = "Áåç çàïèñè";
+        Text[ polish ] = "Nie ma wpisu";
+        Text[ japanese ] = "“ü—Í‚È‚µ";
+        Text[ chinese_traditional ] = "µL¶µ¥Ø";
+        Text[ arabic ] = "áÇ íæÌÏ ÅÏÎÇá";
+        Text[ dutch ] = "Geen item";
+        Text[ chinese_simplified ] = "ÎŞÌõÄ¿";
+        Text[ greek ] = "Êáìßá åããñáöŞ";
+        Text[ korean ] = "µî·ÏÀÌ ¾ÈµÇ¾ú½À´Ï´Ù.";
+        Text[ turkish ] = "Giriş yok";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_EMPTY
+    {
+        Text = "<leer>" ;
+        Text [ ENGLISH ] = "<empty>" ;
+        Text [ portuguese ] = "<vazio>" ;
+        Text [ english_us ] = "<empty>" ;
+        Text [ portuguese_brazilian ] = "<leer>" ;
+        Text [ swedish ] = "<tom>" ;
+        Text [ danish ] = "<tom>" ;
+        Text [ italian ] = "<vuoto>" ;
+        Text [ spanish ] = "<vacío>" ;
+        Text [ french ] = "<vide>" ;
+        Text [ dutch ] = "<leeg>" ;
+        Text[ chinese_simplified ] = "<¿ÕÈ±>";
+        Text[ russian ] = "<ïóñòî>";
+        Text[ polish ] = "<pusty>";
+        Text[ japanese ] = "<‹ó”’>";
+        Text[ chinese_traditional ] = "<ªÅ¯Ê>";
+        Text[ arabic ] = "<İÇÑÛ>";
+        Text[ dutch ] = "<leeg>";
+        Text[ chinese_simplified ] = "<¿ÕÈ±>";
+        Text[ greek ] = "<êåíü>";
+        Text[ korean ] = "<°ø¹é>";
+        Text[ turkish ] = "<Boş>";
+        Text[ language_user1 ] = " ";
+    };
+    Bitmap BMP_STR_CLOSE
+    {
+        File = "dir-clos.bmp" ;
+    };
+    Bitmap BMP_STR_OPEN
+    {
+        File = "dir-open.bmp" ;
+    };
+    Bitmap BMP_STR_END
+    {
+        File = "basobj2.bmp" ;
+    };
+    Bitmap BMP_STR_ERROR
+    {
+        File = "basbrk.bmp" ;
+    };
+    Text [ english_us ] = "Accept or Reject Changes" ;
+    Text [ portuguese_brazilian ] = "Änderungen akzeptieren" ;
+    Text [ swedish ] = "Acceptera eller kasta bort ändringarna" ;
+    Text [ danish ] = "Accepter eller forkast ændringerne" ;
+    Text [ italian ] = "Accetta o rigetta modifiche" ;
+    Text [ spanish ] = "Aceptar o rechazar modificaciones" ;
+    Text [ french ] = "Accepter ou rejeter les modifications" ;
+    Text [ dutch ] = "Wijzigingen accepteren of verwerpen" ;
+    Text [ portuguese ] = "Aceitar ou rejeitar modificações" ;
+    Text[ chinese_simplified ] = "½ÓÊÜ»òÈ¡Ïû¸ü¸Ä";
+    Text[ russian ] = "Ïğèíÿòü èëè îòêëîíèòü èçìåíåíèÿ";
+    Text[ polish ] = "Zaakceptuj albo odrzuæ zmiany";
+    Text[ japanese ] = "•ÏX‰ÓŠ‚ÌŠm”F";
+    Text[ chinese_traditional ] = "±µ¨ü©Î¨ú®øÅÜ§ó";
+    Text[ arabic ] = "ŞÈæá Ãæ ÑİÖ ÊÛííÑÇÊ";
+    Text[ dutch ] = "Wijzigingen accepteren of verwerpen";
+    Text[ chinese_simplified ] = "½ÓÊÜ»òÈ¡Ïû¸ü¸Ä";
+    Text[ greek ] = "Áğïäï÷Ş Ş áğüññéøç áëëáãşí";
+    Text[ korean ] = "º¯°æ Àû¿ë ¶Ç´Â Ãë¼Ò";
+    Text[ turkish ] = "Değişiklikleri kabul/redd et";
+    Text[ language_user1 ] = " ";
+};
+Menu RID_POPUP_CHANGES
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SC_CHANGES_COMMENT ;
+            HelpId = HID_SC_CHANGES_COMMENT ;
+            Text = "Kommentar bearbeiten..." ;
+            Text [ English ] = "Edit Comment..." ;
+            Text [ english_us ] = "Edit Comment..." ;
+            Text [ portuguese_brazilian ] = "Kommentar bearbeiten..." ;
+            Text [ swedish ] = "Redigera kommentar..." ;
+            Text [ danish ] = "Rediger kommentar..." ;
+            Text [ italian ] = "Modifica commento..." ;
+            Text [ spanish ] = "Modificar comentario..." ;
+            Text [ french ] = "Éditer le commentaire..." ;
+            Text [ dutch ] = "Commentaar bewerken..." ;
+            Text [ portuguese ] = "Editar comentário..." ;
+
+            Text[ chinese_simplified ] = "±à¼­×¢½â...";
+            Text[ russian ] = "Ïğàâêà êîììåíòàğèÿ...";
+            Text[ polish ] = "Edytuj komentarz...";
+            Text[ japanese ] = "ºÒİÄ‚Ì•ÒW...";
+            Text[ chinese_traditional ] = "½s¿èª`¸Ñ...";
+            Text[ arabic ] = "ÊÍÑíÑ ÊÚáíŞ...";
+            Text[ dutch ] = "Commentaar bewerken...";
+            Text[ chinese_simplified ] = "±à¼­×¢½â...";
+            Text[ greek ] = "Åğåîåñãáóßá ó÷ïëßïõ...";
+            Text[ korean ] = "ÆíÁı ÁÖ...";
+            Text[ turkish ] = "Açıklamayı düzenle...";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SC_SUB_SORT ;
+            Text = "Sortiere" ;
+            Text [ english ] = "Sort" ;
+            RadioCheck = TRUE ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SC_SORT_ACTION ;
+                        HelpID = HID_SC_SORT_ACTION ;
+                        Text = "Aktion" ;
+                        Text [ english ] = "Action" ;
+                        RadioCheck = TRUE ;
+                        Text [ english_us ] = "Action" ;
+                        Text [ portuguese_brazilian ] = "Aktion" ;
+                        Text [ swedish ] = "Åtgärd" ;
+                        Text [ danish ] = "Handling" ;
+                        Text [ italian ] = "Operazione" ;
+                        Text [ spanish ] = "Acción" ;
+                        Text [ french ] = "Action" ;
+                        Text [ dutch ] = "Activiteit" ;
+                        Text [ portuguese ] = "Acção" ;
+                        Text[ chinese_simplified ] = "²Ù×÷";
+                        Text[ russian ] = "Äåéñòâèå";
+                        Text[ polish ] = "Akcja";
+                        Text[ japanese ] = "±¸¼®İ";
+                        Text[ chinese_traditional ] = "¾Ş§@";
+                        Text[ arabic ] = "ÅÌÑÇÁ";
+                        Text[ dutch ] = "Activiteit";
+                        Text[ chinese_simplified ] = "²Ù×÷";
+                        Text[ greek ] = "Åíİñãåéá";
+                        Text[ korean ] = "ÀÛµ¿";
+                        Text[ turkish ] = "İşlem";
+                        Text[ language_user1 ] = " ";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SC_SORT_POSITION ;
+                        HelpID = HID_SORT_POSITION ;
+                        Text = "Position" ;
+                        Text [ english ] = "Position" ;
+                        RadioCheck = TRUE ;
+                        Text [ english_us ] = "Position" ;
+                        Text [ portuguese_brazilian ] = "Position" ;
+                        Text [ swedish ] = "Position" ;
+                        Text [ danish ] = "Placering" ;
+                        Text [ italian ] = "Posizione" ;
+                        Text [ spanish ] = "Posición" ;
+                        Text [ french ] = "Position" ;
+                        Text [ dutch ] = "Positie" ;
+                        Text [ portuguese ] = "Posição" ;
+                        Text[ chinese_simplified ] = "Î»ÖÃ";
+                        Text[ russian ] = "Ïîëîæåíèå";
+                        Text[ polish ] = "Pozycja";
+                        Text[ japanese ] = "ˆÊ’u";
+                        Text[ chinese_traditional ] = "¦ì¸m";
+                        Text[ arabic ] = "ãæÖÚ";
+                        Text[ dutch ] = "Positie";
+                        Text[ chinese_simplified ] = "Î»ÖÃ";
+                        Text[ greek ] = "Èİóç";
+                        Text[ korean ] = "À§Ä¡";
+                        Text[ turkish ] = "Konum";
+                        Text[ language_user1 ] = " ";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SC_SORT_AUTHOR ;
+                        HelpID = HID_SC_SORT_AUTHOR ;
+                        Text = "Autor" ;
+                        Text [ english ] = "Author" ;
+                        RadioCheck = TRUE ;
+                        Text [ english_us ] = "Author" ;
+                        Text [ portuguese_brazilian ] = "Autor" ;
+                        Text [ swedish ] = "Författare" ;
+                        Text [ danish ] = "Forfatter" ;
+                        Text [ italian ] = "Autore" ;
+                        Text [ spanish ] = "Autor" ;
+                        Text [ french ] = "Auteur" ;
+                        Text [ dutch ] = "Auteur" ;
+                        Text [ portuguese ] = "Autor" ;
+                        Text[ chinese_simplified ] = "×÷Õß";
+                        Text[ russian ] = "Àâòîğ";
+                        Text[ polish ] = "Autor";
+                        Text[ japanese ] = "ì¬Ò";
+                        Text[ chinese_traditional ] = "§@ªÌ";
+                        Text[ arabic ] = "ÇáãÄáİ";
+                        Text[ dutch ] = "Auteur";
+                        Text[ chinese_simplified ] = "×÷Õß";
+                        Text[ greek ] = "ÓõíôÜêôçò";
+                        Text[ korean ] = "ÀúÀÚ";
+                        Text[ turkish ] = "Yazan";
+                        Text[ language_user1 ] = " ";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SC_SORT_DATE ;
+                        HelpID = HID_SC_SORT_DATE ;
+                        Text = "Datum" ;
+                        Text [ english ] = "Date" ;
+                        RadioCheck = TRUE ;
+                        Text [ english_us ] = "Date" ;
+                        Text [ portuguese_brazilian ] = "Datum" ;
+                        Text [ swedish ] = "Datum" ;
+                        Text [ danish ] = "Dato" ;
+                        Text [ italian ] = "Data" ;
+                        Text [ spanish ] = "Fecha" ;
+                        Text [ french ] = "Date" ;
+                        Text [ dutch ] = "Datum" ;
+                        Text [ portuguese ] = "Data" ;
+                        Text[ chinese_simplified ] = "ÈÕÆÚ";
+                        Text[ russian ] = "Äàòà";
+                        Text[ polish ] = "Data";
+                        Text[ japanese ] = "“ú•t";
+                        Text[ chinese_traditional ] = "¤é´Á";
+                        Text[ arabic ] = "ÇáÊÇÑíÎ";
+                        Text[ dutch ] = "Datum";
+                        Text[ chinese_simplified ] = "ÈÕÆÚ";
+                        Text[ greek ] = "Çìåñïìçíßá";
+                        Text[ korean ] = "³¯Â¥";
+                        Text[ turkish ] = "Tarih";
+                        Text[ language_user1 ] = " ";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SC_SORT_COMMENT ;
+                        HelpID = HID_SC_SORT_COMMENT ;
+                        Text = "Beschreibung" ;
+                        Text [ english ] = "Comment" ;
+                        RadioCheck = TRUE ;
+                        Text [ english_us ] = "Description" ;
+                        Text [ portuguese_brazilian ] = "Beschreibung" ;
+                        Text [ swedish ] = "Beskrivning" ;
+                        Text [ danish ] = "Beskrivelse" ;
+                        Text [ italian ] = "Descrizione" ;
+                        Text [ spanish ] = "Descripción" ;
+                        Text [ french ] = "Description" ;
+                        Text [ dutch ] = "Beschrijving" ;
+                        Text [ portuguese ] = "Descrição" ;
+                        Text[ chinese_simplified ] = "ËµÃ÷";
+                        Text[ russian ] = "Îïèñàíèå";
+                        Text[ polish ] = "Opis";
+                        Text[ japanese ] = "à–¾";
+                        Text[ chinese_traditional ] = "´y­z";
+                        Text[ arabic ] = "ÇáæÕİ";
+                        Text[ dutch ] = "Beschrijving";
+                        Text[ chinese_simplified ] = "ËµÃ÷";
+                        Text[ greek ] = "ĞåñéãñáöŞ";
+                        Text[ korean ] = "¼³¸í";
+                        Text[ turkish ] = "Açıklama";
+                        Text[ language_user1 ] = " ";
+                    };
+                };
+            };
+            Text [ english_us ] = "Sorting" ;
+            Text [ portuguese_brazilian ] = "Sortiere" ;
+            Text [ swedish ] = "Sorterar" ;
+            Text [ danish ] = "Sorter" ;
+            Text [ italian ] = "Ordina" ;
+            Text [ spanish ] = "Ordenar" ;
+            Text [ french ] = "Trier" ;
+            Text [ dutch ] = "Sorteer" ;
+            Text [ portuguese ] = "Ordenar" ;
+            Text[ chinese_simplified ] = "ÅÅĞò";
+            Text[ russian ] = "Ñîğòèğîâêà";
+            Text[ polish ] = "Sortowanie";
+            Text[ japanese ] = "•À‚×‘Ö‚¦";
+            Text[ chinese_traditional ] = "±Æ§Ç";
+            Text[ arabic ] = "İÑÒ";
+            Text[ dutch ] = "Sorteer";
+            Text[ chinese_simplified ] = "ÅÅĞò";
+            Text[ greek ] = "Ôáîéíüìçóç";
+            Text[ korean ] = "Á¤·Ä";
+            Text[ turkish ] = "Sırala";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};

@@ -1,0 +1,353 @@
+/*************************************************************************
+ *
+ *  $RCSfile: crnrdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:04 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "crnrdlg.hrc"
+ModelessDialog RID_SCDLG_COLROWNAMERANGES
+{
+    OutputSize = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 256 , 181 ) ;
+    Text = "Beschriftungsbereich festlegen" ;
+    Text [ ENGLISH ] = "Define label area" ;
+    HelpId = HID_COLROWNAMERANGES ;
+    Moveable = TRUE ;
+     // Closeable = TRUE;   // Dieser Dialog hat einen Cancel-Button !
+    GroupBox GB_ASSIGN
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 188 , 175 ) ;
+        Text = "Bereich" ;
+        Text [ ENGLISH ] = "Refers to" ;
+        Text [ norwegian ] = "Refers to" ;
+        Text [ italian ] = "Area" ;
+        Text [ portuguese_brazilian ] = "Remente a" ;
+        Text [ portuguese ] = "Área" ;
+        Text [ finnish ] = "Viittaa:" ;
+        Text [ danish ] = "Område" ;
+        Text [ french ] = "Plage" ;
+        Text [ swedish ] = "Område" ;
+        Text [ dutch ] = "Bereik" ;
+        Text [ spanish ] = "Área" ;
+        Text [ english_us ] = "Range" ;
+        Text[ chinese_simplified ] = "ÇøÓò";
+        Text[ russian ] = "Îáëàñòü";
+        Text[ polish ] = "Zakres";
+        Text[ japanese ] = "”ÍˆÍ";
+        Text[ chinese_traditional ] = "°Ï°ì";
+        Text[ arabic ] = "ÇáäØÇŞ";
+        Text[ greek ] = "Ğåñéï÷Ş";
+        Text[ korean ] = "¿µ¿ª";
+        Text[ turkish ] = "Aralık";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_RANGE
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 176 , 85 ) ;
+        TabStop = TRUE ;
+        VScroll = TRUE ;
+    };
+    Edit ED_AREA
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 107 ) ;
+        Size = MAP_APPFONT ( 106 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton RB_AREA
+    {
+        QuickHelpText = "Verkleinern" ;
+        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        Pos = MAP_APPFONT ( 120 , 107 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ english_us ] = "Shrink" ;
+        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ swedish ] = "Förminska" ;
+        QuickHelpText [ danish ] = "Formindsk" ;
+        QuickHelpText [ italian ] = "Zoom indietro" ;
+        QuickHelpText [ spanish ] = "Reducir" ;
+        QuickHelpText [ french ] = "Réduire" ;
+        QuickHelpText [ dutch ] = "Verkleinen" ;
+        QuickHelpText [ portuguese ] = "Afastar" ;
+    QuickHelpText[ russian ] = "Óìåíüøèòü";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
+        QuickHelpText[ chinese_simplified ] = "ËõĞ¡/·Å´ó";
+        QuickHelpText[ chinese_traditional ] = "ÁY¤p";
+        QuickHelpText[ arabic ] = "ÊÕÛíÑ";
+        QuickHelpText[ greek ] = "Óìßêñõíóç";
+        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    RadioButton BTN_COLHEAD
+    {
+        Pos = MAP_APPFONT ( 12 , 120 ) ;
+        Size = MAP_APPFONT ( 100 , 12 ) ;
+        TabStop = TRUE ;
+        Text = "enthält ~Spaltenköpfe" ;
+        Text [ ENGLISH ] = "contains column headers" ;
+        Text [ norwegian ] = "contains column headers" ;
+        Text [ italian ] = "Contiene intestazioni colonne" ;
+        Text [ portuguese_brazilian ] = "inclui cabeçalhos da coluna" ;
+        Text [ portuguese ] = "Contém ~cabeçalhos das colunas" ;
+        Text [ finnish ] = "sisältää sarakeotsikot" ;
+        Text [ danish ] = "indeholder kolonneoverskrifter" ;
+        Text [ french ] = "contient des en-têtes de ~colonnes" ;
+        Text [ swedish ] = "innehåller ~kolumnhuvuden" ;
+        Text [ dutch ] = "~bevat kolomkoppen" ;
+        Text [ spanish ] = "Contiene títulos de ~columnas" ;
+        Text [ english_us ] = "Contains ~column headers" ;
+        Text[ chinese_simplified ] = "°üº¬ÁĞ±êÌâ(~C)";
+        Text[ russian ] = "Ñîäåğæèò çàãîëîâêè ñòîëáöîâ";
+        Text[ polish ] = "zawiera nag³ówki kolumn";
+        Text[ japanese ] = "—ñ‚Ì€–Ú—“‚ğŠÜ‚Ş(~C)";
+        Text[ chinese_traditional ] = "¥]§tÄæ¼ĞÃD(~C)";
+        Text[ arabic ] = "íÊÖãä ÑÄæÓ ÃÚãÏÉ";
+        Text[ greek ] = "ğåñéİ÷åé êåöáëßäåò óôçëşí";
+        Text[ korean ] = "¿­ ¸Ó¸®±Û Æ÷ÇÔ(~C)";
+        Text[ turkish ] = "Sütun başlıkları ~içeriyor";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton BTN_ROWHEAD
+    {
+        Pos = MAP_APPFONT ( 12 , 133 ) ;
+        Size = MAP_APPFONT ( 100 , 12 ) ;
+        TabStop = TRUE ;
+        Text = "enthält ~Zeilenköpfe" ;
+        Text [ ENGLISH ] = "contains row headers" ;
+        Text [ english_us ] = "Contains ~row headers" ;
+        Text [ dutch ] = "~bevat rijkoppen" ;
+        Text [ swedish ] = "innehåller ~radhuvuden" ;
+        Text [ danish ] = "indeholder rækkeoverskrifter" ;
+        Text [ italian ] = "Include intestazioni righe" ;
+        Text [ spanish ] = "contiene títulos de ~filas" ;
+        Text [ french ] = "contient des en-têtes de ~lignes" ;
+        Text [ portuguese ] = "Contém ~cabeçalhos das linhas" ;
+        Text [ portuguese_brazilian ] = "enthält ~Zeilenköpfe" ;
+        Text[ chinese_simplified ] = "°üº¬ĞĞ±êÌâ(~R)";
+        Text[ russian ] = "Ñîäåğæèò íàçâàíèÿ ñòğîê";
+        Text[ polish ] = "zawiera nag³ówki wierszy";
+        Text[ japanese ] = "s‚Ì€–Ú—“‚ğŠÜ‚Ş(~R)";
+        Text[ chinese_traditional ] = "¥]§tÄæ¼ĞÃD(~R)";
+        Text[ arabic ] = "íÊÖãä ÑÄæÓ Õİæİ";
+        Text[ greek ] = "ğåñéİ÷åé êåöáëßäåò ãñáììşí";
+        Text[ korean ] = "Çà ¸Ó¸®±Û Æ÷ÇÔ(~R)";
+        Text[ turkish ] = "Satır başlıkları  i~çeriyor";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_DATA_LABEL
+    {
+        Pos = MAP_APPFONT ( 12 , 146 ) ;
+        Size = MAP_APPFONT ( 106 , 12 ) ;
+        Text = "für Datenbereich" ;
+        Text [ ENGLISH ] = "for data range" ;
+        Text [ english_us ] = "For data range" ;
+        Text [ portuguese_brazilian ] = "für Datenbereich" ;
+        Text [ swedish ] = "för dataområde" ;
+        Text [ danish ] = "for dataområde" ;
+        Text [ italian ] = "Per l'area dati" ;
+        Text [ spanish ] = "para el área de datos" ;
+        Text [ french ] = "Pour la plage de données" ;
+        Text [ dutch ] = "voor gegevensbereik" ;
+        Text [ portuguese ] = "para a área dos dados" ;
+        Text[ chinese_simplified ] = "ÓÃÓÚÊı¾İÇøÓò";
+        Text[ russian ] = "Äëÿ äèàïàçîíà äàííûõ";
+        Text[ polish ] = "dla zakresu danych";
+        Text[ japanese ] = "ÃŞ°À”ÍˆÍ—p";
+        Text[ chinese_traditional ] = "¥Î©ó¸ê®Æ°Ï°ì";
+        Text[ arabic ] = "áäØÇŞ ÇáÈíÇäÇÊ";
+        Text[ greek ] = "ãéá ğåñéï÷Ş äåäïìİíùí";
+        Text[ korean ] = "µ¥ÀÌÅÍ ¹üÀ§·Î";
+        Text[ turkish ] = "Veri aralığı";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_DATA
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 159 ) ;
+        Size = MAP_APPFONT ( 106 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton RB_DATA
+    {
+        QuickHelpText = "Verkleinern" ;
+        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        Pos = MAP_APPFONT ( 120 , 159 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ english_us ] = "Shrink" ;
+        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ swedish ] = "Förminska" ;
+        QuickHelpText [ danish ] = "Formindsk" ;
+        QuickHelpText [ italian ] = "Zoom indietro" ;
+        QuickHelpText [ spanish ] = "Reducir" ;
+        QuickHelpText [ french ] = "Réduire" ;
+        QuickHelpText [ dutch ] = "Verkleinen" ;
+        QuickHelpText [ portuguese ] = "Afastar" ;
+    QuickHelpText[ russian ] = "Óìåíüøèòü";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
+        QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
+        QuickHelpText[ chinese_traditional ] = "ÁY¤p";
+        QuickHelpText[ arabic ] = "ÊÕÛíÑ";
+        QuickHelpText[ greek ] = "Óìßêñõíóç";
+        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 200 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 200 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_ADD
+    {
+        Pos = MAP_APPFONT ( 138 , 107 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "Hinzu~fügen" ;
+        Text [ ENGLISH ] = "~Add" ;
+        Text [ norwegian ] = "Leg~g til" ;
+        Text [ italian ] = "Aggiungi" ;
+        Text [ portuguese_brazilian ] = "~Acrescentar" ;
+        Text [ portuguese ] = "~Adicionar" ;
+        Text [ finnish ] = "~Lisää" ;
+        Text [ danish ] = "Tilføj" ;
+        Text [ french ] = "~Ajouter" ;
+        Text [ swedish ] = "~Lägg till" ;
+        Text [ dutch ] = "Toe~voegen" ;
+        Text [ spanish ] = "~Añadir" ;
+        Text [ english_us ] = "~Add" ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+        Text[ chinese_simplified ] = "ĞÂÔö(~A)";
+        Text[ russian ] = "Äîáàâèòü";
+        Text[ polish ] = "D~odaj";
+        Text[ japanese ] = "’Ç‰Á(~A)";
+        Text[ chinese_traditional ] = "·s¼W(~A)";
+        Text[ arabic ] = "ÅÖÇİÉ";
+        Text[ greek ] = "ĞñïóèŞêç";
+        Text[ korean ] = "Ãß°¡(~A)";
+        Text[ turkish ] = "~Ekle";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_REMOVE
+    {
+        Pos = MAP_APPFONT ( 138 , 124 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Löschen" ;
+        Text [ ENGLISH ] = "~Remove" ;
+        Text [ norwegian ] = "~Fjern" ;
+        Text [ italian ] = "Elimina..." ;
+        Text [ portuguese_brazilian ] = "~Remover" ;
+        Text [ portuguese ] = "E~liminar" ;
+        Text [ finnish ] = "~Poista" ;
+        Text [ danish ] = "Slet" ;
+        Text [ french ] = "~Supprimer" ;
+        Text [ swedish ] = "~Radera" ;
+        Text [ dutch ] = "~Wissen" ;
+        Text [ spanish ] = "~Eliminar" ;
+        Text [ english_us ] = "~Delete" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ russian ] = "Óäàëèòü";
+        Text[ polish ] = "Usuñ";
+        Text[ japanese ] = "íœ(~D)";
+        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ arabic ] = "ÍĞİ";
+        Text[ greek ] = "ÄéáãñáöŞ";
+        Text[ korean ] = "»èÁ¦(~D)";
+        Text[ turkish ] = "~Sil";
+        Text[ language_user1 ] = " ";
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 200 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ english_us ] = "Define Label Range" ;
+    Text [ swedish ] = "Definiera etikettområde" ;
+    Text [ danish ] = "Definer etiketområde" ;
+    Text [ italian ] = "Definisci area di dicitura" ;
+    Text [ spanish ] = "Definir área de etiqueta" ;
+    Text [ french ] = "Définir la plage de l'étiquette" ;
+    Text [ dutch ] = "Opschriftenbereik definiëren" ;
+    Text [ portuguese_brazilian ] = "Beschriftungsbereich festlegen" ;
+    Text [ portuguese ] = "Definir área do rótulo" ;
+    Text[ chinese_simplified ] = "¶¨ÒåÊı¾İ±êÖ¾ÇøÓò";
+    Text[ russian ] = "Óñòàíîâèòü äèàïàçîí íàçâàíèÿ";
+    Text[ polish ] = "Zdefiniuj zakres etykiet";
+    Text[ japanese ] = "×ÍŞÙ”ÍˆÍ‚ğw’è";
+    Text[ chinese_traditional ] = "©w¸q¼ĞÃD°Ï°ì";
+    Text[ arabic ] = "ÊÚÑíİ äØÇŞ ÇáÚäæäÉ";
+    Text[ greek ] = "Ïñéóìüò ğåñéï÷Şò åğéãñáöŞò";
+    Text[ korean ] = "¶óº§ ¹üÀ§ Á¤ÀÇ";
+    Text[ turkish ] = "Başlık aralığını belirle";
+    Text[ language_user1 ] = " ";
+};

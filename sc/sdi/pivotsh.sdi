@@ -1,0 +1,12 @@
+interface Pivot : Object
+{
+    //  von Basic aus nicht erreichbar, darum alles mit Export = FALSE
+
+    SID_PIVOT_RECALC    [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_PIVOT_KILL      [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+}
+
+shell ScPivotShell
+{
+    import Pivot;
+}

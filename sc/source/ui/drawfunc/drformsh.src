@@ -1,0 +1,563 @@
+/*************************************************************************
+ *
+ *  $RCSfile: drformsh.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:44:56 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "sc.hrc"
+#include "submenu.hrc"
+#include <offmgr/offmenu.hrc>
+ //
+ // Defines -------------------------------------------------------------------------------
+ //
+#define MN_LAYER\
+    ToolBoxItem\
+    {\
+        Identifier = SID_FRAME_TO_TOP ; \
+        HelpID = SID_FRAME_TO_TOP ; \
+    };\
+    ToolBoxItem\
+    {\
+        Identifier = SID_FRAME_TO_BOTTOM ; \
+        HelpID = SID_FRAME_TO_BOTTOM ; \
+    };
+
+#define MN_ARRANGESUB \
+    MenuItem\
+    {\
+        Identifier = SUBMENU_OBJARRANGE ; \
+        HelpID = HID_SCMENU_OBJARRANGE ; \
+        Text = "~Anordnung" ; \
+        Text [ ENGLISH ] = "Arrange" ; \
+        Text [ norwegian ] = "Arrange" ; \
+        Text [ italian ] = "~Disponi" ; \
+        Text [ portuguese_brazilian ] = "Organizar" ; \
+        Text [ portuguese ] = "~DisposiÁ„o" ; \
+        Text [ finnish ] = "J‰rjest‰" ; \
+        Text [ danish ] = "Pl~acering" ; \
+        Text [ french ] = "~Disposition" ; \
+        Text [ swedish ] = "~Placering" ; \
+        Text [ dutch ] = "~Positie" ; \
+        Text [ spanish ] = "~PosiciÛn" ; \
+        Text [ english_us ] = "~Arrange" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_FRAME_TO_TOP\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_FRAME_UP ; \
+                    HelpId = SID_FRAME_UP ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? W~eiter nach vorn : Weiter nach vorn */\
+                    Text = "W~eiter nach vorn" ; \
+                    Text [ ENGLISH ] = "Bring Forward" ; \
+                    Text [ norwegian ] = "Flytt Framover" ; \
+                    Text [ italian ] = "Porta pi˘ ~avanti" ; \
+                    Text [ portuguese_brazilian ] = "Tazer Para Frente" ; \
+                    Text [ portuguese ] = "~Trazer para a frente" ; \
+                    Text [ finnish ] = "Yksi eteen" ; \
+                    Text [ danish ] = "F~lyt fremad" ; \
+                    Text [ french ] = "V~ers l'avant" ; \
+                    Text [ swedish ] = "Flytta l~‰ngre fram" ; \
+                    Text [ dutch ] = "Naar ~voren" ; \
+                    Text [ spanish ] = "Traer m·s a~delante" ; \
+                    Text [ english_us ] = "Bring ~Forward" ; \
+                    Text[ chinese_simplified ] = "‘Ÿ«∞÷√(~F)";\
+                    Text[ russian ] = "œÂÂÏÂÒÚËÚ¸ ~‚ÔÂÂ‰";\
+                    Text[ polish ] = "PrzesuÒ do przodu";\
+                    Text[ japanese ] = "ëOñ Ç÷à⁄ìÆ(~F)";\
+                    Text[ greek ] = "Ã~ÂÙ·ˆÔÒ‹ ›Ì· ÂﬂÂ‰Ô ÂÏÒ¸Ú";\
+                    Text[ korean ] = "æ’¿∏∑Œ ∞°¡Æø¿±‚(~ F)";\
+                    Text[ chinese_traditional ] = "¶A´e∏m(~F)";\
+                    Text[ arabic ] = "≈Õ÷«— √„«„«";\
+                    Text[ turkish ] = "~Bir ˆne getir";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_FRAME_DOWN ; \
+                    HelpId = SID_FRAME_DOWN ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? Weiter ~nach hinten : Weiter nach hinten */\
+                    Text = "Weiter ~nach hinten" ; \
+                    Text [ ENGLISH ] = "Send Backward" ; \
+                    Text [ norwegian ] = "Send Bakover" ; \
+                    Text [ italian ] = "Porta pi˘ i~ndietro" ; \
+                    Text [ portuguese_brazilian ] = "Enviar Para o Fundo" ; \
+                    Text [ portuguese ] = "Enviar para o ~fundo" ; \
+                    Text [ finnish ] = "Yksi taakse" ; \
+                    Text [ danish ] = "Flyt bag~ud" ; \
+                    Text [ french ] = "~Vers l'arriËre" ; \
+                    Text [ swedish ] = "Flytta l‰~ngre bak" ; \
+                    Text [ dutch ] = "Naar ~achteren" ; \
+                    Text [ spanish ] = "Enviar hacia a~tr·s" ; \
+                    Text [ english_us ] = "Send Back~ward" ; \
+                    Text[ chinese_simplified ] = "‘Ÿ∫Û÷√(~W)";\
+                    Text[ russian ] = "œÂÂÏÂÒÚËÚ¸ ~Ì‡Á‡‰";\
+                    Text[ polish ] = "PrzesuÒ do ty≥u";\
+                    Text[ japanese ] = "îwñ Ç…à⁄ìÆ(~W)";\
+                    Text[ greek ] = "~ÃÂÙ·ˆÔÒ‹ ﬂÛ˘";\
+                    Text[ korean ] = "µ⁄∑Œ ∫∏≥ª±‚(~W)";\
+                    Text[ chinese_traditional ] = "¶A´·∏m(~W)";\
+                    Text[ arabic ] = "≈—”«· Œ·›«";\
+                    Text[ turkish ] = "Bir alta gˆnder";\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_FRAME_TO_BOTTOM\
+                };\
+                MenuItem { Separator = TRUE ; }; \
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_HEAVEN\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_HELL\
+                };\
+            };\
+        };\
+        Text[ chinese_simplified ] = "≈≈–Ú(~A)";\
+        Text[ russian ] = "–~‡ÒÔÓÎÓÊÂÌËÂ";\
+        Text[ polish ] = "~Rozmieszczenie";\
+        Text[ japanese ] = "êÆóÒ(~A)";\
+        Text[ greek ] = "ƒÈ‹Ù~·ÓÁ";\
+        Text[ korean ] = "¡§∑ƒ(~A)";\
+        Text[ chinese_traditional ] = "±∆ß«(~A)";\
+        Text[ arabic ] = " — Ì»~";\
+        Text[ turkish ] = "D¸zen";\
+    };
+
+#define MN_ANCHORSUB \
+    MenuItem\
+    {\
+        Identifier = SUBMENU_ANCHOR ; \
+        HelpID = HID_SCMENU_ANCHOR ; \
+        Text = "~Verankerung" ; \
+        Text [ ENGLISH ] = "Anchor" ; \
+        Text [ english_us ] = "An~chor" ; \
+        Text [ italian ] = "Anco~raggio" ; \
+        Text [ spanish ] = "~Anclaje" ; \
+        Text [ french ] = "~Ancrage" ; \
+        Text [ dutch ] = "~Verankering" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = SID_ANCHOR_PAGE ; \
+                    HelpId = SID_ANCHOR_PAGE ; \
+                    Text = "An der ~Seite" ; \
+                    Text [ ENGLISH ] = "To the ~page" ; \
+                    Text [ dutch ] = "Aan ~pagina" ; \
+                    Text [ english_us ] = "To P~age" ; \
+                    Text [ italian ] = "Alla ~pagina" ; \
+                    Text [ spanish ] = "A la ~p·gina" ; \
+                    Text [ french ] = "¿ la ~page" ; \
+                    Text [ swedish ] = "Vid ~sidan" ; \
+                    Text [ danish ] = "Til ~siden" ; \
+                    Text [ portuguese_brazilian ] = "An der ~Seite" ; \
+                    Text [ portuguese ] = "~Na p·gina" ; \
+                    Text[ chinese_simplified ] = "‘⁄“≥√Ê…œ(~A)";\
+                    Text[ russian ] = "~  ÒÚ‡ÌËˆÂ";\
+                    Text[ polish ] = "~Na stronie";\
+                    Text[ japanese ] = "Õﬂ∞ºﬁÇ…(~A)";\
+                    Text[ greek ] = "~”ÙÁ ÛÂÎﬂ‰·";\
+                    Text[ korean ] = "∆‰¿Ã¡ˆø°º≠(~A)";\
+                    Text[ chinese_traditional ] = "¶b≠∂≠±§W(~A)";\
+                    Text[ arabic ] = "⁄·Ï «·’›Õ…";\
+                    Text[ turkish ] = "Sayfa";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ANCHOR_CELL ; \
+                    HelpId = SID_ANCHOR_CELL ; \
+                    Text = "An der ~Zelle" ; \
+                    Text [ ENGLISH ] = "To the ~cell" ; \
+                    Text [ dutch ] = "Aan ~cel" ; \
+                    Text [ english_us ] = "To ~Cell" ; \
+                    Text [ italian ] = "Alla ~cella" ; \
+                    Text [ spanish ] = "A la ~celda" ; \
+                    Text [ french ] = "¿ la ~cellule" ; \
+                    Text [ swedish ] = "Vid ~cellen" ; \
+                    Text [ danish ] = "Til cellen" ; \
+                    Text [ portuguese ] = "~Na cÈlula" ; \
+                    Text [ portuguese_brazilian ] = "An der ~Zelle" ; \
+                    Text[ chinese_simplified ] = "‘⁄µ•‘™∏Ò…œ(~C)";\
+                    Text[ russian ] = "  ˇ˜ÂÈÍÂ";\
+                    Text[ polish ] = "Przy komÛrce";\
+                    Text[ japanese ] = "æŸÇ…(~C)";\
+                    Text[ greek ] = "”ÙÔ ~ÍÂÎﬂ";\
+                    Text[ korean ] = "ºø ø°º≠(~C)";\
+                    Text[ chinese_traditional ] = "¶b¿x¶sÆÊ§W(~C)";\
+                    Text[ arabic ] = "⁄·Ï «·Œ·Ì…";\
+                    Text[ turkish ] = "H¸cre";\
+                };\
+            };\
+        };\
+        Text [ swedish ] = "~Fˆrankring" ; \
+        Text [ danish ] = "~Forankring" ; \
+        Text [ portuguese ] = "~¬ncora" ; \
+        Text [ portuguese_brazilian ] = "~Verankerung" ; \
+        Text[ chinese_simplified ] = "À¯∂®(~C)";\
+        Text[ russian ] = "~œË‚ˇÁÍ‡";\
+        Text[ polish ] = "~Zakotwiczenie";\
+        Text[ japanese ] = "±›∂∞(~C)";\
+        Text[ greek ] = "¡„Í˝Ò~˘ÛÁ";\
+        Text[ korean ] = "∞Ì¡§(~C)";\
+        Text[ chinese_traditional ] = "¬Í©w(~C)";\
+        Text[ arabic ] = "~≈—”«¡";\
+        Text[ turkish ] = "~Sabitleyici";\
+    };
+
+#define MN_ALIGNSUB \
+    MenuItem\
+    {\
+        Identifier = SID_OBJECT_ALIGN ; \
+        HelpId = SID_OBJECT_ALIGN ; \
+        Text = "Aus~richtung" ; \
+        Text [ ENGLISH ] = "Ali~gnment" ; \
+        Text [ norwegian ] = "Ali~gnment" ; \
+        Text [ italian ] = "~Allineamento" ; \
+        Text [ portuguese_brazilian ] = "Ali~nhamento" ; \
+        Text [ portuguese ] = "Ali~nhamento" ; \
+        Text [ finnish ] = "~Tasaus" ; \
+        Text [ danish ] = "~Justering" ; \
+        Text [ french ] = "~Alignement" ; \
+        Text [ swedish ] = "Juste~ring" ; \
+        Text [ dutch ] = "~Uitlijning" ; \
+        Text [ spanish ] = "Ali~neaciÛn" ; \
+        Text [ english_us ] = "A~lignment" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_LEFT\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_CENTER\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_RIGHT\
+                };\
+                MenuItem\
+                {\
+                    Separator = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_UP\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_MIDDLE\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_DOWN\
+                };\
+            };\
+        };\
+        Text[ chinese_simplified ] = "∂‘∆Î(~L)";\
+        Text[ russian ] = "~¬˚‡‚ÌË‚‡ÌËÂ";\
+        Text[ polish ] = "~WyrÛwnanie";\
+        Text[ japanese ] = "îzíu(~L)";\
+        Text[ greek ] = "”~ÙÔﬂ˜ÈÛÁ";\
+        Text[ korean ] = "∏¬√„(~L)";\
+        Text[ chinese_traditional ] = "πÔªÙ(~L)";\
+        Text[ arabic ] = "~„Õ«–«…";\
+        Text[ turkish ] = "Hi~zalama";\
+    };
+
+
+ //
+ // ------------------------------------------------------------------------------
+ //
+ //
+ //     Objekt-Leisten
+ //
+String RID_OBJECTBAR_DRAWFORM
+{
+    Text = "Kontrollfeldleiste" ;
+    Text [ English ] = "Control bar" ;
+    Text [ portuguese ] = "Barra de controlos" ;
+    Text [ english_us ] = "Controls Toolbar" ;
+    Text [ portuguese_brazilian ] = "Kontrollfeldleiste" ;
+    Text [ swedish ] = "Kontrollf‰ltlist" ;
+    Text [ danish ] = "Kontrolelementlinje" ;
+    Text [ italian ] = "Barra dei campi di controllo" ;
+    Text [ spanish ] = "Barra de campos de control" ;
+    Text [ french ] = "Barre de contrÙles" ;
+    Text [ dutch ] = "Controlebalk" ;
+    Text[ chinese_simplified ] = "øÿ÷∆◊÷∂Œ¿∏";
+    Text[ russian ] = "œ‡ÌÂÎ¸ ˝ÎÂÏÂÌÚÓ‚ ÛÔ‡‚ÎÂÌËˇ";
+    Text[ polish ] = "Pasek formantÛw";
+    Text[ japanese ] = "∫›ƒ€∞Ÿ ¬∞Ÿ ﬁ∞";
+    Text[ chinese_traditional ] = "±±®Ó∂µ¶C";
+    Text[ arabic ] = "‘—Ìÿ ⁄‰«’— «· Õﬂ„";
+    Text[ dutch ] = "Controlebalk";
+    Text[ chinese_simplified ] = "øÿ÷∆◊÷∂Œ¿∏";
+    Text[ greek ] = "√Ò·ÏÏﬁ Â‰ﬂ˘Ì ÂÎ›„˜Ôı";
+    Text[ korean ] = "ƒ¡∆Æ∑— µµ±∏∏¿Ω";
+    Text[ turkish ] = "Komut alan˝ Áubuu";
+};
+
+ToolBox RID_OBJECTBAR_DRAWFORM
+{
+    HelpID = RID_OBJECTBAR_DRAWFORM;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    LineSpacing = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Hide = TRUE ;
+    Scroll = TRUE ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_ANCHOR_TOGGLE ;
+            HelpId = SID_ANCHOR_TOGGLE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_TRANSFORM ;
+            HelpID = SID_ATTR_TRANSFORM ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_CTL_PROPERTIES ;
+            HelpID = SID_FM_CTL_PROPERTIES ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_PROPERTIES ;
+            HelpID = SID_FM_PROPERTIES ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_SHOW_FMEXPLORER ;
+            HelpID = SID_FM_SHOW_FMEXPLORER ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_TAB_DIALOG ;
+            HelpID = SID_FM_TAB_DIALOG ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_ADD_FIELD ;
+            HelpID = SID_FM_ADD_FIELD ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_DESIGN_MODE ;
+            HelpID = SID_FM_DESIGN_MODE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        MN_LAYER
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_GROUP ;
+            HelpID = SID_GROUP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_UNGROUP ;
+            HelpID = SID_UNGROUP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ENTER_GROUP ;
+            HelpID = SID_ENTER_GROUP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_LEAVE_GROUP ;
+            HelpID = SID_LEAVE_GROUP ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_GRID_VISIBLE;
+            HelpID = SID_GRID_VISIBLE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_GRID_USE;
+            HelpID = SID_GRID_USE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HELPLINES_MOVE;
+            HelpID = SID_HELPLINES_MOVE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OBJECT_ALIGN ;
+            HelpID = SID_OBJECT_ALIGN ;
+            DropDown = TRUE ;
+        };
+    };
+};
+ //
+ //     Objekt-Menue, Draw
+ //
+
+Menu RID_OBJECTMENU_DRAWFORM
+{
+    ItemList =
+    {
+        MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+        MenuItem { ITEM_FORM_CONTROL_PROPERTIES };
+        MenuItem { ITEM_FORM_PROPERTIES };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_ARRANGESUB
+        MN_ALIGNSUB
+        MN_ANCHORSUB
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        ITEM_GROUP_MENU
+    };
+};
+ //
+ // Popup-Menues ---------------------------------------------------------------------
+ //
+String RID_POPUP_DRAWFORM
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Popup-Men¸ f¸r Zeichenobjekte : Popup-Men≥ f≥r Zeichenobjekte */
+    Text = "Popup-Men¸ f¸r Formularobjekte" ;
+    Text [ ENGLISH ] = "Toolbar for form objects" ;
+    Text[ english_us ] = "Popup menu for form objects";
+                Text[ portuguese ] = "Menu instant‚neo para objectos de formul·rio";
+                Text[ russian ] = "¬ÒÔÎ˚‚‡˛˘ÂÂ ÏÂÌ˛ ‰Îˇ Ó·˙ÂÍÚÓ‚ ÙÓÏÛÎˇ‡";
+                Text[ dutch ] = "Popup-menu voor formulierobjecten";
+                Text[ french ] = "Menu Pop-Up pour les objets de formulaire";
+                Text[ spanish ] = "Men˙ emergente para objetos de formulario";
+                Text[ italian ] = "Menu popup degli oggetti per formulario";
+                Text[ danish ] = "Popup-menu for formularobjekter";
+                Text[ swedish ] = "Popup-meny fˆr formul‰robjekt";
+                Text[ polish ] = "Menu podrÍczne dla obiektÛw formularzy";
+                Text[ portuguese_brazilian ] = "Toolbar for form objects";
+                Text[ japanese ] = "Ã´∞—µÃﬁºﬁ™∏ƒópŒﬂØÃﬂ±ØÃﬂ“∆≠∞";
+                Text[ chinese_simplified ] = "±Ìµ•∂‘œÛµƒµØ≥ˆ Ω≤Àµ•";
+                Text[ chinese_traditional ] = "™ÌÆÊ™´•Û™∫ß÷≈„•\\Ø‡™Ì";
+                Text[ arabic ] = "ﬁ«∆„… „‰»Àﬁ… ·ﬂ«∆‰«  «·«” „«—…";
+                Text[ dutch ] = "Popup-menu voor formulierobjecten";
+    Text[ chinese_simplified ] = "±Ìµ•∂‘œÛµƒµØ≥ˆ Ω≤Àµ•";
+    Text[ greek ] = "¡Ì·‰ı¸ÏÂÌÔ ÏÂÌÔ˝ „È· ·ÌÙÈÍÂﬂÏÂÌ· ˆ¸ÒÏ·Ú";
+    Text[ korean ] = "æÁΩƒ∞≥√º ∆Àæ˜ ∏ﬁ¥∫";
+    Text[ turkish ] = "Form nesneleri iÁin popup mˆn¸";
+};
+ //
+ //     Popup-Menue fuer (Uno-) Controls
+ //
+Menu RID_POPUP_DRAWFORM
+{
+    ItemList =
+    {
+        MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+        MenuItem { ITEM_FORM_CONTROL_PROPERTIES };
+        MenuItem { ITEM_FORM_PROPERTIES };
+        MenuItem { ITEM_REPLACE_CONTROL };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_ARRANGESUB
+        MN_ALIGNSUB
+        MN_ANCHORSUB
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        ITEM_GROUP_MENU
+    };
+};

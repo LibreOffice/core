@@ -1,0 +1,203 @@
+/*************************************************************************
+ *
+ *  $RCSfile: tpstat.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:44:55 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "tpstat.hrc"
+TabPage RID_SCPAGE_STAT
+{
+     // HelpID = HID_DOC_STAT;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    FixedText FT_TABLES_LBL
+    {
+        Pos = MAP_APPFONT ( 18 , 26 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Anzahl Tabellen:" ;
+        Text [ ENGLISH ] = "Number of tables:" ;
+        Text [ norwegian ] = "Number of tables:" ;
+        Text [ italian ] = "Numero di tabelle:" ;
+        Text [ portuguese_brazilian ] = "Número de tabelas:" ;
+        Text [ portuguese ] = "Número de tabelas:" ;
+        Text [ finnish ] = "Taulukoita:" ;
+        Text [ danish ] = "Antal tabeller:" ;
+        Text [ french ] = "Nombre de feuilles :" ;
+        Text [ swedish ] = "Antal tabeller:" ;
+        Text [ dutch ] = "Aantal werkbladen:" ;
+        Text [ spanish ] = "Núm. de hojas:" ;
+        Text [ english_us ] = "Number of sheets:" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "¹¤×÷±íÊıÄ¿:";
+        Text[ russian ] = "Êîëè÷åñòâî òàáëèö:";
+        Text[ polish ] = "Liczba tabel:";
+        Text[ japanese ] = "•\\‚Ì”:";
+        Text[ chinese_traditional ] = "¤u§@ªí¼Æ¥Ø¡G";
+        Text[ arabic ] = "ÚÏÏ ÇáÌÏÇæá:";
+        Text[ dutch ] = "Aantal werkbladen:";
+        Text[ chinese_simplified ] = "¹¤×÷±íÊıÄ¿:";
+        Text[ greek ] = "Áñéèìüò ğéíÜêùí:";
+        Text[ korean ] = "½ÃÆ® ¼ö:";
+        Text[ turkish ] = "Tablo sayısı:";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_TABLES
+    {
+        Pos = MAP_APPFONT ( 114 , 26 ) ;
+        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Left = TRUE ;
+    };
+    FixedText FT_CELLS_LBL
+    {
+        Pos = MAP_APPFONT ( 18 , 38 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Anzahl Zellen:" ;
+        Text [ ENGLISH ] = "Number of cells:" ;
+        Text [ english_us ] = "Number of cells:" ;
+        Left = TRUE ;
+        Text [ italian ] = "Numero di celle:" ;
+        Text [ spanish ] = "Cantidad de celdas:" ;
+        Text [ french ] = "Nombre de cellules :" ;
+        Text [ dutch ] = "Aantal cellen:" ;
+        Text [ swedish ] = "Antal celler:" ;
+        Text [ danish ] = "Antal celler:" ;
+        Text [ portuguese ] = "Número de células:" ;
+        Text [ portuguese_brazilian ] = "Anzahl Zellen:" ;
+        Text[ chinese_simplified ] = "µ¥Ôª¸ñµÄÊıÄ¿£º";
+        Text[ russian ] = "Êîëè÷åñòâî ÿ÷ååê:";
+        Text[ polish ] = "Liczba komórek:";
+        Text[ japanese ] = "¾Ù‚Ì”F";
+        Text[ chinese_traditional ] = "Àx¦s®æªº¼Æ¥Ø¡G";
+        Text[ arabic ] = "ÚÏÏ ÇáÎáÇíÇ:";
+        Text[ dutch ] = "Aantal cellen:";
+        Text[ chinese_simplified ] = "µ¥Ôª¸ñµÄÊıÄ¿£º";
+        Text[ greek ] = "Áñéèìüò êåëéşí:";
+        Text[ korean ] = "¼¿ °³¼ö:";
+        Text[ turkish ] = "Hücre sayısı:";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_CELLS
+    {
+        Pos = MAP_APPFONT ( 114 , 38 ) ;
+        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Left = TRUE ;
+    };
+    FixedText FT_PAGES_LBL
+    {
+        Pos = MAP_APPFONT ( 18 , 50 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Anzahl Seiten:" ;
+        Text [ ENGLISH ] = "Number of pages:" ;
+        Text [ english_us ] = "Number of pages:" ;
+        Left = TRUE ;
+        Text [ italian ] = "Numero di pagine:" ;
+        Text [ spanish ] = "Cantidad de páginas:" ;
+        Text [ french ] = "Nombre de pages :" ;
+        Text [ dutch ] = "Aantal pagina´s:" ;
+        Text [ swedish ] = "Antal sidor:" ;
+        Text [ danish ] = "Antal sider:" ;
+        Text [ portuguese_brazilian ] = "Anzahl Seiten:" ;
+        Text [ portuguese ] = "Número de páginas:" ;
+        Text[ chinese_simplified ] = "Ò³Êı£º";
+        Text[ russian ] = "Êîëè÷åñòâî ñòğàíèö:";
+        Text[ polish ] = "Liczba stron:";
+        Text[ japanese ] = "Íß°¼Ş‘”:";
+        Text[ chinese_traditional ] = "­¶¼Æ¡G";
+        Text[ arabic ] = "ÚÏÏ ÇáÕİÍÇÊ:";
+        Text[ dutch ] = "Aantal pagina´s:";
+        Text[ chinese_simplified ] = "Ò³Êı£º";
+        Text[ greek ] = "Áñéèìüò óåëéäşí:";
+        Text[ korean ] = "ÆäÀÌÁö °³¼ö:";
+        Text[ turkish ] = "Sayfa sayısı:";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_PAGES
+    {
+        Pos = MAP_APPFONT ( 114 , 50 ) ;
+        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Left = TRUE ;
+    };
+    GroupBox GB_INFO
+    {
+        Pos = MAP_APPFONT ( 6 , 4 ) ;
+        Size = MAP_APPFONT ( 246 , 124 ) ;
+        Text = "Dokument: " ;
+        Text [ ENGLISH ] = "Document: " ;
+        Text [ english_us ] = "Document: " ;
+        Text [ dutch ] = "Document:  " ;
+        Text [ italian ] = "Documento: " ;
+        Text [ spanish ] = "Documento:  " ;
+        Text [ french ] = "Document : " ;
+        Text [ swedish ] = "Dokument:  " ;
+        Text [ danish ] = "Dokument: " ;
+        Text [ portuguese_brazilian ] = "Dokument: " ;
+        Text [ portuguese ] = "Documento: " ;
+        Text[ chinese_simplified ] = "ÎÄµµ£º ";
+        Text[ russian ] = "Äîêóìåíò:  ";
+        Text[ polish ] = "Dokument:   ";
+        Text[ japanese ] = "ÄŞ·­ÒİÄ: ";
+        Text[ chinese_traditional ] = "¤å¥ó¡G ";
+        Text[ arabic ] = "ÇáãÓÊäÏ: ";
+        Text[ dutch ] = "Document:  ";
+        Text[ chinese_simplified ] = "ÎÄµµ£º ";
+        Text[ greek ] = "¸ããñáöï:  ";
+        Text[ korean ] = "¹®¼­: ";
+        Text[ turkish ] = "Belge: ";
+        Text[ language_user1 ] = " ";
+    };
+};

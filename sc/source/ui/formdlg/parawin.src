@@ -1,0 +1,244 @@
+/*************************************************************************
+ *
+ *  $RCSfile: parawin.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:44:57 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ //============================================================================
+ // StarView Resource file for StarCalc Para- Window
+ //
+ // (C) 1994-98 StarDivision GmbH, Hamburg, Germany
+ //
+ // $Workfile:   parawin.src  $
+ //   $Author: hr $
+ //     $Date: 2000-09-18 16:44:57 $
+ // $Revision: 1.1.1.1 $
+ //  $Logfile:   T:/sc/source/ui/formdlg/parawin.srv  $
+ //----------------------------------------------------------------------------
+
+
+
+#include "parawin.hrc"
+
+ //---------------------------------------------------------------------------
+
+#define FT_ARGBLOCK( y )                    \
+    Pos = MAP_APPFONT (6 , y ) ; \
+    Size = MAP_APPFONT ( 74 , 10 ) ; \
+    Right = TRUE ;
+
+#define FXBUTTONBLOCK( y )              \
+    Pos = MAP_APPFONT (83 , y ) ; \
+    Size = MAP_APPFONT ( 12 , 12 ) ; \
+    TabStop = TRUE ; \
+    ButtonImage = Image\
+    {\
+        ImageBitmap = Bitmap\
+        {\
+            File = "fx.bmp" ; \
+        };\
+        MaskColor = Color\
+        {\
+            Red = 0xC000 ; \
+            Green = 0xC000 ; \
+            Blue = 0xC000 ; \
+        };\
+    };
+
+#define ED_ARGBLOCK( y )                \
+        Border = TRUE;                  \
+        Pos = MAP_APPFONT( 98, y );     \
+        Size = MAP_APPFONT( 66, 12 );   \
+        TabStop = TRUE;
+
+#define RB_ARGBLOCK( y )                \
+    QuickHelpText = "Verkleinern" ; \
+    QuickHelpText [ ENGLISH ] = "Shrink" ; \
+    Pos = MAP_APPFONT ( 166 , y ) ; \
+    Size = MAP_APPFONT ( 12 , 12 ) ; \
+    TabStop = FALSE ;   \
+    QuickHelpText[ english_us ] = "Shrink"; \
+    QuickHelpText[ portuguese ] = "Shrink"; \
+    QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸"; \
+    QuickHelpText[ dutch ] = "Verkleinen";  \
+    QuickHelpText[ french ] = "RÈduire";    \
+    QuickHelpText[ spanish ] = "Reducir";   \
+    QuickHelpText[ italian ] = "Zoom indietro"; \
+    QuickHelpText[ danish ] = "Formindsk";  \
+    QuickHelpText[ swedish ] = "Fˆrminska"; \
+    QuickHelpText[ polish ] = "Pomniejsz";  \
+    QuickHelpText[ portuguese_brazilian ] = "Shrink";   \
+    QuickHelpText[ japanese ] = "èkè¨"; \
+    QuickHelpText[ chinese_simplified ] = "Àı–°";   \
+    QuickHelpText[ chinese_traditional ] = "¡Y§p";  \
+    QuickHelpText[ arabic ] = " ’€Ì—";  \
+    QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";   \
+    QuickHelpText[ korean ] = "Shrink"; \
+    QuickHelpText[ language_user1 ] = " ";
+
+ //---------------------------------------------------------------------------
+
+ // jetzt alles zusammen
+
+TabPage RID_SCTAB_PARAMETER
+{
+    Border  = FALSE;
+    Size    = MAP_APPFONT( 203, 128 );
+    DialogControl        = TRUE;
+    SVLook               = TRUE;
+
+    FixedText FT_EDITDESC
+    {
+        Pos = MAP_APPFONT (3 , 6 ) ;
+        Size = MAP_APPFONT ( 198 , 20 ) ;
+        WordBreak = TRUE ;
+        Text = "Unbekannte Funktion" ;
+        Text [ ENGLISH ] = "Unknown function." ;
+        Text[ english_us ] = "Function not known";
+        Text[ portuguese ] = "FunÁ„o desconhecida";
+        Text[ russian ] = "ÕÂËÁ‚ÂÒÚÌ‡ˇ ÙÛÌÍˆËˇ";
+        Text[ greek ] = "¢„Ì˘ÛÙÁ ÛıÌ‹ÒÙÁÛÁ";
+        Text[ dutch ] = "Onbekende functie";
+        Text[ french ] = "Fonction inconnue";
+        Text[ spanish ] = "FunciÛn desconocida";
+        Text[ italian ] = "Funzione sconosciuta";
+        Text[ danish ] = "Ukendt funktion";
+        Text[ swedish ] = "Ok‰nd funktion";
+        Text[ polish ] = "Nieznana funkcja.";
+        Text[ portuguese_brazilian ] = "Unknown function.";
+        Text[ japanese ] = "ïsñæÇ»ä÷êî";
+        Text[ korean ] = "æÀºˆ æ¯¥¬ «‘ºˆ";
+        Text[ chinese_simplified ] = "≤ª√˜µƒ∫Ø ˝";
+        Text[ chinese_traditional ] = "§£©˙™∫®Áº∆";
+        Text[ arabic ] = "œ«·… €Ì— „⁄—Ê›…";
+        Text[ turkish ] = "Bilinmeyen i˛lev";
+    };
+
+    FixedText FT_PARNAME
+    {
+        Pos = MAP_APPFONT ( 3, 29) ;
+        Size = MAP_APPFONT ( 198 , 10 ) ;
+    };
+    FixedText FT_PARDESC
+    {
+        Pos = MAP_APPFONT ( 3, 42 ) ;
+        Size = MAP_APPFONT ( 198 , 20 ) ;
+        WordBreak = TRUE ;
+    };
+
+    FixedText FT_ARG1 { FT_ARGBLOCK (  66 ) };
+    FixedText FT_ARG2 { FT_ARGBLOCK (  81 ) };
+    FixedText FT_ARG3 { FT_ARGBLOCK (  96 ) };
+    FixedText FT_ARG4 { FT_ARGBLOCK ( 111 ) };
+
+    ImageButton BTN_FX1
+    {
+        HelpId=HID_SC_FAP_BTN_FX1;
+        FXBUTTONBLOCK (  64 )
+    };
+    ImageButton BTN_FX2
+    {
+        HelpId=HID_SC_FAP_BTN_FX2;
+        FXBUTTONBLOCK (  79 )
+    };
+
+    ImageButton BTN_FX3
+    {
+        HelpId=HID_SC_FAP_BTN_FX3;
+        FXBUTTONBLOCK (  94 )
+    };
+    ImageButton BTN_FX4
+    {
+        HelpId=HID_SC_FAP_BTN_FX4;
+        FXBUTTONBLOCK ( 109 )
+    };
+    Edit ED_ARG1 { ED_ARGBLOCK (  64 ) };
+    Edit ED_ARG2 { ED_ARGBLOCK (  79 ) };
+    Edit ED_ARG3 { ED_ARGBLOCK (  94 ) };
+    Edit ED_ARG4 { ED_ARGBLOCK ( 109 ) };
+
+    ImageButton RB_ARG1
+    {
+        HelpId=HID_SC_FAP_BTN_REF1;
+        RB_ARGBLOCK (  64 )
+    };
+
+    ImageButton RB_ARG2
+    {
+        HelpId=HID_SC_FAP_BTN_REF2;
+        RB_ARGBLOCK (  79 )
+    };
+    ImageButton RB_ARG3
+    {
+        HelpId=HID_SC_FAP_BTN_REF3;
+        RB_ARGBLOCK (  94 )
+    };
+    ImageButton RB_ARG4
+    {
+        HelpId=HID_SC_FAP_BTN_REF4;
+        RB_ARGBLOCK ( 109 )
+    };
+
+    ScrollBar WND_SLIDER
+    {
+        Pos = MAP_APPFONT ( 183, 63 ) ;
+        Size = MAP_APPFONT ( 10 , 59 ) ;
+        VScroll = TRUE ;
+    };
+};
+
+

@@ -1,0 +1,114 @@
+/*************************************************************************
+ *
+ *  $RCSfile: formdlgs.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:44:57 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "sc.hrc"   // -> RID_SCDLG_FORMULA
+
+
+
+#define FT_RESULT           1
+#define WND_RESULT          2
+#define FT_EDITNAME         3
+#define STR_TITLE1          4
+#define STR_TITLE2          5
+#define BTN_HELP            6
+#define BTN_CANCEL          7
+#define BTN_BACKWARD        8
+#define BTN_FORWARD         9
+#define BTN_END             10
+#define BTN_MATRIX          11
+#define FT_FUNCNAME         12
+#define FT_FUNCDESC         13
+#define FT_HEADLINE         14
+#define GB_EDIT             15
+#define FT_FORMULA          16
+#define ED_FORMULA          17
+#define TC_FUNCTION         18
+#define ED_REF              19
+#define RB_REF              20
+#define FT_FORMULA_RESULT   21
+#define WND_FORMULA_RESULT  22
+// Fuer Tabpage
+#define TP_FUNCTION         1
+#define TP_STRUCT           2
+
+// Funktions-Tabpage
+#define FT_FUNCTION         1
+#define FT_CATEGORY         2
+#define LB_CATEGORY         3
+#define LB_FUNCTION         4
+#define IB_FUNCTION         5
+
+
+// Struktur-Tabpage
+#define FT_STRUCT           1
+#define TLB_STRUCT          2
+
+// Bitmaps
+#define BMP_STR_CLOSE       1
+#define BMP_STR_OPEN        2
+#define BMP_STR_END         3
+#define BMP_STR_ERROR       4
+
+// Texte
+#define STR_STRUCT_ERR1     1
+#define STR_STRUCT_ERR2     2
+
+

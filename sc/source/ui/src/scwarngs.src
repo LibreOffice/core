@@ -1,0 +1,127 @@
+/*************************************************************************
+ *
+ *  $RCSfile: scwarngs.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:06 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#define __RSC
+#include "scwarngs.hxx"
+#include "sc.hrc"
+
+
+
+#define SH_MAX 0x7fff
+
+Resource RID_WRNHDLSC
+{
+    String ERRCODE_SC_EXPORT_WRN_ASCII & SH_MAX
+    {
+        Text = "Es wurde nur die aktuelle Tabelle gespeichert." ;
+        Text [ ENGLISH ] = "The current table has only been saved." ;
+        Text [ english_us ] = "Only the active sheet could be saved." ;
+        Text [ italian ] = "È stata salvata solo la tabella corrente." ;
+        Text [ spanish ] = "Solo se ha guardado la hoja actual." ;
+        Text [ french ] = "Seule la feuille active a été enregistrée." ;
+        Text [ dutch ] = "Alleen de actuele tabel werd opgeslagen." ;
+        Text [ swedish ] = "Endast den aktuella tabellen sparades." ;
+        Text [ danish ] = "Kun det aktuelle ark blev gemt." ;
+        Text [ portuguese_brazilian ] = "Es wurde nur die aktuelle Tabelle gespeichert." ;
+        Text [ portuguese ] = "Só foi guardada a tabela activa." ;
+        Text[ chinese_simplified ] = "Ö»´æÅÌÁËµ±Ç°µÄ±í¸ñ¡£";
+        Text[ russian ] = "Ñîõğàíåíà òîëüêî òåêóùàÿ òàáëèöà.";
+        Text[ polish ] = "Tylko aktualny arkusz zosta³ zapisany.";
+        Text[ japanese ] = "Œ»İ‚Ì•\\‚¾‚¯‚ª•Û‘¶‚³‚ê‚Ü‚µ‚½B";
+        Text[ chinese_traditional ] = "¥uÀx¦s¤F·í«eªºªí®æ¡C";
+        Text[ arabic ] = "Êã ÍİÙ ÇáÌÏæá ÇáÍÇáí İŞØ.";
+        Text[ greek ] = "Áğïèçêåıôçêå ìüíï ï ôñİ÷ùí ğßíáêáò.";
+        Text[ korean ] = "È°¼ºµÈ ½ÃÆ®¸¸ÀÌ ÀúÀåµË´Ï´Ù.";
+        Text[ turkish ] = "Yalnızca yürürlükteki tablo kaydedildi.";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCODE_SC_IMPORT_WRN_RNGOVRFLW & SH_MAX
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Die Maximalanzahl von Zeilen wurde überschritten. überzählige Zeilen wurden nicht mitimportiert! : Die Maximalanzahl von Zeilen wurde ³berschritten. ³berzõhlige Zeilen wurden nicht mitimportiert! */
+        Text = "Die Maximalanzahl von Zeilen wurde überschritten. überzählige Zeilen wurden nicht mitimportiert!" ;
+        Text [ ENGLISH ] = "The number of rows exceeded the maximum. Additional rows were not importet!" ;
+        Text [ dutch ] = "Het maximale aantal regels werd overschreden. Het teveel aan regels werd niet geïmporteerd." ;
+        Text [ english_us ] = "The number of rows exceeded the maximum. Additional rows were not imported!" ;
+        Text [ italian ] = "È stato superato il numero massimo di righe. Le righe in eccesso non sono state importate!" ;
+        Text [ spanish ] = "¡Se ha excedido el número máximo de filas, las filas adicionales no se importaron!" ;
+        Text [ french ] = "Le nombre de lignes maximum a été dépassé. Les lignes en surplus n'ont pas été importées !" ;
+        Text [ swedish ] = "Maximala radantalet överskreds. Övertaliga rader blev inte medimporterade!" ;
+        Text [ danish ] = "Det maksimale antal rækker blev overskredet. De overtallige rækker blev ikke importeret!" ;
+        Text [ portuguese ] = "O número máximo de linhas foi ultrapassado. As linhas em excesso não foram importadas!" ;
+        Text [ portuguese_brazilian ] = "Die Maximalanzahl von Zeilen wurde überschritten. überzählige Zeilen wurden nicht mitimportiert!" ;
+        Text[ chinese_simplified ] = "ÒÑ¾­³¬¹ıĞĞµÄ×î´óÊıÄ¿£¬³¬¹ıµÄĞĞÃ»ÓĞ±»ÊäÈë£¡";
+        Text[ russian ] = "Ìàêñèìàëüíîå ÷èñëî ñòğîê ïğåâûøåíî. Ñòğîêè, ïğåâûøàşùèå çàäàííîå ÷èñëî, èìïîğòèğîâàíû íå áóäóò!";
+        Text[ polish ] = "Maksymalna liczba wierszy zosta³a przekroczona. Pozosta³e wiersze nie bêd¹ importowane!";
+        Text[ japanese ] = "s‚ÌÅ‚”‚ğ’´‚¦‚Ü‚µ‚½B‰ßè‚Ìs‚Í²İÎß°Ä‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½!";
+        Text[ chinese_traditional ] = "¤w¸g¶W¹L¦Cªº³Ì¤j¼Æ¥Ø¡A¶W¹Lªº¦C¨S¦³³Q¿é¤J¡I";
+        Text[ arabic ] = "Êã ÊÌÇæÒ ÇáÚÏÏ ÇáÃŞÕì ááÕİæİ¡ áåĞÇ áã íÊã ÇÓÊíÑÇÏ ÇáÕİæİ ÇáÒÇÆÏÉ!";
+        Text[ greek ] = "¸ãéíå õğİñâáóç ôïõ ìİãéóôïõ áñéèìïı ãñáììşí. Äåí èá ãßíåé åéóáãùãŞ ôùí ãñáììşí ğïõ îåğåñíïıí ôï üñéï!";
+        Text[ korean ] = "ÇàÀÇ °¹¼ö°¡ ÃÖ´ë¸¦ ÃÊ°úÇß½À´Ï´Ù. Ãß°¡ÀûÀÎ ÇàÀ» °¡Á® ¿Ã ¼ö ¾ø½À´Ï´Ù !";
+        Text[ turkish ] = "Azami satır sayısı aşıldı. Fazla satırlar içe aktarılmadı!";
+        Text[ language_user1 ] = " ";
+    };
+    /*
+    String ERRCODE_SC_  & SH_MAX
+        {
+    Text = "";
+    Text[ENGLISH] = "";
+        };
+*/
+};

@@ -1,0 +1,289 @@
+ //============================================================================
+ //
+ // StarCalc
+ //
+ // (C) 1994 StarDivision GmbH, Hamburg, Germany
+ // $Author: hr $ $Date: 2000-09-18 16:44:52 $ $Revision: 1.1.1.1 $
+ // $Logfile:   T:/sc/sdi/docsh.sdv  $ $Workfile:   docsh.sdi  $
+ //----------------------------------------------------------------------------
+
+
+
+ //============================================================================
+interface Name : Object
+[
+    uuid = "BA338A40-064E-11d0-89CB-008029E4B0B1" ;
+]
+{
+    SID_SC_NAME_TITLE   [ ExecMethod = Execute; StateMethod = GetState; ] // ole() api(ply)
+}
+
+
+ //============================================================================
+interface TableSelection : Selection
+[
+    uuid = "BA338A41-064E-11d0-89CB-008029E4B0B1" ;
+]
+{
+    SID_DELETE_PRINTAREA        [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_OPENDLG_EDIT_PRINTAREA  [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_CHANGE_PRINTAREA        [ ExecMethod = Execute; ]
+    FID_DEL_MANUALBREAKS        [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_RESET_PRINTZOOM         [ ExecMethod = Execute; StateMethod = GetState; ]
+    SbxObject Cells SID_SC_CELLS
+    (
+        UINT16  Column      SID_SC_CELLS,
+        UINT16  Row         FN_PARAM_1
+    )
+    [
+    ]
+    UINT16 Index FID_TAB_INDEX
+    [
+        Readonly ;
+    ]
+    FID_PROTECT_TABLE       [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_PROTECT_DOC         [ ExecMethod = Execute; StateMethod = GetState; ]
+
+    SID_AUTO_OUTLINE        [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_OUTLINE_DELETEALL   [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_FORMATPAGE          [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_HFEDIT              [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_DETECTIVE_DEL_ALL   [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_TABLE_VISIBLE   [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_TAB_MOVE        [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_DELETE_TABLE    [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_TAB_RENAME      [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+
+    SID_TABLE_ACTIVATE  [ ExecMethod = Execute; ]
+}
+
+
+ //============================================================================
+interface TableDocument : OfficeDocument
+[
+    uuid = "BA338A42-064E-11d0-89CB-008029E4B0B1" ;
+]
+{
+    SID_SBA_IMPORT  [ ExecMethod = Execute; ]
+    SID_SC_CELLS    [ ExecMethod = Execute; ]
+    SID_SC_CELLTEXT [ ExecMethod = Execute; ]
+    SID_SC_SETTEXT  [ ExecMethod = Execute; ]
+    SID_SC_RANGE    [ ExecMethod = Execute; ]
+    SID_SC_SELECTION    [ StateMethod = GetSbxState; ]
+    SID_SC_ACTIVECELL   [ StateMethod = GetSbxState; ]
+    SID_SC_ACTIVETAB    [ StateMethod = GetSbxState; ]
+    SID_TABLES_GET      [ StateMethod = GetSbxState; ]
+    SID_TABLES_COUNT    [ StateMethod = GetState; ]
+    SID_PIVOT_GET       [ StateMethod = GetSbxState; ]
+    SID_SC_ACTIVEOBJECT [ StateMethod = GetDrawObjState; ]
+    SID_ATTR_YEAR2000   [ StateMethod = GetState; ExecMethod = Execute; ]
+    SbxObject OLEObjects
+    [
+        Readonly ;
+        IsCollection ;
+    ]
+    SID_CHART_SOURCE    [ ExecMethod = Execute; ]
+    SID_CHART_ADDSOURCE [ ExecMethod = Execute; ]
+    FID_AUTO_CALC   [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_RECALC      [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_HARD_RECALC [ ExecMethod = Execute;                         ]
+    SID_UPDATETABLINKS      [ ExecMethod = Execute; ]
+    SID_REIMPORT_AFTER_LOAD [ ExecMethod = Execute; ]
+    SID_AUTO_STYLE          [ ExecMethod = Execute; ]
+
+    SID_GET_COLORTABLE      [ ExecMethod = Execute; ]
+
+    FID_CHG_RECORD          [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_DOCUMENT_COMPARE    [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_DOCUMENT_MERGE      [ ExecMethod = Execute; StateMethod = GetState; ]
+
+    SID_DELETE_SCENARIO     [ ExecMethod = Execute; ]
+    SID_EDIT_SCENARIO       [ ExecMethod = Execute; ]
+}
+
+
+ //============================================================================
+shell ScDocShell : SfxObjectShell
+[
+    uuid ( "3F543FA0-B6A6-101B-9961-04021C007002" )
+]
+{
+        import TableDocument[Automation];
+}
+
+
+/*------------------------------------------------------------------------
+    $Log: not supported by cvs2svn $
+    Revision 1.80  1999/08/24 14:12:28  ANK
+    #68244# JumpToTable moved
+
+
+      Rev 1.79   24 Aug 1999 16:12:28   ANK
+   #68244# JumpToTable moved
+
+      Rev 1.78   27 Jul 1999 17:03:42   ANK
+   #67793# changes for table-protection
+
+      Rev 1.77   21 Jun 1999 20:38:30   ANK
+   #66547# Slot's moved
+
+      Rev 1.76   02 Jun 1999 21:41:34   ANK
+   #66547# SubShells
+
+      Rev 1.75   24 Mar 1999 18:35:14   ANK
+   #63806# Configname rausgeschmissen
+
+      Rev 1.74   27 Jan 1999 20:09:58   ER
+   #61027# new: Year2000
+
+      Rev 1.73   30 Jun 1998 23:23:58   NN
+   Merge/Compare mit Sfx-Slots
+
+      Rev 1.72   11 Mar 1998 22:48:42   NN
+   FID_CHG_MERGE/COMPARE
+
+      Rev 1.71   10 Mar 1998 21:53:32   NN
+   DELETE_SCENARIO, EDIT_SCENARIO
+
+      Rev 1.70   06 Mar 1998 14:19:34   ANK
+   New Idl's Redlin
+
+      Rev 1.69   29 Oct 1997 14:30:22   NN
+   Pivottabellen fuer Basic
+
+      Rev 1.68   21 Oct 1997 11:28:20   NN
+   #44618# SID_GET_COLORTABLE
+
+      Rev 1.67   04 Sep 1997 13:35:24   MBA
+   Document von OfficeDocument abgeleitet
+
+      Rev 1.66   02 Sep 1997 19:20:44   MBA
+   OLEObjects jetzt in SVX
+
+      Rev 1.65   28 Aug 1997 12:36:26   MBA
+   Neue Interface-Namen
+
+      Rev 1.64   11 Jul 1997 12:05:48   NN
+   SID_TABLES_COUNT
+
+      Rev 1.63   23 Jun 1997 11:27:58   NN
+   Slots fuer Seitenumbruch-Vorschau
+
+      Rev 1.62   23 Feb 1997 22:47:02   NN
+   SID_REIMPORT_AFTER_LOAD
+
+      Rev 1.61   14 Nov 1996 09:28:20   MI
+   SID_TEMPLATE/SID_STYLE
+
+      Rev 1.60   22 Oct 1996 13:15:14   HJS
+   merge 22.10.96
+
+      Rev 1.59   09 Oct 1996 12:08:44   HJS
+   merge 09.10.96
+
+      Rev 1.58   25 Sep 1996 14:43:04   RJ
+   aufgeraeumt
+
+      Rev 1.57   04 Sep 1996 12:34:26   NN
+   OLEObjects, SelectedObject
+
+      Rev 1.56   02 Sep 1996 10:08:36   NN
+   Hide/Show an Tables, Remove ohne Parameter, Hidden->Visible
+
+      Rev 1.55   29 Aug 1996 18:04:18   NN
+   SetText -> PutCell
+
+      Rev 1.54   28 Aug 1996 21:03:34   NN
+   Parameter bei Cells, neu: SetText
+
+      Rev 1.53   23 Aug 1996 19:42:26   RJ
+   Slot fuer DB-Import
+
+      Rev 1.52   23 Aug 1996 16:31:30   NN
+   CellText
+
+      Rev 1.51   23 Aug 1996 16:07:22   NN
+   nochmal GetSbxState
+
+      Rev 1.50   21 Aug 1996 14:07:04   HJS
+   eu...
+
+      Rev 1.48   30 Jul 1996 12:47:22   NN
+   #29898# GetState fuer FID_RECALC
+
+      Rev 1.47   23 Jul 1996 21:35:28   NN
+   AddChartData
+
+      Rev 1.46   23 Jul 1996 20:49:12   NN
+   SBA-Slots auch aus der idl raus
+
+      Rev 1.45   16 Jul 1996 10:37:20   NN
+   #27077# SID_MODIFIED raus
+
+      Rev 1.44   08 Jul 1996 16:15:40   HJS
+   uebersetzung
+
+      Rev 1.43   01 Apr 1996 15:37:10   NN
+   #26327# ChangeChartData: Parameter fuer Spalten-/Zeilenkoepfe
+
+      Rev 1.42   22 Mar 1996 13:51:34   NN
+   SID_AUTO_STYLE
+
+      Rev 1.41   06 Mar 1996 19:16:30   NN
+   SID_UPDATETABLINKS
+
+      Rev 1.40   29 Feb 1996 11:45:18   NN
+   ExecuteTable/GetStateTable bei FID_DELETE_TABLE
+
+      Rev 1.39   26 Feb 1996 14:40:14   NF
+   Wegen CLOOKS im View
+
+      Rev 1.37   12 Feb 1996 17:15:24   MO
+   Delete/Edit/ChangePtintArea
+
+      Rev 1.36   12 Feb 1996 17:15:06   JN
+   SID_CHART_SOURCE jetzt mit Argumenten fuer Basic
+
+      Rev 1.35   31 Jan 1996 19:18:18   JN
+   #24962#
+
+      Rev 1.34   29 Jan 1996 16:21:16   JN
+   Basic weitergemacht
+
+      Rev 1.33   18 Jan 1996 18:44:28   JN
+   Konfiguration und Basic
+
+      Rev 1.32   16 Jan 1996 16:36:38   JN
+   Zwischenstand Basic
+
+      Rev 1.31   11 Jan 1996 22:31:18   NN
+   #24145# SID_CHART_SOURCE
+
+      Rev 1.30   11 Jan 1996 16:48:38   JN
+   Zwischenstand Basic
+
+      Rev 1.29   21 Dec 1995 12:44:58   JN
+   Umstellungen...
+
+      Rev 1.28   20 Dec 1995 13:06:40   JN
+   ...
+
+      Rev 1.27   19 Dec 1995 16:20:50   MD
+   Selection, ActiveCell, ActiveTable
+
+      Rev 1.26   15 Dec 1995 17:44:30   MD
+   Fixes (ob die gehen?)
+
+      Rev 1.25   15 Dec 1995 15:25:56   JN
+   neue Slots fuer Basic
+
+      Rev 1.24   14 Dec 1995 10:49:38   NF
+   Name nach ReName wegen SFX-Stand
+
+      Rev 1.23   14 Dec 1995 10:19:20   MD
+   Tables, Table
+------------------------------------------------------------------------*/
+
+
+
+

@@ -1,0 +1,1370 @@
+/*************************************************************************
+ *
+ *  $RCSfile: sc.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:44:50 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef SC_SC_HRC
+#define SC_SC_HRC
+
+#ifndef _SFX_HRC
+#include <sfx2/sfx.hrc>      // ->#include <solar.hrc>
+#endif
+
+#ifndef _SVX_DIALOGS_HRC
+#include <svx/dialogs.hrc>  // ->Svx-IDs
+#endif
+
+#define VAR_ARGS                30 // variable Parameter in scfuncs.src
+
+#define RID_HANDLEBITMAP        10005
+
+// Bereiche ------------------------------------------------------------------
+
+#define SC_VIEW_START           (SID_SC_START)
+#define SC_VIEW_END             (SID_SC_START + 99)
+#define SC_MESSAGE_START        (SID_SC_START + 100)
+#define SC_MESSAGE_END          (SID_SC_START + 199)
+#define SC_FUNCTION_START       (SID_SC_START + 200)
+#define SC_FUNCTION_END         (SID_SC_START + 299)
+#define SC_PARAM_START          (SID_SC_START + 300)
+#define SC_PARAM_END            (SID_SC_START + 399)
+
+//  kompatibel zu frueher bleiben:
+#define SC_RESOURCE_START       (RID_APP_START+5000)
+#define SC_RESOURCE_END         (RID_APP_END)
+
+// ---------------------------------------------------------------------------
+// Hilfe IDs -----------------------------------------------------------------
+//  Calc hat einen Bereich von 2000 IDs
+//  Die Funktionen brauchen 11*90 = 990 IDs
+
+#define HID_SC_FUNC_START       (HID_SC_START + 0)
+#define HID_INSWIN_START        (HID_SC_START + 1000)
+#define HID_SC_SHEET_START      (HID_SC_START + 1010)
+#define HID_SC_SHELL_START      (HID_SC_START + 1030)
+#define HID_SC_WIN_START        (HID_SC_START + 1050)
+#define HID_SC_CONTROL_START    (HID_SC_START + 1070)
+#define HID_SC_DLG_START        (HID_SC_START + 1100)
+#define HID_SC_TOOLBOX_START    (HID_SC_START + 1170)
+#define HID_SC_MENU_START       (HID_SC_START + 1180)
+
+// ---------------------------------------------------------------------------
+
+#define HID_INSWIN_POS          (HID_INSWIN_START + 0 )
+#define HID_INSWIN_CALC         (HID_INSWIN_START + 1 )
+#define HID_INSWIN_CANCEL       (HID_INSWIN_START + 2 )
+#define HID_INSWIN_OK           (HID_INSWIN_START + 3 )
+#define HID_INSWIN_SUMME        (HID_INSWIN_START + 4 )
+#define HID_INSWIN_FUNC         (HID_INSWIN_START + 5 )
+#define HID_INSWIN_INPUT        (HID_INSWIN_START + 6 )
+
+// Hilfe IDs fuer Vorlagen ---------------------------------------------------
+#define HID_SC_SHEET_CELL_STD   (HID_SC_SHEET_START +0 )
+#define HID_SC_SHEET_CELL_ERG   (HID_SC_SHEET_START +1 )
+#define HID_SC_SHEET_CELL_ERG1  (HID_SC_SHEET_START +2 )
+#define HID_SC_SHEET_CELL_UEB   (HID_SC_SHEET_START +3 )
+#define HID_SC_SHEET_CELL_UEB1  (HID_SC_SHEET_START +4 )
+#define HID_SC_SHEET_PAGE_STD   (HID_SC_SHEET_START +10 )
+#define HID_SC_SHEET_PAGE_REP   (HID_SC_SHEET_START +11 )
+
+// Hilfe IDs fuer Shells (Helferlein) (max.20) -------------------------------
+#define HID_SCSHELL_APP         (HID_SC_SHELL_START +0 )
+#define HID_SCSHELL_DOCSH       (HID_SC_SHELL_START +1 )
+#define HID_SCSHELL_DRAWSH      (HID_SC_SHELL_START +2 )
+#define HID_SCSHELL_DRTXTOB     (HID_SC_SHELL_START +3 )
+#define HID_SCSHELL_PIVOTSH     (HID_SC_SHELL_START +4 )
+#define HID_SCSHELL_PREVWSH     (HID_SC_SHELL_START +5 )
+#define HID_SCSHELL_TABVWSH     (HID_SC_SHELL_START +6 )
+#define HID_SCSHELL_AUDIT       (HID_SC_SHELL_START +7 )
+#define HID_SCSHELL_DRAWFORMSH  (HID_SC_SHELL_START +8 )
+#define HID_SCSHELL_CELLSH      (HID_SC_SHELL_START +9 )
+#define HID_SCSHELL_FORMATSH    (HID_SC_SHELL_START +10)
+#define HID_SCSHELL_OLEOBEJCTSH (HID_SC_SHELL_START +11)
+#define HID_SCSHELL_CHARTSH     (HID_SC_SHELL_START +12)
+#define HID_SCSHELL_GRAPHIC     (HID_SC_SHELL_START +13)
+#define HID_SCSHELL_PAGEBREAK   (HID_SC_SHELL_START +14)
+
+// Hilfe IDs fuer Dokumentfenster --------------------------------------------
+#define HID_SC_WIN_GRIDWIN      ( HID_SC_WIN_START )
+#define HID_SC_WIN_PREVIEW      ( HID_SC_WIN_START + 1 )
+
+// Hilfe IDs fuer einzelne Controls (max.30) ---------------------------------
+//  Kopf/Fusszeilen Editfenster: Header/Footer links/rechts links/mitte/rechts
+#define HID_SC_HF_HLL           ( HID_SC_CONTROL_START + 0 )
+#define HID_SC_HF_HLC           ( HID_SC_CONTROL_START + 1 )
+#define HID_SC_HF_HLR           ( HID_SC_CONTROL_START + 2 )
+#define HID_SC_HF_HRL           ( HID_SC_CONTROL_START + 3 )
+#define HID_SC_HF_HRC           ( HID_SC_CONTROL_START + 4 )
+#define HID_SC_HF_HRR           ( HID_SC_CONTROL_START + 5 )
+#define HID_SC_HF_FLL           ( HID_SC_CONTROL_START + 6 )
+#define HID_SC_HF_FLC           ( HID_SC_CONTROL_START + 7 )
+#define HID_SC_HF_FLR           ( HID_SC_CONTROL_START + 8 )
+#define HID_SC_HF_FRL           ( HID_SC_CONTROL_START + 9 )
+#define HID_SC_HF_FRC           ( HID_SC_CONTROL_START + 10 )
+#define HID_SC_HF_FRR           ( HID_SC_CONTROL_START + 11 )
+//  "Spalten" in Teilergebnissen: Gruppe 1/2/3 - nicht mehr!
+//#define HID_SC_SUBT_COLS_1        ( HID_SC_CONTROL_START + 12 )
+//#define HID_SC_SUBT_COLS_2        ( HID_SC_CONTROL_START + 13 )
+//#define HID_SC_SUBT_COLS_3        ( HID_SC_CONTROL_START + 14 )
+//  Eintraege im Navigator
+#define HID_SC_NAVIPI_ENTRIES   ( HID_SC_CONTROL_START + 15 )
+#define HID_SC_NAVIPI_ROW       ( HID_SC_CONTROL_START + 16 )
+#define HID_SC_NAVIPI_COL       ( HID_SC_CONTROL_START + 17 )
+#define HID_SC_NAVIPI_DOC       ( HID_SC_CONTROL_START + 18 )
+#define HID_SC_NAVIPI_DATA      ( HID_SC_CONTROL_START + 19 )
+#define HID_SC_NAVIPI_UP        ( HID_SC_CONTROL_START + 20 )
+#define HID_SC_NAVIPI_DOWN      ( HID_SC_CONTROL_START + 21 )
+#define HID_SC_NAVIPI_ZOOM      ( HID_SC_CONTROL_START + 22 )
+#define HID_SC_NAVIPI_ROOT      ( HID_SC_CONTROL_START + 23 )
+#define HID_SC_NAVIPI_SCEN      ( HID_SC_CONTROL_START + 24 )
+#define HID_SC_NAVIPI_DROP      ( HID_SC_CONTROL_START + 25 )
+//  Teilergebnisse
+#define HID_SC_SUBT_GROUP       ( HID_SC_CONTROL_START + 26 )
+#define HID_SC_SUBT_COLS        ( HID_SC_CONTROL_START + 27 )
+#define HID_SC_SUBT_FUNC        ( HID_SC_CONTROL_START + 28 )
+//
+#define HID_SC_NAVIPI_TOOLBOX   ( HID_SC_CONTROL_START + 29 )
+//  Bereich ist voll!
+
+// Hilfe IDs fuer Dialoge / Pages (max.70) -----------------------------------
+#define HID_SC_AUTOFORMAT       (HID_SC_DLG_START )
+#define HID_SC_PIVOTFILTER      (HID_SC_DLG_START +1 )
+#define HID_SC_INPORTOPT        (HID_SC_DLG_START +2 )
+#define HID_SC_PIVOTSUBT        (HID_SC_DLG_START +3 )
+#define HID_SC_FORM_ARGS        (HID_SC_DLG_START +4 )
+#define HID_SCPAGE_SORT_FIELDS  (HID_SC_DLG_START +5 )
+#define HID_SCPAGE_SORT_OPTIONS (HID_SC_DLG_START +6 )
+#define HID_SCPAGE_SUBT_OPTIONS (HID_SC_DLG_START +7 )
+#define HID_SCPAGE_SUBT_GROUP   (HID_SC_DLG_START +8 )
+#define HID_SCPAGE_PROTECTION   (HID_SC_DLG_START +9 )
+#define HID_SCPAGE_VIEW         (HID_SC_DLG_START +10 )
+#define HID_SCPAGE_CALC         (HID_SC_DLG_START +11 )
+#define HID_SCPAGE_USERLISTS    (HID_SC_DLG_START +12 )
+#define HID_SCPAGE_HFEDIT       (HID_SC_DLG_START +13 )
+#define HID_SCPAGE_AREAS        (HID_SC_DLG_START +14 )
+#define HID_SCPAGE_TABLE        (HID_SC_DLG_START +15 )
+#define HID_SCPAGE_PRINT        (HID_SC_DLG_START +16 )
+
+#define HID_SCPAGE_SUBT_GROUP1  (HID_SC_DLG_START +17 )
+#define HID_SCPAGE_SUBT_GROUP2  (HID_SC_DLG_START +18 )
+#define HID_SCPAGE_SUBT_GROUP3  (HID_SC_DLG_START +19 )
+
+#define HID_SCPAGE_HFED_HL      (HID_SC_DLG_START +20 )
+#define HID_SCPAGE_HFED_HR      (HID_SC_DLG_START +21 )
+#define HID_SCPAGE_HFED_FL      (HID_SC_DLG_START +22 )
+#define HID_SCPAGE_HFED_FR      (HID_SC_DLG_START +23 )
+
+#define HID_SCPAGE_CONTENT      (HID_SC_DLG_START +24 )
+#define HID_SCPAGE_LAYOUT       (HID_SC_DLG_START +25 )
+#define HID_SCPAGE_INPUT        (HID_SC_DLG_START +26 )
+
+#define HID_SC_NAVIGATOR        (HID_SC_DLG_START +27 )
+
+#define HID_SC_MTRIN_VAL        (HID_SC_DLG_START +28 )
+#define HID_SC_MTRIN_DEF        (HID_SC_DLG_START +29 )
+#define HID_SC_SELENTRY_LIST    (HID_SC_DLG_START +30 )
+#define HID_SC_GROUP_COLS       (HID_SC_DLG_START +31 )
+#define HID_SC_GROUP_ROWS       (HID_SC_DLG_START +32 )
+
+#define HID_SC_HF_TEXT          (HID_SC_DLG_START +33 )
+#define HID_SC_HF_FILE          (HID_SC_DLG_START +34 )
+#define HID_SC_HF_TABLE         (HID_SC_DLG_START +35 )
+#define HID_SC_HF_PAGE          (HID_SC_DLG_START +36 )
+#define HID_SC_HF_PAGES         (HID_SC_DLG_START +37 )
+#define HID_SC_HF_DATE          (HID_SC_DLG_START +38 )
+#define HID_SC_HF_TIME          (HID_SC_DLG_START +39 )
+
+#define HID_SC_HEADER_EDIT      (HID_SC_DLG_START +40 )
+#define HID_SC_FOOTER_EDIT      (HID_SC_DLG_START +41 )
+
+#define HID_SC_SCENWIN_TOP      (HID_SC_DLG_START +42 )
+#define HID_SC_SCENWIN_BOTTOM   (HID_SC_DLG_START +43 )
+
+#define HID_SC_INPUTWIN         (HID_SC_DLG_START +44 )
+
+#define HID_SC_RENAME_NAME      (HID_SC_DLG_START +45 )
+#define HID_SC_APPEND_NAME      (HID_SC_DLG_START +46 )
+
+//  Funktionsautopilot: nur als Unique-IDs
+#define HID_SC_FAP_PAGE         (HID_SC_DLG_START +47 )
+#define HID_SC_FAP_EDIT1        (HID_SC_DLG_START +48 )
+#define HID_SC_FAP_EDIT2        (HID_SC_DLG_START +49 )
+#define HID_SC_FAP_EDIT3        (HID_SC_DLG_START +50 )
+#define HID_SC_FAP_EDIT4        (HID_SC_DLG_START +51 )
+
+#define HID_SC_ADD_AUTOFMT      (HID_SC_DLG_START +52 )
+#define HID_SC_AUTOFMT_NAME     (HID_SC_DLG_START +53 )
+
+#define HID_SC_DROPMODE_URL     (HID_SC_DLG_START +54 )
+#define HID_SC_DROPMODE_LINK    (HID_SC_DLG_START +55 )
+#define HID_SC_DROPMODE_COPY    (HID_SC_DLG_START +56 )
+
+#define HID_SC_FAP_STRUCT       (HID_SC_DLG_START +57 )
+#define HID_SC_ASCII_TABCTR     (HID_SC_DLG_START +58 )
+
+#define HID_SC_SCENARIO_DELETE  (HID_SC_DLG_START +59 )
+#define HID_SC_SCENARIO_EDIT    (HID_SC_DLG_START +60 )
+
+#define HID_SCDLG_FORMULA       (HID_SC_DLG_START +61 )
+#define HID_SCDLG_CONDFORMAT    (HID_SC_DLG_START +62 )
+#define HID_COLROWNAMERANGES    (HID_SC_DLG_START +63 )
+
+#define HID_FUNCTION_BOX        (HID_SC_DLG_START +64 )
+#define HID_SCPAGE_OPREDLINE    (HID_SC_DLG_START +65 )
+#define HID_SC_REDLIN_CTR       (HID_SC_DLG_START +66 )
+
+//Kopf/FusszeilenDlg: Contextmenue fuer Dateiname
+#define HID_FCOMMAND_TITEL      (HID_SC_DLG_START +67 )
+#define HID_FCOMMAND_FILENAME   (HID_SC_DLG_START +68 )
+#define HID_FCOMMAND_PATH       (HID_SC_DLG_START +69 )
+
+
+// Hilfe IDs fuer Objekt- und Werkzeugleisten (max.10) -----------------------
+
+#define HID_SC_TOOLBOX_TOOLS    ( HID_SC_TOOLBOX_START )
+#define HID_SC_TOOLBOX_TABLE    ( HID_SC_TOOLBOX_START + 1 )
+#define HID_SC_TOOLBOX_DRAW     ( HID_SC_TOOLBOX_START + 2 )
+#define HID_SC_TOOLBOX_DRTEXT   ( HID_SC_TOOLBOX_START + 3 )
+#define HID_SC_TOOLBOX_PREVIEW  ( HID_SC_TOOLBOX_START + 4 )
+
+//  wrong group - HID_SC_DLG_START is full
+#define HID_SC_RENAME_AUTOFMT   ( HID_SC_TOOLBOX_START + 5 )
+#define HID_SC_REN_AFMT_NAME    ( HID_SC_TOOLBOX_START + 6 )
+
+// Hilfe IDs fuer Submenus (max.50) ------------------------------------------
+#define HID_SCMENU_EDIT         ( HID_SC_MENU_START )
+#define HID_SCMENU_FILL         ( HID_SC_MENU_START + 1 )
+#define HID_SCMENU_DELBREAK     ( HID_SC_MENU_START + 2 )
+#define HID_SCMENU_VIEW         ( HID_SC_MENU_START + 3 )
+#define HID_SCMENU_TOOLBARS     ( HID_SC_MENU_START + 4 )
+#define HID_SCMENU_INSERT       ( HID_SC_MENU_START + 5 )
+#define HID_SCMENU_INSBREAK     ( HID_SC_MENU_START + 6 )
+#define HID_SCMENU_NAME         ( HID_SC_MENU_START + 7 )
+#define HID_SCMENU_GRAPHIC      ( HID_SC_MENU_START + 8 )
+#define HID_SCMENU_DATA         ( HID_SC_MENU_START + 9 )
+#define HID_SCMENU_FILTER       ( HID_SC_MENU_START + 10 )
+#define HID_SCMENU_OUTLINE      ( HID_SC_MENU_START + 11 )
+#define HID_SCMENU_PIVOT        ( HID_SC_MENU_START + 12 )
+#define HID_SCMENU_EXTRA        ( HID_SC_MENU_START + 13 )
+#define HID_SCMENU_SPELLING     ( HID_SC_MENU_START + 14 )
+#define HID_SCMENU_AUDIT        ( HID_SC_MENU_START + 15 )
+#define HID_SCMENU_PROTECT      ( HID_SC_MENU_START + 16 )
+#define HID_SCMENU_CELLCONT     ( HID_SC_MENU_START + 17 )
+#define HID_SCMENU_ROW          ( HID_SC_MENU_START + 18 )
+#define HID_SCMENU_COL          ( HID_SC_MENU_START + 19 )
+#define HID_SCMENU_TAB          ( HID_SC_MENU_START + 20 )
+#define HID_SCMENU_MERGE        ( HID_SC_MENU_START + 21 )
+#define HID_SCMENU_AREA         ( HID_SC_MENU_START + 22 )
+#define HID_SCMENU_OBJMIRROR    ( HID_SC_MENU_START + 23 )
+#define HID_SCMENU_OBJARRANGE   ( HID_SC_MENU_START + 24 )
+#define HID_SCMENU_ANCHOR       ( HID_SC_MENU_START + 25 )
+#define HID_SCMENU_SENDTO       ( HID_SC_MENU_START + 26 )
+#define HID_SCMENU_CHANGES      ( HID_SC_MENU_START + 27 )
+
+#define HID_SC_FAP_BTN_FX1      ( HID_SC_MENU_START + 28 )
+#define HID_SC_FAP_BTN_FX2      ( HID_SC_MENU_START + 29 )
+#define HID_SC_FAP_BTN_FX3      ( HID_SC_MENU_START + 30 )
+#define HID_SC_FAP_BTN_FX4      ( HID_SC_MENU_START + 31 )
+#define HID_SC_FAP_BTN_REF1     ( HID_SC_MENU_START + 32 )
+#define HID_SC_FAP_BTN_REF2     ( HID_SC_MENU_START + 33 )
+#define HID_SC_FAP_BTN_REF3     ( HID_SC_MENU_START + 34 )
+#define HID_SC_FAP_BTN_REF4     ( HID_SC_MENU_START + 35 )
+#define HID_SC_FAP_FORMULA      ( HID_SC_MENU_START + 36 )
+
+#define HID_SC_SORT_ACTION      ( HID_SC_MENU_START + 37 )
+#define HID_SC_SORT_AUTHOR      ( HID_SC_MENU_START + 38 )
+#define HID_SC_SORT_DATE        ( HID_SC_MENU_START + 39 )
+#define HID_SC_SORT_COMMENT     ( HID_SC_MENU_START + 40 )
+#define HID_SORT_POSITION       ( HID_SC_MENU_START + 41 )
+#define HID_SC_CHANGES_COMMENT  ( HID_SC_MENU_START + 42 )
+#define HID_SC_FUNCTIONLIST     ( HID_SC_MENU_START + 43 )
+#define HID_SCPAGE_OPTLOAD      ( HID_SC_MENU_START + 44 )
+#define HID_PASSWD_TABLE        ( HID_SC_MENU_START + 45 )
+#define HID_PASSWD_DOC          ( HID_SC_MENU_START + 46 )
+
+#define HID_DATAPILOT_TYPE      ( HID_SC_MENU_START + 47 )
+#define HID_DATAPILOT_DATABASE  ( HID_SC_MENU_START + 48 )
+#define HID_DATAPILOT_SERVICE   ( HID_SC_MENU_START + 49 )
+
+// Ende Hilfe IDs ------------------------------------------------------------
+// ---------------------------------------------------------------------------
+
+// View-Funktionen (max. 100) ------------------------------------------------
+
+#define FID_TESTFUNC0           (SC_VIEW_START)
+#define FID_TESTFUNC1           (SC_VIEW_START + 1)
+#define FID_TESTFUNC2           (SC_VIEW_START + 2)
+#define FID_TESTFUNC3           (SC_VIEW_START + 3)
+#define FID_TESTFUNC4           (SC_VIEW_START + 4)
+#define FID_TESTFUNC5           (SC_VIEW_START + 5)
+#define FID_TESTFUNC6           (SC_VIEW_START + 6)
+#define FID_TESTFUNC7           (SC_VIEW_START + 7)
+#define FID_TESTFUNC8           (SC_VIEW_START + 8)
+#define FID_TESTFUNC9           (SC_VIEW_START + 9)
+#define FID_SCALESTATUS         (SC_VIEW_START + 10)
+#define FID_COLOR               (SC_VIEW_START + 11)
+//aus sfx: #define SID_REPAINT              (SC_VIEW_START + 12)
+#define SID_UPDATECHART         (SC_VIEW_START + 13)
+#define FID_MARKLEFT            (SC_VIEW_START + 14)
+#define FID_MARKRIGHT           (SC_VIEW_START + 15)
+#define FID_MARKUP              (SC_VIEW_START + 16)
+#define FID_MARKDOWN            (SC_VIEW_START + 17)
+#define FID_MARKPAGEUP          (SC_VIEW_START + 18)
+#define FID_MARKPAGEDOWN        (SC_VIEW_START + 19)
+
+// Slot-IDs fuer Attribute:
+
+#define SID_SCATTR_HOR_JUSTIFY  (SC_VIEW_START + 30)    // Alignment-Page
+#define SID_SCATTR_VER_JUSTIFY  (SC_VIEW_START + 31)
+#define SID_SCATTR_MARGIN       (SC_VIEW_START + 32)
+#define SID_SCATTR_ORIENTATION  (SC_VIEW_START + 33)
+#define SID_SCATTR_LINEBREAK    (SC_VIEW_START + 35)
+#define SID_SCATTR_PROTECTION   (SC_VIEW_START + 36)    // Protection-Page
+
+// sonstige Slot-IDs:
+
+#define SID_SCUSERLISTS         (SC_VIEW_START + 37)    // Benutzerdef.Listen
+#define RES_TBX_DUMMY           (SC_VIEW_START + 38)    // Dummy-Item
+#define SID_SCVIEWOPTIONS       (SC_VIEW_START + 39)
+#define SID_SCDOCOPTIONS        (SC_VIEW_START + 40)
+
+// Cursorbewegungen als Properties:
+
+#define SID_CURRENTCELL         (SC_VIEW_START + 41)
+#define SID_CURRENTTAB          (SC_VIEW_START + 42)
+#define SID_CURRENTDOC          (SC_VIEW_START + 43)
+#define SID_CURRENTOBJECT       (SC_VIEW_START + 44)
+
+// Slot-IDs fuer spez. ToolBox-Funktionen:
+
+#define SID_NUMBER_CURRENCY     (SC_VIEW_START + 45)
+#define SID_NUMBER_PERCENT      (SC_VIEW_START + 46)
+
+// "Slot" Ids fuer Eingabezeilen Images:
+#define SID_INPUT_FUNCTION      (SC_VIEW_START + 47)
+#define SID_INPUT_SUM           (SC_VIEW_START + 48)
+#define SID_INPUT_EQUAL         (SC_VIEW_START + 49)
+#define SID_INPUT_CANCEL        (SC_VIEW_START + 50)
+#define SID_INPUT_OK            (SC_VIEW_START + 51)
+
+#define SID_NUMBER_STANDARD     (SC_VIEW_START + 52)
+#define SID_NUMBER_DATE         (SC_VIEW_START + 53)
+#define SID_NUMBER_TWODEC       (SC_VIEW_START + 54)
+#define SID_NUMBER_SCIENTIFIC   (SC_VIEW_START + 55)
+#define SID_NUMBER_TIME         (SC_VIEW_START + 56)
+#define SID_NUMBER_INCDEC       (SC_VIEW_START + 57)
+#define SID_NUMBER_DECDEC       (SC_VIEW_START + 58)
+
+// Sonstiges:
+#define SID_LINKS               (SC_VIEW_START + 60)
+#define SID_INSERT_SIMAGE       (SC_VIEW_START + 61)
+#define SID_INSERT_SCHART       (SC_VIEW_START + 62)
+#define SID_INSERT_SMATH        (SC_VIEW_START + 63)
+#define SID_STANDARD_FONTS      (SC_VIEW_START + 64)
+#define SID_MIRROR_VERTICAL     (SC_VIEW_START + 65)
+#define SID_MIRROR_HORIZONTAL   (SC_VIEW_START + 66)
+#define SID_CELL_FORMAT_RESET   (SC_VIEW_START + 67)
+#define SID_SCPRINTOPTIONS      (SC_VIEW_START + 68)
+#define SID_WINDOW_SPLIT        (SC_VIEW_START + 69)
+#define SID_WINDOW_FIX          (SC_VIEW_START + 70)
+#ifdef MAC
+#ifdef SID_DRAW_CHART
+#undef SID_DRAW_CHART
+#endif
+#endif
+#define SID_DRAW_CHART          (SC_VIEW_START + 71)
+#define SID_UPDATETABLINKS      (SC_VIEW_START + 72)
+
+//TabPage Eingabe
+#define SID_SC_INPUT_SELECTION          (SC_VIEW_START + 73)
+#define SID_SC_INPUT_SELECTIONPOS       (SC_VIEW_START + 74)
+#define SID_SC_INPUT_EDITMODE           (SC_VIEW_START + 75)
+#define SID_SC_INPUT_FMT_EXPAND         (SC_VIEW_START + 76)
+#define SID_SC_INPUT_RANGEFINDER        (SC_VIEW_START + 77)
+#define SID_SC_INPUT_REF_EXPAND         (SC_VIEW_START + 78)
+#define SID_SC_INPUT_MARK_HEADER        (SC_VIEW_START + 79)
+
+#define SID_REIMPORT_AFTER_LOAD (SC_VIEW_START + 80)
+#define SID_DRAW_NOTEEDIT       (SC_VIEW_START + 81)
+
+#define SID_CHOOSE_DESIGN       (SC_VIEW_START + 82)
+#define SID_EURO_CONVERTER      (SC_VIEW_START + 83)
+
+// Nachrichten -------------------------------------------------------------
+
+#define FID_INPUTLINE_STATUS    (SC_MESSAGE_START)
+#define FID_INPUTLINE_ENTER     (SC_MESSAGE_START + 1)
+#define FID_REPAINT             (SC_MESSAGE_START + 2)
+#define FID_DATACHANGED         (SC_MESSAGE_START + 3)
+#define FID_REFMODECHANGED      (SC_MESSAGE_START + 4)
+#define FID_KILLEDITVIEW        (SC_MESSAGE_START + 5)
+#define SID_SOLVE               (SC_MESSAGE_START + 6)
+#define FID_FONT_SELECTED       (SC_MESSAGE_START + 7)
+#define FID_FILTER_OK           (SC_MESSAGE_START + 8)
+#define SC_HINT_DRWLAYER_NEW    (SC_MESSAGE_START + 9)
+#define SID_TABDELETED          (SC_MESSAGE_START + 10)
+#define FID_INPUTLINE_MATRIX    (SC_MESSAGE_START + 11)
+#define SID_DLG_RETOK           (SC_MESSAGE_START + 12)
+#define FID_ANYDATACHANGED      (SC_MESSAGE_START + 13)
+#define SID_STATUS_DOCPOS       (SC_MESSAGE_START + 14)
+#define SID_STATUS_PAGESTYLE    (SC_MESSAGE_START + 15)
+#define SID_STATUS_SELMODE      (SC_MESSAGE_START + 16)
+#define FID_KILLEDITVIEW_NOPAINT (SC_MESSAGE_START + 17)
+#define SID_DLG_MATRIX          (SC_MESSAGE_START + 18)
+#define SC_HINT_DBAREAS_CHANGED (SC_MESSAGE_START + 19)
+#define SC_HINT_AREAS_CHANGED   (SC_MESSAGE_START + 20)
+#define SC_HINT_TABLES_CHANGED  (SC_MESSAGE_START + 21)
+
+#define SID_STATUS_SELMODE_ERG  (SC_MESSAGE_START + 22)
+#define SID_STATUS_SELMODE_ERW  (SC_MESSAGE_START + 23)
+#define SID_STATUS_SELMODE_NORM (SC_MESSAGE_START + 24)
+
+#define SID_CHART_SOURCE        (SC_MESSAGE_START + 25)
+#define SID_CHART_NAME          (SC_MESSAGE_START + 26)
+#define SID_CHART_ADDSOURCE     (SC_MESSAGE_START + 27)
+
+#define SID_AUTO_STYLE          (SC_MESSAGE_START + 28)
+
+#define FID_INPUTLINE_BLOCK     (SC_MESSAGE_START + 29)
+
+#define SID_STATUS_SUM          (SC_MESSAGE_START + 30)
+
+#define SC_HINT_DRAW_CHANGED    (SC_MESSAGE_START + 31)
+#define SC_HINT_DOCNAME_CHANGED (SC_MESSAGE_START + 32)
+#define SC_HINT_AREALINKS_CHANGED (SC_MESSAGE_START + 33)
+#define SC_HINT_SHOWRANGEFINDER (SC_MESSAGE_START + 34)
+#define SC_HINT_DOC_SAVED       (SC_MESSAGE_START + 35)
+#define SC_HINT_FORCESETTAB     (SC_MESSAGE_START + 36)
+
+// Nachricht zum Oeffnen von Dialogen:
+#define SID_OPENDLG_CONSOLIDATE     (SC_MESSAGE_START + 50)
+#define SID_OPENDLG_PIVOTTABLE      (SC_MESSAGE_START + 51)
+#define SID_OPENDLG_FUNCTION        (SC_MESSAGE_START + 52)
+#define SID_OPENDLG_SOLVE           (SC_MESSAGE_START + 53)
+#define SID_OPENDLG_TABOP           (SC_MESSAGE_START + 54)
+#define SID_OPENDLG_CHART           (SC_MESSAGE_START + 55)
+#define SID_OPENDLG_EDITFUNCTION    (SC_MESSAGE_START + 56)
+#define SID_OPENDLG_ARGUMENT        (SC_MESSAGE_START + 57)
+#define SID_OPENDLG_MODCHART        (SC_MESSAGE_START + 58)
+#define SID_OPENDLG_CONDFRMT        (SC_MESSAGE_START + 59)
+
+#define SC_HINT_NAVIGATOR_UPDATEALL  (SC_MESSAGE_START + 65)
+
+// Funktionen ------------------------------------------------------------
+// noch nach Menues sortiert - besserer Vorschlag?
+
+
+//#define FID_PRINT_PREVIEW     (SC_FUNCTION_START)
+#define FID_DOC_MANAGER         (SC_FUNCTION_START + 1)
+#define FID_CURSOR_ENTER        (SC_FUNCTION_START + 2)
+#define SID_MAIL                (SC_FUNCTION_START + 3)
+#define FILE_MENU_END           (SC_FUNCTION_START + 20)
+
+#define EDIT_MENU_START         (FILE_MENU_END)
+#define FID_PASTE_CONTENTS      (EDIT_MENU_START)
+#define FID_DELETE_CELLCONTENTS (EDIT_MENU_START + 1)
+#define FID_DELETE_CELL         (EDIT_MENU_START + 2)
+#define FID_DELETE_TABLE        (EDIT_MENU_START + 3)
+#define FID_FILL_TO_BOTTOM      (EDIT_MENU_START + 4)
+#define FID_FILL_TO_RIGHT       (EDIT_MENU_START + 5)
+#define FID_FILL_TO_TOP         (EDIT_MENU_START + 6)
+#define FID_FILL_TO_LEFT        (EDIT_MENU_START + 7)
+#define FID_FILL_TAB            (EDIT_MENU_START + 8)
+#define FID_FILL_SERIES         (EDIT_MENU_START + 9)
+#define FID_SEARCH_REPLACE_DLG  (EDIT_MENU_START + 10)
+#define FID_EDIT_OBJECT         (EDIT_MENU_START + 11)
+#define SID_SC_NAVIGATOR        (EDIT_MENU_START + 12)
+#define SID_SC_WIZARD           (EDIT_MENU_START + 13)
+#define SID_SC_EDIT_OBJECT      (EDIT_MENU_START + 14)
+#define SID_HFEDIT              (EDIT_MENU_START + 15)
+
+#define SID_DEL_ROWS            (EDIT_MENU_START + 16)//JN
+#define SID_DEL_COLS            (EDIT_MENU_START + 17)//JN
+
+#define FID_CHG_RECORD          (EDIT_MENU_START + 18)
+#define FID_CHG_SHOW            (EDIT_MENU_START + 19)
+
+#define EDIT_MENU_END           (EDIT_MENU_START + 20)
+#define VIEW_MENU_START         (EDIT_MENU_END)
+
+#define FID_TOGGLEOBJECT        (VIEW_MENU_START)
+#define FID_TOGGLEINPUTLINE     (VIEW_MENU_START + 1)
+#define FID_TOGGLEHEADERS       (VIEW_MENU_START + 2)
+#define FID_SCALE               (VIEW_MENU_START + 4)
+#define FID_TOGGLESYNTAX        (VIEW_MENU_START + 5)
+#define FID_SCREEN_OPTIONS      (VIEW_MENU_START + 6)
+#define FID_PAGEBREAKMODE       (VIEW_MENU_START + 7)
+#define FID_FUNCTION_BOX        (VIEW_MENU_START + 8)
+// Compare/Merge jetzt aus Sfx
+//#define FID_CHG_COMPARE       (VIEW_MENU_START + 16)// DANGER DIRTY ID
+//#define FID_CHG_MERGE         (VIEW_MENU_START + 17)// DANGER DIRTY ID
+#define FID_CHG_ACCEPT          (VIEW_MENU_START + 18)// DANGER DIRTY ID
+#define FID_CHG_COMMENT         (VIEW_MENU_START + 19)// DANGER DIRTY ID
+#define VIEW_MENU_END           (VIEW_MENU_START + 20)
+
+#define INSERT_MENU_START       (VIEW_MENU_END)
+#define FID_PAGEBREAK           (INSERT_MENU_START)
+#define FID_INS_ROWBRK          (INSERT_MENU_START + 1)
+#define FID_INS_COLBRK          (INSERT_MENU_START + 2)
+#define FID_DEL_ROWBRK          (INSERT_MENU_START + 3)
+#define FID_DEL_COLBRK          (INSERT_MENU_START + 4)
+#define FID_INS_CELL_CONTENTS   (INSERT_MENU_START + 5)
+#define FID_INS_CELL            (INSERT_MENU_START + 6)
+#define FID_INS_ROW             (INSERT_MENU_START + 7)
+#define FID_INS_COLUMN          (INSERT_MENU_START + 8)
+#define FID_INS_TABLE           (INSERT_MENU_START + 9)
+#define SID_INS_FUNCTION        (INSERT_MENU_START + 10)
+#define FID_DEFINE_NAME         (INSERT_MENU_START + 11)
+#define FID_INSERT_NAME         (INSERT_MENU_START + 12)
+#define FID_USE_NAME            (INSERT_MENU_START + 13)
+#define FID_APPLY_NAME          (INSERT_MENU_START + 14)
+//#define SID_CHARMAP               (INSERT_MENU_START + 15)//!!! kommt von sfx
+//aus sfx: #define SID_INSERT_POSTIT       (INSERT_MENU_START + 16)
+#define SID_INSERT_CLIPART      (INSERT_MENU_START + 17) //!!! sollte vom Svx kommen
+#define FID_INS_CELLSDOWN       (INSERT_MENU_START + 18)
+#define FID_INS_CELLSRIGHT      (INSERT_MENU_START + 19)
+#define INSERT_MENU_END         (INSERT_MENU_START + 20)
+
+#define FORMAT_MENU_START       (INSERT_MENU_END)
+#define FID_CELL_FORMAT         (FORMAT_MENU_START)
+#define FID_ROW_HEIGHT          (FORMAT_MENU_START + 1)
+#define FID_ROW_OPT_HEIGHT      (FORMAT_MENU_START + 2)
+#define FID_ROW_HIDE            (FORMAT_MENU_START + 3)
+#define FID_ROW_SHOW            (FORMAT_MENU_START + 4)
+#define FID_COL_WIDTH           (FORMAT_MENU_START + 5)
+#define FID_COL_OPT_WIDTH       (FORMAT_MENU_START + 6)
+#define FID_COL_HIDE            (FORMAT_MENU_START + 7)
+#define FID_COL_SHOW            (FORMAT_MENU_START + 8)
+#define FID_TABLE_HIDE          (FORMAT_MENU_START + 9)
+#define FID_TABLE_SHOW          (FORMAT_MENU_START + 10)
+#define FID_CONDITIONAL_FORMAT  (FORMAT_MENU_START + 11)
+#define SID_SCSTYLES            (FORMAT_MENU_START + 12)
+#define FID_MERGE_ON            (FORMAT_MENU_START + 13)
+#define FID_MERGE_OFF           (FORMAT_MENU_START + 14)
+#define SID_FORMATPAGE          (FORMAT_MENU_START + 15)
+#define SID_TEXT_STANDARD       (FORMAT_MENU_START + 16)
+#define SID_DRAWTEXT_ATTR_DLG   (FORMAT_MENU_START + 17)
+#define FID_TABLE_VISIBLE       (FORMAT_MENU_START + 18)
+#define FID_COL_OPT_DIRECT      (FORMAT_MENU_START + 19)
+#define FORMAT_MENU_END         (FORMAT_MENU_START + 20)
+
+#define EXTRA_MENU_START        (FORMAT_MENU_END)
+#define FID_VOICE_CONTROL       (EXTRA_MENU_START + 1)
+#define SID_RECALC_TITLE        (EXTRA_MENU_START + 2)
+#define FID_AUTO_CALC           (EXTRA_MENU_START + 3)
+#define FID_RECALC              (EXTRA_MENU_START + 4)
+#define FID_UPDATE_DIAGRAMS     (EXTRA_MENU_START + 5)
+#define FID_PROTECT_TABLE       (EXTRA_MENU_START + 6)
+#define FID_PROTECT_DOC         (EXTRA_MENU_START + 7)
+#define SID_EDIT_MACRO          (EXTRA_MENU_START + 8)
+#define SID_SCOPTIONS           (EXTRA_MENU_START + 9)
+#define SID_MACRO_CHOOSER       (EXTRA_MENU_START + 10)
+#define SID_SCENARIOS           (EXTRA_MENU_START + 12)
+#define SID_ADD_IN_MANAGER      (EXTRA_MENU_START + 13)
+#define SID_PIVOT_RECALC        (EXTRA_MENU_START + 14)
+#define SID_PIVOT_KILL          (EXTRA_MENU_START + 15)
+
+// hier falsch, aber erstmal
+#define SID_SC_HELP_PI          (EXTRA_MENU_START + 16)
+#define SID_SC_SHOW_KEYBOARD_HELP (EXTRA_MENU_START + 17)
+
+#define FID_HARD_RECALC         (EXTRA_MENU_START + 18)
+#define FID_AUTOCOMPLETE        (EXTRA_MENU_START + 19)
+
+#define EXTRA_MENU_END          (EXTRA_MENU_START + 20)
+
+#define DATA_MENU_START         (EXTRA_MENU_END)
+#define SID_DEFINE_DBNAME       (DATA_MENU_START)
+#define SID_SELECT_DB           (DATA_MENU_START + 1)
+#define SID_SORT                (DATA_MENU_START + 2)
+#define SID_FILTER              (DATA_MENU_START + 3)
+#define SID_SPECIAL_FILTER      (DATA_MENU_START + 4)
+#define SID_AUTO_FILTER         (DATA_MENU_START + 5)
+#define SID_UNFILTER            (DATA_MENU_START + 6)
+#define SID_QUERY               (DATA_MENU_START + 7)
+#define SID_SUBTOTALS           (DATA_MENU_START + 8)
+//aus sfx: #define SID_OUTLINE_HIDE        (DATA_MENU_START + 9)
+//aus sfx: #define SID_OUTLINE_SHOW        (DATA_MENU_START + 10)
+//aus sfx: #define SID_OUTLINE_MAKE        (DATA_MENU_START + 11)
+//aus sfx: #define SID_OUTLINE_REMOVE      (DATA_MENU_START + 12)
+#define SID_AUTO_OUTLINE        (DATA_MENU_START + 13)
+//aus sfx: #define SID_OUTLINE_DELETEALL   (DATA_MENU_START + 14)
+#define SID_IMPORT_DATA         (DATA_MENU_START + 15)
+#define SID_REIMPORT_DATA       (DATA_MENU_START + 16)
+#define SID_PIVOT_TABLE         (DATA_MENU_START + 17)
+#define SID_TABOP               (DATA_MENU_START + 18)
+#define SID_TEXT_TO_COLUMNS     (DATA_MENU_START + 19)
+#define SID_CONSOLIDATE         (DATA_MENU_START + 20)
+#define SID_AUTOFILTER_HIDE     (DATA_MENU_START + 21)
+
+#define SID_SBA_IMPORT          (DATA_MENU_START + 22)
+
+#define SID_SORT_DESCENDING     (DATA_MENU_START + 23)
+#define SID_SORT_ASCENDING      (DATA_MENU_START + 24)
+//
+//
+#define DATA_MENU_END           (DATA_MENU_START + 25)
+
+#define TAB_POPUP_START         (DATA_MENU_END)
+#define RID_POPUP_TAB           (TAB_POPUP_START)
+#define FID_TAB_MENU_RENAME     (TAB_POPUP_START+1)
+#define FID_TAB_RENAME          (TAB_POPUP_START+2)
+#define FID_TAB_MOVE            (TAB_POPUP_START+3)
+#define FID_TAB_SELECTALL       (TAB_POPUP_START+4)
+#define FID_TAB_APPEND          (TAB_POPUP_START+5)
+#define FID_TAB_INDEX           (TAB_POPUP_START+6)
+
+#define TAB_POPUP_END           (DATA_MENU_END + 20)
+
+#define OBJBAR_FORMAT_START     (TAB_POPUP_END)
+#define SID_ALIGNLEFT           (OBJBAR_FORMAT_START+6)
+#define SID_ALIGNRIGHT          (OBJBAR_FORMAT_START+7)
+#define SID_ALIGNCENTERHOR      (OBJBAR_FORMAT_START+8)
+#define SID_ALIGNBLOCK          (OBJBAR_FORMAT_START+9)
+#define SID_ALIGNTOP            (OBJBAR_FORMAT_START+10)
+#define SID_ALIGNBOTTOM         (OBJBAR_FORMAT_START+11)
+#define SID_ALIGNCENTERVER      (OBJBAR_FORMAT_START+12)
+#define SID_SELECT_SCENARIO     (OBJBAR_FORMAT_START+13)
+
+#define SID_V_ALIGNCELL         (OBJBAR_FORMAT_START+14)
+#define SID_H_ALIGNCELL         (OBJBAR_FORMAT_START+15)
+
+#define OBJBAR_FORMAT_END       (OBJBAR_FORMAT_START+20)
+
+#define RID_INPUTBAR_START      (OBJBAR_FORMAT_END)
+#define SID_INPUT_WINDOW        (RID_INPUTBAR_START)
+#define RID_INPUTBAR_END        (RID_INPUTBAR_START+1)
+
+#define DRAW_BAR_START          (RID_INPUTBAR_END)
+//! SID_OBJECT_MIRROR wird sicher mal allgemein
+#define SID_OBJECT_MIRROR       (DRAW_BAR_START)
+#define SID_DRAWTOABOVE         (DRAW_BAR_START+15)
+#define SID_DRAWTOBELOW         (DRAW_BAR_START+16)
+//#define SID_GROUP             (DRAW_BAR_START+17)
+//#define SID_UNGROUP               (DRAW_BAR_START+18)
+#define SID_FRAMETOTOP          (DRAW_BAR_START+19)
+#define SID_FRAMETOBOTTOM       (DRAW_BAR_START+20)
+//aus sfx: #define SID_FRAME_UP         (DRAW_BAR_START+21)
+//aus sfx: #define SID_FRAME_DOWN           (DRAW_BAR_START+22)
+#define SID_TOOL_TEXT           (DRAW_BAR_START+23)
+#define SID_ANCHOR_PAGE         (DRAW_BAR_START+24)
+#define SID_ANCHOR_CELL         (DRAW_BAR_START+25)
+#define SID_ANCHOR_TOGGLE       (DRAW_BAR_START+26)
+#define SID_ORIGINALSIZE        (DRAW_BAR_START+27)
+
+#define DRAW_BAR_END            (DRAW_BAR_START+50)
+
+#define DRAW_OBJECTBAR_START    (DRAW_BAR_END)
+#define RID_DRAW_OBJECTBAR      DRAW_OBJECTBAR_START
+
+#define DRAWTEXTBAR_START       (DRAW_BAR_END)
+#define SID_TEXT_LINESPACING_1  (DRAWTEXTBAR_START)
+#define SID_TEXT_LINESPACING_2  (DRAWTEXTBAR_START+1)
+#define SID_TEXT_LINESPACING_3  (DRAWTEXTBAR_START+2)
+#define DRAWTEXTBAR_END         (DRAWTEXTBAR_START+20)
+
+#define DETECTIVE_START         (DRAWTEXTBAR_END)
+#define SID_DETECTIVE_ADD_PRED  (DETECTIVE_START)
+#define SID_DETECTIVE_DEL_PRED  (DETECTIVE_START+1)
+#define SID_DETECTIVE_ADD_SUCC  (DETECTIVE_START+2)
+#define SID_DETECTIVE_DEL_SUCC  (DETECTIVE_START+3)
+#define SID_DETECTIVE_ADD_ERR   (DETECTIVE_START+4)
+#define SID_DETECTIVE_DEL_ALL   (DETECTIVE_START+5)
+
+#define SID_DETECTIVE_FILLMODE  (DETECTIVE_START+6)
+#define SID_FILL_ADD_PRED       (DETECTIVE_START+7)
+#define SID_FILL_DEL_PRED       (DETECTIVE_START+8)
+#define SID_FILL_ADD_SUCC       (DETECTIVE_START+9)
+#define SID_FILL_DEL_SUCC       (DETECTIVE_START+10)
+#define SID_FILL_NONE           (DETECTIVE_START+11)
+#define SID_FILL_SELECT         (DETECTIVE_START+12)
+
+#define SID_DETECTIVE_INVALID   (DETECTIVE_START+13)
+
+#define SID_DETECTIVE_REFRESH   (DETECTIVE_START+14)
+#define SID_DETECTIVE_AUTO      (DETECTIVE_START+15)
+
+#define DETECTIVE_END           (DETECTIVE_START+20)
+
+#define SID_API_SLOTS           (DETECTIVE_END)
+//aus sfx: #define SID_ENTER_STRING     (SID_API_SLOTS)
+#define SID_INSERT_MATRIX       (SID_API_SLOTS+1)
+
+
+#define SID_PREVIEW_START       (SID_API_SLOTS+20)
+#define SID_PREVIEW_NEXT        (SID_PREVIEW_START)
+#define SID_PREVIEW_PREVIOUS    (SID_PREVIEW_START+1)
+#define SID_PREVIEW_FIRST       (SID_PREVIEW_START+2)
+#define SID_PREVIEW_LAST        (SID_PREVIEW_START+3)
+#define SID_PREVIEW_GOTO        (SID_PREVIEW_START+4)
+#define SID_PREVIEW_ZOOMIN      (SID_PREVIEW_START+5)
+#define SID_PREVIEW_ZOOMOUT     (SID_PREVIEW_START+6)
+#define SID_PREVIEW_END         (SID_PREVIEW_START+20)
+
+//aus sfx: #define SID_KEYFUNC_START        (SID_PREVIEW_END+5)
+#define SID_CURSORDOWN_SEL      (SID_KEYFUNC_START + 0)
+#define SID_CURSORUP_SEL        (SID_KEYFUNC_START + 1)
+#define SID_CURSORLEFT_SEL      (SID_KEYFUNC_START + 2)
+#define SID_CURSORRIGHT_SEL     (SID_KEYFUNC_START + 3)
+#define SID_CURSORPAGEDOWN_SEL  (SID_KEYFUNC_START + 4)
+#define SID_CURSORPAGEUP_SEL    (SID_KEYFUNC_START + 5)
+
+#define SID_CURSORPAGELEFT_     (SID_KEYFUNC_START + 6)
+#define SID_CURSORPAGELEFT_SEL  (SID_KEYFUNC_START + 7)
+#define SID_CURSORPAGERIGHT_    (SID_KEYFUNC_START + 8)
+#define SID_CURSORPAGERIGHT_SEL (SID_KEYFUNC_START + 9)
+
+#define SID_CURSORTOPOFFILE_SEL (SID_KEYFUNC_START + 10)
+#define SID_CURSORENDOFFILE_SEL (SID_KEYFUNC_START + 11)
+#define SID_CURSORHOME_SEL      (SID_KEYFUNC_START + 12)
+#define SID_CURSOREND_SEL       (SID_KEYFUNC_START + 13)
+#define SID_CURSORBLKUP         (SID_KEYFUNC_START + 14)
+#define SID_CURSORBLKDOWN       (SID_KEYFUNC_START + 15)
+#define SID_CURSORBLKLEFT       (SID_KEYFUNC_START + 16)
+#define SID_CURSORBLKRIGHT      (SID_KEYFUNC_START + 17)
+#define SID_CURSORBLKUP_SEL     (SID_KEYFUNC_START + 18)
+#define SID_CURSORBLKDOWN_SEL   (SID_KEYFUNC_START + 19)
+#define SID_CURSORBLKLEFT_SEL   (SID_KEYFUNC_START + 20)
+#define SID_CURSORBLKRIGHT_SEL  (SID_KEYFUNC_START + 21)
+
+#define SID_NEXT_TABLE          (SID_KEYFUNC_START + 22)
+#define SID_PREV_TABLE          (SID_KEYFUNC_START + 23)
+
+#define SID_NEXT_UNPROTECT      (SID_KEYFUNC_START + 24)
+#define SID_PREV_UNPROTECT      (SID_KEYFUNC_START + 25)
+
+#define SID_SELECT_COL          (SID_KEYFUNC_START + 26)
+#define SID_SELECT_ROW          (SID_KEYFUNC_START + 27)
+#define SID_SELECT_NONE         (SID_KEYFUNC_START + 28)
+#define SID_ALIGNCURSOR         (SID_KEYFUNC_START + 29)
+#define SID_MARKDATAAREA        (SID_KEYFUNC_START + 30)
+#define SID_SETINPUTMODE        (SID_KEYFUNC_START + 31)
+#define SID_DELETE_CONTENTS     (SID_KEYFUNC_START + 32)
+
+#define SID_MARKAREA            (SID_KEYFUNC_START + 33)
+
+#define SID_AUTOFILL            (SID_KEYFUNC_START + 34)
+#define FID_FILL_AUTO           (SID_KEYFUNC_START + 35)
+#define SID_CANCEL              (SID_KEYFUNC_START + 36)
+
+#define SID_CURSORENTERUP       (SID_KEYFUNC_START + 37)
+#define SID_CURSORENTERDOWN     (SID_KEYFUNC_START + 38)
+
+#define SID_KEYFUNC_END         (SID_KEYFUNC_START + 50)
+
+#define SID_NEW_SLOTS           (SID_KEYFUNC_END)
+#define SID_NEW_SLOTS_END       (SID_NEW_SLOTS+100)
+
+#define SID_NEW_TABLENAME       (SID_NEW_SLOTS+1)
+#define SID_COL_START           (SID_NEW_SLOTS+2)
+#define SID_ROW_START           (SID_NEW_SLOTS+3)
+#define SID_COL_END             (SID_NEW_SLOTS+4)
+#define SID_ROW_END             (SID_NEW_SLOTS+5)
+#define SID_KEEP_MARK           (SID_NEW_SLOTS+6)
+#define SID_FILL_DIR            (SID_NEW_SLOTS+7)
+#define SID_FILL_COUNT          (SID_NEW_SLOTS+8)
+#define SID_WITH_UNDO           (SID_NEW_SLOTS+9)
+//aus sfx: #define SID_ATTR_SECIALCHAR      (SID_NEW_SLOTS+10)
+#define SID_ATTR_ROWHEADERS     (SID_NEW_SLOTS+11)
+#define SID_ATTR_COLHEADERS     (SID_NEW_SLOTS+12)
+
+#define SID_SC_CELLS            (SID_NEW_SLOTS+13)
+#define SID_SC_RANGE            (SID_NEW_SLOTS+14)
+#define SID_SC_SELECTION        (SID_NEW_SLOTS+15)
+#define SID_SC_CELLTEXT         (SID_NEW_SLOTS+16)
+
+#define SID_SC_NAME_TITLE       (SID_NEW_SLOTS+17)
+
+#define SID_SC_ACTIVECELL       (SID_NEW_SLOTS+18)
+#define SID_SC_ACTIVETAB        (SID_NEW_SLOTS+19)
+#define SID_RANGE_ROW           (SID_NEW_SLOTS+20)
+#define SID_RANGE_COL           (SID_NEW_SLOTS+21)
+#define SID_RANGE_TABLE         (SID_NEW_SLOTS+22)
+#define SID_RANGE_VALUE         (SID_NEW_SLOTS+23)
+#define SID_RANGE_FORMULA       (SID_NEW_SLOTS+24)
+#define SID_RANGE_TEXT          (SID_NEW_SLOTS+25)
+#define SID_RANGE_TEXTVALUE     (SID_NEW_SLOTS+26)
+#define SID_TABLE_ACTIVATE      (SID_NEW_SLOTS+27)
+#define SID_TABLES_GET          (SID_NEW_SLOTS+28)
+#define SID_PROP_INTERIOR       (SID_NEW_SLOTS+29)
+#define SID_PROP_FONT           (SID_NEW_SLOTS+30)
+
+#define SID_DEFINE_PRINTAREA        (SID_NEW_SLOTS+31)
+#define SID_DELETE_PRINTAREA        (SID_NEW_SLOTS+32)
+#define SID_CHANGE_PRINTAREA        (SID_NEW_SLOTS+33)
+#define SID_OPENDLG_EDIT_PRINTAREA  (SID_NEW_SLOTS+34)
+
+#define SID_OLE_OBJECT          (SID_NEW_SLOTS+35)
+#define SID_OLE_ACTIVATE        (SID_NEW_SLOTS+36)
+#define SID_OLE_DEACTIVATE      (SID_NEW_SLOTS+37)
+
+#define SID_TOGGLE_REL          (SID_NEW_SLOTS+38)
+#define SID_DATA_SELECT         (SID_NEW_SLOTS+39)
+
+//  Suchen & Ersetzen
+#define FID_SEARCH              (SID_NEW_SLOTS+40)
+#define FID_REPEAT_SEARCH       (SID_NEW_SLOTS+41)
+#define FID_REPLACE             (SID_NEW_SLOTS+42)
+#define FID_SEARCH_ALL          (SID_NEW_SLOTS+43)
+#define FID_REPLACE_ALL         (SID_NEW_SLOTS+44)
+#define FID_SEARCH_COUNT        (SID_NEW_SLOTS+45)
+
+#define SID_SC_SETTEXT          (SID_NEW_SLOTS+46)
+#define SID_RANGE_ADDRESS       (SID_NEW_SLOTS+47)
+#define SID_RANGE_OFFSET        (SID_NEW_SLOTS+48)
+#define SID_NUMBER_FORMAT       (SID_NEW_SLOTS+49)
+
+#define SID_OLE_SELECT          (SID_NEW_SLOTS+50)
+#define SID_SC_ACTIVEOBJECT     (SID_NEW_SLOTS+51)
+
+#define SID_RANGE_NOTETEXT      (SID_NEW_SLOTS+52)
+#define FID_INSERT_FILE         (SID_NEW_SLOTS+53)
+
+#define FID_VALIDATION          (SID_NEW_SLOTS+54)
+
+//  Slots fuer Toolbox Controller in der Werkzeugleiste
+#define SID_TBXCTL_INSERT       (SID_NEW_SLOTS+55)
+#define SID_TBXCTL_INSCELLS     (SID_NEW_SLOTS+56)
+#define SID_TBXCTL_INSOBJ       (SID_NEW_SLOTS+57)
+
+#define SID_DEFINE_COLROWNAMERANGES (SID_NEW_SLOTS+58)
+
+#define FID_NOTE_VISIBLE        (SID_NEW_SLOTS+59)
+
+//  Items fuer Gueltigkeit
+#define FID_VALID_MODE          (SID_NEW_SLOTS+60)
+#define FID_VALID_CONDMODE      (SID_NEW_SLOTS+61)
+#define FID_VALID_VALUE1        (SID_NEW_SLOTS+62)
+#define FID_VALID_VALUE2        (SID_NEW_SLOTS+63)
+#define FID_VALID_BLANK         (SID_NEW_SLOTS+64)
+#define FID_VALID_SHOWHELP      (SID_NEW_SLOTS+65)
+#define FID_VALID_HELPTITLE     (SID_NEW_SLOTS+66)
+#define FID_VALID_HELPTEXT      (SID_NEW_SLOTS+67)
+#define FID_VALID_SHOWERR       (SID_NEW_SLOTS+68)
+#define FID_VALID_ERRSTYLE      (SID_NEW_SLOTS+69)
+#define FID_VALID_ERRTITLE      (SID_NEW_SLOTS+70)
+#define FID_VALID_ERRTEXT       (SID_NEW_SLOTS+71)
+
+#define SID_REFRESH_DBAREA      (SID_NEW_SLOTS+72)
+#define SID_RANGE_REGION        (SID_NEW_SLOTS+73)
+
+#define FID_FOCUS_POSWND        (SID_NEW_SLOTS+74)
+
+//  einzelne Slots fuer verschiedene Unterstreich-Arten (Popup-Menu)
+#define SID_ULINE_VAL_NONE      (SID_NEW_SLOTS+75)
+#define SID_ULINE_VAL_SINGLE    (SID_NEW_SLOTS+76)
+#define SID_ULINE_VAL_DOUBLE    (SID_NEW_SLOTS+77)
+#define SID_ULINE_VAL_DOTTED    (SID_NEW_SLOTS+78)
+
+#define FID_DEL_MANUALBREAKS    (SID_NEW_SLOTS+79)
+#define SID_ADD_PRINTAREA       (SID_NEW_SLOTS+80)
+#define FID_ADJUST_PRINTZOOM    (SID_NEW_SLOTS+81)
+#define FID_RESET_PRINTZOOM     (SID_NEW_SLOTS+82)
+
+#define SID_TABLES_COUNT        (SID_NEW_SLOTS+83)
+#define SID_ACTIVE_OBJ_NAME     (SID_NEW_SLOTS+84)
+#define SID_OBJECT_LEFT         (SID_NEW_SLOTS+85)
+#define SID_OBJECT_TOP          (SID_NEW_SLOTS+86)
+#define SID_OBJECT_WIDTH        (SID_NEW_SLOTS+87)
+#define SID_OBJECT_HEIGHT       (SID_NEW_SLOTS+88)
+
+#define SID_PIVOT_CREATE        (SID_NEW_SLOTS+89)
+#define SID_PIVOT_FIELDS        (SID_NEW_SLOTS+90)
+#define SID_PFIELD_NAME         (SID_NEW_SLOTS+91)
+#define SID_PFIELD_ORIENTATION  (SID_NEW_SLOTS+92)
+#define SID_PFIELD_FUNCTION     (SID_NEW_SLOTS+93)
+#define SID_PIVOT_GET           (SID_NEW_SLOTS+94)
+
+#define SID_DELETE_SCENARIO     (SID_NEW_SLOTS+95)
+#define SID_EDIT_SCENARIO       (SID_NEW_SLOTS+96)
+
+#define SID_GET_CLPBRD_FORMAT_COUNT     (SID_NEW_SLOTS+97)
+#define SID_GET_CLPBRD_FORMAT_BY_IDX    (SID_NEW_SLOTS+98)
+#define SID_GET_CLPBRD_FORMAT_NAME      (SID_NEW_SLOTS+99)
+
+// idl Parameter ---------------------------------------------------------
+
+//aus sfx: #define FN_PARAM_1               (SC_PARAM_START)
+//aus sfx: #define FN_PARAM_2               (SC_PARAM_START+1)
+//aus sfx: #define FN_PARAM_3               (SC_PARAM_START+2)
+//aus sfx: #define FN_PARAM_4               (SC_PARAM_START+3)
+//aus sfx: #define FN_PARAM_5               (SC_PARAM_START+4)
+//aus sfx: #define FN_PARAM_6               (SC_PARAM_START+5)
+//aus sfx: #define FN_PARAM_7               (SC_PARAM_START+6)
+//aus sfx: #define FN_PARAM_8               (SC_PARAM_START+7)
+#define FN_PARAM_9              (FN_PARAM_8+1)
+
+#define SID_SORT_BYROW          (SC_PARAM_START)
+#define SID_SORT_HASHEADER      (SC_PARAM_START+1)
+#define SID_SORT_CASESENS       (SC_PARAM_START+2)
+#define SID_SORT_ATTRIBS        (SC_PARAM_START+3)
+#define SID_SORT_USERDEF        (SC_PARAM_START+4)
+
+// Resourcen -------------------------------------------------------------
+
+#define RID_OBJECTBAR_APP       (SC_RESOURCE_START)
+#define RID_OBJECTBAR_FORMAT    (SC_RESOURCE_START+1)
+#define RID_OBJECTBAR_INPUT     (SC_RESOURCE_START+2)
+#define RID_POPUP_CELLS         (SC_RESOURCE_START+3)
+#define RID_POPUP_DRAW          (SC_RESOURCE_START+4)
+#define RID_TEXT_TOOLBOX        (SC_RESOURCE_START+5)
+#define RID_OBJECTBAR_PREVIEW   (SC_RESOURCE_START+6)
+#define RID_POPUP_PREVIEW       (SC_RESOURCE_START+7)
+#define RID_POPUP_OLE           (SC_RESOURCE_START+8)
+#define RID_POPUP_CHART         (SC_RESOURCE_START+9)
+//#define RID_ANCHORBITMAP      (SC_RESOURCE_START+10)
+//#define RID_GRAYANCHORBITMAP  (SC_RESOURCE_START+11)
+#define RID_OUTLINEBITMAPS      (SC_RESOURCE_START+12)
+#define RID_DRAW_WIN            (SC_RESOURCE_START+13)
+#define RID_CNTRLR_WIN          (SC_RESOURCE_START+14)
+#define RID_GLOBSTR             (SC_RESOURCE_START+15)
+#define RID_OBJECTMENU_CELLS    (SC_RESOURCE_START+17)
+#define RID_OBJECTMENU_DRAW     (SC_RESOURCE_START+18)
+#define RID_ALIGNMENT_WIN       (SC_RESOURCE_START+19)
+#define RID_SCFUNCTIONS         (SC_RESOURCE_START+20)
+#define RID_POPUP_PIVOT         (SC_RESOURCE_START+21)
+#define RID_IMGLIST_INPUTWIN    (SC_RESOURCE_START+22)
+#define RID_ERRHDLSC            (SC_RESOURCE_START+23)
+#define RID_POPUP_GRAPHIC       (SC_RESOURCE_START+24)
+#define RID_SCTEAMDLGBMP1       (SC_RESOURCE_START+25)
+#define RID_SCTEAMDLGBMP2       (SC_RESOURCE_START+26)
+#define RID_SCTEAMDLGBMP3       (SC_RESOURCE_START+27)
+#define RID_OBJECTMENU_DRAWTEXT (SC_RESOURCE_START+28)
+#define RID_POPUP_DRAWTEXT      (SC_RESOURCE_START+29)
+#define RID_MN_FORMAT_ALGN      (SC_RESOURCE_START+30)
+#define RID_MN_FORMAT_STYLE     (SC_RESOURCE_START+31)
+#define RID_MN_FORMAT_LINESPACE (SC_RESOURCE_START+32)
+#define RID_POPUP_EDIT          (SC_RESOURCE_START+33)
+#define RID_POPUP_AUDIT         (SC_RESOURCE_START+34)
+#define RID_OBJECTBAR_TOOLS     (SC_RESOURCE_START+35)
+#define RID_SC_FUNCTION_NAMES   (SC_RESOURCE_START+36)
+#define RID_SC_FUNCTION_NAMES_ENGLISH   (SC_RESOURCE_START+37)
+#define RID_TBXCTL_INSERT       (SC_RESOURCE_START+38)
+#define RID_TBXCTL_INSCELLS     (SC_RESOURCE_START+39)
+#define RID_TBXCTL_INSOBJ       (SC_RESOURCE_START+40)
+#define RID_BMP_REFBTN1         (SC_RESOURCE_START+41)
+#define RID_BMP_REFBTN2         (SC_RESOURCE_START+42)
+#define RID_SC_FUNCTION_DESCRIPTIONS1   (SC_RESOURCE_START+43)
+#define RID_SC_FUNCTION_DESCRIPTIONS2   (SC_RESOURCE_START+44)
+#define RID_POPUP_CONTROL       (SC_RESOURCE_START+45)
+#define RID_POPUP_PAGEBREAK     (SC_RESOURCE_START+46)
+#define RID_OBJECTBAR_DRAWFORM  (SC_RESOURCE_START+47)
+#define RID_POPUP_DRAWFORM      (SC_RESOURCE_START+48)
+#define RID_OBJECTMENU_DRAWFORM (SC_RESOURCE_START+49)
+#define RID_SC_ADDIN_ROT13      (SC_RESOURCE_START+50)
+#define RID_SC_ADDIN_DFA        (SC_RESOURCE_START+51)
+#define RID_IMAGELIST_NAVCONT   (SC_RESOURCE_START+52)
+
+
+#define STR_START               (SC_RESOURCE_START+100)
+#define STR_ROWHEIGHT           (STR_START)
+#define STR_ROWHEIGHT_TITLE     (STR_START + 1)
+#define STR_OPT_ROWHEIGHT       (STR_START + 2)
+#define STR_OPT_ROWHEIGHT_TITLE (STR_START + 3)
+#define STR_COLWIDTH            (STR_START + 4)
+#define STR_COLWIDTH_TITLE      (STR_START + 5)
+#define STR_OPT_COLWIDTH        (STR_START + 6)
+#define STR_OPT_COLWIDTH_TITLE  (STR_START + 7)
+#define SCSTR_UNDEFINED         (STR_START + 8)
+#define SCSTR_NONAME            (STR_START + 9)
+#define SCSTR_NONE              (STR_START + 10)
+#define SCSTR_EMPTY             (STR_START + 11)
+#define SCSTR_NOTEMPTY          (STR_START + 12)
+#define SCSTR_COLUMN            (STR_START + 13)
+#define SCSTR_ROW               (STR_START + 14)
+#define SCSTR_NEW               (STR_START + 15)
+#define SCSTR_ADD               (STR_START + 16)
+#define SCSTR_REMOVE            (STR_START + 17)
+#define SCSTR_CANCEL            (STR_START + 18)
+#define SCSTR_MODIFY            (STR_START + 19)
+#define SCSTR_SHOWTABLE         (STR_START + 20)
+#define SCSTR_HIDDENTABLES      (STR_START + 21)
+#define SCSTR_SELECTDB          (STR_START + 22)
+#define SCSTR_AREAS             (STR_START + 23)
+#define SCSTR_TABLE             (STR_START + 24)
+#define SCSTR_NAME              (STR_START + 25)
+#define SCSTR_INSTABLE          (STR_START + 26)
+#define SCSTR_APDTABLE          (STR_START + 27)
+#define SCSTR_RENAMETAB         (STR_START + 28)
+#define STR_INSERTGRAPHIC       (STR_START + 29)
+//#define STR_BASIC_IDE           (STR_START + 30)
+#define SCSTR_APPLICATION       (STR_START + 31)
+#define SCSTR_DOCSHELL          (STR_START + 32)
+#define SCSTR_TABVIEWSHELL      (STR_START + 33)
+#define SCSTR_EDITSHELL         (STR_START + 34)
+#define SCSTR_DRAWSHELL         (STR_START + 35)
+#define SCSTR_DRAWTEXTSHELL     (STR_START + 36)
+#define SCSTR_NEWTABLE          (STR_START + 37)
+#define SCSTR_PREVIEWSHELL      (STR_START + 38)
+
+#define SCSTR_PROTECTDOC        (STR_START + 39)
+#define SCSTR_UNPROTECTDOC      (STR_START + 40)
+#define SCSTR_PROTECTTAB        (STR_START + 41)
+#define SCSTR_UNPROTECTTAB      (STR_START + 42)
+#define SCSTR_PASSWORD          (STR_START + 43)
+#define SCSTR_PASSWORDOPT       (STR_START + 44)
+#define SCSTR_WRONGPASSWORD     (STR_START + 45)
+
+#define SCSTR_PIVOTSHELL        (STR_START + 46)
+#define SCSTR_END               (STR_START + 47)
+#define SCSTR_STAT_PRINT        (STR_START + 48)
+
+#define SCSTR_UNKNOWN           (STR_START + 49)
+#define SCSTR_CHAR_ATTRS        (STR_START + 50)
+#define SCSTR_ALL               (STR_START + 51)
+#define SCSTR_STDFILTER         (STR_START + 52)
+
+// Cfg-Item-Namen
+#define SCSTR_CFG_APP           (STR_START + 53)
+#define SCSTR_CFG_DOC           (STR_START + 54)
+#define SCSTR_CFG_VIEW          (STR_START + 55)
+#define SCSTR_CFG_SPELLCHECK    (STR_START + 56)
+#define SCSTR_CFG_PRINT         (STR_START + 57)
+
+#define SCSTR_AUDITSHELL        (STR_START + 58)
+
+#define SCSTR_CHARSET_USER      (STR_START + 59)
+#define SCSTR_COLUMN_USER       (STR_START + 60)
+#define SCSTR_FIELDSEP          (STR_START + 61)
+#define SCSTR_TEXTSEP           (STR_START + 62)
+
+#define SCSTR_30_APPLICATION    (STR_START + 63)
+#define SCSTR_30_LONG_DOCNAME   (STR_START + 64)
+
+#define SCSTR_CFG_INPUT         (STR_START + 65)
+
+#define SCSTR_TOP10FILTER       (STR_START + 66)
+
+#define SCSTR_CFG_NAVIPI        (STR_START + 67)
+
+#define SCSTR_40_APPLICATION    (STR_START + 68)
+#define SCSTR_40_LONG_DOCNAME   (STR_START + 69)
+
+#define SCSTR_DRAWFORMSHELL     (STR_START + 70)
+#define SCSTR_CELLSHELL         (STR_START + 71)
+#define SCSTR_FORMATSHELL       (STR_START + 72)
+#define SCSTR_OLEOBJECTSHELL    (STR_START + 73)
+#define SCSTR_CHARTSHELL        (STR_START + 74)
+#define SCSTR_GRAPHICSHELL      (STR_START + 75)
+#define SCSTR_PAGEBREAKSHELL    (STR_START + 76)
+
+#define SCSTR_GRFILTER_OPENERROR     (STR_START + 77)
+#define SCSTR_GRFILTER_IOERROR       (STR_START + 78)
+#define SCSTR_GRFILTER_FORMATERROR   (STR_START + 79)
+#define SCSTR_GRFILTER_VERSIONERROR  (STR_START + 80)
+#define SCSTR_GRFILTER_FILTERERROR   (STR_START + 81)
+#define SCSTR_GRFILTER_TOOBIG        (STR_START + 82)
+
+// Items
+
+#define SCSTR_HOR_JUSTIFY_LEFT      (STR_START + 100)
+#define SCSTR_HOR_JUSTIFY_CENTER    (STR_START + 101)
+#define SCSTR_HOR_JUSTIFY_RIGHT     (STR_START + 102)
+#define SCSTR_HOR_JUSTIFY_BLOCK     (STR_START + 103)
+#define SCSTR_HOR_JUSTIFY_REPEAT    (STR_START + 104)
+#define SCSTR_HOR_JUSTIFY_STANDARD  (STR_START + 105)
+#define SCSTR_VER_JUSTIFY_TOP       (STR_START + 106)
+#define SCSTR_VER_JUSTIFY_CENTER    (STR_START + 107)
+#define SCSTR_VER_JUSTIFY_BOTTOM    (STR_START + 108)
+#define SCSTR_VER_JUSTIFY_STANDARD  (STR_START + 109)
+#define SCSTR_ORIENTATION_TOPBOTTOM (STR_START + 110)
+#define SCSTR_ORIENTATION_BOTTOMTOP (STR_START + 111)
+#define SCSTR_ORIENTATION_STANDARD  (STR_START + 112)
+
+#define SCSTR_CLIP_STRING           (STR_START + 200)
+#define SCSTR_CLIP_RTF              (STR_START + 201)
+#define SCSTR_CLIP_DDE              (STR_START + 202)
+#define SCSTR_CLIP_DIF              (STR_START + 203)
+
+#define SCSTR_HUMAN_SCDOC_NAME      (STR_START + 210)
+#define SCSTR_SHORT_SCDOC_NAME      (STR_START + 211)
+#define SCSTR_LONG_SCDOC_NAME       (STR_START + 212)
+
+#define SCSTR_CLPBRD_CLEAR          (STR_START + 213)
+
+#define SCSTR_FORMULA_AUTOCORRECTION    (STR_START + 214)
+
+// Navigator - in der Reihenfolge wie SC_CONTENT_...
+#define SCSTR_CONTENT_ROOT      (STR_START + 250)
+#define SCSTR_CONTENT_TABLE     (STR_START + 251)
+#define SCSTR_CONTENT_RANGENAME (STR_START + 252)
+#define SCSTR_CONTENT_DBAREA    (STR_START + 253)
+#define SCSTR_CONTENT_GRAPHIC   (STR_START + 254)
+#define SCSTR_CONTENT_OLEOBJECT (STR_START + 255)
+#define SCSTR_CONTENT_NOTE      (STR_START + 256)
+#define SCSTR_CONTENT_AREALINK  (STR_START + 257)
+//  hier ein wenig Platz fuer Erweiterungen
+
+// Eingabezeile, Quickhelp-Strings (HelpText jetzt per HelpId aus Hilfe)
+#define SCSTR_QHELP_INPUTWND    (STR_START + 307)
+#define SCSTR_QHELP_POSWND      (STR_START + 308)
+#define SCSTR_QHELP_BTNCALC     (STR_START + 309)
+#define SCSTR_QHELP_BTNOK       (STR_START + 310)
+#define SCSTR_QHELP_BTNCANCEL   (STR_START + 311)
+#define SCSTR_QHELP_BTNSUM      (STR_START + 312)
+#define SCSTR_QHELP_BTNEQUAL    (STR_START + 313)
+
+// Validator
+#define SCSTR_MINIMUM           (STR_START + 314)
+#define SCSTR_MAXIMUM           (STR_START + 315)
+#define SCSTR_VALUE             (STR_START + 316)
+
+// Formulator
+#define SCSTR_FUDB              (STR_START + 389)
+#define SCSTR_FUDATE            (STR_START + 390)
+#define SCSTR_FUFIN             (STR_START + 391)
+#define SCSTR_FUINFO            (STR_START + 392)
+#define SCSTR_FULOG             (STR_START + 393)
+#define SCSTR_FUMATHS           (STR_START + 394)
+#define SCSTR_FUSTAT            (STR_START + 395)
+#define SCSTR_FUTAB             (STR_START + 396)
+#define SCSTR_FUTEXT            (STR_START + 397)
+//
+#define SCSTR_COMPILER_STRINGS  (STR_START + 398)
+#define SCSTR_FILTER_STRINGS    (STR_START + 399)
+#define SCSTR_COMPILER_INTL_STR (STR_START + 400)
+
+#define STR_END                 (STR_START + 401)
+
+#define BMP_START               (STR_END)
+// Navigator
+#define RID_BMP_EXPAND          (BMP_START)
+#define RID_BMP_COLLAPSE        (BMP_START + 1)
+#define RID_IMG_DROP_URL        (BMP_START + 2)
+#define RID_IMG_DROP_LINK       (BMP_START + 3)
+#define RID_IMG_DROP_COPY       (BMP_START + 4)
+
+#define RID_SCPTR_PIVOTCOL      (BMP_START + 81)
+#define RID_SCPTR_PIVOTROW      (BMP_START + 82)
+#define RID_SCPTR_DETECTIVE     (BMP_START + 83)
+#define RID_SCPTR_CHART         (BMP_START + 84)
+
+#define RID_SCICN_DOCUMENT      (BMP_START + 95)
+#define RID_SCICN_TEMPLATE      (BMP_START + 96)
+#define RID_SCICN_SC10DOC       (BMP_START + 97)
+
+#define BMP_END                 (BMP_START + 100)
+
+#define SC_DIALOGS_START        (BMP_END)
+#define RID_SCDLG_ATTR          (SC_DIALOGS_START)
+#define RID_SCPAGE_NUMBER       (SC_DIALOGS_START + 1)
+#define RID_SCPAGE_ALIGNMENT    (SC_DIALOGS_START + 2)
+#define RID_SCPAGE_PROTECTION   (SC_DIALOGS_START + 3)
+#define RID_SCDLG_SORT          (SC_DIALOGS_START + 5)
+#define RID_SCPAGE_SORT_FIELDS  (SC_DIALOGS_START + 6)
+#define RID_SCPAGE_SORT_OPTIONS (SC_DIALOGS_START + 7)
+#define RID_SCDLG_FILTER        (SC_DIALOGS_START + 8)
+#define RID_SCDLG_SPEC_FILTER   (SC_DIALOGS_START + 9)
+#define RID_SCMISCDLGS          (SC_DIALOGS_START + 10)
+#define RID_SCDLG_DELCELL       (SC_DIALOGS_START + 11)
+#define RID_SCDLG_INSCELL       (SC_DIALOGS_START + 12)
+#define RID_SCDLG_DELCONT       (SC_DIALOGS_START + 13)
+#define RID_SCDLG_INSCONT       (SC_DIALOGS_START + 14)
+#define RID_SCDLG_MOVETAB       (SC_DIALOGS_START + 15)
+#define RID_SCDLG_STRINPUT      (SC_DIALOGS_START + 16)
+#define RID_SCDLG_MTRINPUT      (SC_DIALOGS_START + 17)
+#define RID_SCDLG_SELENTRY      (SC_DIALOGS_START + 18)
+#define RID_SCDLG_FILLSERIES    (SC_DIALOGS_START + 19)
+#define RID_SCDLG_AUTOFORMAT    (SC_DIALOGS_START + 20)
+#define RID_SCDLG_GROUP         (SC_DIALOGS_START + 21)
+#define RID_SCDLG_NAMES         (SC_DIALOGS_START + 22)
+#define RID_SCDLG_DBNAMES       (SC_DIALOGS_START + 23)
+#define RID_SCDLG_PRINTOPTIONS  (SC_DIALOGS_START + 24)
+#define RID_SCPAGE_PRINTOPTIONS (SC_DIALOGS_START + 25)
+#define RID_SCDLG_SOLVER        (SC_DIALOGS_START + 26)
+#define RID_SCDLG_SUBTOTALS     (SC_DIALOGS_START + 27)
+#define RID_SUBTBASE            (SC_DIALOGS_START + 28)
+#define RID_SCPAGE_SUBT_OPTIONS (SC_DIALOGS_START + 29)
+#define RID_SCDLG_OPTIONS       (SC_DIALOGS_START + 30)
+#define RID_SCPAGE_USERLISTS    (SC_DIALOGS_START + 31)
+#define RID_SCDLG_PIVOTFILTER   (SC_DIALOGS_START + 33)
+#define RID_SCDLG_PIVOT_LAYOUT  (SC_DIALOGS_START + 34)
+#define RID_SCDLG_CONSOLIDATE   (SC_DIALOGS_START + 35)
+#define RID_SCTBXWND_SCENARIO   (SC_DIALOGS_START + 36)
+#define RID_SCDLG_FORMULATOR    (SC_DIALOGS_START + 37)
+#define RID_SCDLG_PIVOTSUBT     (SC_DIALOGS_START + 38)
+#define RID_SCDLG_NEWSCENARIO   (SC_DIALOGS_START + 39)
+#define RID_SCDLG_FORMULA       (SC_DIALOGS_START + 40)
+#define RID_SCDLG_ARGUMENTS     (SC_DIALOGS_START + 41)
+#define RID_SCDLG_INSERT_TABLE  (SC_DIALOGS_START + 42)
+#define RID_SCPAGE_TABLE        (SC_DIALOGS_START + 43)
+#define RID_SCPAGE_AREAS        (SC_DIALOGS_START + 44)
+#define RID_SCDLG_STYLES_START  (SC_DIALOGS_START + 45)
+#define RID_SCDLG_STYLES_CHAR   (SC_DIALOGS_START + 45)
+#define RID_SCDLG_STYLES_PAR    (SC_DIALOGS_START + 46)
+#define RID_SCDLG_STYLES_FRAME  (SC_DIALOGS_START + 47)
+#define RID_SCDLG_STYLES_PAGE   (SC_DIALOGS_START + 48)
+#define RID_SCDLG_STYLES_END    (SC_DIALOGS_START + 48)
+#define RID_HFBASE              (SC_DIALOGS_START + 49)
+#define RID_SCDLG_HFEDIT        (SC_DIALOGS_START + 50)
+#define RID_SCDLG_HFEDIT_ALL    (SC_DIALOGS_START + 51)
+#define RID_SCDLG_HFED_HEADER   (SC_DIALOGS_START + 52)
+#define RID_SCDLG_HFED_FOOTER   (SC_DIALOGS_START + 53)
+#define RID_SCBTN_HFEDIT        (SC_DIALOGS_START + 54)
+#define RID_SCPAGE_VIEW         (SC_DIALOGS_START + 55)
+#define RID_SCPAGE_CALC         (SC_DIALOGS_START + 56)
+#define RID_SCDLG_NAVIGATOR     (SC_DIALOGS_START + 57)
+#define RID_SCDLG_TABOP         (SC_DIALOGS_START + 58)
+#define RID_SCDLG_IMPORTOPT     (SC_DIALOGS_START + 59)
+#define RID_POPUP_ROWHEADER     (SC_DIALOGS_START + 60)
+#define RID_POPUP_COLHEADER     (SC_DIALOGS_START + 61)
+#define RID_SCDLG_HFEDIT_SHDR   (SC_DIALOGS_START + 62)
+#define RID_SCDLG_HFEDIT_SFTR   (SC_DIALOGS_START + 63)
+#define RID_SCDLG_HFEDIT_LEFTHEADER     (SC_DIALOGS_START + 64)
+#define RID_SCDLG_HFEDIT_RIGHTHEADER    (SC_DIALOGS_START + 65)
+#define RID_SCDLG_HFEDIT_LEFTFOOTER     (SC_DIALOGS_START + 66)
+#define RID_SCDLG_HFEDIT_RIGHTFOOTER    (SC_DIALOGS_START + 67)
+#define RID_SCDLG_HFEDIT_HEADER         (SC_DIALOGS_START + 68)
+#define RID_SCDLG_HFEDIT_FOOTER         (SC_DIALOGS_START + 69)
+#define RID_SCPAGE_PRINT                (SC_DIALOGS_START + 70)
+#define RID_SCDLG_COLORROW              (SC_DIALOGS_START + 71)
+#define RID_SCDLG_NAMES_PASTE           (SC_DIALOGS_START + 72)
+#define RID_SCDLG_NAMES_CREATE          (SC_DIALOGS_START + 73)
+#define RID_SCDLG_NAMES_APPLY           (SC_DIALOGS_START + 74) //NYI
+#define RID_SCDLG_TEAM                  (SC_DIALOGS_START + 75)
+
+#define RID_SCDLG_CHAR                  (SC_DIALOGS_START + 76)
+#define RID_SCDLG_PARAGRAPH             (SC_DIALOGS_START + 77)
+#define RID_SCDLG_CHARTRANGE            (SC_DIALOGS_START + 78)
+
+#define RID_SCPAGE_STAT                 (SC_DIALOGS_START + 79)
+#define RID_SCDLG_CHARTCOLROW           (SC_DIALOGS_START + 80)
+#define RID_SCDLG_AREAS                 (SC_DIALOGS_START + 81)
+
+#define RID_SCDLG_EDITCHAR              (SC_DIALOGS_START + 82)
+
+    //  Popup fuer Statusbar-Controller
+#define RID_POPUP_SUMCTL                (SC_DIALOGS_START + 83)
+#define RID_SUMCTL_SUM                  (SC_DIALOGS_START + 84)
+#define RID_SUMCTL_MIN                  (SC_DIALOGS_START + 85)
+#define RID_SUMCTL_MAX                  (SC_DIALOGS_START + 86)
+#define RID_SUMCTL_COUNT                (SC_DIALOGS_START + 87)
+#define RID_SUMCTL_COUNT2               (SC_DIALOGS_START + 88)
+#define RID_SUMCTL_AVG                  (SC_DIALOGS_START + 89)
+#define RID_SUMCTL_NONE                 (SC_DIALOGS_START + 90)
+
+#define RID_SCDLG_ASCII                 (SC_DIALOGS_START + 91)
+
+    //  Popup fuer Drop-Modus im Navigator
+#define RID_POPUP_DROPMODE              (SC_DIALOGS_START + 92)
+#define RID_DROPMODE_URL                (SC_DIALOGS_START + 93)
+#define RID_DROPMODE_LINK               (SC_DIALOGS_START + 94)
+#define RID_DROPMODE_COPY               (SC_DIALOGS_START + 95)
+#define RID_SCDLG_CONDFORMAT            (SC_DIALOGS_START + 96)
+
+#define RID_SCPAGE_SUBT_GROUP1          (SC_DIALOGS_START + 97)
+#define RID_SCPAGE_SUBT_GROUP2          (SC_DIALOGS_START + 98)
+#define RID_SCPAGE_SUBT_GROUP3          (SC_DIALOGS_START + 99)
+
+#define RID_SCPAGE_HFED_HL              (SC_DIALOGS_START + 100)
+#define RID_SCPAGE_HFED_HR              (SC_DIALOGS_START + 101)
+#define RID_SCPAGE_HFED_FL              (SC_DIALOGS_START + 102)
+#define RID_SCPAGE_HFED_FR              (SC_DIALOGS_START + 103)
+
+// Ableitungen von RID_SCDLG_MTRINPUT
+#define RID_SCDLG_COL_MAN               (SC_DIALOGS_START + 104)
+#define RID_SCDLG_COL_OPT               (SC_DIALOGS_START + 105)
+#define RID_SCDLG_ROW_MAN               (SC_DIALOGS_START + 106)
+#define RID_SCDLG_ROW_OPT               (SC_DIALOGS_START + 107)
+
+// Ableitungen von RID_SCDLG_SELENTRY
+#define RID_SCDLG_SELECTDB              (SC_DIALOGS_START + 108)
+#define RID_SCDLG_SHOW_TAB              (SC_DIALOGS_START + 109)
+
+// Ableitungen von RID_SCDLG_GROUP
+#define RID_SCDLG_GRP_MAKE              (SC_DIALOGS_START + 110)
+#define RID_SCDLG_GRP_KILL              (SC_DIALOGS_START + 111)
+
+#define RID_SCDLG_COLROWNAMERANGES      (SC_DIALOGS_START + 112)
+
+#define RID_SCPAGE_CONTENT              (SC_DIALOGS_START + 113)
+#define RID_SCPAGE_LAYOUT               (SC_DIALOGS_START + 114)
+#define RID_SCPAGE_INPUT                (SC_DIALOGS_START + 115)
+
+#define RID_SCTAB_PARAMETER             (SC_DIALOGS_START + 116)
+#define RID_SCTAB_FUNCTION              (SC_DIALOGS_START + 117)
+#define RID_SCTAB_STRUCT                (SC_DIALOGS_START + 118)
+
+#define RID_SCDLG_CHANGES               (SC_DIALOGS_START + 119)
+
+#define RID_POPUP_NAVIPI_SCENARIO       (SC_DIALOGS_START + 120)
+#define RID_NAVIPI_SCENARIO_DELETE      (SC_DIALOGS_START + 121)
+#define RID_NAVIPI_SCENARIO_EDIT        (SC_DIALOGS_START + 122)
+
+#define RID_SCDLG_HIGHLIGHT_CHANGES     (SC_DIALOGS_START + 123)
+#define RID_SCPAGE_OPREDLINE            (SC_DIALOGS_START + 124)
+
+#define RID_SCDLG_SIMPLEREF             (SC_DIALOGS_START + 125)
+#define WID_SIMPLE_REF                  (SC_DIALOGS_START + 126)
+#define RID_POPUP_CHANGES               (SC_DIALOGS_START + 127)
+#define RID_SCPAGE_OPTLOAD              (SC_DIALOGS_START + 128)
+
+#define RID_SCDLG_DAPITYPE              (SC_DIALOGS_START + 129)
+#define RID_SCDLG_DAPISERVICE           (SC_DIALOGS_START + 130)
+#define RID_SCDLG_DAPIDATA              (SC_DIALOGS_START + 131)
+
+#define SC_DIALOGS_END          (SC_DIALOGS_START + 150)
+
+#ifndef STD_MASKCOLOR
+#define STD_MASKCOLOR Color { Red=0xC000; Green=0xC000; Blue=0xC000; }
+#endif
+
+
+#endif
+
+

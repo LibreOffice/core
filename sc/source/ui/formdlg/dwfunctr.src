@@ -1,0 +1,600 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dwfunctr.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:44:57 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "sc.hrc"
+#include "dwfunctr.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // RID_SVXDLG_CALCFUNC --------------------------------------------------
+DockingWindow FID_FUNCTION_BOX
+{
+    Border = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Sizeable = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Dockable = TRUE ;
+    EnableResizing = TRUE ;
+    Size = MAP_APPFONT ( 130 , 160 ) ;
+    Text = "Funktionen" ;
+    Text [ ENGLISH ] = "Functions" ;
+    HelpId = HID_FUNCTION_BOX ;
+    ListBox CB_CAT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 20 , 4 ) ;
+        Size = MAP_APPFONT ( 56 , 80 ) ;
+        DropDown = TRUE ;
+        AutoSize = TRUE ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        AutoHScroll = TRUE ;
+        StringList =
+        {
+            < "Zuletzt verwendet" ; Default ; > ;
+            < "Alle" ; Default ; > ;
+            < "Datenbank" ; Default ; > ;
+            < "Datum&Zeit" ; Default ; > ;
+            < "Finanz" ; Default ; > ;
+            < "Information" ; Default ; > ;
+            < "Logisch" ; Default ; > ;
+            < "Mathematik" ; Default ; > ;
+            < "Matrix" ; Default ; > ;
+            < "Statistik" ; Default ; > ;
+            < "Tabelle" ; Default ; > ;
+            < "Text" ; Default ; > ;
+             // ### ACHTUNG: Neuer Eintrag in Liste? 13 : Add In
+            < "Add In" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Zuletzt verwendet" ; Default ; > ;
+            < "Alle" ; Default ; > ;
+            < "Datenbank" ; Default ; > ;
+            < "Datum&Zeit" ; Default ; > ;
+            < "Finanz" ; Default ; > ;
+            < "Information" ; Default ; > ;
+            < "Logisch" ; Default ; > ;
+            < "Mathematik" ; Default ; > ;
+            < "Matrix" ; Default ; > ;
+            < "Statistik" ; Default ; > ;
+            < "Tabelle" ; Default ; > ;
+            < "Text" ; Default ; > ;
+            < "Add In" ; Default ; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "Last used" ; Default ; > ;
+            < "All" ; Default ; > ;
+            < "Database" ; Default ; > ;
+            < "Date&Time" ; Default ; > ;
+            < "Financial" ; Default ; > ;
+            < "Information" ; Default ; > ;
+            < "Logical" ; Default ; > ;
+            < "Mathematical" ; Default ; > ;
+            < "Matrix" ; Default ; > ;
+            < "Statistical" ; Default ; > ;
+            < "Spreadsheet" ; Default ; > ;
+            < "Text" ; Default ; > ;
+            < "Add-In" ; Default ; > ;
+        };
+        StringList [ norwegian ] =
+        {
+            < "Zuletzt verwendet" ; Default ; > ;
+            < "Alle" ; Default ; > ;
+            < "Datenbank" ; Default ; > ;
+            < "Datum&Zeit" ; Default ; > ;
+            < "Finanz" ; Default ; > ;
+            < "Information" ; Default ; > ;
+            < "Logisch" ; Default ; > ;
+            < "Mathematik" ; Default ; > ;
+            < "Matrix" ; Default ; > ;
+            < "Statistik" ; Default ; > ;
+            < "Tabelle" ; Default ; > ;
+            < "Text" ; Default ; > ;
+            < "Add In" ; Default ; > ;
+        };
+        StringList [ italian ] =
+        {
+            < "Usate pi˘ di recente" ; Default ; > ;
+            < "Tutte" ; Default ; > ;
+            < "Database" ; Default ; > ;
+            < "Data&Orario" ; Default ; > ;
+            < "Finanziaria" ; Default ; > ;
+            < "Informazione" ; Default ; > ;
+            < "Logica" ; Default ; > ;
+            < "Matematica" ; Default ; > ;
+            < "Matrice" ; Default ; > ;
+            < "Statistica" ; Default ; > ;
+            < "Tabella" ; Default ; > ;
+            < "Testo" ; Default ; > ;
+            < "Add In" ; Default ; > ;
+             //         < "Definite dall'utente"; Default; >;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+            < "Zuletzt verwendet" ; Default ; > ;
+            < "Alle" ; Default ; > ;
+            < "Datenbank" ; Default ; > ;
+            < "Datum&Zeit" ; Default ; > ;
+            < "Finanz" ; Default ; > ;
+            < "Information" ; Default ; > ;
+            < "Logisch" ; Default ; > ;
+            < "Mathematik" ; Default ; > ;
+            < "Matrix" ; Default ; > ;
+            < "Statistik" ; Default ; > ;
+            < "Tabelle" ; Default ; > ;
+            < "Text" ; Default ; > ;
+            < "Add In" ; Default ; > ;
+             //         < "Definido pelo usu·rio"; Default; >;
+        };
+        StringList [ portuguese ] =
+        {
+            < "Usado por ˙ltimo" ; Default ; > ;
+            < "Tudo" ; Default ; > ;
+            < "Base de dados" ; Default ; > ;
+            < "Data & Hora" ; Default ; > ;
+            < "FinanÁas" ; Default ; > ;
+            < "InformaÁ„o" ; Default ; > ;
+            < "LÛgico" ; Default ; > ;
+            < "Matem·tico" ; Default ; > ;
+            < "Matriz" ; Default ; > ;
+            < "EstatÌstica" ; Default ; > ;
+            < "Folha de c·lculo" ; Default ; > ;
+            < "Texto" ; Default ; > ;
+            < "Adicionar" ; Default ; > ;
+             //         < "Definido pelo utilizador"; Default; >;
+        };
+        StringList [ finnish ] =
+        {
+            < "Zuletzt verwendet" ; Default ; > ;
+            < "Alle" ; Default ; > ;
+            < "Datenbank" ; Default ; > ;
+            < "Datum&Zeit" ; Default ; > ;
+            < "Finanz" ; Default ; > ;
+            < "Information" ; Default ; > ;
+            < "Logisch" ; Default ; > ;
+            < "Mathematik" ; Default ; > ;
+            < "Matrix" ; Default ; > ;
+            < "Statistik" ; Default ; > ;
+            < "Tabelle" ; Default ; > ;
+            < "Text" ; Default ; > ;
+            < "Add In" ; Default ; > ;
+             //         < "K‰ytt‰j‰n"; Default; >;
+        };
+        StringList [ danish ] =
+        {
+            < "Senest anvendt" ; Default ; > ;
+            < "Alle" ; Default ; > ;
+            < "Database" ; Default ; > ;
+            < "Dato og klokkeslÊt" ; Default ; > ;
+            < "Finans" ; Default ; > ;
+            < "Information" ; Default ; > ;
+            < "Logisk" ; Default ; > ;
+            < "Matematik" ; Default ; > ;
+            < "Matrix" ; Default ; > ;
+            < "Statistik" ; Default ; > ;
+            < "Regneark" ; Default ; > ;
+            < "Tekst" ; Default ; > ;
+            < "Add-In" ; Default ; > ;
+             //         < "Brugerdefineret"; Default; >;
+        };
+        StringList [ french ] =
+        {
+            < "Les derniËres utilisÈes" ; Default ; > ;
+            < "Toutes" ; Default ; > ;
+            < "Base de donnÈes" ; Default ; > ;
+            < "Date&Heure" ; Default ; > ;
+            < "Finances" ; Default ; > ;
+            < "Information" ; Default ; > ;
+            < "Logique" ; Default ; > ;
+            < "MathÈmatique" ; Default ; > ;
+            < "Matrice" ; Default ; > ;
+            < "Statistique" ; Default ; > ;
+            < "Classeur" ; Default ; > ;
+            < "Texte" ; Default ; > ;
+            < "Add-In" ; Default ; > ;
+             //         < "DÈfini par l'utilisateur"; Default; >;
+        };
+        StringList [ swedish ] =
+        {
+            < "Senast anv‰nd" ; Default ; > ;
+            < "Alla" ; Default ; > ;
+            < "Databas" ; Default ; > ;
+            < "Datum&Tid" ; Default ; > ;
+            < "Finans" ; Default ; > ;
+            < "Information" ; Default ; > ;
+            < "Logisk" ; Default ; > ;
+            < "Matematik" ; Default ; > ;
+            < "Matris" ; Default ; > ;
+            < "Statistik" ; Default ; > ;
+            < "Tabell" ; Default ; > ;
+            < "Text" ; Default ; > ;
+            < "Add-In" ; Default ; > ;
+             //         < "Anv‰ndardefinierad"; Default; >;
+        };
+        StringList [ dutch ] =
+        {
+            < "Als laatste gebruikt" ; Default ; > ;
+            < "Alle" ; Default ; > ;
+            < "Database" ; Default ; > ;
+            < "Datum&Tijd" ; Default ; > ;
+            < "Financieel" ; Default ; > ;
+            < "Informatie" ; Default ; > ;
+            < "Logisch" ; Default ; > ;
+            < "Wiskundig" ; Default ; > ;
+            < "Matrix" ; Default ; > ;
+            < "Statistiek" ; Default ; > ;
+            < "Werkblad" ; Default ; > ;
+            < "Tekst" ; Default ; > ;
+            < "Add In" ; Default ; > ;
+             //         < "Gebruiker-gedefinieerd"; Default; >;
+        };
+        StringList [ spanish ] =
+        {
+            < "⁄ltima utilizaciÛn" ; Default ; > ;
+            < "Todas" ; Default ; > ;
+            < "Base de datos" ; Default ; > ;
+            < "Fecha&Hora" ; Default ; > ;
+            < "Finanzas" ; Default ; > ;
+            < "InformaciÛn" ; Default ; > ;
+            < "LÛgico" ; Default ; > ;
+            < "Matem·ticas" ; Default ; > ;
+            < "Matriz" ; Default ; > ;
+            < "EstadÌstica" ; Default ; > ;
+            < "Hoja de c·lculo" ; Default ; > ;
+            < "Texto" ; Default ; > ;
+            < "Add In" ; Default ; > ;
+             //         < "Definido por el usuario"; Default; >;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "…œ“ª¥Œ π”√µƒ" ; Default ; > ;
+        < "»´≤ø" ; Default ; > ;
+        < " ˝æ›ø‚" ; Default ; > ;
+        < "»’∆⁄∫Õ ±º‰" ; Default ; > ;
+        < "≤∆ŒÒ" ; Default ; > ;
+        < "–≈œ¢" ; Default ; > ;
+        < "¬ﬂº≠" ; Default ; > ;
+        < " ˝—ß" ; Default ; > ;
+        < "æÿ’Û" ; Default ; > ;
+        < "Õ≥º∆" ; Default ; > ;
+        < "π§◊˜±Ì" ; Default ; > ;
+        < "Œƒ◊÷" ; Default ; > ;
+        < "Add In" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "œËÏÂÌÂÌÓ ÔÓÒÎÂ‰ÌËÏ" ; Default ; > ;
+        < "¬ÒÂ" ; Default ; > ;
+        < "¡‡Á‡ ‰‡ÌÌ˚ı" ; Default ; > ;
+        < "ƒ‡Ú‡ Ë ‚ÂÏˇ" ; Default ; > ;
+        < "‘ËÌ‡ÌÒÓ‚˚Â" ; Default ; > ;
+        < "»ÌÙÓÏ‡ˆËˇ" ; Default ; > ;
+        < "ÀÓ„Ë˜ÂÒÍËÂ" ; Default ; > ;
+        < "Ã‡ÚÂÏ‡ÚË˜ÂÒÍËÂ" ; Default ; > ;
+        < "Ã‡ÚËˆ‡" ; Default ; > ;
+        < "—Ú‡ÚËÒÚË˜ÂÒÍËÂ" ; Default ; > ;
+        < "“‡·ÎËˆ‡" ; Default ; > ;
+        < "“ÂÍÒÚ" ; Default ; > ;
+        < "Õ‡‰ÒÚÓÈÍ‡" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Ostatnio uøyte" ; Default ; > ;
+        < "Wszystkie" ; Default ; > ;
+        < "Baza danych" ; Default ; > ;
+        < "Data&Godzina" ; Default ; > ;
+        < "Finanse" ; Default ; > ;
+        < "Informacja" ; Default ; > ;
+        < "Logiczne" ; Default ; > ;
+        < "Matematyka" ; Default ; > ;
+        < "Macierz" ; Default ; > ;
+        < "Statystyka" ; Default ; > ;
+        < "Arkusz kalkulacyjny" ; Default ; > ;
+        < "Tekst" ; Default ; > ;
+        < "Dodatki" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "ç≈ãﬂégópÇµÇΩä÷êî" ; Default ; > ;
+        < "Ç∑Ç◊Çƒ" ; Default ; > ;
+        < "√ﬁ∞¿Õﬁ∞Ω" ; Default ; > ;
+        < "ì˙ït&éûçè" ; Default ; > ;
+        < "ç‡ñ±" ; Default ; > ;
+        < "èÓïÒ" ; Default ; > ;
+        < "ò_óù" ; Default ; > ;
+        < "êîäw" ; Default ; > ;
+        < "œƒÿ∏Ω" ; Default ; > ;
+        < "ìùåv" ; Default ; > ;
+        < "ï\\åvéZ" ; Default ; > ;
+        < "ï∂éö" ; Default ; > ;
+        < "±ƒﬁ≤›" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "§W§@¶∏®œ•Œ™∫" ; Default ; > ;
+        < "•˛≥°" ; Default ; > ;
+        < "∏ÍÆ∆Æw" ; Default ; > ;
+        < "§È¥¡©MÆ…∂°" ; Default ; > ;
+        < "∞]∞»" ; Default ; > ;
+        < "∏Í∞T" ; Default ; > ;
+        < "≈ﬁøË" ; Default ; > ;
+        < "º∆æ«" ; Default ; > ;
+        < "Øx∞}" ; Default ; > ;
+        < "≤Œ≠p" ; Default ; > ;
+        < "§uß@™Ì" ; Default ; > ;
+        < "§Â¶r" ; Default ; > ;
+        < "Add-In" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "ﬁ«∆„… «·œ«·«  «·„” Œœ„… √ŒÌ—«" ; Default ; > ;
+        < "«·ﬂ·" ; Default ; > ;
+        < "ﬁ«⁄œ… «·»Ì«‰« " ; Default ; > ;
+        < "«· «—ÌŒ Ê«·Êﬁ " ; Default ; > ;
+        < "„«·Ì…" ; Default ; > ;
+        < "„⁄·Ê„…" ; Default ; > ;
+        < "„‰ÿﬁÌ…" ; Default ; > ;
+        < "—Ì«÷Ì« " ; Default ; > ;
+        < "„’›Ê›…" ; Default ; > ;
+        < "≈Õ’«¡" ; Default ; > ;
+        < "ÃœÊ·" ; Default ; > ;
+        < "‰’" ; Default ; > ;
+        < "≈÷«›…" ; Default ; > ;
+    };
+    StringList [ dutch ] =
+    {
+            < "Als laatste gebruikt" ; Default ; > ;
+        < "Alle" ; Default ; > ;
+        < "Database" ; Default ; > ;
+        < "Datum&Tijd" ; Default ; > ;
+        < "Financieel" ; Default ; > ;
+        < "Informatie" ; Default ; > ;
+        < "Logisch" ; Default ; > ;
+        < "Wiskundig" ; Default ; > ;
+        < "Matrix" ; Default ; > ;
+        < "Statistiek" ; Default ; > ;
+        < "Werkblad" ; Default ; > ;
+        < "Tekst" ; Default ; > ;
+        < "Add In" ; Default ; > ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+            < "…œ“ª¥Œ π”√µƒ" ; Default ; > ;
+        < "»´≤ø" ; Default ; > ;
+        < " ˝æ›ø‚" ; Default ; > ;
+        < "»’∆⁄∫Õ ±º‰" ; Default ; > ;
+        < "≤∆ŒÒ" ; Default ; > ;
+        < "–≈œ¢" ; Default ; > ;
+        < "¬ﬂº≠" ; Default ; > ;
+        < " ˝—ß" ; Default ; > ;
+        < "æÿ’Û" ; Default ; > ;
+        < "Õ≥º∆" ; Default ; > ;
+        < "π§◊˜±Ì" ; Default ; > ;
+        < "Œƒ◊÷" ; Default ; > ;
+        < "Add In" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "‘ÂÎÂıÙ·ﬂ· ˜ÒÁÛÈÏÔÔÈÁÏ›ÌÔ" ; Default ; > ;
+        < "ºÎ·" ; Default ; > ;
+        < "¬‹ÛÁ ‰Â‰ÔÏ›Ì˘Ì" ; Default ; > ;
+        < "«ÏÂÒÔÏÁÌﬂ· Í·È øÒ·" ; Default ; > ;
+        < "œÈÍÔÌÔÏÈÍ‹" ; Default ; > ;
+        < "–ÎÁÒÔˆÔÒﬂÂÚ" ; Default ; > ;
+        < "ÀÔ„ÈÍ‹" ; Default ; > ;
+        < "Ã·ËÁÏ·ÙÈÍ‹" ; Default ; > ;
+        < "ÃﬁÙÒ·" ; Default ; > ;
+        < "”Ù·ÙÈÛÙÈÍ‹" ; Default ; > ;
+        < "–ﬂÌ·Í·Ú" ; Default ; > ;
+        < " ÂﬂÏÂÌÔ" ; Default ; > ;
+        < "–ÒÔÛËﬁÍÁ" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "∏∂¡ˆ∏∑ ªÁøÎ" ; Default ; > ;
+        < "¿¸√º" ; Default ; > ;
+        < "µ•¿Ã≈Õ∫£¿ÃΩ∫" ; Default ; > ;
+        < "¿œ¿⁄&Ω√∞£" ; Default ; > ;
+        < "»∏∞Ë¿«" ; Default ; > ;
+        < "¡§∫∏" ; Default ; > ;
+        < "≥Ì∏Æ¿˚¿Œ" ; Default ; > ;
+        < "ºˆ«–¿˚¿Œ" ; Default ; > ;
+        < "«‡∑ƒ" ; Default ; > ;
+        < "≈Î∞Ë" ; Default ; > ;
+        < "Ω∫«¡∑πµÂ Ω√∆Æ" ; Default ; > ;
+        < "≈ÿΩ∫∆Æ" ; Default ; > ;
+        < "√ﬂ∞°" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "Son kullan˝m" ; Default ; > ;
+        < "T¸m¸" ; Default ; > ;
+        < "Vertaban˝" ; Default ; > ;
+        < "Tarih&Saat" ; Default ; > ;
+        < "Finans" ; Default ; > ;
+        < "Bilgi" ; Default ; > ;
+        < "Mant˝k" ; Default ; > ;
+        < "Matematik" ; Default ; > ;
+        < "Matris" ; Default ; > ;
+        < "›statistik" ; Default ; > ;
+        < "Tablo" ; Default ; > ;
+        < "Metin" ; Default ; > ;
+        < "Ekle" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+    };
+    };
+    ListBox DDLB_FUNC
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 4 ) ;
+        Size = MAP_APPFONT ( 56 , 80 ) ;
+        Hide = TRUE ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        AutoHScroll = TRUE ;
+    };
+    ListBox LB_FUNC
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 19 ) ;
+        Size = MAP_APPFONT ( 72 , 90 ) ;
+        TabStop = TRUE ;
+        AutoHScroll = TRUE ;
+    };
+    FixedText FI_FUNCDESC
+    {
+        WordBreak = TRUE ;
+        Border = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 115 ) ;
+        Size = MAP_APPFONT ( 72 , 40 ) ;
+    };
+    Control FT_SPLIT
+    {
+        Pos = MAP_APPFONT ( 3 , 110 ) ;
+        Size = MAP_APPFONT ( 72 , 3 ) ;
+    };
+    ImageButton IMB_INSERT
+    {
+        Pos = MAP_APPFONT ( 3 , 4 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "fx.bmp" ;
+            };
+
+            MaskColor = Color
+            {
+                Red = 0xC000 ;
+                Green = 0xC000 ;
+                Blue = 0xC000 ;
+            };
+
+        };
+        DefButton = TRUE ;
+        QuickHelpText = "Funktion in Rechenblatt einf¸gen" ;
+        QuickHelpText [ English ] = "Insert function into the spreedsheet." ;
+        QuickHelpText [ english_us ] = "Insert Function into calculation sheet" ;
+        QuickHelpText [ portuguese_brazilian ] = "Funktion in Rechenblatt einf¸gen" ;
+        QuickHelpText [ swedish ] = "Infoga funktion i ber‰kningsark" ;
+        QuickHelpText [ danish ] = "IndsÊt funktion i regneark" ;
+        QuickHelpText [ italian ] = "Inserisci funzione nel foglio di calcolo" ;
+        QuickHelpText [ spanish ] = "Insertar la funciÛn en la hoja de c·lculo" ;
+        QuickHelpText [ french ] = "InsÈrer une fonction dans la feuille de calcul" ;
+        QuickHelpText [ dutch ] = "Functie invoegen in werkblad" ;
+        QuickHelpText [ portuguese ] = "Insere funÁ„o na folha de c·lculo" ;
+    QuickHelpText[ russian ] = "¬ÒÚ‡‚ËÚ¸ ÙÛÌÍˆË˛ ‚ ÎËÒÚ";
+        QuickHelpText[ polish ] = "Wstaw funkcjÍ do arkusza";
+        QuickHelpText[ japanese ] = "ï\\Ç…ä÷êîÇë}ì¸";
+        QuickHelpText[ chinese_simplified ] = "≤Â»Î∫Ø ˝";
+        QuickHelpText[ chinese_traditional ] = "¥°§J®Áº∆";
+        QuickHelpText[ arabic ] = "≈œ—«Ã œ«·…";
+        QuickHelpText[ dutch ] = "Functie invoegen in werkblad";
+        QuickHelpText[ chinese_simplified ] = "≤Â»Î∫Ø ˝";
+        QuickHelpText[ greek ] = "≈ÈÛ·„˘„ﬁ ÛıÌ‹ÒÙÁÛÁÚ ÛÂ ıÔÎÔ„ÈÛÙÈÍ¸ ˆ˝ÎÎÔ";
+        QuickHelpText[ korean ] = "Insert Function";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    Text [ english_us ] = "Functions" ;
+    Text [ portuguese_brazilian ] = "Funktionen" ;
+    Text [ swedish ] = "Funktioner" ;
+    Text [ danish ] = "Funktioner" ;
+    Text [ italian ] = "Funzioni" ;
+    Text [ spanish ] = "Funciones" ;
+    Text [ french ] = "Fonctions" ;
+    Text [ dutch ] = "Functies" ;
+    Text [ portuguese ] = "FunÁıes" ;
+    Text[ chinese_simplified ] = "∫Ø ˝";
+    Text[ russian ] = "‘ÛÌÍˆËË";
+    Text[ polish ] = "Funkcje";
+    Text[ japanese ] = "ä÷êî";
+    Text[ chinese_traditional ] = "®Áº∆";
+    Text[ arabic ] = "«·œ«·« ";
+    Text[ dutch ] = "Functies";
+    Text[ chinese_simplified ] = "∫Ø ˝";
+    Text[ greek ] = "”ıÌ·ÒÙﬁÛÂÈÚ";
+    Text[ korean ] = "«‘ºˆ";
+    Text[ turkish ] = "Fonksiyon";
+    Text[ language_user1 ] = " ";
+};
+ // ********************************************************************** EOF

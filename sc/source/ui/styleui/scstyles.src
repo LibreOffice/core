@@ -1,0 +1,144 @@
+/*************************************************************************
+ *
+ *  $RCSfile: scstyles.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:06 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "sc.hrc"
+#include <svtools/style.hrc>
+#define IMPL_FAMILY(family,bmp,filter) \
+    StyleFamily = family;                       \
+    StyleImage = Image                          \
+    {                                           \
+       ImageBitmap = Bitmap { File = bmp; };    \
+       MaskColor   = STD_MASKCOLOR;             \
+    };                                          \
+    FilterList = { filter }
+
+ //------------------------------------------------------------------------
+SfxStyleFamilies DLG_STYLE_DESIGNER
+{
+    StyleFamilyList =
+    {
+        SfxStyleFamilyItem
+        {
+            IMPL_FAMILY ( SFX_STYLE_FAMILY_PARA ,
+            "scstlcel.bmp" ,
+            < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
+            < STR_STYLE_FILTER_USED ; SFXSTYLEBIT_USED ; > ;
+            < STR_STYLE_FILTER_USERDEF ; SFXSTYLEBIT_USERDEF ; > ; ) ;
+            Text = "Zellvorlagen" ;
+            Text [ ENGLISH ] = "Cell Styles" ;
+            Text [ norwegian ] = "Celletyper" ;
+            Text [ italian ] = "Modelli di cella" ;
+            Text [ portuguese_brazilian ] = "Estilos da Célula" ;
+            Text [ portuguese ] = "Estilos de células" ;
+            Text [ finnish ] = "Solutyylit" ;
+            Text [ danish ] = "Celletypografier" ;
+            Text [ french ] = "Styles de cellule" ;
+            Text [ swedish ] = "Cellformatmallar" ;
+            Text [ dutch ] = "Celopmaakprofielen" ;
+            Text [ spanish ] = "Estilos de celda" ;
+            Text [ english_us ] = "Cell Styles" ;
+            Text[ chinese_simplified ] = "µ¥Ôª¸ñÑùÊ½";
+            Text[ russian ] = "Ñòèëè ÿ÷åéêè";
+                Text[ polish ] = "Style komórki";
+                Text[ japanese ] = "¾Ù½À²Ù";
+                Text[ chinese_traditional ] = "Àx¦s®æ¼Ë¦¡";
+                Text[ arabic ] = "ÃäãÇØ ÇáÎáÇíÇ";
+                Text[ dutch ] = "Celopmaakprofielen";
+                Text[ chinese_simplified ] = "µ¥Ôª¸ñÑùÊ½";
+                Text[ greek ] = "Óôõë êåëéïý";
+                Text[ korean ] = "¼¿ À¯Çü";
+                Text[ turkish ] = "Hücre biçimi";
+                Text[ language_user1 ] = " ";
+            };
+        SfxStyleFamilyItem
+        {
+            IMPL_FAMILY ( SFX_STYLE_FAMILY_PAGE ,
+            "catpag.bmp" ,
+            < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
+            < STR_STYLE_FILTER_USERDEF ; SFXSTYLEBIT_USERDEF ; > ; ) ;
+            Text = "Seitenvorlagen" ;
+            Text [ ENGLISH ] = "Page Styles" ;
+            Text [ norwegian ] = "Sidetyper" ;
+            Text [ italian ] = "Modelli di pagina" ;
+            Text [ portuguese_brazilian ] = "Estilos da Página" ;
+            Text [ portuguese ] = "Estilos de página" ;
+            Text [ finnish ] = "Sivutyylit" ;
+            Text [ danish ] = "Sidetypografier" ;
+            Text [ french ] = "Styles de page" ;
+            Text [ swedish ] = "Sidformatmallar" ;
+            Text [ dutch ] = "Pagina-opmaakprofielen" ;
+            Text [ spanish ] = "Estilos de página" ;
+            Text [ english_us ] = "Page Styles" ;
+            Text[ chinese_simplified ] = "Ò³ÃæÑùÊ½";
+            Text[ russian ] = "Ñòèëè ñòðàíèöû";
+                Text[ polish ] = "Style strony";
+                Text[ japanese ] = "Íß°¼Þ½À²Ù";
+                Text[ chinese_traditional ] = "­¶­±¼Ë¦¡";
+                Text[ arabic ] = "ÃäãÇØ ÕÝÍÉ";
+                Text[ dutch ] = "Pagina-opmaakprofielen";
+                Text[ chinese_simplified ] = "Ò³ÃæÑùÊ½";
+                Text[ greek ] = "Ðñüôõðá óåëßäáò";
+                Text[ korean ] = "ÆäÀÌÁö À¯Çü";
+                Text[ turkish ] = "Sayfa biçimi";
+                Text[ language_user1 ] = " ";
+            };
+    };
+};

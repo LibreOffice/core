@@ -1,0 +1,1606 @@
+/*************************************************************************
+ *
+ *  $RCSfile: condfrmt.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:04 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "condfrmt.hrc"
+ModelessDialog RID_SCDLG_CONDFORMAT
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 163 ) ;
+    Text = "Bedingte Formatierung" ;
+    Text [ ENGLISH ] = "Conditional format" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    HelpId = HID_SCDLG_CONDFORMAT ;
+    Hide = TRUE ;
+    CheckBox CBX_COND1
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "Bedingung 1" ;
+        Text [ ENGLISH ] = "Condition 1" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Condition 1" ;
+        Text [ italian ] = "Condizione 1" ;
+        Text [ spanish ] = "CondiciÛn 1" ;
+        Text [ french ] = "Condition 1" ;
+        Text [ dutch ] = "Voorwaarde 1" ;
+        Text [ swedish ] = "Villkor 1" ;
+        Text [ danish ] = "Betingelse 1" ;
+        Text [ portuguese_brazilian ] = "Bedingung 1" ;
+        Text [ portuguese ] = "CondiÁ„o 1" ;
+        Text[ chinese_simplified ] = "Ãıº˛ 1";
+        Text[ russian ] = "”ÒÎÓ‚ËÂ 1";
+        Text[ polish ] = "Warunek 1";
+        Text[ japanese ] = "èåè1";
+        Text[ chinese_traditional ] = "±¯•Û 1";
+        Text[ arabic ] = "«·‘—ÿ 1";
+        Text[ greek ] = "”ıÌËﬁÍÁ 1";
+        Text[ korean ] = "¡∂∞« 1";
+        Text[ turkish ] = "Ko˛ul 1";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_COND1_1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 18 ) ;
+        Size = MAP_APPFONT ( 48 , 40 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Zellwert ist" ; Default ; > ;
+            < "Formel ist" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Zellwert ist" ; Default ; > ;
+            < "Formel ist" ; Default ; > ;
+        };
+        stringlist [ portuguese ] =
+        {
+            < "Valor da cÈlula È" ; Default ; > ;
+            < "FÛrmula È" ; Default ; > ;
+        };
+        stringlist [ english_us ] =
+        {
+            < "Cell value is" ; Default ; > ;
+            < "Formula is" ; Default ; > ;
+        };
+        stringlist [ portuguese_brazilian ] =
+        {
+            < "Zellwert ist" ; Default ; > ;
+            < "Formel ist" ; Default ; > ;
+        };
+        stringlist [ swedish ] =
+        {
+            < "Cellv‰rdet ‰r" ; Default ; > ;
+            < "Formeln ‰r" ; Default ; > ;
+        };
+        stringlist [ danish ] =
+        {
+            < "CellevÊrdien er" ; Default ; > ;
+            < "Formlen er" ; Default ; > ;
+        };
+        stringlist [ italian ] =
+        {
+            < "Il valore della cella Ë" ; Default ; > ;
+            < "La formula Ë" ; Default ; > ;
+        };
+        stringlist [ spanish ] =
+        {
+            < "El valor de la celda es" ; Default ; > ;
+            < "La fÛrmula es" ; Default ; > ;
+        };
+        stringlist [ french ] =
+        {
+            < "Valeur est" ; Default ; > ;
+            < "Formule est" ; Default ; > ;
+        };
+        stringlist [ dutch ] =
+        {
+            < "Celwaarde is" ; Default ; > ;
+            < "Formule is" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "µ•‘™∏Ò ˝÷µ «" ; Default ; > ;
+        < "π´ Ω «" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "«Ì‡˜ÂÌËÂ ˇ˜ÂÈÍË" ; Default ; > ;
+        < "‘ÓÏÛÎ‡" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Wart. kom. jest" ; Default ; > ;
+        < "Formu≥a jest" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "æŸÇÃílÇ™" ; Default ; > ;
+        < "êîéÆÇ™" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "¿x¶sÆÊº∆≠»¨O" ; Default ; > ;
+        < "§Ω¶°¨O" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "ﬁÌ„… «·Œ·Ì…" ; Default ; > ;
+        < "«·’Ì€…" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "« ÙÈÏﬁ ÙÔı ÍÂÎÈÔ˝ ÂﬂÌ·È" ; Default ; > ;
+        < "œ Ù˝ÔÚ ÂﬂÌ·È" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "ºø ∞™¿∫" ; Default ; > ;
+        < "ºˆΩƒ¿∫" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        };
+    StringList [ turkish ] =
+    {
+            < "H¸cre deeri" ; Default ; > ;
+        < "Form¸l" ; Default ; > ;
+    };
+    };
+    ListBox LB_COND1_2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 57 , 18 ) ;
+        Size = MAP_APPFONT ( 62 , 88 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "gleich" ; Default ; > ;
+            < "kleiner als" ; Default ; > ;
+            /* ### ACHTUNG: Neuer Eintrag in Liste? 3 : grˆﬂer als*/
+            < "grˆﬂer als" ; Default ; > ;
+            < "kleiner oder gleich" ; Default ; > ;
+            /* ### ACHTUNG: Neuer Eintrag in Liste? 5 : grˆﬂer oder gleich*/
+            < "grˆﬂer oder gleich" ; Default ; > ;
+            < "ungleich" ; Default ; > ;
+            < "zwischen" ; Default ; > ;
+            < "nicht zwischen" ; Default ; > ;
+        };
+        stringlist [ portuguese ] =
+        {
+            < "igual" ; Default ; > ;
+            < "menor" ; Default ; > ;
+            < "maior" ; Default ; > ;
+            < "menor ou igual a" ; Default ; > ;
+            < "maior ou igual a" ; Default ; > ;
+            < "desigual" ; Default ; > ;
+            < "entre" ; Default ; > ;
+            < "n„o entre" ; Default ; > ;
+        };
+        stringlist [ english_us ] =
+        {
+            < "equal to" ; Default ; > ;
+            < "less than" ; Default ; > ;
+            < "greater than" ; Default ; > ;
+            < "less than or equal to" ; Default ; > ;
+            < "greater than or equal to" ; Default ; > ;
+            < "not equal to" ; Default ; > ;
+            < "between" ; Default ; > ;
+            < "not between" ; Default ; > ;
+        };
+        stringlist [ portuguese_brazilian ] =
+        {
+            < "gleich" ; Default ; > ;
+            < "kleiner als" ; Default ; > ;
+            < "grˆﬂer als" ; Default ; > ;
+            < "kleiner oder gleich" ; Default ; > ;
+            < "grˆﬂer oder gleich" ; Default ; > ;
+            < "ungleich" ; Default ; > ;
+            < "zwischen" ; Default ; > ;
+            < "nicht zwischen" ; Default ; > ;
+        };
+        stringlist [ swedish ] =
+        {
+            < "lika med" ; Default ; > ;
+            < "mindre ‰n" ; Default ; > ;
+            < "stˆrre ‰n" ; Default ; > ;
+            < "mindre ‰n eller lika med" ; Default ; > ;
+            < "stˆrre ‰n eller lika med" ; Default ; > ;
+            < "inte lika med" ; Default ; > ;
+            < "mellan" ; Default ; > ;
+            < "inte mellan" ; Default ; > ;
+        };
+        stringlist [ danish ] =
+        {
+            < "lig med" ; Default ; > ;
+            < "mindre end" ; Default ; > ;
+            < "st¯rre end" ; Default ; > ;
+            < "mindre end eller lig med" ; Default ; > ;
+            < "st¯rre end eller lig med" ; Default ; > ;
+            < "forskellig fra" ; Default ; > ;
+            < "mellem" ; Default ; > ;
+            < "ikke mellem" ; Default ; > ;
+        };
+        stringlist [ italian ] =
+        {
+            < "uguale" ; Default ; > ;
+            < "minore di" ; Default ; > ;
+            < "maggiore di" ; Default ; > ;
+            < "minore o uguale" ; Default ; > ;
+            < "maggiore o uguale" ; Default ; > ;
+            < "non uguale" ; Default ; > ;
+            < "tra" ; Default ; > ;
+            < "non tra" ; Default ; > ;
+        };
+        stringlist [ spanish ] =
+        {
+            < "igual" ; Default ; > ;
+            < "menor que" ; Default ; > ;
+            < "mayor que" ; Default ; > ;
+            < "menor o igual" ; Default ; > ;
+            < "mayor o igual" ; Default ; > ;
+            < "distinta de" ; Default ; > ;
+            < "entre" ; Default ; > ;
+            < "no entre" ; Default ; > ;
+        };
+        stringlist [ french ] =
+        {
+            < "Ègale ‡" ; Default ; > ;
+            < "infÈrieure ‡" ; Default ; > ;
+            < "supÈrieure ‡" ; Default ; > ;
+            < "infÈrieure ou Ègale ‡" ; Default ; > ;
+            < "supÈrieure ou Ègale ‡" ; Default ; > ;
+            < "diffÈrente de" ; Default ; > ;
+            < "comprise entre" ; Default ; > ;
+            < "non comprise entre" ; Default ; > ;
+        };
+        stringlist [ dutch ] =
+        {
+            < "gelijk aan" ; Default ; > ;
+            < "kleiner dan" ; Default ; > ;
+            < "groter dan" ; Default ; > ;
+            < "kleiner dan  of gelijk aan" ; Default ; > ;
+            < "groter dan of gelijk aan" ; Default ; > ;
+            < "niet gelijk aan" ; Default ; > ;
+            < "tussen" ; Default ; > ;
+            < "niet tussen" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "µ»”⁄" ; Default ; > ;
+        < "–°”⁄" ; Default ; > ;
+        < "¥Û”⁄" ; Default ; > ;
+        < "–°”⁄ªÚµ»”⁄" ; Default ; > ;
+        < "¥Û”⁄ªÚµ»”⁄" ; Default ; > ;
+        < "≤ªµ»”⁄" ; Default ; > ;
+        < "‘⁄÷Æº‰" ; Default ; > ;
+        < "≤ª‘⁄÷Æº‰" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "‡‚ÌÓ" ; Default ; > ;
+        < "ÏÂÌ¸¯Â ˜ÂÏ" ; Default ; > ;
+        < "·ÓÎ¸¯Â ˜ÂÏ" ; Default ; > ;
+        < "ÏÂÌ¸¯Â ËÎË ‡‚ÌÓ" ; Default ; > ;
+        < "·ÓÎ¸¯Â ËÎË ‡‚ÌÓ" ; Default ; > ;
+        < "ÌÂ‡‚ÌÓ" ; Default ; > ;
+        < "ÏÂÊ‰Û" ; Default ; > ;
+        < "‚ÌÂ" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "rÛwna" ; Default ; > ;
+        < "mniejsza niø" ; Default ; > ;
+        < "wiÍksza niø" ; Default ; > ;
+        < "mniejsza niø lub rÛwna" ; Default ; > ;
+        < "wiÍksza niø lub rÛwna" ; Default ; > ;
+        < "nierÛwna" ; Default ; > ;
+        < "miÍdzy" ; Default ; > ;
+        < "nie miÍdzy" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "éüÇÃílÇ…ìôÇµÇ¢" ; Default ; > ;
+        < "éüÇÃílÇÊÇËè¨Ç≥Ç¢" ; Default ; > ;
+        < "éüÇÃílÇÊÇËëÂÇ´Ç¢" ; Default ; > ;
+        < "éüÇÃílà»â∫" ; Default ; > ;
+        < "éüÇÃílà»è„" ; Default ; > ;
+        < "éüÇÃílÇ…ìôÇµÇ≠Ç»Ç¢" ; Default ; > ;
+        < "éüÇÃílÇÃä‘" ; Default ; > ;
+        < "éüÇÃílÇÃä‘Ç≈Ç»Ç¢" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "µ•©Û" ; Default ; > ;
+        < "§p©Û" ; Default ; > ;
+        < "§j©Û" ; Default ; > ;
+        < "§p©Û©Œµ•©Û" ; Default ; > ;
+        < "§j©Û©Œµ•©Û" ; Default ; > ;
+        < "§£µ•©Û" ; Default ; > ;
+        < "¶b§ß∂°" ; Default ; > ;
+        < "§£¶b§ß∂°" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "Ì”«ÊÌ" ; Default ; > ;
+        < "√ﬁ· „‰" ; Default ; > ;
+        < "√ﬂ»— „‰" ; Default ; > ;
+        < "√’€— „‰ √Ê Ì”«ÊÌ" ; Default ; > ;
+        < "√ﬂ»— „‰ √Ê Ì”«ÊÌ" ; Default ; > ;
+        < "·« Ì”«ÊÌ" ; Default ; > ;
+        < "»Ì‰" ; Default ; > ;
+        < "·Ì”  »Ì‰" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "∫ÛÔÌ" ; Default ; > ;
+        < "ÏÈÍÒ¸ÙÂÒÔÚ ·¸" ; Default ; > ;
+        < "ÏÂ„·Î˝ÙÂÒÔÚ ·¸" ; Default ; > ;
+        < "ÏÈÍÒ¸ÙÂÒÔ ﬁ ﬂÛÔ ÏÂ" ; Default ; > ;
+        < "ÏÂ„·Î˝ÙÂÒÔ ﬁ ﬂÛÔ ÏÂ" ; Default ; > ;
+        < "ƒÈ‹ˆÔÒÔ" ; Default ; > ;
+        < "ÏÂÙ·Ó˝" ; Default ; > ;
+        < "¸˜È ÏÂÙ·Ó˝" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "¥Ÿ¿Ω∞˙ ∞∞¿Ω" ; Default ; > ;
+        < "¥Ÿ¿Ω¿« πÃ∏∏¿”" ; Default ; > ;
+        < "¥Ÿ¿Ω¿« √ ∞˙¿”" ; Default ; > ;
+        < "¥Ÿ¿Ω¿« ¿Ã«œ¿”" ; Default ; > ;
+        < "¥Ÿ¿Ω¿« ¿ÃªÛ¿”" ; Default ; > ;
+        < "¥Ÿ¿Ω∞˙ ∞∞¡ˆ æ ¿Ω" ; Default ; > ;
+        < "¥Ÿ¿Ω¿« ªÁ¿Ã¿”" ; Default ; > ;
+        < "π€¿«" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "e˛ittir" ; Default ; > ;
+        < "k¸Á¸kt¸r" ; Default ; > ;
+        < "b¸y¸kt¸r" ; Default ; > ;
+        < "k¸Á¸k ya da e˛ittir" ; Default ; > ;
+        < "b¸y¸k ya da e˛ittir" ; Default ; > ;
+        < "e˛it deildir" ; Default ; > ;
+        < "˛u aral˝kta" ; Default ; > ;
+        < "˛u aral˝kta deil" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+    };
+    };
+    Edit EDT_COND1_1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 122 , 18 ) ;
+        Size = MAP_APPFONT ( 41 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton RB_COND1_1
+    {
+        QuickHelpText = "Verkleinern" ;
+        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        Pos = MAP_APPFONT ( 165 , 18 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ english_us ] = "Shrink" ;
+        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ swedish ] = "Fˆrminska" ;
+        QuickHelpText [ danish ] = "Formindsk" ;
+        QuickHelpText [ italian ] = "Zoom indietro" ;
+        QuickHelpText [ spanish ] = "Reducir" ;
+        QuickHelpText [ french ] = "RÈduire" ;
+        QuickHelpText [ dutch ] = "Verkleinen" ;
+        QuickHelpText [ portuguese ] = "Afastar" ;
+    QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "èkè¨";
+        QuickHelpText[ chinese_simplified ] = "Àı–°";
+        QuickHelpText[ chinese_traditional ] = "¡Y§p";
+        QuickHelpText[ arabic ] = " ’€Ì—";
+        QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
+        QuickHelpText[ korean ] = "Minimize";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    FixedText FT_COND1_AND
+    {
+        Pos = MAP_APPFONT ( 182 , 20 ) ;
+        Size = MAP_APPFONT ( 16 , 10 ) ;
+        Text = "und" ;
+        Text [ ENGLISH ] = "and" ;
+        Text [ english_us ] = "and" ;
+        Text [ italian ] = "e" ;
+        Text [ spanish ] = "y" ;
+        Text [ french ] = "et" ;
+        Text [ dutch ] = "en" ;
+        Text [ swedish ] = "och" ;
+        Text [ danish ] = "og" ;
+        Text [ portuguese_brazilian ] = "und" ;
+        Text [ portuguese ] = "e" ;
+        Text[ chinese_simplified ] = "∫Õ";
+        Text[ russian ] = "Ë";
+        Text[ polish ] = "i";
+        Text[ japanese ] = "ÇªÇµÇƒ";
+        Text[ chinese_traditional ] = "©M";
+        Text[ arabic ] = "Ê";
+        Text[ greek ] = "Í·È";
+        Text[ korean ] = "øÕ";
+        Text[ turkish ] = "ve";
+        Text[ language_user1 ] = " ";
+    };
+    Edit EDT_COND1_2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 200 , 18 ) ;
+        Size = MAP_APPFONT ( 41 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton RB_COND1_2
+    {
+        QuickHelpText = "Verkleinern" ;
+        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        Pos = MAP_APPFONT ( 243 , 18 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ english_us ] = "Shrink" ;
+        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ swedish ] = "Fˆrminska" ;
+        QuickHelpText [ danish ] = "Formindsk" ;
+        QuickHelpText [ italian ] = "Zoom indietro" ;
+        QuickHelpText [ spanish ] = "Reducir" ;
+        QuickHelpText [ french ] = "RÈduire" ;
+        QuickHelpText [ dutch ] = "Verkleinen" ;
+        QuickHelpText [ portuguese ] = "Afastar" ;
+    QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "èkè¨";
+        QuickHelpText[ chinese_simplified ] = "Àı–°";
+        QuickHelpText[ chinese_traditional ] = "¡Y§p";
+        QuickHelpText[ arabic ] = " ’€Ì—";
+        QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
+        QuickHelpText[ korean ] = "Minimize";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    FixedText FT_COND1_TEMPLATE
+    {
+        Pos = MAP_APPFONT ( 12 , 36 ) ;
+        Size = MAP_APPFONT ( 42 , 10 ) ;
+        Text = "Zellvorlage" ;
+        Text [ ENGLISH ] = "Cell template" ;
+        Text [ english_us ] = "Cell Style" ;
+        Text [ italian ] = "Modello di cella" ;
+        Text [ spanish ] = "Estilo de celda" ;
+        Text [ french ] = "Style de cellule" ;
+        Text [ dutch ] = "Celopmaak" ;
+        Text [ swedish ] = "Cellformatmall" ;
+        Text [ danish ] = "Celletypografi" ;
+        Text [ portuguese_brazilian ] = "Zellvorlage" ;
+        Text [ portuguese ] = "Estilo da cÈlula" ;
+        Text[ chinese_simplified ] = "µ•‘™∏Ò—˘ Ω";
+        Text[ russian ] = "—ÚËÎ¸ ˇ˜ÂÈÍË";
+        Text[ polish ] = "Styl komÛrki";
+        Text[ japanese ] = "æŸÇÃΩ¿≤Ÿ";
+        Text[ chinese_traditional ] = "¿x¶sÆÊºÀ¶°";
+        Text[ arabic ] = "‰„ÿ Œ·Ì…";
+        Text[ greek ] = "”ÙıÎ ÍÂÎÈÔ˝";
+        Text[ korean ] = "ºø ¿Ø«¸";
+        Text[ turkish ] = "H¸cre biÁimi";
+        Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
+    };
+    ListBox LB_COND1_TEMPLATE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 57 , 33 ) ;
+        Size = MAP_APPFONT ( 62 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    CheckBox CBX_COND2
+    {
+        Pos = MAP_APPFONT ( 6 , 51 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "Bedingung 2" ;
+        Text [ ENGLISH ] = "Condition 2" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Condition 2" ;
+        Text [ italian ] = "Condizione 2" ;
+        Text [ spanish ] = "CondiciÛn 2" ;
+        Text [ french ] = "Condition 2" ;
+        Text [ dutch ] = "Voorwaarde 2" ;
+        Text [ swedish ] = "Villkor 2" ;
+        Text [ danish ] = "Betingelse 2" ;
+        Text [ portuguese_brazilian ] = "Bedingung 2" ;
+        Text [ portuguese ] = "CondiÁ„o 2" ;
+        Text[ chinese_simplified ] = "Ãıº˛ 2";
+        Text[ russian ] = "”ÒÎÓ‚ËÂ 2";
+        Text[ polish ] = "Warunek 2";
+        Text[ japanese ] = "èåè2";
+        Text[ chinese_traditional ] = "±¯•Û 2";
+        Text[ arabic ] = "«·‘—ÿ 2";
+        Text[ greek ] = "”ıÌËﬁÍÁ 2";
+        Text[ korean ] = "¡∂∞«2";
+        Text[ turkish ] = "Ko˛ul 2";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_COND2_1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 63 ) ;
+        Size = MAP_APPFONT ( 48 , 40 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Zellwert ist" ; Default ; > ;
+            < "Formel ist" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Zellwert ist" ; Default ; > ;
+            < "Formel ist" ; Default ; > ;
+        };
+        stringlist [ portuguese ] =
+        {
+            < "Valor da cÈlula È" ; Default ; > ;
+            < "FÛrmula È" ; Default ; > ;
+        };
+        stringlist [ english_us ] =
+        {
+            < "Cell value is" ; Default ; > ;
+            < "Formula is" ; Default ; > ;
+        };
+        stringlist [ portuguese_brazilian ] =
+        {
+            < "Zellwert ist" ; Default ; > ;
+            < "Formel ist" ; Default ; > ;
+        };
+        stringlist [ swedish ] =
+        {
+            < "Cellv‰rdet ‰r" ; Default ; > ;
+            < "Formeln ‰r" ; Default ; > ;
+        };
+        stringlist [ danish ] =
+        {
+            < "CellevÊrdien er" ; Default ; > ;
+            < "Formlen er" ; Default ; > ;
+        };
+        stringlist [ italian ] =
+        {
+            < "Il valore della cella Ë" ; Default ; > ;
+            < "La formula Ë" ; Default ; > ;
+        };
+        stringlist [ spanish ] =
+        {
+            < "El valor de la celda es" ; Default ; > ;
+            < "La fÛrmula es" ; Default ; > ;
+        };
+        stringlist [ french ] =
+        {
+            < "Valeur est" ; Default ; > ;
+            < "Formule est" ; Default ; > ;
+        };
+        stringlist [ dutch ] =
+        {
+            < "Celwaarde is" ; Default ; > ;
+            < "Formule is" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "µ•‘™∏Ò ˝÷µ «" ; Default ; > ;
+        < "π´ Ω «" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "«Ì‡˜ÂÌËÂ ˇ˜ÂÈÍË" ; Default ; > ;
+        < "‘ÓÏÛÎ‡" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Wart. kom. jest" ; Default ; > ;
+        < "Formu≥a jest" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "æŸÇÃílÇ™" ; Default ; > ;
+        < "êîéÆÇ™" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "¿x¶sÆÊº∆≠»¨O" ; Default ; > ;
+        < "§Ω¶°¨O" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "ﬁÌ„… «·Œ·Ì…" ; Default ; > ;
+        < "«·’Ì€…" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "« ÙÈÏﬁ ÙÔı ÍÂÎÈÔ˝ ÂﬂÌ·È" ; Default ; > ;
+        < "œ Ù˝ÔÚ ÂﬂÌ·È" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "ºø ∞™¿∫" ; Default ; > ;
+        < "ºˆΩƒ¿∫" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        };
+    StringList [ turkish ] =
+    {
+            < "H¸cre deeri" ; Default ; > ;
+        < "Form¸l" ; Default ; > ;
+    };
+    };
+    ListBox LB_COND2_2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 57 , 63 ) ;
+        Size = MAP_APPFONT ( 62 , 88 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "gleich" ; Default ; > ;
+            < "kleiner als" ; Default ; > ;
+            /* ### ACHTUNG: Neuer Eintrag in Liste? 3 : grˆﬂer als*/
+            < "grˆﬂer als" ; Default ; > ;
+            < "kleiner oder gleich" ; Default ; > ;
+            /* ### ACHTUNG: Neuer Eintrag in Liste? 5 : grˆﬂer oder gleich*/
+            < "grˆﬂer oder gleich" ; Default ; > ;
+            < "ungleich" ; Default ; > ;
+            < "zwischen" ; Default ; > ;
+            < "nicht zwischen" ; Default ; > ;
+        };
+        stringlist [ portuguese ] =
+        {
+            < "igual" ; Default ; > ;
+            < "menor" ; Default ; > ;
+            < "maior" ; Default ; > ;
+            < "menor ou igual a" ; Default ; > ;
+            < "maior ou igual a" ; Default ; > ;
+            < "desigual" ; Default ; > ;
+            < "entre" ; Default ; > ;
+            < "n„o entre" ; Default ; > ;
+        };
+        stringlist [ english_us ] =
+        {
+            < "equal to" ; Default ; > ;
+            < "less than" ; Default ; > ;
+            < "greater than" ; Default ; > ;
+            < "less than or equal to" ; Default ; > ;
+            < "greater than or equal to" ; Default ; > ;
+            < "not equal to" ; Default ; > ;
+            < "between" ; Default ; > ;
+            < "not between" ; Default ; > ;
+        };
+        stringlist [ portuguese_brazilian ] =
+        {
+            < "gleich" ; Default ; > ;
+            < "kleiner als" ; Default ; > ;
+            < "grˆﬂer als" ; Default ; > ;
+            < "kleiner oder gleich" ; Default ; > ;
+            < "grˆﬂer oder gleich" ; Default ; > ;
+            < "ungleich" ; Default ; > ;
+            < "zwischen" ; Default ; > ;
+            < "nicht zwischen" ; Default ; > ;
+        };
+        stringlist [ swedish ] =
+        {
+            < "lika med" ; Default ; > ;
+            < "mindre ‰n" ; Default ; > ;
+            < "stˆrre ‰n" ; Default ; > ;
+            < "mindre ‰n eller lika med" ; Default ; > ;
+            < "stˆrre ‰n eller lika med" ; Default ; > ;
+            < "inte lika med" ; Default ; > ;
+            < "mellan" ; Default ; > ;
+            < "inte mellan" ; Default ; > ;
+        };
+        stringlist [ danish ] =
+        {
+            < "lig med" ; Default ; > ;
+            < "mindre end" ; Default ; > ;
+            < "st¯rre end" ; Default ; > ;
+            < "mindre end eller lig med" ; Default ; > ;
+            < "st¯rre end eller lig med" ; Default ; > ;
+            < "forskellig fra" ; Default ; > ;
+            < "mellem" ; Default ; > ;
+            < "ikke mellem" ; Default ; > ;
+        };
+        stringlist [ italian ] =
+        {
+            < "uguale" ; Default ; > ;
+            < "minore di" ; Default ; > ;
+            < "maggiore di" ; Default ; > ;
+            < "minore o uguale" ; Default ; > ;
+            < "maggiore o uguale" ; Default ; > ;
+            < "non uguale" ; Default ; > ;
+            < "tra" ; Default ; > ;
+            < "non tra" ; Default ; > ;
+        };
+        stringlist [ spanish ] =
+        {
+            < "igual" ; Default ; > ;
+            < "menor que" ; Default ; > ;
+            < "mayor que" ; Default ; > ;
+            < "menor o igual" ; Default ; > ;
+            < "mayor o igual" ; Default ; > ;
+            < "distinta de" ; Default ; > ;
+            < "entre" ; Default ; > ;
+            < "no entre" ; Default ; > ;
+        };
+        stringlist [ french ] =
+        {
+            < "Ègale ‡" ; Default ; > ;
+            < "infÈrieure ‡" ; Default ; > ;
+            < "supÈrieure ‡" ; Default ; > ;
+            < "infÈrieure ou Ègale ‡" ; Default ; > ;
+            < "supÈrieure ou Ègale ‡" ; Default ; > ;
+            < "diffÈrente de" ; Default ; > ;
+            < "comprise entre" ; Default ; > ;
+            < "non comprise entre" ; Default ; > ;
+        };
+        stringlist [ dutch ] =
+        {
+            < "gelijk aan" ; Default ; > ;
+            < "kleiner dan" ; Default ; > ;
+            < "groter dan" ; Default ; > ;
+            < "kleiner dan of gelijk aan" ; Default ; > ;
+            < "groter dan of gelijk aan" ; Default ; > ;
+            < "niet gelijk aan" ; Default ; > ;
+            < "tussen" ; Default ; > ;
+            < "niet tussen" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "µ»”⁄" ; Default ; > ;
+        < "–°”⁄" ; Default ; > ;
+        < "¥Û”⁄" ; Default ; > ;
+        < "–°”⁄ªÚµ»”⁄" ; Default ; > ;
+        < "¥Û”⁄ªÚµ»”⁄" ; Default ; > ;
+        < "≤ªµ»”⁄" ; Default ; > ;
+        < "‘⁄÷Æº‰" ; Default ; > ;
+        < "≤ª‘⁄÷Æº‰" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "‡‚ÌÓ" ; Default ; > ;
+        < "ÏÂÌ¸¯Â ˜ÂÏ" ; Default ; > ;
+        < "·ÓÎ¸¯Â ˜ÂÏ" ; Default ; > ;
+        < "ÏÂÌ¸¯Â ËÎË ‡‚ÌÓ" ; Default ; > ;
+        < "·ÓÎ¸¯Â ËÎË ‡‚ÌÓ" ; Default ; > ;
+        < "ÌÂ‡‚ÌÓ" ; Default ; > ;
+        < "ÏÂÊ‰Û" ; Default ; > ;
+        < "‚ÌÂ" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "rÛwna" ; Default ; > ;
+        < "mniejsza niø" ; Default ; > ;
+        < "wiÍksza niø" ; Default ; > ;
+        < "mniejsza niø lub rÛwna" ; Default ; > ;
+        < "wiÍksza niø lub rÛwna" ; Default ; > ;
+        < "nierÛwna" ; Default ; > ;
+        < "miÍdzy" ; Default ; > ;
+        < "nie miÍdzy" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "éüÇÃílÇ…ìôÇµÇ¢" ; Default ; > ;
+        < "éüÇÃílÇÊÇËè¨Ç≥Ç¢" ; Default ; > ;
+        < "éüÇÃílÇÊÇËëÂÇ´Ç¢" ; Default ; > ;
+        < "éüÇÃílà»â∫" ; Default ; > ;
+        < "éüÇÃílà»è„" ; Default ; > ;
+        < "éüÇÃílÇ…ìôÇµÇ≠Ç»Ç¢" ; Default ; > ;
+        < "éüÇÃílÇÃä‘" ; Default ; > ;
+        < "éüÇÃílÇÃä‘Ç≈Ç»Ç¢" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "µ•©Û" ; Default ; > ;
+        < "§p©Û" ; Default ; > ;
+        < "§j©Û" ; Default ; > ;
+        < "§p©Û©Œµ•©Û" ; Default ; > ;
+        < "§j©Û©Œµ•©Û" ; Default ; > ;
+        < "§£µ•©Û" ; Default ; > ;
+        < "¶b§ß∂°" ; Default ; > ;
+        < "§£¶b§ß∂°" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "Ì”«ÊÌ" ; Default ; > ;
+        < "√ﬁ· „‰" ; Default ; > ;
+        < "√ﬂ»— „‰" ; Default ; > ;
+        < "√’€— „‰ √Ê Ì”«ÊÌ" ; Default ; > ;
+        < "√ﬂ»— „‰ √Ê Ì”«ÊÌ" ; Default ; > ;
+        < "·« Ì”«ÊÌ" ; Default ; > ;
+        < "»Ì‰" ; Default ; > ;
+        < "·Ì”  »Ì‰" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "∫ÛÔÌ" ; Default ; > ;
+        < "ÏÈÍÒ¸ÙÂÒÔÚ ·¸" ; Default ; > ;
+        < "ÏÂ„·Î˝ÙÂÒÔÚ ·¸" ; Default ; > ;
+        < "ÏÈÍÒ¸ÙÂÒÔ ﬁ ﬂÛÔ ÏÂ" ; Default ; > ;
+        < "ÏÂ„·Î˝ÙÂÒÔ ﬁ ﬂÛÔ ÏÂ" ; Default ; > ;
+        < "ƒÈ‹ˆÔÒÔ" ; Default ; > ;
+        < "ÏÂÙ·Ó˝" ; Default ; > ;
+        < "¸˜È ÏÂÙ·Ó˝" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "¥Ÿ¿Ω∞˙ ∞∞¿Ω" ; Default ; > ;
+        < "¥Ÿ¿Ω¿« πÃ∏∏¿”" ; Default ; > ;
+        < "¥Ÿ¿Ω¿« √ ∞˙¿”" ; Default ; > ;
+        < "¥Ÿ¿Ω¿« ¿Ã«œ¿”" ; Default ; > ;
+        < "¥Ÿ¿Ω¿« ¿ÃªÛ¿”" ; Default ; > ;
+        < "¥Ÿ¿Ω∞˙ ∞∞¡ˆ æ ¿Ω" ; Default ; > ;
+        < "¥Ÿ¿Ω¿« ªÁ¿Ã¿”" ; Default ; > ;
+        < "π€ø°" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "e˛ittir" ; Default ; > ;
+        < "k¸Á¸kt¸r" ; Default ; > ;
+        < "b¸y¸kt¸r" ; Default ; > ;
+        < "k¸Á¸k ya da e˛ittir" ; Default ; > ;
+        < "b¸y¸k ya da e˛ittir" ; Default ; > ;
+        < "e˛it deildir" ; Default ; > ;
+        < "˛u aral˝kta" ; Default ; > ;
+        < "˛u aral˝kta deil" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+    };
+    };
+    Edit EDT_COND2_1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 122 , 63 ) ;
+        Size = MAP_APPFONT ( 41 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton RB_COND2_1
+    {
+        QuickHelpText = "Verkleinern" ;
+        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        Pos = MAP_APPFONT ( 165 , 63 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ english_us ] = "Shrink" ;
+        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ swedish ] = "Fˆrminska" ;
+        QuickHelpText [ danish ] = "Formindsk" ;
+        QuickHelpText [ italian ] = "Zoom indietro" ;
+        QuickHelpText [ spanish ] = "Reducir" ;
+        QuickHelpText [ french ] = "RÈduire" ;
+        QuickHelpText [ dutch ] = "Verkleinen" ;
+        QuickHelpText [ portuguese ] = "Afastar" ;
+    QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "èkè¨";
+        QuickHelpText[ chinese_simplified ] = "Àı–°";
+        QuickHelpText[ chinese_traditional ] = "¡Y§p";
+        QuickHelpText[ arabic ] = " ’€Ì—";
+        QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
+        QuickHelpText[ korean ] = "Minimize";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    FixedText FT_COND2_AND
+    {
+        Pos = MAP_APPFONT ( 182 , 65 ) ;
+        Size = MAP_APPFONT ( 16 , 10 ) ;
+        Text = "und" ;
+        Text [ ENGLISH ] = "and" ;
+        Text [ english_us ] = "and" ;
+        Text [ italian ] = "e" ;
+        Text [ spanish ] = "y" ;
+        Text [ french ] = "et" ;
+        Text [ dutch ] = "en" ;
+        Text [ swedish ] = "och" ;
+        Text [ danish ] = "og" ;
+        Text [ portuguese_brazilian ] = "und" ;
+        Text [ portuguese ] = "e" ;
+        Text[ chinese_simplified ] = "∫Õ";
+        Text[ russian ] = "Ë";
+        Text[ polish ] = "i";
+        Text[ japanese ] = "ÇªÇµÇƒ";
+        Text[ chinese_traditional ] = "©M";
+        Text[ arabic ] = "Ê";
+        Text[ greek ] = "Í·È";
+        Text[ korean ] = "øÕ";
+        Text[ turkish ] = "ve";
+        Text[ language_user1 ] = " ";
+    };
+    Edit EDT_COND2_2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 200 , 63 ) ;
+        Size = MAP_APPFONT ( 41 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton RB_COND2_2
+    {
+        QuickHelpText = "Verkleinern" ;
+        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        Pos = MAP_APPFONT ( 243 , 63 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ english_us ] = "Shrink" ;
+        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ swedish ] = "Fˆrminska" ;
+        QuickHelpText [ danish ] = "Formindsk" ;
+        QuickHelpText [ italian ] = "Zoom indietro" ;
+        QuickHelpText [ spanish ] = "Reducir" ;
+        QuickHelpText [ french ] = "RÈduire" ;
+        QuickHelpText [ dutch ] = "Verkleinen" ;
+        QuickHelpText [ portuguese ] = "Afastar" ;
+    QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "èkè¨";
+        QuickHelpText[ chinese_simplified ] = "Àı–°";
+        QuickHelpText[ chinese_traditional ] = "¡Y§p";
+        QuickHelpText[ arabic ] = " ’€Ì—";
+        QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
+        QuickHelpText[ korean ] = "Minimize";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    FixedText FT_COND2_TEMPLATE
+    {
+        Pos = MAP_APPFONT ( 12 , 81 ) ;
+        Size = MAP_APPFONT ( 42 , 10 ) ;
+        Text = "Zellvorlage" ;
+        Text [ ENGLISH ] = "Cell template" ;
+        Text [ english_us ] = "Cell Style" ;
+        Text [ italian ] = "Modello di cella" ;
+        Text [ spanish ] = "Estilo de celda" ;
+        Text [ french ] = "Style de cellule" ;
+        Text [ dutch ] = "Celopmaak" ;
+        Text [ swedish ] = "Cellformatmall" ;
+        Text [ danish ] = "Celletypografi" ;
+        Text [ portuguese_brazilian ] = "Zellvorlage" ;
+        Text [ portuguese ] = "Estilo da cÈlula" ;
+        Text[ chinese_simplified ] = "µ•‘™∏Ò—˘ Ω";
+        Text[ russian ] = "—ÚËÎ¸ ˇ˜ÂÈÍË";
+        Text[ polish ] = "Styl komÛrki";
+        Text[ japanese ] = "æŸÇÃΩ¿≤Ÿ";
+        Text[ chinese_traditional ] = "¿x¶sÆÊºÀ¶°";
+        Text[ arabic ] = "‰„ÿ Œ·Ì…";
+        Text[ greek ] = "”ÙıÎ ÍÂÎÈÔ˝";
+        Text[ korean ] = "ºø ¿Ø«¸";
+        Text[ turkish ] = "H¸cre biÁimi";
+        Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
+    };
+    ListBox LB_COND2_TEMPLATE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 57 , 78 ) ;
+        Size = MAP_APPFONT ( 62 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    CheckBox CBX_COND3
+    {
+        Pos = MAP_APPFONT ( 6 , 96 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "Bedingung 3" ;
+        Text [ ENGLISH ] = "Condition 3" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Condition 3" ;
+        Text [ italian ] = "Condizione 3" ;
+        Text [ spanish ] = "CondiciÛn 3" ;
+        Text [ french ] = "Condition 3" ;
+        Text [ dutch ] = "Voorwaarde 3" ;
+        Text [ swedish ] = "Villkor 3" ;
+        Text [ danish ] = "Betingelse 3" ;
+        Text [ portuguese_brazilian ] = "Bedingung 3" ;
+        Text [ portuguese ] = "CondiÁ„o 3" ;
+        Text[ chinese_simplified ] = "Ãıº˛ 3";
+        Text[ russian ] = "”ÒÎÓ‚ËÂ 3";
+        Text[ polish ] = "Warunek 3";
+        Text[ japanese ] = "èåè3";
+        Text[ chinese_traditional ] = "±¯•Û 3";
+        Text[ arabic ] = "«·‘—ÿ 3";
+        Text[ greek ] = "”ıÌËﬁÍÁ 3";
+        Text[ korean ] = "¡∂∞« 3";
+        Text[ turkish ] = "Ko˛ul 3";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_COND3_1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 108 ) ;
+        Size = MAP_APPFONT ( 48 , 40 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Zellwert ist" ; Default ; > ;
+            < "Formel ist" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Zellwert ist" ; Default ; > ;
+            < "Formel ist" ; Default ; > ;
+        };
+        stringlist [ portuguese ] =
+        {
+            < "Valor da cÈlula È" ; Default ; > ;
+            < "FÛrmula È" ; Default ; > ;
+        };
+        stringlist [ english_us ] =
+        {
+            < "Cell value is" ; Default ; > ;
+            < "Formula is" ; Default ; > ;
+        };
+        stringlist [ portuguese_brazilian ] =
+        {
+            < "Zellwert ist" ; Default ; > ;
+            < "Formel ist" ; Default ; > ;
+        };
+        stringlist [ swedish ] =
+        {
+            < "Cellv‰rdet ‰r" ; Default ; > ;
+            < "Formeln ‰r" ; Default ; > ;
+        };
+        stringlist [ danish ] =
+        {
+            < "CellevÊrdien er" ; Default ; > ;
+            < "Formlen er" ; Default ; > ;
+        };
+        stringlist [ italian ] =
+        {
+            < "Il valore della cella Ë" ; Default ; > ;
+            < "La formula Ë" ; Default ; > ;
+        };
+        stringlist [ spanish ] =
+        {
+            < "El valor de la celda es" ; Default ; > ;
+            < "La fÛrmula es" ; Default ; > ;
+        };
+        stringlist [ french ] =
+        {
+            < "Valeur est" ; Default ; > ;
+            < "Formule est" ; Default ; > ;
+        };
+        stringlist [ dutch ] =
+        {
+            < "Celwaarde is" ; Default ; > ;
+            < "Formule is" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "µ•‘™∏Ò ˝÷µ «" ; Default ; > ;
+        < "π´ Ω «" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "«Ì‡˜ÂÌËÂ ˇ˜ÂÈÍË" ; Default ; > ;
+        < "‘ÓÏÛÎ‡" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Wart. kom. jest" ; Default ; > ;
+        < "Formu≥a jest" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "æŸÇÃílÇ™" ; Default ; > ;
+        < "êîéÆÇ™" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "¿x¶sÆÊº∆≠»¨O" ; Default ; > ;
+        < "§Ω¶°¨O" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "ﬁÌ„… «·Œ·Ì…" ; Default ; > ;
+        < "«·’Ì€…" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "« ÙÈÏﬁ ÙÔı ÍÂÎÈÔ˝ ÂﬂÌ·È" ; Default ; > ;
+        < "œ Ù˝ÔÚ ÂﬂÌ·È" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "ºø ∞™¿∫" ; Default ; > ;
+        < "ºˆΩƒ¿∫" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        };
+    StringList [ turkish ] =
+    {
+            < "H¸cre deeri" ; Default ; > ;
+        < "Form¸l" ; Default ; > ;
+    };
+    };
+    ListBox LB_COND3_2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 57 , 108 ) ;
+        Size = MAP_APPFONT ( 62 , 88 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "gleich" ; Default ; > ;
+            < "kleiner als" ; Default ; > ;
+            /* ### ACHTUNG: Neuer Eintrag in Liste? 3 : grˆﬂer als*/
+            < "grˆﬂer als" ; Default ; > ;
+            < "kleiner oder gleich" ; Default ; > ;
+            /* ### ACHTUNG: Neuer Eintrag in Liste? 5 : grˆﬂer oder gleich*/
+            < "grˆﬂer oder gleich" ; Default ; > ;
+            < "ungleich" ; Default ; > ;
+            < "zwischen" ; Default ; > ;
+            < "nicht zwischen" ; Default ; > ;
+        };
+        stringlist [ portuguese ] =
+        {
+            < "igual" ; Default ; > ;
+            < "menor" ; Default ; > ;
+            < "maior" ; Default ; > ;
+            < "menor ou igual a" ; Default ; > ;
+            < "maior ou igual a" ; Default ; > ;
+            < "desigual" ; Default ; > ;
+            < "entre" ; Default ; > ;
+            < "n„o entre" ; Default ; > ;
+        };
+        stringlist [ english_us ] =
+        {
+            < "equal to" ; Default ; > ;
+            < "less than" ; Default ; > ;
+            < "greater than" ; Default ; > ;
+            < "less than or equal to" ; Default ; > ;
+            < "greater than or equal to" ; Default ; > ;
+            < "not equal to" ; Default ; > ;
+            < "between" ; Default ; > ;
+            < "not between" ; Default ; > ;
+        };
+        stringlist [ portuguese_brazilian ] =
+        {
+            < "gleich" ; Default ; > ;
+            < "kleiner als" ; Default ; > ;
+            < "grˆﬂer als" ; Default ; > ;
+            < "kleiner oder gleich" ; Default ; > ;
+            < "grˆﬂer oder gleich" ; Default ; > ;
+            < "ungleich" ; Default ; > ;
+            < "zwischen" ; Default ; > ;
+            < "nicht zwischen" ; Default ; > ;
+        };
+        stringlist [ swedish ] =
+        {
+            < "lika med" ; Default ; > ;
+            < "mindre ‰n" ; Default ; > ;
+            < "stˆrre ‰n" ; Default ; > ;
+            < "mindre ‰n eller lika med" ; Default ; > ;
+            < "stˆrre ‰n eller lika med" ; Default ; > ;
+            < "inte lika med" ; Default ; > ;
+            < "mellan" ; Default ; > ;
+            < "inte mellan" ; Default ; > ;
+        };
+        stringlist [ danish ] =
+        {
+            < "lig med" ; Default ; > ;
+            < "mindre end" ; Default ; > ;
+            < "st¯rre end" ; Default ; > ;
+            < "mindre end eller lig med" ; Default ; > ;
+            < "st¯rre end eller lig med" ; Default ; > ;
+            < "forskellig fra" ; Default ; > ;
+            < "mellem" ; Default ; > ;
+            < "ikke mellem" ; Default ; > ;
+        };
+        stringlist [ italian ] =
+        {
+            < "uguale" ; Default ; > ;
+            < "minore di" ; Default ; > ;
+            < "maggiore di" ; Default ; > ;
+            < "minore o uguale" ; Default ; > ;
+            < "maggiore o uguale" ; Default ; > ;
+            < "non uguale" ; Default ; > ;
+            < "tra" ; Default ; > ;
+            < "non tra" ; Default ; > ;
+        };
+        stringlist [ spanish ] =
+        {
+            < "igual" ; Default ; > ;
+            < "menor que" ; Default ; > ;
+            < "mayor que" ; Default ; > ;
+            < "menor o igual" ; Default ; > ;
+            < "mayor o igual" ; Default ; > ;
+            < "distinta de" ; Default ; > ;
+            < "entre" ; Default ; > ;
+            < "no entre" ; Default ; > ;
+        };
+        stringlist [ french ] =
+        {
+            < "Ègale ‡" ; Default ; > ;
+            < "infÈrieure ‡" ; Default ; > ;
+            < "supÈrieure ‡" ; Default ; > ;
+            < "infÈrieure ou Ègale ‡" ; Default ; > ;
+            < "supÈrieure ou Ègale ‡" ; Default ; > ;
+            < "diffÈrente de" ; Default ; > ;
+            < "comprise entre" ; Default ; > ;
+            < "non comprise entre" ; Default ; > ;
+        };
+        stringlist [ dutch ] =
+        {
+            < "gelijk aan" ; Default ; > ;
+            < "kleiner dan" ; Default ; > ;
+            < "groter dan" ; Default ; > ;
+            < "kleiner dan of gelijk aan" ; Default ; > ;
+            < "groter dan of gelijk aan" ; Default ; > ;
+            < "niet gelijk aan" ; Default ; > ;
+            < "tussen" ; Default ; > ;
+            < "niet tussen" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "µ»”⁄" ; Default ; > ;
+        < "–°”⁄" ; Default ; > ;
+        < "¥Û”⁄" ; Default ; > ;
+        < "–°”⁄ªÚµ»”⁄" ; Default ; > ;
+        < "¥Û”⁄ªÚµ»”⁄" ; Default ; > ;
+        < "≤ªµ»”⁄" ; Default ; > ;
+        < "‘⁄÷Æº‰" ; Default ; > ;
+        < "≤ª‘⁄÷Æº‰" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "‡‚ÌÓ" ; Default ; > ;
+        < "ÏÂÌ¸¯Â ˜ÂÏ" ; Default ; > ;
+        < "·ÓÎ¸¯Â ˜ÂÏ" ; Default ; > ;
+        < "ÏÂÌ¸¯Â ËÎË ‡‚ÌÓ" ; Default ; > ;
+        < "·ÓÎ¸¯Â ËÎË ‡‚ÌÓ" ; Default ; > ;
+        < "ÌÂ‡‚ÌÓ" ; Default ; > ;
+        < "ÏÂÊ‰Û" ; Default ; > ;
+        < "‚ÌÂ" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "rÛwna" ; Default ; > ;
+        < "mniejsza niø" ; Default ; > ;
+        < "wiÍksza niø" ; Default ; > ;
+        < "mniejsza niø lub rÛwna" ; Default ; > ;
+        < "wiÍksza niø lub rÛwna" ; Default ; > ;
+        < "nierÛwna" ; Default ; > ;
+        < "miÍdzy" ; Default ; > ;
+        < "nie miÍdzy" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "éüÇÃílÇ…ìôÇµÇ¢" ; Default ; > ;
+        < "éüÇÃílÇÊÇËè¨Ç≥Ç¢" ; Default ; > ;
+        < "éüÇÃílÇÊÇËëÂÇ´Ç¢" ; Default ; > ;
+        < "éüÇÃílà»â∫" ; Default ; > ;
+        < "éüÇÃílà»è„" ; Default ; > ;
+        < "éüÇÃílÇ…ìôÇµÇ≠Ç»Ç¢" ; Default ; > ;
+        < "éüÇÃílÇÃä‘" ; Default ; > ;
+        < "éüÇÃílÇÃä‘Ç≈Ç»Ç¢" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "µ•©Û" ; Default ; > ;
+        < "§p©Û" ; Default ; > ;
+        < "§j©Û" ; Default ; > ;
+        < "§p©Û©Œµ•©Û" ; Default ; > ;
+        < "§j©Û©Œµ•©Û" ; Default ; > ;
+        < "§£µ•©Û" ; Default ; > ;
+        < "¶b§ß∂°" ; Default ; > ;
+        < "§£¶b§ß∂°" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "Ì”«ÊÌ" ; Default ; > ;
+        < "√ﬁ· „‰" ; Default ; > ;
+        < "√ﬂ»— „‰" ; Default ; > ;
+        < "√’€— „‰ √Ê Ì”«ÊÌ" ; Default ; > ;
+        < "√ﬂ»— „‰ √Ê Ì”«ÊÌ" ; Default ; > ;
+        < "·« Ì”«ÊÌ" ; Default ; > ;
+        < "»Ì‰" ; Default ; > ;
+        < "·Ì”  »Ì‰" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "∫ÛÔÌ" ; Default ; > ;
+        < "ÏÈÍÒ¸ÙÂÒÔÚ ·¸" ; Default ; > ;
+        < "ÏÂ„·Î˝ÙÂÒÔÚ ·¸" ; Default ; > ;
+        < "ÏÈÍÒ¸ÙÂÒÔ ﬁ ﬂÛÔ ÏÂ" ; Default ; > ;
+        < "ÏÂ„·Î˝ÙÂÒÔ ﬁ ﬂÛÔ ÏÂ" ; Default ; > ;
+        < "ƒÈ‹ˆÔÒÔ" ; Default ; > ;
+        < "ÏÂÙ·Ó˝" ; Default ; > ;
+        < "¸˜È ÏÂÙ·Ó˝" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "¥Ÿ¿Ω∞˙ ∞∞¿Ω" ; Default ; > ;
+        < "¥Ÿ¿Ω¿« πÃ∏∏¿”" ; Default ; > ;
+        < "¥Ÿ¿Ω¿« √ ∞˙¿”" ; Default ; > ;
+        < "¥Ÿ¿Ω¿« ¿Ã«œ¿”" ; Default ; > ;
+        < "¥Ÿ¿Ω¿« ¿ÃªÛ¿”" ; Default ; > ;
+        < "¥Ÿ¿Ω∞˙ ∞∞¡ˆ æ ¿Ω" ; Default ; > ;
+        < "¥Ÿ¿Ω¿« ªÁ¿Ã¿”" ; Default ; > ;
+        < "π€ø°" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "e˛ittir" ; Default ; > ;
+        < "k¸Á¸kt¸r" ; Default ; > ;
+        < "b¸y¸kt¸r" ; Default ; > ;
+        < "k¸Á¸k ya da e˛ittir" ; Default ; > ;
+        < "b¸y¸k ya da e˛ittir" ; Default ; > ;
+        < "e˛it deildir" ; Default ; > ;
+        < "˛u aral˝kta" ; Default ; > ;
+        < "˛u aral˝kta deil" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+    };
+    };
+    Edit EDT_COND3_1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 122 , 108 ) ;
+        Size = MAP_APPFONT ( 41 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton RB_COND3_1
+    {
+        QuickHelpText = "Verkleinern" ;
+        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        Pos = MAP_APPFONT ( 165 , 108 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ english_us ] = "Shrink" ;
+        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ swedish ] = "Fˆrminska" ;
+        QuickHelpText [ danish ] = "Formindsk" ;
+        QuickHelpText [ italian ] = "Zoom indietro" ;
+        QuickHelpText [ spanish ] = "Reducir" ;
+        QuickHelpText [ french ] = "RÈduire" ;
+        QuickHelpText [ dutch ] = "Verkleinen" ;
+        QuickHelpText [ portuguese ] = "Afastar" ;
+    QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "èkè¨";
+        QuickHelpText[ chinese_simplified ] = "Àı–°";
+        QuickHelpText[ chinese_traditional ] = "¡Y§p";
+        QuickHelpText[ arabic ] = " ’€Ì—";
+        QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
+        QuickHelpText[ korean ] = "Minimize";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    FixedText FT_COND3_AND
+    {
+        Pos = MAP_APPFONT ( 182 , 110 ) ;
+        Size = MAP_APPFONT ( 16 , 10 ) ;
+        Text = "und" ;
+        Text [ ENGLISH ] = "and" ;
+        Text [ english_us ] = "and" ;
+        Text [ italian ] = "e" ;
+        Text [ spanish ] = "y" ;
+        Text [ french ] = "et" ;
+        Text [ dutch ] = "en" ;
+        Text [ swedish ] = "och" ;
+        Text [ danish ] = "og" ;
+        Text [ portuguese_brazilian ] = "und" ;
+        Text [ portuguese ] = "e" ;
+        Text[ chinese_simplified ] = "∫Õ";
+        Text[ russian ] = "Ë";
+        Text[ polish ] = "i";
+        Text[ japanese ] = "ÇªÇµÇƒ";
+        Text[ chinese_traditional ] = "©M";
+        Text[ arabic ] = "Ê";
+        Text[ greek ] = "Í·È";
+        Text[ korean ] = "øÕ";
+        Text[ turkish ] = "ve";
+        Text[ language_user1 ] = " ";
+    };
+    Edit EDT_COND3_2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 200 , 108 ) ;
+        Size = MAP_APPFONT ( 41 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton RB_COND3_2
+    {
+        QuickHelpText = "Verkleinern" ;
+        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        Pos = MAP_APPFONT ( 243 , 108 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ english_us ] = "Shrink" ;
+        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ swedish ] = "Fˆrminska" ;
+        QuickHelpText [ danish ] = "Formindsk" ;
+        QuickHelpText [ italian ] = "Zoom indietro" ;
+        QuickHelpText [ spanish ] = "Reducir" ;
+        QuickHelpText [ french ] = "RÈduire" ;
+        QuickHelpText [ dutch ] = "Verkleinen" ;
+        QuickHelpText [ portuguese ] = "Afastar" ;
+    QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "èkè¨";
+        QuickHelpText[ chinese_simplified ] = "Àı–°";
+        QuickHelpText[ chinese_traditional ] = "¡Y§p";
+        QuickHelpText[ arabic ] = " ’€Ì—";
+        QuickHelpText[ greek ] = "”ÏﬂÍÒıÌÛÁ";
+        QuickHelpText[ korean ] = "Minimize";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    FixedText FT_COND3_TEMPLATE
+    {
+        Pos = MAP_APPFONT ( 12 , 126 ) ;
+        Size = MAP_APPFONT ( 42 , 10 ) ;
+        Text = "Zellvorlage" ;
+        Text [ ENGLISH ] = "Cell template" ;
+        Text [ english_us ] = "Cell Style" ;
+        Text [ italian ] = "Modello di cella" ;
+        Text [ spanish ] = "Estilo de celda" ;
+        Text [ french ] = "Style de cellule" ;
+        Text [ dutch ] = "Celopmaak" ;
+        Text [ swedish ] = "Cellformatmall" ;
+        Text [ danish ] = "Celletypografi" ;
+        Text [ portuguese_brazilian ] = "Zellvorlage" ;
+        Text [ portuguese ] = "Estilo da cÈlula" ;
+        Text[ chinese_simplified ] = "µ•‘™∏Ò—˘ Ω";
+        Text[ russian ] = "—ÚËÎ¸ ˇ˜ÂÈÍË";
+        Text[ polish ] = "Styl komÛrki";
+        Text[ japanese ] = "æŸÇÃΩ¿≤Ÿ";
+        Text[ chinese_traditional ] = "¿x¶sÆÊºÀ¶°";
+        Text[ arabic ] = "‰„ÿ Œ·Ì…";
+        Text[ greek ] = "”ÙıÎ ÍÂÎÈÔ˝";
+        Text[ korean ] = "ºø ¿Ø«¸";
+        Text[ turkish ] = "H¸cre biÁimi";
+        Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
+    };
+    ListBox LB_COND3_TEMPLATE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 57 , 123 ) ;
+        Size = MAP_APPFONT ( 62 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 151 , 143 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 205 , 143 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 89 , 143 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ english_us ] = "Conditional Formatting" ;
+    Text [ italian ] = "Formattazione condizionata" ;
+    Text [ spanish ] = "Formato condicionado" ;
+    Text [ french ] = "Formatage conditionnel" ;
+    Text [ dutch ] = "Conditionele opmaak" ;
+    Text [ swedish ] = "Villkorlig formatering" ;
+    Text [ danish ] = "Betinget formatering" ;
+    Text [ portuguese_brazilian ] = "Bedingte Formatierung" ;
+    Text [ portuguese ] = "FomataÁ„o condicionada" ;
+    Text[ chinese_simplified ] = "”–Ãıº˛µƒ∏Ò Ω";
+    Text[ russian ] = "”ÒÎÓ‚ÌÓÂ ÙÓÏ‡ÚËÓ‚‡ÌËÂ";
+    Text[ polish ] = "Formatowanie warunkowe";
+    Text[ japanese ] = "èåèïtÇ´èëéÆê›íË";
+    Text[ chinese_traditional ] = "¶≥±¯•Û™∫ÆÊ¶°";
+    Text[ arabic ] = " ‰”Ìﬁ „‘—Êÿ";
+    Text[ greek ] = "ÃÔÒˆÔÔﬂÁÛÁ ı¸ ¸ÒÔıÚ";
+    Text[ korean ] = "¡∂∞« º≠Ωƒ";
+    Text[ turkish ] = "Ko˛ullu formatlama";
+    Text[ language_user1 ] = " ";
+};

@@ -1,0 +1,12 @@
+SC_1_0 {
+    global:
+        CreateScDocShellDll;
+        CreateObjScDocShellDll;
+        InitScDll;
+        DeInitScDll;
+        component_getImplementationEnvironment;
+        component_writeInfo;
+        component_getFactory;
+    local:
+        *;
+};

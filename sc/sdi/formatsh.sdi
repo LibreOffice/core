@@ -1,0 +1,172 @@
+ //============================================================================
+ //
+ // StarCalc
+ //
+ // (C) 1994 StarDivision GmbH, Hamburg, Germany
+ // $Author: hr $ $Date: 2000-09-18 16:44:52 $ $Revision: 1.1.1.1 $
+ // $Logfile:   T:/sc/sdi/formatsh.sdv  $ $Workfile:   formatsh.sdi  $
+ //----------------------------------------------------------------------------
+
+ // ===========================================================================
+interface TableFont : Object
+[
+    uuid ( "2E4AC1C0-137C-11D3-B25B-006097DA68F3" )
+]
+{
+    SID_ATTR_CHAR_FONT          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ATTR_CHAR_FONTHEIGHT    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ATTR_CHAR_COLOR         [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ATTR_CHAR_WEIGHT    [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ATTR_CHAR_POSTURE   [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ATTR_CHAR_UNDERLINE [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ULINE_VAL_NONE      [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ULINE_VAL_SINGLE    [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ULINE_VAL_DOUBLE    [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ULINE_VAL_DOTTED    [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+}
+
+ // ===========================================================================
+interface FormatForSelection : Selection
+[
+    uuid ( "40F448A0-137C-11D3-B25B-006097DA68F3" )
+]
+{
+    //Auch das Basic muss wieder laufen
+    SbxObject Font SID_PROP_FONT
+    [
+    ]
+    SbxObject Interior SID_PROP_INTERIOR // status(Final)
+    [
+    ]
+
+    // Slot's die in der DrawShell disabled werden. {
+    SID_STYLE_FAMILY2           [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_APPLY             [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_WATERCAN          [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_NEW_BY_EXAMPLE    [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_UPDATE_BY_EXAMPLE [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
+
+    SfxVoidItem NewTemplate SID_STYLE_NEW
+    (
+        SfxStringItem Param SID_STYLE_NEW,
+        SfxUInt16Item Family SID_STYLE_FAMILY
+    )
+    [
+        ExecMethod = ExecuteStyle ;
+        StateMethod = GetStyleState ;
+        GroupId = GID_VIEW ;
+        Cachable ;
+    ]
+
+     // !!! special
+    SfxTemplateItem PageStyleApply SID_STYLE_FAMILY4 ( )
+    [
+        ExecMethod = ExecuteStyle ;
+        StateMethod = GetStyleState ;
+        GroupId = GID_FORMAT ;
+        Cachable ;
+    ]
+
+    SfxVoidItem EditTemplate SID_STYLE_EDIT
+    (
+        SfxStringItem Param SID_STYLE_EDIT,
+        SfxUInt16Item Family SID_STYLE_FAMILY
+    )
+    [
+        ExecMethod = ExecuteStyle ;
+        StateMethod = GetStyleState ;
+        GroupId = GID_VIEW ;
+        Cachable ;
+    ]
+
+    SfxVoidItem DeleteTemplate SID_STYLE_DELETE
+    (
+        SfxStringItem Param SID_STYLE_DELETE,
+        SfxUInt16Item Family SID_STYLE_FAMILY
+    )
+    [
+        ExecMethod = ExecuteStyle ;
+        StateMethod = GetStyleState ;
+        GroupId = GID_VIEW ;
+        Cachable ;
+    ]
+    // } Slot's die in der DrawShell disabled werden.
+
+    SID_BACKGROUND_COLOR    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_ALIGNLEFT       [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ALIGNRIGHT      [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ALIGNTOP        [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ALIGNBOTTOM     [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ALIGNCENTERVER  [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ALIGNBLOCK      [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+
+    SfxVoidItem AlignHCenter SID_ALIGNCENTERHOR ( )
+    [
+        ExecMethod = ExecuteTextAttr ;
+        StateMethod = GetTextAttrState ;
+        GroupId = GID_FORMAT ;  //FS
+        Cachable ;
+        ToolBoxConfig ;
+    ]
+    SID_V_ALIGNCELL         [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
+    SID_H_ALIGNCELL         [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
+
+    SID_NUMBER_FORMAT       [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState;]
+    SID_NUMBER_TWODEC       [ ExecMethod = ExecuteNumFormat;]
+    SID_NUMBER_SCIENTIFIC   [ ExecMethod = ExecuteNumFormat;]
+    SID_NUMBER_DATE         [ ExecMethod = ExecuteNumFormat;]
+    SID_NUMBER_CURRENCY     [ ExecMethod = ExecuteNumFormat;]
+    SID_NUMBER_PERCENT      [ ExecMethod = ExecuteNumFormat;]
+    SID_NUMBER_TIME         [ ExecMethod = ExecuteNumFormat;]
+    SID_NUMBER_STANDARD     [ ExecMethod = ExecuteNumFormat;]
+    SID_NUMBER_INCDEC       [ ExecMethod = ExecuteNumFormat;]
+    SID_NUMBER_DECDEC       [ ExecMethod = ExecuteNumFormat;]
+
+    SID_ATTR_BORDER             [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]   //XXX
+    SID_ATTR_BORDER_INNER       [                           StateMethod = GetBorderState; ] // status()
+//  SID_ATTR_BORDER_OUTER       [ ExecMethod = ExecuteAttr; StateMethod = GetBorderState; ] // status()
+    SID_ATTR_ALIGN_LINEBREAK    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_FRAME_LINESTYLE         [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+    SID_FRAME_LINECOLOR         [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
+}
+
+
+ // ===========================================================================
+shell ScFormatShell
+{
+    import FormatForSelection[Automation];
+//  import Interior ".Interior";
+    import TableFont ".Font";
+}
+
+/*------------------------------------------------------------------------
+    $Log: not supported by cvs2svn $
+    Revision 1.3  2000/05/24 09:30:06  nn
+    SID_ATTR_BORDER still needed
+
+    Revision 1.2  2000/05/11 17:01:05  nn
+    slots for old basic api removed2
+
+    Revision 1.1  1999/06/02 19:44:38  ANK
+    #66547# SubShells
+
+
+      Rev 1.0   02 Jun 1999 21:44:38   ANK
+   #66547# SubShells
+
+------------------------------------------------------------------------*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

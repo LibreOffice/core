@@ -1,0 +1,401 @@
+/*************************************************************************
+ *
+ *  $RCSfile: compiler.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef SC_COMPILER_HRC
+#define SC_COMPILER_HRC
+
+/* zentrale Definition der OpCodes fuer StarCalc-Funktionen */
+/* rj 15.07.96 */
+
+/*** Spezielle Kommandos ***/
+#define SC_OPCODE_PUSH                0     /* interne Kommandos */
+#define SC_OPCODE_JUMP                1
+#define SC_OPCODE_STOP                2
+#define SC_OPCODE_EXTERNAL            3
+#define SC_OPCODE_NAME                4
+#define SC_OPCODE_IF                  5     /* Sprung Kommandos */
+#define SC_OPCODE_CHOSE               6
+#define SC_OPCODE_OPEN                7     /* Klammern und Seps */
+#define SC_OPCODE_CLOSE               8
+#define SC_OPCODE_SEP                 9
+#define SC_OPCODE_MISSING            10     /* Spezial-Opcodes */
+#define SC_OPCODE_BAD                11
+#define SC_OPCODE_SPACES             12
+#define SC_OPCODE_MAT_REF            13
+#define SC_OPCODE_DB_AREA            14     /* weitere Zugriffs-Operanden */
+#define SC_OPCODE_MACRO              15
+#define SC_OPCODE_COL_ROW_NAME       16
+#define SC_OPCODE_COL_ROW_NAME_AUTO  17
+#define SC_OPCODE_END_DIV            20
+
+/*** Binaere Operatoren ***/
+#define SC_OPCODE_ADD                21
+#define SC_OPCODE_SUB                22
+#define SC_OPCODE_MUL                23
+#define SC_OPCODE_DIV                24
+#define SC_OPCODE_AMPERSAND          25
+#define SC_OPCODE_POW                26
+#define SC_OPCODE_EQUAL              27
+#define SC_OPCODE_NOT_EQUAL          28
+#define SC_OPCODE_LESS               29
+#define SC_OPCODE_GREATER            30
+#define SC_OPCODE_LESS_EQUAL         31
+#define SC_OPCODE_GREATER_EQUAL      32
+#define SC_OPCODE_AND                33
+#define SC_OPCODE_OR                 34
+#define SC_OPCODE_INTERSECT          35
+#define SC_OPCODE_UNION              36
+#define SC_OPCODE_RANGE              37
+#define SC_OPCODE_END_BIN_OP         40
+
+/*** Unaere Operatoren ***/
+#define SC_OPCODE_NOT                41
+#define SC_OPCODE_NEG                42
+#define SC_OPCODE_NEG_SUB            43
+#define SC_OPCODE_END_UN_OP          45
+
+/*** Funktionen ohne Parameter ***/
+#define SC_OPCODE_PI                 46
+#define SC_OPCODE_RANDOM             47
+#define SC_OPCODE_TRUE               48
+#define SC_OPCODE_FALSE              49
+#define SC_OPCODE_GET_ACT_DATE       50
+#define SC_OPCODE_GET_ACT_TIME       51
+#define SC_OPCODE_NO_VALUE           52
+#define SC_OPCODE_CURRENT            53
+#define SC_OPCODE_END_NO_PAR         60
+
+/*** Funktionen mit einem Parameter ***/
+#define SC_OPCODE_DEG                61     /* Trigonometrie */
+#define SC_OPCODE_RAD                62
+#define SC_OPCODE_SIN                63
+#define SC_OPCODE_COS                64
+#define SC_OPCODE_TAN                65
+#define SC_OPCODE_COT                66
+#define SC_OPCODE_ARC_SIN            67
+#define SC_OPCODE_ARC_COS            68
+#define SC_OPCODE_ARC_TAN            69
+#define SC_OPCODE_ARC_COT            70
+#define SC_OPCODE_SIN_HYP            71
+#define SC_OPCODE_COS_HYP            72
+#define SC_OPCODE_TAN_HYP            73
+#define SC_OPCODE_COT_HYP            74
+#define SC_OPCODE_ARC_SIN_HYP        75     /* transzendente */
+#define SC_OPCODE_ARC_COS_HYP        76
+#define SC_OPCODE_ARC_TAN_HYP        77
+#define SC_OPCODE_ARC_COT_HYP        78
+#define SC_OPCODE_EXP                79
+#define SC_OPCODE_LN                 80
+#define SC_OPCODE_SQRT               81
+#define SC_OPCODE_FACT               82
+#define SC_OPCODE_GET_YEAR           83     /* Datum und Uhrzeit */
+#define SC_OPCODE_GET_MONTH          84
+#define SC_OPCODE_GET_DAY            85
+#define SC_OPCODE_GET_HOUR           86
+#define SC_OPCODE_GET_MIN            87
+#define SC_OPCODE_GET_SEC            88
+#define SC_OPCODE_PLUS_MINUS         89     /* diverse */
+#define SC_OPCODE_ABS                90
+#define SC_OPCODE_INT                91
+#define SC_OPCODE_PHI                92
+#define SC_OPCODE_GAUSS              93
+#define SC_OPCODE_IS_EMPTY           94     /* Feldtyp abfragen */
+#define SC_OPCODE_IS_STRING          95
+#define SC_OPCODE_IS_NON_STRING      96
+#define SC_OPCODE_IS_LOGICAL         97
+#define SC_OPCODE_TYPE               98
+#define SC_OPCODE_IS_REF             99
+#define SC_OPCODE_IS_VALUE          100
+#define SC_OPCODE_IS_FORMULA        101
+#define SC_OPCODE_IS_NV             102
+#define SC_OPCODE_IS_ERR            103
+#define SC_OPCODE_IS_ERROR          104
+#define SC_OPCODE_IS_EVEN           105
+#define SC_OPCODE_IS_ODD            106
+#define SC_OPCODE_N                 107
+#define SC_OPCODE_GET_DATE_VALUE    108     /* String-Funktionen */
+#define SC_OPCODE_GET_TIME_VALUE    109
+#define SC_OPCODE_CODE              110
+#define SC_OPCODE_TRIM              111
+#define SC_OPCODE_UPPER             112
+#define SC_OPCODE_PROPPER           113
+#define SC_OPCODE_LOWER             114
+#define SC_OPCODE_LEN               115
+#define SC_OPCODE_T                 116     /* diverse, Teil 2 */
+#define SC_OPCODE_VALUE             117
+#define SC_OPCODE_CLEAN             118
+#define SC_OPCODE_CHAR              119
+#define SC_OPCODE_LOG10             120
+#define SC_OPCODE_EVEN              121
+#define SC_OPCODE_ODD               122
+#define SC_OPCODE_STD_NORM_DIST     123
+#define SC_OPCODE_FISHER            124
+#define SC_OPCODE_FISHER_INV        125
+#define SC_OPCODE_S_NORM_INV        126
+#define SC_OPCODE_GAMMA_LN          127
+#define SC_OPCODE_ERROR_TYPE        128
+#define SC_OPCODE_ERR_CELL          129
+#define SC_OPCODE_FORMULA           130
+#define SC_OPCODE_END_1_PAR         200
+
+/*** Funktionen mit mehreren Parametern ***/
+#define SC_OPCODE_ARC_TAN_2         201
+#define SC_OPCODE_CEIL              202
+#define SC_OPCODE_FLOOR             203
+#define SC_OPCODE_ROUND             204
+#define SC_OPCODE_ROUND_UP          205
+#define SC_OPCODE_ROUND_DOWN        206
+#define SC_OPCODE_TRUNC             207
+#define SC_OPCODE_LOG               208
+#define SC_OPCODE_POWER             209
+#define SC_OPCODE_GGT               210
+#define SC_OPCODE_KGV               211
+#define SC_OPCODE_MOD               212
+#define SC_OPCODE_SUM_PRODUCT       213
+#define SC_OPCODE_SUM_SQ            214
+#define SC_OPCODE_SUM_X2MY2         215
+#define SC_OPCODE_SUM_X2DY2         216
+#define SC_OPCODE_SUM_XMY2          217
+#define SC_OPCODE_GET_DATE          218
+#define SC_OPCODE_GET_TIME          219
+#define SC_OPCODE_GET_DIFF_DATE     220
+#define SC_OPCODE_GET_DIFF_DATE_360 221
+#define SC_OPCODE_MIN               222
+#define SC_OPCODE_MAX               223
+#define SC_OPCODE_SUM               224
+#define SC_OPCODE_PRODUCT           225
+#define SC_OPCODE_AVERAGE           226
+#define SC_OPCODE_COUNT             227
+#define SC_OPCODE_COUNT_2           228
+#define SC_OPCODE_NBW               229
+#define SC_OPCODE_IKV               230
+#define SC_OPCODE_VAR               231
+#define SC_OPCODE_VAR_P             232
+#define SC_OPCODE_ST_DEV            233
+#define SC_OPCODE_ST_DEV_P          234
+#define SC_OPCODE_B                 235
+#define SC_OPCODE_NORM_DIST         236
+#define SC_OPCODE_EXP_DIST          237
+#define SC_OPCODE_BINOM_DIST        238
+#define SC_OPCODE_POISSON_DIST      239
+#define SC_OPCODE_KOMBIN            240
+#define SC_OPCODE_KOMBIN_2          241
+#define SC_OPCODE_VARIATIONEN       242
+#define SC_OPCODE_VARIATIONEN_2     243
+#define SC_OPCODE_BW                244
+#define SC_OPCODE_DIA               245
+#define SC_OPCODE_GDA               246
+#define SC_OPCODE_GDA_2             247
+#define SC_OPCODE_VBD               248
+#define SC_OPCODE_LAUFZ             249
+#define SC_OPCODE_LIA               250
+#define SC_OPCODE_RMZ               251
+#define SC_OPCODE_COLUMNS           252
+#define SC_OPCODE_ROWS              253
+#define SC_OPCODE_COLUMN            254
+#define SC_OPCODE_ROW               255
+#define SC_OPCODE_ZGZ               256
+#define SC_OPCODE_ZW                257
+#define SC_OPCODE_ZZR               258
+#define SC_OPCODE_ZINS              259
+#define SC_OPCODE_ZINS_Z            260
+#define SC_OPCODE_KAPZ              261
+#define SC_OPCODE_KUM_ZINS_Z        262
+#define SC_OPCODE_KUM_KAP_Z         263
+#define SC_OPCODE_EFFEKTIV          264
+#define SC_OPCODE_NOMINAL           265
+#define SC_OPCODE_SUB_TOTAL         266     /* Spezialfunktion für Teilergebnisse */
+#define SC_OPCODE_DB_SUM            267     /* Datenbankfunktionen */
+#define SC_OPCODE_DB_COUNT          268
+#define SC_OPCODE_DB_COUNT_2        269
+#define SC_OPCODE_DB_AVERAGE        270
+#define SC_OPCODE_DB_GET            271
+#define SC_OPCODE_DB_MAX            272
+#define SC_OPCODE_DB_MIN            273
+#define SC_OPCODE_DB_PRODUCT        274
+#define SC_OPCODE_DB_STD_DEV        275
+#define SC_OPCODE_DB_STD_DEV_P      276
+#define SC_OPCODE_DB_VAR            277
+#define SC_OPCODE_DB_VAR_P          278
+#define SC_OPCODE_INDIRECT          279     /* Verwaltungsfunktionen */
+#define SC_OPCODE_ADRESS            280
+#define SC_OPCODE_MATCH             281
+#define SC_OPCODE_COUNT_EMPTY_CELLS 282
+#define SC_OPCODE_COUNT_IF          283
+#define SC_OPCODE_SUM_IF            284
+#define SC_OPCODE_LOOKUP            285
+#define SC_OPCODE_V_LOOKUP          286
+#define SC_OPCODE_H_LOOKUP          287
+#define SC_OPCODE_MULTI_AREA        288
+#define SC_OPCODE_OFFSET            289
+#define SC_OPCODE_INDEX             290
+#define SC_OPCODE_AREAS             291
+#define SC_OPCODE_CURRENCY          292     /* String-Funktionen */
+#define SC_OPCODE_REPLACE           293
+#define SC_OPCODE_FIXED             294
+#define SC_OPCODE_FIND              295
+#define SC_OPCODE_EXACT             296
+#define SC_OPCODE_LEFT              297
+#define SC_OPCODE_RIGHT             298
+#define SC_OPCODE_SEARCH            299
+#define SC_OPCODE_MID               300
+#define SC_OPCODE_TEXT              301
+#define SC_OPCODE_SUBSTITUTE        302
+#define SC_OPCODE_REPT              303
+#define SC_OPCODE_CONCAT            304
+#define SC_OPCODE_MAT_VALUE         305     /* Matrix-Funktionen */
+#define SC_OPCODE_MAT_DET           306
+#define SC_OPCODE_MAT_INV           307
+#define SC_OPCODE_MAT_MULT          308
+#define SC_OPCODE_MAT_TRANS         309
+#define SC_OPCODE_MATRIX_UNIT       310
+#define SC_OPCODE_BACK_SOLVER       311     /* BackSolver */
+#define SC_OPCODE_HYP_GEOM_DIST     312     /* Statistik-Funktionen */
+#define SC_OPCODE_LOG_NORM_DIST     313
+#define SC_OPCODE_T_DIST            314
+#define SC_OPCODE_F_DIST            315
+#define SC_OPCODE_CHI_DIST          316
+#define SC_OPCODE_WEIBULL           317
+#define SC_OPCODE_NEG_BINOM_VERT    318
+#define SC_OPCODE_KRIT_BINOM        319
+#define SC_OPCODE_KURT              320
+#define SC_OPCODE_HAR_MEAN          321
+#define SC_OPCODE_GEO_MEAN          322
+#define SC_OPCODE_STANDARD          323
+#define SC_OPCODE_AVE_DEV           324
+#define SC_OPCODE_SCHIEFE           325
+#define SC_OPCODE_DEV_SQ            326
+#define SC_OPCODE_MEDIAN            327
+#define SC_OPCODE_MODAL_VALUE       328
+#define SC_OPCODE_Z_TEST            329
+#define SC_OPCODE_T_TEST            330
+#define SC_OPCODE_RANK              331
+#define SC_OPCODE_PERCENTILE        332
+#define SC_OPCODE_PERCENT_RANK      333
+#define SC_OPCODE_LARGE             334
+#define SC_OPCODE_SMALL             335
+#define SC_OPCODE_FREQUENCY         336
+#define SC_OPCODE_QUARTILE          337
+#define SC_OPCODE_NORM_INV          338
+#define SC_OPCODE_CONFIDENCE        339
+#define SC_OPCODE_F_TEST            340
+#define SC_OPCODE_TRIM_MEAN         341
+#define SC_OPCODE_PROB              342
+#define SC_OPCODE_CORREL            343
+#define SC_OPCODE_COVAR             344
+#define SC_OPCODE_PEARSON           345
+#define SC_OPCODE_RSQ               346
+#define SC_OPCODE_STEYX             347
+#define SC_OPCODE_SLOPE             348
+#define SC_OPCODE_INTERCEPT         349
+#define SC_OPCODE_TREND             350
+#define SC_OPCODE_GROWTH            351
+#define SC_OPCODE_RGP               352
+#define SC_OPCODE_RKP               353
+#define SC_OPCODE_FORECAST          354
+#define SC_OPCODE_CHI_INV           355
+#define SC_OPCODE_GAMMA_DIST        356
+#define SC_OPCODE_GAMMA_INV         357
+#define SC_OPCODE_T_INV             358
+#define SC_OPCODE_F_INV             359
+#define SC_OPCODE_CHI_TEST          360
+#define SC_OPCODE_LOG_INV           361
+#define SC_OPCODE_TABLE_OP          362
+#define SC_OPCODE_BETA_DIST         363
+#define SC_OPCODE_BETA_INV          364
+#define SC_OPCODE_WEEK              365     /* sonstige */
+#define SC_OPCODE_GET_DAY_OF_WEEK   366
+#define SC_OPCODE_NO_NAME           367
+#define SC_OPCODE_STYLE             368
+#define SC_OPCODE_DDE               369
+#define SC_OPCODE_BASE              370
+#define SC_OPCODE_TABLE             371
+#define SC_OPCODE_TABLES            372
+#define SC_OPCODE_MIN_A             373
+#define SC_OPCODE_MAX_A             374
+#define SC_OPCODE_AVERAGE_A         375
+#define SC_OPCODE_ST_DEV_A          376
+#define SC_OPCODE_ST_DEV_P_A        377
+#define SC_OPCODE_VAR_A             378
+#define SC_OPCODE_VAR_P_A           379
+#define SC_OPCODE_EASTERSUNDAY      380
+#define SC_OPCODE_DECIMAL           381
+#define SC_OPCODE_CONVERT           382
+#define SC_OPCODE_END_2_PAR         383
+
+#define SC_OPCODE_LAST_OPCODE_ID    382     /* letzter OpCode */
+
+/*** Interna ***/
+#define SC_OPCODE_INTERNAL_BEGIN   9995
+#define SC_OPCODE_GAME             9995
+#define SC_OPCODE_SPEW             9996
+#define SC_OPCODE_TTT              9997
+#define SC_OPCODE_TEAM             9998
+#define SC_OPCODE_ANSWER           9999
+#define SC_OPCODE_INTERNAL_END     9999
+
+/*** ab hier sind Extradaten drin **/
+#define SC_OPCODE_DATA_TOKEN_1    10000
+
+#define SC_OPCODE_NONE           0xFFFF
+
+
+#endif /* SC_COMPILER_HRC */

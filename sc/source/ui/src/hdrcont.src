@@ -1,0 +1,679 @@
+/*************************************************************************
+ *
+ *  $RCSfile: hdrcont.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:05 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "sc.hrc"
+
+
+
+#define PART1 \
+    MenuItem\
+    {\
+        Identifier = FID_CELL_FORMAT ; \
+        HelpId = FID_CELL_FORMAT ; \
+        Text = "~Zellen formatieren..." ; \
+        Text [ ENGLISH ] = "Format Cells..." ; \
+        Text [ finnish ] = "Muotoile solut..." ; \
+        Text [ danish ] = "Formater celler..." ; \
+        Text [ french ] = "Formater les ~cellules..." ; \
+        Text [ swedish ] = "Formatera ~celler..." ; \
+        Text [ dutch ] = "~Cellen opmaken..." ; \
+        Text [ spanish ] = "~Formatear celdas..." ; \
+        Text [ english_us ] = "~Format Cells..." ; \
+        Text [ italian ] = "Formatta celle..." ; \
+        Text [ portuguese_brazilian ] = "Zellen formatieren..." ; \
+        Text [ portuguese ] = "Formatar células..." ; \
+        Text[ chinese_simplified ] = "µ¥Ôª¸ñ¸ñÊ½»¯(~F)...";\
+        Text[ russian ] = "Ôîğìàò ÿ÷ååê...";\
+        Text[ polish ] = "Formatuj komórki...";\
+        Text[ japanese ] = "¾Ù‚Ì‘®İ’è(~F)...";\
+        Text[ chinese_traditional ] = "Àx¦s®æ®æ¦¡¤Æ(~F)...";\
+        Text[ arabic ] = "...ÊäÓíŞ ÇáÎáÇíÇ";\
+        Text[ greek ] = "Ìïñöï~ğïßçóç êåëéşí...";\
+        Text[ korean ] = "¼¿ ¼­½Ä(~F)...";\
+        Text[ turkish ] = "Hücreleri formatla...";\
+        Text[ language_user1 ] = " ";\
+    };
+
+
+#define PART2 \
+    MenuItem\
+    {\
+        Identifier = SID_CUT ; \
+        HelpId = SID_CUT ; \
+        Text = "Auss~chneiden" ; \
+        Text [ ENGLISH ] = "Cut" ; \
+        Text [ finnish ] = "Leikkaa" ; \
+        Text [ danish ] = "Klip" ; \
+        Text [ french ] = "Couper" ; \
+        Text [ swedish ] = "Klipp ~ut" ; \
+        Text [ dutch ] = "K~nippen" ; \
+        Text [ spanish ] = "Co~rtar" ; \
+        Text [ english_us ] = "Cu~t" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Die Selektion in die Zwischenablage kopieren und löschen : Die Selektion in die Zwischenablage kopieren und l÷schen */\
+        Text [ italian ] = "Taglia" ; \
+        Text [ portuguese ] = "Cortar" ; \
+        Text [ portuguese_brazilian ] = "Ausschneiden" ; \
+        Text[ chinese_simplified ] = "¼ô³ı(~T)";\
+        Text[ russian ] = "Âûğåçàòü";\
+        Text[ polish ] = "Wytnij";\
+        Text[ japanese ] = "Ø‚èæ‚è(~T)";\
+        Text[ chinese_traditional ] = "°Å¤U(~T)";\
+        Text[ arabic ] = "ŞÕ";\
+        Text[ greek ] = "Á~ğïêïğŞ";\
+        Text[ korean ] = "Àß¶ó³»±â(~T)";\
+        Text[ turkish ] = "~Kes";\
+        Text[ language_user1 ] = " ";\
+    };\
+    MenuItem\
+    {\
+        Identifier = SID_COPY ; \
+        HelpId = SID_COPY ; \
+        Text = "Kopie~ren" ; \
+        Text [ ENGLISH ] = "Copy" ; \
+        Text [ finnish ] = "Kopioi" ; \
+        Text [ danish ] = "Kopier" ; \
+        Text [ french ] = "Copier" ; \
+        Text [ swedish ] = "Kopie~ra" ; \
+        Text [ dutch ] = "~Kopiëren" ; \
+        Text [ spanish ] = "Co~piar" ; \
+        Text [ english_us ] = "~Copy" ; \
+        Text [ italian ] = "Copia" ; \
+        Text [ portuguese ] = "Copiar" ; \
+        Text [ portuguese_brazilian ] = "Kopieren" ; \
+        Text[ chinese_simplified ] = "¸´ÖÆ(~C)";\
+        Text[ russian ] = "Êîïèğîâàòü";\
+        Text[ polish ] = "Kopiuj";\
+        Text[ japanese ] = "ºËß°(~C)";\
+        Text[ chinese_traditional ] = "½Æ»s(~C)";\
+        Text[ arabic ] = "äÓÎ";\
+        Text[ greek ] = "Áíôé~ãñáöŞ";\
+        Text[ korean ] = "º¹»ç(~C)";\
+        Text[ turkish ] = "Kopyala";\
+        Text[ language_user1 ] = " ";\
+    };\
+    MenuItem\
+    {\
+        Identifier = SID_PASTE ; \
+        HelpId = SID_PASTE ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */\
+        Text = "E~infügen" ; \
+        Text [ ENGLISH ] = "Paste" ; \
+        Text [ finnish ] = "Liitä" ; \
+        Text [ danish ] = "Sæt i~nd" ; \
+        Text [ french ] = "~Insérer" ; \
+        Text [ swedish ] = "Klistra ~in" ; \
+        Text [ dutch ] = "~Plakken" ; \
+        Text [ spanish ] = "P~egar" ; \
+        Text [ english_us ] = "~Paste" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Den Inhalt der Zwischenablage einfügen : Den Inhalt der Zwischenablage einf³gen */\
+        Text [ italian ] = "~Incolla" ; \
+        Text [ portuguese ] = "Colar" ; \
+        Text [ portuguese_brazilian ] = "Einfügen" ; \
+        Text[ chinese_simplified ] = "²åÈë(~P)";\
+        Text[ russian ] = "Âñò~àâèòü";\
+        Text[ polish ] = "~Wklej";\
+        Text[ japanese ] = "“\\‚è•t‚¯(~P)";\
+        Text[ chinese_traditional ] = "´¡¤J(~P)";\
+        Text[ arabic ] = "áÕŞ~";\
+        Text[ greek ] = "Åğ~éêüëëçóç";\
+        Text[ korean ] = "ºÙ¿©³Ö±â(~P)";\
+        Text[ turkish ] = "~Yapıştır";\
+        Text[ language_user1 ] = " ";\
+    };
+
+ //-------------------------------------------------------------------------------
+
+Menu RID_POPUP_ROWHEADER
+{
+    ItemList =
+    {
+        PART1
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_ROW_HEIGHT ;
+            HelpId = FID_ROW_HEIGHT ;
+            /* ### ACHTUNG: Neuer Text in Resource? Zeilenhöhe... : Zeilenh÷he... */
+            Text = "Zeile~nhöhe..." ;
+            Text [ ENGLISH ] = "Row height..." ;
+            Text [ finnish ] = "Rivin korkeuden..." ;
+            Text [ danish ] = "Rækkehøjde..." ;
+            Text [ french ] = "Hauteur ~de ligne..." ;
+            Text [ swedish ] = "R~adhöjd..." ;
+            Text [ dutch ] = "~Rijhoogte..." ;
+            Text [ spanish ] = "~Altura de fila..." ;
+            Text [ english_us ] = "~Height..." ;
+            /* ### ACHTUNG: Neuer Text in Resource? Zeilenhöhe ändern : Zeilenh÷he õndern */
+            Text [ italian ] = "Altezza riga..." ;
+            Text [ portuguese ] = "Altu~ra da linha..." ;
+            Text [ portuguese_brazilian ] = "Zeilenhöhe..." ;
+            Text[ chinese_simplified ] = "¸ß(~H)...";
+            Text[ russian ] = "Âûñîòà ñòğîêè...";
+            Text[ polish ] = "Wysokoœæ linii...";
+            Text[ japanese ] = "s‚Ì‚‚³(~H)...";
+            Text[ chinese_traditional ] = "¦C°ª(~H)...";
+            Text[ arabic ] = "ÇÑÊİÇÚ ÇáÕİ...";
+            Text[ greek ] = "¾øïò ãñá~ììŞò...";
+            Text[ korean ] = "³ôÀÌ(~H)...";
+            Text[ turkish ] = "Satır yüksekliği...";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = FID_ROW_OPT_HEIGHT ;
+            HelpId = FID_ROW_OPT_HEIGHT ;
+            /* ### ACHTUNG: Neuer Text in Resource? Optimale Zeilenhöhe... : Optimale Zeilenh÷he... */
+            Text = "~Optimale Zeilenhöhe..." ;
+            Text [ ENGLISH ] = "Optimize row height..." ;
+            Text [ finnish ] = "Sopivimman korkeuden..." ;
+            Text [ danish ] = "Optimal rækkehøjde..." ;
+            Text [ french ] = "Hauteur de ligne ~optimale..." ;
+            Text [ swedish ] = "~Optimal radhöjd..." ;
+            Text [ dutch ] = "~Optimale rijhoogte..." ;
+            Text [ spanish ] = "~Optimar altura de fila..." ;
+            Text [ english_us ] = "Optimal ~Row Height..." ;
+            /* ### ACHTUNG: Neuer Text in Resource? Optimale Zeilenhöhe einstellen : Optimale Zeilenh÷he einstellen */
+            Text [ italian ] = "Altezza ottimale righe..." ;
+            Text [ portuguese ] = "~Optimizar altura da linha..." ;
+            Text [ portuguese_brazilian ] = "Optimale Zeilenhöhe..." ;
+            Text[ chinese_simplified ] = "×î¼Ñ¸ß¶È(~R)...";
+            Text[ russian ] = "Îïòèìàëüíàÿ âûñîòà ñòğîêè...";
+            Text[ polish ] = "Optymalna wysokoœæ wierszy...";
+            Text[ japanese ] = "Å“K‚Ès‚Ì‚‚³(~R)...";
+            Text[ chinese_traditional ] = "³ÌÓì¦C°ª(~R)...";
+            Text[ arabic ] = "...ÇáÇÑÊİÇÚ ÇáÃãËá ááÕİ";
+            Text[ greek ] = "Âİëôéóô~ï ıøïò ãñáììŞò...";
+            Text[ korean ] = "ÃÖÀûÀÇ  Çà ³ôÀÌ(~R)...";
+            Text[ turkish ] = "~En uygun yükseklik...";
+            Text[ language_user1 ] = " ";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_INS_ROW ;
+            HelpId = FID_INS_ROW ;
+            /* ### ACHTUNG: Neuer Text in Resource? Zeilen einfügen : Zeilen einf³gen */
+            Text = "Zeilen ~einfügen" ;
+            Text [ ENGLISH ] = "Insert rows" ;
+            Text [ finnish ] = "Lisää rivejä" ;
+            Text [ danish ] = "Indsæt rækker" ;
+            Text [ french ] = "I~nsérer des lignes" ;
+            Text [ swedish ] = "Infoga rad~er" ;
+            Text [ dutch ] = "Rijen ~invoegen" ;
+            Text [ spanish ] = "~Insertar filas" ;
+            Text [ english_us ] = "~Insert Rows" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Ganze Zeilen einfügen : Ganze Zeilen einf³gen */
+            Text [ italian ] = "Inserisci righe" ;
+            Text [ portuguese ] = "~Inserir linhas" ;
+            Text [ portuguese_brazilian ] = "Zeilen einfügen" ;
+            Text[ chinese_simplified ] = "²åÈëĞĞ(~I)";
+            Text[ russian ] = "Âñòàâèòü ñòğîêè";
+            Text[ polish ] = "Wstaw wiersze";
+            Text[ japanese ] = "s‚Ì‘}“ü(~I)";
+            Text[ chinese_traditional ] = "´¡¤J¦C(~I)";
+            Text[ arabic ] = "ÅÏÑÇÌ ÃÓØÑ";
+            Text[ greek ] = "~ÅéóáãùãŞ ãñáììşí";
+            Text[ korean ] = "Çà »ğÀÔ(~I)";
+            Text[ turkish ] = "Satır ekle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_DEL_ROWS ;
+            HelpId = SID_DEL_ROWS ;
+            /* ### ACHTUNG: Neuer Text in Resource? Zeilen löschen : Zeilen l÷schen */
+            Text = "Zeilen ~löschen" ;
+            Text [ ENGLISH ] = "Delete rows" ;
+            Text [ english_us ] = "~Delete Rows" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Ganze Zeilen löschen : Ganze Zeilen l÷schen */
+            Text [ dutch ] = "Rijen ~wissen" ;
+            Text [ italian ] = "Elimina righe" ;
+            Text [ spanish ] = "~Eliminar filas" ;
+            Text [ french ] = "~Supprimer des lignes" ;
+            Text [ swedish ] = "Radera ra~der" ;
+            Text [ danish ] = "Slet rækker" ;
+            Text [ portuguese ] = "E~liminar linhas" ;
+            Text [ portuguese_brazilian ] = "Zeilen löschen" ;
+            Text[ chinese_simplified ] = "É¾³ıĞĞ(~D)";
+            Text[ russian ] = "Óäàëèòü ñòğîêè";
+            Text[ polish ] = "Usuñ linie";
+            Text[ japanese ] = "s‚Ìíœ(~D)";
+            Text[ chinese_traditional ] = "§R°£¦C(~D)";
+            Text[ arabic ] = "ÍĞİ ÃÓØÑ";
+            Text[ greek ] = "Äéáãñá~öŞ ãñáììşí";
+            Text[ korean ] = "Çà »èÁ¦(~D)";
+            Text[ turkish ] = "Satır sil";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_DELETE ;
+            HelpId = SID_DELETE ;
+            /* ### ACHTUNG: Neuer Text in Resource? Inhalte l~öschen... : Inhalte l~÷schen... */
+            Text = "Inhalte l~öschen..." ;
+            Text [ ENGLISH ] = "Dele~te Data..." ;
+            Text [ norwegian ] = "Dele~te Data..." ;
+            Text [ italian ] = "Canc~ella contenuti..." ;
+            Text [ portuguese_brazilian ] = "Apa~gar Dados..." ;
+            Text [ portuguese ] = "Eli~minar conteúdos..." ;
+            Text [ finnish ] = "~Poista tietoja..." ;
+            Text [ danish ] = "Slet indhold..." ;
+            Text [ french ] = "S~upprimer du contenu..." ;
+            Text [ swedish ] = "Radera innehå~ll..." ;
+            Text [ dutch ] = "~Inhoud wissen..." ;
+            Text [ spanish ] = "Eliminar contenidos..." ;
+            Text [ english_us ] = "De~lete Contents..." ;
+            /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Inhalte löschen (Formeln, Formate etc.) : Ausgewõhlte Inhalte l÷schen (Formeln, Formate etc.) */
+            Text[ chinese_simplified ] = "É¾³ıÄÚÈİ(~L)...";
+            Text[ russian ] = "Óäàëèòü ñîäåğæèìîå...";
+            Text[ polish ] = "Usuñ zawartoœæ...";
+            Text[ japanese ] = "“à—e‚Ìíœ(~L)...";
+            Text[ chinese_traditional ] = "§R°£¤º®e(~L)...";
+            Text[ arabic ] = "...ÍĞİ ãÍÊæíÇÊ";
+            Text[ greek ] = "Äéáãñá~öŞ ğåñéå÷ïìİíùí...";
+            Text[ korean ] = "³»¿ë Áö¿ì±â(~L)...";
+            Text[ turkish ] = "İçerikleri sil...";
+            Text[ language_user1 ] = " ";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_ROW_HIDE ;
+            HelpId = FID_ROW_HIDE ;
+            Text = "~Ausblenden" ;
+            Text [ ENGLISH ] = "Hide" ;
+            Text [ finnish ] = "Piilota" ;
+            Text [ danish ] = "Skjul" ;
+            Text [ french ] = "M~asquer" ;
+            Text [ swedish ] = "~Dölj" ;
+            Text [ dutch ] = "~Verbergen" ;
+            Text [ spanish ] = "~Ocultar" ;
+            Text [ english_us ] = "~Hide" ;
+            Text [ italian ] = "Nascondi" ;
+            Text [ portuguese ] = "O~cultar" ;
+            Text [ portuguese_brazilian ] = "Ausblenden" ;
+            Text[ chinese_simplified ] = "ÒşÈë(~H)";
+            Text[ russian ] = "Ñêğûòü";
+            Text[ polish ] = "Ukryj";
+            Text[ japanese ] = "•\\¦‚µ‚È‚¢(~H)";
+            Text[ chinese_traditional ] = "Áô¤J(~H)";
+            Text[ arabic ] = "ÅÎİÇÁ";
+            Text[ greek ] = "~Áğüêñõøç";
+            Text[ korean ] = "¼û±â±â(~H)";
+            Text[ turkish ] = "~Gizle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = FID_ROW_SHOW ;
+            HelpId = FID_ROW_SHOW ;
+            Text = "Ein~blenden" ;
+            Text [ ENGLISH ] = "Show" ;
+            Text [ finnish ] = "Näytä" ;
+            Text [ danish ] = "Vis" ;
+            Text [ french ] = "~Afficher" ;
+            Text [ swedish ] = "~Visa" ;
+            Text [ dutch ] = "~Weergeven" ;
+            Text [ spanish ] = "~Mostrar" ;
+            Text [ english_us ] = "~Show" ;
+            Text [ italian ] = "Mostra" ;
+            Text [ portuguese ] = "~Mostrar" ;
+            Text [ portuguese_brazilian ] = "Einblenden" ;
+            Text[ chinese_simplified ] = "ÏÔÊ¾(~S)";
+            Text[ russian ] = "Ïîêàçàòü";
+            Text[ polish ] = "Poka¿";
+            Text[ japanese ] = "•\\¦‚·‚é(~S)";
+            Text[ chinese_traditional ] = "Åã¥Ü(~S)";
+            Text[ arabic ] = "ÅÙåÇÑ";
+            Text[ greek ] = "Åì~öÜíéóç";
+            Text[ korean ] = "³ªÅ¸³»±â(~S)";
+            Text[ turkish ] = "G~öster";
+            Text[ language_user1 ] = " ";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        PART2
+        MenuItem
+        {
+            Identifier = FID_PASTE_CONTENTS ;
+            HelpId = FID_PASTE_CONTENTS ;
+            Text = "In~halte einfügen..." ;
+            Text[ chinese_simplified ] = "²åÈëÄÚÈİ(~S)...";
+            Text [ ENGLISH ] = "Paste ~Special..." ;
+            Text [ norwegian ] = "Paste ~Special..." ;
+            Text [ italian ] = "Incolla ~speciale..." ;
+            Text [ portuguese_brazilian ] = "Colar ~Especial..." ;
+            Text [ portuguese ] = "Colar e~special..." ;
+            Text [ finnish ] = "Liitä ~määräten..." ;
+            Text [ danish ] = "Indsæt ind~hold..." ;
+            Text [ french ] = "Colla~ge spécial..." ;
+            Text [ swedish ] = "Klistra in inne~håll..." ;
+            Text [ dutch ] = "Plakken ~speciaal..." ;
+            Text [ spanish ] = "Peg~ado especial..." ;
+            Text [ english_us ] = "Paste ~Special..." ;
+            Text[ russian ] = "~Ñïåöèàëüíàÿ âñòàâêà...";
+            Text[ polish ] = "~Wklej zawartoœæ...";
+            Text[ japanese ] = "Œ`®‚ğ‘I‘ğ‚µ‚Ä“\\‚è•t‚¯(~S)...";
+            Text[ chinese_traditional ] = "´¡¤J¤º®e(~S)...";
+            Text[ arabic ] = "áÕŞ ÎÇÕ...";
+            Text[ greek ] = "ÅéäéêŞ åğéêüëë~çóç...";
+            Text[ korean ] = "¼±ÅÃÇÏ¿© ºÙ¿©³Ö±â( ~S)...";
+            Text[ turkish ] = "Ö~zel yapıştır...";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+
+ //-------------------------------------------------------------------
+
+Menu RID_POPUP_COLHEADER
+{
+    ItemList =
+    {
+        PART1
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_COL_WIDTH ;
+            HelpId = FID_COL_WIDTH ;
+            Text = "Spalte~nbreite..." ;
+            Text [ ENGLISH ] = "Column width..." ;
+            Text [ finnish ] = "Sarakkeen leveyden..." ;
+            Text [ danish ] = "Kolonnebredde..." ;
+            Text [ french ] = "L~argeur de colonne..." ;
+            Text [ swedish ] = "Kolum~nbredd..." ;
+            Text [ dutch ] = "~Kolombreedte..." ;
+            Text [ spanish ] = "~Ancho de columna..." ;
+            Text [ english_us ] = "Col~umn Width..." ;
+            /* ### ACHTUNG: Neuer Text in Resource? Spaltenbreite ändern : Spaltenbreite õndern */
+            Text [ italian ] = "Larghezza colonna..." ;
+            Text [ portuguese ] = "~Largura da coluna..." ;
+            Text [ portuguese_brazilian ] = "Spaltenbreite..." ;
+            Text[ chinese_simplified ] = "ÁĞ¿í(~U)...";
+            Text[ russian ] = "Øèğèíà ñòîëáöîâ...";
+            Text[ polish ] = "Szerokoœæ kolumny...";
+            Text[ japanese ] = "—ñ•(~U)...";
+            Text[ chinese_traditional ] = "Äæ¼e(~U)...";
+            Text[ arabic ] = "ÚÑÖ ÇáÃÚãÏÉ...";
+            Text[ greek ] = "ĞëÜôïò ó~ôŞëçò...";
+            Text[ korean ] = "¿­ ³Êºñ(~U)...";
+            Text[ turkish ] = "Sütun genişliği...";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = FID_COL_OPT_WIDTH ;
+            HelpId = FID_COL_OPT_WIDTH ;
+            Text = "~Optimale Spaltenbreite..." ;
+            Text [ ENGLISH ] = "Optimize column width..." ;
+            Text [ finnish ] = "Sopivimman leveyden..." ;
+            Text [ danish ] = "Optimal kolonnebredde..." ;
+            Text [ french ] = "Largeur de colonne optimale..." ;
+            Text [ swedish ] = "~Optimal kolumnbredd..." ;
+            Text [ dutch ] = "~Optimale kolombreedte..." ;
+            Text [ spanish ] = "~Optimar ancho de columna..." ;
+            Text [ english_us ] = "O~ptimal Column Width..." ;
+            Text [ italian ] = "Larghezza ottimale colonna..." ;
+            Text [ portuguese ] = "~Optimizar largura da coluna..." ;
+            Text [ portuguese_brazilian ] = "Optimale Spaltenbreite..." ;
+            Text[ chinese_simplified ] = "×î¼ÑÁĞ¿í(~P)...";
+            Text[ russian ] = "Îïòèìàëüíàÿ øèğèíà ñòîëáöîâ...";
+            Text[ polish ] = "Optymalna szerokoœæ kolumny...";
+            Text[ japanese ] = "Å“K‚È—ñ•(~P)...";
+            Text[ chinese_traditional ] = "³ÌÓìÄæ¼e(~P)...";
+            Text[ arabic ] = "ÇáÚÑÖ ÇáÃãËá ááÚãæÏ...";
+            Text[ greek ] = "Âİëôéóô~ï ğëÜôïò óôŞëçò...";
+            Text[ korean ] = "ÃÖÀûÀÇ ¿­ ³Êºñ(~P)...";
+            Text[ turkish ] = "En uygun genişlik...";
+            Text[ language_user1 ] = " ";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_INS_COLUMN ;
+            HelpId = FID_INS_COLUMN ;
+            /* ### ACHTUNG: Neuer Text in Resource? Spalten einfügen : Spalten einf³gen */
+            Text = "Spalten ~einfügen" ;
+            Text [ ENGLISH ] = "Insert columns" ;
+            Text [ finnish ] = "Lisää sarakkeita" ;
+            Text [ danish ] = "Indsæt kolonner" ;
+            Text [ french ] = "I~nsérer des colonnes" ;
+            Text [ swedish ] = "Infoga ~kolumner" ;
+            Text [ dutch ] = "~Kolommen invoegen" ;
+            Text [ spanish ] = "~Insertar columnas" ;
+            Text [ english_us ] = "~Insert Columns" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Ganze Spalten einfügen : Ganze Spalten einf³gen */
+            Text [ italian ] = "Inserisci colonne" ;
+            Text [ portuguese ] = "~Inserir colunas" ;
+            Text [ portuguese_brazilian ] = "Spalten einfügen" ;
+            Text[ chinese_simplified ] = "²åÈëÁĞ(~I)";
+            Text[ russian ] = "Âñòàâèòü ñòîëáöû";
+            Text[ polish ] = "Wstaw kolumny";
+            Text[ japanese ] = "—ñ‚Ì‘}“ü(~I)";
+            Text[ chinese_traditional ] = "´¡¤JÄæ(~I)";
+            Text[ arabic ] = "ÅÏÑÇÌ ÃÚãÏÉ";
+            Text[ greek ] = "~ÅéóáãùãŞ óôçëşí";
+            Text[ korean ] = "¿­ »ğÀÔ(~I)";
+            Text[ turkish ] = "Sütun ekle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_DEL_COLS ;
+            HelpId = SID_DEL_COLS ;
+            /* ### ACHTUNG: Neuer Text in Resource? Spalten löschen : Spalten l÷schen */
+            Text = "Spalten ~löschen" ;
+            Text [ ENGLISH ] = "Delete columns" ;
+            Text [ english_us ] = "~Delete Columns" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Ganze Spalten löschen : Ganze Spalten l÷schen */
+            Text [ italian ] = "Elimina colonne" ;
+            Text [ spanish ] = "~Eliminar columnas" ;
+            Text [ french ] = "S~upprimer des colonnes" ;
+            Text [ dutch ] = "K~olommen wissen" ;
+            Text [ swedish ] = "Radera ko~lumner" ;
+            Text [ danish ] = "Slet kolonner" ;
+            Text [ portuguese ] = "Eliminar ~colunas" ;
+            Text [ portuguese_brazilian ] = "Spalten löschen" ;
+            Text[ chinese_simplified ] = "É¾³ıÁĞ(~D)";
+            Text[ russian ] = "Óäàëèòü ñòîëáöû";
+            Text[ polish ] = "Usuñ kolumny";
+            Text[ japanese ] = "—ñ‚Ìíœ(~D)";
+            Text[ chinese_traditional ] = "§R°£Äæ(~D)";
+            Text[ arabic ] = "ÍĞİ ÃÚãÏÉ";
+            Text[ greek ] = "ÄéáãñáöŞ óôç~ëşí";
+            Text[ korean ] = "¿­ »èÁ¦(~D)";
+            Text[ turkish ] = "Sütun sil";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_DELETE ;
+            HelpId = SID_DELETE ;
+            /* ### ACHTUNG: Neuer Text in Resource? Inhalte l~öschen... : Inhalte l~÷schen... */
+            Text = "Inhalte l~öschen..." ;
+            Text [ ENGLISH ] = "Dele~te Data..." ;
+            Text [ norwegian ] = "Dele~te Data..." ;
+            Text [ italian ] = "Can~cella contenuti..." ;
+            Text [ portuguese_brazilian ] = "Apa~gar Dados..." ;
+            Text [ portuguese ] = "Eliminar co~nteúdos..." ;
+            Text [ finnish ] = "~Poista tietoja..." ;
+            Text [ danish ] = "Slet indhold..." ;
+            Text [ french ] = "~Supprimer du contenu..." ;
+            Text [ swedish ] = "Radera ~innehåll..." ;
+            Text [ dutch ] = "I~nhoud wissen..." ;
+            Text [ spanish ] = "~Eliminar contenidos..." ;
+            Text [ english_us ] = "D~elete Contents..." ;
+            /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Inhalte löschen (Formeln, Formate etc.) : Ausgewõhlte Inhalte l÷schen (Formeln, Formate etc.) */
+            Text[ chinese_simplified ] = "É¾³ıÄÚÈİ(~E)...";
+            Text[ russian ] = "Óäàëèòü ñîäåğæèìîå...";
+            Text[ polish ] = "Usuñ zawartoœæ...";
+            Text[ japanese ] = "“à—e‚Ìíœ(~E)...";
+            Text[ chinese_traditional ] = "§R°£¤º®e(~E)...";
+            Text[ arabic ] = "ÍĞİ ãÍÊæíÇÊ...";
+            Text[ greek ] = "Äéáãñá~öŞ ğåñéå÷ïìİíùí...";
+            Text[ korean ] = "³»¿ë Áö¿ì±â(~E)...";
+            Text[ turkish ] = "İçerikleri sil...";
+            Text[ language_user1 ] = " ";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_COL_HIDE ;
+            HelpId = FID_COL_HIDE ;
+            Text = "~Ausblenden" ;
+            Text [ ENGLISH ] = "Hide" ;
+            Text [ finnish ] = "Piilota" ;
+            Text [ danish ] = "Skjul" ;
+            Text [ french ] = "~Masquer" ;
+            Text [ swedish ] = "~Dölj" ;
+            Text [ dutch ] = "~Verbergen" ;
+            Text [ spanish ] = "~Ocultar" ;
+            Text [ english_us ] = "~Hide" ;
+            Text [ italian ] = "Nascondi" ;
+            Text [ portuguese ] = "O~cultar" ;
+            Text [ portuguese_brazilian ] = "Ausblenden" ;
+            Text[ chinese_simplified ] = "ÒşÈë(~H)";
+            Text[ russian ] = "Ñêğûòü";
+            Text[ polish ] = "Ukryj";
+            Text[ japanese ] = "•\\¦‚µ‚È‚¢(~H)";
+            Text[ chinese_traditional ] = "Áô¤J(~H)";
+            Text[ arabic ] = "ÅÎİÇÁ";
+            Text[ greek ] = "~Áğüêñõøç";
+            Text[ korean ] = "¼û±â±â(~H)";
+            Text[ turkish ] = "~Gizle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = FID_COL_SHOW ;
+            HelpId = FID_COL_SHOW ;
+            Text = "Ein~blenden" ;
+            Text [ ENGLISH ] = "Show" ;
+            Text [ finnish ] = "Näytä" ;
+            Text [ danish ] = "Vis" ;
+            Text [ french ] = "A~fficher" ;
+            Text [ swedish ] = "~Visa" ;
+            Text [ dutch ] = "~Weergeven" ;
+            Text [ spanish ] = "~Mostrar" ;
+            Text [ english_us ] = "~Show" ;
+            Text [ italian ] = "Mostra" ;
+            Text [ portuguese ] = "~Mostrar" ;
+            Text [ portuguese_brazilian ] = "Einblenden" ;
+            Text[ chinese_simplified ] = "ÏÔÊ¾(~S)";
+            Text[ russian ] = "Ïîêàçàòü";
+            Text[ polish ] = "Poka¿";
+            Text[ japanese ] = "•\\¦‚·‚é(~S)";
+            Text[ chinese_traditional ] = "Åã¥Ü(~S)";
+            Text[ arabic ] = "ÅÙåÇÑ";
+            Text[ greek ] = "Åì~öÜíéóç";
+            Text[ korean ] = "³ªÅ¸³»±â(~S)";
+            Text[ turkish ] = "G~öster";
+            Text[ language_user1 ] = " ";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        PART2
+        MenuItem
+        {
+            Identifier = FID_PASTE_CONTENTS ;
+            HelpId = FID_PASTE_CONTENTS ;
+            Text = "In~halte einfügen..." ;
+            Text[ chinese_simplified ] = "²åÈëÄÚÈİ(~S)...";
+            Text [ ENGLISH ] = "Paste ~Special..." ;
+            Text [ norwegian ] = "Paste ~Special..." ;
+            Text [ italian ] = "Incolla ~speciale..." ;
+            Text [ portuguese_brazilian ] = "Colar ~Especial..." ;
+            Text [ portuguese ] = "Colar e~special..." ;
+            Text [ finnish ] = "Liitä ~määräten..." ;
+            Text [ danish ] = "Indsæt ind~hold..." ;
+            Text [ french ] = "Colla~ge spécial..." ;
+            Text [ swedish ] = "Klistra in inne~håll..." ;
+            Text [ dutch ] = "Plakken ~speciaal..." ;
+            Text [ spanish ] = "Peg~ado especial..." ;
+            Text [ english_us ] = "Paste ~Special..." ;
+            Text[ russian ] = "~Ñïåöèàëüíàÿ âñòàâêà...";
+            Text[ polish ] = "~Wklej zawartoœæ...";
+            Text[ japanese ] = "Œ`®‚ğ‘I‘ğ‚µ‚Ä“\\‚è•t‚¯(~S)...";
+            Text[ chinese_traditional ] = "´¡¤J¤º®e(~S)...";
+            Text[ arabic ] = "áÕŞ ÎÇÕ...";
+            Text[ greek ] = "ÅéäéêŞ åğéêüëë~çóç...";
+            Text[ korean ] = "¼±ÅÃÇÏ¿© ºÙ¿©³Ö±â( ~S)...";
+            Text[ turkish ] = "Ö~zel yapıştır...";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+
+
+

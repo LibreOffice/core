@@ -1,0 +1,269 @@
+/*************************************************************************
+ *
+ *  $RCSfile: highred.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "highred.hrc"
+ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
+{
+    OutputSize = TRUE ;
+    HelpId = FID_CHG_ACCEPT ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 318 , 161 ) ;
+    Text = "Änderungen anzeigen" ;
+    Text [ ENGLISH ] = "Show Changes" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+     // Dieser Dialog hat einen Cancel-Button !
+    CheckBox CB_HIGHLIGHT
+    {
+        Text = "~Änderungen in der Tabelle anzeigen" ;
+        Text [ ENGLISH ] = "Show changes in the spreadsheet" ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 150 , 12 ) ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "~Show changes in spreadsheet" ;
+        Text [ portuguese_brazilian ] = "Änderungen in der Tabelle anzeigen" ;
+        Text [ swedish ] = "Visa ~ändringar i tabellen" ;
+        Text [ danish ] = "Vis ændringerne i regnearket" ;
+        Text [ italian ] = "Mostra modifiche nella tabella" ;
+        Text [ spanish ] = "~Mostrar las modificaciones en la hoja" ;
+        Text [ french ] = "~Afficher les modifications dans la feuille de calcul" ;
+        Text [ dutch ] = "W~ijzigingen op het werkblad weergeven." ;
+        Text [ portuguese ] = "Mostrar modificações na folha de cálculo" ;
+        Text[ chinese_simplified ] = "ÏÔÊ¾¹¤×÷±íÄÚµÄ¸ü¸ÄÄÚÈİ(~S)";
+        Text[ russian ] = "Ïîêàçàòü èçìåíåíèÿ â ëèñòå";
+        Text[ polish ] = "Poka¿ zmiany w tabeli";
+        Text[ japanese ] = "•\\“à‚Ì•ÏX‚ğ•\\¦(~S)";
+        Text[ chinese_traditional ] = "Åã¥Ü¤u§@ªí¤ºªºÅÜ§ó(~S)";
+        Text[ arabic ] = "ÅÙåÇÑ ÇáÊÛííÑÇÊ İí ÇáÌÏæá";
+        Text[ greek ] = "ÅìöÜíéóç áëëáãşí ğßíáêá";
+        Text[ korean ] = "½ºÇÁ·¹µå ½ÃÆ®»ó¿¡ º¯°æ º¸ÀÌ±â(~S)";
+        Text[ turkish ] = "~Tablodaki değişiklikleri görüntüle";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_REDLINING
+    {
+        Pos = MAP_APPFONT ( 3 , 18 ) ;
+        Size = MAP_APPFONT ( 260 ,107 ) ;
+    };
+    CheckBox CB_HIGHLIGHT_ACCEPT
+    {
+        Text = "A~kzeptierte Änderungen anzeigen" ;
+        Text [ ENGLISH ] = "Show rejected changes" ;
+        Pos = MAP_APPFONT ( 14 , 125 ) ;
+        Size = MAP_APPFONT ( 150 , 12 ) ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Show ~accepted changes" ;
+        Text [ portuguese_brazilian ] = "A~kzeptierte Änderungen anzeigen" ;
+        Text [ swedish ] = "Visa a~ccepterade ändringar" ;
+        Text [ danish ] = "Vis accepterede ændringer" ;
+        Text [ italian ] = "Mostra i cambiamenti a~ccettati" ;
+        Text [ spanish ] = "~Mostrar las modificaciones aceptadas" ;
+        Text [ french ] = "Afficher les modifications acceptées" ;
+        Text [ dutch ] = "Geac~cepteerde wijzigingen weergeven" ;
+        Text [ portuguese ] = "Mostrar mo~dificações aceites" ;
+        Text[ chinese_simplified ] = "ÏÔÊ¾½ÓÊÜµÄ¸ü¸ÄÄÚÈİ(~A)";
+        Text[ russian ] = "Ïîêàçàòü ïğèíÿòûå èçìåíåíèÿ";
+        Text[ polish ] = "Poka¿ zmiany zaakceptowane";
+        Text[ japanese ] = "”F‚ß‚½•ÏXŒÂŠ‚ğ•\\¦(~A)";
+        Text[ chinese_traditional ] = "Åã¥Ü±µ¨üªºÅÜ§ó(~A)";
+        Text[ arabic ] = "ÅÙåÇÑ ÇáÊÛííÑÇÊ ÇáãŞÈæáÉ";
+        Text[ greek ] = "ÅìöÜíéóç áğïäå÷ïìİíùí áëëáãşí";
+        Text[ korean ] = "Àû¿ëµÈ º¯°æ º¸ÀÌ±â(~A)";
+        Text[ turkish ] = "~Kabul edilen değişiklikleri görüntüle";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CB_HIGHLIGHT_REJECT
+    {
+        Text = "A~bgelehnte Änderungen anzeigen" ;
+        Text [ ENGLISH ] = "Show accepted changes" ;
+        Pos = MAP_APPFONT ( 14 , 140 ) ;
+        Size = MAP_APPFONT ( 150 , 12 ) ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Show ~rejected changes" ;
+        Text [ portuguese_brazilian ] = "A~bgelehnte Änderungen anzeigen" ;
+        Text [ swedish ] = "Visa ~ej accepterade ändringar" ;
+        Text [ danish ] = "Vis forkastede ændringer" ;
+        Text [ italian ] = "Mostra i cambiamenti ~non accettati" ;
+        Text [ spanish ] = "~Mostrar las modificaciones rechazadas" ;
+        Text [ french ] = "Afficher les modifications refusées" ;
+        Text [ dutch ] = "Niet-ge~accepteerde wijzigingen weergeven" ;
+        Text [ portuguese ] = "Mostrar modificações ~rejeitadas" ;
+        Text[ chinese_simplified ] = "ÏÔÊ¾¾Ü¾øµÄ¸ü¸ÄÄÚÈİ(~R)";
+        Text[ russian ] = "Ïîêàçàòü îòêëîíåííûå èçìåíåíèÿ";
+        Text[ polish ] = "Poka¿ zmiany odrzucone";
+        Text[ japanese ] = "”F‚ß‚È‚¢•ÏXŒÂŠ‚ğ•\\¦(~R)";
+        Text[ chinese_traditional ] = "Åã¥Ü©Úµ´ªºÅÜ§ó(~R)";
+        Text[ arabic ] = "ÅÙåÇÑ ÇáÊÛííÑÇÊ ÇáãÑİæÖÉ";
+        Text[ greek ] = "ÅìöÜíéóç áğïññéğôİùí áëëáãşí";
+        Text[ korean ] = "Ãë¼ÒµÈ º¯°æ º¸ÀÌ±â(~R)";
+        Text[ turkish ] = "~Reddedilen değişiklikleri görüntüle";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_TO_HIGHLIGHT
+    {
+        Pos = MAP_APPFONT ( 3 , 18 ) ;
+        Size = MAP_APPFONT ( 260 , 136 ) ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 269 , 6 ) ;
+        Size = MAP_APPFONT ( 45 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 269 , 23 ) ;
+        Size = MAP_APPFONT ( 45 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 269 , 43 ) ;
+        Size = MAP_APPFONT ( 45 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_ASSIGN
+    {
+        Text = "Bereich" ;
+        Text [ ENGLISH ] = "Range" ;
+        Hide = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 105 ) ;
+        Size = MAP_APPFONT ( 128 , 12 ) ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Range" ;
+        Text [ portuguese_brazilian ] = "Bereich" ;
+        Text [ swedish ] = "Område" ;
+        Text [ danish ] = "Område" ;
+        Text [ italian ] = "Area" ;
+        Text [ spanish ] = "Área" ;
+        Text [ french ] = "Plage" ;
+        Text [ dutch ] = "Bereik" ;
+        Text [ portuguese ] = "Intervalo" ;
+        Text[ chinese_simplified ] = "ÇøÓò";
+        Text[ russian ] = "Äèàïàçîí";
+        Text[ polish ] = "Zakres";
+        Text[ japanese ] = "”ÍˆÍ";
+        Text[ chinese_traditional ] = "°Ï°ì";
+        Text[ arabic ] = "ÇáäØÇŞ";
+        Text[ greek ] = "Ğåñéï÷Ş";
+        Text[ korean ] = "¹üÀ§";
+        Text[ turkish ] = "Aralık";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_ASSIGN
+    {
+        Hide = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 119 ) ;
+        Size = MAP_APPFONT ( 128 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton RB_ASSIGN
+    {
+        Hide = TRUE ;
+        QuickHelpText = "Verkleinern/Vergrößern" ;
+        QuickHelpText [ ENGLISH ] = "Shrink/Expand" ;
+        Pos = MAP_APPFONT ( 142 , 119 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ english_us ] = "Minimize/Maximize" ;
+        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ swedish ] = "Förminska/Förstora" ;
+        QuickHelpText [ danish ] = "Formindsk/Forstør" ;
+        QuickHelpText [ italian ] = "Zoom avanti/indietro" ;
+        QuickHelpText [ spanish ] = "Reducir/Aumentar" ;
+        QuickHelpText [ french ] = "Réduire/agrandir" ;
+        QuickHelpText [ dutch ] = "Verkleinen/vergroten" ;
+        QuickHelpText [ portuguese ] = "Afastar/Aproximar" ;
+    QuickHelpText[ russian ] = "Óìåíüøèòü/Óâåëè÷èòü";
+        QuickHelpText[ polish ] = "Pomniejsz/Powiêksz";
+        QuickHelpText[ japanese ] = "k¬/Šg‘å";
+        QuickHelpText[ chinese_simplified ] = "ËõĞ¡/·Å´ó";
+        QuickHelpText[ chinese_traditional ] = "ÁY¤p/©ñ¤j";
+        QuickHelpText[ arabic ] = "ÊÕÛíÑ/ÊßÈíÑ";
+        QuickHelpText[ greek ] = "Óìßêñõíóç/Ìåãİèõíóç";
+        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    Text [ english_us ] = "Show Changes" ;
+    Text [ portuguese_brazilian ] = "Änderungen anzeigen" ;
+    Text [ swedish ] = "Visa ändringar" ;
+    Text [ danish ] = "Vis ændringer" ;
+    Text [ italian ] = "Mostra le modifiche" ;
+    Text [ spanish ] = "Mostrar modificaciones" ;
+    Text [ french ] = "Afficher les modifications" ;
+    Text [ dutch ] = "Wijzigingen weergeven" ;
+    Text [ portuguese ] = "Mostrar modificações" ;
+    Text[ chinese_simplified ] = "ÏÔÊ¾¸ü¸Ä";
+    Text[ russian ] = "Ïîêàçàòü èçìåíåíèÿ";
+    Text[ polish ] = "Poka¿ zmiany";
+    Text[ japanese ] = "•ÏXŒÂŠ‚Ì•\\¦";
+    Text[ chinese_traditional ] = "Åã¥ÜÅÜ§ó";
+    Text[ arabic ] = "ÅÙåÇÑ ÇáÊÛííÑÇÊ";
+    Text[ greek ] = "ÅìöÜíéóç áëëáãşí";
+    Text[ korean ] = "º¯°æº¸ÀÌ±â";
+    Text[ turkish ] = "Değişiklikleri görüntüle";
+    Text[ language_user1 ] = " ";
+};

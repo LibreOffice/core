@@ -1,0 +1,792 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dfa.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:44:46 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "sc.hrc" // Definition RID_XXX in StarCalc
+#include "dfa.hrc"
+
+Resource RID_SC_ADDIN_DFA
+{
+    String DFA_PAR_DATE1_NAME // Name of Date1 Parameter
+    {
+        Text = "Datum 1" ;
+        Text [ english ] = "Date 1" ;
+        Text[ english_us ] = "Date 1";
+        Text[ portuguese ] = "Data 1";
+        Text[ russian ] = "Äàòà 1";
+        Text[ dutch ] = "Datum 1";
+        Text[ french ] = "Date 1";
+        Text[ spanish ] = "Fecha 1";
+        Text[ italian ] = "Data 1";
+        Text[ danish ] = "Dato_1";
+        Text[ swedish ] = "Datum 1";
+        Text[ polish ] = "Data 1";
+        Text[ portuguese_brazilian ] = "Date 1";
+        Text[ japanese ] = "“ú•t 1";
+        Text[ chinese_simplified ] = "ÈÕÆÚ 1";
+        Text[ chinese_traditional ] = "¤é´Á 1";
+        Text[ arabic ] = "ÇáÊÇÑíÎ 1";
+        Text[ dutch ] = "Datum 1";
+        Text[ chinese_simplified ] = "ÈÕÆÚ 1";
+        Text[ greek ] = "Çìåñïìçíßá 1";
+        Text[ korean ] = "ÀÏÀÚ 1";
+        Text[ turkish ] = "Tarih 1";
+    };
+    String DFA_PAR_DATE2_NAME // Name of Date2 Parameter
+    {
+        Text = "Datum 2" ;
+        Text [ english ] = "Date 2" ;
+        Text[ english_us ] = "Date 2";
+        Text[ portuguese ] = "Data 2";
+        Text[ russian ] = "Äàòà 2";
+        Text[ dutch ] = "Datum 2";
+        Text[ french ] = "Date 2";
+        Text[ spanish ] = "Fecha 2";
+        Text[ italian ] = "Data 2";
+        Text[ danish ] = "Dato_2";
+        Text[ swedish ] = "Datum 2";
+        Text[ polish ] = "Data 2";
+        Text[ portuguese_brazilian ] = "Date 2";
+        Text[ japanese ] = "“ú•t 2";
+        Text[ chinese_simplified ] = "ÈÕÆÚ 2";
+        Text[ chinese_traditional ] = "¤é´Á 2";
+        Text[ arabic ] = "ÇáÊÇÑíÎ 2";
+        Text[ dutch ] = "Datum 2";
+        Text[ chinese_simplified ] = "ÈÕÆÚ 2";
+        Text[ greek ] = "Çìåñïìçíßá 2";
+        Text[ korean ] = "ÀÏÀÚ 2";
+        Text[ turkish ] = "Tarih 2";
+    };
+    String DFA_PAR_MODE_NAME // Name of Mode Parameter
+    {
+        Text = "Art" ;
+        Text [ english ] = "Mode" ;
+        Text[ english_us ] = "Mode";
+        Text[ portuguese ] = "Modo";
+        Text[ russian ] = "Ñïîñîá âû÷èñëåíèé";
+        Text[ dutch ] = "Modus";
+        Text[ french ] = "Mode";
+        Text[ spanish ] = "Modo";
+        Text[ italian ] = "Modo";
+        Text[ danish ] = "Type";
+        Text[ swedish ] = "Typ";
+        Text[ polish ] = "Tryb";
+        Text[ portuguese_brazilian ] = "Mode";
+        Text[ japanese ] = "Ó°ÄŞ";
+        Text[ chinese_simplified ] = "ÀàĞÍ";
+        Text[ chinese_traditional ] = "Ãş«¬";
+        Text[ arabic ] = "ØÑíŞÉ ÇáÍÓÇÈ";
+        Text[ dutch ] = "Modus";
+        Text[ chinese_simplified ] = "ÀàĞÍ";
+        Text[ greek ] = "Ôñüğïò";
+        Text[ korean ] = "°è»ê ¸ğµå";
+        Text[ turkish ] = "Tür";
+    };
+
+    String DFA_PAR_DATE_NAME // Name of Date Parameter
+    {
+        Text = "Datum" ;
+        Text [ english ] = "Date" ;
+        Text[ english_us ] = "Date";
+        Text[ portuguese ] = "Data";
+        Text[ russian ] = "Äàòà";
+        Text[ dutch ] = "Datum";
+        Text[ french ] = "Date";
+        Text[ spanish ] = "Fecha";
+        Text[ italian ] = "Data";
+        Text[ danish ] = "Dato";
+        Text[ swedish ] = "Datum";
+        Text[ polish ] = "Data";
+        Text[ portuguese_brazilian ] = "Date";
+        Text[ japanese ] = "“ú•t";
+        Text[ chinese_simplified ] = "ÈÕÆÚ";
+        Text[ chinese_traditional ] = "¤é´Á";
+        Text[ arabic ] = "ÇáÊÇÑíÎ";
+        Text[ dutch ] = "Datum";
+        Text[ chinese_simplified ] = "ÈÕÆÚ";
+        Text[ greek ] = "Çìåñïìçíßá";
+        Text[ korean ] = "ÀÏÀÚ";
+        Text[ turkish ] = "Tarih";
+    };
+
+    String DFA_PAR_DATE_DESC // Description of Date Parameter
+    {
+        Text = "Interne Zahl des Datums" ;
+        Text [ english ] = "a internal date value" ;
+        Text[ english_us ] = "Internal number of the date";
+        Text[ portuguese ] = "Número interno da data";
+        Text[ russian ] = "Ïğåäñòàâëÿåò âíóòğåííåå çíà÷åíèå äàòû";
+        Text[ dutch ] = "Interne waarde van de datum";
+        Text[ french ] = "Le numéro de série de la date";
+        Text[ spanish ] = "Número interno de la fecha";
+        Text[ italian ] = "Numero interno della data";
+        Text[ danish ] = "Intern datoværdi";
+        Text[ swedish ] = "Datumets interna tal";
+        Text[ polish ] = "Wewnêtrzna liczba daty";
+        Text[ portuguese_brazilian ] = "a internal date value";
+        Text[ japanese ] = "“ú•t‚Ì¼Ø±Ù’l";
+        Text[ chinese_simplified ] = "ÈÕÆÚµÄÏµÍ³ÄÚ²¿Êı×Ö";
+        Text[ chinese_traditional ] = "¤é´Áªº¤º³¡¼Æ¦r";
+        Text[ arabic ] = "ÇáÑŞã ÇáÏÇÎáí ááÊÇÑíÎ";
+        Text[ dutch ] = "Interne waarde van de datum";
+        Text[ chinese_simplified ] = "ÈÕÆÚµÄÏµÍ³ÄÚ²¿Êı×Ö";
+        Text[ greek ] = "Åóùôåñéêüò áñéèìüò ôçò çìåñïìçíßáò";
+        Text[ korean ] = "ÀÏÀÚÀÇ ³»ºÎÀû ¹øÈ£";
+        Text[ turkish ] = "Dahili tarih sayısı";
+    };
+
+/*-=======================================================================*/
+    String DFA_WEEK_NAME // Name
+    {
+        Text = "Wochen" ;
+        Text [ english ] = "Weeks" ;
+        Text[ english_us ] = "Weeks";
+        Text[ portuguese ] = "Semanas";
+        Text[ russian ] = "Íåäåëè";
+        Text[ dutch ] = "Weken";
+        Text[ french ] = "Semaines";
+        Text[ spanish ] = "Semanas";
+        Text[ italian ] = "Settimane";
+        Text[ danish ] = "Uger";
+        Text[ swedish ] = "Veckor";
+        Text[ polish ] = "Tygodnie";
+        Text[ portuguese_brazilian ] = "Weeks";
+        Text[ japanese ] = "T";
+        Text[ chinese_simplified ] = "ÖÜ";
+        Text[ chinese_traditional ] = "¶g";
+        Text[ arabic ] = "ÃÓÇÈíÚ";
+        Text[ dutch ] = "Weken";
+        Text[ chinese_simplified ] = "ÖÜ";
+        Text[ greek ] = "ÅâäïìÜäåò";
+        Text[ korean ] = "ÁÖ";
+        Text[ turkish ] = "Hafta";
+    };
+    String DFA_WEEK_DESC // Description
+    {
+        Text = "Bestimmt die Wochendifferenz zweier Daten" ;
+        Text [ english ] = "returns number of weeks between two dates" ;
+        Text[ english_us ] = "Returns the difference in weeks between two dates";
+        Text[ portuguese ] = "devolve o número de semanas entre duas datas";
+        Text[ russian ] = "Îïğåäåëÿåò ÷èñëî íåäåëü ìåæäó äâóìÿ äàòàìè";
+        Text[ dutch ] = "Bepaalt het aantal weken tussen twee datums";
+        Text[ french ] = "Renvoie la différence en semaines de deux dates";
+        Text[ spanish ] = "Determina la diferencia en semanas de dos fechas";
+        Text[ italian ] = "Restituisce la differenza settimanale di due date";
+        Text[ danish ] = "Bestemmer ugedifferensen mellem to datoer";
+        Text[ swedish ] = "Bestämmer veckodifferensen mellan två datum";
+        Text[ polish ] = "Oblicza liczbê tygodni zawartych miêdzy dwiema datami";
+        Text[ portuguese_brazilian ] = "returns number of weeks between two dates";
+        Text[ japanese ] = "2‚Â‚Ì“ú•t‚ÌŠÔ‚ÌT‚Ì”‚ğ•Ô‚µ‚Ü‚·";
+        Text[ chinese_simplified ] = "¼ÆËãÁ½¸öÊı¾İµÄÖÜ²î¶î";
+        Text[ chinese_traditional ] = "­pºâ¨â­Ó¼Æ¾Úªº¶g®tÃB";
+        Text[ arabic ] = "íÍÏÏ ÚÏÏ ÇáÃÓÇÈíÚ ÇáæÇŞÚÉ Èíä ÊÇÑíÎíä";
+        Text[ dutch ] = "Bepaalt het aantal weken tussen twee datums";
+        Text[ chinese_simplified ] = "¼ÆËãÁ½¸öÊı¾İµÄÖÜ²î¶î";
+        Text[ greek ] = "Ïñßæåé ôçí äéáöïñÜ åâäïìÜäùí äıï çìåñïìçíéşí";
+        Text[ korean ] = "µÎ ÀÏÀÚ »çÀÌÀÇ ÁÖ´ÜÀ§ Â÷ÀÌ";
+        Text[ turkish ] = "İki veri arasındaki hafta farkını bulur";
+    };
+    String DFA_WEEK_PAR1_DESC // Description of Parameter 1
+    {
+        Text = "Jüngeres Datum für die Wochendifferenz" ;
+        Text [ english ] = "the older date for the week difference" ;
+        Text[ language_user1 ] = "Jüngeres Datum ist das Gegenteil von older date";
+        Text[ english_us ] = "The end date for calculating the difference in weeks";
+        Text[ portuguese ] = "Data mais recente para a diferença em semanas";
+        Text[ russian ] = "Êîíå÷íàÿ äàòà äëÿ îïğåäåëåíèÿ ğàçíèöû â êîëè÷åñòâå íåäåëü.";
+        Text[ dutch ] = "De vroegere datum";
+        Text[ french ] = "Date la plus récente pour la différence en semaines";
+        Text[ spanish ] = "Fecha más reciente para la diferencia en semanas";
+        Text[ italian ] = "La data più recente per la differenza settimanale";
+        Text[ danish ] = "Yngre dato for ugedifferensen";
+        Text[ swedish ] = "Yngre datum för veckodifferensen";
+        Text[ polish ] = "Wczeœniejsza data w obliczaniu ró¿nicy tygodni";
+        Text[ portuguese_brazilian ] = "the older date for the week difference";
+        Text[ japanese ] = "T”ŒvZ‚Ì‚½‚ß‚Ì‰‚ß‚Ì“ú•t";
+        Text[ chinese_simplified ] = "ÊôÓÚÒ»¸öÖÜ²î¶îµÄ½ÏÔçµÄÈÕÆÚ";
+        Text[ chinese_traditional ] = "Äİ©ó¤@­Ó¶g®tÃBªº¸û¦­ªº¤é´Á";
+        Text[ arabic ] = "ÊÇÑíÎ ÃÍÏË ááİÇÑŞ ÈÇáÃÓÇÈíÚ";
+        Text[ dutch ] = "De vroegere datum";
+        Text[ chinese_simplified ] = "ÊôÓÚÒ»¸öÖÜ²î¶îµÄ½ÏÔçµÄÈÕÆÚ";
+        Text[ greek ] = "ÔåëéêŞ çìåñïìçíßá ãéá ôïí õğïëïãéóìü ôçò äéáöïñÜò óå åâäïìÜäåò";
+        Text[ korean ] = "ÁÖ »çÀÌ¿¡ Â÷ÀÌ¸¦ °è»êÇÏ±â À§ÇÑ ¸¶Áö¸· ³¯";
+        Text[ turkish ] = "Hafta farkı hesabı için daha geç olan tarih";
+    };
+    String DFA_WEEK_PAR2_DESC // Description of Parameter 2
+    {
+        Text = "Älteres Datum für die Wochendifferenz" ;
+        Text [ english ] = "the younger date for the week difference" ;
+        Text[ english_us ] = "The start date for calculating the difference weeks";
+        Text[ portuguese ] = "Data mais antiga para a diferença em semanas";
+        Text[ russian ] = "Íà÷àëüíàÿ äàòà äëÿ îïğåäåëåíèÿ ğàçíèöû â êîëè÷åñòâå íåäåëü.";
+        Text[ dutch ] = "De latere datum";
+        Text[ french ] = "Date la plus ancienne pour la différence en semaines";
+        Text[ spanish ] = "Fecha más antigua para la diferencia en semanas";
+        Text[ italian ] = "La data meno recente per la differenza settimanale";
+        Text[ danish ] = "Ældre dato for ugedifferensen";
+        Text[ swedish ] = "Äldre datum för veckodifferensen";
+        Text[ polish ] = "PóŸniejsza data w obliczaniu ró¿nicy tygodni";
+        Text[ portuguese_brazilian ] = "the younger date for the week difference";
+        Text[ japanese ] = "T”ŒvZ‚Ì‚½‚ß‚ÌŒã‚Ì“ú•t";
+        Text[ chinese_simplified ] = "ÊôÓÚÒ»¸öÖÜ²î¶îµÄ½ÏÍíµÄÈÕÆÚ";
+        Text[ chinese_traditional ] = "Äİ©ó¤@­Ó¶g®tÃBªº¸û±ßªº¤é´Á";
+        Text[ arabic ] = "ÊÇÑíÎ ÃŞÏã ááİÇÑŞğ ÈÇáÃÓÇÈíÚ";
+        Text[ dutch ] = "De latere datum";
+        Text[ chinese_simplified ] = "ÊôÓÚÒ»¸öÖÜ²î¶îµÄ½ÏÍíµÄÈÕÆÚ";
+        Text[ greek ] = "Áñ÷éêŞ çìåñïìçíßá ãéá ôïí õğïëïãéóìü ôçò äéáöïñÜò óå åâäïìÜäåò";
+        Text[ korean ] = "ÁÖ Â÷ÀÌ¸¦ °è»êÇÏ±â À§ÇÑ ½ÃÀÛÀÏ";
+        Text[ turkish ] = "Hafta farkı hesabı için daha erken olan tarih";
+    };
+    String DFA_WEEK_PAR3_DESC // Description of Parameter 3
+    {
+        Text = "Art der Differenzbildung Art=0 heißt Intervall, Art=1 heißt in Kalenderwochen" ;
+        Text [ english ] = "Mode=0 means week interval, Mode=1 means by week of year" ;
+        Text[ english_us ] = "Type of difference calculation: mode=0 means the interval, mode=1 means calendar weeks";
+        Text[ portuguese ] = "Modo de formação da diferença: modo=0 para intervalos; modo=1 para semanas.";
+        Text[ russian ] = "Ñïîñîá âû÷èñëåíèé: ñïîñîá=0 îçíà÷àåò èíòåğâàë, ñïîñîá=1 îçíà÷àåò èíòåğâàë â êàëåíäàğíûõ íåäåëÿõ";
+        Text[ dutch ] = "Modus=0 betekent aantal , Modus=1 betekent in kalenderweken";
+        Text[ french ] = "Mode de calcul de la différence Mode=0 pour l'intervalle, Mode=1 pour les semaines de l'année";
+        Text[ spanish ] = "Tipo de formación de diferencia: Tipo=0 significa intervalo; tipo=1, semanas del año";
+        Text[ italian ] = "Modo di calcolo della differenza Modo=0 per l'intervallo, Modo=1 per le settimane dell'anno";
+        Text[ danish ] = "Differensdannelsestype Type=O betyder interval, Type=1 betyder i kalenderuger";
+        Text[ swedish ] = "Typ av differensbildning typ=0 heter intervall, typ=1 heter i kalenderveckan";
+        Text[ polish ] = "Obliczanie ró¿nicy. 0 oznacza przedzia³ tygodni, 1 - tygodnie kalendarzowe";
+        Text[ portuguese_brazilian ] = "Mode=0 means week interval, Mode=1 means by week of year";
+        Text[ japanese ] = "ŒvZ•û–@:Ó°ÄŞ=0 ‚Í7“ú’PˆÊAÓ°ÄŞ=1 ‚Í¶ÚİÀŞ°‚ÌT‚ÅŒvZ‚³‚ê‚Ü‚·B";
+        Text[ chinese_simplified ] = "µÃ³ö²î¶îµÄÀàĞÍ Mode=0 ±íÊ¾¼ä¸ô£¬ Mode=1 ±íÊ¾Ò»ÄêµÄĞÇÆÚÊı";
+        Text[ chinese_traditional ] = "±o¥X®tÃBªºÃş«¬ Mode=0 ªí¥Ü¶¡¹j¡A Mode=1 ªí¥Ü¤@¦~ªº¬P´Á¼Æ";
+        Text[ arabic ] = "ØÑíŞÉ ÍÓÇÈ ÇáİÑŞ: mode=0 ÊÚäí ÇáİÇÕá ÇáÒãäí¡ mode=1 ÊÚäí İí ÃÓÇÈíÚ ÇáÊŞæíã";
+        Text[ dutch ] = "Modus=0 betekent aantal , Modus=1 betekent in kalenderweken";
+        Text[ chinese_simplified ] = "µÃ³ö²î¶îµÄÀàĞÍ Mode=0 ±íÊ¾¼ä¸ô£¬ Mode=1 ±íÊ¾Ò»ÄêµÄĞÇÆÚÊı";
+        Text[ greek ] = "Ôñüğïò õğïëïãéóìïı äéáöïñÜò: Ôñüğïò=0 óçìáßíåé äéÜóôçìá, Ôñüğïò=1 óçìáßíåé çìåñïëïãéáêİò åâäïìÜäåò";
+        Text[ korean ] = "Â÷ÀÌ °è»ê ÇüÅÂ: ¸ğµå=0 Àº  °£°İÀ» ÀÇ¹ÌÇÏ°í, ¸ğµå=1 ÀÏÁ¤ÀÌ ÀÖ´Â ÁÖ¸¦ ÀÇ¹Ì";
+        Text[ turkish ] = "Fark hesabı türü, tür=0 aralık, tür=1 ise takvim haftası cinsinden anlamına gelir";
+    };
+
+/*-=======================================================================*/
+
+    String DFA_MONTHS_NAME // Name
+    {
+        Text = "Monate" ;
+        Text [ english ] = "Months" ;
+        Text[ english_us ] = "Months";
+        Text[ portuguese ] = "Meses";
+        Text[ russian ] = "Ìåñÿöû";
+        Text[ dutch ] = "Maanden";
+        Text[ french ] = "Mois";
+        Text[ spanish ] = "Meses";
+        Text[ italian ] = "Mesi";
+        Text[ danish ] = "Måneder";
+        Text[ swedish ] = "Månader";
+        Text[ polish ] = "Miesi¹ce";
+        Text[ portuguese_brazilian ] = "Months";
+        Text[ japanese ] = "Œ";
+        Text[ chinese_simplified ] = "ÔÂ";
+        Text[ chinese_traditional ] = "¤ë";
+        Text[ arabic ] = "ÃÔåÑ";
+        Text[ dutch ] = "Maanden";
+        Text[ chinese_simplified ] = "ÔÂ";
+        Text[ greek ] = "ÌŞíåò";
+        Text[ korean ] = "¿ù";
+        Text[ turkish ] = "Ay";
+    };
+    String DFA_MONTHS_DESC // Description
+    {
+        Text = "Bestimmt die Monatsdifferenz zweier Daten" ;
+        Text [ english ] = "returns number of months between two dates" ;
+        Text[ english_us ] = "Determines the number of months between two dates";
+        Text[ portuguese ] = "devolve o número de meses entre duas datas";
+        Text[ russian ] = "Îïğåäåëÿåò ÷èñëî ìåñÿöåâ ìåæäó äâóìÿ äàòàìè";
+        Text[ dutch ] = "Bepaalt het aantal maanden tussen twee datums";
+        Text[ french ] = "Renvoie la différence en mois de deux dates";
+        Text[ spanish ] = "Determina la diferencia en meses entre dos fechas";
+        Text[ italian ] = "Restituisce la differenza mensile di due date";
+        Text[ danish ] = "Bestemmer månedsdifferensen mellem to datoer";
+        Text[ swedish ] = "Bestämmer månadsdifferensen mellan två datum";
+        Text[ polish ] = "Oblicza liczbê miesiêcy zawartych miêdzy dwoma datami";
+        Text[ portuguese_brazilian ] = "returns number of months between two dates";
+        Text[ japanese ] = "2‚Â‚Ì“ú•t‚ÌŠÔ‚ÌŒ”‚ğ•Ô‚µ‚Ü‚·";
+        Text[ chinese_simplified ] = "¼ÆËãÁ½¸öÊı¾İµÄÔÂ²î¶î";
+        Text[ chinese_traditional ] = "­pºâ¨â­Ó¼Æ¾Úªº¤ë®tÃB";
+        Text[ arabic ] = "íÍÏÏ ÚÏÏ ÇáÃÔåÑ ÇáæÇŞÚÉ Èíä ÊÇÑíÎíä";
+        Text[ dutch ] = "Bepaalt het aantal maanden tussen twee datums";
+        Text[ chinese_simplified ] = "¼ÆËãÁ½¸öÊı¾İµÄÔÂ²î¶î";
+        Text[ greek ] = "Ïñßæåé ôçí äéáöïñÜ äıï çìåñïìçíéşí óå ìŞíåò";
+        Text[ korean ] = "µÎ ÀÏÀÚ »çÀÌÀÇ °³¿ù¼ö¸¦ °áÁ¤";
+        Text[ turkish ] = "İki veri arasındaki ay farkını belirler";
+    };
+    String DFA_MONTHS_PAR1_DESC // Description of Parameter 1
+    {
+        Text = "Jüngeres Datum für die Monatsdifferenz" ;
+        Text [ english ] = "the older date for the month difference" ;
+        Text[ english_us ] = "The end date for calculating the difference in months";
+        Text[ portuguese ] = "Data mais recente para a diferença em meses";
+        Text[ russian ] = "Êîíå÷íàÿ äàòà äëÿ îïğåäåëåíèÿ ğàçíèöû â êîëè÷åñòâå ìåñÿöåâ.";
+        Text[ dutch ] = "de vroegere datum";
+        Text[ french ] = "Date la plus récente pour la différence en mois";
+        Text[ spanish ] = "Fecha más reciente para la diferencia mensual";
+        Text[ italian ] = "La data più recente per la differenza mensile";
+        Text[ danish ] = "Yngre dato for månedsdifferensen";
+        Text[ swedish ] = "Yngre datum för månadsdifferensen";
+        Text[ polish ] = "Wczeœniejsza data w obliczaniu ró¿nicy miesiêcy";
+        Text[ portuguese_brazilian ] = "the older date for the month difference";
+        Text[ japanese ] = "Œ”ŒvZ‚Ì‚½‚ß‚Ì‰‚ß‚Ì“ú•t";
+        Text[ chinese_simplified ] = "ÊôÓÚÒ»¸öÔÂ²î¶îµÄ½ÏÔçµÄÈÕÆÚ";
+        Text[ chinese_traditional ] = "Äİ©ó¤@­Ó¤ë®tÃBªº¸û¦­ªº¤é´Á";
+        Text[ arabic ] = "ÊÇÑíÎ ÃÍÏË ááİÇÑŞ ÈÇáÃÔåÑ";
+        Text[ dutch ] = "de vroegere datum";
+        Text[ chinese_simplified ] = "ÊôÓÚÒ»¸öÔÂ²î¶îµÄ½ÏÔçµÄÈÕÆÚ";
+        Text[ greek ] = "ÔåëéêŞ çìåñïìçíßá ãéá ôïí õğïëïãéóìü ôçò äéáöïñÜò óå ìŞíåò";
+        Text[ korean ] = "¿ù »çÀÌ¿¡ Â÷ÀÌ¸¦ °è»êÇÏ±â À§ÇÑ ¸¶Áö¸· ³¯";
+        Text[ turkish ] = "Ay farkı hesabı için daha geç olan tarih";
+    };
+    String DFA_MONTHS_PAR2_DESC // Description of Parameter 2
+    {
+        Text = "Älteres Datum für die Monatsdifferenz" ;
+        Text [ english ] = "the younger date for the month difference" ;
+        Text[ english_us ] = "The start date for calculating the difference in months";
+        Text[ portuguese ] = "Data mais antiga para a diferença em meses";
+        Text[ russian ] = "Íà÷àëüíàÿ äàòà äëÿ îïğåäåëåíèÿ ğàçíèöû â êîëè÷åñòâå ìåñÿöåâ.";
+        Text[ dutch ] = "Latere datum";
+        Text[ french ] = "Date la plus ancienne pour la différence en mois";
+        Text[ spanish ] = "Fecha más antigua para la diferencia mensual";
+        Text[ italian ] = "La data meno recente per la differenza mensile";
+        Text[ danish ] = "Ældre dato for månedsdifferensen";
+        Text[ swedish ] = "Äldre datum för månadsdifferensen";
+        Text[ polish ] = "PóŸniejsza data w obliczaniu ró¿nicy miesiêcy";
+        Text[ portuguese_brazilian ] = "the younger date for the month difference";
+        Text[ japanese ] = "Œ”ŒvZ‚Ì‚½‚ß‚ÌŒã‚Ì“ú•t";
+        Text[ chinese_simplified ] = "ÊôÓÚÒ»¸öÔÂ²î¶îµÄ½ÏÍíµÄÈÕÆÚ";
+        Text[ chinese_traditional ] = "Äİ©ó¤@­Ó¤ë®tÃBªº¸û±ßªº¤é´Á";
+        Text[ arabic ] = "ÊÇÑíÎ ÃŞÏã ááİÇÑŞ ÈÇáÃÔåÑ";
+        Text[ dutch ] = "Latere datum";
+        Text[ chinese_simplified ] = "ÊôÓÚÒ»¸öÔÂ²î¶îµÄ½ÏÍíµÄÈÕÆÚ";
+        Text[ greek ] = "Áñ÷éêŞ çìåñïìçíßá ãéá ôïí õğïëïãéóìü ôçò äéáöïñÜò óå ìŞíåò";
+        Text[ korean ] = "¿ù Â÷ÀÌ¸¦ °è»êÇÏ±â À§ÇÑ ½ÃÀÛÀÏ";
+        Text[ turkish ] = "Ay farkı hesabı için daha erken olan tarih";
+    };
+    String DFA_MONTHS_PAR3_DESC // Description of Parameter 2
+    {
+        Text = "Art der Differenzbildung Art=0 heißt Intervall, Art=1 heißt in Kalendermonaten" ;
+        Text [ english ] = "Mode=0 means month interval, Mode=1 means by month of year" ;
+        Text[ english_us ] = "Type of difference calculation: Mode = 0 means interval, mode = 1 means in calendar months";
+        Text[ portuguese ] = "Modo de formação da diferença: modo=0 para intervalos; modo=1 para meses.";
+        Text[ russian ] = "Ñïîñîá âû÷èñëåíèé: ñïîñîá=0 îçíà÷àåò èíòåğâàë, ñïîñîá=1 îçíà÷àåò èíòåğâàë â êàëåíäàğíûõ ìåñÿöàõ.";
+        Text[ dutch ] = "Modus=0 betekent aantal, Modus=1 betekent in kalendermaanden";
+        Text[ french ] = "Mode de calcul de la différence Mode=0 pour l'intervalle, Mode=1 pour les mois de l'année";
+        Text[ spanish ] = "Tipo de formación de diferencia: Tipo=0 significa intervalo; tipo=1, meses del año";
+        Text[ italian ] = "Modo di calcolo della differenza Modo=0 per l'intervallo, Modo=1 per i mesi dell'anno";
+        Text[ danish ] = "Differensdannelsestype Type=O betyder interval, Type=1 betyder i kalendermåneder";
+        Text[ swedish ] = "Typ av differensbildning typ=0 heter intervall, typ=1 heter i kalendermånaden";
+        Text[ polish ] = "Obliczanie ró¿nicy. 0 oznacza przedzia³ miesiêczny, 1 - miesi¹ce kalendarzowe";
+        Text[ portuguese_brazilian ] = "Mode=0 means month interval, Mode=1 means by month of year";
+        Text[ japanese ] = "ŒvZ•û–@:Ó°ÄŞ=0 ‚Íˆê’è’PˆÊAÓ°ÄŞ=1 ‚Í¶ÚİÀŞ°‚ÌŒ‚ÅŒvZ‚³‚ê‚Ü‚·B";
+        Text[ chinese_simplified ] = "µÃ³ö²î¶î Mode=0 ±íÊ¾¼ä¸ô£¬ Mode=1 ±íÊ¾Ò»ÄêµÄÔÂÊı";
+        Text[ chinese_traditional ] = "±o¥X®tÃB Mode=0 ªí¥Ü¶¡¹j¡A Mode=1 ªí¥Ü¤@¦~ªº¤ë¼Æ";
+        Text[ arabic ] = "ØÑíŞÉ ÍÓÇÈ ÇáİÑŞ: mode=0 ÊÚäí ÇáİÇÕá ÇáÒãäí¡ mode=1 ÊÚäí İí ÃÔåÑ ÇáÊŞæíã";
+        Text[ dutch ] = "Modus=0 betekent aantal, Modus=1 betekent in kalendermaanden";
+        Text[ chinese_simplified ] = "µÃ³ö²î¶î Mode=0 ±íÊ¾¼ä¸ô£¬ Mode=1 ±íÊ¾Ò»ÄêµÄÔÂÊı";
+        Text[ greek ] = "Ôñüğïò õğïëïãéóìïı äéáöïñÜò: Ôñüğïò=0 óçìáßíåé äéÜóôçìá, Ôñüğïò=1 óçìáßíåé çìåñïëïãéáêïß ìŞíåò";
+        Text[ korean ] = "Â÷ÀÌ °è»ê ÇüÅÂ: ¸ğµå=0 Àº  °£°İÀ» ÀÇ¹ÌÇÏ°í, ¸ğµå=1 ÀÏÁ¤ÀÌ ÀÖ´Â ¿ùÀ» ÀÇ¹Ì";
+        Text[ turkish ] = "Fark hesabı türü, tür=0 aralık, tür=1 ise takvim ayı cinsinden anlamına gelir";
+    };
+
+/*-=======================================================================*/
+
+    String DFA_YEARS_NAME // Name
+    {
+        Text = "Jahre" ;
+        Text [ english ] = "Years" ;
+        Text[ english_us ] = "Years";
+        Text[ portuguese ] = "Anos";
+        Text[ russian ] = "Ãîäû";
+        Text[ dutch ] = "Jaren";
+        Text[ french ] = "Années";
+        Text[ spanish ] = "Años";
+        Text[ italian ] = "Anni";
+        Text[ danish ] = "År";
+        Text[ swedish ] = "År";
+        Text[ polish ] = "Lata";
+        Text[ portuguese_brazilian ] = "Years";
+        Text[ japanese ] = "”N";
+        Text[ chinese_simplified ] = "Years";
+        Text[ chinese_traditional ] = "Years";
+        Text[ arabic ] = "ÓäæÇÊ";
+        Text[ dutch ] = "Jaren";
+        Text[ chinese_simplified ] = "Years";
+        Text[ greek ] = "×ñüíéá";
+        Text[ korean ] = "³â";
+        Text[ turkish ] = "Yıl";
+    };
+    String DFA_YEARS_DESC // Description
+    {
+        Text = "Bestimmt die Jahresdifferenz zweier Daten" ;
+        Text [ english ] = "returns number of years between two dates" ;
+        Text[ english_us ] = "Returns the difference in years between two dates";
+        Text[ portuguese ] = "devolve o número de anos entre duas datas";
+        Text[ russian ] = "Îïğåäåëÿåò êîëè÷åñòâî ëåò ìåæäó äâóìÿ äàòàìè";
+        Text[ dutch ] = "Bepaalt het aantal jaren tussen twee datums";
+        Text[ french ] = "Renvoie la différence en années de deux dates";
+        Text[ spanish ] = "Determina la diferencia en años de dos fechas";
+        Text[ italian ] = "Restituisce la differenza annuale di due date";
+        Text[ danish ] = "Bestemmer årsdifferensen mellem to datoer";
+        Text[ swedish ] = "Bestämmer årsdifferensen mellan två datum";
+        Text[ polish ] = "Oblicza liczbê lat zawartych miêdzy dwiema datami";
+        Text[ portuguese_brazilian ] = "returns number of years between two dates";
+        Text[ japanese ] = "2‚Â‚Ì“ú•t‚ÌŠÔ‚Ì”N”‚ğ•Ô‚µ‚Ü‚·";
+        Text[ chinese_simplified ] = "¼ÆËãÁ½¸öÊı¾İµÄÄê²î¶î";
+        Text[ chinese_traditional ] = "­pºâ¨â­Ó¼Æ¾Úªº¦~®tÃB";
+        Text[ arabic ] = "íÍÏÏ ÚÏÏ ÇáÓäæÇÊ ÇáæÇŞÚÉ Èíä ÊÇÑíÎíä";
+        Text[ dutch ] = "Bepaalt het aantal jaren tussen twee datums";
+        Text[ chinese_simplified ] = "¼ÆËãÁ½¸öÊı¾İµÄÄê²î¶î";
+        Text[ greek ] = "Ïñßæåé ôçí äéáöïñÜ äıï çìåñïìçíéşí óå İôç";
+        Text[ korean ] = "µÎ ÀÏÀÚ »çÀÌÀÇ ³â Â÷ÀÌ";
+        Text[ turkish ] = "İki veri arasındaki yıl farkını bulur";
+    };
+    String DFA_YEARS_PAR1_DESC // Description of Parameter 1
+    {
+        Text = "Jüngeres Datum für die Jahresdifferenz" ;
+        Text [ english ] = "the older date for the year difference" ;
+        Text[ english_us ] = "The end date for calculating the difference in years";
+        Text[ portuguese ] = "Data mais recente para a diferença em anos";
+        Text[ russian ] = "Êîíå÷íàÿ äàòà äëÿ îïğåäåëåíèÿ ğàçíèöû â êîëè÷åñòâå ëåò.";
+        Text[ dutch ] = "De vroegere datum";
+        Text[ french ] = "Date la plus récente pour la différence en années";
+        Text[ spanish ] = "Fecha más reciente para la diferencia en años";
+        Text[ italian ] = "La data meno recente per la differenza annuale";
+        Text[ danish ] = "Yngre dato for årsdifferensen";
+        Text[ swedish ] = "Yngre datum för årsdifferensen";
+        Text[ polish ] = "Wczeœniejsza data w obliczaniu ró¿nicy lat";
+        Text[ portuguese_brazilian ] = "the older date for the year difference";
+        Text[ japanese ] = "”N”ŒvZ‚Ì‚½‚ß‚Ì‰‚ß‚Ì“ú•t";
+        Text[ chinese_simplified ] = "ÊôÓÚÒ»¸öÄê²î¶îµÄ½ÏÔçµÄÈÕÆÚ";
+        Text[ chinese_traditional ] = "Äİ©ó¤@­Ó¦~®tÃBªº¸û¦­ªº¤é´Á";
+        Text[ arabic ] = "ÊÇÑíÎ ÃÍÏË ááİÇÑŞ ÈÇáÓäæÇÊ";
+        Text[ dutch ] = "De vroegere datum";
+        Text[ chinese_simplified ] = "ÊôÓÚÒ»¸öÄê²î¶îµÄ½ÏÔçµÄÈÕÆÚ";
+        Text[ greek ] = "ÔåëéêŞ çìåñïìçíßá ãéá ôïí õğïëïãéóìü ôçò äéáöïñÜò óå İôç";
+        Text[ korean ] = "³â »çÀÌ¿¡ Â÷ÀÌ¸¦ °è»êÇÏ±â À§ÇÑ ¸¶Áö¸· ³¯";
+        Text[ turkish ] = "Yıl farkı hesabı için daha geç olan tarih";
+    };
+    String DFA_YEARS_PAR2_DESC // Description of Parameter 2
+    {
+        Text = "Älteres Datum für die Jahresdifferenz" ;
+        Text [ english ] = "the younger date for the year difference" ;
+        Text[ english_us ] = "The start date for calculating the difference in years";
+        Text[ portuguese ] = "Data mais antiga para a diferença em anos";
+        Text[ russian ] = "Íà÷àëüíàÿ äàòà äëÿ îïğåäåëåíèÿ ğàçíèöû â êîëè÷åñòâå ëåò.";
+        Text[ dutch ] = "De latere datum";
+        Text[ french ] = "Date la plus ancienne pour la différence en années";
+        Text[ spanish ] = "Fecha más antigua para la diferencia en años";
+        Text[ italian ] = "La data meno recente per la differenza annuale";
+        Text[ danish ] = "Ældre dato for årsdifferensen";
+        Text[ swedish ] = "Äldre datum för årsdifferensen";
+        Text[ polish ] = "PóŸniejsza data w obliczaniu ró¿nicy lat";
+        Text[ portuguese_brazilian ] = "the younger date for the year difference";
+        Text[ japanese ] = "”N”ŒvZ‚Ì‚½‚ß‚ÌŒã‚Ì“ú•t";
+        Text[ chinese_simplified ] = "ÊôÓÚÒ»¸öÄê²î¶îµÄ½ÏÍíµÄÈÕÆÚ";
+        Text[ chinese_traditional ] = "Äİ©ó¤@­Ó¦~®tÃBªº¸û±ßªº¤é´Á";
+        Text[ arabic ] = "ÊÇÑíÎ ÃŞÏã ááİÇÑŞ ÈÇáÓäæÇÊ";
+        Text[ dutch ] = "De latere datum";
+        Text[ chinese_simplified ] = "ÊôÓÚÒ»¸öÄê²î¶îµÄ½ÏÍíµÄÈÕÆÚ";
+        Text[ greek ] = "Áñ÷éêŞ çìåñïìçíßá ãéá ôïí õğïëïãéóìü ôçò äéáöïñÜò óå İôç";
+        Text[ korean ] = "³â Â÷ÀÌ¸¦ °è»êÇÏ±â À§ÇÑ ½ÃÀÛÀÏ";
+        Text[ turkish ] = "Yıl farkı hesabı için daha erken olan tarih";
+    };
+    String DFA_YEARS_PAR3_DESC // Description of Parameter 2
+    {
+        Text = "Art der Differenzbildung Art=0 heißt Intervall, Art=1 heißt in Kalenderjahren" ;
+        Text [ english ] = "Mode=0 means year interval, Mode=1 means by calendar years" ;
+        Text[ english_us ] = "Type of difference calculation: Mode=0 means interval, mode=1 means in calendar years.";
+        Text[ portuguese ] = "Modo de formação da diferença: modo=0 para intervalos; modo=1 para anos .";
+        Text[ russian ] = "Ñïîñîá âû÷èñëåíèé: ñïîñîá=0 îçíà÷àåò èíòåğâàë, ñïîñîá=1 îçíà÷àåò èíòåğâàë â êàëåíäàğíûõ ãîäàõ";
+        Text[ dutch ] = "Modus=0 betekent aantal, modus=1 betekent in kalenderjaren";
+        Text[ french ] = "Mode de calcul de la différence Mode=0 pour l'intervalle, Mode=1 pour les années";
+        Text[ spanish ] = "Tipo de formación de diferencia: Tipo=0 significa intervalo; tipo=1, años naturales";
+        Text[ italian ] = "Modo di calcolo della differenza Modo=0 per l'intervallo, Modo=1 per l'anno";
+        Text[ danish ] = "Differensdannelsestype Type=O betyder interval, Type=1 betyder i kalenderår";
+        Text[ swedish ] = "Typ av differensbildning typ=0 heter intervall, typ=1 heter i kalenderåren";
+        Text[ polish ] = "Obliczanie ró¿nicy. 0 oznacza przedzia³ lat, 1 - lata kalendarzowe";
+        Text[ portuguese_brazilian ] = "Mode=0 means year interval, Mode=1 means by calendar years";
+        Text[ japanese ] = "ŒvZ•û–@:Ó°ÄŞ=0 ‚Íˆê’è’PˆÊAÓ°ÄŞ=1 ‚Í¶ÚİÀŞ°‚Ì”N‚ÅŒvZ‚³‚ê‚Ü‚·B";
+        Text[ chinese_simplified ] = "µÃ³ö²î¶îµÄÀàĞÍ Mode=0 ±íÊ¾Äê¼ä¸ô£¬ Mode=1 ±íÊ¾ĞÇÆÚÄêÊı";
+        Text[ chinese_traditional ] = "±o¥X®tÃBªºÃş«¬ Mode=0 ªí¥Ü¦~¶¡¹j¡A Mode=1 ªí¥Ü¬P´Á¦~¼Æ";
+        Text[ arabic ] = "ØÑíŞÉ ÍÓÇÈ ÇáİÑŞ: mode=0 ÊÚäí İÇÕá Òãäí¡ mode=1 ÊÚäí İí ÓäæÇÊ ÇáÊŞæíã";
+        Text[ dutch ] = "Modus=0 betekent aantal, modus=1 betekent in kalenderjaren";
+        Text[ chinese_simplified ] = "µÃ³ö²î¶îµÄÀàĞÍ Mode=0 ±íÊ¾Äê¼ä¸ô£¬ Mode=1 ±íÊ¾ĞÇÆÚÄêÊı";
+        Text[ greek ] = "Ôñüğïò ôïõ õğïëïãéóìïı ôçò äéáöïñÜò: Ôñüğïò=0 óçìáßíåé äéÜóôçìá, Ôñüğïò=1 óçìáßíåé óå çìåñïëïãéáêÜ İôç";
+        Text[ korean ] = "Â÷ÀÌ °è»ê ÇüÅÂ: ¸ğµå=0 Àº  °£°İÀ» ÀÇ¹ÌÇÏ°í, ¸ğµå=1 ÀÏÁ¤ÀÌ ÀÖ´Â ³âÀ» ÀÇ¹Ì.";
+        Text[ turkish ] = "Fark hesabı türü, tür=0 aralık, tür=1 ise takvim yılı cinsinden anlamına gelir";
+    };
+
+/*-=======================================================================*/
+
+    String DFA_ISLEAPYEAR_NAME // Name
+    {
+        Text = "IstSchaltJahr" ;
+        Text [ english ] = "IsLeapYear" ;
+        Text[ english_us ] = "IsLeapYear";
+        Text[ portuguese ] = "ÉAnoBissexto";
+        Text[ russian ] = "Âûñîêîñíûé ãîä";
+        Text[ dutch ] = "IsSchrikkelJaar";
+        Text[ french ] = "EstAnnéeBissextile";
+        Text[ spanish ] = "EsAñoBisiesto";
+        Text[ italian ] = "AnnoBisestile";
+        Text[ danish ] = "ErSkudÅr";
+        Text[ swedish ] = "ÄrSkottår";
+        Text[ polish ] = "Rok przestêpny";
+        Text[ portuguese_brazilian ] = "IsLeapYear";
+        Text[ japanese ] = "IsLeapYear";
+        Text[ chinese_simplified ] = "IsLeapYear";
+        Text[ chinese_traditional ] = "IsLeapYear";
+        Text[ arabic ] = "Ãæá ÓäÉ ßÈíÓÉ";
+        Text[ dutch ] = "IsSchrikkelJaar";
+        Text[ chinese_simplified ] = "IsLeapYear";
+        Text[ greek ] = "ÅßíáéÄßóåêôï¸ôïò";
+        Text[ korean ] = "°Ç³Ê ¶Ú ³â";
+        Text[ turkish ] = "Artıkyıldır";
+    };
+    String DFA_ISLEAPYEAR_DESC // Description
+    {
+        Text = "Liefert 1(WAHR) wenn das Jahr ein Schaltjahr ist sonst 0(FALSCH)" ;
+        Text [ english ] = "returns 1 if the date is in a LeapYear, 0 otherwise" ;
+        Text[ english_us ] = "Returns 1 (TRUE) if a leap year is used, otherwise 0 (FALSE) is returned";
+        Text[ portuguese ] = "devolve 1(VERDADEIRO) se o ano for um ano bissexto, caso contrário 0 (FALSO)";
+        Text[ russian ] = "Âîçâğàùàåò çíà÷åíèå 1 (ÈÑÒÈÍÀ), åñëè ãîä ÿâëÿåòñÿ âûñîêîñíûì, â ïğîòèâíîì ñëó÷àå âîçâğàùàåò çíà÷åíèå 0 (ËÎÆÜ)";
+        Text[ dutch ] = "Geeft als resultaat 1(WAAR) als het jaar een schrikkeljaar is, andrs 0(ONWAAR)";
+        Text[ french ] = "Renvoie 1 (VRAI) si l'année est une année bissextile, sinon 0 (FAUX)";
+        Text[ spanish ] = "Devuelve 1(VERDADERO) si el año es bisiesto; si no, 0(FALSO)";
+        Text[ italian ] = "Restituisce 1(VERO) se l'anno è bisestile, altrimenti 0(FALSO)";
+        Text[ danish ] = "Returnerer 1(SAND) hvis året er et skudår ellers 0(FALSK)";
+        Text[ swedish ] = "Returnerar 1(SANT) om året är ett skottår annars 0(FALSKT)";
+        Text[ polish ] = "Podaje 1 (PRAWDA), jeœli rok jest rokiem przestêpnym, w innym wypadku 0 (FA£SZ).";
+        Text[ portuguese_brazilian ] = "returns 1 if the date is in a LeapYear, 0 otherwise";
+        Text[ japanese ] = "‚»‚Ì”N‚ª‰[”N‚Å‚ ‚ê‚Î 1(TRUE)A‚»‚¤‚Å‚È‚¯‚ê‚Î0(FALSE)‚ğ•Ô‚µ‚Ü‚·B";
+        Text[ chinese_simplified ] = "Èç¹ûÊÇÈòÄê¾Í·´À¡ 1(TRUE) £¬·ñÔò¾Í·´À¡ 0 (FALSE)";
+        Text[ chinese_traditional ] = "¦pªG¬O¶|¦~´N¶Ç¦^ 1(TRUE)¡A§_«h´N¶Ç¦^ 0 (FALSE)";
+        Text[ arabic ] = "íŞÏã 1 (ÕÍíÍ) ÚäÏãÇ Êßæä ÇáÓäÉ ßÈíÓÉ¡ ÚÏÇ Ğáß 0 (ÎØÃ)";
+        Text[ dutch ] = "Geeft als resultaat 1(WAAR) als het jaar een schrikkeljaar is, andrs 0(ONWAAR)";
+        Text[ chinese_simplified ] = "Èç¹ûÊÇÈòÄê¾Í·´À¡ 1(TRUE) £¬·ñÔò¾Í·´À¡ 0 (FALSE)";
+        Text[ greek ] = "Áğïäßäåé 1 (ÁËÇÈÇÓ) üôáí ğñüêåéôáé ãéá äßóåêôï İôïò, áëëéşò 0 (ØÅÕÄÇÓ)";
+        Text[ korean ] = "°Ç³Ê ¶Ú ³âµµ°¡ »ç¿ëµÇ¾úÀ¸¸é 1À» ¹İÈ¯(Âü), ¾Æ´Ï¸é 0À» ¹İÈ¯(°ÅÁş)";
+        Text[ turkish ] = "Yıl, artıkyıl ise 1(DOĞRU) aksi halde 0(YANLIŞ) verir";
+    };
+
+/*-=======================================================================*/
+
+    String DFA_DAYSINMONTH_NAME // Name
+    {
+        Text = "TageImMonat" ;
+        Text [ english ] = "DaysInMonth" ;
+        Text[ english_us ] = "DaysInMonth";
+        Text[ portuguese ] = "DiasNoMês";
+        Text[ russian ] = "Äíåé â ìåñÿöå";
+        Text[ dutch ] = "DagenInMaand";
+        Text[ french ] = "JoursDansMois";
+        Text[ spanish ] = "DíasEnMes";
+        Text[ italian ] = "GiorniMese";
+        Text[ danish ] = "DageMåned";
+        Text[ swedish ] = "DagarIMånaden";
+        Text[ polish ] = "Dni w miesi¹cu";
+        Text[ portuguese_brazilian ] = "DaysInMonth";
+        Text[ japanese ] = "DaysInMonth";
+        Text[ chinese_simplified ] = "DaysInMonth";
+        Text[ chinese_traditional ] = "DaysInMonth";
+        Text[ arabic ] = "íæãÇğ İí ÇáÔåÑ";
+        Text[ dutch ] = "DagenInMaand";
+        Text[ chinese_simplified ] = "DaysInMonth";
+        Text[ greek ] = "ÇìİñåòÁíÜÌŞíá";
+        Text[ korean ] = "¿ùÀÇ ÀÏ¼ö";
+        Text[ turkish ] = "AydakiGünSayısı";
+    };
+    String DFA_DAYSINMONTH_DESC // Description
+    {
+        Text = "Bestimmt die Anzahl an Tagen im Monat zu einem Datum" ;
+        Text [ english ] = "returns the number of days in the month for a date" ;
+        Text[ english_us ] = "Returns the number of days in the month in relation to the date entered";
+        Text[ portuguese ] = "devolve o número de dias no mês para uma determinada data";
+        Text[ russian ] = "Îïğåäåëÿåò êîëè÷åñòâî äíåé â ìåñÿöå äëÿ óêàçàííîé äàòû";
+        Text[ dutch ] = "Geeft als resultaat het aantal dagen in een maand bij een bepaalde datum";
+        Text[ french ] = "Renvoie le nombre de jours dans le mois pour une date";
+        Text[ spanish ] = "Determina la cantidad de días en un mes para una fecha";
+        Text[ italian ] = "Restituisce il numero dei giorni del mese per una determinata data";
+        Text[ danish ] = "Bestemmer antallet af dage i en måned til en dato";
+        Text[ swedish ] = "Bestämmer antalet dagar i månaden till ett datum";
+        Text[ polish ] = "Oblicza liczbê dni w miesi¹cu do podanej daty";
+        Text[ portuguese_brazilian ] = "returns the number of days in the month for a date";
+        Text[ japanese ] = "‚»‚Ì“ú•t‚ª‚»‚ÌŒ‚Ì‰½“ú–Ú‚É‚ ‚½‚é‚©‚ğ•Ô‚µ‚Ü‚·";
+        Text[ chinese_simplified ] = "¼ÆËãÒ»¸öÊôÓÚ¸ø¶¨ÈÕÆÚµÄÔÂµÄÌìÊı";
+        Text[ chinese_traditional ] = "­pºâ¤@­ÓÄİ©óµ¹©w¤é´Áªº¤ëªº¤Ñ¼Æ";
+        Text[ arabic ] = "íÍÏÏ ÚÏÏ ÇáÃíÇã İí ÇáÔåÑ ÍÊì ÊÇÑíÎ ãÇ";
+        Text[ dutch ] = "Geeft als resultaat het aantal dagen in een maand bij een bepaalde datum";
+        Text[ chinese_simplified ] = "¼ÆËãÒ»¸öÊôÓÚ¸ø¶¨ÈÕÆÚµÄÔÂµÄÌìÊı";
+        Text[ greek ] = "Ïñßæåé ãéá ìéá çìåñïìçíßá ôïí áñéèìü çìåñşí áíÜ ìŞíá";
+        Text[ korean ] = "ÀÔ·ÂµÈ ³¯Â¥¿¡ °ü°èµÇ´Â ´ŞÀÇ ÀÏ¼ö¸¦ ¹İÈ¯";
+        Text[ turkish ] = "Girilen tarihe göre ayın gün sayısını bulur";
+    };
+
+/*-=======================================================================*/
+
+    String DFA_DAYSINYEAR_NAME // Name
+    {
+        Text = "TageImJahr" ;
+        Text [ english ] = "DaysInYear" ;
+        Text[ english_us ] = "DaysInYear";
+        Text[ portuguese ] = "DiasNoAno";
+        Text[ russian ] = "Äíåé â ãîäó";
+        Text[ dutch ] = "DagenInJaar";
+        Text[ french ] = "JoursDansAnnée";
+        Text[ spanish ] = "DíasEnAño";
+        Text[ italian ] = "GiorniAnno";
+        Text[ danish ] = "DageÅr";
+        Text[ swedish ] = "DagarPåÅret";
+        Text[ polish ] = "Dni w roku";
+        Text[ portuguese_brazilian ] = "DaysInYear";
+        Text[ japanese ] = "DaysInYear";
+        Text[ chinese_simplified ] = "DaysInYear";
+        Text[ chinese_traditional ] = "DaysInYear";
+        Text[ arabic ] = "íæãÇğ İí ÇáÓäÉ";
+        Text[ dutch ] = "DagenInJaar";
+        Text[ chinese_simplified ] = "DaysInYear";
+        Text[ greek ] = "ÇìİñåòÓôï¸ôïò";
+        Text[ korean ] = "³âÀÇ ÀÏ¼ö";
+        Text[ turkish ] = "YıldakiGünSayısı";
+    };
+    String DFA_DAYSINYEAR_DESC // Description
+    {
+        Text = "Bestimmt die Anzahl an Tagen im Jahr zu einem Datum" ;
+        Text [ english ] = "returns the number of days in the year for a date" ;
+        Text[ english_us ] = "Returns the number of days in a year in relation to the date entered";
+        Text[ portuguese ] = "devolve o número de dias no ano para uma determinada data";
+        Text[ russian ] = "Îïğåäåëÿåò êîëè÷åñòâî äíåé â ãîäó äëÿ óêàçàííîé äàòû.";
+        Text[ dutch ] = "Geeft als resultaat het aantal dagen in een jaar bij een bepaalde datum";
+        Text[ french ] = "renvoie le nombre de jours dans l'année pour une date";
+        Text[ spanish ] = "Determina la cantidad de días en un año para una fecha";
+        Text[ italian ] = "Restituisce il numero dei giorni dell'anno per una deteminata data";
+        Text[ danish ] = "Bestemmer antallet af dage i et år til en dato";
+        Text[ swedish ] = "Bestämmer antalet dagar i året till ett datum";
+        Text[ polish ] = "Oblicza liczbê dni w roku do podanej daty";
+        Text[ portuguese_brazilian ] = "returns the number of days in the year for a date";
+        Text[ japanese ] = "‚»‚Ì“ú•t‚ª‚»‚Ì”N‚Ì‰½“ú–Ú‚É‚ ‚½‚é‚©‚ğ•Ô‚µ‚Ü‚·";
+        Text[ chinese_simplified ] = "¼ÆËãÒ»¸öÊôÓÚ¸ø¶¨ÈÕÆÚµÄÄêµÄÌìÊı";
+        Text[ chinese_traditional ] = "­pºâ¤@­ÓÄİ©óµ¹©w¤é´Áªº¦~ªº¤Ñ¼Æ";
+        Text[ arabic ] = "íÍÏÏ ÚÏÏ ÇáÃíÇã İí ÇáÓäÉ ÍÊì ÊÇÑíÎ ãÇ";
+        Text[ dutch ] = "Geeft als resultaat het aantal dagen in een jaar bij een bepaalde datum";
+        Text[ chinese_simplified ] = "¼ÆËãÒ»¸öÊôÓÚ¸ø¶¨ÈÕÆÚµÄÄêµÄÌìÊı";
+        Text[ greek ] = "Ïñßæåé ôïí áñéèìü çìåñşí áíÜ İôïò ãéá ìßá çìåñïìçíßá";
+        Text[ korean ] = "ÀÔ·ÂµÈ ³¯Â¥¿¡ °ü°èµÇ´Â ³âÀÇ ÀÏ¼ö¸¦ ¹İÈ¯";
+        Text[ turkish ] = "Girilen tarihe göre yılın gün sayısını bulur";
+    };
+
+/*-=======================================================================*/
+
+    String DFA_WEEKSINYEAR_NAME // Name
+    {
+        Text = "WochenImJahr" ;
+        Text [ english ] = "WeeksInYear" ;
+        Text[ english_us ] = "WeeksInYear";
+        Text[ portuguese ] = "SemanasNoAno";
+        Text[ russian ] = "Íåäåëü â ãîäó";
+        Text[ dutch ] = "WekenInJaar";
+        Text[ french ] = "SemainesDansAnnée";
+        Text[ spanish ] = "SemanasEnAño";
+        Text[ italian ] = "SettimaneAnno";
+        Text[ danish ] = "UgerÅr";
+        Text[ swedish ] = "VeckorPerÅr";
+        Text[ polish ] = "Tygodnie w roku";
+        Text[ portuguese_brazilian ] = "WeeksInYear";
+        Text[ japanese ] = "WeeksInYear";
+        Text[ chinese_simplified ] = "WeeksInYear";
+        Text[ chinese_traditional ] = "WeeksInYear";
+        Text[ arabic ] = "ÃÓÈæÚÇğ İí ÇáÓäÉ";
+        Text[ dutch ] = "WekenInJaar";
+        Text[ chinese_simplified ] = "WeeksInYear";
+        Text[ greek ] = "ÅâäïìÜäåòÁíÜ¸ôïò";
+        Text[ korean ] = "³âÀÇ ÁÖ¼ö";
+        Text[ turkish ] = "YıldakiHaftaSayısı";
+    };
+    String DFA_WEEKSINYEAR_DESC // Description
+    {
+        Text = "Bestimmt die Anzahl an Wochen im Jahr zu einem Datum" ;
+        Text [ english ] = "returns the number of weeks in the year for a date" ;
+        Text[ english_us ] = "Returns the number of weeks in the year in relation to a date";
+        Text[ portuguese ] = "Devolve o número de semanas no ano para uma determinada data";
+        Text[ russian ] = "Îïğåäåëÿåò êîëè÷åñòâî íåäåëü â ãîäó äëÿ óêàçàííîé äàòû.";
+        Text[ dutch ] = "Geeft als resultaat het aantal weken in een jaar bij een datum";
+        Text[ french ] = "Renvoie le nombre de semaines dans l'année pour une date";
+        Text[ spanish ] = "Determina la cantidad de semanas en un año para una fecha";
+        Text[ italian ] = "Restituisce il numero delle settimane dell'anno per una determinata data";
+        Text[ danish ] = "Bestemmer antallet af dage i en måned til en dato";
+        Text[ swedish ] = "Bestämmer antalet veckor i året till ett datum";
+        Text[ polish ] = "Oblicza liczbê tygodni w roku do podanej daty";
+        Text[ portuguese_brazilian ] = "returns the number of weeks in the year for a date";
+        Text[ japanese ] = "‚»‚Ì“ú•t‚ª‚»‚Ì”N‚Ì‰½T–Ú‚É‚ ‚½‚é‚©‚ğ•Ô‚µ‚Ü‚·";
+        Text[ chinese_simplified ] = "¼ÆËãÒ»¸öÊôÓÚ¸ø¶¨ÈÕÆÚµÄÄêµÄĞÇÆÚÊı";
+        Text[ chinese_traditional ] = "­pºâ¤@­ÓÄİ©óµ¹©w¤é´Áªº¦~ªº¬P´Á¼Æ";
+        Text[ arabic ] = "íÍÏÏ ÚÏÏ ÇáÃÓÇÈíÚ İí ÇáÓäÉ ÍÊì ÊÇÑíÎ ãÇ";
+        Text[ dutch ] = "Geeft als resultaat het aantal weken in een jaar bij een datum";
+        Text[ chinese_simplified ] = "¼ÆËãÒ»¸öÊôÓÚ¸ø¶¨ÈÕÆÚµÄÄêµÄĞÇÆÚÊı";
+        Text[ greek ] = "Ïñßæåé ãéá ìßá çìåñïìçíßá ôïí áñéèìü åâäïìÜäùí áíÜ İôïò";
+        Text[ korean ] = "ÀÔ·ÂµÈ ³¯Â¥¿¡ °ü°èµÇ´Â ´ŞÀÇ ÁÖ¼ö¸¦ ¹İÈ¯";
+        Text[ turkish ] = "Girilen tarihe göre yılın hafta sayısını bulur";
+    };
+
+};
+
+

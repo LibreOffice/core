@@ -1,0 +1,401 @@
+ //============================================================================
+ //
+ // StarCalc
+ //
+ // (C) 1994 StarDivision GmbH, Hamburg, Germany
+ // $Author: hr $ $Date: 2000-09-18 16:44:52 $ $Revision: 1.1.1.1 $
+ // $Logfile:   T:/sc/sdi/cellsh.sdv  $ $Workfile:   cellsh.sdi  $
+ //----------------------------------------------------------------------------
+
+ // ===========================================================================
+interface CellSelection : Selection
+[
+    uuid ( "D7680520-137B-11D3-B25B-006097DA68F3" )
+]
+{
+    SbxObject Movement
+    [
+    ]
+    // Slot's die in der DrawShell disabled werden. {
+    FID_DEFINE_NAME             [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_DEFINE_COLROWNAMERANGES [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_OPENDLG_SOLVE           [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_OPENDLG_PIVOTTABLE      [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    SID_OPENDLG_TABOP           [ ExecMethod = Execute; StateMethod = GetBlockState; ]
+    SID_FILTER                  [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    SID_SPECIAL_FILTER          [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    SID_DEFINE_DBNAME           [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    SID_OPENDLG_CONSOLIDATE     [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_OPENDLG_CHART           [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_IMPORT_DATA             [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    SID_OPENDLG_FUNCTION        [ ExecMethod = Execute; StateMethod = GetCellState; ]
+    SID_INS_FUNCTION            [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+
+    // Datenbank-Operationen {
+    SID_SORT_ASCENDING      [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    SID_SORT_DESCENDING     [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    SID_REIMPORT_DATA       [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    SID_REFRESH_DBAREA      [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    SID_SBA_BRW_INSERT      [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    SID_SELECT_DB           [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    SID_SORT                [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    FID_FILTER_OK           [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    SID_AUTO_FILTER         [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    SID_AUTOFILTER_HIDE     [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    SID_UNFILTER            [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    SID_SUBTOTALS           [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    SID_PIVOT_TABLE         [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
+    FID_VALIDATION          [ ExecMethod = ExecuteDB; StateMethod = GetBlockState; ]
+
+    // } Datenbank-Operationen
+
+
+    SID_BORDER_OBJECT   [ StateMethod = GetState; ]
+    SID_RANGE_ADDRESS   [ StateMethod = GetState; ]
+
+    SID_HYPERLINK_SETLINK   [ ExecMethod = ExecuteEdit; ]
+    SID_HYPERLINK_GETLINK   [ StateMethod = GetHLinkState; ]
+    SID_UPDATECHART         [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+
+    SID_RANGE_ROW           [ StateMethod = GetState; ]
+    SID_RANGE_COL           [ StateMethod = GetState; ]
+    SID_RANGE_TABLE         [ StateMethod = GetState; ]
+    SID_RANGE_VALUE         [ StateMethod = GetState; ]
+    SID_RANGE_FORMULA       [ StateMethod = GetState; ]
+    SID_RANGE_TEXTVALUE     [ StateMethod = GetState; ]
+    SID_RANGE_NOTETEXT      [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+
+    SID_ENTER_STRING        [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_INSERT_MATRIX       [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_MARKAREA            [ ExecMethod = Execute; ]
+    SID_SELECT_SCENARIO     [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    FID_CELL_FORMAT         [ ExecMethod = Execute; StateMethod = GetBlockState; ]
+    FID_ROW_HEIGHT          [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_ROW_OPT_HEIGHT      [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_ROW_HIDE            [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_ROW_SHOW            [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_COL_WIDTH           [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_COL_OPT_WIDTH       [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_COL_OPT_DIRECT      [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_COL_HIDE            [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_COL_SHOW            [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_AUTOFORMAT          [ ExecMethod = Execute; StateMethod = GetBlockState; ]
+    SID_SOLVE               [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_SCENARIOS           [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_DETECTIVE_ADD_PRED  [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_DETECTIVE_DEL_PRED  [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_DETECTIVE_ADD_SUCC  [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_DETECTIVE_DEL_SUCC  [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_DETECTIVE_ADD_ERR   [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_DETECTIVE_INVALID   [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_DETECTIVE_REFRESH   [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    FID_INS_ROW             [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    FID_INS_COLUMN          [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    FID_INS_CELLSDOWN       [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    FID_INS_CELLSRIGHT      [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    SID_DEL_ROWS            [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_DEL_COLS            [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    FID_INS_CELL            [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    FID_DELETE_CELL         [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    FID_INS_CELL_CONTENTS   [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_CELL_FORMAT_RESET   [ ExecMethod = Execute; StateMethod = GetBlockState; ]
+
+    SfxVoidItem Clear SID_DELETE
+    (
+        SfxStringItem Flags SID_DELETE
+    )
+    [
+        ExecMethod = ExecuteEdit ;
+        StateMethod = GetBlockState ;
+        GroupId = GID_EDIT ;  //FS
+        Cachable , HasDialog ;
+        MenuConfig , AccelConfig ;
+    ]
+    SID_DELETE_CONTENTS [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    FID_INS_ROWBRK      [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    FID_INS_COLBRK      [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    FID_DEL_ROWBRK      [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    FID_DEL_COLBRK      [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    FID_FILL_TO_BOTTOM  [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    FID_FILL_TO_RIGHT   [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    FID_FILL_TO_TOP     [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    FID_FILL_TO_LEFT    [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    FID_FILL_TAB        [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    FID_FILL_SERIES     [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    FID_FILL_AUTO       [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_MARKDATAAREA    [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
+    SID_SETINPUTMODE    [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
+    SID_CUT             [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    SID_COPY            [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    SID_PASTE           [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
+    FID_PASTE_CONTENTS  [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
+    SID_GET_CLPBRD_FORMAT_COUNT     [ ExecMethod = ExecuteEdit; ]
+    SID_GET_CLPBRD_FORMAT_BY_IDX    [ ExecMethod = ExecuteEdit; ]
+    SID_GET_CLPBRD_FORMAT_NAME      [ ExecMethod = ExecuteEdit; ]
+    FID_MERGE_ON    [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_MERGE_OFF   [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_OUTLINE_HIDE    [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_OUTLINE_SHOW    [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_OUTLINE_MAKE    [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_OUTLINE_REMOVE  [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    FID_INPUTLINE_STATUS    [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_INPUTLINE_ENTER     [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_INPUTLINE_BLOCK     [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_INPUTLINE_MATRIX    [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_CHARMAP [ ExecMethod = ExecuteEdit; StateMethod = GetCellState; ]
+
+    SID_INSERT_POSTIT   [ ExecMethod = ExecuteEdit; StateMethod = GetCellState; ]
+
+    SID_TABOP               [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_CONSOLIDATE         [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    FID_INSERT_NAME [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    FID_USE_NAME    [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_CANCEL      [ ExecMethod = Execute; ]
+    SID_TOGGLE_REL  [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_OPENDLG_CONDFRMT    [ ExecMethod = Execute; StateMethod = GetBlockState; ]
+    FID_CONDITIONAL_FORMAT  [ ExecMethod = ExecuteEdit; ]
+    FID_NOTE_VISIBLE        [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_DEC_INDENT          [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_INC_INDENT          [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+
+    SID_THESAURUS   [ ExecMethod = ExecuteEdit; StateMethod = GetCellState; ]
+    SID_SPELLING    [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+
+}
+
+ // ===========================================================================
+interface CellMovement : Selection
+[
+    uuid ( "FF2E35C0-137B-11D3-B25B-006097DA68F3" )
+]
+{
+    SfxVoidItem JumpToNextTable SID_NEXT_TABLE ( )
+    [
+        ExecMethod = ExecuteMove ;
+        StateMethod = GetStateCursor ;
+        Cachable ;
+    ]
+
+    SfxVoidItem JumpToPrevTable SID_PREV_TABLE ( )
+    [
+        ExecMethod = ExecuteMove ;
+        StateMethod = GetStateCursor ;
+        Cachable ;
+    ]
+
+    SfxVoidItem GoDown SID_CURSORDOWN
+    (
+        SfxInt16Item By FN_PARAM_1,
+        SfxBoolItem  Sel FN_PARAM_2
+    )
+    [
+        ExecMethod = ExecuteCursor ;
+        StateMethod = GetStateCursor ;
+        Cachable ;
+    ]
+
+    SfxVoidItem GoDownSel SID_CURSORDOWN_SEL
+    (
+        SfxInt16Item By FN_PARAM_1
+    )
+    [
+        Export = FALSE ;
+        ExecMethod = ExecuteCursorSel ;
+        StateMethod = GetStateCursor ;
+        Cachable ;
+    ]
+    SID_CURSORBLKDOWN       [ ExecMethod = ExecuteCursor;    StateMethod = GetStateCursor; ]
+    SID_CURSORBLKDOWN_SEL   [ ExecMethod = ExecuteCursorSel; StateMethod = GetStateCursor; ]
+
+    SfxVoidItem GoUp SID_CURSORUP
+    (
+        SfxInt16Item By FN_PARAM_1,
+        SfxBoolItem  Sel FN_PARAM_2
+    )
+    [
+        ExecMethod = ExecuteCursor ;
+        StateMethod = GetStateCursor ;
+        Cachable ;
+    ]
+    SID_CURSORUP_SEL    [ ExecMethod = ExecuteCursorSel; StateMethod = GetStateCursor; ]
+    SID_CURSORBLKUP     [ ExecMethod = ExecuteCursor;    StateMethod = GetStateCursor; ]
+    SID_CURSORBLKUP_SEL [ ExecMethod = ExecuteCursorSel; StateMethod = GetStateCursor; ]
+
+    SfxVoidItem GoLeft SID_CURSORLEFT
+    (
+        SfxInt16Item By FN_PARAM_1,
+        SfxBoolItem  Sel FN_PARAM_2
+    )
+    [
+        ExecMethod = ExecuteCursor ;
+        StateMethod = GetStateCursor ;
+        Cachable ;
+    ]
+    SID_CURSORLEFT_SEL      [ ExecMethod = ExecuteCursorSel; StateMethod = GetStateCursor; ]
+    SID_CURSORBLKLEFT       [ ExecMethod = ExecuteCursor;    StateMethod = GetStateCursor; ]
+    SID_CURSORBLKLEFT_SEL   [ ExecMethod = ExecuteCursorSel; StateMethod = GetStateCursor; ]
+
+    SfxVoidItem GoRight SID_CURSORRIGHT
+    (
+        SfxInt16Item By FN_PARAM_1,
+        SfxBoolItem  Sel FN_PARAM_2
+    )
+    [
+        ExecMethod = ExecuteCursor ;
+        StateMethod = GetStateCursor ;
+        Cachable ;
+    ]
+    SID_CURSORRIGHT_SEL     [ ExecMethod = ExecuteCursorSel; StateMethod = GetStateCursor; ]
+    SID_CURSORBLKRIGHT      [ ExecMethod = ExecuteCursor;    StateMethod = GetStateCursor; ]
+    SID_CURSORBLKRIGHT_SEL  [ ExecMethod = ExecuteCursorSel; StateMethod = GetStateCursor; ]
+    SID_NEXT_UNPROTECT  [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
+    SID_PREV_UNPROTECT  [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
+    SID_CURSORENTERDOWN [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
+    SID_CURSORENTERUP   [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
+
+    SfxVoidItem GoDownBlock SID_CURSORPAGEDOWN
+    (
+        SfxInt16Item By FN_PARAM_1,
+        SfxBoolItem  Sel FN_PARAM_2
+    )
+    [
+        ExecMethod = ExecuteCursor ;
+        StateMethod = GetStateCursor ;
+        Cachable ;
+    ]
+    SID_CURSORPAGEDOWN_SEL  [ ExecMethod = ExecuteCursorSel; StateMethod = GetStateCursor; ]
+
+    SfxVoidItem GoUpBlock SID_CURSORPAGEUP
+    (
+        SfxInt16Item By FN_PARAM_1,
+        SfxBoolItem  Sel FN_PARAM_2
+    )
+    [
+        ExecMethod = ExecuteCursor ;
+        StateMethod = GetStateCursor ;
+        Cachable ;
+    ]
+    SID_CURSORPAGEUP_SEL    [ ExecMethod = ExecuteCursorSel; StateMethod = GetStateCursor; ]
+    SID_CURSORPAGELEFT_     [ ExecMethod = ExecuteCursor;    StateMethod = GetStateCursor; ]
+    SID_CURSORPAGELEFT_SEL  [ ExecMethod = ExecuteCursorSel; StateMethod = GetStateCursor; ]
+    SID_CURSORPAGERIGHT_    [ ExecMethod = ExecuteCursor;    StateMethod = GetStateCursor; ]
+    SID_CURSORPAGERIGHT_SEL [ ExecMethod = ExecuteCursorSel; StateMethod = GetStateCursor; ]
+    SID_ALIGNCURSOR         [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
+
+    SfxVoidItem GoToEndOfData SID_CURSORENDOFFILE
+    (
+        SfxBoolItem  Sel FN_PARAM_2 //XXX
+    )
+    [
+        ExecMethod = ExecutePage ;
+        StateMethod = GetStateCursor ;
+        Cachable ;
+    ]
+    SID_CURSORENDOFFILE_SEL [ ExecMethod = ExecutePageSel; StateMethod = GetStateCursor; ]
+
+    SfxVoidItem GoToStart SID_CURSORTOPOFFILE
+    (
+        SfxBoolItem  Sel FN_PARAM_2 //XXX
+    )
+    [
+        ExecMethod = ExecutePage ;
+        StateMethod = GetStateCursor ;
+        Cachable ;
+    ]
+    SID_CURSORTOPOFSCREEN   [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
+    SID_CURSORENDOFSCREEN   [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
+
+    SfxVoidItem GoToStartOfRow SID_CURSORHOME
+    (
+        SfxBoolItem Sel FN_PARAM_2
+    )
+    [
+        ExecMethod = ExecutePage ;
+        StateMethod = GetStateCursor ;
+        Cachable ;
+    ]
+
+    SID_CURSOREND   [ ExecMethod = ExecutePage; StateMethod = GetStateCursor; ]
+    SID_CURSORTOPOFFILE_SEL [ ExecMethod = ExecutePageSel; StateMethod = GetStateCursor; ]
+    SID_CURSORHOME_SEL      [ ExecMethod = ExecutePageSel; StateMethod = GetStateCursor; ]
+    SID_CURSOREND_SEL       [ ExecMethod = ExecutePageSel; StateMethod = GetStateCursor; ]
+    SID_SELECT_COL  [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
+    SID_SELECT_ROW  [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
+    SID_SELECT_NONE [ ExecMethod = ExecuteMove; StateMethod = GetStateCursor; ]
+    SID_SELECTALL   [ ExecMethod = Execute;     StateMethod = GetState;       ]
+    SID_STATUS_SUM      [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_STATUS_DOCPOS   [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_STATUS_SELMODE  [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_STATUS_SELMODE_ERG  [ ExecMethod = Execute; ]
+    SID_STATUS_SELMODE_ERW  [ ExecMethod = Execute; ]
+    SID_STATUS_SELMODE_NORM [ ExecMethod = Execute; ]
+    SID_ATTR_SIZE       [ StateMethod = GetState; ]
+    SID_ATTR_POSITION   [ StateMethod = GetState; ]
+    SID_TABLE_CELL
+    [
+         // "Tabellenzelle" soll nicht im Anpassen-Dialog auftauchen:
+        StatusBarConfig = FALSE ;
+        StateMethod = GetState ;
+    ]
+    SID_DATA_SELECT         [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_DETECTIVE_FILLMODE  [ ExecMethod = Execute; StateMethod = GetState; ] // api:
+}
+
+
+interface RangeSelection : Selection
+[
+    uuid ( "0CAB4620-137C-11D3-B25B-006097DA68F3" )
+]
+{
+    import CellSelection;
+    import FormatForSelection;
+    import TableFont ".Font";
+    import BaseSelection;
+}
+
+interface Cell
+[
+    uuid ( "F0645A00-1921-11D3-B25B-006097DA68F3" )
+]
+{
+    import CellSelection;
+    import CellMovement;
+}
+
+ // ===========================================================================
+shell ScCellShell : ScFormatShell
+{
+    import Cell[Automation];
+}
+
+/*------------------------------------------------------------------------
+    $Log: not supported by cvs2svn $
+    Revision 1.3  1999/07/27 15:03:42  ANK
+    #67793# changes for table-protection
+
+
+      Rev 1.2   27 Jul 1999 17:03:42   ANK
+   #67793# changes for table-protection
+
+      Rev 1.1   21 Jun 1999 20:38:28   ANK
+   #66547# Slot's moved
+
+      Rev 1.0   02 Jun 1999 21:44:38   ANK
+   #66547# SubShells
+
+------------------------------------------------------------------------*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

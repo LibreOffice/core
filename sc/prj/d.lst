@@ -1,0 +1,33 @@
+mkdir: %_DEST%\odk%_EXT%
+mkdir: %_DEST%\odk%_EXT%\inc
+mkdir: %_DEST%\odk%_EXT%\lib
+mkdir: %_DEST%\odk%_EXT%\src
+mkdir: %_DEST%\odk%_EXT%\pck
+..\inc\sc.lst %_DEST%\inc%_EXT%\sc.lst
+..\%__SRC%\inc\scinter.h %_DEST%\odk\inc%_EXT%\scinter.h
+..\%__SRC%\lib\scinter.lib %_DEST%\odk\lib%_EXT%\scinter.lib
+..\%__SRC%\misc\scinter.c %_DEST%\odk\src%_EXT%\scinter.c
+..\%__SRC%\bin\scalc3.exe %_DEST%\bin%_EXT%\scalc3.exe
+..\%__SRC%\bin\*.sym %_DEST%\bin%_EXT%\*.sym
+..\%__SRC%\bin\scalc3.pdb %_DEST%\bin%_EXT%\scalc3.pdb
+..\%__SRC%\bin\scslots.tlb %_DEST%\bin%_EXT%\scslots.tlb
+..\%__SRC%\bin\sc%upd%*.dll %_DEST%\bin%_EXT%\sc%upd%*.dll
+..\%__SRC%\bin\sc%upd%*.res %_DEST%\bin%_EXT%\sc%upd%*.res
+..\%__SRC%\bin\dfa%upd%*.dll %_DEST%\bin%_EXT%\dfa%upd%*.dll
+..\%__SRC%\bin\rot%upd%*.dll %_DEST%\bin%_EXT%\rot%upd%*.dll
+..\%__SRC%\bin\addin.zip %_DEST%\bin%_EXT%\addin.zip
+..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
+touch: ..\%__SRC%\misc\sc.hid %_DEST%\bin%_EXT%\sc.hid
+..\%__SRC%\lib\sci.lib %_DEST%\lib%_EXT%\sci.lib
+..\%__SRC%\lib\sclib.lib %_DEST%\lib%_EXT%\sclib.lib
+..\%__SRC%\slb\ysclib.lib %_DEST%\lib%_EXT%\ysclib.lib
+..\%__SRC%\slb\lib*.* %_DEST%\lib%_EXT%\lib*.*
+..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
+..\inc\sc.hrc %_DEST%\inc%_EXT%\sc.hrc
+..\source\convert.ini %_DEST%\pck%_EXT%\convert.ini
+dos: mkdir %_DEST%\inc\%_EXT%\sc
+hedabu: ..\inc\scdll.hxx %_DEST%\inc%_EXT%\sc\scdll.hxx
+mkdir: %_DEST%\ucr%_EXT%\sc
+..\%__SRC%\ucr\*.ucr %_DEST%\ucr%_EXT%\sc\*.ucr
+..\xml\*.xml %_DEST%\xml\*.xml
+

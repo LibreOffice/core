@@ -1,0 +1,524 @@
+/*************************************************************************
+ *
+ *  $RCSfile: attrdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:04 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <svx/dialogs.hrc>
+#include "attrdlg.hrc"
+
+ //================================================
+ // Attributdialog:
+
+TabDialog RID_SCDLG_ATTR
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 280 , 165 ) ;
+    Text = "Zellattribute" ;
+    Text [ ENGLISH ] = "Cell Attributes" ;
+    Text [ norwegian ] = "Cell Attributes" ;
+    Text [ italian ] = "Attributi cella" ;
+    Text [ portuguese_brazilian ] = "Atributos da Célula" ;
+    Text [ portuguese ] = "Atributos de célula" ;
+    Text [ finnish ] = "Solumääritteet" ;
+    Text [ danish ] = "Celleattributter" ;
+    Text [ french ] = "Attributs de cellule" ;
+    Text [ swedish ] = "Cellattribut" ;
+    Text [ dutch ] = "Celattributen" ;
+    Text [ spanish ] = "Atributos de celda" ;
+    Text [ english_us ] = "Cell Attributes" ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 23 , 0 ) ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TP_NUMBER ;
+                PageResID = 256 ;
+                Text = "Zahlen" ;
+                Text [ ENGLISH ] = "Number" ;
+                Text [ norwegian ] = "Number" ;
+                Text [ italian ] = "Numeri" ;
+                Text [ portuguese_brazilian ] = "Número" ;
+                Text [ portuguese ] = "Números" ;
+                Text [ finnish ] = "Numero" ;
+                Text [ danish ] = "Tal" ;
+                Text [ french ] = "Nombres" ;
+                Text [ swedish ] = "Tal" ;
+                Text [ dutch ] = "Getallen" ;
+                Text [ spanish ] = "Números" ;
+                Text [ english_us ] = "Numbers" ;
+                Text[ chinese_simplified ] = "Êı×Ö";
+                Text[ russian ] = "×èñëà";
+                Text[ polish ] = "Liczby";
+                Text[ japanese ] = "”";
+                Text[ chinese_traditional ] = "¼Æ¦r";
+                Text[ arabic ] = "ÃÑŞÇã";
+                Text[ greek ] = "Áñéèìïß";
+                Text[ korean ] = "¹øÈ£";
+                Text[ turkish ] = "Sayı";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_FONT ;
+                PageResID = 257 ;
+                Text = "Schrift" ;
+                Text [ ENGLISH ] = "Character" ;
+                Text [ norwegian ] = "Character" ;
+                Text [ italian ] = "Carattere" ;
+                Text [ portuguese_brazilian ] = "Caractere" ;
+                Text [ portuguese ] = "Tipo de letra" ;
+                Text [ finnish ] = "Merkki" ;
+                Text [ danish ] = "Skrifttype" ;
+                Text [ french ] = "Police" ;
+                Text [ swedish ] = "Teckensnitt" ;
+                Text [ dutch ] = "Lettertype" ;
+                Text [ spanish ] = "Fuente" ;
+                Text [ english_us ] = "Font" ;
+                Text[ chinese_simplified ] = "×ÖÌå";
+                Text[ russian ] = "Øğèôò";
+                Text[ polish ] = "Czcionka";
+                Text[ japanese ] = "Ì«İÄ";
+                Text[ chinese_traditional ] = "¦r«¬";
+                Text[ arabic ] = "ÇáÎØ";
+                Text[ greek ] = "ÃñáììáôïóåéñÜ";
+                Text[ korean ] = "±Û²Ã";
+                Text[ turkish ] = "Yazıtipi";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_ALIGNMENT ;
+                PageResID = 258 ;
+                Text = "Ausrichtung" ;
+                Text [ ENGLISH ] = "Alignment" ;
+                Text [ norwegian ] = "Alignment" ;
+                Text [ italian ] = "Allineamento" ;
+                Text [ portuguese_brazilian ] = "Alinhamento" ;
+                Text [ portuguese ] = "Alinhamento" ;
+                Text [ finnish ] = "Tasaus" ;
+                Text [ danish ] = "Justering" ;
+                Text [ french ] = "Alignement" ;
+                Text [ swedish ] = "Justering" ;
+                Text [ dutch ] = "Uitlijning" ;
+                Text [ spanish ] = "Alineación" ;
+                Text [ english_us ] = "Alignment" ;
+                Text[ chinese_simplified ] = "¶ÔÆë";
+                Text[ russian ] = "Âûğàâíèâàíèå";
+                Text[ polish ] = "Wyrównanie";
+                Text[ japanese ] = "”z’u";
+                Text[ chinese_traditional ] = "¹ï»ô";
+                Text[ arabic ] = "ÇáãÍÇĞÇÉ";
+                Text[ greek ] = "Óôïß÷éóç";
+                Text[ korean ] = "¸ÂÃã";
+                Text[ turkish ] = "Hizalama";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_BORDER ;
+                PageResID = 259 ;
+                Text = "Umrandung" ;
+                Text [ ENGLISH ] = "Border" ;
+                Text [ norwegian ] = "Border" ;
+                Text [ italian ] = "Bordo" ;
+                Text [ portuguese_brazilian ] = "Borda" ;
+                Text [ portuguese ] = "Contornos" ;
+                Text [ finnish ] = "Reunaviiva" ;
+                Text [ danish ] = "Ramme" ;
+                Text [ french ] = "Bordure" ;
+                Text [ swedish ] = "Inramning" ;
+                Text [ dutch ] = "Omranding" ;
+                Text [ spanish ] = "Borde" ;
+                Text [ english_us ] = "Borders" ;
+                Text[ chinese_simplified ] = "±ß¿ò";
+                Text[ russian ] = "Îáğàìëåíèå";
+                Text[ polish ] = "Obramowanie";
+                Text[ japanese ] = "ŠO˜g";
+                Text[ chinese_traditional ] = "Ãä®Ø";
+                Text[ arabic ] = "ÇáÍÏæÏ";
+                Text[ greek ] = "Ğåñßãñáììá";
+                Text[ korean ] = "°æ°è¼±";
+                Text[ turkish ] = "Kenarlık";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_BACKGROUND ;
+                PageResID = 260 ;
+                Text = "Hintergrund" ;
+                Text [ ENGLISH ] = "Background" ;
+                Text [ norwegian ] = "Background" ;
+                Text [ italian ] = "Sfondo" ;
+                Text [ portuguese_brazilian ] = "Fundo" ;
+                Text [ portuguese ] = "Plano de fundo" ;
+                Text [ finnish ] = "Tausta" ;
+                Text [ danish ] = "Baggrund" ;
+                Text [ french ] = "Arrière-plan" ;
+                Text [ swedish ] = "Bakgrund" ;
+                Text [ dutch ] = "Achtergrond" ;
+                Text [ spanish ] = "Fondo" ;
+                Text [ english_us ] = "Background" ;
+                Text[ chinese_simplified ] = "±³¾°";
+                Text[ russian ] = "Ôîí";
+                Text[ polish ] = "T³o";
+                Text[ japanese ] = "”wŒi";
+                Text[ chinese_traditional ] = "­I´º";
+                Text[ arabic ] = "ÎáİíÉ";
+                Text[ language_user1 ] = " ";
+                Text[ greek ] = "Öüíôï";
+                Text[ korean ] = "¹è°æ";
+                Text[ turkish ] = "Artalan";
+            };
+            PageItem
+            {
+                Identifier = TP_PROTECTION ;
+                PageResID = 261 ;
+                Text = "Zellschutz" ;
+                Text [ ENGLISH ] = "Protection" ;
+                Text [ norwegian ] = "Protection" ;
+                Text [ italian ] = "Protezione" ;
+                Text [ portuguese_brazilian ] = "Proteção" ;
+                Text [ portuguese ] = "Protecção de célula" ;
+                Text [ finnish ] = "Suojaus" ;
+                Text [ danish ] = "Cellebeskyttelse" ;
+                Text [ french ] = "Protection" ;
+                Text [ swedish ] = "Cellskydd" ;
+                Text [ dutch ] = "Celbeveiliging" ;
+                Text [ spanish ] = "Protección de celda" ;
+                Text [ english_us ] = "Cell Protection" ;
+                Text[ chinese_simplified ] = "µ¥Ôª¸ñ±£»¤";
+                Text[ russian ] = "Çàùèòà ÿ÷åéêè";
+                Text[ polish ] = "Ochrona komórek";
+                Text[ japanese ] = "¾Ù‚Ì•ÛŒì";
+                Text[ chinese_traditional ] = "Àx¦s®æ«OÅ@";
+                Text[ arabic ] = "ÍãÇíÉ ÇáÎáíÉ";
+                Text[ greek ] = "Ğñïóôáóßá êåëéïı";
+                Text[ korean ] = "¼¿ º¸È£";
+                Text[ turkish ] = "Hücre koruması";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "µ¥Ôª¸ñÊôĞÔ";
+    Text[ russian ] = "Àòğèáóòû ÿ÷åéêè";
+    Text[ polish ] = "Atrybuty komórek";
+    Text[ japanese ] = "¾Ù‚Ì‘®«";
+    Text[ chinese_traditional ] = "Àx¦s®æÄİ©Ê";
+    Text[ arabic ] = "ÓãÇÊ ÇáÎáíÉ";
+    Text[ greek ] = "Éäéüôçôåò êåëéïı";
+    Text[ korean ] = "¼¿ ¼Ó¼º";
+    Text[ turkish ] = "Hücre öznitelikleri";
+    Text[ language_user1 ] = " ";
+};
+
+ //================================================
+ // Zellschutz-TabPage:
+
+TabPage RID_SCPAGE_PROTECTION
+{
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    HelpId = HID_SCPAGE_PROTECTION ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    TriStateBox BTN_PROTECTED
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text = "~Gesperrt" ;
+        Text [ ENGLISH ] = "~Protected" ;
+        Text [ norwegian ] = "~Protected" ;
+        Text [ italian ] = "~Protetto" ;
+        Text [ portuguese_brazilian ] = "~Protegido" ;
+        Text [ portuguese ] = "~Proteger" ;
+        Text [ finnish ] = "~Suojattu" ;
+        Text [ danish ] = "Låst" ;
+        Text [ french ] = "~Vérrouiller" ;
+        Text [ swedish ] = "Skydda~d" ;
+        Text [ dutch ] = "~Beveiligd" ;
+        Text [ spanish ] = "~Protegido" ;
+        Text [ english_us ] = "~Protected" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "Ëø¶¨(~P)";
+        Text[ russian ] = "Áëîêèğîâàíî";
+        Text[ polish ] = "Zablokowany";
+        Text[ japanese ] = "•ÛŒì‚·‚é(~P)";
+        Text[ chinese_traditional ] = "Âê©w(~P)";
+        Text[ arabic ] = "ãÍãí";
+        Text[ greek ] = "Êëåéäùìİíï";
+        Text[ korean ] = "º¸È£(~P)";
+        Text[ turkish ] = "~Koruma altında";
+        Text[ language_user1 ] = " ";
+    };
+    TriStateBox BTN_HIDE_FORMULAR
+    {
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text = "~Formel ausblenden" ;
+        Text [ ENGLISH ] = "Hide ~Formulas" ;
+        Text [ norwegian ] = "Hide ~Formulas" ;
+        Text [ italian ] = "Nascondi ~formule" ;
+        Text [ portuguese_brazilian ] = "Ocultar ~Fórmulas" ;
+        Text [ portuguese ] = "Ocultar ~fórmulas" ;
+        Text [ finnish ] = "Piilota ~kaavat" ;
+        Text [ danish ] = "Skjul ~formel" ;
+        Text [ french ] = "Masquer les ~formules" ;
+        Text [ swedish ] = "Dölj ~formel" ;
+        Text [ dutch ] = "~Formules verbergen" ;
+        Text [ spanish ] = "Ocultar ~fórmulas" ;
+        Text [ english_us ] = "Hide ~formula" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "ÒşÈë¹«Ê½(~F)";
+        Text[ russian ] = "Ñêğûòü ôîğìóëó";
+        Text[ polish ] = "Ukryj formu³ê";
+        Text[ japanese ] = "”®‚Ì”ñ•\\¦(~F)";
+        Text[ chinese_traditional ] = "Áô¤J¤½¦¡(~F)";
+        Text[ arabic ] = "ÅÎİÇÁ ÇáÕíÛÉ";
+        Text[ greek ] = "Áğüêñõøç ôığïõ";
+        Text[ korean ] = "¼ö½Ä ¼û±â±â(~F)";
+        Text[ turkish ] = "~Formulü gizle";
+        Text[ language_user1 ] = " ";
+    };
+    TriStateBox BTN_HIDE_ALL
+    {
+        Pos = MAP_APPFONT ( 12 , 40 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text = "~Alles ausblenden" ;
+        Text [ ENGLISH ] = "Hide ~All" ;
+        Text [ norwegian ] = "Hide ~All" ;
+        Text [ italian ] = "Nascondi ~tutto" ;
+        Text [ portuguese_brazilian ] = "Orecortar ~Tudo" ;
+        Text [ portuguese ] = "Ocultar ~tudo" ;
+        Text [ finnish ] = "Piilota k~aikki" ;
+        Text [ danish ] = "Skjul alt" ;
+        Text [ french ] = "Masquer ~tout" ;
+        Text [ swedish ] = "Dölj ~allt" ;
+        Text [ dutch ] = "~Alles verbergen" ;
+        Text [ spanish ] = "Ocultar ~todo" ;
+        Text [ english_us ] = "Hide ~all" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "È«²¿ÒşÈë(~A)";
+        Text[ russian ] = "Ñêğûòü âñå";
+        Text[ polish ] = "Ukryj wszystko";
+        Text[ japanese ] = "‚·‚×‚Ä”ñ•\\¦(~A)";
+        Text[ chinese_traditional ] = "¥ş³¡Áô¤J(~A)";
+        Text[ arabic ] = "ÅÎİÇÁ Çáßá";
+        Text[ greek ] = "~Áğüêñõøç üëùí";
+        Text[ korean ] = "ÀüºÎ ¼û±â±â(~A)";
+        Text[ turkish ] = "~Tümünü gizle";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_HINT
+    {
+        Pos = MAP_APPFONT ( 114 , 12 ) ;
+        Size = MAP_APPFONT ( 130 , 63 ) ;
+        WordBreak = TRUE ;
+        /* ### ACHTUNG: Neuer Text in Resource? Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü 'Extras' den Befehl 'Dokument schützen' und dann den Befehl 'Tabelle'. : Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü ''Extras'' den Befehl ''Dokument schützen'' und dann den Befehl ''Tabelle''. */
+        /* ### ACHTUNG: Neuer Text in Resource? Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü 'Extras' den Befehl 'Dokument schützen' und dann den Befehl 'Tabelle'. : Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü ''Extras'' den Befehl ''Dokument schützen'' und dann den Befehl ''Tabelle''. */
+        /* ### ACHTUNG: Neuer Text in Resource? Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü 'Extras' den Befehl 'Dokument schützen' und dann den Befehl 'Tabelle'. : Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü ''Extras'' den Befehl ''Dokument schützen'' und dann den Befehl ''Tabelle''. */
+        /* ### ACHTUNG: Neuer Text in Resource? Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü 'Extras' den Befehl 'Dokument schützen' und dann den Befehl 'Tabelle'. : Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü ''Extras'' den Befehl ''Dokument schützen'' und dann den Befehl ''Tabelle''. */
+        Text = "Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü 'Extras' den Befehl 'Dokument schützen' und dann den Befehl 'Tabelle'." ;
+        Text [ ENGLISH ] =
+        "To activate cell protection, you have to protect the active table.\n\nChoose 'Protect Document' from menu 'Extras' and the command 'Table' afterwards." ;
+        Text [ norwegian ] =
+        "To activate cell protection, you have to protect the active table.\n\nChoose 'Protect Document' from menu 'Extras' and the command 'Table' afterwards." ;
+        Text [ italian ] = "Per attivare la protezione cella, è necessario proteggere la tabella attiva.\n\nScegliere 'Proteggi documento' dal menu 'Strumenti' e quindi il comando 'Tabella'." ;
+        Text [ portuguese_brazilian ] = "Para ativar a proteção da célula, , preciso proteger a tabelaativa.\n\nEscolha 'Proteger Documento' no menu 'Extras' e,em seguida, o comando 'Tabela'." ;
+        Text [ portuguese ] = "Para activar a protecção da célula, é necessário proteger a tabela activa.\n\nSeleccione 'Proteger documento' no menu 'Ferramentas' e em seguida o comando 'Tabela'." ;
+        Text [ finnish ] =
+        "Suojaa aktiivinen taulukko, jotta voit valita solujen suojauksen.\n\nValitse sitten Muut-valikosta Suojaa asiakirja ja Taulukko." ;
+        Text [ danish ] = "Cellebeskyttelsen er kun effektiv, når det aktive regneark er beskyttet.\n\nVælg 'Bekyt dokument' i menuen 'Funktioner'og derefter 'Regneark' for at beskytte regnearket." ;
+        Text [ french ] = "Pour activer la protection d'une cellule, vous devez protéger la feuille courante.\n\nChoisissez 'Protection' dans le menu 'Outils' puis la commande 'Feuille'." ;
+        Text [ swedish ] = "Cellskyddet är endast verksamt om den aktiva tabellen är skyddad.\n\nVälj kommandot 'Skydda dokument' i menyn 'Verktyg' och därefter kommandot 'Tabell' för att skydda tabellen." ;
+        Text [ dutch ] = "De celbeveiliging functioneert alleen als het actieve werkblad beveiligd is.\n\nKies eerst in menu 'Extra' de optie \"Document beveiligen\" en vervolgens de optie 'Werkblad'." ;
+        Text [ spanish ] = "La protección de celdas es efectiva solamente si la hoja activa está protegida.\n\nSeleccione en 'Herramientas' la instrucción 'Proteger documento' y luego 'Hoja'." ;
+        Text [ english_us ] = "Cell protection is only effective after the current sheet has been protected. \n\nSelect 'Protect Document' from the 'Tools' menu, and specify 'Sheet'." ;
+        Text[ chinese_simplified ] = "Ö»ÓĞÔÚÄú¼¤»î±£»¤¹¤×÷±íºó£¬µ¥Ôª¸ñ²Å»áÊÜµ½±£»¤¡£\n\nÇëÄú°´»÷²Ëµ¥ÃüÁî¡°¹¤¾ß¡±£¬¡°±£»¤ÎÄµµ¡±£¬¡°¹¤×÷±í¡±¡£";
+        Text[ russian ] = "Çàùèòà ÿ÷åéêè äåéñòâóåò òîëüêî ïîñëå çàùèòû òåêóùåãî ëèñòà.\n\nÄëÿ çàùèòû ëèñòà âûáåğèòå â ìåíş 'Ñåğâèñ' êîìàíäó 'Çàùèòà äîêóìåíòà', à çàòåì êîìàíäó 'Òàáëèöà'.";
+        Text[ polish ] = "Ochrona komórek jest wtedy uaktywniona, jeœli bie¿¹cy arkusz jest chroniony.\n\nWybierz dla tego celu z menu 'Narzêdzia' polecenie 'Chroñ dokument', a nastêpnie polecenie 'Arkusz'.";
+        Text[ japanese ] = "¾Ù‚Ì•ÛŒì‚Í¤ì‹Æ’†‚Ì•\\‚ª•ÛŒì‚³‚ê‚Ä‚¢‚é‚Ì‚İ—LŒø‚Å‚·B\n\nÒÆ­°‚Ì[Â°Ù][ÄŞ·­ÒİÄ‚Ì•ÛŒì]‚ğ‘I‘ğ‚µ‚Ä[•\\]‚ğw’è‚µ‚Ä‰º‚³‚¢B";
+        Text[ chinese_traditional ] = "¥u¦³¦b±z¿E¬¡«OÅ@¤u§@ªí«á¡AÀx¦s®æ¤~·|¨ü¨ì«OÅ@¡C\n\n½Ğ±z«ö¤@¤U³o­Ó¥\\¯àªíªº©R¥O¡G\"«OÅ@¤å¥ó\"¡A\"¤u§@ªí\"¡C";
+        Text[ arabic ] = "áÇ ÊÕÈÍ ÍãÇíÉ ÇáÎáÇíÇ İÚøÇáÉ¡ ÅáÇ ÚäÏãÇ íßæä ÇáÌÏæá ÇáÍÇáí ãÍãí.\n\náÊäİíĞ Ğáß ÇáÑÌÇÁ ÇÎÊíÇÑ ÇáÃãÑ 'ÍãÇíÉ ÇáãÓÊäÏ' ãä ÇáŞÇÆãÉ 'ÃÏæÇÊ'¡ Ëã ÇáÃãÑ 'ÌÏæá'.";
+        Text[ greek ] = "Ç ğñïóôáóßá êåëéşí éó÷ıåé ìüíï åöüóïí ôåèåß ï ôñİ÷ùí ğßíáêáò õğü ğñïóôáóßá.\n\nÃéá íá åğéôåõ÷èåß áõôü åğéëİîôå óôï ìåíïı 'Åñãáëåßá' ôçí åíôïëŞ 'Ğñïóôáóßá åããñÜöïõ' êáé óôç óõíİ÷åéá 'Ğßíáêáò'.";
+        Text[ korean ] = "¼¿ º¸È£´Â ÇöÀçÀÇ ½ÃÆ®°¡ º¸È£µÇ¾úÀ»¶§¸¸ À¯È¿ÇÕ´Ï´Ù.  \n\n'µµ±¸'¸Ş´º¿¡¼­ '¹®¼­º¸È£'¸¦ ¼±ÅÃÇÏ½ÅµÚ ½ÃÆ®¸¦ ÁöÁ¤ÇÏ½Ê½Ã¿À.";
+        Text[ turkish ] = "Hücre koruması, yalnızca aktif tablo da korunmuşsa etkindir.\n\nBunun için 'Araçlar' mönüsünden önce 'belgeyi koru' sonra 'Tablo' komutunu seçin.";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_PROTECTION
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 246 , 75 ) ;
+        Text = "Schutz" ;
+        Text [ ENGLISH ] = "Protection" ;
+        Text [ norwegian ] = "Protection" ;
+        Text [ italian ] = "Protezione" ;
+        Text [ portuguese_brazilian ] = "Proteção" ;
+        Text [ portuguese ] = "Protecção" ;
+        Text [ finnish ] = "Suojaus" ;
+        Text [ danish ] = "Beskyttelse" ;
+        Text [ french ] = "Protection" ;
+        Text [ swedish ] = "Skydd" ;
+        Text [ dutch ] = "Beveiliging" ;
+        Text [ spanish ] = "Protección" ;
+        Text [ english_us ] = "Protection" ;
+        Text[ chinese_simplified ] = "±£»¤";
+        Text[ russian ] = "Çàùèòà";
+        Text[ polish ] = "Ochrona";
+        Text[ japanese ] = "•ÛŒì";
+        Text[ chinese_traditional ] = "«OÅ@";
+        Text[ arabic ] = "ÍãÇíÉ";
+        Text[ greek ] = "Ğñïóôáóßá";
+        Text[ korean ] = "º¸È£";
+        Text[ turkish ] = "Koruma";
+        Text[ language_user1 ] = " ";
+    };
+    TriStateBox BTN_HIDE_PRINT
+    {
+        Pos = MAP_APPFONT ( 12 , 93 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text = "Für Aus~druck ausblenden" ;
+        Text [ ENGLISH ] = "Hide for ~Printing" ;
+        Text [ norwegian ] = "Hide for ~Printing" ;
+        Text [ italian ] = "Non ~stampare" ;
+        Text [ portuguese_brazilian ] = "Ocultar para ~Impressão" ;
+        Text [ portuguese ] = "Ocultar para ~impressão" ;
+        Text [ finnish ] = "Piilota ~tulostusta varten" ;
+        Text [ danish ] = "Skjul ved udskrivning" ;
+        Text [ french ] = "Masquer pour l'~impression" ;
+        Text [ swedish ] = "Dölj vid ~utskrift" ;
+        Text [ dutch ] = "Verbergen voor af~drukken" ;
+        Text [ spanish ] = "~Ocultar para la impresión" ;
+        Text [ english_us ] = "Hide ~when printing" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "´òÓ¡Ê±ÒşÈë(~H)";
+        Text[ russian ] = "Ñêğûòü äëÿ ïå÷àòè";
+        Text[ polish ] = "U~kryj przy wydruku";
+        Text[ japanese ] = "ˆóü‚µ‚È‚¢(~H)";
+        Text[ chinese_traditional ] = "¥´¦L®ÉÁô¤J(~H)";
+        Text[ arabic ] = "ÅÎİÇÁ ÚäÏ ÇáØÈÇÚÉ";
+        Text[ greek ] = "Áğüêñõøç êáôÜ ôçí åêôığùóç";
+        Text[ korean ] = "ÀÎ¼â ½Ã ¼û±â±â(~W)";
+        Text[ turkish ] = "~Yazdırırken gizle";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_HINT2
+    {
+        Pos = MAP_APPFONT ( 114 , 93 ) ;
+        Size = MAP_APPFONT ( 131 , 31 ) ;
+        WordBreak = TRUE ;
+        Text = "Die Zellen der aktuellen Selektion werden beim Ausdruck nicht ausgegeben." ;
+        Text [ ENGLISH ] = "Cells of current selection will be omitted for printing." ;
+        Text [ norwegian ] = "Cells of current selection will be omitted for printing." ;
+        Text [ italian ] = "Le celle della selezione corrente\nnon verranno stampate." ;
+        Text [ portuguese_brazilian ] = "As células na seleção atual serão omitidas na impressão." ;
+        Text [ portuguese ] = "As células da selecção actual serão omitidas na impressão." ;
+        Text [ finnish ] = "Estää valittujen solujen tulostamisen." ;
+        Text [ danish ] = "De markerede celler udskrives ikke." ;
+        Text [ french ] = "Les cellules sélectionnées ne seront pas imprimées." ;
+        Text [ swedish ] = "De markerade cellerna kommer inte att skrivas ut." ;
+        Text [ dutch ] = "De geselecteerde cellen worden bij het afdrukken weggelaten." ;
+        Text [ spanish ] = "No se imprimen las celdas de la selección actual." ;
+        Text [ english_us ] = "The cells selected will be omitted when printing." ;
+        Text[ chinese_simplified ] = "µ±Ç°Ñ¡¶¨µ¥Ôª¸ñ²»»á±»´òÓ¡³öÀ´¡£";
+        Text[ russian ] = "Ïğè ïå÷àòè âûäåëåííûå ÿ÷åéêè ïîêàçàíû íå áóäóò.";
+        Text[ polish ] = "Zaznaczone komórki zostan¹ pominiête przy wydruku.";
+        Text[ japanese ] = "Œ»İ‘I‘ğ‚³‚ê‚Ä‚¢‚é¾Ù‚Íˆóü‚³‚ê‚Ü‚¹‚ñB";
+        Text[ chinese_traditional ] = "·í«e¿ï¨úªºÀx¦s®æ¤£·|³Q¦C¦L¥X¨Ó¡C";
+        Text[ arabic ] = "ÓíÊã ÊÌÇåá ÎáÇíÇ ÇáÊÍÏíÏ ÇáÍÇáí ÚäÏ ÇáØÈÇÚÉ.";
+        Text[ greek ] = "Ôá êåëéÜ ôçò ôñİ÷ïõóáò åğéëïãŞò èá ğáñáëçöèïıí êáôÜ ôçí åêôığùóç.";
+        Text[ korean ] = "¼±ÅÃµÈ ¼¿Àº ÀÎ¼â¿¡¼­ Á¦¿ÜµÉ °ÍÀÔ´Ï´Ù.";
+        Text[ turkish ] = "Yürürlükteki seçimin hücreleri yazdırmaya dahil olmayacak.";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_PRINT
+    {
+        Pos = MAP_APPFONT ( 6 , 82 ) ;
+        Size = MAP_APPFONT ( 246 , 48 ) ;
+        Text = "Ausdruck" ;
+        Text [ ENGLISH ] = "Printing" ;
+        Text [ norwegian ] = "Printing" ;
+        Text [ italian ] = "Stampa" ;
+        Text [ portuguese_brazilian ] = "Impressão" ;
+        Text [ portuguese ] = "Impressão" ;
+        Text [ finnish ] = "Tulostus" ;
+        Text [ danish ] = "Udskrivning" ;
+        Text [ french ] = "Impression" ;
+        Text [ swedish ] = "Utskrift" ;
+        Text [ dutch ] = "Afdrukken" ;
+        Text [ spanish ] = "Impresión" ;
+        Text [ english_us ] = "Print" ;
+        Text[ chinese_simplified ] = "´òÓ¡";
+        Text[ russian ] = "Ïå÷àòü";
+        Text[ polish ] = "Wydruk";
+        Text[ japanese ] = "ˆóü";
+        Text[ chinese_traditional ] = "¦C¦L";
+        Text[ arabic ] = "ØÈÇÚÉ";
+        Text[ greek ] = "Åêôığùóç";
+        Text[ korean ] = "ÀÎ¼â";
+        Text[ turkish ] = "Yazdır";
+        Text[ language_user1 ] = " ";
+    };
+};

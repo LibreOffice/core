@@ -1,0 +1,18 @@
+ //============================================================================
+ //
+ // ScOleObjectShell fuer StarCalc
+ //
+ // (C) 1999 StarDivision GmbH, Hamburg, Germany
+ // $Author: hr $ $Date: 2000-09-18 16:44:52 $ $Revision: 1.1.1.1 $
+ // $Logfile:   T:/sc/sdi/oleobjsh.sdv  $ $Workfile:   oleobjsh.sdi  $
+ //----------------------------------------------------------------------------
+
+interface OleObjectSelection : Selection
+{
+}
+
+ // ===========================================================================
+shell ScOleObjectShell : ScDrawShell
+{
+    import OleObjectSelection;
+}

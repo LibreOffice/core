@@ -1,0 +1,665 @@
+/*************************************************************************
+ *
+ *  $RCSfile: scerrors.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:05 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#define __RSC
+#include "scerrors.hxx"
+#include "sc.hrc"
+
+
+
+#define SH_MAX 0x7fff
+
+Resource RID_ERRHDLSC
+{
+     //------------------------------------------------------------
+     // ERRORS -----------------------------------------------------
+     //------------------------------------------------------------
+    String SCERR_IMPORT_CONNECT & SH_MAX
+    {
+        Text = "Es konnte keine Verbindung zu der Datei hergestellt werden." ;
+        Text [ ENGLISH ] = "No connection could be established." ;
+        Text [ english_us ] = "Impossible to connect to the file." ;
+        Text [ italian ] = "Impossibile stabilire il collegamento con il file" ;
+        Text [ spanish ] = "No se pudo establecer conexión con el archivo." ;
+        Text [ french ] = "Impossible d'établir un lien avec le fichier." ;
+        Text [ dutch ] = "Er kon geen verbinding met het bestand tot stand worden gebracht." ;
+        Text [ swedish ] = "En förbindelse till filen kunde inte etableras." ;
+        Text [ danish ] = "Det var ikke muligt at oprette en forbindelse til filen." ;
+        Text [ portuguese ] = "Não foi possível estabelecer ligação com o ficheiro." ;
+        Text [ portuguese_brazilian ] = "Es konnte keine Verbindung zu der Datei hergestellt werden." ;
+        Text[ chinese_simplified ] = "ÎŞ·¨Á¬½ÓÕâ¸öÎÄ¼ş¡£";
+        Text[ russian ] = "Íåâîçìîæíî ñîçäàòü ñâÿçü ñ ıòèì ôàéëîì.";
+        Text[ polish ] = "Nie mo¿na by³o utworzyæ po³¹czenia z plikiem.";
+        Text[ japanese ] = "Ì§²Ù‚Ö‚ÌÚ‘±‚Í‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        Text[ chinese_traditional ] = "µLªk³sµ²³o­ÓÀÉ®×¡C";
+        Text[ arabic ] = "ÊÚĞÑ ÇáÇÊÕÇá ÈÇáãáİ.";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé óıíäåóç ìå ôï áñ÷åßï.";
+        Text[ korean ] = "ÆÄÀÏ¿¡ Á¢¼ÓÀÌ ºÒ°¡´ÉÇÕ´Ï´Ù.";
+        Text[ turkish ] = "Dosya ile bağlantı oluşturulamadı.";
+        Text[ language_user1 ] = " ";
+    };
+    String SCERR_IMPORT_CURSOR & SH_MAX
+    {
+        Text = "Das Dateiformat konnte nicht gelesen werden." ;
+        Text [ ENGLISH ] = "The fileformat could not be read." ;
+        Text [ dutch ] = "Het bestandsformaat kon niet worden gelezen." ;
+        Text [ english_us ] = "The file format could not be read." ;
+        Text [ italian ] = "Impossibile leggere il formato del file" ;
+        Text [ spanish ] = "No se pudo leer el formato del archivo." ;
+        Text [ french ] = "Impossible de lire ce format de fichier." ;
+        Text [ swedish ] = "Filformatet kunde inte läsas." ;
+        Text [ danish ] = "Det var ikke muligt at læse filformatet." ;
+        Text [ portuguese ] = "Foi impossível ler o formato do ficheiro." ;
+        Text [ portuguese_brazilian ] = "Das Dateiformat konnte nicht gelesen werden." ;
+        Text[ chinese_simplified ] = "ÎŞ·¨¶ÁÈ¡Õâ¸öÎÄ¼ş¸ñÊ½¡£";
+        Text[ russian ] = "Íå óäàåòñÿ ïğî÷èòàòü ôîğìàò ôàéëà.";
+        Text[ polish ] = "Format pliku nie móg³ zostaæ odczytany.";
+        Text[ japanese ] = "Ì§²Ù‘®‚Í“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        Text[ chinese_traditional ] = "µLªkÅª¨ú³o­ÓÀÉ®×®æ¦¡¡C";
+        Text[ arabic ] = "ÊÚĞÑ ŞÑÇÁÉ ÊäÓíŞ Çáãáİ.";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé áíÜãíùóç ôçò ìïñöŞò áñ÷åßïõ.";
+        Text[ korean ] = "ÆÄÀÏ¼­½ÄÀ» ÀĞÀ»¼ö ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Dosya formatı okunamadı.";
+        Text[ language_user1 ] = " ";
+    };
+    String SCERR_IMPORT_OPEN & SH_MAX
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Die Datei konnte nicht geöffnet werden. : Die Datei konnte nicht ge÷ffnet werden. */
+        Text = "Die Datei konnte nicht geöffnet werden." ;
+        Text [ ENGLISH ] = "The file could not be opened." ;
+        Text [ dutch ] = "Het bestand kon niet worden geopend." ;
+        Text [ english_us ] = "File could not be opened." ;
+        Text [ italian ] = "Impossibile aprire il file." ;
+        Text [ spanish ] = "No se pudo abrir el archivo." ;
+        Text [ french ] = "Impossible d'ouvrir le fichier." ;
+        Text [ swedish ] = "Filen kunde inte öppnas." ;
+        Text [ danish ] = "Det var ikke muligt at åbne filen." ;
+        Text [ portuguese ] = "Impossível abrir o ficheiro." ;
+        Text [ portuguese_brazilian ] = "Die Datei konnte nicht geöffnet werden." ;
+        Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÕâ¸öÎÄ¼ş¡£";
+        Text[ russian ] = "Íå óäàåòñÿ îòêğûòü ôàéë.";
+        Text[ polish ] = "Nie mo¿na by³o otworzyæ pliku.";
+        Text[ japanese ] = "Ì§²Ù‚ğŠJ‚­‚±‚Æ‚ª‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        Text[ chinese_traditional ] = "µLªk¶}±Ò³o­ÓÀÉ®×¡C";
+        Text[ arabic ] = "ÊÚĞÑ İÊÍ Çáãáİ.";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá áíïé÷èåß ôï áñ÷åßï.";
+        Text[ korean ] = "ÆÄÀÏÀÌ ¿­¸®Áö ¾Ê½À´Ï´Ù.";
+        Text[ turkish ] = "Dosya açılamadı.";
+        Text[ language_user1 ] = " ";
+    };
+    String SCERR_IMPORT_UNKNOWN & SH_MAX
+    {
+        Text = "Ein unbekannter Fehler ist aufgetreten." ;
+        Text [ ENGLISH ] = "An unknown error occurred" ;
+        Text [ dutch ] = "Er is een onbekende fout opgetreden" ;
+        Text [ english_us ] = "An unknown error has occurred." ;
+        Text [ italian ] = "Si è verificato un errore sconosciuto." ;
+        Text [ spanish ] = "Ha ocurrido un error desconocido." ;
+        Text [ french ] = "Une erreur inconnue est survenue." ;
+        Text [ swedish ] = "Det har uppstått ett okänt fel." ;
+        Text [ danish ] = "Der opstod en ukendt fejl." ;
+        Text [ portuguese ] = "Surgiu um erro desconhecido." ;
+        Text [ portuguese_brazilian ] = "Ein unbekannter Fehler ist aufgetreten." ;
+        Text[ chinese_simplified ] = "·¢ÉúÒ»¸ö²»Ã÷µÄ´íÎó¡£";
+        Text[ russian ] = "Ïğîèçîøëà íåèçâåñòíàÿ îøèáêà.";
+        Text[ polish ] = "Wyst¹pi³ nieznany b³¹d.";
+        Text[ japanese ] = "•s–¾‚È´×°‚ª”­¶‚µ‚Ü‚µ‚½B";
+        Text[ chinese_traditional ] = "µo¥Í¤@­Ó¤£©úªº¿ù»~¡C";
+        Text[ arabic ] = "ÍÏË ÎØÃ ÛíÑ ãÚÑæİ.";
+        Text[ greek ] = "ĞáñïõóéÜóôçêå Üãíùóôï óöÜëìá.";
+        Text[ korean ] = "¾Ë¼ö¾ø´Â ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
+        Text[ turkish ] = "Bilnmeyen hata oluştu.";
+        Text[ language_user1 ] = " ";
+    };
+    String SCERR_IMPORT_OUTOFMEM & SH_MAX
+    {
+        Text = "Nicht genug Speicher beim Importieren." ;
+        Text [ ENGLISH ] = "Not enough memory while importing." ;
+        Text [ dutch ] = "Niet genoeg geheugen bij het importeren." ;
+        Text [ english_us ] = "Not enough memory while importing." ;
+        Text [ italian ] = "Memoria insufficiente durante l'importazione." ;
+        Text [ spanish ] = "Memoria insuficiente al importar." ;
+        Text [ french ] = "Mémoire insuffisante lors de l'import." ;
+        Text [ swedish ] = "Inte tillräckligt med minne under importeringen." ;
+        Text [ danish ] = "Ikke tilstrækkelig hukommelse ved import." ;
+        Text [ portuguese ] = "Memória insuficiente ao importar." ;
+        Text [ portuguese_brazilian ] = "Nicht genug Speicher beim Importieren." ;
+        Text[ chinese_simplified ] = "ÔÚÊäÈëÊ±ÄÚ´æ²»×ã¡£";
+        Text[ russian ] = "Íåäîñòàòî÷íî ïàìÿòè ïğè èìïîğòèğîâàíèè.";
+        Text[ polish ] = "Za ma³o pamiêci dla importu.";
+        Text[ japanese ] = "²İÎß°Ä‚ÌÛ‚Ì•s\\•ª‚È‹ó‚«—e—ÊB";
+        Text[ chinese_traditional ] = "¦b¿é¤J®É°O¾ĞÅé¤£¨¬¡C";
+        Text[ arabic ] = "ÇáĞÇßÑÉ áíÓÊ ßÇİíÉ ÃËäÇÁ ÇáÇÓÊíÑÇÏ.";
+        Text[ greek ] = "ÊáôÜ ôçí åéóáãùãŞ ğñïİêõøå ğñüâëçìá ìíŞìçò.";
+        Text[ korean ] = "°¡Á®¿À±â¸¦ ÇÏ´Âµ¿¾È ¸Ş¸ğ¸®°¡ ºÎÁ·ÇÕ´Ï´Ù.";
+        Text[ turkish ] = "İçe aktarma işleminde bellek yetersiz.";
+        Text[ language_user1 ] = " ";
+    };
+    String SCERR_IMPORT_UNKNOWN_WK & SH_MAX
+    {
+        Text = "Unbekanntes Lotus-123-Dateiformat." ;
+        Text [ ENGLISH ] = "Unknown Lotus-123 file format." ;
+        Text [ dutch ] = "Onbekend Lotus-123-bestandsformaat." ;
+        Text [ english_us ] = "Unknown Lotus1-2-3 file format." ;
+        Text [ italian ] = "Formato file Lotus 123 sconosciuto." ;
+        Text [ spanish ] = "Formato del archivo Lotus 123 desconocido." ;
+        Text [ french ] = "Format de fichier Lotus-123 inconnu." ;
+        Text [ swedish ] = "Obekant Lotus-123-filformat." ;
+        Text [ danish ] = "Ukendt Lotus-123-filformat." ;
+        Text [ portuguese ] = "Formato de ficheiro Lotus-123 desconhecido." ;
+        Text [ portuguese_brazilian ] = "Unbekanntes Lotus-123-Dateiformat." ;
+        Text[ chinese_simplified ] = "²»Ã÷µÄ Lotus1-2-3 ÎÄ¼ş¸ñÊ½¡£";
+        Text[ russian ] = "Íåèçâåñòíûé ôîğìàò ôàéëà Lotus-123.";
+        Text[ polish ] = "Nieznany format pliku Lotus1-2-3.";
+        Text[ japanese ] = "•s–¾‚È Lotus123 Ì§²Ù‘®¡";
+        Text[ chinese_traditional ] = "¤£©úªº Lotus1-2-3 ÀÉ®×®æ¦¡¡C";
+        Text[ arabic ] = "ÊäÓíŞ ãáİ Lotus-123 ÛíÑ ãÚÑæİ.";
+        Text[ greek ] = "¢ãíùóôç ìïñöŞ áñ÷åßïõ Lotus1-2-3.";
+        Text[ korean ] = "¾Ë¼ö¾ø´Â ·ÎÅÍ½º1-2-3 ÆÄÀÏ ¼­½Ä";
+        Text[ turkish ] = "Bilinmeyen Lotus-123 dosya formatı.";
+        Text[ language_user1 ] = " ";
+    };
+    String SCERR_IMPORT_FORMAT & SH_MAX
+    {
+        Text = "Fehler in Dateistruktur beim Importieren." ;
+        Text [ ENGLISH ] = "Error in file structure." ;
+        Text [ dutch ] = "Fout in bestandstructuur bij importeren" ;
+        Text [ english_us ] = "Error in file structure while importing." ;
+        Text [ italian ] = "Errore nella struttura del file durante l'importazione" ;
+        Text [ spanish ] = "Error en la estructura del archivo al importar." ;
+        Text [ french ] = "Erreur dans la structure du fichier lors de l'import." ;
+        Text [ swedish ] = "Fel i filstruktur vid importering." ;
+        Text [ danish ] = "Fejl i filstrukturen ved import." ;
+        Text [ portuguese ] = "Erro na estrutura do ficheiro ao importar." ;
+        Text [ portuguese_brazilian ] = "Fehler in Dateistruktur beim Importieren." ;
+        Text[ chinese_simplified ] = "ÔÚÊäÈëÊ±·¢ÉúÎÄ¼ş½á¹¹´íÎó¡£";
+        Text[ russian ] = "Îøèáêà â ñòğóêòóğå ôàéëà ïğè èìïîğòèğîâàíèè.";
+        Text[ polish ] = "B³¹d struktury pliku podczas importowania.";
+        Text[ japanese ] = "²İÎß°Ä‚ÌÛ‚ÌÌ§²Ù\\‘¢‚É‚¨‚¯‚é´×°B";
+        Text[ chinese_traditional ] = "¦b¿é¤J®Éµo¥ÍÀÉ®×µ²ºc¿ù»~¡C";
+        Text[ arabic ] = "ÍÏË ÎØÃ İí ÈäíÉ Çáãáİ ÃËäÇÁ ÇáÇÓÊíÑÇÏ.";
+        Text[ greek ] = "ÓöÜëìá óôç äïìŞ ôïõ áñ÷åßïõ êáôÜ ôçí åéóáãùãŞ.";
+        Text[ korean ] = "°¡Á®¿À±â¸¦ ÇÏ´Âµ¿¾È ÆÄÀÏ ±¸Á¶¿¡¼­ ¿À·ù";
+        Text[ turkish ] = "İçe aktarma işleminde dosya yapısında hata.";
+        Text[ language_user1 ] = " ";
+    };
+    String SCERR_IMPORT_NI & SH_MAX
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Für diesen Dateityp ist kein Filter implementiert. : F³r diesen Dateityp ist kein Filter implementiert. */
+        Text = "Für diesen Dateityp ist kein Filter implementiert." ;
+        Text [ ENGLISH ] = "There is no filter available for this file." ;
+        Text [ english_us ] = "There is no filter available for this file type." ;
+        Text [ italian ] = "Per questo tipo di file non è stato implementato nessun filtro" ;
+        Text [ spanish ] = "Para este tipo de archivo no hay ningún filtro implementado." ;
+        Text [ french ] = "Aucun filtre disponible pour ce type de fichier." ;
+        Text [ dutch ] = "Voor dit bestandstype staat geen filter ter beschikking." ;
+        Text [ swedish ] = "Inget filter är implementerat för denna filtyp." ;
+        Text [ danish ] = "Der er ikke implementeret et filter til denne filtype." ;
+        Text [ portuguese ] = "Não há filtro implementado para este tipo de ficheiro." ;
+        Text [ portuguese_brazilian ] = "Für diesen Dateityp ist kein Filter implementiert." ;
+        Text[ chinese_simplified ] = "Ä¿Ç°»¹²»ÄÜÎªÕâ¸öÎÄ¼şÀàĞÍÌá¹©É¸Ñ¡¹¦ÄÜ¡£";
+        Text[ language_user1 ] = " ";
+        Text[ russian ] = "Äëÿ ıòîãî òèïà ôàéëà íå èìååòñÿ ôèëüòğà.";
+        Text[ polish ] = "Dla tego typu pliku nie zaimplementowano filtra.";
+        Text[ japanese ] = "‚±‚ÌÌ§²Ù‚Ìí—Ş‚É‚ÍÌ¨ÙÀ‚ªÀ‘•‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
+        Text[ chinese_traditional ] = "¥Ø«eÁÙ¤£¯à¬°³o­ÓÀÉ®×Ãş«¬´£¨Ñ¿z¿ï¥\\¯à¡C";
+        Text[ arabic ] = "áã íÊã ÊäİíĞ İáÊÑ áåĞÇ ÇáäæÚ ãä ÇáãáİÇÊ.";
+        Text[ greek ] = "Äåí õğÜñ÷åé ößëôñï äéáèİóéìï ãéá áõôüí ôïí ôığï áñ÷åßùí.";
+        Text[ korean ] = "ÀÌ ÆÄÀÏ À¯Çü¿¡ ¸Â´Â ÇÊÅÍ°¡ ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Bu dosya tipi için filtre mevcut değil.";
+    };
+    String SCERR_IMPORT_UNKNOWN_BIFF & SH_MAX
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Nicht unterstütztes oder unbekanntes Excel-Dateiformat. : Nicht unterst³tztes oder unbekanntes Excel-Dateiformat. */
+        Text = "Nicht unterstütztes oder unbekanntes Excel-Dateiformat." ;
+        Text [ ENGLISH ] = "Unknown or not supported Excel file format" ;
+        Text [ english_us ] = "Unknown or unsupported Excel file format." ;
+        Text [ italian ] = "Formato file Excel sconosciuto o non supportato" ;
+        Text [ spanish ] = "Formato del archivo Excel no soportado o desconocido." ;
+        Text [ french ] = "Format de fichier Excel inconnu ou incompatible." ;
+        Text [ dutch ] = "Niet ondersteund of onbekend Excel bestandsformaat." ;
+        Text [ swedish ] = "Ej understött eller obekant Excel-filformat." ;
+        Text [ danish ] = "Et ikke understøttet eller ukendt Excel-filformat." ;
+        Text [ portuguese ] = "Formato de ficheiro Excel sem suporte ou desconhecido." ;
+        Text [ portuguese_brazilian ] = "Nicht unterstütztes oder unbekanntes Excel-Dateiformat." ;
+        Text[ chinese_simplified ] = "²»ÊÜÖ§³ÖµÄ»ò²»Ã÷µÄ Excel ÎÄ¼ş¸ñÊ½¡£";
+        Text[ russian ] = "Íåèçâåñòíûé èëè íåïîääåğæèâàåìûé ôîğìàò ôàéëà Excel.";
+        Text[ polish ] = "Nie obs³ugiwany lub nieznany format pliku Excel.";
+        Text[ japanese ] = "x‰‡‚³‚ê‚Ä‚È‚¢‚Ü‚½‚Í•s–¾‚ÈExcelÌ§²ÙÌ«°Ï¯Ä¡";
+        Text[ chinese_traditional ] = "¤£¨ü¤ä´©ªº©Î¤£©úªº Excel ÀÉ®×®æ¦¡¡C";
+        Text[ arabic ] = "ÊäÓíŞ ãáİ Excel ÛíÑ ãÏÚæã¡ Ãæ ÛíÑ ãÚÑæİ.";
+        Text[ greek ] = "¢ãíùóôç Ş ìç õğïóôçñéæüìåíç ìïñöŞ áñ÷åßïõ Excel.";
+        Text[ korean ] = "¾Ë¼ö¾ø°Å³ª Áö¿øµÇÁö ¾Ê´ÂExcel ÆÄÀÏ ¼­½Ä.";
+        Text[ turkish ] = "Desteklenmeyen ya da bilinmeyen Excel dosya formatı.";
+        Text[ language_user1 ] = " ";
+    };
+    String SCERR_IMPORT_NI_BIFF & SH_MAX
+    {
+        Text = "Noch nicht implementiertes Excel-Dateiformat." ;
+        Text [ ENGLISH ] = "Not yet implemented Excel file format" ;
+        Text [ dutch ] = "Nog niet geïmplementeerd Excel bestandsformaat." ;
+        Text [ english_us ] = "Excel file format not yet implemented." ;
+        Text [ italian ] = "Formato di file Excel non ancora implementato." ;
+        Text [ spanish ] = "Formato del archivo Excel aún no implementado." ;
+        Text [ french ] = "Format de fichier Excel pas encore appliqué." ;
+        Text [ swedish ] = "Ännu inte implementerat Excel-filformat." ;
+        Text [ danish ] = "Endnu ikke implementeret Excel-filformat." ;
+        Text [ portuguese ] = "Formato de ficheiro Excel ainda não implementado." ;
+        Text [ portuguese_brazilian ] = "Noch nicht implementiertes Excel-Dateiformat." ;
+        Text[ chinese_simplified ] = "»¹²»ÊÜÖ§³ÖµÄ Excel ÎÄ¼ş¸ñÊ½¡£";
+        Text[ russian ] = "Ôîğìàò ôàéëà Excel åùå íåğåàëèçîâàí.";
+        Text[ polish ] = "Jeszcze nie zaimplementowany format pliku Excel.";
+        Text[ japanese ] = "‚Ü‚¾À‘•‚³‚ê‚Ä‚È‚¢ Excel Ì§²Ù‘®B";
+        Text[ chinese_traditional ] = "ÁÙ¤£¨ü¤ä´©ªº Excel ÀÉ®×®æ¦¡¡C";
+        Text[ arabic ] = "ÊäÓíŞ ãáİ Excel áã íÊã ÊäİíĞå ÈÚÏ.";
+        Text[ greek ] = "ÌïñöŞ áñ÷åßïõ Excel ğïõ äåí İ÷åé õëïğïéçèåß áêüìç.";
+        Text[ korean ] = "Excel ÆÄÀÏÆ÷¸ËÀÌ ¾ÆÁ÷ ±¸ÇöµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ turkish ] = "Henüz kullanılmayan Excel dosya formatı.";
+        Text[ language_user1 ] = " ";
+    };
+    String SCERR_IMPORT_FILEPASSWD & SH_MAX
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Die Datei ist durch ein Kennwort geschützt. : Die Datei ist durch ein Kennwort gesch³tzt. */
+        Text = "Die Datei ist durch ein Kennwort geschützt." ;
+        Text [ ENGLISH ] = "This file is password protected." ;
+        Text [ dutch ] = "Het bestand is door een wachtwoord beveiligd" ;
+        Text [ english_us ] = "This file is password-protected." ;
+        Text [ italian ] = "Il file è protetto da una password" ;
+        Text [ spanish ] = "El archivo está protegido con una palabra clave." ;
+        Text [ french ] = "Fichier protégé par un mot de passe." ;
+        Text [ swedish ] = "Filen är skyddad med ett lösenord." ;
+        Text [ danish ] = "Filen er beskyttet med en adgangskode." ;
+        Text [ portuguese ] = "O ficheiro está protegido por senha." ;
+        Text [ portuguese_brazilian ] = "Die Datei ist durch ein Kennwort geschützt." ;
+        Text[ chinese_simplified ] = "Õâ¸öÎÄ¼şÊÜµ½¿ÚÁî±£»¤¡£";
+        Text[ russian ] = "Ôàéë çàùèùåí ïàğîëåì.";
+        Text[ polish ] = "Plik jest zabezpieczony has³em.";
+        Text[ japanese ] = "Ì§²Ù‚ÍÊß½Ü°ÄŞ‚É‚æ‚Á‚Ä•ÛŒì‚³‚ê‚Ä‚¢‚Ü‚·B";
+        Text[ chinese_traditional ] = "³o­ÓÀÉ®×¨ü¨ì±K½X«OÅ@¡C";
+        Text[ arabic ] = "åĞÇ Çáãáİ ãÍãí ÈßáãÉ ÓÑ.";
+        Text[ greek ] = "Ôï áñ÷åßï ğñïóôáôåıåôáé ìå êùäéêü ğñüóâáóçò.";
+        Text[ korean ] = "ÆÄÀÏÀÌ ÆĞ½º¿öµå º¸È£°¡ µÇ¾îÀÖ½À´Ï´Ù.";
+        Text[ turkish ] = "Dosya şifre ile korunuyor.";
+        Text[ language_user1 ] = " ";
+    };
+    String SCERR_IMPORT_INTERNAL & SH_MAX
+    {
+        Text = "Interner Importfehler" ;
+        Text [ ENGLISH ] = "An internal error occurred while importing." ;
+        Text [ english_us ] = "Internal import error." ;
+        Text [ italian ] = "Errore interno di import" ;
+        Text [ spanish ] = "Error de importación interno." ;
+        Text [ french ] = "Erreur d'import interne" ;
+        Text [ dutch ] = "Interne importfout" ;
+        Text [ swedish ] = "Internt importfel" ;
+        Text [ danish ] = "Intern importfejl." ;
+        Text [ portuguese ] = "Erro de importação interno." ;
+        Text [ portuguese_brazilian ] = "Interner Importfehler" ;
+        Text[ chinese_simplified ] = "ÄÚ²¿ÊäÈë´íÎó¡£";
+        Text[ russian ] = "Âíóòğåííÿÿ îøèáêà èìïîğòà";
+        Text[ polish ] = "Wewnêtrzny b³¹d importu";
+        Text[ japanese ] = "“à•”‚Ì²İÎß°Ä´×°";
+        Text[ chinese_traditional ] = "¤º³¡¿é¤J¿ù»~¡C";
+        Text[ arabic ] = "ÎØÃ ÇÓÊíÑÇÏ ÏÇÎáí";
+        Text[ greek ] = "Åóùôåñéêü óöÜëìá åéóáãùãŞò.";
+        Text[ korean ] = "³»ºÎ °¡Á®¿À±â ¿À·ù.";
+        Text[ turkish ] = "İç içe aktarma hatası";
+        Text[ language_user1 ] = " ";
+    };
+    String SCERR_IMPORT_8K_LIMIT & SH_MAX
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Die Datei enthält Daten unterhalb von Zeile 8192 und kann daher nicht gelesen werden. : Die Datei enthõlt Daten unterhalb von Zeile 8192 und kann daher nicht gelesen werden. */
+        Text = "Die Datei enthält Daten unterhalb von Zeile 8192 und kann daher nicht gelesen werden." ;
+        Text [ ENGLISH ] = "The file contains data below row 8192 and cannot be read." ;
+        Text [ portuguese ] = "O ficheiro contém dados abaixo da linha 8192 e não pode ser lido." ;
+        Text [ english_us ] = "The file contains data after row 8192 and therefore can not be read." ;
+        Text [ portuguese_brazilian ] = "Die Datei enthält Daten unterhalb von Zeile 8192 und kann daher nicht gelesen werden." ;
+        Text [ swedish ] = "Filen innehåller data under rad 8192 och kan därför inte läsas." ;
+        Text [ danish ] = "Filen indeholder data nedenfor række 8192 og kan derfor ikke læses." ;
+        Text [ italian ] = "Impossibile leggere il file in quanto contiene dei dati al di sotto della riga 8192." ;
+        Text [ spanish ] = "El archivo contiene datos por debajo de la fila 8192, por lo que no puede ser leído." ;
+        Text [ french ] = "Le fichier ne peut pas être lu car il contient des données au delà de la ligne 8192." ;
+        Text [ dutch ] = "In het bestand komen beneden regel 8192 gegevens voor en het kan daarom niet worden gelezen." ;
+        Text[ chinese_simplified ] = "Õâ¸öÎÄ¼şº¬ÓĞĞĞÊı8192Ö®ÏÂµÄÊı¾İ£¬Òò´ËÎŞ·¨¶Á³ö¡£";
+        Text[ russian ] = "Â ôàéëå ñîäåğæàòñÿ äàííûå, íàõîäÿùèåñÿ íèæå ñòğîêè 8192 è ïîıòîìó ïğî÷èòàòü åãî íå óäàåòñÿ.";
+        Text[ polish ] = "Plik zawiera znaki poni¿ej wiersza 8192 i z tego powodu nie mo¿e zostaæ odczytany.";
+        Text[ japanese ] = "Ì§²Ù‚Í 8192s–Ú‚Ì‰º‚ÉÃŞ°À‚ğŠÜ‚ñ‚Å‚¢‚é‚Ì‚Å“Ç‚İæ‚è‚Å‚«‚Ü‚¹‚ñB";
+        Text[ chinese_traditional ] = "³o­ÓÀÉ®×§t¦³¦C¼Æ8192¤§¤Uªº¼Æ¾Ú¡A¦]¦¹µLªkÅª¥X¡C";
+        Text[ arabic ] = "íÍÊæí Çáãáİ Úáì ÈíÇäÇÊ ÃÓİá ÇáÕİ 8192¡ áåĞÇ áÇ íãßä ŞÑÇÁÊå.";
+        Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé áíÜãíùóç ôïõ áñ÷åßïõ åğåéäŞ ğåñéİ÷åé äåäïìİíá ğëİïí ôùí 8192 ãñáììşí.";
+        Text[ korean ] = "ÆÄÀÏÀÌ Çà 8192 µÚÀÇ µ¥ÀÌÅÍ¸¦ Æ÷ÇÔÇÏ°í ÀÖ¾î¼­ ÀĞÇôÁöÁö ¾Ê½À´Ï´Ù.";
+        Text[ turkish ] = "Dosya, 8192 satırı altında veri bulunduğu okununamıyor.";
+        Text[ language_user1 ] = " ";
+    };
+     // Export ----------------------------------------------------
+    String SCERR_EXPORT_CONNECT & SH_MAX
+    {
+        Text = "Es konnte keine Verbindung zu der Datei hergestellt werden." ;
+        Text [ ENGLISH ] = "No connection could be established." ;
+        Text [ english_us ] = "Connection to the file could not be established." ;
+        Text [ italian ] = "Impossibile stabilire un collegamento al file." ;
+        Text [ spanish ] = "No se pudo establecer conexión con el archivo." ;
+        Text [ french ] = "Impossible d'établir un lien avec le fichier." ;
+        Text [ dutch ] = "Er kon geen verbinding met het bestand tot stand worden gebracht." ;
+        Text [ swedish ] = "En förbindelse till filen kunde inte etableras." ;
+        Text [ danish ] = "Det var ikke muligt at oprette en forbindelse til filen." ;
+        Text [ portuguese_brazilian ] = "Es konnte keine Verbindung zu der Datei hergestellt werden." ;
+        Text [ portuguese ] = "Não foi possível estabelecer ligação com o ficheiro." ;
+        Text[ chinese_simplified ] = "ÎŞ·¨Á¬½ÓÎÄ¼ş¡£";
+        Text[ russian ] = "Íå óäàåòñÿ ñîçäàòü ñâÿçü ñ ôàéëîì.";
+        Text[ polish ] = "Nie mo¿na by³o ustanowiæ po³¹czenia z plikiem.";
+        Text[ japanese ] = "Ì§²Ù‚Ö‚ÌÚ‘±‚Í‚Å‚«‚Ü‚¹‚ñB";
+        Text[ chinese_traditional ] = "µLªk³sµ²ÀÉ®×¡C";
+        Text[ arabic ] = "ÊÚĞÑ ÇáÇÊÕÇá ÈÇáãáİ.";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé óıíäåóç ìå ôï áñ÷åßï.";
+        Text[ korean ] = "ÆÄÀÏ¿¡ Á¢¼ÓÀÌ ¼º¸³µÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ turkish ] = "Dosya ile bağlantı oluşturulamadı.";
+        Text[ language_user1 ] = " ";
+    };
+    String SCERR_EXPORT_CURSOR & SH_MAX
+    {
+        Text = "Das Dateiformat konnte nicht geschrieben werden." ;
+        Text [ ENGLISH ] = "The fileformat could not be written." ;
+        Text [ english_us ] = "The file format could not be written." ;
+        Text [ italian ] = "Impossibile scrivere il formato dei dati." ;
+        Text [ spanish ] = "No se pudo guardar el formato del archivo." ;
+        Text [ french ] = "Impossible d'écrire ce format de fichier." ;
+        Text [ dutch ] = "Het bestandsformaat kon niet worden geschreven." ;
+        Text [ swedish ] = "Filformatet kunde inte skrivas." ;
+        Text [ danish ] = "Det var ikke muligt at skrive filformatet." ;
+        Text [ portuguese ] = "Não foi possível guardar o formato do ficheiro." ;
+        Text [ portuguese_brazilian ] = "Das Dateiformat konnte nicht geschrieben werden." ;
+        Text[ chinese_simplified ] = "ÎŞ·¨Ğ´ÈëÎÄ¼ş¸ñÊ½¡£";
+        Text[ russian ] = "Çàïèñàòü ôîğìàò ôàéëà íåâîçìîæíî.";
+        Text[ polish ] = "Formatu pliku nie mo¿na by³o zapisaæ.";
+        Text[ japanese ] = "Ì§²Ù‘®‚Í‘‚«‚İ‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        Text[ chinese_traditional ] = "µLªk¼g¤JÀÉ®×®æ¦¡¡C";
+        Text[ arabic ] = "ÊÚĞÑ ßÊÇÈÉ ÊäÓíŞ Çáãáİ.";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé åããñáöŞ ôçò ìïñöŞò áñ÷åßïõ..";
+        Text[ korean ] = "ÆÄÀÏ ¼­½ÄÀÌ ¾²¿©Áú ¼ö ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Dosya formatı yazılamadı.";
+        Text[ language_user1 ] = " ";
+    };
+    String SCERR_EXPORT_DATA & SH_MAX
+    {
+        Text = "Die Daten konnten nicht geschrieben werden." ;
+        Text [ ENGLISH ] = "Data could not be written." ;
+        Text [ english_us ] = "Data could not be written." ;
+        Text [ italian ] = "Impossibile scrivere i dati." ;
+        Text [ spanish ] = "No se pudieron guardar los datos." ;
+        Text [ french ] = "Impossible d'écrire ces données." ;
+        Text [ dutch ] = "De gegevens konden niet worden geschreven." ;
+        Text [ swedish ] = "Data kunde inte skrivas." ;
+        Text [ danish ] = "Det var ikke muligt at skrive data." ;
+        Text [ portuguese ] = "Não foi possível gravar os dados." ;
+        Text [ portuguese_brazilian ] = "Die Daten konnten nicht geschrieben werden." ;
+        Text[ chinese_simplified ] = "ÎŞ·¨Ğ´ÈëÊı¾İ¡£";
+        Text[ russian ] = "Çàïèñàòü äàííûå íåâîçìîæíî.";
+        Text[ polish ] = "Plików nie mo¿na by³o zapisaæ.";
+        Text[ japanese ] = "ÃŞ°À‚Í‘‚«‚İ‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        Text[ chinese_traditional ] = "µLªk¼g¤J¼Æ¾Ú¡C";
+        Text[ arabic ] = "ÊÚĞÑ ßÊÇÈÉ ÇáÈíÇäÇÊ.";
+        Text[ greek ] = "Äåí Şôáí äõíáôŞ ç åããñáöŞ ôùí äåäïìİíùí.";
+        Text[ korean ] = "µ¥ÀÌÅÍ°¡ ÀúÀåµÉ ¼ö ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Veriler yazılamadı.";
+        Text[ language_user1 ] = " ";
+    };
+     //------------------------------------------------------------
+     // WARNINGS ---------------------------------------------------
+     //------------------------------------------------------------
+    String SCWARN_EXPORT_ASCII & SH_MAX
+    {
+        Text = "Es wurde nur die aktuelle Tabelle gespeichert." ;
+        Text [ ENGLISH ] = "The current table has only been saved." ;
+        Text [ dutch ] = "Alleen de actuele tabel werd opgeslagen." ;
+        Text [ english_us ] = "Only the active sheet was saved." ;
+        Text [ italian ] = "È stata salvata solo la tabella attuale." ;
+        Text [ spanish ] = "Solo se ha guardado la hoja actual." ;
+        Text [ french ] = "Seule la feuille active a été enregistrée." ;
+        Text [ swedish ] = "Endast den aktuella tabellen sparades." ;
+        Text [ danish ] = "Kun det aktuelle ark blev gemt." ;
+        Text [ portuguese ] = "Só foi guardada a folha activa." ;
+        Text [ portuguese_brazilian ] = "Es wurde nur die aktuelle Tabelle gespeichert." ;
+        Text[ chinese_simplified ] = "Ö»ÄÜ´æÅÌµ±Ç°µÄ¹¤×÷±í¡£";
+        Text[ russian ] = "Ñîõğàíåí òîëüêî òåêóùèé ëèñò.";
+        Text[ polish ] = "Tylko bie¿¹cy arkusz zosta³ zapisany.";
+        Text[ japanese ] = "Œ»İ‚Ì•\\‚¾‚¯‚ª•Û‘¶‚³‚ê‚Ü‚µ‚½B";
+        Text[ chinese_traditional ] = "¥u¯àÀx¦s·í«eªº¤u§@ªí¡C";
+        Text[ arabic ] = "Êã ÍİÙ ÇáÌÏæá ÇáÍÇáí İŞØ.";
+        Text[ greek ] = "Áğïèçêåıôçêå ìüíï ï ôñİ÷ùí ğßíáêáò.";
+        Text[ korean ] = "È°¼ºÈ­µÈ ½ÃÆ®¸¸ÀÌ ÀúÀåµÇ¾ú½À´Ï´Ù.";
+        Text[ turkish ] = "Yalnızca yürürlükteki tablo kaydedildi.";
+        Text[ language_user1 ] = " ";
+    };
+    String SCWARN_IMPORT_RANGE_OVERFLOW & SH_MAX
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Die Maximalanzahl von Zeilen wurde überschritten. Überzählige Zeilen wurden nicht mitimportiert! : Die Maximalanzahl von Zeilen wurde ³berschritten. šberzõhlige Zeilen wurden nicht mitimportiert! */
+        Text = "Die Maximalanzahl von Zeilen wurde überschritten. Überzählige Zeilen wurden nicht mitimportiert!" ;
+        Text [ ENGLISH ] = "The number of rows exceeded the maximum. Additional rows were not imported!" ;
+        Text [ dutch ] = "Het maximale aantal regels werd overschreden. Het teveel aan regels werd niet geïmporteerd!" ;
+        Text [ english_us ] = "The maximum number of rows has been exceeded. Excess rows were not imported!" ;
+        Text [ italian ] = "Il numero massimo di righe è stato superato. le righe in eccesso non sono state importate!" ;
+        Text [ spanish ] = "Se ha excedido la cantidad máxima de filas. ¡Las filas adicionales no se importaron!" ;
+        Text [ french ] = "Le nombre de lignes maximum a été dépassé. Le surplus n'a pas pu être importé !" ;
+        Text [ swedish ] = "Radantalet överskrider maximum. Överblivna rader blev inte medimporterade!" ;
+        Text [ danish ] = "Det maksimale antal rækker blev overskredet. De overtallige rækker blev ikke importeret!" ;
+        Text [ portuguese ] = "O número máximo de linhas foi ultrapassado! As linhas em excesso não foram importadas!" ;
+        Text [ portuguese_brazilian ] = "Die Maximalanzahl von Zeilen wurde überschritten. überzählige Zeilen wurden nicht mitimportiert!" ;
+        Text[ chinese_simplified ] = "³¬¹ıĞĞÊı×î¸ßÏŞ¶È¡£³¬¹ıµÄĞĞ²»»á±»ÊäÈë£¡";
+        Text[ russian ] = "Ìàêñèìàëüíîå ÷èñëî ñòğîê ïğåâûøåíî.Ñòğîêè, ïğåâûøàşùèå çàäàííîå ÷èñëî, èìïîğòèğîâàíû íå áóäóò!";
+        Text[ polish ] = "Maksymalna liczba wierszy zosta³a przekroczona. Pozosta³e wiersze nie bêd¹ importowane!";
+        Text[ japanese ] = "s‚ÌÅ‚”‚ğ’´‚¦‚Ü‚µ‚½B‰ßè‚Ìs‚Í²İÎß°Ä‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½!";
+        Text[ chinese_traditional ] = "¶W¹L¦C¼Æ³Ì°ª­­«×¡C¶W¹Lªº¦C¤£·|³Q¿é¤J¡I";
+        Text[ arabic ] = "Êã ÊÎØí ÇáÚÏÏ ÇáÃŞÕì ááÕİæİ. áåĞÇ áã íÊã ÇÓÊíÑÇÏ ÇáÕİæİ ÇáÒÇÆÏÉ!";
+        Text[ greek ] = "¸ãéíå õğİñâáóç ôïõ ìİãéóôïõ áñéèìïı ãñáììşí. Äåí èá ãßíåé åéóáãùãŞ ôùí ãñáììşí ğïõ îåğåñíïıí ôï üñéï!";
+        Text[ korean ] = "ÇàÀÇ ÃÖ´ë¼ö¸¦ ÃÊ°úÇß½À´Ï´Ù. ÃÊ°úµÈ ÇàÀº °¡Á®¿Ã¼ö ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Azami satır sayısı aşıldı. Fazla satırlar içe aktarılmadı!";
+        Text[ language_user1 ] = " ";
+    };
+    String SCWARN_IMPORT_OPEN_FM3 & SH_MAX
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Zugehörige FM3-Datei konnte nicht geöffnet werden. : Zugeh÷rige FM3-Datei konnte nicht ge÷ffnet werden. */
+        Text = "Zugehörige FM3-Datei konnte nicht geöffnet werden." ;
+        Text [ ENGLISH ] = "Related FM3-File could not be opened." ;
+        Text [ dutch ] = "Bijbehorend FM3-bestand kon niet worden geopend." ;
+        Text [ english_us ] = "Corresponding FM3-File could not be opened." ;
+        Text [ italian ] = "Impossibile aprire il file relativo FM3." ;
+        Text [ spanish ] = "No se pudo abrir el archivo correspondiente FM3." ;
+        Text [ french ] = "Impossible d'ouvrir le fichier FM3 correspondant." ;
+        Text [ swedish ] = "Tillhörande FM3-fil kunde inte öppnas." ;
+        Text [ danish ] = "Det var ikke muligt at åbne tilhørende FM3-fil." ;
+        Text [ portuguese ] = "Foi impossível abrir o ficheiro FM3 correspondente." ;
+        Text [ portuguese_brazilian ] = "Zugehörige FM3-Datei konnte nicht geöffnet werden." ;
+        Text[ chinese_simplified ] = "ÎŞ·¨¿ªÆô´ÓÊôµÄ FM3-ÎÄ¼ş¡£";
+        Text[ russian ] = "Îòêğûòü ôàéë, îòíîñÿùèéñÿ ê FM3 íå óäàåòñÿ.";
+        Text[ polish ] = "Plik pokrewny FM3 nie móg³ zostaæ otworzony.";
+        Text[ japanese ] = "•t‘®‚·‚éFM3Ì§²Ù‚ÍŠJ‚­‚±‚Æ‚ª‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        Text[ chinese_traditional ] = "µLªk¶}±Ò±qÄİªº FM3-ÀÉ®×¡C";
+        Text[ arabic ] = "ÊÚĞÑ İÊÍ Çáãáİ FM3 ÇáãÑÊÈØ.";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá áíïé÷èåß ôï áíôßóôïé÷ï áñ÷åßï FM3.";
+        Text[ korean ] = "FM3-ÆÄÀÏ¿¡À¯»çÇÑÆÄÀÏÀ» ¿­¼ö ¾ø½À´Ï´Ù..";
+        Text[ turkish ] = "İlgili FM3 dosyası açlamadı.";
+        Text[ language_user1 ] = " ";
+    };
+    String SCWARN_IMPORT_WRONG_FM3 & SH_MAX
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Fehler in Dateistruktur der zugehörigen FM3-Datei. : Fehler in Dateistruktur der zugeh÷rigen FM3-Datei. */
+        Text = "Fehler in Dateistruktur der zugehörigen FM3-Datei." ;
+        Text [ ENGLISH ] = "Error in file structure in the related FM3-File." ;
+        Text [ dutch ] = "Fout in bestandstructuur van bijbehorend FM3-bestand" ;
+        Text [ english_us ] = "Error in file structure of corresponding FM3-File." ;
+        Text [ italian ] = "Errore nella struttura del file del relativo file FM3." ;
+        Text [ spanish ] = "Error en la estructura del archivo FM3 correspondiente." ;
+        Text [ french ] = "Erreur dans la structure du fichier FM3 correspondant." ;
+        Text [ swedish ] = "Fel i den tillhörande FM3-filens filstruktur." ;
+        Text [ danish ] = "Fejl i den tilhørende FM3-fils filstruktur." ;
+        Text [ portuguese ] = "Erro na estrutura do ficheiro FM3 correspondente." ;
+        Text [ portuguese_brazilian ] = "Fehler in Dateistruktur der zugehörigen FM3-Datei." ;
+        Text[ chinese_simplified ] = "´ÓÊôµÄ FM3-ÎÄ¼şµÄÎÄ¼ş½á¹¹º¬ÓĞ´íÎó¡£";
+        Text[ russian ] = "Îøèáêà â ñòğóêòóğå ôàéëà, îòíîñÿùåãîñÿ ê FM3.";
+        Text[ polish ] = "B³¹d w strukturze pliku pokrewnego FM3.";
+        Text[ japanese ] = "•t‘®‚·‚éFM3Ì§²Ù‚ÌÌ§²Ù\\‘¢‚É‚¨‚¯‚é´×°¡";
+        Text[ chinese_traditional ] = "±qÄİªº FM3-ÀÉ®×ªºÀÉ®×µ²ºc§t¦³¿ù»~¡C";
+        Text[ arabic ] = "ÎØÃ İí ÈäíÉ Çáãáİ İí Çáãáİ FM3 ÇáãÑÊÈØ.";
+        Text[ greek ] = "ÓöÜëìá óôç äïìŞ áñ÷åßïõ ôïõ áíôßóôïé÷ïõ áñ÷åßïõ FM3.";
+        Text[ korean ] = "FM3-ÆÄÀÏ¿¡ À¯»çÇÑ ÆÄÀÏ ±¸Á¶¿¡ ¿À·ù.";
+        Text[ turkish ] = "İlgili FM3 dosyasının dosya yapısında hata.";
+        Text[ language_user1 ] = " ";
+    };
+    String SCWARN_CORE_HARD_RECALC & SH_MAX
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Dokument zu komplex für automatische Berechnung. Neuberechnung mit F9. : Dokument zu komplex f³r automatische Berechnung. Neuberechnung mit F9. */
+        Text = "Dokument zu komplex für automatische Berechnung. Neuberechnung mit F9." ;
+        Text [ ENGLISH ] = "Document too complex for autocalc. Recalc via F9" ;
+        Text [ dutch ] = "Document te gecompliceerd voor automatische berekening" ;
+        Text [ english_us ] = "Document too complex for automatic calculation. Press F9 to recalculate." ;
+        Text [ italian ] = "Documento troppo complesso per il calcolo automatico. Premete F9 per effettuare un nuovo calcolo." ;
+        Text [ spanish ] = "Documento demasiado complejo para el cálculo automático. Pulse F9 para volver a calcular." ;
+        Text [ french ] = "Document trop complexe pour le calcul automatique. Pour calculer à nouveau, appuyez sur F9." ;
+        Text [ swedish ] = "Dokumentet är för komplext för en automatisk beräkning. Ny beräkning med F9." ;
+        Text [ danish ] = "Dokumentet er for komplekst til automatisk beregning. Genberegning med F9." ;
+        Text [ portuguese ] = "O documento é demasiado complexo para o cálculo automático. Calcular de novo com F9." ;
+        Text [ portuguese_brazilian ] = "Dokument zu komplex für automatische Berechnung. Neuberechnung mit F9." ;
+        Text[ chinese_simplified ] = "ÎÄµµ¹ıÓÚ¸´ºÏ£¬ÎŞ·¨Ö´ĞĞ×Ô¶¯ÔËËã¹¦ÄÜ¡£Çë°´»÷ F9£¬ ÖØĞÂÔËËã¡£";
+        Text[ russian ] = "Äîêóìåíò ñëèøêîì ñëîæíûé äëÿ àâòîìàòè÷åñêèõ âû÷èñëåíèé. Äëÿ ïîâòîğíîãî âû÷èñëåíèÿ íàæìèòå F9.";
+        Text[ polish ] = "Dokument jest zbyt z³o¿ony dla automatycznego obliczenia. Oblicz ponownie, przyciskaj¹c F9.";
+        Text[ japanese ] = "©“®ŒvZ‚É‚ÍÄŞ·­ÒİÄ‚ª•¡G‚·‚¬‚Ü‚·BF9‚ÅÄŒvZB";
+        Text[ chinese_traditional ] = "¤å¥ó¹L©ó½Æ¦X¡AµLªk°õ¦æ¦Û°Ê¹Bºâ¥\\¯à¡C½Ğ«öÀ» F9¡A ­«·s¹Bºâ¡C";
+        Text[ arabic ] = "ÇáãÓÊäÏ ãÚŞÏ ÌÏÇğ ÈÍíË áÇ íãßä ÅÌÑÇÁ ÇáÍÓÇÈ ÊáŞÇÆíÇğ. ÇáÑÌÇÁ ÇáÖÛØ Úáì F9 áÅÚÇÏÉ ÇáÍÓÇÈ.";
+        Text[ greek ] = "Ôï İããñáöï åßíáé õğåñâïëéêÜ ğåñßğëïêï ãéá áõôüìáôï õğïëïãéóìü. ĞáôŞóôå ôï ğëŞêôñï F9 ãéá íá åêôåëåóôåß îáíÜ ï õğïëïãéóìüò.";
+        Text[ korean ] = "¹®¼­°¡ ÀÚµ¿ °è»êÀ» ÇÏ±â¿£ ³Ê¹« º¹ÀâÇÕ´Ï´Ù. F9¸¦ ´©¸£¼Å¼­ Àç °è»êÇÏ½Ê½Ã¿À.";
+        Text[ turkish ] = "Belge, otomatik hesaplama için fazla karmaşık. Yeniden hesaplatmak için F9 tuşuna basın.";
+        Text[ language_user1 ] = " ";
+    };
+    String SCWARN_EXPORT_MAXROW & SH_MAX
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Das Dokument enthält mehr Zeilen, als das Ausgabeformat unterstützt.\nÜberzählige Zeilen wurden nicht gespeichert. : Das Dokument enthõlt mehr Zeilen, als das Ausgabeformat unterst³tzt.\nšberzõhlige Zeilen wurden nicht gespeichert. */
+        Text = "Das Dokument enthält mehr Zeilen, als das Ausgabeformat unterstützt.\nÜberzählige Zeilen wurden nicht gespeichert." ;
+        Text [ ENGLISH ] = "The document contains more rows than supported in the selected format.\nThe additional rows were not saved." ;
+        Text [ portuguese ] = "O documento contém mais linhas do que as previstas para o formato correspondente.\nAs linhas em excesso não foram guardadas." ;
+        Text [ english_us ] = "The document contains more rows than supported in the selected format.\nAdditional rows were not saved." ;
+        Text [ portuguese_brazilian ] = "Das Dokument enthält mehr Zeilen, als das Ausgabeformat unterstützt.\nÜberzählige Zeilen wurden nicht gespeichert." ;
+        Text [ swedish ] = "Dokumentet innehåller mer rader än vad som understöds av utmatningsformatet.\nÖvertaliga rader kommer inte att sparas." ;
+        Text [ danish ] = "Dokumentet indeholder flere rækker end output-formatet understøtter.\nDe overtallige rækker blev ikke gemt." ;
+        Text [ italian ] = "Il documento contiene più righe di quelle supportate dal formato di uscita.\nLe righe in eccesso non sono state salvate." ;
+        Text [ spanish ] = "El documento contiene mas filas de las que soporta el formato seleccionado.\nLas filas adicionales no se guardaron." ;
+        Text [ french ] = "Le document comporte plus de lignes que le format n'en supporte.\nLes lignes en surplus n'ont pas été enregistrées." ;
+        Text [ dutch ] = "Het document bevat teveel regels voor dit formaat.\nDit teveel werd niet opgeslagen." ;
+        Text[ chinese_simplified ] = "Õû¸öÎÄµµº¬ÓĞµÄĞĞÊı³¬¹ı´òÓ¡¸ñÊ½Ö§³ÖµÄ·¶Î§¡£\n³¬¹ıµÄĞĞ²»»á±»´æÅÌ¡£";
+        Text[ russian ] = "Äîêóìåíò ñîäåğæèò áîëüøå ñòğîê, ÷åì ïîääåğæèâàåòñÿ ôîğìàòîì âûâîäà.\nÑòğîêè, ïğåâûøàşùèå çàäàííîå ÷èñëî, ñîõğàíåíû íå áóäóò.";
+        Text[ polish ] = "Dokument zawiera wiêcej wierszy ni¿ jest obs³ugiwane przez format wyjœciowy. \nDodatkowe wiersze nie bêd¹ obs³ugiwane.";
+        Text[ japanese ] = "ÄŞ·­ÒİÄ‚ÍŠ§só‘Ô‚Ì‘®‚Å»Îß°Ä‚·‚é‚æ‚ès‚ª‘½‚·‚¬‚Ü‚·B\n‰ßè‚Ìs‚Í•Û‘¶‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        Text[ chinese_traditional ] = "¾ã­Ó¤å¥ó§t¦³ªº¦C¼Æ¶W¹L¦C¦L®æ¦¡¤ä«ùªº½d³ò¡C\n¶W¹Lªº¦C¤£·|³QÀx¦s¡C";
+        Text[ arabic ] = "íÍÊæí ÇáãÓÊäÏ Úáì ÚÏÏ ãä ÇáÕİæİ íİæŞ ÇáÚÏÏ ÇáĞí íãßä ááÊäÓíŞ ÇáãÍÏÏ ÏÚãå.\náã íÊã ÍİÙ ÇáÕİæİ ÇáÒÇÆÏÉ.";
+        Text[ greek ] = "Ôï İããñáöï ğåñéİ÷åé ğåñéóóüôåñåò ãñáììİò áğü üôé õğïóôçñßæåé ç ìïñöŞ \nåîáãùãŞò. Ïé ğëåïíÜæïõóåò ãñáììİò äåí áğïèçêåıôçêáí.";
+        Text[ korean ] = "¹®¼­°¡ ¼±ÅÃµÈ ¼­½Ä¾È¿¡¼­ Áö¿ø°¡´ÉÇÑ Çàº¸´Ù ´õ ¸¹Àº ÇàÀ» Æ÷ÇÔÇÏ°í ÀÖ½À´Ï´Ù.\nºÎ°¡ÀûÀÎ ÇàÀÌ ÀúÀåµÇÁö ¾Ê½À´Ï´Ù.";
+        Text[ turkish ] = "Belge, çıktı formatının desteklediğinden çok satır içeriyor.\nFazla gelen satırlar kaydedilmedi.";
+        Text[ language_user1 ] = " ";
+    };
+    String SCWARN_IMPORT_INFOLOST & SH_MAX
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Das Dokument enthält Informationen, die dieser Programmversion unbekannt sind.\nBei erneutem Speichern gehen diese Informationen verloren! : Das Dokument enthõlt Informationen, die dieser Programmversion unbekannt sind.\nBei erneutem Speichern gehen diese Informationen verloren! */
+        Text = "Das Dokument enthält Informationen, die dieser Programmversion unbekannt sind.\nBei erneutem Speichern gehen diese Informationen verloren!" ;
+        Text [ ENGLISH ] = "The document contains informations which are not recognized by this program version.\nSaving this document will destroy these informations!" ;
+        Text [ portuguese ] = "O documento contém informações desconhecidas para esta versão do programa.\nAo guardar novamente perderá estas informações!" ;
+        Text [ english_us ] = "The document contains information not recognized by this program version.\nResaving the document will delete this information!" ;
+        Text [ portuguese_brazilian ] = "Das Dokument enthält Informationen, die dieser Programmversion unbekannt sind.\nBei erneutem Speichern gehen diese Informationen verloren!" ;
+        Text [ swedish ] = "Dokumentet innehåller information som denna programversion inte känner igen.\nOm Du sparar igen kommer denna information att gå förlorad!" ;
+        Text [ danish ] = "Dokumentet indeholder informationer, som denne programversion ikke kan genkende.\nHvis du gemmer dokumentet igen, vil disse informationer gå tabt." ;
+        Text [ italian ] = "Il documento contiene informazioni sconosciute alla versione corrente del programma.\nCon un nuovo salvataggio le informazioni andranno perse!" ;
+        Text [ spanish ] = "El documento contiene información desconocida para la versión de este programa.\n¡Al volver a guardar se perderá esta información!" ;
+        Text [ french ] = "Le document contient des informations inconnues de cette version du programme.\nCes informations seront perdues lors d'un nouvel enregistrement !" ;
+        Text [ dutch ] = "Het document bevat gegevens die voor deze programmaversie onbekend zijn.\nAls u opnieuw opslaat gaan deze verloren!" ;
+        Text[ chinese_simplified ] = "Õâ¸ö³ÌĞòÎŞ·¨´¦ÀíÕâ¸öÎÄµµÖĞ²»Ã÷µÄĞÅÏ¢¡£\nÔÚÖØĞÂ´æÅÌÊ±»áËğÊ§ÕâĞ©ĞÅÏ¢£¡";
+        Text[ russian ] = "Äîêóìåíò ñîäåğæèò ñâåäåíèÿ, íåèçâåñòíûå ıòîé âåğñèè ïğîãğàììû.\nÏğè ïîâòîğíîì ñîõğàíåíèè ıòè ñâåäåíèÿ áóäóò óòåğÿíû!";
+        Text[ polish ] = "Dokument zawiera informacje, które s¹ nieznane w tej wersji programu.\nPrzy ponownym zapisie te informacje zostan¹ skasowane!";
+        Text[ japanese ] = "ÄŞ·­ÒİÄ‚Í‚±‚ÌÌßÛ¸Ş×Ñ ÊŞ°¼Ş®İ‚Å‚Í”F’m‚Å‚«‚È‚¢î•ñ‚ğŠÜ‚ñ‚Å‚¢‚Ü‚·B\n‚ ‚ç‚½‚ß‚Ä•Û‘¶‚·‚éÛ ‚±‚Ìî•ñ‚Í¸‚í‚ê‚Ü‚·!";
+        Text[ chinese_traditional ] = "³o­Óµ{§ÇµLªk³B²z³o­Ó¤å¥ó¤¤¤£©úªº¸ê°T¡C\n¦b­«·sÀx¦s®É³o¨Ç¸ê°T·|¬y¥¢¡I";
+        Text[ arabic ] = "íÍÊæí ÇáãÓÊäÏ Úáì ãÚáæãÇÊ ÛÑíÈÉ Úáì ÅÕÏÇÑ ÇáÈÑäÇãÌ åĞÇ.\nåĞå ÇáÈíÇäÇÊ Óæİ ÊÖíÚ ÚäÏ ÅÚÇÏÉ ÍİÙ ÇáãÓÊäÏ!";
+        Text[ greek ] = "Ôï İããñáöï ğåñéİ÷åé ğëçñïöïñßåò ïé ïğïßåò åßíáé Üãíùóôåò ãéá áõôŞ ôç İêäïóç ôïõ \nğñïãñÜììáôïò. Ïé ğëçñïöïñßåò áõôİò èá ÷áèïıí áí åğáíáëáìâÜíåôå ôçí áğïèŞêåõóç ôïõò!";
+        Text[ korean ] = "¹®¼­°¡ ÀÌ ÇÁ·Î±×·¥ÀÇ ¹öÁ¯¿¡ ÀÇÇØ¼­ ÀÎ½ÄµÉ¼ö ¾ø´Â Àüº¸¸¦ Æ÷ÇÔÇÏ°í ÀÖ½À´Ï´Ù.\nÀÌ Á¤º¸¸¦ »èÁ¦ÇÏ°í ´Ù½Ã ÀúÀåÇÏ½Ê½Ã¿À!";
+        Text[ turkish ] = "Belgede, bu program sürümünde bilinmeyen bilgiler mevcut.\nBu bilgiler, yeniden kayıtta kaybolacak!";
+        Text[ language_user1 ] = " ";
+    };
+    String SCWARN_EXPORT_DATALOST & SH_MAX
+    {
+        Text = "Es konnten nicht alle Zellinhalte in dem angegebenen Format gespeichert werden." ;
+        Text [ ENGLISH ] = "Not all cell contents could be saved in the specified format." ;
+        Text [ portuguese ] = "Não foi possível guardar todos os conteúdos das células no formato especificado." ;
+        Text [ english_us ] = "Not all cell contents could be saved in the specified format." ;
+        Text [ portuguese_brazilian ] = "Es konnten nicht alle Zellinhalte in dem angegebenen Format gespeichert werden." ;
+        Text [ swedish ] = "Allt innehåll i cellerna kunde inte sparas i det angivna formatet." ;
+        Text [ danish ] = "Det var ikke muligt at gemme alle celleindhold i det angivne format." ;
+        Text [ italian ] = "Non è stato possibile salvare tutti i contenuti delle celle nel formato specificato ." ;
+        Text [ spanish ] = "No se pudieron guardar todos los contenidos de las celdas en el formato especificado." ;
+        Text [ french ] = "Il n'a pas été possible d'enregistrer le contenu de toutes les cellules dans le format spécifié." ;
+        Text [ dutch ] = "Niet van elke cel kon de inhoud in het aangegeven formaat worden opgeslagen." ;
+        Text[ chinese_simplified ] = "ÎŞ·¨ÓÃÖ¸¶¨µÄ¸ñÊ½´æÅÌÈ«²¿µÄµ¥Ôª¸ñÄÚÈİ¡£";
+        Text[ russian ] = "Ñîõğàíèòü âñå ñîäåğæèìîå ÿ÷åéêè â çàäàííîì ôîğìàòå íåâîçìîæíî.";
+        Text[ polish ] = "Nie wszystkie zawartoœci komórek mog³y zostaæ zapisane w wybranym formacie.";
+        Text[ japanese ] = "w’è‚µ‚½‘®‚Å‚·‚×‚Ä‚Ì¾Ù“à—e‚Í•Û‘¶‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        Text[ chinese_traditional ] = "µLªk¥Î«ü©wªº®æ¦¡Àx¦s¥ş³¡ªºÀx¦s®æ¤º®e¡C";
+        Text[ arabic ] = "ÊÚĞÑ ÍİÙ ßá ãÍÊæíÇÊ ÇáÎáÇíÇ İí ÇáÊäÓíŞ ÇáãÍÏÏ.";
+        Text[ greek ] = "Äåí Şôáí äõíáôüí íá áğïèçêåõôïıí üëá ôá ğåñéå÷üìåíá êåëéşí óôç äåäïìİíç ìïñöŞ.";
+        Text[ korean ] = "¸ğµç ¼¿ÀÇ ³»¿ëÀÌ ÁöÁ¤µÈ ¼­½ÄÀ¸·Î ÀúÀåµÉ¼ö ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Tüm hücre içerikleri belirtilen formatta kaydedilemedi.";
+        Text[ language_user1 ] = " ";
+    };
+};

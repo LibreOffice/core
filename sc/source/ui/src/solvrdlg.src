@@ -1,0 +1,418 @@
+/*************************************************************************
+ *
+ *  $RCSfile: solvrdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:06 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ //============================================================================
+ // Dialogfenster Zielwertsuche
+ //
+ // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
+ //
+ // $Workfile:   solvrdlg.src  $
+ //   $Author: hr $
+ //     $Date: 2000-09-18 16:45:06 $
+ // $Revision: 1.1.1.1 $
+ //  $Logfile:   T:/sc/source/ui/src/solvrdlg.srv  $
+ //----------------------------------------------------------------------------
+
+#include "solvrdlg.hrc"
+ModelessDialog RID_SCDLG_SOLVER
+{
+    OutputSize = TRUE ;
+    HelpId = SID_OPENDLG_SOLVE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 222 , 68 ) ;
+    Text = "Zielwertsuche" ;
+    Text [ ENGLISH ] = "Solver" ;
+    Text [ norwegian ] = "+++ Problemløser Solver" ;
+    Text [ italian ] = "Ricerca valore destinazione" ;
+    Text [ portuguese_brazilian ] = "Resolver" ;
+    Text [ portuguese ] = "Atingir objectivo" ;
+    Text [ finnish ] = "Ratkaisija" ;
+    Text [ danish ] = "Målsøgning" ;
+    Text [ french ] = "Recherche de valeur cible" ;
+    Text [ swedish ] = "Målvärdessökning" ;
+    Text [ dutch ] = "Doelwaarde zoeken" ;
+    Text [ spanish ] = "Buscar valor destino" ;
+    Text [ english_us ] = "Goal Seek" ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    FixedText FT_FORMULACELL
+    {
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "~Formelzelle" ;
+        Text [ ENGLISH ] = "~formula cell" ;
+        Text [ norwegian ] = "~formelcelle" ;
+        Text [ italian ] = "~Cella formula" ;
+        Text [ portuguese_brazilian ] = "~célula de fórmula" ;
+        Text [ portuguese ] = "Célula ~fórmula" ;
+        Text [ finnish ] = "~kaavasolu" ;
+        Text [ danish ] = "~Formelcelle" ;
+        Text [ french ] = "Cellule de formule" ;
+        Text [ swedish ] = "~Formelcell" ;
+        Text [ dutch ] = "~Formulecel" ;
+        Text [ spanish ] = "Celda de ~fórmula" ;
+        Text [ english_us ] = "Formula cell" ;
+        Text[ chinese_simplified ] = "¹«Ê½µ¥Ôª¸ñ(~F)";
+        Text[ russian ] = "ß÷åéêà ôîğìóë";
+        Text[ polish ] = "Komórka formu³y";
+        Text[ japanese ] = "”®¾Ù";
+        Text[ chinese_traditional ] = "¤½¦¡Àx¦s®æ(~F)";
+        Text[ arabic ] = "ÎáíÉ ÕíÛÉ";
+        Text[ language_user1 ] = " ";
+        Text[ greek ] = "Êåëß ôığïõ";
+        Text[ korean ] = "¼ö½Ä ¼¿";
+        Text[ turkish ] = "~Formül hücresi";
+    };
+    Edit ED_FORMULACELL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 64 , 14 ) ;
+        Size = MAP_APPFONT ( 76 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton RB_FORMULACELL
+    {
+        QuickHelpText = "Verkleinern" ;
+        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        Pos = MAP_APPFONT ( 142 , 14 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ english_us ] = "Shrink" ;
+        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ swedish ] = "Förminska" ;
+        QuickHelpText [ danish ] = "Formindsk" ;
+        QuickHelpText [ italian ] = "Zoom indietro" ;
+        QuickHelpText [ spanish ] = "Reducir" ;
+        QuickHelpText [ french ] = "Réduire" ;
+        QuickHelpText [ dutch ] = "Verkleinen" ;
+        QuickHelpText [ portuguese ] = "Afastar" ;
+    QuickHelpText[ russian ] = "Óìåíüøèòü";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
+        QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
+        QuickHelpText[ chinese_traditional ] = "ÁY¤p";
+        QuickHelpText[ arabic ] = "ÊÕÛíÑ";
+        QuickHelpText[ greek ] = "Óìßêñõíóç";
+        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    FixedText FT_TARGETVAL
+    {
+        Pos = MAP_APPFONT ( 12 , 31 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "~Zielwert" ;
+        Text [ ENGLISH ] = "~target value" ;
+        Text [ norwegian ] = "~målverdi " ;
+        Text [ italian ] = "Valore di destin." ;
+        Text [ portuguese_brazilian ] = "~target value" ;
+        Text [ portuguese ] = "~Valor de destino" ;
+        Text [ finnish ] = "~target value" ;
+        Text [ danish ] = "Målværdi" ;
+        Text [ french ] = "Valeur ~cible" ;
+        Text [ swedish ] = "~Målvärde" ;
+        Text [ dutch ] = "~Doelwaarde" ;
+        Text [ spanish ] = "Valor ~destino" ;
+        Text [ english_us ] = "Target ~value" ;
+        Text[ chinese_simplified ] = "Ä¿±êÖµ(~V)";
+        Text[ russian ] = "Êîíå÷íîå çíà÷åíèå";
+        Text[ polish ] = "Wartoœæ docelowa";
+        Text[ japanese ] = "–Ú•W’l(~V)";
+        Text[ chinese_traditional ] = "¥Ø¼Ğ­È(~V)";
+        Text[ arabic ] = "ÇáŞíãÉ ÇáåÏİ";
+        Text[ greek ] = "ÔéìŞ ~ğñïïñéóìïı";
+        Text[ korean ] = "¸ñÇ¥ °ª(~V)";
+        Text[ turkish ] = "~Hedef değer";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_TARGETVAL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 64 , 29 ) ;
+        Size = MAP_APPFONT ( 90 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_VARCELL
+    {
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "~variable Zelle" ;
+        Text [ ENGLISH ] = "~variable cell" ;
+        Text [ norwegian ] = "~cellevariabel l" ;
+        Text [ italian ] = "Cella ~variabile" ;
+        Text [ portuguese_brazilian ] = "~célula variável" ;
+        Text [ portuguese ] = "Célula ~variável" ;
+        Text [ finnish ] = "~muuttujasolu" ;
+        Text [ danish ] = "Variabel celle" ;
+        Text [ french ] = "Cellule ~variable" ;
+        Text [ swedish ] = "~Variabel cell" ;
+        Text [ dutch ] = "~Variabele cel" ;
+        Text [ spanish ] = "Celda ~variable" ;
+        Text [ english_us ] = "Variable ~cell" ;
+        Text[ chinese_simplified ] = "¿É±äµÄµ¥Ôª¸ñ(~C)";
+        Text[ russian ] = "èçìåíÿåìàÿ ÿ÷åéêà";
+        Text[ polish ] = "Zmienna komórka";
+        Text[ japanese ] = "•Ï‰»‚³‚¹‚é¾Ù(~C)";
+        Text[ chinese_traditional ] = "¥iÅÜªºÀx¦s®æ(~C)";
+        Text[ arabic ] = "ÎáíÉ ãÊÛíÑÉ";
+        Text[ greek ] = "ìåôáâëçôü êåëß";
+        Text[ korean ] = "º¯¼ö ¼¿(~C)";
+        Text[ turkish ] = "~Değişken hücre";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_VARCELL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 64 , 44 ) ;
+        Size = MAP_APPFONT ( 76 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton RB_VARCELL
+    {
+        QuickHelpText = "Verkleinern" ;
+        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        Pos = MAP_APPFONT ( 142 , 44 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ english_us ] = "Shrink" ;
+        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ swedish ] = "Förminska" ;
+        QuickHelpText [ danish ] = "Formindsk" ;
+        QuickHelpText [ italian ] = "Zoom indietro" ;
+        QuickHelpText [ spanish ] = "Reducir" ;
+        QuickHelpText [ french ] = "Réduire" ;
+        QuickHelpText [ dutch ] = "Verkleinen" ;
+        QuickHelpText [ portuguese ] = "Afastar" ;
+    QuickHelpText[ russian ] = "Óìåíüøèòü";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
+        QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
+        QuickHelpText[ chinese_traditional ] = "ÁY¤p";
+        QuickHelpText[ arabic ] = "ÊÕÛíÑ";
+        QuickHelpText[ greek ] = "Óìßêñõíóç";
+        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    GroupBox GB_VARIABLES
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 154 , 59 ) ;
+        Text = "Vorgaben" ;
+        Text [ ENGLISH ] = "Variables" ;
+        Text [ norwegian ] = "Variabler" ;
+        Text [ italian ] = "Preimpostazioni" ;
+        Text [ portuguese_brazilian ] = "Variáveis" ;
+        Text [ portuguese ] = "Definir variáveis" ;
+        Text [ finnish ] = "Muuttujat" ;
+        Text [ danish ] = "Forudindstillinger" ;
+        Text [ french ] = "Définir les variables" ;
+        Text [ swedish ] = "Förinställningar" ;
+        Text [ dutch ] = "Standaard" ;
+        Text [ spanish ] = "Variables" ;
+        Text [ english_us ] = "Set defaults" ;
+        Text[ chinese_simplified ] = "Ô¤ÖÃ";
+        Text[ russian ] = "Çàäàííûå çíà÷åíèÿ";
+        Text[ polish ] = "Ustawienia domyœlne";
+        Text[ japanese ] = "w’è";
+        Text[ chinese_traditional ] = "¹w¸m";
+        Text[ arabic ] = "ÅÚÏÇÏÇÊ ÇİÊÑÇÖíÉ";
+        Text[ greek ] = "Ğñïåğéëïãİò";
+        Text[ korean ] = "±âº»°ª ¼³Á¤";
+        Text[ turkish ] = "Varsayılan belirle";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton BTN_OK
+    {
+        DefButton = TRUE ;
+        Pos = MAP_APPFONT ( 166 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 166 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 166 , 48 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    String STR_INVALIDVAL
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Unzulässiger Zielwert! : Unzulõssiger Zielwert! */
+        Text = "Unzulässiger Zielwert!" ;
+        Text [ ENGLISH ] = "Invalid target value!" ;
+        Text [ norwegian ] = "Ugyldig målverdi!" ;
+        Text [ italian ] = "Valore di destinazione non valido!" ;
+        Text [ portuguese_brazilian ] = "Valor do alvo inválido!" ;
+        Text [ portuguese ] = "Valor de destino incorreto!" ;
+        Text [ finnish ] = "Virheellinen kohdearvo!" ;
+        Text [ danish ] = "Ugyldig målværdi!" ;
+        Text [ french ] = "La valeur cible est incorrecte !" ;
+        Text [ swedish ] = "Ogiltigt målvärde!" ;
+        Text [ dutch ] = "Ongeldige doelwaarde!" ;
+        Text [ spanish ] = "¡Valor de destino no válido!" ;
+        Text [ english_us ] = "Invalid target value." ;
+        Text[ chinese_simplified ] = "Ä¿±êÊıÖµÎŞĞ§£¡";
+        Text[ russian ] = "Íåäîïóñòèìîå êîíå÷íîå çíà÷åíèå!";
+        Text[ polish ] = "Nieprawid³owa wartoœæ docelowa!";
+        Text[ japanese ] = "‹–‚³‚ê‚È‚¢–Ú•W’l!";
+        Text[ chinese_traditional ] = "¥Ø¼Ğ¼Æ­ÈµL®Ä¡I";
+        Text[ arabic ] = "ŞíãÉ åÏİ ÛíÑ ÕÇáÍÉ!";
+        Text[ greek ] = "Ìç İãêõñç ôéìŞ ğñïïñéóìïı!";
+        Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ¸ñÇ¥°ª.";
+        Text[ turkish ] = "Geçerli olmayan hedef değer!";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_INVALIDVAR
+    {
+        Text = "Undefinierter Name als variable Zelle!" ;
+        Text [ ENGLISH ] = "Undefined name for variable cell!" ;
+        Text [ norwegian ] = "Udefinert navn for cellevariabel!" ;
+        Text [ italian ] = "Nome non definito per la cella-variabile!" ;
+        Text [ portuguese_brazilian ] = "Nome indefinido para célula variável!" ;
+        Text [ portuguese ] = "Nome indefinido para célula variável!" ;
+        Text [ finnish ] = "Muuttujasolun nimi on määrittämätön!" ;
+        Text [ danish ] = "Udefineret navn som variabelcelle!" ;
+        Text [ french ] = "Le nom pour la cellule variable n'a pas été défini !" ;
+        Text [ swedish ] = "Odefinierat namn som variabel cell!" ;
+        Text [ dutch ] = "Niet-gedefinieerde naam voor variabele cel!" ;
+        Text [ spanish ] = "¡Nombre no definido como celda de variable!" ;
+        Text [ english_us ] = "Undefined name for variable cell." ;
+        Text[ chinese_simplified ] = "Î´¶¨ÒåµÄÃû³Æµ±×÷¿É±äÁ¿µÄµ¥Ôª¸ñ£¡";
+        Text[ russian ] = "Íåîïğåäåëåííîå èìÿ äëÿ èçìåíÿåìîé ÿ÷åéêè!";
+        Text[ polish ] = "Nie zdefiniowana nazwa jako komórka zmienna!";
+        Text[ japanese ] = "•Ï‰»‚³‚¹‚é¾Ù‚ªw’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ!";
+        Text[ chinese_traditional ] = "¥¼©w¸qªº¦WºÙ³Q·í§@¥iÅÜ¶qªºÀx¦s®æ¡I";
+        Text[ arabic ] = "ÇÓã ÛíÑ ãõÚÑøİ ßÎáíÉ ãÊÛíÑÉ!";
+        Text[ greek ] = "Áüñéóôï üíïìá ùò ìåôáâëçôü êåëß!";
+        Text[ korean ] = "º¯¼ö ¼¿¿¡ ÀÌ¸§ÀÌ Á¤ÀÇµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ turkish ] = "Tanımlanmamış hücresi için tanımlanmamış ad!";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_INVALIDFORM
+    {
+        Text = "Undefinierter Name als Formelzelle!" ;
+        Text [ ENGLISH ] = "Undefined name for formula cell!" ;
+        Text [ norwegian ] = "Udefinert navn for formelcelle!" ;
+        Text [ italian ] = "Nome non definito per la cella-formula!" ;
+        Text [ portuguese_brazilian ] = "Nome indefinido para célula de fórmula!" ;
+        Text [ portuguese ] = "Nome indefinido para célula fórmula!" ;
+        Text [ finnish ] = "Kaavasolun nimi on määrittämätön!" ;
+        Text [ danish ] = "Udefineret navn som formelcelle!" ;
+        Text [ french ] = "Le nom de la cellule de formule n'a pas été défini !" ;
+        Text [ swedish ] = "Odefinierat namn som formelcell!" ;
+        Text [ dutch ] = "Niet-gedefinieerde naam voor formulecel!" ;
+        Text [ spanish ] = "¡Nombre no definido como celda de fórmula!" ;
+        Text [ english_us ] = "Undefined name as formula cell." ;
+        Text[ chinese_simplified ] = "Î´¶¨ÒåµÄÃû³Æµ±×÷¹«Ê½µ¥Ôª¸ñ£¡";
+        Text[ russian ] = "Íåîïğåäåëåííîå èìÿ äëÿ ÿ÷åéêè ôîğìóëû!";
+        Text[ polish ] = "Nie zdefiniowana nazwa jako formu³a komórek!";
+        Text[ japanese ] = "”®¾Ù‚ªw’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ!";
+        Text[ chinese_traditional ] = "¥¼©w¸qªº¦WºÙ³Q·í§@¤½¦¡Àx¦s®æ¡I";
+        Text[ arabic ] = "ÇÓã ÛíÑ ãõÚÑøİ ßÎáíÉ ÕíÛÉ!";
+        Text[ greek ] = "Áüñéóôï üíïìá ùò êåëß ôığïõ!";
+        Text[ korean ] = "¼ö½Ä ¼¿¿¡ ÀÌ¸§ÀÌ Á¤ÀÇµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ turkish ] = "Formül hücresi için tanımlanmamış ad!";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_NOFORMULA
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Zelle muß eine Formel enthalten! : Zelle mu˜ eine Formel enthalten! */
+        Text = "Zelle muss eine Formel enthalten!" ;
+        Text [ ENGLISH ] = "No formula cell!" ;
+        Text [ norwegian ] = "Ingen formelcelle!" ;
+        Text [ italian ] = "La cella deve contenere una formula!" ;
+        Text [ portuguese_brazilian ] = "Sem célula de fórmula!" ;
+        Text [ portuguese ] = "A célula tem de conter uma fórmula!" ;
+        Text [ finnish ] = "Ei kaavasolua!" ;
+        Text [ danish ] = "Cellen skal indeholde en formel!" ;
+        Text [ french ] = "La cellule doit contenir une formule !" ;
+        Text [ swedish ] = "Cell måste innehålla en formel!" ;
+        Text [ dutch ] = "Cel moet een formule bevatten" ;
+        Text [ spanish ] = "¡La celda debe contener una fórmula!" ;
+        Text [ english_us ] = "Cell must contain a formula." ;
+        Text[ chinese_simplified ] = "µ¥Ôª¸ñÄÚ±ØĞëº¬ÓĞÒ»¸ö¹«Ê½£¡";
+        Text[ russian ] = "ß÷åéêà äîëæíà ñîäåğæòü ôîğìóëó!";
+        Text[ polish ] = "Komórka musi zawieraæ formu³ê!";
+        Text[ japanese ] = "¾Ù‚Í”®‚ğŠÜ‚ñ‚Å‚¢‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñ!";
+        Text[ chinese_traditional ] = "Àx¦s®æ¥²¶·§t¦³¤@­Ó¤½¦¡¡I";
+        Text[ arabic ] = "íÌÈ Ãä ÊÍÊæí ÇáÎáíÉ Úáì ÕíÛÉ.";
+        Text[ greek ] = "Ôï êåëß ğñİğåé íá ğåñéİ÷åé İíáí ôığï!";
+        Text[ korean ] = "¼¿¿¡´Â ¼ö½ÄÀÌ Æ÷ÇÔµÇ¾î¾ß¸¸ ÇÕ´Ï´Ù.";
+        Text[ turkish ] = "Hücre, formül içermeli!";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "µ¥±äÁ¿Çó½â";
+    Text[ russian ] = "Ïîäáîğ ïàğàìåòğà";
+    Text[ polish ] = "Szukaj wyniku";
+    Text[ japanese ] = "ºŞ°Ù¼°¸";
+    Text[ chinese_traditional ] = "¥Ø¼Ğ·j´M";
+    Text[ arabic ] = "ÇáÈÍË Úä ÇáŞíãÉ ÇáåÏİ";
+    Text[ greek ] = "ÁíáæŞôçóç óôü÷ïõ";
+    Text[ korean ] = "¸ñÇ¥ Ã£±â";
+    Text[ turkish ] = "Hedef değer ara";
+    Text[ language_user1 ] = " ";
+};

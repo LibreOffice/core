@@ -1,0 +1,398 @@
+/*************************************************************************
+ *
+ *  $RCSfile: instbdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "instbdlg.hrc"
+ModalDialog RID_SCDLG_INSERT_TABLE
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 274 , 190 ) ;
+    /* ### ACHTUNG: Neuer Text in Resource? Tabelle einfügen : Tabelle einf³gen */
+    Text = "Tabelle einfügen" ;
+    Text [ ENGLISH ] = "Insert table" ;
+    Text [ DANISH ] = "Indsæt regneark" ;
+    Text [ ENGLISH_US ] = "Insert Sheet" ;
+    Text [ SPANISH ] = "Insertar hoja" ;
+    Text [ FRENCH ] = "Insérer une feuille" ;
+    Text [ ITALIAN ] = "Inserisci tabella" ;
+    Text [ DUTCH ] = "Werkblad invoegen" ;
+    Text [ PORTUGUESE_BRAZILIAN ] = "Tabelle einfügen" ;
+    Text [ SWEDISH ] = "Infoga tabell" ;
+    Text [ PORTUGUESE ] = "Inserir folha" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    RadioButton BTN_NEW
+    {
+        Pos = MAP_APPFONT ( 12 , 58 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Text = "Neu ~erstellen" ;
+        Text [ ENGLISH ] = "~Create new" ;
+        Text [ DANISH ] = "Opret nyt" ;
+        Text [ ENGLISH_US ] = "~New sheet" ;
+        Text [ SPANISH ] = "~Crear una nueva" ;
+        Text [ FRENCH ] = "Créer une nouvelle feuille" ;
+        Text [ ITALIAN ] = "Crea nuovo" ;
+        Text [ DUTCH ] = "~Nieuw" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Neu erstellen" ;
+        Text [ SWEDISH ] = "Skapa ~ny" ;
+        Text [ PORTUGUESE ] = "Criar ~novo" ;
+        Text[ chinese_simplified ] = "ĞÂ½¨¹¤×÷±í(~N)";
+        Text[ russian ] = "Ñîçäàòü íîâûé ëèñò";
+        Text[ polish ] = "Utwórz ponownie";
+        Text[ japanese ] = "V‚µ‚­ì¬(~N)";
+        Text[ chinese_traditional ] = "·s«Ø¤u§@ªí(~N)";
+        Text[ arabic ] = "ÅäÔÇÁ ãä ÌÏíÏ";
+        Text[ greek ] = "Äçìéïõñãßá";
+        Text[ korean ] = "»õ ½ÃÆ®(~N)";
+        Text[ turkish ] = "~Yeni tablo";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton BTN_FROMFILE
+    {
+        Pos = MAP_APPFONT ( 12 , 104 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "~Aus Datei erstellen" ;
+        Text [ ENGLISH ] = "F~rom file" ;
+        Text [ DANISH ] = "Opret fra fil" ;
+        Text [ ENGLISH_US ] = "~From file" ;
+        Text [ SPANISH ] = "~A partir de archivo" ;
+        Text [ FRENCH ] = "~Création à partir d'un fichier" ;
+        Text [ ITALIAN ] = "Creare da file" ;
+        Text [ DUTCH ] = "~Uit bestand vervaardigen" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Aus Datei erstellen" ;
+        Text [ SWEDISH ] = "Skapa från f~il" ;
+        Text [ PORTUGUESE ] = "~Criar a partir do ficheiro" ;
+        Text[ chinese_simplified ] = "´ÓÎÄ¼ş´´½¨(~F)";
+        Text[ russian ] = "Ñîçäàòü èç ôàéëà";
+        Text[ polish ] = "Utwórz z pliku";
+        Text[ japanese ] = "Ì§²Ù‚©‚çì¬(~F)";
+        Text[ chinese_traditional ] = "±qÀÉ®×«Ø«Ø¥ß(~F)";
+        Text[ arabic ] = "ÅäÔÇÁ ãä Çáãáİ";
+        Text[ greek ] = "Äçìéïõñãßá áğü áñ÷åßï";
+        Text[ korean ] = "ÆÄÀÏ·ÎºÎÅÍ(~F)";
+        Text[ turkish ] = "~Dosyadan oluştur";
+        Text[ language_user1 ] = " ";
+    };
+    MultiListBox LB_TABLES
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 30 , 117 ) ;
+        Size = MAP_APPFONT ( 110 , 48 ) ;
+        AutoHScroll = TRUE ;
+    };
+    PushButton BTN_BROWSE
+    {
+        Pos = MAP_APPFONT ( 146 , 117 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text = "~Durchsuchen..." ;
+        Text [ ENGLISH ] = "~Browse..." ;
+        Text [ DANISH ] = "Gennemse..." ;
+        Text [ ENGLISH_US ] = "~Browse..." ;
+        Text [ SPANISH ] = "E~xaminar..." ;
+        Text [ FRENCH ] = "~Parcourir..." ;
+        Text [ ITALIAN ] = "~Sfoglia..." ;
+        Text [ DUTCH ] = "~Bladeren..." ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Durchsuchen..." ;
+        Text [ SWEDISH ] = "~Genomsök..." ;
+        Text [ PORTUGUESE ] = "~Pesquisar" ;
+        Text[ chinese_simplified ] = "ä¯ÀÀ(~B)...";
+        Text[ russian ] = "Îáçîğ...";
+        Text[ polish ] = "Przegl¹d~aj...";
+        Text[ japanese ] = "ŒŸõ(~B)...";
+        Text[ chinese_traditional ] = "ÂsÄı(~B)...";
+        Text[ arabic ] = "ÇÓÊÚÑÇÖ...";
+        Text[ greek ] = "ÁíáæŞôçóç...";
+        Text[ korean ] = "Ã£¾Æº¸±â(~B)...";
+        Text[ turkish ] = "~Tara...";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox BTN_LINK
+    {
+        Pos = MAP_APPFONT ( 146 , 135 ) ;
+        Size = MAP_APPFONT ( 54 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Ver~knüpfen : Ver~kn³pfen */
+        Text = "Ver~knüpfen" ;
+        Text [ ENGLISH ] = "Lin~k" ;
+        Text [ DANISH ] = "Kæd" ;
+        Text [ ENGLISH_US ] = "Lin~k " ;
+        Text [ SPANISH ] = "~Vincular" ;
+        Text [ FRENCH ] = "~Lier" ;
+        Text [ ITALIAN ] = "~Collega" ;
+        Text [ DUTCH ] = "~Koppelen" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Verknüpfen" ;
+        Text [ SWEDISH ] = "Län~ka" ;
+        Text [ PORTUGUESE ] = "~Ligar" ;
+        Text[ chinese_simplified ] = "Á´½Ó(~K)";
+        Text[ russian ] = "Ñâÿçàòü";
+        Text[ polish ] = "Po³¹cz";
+        Text[ japanese ] = "Øİ¸(~K)";
+        Text[ chinese_traditional ] = "±¶®|(~K)";
+        Text[ arabic ] = "ÑÈØ";
+        Text[ greek ] = "Óıíäåóç";
+        Text[ korean ] = "¿¬°á(~K)";
+        Text[ turkish ] = "Bağ~la";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_TABNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 70 , 86 ) ;
+        Size = MAP_APPFONT ( 135 , 12 ) ;
+    };
+    FixedText FT_PATH
+    {
+        Pos = MAP_APPFONT ( 30 , 170 ) ;
+        Size = MAP_APPFONT ( 176 , 10 ) ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 218 , 8 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 218 , 25 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 218 , 49 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    GroupBox GB_POSITION
+    {
+        Pos = MAP_APPFONT ( 6 , 4 ) ;
+        Size = MAP_APPFONT ( 206 , 38 ) ;
+        Text = "Position" ;
+        Text [ ENGLISH ] = "Position" ;
+        Text [ english_us ] = "Position" ;
+        Text [ portuguese_brazilian ] = "Position" ;
+        Text [ swedish ] = "Position" ;
+        Text [ danish ] = "Placering" ;
+        Text [ italian ] = "Posizione" ;
+        Text [ spanish ] = "Posición" ;
+        Text [ french ] = "Position" ;
+        Text [ dutch ] = "Positie" ;
+        Text [ portuguese ] = "Posição" ;
+        Text[ chinese_simplified ] = "Î»ÖÃ";
+        Text[ russian ] = "Ïîëîæåíèå";
+        Text[ polish ] = "Pozycja";
+        Text[ japanese ] = "ˆÊ’u";
+        Text[ chinese_traditional ] = "¦ì¸m";
+        Text[ arabic ] = "ÇáãæÖÚ";
+        Text[ greek ] = "Èİóç";
+        Text[ korean ] = "À§Ä¡";
+        Text[ turkish ] = "Konum";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_BEHIND
+    {
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 115 , 10 ) ;
+        Text = "~Nach aktueller Tabelle" ;
+        Text [ ENGLISH ] = "After selected sheet" ;
+        TabStop = TRUE ;
+        Text [ portuguese ] = "~Depois folha seleccionada" ;
+        Text [ english_us ] = "~After current sheet" ;
+        Text [ portuguese_brazilian ] = "~Nach aktueller Tabelle" ;
+        Text [ swedish ] = "~Efter aktuell tabell" ;
+        Text [ danish ] = "Efter aktuelt ark" ;
+        Text [ italian ] = "~Dopo la tabella corrente" ;
+        Text [ spanish ] = "Detrás de la ~hoja actual" ;
+        Text [ french ] = "~Après la feuille courante" ;
+        Text [ dutch ] = "~Na actuele tabel" ;
+        Text[ chinese_simplified ] = "ÔÚµ±Ç°µÄ¹¤×÷±íÖ®ºó(~A)";
+        Text[ russian ] = "Ïîñëå òåêóùåé òàáëèöû";
+        Text[ polish ] = "Za ~zaznaczonym arkuszem";
+        Text[ japanese ] = "•\\¦’†‚Ì•\\‚ÌŒã‚É(~A)";
+        Text[ chinese_traditional ] = "¦b·í«eªº¤u§@ªí¤§«á(~A)";
+        Text[ arabic ] = "ÈÚÏ ÇáÌÏæá ÇáÍÇáí";
+        Text[ greek ] = "ÌåôÜ áğü ôïí åíåñãü ğßíáêá";
+        Text[ korean ] = "ÇöÀç ½ÃÆ® µÚ·Î(~A)";
+        Text[ turkish ] = "Açık tablonun ~arkasına";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_BEFORE
+    {
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 101 , 10 ) ;
+        Text = "~Vor aktueller Tabelle" ;
+        Text [ ENGLISH ] = "Before selected sheet" ;
+        TabStop = TRUE ;
+        Text [ portuguese ] = "~Antes da folha seleccionada" ;
+        Text [ english_us ] = "B~efore current sheet" ;
+        Text [ portuguese_brazilian ] = "~Vor aktueller Tabelle" ;
+        Text [ swedish ] = "~Före aktuell tabell" ;
+        Text [ danish ] = "Før aktuelt ark" ;
+        Text [ italian ] = "~Prima della tabella corrente" ;
+        Text [ spanish ] = "~Delante de la hoja actual" ;
+        Text [ french ] = "A~vant la feuille courante" ;
+        Text [ dutch ] = "~Voor actuele tabel" ;
+        Text[ chinese_simplified ] = "ÔÚµ±Ç°µÄ¹¤×÷±íÖ®Ç°(~S)";
+        Text[ russian ] = "Ïåğåä òåêóùåé òàáëèöåé";
+        Text[ polish ] = "Przed zaz~naczonym arkuszem";
+        Text[ japanese ] = "•\\¦’†‚Ì•\\‚Ì‘O‚É(~S)";
+        Text[ chinese_traditional ] = "¦b·í«eªº¤u§@ªí¤§«e(~S)";
+        Text[ arabic ] = "ŞÈá ÇáÌÏæá ÇáÍÇáí";
+        Text[ greek ] = "Ğñéí áğü ôïí åíåñãü ğßíáêá";
+        Text[ korean ] = "ÇöÀç ½ÃÆ® Àü¿¡(~E)";
+        Text[ turkish ] = "Açık tablonun ~önüne";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_TABLE
+    {
+        Pos = MAP_APPFONT ( 6 , 46 ) ;
+        Size = MAP_APPFONT ( 206 , 139 ) ;
+        Text = "Tabelle" ;
+        Text [ ENGLISH ] = "Table" ;
+        Text [ english_us ] = "Create sheet" ;
+        Text [ portuguese_brazilian ] = "Tabelle" ;
+        Text [ swedish ] = "Tabell" ;
+        Text [ danish ] = "Ark" ;
+        Text [ italian ] = "Tabella" ;
+        Text [ spanish ] = "Hoja" ;
+        Text [ french ] = "Feuille" ;
+        Text [ dutch ] = "Tabel" ;
+        Text [ portuguese ] = "Folha" ;
+        Text[ chinese_simplified ] = "¹¤×÷±í";
+        Text[ russian ] = "Òàáëèöà";
+        Text[ polish ] = "Arkusz";
+        Text[ japanese ] = "•\\‚Ìì¬";
+        Text[ chinese_traditional ] = "¤u§@ªí";
+        Text[ arabic ] = "ÌÏæá";
+        Text[ greek ] = "Ğßíáêáò";
+        Text[ korean ] = "½ÃÆ® ¸¸µé±â";
+        Text[ turkish ] = "Tablo";
+        Text[ language_user1 ] = " ";
+    };
+    NumericField NF_COUNT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 70 , 70 ) ;
+        Size = MAP_APPFONT ( 23 , 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 99 ;
+    };
+    FixedText FT_COUNT
+    {
+        Pos = MAP_APPFONT ( 30 , 71 ) ;
+        Size = MAP_APPFONT ( 38 , 10 ) ;
+        Text = "An~zahl" ;
+        Text [ ENGLISH ] = "Count" ;
+        Text [ portuguese ] = "~N° de folhas" ;
+        Text [ english_us ] = "N~o. of sheets" ;
+        Text [ portuguese_brazilian ] = "An~zahl" ;
+        Text [ swedish ] = "An~tal" ;
+        Text [ danish ] = "Antal" ;
+        Text [ italian ] = "~Numero" ;
+        Text [ spanish ] = "~Núm. de hojas" ;
+        Text [ french ] = "N~ombre" ;
+        Text [ dutch ] = "Aan~tal" ;
+        Text[ chinese_simplified ] = "ÊıÄ¿(~O)";
+        Text[ russian ] = "×èñëî ëèñòîâ";
+        Text[ polish ] = "Iloœæ";
+        Text[ japanese ] = "•\\”(~O)";
+        Text[ chinese_traditional ] = "¼Æ¥Ø(~O)";
+        Text[ arabic ] = "ÇáÚÏÏ";
+        Text[ greek ] = "Áñé~èìüò";
+        Text[ korean ] = "½ÃÆ® ¹øÈ£(~O)";
+        Text[ turkish ] = "A~det";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 30 , 87 ) ;
+        Size = MAP_APPFONT ( 38 , 10 ) ;
+        Text = "Na~me" ;
+        Text [ ENGLISH ] = "Name" ;
+        Text[ english_us ] = "Na~me";
+        Text[ portuguese ] = "No~me";
+        Text[ russian ] = "Èìÿ";
+        Text[ greek ] = "¼íï~ìá";
+        Text[ dutch ] = "~Naam";
+        Text[ french ] = "No~m";
+        Text[ spanish ] = "No~mbre";
+        Text[ italian ] = "No~me";
+        Text[ danish ] = "Navn";
+        Text[ swedish ] = "Na~mn";
+        Text[ polish ] = "Nazwa";
+        Text[ portuguese_brazilian ] = "Name";
+        Text[ japanese ] = "–¼‘O(~N)";
+        Text[ korean ] = "Name";
+        Text[ chinese_simplified ] = "Ãû³Æ(~M)";
+        Text[ chinese_traditional ] = "¦WºÙ";
+        Text[ turkish ] = "~Ad";
+        Text[ arabic ] = "ÇáÇÓã";
+    };
+    Text[ chinese_simplified ] = "²åÈë¹¤×÷±í";
+    Text[ russian ] = "Âñòàâèòü òàáëèöó";
+    Text[ polish ] = "Wstaw arkusz";
+    Text[ japanese ] = "•\\‚Ì‘}“ü";
+    Text[ chinese_traditional ] = "´¡¤J¤u§@ªí";
+    Text[ arabic ] = "ÅÏÑÇÌ ÌÏæá";
+    Text[ greek ] = "ÅéóáãùãŞ ğßíáêá";
+    Text[ korean ] = "½ÃÆ® »ğÀÔ";
+    Text[ turkish ] = "Tablo ekle";
+    Text[ language_user1 ] = " ";
+};

@@ -1,0 +1,253 @@
+/*************************************************************************
+ *
+ *  $RCSfile: opredlin.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:05 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "opredlin.hrc"
+TabPage RID_SCPAGE_OPREDLINE
+{
+    HelpId = HID_SCPAGE_OPREDLINE ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    FixedText FT_CONTENT
+    {
+        HelpID = 1 ;
+        Pos = MAP_APPFONT ( 12 , 21 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text = "~Änderungen" ;
+        Text [ ENGLISH ] = "Changes" ;
+        Text [ english_us ] = "Chan~ges" ;
+        Text [ portuguese_brazilian ] = "~Änderungen" ;
+        Text [ swedish ] = "~Ändringar" ;
+        Text [ danish ] = "Ændringer" ;
+        Text [ italian ] = "~Modifica" ;
+        Text [ spanish ] = "~Modificaciones" ;
+        Text [ french ] = "~Modifications" ;
+        Text [ dutch ] = "~Wijzigingen" ;
+        Text [ portuguese ] = "~Modificações" ;
+        Text[ chinese_simplified ] = "¸ü¸Ä(~G)";
+        Text[ russian ] = "Èñïğàâëåíèÿ";
+        Text[ polish ] = "Zmiany";
+        Text[ japanese ] = "•ÏX(~G)";
+        Text[ chinese_traditional ] = "ÅÜ§ó(~G)";
+        Text[ arabic ] = "ÇáÊÛííÑÇÊ";
+        Text[ greek ] = "Áëëáãİò";
+        Text[ korean ] = "º¯°æ(~G)";
+        Text[ turkish ] = "~Değişiklikler";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_REMOVE
+    {
+        Pos = MAP_APPFONT ( 12 , 41 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text = "~Löschungen" ;
+        Text [ ENGLISH ] = "Removed Entrys" ;
+        Text [ portuguese ] = "~Eliminações" ;
+        Text [ english_us ] = "~Deletions" ;
+        Text [ portuguese_brazilian ] = "~Löschungen" ;
+        Text [ swedish ] = "~Raderingar" ;
+        Text [ danish ] = "Sletninger" ;
+        Text [ italian ] = "~Elimina" ;
+        Text [ spanish ] = "~Eliminaciones" ;
+        Text [ french ] = "~Suppressions" ;
+        Text [ dutch ] = "~Verwijderingen" ;
+        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ russian ] = "Óäàëåíèÿ";
+        Text[ polish ] = "Usuniêcia";
+        Text[ japanese ] = "íœ(~D)";
+        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ arabic ] = "ÍĞİ";
+        Text[ greek ] = "Äéáãñáöİò";
+        Text[ korean ] = "»èÁ¦(~D)";
+        Text[ turkish ] = "~Silinenler";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_INSERT
+    {
+        Pos = MAP_APPFONT ( 12 , 61 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text = "~Einfügungen" ;
+        Text [ ENGLISH ] = "Inserted Entrys" ;
+        Text [ portuguese ] = "~Inserções" ;
+        Text [ english_us ] = "~Insertions" ;
+        Text [ portuguese_brazilian ] = "~Einfügungen" ;
+        Text [ swedish ] = "~Infogningar" ;
+        Text [ danish ] = "Indsættelser" ;
+        Text [ italian ] = "~Inserisci" ;
+        Text [ spanish ] = "~Inserciones" ;
+        Text [ french ] = "~Insertions" ;
+        Text [ dutch ] = "~Invoegingen" ;
+        Text[ chinese_simplified ] = "²åÈë(~I)";
+        Text[ russian ] = "Âñòàâêè";
+        Text[ polish ] = "Wstawienia";
+        Text[ japanese ] = "‘}“ü(~I)";
+        Text[ chinese_traditional ] = "´¡¤J(~I)";
+        Text[ arabic ] = "ÅÏÑÇÌÇÊ";
+        Text[ greek ] = "ĞñïóèŞêåò";
+        Text[ korean ] = "»ğÀÔ(~I)";
+        Text[ turkish ] = "~Eklemeler";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_MOVE
+    {
+        Pos = MAP_APPFONT ( 12 , 81 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text = "~Verschiebungen" ;
+        Text [ ENGLISH ] = "Moved Entrys" ;
+        Text [ portuguese ] = "~Deslocamentos" ;
+        Text [ english_us ] = "~Moved entries" ;
+        Text [ portuguese_brazilian ] = "~Verschiebungen" ;
+        Text [ swedish ] = "~Förskjutningar" ;
+        Text [ danish ] = "Flytninger" ;
+        Text [ italian ] = "~Sposta" ;
+        Text [ spanish ] = "~Desplazamientos" ;
+        Text [ french ] = "~Déplacements" ;
+        Text [ dutch ] = "~Verplaatsingen" ;
+        Text[ chinese_simplified ] = "ÒÆ¶¯(~M)";
+        Text[ russian ] = "Cìåùåíèÿ";
+        Text[ polish ] = "Przesuniêcia";
+        Text[ japanese ] = "ˆÚ“®(~M)";
+        Text[ chinese_traditional ] = "²¾°Ê(~M)";
+        Text[ arabic ] = "ÅÒÇÍÇÊ";
+        Text[ greek ] = "ÌåôáêéíŞóåéò";
+        Text[ korean ] = "Ç×¸ñ ÀÌµ¿(~M)";
+        Text[ turkish ] = "~Taşınan girişler";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_COLORCHGS
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 248 , 116 ) ;
+        Text = "Farbgebung für Änderungen" ;
+        Text [ ENGLISH ] = "Colors for Changes" ;
+        Text [ portuguese ] = "Cores para modificações" ;
+        Text [ english_us ] = "Colors for changes" ;
+        Text [ portuguese_brazilian ] = "Farbgebung für Änderungen" ;
+        Text [ swedish ] = "Färggivning för ändringar" ;
+        Text [ danish ] = "Farver for ændringer" ;
+        Text [ italian ] = "Colori per i comandi" ;
+        Text [ spanish ] = "Colores para las modificaciones" ;
+        Text [ french ] = "Couleurs d'affichage des modifications" ;
+        Text [ dutch ] = "Kleurgeving voor wijzigingen" ;
+        Text[ chinese_simplified ] = "¸ü¸Ä²¿·Ö²ÉÓÃµÄÑÕÉ«";
+        Text[ russian ] = "Öâåò äëÿ èçìåíåíèé";
+        Text[ polish ] = "Kolory dla modyfikacji";
+        Text[ japanese ] = "•ÏX—p‚ÌF";
+        Text[ chinese_traditional ] = "ÅÜ§ó³¡¤À±Ä¥ÎªºÃC¦â";
+        Text[ arabic ] = "áæä ÇáÊÛííÑÇÊ";
+        Text[ greek ] = "×ñşìá áëëáãşí";
+        Text[ korean ] = "º¯°æÀ» À§ÇÑ »ö»ó";
+        Text[ turkish ] = "Değişiklikleri gösteren renkler";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox CLB_CONTENT
+    {
+        Pos = MAP_APPFONT ( 90 , 20 ) ;
+        Size = MAP_APPFONT ( 120 , 124 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox CLB_REMOVE
+    {
+        Pos = MAP_APPFONT ( 90 , 40 ) ;
+        Size = MAP_APPFONT ( 120 , 124 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox CLB_INSERT
+    {
+        Pos = MAP_APPFONT ( 90 , 60 ) ;
+        Size = MAP_APPFONT ( 120 , 124 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox CLB_MOVE
+    {
+        Pos = MAP_APPFONT ( 90 , 80 ) ;
+        Size = MAP_APPFONT ( 120 , 124 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    String STR_AUTHOR
+    {
+        Text = "Nach Autor" ;
+        Text [ English ] = "By author" ;
+        Text [ portuguese ] = "Conforme autor" ;
+        Text [ english_us ] = "By author" ;
+        Text [ portuguese_brazilian ] = "Nach Autor" ;
+        Text [ swedish ] = "Efter författare" ;
+        Text [ danish ] = "Efter forfatter" ;
+        Text [ italian ] = "per autore" ;
+        Text [ spanish ] = "Según autor" ;
+        Text [ french ] = "Par auteur" ;
+        Text [ dutch ] = "Naar auteur" ;
+        Text[ chinese_simplified ] = "°´×÷Õß";
+        Text[ russian ] = "Ïî àâòîğó";
+        Text[ polish ] = "Wed³ug autora";
+        Text[ japanese ] = "ì¬Ò‚É]‚Á‚Ä";
+        Text[ chinese_traditional ] = "«ö·Ó§@ªÌ";
+        Text[ arabic ] = "ÍÓÈ ÇáãÄáİ";
+        Text[ greek ] = "ÊáôÜ óõíôÜêôç";
+        Text[ korean ] = "ÀúÀÚ";
+        Text[ turkish ] = "Yazana göre";
+        Text[ language_user1 ] = " ";
+    };
+};

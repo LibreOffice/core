@@ -1,0 +1,1722 @@
+/*************************************************************************
+ *
+ *  $RCSfile: popup.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:05 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include "sc.hrc" // -> #include <sfx.hrc>
+#include <basctl/basicide.hrc>
+#include <offmgr/offmenu.hrc>
+
+
+
+ // Popup-Menues ----------------------------------------------------------------
+
+String RID_POPUP_CELLS
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Zellen : Popup-Men³ f³r Zellen */
+    Text = "Popup-Menü für Zellen" ;
+    Text [ ENGLISH ] = "Cell Popup Menu" ;
+    Text [ norwegian ] = "Cell Popup Menu" ;
+    Text [ italian ] = "Menu cella di scelta rapida" ;
+    Text [ portuguese_brazilian ] = "Menu Popup da Célula" ;
+    Text [ portuguese ] = "Menu instantâneo para células" ;
+    Text [ finnish ] = "Solun kohovalikko" ;
+    Text [ danish ] = "Popop-menu for celler" ;
+    Text [ french ] = "Menu Pop-Up pour les cellules" ;
+    Text [ swedish ] = "Popupmeny för celler" ;
+    Text [ dutch ] = "PopUp-menu voor cellen" ;
+    Text [ spanish ] = "Menú emergente para celdas" ;
+    Text [ english_us ] = "Cell pop-up menu" ;
+    Text[ chinese_simplified ] = "µ¥Ôª¸ñµ¯³öÊ½²Ëµ¥";
+    Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ ÿ÷ååê";
+    Text[ polish ] = "Menu podrêczne dla komórek";
+    Text[ japanese ] = "Îß¯Ìß±¯Ìß ÒÆ­° ¾Ù—p";
+    Text[ chinese_traditional ] = "Àx¦s®æ¥\\¯àªí";
+    Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ ááÎáÇíÇ";
+    Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá êåëéÜ";
+    Text[ korean ] = "¼¿ ÆË¾÷¸Ş´º";
+    Text[ turkish ] = "Hücreler için popup mönü";
+    Text[ language_user1 ] = " ";
+};
+
+Menu RID_POPUP_CELLS
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_CELL_FORMAT_RESET ;
+            HelpId = SID_CELL_FORMAT_RESET ;
+            /* ### ACHTUNG: Neuer Text in Resource? Standar~d : Standard */
+            /* ### ACHTUNG: Neuer Text in Resource? Standar~d : Standard */
+            /* ### ACHTUNG: Neuer Text in Resource? Standar~d : Standard */
+            Text = "Standar~d" ;
+            Text [ ENGLISH ] = "Standar~d" ;
+            Text [ dutch ] = "~Standaard" ;
+            Text [ english_us ] = "~Default" ;
+            Text [ italian ] = "Standar~d" ;
+            Text [ spanish ] = "~Predeterminado" ;
+            Text [ french ] = "~Par défaut" ;
+            Text [ swedish ] = "Standar~d" ;
+            Text [ danish ] = "Standar~d" ;
+            Text [ portuguese_brazilian ] = "Standar~d" ;
+            Text [ portuguese ] = "~Padrão" ;
+            Text[ chinese_simplified ] = "±ê×¼(~D)";
+            Text[ language_user1 ] = " ";
+            Text[ russian ] = "~Ïî óìîë÷àíèş";
+            Text[ polish ] = "~Domyœlnie";
+            Text[ japanese ] = "•W€(~D)";
+            Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";
+            Text[ arabic ] = "ÇİÊÑÇÖí~";
+            Text[ greek ] = "~ĞñïåğéëïãŞ";
+            Text[ korean ] = "±âº»°ª(~D)";
+            Text[ turkish ] = "~Standart";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_CELL_FORMAT ;
+            HelpId = FID_CELL_FORMAT ;
+            Text = "~Zellen formatieren..." ;
+            Text [ ENGLISH ] = "~Format Cells..." ;
+            Text [ norwegian ] = "~Format Cells..." ;
+            Text [ italian ] = "Formatta celle..." ;
+            Text [ portuguese_brazilian ] = "~Format Cells..." ;
+            Text [ portuguese ] = "Formatar ~células..." ;
+            Text [ finnish ] = "~Muotoile solut..." ;
+            Text [ danish ] = "Formater celler..." ;
+            Text [ french ] = "~Formater les cellules..." ;
+            Text [ swedish ] = "~Formatera celler..." ;
+            Text [ dutch ] = "Cellen ~opmaken..." ;
+            Text [ spanish ] = "~Formatear celdas..." ;
+            Text [ english_us ] = "Format ~Cells..." ;
+            Text[ chinese_simplified ] = "µ¥Ôª¸ñ¸ñÊ½»¯(~C)...";
+            Text[ russian ] = "Ôîğìàò ÿ÷ååê...";
+            Text[ polish ] = "Formatuj komórki...";
+            Text[ japanese ] = "¾Ù‚Ì‘®İ’è(~C)...";
+            Text[ chinese_traditional ] = "Àx¦s®æ®æ¦¡¤Æ(~C)...";
+            Text[ arabic ] = "...ÊäÓíŞ ÇáÎáÇíÇ";
+            Text[ greek ] = "Ìïñöï~ğïßçóç êåëéşí...";
+            Text[ korean ] = "¼¿ ¼­½Ä(~C)...";
+            Text[ turkish ] = "Hücreleri formatla...";
+            Text[ language_user1 ] = " ";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_INS_CELL ;
+            HelpId = FID_INS_CELL ;
+            /* ### ACHTUNG: Neuer Text in Resource? Zellen ~einfügen... : Zellen einfügen... */
+            /* ### ACHTUNG: Neuer Text in Resource? Zellen ~einfügen... : Zellen einfügen... */
+            /* ### ACHTUNG: Neuer Text in Resource? Zellen ~einfügen... : Zellen einfügen... */
+            /* ### ACHTUNG: Neuer Text in Resource? Zellen ~einfügen... : Zellen ~einf³gen... */
+            Text = "Zellen ~einfügen..." ;
+            Text [ ENGLISH ] = "Insert Cells..." ;
+            Text [ norwegian ] = "Insert Cells..." ;
+            Text [ italian ] = "~Inserisci celle..." ;
+            Text [ portuguese_brazilian ] = "Insert Cells..." ;
+            Text [ portuguese ] = "~Inserir células..." ;
+            Text [ finnish ] = "Lisää soluja..." ;
+            Text [ danish ] = "Indsæt celler..." ;
+            Text [ french ] = "~Insérer des cellules..." ;
+            Text [ swedish ] = "~Infoga celler..." ;
+            Text [ dutch ] = "Cellen ~invoegen..." ;
+            Text [ spanish ] = "~Insertar celdas..." ;
+            Text [ english_us ] = "Insert C~ells..." ;
+            /* ### ACHTUNG: Neuer Text in Resource? Zellen einfügen : Zellen einf³gen */
+            Text[ chinese_simplified ] = "²åÈëµ¥Ôª¸ñ(~E)...";
+            Text[ russian ] = "Âñòàâèòü ÿ÷åéêè...";
+            Text[ polish ] = "Wstaw komórki...";
+            Text[ japanese ] = "¾Ù‚Ì‘}“ü(~E)...";
+            Text[ chinese_traditional ] = "´¡¤JÀx¦s®æ(~E)...";
+            Text[ arabic ] = "...ÅÏÑÇÌ ÎáÇíÇ";
+            Text[ greek ] = "ĞñïóèŞêç ê~åëéşí...";
+            Text[ korean ] = "¼¿ »ğÀÔ(~E)...";
+            Text[ turkish ] = "Hücre ekle...";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = FID_DELETE_CELL ;
+            HelpId = FID_DELETE_CELL ;
+            /* ### ACHTUNG: Neuer Text in Resource? Zellen ~löschen... : Zellen löschen... */
+            /* ### ACHTUNG: Neuer Text in Resource? Zellen ~löschen... : Zellen löschen... */
+            /* ### ACHTUNG: Neuer Text in Resource? Zellen ~löschen... : Zellen löschen... */
+            /* ### ACHTUNG: Neuer Text in Resource? Zellen ~löschen... : Zellen ~l÷schen... */
+            Text = "Zellen ~löschen..." ;
+            Text [ ENGLISH ] = "Delete Cells..." ;
+            Text [ norwegian ] = "Delete Cells..." ;
+            Text [ italian ] = "Elimina celle..." ;
+            Text [ portuguese_brazilian ] = "Delete Cells..." ;
+            Text [ portuguese ] = "Eliminar ~células..." ;
+            Text [ finnish ] = "Poista soluja..." ;
+            Text [ danish ] = "Slet celler..." ;
+            Text [ french ] = "Supprimer des ce~llules..." ;
+            Text [ swedish ] = "Radera ce~ller..." ;
+            Text [ dutch ] = "Cellen ~wissen..." ;
+            Text [ spanish ] = "~Eliminar celdas..." ;
+            Text [ english_us ] = "~Delete Cells..." ;
+            /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Zellen, Zeilen oder Spalten löschen : Ausgewõhlte Zellen, Zeilen oder Spalten l÷schen */
+            Text[ chinese_simplified ] = "É¾³ıµ¥Ôª¸ñ(~D)...";
+            Text[ russian ] = "Óäàëèòü ÿ÷åéêè...";
+            Text[ polish ] = "Usuñ komórki...";
+            Text[ japanese ] = "¾Ù‚Ìíœ(~D)...";
+            Text[ chinese_traditional ] = "§R°£Àx¦s®æ(~D)...";
+            Text[ arabic ] = "...ÍĞİ ÎáÇíÇ";
+            Text[ greek ] = "ÄéáãñáöŞ êå~ëéşí...";
+            Text[ korean ] = "¼¿ »èÁ¦(~D)...";
+            Text[ turkish ] = "Hücre sil...";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_DELETE ;
+            HelpId = SID_DELETE ;
+            /* ### ACHTUNG: Neuer Text in Resource? Inhalte l~öschen... : Inhalte löschen... */
+            /* ### ACHTUNG: Neuer Text in Resource? Inhalte l~öschen... : Inhalte löschen... */
+            /* ### ACHTUNG: Neuer Text in Resource? Inhalte l~öschen... : Inhalte löschen... */
+            /* ### ACHTUNG: Neuer Text in Resource? Inhalte l~öschen... : Inhalte l~÷schen... */
+            Text = "Inhalte lö~schen..." ;
+            Text [ ENGLISH ] = "Delete Data..." ;
+            Text [ norwegian ] = "Delete Data..." ;
+            Text [ italian ] = "Elimina contenuti..." ;
+            Text [ portuguese_brazilian ] = "Delete Data..." ;
+            Text [ portuguese ] = "Eliminar co~nteúdos..." ;
+            Text [ finnish ] = "Poista tiedot..." ;
+            Text [ danish ] = "Slet indhold..." ;
+            Text [ french ] = "Supprimer du ~contenu..." ;
+            Text [ swedish ] = "Ra~dera innehåll..." ;
+            Text [ dutch ] = "I~nhoud wissen..." ;
+            Text [ spanish ] = "Eliminar contenidos..." ;
+            Text [ english_us ] = "D~elete Contents..." ;
+            /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Inhalte löschen (Formeln, Formate etc.) : Ausgewõhlte Inhalte l÷schen (Formeln, Formate etc.) */
+            Text[ chinese_simplified ] = "É¾³ıÄÚÈİ(~E)...";
+            Text[ russian ] = "Óäàëèòü ñîäåğæèìîå...";
+            Text[ polish ] = "Usuñ zawartoœci...";
+            Text[ japanese ] = "“à—e‚Ìíœ(~E)...";
+            Text[ chinese_traditional ] = "§R°£¤º®e(~E)...";
+            Text[ arabic ] = "...ÍĞİ ãÍÊæíÇÊ";
+            Text[ greek ] = "Äéáãñá~öŞ ğåñéå÷ïìİíùí...";
+            Text[ korean ] = "³»¿ë »èÁ¦(~E)...";
+            Text[ turkish ] = "İçerikleri sil...";
+            Text[ language_user1 ] = " ";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+
+        MenuItem
+        {
+            Identifier = SID_CUT ;
+            HelpId = SID_CUT ;
+            Text = "Auss~chneiden" ;
+            Text [ ENGLISH ] = "~Cut" ;
+            Text [ norwegian ] = "~Cut" ;
+            Text [ italian ] = "Taglia" ;
+            Text [ portuguese_brazilian ] = "~Recortar" ;
+            Text [ portuguese ] = "~Cortar" ;
+            Text [ finnish ] = "~Leikkaa" ;
+            Text [ danish ] = "~Klip" ;
+            Text [ french ] = "~Couper" ;
+            Text [ swedish ] = "~Klipp ut" ;
+            Text [ dutch ] = "K~nippen" ;
+            Text [ spanish ] = "~Cortar" ;
+            Text [ english_us ] = "Cu~t" ;
+            Text[ chinese_simplified ] = "¼ô³ı(~T)";
+            Text[ russian ] = "Âûğåçàòü";
+            Text[ polish ] = "Wytnij";
+            Text[ japanese ] = "Ø‚èæ‚è(~T)";
+            Text[ chinese_traditional ] = "°Å¤U(~T)";
+            Text[ arabic ] = "ŞÕ";
+            Text[ greek ] = "Á~ğïêïğŞ";
+            Text[ korean ] = "Àß¶ó³»±â(~T)";
+            Text[ turkish ] = "~Kes";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_COPY ;
+            HelpId = SID_COPY ;
+            Text = "Kopie~ren" ;
+            Text [ ENGLISH ] = "C~opy" ;
+            Text [ norwegian ] = "C~opy" ;
+            Text [ italian ] = "Copia" ;
+            Text [ portuguese_brazilian ] = "C~opiar" ;
+            Text [ portuguese ] = "C~opiar" ;
+            Text [ finnish ] = "K~opioi" ;
+            Text [ danish ] = "K~opier" ;
+            Text [ french ] = "Co~pier" ;
+            Text [ swedish ] = "K~opiera" ;
+            Text [ dutch ] = "~Kopiëren" ;
+            Text [ spanish ] = "C~opiar" ;
+            Text [ english_us ] = "~Copy" ;
+            Text[ chinese_simplified ] = "¸´ÖÆ(~C)";
+            Text[ russian ] = "Êîïèğîâàòü";
+            Text[ polish ] = "Kopiuj";
+            Text[ japanese ] = "ºËß°(~C)";
+            Text[ chinese_traditional ] = "½Æ»s(~C)";
+            Text[ arabic ] = "äÓÎ";
+            Text[ greek ] = "Áíôé~ãñáöŞ";
+            Text[ korean ] = "º¹»ç(~C)";
+            Text[ turkish ] = "K~opyala";
+            Text[ language_user1 ] = " ";
+        };
+
+        MenuItem
+        {
+            Identifier = SID_PASTE ;
+            HelpID = SID_PASTE ;
+            Text = "E~infügen" ;
+            Text [ English ] = "~Paste" ;
+            Text [ norwegian ] = "~Paste" ;
+            Text [ italian ] = "~Incolla" ;
+            Text [ portuguese_brazilian ] = "Colar" ;
+            Text [ portuguese ] = "~Inserir" ;
+            Text [ finnish ] = "L~iitä" ;
+            Text [ danish ] = "Sæt i~nd" ;
+            Text [ french ] = "Coller" ;
+            Text [ swedish ] = "K~listra in" ;
+            Text [ dutch ] = "~Invoegen" ;
+            Text [ spanish ] = "P~egar" ;
+            Text [ english_us ] = "~Paste" ;
+            Text[ chinese_simplified ] = "²åÈë(~P)";
+            Text[ russian ] = "~Âñòàâèòü";
+            Text[ polish ] = "~Wstaw";
+            Text[ japanese ] = "‘}“ü(~P)";
+            Text[ chinese_traditional ] = "´¡¤J(~P)";
+            Text[ arabic ] = "áÕŞ";
+            Text[ greek ] = "Å~éóáãùãŞ";
+            Text[ korean ] = "ºÙ¿©³Ö±â(~P)";
+            Text[ turkish ] = "~Ekle";
+            Text[ language_user1 ] = " ";
+        };
+
+        MenuItem
+        {
+            Identifier = FID_PASTE_CONTENTS ;
+            HelpId = FID_PASTE_CONTENTS ;
+            Text = "In~halte einfügen..." ;
+            Text [ ENGLISH ] = "Paste ~Special..." ;
+            Text [ norwegian ] = "Paste ~Special..." ;
+            Text [ italian ] = "Incolla ~speciale..." ;
+            Text [ portuguese_brazilian ] = "Colar ~Especial..." ;
+            Text [ portuguese ] = "Colar e~special..." ;
+            Text [ finnish ] = "Liitä ~määräten..." ;
+            Text [ danish ] = "Indsæt ind~hold..." ;
+            Text [ french ] = "Collage spécial..." ;
+            Text [ swedish ] = "Klistra in innehåll..." ;
+            Text [ dutch ] = "~Plakken speciaal..." ;
+            Text [ spanish ] = "Pega~do especial..." ;
+            Text [ english_us ] = "Paste Special..." ;
+            Text[ chinese_simplified ] = "²åÈëÄÚÈİ...";
+            Text[ russian ] = "Ñï~åöèàëüíàÿ âñòàâêà...";
+            Text[ polish ] = "~Wklej zawartoœæ...";
+            Text[ japanese ] = "Œ`®‚ğ‘I‘ğ‚µ‚Ä“\\‚è•t‚¯(~S)...";
+            Text[ chinese_traditional ] = "´¡¤J¤º®e(~S)...";
+            Text[ arabic ] = "áÕŞ ÎÇÕ...";
+            Text[ greek ] = "ÅéäéêŞ åğéêüëë~çóç...";
+            Text[ korean ] = "¼±ÅÃÇÏ¿© ºÙ¿©³Ö±â...";
+            Text[ turkish ] = "Özel yapıştır...";
+            Text[ language_user1 ] = " ";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_NOTE_VISIBLE ;
+            HelpId = FID_NOTE_VISIBLE ;
+            Text = "~Notiz anzeigen" ;
+            Text [ ENGLISH ] = "Show ~Note" ;
+            Text [ english_us ] = "~Show Note" ;
+            Text [ swedish ] = "~Visa anteckning" ;
+            Text [ danish ] = "Vis note" ;
+            Text [ italian ] = "Mostra nota" ;
+            Text [ spanish ] = "~Mostrar nota" ;
+            Text [ french ] = "Afficher la ~note" ;
+            Text [ dutch ] = "~Aantekening weergeven" ;
+            Text [ portuguese_brazilian ] = "~Notiz anzeigen" ;
+            Text [ portuguese ] = "~Mostrar anotação" ;
+            Text[ chinese_simplified ] = "ÏÔÊ¾±¸×¢(~S)";
+            Text[ russian ] = "Ïîêàçàòü ïğèìå÷àíèÿ";
+            Text[ polish ] = "Poka¿ notatkê";
+            Text[ japanese ] = "ºÒİÄ‚Ì•\\¦(~S)";
+            Text[ chinese_traditional ] = "Åã¥Ü³Æµù(~S)";
+            Text[ arabic ] = "ÅÙåÇÑ ÇáãáÇÍÙÉ";
+            Text[ greek ] = "ÅìöÜ~íéóç óçìåßùóçò";
+            Text[ korean ] = "¸Ş¸ğº¸±â(~S)";
+            Text[ turkish ] = "Notu görüntüle";
+            Text[ language_user1 ] = " ";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = SID_DATA_SELECT ;
+            HelpId = SID_DATA_SELECT ;
+            /* ### ACHTUNG: Neuer Text in Resource? Aus~wahlliste... : Auswahlliste... */
+            /* ### ACHTUNG: Neuer Text in Resource? Aus~wahlliste... : Auswahlliste... */
+            /* ### ACHTUNG: Neuer Text in Resource? Aus~wahlliste... : Auswahlliste... */
+            Text = "Aus~wahlliste..." ;
+            Text [ ENGLISH ] = "Select..." ;
+            Text [ english_us ] = "Se~lection List..." ;
+            Text [ italian ] = "Lista di scelta..." ;
+            Text [ spanish ] = "~Lista de selección..." ;
+            Text [ french ] = "~Liste de sélection..." ;
+            Text [ dutch ] = "~Keuzelijst..." ;
+            Text [ swedish ] = "~Urvalslista..." ;
+            Text [ danish ] = "Udvalgsliste..." ;
+            Text [ portuguese_brazilian ] = "Aus~wahlliste..." ;
+            Text [ portuguese ] = "~Lista de selecção..." ;
+            Text[ chinese_simplified ] = "Ñ¡ÔñÁĞµ¥(~L)...";
+            Text[ russian ] = "Ñïèñîê âûáîğà...";
+            Text[ polish ] = "Lista wyboru...";
+            Text[ japanese ] = "‘I‘ğØ½Ä(~L)...";
+            Text[ chinese_traditional ] = "¿ï¾Ü¦Cªí(~L)...";
+            Text[ arabic ] = "ŞÇÆãÉ ÇáÊÍÏíÏ...";
+            Text[ greek ] = "Ëßóôá åğéëï~ãşí...";
+            Text[ korean ] = "¼±ÅÃ¸®½ºÆ®(~L)...";
+            Text[ turkish ] = "Seçim listesi...";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+
+String RID_POPUP_TAB
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Tabellenleiste : Popup-Men³ f³r Tabellenleiste */
+    Text = "Popup-Menü für Tabellenleiste" ;
+    Text [ ENGLISH ] = "Table Control Popup Menu" ;
+    Text [ norwegian ] = "Table Control Popup Menu" ;
+    Text [ italian ] = "Menu di scelta rapida per barra tabella" ;
+    Text [ portuguese_brazilian ] = "Menu Popup de Controle da Tabela" ;
+    Text [ portuguese ] = "Menu instantâneo para barra de tabelas" ;
+    Text [ finnish ] = "Taulukon hallinnan kohovalikko" ;
+    Text [ danish ] = "Popup-menu for regnearkslinjen" ;
+    Text [ french ] = "Menu Pop-Up pour la barre des tables" ;
+    Text [ swedish ] = "Popupmeny för tabellist" ;
+    Text [ dutch ] = "PopUp-menu voor werkbladenbalk" ;
+    Text [ spanish ] = "Menú emergente para la barra de hojas" ;
+    Text [ english_us ] = "Sheet bar pop-up menu" ;
+    Text[ chinese_simplified ] = "¹¤×÷±í¿òµÄµ¯³öÊ½²Ëµ¥";
+    Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ ïàíåëè ëèñòà";
+    Text[ polish ] = "Menu podrêczne dla paska arkusza";
+    Text[ japanese ] = "Îß¯Ìß±¯ÌßÒÆ­° ¼°ÄÊŞ°—p";
+    Text[ chinese_traditional ] = "¤u§@ªí¤u¨ã¦Cªº¥\\¯àªí";
+    Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ áÔÑíØ ÌÏæá";
+    Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá ãñáììŞ ğßíáêá";
+    Text[ korean ] = "½ÃÆ® ¹Ù ÆË¾÷¸Ş´º";
+    Text[ turkish ] = "Tablo çubuğu için popup mönü";
+    Text[ language_user1 ] = " ";
+};
+
+Menu RID_POPUP_TAB
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = FID_INS_TABLE ;
+            HelpId = FID_INS_TABLE ;
+            /* ### ACHTUNG: Neuer Text in Resource? ~Einfügen... : ~Einf³gen... */
+            Text = "~Einfügen..." ;
+            Text [ ENGLISH ] = "~Insert..." ;
+            Text [ norwegian ] = "Insert..." ;
+            Text [ italian ] = "~Inserisci..." ;
+            Text [ portuguese_brazilian ] = "~Inserir..." ;
+            Text [ portuguese ] = "~Inserir..." ;
+            Text [ finnish ] = "Lisää..." ;
+            Text [ danish ] = "~Indsæt..." ;
+            Text [ french ] = "~Insérer..." ;
+            Text [ swedish ] = "~Infoga..." ;
+            Text [ dutch ] = "~Invoegen..." ;
+            Text [ spanish ] = "~Insertar..." ;
+            Text [ english_us ] = "~Insert..." ;
+            /* ### ACHTUNG: Neuer Text in Resource? Tabelle einfügen : Tabelle einf³gen */
+            Text[ chinese_simplified ] = "²åÈë(~I)...";
+            Text[ russian ] = "Âñòàâêà...";
+            Text[ polish ] = "W~staw...";
+            Text[ japanese ] = "‘}“ü(~I)...";
+            Text[ chinese_traditional ] = "´¡¤J(~I)...";
+            Text[ arabic ] = "ÅÏÑÇÌ...";
+            Text[ greek ] = "~ÅéóáãùãŞ...";
+            Text[ korean ] = "»ğÀÔ(~I)...";
+            Text[ turkish ] = "~Ekle...";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = FID_DELETE_TABLE ;
+            HelpId = FID_DELETE_TABLE ;
+            /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
+            Text = "~Löschen..." ;
+            Text [ ENGLISH ] = "~Delete..." ;
+            Text [ norwegian ] = "Slett..." ;
+            Text [ italian ] = "Elimina..." ;
+            Text [ portuguese_brazilian ] = "Apagar..." ;
+            Text [ portuguese ] = "E~liminar..." ;
+            Text [ finnish ] = "Poista..." ;
+            Text [ danish ] = "Slet..." ;
+            Text [ french ] = "~Supprimer..." ;
+            Text [ swedish ] = "~Radera..." ;
+            Text [ dutch ] = "~Wissen..." ;
+            Text [ spanish ] = "~Eliminar..." ;
+            Text [ english_us ] = "~Delete..." ;
+            /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Tabellen löschen : Ausgewõhlte Tabellen l÷schen */
+            Text[ chinese_simplified ] = "É¾³ı(~D)...";
+            Text[ russian ] = "Óäàëèòü...";
+            Text[ polish ] = "Usuñ...";
+            Text[ japanese ] = "íœ(~D)...";
+            Text[ chinese_traditional ] = "§R°£(~D)...";
+            Text[ arabic ] = "ÍĞİ...";
+            Text[ greek ] = "Äéáãñá~öŞ...";
+            Text[ korean ] = "»èÁ¦(~D)...";
+            Text[ turkish ] = "~Sil...";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = FID_TAB_MENU_RENAME ;
+            HelpId = FID_TAB_MENU_RENAME ;
+            Text = "~Umbenennen..." ;
+            Text [ ENGLISH ] = "~Rename..." ;
+            Text [ norwegian ] = "Rename..." ;
+            Text [ italian ] = "Rinomina..." ;
+            Text [ portuguese_brazilian ] = "Rename..." ;
+            Text [ portuguese ] = "~Mudar nome..." ;
+            Text [ finnish ] = "Nimeä..." ;
+            Text [ danish ] = "Omdøb..." ;
+            Text [ french ] = "Ren~ommer..." ;
+            Text [ swedish ] = "~Byt namn..." ;
+            Text [ dutch ] = "~Naam wijzigen..." ;
+            Text [ spanish ] = "~Cambiar nombre..." ;
+            Text [ english_us ] = "~Rename..." ;
+            Text[ chinese_simplified ] = "ÖØÃüÃû(~R)...";
+            Text[ russian ] = "Ïåğåèìåíîâàòü...";
+            Text[ polish ] = "Zmieñ nazwê...";
+            Text[ japanese ] = "–¼‘O‚Ì•ÏX(~R)...";
+            Text[ chinese_traditional ] = "­«·s©R¦W(~R)...";
+            Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ...";
+            Text[ greek ] = "~Ìåôïíïìáóßá...";
+            Text[ korean ] = "ÀÌ¸§ ¹Ù²Ù±â(~R)...";
+            Text[ turkish ] = "Ye~niden adlandır...";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = FID_TAB_MOVE ;
+            HelpId = FID_TAB_MOVE ;
+            Text = "~Verschieben/kopieren..." ;
+            Text [ ENGLISH ] = "~Move/Copy..." ;
+            Text [ norwegian ] = "Move/Copy..." ;
+            Text [ italian ] = "Sposta/copia..." ;
+            Text [ portuguese_brazilian ] = "Move/Copy..." ;
+            Text [ portuguese ] = "~Mover/Copiar..." ;
+            Text [ finnish ] = "Siirrä/Kopioi..." ;
+            Text [ danish ] = "Flyt/kopier..." ;
+            Text [ french ] = "~Déplacer/Copier..." ;
+            Text [ swedish ] = "~Flytta/kopiera..." ;
+            Text [ dutch ] = "~Verplaatsen/kopiëren..." ;
+            Text [ spanish ] = "~Desplazar/Copiar..." ;
+            Text [ english_us ] = "~Move/Copy..." ;
+            Text[ chinese_simplified ] = "ÒÆ¶¯/¸´ÖÆ(~M)...";
+            Text[ russian ] = "Ïåğåìåñòèòü/ñêîïèğîâàòü...";
+            Text[ polish ] = "Przesuñ/Kopiuj...";
+            Text[ japanese ] = "ˆÚ“®/ºËß°(~M)...";
+            Text[ chinese_traditional ] = "²¾°Ê/½Æ»s(~M)...";
+            Text[ arabic ] = "ÅÒÇÍÉ/äÓÎ...";
+            Text[ greek ] = "Ìåôáêßíçóç/Á~íôéãñáöŞ...";
+            Text[ korean ] = "ÀÌµ¿/º¹»ç(~M)...";
+            Text[ turkish ] = "Taşı/kopyala...";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = FID_TAB_SELECTALL ;
+            HelpId = FID_TAB_SELECTALL ;
+            /* ### ACHTUNG: Neuer Text in Resource? Alle ~Tabellen auswählen : Alle Tabellen auswählen */
+            /* ### ACHTUNG: Neuer Text in Resource? Alle ~Tabellen auswählen : Alle Tabellen auswählen */
+            /* ### ACHTUNG: Neuer Text in Resource? Alle ~Tabellen auswählen : Alle Tabellen auswählen */
+            /* ### ACHTUNG: Neuer Text in Resource? Alle ~Tabellen auswählen : Alle ~Tabellen auswõhlen */
+            Text = "Alle ~Tabellen auswählen" ;
+            Text [ ENGLISH ] = "~Select All" ;
+            Text [ norwegian ] = "Select All" ;
+            Text [ italian ] = "Seleziona tutte le tabelle" ;
+            Text [ portuguese_brazilian ] = "Selecionar Tudo" ;
+            Text [ portuguese ] = "Seleccionar ~todas" ;
+            Text [ finnish ] = "Valitse kaikki" ;
+            Text [ danish ] = "Marker alle ark" ;
+            Text [ french ] = "Sélectionne~r toutes les feuilles" ;
+            Text [ swedish ] = "~Välj alla tabeller" ;
+            Text [ dutch ] = "~Alle werkbladen selecteren" ;
+            Text [ spanish ] = "~Seleccionar todas" ;
+            Text [ english_us ] = "Select All S~heets" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Alle Tabellen auswählen : Alle Tabellen auswõhlen */
+            Text[ chinese_simplified ] = "Ñ¡ÔñÈ«²¿¹¤×÷±í(~H)";
+            Text[ russian ] = "Âûäåëèòü âñå";
+            Text[ polish ] = "Zaznacz wszystkie arkusze";
+            Text[ japanese ] = "‚·‚×‚Ä‚Ì•\\‚ğ‘I‘ğ(~H)";
+            Text[ chinese_traditional ] = "¿ï¾Ü¥ş³¡ªº¤u§@ªí(~H)";
+            Text[ arabic ] = "ÊÍÏíÏ ßá ÇáÌÏÇæá";
+            Text[ greek ] = "ÅğéëïãŞ üëùí ôùí ~ğéíÜêùí";
+            Text[ korean ] = "ÀüÃ¼ ½ÃÆ® ¼±ÅÃ(~H)";
+            Text[ turkish ] = "Tüm tabloları seç";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+
+String RID_POPUP_PIVOT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für den Datenpilot : Popup-Men³ f³r den Datenpilot */
+    Text = "Popup-Menü für den Datenpilot" ;
+    Text [ ENGLISH ] = "Data Pilot Popup Menu" ;
+    Text [ norwegian ] = "Data Pilot Popup Menu" ;
+    Text [ italian ] = "Menu a scelta rapida DataPilot" ;
+    Text [ portuguese_brazilian ] = "Data Pilot Popup Menu" ;
+    Text [ portuguese ] = "Menu instantâneo para o piloto de dados" ;
+    Text [ french ] = "Menu Pop-Up pour le DataPilote" ;
+    Text [ dutch ] = "PopUp-menu voor DataPiloot" ;
+    Text [ spanish ] = "Menú emergente del piloto de datos" ;
+    Text [ danish ] = "Popup-menu for datapiloten" ;
+    Text [ swedish ] = "Popupmeny för datapiloten" ;
+    Text [ finnish ] = "Data Pilot Popup Menu" ;
+    Text [ english_us ] = "DataPilot pop-up menu" ;
+    Text[ chinese_simplified ] = "Êı¾İÖúÀíµ¯³öÊ½²Ëµ¥";
+    Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ ñâîäíîé òàáëèöû";
+    Text[ polish ] = "Menu podrêczne dla Pilota danych";
+    Text[ japanese ] = "Îß¯Ìß±¯ÌßÒÆ­° ÃŞ°À Êß²Û¯Ä—p";
+    Text[ chinese_traditional ] = "¸ê®Æ§U²z§ÖÅã¥\\¯àªí";
+    Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ ááãÑÔÏ ÇáÂáí ááÈíÇäÇÊ";
+    Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá ôïí ğéëüôï äåäïìİíùí";
+    Text[ korean ] = "Å×ÀÌÅÍ ÆÄÀÏ·µ ÆË¾÷¸Ş´º";
+    Text[ turkish ] = "Veri pilotu için popup mönü";
+    Text[ language_user1 ] = " ";
+};
+
+Menu RID_POPUP_PIVOT
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_OPENDLG_PIVOTTABLE ;
+            HelpId = SID_OPENDLG_PIVOTTABLE ;
+            Text = "~Aufrufen..." ;
+            Text [ ENGLISH ] = "~Run..." ;
+            Text [ norwegian ] = "~Run..." ;
+            Text [ italian ] = "A~vvia..." ;
+            Text [ portuguese_brazilian ] = "~Run..." ;
+            Text [ portuguese ] = "~Activar..." ;
+            Text [ french ] = "~Activer..." ;
+            Text [ dutch ] = "~Oproepen..." ;
+            Text [ spanish ] = "~Activar..." ;
+            Text [ danish ] = "Aktiver..." ;
+            Text [ swedish ] = "~Kör..." ;
+            Text [ finnish ] = "~Run..." ;
+            Text [ english_us ] = "~Start..." ;
+            Text[ chinese_simplified ] = "Æô¶¯(~S)...";
+            Text[ russian ] = "Âûçâàòü...";
+            Text[ polish ] = "Rozpoczynaj...";
+            Text[ japanese ] = "ŒÄ‚Ño‚·(~S)...";
+            Text[ chinese_traditional ] = "±Ò°Ê(~S)...";
+            Text[ arabic ] = "ÈÏÁ...";
+            Text[ greek ] = "Åíåñã~ïğïßçóç...";
+            Text[ korean ] = "½ÃÀÛ(~S)...";
+            Text[ turkish ] = "Başlat...";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_PIVOT_RECALC ;
+            HelpId = SID_PIVOT_RECALC ;
+            /* ### ACHTUNG: Neuer Text in Resource? A~ktualisieren : Aktualisieren */
+            /* ### ACHTUNG: Neuer Text in Resource? A~ktualisieren : Aktualisieren */
+            /* ### ACHTUNG: Neuer Text in Resource? A~ktualisieren : Aktualisieren */
+            Text = "A~ktualisieren" ;
+            Text [ ENGLISH ] = "~Update" ;
+            Text [ norwegian ] = "~Update" ;
+            Text [ italian ] = "Aggiorna" ;
+            Text [ portuguese_brazilian ] = "~Atualizar" ;
+            Text [ portuguese ] = "A~ctualizar" ;
+            Text [ finnish ] = "~Laske uudelleen" ;
+            Text [ danish ] = "Opdater" ;
+            Text [ french ] = "A~ctualiser" ;
+            Text [ swedish ] = "~Uppdatera" ;
+            Text [ dutch ] = "~Actualiseren" ;
+            Text [ spanish ] = "A~ctualizar" ;
+            Text [ english_us ] = "~Refresh" ;
+            Text[ chinese_simplified ] = "¸üĞÂ(~R)";
+            Text[ russian ] = "Îáíîâèòü";
+            Text[ polish ] = "Aktualizuj";
+            Text[ japanese ] = "XV(~R)";
+            Text[ chinese_traditional ] = "§ó·s(~R)";
+            Text[ arabic ] = "ÊÍÏíË";
+            Text[ greek ] = "Å~íçìİñùóç";
+            Text[ korean ] = "»õ·Î°íÄ§(~R)";
+            Text[ turkish ] = "Güncelle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_PIVOT_KILL ;
+            HelpId = SID_PIVOT_KILL ;
+            /* ### ACHTUNG: Neuer Text in Resource? L~öschen : Löschen */
+            /* ### ACHTUNG: Neuer Text in Resource? L~öschen : Löschen */
+            /* ### ACHTUNG: Neuer Text in Resource? L~öschen : Löschen */
+            /* ### ACHTUNG: Neuer Text in Resource? L~öschen : L~÷schen */
+            Text = "L~öschen" ;
+            Text [ ENGLISH ] = "~Delete" ;
+            Text [ norwegian ] = "~Slett" ;
+            Text [ italian ] = "Elimina" ;
+            Text [ portuguese_brazilian ] = "~Apagar" ;
+            Text [ portuguese ] = "E~liminar" ;
+            Text [ finnish ] = "~Poista" ;
+            Text [ danish ] = "Slet" ;
+            Text [ french ] = "~Supprimer" ;
+            Text [ swedish ] = "~Radera" ;
+            Text [ dutch ] = "~Wissen" ;
+            Text [ spanish ] = "~Eliminar" ;
+            Text [ english_us ] = "~Delete" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Löschen einer bestehenden Datenpilot-Tabelle : L÷schen einer bestehenden Datenpilot-Tabelle */
+            Text[ chinese_simplified ] = "É¾³ı(~D)";
+            Text[ russian ] = "Óäàëèòü";
+            Text[ polish ] = "Usuñ";
+            Text[ japanese ] = "íœ(~D)";
+            Text[ chinese_traditional ] = "§R°£(~D)";
+            Text[ arabic ] = "ÍĞİ";
+            Text[ greek ] = "Äéáãñá~öŞ";
+            Text[ korean ] = "»èÁ¦(~D)";
+            Text[ turkish ] = "~Sil";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+
+String RID_POPUP_PREVIEW
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Seitenvorschau : Popup-Men³ f³r Seitenvorschau */
+    Text = "Popup-Menü für Seitenvorschau" ;
+    Text [ ENGLISH ] = "Page Preview Popup Menu" ;
+    Text [ norwegian ] = "Page Preview Popup Menu" ;
+    Text [ italian ] = "Menu di scelta rapida per l'anteprima pagina" ;
+    Text [ portuguese_brazilian ] = "Page Preview Popup Menu" ;
+    Text [ portuguese ] = "Menu instantâneo para visualizar página" ;
+    Text [ finnish ] = "Page Preview Popup Menu" ;
+    Text [ danish ] = "Popup-menu for sidevisning" ;
+    Text [ french ] = "Menu Pop-Up pour l'aperçu de page" ;
+    Text [ swedish ] = "Popupmeny för sidförhandsvisning" ;
+    Text [ dutch ] = "PopUp-menu voor paginavoorbeeld" ;
+    Text [ spanish ] = "Menú para previsualización" ;
+    Text [ english_us ] = "Page Preview pop-up menu" ;
+    Text[ chinese_simplified ] = "Ò³ÃæÔ¤ÊÓµ¯³öÊ½²Ëµ¥";
+    Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ ïğåäâàğèòåëüíîãî ïğîñìîòğà ñòğàíèöû";
+    Text[ polish ] = "Menu podrêczne dla podgl¹du stron";
+    Text[ japanese ] = "Îß¯Ìß±¯ÌÒÆ­°  Íß°¼ŞÌßÚËŞ­°";
+    Text[ chinese_traditional ] = "­¶­±ÀËµø¥\\¯àªí";
+    Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ áãÚÇíäÉ ÇáÕİÍÉ";
+    Text[ greek ] = "Áíáäõüìåíï ìåíïı ğñïåğéóêüğçóçò óåëßäáò";
+    Text[ korean ] = "ÆäÀÌÁö ¹Ì¸®º¸±â ÆË¾÷¸Ş´º";
+    Text[ turkish ] = "Sayfa önizlemesi için popup mönü";
+    Text[ language_user1 ] = " ";
+};
+
+Menu RID_POPUP_PREVIEW
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_PREVIEW_PREVIOUS ;
+            HelpId = SID_PREVIEW_PREVIOUS ;
+            Text = "~Vorhergehende Seite" ;
+            Text [ ENGLISH ] = "~Previous page" ;
+            Text [ norwegian ] = "Forrige side" ;
+            Text [ italian ] = "Pagina ~precedente" ;
+            Text [ portuguese_brazilian ] = "Anterior página" ;
+            Text [ portuguese ] = "Página ~anterior" ;
+            Text [ finnish ] = "Previous page" ;
+            Text [ danish ] = "Forrige side" ;
+            Text [ french ] = "~Page précédente" ;
+            Text [ swedish ] = "~Föregående sida" ;
+            Text [ dutch ] = "Vo~rige pagina" ;
+            Text [ spanish ] = "Página ~anterior" ;
+            Text [ english_us ] = "~Previous Page" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Auf die vorhergehende Seite blättern : Auf die vorhergehende Seite blõttern */
+            Text[ chinese_simplified ] = "ÉÏÒ»Ò³(~P)";
+            Text[ russian ] = "Ïğåäûäóùàÿ ñòğàíèöà";
+            Text[ polish ] = "Poprzednia strona";
+            Text[ japanese ] = "‘O‚ÌÍß°¼Ş(~P)";
+            Text[ chinese_traditional ] = "¤W¤@­¶(~P)";
+            Text[ arabic ] = "ÇáÕİÍÉ ÇáÓÇÈŞÉ";
+            Text[ greek ] = "Ğ~ñïçãïıìåíç óåëßäá";
+            Text[ korean ] = "ÀÌÀü ÆäÀÌÁö(~P)";
+            Text[ turkish ] = "Önceki sayfa";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_PREVIEW_NEXT ;
+            HelpId = SID_PREVIEW_NEXT ;
+            /* ### ACHTUNG: Neuer Text in Resource? ~Nächste Seite : ~Nõchste Seite */
+            Text = "~Nächste Seite" ;
+            Text [ ENGLISH ] = "~Next page" ;
+            Text [ norwegian ] = "Neste side" ;
+            Text [ italian ] = "Pagina successiva" ;
+            Text [ portuguese_brazilian ] = "Próxima página" ;
+            Text [ portuguese ] = "Página ~seguinte" ;
+            Text [ finnish ] = "Next page" ;
+            Text [ danish ] = "Næste side" ;
+            Text [ french ] = "Page ~suivante" ;
+            Text [ swedish ] = "~Nästa sida" ;
+            Text [ dutch ] = "Vo~lgende pagina" ;
+            Text [ spanish ] = "~Página siguiente" ;
+            Text [ english_us ] = "~Next Page" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Auf die nächste Seite blättern : Auf die nõchste Seite blõttern */
+            Text[ chinese_simplified ] = "ÏÂÒ»Ò³(~N)";
+            Text[ russian ] = "Ñëåäóşùàÿ ñòğàíèöà";
+            Text[ polish ] = "Nastêpna strona";
+            Text[ japanese ] = "Ÿ‚ÌÍß°¼Ş(~N)";
+            Text[ chinese_traditional ] = "¤U¤@­¶(~N)";
+            Text[ arabic ] = "ÇáÕİÍÉ ÇáÊÇáíÉ";
+            Text[ greek ] = "Åğüìå~íç óåëßäá";
+            Text[ korean ] = "´ÙÀ½ÆäÀÌÁö(~N)";
+            Text[ turkish ] = "Sonraki sayfa";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_FORMATPAGE ;
+            HelpId = SID_FORMATPAGE ;
+            /* ### ACHTUNG: Neuer Text in Resource? Seiten~layout... : Seitenlayout... */
+            /* ### ACHTUNG: Neuer Text in Resource? Seiten~layout... : Seitenlayout... */
+            /* ### ACHTUNG: Neuer Text in Resource? Seiten~layout... : Seitenlayout... */
+            Text = "Seiten~layout..." ;
+            Text [ ENGLISH ] = "Page ~layout..." ;
+            Text [ norwegian ] = "Page layout..." ;
+            Text [ italian ] = "Layout di pagina..." ;
+            Text [ portuguese_brazilian ] = "Page layout..." ;
+            Text [ portuguese ] = "Configurar ~página..." ;
+            Text [ finnish ] = "Page layout..." ;
+            Text [ danish ] = "Sidelayout..." ;
+            Text [ french ] = "~Mise en page..." ;
+            Text [ swedish ] = "Sid~layout..." ;
+            Text [ dutch ] = "~Pagina-lay-out..." ;
+            Text [ spanish ] = "~Diseño de página..." ;
+            Text [ english_us ] = "Pa~ge Layout..." ;
+            Text[ chinese_simplified ] = "Ò³Ãæ°æÊ½(~G)...";
+            Text[ russian ] = "Ğàçìåòêà ñòğàíèöû...";
+            Text[ polish ] = "Uk³ad strony...";
+            Text[ japanese ] = "Íß°¼Ş Ú²±³Ä(~G)...";
+            Text[ chinese_traditional ] = "­¶­±ª©¦¡(~G)...";
+            Text[ arabic ] = "ÊÎØíØ ÇáÕİÍÉ...";
+            Text[ greek ] = "ÄéÜô~áîç óåëßäáò...";
+            Text[ korean ] = "ÆäÀÌÁö ¸ğ¾ç(~G)...";
+            Text[ turkish ] = "Sayfa düzeni...";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_CLOSEWIN ;
+            HelpId = SID_CLOSEWIN ;
+            /* ### ACHTUNG: Neuer Text in Resource? ~Schließen : ~Schlie˜en */
+            Text = "~Schließen" ;
+            Text [ ENGLISH ] = "~Close" ;
+            Text [ norwegian ] = "Lukk" ;
+            Text [ italian ] = "Chiudi" ;
+            Text [ portuguese_brazilian ] = "Fechar" ;
+            Text [ portuguese ] = "~Fechar" ;
+            Text [ finnish ] = "Sulje" ;
+            Text [ danish ] = "~Luk" ;
+            Text [ french ] = "~Fermer" ;
+            Text [ swedish ] = "~Stäng" ;
+            Text [ dutch ] = "~Sluiten" ;
+            Text [ spanish ] = "~Cerrar" ;
+            Text [ english_us ] = "~Close" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Seitenvorschau schließen : Seitenvorschau schlie˜en */
+            Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
+            Text[ russian ] = "Çàêğûòü";
+            Text[ polish ] = "Zamknij";
+            Text[ japanese ] = "•Â‚¶‚é(~C)";
+            Text[ chinese_traditional ] = "Ãö³¬(~C)";
+            Text[ arabic ] = "ÅÛáÇŞ";
+            Text[ greek ] = "Êëåß~óéìï";
+            Text[ korean ] = "´İ±â(~C)";
+            Text[ turkish ] = "Kapa~t";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+
+
+String RID_POPUP_EDIT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Texteingabe : Popup-Men³ f³r Texteingabe */
+    Text = "Popup-Menü für Texteingabe" ;
+    Text [ ENGLISH ] = "Text Edit Popup Menu" ;
+    Text [ english_us ] = "Text Input pop-up menu" ;
+    Text [ italian ] = "Menu a tendina per l'introduzione del testo" ;
+    Text [ spanish ] = "Menú emergente para entrada de texto" ;
+    Text [ french ] = "Menu Pop-Up pour la saisie de texte" ;
+    Text [ dutch ] = "PopUp-menu voor tekstinvoer" ;
+    Text [ swedish ] = "Popupmeny för textinmatning" ;
+    Text [ danish ] = "Popup-menu for tekstinput" ;
+    Text [ portuguese ] = "Menu instantâneo para inserção de texto" ;
+    Text [ portuguese_brazilian ] = "Popup-Menü für Texteingabe" ;
+    Text[ chinese_simplified ] = "×Ö¶ÎÇøµ¯³öÊ½²Ëµ¥";
+    Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ ââîäà òåêñòà";
+    Text[ polish ] = "Menu podrêczne dla wprowadzenia tekstu";
+    Text[ japanese ] = "Îß¯Ìß±¯ÌßÒÆ­° Ã·½Ä“ü—Í—p";
+    Text[ chinese_traditional ] = "Äæ¦ì°Ï¥\\¯àªí";
+    Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ áÅÏÎÇá ÇáäÕ";
+    Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá åéóáãùãŞ êåéìİíïõ";
+    Text[ korean ] = "ÅØ½ºÆ®ÀÔ·Â ÆË¾÷¸Ş´º";
+    Text[ turkish ] = "Metin girişi için popup mönü";
+    Text[ language_user1 ] = " ";
+};
+
+Menu RID_POPUP_EDIT
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_CELL_FORMAT_RESET ;
+            HelpId = SID_CELL_FORMAT_RESET ;
+            /* ### ACHTUNG: Neuer Text in Resource? Standar~d : Standard */
+            /* ### ACHTUNG: Neuer Text in Resource? Standar~d : Standard */
+            /* ### ACHTUNG: Neuer Text in Resource? Standar~d : Standard */
+            Text = "Standar~d" ;
+            Text [ ENGLISH ] = "Standar~d" ;
+            Text [ dutch ] = "~Standaard" ;
+            Text [ english_us ] = "~Default" ;
+            Text [ italian ] = "Standar~d" ;
+            Text [ spanish ] = "~Predeterminado" ;
+            Text [ french ] = "~Par défaut" ;
+            Text [ swedish ] = "Standar~d" ;
+            Text [ danish ] = "Standar~d" ;
+            Text [ portuguese_brazilian ] = "Standar~d" ;
+            Text [ portuguese ] = "~Padrão" ;
+            Text[ chinese_simplified ] = "±ê×¼(~D)";
+            Text[ russian ] = "~Ïî óìîë÷àíèş";
+            Text[ polish ] = "~Domyœlnie";
+            Text[ japanese ] = "•W€(~D)";
+            Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";
+            Text[ arabic ] = "~ŞíÇÓí";
+            Text[ greek ] = "~ĞñïåğéëïãŞ";
+            Text[ korean ] = "±âº»°ª(~D)";
+            Text[ turkish ] = "~Standart";
+            Text[ language_user1 ] = " ";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem // Menu-Controller
+         // Menu-Controller
+         // Menu-Controller
+         // Menu-Controller
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONT
+        };
+        MenuItem // Menu-Controller
+         // Menu-Controller
+         // Menu-Controller
+         // Menu-Controller
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONTHEIGHT
+        };
+        MenuItem
+        {
+            Text = "Sti~l" ;
+            Text [ English ] = "~Style" ;
+            Text [ norwegian ] = "Mal" ;
+            Text [ italian ] = "Stile" ;
+            Text [ portuguese_brazilian ] = "Estilo" ;
+            Text [ portuguese ] = "Estilo" ;
+            Text [ finnish ] = "Tyyli" ;
+            Text [ danish ] = "Typografi" ;
+            Text [ french ] = "Style" ;
+            Text [ swedish ] = "Format" ;
+            Text [ dutch ] = "Opmaakstijl" ;
+            Text [ spanish ] = "Estilo" ;
+            Text [ english_us ] = "Style" ;
+            Identifier = RID_MN_FORMAT_STYLE ;
+            HelpID = RID_MN_FORMAT_STYLE ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        ITEM_FORMAT_ATTR_CHAR_WEIGHT
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_ATTR_CHAR_POSTURE
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_ATTR_CHAR_UNDERLINE
+                    };
+                    MenuItem
+                    {
+                        Text = "Do~ppelt unterstreichen" ;
+                        Text [ English ] = "~Double Underline" ;
+                        Identifier = SID_ULINE_VAL_DOUBLE ;
+                        HelpID = SID_ULINE_VAL_DOUBLE ;
+                        Text [ english_us ] = "Do~uble Underline" ;
+                        Text [ portuguese_brazilian ] = "Do~ppelt unterstreichen" ;
+                        Text = "Do~ppelt unterstreichen" ;
+                        Text [ swedish ] = "Du~bbel understrykning" ;
+                        Text [ danish ] = "Dobbelt understreget" ;
+                        Text [ italian ] = "Doppia sottolineatura" ;
+                        Text [ spanish ] = "Subrayado ~doble" ;
+                        Text [ french ] = "S~oulignage double" ;
+                        Text [ dutch ] = "Du~bbel onderstrepen" ;
+                        Text [ portuguese ] = "Sublinhado ~duplo" ;
+                        Text[ chinese_simplified ] = "Ë«ÏÂ»®Ïß(~U)";
+                        Text[ russian ] = "Äâîéíîå ïîä÷åğêèâàíèå";
+                        Text[ polish ] = "Podwójne podkreœlenie";
+                        Text[ japanese ] = "“ñd‰ºü(~U)";
+                        Text[ chinese_traditional ] = "Âù¤U¹º½u(~U)";
+                        Text[ arabic ] = "ÊÍÊå ÎØ ãÒÏæÌ";
+                        Text[ greek ] = "Äé~ğëŞ õğïãñÜììéóç";
+                        Text[ korean ] = "ÀÌÁß ¹ØÁÙ(~U)";
+                        Text[ turkish ] = "Altını çift çiz";
+                        Text[ language_user1 ] = " ";
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_ATTR_CHAR_STRIKEOUT
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_ATTR_CHAR_SHADOWED
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_ATTR_CHAR_CONTOUR
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_SET_SUPER_SCRIPT ;
+                        HelpID = SID_SET_SUPER_SCRIPT ;
+                        Text = "~Hochstellen" ;
+                        Text [ English ] = "Superscript" ;
+                        Text [ norwegian ] = "Superskript" ;
+                        Text [ italian ] = "Apice" ;
+                        Text [ portuguese_brazilian ] = "Sobrescrito" ;
+                        Text [ portuguese ] = "~Superior à linha" ;
+                        Text [ finnish ] = "Yläindeksi" ;
+                        Text [ danish ] = "Hævet" ;
+                        Text [ french ] = "E~xposant" ;
+                        Text [ swedish ] = "~Upphöjt" ;
+                        Text [ dutch ] = "S~uperscript" ;
+                        Text [ spanish ] = "~Superíndice" ;
+                        Text [ english_us ] = "S~uperscript" ;
+                        Text[ chinese_simplified ] = "ÉÏ±ê(~U)";
+                        Text[ russian ] = "Âåğõíèé èíäåêñ";
+                        Text[ polish ] = "Indeks górny";
+                        Text[ japanese ] = "ã•t‚«•¶š(~U)";
+                        Text[ chinese_traditional ] = "¤W¼Ğ(~U)";
+                        Text[ arabic ] = "ãÑÊİÚ";
+                        Text[ greek ] = "Åêèİô~çò";
+                        Text[ korean ] = "À­ Ã·ÀÚ(~U)";
+                        Text[ turkish ] = "Üst simge";
+                        Text[ language_user1 ] = " ";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_SET_SUB_SCRIPT ;
+                        HelpID = SID_SET_SUB_SCRIPT ;
+                        Text = "~Tiefstellen" ;
+                        Text [ English ] = "Subscript" ;
+                        Text [ norwegian ] = "Subskript" ;
+                        Text [ italian ] = "Pedice" ;
+                        Text [ portuguese_brazilian ] = "Subscrito" ;
+                        Text [ portuguese ] = "~Inferior à linha" ;
+                        Text [ finnish ] = "Alaindeksi" ;
+                        Text [ danish ] = "Sænket" ;
+                        Text [ french ] = "I~ndice" ;
+                        Text [ swedish ] = "~Nedsänkt" ;
+                        Text [ dutch ] = "Su~bscript" ;
+                        Text [ spanish ] = "~Subíndice" ;
+                        Text [ english_us ] = "Su~bscript" ;
+                        Text[ chinese_simplified ] = "ÏÂ±ê(~B)";
+                        Text[ russian ] = "Íèæíèé èíäåêñ";
+                        Text[ polish ] = "Indeks dolny";
+                        Text[ japanese ] = "‰º•t‚«•¶š(~B)";
+                        Text[ chinese_traditional ] = "¤U¼Ğ(~B)";
+                        Text[ arabic ] = "ãäÎİÖ";
+                        Text[ greek ] = "Äåßê~ôçò";
+                        Text[ korean ] = "¾Æ·¡ Ã·ÀÚ(~B)";
+                        Text[ turkish ] = "Alt simge";
+                        Text[ language_user1 ] = " ";
+                    };
+                };
+            };
+                    Text[ italian ] = "Stile";
+            Text[ portuguese_brazilian ] = "Estilo";
+            Text[ portuguese ] = "E~stilo";
+            Text[ danish ] = "Typografi";
+            Text[ french ] = "St~yle";
+            Text[ swedish ] = "Sti~l";
+            Text[ dutch ] = "T~ype";
+            Text[ spanish ] = "~Estilo";
+            Text[ english_us ] = "St~yle";
+    Text[ chinese_simplified ] = "Ê½Ñù(~Y)";
+            Text[ russian ] = "Ñòèëü";
+            Text[ polish ] = "Styl";
+            Text[ japanese ] = "½À²Ù(~Y)";
+            Text[ chinese_traditional ] = "¼Ë¦¡(~Y)";
+            Text[ arabic ] = "ÇáäãØ";
+            Text[ greek ] = "Óôõ~ë";
+            Text[ korean ] = "À¯Çü(~Y)";
+            Text[ turkish ] = "Biçim";
+            Text[ language_user1 ] = " ";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            ITEM_FORMAT_CHAR_DLG
+        };
+    };
+};
+
+String RID_POPUP_AUDIT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Detektiv-Füll-Modus : Popup-Men³ f³r Detektiv-F³ll-Modus */
+    Text = "Popup-Menü für Detektiv-Füll-Modus" ;
+    Text [ ENGLISH ] = "Auditing Fill Mode Popup Menu" ;
+    Text [ english_us ] = "Detective Fill Mode pop-up menu" ;
+    Text [ italian ] = "Menu a tendina per il modo di riempimento detective" ;
+    Text [ spanish ] = "Menú emergente para el modo Detective de relleno" ;
+    Text [ french ] = "Menu Pop-Up du mode Remplissage d'audit" ;
+    Text [ dutch ] = "PopUp-menu voor verkenner-opvul-modus" ;
+    Text [ swedish ] = "Popupmeny för detektiv-fyllningsläge" ;
+    Text [ danish ] = "Popup-menu for detektiv fyldmodus" ;
+    Text [ portuguese_brazilian ] = "Popup-Menü für Detektiv-Füll-Modus" ;
+    Text [ portuguese ] = "Menu instantâneo para o modo preenchimento de auditoria" ;
+    Text[ chinese_simplified ] = "ÕìÌ½-³äÌî-µ¯³öÊ½²Ëµ¥";
+    Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ ğåæèìà çàëèâêè çàâèñèìîñòè";
+    Text[ polish ] = "Menu podrêczne dla trybu wype³niania detektywa";
+    Text[ japanese ] = "’T’m —šsÓ°ÄŞ—pÎß¯Ìß±¯ÌßÒÆ­°";
+    Text[ chinese_traditional ] = "°»±´-¥R¶ñ-¥\\¯àªí";
+    Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ áæÖÚ ÊÚÈÆÉ ÇáãÎÈÑ";
+    Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá ôçí êáôÜóôáóç ãåìßóìáôïò ôïõ áíé÷íåõôŞ";
+    Text[ korean ] = "Ã¤¿ì±â ¸ğµåÃßÀû ÆË¾÷¸Ş´º";
+    Text[ turkish ] = "Doldurma kipi (dedektif) için popup mönü";
+    Text[ language_user1 ] = " ";
+};
+
+Menu RID_POPUP_AUDIT
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_FILL_ADD_PRED ;
+            HelpId = SID_FILL_ADD_PRED ;
+            /* ### ACHTUNG: Neuer Text in Resource? Spur zum ~Vorgänger : Spur zum Vorgänger */
+            /* ### ACHTUNG: Neuer Text in Resource? Spur zum ~Vorgänger : Spur zum Vorgänger */
+            /* ### ACHTUNG: Neuer Text in Resource? Spur zum ~Vorgänger : Spur zum Vorgänger */
+            /* ### ACHTUNG: Neuer Text in Resource? Spur zum ~Vorgänger : Spur zum ~Vorgõnger */
+            Text = "Spur zum ~Vorgänger" ;
+            Text [ ENGLISH ] = "Trace ~Predescessor" ;
+            Text [ norwegian ] = "Trace Predescessor" ;
+            Text [ italian ] = "Individua ~precedenti" ;
+            Text [ portuguese_brazilian ] = "Traçar Predecessor" ;
+            Text [ portuguese ] = "Analisar ~precedentes" ;
+            Text [ finnish ] = "Etsi edeltäjä" ;
+            Text [ danish ] = "Spor overordnede" ;
+            Text [ french ] = "Repérer les ~antécédents" ;
+            Text [ swedish ] = "Spår till ~föregångare" ;
+            Text [ dutch ] = "Spoor naar ~voorganger" ;
+            Text [ spanish ] = "Rastrear ~precedentes" ;
+            Text [ english_us ] = "Trace ~Precedent" ;
+            Text[ chinese_simplified ] = "ÏòÇ°µÄ×·×Ù¼ıÍ·(~P)";
+            Text[ russian ] = "Âëèÿşùèå ÿ÷åéêè";
+            Text[ polish ] = "ŒledŸ poprzedniki";
+            Text[ japanese ] = "QÆŒ³ÄÚ°½(~P)";
+            Text[ chinese_traditional ] = "Àx¦s®æ«e¾É°Ñ·Ó(~P)";
+            Text[ arabic ] = "ÊÊÈÚ ÃËÑ ÇáÓÇÈŞ";
+            Text[ greek ] = "º÷íïò ğñïçãïıìåíï~õ";
+            Text[ korean ] = "¼±·Ê ÃßÀû(~P)";
+            Text[ turkish ] = "Öncekini izle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_FILL_DEL_PRED ;
+            HelpId = SID_FILL_DEL_PRED ;
+            /* ### ACHTUNG: Neuer Text in Resource? Spur zum Vorgänger ~entfernen : Spur zum Vorgänger entfernen */
+            /* ### ACHTUNG: Neuer Text in Resource? Spur zum Vorgänger ~entfernen : Spur zum Vorgänger entfernen */
+            /* ### ACHTUNG: Neuer Text in Resource? Spur zum Vorgänger ~entfernen : Spur zum Vorgänger entfernen */
+            /* ### ACHTUNG: Neuer Text in Resource? Spur zum Vorgänger ~entfernen : Spur zum Vorgõnger ~entfernen */
+            Text = "Spur zum Vorgänger ~entfernen" ;
+            Text [ ENGLISH ] = "~Remove Predescessor" ;
+            Text [ norwegian ] = "Remove Predescessor" ;
+            Text [ italian ] = "Rimuovi traccia sul precedente" ;
+            Text [ portuguese_brazilian ] = "Remover Predecessor" ;
+            Text [ portuguese ] = "Remover pr~ecedentes" ;
+            Text [ finnish ] = "Poista edeltäjä" ;
+            Text [ danish ] = "Fjern overordnede pile" ;
+            Text [ french ] = "~Supprimer le repérage des antécédents" ;
+            Text [ swedish ] = "Ta bort spår till ~föregångaren" ;
+            Text [ dutch ] = "Spoor naar voorganger v~erwijderen" ;
+            Text [ spanish ] = "~Eliminar rastro a precedente" ;
+            Text [ english_us ] = "~Remove Precedent" ;
+            Text[ chinese_simplified ] = "É¾³ıÏòÇ°µÄ×·×Ù¼ıÍ·(~R)";
+            Text[ russian ] = "Óäàëèòü âëèÿşùèå ÿ÷åéêè";
+            Text[ polish ] = "Usuñ strza³ki poprzedników";
+            Text[ japanese ] = "QÆŒ³ÄÚ°½‚Ìíœ(~R)";
+            Text[ chinese_traditional ] = "§R°£Àx¦s®æ«e¾É°Ñ·Ó(~R)";
+            Text[ arabic ] = "ãÍæ ÃËÑ ÇáÓÇÈŞ";
+            Text[ greek ] = "ÊáôÜñãçóç ß÷íïõò ğñïçãïıì~åíïõ";
+            Text[ korean ] = "¼±·Ê »èÁ¦(~R)";
+            Text[ turkish ] = "Öncekinin izini sil";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_FILL_ADD_SUCC ;
+            HelpId = SID_FILL_ADD_SUCC ;
+            /* ### ACHTUNG: Neuer Text in Resource? Spur zum ~Nachfolger : Spur zum Nachfolger */
+            /* ### ACHTUNG: Neuer Text in Resource? Spur zum ~Nachfolger : Spur zum Nachfolger */
+            /* ### ACHTUNG: Neuer Text in Resource? Spur zum ~Nachfolger : Spur zum Nachfolger */
+            Text = "Spur zum ~Nachfolger" ;
+            Text [ ENGLISH ] = "Trace ~Successor" ;
+            Text [ norwegian ] = "Trace Successor" ;
+            Text [ italian ] = "Individua dipendenti" ;
+            Text [ portuguese_brazilian ] = "Traçar Sucessor" ;
+            Text [ portuguese ] = "Analisar ~dependentes" ;
+            Text [ finnish ] = "Etsi seuraaja" ;
+            Text [ danish ] = "Spor underordnede" ;
+            Text [ french ] = "R~epérer les dépendants" ;
+            Text [ swedish ] = "Spår till ~efterträdaren" ;
+            Text [ dutch ] = "Spoor naar ~opvolger" ;
+            Text [ spanish ] = "Rastrear ~dependientes" ;
+            Text [ english_us ] = "~Trace Dependent" ;
+            Text[ chinese_simplified ] = "ÏòºóµÄ×·×Ù¼ıÍ·(~T)";
+            Text[ russian ] = "Çàâèñèìûå ÿ÷åéêè";
+            Text[ polish ] = "ŒledŸ zale¿noœci";
+            Text[ japanese ] = "QÆæÄÚ°½(~T)";
+            Text[ chinese_traditional ] = "Àx¦s®æ±qÄİ°Ñ·Ó(~T)";
+            Text[ arabic ] = "ÊÊÈÚ ÃËÑ ÇááÇÍŞ";
+            Text[ greek ] = "º÷íïò ğñïò ôï åğüìå~íï";
+            Text[ korean ] = "Á¾¼Ó ÃßÀû(~T)";
+            Text[ turkish ] = "Sonrakinin izini sil";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_FILL_DEL_SUCC ;
+            HelpId = SID_FILL_DEL_SUCC ;
+            /* ### ACHTUNG: Neuer Text in Resource? Spur zum Nachfolger ent~fernen : Spur zum Nachfolger entfernen */
+            /* ### ACHTUNG: Neuer Text in Resource? Spur zum Nachfolger ent~fernen : Spur zum Nachfolger entfernen */
+            /* ### ACHTUNG: Neuer Text in Resource? Spur zum Nachfolger ent~fernen : Spur zum Nachfolger entfernen */
+            Text = "Spur zum Nachfolger ent~fernen" ;
+            Text [ ENGLISH ] = "R~emove Successor" ;
+            Text [ norwegian ] = "Remove Successor" ;
+            Text [ italian ] = "Rimuovi freccia sul dipendente" ;
+            Text [ portuguese_brazilian ] = "Remover Sucessor" ;
+            Text [ portuguese ] = "Remover depe~ndentes" ;
+            Text [ finnish ] = "Poista seuraaja" ;
+            Text [ danish ] = "Fjern underordnede pile" ;
+            Text [ french ] = "~Supprimer repérage des dépendants" ;
+            Text [ swedish ] = "Ta bort spår till ~efterträdaren" ;
+            Text [ dutch ] = "Spoor naar opvolger ve~rwijderen" ;
+            Text [ spanish ] = "~Eliminar rastro a dependiente" ;
+            Text [ english_us ] = "Remove Dependent" ;
+            Text[ chinese_simplified ] = "É¾³ıÏòºóµÄ×·×Ù¼ıÍ·";
+            Text[ russian ] = "Óäàëèòü çàâèñèìûå ÿ÷åéêè";
+            Text[ polish ] = "Usuñ strza³ki zale¿noœci";
+            Text[ japanese ] = "QÆæ‚Ì‰ğœ";
+            Text[ chinese_traditional ] = "§R°£Àx¦s®æ±qÄİ°Ñ·Ó";
+            Text[ arabic ] = "ãÍæ ÃËÑ ÇááÇÍŞ";
+            Text[ greek ] = "Äéáãñá~öŞ ß÷íïõò ğñïò ôï åğüìåíï";
+            Text[ korean ] = "Á¾¼Ó Á¦°Å";
+            Text[ turkish ] = "Sonrakinin izini sil";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_DETECTIVE_DEL_ALL ;
+            HelpId = SID_DETECTIVE_DEL_ALL ;
+            Text = "~Alle Spuren entfernen" ;
+            Text [ ENGLISH ] = "Remove ~all Traces" ;
+            Text [ norwegian ] = "Remove all Traces" ;
+            Text [ italian ] = "Rimuovi tutte le evidenziazioni" ;
+            Text [ portuguese_brazilian ] = "Remover todos os Traços" ;
+            Text [ portuguese ] = "Remover ~todas as setas" ;
+            Text [ finnish ] = "Poista merkinnät" ;
+            Text [ danish ] = "Fjern alle pile" ;
+            Text [ french ] = "S~upprimer tous les repères" ;
+            Text [ swedish ] = "Ta bort ~alla spår" ;
+            Text [ dutch ] = "~Alle sporen verwijderen" ;
+            Text [ spanish ] = "Eliminar ~todos los rastros" ;
+            Text [ english_us ] = "Remove ~All Traces" ;
+            Text[ chinese_simplified ] = "É¾³ıÈ«²¿µÄ×·×Ù¼ıÍ·(~A)";
+            Text[ russian ] = "Óáğàòü âñå ñòğåëêè";
+            Text[ polish ] = "Usuñ wszystkie strza³ki";
+            Text[ japanese ] = "‚·‚×‚Ä‚ÌÄÚ°½‚ğ‰ğœ(~A)";
+            Text[ chinese_traditional ] = "§R°£¥ş³¡ªº°lÂÜ½b¸¹(~A)";
+            Text[ arabic ] = "ãÍæ ßá ÇáÂËÇÑ";
+            Text[ greek ] = "Äé~áãñáöŞ üëùí ôùí é÷íşí";
+            Text[ korean ] = "¸ğµç ÃßÀû Á¦°Å(~A)";
+            Text[ turkish ] = "Tüm izleri kaldır";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_FILL_NONE ;
+            HelpId = SID_FILL_NONE ;
+            /* ### ACHTUNG: Neuer Text in Resource? Füll-Modus ~beenden : Füll-Modus beenden */
+            /* ### ACHTUNG: Neuer Text in Resource? Füll-Modus ~beenden : Füll-Modus beenden */
+            /* ### ACHTUNG: Neuer Text in Resource? Füll-Modus ~beenden : Füll-Modus beenden */
+            /* ### ACHTUNG: Neuer Text in Resource? Füll-Modus ~beenden : F³ll-Modus ~beenden */
+            Text = "Füll-Modus ~beenden" ;
+            Text [ ENGLISH ] = "End Fill ~Mode" ;
+            Text [ english_us ] = "Exit Fill Mode" ;
+            Text [ italian ] = "Termina modo riempimento" ;
+            Text [ spanish ] = "~Salir del modo de relleno" ;
+            Text [ french ] = "Quitter le mode ~Remplissage" ;
+            Text [ dutch ] = "Opvulmodus ~beëindigen" ;
+            Text [ swedish ] = "~Avsluta fyllningsläget" ;
+            Text [ danish ] = "Afslut fyldmodus" ;
+            Text [ portuguese_brazilian ] = "Füll-Modus ~beenden" ;
+            Text [ portuguese ] = "~Sair do modo de preenchimento" ;
+            Text[ chinese_simplified ] = "½áÊø³äÌîÄ£Ê½(~F)";
+            Text[ russian ] = "Çàêîí÷èòü ğåæèì çàëèâêè";
+            Text[ polish ] = "Zakoñcz tryb wype³niania";
+            Text[ japanese ] = "ÀsÓ°ÄŞ‚ÌI—¹";
+            Text[ chinese_traditional ] = "µ²§ô¥R¶ñ¼Ò¦¡(~F)";
+            Text[ arabic ] = "ÅäåÇÁ æÖÚ ÇáÊÚÈÆÉ";
+            Text[ greek ] = "~Ôåñìáôéóìüò êáôÜóôáóçò ãåìßóìáôïò";
+            Text[ korean ] = "Ã¤¿ì±â ¸ğµå Á¾·á";
+            Text[ turkish ] = "Doldurma kipinden çık";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+
+String RID_POPUP_PAGEBREAK
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Seitenumbruch-Vorschau : Popup-Men³ f³r Seitenumbruch-Vorschau */
+    Text = "Popup-Menü für Seitenumbruch-Vorschau" ;
+    Text [ ENGLISH ] = "Page Break Preview Popup Menu" ;
+    Text [ portuguese ] = "Menu instantâneo para visualizar quebras de página" ;
+    Text [ english_us ] = "Page Break Preview pop-up menu" ;
+    Text [ portuguese_brazilian ] = "Popup-Menü für Seitenumbruch-Vorschau" ;
+    Text [ swedish ] = "Popupmeny för förhandsvisning av sidbrytning" ;
+    Text [ danish ] = "Popup-menu for sideskiftsvisning" ;
+    Text [ italian ] = "Menu a tendina per l'anteprima dell'impaginazione" ;
+    Text [ spanish ] = "Menú emergente para previsualización de saltos de página" ;
+    Text [ french ] = "Menu Pop-Up pour l'aperçu des sauts de page" ;
+    Text [ dutch ] = "Popup-menu voor voorbeeld van paginaeinde" ;
+    Text[ chinese_simplified ] = "Ò³ÃæÔ¤ÊÓµÄµ¯³öÊ½²Ëµ¥";
+    Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ ïğåäâàğèòåëüíîãî ïğîñìîòğà ğàçğûâà ñòğàíèö";
+    Text[ polish ] = "Menu podrêczne dla podgl¹du ³amania strony";
+    Text[ japanese ] = "Îß¯Ìß±¯ÌßÒÆ­° ‰üÍß°¼ŞÌßÚËŞ­°—p";
+    Text[ chinese_traditional ] = "­¶­±ÀËµø¥\\¯àªí";
+    Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ áãÚÇíäÉ İæÇÕá ÇáÕİÍÇÊ";
+    Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá ğñïåğéóêüğçóç áëëáãŞò óåëßäáò";
+    Text[ korean ] = "ÆäÀÌÁö ³ª´® ¹Ì¸®º¸±â ÆË¾÷¿¡´º";
+    Text[ turkish ] = "Sayfa sonu önizlemesi için popup mönü";
+    Text[ language_user1 ] = " ";
+};
+
+Menu RID_POPUP_PAGEBREAK
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_CELL_FORMAT_RESET ;
+            HelpId = SID_CELL_FORMAT_RESET ;
+            Text = "Standar~d" ;
+            Text [ ENGLISH ] = "Standar~d" ;
+            Text [ dutch ] = "~Standaard" ;
+            Text [ english_us ] = "~Default" ;
+            Text [ italian ] = "Standar~d" ;
+            Text [ spanish ] = "~Predeterminado" ;
+            Text [ french ] = "~Par défaut" ;
+            Text [ swedish ] = "Standar~d" ;
+            Text [ danish ] = "Standar~d" ;
+            Text [ portuguese_brazilian ] = "Standar~d" ;
+            Text [ portuguese ] = "~Padrão" ;
+            Text[ chinese_simplified ] = "±ê×¼(~D)";
+            Text[ russian ] = "~Ïî óìîë÷àíèş";
+            Text[ polish ] = "~Domyœlnie";
+            Text[ japanese ] = "•W€(~D)";
+            Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";
+            Text[ arabic ] = "~ŞíÇÓí";
+            Text[ greek ] = "~ĞñïåğéëïãŞ";
+            Text[ korean ] = "±âº»°ª(~D)";
+            Text[ turkish ] = "~Standart";
+            Text[ language_user1 ] = " ";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_CELL_FORMAT ;
+            HelpId = FID_CELL_FORMAT ;
+            Text = "~Zellen formatieren..." ;
+            Text [ ENGLISH ] = "~Format Cells..." ;
+            Text [ norwegian ] = "~Format Cells..." ;
+            Text [ italian ] = "Formatta ~celle..." ;
+            Text [ portuguese_brazilian ] = "~Format Cells..." ;
+            Text [ portuguese ] = "Formatar ~células..." ;
+            Text [ finnish ] = "~Muotoile solut..." ;
+            Text [ danish ] = "Formater celler..." ;
+            Text [ french ] = "~Formater les cellules..." ;
+            Text [ swedish ] = "~Formatera celler..." ;
+            Text [ dutch ] = "~Cellen opmaken..." ;
+            Text [ spanish ] = "Formatear ~celdas..." ;
+            Text [ english_us ] = "Format ~Cells..." ;
+            Text[ chinese_simplified ] = "µ¥Ôª¸ñ¸ñÊ½»¯(~C)...";
+            Text[ russian ] = "Ôîğìàò ÿ÷ååê...";
+            Text[ polish ] = "Formatuj komórki...";
+            Text[ japanese ] = "¾Ù‚Ì‘®İ’è(~C)...";
+            Text[ chinese_traditional ] = "Àx¦s®æ®æ¦¡¤Æ(~C)...";
+            Text[ arabic ] = "ÊäÓíŞ ÇáÎáÇíÇ...";
+            Text[ greek ] = "Ìïñöï~ğïßçóç êåëéşí...";
+            Text[ korean ] = "¼¿ ¼­½Ä(~C)...";
+            Text[ turkish ] = "Hücreleri formatla...";
+            Text[ language_user1 ] = " ";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_INS_ROWBRK ;
+            HelpId = FID_INS_ROWBRK ;
+            /* ### ACHTUNG: Neuer Text in Resource? Z~eilenumbruch einfügen : Z~eilenumbruch einf³gen */
+            Text = "Z~eilenumbruch einfügen" ;
+            Text [ ENGLISH ] = "Insert ~Column Break" ;
+            Text [ english_us ] = "Insert ~Row Break" ;
+            Text [ portuguese_brazilian ] = "Z~eilenumbruch einfügen" ;
+            Text [ swedish ] = "Infoga ~radbrytning" ;
+            Text [ danish ] = "Indsæt linjeskift" ;
+            Text [ italian ] = "Inserisci interruzione riga" ;
+            Text [ spanish ] = "Insertar salto de ~fila" ;
+            Text [ french ] = "I~nsérer un renvoi à la ligne" ;
+            Text [ dutch ] = "~Rijeinde invoegen" ;
+            Text [ portuguese ] = "Inserir quebra de ~linha" ;
+            Text[ chinese_simplified ] = "ÔÚĞĞÖ®¼ä²åÈë·Ö¸ô·û(~R)";
+            Text[ russian ] = "Âñòàâèòü ğàçğûâ ñòğîê";
+            Text[ polish ] = "Wstaw podzia³ wierszy";
+            Text[ japanese ] = "‰üs‚Ì‘}“ü(~R)";
+            Text[ chinese_traditional ] = "´¡¤J´«¦C(~R)";
+            Text[ arabic ] = "ÅÏÑÇÌ İÇÕá ÃÓØÑ";
+            Text[ greek ] = "~ÅéóáãùãŞ áëëáãŞò ãñáììŞò";
+            Text[ korean ] = "Çà ºĞ¸® »ğÀÔ(~R)";
+            Text[ turkish ] = "Satır sonu ekle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = FID_INS_COLBRK ;
+            HelpId = FID_INS_COLBRK ;
+            /* ### ACHTUNG: Neuer Text in Resource? S~paltenumbruch einfügen : S~paltenumbruch einf³gen */
+            Text = "S~paltenumbruch einfügen" ;
+            Text [ ENGLISH ] = "Insert ~Row Break" ;
+            Text [ english_us ] = "Insert ~Column Break" ;
+            Text [ portuguese_brazilian ] = "S~paltenumbruch einfügen" ;
+            Text [ swedish ] = "Infoga ~kolumnbrytning" ;
+            Text [ danish ] = "Indsæt spalteskift" ;
+            Text [ italian ] = "Inserisci interruzione colonna" ;
+            Text [ spanish ] = "Insertar salto de ~columna" ;
+            Text [ french ] = "Insérer un saut de c~olonne" ;
+            Text [ dutch ] = "~Kolomeinde invoegen" ;
+            Text [ portuguese ] = "Inserir quebra de ~coluna" ;
+            Text[ chinese_simplified ] = "ÔÚÁĞÖ®¼ä²åÈë·Ö¸ô·û(~C)";
+            Text[ russian ] = "Âñòàâèòü ğàçğûâ ñòîëáöîâ";
+            Text[ polish ] = "Wstaw podzia³ kolumny";
+            Text[ japanese ] = "—ñ‚Ì‹æØ‚è‚ğ‘}“ü(~C)";
+            Text[ chinese_traditional ] = "´¡¤J´«Äæ(~C)";
+            Text[ arabic ] = "ÅÏÑÇÌ İÇÕá ÃÚãÏÉ";
+            Text[ greek ] = "ÅéóáãùãŞ áëëáãŞò ó~ôŞëçò";
+            Text[ korean ] = "¿­ ºĞ¸® »ğÀÔ(~C)";
+            Text[ turkish ] = "Sütun sonu ekle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = FID_DEL_MANUALBREAKS ;
+            HelpId = FID_DEL_MANUALBREAKS ;
+            /* ### ACHTUNG: Neuer Text in Resource? Alle ~manuellen Umbrüche löschen : Alle ~manuellen Umbr³che l÷schen */
+            Text = "Alle ~manuellen Umbrüche löschen" ;
+            Text [ ENGLISH ] = "~Remove All Manual Breaks" ;
+            Text [ english_us ] = "Delete All Manual Breaks" ;
+            Text [ portuguese_brazilian ] = "Alle ~manuellen Umbrüche löschen" ;
+            Text [ swedish ] = "Radera alla ~manuella brytningar" ;
+            Text [ danish ] = "Slet alle manuelle skift" ;
+            Text [ italian ] = "Elimina interruzioni manuali" ;
+            Text [ spanish ] = "Eliminar todos los saltos ~manuales" ;
+            Text [ french ] = "Supprimer tous les sauts ~manuels" ;
+            Text [ dutch ] = "Alle handmatige ~einden wissen" ;
+            Text [ portuguese ] = "Remover todas as quebras ~manuais" ;
+            Text[ chinese_simplified ] = "É¾³ıÈ«²¿µÄÊÖ¹¤·Ö¸ô·û(~R)";
+            Text[ russian ] = "Óáğàòü âñå ğàçğûâû";
+            Text[ polish ] = "Usuñ wszystkie rêczne podzia³y";
+            Text[ japanese ] = "‚·‚×‚Ä‚Ìè“®‹æØ‚è‚Ì‰ğœ";
+            Text[ chinese_traditional ] = "§R°£¥ş³¡ªº¤â¤u¤À¹j²Å(~R)";
+            Text[ arabic ] = "ÅÒÇáÉ ßá ÇáİæÇÕá ÇáíÏæíÉ";
+            Text[ greek ] = "ÄéáãñáöŞ üëùí ôùí ~÷åéñïêßíçôùí áëëáãşí";
+            Text[ korean ] = "¸ğµç ¼öµ¿ ³ª´©±â »èÁ¦";
+            Text[ turkish ] = "Tüm manüel kesmeleri sil";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = FID_RESET_PRINTZOOM ;
+            HelpId = FID_RESET_PRINTZOOM ;
+            Text = "S~kalierung aufheben" ;
+            Text [ ENGLISH ] = "Reset Scale" ;
+            Text [ english_us ] = "Reset Scale" ;
+            Text [ portuguese_brazilian ] = "S~kalierung aufheben" ;
+            Text [ swedish ] = "Upphäv s~kalering" ;
+            Text [ danish ] = "Ophæv skalering" ;
+            Text [ italian ] = "Elimina scala" ;
+            Text [ spanish ] = "Restablecer ~escala" ;
+            Text [ french ] = "Supprimer l'~échelle" ;
+            Text [ dutch ] = "Schaal ~opheffen" ;
+            Text [ portuguese ] = "Repor ~escala" ;
+            Text[ chinese_simplified ] = "ÖØÉè¿Ì¶ÈÏÔÊ¾(~S)";
+            Text[ russian ] = "Ñíÿòü ìàñøòàáèğîâàíèå";
+            Text[ polish ] = "Zresetuj skalowanie";
+            Text[ japanese ] = "½¹°Ù‚Ì‰ğœ";
+            Text[ chinese_traditional ] = "­«³]Åã¥Ü¤ñ¨Ò(~S)";
+            Text[ arabic ] = "ÅÒÇáÉ ÇáãŞíÇÓ";
+            Text[ greek ] = "ÊáôÜñãçóç ~êëßìáêáò";
+            Text[ korean ] = "¹èÀ² Àç¼³Á¤";
+            Text[ turkish ] = "Ölçeklendirmeyi kaldır";
+            Text[ language_user1 ] = " ";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = SID_DEFINE_PRINTAREA ;
+            HelpId = SID_DEFINE_PRINTAREA ;
+            Text = "Druckbereich ~festlegen" ;
+            Text [ ENGLISH ] = "~Define Print Area" ;
+            Text [ english_us ] = "Define Print Range" ;
+            Text [ portuguese_brazilian ] = "Druckbereich ~festlegen" ;
+            Text [ swedish ] = "~Definiera utskriftområde" ;
+            Text [ danish ] = "Definer udskriftsområde" ;
+            Text [ italian ] = "De~finisci area di stampa" ;
+            Text [ spanish ] = "~Definir área de impresión" ;
+            Text [ french ] = "~Définir la zone d'impression" ;
+            Text [ dutch ] = "Afdrukbereik ~definiëren" ;
+            Text [ portuguese ] = "~Definir área de impressão" ;
+            Text[ chinese_simplified ] = "¶¨Òå´òÓ¡ÇøÓò(~D)";
+            Text[ russian ] = "Çàäàòü îáëàñòü ïå÷àòè";
+            Text[ polish ] = "Zdefiniuj zakres wydruku";
+            Text[ japanese ] = "ˆóü”ÍˆÍ‚Ìw’è";
+            Text[ chinese_traditional ] = "³]©w¦C¦L­S³ò(~D)";
+            Text[ arabic ] = "ÊÚííä äØÇŞ ÇáØÈÇÚÉ";
+            Text[ greek ] = "~Ïñéóìüò ğåñéï÷Şò åêôığùóçò";
+            Text[ korean ] = "ÀÎ¼â ¿µ¿ª ÁöÁ¤";
+            Text[ turkish ] = "Yazdırma aralığını tanımla";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_ADD_PRINTAREA ;
+            HelpId = SID_ADD_PRINTAREA ;
+            /* ### ACHTUNG: Neuer Text in Resource? Druckbereich ~hinzufügen : Druckbereich ~hinzuf³gen */
+            Text = "Druckbereich ~hinzufügen" ;
+            Text [ ENGLISH ] = "~Add Print Area" ;
+            Text [ english_us ] = "Add Print Range" ;
+            Text [ portuguese_brazilian ] = "Druckbereich ~hinzufügen" ;
+            Text [ swedish ] = "~Lägg till utskriftsområde" ;
+            Text [ danish ] = "Tilføj udskriftsområde" ;
+            Text [ italian ] = "Aggiungi area di stampa" ;
+            Text [ spanish ] = "~Añadir área de impresión" ;
+            Text [ french ] = "Ajouter une ~zone d'impression" ;
+            Text [ dutch ] = "Afdrukbereik ~toevoegen" ;
+            Text [ portuguese ] = "~Adicionar área de impressão" ;
+            Text[ chinese_simplified ] = "ĞÂÔö´òÓ¡ÇøÓò(~A)";
+            Text[ russian ] = "Äîáàâèòü îáëàñòü ïå÷àòè";
+            Text[ polish ] = "Dodaj zakres wydruku";
+            Text[ japanese ] = "ˆóü”ÍˆÍ‚Ì’Ç‰Á";
+            Text[ chinese_traditional ] = "·s¼W¦C¦L­S³ò(~A)";
+            Text[ arabic ] = "ÅÖÇİÉ äØÇŞ ØÈÇÚÉ";
+            Text[ greek ] = "ĞñïóèŞêç ğåñéï~÷Şò åêôığùóçò";
+            Text[ korean ] = "ÀÎ¼â ¿µ¿ª Ãß°¡";
+            Text[ turkish ] = "Yazdırma aralığını ekle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_DELETE_PRINTAREA ;
+            HelpId = SID_DELETE_PRINTAREA ;
+            Text = "Druckbereich ~aufheben" ;
+            Text [ ENGLISH ] = "Reset Print Area" ;
+            Text [ english_us ] = "Undo Print Range" ;
+            Text [ portuguese_brazilian ] = "Druckbereich ~aufheben" ;
+            Text [ swedish ] = "~Upphäv utskriftområde" ;
+            Text [ danish ] = "Ophæv udskriftsområde" ;
+            Text [ italian ] = "Ripristina ~area di stampa" ;
+            Text [ spanish ] = "~Restablecer área de impresión" ;
+            Text [ french ] = "~Supprimer la zone d'impression" ;
+            Text [ dutch ] = "Afdrukbereik op~heffen" ;
+            Text [ portuguese ] = "~Restaurar área de impressão" ;
+            Text[ chinese_simplified ] = "ÖØÉè´òÓ¡ÇøÓò(~R)";
+            Text[ russian ] = "Óáğàòü îáëàñòü ïå÷àòè";
+            Text[ polish ] = "Zresetuj zakres wydruku";
+            Text[ japanese ] = "ˆóü”ÍˆÍ‚Ì‰ğœ";
+            Text[ chinese_traditional ] = "­«³]¦C¦L­S³ò(~R)";
+            Text[ arabic ] = "ÅáÛÇÁ äØÇŞ ÇáØÈÇÚÉ";
+            Text[ greek ] = "Ê~áôÜñãçóç ğåñéï÷Şò åêôığùóçò";
+            Text[ korean ] = "ÀÎ¼â ¿µ¿ª Àç ¼³Á¤";
+            Text[ turkish ] = "Yazdırma aralığını kaldır";
+            Text[ language_user1 ] = " ";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = SID_FORMATPAGE ;
+            HelpId = SID_FORMATPAGE ;
+            Text = "~Seitenformat..." ;
+            Text [ ENGLISH ] = "~Page Format..." ;
+            Text [ english_us ] = "Page Format..." ;
+            Text [ portuguese_brazilian ] = "~Seitenformat..." ;
+            Text [ swedish ] = "~Sidformat..." ;
+            Text [ danish ] = "Sideformat..." ;
+            Text [ italian ] = "Formato pagina..." ;
+            Text [ spanish ] = "Formato de ~página..." ;
+            Text [ french ] = "~Format de page..." ;
+            Text [ dutch ] = "~Paginaformaat...." ;
+            Text [ portuguese ] = "Formato de ~página..." ;
+            Text[ chinese_simplified ] = "Ò³Ãæ¸ñÊ½(~G)...";
+            Text[ russian ] = "Ôîğìàò ñòğàíèöû...";
+            Text[ polish ] = "Format strony...";
+            Text[ japanese ] = "Íß°¼Ş‘®...";
+            Text[ chinese_traditional ] = "­¶­±®æ¦¡(~G)...";
+            Text[ arabic ] = "ÊäÓíŞ ÇáÕİÍÉ...";
+            Text[ greek ] = "ÌïñöŞ ~óåëßäáò...";
+            Text[ korean ] = "ÆäÀÌÁö ¼­½Ä...";
+            Text[ turkish ] = "Sayfa formatı...";
+            Text[ language_user1 ] = " ";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_NOTE_VISIBLE ;
+            HelpId = FID_NOTE_VISIBLE ;
+            Text = "~Notiz anzeigen" ;
+            Text [ ENGLISH ] = "Show ~Note" ;
+            Text [ english_us ] = "Show Note" ;
+            Text [ swedish ] = "~Visa anteckning" ;
+            Text [ danish ] = "Vis note" ;
+            Text [ italian ] = "Mostra nota" ;
+            Text [ spanish ] = "Mostrar ~nota" ;
+            Text [ french ] = "Afficher la~note" ;
+            Text [ dutch ] = "~Aantekening weergeven" ;
+            Text [ portuguese_brazilian ] = "~Notiz anzeigen" ;
+            Text [ portuguese ] = "Mostrar ~anotação" ;
+            Text[ chinese_simplified ] = "ÏÔÊ¾±¸×¢(~N)";
+            Text[ russian ] = "Ïîêàçàòü ïğèìå÷àíèÿ";
+            Text[ polish ] = "Poka¿ notatkê";
+            Text[ japanese ] = "ºÒİÄ‚Ì•\\¦";
+            Text[ chinese_traditional ] = "Åã¥Ü³Æµù(~N)";
+            Text[ arabic ] = "ÅÙåÇÑ ÇáãáÇÍÙÉ";
+            Text[ greek ] = "ÅìöÜ~íéóç óçìåßùóçò";
+            Text[ korean ] = "¸Ş¸ğ ³ªÅ¸³»±â";
+            Text[ turkish ] = "Notu görüntüle";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+
+

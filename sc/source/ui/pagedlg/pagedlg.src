@@ -1,0 +1,1170 @@
+/*************************************************************************
+ *
+ *  $RCSfile: pagedlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:04 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "pagedlg.hrc"
+ModelessDialog RID_SCDLG_AREAS
+{
+    HelpId = HID_SCPAGE_AREAS ;
+    Size = MAP_APPFONT ( 316 , 123 ) ;
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+     //Closeable = TRUE;    // Dieser Dialog hat einen Cancel-Button !
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Text = "Druckbereiche bearbeiten" ;
+    Text [ ENGLISH ] = "Edit Print Areas" ;
+    Text [ ENGLISH_US ] = "Edit Print Ranges" ;
+    Text [ italian ] = "Modifica aree di stampa" ;
+    Text [ spanish ] = "Editar áreas de impresión" ;
+    Text [ french ] = "Éditer les zones d'impression" ;
+    Text [ dutch ] = "Afdrukbereiken bewerken" ;
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 260 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 260 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 260 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    GroupBox GB_PRINTAREA
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 34 ) ;
+        Text = "Druckbereich" ;
+        Text [ ENGLISH ] = "Print area" ;
+        Text [ NORWEGIAN ] = "Print area" ;
+        Text [ DANISH ] = "Udskriftsområde" ;
+        Text [ ENGLISH_US ] = "Print range" ;
+        Text [ SPANISH ] = "Área de impresión" ;
+        Text [ FINNISH ] = "Tulostusalue" ;
+        Text [ FRENCH ] = "Zone d'impression" ;
+        Text [ ITALIAN ] = "Area di stampa" ;
+        Text [ DUTCH ] = "Afdrukbereik" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Area de impressÒo" ;
+        Text [ SWEDISH ] = "Utskriftsområde" ;
+        Text [ PORTUGUESE ] = "Área de impressão" ;
+        Text[ chinese_simplified ] = "´òÓ¡ÇøÓò";
+        Text[ russian ] = "Îáëàñòü ïå÷àòè";
+        Text[ polish ] = "Obszar wydruku";
+        Text[ japanese ] = "ˆóü”ÍˆÍ";
+        Text[ chinese_traditional ] = "¦C¦L­S³ò";
+        Text[ arabic ] = "äØÇŞ ÇáØÈÇÚÉ";
+        Text[ greek ] = "Ğåñéï÷Ş åêôığùóçò";
+        Text[ korean ] = "ÀÎ¼â ¿µ¿ª";
+        Text[ turkish ] = "Yazdırma aralığı";
+    };
+    ListBox LB_PRINTAREA
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 17 ) ;
+        Size = MAP_APPFONT ( 90 , 60 ) ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "- keiner -" ; Default ; > ;
+            < "- benutzerdefiniert -" ; Default ; > ;
+            < "- Selektion -" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "- keiner -" ; Default ; > ;
+            < "- benutzerdefiniert -" ; Default ; > ;
+            < "- Selektion -" ; Default ; > ;
+        };
+        StringList [ norwegian ] =
+        {
+            < "- keiner -" ; Default ; > ;
+            < "- benutzerdefiniert -" ; Default ; > ;
+            < "- Selektion -" ; Default ; > ;
+        };
+        StringList [ italian ] =
+        {
+            < "- nessuno -" ; Default ; > ;
+            < "- definito dall'utente -" ; Default ; > ;
+            < "- selezione -" ; Default ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+            < "- keiner -" ; Default ; > ;
+            < "- benutzerdefiniert -" ; Default ; > ;
+            < "- selection -" ; Default ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+            < "- nenhum -" ; Default ; > ;
+            < "- definida pelo utilizador -" ; Default ; > ;
+            < "- selecção -" ; Default ; > ;
+        };
+        StringList [ finnish ] =
+        {
+            < "- keiner -" ; Default ; > ;
+            < "- benutzerdefiniert -" ; Default ; > ;
+            < "- Selektion -" ; Default ; > ;
+        };
+        StringList [ danish ] =
+        {
+            < "- ingen -" ; Default ; > ;
+            < "- brugerdefineret -" ; Default ; > ;
+            < "- markering -" ; Default ; > ;
+        };
+        StringList [ french ] =
+        {
+            < "- aucun -" ; Default ; > ;
+            < "- défini par l'utilisateur -" ; Default ; > ;
+            < "- sélection -" ; Default ; > ;
+        };
+        StringList [ swedish ] =
+        {
+            < "- ingen -" ; Default ; > ;
+            < "- användardefinierad -" ; Default ; > ;
+            < "- markering -" ; Default ; > ;
+        };
+        StringList [ dutch ] =
+        {
+            < "- geen -" ; Default ; > ;
+            < "- gebruikergedefinieerd -" ; Default ; > ;
+            < "- selectie -" ; Default ; > ;
+        };
+        StringList [ spanish ] =
+        {
+            < "- ninguno -" ; Default ; > ;
+            < "- definido por el usuario -" ; Default ; > ;
+            < "- selección -" ; Default ; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "- none -" ; Default ; > ;
+            < "- user defined -" ; Default ; > ;
+            < "- selection -" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "- ÎŞ -" ; Default ; > ;
+        < "- Ê¹ÓÃÕß×Ô¶¨ -" ; Default ; > ;
+        < "- Ñ¡Ôñ -" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "- áåç -" ; Default ; > ;
+        < "-çàäàíî ïîëüçîâàòåëåì -" ; Default ; > ;
+        < "- Âûäåëåíèå -" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "- brak -" ; Default ; > ;
+        < "-zdefiniowane przez u¿ytkownika" ; Default ; > ;
+        < "- Zaznaczanie -" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "-‚È‚µ-" ; Default ; > ;
+        < "-Õ°»Ş°’è‹`-" ; Default ; > ;
+        < "-‘I‘ğ-" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "- µL -" ; Default ; > ;
+        < "-¦Û­q -" ; Default ; > ;
+        < "- ¿ï¨ú -" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "- ÈÏæä -" ; Default ; > ;
+        < "- ãÚÑİ ãä ŞÈá ÇáãÓÊÎÏã -" ; Default ; > ;
+        < "- ÇáÊÍÏíÏ -" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "- êáíİíá -" ; Default ; > ;
+        < "- ğñïóáñìïóìİíá -" ; Default ; > ;
+        < "- ÅğéëïãŞ -" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "- ¾øÀ½ -" ; Default ; > ;
+        < "- »ç¿ëÀÚ Á¤ÀÇ -" ; Default ; > ;
+        < "- ¼±ÅÃ -" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "- yok -" ; Default ; > ;
+        < "- kullanıcı tanımlı -" ; Default ; > ;
+        < "- Seçim -" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < "- keiner -" ; Default ; > ;
+        < "- benutzerdefiniert -" ; Default ; > ;
+        < "- Selektion -" ; Default ; > ;
+    };
+    };
+    Edit ED_PRINTAREA
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 108 , 17 ) ;
+        Size = MAP_APPFONT ( 126 , 12 ) ;
+    };
+    ImageButton RB_PRINTAREA
+    {
+        QuickHelpText = "Verkleinern" ;
+        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        Pos = MAP_APPFONT ( 236 , 17 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ english_us ] = "Shrink" ;
+        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ swedish ] = "Förminska" ;
+        QuickHelpText [ danish ] = "Formindsk" ;
+        QuickHelpText [ italian ] = "Zoom indietro" ;
+        QuickHelpText [ spanish ] = "Reducir" ;
+        QuickHelpText [ french ] = "Réduire" ;
+        QuickHelpText [ dutch ] = "Verkleinen" ;
+        QuickHelpText [ portuguese ] = "Afastar" ;
+    QuickHelpText[ russian ] = "Óìåíüøèòü";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
+        QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
+        QuickHelpText[ chinese_traditional ] = "ÁY¤p";
+        QuickHelpText[ arabic ] = "ÊÕÛíÑ";
+        QuickHelpText[ greek ] = "Óìßêñõíóç";
+        QuickHelpText[ korean ] = "Min/Max";
+    };
+    GroupBox GB_REPEATROW
+    {
+        Pos = MAP_APPFONT ( 6 , 43 ) ;
+        Size = MAP_APPFONT ( 248 , 34 ) ;
+        Text = "Wiederholungszeile" ;
+        Text [ ENGLISH ] = "Row to repeat at top" ;
+        Text [ NORWEGIAN ] = "Row to repeat at top" ;
+        Text [ DANISH ] = "Gentagelsesrække" ;
+        Text [ ENGLISH_US ] = "Rows to repeat" ;
+        Text [ SPANISH ] = "Fila ~a repetir" ;
+        Text [ FINNISH ] = "Ylhõõllõ toistettava rivi" ;
+        Text [ FRENCH ] = "Ligne à répéter" ;
+        Text [ ITALIAN ] = "Riga da ripetere" ;
+        Text [ DUTCH ] = "Rij herhalen" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Fileira para repetir no topo" ;
+        Text [ SWEDISH ] = "Upprepningsrad" ;
+        Text [ PORTUGUESE ] = "Linha a repetir" ;
+        Text[ chinese_simplified ] = "ÖØ¸´µÄĞĞ";
+        Text[ russian ] = "Ïîâòîğ ñòğîêè";
+        Text[ polish ] = "Powtarzaj wiersz";
+        Text[ japanese ] = "ŒJ‚è•Ô‚·s";
+        Text[ chinese_traditional ] = "­«½ÆÄæ";
+        Text[ arabic ] = "ÇáÕİ ÇáãßÑÑ";
+        Text[ greek ] = "Åğáíáëáìâáíüìåíç ãñáììŞ";
+        Text[ korean ] = "Çà ¹İº¹";
+        Text[ turkish ] = "Yinelenen satır";
+    };
+    ListBox LB_REPEATROW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 57 ) ;
+        Size = MAP_APPFONT ( 90 , 60 ) ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "- keine -" ; Default ; > ;
+            < "- benutzerdefiniert -" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "- keine -" ; Default ; > ;
+            < "- benutzerdefiniert -" ; Default ; > ;
+        };
+        StringList [ norwegian ] =
+        {
+            < "- keine -" ; Default ; > ;
+            < "- benutzerdefiniert -" ; Default ; > ;
+        };
+        StringList [ italian ] =
+        {
+            < "- nessuna -" ; Default ; > ;
+            < "- definito dall'utente -" ; Default ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+            < "- keine -" ; Default ; > ;
+            < "- definido pelo usuário -" ; Default ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+            < "- nenhum -" ; Default ; > ;
+            < "- definida pelo utilizador -" ; Default ; > ;
+        };
+        StringList [ finnish ] =
+        {
+            < "- keine -" ; Default ; > ;
+            < "- benutzerdefiniert -" ; Default ; > ;
+        };
+        StringList [ danish ] =
+        {
+            < "- ingen -" ; Default ; > ;
+            < "- brugerdefineret -" ; Default ; > ;
+        };
+        StringList [ french ] =
+        {
+            < "- aucun -" ; Default ; > ;
+            < "- défini par l'utilisateur -" ; Default ; > ;
+        };
+        StringList [ swedish ] =
+        {
+            < "- inga -" ; Default ; > ;
+            < "- användardefinierad -" ; Default ; > ;
+        };
+        StringList [ dutch ] =
+        {
+            < "- geen -" ; Default ; > ;
+            < "- gebruikergedefinieerd -" ; Default ; > ;
+        };
+        StringList [ spanish ] =
+        {
+            < "- ninguno -" ; Default ; > ;
+            < "- definida por el usuario -" ; Default ; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "- none -" ; Default ; > ;
+            < "- user defined -" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "- ÎŞ -" ; Default ; > ;
+        < "- Ê¹ÓÃÕß×Ô¶¨ -" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "- áåç -" ; Default ; > ;
+        < "- çàäàíî ïîëüçîâàòåëåì -" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "- brak -" ; Default ; > ;
+        < "- zdefiniowane przez u¿ytkownika -" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "-‚È‚µ-" ; Default ; > ;
+        < "-Õ°»Ş°’è‹`-" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "- µL -" ; Default ; > ;
+        < "- ¦Û­q -" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "- ÈÏæä -" ; Default ; > ;
+        < "- ãÚÑİ ãä ŞÈá ÇáãÓÊÎÏã -" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "- êáíİíá -" ; Default ; > ;
+        < "- ğñïóáñìïóìİíá -" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "- ¾øÀ½ -" ; Default ; > ;
+        < "- »ç¿ëÀÚ Á¤ÀÇ -" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "- yok -" ; Default ; > ;
+        < "- kullanıcı tanımlı -" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < "- keine -" ; Default ; > ;
+        < "- benutzerdefiniert -" ; Default ; > ;
+    };
+    };
+    Edit ED_REPEATROW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 108 , 57 ) ;
+        Size = MAP_APPFONT ( 126 , 12 ) ;
+    };
+    ImageButton RB_REPEATROW
+    {
+        QuickHelpText = "Verkleinern" ;
+        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        Pos = MAP_APPFONT ( 236 , 57 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ english_us ] = "Shrink" ;
+        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ swedish ] = "Förminska" ;
+        QuickHelpText [ danish ] = "Formindsk" ;
+        QuickHelpText [ italian ] = "Zoom indietro" ;
+        QuickHelpText [ spanish ] = "Reducir" ;
+        QuickHelpText [ french ] = "Réduire" ;
+        QuickHelpText [ dutch ] = "Verkleinen" ;
+        QuickHelpText [ portuguese ] = "Afastar" ;
+    QuickHelpText[ russian ] = "Óìåíüøèòü";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
+        QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
+        QuickHelpText[ chinese_traditional ] = "ÁY¤p";
+        QuickHelpText[ arabic ] = "ÊÕÛíÑ";
+        QuickHelpText[ greek ] = "Óìßêñõíóç";
+        QuickHelpText[ korean ] = "Min/Max";
+    };
+    GroupBox GB_REPEATCOL
+    {
+        Pos = MAP_APPFONT ( 6 , 83 ) ;
+        Size = MAP_APPFONT ( 248 , 34 ) ;
+        Text = "Wiederholungsspalte" ;
+        Text [ ENGLISH ] = "Columns to repeat at left" ;
+        Text [ NORWEGIAN ] = "Columns to repeat at left" ;
+        Text [ DANISH ] = "Gentagelseskolonne" ;
+        Text [ ENGLISH_US ] = "Repeat column" ;
+        Text [ SPANISH ] = "~Columna a repetir" ;
+        Text [ FINNISH ] = "Vasemmalla toistettavat sarakkeet" ;
+        Text [ FRENCH ] = "Colonne à répéter" ;
+        Text [ ITALIAN ] = "Colonna da ripetere" ;
+        Text [ DUTCH ] = "Kolom herhalen" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Colunas para repetir Ó esquerda" ;
+        Text [ SWEDISH ] = "Upprepningskolumn" ;
+        Text [ PORTUGUESE ] = "Coluna a repetir" ;
+        Text[ chinese_simplified ] = "ÖØ¸´ÁĞ";
+        Text[ russian ] = "Ïîâòîğ ñòîëáöà";
+        Text[ polish ] = "Powtarzaj kolumny";
+        Text[ japanese ] = "ŒJ‚è•Ô‚·—ñ";
+        Text[ chinese_traditional ] = "­«½ÆÄæ";
+        Text[ arabic ] = "ÇáÚãæÏ ÇáãßÑÑ";
+        Text[ greek ] = "Åğáíáëáìâáíüìåíç óôŞëç";
+        Text[ korean ] = "¿­ ¹İº¹";
+        Text[ turkish ] = "Yinelenen sütun";
+    };
+    ListBox LB_REPEATCOL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 97 ) ;
+        Size = MAP_APPFONT ( 90 , 60 ) ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "- keine -" ; Default ; > ;
+            < "- benutzerdefiniert -" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "- keine -" ; Default ; > ;
+            < "- benutzerdefiniert -" ; Default ; > ;
+        };
+        StringList [ norwegian ] =
+        {
+            < "- keine -" ; Default ; > ;
+            < "- benutzerdefiniert -" ; Default ; > ;
+        };
+        StringList [ italian ] =
+        {
+            < "- nessuna -" ; Default ; > ;
+            < "- definito dall'utente -" ; Default ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+            < "- keine -" ; Default ; > ;
+            < "- definido pelo usuário -" ; Default ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+            < "- nenhum -" ; Default ; > ;
+            < "- definida pelo utilizador -" ; Default ; > ;
+        };
+        StringList [ finnish ] =
+        {
+            < "- keine -" ; Default ; > ;
+            < "- benutzerdefiniert -" ; Default ; > ;
+        };
+        StringList [ danish ] =
+        {
+            < "- ingen -" ; Default ; > ;
+            < "- brugerdefineret -" ; Default ; > ;
+        };
+        StringList [ french ] =
+        {
+            < "- aucun -" ; Default ; > ;
+            < "- défini par l'utilisateur -" ; Default ; > ;
+        };
+        StringList [ swedish ] =
+        {
+            < "- inga -" ; Default ; > ;
+            < "- användardefinierad -" ; Default ; > ;
+        };
+        StringList [ dutch ] =
+        {
+            < "- geen -" ; Default ; > ;
+            < "- gebruikergedefinieerd -" ; Default ; > ;
+        };
+        StringList [ spanish ] =
+        {
+            < "- ninguno -" ; Default ; > ;
+            < "- definida por el usuario -" ; Default ; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "- none -" ; Default ; > ;
+            < "- user defined -" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "- ÎŞ -" ; Default ; > ;
+        < "- Ê¹ÓÃÕß×Ô¶¨ -" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "- áåç -" ; Default ; > ;
+        < "- çàäàíî ïîëüçîâàòåëåì -" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "- brak -" ; Default ; > ;
+        < "-zdefiniowane przez u¿ytkownika-" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "-‚È‚µ-" ; Default ; > ;
+        < "-Õ°»Ş°’è‹`-" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "- µL -" ; Default ; > ;
+        < "- ¦Û­q -" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "- ÈÏæä -" ; Default ; > ;
+        < "- ãÚÑİ ãä ŞÈá ÇáãÓÊÎÏã -" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "- êáíİíá -" ; Default ; > ;
+        < "- ğñïóáñìïóìİíá -" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "- ¾øÀ½ -" ; Default ; > ;
+        < "- »ç¿ëÀÚ Á¤ÀÇ -" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "- yok -" ; Default ; > ;
+        < "- kullanıcı tanımlı -" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < "- keine -" ; Default ; > ;
+        < "- benutzerdefiniert -" ; Default ; > ;
+    };
+    };
+    Edit ED_REPEATCOL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 108 , 97 ) ;
+        Size = MAP_APPFONT ( 126 , 12 ) ;
+    };
+    ImageButton RB_REPEATCOL
+    {
+        QuickHelpText = "Verkleinern" ;
+        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        Pos = MAP_APPFONT ( 236 , 97 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ english_us ] = "Shrink" ;
+        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ swedish ] = "Förminska" ;
+        QuickHelpText [ danish ] = "Fomindsk" ;
+        QuickHelpText [ italian ] = "Zoom indietro" ;
+        QuickHelpText [ spanish ] = "Reducir" ;
+        QuickHelpText [ french ] = "Réduire" ;
+        QuickHelpText [ dutch ] = "Verkleinen" ;
+        QuickHelpText [ portuguese ] = "Afastar" ;
+    QuickHelpText[ russian ] = "Óìåíüøèòü";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
+        QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
+        QuickHelpText[ chinese_traditional ] = "ÁY¤p";
+        QuickHelpText[ arabic ] = "ÊÕÛíÑ";
+        QuickHelpText[ greek ] = "Óìßêñõíóç";
+        QuickHelpText[ korean ] = "Min/Max";
+    };
+    Text [ swedish ] = "Redigera utskriftsområden" ;
+    Text [ danish ] = "Rediger udskriftsområde" ;
+    Text [ portuguese ] = "Editar áreas de impressão" ;
+    Text [ portuguese_brazilian ] = "Druckbereiche bearbeiten" ;
+    Text[ chinese_simplified ] = "±à¼­´òÓ¡ÇøÓò";
+    Text[ russian ] = "Ïğàâêà îáëàñòåé ïå÷àòè";
+    Text[ polish ] = "Edytuj obszar wydruku";
+    Text[ japanese ] = "ˆóü”ÍˆÍ‚Ì•ÒW";
+    Text[ chinese_traditional ] = "½s¿è¦C¦L­S³ò";
+    Text[ arabic ] = "ÊÍÑíÑ äØÇŞÇÊ ÇáØÈÇÚÉ";
+    Text[ greek ] = "Åğåîåñãáóßá ğåñéï÷şí åêôığùóçò";
+    Text[ korean ] = "ÀÎ¼â ¿µ¿ª ÆíÁı";
+    Text[ turkish ] = "Yazdırma aralıklarını düzenle";
+};
+TabPage RID_SCPAGE_TABLE
+{
+    Hide = TRUE ;
+    HelpId = HID_SCPAGE_TABLE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    CheckBox BTN_GRID
+    {
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 77 , 10 ) ;
+        Text = "Tabellen~gitter" ;
+        Text [ ENGLISH ] = "~Grid" ;
+        Text [ norwegian ] = "~Grid" ;
+        Text [ italian ] = "Griglia" ;
+        Text [ portuguese_brazilian ] = "~Grade" ;
+        Text [ portuguese ] = "~Grelha" ;
+        Text [ finnish ] = "Taustav~iivat" ;
+        Text [ danish ] = "Tabelgitter" ;
+        Text [ french ] = "~Grille" ;
+        Text [ swedish ] = "Tabell~gitter" ;
+        Text [ dutch ] = "Tabellen~raster" ;
+        Text [ spanish ] = "~Cuadrícula" ;
+        Text [ english_us ] = "~Grid" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "¹¤×÷±íÍø¸ñ(~G)";
+        Text[ russian ] = "Ñåòêà";
+        Text[ polish ] = "Siatka tabeli";
+        Text[ japanese ] = "•\\‚Ì¸ŞØ¯ÄŞü(~G)";
+        Text[ chinese_traditional ] = "¤u§@ªíºô®æ(~G)";
+        Text[ arabic ] = "ÔÈßÉ ÇáÌÏæá";
+        Text[ greek ] = "Ğëİãìá ğßíáêá";
+        Text[ korean ] = "´«±İ¼±(~G)";
+        Text[ turkish ] = "~Kılavuz çizgiler";
+    };
+    CheckBox BTN_HEADER
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 86 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Zeilen- & Sp~altenköpfe : Zeilen- & Sp~altenk÷pfe */
+        Text = "Zeilen- & Sp~altenköpfe" ;
+        Text [ ENGLISH ] = "Column- & row he~adings" ;
+        Text [ norwegian ] = "Column- & row he~adings" ;
+        Text [ italian ] = "Intestazioni colo~nna/riga" ;
+        Text [ portuguese_brazilian ] = "Tí~tulos de Coluna- & fileira" ;
+        Text [ portuguese ] = "Tí~tulos de colunas & linhas" ;
+        Text [ finnish ] = "Rivi- ja sarake~otsikot" ;
+        Text [ danish ] = "Række-/kolonneoverskrifter" ;
+        Text [ french ] = "~En-têtes de colonnes/lignes" ;
+        Text [ swedish ] = "Rad- och kolumnhu~vuden" ;
+        Text [ dutch ] = "Kolom- en rij~koppen" ;
+        Text [ spanish ] = "Tít~ulos de filas y columnas" ;
+        Text [ english_us ] = "~Column and row headers" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "ĞĞ±êÌâºÍÁĞ±êÌâ(~H)";
+        Text[ russian ] = "Çàãîëîâêè ñòğîê è ñòîëáöîâ";
+        Text[ polish ] = "~Nag³ówki wierszy & kolumn";
+        Text[ japanese ] = "s‚Æ—ñ‚Ì”Ô†(~H)";
+        Text[ chinese_traditional ] = "Äæ©M¦C¼ĞÃD(~H)";
+        Text[ arabic ] = "ÑÄæÓ ÇáÃÓØÑ æÇáÃÚãÏÉ";
+        Text[ greek ] = "Êåöáëßäåò ãñáììşí/óôçëşí";
+        Text[ korean ] = "¿­°ú Çà ¸Ó¸®±Û(~C)";
+        Text[ turkish ] = "Satır ve sütun ~başlıkları";
+    };
+    CheckBox BTN_NOTES
+    {
+        Pos = MAP_APPFONT ( 12 , 40 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~Notizen" ;
+        Text [ ENGLISH ] = "~Notes" ;
+        Text [ norwegian ] = "~Notes" ;
+        Text [ italian ] = "~Note" ;
+        Text [ portuguese_brazilian ] = "~Observações" ;
+        Text [ portuguese ] = "~Anotações" ;
+        Text [ finnish ] = "~Huomautukset" ;
+        Text [ danish ] = "Noter" ;
+        Text [ french ] = "~Notes" ;
+        Text [ swedish ] = "A~nteckningar" ;
+        Text [ dutch ] = "~Aantekeningen" ;
+        Text [ spanish ] = "~Notas" ;
+        Text [ english_us ] = "~Notes" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "±¸×¢(~N)";
+        Text[ russian ] = "Ïğèìå÷àíèÿ";
+        Text[ polish ] = "Notatki";
+        Text[ japanese ] = "ºÒİÄ(~N)";
+        Text[ chinese_traditional ] = "³Æµù(~N)";
+        Text[ arabic ] = "ãáÇÍÙÇÊ";
+        Text[ greek ] = "Óçìåéşóåéò";
+        Text[ korean ] = "¸Ş¸ğ(~N)";
+        Text[ turkish ] = "~Notlar";
+    };
+    CheckBox BTN_OBJECTS
+    {
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text = "~Objekte/Grafiken" ;
+        Text [ ENGLISH ] = "~Objects/Images" ;
+        Text [ norwegian ] = "~Objects/Images" ;
+        Text [ italian ] = "~Oggetti/immagini" ;
+        Text [ portuguese_brazilian ] = "~Objects/Images" ;
+        Text [ portuguese ] = "~Objectos/Imagens" ;
+        Text [ finnish ] = "~Objects/Images" ;
+        Text [ danish ] = "Objekter/billeder" ;
+        Text [ french ] = "~Objets/images" ;
+        Text [ swedish ] = "O~bjekt/grafiker" ;
+        Text [ dutch ] = "~Objecten/afbeeld." ;
+        Text [ spanish ] = "~Objetos/Imágenes" ;
+        Text [ ENGLISH_US ] = "~Objects/graphics" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "¶ÔÏó/Í¼ĞÎ(~O)";
+        Text[ russian ] = "Îáúåêòû è ğèñóíêè";
+        Text[ polish ] = "Obiekty/~Grafiki";
+        Text[ japanese ] = "µÌŞ¼Şª¸Ä/}(~O)";
+        Text[ chinese_traditional ] = "ª«¥ó/¹Ï¤ù(~O)";
+        Text[ arabic ] = "ßÇÆäÇÊ/ÕæÑ";
+        Text[ greek ] = "Áíôéêåßìåíá/ÃñáöéêÜ";
+        Text[ korean ] = "°³Ã¼/±×·¡ÇÈ(~O)";
+        Text[ turkish ] = "~Nesne/grafikler";
+    };
+    CheckBox BTN_CHARTS
+    {
+        Pos = MAP_APPFONT ( 12 , 66 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "~Diagramme" ;
+        Text [ ENGLISH ] = "~Charts" ;
+        Text [ norwegian ] = "~Charts" ;
+        Text [ italian ] = "Diagrammi" ;
+        Text [ portuguese_brazilian ] = "~Gráficos" ;
+        Text [ portuguese ] = "~Gráficos" ;
+        Text [ finnish ] = "~Kaaviot" ;
+        Text [ danish ] = "Diagrammer" ;
+        Text [ french ] = "~Diagrammes" ;
+        Text [ swedish ] = "~Diagram" ;
+        Text [ dutch ] = "~Diagrammen" ;
+        Text [ spanish ] = "~Diagramas" ;
+        Text [ ENGLISH_US ] = "Ch~arts" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "Í¼±í(~C)";
+        Text[ russian ] = "Äèàãğàììà";
+        Text[ polish ] = "Wy~kresy";
+        Text[ japanese ] = "¸Ş×Ì(~C)";
+        Text[ chinese_traditional ] = "¹Ïªí(~C)";
+        Text[ arabic ] = "ÑÓæã ÈíÇäíÉ";
+        Text[ greek ] = "ÄéáãñÜììáôá";
+        Text[ korean ] = "Â÷Æ®(~A)";
+        Text[ turkish ] = "~Şemalar";
+    };
+    CheckBox BTN_DRAWINGS
+    {
+        Pos = MAP_APPFONT ( 12 , 79 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "Zeichenob~jekte" ;
+        Text [ ENGLISH ] = "Drawob~jects" ;
+        Text [ norwegian ] = "Drawob~jects" ;
+        Text [ italian ] = "Oggetti di disegno" ;
+        Text [ portuguese_brazilian ] = "Drawob~jects" ;
+        Text [ portuguese ] = "Objectos de ~desenho" ;
+        Text [ finnish ] = "Drawob~jects" ;
+        Text [ danish ] = "Tegneobjekter" ;
+        Text [ french ] = "~Objets de dessin" ;
+        Text [ swedish ] = "Ritob~jekt" ;
+        Text [ dutch ] = "Teken~objecten" ;
+        Text [ spanish ] = "O~bjetos de dibujo" ;
+        Text [ ENGLISH_US ] = "~Drawing objects" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó(~D)";
+        Text[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
+        Text[ polish ] = "Obiekty g~raficzne";
+        Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸Ä(~D)";
+        Text[ chinese_traditional ] = "¦r¤¸ª«¥ó(~D)";
+        Text[ arabic ] = "ßÇÆäÇÊ ÑÓæãíÉ";
+        Text[ greek ] = "Áíôéêåßìåíá ó÷åäßáóçò";
+        Text[ korean ] = "°³Ã¼ ±×¸®±â(~D)";
+        Text[ turkish ] = "Çizim nesnele~ri";
+    };
+    CheckBox BTN_FORMULAS
+    {
+        Pos = MAP_APPFONT ( 12 , 92 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "~Formeln" ;
+        Text [ ENGLISH ] = "~Formulas" ;
+        Text [ norwegian ] = "~Formulas" ;
+        Text [ italian ] = "~Formula" ;
+        Text [ portuguese_brazilian ] = "~Fórmulas" ;
+        Text [ portuguese ] = "~Fórmulas" ;
+        Text [ finnish ] = "~Kaavat" ;
+        Text [ danish ] = "~Formler" ;
+        Text [ french ] = "~Formules" ;
+        Text [ swedish ] = "~Formler" ;
+        Text [ dutch ] = "~Formules" ;
+        Text [ spanish ] = "~Fórmulas" ;
+        Text [ english_us ] = "~Formulas" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "¹«Ê½(~F)";
+        Text[ russian ] = "Ôîğìóëû";
+        Text[ polish ] = "Formu³y";
+        Text[ japanese ] = "”®(~F)";
+        Text[ chinese_traditional ] = "¤½¦¡(~F)";
+        Text[ arabic ] = "ÕíÛ";
+        Text[ greek ] = "Ôığïé";
+        Text[ korean ] = "¼ö½Ä(~F)";
+        Text[ turkish ] = "~Formül";
+    };
+    CheckBox BTN_NULLVALS
+    {
+        Pos = MAP_APPFONT ( 12 , 105 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "N~ullwerte" ;
+        Text [ ENGLISH ] = "N~ull values" ;
+        Text [ norwegian ] = "N~ull values" ;
+        Text [ italian ] = "Valori zero" ;
+        Text [ portuguese_brazilian ] = "~Null values" ;
+        Text [ portuguese ] = "~Valores zero" ;
+        Text [ finnish ] = "~Null values" ;
+        Text [ danish ] = "Nulværdier" ;
+        Text [ french ] = "Valeurs ~zéro" ;
+        Text [ swedish ] = "N~ollvärden" ;
+        Text [ dutch ] = "~Nulwaarden" ;
+        Text [ spanish ] = "~Valores cero" ;
+        Text [ english_us ] = "~Zero values" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "ÁãÖµ(~Z)";
+        Text[ russian ] = "Íóëåâûå çíà÷åíèÿ";
+        Text[ polish ] = "Warto~œci zerowe";
+        Text[ japanese ] = "¾ŞÛ’l(~Z)";
+        Text[ chinese_traditional ] = "¹s­È(~Z)";
+        Text[ arabic ] = "Şíã ÇáÕİÑ";
+        Text[ greek ] = "Ìçäåíéêİò ôéìİò";
+        Text[ korean ] = "0 °ª(~Z)";
+        Text[ turkish ] = "Sıfır değer~leri";
+    };
+    GroupBox GB_PRINT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 100 , 118 ) ;
+        Text = "Drucken" ;
+        Text [ ENGLISH ] = "Print" ;
+        Text [ norwegian ] = "Skriv ut" ;
+        Text [ italian ] = "Stampa" ;
+        Text [ portuguese_brazilian ] = "Imprimir" ;
+        Text [ portuguese ] = "Imprimir" ;
+        Text [ finnish ] = "Tulosta" ;
+        Text [ danish ] = "Udskriv" ;
+        Text [ french ] = "Imprimer" ;
+        Text [ swedish ] = "Skriv ut" ;
+        Text [ dutch ] = "Afdrukken" ;
+        Text [ spanish ] = "Imprimir" ;
+        Text [ english_us ] = "Print" ;
+        Text[ chinese_simplified ] = "´òÓ¡";
+        Text[ russian ] = "Ïå÷àòü";
+        Text[ polish ] = "Drukuj";
+        Text[ japanese ] = "ˆóü";
+        Text[ chinese_traditional ] = "¦C¦L";
+        Text[ arabic ] = "ØÈÇÚÉ";
+        Text[ greek ] = "Åêôığùóç";
+        Text[ korean ] = "ÀÎ¼â";
+        Text[ turkish ] = "Yazdır";
+    };
+    RadioButton BTN_TOPDOWN
+    {
+        Pos = MAP_APPFONT ( 118 , 14 ) ;
+        Size = MAP_APPFONT ( 82 , 10 ) ;
+        Text = "Von o~ben nach unten" ;
+        Text [ ENGLISH ] = "~Top to bottom" ;
+        Text [ norwegian ] = "~Top to bottom" ;
+        Text [ italian ] = "Dall'al~to in basso" ;
+        Text [ portuguese_brazilian ] = "~De cima para baixo" ;
+        Text [ portuguese ] = "De ~cima para baixo" ;
+        Text [ finnish ] = "~Ylhäältä alas" ;
+        Text [ danish ] = "Fra øverst til nederst" ;
+        Text [ french ] = "~Du haut en bas" ;
+        Text [ swedish ] = "~Uppifrån och ned" ;
+        Text [ dutch ] = "Van ~boven naar beneden" ;
+        Text [ spanish ] = "De arriba ~hacia abajo" ;
+        Text [ english_us ] = "~Top to bottom" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "´ÓÉÏÏòÏÂ(~T)";
+        Text[ russian ] = "Ñâåğõó âíèç";
+        Text[ polish ] = "Od g~óry do do³u";
+        Text[ japanese ] = "ã‚©‚ç‰º‚Ö(~T)";
+        Text[ chinese_traditional ] = "±q¤W¦V¤U(~T)";
+        Text[ arabic ] = "ãä ÃÚáì áÃÓİá";
+        Text[ greek ] = "Áğü ğÜíù ğñïò ôá êÜôù";
+        Text[ korean ] = "À§¿¡¼­ ¾Æ·¡·Î(~T)";
+        Text[ turkish ] = "~Yukardan aşağı";
+    };
+    RadioButton BTN_LEFTRIGHT
+    {
+        Pos = MAP_APPFONT ( 118 , 27 ) ;
+        Size = MAP_APPFONT ( 82 , 10 ) ;
+        Text = "Von lin~ks nach rechts" ;
+        Text [ ENGLISH ] = "Left to rig~ht" ;
+        Text [ norwegian ] = "Left to rig~ht" ;
+        Text [ italian ] = "Da sinistra a d~estra" ;
+        Text [ portuguese_brazilian ] = "Da esquerda para a di~reita" ;
+        Text [ portuguese ] = "Da esquerda para a di~reita" ;
+        Text [ finnish ] = "Vase~mmalta oikealle" ;
+        Text [ danish ] = "Fra venstre til højre" ;
+        Text [ french ] = "De gauche à dro~ite" ;
+        Text [ swedish ] = "Från vänster till hög~er" ;
+        Text [ dutch ] = "Van ~links naar rechts" ;
+        Text [ spanish ] = "De ~izquierda a derecha" ;
+        Text [ english_us ] = "~Left to right" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "´Ó×óÏòÓÒ(~L)";
+        Text[ russian ] = "Ñëåâà íàïğàâî";
+        Text[ polish ] = "Od lewej do prawej";
+        Text[ japanese ] = "¶‚©‚ç‰E‚Ö(~L)";
+        Text[ chinese_traditional ] = "±q¥ª¦V¥k(~L)";
+        Text[ arabic ] = "ãä ÇáíÓÇÑ Åáì Çáíãíä";
+        Text[ language_user1 ] = "ÌŞêïò; - - - -";
+        Text[ greek ] = "Áğü áñéóôåñÜ ğñïò ôá äåîéÜ";
+        Text[ korean ] = "¿ŞÂÊ¿¡¼­ ¿À¸¥ÂÊÀ¸·Î(~L)";
+        Text[ turkish ] = "S~oldan sağa";
+    };
+    FixedBitmap BMP_PAGEDIR
+    {
+        Pos = MAP_APPFONT ( 214 , 12 ) ;
+        Size = MAP_APPFONT ( 25 , 25 ) ;
+    };
+     //      Image IMG_LEFTRIGHT { BMP( "lftrgt.bmp" );  COLMASK; };
+     //      Image IMG_TOPDOWN   { BMP( "topdown.bmp" ); COLMASK; };
+    Bitmap IMG_LEFTRIGHT { File = "lftrgt.bmp" ; };
+    Bitmap IMG_TOPDOWN { File = "topdown.bmp" ; };
+    CheckBox BTN_PAGENO
+    {
+        Pos = MAP_APPFONT ( 118 , 44 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text = "Erste Seiten~zahl" ;
+        Text [ ENGLISH ] = "First ~page" ;
+        Text [ norwegian ] = "First ~page" ;
+        Text [ italian ] = "Primo numero di ~pagina" ;
+        Text [ portuguese_brazilian ] = "Primeira página" ;
+        Text [ portuguese ] = "~Número da primeira página" ;
+        Text [ finnish ] = "First ~page" ;
+        Text [ danish ] = "Første sidetal" ;
+        Text [ french ] = "~Premier numéro de page" ;
+        Text [ swedish ] = "Första ~sidnummer" ;
+        Text [ dutch ] = "~Nummer eerste pagina" ;
+        Text [ spanish ] = "~Primer núm. de página" ;
+        Text [ english_us ] = "First ~page number" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "µÚÒ»¸öÒ³Êı(~P)";
+        Text[ russian ] = "Ïåğâàÿ ñòğàíèöà ¹";
+        Text[ polish ] = "Pierwszy nu~mer strony";
+        Text[ japanese ] = "Å‰‚ÌÍß°¼Ş”Ô†(~P)";
+        Text[ chinese_traditional ] = "²Ä¤@­Ó­¶¼Æ(~P)";
+        Text[ arabic ] = "ÑŞã ÇáÕİÍÉ ÇáÃæáì";
+        Text[ greek ] = "Ğñşôïò áñéèìüò óåëßäáò";
+        Text[ korean ] = "Ã¹ ÆäÀÌÁö ¹øÈ£(~P)";
+        Text[ turkish ] = "İlk sayfa ~numarası";
+    };
+    NumericField ED_PAGENO
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 191 , 43 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 9999 ;
+        SpinSize = 1 ;
+        Repeat = TRUE ;
+    };
+    GroupBox GB_PAGEDIR
+    {
+        Pos = MAP_APPFONT ( 112 , 3 ) ;
+        Size = MAP_APPFONT ( 142 , 65 ) ;
+        Text = "Seitenreihenfolge" ;
+        Text [ ENGLISH ] = "Page Order" ;
+        Text [ norwegian ] = "Page Order" ;
+        Text [ italian ] = "Sequenza pagine" ;
+        Text [ portuguese_brazilian ] = "Ordem das Páginas" ;
+        Text [ portuguese ] = "Ordem das páginas" ;
+        Text [ finnish ] = "Sivujen järjestys" ;
+        Text [ danish ] = "Siderækkefølge" ;
+        Text [ french ] = "Ordre des pages" ;
+        Text [ swedish ] = "Sidordning" ;
+        Text [ dutch ] = "Pagina-volgorde" ;
+        Text [ spanish ] = "Orden de páginas" ;
+        Text [ ENGLISH_US ] = "Page order" ;
+        Text[ chinese_simplified ] = "Ò³Ğò";
+        Text[ russian ] = "Ïîğÿäîê ñòğàíèö";
+        Text[ polish ] = "Kolejnoœæ stron";
+        Text[ japanese ] = "Íß°¼Ş‚Ì‡”Ô";
+        Text[ chinese_traditional ] = "­¶§Ç";
+        Text[ arabic ] = "ÊÑÊíÈ ÇáÕİÍÉ";
+        Text[ greek ] = "ÄéÜôáîç óåëéäşí";
+        Text[ korean ] = "ÆäÀÌÁö ¼ø¼­";
+        Text[ turkish ] = "Sayfa sırası";
+    };
+    RadioButton BTN_SCALEALL
+    {
+        Pos = MAP_APPFONT ( 118 , 84 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text = "A~lles auf [%]" ;
+        Text [ ENGLISH ] = "~All pages to [%]" ;
+        Text [ norwegian ] = "~All pages to [%]" ;
+        Text [ italian ] = "~Tutto a [%]" ;
+        Text [ portuguese_brazilian ] = "~Todas as páginas para [%]" ;
+        Text [ portuguese ] = "~Tudo para [%]" ;
+        Text [ DANISH ] = "Alt til [%]" ;
+        Text [ ENGLISH_US ] = "~All to [%]" ;
+        Text [ SPANISH ] = "~Todo al [%]" ;
+        Text [ FINNISH ] = "~All pages to [%]" ;
+        Text [ FRENCH ] = "~Tout à [%]" ;
+        Text [ DUTCH ] = "~Alles naar [%]" ;
+        Text [ SWEDISH ] = "A~llt till (%)" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "È«²¿²ÉÓÃ°Ù·Ö±È[%](~A)";
+        Text[ russian ] = "Âñå íà [%]";
+        Text[ polish ] = "Wszystko na [%] ";
+        Text[ japanese ] = "‚·‚×‚Ä [%]";
+        Text[ greek ] = "¼~ëá óå [%]";
+        Text[ korean ] = "ÀüÃ¼¸¦  [%] ·Î(~A)";
+        Text[ chinese_traditional ] = "¥ş³¡±Ä¥Î[%]";
+        Text[ arabic ] = "Çáßá Åáì  [%]";
+        Text[ turkish ] = "T~ümü [%]";
+    };
+    RadioButton BTN_SCALEPAGENUM
+    {
+        Pos = MAP_APPFONT ( 118 , 103 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text = "Ma~x. Seitenzahl" ;
+        Text [ ENGLISH ] = "To ~fit on pages" ;
+        Text [ norwegian ] = "To ~fit on pages" ;
+        Text [ italian ] = "Num. massimo pagine" ;
+        Text [ portuguese_brazilian ] = "Para ~se ajustar nas páginas" ;
+        Text [ portuguese ] = "~Máximo de páginas" ;
+        Text [ DANISH ] = "Maks. antal sider" ;
+        Text [ ENGLISH_US ] = "~Max. no. of pages" ;
+        Text [ SPANISH ] = "Núm. ~máx. de páginas" ;
+        Text [ FINNISH ] = "Sovita sivui~lle" ;
+        Text [ FRENCH ] = "Nbre ~max. de pages" ;
+        Text [ DUTCH ] = "Hoogste ~paginanr." ;
+        Text [ SWEDISH ] = "Ma~x antal sidor" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "×î¶àÒ³Êı(~M)";
+        Text[ russian ] = "Ìàêñèìóì ñòğàíèö";
+        Text[ polish ] = "Maks. licz~ba stron";
+        Text[ japanese ] = "Å‚‚ÌÍß°¼Ş”(~M)";
+        Text[ chinese_traditional ] = "³Ì¦h­¶¼Æ(~M)";
+        Text[ arabic ] = "ÇáÚÏÏ ÇáÃŞÕì ááÕİÍÇÊ";
+        Text[ greek ] = "Ìİ~ã. áñéèìüò óåëßäùí";
+        Text[ korean ] = "ÃÖ´ë ÆäÀÌÁö ¹øÈ£(~M)";
+        Text[ turkish ] = "A~zami sayfa sayısı";
+    };
+    NumericField ED_SCALEPAGENUM
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 191 , 102 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Minimum = 1 ;
+        Maximum = 999 ;
+        SpinSize = 1 ;
+    };
+    NumericField ED_SCALEALL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 191 , 83 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Maximum = 400 ;
+        First = 15 ;
+        Last = 200 ;
+        SpinSize = 1 ;
+    };
+    GroupBox GB_SCALE
+    {
+        Pos = MAP_APPFONT ( 112 , 71 ) ;
+        Size = MAP_APPFONT ( 142 , 50 ) ;
+        Text = "Skalierung" ;
+        Text [ ENGLISH ] = "Scale" ;
+        Text [ ENGLISH_US ] = "Scale" ;
+        Text [ dutch ] = "Schaal" ;
+        Text [ italian ] = "Scala" ;
+        Text [ spanish ] = "Escala" ;
+        Text [ french ] = "Redimensionnement (impression)" ;
+        Text [ swedish ] = "Skalering" ;
+        Text [ danish ] = "Skalering" ;
+        Text [ portuguese ] = "Escala" ;
+        Text [ portuguese_brazilian ] = "Skalierung" ;
+        Text[ chinese_simplified ] = "¿Ì¶È";
+        Text[ russian ] = "Ìàñøòàá";
+        Text[ polish ] = "Skalowanie";
+        Text[ japanese ] = "½¹°Ù";
+        Text[ chinese_traditional ] = "Åã¥Ü¤ñ¨Ò";
+        Text[ arabic ] = "ÇáãŞíÇÓ";
+        Text[ greek ] = "Êëßìáêá";
+        Text[ korean ] = "¹èÀ²";
+        Text[ turkish ] = "Ölçek";
+    };
+};

@@ -1,0 +1,2855 @@
+/*************************************************************************
+ *
+ *  $RCSfile: scstring.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:06 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include "sc.hrc" // -> #include <sfx.hrc>
+
+
+
+ // Strings fuer Interface-Namen ------------------------------------------
+
+String SCSTR_APPLICATION
+{
+    Text = "StarCalc 5.0" ;
+    Text [ ENGLISH ] = "StarCalc 5.0" ;
+    Text [ norwegian ] = "StarCalc 5.0" ;
+    Text [ italian ] = "StarCalc 5.0" ;
+    Text [ portuguese_brazilian ] = "StarOffice Calc 4.0" ;
+    Text [ portuguese ] = "StarCalc 5.0" ;
+    Text [ finnish ] = "StarCalc 5.0" ;
+    Text [ danish ] = "StarCalc 5.0" ;
+    Text [ french ] = "StarCalc 5.0" ;
+    Text [ swedish ] = "StarCalc 5.0" ;
+    Text [ dutch ] = "StarCalc 5.0" ;
+    Text [ spanish ] = "StarCalc 5.0" ;
+    Text [ english_us ] = "StarCalc  5.0" ;
+    Text[ chinese_simplified ] = "StarCalc 5.0";
+    Text[ russian ] = "StarCalc 5.0";
+    Text[ polish ] = "StarCalc 5.0";
+    Text[ japanese ] = "StarCalc 5.0";
+    Text[ chinese_traditional ] = "StarOffice Calc 5.0";
+    Text[ arabic ] = "StarCalc 5.0";
+    Text[ greek ] = "Star Calc 5.0";
+    Text[ korean ] = "StarOffice Calc  5.0";
+    Text[ turkish ] = "StarCalc 5.0";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_40_APPLICATION
+{
+    Text = "StarCalc 4.0" ;
+    Text [ ENGLISH ] = "StarCalc 4.0" ;
+    Text [ norwegian ] = "StarCalc 4.0" ;
+    Text [ italian ] = "StarCalc 4.0" ;
+    Text [ portuguese_brazilian ] = "StarOffice Calc 4.0" ;
+    Text [ portuguese ] = "StarCalc 4.0" ;
+    Text [ finnish ] = "StarCalc 4.0" ;
+    Text [ danish ] = "StarCalc 4.0" ;
+    Text [ french ] = "StarCalc 4.0" ;
+    Text [ swedish ] = "StarCalc 4.0" ;
+    Text [ dutch ] = "Star Calc 4.0" ;
+    Text [ spanish ] = "StarCalc 4.0" ;
+    Text [ english_us ] = "StarCalc 4.0" ;
+    Text[ chinese_simplified ] = "StarCalc 4.0";
+    Text[ russian ] = "StarCalc 4.0";
+    Text[ polish ] = "StarCalc 4.0";
+    Text[ japanese ] = "StarCalc 4.0";
+    Text[ chinese_traditional ] = "StarOffice Calc 4.0";
+    Text[ arabic ] = "Star Calc 4.0";
+    Text[ greek ] = "StarCalc 4.0";
+    Text[ korean ] = "StarOffice Calc 4.0";
+    Text[ turkish ] = "StarCalc 4.0";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_30_APPLICATION
+{
+    Text = "StarCalc 3.0" ;
+    Text [ ENGLISH ] = "StarCalc 3.0" ;
+    Text [ norwegian ] = "StarCalc 3.0" ;
+    Text [ italian ] = "StarCalc 3.0" ;
+    Text [ portuguese_brazilian ] = "StarOffice Calc 3.0" ;
+    Text [ portuguese ] = "StarCalc 3.0" ;
+    Text [ finnish ] = "StarCalc 3.0" ;
+    Text [ danish ] = "StarCalc 3.0" ;
+    Text [ french ] = "StarCalc 3.0" ;
+    Text [ swedish ] = "StarCalc 3.0" ;
+    Text [ dutch ] = "StarCalc 3.0" ;
+    Text [ spanish ] = "StarCalc 3.0" ;
+    Text [ english_us ] = "StarCalc 3.0" ;
+    Text[ chinese_simplified ] = "StarCalc 3.0";
+    Text[ russian ] = "StarCalc 3.0";
+    Text[ polish ] = "StarCalc 3.0";
+    Text[ japanese ] = "StarCalc 3.0";
+    Text[ chinese_traditional ] = "StarOffice Calc 3.0";
+    Text[ arabic ] = "Star Calc 3.0";
+    Text[ greek ] = "Star Calc 3.0";
+    Text[ korean ] = "StarOffice Calc 3.0";
+    Text[ turkish ] = "StarCalc 3.0";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_LONG_SCDOC_NAME
+{
+    Text = "StarOffice 5.0 Tabelle" ;
+    Text [ ENGLISH ] = "StarOffice 5.0 Table" ;
+    Text [ dutch ] = "StarOffice 5.0 werkblad" ;
+    Text [ english_us ] = "StarOffice 5.0 Spreadsheet" ;
+    Text [ swedish ] = "StarOffice 5.0 tabell" ;
+    Text [ danish ] = "StarOffice Calc 5.0 regneark" ;
+    Text [ italian ] = "Foglio di calcolo StarOffice 5.0" ;
+    Text [ spanish ] = "Hoja de cálculo de StarOffice 5.0" ;
+    Text [ french ] = "Classeur StarOffice 5.0" ;
+    Text [ portuguese ] = "StarOffice 5.0 Folha de cálculo" ;
+    Text [ portuguese_brazilian ] = "StarOffice 4.0 Tabelle" ;
+    Text[ chinese_simplified ] = "StarOffice 5.0 ¹¤×÷±í";
+    Text[ russian ] = "Ëèñò â StarOffice 5.0";
+    Text[ polish ] = "Arkusz kalkulacyjny StarOffice 5.0";
+    Text[ japanese ] = "StarOffice 5.0 •\\";
+    Text[ chinese_traditional ] = "StarOffice 5.0 ¤u§@ªí";
+    Text[ arabic ] = "ÌÏæá StarOffice Calc 5.0";
+    Text[ greek ] = "ÄéÜãñáììá StarOffice 5.0";
+    Text[ korean ] = "StarOffice Calc 5.0 ½ºÇÁ·¹µå ½ÃÆ®";
+    Text[ turkish ] = "StarOffice 5.0 tablosu";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_40_LONG_DOCNAME
+{
+    Text = "StarOffice 4.0 Tabelle" ;
+    Text [ ENGLISH ] = "StarOffice 4.0 Table" ;
+    Text [ dutch ] = "StarCalc 4.0 werkblad" ;
+    Text [ english_us ] = "Spreadsheet (StarCalc 4.0)" ;
+    Text [ swedish ] = "Star 4.0 tabell" ;
+    Text [ danish ] = "StarCalc 4.0 regneark" ;
+    Text [ italian ] = "Foglio elettronico StarOffice 4.0" ;
+    Text [ spanish ] = "Hoja de cálculo de StarOffice 4.0" ;
+    Text [ french ] = "Classeur StarCalc 4.0" ;
+    Text [ portuguese ] = "Folha de cálculo StarCalc 4.0" ;
+    Text [ portuguese_brazilian ] = "StarOffice 4.0 Tabelle" ;
+    Text[ chinese_simplified ] = "StarCalc 4.0 ¹¤×÷±í";
+    Text[ russian ] = "Ëèñò â StarOffice 4.0";
+    Text[ polish ] = "Arkusz kalkulacyjny StarCalc 4.0";
+    Text[ japanese ] = "StarCalc 4.0 •\\ŒvZ";
+    Text[ chinese_traditional ] = "StarOffice 4.0 ¤u§@ªí";
+    Text[ arabic ] = "ÌÏæá StarCalc 4.0";
+    Text[ greek ] = "Star Calc 4.0 - Ğßíáêáò";
+    Text[ korean ] = "½ºÇÁ·¹µå ½ÃÆ® (StarOffice Calc 4.0)";
+    Text[ turkish ] = "StarCalc 4.0 tablosu";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_30_LONG_DOCNAME
+{
+    Text = "StarCalc 3.0 Tabelle" ;
+    Text [ ENGLISH ] = "StarCalc 3.0 Table" ;
+    Text [ dutch ] = "StarCalc 3.0 werkblad" ;
+    Text [ english_us ] = "StarCalc 3.0 Spreadsheet" ;
+    Text [ swedish ] = "StarCalc 3.0 tabell" ;
+    Text [ danish ] = "StarCalc 3.0 regneark" ;
+    Text [ italian ] = "Foglio elettronico StarCalc 3.0" ;
+    Text [ spanish ] = "Hoja de cálculo de StarCalc 3.0" ;
+    Text [ french ] = "Classeur StarCalc 3.0" ;
+    Text [ portuguese ] = "StarCalc 3.0 Folha de cálculo" ;
+    Text [ portuguese_brazilian ] = "StarOffice Calc 3.0 Tabelle" ;
+    Text[ chinese_simplified ] = "StaCalc 3.0 ¹¤×÷±í";
+    Text[ russian ] = "Ëèñò â StarCalc 3.0";
+    Text[ polish ] = "Arkusz kalkulacyjny StarCalc 3.0";
+    Text[ japanese ] = "StarCalc 3.0 •\\ŒvZ";
+    Text[ chinese_traditional ] = "StarOffice Calc 3.0 ¤u§@ªí";
+    Text[ arabic ] = "ÌÏæá Star Calc 3.0";
+    Text[ greek ] = "StarCalc 3.0 - Ğßíáêáò";
+    Text[ korean ] = "StarOffice Calc 3.0 ½ºÇÁ·¹µå ½ÃÆ®";
+    Text[ turkish ] = "StarCalc 3.0 tablosu";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_SHORT_SCDOC_NAME
+{
+    Text = "Tabelle" ;
+    Text [ ENGLISH ] = "Tabelle" ;
+    Text [ norwegian ] = "Table" ;
+    Text [ italian ] = "Foglio di calcolo" ;
+    Text [ portuguese_brazilian ] = "Tabela" ;
+    Text [ portuguese ] = "Folha de cálculo" ;
+    Text [ finnish ] = "Taulukko" ;
+    Text [ danish ] = "Regneark" ;
+    Text [ french ] = "Feuille de calcul" ;
+    Text [ swedish ] = "Tabell" ;
+    Text [ dutch ] = "Werkblad" ;
+    Text [ spanish ] = "Hoja de cálculo" ;
+    Text [ english_us ] = "Spreadsheet" ;
+    Text[ chinese_simplified ] = "¹¤×÷±í";
+    Text[ russian ] = "Ëèñò";
+    Text[ polish ] = "Arkusz kalkulacyjny";
+    Text[ japanese ] = "•\\";
+    Text[ chinese_traditional ] = "¤u§@ªí";
+    Text[ arabic ] = "ÇáÌÏæá";
+    Text[ greek ] = "Ğßíáêáò";
+    Text[ korean ] = "½ºÇÁ·¹µå ½ÃÆ®";
+    Text[ turkish ] = "Tablo";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_HUMAN_SCDOC_NAME
+{
+    Text = "Tabelle" ;
+    Text [ ENGLISH ] = "Tabelle" ;
+    Text [ norwegian ] = "Table" ;
+    Text [ italian ] = "Foglio di calcolo" ;
+    Text [ portuguese_brazilian ] = "Tabela" ;
+    Text [ portuguese ] = "Folha de cálculo" ;
+    Text [ finnish ] = "Taulukko" ;
+    Text [ danish ] = "Regneark" ;
+    Text [ french ] = "Feuille de calcul" ;
+    Text [ swedish ] = "Tabell" ;
+    Text [ dutch ] = "Werkblad" ;
+    Text [ spanish ] = "Hoja de cálculo" ;
+    Text [ english_us ] = "Spreadsheet" ;
+    Text[ chinese_simplified ] = "¹¤×÷±í";
+    Text[ russian ] = "Ëèñò";
+    Text[ polish ] = "Arkusz kalkulacyjny";
+    Text[ japanese ] = "•\\";
+    Text[ chinese_traditional ] = "¤u§@ªí";
+    Text[ arabic ] = "ÇáÌÏæá";
+    Text[ greek ] = "Ğßíáêáò";
+    Text[ korean ] = "½ºÇÁ·¹µå ½ÃÆ®";
+    Text[ turkish ] = "Tablo";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_DOCSHELL
+{
+    Text = "Tabelle" ;
+    Text [ ENGLISH ] = "Table" ;
+    Text [ norwegian ] = "Table" ;
+    Text [ italian ] = "Tabella" ;
+    Text [ portuguese_brazilian ] = "Tabela" ;
+    Text [ portuguese ] = "Folha" ;
+    Text [ finnish ] = "Taulukko" ;
+    Text [ danish ] = "Ark" ;
+    Text [ french ] = "Feuille" ;
+    Text [ swedish ] = "Tabell" ;
+    Text [ dutch ] = "Werkblad" ;
+    Text [ spanish ] = "Hoja" ;
+    Text [ english_us ] = "Sheet" ;
+    Text[ chinese_simplified ] = "¹¤×÷±í";
+    Text[ russian ] = "Ëèñò";
+    Text[ polish ] = "Arkusz";
+    Text[ japanese ] = "•\\";
+    Text[ chinese_traditional ] = "¤u§@ªí";
+    Text[ arabic ] = "ÇáÌÏæá";
+    Text[ greek ] = "Öıëëï";
+    Text[ korean ] = "½ÃÆ®";
+    Text[ turkish ] = "Tablo";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_TABVIEWSHELL
+{
+    Text = "Zellen" ;
+    Text [ ENGLISH ] = "Cells" ;
+    Text [ norwegian ] = "Celler" ;
+    Text [ italian ] = "Celle" ;
+    Text [ portuguese_brazilian ] = "Células" ;
+    Text [ portuguese ] = "Células" ;
+    Text [ finnish ] = "Solut" ;
+    Text [ danish ] = "Celler" ;
+    Text [ french ] = "Cellules" ;
+    Text [ swedish ] = "Celler" ;
+    Text [ dutch ] = "Cellen" ;
+    Text [ spanish ] = "Celdas" ;
+    Text [ english_us ] = "Cells" ;
+    Text[ chinese_simplified ] = "µ¥Ôª¸ñ";
+    Text[ russian ] = "ß÷åéêè";
+    Text[ polish ] = "Komórki";
+    Text[ japanese ] = "¾Ù";
+    Text[ chinese_traditional ] = "Àx¦s®æ";
+    Text[ arabic ] = "ÇáÎáÇíÇ";
+    Text[ greek ] = "ÊåëéÜ";
+    Text[ korean ] = "¼¿";
+    Text[ turkish ] = "Hücre";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_CELLSHELL
+{
+    Text = "Zellfunktionen" ;
+    Text [ ENGLISH ] = "Functions for Cells" ;
+    Text[ english_us ] = "Functions for Cells";
+    Text[ portuguese ] = "Funções de células";
+    Text[ russian ] = "Ôóíêöèè ÿ÷åéêè";
+    Text[ greek ] = "Ëåéôïõñãßåò êåëéşí";
+    Text[ dutch ] = "Celfuncties";
+    Text[ french ] = "Fonctions de cellule";
+    Text[ spanish ] = "Funciones de celda";
+    Text[ italian ] = "Funzione delle celle";
+    Text[ danish ] = "Cellefunktioner";
+    Text[ swedish ] = "Cellfunktioner";
+    Text[ polish ] = "Funkcje komórek";
+    Text[ portuguese_brazilian ] = "Functions for Cells";
+    Text[ japanese ] = "¾Ù‚ÌŠÖ”";
+    Text[ korean ] = "¼¿ ±â´É";
+    Text[ chinese_simplified ] = "µ¥Ôª¸ñº¯Êı";
+    Text[ chinese_traditional ] = "Àx¦s®æ¥\\¯à";
+    Text[ arabic ] = "ãåÇã ÇáÎáÇíÇ";
+    Text[ turkish ] = "Hücre işlevi";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_FORMATSHELL
+{
+    Text = "Zellformate" ;
+    Text [ ENGLISH ] = "Formats for Cells" ;
+    Text[ english_us ] = "Formats for Cells";
+    Text[ portuguese ] = "Formatos de células";
+    Text[ russian ] = "Ôîğìàòû ÿ÷åéêè";
+    Text[ greek ] = "Ìïñöİò êåëéşí";
+    Text[ dutch ] = "Celformaten";
+    Text[ french ] = "Formats de cellule";
+    Text[ spanish ] = "Formatos de celda";
+    Text[ italian ] = "Formato delle celle";
+    Text[ danish ] = "Celleformater";
+    Text[ swedish ] = "Cellformat";
+    Text[ polish ] = "Formaty komórek";
+    Text[ portuguese_brazilian ] = "Formats for Cells";
+    Text[ japanese ] = "¾Ù‚Ì‘®";
+    Text[ korean ] = "¼¿ ¼­½Ä";
+    Text[ chinese_simplified ] = "µ¥Ôª¸ñ¸ñÊ½";
+    Text[ chinese_traditional ] = "Àx¦s®æ®æ¦¡";
+    Text[ arabic ] = "ÊäÓíŞÇÊ ÇáÎáÇíÇ";
+    Text[ turkish ] = "Hücre formatı";
+    Text[ language_user1 ] = " ";
+};
+
+
+String SCSTR_DRAWSHELL
+{
+    Text = "Grafikobjekte" ;
+    Text [ ENGLISH ] = "Grafical objects" ;
+    Text [ norwegian ] = "Grafiske objekter " ;
+    Text [ italian ] = "Oggetti grafici" ;
+    Text [ portuguese_brazilian ] = "Objetos gráficos" ;
+    Text [ portuguese ] = "Objectos gráficos" ;
+    Text [ finnish ] = "Graafiset objektit" ;
+    Text [ danish ] = "Grafiske objekter" ;
+    Text [ french ] = "Objets graphiques" ;
+    Text [ swedish ] = "Grafiska objekt" ;
+    Text [ dutch ] = "Grafische objecten" ;
+    Text [ spanish ] = "Objetos gráficos" ;
+    Text [ english_us ] = "Graphics objects" ;
+    Text[ chinese_simplified ] = "Í¼ĞÎ¶ÔÏó";
+    Text[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
+    Text[ polish ] = "Obiekty graficzne";
+    Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸Ä";
+    Text[ chinese_traditional ] = "¹Ï¤ùª«¥ó";
+    Text[ arabic ] = "ßÇÆäÇÊ ÕæÑÉ";
+    Text[ greek ] = "Áíôéêåßìåíá ãñáöéêşí";
+    Text[ korean ] = "±×·¡ÇÈ °³Ã¼";
+    Text[ turkish ] = "Grafik nesnesi";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_DRAWTEXTSHELL
+{
+    Text = "Textobjekte" ;
+    Text [ ENGLISH ] = "Text objects" ;
+    Text [ norwegian ] = "Tekst objekter" ;
+    Text [ italian ] = "Oggetti di testo" ;
+    Text [ portuguese_brazilian ] = "Objetos de texto" ;
+    Text [ portuguese ] = "Objectos de texto" ;
+    Text [ finnish ] = "Tekstiobjektit" ;
+    Text [ danish ] = "Tekstobjekter" ;
+    Text [ french ] = "Objets de texte" ;
+    Text [ swedish ] = "Textobjekt" ;
+    Text [ dutch ] = "Tekstobjecten" ;
+    Text [ spanish ] = "Objetos de texto" ;
+    Text [ english_us ] = "Text objects" ;
+    Text[ chinese_simplified ] = "ÎÄ×Ö¶ÔÏó";
+    Text[ russian ] = "Òåêñòîâûå îáúåêòû";
+    Text[ polish ] = "Obiekty tekstowe";
+    Text[ japanese ] = "Ã·½ÄµÌŞ¼Şª¸Ä";
+    Text[ chinese_traditional ] = "¤å¦rª«¥ó";
+    Text[ arabic ] = "ßÇÆäÇÊ ÇáäÕ";
+    Text[ greek ] = "Áíôéêåßìåíá êåéìİíïõ";
+    Text[ korean ] = "ÅØ½ºÆ® °³Ã¼";
+    Text[ turkish ] = "Metin nesnesi";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_DRAWFORMSHELL
+{
+    Text = "Formularobjekte" ;
+    Text [ ENGLISH ] = "Form objects" ;
+    Text[ english_us ] = "Form objects";
+    Text[ portuguese ] = "Objectos de formulário";
+    Text[ russian ] = "Îáúåêòû ôîğìóëÿğà";
+    Text[ dutch ] = "Formulierobjecten";
+    Text[ french ] = "Objets de formulaire";
+    Text[ spanish ] = "Objetos de formulario";
+    Text[ italian ] = "Oggetti per formulario";
+    Text[ danish ] = "Formularobjekter";
+    Text[ swedish ] = "Formulärobjekt";
+    Text[ polish ] = "Obiekty formularzy";
+    Text[ portuguese_brazilian ] = "Form objects";
+    Text[ japanese ] = "Ì«°Ñ µÌŞ¼Şª¸Ä";
+    Text[ chinese_simplified ] = "±íµ¥¶ÔÏó";
+    Text[ chinese_traditional ] = "ªí³æª«¥ó";
+    Text[ arabic ] = "ßÇÆäÇÊ ÇáÇÓÊãÇÑÉ";
+    Text[ greek ] = "Áíôéêåßìåíá öüñìáò";
+    Text[ korean ] = "¾ç½Ä °³Ã¼";
+    Text[ turkish ] = "Form nesnesi";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_CHARTSHELL
+{
+    Text = "Chart-Objekte" ;
+    Text [ ENGLISH ] = "Chart-objects" ;
+    Text[ english_us ] = "Chart objects";
+    Text[ portuguese ] = "Objectos de gráficos";
+    Text[ russian ] = "Îáúåêòû äèàãğàììû";
+    Text[ greek ] = "Áíôéêåßìåíá äéáãñÜììáôïò";
+    Text[ dutch ] = "Chart-objecten";
+    Text[ french ] = "Objets de diagramme";
+    Text[ spanish ] = "Objetos de diagrama";
+    Text[ italian ] = "Diagrammi";
+    Text[ danish ] = "Diagram-objekter";
+    Text[ swedish ] = "Chart-objekt";
+    Text[ polish ] = "Obiekty wykresu";
+    Text[ portuguese_brazilian ] = "Chart-objects";
+    Text[ japanese ] = "¸Ş×Ì‚ÌµÌŞ¼Şª¸Ä";
+    Text[ korean ] = "Â÷Æ®°³Ã¼";
+    Text[ chinese_simplified ] = "Í¼±í¶ÔÏó";
+    Text[ chinese_traditional ] = "¹Ïªíª«É²";
+    Text[ arabic ] = "ßÇÆäÇÊ ÇáÑÓã ÇáÈíÇäí";
+    Text[ turkish ] = "Şema nesnesi";
+};
+
+String SCSTR_OLEOBJECTSHELL
+{
+    Text = "OLE-Objekte" ;
+    Text [ ENGLISH ] = "OLE-objects" ;
+    Text[ english_us ] = "OLE objects";
+    Text[ portuguese ] = "Objectos OLE";
+    Text[ russian ] = "Îáúåêòû OLE";
+    Text[ greek ] = "Áíôéêåßìåíá OLE";
+    Text[ dutch ] = "OLE-objecten";
+    Text[ french ] = "Objets OLE";
+    Text[ spanish ] = "Objetos OLE";
+    Text[ italian ] = "Oggetti OLE";
+    Text[ danish ] = "OLE-objekter";
+    Text[ swedish ] = "OLE-objekt";
+    Text[ polish ] = "Obiekty OLE";
+    Text[ portuguese_brazilian ] = "OLE-objects";
+    Text[ japanese ] = "OLEµÌŞ¼Şª¸Ä";
+    Text[ korean ] = "OLE °³Ã¼";
+    Text[ chinese_simplified ] = "OLE ¶ÔÏó";
+    Text[ chinese_traditional ] = "OLE ª«É²";
+    Text[ arabic ] = "ßÇÆäÇÊ OLE";
+    Text[ turkish ] = "OLE nesnesi";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_GRAPHICSHELL
+{
+    Text = "Grafik" ;
+    Text [ ENGLISH ] = "Graphic" ;
+    Text[ english_us ] = "Graphics";
+    Text[ portuguese ] = "Gráfico";
+    Text[ russian ] = "Ğèñóíîê";
+    Text[ greek ] = "Ãñáöéêü";
+    Text[ dutch ] = "Afbeeldingen";
+    Text[ french ] = "Image";
+    Text[ spanish ] = "Imagen";
+    Text[ italian ] = "Immagine";
+    Text[ danish ] = "Grafik";
+    Text[ swedish ] = "Grafik";
+    Text[ polish ] = "Grafika";
+    Text[ portuguese_brazilian ] = "Graphic";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸";
+    Text[ korean ] = "±×·¡ÇÈ";
+    Text[ chinese_simplified ] = "Í¼ĞÎ";
+    Text[ chinese_traditional ] = "¹Ï§Î";
+    Text[ arabic ] = "ÕæÑÉ";
+    Text[ turkish ] = "Grafik";
+};
+String SCSTR_PAGEBREAKSHELL
+{
+    Text = "Seitenumbruch" ;
+    Text [ ENGLISH ] = "Pagebreak" ;
+    Text[ english_us ] = "Pagebreak";
+    Text[ portuguese ] = "Quebra de página";
+    Text[ russian ] = "Ğàçğûâ ñòğàíèöû";
+    Text[ greek ] = "ÁëëáãŞ óåëßäáò";
+    Text[ dutch ] = "Pagina-einde";
+    Text[ french ] = "Saut de page";
+    Text[ spanish ] = "Salto de página";
+    Text[ italian ] = "Interruzione di pagina";
+    Text[ danish ] = "Sideskift";
+    Text[ swedish ] = "Sidbrytning";
+    Text[ polish ] = "Podzia³ strony";
+    Text[ portuguese_brazilian ] = "Pagebreak";
+    Text[ japanese ] = "‰üÍß°¼Ş";
+    Text[ korean ] = "ÆäÀÌÁö³ª´©±â";
+    Text[ chinese_simplified ] = "»»Ò³";
+    Text[ chinese_traditional ] = "´«­¶";
+    Text[ arabic ] = "İÇÕá ÕİÍÇÊ";
+    Text[ turkish ] = "Sayfa sonu";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_EDITSHELL
+{
+    Text = "Textbearbeitung" ;
+    Text [ ENGLISH ] = "Text editing" ;
+    Text [ norwegian ] = "Tekst redigering" ;
+    Text [ italian ] = "Modifica testo" ;
+    Text [ portuguese_brazilian ] = "Edição de texto" ;
+    Text [ portuguese ] = "Edição de texto" ;
+    Text [ finnish ] = "Tekstin muokkaus" ;
+    Text [ danish ] = "Tekstredigering" ;
+    Text [ french ] = "Édition de texte" ;
+    Text [ swedish ] = "Textredigering" ;
+    Text [ dutch ] = "Tekstbewerking" ;
+    Text [ spanish ] = "Edición de texto" ;
+    Text [ english_us ] = "Text editing" ;
+    Text[ chinese_simplified ] = "ÎÄ×Ö±à¼­";
+    Text[ russian ] = "Ğåäàêòèğîâàíèå òåêñòà";
+    Text[ polish ] = "Edycja tekstu";
+    Text[ japanese ] = "Ã·½Ä‚Ì•ÒW";
+    Text[ chinese_traditional ] = "¤å¦r½s¿è";
+    Text[ arabic ] = "ÊÍÑíÑ ÇáäÕ";
+    Text[ greek ] = "Åğåîåñãáóßá êåéìİíïõ";
+    Text[ korean ] = "ÅØ½ºÆ® ÆíÁı";
+    Text[ turkish ] = "Metin düzenleme";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_PREVIEWSHELL
+{
+    Text = "Druckvorschau" ;
+    Text [ ENGLISH ] = "Print preview" ;
+    Text [ norwegian ] = "Skriv ut forhåndsvisning" ;
+    Text [ italian ] = "Anteprima stampa" ;
+    Text [ portuguese_brazilian ] = "Examinar impressão" ;
+    Text [ portuguese ] = "Previsualizar impressão" ;
+    Text [ finnish ] = "Esikatselu" ;
+    Text [ danish ] = "Udskriftsvisning" ;
+    Text [ french ] = "Aperçu" ;
+    Text [ swedish ] = "Skärmutskrift" ;
+    Text [ dutch ] = "Afdrukvoorbeeld" ;
+    Text [ spanish ] = "Presentación preliminar" ;
+    Text [ english_us ] = "Print Preview" ;
+    Text[ chinese_simplified ] = "´òÓ¡Ô¤ÊÓ";
+    Text[ russian ] = "Ïğîñìîòğ ïå÷àòè";
+    Text[ polish ] = "Podgl¹d wydruku";
+    Text[ japanese ] = "ˆóüÌßÚËŞ­°";
+    Text[ chinese_traditional ] = "¦C¦LÀËµø";
+    Text[ arabic ] = "ãÚÇíäÉ ŞÈá ÇáØÈÇÚÉ";
+    Text[ greek ] = "Ğñïåğéóêüğçóç åêôığùóçò";
+    Text[ korean ] = "ÀÎ¼â ¹Ì¸®º¸±â";
+    Text[ turkish ] = "Baskı önizleme";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_PIVOTSHELL
+{
+    Text = "Datenpilot-Tabellen" ;
+    Text [ ENGLISH ] = "Data Pilot Tables" ;
+    Text [ norwegian ] = "Data Pilot Tables" ;
+    Text [ italian ] = "Tabelle DataPilot" ;
+    Text [ portuguese_brazilian ] = "Data Pilot Tables" ;
+    Text [ portuguese ] = "Tabelas do Piloto de Dados" ;
+    Text [ finnish ] = "???-taulukot" ;
+    Text [ danish ] = "DataPilot-tabeller" ;
+    Text [ french ] = "Tables du DataPilote" ;
+    Text [ swedish ] = "Datapilottabeller" ;
+    Text [ dutch ] = "DataPiloot-tabellen" ;
+    Text [ spanish ] = "Tablas del piloto de datos" ;
+    Text [ english_us ] = "Data Pilot Tables" ;
+    Text[ chinese_simplified ] = "Êı¾İÖúÀí¹¤×÷±í";
+    Text[ russian ] = "Ñâîäíàÿ òàáëèöà";
+    Text[ polish ] = "Tabele Pilota danych";
+    Text[ japanese ] = "ÃŞ°ÀÊß²Û¯Ä‚Ì•\\";
+    Text[ chinese_traditional ] = "¸ê®Æ§U²z¤u§@ªí";
+    Text[ arabic ] = "ÌÏÇæá ãÑÔÏ ÇáÈíÇäÇÊ";
+    Text[ greek ] = "Ğßíáêåò ğéëüôïõ äåäïìİíùí";
+    Text[ korean ] = "µ¥ÀÌÅÍ ÆÄÀÏ·µ Å×ÀÌºí";
+    Text[ turkish ] = "Veri pilotu tablosu";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_AUDITSHELL
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Detektiv-Füll-Modus : Detektiv-F³ll-Modus */
+    Text = "Detektiv-Füll-Modus" ;
+    Text [ ENGLISH ] = "Auditing Fill Mode" ;
+    Text [ dutch ] = "Verkenner opvulmodus" ;
+    Text [ english_us ] = "Detective Fill Mode" ;
+    Text [ italian ] = "Modo di riempimento detective" ;
+    Text [ spanish ] = "Modo Detective de relleno" ;
+    Text [ french ] = "Mode Remplissage d'audit" ;
+    Text [ swedish ] = "Detektiv-fyllningsläge" ;
+    Text [ danish ] = "Detektiv-fyldmodus" ;
+    Text [ portuguese ] = "Modo preenchimento de auditoria" ;
+    Text [ portuguese_brazilian ] = "Detektiv-Füll-Modus" ;
+    Text[ chinese_simplified ] = "ÕìÌ½-³äÌîÄ£Ê½";
+    Text[ russian ] = "Ğåæèì çàëèâêè çàâèñèìîñòåé";
+    Text[ polish ] = "Tryb wype³niania detektywa";
+    Text[ japanese ] = "’T’m —šsÓ°ÄŞ";
+    Text[ chinese_traditional ] = "°»±´-¥R¶ñ¼Ò¦¡";
+    Text[ arabic ] = "æÖÚ ÊÚÈÆÉ ÇáãÎÈÑ";
+    Text[ greek ] = "ÊáôÜóôáóç ãåìßóìáôïò áíé÷íåõôŞ";
+    Text[ korean ] = "ÃßÀû Ã¤¿ì±â ¸ğµå";
+    Text[ turkish ] = "Dedektif doldurma kipi";
+    Text[ language_user1 ] = " ";
+};
+
+ // -----------------------------------------------------------------------
+
+String STR_ROWHEIGHT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Höhe : H÷he */
+    Text = "Höhe" ;
+    Text [ ENGLISH ] = "Height" ;
+    Text [ norwegian ] = "Høyde " ;
+    Text [ italian ] = "Altezza" ;
+    Text [ portuguese_brazilian ] = "Altura" ;
+    Text [ portuguese ] = "Altura" ;
+    Text [ finnish ] = "Korkeus" ;
+    Text [ danish ] = "Højde" ;
+    Text [ french ] = "Hauteur" ;
+    Text [ swedish ] = "Höjd" ;
+    Text [ dutch ] = "Hoogte" ;
+    Text [ spanish ] = "Altura" ;
+    Text [ english_us ] = "Height" ;
+    Text[ chinese_simplified ] = "¸ß";
+    Text[ russian ] = "Âûñîòà";
+    Text[ polish ] = "Wysokoœæ";
+    Text[ japanese ] = "‚‚³";
+    Text[ chinese_traditional ] = "°ª";
+    Text[ arabic ] = "ÇáÇÑÊİÇÚ";
+    Text[ greek ] = "¾øïò";
+    Text[ korean ] = "³ôÀÌ";
+    Text[ turkish ] = "Yükseklik";
+    Text[ language_user1 ] = " ";
+};
+String STR_OPT_ROWHEIGHT
+{
+    Text = "Extra" ;
+    Text [ ENGLISH ] = "Extra" ;
+    Text [ norwegian ] = "Ekstra " ;
+    Text [ italian ] = "Extra" ;
+    Text [ portuguese_brazilian ] = "Extra" ;
+    Text [ portuguese ] = "Adicionar" ;
+    Text [ finnish ] = "Muut" ;
+    Text [ danish ] = "Tilføj" ;
+    Text [ french ] = "Outils" ;
+    Text [ swedish ] = "Extra" ;
+    Text [ dutch ] = "Extra" ;
+    Text [ spanish ] = "Añadir" ;
+    Text [ english_us ] = "Add" ;
+    Text[ chinese_simplified ] = "¸½¼Ó";
+    Text[ russian ] = "Äîáàâèòü";
+    Text[ polish ] = "Dodaj";
+    Text[ japanese ] = "Ú×İ’è";
+    Text[ chinese_traditional ] = "ªş¥[";
+    Text[ arabic ] = "ÅÖÇİí";
+    Text[ greek ] = "Ğñüóèåôá";
+    Text[ korean ] = "Ãß°¡";
+    Text[ turkish ] = "Ekle";
+    Text[ language_user1 ] = " ";
+};
+String STR_ROWHEIGHT_TITLE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Zeilenhöhe : Zeilenh÷he */
+    Text = "Zeilenhöhe" ;
+    Text [ ENGLISH ] = "Row height" ;
+    Text [ norwegian ] = "Høyde på rad " ;
+    Text [ italian ] = "Altezza riga" ;
+    Text [ portuguese_brazilian ] = "Altura da fileira" ;
+    Text [ portuguese ] = "Altura da linha" ;
+    Text [ finnish ] = "Rivikorkeus" ;
+    Text [ danish ] = "Rækkehøjde" ;
+    Text [ french ] = "Hauteur de ligne" ;
+    Text [ swedish ] = "Radhöjd" ;
+    Text [ dutch ] = "Rijhoogte" ;
+    Text [ spanish ] = "Altura de fila" ;
+    Text [ english_us ] = "Row Height" ;
+    Text[ chinese_simplified ] = "ĞĞ¸ß";
+    Text[ russian ] = "Âûñîòà ñòğîêè";
+    Text[ polish ] = "Wysokoœæ wierszy";
+    Text[ japanese ] = "s‚Ì‚‚³";
+    Text[ chinese_traditional ] = "¦C°ª";
+    Text[ arabic ] = "ÇÑÊİÇÚ ÇáÕİ";
+    Text[ greek ] = "¾øïò ãñáììŞò";
+    Text[ korean ] = "Çà ³ôÀÌ";
+    Text[ turkish ] = "Satır yüksekliği";
+    Text[ language_user1 ] = " ";
+};
+String STR_OPT_ROWHEIGHT_TITLE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Optimale Zeilenhöhe : Optimale Zeilenh÷he */
+    Text = "Optimale Zeilenhöhe" ;
+    Text [ ENGLISH ] = "Optimal row height" ;
+    Text [ norwegian ] = "Optimal høyde på rad " ;
+    Text [ italian ] = "Altezza riga ottimale" ;
+    Text [ portuguese_brazilian ] = "Altura ótima da fileira" ;
+    Text [ portuguese ] = "Optimizar altura da linha" ;
+    Text [ finnish ] = "Sopivin rivikorkeus" ;
+    Text [ danish ] = "Optimal rækkehøjde" ;
+    Text [ french ] = "Hauteur de ligne optimale" ;
+    Text [ swedish ] = "Optimal radhöjd" ;
+    Text [ dutch ] = "Optimale rijhoogte" ;
+    Text [ spanish ] = "Altura de fila óptima" ;
+    Text [ english_us ] = "Optimal Row Height" ;
+    Text[ chinese_simplified ] = "×î¼ÑĞĞ¸ß";
+    Text[ russian ] = "Îïòèìàëüíàÿ âûñîòà ñòğîêè";
+    Text[ polish ] = "Optymalna wysokoœæ wierszy";
+    Text[ japanese ] = "Å“K‚Ès‚Ì‚‚³";
+    Text[ chinese_traditional ] = "³ÌÓì¦C°ª";
+    Text[ arabic ] = "ÇáÇÑÊİÇÚ ÇáÃãËá ááÕİ";
+    Text[ greek ] = "Âİëôéóôï ıøïò ãñáììŞò";
+    Text[ korean ] = "ÃÖÀûÀÇ Çà ³ôÀÌ";
+    Text[ turkish ] = "Optimum satır yüksekliği";
+    Text[ language_user1 ] = " ";
+};
+String STR_COLWIDTH
+{
+    Text = "Breite" ;
+    Text [ ENGLISH ] = "Width" ;
+    Text [ norwegian ] = "Bredde " ;
+    Text [ italian ] = "Larghezza" ;
+    Text [ portuguese_brazilian ] = "Largura" ;
+    Text [ portuguese ] = "Largura" ;
+    Text [ finnish ] = "Leveys" ;
+    Text [ danish ] = "Bredde" ;
+    Text [ french ] = "Largeur" ;
+    Text [ swedish ] = "Bredd" ;
+    Text [ dutch ] = "Breedte" ;
+    Text [ spanish ] = "Ancho" ;
+    Text [ english_us ] = "Width" ;
+    Text[ chinese_simplified ] = "¿í";
+    Text[ russian ] = "Øèğèíà";
+    Text[ polish ] = "Szerokoœæ";
+    Text[ japanese ] = "•";
+    Text[ chinese_traditional ] = "¼e";
+    Text[ arabic ] = "ÇáÚÑÖ";
+    Text[ greek ] = "ĞëÜôïò";
+    Text[ korean ] = "³Êºñ";
+    Text[ turkish ] = "Genişlik";
+    Text[ language_user1 ] = " ";
+};
+String STR_OPT_COLWIDTH
+{
+    Text = "Extra" ;
+    Text [ ENGLISH ] = "Extra" ;
+    Text [ norwegian ] = "Ekstra " ;
+    Text [ italian ] = "Extra" ;
+    Text [ portuguese_brazilian ] = "Extra" ;
+    Text [ portuguese ] = "Adicionar" ;
+    Text [ finnish ] = "Muut" ;
+    Text [ danish ] = "Tilføj" ;
+    Text [ french ] = "Outils" ;
+    Text [ swedish ] = "Extra" ;
+    Text [ dutch ] = "Extra" ;
+    Text [ spanish ] = "Añadir" ;
+    Text [ english_us ] = "Add" ;
+    Text[ chinese_simplified ] = "¸½¼Ó";
+    Text[ russian ] = "Äîáàâèòü";
+    Text[ polish ] = "Dodaj";
+    Text[ japanese ] = "Ú×İ’è";
+    Text[ chinese_traditional ] = "ªş¥[";
+    Text[ arabic ] = "ÅÖÇİí";
+    Text[ greek ] = "Ğñüóèåôá";
+    Text[ korean ] = "Ãß°¡";
+    Text[ turkish ] = "Ekle";
+    Text[ language_user1 ] = " ";
+};
+String STR_COLWIDTH_TITLE
+{
+    Text = "Spaltenbreite" ;
+    Text [ ENGLISH ] = "Column width" ;
+    Text [ norwegian ] = "Bredde på kolonne " ;
+    Text [ italian ] = "Larghezza colonna" ;
+    Text [ portuguese_brazilian ] = "Largura da coluna" ;
+    Text [ portuguese ] = "Largura da coluna" ;
+    Text [ finnish ] = "Sarakeleveys" ;
+    Text [ danish ] = "Kolonnebredde" ;
+    Text [ french ] = "Largeur de colonne" ;
+    Text [ swedish ] = "Kolumnbredd" ;
+    Text [ dutch ] = "Kolombreedte" ;
+    Text [ spanish ] = "Ancho de columna" ;
+    Text [ english_us ] = "Column Width" ;
+    Text[ chinese_simplified ] = "ÁĞ¿í";
+    Text[ russian ] = "Øèğèíà ñòîëáöîâ";
+    Text[ polish ] = "Szerokoœæ kolumn";
+    Text[ japanese ] = "—ñ•";
+    Text[ chinese_traditional ] = "Äæ¼e";
+    Text[ arabic ] = "ÚÑÖ ÇáÃÚãÏÉ";
+    Text[ greek ] = "ĞëÜôïò óôŞëçò";
+    Text[ korean ] = "¿­ ³Êºñ";
+    Text[ turkish ] = "Sütun genişliği";
+    Text[ language_user1 ] = " ";
+};
+String STR_OPT_COLWIDTH_TITLE
+{
+    Text = "Optimale Spaltenbreite" ;
+    Text [ ENGLISH ] = "Optimal column width" ;
+    Text [ norwegian ] = "Optimal bredde på kolonne " ;
+    Text [ italian ] = "Larghezza colonna ottimale" ;
+    Text [ portuguese_brazilian ] = "Largura ótima da coluna" ;
+    Text [ portuguese ] = "Optimizar largura da coluna" ;
+    Text [ finnish ] = "Sopivin sarakeleveys" ;
+    Text [ danish ] = "Optimal kolonnebredde" ;
+    Text [ french ] = "Largeur de colonne optimale" ;
+    Text [ swedish ] = "Optimal kolumnbredd" ;
+    Text [ dutch ] = "Optimale kolombreedte" ;
+    Text [ spanish ] = "Ancho de columna óptimo" ;
+    Text [ english_us ] = "Optimal Column Width" ;
+    Text[ chinese_simplified ] = "×î¼ÑÁĞ¿í";
+    Text[ russian ] = "Îïòèìàëüíàÿ øèğèíà ñòîëáöà";
+    Text[ polish ] = "Optymalna szerokoœæ kolumn";
+    Text[ japanese ] = "Å“K‚È—ñ•";
+    Text[ chinese_traditional ] = "³ÌÓìÄæ¼e";
+    Text[ arabic ] = "ÇáÚÑÖ ÇáÃãËá ááÃÚãÏÉ";
+    Text[ greek ] = "Âİëôéóôï ğëÜôïò óôŞëçò";
+    Text[ korean ] = "ÃÖÀûÀÇ ¿­ ³Êºñ";
+    Text[ turkish ] = "Optimum sütun genişliği";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_UNDEFINED
+{
+    Text = "- undefiniert -" ;
+    Text [ ENGLISH ] = "- undefined -" ;
+    Text [ norwegian ] = "- ubestemt -" ;
+    Text [ italian ] = "- non definito -" ;
+    Text [ portuguese_brazilian ] = "- não definido -" ;
+    Text [ portuguese ] = "- indefinido -" ;
+    Text [ finnish ] = "- määrittämätön -" ;
+    Text [ danish ] = "- udefineret -" ;
+    Text [ french ] = "- indéfini -" ;
+    Text [ swedish ] = "- odefinierad -" ;
+    Text [ dutch ] = "- niet gedefinieerd -" ;
+    Text [ spanish ] = "- no definido -" ;
+    Text [ english_us ] = "- undefined -" ;
+    Text[ chinese_simplified ] = "- Î´¶¨ÒåµÄ -";
+    Text[ russian ] = "- íåîïğåäåëåí -";
+    Text[ polish ] = "- niezdefiniowany -";
+    Text[ japanese ] = "- w’è‚È‚µ -";
+    Text[ chinese_traditional ] = "- ¥¼©w¸qªº -";
+    Text[ arabic ] = "- ÛíÑ ãõÚÑøİ -";
+    Text[ greek ] = "- ìç ïñéóìİíï -";
+    Text[ korean ] = "- Á¤ÀÇµÇÁö ¾ÊÀ½ -";
+    Text[ turkish ] = "- tanımlanmamış -";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_NONE
+{
+    Text = "- keiner -" ;
+    Text [ ENGLISH ] = "- none -" ;
+    Text [ norwegian ] = "- none -" ;
+    Text [ italian ] = "- senza -" ;
+    Text [ portuguese_brazilian ] = "- nenhum -" ;
+    Text [ portuguese ] = "- nenhuma -" ;
+    Text [ finnish ] = "- ei ole -" ;
+    Text [ danish ] = "- ingen -" ;
+    Text [ french ] = "- aucun -" ;
+    Text [ swedish ] = "- ingen -" ;
+    Text [ dutch ] = "- geen -" ;
+    Text [ spanish ] = "- ninguno -" ;
+    Text [ english_us ] = "- none -" ;
+    Text[ chinese_simplified ] = "- ÎŞ -";
+    Text[ russian ] = "- áåç -";
+    Text[ polish ] = "-brak -";
+    Text[ japanese ] = "- ‚È‚µ -";
+    Text[ chinese_traditional ] = "- µL -";
+    Text[ arabic ] = "- ÈÏæä -";
+    Text[ greek ] = "- êáíİíá -";
+    Text[ korean ] = "- ¾øÀ½  -";
+    Text[ turkish ] = "- yok -";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_EMPTY
+{
+    Text = "- leer -" ;
+    Text [ ENGLISH ] = "- empty -" ;
+    Text [ norwegian ] = "- tom -" ;
+    Text [ italian ] = "- vuoto -" ;
+    Text [ portuguese_brazilian ] = "- vazio -" ;
+    Text [ portuguese ] = "- vazio -" ;
+    Text [ finnish ] = "- tyhjä -" ;
+    Text [ danish ] = "- tom -" ;
+    Text [ french ] = "- vide -" ;
+    Text [ swedish ] = "- tom -" ;
+    Text [ dutch ] = "- leeg -" ;
+    Text [ spanish ] = "- vacío -" ;
+    Text [ english_us ] = "- empty -" ;
+    Text[ chinese_simplified ] = "- ¿Õ°× -";
+    Text[ russian ] = "-ïóñòî -";
+    Text[ polish ] = "- pusty -";
+    Text[ japanese ] = "- ‹ó”’ -";
+    Text[ chinese_traditional ] = "- ªÅ¥Õ -";
+    Text[ arabic ] = "- İÇÑÛ -";
+    Text[ greek ] = "- êåíü -";
+    Text[ korean ] = "- ºñ¾úÀ½ -";
+    Text[ turkish ] = "- boş -";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_NOTEMPTY
+{
+    Text = "- nicht leer -" ;
+    Text [ ENGLISH ] = "- not empty -" ;
+    Text [ norwegian ] = "- ikke tom -" ;
+    Text [ italian ] = "- non vuoto -" ;
+    Text [ portuguese_brazilian ] = "- não vazio -" ;
+    Text [ portuguese ] = "- não vazio -" ;
+    Text [ finnish ] = "- ei tyhjä -" ;
+    Text [ danish ] = "- ikke tom -" ;
+    Text [ french ] = "- non vide -" ;
+    Text [ swedish ] = "- inte tom -" ;
+    Text [ dutch ] = "- niet leeg -" ;
+    Text [ spanish ] = "- no vacío -" ;
+    Text [ english_us ] = "- not empty -" ;
+    Text[ chinese_simplified ] = "- ²»¿Õ°× -";
+    Text[ russian ] = "- íå ïóñòî -";
+    Text[ polish ] = "-nie pusty -";
+    Text[ japanese ] = "- ‹ó”’‚È‚µ -";
+    Text[ chinese_traditional ] = "- ¤£ªÅ¥Õ -";
+    Text[ arabic ] = "- ÛíÑ İÇÑÛ -";
+    Text[ greek ] = "- ü÷é êåíü -";
+    Text[ korean ] = "- ºñ¾îÀÖÁö ¾ÊÀ½ -";
+    Text[ turkish ] = "- boş değil -";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_NEWTABLE
+{
+    Text = "- neue Tabelle -" ;
+    Text [ ENGLISH ] = "- new table -" ;
+    Text [ norwegian ] = "- ny tabell -" ;
+    Text [ italian ] = "- nuova tabella -" ;
+    Text [ portuguese_brazilian ] = "- nova tabela -" ;
+    Text [ portuguese ] = "- nova folha -" ;
+    Text [ finnish ] = "- new table -" ;
+    Text [ danish ] = "- nyt ark -" ;
+    Text [ french ] = "- nouvelle feuille -" ;
+    Text [ swedish ] = "- ny tabell -" ;
+    Text [ dutch ] = "- nieuw werkblad -" ;
+    Text [ spanish ] = "- nueva hoja -" ;
+    Text [ english_us ] = "- new sheet -" ;
+    Text[ chinese_simplified ] = "- ĞÂ½¨¹¤×÷±í -";
+    Text[ russian ] = "- íîâûé ëèñò -";
+    Text[ polish ] = "- nowy arkusz -";
+    Text[ japanese ] = "- V‚µ‚¢•\\ -";
+    Text[ chinese_traditional ] = "- ·s«Ø¤u§@ªí -";
+    Text[ arabic ] = "- ÌÏæá ÌÏíÏ -";
+    Text[ greek ] = "- Äçìéïõñãßá ğßíáêá -";
+    Text[ korean ] = "- »õ ½ÃÆ® -";
+    Text[ turkish ] = "- yeni tablo -";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_ALL
+{
+    Text = "- alle -" ;
+    Text [ ENGLISH ] = "- all -" ;
+    Text [ norwegian ] = "- all -" ;
+    Text [ italian ] = "- tutto -" ;
+    Text [ portuguese_brazilian ] = "- all -" ;
+    Text [ portuguese ] = "- tudo -" ;
+    Text [ french ] = "- tout -" ;
+    Text [ dutch ] = "- alle-" ;
+    Text [ spanish ] = "- todo -" ;
+    Text [ danish ] = "- alle -" ;
+    Text [ swedish ] = "- alla -" ;
+    Text [ finnish ] = "- all -" ;
+    Text [ english_us ] = "- all -" ;
+    Text[ chinese_simplified ] = "- È«²¿ -";
+    Text[ russian ] = "- âñå -";
+    Text[ polish ] = "- wszystkie -";
+    Text[ japanese ] = "- ‚·‚×‚Ä -";
+    Text[ chinese_traditional ] = "- ¥ş³¡ -";
+    Text[ arabic ] = "- Çáßá -";
+    Text[ greek ] = "- üëá -";
+    Text[ korean ] = "- ÀüÃ¼ -";
+    Text[ turkish ] = "- tümü -";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_STDFILTER
+{
+    Text = "- Standard -" ;
+    Text [ ENGLISH ] = "- Standard -" ;
+    Text [ english_us ] = "- Standard -" ;
+    Text [ italian ] = "- Standard -" ;
+    Text [ spanish ] = "- Estándar -" ;
+    Text [ french ] = "- Standard -" ;
+    Text [ dutch ] = "- Standaard -" ;
+    Text [ swedish ] = "- Standard -" ;
+    Text [ danish ] = "- Standard -" ;
+    Text [ portuguese ] = "- Padrão -" ;
+    Text [ portuguese_brazilian ] = "- Standard -" ;
+    Text[ chinese_simplified ] = "- ±ê×¼ -";
+    Text[ russian ] = "- Ñòàíäàğò -";
+    Text[ polish ] = "- Domyœlnie-";
+    Text[ japanese ] = "- •W€ -";
+    Text[ chinese_traditional ] = "- ¼Ğ·Ç -";
+    Text[ arabic ] = "- ŞíÇÓí -";
+    Text[ greek ] = "- ÔõğéêÜ -";
+    Text[ korean ] = "- Ç¥ÁØ -";
+    Text[ turkish ] = "- Standart -";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_TOP10FILTER
+{
+    Text = "- Top 10 -" ;
+    Text [ ENGLISH ] = "- Top 10 -" ;
+    Text [ portuguese ] = "- Top 10 -" ;
+    Text [ english_us ] = "- Top 10 -" ;
+    Text [ portuguese_brazilian ] = "- Top 10 -" ;
+    Text [ swedish ] = "- Top 10 -" ;
+    Text [ danish ] = "- Top 10 -" ;
+    Text [ italian ] = "- Top 10 -" ;
+    Text [ spanish ] = "- Los 10 primeros -" ;
+    Text [ french ] = "- Top 10 -" ;
+    Text [ dutch ] = "- Top 10 -" ;
+    Text[ chinese_simplified ] = "- Ç° 10 ¸ö -";
+    Text[ russian ] = "- 10 ïåğâûõ -";
+    Text[ polish ] = "- 10 pierwszych -";
+    Text[ japanese ] = "- Ä¯Ìß 10 -";
+    Text[ chinese_traditional ] = "- «e 10 ­Ó -";
+    Text[ arabic ] = "- Top 10 -";
+    Text[ greek ] = "- Ğñşôá 10 -";
+    Text[ korean ] = "- »óÀ§ 10 -";
+    Text[ turkish ] = "- Top 10 -";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_NONAME
+{
+    Text = "unbenannt" ;
+    Text [ ENGLISH ] = "unknown" ;
+    Text [ norwegian ] = "ukjent" ;
+    Text [ italian ] = "Senza nome" ;
+    Text [ portuguese_brazilian ] = "desconhecido" ;
+    Text [ portuguese ] = "sem nome" ;
+    Text [ finnish ] = "tuntematon" ;
+    Text [ danish ] = "ikke-navngivet" ;
+    Text [ french ] = "sans nom" ;
+    Text [ swedish ] = "namnlös" ;
+    Text [ dutch ] = "naamloos" ;
+    Text [ spanish ] = "Sin nombre" ;
+    Text [ english_us ] = "unnamed" ;
+    Text[ chinese_simplified ] = "Î´ÃüÃû";
+    Text[ russian ] = "áåç èìåíè";
+    Text[ polish ] = "bez nazwy";
+    Text[ japanese ] = "–³–¼";
+    Text[ chinese_traditional ] = "¥¼©R¦W";
+    Text[ arabic ] = "ÈÏæä ÚäæÇä";
+    Text[ greek ] = "Äß÷ùò üíïìá";
+    Text[ korean ] = "ÀÌ¸§¾øÀ½";
+    Text[ turkish ] = "bilinmeyen";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_COLUMN
+{
+    Text = "Spalte" ;
+    Text [ ENGLISH ] = "Column" ;
+    Text [ norwegian ] = "Column" ;
+    Text [ italian ] = "Colonna" ;
+    Text [ portuguese_brazilian ] = "Coluna" ;
+    Text [ portuguese ] = "Coluna" ;
+    Text [ finnish ] = "Sarake" ;
+    Text [ danish ] = "Kolonne" ;
+    Text [ french ] = "Colonne" ;
+    Text [ swedish ] = "Kolumn" ;
+    Text [ dutch ] = "Kolom" ;
+    Text [ spanish ] = "Columna" ;
+    Text [ english_us ] = "Column" ;
+    Text[ chinese_simplified ] = "ÁĞ";
+    Text[ russian ] = "Ñòîëáåö";
+    Text[ polish ] = "Kolumna";
+    Text[ japanese ] = "—ñ";
+    Text[ chinese_traditional ] = "Äæ";
+    Text[ arabic ] = "ÇáÚãæÏ";
+    Text[ greek ] = "ÓôŞëç";
+    Text[ korean ] = "¿­";
+    Text[ turkish ] = "Sütun";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_ROW
+{
+    Text = "Zeile" ;
+    Text [ ENGLISH ] = "Row" ;
+    Text [ norwegian ] = "Row" ;
+    Text [ italian ] = "Riga" ;
+    Text [ portuguese_brazilian ] = "Fileira" ;
+    Text [ portuguese ] = "Linha" ;
+    Text [ finnish ] = "Rivi" ;
+    Text [ danish ] = "Række" ;
+    Text [ french ] = "Ligne" ;
+    Text [ swedish ] = "Rad" ;
+    Text [ dutch ] = "Rij" ;
+    Text [ spanish ] = "Fila" ;
+    Text [ english_us ] = "Row" ;
+    Text[ chinese_simplified ] = "ĞĞ";
+    Text[ russian ] = "Ñòğîêà";
+    Text[ polish ] = "Wiersz";
+    Text[ japanese ] = "—ñ";
+    Text[ chinese_traditional ] = "¦C";
+    Text[ arabic ] = "Õİ";
+    Text[ greek ] = "ÃñáììŞ";
+    Text[ korean ] = "Çà";
+    Text[ turkish ] = "Satır";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_NEW
+{
+    Text = "~Neu" ;
+    Text [ ENGLISH ] = "~New" ;
+    Text [ norwegian ] = "~New" ;
+    Text [ italian ] = "~Nuovo" ;
+    Text [ portuguese_brazilian ] = "~Novo" ;
+    Text [ portuguese ] = "~Novo" ;
+    Text [ finnish ] = "~Uusi" ;
+    Text [ danish ] = "Ny" ;
+    Text [ french ] = "Nou~veau" ;
+    Text [ swedish ] = "~Nytt" ;
+    Text [ dutch ] = "~Nieuw" ;
+    Text [ spanish ] = "~Nuevo" ;
+    Text [ english_us ] = "~New" ;
+    Text[ chinese_simplified ] = "ĞÂ½¨(~N)";
+    Text[ russian ] = "Ñîçä~àòü";
+    Text[ polish ] = "Nowy";
+    Text[ japanese ] = "V‹Kì¬(~N)";
+    Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(~N)";
+    Text[ arabic ] = "ÌÏíÏ";
+    Text[ greek ] = "Äçìéïõñãßá";
+    Text[ korean ] = "»õ·Î(~N)";
+    Text[ turkish ] = "~Yeni";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_ADD
+{
+    /* ### ACHTUNG: Neuer Text in Resource? ~Hinzufügen : ~Hinzuf³gen */
+    Text = "~Hinzufügen" ;
+    Text [ ENGLISH ] = "~Add" ;
+    Text [ norwegian ] = "Leg~g til" ;
+    Text [ italian ] = "A~ggiungi" ;
+    Text [ portuguese_brazilian ] = "~Acrescentar" ;
+    Text [ portuguese ] = "~Adicionar" ;
+    Text [ finnish ] = "~Lisää" ;
+    Text [ danish ] = "Tilføj" ;
+    Text [ french ] = "~Ajouter" ;
+    Text [ swedish ] = "~Lägg till" ;
+    Text [ dutch ] = "Toe~voegen" ;
+    Text [ spanish ] = "~Añadir" ;
+    Text [ english_us ] = "~Add" ;
+    Text[ chinese_simplified ] = "ĞÂÔö(~A)";
+    Text[ russian ] = "Äîáàâèòü";
+    Text[ polish ] = "Dodaj";
+    Text[ japanese ] = "’Ç‰Á(~A)";
+    Text[ chinese_traditional ] = "·s¼W(~A)";
+    Text[ arabic ] = "ÅÖÇİÉ";
+    Text[ greek ] = "ĞñïóèŞêç";
+    Text[ korean ] = "Ãß°¡(~A)";
+    Text[ turkish ] = "~Ekle";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_REMOVE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
+    Text = "~Löschen" ;
+    Text [ ENGLISH ] = "~Remove" ;
+    Text [ norwegian ] = "~Fjern" ;
+    Text [ italian ] = "Elimina" ;
+    Text [ portuguese_brazilian ] = "~Remover" ;
+    Text [ portuguese ] = "~Remover" ;
+    Text [ finnish ] = "~Poista" ;
+    Text [ danish ] = "Slet" ;
+    Text [ french ] = "~Supprimer" ;
+    Text [ swedish ] = "~Radera" ;
+    Text [ dutch ] = "~Wissen" ;
+    Text [ spanish ] = "~Eliminar" ;
+    Text [ english_us ] = "~Delete" ;
+    Text[ chinese_simplified ] = "É¾³ı(~D)";
+    Text[ russian ] = "Óäàëèòü";
+    Text[ polish ] = "Usuñ";
+    Text[ japanese ] = "íœ(~D)";
+    Text[ chinese_traditional ] = "§R°£(~D)";
+    Text[ arabic ] = "ÍĞİ";
+    Text[ greek ] = "ÄéáãñáöŞ";
+    Text[ korean ] = "»èÁ¦(~D)";
+    Text[ turkish ] = "~Sil";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_CANCEL
+{
+    Text = "Ab~brechen" ;
+    Text [ ENGLISH ] = "Cance~l" ;
+    Text [ norwegian ] = "Avbry~t" ;
+    Text [ italian ] = "Annulla" ;
+    Text [ portuguese_brazilian ] = "Cancela~r" ;
+    Text [ portuguese ] = "Cancela~r" ;
+    Text [ finnish ] = "~Peruuta" ;
+    Text [ danish ] = "Annuller" ;
+    Text [ french ] = "~Annuler" ;
+    Text [ swedish ] = "Av~bryt" ;
+    Text [ dutch ] = "~Annuleren" ;
+    Text [ spanish ] = "Can~celar" ;
+    Text [ english_us ] = "Cance~l" ;
+    Text[ chinese_simplified ] = "È¡Ïû(~L)";
+    Text[ russian ] = "Îòìåíà";
+    Text[ polish ] = "Anuluj";
+    Text[ japanese ] = "·¬İ¾Ù(~L)";
+    Text[ chinese_traditional ] = "¨ú®ø(~L)";
+    Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
+    Text[ greek ] = "Áêıñùóç";
+    Text[ korean ] = "Ãë¼Ò(~L)";
+    Text[ turkish ] = "~İptal";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_MODIFY
+{
+    /* ### ACHTUNG: Neuer Text in Resource? ~Ändern : ~ndern */
+    Text = "~Ändern" ;
+    Text [ ENGLISH ] = "Modif~y" ;
+    Text [ norwegian ] = "Modif~y" ;
+    Text [ italian ] = "~Cambia" ;
+    Text [ portuguese_brazilian ] = "Modif~icar" ;
+    Text [ portuguese ] = "Modif~icar" ;
+    Text [ finnish ] = "~Muokkaa" ;
+    Text [ danish ] = "Modificer" ;
+    Text [ french ] = "~Modifier" ;
+    Text [ swedish ] = "~Ändra" ;
+    Text [ dutch ] = "Wij~zigen" ;
+    Text [ spanish ] = "~Modificar" ;
+    Text [ english_us ] = "Modif~y" ;
+    Text[ chinese_simplified ] = "¸ü¸Ä(~Y)";
+    Text[ russian ] = "Èçìåíèòü";
+    Text[ polish ] = "Modyfikuj";
+    Text[ japanese ] = "•ÏX(~Y)";
+    Text[ chinese_traditional ] = "­×§ï(~Y)";
+    Text[ arabic ] = "ÊÚÏíá";
+    Text[ greek ] = "Ôñïğïğïßçóç";
+    Text[ korean ] = "¼öÁ¤(~Y)";
+    Text[ turkish ] = "~Değiştir";
+    Text[ language_user1 ] = " ";
+};
+
+
+String SCSTR_SHOWTABLE
+{
+    Text = "Tabelle einblenden" ;
+    Text [ ENGLISH ] = "Show table" ;
+    Text [ norwegian ] = "Vis tabell" ;
+    Text [ italian ] = "Mostra tabella" ;
+    Text [ portuguese_brazilian ] = "Mostrar tabela" ;
+    Text [ portuguese ] = "Mostrar folha" ;
+    Text [ finnish ] = "Näytä taulukko" ;
+    Text [ danish ] = "Vis ark" ;
+    Text [ french ] = "Afficher la feuille" ;
+    Text [ swedish ] = "Visa tabell" ;
+    Text [ dutch ] = "Werkblad weergeven" ;
+    Text [ spanish ] = "Mostrar hoja" ;
+    Text [ english_us ] = "Show Sheet" ;
+    Text[ chinese_simplified ] = "ÏÔÊ¾¹¤×÷±í";
+    Text[ russian ] = "Ïîêàçàòü ëèñò";
+    Text[ polish ] = "Poka¿ tabelê";
+    Text[ japanese ] = "•\\‚Ì•\\¦";
+    Text[ chinese_traditional ] = "Åã¥Ü¤u§@ªí";
+    Text[ arabic ] = "ÅÙåÇÑ ÇáÌÏæá";
+    Text[ greek ] = "ÅìöÜíéóç ğßíáêá";
+    Text[ korean ] = "½ÃÆ® º¸ÀÌ±â";
+    Text[ turkish ] = "Tabloyu görüntüle";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_HIDDENTABLES
+{
+    Text = "Ausgeblendete Tabellen" ;
+    Text [ ENGLISH ] = "Hidden tables" ;
+    Text [ norwegian ] = "Skjulte tabeller" ;
+    Text [ italian ] = "Tabelle nascoste" ;
+    Text [ portuguese_brazilian ] = "Ocultar tabelas" ;
+    Text [ portuguese ] = "Folhas de cálculo ocultas" ;
+    Text [ finnish ] = "Piilotetut taulukot" ;
+    Text [ danish ] = "Skjulte ark" ;
+    Text [ french ] = "Feuilles masquées" ;
+    Text [ swedish ] = "Dolda tabeller" ;
+    Text [ dutch ] = "Verborgen werkbladen" ;
+    Text [ spanish ] = "Hojas ocultas" ;
+    Text [ english_us ] = "Hidden Sheets" ;
+    Text[ chinese_simplified ] = "ÒşÈëµÄ¹¤×÷±í";
+    Text[ russian ] = "Ñêğûòûå ëèñòû";
+    Text[ polish ] = "Ukryte arkusze";
+    Text[ japanese ] = "”ñ•\\¦‚Ì•\\";
+    Text[ chinese_traditional ] = "Áô¤Jªº¤u§@ªí";
+    Text[ arabic ] = "ÇáÌÏÇæá ÇáãÎİíÉ";
+    Text[ greek ] = "Êñõöïß ğßíáêåò";
+    Text[ korean ] = "¼û°ÜÁø ½ÃÆ®";
+    Text[ turkish ] = "Gizlenmiş tablolar";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_SELECTDB
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Datenbankbereich wählen : Datenbankbereich wõhlen */
+    Text = "Datenbankbereich wählen" ;
+    Text [ ENGLISH ] = "Select Database" ;
+    Text [ norwegian ] = "Velg database" ;
+    Text [ italian ] = "Seleziona area database" ;
+    Text [ portuguese_brazilian ] = "Selecionar Base de Dados" ;
+    Text [ portuguese ] = "Seleccionar área da base de dados" ;
+    Text [ finnish ] = "Valitse tietokanta" ;
+    Text [ danish ] = "Vælg databaseområde" ;
+    Text [ french ] = "Sélectionner une plage de base de données" ;
+    Text [ swedish ] = "Välj databasområde" ;
+    Text [ dutch ] = "Database-bereik selecteren" ;
+    Text [ spanish ] = "Seleccionar área de base de datos" ;
+    Text [ english_us ] = "Select Database Range" ;
+    Text[ chinese_simplified ] = "Ñ¡ÔñÊı¾İ¿âÇøÓò";
+    Text[ russian ] = "Âûáğàòü îáëàñòü áàçû äàííûõ";
+    Text[ polish ] = "Zaznacz obszar bazy danych";
+    Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚Ì”ÍˆÍ‚ğ‘I‘ğ";
+    Text[ chinese_traditional ] = "¿ï¾Ü¸ê®Æ®w°Ï°ì";
+    Text[ arabic ] = "ÇÎÊíÇÑ äØÇŞ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
+    Text[ greek ] = "ÅğéëïãŞ ğåñéï÷Şò âÜóçò äåäïìİíùí";
+    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ¿µ¿ª ¼±ÅÃ";
+    Text[ turkish ] = "Veritabanı aralığını seç";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_AREAS
+{
+    Text = "Bereiche" ;
+    Text [ ENGLISH ] = "Table areas" ;
+    Text [ norwegian ] = "Tabellområde" ;
+    Text [ italian ] = "Aree" ;
+    Text [ portuguese_brazilian ] = "Áreas da tabela" ;
+    Text [ portuguese ] = "Áreas" ;
+    Text [ finnish ] = "Taulukkoalueet" ;
+    Text [ danish ] = "Områder" ;
+    Text [ french ] = "Plages" ;
+    Text [ swedish ] = "Områden" ;
+    Text [ dutch ] = "Bereiken" ;
+    Text [ spanish ] = "Áreas" ;
+    Text [ english_us ] = "Ranges" ;
+    Text[ chinese_simplified ] = "ÇøÓò";
+    Text[ russian ] = "Îáëàñòè";
+    Text[ polish ] = "Obszary";
+    Text[ japanese ] = "”ÍˆÍ";
+    Text[ chinese_traditional ] = "°Ï°ì";
+    Text[ arabic ] = "ÇáäØÇŞÇÊ";
+    Text[ greek ] = "Ğåñéï÷İò";
+    Text[ korean ] = "¿µ¿ª";
+    Text[ turkish ] = "Aralıklar";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_TABLE
+{
+    Text = "Tabelle" ;
+    Text [ ENGLISH ] = "Table" ;
+    Text [ norwegian ] = "Table" ;
+    Text [ italian ] = "Tabella" ;
+    Text [ portuguese_brazilian ] = "Tabela" ;
+    Text [ portuguese ] = "Folha" ;
+    Text [ finnish ] = "Taulukko" ;
+    Text [ danish ] = "Ark" ;
+    Text [ french ] = "Feuille" ;
+    Text [ swedish ] = "Tabell" ;
+    Text [ dutch ] = "Werkblad" ;
+    Text [ spanish ] = "Hoja" ;
+    Text [ english_us ] = "Sheet" ;
+    Text[ chinese_simplified ] = "¹¤×÷±í";
+    Text[ russian ] = "Ëèñò";
+    Text[ polish ] = "Arkusz";
+    Text[ japanese ] = "•\\";
+    Text[ chinese_traditional ] = "¤u§@ªí";
+    Text[ arabic ] = "ÇáÌÏæá";
+    Text[ greek ] = "Öıëëï";
+    Text[ korean ] = "½ÃÆ®";
+    Text[ turkish ] = "Tablo";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_NAME
+{
+    Text = "Name" ;
+    Text [ ENGLISH ] = "Name" ;
+    Text [ norwegian ] = "Navn" ;
+    Text [ italian ] = "Nome" ;
+    Text [ portuguese_brazilian ] = "Nomear" ;
+    Text [ portuguese ] = "Nome" ;
+    Text [ finnish ] = "Nimi" ;
+    Text [ danish ] = "Navn" ;
+    Text [ french ] = "Nom" ;
+    Text [ swedish ] = "Namn" ;
+    Text [ dutch ] = "Naam" ;
+    Text [ spanish ] = "Nombre" ;
+    Text [ english_us ] = "Name" ;
+    Text[ chinese_simplified ] = "Ãû³Æ";
+    Text[ russian ] = "Èìÿ";
+    Text[ polish ] = "Nazwa";
+    Text[ japanese ] = "–¼‘O";
+    Text[ chinese_traditional ] = "¦WºÙ";
+    Text[ arabic ] = "ÇáÇÓã";
+    Text[ greek ] = "¼íïìá";
+    Text[ korean ] = "ÀÌ¸§";
+    Text[ turkish ] = "Ad";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_INSTABLE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Tabelle einfügen : Tabelle einf³gen */
+    Text = "Tabelle einfügen" ;
+    Text [ ENGLISH ] = "Insert Table" ;
+    Text [ norwegian ] = "Sett inn tabell" ;
+    Text [ italian ] = "Inserisci tabella" ;
+    Text [ portuguese_brazilian ] = "Insere Tabela" ;
+    Text [ portuguese ] = "Inserir folha de cálculo" ;
+    Text [ finnish ] = "Lisää taulukko" ;
+    Text [ danish ] = "Indsæt ark" ;
+    Text [ french ] = "Insérer une feuille" ;
+    Text [ swedish ] = "Infoga tabell" ;
+    Text [ dutch ] = "Werkblad invoegen" ;
+    Text [ spanish ] = "Insertar hoja" ;
+    Text [ english_us ] = "Insert Sheet" ;
+    Text[ chinese_simplified ] = "²åÈë¹¤×÷±í";
+    Text[ russian ] = "Âñòàâèòü ëèñò";
+    Text[ polish ] = "Wstaw arkusz";
+    Text[ japanese ] = "•\\‚Ì‘}“ü";
+    Text[ chinese_traditional ] = "´¡¤J¤u§@ªí";
+    Text[ arabic ] = "ÅÏÑÇÌ ÌÏæá";
+    Text[ greek ] = "ÅéóáãùãŞ ğßíáêá";
+    Text[ korean ] = "½ÃÆ® »ğÀÔ";
+    Text[ turkish ] = "Tablo ekle";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_APDTABLE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Tabelle anhängen : Tabelle anhõngen */
+    Text = "Tabelle anhängen" ;
+    Text [ ENGLISH ] = "Append Table" ;
+    Text [ norwegian ] = "Føy til tabell" ;
+    Text [ italian ] = "Allega tabella" ;
+    Text [ portuguese_brazilian ] = "Anexar Tabela" ;
+    Text [ portuguese ] = "Anexar folha" ;
+    Text [ finnish ] = "Lisää taulukon loppuun" ;
+    Text [ danish ] = "Vedhæft ark" ;
+    Text [ french ] = "Annexer la feuille" ;
+    Text [ swedish ] = "Tillfoga tabell" ;
+    Text [ dutch ] = "Werkblad toevoegen" ;
+    Text [ spanish ] = "Adjuntar hoja" ;
+    Text [ english_us ] = "Append Sheet" ;
+    Text[ chinese_simplified ] = "¸½¼Ó¹¤×÷±í";
+    Text[ russian ] = "Äîáàâèòü ëèñò";
+    Text[ polish ] = "Do³¹cz arkusz";
+    Text[ japanese ] = "•\\‚ğ“Y•t‚·‚é";
+    Text[ chinese_traditional ] = "ªş¥[¤u§@ªí";
+    Text[ arabic ] = "ÅÑİÇŞ ÌÏæá";
+    Text[ greek ] = "Ğñïóêüëëçóç ğßíáêá";
+    Text[ korean ] = "Ã·ºÎµÈ ½ÃÆ®";
+    Text[ turkish ] = "Tablo ekle";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_RENAMETAB
+{
+    Text = "Tabelle umbenennen" ;
+    Text [ ENGLISH ] = "Rename Table" ;
+    Text [ english_us ] = "Rename Sheet" ;
+    Text [ italian ] = "Rinomina tabella" ;
+    Text [ spanish ] = "Cambiar nombre a hoja" ;
+    Text [ french ] = "Renommer la feuille" ;
+    Text [ dutch ] = "Werkbladnaam wijzigen" ;
+    Text [ swedish ] = "Byt namn på tabell" ;
+    Text [ danish ] = "Omdøb ark" ;
+    Text [ portuguese ] = "Mudar nome da folha" ;
+    Text [ portuguese_brazilian ] = "Tabelle umbenennen" ;
+    Text[ chinese_simplified ] = "ÖØÃüÃû¹¤×÷±í";
+    Text[ russian ] = "Ïåğåèìåíîâàòü ëèñò";
+    Text[ polish ] = "Zmieñ nazwê arkusza";
+    Text[ japanese ] = "•\\‚Ì–¼‘O•ÏX";
+    Text[ chinese_traditional ] = "­«·s©R¦W¤u§@ªí";
+    Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ ÇáÌÏæá";
+    Text[ greek ] = "Ìåôïíïìáóßá ğßíáêá";
+    Text[ korean ] = "½ÃÆ® ÀÌ¸§ ¹Ù²Ù±â";
+    Text[ turkish ] = "Tabloyu yeniden adlandır";
+    Text[ language_user1 ] = " ";
+};
+String STR_INSERTGRAPHIC
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Grafik einfügen : Grafik einf³gen */
+    Text = "Grafik einfügen" ;
+    Text [ ENGLISH ] = "Insert image" ;
+    Text [ norwegian ] = "Sett inn bilde" ;
+    Text [ italian ] = "Inserisci immagine" ;
+    Text [ portuguese_brazilian ] = "Insere imagem" ;
+    Text [ portuguese ] = "Inserir imagem" ;
+    Text [ finnish ] = "Lisää kuva" ;
+    Text [ danish ] = "Indsæt billede" ;
+    Text [ french ] = "Insérer une image" ;
+    Text [ swedish ] = "Infoga grafik" ;
+    Text [ dutch ] = "Afbeelding invoegen" ;
+    Text [ spanish ] = "Insertar imagen" ;
+    Text [ english_us ] = "Insert Graphics" ;
+    Text[ chinese_simplified ] = "²åÈëÍ¼ĞÎ";
+    Text[ russian ] = "Âñòàâèòü ğèñóíîê";
+    Text[ polish ] = "Wstaw obraz";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì‘}“ü";
+    Text[ chinese_traditional ] = "´¡¤J¹Ï¤ù";
+    Text[ arabic ] = "ÅÏÑÇÌ ÕæÑÉ";
+    Text[ greek ] = "ÅéóáãùãŞ ãñáöéêïı";
+    Text[ korean ] = "±×·¡ÇÈ »ğÀÔ";
+    Text[ turkish ] = "Grafik ekle";
+    Text[ language_user1 ] = " ";
+};
+
+ //      Attribute
+
+String SCSTR_HOR_JUSTIFY_LEFT
+{
+    Text = "Ausrichtung nach links" ;
+    Text [ ENGLISH ] = "Adjust left" ;
+    Text [ norwegian ] = "Juster til venstre" ;
+    Text [ italian ] = "Allinea a sinistra" ;
+    Text [ portuguese_brazilian ] = "Ajustar o esquerda" ;
+    Text [ portuguese ] = "Ajustar à esquerda" ;
+    Text [ finnish ] = "Tasaa vasemmalle" ;
+    Text [ danish ] = "Venstrejusteret" ;
+    Text [ french ] = "Alignement à gauche" ;
+    Text [ swedish ] = "Vänsterjustera" ;
+    Text [ dutch ] = "Linkslijnend" ;
+    Text [ spanish ] = "Alinear a la izquierda" ;
+    Text [ english_us ] = "Align left" ;
+    Text[ chinese_simplified ] = "Ïò×ó¶ÔÆë";
+    Text[ russian ] = "Âûğàâíèâàíèå ïî ëåâîìó êğàş";
+    Text[ polish ] = "Wyrównaj do lewej";
+    Text[ japanese ] = "¶‘µ‚¦";
+    Text[ chinese_traditional ] = "¦V¥ª¹ï»ô";
+    Text[ arabic ] = "ãÍÇĞÇÉ Åáì ÇáíÓÇÑ";
+    Text[ greek ] = "Óôïß÷éóç áñéóôåñÜ";
+    Text[ korean ] = "¿ŞÂÊ ¸ÂÃã";
+    Text[ turkish ] = "Sola hizala";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_HOR_JUSTIFY_CENTER
+{
+    Text = "Horizontal zentriert" ;
+    Text [ ENGLISH ] = "Center horizontally" ;
+    Text [ norwegian ] = "Midtstill horisontal " ;
+    Text [ italian ] = "Centra in senso orizzontale" ;
+    Text [ portuguese_brazilian ] = "Centrar horizontalmente" ;
+    Text [ portuguese ] = "Centrado na horizontal" ;
+    Text [ finnish ] = "Keskitä vaakasuunnassa" ;
+    Text [ danish ] = "Vandret centreret" ;
+    Text [ french ] = "Centré horizontalement" ;
+    Text [ swedish ] = "Horisontellt centrerad" ;
+    Text [ dutch ] = "Horizontaal gecentreerd" ;
+    Text [ spanish ] = "Centrado horizontal" ;
+    Text [ english_us ] = "Centered horizontally" ;
+    Text[ chinese_simplified ] = "Ë®Æ½¾ÓÖĞ";
+    Text[ russian ] = "Ãîğèçîíòàëüíî ïî öåíòğó";
+    Text[ polish ] = "Wyrównany w poziomie";
+    Text[ japanese ] = "…•½‚É’†‰›‘µ‚¦";
+    Text[ chinese_traditional ] = "¤ô¥­¸m¤¤";
+    Text[ arabic ] = "ãæÓØ ÃİŞíÇ";
+    Text[ greek ] = "Êåíôñáñéóìİíá ïñéæüíôéá";
+    Text[ korean ] = "¼öÆòÀ¸·Î °¡¿îµ¥";
+    Text[ turkish ] = "Yatay ortala";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_HOR_JUSTIFY_RIGHT
+{
+    Text = "Ausrichtung nach rechts" ;
+    Text [ ENGLISH ] = "Adjust right" ;
+    Text [ norwegian ] = "Juster til høyre " ;
+    Text [ italian ] = "Allinea a destra" ;
+    Text [ portuguese_brazilian ] = "Ajustar o direita" ;
+    Text [ portuguese ] = "Ajustar à direita" ;
+    Text [ finnish ] = "Tasaa oikealle" ;
+    Text [ danish ] = "Højrejusteret" ;
+    Text [ french ] = "Alignement à droite" ;
+    Text [ swedish ] = "Högerjustera" ;
+    Text [ dutch ] = "Rechtlijnend" ;
+    Text [ spanish ] = "Alinear a la derecha" ;
+    Text [ english_us ] = "Align right" ;
+    Text[ chinese_simplified ] = "ÏòÓÒ¶ÔÆë";
+    Text[ russian ] = "Âûğàâíèâàíèå ïî ïğàâîìó êğàş";
+    Text[ polish ] = "Wyrównaj do prawej";
+    Text[ japanese ] = "‰E‘µ‚¦";
+    Text[ chinese_traditional ] = "¦V¥k¹ï»ô";
+    Text[ arabic ] = "ãÍÇĞÇÉ Åáì Çáíãíä";
+    Text[ greek ] = "Óôïß÷éóç äåîéÜ";
+    Text[ korean ] = "¿À¸¥ÂÊ ¸ÂÃã";
+    Text[ turkish ] = "Sağa hizala";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_HOR_JUSTIFY_BLOCK
+{
+    Text = "Blockausrichtung" ;
+    Text [ ENGLISH ] = "Block" ;
+    Text [ norwegian ] = "Datablokk " ;
+    Text [ italian ] = "Allineamento blocco" ;
+    Text [ portuguese_brazilian ] = "Bloco" ;
+    Text [ portuguese ] = "Justificar" ;
+    Text [ finnish ] = "Lohko" ;
+    Text [ danish ] = "Lige margener" ;
+    Text [ french ] = "Alignement bloc" ;
+    Text [ swedish ] = "Blockjustering" ;
+    Text [ dutch ] = "Uitgevuld" ;
+    Text [ spanish ] = "Justificado" ;
+    Text [ english_us ] = "Justify" ;
+    Text[ chinese_simplified ] = "×óÓÒ¶ÔÆë";
+    Text[ russian ] = "Âûğàâíèâàíèå ïî øèğèíå";
+    Text[ polish ] = "Wyjustowany";
+    Text[ japanese ] = "‹Ï“™Š„•t";
+    Text[ chinese_traditional ] = "¥ª¥k¹ï»ô";
+    Text[ arabic ] = "ÖÈØ";
+    Text[ greek ] = "ĞëŞñçò óôïß÷éóç";
+    Text[ korean ] = "¾çÂÊ ¸ÂÃã";
+    Text[ turkish ] = "İki yana yasla";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_HOR_JUSTIFY_REPEAT
+{
+    Text = "Ausrichtung wiederholen" ;
+    Text [ ENGLISH ] = "Adjust repeat" ;
+    Text [ norwegian ] = "Juster gjenta+++Adjust repeat" ;
+    Text [ italian ] = "Ripeti allineamento" ;
+    Text [ portuguese_brazilian ] = "Ajuste repetido" ;
+    Text [ portuguese ] = "Repetir alinhamento" ;
+    Text [ finnish ] = "Toisto" ;
+    Text [ danish ] = "Gentag justeringen" ;
+    Text [ french ] = "Répéter l'alignement" ;
+    Text [ swedish ] = "Upprepa justering" ;
+    Text [ dutch ] = "Uitlijnen herhalen" ;
+    Text [ spanish ] = "Repetir alineación" ;
+    Text [ english_us ] = "Repeat alignment" ;
+    Text[ chinese_simplified ] = "ÖØ¸´¶ÔÆë";
+    Text[ russian ] = "Ïîâòîğèòü âûğàâíèâàíèå";
+    Text[ polish ] = "Powtórz wyrównanie";
+    Text[ japanese ] = "”z’u‚ÌØËß°Ä";
+    Text[ chinese_traditional ] = "­«½Æ¹ï»ô";
+    Text[ arabic ] = "ÊßÑÇÑ ÇáãÍÇĞÇÉ";
+    Text[ greek ] = "ÅğáíÜëçøç óôïß÷éóçò";
+    Text[ korean ] = "¸ÂÃã ¹İº¹";
+    Text[ turkish ] = "Hizalamayı yinele";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_HOR_JUSTIFY_STANDARD
+{
+    Text = "Horizontale Ausrichtung Standard" ;
+    Text [ ENGLISH ] = "Adjust standard" ;
+    Text [ norwegian ] = "Tilpass Standard " ;
+    Text [ italian ] = "Allineamento standard orizzontale" ;
+    Text [ portuguese_brazilian ] = "Ajuste padrão" ;
+    Text [ portuguese ] = "Ajuste padrão na horizontal" ;
+    Text [ finnish ] = "Vakiotasaus" ;
+    Text [ danish ] = "Standard vandret justering" ;
+    Text [ french ] = "Alignement horizontal par défaut" ;
+    Text [ swedish ] = "Horisontell justering standard" ;
+    Text [ dutch ] = "Standaard horizontaal uitlijnen" ;
+    Text [ spanish ] = "Alineación horizontal preterminada" ;
+    Text [ english_us ] = "Horizontal alignment default" ;
+    Text[ chinese_simplified ] = "Ë®Æ½¶ÔÆë±ê×¼";
+    Text[ russian ] = "Ãîğèçîíòàëüíîå âûğàâíèâàíèå (ñòàíäàğò)";
+    Text[ polish ] = "Domyœlne wyrównanie w poziomie";
+    Text[ japanese ] = "•W€‰¡ˆÊ’u";
+    Text[ chinese_traditional ] = "¤ô¥­¹ï»ô¼Ğ·Ç";
+    Text[ arabic ] = "ãÍÇĞÇÉ ÃİŞíÉ ÇİÊÑÇÖíÉ";
+    Text[ language_user1 ] = " ";
+    Text[ greek ] = "ĞñïåğéëïãŞ: Ïñéæüíôéá óôïß÷éóç";
+    Text[ korean ] = "±âº» ¼öÆò ¸ÂÃã";
+    Text[ turkish ] = "Standart yatay hizalama";
+};
+String SCSTR_VER_JUSTIFY_TOP
+{
+    Text = "Ausrichtung nach oben" ;
+    Text [ ENGLISH ] = "Adjust top" ;
+    Text [ norwegian ] = "Tilpass Topp " ;
+    Text [ italian ] = "Allinea in alto" ;
+    Text [ portuguese_brazilian ] = "Ajustar topo" ;
+    Text [ portuguese ] = "Ajustar para cima" ;
+    Text [ finnish ] = "Tasaa ylös" ;
+    Text [ danish ] = "Juster opad" ;
+    Text [ french ] = "Alignement au bord supérieur" ;
+    Text [ swedish ] = "Justera uppåt" ;
+    Text [ dutch ] = "Op bovenkant uitlijnen" ;
+    Text [ spanish ] = "Alineación hacia arriba" ;
+    Text [ english_us ] = "Align to top" ;
+    Text[ chinese_simplified ] = "ÏòÉÏ¶ÔÆë";
+    Text[ russian ] = "Âûğàâíèâàíèå ïî âåğõíåìó êğàş";
+    Text[ polish ] = "Wyrównanie do góry";
+    Text[ japanese ] = "ã‘µ‚¦";
+    Text[ chinese_traditional ] = "¦V¤W¹ï»ô";
+    Text[ arabic ] = "ãÍÇĞÇÉ Åáì ÃÚáì";
+    Text[ greek ] = "Óôïß÷éóç ğÜíù";
+    Text[ korean ] = "À§¿¡ ¸ÂÃã";
+    Text[ turkish ] = "Yukarı hizala";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_VER_JUSTIFY_CENTER
+{
+    Text = "Vertikal zentriert" ;
+    Text [ ENGLISH ] = "Center vertically" ;
+    Text [ norwegian ] = "Midtstill vertikal " ;
+    Text [ italian ] = "Centra verticalmente" ;
+    Text [ portuguese_brazilian ] = "Centrar verticalmente" ;
+    Text [ portuguese ] = "Centrado na vertical" ;
+    Text [ finnish ] = "Pystykeskitys" ;
+    Text [ danish ] = "Lodret centreret" ;
+    Text [ french ] = "Centré verticalement" ;
+    Text [ swedish ] = "Vertikalt centrerad" ;
+    Text [ dutch ] = "Verticaal gecentreerd" ;
+    Text [ spanish ] = "Centrado vertical" ;
+    Text [ english_us ] = "Centered vertically" ;
+    Text[ chinese_simplified ] = "´¹Ö±¾ÓÖĞ";
+    Text[ russian ] = "Âåğòèêàëüíî ïî öåíòğó";
+    Text[ polish ] = "Wyœrodkowany w pionie";
+    Text[ japanese ] = "‚’¼‚É’†‰›‘µ‚¦";
+    Text[ chinese_traditional ] = "««ª½¸m¤¤";
+    Text[ arabic ] = "ãæÓØ ÚãæÏíÇ";
+    Text[ greek ] = "Êåíôñáñéóìİíá êáôáêüñõöá";
+    Text[ korean ] = "¼öÁ÷À¸·Î °¡¿îµ¥";
+    Text[ turkish ] = "Dikey ortala";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_VER_JUSTIFY_BOTTOM
+{
+    Text = "Ausrichtung nach unten" ;
+    Text [ ENGLISH ] = "Adjust bottom" ;
+    Text [ norwegian ] = "Tilpass Bunn" ;
+    Text [ italian ] = "Allinea in basso" ;
+    Text [ portuguese_brazilian ] = "Ajuste na base" ;
+    Text [ portuguese ] = "Ajustar para baixo" ;
+    Text [ finnish ] = "Tasaa alas" ;
+    Text [ danish ] = "Juster nedad" ;
+    Text [ french ] = "Alignement en bas" ;
+    Text [ swedish ] = "Justera nedåt" ;
+    Text [ dutch ] = "Op onderkant uitlijnen" ;
+    Text [ spanish ] = "Alineación hacia abajo" ;
+    Text [ english_us ] = "Align to bottom" ;
+    Text[ chinese_simplified ] = "ÏòÏÂ¶ÔÆë";
+    Text[ russian ] = "Âûğàâíèâàíèå ïî íèæíåìó êğàş";
+    Text[ polish ] = "Wyrówanie do do³u";
+    Text[ japanese ] = "‰º‘µ‚¦";
+    Text[ chinese_traditional ] = "¦V¤U¹ï»ô";
+    Text[ arabic ] = "ãÍÇĞÇÉ Åáì ÃÓİá";
+    Text[ greek ] = "Óôïß÷éóç ğñïò ôá êÜôù";
+    Text[ korean ] = "¾Æ·¡¿¡ ¸ÂÃã";
+    Text[ turkish ] = "Aşağı hizala";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_VER_JUSTIFY_STANDARD
+{
+    Text = "Vertikale Ausrichtung Standard" ;
+    Text [ ENGLISH ] = "Adjust Standard" ;
+    Text [ norwegian ] = "Tilpass Standard" ;
+    Text [ italian ] = "Allineamento standard verticale" ;
+    Text [ portuguese_brazilian ] = "Ajustar Padrão" ;
+    Text [ portuguese ] = "Ajustar padrão na vertical" ;
+    Text [ finnish ] = "Vakiotasaus" ;
+    Text [ danish ] = "Standard lodret justering" ;
+    Text [ french ] = "Alignement vertical par défaut" ;
+    Text [ swedish ] = "Vertikal justering standard" ;
+    Text [ dutch ] = "Standaard verticaal uitlijnen" ;
+    Text [ spanish ] = "Alineación vertical predeterminada" ;
+    Text [ english_us ] = "Vertical alignment default" ;
+    Text[ chinese_simplified ] = "´¹Ö±¶ÔÆë ±ê×¼";
+    Text[ russian ] = "Âûğàâíèâàíèå ïî âåğòèêàëè (ñòàíäàğò)";
+    Text[ polish ] = "Domyœlne wyrównanie w pionie";
+    Text[ japanese ] = "•W€‚’¼‘µ‚¦";
+    Text[ chinese_traditional ] = "««ª½¹ï»ô ¼Ğ·Ç";
+    Text[ arabic ] = "ãÍÇĞÇÉ ÑÃÓíÉ ÇİÊÑÇÖíÉ";
+    Text[ greek ] = "ĞñïåğéëïãŞ: Êáôáêüñõöç óôïß÷éóç";
+    Text[ korean ] = "±âº» ¼öÁ÷ ¸ÂÃã";
+    Text[ turkish ] = "Standart dikey hizalama";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_ORIENTATION_TOPBOTTOM
+{
+    Text = "Von oben nach unten" ;
+    Text [ ENGLISH ] = "Top to bottom" ;
+    Text [ norwegian ] = "Topp til bunn " ;
+    Text [ italian ] = "Dall'alto in basso" ;
+    Text [ portuguese_brazilian ] = "Topo para a base" ;
+    Text [ portuguese ] = "De cima para baixo" ;
+    Text [ finnish ] = "Ylhäältä alas" ;
+    Text [ danish ] = "Fra øverst til nederst" ;
+    Text [ french ] = "Du haut vers le bas" ;
+    Text [ swedish ] = "Uppifrån och ned" ;
+    Text [ dutch ] = "Van boven naar beneden" ;
+    Text [ spanish ] = "De arriba hacia abajo" ;
+    Text [ english_us ] = "Top to bottom" ;
+    Text[ chinese_simplified ] = "´ÓÉÏÏòÏÂ";
+    Text[ russian ] = "Ñâåğõó âíèç";
+    Text[ polish ] = "Z góry do do³u";
+    Text[ japanese ] = "ã‚©‚ç‰º‚Ö";
+    Text[ chinese_traditional ] = "±q¤W¦V¤U";
+    Text[ arabic ] = "ãä ÃÚáì áÃÓİá";
+    Text[ greek ] = "Áğü ğÜíù ğñïò ôá êÜôù";
+    Text[ korean ] = "À§¿¡¼­ ¾Æ·¡·Î";
+    Text[ turkish ] = "Yukardan aşağı";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_ORIENTATION_BOTTOMTOP
+{
+    Text = "Von unten nach oben" ;
+    Text [ ENGLISH ] = "Bottom to Top" ;
+    Text [ norwegian ] = "Bunn til topp " ;
+    Text [ italian ] = "Dal basso in alto" ;
+    Text [ portuguese_brazilian ] = "Base para o topo" ;
+    Text [ portuguese ] = "De baixo para cima" ;
+    Text [ finnish ] = "Alhaalta ylös" ;
+    Text [ danish ] = "Fra nederst til øverst" ;
+    Text [ french ] = "Du bas vers le haut" ;
+    Text [ swedish ] = "Nedifrån och upp" ;
+    Text [ dutch ] = "Van beneden naar boven" ;
+    Text [ spanish ] = "Desde abajo hacia arriba" ;
+    Text [ english_us ] = "Bottom to Top" ;
+    Text[ chinese_simplified ] = "´ÓÏÂÏòÉÏ";
+    Text[ russian ] = "Ñíèçó ââåğõ";
+    Text[ polish ] = "Z do³u do góry";
+    Text[ japanese ] = "‰º‚©‚çã‚Ö";
+    Text[ chinese_traditional ] = "±q¤U¦V¤W";
+    Text[ arabic ] = "ãä ÃÓİá Åáì ÃÚáì";
+    Text[ greek ] = "Áğü êÜôù ğñïò ôá ğÜíù";
+    Text[ korean ] = "¾Æ·¡¼­ À§·Î";
+    Text[ turkish ] = "Aşağıdan yukarıya";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_ORIENTATION_STANDARD
+{
+    Text = "Schreibrichtung Standard" ;
+    Text [ ENGLISH ] = "Orientation standard" ;
+    Text [ norwegian ] = "Retningsstandard" ;
+    Text [ italian ] = "Orientamento standard" ;
+    Text [ portuguese_brazilian ] = "Orientação padrão" ;
+    Text [ portuguese ] = "Orientação padrão" ;
+    Text [ finnish ] = "Vakiosuunta" ;
+    Text [ danish ] = "Standard skriveretning" ;
+    Text [ french ] = "Sens d'écriture par défaut" ;
+    Text [ swedish ] = "Standardorientering" ;
+    Text [ dutch ] = "Standaard afdrukrichting" ;
+    Text [ spanish ] = "Orientación predeterminada" ;
+    Text [ english_us ] = "Default orientation" ;
+    Text[ chinese_simplified ] = "ÎÄ×Ö·½Ïò ±ê×¼";
+    Text[ russian ] = "Ñòàíäàğòíîå íàïğàâëåíèå ïèñüìà";
+    Text[ polish ] = "Orientacja domyœlna";
+    Text[ japanese ] = "‹L“ü•ûŒü •W€";
+    Text[ chinese_traditional ] = "¤å¦r¤è¦V ¼Ğ·Ç";
+    Text[ arabic ] = "ÇÊÌÇå ÇáßÊÇÈÉ ÇáÇİÊÑÇÖí";
+    Text[ greek ] = "ĞñïåğéëïãŞ êáôåıèõíóçò ãñáöŞò";
+    Text[ korean ] = "±âº» ¾²±â¹æÇâ";
+    Text[ turkish ] = "Standart metin yönü";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_CLIP_STRING
+{
+    Text = "Unformatierter Text" ;
+    Text [ ENGLISH ] = "Unformatted Text" ;
+    Text [ norwegian ] = "Uformatert Tekst" ;
+    Text [ italian ] = "Testo non formattato" ;
+    Text [ portuguese_brazilian ] = "Texto Não Formatado" ;
+    Text [ portuguese ] = "Texto não formatado" ;
+    Text [ finnish ] = "Muotoilematon teksti" ;
+    Text [ danish ] = "Uformateret tekst" ;
+    Text [ french ] = "Texte non formaté" ;
+    Text [ swedish ] = "Oformaterad text" ;
+    Text [ dutch ] = "Tekst zonder opmaak" ;
+    Text [ spanish ] = "Texto no formateado" ;
+    Text [ english_us ] = "Unformatted text" ;
+    Text[ chinese_simplified ] = "Î´¸ñÊ½µÄÎÄ±¾";
+    Text[ russian ] = "Íåôîğìàòèğîâàííûé òåêñò";
+    Text[ polish ] = "Tekst niesformatowany";
+    Text[ japanese ] = "‘®İ’è‚³‚ê‚Ä‚È‚¢Ã·½Ä";
+    Text[ chinese_traditional ] = "¥¼®æ¦¡ªº¥»¤å";
+    Text[ arabic ] = "äÕ ÛíÑ ãäÓŞ";
+    Text[ greek ] = "Ìç ìïñöïğïéçìİíï êåßìåíï";
+    Text[ korean ] = "¼­½ÄÈ­ µÇÁö ¾ÊÀº ÅØ½ºÆ®";
+    Text[ turkish ] = "Formatlanmamış metin";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_CLIP_RTF
+{
+    Text = "Formatierter Text [RTF]" ;
+    Text [ ENGLISH ] = "Formatted text [RTF]" ;
+    Text [ norwegian ] = "Formatert tekst [RTF]" ;
+    Text [ italian ] = "Testo formattato [RTF]" ;
+    Text [ portuguese_brazilian ] = "Texto formatado [RTF]" ;
+    Text [ portuguese ] = "Texto formatado [RTF]" ;
+    Text [ finnish ] = "Muotoiltu teksti [RTF]" ;
+    Text [ danish ] = "Formateret tekst [RTF]" ;
+    Text [ french ] = "Texte formaté [RTF]" ;
+    Text [ swedish ] = "Formaterad text [RTF]" ;
+    Text [ dutch ] = "Opgemaakte tekst [RTF]" ;
+    Text [ spanish ] = "Texto formateado [RTF]" ;
+    Text [ english_us ] = "Formatted text [RTF]" ;
+    Text[ chinese_simplified ] = "¸ñÊ½»¯µÄÎÄ±¾ [RTF]";
+    Text[ russian ] = "Ôîğìàòèğîâàííûé òåêñò [RTF]";
+    Text[ polish ] = "Sformatowany tekst [RTF]";
+    Text[ japanese ] = "‘®İ’èÏ‚İÃ·½Ä [RTF]";
+    Text[ greek ] = "Ìïñöùğïéçìİíï êåßìåíï [RTF]";
+    Text[ korean ] = "¼­½Ä ÅØ½ºÆ® [RTF]";
+    Text[ chinese_traditional ] = "¤w¸g®æ¦¡¤Æªº¤å¦r[RTF]";
+    Text[ arabic ] = "äÕ ãõäÓøóŞ [RTF]";
+    Text[ turkish ] = "Formatlı metin [RTF]";
+};
+String SCSTR_CLIP_DDE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? DDE Verknüpfung : DDE Verkn³pfung */
+    Text = "DDE Verknüpfung" ;
+    Text [ ENGLISH ] = "DDE link" ;
+    Text [ norwegian ] = "DDE link" ;
+    Text [ italian ] = "Collegamento DDE" ;
+    Text [ portuguese_brazilian ] = "Ligação do DDE" ;
+    Text [ portuguese ] = "Ligação DDE" ;
+    Text [ finnish ] = "DDE-linkki" ;
+    Text [ danish ] = "DDE-kæde" ;
+    Text [ french ] = "Lien DDE" ;
+    Text [ swedish ] = "DDE-länk" ;
+    Text [ dutch ] = "DDE-koppeling" ;
+    Text [ spanish ] = "Vínculo DDE" ;
+    Text [ english_us ] = "DDE link" ;
+    Text[ chinese_simplified ] = "DDE Á´½Ó";
+    Text[ russian ] = "Ññûëêà DDE";
+    Text[ polish ] = "£¹cze DDE";
+    Text[ japanese ] = "DDEØİ¸";
+    Text[ chinese_traditional ] = "DDE ±¶®|";
+    Text[ arabic ] = "ÇÑÊÈÇØ DDE";
+    Text[ greek ] = "Óıíäåóç DDE";
+    Text[ korean ] = "DDE ¿¬°á";
+    Text[ turkish ] = "DDE bağlantısı";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_CLIP_DIF
+{
+    Text = "DIF" ;
+    Text [ ENGLISH ] = "DIF" ;
+    Text [ english_us ] = "DIF" ;
+    Text [ italian ] = "DIF" ;
+    Text [ spanish ] = "DIF" ;
+    Text [ french ] = "DIF" ;
+    Text [ dutch ] = "DIF" ;
+    Text [ swedish ] = "DIF" ;
+    Text [ danish ] = "DIF" ;
+    Text [ portuguese ] = "DIF" ;
+    Text [ portuguese_brazilian ] = "DIF" ;
+    Text[ chinese_simplified ] = "DIF";
+    Text[ russian ] = "DIF";
+    Text[ polish ] = "DIF";
+    Text[ japanese ] = "DIF";
+    Text[ chinese_traditional ] = "DIF";
+    Text[ arabic ] = "DIF";
+    Text[ greek ] = "DIF";
+    Text[ korean ] = "DIF";
+    Text[ turkish ] = "DIF";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_PROTECTDOC
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Dokument schützen : Dokument sch³tzen */
+    Text = "Dokument schützen" ;
+    Text [ ENGLISH ] = "Protect document" ;
+    Text [ norwegian ] = "Protect document" ;
+    Text [ italian ] = "Proteggi documento" ;
+    Text [ portuguese_brazilian ] = "Prodígio um documento" ;
+    Text [ portuguese ] = "Proteger documento" ;
+    Text [ finnish ] = "Suojaa asiakirjan" ;
+    Text [ danish ] = "Beskyt dokument" ;
+    Text [ french ] = "Protéger le document" ;
+    Text [ swedish ] = "Skydda dokument" ;
+    Text [ dutch ] = "Document beveiligen" ;
+    Text [ spanish ] = "Proteger documento" ;
+    Text [ english_us ] = "Protect Document" ;
+    Text[ chinese_simplified ] = "±£»¤ÎÄµµ";
+    Text[ russian ] = "Çàùèòà äîêóìåíòà";
+    Text[ polish ] = "Chroñ arkusz";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚Ì•ÛŒì";
+    Text[ chinese_traditional ] = "«OÅ@¤å¥ó";
+    Text[ arabic ] = "ÍãÇíÉ ÇáãÓÊäÏ";
+    Text[ greek ] = "Ğñïóôáóßá åããñÜöïõ";
+    Text[ korean ] = "¹®¼­ º¸È£";
+    Text[ turkish ] = "Belgeyi koru";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_UNPROTECTDOC
+{
+    Text = "Dokumentschutz aufheben" ;
+    Text [ ENGLISH ] = "Unprotect document" ;
+    Text [ norwegian ] = "Fjern dokumentbeskyttelse" ;
+    Text [ italian ] = "Disattiva protezione documento" ;
+    Text [ portuguese_brazilian ] = "Documento desprotegido" ;
+    Text [ portuguese ] = "Desproteger documento" ;
+    Text [ finnish ] = "Poista asiakirjan suojaus" ;
+    Text [ danish ] = "Ophæv dokumentbeskyttelse" ;
+    Text [ french ] = "Supprimer la protection du document" ;
+    Text [ swedish ] = "Upphäv dokumentskydd" ;
+    Text [ dutch ] = "Documentbeveiliging opheffen" ;
+    Text [ spanish ] = "Desproteger documento" ;
+    Text [ english_us ] = "Unprotect document" ;
+    Text[ chinese_simplified ] = "È¡ÏûÎÄµµ±£»¤";
+    Text[ russian ] = "Ñíÿòü çàùèòó ñ äîêóìåíòà";
+    Text[ polish ] = "Nie chroñ dokumentu";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚Ì•ÛŒì‚ğ‰ğœ";
+    Text[ chinese_traditional ] = "¨ú®øª«¥ó«OÅ@";
+    Text[ arabic ] = "ÅÒÇáÉ ÍãÇíÉ ÇáãÓÊäÏ";
+    Text[ greek ] = "ÊáôÜñãçóç ğñïóôáóßáò åããñÜöïõ";
+    Text[ korean ] = "¹®¼­ º¸È£ ÇØÁ¦";
+    Text[ turkish ] = "Belge korumasını kaldır";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_PROTECTTAB
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Tabelle schützen : Tabelle sch³tzen */
+    Text = "Tabelle schützen" ;
+    Text [ ENGLISH ] = "Protect table" ;
+    Text [ english_us ] = "Protect Sheet" ;
+    Text [ dutch ] = "Werkblad beveiligen" ;
+    Text [ italian ] = "Proteggi tabella" ;
+    Text [ spanish ] = "Proteger hoja" ;
+    Text [ french ] = "Protéger la feuille" ;
+    Text [ swedish ] = "Skydda tabell" ;
+    Text [ danish ] = "Beskyt ark" ;
+    Text [ portuguese ] = "Proteger folha" ;
+    Text [ portuguese_brazilian ] = "Tabelle schützen" ;
+    Text[ chinese_simplified ] = "±£»¤¹¤×÷±í";
+    Text[ russian ] = "Çàùèòà ëèñòà";
+    Text[ polish ] = "Chroñ tabelê";
+    Text[ japanese ] = "•\\‚Ì•ÛŒì";
+    Text[ chinese_traditional ] = "«OÅ@¤u§@ªí";
+    Text[ arabic ] = "ÍãÇíÉ ÇáÌÏæá";
+    Text[ greek ] = "Ğñïóôáóßá ğßíáêá";
+    Text[ korean ] = "½ÃÆ® º¸È£";
+    Text[ turkish ] = "Tabloyu koru";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_UNPROTECTTAB
+{
+    Text = "Tabellenschutz aufheben" ;
+    Text [ ENGLISH ] = "Unprotect table" ;
+    Text [ english_us ] = "Unprotect sheet" ;
+    Text [ italian ] = "Disattiva protezione tabella" ;
+    Text [ spanish ] = "Desproteger hoja" ;
+    Text [ french ] = "Annuler la protection de la feuille" ;
+    Text [ dutch ] = "Werkbladbeveiliging opheffen" ;
+    Text [ swedish ] = "Upphäv tabellskydd" ;
+    Text [ danish ] = "Ophæv arkbeskyttelse" ;
+    Text [ portuguese ] = "Desproteger folha" ;
+    Text [ portuguese_brazilian ] = "Tabellenschutz aufheben" ;
+    Text[ chinese_simplified ] = "È¡Ïû¹¤×÷±í±£»¤";
+    Text[ russian ] = "Ñíÿòü çàùèòó ñ ëèñòà";
+    Text[ polish ] = "Nie chroñ arkusza";
+    Text[ japanese ] = "•\\‚Ì•ÛŒì‚ğ‰ğœ";
+    Text[ chinese_traditional ] = "¨ú®ø¤u§@ªí«OÅ@";
+    Text[ arabic ] = "ÅáÛÇÁ ÍãÇíÉ ÇáÌÏæá";
+    Text[ greek ] = "ÊáôÜñãçóç ğñïóôáóßáò ğßíáêá";
+    Text[ korean ] = "½ÃÆ® º¸È£ ÇØÁ¦";
+    Text[ turkish ] = "Tablo korumasını kaldır";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_PASSWORD
+{
+    Text = "Kennwort:" ;
+    Text [ ENGLISH ] = "Password:" ;
+    Text [ norwegian ] = "Passord:" ;
+    Text [ italian ] = "Password:" ;
+    Text [ portuguese_brazilian ] = "Senha:" ;
+    Text [ portuguese ] = "Senha:" ;
+    Text [ finnish ] = "Salasana:" ;
+    Text [ danish ] = "Adgangskode:" ;
+    Text [ french ] = "Mot de passe :" ;
+    Text [ swedish ] = "Lösenord:" ;
+    Text [ dutch ] = "Wachtwoord:" ;
+    Text [ spanish ] = "Contraseña:" ;
+    Text [ english_us ] = "Password:" ;
+    Text[ chinese_simplified ] = "¿ÚÁî£º";
+    Text[ russian ] = "Ïàğîëü:";
+    Text[ polish ] = "Has³o:";
+    Text[ japanese ] = "Êß½Ü°ÄŞ:";
+    Text[ chinese_traditional ] = "±K½X¡G";
+    Text[ arabic ] = "ßáãÉ ÇáÓÑ:";
+    Text[ greek ] = "Êùäéêüò ğñüóâáóçò:";
+    Text[ korean ] = "ÆĞ½º¿öµå:";
+    Text[ turkish ] = "Şifre:";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_PASSWORDOPT
+{
+    Text = "Kennwort (optional):" ;
+    Text [ ENGLISH ] = "Password (optional):" ;
+    Text [ norwegian ] = "Passord (valgfri):" ;
+    Text [ italian ] = "Password (facoltativa):" ;
+    Text [ portuguese_brazilian ] = "Senha (opcional):" ;
+    Text [ portuguese ] = "Senha (opcional):" ;
+    Text [ finnish ] = "Salasana (valinnainen):" ;
+    Text [ danish ] = "Adgangskode (valgfri):" ;
+    Text [ french ] = "Mot de passe (facultatif) :" ;
+    Text [ swedish ] = "Lösenord (valfritt):" ;
+    Text [ dutch ] = "Wachtwoord (optioneel):" ;
+    Text [ spanish ] = "Contraseña (opcional):" ;
+    Text [ english_us ] = "Password (optional):" ;
+    Text[ chinese_simplified ] = "¿ÚÁî(¿ÉÊ¡ÂÔ)£º";
+    Text[ russian ] = "Ïàğîëü (íå îáÿçàòåëüíî):";
+    Text[ polish ] = "Has³o (opcjonalne):";
+    Text[ japanese ] = "Êß½Ü°ÄŞ(µÌß¼®İ):";
+    Text[ chinese_traditional ] = "±K½X(¥i¬Ù²¤)¡G";
+    Text[ arabic ] = "ßáãÉ ÇáÓÑ (ÇÎÊíÇÑíÉ):";
+    Text[ greek ] = "Êùäéêüò ğñüóâáóçò (ğñïáéñåôéêÜ):";
+    Text[ korean ] = "ÆĞ½º¿öµå (¼±ÅÃ):";
+    Text[ turkish ] = "Şifre (isteğe bağlı):";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_WRONGPASSWORD
+{
+    Text = "Falsches Kennwort" ;
+    Text [ ENGLISH ] = "Wrong password" ;
+    Text [ norwegian ] = "Feil passord" ;
+    Text [ italian ] = "Password errata" ;
+    Text [ portuguese_brazilian ] = "Senha incorreta" ;
+    Text [ portuguese ] = "Senha incorrecta" ;
+    Text [ finnish ] = "Väärä salasana" ;
+    Text [ danish ] = "Forkert adgangskode" ;
+    Text [ french ] = "Mot de passe incorrect" ;
+    Text [ swedish ] = "Felaktigt lösenord" ;
+    Text [ dutch ] = "Dit wachtwoord is niet correct." ;
+    Text [ spanish ] = "Contraseña incorrecta" ;
+    Text [ english_us ] = "Incorrect Password" ;
+    Text[ chinese_simplified ] = "¿ÚÁîÎŞĞ§";
+    Text[ russian ] = "Íåïğàâèëüíûé ïàğîëü";
+    Text[ polish ] = "Niepoprawne has³o";
+    Text[ japanese ] = "³‚µ‚­‚È‚¢Êß½Ü°ÄŞ";
+    Text[ chinese_traditional ] = "±K½XµL®Ä";
+    Text[ arabic ] = "ßáãÉ ÓÑ ÛíÑ ÕÍíÍÉ";
+    Text[ greek ] = "Åóöáëìİíïò êùäéêüò ğñüóâáóçò";
+    Text[ korean ] = "Àß¸øµÈ ÆĞ½º¿öµå";
+    Text[ turkish ] = "Şifre yanlış";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_END
+{
+    Text = "~Ende" ;
+    Text [ ENGLISH ] = "~End" ;
+    Text [ norwegian ] = "~End" ;
+    Text [ italian ] = "~Fine" ;
+    Text [ portuguese_brazilian ] = "~Fim" ;
+    Text [ portuguese ] = "~Fim" ;
+    Text [ finnish ] = "~Loppu" ;
+    Text [ danish ] = "Slutning" ;
+    Text [ french ] = "~Fin" ;
+    Text [ swedish ] = "~Slut" ;
+    Text [ dutch ] = "~Eind" ;
+    Text [ spanish ] = "~Fin" ;
+    Text [ english_us ] = "~End" ;
+    Text[ chinese_simplified ] = "½áÊø(~E)";
+    Text[ russian ] = "Êîíåö";
+    Text[ polish ] = "Koniec";
+    Text[ japanese ] = "I—¹(~E)";
+    Text[ chinese_traditional ] = "µ²§ô(~E)";
+    Text[ arabic ] = "ÇáäåÇíÉ";
+    Text[ greek ] = "Ôİëïò";
+    Text[ korean ] = "Á¾·á(~E)";
+    Text[ turkish ] = "~Son";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_STAT_PRINT
+{
+    Text = "Drucke..." ;
+    Text [ English ] = "Printing..." ;
+    Text [ norwegian ] = "Skriver ut..." ;
+    Text [ italian ] = "Stampa..." ;
+    Text [ portuguese_brazilian ] = "Imprimindo..." ;
+    Text [ portuguese ] = "A imprimir..." ;
+    Text [ finnish ] = "Tulostus..." ;
+    Text [ danish ] = "Udskriver..." ;
+    Text [ french ] = "Impression..." ;
+    Text [ swedish ] = "Skriver ut..." ;
+    Text [ dutch ] = "Bezig met afdrukken..." ;
+    Text [ spanish ] = "Imprimiendo..." ;
+    Text [ english_us ] = "Printing..." ;
+    Text[ chinese_simplified ] = "´òÓ¡...";
+    Text[ russian ] = "Ïå÷àòü...";
+    Text[ polish ] = "Drukowanie..";
+    Text[ japanese ] = "ˆóü...";
+    Text[ chinese_traditional ] = "¦C¦L...";
+    Text[ arabic ] = "ØÈÇÚÉ...";
+    Text[ greek ] = "Åêôığùóç...";
+    Text[ korean ] = "ÀÎ¼â...";
+    Text[ turkish ] = "Yazdır...";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_UNKNOWN
+{
+    Text = "Unbekannt" ;
+    Text [ English ] = "Unknown" ;
+    Text [ norwegian ] = "Unknown" ;
+    Text [ italian ] = "Senza nome" ;
+    Text [ portuguese_brazilian ] = "Desconhecido" ;
+    Text [ portuguese ] = "Desconhecido" ;
+    Text [ french ] = "Inconnu" ;
+    Text [ dutch ] = "Onbekend" ;
+    Text [ spanish ] = "Desconocido" ;
+    Text [ danish ] = "Ukendt" ;
+    Text [ swedish ] = "Okänd" ;
+    Text [ finnish ] = "Unknown" ;
+    Text [ english_us ] = "Unknown" ;
+    Text[ chinese_simplified ] = "Î´ÃüÃû";
+    Text[ russian ] = "Íåèçâåñòíûé";
+    Text[ polish ] = "Nieznany";
+    Text[ japanese ] = "–³–¼";
+    Text[ chinese_traditional ] = "¥¼©R¦W";
+    Text[ arabic ] = "ÛíÑ ãÚÑæİ";
+    Text[ greek ] = "¢ãíùóôï";
+    Text[ korean ] = "¾Ë¼ö¾øÀ½";
+    Text[ turkish ] = "Bilinmiyor";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_CHAR_ATTRS
+{
+    Text = "Zeichenattribute" ;
+    Text [ ENGLISH ] = "Character Attributes" ;
+    Text [ norwegian ] = "Character Attributes" ;
+    Text [ italian ] = "Attributi carattere" ;
+    Text [ portuguese_brazilian ] = "Character Attributes" ;
+    Text [ portuguese ] = "Atributos de caracteres" ;
+    Text [ french ] = "Attributs de caractères" ;
+    Text [ dutch ] = "Schriftteken-attributen" ;
+    Text [ spanish ] = "Atributos de caracteres" ;
+    Text [ danish ] = "Tegnattributter" ;
+    Text [ swedish ] = "Teckenattribut" ;
+    Text [ finnish ] = "Character Attributes" ;
+    Text [ english_us ] = "Font Attributes" ;
+    Text[ chinese_simplified ] = "×ÖÌåÊôĞÔ";
+    Text[ russian ] = "Àòğèáóòû øğèôòà";
+    Text[ polish ] = "Atrybuty czcionek";
+    Text[ japanese ] = "•¶š‚Ì‘®«";
+    Text[ chinese_traditional ] = "¦r¤¸Äİ©Ê";
+    Text[ arabic ] = "ÓãÇÊ ÇáÎØ";
+    Text[ greek ] = "Éäéüôçôåò ÷áñáêôŞñùí";
+    Text[ korean ] = "±Û²Ã ¼Ó¼º";
+    Text[ turkish ] = "Yazıtipi öznitelikleri";
+    Text[ language_user1 ] = " ";
+};
+
+
+String SCSTR_CLPBRD_CLEAR
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Sie haben größere Datenmengen in die Zwischenablage gestellt.\nSoll der Inhalt der Zwischenablage anderen Applikationen zur Verfügung gestellt werden? : Sie haben gr÷˜ere Datenmengen in die Zwischenablage gestellt.\nSoll der Inhalt der Zwischenablage anderen Applikationen zur Verf³gung gestellt werden? */
+    Text = "Sie haben größere Datenmengen in die Zwischenablage gestellt.\nSoll der Inhalt der Zwischenablage anderen Applikationen zur Verfügung gestellt werden?" ;
+    Text [ English ] = "Shall the Clipboard Content be available for other Applications?" ;
+    Text [ norwegian ] = "Vil du at Innholdet på Utklippstavlen skal være tilgjengelig til andre applikasjoner?" ;
+    Text [ italian ] = "Negli appunti ci sono molti dati.\nRenderli disponibili per altre applicazioni?" ;
+    Text [ portuguese_brazilian ] = "O Conteúdo do Clipboard deve estar disponível para outros Aplicativos?" ;
+    Text [ portuguese ] = "Na área de transferência encontram-se grandes quantidades de dados.\nColocar o conteúdo da área de transferência à disposição de outras aplicações?" ;
+    Text [ english_us ] = "You have a large amount of data saved in the clipboard.\nDo you want the clipboard contents to be available in other applications?" ;
+    Text [ finnish ] = "Pitääkö leikepöydän sisällön olla muiden sovellusten käytettävissä?" ;
+    Text [ danish ] = "Du har placeret en stor mængde data i udklipsholderen.\nSkal udklipholderens indhold være tilgængeligt for andre applikationer?" ;
+    Text [ french ] = "Vous avez déposé un grand nombre de données dans le presse-papiers. \nSouhaitez-vous en conserver le contenu pour une utilisation ultérieure sous une autre application ?" ;
+    Text [ swedish ] = "Du har stora datamängder i urklippet. \nSkall innehållet i urklippet vara tillgängligt för andra tillämpningar?" ;
+    Text [ dutch ] = "U hebt een groot aantal gegevens op het Klembord geplaatst.\nWilt u dat de inhoud van het Klembord beschikbaar blijft voor andere toepassingen?" ;
+    Text [ spanish ] = "Ha copiado una gran cantidad de datos en el portapapeles.\n¿Desea que el contenido del portapapeles esté disponible para otras aplicaciones?" ;
+    Text[ chinese_simplified ] = "ÔÚ¼ôÌù°åÄÚÁô´æ´óÁ¿Êı¾İ¡£\nÄúÒªÈÃÆäËûµÄÓ¦ÓÃ³ÌĞòÒ²Ê¹ÓÃÕâĞ©Êı¾İÂğ£¿";
+    Text[ russian ] = "Âû ïîìåñòèëè â áóôåğ îáìåíà áîëüøåå êîëè÷åñòâî äàííûõ.\nÑäåëàòü äîñòóïíûì ñîäåğæèìîå áóôåğà îáìåíà äëÿ äğóãèõ ïğèëîæåíèé?";
+    Text[ polish ] = "Wprowadzi³eœ wiêksze iloœci danych do schowka.\nCzy zawartoœæ schowka ma zostaæ udostêpniona innym aplikacjom?";
+    Text[ japanese ] = "‚©‚È‚è‚ÌÃŞ°À—Ê‚ª¸Ø¯ÌßÎŞ°ÄŞ‚É•ÛŠÇ‚³‚ê‚Ä‚¢‚Ü‚·B\n¸Ø¯ÌßÎŞ°ÄŞ‚Ì“à—e‚ğ‘¼‚Ì±ÌßØ¹°¼®İ‚Ég‚¤‚æ‚¤‚É‚µ‚Ä‚à‚æ‚ë‚µ‚¢‚Å‚·‚©?";
+    Text[ chinese_traditional ] = "¦b°Å¶KÃ¯¤º¯d¦s¤j¶q¸ê®Æ¡C\n±z­nÅı¨ä¥LªºÀ³¥Îµ{§Ç¤]¨Ï¥Î³o¨Ç¸ê®Æ¡H";
+    Text[ arabic ] = "áŞÏ ŞãÊ ÈÍİÙ ßãíÇÊ ßÈíÑÉ ãä ÇáÈíÇäÇÊ İí ÇáÍÇİÙÉ.\nåá ÊÑíÏ æÖÚ ãÍÊæíÇÊ ÇáÍÇİÙÉ ÊÍÊ ÊÕÑİ ÊØÈíŞÇÊ ÃÎÑì¿";
+    Text[ greek ] = "¸÷åôå áğïèçêåıóåé ìåãÜëç ğïóüôçôá äåäïìİíùí óôï ğñü÷åéñï.\nÈİëåôå ôá äåäïìİíá áõôÜ íá åßíáé äéáèİóéìá êáé ãéá Üëëåò åöáñìïãİò;";
+    Text[ korean ] = "Å¬¸³º¸µå¿¡ ¸¹Àº ·®ÀÇ µ¥ÀÌÅÍ°¡ ÀúÀåµÇ¾î ÀÖ½À´Ï´Ù .\nÅ¬¸³º¸µåÀÇ ³»¿ëÀ» ´Ù¸¥ ÀÀ¿ëÇÁ·Î±×·¥¿¡¼­µµ °¡´ÉÇÏ°Ô ÇÏ°Ú½À´Ï±î?";
+    Text[ turkish ] = "Panoya büyük miktarda veri aktardınız.\nPano içeriğini başka uygulamalarda kullanmak istiyor musunuz?";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_CFG_APP
+{
+    Text = "Systemoptionen" ;
+    Text [ ENGLISH ] = "System Options" ;
+    Text [ dutch ] = "Systeemopties" ;
+    Text [ english_us ] = "System Options" ;
+    Text [ italian ] = "Opzioni di sistema" ;
+    Text [ spanish ] = "Opciones del sistema" ;
+    Text [ french ] = "Options de système" ;
+    Text [ swedish ] = "Systemalternativ" ;
+    Text [ danish ] = "Systemindstillinger" ;
+    Text [ portuguese ] = "Opções do sistema" ;
+    Text [ portuguese_brazilian ] = "Systemoptionen" ;
+    Text[ chinese_simplified ] = "ÏµÍ³Ñ¡Ïî";
+    Text[ russian ] = "Ïàğàìåòğû ñèñòåìû";
+    Text[ polish ] = "Opcje systemu";
+    Text[ japanese ] = "¼½ÃÑ µÌß¼®İ";
+    Text[ chinese_traditional ] = "¨t²Î¿ï¶µ";
+    Text[ arabic ] = "ÎíÇÑÇÊ ÇáäÙÇã";
+    Text[ greek ] = "Åğéëïãİò óõóôŞìáôïò";
+    Text[ korean ] = "½Ã½ºÅÛ ¿É¼Ç";
+    Text[ turkish ] = "Sistem seçenekleri";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_CFG_DOC
+{
+    Text = "Dokumentoptionen" ;
+    Text [ ENGLISH ] = "Document Options" ;
+    Text [ english_us ] = "Document Options" ;
+    Text [ italian ] = "Opzioni di documento" ;
+    Text [ spanish ] = "Opciones del documento" ;
+    Text [ french ] = "Options de document" ;
+    Text [ dutch ] = "Documentopties" ;
+    Text [ swedish ] = "Dokumentalternativ" ;
+    Text [ danish ] = "Dokumentindstillinger" ;
+    Text [ portuguese ] = "Opções do documento" ;
+    Text [ portuguese_brazilian ] = "Dokumentoptionen" ;
+    Text[ chinese_simplified ] = "ÎÄµµÑ¡Ïî";
+    Text[ russian ] = "Ïàğàìåòğû äîêóìåíòà";
+    Text[ polish ] = "Opcje dokumentu";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ µÌß¼®İ";
+    Text[ chinese_traditional ] = "¤å¥ó¿ï¶µ";
+    Text[ arabic ] = "ÎíÇÑÇÊ ÇáãÓÊäÏ";
+    Text[ greek ] = "Åğéëïãİò åããñÜöïõ";
+    Text[ korean ] = "¹®¼­ ¿É¼Ç";
+    Text[ turkish ] = "Belge seçenekleri";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_CFG_VIEW
+{
+    Text = "Ansichtoptionen" ;
+    Text [ ENGLISH ] = "View Options" ;
+    Text [ english_us ] = "View Options" ;
+    Text [ italian ] = "Opzioni vista" ;
+    Text [ spanish ] = "Opciones de visualización" ;
+    Text [ french ] = "Options d'affichage" ;
+    Text [ dutch ] = "Beeldschermopties" ;
+    Text [ swedish ] = "Vyalternativ" ;
+    Text [ danish ] = "Visningsindstillinger" ;
+    Text [ portuguese ] = "Opções de visualização" ;
+    Text [ portuguese_brazilian ] = "Ansichtoptionen" ;
+    Text[ chinese_simplified ] = "ÊÓÍ¼Ñ¡Ïî";
+    Text[ russian ] = "Ïàğàìåòğû âèäà";
+    Text[ polish ] = "Opcje widoku";
+    Text[ japanese ] = "•\\¦µÌß¼®İ";
+    Text[ chinese_traditional ] = "ÀËµø¿ï¶µ";
+    Text[ arabic ] = "ÎíÇÑÇÊ ÇáÚÑÖ";
+    Text[ greek ] = "Åğéëïãİò ğñïâïëŞò";
+    Text[ korean ] = "º¸±â ¿É¼Ç";
+    Text[ turkish ] = "Görünüm seçenekleri";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_CFG_INPUT
+{
+    Text = "Eingabeoptionen" ;
+    Text [ ENGLISH ] = "Input Options" ;
+    Text [ dutch ] = "Invoeropties" ;
+    Text [ english_us ] = "Input Options" ;
+    Text [ swedish ] = "Inmatningsalternativ" ;
+    Text [ danish ] = "Inputindstillinger" ;
+    Text [ italian ] = "Opzioni di digitazione" ;
+    Text [ spanish ] = "Opciones de entrada" ;
+    Text [ french ] = "Options de saisie" ;
+    Text [ portuguese ] = "Opções de entrada" ;
+    Text [ portuguese_brazilian ] = "Eingabeoptionen" ;
+    Text[ chinese_simplified ] = "ÊäÈëÑ¡Ïî";
+    Text[ russian ] = "Ïàğàìåòğû ââîäà";
+    Text[ polish ] = "Opcje wprowadzania";
+    Text[ japanese ] = "“ü—ÍµÌß¼®İ";
+    Text[ chinese_traditional ] = "¿é¤J¿ï¶µ";
+    Text[ arabic ] = "ÎÕÇÆÕ ÇáÅÏÎÇá";
+    Text[ greek ] = "Åğéëïãİò åéóáãùãŞò";
+    Text[ korean ] = "ÀÔ·Â ¿É¼Ç";
+    Text[ turkish ] = "Giriş seçenekleri";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_CFG_SPELLCHECK
+{
+    Text = "Rechtschreiboptionen" ;
+    Text [ ENGLISH ] = "Spellchecker Options" ;
+    Text [ dutch ] = "Spellingsopties" ;
+    Text [ english_us ] = "Spelling Options" ;
+    Text [ italian ] = "Opzioni controllo ortografico" ;
+    Text [ spanish ] = "Opciones de ortografía" ;
+    Text [ french ] = "Options Orthographe" ;
+    Text [ swedish ] = "Rättstavningsalternativ" ;
+    Text [ danish ] = "Stavekontrol-indstillinger" ;
+    Text [ portuguese ] = "Opções de ortografia" ;
+    Text [ portuguese_brazilian ] = "Rechtschreiboptionen" ;
+    Text[ chinese_simplified ] = "Õı×Ö·¨Ñ¡Ïî";
+    Text[ russian ] = "Ïàğàìåòğû îğôîãğàôèè";
+    Text[ polish ] = "Opcje pisowni";
+    Text[ japanese ] = "½ÍßÙÁª¯¸ µÌß¼®İ";
+    Text[ chinese_traditional ] = "«÷¦r";
+    Text[ arabic ] = "ÎíÇÑÇÊ ÇáÊÏŞíŞ ÇáÅãáÇÆí";
+    Text[ greek ] = "Åğéëïãİò ïñèïãñáößáò";
+    Text[ korean ] = "¸ÂÃã¹ı ¿É¼Ç";
+    Text[ turkish ] = "Yazım seçenekleri";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_CFG_PRINT
+{
+    Text = "Druckoptionen" ;
+    Text [ ENGLISH ] = "Print Options" ;
+    Text [ dutch ] = "Afdrukopties" ;
+    Text [ english_us ] = "Print Options" ;
+    Text [ italian ] = "Opzioni di stampa" ;
+    Text [ spanish ] = "Opciones de impresión" ;
+    Text [ french ] = "Options d'impression" ;
+    Text [ swedish ] = "Utskriftsalternativ" ;
+    Text [ danish ] = "Udskriftsindstillinger" ;
+    Text [ portuguese ] = "Opções de impressão" ;
+    Text [ portuguese_brazilian ] = "Druckoptionen" ;
+    Text[ chinese_simplified ] = "´òÓ¡Ñ¡Ïî";
+    Text[ russian ] = "Ïàğàìåòğû ïå÷àòè";
+    Text[ polish ] = "Opcje wydruku";
+    Text[ japanese ] = "ˆóüµÌß¼®İ";
+    Text[ chinese_traditional ] = "¦C¦L¿ï¶µ";
+    Text[ arabic ] = "ÎíÇÑÇÊ ÇáØÈÇÚÉ";
+    Text[ greek ] = "Åğéëïãİò åêôığùóçò";
+    Text[ korean ] = "ÀÎ¼â ¿É¼Ç";
+    Text[ turkish ] = "Yazdırma seçenekleri";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_CFG_NAVIPI
+{
+    Text = "Navigator-Einstellungen" ;
+    Text [ ENGLISH ] = "Navigator Settings" ;
+    Text [ portuguese ] = "Parâmetros - Navegador" ;
+    Text [ english_us ] = "Navigator Settings" ;
+    Text [ portuguese_brazilian ] = "Navigator-Einstellungen" ;
+    Text [ swedish ] = "Navigatorinställningar" ;
+    Text [ danish ] = "Navigator-indstillinger" ;
+    Text [ italian ] = "Impostazioni navigatore" ;
+    Text [ spanish ] = "Configuración del Navegador" ;
+    Text [ french ] = "Paramètres du Navigateur" ;
+    Text [ dutch ] = "Navigator-instellingen" ;
+    Text[ chinese_simplified ] = "Éè¶¨ÖúÊÖ";
+    Text[ russian ] = "Íàñòğîéêè Íàâèãàòîğà";
+    Text[ polish ] = "Ustawienia nawigatora";
+    Text[ japanese ] = "ÅËŞ¹Ş°À‚Ìİ’è";
+    Text[ chinese_traditional ] = "³]©w§U¤â";
+    Text[ arabic ] = "ÅÚÏÇÏÇÊ ÇáäÇİíÌíÊæÑ";
+    Text[ greek ] = "Ñõèìßóåéò Navigator";
+    Text[ korean ] = "³×¹Ì°ÔÀÌÅÍ ¼³Á¤";
+    Text[ turkish ] = "Navigatör ayarları";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_MINIMUM
+{
+    Text = "~Minimum" ;
+    Text [ ENGLISH ] = "~Minimum" ;
+    Text [ dutch ] = "~Minimum" ;
+    Text [ english_us ] = "~Minimum" ;
+    Text [ swedish ] = "~Minimum" ;
+    Text [ danish ] = "Minimum" ;
+    Text [ italian ] = "~Minimo" ;
+    Text [ spanish ] = "~Mínimo" ;
+    Text [ french ] = "~Minimum" ;
+    Text [ portuguese ] = "~Mínimo" ;
+    Text [ portuguese_brazilian ] = "~Minimum" ;
+    Text[ chinese_simplified ] = "×îĞ¡(~M)";
+    Text[ russian ] = "Ìèíèìóì";
+    Text[ polish ] = "Minimum";
+    Text[ japanese ] = "Å¬’l(~M)";
+    Text[ chinese_traditional ] = "³Ì¤p(~M)";
+    Text[ arabic ] = "ÇáÍÏ ÇáÃÏäì";
+    Text[ greek ] = "ÅëÜ÷éóôï";
+    Text[ korean ] = "ÃÖ¼Ò(~M)";
+    Text[ turkish ] = "A~sgari";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_MAXIMUM
+{
+    Text = "~Maximum" ;
+    Text [ ENGLISH ] = "~Maximum" ;
+    Text [ dutch ] = "~Maximum" ;
+    Text [ english_us ] = "~Maximum" ;
+    Text [ swedish ] = "~Maximum" ;
+    Text [ danish ] = "Maksimum" ;
+    Text [ italian ] = "~Massimo" ;
+    Text [ spanish ] = "~Máximo" ;
+    Text [ french ] = "~Maximum" ;
+    Text [ portuguese ] = "~Máximo" ;
+    Text [ portuguese_brazilian ] = "~Maximum" ;
+    Text[ chinese_simplified ] = "×î´ó(~M)";
+    Text[ russian ] = "Ìàêñèìóì";
+    Text[ polish ] = "Maksimum";
+    Text[ japanese ] = "Å‘å’l(~M)";
+    Text[ chinese_traditional ] = "³Ì¤j(~M)";
+    Text[ arabic ] = "ÇáÍÏ ÇáÃŞÕì";
+    Text[ greek ] = "Ìİãéóôï";
+    Text[ korean ] = "ÃÖ´ë(~M)";
+    Text[ turkish ] = "A~zami";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_VALUE
+{
+    Text = "~Wert" ;
+    Text [ ENGLISH ] = "~Value" ;
+    Text [ dutch ] = "~Waarde" ;
+    Text [ english_us ] = "~Value" ;
+    Text [ swedish ] = "~Värde" ;
+    Text [ danish ] = "Værdi" ;
+    Text [ italian ] = "~Valore" ;
+    Text [ spanish ] = "~Valor" ;
+    Text [ french ] = "~Valeur" ;
+    Text [ portuguese ] = "~Valor" ;
+    Text [ portuguese_brazilian ] = "~Wert" ;
+    Text[ chinese_simplified ] = "ÊıÖµ(~V)";
+    Text[ russian ] = "Çíà÷åíèå";
+    Text[ polish ] = "Wartoœæ";
+    Text[ japanese ] = "”’l(~V)";
+    Text[ chinese_traditional ] = "¼Æ­È(~V)";
+    Text[ arabic ] = "ÇáŞíãÉ";
+    Text[ greek ] = "ÔéìŞ";
+    Text[ korean ] = "°ª(~V)";
+    Text[ turkish ] = "~Değer";
+    Text[ language_user1 ] = " ";
+};
+
+ // fuer Dialoge:
+
+String SCSTR_CHARSET_USER
+{
+    Text = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
+    Text [ ENGLISH ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
+    Text [ english_us ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
+    Text [ italian ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema" ;
+    Text [ spanish ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema" ;
+    Text [ french ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Systeme" ;
+    Text [ dutch ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
+    Text [ swedish ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
+    Text [ danish ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
+    Text [ portuguese ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema" ;
+    Text [ portuguese_brazilian ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
+    Text[ chinese_simplified ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);ÏµÍ³";
+    Text[ russian ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Ñèñòåìà";
+    Text[ polish ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
+    Text[ japanese ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);¼½ÃÑ";
+    Text[ chinese_traditional ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);¨t²Î";
+    Text[ arabic ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);äÙÇã";
+    Text[ greek ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Óıóôçìá";
+    Text[ korean ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);½Ã½ºÅÛ";
+    Text[ turkish ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistem";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_COLUMN_USER
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Standard;Text;Datum (TMJ);Datum (MTJ);Datum (JMT);US-Englisch;ausblenden : Standard;Text;Datum (TMJ);Datum (MTJ);Datum (JMT);ausblenden */
+    Text = "Standard;Text;Datum (TMJ);Datum (MTJ);Datum (JMT);US-Englisch;ausblenden" ;
+    Text [ ENGLISH ] = "Standard;Text;Date (DMY);Date (MDY);Date (YMD);English (US);hide" ;
+    Text [ english_us ] = "Standard;Text;Date (DMY);Date (MDY);Date (YMD);US English;Hide" ;
+    Text [ italian ] = "Standard;Testo;Data (GMA);Data (MGA);Data (AMG);Inglese US;Nascondi" ;
+    Text [ spanish ] = "Estándar;Texto;Fecha (DMA);Fecha (MDA);Fecha (AMD);Inglés (US);Ocultar" ;
+    Text [ french ] = "Standard;Texte;Date (JMA);Date (MJA);Date (AMJ);Anglais US;Masquer" ;
+    Text [ dutch ] = "Standaard;Tekst;Datum (DMJ);Datum (MDJ);Datum (JMD);VS-Engels;verbergen" ;
+    Text [ swedish ] = "Standard;Text;Datum (DMÅ);Datum (MDÅ);Datum (ÅMD);Engelska (US);Dölj" ;
+    Text [ danish ] = "Standard;Tekst;Dato (DMÅ);Dato (MDÅ);Dato (ÅMD);Engelsk (US);skjul" ;
+    Text [ portuguese ] = "Padrão;Texto;Data (DMA);Data (MDA);Data (AMD);Inglês (E.U.),ocultar" ;
+    Text [ portuguese_brazilian ] = "Standard;Text;Datum (TMJ);Datum (MTJ);Datum (JMT);ausblenden" ;
+    Text[ chinese_simplified ] = "±ê×¼;ÎÄ×Ö;ÈÕÆÚ(DMY);ÈÕÆÚ(MDY);ÈÕÆÚ(YMD);ÃÀ¹úÓ¢Óï;ÒşÈë";
+    Text[ russian ] = "Ñòàíäàğò;Òåêñò;Äàòà (ÄÌÃ);Äàòà (ÌÄÃ);Äàòà (ÃÌÄ);Àíãëèéñêèé ÑØÀ;ñêğûòü";
+    Text[ polish ] = "Standard;Tekst;Data (DMY);Data (DMY);Data (YMD);Angielski (USA);ukryj";
+    Text[ japanese ] = "•W€;Ã·½Ä;“ú•t(DMY);“ú•t(MDY);“ú•t (YMD);‰pŒê(US);”ñ•\\¦";
+    Text[ chinese_traditional ] = "¼Ğ·Ç;¤å¦r;¤é´Á(DMY);¤é´Á(MDY);¤é´Á(YMD);¬ü»y;Áô¤J";
+    Text[ arabic ] = "ŞíÇÓíºäÕºÊÇÑíÎ (DMY)ºÊÇÑíÎ (MDY)º ÊÇÑíÎ (YMD)º ÅäßáíÒí ÇáæáÇíÇÊ ÇáãÊÍÏÉºÅÎİÇÁ";
+    Text[ greek ] = "ĞñïåğéëïãŞ;Êåßìåíï;Çìåñïìçíßá (ÇÌÅ);Çìåñïìçíßá (ÌÇÅ);Çìåñïìçíßá (ÅÌÇ);ÁããëéêÜ (Ç.Ğ.Á.);Áğüêñõøç";
+    Text[ korean ] = "Ç¥ÁØ;ÅØ½ºÆ®;ÀÏÀÚ (DMY);ÀÏÀÚ (MDY);ÀÏÀÚ (YMD);US-English;¼û±â±â";
+    Text[ turkish ] = "Standart;Metin;Tarih (GAY);Tarih (AGY);Tarih(YAG);İngilizce (ABD);gizle";
+    Text[ language_user1 ] = " ";
+};
+
+String SCSTR_FIELDSEP
+{
+    Text = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{Leer}\t32" ;
+    Text [ ENGLISH ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{Space}\t32" ;
+    Text [ norwegian ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{Space}\t32" ;
+    Text [ italian ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{Spazio}\t32" ;
+    Text [ portuguese_brazilian ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{Space}\t32" ;
+    Text [ portuguese ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{espaço}\t32" ;
+    Text [ french ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{Espace}\t32" ;
+    Text [ dutch ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{Leeg}\t32" ;
+    Text [ spanish ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{vacío}\t32" ;
+    Text [ danish ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{tom}\t32" ;
+    Text [ swedish ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{tom}\t32" ;
+    Text [ finnish ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{Space}\t32" ;
+    Text [ english_us ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{space}\t32 " ;
+    Text[ chinese_simplified ] = ",\t44\t;\t59\t:\t58\t{ÖÆ±í·û}\t9\t{¿Õ°×}\t32";
+    Text[ russian ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{Ïğîáåë}\t32";
+    Text[ polish ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{Pusty}\t32";
+    Text[ japanese ] = ",\t44\t;\t59\t:\t58\t{ÀÌŞ}\t9\t{‹ó”’}\t32";
+    Text[ chinese_traditional ] = ",\t44\t;\t59\t:\t58\t{»sªí²Å}\t9\t{ªÅ¥Õ}\t32";
+    Text[ arabic ] = ",\t44\t;\t59\t:\t58\t{ÚáÇãÉ ÌÏæáÉ}\t9\t{ãÓÇİÉ}\t32";
+    Text[ greek ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{êåíü}\t32";
+    Text[ korean ] = ",\t44\t;\t59\t:\t58\t{ÅÇ}\t9\t{°ø¹é}\t32";
+    Text[ language_user1 ] = " ";
+    Text[ turkish ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{Boşluk}\t32";
+};
+
+String SCSTR_TEXTSEP
+{
+    Text = "\"\t34\t'\t39" ;
+};
+
+String SCSTR_FORMULA_AUTOCORRECTION
+{
+    Text = "StarOffice Calc hat einen Fehler in der eingegebenen Formel gefunden.\nWollen Sie die unten vorgeschlagene Korrektur akzeptieren?\n\n" ;
+    Text [ ENGLISH ] = "StarCalc found an error in the formula you entered.\nDo you want to accept the correction proposed below?\n\n" ;
+    Text [ portuguese ] = "O StarOffice Calc encontrou um erro na fórmula indicada. \nAceitar a correcção proposta em baixo?\n\n" ;
+    Text [ english_us ] = "StarOffice Calc found an error in the formula entered.\nDo you want to accept the correction proposed below?\n\n" ;
+    Text [ portuguese_brazilian ] = "StarOffice Calc hat einen Fehler in der eingegebenen Formel gefunden.\nWollen Sie die unten vorgeschlagene Korrektur akzeptieren?\n\n" ;
+    Text [ swedish ] = "StarOffice Calc har hittat ett fel i den angivna formeln.\nSkall korrigeringen som föreslås nedan accepteras?\n\n" ;
+    Text [ danish ] = "StarOffice Calc har fundet en fejl i den indtastede formel.\nVil du acceptere den rettelse, som foreslås nedenfor?\n" ;
+    Text [ italian ] = "StarOffice Calc ha trovato un errore nella formula digitata.\nVolete accettare la correzione proposta?\n\n" ;
+    Text [ spanish ] = "StarOffice Calc encontró un error en la fórmula dada.\n¿Desea aceptar la corrección sugerida abajo?\n\n" ;
+    Text [ french ] = "StarOffice Calc a détecté une erreur dans la formule.\nAcceptez-vous la correction proposée ci-dessous ?\n\n" ;
+    Text [ dutch ] = "StarOffice Calc heeft een fout in de formule gevonden.\nWilt u de hieronder voorgestelde correctie accepteren?\n\n" ;
+    Text[ chinese_simplified ] = "StarOffice Calc ·¢ÏÖÊäÈëµÄ¹«Ê½º¬ÓĞÒ»¸ö´íÎó¡£\nÄú½ÓÊÜÏÂÃæ½¨ÒéµÄĞŞ¸ÄÂğ£¿\n\n";
+    Text[ russian ] = "StarOffice Calc íàøåë îøèáêó â ââåäåííîé ôîğìóëå.\nÂû õîòèòå ïğèíÿòü èñïğàâëåíèå, ïğåäëîæåííîå âíèçó?\n\n";
+    Text[ polish ] = "StarOffice Calc znalaz³ b³¹d we wprowadzonej formule.\nCzy akceptujesz podan¹ na dole korektê?\n\n";
+    Text[ japanese ] = "StarOffice Calc‚Í“ü—Í‚³‚ê‚½”®‚É´×°‚ğŒ©‚Â‚¯‚Ü‚µ‚½B\nŸ‚ÌC³Œó•â‚ğ“K—p‚µ‚Ü‚·‚©?\n\n";
+    Text[ chinese_traditional ] = "StarOffice Calc µo²{¿é¤Jªº¤½¦¡§t¦³¤@­Ó¿ù»~¡C\n±z±µ¨ü¤U­±ªº­×§ï«ØÄ³¡H\n\n";
+    Text[ arabic ] = "StarOffice Calc æÌÏ ÎØÃ İí ÇáÕíÛÉ ÇáÊí ŞãÊ ÈÅÏÎÇáåÇ.\nåá ÊÑíÏ ŞÈæá ÇáÊÕÍíÍ ÇáãñŞÊÑÍ ÃÏäÇå¿\n\n";
+    Text[ greek ] = "Ôï StarOffice Calc åíôüğéóå İíá óöÜëìá óôïí ôığï ğïõ åéóÜãáôå.\nÈİëåôå íá ãßíåé áğïäï÷Ş ôçò ğñïôåéíüìåíçò äéüñèùóçò óôï êÜôù ìİñïò;\n\n";
+    Text[ korean ] = "StarOffice Calc°¡ ÀÔ·ÂµÈ ¼ö½Ä¿¡¼­ ¿À·ù¸¦ Ã£¾Æ³Â½À´Ï´Ù.\n´ÙÀ½ÀÇ Á¦¾ÈµÈ ¸ğÀ½À» ¹Ş¾ÆµéÀÌ½Ã°Ú½À´Ï±î ?\n\n";
+    Text[ turkish ] = "StarOffice Calc, girilen formülde bir hata buldu.\nAşağıda önerilen düzeltmeyi kabul etmek istiyor musunuz?\n\n";
+    Text[ language_user1 ] = " ";
+};
+
+//! the graphics filter error strings should be moved to svx or offapp!
+
+String SCSTR_GRFILTER_OPENERROR
+{
+    Text = "Grafikdatei kann nicht geöffnet werden" ;
+    Text [ English ] = "Can't open graphic file" ;
+    Text [ norwegian ] = "Can't open graphic file" ;
+    Text [ italian ] = "Impossibile aprire il file grafico" ;
+    Text [ portuguese_brazilian ] = "NÆo consigo abrir arquivo gr fico" ;
+    Text [ portuguese ] = "Impossível abrir ficheiro gráfico." ;
+    Text [ finnish ] = "Grafiikkatiedostoa ei voi avata" ;
+    Text [ danish ] = "Det er ikke muligt at åbne grafikfilen" ;
+    Text [ french ] = "Impossible d'ouvrir le fichier graphique !" ;
+    Text [ swedish ] = "Grafikfil kan inte öppnas" ;
+    Text [ dutch ] = "Grafisch bestand kan niet worden geopend" ;
+    Text [ spanish ] = "No es posible abrir el archivo gráfico" ;
+    Text [ english_us ] = "Graphics file can not be opened" ;
+    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÍ¼ĞÎÎÄ¼ş";
+    Text[ russian ] = "Îòêğûòü ãğàôè÷åñêèé ôàéë íåâîçìîæíî";
+    Text[ polish ] = "Pliku graficznego nie mo¿na by³o otworzyæ";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸Ì§²Ù‚ğŠJ‚¯‚Ü‚¹‚ñ";
+    Text[ chinese_traditional ] = "µLªk¶}±Ò¹Ï¤ùÀÉ®×";
+    Text[ arabic ] = "áÇ íãßä İÊÍ ãáİ ÇáÑÓæãÇÊ";
+    Text[ dutch ] = "Grafisch bestand kan niet worden geopend";
+    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÍ¼ĞÎÎÄ¼ş";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá áíïé÷èåß ôï áñ÷åßï ãñáöéêşí";
+    Text[ korean ] = "±×·¡ÇÈ ÆÄÀÏÀÌ ¿­¸®Áö ¾Ê½À´Ï´Ù.";
+    Text[ turkish ] = "Grafik dosyası açılamıyor";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_GRFILTER_IOERROR
+{
+    Text = "Grafikdatei kann nicht gelesen werden" ;
+    Text [ English ] = "Can't read graphic file" ;
+    Text [ norwegian ] = "Can't read graphic file" ;
+    Text [ italian ] = "Impossibile leggere il file grafico" ;
+    Text [ portuguese_brazilian ] = "NÆo consigo ler arquivo gr fico" ;
+    Text [ portuguese ] = "Impossível ler o ficheiro gráfico." ;
+    Text [ finnish ] = "Grafiikkatiedostoa ei voi lukea" ;
+    Text [ danish ] = "Det er ikke muligt at læse grafikfilen" ;
+    Text [ french ] = "Impossible de lire le fichier graphique !" ;
+    Text [ swedish ] = "Grafikfil kan inte läsas" ;
+    Text [ dutch ] = "Grafisch bestand kan niet worden gelezen" ;
+    Text [ spanish ] = "No es posible leer el archivo gráfico" ;
+    Text [ english_us ] = "Graphics file can not be read" ;
+    Text[ chinese_simplified ] = "ÎŞ·¨¶ÁÈ¡Í¼ĞÎÎÄ¼ş";
+    Text[ russian ] = "Ïğî÷èòàòü ãğàôè÷åñêèé ôàéë íåâîçìîæíî";
+    Text[ polish ] = "Pliku graficznego nie mo¿na by³o odczytaæ";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸Ì§²Ù‚ğ“Ç‚İ‚ß‚Ü‚¹‚ñ";
+    Text[ chinese_traditional ] = "µLªkÅª¨ú¹Ï¤ùÀÉ®×";
+    Text[ arabic ] = "áÇ íãßä ŞÑÇÁÉ ãáİ ÇáÑÓæãÇÊ";
+    Text[ dutch ] = "Grafisch bestand kan niet worden gelezen";
+    Text[ chinese_simplified ] = "ÎŞ·¨¶ÁÈ¡Í¼ĞÎÎÄ¼ş";
+    Text[ greek ] = "Äåí åßíáé äõíáôŞ ç áíÜãíùóç ôïõ áñ÷åßïõ ãñáöéêşí";
+    Text[ korean ] = "±×·¡ÇÈ ÆÄÀÏÀÌ ÀĞÇôÁú ¼ö ¾ø½À´Ï´Ù.";
+    Text[ turkish ] = "Grafik dosyası okunamıyor";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_GRFILTER_FORMATERROR
+{
+    Text = "Unbekanntes Grafikformat" ;
+    Text [ English ] = "Unknown graphic format" ;
+    Text [ norwegian ] = "Unknown graphic format" ;
+    Text [ italian ] = "Formato grafico sconosciuto" ;
+    Text [ portuguese_brazilian ] = "Formato gr fico desconhecido" ;
+    Text [ portuguese ] = "Formato de gráfico desconhecido." ;
+    Text [ finnish ] = "Tuntematon grafiikkamuoto" ;
+    Text [ danish ] = "Ukendt grafikformat" ;
+    Text [ french ] = "Format graphique inconnu !" ;
+    Text [ swedish ] = "Okänt grafikformat" ;
+    Text [ dutch ] = "Onbekend afbeeldingsformaat" ;
+    Text [ spanish ] = "Formato de imagen desconocido" ;
+    Text [ english_us ] = "Unknown graphic format" ;
+    Text[ chinese_simplified ] = "²»Ã÷µÄÍ¼ĞÎ¸ñÊ½";
+    Text[ russian ] = "Íåèçâåñòíûé ãğàôè÷åñêèé ôîğìàò";
+    Text[ polish ] = "Nieznany format graficzny";
+    Text[ japanese ] = "–³‘è‚Ì¸Ş×Ì¨¯¸‘®";
+    Text[ chinese_traditional ] = "¤£©úªº¹Ï¤ù®æ¦¡";
+    Text[ arabic ] = "ÊäÓíŞ ÑÓæãÇÊ ÛíÑ ãÚÑæİ";
+    Text[ dutch ] = "Onbekend afbeeldingsformaat";
+    Text[ chinese_simplified ] = "²»Ã÷µÄÍ¼ĞÎ¸ñÊ½";
+    Text[ greek ] = "¢ãíùóôç ìïñöŞ ãñáöéêşí";
+    Text[ korean ] = "¾Ë¼ö¾ø´Â ±×·¡ÇÈ ¼­½Ä";
+    Text[ turkish ] = "Bilinmeyen grafik dosyası";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_GRFILTER_VERSIONERROR
+{
+    Text = "Die Version der Grafikdatei wird nicht unterstützt" ;
+    Text [ English ] = "Version of graphic file not supported" ;
+    Text [ norwegian ] = "Version of graphic file not supported" ;
+    Text [ italian ] = "Versione del file grafico non supportata" ;
+    Text [ portuguese_brazilian ] = "VersÆo de arquivo gr fico nÆo suportada" ;
+    Text [ portuguese ] = "Versão do ficheiro gráfico não tem suporte." ;
+    Text [ finnish ] = "Ei tukea grafiikkatiedoston versiolle" ;
+    Text [ danish ] = "Grafikfilens version bliver ikke understøttet" ;
+    Text [ french ] = "Cette version du fichier graphique n'est pas supportée !" ;
+    Text [ swedish ] = "Grafikfilens version stöds inte" ;
+    Text [ dutch ] = "Deze versie van het grafische bestand wordt niet ondersteund" ;
+    Text [ spanish ] = "No se soporta la versión del archivo gráfico" ;
+    Text [ english_us ] = "This graphic file version is not supported" ;
+    Text[ chinese_simplified ] = "²»Ö§³ÖÕâ¸öÍ¼ĞÎÎÄ¼ş°æ±¾";
+    Text[ russian ] = "Âåğñèÿ ãğàôè÷åñêîãî ôàéëà íå ïîääåğæèâàåòñÿ";
+    Text[ polish ] = "Wersja pliku graficznego nie bêdzie obs³ugiwana";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸Ì§²Ù‚ÌÊŞ°¼Ş®İ‚Íx‰‡‚³‚ê‚Ü‚¹‚ñ";
+    Text[ chinese_traditional ] = "¤£¤ä´©³o­Óª©¥»ªº¹Ï¤ùÀÉ®×";
+    Text[ arabic ] = "áÇ íÊã ÏÚã ÅÕÏÇÑ ãáİ ÇáÑÓæãÇÊ";
+    Text[ dutch ] = "Deze versie van het grafische bestand wordt niet ondersteund";
+    Text[ chinese_simplified ] = "²»Ö§³ÖÕâ¸öÍ¼ĞÎÎÄ¼ş°æ±¾";
+    Text[ greek ] = "Äåí õğïóôçñßæåôáé ç İêäïóç áõôïı ôïõ áñ÷åßïõ ãñáöéêşí";
+    Text[ korean ] = "ÀÌ ±×·¡ÇÈ ÆÄÀÏ ¹öÁ¯Àº Áö¿øµÇÁö ¾Ê½À´Ï´Ù.";
+    Text[ turkish ] = "Bu grafik dosyası sürümü desteklenmiyor";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_GRFILTER_FILTERERROR
+{
+    Text = "Grafikfilter nicht gefunden" ;
+    Text [ English ] = "Graphic filter not found" ;
+    Text [ norwegian ] = "Graphic filter not found" ;
+    Text [ italian ] = "Filtro grafico non trovato" ;
+    Text [ portuguese_brazilian ] = "Filtro gr fico nÆo encontrado" ;
+    Text [ portuguese ] = "Filtro gráfico não encontrado." ;
+    Text [ finnish ] = "Grafiikkasuodinta ei löydy" ;
+    Text [ danish ] = "Grafikfilter blev ikke fundet" ;
+    Text [ french ] = "Filtre graphique introuvable" ;
+    Text [ swedish ] = "Grafikfilter hittades inte" ;
+    Text [ dutch ] = "Grafische filter niet gevonden" ;
+    Text [ spanish ] = "No se encontró el filtro de imagen" ;
+    Text [ english_us ] = "Graphics filter not found" ;
+    Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½Í¼ĞÎ¹ıÂËÆ÷";
+    Text[ russian ] = "Ãğàôè÷åñêèé ôèëüòğ íå íàéäåí";
+    Text[ polish ] = "Nie znaleziono filtrów graficznych";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸Ì¨ÙÀ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ";
+    Text[ chinese_traditional ] = "¨S¦³§ä¨ì¹Ï¤ù¹LÂo¾¹";
+    Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì İáÊÑ ÇáÑÓæãÇÊ";
+    Text[ dutch ] = "Grafische filter niet gevonden";
+    Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½Í¼ĞÎ¹ıÂËÆ÷";
+    Text[ greek ] = "Äåí âñİèçêå ôï ößëôñï ãñáöéêşí";
+    Text[ korean ] = "±×·¡ÇÈ ÇÊÅÍ°¡ ¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.";
+    Text[ turkish ] = "Grafik filtresi bulunamadı";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_GRFILTER_TOOBIG
+{
+    Text = "Nicht genug Speicher zum Einfügen der Grafik" ;
+    Text [ English ] = "Not enough memory to insert graphic" ;
+    Text [ norwegian ] = "Not enough memory to insert graphic" ;
+    Text [ italian ] = "Memoria insufficiente per inserire l'immagine" ;
+    Text [ portuguese_brazilian ] = "Mem¢ria insuficiente para inserir o gr fico" ;
+    Text [ portuguese ] = "Memória insuficiente para inserir a imagem." ;
+    Text [ finnish ] = "Muisti ei riitä grafiikan lisäämiseen" ;
+    Text [ danish ] = "Ikke nok hukommelse til at indsætte billedet" ;
+    Text [ french ] = "Impossible d'insérer l'image, mémoire insuffisante !" ;
+    Text [ swedish ] = "Inte tillräckligt med minne för att infoga grafiken" ;
+    Text [ dutch ] = "Niet genoeg vrij geheugen om de afbeelding in te voegen" ;
+    Text [ spanish ] = "No hay suficiente memoria para insertar la imagen" ;
+    Text [ english_us ] = "Not enough memory available to insert graphics." ;
+    Text[ chinese_simplified ] = "Ã»ÓĞ×ã¹»µÄÄÚ´æÓÃÓÚ²åÈëÍ¼ĞÎ";
+    Text[ russian ] = "Íåäîñòàòî÷íî ïàìÿòè äëÿ âñòàâêè ğèñóíêà";
+    Text[ polish ] = "Za ma³o pamiêci do wstawienia grafiki";
+    Text[ japanese ] = "¸Ş×¯Ì¨¯¸‚ğ‘}“ü‚·‚é‚Ì‚É\\•ª‚Ì‹ó‚«—e—Ê‚ª‚ ‚è‚Ü‚¹‚ñ";
+    Text[ chinese_traditional ] = "°O¾ĞÅé¤£¨¬¡AµLªk´¡¤J¹Ï¤ù";
+    Text[ arabic ] = "áÇ íæÌÏ ĞÇßÑÉ ßÇİíÉ áÅÏÑÇÌ ÇáÑÓã";
+    Text[ dutch ] = "Niet genoeg vrij geheugen om de afbeelding in te voegen";
+    Text[ chinese_simplified ] = "Ã»ÓĞ×ã¹»µÄÄÚ´æÓÃÓÚ²åÈëÍ¼ĞÎ";
+    Text[ greek ] = "Ç ìíŞìç äåí åğáñêåß ãéá ôçí ğñïóèŞêç ôïõ ãñáöéêïı.";
+    Text[ korean ] = "±×·¡ÇÈÀ» »ğÀÔÇÏ±â¿¡ ¸Ş¸ğ¸®°¡ ºÎÁ·ÇÕ´Ï´Ù.";
+    Text[ turkish ] = "Grafiğin eklenmesi için yeterli bellek yok";
+    Text[ language_user1 ] = " ";
+};
+

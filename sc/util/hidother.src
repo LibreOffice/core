@@ -1,0 +1,391 @@
+/*************************************************************************
+ *
+ *  $RCSfile: hidother.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:16 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "../inc/scfuncs.hrc"           // HID_FUNC_XXX
+
+//  Help-IDs fuer Dokument-Fenster
+
+hidspecial HID_SC_WIN_GRIDWIN    { HelpID = HID_SC_WIN_GRIDWIN; };
+hidspecial HID_SC_WIN_PREVIEW    { HelpID = HID_SC_WIN_PREVIEW; };
+
+//  Help-IDs fuer Shells (Helferlein)
+
+hidspecial HID_SCSHELL_TABVWSH   { HelpID = HID_SCSHELL_TABVWSH; };
+hidspecial HID_SCSHELL_PREVWSH   { HelpID = HID_SCSHELL_PREVWSH; };
+hidspecial HID_SCSHELL_AUDIT     { HelpID = HID_SCSHELL_AUDIT; };
+hidspecial HID_SCSHELL_PIVOTSH   { HelpID = HID_SCSHELL_PIVOTSH; };
+hidspecial HID_SCSHELL_DRAWSH    { HelpID = HID_SCSHELL_DRAWSH; };
+hidspecial HID_SCSHELL_DRTXTOB   { HelpID = HID_SCSHELL_DRTXTOB; };
+hidspecial HID_SCSHELL_DRAWFORMSH{ HelpID = HID_SCSHELL_DRAWFORMSH ; };
+
+hidspecial HID_SCSHELL_CELLSH       { HelpID = HID_SCSHELL_CELLSH       ; };
+hidspecial HID_SCSHELL_FORMATSH     { HelpID = HID_SCSHELL_FORMATSH     ; };
+hidspecial HID_SCSHELL_OLEOBEJCTSH  { HelpID = HID_SCSHELL_OLEOBEJCTSH  ; };
+hidspecial HID_SCSHELL_CHARTSH      { HelpID = HID_SCSHELL_CHARTSH      ; };
+hidspecial HID_SCSHELL_GRAPHIC      { HelpID = HID_SCSHELL_GRAPHIC      ; };
+hidspecial HID_SCSHELL_PAGEBREAK    { HelpID = HID_SCSHELL_PAGEBREAK    ; };
+
+//  Help-IDs fuer Standard-Vorlagen
+
+hidspecial HID_SC_SHEET_CELL_STD    { HelpID = HID_SC_SHEET_CELL_STD; };
+hidspecial HID_SC_SHEET_CELL_ERG    { HelpID = HID_SC_SHEET_CELL_ERG; };
+hidspecial HID_SC_SHEET_CELL_ERG1   { HelpID = HID_SC_SHEET_CELL_ERG1; };
+hidspecial HID_SC_SHEET_CELL_UEB    { HelpID = HID_SC_SHEET_CELL_UEB; };
+hidspecial HID_SC_SHEET_CELL_UEB1   { HelpID = HID_SC_SHEET_CELL_UEB1; };
+hidspecial HID_SC_SHEET_PAGE_STD    { HelpID = HID_SC_SHEET_PAGE_STD; };
+hidspecial HID_SC_SHEET_PAGE_REP    { HelpID = HID_SC_SHEET_PAGE_REP; };
+
+//  Elemente in der Eingabezeile
+
+hidspecial HID_INSWIN_POS        { HelpID = HID_INSWIN_POS; };
+hidspecial HID_INSWIN_CALC       { HelpID = HID_INSWIN_CALC; };
+hidspecial HID_INSWIN_CANCEL     { HelpID = HID_INSWIN_CANCEL; };
+hidspecial HID_INSWIN_OK         { HelpID = HID_INSWIN_OK; };
+hidspecial HID_INSWIN_SUMME      { HelpID = HID_INSWIN_SUMME; };
+hidspecial HID_INSWIN_FUNC       { HelpID = HID_INSWIN_FUNC; };
+hidspecial HID_INSWIN_INPUT      { HelpID = HID_INSWIN_INPUT; };
+
+//  andere Controls, die vom Code aus die HelpID bekommen
+
+hidspecial HID_SC_HEADER_EDIT    { HelpID = HID_SC_HEADER_EDIT; };
+hidspecial HID_SC_FOOTER_EDIT    { HelpID = HID_SC_FOOTER_EDIT; };
+
+hidspecial HID_SC_SCENWIN_TOP    { HelpID = HID_SC_SCENWIN_TOP; };
+hidspecial HID_SC_SCENWIN_BOTTOM { HelpID = HID_SC_SCENWIN_BOTTOM; };
+hidspecial HID_SC_INPUTWIN       { HelpID = HID_SC_INPUTWIN; };
+hidspecial HID_SC_RENAME_NAME    { HelpID = HID_SC_RENAME_NAME; };
+hidspecial HID_SC_APPEND_NAME    { HelpID = HID_SC_APPEND_NAME; };
+hidspecial HID_SC_AUTOFMT_NAME   { HelpID = HID_SC_AUTOFMT_NAME; };
+hidspecial HID_SC_ADD_AUTOFMT    { HelpID = HID_SC_ADD_AUTOFMT; };
+hidspecial HID_SC_REN_AFMT_NAME  { HelpID = HID_SC_REN_AFMT_NAME; };
+hidspecial HID_SC_RENAME_AUTOFMT { HelpID = HID_SC_RENAME_AUTOFMT; };
+hidspecial HID_PASSWD_TABLE      { HelpID = HID_PASSWD_TABLE; };
+hidspecial HID_PASSWD_DOC        { HelpID = HID_PASSWD_DOC; };
+
+//  2. Seite Funktionsautopilot: nur als Unique-IDs
+
+hidspecial HID_SC_FAP_PAGE       { HelpID = HID_SC_FAP_PAGE; };
+hidspecial HID_SC_FAP_EDIT1      { HelpID = HID_SC_FAP_EDIT1; };
+hidspecial HID_SC_FAP_EDIT2      { HelpID = HID_SC_FAP_EDIT2; };
+hidspecial HID_SC_FAP_EDIT3      { HelpID = HID_SC_FAP_EDIT3; };
+hidspecial HID_SC_FAP_EDIT4      { HelpID = HID_SC_FAP_EDIT4; };
+
+//  Funktionen fuer Funkionsautopiloten
+
+hidspecial HID_FUNC_DBANZAHL     { HelpID = HID_FUNC_DBANZAHL; };
+hidspecial HID_FUNC_DBANZAHL2    { HelpID = HID_FUNC_DBANZAHL2; };
+hidspecial HID_FUNC_DBMITTELWERT { HelpID = HID_FUNC_DBMITTELWERT; };
+hidspecial HID_FUNC_DBAUSZUG     { HelpID = HID_FUNC_DBAUSZUG; };
+hidspecial HID_FUNC_DBMAX        { HelpID = HID_FUNC_DBMAX; };
+hidspecial HID_FUNC_DBMIN        { HelpID = HID_FUNC_DBMIN; };
+hidspecial HID_FUNC_DBPRODUKT    { HelpID = HID_FUNC_DBPRODUKT; };
+hidspecial HID_FUNC_DBSTDABW     { HelpID = HID_FUNC_DBSTDABW; };
+hidspecial HID_FUNC_DBSTDABWN    { HelpID = HID_FUNC_DBSTDABWN; };
+hidspecial HID_FUNC_DBSUMME      { HelpID = HID_FUNC_DBSUMME; };
+hidspecial HID_FUNC_DBVARIANZ    { HelpID = HID_FUNC_DBVARIANZ; };
+hidspecial HID_FUNC_DBVARIANZEN  { HelpID = HID_FUNC_DBVARIANZEN; };
+hidspecial HID_FUNC_DATUM        { HelpID = HID_FUNC_DATUM; };
+hidspecial HID_FUNC_DATWERT      { HelpID = HID_FUNC_DATWERT; };
+hidspecial HID_FUNC_TAG      { HelpID = HID_FUNC_TAG; };
+hidspecial HID_FUNC_TAGE360      { HelpID = HID_FUNC_TAGE360; };
+hidspecial HID_FUNC_STUNDE       { HelpID = HID_FUNC_STUNDE; };
+hidspecial HID_FUNC_MINUTE       { HelpID = HID_FUNC_MINUTE; };
+hidspecial HID_FUNC_MONAT        { HelpID = HID_FUNC_MONAT; };
+hidspecial HID_FUNC_JETZT        { HelpID = HID_FUNC_JETZT; };
+hidspecial HID_FUNC_SEKUNDE      { HelpID = HID_FUNC_SEKUNDE; };
+hidspecial HID_FUNC_ZEIT         { HelpID = HID_FUNC_ZEIT; };
+hidspecial HID_FUNC_ZEITWERT     { HelpID = HID_FUNC_ZEITWERT; };
+hidspecial HID_FUNC_HEUTE        { HelpID = HID_FUNC_HEUTE; };
+hidspecial HID_FUNC_WOCHENTAG    { HelpID = HID_FUNC_WOCHENTAG; };
+hidspecial HID_FUNC_JAHR         { HelpID = HID_FUNC_JAHR; };
+hidspecial HID_FUNC_TAGE         { HelpID = HID_FUNC_TAGE; };
+hidspecial HID_FUNC_KALENDERWOCHE        { HelpID = HID_FUNC_KALENDERWOCHE; };
+hidspecial HID_FUNC_OSTERSONNTAG         { HelpID = HID_FUNC_OSTERSONNTAG; };
+hidspecial HID_FUNC_BW       { HelpID = HID_FUNC_BW; };
+hidspecial HID_FUNC_ZW       { HelpID = HID_FUNC_ZW; };
+hidspecial HID_FUNC_ZZR      { HelpID = HID_FUNC_ZZR; };
+hidspecial HID_FUNC_RMZ      { HelpID = HID_FUNC_RMZ; };
+hidspecial HID_FUNC_ZINS         { HelpID = HID_FUNC_ZINS; };
+hidspecial HID_FUNC_ZINSZ        { HelpID = HID_FUNC_ZINSZ; };
+hidspecial HID_FUNC_KAPZ         { HelpID = HID_FUNC_KAPZ; };
+hidspecial HID_FUNC_KUMKAPITAL   { HelpID = HID_FUNC_KUMKAPITAL; };
+hidspecial HID_FUNC_KUMZINSZ     { HelpID = HID_FUNC_KUMZINSZ; };
+hidspecial HID_FUNC_DIA      { HelpID = HID_FUNC_DIA; };
+hidspecial HID_FUNC_LIA      { HelpID = HID_FUNC_LIA; };
+hidspecial HID_FUNC_GDA      { HelpID = HID_FUNC_GDA; };
+hidspecial HID_FUNC_GDA2         { HelpID = HID_FUNC_GDA2; };
+hidspecial HID_FUNC_VDB      { HelpID = HID_FUNC_VDB; };
+hidspecial HID_FUNC_EFFEKTIV         { HelpID = HID_FUNC_EFFEKTIV; };
+hidspecial HID_FUNC_NOMINAL      { HelpID = HID_FUNC_NOMINAL; };
+hidspecial HID_FUNC_NBW      { HelpID = HID_FUNC_NBW; };
+hidspecial HID_FUNC_IKV      { HelpID = HID_FUNC_IKV; };
+hidspecial HID_FUNC_LAUFZEIT         { HelpID = HID_FUNC_LAUFZEIT; };
+hidspecial HID_FUNC_ZGZ      { HelpID = HID_FUNC_ZGZ; };
+hidspecial HID_FUNC_ISTBEZUG         { HelpID = HID_FUNC_ISTBEZUG; };
+hidspecial HID_FUNC_ISTFEHL      { HelpID = HID_FUNC_ISTFEHL; };
+hidspecial HID_FUNC_ISTFEHLER        { HelpID = HID_FUNC_ISTFEHLER; };
+hidspecial HID_FUNC_ISTLEER      { HelpID = HID_FUNC_ISTLEER; };
+hidspecial HID_FUNC_ISTLOG       { HelpID = HID_FUNC_ISTLOG; };
+hidspecial HID_FUNC_ISTNV        { HelpID = HID_FUNC_ISTNV; };
+hidspecial HID_FUNC_ISTKTEXT         { HelpID = HID_FUNC_ISTKTEXT; };
+hidspecial HID_FUNC_ISTTEXT      { HelpID = HID_FUNC_ISTTEXT; };
+hidspecial HID_FUNC_ISTZAHL      { HelpID = HID_FUNC_ISTZAHL; };
+hidspecial HID_FUNC_ISTFORMEL        { HelpID = HID_FUNC_ISTFORMEL; };
+hidspecial HID_FUNC_FORMEL       { HelpID = HID_FUNC_FORMEL; };
+hidspecial HID_FUNC_N        { HelpID = HID_FUNC_N; };
+hidspecial HID_FUNC_NV       { HelpID = HID_FUNC_NV; };
+hidspecial HID_FUNC_TYP      { HelpID = HID_FUNC_TYP; };
+hidspecial HID_FUNC_AKTUELL      { HelpID = HID_FUNC_AKTUELL; };
+hidspecial HID_FUNC_FALSCH       { HelpID = HID_FUNC_FALSCH; };
+hidspecial HID_FUNC_NICHT        { HelpID = HID_FUNC_NICHT; };
+hidspecial HID_FUNC_WAHR         { HelpID = HID_FUNC_WAHR; };
+hidspecial HID_FUNC_WENN         { HelpID = HID_FUNC_WENN; };
+hidspecial HID_FUNC_ODER         { HelpID = HID_FUNC_ODER; };
+hidspecial HID_FUNC_UND      { HelpID = HID_FUNC_UND; };
+hidspecial HID_FUNC_ABS      { HelpID = HID_FUNC_ABS; };
+hidspecial HID_FUNC_POTENZ       { HelpID = HID_FUNC_POTENZ; };
+hidspecial HID_FUNC_ANZAHLLEEREZELLEN        { HelpID = HID_FUNC_ANZAHLLEEREZELLEN; };
+hidspecial HID_FUNC_PI       { HelpID = HID_FUNC_PI; };
+hidspecial HID_FUNC_SUMME        { HelpID = HID_FUNC_SUMME; };
+hidspecial HID_FUNC_QUADRATESUMME        { HelpID = HID_FUNC_QUADRATESUMME; };
+hidspecial HID_FUNC_PRODUKT      { HelpID = HID_FUNC_PRODUKT; };
+hidspecial HID_FUNC_SUMMEWENN        { HelpID = HID_FUNC_SUMMEWENN; };
+hidspecial HID_FUNC_ZAEHLENWENN      { HelpID = HID_FUNC_ZAEHLENWENN; };
+hidspecial HID_FUNC_WURZEL       { HelpID = HID_FUNC_WURZEL; };
+hidspecial HID_FUNC_ZUFALLSZAHL      { HelpID = HID_FUNC_ZUFALLSZAHL; };
+hidspecial HID_FUNC_ISTGERADE        { HelpID = HID_FUNC_ISTGERADE; };
+hidspecial HID_FUNC_ISTUNGERADE      { HelpID = HID_FUNC_ISTUNGERADE; };
+hidspecial HID_FUNC_KOMBINATIONEN        { HelpID = HID_FUNC_KOMBINATIONEN; };
+hidspecial HID_FUNC_KOMBINATIONEN2       { HelpID = HID_FUNC_KOMBINATIONEN2; };
+hidspecial HID_FUNC_ARCCOS       { HelpID = HID_FUNC_ARCCOS; };
+hidspecial HID_FUNC_ARCSIN       { HelpID = HID_FUNC_ARCSIN; };
+hidspecial HID_FUNC_ARCOSHYP         { HelpID = HID_FUNC_ARCOSHYP; };
+hidspecial HID_FUNC_ARSINHYP         { HelpID = HID_FUNC_ARSINHYP; };
+hidspecial HID_FUNC_ARCCOT       { HelpID = HID_FUNC_ARCCOT; };
+hidspecial HID_FUNC_ARCTAN       { HelpID = HID_FUNC_ARCTAN; };
+hidspecial HID_FUNC_ARCOTHYP         { HelpID = HID_FUNC_ARCOTHYP; };
+hidspecial HID_FUNC_ARTANHYP         { HelpID = HID_FUNC_ARTANHYP; };
+hidspecial HID_FUNC_COS      { HelpID = HID_FUNC_COS; };
+hidspecial HID_FUNC_SIN      { HelpID = HID_FUNC_SIN; };
+hidspecial HID_FUNC_COT      { HelpID = HID_FUNC_COT; };
+hidspecial HID_FUNC_TAN      { HelpID = HID_FUNC_TAN; };
+hidspecial HID_FUNC_COSHYP       { HelpID = HID_FUNC_COSHYP; };
+hidspecial HID_FUNC_SINHYP       { HelpID = HID_FUNC_SINHYP; };
+hidspecial HID_FUNC_COTHYP       { HelpID = HID_FUNC_COTHYP; };
+hidspecial HID_FUNC_TANHYP       { HelpID = HID_FUNC_TANHYP; };
+hidspecial HID_FUNC_ARCTAN2      { HelpID = HID_FUNC_ARCTAN2; };
+hidspecial HID_FUNC_DEG      { HelpID = HID_FUNC_DEG; };
+hidspecial HID_FUNC_RAD      { HelpID = HID_FUNC_RAD; };
+hidspecial HID_FUNC_EXP      { HelpID = HID_FUNC_EXP; };
+hidspecial HID_FUNC_LOG      { HelpID = HID_FUNC_LOG; };
+hidspecial HID_FUNC_LN       { HelpID = HID_FUNC_LN; };
+hidspecial HID_FUNC_LOG10        { HelpID = HID_FUNC_LOG10; };
+hidspecial HID_FUNC_FAKULTAET        { HelpID = HID_FUNC_FAKULTAET; };
+hidspecial HID_FUNC_REST         { HelpID = HID_FUNC_REST; };
+hidspecial HID_FUNC_VORZEICHEN       { HelpID = HID_FUNC_VORZEICHEN; };
+hidspecial HID_FUNC_TEILERGEBNIS         { HelpID = HID_FUNC_TEILERGEBNIS; };
+hidspecial HID_FUNC_GANZZAHL         { HelpID = HID_FUNC_GANZZAHL; };
+hidspecial HID_FUNC_KUERZEN      { HelpID = HID_FUNC_KUERZEN; };
+hidspecial HID_FUNC_RUNDEN       { HelpID = HID_FUNC_RUNDEN; };
+hidspecial HID_FUNC_AUFRUNDEN        { HelpID = HID_FUNC_AUFRUNDEN; };
+hidspecial HID_FUNC_ABRUNDEN         { HelpID = HID_FUNC_ABRUNDEN; };
+hidspecial HID_FUNC_GERADE       { HelpID = HID_FUNC_GERADE; };
+hidspecial HID_FUNC_UNGERADE         { HelpID = HID_FUNC_UNGERADE; };
+hidspecial HID_FUNC_OBERGRENZE       { HelpID = HID_FUNC_OBERGRENZE; };
+hidspecial HID_FUNC_UNTERGRENZE      { HelpID = HID_FUNC_UNTERGRENZE; };
+hidspecial HID_FUNC_GGT      { HelpID = HID_FUNC_GGT; };
+hidspecial HID_FUNC_KGV      { HelpID = HID_FUNC_KGV; };
+hidspecial HID_FUNC_MTRANS       { HelpID = HID_FUNC_MTRANS; };
+hidspecial HID_FUNC_MMULT        { HelpID = HID_FUNC_MMULT; };
+hidspecial HID_FUNC_MDET         { HelpID = HID_FUNC_MDET; };
+hidspecial HID_FUNC_MINV         { HelpID = HID_FUNC_MINV; };
+hidspecial HID_FUNC_EINHEITSMATRIX       { HelpID = HID_FUNC_EINHEITSMATRIX; };
+hidspecial HID_FUNC_SUMMENPRODUKT        { HelpID = HID_FUNC_SUMMENPRODUKT; };
+hidspecial HID_FUNC_SUMMEX2MY2       { HelpID = HID_FUNC_SUMMEX2MY2; };
+hidspecial HID_FUNC_SUMMEX2PY2       { HelpID = HID_FUNC_SUMMEX2PY2; };
+hidspecial HID_FUNC_SUMMEXMY2        { HelpID = HID_FUNC_SUMMEXMY2; };
+hidspecial HID_FUNC_HAEUFIGKEIT      { HelpID = HID_FUNC_HAEUFIGKEIT; };
+hidspecial HID_FUNC_RGP      { HelpID = HID_FUNC_RGP; };
+hidspecial HID_FUNC_RKP      { HelpID = HID_FUNC_RKP; };
+hidspecial HID_FUNC_TREND        { HelpID = HID_FUNC_TREND; };
+hidspecial HID_FUNC_VARIATION        { HelpID = HID_FUNC_VARIATION; };
+hidspecial HID_FUNC_ANZAHL       { HelpID = HID_FUNC_ANZAHL; };
+hidspecial HID_FUNC_ANZAHL2      { HelpID = HID_FUNC_ANZAHL2; };
+hidspecial HID_FUNC_MAX      { HelpID = HID_FUNC_MAX; };
+hidspecial HID_FUNC_MIN      { HelpID = HID_FUNC_MIN; };
+hidspecial HID_FUNC_VARIANZ      { HelpID = HID_FUNC_VARIANZ; };
+hidspecial HID_FUNC_VARIANZEN        { HelpID = HID_FUNC_VARIANZEN; };
+hidspecial HID_FUNC_STABW        { HelpID = HID_FUNC_STABW; };
+hidspecial HID_FUNC_STABWN       { HelpID = HID_FUNC_STABWN; };
+hidspecial HID_FUNC_MITTELWERT       { HelpID = HID_FUNC_MITTELWERT; };
+hidspecial HID_FUNC_SUMQUADABW       { HelpID = HID_FUNC_SUMQUADABW; };
+hidspecial HID_FUNC_MITTELABW        { HelpID = HID_FUNC_MITTELABW; };
+hidspecial HID_FUNC_SCHIEFE      { HelpID = HID_FUNC_SCHIEFE; };
+hidspecial HID_FUNC_KURT         { HelpID = HID_FUNC_KURT; };
+hidspecial HID_FUNC_GEOMITTEL        { HelpID = HID_FUNC_GEOMITTEL; };
+hidspecial HID_FUNC_HARMITTEL        { HelpID = HID_FUNC_HARMITTEL; };
+hidspecial HID_FUNC_MODALWERT        { HelpID = HID_FUNC_MODALWERT; };
+hidspecial HID_FUNC_MEDIAN       { HelpID = HID_FUNC_MEDIAN; };
+hidspecial HID_FUNC_QUANTIL      { HelpID = HID_FUNC_QUANTIL; };
+hidspecial HID_FUNC_QUARTILE         { HelpID = HID_FUNC_QUARTILE; };
+hidspecial HID_FUNC_KGROESSTE        { HelpID = HID_FUNC_KGROESSTE; };
+hidspecial HID_FUNC_KKLEINSTE        { HelpID = HID_FUNC_KKLEINSTE; };
+hidspecial HID_FUNC_QUANTILSRANG         { HelpID = HID_FUNC_QUANTILSRANG; };
+hidspecial HID_FUNC_RANG         { HelpID = HID_FUNC_RANG; };
+hidspecial HID_FUNC_GESTUTZTMITTEL       { HelpID = HID_FUNC_GESTUTZTMITTEL; };
+hidspecial HID_FUNC_WAHRSCHBEREICH       { HelpID = HID_FUNC_WAHRSCHBEREICH; };
+hidspecial HID_FUNC_B        { HelpID = HID_FUNC_B; };
+hidspecial HID_FUNC_PHI      { HelpID = HID_FUNC_PHI; };
+hidspecial HID_FUNC_GAUSS        { HelpID = HID_FUNC_GAUSS; };
+hidspecial HID_FUNC_FISHER       { HelpID = HID_FUNC_FISHER; };
+hidspecial HID_FUNC_FISHERINV        { HelpID = HID_FUNC_FISHERINV; };
+hidspecial HID_FUNC_BINOMVERT        { HelpID = HID_FUNC_BINOMVERT; };
+hidspecial HID_FUNC_NEGBINOMVERT         { HelpID = HID_FUNC_NEGBINOMVERT; };
+hidspecial HID_FUNC_KRITBINOM        { HelpID = HID_FUNC_KRITBINOM; };
+hidspecial HID_FUNC_POISSON      { HelpID = HID_FUNC_POISSON; };
+hidspecial HID_FUNC_NORMVERT         { HelpID = HID_FUNC_NORMVERT; };
+hidspecial HID_FUNC_NORMINV      { HelpID = HID_FUNC_NORMINV; };
+hidspecial HID_FUNC_STANDNORMVERT        { HelpID = HID_FUNC_STANDNORMVERT; };
+hidspecial HID_FUNC_STANDNORMINV         { HelpID = HID_FUNC_STANDNORMINV; };
+hidspecial HID_FUNC_LOGNORMVERT      { HelpID = HID_FUNC_LOGNORMVERT; };
+hidspecial HID_FUNC_LOGINV       { HelpID = HID_FUNC_LOGINV; };
+hidspecial HID_FUNC_EXPONVERT        { HelpID = HID_FUNC_EXPONVERT; };
+hidspecial HID_FUNC_GAMMAVERT        { HelpID = HID_FUNC_GAMMAVERT; };
+hidspecial HID_FUNC_GAMMAINV         { HelpID = HID_FUNC_GAMMAINV; };
+hidspecial HID_FUNC_GAMMALN      { HelpID = HID_FUNC_GAMMALN; };
+hidspecial HID_FUNC_BETAVERT         { HelpID = HID_FUNC_BETAVERT; };
+hidspecial HID_FUNC_BETAINV      { HelpID = HID_FUNC_BETAINV; };
+hidspecial HID_FUNC_WEIBULL      { HelpID = HID_FUNC_WEIBULL; };
+hidspecial HID_FUNC_HYPGEOMVERT      { HelpID = HID_FUNC_HYPGEOMVERT; };
+hidspecial HID_FUNC_TVERT        { HelpID = HID_FUNC_TVERT; };
+hidspecial HID_FUNC_TINV         { HelpID = HID_FUNC_TINV; };
+hidspecial HID_FUNC_FVERT        { HelpID = HID_FUNC_FVERT; };
+hidspecial HID_FUNC_FINV         { HelpID = HID_FUNC_FINV; };
+hidspecial HID_FUNC_CHIVERT      { HelpID = HID_FUNC_CHIVERT; };
+hidspecial HID_FUNC_CHIINV       { HelpID = HID_FUNC_CHIINV; };
+hidspecial HID_FUNC_STANDARDISIERUNG         { HelpID = HID_FUNC_STANDARDISIERUNG; };
+hidspecial HID_FUNC_VARIATIONEN      { HelpID = HID_FUNC_VARIATIONEN; };
+hidspecial HID_FUNC_VARIATIONEN2         { HelpID = HID_FUNC_VARIATIONEN2; };
+hidspecial HID_FUNC_KONFIDENZ        { HelpID = HID_FUNC_KONFIDENZ; };
+hidspecial HID_FUNC_GTEST        { HelpID = HID_FUNC_GTEST; };
+hidspecial HID_FUNC_CHITEST      { HelpID = HID_FUNC_CHITEST; };
+hidspecial HID_FUNC_FTEST        { HelpID = HID_FUNC_FTEST; };
+hidspecial HID_FUNC_TTEST        { HelpID = HID_FUNC_TTEST; };
+hidspecial HID_FUNC_BESTIMMTHEITSMASS        { HelpID = HID_FUNC_BESTIMMTHEITSMASS; };
+hidspecial HID_FUNC_ACHSENABSCHNITT      { HelpID = HID_FUNC_ACHSENABSCHNITT; };
+hidspecial HID_FUNC_STEIGUNG         { HelpID = HID_FUNC_STEIGUNG; };
+hidspecial HID_FUNC_STFEHLERYX       { HelpID = HID_FUNC_STFEHLERYX; };
+hidspecial HID_FUNC_PEARSON      { HelpID = HID_FUNC_PEARSON; };
+hidspecial HID_FUNC_KORREL       { HelpID = HID_FUNC_KORREL; };
+hidspecial HID_FUNC_KOVAR        { HelpID = HID_FUNC_KOVAR; };
+hidspecial HID_FUNC_SCHAETZER        { HelpID = HID_FUNC_SCHAETZER; };
+hidspecial HID_FUNC_MINA         { HelpID = HID_FUNC_MINA; };
+hidspecial HID_FUNC_MAXA         { HelpID = HID_FUNC_MAXA; };
+hidspecial HID_FUNC_MITTELWERTA      { HelpID = HID_FUNC_MITTELWERTA; };
+hidspecial HID_FUNC_STABWA       { HelpID = HID_FUNC_STABWA; };
+hidspecial HID_FUNC_STABWNA      { HelpID = HID_FUNC_STABWNA; };
+hidspecial HID_FUNC_VARIANZA         { HelpID = HID_FUNC_VARIANZA; };
+hidspecial HID_FUNC_VARIANZENA       { HelpID = HID_FUNC_VARIANZENA; };
+hidspecial HID_FUNC_ADRESSE      { HelpID = HID_FUNC_ADRESSE; };
+hidspecial HID_FUNC_BEREICHE         { HelpID = HID_FUNC_BEREICHE; };
+hidspecial HID_FUNC_WAHL         { HelpID = HID_FUNC_WAHL; };
+hidspecial HID_FUNC_SPALTE       { HelpID = HID_FUNC_SPALTE; };
+hidspecial HID_FUNC_ZEILE        { HelpID = HID_FUNC_ZEILE; };
+hidspecial HID_FUNC_SPALTEN      { HelpID = HID_FUNC_SPALTEN; };
+hidspecial HID_FUNC_ZEILEN       { HelpID = HID_FUNC_ZEILEN; };
+hidspecial HID_FUNC_WVERWEIS         { HelpID = HID_FUNC_WVERWEIS; };
+hidspecial HID_FUNC_SVERWEIS         { HelpID = HID_FUNC_SVERWEIS; };
+hidspecial HID_FUNC_INDEX        { HelpID = HID_FUNC_INDEX; };
+hidspecial HID_FUNC_INDIREKT         { HelpID = HID_FUNC_INDIREKT; };
+hidspecial HID_FUNC_VERWEIS      { HelpID = HID_FUNC_VERWEIS; };
+hidspecial HID_FUNC_VERGLEICH        { HelpID = HID_FUNC_VERGLEICH; };
+hidspecial HID_FUNC_VERSCHIEBUNG         { HelpID = HID_FUNC_VERSCHIEBUNG; };
+hidspecial HID_FUNC_FEHLERTYP        { HelpID = HID_FUNC_FEHLERTYP; };
+hidspecial HID_FUNC_VORLAGE      { HelpID = HID_FUNC_VORLAGE; };
+hidspecial HID_FUNC_DDE      { HelpID = HID_FUNC_DDE; };
+hidspecial HID_FUNC_TABELLE      { HelpID = HID_FUNC_TABELLE; };
+hidspecial HID_FUNC_TABELLEN         { HelpID = HID_FUNC_TABELLEN; };
+hidspecial HID_FUNC_CODE         { HelpID = HID_FUNC_CODE; };
+hidspecial HID_FUNC_DM       { HelpID = HID_FUNC_DM; };
+hidspecial HID_FUNC_ZEICHEN      { HelpID = HID_FUNC_ZEICHEN; };
+hidspecial HID_FUNC_SAEUBERN         { HelpID = HID_FUNC_SAEUBERN; };
+hidspecial HID_FUNC_VERKETTEN        { HelpID = HID_FUNC_VERKETTEN; };
+hidspecial HID_FUNC_IDENTISCH        { HelpID = HID_FUNC_IDENTISCH; };
+hidspecial HID_FUNC_FINDEN       { HelpID = HID_FUNC_FINDEN; };
+hidspecial HID_FUNC_SUCHEN       { HelpID = HID_FUNC_SUCHEN; };
+hidspecial HID_FUNC_GLAETTEN         { HelpID = HID_FUNC_GLAETTEN; };
+hidspecial HID_FUNC_GROSS2       { HelpID = HID_FUNC_GROSS2; };
+hidspecial HID_FUNC_GROSS        { HelpID = HID_FUNC_GROSS; };
+hidspecial HID_FUNC_KLEIN        { HelpID = HID_FUNC_KLEIN; };
+hidspecial HID_FUNC_WERT         { HelpID = HID_FUNC_WERT; };
+hidspecial HID_FUNC_TEXT         { HelpID = HID_FUNC_TEXT; };
+hidspecial HID_FUNC_T        { HelpID = HID_FUNC_T; };
+hidspecial HID_FUNC_ERSETZEN         { HelpID = HID_FUNC_ERSETZEN; };
+hidspecial HID_FUNC_FEST         { HelpID = HID_FUNC_FEST; };
+hidspecial HID_FUNC_LAENGE       { HelpID = HID_FUNC_LAENGE; };
+hidspecial HID_FUNC_LINKS        { HelpID = HID_FUNC_LINKS; };
+hidspecial HID_FUNC_RECHTS       { HelpID = HID_FUNC_RECHTS; };
+hidspecial HID_FUNC_TEIL         { HelpID = HID_FUNC_TEIL; };
+hidspecial HID_FUNC_WIEDERHOLEN      { HelpID = HID_FUNC_WIEDERHOLEN; };
+hidspecial HID_FUNC_WECHSELN         { HelpID = HID_FUNC_WECHSELN; };
+hidspecial HID_FUNC_BASIS        { HelpID = HID_FUNC_BASIS; };
+hidspecial HID_FUNC_DEZIMAL      { HelpID = HID_FUNC_DEZIMAL; };
+hidspecial HID_FUNC_UMRECHNEN        { HelpID = HID_FUNC_UMRECHNEN; };
+

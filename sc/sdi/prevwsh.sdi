@@ -1,0 +1,138 @@
+interface TablePrintPreview : View
+{
+    //  von Basic aus nicht erreichbar, darum alles mit Export = FALSE
+
+    SID_FORMATPAGE          [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_STATUS_PAGESTYLE    [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_HFEDIT              [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_ATTR_ZOOM           [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    FID_SCALE               [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_STATUS_DOCPOS       [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_PREVIEW_NEXT        [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_PREVIEW_PREVIOUS    [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_PREVIEW_FIRST       [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_PREVIEW_LAST        [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+
+    SfxVoidItem CursorPageUp SID_CURSORPAGEUP
+    (
+        SfxInt16Item By SID_CURSORPAGEUP
+    )
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE;
+        GroupId = GID_INTERN ;
+        Cachable ;
+    ]
+
+    SfxVoidItem CursorPageDown SID_CURSORPAGEDOWN
+    (
+        SfxInt16Item By SID_CURSORPAGEDOWN
+    )
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE;
+        GroupId = GID_INTERN ;
+        Cachable ;
+    ]
+
+    SID_CURSORHOME  [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_CURSOREND   [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+
+    SfxVoidItem CursorDown SID_CURSORDOWN
+    (
+        SfxInt16Item By SID_CURSORDOWN
+    )
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE;
+        GroupId = GID_INTERN ;
+        Cachable ;
+    ]
+    SfxVoidItem CursorUp SID_CURSORUP
+    (
+        SfxInt16Item By SID_CURSORUP
+    )
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE;
+        GroupId = GID_INTERN ;
+        Cachable ;
+    ]
+    SfxVoidItem CursorLeft SID_CURSORLEFT
+    (
+        SfxInt16Item By SID_CURSORLEFT
+    )
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE;
+        GroupId = GID_INTERN ;
+        Cachable ;
+    ]
+
+    SfxVoidItem CursorRight SID_CURSORRIGHT
+    (
+        SfxInt16Item By SID_CURSORRIGHT
+    )
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE;
+        GroupId = GID_INTERN ;
+        Cachable ;
+    ]
+
+    SfxVoidItem PPage SID_PREV_TABLE ( )
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE;
+        GroupId = GID_INTERN ;
+        Cachable ;
+    ]
+
+    SfxVoidItem NPage SID_NEXT_TABLE ( )
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE;
+        GroupId = GID_INTERN ;
+        Cachable ;
+    ]
+
+    SfxVoidItem FPage SID_CURSORTOPOFFILE ( )
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE;
+        GroupId = GID_INTERN ;
+        Cachable ;
+    ]
+
+    SfxVoidItem LPage SID_CURSORENDOFFILE ( )
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE;
+        GroupId = GID_INTERN ;
+        Cachable ;
+    ]
+    SID_PREVIEW_ZOOMIN  [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_PREVIEW_ZOOMOUT [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_REPAINT         [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_UNDO            [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_REDO            [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_REPEAT          [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_PRINTPREVIEW    [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ] // ole() api()
+}
+
+
+ // ===========================================================================
+shell ScPreviewShell : SfxViewShell
+{
+    import TablePrintPreview;
+}

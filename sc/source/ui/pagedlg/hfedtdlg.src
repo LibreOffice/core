@@ -1,0 +1,1401 @@
+/*************************************************************************
+ *
+ *  $RCSfile: hfedtdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:04 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+/* StarView ressource file */
+
+#include "hfedtdlg.hrc"
+#define HFEDIT_DLGTITLE \
+/* ### ACHTUNG: Neuer Text in Resource? Kopf-/Fußzeilen : Kopf-/Fu˜zeilen */\
+    Text = "Kopf-/Fußzeilen" ; \
+    Text [ ENGLISH ] = "Header/Footer" ; \
+    Text [ norwegian ] = "Header/Footer" ; \
+    Text [ italian ] = "Intestazione/piè di pagina" ; \
+    Text [ portuguese_brazilian ] = "Cabeşalho/RodapÚ" ; \
+    Text [ portuguese ] = "Cabeçalhos/Rodapés" ; \
+    Text [ finnish ] = "Ylä/alateksti" ; \
+    Text [ danish ] = "Sidehoved/Sidefod" ; \
+    Text [ french ] = "En-tête/Pied de page" ; \
+    Text [ swedish ] = "Sidhuvud/sidfot" ; \
+    Text [ dutch ] = "Kop-/voettekst" ; \
+    Text [ spanish ] = "Encabezam./Pie de página" ; \
+    Text [ english_us ] = "Headers/Footers" ; \
+    Text[ chinese_simplified ] = "Ò³Ã¼/Ò³½Å";   \
+    Text[ russian ] = "Âåğõíèé/Íèæíèé êîëîíòèòóëû"; \
+    Text[ polish ] = "Nag³ówki-/Stopki";    \
+    Text[ japanese ] = "Í¯ÀŞ/Ì¯À";  \
+    Text[ chinese_traditional ] = "­¶­º/­¶§À";  \
+    Text[ arabic ] = "ÑÄæÓ/ÊĞííáÇÊ ÇáÕİÍÇÊ";    \
+    Text[ dutch ] = "Kop-/voettekst";   \
+    Text[ chinese_simplified ] = "Ò³Ã¼/Ò³½Å";   \
+    Text[ greek ] = "Êåöáëßäåò/Õğïóİëéäá";  \
+    Text[ korean ] = "¸Ó¸®±Û/¹Ù´Ú±Û";   \
+    Text[ turkish ] = "Üst/Altbilgi";   \
+    Text[ language_user1 ] = " ";
+
+#define HEADER \
+    Text = "Kopfzeile" ; \
+    Text [ ENGLISH ] = "Header" ; \
+    Text [ norwegian ] = "Header" ; \
+    Text [ italian ] = "Riga d'intestazione" ; \
+    Text [ portuguese_brazilian ] = "Cabeçalho" ; \
+    Text [ portuguese ] = "Cabeçalho" ; \
+    Text [ finnish ] = "Yläteksti" ; \
+    Text [ danish ] = "Sidehoved" ; \
+    Text [ french ] = "En-tête" ; \
+    Text [ swedish ] = "Sidhuvud" ; \
+    Text [ dutch ] = "Koptekst" ; \
+    Text [ spanish ] = "Encabezamiento" ; \
+    Text [ english_us ] = "Header" ; \
+    Text[ chinese_simplified ] = "Ò³Ã¼";    \
+    Text[ russian ] = "Âåğõíèé êîëîíòèòóë"; \
+    Text[ polish ] = "Nag³ówek";    \
+    Text[ japanese ] = "Í¯ÀŞ";  \
+    Text[ chinese_traditional ] = "­¶­º";   \
+    Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ";  \
+    Text[ dutch ] = "Koptekst"; \
+    Text[ chinese_simplified ] = "Ò³Ã¼";    \
+    Text[ greek ] = "Êåöáëßäá"; \
+    Text[ korean ] = "¸Ó¸®±Û";  \
+    Text[ turkish ] = "Üstbilgi";   \
+    Text[ language_user1 ] = " ";
+
+#define FOOTER \
+/* ### ACHTUNG: Neuer Text in Resource? Fußzeile : Fu˜zeile */\
+    Text = "Fußzeile" ; \
+    Text [ ENGLISH ] = "Footer" ; \
+    Text [ norwegian ] = "Footer" ; \
+    Text [ italian ] = "Piè di pagina" ; \
+    Text [ portuguese_brazilian ] = "RodapÚ" ; \
+    Text [ portuguese ] = "Rodapé" ; \
+    Text [ finnish ] = "Alateksti" ; \
+    Text [ danish ] = "Sidefod" ; \
+    Text [ french ] = "Pied de page" ; \
+    Text [ swedish ] = "Sidfot" ; \
+    Text [ dutch ] = "Voettekst" ; \
+    Text [ spanish ] = "Pie de página" ; \
+    Text [ english_us ] = "Footer" ; \
+    Text[ chinese_simplified ] = "Ò³½Å";    \
+    Text[ russian ] = "Íèæíèé êîëîíòèòóë";  \
+    Text[ polish ] = "Stopka";  \
+    Text[ japanese ] = "Ì¯À";   \
+    Text[ chinese_traditional ] = "­¶§À";   \
+    Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ";    \
+    Text[ dutch ] = "Voettekst";    \
+    Text[ chinese_simplified ] = "Ò³½Å";    \
+    Text[ greek ] = "Õğïóİëéäï";    \
+    Text[ korean ] = "¹Ù´Ú±Û";  \
+    Text[ turkish ] = "Altbilgi";   \
+    Text[ language_user1 ] = " ";
+
+#define HEADER_RIGHT \
+    Text = "Kopfzeile (rechts)" ; \
+    Text [ ENGLISH ] = "Header (right)" ; \
+    Text [ norwegian ] = "Header (right)" ; \
+    Text [ italian ] = "Riga d'intestazione (destra)" ; \
+    Text [ portuguese_brazilian ] = "Cabeçalho (direito)" ; \
+    Text [ portuguese ] = "Cabeçalho (direito)" ; \
+    Text [ finnish ] = "Yläteksti (oikea)" ; \
+    Text [ danish ] = "Sidehoved (højre)" ; \
+    Text [ french ] = "En-tête (droit)" ; \
+    Text [ swedish ] = "Sidhuvud (höger)" ; \
+    Text [ dutch ] = "Koptekst (rechts)" ; \
+    Text [ spanish ] = "Encabezam. (der.)" ; \
+    Text [ english_us ] = "Header (right)" ; \
+    Text[ chinese_simplified ] = "Ò³Ã¼(ÓÒ)";    \
+    Text[ russian ] = "Âåğõíèé êîëîíòèòóë (ñïğàâà)";    \
+    Text[ polish ] = "Wiersz nag³ówka (z prawej)";  \
+    Text[ japanese ] = "Í¯ÀŞi‰Ej";    \
+    Text[ chinese_traditional ] = "­¶­º(¥k)";   \
+    Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ (íãíä)";   \
+    Text[ dutch ] = "Koptekst (rechts)";    \
+    Text[ chinese_simplified ] = "Ò³Ã¼(ÓÒ)";    \
+    Text[ greek ] = "Êåöáëßäá (äåîéÜ)"; \
+    Text[ korean ] = "¸Ó¸®±Û(¿À¸¥ÂÊ)";  \
+    Text[ turkish ] = "Altbilgi (sağ)"; \
+    Text[ language_user1 ] = " ";
+
+#define HEADER_LEFT \
+    Text = "Kopfzeile (links)" ; \
+    Text [ ENGLISH ] = "Header (left)" ; \
+    Text [ norwegian ] = "Header (left)" ; \
+    Text [ italian ] = "Riga d'intestazione (sinistra)" ; \
+    Text [ portuguese_brazilian ] = "Cabeçalho (esquerdo)" ; \
+    Text [ portuguese ] = "Cabeçalho (esquerdo)" ; \
+    Text [ finnish ] = "Yläteksti (vasen)" ; \
+    Text [ danish ] = "Sidehoved (venstre)" ; \
+    Text [ french ] = "En-tête (à gauche)" ; \
+    Text [ swedish ] = "Sidhuvud (vänster)" ; \
+    Text [ dutch ] = "Koptekst (links)" ; \
+    Text [ spanish ] = "Encabezam. (izq.)" ; \
+    Text [ english_us ] = "Header (left)" ; \
+    Text[ chinese_simplified ] = "Ò³Ã¼(×ó)";    \
+    Text[ russian ] = "Âåğõíèé êîëîíòèòóë (ñëåâà)"; \
+    Text[ polish ] = "Wiersz nag³ówka (z lewej)";   \
+    Text[ japanese ] = "Í¯ÀŞi¶j";    \
+    Text[ chinese_traditional ] = "­¶­º(¥ª)";   \
+    Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ (íÓÇÑ)";   \
+    Text[ dutch ] = "Koptekst (links)"; \
+    Text[ chinese_simplified ] = "Ò³Ã¼(×ó)";    \
+    Text[ greek ] = "Êåöáëßäá (áñéóôåñÜ)";  \
+    Text[ korean ] = "¸Ó¸®±Û(¿ŞÂÊ)";    \
+    Text[ turkish ] = "Üstbilgi (sol)"; \
+    Text[ language_user1 ] = " ";
+
+#define FOOTER_RIGHT \
+/* ### ACHTUNG: Neuer Text in Resource? Fußzeile (rechts) : Fu˜zeile (rechts) */\
+    Text = "Fußzeile (rechts)" ; \
+    Text [ ENGLISH ] = "Footer (right)" ; \
+    Text [ norwegian ] = "Footer (right)" ; \
+    Text [ italian ] = "Piè di pagina (destra)" ; \
+    Text [ portuguese_brazilian ] = "RodapÚ (direito)" ; \
+    Text [ portuguese ] = "Rodapé (direito)" ; \
+    Text [ finnish ] = "Alateksti (oikea)" ; \
+    Text [ danish ] = "Sidefod (højre)" ; \
+    Text [ french ] = "Pied de page (droit)" ; \
+    Text [ swedish ] = "Sidfot (höger)" ; \
+    Text [ dutch ] = "Voettekst (rechts)" ; \
+    Text [ spanish ] = "Pie de página (derecha)" ; \
+    Text [ english_us ] = "Footer (right)" ; \
+    Text[ chinese_simplified ] = "Ò³½Å(ÓÒ)";    \
+    Text[ russian ] = "Íèæíèé êîëîíòèòóë (ñïğàâà)"; \
+    Text[ polish ] = "Wiersz stopki (z prawej)";    \
+    Text[ japanese ] = "Ì¯Ài‰Ej"; \
+    Text[ chinese_traditional ] = "­¶§À(¥k)";   \
+    Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ (íãíä)"; \
+    Text[ dutch ] = "Voettekst (rechts)";   \
+    Text[ chinese_simplified ] = "Ò³½Å(ÓÒ)";    \
+    Text[ greek ] = "Õğïóİëéäï (äåîéÜ)";    \
+    Text[ korean ] = "¹Ù´Ú±Û (¿À¸¥ÂÊ)"; \
+    Text[ turkish ] = "Altbilgi (sağ)"; \
+    Text[ language_user1 ] = " ";
+
+#define FOOTER_LEFT \
+/* ### ACHTUNG: Neuer Text in Resource? Fußzeile (links) : Fu˜zeile (links) */\
+    Text = "Fußzeile (links)" ; \
+    Text [ ENGLISH ] = "Footer (left)" ; \
+    Text [ norwegian ] = "Footer (left)" ; \
+    Text [ italian ] = "Piè di pagina (sinistra)" ; \
+    Text [ portuguese_brazilian ] = "RodapÚ (esquerdo)" ; \
+    Text [ portuguese ] = "Rodapé (esquerdo)" ; \
+    Text [ finnish ] = "Yläteksti (vasen)" ; \
+    Text [ danish ] = "Sidefod (venstre)" ; \
+    Text [ french ] = "Pied de page (gauche)" ; \
+    Text [ swedish ] = "Sidfot (vänster)" ; \
+    Text [ dutch ] = "Voettekst (links)" ; \
+    Text [ spanish ] = "Pie de página (izquierda)" ; \
+    Text [ english_us ] = "Footer (left)" ; \
+    Text[ chinese_simplified ] = "Ò³½Å(×ó)";    \
+    Text[ russian ] = "Íèæíèé êîëîíòèòóë (ñëåâà)";  \
+    Text[ polish ] = "Wiersz stopki (z lewej)"; \
+    Text[ japanese ] = "Ì¯À (¶j"; \
+    Text[ chinese_traditional ] = "­¶§À(¥ª)";   \
+    Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ (íÓÇÑ)"; \
+    Text[ dutch ] = "Voettekst (links)";    \
+    Text[ chinese_simplified ] = "Ò³½Å(×ó)";    \
+    Text[ greek ] = "Õğïóİëéäï (áñéóôåñÜ)"; \
+    Text[ korean ] = "¹Ù´Ú±Û (¿ŞÂÊ)";   \
+    Text[ turkish ] = "Altbilgi (sol)"; \
+    Text[ language_user1 ] = " ";
+
+ //------------------------------------------------------------------------
+ // Bearbeiten vom Seitendialog aus aufgerufen
+ //------------------------------------------------------------------------
+TabDialog RID_SCDLG_HFED_HEADER
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Text = "Kopfzeilen" ;
+    Text [ ENGLISH ] = "Header" ;
+    Text [ norwegian ] = "Header" ;
+    Text [ italian ] = "Intestazioni" ;
+    Text [ portuguese_brazilian ] = "Cabeçalho" ;
+    Text [ portuguese ] = "Cabeçalhos" ;
+    Text [ finnish ] = "Yläteksti" ;
+    Text [ danish ] = "Sidehoved" ;
+    Text [ french ] = "En-têtes" ;
+    Text [ swedish ] = "Sidhuvuden" ;
+    Text [ dutch ] = "Kopteksten" ;
+    Text [ spanish ] = "Encabezamientos" ;
+    Text [ english_us ] = "Headers" ;
+    Moveable = TRUE ;
+     // Closeable = TRUE;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = 1 ;
+                HEADER_RIGHT
+                PageResID = HID_SCPAGE_HFED_HR ;
+            };
+            PageItem
+            {
+                Identifier = 2 ;
+                HEADER_LEFT
+                PageResID = HID_SCPAGE_HFED_HL ;
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "Ò³Ã¼";
+    Text[ russian ] = "Âåğõíèé êîëîíòèòóë";
+    Text[ polish ] = "Nag³ówki";
+    Text[ japanese ] = "Í¯ÀŞ";
+    Text[ chinese_traditional ] = "­¶­º";
+    Text[ arabic ] = "ÑÄæÓ ÇáÕİÍÇÊ";
+    Text[ dutch ] = "Kopteksten";
+    Text[ chinese_simplified ] = "Ò³Ã¼";
+    Text[ greek ] = "Êåöáëßäåò";
+    Text[ korean ] = "¸Ó¸®±Û";
+    Text[ turkish ] = "Üstbilgi";
+    Text[ language_user1 ] = " ";
+};
+TabDialog RID_SCDLG_HFED_FOOTER
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 270 , 140 ) ;
+    /* ### ACHTUNG: Neuer Text in Resource? Fußzeilen : Fu˜zeilen */
+    Text = "Fußzeilen" ;
+    Text [ ENGLISH ] = "Footer" ;
+    Text [ norwegian ] = "Footer" ;
+    Text [ italian ] = "Piè di pagina" ;
+    Text [ portuguese_brazilian ] = "Rodapé" ;
+    Text [ portuguese ] = "Rodapé" ;
+    Text [ finnish ] = "Alateksti" ;
+    Text [ danish ] = "Sidefod" ;
+    Text [ french ] = "Pieds de pages" ;
+    Text [ swedish ] = "Sidfötter" ;
+    Text [ dutch ] = "Voetteksten" ;
+    Text [ spanish ] = "Pies de página" ;
+    Text [ english_us ] = "Footers" ;
+    Moveable = TRUE ;
+     // Closeable = TRUE;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = 1 ;
+                FOOTER_RIGHT
+                PageResID = HID_SCPAGE_HFED_FR ;
+            };
+            PageItem
+            {
+                Identifier = 2 ;
+                FOOTER_LEFT
+                PageResID = HID_SCPAGE_HFED_FL ;
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "Ò³½Å";
+    Text[ russian ] = "Íèæíèé êîëîíòèòóë";
+    Text[ polish ] = "Stopki";
+    Text[ japanese ] = "Ì¯À";
+    Text[ chinese_traditional ] = "­¶§À";
+    Text[ arabic ] = "ÊĞííáÇÊ ÇáÕİÍÉ";
+    Text[ dutch ] = "Voetteksten";
+    Text[ chinese_simplified ] = "Ò³½Å";
+    Text[ greek ] = "Õğïóİëéäá";
+    Text[ korean ] = "¹Ù´Ú±Û";
+    Text[ turkish ] = "Altbilgi";
+    Text[ language_user1 ] = " ";
+};
+ //------------------------------------------------------------------------
+ // Bearbeiten/Kopf-Fusszeile:
+ //------------------------------------------------------------------------
+TabDialog RID_SCDLG_HFEDIT_ALL
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Moveable = TRUE ;
+     // Closeable = TRUE;
+    HFEDIT_DLGTITLE
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = 1 ;
+                HEADER_RIGHT
+                PageResID = HID_SCPAGE_HFED_HR ;
+            };
+            PageItem
+            {
+                Identifier = 2 ;
+                HEADER_LEFT
+                PageResID = HID_SCPAGE_HFED_HL ;
+            };
+            PageItem
+            {
+                Identifier = 3 ;
+                FOOTER_RIGHT
+                PageResID = HID_SCPAGE_HFED_FR ;
+            };
+            PageItem
+            {
+                Identifier = 4 ;
+                FOOTER_LEFT
+                PageResID = HID_SCPAGE_HFED_FL ;
+            };
+        };
+    };
+};
+TabDialog RID_SCDLG_HFEDIT_SHDR
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Moveable = TRUE ;
+     // Closeable = TRUE;
+    HFEDIT_DLGTITLE
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = 1 ;
+                HEADER
+                PageResID = HID_SCPAGE_HFED_HR ;
+            };
+            PageItem
+            {
+                Identifier = 2 ;
+                FOOTER_RIGHT
+                PageResID = HID_SCPAGE_HFED_FR ;
+            };
+            PageItem
+            {
+                Identifier = 3 ;
+                FOOTER_LEFT
+                PageResID = HID_SCPAGE_HFED_FL ;
+            };
+        };
+    };
+};
+TabDialog RID_SCDLG_HFEDIT_SFTR
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Moveable = TRUE ;
+     // Closeable = TRUE;
+    HFEDIT_DLGTITLE
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = 1 ;
+                HEADER_RIGHT
+                PageResID = HID_SCPAGE_HFED_HR ;
+            };
+            PageItem
+            {
+                Identifier = 2 ;
+                HEADER_LEFT
+                PageResID = HID_SCPAGE_HFED_HL ;
+            };
+            PageItem
+            {
+                Identifier = 3 ;
+                FOOTER
+                PageResID = HID_SCPAGE_HFED_FR ;
+            };
+        };
+    };
+};
+TabDialog RID_SCDLG_HFEDIT
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Moveable = TRUE ;
+     // Closeable = TRUE;
+    HFEDIT_DLGTITLE
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = 1 ;
+                HEADER
+                PageResID = HID_SCPAGE_HFED_HR ;
+            };
+            PageItem
+            {
+                Identifier = 2 ;
+                FOOTER
+                PageResID = HID_SCPAGE_HFED_FR ;
+            };
+        };
+    };
+};
+TabDialog RID_SCDLG_HFEDIT_HEADER
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Moveable = TRUE ;
+     // Closeable = TRUE;
+    HFEDIT_DLGTITLE
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = 1 ;
+                HEADER_RIGHT
+                PageResID = HID_SCPAGE_HFED_HR ;
+            };
+            PageItem
+            {
+                Identifier = 2 ;
+                HEADER_LEFT
+                PageResID = HID_SCPAGE_HFED_HL ;
+            };
+        };
+    };
+};
+TabDialog RID_SCDLG_HFEDIT_FOOTER
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Moveable = TRUE ;
+     // Closeable = TRUE;
+    HFEDIT_DLGTITLE
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = 1 ;
+                FOOTER_RIGHT
+                PageResID = HID_SCPAGE_HFED_FR ;
+            };
+            PageItem
+            {
+                Identifier = 2 ;
+                FOOTER_LEFT
+                PageResID = HID_SCPAGE_HFED_FL ;
+            };
+        };
+    };
+};
+TabDialog RID_SCDLG_HFEDIT_RIGHTHEADER
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Moveable = TRUE ;
+     // Closeable = TRUE;
+    HFEDIT_DLGTITLE
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = 1 ;
+                HEADER_RIGHT
+                PageResID = HID_SCPAGE_HFED_HR ;
+            };
+        };
+    };
+};
+TabDialog RID_SCDLG_HFEDIT_LEFTHEADER
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Moveable = TRUE ;
+     // Closeable = TRUE;
+    HFEDIT_DLGTITLE
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = 1 ;
+                HEADER_LEFT
+                PageResID = HID_SCPAGE_HFED_HL ;
+            };
+        };
+    };
+};
+TabDialog RID_SCDLG_HFEDIT_RIGHTFOOTER
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Moveable = TRUE ;
+     // Closeable = TRUE;
+    HFEDIT_DLGTITLE
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = 1 ;
+                FOOTER_RIGHT
+                PageResID = HID_SCPAGE_HFED_FR ;
+            };
+        };
+    };
+};
+TabDialog RID_SCDLG_HFEDIT_LEFTFOOTER
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 270 , 140 ) ;
+    Moveable = TRUE ;
+     // Closeable = TRUE;
+    HFEDIT_DLGTITLE
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = 1 ;
+                FOOTER_LEFT
+                PageResID = HID_SCPAGE_HFED_FL ;
+            };
+        };
+    };
+};
+ //------------------------------------------------------------------------
+ //  ScTpHFEdit
+ //------------------------------------------------------------------------
+TabPage RID_HFBASE
+{
+    Hide = TRUE ;
+    HelpId = HID_SCPAGE_HFEDIT ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    FixedText FT_LEFT
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Text = "~Linker Bereich" ;
+        Text [ ENGLISH ] = "~Left Area" ;
+        Text [ norwegian ] = "~Left Area" ;
+        Text [ italian ] = "Area ~sinistra" ;
+        Text [ portuguese_brazilian ] = "~Área Esquerda" ;
+        Text [ portuguese ] = "~Área esquerda" ;
+        Text [ finnish ] = "~Vasen alue" ;
+        Text [ danish ] = "Venstre område" ;
+        Text [ french ] = "~Plage gauche" ;
+        Text [ swedish ] = "~Vänster område" ;
+        Text [ dutch ] = "~Linker bereik" ;
+        Text [ spanish ] = "Área ~izquierda" ;
+        Text [ english_us ] = "~Left Area" ;
+        Text[ chinese_simplified ] = "×ó±ßÇøÓò(~L)";
+        Text[ russian ] = "Ëåâàÿ îáëàñòü";
+        Text[ polish ] = "Lewy obszar";
+        Text[ japanese ] = "¶‚Ì”ÍˆÍ(~L)";
+        Text[ chinese_traditional ] = "¥ª°Ï°ì(~L)";
+        Text[ arabic ] = "ãäØŞÉ íÓÑì";
+        Text[ dutch ] = "~Linker bereik";
+        Text[ chinese_simplified ] = "×ó±ßÇøÓò(~L)";
+        Text[ greek ] = "ÁñéóôåñŞ ğåñéï÷Ş";
+        Text[ korean ] = "¿ŞÂÊ ¿µ¿ª(~L)";
+        Text[ turkish ] = "~Sol bölüm";
+        Text[ language_user1 ] = " ";
+    };
+    /*      "Control" braucht eigene HelpId, darum in der Ableitung:
+    Control WND_LEFT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 18 ) ;
+        Size = MAP_APPFONT ( 80 , 55 ) ;
+        TabStop = TRUE ;
+    };
+*/
+    FixedText FT_CENTER
+    {
+        Pos = MAP_APPFONT ( 90 , 6 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Text = "~Mittlerer Bereich" ;
+        Text [ ENGLISH ] = "~Center Area" ;
+        Text [ norwegian ] = "~Center Area" ;
+        Text [ italian ] = "Area ~centrale" ;
+        Text [ portuguese_brazilian ] = "~Área Central" ;
+        Text [ portuguese ] = "~Área central" ;
+        Text [ finnish ] = "~Keskialue" ;
+        Text [ danish ] = "Midterområde" ;
+        Text [ french ] = "Plage centrale" ;
+        Text [ swedish ] = "~Mittområde" ;
+        Text [ dutch ] = "~Middelste bereik" ;
+        Text [ spanish ] = "Área ~central" ;
+        Text [ english_us ] = "~Center Area" ;
+        Text[ chinese_simplified ] = "ÖĞ¼äÇøÓò(~C)";
+        Text[ russian ] = "Öåíòğàëüíàÿ îáëàñòü";
+        Text[ polish ] = "Œrodkowy obszar";
+        Text[ japanese ] = "’†‰›‚Ì”ÍˆÍ(~C)";
+        Text[ chinese_traditional ] = "¤¤¶¡°Ï°ì(~C)";
+        Text[ arabic ] = "ãäØŞÉ æÓØì";
+        Text[ dutch ] = "~Middelste bereik";
+        Text[ chinese_simplified ] = "ÖĞ¼äÇøÓò(~C)";
+        Text[ greek ] = "ÊåíôñéêŞ ğåñéï÷Ş";
+        Text[ korean ] = "Áß½É ¿µ¿ª(~C)";
+        Text[ turkish ] = "~Orta bölüm";
+        Text[ language_user1 ] = " ";
+    };
+    /*      "Control" braucht eigene HelpId, darum in der Ableitung:
+    Control WND_CENTER
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 90 , 18 ) ;
+        Size = MAP_APPFONT ( 80 , 55 ) ;
+        TabStop = TRUE ;
+    };
+*/
+    FixedText FT_RIGHT
+    {
+        Pos = MAP_APPFONT ( 174 , 6 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Text = "~Rechter Bereich" ;
+        Text [ ENGLISH ] = "~Right Area" ;
+        Text [ norwegian ] = "~Right Area" ;
+        Text [ italian ] = "Area ~destra" ;
+        Text [ portuguese_brazilian ] = "~Área Direita" ;
+        Text [ portuguese ] = "~Área direita" ;
+        Text [ finnish ] = "~Oikea alue" ;
+        Text [ danish ] = "Højre område" ;
+        Text [ french ] = "Plage ~droite" ;
+        Text [ swedish ] = "~Höger område" ;
+        Text [ dutch ] = "~Rechter bereik" ;
+        Text [ spanish ] = "Área ~derecha" ;
+        Text [ english_us ] = "~Right Area" ;
+        Text[ chinese_simplified ] = "ÓÒ±ßÇøÓò(~R)";
+        Text[ russian ] = "Ïğàâàÿ îáëàñòü";
+        Text[ polish ] = "Prawy obszar";
+        Text[ japanese ] = "‰E‚Ì”ÍˆÍ(~R)";
+        Text[ chinese_traditional ] = "¥k°Ï°ì(~R)";
+        Text[ arabic ] = "ãäØŞÉ íãäì";
+        Text[ dutch ] = "~Rechter bereik";
+        Text[ chinese_simplified ] = "ÓÒ±ßÇøÓò(~R)";
+        Text[ greek ] = "Ğåñéï÷Ş äåîéÜ";
+        Text[ korean ] = "¿À¸¥ÂÊ ¿µ¿ª(~R)";
+        Text[ turkish ] = "~Sağ bölüm";
+        Text[ language_user1 ] = " ";
+    };
+    /*      "Control" braucht eigene HelpId, darum in der Ableitung:
+    Control WND_RIGHT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 174 , 18 ) ;
+        Size = MAP_APPFONT ( 80 , 55 ) ;
+        TabStop = TRUE ;
+    };
+*/
+    ImageButton BTN_TEXT
+    {
+        HelpId = HID_SC_HF_TEXT ;
+        Pos = MAP_APPFONT ( 66 , 78 ) ;
+        Size = MAP_APPFONT ( 15 , 15 ) ;
+        TabStop = TRUE ;
+        QuickHelpText = "Textattribute" ;
+        QuickHelpText [ ENGLISH ] = "Text Attributes" ;
+        QuickHelpText [ norwegian ] = "Text Attributes" ;
+        QuickHelpText [ italian ] = "Attributi di testo" ;
+        QuickHelpText [ portuguese_brazilian ] = "Atributos de Texto" ;
+        QuickHelpText [ portuguese ] = "Atributos de texto" ;
+        QuickHelpText [ finnish ] = "Tekstimääritteet" ;
+        QuickHelpText [ danish ] = "Tekstattributter" ;
+        QuickHelpText [ french ] = "Attributs de texte" ;
+        QuickHelpText [ swedish ] = "Textattribut" ;
+        QuickHelpText [ dutch ] = "Tekstattributen" ;
+        QuickHelpText [ spanish ] = "Atributos de texto" ;
+        QuickHelpText [ english_us ] = "Text Attributes" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "text.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        /* ### ACHTUNG: Neuer Text in Resource? Ändern der Textattribute der aktuellen Selektion : ndern der Textattribute der aktuellen Selektion */
+    QuickHelpText[ russian ] = "Àòğèáóòû òåêñòà";
+        QuickHelpText[ polish ] = "Atrybuty tekstu";
+        QuickHelpText[ japanese ] = "Ã·½Ä‚Ì‘®«";
+        QuickHelpText[ chinese_simplified ] = "ÕıÎÄÊôĞÔ";
+        QuickHelpText[ chinese_traditional ] = "¤å¦rÄİ©Ê";
+        QuickHelpText[ arabic ] = "ÓãÇÊ ÇáäÕ";
+        QuickHelpText[ dutch ] = "Tekstattributen";
+        QuickHelpText[ chinese_simplified ] = "ÕıÎÄÊôĞÔ";
+        QuickHelpText[ greek ] = "Éäéüôçôåò êåéìİíïõ";
+        QuickHelpText[ korean ] = "Text Attributes";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    ImageButton BTN_FILE
+    {
+        HelpId = HID_SC_HF_FILE ;
+        Pos = MAP_APPFONT ( 89 , 78 ) ;
+        Size = MAP_APPFONT ( 15 , 15 ) ;
+        TabStop = TRUE ;
+        QuickHelpText = "Dateiname" ;
+        QuickHelpText [ ENGLISH ] = "Filename" ;
+        QuickHelpText [ norwegian ] = "Filename" ;
+        QuickHelpText [ italian ] = "Nome del file" ;
+        QuickHelpText [ portuguese_brazilian ] = "Nome do Arquivo" ;
+        QuickHelpText [ portuguese ] = "Nome do ficheiro" ;
+        QuickHelpText [ finnish ] = "Tiedostonimi" ;
+        QuickHelpText [ danish ] = "Filnavn" ;
+        QuickHelpText [ french ] = "Nom de fichier" ;
+        QuickHelpText [ swedish ] = "Filnamn" ;
+        QuickHelpText [ dutch ] = "Bestandsnaam" ;
+        QuickHelpText [ spanish ] = "Nombre de archivo" ;
+        QuickHelpText [ english_us ] = "File name" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "file.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        /* ### ACHTUNG: Neuer Text in Resource? Einfügen des Dateinames des aktuellen Dokumentes : Einf³gen des Dateinames des aktuellen Dokumentes */
+        QuickHelpText[ russian ] = "Èìÿ ôàéëà";
+        QuickHelpText[ polish ] = "Nazwa pliku";
+        QuickHelpText[ japanese ] = "Ì§²Ù–¼";
+        QuickHelpText[ chinese_simplified ] = "ÎÄ¼şÃû";
+        QuickHelpText[ chinese_traditional ] = "ÀÉ®×¦WºÙ";
+        QuickHelpText[ arabic ] = "ÇÓã Çáãáİ";
+        QuickHelpText[ dutch ] = "Bestandsnaam";
+        QuickHelpText[ chinese_simplified ] = "ÎÄ¼şÃû";
+        QuickHelpText[ greek ] = "¼íïìá áñ÷åßïõ";
+        QuickHelpText[ korean ] = "File name";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+
+    Menu RID_POPUP_FCOMMAND
+    {
+        ItemList =
+        {
+            MenuItem
+            {
+                Identifier = FILE_COMMAND_TITEL ;
+                HelpID = HID_FCOMMAND_TITEL ;
+                Text = "Titel" ;
+                Text [ english ] = "Titel" ;
+                            Text[ italian ] = "Titolo";
+                Text[ portuguese_brazilian ] = "Titel";
+                Text[ portuguese ] = "Título";
+                Text[ danish ] = "Titel";
+                Text[ french ] = "Titre";
+                Text[ swedish ] = "Titel";
+                Text[ dutch ] = "Titel";
+                Text[ spanish ] = "Título";
+                Text[ english_us ] = "Title";
+    Text[ chinese_simplified ] = "±êÌâ";
+                Text[ russian ] = "Çàãîëîâîê";
+                Text[ polish ] = "Tytu³";
+                Text[ japanese ] = "À²ÄÙ";
+                Text[ chinese_traditional ] = "¼ĞÃD";
+                Text[ arabic ] = "ÇáÚäæÇä";
+                Text[ dutch ] = "Titel";
+                Text[ chinese_simplified ] = "±êÌâ";
+                Text[ greek ] = "Ôßôëïò";
+                Text[ korean ] = "Á¦¸ñ";
+                Text[ turkish ] = "Başlık";
+                Text[ language_user1 ] = " ";
+            };
+            MenuItem
+            {
+                Identifier = FILE_COMMAND_FILENAME;
+                HelpID = HID_FCOMMAND_FILENAME;
+                Text = "Dateiname" ;
+                Text [ english ] = "Filename" ;
+                RadioCheck = TRUE ;
+                            Text[ italian ] = "Nome file";
+                Text[ portuguese_brazilian ] = "Dateiname";
+                Text[ portuguese ] = "Nome do ficheiro";
+                Text[ danish ] = "Filnavn";
+                Text[ french ] = "Nom de fichier";
+                Text[ swedish ] = "Filnamn";
+                Text[ dutch ] = "Bestandsnaam";
+                Text[ spanish ] = "Nombre del archivo";
+                Text[ english_us ] = "File Name";
+    Text[ chinese_simplified ] = "ÎÄ¼şÃû";
+                Text[ russian ] = "Èìÿ ôàéëà";
+                Text[ polish ] = "Nazwa pliku";
+                Text[ japanese ] = "Ì§²Ù–¼";
+                Text[ chinese_traditional ] = "ÀÉ®×¦WºÙ";
+                Text[ arabic ] = "ÇÓã Çáãáİ";
+                Text[ dutch ] = "Bestandsnaam";
+                Text[ chinese_simplified ] = "ÎÄ¼şÃû";
+                Text[ greek ] = "¼íïìá áñ÷åßïõ";
+                Text[ korean ] = "ÆÄÀÏ ÀÌ¸§";
+                Text[ turkish ] = "Dosya adı";
+                Text[ language_user1 ] = " ";
+            };
+            MenuItem
+            {
+                Identifier = FILE_COMMAND_PATH;
+                HelpID = HID_FCOMMAND_PATH;
+                Text = "Pfad/Dateiname" ;
+                Text [ english ] = "Path/Filename" ;
+                RadioCheck = TRUE ;
+                            Text[ italian ] = "Nome di percorso/file";
+                Text[ portuguese_brazilian ] = "Pfad/Dateiname";
+                Text[ portuguese ] = "Atalho/Nome do ficheiro";
+                Text[ danish ] = "Sti/Filnavn";
+                Text[ french ] = "Chemin/Nom de fichier";
+                Text[ swedish ] = "Sökväg/Filnamn";
+                Text[ dutch ] = "Pad/Bestandsnaam";
+                Text[ spanish ] = "Ruta/Nombre de archivo";
+                Text[ english_us ] = "Path/File Name";
+    Text[ chinese_simplified ] = "Â·¾¶/ÎÄ¼şÃû";
+                Text[ russian ] = "Èìÿ ïóòè/ôàéëà";
+                Text[ polish ] = "Œcie¿ka/Nazwa pliku";
+                Text[ japanese ] = "Êß½/Ì§²Ù–¼";
+                Text[ chinese_traditional ] = "¸ô®|/ÀÉ®×¦WºÙ";
+                Text[ arabic ] = "ÇáãÓÇÑ/ÇÓã Çáãáİ";
+                Text[ dutch ] = "Pad/Bestandsnaam";
+                Text[ chinese_simplified ] = "Â·¾¶/ÎÄ¼şÃû";
+                Text[ greek ] = "¼íïìá äéáäñïìŞò/ïíüìáôïò";
+                Text[ korean ] = "°æ·Î/ÆÄÀÏ ¸í";
+                Text[ turkish ] = "Yol/dosya adı";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+
+    ImageButton BTN_TABLE
+    {
+        HelpId = HID_SC_HF_TABLE ;
+        Pos = MAP_APPFONT ( 106 , 78 ) ;
+        Size = MAP_APPFONT ( 15 , 15 ) ;
+        TabStop = TRUE ;
+        QuickHelpText = "Tabellenname" ;
+        QuickHelpText [ ENGLISH ] = "Table Name" ;
+        QuickHelpText [ norwegian ] = "Table Name" ;
+        QuickHelpText [ italian ] = "Nome tabella" ;
+        QuickHelpText [ portuguese_brazilian ] = "Tabela Nome" ;
+        QuickHelpText [ portuguese ] = "Nome da folha" ;
+        QuickHelpText [ finnish ] = "Taulukon nimi" ;
+        QuickHelpText [ danish ] = "Arknavn" ;
+        QuickHelpText [ french ] = "Nom de feuille" ;
+        QuickHelpText [ swedish ] = "Tabellnamn" ;
+        QuickHelpText [ dutch ] = "Tabelnaam" ;
+        QuickHelpText [ spanish ] = "Nombre de la hoja" ;
+        QuickHelpText [ english_us ] = "Sheet Name" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "table.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        /* ### ACHTUNG: Neuer Text in Resource? Einfügen des aktuellen Tabellennamens : Einf³gen des aktuellen Tabellennamens */
+    QuickHelpText[ russian ] = "Èìÿ ëèñòà";
+        QuickHelpText[ polish ] = "Nazwa tabeli";
+        QuickHelpText[ japanese ] = "•\\‚Ì–¼‘O";
+        QuickHelpText[ chinese_simplified ] = "±í¸ñÃû³Æ";
+        QuickHelpText[ chinese_traditional ] = "¤u§@ªí¦WºÙ";
+        QuickHelpText[ arabic ] = "ÇÓã ÇáÌÏæá";
+        QuickHelpText[ dutch ] = "Tabelnaam";
+        QuickHelpText[ chinese_simplified ] = "±í¸ñÃû³Æ";
+        QuickHelpText[ greek ] = "¼íïìá ğßíáêá";
+        QuickHelpText[ korean ] = "Sheet Name";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    ImageButton BTN_PAGE
+    {
+        HelpId = HID_SC_HF_PAGE ;
+        Pos = MAP_APPFONT ( 126 , 78 ) ;
+        Size = MAP_APPFONT ( 15 , 15 ) ;
+        TabStop = TRUE ;
+        QuickHelpText = "Seite" ;
+        QuickHelpText [ ENGLISH ] = "Page" ;
+        QuickHelpText [ norwegian ] = "Page" ;
+        QuickHelpText [ italian ] = "Pagina" ;
+        QuickHelpText [ portuguese_brazilian ] = "Página" ;
+        QuickHelpText [ portuguese ] = "Página" ;
+        QuickHelpText [ finnish ] = "Sivu" ;
+        QuickHelpText [ danish ] = "Side" ;
+        QuickHelpText [ french ] = "Page" ;
+        QuickHelpText [ swedish ] = "Sida" ;
+        QuickHelpText [ dutch ] = "Pagina" ;
+        QuickHelpText [ spanish ] = "Página" ;
+        QuickHelpText [ english_us ] = "Page" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "page.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        /* ### ACHTUNG: Neuer Text in Resource? Einfügen der aktuellen Seitenzahl : Einf³gen der aktuellen Seitenzahl */
+    QuickHelpText[ russian ] = "Ñòğàíèöà";
+        QuickHelpText[ polish ] = "Strona";
+        QuickHelpText[ japanese ] = "Íß°¼Ş";
+        QuickHelpText[ chinese_simplified ] = "Ò³Ãæ";
+        QuickHelpText[ chinese_traditional ] = "­¶";
+        QuickHelpText[ arabic ] = "ÕİÍÉ";
+        QuickHelpText[ dutch ] = "Pagina";
+        QuickHelpText[ chinese_simplified ] = "Ò³Ãæ";
+        QuickHelpText[ greek ] = "Óåëßäá";
+        QuickHelpText[ korean ] = "Sheet";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    ImageButton BTN_PAGES
+    {
+        HelpId = HID_SC_HF_PAGES ;
+        Pos = MAP_APPFONT ( 143 , 78 ) ;
+        Size = MAP_APPFONT ( 15 , 15 ) ;
+        TabStop = TRUE ;
+        QuickHelpText = "Seiten" ;
+        QuickHelpText [ ENGLISH ] = "Pages" ;
+        QuickHelpText [ norwegian ] = "Pages" ;
+        QuickHelpText [ italian ] = "Pagine" ;
+        QuickHelpText [ portuguese_brazilian ] = "Páginas" ;
+        QuickHelpText [ portuguese ] = "Páginas" ;
+        QuickHelpText [ finnish ] = "Sivumäärä" ;
+        QuickHelpText [ danish ] = "Sider" ;
+        QuickHelpText [ french ] = "Pages" ;
+        QuickHelpText [ swedish ] = "Sidor" ;
+        QuickHelpText [ dutch ] = "Pagina's" ;
+        QuickHelpText [ spanish ] = "Número de páginas" ;
+        QuickHelpText [ english_us ] = "Pages" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "pages.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        /* ### ACHTUNG: Neuer Text in Resource? Einfügen der letzten Seitenzahl : Einf³gen der letzten Seitenzahl */
+    QuickHelpText[ russian ] = "Ñòğàíèöû";
+        QuickHelpText[ polish ] = "Strony";
+        QuickHelpText[ japanese ] = "Íß°¼Ş";
+        QuickHelpText[ chinese_simplified ] = "Ò³Êı";
+        QuickHelpText[ chinese_traditional ] = "­¶";
+        QuickHelpText[ arabic ] = "ÕİÍÇÊ";
+        QuickHelpText[ dutch ] = "Pagina's";
+        QuickHelpText[ chinese_simplified ] = "Ò³Êı";
+        QuickHelpText[ greek ] = "Óåëßäåò";
+        QuickHelpText[ korean ] = "Number of Pages";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    ImageButton BTN_DATE
+    {
+        HelpId = HID_SC_HF_DATE ;
+        Pos = MAP_APPFONT ( 163 , 78 ) ;
+        Size = MAP_APPFONT ( 15 , 15 ) ;
+        TabStop = TRUE ;
+        QuickHelpText = "Datum" ;
+        QuickHelpText [ ENGLISH ] = "Date" ;
+        QuickHelpText [ norwegian ] = "Date" ;
+        QuickHelpText [ italian ] = "Data" ;
+        QuickHelpText [ portuguese_brazilian ] = "Data" ;
+        QuickHelpText [ portuguese ] = "Data" ;
+        QuickHelpText [ finnish ] = "Päiväys" ;
+        QuickHelpText [ danish ] = "Dato" ;
+        QuickHelpText [ french ] = "Date" ;
+        QuickHelpText [ swedish ] = "Datum" ;
+        QuickHelpText [ dutch ] = "Datum" ;
+        QuickHelpText [ spanish ] = "Fecha" ;
+        QuickHelpText [ english_us ] = "Date" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "date.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        /* ### ACHTUNG: Neuer Text in Resource? Einfügen des aktuellen Datums : Einf³gen des aktuellen Datums */
+    QuickHelpText[ russian ] = "Äàòà";
+        QuickHelpText[ polish ] = "Data";
+        QuickHelpText[ japanese ] = "“ú•t";
+        QuickHelpText[ chinese_simplified ] = "ÈÕÆÚ";
+        QuickHelpText[ chinese_traditional ] = "¤é´Á";
+        QuickHelpText[ arabic ] = "ÇáÊÇÑíÎ";
+        QuickHelpText[ dutch ] = "Datum";
+        QuickHelpText[ chinese_simplified ] = "ÈÕÆÚ";
+        QuickHelpText[ greek ] = "Çìåñïìçíßá";
+        QuickHelpText[ korean ] = "Date";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    ImageButton BTN_TIME
+    {
+        HelpId = HID_SC_HF_TIME ;
+        Pos = MAP_APPFONT ( 180 , 78 ) ;
+        Size = MAP_APPFONT ( 15 , 15 ) ;
+        TabStop = TRUE ;
+        QuickHelpText = "Uhrzeit" ;
+        QuickHelpText [ ENGLISH ] = "Time" ;
+        QuickHelpText [ norwegian ] = "Time" ;
+        QuickHelpText [ italian ] = "Ora" ;
+        QuickHelpText [ portuguese_brazilian ] = "Hora" ;
+        QuickHelpText [ portuguese ] = "Hora" ;
+        QuickHelpText [ finnish ] = "Aika" ;
+        QuickHelpText [ danish ] = "Klokkeslæt" ;
+        QuickHelpText [ french ] = "Heure" ;
+        QuickHelpText [ swedish ] = "Klockslag" ;
+        QuickHelpText [ dutch ] = "Tijd" ;
+        QuickHelpText [ spanish ] = "Hora" ;
+        QuickHelpText [ english_us ] = "Time" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "time.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        /* ### ACHTUNG: Neuer Text in Resource? Einfügen der aktuellen Uhrzeit : Einf³gen der aktuellen Uhrzeit */
+    QuickHelpText[ russian ] = "Âğåìÿ";
+        QuickHelpText[ polish ] = "Godzina";
+        QuickHelpText[ japanese ] = "";
+        QuickHelpText[ chinese_simplified ] = "Ê±¼ä";
+        QuickHelpText[ chinese_traditional ] = "®É¶¡";
+        QuickHelpText[ arabic ] = "ÇáæŞÊ";
+        QuickHelpText[ dutch ] = "Tijd";
+        QuickHelpText[ chinese_simplified ] = "Ê±¼ä";
+        QuickHelpText[ greek ] = "¿ñá";
+        QuickHelpText[ korean ] = "Time";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    /* fuer DesignEd
+    BitmapButton 1 {
+            Pos = MAP_APPFONT( 66, 78 );
+            Size = MAP_APPFONT( 15, 15 );
+            TabStop = TRUE;
+            ButtonBitmap = Bitmap  {
+                File = "e:\\text.bmp";
+            };
+        };
+    BitmapButton 2 {
+            Pos = MAP_APPFONT( 126, 78 );
+            Size = MAP_APPFONT( 15, 15 );
+            TabStop = TRUE;
+            ButtonBitmap = Bitmap  {
+                File = "e:\\page.bmp";
+            };
+        };
+    BitmapButton 3 {
+            Pos = MAP_APPFONT( 143, 78 );
+            Size = MAP_APPFONT( 15, 15 );
+            TabStop = TRUE;
+            ButtonBitmap = Bitmap  {
+                File = "e:\\pages.bmp";
+            };
+        };
+    BitmapButton 4 {
+            Pos = MAP_APPFONT( 163, 78 );
+            Size = MAP_APPFONT( 15, 15 );
+            TabStop = TRUE;
+            ButtonBitmap = Bitmap  {
+                File = "e:\\date.bmp";
+            };
+        };
+    BitmapButton 5 {
+            Pos = MAP_APPFONT( 180, 78 );
+            Size = MAP_APPFONT( 15, 15 );
+            TabStop = TRUE;
+            ButtonBitmap = Bitmap  {
+                File = "e:\\time.bmp";
+            };
+        };
+    BitmapButton 6 {
+            Pos = MAP_APPFONT( 89, 78 );
+            Size = MAP_APPFONT( 15, 15 );
+            TabStop = TRUE;
+            ButtonBitmap = Bitmap  {
+                File = "e:\\file.bmp";
+            };
+        };
+    BitmapButton 7 {
+            Pos = MAP_APPFONT( 106, 78 );
+            Size = MAP_APPFONT( 15, 15 );
+            TabStop = TRUE;
+            ButtonBitmap = Bitmap  {
+                File = "e:\\table.bmp";
+            };
+        };
+*/
+    FixedText FT_INFO
+    {
+        Pos = MAP_APPFONT ( 12 , 106 ) ;
+        Size = MAP_APPFONT ( 240 , 18 ) ;
+        WordBreak = TRUE ;
+        /* ### ACHTUNG: Neuer Text in Resource? Benutzen Sie die Schaltflächen, um die Schriftart zu verändern oder Feldbefehle wie Datum, Uhrzeit, etc. einzufügen. : Benutzen Sie die Schaltflõchen, um die Schriftart zu verõndern oder Feldbefehle wie Datum, Uhrzeit, etc. einzuf³gen. */
+        Text = "Benutzen Sie die Schaltflächen, um die Schriftart zu verändern oder Feldbefehle wie Datum, Uhrzeit, etc. einzufügen." ;
+        Text [ ENGLISH ] = "Use image buttons to change the text font orto insert special commands like date, time etc." ;
+        Text [ norwegian ] = "Use image buttons to change the text font orto insert special commands like date, time etc." ;
+        Text [ italian ] = "Usare i pulsanti per modificare il tipo di carattere\no per inserire comandi speciali come data, ora, ecc." ;
+        Text [ portuguese_brazilian ] = "Use os botões de imagem para mudar a fonte do texto ouinserir comandos especiais como data hora, etc." ;
+        Text [ portuguese ] = "Use os botões para mudar o tipo de letra ou inserir campos como data, hora, etc." ;
+        Text [ finnish ] = "Kuvapainikkeilla voit vaihtaa tekstin fontin tai lisätä erikoiskomennon, kuten päiväyksen tai ajan." ;
+        Text [ danish ] = "Brug knapperne til at forandre skrifttypen eller til at indsætte felter som dato, klokkeslæt etc." ;
+        Text [ french ] = "Utilisez les boutons pour modifier la police ou pour insérer des instructions de champ telles que la date, l'heure, etc." ;
+        Text [ swedish ] = "Använd kommandoknapparna för att ändra teckensnitt eller infoga fältkommandon som datum, klockslag etc." ;
+        Text [ dutch ] = "Gebruik de knoppen om de tekstattributen te wijzigen of om veldopdrachten zoals datum, tijd, enz. in te voegen." ;
+        Text [ spanish ] = "Utilice los botones para modificar la fuente o para insertar comandos como fecha, hora, etc." ;
+        Text [ english_us ] = "Use the buttons to change the font or insert field commands such as date, time, etc." ;
+        Text[ chinese_simplified ] = "ÇëÄú°´»÷°´Å¥£¬¸ü¸Ä×ÖÌå»ò²åÈëÈÕÆÚ£¬Ê±¼äµÈÇøÓòÖ¸Áî¡£";
+        Text[ russian ] = "Äëÿ èçìåíåíèÿ øğèôòà èëè äëÿ âñòàâêè òàêèõ êîìàíä ïîëÿ êàê äàòà, âğåìÿ è ò.ä. èñïîëüçóéòå êíîïêè.";
+        Text[ polish ] = "U¿yj przycisków, aby zmieniæ czcionkê oraz wpisaæ datê i godzinê.";
+        Text[ japanese ] = "•ÏXÎŞÀİ‚ğ¸Ø¯¸‚µ‚Ä¤Ì«İÄ‚Ì•ÏX‚ ‚é‚¢‚Í“ú•t¤“™‚ÌÌ¨°ÙÄŞºÏİÄŞ‚Ì‘}“ü‚ğ‚µ‚Ä‚­‚¾‚³‚¢B";
+        Text[ chinese_traditional ] = "½Ğ±z«ö¤@¤U«ö¶s¡MÅÜ§ó¦r«¬©Î´¡¤J¤é´Á¡M®É¶¡µ¥°Ï°ì«ü¥O¡C";
+        Text[ arabic ] = "ÇÓÊÎÏã ÇáãİÇÊíÍ áÊÛííÑ äæÚ ÇáÎØ Ãæ áÅÖÇİÉ ÃæÇãÑ ÍŞæá¡ ãËá ÇáÊÇÑíÎ¡ Ãæ ÇáæŞÊ ...ÅáÎ.";
+        Text[ dutch ] = "Gebruik de knoppen om de tekstattributen te wijzigen of om veldopdrachten zoals datum, tijd, enz. in te voegen.";
+        Text[ chinese_simplified ] = "ÇëÄú°´»÷°´Å¥£¬¸ü¸Ä×ÖÌå»ò²åÈëÈÕÆÚ£¬Ê±¼äµÈÇøÓòÖ¸Áî¡£";
+        Text[ greek ] = "×ñçóéìïğïéŞóôå ôá ğåäßá åíôïëŞò ãéá íá áëëÜîåôå ôçí ãñáììáôïóåéñÜ Ş ãéá íá åéóÜãåôå ğåäßá åíôïëşí, üğùò ğ.÷. çìåñïìçíßá, şñá, êôë.";
+        Text[ korean ] = "±Û²ÃÀ» º¯°æÇÏ°Å³ª ³¯Â¥, ½Ã°£µîÀÇ ÇÊµå ¸í·É¾î¸¦ »ğÀÔÇÏ±â À§ÇØ¼­´Â ¹öÆ°À» »ç¿ëÇÏ½Ê½Ã¿À.";
+        Text[ turkish ] = "Yazıtipini değiştirmek ya da tarih, saat gibi alan komutları eklemek için düğmeleri kullanınız.";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_INFO
+    {
+        Pos = MAP_APPFONT ( 6 , 95 ) ;
+        Size = MAP_APPFONT ( 248 , 35 ) ;
+        Text = "Hinweis" ;
+        Text [ ENGLISH ] = "Hint" ;
+        Text [ norwegian ] = "Hint" ;
+        Text [ italian ] = "Nota" ;
+        Text [ portuguese_brazilian ] = "Dica" ;
+        Text [ portuguese ] = "Observação" ;
+        Text [ finnish ] = "Vihje" ;
+        Text [ danish ] = "Tip" ;
+        Text [ french ] = "Conseil" ;
+        Text [ swedish ] = "Tips" ;
+        Text [ dutch ] = "Tip" ;
+        Text [ spanish ] = "Indicación" ;
+        Text [ english_us ] = "Note" ;
+        Text[ chinese_simplified ] = "ÌáÊ¾";
+        Text[ russian ] = "Óêàçàíèå";
+        Text[ polish ] = "Porada";
+        Text[ japanese ] = "w¦";
+        Text[ chinese_traditional ] = "´£¥Ü";
+        Text[ arabic ] = "ãáÇÍÙÉ";
+        Text[ dutch ] = "Tip";
+        Text[ chinese_simplified ] = "ÌáÊ¾";
+        Text[ greek ] = "Õğüäåéîç";
+        Text[ korean ] = "ÆÁ";
+        Text[ turkish ] = "Not";
+        Text[ language_user1 ] = " ";
+    };
+};
+ // Kombinationen: Header/Footer links/rechts
+ // die Eingabefenster jeweils mit eigener ID, sonst aus RID_HFBASE kopiert
+TabPage RID_SCPAGE_HFED_HL < RID_HFBASE
+{
+    Hide = TRUE ;
+    HelpId = HID_SCPAGE_HFED_HL ;
+    Control WND_LEFT
+    {
+        HelpId = HID_SC_HF_HLL ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 18 ) ;
+        Size = MAP_APPFONT ( 80 , 55 ) ;
+        TabStop = TRUE ;
+    };
+    Control WND_CENTER
+    {
+        HelpId = HID_SC_HF_HLC ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 90 , 18 ) ;
+        Size = MAP_APPFONT ( 80 , 55 ) ;
+        TabStop = TRUE ;
+    };
+    Control WND_RIGHT
+    {
+        HelpId = HID_SC_HF_HLR ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 174 , 18 ) ;
+        Size = MAP_APPFONT ( 80 , 55 ) ;
+        TabStop = TRUE ;
+    };
+};
+TabPage RID_SCPAGE_HFED_HR < RID_HFBASE
+{
+    Hide = TRUE ;
+    HelpId = HID_SCPAGE_HFED_HR ;
+    Control WND_LEFT
+    {
+        HelpId = HID_SC_HF_HRL ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 18 ) ;
+        Size = MAP_APPFONT ( 80 , 55 ) ;
+        TabStop = TRUE ;
+    };
+    Control WND_CENTER
+    {
+        HelpId = HID_SC_HF_HRC ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 90 , 18 ) ;
+        Size = MAP_APPFONT ( 80 , 55 ) ;
+        TabStop = TRUE ;
+    };
+    Control WND_RIGHT
+    {
+        HelpId = HID_SC_HF_HRR ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 174 , 18 ) ;
+        Size = MAP_APPFONT ( 80 , 55 ) ;
+        TabStop = TRUE ;
+    };
+};
+TabPage RID_SCPAGE_HFED_FL < RID_HFBASE
+{
+    Hide = TRUE ;
+    HelpId = HID_SCPAGE_HFED_FL ;
+    Control WND_LEFT
+    {
+        HelpId = HID_SC_HF_FLL ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 18 ) ;
+        Size = MAP_APPFONT ( 80 , 55 ) ;
+        TabStop = TRUE ;
+    };
+    Control WND_CENTER
+    {
+        HelpId = HID_SC_HF_FLC ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 90 , 18 ) ;
+        Size = MAP_APPFONT ( 80 , 55 ) ;
+        TabStop = TRUE ;
+    };
+    Control WND_RIGHT
+    {
+        HelpId = HID_SC_HF_FLR ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 174 , 18 ) ;
+        Size = MAP_APPFONT ( 80 , 55 ) ;
+        TabStop = TRUE ;
+    };
+};
+TabPage RID_SCPAGE_HFED_FR < RID_HFBASE
+{
+    Hide = TRUE ;
+    HelpId = HID_SCPAGE_HFED_FR ;
+    Control WND_LEFT
+    {
+        HelpId = HID_SC_HF_FRL ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 18 ) ;
+        Size = MAP_APPFONT ( 80 , 55 ) ;
+        TabStop = TRUE ;
+    };
+    Control WND_CENTER
+    {
+        HelpId = HID_SC_HF_FRC ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 90 , 18 ) ;
+        Size = MAP_APPFONT ( 80 , 55 ) ;
+        TabStop = TRUE ;
+    };
+    Control WND_RIGHT
+    {
+        HelpId = HID_SC_HF_FRR ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 174 , 18 ) ;
+        Size = MAP_APPFONT ( 80 , 55 ) ;
+        TabStop = TRUE ;
+    };
+};

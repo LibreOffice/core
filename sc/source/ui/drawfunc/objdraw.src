@@ -1,0 +1,1441 @@
+/*************************************************************************
+ *
+ *  $RCSfile: objdraw.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:44:56 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "sc.hrc"
+#include "submenu.hrc"
+#include <offmgr/offmenu.hrc>
+ //
+ // Defines -------------------------------------------------------------------------------
+ //
+#define MN_RESET\
+    MenuItem\
+    {\
+        Identifier = SID_TEXT_STANDARD ; \
+        HelpID = SID_TEXT_STANDARD ; \
+        Text = "Standar~d" ; \
+        Text [ ENGLISH ] = "Standar~d" ; \
+        Text [ dutch ] = "Standaar~d" ; \
+        Text [ english_us ] = "~Default" ; \
+        Text [ italian ] = "Standar~d" ; \
+        Text [ spanish ] = "~Predeterminado" ; \
+        Text [ french ] = "Par d~Èfaut" ; \
+        Text [ swedish ] = "Standar~d" ; \
+        Text [ danish ] = "Standar~d" ; \
+        Text [ portuguese ] = "~Padr„o" ; \
+        Text [ portuguese_brazilian ] = "Standar~d" ; \
+        Text[ chinese_simplified ] = "±Í◊º(~D)";\
+        Text[ russian ] = "~—Ú‡Ì‰‡Ú";\
+        Text[ polish ] = "~Standard";\
+        Text[ japanese ] = "ïWèÄ(~D)";\
+        Text[ chinese_traditional ] = "º–∑«(~D)";\
+        Text[ arabic ] = "~ﬁÌ«”Ì";\
+        Text[ greek ] = "~–ÒÔÂÈÎÔ„ﬁ";\
+        Text[ korean ] = "±‚∫ª∞™(~D)";\
+        Text[ turkish ] = "Standar~t";\
+        Text[ language_user1 ] = " ";\
+    };
+
+ // Font (SID_ATTR_CHAR_FONT) und Groesse (SID_ATTR_CHAR_FONTHEIGHT) duerfen nicht im
+ // Formatmenue auftauchen, weil die Controller im ExeEnv sonst im Container angelegt werden
+#define MN_TEXT_ATTR\
+    MenuItem\
+    {\
+        Identifier = RID_MN_FORMAT_STYLE ; \
+        HelpID = RID_MN_FORMAT_STYLE ; \
+        Text = "Sti~l" ; \
+        Text [ English ] = "St~yle" ; \
+        Text [ norwegian ] = "M~al" ; \
+        Text [ italian ] = "St~ile" ; \
+        Text [ portuguese_brazilian ] = "Es~tilo" ; \
+        Text [ portuguese ] = "Estil~o" ; \
+        Text [ finnish ] = "~Tyyli" ; \
+        Text [ danish ] = "Typografi" ; \
+        Text [ french ] = "St~yle" ; \
+        Text [ swedish ] = "Sti~l" ; \
+        Text [ dutch ] = "~Opmaak" ; \
+        Text [ spanish ] = "Est~ilo" ; \
+        Text [ english_us ] = "~Style" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_WEIGHT\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_POSTURE\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_UNDERLINE\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_STRIKEOUT\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_SHADOWED\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_CONTOUR\
+                };\
+                MenuItem\
+                {\
+                    Separator = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_SET_SUPER_SCRIPT ; \
+                    HelpID = SID_SET_SUPER_SCRIPT ; \
+                    Text = "~Hochstellen" ; \
+                    Text [ English ] = "Su~perscript" ; \
+                    Text [ norwegian ] = "Su~perskript" ; \
+                    Text [ italian ] = "Apice" ; \
+                    Text [ portuguese_brazilian ] = "So~brescrito" ; \
+                    Text [ portuguese ] = "~Superior ‡ linha" ; \
+                    Text [ finnish ] = "~Yl‰indeksi" ; \
+                    Text [ danish ] = "HÊvet" ; \
+                    Text [ french ] = "~Exposant" ; \
+                    Text [ swedish ] = "~Upphˆjt" ; \
+                    Text [ dutch ] = "Su~perscript" ; \
+                    Text [ spanish ] = "SuperÌn~dice" ; \
+                    Text [ english_us ] = "~Superscript" ; \
+                    Text[ chinese_simplified ] = "…œ±Í(~S)";\
+                    Text[ russian ] = "¬ÂıÌËÈ Â„ËÒÚ";\
+                    Text[ polish ] = "Indeks gÛrny";\
+                    Text[ japanese ] = "è„ïtÇ´(~S)";\
+                    Text[ chinese_traditional ] = "§Wº–(~S)";\
+                    Text[ arabic ] = "„— ›⁄";\
+                    Text[ greek ] = "≈ÍË›Ù~ÁÚ";\
+                    Text[ korean ] = "¿ß √∑¿⁄(~S)";\
+                    Text[ turkish ] = "~‹st simge";\
+                    Text[ language_user1 ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_SET_SUB_SCRIPT ; \
+                    HelpID = SID_SET_SUB_SCRIPT ; \
+                    Text = "~Tiefstellen" ; \
+                    Text [ English ] = "Su~bscript" ; \
+                    Text [ norwegian ] = "Su~bskript" ; \
+                    Text [ italian ] = "Pedice" ; \
+                    Text [ portuguese_brazilian ] = "Su~bscrito" ; \
+                    Text [ portuguese ] = "~Inferior ‡ linha" ; \
+                    Text [ finnish ] = "~Alaindeksi" ; \
+                    Text [ danish ] = "SÊnket" ; \
+                    Text [ french ] = "~Indice infÈrieur" ; \
+                    Text [ swedish ] = "~Neds‰nkt" ; \
+                    Text [ dutch ] = "Su~bscript" ; \
+                    Text [ spanish ] = "Su~bÌndice" ; \
+                    Text [ english_us ] = "S~ubscript" ; \
+                    Text[ chinese_simplified ] = "œ¬±Í(~U)";\
+                    Text[ russian ] = "ÕËÊÌËÈ Â„ËÒÚ";\
+                    Text[ polish ] = "Indeks dolny";\
+                    Text[ japanese ] = "â∫ïtÇ´(~U)";\
+                    Text[ chinese_traditional ] = "§Uº–(~U)";\
+                    Text[ arabic ] = "„‰Œ›÷";\
+                    Text[ greek ] = "ƒÂﬂÍ~ÙÁÚ";\
+                    Text[ korean ] = "æ∆∑°√∑¿⁄(~U)";\
+                    Text[ turkish ] = "~Alt simge";\
+                    Text[ language_user1 ] = " ";\
+                };\
+            };\
+        };\
+        Text[ chinese_simplified ] = " Ω—˘(~S)";\
+        Text[ russian ] = "—ÚËÎ¸";\
+        Text[ polish ] = "Styl";\
+        Text[ japanese ] = "Ω¿≤Ÿ(~S)";\
+        Text[ chinese_traditional ] = "ºÀ¶°(~S)";\
+        Text[ arabic ] = "‰„ÿ";\
+        Text[ greek ] = "”Ùı~Î";\
+        Text[ korean ] = "Ω∫≈∏¿œ(~S)";\
+        Text[ turkish ] = "Bi~Áim";\
+        Text[ language_user1 ] = " ";\
+    };\
+    MenuItem\
+    {\
+        Identifier = RID_MN_FORMAT_ALGN ; \
+        HelpID = RID_MN_FORMAT_ALGN ; \
+        Text = "~Ausrichtung" ; \
+        Text [ English ] = "~Alignment" ; \
+        Text [ norwegian ] = "~Justering" ; \
+        Text [ italian ] = "~Allineamento" ; \
+        Text [ portuguese_brazilian ] = "~Alinhamento" ; \
+        Text [ portuguese ] = "~Alinhamento" ; \
+        Text [ finnish ] = "~Tasaus" ; \
+        Text [ danish ] = "Justering" ; \
+        Text [ french ] = "~Alignement" ; \
+        Text [ swedish ] = "~Justering" ; \
+        Text [ dutch ] = "~Uitlijning" ; \
+        Text [ spanish ] = "~AlineaciÛn" ; \
+        Text [ english_us ] = "~Alignment" ; \
+        RadioCheck = TRUE ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_PARA_ADJUST_LEFT\
+                    RadioCheck = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_PARA_ADJUST_RIGHT\
+                    RadioCheck = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_PARA_ADJUST_CENTER\
+                    RadioCheck = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_PARA_ADJUST_BLOCK ; \
+                    HelpID = SID_ATTR_PARA_ADJUST_BLOCK ; \
+                    RadioCheck = TRUE ; \
+                    Text = "~Blocksatz" ; \
+                    Text [ English ] = "~Justified" ; \
+                    Text [ norwegian ] = "~Stillt inn" ; \
+                    Text [ italian ] = "~Giustificato" ; \
+                    Text [ portuguese_brazilian ] = "~Justificado" ; \
+                    Text [ portuguese ] = "~Justificado" ; \
+                    Text [ finnish ] = "~Reunat" ; \
+                    Text [ danish ] = "~Lige margener" ; \
+                    Text [ french ] = "~JustifiÈ" ; \
+                    Text [ swedish ] = "~Marginaljusterad" ; \
+                    Text [ dutch ] = "~Uitgevuld" ; \
+                    Text [ spanish ] = "~Justificado" ; \
+                    Text [ english_us ] = "~Justified" ; \
+                    Text[ chinese_simplified ] = "◊Û”“∂‘∆Î(~J)";\
+                    Text[ russian ] = "œÓ ¯ËËÌÂ";\
+                    Text[ polish ] = "Wyjustuj";\
+                    Text[ japanese ] = "ãœìôäÑït(~J)";\
+                    Text[ chinese_traditional ] = "•™•kπÔªÙ(~J)";\
+                    Text[ arabic ] = "÷»ÿ";\
+                    Text[ greek ] = "~–ÎﬁÒÁÚ ÛÙÔﬂ˜ÈÛÁ";\
+                    Text[ korean ] = "æÁ¬  ∏¬√„(~J)";\
+                    Text[ turkish ] = "~›ki yana yasla";\
+                    Text[ language_user1 ] = " ";\
+                };\
+            };\
+        };\
+        Text[ chinese_simplified ] = "∂‘∆Î(~A)";\
+        Text[ russian ] = "¬˚‡‚ÌË‚‡ÌËÂ";\
+        Text[ polish ] = "WyrÛwnanie";\
+        Text[ japanese ] = "îzíu(~A)";\
+        Text[ chinese_traditional ] = "πÔªÙ(~A)";\
+        Text[ arabic ] = "„Õ«–«…";\
+        Text[ greek ] = "~”ÙÔﬂ˜ÈÛÁ";\
+        Text[ korean ] = "∏¬√„(~A)";\
+        Text[ turkish ] = "~Hizalama";\
+        Text[ language_user1 ] = " ";\
+    };\
+    MenuItem\
+    {\
+        Identifier = RID_MN_FORMAT_LINESPACE ; \
+        HelpID = RID_MN_FORMAT_LINESPACE ; \
+        Text = "~Zeilenabstand" ; \
+        Text [ English ] = "~Line Spacing" ; \
+        Text [ norwegian ] = "~Linjeavstand" ; \
+        Text [ italian ] = "Interli~nea" ; \
+        Text [ portuguese_brazilian ] = "~EspaÁamento de linha" ; \
+        Text [ portuguese ] = "~Entrelinhas" ; \
+        Text [ finnish ] = "~Riviv‰li" ; \
+        Text [ danish ] = "~Linjeafstand" ; \
+        Text [ french ] = "Inter~ligne" ; \
+        Text [ swedish ] = "~RadavstÂnd" ; \
+        Text [ dutch ] = "~Regelafstand" ; \
+        Text [ spanish ] = "Inter~lineado" ; \
+        Text [ english_us ] = "~Line Spacing" ; \
+        _MenuItemFlags = MIB_RADIOCHECK ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_PARA_LINESPACE_10\
+                    RadioCheck = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_PARA_LINESPACE_15\
+                    RadioCheck = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_PARA_LINESPACE_20\
+                    RadioCheck = TRUE ; \
+                };\
+            };\
+        };\
+        Text[ chinese_simplified ] = "––æ‡(~L)";\
+        Text[ russian ] = "ÏÂÊ‰ÛÒÚÓ˜Ì˚È";\
+        Text[ polish ] = "OdstÍp wierszy";\
+        Text[ japanese ] = "çsä‘(~L)";\
+        Text[ chinese_traditional ] = "¶C∂°πj(~L)";\
+        Text[ arabic ] = " »«⁄œ «·√”ÿ—";\
+        Text[ greek ] = "ƒÈ‹ÛÙÈ~˜Ô";\
+        Text[ korean ] = "¡Ÿ ∂ÁøÏ±‚(~L)";\
+        Text[ turkish ] = "~Sat˝r aral˝˝";\
+        Text[ language_user1 ] = " ";\
+    };
+
+#define MN_DRWTXT \
+    MenuItem\
+    {\
+        ITEM_FORMAT_CHAR_DLG\
+    };\
+    MenuItem\
+    {\
+        ITEM_FORMAT_PARA_DLG\
+    };
+
+#define MN_DRWTXTATTR \
+    MenuItem\
+    {\
+        Identifier = SID_DRAWTEXT_ATTR_DLG ; \
+        HelpID = SID_DRAWTEXT_ATTR_DLG ; \
+        Text = "~Text..." ; \
+        Text [ ENGLISH ] = "Te~xt..." ; \
+        Text [ english_us ] = "Te~xt..." ; \
+        Text [ italian ] = "~Testo..." ; \
+        Text [ spanish ] = "Te~xto..." ; \
+        Text [ french ] = "Te~xte..." ; \
+        Text [ dutch ] = "Te~kst..." ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Textattribute f¸r die selektierten Textobjekte festlegen : Textattribute f≥r die selektierten Textobjekte festlegen */\
+        Text [ swedish ] = "~Text..." ; \
+        Text [ danish ] = "~Tekst..." ; \
+        Text [ portuguese ] = "Te~xto..." ; \
+        Text [ portuguese_brazilian ] = "Te~xt..." ; \
+        Text[ chinese_simplified ] = "Œƒ◊÷(~X)...";\
+        Text[ russian ] = "~“ÂÍÒÚ...";\
+        Text[ polish ] = "~Tekst...";\
+        Text[ japanese ] = "√∑Ωƒ(~X)...";\
+        Text[ chinese_traditional ] = "§Â¶r(~X)...";\
+        Text[ arabic ] = "~‰’...";\
+        Text[ greek ] = "~ ÂﬂÏÂÌÔ...";\
+        Text[ korean ] = "≈ÿΩ∫∆Æ(~X)...";\
+        Text[ turkish ] = "~Metin...";\
+        Text[ language_user1 ] = " ";\
+    };
+
+#define MN_ORIGINALSIZE \
+    MenuItem\
+    {\
+        Identifier = SID_ORIGINALSIZE ; \
+        HelpId = SID_ORIGINALSIZE ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Originalgrˆﬂe : Originalgr˜òe */\
+        Text = "Original~grˆﬂe" ; \
+        Text [ ENGLISH ] = "Real Size" ; \
+        Text [ norwegian ] = "Real Size" ; \
+        Text [ italian ] = "Dimensione ori~ginale" ; \
+        Text [ portuguese_brazilian ] = "Tamanho real" ; \
+        Text [ portuguese ] = "Tamanho original" ; \
+        Text [ finnish ] = "Todellinen koko" ; \
+        Text [ danish ] = "Oprindelig st¯rrelse" ; \
+        Text [ french ] = "Taille d'origine" ; \
+        Text [ swedish ] = "Ori~ginalstorlek" ; \
+        Text [ dutch ] = "Originele ~grootte" ; \
+        Text [ spanish ] = "Ta~maÒo original" ; \
+        Text [ english_us ] = "~Original Size" ; \
+        Text[ chinese_simplified ] = "‘≠º˛¥Û–°(~O)";\
+        Text[ russian ] = "»ÒıÓ‰Ì˚È ‡ÁÏÂ";\
+        Text[ polish ] = "Rozmiar oryginalny";\
+        Text[ japanese ] = "µÿºﬁ≈Ÿ ª≤Ωﬁ(~O)";\
+        Text[ chinese_traditional ] = "≠Ï•Û§j§p(~O)";\
+        Text[ arabic ] = "«·ÕÃ„ «·√’·Ì";\
+        Text[ greek ] = "¡Ò˜ÈÍ¸ Ï›~„ÂËÔÚ";\
+        Text[ korean ] = "ø¯∑° ≈©±‚(~O)";\
+        Text[ turkish ] = "GerÁek ~boyut";\
+        Text[ language_user1 ] = " ";\
+    };
+
+#define MN_MIRRORSUB \
+    MenuItem\
+    {\
+        Identifier = SUBMENU_OBJMIRROR ; \
+        HelpID = HID_SCMENU_OBJMIRROR ; \
+        Text = "Sp~iegeln" ; \
+        Text [ ENGLISH ] = "~Mirror" ; \
+        Text [ norwegian ] = "~Mirror" ; \
+        Text [ italian ] = "Ri~specchia" ; \
+        Text [ portuguese_brazilian ] = "~Espelho" ; \
+        Text [ portuguese ] = "~Reflectir" ; \
+        Text [ finnish ] = "P~eilaa" ; \
+        Text [ danish ] = "Spejl~vend" ; \
+        Text [ french ] = "~ReflÈter" ; \
+        Text [ swedish ] = "Sp~egla" ; \
+        Text [ dutch ] = "~Spiegelen" ; \
+        Text [ spanish ] = "~Reflejar" ; \
+        Text [ english_us ] = "~Flip" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = SID_MIRROR_VERTICAL ; \
+                    HelpId = SID_MIRROR_VERTICAL ; \
+                    Text = "~Vertikal" ; \
+                    Text [ ENGLISH ] = "~Vertical" ; \
+                    Text [ norwegian ] = "~Vertikal" ; \
+                    Text [ italian ] = "~Verticale" ; \
+                    Text [ portuguese_brazilian ] = "~Vertical" ; \
+                    Text [ portuguese ] = "~Vertical" ; \
+                    Text [ finnish ] = "~Rinnakkain" ; \
+                    Text [ danish ] = "~Lodret" ; \
+                    Text [ french ] = "~Verticalement" ; \
+                    Text [ swedish ] = "~Vertikalt" ; \
+                    Text [ dutch ] = "~Verticaal" ; \
+                    Text [ spanish ] = "~Vertical" ; \
+                    Text [ english_us ] = "~Vertically" ; \
+                    Text[ chinese_simplified ] = "¥π÷±∑ΩœÚ(~V)";\
+                    Text[ russian ] = "~œÓ ‚ÂÚËÍ‡ÎË";\
+                    Text[ polish ] = "~W pionie";\
+                    Text[ japanese ] = "ç∂âE(~V)";\
+                    Text[ chinese_traditional ] = "´´™Ω§Ë¶V(~V)";\
+                    Text[ arabic ] = "—√”Ì~";\
+                    Text[ greek ] = " ·Ù·Í¸Òı~ˆ·";\
+                    Text[ korean ] = "ºˆ¡˜(~V)";\
+                    Text[ turkish ] = "~Dikey";\
+                    Text[ language_user1 ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_MIRROR_HORIZONTAL ; \
+                    HelpId = SID_MIRROR_HORIZONTAL ; \
+                    Text = "~Horizontal" ; \
+                    Text [ ENGLISH ] = "~Horizontal" ; \
+                    Text [ norwegian ] = "~Horisontal" ; \
+                    Text [ italian ] = "Orizzontale" ; \
+                    Text [ portuguese_brazilian ] = "~Horizontal" ; \
+                    Text [ portuguese ] = "~Horizontal" ; \
+                    Text [ finnish ] = "~Allekkain" ; \
+                    Text [ danish ] = "~Vandret" ; \
+                    Text [ french ] = "H~orizontale" ; \
+                    Text [ swedish ] = "~Horisontellt" ; \
+                    Text [ dutch ] = "~Horizontaal" ; \
+                    Text [ spanish ] = "~Horizontal" ; \
+                    Text [ english_us ] = "~Horizontal" ; \
+                    Text[ chinese_simplified ] = "ÀÆ∆Ω∑ΩœÚ(~H)";\
+                    Text[ russian ] = "œÓ „ÓËÁÓÌÚ‡ÎË";\
+                    Text[ polish ] = "W pionie";\
+                    Text[ japanese ] = "êÖïΩ(~H)";\
+                    Text[ chinese_traditional ] = "§Ù•≠§Ë¶V(~H)";\
+                    Text[ arabic ] = "√›ﬁÌ";\
+                    Text[ greek ] = "œÒÈ~Ê¸ÌÙÈ·";\
+                    Text[ korean ] = "ºˆ∆Ú(~H)";\
+                    Text[ turkish ] = "~Yatay";\
+                    Text[ language_user1 ] = " ";\
+                };\
+            };\
+        };\
+        Text[ chinese_simplified ] = "∑¥”≥(~F)";\
+        Text[ russian ] = "~ŒÚÓ·‡ÊÂÌËÂ";\
+        Text[ polish ] = "~PrzerzuÊ";\
+        Text[ japanese ] = "îΩì](~F)";\
+        Text[ chinese_traditional ] = "§œ¨M(~F)";\
+        Text[ arabic ] = "«‰⁄ﬂ«~”";\
+        Text[ greek ] = " ·Ù¸ÙÒ~ÈÛÁ";\
+        Text[ korean ] = "¥Îƒ™(~F)";\
+        Text[ turkish ] = "~Yans˝t";\
+        Text[ language_user1 ] = " ";\
+    };
+
+#define MN_ARRANGESUB \
+    MenuItem\
+    {\
+        Identifier = SUBMENU_OBJARRANGE ; \
+        HelpID = HID_SCMENU_OBJARRANGE ; \
+        Text = "~Anordnung" ; \
+        Text [ ENGLISH ] = "Arrange" ; \
+        Text [ norwegian ] = "Arrange" ; \
+        Text [ italian ] = "~Disponi" ; \
+        Text [ portuguese_brazilian ] = "Organizar" ; \
+        Text [ portuguese ] = "~DispoÁ„o" ; \
+        Text [ finnish ] = "J‰rjest‰" ; \
+        Text [ danish ] = "Pl~acering" ; \
+        Text [ french ] = "~Disposition" ; \
+        Text [ swedish ] = "Pl~acering" ; \
+        Text [ dutch ] = "~Positie" ; \
+        Text [ spanish ] = "~PosiciÛn" ; \
+        Text [ english_us ] = "~Arrange" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_FRAME_TO_TOP\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_FRAME_UP ; \
+                    HelpId = SID_FRAME_UP ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? W~eiter nach vorn : Weiter nach vorn */\
+                    Text = "W~eiter nach vorn" ; \
+                    Text [ ENGLISH ] = "Bring Forward" ; \
+                    Text [ norwegian ] = "Flytt Framover" ; \
+                    Text [ italian ] = "Porta pi˘ ~avanti" ; \
+                    Text [ portuguese_brazilian ] = "Tazer Para Frente" ; \
+                    Text [ portuguese ] = "~Trazer para a frente" ; \
+                    Text [ finnish ] = "Yksi eteen" ; \
+                    Text [ danish ] = "F~lyt fremad" ; \
+                    Text [ french ] = "V~ers l'avant" ; \
+                    Text [ swedish ] = "Flytta l~‰ngre fram" ; \
+                    Text [ dutch ] = "Verder naar ~voren" ; \
+                    Text [ spanish ] = "Traer m·s a~delante" ; \
+                    Text [ english_us ] = "Bring ~Forward" ; \
+                    Text[ chinese_simplified ] = "‘Ÿ«∞÷√(~F)";\
+                    Text[ russian ] = "œÂÂÏÂÒÚËÚ¸ ~‚ÔÂÂ‰";\
+                    Text[ polish ] = "PrzesuÒ do przodu";\
+                    Text[ japanese ] = "ëOñ Ç÷à⁄ìÆ(~F)";\
+                    Text[ chinese_traditional ] = "¶A´e∏m(~F)";\
+                    Text[ arabic ] = "≈Õ÷«— √„«„«";\
+                    Text[ greek ] = "Ã~ÂÙ·ˆÔÒ‹ ›Ì· ÂﬂÂ‰Ô ÂÏÒ¸Ú";\
+                    Text[ korean ] = "æ’¿∏∑Œ ∞°¡Æø¿±‚(~ F)";\
+                    Text[ turkish ] = "B~ir ˆne getir";\
+                    Text[ language_user1 ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_FRAME_DOWN ; \
+                    HelpId = SID_FRAME_DOWN ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? Weiter ~nach hinten : Weiter nach hinten */\
+                    Text = "Weiter ~nach hinten" ; \
+                    Text [ ENGLISH ] = "Send Backward" ; \
+                    Text [ norwegian ] = "Send Bakover" ; \
+                    Text [ italian ] = "Porta pi˘ indietro" ; \
+                    Text [ portuguese_brazilian ] = "Enviar Para o Fundo" ; \
+                    Text [ portuguese ] = "Enviar para o ~fundo" ; \
+                    Text [ finnish ] = "Yksi taakse" ; \
+                    Text [ danish ] = "Flyt bag~ud" ; \
+                    Text [ french ] = "~Vers l'arriËre" ; \
+                    Text [ swedish ] = "Flytta l‰~ngre bak" ; \
+                    Text [ dutch ] = "Verder naar ~achteren" ; \
+                    Text [ spanish ] = "Enviar hacia a~tr·s" ; \
+                    Text [ english_us ] = "Send Back~ward" ; \
+                    Text[ chinese_simplified ] = "‘Ÿ∫Û÷√(~W)";\
+                    Text[ russian ] = "œÂÂÏÂÒÚËÚ¸ ~Ì‡Á‡‰";\
+                    Text[ polish ] = "PrzesuÒ do ty≥u";\
+                    Text[ japanese ] = "îwñ Ç…à⁄ìÆ(~W)";\
+                    Text[ chinese_traditional ] = "¶A´·∏m(~W)";\
+                    Text[ arabic ] = "≈—”«· Œ·›«";\
+                    Text[ greek ] = "~ÃÂÙ·ˆÔÒ‹ ﬂÛ˘";\
+                    Text[ korean ] = "µ⁄∑Œ ∫∏≥ª±‚(~W)";\
+                    Text[ turkish ] = "Bir  ~geri gˆnder";\
+                    Text[ language_user1 ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_FRAME_TO_BOTTOM\
+                };\
+                MenuItem { Separator = TRUE ; }; \
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_HEAVEN\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_HELL\
+                };\
+            };\
+        };\
+        Text[ chinese_simplified ] = "≈≈–Ú(~A)";\
+        Text[ russian ] = "–~‡ÒÔÓÎÓÊÂÌËÂ";\
+        Text[ polish ] = "~Rozmieszczenie";\
+        Text[ japanese ] = "êÆóÒ(~A)";\
+        Text[ chinese_traditional ] = "±∆ß«(~A)";\
+        Text[ arabic ] = " — Ì»~";\
+        Text[ greek ] = "ƒÈ‹Ù~·ÓÁ";\
+        Text[ korean ] = "¡§∑ƒ(~A)";\
+        Text[ turkish ] = "~Hizalama";\
+        Text[ language_user1 ] = " ";\
+    };
+
+#define MN_ANCHORSUB \
+    MenuItem\
+    {\
+        Identifier = SUBMENU_ANCHOR ; \
+        HelpID = HID_SCMENU_ANCHOR ; \
+        Text = "~Verankerung" ; \
+        Text [ ENGLISH ] = "Anchor" ; \
+        Text [ english_us ] = "An~chor" ; \
+        Text [ italian ] = "Anco~raggio" ; \
+        Text [ spanish ] = "~Anclaje" ; \
+        Text [ french ] = "~Ancrage" ; \
+        Text [ dutch ] = "~Verankering" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = SID_ANCHOR_PAGE ; \
+                    HelpId = SID_ANCHOR_PAGE ; \
+                    Text = "An der ~Seite" ; \
+                    Text [ ENGLISH ] = "To the ~page" ; \
+                    Text [ dutch ] = "Aan ~pagina" ; \
+                    Text [ english_us ] = "To P~age" ; \
+                    Text [ italian ] = "Alla ~pagina" ; \
+                    Text [ spanish ] = "A la ~p·gina" ; \
+                    Text [ french ] = "¿ la ~page" ; \
+                    Text [ swedish ] = "Vid ~sidan" ; \
+                    Text [ danish ] = "Til ~siden" ; \
+                    Text [ portuguese_brazilian ] = "An der ~Seite" ; \
+                    Text [ portuguese ] = "~Na p·gina" ; \
+                    Text[ chinese_simplified ] = "‘⁄“≥√Ê…œ(~A)";\
+                    Text[ russian ] = "~  ÒÚ‡ÌËˆÂ";\
+                    Text[ polish ] = "~Na stronie";\
+                    Text[ japanese ] = "Õﬂ∞ºﬁÇ÷(~A)";\
+                    Text[ chinese_traditional ] = "¶b≠∂≠±§W(~A)";\
+                    Text[ arabic ] = "⁄·Ï «·~’›Õ…";\
+                    Text[ greek ] = "~”ÙÁ ÛÂÎﬂ‰·";\
+                    Text[ korean ] = "∆‰¿Ã¡ˆ∑Œ(~A)";\
+                    Text[ turkish ] = "Sayfa~da";\
+                    Text[ language_user1 ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ANCHOR_CELL ; \
+                    HelpId = SID_ANCHOR_CELL ; \
+                    Text = "An der ~Zelle" ; \
+                    Text [ ENGLISH ] = "To the ~cell" ; \
+                    Text [ dutch ] = "Aan ~cel" ; \
+                    Text [ english_us ] = "To ~Cell" ; \
+                    Text [ italian ] = "Alla ~cella" ; \
+                    Text [ spanish ] = "A la ~celda" ; \
+                    Text [ french ] = "¿ la ~cellule" ; \
+                    Text [ swedish ] = "Vid ~cellen" ; \
+                    Text [ danish ] = "Til cellen" ; \
+                    Text [ portuguese ] = "~CÈlula" ; \
+                    Text [ portuguese_brazilian ] = "An der ~Zelle" ; \
+                    Text[ chinese_simplified ] = "‘⁄µ•‘™∏Ò…œ(~C)";\
+                    Text[ russian ] = "  ˇ˜ÂÈÍÂ";\
+                    Text[ polish ] = "Przy komÛrce";\
+                    Text[ japanese ] = "æŸÇ…(~C)";\
+                    Text[ chinese_traditional ] = "¶b¿x¶sÆÊ§W(~C)";\
+                    Text[ arabic ] = "Œ·Ì…";\
+                    Text[ greek ] = "”ÙÔ ~ÍÂÎﬂ";\
+                    Text[ korean ] = "ºø ∑Œ(~C)";\
+                    Text[ turkish ] = "H¸cre~de";\
+                    Text[ language_user1 ] = " ";\
+                };\
+            };\
+        };\
+        Text [ swedish ] = "~Fˆrankring" ; \
+        Text [ danish ] = "~Forankring" ; \
+        Text [ portuguese ] = "~¬ncora para" ; \
+        Text [ portuguese_brazilian ] = "~Verankerung" ; \
+        Text[ chinese_simplified ] = "À¯∂®(~C)";\
+        Text[ russian ] = "~œË‚ˇÁÍ‡";\
+        Text[ polish ] = "~Zakotwiczenie";\
+        Text[ japanese ] = "±›∂∞(~C)";\
+        Text[ chinese_traditional ] = "¬Í©w(~C)";\
+        Text[ arabic ] = "~≈—”«¡";\
+        Text[ greek ] = "¡„Í˝Ò~˘ÛÁ";\
+        Text[ korean ] = "∞Ì¡§(~C)";\
+        Text[ turkish ] = "Sa~bitleyici";\
+        Text[ language_user1 ] = " ";\
+    };
+
+#define MN_ALIGNSUB \
+    MenuItem\
+    {\
+        Identifier = SID_OBJECT_ALIGN ; \
+        HelpId = SID_OBJECT_ALIGN ; \
+        Text = "Aus~richtung" ; \
+        Text [ ENGLISH ] = "Ali~gnment" ; \
+        Text [ norwegian ] = "Ali~gnment" ; \
+        Text [ italian ] = "~Allineamento" ; \
+        Text [ portuguese_brazilian ] = "Ali~nhamento" ; \
+        Text [ portuguese ] = "Ali~nhamento" ; \
+        Text [ finnish ] = "~Tasaus" ; \
+        Text [ danish ] = "~Justering" ; \
+        Text [ french ] = "~Alignement" ; \
+        Text [ swedish ] = "Juste~ring" ; \
+        Text [ dutch ] = "~Uitlijning" ; \
+        Text [ spanish ] = "Ali~neaciÛn" ; \
+        Text [ english_us ] = "A~lignment" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_LEFT\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_CENTER\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_RIGHT\
+                };\
+                MenuItem\
+                {\
+                    Separator = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_UP\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_MIDDLE\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_DOWN\
+                };\
+            };\
+        };\
+        Text[ chinese_simplified ] = "∂‘∆Î(~L)";\
+        Text[ russian ] = "~¬˚‡‚ÌË‚‡ÌËÂ";\
+        Text[ polish ] = "~WyrÛwnanie";\
+        Text[ japanese ] = "îzíu(~L)";\
+        Text[ chinese_traditional ] = "πÔªÙ(~L)";\
+        Text[ arabic ] = "~„Õ«–«…";\
+        Text[ greek ] = "”~ÙÔﬂ˜ÈÛÁ";\
+        Text[ korean ] = "∏¬√„(~L)";\
+        Text[ turkish ] = "Hiz~alama";\
+        Text[ language_user1 ] = " ";\
+    };
+
+ //
+ // ------------------------------------------------------------------------------
+ //
+ //
+ //     Objekt-Leisten
+ //
+String RID_DRAW_OBJECTBAR
+{
+    Text = "Zeichenobjektleiste" ;
+    Text [ ENGLISH ] = "Toolbar for drawing objects" ;
+    Text [ norwegian ] = "Verkt¯ylinje for tegneobjekter " ;
+    Text [ italian ] = "Barra degli oggetti per disegno" ;
+    Text [ portuguese_brazilian ] = "Barra de Ferramentas para desenhar objetos" ;
+    Text [ portuguese ] = "Barra de objectos de desenho" ;
+    Text [ finnish ] = "Piirto-objektien tyˆkalurivi" ;
+    Text [ danish ] = "VÊrkt¯jslinje for tegneobjekter" ;
+    Text [ french ] = "Barre d'objets de dessin" ;
+    Text [ swedish ] = "Ritobjektslist" ;
+    Text [ dutch ] = "Werkbalk voor tekenobjecten" ;
+    Text [ spanish ] = "Barra de objetos de dibujo" ;
+    Text [ english_us ] = "Drawing Object Bar" ;
+    Text[ chinese_simplified ] = "ªÊÕº∂‘œÛ¿∏";
+    Text[ russian ] = "œ‡ÌÂÎ¸ „‡ÙË˜ÂÒÍËı Ó·˙ÂÍÚÓ‚";
+    Text[ polish ] = "Pasek obiektÛw rysunkowych";
+    Text[ japanese ] = "ê}å`ï`âÊµÃﬁºﬁ™∏ƒ ﬁ∞";
+    Text[ chinese_traditional ] = "√∏πœ™´•Û§u®„¶C";
+    Text[ arabic ] = "‘—Ìÿ «·ﬂ«∆‰«  «·—”Ê„Ì…";
+    Text[ greek ] = "√Ò·ÏÏﬁ Û˜Â‰ﬂ·ÛÁÚ ·ÌÙÈÍÂÈÏ›Ì˘Ì";
+    Text[ korean ] = "±◊∏Æ±‚ ∞≥√º ∏¿Ω";
+    Text[ turkish ] = "«izim nesne Áubuu";
+    Text[ language_user1 ] = " ";
+};
+ToolBox RID_DRAW_OBJECTBAR
+{
+    HelpId = HID_SC_TOOLBOX_DRAW ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Customize = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    LineSpacing = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    MenuStrings = TRUE ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_EDIT ;
+            HelpID = SID_BEZIER_EDIT ;
+
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+         // Linien
+        ToolBoxItem
+        {
+            Identifier = SID_ATTRIBUTES_LINE ;
+            HelpId = SID_ATTRIBUTES_LINE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_LINEEND_STYLE ;
+            HelpID = SID_ATTR_LINEEND_STYLE ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_LINE_STYLE ;
+            HelpId = SID_ATTR_LINE_STYLE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_LINE_WIDTH ;
+            HelpId = SID_ATTR_LINE_WIDTH ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_LINE_COLOR ;
+            HelpId = SID_ATTR_LINE_COLOR ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTRIBUTES_AREA ;
+            HelpId = SID_ATTRIBUTES_AREA ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_FILL_STYLE ;
+            HelpId = SID_ATTR_FILL_STYLE ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+         // Rest
+        ToolBoxItem
+        {
+            Identifier = SID_OBJECT_ROTATE ;
+            HelpId = SID_OBJECT_ROTATE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ANCHOR_TOGGLE ;
+            HelpId = SID_ANCHOR_TOGGLE ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_FRAME_TO_TOP ;
+            HelpId = SID_FRAME_TO_TOP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FRAME_TO_BOTTOM ;
+            HelpId = SID_FRAME_TO_BOTTOM ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OBJECT_HEAVEN ;
+            HelpID = SID_OBJECT_HEAVEN ;
+
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OBJECT_HELL ;
+            HelpID = SID_OBJECT_HELL ;
+
+        };
+
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+
+        ToolBoxItem
+        {
+            Identifier = SID_GRID_VISIBLE;
+            HelpID = SID_GRID_VISIBLE;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_GRID_USE;
+            HelpID = SID_GRID_USE;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HELPLINES_MOVE;
+            HelpID = SID_HELPLINES_MOVE;
+            Hide = TRUE;
+        };
+
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_OBJECT_ALIGN ;
+            HelpId = SID_OBJECT_ALIGN ;
+        };
+    };
+    Scroll = TRUE ;
+};
+ //
+ // Text-Toolbox
+ //
+String RID_TEXT_TOOLBOX
+{
+    Text = "Textobjektleiste" ;
+    Text [ ENGLISH ] = "Toolbar for text objects" ;
+    Text [ norwegian ] = "Verkt¯ylinje for tekstobjekter" ;
+    Text [ italian ] = "Barra degli oggetti di testo" ;
+    Text [ portuguese_brazilian ] = "Barra de ferramentas para objetos de texto" ;
+    Text [ portuguese ] = "Barra de objectos de texto" ;
+    Text [ finnish ] = "Tekstiobjektien tyˆkalurivi" ;
+    Text [ danish ] = "VÊrkt¯jslinje for tekstobjekter" ;
+    Text [ french ] = "Barre d'objets de texte" ;
+    Text [ swedish ] = "Textobjektlist" ;
+    Text [ dutch ] = "Werkbalk voor tekstobjecten" ;
+    Text [ spanish ] = "Barra de objetos de texto" ;
+    Text [ english_us ] = "Text Object Bar" ;
+    Text[ chinese_simplified ] = "Œƒ◊÷∂‘œÛπ§æﬂ¿∏";
+    Text[ russian ] = "œ‡ÌÂÎ¸ Ó·˙ÂÍÚÓ‚ ÚÂÍÒÚ‡";
+    Text[ polish ] = "Pasek obiektÛw tekstowych";
+    Text[ japanese ] = "√∑ΩƒµÃﬁºﬁ™∏ƒ  ﬁ∞";
+    Text[ chinese_traditional ] = "§Â¶r™´•Û§u®„¶C";
+    Text[ arabic ] = "‘—Ìÿ ﬂ«∆‰«  «·‰’";
+    Text[ greek ] = "√Ò·ÏÏﬁ ·ÌÙÈÍÂÈÏ›Ì˘Ì ÍÂÈÏ›ÌÔı";
+    Text[ korean ] = "≈ÿΩ∫∆Æ ∞≥√º ∏¿Ω";
+    Text[ turkish ] = "Metin nesne Áubuu";
+    Text[ language_user1 ] = " ";
+};
+ToolBox RID_TEXT_TOOLBOX
+{
+    HelpId = HID_SC_TOOLBOX_DRTEXT ;
+    LineSpacing = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Scroll = TRUE ;
+    Customize = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 0 , 0 ) ;
+    Align = BOXALIGN_TOP ;
+    MenuStrings = TRUE ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_FONT ;
+            HelpId = SID_ATTR_CHAR_FONT ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_FONTHEIGHT ;
+            HelpId = SID_ATTR_CHAR_FONTHEIGHT ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_WEIGHT ;
+            HelpId = SID_ATTR_CHAR_WEIGHT ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_POSTURE ;
+            HelpId = SID_ATTR_CHAR_POSTURE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_UNDERLINE ;
+            HelpId = SID_ATTR_CHAR_UNDERLINE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ULINE_VAL_DOUBLE;
+            HelpId = SID_ULINE_VAL_DOUBLE;
+            AutoCheck = TRUE ;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_COLOR ;
+            HelpId = SID_ATTR_CHAR_COLOR ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LINESPACE_10 ;
+            HelpId = SID_ATTR_PARA_LINESPACE_10 ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LINESPACE_15 ;
+            HelpId = SID_ATTR_PARA_LINESPACE_15 ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LINESPACE_20 ;
+            HelpId = SID_ATTR_PARA_LINESPACE_20 ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_ADJUST_LEFT ;
+            HelpId = SID_ATTR_PARA_ADJUST_LEFT ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_ADJUST_CENTER ;
+            HelpId = SID_ATTR_PARA_ADJUST_CENTER ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_ADJUST_RIGHT ;
+            HelpId = SID_ATTR_PARA_ADJUST_RIGHT ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_ADJUST_BLOCK ;
+            HelpId = SID_ATTR_PARA_ADJUST_BLOCK ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_SET_SUPER_SCRIPT ;
+            HelpID = SID_SET_SUPER_SCRIPT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_SET_SUB_SCRIPT ;
+            HelpID = SID_SET_SUB_SCRIPT ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_CHAR_DLG ;
+            HelpID = SID_CHAR_DLG ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PARA_DLG ;
+            HelpID = SID_PARA_DLG ;
+        };
+    };
+};
+ //
+ //     Objekt-Menue, Draw
+ //
+Menu RID_OBJECTMENU_DRAW
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            ITEM_FORMAT_ATTRIBUTES_LINE
+        };
+        MenuItem
+        {
+            ITEM_FORMAT_ATTRIBUTES_AREA
+        };
+        MN_DRWTXTATTR
+        MenuItem
+        {
+            ITEM_FORMAT_ATTR_TRANSFORM
+        };
+        MenuItem
+        {
+            ITEM_FORM_CONTROL_PROPERTIES
+        };
+        MenuItem
+        {
+            ITEM_FORM_PROPERTIES
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_MIRRORSUB
+        MN_ARRANGESUB
+        MN_ALIGNSUB
+        MN_ANCHORSUB
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            ITEM_FORMAT_BEZIER_EDIT
+            RadioCheck = FALSE ;
+            AutoCheck = TRUE ;
+        };
+        MenuItem
+        {
+            ITEM_FORMAT_FONTWORK
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        ITEM_GROUP_MENU
+    };
+};
+ //
+ //  Menu Text
+ //
+Menu RID_OBJECTMENU_DRAWTEXT
+{
+    ItemList =
+    {
+        MN_RESET
+        MenuItem { Separator = TRUE ; };
+        MN_TEXT_ATTR
+        MenuItem { Separator = TRUE ; };
+        MN_DRWTXT
+        MenuItem { Separator = TRUE ; };
+        MN_DRWTXTATTR
+        MenuItem
+        {
+            ITEM_FORMAT_FONTWORK
+        };
+    };
+};
+ //
+ // Popup-Menues ---------------------------------------------------------------------
+ //
+String RID_POPUP_DRAW
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Popup-Men¸ f¸r Zeichenobjekte : Popup-Men≥ f≥r Zeichenobjekte */
+    Text = "Popup-Men¸ f¸r Zeichenobjekte" ;
+    Text [ ENGLISH ] = "Toolbar for drawing objects" ;
+    Text [ norwegian ] = "Verkt¯ylinje for tegneobjekter " ;
+    Text [ italian ] = "Barra degli strumenti per disegnare gli oggetti" ;
+    Text [ portuguese_brazilian ] = "Barra de Ferramentas para desenhar objetos" ;
+    Text [ portuguese ] = "Menu instant‚neo para objectos de desenho" ;
+    Text [ french ] = "Menu Pop-Up pour les objets de dessin" ;
+    Text [ dutch ] = "PopUp-menu voor tekenobjecten" ;
+    Text [ spanish ] = "Men˙ emergente para objetos de dibujo" ;
+    Text [ danish ] = "Popup-menu for tegneobjekter" ;
+    Text [ swedish ] = "Popup-meny fˆr ritobjekt" ;
+    Text [ finnish ] = "Toolbar for drawing objects" ;
+    Text [ english_us ] = "Pop-up menu for drawing objects" ;
+    Text[ chinese_simplified ] = "ªÊÕºµØ≥ˆ Ω≤Àµ•";
+    Text[ russian ] = "¬ÒÔÎ˚‚‡˛˘ÂÂ ÏÂÌ˛ ‰Îˇ „‡ÙË˜ÂÒÍËı Ó·˙ÂÍÚÓ‚";
+    Text[ polish ] = "Menu podrÍczne dla obiektÛw rysunkowych";
+    Text[ japanese ] = "ŒﬂØÃﬂ±ØÃﬂ“∆≠∞ ï`âÊ¬∞ŸŒﬁØ∏Ω";
+    Text[ chinese_traditional ] = "√∏πœß÷≈„•\\Ø‡™Ì";
+    Text[ arabic ] = "ﬁ«∆„… „‰»Àﬁ… ··ﬂ«∆‰«  «·—”Ê„Ì…";
+    Text[ greek ] = "¡Ì·‰ı¸ÏÂÌÔ ÏÂÌÔ˝ „È· ·ÌÙÈÍÂﬂÏÂÌ· Û˜Â‰ﬂ·ÛÁÚ";
+    Text[ korean ] = "±◊∏Æ±‚ ∞≥√º∏¶ ¿ß«— ∆Àæ˜ ∏ﬁ¥∫";
+    Text[ turkish ] = "«izim nesneleri iÁin aÁ˝lan mˆn¸";
+    Text[ language_user1 ] = " ";
+};
+ //
+ //     Popup-Menue fuer (allgemeine) Zeichenobjekte
+ //
+Menu RID_POPUP_DRAW
+{
+    ItemList =
+    {
+        MenuItem { ITEM_FORMAT_ATTRIBUTES_LINE };
+        MenuItem { ITEM_FORMAT_ATTRIBUTES_AREA };
+        MN_DRWTXTATTR // Text...
+        MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_MIRRORSUB
+        MN_ARRANGESUB
+        MN_ALIGNSUB
+        MN_ANCHORSUB
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            ITEM_FORMAT_BEZIER_EDIT
+            RadioCheck = FALSE ;
+            AutoCheck = TRUE ;
+        };
+        MenuItem
+        {
+            ITEM_FORMAT_FONTWORK
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        ITEM_GROUP_MENU
+    };
+};
+
+ //
+ //     Popup-Menue fuer (Uno-) Controls
+ //
+
+Menu RID_POPUP_CONTROL
+{
+    ItemList =
+    {
+        MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+        MenuItem { ITEM_FORM_CONTROL_PROPERTIES };
+        MenuItem { ITEM_FORM_PROPERTIES };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_ARRANGESUB
+        MN_ALIGNSUB
+        MN_ANCHORSUB
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        ITEM_GROUP_MENU
+    };
+};
+
+ //
+ //     Grafik
+ //
+
+Menu RID_POPUP_GRAPHIC
+{
+    ItemList =
+    {
+        MN_DRWTXTATTR
+        MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+        MN_ORIGINALSIZE
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_MIRRORSUB
+        MN_ARRANGESUB
+        MN_ALIGNSUB
+        MN_ANCHORSUB
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        ITEM_GROUP_MENU
+       };
+};
+
+ //
+ //     Ole-Objekt
+ //
+
+Menu RID_POPUP_OLE
+{
+    ItemList =
+    {
+        MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+        MN_ORIGINALSIZE
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_ARRANGESUB
+        MN_ALIGNSUB
+        MN_ANCHORSUB
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        ITEM_GROUP_MENU
+    };
+};
+
+ //
+ //     Charts
+ //
+
+Menu RID_POPUP_CHART
+{
+    ItemList =
+    {
+        MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+        MN_ORIGINALSIZE
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_ARRANGESUB
+        MN_ALIGNSUB
+        MN_ANCHORSUB
+        MenuItem
+        {
+            Identifier = SID_OPENDLG_MODCHART ;
+            HelpId = SID_OPENDLG_MODCHART ;
+            /* ### ACHTUNG: Neuer Text in Resource? Datenbereich ‰ndern... : Datenbereich ındern... */
+            Text = "~Datenbereich ‰ndern..." ;
+            Text [ ENGLISH ] = "Change data area..." ;
+            Text [ english_us ] = "~Modify Data Range..." ;
+            Text [ italian ] = "Cambia area dati..." ;
+            Text [ spanish ] = "Modificar ·rea de ~datos..." ;
+            Text [ french ] = "M~odifier la plage de donnÈes..." ;
+            Text [ dutch ] = "~Gegevensbereik veranderen..." ;
+            Text [ swedish ] = "ƒndra ~dataomrÂde..." ;
+            Text [ danish ] = "Rediger dataomrÂde..." ;
+            Text [ portuguese_brazilian ] = "Datenbereich ‰ndern..." ;
+            Text [ portuguese ] = "~Modificar ·rea de dados..." ;
+            Text[ chinese_simplified ] = "∏¸∏ƒ ˝æ›«¯”Ú(~M)...";
+                                                Text[ russian ] = "»ÁÏÂÌËÚ¸ Ó·Î‡ÒÚ¸ ‰‡ÌÌ˚ı...";
+                                                Text[ polish ] = "ZmieÒ obszar danych..";
+                                                Text[ japanese ] = "√ﬁ∞¿óÃàÊÇÃïœçX(~M)...";
+                                                Text[ chinese_traditional ] = "≠◊ßÔ∏ÍÆ∆∞œ∞Ï(~M)...";
+                                                Text[ arabic ] = "... ⁄œÌ· ‰ÿ«ﬁ «·»Ì«‰« ";
+                                                Text[ greek ] = "¡ÎÎ·„ﬁ ÂÒÈÔ˜ﬁÚ ~‰Â‰ÔÏ›Ì˘Ì...";
+            Text[ korean ] = "µ•¿Ã≈Õ øµø™ ºˆ¡§(~M)...";
+            Text[ turkish ] = "~Veri alan˝n˝ dei˛tir...";
+            Text[ language_user1 ] = " ";
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        ITEM_GROUP_MENU
+    };
+};
+
+ //
+ //  PopUpDraw Text
+ //
+
+String RID_POPUP_DRAWTEXT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Popup-Men¸ f¸r Text-Objekte : Popup-Men≥ f≥r Text-Objekte */
+    Text = "Popup-Men¸ f¸r Text-Objekte" ;
+    Text [ English ] = "Popup menu for text objects" ;
+    Text [ english_us ] = "Pop-up menu for text objects" ;
+    Text [ italian ] = "Menu popup per gli oggetti di testo" ;
+    Text [ spanish ] = "Men˙ emergente para objetos de texto" ;
+    Text [ french ] = "Menu Pop-Up pour les objets de texte" ;
+    Text [ dutch ] = "PopUp-menu voor tekstobjecten" ;
+    Text [ swedish ] = "Popup-meny fˆr textobjekt" ;
+    Text [ danish ] = "Popup-menu for tekstobjekter" ;
+    Text [ portuguese_brazilian ] = "Popup-Men¸ f¸r Text-Objekte" ;
+    Text [ portuguese ] = "Menu instant‚neo para objectos de texto" ;
+    Text[ chinese_simplified ] = "Œƒ◊÷∂‘œÛµƒµØ≥ˆ Ω≤Àµ•";
+                                        Text[ russian ] = "¬ÒÔÎ˚‚‡˛˘ÂÂ ÏÂÌ˛ ‰Îˇ Ó·˙ÂÍÚÓ‚ ÚÂÍÒÚ‡";
+                                        Text[ polish ] = "Menu podrÍczne dla obiektÛw tekstowych";
+                                        Text[ japanese ] = "ŒﬂØÃﬂ±ØÃﬂ“∆≠∞ √∑Ωƒ µÃﬁºﬁ™∏ƒóp";
+                                        Text[ chinese_traditional ] = "§Â¶r™´•Ûß÷≈„•\\Ø‡™Ì";
+                                        Text[ arabic ] = "ﬁ«∆„… „‰»Àﬁ… ··ﬂ«∆‰«  «·‰’Ì…";
+                                        Text[ greek ] = "¡Ì·‰ı¸ÏÂÌÔ ÏÂÌÔ˝ „È· ·ÌÙÍÂﬂÏÂÌ· ÍÂÈÏ›ÌÔı";
+    Text[ korean ] = "≈ÿΩ∫∆Æ ∞≥√º∏¶ ¿ß«— ∆Àæ˜ ∏ﬁ¥∫";
+    Text[ turkish ] = "Metin nesneleri iÁin aÁ˝lan mˆn¸";
+    Text[ language_user1 ] = " ";
+};
+
+Menu RID_POPUP_DRAWTEXT
+{
+    ItemList =
+    {
+        MN_RESET
+        MenuItem { Separator = TRUE ; };
+        MN_DRWTXTATTR
+        MenuItem { Separator = TRUE ; };
+        MenuItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONT
+        };
+        MenuItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONTHEIGHT
+        };
+         // Stil, Ausrichtung, Zeilenabstand
+        MN_TEXT_ATTR
+        MenuItem { Separator = TRUE ; };
+         // Zeichen, Absatz
+        MN_DRWTXT
+    };
+};
+
+

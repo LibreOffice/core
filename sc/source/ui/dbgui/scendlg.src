@@ -1,0 +1,450 @@
+/*************************************************************************
+ *
+ *  $RCSfile: scendlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+#include "scendlg.hrc"
+ModalDialog RID_SCDLG_NEWSCENARIO
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 247 , 199 ) ;
+    Text = "Szenario anlegen" ;
+    Text [ ENGLISH ] = "Create Scenario" ;
+    Text [ NORWEGIAN ] = "Lag Scenario" ;
+    Text [ DANISH ] = "Opret scenarie" ;
+    Text [ ENGLISH_US ] = "Create Scenario" ;
+    Text [ SPANISH ] = "Crear escenario" ;
+    Text [ FINNISH ] = "Luo hahmotelma" ;
+    Text [ FRENCH ] = "Création d'un scénario" ;
+    Text [ ITALIAN ] = "Crea scenario" ;
+    Text [ DUTCH ] = "Scenario maken" ;
+    Text [ PORTUGUESE_BRAZILIAN ] = "Criar Cenário" ;
+    Text [ SWEDISH ] = "Skapa scenario" ;
+    Text [ PORTUGUESE ] = "Criar cenário" ;
+    Moveable = TRUE ;
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 191 , 11 ) ;
+        Size = MAP_APPFONT ( 50 , 15 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 191 , 29 ) ;
+        Size = MAP_APPFONT ( 50 , 15 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 191 , 48 ) ;
+        Size = MAP_APPFONT ( 50 , 15 ) ;
+        TabStop = TRUE ;
+    };
+    MultiLineEdit ED_COMMENT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 20 , 54 ) ;
+        Size = MAP_APPFONT ( 156 , 46 ) ;
+        TabStop = TRUE ;
+        MaxTextLength = 512 ;
+        VScroll = TRUE ;
+    };
+    Edit ED_NAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 20 , 18 ) ;
+        Size = MAP_APPFONT ( 156 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    CheckBox CB_SHOWFRAME
+    {
+        Pos = MAP_APPFONT ( 12 , 126 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
+        Text = "Rahmen anzeigen in" ;
+        Text [ ENGLISH ] = "Display frame" ;
+        Text [ english_us ] = "Display border in" ;
+        Text [ portuguese_brazilian ] = "Rahmen anzeigen in" ;
+        Text [ swedish ] = "Visa ram i" ;
+        Text [ danish ] = "Vis ramme i" ;
+        Text [ italian ] = "Mostra cornice in" ;
+        Text [ spanish ] = "Mostrar borde en" ;
+        Text [ french ] = "Afficher cadre dans" ;
+        Text [ dutch ] = "Kader weergeven in" ;
+        Text [ portuguese ] = "Mostrar moldura em" ;
+        Text[ chinese_simplified ] = "ÏÔÊ¾±ß¿ò";
+        Text[ russian ] = "Ïîêàçàòü ğàìêè â öâåòå";
+        Text[ polish ] = "Poka¿ ramkê w k~olorze";
+        Text[ japanese ] = "˜g‚ğ•\\¦";
+        Text[ language_user1 ] = " ";
+        Text[ chinese_traditional ] = "Åã¥ÜÃä®Ø";
+        Text[ arabic ] = "ÅÙåÇÑ ÇáÅØÇÑ ÈÇááæä";
+        Text[ greek ] = "ÅìöÜíéóç ğëáéóßïõ óôï";
+        Text[ korean ] = "°æ°è¼± Ç¥½Ã";
+        Text[ turkish ] = "Çerçeve rengi";
+    };
+    ListBox LB_COLOR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 51 , 138 ) ;
+        Size = MAP_APPFONT ( 126 , 86 ) ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    CheckBox CB_PRINTFRAME
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 121 , 243 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
+        Text = "Rahmen drucken" ;
+        Text [ ENGLISH ] = "Print frame" ;
+        Text [ english_us ] = "Print border" ;
+        Text [ portuguese_brazilian ] = "Rahmen drucken" ;
+        Text [ swedish ] = "Skriv ut ram" ;
+        Text [ danish ] = "Udskriv ramme" ;
+        Text [ italian ] = "Stampa cornice" ;
+        Text [ spanish ] = "Imprimir borde" ;
+        Text [ french ] = "Imprimer le cadre" ;
+        Text [ dutch ] = "Kader afdrukken" ;
+        Text [ portuguese ] = "Imprimir moldura" ;
+        Text[ chinese_simplified ] = "´òÓ¡±ß¿ò";
+        Text[ russian ] = "Ïå÷àòü ğàìîê";
+        Text[ polish ] = "Drukuj ramkê";
+        Text[ japanese ] = "˜g‚Ìˆóü";
+        Text[ language_user1 ] = " ";
+        Text[ chinese_traditional ] = "¦C¦LÃä®Ø";
+        Text[ arabic ] = "ØÈÇÚÉ ÅØÇÑ";
+        Text[ greek ] = "Åêôığùóç ğëáéóßïõ";
+        Text[ korean ] = "°æ°è¼± ÀÎ¼â";
+        Text[ turkish ] = "Çerçeveyi yazdır";
+    };
+    CheckBox CB_TWOWAY
+    {
+        Pos = MAP_APPFONT ( 12 , 157 ) ;
+        Size = MAP_APPFONT (160 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Zurückkopieren : Zur³ckkopieren */
+        Text = "Zurückkopieren" ;
+        Text [ ENGLISH ] = "Copy back" ;
+        Text [ english_us ] = "Copy back" ;
+        Text [ portuguese_brazilian ] = "Zur³ckkopieren" ;
+        Text [ swedish ] = "Kopiera tillbaka" ;
+        Text [ danish ] = "Kopier tilbage" ;
+        Text [ italian ] = "Ricopia all'indietro" ;
+        Text [ spanish ] = "Actualizar escenario con valores modificados" ;
+        Text [ french ] = "Recopier" ;
+        Text [ dutch ] = "Terugkopiëren" ;
+        Text [ portuguese ] = "Actualizar cenário com os valores da folha modificados" ;
+        Text[ chinese_simplified ] = "¸üĞÂ¹¤×÷±í·½°¸";
+        Text[ russian ] = "Îáğàòíîå êîïèğîâàíèå";
+        Text[ polish ] = "Kopiuj z powrotem";
+        Text[ japanese ] = "Œ³‚Ì’l‚É–ß‚·";
+        Text[ chinese_traditional ] = "§ó·s¤u§@ªí¤è®×";
+        Text[ arabic ] = "ÅÚÇÏÉ ÇáäÓÎ";
+        Text[ greek ] = "ÁíôéãñáöŞ ğßóù";
+        Text[ korean ] = "µÚ·Î º¹»ç";
+        Text[ turkish ] = "Geri kopyala";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CB_ATTRIB
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 20 , 243 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
+        Text = "Attribute" ;
+        Text [ ENGLISH ] = "Atributes" ;
+        Text [ english_us ] = "Attributes" ;
+        Text [ portuguese_brazilian ] = "Attribute" ;
+        Text [ swedish ] = "Attribut" ;
+        Text [ danish ] = "Attributter" ;
+        Text [ italian ] = "Attributi" ;
+        Text [ spanish ] = "Atributos" ;
+        Text [ french ] = "Attributs" ;
+        Text [ dutch ] = "Attributen" ;
+        Text [ portuguese ] = "Atributos" ;
+        Text[ chinese_simplified ] = "ÊôĞÔ";
+        Text[ russian ] = "Àòğèáóòû";
+        Text[ polish ] = "Atrybuty";
+        Text[ japanese ] = "‘®«";
+        Text[ chinese_traditional ] = "Äİ©Ê";
+        Text[ arabic ] = "ÇáÓãÇÊ";
+        Text[ greek ] = "Éäéüôçôåò";
+        Text[ korean ] = "¼Ó¼º";
+        Text[ turkish ] = "Öznitelik";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CB_VALUE
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 230 , 243 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
+        Text = "Nur Werte kopieren" ;
+        Text [ ENGLISH ] = "Copy values only" ;
+        Text [ english_us ] = "Copy values only" ;
+        Text [ portuguese_brazilian ] = "Nur Werte kopieren" ;
+        Text [ swedish ] = "Kopiera endast värden" ;
+        Text [ danish ] = "Kopier kun værdier" ;
+        Text [ italian ] = "Copia solo i valori" ;
+        Text [ spanish ] = "Copiar solo valores" ;
+        Text [ french ] = "Ne copier que les valeurs" ;
+        Text [ dutch ] = "Alleen waarden kopiëren" ;
+        Text [ portuguese ] = "Copiar só valores" ;
+        Text[ chinese_simplified ] = "Ö»¸´ÖÆÊıÖµ";
+        Text[ russian ] = "Êîïèğîâàòü òîëüêî çíà÷åíèÿ";
+        Text[ polish ] = "Kopiuj tylko wartoœci";
+        Text[ japanese ] = "”’l‚Ì‚İºËß°";
+        Text[ chinese_traditional ] = "¥u½Æ»s¼Æ­È";
+        Text[ arabic ] = "äÓÎ ÇáŞíã İŞØ";
+        Text[ greek ] = "ÁíôéãñáöŞ ìüíï ôùí ôéìşí";
+        Text[ korean ] = "°ª¸¸ º¹»ç";
+        Text[ turkish ] = "Yalnızca değerleri kopyala";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CB_COPYALL
+    {
+        Pos = MAP_APPFONT ( 12 , 170 ) ;
+        Size = MAP_APPFONT ( 95 , 10 ) ;
+        Text = "Ganze Tabelle kopieren" ;
+        Text [ ENGLISH ] = "Copy entire sheet" ;
+        Text [ english_us ] = "Copy entire sheet" ;
+        Text [ portuguese_brazilian ] = "Ganze Tabelle kopieren" ;
+        Text [ swedish ] = "Kopiera hel tabell" ;
+        Text [ danish ] = "Kopier hele arket" ;
+        Text [ italian ] = "Copia intera tabella" ;
+        Text [ spanish ] = "Copiar toda la hoja" ;
+        Text [ french ] = "Copier la feuille entière" ;
+        Text [ dutch ] = "Hele tabel kopiëren" ;
+        Text [ portuguese ] = "Copiar tabela inteira" ;
+        Text[ chinese_simplified ] = "¸´ÖÆÕû¸ö¹¤×÷±í";
+        Text[ russian ] = "Êîïèğîâàòü âñş òàáëèöó";
+        Text[ polish ] = "Kopiuj ca³¹ tabelê";
+        Text[ japanese ] = "•\\‘S‘Ì‚ğºËß°";
+        Text[ chinese_traditional ] = "½Æ»s¾ã­Ó¤u§@ªí";
+        Text[ arabic ] = "äÓÎ ßá ÇáÌÏæá";
+        Text[ greek ] = "ÁíôéãñáöŞ ïëüêëçñïõ ğßíáêá";
+        Text[ korean ] = "ÀüÃ¼ ½ÃÆ® º¹»ç";
+        Text[ turkish ] = "Tablonun tümünü kopyala";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_EDIT
+    {
+        Text = "Szenario bearbeiten" ;
+        Text [ ENGLISH ] = "Edit Scenario" ;
+        Text [ portuguese ] = "Editar Cenário" ;
+        Text [ english_us ] = "Edit Scenario" ;
+        Text [ portuguese_brazilian ] = "Szenario bearbeiten" ;
+        Text [ swedish ] = "Bearbeta scenario" ;
+        Text [ danish ] = "Rediger scenarie" ;
+        Text [ italian ] = "Modifica scenario" ;
+        Text [ spanish ] = "Editar escenario" ;
+        Text [ french ] = "Modifier scénario" ;
+        Text [ dutch ] = "Scenario bewerken" ;
+        Text[ chinese_simplified ] = "±à¼­·½°¸";
+        Text[ russian ] = "Ïğàâêà ñöåíàğèÿ";
+        Text[ polish ] = "Edytuj scenariusz";
+        Text[ japanese ] = "¼ÅØµ‚Ì•ÒW";
+        Text[ chinese_traditional ] = "½s¿è¤è®×";
+        Text[ arabic ] = "ÊÍÑíÑ ÇáÓíäÇÑíæ";
+        Text[ greek ] = "Åğåîåñãáóßá óåíáñßïõ";
+        Text[ korean ] = "½Ã³ª¸®¿À ÆíÁı";
+        Text[ turkish ] = "Senaryoyu düzenle";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_CREATEDBY
+    {
+        Text = "Angelegt von" ;
+        Text [ ENGLISH ] = "Created by" ;
+        Text [ NORWEGIAN ] = "Laget av" ;
+        Text [ DANISH ] = "Oprettet af" ;
+        Text [ ENGLISH_US ] = "Created by" ;
+        Text [ SPANISH ] = "Creado por" ;
+        Text [ FINNISH ] = "Tekijõ" ;
+        Text [ FRENCH ] = "Créé par" ;
+        Text [ ITALIAN ] = "Creato da" ;
+        Text [ DUTCH ] = "Gemaakt door" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Criado por" ;
+        Text [ SWEDISH ] = "Skapat av" ;
+        Text [ PORTUGUESE ] = "Criado por" ;
+        Text[ chinese_simplified ] = "×÷Õß";
+        Text[ russian ] = "Ñîçäàíî";
+        Text[ polish ] = "Utworzony przez";
+        Text[ japanese ] = "ì¬Ò";
+        Text[ chinese_traditional ] = "§@ªÌ";
+        Text[ arabic ] = "ÃäÔÃ ÇáÓíäÇÑíæ";
+        Text[ greek ] = "ÄçìéïõñãŞèçêå áğü";
+        Text[ korean ] = "·Î ¸¸µé±â";
+        Text[ turkish ] = "Yazan";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_ON
+    {
+        Text = "am" ;
+        Text [ ENGLISH ] = "on" ;
+        Text [ NORWEGIAN ] = "pÕ" ;
+        Text [ DANISH ] = "den" ;
+        Text [ ENGLISH_US ] = "on" ;
+        Text [ SPANISH ] = "en" ;
+        Text [ FINNISH ] = "on" ;
+        Text [ FRENCH ] = "le" ;
+        Text [ ITALIAN ] = "il" ;
+        Text [ DUTCH ] = "op" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "em" ;
+        Text [ SWEDISH ] = "den" ;
+        Text [ PORTUGUESE ] = "em" ;
+        Text[ chinese_simplified ] = "ÈÕÆÚ£º";
+        Text[ russian ] = "â";
+        Text[ polish ] = "dnia";
+        Text[ japanese ] = "“ú•t";
+        Text[ chinese_traditional ] = "¤é´Á¡G";
+        Text[ arabic ] = "ÈÊÇÑíÎ";
+        Text[ greek ] = "ôéò";
+        Text[ korean ] = "À§Ä¡";
+        Text[ turkish ] = "tarih:";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_NAME
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 180 , 30 ) ;
+        Text = "Name des Szenarios" ;
+        Text [ ENGLISH ] = "Szenario Name" ;
+        Text [ ENGLISH_US ] = "Name of scenario";
+        Text[ italian ] = "Nome dello scenario";
+        Text[ portuguese_brazilian ] = "Name des Szenarios";
+        Text[ portuguese ] = "Nome do cenário";
+        Text[ danish ] = "Scenariets navn";
+        Text[ french ] = "Nom du scénario";
+        Text[ swedish ] = "Namn på scenariot";
+        Text[ dutch ] = "Naam van het scenario";
+        Text[ spanish ] = "Nombre del escenario";
+        Text[ chinese_simplified ] = "·½°¸Ãû³Æ";
+        Text[ russian ] = "Íàçâàíèå ñöåíàğèÿ";
+        Text[ polish ] = "Nazwa scenariusza";
+        Text[ japanese ] = "¼ÅØµ–¼";
+        Text[ chinese_traditional ] = "¤ÀªRÂÅ¥»ªº¦WºÙ";
+        Text[ arabic ] = "ÇÓã ÇáÓíäÇÑíæ";
+        Text[ greek ] = "¼íïìá óåíáñßïõ";
+        Text[ korean ] = "½Ã³ª¸®¿À ÀÌ¸§";
+        Text[ turkish ] = "Senaryonun adı";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_COMMENT
+    {
+        Pos = MAP_APPFONT ( 7 , 42 ) ;
+        Size = MAP_APPFONT ( 180 , 64 ) ;
+        Text = "Kommentar" ;
+        Text [ ENGLISH ] = "Comment" ;
+        Text [ ENGLISH_US ] = "Comment";
+        Text[ italian ] = "Commento";
+        Text[ portuguese_brazilian ] = "Kommentar";
+        Text[ portuguese ] = "Comentário";
+        Text[ danish ] = "Kommentar";
+        Text[ french ] = "Commentaire";
+        Text[ swedish ] = "Kommentar";
+        Text[ dutch ] = "Commentaar";
+        Text[ spanish ] = "Comentario";
+        Text[ chinese_simplified ] = "×¢½â";
+        Text[ russian ] = "Êîììåíòàğèé";
+        Text[ polish ] = "Komentarz";
+        Text[ japanese ] = "ºÒİÄ";
+        Text[ chinese_traditional ] = "ª`¸Ñ";
+        Text[ arabic ] = "ÇáÊÚáíŞ";
+        Text[ greek ] = "Ó÷üëéï";
+        Text[ korean ] = "¸Ş¸ğ";
+        Text[ turkish ] = "Açıklama";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 114 ) ;
+        Size = MAP_APPFONT ( 180 , 73 ) ;
+        Text = "Einstellungen" ;
+        Text [ ENGLISH ] = "Additional settings" ;
+        Text [ ENGLISH_US ] = "Settings";
+        Text[ italian ] = "Impostazioni";
+        Text[ portuguese_brazilian ] = "Einstellungen";
+        Text[ portuguese ] = "Predefinições";
+        Text[ danish ] = "Indstillinger";
+        Text[ french ] = "Paramètres";
+        Text[ swedish ] = "Inställningar";
+        Text[ dutch ] = "Instellingen";
+        Text[ spanish ] = "Configuración";
+        Text[ chinese_simplified ] = "Éè¶¨";
+        Text[ russian ] = "Íàñòğîéêè";
+        Text[ polish ] = "Ustawienia";
+        Text[ japanese ] = "İ’è";
+        Text[ chinese_traditional ] = "³]©w";
+        Text[ arabic ] = "ÅÚÏÇÏÇÊ";
+        Text[ greek ] = "Ñõèìßóåéò";
+        Text[ korean ] = "¼³Á¤";
+        Text[ turkish ] = "Ayarlar";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "½¨Á¢·½°¸";
+    Text[ russian ] = "Ñîçäàòü ñöåíàğèé";
+    Text[ polish ] = "Utwórz scenariusz";
+    Text[ japanese ] = "¼ÅØµ‚Ìì¬";
+    Text[ chinese_traditional ] = "«Ø¥ß¤è®×";
+    Text[ arabic ] = "ÅäÔÇÁ ÓíäÇÑíæ";
+    Text[ greek ] = "Äçìéïõñãßá óåíáñßïõ";
+    Text[ korean ] = "½Ã³ª¸®¿À ¸¸µé±â";
+    Text[ turkish ] = "Senaryo oluştur";
+    Text[ language_user1 ] = " ";
+};

@@ -1,0 +1,681 @@
+/*************************************************************************
+ *
+ *  $RCSfile: pseudo.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:05 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include <svx/svxids.hrc>
+
+/*
+SfxSlotInfo SID_DRAW_LINE
+{
+    SlotName = "ZeichnenLinie" ;
+    HelpText = "Zeichnen einer Linie" ;
+    SlotName [ English ] = "DrawLine" ;
+    HelpText [ English ] = "Draw a line" ;
+    Slotname [ english_us ] = "DrawLine" ;
+    HelpText [ english_us ] = "Draw a line" ;
+    Slotname = "ZeichnenLinie" ;
+    Slotname [ italian ] = "DisegnaLinea" ;
+    HelpText [ italian ] = "Disegna una linea" ;
+    Slotname [ spanish ] = "DibujarLínea" ;
+    HelpText [ spanish ] = "Dibuja una línea" ;
+    Slotname [ french ] = "DessinerLigne" ;
+    HelpText [ french ] = "Dessiner une ligne" ;
+    Slotname [ dutch ] = "TekenenLijn" ;
+    HelpText [ dutch ] = "Een lijn tekenen" ;
+    Slotname [ swedish ] = "RitaLinje" ;
+    HelpText [ swedish ] = "Rita en linje" ;
+    Slotname [ danish ] = "ZeichnenLinie" ;
+    HelpText [ danish ] = "Tegn en linje" ;
+    Slotname [ portuguese ] = "DesenharLinha" ;
+    HelpText [ portuguese ] = "Desenha uma linha" ;
+    Slotname [ portuguese_brazilian ] = "ZeichnenLinie" ;
+    HelpText [ portuguese_brazilian ] = "Zeichnen einer Linie" ;
+};
+SfxSlotInfo SID_DRAW_RECT
+{
+    SlotName = "ZeichnenRechteck" ;
+    HelpText = "Zeichnen eines Rechtecks" ;
+    SlotName [ English ] = "DrawRectangle" ;
+    HelpText [ English ] = "Draw a rectangle" ;
+    Slotname [ dutch ] = "TekenenRechthoek" ;
+    HelpText [ dutch ] = "Een rechthoek tekenen" ;
+    Slotname [ english_us ] = "DrawRectangle" ;
+    HelpText [ english_us ] = "Draw a rectangle" ;
+    Slotname = "ZeichnenRechteck" ;
+    Slotname [ italian ] = "DisegnaRettangolo" ;
+    HelpText [ italian ] = "Disegna un rettangolo" ;
+    Slotname [ spanish ] = "DibujarRectángulo" ;
+    HelpText [ spanish ] = "Dibuja un rectángulo" ;
+    Slotname [ french ] = "DessinerRectangle" ;
+    HelpText [ french ] = "Dessiner un Rectangle" ;
+    Slotname [ swedish ] = "RitaRektangel" ;
+    HelpText [ swedish ] = "Rita en rektangel" ;
+    Slotname [ danish ] = "ZeichnenRechteck" ;
+    HelpText [ danish ] = "Tegn en rektangel" ;
+    Slotname [ portuguese ] = "DesenharRectângulo" ;
+    HelpText [ portuguese ] = "Desenha um rectângulo" ;
+    Slotname [ portuguese_brazilian ] = "ZeichnenRechteck" ;
+    HelpText [ portuguese_brazilian ] = "Zeichnen eines Rechtecks" ;
+};
+SfxSlotInfo SID_DRAW_ELLIPSE
+{
+    SlotName = "ZeichnenEllipse" ;
+    HelpText = "Zeichnen einer Ellipse" ;
+    SlotName [ English ] = "DrawEllipse" ;
+    HelpText [ English ] = "Draw an ellipse" ;
+    Slotname [ english_us ] = "DrawEllipse" ;
+    HelpText [ english_us ] = "Draw ellipse" ;
+    Slotname = "ZeichnenEllipse" ;
+    Slotname [ italian ] = "DisegnaEllisse" ;
+    HelpText [ italian ] = "Disegna una ellisse" ;
+    Slotname [ spanish ] = "DibujarElipse" ;
+    HelpText [ spanish ] = "Dibuja una elipse" ;
+    Slotname [ french ] = "DessinerEllipse" ;
+    HelpText [ french ] = "Dessiner une ellipse" ;
+    Slotname [ dutch ] = "TekenenOvaal" ;
+    HelpText [ dutch ] = "Een ovaal tekenen" ;
+    Slotname [ swedish ] = "RitaEllips" ;
+    HelpText [ swedish ] = "Rita en ellips" ;
+    Slotname [ danish ] = "ZeichnenEllipse" ;
+    HelpText [ danish ] = "Tegn en ellipse" ;
+    Slotname [ portuguese ] = "DesenharElipse" ;
+    HelpText [ portuguese ] = "Desenha uma elipse" ;
+    Slotname [ portuguese_brazilian ] = "ZeichnenEllipse" ;
+    HelpText [ portuguese_brazilian ] = "Zeichnen einer Ellipse" ;
+};
+SfxSlotInfo SID_DRAW_POLYGON
+{
+    SlotName = "ZeichnenPolygon" ;
+    HelpText = "Zeichnen eines Polygons" ;
+    SlotName [ English ] = "DrawPolygon" ;
+    HelpText [ English ] = "Draw a Polygon" ;
+    Slotname [ english_us ] = "DrawPolygon" ;
+    HelpText [ english_us ] = "Draw a polygon" ;
+    Slotname = "ZeichnenPolygon" ;
+    Slotname [ italian ] = "DisegnaPoligono" ;
+    HelpText [ italian ] = "Disegna un poligono" ;
+    Slotname [ spanish ] = "DibujarPolígono" ;
+    HelpText [ spanish ] = "Dibuja un polígono" ;
+    Slotname [ french ] = "DessinerPolygone" ;
+    HelpText [ french ] = "Dessiner un polygone" ;
+    Slotname [ dutch ] = "TekenenVeelhoek" ;
+    HelpText [ dutch ] = "Een veelhoek tekenen" ;
+    Slotname [ swedish ] = "RitaPolygon" ;
+    HelpText [ swedish ] = "Rita ett polygon" ;
+    Slotname [ danish ] = "ZeichnenPolygon" ;
+    HelpText [ danish ] = "Tegn et polygon" ;
+    Slotname [ portuguese ] = "DesenharPolígono" ;
+    HelpText [ portuguese ] = "Desenha um polígono" ;
+    Slotname [ portuguese_brazilian ] = "ZeichnenPolygon" ;
+    HelpText [ portuguese_brazilian ] = "Zeichnen eines Polygons" ;
+};
+SfxSlotInfo SID_DRAW_ARC
+{
+    SlotName = "ZeichnenBogen" ;
+    HelpText = "Zeichnen eines Kreisbogens" ;
+    SlotName [ English ] = "DrawArc" ;
+    HelpText [ English ] = "Draw an arc" ;
+    Slotname [ english_us ] = "DrawArc" ;
+    HelpText [ english_us ] = "Draw an arc" ;
+    Slotname = "ZeichnenBogen" ;
+    Slotname [ italian ] = "ArcoDiCerchio" ;
+    HelpText [ italian ] = "Disegna un arco di cerchio" ;
+    Slotname [ spanish ] = "DibujarArco" ;
+    HelpText [ spanish ] = "Dibujar un arco circular" ;
+    Slotname [ french ] = "DessinerArc" ;
+    HelpText [ french ] = "Dessiner un arc" ;
+    Slotname [ dutch ] = "TekenenBoog" ;
+    HelpText [ dutch ] = "Een cirkelboog tekenen" ;
+    Slotname [ swedish ] = "RitaBåge" ;
+    HelpText [ swedish ] = "Rita en båge" ;
+    Slotname [ danish ] = "DrawArc" ;
+    HelpText [ danish ] = "Tegn en cirkelbue" ;
+    Slotname [ portuguese_brazilian ] = "ZeichnenBogen" ;
+    HelpText [ portuguese_brazilian ] = "Zeichnen eines Kreisbogens" ;
+    Slotname [ portuguese ] = "DesenharArco" ;
+    HelpText [ portuguese ] = "Desenha um arco" ;
+};
+SfxSlotInfo SID_DRAW_PIE
+{
+    SlotName = "ZeichnenKreissegment" ;
+    HelpText = "Zeichnen eines Kreissegments" ;
+    SlotName [ English ] = "DrawPie" ;
+    HelpText [ English ] = "Draw a pie" ;
+    Slotname [ english_us ] = "DrawCirclePie" ;
+    HelpText [ english_us ] = "Draws Circle Pies" ;
+    Slotname = "ZeichnenKreissegment" ;
+    Slotname [ italian ] = "SegmentoDiCerchio" ;
+    HelpText [ italian ] = "Disegna segmento di cerchio" ;
+    Slotname [ spanish ] = "DibujarSectorDeCírculo" ;
+    HelpText [ spanish ] = "Dibuja un sector de círculo" ;
+    Slotname [ french ] = "DessinerSegmentArc" ;
+    HelpText [ french ] = "Dessiner un segment d'un arc" ;
+    Slotname [ dutch ] = "TekenenCirkelsegment" ;
+    HelpText [ dutch ] = "Een cirkelsegment tekenen" ;
+    Slotname [ swedish ] = "TecknaCirkelsegment" ;
+    HelpText [ swedish ] = "Teckna ett cirkelsegment" ;
+    Slotname [ danish ] = "ZeichnenKreissegment" ;
+    HelpText [ danish ] = "Tegn et cirkelsegment" ;
+    Slotname [ portuguese ] = "DesenharSectorCírculo" ;
+    HelpText [ portuguese ] = "Desenha um sector de círculo" ;
+    Slotname [ portuguese_brazilian ] = "ZeichnenKreissegment" ;
+    HelpText [ portuguese_brazilian ] = "Zeichnen eines Kreissegments" ;
+};
+SfxSlotInfo SID_DRAW_CIRCLECUT
+{
+    SlotName = "ZeichnenKreisabschnitt" ;
+    HelpText = "Zeichnen eines Kreisabschnitts" ;
+    SlotName [ English ] = "DrawCirclecut" ;
+    HelpText [ English ] = "Draw a circlecut" ;
+    Slotname [ dutch ] = "TekenenCirkelgedeelte" ;
+    HelpText [ dutch ] = "Een cirkelgedeelte tekenen" ;
+    Slotname [ english_us ] = "DrawEllipseSection" ;
+    HelpText [ english_us ] = "Draw Circle Section" ;
+    Slotname = "ZeichnenKreisabschnitt" ;
+    Slotname [ italian ] = "SezioneDiCerchio" ;
+    HelpText [ italian ] = "Disegna una sezione di cerchio" ;
+    Slotname [ spanish ] = "DibujarSegmentoDeCírculo" ;
+    HelpText [ spanish ] = "Dibuja un segmento de círculo" ;
+    Slotname [ french ] = "DessinerSegmentCercle" ;
+    HelpText [ french ] = "Dessiner un segment de cercle" ;
+    Slotname [ swedish ] = "RitaCirkelsegment" ;
+    HelpText [ swedish ] = "Rita ett cirkelavsnitt" ;
+    Slotname [ danish ] = "ZeichnenKreisabschnitt" ;
+    HelpText [ danish ] = "Tegn et cirkelafsnit" ;
+    Slotname [ portuguese ] = "DesenharSegmentoCírculo" ;
+    HelpText [ portuguese ] = "Desenha um segmento de círculo" ;
+    Slotname [ portuguese_brazilian ] = "ZeichnenKreisabschnitt" ;
+    HelpText [ portuguese_brazilian ] = "Zeichnen eines Kreisabschnitts" ;
+};
+SfxSlotInfo SID_DRAW_TEXT
+{
+    SlotName = "ZeichnenText" ;
+    HelpText = "Eingabe von Zeichentext" ;
+    SlotName [ English ] = "DrawText" ;
+    HelpText [ English ] = "Insert draw text" ;
+    Slotname [ dutch ] = "TekenenTekst" ;
+    HelpText [ dutch ] = "Tekentekst invoeren" ;
+    Slotname [ english_us ] = "DrawText" ;
+    HelpText [ english_us ] = "Insert draw text" ;
+    Slotname = "ZeichnenText" ;
+    Slotname [ italian ] = "DisegnaTesto" ;
+    HelpText [ italian ] = "Digitazione di testo" ;
+    Slotname [ spanish ] = "DibujarTexto" ;
+    HelpText [ spanish ] = "Introduce texto de dibujo" ;
+    Slotname [ french ] = "DessinerTexte" ;
+    HelpText [ french ] = "Insérer un texte" ;
+    Slotname [ swedish ] = "RitaText" ;
+    HelpText [ swedish ] = "Infoga text" ;
+    Slotname [ danish ] = "ZeichnenText" ;
+    HelpText [ danish ] = "Indsæt tekst i tegning" ;
+    Slotname [ portuguese ] = "DesenharTexto" ;
+    HelpText [ portuguese ] = "Inserir texto de desenho" ;
+    Slotname [ portuguese_brazilian ] = "ZeichnenText" ;
+    HelpText [ portuguese_brazilian ] = "Eingabe von Zeichentext" ;
+};
+SfxSlotInfo SID_DRAW_CAPTION
+{
+    SlotName = "ZeichnenLegende" ;
+    HelpText = "Legende einfügen" ;
+    SlotName [ English ] = "DrawCaption" ;
+    HelpText [ English ] = "Insert a caption" ;
+    Slotname [ dutch ] = "TekenenLegende" ;
+    HelpText [ dutch ] = "Legenda invoegen" ;
+    Slotname [ english_us ] = "DrawLegend" ;
+    HelpText [ english_us ] = "Insert a legend" ;
+    Slotname = "ZeichnenLegende" ;
+    Slotname [ italian ] = "DisegnaDidascalia" ;
+    HelpText [ italian ] = "Inserisci una didascalia" ;
+    Slotname [ spanish ] = "DibujarLeyenda" ;
+    HelpText [ spanish ] = "Inserta una leyenda" ;
+    Slotname [ french ] = "DessinerLégende" ;
+    HelpText [ french ] = "Insère la légende" ;
+    Slotname [ swedish ] = "RitaLegend" ;
+    HelpText [ swedish ] = "Infoga legend" ;
+    Slotname [ danish ] = "ZeichnenLegende" ;
+    HelpText [ danish ] = "Indsæt forklaring" ;
+    Slotname [ portuguese ] = "DesenharLegenda" ;
+    HelpText [ portuguese ] = "Insere legenda" ;
+    Slotname [ portuguese_brazilian ] = "ZeichnenLegende" ;
+    HelpText [ portuguese_brazilian ] = "Legende einfügen" ;
+};
+
+
+
+
+SfxSlotInfo SID_INSERT_PUSHBUTTON
+{
+    SlotName = "EinfügenPushbutton" ;
+    HelpText = "Einfügen eines Pushbuttons" ;
+    SlotName [ English ] = "InsertPushutton" ;
+    HelpText [ English ] = "Insert a pushbutton" ;
+    Slotname [ dutch ] = "InvoegenPushButton" ;
+    HelpText [ dutch ] = "Pushbutton invoegen" ;
+    Slotname [ english_us ] = "InsertPushButton" ;
+    HelpText [ english_us ] = "Insert a push button" ;
+    Slotname = "EinfügenPushbutton" ;
+    Slotname [ italian ] = "InserisciPushbutton" ;
+    HelpText [ italian ] = "Inserisci un Pushbutton" ;
+    Slotname [ spanish ] = "InsertarPushbutton" ;
+    HelpText [ spanish ] = "Insertar un botón de pulsación" ;
+    Slotname [ french ] = "InsérerBoutondeCommande" ;
+    HelpText [ french ] = "Insérer un bouton de commande" ;
+    Slotname [ swedish ] = "InfogaPushbutton" ;
+    HelpText [ swedish ] = "Infoga en pushbutton" ;
+    Slotname [ danish ] = "EinfügenPushbutton" ;
+    HelpText [ danish ] = "Indsæt en Pushbuttons" ;
+    Slotname [ portuguese ] = "InserirBotãoComando" ;
+    HelpText [ portuguese ] = "Insere um botão de comando" ;
+    Slotname [ portuguese_brazilian ] = "EinfügenPushbutton" ;
+    HelpText [ portuguese_brazilian ] = "Einfügen eines Pushbuttons" ;
+};
+SfxSlotInfo SID_INSERT_CHECKBOX
+{
+    SlotName = "EinfügenCheckbox" ;
+    HelpText = "Einfügen einer Checkbox" ;
+    SlotName [ English ] = "InsertCheckbox" ;
+    HelpText [ English ] = "Insert a checkbox" ;
+    Slotname [ dutch ] = "InvoegenCheckbox" ;
+    HelpText [ dutch ] = "Een checkbox invoegen" ;
+    Slotname [ english_us ] = "InsertCheckbox" ;
+    HelpText [ english_us ] = "Insert a checkbox" ;
+    Slotname = "EinfügenCheckbox" ;
+    Slotname [ italian ] = "InserisciChekcBox" ;
+    HelpText [ italian ] = "Inserisci una Checkbox" ;
+    Slotname [ spanish ] = "InsertarCasillaControl" ;
+    HelpText [ spanish ] = "Inserta un cuadro de verificación" ;
+    Slotname [ french ] = "InsérerCaseàcocher" ;
+    HelpText [ french ] = "Insérer une case à cocher" ;
+    Slotname [ swedish ] = "InfogaCheckbox" ;
+    HelpText [ swedish ] = "Infoga en Checkbox" ;
+    Slotname [ danish ] = "EinfügenCheckbox" ;
+    HelpText [ danish ] = "Indsæt en checkbox" ;
+    Slotname [ portuguese ] = "InserirCaixaCombinação" ;
+    HelpText [ portuguese ] = "Insere uma caixa de combinação" ;
+    Slotname [ portuguese_brazilian ] = "EinfügenCheckbox" ;
+    HelpText [ portuguese_brazilian ] = "Einfügen einer Checkbox" ;
+};
+SfxSlotInfo SID_INSERT_RADIOBUTTON
+{
+    SlotName = "EinfügenRadiobutton" ;
+    HelpText = "Einfügen eines Radiobutton" ;
+    SlotName [ English ] = "InsertRadiobutton" ;
+    HelpText [ English ] = "Insert a radiobutton" ;
+    Slotname [ dutch ] = "InvoegenRadiobutton" ;
+    HelpText [ dutch ] = "Radiobutton invoegen" ;
+    Slotname [ english_us ] = "InsertRadiobutton" ;
+    HelpText [ english_us ] = "Insert a radio button" ;
+    Slotname = "EinfügenRadiobutton" ;
+    Slotname [ italian ] = "InserisciRadiobutton" ;
+    HelpText [ italian ] = "Inserisci un Radiobutton" ;
+    Slotname [ spanish ] = "InsertarRadiobutton" ;
+    HelpText [ spanish ] = "Insertar un botón de radio" ;
+    Slotname [ french ] = "InsérerCased'Option" ;
+    HelpText [ french ] = "Insérer une case d'option" ;
+    Slotname [ swedish ] = "InfogaRadiobutton" ;
+    HelpText [ swedish ] = "Infoga en Radiobutton" ;
+    Slotname [ danish ] = "EinfügenRadiobutton" ;
+    HelpText [ danish ] = "Indsæt en Radiobutton" ;
+    Slotname [ portuguese ] = "InserirBotãoSelecção" ;
+    HelpText [ portuguese ] = "Insere um botão de selecção" ;
+    Slotname [ portuguese_brazilian ] = "EinfügenRadiobutton" ;
+    HelpText [ portuguese_brazilian ] = "Einfügen eines Radiobutton" ;
+};
+SfxSlotInfo SID_INSERT_SPINBUTTON
+{
+    SlotName = "EinfügenSpinbutton" ;
+    HelpText = "Einfügen eines Spinbutton" ;
+    SlotName [ English ] = "InsertSpinbutton" ;
+    HelpText [ English ] = "Insert a spinbutton" ;
+    Slotname [ dutch ] = "InvoegenSpinbutton" ;
+    HelpText [ dutch ] = "Spinbutton invoegen" ;
+    Slotname [ english_us ] = "InsertSpinbutton" ;
+    HelpText [ english_us ] = "Insert a spin button" ;
+    Slotname = "EinfügenSpinbutton" ;
+    Slotname [ italian ] = "InserisciSpinbutton" ;
+    HelpText [ italian ] = "Inserisci uno Spinbutton" ;
+    Slotname [ spanish ] = "InsertarSpinbutton" ;
+    HelpText [ spanish ] = "Insertar un botón de giro" ;
+    Slotname [ french ] = "InsérerSpinbutton" ;
+    HelpText [ french ] = "Insérer un Spinbutton" ;
+    Slotname [ swedish ] = "InfogaSpinbutton" ;
+    HelpText [ swedish ] = "Infoga en spinbutton" ;
+    Slotname [ danish ] = "EinfügenSpinbutton" ;
+    HelpText [ danish ] = "Indsæt en Spinbutton" ;
+    Slotname [ portuguese ] = "InserirBotãoSpin" ;
+    HelpText [ portuguese ] = "Insere um botão spin" ;
+    Slotname [ portuguese_brazilian ] = "EinfügenSpinbutton" ;
+    HelpText [ portuguese_brazilian ] = "Einfügen eines Spinbutton" ;
+};
+SfxSlotInfo SID_INSERT_FIXEDTEXT
+{
+    SlotName = "EinfügenFixedtext" ;
+    HelpText = "Einfügen eines Fixedtexts" ;
+    SlotName [ English ] = "InsertFixedText" ;
+    HelpText [ English ] = "Insert a fixed text" ;
+    Slotname [ dutch ] = "InvoegenFixedtext" ;
+    HelpText [ dutch ] = "Fixedtext invoegen" ;
+    Slotname [ english_us ] = "InsertFixedText" ;
+    HelpText [ english_us ] = "Insert a fixed text" ;
+    Slotname = "EinfügenFixedtext" ;
+    Slotname [ italian ] = "InserisciTestoFisso" ;
+    HelpText [ italian ] = "Inserisci un testo fisso" ;
+    Slotname [ spanish ] = "InsertarTextoFijo" ;
+    HelpText [ spanish ] = "Inserta un texto fijo" ;
+    Slotname [ french ] = "InsérerTexteFixe" ;
+    HelpText [ french ] = "Insérer un texte de longueur fixe" ;
+    Slotname [ swedish ] = "InfogaFixedText" ;
+    HelpText [ swedish ] = "Infoga en fixedtext" ;
+    Slotname [ danish ] = "EinfügenFixedtext" ;
+    HelpText [ danish ] = "Indsæt en fixedtekst" ;
+    Slotname [ portuguese ] = "InserirTextoFixo" ;
+    HelpText [ portuguese ] = "Insere um texto fixo" ;
+    Slotname [ portuguese_brazilian ] = "EinfügenFixedtext" ;
+    HelpText [ portuguese_brazilian ] = "Einfügen eines Fixedtexts" ;
+};
+SfxSlotInfo SID_INSERT_GROUPBOX
+{
+    SlotName = "EinfügenGroupbox" ;
+    HelpText = "Einfügen einer Groupbox" ;
+    SlotName [ English ] = "InsertGroupbox" ;
+    HelpText [ English ] = "Insert a groupbox" ;
+    Slotname [ english_us ] = "InsertGroupbox" ;
+    HelpText [ english_us ] = "Insert a groupbox" ;
+    Slotname = "EinfügenGroupbox" ;
+    Slotname [ italian ] = "InserisciGroupBox" ;
+    HelpText [ italian ] = "Inserisci un Group Box" ;
+    Slotname [ spanish ] = "IsnertarCuadroGrupos" ;
+    HelpText [ spanish ] = "Insertar un cuadro para grupos" ;
+    Slotname [ french ] = "InsérerGroupBox" ;
+    HelpText [ french ] = "Insérer une boîte de groupe" ;
+    Slotname [ dutch ] = "InvoegenGroupbox" ;
+    HelpText [ dutch ] = "Groupbox invoegen" ;
+    Slotname [ swedish ] = "InfogaGroupbox" ;
+    HelpText [ swedish ] = "Infoga en groupbox" ;
+    Slotname [ danish ] = "EinfügenGroupbox" ;
+    HelpText [ danish ] = "Indsæt en groupbox" ;
+    Slotname [ portuguese ] = "InserirCaixaGrupos" ;
+    HelpText [ portuguese ] = "Insere uma caixa de grupos" ;
+    Slotname [ portuguese_brazilian ] = "EinfügenGroupbox" ;
+    HelpText [ portuguese_brazilian ] = "Einfügen einer Groupbox" ;
+};
+
+SfxSlotInfo SID_INSERT_LISTBOX
+{
+    SlotName = "EinfügenListbox" ;
+    HelpText = "Einfügen einer Listbox" ;
+    SlotName [ English ] = "InsertListbox" ;
+    HelpText [ English ] = "Insert a listbox" ;
+    Slotname [ english_us ] = "InsertListbox" ;
+    HelpText [ english_us ] = "Insert a listbox" ;
+    Slotname = "EinfügenListbox" ;
+    Slotname [ italian ] = "InserisciListbox" ;
+    HelpText [ italian ] = "Inserisci un ListBox" ;
+    Slotname [ spanish ] = "InsertarCuadroLista" ;
+    HelpText [ spanish ] = "Insertar un cuadro de lista" ;
+    Slotname [ french ] = "InsérerZonedeListe" ;
+    HelpText [ french ] = "Insérer une zone de liste" ;
+    Slotname [ dutch ] = "InvoegenListbox" ;
+    HelpText [ dutch ] = "Listbox invoegen" ;
+    Slotname [ swedish ] = "InfogaListbox" ;
+    HelpText [ swedish ] = "Infoga en listbox" ;
+    Slotname [ danish ] = "EinfügenListbox" ;
+    HelpText [ danish ] = "Indsæt en Listbox" ;
+    Slotname [ portuguese ] = "InserirCaixaLista" ;
+    HelpText [ portuguese ] = "Insere uma caixa de listas" ;
+    Slotname [ portuguese_brazilian ] = "EinfügenListbox" ;
+    HelpText [ portuguese_brazilian ] = "Einfügen einer Listbox" ;
+};
+SfxSlotInfo SID_INSERT_COMBOBOX
+{
+    SlotName = "EinfügenCombobox" ;
+    HelpText = "Einfügen einer Combobox" ;
+    SlotName [ English ] = "InsertCombobox" ;
+    HelpText [ English ] = "Insert a combobox" ;
+    Slotname [ dutch ] = "InvoegenCheckbox" ;
+    HelpText [ dutch ] = "Combobox invoegen" ;
+    Slotname [ english_us ] = "InsertCombobox" ;
+    HelpText [ english_us ] = "Insert a combobox" ;
+    Slotname = "EinfügenCombobox" ;
+    Slotname [ italian ] = "InserisciComboBox" ;
+    HelpText [ italian ] = "Inserisci un Combo Box" ;
+    Slotname [ spanish ] = "InsertarCuadroCombinado" ;
+    HelpText [ spanish ] = "Inserta un cuadro combinado" ;
+    Slotname [ french ] = "InsérerZonedelistedéroulante" ;
+    HelpText [ french ] = "Insérer une zone de liste déroulante" ;
+    Slotname [ swedish ] = "InfogaCombobox" ;
+    HelpText [ swedish ] = "Infoga en Combobox" ;
+    Slotname [ danish ] = "EinfügenCombobox" ;
+    HelpText [ danish ] = "Indsæt en combobox" ;
+    Slotname [ portuguese ] = "InserirCaixaCombinação" ;
+    HelpText [ portuguese ] = "Insere uma caixa de combinação" ;
+    Slotname [ portuguese_brazilian ] = "EinfügenCombobox" ;
+    HelpText [ portuguese_brazilian ] = "Einfügen einer Combobox" ;
+};
+SfxSlotInfo SID_INSERT_EDIT
+{
+    SlotName = "EinfügenEdit" ;
+    HelpText = "Einfügen eines Edits" ;
+    SlotName [ English ] = "InsertEdit" ;
+    HelpText [ English ] = "Insert an editfield" ;
+    Slotname [ english_us ] = "InsertEdit" ;
+    HelpText [ english_us ] = "Insert an edit field" ;
+    Slotname = "EinfügenEdit" ;
+    Slotname [ italian ] = "InserisciEdit" ;
+    HelpText [ italian ] = "Inserisci un Edit" ;
+    Slotname [ spanish ] = "InsertarEdición" ;
+    HelpText [ spanish ] = "Inserta una edición" ;
+    Slotname [ french ] = "InsérerModifier" ;
+    HelpText [ french ] = "Insérer une modification" ;
+    Slotname [ dutch ] = "InvoegenEdit" ;
+    HelpText [ dutch ] = "Edit invoegen" ;
+    Slotname [ swedish ] = "InfogaRedigera" ;
+    HelpText [ swedish ] = "Infoga ett redigera-fält" ;
+    Slotname [ danish ] = "EinfügenEdit" ;
+    HelpText [ danish ] = "Indsæt et edit felt" ;
+    Slotname [ portuguese ] = "InserirEditar" ;
+    HelpText [ portuguese ] = "Insere um Editar" ;
+    Slotname [ portuguese_brazilian ] = "EinfügenEdit" ;
+    HelpText [ portuguese_brazilian ] = "Einfügen eines Edits" ;
+};
+SfxSlotInfo SID_INSERT_HSCROLLBAR
+{
+    SlotName = "EinfügenHScrollbar" ;
+    HelpText = "Einfügen eines horizontalen Scrollbars" ;
+    SlotName [ English ] = "InsertHScrollbar" ;
+    HelpText [ English ] = "Insert a horizontal scrollbar" ;
+    Slotname [ english_us ] = "InsertHScrollbar" ;
+    HelpText [ english_us ] = "Insert a horizontal scrollbar" ;
+    Slotname = "EinfügenHScrollbar" ;
+    Slotname [ italian ] = "InserisciHScrollbar" ;
+    HelpText [ italian ] = "Inserisci una Scrollbar orizzontale" ;
+    Slotname [ spanish ] = "InsertarHScrollbar" ;
+    HelpText [ spanish ] = "Inserta una barra de desplazamiento horizontal" ;
+    Slotname [ french ] = "InsérerBarredeDéfilementH" ;
+    HelpText [ french ] = "Insère une barre de défilement horizontale" ;
+    Slotname [ dutch ] = "InvoegenHScrollbar" ;
+    HelpText [ dutch ] = "Een horizontale schuifbalk invoegen" ;
+    Slotname [ swedish ] = "InfogaHRullningslist" ;
+    HelpText [ swedish ] = "Infoga en horisontal scrollbar" ;
+    Slotname [ danish ] = "EinfügenHScrollbar" ;
+    HelpText [ danish ] = "Indsæt et vandret Scrollbar" ;
+    Slotname [ portuguese ] = "InserirBarraDeslH" ;
+    HelpText [ portuguese ] = "Insere uma barra de deslocamento horizontal" ;
+    Slotname [ portuguese_brazilian ] = "EinfügenHScrollbar" ;
+    HelpText [ portuguese_brazilian ] = "Einfügen eines horizontalen Scrollbars" ;
+};
+SfxSlotInfo SID_INSERT_VSCROLLBAR
+{
+    SlotName = "EinfügenVScrollbar" ;
+    HelpText = "Einfügen eines vertikalen Scrollbars" ;
+    SlotName [ English ] = "InsertVScrollbar" ;
+    HelpText [ English ] = "Insert a vertical scrollbar" ;
+    Slotname [ dutch ] = "InvoegenVScrollbar" ;
+    HelpText [ dutch ] = "Een verticale schuifbalk invoegen" ;
+    Slotname [ english_us ] = "InsertVScrollbar" ;
+    HelpText [ english_us ] = "Insert a vertical scrollbar" ;
+    Slotname = "EinfügenVScrollbar" ;
+    Slotname [ italian ] = "InserisciVScrollbar" ;
+    HelpText [ italian ] = "Inserisci una Scrollbar verticale" ;
+    Slotname [ spanish ] = "InsertarVScrollbar" ;
+    HelpText [ spanish ] = "Insertar una barra de desplazamiento vertical" ;
+    Slotname [ french ] = "InsérerBarredeDéfilementV" ;
+    HelpText [ french ] = "Insère une barre de défilement verticale" ;
+    Slotname [ swedish ] = "InfogaVRullningslist" ;
+    HelpText [ swedish ] = "Infoga en vertikal scrollbar" ;
+    Slotname [ danish ] = "EinfügenVScrollbar" ;
+    HelpText [ danish ] = "Indsæt et lodret scrollbar" ;
+    Slotname [ portuguese ] = "InserirBarraDeslV" ;
+    HelpText [ portuguese ] = "Insere uma barra de deslocamento vertical" ;
+    Slotname [ portuguese_brazilian ] = "EinfügenVScrollbar" ;
+    HelpText [ portuguese_brazilian ] = "Einfügen eines vertikalen Scrollbars" ;
+};
+SfxSlotInfo SID_INSERT_PREVIEW
+{
+    SlotName = "Preview" ;
+    HelpText = "Preview" ;
+    SlotName [ English ] = "Preview" ;
+    HelpText [ English ] = "Preview" ;
+    Slotname [ dutch ] = "Preview" ;
+    HelpText [ dutch ] = "Preview" ;
+    Slotname [ english_us ] = "Preview" ;
+    HelpText [ english_us ] = "Preview" ;
+    Slotname = "Preview" ;
+    Slotname [ italian ] = "Anteprima" ;
+    HelpText [ italian ] = "Anteprima" ;
+    Slotname [ spanish ] = "Presentación preliminar" ;
+    HelpText [ spanish ] = "Presentación preliminar" ;
+    Slotname [ french ] = "Aperçu" ;
+    HelpText [ french ] = "Aperçu" ;
+    Slotname [ swedish ] = "Preview" ;
+    HelpText [ swedish ] = "Preview" ;
+    Slotname [ danish ] = "Preview" ;
+    HelpText [ danish ] = "Preview" ;
+    Slotname [ portuguese ] = "Visualizar" ;
+    HelpText [ portuguese ] = "Visualização" ;
+    Slotname [ portuguese_brazilian ] = "Preview" ;
+    HelpText [ portuguese_brazilian ] = "Preview" ;
+};
+
+
+
+
+SfxSlotInfo SID_INSERT_URLBUTTON
+{
+    SlotName = "EinfügenURLButton" ;
+    HelpText = "Einfügen eines URL-Buttons" ;
+    SlotName [ English ] = "InsertURLButton" ;
+    HelpText [ English ] = "Insert an URL Button" ;
+    Slotname [ dutch ] = "InvoegenURLButton" ;
+    HelpText [ dutch ] = "URL-button invoegen" ;
+    Slotname [ english_us ] = "InsertURLButton" ;
+    HelpText [ english_us ] = "Insert a URL button" ;
+    Slotname = "EinfügenURLButton" ;
+    Slotname [ italian ] = "InserisciPulsanteURL" ;
+    HelpText [ italian ] = "Inserisci un pulsante URL" ;
+    Slotname [ spanish ] = "InsertarBotónURL" ;
+    HelpText [ spanish ] = "Insertar un botón URL" ;
+    Slotname [ french ] = "InsérerBoutonURL" ;
+    HelpText [ french ] = "Insérer un bouton URL" ;
+    Slotname [ swedish ] = "InfogaURLButton" ;
+    HelpText [ swedish ] = "Infoga en URL-button" ;
+    Slotname [ danish ] = "EinfügenURLButton" ;
+    HelpText [ danish ] = "Indsæt en URL-Button" ;
+    Slotname [ portuguese ] = "InserirBotãoURL" ;
+    HelpText [ portuguese ] = "Insere um botão URL" ;
+    Slotname [ portuguese_brazilian ] = "EinfügenURLButton" ;
+    HelpText [ portuguese_brazilian ] = "Einfügen eines URL-Buttons" ;
+};
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

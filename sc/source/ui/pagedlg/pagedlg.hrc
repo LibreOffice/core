@@ -1,0 +1,123 @@
+/*************************************************************************
+ *
+ *  $RCSfile: pagedlg.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:04 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+#include "sc.hrc"   // -> RID_SCDLG_PAGE
+                    // -> RID_SCPAGE_TABLE
+                    // -> RID_SCPAGE_AREAS
+
+#define TP_PAGE_STD     1
+#define TP_PAGE_HEADER  2
+#define TP_PAGE_FOOTER  3
+#define TP_PAGE_TABLE   4
+#define TP_PAGE_AREAS   5
+
+//================================================
+// TabPage: Tabelle
+
+#define BTN_GRID            10
+#define BTN_HEADER          11
+#define BTN_NOTES           12
+#define BTN_CHARTS          13
+#define BTN_OBJECTS         14
+#define BTN_DRAWINGS        15
+#define BTN_FORMULAS        16
+#define BTN_NULLVALS        17
+#define GB_PRINT            19
+
+#define BTN_TOPDOWN         20
+#define BTN_LEFTRIGHT       21
+#define BMP_PAGEDIR         22
+#define IMG_LEFTRIGHT       23
+#define IMG_TOPDOWN         24
+#define BTN_PAGENO          25
+#define ED_PAGENO           26
+#define GB_PAGEDIR          29
+
+#define BTN_SCALENONE       30
+#define BTN_SCALEALL        31
+#define ED_SCALEALL         32
+#define BTN_SCALEPAGENUM    33
+#define ED_SCALEPAGENUM     34
+#define GB_SCALE            39
+
+//================================================
+// TabPage: Druckbereiche
+
+#define GB_PRINTAREA        10
+#define ED_PRINTAREA        11
+#define RB_PRINTAREA        12
+#define LB_PRINTAREA        13
+
+#define GB_REPEATROW        20
+#define ED_REPEATROW        21
+#define RB_REPEATROW        22
+#define LB_REPEATROW        23
+
+#define GB_REPEATCOL        30
+#define ED_REPEATCOL        31
+#define RB_REPEATCOL        32
+#define LB_REPEATCOL        33
+
+#define BTN_OK              1
+#define BTN_CANCEL          2
+#define BTN_HELP            3
+

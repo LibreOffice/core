@@ -1,0 +1,173 @@
+/*************************************************************************
+ *
+ *  $RCSfile: sc.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:05 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ //==================================================================
+ // StarCalc Applikations Resource
+ //
+ // (C) 1994 StarDivision GmbH, Hamburg, Germany
+ // $Author: hr $ $Date: 2000-09-18 16:45:05 $ $Revision: 1.1.1.1 $
+ // $Logfile:   T:/sc/source/ui/src/sc.srv  $ $Workfile:   sc.src  $
+ //==================================================================
+
+
+#include "sc.hrc" // -> #include <sfx.hrc>
+#include <basctl/basicide.hrc>
+
+
+
+ // Version und App-Titel------------------------------------------------------
+
+String RID_BUILDVERSION
+{
+    Text = UPDVER ;
+};
+
+String RID_APPTITLE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? StarCalc 4.0 : StarCalc 3.1 */
+    Text = "StarOffice Calc" ;
+    Text [ ENGLISH ] = "StarCalc 4.0" ;
+    Text [ norwegian ] = "StarCalc 4.0" ;
+    Text [ italian ] = "StarOffice Calc" ;
+    Text [ portuguese_brazilian ] = "StarOffice Calc 3.1" ;
+    Text [ portuguese ] = "StarOffice Calc" ;
+    Text [ finnish ] = "StarCalc 4.0" ;
+    Text [ danish ] = "StarOffice Calc" ;
+    Text [ french ] = "StarOffice Calc" ;
+    Text [ swedish ] = "StarOffice Calc" ;
+    Text [ dutch ] = "StarOffice Calc" ;
+    Text [ spanish ] = "StarOffice Calc" ;
+    Text [ english_us ] = "StarOffice Calc" ;
+    Text[ chinese_simplified ] = "StarOffice Calc";
+    Text[ russian ] = "StarOffice Calc";
+    Text[ polish ] = "StarOffice Calc";
+    Text[ japanese ] = "StarOffice Calc";
+    Text[ chinese_traditional ] = "StarOffice Calc";
+    Text[ arabic ] = "StarOffice Calc";
+    Text[ greek ] = "StarOffice Calc";
+    Text[ korean ] = "StarOffice Calc";
+    Text[ turkish ] = "StarOffice Calc";
+    Text[ language_user1 ] = " ";
+};
+
+ // About-Dialog --------------------------------------------------------------
+
+ // Icons & Bitmaps: ----------------------------------------------------------
+
+
+ //Bitmap RID_DEFAULTINTRO         { File = "scintro.bmp"; };
+ //Bitmap RID_DROPDOWNBITMAP        { File = "dropdown.bmp"; };
+ //Bitmap RID_BLUEDROPDOWNBITMAP    { File = "dropblue.bmp"; };
+//Bitmap RID_ANCHORBITMAP { File = "anchor.bmp" ; };
+//Bitmap RID_GRAYANCHORBITMAP { File = "anchor.bmp" ; };  //! andere Bitmap !!!
+
+// Bitmap RID_BMP_REFBTN1 { File = "refinp1.bmp" ; };
+// Bitmap RID_BMP_REFBTN2 { File = "refinp2.bmp" ; };
+
+Image RID_BMP_REFBTN1
+{
+    ImageBitmap = Bitmap
+    {
+        File = "refinp1.bmp";
+    };
+
+    MaskColor = Color
+    {
+        Red = 0xC000 ;
+        Green = 0xC000 ;
+        Blue = 0xC000 ;
+    };
+};
+
+Image RID_BMP_REFBTN2
+{
+    ImageBitmap = Bitmap
+    {
+        File = "refinp2.bmp";
+    };
+
+    MaskColor = Color
+    {
+        Red = 0xC000 ;
+        Green = 0xC000 ;
+        Blue = 0xC000 ;
+    };
+};
+
+
+ // ???
+String 30001 { Text = "Dummy1" ; };
+String 30002 { Text = "Dummy2" ; };
+String 30006 { Text = "Dummy3" ; };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

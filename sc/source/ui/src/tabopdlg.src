@@ -1,0 +1,489 @@
+/*************************************************************************
+ *
+ *  $RCSfile: tabopdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:06 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ //============================================================================
+ // Dialogfenster Mehrfachoperationen
+ //
+ // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
+ //
+ // $Workfile:   tabopdlg.src  $
+ //   $Author: hr $
+ //     $Date: 2000-09-18 16:45:06 $
+ // $Revision: 1.1.1.1 $
+ //  $Logfile:   T:/sc/source/ui/src/tabopdlg.srv  $
+ //----------------------------------------------------------------------------
+
+#include "tabopdlg.hrc"
+ModelessDialog RID_SCDLG_TABOP
+{
+    OutputSize = TRUE ;
+    HelpId = SID_OPENDLG_TABOP ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 222 , 68 ) ;
+    Text = "Mehrfachoperationen" ;
+    Text [ ENGLISH ] = "Table" ;
+    Text [ norwegian ] = "Table" ;
+    Text [ italian ] = "Tabella" ;
+    Text [ portuguese_brazilian ] = "Tabela" ;
+    Text [ portuguese ] = "Operações múltiplas" ;
+    Text [ finnish ] = "Taulukko" ;
+    Text [ danish ] = "Multioperationer" ;
+    Text [ french ] = "Opérations multiples" ;
+    Text [ swedish ] = "Multipla räkneoperationer" ;
+    Text [ dutch ] = "Meervoudige operaties" ;
+    Text [ spanish ] = "Operaciones múltiples" ;
+    Text [ english_us ] = "Multiple operations" ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    FixedText FT_FORMULARANGE
+    {
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "~Formeln" ;
+        Text [ ENGLISH ] = "~formulas" ;
+        Text [ norwegian ] = "~formler" ;
+        Text [ italian ] = "~Formule" ;
+        Text [ portuguese_brazilian ] = "~formulas" ;
+        Text [ portuguese ] = "~Fórmulas" ;
+        Text [ finnish ] = "~formulas" ;
+        Text [ danish ] = "~Formler" ;
+        Text [ french ] = "~Formules" ;
+        Text [ swedish ] = "~Formler" ;
+        Text [ dutch ] = "~Formules" ;
+        Text [ spanish ] = "~Fórmulas" ;
+        Text [ english_us ] = "~Formulas" ;
+        Text[ chinese_simplified ] = "¹«Ê½(~F)";
+        Text[ russian ] = "Ôîğìóëà";
+        Text[ polish ] = "Formu³y";
+        Text[ japanese ] = "”®(~F)";
+        Text[ chinese_traditional ] = "¤½¦¡(~F)";
+        Text[ arabic ] = "ÕíÛ";
+        Text[ greek ] = "~Ôığïé";
+        Text[ korean ] = "¼ö½Ä(~F)";
+        Text[ turkish ] = "~Formül";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_FORMULARANGE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 64 , 14 ) ;
+        Size = MAP_APPFONT ( 76 , 12 ) ;
+    };
+    ImageButton RB_FORMULARANGE
+    {
+        QuickHelpText = "Verkleinern" ;
+        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        Pos = MAP_APPFONT ( 142 , 14 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ english_us ] = "Shrink" ;
+        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ swedish ] = "Förminska" ;
+        QuickHelpText [ danish ] = "Formindsk" ;
+        QuickHelpText [ italian ] = "Zoom indietro" ;
+        QuickHelpText [ spanish ] = "Reducir" ;
+        QuickHelpText [ french ] = "Réduire" ;
+        QuickHelpText [ dutch ] = "Verkleinen" ;
+        QuickHelpText [ portuguese ] = "Afastar" ;
+    QuickHelpText[ russian ] = "Óìåíüøèòü";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
+        QuickHelpText[ chinese_simplified ] = "ËõĞ¡/·Å´ó";
+        QuickHelpText[ chinese_traditional ] = "ÁY¤p";
+        QuickHelpText[ arabic ] = "ÊÕÛíÑ";
+        QuickHelpText[ greek ] = "Óìßêñõíóç";
+        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    FixedText FT_ROWCELL
+    {
+        Pos = MAP_APPFONT ( 12 , 31 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "~Zeile" ;
+        Text [ ENGLISH ] = "~row" ;
+        Text [ norwegian ] = "~rad" ;
+        Text [ italian ] = "Riga" ;
+        Text [ portuguese_brazilian ] = "filei~ra" ;
+        Text [ portuguese ] = "~Linha" ;
+        Text [ finnish ] = "~row" ;
+        Text [ danish ] = "Række" ;
+        Text [ french ] = "~Ligne" ;
+        Text [ swedish ] = "~Rad" ;
+        Text [ dutch ] = "~Rij" ;
+        Text [ spanish ] = "Fil~a" ;
+        Text [ english_us ] = "~Row input cell" ;
+        Text[ chinese_simplified ] = "ĞĞ(~R)";
+        Text[ russian ] = "Ñòğîêà";
+        Text[ polish ] = "Wiersz";
+        Text[ japanese ] = "s(~R)";
+        Text[ chinese_traditional ] = "¦C(~R)";
+        Text[ arabic ] = "ÇáÕİ";
+        Text[ greek ] = "~ÃñáììŞ";
+        Text[ korean ] = "¼¿¿¡ Çà »ğÀÔ(~R)";
+        Text[ turkish ] = "~Satır";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_ROWCELL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 64 , 29 ) ;
+        Size = MAP_APPFONT ( 76 , 12 ) ;
+    };
+    ImageButton RB_ROWCELL
+    {
+        QuickHelpText = "Verkleinern" ;
+        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        Pos = MAP_APPFONT ( 142 , 29 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ english_us ] = "Shrink" ;
+        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ swedish ] = "Förminska" ;
+        QuickHelpText [ danish ] = "Formindsk" ;
+        QuickHelpText [ italian ] = "Zoom indietro" ;
+        QuickHelpText [ spanish ] = "Reducir" ;
+        QuickHelpText [ french ] = "Réduire" ;
+        QuickHelpText [ dutch ] = "Verkleinen" ;
+        QuickHelpText [ portuguese ] = "Afastar" ;
+    QuickHelpText[ russian ] = "Óìåíüøèòü";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
+        QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
+        QuickHelpText[ chinese_traditional ] = "ÁY¤p";
+        QuickHelpText[ arabic ] = "ÊÕÛíÑ";
+        QuickHelpText[ greek ] = "Óìßêñõíóç";
+        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    FixedText FT_COLCELL
+    {
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "~Spalte" ;
+        Text [ ENGLISH ] = "~column" ;
+        Text [ norwegian ] = "~kolonne" ;
+        Text [ italian ] = "~Colonna" ;
+        Text [ portuguese_brazilian ] = "~coluna" ;
+        Text [ portuguese ] = "~Coluna" ;
+        Text [ finnish ] = "~column" ;
+        Text [ danish ] = "Kolonne" ;
+        Text [ french ] = "~Colonne" ;
+        Text [ swedish ] = "~Kolumn" ;
+        Text [ dutch ] = "~Kolom" ;
+        Text [ spanish ] = "~Columna" ;
+        Text [ english_us ] = "~Column input cell" ;
+        Text[ chinese_simplified ] = "ÁĞ(~C)";
+        Text[ russian ] = "Ñòîëáåö";
+        Text[ polish ] = "Kolumna";
+        Text[ japanese ] = "—ñ(~C)";
+        Text[ chinese_traditional ] = "Äæ(~C)";
+        Text[ arabic ] = "ÇáÚãæÏ";
+        Text[ greek ] = "~ÓôŞëç";
+        Text[ korean ] = "¼¿¿¡ ¿­ »ğÀÔ(~C)";
+        Text[ turkish ] = "~Sütun";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_COLCELL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 64 , 44 ) ;
+        Size = MAP_APPFONT ( 76 , 12 ) ;
+    };
+    ImageButton RB_COLCELL
+    {
+        QuickHelpText = "Verkleinern" ;
+        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        Pos = MAP_APPFONT ( 142 , 44 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ english_us ] = "Shrink" ;
+        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ swedish ] = "Förminska" ;
+        QuickHelpText [ danish ] = "Formindsk" ;
+        QuickHelpText [ italian ] = "Zoom indietro" ;
+        QuickHelpText [ spanish ] = "Reducir" ;
+        QuickHelpText [ french ] = "Réduire" ;
+        QuickHelpText [ dutch ] = "Verkleinen" ;
+        QuickHelpText [ portuguese ] = "Afastar" ;
+    QuickHelpText[ russian ] = "Óìåíüøèòü";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
+        QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
+        QuickHelpText[ chinese_traditional ] = "ÁY¤p";
+        QuickHelpText[ arabic ] = "ÊÕÛíÑ";
+        QuickHelpText[ greek ] = "Óìßêñõíóç";
+        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    GroupBox GB_VARIABLES
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 154 , 59 ) ;
+        Text = "Vorgaben" ;
+        Text [ ENGLISH ] = "Variables" ;
+        Text [ norwegian ] = "Variabler" ;
+        Text [ italian ] = "Dati" ;
+        Text [ portuguese_brazilian ] = "Variáveis" ;
+        Text [ portuguese ] = "Definir variáveis" ;
+        Text [ finnish ] = "Muuttujat" ;
+        Text [ danish ] = "Forudindstillinger" ;
+        Text [ french ] = "Définir les variables" ;
+        Text [ swedish ] = "Förinställningar" ;
+        Text [ dutch ] = "Standaard" ;
+        Text [ spanish ] = "Variables" ;
+        Text [ english_us ] = "Settings" ;
+        Text[ chinese_simplified ] = "Ô¤ÖÃ";
+        Text[ russian ] = "Íàñòğîéêè";
+        Text[ polish ] = "Ustawienia domyœlne";
+        Text[ japanese ] = "Šî€’l";
+        Text[ chinese_traditional ] = "¹w¸m";
+        Text[ arabic ] = "ÅÚÏÇÏÇÊ ÇİÊÑÇÖíÉ";
+        Text[ greek ] = "ĞñïåğéëïãŞ";
+        Text[ korean ] = "¼³Á¤";
+        Text[ turkish ] = "Varsayılan";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 166 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 166 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 166 , 48 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    String STR_NOFORMULA
+    {
+        Text = "Keine Formel eingetragen!" ;
+        Text [ ENGLISH ] = "No formula specified!" ;
+        Text [ norwegian ] = "Ingen formel er spesifisert!" ;
+        Text [ italian ] = "Nessuna formula specificata!" ;
+        Text [ portuguese_brazilian ] = "No formula specified!" ;
+        Text [ portuguese ] = "Fórmula não especificada!" ;
+        Text [ finnish ] = "No formula specified!" ;
+        Text [ danish ] = "Der er ikke specificeret nogen formel!" ;
+        Text [ french ] = "Aucune formule n'a été spécifiée !" ;
+        Text [ swedish ] = "Ingen formel specificerad!" ;
+        Text [ dutch ] = "Geen formule gespecificeerd." ;
+        Text [ spanish ] = "¡No se ha especificado ninguna fórmula!" ;
+        Text [ english_us ] = "No formula specified." ;
+        Text[ chinese_simplified ] = "Ã»ÓĞÊäÈë¹«Ê½£¡";
+        Text[ russian ] = "Íå âíåñåíà ôîğìóëà!";
+        Text[ polish ] = "Nie wpisano formu³y!";
+        Text[ japanese ] = "”®‚Í‹L“ü‚µ‚È‚¢‚Å‰º‚³‚¢!";
+        Text[ chinese_traditional ] = "¨S¦³«ü©w¤½¦¡¡I";
+        Text[ arabic ] = "áã íÊã ÊÍÏíÏ ÃíÉ ÇáÕíÛÉ!";
+        Text[ greek ] = "Äåí ïñßóôçêáí ôığïé!";
+        Text[ korean ] = "ÁöÁ¤µÈ ¼ö½ÄÀÌ ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Formül girilmedi!";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_NOCOLROW
+    {
+        Text = "Weder Zeile noch Spalte eingetragen!" ;
+        Text [ ENGLISH ] = "Neither row nor column specified!" ;
+        Text [ norwegian ] = "Hverken rad eller kolonne er spesifisert!" ;
+        Text [ italian ] = "Non è stata specificata nessuna riga o colonna!" ;
+        Text [ portuguese_brazilian ] = "Neither row nor column specified!" ;
+        Text [ portuguese ] = "Linha e coluna indefinidas!" ;
+        Text [ finnish ] = "Neither row nor column specified!" ;
+        Text [ danish ] = "Der er hverken specificeret række eller kolonne!" ;
+        Text [ french ] = "Ni ligne ni colonne n'ont été spécifiées !" ;
+        Text [ swedish ] = "Varken rad eller kolumn specificerad!" ;
+        Text [ dutch ] = "Noch rij, noch kolom gespecificeerd!" ;
+        Text [ spanish ] = "¡No se ha especificado ni la fila ni la columna!" ;
+        Text [ english_us ] = "Neither row or column specified." ;
+        Text[ chinese_simplified ] = "Ã»ÓĞÖ¸¶¨ĞĞºÍÁĞ£¡";
+        Text[ russian ] = "Íè ñòğîêè, íè ñòîëáöû íå çàäàíû!";
+        Text[ polish ] = "Nie wpisano ani wiersza ani kolumny!";
+        Text[ japanese ] = "s‚à—ñ‚à‹L“ü‚µ‚È‚¢‚Å‰º‚³‚¢!";
+        Text[ chinese_traditional ] = "¨S¦³«ü©wÄæ©M¦C¡I";
+        Text[ arabic ] = "áã íÊã ÊÍÏíÏ ÇáÕİ æáÇ ÇáÚãæÏ!";
+        Text[ greek ] = "Äåí ïñßóôçêå ïıôå ãñáììŞ, ïıôå óôŞëç!";
+        Text[ korean ] = "¿­ ¶Ç´Â ÇàÀÌ ÁöÁ¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ turkish ] = "Ne satır ne de sütun belirtildi!";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_WRONGFORMULA
+    {
+        Text = "Undefinierter Name oder Bereich!" ;
+        Text [ ENGLISH ] = "Undefined name or range for formula!" ;
+        Text [ norwegian ] = "Udefinert navn eller verdimengde for formel !" ;
+        Text [ italian ] = "Nome o area non definiti!" ;
+        Text [ portuguese_brazilian ] = "Undefined name or range for formula!" ;
+        Text [ portuguese ] = "Nome ou área indefinidos!" ;
+        Text [ finnish ] = "Undefined name or range for formula!" ;
+        Text [ danish ] = "Udefineret navn eller område!" ;
+        Text [ french ] = "Nom ou plage indéfini(e) !" ;
+        Text [ swedish ] = "Odefinierat namn eller område!" ;
+        Text [ dutch ] = "Ongedefinieerde naam of bereik!" ;
+        Text [ spanish ] = "¡Nombre o área no definidos!" ;
+        Text [ english_us ] = "Undefined name or range." ;
+        Text[ chinese_simplified ] = "Ã»ÓĞ¶¨ÒåÃû³Æ»òÇøÓò£¡";
+        Text[ russian ] = "Èìÿ èëè îáëàñòü íå îïğåäåëåíû!";
+        Text[ polish ] = "Nie zdefiniowana nazwa lub obszar!";
+        Text[ japanese ] = "’è‹`‚È‚µ‚Ì–¼‘O‚Ü‚½‚Í”ÍˆÍ!";
+        Text[ chinese_traditional ] = "¨S¦³©w¸q¦WºÙ©Î°Ï°ì¡I";
+        Text[ arabic ] = "ÇÓã Ãæ äØÇŞ ÛíÑ ãõÚÑøİ!";
+        Text[ greek ] = "Ìç ïñéóìİíï üíïìá Ş ìç ïñéóìİíç ğåñéï÷Ş!";
+        Text[ korean ] = "ÁöÁ¤µÇÁö ¾ÊÀº ÀÌ¸§¶Ç´Â ¿µ¿ª";
+        Text[ turkish ] = "Tanımlanmamış ad ya da alan!";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_WRONGROWCOL
+    {
+        Text = "Undefinierter Name oder falsche Zellreferenz!" ;
+        Text [ ENGLISH ] = "Row: no formula cell!" ;
+        Text [ norwegian ] = "Rad: ingen  formelcelle!" ;
+        Text [ italian ] = "Nome non definito o riferimento a celle errato!" ;
+        Text [ portuguese_brazilian ] = "Row: no formula cell!" ;
+        Text [ portuguese ] = "Nome ou referência da célula indefinidos!" ;
+        Text [ finnish ] = "Row: no formula cell!" ;
+        Text [ danish ] = "Udefineret navn eller forkert cellereference!" ;
+        Text [ french ] = "Nom indéfini ou référence de cellule incorrecte !" ;
+        Text [ swedish ] = "Odefinierat namn eller fel cellreferens!" ;
+        Text [ dutch ] = "Ongedefinieerde naam of verkeerde celverwijzing." ;
+        Text [ spanish ] = "¡Nombre no definido o ref. a celda incorrecta!" ;
+        Text [ english_us ] = "Undefined name or wrong cell reference." ;
+        Text[ chinese_simplified ] = "Ã»ÓĞ¶¨ÒåÃû³Æ»ò´íÎóµÄµ¥Ôª¸ñÒıÓÃ£¡";
+        Text[ russian ] = "Íåîïğåäåëåíî èìÿ èëè íåïğàâèëüíàÿ ññûëêà ÿ÷åéêè!";
+        Text[ polish ] = "Nie zdefiniowana nazwa lub z³y adres komórki!";
+        Text[ japanese ] = "’è‹`‚È‚µ‚Ì–¼‘O‚Ü‚½‚Í³‚µ‚­‚È‚¢¾ÙQÆ!";
+        Text[ chinese_traditional ] = "¨S¦³©w¸q¦WºÙ©Î¿ù»~ªºÀx¦s®æ°Ñ·Ó¡I";
+        Text[ arabic ] = "ÇÓã ÛíÑ ãõÚÑøİ Ãæ ãÑÌÚ ÎáíÉ ÎÇØÆ!";
+        Text[ greek ] = "Ìç ïñéóìİíï üíïìá Ş ëÜèïò áíáöïñÜ êåëéïı!.";
+        Text[ korean ] = "ÁöÁ¤µÇÁö ¾ÊÀº ÀÌ¸§ ¶Ç´Â Àß¸øµÈ ¼¿ ÂüÁ¶";
+        Text[ turkish ] = "Tanımlanmamış ad ya da yanlış hücre referansı!";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_NOCOLFORMULA
+    {
+        Text = "Formeln bilden keine Spalte!" ;
+        Text [ ENGLISH ] = "Formulas form no column!" ;
+        Text [ norwegian ] = "Formelblanketten har ingen kolonne!" ;
+        Text [ italian ] = "Le formule non producono una colonna!" ;
+        Text [ portuguese_brazilian ] = "Formulas form no column!" ;
+        Text [ portuguese ] = "Fórmulas não formam coluna!" ;
+        Text [ finnish ] = "Formulas form no column!" ;
+        Text [ danish ] = "Formler danner ikke kolonne!" ;
+        Text [ french ] = "Les formules ne forment pas de colonne !" ;
+        Text [ swedish ] = "Formlerna bildar ingen kolumn!" ;
+        Text [ dutch ] = "Formules vormen geen kolom!" ;
+        Text [ spanish ] = "¡Las fórmulas no forman columna!" ;
+        Text [ english_us ] = "Formulas don't form a column." ;
+        Text[ chinese_simplified ] = "¹«Ê½²¢²»¹¹³ÉÁĞ£¡";
+        Text[ russian ] = "Ôîğìóëû íå îáğàçóşò ñòîëáåö!";
+        Text[ polish ] = "Formu³y nie tworz¹ kolumny!";
+        Text[ japanese ] = "”®‚Í—ñ‚ğŒ`¬‚µ‚Ü‚¹‚ñ!";
+        Text[ chinese_traditional ] = "¤½¦¡¨Ã¤£ºc¦¨Äæ¡I";
+        Text[ arabic ] = "ÇáÕíÛ áÇ ÊõÔßá ÚãæÏÇğ!";
+        Text[ greek ] = "Ïé ôığïé äåí áğïôåëïıí ìéá óôŞëç!";
+        Text[ korean ] = "¼ö½ÄÀº ¿­À» ±¸¼ºÇÏÁö ¾Ê½À´Ï´Ù.";
+        Text[ turkish ] = "Formüller sütun oluşturmuyor!";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_NOROWFORMULA
+    {
+        Text = "Formeln bilden keine Zeile!" ;
+        Text [ ENGLISH ] = "Formulas form no row!" ;
+        Text [ norwegian ] = "Formelblanketten har ingen rad!" ;
+        Text [ italian ] = "Le formule non producono una riga!" ;
+        Text [ portuguese_brazilian ] = "Formulas form no row!" ;
+        Text [ portuguese ] = "Fórmulas não formam linha!" ;
+        Text [ finnish ] = "Formulas form no row!" ;
+        Text [ danish ] = "Formler danner ikke række!" ;
+        Text [ french ] = "Les formules ne forment pas de ligne !" ;
+        Text [ swedish ] = "Formlerna bildar ingen rad!" ;
+        Text [ dutch ] = "Formules vormen geen rij!" ;
+        Text [ spanish ] = "¡Fórmulas no forman una fila!" ;
+        Text [ english_us ] = "Formulas don't form a row." ;
+        Text[ chinese_simplified ] = "¹«Ê½²»¹¹³ÉĞĞ£¡";
+        Text[ russian ] = "Ôîğìóëû íå îáğàçóşò ñòğîêó!";
+        Text[ polish ] = "Formu³y nie tworz¹ wiersza!";
+        Text[ japanese ] = "”®‚Ís‚ğŒ`¬‚µ‚Ü‚¹‚ñ!";
+        Text[ chinese_traditional ] = "¤½¦¡¤£ºc¦¨¦C¡I";
+        Text[ arabic ] = "ÇáÕíÛ áÇ ÊõÔßá ÕİÇğ!";
+        Text[ greek ] = "Ïé ôığïé äåí áğïôåëïıí ìéá ãñáììŞ!";
+        Text[ korean ] = "¼ö½ÄÀº ÇàÀ» ±¸¼ºÇÏÁö ¾Ê½À´Ï´Ù.";
+        Text[ turkish ] = "Formüller satır oluşturmuyor!";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "¶àÖØ¼ÆËã";
+    Text[ russian ] = "Òàáëèöà ïîäñòàíîâîê";
+    Text[ polish ] = "Operacje wielokrotne";
+    Text[ japanese ] = "•¡”‰‰Z";
+    Text[ chinese_traditional ] = "¼Ï¯Ã¤ÀªRªí";
+    Text[ arabic ] = "ÚãáíÇÊ ãÊÚÏÏÉ";
+    Text[ greek ] = "Ğïëëáğëİò ëåéôïõñãßåò";
+    Text[ korean ] = "º¹ÇÕ ¿¬»ê";
+    Text[ turkish ] = "Çoklu işlemler";
+    Text[ language_user1 ] = " ";
+};

@@ -1,0 +1,543 @@
+/*************************************************************************
+ *
+ *  $RCSfile: globstr.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __GLOBSTR_HRC_
+#define __GLOBSTR_HRC_
+
+
+#define STR_UNDO_DELETECELLS        1
+#define STR_UNDO_CUT                2
+#define STR_UNDO_PASTE              3
+#define STR_UNDO_MOVE               4
+#define STR_UNDO_COPY               5
+#define STR_UNDO_DELETECONTENTS     6
+#define STR_UNDO_SELATTR            7
+#define STR_UNDO_SELATTRLINES       8
+#define STR_UNDO_COLWIDTH           9
+#define STR_UNDO_OPTCOLWIDTH        10
+#define STR_UNDO_ROWHEIGHT          11
+#define STR_UNDO_OPTROWHEIGHT       12
+#define STR_UNDO_AUTOFILL           13
+#define STR_UNDO_MERGE              14
+#define STR_UNDO_REMERGE            15
+#define STR_UNDO_AUTOFORMAT         16
+#define STR_UNDO_REPLACE            17
+#define STR_UNDO_CURSORATTR         18
+#define STR_UNDO_ENTERDATA          19
+#define STR_UNDO_INSCOLBREAK        20
+#define STR_UNDO_DELCOLBREAK        21
+#define STR_UNDO_INSROWBREAK        22
+#define STR_UNDO_DELROWBREAK        23
+#define STR_UNDO_DOOUTLINE          24
+#define STR_UNDO_REDOOUTLINE        25
+#define STR_UNDO_MAKEOUTLINE        26
+#define STR_UNDO_REMAKEOUTLINE      27
+#define STR_UNDO_OUTLINELEVEL       28
+#define STR_UNDO_DOOUTLINEBLK       29
+#define STR_UNDO_REDOOUTLINEBLK     30
+#define STR_UNDO_REMOVEALLOTLNS     31
+#define STR_UNDO_AUTOOUTLINE        32
+#define STR_UNDO_SUBTOTALS          33
+#define STR_UNDO_SORT               34
+#define STR_UNDO_QUERY              35
+#define STR_UNDO_DBDATA             36
+#define STR_UNDO_IMPORTDATA         37
+#define STR_UNDO_REPEATDB           38
+
+#define STR_DB_NONAME               39
+
+#define STR_MSSG_DOSUBTOTALS_0      40
+#define STR_MSSG_DOSUBTOTALS_1      41
+#define STR_MSSG_DOSUBTOTALS_2      42
+#define STR_MSSG_REPEATDB_0         43
+#define STR_MSSG_MAKEAUTOFILTER_0   44
+#define STR_MSSG_IMPORTDATA_0       45
+#define STR_MSSG_MAKEOUTLINE_0      46
+#define STR_MSSG_REMOVEOUTLINE_0    47
+#define STR_MSSG_PASTEFROMCLIP_0    48
+#define STR_MSSG_PASTEFROMCLIP_1    49
+#define STR_MSSG_MOVEBLOCKTO_0      50
+#define STR_MSSG_APPLYPATTLINES_0   51
+#define STR_MSSG_INSERTCELLS_0      52
+#define STR_MSSG_DELETECELLS_0      53
+#define STR_MSSG_MERGECELLS_0       54
+#define STR_MSSG_SEARCHANDREPLACE_0 55
+#define STR_MSSG_SOLVE_0            56
+#define STR_MSSG_SOLVE_1            57
+#define STR_MSSG_SOLVE_2            58
+#define STR_MSSG_SOLVE_3            59
+#define STR_MSSG_SOLVE_4            60
+#define STR_MSSG_SOLVE_5            61
+#define STR_MSSG_SOLVE_6            62
+// unused: 63
+
+#define STR_TABLE_GESAMTERGEBNIS    64
+#define STR_TABLE_ERGEBNIS          65
+#define STR_UNDO_SPELLING           66
+#define STR_TABLE_UND               67
+#define STR_TABLE_ODER              68
+#define STR_UNDO_INSERTCELLS        69
+#define STR_TABLE_DEF               70
+//#define STR_STYLENAME_STANDARD      71 s.u.
+#define STR_MOVE_TO_END             72
+#define STR_BOX_YNI                 73
+#define STR_NO_REF_TABLE            74
+
+#define STR_PIVOTFUNC_SUM           75  // pivot.cxx
+#define STR_PIVOTFUNC_COUNT         76
+#define STR_PIVOTFUNC_AVG           77
+#define STR_PIVOTFUNC_MAX           78
+#define STR_PIVOTFUNC_MIN           79
+#define STR_PIVOTFUNC_PROD          80
+#define STR_PIVOTFUNC_COUNT2        90
+#define STR_PIVOTFUNC_STDDEV        91
+#define STR_PIVOTFUNC_STDDEV2       92
+#define STR_PIVOTFUNC_VAR           93
+#define STR_PIVOTFUNC_VAR2          94
+#define STR_PIVOT_TOTAL             95
+#define STR_PIVOT_DATA              96
+
+#define STR_PIVOT_INVALID_DBAREA    97 // tabvwsh3.cxx
+
+#define STR_TABLE                   98
+#define STR_COLUMN                  99
+#define STR_ROW                     100
+#define STR_LOAD_DOC                101
+#define STR_SAVE_DOC                102
+
+#define STR_ERR_INVALID_TABREF      103
+#define STR_AREA_ALREADY_INSERTED   104
+#define STR_INVALID_TABREF          105
+#define STR_INVALID_QUERYAREA       106
+
+#define STR_REIMPORT_EMPTY          107
+#define STR_NOMULTISELECT           108
+#define STR_FILL_SERIES_PROGRESS    109 // documen3.cxx
+
+#define STR_UNKNOWN_FILTER          110
+
+#define STR_DATABASE_NOTFOUND       111
+#define STR_DATABASE_ABORTED        112
+
+#define STR_UNDO_PRINTRANGES        113
+
+#define STR_UNDO_DEC_INDENT         114
+#define STR_UNDO_INC_INDENT         115
+#define STR_UNDO_THESAURUS          116
+
+#define STR_FILL_TAB                117
+#define STR_NO_VALUE                118
+#define STR_UPDATE_SCENARIO         119
+#define STR_ERR_NEWSCENARIO         120
+#define STR_SCENARIO                121
+#define STR_PIVOT_TABLE             122
+#define STR_NEWTABNAMENOTUNIQUE     123
+
+#define STR_FUN_TEXT_SUM            124
+#define STR_FUN_TEXT_COUNT          125
+#define STR_FUN_TEXT_AVG            126
+#define STR_FUN_TEXT_MAX            127
+#define STR_FUN_TEXT_MIN            128
+#define STR_FUN_TEXT_PRODUCT        129
+#define STR_FUN_TEXT_STDDEV         130
+#define STR_FUN_TEXT_VAR            131
+#define STR_DOC_STAT                132
+
+//#define STR_STYLENAME_RESULT        133 s.u.
+
+#define STR_DBNAME_IMPORT           134
+
+#define STR_NOCHARTATCURSOR         135
+#define STR_NOAREASELECTED          136
+#define STR_INVALIDTABNAME          137
+
+#define STR_PIVOT_NOTFOUND          138
+#define STR_ERROR_STR               139
+#define STR_NV_STR                  140
+#define STR_EMPTYDATA               141
+#define STR_PIVOT_NODATA            142
+#define STR_PIVOT_MOVENOTALLOWED    143
+
+#define STR_PRINT_INVALID_AREA      144
+
+#define STR_PAGESTYLE               145
+#define STR_HEADER                  146
+#define STR_FOOTER                  147
+
+#define STR_TEXTATTRS               148
+
+#define STR_HFCMD_DELIMITER         149
+#define HFCMD_START                 150
+#define STR_HFCMD_PAGE              150
+#define STR_HFCMD_PAGES             151
+#define STR_HFCMD_DATE              152
+#define STR_HFCMD_TIME              153
+#define STR_HFCMD_FILE              154
+#define STR_HFCMD_TABLE             155
+#define HFCMD_END                   155
+
+#define STR_PROTECTIONERR           156
+
+#define STR_PAGEHEADER              157
+#define STR_PAGEFOOTER              158
+#define STR_PAGE                    159
+#define STR_LONG_ERR_ILL_ARG        160
+#define STR_LONG_ERR_ILL_PAR        161
+#define STR_LONG_ERR_ILL_FPO        162
+#define STR_LONG_ERR_ILL_CHAR       163
+#define STR_LONG_ERR_ILL_SEP        164
+#define STR_LONG_ERR_PAIR           165
+#define STR_LONG_ERR_OP_EXP         166
+#define STR_LONG_ERR_VAR_EXP        167
+#define STR_LONG_ERR_CODE_OVF       168
+#define STR_LONG_ERR_STR_OVF        169
+#define STR_LONG_ERR_STACK_OVF      170
+#define STR_LONG_ERR_SYNTAX         171
+#define STR_LONG_ERR_CIRC_REF       172
+#define STR_LONG_ERR_NO_NAME        173
+#define STR_LONG_ERR_NO_REF         174
+#define STR_LONG_ERR_NO_CONV        175
+#define STR_LONG_ERR_NO_VALUE       176
+#define STR_LONG_ERR_NV             177
+
+#define STR_GRIDCOLOR               178
+#define STR_MERGE_NOTEMPTY          179
+#define STR_CELL_FILTER             180
+
+#define STR_TARGETNOTFOUND          181
+
+#define STR_INVALID_EPS             182
+#define STR_TABLE_OP                183     // documen4.cxx
+#define STR_UNDO_TABOP              184
+
+#define STR_INVALID_AFNAME          185
+
+#define STR_AREA                    186
+#define STR_YES                     187
+#define STR_NO                      188
+#define STR_PROTECTION              189
+#define STR_FORMULAS                190
+#define STR_HIDE                    191
+#define STR_PRINT                   192
+
+#define STR_INVALID_AFAREA          193
+
+#define STR_CASCADE                 194 // Funktionsautopilot
+#define STR_OPTIONAL                195
+#define STR_REQUIRED                196
+#define STR_EDITFUNCTION            197
+#define STR_INVALID                 198
+
+#define STR_NOTES                   199
+#define STR_QUERY_DELTAB            200
+
+#define STR_UNDO_DETREFRESH         201
+
+#define STR_UNDO_SHOWNOTE           202
+#define STR_UNDO_HIDENOTE           203
+#define STR_UNDO_DRAGDROP           204
+
+#define STR_EXPORT_ASCII_WARNING    205
+#define STR_IMPORT_ERROR            206
+#define STR_IMPORT_ASCII            207
+#define STR_IMPORT_LOTUS            208
+#define STR_IMPORT_DBF              209
+#define STR_EXPORT_ASCII            210
+
+#define STR_STYLENAME_STANDARD      71
+#define STR_STYLENAME_RESULT        133
+#define STR_STYLENAME_RESULT1       211
+#define STR_STYLENAME_HEADLINE      212
+#define STR_STYLENAME_HEADLINE1     213
+#define STR_STYLENAME_REPORT        214
+#define STR_STYLENAME_REPORT1       215
+
+#define STR_PIVOT_ERROR             216
+#define STR_PIVOT_PROGRESS          217
+#define STR_IMPORT_EXCEL_WARNING    218
+#define STR_SPELLING_STOP_OK        219
+#define STR_THESAURUS_NO_STRING     220
+#define STR_SPELLING_BEGIN_TAB      221
+#define STR_SPELLING_NO_LANG        222                         // kann spaeter wieder raus
+
+#define STR_UNDO_GRAFEDIT           223
+
+#define STR_NOLANGERR               224
+
+#define STR_UNDO_INSERT_TAB         225
+#define STR_UNDO_DELETE_TAB         226
+#define STR_UNDO_RENAME_TAB         227
+#define STR_UNDO_MOVE_TAB           228
+#define STR_UNDO_COPY_TAB           229
+#define STR_UNDO_APPEND_TAB         230
+
+#define STR_CHART_MAINTITLE         231
+#define STR_CHART_SUBTITLE          232
+#define STR_CHART_XTITLE            233
+#define STR_CHART_YTITLE            234
+#define STR_CHART_ZTITLE            235
+
+#define STR_ABSREFLOST              236
+#define STR_NAMECONFLICT            237
+
+#define STR_ERR_AUTOFILTER          238
+#define STR_MSSG_SEARCHANDREPLACE_1 239
+#define STR_MSSG_SEARCHANDREPLACE_2 240
+#define STR_MSSG_SEARCHANDREPLACE_3 241
+
+#define STR_CREATENAME_REPLACE      242
+#define STR_CREATENAME_MARKERR      243
+
+#define STR_UNDO_LISTNAMES          244
+#define STR_UNDO_PIVOT_NEW          245
+#define STR_UNDO_PIVOT_MODIFY       246
+#define STR_UNDO_PIVOT_DELETE       247
+#define STR_UNDO_CONSOLIDATE        248
+#define STR_UNDO_USESCENARIO        249
+#define STR_UNDO_MAKESCENARIO       250
+
+#define STR_CONSOLIDATE_ERR1        251
+#define STR_SCENARIO_NOTFOUND       252
+
+#define STR_UNDO_APPLYCELLSTYLE     253
+
+#define STR_UNDO_DETADDPRED         254
+#define STR_UNDO_DETDELPRED         255
+#define STR_UNDO_DETADDSUCC         256
+#define STR_UNDO_DETDELSUCC         257
+#define STR_UNDO_DETADDERROR        258
+#define STR_UNDO_DETDELALL          259
+
+#define STR_QUERY_DELENTRY          260
+
+#define STR_VOBJ_OBJECT             261
+#define STR_VOBJ_CHART              262
+#define STR_VOBJ_DRAWINGS           263
+#define STR_VOBJ_MODE_SHOW          264
+#define STR_VOBJ_MODE_HIDE          265
+#define STR_VOBJ_MODE_DUMMY         266
+
+#define STR_SCATTR_PAGE_TOPDOWN     267
+#define STR_SCATTR_PAGE_LEFTRIGHT   268
+#define STR_SCATTR_PAGE_NOTES       269
+#define STR_SCATTR_PAGE_GRID        270
+#define STR_SCATTR_PAGE_HEADERS     271
+#define STR_SCATTR_PAGE_FORMULAS    272
+#define STR_SCATTR_PAGE_NULLVALS    273
+#define STR_SCATTR_PAGE_PRINTDIR    274
+#define STR_SCATTR_PAGE_FIRSTPAGENO 275
+#define STR_SCATTR_PAGE_SCALE       276
+#define STR_SCATTR_PAGE_SCALETOPAGES 277
+
+#define STR_NOREF_STR               278
+#define STR_ODER_SO                 279
+
+#define STR_UNDO_CHARTDATA          280
+#define STR_UNDO_ORIGINALSIZE       281
+
+#define STR_LINKERROR               282
+#define STR_LINKERRORFILE           283
+#define STR_LINKERRORTAB            284
+#define STR_UNDO_UPDATELINK         285
+
+#define STR_IMPORT_REPLACE          286
+
+#define STR_UNDO_REMOVELINK         287
+
+#define STR_OVERVIEW                288
+#define STR_DOC_INFO                289
+#define STR_DOC_CREATED             290
+#define STR_DOC_MODIFIED            291
+#define STR_DOC_PRINTED             292
+#define STR_DOC_THEME               293
+#define STR_DOC_KEYWORDS            318
+#define STR_DOC_COMMENT             294
+#define STR_BY                      295
+#define STR_ON                      296
+
+#define STR_RELOAD_TABLES           297
+
+#define STR_FILTER_TOOMANY          298
+
+#define STR_UNDO_ENTERMATRIX        299
+
+#define STR_INSERT_FULL             300
+#define STR_TABINSERT_ERROR         301
+#define STR_PASTE_ERROR             302
+#define STR_PASTE_FULL              303
+
+#define STR_ERR_INVALID_AREA        304
+
+#define STR_IMPORT_DIF              305
+#define STR_EXPORT_DIF              306
+
+#define STR_ERR_NOREF               307
+#define STR_FUN_TEXT_COUNT2         308
+#define STR_NO_NAME_REF             309
+
+#define STR_MATRIXFRAGMENTERR       310
+
+#define STR_UNDO_SHOWTAB            311
+#define STR_UNDO_HIDETAB            312
+#define STR_UNDO_INSERTAREALINK     313
+
+#define STR_REIMPORT_AFTER_LOAD     314
+
+#define STR_DETINVALID_OVERFLOW     315
+#define STR_GRAPHICNAME             316
+#define STR_INVALIDNAME             317
+//  318 ist oben
+#define STR_ERR_LINKOVERLAP         319
+
+#define STR_VALID_MACRONOTFOUND     320
+#define STR_VALID_DEFERROR          321
+
+#define STR_UNDO_DETINVALID         322
+
+#define STR_PROGRESS_CALCULATING    323
+#define STR_PROGRESS_SORTING        324
+#define STR_PROGRESS_HEIGHTING      325
+
+#define STR_QUICKHELP_DELETE        326
+
+#define STR_FUNCTIONLIST_MORE       327
+
+#define STR_PIVOT_STYLE_INNER       328
+#define STR_PIVOT_STYLE_RESULT      329
+#define STR_PIVOT_STYLE_CATEGORY    330
+#define STR_PIVOT_STYLE_TITLE       331
+#define STR_PIVOT_STYLE_FIELDNAME   332
+#define STR_PIVOT_STYLE_TOP         333
+
+#define STR_OPERATION_FILTER        334
+#define STR_OPERATION_SORT          335
+#define STR_OPERATION_SUBTOTAL      336
+#define STR_OPERATION_NONE          337
+
+#define STR_UNDO_PROTECT_TAB        338
+#define STR_UNDO_UNPROTECT_TAB      339
+#define STR_UNDO_PROTECT_DOC        340
+#define STR_UNDO_UNPROTECT_DOC      341
+
+#define STR_PROGRESS_IMPORT         342
+
+#define STR_SORT_ERR_MERGED         343
+
+#define STR_TIP_WIDTH               344
+#define STR_TIP_HEIGHT              345
+#define STR_TIP_HIDE                346
+
+#define STR_UNDO_REMOVEBREAKS       347
+#define STR_UNDO_PRINTSCALE         348
+#define STR_UNDO_DRAG_BREAK         349
+
+#define STR_QUICKHELP_REF           350
+
+#define STR_PIVOT_OVERLAP           351
+#define STR_PIVOT_NOTEMPTY          352
+
+#define STR_QUERY_NOTFOUND          353
+
+#define STR_ERR_INSERTOBJ           354
+
+#define STR_PROGRESS_COMPARING      355
+
+#define STR_CHANGED_BLANK           356
+#define STR_CHANGED_CELL            357
+#define STR_CHANGED_INSERT          358
+#define STR_CHANGED_DELETE          359
+#define STR_CHANGED_MOVE            360
+
+#define STR_QUERY_DELSCENARIO       361
+#define STR_UNDO_EDITSCENARIO       362
+
+#define STR_END_REDLINING_TITLE     363
+#define STR_END_REDLINING           364
+
+#define STR_UNDO_EDITNOTE           365
+#define STR_TABREMOVE_ERROR         366
+#define STR_CLOSE_ERROR_LINK        367
+#define STR_UNDO_RANGENAMES         368
+
+#define STR_MSSG_SEARCHANDREPLACE_4 369
+#define STR_MSSG_SEARCHANDREPLACE_5 370
+
+#define STR_UNDO_RESIZEMATRIX       371
+#define STR_TIP_RESIZEMATRIX        372
+
+#define STR_READONLYERR             373
+
+#define STR_PASTE_BIGGER            374
+
+#define STR_MACRO_WARNING           375
+
+#define STR_EXPORT_DBF              376
+
+#define STR_UNDO_APPLYPAGESTYLE     377
+#define STR_UNDO_EDITCELLSTYLE      378
+#define STR_UNDO_EDITPAGESTYLE      379
+
+#define STR_COUNT                   379
+
+
+
+#endif
+

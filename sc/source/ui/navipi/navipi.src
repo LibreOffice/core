@@ -1,0 +1,1150 @@
+/*************************************************************************
+ *
+ *  $RCSfile: navipi.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:45:03 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "navipi.hrc"
+Window RID_SCDLG_NAVIGATOR
+{
+    SVLook = TRUE ;
+    HelpId = HID_SC_NAVIGATOR ;
+     //?    Pos = MAP_APPFONT( 0, 0 );
+    Size = MAP_APPFONT ( 115 , 116 ) ;
+    OutputSize = TRUE ;
+    DialogControl = TRUE ;
+    Hide = TRUE ;
+    Text = "Navigator" ;
+    Text [ ENGLISH ] = "Navigator" ;
+    Text [ norwegian ] = "Navigator" ;
+    Text [ italian ] = "Navigatore" ;
+    Text [ portuguese_brazilian ] = "Navegador" ;
+    Text [ portuguese ] = "Navegador" ;
+    Text [ finnish ] = "Navigaattori" ;
+    Text [ danish ] = "Navigator" ;
+    Text [ french ] = "Navigateur" ;
+    Text [ swedish ] = "Navigator" ;
+    Text [ dutch ] = "Navigator" ;
+    Text [ spanish ] = "Navegador" ;
+    Text [ ENGLISH_US ] = "Navigator" ;
+     //    Closeable = TRUE ;
+     //    Moveable = TRUE ;
+     //    Zoomable = TRUE ;
+     //    Sizeable = TRUE ;
+     //    EnableResizing = TRUE ;
+     //    HideWhenDeactivate = TRUE ;
+     //    Border = TRUE ;
+     //    Dockable = TRUE ;
+    FixedText FT_ROW
+    {
+         //         Pos = MAP_APPFONT( 2, 20 );
+        Pos = MAP_APPFONT ( 2 , 19 ) ;
+         // an kleinere Toolbox-Bitmaps angepasst
+        Size = MAP_APPFONT ( 19 , 10 ) ;
+        Text = "Zeile" ;
+        Text [ ENGLISH ] = "Row" ;
+        Text [ norwegian ] = "Row" ;
+        Text [ italian ] = "Riga" ;
+        Text [ portuguese_brazilian ] = "Fileira" ;
+        Text [ portuguese ] = "Linha" ;
+        Text [ finnish ] = "Rivi" ;
+        Text [ danish ] = "Række" ;
+        Text [ french ] = "Ligne" ;
+        Text [ swedish ] = "Rad" ;
+        Text [ dutch ] = "Rij" ;
+        Text [ spanish ] = "Fila" ;
+        Text [ ENGLISH_US ] = "Row" ;
+        Text[ chinese_simplified ] = "ĞĞ";
+        Text[ russian ] = "Ñòğîêà";
+        Text[ polish ] = "Wiersz";
+        Text[ japanese ] = "s";
+        Text[ chinese_traditional ] = "¦C";
+        Text[ arabic ] = "ÓØÑ";
+        Text[ dutch ] = "Rij";
+        Text[ chinese_simplified ] = "ĞĞ";
+        Text[ greek ] = "ÃñáììŞ";
+        Text[ korean ] = "Çà";
+        Text[ turkish ] = "Satır";
+        Text[ language_user1 ] = " ";
+    };
+    NumericField ED_ROW
+    {
+        HelpId = HID_SC_NAVIPI_ROW ;
+        Border = TRUE ;
+         //         Pos = MAP_APPFONT( 31, 19 );
+        Pos = MAP_APPFONT ( 31 , 18 ) ;
+         // an kleinere Toolbox-Bitmaps angepasst
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Right = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        SpinSize = 1 ;
+        Minimum = 1 ;
+        First = 1 ;
+        Maximum = 32000 ;
+        Last = 32000 ;
+        QuickHelpText = "Zeile" ;
+        QuickHelpText [ ENGLISH ] = "Row" ;
+        QuickHelpText [ norwegian ] = "Row" ;
+        QuickHelpText [ italian ] = "Riga" ;
+        QuickHelpText [ portuguese_brazilian ] = "Fileira" ;
+        QuickHelpText [ portuguese ] = "Linha" ;
+        QuickHelpText [ finnish ] = "Rivi" ;
+        QuickHelpText [ danish ] = "Række" ;
+        QuickHelpText [ french ] = "Ligne" ;
+        QuickHelpText [ swedish ] = "Rad" ;
+        QuickHelpText [ dutch ] = "Rij" ;
+        QuickHelpText [ spanish ] = "Fila" ;
+        QuickHelpText [ english_us ] = "Row" ;
+        QuickHelpText [ dutch ] = "Rij" ;
+        QuickHelpText [ french ] = "Ligne" ;
+        QuickHelpText[ russian ] = "Ñòğîêà";
+        QuickHelpText[ polish ] = "Wiersz";
+        QuickHelpText[ japanese ] = "s";
+        QuickHelpText[ chinese_simplified ] = "ĞĞ";
+        QuickHelpText[ chinese_traditional ] = "Äæ";
+        QuickHelpText[ arabic ] = "ÓØÑ";
+        QuickHelpText[ dutch ] = "Rij";
+        QuickHelpText[ chinese_simplified ] = "ĞĞ";
+        QuickHelpText[ greek ] = "ÃñáììŞ";
+        QuickHelpText[ korean ] = "Row";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    FixedText FT_COL
+    {
+        Pos = MAP_APPFONT ( 2 , 5 ) ;
+        Size = MAP_APPFONT ( 23 , 10 ) ;
+        Text = "Spalte" ;
+        Text [ ENGLISH ] = "Column" ;
+        Text [ norwegian ] = "Column" ;
+        Text [ italian ] = "Colonna" ;
+        Text [ portuguese_brazilian ] = "Coluna" ;
+        Text [ portuguese ] = "Coluna" ;
+        Text [ finnish ] = "Sarake" ;
+        Text [ danish ] = "Kolonne" ;
+        Text [ french ] = "Colonne" ;
+        Text [ swedish ] = "Kolumn" ;
+        Text [ dutch ] = "Kolom" ;
+        Text [ spanish ] = "Columna" ;
+        Text [ ENGLISH_US ] = "Column" ;
+        Text[ chinese_simplified ] = "ÁĞ";
+        Text[ russian ] = "Ñòîëáåö";
+        Text[ polish ] = "Kolumna";
+        Text[ japanese ] = "—ñ";
+        Text[ chinese_traditional ] = "Äæ";
+        Text[ arabic ] = "ÚãæÏ";
+        Text[ dutch ] = "Kolom";
+        Text[ chinese_simplified ] = "ÁĞ";
+        Text[ greek ] = "ÓôŞëç";
+        Text[ korean ] = "¿­";
+        Text[ turkish ] = "Sütun";
+        Text[ language_user1 ] = " ";
+    };
+    SpinField ED_COL
+    {
+        HelpId = HID_SC_NAVIPI_COL ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 31 , 4 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Right = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        QuickHelpText = "Spalte" ;
+        QuickHelpText [ ENGLISH ] = "Column" ;
+        QuickHelpText [ norwegian ] = "Column" ;
+        QuickHelpText [ italian ] = "Colonna" ;
+        QuickHelpText [ portuguese_brazilian ] = "Coluna" ;
+        QuickHelpText [ portuguese ] = "Coluna" ;
+        QuickHelpText [ finnish ] = "Sarake" ;
+        QuickHelpText [ danish ] = "Kolonne" ;
+        QuickHelpText [ french ] = "Colonne" ;
+        QuickHelpText [ swedish ] = "Kolumn" ;
+        QuickHelpText [ dutch ] = "Kolom" ;
+        QuickHelpText [ spanish ] = "Columna" ;
+        QuickHelpText [ english_us ] = "Column" ;
+        QuickHelpText [ dutch ] = "Kolom" ;
+        QuickHelpText [ french ] = "Colonne" ;
+    QuickHelpText[ russian ] = "Ñòîëáåö";
+        QuickHelpText[ polish ] = "Kolumna";
+        QuickHelpText[ japanese ] = "—ñ";
+        QuickHelpText[ chinese_simplified ] = "ÁĞ";
+        QuickHelpText[ chinese_traditional ] = "¦C";
+        QuickHelpText[ arabic ] = "ÚãæÏ";
+        QuickHelpText[ dutch ] = "Kolom";
+        QuickHelpText[ chinese_simplified ] = "ÁĞ";
+        QuickHelpText[ greek ] = "ÓôŞëç";
+        QuickHelpText[ korean ] = "Column";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    Control LB_ENTRIES
+    {
+         // "Control" braucht immer eigene HelpId
+        HelpId = HID_SC_NAVIPI_ENTRIES ;
+        Border = TRUE ;
+         //         Pos = MAP_APPFONT( 2, 52 );
+        Pos = MAP_APPFONT ( 2 , 35 ) ;
+        Size = MAP_APPFONT ( 110 , 100 ) ;
+        TabStop = TRUE ;
+    };
+    ListBox LB_DOCUMENTS
+    {
+        HelpId = HID_SC_NAVIPI_DOC ;
+        Border = TRUE ;
+         //         Pos = MAP_APPFONT( 2, 35 );
+        Pos = MAP_APPFONT ( 2 , 89 ) ;
+        Size = MAP_APPFONT ( 82 , 50 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        QuickHelpText = "Dokument" ;
+        QuickHelpText [ ENGLISH ] = "Document" ;
+        QuickHelpText [ dutch ] = "Document" ;
+        QuickHelpText [ english_us ] = "Document" ;
+        QuickHelpText [ italian ] = "Documento" ;
+        QuickHelpText [ spanish ] = "Documento" ;
+        QuickHelpText [ french ] = "Document" ;
+        QuickHelpText [ danish ] = "Dokument" ;
+        QuickHelpText [ portuguese ] = "Documento" ;
+        QuickHelpText [ portuguese_brazilian ] = "Dokument" ;
+        QuickHelpText [ swedish ] = "Dokument" ;
+    QuickHelpText[ russian ] = "Äîêóìåíò";
+        QuickHelpText[ polish ] = "Dokument";
+        QuickHelpText[ japanese ] = "ÄŞ·­ÒİÄ";
+        QuickHelpText[ chinese_simplified ] = "ÎÄµµ";
+        QuickHelpText[ chinese_traditional ] = "ÀÉ®×";
+        QuickHelpText[ arabic ] = "ãÓÊäÏ";
+        QuickHelpText[ dutch ] = "Document";
+        QuickHelpText[ chinese_simplified ] = "ÎÄµµ";
+        QuickHelpText[ greek ] = "¸ããñáöï";
+        QuickHelpText[ korean ] = "Document";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    ToolBox TBX_CMD
+    {
+        Pos = MAP_APPFONT ( 66 , 3 ) ;
+        HelpId = HID_SC_NAVIPI_TOOLBOX ;
+        SVLook = TRUE ;
+        Border = FALSE ;
+        ItemImageList = ImageList
+        {
+            ImageBitmap = Bitmap { File = "navipi.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+            IdList =  // 3
+            {
+                IID_DATA ;
+                IID_UP ;  // 5
+                IID_DOWN ;  // 6
+                IID_SCENARIOS ;  // 7
+                IID_DROPMODE ;  // 9
+                IID_CHANGEROOT ;  // 10
+                IID_ZOOMOUT ;  // 11
+            };
+            IdCount = { 8 ; };
+        };
+        LineCount = 2 ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = IID_DATA ;
+                HelpId = HID_SC_NAVIPI_DATA ;
+                Text = "Datenbereich" ;
+                Text [ ENGLISH ] = "Data Area" ;
+                Text [ norwegian ] = "Data Area" ;
+                Text [ italian ] = "Area dati" ;
+                Text [ portuguese_brazilian ] = "Data Area" ;
+                Text [ portuguese ] = "Área de dados" ;
+                Text [ finnish ] = "Data Area" ;
+                Text [ danish ] = "Dataområde" ;
+                Text [ french ] = "Plage de données" ;
+                Text [ swedish ] = "Dataområde" ;
+                Text [ dutch ] = "Gegevensbereik" ;
+                Text [ spanish ] = "Área de datos" ;
+                Text [ english_us ] = "Data Area" ;
+                Text[ chinese_simplified ] = "Êı¾İÇøÓò";
+                Text[ russian ] = "Îáëàñòü äàííûõ";
+                Text[ polish ] = "Obszar danych";
+                Text[ japanese ] = "ÃŞ°À”ÍˆÍ";
+                Text[ chinese_traditional ] = "¸ê®Æ°Ï°ì";
+                Text[ arabic ] = "ãäØŞÉ ÇáÈíÇäÇÊ";
+                Text[ dutch ] = "Gegevensbereik";
+                Text[ chinese_simplified ] = "Êı¾İÇøÓò";
+                Text[ greek ] = "Ğåñéï÷Ş äåäïìİíùí";
+                Text[ korean ] = "µ¥ÀÌÅÍ ¿µ¿ª";
+                Text[ turkish ] = "Veri alanı";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = IID_UP ;
+                HelpId = HID_SC_NAVIPI_UP ;
+                Text = "Anfang" ;
+                Text [ ENGLISH ] = "Start" ;
+                Text [ norwegian ] = "Start" ;
+                Text [ italian ] = "Inizio" ;
+                Text [ portuguese_brazilian ] = "Início" ;
+                Text [ portuguese ] = "Início" ;
+                Text [ finnish ] = "Alku" ;
+                Text [ danish ] = "Begyndelse" ;
+                Text [ french ] = "Début" ;
+                Text [ swedish ] = "Början" ;
+                Text [ dutch ] = "Begin" ;
+                Text [ spanish ] = "Comienzo" ;
+                Text [ english_us ] = "Start" ;
+                Text[ chinese_simplified ] = "¿ªÊ¼";
+                Text[ russian ] = "Íà÷àëî";
+                Text[ polish ] = "Pocz¹tek";
+                Text[ japanese ] = "½À°Ä";
+                Text[ chinese_traditional ] = "¶}©l";
+                Text[ arabic ] = "ÈÏÇíÉ";
+                Text[ dutch ] = "Begin";
+                Text[ chinese_simplified ] = "¿ªÊ¼";
+                Text[ greek ] = "Áñ÷Ş";
+                Text[ korean ] = "½ÃÀÛ";
+                Text[ turkish ] = "Başlangıç";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = IID_DOWN ;
+                HelpId = HID_SC_NAVIPI_DOWN ;
+                Text = "Ende" ;
+                Text [ ENGLISH ] = "End" ;
+                Text [ norwegian ] = "End" ;
+                Text [ italian ] = "Fine" ;
+                Text [ portuguese_brazilian ] = "Final" ;
+                Text [ portuguese ] = "Fim" ;
+                Text [ finnish ] = "Loppu" ;
+                Text [ danish ] = "Slut" ;
+                Text [ french ] = "Fin" ;
+                Text [ swedish ] = "Slut" ;
+                Text [ dutch ] = "Einde" ;
+                Text [ spanish ] = "Fin" ;
+                Text [ english_us ] = "End" ;
+                Text[ chinese_simplified ] = "½áÊø";
+                Text[ russian ] = "Êîíåö";
+                Text[ polish ] = "Koniec";
+                Text[ japanese ] = "I—¹";
+                Text[ chinese_traditional ] = "µ²§ô";
+                Text[ arabic ] = "äåÇíÉ";
+                Text[ dutch ] = "Einde";
+                Text[ chinese_simplified ] = "½áÊø";
+                Text[ greek ] = "Ôİëïò";
+                Text[ korean ] = "Á¾·á";
+                Text[ turkish ] = "Son";
+                Text[ language_user1 ] = " ";
+            };
+             //--------------------------------------------
+             //         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR; };
+             //--------------------------------------------
+             //----------------------------------------
+            ToolBoxItem { Type = TOOLBOXITEM_BREAK ; };
+             //----------------------------------------
+            ToolBoxItem
+            {
+                Identifier = IID_ZOOMOUT ;
+                HelpId = HID_SC_NAVIPI_ZOOM ;
+                Text = "Inhalte" ;
+                Text [ ENGLISH ] = "Contents" ;
+                Text [ dutch ] = "Inhoud" ;
+                Text [ english_us ] = "Contents" ;
+                Text [ italian ] = "Contenuti" ;
+                Text [ spanish ] = "Contenidos" ;
+                Text [ french ] = "Contenu" ;
+                Text [ swedish ] = "Innehåll" ;
+                Text [ danish ] = "Indhold" ;
+                Text [ portuguese ] = "Conteúdos" ;
+                Text [ portuguese_brazilian ] = "Inhalte" ;
+                Text[ chinese_simplified ] = "ÄÚÈİ";
+                Text[ russian ] = "Ñîäåğæèìîå";
+                Text[ polish ] = "Zawartoœci";
+                Text[ japanese ] = "“à—e";
+                Text[ chinese_traditional ] = "¤º®e";
+                Text[ arabic ] = "ÇáãÍÊæíÇÊ";
+                Text[ dutch ] = "Inhoud";
+                Text[ chinese_simplified ] = "ÄÚÈİ";
+                Text[ greek ] = "Ğåñéå÷üìåíá";
+                Text[ korean ] = "³»¿ë";
+                Text[ turkish ] = "İçerikler";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = IID_CHANGEROOT ;
+                HelpId = HID_SC_NAVIPI_ROOT ;
+                Text = "Umschalten" ;
+                Text [ ENGLISH ] = "Toggle" ;
+                Text [ dutch ] = "Omschakelen" ;
+                Text [ english_us ] = "Toggle" ;
+                Text [ italian ] = "Commuta" ;
+                Text [ spanish ] = "Conmutar" ;
+                Text [ french ] = "Basculer" ;
+                Text [ swedish ] = "Växla" ;
+                Text [ danish ] = "Skift" ;
+                Text [ portuguese ] = "Comutar" ;
+                Text [ portuguese_brazilian ] = "Umschalten" ;
+                Text[ chinese_simplified ] = "ÇĞ»»";
+                Text[ russian ] = "Ïåğåêëş÷èòü";
+                Text[ polish ] = "Prze³¹cz";
+                Text[ japanese ] = "Ø‚è‘Ö‚¦";
+                Text[ chinese_traditional ] = "¤Á´«";
+                Text[ arabic ] = "ÊÈÏíá";
+                Text[ dutch ] = "Omschakelen";
+                Text[ chinese_simplified ] = "ÇĞ»»";
+                Text[ greek ] = "ÅíáëëáãŞ";
+                Text[ korean ] = "Åä±Û";
+                Text[ turkish ] = "Değiştir";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = IID_SCENARIOS ;
+                HelpId = HID_SC_NAVIPI_SCEN ;
+                Text = "Szenarien" ;
+                Text [ ENGLISH ] = "Scenarios" ;
+                Text [ dutch ] = "Scenario´s" ;
+                Text [ english_us ] = "Scenarios" ;
+                Text [ italian ] = "Scenari" ;
+                Text [ spanish ] = "Escenarios" ;
+                Text [ french ] = "Scénarios" ;
+                Text [ swedish ] = "Scenarion" ;
+                Text [ danish ] = "Scenarier" ;
+                Text [ portuguese ] = "Cenários" ;
+                Text [ portuguese_brazilian ] = "Szenarien" ;
+                Text[ chinese_simplified ] = "·½°¸";
+                Text[ russian ] = "Ñöåíàğèè";
+                Text[ polish ] = "Scenariusz";
+                Text[ japanese ] = "¼ÅØµ";
+                Text[ chinese_traditional ] = "¤ÀªRÂÅ¥»";
+                Text[ arabic ] = "æÍÏÇÊ ÇáÓíäÇÑíæ";
+                Text[ dutch ] = "Scenario´s";
+                Text[ chinese_simplified ] = "·½°¸";
+                Text[ greek ] = "ÓåíÜñéá";
+                Text[ korean ] = "½Ã³ª¸®¿À";
+                Text[ turkish ] = "Senaryo";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = IID_DROPMODE ;
+                HelpId = HID_SC_NAVIPI_DROP ;
+                DropDown = TRUE ;
+                Text = "Dragmodus" ;
+                Text [ ENGLISH ] = "Drag mode" ;
+                Text [ dutch ] = "Dragmodus" ;
+                Text [ english_us ] = "Drag Mode" ;
+                Text [ italian ] = "Modo drag" ;
+                Text [ spanish ] = "Modo Arrastrar" ;
+                Text [ french ] = "Mode Glisser" ;
+                Text [ swedish ] = "Draläge" ;
+                Text [ danish ] = "Trækmodus" ;
+                Text [ portuguese ] = "Modo Arrastar" ;
+                Text [ portuguese_brazilian ] = "Dragmodus" ;
+                Text[ chinese_simplified ] = "ÍÏÀ­Ä£Ê½";
+                Text[ russian ] = "Ğåæèì ïåğåòÿãèâàíèÿ";
+                Text[ polish ] = "Tryb przeci¹gania";
+                Text[ japanese ] = "ÄŞ×¯¸ŞÓ°ÄŞ";
+                Text[ chinese_traditional ] = "©ì¦²¼Ò¦¡";
+                Text[ arabic ] = "ØÑíŞÉ ÇáÓÍÈ";
+                Text[ dutch ] = "Dragmodus";
+                Text[ chinese_simplified ] = "ÍÏÀ­Ä£Ê½";
+                Text[ greek ] = "ÊáôÜóôáóç ìåôáêßíçóçò";
+                Text[ korean ] = "µå·¡±× ¸ğµå";
+                Text[ turkish ] = "Sürükleme kipi";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    String STR_DRAGMODE
+    {
+        Text = "Dragmodus" ;
+        Text [ English ] = "Drag mode" ;
+        Text [ dutch ] = "Dragmodus" ;
+        Text [ english_us ] = "Drag Mode" ;
+        Text [ italian ] = "Modo trascina" ;
+        Text [ spanish ] = "Modo Arrastrar" ;
+        Text [ french ] = "Mode Glisser" ;
+        Text [ swedish ] = "Draläge" ;
+        Text [ danish ] = "Trækmodus" ;
+        Text [ portuguese ] = "Modo Arrastar" ;
+        Text [ portuguese_brazilian ] = "Dragmodus" ;
+        Text[ chinese_simplified ] = "ÍÏÀ­Ä£Ê½";
+        Text[ russian ] = "Ğåæèì ïåğåòÿãèâàíèÿ";
+        Text[ polish ] = "Tryb przeci¹gania";
+        Text[ japanese ] = "ÄŞ×¯¸ŞÓ°ÄŞ";
+        Text[ chinese_traditional ] = "©ì¦²¼Ò¦¡";
+        Text[ arabic ] = "ØÑíŞÉ ÇáÓÍÈ";
+        Text[ dutch ] = "Dragmodus";
+        Text[ chinese_simplified ] = "ÍÏÀ­Ä£Ê½";
+        Text[ greek ] = "ÊáôÜóôáóç ìåôáêßíçóçò";
+        Text[ korean ] = "µå·¡±× ¸ğµå";
+        Text[ turkish ] = "Sürükleme kipi";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_DISPLAY
+    {
+        Text = "Anzeige" ;
+        Text [ English ] = "Display" ;
+        Text [ dutch ] = "Beeld" ;
+        Text [ english_us ] = "Display" ;
+        Text [ italian ] = "Visualizzazione" ;
+        Text [ spanish ] = "Visualización" ;
+        Text [ french ] = "Affichage" ;
+        Text [ swedish ] = "Visning" ;
+        Text [ danish ] = "Visning" ;
+        Text [ portuguese ] = "Mostrar" ;
+        Text [ portuguese_brazilian ] = "Anzeige" ;
+        Text[ chinese_simplified ] = "ÏÔÊ¾";
+        Text[ russian ] = "Ïîêàçàòü";
+        Text[ polish ] = "Wyœwietl";
+        Text[ japanese ] = "•\\¦";
+        Text[ chinese_traditional ] = "Åã¥Ü";
+        Text[ arabic ] = "ÚÑÖ";
+        Text[ dutch ] = "Beeld";
+        Text[ chinese_simplified ] = "ÏÔÊ¾";
+        Text[ greek ] = "ÅìöÜíéóç";
+        Text[ korean ] = "µğ½ºÇÃ·¹ÀÌ";
+        Text[ turkish ] = "Görüntü";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_ACTIVE
+    {
+        Text = "aktiv" ;
+        Text [ English ] = "active" ;
+        Text [ dutch ] = "actief" ;
+        Text [ english_us ] = "active" ;
+        Text [ italian ] = "attivo" ;
+        Text [ spanish ] = "activo" ;
+        Text [ french ] = "active" ;
+        Text [ swedish ] = "aktiv" ;
+        Text [ danish ] = "aktiv" ;
+        Text [ portuguese ] = "activo" ;
+        Text [ portuguese_brazilian ] = "aktiv" ;
+        Text[ chinese_simplified ] = "¼¤»îµÄ";
+        Text[ russian ] = "àêòèâíûé";
+        Text[ polish ] = "aktywny";
+        Text[ japanese ] = "±¸Ã¨ÌŞ";
+        Text[ chinese_traditional ] = "¿E¬¡ªº";
+        Text[ arabic ] = "äÔØ";
+        Text[ dutch ] = "actief";
+        Text[ chinese_simplified ] = "¼¤»îµÄ";
+        Text[ greek ] = "ÅíåñãÜ";
+        Text[ korean ] = "ÀÛµ¿";
+        Text[ turkish ] = "Etkin";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_NOTACTIVE
+    {
+        Text = "inaktiv" ;
+        Text [ English ] = "inactive" ;
+        Text [ english_us ] = "inactive" ;
+        Text [ italian ] = "inattivo" ;
+        Text [ spanish ] = "inactivo" ;
+        Text [ french ] = "inactive" ;
+        Text [ dutch ] = "inactief" ;
+        Text [ swedish ] = "inaktiv" ;
+        Text [ danish ] = "inaktiv" ;
+        Text [ portuguese ] = "inactivo" ;
+        Text [ portuguese_brazilian ] = "inaktiv" ;
+        Text[ chinese_simplified ] = "Ê§»î";
+        Text[ russian ] = "íåàêòèâíûé";
+        Text[ polish ] = "nieaktywny";
+        Text[ japanese ] = "±¸Ã¨ÌŞ‚Å‚È‚¢";
+        Text[ chinese_traditional ] = "¥¢¬¡";
+        Text[ arabic ] = "ÛíÑ äÔØ";
+        Text[ dutch ] = "inactief";
+        Text[ chinese_simplified ] = "Ê§»î";
+        Text[ greek ] = "ìç åíåñãü";
+        Text[ korean ] = "ºñ È°¼º";
+        Text[ turkish ] = "Etkin değil";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_HIDDEN
+    {
+        Text = "versteckt" ;
+        Text [ English ] = "hidden" ;
+        Text [ english_us ] = "hidden" ;
+        Text [ italian ] = "nascosto" ;
+        Text [ spanish ] = "oculto" ;
+        Text [ french ] = "caché" ;
+        Text [ dutch ] = "verborgen" ;
+        Text [ swedish ] = "gömd" ;
+        Text [ danish ] = "skjult" ;
+        Text [ portuguese ] = "oculto" ;
+        Text [ portuguese_brazilian ] = "versteckt" ;
+        Text[ chinese_simplified ] = "ÒşÈë";
+        Text[ russian ] = "ñêğûòûé";
+        Text[ polish ] = "ukryty";
+        Text[ japanese ] = "‰B‚µ";
+        Text[ chinese_traditional ] = "Áô¤J";
+        Text[ arabic ] = "ãÎİí";
+        Text[ dutch ] = "verborgen";
+        Text[ chinese_simplified ] = "ÒşÈë";
+        Text[ greek ] = "êñõöü";
+        Text[ korean ] = "¼û±è";
+        Text[ turkish ] = "Gizli";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_ACTIVEWIN
+    {
+        Text = "Aktives Fenster" ;
+        Text [ English ] = "Active Window" ;
+        Text [ dutch ] = "Actief venster" ;
+        Text [ english_us ] = "Active window" ;
+        Text [ italian ] = "Finestra attiva" ;
+        Text [ spanish ] = "Ventana activa" ;
+        Text [ french ] = "Fenêtre active" ;
+        Text [ swedish ] = "Aktivt fönster" ;
+        Text [ danish ] = "aktivt vindue" ;
+        Text [ portuguese ] = "Janela activa" ;
+        Text [ portuguese_brazilian ] = "Aktives Fenster" ;
+        Text[ chinese_simplified ] = "µ±Ç°µÄÊÓ´°";
+        Text[ russian ] = "Àêòèâíîå îêíî";
+        Text[ polish ] = "Aktywne okno";
+        Text[ japanese ] = "±¸Ã¨ÌŞ‚È³¨İÄŞ³";
+        Text[ chinese_traditional ] = "·í«eªºµøµ¡";
+        Text[ arabic ] = "ÇáäÇİĞÉ ÇáäÔØÉ";
+        Text[ dutch ] = "Actief venster";
+        Text[ chinese_simplified ] = "µ±Ç°µÄÊÓ´°";
+        Text[ greek ] = "Åíåñãü ğáñÜèõñï";
+        Text[ korean ] = "È°¼º Ã¢";
+        Text[ turkish ] = "Etkin pencere";
+        Text[ language_user1 ] = " ";
+    };
+
+    String STR_QHLP_SCEN_LISTBOX
+    {
+        Text = "Name des Szenarios" ;
+        Text [ ENGLISH ] = "Szenario Name" ;
+        Text [ ENGLISH_US ] = "Scenario name";
+        Text[ italian ] = "Nome dello scenario";
+        Text[ portuguese_brazilian ] = "Name des Szenarios";
+        Text[ portuguese ] = "Nome do cenário";
+        Text[ danish ] = "Scenariets navn";
+        Text[ french ] = "Nom du scénario";
+        Text[ swedish ] = "Namn på scenariot";
+        Text[ dutch ] = "Naam van het scenario";
+        Text[ spanish ] = "Nombre del escenario";
+        Text[ chinese_simplified ] = "·½°¸Ãû³Æ";
+        Text[ russian ] = "Íàçâàíèå ñöåíàğèÿ";
+        Text[ polish ] = "Nazwa scenariusza";
+        Text[ japanese ] = "¼ÅØµ–¼";
+        Text[ chinese_traditional ] = "¤ÀªRÂÅ¥»ªº¦WºÙ";
+        Text[ arabic ] = "ÇÓã ÇáÓíäÇÑíæ";
+        Text[ dutch ] = "Naam van het scenario";
+        Text[ chinese_simplified ] = "·½°¸Ãû³Æ";
+        Text[ greek ] = "¼íïìá óåíáñßïõ";
+        Text[ korean ] = "½Ã³ª¸®¿À ÀÌ¸§";
+        Text[ turkish ] = "Senaryo adı";
+        Text[ language_user1 ] = " ";
+    };
+
+    String STR_QHLP_SCEN_COMMENT
+    {
+        Text = "Kommentar" ;
+        Text [ ENGLISH ] = "Comment" ;
+        Text [ ENGLISH_US ] = "Comment";
+        Text[ italian ] = "Commento";
+        Text[ portuguese_brazilian ] = "Kommentar";
+        Text[ portuguese ] = "Comentário";
+        Text[ danish ] = "Kommentar";
+        Text[ french ] = "Commentaire";
+        Text[ swedish ] = "Kommentar";
+        Text[ dutch ] = "Commentaar";
+        Text[ spanish ] = "Comentario";
+        Text[ chinese_simplified ] = "×¢½â";
+        Text[ russian ] = "Êîììåíòàğèé";
+        Text[ polish ] = "Komentarz";
+        Text[ japanese ] = "ºÒİÄ";
+        Text[ chinese_traditional ] = "ª`¸Ñ";
+        Text[ arabic ] = "ÊÚáíŞ";
+        Text[ dutch ] = "Commentaar";
+        Text[ chinese_simplified ] = "×¢½â";
+        Text[ greek ] = "Ó÷üëéï";
+        Text[ korean ] = "ÁÖ";
+        Text[ turkish ] = "Açıklama";
+        Text[ language_user1 ] = " ";
+    };
+
+    Text[ chinese_simplified ] = "ÖúÊÖ";
+    Text[ russian ] = "Íàâèãàòîğ";
+    Text[ polish ] = "Nawigator";
+    Text[ japanese ] = "ÅËŞ¹Ş°À";
+    Text[ chinese_traditional ] = "§U¤â";
+    Text[ arabic ] = "ÇáäÇİíÌíÊæÑ";
+    Text[ dutch ] = "Navigator";
+    Text[ chinese_simplified ] = "ÖúÊÖ";
+    Text[ greek ] = "Navigator";
+    Text[ korean ] = "³×ºñ°ÔÀÌÅÍ";
+    Text[ turkish ] = "Navigatör";
+    Text[ language_user1 ] = " ";
+};
+ImageList RID_IMAGELIST_NAVCONT
+{
+    ImageBitmap = Bitmap { File = "ncont.bmp" ; };
+    MaskColor = STD_MASKCOLOR ;
+    IdList =
+    {
+         // SC_CONTENT_...
+        1 ;
+        2 ;
+        3 ;
+        4 ;
+        5 ;
+        6 ;
+        7 ;
+    };
+    IdCount = { 7 ; };
+};
+Bitmap RID_BMP_EXPAND
+{
+    File = "plus.bmp" ;
+};
+Bitmap RID_BMP_COLLAPSE
+{
+    File = "minus.bmp" ;
+};
+Image RID_IMG_DROP_URL
+{
+    ImageBitmap = Bitmap { File = "dropurl.bmp" ; };
+    MaskColor = STD_MASKCOLOR ;
+};
+Image RID_IMG_DROP_LINK
+{
+    ImageBitmap = Bitmap { File = "droplink.bmp" ; };
+    MaskColor = STD_MASKCOLOR ;
+};
+Image RID_IMG_DROP_COPY
+{
+    ImageBitmap = Bitmap { File = "dropcopy.bmp" ; };
+    MaskColor = STD_MASKCOLOR ;
+};
+
+//  content description strings are also used in ScLinkTargetsObj
+
+String SCSTR_CONTENT_ROOT
+{
+    TEXT = "Inhalte" ;
+    TEXT [ English ] = "Contents" ;
+    Text [ english_us ] = "Contents" ;
+    Text [ italian ] = "Contenuti" ;
+    Text [ spanish ] = "Contenidos" ;
+    Text [ french ] = "Contenu" ;
+    Text [ dutch ] = "Inhoud" ;
+    Text [ swedish ] = "Innehåll" ;
+    Text [ danish ] = "Indhold" ;
+    Text [ portuguese ] = "Conteúdos" ;
+    Text [ portuguese_brazilian ] = "Inhalte" ;
+    Text[ chinese_simplified ] = "ÄÚÈİ";
+    Text[ russian ] = "Ñîäåğæàíèå";
+    Text[ polish ] = "Zawartoœci";
+    Text[ japanese ] = "“à—e";
+    Text[ chinese_traditional ] = "¤º®e";
+    Text[ arabic ] = "ÇáãÍÊæíÇÊ";
+    Text[ dutch ] = "Inhoud";
+    Text[ chinese_simplified ] = "ÄÚÈİ";
+    Text[ greek ] = "Ğåñéå÷üìåíá";
+    Text[ korean ] = "±¸¼º";
+    Text[ turkish ] = "İçerikler";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_CONTENT_TABLE
+{
+    TEXT = "Tabellen" ;
+    TEXT [ English ] = "Tables" ;
+    Text [ english_us ] = "Sheets" ;
+    Text [ italian ] = "Tabelle" ;
+    Text [ spanish ] = "Hojas" ;
+    Text [ french ] = "Feuilles" ;
+    Text [ dutch ] = "Werkbladen" ;
+    Text [ swedish ] = "Tabeller" ;
+    Text [ danish ] = "Regneark" ;
+    Text [ portuguese ] = "Folhas" ;
+    Text [ portuguese_brazilian ] = "Tabellen" ;
+    Text[ chinese_simplified ] = "¹¤×÷±í";
+    Text[ russian ] = "Òàáëèöû";
+    Text[ polish ] = "Arkusze";
+    Text[ japanese ] = "•\\";
+    Text[ chinese_traditional ] = "¤u§@ªí";
+    Text[ arabic ] = "ÌÏÇæá";
+    Text[ dutch ] = "Werkbladen";
+    Text[ chinese_simplified ] = "¹¤×÷±í";
+    Text[ greek ] = "Ğßíáêåò";
+    Text[ korean ] = "½ÃÆ®";
+    Text[ turkish ] = "Tablolar";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_CONTENT_RANGENAME
+{
+    TEXT = "Bereichsnamen" ;
+    TEXT [ English ] = "Range names" ;
+    Text [ dutch ] = "Bereiknamen" ;
+    Text [ english_us ] = "Range names" ;
+    Text [ italian ] = "Nomi dell'area" ;
+    Text [ spanish ] = "Nombres de las áreas" ;
+    Text [ french ] = "Noms de plages" ;
+    Text [ swedish ] = "Områdesnamn" ;
+    Text [ danish ] = "Områdenavne" ;
+    Text [ portuguese ] = "Nomes das áreas" ;
+    Text [ portuguese_brazilian ] = "Bereichsnamen" ;
+    Text[ chinese_simplified ] = "ÇøÓòÃû³Æ";
+    Text[ russian ] = "Íàçâàíèÿ îáëàñòåé";
+    Text[ polish ] = "Nazwy obszarów";
+    Text[ japanese ] = "”ÍˆÍ–¼";
+    Text[ chinese_traditional ] = "°Ï°ì¦WºÙ";
+    Text[ arabic ] = "ÃÓãÇÁ ÇáãäØŞÉ";
+    Text[ dutch ] = "Bereiknamen";
+    Text[ chinese_simplified ] = "ÇøÓòÃû³Æ";
+    Text[ greek ] = "Ïíüìáôá ğåñéï÷şí";
+    Text[ korean ] = "¿µ¿ª ÀÌ¸§";
+    Text[ turkish ] = "Alan adları";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_CONTENT_DBAREA
+{
+    TEXT = "Datenbankbereiche" ;
+    TEXT [ English ] = "Database areas" ;
+    Text [ dutch ] = "Database-bereiken" ;
+    Text [ english_us ] = "Database ranges" ;
+    Text [ italian ] = "Aree database" ;
+    Text [ spanish ] = "Áreas de base de datos" ;
+    Text [ french ] = "Plages de base de données" ;
+    Text [ swedish ] = "Databasområden" ;
+    Text [ danish ] = "Databaseområder" ;
+    Text [ portuguese ] = "Áreas da base de dados" ;
+    Text [ portuguese_brazilian ] = "Datenbankbereiche" ;
+    Text[ chinese_simplified ] = "Êı¾İ¿âÇøÓò";
+    Text[ russian ] = "Îáëàñòè áàçû äàííûõ";
+    Text[ polish ] = "Obszary bazy danych";
+    Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚Ì”ÍˆÍ";
+    Text[ chinese_traditional ] = "¸ê®Æ®w°Ï°ì";
+    Text[ arabic ] = "ãäÇØŞ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
+    Text[ dutch ] = "Database-bereiken";
+    Text[ chinese_simplified ] = "Êı¾İ¿âÇøÓò";
+    Text[ greek ] = "Ğåäßá âÜóçò äåäïìİíùí";
+    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ¿µ¿ª";
+    Text[ turkish ] = "Veritabanı alanları";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_CONTENT_GRAPHIC
+{
+    TEXT = "Grafiken" ;
+    TEXT [ English ] = "Graphics" ;
+    Text [ english_us ] = "Graphics" ;
+    Text [ italian ] = "Immagini" ;
+    Text [ spanish ] = "Imágenes" ;
+    Text [ french ] = "Images" ;
+    Text [ dutch ] = "Afbeeldingen" ;
+    Text [ swedish ] = "Grafiker" ;
+    Text [ danish ] = "Billeder" ;
+    Text [ portuguese ] = "Imagens" ;
+    Text [ portuguese_brazilian ] = "Grafiken" ;
+    Text[ chinese_simplified ] = "Í¼ĞÎ";
+    Text[ russian ] = "Ğèñóíêè";
+    Text[ polish ] = "Grafiki";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸";
+    Text[ chinese_traditional ] = "¼v¹³";
+    Text[ arabic ] = "ÕæÑ";
+    Text[ dutch ] = "Afbeeldingen";
+    Text[ chinese_simplified ] = "Í¼ĞÎ";
+    Text[ greek ] = "ÃñáöéêÜ";
+    Text[ korean ] = "±×·¡ÇÈ";
+    Text[ turkish ] = "Grafikler";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_CONTENT_OLEOBJECT
+{
+    TEXT = "OLE-Objekte" ;
+    TEXT [ English ] = "OLE-Objects" ;
+    Text [ english_us ] = "OLE objects" ;
+    Text [ italian ] = "Oggetti OLE" ;
+    Text [ spanish ] = "Objetos OLE" ;
+    Text [ french ] = "Objets OLE" ;
+    Text [ dutch ] = "OLE-objecten" ;
+    Text [ swedish ] = "OLE-objekt" ;
+    Text [ danish ] = "OLE-objekter" ;
+    Text [ portuguese ] = "Objectos OLE" ;
+    Text [ portuguese_brazilian ] = "OLE-Objekte" ;
+    Text[ chinese_simplified ] = "OLE-¶ÔÏó";
+    Text[ russian ] = "Îáúåêòû OLE";
+    Text[ polish ] = "Obiekty OLE";
+    Text[ japanese ] = "OLE µÌŞ¼Şª¸Ä";
+    Text[ chinese_traditional ] = "OLE-ª«¥ó";
+    Text[ arabic ] = "OLE ßÇÆäÇÊ";
+    Text[ dutch ] = "OLE-objecten";
+    Text[ chinese_simplified ] = "OLE-¶ÔÏó";
+    Text[ greek ] = "Áíôéêåßìåíá OLE";
+    Text[ korean ] = "OLE °³Ã¼";
+    Text[ turkish ] = "OLE nesneleri";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_CONTENT_NOTE
+{
+    TEXT = "Notizen" ;
+    TEXT [ English ] = "Notes" ;
+    Text [ english_us ] = "Notes" ;
+    Text [ portuguese ] = "Anotações" ;
+    Text [ swedish ] = "Anteckningar" ;
+    Text [ danish ] = "Noter" ;
+    Text [ italian ] = "Note" ;
+    Text [ spanish ] = "Notas" ;
+    Text [ french ] = "Notes" ;
+    Text [ dutch ] = "Aantekeningen" ;
+    Text [ portuguese_brazilian ] = "Notizen" ;
+    Text[ chinese_simplified ] = "±¸×¢";
+    Text[ russian ] = "Ïğèìå÷àíèÿ";
+    Text[ polish ] = "Notatki";
+    Text[ japanese ] = "ºÒİÄ";
+    Text[ chinese_traditional ] = "³Æµù";
+    Text[ arabic ] = "ãáÇÍÙÇÊ";
+    Text[ dutch ] = "Aantekeningen";
+    Text[ chinese_simplified ] = "±¸×¢";
+    Text[ greek ] = "Óçìåéşóåéò";
+    Text[ korean ] = "¸Ş¸ğ";
+    Text[ turkish ] = "Notlar";
+    Text[ language_user1 ] = " ";
+};
+String SCSTR_CONTENT_AREALINK
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Verknüpfte Bereiche : Verkn³pfte Bereiche */
+    TEXT = "Verknüpfte Bereiche" ;
+    TEXT [ English ] = "Linked areas" ;
+    Text [ portuguese_brazilian ] = "Verknüpfte Bereiche" ;
+    Text [ english_us ] = "Linked areas" ;
+    Text [ portuguese ] = "Áreas ligadas" ;
+    Text [ swedish ] = "Länkade områden" ;
+    Text [ danish ] = "Sammenkædede områder" ;
+    Text [ italian ] = "Aree collegate" ;
+    Text [ spanish ] = "Áreas vinculadas" ;
+    Text [ french ] = "Plage externe" ;
+    Text [ dutch ] = "Gekoppelde bereiken" ;
+    Text[ chinese_simplified ] = "Á´½ÓµÄÇøÓò";
+    Text[ russian ] = "Ñâÿçàííûå îáëàñòè";
+    Text[ polish ] = "Po³¹czone obszary";
+    Text[ japanese ] = "Øİ¸‚³‚ê‚½”ÍˆÍ";
+    Text[ chinese_traditional ] = "³sµ²ªº°Ï°ì";
+    Text[ arabic ] = "ãäÇØŞ ãÑÊÈØÉ";
+    Text[ dutch ] = "Gekoppelde bereiken";
+    Text[ chinese_simplified ] = "Á´½ÓµÄÇøÓò";
+    Text[ greek ] = "Óõíäåäåìİíåò ğåñéï÷İò";
+    Text[ korean ] = "¿µ¿ªÀÌ ¿¬°áµÇ¾ú½À´Ï´Ù.";
+    Text[ turkish ] = "Bağlantılı alanlar";
+    Text[ language_user1 ] = " ";
+};
+ // PopupMenu -------------------------------------------------------------
+Menu RID_POPUP_DROPMODE
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = RID_DROPMODE_URL ;
+            HelpId = HID_SC_DROPMODE_URL ;
+            /* ### ACHTUNG: Neuer Text in Resource? Als Hyperlink einfügen : Als Hyperlink einf³gen */
+            Text = "Als Hyperlink einfügen" ;
+            Text [ ENGLISH ] = "Insert as Hyperlink" ;
+            Text [ dutch ] = "Als Hyperlink invoegen" ;
+            Text [ english_us ] = "Insert as Hyperlink" ;
+            Text [ swedish ] = "Infoga som hyperlänk" ;
+            Text [ danish ] = "Indsæt som hyperlink" ;
+            Text [ italian ] = "Inserisci come hyperlink" ;
+            Text [ spanish ] = "Insertar como hiperenlace" ;
+            Text [ french ] = "Insérer comme hyperlien" ;
+            Text [ portuguese_brazilian ] = "Als Hyperlink einfügen" ;
+            Text [ portuguese ] = "Inserir como hiperligação" ;
+            Text[ chinese_simplified ] = "µ±×÷³¬Á´½Ó²åÈë";
+            Text[ russian ] = "Âñòàâèòü êàê ãèïåğññûëêó";
+            Text[ polish ] = "Wstaw jako hiper³¹cze";
+            Text[ japanese ] = "Ê²Êß°Øİ¸‚Æ‚µ‚Ä‘}“ü";
+            Text[ chinese_traditional ] = "·í§@¶W³sµ²´¡¤J";
+            Text[ arabic ] = "ÅÏÑÇÌ ßÇÑÊÈÇØ ÊÔÚÈí";
+            Text[ dutch ] = "Als Hyperlink invoegen";
+            Text[ chinese_simplified ] = "µ±×÷³¬Á´½Ó²åÈë";
+            Text[ greek ] = "ÅéóáãùãŞ ùò õğåñ-óıíäåóç";
+            Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©¸¦ »ğÀÔ";
+            Text[ turkish ] = "Hyperlink olarak ekle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = RID_DROPMODE_LINK ;
+            HelpId = HID_SC_DROPMODE_LINK ;
+            /* ### ACHTUNG: Neuer Text in Resource? Als Verknüpfung einfügen : Als Verkn³pfung einf³gen */
+            Text = "Als Verknüpfung einfügen" ;
+            Text [ ENGLISH ] = "Insert as Link" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Drag & Drop als Verknüpfung : Drag & Drop als Verkn³pfung */
+            Text [ dutch ] = "Als koppeling invoegen" ;
+            Text [ english_us ] = "Insert as Link" ;
+            Text [ swedish ] = "Infoga som länk" ;
+            Text [ danish ] = "Indsæt som kæde" ;
+            Text [ italian ] = "Inserisci come collegamento" ;
+            Text [ spanish ] = "Insertar como vínculo" ;
+            Text [ french ] = "Insérer comme lien" ;
+            Text [ portuguese_brazilian ] = "Als Verknüpfung einfügen" ;
+            Text [ portuguese ] = "Inserir como ligação" ;
+            Text[ chinese_simplified ] = "µ±×÷Á´½Ó²åÈë";
+            Text[ russian ] = "Âñòàâèòü êàê ññûëêó";
+            Text[ polish ] = "Wstaw jako ³¹cze";
+            Text[ japanese ] = "Øİ¸‚Æ‚µ‚Ä‘}“ü";
+            Text[ chinese_traditional ] = "·í§@±¶®|´¡¤J";
+            Text[ arabic ] = "ÅÏÑÇÌ ßÇÑÊÈÇØ";
+            Text[ dutch ] = "Als koppeling invoegen";
+            Text[ chinese_simplified ] = "µ±×÷Á´½Ó²åÈë";
+            Text[ greek ] = "ÅéóáãùãŞ ùò óıíäåóç";
+            Text[ korean ] = "¿¬°á·Î »ğÀÔ";
+            Text[ turkish ] = "Bağlantı olarak ekle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = RID_DROPMODE_COPY ;
+            HelpId = HID_SC_DROPMODE_COPY ;
+            /* ### ACHTUNG: Neuer Text in Resource? Als Kopie einfügen : Als Kopie einf³gen */
+            Text = "Als Kopie einfügen" ;
+            Text [ ENGLISH ] = "Insert as Copy" ;
+            Text [ english_us ] = "Insert as Copy" ;
+            Text [ swedish ] = "Infoga som kopia" ;
+            Text [ danish ] = "Indsæt som kopi" ;
+            Text [ italian ] = "Inserisci come copia" ;
+            Text [ spanish ] = "Insertar como copia" ;
+            Text [ french ] = "Insérer comme copie" ;
+            Text [ dutch ] = "Als kopie invoegen" ;
+            Text [ portuguese ] = "Inserir como cópia" ;
+            Text [ portuguese_brazilian ] = "Als Kopie einfügen" ;
+            Text[ chinese_simplified ] = "µ±×÷¸´ÖÆ¼ş²åÈë";
+            Text[ russian ] = "Âñòàâèòü êàê êîïèş";
+            Text[ polish ] = "Wstaw jako kopiê";
+            Text[ japanese ] = "ºËß°‚Æ‚µ‚Ä‘}“ü";
+            Text[ chinese_traditional ] = "·í§@½Æ»s¥ó´¡¤J";
+            Text[ arabic ] = "ÅÏÑÇÌ ßäÓÎÉ";
+            Text[ dutch ] = "Als kopie invoegen";
+            Text[ chinese_simplified ] = "µ±×÷¸´ÖÆ¼ş²åÈë";
+            Text[ greek ] = "ÅéóáãùãŞ ùò áíôßãñáöï";
+            Text[ korean ] = "º¹»çº»À» »ğÀÔ";
+            Text[ turkish ] = "Kopya olarak ekle";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+Menu RID_POPUP_NAVIPI_SCENARIO
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = RID_NAVIPI_SCENARIO_DELETE ;
+            HelpId = HID_SC_SCENARIO_DELETE ;
+            Text = "Löschen" ;
+            Text [ ENGLISH ] = "Delete" ;
+            Text [ portuguese ] = "Eliminar" ;
+            Text [ english_us ] = "Delete" ;
+            Text [ portuguese_brazilian ] = "Löschen" ;
+            Text [ swedish ] = "Radera" ;
+            Text [ danish ] = "Slet" ;
+            Text [ italian ] = "Elimina" ;
+            Text [ spanish ] = "Eliminar" ;
+            Text [ french ] = "Supprimer" ;
+            Text [ dutch ] = "Wissen" ;
+            Text[ chinese_simplified ] = "É¾³ı";
+            Text[ russian ] = "Óäàëèòü";
+            Text[ polish ] = "Usuñ";
+            Text[ japanese ] = "íœ";
+            Text[ chinese_traditional ] = "§R°£";
+            Text[ arabic ] = "ÍĞİ";
+            Text[ dutch ] = "Wissen";
+            Text[ chinese_simplified ] = "É¾³ı";
+            Text[ greek ] = "ÄéáãñáöŞ";
+            Text[ korean ] = "»èÁ¦";
+            Text[ turkish ] = "Sil";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = RID_NAVIPI_SCENARIO_EDIT ;
+            HelpId = HID_SC_SCENARIO_EDIT ;
+            Text = "Eigenschaften..." ;
+            Text [ ENGLISH ] = "Properties..." ;
+            Text [ portuguese ] = "Propriedades..." ;
+            Text [ english_us ] = "Properties..." ;
+            Text [ portuguese_brazilian ] = "Eigenschaften..." ;
+            Text [ swedish ] = "Egenskaper..." ;
+            Text [ danish ] = "Egenskaber..." ;
+            Text [ italian ] = "Proprietà..." ;
+            Text [ spanish ] = "Propiedades..." ;
+            Text [ french ] = "Propriétés..." ;
+            Text [ dutch ] = "Eigenschappen..." ;
+            Text[ chinese_simplified ] = "ÊôĞÔ...";
+            Text[ russian ] = "Ñâîéñòâà...";
+            Text[ polish ] = "W³aœciwoœci...";
+            Text[ japanese ] = "ÌßÛÊßÃ¨...";
+            Text[ chinese_traditional ] = "Äİ©Ê...";
+            Text[ arabic ] = "ÎÕÇÆÕ...";
+            Text[ dutch ] = "Eigenschappen...";
+            Text[ chinese_simplified ] = "ÊôĞÔ...";
+            Text[ greek ] = "Éäéüôçôåò...";
+            Text[ korean ] = "Æ¯¼º...";
+            Text[ turkish ] = "Özellikler...";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};

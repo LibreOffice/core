@@ -1,0 +1,94 @@
+interface TableDrawText : Selection
+{
+    //  Drawing geht von Basic aus gar nicht, darum alles mit Export = FALSE
+
+    // alle Referenz-Eingabe-Dialoge:
+    FID_DEFINE_NAME             [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_DEFINE_COLROWNAMERANGES [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_OPENDLG_SOLVE           [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_OPENDLG_PIVOTTABLE      [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_OPENDLG_TABOP           [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_FILTER                  [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_SPECIAL_FILTER          [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_DEFINE_DBNAME           [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_OPENDLG_CONSOLIDATE     [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_OPENDLG_CHART           [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_OPENDLG_EDIT_PRINTAREA  [ StateMethod = StateDisableItems; Export = FALSE; ]
+     // andere:
+    SID_DRAW_CHART              [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_STYLE_CATALOG           [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_IMPORT_DATA             [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_OPENDLG_FUNCTION        [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_STYLE_FAMILY2           [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_STYLE_FAMILY4           [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_STYLE_APPLY             [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_STYLE_WATERCAN          [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_STYLE_NEW_BY_EXAMPLE    [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_STYLE_UPDATE_BY_EXAMPLE [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_STYLE_NEW               [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_STYLE_EDIT              [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_STYLE_DELETE            [ StateMethod = StateDisableItems; Export = FALSE; ]
+
+     //----------------------------------------------------------------------------
+    SID_CUT             [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_COPY            [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_PASTE           [ ExecMethod = Execute; StateMethod = GetClipState; Export = FALSE; ]
+    FID_PASTE_CONTENTS  [ ExecMethod = Execute; StateMethod = GetClipState; Export = FALSE; ]
+    SID_SELECTALL       [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_CHARMAP         [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+     // Attribute: --------------------------------------------------
+    SID_TEXT_STANDARD           [ ExecMethod = ExecuteAttr; StateMethod = GetState; Export = FALSE; ]
+    SID_DRAWTEXT_ATTR_DLG       [ ExecMethod = ExecuteAttr; StateMethod = GetState; Export = FALSE; ]
+    SID_ATTR_CHAR_FONT          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_FONTHEIGHT    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_COLOR         [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_WEIGHT        [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_POSTURE       [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_UNDERLINE     [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+
+    SID_ULINE_VAL_NONE          [ ExecMethod = ExecuteToggle; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ULINE_VAL_SINGLE        [ ExecMethod = ExecuteToggle; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ULINE_VAL_DOUBLE        [ ExecMethod = ExecuteToggle; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ULINE_VAL_DOTTED        [ ExecMethod = ExecuteToggle; StateMethod = GetAttrState; Export = FALSE; ]
+
+    SID_ATTR_CHAR_CONTOUR       [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_SHADOWED      [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_STRIKEOUT     [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_PARA_ADJUST_LEFT   [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_PARA_ADJUST_CENTER [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_PARA_ADJUST_RIGHT  [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_PARA_ADJUST_BLOCK  [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_PARA_LINESPACE_10  [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_PARA_LINESPACE_15  [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_PARA_LINESPACE_20  [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_SET_SUPER_SCRIPT        [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_SET_SUB_SCRIPT          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_CHAR_DLG                [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_PARA_DLG                [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+     // ---- FontWork:
+    SID_FONTWORK    [ ExecMethod = ExecuteExtra; StateMethod = GetState; Export = FALSE; ]
+
+    SID_FORMTEXT_STYLE      [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_FORMTEXT_ADJUST     [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_FORMTEXT_DISTANCE   [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_FORMTEXT_START      [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_FORMTEXT_MIRROR     [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_FORMTEXT_HIDEFORM   [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_FORMTEXT_OUTLINE    [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_FORMTEXT_SHADOW     [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_FORMTEXT_SHDWCOLOR  [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_FORMTEXT_SHDWXVAL   [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_FORMTEXT_SHDWYVAL   [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_FORMTEXT_STDFORM    [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+
+    SID_HYPERLINK_SETLINK   [ ExecMethod = Execute; Export = FALSE; ]
+    SID_HYPERLINK_GETLINK   [ StateMethod = GetState; Export = FALSE; ]
+}
+
+
+
+ // ===========================================================================
+shell ScDrawTextObjectBar
+{
+    import TableDrawText;
+}

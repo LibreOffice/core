@@ -1,0 +1,15 @@
+interface Auditing : Object
+{
+    SID_FILL_ADD_PRED   [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_FILL_DEL_PRED   [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_FILL_ADD_SUCC   [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_FILL_DEL_SUCC   [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_FILL_NONE       [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_CANCEL          [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_FILL_SELECT     [ ExecMethod = Execute; StateMethod = GetState; ]
+}
+
+shell ScAuditingShell
+{
+    import Auditing;
+}

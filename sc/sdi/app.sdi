@@ -1,0 +1,142 @@
+ //==================================================================
+ //
+ // StarCalc
+ //
+ // (C) 1994 StarDivision GmbH, Hamburg, Germany
+ // $Author: hr $ $Date: 2000-09-18 16:44:52 $ $Revision: 1.1.1.1 $
+ // $Logfile:   T:/sc/sdi/app.sdv  $ $Workfile:   app.sdi  $
+ //------------------------------------------------------------------
+
+interface StarCalc : Module
+[
+    uuid ( "AB3257C0-07D7-11CF-89CB-008029E4B0B1" )
+]
+{
+    SID_SC_EDITOPTIONS  [ ExecMethod = Execute; ]
+    FID_AUTOCOMPLETE    [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_DETECTIVE_AUTO  [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_PSZ_FUNCTION    [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_FOCUS_POSWND    [ ExecMethod = Execute; ]
+
+    SID_ATTR_METRIC     [ ExecMethod = Execute; StateMethod = GetState; ]
+
+    SID_AUTOSPELL_CHECK
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE;
+    ]
+
+    SID_AUTOSPELL_MARKOFF
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE;
+    ]
+
+    SID_ATTR_LANGUAGE
+    [
+            ExecMethod = Execute ;
+            StateMethod = GetState ;
+        Export = FALSE;
+    ]
+
+    SID_CHOOSE_DESIGN   [ ExecMethod = Execute; ]
+    SID_EURO_CONVERTER  [ ExecMethod = Execute; ]
+}
+
+
+shell ScModule
+{
+            import StarCalc[Automation];
+}
+
+
+/*------------------------------------------------------------------------
+    $Log: not supported by cvs2svn $
+    Revision 1.40  2000/02/10 15:10:20  nn
+    #72897# slot for Euro converter
+
+    Revision 1.39  1999/11/10 17:01:20  nn
+    SID_CHOOSE_DESIGN
+
+    Revision 1.38  1999/03/24 17:34:52  ANK
+    #63806# Configname rausgeschmissen
+
+
+      Rev 1.37   24 Mar 1999 18:34:52   ANK
+   #63806# Configname rausgeschmissen
+
+      Rev 1.36   22 Jun 1998 21:04:14   NN
+   SID_DETECTIVE_AUTO
+
+      Rev 1.35   28 Aug 1997 12:35:58   MBA
+   Neue Interface-Namen
+
+      Rev 1.34   07 Aug 1997 14:45:14   NN
+   #42479# SID_ATTR_METRIC
+
+      Rev 1.33   02 Jun 1997 15:45:16   NN
+   FID_FOCUS_POSWND
+
+      Rev 1.32   30 Apr 1997 16:44:08   ER
+   #39374# SID_ATTR_LANGUAGE in ScModule Execute/GetState Dokumentabgleich
+
+      Rev 1.31   09 Dec 1996 16:07:30   NN
+   SID_SC_EDITOPTIONS statt SID_SCOPTIONS, SID_AUTOSPELL_MARKOFF
+
+      Rev 1.30   18 Nov 1996 18:25:00   NN
+   SID_AUTOSPELL_CHECK
+
+      Rev 1.29   05 Nov 1996 14:38:46   NN
+   ScModule statt ScApplication
+
+      Rev 1.28   22 Oct 1996 13:15:14   HJS
+   merge 22.10.96
+
+      Rev 1.27   09 Oct 1996 12:08:56   HJS
+   merge 09.10.96
+
+      Rev 1.26   30 Sep 1996 11:09:36   NN
+   SID_PSZ_FUNCTION
+
+      Rev 1.25   25 Sep 1996 14:46:44   RJ
+   aufgeraeumt
+
+      Rev 1.24   26 Aug 1996 21:40:12   NN
+   #30649# Extras/Optionen mit PlugComm-Flag
+
+      Rev 1.23   21 Aug 1996 14:07:06   HJS
+   eu...
+
+      Rev 1.22   14 Aug 1996 17:01:06   NN
+   SID_INET_DLG
+
+      Rev 1.21   05 Jun 1996 12:05:52   OV
+   sid_show_browser raus
+
+      Rev 1.20   23 May 1996 16:05:36   NN
+   FID_AUTOCOMPLETE
+
+      Rev 1.19   29 Mar 1996 12:23:00   OS
+   Ids fuer Basic internationalisiert
+
+      Rev 1.18   29 Mar 1996 09:31:24   OS
+   Umlaut berichtigt
+
+      Rev 1.17   03 Mar 1996 19:17:12   JN
+   InsertHyperlink neu
+
+      Rev 1.16   28 Feb 1996 18:32:54   JN
+   hier kein Adressbuch, Ableitung jetzt von OfficeApplication
+
+      Rev 1.15   22 Feb 1996 12:58:08   JN
+   neuer Slot fuer Adressbuch ein/aus
+
+      Rev 1.14   13 Feb 1996 16:23:58   JN
+   Address Interface neu
+
+------------------------------------------------------------------------*/
+
+
+

@@ -1,0 +1,57 @@
+interface TableText : Selection
+{
+    //  von Basic aus nicht erreichbar, darum alles mit Export = FALSE
+
+    SID_ATTR_INSERT     [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+
+    SfxVoidItem Delete SID_DELETE ( )
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE;
+        GroupId = GID_EDIT ;
+        Cachable ;
+    ]
+    SID_CUT             [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_COPY            [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_PASTE           [ ExecMethod = Execute; StateMethod = GetClipState; Export = FALSE; ]
+    FID_PASTE_CONTENTS  [ ExecMethod = Execute; StateMethod = GetClipState; Export = FALSE; ]
+    SID_SELECTALL       [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_CHARMAP         [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    FID_INSERT_NAME     [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+
+     // ---- Attribute:
+    SID_ATTR_CHAR_FONT          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_FONTHEIGHT    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_COLOR         [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+
+     // ---- Attribut - Toggles:
+    SID_ATTR_CHAR_WEIGHT        [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_POSTURE       [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_UNDERLINE     [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+
+    SID_ULINE_VAL_NONE          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ULINE_VAL_SINGLE        [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ULINE_VAL_DOUBLE        [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ULINE_VAL_DOTTED        [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+
+    SID_ATTR_CHAR_STRIKEOUT     [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_SHADOWED      [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_CONTOUR       [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_SET_SUPER_SCRIPT        [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_SET_SUB_SCRIPT          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_CELL_FORMAT_RESET   [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_CHAR_DLG            [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_TOGGLE_REL          [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+
+    SID_HYPERLINK_SETLINK   [ ExecMethod = Execute; Export = FALSE; ]
+    SID_HYPERLINK_GETLINK   [ StateMethod = GetState; Export = FALSE; ]
+}
+
+
+ // ===========================================================================
+shell ScEditShell
+{
+    import TableText;
+}
+
