@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockExport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2002-01-23 14:48:38 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:13:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,14 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::rtl;
 
-SwXMLBlockListExport::SwXMLBlockListExport( SwXMLTextBlocks & rBlocks, const rtl::OUString &rFileName,
-          com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler)
-: rBlockList(rBlocks),
-  SvXMLExport(rFileName, rHandler)
+// #110680#
+SwXMLBlockListExport::SwXMLBlockListExport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    SwXMLTextBlocks & rBlocks,
+    const rtl::OUString &rFileName,
+    com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler)
+:   SvXMLExport( xServiceFactory, rFileName, rHandler ),
+    rBlockList(rBlocks)
 {
     _GetNamespaceMap().Add( GetXMLToken ( XML_NP_BLOCK_LIST ),
                             GetXMLToken ( XML_N_BLOCK_LIST ),
@@ -124,10 +128,14 @@ sal_uInt32 SwXMLBlockListExport::exportDoc(enum XMLTokenEnum eClass)
     return 0;
 }
 
-SwXMLTextBlockExport::SwXMLTextBlockExport( SwXMLTextBlocks & rBlocks, const rtl::OUString &rFileName,
-          com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler)
-: rBlockList(rBlocks),
-  SvXMLExport(rFileName, rHandler)
+// #110680#
+SwXMLTextBlockExport::SwXMLTextBlockExport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    SwXMLTextBlocks & rBlocks,
+    const rtl::OUString &rFileName,
+    com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler)
+:   SvXMLExport( xServiceFactory, rFileName, rHandler ),
+    rBlockList(rBlocks)
 {
     _GetNamespaceMap().Add( GetXMLToken ( XML_NP_BLOCK_LIST ),
                             GetXMLToken ( XML_N_BLOCK_LIST ),
