@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: sj $ $Date: 2001-11-08 15:30:11 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 23:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,7 +527,7 @@ String STR_DIAVIEW
     Text [ italian ] = "Diapositiva" ;
     Text [ portuguese_brazilian ] = "Slide" ;
     Text [ portuguese ] = "Diapositivo" ;
-    Text [ finnish ] = "Slide" ;
+    Text [ finnish ] = "Dia" ;
     Text [ danish ] = "Dias" ;
     Text [ french ] = "Diapo" ;
     Text [ swedish ] = "Diabild" ;
@@ -1285,7 +1285,7 @@ String STR_25
     Text [ italian ] = "25%" ;
     Text [ portuguese_brazilian ] = "25%" ;
     Text [ portuguese ] = "25%" ;
-    Text [ finnish ] = "25 %" ;
+    Text [ finnish ] = "25%" ;
     Text [ danish ] = "25%" ;
     Text [ french ] = "25%" ;
     Text [ swedish ] = "25%" ;
@@ -1311,7 +1311,7 @@ String STR_50
     Text [ italian ] = "50%" ;
     Text [ portuguese_brazilian ] = "50%" ;
     Text [ portuguese ] = "50%" ;
-    Text [ finnish ] = "50 %" ;
+    Text [ finnish ] = "50%" ;
     Text [ danish ] = "50%" ;
     Text [ french ] = "50%" ;
     Text [ swedish ] = "50%" ;
@@ -1337,7 +1337,7 @@ String STR_75
     Text [ italian ] = "75%" ;
     Text [ portuguese_brazilian ] = "75%" ;
     Text [ portuguese ] = "75%" ;
-    Text [ finnish ] = "75 %" ;
+    Text [ finnish ] = "75%" ;
     Text [ danish ] = "75%" ;
     Text [ french ] = "75%" ;
     Text [ swedish ] = "75%" ;
@@ -3173,7 +3173,7 @@ String STR_AL_TITLE_VERT_OUTLINE
     Text[ turkish ] = "Title, vertical text";
     Text[ arabic ] = "ÚäæÇä¡ äÕ ÚãæÏí";
     Text[ catalan ] = "Título, texto vertical";
-    Text[ finnish ] = "Titel, vertikaler text";
+    Text[ finnish ] = "Otsikko, pystysuuntainen teksti";
 };
 String STR_AL_TITLE_VERT_OUTLINE_CLIPART
 {
@@ -3198,7 +3198,7 @@ String STR_AL_TITLE_VERT_OUTLINE_CLIPART
     Text[ turkish ] = "Title, vertical text, clipart";
     Text[ arabic ] = "ÚäæÇä¡ äÕ ÚãæÏí¡ Clipart";
     Text[ catalan ] = "Título, texto vertical, clipart";
-    Text[ finnish ] = "Titel, vertikaler Text, Clipart";
+    Text[ finnish ] = "Otsikko, pystysuuntainen teksti, leikekuva";
 };
 String STR_AL_VERT_TITLE_TEXT_CHART
 {
@@ -3223,7 +3223,7 @@ String STR_AL_VERT_TITLE_TEXT_CHART
     Text[ turkish ] = "Vertical title, text, chart";
     Text[ arabic ] = "ÚäæÇä ÚãæÏí¡ äÕ¡ ÑÓã ÈíÇäí";
     Text[ catalan ] = "Título vertical, texto, diagrama";
-    Text[ finnish ] = "Vertikaler Titel, Text, Diagramm";
+    Text[ finnish ] = "Pystysuuntainen otsikko, teksti, leikekuva";
 };
 String STR_AL_VERT_TITLE_VERT_OUTLINE
 {
@@ -3248,7 +3248,7 @@ String STR_AL_VERT_TITLE_VERT_OUTLINE
     Text[ turkish ] = "Vertical title, vertical text";
     Text[ arabic ] = "ÚäæÇä ÚãæÏí¡ äÕ ÚãæÏí";
     Text[ catalan ] = "Título vertical, texto vertical";
-    Text[ finnish ] = "Vertikaler Titel, vertikaler Text";
+    Text[ finnish ] = "Pystysuuntainen otsikko, pystysuuntainen teksti";
 };
 
 String STR_AUTOLAYOUT_HANDOUT1
@@ -3500,7 +3500,7 @@ String STR_MASTERPAGEMODE
     Text [ italian ] = "Vista sfondo" ;
     Text [ portuguese_brazilian ] = "Modo Fdesfazer" ;
     Text [ portuguese ] = "Modo Plano de fundo" ;
-    Text [ finnish ] = "Taustanäkymä" ;
+    Text [ finnish ] = "Päänäkymä" ;
     Text [ danish ] = "Baggrundsvisning" ;
     Text [ french ] = "Mode Arrière-plan" ;
     Text [ swedish ] = "Bakgrundsvy" ;
@@ -4014,7 +4014,7 @@ String STR_EXPORT_STANDARD
     Text [ italian ] = "~Standard" ;
     Text [ portuguese_brazilian ] = "C~asa" ;
     Text [ portuguese ] = "~Padrão" ;
-    Text [ finnish ] = "Vakio" ;
+    Text [ finnish ] = "Oletusarvo" ;
     Text [ danish ] = "Standard" ;
     Text [ french ] = "~Standard" ;
     Text [ swedish ] = "~Standard" ;
@@ -5668,7 +5668,7 @@ String STR_WARN_DEL_PAGE
     Text[ arabic ] = "ÊÍĞİ åĞå ÇáÚãáíÉ ÇáÕİÍÉ '$'. \nÊÍÊæí åĞå ÇáÕİÍÉ Úáì ßÇÆäÇÊ ÑÓæãíÉ!";
     Text[ turkish ] = "Bu işlem '$' sayfasını siler. \nSayfa çizim nesneleri içeriyor!";
     Text[ catalan ] = "Esta acción eliminará la página $. \n¡La página contiene objetos de dibujo!";
-    Text[ finnish ] = "Tämä toiminto poistaa sivun $. \nHuomautus: Sivulla on piirrosobjekteja.";
+    Text[ finnish ] = "Tämä toiminto poistaa sivun $. \nHuomautus: sivulla on piirrosobjekteja.";
 };
 String STR_WARN_DEL_SEL_PAGES
 {
@@ -5693,7 +5693,7 @@ String STR_WARN_DEL_SEL_PAGES
     Text[ arabic ] = "ÊÍĞİ åĞå ÇáÚãáíÉ ÇáÕİÍÇÊ ÇáãÍÏÏÉ. \nÊÍÊæí åĞå ÇáÕİÍÇÊ Úáì ßÇÆäÇÊ ÑÓæãíÉ!";
     Text[ turkish ] = "Bu işlem seçilen sayfaları siler. \nSayfalar çizim nesneleri içeriyor!";
     Text[ catalan ] = "Esta acción elimina las páginas seleccionadas. \n¡Las páginas contienen objetos de dibujo!";
-    Text[ finnish ] = "Tämä toiminto poistaa valitut sivut.\nHuomauts: Sivuilla on piirrosobjekteja.";
+    Text[ finnish ] = "Tämä toiminto poistaa valitut sivut.\nHuomautus: sivuilla on piirrosobjekteja.";
 };
 
 String STR_WARN_DEL_SEL_PAGE
@@ -5719,7 +5719,7 @@ String STR_WARN_DEL_SEL_PAGE
     Text[ arabic ] = "ÊÍĞİ åĞå ÇáÚãáíÉ ÇáÕİÍÉ ÇáãÍÏÏÉ. \nÊÍÊæí åĞå ÇáÕİÍÉ Úáì ßÇÆäÇÊ ÑÓæãíÉ!";
     Text[ turkish ] = "Bu işlem seçilen sayfayı siler. \nSayfa çizim nesneleri içeriyor!";
     Text[ catalan ] = "Esta acción elimina la página seleccionada. \n¡La página contiene objetos de dibujo!";
-    Text[ finnish ] = "T?m? toiminto poistaa valitun sivun.\nHuomautus: sivulla on piirrosobjekteja.";
+    Text[ finnish ] = "Tämä toiminto poistaa valitun sivun.\nHuomautus: sivulla on piirrosobjekteja.";
 };
 
 ModalDialog RID_UNDO_DELETE_WARNING
@@ -5994,7 +5994,7 @@ String STR_REMOVE_LINK
     Text [ finnish ] = "Kuva on linkitetty asiakirjaan. \nHaluatko poistaa kuvan linkityksen, jotta voit muokata kuvaa?" ;
     Text [ danish ] = "Denne grafik er kædet til dokumentet. \nVil du ophæve kæden for at redigere grafikken." ;
     Text [ french ] = "Cette image est liée au document.\nSouhaitez-vous supprimer le lien pour modifier l'image ?" ;
-    Text [ swedish ] = "Denna grafik är länkad till dokumentet.\nVill Du upphäva länken för att redigera grafiken?" ;
+    Text [ swedish ] = "Det här grafikobjektet är länkat till dokumentet.\nVill du upphäva länken för att redigera grafikobjektet?" ;
     Text [ dutch ] = "Deze afbeelding is met het document gekoppeld. \nWilt u de koppeling opheffen om de afbeelding te bewerken?" ;
     Text [ spanish ] = "Esta imagen está vinculada al documento. \n¿Desea eliminar el vínculo para editar la imagen?" ;
     Text[ chinese_simplified ] = "è¿™ä¸ªå›¾å½¢æ˜¯å’Œæ–‡æ¡£é“¾æ¥çš„ã€‚ \næ‚¨è¦å–æ¶ˆè¿™ä¸ªé“¾æ¥ï¼Œç¼–è¾‘è¿™ä¸ªå›¾å½¢å—ï¼Ÿ";
@@ -6801,7 +6801,7 @@ String STR_PRINT_DRAWING
     Text[ arabic ] = "(ÑÓãÉ)";
     Text[ turkish ] = "(Çizim)";
     Text[ catalan ] = "(dibujo)";
-    Text[ finnish ] = "(Piirros)";
+    Text[ finnish ] = " (Piirros)";
 };
 String STR_PRINT_NOTES
 {
@@ -6826,7 +6826,7 @@ String STR_PRINT_NOTES
     Text[ arabic ] = "(ãáÇÍÙÇÊ)";
     Text[ turkish ] = "(Notlar)";
     Text[ catalan ] = "(Notas)";
-    Text[ finnish ] = "(Huomautukset)";
+    Text[ finnish ] = " (Huomautukset)";
 };
 String STR_PRINT_HANDOUT
 {
@@ -6851,7 +6851,7 @@ String STR_PRINT_HANDOUT
     Text[ arabic ] = "(äÔÑÉ)";
     Text[ turkish ] = "(Slayt sıralayıcısı)";
     Text[ catalan ] = "(volante)";
-    Text[ finnish ] = "(Esite)";
+    Text[ finnish ] = " (Esite)";
 };
 String STR_PRINT_OUTLINE
 {
@@ -6876,7 +6876,7 @@ String STR_PRINT_OUTLINE
     Text[ arabic ] = "(ÊŞÓíã)";
     Text[ turkish ] = "(Anahat)";
     Text[ catalan ] = "(Esquema)";
-    Text[ finnish ] = "(Jäsennys)";
+    Text[ finnish ] = " (Jäsennys)";
 };
 String STR_WARN_SCALE_FAIL
 {
@@ -7482,7 +7482,7 @@ String STR_EFFECTDLG_MACRO
     Text[ arabic ] = "ãÇßÑæ";
     Text[ turkish ] = "Makro";
     Text[ catalan ] = "Macro";
-    Text[ finnish ] = "Macro";
+    Text[ finnish ] = "Makro";
 };
  // Strings fuer Animations-Effekte
 String STR_EFFECT_NONE
@@ -7687,7 +7687,7 @@ String STR_EFFECT_DISCARD_FROM_L
     Text[ finnish ] = "Poista peite vasemmalta";
     Text[ italian ] = "Sovrapponi da sinistra";
     Text[ danish ] = "Afdæk mod højre";
-    Text[ swedish ] = "Flyg in från vänster";
+    Text[ swedish ] = "Flyg in utifrån, från vänster";
     Text[ polish ] = "Przenikaj z lewej";
     Text[ portuguese_brazilian ] = "Descartar a partir da esquerda";
     Text[ japanese ] = "å·¦ã‹ã‚‰ï½½ï¾—ï½²ï¾„ï¾ï½²ï¾";
@@ -7712,7 +7712,7 @@ String STR_EFFECT_DISCARD_FROM_UL
     Text[ finnish ] = "Poista peite ylävasemmalta";
     Text[ italian ] = "Sovrapponi dall'alto a sinistra";
     Text[ danish ] = "Discard from Top Left";
-    Text[ swedish ] = "Flyg in uppifrån vänster";
+    Text[ swedish ] = "Flyg in utifrån, uppifrån vänster";
     Text[ polish ] = "Przenikaj z lewej od góry";
     Text[ portuguese_brazilian ] = "Discard from Top Left";
     Text[ japanese ] = "å·¦ä¸Šã‹ã‚‰ï½½ï¾—ï½²ï¾„ï¾ï½²ï¾";
@@ -7737,7 +7737,7 @@ String STR_EFFECT_DISCARD_FROM_T
     Text[ finnish ] = "Poista peite ylhäältä";
     Text[ italian ] = "Sovrapponi dall'alto";
     Text[ danish ] = "Discard from Top";
-    Text[ swedish ] = "Flyg in uppifrån";
+    Text[ swedish ] = "Flyg in utifrån, uppifrån";
     Text[ polish ] = "Przenikaj od góry";
     Text[ portuguese_brazilian ] = "Discard from Top";
     Text[ japanese ] = "ä¸Šã‹ã‚‰ï½½ï¾—ï½²ï¾„ï¾ï½²ï¾";
@@ -7762,7 +7762,7 @@ String STR_EFFECT_DISCARD_FROM_UR
     Text[ finnish ] = "Poista peite yläoikealta";
     Text[ italian ] = "Sovrapponi dall'alto a destra";
     Text[ danish ] = "Discard from Upper Right";
-    Text[ swedish ] = "Flyg in uppifrån höger";
+    Text[ swedish ] = "Flyg in utifrån, uppifrån höger";
     Text[ polish ] = "Przenikaj z prawej od góry";
     Text[ portuguese_brazilian ] = "Discard from Upper Right";
     Text[ japanese ] = "å³ä¸Šã‹ã‚‰ï½½ï¾—ï½²ï¾„ï¾ï½²ï¾";
@@ -7787,7 +7787,7 @@ String STR_EFFECT_DISCARD_FROM_R
     Text[ finnish ] = "Poista peite oikealta";
     Text[ italian ] = "Sovrapponi da destra";
     Text[ danish ] = "Afdæk mod venstre";
-    Text[ swedish ] = "Flyg in från höger";
+    Text[ swedish ] = "Flyg in utifrån, från höger";
     Text[ polish ] = "Przenikaj z prawej";
     Text[ portuguese_brazilian ] = "Descartar a partir da direita";
     Text[ japanese ] = "å³ã‹ã‚‰ï½½ï¾—ï½²ï¾„ï¾ï½²ï¾";
@@ -7812,7 +7812,7 @@ String STR_EFFECT_DISCARD_FROM_LR
     Text[ finnish ] = "Poista peite alaoikealta";
     Text[ italian ] = "Sovrapponi dal basso a destra";
     Text[ danish ] = "Discard from Lower Right";
-    Text[ swedish ] = "Flyg in nedifrån höger";
+    Text[ swedish ] = "Flyg in utifrån, nedifrån höger";
     Text[ polish ] = "Przenikaj z prawej od do³u";
     Text[ portuguese_brazilian ] = "Discard from Lower Right";
     Text[ japanese ] = "å³ä¸‹ã‹ã‚‰ï½½ï¾—ï½²ï¾„ï¾ï½²ï¾";
@@ -7837,7 +7837,7 @@ String STR_EFFECT_DISCARD_FROM_B
     Text[ finnish ] = "Poista peite alhaalta";
     Text[ italian ] = "Sovrapponi dal basso";
     Text[ danish ] = "Afdæk opad";
-    Text[ swedish ] = "Flyg in nedifrån";
+    Text[ swedish ] = "Flyg in utifrån, nedifrån";
     Text[ polish ] = "Przenikaj z do³u";
     Text[ portuguese_brazilian ] = "Descartar a partir da base";
     Text[ japanese ] = "ä¸‹ã‹ã‚‰ï½½ï¾—ï½²ï¾„ï¾ï½²ï¾";
@@ -7862,7 +7862,7 @@ String STR_EFFECT_DISCARD_FROM_LL
     Text[ finnish ] = "Poista peite alavasemmalta";
     Text[ italian ] = "Sovrapponi dal basso a sinistra";
     Text[ danish ] = "Discard from Lower Left";
-    Text[ swedish ] = "Flyg in nedifrån vänster";
+    Text[ swedish ] = "Flyg in utifrån, nedifrån vänster";
     Text[ polish ] = "Przenikaj z lewej od do³u";
     Text[ portuguese_brazilian ] = "Discard from Lower Left";
     Text[ japanese ] = "å·¦ä¸‹ã‹ã‚‰ï½½ï¾—ï½²ï¾„ï¾ï½²ï¾";
@@ -7887,7 +7887,7 @@ String STR_EFFECT_DISCARD_S_FROM_L
     Text[ finnish ] = "Poista objektin peite vasemmalta";
     Text[ italian ] = "Sovrapponi da sinistra da un punto interno";
     Text[ danish ] = "Discard short from Left";
-    Text[ swedish ] = "Flyg in kort från vänster";
+    Text[ swedish ] = "Flyg in på sidan, från vänster";
     Text[ polish ] = "Przenikaj w ramce obiektu z lewej";
     Text[ portuguese_brazilian ] = "Discard short from Left";
     Text[ japanese ] = "å·¦ã‹ã‚‰ï¾‹ï¾Ÿï½°ï½¸ï½²ï¾";
@@ -7912,7 +7912,7 @@ String STR_EFFECT_DISCARD_S_FROM_UL
     Text[ finnish ] = "Poista objektin peite ylävasemmalta";
     Text[ italian ] = "Sovrapponi dall'alto a sinistra da un punto interno";
     Text[ danish ] = "Discard short from Upper Left";
-    Text[ swedish ] = "Flyg in kort uppifrån vänster";
+    Text[ swedish ] = "Flyg in på sidan, uppifrån vänster";
     Text[ polish ] = "Przenikaj w ramce obiektu z lewej od góry";
     Text[ portuguese_brazilian ] = "Discard short from Upper Left";
     Text[ japanese ] = "å·¦ä¸Šã‹ã‚‰ï¾‹ï¾Ÿï½°ï½¸ï½²ï¾";
@@ -7937,7 +7937,7 @@ String STR_EFFECT_DISCARD_S_FROM_T
     Text[ finnish ] = "Poista objektin peite ylhäältä";
     Text[ italian ] = "Sovrapponi dall'alto da un punto interno";
     Text[ danish ] = "Discard short from Top";
-    Text[ swedish ] = "Flyg in kort uppifrån";
+    Text[ swedish ] = "Flyg in på sidan, uppifrån";
     Text[ polish ] = "Przenikaj w ramce obiektu od góry";
     Text[ portuguese_brazilian ] = "Discard short from Top";
     Text[ japanese ] = "ä¸Šã‹ã‚‰ï¾‹ï¾Ÿï½°ï½¸ï½²ï¾";
@@ -7962,7 +7962,7 @@ String STR_EFFECT_DISCARD_S_FROM_UR
     Text[ finnish ] = "Poista objektin peite yläoikealta";
     Text[ italian ] = "Sovrapponi dall'alto a sinistra da un punto interno";
     Text[ danish ] = "Discard short from Upper Right";
-    Text[ swedish ] = "Flyg in kort uppifrån höger";
+    Text[ swedish ] = "Flyg in på sidan, uppifrån höger";
     Text[ polish ] = "Przenikaj z prawej od góry";
     Text[ portuguese_brazilian ] = "Discard short from Upper Right";
     Text[ japanese ] = "å³ä¸Šã‹ã‚‰ï¾‹ï¾Ÿï½°ï½¸ï½²ï¾";
@@ -7987,7 +7987,7 @@ String STR_EFFECT_DISCARD_S_FROM_R
     Text[ finnish ] = "Poista objektin peite oikealta";
     Text[ italian ] = "Sovrapponi da destra da un punto interno";
     Text[ danish ] = "Discard short from Right";
-    Text[ swedish ] = "Flyg in kort från höger";
+    Text[ swedish ] = "Flyg in på sidan, från höger";
     Text[ polish ] = "Przenikaj w ramce obiektu z prawej";
     Text[ portuguese_brazilian ] = "Discard short from Right";
     Text[ japanese ] = "å³ã‹ã‚‰ï¾‹ï¾Ÿï½°ï½¸ï½²ï¾";
@@ -8012,7 +8012,7 @@ String STR_EFFECT_DISCARD_S_FROM_LR
     Text[ finnish ] = "Poista objektin peite alaoikealta";
     Text[ italian ] = "Sovrapponi dal basso a destra da un punto interno";
     Text[ danish ] = "Discard short from Lower Right";
-    Text[ swedish ] = "Flyg in kort nedifrån höger";
+    Text[ swedish ] = "Flyg in på sidan, nedifrån höger";
     Text[ polish ] = "Przenikaj w ramce obiektu z prawej od do³u";
     Text[ portuguese_brazilian ] = "Discard short from Lower Right";
     Text[ japanese ] = "å³ä¸‹ã‹ã‚‰ï¾‹ï¾Ÿï½°ï½¸ï½²ï¾";
@@ -8037,7 +8037,7 @@ String STR_EFFECT_DISCARD_S_FROM_B
     Text[ finnish ] = "Poista objektin peite alhaalta";
     Text[ italian ] = "Sovrapponi dal basso da un punto interno";
     Text[ danish ] = "Discard short from Bottom";
-    Text[ swedish ] = "Flyg in nedifrån";
+    Text[ swedish ] = "Flyg in på sidan, nedifrån";
     Text[ polish ] = "Przenikaj w ramce obiektu od do³u";
     Text[ portuguese_brazilian ] = "Discard short from Bottom";
     Text[ japanese ] = "ä¸‹ã‹ã‚‰ï¾‹ï¾Ÿï½°ï½¸ï½²ï¾";
@@ -8062,7 +8062,7 @@ String STR_EFFECT_DISCARD_S_FROM_LL
     Text[ finnish ] = "Poista objektin peite alavasemmalta";
     Text[ italian ] = "Sovrapponi dal basso a sinistra da un punto interno";
     Text[ danish ] = "Discard short from Lower Left";
-    Text[ swedish ] = "Flyg in kort nedifrån vänster";
+    Text[ swedish ] = "Flyg in på sidan, nedifrån vänster";
     Text[ polish ] = "Przenikaj w ramce obiektu z lewej od do³u";
     Text[ portuguese_brazilian ] = "Discard short from Lower Left";
     Text[ japanese ] = "å·¦ä¸‹ã‹ã‚‰ï¾‹ï¾Ÿï½°ï½¸ï½²ï¾";
@@ -8961,7 +8961,7 @@ String STR_EFFECT_MOVE_TO_L
     Text[ finnish ] = "Siirrä vasemmalle";
     Text[ italian ] = "Uscita a sinistra";
     Text[ danish ] = "Flyt mod venstre";
-    Text[ swedish ] = "Flyg ut till vänster";
+    Text[ swedish ] = "Flyg ut åt vänster";
     Text[ polish ] = "Wysuñ w lewo";
     Text[ portuguese_brazilian ] = "Nach links bewegen";
     Text[ japanese ] = "å·¦ã«ï½½ï¾—ï½²ï¾„ï¾ï½±ï½³ï¾„";
@@ -8986,7 +8986,7 @@ String STR_EFFECT_MOVE_TO_UL
     Text[ finnish ] = "Siirrä ylävasemmalle";
     Text[ italian ] = "Uscita in alto a sinistra";
     Text[ danish ] = "Move to upper left";
-    Text[ swedish ] = "Flyg ut uppe till vänster";
+    Text[ swedish ] = "Flyg ut uppåt åt vänster";
     Text[ polish ] = "Wysuñ w lewo do góry";
     Text[ portuguese_brazilian ] = "Move to upper left";
     Text[ japanese ] = "å·¦ä¸Šã«ï½½ï¾—ï½²ï¾„ï¾ï½±ï½³ï¾„";
@@ -9036,7 +9036,7 @@ String STR_EFFECT_MOVE_TO_UR
     Text[ finnish ] = "Siirrä yläoikealle";
     Text[ italian ] = "Uscita in alto a destra";
     Text[ danish ] = "Move to upper right";
-    Text[ swedish ] = "Flyg ut uppe till höger";
+    Text[ swedish ] = "Flyg ut uppåt åt höger";
     Text[ polish ] = "Wysuñ w prawo do góry";
     Text[ portuguese_brazilian ] = "Move to upper right";
     Text[ japanese ] = "å³ä¸Šã«ï½½ï¾—ï½²ï¾„ï¾ï½±ï½³ï¾„";
@@ -9061,7 +9061,7 @@ String STR_EFFECT_MOVE_TO_R
     Text[ finnish ] = "Siirrä oikealle";
     Text[ italian ] = "Uscita a destra";
     Text[ danish ] = "Flyt mod højre";
-    Text[ swedish ] = "Flyg ut till höger";
+    Text[ swedish ] = "Flyg ut åt höger";
     Text[ polish ] = "Wysuñ w prawo";
     Text[ portuguese_brazilian ] = "Nach rechts bewegen";
     Text[ japanese ] = "å³ã«ï½½ï¾—ï½²ï¾„ï¾ï½±ï½³ï¾„";
@@ -9086,7 +9086,7 @@ String STR_EFFECT_MOVE_TO_LR
     Text[ finnish ] = "Siirrä alaoikealle";
     Text[ italian ] = "Uscita in basso a destra";
     Text[ danish ] = "Move to lower right";
-    Text[ swedish ] = "Flyg ut nere till höger";
+    Text[ swedish ] = "Flyg ut nedåt åt höger";
     Text[ polish ] = "Wysuñ w prawo na dó³";
     Text[ portuguese_brazilian ] = "Move to lower right";
     Text[ japanese ] = "å³ä¸‹ã«ï½½ï¾—ï½²ï¾„ï¾ï½±ï½³ï¾„";
@@ -9136,7 +9136,7 @@ String STR_EFFECT_MOVE_TO_LL
     Text[ finnish ] = "Siirrä alavasemmalle";
     Text[ italian ] = "Uscita in basso a sinistra";
     Text[ danish ] = "Move to lower left";
-    Text[ swedish ] = "Flyg ut nere till vänster";
+    Text[ swedish ] = "Flyg ut nedåt åt vänster";
     Text[ polish ] = "Wysuñ w lewo na dó³";
     Text[ portuguese_brazilian ] = "Move to lower left";
     Text[ japanese ] = "å·¦ä¸‹ã«ï½½ï¾—ï½²ï¾„ï¾ï½±ï½³ï¾„";
@@ -9161,7 +9161,7 @@ String STR_EFFECT_MOVE_S_TO_L
     Text[ finnish ] = "Siirrä objektia vasemmalle";
     Text[ italian ] = "Uscita a sinistra da un punto interno";
     Text[ danish ] = "Move short to left";
-    Text[ swedish ] = "Flyg ut kort till vänster";
+    Text[ swedish ] = "Flyg ut på sidan, åt vänster";
     Text[ polish ] = "Wysuñ z ramki obiektu w lewo";
     Text[ portuguese_brazilian ] = "Move short to left";
     Text[ japanese ] = "å·¦ã«ï¾‹ï¾Ÿï½°ï½¸ï½±ï½³ï¾„";
@@ -9186,7 +9186,7 @@ String STR_EFFECT_MOVE_S_TO_UL
     Text[ finnish ] = "Siirrä objektia ylävasemmalle";
     Text[ italian ] = "Uscita a sinistra in alto da un punto interno";
     Text[ danish ] = "Move short to upper left";
-    Text[ swedish ] = "Flyg ut kort uppe till vänster";
+    Text[ swedish ] = "Flyg ut på sidan, uppåt åt vänster";
     Text[ polish ] = "Wysuñ z ramki obiektu w lewo do góry";
     Text[ portuguese_brazilian ] = "Move short to upper left";
     Text[ japanese ] = "å·¦ä¸Šã«ï¾‹ï¾Ÿï½°ï½¸ï½±ï½³ï¾„";
@@ -9211,7 +9211,7 @@ String STR_EFFECT_MOVE_S_TO_T
     Text[ finnish ] = "Siirrä objektia ylöspäin";
     Text[ italian ] = "Uscita in alto da un punto interno";
     Text[ danish ] = "Move short to top";
-    Text[ swedish ] = "Flyg ut kort uppåt";
+    Text[ swedish ] = "Flyg ut på sidan, uppåt";
     Text[ polish ] = "Wysuñ z ramki obiektu do góry";
     Text[ portuguese_brazilian ] = "Move short to top";
     Text[ japanese ] = "ä¸Šã«ï¾‹ï¾Ÿï½°ï½¸ï½±ï½³ï¾„";
@@ -9236,7 +9236,7 @@ String STR_EFFECT_MOVE_S_TO_UR
     Text[ finnish ] = "Siirrä objekti yläoikealle";
     Text[ italian ] = "Uscita a destra in alto da un punto interno";
     Text[ danish ] = "Move short to upper right";
-    Text[ swedish ] = "Flyg ut kort uppe till höger";
+    Text[ swedish ] = "Flyg ut på sidan, uppåt åt höger";
     Text[ polish ] = "Wysuñ z ramki obiektu w prawo do góry";
     Text[ portuguese_brazilian ] = "Move short to upper right";
     Text[ japanese ] = "å³ä¸Šã«ï¾‹ï¾Ÿï½°ï½¸ï½±ï½³ï¾„";
@@ -9261,7 +9261,7 @@ String STR_EFFECT_MOVE_S_TO_R
     Text[ finnish ] = "Siirrä objekti oikealle";
     Text[ italian ] = "Uscita a destra da un punto interno";
     Text[ danish ] = "Move short to right";
-    Text[ swedish ] = "Flyg ut kort till höger";
+    Text[ swedish ] = "Flyg ut på sidan, åt höger";
     Text[ polish ] = "Wysuñ z ramki obiektu w prawo";
     Text[ portuguese_brazilian ] = "Move short to right";
     Text[ japanese ] = "å³ã«ï¾‹ï¾Ÿï½°ï½¸ï½±ï½³ï¾„";
@@ -9286,7 +9286,7 @@ String STR_EFFECT_MOVE_S_TO_LR
     Text[ finnish ] = "Siirrä objekti alaoikealle";
     Text[ italian ] = "Uscita a destra in basso da un punto interno";
     Text[ danish ] = "Move short to lower right";
-    Text[ swedish ] = "Flyg ut kort nedåt till höger";
+    Text[ swedish ] = "Flyg ut på sidan, nedåt åt höger";
     Text[ polish ] = "Wysuñ z ramki obiektu w prawo na dó³";
     Text[ portuguese_brazilian ] = "Move short to lower right";
     Text[ japanese ] = "å³ä¸‹ã«ï¾‹ï¾Ÿï½°ï½¸ï½±ï½³ï¾„";
@@ -9311,7 +9311,7 @@ String STR_EFFECT_MOVE_S_TO_B
     Text[ finnish ] = "Siirrä objektia alaspäin";
     Text[ italian ] = "Uscita in basso da un punto interno";
     Text[ danish ] = "Move short to bottom";
-    Text[ swedish ] = "Flyg ut kort nedåt";
+    Text[ swedish ] = "Flyg ut på sidan, nedåt";
     Text[ polish ] = "Wysuñ z ramki obiektu w dó³";
     Text[ portuguese_brazilian ] = "Move short to bottom";
     Text[ japanese ] = "ä¸‹ã«ï¾‹ï¾Ÿï½°ï½¸ï½±ï½³ï¾„";
@@ -9336,7 +9336,7 @@ String STR_EFFECT_MOVE_S_TO_LL
     Text[ finnish ] = "Siirrä objektia alavasemmalle";
     Text[ italian ] = "Uscita a sinistra in basso da un punto interno";
     Text[ danish ] = "Move short to lower left";
-    Text[ swedish ] = "Flyg ut kort nedifrån till vänster";
+    Text[ swedish ] = "Flyg ut på sidan, nedåt åt vänster";
     Text[ polish ] = "Wysuñ z ramki obiektu w lewo na dó³";
     Text[ portuguese_brazilian ] = "Move short to lower left";
     Text[ japanese ] = "å·¦ä¸‹ã«ï¾‹ï¾Ÿï½°ï½¸ï½±ï½³ï¾„";
@@ -9927,7 +9927,7 @@ String STR_SLIDE_SINGULAR
     Text[ arabic ] = "ÔÑíÍÉ";
     Text[ turkish ] = "Slayt";
     Text[ catalan ] = "Diapositiva";
-    Text[ finnish ] = " Slide";
+    Text[ finnish ] = " Dia";
 };
 String STR_SLIDE_PLURAL
 {
@@ -9952,7 +9952,7 @@ String STR_SLIDE_PLURAL
     Text[ arabic ] = "ÔÑÇÆÍ";
     Text[ turkish ] = "Slayt";
     Text[ catalan ] = "Diapositivas";
-    Text[ finnish ] = "Diat";
+    Text[ finnish ] = " Diat";
 };
 String STR_CHART_MAINTITLE
 {
@@ -10674,7 +10674,7 @@ String STR_EFFECT_DISCARD_SHORT
     Text[ finnish ] = "Poista objektin peite";
     Text[ italian ] = "Sovrapporre da un punto interno";
     Text[ danish ] = "Discard short";
-    Text[ swedish ] = "Flyg in kort";
+    Text[ swedish ] = "Flyg in på sidan";
     Text[ polish ] = "Przenikaj w ramce obiektu";
     Text[ portuguese_brazilian ] = "Discard short";
     Text[ japanese ] = "ï¾‹ï¾Ÿï½°ï½¸ï½²ï¾";
@@ -11603,7 +11603,7 @@ String STR_ASK_GALLERY_INSERT
     Text [ portuguese ] = "Deseja inserir o som na Gallery?" ;
     Text [ english_us ] = "Do you want to add the sound to the Gallery?" ;
     Text [ portuguese_brazilian ] = "Soll der Sound zum Gallery-Thema hinzugef?t werden?" ;
-    Text [ swedish ] = "Vill Du lägga till ljud till Gallery-temat?" ;
+    Text [ swedish ] = "Vill du lägga till ljudet till Gallery-temat?" ;
     Text [ danish ] = "Skal lyden tilføjes til Gallery-emnet?" ;
     Text [ italian ] = "Aggiungere lil suono all'argomento Gallery?" ;
     Text [ spanish ] = "¿Desea añadir el sonido al tema Gallery?" ;
@@ -11646,7 +11646,7 @@ String STR_TWAIN_NO_SOURCE_UNX
     Text[ arabic ] = "ááÃÓİ áÇ íæÌÏ ÍÇáíÇğ ãÕÏÑ SANE.";
     Text[ turkish ] = "Henüz bir SANE kaynağı mevcut değil.";
     Text[ catalan ] = "Por el momento no existe ninguna fuente SANE disponible.";
-    Text[ finnish ] = "SANE-l?hde ei ole t?ll? hetkell? k?ytett?viss?.";
+    Text[ finnish ] = "SANE-lähde ei ole tällä hetkellä käytettävissä.";
 };
 
 String STR_TWAIN_NO_SOURCE
@@ -12028,7 +12028,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_60
     Text[ arabic ] = "ÚÑÖ ÊŞÏíãí ãä %PRODUCTNAME 6.0";
     Text[ turkish ] = "Sunu (%PRODUCTNAME 6.0)";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Presentación";
-    Text[ finnish ] = "%PRODUCTNAME 6.0 Präsentation";
+    Text[ finnish ] = "%PRODUCTNAME 6.0 -esitys";
 };
 String STR_IMPRESS_DOCUMENT_FULLTYPE_50
 {
@@ -12079,7 +12079,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_40
     Text[ arabic ] = "ÚÑÖ ÊŞÏíãí ãä %PRODUCTNAME 4.0";
     Text[ turkish ] = "Sunu (%PRODUCTNAME 4.0)";
     Text[ catalan ] = "%PRODUCTNAME 4.0 Presentación";
-    Text[ finnish ] = "%PRODUCTNAME 4.0 -esitys";
+    Text[ finnish ] = "%PRODUCTNAME 4,0 -esitys";
 };
 String STR_IMPRESS_DOCUMENT_FULLTYPE_31
 {
@@ -12180,7 +12180,7 @@ String STR_GRAPHIC_DOCUMENT_FULLTYPE_60
     Text[ arabic ] = "ÑÓãÉ ãä %PRODUCTNAME 6.0";
     Text[ turkish ] = "%PRODUCTNAME 6.0 çizimi";
     Text[ catalan ] = "PRODUCTNAME 6.0 Dibujo";
-    Text[ finnish ] = "%PRODUCTNAME 6.0 Zeichnung";
+    Text[ finnish ] = "%PRODUCTNAME 6.0 -piirros";
 };
 String STR_VIEWTYPE_VIEW
 {
@@ -12358,7 +12358,7 @@ String STR_PUBDLG_SAMENAME
     Text[ arabic ] = "íæÌÏ ãä ŞÈá ÊÕãíã ÈåĞÇ ÇáÇÓã\nåá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
     Text[ turkish ] = "Bu adı taşıyan bir tasarım mevcut durumda.\nÜzerine yazmak istiyor musunuz?";
     Text[ catalan ] = "Ya existe un diseño con este nombre.\n¿Desea sobrescribirlo?";
-    Text[ finnish ] = "T?m?nniminen suunnitelma on jo olemassa.\nHaluatko korvata sen?";
+    Text[ finnish ] = "Tämänniminen suunnitelma on jo olemassa.\nHaluatko korvata sen?";
 };
 
 String STR_HTMLATTR_TEXT
@@ -12436,7 +12436,7 @@ String STR_HTMLATTR_VLINK
     Text[ arabic ] = "ÇÑÊÈÇØ ÓÈŞ ÒíÇÑÊå";
     Text[ turkish ] = "Kullanılmış bağlantı";
     Text[ catalan ] = "Enlace visitado";
-    Text[ finnish ] = "K?yty linkki";
+    Text[ finnish ] = "Käyty linkki";
 };
 
 String STR_HTMLATTR_ALINK
@@ -12514,7 +12514,7 @@ String STR_HTMLEXP_CONTENTS
     Text[ arabic ] = "İåÑÓ ÇáãÍÊæíÇÊ";
     Text[ turkish ] = "İçindekiler";
     Text[ catalan ] = "Índice de contenido";
-    Text[ finnish ] = "Sis?llysluettelo";
+    Text[ finnish ] = "Sisällysluettelo";
 };
 
 String STR_HTMLEXP_CLICKSTART
@@ -12540,7 +12540,7 @@ String STR_HTMLEXP_CLICKSTART
     Text[ arabic ] = "ÇäŞÑ åäÇ áÊÈÏÃ";
     Text[ turkish ] = "Başlamak için burayı tıklayın";
     Text[ catalan ] = "Pulse aquí para comenzar";
-    Text[ finnish ] = "Aloita napsauttamalla t?t?";
+    Text[ finnish ] = "Aloita napsauttamalla tätä";
 };
 
 String STR_HTMLEXP_AUTHOR
@@ -12592,7 +12592,7 @@ String STR_HTMLEXP_EMAIL
     Text[ arabic ] = "ÈÑíÏ ÅáßÊÑæäí";
     Text[ turkish ] = "E-posta";
     Text[ catalan ] = "correu electròic";
-    Text[ finnish ] = "S?hk?osti";
+    Text[ finnish ] = "Sähköposti";
 };
 
 String STR_HTMLEXP_HOMEPAGE
@@ -12644,7 +12644,7 @@ String STR_HTMLEXP_INFO
     Text[ arabic ] = "ãÚáæãÇÊ ÂÎÑì";
     Text[ turkish ] = "Diğer bilgiler";
     Text[ catalan ] = "Otras informaciones";
-    Text[ finnish ] = "Lis?tietoja";
+    Text[ finnish ] = "Lisätietoja";
 };
 
 String STR_HTMLEXP_CREATED
@@ -12723,7 +12723,7 @@ String STR_HTMLEXP_NOFRAMES
     Text[ arabic ] = "ÚĞÑÇğ¡ ÇáãÊÕİÍ ÇáÎÇÕ Èß áÇ íÏÚã ÇáÅØÇÑÇÊ";
     Text[ turkish ] = "Web tarayıcınız frame desteklemiyor";
     Text[ catalan ] = "Lamentablemente su navegador no acepta Frames";
-    Text[ finnish ] = "Ik?v? kyll? selain ei tue irrallisia kehyksi?.";
+    Text[ finnish ] = "Ikävä kyllä selain ei tue irrallisia kehyksiä.";
 };
 
 String STR_HTMLEXP_FIRSTPAGE
@@ -12749,7 +12749,7 @@ String STR_HTMLEXP_FIRSTPAGE
     Text[ arabic ] = "ÇáÕİÍÉ ÇáÃæáì";
     Text[ turkish ] = "İlk sayfa";
     Text[ catalan ] = "Primera página";
-    Text[ finnish ] = "Ensimm?inen sivu";
+    Text[ finnish ] = "Ensimmäinen sivu";
 };
 
 String STR_HTMLEXP_LASTPAGE
@@ -12853,7 +12853,7 @@ String STR_HTMLEXP_OUTLINE
     Text[ arabic ] = "ÈãÍÊæíÇÊ";
     Text[ turkish ] = "İçerik ile";
     Text[ catalan ] = "Con contenido";
-    Text[ finnish ] = "Sis?ll? kanssa";
+    Text[ finnish ] = "Sisällön kanssa";
 };
 
 String STR_HTMLEXP_NOOUTLINE
@@ -12879,7 +12879,7 @@ String STR_HTMLEXP_NOOUTLINE
     Text[ arabic ] = "ÈÏæä ãÍÊæíÇÊ";
     Text[ turkish ] = "İçeriksiz";
     Text[ catalan ] = "Sin contenido";
-    Text[ finnish ] = "Ilman sis?lt?";
+    Text[ finnish ] = "Ilman sisältöä";
 };
 
 String STR_WEBVIEW_SAVE
@@ -12983,7 +12983,7 @@ String STR_PRES_PAUSE
     Text[ arabic ] = "ÅíŞÇİ ãÄŞÊ...";
     Text[ turkish ] = "Duraklat...";
     Text[ catalan ] = "Pausa...";
-    Text[ finnish ] = "Keskeyt?...";
+    Text[ finnish ] = "Keskeytä...";
 };
 
 STRING STR_WIZARD_ORIGINAL
@@ -13009,7 +13009,7 @@ STRING STR_WIZARD_ORIGINAL
     Text[ arabic ] = "<ÇáÃÕá>";
     Text[ turkish ] = "<Aslı>";
     Text[ catalan ] = "<Original>";
-    Text[ finnish ] = "<Alkuper?inen>";
+    Text[ finnish ] = "<Alkuperäinen>";
 };
 
 STRING STR_WIZARD_POSITION
@@ -13113,7 +13113,7 @@ String STR_UNDO_APPLY_3D_FAVOURITE
     Text[ arabic ] = "ÊØÈíŞ ÇáÎÕÇÆÕ ËáÇËíÉ ÇáÃÈÚÇÏ ÇáãõİÖáÉ";
     Text[ turkish ] = "Sık kullanılan 3B efekt uygula";
     Text[ catalan ] = "Asignar favorito 3D";
-    Text[ finnish ] = "K?yt? 3D-suosikkia";
+    Text[ finnish ] = "Käytä 3D-suosikkia";
 };
 
 String STR_ERROR_OBJNOCREATE_PLUGIN
@@ -13140,7 +13140,7 @@ String STR_ERROR_OBJNOCREATE_PLUGIN
     Text[ arabic ] = "áÇ íãßä ÅÏÑÇÌ Plug-in ãä ÇáãÓÊäÏ %.";
     Text[ turkish ] = "% belgesinden Plug-in eklenemiyor.";
     Text[ catalan ] = "No se puede insertar plug-in del documento %.";
-    Text[ finnish ] = "Lis?osaa ei voitu lis?t? asiakirjasta %.";
+    Text[ finnish ] = "Lisäosaa ei voitu lisätä asiakirjasta %.";
 };
 
 String STR_UNDO_GRAFFILTER
@@ -13192,7 +13192,7 @@ String STR_WARNING_NOSOUNDFILE
     Text[ arabic ] = "Çáãáİ %\náíÓ ãáİÇğ ÕæÊíÇğ !";
     Text[ turkish ] = "Dosya %\ngeçerli bir ses dosyası değil!";
     Text[ catalan ] = "¡ El archivo %\nno es un archivo audio válido !";
-    Text[ finnish ] = "Tiedosto %\nei ole kelvollinen ??nitiedosto.";
+    Text[ finnish ] = "Tiedosto %\nei ole kelvollinen äänitiedosto.";
 };
 
 String STR_UNDO_CONVERT_TO_METAFILE
@@ -13270,7 +13270,7 @@ String STR_PACKNGO_FILEDLG_TITLE
     Text[ arabic ] = "ÖÛØ - ÍİÙ ÈÇÓã";
     Text[ turkish ] = "Sıkıştır - Farklı kaydet";
     Text[ catalan ] = "Comprimir - Guardar como";
-    Text[ finnish ] = "Pakkaa - Tallenna nimell?";
+    Text[ finnish ] = "Pakkaa - Tallenna nimellä";
 };
 
 String STR_HTMLEXP_ERROR_CREATE_FILE
@@ -13676,6 +13676,7 @@ String STR_UNDO_GRAFTRANSPARENCY
     Text[ catalan ] = "Transparencia";
     Text[ finnish ] = "Läpikuultavuus";
 };
+
 
 
 
