@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-23 10:42:24 $
+ *  last change: $Author: jp $ $Date: 2002-03-11 14:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1007,7 +1007,8 @@ static BOOL lcl_FindCharSet( BOOL bSearchId, String& rChrSetStr,
         sToken081[] = "JIS_X_212",
         sToken082[] = "MS_1361",
         sToken083[] = "GB_18030",
-        sToken084[] = "UNICODE_2"
+        sToken084[] = "BIG5_HKSCS",
+        sToken085[] = "UNICODE_2"
             ;
     struct _Dummy_MAP
     {
@@ -1099,7 +1100,8 @@ static BOOL lcl_FindCharSet( BOOL bSearchId, String& rChrSetStr,
         RTL_TEXTENCODING_JIS_X_0212,            sToken081,
         RTL_TEXTENCODING_MS_1361,               sToken082,
         RTL_TEXTENCODING_GB_18030,              sToken083,
-        RTL_TEXTENCODING_UCS2,                  sToken084
+        RTL_TEXTENCODING_BIG5_HKSCS,            sToken084,
+        RTL_TEXTENCODING_UCS2,                  sToken085
     };
 
     BOOL bFnd = FALSE;
