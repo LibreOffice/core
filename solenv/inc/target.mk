@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.137 $
+#   $Revision: 1.138 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-04 10:39:43 $
+#   last change: $Author: vg $ $Date: 2003-06-12 10:00:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2178,7 +2178,6 @@ COMPVTMP:=$(mktmp iii)
     @echo COMNAME:=$(COMNAME) > $(COMPVTMP)
     @echo COMID:=$(COMID) >> $(COMPVTMP)
 .IF "$(COM)"=="GCC"
-    @echo LIBSTDCPP3:=$(LIBSTDCPP3) >> $(COMPVTMP)
     @echo SHORTSTDCPP3:=$(SHORTSTDCPP3) >> $(COMPVTMP)
 .ENDIF
     @echo CCNUMVER:=$(CCNUMVER) >> $(COMPVTMP)
@@ -2374,7 +2373,7 @@ $(RSC_MULTI1) $(RSC_MULTI2) $(RSC_MULTI3) $(RSC_MULTI4) $(RSC_MULTI5) $(RSC_MULT
 .IF "$(MAKEFILERC)"==""
 .IF "$(CXXFILES)$(CFILES)$(RCFILES)$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(PARFILES)" != ""
 .IF "$(DEPFILES)" != ""
-.INCLUDE : $(DEPFILES)
+.IGNORE: .INCLUDE : $(DEPFILES)
 .ENDIF			# "$(DEPFILES)" != ""
 .INCLUDE : $(MISC)$/$(TARGET).dpc
 .IF "$(GROUP)"=="WRITER"
