@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 13:58:11 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 09:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,8 +619,8 @@ TabPage RID_SVXPAGE_BORDER
 
     FixedText FT_SHADOWPOS
     {
-        Pos = MAP_APPFONT ( 12 , 137 ) ;
-        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 133 ) ;
+        Size = MAP_APPFONT ( 74 , 8 ) ;
         Text = "~Position" ;
         Text [ ENGLISH ] = "~Position" ;
         Text [ norwegian ] = "~Posisjon" ;
@@ -657,13 +657,13 @@ TabPage RID_SVXPAGE_BORDER
     {
         HelpId = HID_BORDER_CTL_SHADOWS ;
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 76 , 135 ) ;
+        Pos = MAP_APPFONT ( 12 , 144 ) ;
         Size = MAP_APPFONT ( 74 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_SHADOWSIZE
     {
-        Pos = MAP_APPFONT ( 12 , 153 ) ;
+        Pos = MAP_APPFONT ( 88 , 133 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "~Distanz" ;
         Text [ ENGLISH ] = "~Distance" ;
@@ -698,7 +698,7 @@ TabPage RID_SVXPAGE_BORDER
     MetricField ED_SHADOWSIZE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 76 , 151 ) ;
+        Pos = MAP_APPFONT ( 88 , 144 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Spin = TRUE ;
         Repeat = TRUE ;
@@ -712,7 +712,7 @@ TabPage RID_SVXPAGE_BORDER
     };
     FixedText FT_SHADOWCOLOR
     {
-        Pos = MAP_APPFONT ( 12 , 169 ) ;
+        Pos = MAP_APPFONT ( 177 , 133 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "Far~be" ;
         Text [ ENGLISH ] = "C~olor" ;
@@ -749,14 +749,14 @@ TabPage RID_SVXPAGE_BORDER
     ListBox LB_SHADOWCOLOR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 76 , 167 ) ;
+        Pos = MAP_APPFONT ( 177 , 144 ) ;
         Size = MAP_APPFONT ( 74 , 68 ) ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
     };
     FixedLine FL_SHADOW
     {
-        Pos = MAP_APPFONT ( 6 , 124 ) ;
+        Pos = MAP_APPFONT ( 6 , 123 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Schatten" ;
         Text [ ENGLISH ] = "Shadow" ;
@@ -790,6 +790,24 @@ TabPage RID_SVXPAGE_BORDER
         Text[ hungarian ] = "Árnyékolás stílusa";
         Text[ slovenian ] = "Slog senčenja";
     };
+    FixedLine FL_PROPERTIES
+    {
+        Pos = MAP_APPFONT ( 6 , 162 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Hide = TRUE;
+        Text = "Eigenschaften" ;
+        Text [ english_us ] = "Properties" ;
+    };
+    CheckBox  CB_MERGEWITHNEXT
+    {
+        Pos = MAP_APPFONT ( 12 , 173 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Hide = TRUE;
+        Text = "Mit dem n�chsten Absatz verschmelzen" ;
+        Text [ english_us ] = "~Merge with next paragraph" ;
+    };
+
+
 #define _PREVIEW_IDLIST_\
         IdList =                    \
         {                           \
