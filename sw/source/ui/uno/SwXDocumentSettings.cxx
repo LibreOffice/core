@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-27 16:31:58 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 10:01:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_PRINTER_INDEPENDENT_LAYOUT,
     HANDLE_IS_LABEL_DOC,
     HANDLE_IS_ADD_FLY_OFFSET,
+    HANDLE_IS_ADD_EXTERNAL_LEADING,
     /* Stampit It disable the print cancel button of the shown progress dialog. */
     HANDLE_ALLOW_PRINTJOB_CANCEL
 };
@@ -198,6 +199,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("PrinterIndependentLayout"),   HANDLE_PRINTER_INDEPENDENT_LAYOUT,      CPPUTYPE_INT16,             0,   0},
         { RTL_CONSTASCII_STRINGPARAM("IsLabelDocument"),            HANDLE_IS_LABEL_DOC,                    CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("AddFrameOffsets"),            HANDLE_IS_ADD_FLY_OFFSET,               CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("AddExternalLeading"),         HANDLE_IS_ADD_EXTERNAL_LEADING,         CPPUTYPE_BOOLEAN,           0,   0},
         /* Stampit It disable the print cancel button of the shown progress dialog. */
         { RTL_CONSTASCII_STRINGPARAM("AllowPrintJobCancel"),        HANDLE_ALLOW_PRINTJOB_CANCEL,           CPPUTYPE_BOOLEAN,           0,   0},
 /*
@@ -513,10 +515,10 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         {
             sal_Int16 nTmp;
             rValue >>= nTmp;
-            if( (nTmp == document::PrinterIndependentLayout::ENABLED ) ||
-                (nTmp == document::PrinterIndependentLayout::DISABLED ) )
-                mpDoc->SetUseVirtualDevice(
-                    nTmp == document::PrinterIndependentLayout::ENABLED  );
+            if( (nTmp == document::PrinterIndependentLayout::DISABLED ) ||
+                (nTmp == document::PrinterIndependentLayout::LOW_RESOLUTION ) ||
+                (nTmp == document::PrinterIndependentLayout::HIGH_RESOLUTION ) )
+                mpDoc->SetUseVirtualDevice( nTmp );
             else
                 throw IllegalArgumentException();
         }
@@ -533,6 +535,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
             mpDoc->SetAddFlyOffsets( bTmp );
+        }
+        break;
+        case HANDLE_IS_ADD_EXTERNAL_LEADING:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->SetAddExtLeading( bTmp );
         }
         break;
         case HANDLE_ALLOW_PRINTJOB_CANCEL:
@@ -701,10 +709,7 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_PRINTER_INDEPENDENT_LAYOUT:
         {
-            sal_Int16 nTmp = mpDoc->IsUseVirtualDevice()
-                ? document::PrinterIndependentLayout::ENABLED
-                : document::PrinterIndependentLayout::DISABLED;
-            rValue <<= nTmp;
+            rValue <<= mpDoc->IsUseVirtualDevice();
         }
         break;
         case HANDLE_IS_LABEL_DOC:
@@ -716,6 +721,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_IS_ADD_FLY_OFFSET:
         {
             sal_Bool bTmp = mpDoc->IsAddFlyOffsets();
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        case HANDLE_IS_ADD_EXTERNAL_LEADING:
+        {
+            sal_Bool bTmp = mpDoc->IsAddExtLeading();
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
