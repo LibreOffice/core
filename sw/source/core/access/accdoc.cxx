@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:10:35 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 12:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,10 +546,10 @@ void SwAccessibleDocument::clearAccessibleSelection(  )
     aSelectionHelper.clearAccessibleSelection();
 }
 
-void SwAccessibleDocument::selectAllAccessible(  )
+void SwAccessibleDocument::selectAllAccessibleChildren(  )
     throw ( RuntimeException )
 {
-    aSelectionHelper.selectAllAccessible();
+    aSelectionHelper.selectAllAccessibleChildren();
 }
 
 sal_Int32 SwAccessibleDocument::getSelectedAccessibleChildCount(  )
