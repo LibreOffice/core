@@ -2,9 +2,9 @@
  *
  *  $RCSfile: showwin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:17:12 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 10:30:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 
 #include "res_bmp.hrc"
 
+#ifndef _SD_SLIDESHOW_HXX
+#include "slideshow.hxx"
+#endif
+
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
@@ -95,7 +99,8 @@ ShowWindow::ShowWindow( ::Window* pParent )
     meShowWindowMode(SHOWWINDOWMODE_NORMAL),
     mnRestartPageIndex( PAGE_NO_END ),
     mnPauseTimeout( SLIDE_NO_TIMEOUT ),
-    mbShowNavigatorAfterSpecialMode( FALSE )
+    mbShowNavigatorAfterSpecialMode( FALSE ),
+    mpSlideshow(0)
 {
     // Do never mirror the preview window.  This explicitly includes right
     // to left writing environments.
@@ -291,13 +296,20 @@ void ShowWindow::Paint(const Rectangle& rRect)
 
         SetClipRegion( aOldClipRegion );
 */
-        if(mpViewShell )
+        if( mpSlideshow )
         {
-            Slideshow* pSlideShow = mpViewShell->GetSlideShow();
-            if( pSlideShow )
-                pSlideShow->paint(rRect);
-            else
-                mpViewShell->Paint(rRect, this);
+            mpSlideshow->paint(rRect);
+        }
+        else
+        {
+            if(mpViewShell )
+            {
+                Slideshow* pSlideShow = mpViewShell->GetSlideShow();
+                if( pSlideShow )
+                    pSlideShow->paint(rRect);
+                else
+                    mpViewShell->Paint(rRect, this);
+            }
         }
     }
     else
