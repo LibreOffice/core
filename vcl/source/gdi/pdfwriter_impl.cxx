@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-06 15:26:16 $
+ *  last change: $Author: pl $ $Date: 2002-11-13 11:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4879,7 +4879,14 @@ void PDFWriterImpl::updateGraphicsState()
     GraphicsState& rNewState = m_aGraphicsStack.front();
     // first set clip region since it might invalidate everything else
     Region& rNewClip = rNewState.m_aClipRegion;
-    if( m_aCurrentPDFState.m_aClipRegion != rNewClip )
+
+    /*  #103137# equality operator is not implemented
+     *  const as API promises but may change Region
+     *  from Polygon to rectangles. Arrrgghh !!!!
+     */
+    Region aLeft = m_aCurrentPDFState.m_aClipRegion;
+    Region aRight = rNewClip;
+    if( aLeft != aRight )
     {
         if( ! m_aCurrentPDFState.m_aClipRegion.IsEmpty() &&
             ! m_aCurrentPDFState.m_aClipRegion.IsNull() )
