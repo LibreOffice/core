@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 10:56:16 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:15:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,11 +207,22 @@ struct SwGetCurColNumPara
 #define SW_MOVE_LEFT    2
 #define SW_MOVE_RIGHT   3
 
-#define SW_TABCOL_NONE  0
-#define SW_TABCOL_HORI  1
-#define SW_TABCOL_VERT  2
-#define SW_TABROW_HORI  3
-#define SW_TABROW_VERT  4
+#define SW_TABCOL_NONE          0
+#define SW_TABCOL_HORI          1
+#define SW_TABCOL_VERT          2
+#define SW_TABROW_HORI          3
+#define SW_TABROW_VERT          4
+// --> FME 2004-07-30 #i32329# Enhanced table selection
+#define SW_TABSEL_HORI          5
+#define SW_TABSEL_HORI_RTL      6
+#define SW_TABROWSEL_HORI       7
+#define SW_TABROWSEL_HORI_RTL   8
+#define SW_TABCOLSEL_HORI       9
+#define SW_TABSEL_VERT          10
+#define SW_TABROWSEL_VERT       11
+#define SW_TABCOLSEL_VERT       12
+// <--
+
 
 class SW_DLLPUBLIC SwFEShell : public SwEditShell
 {
@@ -230,7 +241,9 @@ class SW_DLLPUBLIC SwFEShell : public SwEditShell
     // OD 25.06.2003 #108784# - correct type of 1st parameter
     SW_DLLPRIVATE void ChangeOpaque( SdrLayerID nLayerId );
 
-    SW_DLLPRIVATE const SwFrm *GetBox( const Point &rPt, bool* pbRow = 0 ) const;
+    // Used for mouse operations on a table:
+    // Returns a cell frame that is 'close' to rPt.
+    SW_DLLPRIVATE const SwFrm *GetBox( const Point &rPt, bool* pbRow = 0, bool* pbCol = 0 ) const;
 
     //0 == in keiner Spalte
     SW_DLLPRIVATE USHORT _GetCurColNum( const SwFrm *pFrm,
@@ -667,6 +680,10 @@ public:
     void GetMouseTabCols( SwTabCols &rToFill, const Point &rPt ) const;
     void SetMouseTabCols( const SwTabCols &rNew, BOOL bCurRowOnly,
                           const Point &rPt );
+
+    // --> FME 2004-07-30 #i20126# Enhanced table selection
+    bool SelTblRowCol( const Point& rPt );
+    // <--
 
     // #i24134# adjustment of table rows via Ruler
     void GetTabRows( SwTabCols &rToFill ) const;
