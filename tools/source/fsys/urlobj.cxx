@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-21 14:50:50 $
+ *  last change: $Author: hr $ $Date: 2001-09-26 16:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1516,14 +1516,15 @@ bool INetURLObject::convertRelToAbs(UniString const & rTheRelURIRef,
         return true;
     }
 
+    enum State { STATE_AUTH, STATE_ABS_PATH, STATE_REL_PATH, STATE_FRAGMENT,
+                 STATE_DONE };
+
     UniString aSynAbsURIRef(UniString::CreateFromAscii(getSchemeInfo().
                                                            m_pScheme));
     aSynAbsURIRef += ':';
 
     sal_Char cEscapePrefix = getEscapePrefix();
 
-    enum State { STATE_AUTH, STATE_ABS_PATH, STATE_REL_PATH, STATE_FRAGMENT,
-                 STATE_DONE };
     State eState = STATE_AUTH;
     bool bSameDoc = true;
 
