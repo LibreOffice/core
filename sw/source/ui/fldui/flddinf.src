@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddinf.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:17:31 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ TabPage TP_FLD_DOKINF
         Text[ czech ] = "Typ";
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "~वर्ग";
+        Text[ slovak ] = "~Typ";
     };
     Control TLB_DOKINFTYPE
     {
@@ -144,6 +145,7 @@ TabPage TP_FLD_DOKINF
         Text[ czech ] = "Vybrat";
         Text[ hebrew ] = "~Auswahl";
         Text[ hindi ] = "चु~नो";
+        Text[ slovak ] = "Vy~brať";
     };
     ListBox LB_DOKINFSELECTION
     {
@@ -333,6 +335,13 @@ TabPage TP_FLD_DOKINF
         < "दिनांक" ; > ;
         < "दिनांक समय लेखक" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Autor" ; > ;
+        < "Čas" ; > ;
+        < "Dátum" ; > ;
+        < "Dátum, čas a autor" ; > ;
+    };
     };
     FixedText FT_DOKINFFORMAT
     {
@@ -366,6 +375,7 @@ TabPage TP_FLD_DOKINF
         Text[ czech ] = "Formát";
         Text[ hebrew ] = "F~ormat";
         Text[ hindi ] = "र~चना";
+        Text[ slovak ] = "F~ormát";
     };
     ListBox LB_DOKINFFORMAT
     {
@@ -407,6 +417,7 @@ TabPage TP_FLD_DOKINF
         Text[ czech ] = "Pevný obsah";
         Text[ hebrew ] = "~Inhalt fixieren";
         Text[ hindi ] = "~स्थिर विषय";
+        Text[ slovak ] = "Pe~vný obsah";
     };
     Bitmap BMP_DOKINFROOT_OPENED
     {
@@ -445,6 +456,7 @@ TabPage TP_FLD_DOKINF
         Text[ czech ] = "Informace";
         Text[ hebrew ] = "Info";
         Text[ hindi ] = "जानकारी";
+        Text[ slovak ] = "Informácie";
     };
     Text [ english_us ] = "DocInformation" ;
     Text [ portuguese_brazilian ] = "Info. do Doc." ;
@@ -471,7 +483,10 @@ TabPage TP_FLD_DOKINF
     Text[ czech ] = "Informace o dokumentu";
     Text[ hebrew ] = "Dokumentinfo";
     Text[ hindi ] = "DocInformation";
+    Text[ slovak ] = "Informácie o dokumente";
 };
+
+
 
 
 
