@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filecopy.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:04:01 $
+ *  last change: $Author: hjs $ $Date: 2003-10-30 17:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef PM2
 #include <stdio.h>
-#endif
 
 #ifndef _COMDEP_HXX
 #include "comdep.hxx"
@@ -112,27 +110,6 @@
 #endif
 
 using namespace ::osl;
-
-EA_Copier* EA_Copier::_pCopier = NULL;
-
-//========================================================================
-
-EA_Copier::~EA_Copier()
-{
-}
-
-//------------------------------------------------------------------------
-void EA_Copier::Register( EA_Copier* pCopier )
-{
-    _pCopier = pCopier;
-}
-
-//------------------------------------------------------------------------
-
-EA_Copier* EA_Copier::Get()
-{
-    return _pCopier;
-}
 
 /*************************************************************************
 |*
@@ -309,10 +286,6 @@ const Link& FileCopier::GetErrorHdl() const
 
 #ifndef MAC
 
-#ifdef OS2
-BOOL createLongNameEA   ( const PCSZ pszPath, ULONG ulAttributes, const String& aLongName );
-#endif
-
 FSysError FileCopier::DoCopy_Impl( const DirEntry &rSource, const DirEntry &rTarget,
                                                                    BOOL bTop )
 {
@@ -469,10 +442,6 @@ FSysError FileCopier::DoCopy_Impl( const DirEntry &rSource, const DirEntry &rTar
             }
             else
                 eRet = Error( aTargetStream.GetError(), 0, &aTarget );
-
-            // ggf. EAs kopieren
-            if ( !eRet && EA_Copier::Get() && !EA_Copier::Get()->Copy( aSource, aTargetStream ) )
-                eRet = FSYS_ERR_UNKNOWN | ERRCODE_WARNING_MASK;
 
             // unvollstaendiges File wieder loeschen
             aTargetStream.Close();
