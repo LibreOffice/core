@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-09-27 14:03:58 $
+ *  last change: $Author: pb $ $Date: 2000-10-23 12:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
 
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
@@ -299,7 +299,7 @@ void SAL_CALL SdrUnoControlRec::propertyChange( const ::com::sun::star::beans::P
     if (evt.PropertyName == rtl::OUString::createFromAscii("DefaultControl"))
     {
         // anlegen eines neuen Controls
-        uno::Reference< lang::XMultiServiceFactory > xFactory( ::utl::getProcessServiceFactory() );
+        uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
         if( xFactory.is() )
         {
             OUString aControlName;
@@ -655,7 +655,7 @@ void SdrPageViewWinRec::CreateControlContainer()
         else
         {
             // Printer und VirtualDevice, bzw. kein OutDev
-            uno::Reference< lang::XMultiServiceFactory > xFactory( ::utl::getProcessServiceFactory() );
+            uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
             if( xFactory.is() )
             {
                 xControlContainer = uno::Reference< awt::XControlContainer >(xFactory->createInstance(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlContainer")), uno::UNO_QUERY);
@@ -822,7 +822,7 @@ void SdrPageView::ImpInsertControl(const SdrUnoObj* pSdrUnoObj,
         if (nCtrlNum == SDRUNOCONTROL_NOTFOUND)
         {
             // Control fuer die View erzeugen
-            uno::Reference< lang::XMultiServiceFactory > xFactory( ::utl::getProcessServiceFactory() );
+            uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
             uno::Reference< awt::XControl > xUnoControl;
             if( xFactory.is() )
                 xUnoControl = uno::Reference< awt::XControl >(xFactory->createInstance(pSdrUnoObj->GetUnoControlTypeName()), uno::UNO_QUERY);

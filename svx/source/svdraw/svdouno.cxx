@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdouno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-09-27 14:03:58 $
+ *  last change: $Author: pb $ $Date: 2000-10-23 12:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #endif
 
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include "svdouno.hxx"
 #include "svdxout.hxx"
@@ -421,7 +421,7 @@ void SdrUnoObj::operator = (const SdrObject& rObj)
     // Kopieren des UnoModels
     uno::Reference< io::XPersistObject > xObj(((SdrUnoObj&) rObj).GetUnoControlModel(), uno::UNO_QUERY );
 
-    uno::Reference< lang::XMultiServiceFactory > xFactory( ::utl::getProcessServiceFactory() );
+    uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     if (xObj.is() && xFactory.is() )
     {
         // copy it by streaming
@@ -598,7 +598,7 @@ void SdrUnoObj::CreateUnoControlModel(const String& rModelName)
     aUnoControlModelTypeName = rModelName;
 
     uno::Reference< awt::XControlModel >   xModel;
-    uno::Reference< lang::XMultiServiceFactory > xFactory( ::utl::getProcessServiceFactory() );
+    uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     if (aUnoControlModelTypeName.Len() && xFactory.is() )
     {
         xModel = uno::Reference< awt::XControlModel >(xFactory->createInstance(

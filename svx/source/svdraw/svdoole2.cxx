@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:25 $
+ *  last change: $Author: pb $ $Date: 2000-10-23 12:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #endif
 
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 
 #ifdef SVX_LIGHT
 #define SV_DECL_SDROLELINK_DEFINED
@@ -1263,7 +1263,7 @@ void SvInPlaceObject::CreatePlugin( uno::Reference< awt::XToolkit > xToolkit,
             pArgs[i] = rCmd.GetArgument();
         }
 
-        uno::Reference< lang::XMultiServiceFactory > xFactory( ::utl::getProcessServiceFactory() );
+        uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
         if( xFactory.is() )
         {
             uno::Reference< plugin::XPluginManager > xPMgr( xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.plugin.PluginManager")), uno::UNO_QUERY );
