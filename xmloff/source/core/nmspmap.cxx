@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nmspmap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-18 16:14:13 $
+ *  last change: $Author: mtg $ $Date: 2001-06-13 14:16:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Martin Gallwey (gallwey@sun.com)
  *
  *
  ************************************************************************/
@@ -80,6 +80,18 @@
 #endif
 
 using namespace rtl;
+
+/* The basic idea of this class is that we have two two ways to search our
+ * data...by prefix and by key. We use an STL hash_map for fast prefix
+ * searching and an STL map for fast key searching.
+ *
+ * The references to an 'Index' refer to an earlier implementation of the
+ * name space map and remain to support code which uses these interfaces.
+ *
+ * In this implementation, key and index should always be the same number.
+ *
+ * Martin 13/06/01
+ */
 
 SvXMLNamespaceMap::SvXMLNamespaceMap() :
     sXMLNS( OUString::createFromAscii(sXML_xmlns) )
@@ -220,18 +232,44 @@ OUString SvXMLNamespaceMap::GetAttrNameByIndex( USHORT nIdx ) const
 OUString SvXMLNamespaceMap::GetQNameByIndex( USHORT nIdx,
                                            const OUString& rLocalName ) const
 {
+    // We always want to return at least the rLocalName...
     OUStringBuffer sQName;
-    sal_Bool bNotEnd = sal_False;
-    NameSpaceMap::const_iterator aIter = aNameMap.find ( nIdx );
-    if ( aIter != aNameMap.end() )
-    {
-        sQName.append ( (*aIter).second->sPrefix);
-        sQName.append ( sal_Unicode(':') );
-        bNotEnd = sal_True;
-    }
-    if ( bNotEnd  || USHRT_MAX == nIdx )
-        sQName.append ( rLocalName );
 
+    switch ( nIdx )
+    {
+        case XML_NAMESPACE_UNKNOWN:
+            // ...if it's a completely unknown namespace, assert and return the local name
+            DBG_ASSERT( sal_False, "SvXMLNamespaceMap::GetQNameByIndex: invalid namespace key" );
+        case XML_NAMESPACE_NONE:
+            // ...if there isn't one, return the local name
+            sQName.append ( rLocalName );
+        break;
+        case XML_NAMESPACE_XMLNS:
+        {
+            // ...if it's in the xmlns namespace, make the prefix
+            sQName.append ( sXMLNS );
+            sQName.append ( sal_Unicode(':') );
+            sQName.append ( rLocalName );
+        }
+        break;
+        default:
+        {
+            NameSpaceMap::const_iterator aIter = aNameMap.find ( nIdx );
+            if ( aIter != aNameMap.end() )
+            {
+                // ...if it's in our map, make the prefix
+                sQName.append ( (*aIter).second->sPrefix);
+                sQName.append ( sal_Unicode(':') );
+                sQName.append ( rLocalName );
+            }
+            else
+            {
+                // ... if isn't, this is a Bad Thing, assert and return the local name
+                DBG_ASSERT( sal_False, "SvXMLNamespaceMap::GetQNameByIndex: invalid namespace key" );
+                sQName.append ( rLocalName );
+            }
+        }
+    }
     return sQName.makeStringAndClear();;
 }
 
@@ -259,6 +297,8 @@ USHORT SvXMLNamespaceMap::GetKeyByAttrName( const OUString& rAttrName,
             if ( pNamespace )
                 *pNamespace = (*aIter).second->sName;
         }
+        else if ( aPrefix == sXMLNS )
+            nKey = XML_NAMESPACE_XMLNS;
     }
     else
     {
