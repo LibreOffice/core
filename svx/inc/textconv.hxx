@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textconv.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:43:35 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:39:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,10 @@ class TextConvWrapper : public svx::HangulHanjaConversion
 
     void        SelectNewUnit_impl( const sal_Int32 nUnitStart,
                                     const sal_Int32 nUnitEnd );
+
+    // Forbidden and not implemented.
+    TextConvWrapper (const TextConvWrapper &);
+    TextConvWrapper & operator= (const TextConvWrapper &);
 
 protected:
     virtual void    GetNextPortion( ::rtl::OUString& /* [out] */ rNextPortion );
