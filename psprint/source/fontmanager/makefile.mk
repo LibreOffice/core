@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pl $ $Date: 2002-02-28 11:49:51 $
+#   last change: $Author: hr $ $Date: 2002-08-20 15:00:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,13 +74,6 @@ ENVCFLAGS+= -I..$/fontsubset
 
 # --- Files --------------------------------------------------------
 
-.IF "$(OS)"=="MACOSX"
-
-dummy:
-    @echo "Nothing to build for Mac OS X"
- 
-.ELSE		# "$(OS)"=="MACOSX"
-
 SLOFILES=\
     $(SLO)$/fontmanager.obj		\
     $(SLO)$/fontcache.obj		\
@@ -89,8 +82,6 @@ SLOFILES=\
 .IF "$(OS)$(CPU)"=="SOLARISI"
 NOOPTFILES=$(SLO)$/fontmanager.obj
 .ENDIF
-
-.ENDIF		# "$(OS)"=="MACOSX"
 
 # --- Targets ------------------------------------------------------
 
