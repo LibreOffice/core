@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectformatterlayfrm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:11:37 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:38:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,11 @@ class SwObjectFormatterLayFrm : public SwObjectFormatter
     public:
         virtual ~SwObjectFormatterLayFrm();
 
-        virtual bool DoFormatObj( SwAnchoredObject& _rAnchoredObj );
+        // --> OD 2005-01-10 #i40147# - add parameter <_bCheckForMovedFwd>.
+        // Not relevant for objects anchored at layout frame.
+        virtual bool DoFormatObj( SwAnchoredObject& _rAnchoredObj,
+                                  const bool _bCheckForMovedFwd = false );
+        // <--
         virtual bool DoFormatObjs();
 
         static SwObjectFormatterLayFrm* CreateObjFormatter(
