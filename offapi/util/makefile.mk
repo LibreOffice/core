@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.76 $
+#   $Revision: 1.77 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-04 02:28:25 $
+#   last change: $Author: kz $ $Date: 2004-06-11 09:37:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,6 +103,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssfbinding.db \
     $(UCR)$/cssfvalidation.db \
     $(UCR)$/cssformula.db \
+    $(UCR)$/cssgraphic.db \
     $(UCR)$/cssinstallation.db \
     $(UCR)$/cssi18n.db \
     $(UCR)$/cssldap.db \
@@ -145,6 +146,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssuidialogs.db \
     $(UCR)$/cssui.db \
     $(UCR)$/cssframe.db \
+    $(UCR)$/cssgraphic.db \
     $(UCR)$/cssaccessibility.db\
     $(UCR)$/dcsssprovider.db \
     $(UCR)$/dcsssbrowse.db \
@@ -154,8 +156,9 @@ UNOIDLDBFILES= \
     $(UCR)$/dcssfstatus.db \
     $(UCR)$/dcssgeometry.db \
     $(UCR)$/dcssrendering.db \
-    $(UCR)$/dcssdrawing.db
-
+    $(UCR)$/dcssdrawing.db	
+    
+    
 REFERENCE_RDB=$(PRJ)$/type_reference$/OO_11$/types.rdb
 REFERENCE_DOC_RDB=$(PRJ)$/type_reference$/OO_11$/types_doc.rdb
 
@@ -189,6 +192,3 @@ $(REGISTRYCHECKFLAG) : $(UCR)$/types.db $(OUT)$/ucrdoc$/types_doc.db
         && echo > $(REGISTRYCHECKFLAG)
 
 .INCLUDE :  target.mk
-
-
-
