@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condedit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-05 15:22:34 $
+ *  last change: $Author: jp $ $Date: 2001-07-11 17:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 ConditionEdit::ConditionEdit( Window* pParent, const ResId& rResId )
     : Edit( pParent, rResId ),
     DropTargetHelper( this ),
-    bBrackets( TRUE ), bEnableDrop( TRUE )
+    bBrackets( TRUE ), bEnableDrop( TRUE ), bHasDroppedData( FALSE )
 {
 }
 
@@ -95,22 +95,10 @@ ConditionEdit::ConditionEdit( Window* pParent, const ResId& rResId )
 
 sal_Int8 ConditionEdit::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    sal_Int8 nRet = DND_ACTION_NONE;
-    if( bEnableDrop && ( DND_ACTION_COPY & rEvt.mnAction ) )
-    {
-        DataFlavorExVector& rDFE = GetDataFlavorExVector();
-        DataFlavorExVector::iterator aIter( rDFE.begin() ), aEnd( rDFE.end() );
-
-        while( aIter != aEnd )
-        {
-            if( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE == (*aIter++).mnSotId )
-            {
-                nRet = DND_ACTION_COPY;
-                aIter = aEnd;
-            }
-        }
-    }
-    return nRet;
+    return IsFormatSupported( GetDataFlavorExVector(),
+                                SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE )
+                ? DND_ACTION_COPY
+                : DND_ACTION_NONE;
 }
 
 sal_Int8 ConditionEdit::ExecuteDrop( const ExecuteDropEvent& rEvt )
@@ -135,7 +123,7 @@ sal_Int8 ConditionEdit::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 sDBName += ']';
 
             SetText( sDBName );
-
+            bHasDroppedData = TRUE;
             nRet = DND_ACTION_COPY;
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condedit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-05 15:20:38 $
+ *  last change: $Author: jp $ $Date: 2001-07-11 17:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 
 class ConditionEdit : public Edit, public DropTargetHelper
 {
-    BOOL bBrackets, bEnableDrop;
+    BOOL bBrackets, bEnableDrop, bHasDroppedData;
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
@@ -87,8 +87,10 @@ public:
 
     inline void SetDropEnable( BOOL bFlag )     { bEnableDrop = bFlag; }
     inline BOOL IsDropEnable() const            { return bEnableDrop; }
-};
 
+    inline void ResetDroppedDataFlag()          { bHasDroppedData = FALSE; }
+    inline BOOL HasDroppedData() const          { return bHasDroppedData; }
+};
 
 #endif
 
