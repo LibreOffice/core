@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:40 $
+ *  last change: $Author: os $ $Date: 2000-11-03 10:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ public:
     virtual void Reset(const SfxItemSet &rSet);
 
     void            SetNewFrame(BOOL bNewFrame) { bNew      = bNewFrame; }
-    void            SetFormatUsed(BOOL bFmt)    { bFormat   = bFmt;      }
+    void            SetFormatUsed(BOOL bFmt);
     void            SetFrmType(USHORT nType)    { nDlgType  = nType;     }
 };
 
@@ -327,7 +327,7 @@ public:
     virtual BOOL FillItemSet(SfxItemSet &rSet);
     virtual void Reset(const SfxItemSet &rSet);
 
-    void            SetFormatUsed(BOOL bFmt) { bFormat  = bFmt;  }
+    void            SetFormatUsed(BOOL bFmt);
     void            SetFrmType(USHORT nType) { nDlgType = nType; }
     void            SetNewFrame(BOOL bNewFrame) { bNew  = bNewFrame; }
     void            SetShell(SwWrtShell* pSh) { pWrtSh  = pSh; }
