@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2002-12-05 10:27:05 $
+ *  last change: $Author: kz $ $Date: 2002-12-09 09:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2651,6 +2651,16 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ korean ] = "ÎπÑÌä∏Îßµ";
         Text[ turkish ] = "Bit e˛lem";
         Text[ thai ] = "‡∏ö‡∏¥‡∏ó‡πÅ‡∏°‡∏õ";
+        Text[ english_us ] = "Bitmap";
+        Text[ greek ] = "Bitmap";
+        Text[ dutch ] = "Bitmap";
+        Text[ french ] = "Bitmap";
+        Text[ finnish ] = "Bittikartta";
+        Text[ danish ] = "Bitmap";
+        Text[ chinese_simplified ] = "‰ΩçÂõæ";
+        Text[ chinese_traditional ] = "ÈªûÈô£Âúñ";
+        Text[ arabic ] = "’Ê—… ‰ﬁÿÌ…";
+        Text[ catalan ] = "Mapa de bits";
     };
     ListBox LB_BITMAPS
     {
