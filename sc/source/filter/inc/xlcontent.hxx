@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlcontent.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:42:50 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,8 +182,8 @@ const sal_uInt32 EXC_HLINK_UNC              = 0x00000100;   /// UNC path.
 
 #define EXC_WEBQRY_FILTER                   "calc_HTML_WebQuery"
 
-// (0x00CD) SXSTRING
-const sal_uInt16 EXC_ID_SXSTRING            = 0x00CD;
+// (0x00CD) WQSTRING
+const sal_uInt16 EXC_ID_WQSTRING            = 0x00CD;
 
 // (0x00DC) PARAMQRY
 const sal_uInt16 EXC_ID_PQRY                = 0x00DC;
