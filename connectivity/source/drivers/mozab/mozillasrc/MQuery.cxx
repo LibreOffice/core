@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 14:40:45 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:39:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,11 @@
 #include "MTypeConverter.hxx"
 #endif
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
 # define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
-#else /* _DEBUG */
+#else /* OSL_DEBUG_LEVEL */
 # define OUtoCStr( x ) ("dummy")
-#endif /* _DEBUG */
+#endif /* OSL_DEBUG_LEVEL */
 
 static NS_DEFINE_CID(kRDFServiceCID, NS_RDFSERVICE_CID);
 static NS_DEFINE_CID(kAbDirectoryQueryArgumentsCID, NS_ABDIRECTORYQUERYARGUMENTS_CID);
@@ -426,10 +426,10 @@ sal_Int32 MQuery::executeQuery(OConnection* _pCon)
         NS_ENSURE_SUCCESS(rv, rv);
         OSL_TRACE("Using the directoryQueryProxy\n");
     }
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     else
         OSL_TRACE("Not using a Query Proxy, Query i/f supported by directory\n");
-#endif /* DEBUG */
+#endif /* OSL_DEBUG_LEVEL */
 
     /*
     // The problem here is that an LDAP Address Book may exist as
@@ -507,7 +507,7 @@ sal_Int32 MQuery::executeQuery(OConnection* _pCon)
         m_aQueryHelper->notifyQueryError() ;
         return(-1);
     }
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     else {
         OSL_TRACE( "****** DoQuery succeeded \n");
     }
