@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeupdate.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ bool detachSetElement(Factory& rFactory, configuration::ElementRef const& aEleme
 }
 //-----------------------------------------------------------------------------
 
-UpdateGuardImpl::UpdateGuardImpl(NodeGroupAccess& rNode) throw()
+UpdateGuardImpl::UpdateGuardImpl(NodeGroupAccess& rNode)
 : m_aDataAccess(rNode.getSourceData())
 , m_aViewLock(rNode.getDataLock())
 , m_rNode(rNode)
@@ -209,7 +209,7 @@ UpdateGuardImpl::UpdateGuardImpl(NodeGroupAccess& rNode) throw()
 }
 //-----------------------------------------------------------------------------
 
-UpdateGuardImpl::UpdateGuardImpl(NodeSetAccess& rNode) throw()
+UpdateGuardImpl::UpdateGuardImpl(NodeSetAccess& rNode)
 : m_aDataAccess(rNode.getSourceData())
 , m_aViewLock(rNode.getDataLock())
 , m_rNode(rNode)
