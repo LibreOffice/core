@@ -1,0 +1,161 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XProfileDiscover.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:38:12 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_mozilla_XProfileDiscover_idl__
+#define __com_sun_star_mozilla_XProfileDiscover_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_mozilla_MozillaProductType_idl__
+#include <com/sun/star/mozilla/MozillaProductType.idl>
+#endif
+
+
+ module com {  module sun {  module star {  module mozilla {
+
+
+
+/** is the interface used to list and get information for Mozilla/Thunderbird profiles
+
+
+    @see com::sun::star::mozilla::XProfileManager
+    @see com::sun::star::mozilla::MozillaBootstrap
+ */
+published interface XProfileDiscover: com::sun::star::uno::XInterface
+{
+
+    /** attempts to get the profiles count.
+
+        @param product
+            is the product name to get profiles count.Currently support "Mozilla" and "Thunderbird".
+        @returns
+            the profiles count of selected product.
+
+     */
+    long getProfileCount( [in]MozillaProductType product);
+
+    /** attempts to get the profile list for the given product.
+
+        @param product
+            is the product name to get profile list.Currently support "Mozilla" and "Thunderbird".
+        @param list
+            is a list of all profile of the given product.
+        @returns
+            the profile count for the given product.
+
+     */
+    long getProfileList( [in]MozillaProductType product,[out] sequence<string> list);
+
+    /** attempts to get the default profile name for the given product.
+
+        @param product
+            is the product name to get default profile.Currently support "Mozilla" and "Thunderbird".
+        @returns
+            the default profile name for the given product.
+
+     */
+    string getDefaultProfile( [in]MozillaProductType product);
+
+
+    /** attempts to get the full path for the given profile.
+
+        @param product
+            is the product name to get profile path.Currently support "Mozilla" and "Thunderbird".
+        @param profileName
+            the profile name to get full path.
+        @returns
+            the full path of the given profile.
+
+     */
+    string getProfilePath( [in]MozillaProductType product,[in]string profileName);
+
+    /** attempts to get whether profile is locked by other applications.
+
+        @param product
+            is the product name to get profile path.Currently support "Mozilla" and "Thunderbird".
+        @param profileName
+            the profile name to check.
+        @returns
+            true is the given profile is locked.
+
+     */
+    boolean isProfileLocked( [in]MozillaProductType product,[in]string profileName);
+
+    /** return true if the given profile exists
+
+        @param product
+            is the product name to get profile path.Currently support "Mozilla" and "Thunderbird".
+        @param profileName
+            the profile name to check.
+        @returns
+            whether given profile exists
+
+     */
+    boolean getProfileExists( [in]MozillaProductType product,[in]string profileName);
+
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
