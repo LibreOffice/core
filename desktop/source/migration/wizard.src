@@ -1,0 +1,467 @@
+/*************************************************************************
+ *
+ *  $RCSfile: wizard.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:50:22 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+ #include "wizard.hrc"
+
+ModalDialog DLG_FIRSTSTART_WIZARD
+{
+    Text [ de ] = "Willkommen zu %PRODUCTNAME %PRODUCTVERSION";
+    Text [ en-US ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION";
+
+    OutputSize      = TRUE ;
+    SVLook          = TRUE ;
+    Moveable        = TRUE ;
+    Closeable       = TRUE ;
+    Hide            = TRUE;
+    HelpID          = HID_FIRSTSTART_DIALOG;
+};
+
+String STR_FIRSTSTART_TITLE
+{
+    Text [ en-US ] = "Steps";
+    Text [ de ]    = "Schritte";
+};
+
+String STR_STATE_WELCOME
+{
+    Text [ de ]    = "Willkommen";
+    Text [ en-US ] = "Welcome";
+};
+String STR_STATE_LICENSE
+{
+    Text [ de ]    = "Lizenzbedingungen";
+    Text [ en-US ] = "License Agreement";
+};
+String STR_STATE_MIGRATION
+{
+    Text [ de ]    = "Persönliche Daten";
+    Text [ en-US ] = "Personal Data";
+};
+String STR_STATE_USER
+{
+    Text [ de ]    = "Benutzername";
+    Text [ en-US ] = "User name";
+};
+
+String STR_STATE_REGISTRATION
+{
+    Text [ de ]    = "Registrierung";
+    Text [ en-US ] = "Registration";
+};
+
+String STR_WELCOME_MIGRATION
+{
+    Text [ de ]    = "Dieser Assistent wird Sie durch die Lizenzbedingungen, dem Übertragen von Benutzer Daten aus %OLD_VERSION und die Registrierung von %PRODUCTNAME führen.\n\nKlicken Sie auf 'Weiter', um fortzufahren.";
+    Text [ en-US ] = "This wizard will guide you through the license agreement, the transfer of user data from %OLD_VERSION and the registration of %PRODUCTNAME.\n\nClick 'Next' to continue.";
+
+};
+String STR_WELCOME_OEM
+{
+    Text [ de ]    = "Dieser Assistent wird Sie durch die Lizenzbedingungen und die Registrierung von %PRODUCTNAME führen.\n\nIn der Readme-Datei im %PRODUCTNAME-Produktverzeichnis finden Sie wichtige Hinweise zum Programm. Bitte lesen Sie diese Hinweise aufmerksam durch.\n\nDes weiteren finden Sie ausführliche Informationen auf der Internetseite von Sun unter\n\nhttp://www.sun.com/%PRODUCTNAME.\n\nKlicken Sie auf 'Weiter', um fortzufahren.";
+    Text [ en-US ] = "This wizard will guide you through the license agreement and the registration of %PRODUCTNAME.\n\nImportant information is contained in the readme file which is located in the %PRODUCTNAME product directory. Please read this file carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/%PRODUCTNAME.\n\nClick 'Next' to continue.";
+};
+String STR_WELCOME_OEM_EXT
+{
+    Text [ de ]    = "Dieser Assistent wird Sie durch die Lizenzbedingungen und  die Registrierung von %PRODUCTNAME führen.\n\nIn der Readme-Datei im %PRODUCTNAME-Produktverzeichnis finden Sie wichtige Hinweise zum Programm. Bitte lesen Sie diese Hinweise aufmerksam durch. Des weiteren finden Sie ausführliche Informationen auf der Internetseite von Sun unter\n\nhttp://www.sun.com/%PRODUCTNAME.\n\nSupport und Schulung:\n\nNutzen Sie die Möglichkeit des kostenlosen Software-Supports für 60 Tage ab Kaufdatum. Auch eine kostenlose, Web-basierte %PRODUCTNAME-Schulung des Sun(tm) Web Learning Centers wartet auf Sie. Dieses Schulungsangebot ist 90 Tage ab Registrierung gültig. Besuchen Sie folgende Webseite für weitere Details.\n\nhttp://www.sun.com/star/service\n\nKlicken Sie auf 'Weiter', um fortzufahren.";
+    Text [ en-US ] = "This wizard will guide you through the license agreement and the registration of %PRODUCTNAME.\n\nImportant information is contained in the readme files which are located in the %PRODUCTNAME product directory. Please read these files carefully. You can also find detailed information on the Sun website \n\nhttp://www.sun.com/&PRODUCTNAME.\n\nSupport and Training:\n\nGet FREE software support valid for 60 days from date of purchase and FREE access to a web-based %PRODUCTNAME course available through the Sun(tm) Web Learning Center (valid for 90 days from the date of registration). To take advantage of this offer, visit the website below.\n\nhttp://www.sun.com/star/service\n\nClick 'Next' to continue.";
+};
+
+String STR_WELCOME_EVAL
+{
+    Text [ de ]    = "Dieser Assistent wird Sie durch die Lizenzbedingungen und die Registrierung von %PRODUCTNAME führen.\n\n Diese Version von %PRODUCTNAME ermöglicht Ihnen die Evaluierung des Produktes und enthält den vollen Funktionsumfang. Bitte beachten Sie, dass diese Version nach Installation nur %EVALDAYS Tage lauffähig ist. Informationen rund um %PRODUCTNAME erhalten Sie unter: www.sun.com/%PRODUCTNAME\n\nKlicken Sie auf 'Weiter', um fortzufahren.";
+    Text [ en-US ] = "This wizard will guide you through the license agreement and the registration of %PRODUCTNAME.\n\nThis version lets you evaluate the full functionality. However, since it is an evaluation version, you will be able to start it within %EVALDAYS days after installation. To find out more about the %PRODUCTNAME product, visit www.sun.com/%PRODUCTNAME\n\nClick 'Next' to continue.";
+};
+
+String STR_FINISH
+{
+    Text [ en-US ] = "~Finish";
+    Text [ de ]    = "~Fertig";
+};
+
+ErrorBox ERRBOX_REG_NOSYSBROWSER
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+
+    Message [ de ] = "Fehler beim Starten des Webbrowsers.\nBitte überprüfen Sie die Einstellungen von %PRODUCTNAME und die des Webbrowsers." ;
+    Message [ en-US ] = "An error occurred in starting the web browser.\nPlease check the %PRODUCTNAME and web browser settings.";
+};
+
+QueryBox QB_ASK_DECLINE
+{
+    Buttons = WB_YES_NO;
+    DefButton = WB_DEF_NO;
+
+    Message [ de ] = "Wollen Sie wirklich ablehnen?" ;
+    Message [ en-US ] = "Do you really want to decline?";
+};
+
+
+#define ROWHEIGHT 8
+#define MARGINLEFT 10
+#define MARGINRIGHT 10
+#define BODYWIDTH TP_WIDTH-MARGINLEFT-MARGINRIGHT
+#define MARGINTOP 10
+#define MARGINBOTTOM 2
+#define BODYHEIGHT TP_HEIGHT-MARGINTOP-MARGINBOTTOM
+#define INDENT 10
+#define INDENT2 25
+
+TabPage TP_WELCOME
+{
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT(TP_WIDTH, TP_HEIGHT);
+    HelpID          = HID_FIRSTSTART_WELCOME;
+    // bold fixedtext for header
+    FixedText FT_WELCOME_HEADER
+    {
+        Pos = MAP_APPFONT(MARGINRIGHT, MARGINTOP);
+        Size = MAP_APPFONT( BODYWIDTH, ROWHEIGHT );
+        Text [ de ]    = "Willkommen zu %PRODUCTNAME %PRODUCTVERSION";
+        Text [ en-US ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION";
+    };
+    FixedText FT_WELCOME_BODY
+    {
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP + 2*ROWHEIGHT);
+        Size = MAP_APPFONT( BODYWIDTH, BODYHEIGHT-MARGINTOP - 2*ROWHEIGHT );
+        WordBreak = TRUE;
+        Text [ de ]    = "Dieser Assistent wird Sie durch die Lizenzbedingungen und die Registrierung von %PRODUCTNAME führen.\n\nKlicken Sie auf 'Weiter', um fortzufahren.";
+        Text [ en-US ] = "This wizard will guide you through the license agreement and the registration of %PRODUCTNAME.\n\nClick 'Next' to continue.";
+    };
+};
+
+TabPage TP_LICENSE
+{
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT(TP_WIDTH, TP_HEIGHT);
+    HelpID          = HID_FIRSTSTART_LICENSE;
+    FixedText FT_LICENSE_HEADER
+    {
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP);
+        Size = MAP_APPFONT( BODYWIDTH, ROWHEIGHT );
+        Text [ en-US ] = "Please follow these steps to accept the license";
+        Text [ de ]    = "Bitte folgen Sie diesen Schritten, um die Lizenz zu akzeptieren.";
+    };
+    FixedText FT_LICENSE_BODY_1
+    {
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP + 2*ROWHEIGHT);
+        Size = MAP_APPFONT( INDENT, ROWHEIGHT );
+        Text [ en-US ] = "1.";
+        Text [ de ]    = "1.";
+    };
+    FixedText FT_LICENSE_BODY_1_TXT
+    {
+        Pos = MAP_APPFONT(MARGINLEFT+INDENT, MARGINTOP +2*ROWHEIGHT);
+        Size = MAP_APPFONT( BODYWIDTH-INDENT, 3*ROWHEIGHT);
+        WordBreak = TRUE;
+        Text [ en-US ] = "View the complete License Agreement. Please use the scrollbar or the '%PAGEDOWN' button in this dialog to view the entire license text.";
+        Text [ de ]    = "Lesen Sie den gesamten Lizenzvertrag. Verwenden Sie die Bildlaufleiste oder die %PAGEDOWN Schaltfläche in diesem Dialog um den gesamten Text sichtbar zu machen.";
+    };
+    FixedText FT_LICENSE_BODY_2
+    {
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP + 5*ROWHEIGHT);
+        Size = MAP_APPFONT(INDENT, ROWHEIGHT );
+        Text [ en-US ] = "2.";
+        Text [ de ]    = "2.";
+    };
+    FixedText FT_LICENSE_BODY_2_TXT
+    {
+        Pos = MAP_APPFONT(MARGINLEFT+INDENT, MARGINTOP + 5*ROWHEIGHT);
+        Size = MAP_APPFONT( BODYWIDTH-INDENT, 2*ROWHEIGHT);
+        WordBreak = TRUE;
+        Text [ en-US ] = "Click 'Accept' to accept the terms of the Agreement. ";
+        Text [ de ]    = "Klicken Sie auf 'Akzeptieren' um die Bedingungen des Vertrages zu akzeptieren";
+    };
+    MultiLineEdit ML_LICENSE
+    {
+        PosSize = MAP_APPFONT (MARGINLEFT+INDENT, MARGINTOP + 8*ROWHEIGHT, BODYWIDTH-INDENT , BODYHEIGHT - 8*ROWHEIGHT - 15-2*MARGINBOTTOM) ;
+        Border = TRUE;
+        VScroll = TRUE;
+        ReadOnly = TRUE;
+    };
+    PushButton PB_LICENSE_DOWN
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( TP_WIDTH-MARGINRIGHT-50 , TP_HEIGHT-MARGINBOTTOM-15 ) ;
+        Size = MAP_APPFONT ( 50, 15 ) ;
+        Text [ de ] = "Blätt~ern";
+        Text [ en-US ] = "Scroll ~Down";
+    };
+};
+
+String STR_LICENSE_ACCEPT
+{
+    Text [ en-US ] = "~Accept";
+    Text [ de ]    = "~Akzeptieren";
+};
+String STR_LICENSE_DECLINE
+{
+    Text [ en-US ] = "~Decline";
+    Text [ de ]    = "A~blehnen";
+};
+
+
+TabPage TP_MIGRATION
+{
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT(TP_WIDTH, TP_HEIGHT);
+    HelpID          = HID_FIRSTSTART_MIGRATION;
+
+    FixedText FT_MIGRATION_HEADER
+    {
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP);
+        Size = MAP_APPFONT( BODYWIDTH, ROWHEIGHT );
+        Text [ en-US ] = "Transfer personal data";
+        Text [ de ]    = "Übernahme persönlicher Daten";
+
+    };
+
+    FixedText FT_MIGRATION_BODY
+    {
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*2);
+        Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*8);
+        WordBreak = TRUE;
+        Text [ en-US ] = "Personal data from %OLDPRODUCT installation can be used in %PRODUCTNAME %PRODUCTVERSION.\n\nUnmark the check box below if you do not want data such as templates, dictionaries and Gallery themes to be copied to %PRODUCTNAME %PRODUCTVERSION. To migrate all your personal data from the previous version of  %PRODUCTNAME, follow the guidelines in the Readme file.";
+        Text [ de ]    = "Sie können persönliche Daten aus %OLDPRODUCT nach %PRODUCTNAME %PRODUCTVERSION kopieren.\n\nDeaktivieren Sie das  Markierfeld weiter unten, um Benutzerdaten wie Dokumentvorlagen, Wörterbücher und Gallery-Themen nicht nach %PRODUCTNAME %PRODUCTVERSION zu übernhmen. Zur vollständigen Migration Ihrer Daten beachten Sie bitte auch weitere Hinweise in der Readme-Datei.";
+    };
+
+    CheckBox CB_MIGRATION
+    {
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*10);
+        Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*2);
+        Check = TRUE;
+        Text [ en-US ] = "Transfer personal data";
+        Text [ de ]    = "Persönliche Daten übernehmen";
+    };
+};
+
+#define USERINDENT 40
+#define EDHEIGHT 12
+#define INITIALSWIDTH 25
+#define FTADD 2
+
+TabPage TP_USER
+{
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT(TP_WIDTH, TP_HEIGHT);
+    HelpID = HID_FIRSTSTART_USER;
+
+    FixedText FT_USER_HEADER
+    {
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP);
+        Size = MAP_APPFONT( BODYWIDTH, ROWHEIGHT );
+        Text [ en-US ] = "Provide your full name and initials below";
+        Text [ de ]    = "Bitte geben Sie ihren Vor- und Nachnamen sowie Ihre Kürzel an.";
+
+    };
+
+    FixedText FT_USER_BODY
+    {
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*2);
+        Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*3);
+        WordBreak = TRUE;
+        Text [ en-US ] = "The user name will be used in the document properties, templates and when you record changes made to documents.";
+        Text [ de ]    = "Der Benutzername wird in den Dokumenteigenschaften sowie Dokumentvorlagen verwendet und wenn Sie Änderungen an Dokumenten aufzeichnen.";
+    };
+
+    FixedText FT_USER_FIRST
+    {
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*7+FTADD);
+        Size = MAP_APPFONT(USERINDENT, ROWHEIGHT);
+        Text [ en-US ] = "First name";
+        Text [ de ]    = "Vorname";
+    };
+    Edit ED_USER_FIRST
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT(MARGINLEFT+USERINDENT, MARGINTOP+ROWHEIGHT*7);
+        Size = MAP_APPFONT(BODYWIDTH-USERINDENT, EDHEIGHT);
+    };
+
+    FixedText FT_USER_LAST
+    {
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*9+FTADD);
+        Size = MAP_APPFONT(USERINDENT, ROWHEIGHT);
+        Text [ en-US ] = "Last name";
+        Text [ de ]    = "Nachname";
+    };
+    Edit ED_USER_LAST
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT(MARGINLEFT+USERINDENT, MARGINTOP+ROWHEIGHT*9);
+        Size = MAP_APPFONT(BODYWIDTH-USERINDENT, EDHEIGHT);
+    };
+
+    FixedText FT_USER_INITIALS
+    {
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*11+FTADD);
+        Size = MAP_APPFONT(USERINDENT, ROWHEIGHT);
+        Text [ en-US ] = "Initials";
+        Text [ de ]    = "Kürzel";
+    };
+    Edit ED_USER_INITIALS
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT(MARGINLEFT+USERINDENT, MARGINTOP+ROWHEIGHT*11);
+        Size = MAP_APPFONT(INITIALSWIDTH, EDHEIGHT);
+    };
+
+    FixedText FT_USER_FATHER
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT(MARGINLEFT+USERINDENT+INITIALSWIDTH+10, MARGINTOP+ROWHEIGHT*11+FTADD);
+        Size = MAP_APPFONT(USERINDENT, ROWHEIGHT);
+        Text [ en-US ] = "Father's name";
+        Text [ de ]    = "Vatername";
+    };
+    Edit ED_USER_FATHER
+    {
+        Border = TRUE;
+        Hide = TRUE;
+        Pos = MAP_APPFONT(MARGINLEFT+USERINDENT*2+INITIALSWIDTH+10, MARGINTOP+ROWHEIGHT*11);
+        Size = MAP_APPFONT(BODYWIDTH-10-USERINDENT*2-INITIALSWIDTH, EDHEIGHT);
+    };
+};
+
+TabPage TP_REGISTRATION
+{
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT(TP_WIDTH, TP_HEIGHT);
+    HelpID          = HID_FIRSTSTART_REGISTRATION;
+    FixedText FT_REGISTRATION_HEADER
+    {
+        Text [ en-US ] = "%PRODUCTNAME Registration";
+        Text [ de ]    = "%PRODUCTNAME Registrierung";
+        Pos = MAP_APPFONT(MARGINLEFT, MARGINRIGHT);
+        Size = MAP_APPFONT(BODYWIDTH, MARGINRIGHT);
+    };
+
+    FixedImage IMG_REGISTRATION
+    {
+        Pos = MAP_APPFONT ( MARGINLEFT , MARGINTOP+ROWHEIGHT*2 ) ;
+        Size = MAP_PIXEL ( 32 , 32 ) ;
+        Fixed = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "regkey.png" ;
+            };
+            MaskColor = Color { Red = 0x0000 ; Green = 0x0000 ; Blue = 0xFFFF ; };
+        };
+    };
+    FixedText FT_REGISTRATION_BODY
+    {
+        Text [ en-US ] = "You now have the opportunity to register as a %PRODUCTNAME user. Registration is voluntary and is without obligation.\n\nIf you register, we can inform you about new developments concerning this product.";
+        Text [ de ]    = "Sie haben jetzt die Möglichkeit, sich als %PRODUCTNAME Anwender registrieren zu lassen.  Die Registrierung ist freiwillig und für Sie unverbindlich.\n\nWenn Sie sich registrieren, können wir Sie über Produktneuheiten informieren.";
+        WordBreak = TRUE;
+        Pos = MAP_APPFONT(MARGINLEFT+INDENT2, MARGINTOP+ROWHEIGHT*2);
+        Size = MAP_APPFONT(BODYWIDTH-INDENT2, ROWHEIGHT*9);
+    };
+
+    RadioButton RB_REGISTRATION_NOW
+    {
+        Text [ en-US ] = "I want to register ~now";
+        Text [ de ]    = "Ich möchte mich ~jetzt registrieren";
+        Pos = MAP_APPFONT(MARGINLEFT+INDENT2, ROWHEIGHT*11);
+        Size = MAP_APPFONT(BODYWIDTH-INDENT2, ROWHEIGHT*2);
+        Check = TRUE;
+    };
+    RadioButton RB_REGISTRATION_LATER
+    {
+        Text [ en-US ] = "I want to register ~later";
+        Text [ de ]    = "Ich möchte mich ~später registrieren";
+        Pos = MAP_APPFONT(MARGINLEFT+INDENT2, ROWHEIGHT*13);
+        Size = MAP_APPFONT(BODYWIDTH-INDENT2, ROWHEIGHT*2);
+    };
+    RadioButton RB_REGISTRATION_NEVER
+    {
+        Text [ en-US ] = "I do not want to ~register";
+        Text [ de ]    = "Ich möchte mich ~nicht registrieren";
+        Pos = MAP_APPFONT(MARGINLEFT+INDENT2, ROWHEIGHT*15);
+        Size = MAP_APPFONT(BODYWIDTH-INDENT2, ROWHEIGHT*2);
+    };
+    RadioButton RB_REGISTRATION_REG
+    {
+        Text [ en-US ] = "I have ~already registered";
+        Text [ de ]    = "Ich bin ~bereits registriert";
+        Pos = MAP_APPFONT(MARGINLEFT+INDENT2, ROWHEIGHT*17);
+        Size = MAP_APPFONT(BODYWIDTH-INDENT2, ROWHEIGHT*1);
+    };
+
+    FixedLine FL_REGISTRATION
+    {
+        Pos = MAP_APPFONT(MARGINLEFT, TP_HEIGHT-MARGINBOTTOM-ROWHEIGHT*6);
+        Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT);
+    };
+
+    FixedText FT_REGISTRATION_END
+    {
+        Text [ en-US ] = "We hope you enjoy working with %PRODUCTNAME.\n\nTo exit the wizard, click 'Finish'.";
+        Text [ de ]    = "Wir wünschen Ihnen viel Spaß und Erfolg mit %PRODUCTNAME.\n\nKlicken Sie auf 'Fertig', um den Assistenten zu beenden.";
+        Pos = MAP_APPFONT(MARGINLEFT, TP_HEIGHT-MARGINBOTTOM-ROWHEIGHT*4);
+        Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*4);
+    };
+};
