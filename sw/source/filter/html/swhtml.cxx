@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-07 08:06:13 $
+ *  last change: $Author: jp $ $Date: 2001-04-05 15:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,7 +329,10 @@ SV_IMPL_PTRARR( _HTMLAttrs, _HTMLAttrPtr )
 HTMLReader::HTMLReader()
 {
     bTmplBrowseMode = TRUE;
+}
 
+String HTMLReader::GetTemplateName() const
+{
     String sTemplate(
             String::CreateFromAscii(TOOLS_CONSTASCII_STRINGPARAM("internal")) );
     sTemplate += INET_PATH_TOKEN;
@@ -352,13 +355,15 @@ HTMLReader::HTMLReader()
         bSet = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
     }
 #endif
-    if( bSet )
-        SetTemplateName( sTemplate );
-#ifndef PRODUCT
-    else
+
+    if( !bSet )
+    {
+        sTemplate.Erase();
         ASSERT( !this,
             "Die html.vor befindet sich nicht mehr im definierten Directory!");
-#endif
+    }
+
+    return sTemplate;
 }
 
 int HTMLReader::SetStrmStgPtr()
@@ -5262,6 +5267,9 @@ void _HTMLAttr::InsertPrev( _HTMLAttr *pPrv )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/03/07 08:06:13  mib
+      #84201#: 6.0 template support
+
       Revision 1.6  2000/12/08 15:14:18  mib
       #75662#: Don't add blanks to comments
 

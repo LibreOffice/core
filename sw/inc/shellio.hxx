@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-06 11:08:07 $
+ *  last change: $Author: jp $ $Date: 2001-04-05 15:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,6 +268,9 @@ protected:
     BOOL bReadUTF8: 1;      // Stream als UTF-8 interpretieren
     BOOL bBlockMode: 1;
     BOOL bOrganizerMode : 1;
+    BOOL bHasAskTemplateName : 1;
+
+    virtual String GetTemplateName() const;
 
 public:
     Reader();

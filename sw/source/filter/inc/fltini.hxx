@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-02 11:04:42 $
+ *  last change: $Author: jp $ $Date: 2001-04-05 15:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ class HTMLReader: public Reader
     // wir wollen die Streams / Storages nicht geoeffnet haben
     virtual int SetStrmStgPtr();
     virtual ULONG Read(SwDoc &,SwPaM &,const String &);
+    virtual String GetTemplateName() const;
 public:
     HTMLReader();
 };

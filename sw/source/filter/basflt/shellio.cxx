@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-07 08:05:56 $
+ *  last change: $Author: jp $ $Date: 2001-04-05 15:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,7 +547,8 @@ SwReader::SwReader( SfxMedium& rMedium, const String& rFileName, SwPaM& rPam )
 Reader::Reader()
     : pStrm(0), pStg(0), pMedium(0), pTemplate(0),
     bTmplBrowseMode( FALSE ), bInsertMode( FALSE ),
-    bReadUTF8( FALSE ), bBlockMode( FALSE ), bOrganizerMode( FALSE )
+    bReadUTF8( FALSE ), bBlockMode( FALSE ), bOrganizerMode( FALSE ),
+    bHasAskTemplateName( FALSE )
 {
 }
 
@@ -556,9 +557,20 @@ Reader::~Reader()
     delete pTemplate;
 }
 
+String Reader::GetTemplateName() const
+{
+    return aEmptyStr;
+}
+
 // Die Filter-Vorlage laden, setzen und wieder freigeben
 SwDoc* Reader::GetTemplateDoc()
 {
+    if( !bHasAskTemplateName )
+    {
+        SetTemplateName( GetTemplateName() );
+        bHasAskTemplateName = TRUE;
+    }
+
     if( !aTemplateNm.Len() )
         ClearTemplate();
     else
@@ -1133,6 +1145,9 @@ BOOL SetHTMLTemplate( SwDoc & rDoc )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2001/03/07 08:05:56  mib
+      #84201#: 6.0 template support
+
       Revision 1.8  2001/03/06 11:08:40  mib
       organizer support for XML file format
 
