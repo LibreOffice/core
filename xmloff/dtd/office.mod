@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.43 2001-07-31 14:47:55 dvo Exp $
+	$Id: office.mod,v 1.44 2001-09-20 17:47:53 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -184,8 +184,8 @@
 <!ELEMENT office:meta %meta;>
 
 <!ENTITY % script	"(script:library-embedded |
-					  script:library-linked)*">
-<!ELEMENT office:script %script;>
+					  script:library-linked)*,office:events?">
+<!ELEMENT office:script (%script;)>
 
 <!ELEMENT office:font-decls (style:font-decl)*>
 

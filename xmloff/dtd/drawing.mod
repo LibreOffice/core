@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.68 2001-08-13 11:04:09 cl Exp $
+	$Id: drawing.mod,v 1.69 2001-09-20 17:47:53 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -537,9 +537,7 @@
 
 <!-- text boxes -->
 <!ELEMENT draw:text-box (office:events?,draw:image-map?,
-		(text:h|text:p|text:ordered-list|
-		text:unordered-list|table:table|chart:chart|
-		draw:a|draw:text-box|draw:image)*)>
+		%sectionText;)>
 <!ATTLIST draw:text-box %draw-style-name;>
 <!ATTLIST draw:text-box %draw-transform; >
 <!ATTLIST draw:text-box draw:name %string; #IMPLIED>
@@ -551,6 +549,8 @@
 <!ATTLIST draw:text-box %table-background; >
 <!ATTLIST draw:text-box svg:width %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:text-box svg:height %lengthOrPercentage; #IMPLIED>
+<!ATTLIST draw:text-box style:rel-width %percentage; #IMPLIED>
+<!ATTLIST draw:text-box style:rel-height %percentage; #IMPLIED>
 <!ATTLIST draw:text-box fo:min-height %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:text-box %zindex;>
 <!ATTLIST draw:text-box %presentation-class; >
