@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.162 $
+ *  $Revision: 1.163 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:21:30 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 10:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2034,18 +2034,27 @@ void SfxMedium::GetMedium_Impl()
             if (xInteractionHandler.is())
                 GetItemSet()->Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, makeAny(xInteractionHandler) ) );
             TransformItems( SID_OPENDOC, *GetItemSet(), xProps );
-            comphelper::MediaDescriptor aMedium( xProps );
-            aMedium.addInputStream();
-            sal_Bool bReadOnly = aMedium.isStreamReadOnly();
-            if (bReadOnly)
-                GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
+            if(m_xInputStreamToLoadFrom.is()) {
+                pImp->xInputStream = m_xInputStreamToLoadFrom;
+                pImp->xInputStream->skipBytes(0);
+                if(m_bIsReadOnly)
+                    GetItemSet()->Put( SfxUsrAnyItem( SID_DOC_READONLY, makeAny( sal_True ) ) );
 
-            //TODO/MBA: what happens if property is not there?!
-            GetContent();
-            aMedium[comphelper::MediaDescriptor::PROP_STREAM()] >>= pImp->xStream;
-            aMedium[comphelper::MediaDescriptor::PROP_INPUTSTREAM()] >>= pImp->xInputStream;
-            if ( !pImp->xInputStream.is() && pImp->xStream.is() )
-                pImp->xInputStream = pImp->xStream->getInputStream();
+                // m_xInputStreamToLoadFrom = 0;
+            }else {
+                comphelper::MediaDescriptor aMedium( xProps );
+                aMedium.addInputStream();
+                sal_Bool bReadOnly = aMedium.isStreamReadOnly();
+                if (bReadOnly)
+                    GetItemSet()->Put( SfxUsrAnyItem( SID_DOC_READONLY, makeAny( sal_True ) ) );
+
+                //TODO/MBA: what happens if property is not there?!
+                GetContent();
+                aMedium[comphelper::MediaDescriptor::PROP_STREAM()] >>= pImp->xStream;
+                aMedium[comphelper::MediaDescriptor::PROP_INPUTSTREAM()] >>= pImp->xInputStream;
+                if ( !pImp->xInputStream.is() && pImp->xStream.is() )
+                    pImp->xInputStream = pImp->xStream->getInputStream();
+            }
 
             //TODO/MBA: need support for SID_STREAM
             if ( pImp->xStream.is() )
@@ -2462,7 +2471,7 @@ void SfxMedium::RefreshName_Impl()
 
 void SfxMedium::SetIsRemote_Impl()
 {
-    INetURLObject aObj( GetBaseURL() );
+    INetURLObject aObj( GetName() );
     switch( aObj.GetProtocol() )
     {
         case INET_PROT_FTP:
