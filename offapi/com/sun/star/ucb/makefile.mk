@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kso $ $Date: 2001-01-10 08:52:00 $
+#   last change: $Author: kso $ $Date: 2001-01-10 13:10:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -183,6 +183,9 @@ IDLFILES=\
     UniversalContentBroker.idl\
     UnsupportedCommandException.idl\
     VerificationMode.idl\
+    WebDAVContentProvider.idl\
+    WebDAVDocumentContent.idl\
+    WebDAVFolderContent.idl\
     WelcomeDynamicResultSetStruct.idl\
     XAnyCompare.idl\
     XAnyCompareFactory.idl\
