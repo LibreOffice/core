@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dentty.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:10 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,10 +89,12 @@ void B3dEntity::Copy(B3dEntity& rEnt)
     bEdgeFlag = rEnt.IsEdgeVisible();
     aPlaneNormal = rEnt.PlaneNormal();
 
-    if(bNormalUsed = rEnt.IsNormalUsed())
+    bNormalUsed = rEnt.IsNormalUsed();
+    if( bNormalUsed )
         aNormal = rEnt.Normal();
 
-    if(bTexCoorUsed = rEnt.IsTexCoorUsed())
+    bTexCoorUsed = rEnt.IsTexCoorUsed();
+    if( bTexCoorUsed )
         aTexCoor = rEnt.TexCoor();
 
     aColor = rEnt.Color();
