@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-23 20:18:50 $
+ *  last change: $Author: nn $ $Date: 2000-11-26 13:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,6 +397,9 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
     FontItalic      eItalic, eCjkItalic, eCtlItalic;
     BOOL            bOutline;
     BOOL            bShadow;
+    LanguageType    eLang, eCjkLang, eCtlLang;
+
+    //! additional parameter to control if language is needed?
 
     if ( pCondSet )
     {
@@ -461,6 +464,16 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
         if ( pCondSet->GetItemState( ATTR_FONT_SHADOWED, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rMySet.Get( ATTR_FONT_SHADOWED );
         bShadow = ((const SvxShadowedItem*)pItem)->GetValue();
+
+        if ( pCondSet->GetItemState( ATTR_FONT_LANGUAGE, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( ATTR_FONT_LANGUAGE );
+        eLang = ((const SvxLanguageItem*)pItem)->GetLanguage();
+        if ( pCondSet->GetItemState( ATTR_CJK_FONT_LANGUAGE, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( ATTR_CJK_FONT_LANGUAGE );
+        eCjkLang = ((const SvxLanguageItem*)pItem)->GetLanguage();
+        if ( pCondSet->GetItemState( ATTR_CTL_FONT_LANGUAGE, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( ATTR_CTL_FONT_LANGUAGE );
+        eCtlLang = ((const SvxLanguageItem*)pItem)->GetLanguage();
     }
     else        // alles direkt aus Pattern
     {
@@ -494,6 +507,12 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
                         rMySet.Get( ATTR_FONT_CONTOUR )).GetValue();
         bShadow = ((const SvxShadowedItem&)
                         rMySet.Get( ATTR_FONT_SHADOWED )).GetValue();
+        eLang = ((const SvxLanguageItem&)
+                        rMySet.Get( ATTR_FONT_LANGUAGE )).GetLanguage();
+        eCjkLang = ((const SvxLanguageItem&)
+                        rMySet.Get( ATTR_CJK_FONT_LANGUAGE )).GetLanguage();
+        eCtlLang = ((const SvxLanguageItem&)
+                        rMySet.Get( ATTR_CTL_FONT_LANGUAGE )).GetLanguage();
     }
 
     // kompatibel zu LogicToLogic rechnen, also 2540/1440 = 127/72, und runden
@@ -521,8 +540,9 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
     pEditSet->Put( SvxPostureItem   ( eCtlItalic,   EE_CHAR_ITALIC_CTL ) );
     pEditSet->Put( SvxContourItem   ( bOutline,     EE_CHAR_OUTLINE ) );
     pEditSet->Put( SvxShadowedItem  ( bShadow,      EE_CHAR_SHADOW ) );
-
-    //! language...
+    pEditSet->Put( SvxLanguageItem  ( eLang,        EE_CHAR_LANGUAGE ) );
+    pEditSet->Put( SvxLanguageItem  ( eCjkLang,     EE_CHAR_LANGUAGE_CJK ) );
+    pEditSet->Put( SvxLanguageItem  ( eCtlLang,     EE_CHAR_LANGUAGE_CTL ) );
 }
 
 void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )
