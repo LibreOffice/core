@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeaderFooterAreasView.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:17:11 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:54:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,15 +90,22 @@ service AccessiblePageHeaderFooterAreasView
         page preview.
 
     <ul>
-        <li>The parent returned by <type>getAccessibleParent</type>
+        <li>The parent returned by <method scope="::com::sun::star::accessibility"
+            >XAccessibleContext::getAccessibleParent</method>
             is the accessible spreadsheet page preview.</li>
-        <li>The children returned by <type>getAccessibleChild</type> all
-            support the interface XAccessible. Calling
-            <type>getAccessibleContext</type> for these children returns
-            an object that supports one of the following services.</li>
+        <li>The children returned by
+            <method scope="::com::sun::star::accessibility"
+            >XAccessibleContext::getAccessibleChild</method> all
+            support the interface
+            <type scope="::com::sun::star::accessibility">XAccessible</type.
+            Calling
+            <method scope="::com::sun::star::accessibility"
+            >XAccessible::getAccessibleContext</method> for these children
+            returns an object that supports one of the following services.</li>
         <ul>
-            <li><type>com.sun.star.text.AccessibleHeaderFooterView</type>:
-                A child where calling <type>getAccessibleChild</type>
+            <li><type scope="::com::sun::star::text">AccessibleHeaderFooterView</type>:
+                A child where calling <method scope="::com::sun::star::text"
+                >XAccessibleContext::getAccessibleChild</method>
                 an object that supports this service is returned for
                 every header and footer that is at least partially visible.</li>
         </ul>
@@ -108,35 +115,51 @@ service AccessiblePageHeaderFooterAreasView
             is the right area.</li>
         </ul>
         <li>The description is ???.</li>
-        <li>The name is Header/Footer.</li>
-        <li>The role is <type>HEADER/FOOTER</type></li>
+        <li>The name is Header or Footer respectively.</li>
+        <li>The role is <const scope="::com::sun::star::accessibility"
+            >AccessibleRole::HEADER</const> or
+            <const scope="::com::sun::star::accessibility"
+            >AccessibleRole::FOOTER</const>.</li>
         <li>There are no relations.</li>
         <li>The following states are supported:
             <ul>
-                <li><type>DEFUNC</type> is always false until the preview is
-                    closed.</li>
-                <li><type>EDITABLE</type> is always false, because the document
-                    is not editable in the page preview. So it is left out of
-                    the list.</li>
-                <li><type>ENABLED</type> is always true.</li>
-                <li><type>MULTILINE</type> makes no sense on a document and so
-                    it is left out of the list.</li>
-                <li><type>MULTISELECTABLE</type> is always false, because in a
-                    page preview a selection is not possible. So it is left out
-                    of the list.</li>
-                <li><type>OPAQUE</type> is always true.</li>
-                <li><type>RESIZEABLE</type> is always false, because you can
-                    resize the window of the page preview, but not the page
-                    preview itself. So it is left out of the list.</li>
-                <li><type>SELECTABLE</type> is always false, because in the
-                    page preview is no selection possible. So it is left out of
-                    the list.</li>
-                <li><type>SELECTED</type> is always false, because in the
-                    page preview is no selection possible. So it is left out of
-                    the list.</li>
-                <li><type>SHOWING</type>Is true if the Bounding Box lies in
-                    the Bounding Box of the parent. Otherwise it is false.</li>
-                <li><type>VISIBLE</type>Is always true.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::DEFUNC</const> is always false until
+                    the preview is closed.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::EDITABLE</const> is always false,
+                    because the document is not editable in the page preview.
+                    So it is left out of the list.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::ENABLED</const> is always true.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::MULTILINE</const> makes no sense on
+                    a document and so it is left out of the list.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::MULTISELECTABLE</const> is always
+                    false, because in a page preview a selection is not
+                    possible. So it is left out of the list.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::OPAQUE</const> is always true.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::RESIZEABLE</const> is always false,
+                    because you can resize the window of the page preview, but
+                    not the page preview itself. So it is left out of the
+                    list.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::SELECTABLE</const> is always false,
+                    because in the page preview is no selection possible. So it
+                    is left out of the list.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::SELECTED</const> is always false,
+                    because in the page preview is no selection possible. So it
+                    is left out of the list.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::SHOWING</const>Is true if the
+                    Bounding Box lies in the Bounding Box of the parent.
+                    Otherwise it is false.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::VISIBLE</const>Is always true.</li>
             </ul>
         </li>
     </ul>
