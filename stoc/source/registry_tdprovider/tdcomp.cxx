@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdcomp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:47:54 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:15:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #include "base.hxx"
 #endif
 
+#include "registry/reader.hxx"
+#include "registry/version.h"
+
 namespace stoc_rdbtdp
 {
 
@@ -120,12 +123,11 @@ Sequence< Reference< XTypeDescription > > CompoundTypeDescriptionImpl::getMember
 {
     if (! _pMembers)
     {
-        RegistryTypeReaderLoader aLoader;
-        RegistryTypeReader aReader(
-            aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
-            _aBytes.getLength(), sal_False );
+        typereg::Reader aReader(
+            _aBytes.getConstArray(), _aBytes.getLength(), false,
+            TYPEREG_VERSION_1);
 
-        sal_uInt16 nFields = (sal_uInt16)aReader.getFieldCount();
+        sal_uInt16 nFields = aReader.getFieldCount();
         Sequence< Reference< XTypeDescription > > * pTempMembers =
             new Sequence< Reference< XTypeDescription > >( nFields );
         Reference< XTypeDescription > * pMembers = pTempMembers->getArray();
@@ -135,7 +137,8 @@ Sequence< Reference< XTypeDescription > > CompoundTypeDescriptionImpl::getMember
             try
             {
                 _xTDMgr->getByHierarchicalName(
-                    aReader.getFieldType( nFields ).replace( '/', '.' ) ) >>= pMembers[nFields];
+                    aReader.getFieldTypeName( nFields ).replace( '/', '.' ) )
+                        >>= pMembers[nFields];
             }
             catch (NoSuchElementException &)
             {
@@ -163,12 +166,11 @@ Sequence< OUString > CompoundTypeDescriptionImpl::getMemberNames()
 {
     if (! _pMemberNames)
     {
-        RegistryTypeReaderLoader aLoader;
-        RegistryTypeReader aReader(
-            aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
-            _aBytes.getLength(), sal_False );
+        typereg::Reader aReader(
+            _aBytes.getConstArray(), _aBytes.getLength(), false,
+            TYPEREG_VERSION_1);
 
-        sal_uInt16 nFields = (sal_uInt16)aReader.getFieldCount();
+        sal_uInt16 nFields = aReader.getFieldCount();
         Sequence< OUString > * pTempMemberNames = new Sequence< OUString >( nFields );
         OUString * pMemberNames = pTempMemberNames->getArray();
 
