@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransGradientStyle.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-25 16:19:26 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ using namespace ::xmloff::token;
 enum SvXMLTokenMapAttrs
 {
     XML_TOK_GRADIENT_NAME,
+    XML_TOK_GRADIENT_DISPLAY_NAME,
     XML_TOK_GRADIENT_STYLE,
     XML_TOK_GRADIENT_CX,
     XML_TOK_GRADIENT_CY,
@@ -128,6 +129,7 @@ enum SvXMLTokenMapAttrs
 static __FAR_DATA SvXMLTokenMapEntry aTrGradientAttrTokenMap[] =
 {
     { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_GRADIENT_NAME },
+    { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_GRADIENT_DISPLAY_NAME },
     { XML_NAMESPACE_DRAW, XML_STYLE, XML_TOK_GRADIENT_STYLE },
     { XML_NAMESPACE_DRAW, XML_CX, XML_TOK_GRADIENT_CX },
     { XML_NAMESPACE_DRAW, XML_CY, XML_TOK_GRADIENT_CY },
@@ -171,6 +173,7 @@ sal_Bool XMLTransGradientStyleImport::importXML(
     sal_Bool bRet           = sal_False;
     sal_Bool bHasName       = sal_False;
     sal_Bool bHasStyle      = sal_False;
+    OUString aDisplayName;
 
     awt::Gradient aGradient;
     aGradient.XOffset = 0;
@@ -202,6 +205,11 @@ sal_Bool XMLTransGradientStyleImport::importXML(
                 bHasName = sal_True;
             }
             break;
+        case XML_TOK_GRADIENT_DISPLAY_NAME:
+            {
+                aDisplayName = rStrValue;
+            }
+            break;
         case XML_TOK_GRADIENT_STYLE:
             {
                 sal_uInt16 eValue;
@@ -225,7 +233,7 @@ sal_Bool XMLTransGradientStyleImport::importXML(
                 sal_Int32 aStartTransparency;
                 rUnitConverter.convertPercent( aStartTransparency, rStrValue );
 
-                aStartTransparency = ( aStartTransparency * 255 ) / 100;
+                aStartTransparency = ( (100 - aStartTransparency) * 255 ) / 100;
 
                 Color aColor(aStartTransparency, aStartTransparency, aStartTransparency );
                 aGradient.StartColor = (sal_Int32)( aColor.GetColor() );
@@ -236,7 +244,7 @@ sal_Bool XMLTransGradientStyleImport::importXML(
                 sal_Int32 aEndTransparency;
                 rUnitConverter.convertPercent( aEndTransparency, rStrValue );
 
-                aEndTransparency = ( aEndTransparency * 255 ) / 100;
+                aEndTransparency = ( (100 - aEndTransparency) * 255 ) / 100;
 
                 Color aColor( aEndTransparency, aEndTransparency, aEndTransparency );
                 aGradient.EndColor = (sal_Int32)( aColor.GetColor() );
@@ -261,6 +269,13 @@ sal_Bool XMLTransGradientStyleImport::importXML(
     }
 
     rValue <<= aGradient;
+
+    if( aDisplayName.getLength() )
+    {
+        rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_GRADIENT_ID, rStrName,
+                                     aDisplayName );
+        rStrName = aDisplayName;
+    }
 
     bRet = bHasName && bHasStyle;
 
@@ -309,7 +324,13 @@ sal_Bool XMLTransGradientStyleExport::exportXML(
             else
             {
                 // Name
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rStrName );
+                sal_Bool bEncoded = sal_False;
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
+                                      rExport.EncodeStyleName( rStrName,
+                                                                &bEncoded ) );
+                if( bEncoded )
+                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,
+                                            rStrName );
 
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
@@ -332,14 +353,14 @@ sal_Bool XMLTransGradientStyleExport::exportXML(
 
                 // Transparency start
                 aColor.SetColor( aGradient.StartColor );
-                sal_Int32 aStartValue = (sal_Int32)(((aColor.GetRed() + 1) * 100) / 255);
+                sal_Int32 aStartValue = 100 - (sal_Int32)(((aColor.GetRed() + 1) * 100) / 255);
                 rUnitConverter.convertPercent( aOut, aStartValue );
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_START, aStrValue );
 
                 // Transparency end
                 aColor.SetColor( aGradient.EndColor );
-                sal_Int32 aEndValue = (sal_Int32)(((aColor.GetRed() + 1) * 100) / 255);
+                sal_Int32 aEndValue = 100 - (sal_Int32)(((aColor.GetRed() + 1) * 100) / 255);
                 rUnitConverter.convertPercent( aOut, aEndValue );
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_END, aStrValue );
@@ -359,7 +380,7 @@ sal_Bool XMLTransGradientStyleExport::exportXML(
 
                 // Do Write
                 SvXMLElementExport rElem( rExport,
-                                          XML_NAMESPACE_DRAW, XML_TRANSPARENCY,
+                                          XML_NAMESPACE_DRAW, XML_OPACITY,
                                           sal_True, sal_False );
             }
         }
