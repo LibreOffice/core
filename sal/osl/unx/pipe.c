@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hro $ $Date: 2002-07-11 14:01:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,12 +399,12 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
         len = sizeof(addr);
 
         nRet = connect( fd, (struct sockaddr *)&addr, len);
-#if defined(DEBUG)
+#if OSL_DEBUG_LEVEL > 1
         if ( nRet < 0 )
         {
             perror("connect in osl_destroyPipe");
         }
-#endif /* DEBUG */
+#endif /* OSL_DEBUG_LEVEL */
         close(fd);
     }
 #endif /* LINUX */
