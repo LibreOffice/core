@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:06:32 $
+ *  last change: $Author: oj $ $Date: 2002-10-08 06:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1156,7 +1156,8 @@ namespace dbaui
                 case etView:
                 case etTable:
                 case etQuery:
-                    if(etQuery == eType || isConnectionWriteAble(_aEntry->pEntry))
+
+                    if ( etQuery == eType || isConnectionWriteAble(_aEntry->pEntry) )
                     {
                         DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(_aEntry->pEntry->GetUserData());
                         OSL_ENSURE(pData && pData->xObject.is(),"Error in editing!");
@@ -1172,6 +1173,12 @@ namespace dbaui
                                 sOldName = sName;
                             else
                                 ::dbaui::composeTableName(xMeta,xProp,sOldName,sal_False);
+
+                            if ( !_aEntry->aNewText.Len() )
+                            {
+                                String sError = ErrorBox(getView(), ModuleRes(ERROR_INVALID_TABLE_NAME)).GetMessText();
+                                dbtools::throwGenericSQLException(sError, NULL);
+                            }
 
                             // check if the new name is allowed
                             if ( etQuery != eType && isSQL92CheckEnabled(xConnection) && xMeta.is() )
@@ -1388,6 +1395,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.54  2002/10/07 13:06:32  oj
+ *  #i3289# correct table name quoting so that in every situation the correct schema, catalog is used
+ *
  *  Revision 1.53  2002/08/19 07:32:51  oj
  *  #99473# change string resource files
  *
