@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-01 18:55:57 $
+ *  last change: $Author: sab $ $Date: 2002-04-23 09:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,13 +121,13 @@ void XMLTableShapeImportHelper::finishShape(
     static_cast<ScXMLImport&>(mrImporter).LockSolarMutex();
     if (rShapes == static_cast<ScXMLImport&>(mrImporter).GetTables().GetCurrentXShapes())
     {
-        sal_Bool bBackground(sal_False);
         Rectangle* pRect = NULL;
         sal_Int32 nEndX(-1);
         sal_Int32 nEndY(-1);
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         table::CellAddress aEndCell;
         rtl::OUString* pRangeList = NULL;
+        sal_Int16 nLayerID(-1);
         for( sal_Int16 i=0; i < nAttrCount; i++ )
         {
             const rtl::OUString& rAttrName = xAttrList->getNameByIndex( i );
@@ -150,7 +150,7 @@ void XMLTableShapeImportHelper::finishShape(
                     static_cast<ScXMLImport&>(mrImporter).GetMM100UnitConverter().convertMeasure(nEndY, rValue);
                 else if (IsXMLToken(aLocalName, XML_TABLE_BACKGROUND))
                     if (IsXMLToken(rValue, XML_TRUE))
-                        bBackground = sal_True;
+                        nLayerID = SC_LAYER_BACK;
             }
             else if(nPrefix == XML_NAMESPACE_DRAW)
             {
@@ -158,16 +158,13 @@ void XMLTableShapeImportHelper::finishShape(
                     pRangeList = new rtl::OUString(rValue);
             }
         }
-        if (bBackground)
+        if ((nLayerID == -1) && rShape->getShapeType().equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ControlShape")))) //controls are never in background
+            nLayerID = SC_LAYER_CONTROLS;
+        if (nLayerID != -1)
         {
             uno::Reference< beans::XPropertySet > xShapeProp( rShape, uno::UNO_QUERY );
             if( xShapeProp.is() )
-            {
-                sal_Int16 nLayerID = SC_LAYER_BACK;
-                uno::Any aPropAny;
-                aPropAny <<= nLayerID;
-                xShapeProp->setPropertyValue(OUString( RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ) ), aPropAny );
-            }
+                xShapeProp->setPropertyValue(OUString( RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ) ), uno::makeAny(nLayerID) );
         }
 
         if (!bOnTable)
