@@ -1,4 +1,4 @@
-    <node oor:name="MS Excel 5.0 (StarWriter)" oor:op="replace">
+    <node oor:name="MS Excel 5.0 (StarWriter)" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>calc_MS_Excel_5095</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
