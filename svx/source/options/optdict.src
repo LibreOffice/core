@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdict.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:39:28 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ ModalDialog RID_SFXDLG_NEWDICT
     Text [ italian ] = "Nuovo dizionario" ;
     Text [ portuguese_brazilian ] = "New dictionary" ;
     Text [ portuguese ] = "Novo dicionário" ;
-    Text [ finnish ] = "New dictionary" ;
+    Text [ finnish ] = "Uusi sanasto" ;
     Text [ danish ] = "Opret brugerordbog" ;
     Text [ french ] = "Nouveau dictionnaire de l'utilisateur" ;
     Text [ swedish ] = "Skapa användarordbok" ;
@@ -145,7 +145,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text [ italian ] = "~Lingua" ;
         Text [ portuguese_brazilian ] = "~Idioma" ;
         Text [ portuguese ] = "~Língua" ;
-        Text [ finnish ] = "K~ieli" ;
+        Text [ finnish ] = "~Kieli" ;
         Text [ danish ] = "Sprog" ;
         Text [ french ] = "~Langue" ;
         Text [ swedish ] = "~Språk" ;
@@ -182,7 +182,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text [ italian ] = "~Eccezione (-)" ;
         Text [ portuguese_brazilian ] = "~Exceção (-)" ;
         Text [ portuguese ] = "~Excepção (-)" ;
-        Text [ finnish ] = "Po~ikkeus (-)" ;
+        Text [ finnish ] = "~Poikkeus (-)" ;
         Text [ danish ] = "Undtagelse (-)" ;
         Text [ french ] = "~Exception (-)" ;
         Text [ swedish ] = "~Undantag (-)" ;
@@ -213,7 +213,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text [ italian ] = "Dizionario" ;
         Text [ portuguese_brazilian ] = "Dicionário" ;
         Text [ portuguese ] = "Dicionário" ;
-        Text [ finnish ] = "Dictionary" ;
+        Text [ finnish ] = "Wörterbuch" ;
         Text [ danish ] = "Ordbog" ;
         Text [ french ] = "Dictionnaire" ;
         Text [ swedish ] = "Ordbok" ;
@@ -268,7 +268,7 @@ ModalDialog RID_SFXDLG_EDITDICT
     Text [ italian ] = "Modifica dizionario" ;
     Text [ portuguese_brazilian ] = "Edit dictionary" ;
     Text [ portuguese ] = "Editar dicionário do utilizador" ;
-    Text [ finnish ] = "Edit dictionary" ;
+    Text [ finnish ] = "Muokkaa mukautettua sanastoa" ;
     Text [ danish ] = "Rediger brugerordbog" ;
     Text [ french ] = "Édition du dictionnaire de l'utilisateur" ;
     Text [ swedish ] = "Redigera användarordbok" ;
@@ -304,6 +304,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ turkish ] = "Kitap";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Libro";
+        Text[ finnish ] = "~Kirja";
     };
     ListBox LB_ALLDICTS
     {
@@ -338,6 +339,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ turkish ] = "Dil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "I~dioma";
+        Text[ finnish ] = "~Kieli";
     };
     ListBox LB_DICTLANG
     {
@@ -380,6 +382,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ turkish ] = "Sözcük";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Palabra";
+        Text[ finnish ] = "~Sana";
     };
     Edit ED_WORD
     {
@@ -414,6 +417,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ korean ] = "Á¦¾È(~B):";
         Text[ turkish ] = "Öneri";
         Text[ catalan ] = "~Sugerencia";
+        Text[ finnish ] = "~Korvaus:";
     };
 
     Edit ED_REPLACE
@@ -451,6 +455,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ turkish ] = "Yeni";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nuevo";
+        Text[ finnish ] = "~Uusi";
     };
     PushButton PB_DELETE_REPLACE
     {
@@ -479,6 +484,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
+        Text[ finnish ] = "~Poista";
     };
     Control TLB_REPLACE
     {
@@ -593,6 +599,7 @@ String RID_SVXSTR_OPT_DOUBLE_DICTS
     Text[ turkish ] = "Girilen ad mevcut durumda.\nLütfen baþka bir ad girin.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Este nombre ya existe.\nPor favor escriba otro nombre.";
+    Text[ finnish ] = "Määritetty nimi on jo käytössä.\nMääritä uusi nimi.";
 };
  // RID_SFXQB_SET_LANGUAGE ------------------------------------------------
 QueryBox RID_SFXQB_SET_LANGUAGE
@@ -625,5 +632,6 @@ QueryBox RID_SFXQB_SET_LANGUAGE
     Message[ turkish ] = "'%1' sözlüðünün dilini deðiþtirmek isityor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "¿Desea cambiar el idioma del diccionario '%1' ?";
+    Message[ finnish ] = "Haluatko vaihtaa sanaston '%1' kieltä?";
 };
  // ********************************************************************** EOF
