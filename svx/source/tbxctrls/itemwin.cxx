@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemwin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-09-06 14:42:49 $
+ *  last change: $Author: os $ $Date: 2002-01-11 11:36:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,6 +347,7 @@ void SvxColorBox::Select()
     {
         XLineColorItem aLineColorItem( GetSelectEntry(), GetSelectEntryColor() );
         rBindings.GetDispatcher()->Execute( nId, SFX_CALLMODE_RECORD, &aLineColorItem, 0L );
+        nCurPos = GetSelectEntryPos();
         ReleaseFocus_Impl();
     }
 }
