@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-16 14:49:22 $
+ *  last change: $Author: mt $ $Date: 2002-07-19 09:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,9 +317,9 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
             // Now that we have Bidi, the first/last index doesn't have to be the 'most outside' postion
             if ( !bPartOfLine )
             {
-                aTopLeft.X() = pLine->GetStartPosX();
-                aBottomRight.X() = pLine->GetStartPosX() + pLine->GetTextWidth();
-
+                Range aLineXPosStartEnd = pEditEngine->pImpEditEngine->GetLineXPosStartEnd( pTmpPortion, pLine );
+                aTopLeft.X() = aLineXPosStartEnd.Min();
+                aBottomRight.X() = aLineXPosStartEnd.Max();
                 ImplDrawHighlightRect( pOutWin, aTopLeft, aBottomRight, pPolyPoly );
             }
             else

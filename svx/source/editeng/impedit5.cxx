@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-12 13:31:16 $
+ *  last change: $Author: mt $ $Date: 2002-07-19 09:21:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -864,7 +864,7 @@ BOOL ImpEditEngine::HasParaAttrib( USHORT nPara, USHORT nWhich ) const
     return pNode->GetContentAttribs().HasItem( nWhich );
 }
 
-const SfxPoolItem& ImpEditEngine::GetParaAttrib( USHORT nPara, USHORT nWhich )
+const SfxPoolItem& ImpEditEngine::GetParaAttrib( USHORT nPara, USHORT nWhich ) const
 {
     ContentNode* pNode = aEditDoc.GetObject( nPara );
     DBG_ASSERT( pNode, "Node nicht gefunden: GetParaAttrib" );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-12 10:31:18 $
+ *  last change: $Author: mt $ $Date: 2002-07-19 09:21:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,10 @@
 
 #ifndef SVX_LIGHT
 #include <srchdlg.hxx>
+#endif
+
+#ifdef DEBUG
+#include <writingmodeitem.hxx>
 #endif
 
 // Spaeter -> TOOLS\STRING.H (fuer Grep: WS_TARGET)
@@ -1007,9 +1011,17 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
             break;
             default:
             {
-                #if defined( DBG_UTIL ) || defined( DEBUG )
-//                    if ( ( nCode == KEY_C ) && rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
-//                      SetAsianCompressionMode( GetAsianCompressionMode() ? EE_ASIANCOMPRESSION_NONE : EE_ASIANCOMPRESSION_PUNCTIONANDKANA );
+                #if defined( DEBUG ) && !defined( PRODUCT )
+                    if ( ( nCode == KEY_W ) && rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
+                    {
+                        SfxItemSet aAttribs = pEditView->GetAttribs();
+                        const SvxWritingModeItem& rCurrentWritingMode = (const SvxWritingModeItem&)aAttribs.Get( EE_PARA_WRITINGDIR );
+                        SvxWritingModeItem aNewItem( ::com::sun::star::text::WritingMode_LR_TB, EE_PARA_WRITINGDIR );
+                        if ( rCurrentWritingMode.GetValue() != ::com::sun::star::text::WritingMode_RL_TB )
+                            aNewItem.SetValue( ::com::sun::star::text::WritingMode_RL_TB );
+                        aAttribs.Put( aNewItem );
+                        pEditView->SetAttribs( aAttribs );
+                    }
                 #endif
                 if ( !bReadOnly && IsSimpleCharInput( rKeyEvent ) )
                 {
@@ -1720,11 +1732,12 @@ sal_Bool EditEngine::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
         {
             ParaPortion* pParaPortion = pImpEditEngine->FindParaPortion( aPaM.GetNode() );
             DBG_ASSERT( pParaPortion, "ParaPortion?" );
+
             sal_uInt16 nLine = pParaPortion->GetLineNumber( aPaM.GetIndex() );
             EditLine* pLine = pParaPortion->GetLines().GetObject( nLine );
-            if ( ( aDocPos.X() >= pLine->GetStartPosX() - nBorder ) &&
-                 ( aDocPos.X() <= pLine->GetStartPosX() +
-                         pImpEditEngine->CalcLineWidth( pParaPortion, pLine, FALSE ) + nBorder ) )
+            Range aLineXPosStartEnd = pImpEditEngine->GetLineXPosStartEnd( pParaPortion, pLine );
+            if ( ( aDocPos.X() >= aLineXPosStartEnd.Min() - nBorder ) &&
+                 ( aDocPos.X() <= aLineXPosStartEnd.Max() + nBorder ) )
             {
                  bTextPos = sal_True;
             }

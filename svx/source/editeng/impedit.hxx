@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-12 10:31:19 $
+ *  last change: $Author: mt $ $Date: 2002-07-19 09:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,6 +548,7 @@ private:
     long                GetPortionXOffset( ParaPortion* pParaPortion, EditLine* pLine, USHORT nTextPortion );
     USHORT              GetChar( ParaPortion* pParaPortion, EditLine* pLine, long nX, BOOL bSmart = TRUE );
     Range               GetInvalidYOffsets( ParaPortion* pPortion );
+    Range               GetLineXPosStartEnd( ParaPortion* pParaPortion, EditLine* pLine );
 
     void                SetParaAttrib( BYTE nFunc, EditSelection aSel, sal_uInt16 nValue );
     sal_uInt16          GetParaAttrib( BYTE nFunc, EditSelection aSel );
@@ -625,6 +626,8 @@ private:
 
     BOOL                ImplCalcAsianCompression( ContentNode* pNode, TextPortion* pTextPortion, USHORT nStartPos, long* pDXArray, USHORT n100thPercentFromMax, BOOL bManipulateDXArray );
     void                ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* pParaPortion, long nRemainingWidth );
+
+    void                ImplInitLayoutMode( OutputDevice* pOutDev, USHORT nPara, USHORT nIndex );
 
     EditPaM             ReadText( SvStream& rInput, EditSelection aSel );
     EditPaM             ReadRTF( SvStream& rInput, EditSelection aSel );
@@ -711,7 +714,7 @@ public:
     BOOL                    IsVertical() const                      { return GetEditDoc().IsVertical(); }
 
     void                    InitWritingDirections( USHORT nPara );
-    BOOL                    IsRightToLeft( USHORT nPara );
+    BOOL                    IsRightToLeft( USHORT nPara ) const;
     BYTE                    GetRightToLeft( USHORT nPara, USHORT nChar, USHORT* pStart = NULL, USHORT* pEnd = NULL );
 
     void                    SetTextRanger( TextRanger* pRanger );
@@ -796,7 +799,7 @@ public:
     const SfxItemSet&   GetParaAttribs( sal_uInt16 nPara ) const;
 
     sal_Bool            HasParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhich ) const;
-    const SfxPoolItem&  GetParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhich );
+    const SfxPoolItem&  GetParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhich ) const;
 
     Rectangle       PaMtoEditCursor( EditPaM aPaM, sal_uInt16 nFlags = 0 );
     Rectangle       GetEditCursor( ParaPortion* pPortion, sal_uInt16 nIndex, sal_uInt16 nFlags = 0 );
@@ -907,6 +910,7 @@ public:
     SfxItemPool*        GetEditTextObjectPool() const               { return pTextObjectPool; }
 
     const SvxLRSpaceItem&   GetLRSpaceItem( ContentNode* pNode );
+    SvxAdjust               GetJustification( USHORT nPara ) const;
 
     void                SetCharStretching( sal_uInt16 nX, sal_uInt16 nY );
     inline void         GetCharStretching( sal_uInt16& rX, sal_uInt16& rY );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-18 12:17:00 $
+ *  last change: $Author: mt $ $Date: 2002-07-19 09:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1490,7 +1490,7 @@ void ImpEditEngine::InitWritingDirections( USHORT nPara )
 
 }
 
-BOOL ImpEditEngine::IsRightToLeft( USHORT nPara )
+BOOL ImpEditEngine::IsRightToLeft( USHORT nPara ) const
 {
     BOOL bR2L = FALSE;
 
@@ -1505,7 +1505,8 @@ BOOL ImpEditEngine::IsRightToLeft( USHORT nPara )
 
 BYTE ImpEditEngine::GetRightToLeft( USHORT nPara, USHORT nPos, USHORT* pStart, USHORT* pEnd )
 {
-    BYTE nRightToLeft = IsRightToLeft( nPara ) ? 1 : 0;
+//    BYTE nRightToLeft = IsRightToLeft( nPara ) ? 1 : 0;
+    BYTE nRightToLeft = 0;
 
     ContentNode* pNode = aEditDoc.SaveGetObject( nPara );
     if ( pNode && pNode->Len() )
@@ -1531,6 +1532,26 @@ BYTE ImpEditEngine::GetRightToLeft( USHORT nPara, USHORT nPos, USHORT* pStart, U
     }
     return nRightToLeft;
 }
+
+SvxAdjust ImpEditEngine::GetJustification( USHORT nPara ) const
+{
+    SvxAdjust eJustification = SVX_ADJUST_LEFT;
+
+    if ( !aStatus.IsOutliner() )
+    {
+        eJustification = ((const SvxAdjustItem&) GetParaAttrib( nPara, EE_PARA_JUST )).GetAdjust();
+
+        if ( IsRightToLeft( nPara ) )
+        {
+            if ( eJustification == SVX_ADJUST_LEFT )
+                eJustification = SVX_ADJUST_RIGHT;
+            else if ( eJustification == SVX_ADJUST_RIGHT )
+                eJustification = SVX_ADJUST_LEFT;
+        }
+    }
+    return eJustification;
+}
+
 
 //  ----------------------------------------------------------------------
 //  Textaenderung
@@ -2494,17 +2515,12 @@ ULONG ImpEditEngine::CalcTextWidth( BOOL bIgnoreExtraSpace )
 
 ULONG ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, BOOL bIgnoreExtraSpace )
 {
-    SvxAdjust eJustification = SVX_ADJUST_LEFT;
-    if ( !aStatus.IsOutliner() )
-        eJustification = ((const SvxAdjustItem&)pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_JUST)).GetAdjust();
-
+    USHORT nPara = GetEditDoc().GetPos( pPortion->GetNode() );
     ULONG nOldLayoutMode = GetRefDevice()->GetLayoutMode();
 
-    USHORT nPara = GetEditDoc().GetPos( pPortion->GetNode() );
-    if ( !HasScriptType( nPara, i18n::ScriptType::COMPLEX ) )
-        GetRefDevice()->SetLayoutMode( nOldLayoutMode|TEXT_LAYOUT_COMPLEX_DISABLED );
-    else
-        GetRefDevice()->SetLayoutMode( nOldLayoutMode&(~TEXT_LAYOUT_COMPLEX_DISABLED) );
+    ImplInitLayoutMode( GetRefDevice(), nPara, 0xFFFF );
+
+    SvxAdjust eJustification = GetJustification( nPara );
 
     // Berechnung der Breite ohne die Indents...
     ULONG nWidth = 0;
@@ -3229,6 +3245,26 @@ USHORT ImpEditEngine::GetChar( ParaPortion* pParaPortion, EditLine* pLine, long 
     return nChar;
 }
 
+Range ImpEditEngine::GetLineXPosStartEnd( ParaPortion* pParaPortion, EditLine* pLine )
+{
+    Range aLineXPosStartEnd;
+
+    USHORT nPara = GetEditDoc().GetPos( pParaPortion->GetNode() );
+    if ( !IsRightToLeft( nPara ) )
+    {
+        aLineXPosStartEnd.Min() = pLine->GetStartPosX();
+        aLineXPosStartEnd.Max() = pLine->GetStartPosX() + pLine->GetTextWidth();
+    }
+    else
+    {
+        aLineXPosStartEnd.Min() = GetPaperSize().Width() - ( pLine->GetStartPosX() + pLine->GetTextWidth() );
+        aLineXPosStartEnd.Max() = GetPaperSize().Width() - pLine->GetStartPosX();
+    }
+
+
+    return aLineXPosStartEnd;
+}
+
 long ImpEditEngine::GetPortionXOffset( ParaPortion* pParaPortion, EditLine* pLine, USHORT nTextPortion )
 {
     long nX = pLine->GetStartPosX();
@@ -3250,8 +3286,11 @@ long ImpEditEngine::GetPortionXOffset( ParaPortion* pParaPortion, EditLine* pLin
         }
     }
 
+    USHORT nPara = GetEditDoc().GetPos( pParaPortion->GetNode() );
+    BOOL bR2LPara = IsRightToLeft( nPara );
+
     TextPortion* pDestPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
-    if ( pDestPortion->GetRightToLeft() )
+    if ( !bR2LPara && pDestPortion->GetRightToLeft() )
     {
         // Portions behind must be added, visual before this portion
         sal_uInt16 nTmpPortion = nTextPortion+1;
@@ -3275,6 +3314,15 @@ long ImpEditEngine::GetPortionXOffset( ParaPortion* pParaPortion, EditLine* pLin
             else
                 break;
         }
+    }
+
+    if ( bR2LPara )
+    {
+        // Switch X postions...
+        DBG_ASSERT( GetPaperSize().Width(), "GetPortionXOffset - paper size?!" );
+        DBG_ASSERT( nX <= GetPaperSize().Width(), "GetPortionXOffset - position out of paper size!" );
+        nX = GetPaperSize().Width() - nX;
+        nX -= pDestPortion->GetSize().Width();
     }
 
     return nX;

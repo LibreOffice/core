@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-18 12:17:01 $
+ *  last change: $Author: mt $ $Date: 2002-07-19 09:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,9 +548,7 @@ void ImpEditEngine::CheckAutoPageSize()
                 // Die Hoehe kann sich hier nicht mehr aendern.
                 ParaPortion* pParaPortion = GetParaPortions().GetObject( nPara );
                 ContentNode* pNode = pParaPortion->GetNode();
-                SvxAdjust eJustification = SVX_ADJUST_LEFT;
-                if ( !aStatus.IsOutliner() )
-                    eJustification = ((const SvxAdjustItem&)pNode->GetContentAttribs().GetItem( EE_PARA_JUST)).GetAdjust();
+                SvxAdjust eJustification = GetJustification( nPara );
                 if ( eJustification != SVX_ADJUST_LEFT )
                 {
                     pParaPortion->MarkSelectionInvalid( 0, pNode->Len() );
@@ -628,9 +626,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
 
     BOOL bRightToLeftPara = IsRightToLeft( nPara );
 
-    SvxAdjust eJustification = SVX_ADJUST_LEFT;
-    if ( !aStatus.IsOutliner() )
-        eJustification = ((const SvxAdjustItem&)pNode->GetContentAttribs().GetItem( EE_PARA_JUST)).GetAdjust();
+    SvxAdjust eJustification = GetJustification( nPara );
     sal_Bool bHyphenatePara = ((const SfxBoolItem&)pNode->GetContentAttribs().GetItem( EE_PARA_HYPHENATE )).GetValue();
     const SvxLRSpaceItem& rLRItem = GetLRSpaceItem( pNode );
     const SvxLineSpacingItem& rLSItem = (const SvxLineSpacingItem&) pNode->GetContentAttribs().GetItem( EE_PARA_SBL );
@@ -675,16 +671,8 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
 
     // SW disables TEXT_LAYOUT_COMPLEX_DISABLED, so maybe I have to enable it...
     ULONG nOldLayoutMode = GetRefDevice()->GetLayoutMode();
-    BOOL bCTL = HasScriptType( nPara, i18n::ScriptType::COMPLEX );
-    if ( !bCTL )
-    {
-        GetRefDevice()->SetLayoutMode( nOldLayoutMode|TEXT_LAYOUT_COMPLEX_DISABLED );
-    }
-    else
-    {
-        GetRefDevice()->SetLayoutMode( nOldLayoutMode&(~TEXT_LAYOUT_COMPLEX_DISABLED) );
-        bQuickFormat = FALSE;
-    }
+
+    ImplInitLayoutMode( GetRefDevice(), nPara, 0xFFFF );
 
     sal_uInt16 nRealInvalidStart = nInvalidStart;
 
@@ -694,7 +682,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
         pParaPortion->GetTextPortions().Reset();
         pParaPortion->GetTextPortions().Insert( pDummyPortion, 0 );
     }
-    else if ( bQuickFormat )
+    else if ( bQuickFormat && !HasScriptType( nPara, i18n::ScriptType::COMPLEX ) )
     {
         // schnellere Methode:
         RecalcTextPortion( pParaPortion, nInvalidStart, nInvalidDiff );
@@ -1583,7 +1571,8 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
 
     if ( !aStatus.IsOutliner() )
     {
-        SvxAdjust eJustification = ((const SvxAdjustItem&)pParaPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_JUST)).GetAdjust();
+        USHORT nPara = GetParaPortions().GetPos( pParaPortion );
+        SvxAdjust eJustification = GetJustification( nPara );
         long nMaxLineWidth = !IsVertical() ? aPaperSize.Width() : aPaperSize.Height();
         nMaxLineWidth -= GetXValue( rLRItem.GetRight() );
         long nTextXOffset = 0;
@@ -2640,12 +2629,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                 aTmpFont.SetPhysFont( pOutDev );
 
                                 ULONG nOldLayoutMode = pOutDev->GetLayoutMode();
-                                short nScriptType = GetScriptType( EditPaM( pPortion->GetNode(), nIndex+1 ) );
-                                if ( nScriptType != i18n::ScriptType::COMPLEX )
-                                    pOutDev->SetLayoutMode( nOldLayoutMode|TEXT_LAYOUT_COMPLEX_DISABLED );
-                                else
-                                    pOutDev->SetLayoutMode( nOldLayoutMode&(~TEXT_LAYOUT_COMPLEX_DISABLED) );
-
+                                ImplInitLayoutMode( pOutDev, n, nIndex );
 
                                 XubString aText;
                                 USHORT nTextStart = 0;
@@ -3553,6 +3537,41 @@ void ImpEditEngine::DoStretchChars( sal_uInt16 nX, sal_uInt16 nY )
 const SvxLRSpaceItem& ImpEditEngine::GetLRSpaceItem( ContentNode* pNode )
 {
     return (const SvxLRSpaceItem&)pNode->GetContentAttribs().GetItem( aStatus.IsOutliner() ? EE_PARA_OUTLLRSPACE : EE_PARA_LRSPACE );
+}
+
+void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, USHORT nPara, USHORT nIndex )
+{
+    BOOL bCTL = FALSE;
+    if ( nIndex == 0xFFFF )
+    {
+        bCTL = HasScriptType( nPara, i18n::ScriptType::COMPLEX );
+    }
+    else
+    {
+        ContentNode* pNode = GetEditDoc().SaveGetObject( nPara );
+        short nScriptType = GetScriptType( EditPaM( pNode, nIndex+1 ) );
+        bCTL = nScriptType == i18n::ScriptType::COMPLEX;
+    }
+
+    ULONG nLayoutMode = pOutDev->GetLayoutMode();
+
+    // We always use the left postion for DrawText()
+    nLayoutMode &= ~(TEXT_LAYOUT_BIDI_RTL);
+
+    if ( !bCTL )
+    {
+        // No CTL/Bidi checking neccessary
+        nLayoutMode |= ( TEXT_LAYOUT_COMPLEX_DISABLED | TEXT_LAYOUT_BIDI_STRONG );
+    }
+    else
+    {
+        // CTL/Bidi checking neccessary
+        // Don't use BIDI_STRONG, VCL must do some checks.
+        nLayoutMode &= ~( TEXT_LAYOUT_COMPLEX_DISABLED | TEXT_LAYOUT_BIDI_STRONG );
+    }
+
+    pOutDev->SetLayoutMode( nLayoutMode );
+
 }
 
 Reference < i18n::XBreakIterator > ImpEditEngine::ImplGetBreakIterator()

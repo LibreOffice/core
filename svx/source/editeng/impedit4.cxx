@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-18 12:17:03 $
+ *  last change: $Author: mt $ $Date: 2002-07-19 09:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 #include "wghtitem.hxx"
 #include "langitem.hxx"
 #include <charreliefitem.hxx>
+#include <writingmodeitem.hxx>
 #include <emphitem.hxx>
 
 #include <rtl/tencinfo.h>
@@ -498,7 +499,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         rOutput.WriteNumber( rtl_getBestWindowsCharsetFromTextEncoding( eChrSet ) );
 
         rOutput << ' ';
-        rOutput << ByteString( pFontItem->GetFamilyName(), eChrSet ).GetBuffer();
+        rOutput << ByteString( pFontItem->GetFamilyName(), eDestEnc ).GetBuffer();
         rOutput << ";}";
     }
     rOutput << '}';
@@ -787,7 +788,13 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
     switch ( nWhich )
     {
         case EE_PARA_WRITINGDIR:
-            DBG_ERROR( "rtf export: EE_PARA_WRITINGDIR not implemented yet!" );
+        {
+            const SvxWritingModeItem& rWritingMode = (const SvxWritingModeItem&)rItem;
+            if ( rWritingMode.GetValue() == com::sun::star::text::WritingMode_RL_TB )
+                rOutput << "\\rtlpar";
+            else
+                rOutput << "\\ltrpar";
+        }
         break;
         case EE_PARA_OUTLLEVEL:
         {
