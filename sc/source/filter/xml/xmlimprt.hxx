@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-07 16:11:07 $
+ *  last change: $Author: dr $ $Date: 2000-11-10 11:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,7 @@ enum ScXMLTableRowCellTokens
     XML_TOK_TABLE_ROW_CELL_P,
     XML_TOK_TABLE_ROW_CELL_SUBTABLE,
     XML_TOK_TABLE_ROW_CELL_ANNOTATION,
+    XML_TOK_TABLE_ROW_CELL_DETECTIVE,
     XML_TOK_TABLE_ROW_CELL_CELL_RANGE_SOURCE
 };
 
@@ -306,6 +307,25 @@ enum ScXMLAnnotationAttrTokens
     XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE,
     XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE_STRING,
     XML_TOK_TABLE_ANNOTATION_ATTR_DISPLAY
+};
+
+enum ScXMLDetectiveElemTokens
+{
+    XML_TOK_DETECTIVE_ELEM_HIGHLIGHTED,
+    XML_TOK_DETECTIVE_ELEM_OPERATION,
+};
+
+enum ScXMLDetectiveHighlightedAttrTokens
+{
+    XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_CELL_RANGE,
+    XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_DIRECTION,
+    XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_CONTAINS_ERROR
+};
+
+enum ScXMLDetectiveOperationAttrTokens
+{
+    XML_TOK_DETECTIVE_OPERATION_ATTR_NAME,
+    XML_TOK_DETECTIVE_OPERATION_ATTR_INDEX
 };
 
 enum ScXMLCellRangeSourceAttrTokens
@@ -652,6 +672,9 @@ class ScXMLImport: public SvXMLImport
     SvXMLTokenMap           *pTableRowCellElemTokenMap;
     SvXMLTokenMap           *pTableRowCellAttrTokenMap;
     SvXMLTokenMap           *pTableAnnotationAttrTokenMap;
+    SvXMLTokenMap           *pDetectiveElemTokenMap;
+    SvXMLTokenMap           *pDetectiveHighlightedAttrTokenMap;
+    SvXMLTokenMap           *pDetectiveOperationAttrTokenMap;
     SvXMLTokenMap           *pTableCellRangeSourceAttrTokenMap;
     SvXMLTokenMap           *pNamedExpressionsElemTokenMap;
     SvXMLTokenMap           *pNamedRangeAttrTokenMap;
@@ -779,6 +802,9 @@ public:
     const SvXMLTokenMap& GetTableRowCellElemTokenMap();
     const SvXMLTokenMap& GetTableRowCellAttrTokenMap();
     const SvXMLTokenMap& GetTableAnnotationAttrTokenMap();
+    const SvXMLTokenMap& GetDetectiveElemTokenMap();
+    const SvXMLTokenMap& GetDetectiveHighlightedAttrTokenMap();
+    const SvXMLTokenMap& GetDetectiveOperationAttrTokenMap();
     const SvXMLTokenMap& GetTableCellRangeSourceAttrTokenMap();
     const SvXMLTokenMap& GetNamedExpressionsElemTokenMap();
     const SvXMLTokenMap& GetNamedRangeAttrTokenMap();

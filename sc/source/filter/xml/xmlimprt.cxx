@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-07 16:11:06 $
+ *  last change: $Author: dr $ $Date: 2000-11-10 11:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,6 +321,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTableRowCellTokenMap[] =
     { XML_NAMESPACE_TEXT,   sXML_p,                 XML_TOK_TABLE_ROW_CELL_P                    },
     { XML_NAMESPACE_TABLE,  sXML_sub_table,         XML_TOK_TABLE_ROW_CELL_SUBTABLE             },
     { XML_NAMESPACE_OFFICE, sXML_annotation,        XML_TOK_TABLE_ROW_CELL_ANNOTATION           },
+    { XML_NAMESPACE_TABLE,  sXML_detective,         XML_TOK_TABLE_ROW_CELL_DETECTIVE            },
     { XML_NAMESPACE_TABLE,  sXML_cell_range_source, XML_TOK_TABLE_ROW_CELL_CELL_RANGE_SOURCE    },
     XML_TOKEN_MAP_END
 };
@@ -351,6 +352,28 @@ static __FAR_DATA SvXMLTokenMapEntry aTableAnnotationAttrTokenMap[] =
     { XML_NAMESPACE_OFFICE, sXML_create_date,           XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE           },
     { XML_NAMESPACE_OFFICE, sXML_create_date_string,    XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE_STRING    },
     { XML_NAMESPACE_OFFICE, sXML_display,               XML_TOK_TABLE_ANNOTATION_ATTR_DISPLAY               },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aDetectiveElemTokenMap[]=
+{
+    { XML_NAMESPACE_TABLE,  sXML_highlighted_range, XML_TOK_DETECTIVE_ELEM_HIGHLIGHTED  },
+    { XML_NAMESPACE_TABLE,  sXML_operation,         XML_TOK_DETECTIVE_ELEM_OPERATION    },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aDetectiveHighlightedAttrTokenMap[]=
+{
+    { XML_NAMESPACE_TABLE,  sXML_cell_range_address,    XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_CELL_RANGE       },
+    { XML_NAMESPACE_TABLE,  sXML_direction,             XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_DIRECTION        },
+    { XML_NAMESPACE_TABLE,  sXML_contains_error,        XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_CONTAINS_ERROR   },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aDetectiveOperationAttrTokenMap[]=
+{
+    { XML_NAMESPACE_TABLE,  sXML_name,  XML_TOK_DETECTIVE_OPERATION_ATTR_NAME   },
+    { XML_NAMESPACE_TABLE,  sXML_index, XML_TOK_DETECTIVE_OPERATION_ATTR_INDEX  },
     XML_TOKEN_MAP_END
 };
 
@@ -894,6 +917,27 @@ const SvXMLTokenMap& ScXMLImport::GetTableAnnotationAttrTokenMap()
     return *pTableAnnotationAttrTokenMap;
 }
 
+const SvXMLTokenMap& ScXMLImport::GetDetectiveElemTokenMap()
+{
+    if( !pDetectiveElemTokenMap )
+        pDetectiveElemTokenMap = new SvXMLTokenMap( aDetectiveElemTokenMap );
+    return *pDetectiveElemTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetDetectiveHighlightedAttrTokenMap()
+{
+    if( !pDetectiveHighlightedAttrTokenMap )
+        pDetectiveHighlightedAttrTokenMap = new SvXMLTokenMap( aDetectiveHighlightedAttrTokenMap );
+    return *pDetectiveHighlightedAttrTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetDetectiveOperationAttrTokenMap()
+{
+    if( !pDetectiveOperationAttrTokenMap )
+        pDetectiveOperationAttrTokenMap = new SvXMLTokenMap( aDetectiveOperationAttrTokenMap );
+    return *pDetectiveOperationAttrTokenMap;
+}
+
 const SvXMLTokenMap& ScXMLImport::GetTableCellRangeSourceAttrTokenMap()
 {
     if( !pTableCellRangeSourceAttrTokenMap )
@@ -1202,6 +1246,9 @@ ScXMLImport::ScXMLImport(   com::sun::star::uno::Reference <com::sun::star::fram
     pTableRowCellElemTokenMap( 0 ),
     pTableRowCellAttrTokenMap( 0 ),
     pTableAnnotationAttrTokenMap( 0 ),
+    pDetectiveElemTokenMap( 0 ),
+    pDetectiveHighlightedAttrTokenMap( 0 ),
+    pDetectiveOperationAttrTokenMap( 0 ),
     pTableCellRangeSourceAttrTokenMap( 0 ),
     pNamedExpressionsElemTokenMap( 0 ),
     pNamedRangeAttrTokenMap( 0 ),
@@ -1300,6 +1347,9 @@ ScXMLImport::~ScXMLImport()
     delete pTableRowCellElemTokenMap;
     delete pTableRowCellAttrTokenMap;
     delete pTableAnnotationAttrTokenMap;
+    delete pDetectiveElemTokenMap;
+    delete pDetectiveHighlightedAttrTokenMap;
+    delete pDetectiveOperationAttrTokenMap;
     delete pTableCellRangeSourceAttrTokenMap;
     delete pNamedExpressionsElemTokenMap;
     delete pNamedRangeAttrTokenMap;
