@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testsax.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-13 06:49:11 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 14:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -857,7 +857,7 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch (InvalidRegistryException &)
         {
-            OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
         }
     }
 
