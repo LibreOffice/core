@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: packimages.pl,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-18 14:34:45 $
+#   last change: $Author: rt $ $Date: 2005-01-28 16:05:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,7 @@ my @custom_list;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.9 $ ';
+my $id_str = ' $Revision: 1.10 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -168,8 +168,13 @@ sub parse_options
 sub get_image_lists
 {
     my @image_lists;
+    my $glob_imagelist_path;
+
     foreach ( @imagelist_path ) {
-        push @image_lists, glob("$_/*.ilst");
+        $glob_imagelist_path = $_;
+        # cygwin perl
+        chomp( $glob_imagelist_path = qx{cygpath -u "$glob_imagelist_path"} ) if "$^O" eq "cygwin";
+        push @image_lists, glob("$glob_imagelist_path/*.ilst");
     }
     if ( !@image_lists ) {
         print_error("can't find any image lists in '@imagelist_path'", 3);
