@@ -2,7 +2,7 @@
     module StarApplicationFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: hjs $ $Date: 2003-08-19 12:32:00 $ $Revision: 1.11 $
+    $Author: rt $ $Date: 2003-09-19 07:55:22 $ $Revision: 1.12 $
     $Logfile:   T:/sfx2/sdi/sfxslots.sdv  $ $Workfile:   SFXSLOTS.SDI  $
 =========================================================================*/
 
@@ -33,6 +33,7 @@ TypeLibFile( "sfxslots.tlb" )
     item String     SfxTemplateItem;        //! Dummy
     item String     SfxMacroInfoItem;       //! Dummy
     item String     SfxImageItem;           //! Dummy
+    item String     SfxFrameItem;           //! Dummy
 
     struct Point
     {
