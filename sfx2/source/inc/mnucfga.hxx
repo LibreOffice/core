@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnucfga.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:34 $
+ *  last change: $Author: mba $ $Date: 2001-08-27 07:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@ struct SfxMenuCfgItem
     USHORT             nId;        // id of the binding or 0 if none
     String             aTitle;     // title of the item
     String             aHelpText;  // Hilfetext
+    String              aCommand;
     SfxMenuCfgItemArr* pPopup;     // pointer to a popup menu (if any)
 };
 

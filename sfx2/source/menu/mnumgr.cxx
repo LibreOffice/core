@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-16 15:48:29 $
+ *  last change: $Author: mba $ $Date: 2001-08-27 07:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ class SfxMenuIter_Impl
 */
 
 {
+    String              _aCommand;
     SfxMenuIter_Impl*   _pPrev;     // der vorherige auf dem Stack
     Menu*               _pMenu;     // das Men"u "uber das gerade iteriert wird
     Menu*               _pPopup;    // Popup an dieser Pos falls noch zu durchl.
@@ -151,6 +152,9 @@ public:
                         { return ( pMenu && pMenu->GetItemCount() )
                                     ? new SfxMenuIter_Impl( pMenu )
                                     : 0; }
+
+    String              GetCommand() const
+                        { return _aCommand; }
 
     USHORT              GetLevel() const
                         { return _nLevel; }
@@ -197,6 +201,7 @@ SfxMenuIter_Impl::SfxMenuIter_Impl
     _nId( pMenu->GetItemId(0) ),
     _nLevel( pPrev ? ( pPrev->_nLevel + 1 ) : 0 )
 {
+    _aCommand = pMenu->GetItemCommand( _nId );
     _pPopup = pMenu->GetPopupMenu( _nId );
 }
 
@@ -225,6 +230,7 @@ SfxMenuIter_Impl* SfxMenuIter_Impl::NextItem()
 
     // bleibt in diesem Menu
     _nId = _pMenu->GetItemId(_nPos);
+    _aCommand = _pMenu->GetItemCommand( _nId );
     _pPopup = _pMenu->GetPopupMenu(_nId);
 
     // nicht alles wird angezeigt
@@ -234,7 +240,7 @@ SfxMenuIter_Impl* SfxMenuIter_Impl::NextItem()
     if ( _nId >= START_ITEMID_WINDOWLIST && _nId <= END_ITEMID_WINDOWLIST )
         return NextItem();
 
-    // nicht alle Popups werden dur chlaufen
+    // nicht alle Popups werden durchlaufen
     if ( _nId == SID_OBJECT ||
          ( _nId >= SID_OBJECTMENU0 && _nId <= SID_OBJECTMENU_LAST ) )
         _pPopup = 0;
@@ -249,7 +255,7 @@ BOOL SfxMenuIter_Impl::IsBinding( SfxModule* pMod ) const
         if ( !SfxMenuControl::IsSpecialControl( _nId, pMod ) )
             // "Unechtes" Binding: Popup mit SlotId
             return FALSE;
-    return _nId >= SID_SFX_START;
+    return _nId >= SID_SFX_START || ( GetCommand().Len() != 0);
 }
 
 //--------------------------------------------------------------------
@@ -350,6 +356,8 @@ BOOL SfxMenuManager::StoreMenu( SvStream& rStream, Menu* pMenu, SfxModule* pMod 
         return TRUE;
 
     rtl_TextEncoding nEnc = osl_getThreadTextEncoding();
+    SfxMacroConfig* pMC = SfxMacroConfig::GetOrCreate();
+    SvUShorts aMacroSlots;
 
     SfxMenuIter_Impl *pFirstIter = pIterator;
     USHORT nFirstLevel = pFirstIter->GetLevel();
@@ -376,12 +384,20 @@ BOOL SfxMenuManager::StoreMenu( SvStream& rStream, Menu* pMenu, SfxModule* pMod 
             String aTitle = pIterator->GetItemText();
             if( pIterator->IsBinding( pMod ) )
             {
+                if ( pIterator->GetCommand().Len() && !pMC->IsMacroSlot( nId ) )
+                {
+                    SfxMacroInfo aInfo( pIterator->GetCommand() );
+                    pMC->GetSlotId( &aInfo );
+                    nId = aInfo.GetSlotId();
+                    aMacroSlots.Insert( nId, aMacroSlots.Count() );
+                }
+
                 rStream << 'I';
                 rStream << nId;
                 rStream.WriteByteString(aTitle, nEnc );
                 if (nId >= SID_MACRO_START && nId <= SID_MACRO_END)
                     // MacroInfo speichern
-                    rStream << *(SFX_APP()->GetMacroConfig()->GetMacroInfo(nId));
+                    rStream << *(pMC->GetMacroInfo(nId));
                 if ( pIterator->GetPopupMenu() )
                     // Unechtes Popup "uberspringen
                     pIterator->RemovePopup();
@@ -410,6 +426,10 @@ BOOL SfxMenuManager::StoreMenu( SvStream& rStream, Menu* pMenu, SfxModule* pMod 
 
     // Ende-Markierung f"ur MenuBar setzen
     rStream << 'E';
+
+    for ( USHORT n=0; n<aMacroSlots.Count(); n++ )
+        pMC->ReleaseSlotId( aMacroSlots[n] );
+
     return TRUE;
 }
 
@@ -614,13 +634,19 @@ void SfxMenuManager::ConstructSvMenu( Menu* pSuper, SfxMenuCfgItemArr& rCfg)
         else if ( nId )
         {
             pSuper->InsertItem( nId, rCfg[n]->aTitle );
-            pSuper->SetHelpId( nId, (ULONG) nId );
             if ( SfxMacroConfig::IsMacroSlot( nId ) )
             {
                 SFX_APP()->GetMacroConfig()->RegisterSlotId( nId );
                 pSuper->SetItemCommand( nId, SFX_APP()->GetMacroConfig()->GetMacroInfo(nId)->GetURL() );
             }
-
+            else if ( rCfg[n]->aCommand.Len() )
+            {
+                pSuper->SetItemCommand( nId, rCfg[n]->aCommand );
+            }
+            else
+            {
+                pSuper->SetHelpId( nId, (ULONG) nId );
+            }
         }
         else
         {
@@ -756,12 +782,13 @@ void SfxMenuManager::ConstructSvMenu( Menu* pSuper, SvStream& rStream,
 // append a binding by function-id
 
 void SfxMenuManager::AppendItem(const String &rText,
-                                const String &rHelpText, USHORT nId )
+                                const String &rHelpText, USHORT nId, const String &rCommand )
 {
     SfxMenuCfgItem* pItem = new SfxMenuCfgItem;
     pItem->nId = nId;
     pItem->aTitle = rText;
     pItem->aHelpText = rHelpText;
+    pItem->aCommand = rCommand;
     pItem->pPopup = 0;
     pCfgStack->Top()->Append( pItem );
 }
@@ -852,13 +879,19 @@ void SfxMenuManager::LeavePopup()
 //--------------------------------------------------------------------
 
 // executes the function for the selected item
+extern Select_Impl( void*, void* ) ;
 
 IMPL_LINK( SfxMenuManager, Select, Menu *, pMenu )
 {
     DBG_MEMTEST();
 
     USHORT nId = (USHORT) pMenu->GetCurItemId();
-    if ( pBindings->IsBound(nId) )
+    String aCommand = pMenu->GetItemCommand( nId );
+    if ( aCommand.Len() )
+    {
+        pBindings->ExecuteCommand_Impl( aCommand );
+    }
+    else if ( pBindings->IsBound(nId) )
         // normal function
         pBindings->Execute( nId );
     else
@@ -900,6 +933,12 @@ BOOL SfxMenuManager::IsBinding() const
     SfxDispatcher* pDisp = pBindings->GetDispatcher_Impl();
     SfxModule *pMod = pDisp ? SFX_APP()->GetActiveModule( pDisp->GetFrame() ) :0;
     return pIterator->IsBinding( pMod );
+}
+
+String SfxMenuManager::GetCommand() const
+{
+    DBG_ASSERT( pIterator, "invalid iterator state" );
+    return pIterator->GetCommand();
 }
 
 //--------------------------------------------------------------------
@@ -966,6 +1005,10 @@ USHORT SfxMenuManager::GetItemId() const
         aStr += ByteString( " : Popups muessen Ids != 0 haben!" );
         DBG_ASSERT( nId, aStr.GetBuffer() );
 #endif
+        return nId;
+    }
+    else if ( pIterator->GetCommand().Len() )
+    {
         return nId;
     }
     else

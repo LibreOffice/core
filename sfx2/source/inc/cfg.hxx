@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-24 08:01:52 $
+ *  last change: $Author: mba $ $Date: 2001-08-27 07:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,7 @@ private:
     BOOL                        bPopUp;
     String                      aHelpText;
     String                      aStr;
+    String                      aCommand;
 
 public:
     SfxMenuConfigEntry( USHORT nInitId, const String& rInitStr,
@@ -182,6 +183,7 @@ public:
 
     USHORT                      GetId() const { return nId; }
     void                        SetId( USHORT nNew );
+    void                        SetCommand( const String& rCmd ) { aCommand = rCmd; }
     const String&               GetName() const { return aStr; }
     void                        SetName( const String& rStr ) { aStr = rStr; }
     const String&               GetHelpText() const { return aHelpText; }
@@ -190,6 +192,7 @@ public:
     BOOL                        IsBinding() const { return nId != 0 && !bPopUp; }
     BOOL                        IsSeparator() const { return nId == 0; }
     BOOL                        IsPopup() const { return bPopUp; }
+    const String&               GetCommand() const { return aCommand; }
 };
 
 // class SfxMenuConfigEntryArr *************************************************
