@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOLEShape.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: af $ $Date: 2002-04-22 14:32:17 $
+ *  last change: $Author: af $ $Date: 2002-05-06 09:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,13 +76,10 @@ using namespace ::drafts::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
-AccessibleOLEShape::AccessibleOLEShape (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape>& rxShape,
-    const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
-    const AccessibleShapeTreeInfo& rShapeTreeInfo,
-    long nIndex)
-    :      AccessibleShape (rxShape, rxParent, rShapeTreeInfo, nIndex)
+AccessibleOLEShape::AccessibleOLEShape (
+    const AccessibleShapeInfo& rShapeInfo,
+    const AccessibleShapeTreeInfo& rShapeTreeInfo)
+    : AccessibleShape (rShapeInfo, rShapeTreeInfo)
 {
 }
 
