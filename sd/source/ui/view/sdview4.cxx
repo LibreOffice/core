@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:18:21 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,9 +491,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
                     uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
                     if ( xPersist.is())
                     {
-                        // TODO/LEAN: VisualArea currently needs running state
-                        svt::EmbeddedObjectRef::TryRunningState( xObj );
-
+                        // TODO/LEAN: VisualArea access can switch the object to running state
                         sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
                         xPersist->storeOwn();
 
