@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: cl $ $Date: 2002-07-16 08:13:01 $
+#   last change: $Author: vg $ $Date: 2002-07-18 14:06:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,8 @@ SLOFILES =	$(SLO)$/HtmlOptionsDialog.obj\
             $(SLO)$/htmlex.obj			\
             $(SLO)$/htmlattr.obj		\
             $(SLO)$/pubdlg.obj			
+
+EXCEPTIONSFILES = $(SLO)$/HtmlOptionsDialog.obj
 
 SRCFILES =	pubdlg.src					
     
