@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-03 19:26:11 $
+ *  last change: $Author: nn $ $Date: 2000-11-26 13:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,6 +519,10 @@ BOOL __EXPORT ScDocShell::Load( SvStorage* pStor )
 {
     DBG_ASSERT( pStor, "Nanu... Load ohne Storage?" );
     //  wait cursor is handled with progress bar
+
+    //  only the latin script language is loaded
+    //  -> initialize the others from options (before loading)
+    InitOptions();
 
     GetUndoManager()->Clear();
 
