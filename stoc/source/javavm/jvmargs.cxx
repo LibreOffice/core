@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jvmargs.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-07 12:51:18 $
+ *  last change: $Author: cp $ $Date: 2002-01-20 20:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,10 @@ namespace stoc_javavm {
             ;
 
         else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Home"))))
-            ;
+            _java_home = right;
+
+        else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("VMType"))))
+            _vmtype = right;
 
         else if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("SystemClasspath"))))
             setSystemClasspath(right);
@@ -335,5 +338,13 @@ namespace stoc_javavm {
         const ::std::vector< ::rtl::OUString > & JVM::getProperties() const
     {
         return _props;
+    }
+
+    const OUString& JVM::getJavaHome() const throw() {
+        return _java_home;
+    }
+
+    const OUString& JVM::getVMType() const throw() {
+        return _vmtype;
     }
 }

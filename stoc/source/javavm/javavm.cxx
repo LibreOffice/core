@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: jl $ $Date: 2001-11-22 13:17:57 $
+ *  last change: $Author: cp $ $Date: 2002-01-20 20:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1220,6 +1220,20 @@ JavaVM * JavaVirtualMachine_Impl::createJavaVM(const JVM & jvm) throw(RuntimeExc
 
         throw RuntimeException(message, Reference<XInterface>());
     }
+
+    #ifdef UNX
+    OUString javaHome(RTL_CONSTASCII_USTRINGPARAM("JAVA_HOME="));
+    javaHome += jvm.getJavaHome();
+    const OUString & vmType  = jvm.getVMType();
+
+    if(!vmType.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("jre"))))
+    {
+        javaHome += OUString(RTL_CONSTASCII_USTRINGPARAM("/jre"));
+    }
+
+    OString osJavaHome = OUStringToOString(javaHome, osl_getThreadTextEncoding());
+    putenv(strdup(osJavaHome.getStr()));
+    #endif
 
     JNI_InitArgs_Type * initArgs = (JNI_InitArgs_Type *)_javaLib.getSymbol(OUString::createFromAscii("JNI_GetDefaultJavaVMInitArgs"));
     JNI_CreateVM_Type * pCreateJavaVM = (JNI_CreateVM_Type *)_javaLib.getSymbol(OUString::createFromAscii("JNI_CreateJavaVM"));

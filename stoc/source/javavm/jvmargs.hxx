@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jvmargs.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-10-17 15:52:51 $
+ *  last change: $Author: cp $ $Date: 2002-01-20 20:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@ namespace stoc_javavm {
         sal_Bool _is_abort;
         JNIabort _abort;
 
+        ::rtl::OUString _java_home;
+        ::rtl::OUString _vmtype;
+
     public:
         JVM() throw();
 
@@ -158,6 +161,9 @@ namespace stoc_javavm {
         const ::rtl::OUString & getRuntimeLib() const throw();
         sal_Bool isEnabled() const throw();
         const ::std::vector< ::rtl::OUString> & getProperties() const;
+
+        const ::rtl::OUString & getJavaHome() const throw();
+        const ::rtl::OUString & getVMType() const throw();
     };
 }
 
