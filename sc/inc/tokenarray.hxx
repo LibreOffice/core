@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tokenarray.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $  $Date: 2004-06-04 10:17:30 $
+ *  last change: $Author: kz $  $Date: 2004-06-28 16:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ class ScTokenArray
     BOOL            bReplacedSharedFormula; // If code was created by replacing
                             // a shared formula, a temporary flag during
                             // UpdateReference() until StartListeningTo()
+    BOOL            bHyperLink; // If HYPERLINK() occurs in the formula.
 
     void                    Assign( const ScTokenArray& );
 
@@ -184,6 +185,8 @@ public:
     short     GetRefs()  const { return nRefs;  }
     void      SetReplacedSharedFormula( BOOL bVal ) { bReplacedSharedFormula = bVal; }
     BOOL      IsReplacedSharedFormula() const       { return bReplacedSharedFormula; }
+    void      SetHyperLink( BOOL bVal ) { bHyperLink = bVal; }
+    BOOL      IsHyperLink() const       { return bHyperLink; }
 
     inline  ScRecalcMode    GetRecalcMode() const { return nMode; }
                             /** Bits aren't set directly but validated and
