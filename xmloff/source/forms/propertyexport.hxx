@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-02 15:58:22 $
+ *  last change: $Author: mib $ $Date: 2001-01-03 11:08:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _XMLOFF_FORMS_CALLBACKS_HXX_
+#include <callbacks.hxx>
 #endif
 #ifndef _XMLOFF_XMLEXP_HXX
 #include "xmlexp.hxx"
@@ -397,6 +400,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/01/02 15:58:22  fs
+ *  event ex- & import
+ *
  *  Revision 1.6  2000/12/18 15:14:35  fs
  *  some changes ... now exporting/importing styles
  *
