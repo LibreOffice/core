@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-03-20 11:00:27 $
+ *  last change: $Author: kz $ $Date: 2002-05-03 00:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,20 +88,21 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ dutch ] = "Verdeling";
         TEXT[ spanish ] = "Distribución";
         TEXT[ english_us ] = "Distribution";
-    TEXT[ chinese_simplified ] = "·Ö²¼";
+    TEXT[ chinese_simplified ] = "åˆ†å¸ƒ";
         TEXT[ russian ] = "Ğàñïğåäåëåíèå";
         TEXT[ polish ] = "Podzia³";
-        TEXT[ japanese ] = "•ªŠ„";
-        TEXT[ chinese_traditional ] = "¤À¥¬";
+        TEXT[ japanese ] = "åˆ†å‰²";
+        TEXT[ chinese_traditional ] = "åˆ†å¸ƒ";
         TEXT[ arabic ] = "ÇáÊŞÓíã";
         TEXT[ dutch ] = "Verdeling";
-        TEXT[ chinese_simplified ] = "·Ö²¼";
+        TEXT[ chinese_simplified ] = "åˆ†å¸ƒ";
         TEXT[ greek ] = "ÊáôáíïìŞ";
-        TEXT[ korean ] = "ºĞÇÒ";
+        TEXT[ korean ] = "ë¶„í• ";
         TEXT[ turkish ] = "Dağılım";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Distribución";
-        TEXT[ finnish ] = "Jakelu";
+        TEXT[ finnish ] = "Jakauma";
+        TEXT[ thai ] = "à¸à¸²à¸£à¹à¸ˆà¸à¹à¸ˆà¸‡";
     };
     FixedText FT_ROWS
     {
@@ -110,29 +111,30 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         Text = "~Zeilen" ;
         Text [ ENGLISH ] = "~Rows" ;
         Left = TRUE ;
-            TEXT[ italian ] = "~Righe";
+            TEXT[ italian ] = "Righe";
         TEXT[ portuguese_brazilian ] = "~Zeilen";
         TEXT[ portuguese ] = "~Linhas";
         TEXT[ danish ] = "Rækker";
-        TEXT[ french ] = "~Lignes";
+        TEXT[ french ] = "Lignes";
         TEXT[ swedish ] = "R~ader";
         TEXT[ dutch ] = "~Rijen";
         TEXT[ spanish ] = "~Filas";
         TEXT[ english_us ] = "Ro~ws";
-    TEXT[ chinese_simplified ] = "ĞĞ(~W)";
+    TEXT[ chinese_simplified ] = "è¡Œ(~W)";
         TEXT[ russian ] = "Ñòğîêè";
         TEXT[ polish ] = "Wiersze";
-        TEXT[ japanese ] = "c(~W)";
-        TEXT[ chinese_traditional ] = "¦æ(~W)";
+        TEXT[ japanese ] = "ç¸¦(~W)";
+        TEXT[ chinese_traditional ] = "è¡Œ(~W)";
         TEXT[ arabic ] = "Õİæİ";
         TEXT[ dutch ] = "~Rijen";
-        TEXT[ chinese_simplified ] = "ĞĞ(~W)";
+        TEXT[ chinese_simplified ] = "è¡Œ(~W)";
         TEXT[ greek ] = "Ãñáììİò";
-        TEXT[ korean ] = "Çà(~W)";
+        TEXT[ korean ] = "í–‰(~W)";
         TEXT[ turkish ] = "Sa~tır";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Filas";
         TEXT[ finnish ] = "~Rivit";
+        TEXT[ thai ] = "à¹à¸–~à¸§";
     };
     NumericField NF_ROWS
     {
@@ -165,20 +167,21 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ dutch ] = "~Kolommen";
         TEXT[ spanish ] = "~Columnas";
         TEXT[ english_us ] = "~Columns";
-    TEXT[ chinese_simplified ] = "À¸(~C)";
+    TEXT[ chinese_simplified ] = "æ (~C)";
         TEXT[ russian ] = "Êîëîíêè";
         TEXT[ polish ] = "Kolumny";
-        TEXT[ japanese ] = "‰¡(~C)";
-        TEXT[ chinese_traditional ] = "Äæ(~C)";
+        TEXT[ japanese ] = "æ¨ª(~C)";
+        TEXT[ chinese_traditional ] = "æ¬„(~C)";
         TEXT[ arabic ] = "ÃÚãÏÉ";
         TEXT[ dutch ] = "~Kolommen";
-        TEXT[ chinese_simplified ] = "À¸(~C)";
+        TEXT[ chinese_simplified ] = "æ (~C)";
         TEXT[ greek ] = "ÓôŞëåò";
-        TEXT[ korean ] = "¿­(~C)";
+        TEXT[ korean ] = "ì—´(~C)";
         TEXT[ turkish ] = "~Sütun";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Columnas";
         TEXT[ finnish ] = "~Sarakkeet";
+        TEXT[ thai ] = "~à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
     };
     NumericField NF_COLS
     {
@@ -211,20 +214,21 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ dutch ] = "Marges";
         TEXT[ spanish ] = "Márgenes";
         TEXT[ english_us ] = "Margins";
-    TEXT[ chinese_simplified ] = "±ß¾à";
+    TEXT[ chinese_simplified ] = "è¾¹è·";
         TEXT[ russian ] = "Ïîëÿ";
         TEXT[ polish ] = "Marginesy";
-        TEXT[ japanese ] = "—]”’";
-        TEXT[ chinese_traditional ] = "Ãä¶Z";
+        TEXT[ japanese ] = "ä½™ç™½";
+        TEXT[ chinese_traditional ] = "é‚Šè·";
         TEXT[ arabic ] = "ÇáåæÇãÔ";
         TEXT[ dutch ] = "Marges";
-        TEXT[ chinese_simplified ] = "±ß¾à";
+        TEXT[ chinese_simplified ] = "è¾¹è·";
         TEXT[ greek ] = "Ğåñéèşñéá";
-        TEXT[ korean ] = "¿Ü°û¼±";
+        TEXT[ korean ] = "ì™¸ê³½ì„ ";
         TEXT[ turkish ] = "Kenarlar";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Márgenes";
         TEXT[ finnish ] = "Reunat";
+        TEXT[ thai ] = "à¸£à¸°à¸¢à¸°à¸‚à¸­à¸š";
     };
     FixedText FT_LMARGIN
     {
@@ -237,25 +241,26 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ portuguese_brazilian ] = "~Links";
         TEXT[ portuguese ] = "~Esquerda";
         TEXT[ danish ] = "Venstre";
-        TEXT[ french ] = "~À gauche";
+        TEXT[ french ] = "À gauche";
         TEXT[ swedish ] = "V~änster";
         TEXT[ dutch ] = "~Links";
         TEXT[ spanish ] = "~Izquierda";
         TEXT[ english_us ] = "L~eft";
-    TEXT[ chinese_simplified ] = "×ó(~E)";
+    TEXT[ chinese_simplified ] = "å·¦(~E)";
         TEXT[ russian ] = "Ñëåâà";
         TEXT[ polish ] = "Z lewej";
-        TEXT[ japanese ] = "¶(~E)";
-        TEXT[ chinese_traditional ] = "¥ª(~E)";
+        TEXT[ japanese ] = "å·¦(~E)";
+        TEXT[ chinese_traditional ] = "å·¦(~E)";
         TEXT[ arabic ] = "íÓÇÑ";
         TEXT[ dutch ] = "~Links";
-        TEXT[ chinese_simplified ] = "×ó(~E)";
+        TEXT[ chinese_simplified ] = "å·¦(~E)";
         TEXT[ greek ] = "ÁñéóôåñÜ";
-        TEXT[ korean ] = "¿ŞÂÊ(~E)";
+        TEXT[ korean ] = "ì™¼ìª½(~E)";
         TEXT[ turkish ] = "S~ol";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Izquierda";
         TEXT[ finnish ] = "~Vasen";
+        TEXT[ thai ] = "à¸‹à¹‰à¸²~à¸¢";
     };
     MetricField MF_LMARGIN
     {
@@ -284,25 +289,26 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ portuguese_brazilian ] = "~Rechts";
         TEXT[ portuguese ] = "~Direita";
         TEXT[ danish ] = "Højre";
-        TEXT[ french ] = "~À droite";
+        TEXT[ french ] = "À droite";
         TEXT[ swedish ] = "Höge~r";
         TEXT[ dutch ] = "R~echts";
         TEXT[ spanish ] = "~Derecha";
         TEXT[ english_us ] = "~Right";
-    TEXT[ chinese_simplified ] = "ÓÒ(~R)";
+    TEXT[ chinese_simplified ] = "å³(~R)";
         TEXT[ russian ] = "Ñïğàâà";
         TEXT[ polish ] = "Z prawej";
-        TEXT[ japanese ] = "‰E(~R)";
-        TEXT[ chinese_traditional ] = "¥k(~R)";
+        TEXT[ japanese ] = "å³(~R)";
+        TEXT[ chinese_traditional ] = "å³(~R)";
         TEXT[ arabic ] = "íãíä";
         TEXT[ dutch ] = "R~echts";
-        TEXT[ chinese_simplified ] = "ÓÒ(~R)";
+        TEXT[ chinese_simplified ] = "å³(~R)";
         TEXT[ greek ] = "ÄåîéÜ";
-        TEXT[ korean ] = "¿À¸¥ÂÊ(~R)";
+        TEXT[ korean ] = "ì˜¤ë¥¸ìª½(~R)";
         TEXT[ turkish ] = "Sa~ğ";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Derecha";
         TEXT[ finnish ] = "~Oikea";
+        TEXT[ thai ] = "~à¸‚à¸§à¸²";
     };
     MetricField MF_RMARGIN
     {
@@ -336,20 +342,21 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ dutch ] = "~Boven";
         TEXT[ spanish ] = "A~rriba";
         TEXT[ english_us ] = "~Top";
-    TEXT[ chinese_simplified ] = "ÉÏ(~T)";
+    TEXT[ chinese_simplified ] = "ä¸Š(~T)";
         TEXT[ russian ] = "Ñâåğõó";
         TEXT[ polish ] = "W górze";
-        TEXT[ japanese ] = "ã(~T)";
-        TEXT[ chinese_traditional ] = "¤W(~T)";
+        TEXT[ japanese ] = "ä¸Š(~T)";
+        TEXT[ chinese_traditional ] = "ä¸Š(~T)";
         TEXT[ arabic ] = "ÃÚáì";
         TEXT[ dutch ] = "~Boven";
-        TEXT[ chinese_simplified ] = "ÉÏ(~T)";
+        TEXT[ chinese_simplified ] = "ä¸Š(~T)";
         TEXT[ greek ] = "ĞÜíù";
-        TEXT[ korean ] = "À§(~T)";
+        TEXT[ korean ] = "ìœ„(~T)";
         TEXT[ turkish ] = "~Üst";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "A~rriba";
         TEXT[ finnish ] = "~Yläosa";
+        TEXT[ thai ] = "~à¸šà¸™";
     };
     MetricField MF_TMARGIN
     {
@@ -383,20 +390,21 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ dutch ] = "~Onder";
         TEXT[ spanish ] = "A~bajo";
         TEXT[ english_us ] = "~Bottom";
-    TEXT[ chinese_simplified ] = "ÏÂ(~B)";
+    TEXT[ chinese_simplified ] = "ä¸‹(~B)";
         TEXT[ russian ] = "Ñíèçó";
         TEXT[ polish ] = "W dole";
-        TEXT[ japanese ] = "‰º(~B)";
-        TEXT[ chinese_traditional ] = "¤U(~B)";
+        TEXT[ japanese ] = "ä¸‹(~B)";
+        TEXT[ chinese_traditional ] = "ä¸‹(~B)";
         TEXT[ arabic ] = "ÃÓİá";
         TEXT[ dutch ] = "~Onder";
-        TEXT[ chinese_simplified ] = "ÏÂ(~B)";
+        TEXT[ chinese_simplified ] = "ä¸‹(~B)";
         TEXT[ greek ] = "ÊÜôù";
-        TEXT[ korean ] = "¾Æ·¡(~B)";
+        TEXT[ korean ] = "ì•„ë˜(~B)";
         TEXT[ turkish ] = "~Alt";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "A~bajo";
         TEXT[ finnish ] = "~Alaosa";
+        TEXT[ thai ] = "~à¸¥à¹ˆà¸²à¸‡";
     };
     MetricField MF_BMARGIN
     {
@@ -430,20 +438,21 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ dutch ] = "Afstand";
         TEXT[ spanish ] = "Espacio";
         TEXT[ english_us ] = "Spacing";
-        TEXT[ chinese_simplified ] = "¼ä¸ô";
+        TEXT[ chinese_simplified ] = "é—´éš”";
         TEXT[ russian ] = "Ğàññòîÿíèå";
         TEXT[ polish ] = "Odstêp";
-        TEXT[ japanese ] = "ŠÔŠu";
-        TEXT[ chinese_traditional ] = "¶¡¹j";
+        TEXT[ japanese ] = "é–“éš”";
+        TEXT[ chinese_traditional ] = "é–“éš”";
         TEXT[ arabic ] = "ÇáÊÈÇÚÏ";
         TEXT[ dutch ] = "Afstand";
-        TEXT[ chinese_simplified ] = "¼ä¸ô";
+        TEXT[ chinese_simplified ] = "é—´éš”";
         TEXT[ greek ] = "Áğüóôáóç";
-        TEXT[ korean ] = "°£°İ";
+        TEXT[ korean ] = "ê°„ê²©";
         TEXT[ turkish ] = "Aralık";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Espacio";
-        TEXT[ finnish ] = "Välit";
+        TEXT[ finnish ] = "Objektivälit";
+        TEXT[ thai ] = "à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡";
     };
     FixedText FT_HMARGIN
     {
@@ -461,20 +470,21 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ dutch ] = "~Horizontaal";
         TEXT[ spanish ] = "~Horizontal";
         TEXT[ english_us ] = "Hori~zontal";
-        TEXT[ chinese_simplified ] = "ºáÏò(~Z)";
+        TEXT[ chinese_simplified ] = "æ¨ªå‘(~Z)";
         TEXT[ russian ] = "Ãîğèçîíòàëüíî";
         TEXT[ polish ] = "Poziomo";
-        TEXT[ japanese ] = "‰¡(~Z)";
-        TEXT[ chinese_traditional ] = "¤ô¥­(~Z)";
+        TEXT[ japanese ] = "æ¨ª(~Z)";
+        TEXT[ chinese_traditional ] = "æ°´å¹³(~Z)";
         TEXT[ arabic ] = "ÃİŞí";
         TEXT[ dutch ] = "~Horizontaal";
-        TEXT[ chinese_simplified ] = "ºáÏò(~Z)";
+        TEXT[ chinese_simplified ] = "æ¨ªå‘(~Z)";
         TEXT[ greek ] = "Ïñéæüíôéá";
-        TEXT[ korean ] = "¼öÆò(~Z)";
+        TEXT[ korean ] = "ìˆ˜í‰(~Z)";
         TEXT[ turkish ] = "~Yatay";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Horizontal";
-        TEXT[ finnish ] = "~Vaakataso";
+        TEXT[ finnish ] = "Vaaka~taso";
+        TEXT[ thai ] = "à¹à¸™à¸§à¸™~à¸­à¸™";
     };
 
     MetricField MF_HMARGIN
@@ -500,7 +510,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         Text = "~Vertikal" ;
         Text [ ENGLISH ] = "~Vertical" ;
         Left = TRUE ;
-            TEXT[ italian ] = "~Verticale";
+            TEXT[ italian ] = "Verticale";
         TEXT[ portuguese_brazilian ] = "~Vertikal";
         TEXT[ portuguese ] = "~Vertical";
         TEXT[ danish ] = "Lodret";
@@ -509,20 +519,21 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ dutch ] = "~Verticaal";
         TEXT[ spanish ] = "~Vertical";
         TEXT[ english_us ] = "~Vertically";
-        TEXT[ chinese_simplified ] = "×İÏò(~V)";
+        TEXT[ chinese_simplified ] = "çºµå‘(~V)";
         TEXT[ russian ] = "Âåğòèêàëüíî";
         TEXT[ polish ] = "Pionowo";
-        TEXT[ japanese ] = "c(~V)";
-        TEXT[ chinese_traditional ] = "««ª½(~V)";
+        TEXT[ japanese ] = "ç¸¦(~V)";
+        TEXT[ chinese_traditional ] = "å‚ç›´(~V)";
         TEXT[ arabic ] = "ÑÃÓí";
         TEXT[ dutch ] = "~Verticaal";
-        TEXT[ chinese_simplified ] = "×İÏò(~V)";
+        TEXT[ chinese_simplified ] = "çºµå‘(~V)";
         TEXT[ greek ] = "Êáôáêüñõöá";
-        TEXT[ korean ] = "¼öÁ÷(~V)";
+        TEXT[ korean ] = "ìˆ˜ì§(~V)";
         TEXT[ turkish ] = "~Dikey";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Vertical";
         TEXT[ finnish ] = "~Pystytaso";
+        TEXT[ thai ] = "à¹à¸™à¸§~à¸•à¸±à¹‰à¸‡";
     };
 
     MetricField MF_VMARGIN
@@ -556,20 +567,21 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ dutch ] = "Formaat";
         TEXT[ spanish ] = "Formato";
         TEXT[ english_us ] = "Format";
-    TEXT[ chinese_simplified ] = "¸ñÊ½";
+    TEXT[ chinese_simplified ] = "æ ¼å¼";
         TEXT[ russian ] = "Ôîğìàò";
         TEXT[ polish ] = "Format";
-        TEXT[ japanese ] = "‘®";
-        TEXT[ chinese_traditional ] = "®æ¦¡";
+        TEXT[ japanese ] = "æ›¸å¼";
+        TEXT[ chinese_traditional ] = "æ ¼å¼";
         TEXT[ arabic ] = "ÇáÊäÓíŞ";
         TEXT[ dutch ] = "Formaat";
-        TEXT[ chinese_simplified ] = "¸ñÊ½";
+        TEXT[ chinese_simplified ] = "æ ¼å¼";
         TEXT[ greek ] = "ÌïñöŞ";
-        TEXT[ korean ] = "¼­½Ä";
+        TEXT[ korean ] = "ì„œì‹";
         TEXT[ turkish ] = "Format";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Formato";
-        TEXT[ finnish ] = "Muotoile";
+        TEXT[ finnish ] = "Muoto";
+        TEXT[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸š";
     };
     RadioButton RB_LANDSCAPE
     {
@@ -583,25 +595,26 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ portuguese_brazilian ] = "~Querformat";
         TEXT[ portuguese ] = "~Horizontal";
         TEXT[ danish ] = "Liggende";
-        TEXT[ french ] = "Pa~ysage";
+        TEXT[ french ] = "Paysage";
         TEXT[ swedish ] = "~Liggande";
         TEXT[ dutch ] = "~Liggend";
         TEXT[ spanish ] = "~Horizontal";
         TEXT[ english_us ] = "~Landscape";
-    TEXT[ chinese_simplified ] = "ºáÏò(~L)";
+    TEXT[ chinese_simplified ] = "æ¨ªå‘(~L)";
         TEXT[ russian ] = "Àëüáîìíûé ôîğìàò";
         TEXT[ polish ] = "Orientacja pozioma";
-        TEXT[ japanese ] = "‰¡(~L)";
-        TEXT[ chinese_traditional ] = "¾î¦V(~L)";
+        TEXT[ japanese ] = "æ¨ª(~L)";
+        TEXT[ chinese_traditional ] = "æ©«å‘(~L)";
         TEXT[ arabic ] = "ÈÇáÚÑÖ";
         TEXT[ dutch ] = "~Liggend";
-        TEXT[ chinese_simplified ] = "ºáÏò(~L)";
+        TEXT[ chinese_simplified ] = "æ¨ªå‘(~L)";
         TEXT[ greek ] = "Ïñéæïíôßùò";
-        TEXT[ korean ] = "°¡·Î(~L)";
+        TEXT[ korean ] = "ê°€ë¡œ(~L)";
         TEXT[ turkish ] = "Ya~tay";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Horizontal";
         TEXT[ finnish ] = "~Vaaka";
+        TEXT[ thai ] = "~à¹à¸™à¸§à¸™à¸­à¸™";
     };
     RadioButton RB_PORTRAIT
     {
@@ -613,25 +626,26 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ portuguese_brazilian ] = "Ho~chformat";
         TEXT[ portuguese ] = "~Vertical";
         TEXT[ danish ] = "Stående";
-        TEXT[ french ] = "P~ortrait";
+        TEXT[ french ] = "Portrait";
         TEXT[ swedish ] = "S~tående";
         TEXT[ dutch ] = "~Staand";
         TEXT[ spanish ] = "~Vertical";
         TEXT[ english_us ] = "P~ortrait";
-    TEXT[ chinese_simplified ] = "×İÏò(~O)";
+    TEXT[ chinese_simplified ] = "çºµå‘(~O)";
         TEXT[ russian ] = "Êíèæíûé ôîğìàò";
         TEXT[ polish ] = "Orientacja pionowa";
-        TEXT[ japanese ] = "c(~O)";
-        TEXT[ chinese_traditional ] = "Áa¦V(~O)";
+        TEXT[ japanese ] = "ç¸¦(~O)";
+        TEXT[ chinese_traditional ] = "ç¸±å‘(~O)";
         TEXT[ arabic ] = "ÈÇáØæá";
         TEXT[ dutch ] = "~Staand";
-        TEXT[ chinese_simplified ] = "×İÏò(~O)";
+        TEXT[ chinese_simplified ] = "çºµå‘(~O)";
         TEXT[ greek ] = "Êáôáêüñõöá";
-        TEXT[ korean ] = "¼¼·Î(~O)";
+        TEXT[ korean ] = "ì„¸ë¡œ(~O)";
         TEXT[ turkish ] = "Di~key";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Vertical";
         TEXT[ finnish ] = "~Pysty";
+        TEXT[ thai ] = "à¹à¸™à¸§à¸•à¸±à¹‰~à¸‡";
     };
     Window WIN_PREVIEW
     {
@@ -665,29 +679,30 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TabStop = TRUE ;
         Text = "Standar~d" ;
         Text [ English ] = "Standar~d" ;
-            TEXT[ italian ] = "Standar~d";
+            TEXT[ italian ] = "~Standard";
         TEXT[ portuguese_brazilian ] = "Standar~d";
         TEXT[ portuguese ] = "~Padrão";
         TEXT[ danish ] = "Standar~d";
-        TEXT[ french ] = "Par ~défaut";
+        TEXT[ french ] = "Par défaut";
         TEXT[ swedish ] = "Standar~d";
         TEXT[ dutch ] = "Standaar~d";
         TEXT[ spanish ] = "~Predeterminado";
         TEXT[ english_us ] = "~Default";
-    TEXT[ chinese_simplified ] = "Ä¬ÈÏ(~D)";
+    TEXT[ chinese_simplified ] = "é»˜è®¤(~D)";
         TEXT[ russian ] = "Ñòàíäàğò";
         TEXT[ polish ] = "Domyœlnie";
-        TEXT[ japanese ] = "•W€(~D)";
+        TEXT[ japanese ] = "æ¨™æº–(~D)";
         TEXT[ language_user1 ] = " ";
-        TEXT[ chinese_traditional ] = "Àq»{(~D)";
+        TEXT[ chinese_traditional ] = "é»˜èª(~D)";
         TEXT[ arabic ] = "ÇİÊÑÇÖí";
         TEXT[ dutch ] = "Standaar~d";
-        TEXT[ chinese_simplified ] = "Ä¬ÈÏ(~D)";
+        TEXT[ chinese_simplified ] = "é»˜è®¤(~D)";
         TEXT[ greek ] = "ĞñïåğéëïãŞ";
-        TEXT[ korean ] = "±âº»°ª(~D)";
+        TEXT[ korean ] = "ê¸°ë³¸ê°’(~D)";
         TEXT[ turkish ] = "Standar~t";
         TEXT[ catalan ] = "~Predeterminado";
         TEXT[ finnish ] = "~Oletusarvo";
+        TEXT[ thai ] = "~à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
     };
     TEXT[ italian ] = "Opzioni di stampa";
     TEXT[ portuguese_brazilian ] = "Druckoptionen";
@@ -698,20 +713,21 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
     TEXT[ dutch ] = "Afdrukopties";
     TEXT[ spanish ] = "Opciones de impresión";
     TEXT[ english_us ] = "Print Options";
-    TEXT[ chinese_simplified ] = "´òÓ¡Ñ¡Ïî";
+    TEXT[ chinese_simplified ] = "æ‰“å°é€‰é¡¹";
     TEXT[ russian ] = "Ïàğàìåòğû ïå÷àòè";
     TEXT[ polish ] = "Opcje wydruku";
-    TEXT[ japanese ] = "ˆóüµÌß¼®İ";
-    TEXT[ chinese_traditional ] = "¦C¦L¿ï¶µ";
+    TEXT[ japanese ] = "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼å°åˆ·ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
+    TEXT[ chinese_traditional ] = "åˆ—å°é¸é …";
     TEXT[ arabic ] = "ÎíÇÑÇÊ ÇáØÈÇÚÉ";
     TEXT[ dutch ] = "Afdrukopties";
-    TEXT[ chinese_simplified ] = "´òÓ¡Ñ¡Ïî";
+    TEXT[ chinese_simplified ] = "æ‰“å°é€‰é¡¹";
     TEXT[ greek ] = "Åğéëïãİò åêôığùóçò";
-    TEXT[ korean ] = "ÀÎ¼â ¿É¼Ç";
+    TEXT[ korean ] = "ì¸ì‡„ ì˜µì…˜";
     TEXT[ turkish ] = "Yazdırma seçenekleri";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Opciones de impresión";
     TEXT[ finnish ] = "Tulostusasetukset";
+    TEXT[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸à¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œ";
 };
 ModalDialog DLG_PAGEPREVIEW_ZOOM
 {
@@ -752,19 +768,20 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Text [ spanish ] = "~Columnas" ;
         Text [ english_us ] = "~Columns" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "À¸(~C)";
+        Text[ chinese_simplified ] = "æ (~C)";
         Text[ russian ] = "Êîëîíêè";
         Text[ polish ] = "Kolumny";
-        Text[ japanese ] = "‰¡(~C)";
-        Text[ chinese_traditional ] = "Äæ(~C)";
+        Text[ japanese ] = "æ¨ª(~C)";
+        Text[ chinese_traditional ] = "æ¬„(~C)";
         Text[ arabic ] = "ÃÚãÏÉ";
         Text[ dutch ] = "~Kolommen";
-        Text[ chinese_simplified ] = "À¸(~C)";
+        Text[ chinese_simplified ] = "æ (~C)";
         Text[ greek ] = "ÓôŞëåò";
-        Text[ korean ] = "¿­(~C)";
+        Text[ korean ] = "ì—´(~C)";
         Text[ turkish ] = "~Sütun";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Columnas";
+        Text[ thai ] = "~à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
     };
     FixedText FT_ROW
     {
@@ -773,30 +790,31 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Text = "~Zeilen" ;
         Text [ ENGLISH ] = "~Rows" ;
         Text [ norwegian ] = "~Rows" ;
-        Text [ italian ] = "~Righe" ;
+        Text [ italian ] = "Righe" ;
         Text [ portuguese_brazilian ] = "Filei~ras" ;
         Text [ portuguese ] = "~Linhas" ;
         Text [ finnish ] = "~Rivit" ;
         Text [ danish ] = "Rækker" ;
-        Text [ french ] = "~Lignes" ;
+        Text [ french ] = "Lignes" ;
         Text [ swedish ] = "~Rader" ;
         Text [ dutch ] = "~Rijen" ;
         Text [ spanish ] = "~Filas" ;
         Text [ english_us ] = "~Rows" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ĞĞ(~R)";
+        Text[ chinese_simplified ] = "è¡Œ(~R)";
         Text[ russian ] = "Ñòğîêè";
         Text[ polish ] = "Wiersze";
-        Text[ japanese ] = "c(~R)";
-        Text[ chinese_traditional ] = "¦æ(~R)";
+        Text[ japanese ] = "ç¸¦(~R)";
+        Text[ chinese_traditional ] = "è¡Œ(~R)";
         Text[ arabic ] = "Õİæİ";
         Text[ dutch ] = "~Rijen";
-        Text[ chinese_simplified ] = "ĞĞ(~R)";
+        Text[ chinese_simplified ] = "è¡Œ(~R)";
         Text[ greek ] = "Ãñáììİò";
-        Text[ korean ] = "Çà(~R)";
+        Text[ korean ] = "í–‰(~R)";
         Text[ turkish ] = "S~atır";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Filas";
+        Text[ thai ] = "à¹~à¸–à¸§";
     };
     NumericField ED_COL
     {
@@ -847,19 +865,20 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    Text[ chinese_simplified ] = "ÏÔÊ¾±ÈÁĞ";
+    Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”ä¾‹";
     Text[ russian ] = "Ìàñøòàá";
     Text[ polish ] = "Skala";
-    Text[ japanese ] = "½Ş°Ñ";
-    Text[ chinese_traditional ] = "Åã¥Ü¤ñ¨Ò";
+    Text[ japanese ] = "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®ã‚ºãƒ¼ãƒ ";
+    Text[ chinese_traditional ] = "é¡¯ç¤ºæ¯”ä¾‹";
     Text[ arabic ] = "ÊßÈíÑ æÊÕÛíÑ";
     Text[ dutch ] = "Maatstaf";
-    Text[ chinese_simplified ] = "ÏÔÊ¾±ÈÁĞ";
+    Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”ä¾‹";
     Text[ greek ] = "Êëßìáêá";
-    Text[ korean ] = "È®´ë/Ãà¼Ò";
+    Text[ korean ] = "í™•ëŒ€/ì¶•ì†Œ";
     Text[ turkish ] = "Yakınlaştır";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Escala";
+    Text[ thai ] = "à¸¢à¹ˆà¸­/à¸‚à¸¢à¸²à¸¢";
 };
 String RID_PVIEW_TOOLBOX
 {
@@ -874,20 +893,21 @@ String RID_PVIEW_TOOLBOX
     Text [ danish ] = "Sidevisning" ;
     Text [ portuguese ] = "Ver página" ;
     Text [ portuguese_brazilian ] = "Seitenansicht" ;
-    Text[ chinese_simplified ] = "Ò³ÃæÊÓÍ¼";
+    Text[ chinese_simplified ] = "é¡µé¢è§†å›¾";
     Text[ russian ] = "Ïğåäâàğèòåëüíûé ïğîñìîòğ";
     Text[ polish ] = "Podgl¹d wydruku";
-    Text[ japanese ] = "ˆóüÌßÚËŞ­°";
-    Text[ chinese_traditional ] = "­¶­±ÀËµø";
+    Text[ japanese ] = "å°åˆ·ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼";
+    Text[ chinese_traditional ] = "é é¢æª¢è¦–";
     Text[ arabic ] = "ãÚÇíäÉ ÇáÕİÍÉ";
     Text[ dutch ] = "Afdrukvoorbeeld";
-    Text[ chinese_simplified ] = "Ò³ÃæÊÓÍ¼";
+    Text[ chinese_simplified ] = "é¡µé¢è§†å›¾";
     Text[ greek ] = "Ğñïåğéóêüğçóç åêôığùóçò";
-    Text[ korean ] = "ÀÎ¼â ¹Ì¸®º¸±â";
+    Text[ korean ] = "ì¸ì‡„ ë¯¸ë¦¬ë³´ê¸°";
     Text[ turkish ] = "Sayfa önizleme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Vista preliminar";
     Text[ finnish ] = "Sivun esikatselu";
+    Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡à¸«à¸™à¹‰à¸²";
 };
 ToolBox RID_PVIEW_TOOLBOX
 {
