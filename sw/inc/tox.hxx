@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tox.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-18 16:54:06 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,8 @@
 #ifndef _ERRHDL_HXX
 #include <errhdl.hxx>
 #endif
+
+#include <vector> // #i21237#
 
 class SwTOXType;
 class SwTOXMark;
@@ -244,6 +246,9 @@ struct SwFormToken
     USHORT          nChapterFormat;     //SwChapterFormat;
     USHORT          nAuthorityField;    //enum ToxAuthorityField
     sal_Unicode     cTabFillChar;
+    sal_Bool        bWithTab;      // TRUE: do generate tab
+                                   // character only the tab stop
+                                   // #i21237#
 
     SwFormToken(FormTokenType eType ) :
         nTabStopPosition(0),
@@ -252,41 +257,129 @@ struct SwFormToken
         eTabAlign(0 /*SVX_TAB_ADJUST_LEFT*/),
         nChapterFormat(0 /*CF_NUMBER*/),
         nAuthorityField(0 /*AUTH_FIELD_IDENTIFIER*/),
-        cTabFillChar(' ') {}
+        cTabFillChar(' '),
+        bWithTab(sal_True)  // #i21237#
+    {}
 
     String GetString() const;
 };
 
-class SwFormTokenEnumerator
-{
-    String sPattern;
-    xub_StrLen nCurPatternPos;
-    xub_StrLen nCurPatternLen;
+// -> #i21237#
+/**
+    Functor that is true when a given token has a certain token type.
 
-    FormTokenType _SearchNextToken( xub_StrLen nStt, xub_StrLen& rEnd,
-                                    xub_StrLen* pTokenLen = 0 ) const;
-    SwFormToken BuildToken( FormTokenType, xub_StrLen ) const;
+    @param _eType  the type to check for
+    @param rToken  the token to check
+
+    @retval TRUE   the token has the given type
+    @retval FALSE  else
+*/
+struct SwFormTokenEqualToFormTokenType
+{
+    FormTokenType eType;
+
+    SwFormTokenEqualToFormTokenType(FormTokenType _eType) : eType(_eType) {}
+    bool operator()(const SwFormToken & rToken)
+    {
+        return rToken.eTokenType == eType;
+    }
+};
+
+/**
+   Functor that appends the string representation of a given token to a string.
+
+   @param _rText    string to append the string representation to
+   @param rToken    token whose string representation is appended
+*/
+struct SwFormTokenToString
+{
+    String & rText;
+    SwFormTokenToString(String & _rText) : rText(_rText) {}
+    void operator()(const SwFormToken & rToken) { rText += rToken.GetString(); }
+};
+
+/// Vector of tokens.
+typedef std::vector<SwFormToken> SwFormTokens;
+
+/**
+   Helper class that converts vectors of tokens to strings and vice
+   versa.
+ */
+class SwFormTokensHelper
+{
+    /// the tokens
+    SwFormTokens aTokens;
+
+    /**
+       Builds a token from its string representation.
+
+       @sPattern          the whole pattern
+       @nCurPatternPos    starting position of the token
+
+       @return the token
+     */
+    SwFormToken BuildToken( const String & sPattern,
+                            xub_StrLen & nCurPatternPos ) const;
+
+    /**
+       Returns the string of a token.
+
+       @param sPattern    the whole pattern
+       @param nStt        starting position of the token
+
+       @return   the string representation of the token
+    */
+    String SearchNextToken( const String & sPattern,
+                            xub_StrLen nStt ) const;
+
+    /**
+       Returns the type of a token.
+
+       @param sToken     the string representation of the token
+       @param pTokenLen  return parameter the length of the head of the token
+
+       If pTokenLen is non-NULL the length of the token's head is
+       written to *pTokenLen
+
+       @return the type of the token
+    */
+    FormTokenType GetTokenType(const String & sToken,
+                               xub_StrLen * pTokenLen) const;
 
 public:
-    SwFormTokenEnumerator( const String& rPattern );
-    BOOL            HasNextToken() const
-        { return nCurPatternPos + nCurPatternLen < sPattern.Len(); }
+    /**
+       contructor
 
-    SwFormToken     GetNextToken();
-    SwFormToken     GetCurToken() const;
+       @param rTokens       vector of tokens
+    */
+    SwFormTokensHelper(const SwFormTokens & rTokens) : aTokens(rTokens) {}
 
-    FormTokenType   GetCurTokenType();
-    FormTokenType   GetNextTokenType();
-    FormTokenType   GetPrevTokenType();
-    void            RemoveCurToken();
-    void            InsertToken( const SwFormToken& rToken );
-    const String&   GetPattern() const      { return sPattern; }
+    /**
+       constructor
+
+       @param rStr   string representation of the tokens
+    */
+    SwFormTokensHelper(const String & rStr);
+
+    /**
+       Returns vector of tokens.
+
+       @return vector of tokens
+    */
+    const SwFormTokens & GetTokens() const { return aTokens; }
+
+    /**
+       Returns string representation of the vector of tokens.
+     */
+    String GetPatternString() const;
 };
+// <- #i21237#
 
 class SwForm
 {
-    String  aPattern[ AUTH_TYPE_END + 1 ];
+    SwFormTokens    aPattern[ AUTH_TYPE_END + 1 ]; // #i21237#
     String  aTemplate[ AUTH_TYPE_END + 1 ];
+
     USHORT  nType, nFormMaxLevel;
     //USHORT    nFirstTabPos; -> Value in tab token
 //  BOOL    bHasFirstTabPos : 1;
@@ -300,21 +393,23 @@ public:
 
     SwForm& operator=( const SwForm& rForm );
 
-    inline void             SetTemplate(USHORT nLevel, const String& rName);
+    inline void SetTemplate(USHORT nLevel, const String& rName);
     inline const String&    GetTemplate(USHORT nLevel) const;
 
-    inline void             SetPattern(USHORT nLevel, const String& rName);
-    inline const String&    GetPattern(USHORT nLevel) const;
+    // #i21237#
+    inline void SetPattern(USHORT nLevel, const SwFormTokens& rName);
+    inline void SetPattern(USHORT nLevel, const String& rStr);
+    inline const SwFormTokens&  GetPattern(USHORT nLevel) const;
 
     //convert pattern string from old to new format or vice versa
-    static String           ConvertPatternTo51(const String& rSource);
+    // #i21237#
+    static String           ConvertPatternTo51(const SwFormTokens& rSource);
     static String           ConvertPatternFrom51(const String& rSource, TOXTypes eType);
 
     // fill tab stop positions from template to pattern
-    void                    AdjustTabStops(SwDoc& rDoc);
-
-    SwFormTokenEnumerator   CreateTokenEnumerator(USHORT nLevel) const
-        {return SwFormTokenEnumerator(GetPattern(nLevel));}
+    // #i21237#
+    void                    AdjustTabStops(SwDoc& rDoc,
+                                           BOOL bDefaultRightTabStop = FALSE);
 
     inline USHORT   GetTOXType() const;
     inline USHORT   GetFormMax() const;
@@ -532,7 +627,8 @@ public:
 
     const String&   GetSortAlgorithm()const {return sSortAlgorithm;}
     void            SetSortAlgorithm(const String& rSet) {sSortAlgorithm = rSet;}
-
+    // #i21237#
+    void AdjustTabStops(SwDoc & rDoc, BOOL bDefaultRightTabStop);
 };
 
 
@@ -632,19 +728,27 @@ inline const String& SwTOXMark::GetSecondaryKeyReading() const
 //
 //SwForm
 //
-inline void SwForm::SetTemplate(USHORT nLevel, const String& rName)
+inline void SwForm::SetTemplate(USHORT nLevel, const String& rTemplate)
 {
     ASSERT(nLevel < GetFormMax(), "Index >= FORM_MAX");
-    aTemplate[nLevel] = rName;
+    aTemplate[nLevel] = rTemplate;
 }
 
-inline void SwForm::SetPattern(USHORT nLevel, const String& rName)
+inline void SwForm::SetPattern(USHORT nLevel, const SwFormTokens& rTokens)
 {
     ASSERT(nLevel < GetFormMax(), "Index >= FORM_MAX");
-    aPattern[nLevel] = rName;
+    aPattern[nLevel] = rTokens;
 }
 
-inline const String& SwForm::GetPattern(USHORT nLevel) const
+inline void SwForm::SetPattern(USHORT nLevel, const String & rStr)
+{
+    ASSERT(nLevel < GetFormMax(), "Index >= FORM_MAX");
+
+    SwFormTokensHelper aHelper(rStr);
+    aPattern[nLevel] = aHelper.GetTokens();
+}
+
+inline const SwFormTokens& SwForm::GetPattern(USHORT nLevel) const
 {
     ASSERT(nLevel < GetFormMax(), "Index >= FORM_MAX");
     return aPattern[nLevel];
@@ -696,6 +800,11 @@ inline const String& SwTOXBase::GetTypeName() const
 
 inline const SwForm& SwTOXBase::GetTOXForm() const
     { return aForm; }
+
+inline void SwTOXBase::AdjustTabStops(SwDoc & rDoc, BOOL bDefaultRightTabStop)
+{
+    aForm.AdjustTabStops(rDoc, bDefaultRightTabStop);
+}
 
 inline void SwTOXBase::SetCreate(USHORT nCreate)
     { nCreateType = nCreate; }
