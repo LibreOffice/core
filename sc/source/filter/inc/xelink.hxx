@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xelink.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:59:08 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 class ScRange;
 struct SingleRefData;
 
-
 /* ============================================================================
 Classes for export of different kinds of internal/external references.
 - 3D cell and cell range links
@@ -102,89 +101,89 @@ class XclExpTabInfo
 {
 public:
     /** Initializes the complete buffer from the current exported document. */
-    explicit                    XclExpTabInfo( const XclExpRoot& rRoot );
+    explicit            XclExpTabInfo( const XclExpRoot& rRoot );
 
     /** Returns true, if the specified Calc sheet will be exported. */
-    bool                        IsExportTab( SCTAB nScTab ) const;
+    bool                IsExportTab( SCTAB nScTab ) const;
     /** Returns true, if the specified Calc sheet is used to store external cell contents. */
-    bool                        IsExternalTab( SCTAB nScTab ) const;
+    bool                IsExternalTab( SCTAB nScTab ) const;
     /** Returns true, if the specified Calc sheet is visible and will be exported. */
-    bool                        IsVisibleTab( SCTAB nScTab ) const;
+    bool                IsVisibleTab( SCTAB nScTab ) const;
     /** Returns true, if the specified Calc sheet is selected and will be exported. */
-    bool                        IsSelectedTab( SCTAB nScTab ) const;
+    bool                IsSelectedTab( SCTAB nScTab ) const;
     /** Returns true, if the specified Calc sheet is the active displayed sheet. */
-    bool                        IsActiveTab( SCTAB nScTab ) const;
+    bool                IsActiveTab( SCTAB nScTab ) const;
 
     /** Returns the Excel sheet index for a given Calc sheet. */
-    sal_uInt16                  GetXclTab( SCTAB nScTab ) const;
+    sal_uInt16          GetXclTab( SCTAB nScTab ) const;
 
     /** Returns the Calc sheet index of the nSortedTab-th entry in the sorted sheet names list. */
-    SCTAB                       GetRealScTab( sal_uInt16 nSortedTab ) const;
+    SCTAB               GetRealScTab( SCTAB nSortedScTab ) const;
     /** Returns the index of the passed Calc sheet in the sorted sheet names list. */
-    sal_uInt16                  GetSortedScTab( SCTAB nScTab ) const;
+    SCTAB               GetSortedScTab( SCTAB nScTab ) const;
 
     /** Returns the number of Calc sheets. */
-    inline SCTAB               GetScTabCount() const { return mnScCnt; }
+    inline SCTAB        GetScTabCount() const { return mnScCnt; }
 
     /** Returns the number of Excel sheets to be exported. */
-    inline sal_uInt16           GetXclTabCount() const { return mnXclCnt; }
+    inline sal_uInt16   GetXclTabCount() const { return mnXclCnt; }
     /** Returns the number of external linked sheets. */
-    inline sal_uInt16           GetXclExtTabCount() const { return mnXclExtCnt; }
+    inline sal_uInt16   GetXclExtTabCount() const { return mnXclExtCnt; }
     /** Returns the number of codepages (VBA modules). */
-    inline sal_uInt16           GetXclCodenameCount() const { return mnXclCodeCnt; }
+    inline sal_uInt16   GetXclCodenameCount() const { return mnXclCodeCnt; }
     /** Returns the number of exported selected sheets. */
-    inline sal_uInt16           GetXclSelectedCount() const { return mnXclSelected; }
+    inline sal_uInt16   GetXclSelectedCount() const { return mnXclSelected; }
 
     /** Returns the Excel index of the active, displayed sheet. */
-    inline sal_uInt16           GetXclActiveTab() const { return mnXclActive; }
+    inline sal_uInt16   GetXclActiveTab() const { return mnXclActive; }
     /** Returns the Excel index of the first visible sheet. */
-    inline sal_uInt16           GetXclFirstVisTab() const { return mnXclFirstVis; }
+    inline sal_uInt16   GetXclFirstVisTab() const { return mnXclFirstVis; }
 
     // *** for change tracking ***
 
     /** Enables logging of Excel sheet indexes in each 3D-reference. */
-    void                        StartRefLog();
+    void                StartRefLog();
     /** Appends sheet index pair (called by formula compiler). */
-    void                        AppendTabRef( sal_uInt16 nXclFirst, sal_uInt16 nXclLast );
+    void                AppendTabRef( sal_uInt16 nXclFirst, sal_uInt16 nXclLast );
     /** Disables logging of Excel sheet indexes. */
-    const XclExpRefLogVec&      EndRefLog();
+    const XclExpRefLogVec& EndRefLog();
 
 private:
     /** Returns true, if any of the passed flags is set for the specified Calc sheet. */
-    bool                        GetFlag( SCTAB nScTab, sal_uInt8 nFlags ) const;
+    bool                GetFlag( SCTAB nScTab, sal_uInt8 nFlags ) const;
     /** Sets or clears (depending on bSet) all passed flags for the specified Calc sheet. */
-    void                        SetFlag( SCTAB nScTab, sal_uInt8 nFlags, bool bSet = true );
+    void                SetFlag( SCTAB nScTab, sal_uInt8 nFlags, bool bSet = true );
 
     /** Searches for sheets not to be exported. */
-    void                        CalcXclIndexes();
+    void                CalcXclIndexes();
     /** Sorts the names of all tables and stores the indexes of the sorted indexes. */
-    void                        CalcSortedIndexes( ScDocument& rDoc );
+    void                CalcSortedIndexes( ScDocument& rDoc );
 
 private:
     typedef ::std::pair< sal_uInt16, sal_uInt8 >    ScTabInfoEntry;
     typedef ::std::vector< ScTabInfoEntry >         ScTabInfoVec;
+    typedef ::std::vector< SCTAB >                  ScTabVec;
 
-    ScTabInfoVec                maTabInfoVec;       /// Array of Calc sheet index information.
+    ScTabInfoVec        maTabInfoVec;       /// Array of Calc sheet index information.
 
-    SCTAB                       mnScCnt;            /// Count of Calc sheets.
-    sal_uInt16                  mnXclCnt;           /// Count of Excel sheets to be exported.
-    sal_uInt16                  mnXclExtCnt;        /// Count of external link sheets.
-    sal_uInt16                  mnXclCodeCnt;       /// Count of codepages.
-    sal_uInt16                  mnXclSelected;      /// Count of selected and exported sheets.
-    sal_uInt16                  mnXclActive;        /// Active (selected) sheet.
-    sal_uInt16                  mnXclFirstVis;      /// First visible sheet.
+    SCTAB               mnScCnt;            /// Count of Calc sheets.
+    sal_uInt16          mnXclCnt;           /// Count of Excel sheets to be exported.
+    sal_uInt16          mnXclExtCnt;        /// Count of external link sheets.
+    sal_uInt16          mnXclCodeCnt;       /// Count of codepages.
+    sal_uInt16          mnXclSelected;      /// Count of selected and exported sheets.
+    sal_uInt16          mnXclActive;        /// Active (selected) sheet.
+    sal_uInt16          mnXclFirstVis;      /// First visible sheet.
 
-    ScfUInt16Vec                maFromSortedVec;    /// Sorted index -> real index.
-    ScfUInt16Vec                maToSortedVec;      /// Real index -> sorted index.
+    ScTabVec            maFromSortedVec;    /// Sorted Calc sheet index -> real Calc sheet index.
+    ScTabVec            maToSortedVec;      /// Real Calc sheet index -> sorted Calc sheet index.
 
-    XclExpRefLogVec             maRefLog;           /// A log for each requested Excel sheet index.
-    bool                        mbEnableLog;        /// true = log all sheet indexes (for formula compiler).
+    XclExpRefLogVec     maRefLog;           /// A log for each requested Excel sheet index.
+    bool                mbEnableLog;        /// true = log all sheet indexes (for formula compiler).
 };
-
 
 // Export link manager ========================================================
 
-class XclExpLinkManager_Impl;
+class XclExpLinkManagerImpl;
 
 /** Stores all data for internal/external references (the link table).
     @descr  Contents in BIFF8:
@@ -202,44 +201,43 @@ class XclExpLinkManager_Impl;
 class XclExpLinkManager : public XclExpRecordBase
 {
 public:
-    explicit                    XclExpLinkManager( const XclExpRoot& rRoot );
-    virtual                     ~XclExpLinkManager();
+    explicit            XclExpLinkManager( const XclExpRoot& rRoot );
+    virtual             ~XclExpLinkManager();
 
     /** Searches for XTI structure with the given Excel sheet range. Adds new XTI if not found.
         @return  The list index of the XTI structure. */
-    sal_uInt16                  FindXti( sal_uInt16 nXclFirst, sal_uInt16 nXclLast );
+    sal_uInt16          FindXti( sal_uInt16 nXclFirst, sal_uInt16 nXclLast );
 
     /** Returns the external document URL of the specified Excel sheet. */
-    const XclExpString*         GetUrl( sal_uInt16 nXclTab ) const;
+    const XclExpString* GetUrl( sal_uInt16 nXclTab ) const;
     /** Returns the external sheet name of the specified Excel sheet. */
-    const XclExpString*         GetTabName( sal_uInt16 nXclTab ) const;
+    const XclExpString* GetTabName( sal_uInt16 nXclTab ) const;
 
     /** Stores the cell with the given address in a CRN record list. */
-    void                        StoreCell( const SingleRefData& rRef );
+    void                StoreCell( const SingleRefData& rRef );
     /** Stores all cells in the given range in a CRN record list. */
-    void                        StoreCellRange( const SingleRefData& rRef1, const SingleRefData& rRef2 );
+    void                StoreCellRange( const SingleRefData& rRef1, const SingleRefData& rRef2 );
 
     /** Finds or inserts an EXTERNNAME record for an add-in function name.
         @param rnXti  Returns the index of the XTI structure which contains the add-in function name.
         @param rnExtName  Returns the 1-based EXTERNNAME record index. */
-    void                        InsertAddIn(
-                                    sal_uInt16& rnXti, sal_uInt16& rnExtName,
-                                    const String& rName );
+    void                InsertAddIn(
+                            sal_uInt16& rnXti, sal_uInt16& rnExtName,
+                            const String& rName );
     /** Finds or inserts an EXTERNNAME record for DDE links.
         @param rnXti  Returns the index of the XTI structure which contains the DDE link.
         @param rnExtName  Returns the 1-based EXTERNNAME record index. */
-    bool                        InsertDde(
-                                    sal_uInt16& rnXti, sal_uInt16& rnExtName,
-                                    const String& rApplic, const String& rTopic, const String& rItem );
+    bool                InsertDde(
+                            sal_uInt16& rnXti, sal_uInt16& rnExtName,
+                            const String& rApplic, const String& rTopic, const String& rItem );
 
     /** Writes the entire Link table. */
-    virtual void                Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm );
 
 private:
-    typedef ::std::auto_ptr< XclExpLinkManager_Impl > XclExpLinkManager_ImplPtr;
-    XclExpLinkManager_ImplPtr   mpImpl;
+    typedef ::std::auto_ptr< XclExpLinkManagerImpl > XclExpLinkMgrImplPtr;
+    XclExpLinkMgrImplPtr mpImpl;
 };
-
 
 // ============================================================================
 
