@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:15:47 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,7 @@ sal_Bool OGenericUnoController::Construct(Window* pParent)
 #if OSL_DEBUG_LEVEL >= 2
     m_bDescribingSupportedFeatures = true;
 #endif
+    m_aSupportedFeatures.clear();
     describeSupportedFeatures();
 #if OSL_DEBUG_LEVEL >= 2
     m_bDescribingSupportedFeatures = false;
@@ -262,6 +263,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
 {
     vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard(m_aMutex);
+
     Reference< XWindow >        xParent;
     Reference< XFrame > xFrame;
 
@@ -287,26 +289,36 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
             m_bReadOnly = sal_True;
         }
     }
-    if ( xFrame.is() )
+    try
     {
-        xParent = xFrame->getContainerWindow();
-        VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(xParent);
-        Window* pParentWin = pParentComponent ? pParentComponent->GetWindow() : NULL;
-        if (!pParentWin)
+        if ( xFrame.is() )
         {
-            throw Exception(::rtl::OUString::createFromAscii("Parent window is null"),*this);
-        }
+            xParent = xFrame->getContainerWindow();
+            VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(xParent);
+            Window* pParentWin = pParentComponent ? pParentComponent->GetWindow() : NULL;
+            if (!pParentWin)
+            {
+                throw Exception(::rtl::OUString::createFromAscii("Parent window is null"),*this);
+            }
 
-        Construct( pParentWin );
+            Construct( pParentWin );
+        }
+        else
+        {
+            OSL_ENSURE(0,"OGenericUnoController::initialize: Frame is null!");
+        }
+        ODataView* pView = getView();
+        if ( (m_bReadOnly || m_bPreview) && pView )
+            pView->EnableInput(FALSE);
+        impl_initialize(aArguments);
     }
-    else
+    catch(Exception& e)
     {
-        OSL_ENSURE(0,"OGenericUnoController::initialize: Frame is null!");
+        // no one clears my view if I won't
+        ::std::auto_ptr<Window> aTemp(m_pView);
+        m_pView = NULL;
+        throw e;
     }
-    ODataView* pView = getView();
-    if ( (m_bReadOnly || m_bPreview) && pView )
-        pView->EnableInput(FALSE);
-    impl_initialize(aArguments);
     if ( xFrame.is() )
         xFrame->setComponent(getComponentWindow(), this);
 }
@@ -517,6 +529,18 @@ void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rF
         }
     }
 
+}
+
+//------------------------------------------------------------------------------
+sal_Bool OGenericUnoController::isFeatureSupported( sal_Int32 _nId )
+{
+    SupportedFeatures::iterator aFeaturePos = ::std::find_if(
+        m_aSupportedFeatures.begin(),
+        m_aSupportedFeatures.end(),
+        ::std::bind2nd( SupportedFeaturesEqualId(), _nId )
+    );
+
+    return ( m_aSupportedFeatures.end() != aFeaturePos && aFeaturePos->first.getLength());
 }
 
 // -----------------------------------------------------------------------
@@ -862,7 +886,6 @@ FeatureState OGenericUnoController::GetState(sal_uInt16 nId) const
 
     return aReturn;
 }
-
 //------------------------------------------------------------------------------
 URL OGenericUnoController::getURLForId(sal_Int32 _nId) const
 {
