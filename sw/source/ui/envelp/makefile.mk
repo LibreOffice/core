@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 15:26:21 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:56:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,9 +65,6 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=envelp
 
-AUTOSEG=true
-
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -76,21 +73,8 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        envfmt.cxx \
-    envimg.cxx \
-        envlop1.cxx \
-        envprt.cxx \
-        labelcfg.cxx \
-        label1.cxx \
-        labelexp.cxx \
-        labfmt.cxx \
-        labprt.cxx \
-        labimg.cxx \
-        mailmrge.cxx \
-        syncbtn.cxx
-
-SRCFILES =\
+SRS1NAME=$(TARGET)
+SRC1FILES =\
         envelp.src \
         envfmt.src \
         envlop.src \
