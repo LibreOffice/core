@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: af $ $Date: 2002-08-27 14:01:08 $
+ *  last change: $Author: cl $ $Date: 2002-11-19 13:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,7 +569,11 @@ Any SAL_CALL SdUnoDrawView::getSelection()
         }
     }
 
-    return Any( &xShapes, ITYPE(drawing::XShapes) );
+    Any aAny;
+    if( 0 != xShapes->getCount() )
+        aAny <<= xShapes;
+
+    return aAny;
 }
 
 //----------------------------------------------------------------------

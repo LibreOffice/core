@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoSlideView.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-21 14:19:59 $
+ *  last change: $Author: cl $ $Date: 2002-11-19 13:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,45 +355,8 @@ sal_Bool SAL_CALL SdUnoSlideView::select( const Any& aSelection )
 Any SAL_CALL SdUnoSlideView::getSelection()
     throw(RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    SdXImpressDocument* pModel = getModel();
-
-    Reference< drawing::XShapes > xShapes( SvxShapeCollection_NewInstance(), UNO_QUERY );
-
-/*
-    if(mpView)
-    {
-        const SdrMarkList& rMarkList = mpView->GetMarkList();
-        sal_uInt32 nCount = rMarkList.GetMarkCount();
-        for( sal_uInt32 nNum = 0; nNum < nCount; nNum++)
-        {
-            SdrMark *pMark = rMarkList.GetMark(nNum);
-            if(pMark==NULL)
-                continue;
-
-            SdrObject *pObj = pMark->GetObj();
-            if(pObj==NULL || pObj->GetPage() == NULL)
-                continue;
-
-            Reference< drawing::XDrawPage > xPage( pObj->GetPage()->getUnoPage(), UNO_QUERY);
-
-            if(!xPage.is())
-                continue;
-
-            SvxDrawPage* pDrawPage = SvxDrawPage::getImplementation( xPage );
-
-            if(pDrawPage==NULL)
-                continue;
-
-            Reference< drawing::XShape > xShape( pObj->getUnoShape(), UNO_QUERY );
-
-            if(xShape.is())
-                xShapes->add(xShape);
-        }
-    }
-*/
-    return Any( &xShapes, ITYPE(drawing::XShapes) );
+    Any aAny;
+    return aAny;
 }
 
 //----------------------------------------------------------------------
