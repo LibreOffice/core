@@ -175,6 +175,14 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const css::util::URL& aURL,
                     aArgumentBuffer.appendAscii("false");
             }
             else
+            // if value == sal_Int8
+            if (lArguments[i].Value.getValueType() == getCppuType((sal_Int8*)0))
+            {
+                sal_Int8 nVal;
+                lArguments[i].Value >>= nVal;
+                aArgumentBuffer.append((sal_Int32)nVal);
+            }
+            else
             // if value == sal_Int16
             if (lArguments[i].Value.getValueType() == getCppuType((sal_Int16*)0))
             {
@@ -216,6 +224,8 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const css::util::URL& aURL,
                 aArgumentBuffer.append     (sVal);
                 aArgumentBuffer.appendAscii("\"");
             }
+            else
+                LOG_ASSERT2(0, "Type not scriptable!")
 
             aArgumentBuffer.appendAscii("\n");
         }
@@ -254,7 +264,12 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const css::util::URL& aURL,
     if(nValidArgs<1)
         aScriptBuffer.appendAscii("disp.dispatch(url,noargs())\n");
     else
-        aScriptBuffer.appendAscii("disp.dispatch(url,args())\n");
+    {
+        aScriptBuffer.appendAscii("disp.dispatch(url,");
+        aScriptBuffer.append( sArrayName.getStr() );
+        aScriptBuffer.appendAscii("())\n");
+    }
+
     aScriptBuffer.appendAscii("\n");
 
     /* SAFE { */
