@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: khong $ $Date: 2002-07-25 04:38:12 $
+ *  last change: $Author: khong $ $Date: 2002-09-06 01:19:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,8 @@ Sequence < Locale > SAL_CALL IndexEntrySupplier::getLocaleList() throw (RuntimeE
 
 Sequence < OUString > SAL_CALL IndexEntrySupplier::getAlgorithmList( const Locale& rLocale ) throw (RuntimeException)
 {
-    Sequence < OUString > algorithmList;
+    Sequence < OUString > algorithmList(1);
+    algorithmList[0] = OUString::createFromAscii("alphanumeric");
 
     for( sal_Int16 i=0; i<nbOfLocales; i++ ) {
         OUString name = OUString::createFromAscii( aLocaleList[i].pLocale );
@@ -167,10 +168,13 @@ Sequence < OUString > SAL_CALL IndexEntrySupplier::getAlgorithmList( const Local
 
         OUString algorithms = OUString::createFromAscii( aLocaleList[i].pAlgorithms );
 
-        algorithmList.realloc(aLocaleList[i].pAlgorithmCount);
-        index = 0;
-        for (sal_Int16 j=0; j<aLocaleList[i].pAlgorithmCount; j++)
+        if (aLocaleList[i].pAlgorithmCount > 1) {
+            algorithmList.realloc(aLocaleList[i].pAlgorithmCount);
+            index = 0;
+            for (sal_Int16 j=0; j<aLocaleList[i].pAlgorithmCount; j++)
             algorithmList[j] = algorithms.getToken(0, sal_Unicode(','), index);
+        } else
+            algorithmList[0] = algorithms;
 
         break;
         }
