@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-10-28 18:03:30 $
+ *  last change: $Author: iha $ $Date: 2003-11-22 18:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,15 @@ public:
                                 , rtl::OUString& rNameOfLastSelectedObject
                                 , const DrawViewWrapper& rDrawViewWrapper
                                 , bool bAllowMultiClickSelectionChange );
+    static bool             isDragableObjectHitTwice( const Point& rMPos
+                                , const rtl::OUString& rNameOfLastSelectedObject
+                                , const DrawViewWrapper& rDrawViewWrapper );
+
+    static void             changeSelection( const Point& rMPos
+                                , rtl::OUString& rNameOfLastSelectedObject
+                                , DrawViewWrapper& rDrawViewWrapper
+                                , bool bAllowMultiClickSelectionChange );
+
 
     SelectionHelper( SdrObject* pSelectedObj, const rtl::OUString& rSelectedObjectCID );
     virtual ~SelectionHelper();

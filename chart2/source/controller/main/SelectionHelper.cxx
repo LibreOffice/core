@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2003-10-30 16:06:01 $
+ *  last change: $Author: iha $ $Date: 2003-11-22 18:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,39 @@ SdrObject* SelectionHelper::getObjectToSelect( const Point& rMPos
     return pNewObj;
 }
 
+//static
+bool SelectionHelper::isDragableObjectHitTwice( const Point& rMPos
+                    , const rtl::OUString& rNameOfLastSelectedObject
+                    , const DrawViewWrapper& rDrawViewWrapper )
+{
+    if(!rNameOfLastSelectedObject.getLength())
+        return false;
+    if( !ObjectIdentifier::isDragableObject(rNameOfLastSelectedObject) )
+        return false;
+    if( !rDrawViewWrapper.IsMarkedObjHit(rMPos) )
+        return false;
+    return true;
+}
+
+void SelectionHelper::changeSelection( const Point& rMPos
+                    , rtl::OUString& rNameOfLastSelectedObject
+                    , DrawViewWrapper& rDrawViewWrapper
+                    , bool bAllowMultiClickSelectionChange )
+{
+    rDrawViewWrapper.UnmarkAll();
+    SdrObject* pNewObj = SelectionHelper::getObjectToSelect(
+                                rMPos, rNameOfLastSelectedObject
+                                , rDrawViewWrapper
+                                , bAllowMultiClickSelectionChange );
+    if(pNewObj)
+    {
+        SelectionHelper aSelectionHelper( pNewObj, rNameOfLastSelectedObject );
+        SdrObject* pMarkObj = aSelectionHelper.getObjectToMark();
+        rDrawViewWrapper.setMarkHandleProvider(&aSelectionHelper);
+        rDrawViewWrapper.MarkObject(pMarkObj);
+        rDrawViewWrapper.setMarkHandleProvider(NULL);
+    }
+}
 
 SelectionHelper::SelectionHelper( SdrObject* pSelectedObj
                       , const rtl::OUString& rSelectedObjectCID )
