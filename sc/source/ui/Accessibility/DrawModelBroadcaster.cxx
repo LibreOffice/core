@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawModelBroadcaster.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-31 08:04:19 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ void ScDrawModelBroadcaster::Notify( SfxBroadcaster& rBC,
         }
         catch( uno::RuntimeException& r )
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             ByteString aError( "Runtime exception caught while notifying shape.:\n" );
             aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
             DBG_ERROR( aError.GetBuffer() );
