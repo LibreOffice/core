@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeElementImportContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-13 15:50:55 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 15:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmlkywd.hxx"
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 
@@ -92,7 +92,9 @@
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
-
+using ::xmloff::token::IsXMLToken;
+using ::xmloff::token::XML_P;
+using ::xmloff::token::XML_CHANGE_INFO;
 
 TYPEINIT1( XMLChangeElementImportContext, SvXMLImportContext );
 
@@ -116,25 +118,30 @@ SvXMLImportContext* XMLChangeElementImportContext::CreateChildContext(
     SvXMLImportContext* pContext = NULL;
 
     if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
-         rLocalName.equalsAsciiL(sXML_change_info, sizeof(sXML_change_info)-1))
+         IsXMLToken( rLocalName, XML_CHANGE_INFO) )
     {
         pContext = new XMLChangeInfoContext(GetImport(), nPrefix, rLocalName,
                                             rChangedRegion, GetLocalName());
     }
-    else if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-              rLocalName.equalsAsciiL(sXML_p, sizeof(sXML_p)-1) )
+    else
     {
+        // import into redline -> create XText
         rChangedRegion.UseRedlineText();
+
         pContext = GetImport().GetTextImport()->CreateTextChildContext(
             GetImport(), nPrefix, rLocalName, xAttrList,
             XML_TEXT_TYPE_CHANGED_REGION);
+
+        if (NULL == pContext)
+        {
+            // no text element -> use default
+            pContext = SvXMLImportContext::CreateChildContext(
+                nPrefix, rLocalName, xAttrList);
+
+            // illegal element content! TODO: discard this redline!
+        }
     }
 
-    if (NULL == pContext)
-    {
-        pContext = SvXMLImportContext::CreateChildContext(
-            nPrefix, rLocalName, xAttrList);
-    }
 
     return pContext;
 }
