@@ -8,7 +8,7 @@ mkdir: %_DEST%\inc%_EXT%\tools
 ..\%__SRC%\bin\tl?????.sym %_DEST%\bin%_EXT%\tl?????.sym
 ..\%__SRC%\bin\wps?????.dll %_DEST%\bin%_EXT%\wps?????.dll
 ..\%__SRC%\lib\atools.lib %_DEST%\lib%_EXT%\atools.lib
-..\%__SRC%\lib\bootstrp.lib %_DEST%\lib%_EXT%\bootstrp.lib
+..\%__SRC%\lib\btstrp.lib %_DEST%\lib%_EXT%\btstrp.lib
 ..\%__SRC%\lib\bootstrp2.lib %_DEST%\lib%_EXT%\bootstrp2.lib
 ..\%__SRC%\lib\itools.lib %_DEST%\lib%_EXT%\itools.lib
 ..\%__SRC%\lib\lib*.a %_DEST%\lib%_EXT%\lib*.a
