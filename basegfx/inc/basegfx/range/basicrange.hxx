@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicrange.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:36:11 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:35:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,26 @@ namespace basegfx
             if(rRange.mnMaximum > mnMaximum)
             {
                 mnMaximum = rRange.mnMaximum;
+            }
+        }
+
+        void intersect(const BasicRange& rRange)
+        {
+            if( !overlaps( rRange ) )
+            {
+                reset();
+            }
+            else
+            {
+                if(rRange.mnMinimum > mnMinimum)
+                {
+                    mnMinimum = rRange.mnMinimum;
+                }
+
+                if(rRange.mnMaximum < mnMaximum)
+                {
+                    mnMaximum = rRange.mnMaximum;
+                }
             }
         }
 
