@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: mav $ $Date: 2002-05-13 10:45:46 $
+ *  last change: $Author: cl $ $Date: 2002-09-25 09:51:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,7 @@ ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 , pRootFolder( NULL )
 , xFactory( xNewFactory )
 , bHasEncryptedEntries ( sal_False )
+, bUseManifest ( sal_True )
 , eMode ( e_IMode_None )
 {
     xRootFolder = pRootFolder = new ZipPackageFolder();
@@ -844,58 +845,61 @@ sal_Bool ZipPackage::writeFileIsTemp()
     // Clean up random pool memory
     rtl_random_destroyPool ( aRandomPool );
 
-    // Write the manifest
-    OUString sManifestWriter( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.ManifestWriter" ) );
-    Reference < XManifestWriter > xWriter ( xFactory->createInstance( sManifestWriter ), UNO_QUERY );
-    if ( xWriter.is() )
+    if( bUseManifest )
     {
-        ZipEntry * pEntry = new ZipEntry;
-        ZipPackageBuffer *pBuffer = new ZipPackageBuffer( n_ConstBufferSize );
-        xManOutStream = Reference < XOutputStream > (*pBuffer, UNO_QUERY);
-
-        pEntry->sName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "META-INF/manifest.xml") );
-        pEntry->nMethod = DEFLATED;
-        pEntry->nCrc = pEntry->nSize = pEntry->nCompressedSize = -1;
-        pEntry->nTime = ZipOutputStream::getCurrentDosTime();
-
-        // Convert vector into a Sequence
-        Sequence < Sequence < PropertyValue > > aManifestSequence ( aManList.size() );
-        Sequence < PropertyValue > * pSequence = aManifestSequence.getArray();
-        for (vector < Sequence < PropertyValue > >::const_iterator aIter = aManList.begin(), aEnd = aManList.end();
-             aIter != aEnd;
-             aIter++, pSequence++)
-            *pSequence= (*aIter);
-        xWriter->writeManifestSequence ( xManOutStream,  aManifestSequence );
-
-        sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
-        pBuffer->realloc( nBufferLength );
-
-        try
+        // Write the manifest
+        OUString sManifestWriter( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.ManifestWriter" ) );
+        Reference < XManifestWriter > xWriter ( xFactory->createInstance( sManifestWriter ), UNO_QUERY );
+        if ( xWriter.is() )
         {
-            // the manifest.xml is never encrypted - so pass an empty reference
-            vos::ORef < EncryptionData > xEmpty;
-            aZipOut.putNextEntry( *pEntry, xEmpty );
-            aZipOut.write( pBuffer->getSequence(), 0, nBufferLength );
-            aZipOut.closeEntry();
+            ZipEntry * pEntry = new ZipEntry;
+            ZipPackageBuffer *pBuffer = new ZipPackageBuffer( n_ConstBufferSize );
+            xManOutStream = Reference < XOutputStream > (*pBuffer, UNO_QUERY);
+
+            pEntry->sName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "META-INF/manifest.xml") );
+            pEntry->nMethod = DEFLATED;
+            pEntry->nCrc = pEntry->nSize = pEntry->nCompressedSize = -1;
+            pEntry->nTime = ZipOutputStream::getCurrentDosTime();
+
+            // Convert vector into a Sequence
+            Sequence < Sequence < PropertyValue > > aManifestSequence ( aManList.size() );
+            Sequence < PropertyValue > * pSequence = aManifestSequence.getArray();
+            for (vector < Sequence < PropertyValue > >::const_iterator aIter = aManList.begin(), aEnd = aManList.end();
+                 aIter != aEnd;
+                 aIter++, pSequence++)
+                *pSequence= (*aIter);
+            xWriter->writeManifestSequence ( xManOutStream,  aManifestSequence );
+
+            sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
+            pBuffer->realloc( nBufferLength );
+
+            try
+            {
+                // the manifest.xml is never encrypted - so pass an empty reference
+                vos::ORef < EncryptionData > xEmpty;
+                aZipOut.putNextEntry( *pEntry, xEmpty );
+                aZipOut.write( pBuffer->getSequence(), 0, nBufferLength );
+                aZipOut.closeEntry();
+            }
+            catch (::com::sun::star::io::IOException & r )
+            {
+                VOS_ENSURE( 0, "Error adding META-INF/manifest.xml to the ZipOutputStream" );
+                throw WrappedTargetException(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM ( "Error adding META-INF/manifest.xml to the ZipOutputStream!" ) ),
+                        static_cast < OWeakObject * > ( this ),
+                        makeAny( r ) );
+
+            }
         }
-        catch (::com::sun::star::io::IOException & r )
+        else
         {
-            VOS_ENSURE( 0, "Error adding META-INF/manifest.xml to the ZipOutputStream" );
+            VOS_ENSURE ( 0, "Couldn't get a ManifestWriter!" );
+            IOException aException;
             throw WrappedTargetException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM ( "Error adding META-INF/manifest.xml to the ZipOutputStream!" ) ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM ( "Couldn't get a ManifestWriter!" ) ),
                     static_cast < OWeakObject * > ( this ),
-                    makeAny( r ) );
-
+                    makeAny( aException ) );
         }
-    }
-    else
-    {
-        VOS_ENSURE ( 0, "Couldn't get a ManifestWriter!" );
-        IOException aException;
-        throw WrappedTargetException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM ( "Couldn't get a ManifestWriter!" ) ),
-                static_cast < OWeakObject * > ( this ),
-                makeAny( aException ) );
     }
 
     try
@@ -1218,6 +1222,11 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
         if (!( aValue >>= aEncryptionKey ) )
             throw IllegalArgumentException();
     }
+    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseManifest") ) )
+    {
+        if (!( aValue >>= bUseManifest ) )
+            throw IllegalArgumentException();
+    }
     throw UnknownPropertyException();
 }
 Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
@@ -1232,6 +1241,11 @@ Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
     else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "HasEncryptedEntries" ) ) )
     {
         aAny <<= bHasEncryptedEntries;
+        return aAny;
+    }
+    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "UseManifest" ) ) )
+    {
+        aAny <<= bUseManifest;
         return aAny;
     }
     throw UnknownPropertyException();
