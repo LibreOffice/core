@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobject.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:29:16 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 class SdrObject;
 class SwFrm;
 class SwLayoutFrm;
+// --> OD 2004-07-14 #117380#
+class SwTxtFrm;
+// <--
 class SwFrmFmt;
 class SwFmtAnchor;
 
@@ -122,13 +125,20 @@ class SwAnchoredObject
             For to-character anchored Writer fly frames the member <maLastCharRect>
             is updated. This is checked for change and depending on the applied
             positioning, it's decided, if the Writer fly frame has to be invalidated.
+            OD 2004-07-14 #117380#
+            improvement - add second parameter <_rAnchorCharFrm>
 
             @author OD
 
             @param _rAnch
             input parameter - reference to anchor position
+
+            @param _rAnchorCharFrm
+            input parameter - reference to the text frame containing the anchor
+            character.
         */
-        void _CheckCharRect( const SwFmtAnchor& _rAnch );
+        void _CheckCharRect( const SwFmtAnchor& _rAnch,
+                             const SwTxtFrm& _rAnchorCharFrm );
 
         /** check top of line
 
@@ -137,13 +147,20 @@ class SwAnchoredObject
             For to-character anchored Writer fly frames the member <mnLastTopOfLine>
             is updated. This is checked for change and depending on the applied
             positioning, it's decided, if the Writer fly frame has to be invalidated.
+            OD 2004-07-14 #117380#
+            improvement - add second parameter <_rAnchorCharFrm>
 
             @author OD
 
             @param _rAnch
             input parameter - reference to anchor position
+
+            @param _rAnchorCharFrm
+            input parameter - reference to the text frame containing the anchor
+            character.
         */
-        void _CheckTopOfLine( const SwFmtAnchor& _rAnch );
+        void _CheckTopOfLine( const SwFmtAnchor& _rAnch,
+                              const SwTxtFrm& _rAnchorCharFrm );
 
     protected:
         SwAnchoredObject();
@@ -182,10 +199,16 @@ class SwAnchoredObject
             and <maLastTopOfLine> are updated. These are checked for change and
             depending on the applied positioning, it's decided, if the Writer fly
             frame has to be invalidated.
+            OD 2004-07-15 #117380#
+            add parameter <_bCheckForParaPorInf>, default value <true>
 
             @author OD
+
+            @param _bCheckForParaPorInf
+            input parameter - boolean indicating, if check on paragraph portion
+            information has to be done.
         */
-        void CheckCharRectAndTopOfLine();
+        void CheckCharRectAndTopOfLine( const bool _bCheckForParaPorInf = true );
 
         // accessors to member <maLastCharRect>
         const SwRect& GetLastCharRect() const;
