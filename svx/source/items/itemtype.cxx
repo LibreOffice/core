@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemtype.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:03:28 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ XubString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, c
         nRet %= nDiff;
         if( 4 == nDigits )
         {
-            DBG_ASSERT(pIntl, "no IntlWrapper* set")
+//            DBG_ASSERT(pIntl, "no IntlWrapper* set")
             if(pIntl)
                 sRet += pIntl->getLocaleData()->getNumDecimalSep();
             else
