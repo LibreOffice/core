@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NativeLibraryLoader.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 14:34:07 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 15:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,11 @@
 package com.sun.star.lib.util;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.net.URLDecoder;
 
 /** Helper functions to locate and load native files.
  */
@@ -140,11 +143,89 @@ public final class NativeLibraryLoader {
 
     private NativeLibraryLoader() {} // do not instantiate
 
-    private static File mapUrlToFile(URL url) {
-        if (url != null && url.getProtocol().equalsIgnoreCase("file")) {
-            String f = url.getFile();
-            return new File(f == null ? "" : f);
+    // java.net.URI is only available since Java 1.4:
+    private static Class uriClass;
+    private static Constructor uriConstructor;
+    private static Constructor fileConstructor;
+    static {
+        try {
+            uriClass = Class.forName("java.net.URI");
+            uriConstructor = uriClass.getConstructor(
+                new Class[] { String.class });
+            fileConstructor = File.class.getConstructor(
+                new Class[] { uriClass });
+        } catch (ClassNotFoundException e) {
+        } catch (NoSuchMethodException e) {
         }
-        return null;
+    }
+
+    private static File mapUrlToFile(URL url) {
+        if (url == null) {
+            return null;
+        } else if (fileConstructor == null) {
+            // If java.net.URI is not available, hope that the following works
+            // well:  First, check that the given URL has a certain form.
+            // Second, use the URLDecoder to decode the URL path (taking care
+            // not to change any plus signs to spaces), hoping that the used
+            // default encoding is the proper one for file URLs.  Third, create
+            // a File from the decoded path.
+            return url.getProtocol().equalsIgnoreCase("file")
+                && url.getAuthority() == null && url.getQuery() == null
+                && url.getRef() == null
+                ? new File(URLDecoder.decode(replace(url.getPath(), '+',
+                                                     "%2B")))
+                : null;
+        } else {
+            // If java.net.URI is avaliable, do
+            //   URI uri = new URI(url.toString());
+            //   try {
+            //       return new File(uri);
+            //   } catch (IllegalArgumentException e) {
+            //       return null;
+            //   }
+            try {
+                Object uri = uriConstructor.newInstance(
+                    new Object[] { url.toString() });
+                try {
+                    return (File) fileConstructor.newInstance(
+                        new Object[] { uri });
+                } catch (InvocationTargetException e) {
+                    if (e.getTargetException() instanceof
+                        IllegalArgumentException) {
+                        return null;
+                    } else {
+                        throw e;
+                    }
+                }
+            } catch (InstantiationException e) {
+                throw new RuntimeException("This cannot happen: " + e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("This cannot happen: " + e);
+            } catch (InvocationTargetException e) {
+                if (e.getTargetException() instanceof Error) {
+                    throw (Error) e.getTargetException();
+                } else if (e.getTargetException() instanceof RuntimeException) {
+                    throw (RuntimeException) e.getTargetException();
+                } else {
+                    throw new RuntimeException("This cannot happen: " + e);
+                }
+            }
+        }
+    }
+
+    private static String replace(String str, char from, String to) {
+        StringBuffer b = new StringBuffer();
+        for (int i = 0;;) {
+            int j = str.indexOf(from, i);
+            if (j == -1) {
+                b.append(str.substring(i));
+                break;
+            } else {
+                b.append(str.substring(i, j));
+                b.append(to);
+                i = j + 1;
+            }
+        }
+        return b.toString();
     }
 }
