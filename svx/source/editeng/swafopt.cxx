@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swafopt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-16 12:49:51 $
+ *  last change: $Author: os $ $Date: 2002-08-06 08:33:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,9 +110,10 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     bAFmtByInput =
     bRightMargin =
     bAutoCompleteWords =
-    bAutoCmpltCollectWords = TRUE;
+    bAutoCmpltCollectWords =
+    bAutoCmpltKeepList = TRUE;
 
-    bDummy4 = bDummy5 = bDummy6 = bDummy7 = bDummy8 =
+    bDummy5 = bDummy6 = bDummy7 = bDummy8 =
          FALSE;
 
     nRightMargin = 50;      // dflt. 50 %
@@ -163,7 +164,6 @@ SvxSwAutoFmtFlags& SvxSwAutoFmtFlags::operator=( const SvxSwAutoFmtFlags& rAFFla
 
     bDummy = rAFFlags.bDummy;
 
-    bDummy4 = rAFFlags.bDummy4;
     bDummy5 = rAFFlags.bDummy5;
     bDummy6 = rAFFlags.bDummy6;
     bDummy7 = rAFFlags.bDummy7;
@@ -182,6 +182,7 @@ SvxSwAutoFmtFlags& SvxSwAutoFmtFlags::operator=( const SvxSwAutoFmtFlags& rAFFla
 
     bAutoCompleteWords = rAFFlags.bAutoCompleteWords;
     bAutoCmpltCollectWords = rAFFlags.bAutoCmpltCollectWords;
+    bAutoCmpltKeepList = rAFFlags.bAutoCmpltKeepList;
     bAutoCmpltEndless = rAFFlags.bAutoCmpltEndless;
     bAutoCmpltAppendBlanc = rAFFlags.bAutoCmpltAppendBlanc;
     bAutoCmpltShowAsTip = rAFFlags.bAutoCmpltShowAsTip;
