@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: er $ $Date: 2002-03-08 15:22:04 $
+#   last change: $Author: er $ $Date: 2002-07-17 19:27:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,11 +81,9 @@ IDLFILES=\
     CalendarItem.idl \
     ChapterCollator.idl \
     CharacterClassification.idl \
-    CJKBreakIterator.idl \
     Collator.idl \
     Currency.idl \
     IndexEntrySupplier.idl \
-    JAJPBreakIterator.idl \
     LanguageCountryInfo.idl \
     LocaleCalendar.idl \
     LocaleData.idl \
@@ -94,8 +92,6 @@ IDLFILES=\
     NumberFormatIndex.idl \
     NumberFormatMapper.idl \
     Transliteration.idl \
-    Transliterationl10n.idl \
-    Transliterationja_JP.idl \
     Weekdays.idl \
     XBreakIterator.idl \
     XCalendar.idl \
@@ -105,9 +101,7 @@ IDLFILES=\
     XIndexEntrySupplier.idl \
     XLocaleData.idl \
     XNumberFormatCode.idl \
-    XTransliteration.idl \
-    ZHCNBreakIterator.idl \
-    ZHTWBreakIterator.idl
+    XTransliteration.idl
 
 # ------------------------------------------------------------------
 
