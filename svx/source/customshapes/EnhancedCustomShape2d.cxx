@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:33:32 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 11:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,9 +141,31 @@
 #include <drafts/com/sun/star/drawing/EnhancedCustomShapeOperation.hpp>
 #endif
 
-#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#endif
+//#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
+//#include <basegfx/polygon/b2dpolypolygontools.hxx>
+//#endif
+
+//#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+//#include <basegfx/matrix/b2dhommatrix.hxx>
+//#endif
+
+//#ifndef _EEITEM_HXX
+//#include <eeitem.hxx>
+//#endif
+//
+//#define ITEMID_COLOR          0
+//
+//#ifndef _SVX_LCOLITEM_HXX
+//#include <lcolitem.hxx>
+//#endif
+//
+//#ifndef _SVX_XLNTRIT_HXX
+//#include <xlntrit.hxx>
+//#endif
+//
+//#ifndef _SVX_XFLTRIT_HXX
+//#include <xfltrit.hxx>
+//#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::drafts::com::sun::star::drawing;
@@ -1936,75 +1958,65 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
     aPoly = aEmptyPoly;
     if ( aPolyPoly.Count() )
     {
-        if ( bLineGeometryNeededOnly )
+        // #i37011#
+        bool bForceCreateTwoObjects(false);
+        ::basegfx::B2DPolyPolygon aLocalPolyPolygon(aPolyPoly.getB2DPolyPolygon());
+
+        if(!bSortFilledObjectsToBack && !aLocalPolyPolygon.isClosed() && !bNoStroke)
         {
-            SdrPathObj* pStroke = new SdrPathObj( OBJ_PLIN, aPolyPoly );
-// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-//          pStroke->SetModel( pCustomShapeObj->GetModel() );
-            pStroke->SetMergedItemSet( *this );
-            pStroke->SetMergedItem( SdrShadowItem( FALSE ) );
-            pStroke->SetMergedItem( XFillStyleItem( XFILL_NONE ) );
-            rObjectList.push_back( pStroke );
+            bForceCreateTwoObjects = true;
+        }
+
+        if(bLineGeometryNeededOnly)
+        {
+            bForceCreateTwoObjects = true;
+            bNoFill = true;
+            bNoStroke = false;
+        }
+
+        if(bForceCreateTwoObjects || bSortFilledObjectsToBack)
+        {
+            if(bFilled && !bNoFill)
+            {
+                ::basegfx::B2DPolyPolygon aClosedPolyPolygon(aLocalPolyPolygon);
+                aClosedPolyPolygon.setClosed(true);
+                SdrPathObj* pFill = new SdrPathObj(OBJ_POLY, XPolyPolygon(aClosedPolyPolygon));
+                SfxItemSet aTempSet(*this);
+                aTempSet.Put(SdrShadowItem(sal_False));
+                aTempSet.Put(XLineStyleItem(XLINE_NONE));
+                pFill->SetMergedItemSet(aTempSet);
+                rObjectList.push_back(pFill);
+            }
+            if(!bNoStroke)
+            {
+                SdrPathObj* pStroke = new SdrPathObj(OBJ_PLIN, XPolyPolygon(aLocalPolyPolygon));
+                SfxItemSet aTempSet(*this);
+                aTempSet.Put(SdrShadowItem(sal_False));
+                aTempSet.Put(XFillStyleItem(XFILL_NONE));
+                pStroke->SetMergedItemSet(aTempSet);
+                rObjectList.push_back(pStroke);
+            }
         }
         else
         {
-            if ( !bSortFilledObjectsToBack )
-            {
-                SdrObjKind eObjKind( bNoFill ? OBJ_PLIN : OBJ_POLY );
-                SdrPathObj* pObj = new SdrPathObj( eObjKind, aPolyPoly );
-// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-//              pObj->SetModel( pCustomShapeObj->GetModel() );
-                pObj->SetMergedItemSet( *this );
-                pObj->SetMergedItem( SdrShadowItem( FALSE ) );
-                if ( !bNoFill )
-                {   // close object
-                    sal_Int16 i, nCnt = aPolyPoly.Count();
-                    for ( i = 0; i < nCnt; i++ )
-                    {
-                        XPolygon& rPoly = aPolyPoly[ i ];
-                        Point aPt0( rPoly[ 0 ] );
-                        if ( aPt0 != rPoly[ rPoly.GetPointCount() - 1 ] )
-                            rPoly[ rPoly.GetPointCount() ] = aPt0;
-                    }
-                }
-                else
-                    pObj->SetMergedItem( XFillStyleItem( XFILL_NONE ) );
+            SdrObjKind eObjKind(bNoFill ? OBJ_PLIN : OBJ_POLY);
+            aLocalPolyPolygon.setClosed(true);
+            SdrPathObj* pObj = new SdrPathObj(eObjKind, XPolyPolygon(aLocalPolyPolygon));
+            SfxItemSet aTempSet(*this);
+            aTempSet.Put(SdrShadowItem(sal_False));
 
-                if ( bNoStroke )
-                    pObj->SetMergedItem( XLineStyleItem( XLINE_NONE ) );
-                rObjectList.push_back( pObj );
-            }
-            else
+            if(bNoFill)
             {
-                if ( !bNoStroke )
-                {
-                    SdrPathObj* pStroke = new SdrPathObj( OBJ_PLIN, aPolyPoly );
-// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-//                  pStroke->SetModel( pCustomShapeObj->GetModel() );
-                    pStroke->SetMergedItemSet( *this );
-                    pStroke->SetMergedItem( SdrShadowItem( FALSE ) );
-                    pStroke->SetMergedItem( XFillStyleItem( XFILL_NONE ) );
-                    rObjectList.push_back( pStroke );
-                }
-                if ( bFilled && !bNoFill )
-                {
-                    sal_Int16 i, nCnt = aPolyPoly.Count();
-                    for ( i = 0; i < nCnt; i++ )
-                    {
-                        XPolygon& rPoly = aPolyPoly[ i ];
-                        Point aPt0( rPoly[ 0 ] );
-                        if ( aPt0 != rPoly[ rPoly.GetPointCount() - 1 ] )
-                            rPoly[ rPoly.GetPointCount() ] = aPt0;
-                    }
-                    SdrPathObj* pFill = new SdrPathObj( OBJ_POLY, aPolyPoly );
-// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-//                  pFill->SetModel( pCustomShapeObj->GetModel() );
-                    pFill->SetMergedItemSet( *this );
-                    pFill->SetMergedItem( SdrShadowItem( FALSE ) );
-                    pFill->SetMergedItem( XLineStyleItem( XLINE_NONE ) );
-                    rObjectList.push_back( pFill );
-                }
+                aTempSet.Put(XFillStyleItem(XFILL_NONE));
             }
+
+            if(bNoStroke)
+            {
+                aTempSet.Put(XLineStyleItem(XLINE_NONE));
+            }
+
+            pObj->SetMergedItemSet(aTempSet);
+            rObjectList.push_back(pObj);
         }
     }
 }
@@ -2022,129 +2034,163 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
     sal_Bool bSortFilledObjectsToBack = SortFilledObjectsToBackByDefault( eSpType );
 
     while( nSegmentInd <= seqSegments.getLength() )
+    {
         CreateSubPath( nSrcPt, nSegmentInd, vObjectList, bLineGeometryNeededOnly, bSortFilledObjectsToBack );
+    }
 
     SdrObject* pRet = NULL;
     sal_uInt32 i;
+
     if ( vObjectList.size() )
     {
-        sal_Bool    bShadow = (((SdrShadowItem&)pCustomShapeObj->GetMergedItem( SDRATTR_SHADOW )).GetValue());
-//BFS09     PolyPolygon aShadowUnion;
-        ::basegfx::B2DPolyPolygon aShadowUnion;
-
-        // inserting all filled objects
+        const SfxItemSet& rCustomShapeSet = pCustomShapeObj->GetMergedItemSet();
+        const sal_Bool  bShadow(((SdrShadowItem&)rCustomShapeSet.Get( SDRATTR_SHADOW )).GetValue());
         Color           aBasicColor( COL_WHITE );
         Color           aFillColor;
         sal_uInt32      nColorCount = nColorData >> 28;
         sal_uInt32      nColorIndex = 0;
 
         if ( nColorCount )
-            aBasicColor = (((XFillColorItem&)pCustomShapeObj->GetMergedItem( XATTR_FILLCOLOR )).GetValue());
-
-        pRet = new SdrObjGroup;
-// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-//      pRet->SetModel( pCustomShapeObj->GetModel() );
-
-        if ( bSortFilledObjectsToBack )
         {
-            // taking care of filled objects -> first
-            for ( i = 0; i < vObjectList.size(); i++ )
+            aBasicColor = (((XFillColorItem&)rCustomShapeSet.Get( XATTR_FILLCOLOR )).GetValue());
+        }
+
+        // #i37011# remove invisible objects
+        if(vObjectList.size())
+        {
+            std::vector< SdrPathObj* > vTempList;
+
+            for(i = 0L; i < vObjectList.size(); i++)
             {
-                SdrPathObj* pObj( vObjectList[ i ] );
-                if ( !pObj->IsLine() )
+                SdrPathObj* pObj(vObjectList[i]);
+                const XLineStyle eLineStyle = ((const XLineStyleItem&)pObj->GetMergedItem(XATTR_LINESTYLE)).GetValue();
+                const XFillStyle eFillStyle = ((const XFillStyleItem&)pObj->GetMergedItem(XATTR_FILLSTYLE)).GetValue();
+
+                if(XLINE_NONE == eLineStyle && XFILL_NONE == eFillStyle)
                 {
-                    if ( nColorIndex < nColorCount )
-                        aFillColor = GetColorData( aBasicColor, nColorIndex++ );
-                    if ( nColorCount )
-                        pObj->SetMergedItem( XFillColorItem( String(), aFillColor ) );
-                    pRet->GetSubList()->NbcInsertObject( pObj );
-
-                    // we will create the union of all polygon objects if shadow is used
-                    if ( bShadow )
-                    {
-                        const XPolyPolygon& rPathPoly = pObj->GetPathPoly();
-                        ::basegfx::B2DPolyPolygon aCandidate(rPathPoly.getB2DPolyPolygon());
-                        if(aCandidate.areControlPointsUsed())
-                        {
-                            aCandidate = ::basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
-                        }
-                        aCandidate = ::basegfx::tools::correctOrientations(aCandidate);
-                        aShadowUnion.append(aCandidate);
-
-//BFS09                     const XPolyPolygon& rPathPoly = pObj->GetPathPoly();
-//BFS09//BFS09                      PolyPolygon aVCLPolyPoly( XOutCreatePolyPolygonBezier( rPathPoly, NULL ) );
-//BFS09                     PolyPolygon aVCLPolyPoly( XOutCreatePolyPolygonBezier( rPathPoly ) );
-//BFS09                     PolyPolygon aSource( aShadowUnion );
-//BFS09                     aVCLPolyPoly.GetUnion( aSource, aShadowUnion );
-                    }
+                    delete pObj;
+                }
+                else
+                {
+                    vTempList.push_back(pObj);
                 }
             }
 
-            // inserting stroked objects
-            for ( i = 0; i < vObjectList.size(); i++ )
+            vObjectList = vTempList;
+        }
+
+        if(1L == vObjectList.size())
+        {
+            // a single object, correct some values
+            SdrPathObj* pObj(vObjectList[0L]);
+
+            if(bShadow)
             {
-                SdrPathObj* pObj( vObjectList[ i ] );
-                if ( pObj->IsLine() )
-                    pRet->GetSubList()->NbcInsertObject( pObj );
+                pObj->SetMergedItem(SdrShadowItem(sal_True));
+            }
+
+            if(!pObj->IsLine())
+            {
+                if ( nColorIndex < nColorCount )
+                {
+                    aFillColor = GetColorData( aBasicColor, nColorIndex++ );
+                }
+
+                if ( nColorCount )
+                {
+                    pObj->SetMergedItem( XFillColorItem( String(), aFillColor ) );
+                }
             }
         }
         else
         {
+            sal_Bool bContainsLines(sal_False);
+            sal_Bool bContainsAreas(sal_False);
+
+            // correct some values and collect content data
             for ( i = 0; i < vObjectList.size(); i++ )
             {
                 SdrPathObj* pObj( vObjectList[ i ] );
-                if ( pObj->IsLine() )
-                    pRet->GetSubList()->NbcInsertObject( pObj );
+
+                if(pObj->IsLine())
+                {
+                    bContainsLines = sal_True;
+                }
                 else
                 {
+                    bContainsAreas = sal_True;
+
                     if ( nColorIndex < nColorCount )
-                        aFillColor = GetColorData( aBasicColor, nColorIndex++ );
-                    if ( nColorCount )
-                        pObj->SetMergedItem( XFillColorItem( String(), aFillColor ) );
-                    pRet->GetSubList()->NbcInsertObject( pObj );
-
-                    // we will create the union of all polygon objects if shadow is used
-                    if ( bShadow )
                     {
-                        const XPolyPolygon& rPathPoly = pObj->GetPathPoly();
-                        ::basegfx::B2DPolyPolygon aCandidate(rPathPoly.getB2DPolyPolygon());
-                        if(aCandidate.areControlPointsUsed())
-                        {
-                            aCandidate = ::basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
-                        }
-                        aCandidate = ::basegfx::tools::correctOrientations(aCandidate);
-                        aShadowUnion.append(aCandidate);
+                        aFillColor = GetColorData( aBasicColor, nColorIndex++ );
+                    }
 
-//BFS09                     const XPolyPolygon& rPathPoly = pObj->GetPathPoly();
-//BFS09//BFS09                      PolyPolygon aVCLPolyPoly( XOutCreatePolyPolygonBezier( rPathPoly, NULL ) );
-//BFS09                     PolyPolygon aVCLPolyPoly( XOutCreatePolyPolygonBezier( rPathPoly ) );
-//BFS09                     PolyPolygon aSource( aShadowUnion );
-//BFS09                     aVCLPolyPoly.GetUnion( aSource, aShadowUnion );
+                    if ( nColorCount )
+                    {
+                        pObj->SetMergedItem( XFillColorItem( String(), aFillColor ) );
                     }
                 }
             }
-        }
 
-        //BFS09
-        aShadowUnion = ::basegfx::tools::removeAllIntersections(aShadowUnion);
-        aShadowUnion = ::basegfx::tools::removeNeutralPolygons(aShadowUnion, sal_True);
+            // sort objects so that filled ones are in front. Necessary
+            // for some strange objects
+            if ( bSortFilledObjectsToBack )
+            {
+                std::vector< SdrPathObj* > vTempList;
 
-        // set the shadow object
-//BFS09     if ( !bLineGeometryNeededOnly && bShadow && aShadowUnion.Count() )
-        if ( !bLineGeometryNeededOnly && bShadow && aShadowUnion.count() )
-        {
-            XPolyPolygon aXShadowPolyPoly( aShadowUnion );
-            SdrPathObj* pShadow = new SdrPathObj( OBJ_POLY, aXShadowPolyPoly );
-// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-//          pShadow->SetModel( pCustomShapeObj->GetModel() );
-            pShadow->SetMergedItemSet( *this );
-            pShadow->SetMergedItem( XLineStyleItem( XLINE_NONE ) );
-            pRet->GetSubList()->NbcInsertObject( pShadow, 0 );
+                for ( i = 0; i < vObjectList.size(); i++ )
+                {
+                    SdrPathObj* pObj( vObjectList[ i ] );
+
+                    if ( !pObj->IsLine() )
+                    {
+                        vTempList.push_back(pObj);
+                    }
+                }
+
+                for ( i = 0; i < vObjectList.size(); i++ )
+                {
+                    SdrPathObj* pObj( vObjectList[ i ] );
+
+                    if ( pObj->IsLine() )
+                    {
+                        vTempList.push_back(pObj);
+                    }
+                }
+
+                vObjectList = vTempList;
+            }
         }
-        Rectangle aCurRect( pRet->GetSnapRect() );
-        aCurRect.Move( aLogicRect.Left(), aLogicRect.Top() );
-        pRet->NbcSetSnapRect( aCurRect );
     }
+
+    // #i37011#
+    if(vObjectList.size())
+    {
+        // copy remaining objects to pRet
+        if(vObjectList.size() > 1L)
+        {
+            pRet = new SdrObjGroup;
+
+            for (i = 0L; i < vObjectList.size(); i++)
+            {
+                SdrObject* pObj(vObjectList[i]);
+                pRet->GetSubList()->NbcInsertObject(pObj);
+            }
+        }
+        else if(1L == vObjectList.size())
+        {
+            pRet = vObjectList[0L];
+        }
+
+        if(pRet)
+        {
+            // move to target position
+            Rectangle aCurRect(pRet->GetSnapRect());
+            aCurRect.Move(aLogicRect.Left(), aLogicRect.Top());
+            pRet->NbcSetSnapRect(aCurRect);
+        }
+    }
+
     return pRet;
 }
 
