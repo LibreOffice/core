@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:18 $
+ *  last change: $Author: nn $ $Date: 2001-01-30 15:50:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/progress.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <svtools/eitem.hxx>
+#include <svtools/itemset.hxx>
 
 #define SC_PROGRESS_CXX
 #include "progress.hxx"
@@ -92,6 +96,22 @@ ScDocument*     ScProgress::pInterpretDoc;
 BOOL            ScProgress::bIdleWasDisabled = FALSE;
 
 
+BOOL lcl_IsHiddenDocument( SfxObjectShell* pObjSh )
+{
+    if (pObjSh)
+    {
+        SfxMedium* pMed = pObjSh->GetMedium();
+        if (pMed)
+        {
+            SfxItemSet* pSet = pMed->GetItemSet();
+            const SfxPoolItem* pItem;
+            if ( pSet && SFX_ITEM_SET == pSet->GetItemState( SID_HIDDEN, TRUE, &pItem ) &&
+                        ((const SfxBoolItem*)pItem)->GetValue() )
+                return TRUE;
+        }
+    }
+    return FALSE;
+}
 
 ScProgress::ScProgress( SfxObjectShell* pObjSh, const String& rText,
                         ULONG nRange, BOOL bAllDocs, BOOL bWait )
@@ -99,8 +119,16 @@ ScProgress::ScProgress( SfxObjectShell* pObjSh, const String& rText,
 
     if ( pGlobalProgress || SfxProgress::GetActiveProgress( NULL ) )
     {
-        DBG_ERROR( "ScProgress: es kann nur einen geben!" );
-        pProgress = NULL;
+        if ( lcl_IsHiddenDocument(pObjSh) )
+        {
+            // loading a hidden document while a progress is active is possible - no error
+            pProgress = NULL;
+        }
+        else
+        {
+            DBG_ERROR( "ScProgress: there can be only one!" );
+            pProgress = NULL;
+        }
     }
     else if ( SFX_APP()->IsDowning() )
     {
