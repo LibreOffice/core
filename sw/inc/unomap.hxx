@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 10:46:14 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,14 +392,4 @@ public:
 };
 
 extern SwUnoPropertyMapProvider aSwMapProvider;
-
-// conversion of ui and programmatic names in styles and sequence fields
-struct Programmatic2UIName_Impl
-{
-    String sProgrammaticName;
-    String sUIName;
-};
-
 #endif
-
-
