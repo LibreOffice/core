@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-17 20:13:40 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 10:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ polish ] = "�aduj dokument ��cznie z ustawieniami indywidualnymi";
         Text[ portuguese_brazilian ] = "Load user-defined settings with the document";
         Text[ japanese ] = "ﾕｰｻﾞｰ独自の設定をﾄﾞｷｭﾒﾝﾄとともに読み込む";
-        Text[ korean ] = "문서에 대해 사용자 정의 설정 로드";
+        Text[ korean ] = "문서와 함께 사용자 고유 설정 로드";
         Text[ chinese_simplified ] = "连同使用者的设定一起装入文档";
         Text[ chinese_traditional ] = "連同使用者的設定一起載入文件";
         Text[ turkish ] = "Load user-defined settings with the document";
@@ -724,6 +724,7 @@ TabPage RID_SFXPAGE_SAVE
 };
 
 // ********************************************************************** EOF
+
 
 
 
