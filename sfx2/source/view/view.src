@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-08 17:44:01 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 15:56:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,7 +418,7 @@ String STR_PRINT_NEWORI
     Text[ russian ] = "Βϋ θημενθλθ σρςΰνξβκσ ξπθενςΰφθθ ρςπΰνθφϋ.\nΡξυπΰνθςό ύςθ θημενθÿ\nβ ςεκσωεμ δξκσμενςε?";
     Text[ polish ] = "Zmieni³e ustawienia strony.\nCzy te zmienione ustawienia majΉ zostaζ \nzapisane w dokumencie?";
     Text[ japanese ] = "Νί°Όή•ϋό‚Μέ’θ‚ª•ΟX‚³‚κ‚Δ‚Ά‚ά‚·B\n•ΟX‚³‚κ‚½έ’θ‚π»έ‚ΜΔή·­ÒέΔ‚Ι\n“K—p‚µ‚ά‚·‚©?";
-    Text[ chinese_traditional ] = "±z§σ§ο¤F­¶­±³]©w΅C\n³o­Σ¤εΐΙ­n±µ¦¬§σ§οªΊ³]©w¶ά΅S";
+    Text[ chinese_traditional ] = "±zΕά§σ¤F­¶­±³]©w΅C\n³o­Σ¤εΐΙ®M¥ΞΕά§σªΊ³]©w΅S";
     Text[ greek ] = "Έχετε αλλάξει την ρύθμιση για τον προσανατολισμό της σελίδας.\nΘέλετε να εφαρμοστούν οι αλλαγές \nστο κείμενο;";
     Text[ korean ] = "ΖδΐΜΑφ ΉζΗβΌ³Α¤ΐΜ Ί―°ζµΗΎϊ½ΐ΄Ο΄Ω.\nΊ―°ζµΘ Ό³Α¤ΐ» Ή®Ό­Ώ΅ ΐϋΏλΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ arabic ] = "αήΟ ήγΚ ΘΚΫννΡ ΕΪΟΗΟΗΚ ΗΚΜΗε ΗαΥέΝΙ.\nεα ΚΡνΟ ΚΨΘνή ΗαΕΪΟΗΟΗΚ ΗαΜΟνΟΙ\nΪαμ ΗαγΣΚδΟΏ";
@@ -442,7 +442,7 @@ String STR_PRINT_NEWSIZE
     Text[ russian ] = "Βϋ θημενθλθ πΰημεπ ρςπΰνθφϋ.\nΡξυπΰνθςό ύςθ θημενενθÿ\nβ ςεκσωεμ δξκσμενςε?";
     Text[ polish ] = "Zmieni³e rozmiar strony. \nCzy zmiany majΉ zostaζ zapisane \nw aktywnym dokumencie?";
     Text[ japanese ] = "Νί°Όή »²½ή‚ª•ΟX‚³‚κ‚Δ‚Ά‚ά‚·B\n•ΟX‚³‚κ‚½έ’θ‚π»έ‚ΜΔή·­ÒέΔ‚Ι\n“K—p‚µ‚ά‚·‚©?";
-    Text[ chinese_traditional ] = "±z¤wΈg§σ§ο­¶­±¤j¤p΅C\n±zªΊ¤ε¥σ­n±Δ¥Ξ³o­Σ³]©w΅H";
+    Text[ chinese_traditional ] = "±z¤wΈgΕά§σ¤F­¶­±¤j¤p΅C\nΕύ¤ε¥σ±Δ¥Ξ³o­Σ³]©w΅H";
     Text[ greek ] = "Αλλάξατε το μέγεθος της σελίδας.\nΝα εφαρμοστεί αυτή η αλλαγή στο έγγραφο;";
     Text[ korean ] = "ΖδΐΜΑφ Ε©±β°΅ Ί―°ζµΗΎϊ½ΐ΄Ο΄Ω.\nΊ―°ζµΘ Ό³Α¤ΐ» Ή®Ό­Ώ΅ ΐϋΏλΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ arabic ] = "αήΟ ήγΚ ΘΚΫννΡ ΝΜγ ΗαΥέΝΙ.\nεα ΚΡνΟ ΚΨΘνή ΗαΕΪΟΗΟΗΚ ΗαΜΟνΟΙ Ϊαμ ΗαγΣΚδΟΏ";
@@ -981,7 +981,7 @@ ErrorBox ERRBOX_SFX_INVALID_MERGEOPT
     Message[ russian ] = "Χςξαϋ ξςοπΰβθςό ρξξαωενθε οξ Θνςεπνεςσ,\nνεξαυξδθμ Βΰψ ΰδπερ ύλεκςπξννξι οξχςϋ θ ρεπβεπ SMTP δλÿ δξρςΰβκθ οξχςϋ.\nΒβεδθςε, οξζΰλσιρςΰ, ύςθ σρςΰνξβκθ β\n\"Ρεπβθρ\\Οΰπΰμεςπϋ\\Ξαωθε...\\Δΰννϋε οξλόηξβΰςελÿ\\έλ. οξχςΰ\" θ β\n\"Ρεπβθρ\\Οΰπΰμεςπϋ\\Θνςεπνες\\Οξχςΰ/Νξβξρςθ\\Δξρςΰβκΰ νξβξρςει\",\nοπεζδε χεμ Βϋ ξοÿςό ξςοπΰβθςε ρξξαωενθε.";
     Message[ polish ] = "Aby wys³aζ wiadomoζ via Internet,\nwymagany jest twσj adres e-mail i serwer SMTP.\nProszκ wprowad te ustawienia w \n\"Narzκdzia\\\\Opcje\\\\Ogσlne...\\\\Dane uΏytkownika\\\\e-mail\" i\n\"Narzκdzia\\\\Opcje\\\\Internet\\\\Poczta/Wiadomoci\\\\Wysy³anie wiadomoci\",\nzanim ponownie wylesz wiadomoζ.";
     Message[ japanese ] = "²έΐ°Θ―Δ‚ΕÒ―Ύ°Όή‚π‘—M‚·‚ι‚Ι‚Ν\nE-mail±ΔήΪ½‚ΖSMTP »°Κή°‚ª•K—v‚Ε‚·B\nÒ―Ύ°Όή‚πΔ‘—M‚·‚ι‘O‚Ι\n‚±‚Μέ’θ‚π\n[Β°Ω\\µΜίΌ®έ\\‘S”Κ...\\Υ°»ή°Γή°ΐ \\E-mail]‚¨‚ζ‚Ρ\n[Β°Ω\\µΜίΌ®έ\\²έΐ°Θ―Δ\\Ò°Ω/Ζ­°½\\Ò―Ύ°Όή‘—M]‚Ι“o^‚µ‚Δ‰Ί‚³‚ΆB";
-    Message[ chinese_traditional ] = "³zΉL Internet ¶Η°eΉq¤l¶l¥σ\n»έ­n±zªΊΉq¤l¶l¥σ¦a§}©M¤@­Σ SMTP ¦ψªAΎΉ΅C\n½Π¦b­«·s¶Η°eΉq¤l¶l¥σ¤§«e¦b\n΅§¤u¨γ\\Ώο¶µ\\¤@―λ...\\¨Ο¥ΞªΜΈκ®Ζ΅¨©M΅§¤u¨γ\\Ώο¶µ\\Internet\\Ήq¤l¶l¥σ/·s»D\\¶Η°eΉq¤l¶l¥σ΅¨³B§@¬ΫΓφªΊ³]©w΅C";
+    Message[ chinese_traditional ] = "³zΉL Internet ¶Η°eΉq¤l¶l¥σ\n»έ­n±zªΊΉq¤l¶l¥σ¦a§}©M¤@­Σ SMTP ¦ψªAΎΉ΅C\n½Π¦b­«·s¶Η°eΉq¤l¶l¥σ¤§«e¦b\n΅u¤u¨γ΅v-΅uΏο¶µ΅v-΅u¤@―λ΅v-΅u¨Ο¥ΞªΜΈκ®Ζ΅v©M΅u¤u¨γ΅v-΅uΏο¶µ΅v-΅uInternet΅v-΅uΉq¤l¶l¥σ΅v-΅u·s»D΅v-΅u¶Η°eΉq¤l¶l¥σ΅v΅¨³B§@¬ΫΓφªΊ³]©w΅C";
     Message[ greek ] = "Για να έχετε τη δυνατότητα αποστολής μηνύματος μέσω του Internet\nπρέπει να ορίσετε τη δική σας διεύθυνση E-mail και έναν διακομιστή SMTP.\nΠαρακαλώ εισάγετε αυτές τις ρυθμίσεις στο\n\"Εργαλεία\\Επιλογές\\Γενικά...\\Προσωπικά δεδομένα\\E-Mail\" και\n\"Εργαλεία\\Επιλογές\\Internet\\Αλληλογραφία/Συζητήσεις\\Αποστολή μηνυμάτων\".\nπριν αποστείλετε ξανά κάποιο μήνυμα.";
     Message[ korean ] = "Έή½ΓΑφΈ¦ ΐΞΕΝ³έΐΈ·Ξ ΊΈ³»·ΑΈι \nE-Mail ΑΦΌÒΏΝ SMTP Ό­Ήφ°΅ ΗΚΏδΗΥ΄Ο΄Ω. \n»υ·Ξ Έή½ΓΑφΈ¦ ΊΈ³»±β ΐόΏ΅ \n\"µµ±Έ\\ΏΙΌΗ\\ΐΟΉέ...\\»ηΏλΐΪ µ¥ΐΜΕΝ\\E-Mail\"°ϊ \n\"µµ±Έ\\ΏΙΌΗ\\ΐΞΕΝ³έ\\ΈήΐΟ/΄Ί½Ί\\Έή½ΓΑφ ΊΈ³»±β\"Ώ΅ µϋ¶σ Ό³Α¤ΗΟΏ© ΐΤ·ΒΗΟ½Κ½ΓΏΐ.";
     Message[ arabic ] = "ΕΡΣΗα ΡΣΗαΙ γδ ΞαΗα ΗαΕδΚΡδΚ΅\nνΚΨαΘ ζΜζΟ ΪδζΗδ ΘΡνΟ ΕαίΚΡζδν ζγÒζψΟ SMTP.\nΗαΡΜΗΑ ΕΟΡΗΜ εΠε ΗαΕΪΟΗΟΗΚ ΚΝΚ\n\"ΓΟζΗΚ/ΞνΗΡΗΚ/ΪΗγ.../ΘνΗδΗΚ ΗαγΣΚΞΟγ/ΘΡνΟ ΕαίΚΡζδν\"΅ Λγ ΚΝΚ\n\"ΓΟζΗΚ/ΞνΗΡΗΚ/ΕδΚΡδΚ/ΗαΘΡνΟ \\γΜγζΪΗΚ ΗαΓΞΘΗΡ/ΕΡΣΗα ΗαΘΡνΟ\"΅\nΛγ ΝΗζα ΕΡΣΗα εΠε ΗαΡΣΗαΙ γΡΙ ΓΞΡμ.";
@@ -1007,7 +1007,7 @@ ErrorBox ERRBOX_SFX_NO_OUTBOX
     Message[ russian ] = "Δλÿ βϋαπΰννξγξ Βΰμθ δειρςβθÿ νεξαυξδθμΰ οΰοκΰ \"Ξςοπΰβλεννϋε\".\nΟπεζδε χεμ Βϋ οξβςξπθςε ύςσ ξοεπΰφθώ, ρξηδΰιςε, οξζΰλσιρςΰ, οΰοκσ \"Ξςοπΰβλεννϋε\".";
     Message[ polish ] = "Dla wybranej przez ciebie akcji potrzebna jest skrzynka nadawcza.\nProszκ utwσrz skrzynkκ nadawczΉ, zanim wykonasz ponownie tκ akcjκ.";
     Message[ japanese ] = "‘I‘π‚³‚κ‚½±ΈΌ®έ‚πΐs‚·‚ι‚Μ‚Ι‘—MΔΪ²‚ª•K—v‚Ε‚·B\n‚±‚Μ±ΈΌ®έ‚πΔΐs‚·‚ι‘O‚ΙA‘—MΔΪ²‚πi”[‚µ‚Δ‰Ί‚³‚ΆB";
-    Message[ chinese_traditional ] = "°υ¦ζ³o­ΣΎή§@­n¨D±z°tΈm¤@­Σ±H¥σ§X΅C\n½Π±z«Ψ¥ί¤@­Σ±H¥σ§X΅AµM¦Z¦b­«·s°υ¦ζ³o­Σ©R¥O΅C";
+    Message[ chinese_traditional ] = "°υ¦ζ³o­ΣΎή§@­n¨D±z°tΈm¤@­Σ±H¥σ§X΅C\n½Π±z«Ψ¥ί¤@­Σ±H¥σ§X΅AµM¦Z¦b­«·s°υ¦ζ³o­Σ«ό¥O΅C";
     Message[ greek ] = "Για να εκτελεστεί αυτή η ενέργεια απαιτείται ο φάκελος 'Εξερχόμενα'\nΠαρακαλώ δημιουργήστε αυτόν τον φάκελο πριν την επόμενη εκτέλεση αυτής της ενέργειας.";
     Message[ korean ] = "Ό±ΕΓΗΡ ΐΫΎχΏ΅΄Β ΊΈ³ΎΖνΑφΗΤΐΜ ΗΚΏδΗΥ΄Ο΄Ω. \nΐΜ ΐΫΎχΐ» ΐη½ΗΗΰΗΟ±β ΐόΏ΅ ΊΈ³ΎΖνΑφΗΤΐ» ΈΈµε½Κ½ΓΏΐ.";
     Message[ arabic ] = "ΚδένΠ ΗαΕΜΡΗΑ ΗαΠν ήγΚ ΘΗΞΚνΗΡε νΝΚΗΜ Εαμ ΣαΙ ΥΗΟΡΗΚ.\nΗαΡΜΗΑ ΕδΤΗΑ ΣαΙ ΥΗΟΡΗΚ΅ ήΘα γΝΗζαΙ ΚδένΠ εΠΗ ΗαΕΜΡΗΑ γΜΟΟΗπ.";
