@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dxfgrprd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-19 08:54:58 $
+ *  last change: $Author: sj $ $Date: 2002-04-25 12:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,19 +194,11 @@ USHORT DXFGroupReader::Read()
     else if (nG< 180) ReadI();
     else if (nG< 210) goto LErr;
     else if (nG< 240) F210_239[nG-210]=ReadF();
-    else if (nG==330)
+    else if (nG<=369)
     {
         char aTmp[ DXF_MAX_STRING_LEN + 1 ];
         ReadS( aTmp );      // hex string
     }
-    else if (nG< 340)
-        ReadI();
-    else if (nG==340)
-        ReadI();
-    else if (nG==350)
-        ReadI();
-    else if (nG==360)
-        ReadI();
     else if (nG< 999) goto LErr;
     else if (nG<1010) ReadS(S999_1009[nG-999]);
     else if (nG<1060) F1010_1059[nG-1010]=ReadF();
