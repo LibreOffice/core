@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-04 17:34:22 $
+ *  last change: $Author: pb $ $Date: 2000-10-30 11:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,6 @@
 #endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _LIBCALL_HXX //autogen
-#include <svtools/libcall.hxx>
 #endif
 #ifndef _FILTER_HXX //autogen
 #include <svtools/filter.hxx>

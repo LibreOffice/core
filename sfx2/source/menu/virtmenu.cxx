@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:35 $
+ *  last change: $Author: pb $ $Date: 2000-10-30 11:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 
 #include <sot/factory.hxx>
 #include <vcl/system.hxx>
-#include <svtools/libcall.hxx>
 #pragma hdrstop
 
 #include "virtmenu.hxx"
@@ -947,26 +946,6 @@ typedef ULONG (__LOADONCALLAPI *HelpIdFunc) ( const String& );
 void SfxVirtualMenu::SetHelpIds( ResMgr *pRes )
 {
     pResMgr = pRes;
-/*  SvLibrary aLib( SVLIBRARY( "ss" ) );
-    if ( aLib.ModulFound() )
-    {
-        HelpIdFunc pFunc = (HelpIdFunc) aLib.GetFunction( DEFINE_CONST_UNICODE("GetHelpId") );
-        if ( pFunc )
-        {
-            for ( USHORT nPos=0; nPos<pSVMenu->GetItemCount(); nPos++ )
-            {
-                USHORT nId = pSVMenu->GetItemId( nPos );
-                SfxVirtualMenu *pPopup = GetPopupMenu(nId);
-                if ( pPopup )
-                    pPopup->SetHelpIds( pResMgr );
-                else
-                {
-                    USHORT nHelpId = (*pFunc)( pSVMenu->GetItemCommand( nId ) );
-                    pSVMenu->SetHelpId( nId, nHelpId );
-                }
-            }
-        }
-    }*/
 }
 
 void SfxVirtualMenu::SetRemoveDisabledEntries()
