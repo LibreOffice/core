@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:54:22 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,26 +189,23 @@ Sequence<Type> OImageControlModel::_getTypes()
 DBG_NAME(OImageControlModel)
 //------------------------------------------------------------------
 OImageControlModel::OImageControlModel(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_IMAGECONTROL, FRM_CONTROL_IMAGECONTROL, sal_False, sal_False)
+    :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_IMAGECONTROL, FRM_CONTROL_IMAGECONTROL, sal_False, sal_False )
                     // use the old control name for compytibility reasons
-    ,OPropertyChangeListener( m_aMutex )
-    ,m_pImageProducer( new ImageProducer )
+    ,m_pImageProducer( NULL )
     ,m_bReadOnly( sal_False )
-    ,m_pAggregatePropertyMultiplexer( NULL )
 {
     DBG_CTOR( OImageControlModel, NULL );
     m_nClassId = FormComponentType::IMAGECONTROL;
+    initValueProperty( PROPERTY_IMAGE_URL, PROPERTY_ID_IMAGE_URL);
 
     implConstruct();
 }
 
 //------------------------------------------------------------------
 OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, const Reference< XMultiServiceFactory >& _rxFactory )
-    :OBoundControlModel( _pOriginal, _rxFactory, sal_False, sal_False )
+    :OBoundControlModel( _pOriginal, _rxFactory )
                 // use the old control name for compytibility reasons
-    ,OPropertyChangeListener( m_aMutex )
     ,m_pImageProducer( NULL )
-    ,m_pAggregatePropertyMultiplexer( NULL )
 {
     DBG_CTOR( OImageControlModel, NULL );
     implConstruct();
@@ -220,7 +217,11 @@ OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, co
         // 2003-05-15 - #109591# - fs@openoffice.org
         Any aImageURL;
         getFastPropertyValue( aImageURL, PROPERTY_ID_IMAGE_URL );
-        _propertyChanged( PropertyChangeEvent( *this, PROPERTY_IMAGE_URL, sal_False, PROPERTY_ID_IMAGE_URL, Any( ), aImageURL ) );
+        ::rtl::OUString sImageURL;
+        aImageURL >>= sImageURL;
+
+        ::osl::MutexGuard aGuard( m_aMutex );   // handleNewImageURL expects this
+        handleNewImageURL( sImageURL );
     }
     osl_decrementInterlockedCount( &m_refCount );
 }
@@ -230,18 +231,6 @@ void OImageControlModel::implConstruct()
 {
     m_pImageProducer = new ImageProducer;
     m_xImageProducer = m_pImageProducer;
-    m_sDataFieldConnectivityProperty = PROPERTY_IMAGE_URL;
-
-    increment(m_refCount);
-    if ( m_xAggregateSet.is() )
-    {
-        m_pAggregatePropertyMultiplexer = new OPropertyChangeMultiplexer( this, m_xAggregateSet, sal_False );
-        m_pAggregatePropertyMultiplexer->acquire();
-        m_pAggregatePropertyMultiplexer->addProperty( PROPERTY_IMAGE_URL );
-    }
-    decrement(m_refCount);
-
-    doSetDelegator();
 }
 
 //------------------------------------------------------------------
@@ -251,15 +240,6 @@ OImageControlModel::~OImageControlModel()
     {
         acquire();
         dispose();
-    }
-
-    doResetDelegator();
-
-    if (m_pAggregatePropertyMultiplexer)
-    {
-        m_pAggregatePropertyMultiplexer->dispose();
-        m_pAggregatePropertyMultiplexer->release();
-        m_pAggregatePropertyMultiplexer = NULL;
     }
 
     DBG_DTOR(OImageControlModel,NULL);
@@ -299,7 +279,7 @@ Any SAL_CALL OImageControlModel::queryAggregation(const Type& _rType) throw (Run
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OImageControlModel::_approve(sal_Int32 _nColumnType)
+sal_Bool OImageControlModel::approveDbColumnType(sal_Int32 _nColumnType)
 {
     // zulaessing sind die binary Typen, OTHER- und LONGVARCHAR-Felder
     if ((_nColumnType == DataType::BINARY) || (_nColumnType == DataType::VARBINARY)
@@ -312,68 +292,21 @@ sal_Bool OImageControlModel::_approve(sal_Int32 _nColumnType)
 
 
 //------------------------------------------------------------------------------
-void OImageControlModel::_propertyChanged( const PropertyChangeEvent& rEvt )
+void OImageControlModel::_propertyChanged( const PropertyChangeEvent& _rEvent )
                                             throw( RuntimeException )
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
-
-    // Wenn eine URL gesetzt worden ist, muss die noch an den ImageProducer
-    // weitergereicht werden.
-    // xInStream erzeugen
-
-    Reference<XActiveDataSink>  xSink(
-        m_xServiceFactory->createInstance(
-        ::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")), UNO_QUERY);
-    if (!xSink.is())
-        return;
-
-    // SvStream am xInStream setzen
-    String aPath = getString(rEvt.NewValue);
-
-    SvStream* pFileStream = ::utl::UcbStreamHelper::CreateStream(aPath, STREAM_READ);
-    sal_Bool bSetNull = (NULL == pFileStream) || (ERRCODE_NONE != pFileStream->GetErrorCode());
-
-    if (!bSetNull)
+    if ( m_xColumnUpdate.is() )
     {
-        // get the size of the stream
-        pFileStream->Seek(STREAM_SEEK_TO_END);
-        sal_Int32 nSize = (sal_Int32)pFileStream->Tell();
-        if (pFileStream->GetBufferSize() < 8192)
-            pFileStream->SetBufferSize(8192);
-        pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
-
-        Reference<XInputStream> xInput
-            (new ::utl::OInputStreamHelper(new SvLockBytes(pFileStream, sal_True),
-                                           nSize));
-        xSink->setInputStream(xInput);
-        Reference<XInputStream>  xInStream(xSink, UNO_QUERY);
-        if (m_xColumnUpdate.is())
-            m_xColumnUpdate->updateBinaryStream(xInStream, xInput->available());
-        else
-        {
-            GetImageProducer()->setImage( xInStream );
-            GetImageProducer()->startProduction();
-        }
-
-        // usually the setBinaryStream should close the input, but just in case ....
-        try
-        {
-            xInStream->closeInput();
-        }
-        catch (NotConnectedException&)
-        {
-        }
+        OBoundControlModel::_propertyChanged( _rEvent );
     }
     else
-    {
-        if (m_xColumnUpdate.is())
-            m_xColumnUpdate->updateNull();
+    {   // we're not bound. In this case, we have to manually care for updating the
+        // image producer, since the base class will not do this
+        ::rtl::OUString sImageURL;
+        _rEvent.NewValue >>= sImageURL;
 
-        Reference< com::sun::star::io::XInputStream > xNull;
-        GetImageProducer()->setImage(xNull);
-        GetImageProducer()->startProduction();
-
-        delete pFileStream;
+        ::osl::MutexGuard aGuard( m_aMutex );   // handleNewImageURL expects this
+        handleNewImageURL( sImageURL );
     }
 }
 
@@ -499,64 +432,154 @@ void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream) 
     // Nach dem Lesen die Defaultwerte anzeigen
     if (m_aControlSource.getLength())
     {   // (not if we don't have a control source - the "State" property acts like it is persistent, then
-        ::osl::MutexGuard aGuard(m_aMutex); // _reset expects this mutex guarding
-        _reset();
+        ::osl::MutexGuard aGuard(m_aMutex); // resetNoBroadcast expects this mutex guarding
+        resetNoBroadcast();
     }
 }
 
-// XPropertyChangeListener
 //------------------------------------------------------------------------------
-void OImageControlModel::_onValueChanged()
+sal_Bool OImageControlModel::handleNewImageURL( const ::rtl::OUString& _rURL )
 {
-    UpdateFromField();
+
+    // if the image URL has been set, we have to forward this to the image producer
+    // xInStream erzeugen
+    Reference< XActiveDataSink > xSink(
+        m_xServiceFactory->createInstance(
+        ::rtl::OUString::createFromAscii( "com.sun.star.io.ObjectInputStream" ) ), UNO_QUERY );
+    if ( !xSink.is() )
+        return sal_False;
+
+    SvStream* pFileStream = ::utl::UcbStreamHelper::CreateStream( _rURL, STREAM_READ );
+    sal_Bool bSetNull = (NULL == pFileStream) || (ERRCODE_NONE != pFileStream->GetErrorCode());
+
+    if (!bSetNull)
+    {
+        // get the size of the stream
+        pFileStream->Seek(STREAM_SEEK_TO_END);
+        sal_Int32 nSize = (sal_Int32)pFileStream->Tell();
+        if (pFileStream->GetBufferSize() < 8192)
+            pFileStream->SetBufferSize(8192);
+        pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
+
+        Reference<XInputStream> xInput
+            (new ::utl::OInputStreamHelper(new SvLockBytes(pFileStream, sal_True),
+                                        nSize));
+        xSink->setInputStream( xInput );
+        Reference< XInputStream >  xInStream(xSink, UNO_QUERY);
+
+        if ( m_xColumnUpdate.is() )
+            updateColumnWithStream( xInStream );
+        else
+            setControlValue( makeAny( xInStream ) );
+
+        // close the stream, just to be on the safe side (should have been done elsewhere ...)
+        try
+        {
+            xInStream->closeInput();
+        }
+        catch (NotConnectedException&)
+        {
+        }
+    }
+    else
+    {
+        if ( m_xColumnUpdate.is() )
+            updateColumnWithStream( NULL );
+        else
+            setControlValue( Any() );
+
+        delete pFileStream;
+    }
+
+    return sal_True;
 }
 
 //------------------------------------------------------------------------------
-Any OImageControlModel::_getControlValue() const
+sal_Bool OImageControlModel::commitControlValueToDbColumn( bool _bPostReset )
 {
-    // hier macht ein Vergleich keinen Sinn, daher void siehe OBoundControlModel
-    return Any();
+    if ( _bPostReset )
+    {
+        // since this is a "commit after reset", we can simply update the column
+        // with null - this is our "default" which we were just reset to
+        updateColumnWithStream( NULL );
+    }
+    else
+    {
+        ::osl::MutexGuard aGuard(m_aMutex);
+
+        ::rtl::OUString sImageURL;
+        m_xAggregateSet->getPropertyValue( PROPERTY_IMAGE_URL ) >>= sImageURL;
+        return handleNewImageURL( sImageURL );
+    }
+
+    return sal_True;
+}
+
+//------------------------------------------------------------------------------
+void OImageControlModel::updateColumnWithStream( const Reference< XInputStream >& _rxStream )
+{
+    OSL_PRECOND( m_xColumnUpdate.is(), "OImageControlModel::updateColumnWithStream: no column update interface!" );
+    if ( m_xColumnUpdate.is() )
+    {
+        if ( _rxStream.is() )
+            m_xColumnUpdate->updateBinaryStream( _rxStream, _rxStream->available() );
+        else
+            m_xColumnUpdate->updateNull();
+
+        // note that this will fire a value change for the column, which
+        // will result in us (our base class, actually) syncing the
+        // db column content to our control content - finally, this will arrive
+        // in setControlValue
+    }
+}
+
+//------------------------------------------------------------------------------
+Any OImageControlModel::translateDbColumnToControlValue()
+{
+    return makeAny( m_xColumn->getBinaryStream() );
+}
+
+//------------------------------------------------------------------------------
+void OImageControlModel::setControlValue( const Any& _rValue )
+{
+    DBG_ASSERT( GetImageProducer() && m_xImageProducer.is(), "OImageControlModel::setControlValue: no image producer!" );
+    if ( !GetImageProducer() || !m_xImageProducer.is() )
+        return;
+
+    // give the image producer the stream
+    Reference< XInputStream > xInStream;
+    _rValue >>= xInStream;
+    GetImageProducer()->setImage( xInStream );
+
+    // and start production
+    Reference< XImageProducer > xProducer = m_xImageProducer;
+    {
+        // release our mutex once (it's acquired in the calling method!), as starting the image production may
+        // result in the locking of the solar mutex (unfortunally the default implementation of our aggregate,
+        // VCLXImageControl, does this locking)
+        // FS - 74438 - 30.03.00
+        MutexRelease aRelease(m_aMutex);
+        xProducer->startProduction();
+    }
 }
 
 // OComponentHelper
 //------------------------------------------------------------------
 void OImageControlModel::disposing()
 {
-    if (m_pAggregatePropertyMultiplexer)
-        m_pAggregatePropertyMultiplexer->dispose();
-
     OBoundControlModel::disposing();
 
-    Reference<XInputStream>  xInStream;
-    GetImageProducer()->setImage( xInStream );
-    m_xImageProducer->startProduction();
-}
-
-//------------------------------------------------------------------------------
-void OImageControlModel::_reset()
-{
-    if(getField().is()) // only reset when we are connected to a column
     {
-        Reference<XInputStream>  xDummy;
-        GetImageProducer()->setImage(xDummy);
-        Reference<XImageProducer> xProducer = m_xImageProducer;
-        {   // release our mutex once (it's acquired in the calling method !), as starting the image production may
-            // result in the locking of the solar mutex (unfortunally the default implementation of our aggregate,
-            // VCLXImageControl, does this locking)
-            // FS - 74438 - 30.03.00
-            MutexRelease aRelease(m_aMutex);
-            xProducer->startProduction();
-        }
+        ::osl::MutexGuard aRelease( m_aMutex ); // setControlValue expects this
+        setControlValue( Any() );
     }
 }
 
-// Helper functions
 //------------------------------------------------------------------------------
-void OImageControlModel::UpdateFromField()
+void OImageControlModel::resetNoBroadcast()
 {
-    Reference<XInputStream>  xInStream = m_xColumn->getBinaryStream();
-    GetImageProducer()->setImage(xInStream);
-    GetImageProducer()->startProduction();
+    if ( getField().is() )          // only reset when we are connected to a column
+        OBoundControlModel::resetNoBroadcast( );
 }
 
 //--------------------------------------------------------------------
