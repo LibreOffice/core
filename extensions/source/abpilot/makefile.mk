@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:08:10 $
+#   last change: $Author: rt $ $Date: 2004-05-21 13:51:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,9 +101,8 @@ SRS1NAME=$(TARGET)
 SRC1FILES=			abspilot.src
 
 RESLIB1NAME=abp
+RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES= $(SRS)$/abp.srs
-
-#IMGLST_SRS=$(SRS)$/abp.srs
 
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1VERSIONMAP= $(TARGET).map
