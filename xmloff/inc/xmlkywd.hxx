@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-16 13:23:55 $
+ *  last change: $Author: sab $ $Date: 2000-11-16 18:17:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,6 +281,7 @@ XML_CONSTASCII_ACTION( sXML_casemap_uppercase, "uppercase" );
 XML_CONSTASCII_ACTION( sXML_categories, "categories" );
 XML_CONSTASCII_ACTION( sXML_category, "category" );
 XML_CONSTASCII_ACTION( sXML_category_and_value, "category-and-value" );
+XML_CONSTASCII_ACTION( sXML_cell_count, "cell-count");
 XML_CONSTASCII_ACTION( sXML_cell_protect, "cell-protect");
 XML_CONSTASCII_ACTION( sXML_cell_range_address, "cell-range-address");
 XML_CONSTASCII_ACTION( sXML_cell_range_source, "cell-range-source");
@@ -465,6 +466,7 @@ XML_CONSTASCII_ACTION( sXML_distribute_letter, "distribute-letter" );
 XML_CONSTASCII_ACTION( sXML_distribute_space, "distribute-space" );
 XML_CONSTASCII_ACTION( sXML_divide, "divide" );
 XML_CONSTASCII_ACTION( sXML_document, "document" );
+XML_CONSTASCII_ACTION( sXML_document_statistic, "document-statistic" );
 XML_CONSTASCII_ACTION( sXML_domain, "domain" );
 XML_CONSTASCII_ACTION( sXML_dot, "dot" );
 XML_CONSTASCII_ACTION( sXML_dotted, "dotted" );

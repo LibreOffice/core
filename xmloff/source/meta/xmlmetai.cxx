@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: sab $ $Date: 2000-11-16 18:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@ enum SfxXMLMetaElemTokens
     XML_TOK_META_EDITINGCYCLES,
     XML_TOK_META_EDITINGDURATION,
     XML_TOK_META_USERDEFINED,
+    XML_TOK_META_DOCUMENT_STATISTIC,
     XML_TOK_META_ELEM_END = XML_TOK_UNKNOWN
 };
 
@@ -181,6 +182,7 @@ static __FAR_DATA SvXMLTokenMapEntry aMetaElemTokenMap[] =
     { XML_NAMESPACE_META,   sXML_editing_cycles,    XML_TOK_META_EDITINGCYCLES },
     { XML_NAMESPACE_META,   sXML_editing_duration,  XML_TOK_META_EDITINGDURATION },
     { XML_NAMESPACE_META,   sXML_user_defined,      XML_TOK_META_USERDEFINED },
+    { XML_NAMESPACE_META,   sXML_document_statistic,XML_TOK_META_DOCUMENT_STATISTIC },
     XML_TOKEN_MAP_END
 };
 
@@ -543,6 +545,8 @@ SfxXMLMetaElementContext::SfxXMLMetaElementContext( SvXMLImport& rImport, sal_uI
             }
         }
     }
+    else if ( nElementType == XML_TOK_META_DOCUMENT_STATISTIC )
+        GetImport().SetStatisticAttributes(xAttrList);
 }
 
 SfxXMLMetaElementContext::~SfxXMLMetaElementContext()
@@ -694,6 +698,8 @@ void SfxXMLMetaElementContext::EndElement()
             break;
         case XML_TOK_META_USERDEFINED:
             rParent.AddUserField( sFieldName, sContent );
+            break;
+        case XML_TOK_META_DOCUMENT_STATISTIC:
             break;
         default:
             DBG_ERROR("wrong element");
