@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-07 10:51:26 $
+ *  last change: $Author: mtg $ $Date: 2001-03-07 16:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,12 +310,15 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
         {
             pZipFile    = new ZipFile(xContentStream, sal_True);
             xZipFile    = Reference < XZipFile > ( pZipFile );
+            getZipFileContents();
         }
         catch (ZipException&)// rException)
         {
+            // clean up the memory, throw an assertion, and tell the UCB about the error
+            delete pZipFile; pZipFile = NULL;
             VOS_ENSURE( 0, "ZipException thrown - bad Zip File"); //rException.Message);
+            throw;
         }
-        getZipFileContents();
     }
     catch (::com::sun::star::ucb::CommandAbortedException&)
     {
