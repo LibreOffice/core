@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:20:38 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:35:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ class ImplTextLayoutCache
 public:
     virtual inline ~ImplTextLayoutCache() {};
 
-    virtual void flush() = 0;
+    virtual void flush( int nMinLevel ) = 0;
 };
 
 // -------------------
