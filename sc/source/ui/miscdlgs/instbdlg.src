@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:16:37 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 14:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,7 +356,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ chinese_traditional ] = "¼Æ¥Ø(~O)";
         Text[ arabic ] = "ÇáÚÏÏ";
         Text[ greek ] = "Áñé~èìüò";
-        Text[ korean ] = "¼ıÀÚ(~O)";
+        Text[ korean ] = "¼ıÀÚ";
         Text[ turkish ] = "A~det";
         Text[ language_user1 ] = " ";
     };
