@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-04 17:09:33 $
+ *  last change: $Author: obr $ $Date: 2002-03-14 13:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,8 +159,11 @@
 #ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_BRIDGE_XACCESSIBLENATIVEFRAMEMAP_HPP_
-#include <drafts/com/sun/star/accessibility/bridge/XAccessibleNativeFrameMap.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_BRIDGE_XACCESSIBLETOPWINDOWMAP_HPP_
+#include <drafts/com/sun/star/accessibility/bridge/XAccessibleTopWindowMap.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
+#include <com/sun/star/awt/XTopWindow.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XDISPLAYCONNECTION_HPP_
 #include <com/sun/star/awt/XDisplayConnection.hpp>
@@ -202,6 +205,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
 using namespace ::drafts::com::sun::star::accessibility::bridge;
+
+using ::com::sun::star::awt::XTopWindow;
 
 // =======================================================================
 
@@ -668,43 +673,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
         mpFrameData->mbSysObjFocus      = FALSE;
         mpFrameData->maPaintTimer.SetTimeout( 30 );
         mpFrameData->maPaintTimer.SetTimeoutHdl( LINK( this, Window, ImplHandlePaintHdl ) );
-
-#ifndef REMOTE_APPSERVER
-#if defined WNT
-        // FIXME: determine if accessibility should be enabled
-        if( NULL != getenv("SAL_ACCESSIBILITY_ENABLED" ) )
-        {
-            // instanciate access bridge service
-            if(!pSVData->mxAccessBridge.is())
-            {
-                try
-                {
-                    Reference< XMultiServiceFactory > xFactory(vcl::unohelper::GetMultiServiceFactory());
-
-                    if(xFactory.is())
-                    {
-                        pSVData->mxAccessBridge = Reference< XAccessibleNativeFrameMap >( xFactory->createInstance(
-                            OUString::createFromAscii( "drafts.com.sun.star.accessibility.bridge.AccessBridge" ) ), UNO_QUERY );
-                    }
-                }
-
-                catch(::com::sun::star::uno::Exception exception)
-                {
-                    // FIXME: error handling
-                }
-            }
-
-            // register proxy accessible for the new native frame window
-            if(pSVData->mxAccessBridge.is())
-            {
-                const SystemEnvData * pEnvData = GetSystemData();
-
-                if(pEnvData)
-                    pSVData->mxAccessBridge->registerAccessibleNativeFrame( makeAny((sal_uInt32) pEnvData->hWnd), new FrameAccessibleImpl(this));
-            }
-        }
-#endif
-#endif
     }
 
     // init data
@@ -776,6 +744,36 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
         // the correct size before we display the window
         if ( nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_APP) )
             mpFrame->GetClientSize( mnOutWidth, mnOutHeight );
+
+#ifndef REMOTE_APPSERVER
+#if defined WNT
+
+        // FIXME: determine if accessibility should be enabled
+        if( NULL != getenv("SAL_ACCESSIBILITY_ENABLED" ) )
+        {
+            // instanciate access bridge service
+            if(!pSVData->mxAccessBridge.is())
+            {
+                try
+                {
+                    Reference< XMultiServiceFactory > xFactory(vcl::unohelper::GetMultiServiceFactory());
+
+                    if(xFactory.is())
+                    {
+                        pSVData->mxAccessBridge = Reference< XAccessibleTopWindowMap >( xFactory->createInstance(
+                            OUString::createFromAscii( "drafts.com.sun.star.accessibility.bridge.AccessBridge" ) ), UNO_QUERY );
+                    }
+                }
+
+                catch(::com::sun::star::uno::Exception exception)
+                {
+                    // FIXME: error handling
+                }
+            }
+        }
+#endif
+#endif
+
     }
     else
     {
@@ -5690,6 +5688,30 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
 #endif
 
         ImplShowAllOverlaps();
+
+#ifndef REMOTE_APPSERVER
+#if defined WNT
+
+        // filter system windows that are accessible over the Accessibility API anyway
+        if( mbFrame && (mnStyle & (WB_MOVEABLE | WB_CLOSEABLE | WB_SIZEABLE)) )
+        {
+            ImplSVData* pSVData = ImplGetSVData();
+
+            // register proxy accessible for the new native frame window
+            if(pSVData->mxAccessBridge.is())
+            {
+                const SystemEnvData * pEnvData = GetSystemData();
+
+                if(pEnvData)
+                {
+                    Reference< XTopWindow > xTopWindow( ImplGetWindow()->GetComponentInterface(), UNO_QUERY );
+                    if(xTopWindow.is())
+                        pSVData->mxAccessBridge->registerAccessibleNativeFrame( makeAny((sal_uInt32) pEnvData->hWnd), GetAccessible(), xTopWindow);
+                }
+            }
+        }
+#endif
+#endif
     }
 
     // Hintergrund-Sicherung zuruecksetzen
