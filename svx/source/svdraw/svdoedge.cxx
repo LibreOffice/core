@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-07 17:33:57 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 10:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -845,6 +845,12 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
     else if(GetModel() && GetModel()->isLocked())
     {
         // avoid re-layout during imports/API call sequences
+        // #i45294# but calc EdgeTrack and secure properties there
+        ((SdrEdgeObj*)this)->mbBoundRectCalculationRunning = sal_True;
+        *pEdgeTrack=ImpCalcEdgeTrack(*pEdgeTrack,aCon1,aCon2,&aEdgeInfo);
+        ImpSetAttrToEdgeInfo();
+        bEdgeTrackDirty=FALSE;
+        ((SdrEdgeObj*)this)->mbBoundRectCalculationRunning = sal_False;
     }
     else
     {
