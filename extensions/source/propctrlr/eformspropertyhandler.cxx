@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eformspropertyhandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:05:03 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:55:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,13 +515,13 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL EFormsPropertyHandler::updateDependentProperties( PropertyId _nActuatingPropId, const Any& _rNewValue, const Any& _rOldValue, IPropertyBrowserUI* _pUpdater )
+    void SAL_CALL EFormsPropertyHandler::actuatingPropertyChanged( PropertyId _nActuatingPropId, const Any& _rNewValue, const Any& _rOldValue, IPropertyBrowserUI* _pUpdater, bool )
     {
-        OSL_ENSURE( m_pHelper.get(), "EFormsPropertyHandler::updateDependentProperties: we do not have any ActuatingProperties!" );
+        OSL_ENSURE( m_pHelper.get(), "EFormsPropertyHandler::actuatingPropertyChanged: we do not have any ActuatingProperties!" );
         if ( !m_pHelper.get() )
             return;
 
-        DBG_ASSERT( _pUpdater, "EFormsPropertyHandler::updateDependentProperties: invalid callback!" );
+        DBG_ASSERT( _pUpdater, "EFormsPropertyHandler::actuatingPropertyChanged: invalid callback!" );
         if ( !_pUpdater )
             return;
 
@@ -544,7 +544,7 @@ namespace pcr
         break;
 
         default:
-            DBG_ERROR( "EFormsPropertyHandler::updateDependentProperties: cannot handle this property!" );
+            DBG_ERROR( "EFormsPropertyHandler::actuatingPropertyChanged: cannot handle this property!" );
         }
     }
 

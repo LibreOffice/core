@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editpropertyhandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:04:29 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ namespace pcr
                                             SAL_CALL getSupersededProperties( ) const;
         virtual ::std::vector< ::rtl::OUString >
                                             SAL_CALL getActuatingProperties( ) const;
-        virtual void                        SAL_CALL updateDependentProperties( PropertyId _nActuatingPropId, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, IPropertyBrowserUI* _pUpdater );
+        virtual void                        SAL_CALL actuatingPropertyChanged( PropertyId _nActuatingPropId, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, IPropertyBrowserUI* _pUpdater, bool );
 
         // PropertyHandler overridables
         virtual ::std::vector< ::com::sun::star::beans::Property >
