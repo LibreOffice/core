@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bparr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:41:21 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,7 +538,7 @@ USHORT BigPtrArray::Compress( short nMax )
     // benutzt; wobei pp das "alte" Array, qq das "neue" Array ist.
     BlockInfo** pp = ppInf, **qq = pp;
     BlockInfo* p;
-    BlockInfo* pLast;                   // letzter nicht voller Block
+    BlockInfo* pLast(0);                // letzter nicht voller Block
     USHORT nLast = 0;                   // fehlende Elemente
     USHORT nBlkdel = 0;                 // Anzahl der geloeschte Bloecke
     USHORT nFirstChgPos = USHRT_MAX;    // ab welcher Pos gab es die 1. Aenderung?
