@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbgoutsw.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 11:39:01 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@ const char * dbg_out(const SwPaM & rPam);
 const char * dbg_out(const SwNodeNum & rNum);
 const char * dbg_out(const SwUndos & rUndos);
 const char * dbg_out(const SwRewriter & rRewriter);
+const char * dbg_out(const SwNumRule & rRule);
+const char * dbg_out(const SwTxtFmtColl & rFmt);
+const char * dbg_out(const SwFrmFmts & rFrmFmts);
 const char * dbg_out(const SwNumRuleTbl & rTbl);
 
 template<typename tKey, typename tMember, typename fHashFunction>
