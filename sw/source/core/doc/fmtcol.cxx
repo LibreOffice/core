@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtcol.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-04 11:15:05 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -475,19 +474,26 @@ void SwTxtFmtColl::SetOutlineLevel( BYTE nLevel )
 
     SwNumRuleItem aNumRuleItem(GetNumRule());
 
+    bool bSetOutlineNumRule = false;
+
     if (aNumRuleItem.GetValue().Len() > 0)
     {
         String sNumRuleName = aNumRuleItem.GetValue();
         SwNumRule * pNumRule = GetDoc()->FindNumRulePtr(sNumRuleName);
 
         if (! pNumRule || !pNumRule->IsOutlineRule())
-        {
-            String aTmp(SwNumRule::GetOutlineRuleName(),
-                        RTL_TEXTENCODING_ASCII_US);
-            SwNumRuleItem aItem(aTmp);
+            bSetOutlineNumRule = true;
+    }
+    else if (nLevel != NO_NUMBERING)
+        bSetOutlineNumRule = true;
 
-            GetDoc()->SetAttr(aItem, *this);
-        }
+    if (bSetOutlineNumRule)
+    {
+        String aTmp(SwNumRule::GetOutlineRuleName(),
+                    RTL_TEXTENCODING_ASCII_US);
+        SwNumRuleItem aItem(aTmp);
+
+        GetDoc()->SetAttr(aItem, *this);
     }
 }
 
