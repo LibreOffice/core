@@ -34,6 +34,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\table
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\telephony
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\telephony\DIALER
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\text
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\ui
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\uno
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\util
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\view
@@ -117,6 +118,8 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\mozilla
 ..\%__SRC%\inc\com\sun\star\telephony\DIALER\*.hpp %_DEST%\inc%_EXT%\com\sun\star\telephony\DIALER\*.hpp
 ..\%__SRC%\inc\com\sun\star\text\*.hdl %_DEST%\inc%_EXT%\com\sun\star\text\*.hdl
 ..\%__SRC%\inc\com\sun\star\text\*.hpp %_DEST%\inc%_EXT%\com\sun\star\text\*.hpp
+..\%__SRC%\inc\com\sun\star\ui\*.hdl %_DEST%\inc%_EXT%\com\sun\star\ui\*.hdl
+..\%__SRC%\inc\com\sun\star\ui\*.hpp %_DEST%\inc%_EXT%\com\sun\star\ui\*.hpp
 ..\%__SRC%\inc\com\sun\star\uno\*.hdl %_DEST%\inc%_EXT%\com\sun\star\uno\*.hdl
 ..\%__SRC%\inc\com\sun\star\uno\*.hpp %_DEST%\inc%_EXT%\com\sun\star\uno\*.hpp
 ..\%__SRC%\inc\com\sun\star\util\*.hdl %_DEST%\inc%_EXT%\com\sun\star\util\*.hdl
