@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:16:13 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@
 #include <svtools/stdctrl.hxx>
 #endif
 #ifndef  _COM_SUN_STAR_I18N_XEXTENDEDINDEXENTRYSUPPLIER_HPP_
-#include <drafts/com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
+#include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
 #endif
 class SwWrtShell;
 class SwTOXMgr;
@@ -171,7 +171,7 @@ class SwIndexMarkDlg : public Window //SvxStandardDialog
     BOOL            bPhoneticED2_ChangedByUser;
     LanguageType    nLangForPhoneticReading; //Language of current text used for phonetic reading proposal
     BOOL            bIsPhoneticReadingEnabled; //this value states wether phopentic reading is enabled in principle dependend of global cjk settings and language of current entry
-    com::sun::star::uno::Reference< drafts::com::sun::star::i18n::XExtendedIndexEntrySupplier >
+    com::sun::star::uno::Reference< com::sun::star::i18n::XExtendedIndexEntrySupplier >
                     xExtendedIndexEntrySupplier;
 
     SwTOXMgr*       pTOXMgr;
