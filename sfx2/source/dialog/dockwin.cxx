@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-07 11:20:35 $
+ *  last change: $Author: mba $ $Date: 2001-02-19 11:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,10 +790,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
         SetFloatingMode(!bFloatMode);
 
     if ( pInfo->nFlags & SFX_CHILDWIN_FORCEDOCK )
-    {
         SetFloatingMode( FALSE );
-    }
-
 
     if (IsFloatingMode())
     {
@@ -826,11 +823,9 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
 
         // Angedockte Fenster werden, sofern sie resizable sind, in ein
         // SplitWindow eingesetzt
-        if ( pImp->bSplitable && !(pInfo->nFlags & SFX_CHILDWIN_FORCEDOCK) &&
-             pBindings->GetDispatcher_Impl() )
+        if ( pImp->bSplitable )
         {
 //          pImp->bAutoHide = ( pInfo->nFlags & SFX_CHILDWIN_AUTOHIDE) != 0;
-            SfxViewFrame *pFrame = pBindings->GetDispatcher_Impl()->GetFrame();
             pImp->pSplitWin = pWorkWin->GetSplitWindow_Impl(GetAlignment());
             pImp->pSplitWin->InsertWindow(this, pImp->aSplitSize);
         }
