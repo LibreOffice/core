@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2001-05-23 09:38:45 $
+ *  last change: $Author: mib $ $Date: 2001-06-12 07:31:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1259,14 +1259,43 @@ SwXTextRange::~SwXTextRange()
   -----------------------------------------------------------------------*/
 void    SwXTextRange::_CreateNewBookmark(SwPaM& rPam)
 {
+    static sal_Int32 nBookmark = 0;
+    String sBookmarkName;
+
     SwBookmark* pBkm = GetBookmark();
     if(pBkm)
-        pDoc->DelBookmark( pBkm->GetName() );
-    KeyCode aCode;
-    String sBookmarkName(C2S("SwXTextPosition"));
-    String sShortName;
-    rPam.GetDoc()->MakeUniqueBookmarkName(sBookmarkName);
+    {
+        // If a bookmark exists already its name can be resused
+        sBookmarkName = pBkm->GetName();
+        pDoc->DelBookmark( sBookmarkName );
+    }
+    else
+    {
+        // Otherwise we have to create a new name. This is not done
+        // using SwDoc::MakeUniqueBookmarkName, because this method
+        // starts counting bookmarks beginning with 1. That's required
+        // for real bookmarks, but very slow in thsi case there lots
+        // of bookmarks requiere any unique name only.
+        String sPrefix(C2S("SwXTextPosition"));
+        const SwBookmarks& rBookmarks = pDoc->GetBookmarks();
+        sal_uInt16 nBookmarks = rBookmarks.Count(), i;
+        do
+        {
+            nBookmark++;
+            if( nBookmark < 1 ) // on overwflow restart with 1
+                nBookmark = 1;
 
+            sBookmarkName = sPrefix;
+            sBookmarkName += String::CreateFromInt32( nBookmark );
+            for( i = 0; i < nBookmarks; i++ )
+                if( rBookmarks[i]->GetName().Equals( sBookmarkName ) )
+                    break;
+        }
+        while( i < nBookmarks );
+    }
+
+    KeyCode aCode;
+    String sShortName;
     SwBookmark* pMark = pDoc->MakeBookmark(rPam, aCode,
                 sBookmarkName, sShortName, UNO_BOOKMARK);
     pMark->Add(this);
