@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-03-21 20:52:00 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,14 +227,14 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ spanish ] = "Contiene títulos de ~columnas" ;
         Text [ english_us ] = "Co~ntains column headers" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "°üº¬ÁĞ±êÌâ(~H)";
+        Text[ chinese_simplified ] = "°üº¬ÁĞ±êÌâ(~N)";
         Text[ russian ] = "Ñîäåğæèò çàãîëîâêè ñòîëáöîâ";
         Text[ polish ] = "zawiera nag³ówki kolumn";
-        Text[ japanese ] = "—ñ‚Ì€–Ú—“‚ğŠÜ‚Ş(~H)";
-        Text[ chinese_traditional ] = "¥]§tÄæ¼ĞÃD(~H)";
+        Text[ japanese ] = "—ñ‚Ì€–Ú—“‚ğŠÜ‚Ş(~N)";
+        Text[ chinese_traditional ] = "¥]§tÄæ¼ĞÃD(~N)";
         Text[ arabic ] = "íÊÖãä ÑÄæÓ ÃÚãÏÉ";
         Text[ greek ] = "ğåñéİ÷åé êåöáëßäåò óôçëşí";
-        Text[ korean ] = "¿­ ¸Ó¸®±Û Æ÷ÇÔ";
+        Text[ korean ] = "¿­ ¸Ó¸®±Û Æ÷ÇÔ(~N)";
         Text[ turkish ] = "Sütun başlıkları ~içeriyor";
         Text[ language_user1 ] = " ";
     };
@@ -263,7 +263,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ chinese_traditional ] = "´¡¤J/§R°£Àx¦s®æ(~C)";
         Text[ arabic ] = "ÅÏÑÇÌ/ÍĞİ ÎáÇíÇ";
         Text[ greek ] = "ĞñïóèŞêç/ÄéáãñáöŞ êåëéşí";
-        Text[ korean ] = "¼¿ »ğÀÔ£¯»èÁ¦";
+        Text[ korean ] = "¼¿ »ğÀÔ£¯»èÁ¦(~C)";
         Text[ turkish ] = "Hücre ~ekle/sil";
         Text[ language_user1 ] = " ";
     };
@@ -291,7 +291,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ chinese_traditional ] = "«O¯d®æ¦¡(~F)";
         Text[ arabic ] = "ÇáÅÈŞÇÁ Úáì ÇáÊäÓíŞ";
         Text[ greek ] = "ÄéáôŞñçóç ìïñöïğïßçóçò";
-        Text[ korean ] = "Æ÷¸ËÆÃ À¯Áö";
+        Text[ korean ] = "Æ÷¸ËÆÃ À¯Áö(~F)";
         Text[ turkish ] = "Formatlamayı ~koru";
         Text[ language_user1 ] = " ";
     };
@@ -319,7 +319,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ chinese_traditional ] = "¤£Àx¦s¶×¤Jªº¸ê®Æ(~I)";
         Text[ arabic ] = "ÚÏã ÍİÙ ÇáÈíÇäÇÊ ÇáãÓÊæÑÏÉ";
         Text[ greek ] = "Íá ìçí áğïèçêåõôïıí å~éóáãüìåíá äåäïìİíá";
-        Text[ korean ] = "°¡Á®¿Â µ¥ÀÌÅÍ ÀúÀåÇÏÁö ¾Ê±â";
+        Text[ korean ] = "°¡Á®¿Â µ¥ÀÌÅÍ ÀúÀåÇÏÁö ¾Ê±â(~I)";
         Text[ turkish ] = "~İçe aktarılan verileri kaydetme";
         Text[ language_user1 ] = " ";
     };
@@ -416,7 +416,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ chinese_traditional ] = "·s¼W(~A)";
         Text[ arabic ] = "ÅÖÇİÉ";
         Text[ greek ] = "ĞñïóèŞêç";
-        Text[ korean ] = "Ãß°¡";
+        Text[ korean ] = "Ãß°¡(~A)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
     };
@@ -446,7 +446,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ chinese_traditional ] = "§R°£(~D)";
         Text[ arabic ] = "ÍĞİ";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "»èÁ¦";
+        Text[ korean ] = "»èÁ¦(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
     };
@@ -487,7 +487,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ chinese_traditional ] = "·s¼W(~A)";
         Text[ arabic ] = "ÅÖÇİÉ";
         Text[ greek ] = "ĞñïóèŞêç";
-        Text[ korean ] = "Ãß°¡";
+        Text[ korean ] = "Ãß°¡(~A)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
     };
@@ -507,14 +507,14 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ dutch ] = "Wij~zigen" ;
         Text [ spanish ] = "~Modificar" ;
         Text [ english_us ] = "M~odify" ;
-        Text[ chinese_simplified ] = "¸ü¸Ä(~M)";
+        Text[ chinese_simplified ] = "¸ü¸Ä(~O)";
         Text[ russian ] = "Èçìåíèòü";
         Text[ polish ] = "Modyfikuj";
-        Text[ japanese ] = "•ÏX(~M)";
-        Text[ chinese_traditional ] = "ÅÜ§ó(~M)";
+        Text[ japanese ] = "•ÏX(~O)";
+        Text[ chinese_traditional ] = "ÅÜ§ó(~O)";
         Text[ arabic ] = "ÊÚÏíá";
         Text[ greek ] = "Ôñïğïğïßçóç";
-        Text[ korean ] = "º¯°æ";
+        Text[ korean ] = "º¯°æ(~O)";
         Text[ turkish ] = "~Değiştir";
         Text[ language_user1 ] = " ";
     };
