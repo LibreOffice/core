@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-05-24 13:06:41 $
+ *  last change: $Author: kz $ $Date: 2002-05-28 20:13:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,9 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ polish ] = "Settings for high contrast appearance";
         Text[ portuguese_brazilian ] = "Settings for high contrast appearance";
         Text[ japanese ] = "Settings for high contrast appearance";
-        Text[ korean ] = "Settings for high contrast appearance";
+        Text[ korean ] = "대조 모양 설정 사용";
         Text[ chinese_simplified ] = "Settings for high contrast appearance";
-        Text[ chinese_traditional ] = "Settings for high contrast appearance";
+        Text[ chinese_traditional ] = "使用對比度的設定";
         Text[ turkish ] = "Settings for high contrast appearance";
         Text[ arabic ] = "Settings for high contrast appearance";
         Text[ catalan ] = "Settings for high contrast appearance";
@@ -119,9 +119,9 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ polish ] = "For ~drawings and presentations";
         Text[ portuguese_brazilian ] = "For ~drawings and presentations";
         Text[ japanese ] = "For ~drawings and presentations";
-        Text[ korean ] = "For ~drawings and presentations";
+        Text[ korean ] = "그리기 및 프레젠테이션 용";
         Text[ chinese_simplified ] = "For ~drawings and presentations";
-        Text[ chinese_traditional ] = "For ~drawings and presentations";
+        Text[ chinese_traditional ] = "用於繪圖和簡報";
         Text[ turkish ] = "For ~drawings and presentations";
         Text[ arabic ] = "For ~drawings and presentations";
         Text[ catalan ] = "For ~drawings and presentations";
@@ -156,9 +156,9 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ polish ] = "For page ~previews";
         Text[ portuguese_brazilian ] = "For page ~previews";
         Text[ japanese ] = "For page ~previews";
-        Text[ korean ] = "For page ~previews";
+        Text[ korean ] = "페이지 미리보기용";
         Text[ chinese_simplified ] = "For page ~previews";
-        Text[ chinese_traditional ] = "For page ~previews";
+        Text[ chinese_traditional ] = "用於頁面檢視/頁面列印";
         Text[ turkish ] = "For page ~previews";
         Text[ arabic ] = "For page ~previews";
         Text[ catalan ] = "For page ~previews";
@@ -184,9 +184,9 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ polish ] = "Miscellaneous options";
         Text[ portuguese_brazilian ] = "Miscellaneous options";
         Text[ japanese ] = "Miscellaneous options";
-        Text[ korean ] = "Miscellaneous options";
+        Text[ korean ] = "기타 옵션";
         Text[ chinese_simplified ] = "Miscellaneous options";
-        Text[ chinese_traditional ] = "Miscellaneous options";
+        Text[ chinese_traditional ] = "其他選項";
         Text[ turkish ] = "Miscellaneous options";
         Text[ arabic ] = "Miscellaneous options";
         Text[ catalan ] = "Miscellaneous options";
@@ -213,9 +213,9 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ polish ] = "~Help tips disappear after ";
         Text[ portuguese_brazilian ] = "~Help tips disappear after ";
         Text[ japanese ] = "~Help tips disappear after ";
-        Text[ korean ] = "~Help tips disappear after ";
+        Text[ korean ] = "도움말 다음에 사라짐";
         Text[ chinese_simplified ] = "~Help tips disappear after ";
-        Text[ chinese_traditional ] = "~Help tips disappear after ";
+        Text[ chinese_traditional ] = "說明文顯示停留";
         Text[ turkish ] = "~Help tips disappear after ";
         Text[ arabic ] = "~Help tips disappear after ";
         Text[ catalan ] = "~Help tips disappear after ";
@@ -254,9 +254,9 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ polish ] = "seconds";
         Text[ portuguese_brazilian ] = "seconds";
         Text[ japanese ] = "seconds";
-        Text[ korean ] = "seconds";
+        Text[ korean ] = "초";
         Text[ chinese_simplified ] = "seconds";
-        Text[ chinese_traditional ] = "seconds";
+        Text[ chinese_traditional ] = "秒";
         Text[ turkish ] = "seconds";
         Text[ arabic ] = "seconds";
         Text[ catalan ] = "seconds";
@@ -283,9 +283,9 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ polish ] = "Allow animated ~graphics";
         Text[ portuguese_brazilian ] = "Allow animated ~graphics";
         Text[ japanese ] = "Allow animated ~graphics";
-        Text[ korean ] = "Allow animated ~graphics";
+        Text[ korean ] = "애니메이션된 그래픽 허용";
         Text[ chinese_simplified ] = "Allow animated ~graphics";
-        Text[ chinese_traditional ] = "Allow animated ~graphics";
+        Text[ chinese_traditional ] = "允許動畫圖形";
         Text[ turkish ] = "Allow animated ~graphics";
         Text[ arabic ] = "Allow animated ~graphics";
         Text[ catalan ] = "Allow animated ~graphics";
@@ -312,9 +312,9 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ polish ] = "Allow animated ~text";
         Text[ portuguese_brazilian ] = "Allow animated ~text";
         Text[ japanese ] = "Allow animated ~text";
-        Text[ korean ] = "Allow animated ~text";
+        Text[ korean ] = "애니메이션된 텍스트 허용";
         Text[ chinese_simplified ] = "Allow animated ~text";
-        Text[ chinese_traditional ] = "Allow animated ~text";
+        Text[ chinese_traditional ] = "允許動畫文字";
         Text[ turkish ] = "Allow animated ~text";
         Text[ arabic ] = "Allow animated ~text";
         Text[ catalan ] = "Allow animated ~text";
@@ -341,9 +341,9 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ polish ] = "Always use automatic font ~color for screen display";
         Text[ portuguese_brazilian ] = "Always use automatic font ~color for screen display";
         Text[ japanese ] = "Always use automatic font ~color for screen display";
-        Text[ korean ] = "Always use automatic font ~color for screen display";
+        Text[ korean ] = "스크린 표시용으로 항상 자동 글꼴 색상 사용 ";
         Text[ chinese_simplified ] = "Always use automatic font ~color for screen display";
-        Text[ chinese_traditional ] = "Always use automatic font ~color for screen display";
+        Text[ chinese_traditional ] = "熒幕自動顯示字型顏色";
         Text[ turkish ] = "Always use automatic font ~color for screen display";
         Text[ arabic ] = "Always use automatic font ~color for screen display";
         Text[ catalan ] = "Always use automatic font ~color for screen display";
@@ -370,9 +370,9 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ polish ] = "Use system ~font for user interface";
         Text[ portuguese_brazilian ] = "Use system ~font for user interface";
         Text[ japanese ] = "Use system ~font for user interface";
-        Text[ korean ] = "Use system ~font for user interface";
+        Text[ korean ] = "시스템 글꼴을 사용자 인터페이스용으로 사용";
         Text[ chinese_simplified ] = "Use system ~font for user interface";
-        Text[ chinese_traditional ] = "Use system ~font for user interface";
+        Text[ chinese_traditional ] = "採用使用者介面的系統字型";
         Text[ turkish ] = "Use system ~font for user interface";
         Text[ arabic ] = "Use system ~font for user interface";
         Text[ catalan ] = "Use system ~font for user interface";
@@ -400,9 +400,9 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ polish ] = "Support ~assistive technology tools (program restart required)";
         Text[ portuguese_brazilian ] = "Support ~assistive technology tools (program restart required)";
         Text[ japanese ] = "Support ~assistive technology tools (program restart required)";
-        Text[ korean ] = "Support ~assistive technology tools (program restart required)";
+        Text[ korean ] = "장애인을 위한 보조 기술 도구 지원 (프로그램 재시작이 요구됨)";
         Text[ chinese_simplified ] = "Support ~assistive technology tools (program restart required)";
-        Text[ chinese_traditional ] = "Support ~assistive technology tools (program restart required)";
+        Text[ chinese_traditional ] = "支援協助工具程式(需要重新啓動程式)";
         Text[ turkish ] = "Support ~assistive technology tools (program restart required)";
         Text[ arabic ] = "Support ~assistive technology tools (program restart required)";
         Text[ catalan ] = "Support ~assistive technology tools (program restart required)";
@@ -430,9 +430,9 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ polish ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
         Text[ portuguese_brazilian ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
         Text[ japanese ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
-        Text[ korean ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ korean ] = "장애인에게 적합한 컴퓨터 사용을 위해 보조 기술 도구    Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
         Text[ chinese_simplified ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
-        Text[ chinese_traditional ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+        Text[ chinese_traditional ] = "請注意，透過協助工具來使用電腦必須使用 Sun Microsystems Java 。在第一次啓動程式時必須裝載 Java 運行時間環境。因此，第一次啓動過程要比平時慢幾秒鍾。";
         Text[ turkish ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
         Text[ arabic ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
         Text[ catalan ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
