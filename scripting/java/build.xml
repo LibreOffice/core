@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: dfoster $ $Date: 2003-09-10 14:44:41 $
+#   last change: $Author: dfoster $ $Date: 2003-11-03 16:07:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@
     <pathelement location="${solar.jar}/java_uno.jar"/>
     <pathelement location="${solar.jar}/ridl.jar"/>
     <pathelement location="${solar.jar}/sandbox.jar"/>
-    <pathelement location="${solar.jar}/bsh-1.2b7.jar"/>
+    <pathelement location="${solar.jar}/bsh.jar"/>
     <pathelement location="${solar.jar}/js.jar"/>
     <pathelement location="${jardir}"/>
   </path>
