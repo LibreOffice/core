@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-14 07:06:59 $
+ *  last change: $Author: fs $ $Date: 2001-05-18 07:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,17 +237,15 @@ Any SAL_CALL OGridControlModel::queryAggregation( const Type& _rType ) throw (Ru
 //------------------------------------------------------------------------------
 void SAL_CALL OGridControlModel::setParent(const InterfaceRef& Parent) throw(NoSupportException, RuntimeException)
 {
-    Reference<XForm>  xForm(m_xParent, UNO_QUERY);
-    Reference<XLoadable>  xLoadable(xForm, UNO_QUERY);
-    if (xLoadable.is())
-        xLoadable->removeLoadListener(this);
+    if (m_xParentFormLoadable.is())
+        m_xParentFormLoadable->removeLoadListener(this);
 
     OControlModel::setParent(Parent);
 
-    xForm = Reference<XForm>  (m_xParent, UNO_QUERY);
-    xLoadable = Reference<XLoadable>  (xForm, UNO_QUERY);
-    if (xLoadable.is())
-        xLoadable->addLoadListener(this);
+    Reference< XForm > xForm(m_xParent, UNO_QUERY);
+    m_xParentFormLoadable = Reference< XLoadable >  (xForm, UNO_QUERY);
+    if (m_xParentFormLoadable.is())
+        m_xParentFormLoadable->addLoadListener(this);
 }
 //------------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OGridControlModel::getTypes(  ) throw(RuntimeException)
@@ -1036,35 +1034,53 @@ OGridColumn* OGridControlModel::getColumnImplementation(const InterfaceRef& _rxI
 }
 
 //------------------------------------------------------------------------------
-void OGridControlModel::implRemoved(const InterfaceRef& _rxObject)
+void OGridControlModel::gotColumn(const Reference< XInterface >& _rxColumn)
 {
-    OInterfaceContainer::implRemoved(_rxObject);
+    // if our form is already loaded, tell the column
+    // 18.05.2001 - 86558 - frank.schoenheit@germany.sun.com
+    if (m_xParentFormLoadable.is() && m_xParentFormLoadable->isLoaded())
+    {
+        Reference< XLoadListener > xColumnLoadListener(_rxColumn, UNO_QUERY);
+        if (xColumnLoadListener.is())
+        {   // it's kind of a fake ...
+            EventObject aFakedLoadEvent;
+            aFakedLoadEvent.Source = m_xParentFormLoadable;
+            xColumnLoadListener->loaded(aFakedLoadEvent);
+        }
+    }
+}
 
-    if (Reference<XInterface>(m_xSelection, UNO_QUERY).get() == Reference<XInterface>(_rxObject, UNO_QUERY).get())
+//------------------------------------------------------------------------------
+void OGridControlModel::lostColumn(const Reference< XInterface >& _rxColumn)
+{
+    if (Reference<XInterface>(m_xSelection, UNO_QUERY).get() == Reference<XInterface>(_rxColumn, UNO_QUERY).get())
     {   // the currently selected element was replaced
         m_xSelection.clear();
         EventObject aEvt(static_cast<XWeak*>(this));
         NOTIFY_LISTENERS(m_aSelectListeners, XSelectionChangeListener, selectionChanged, aEvt);
     }
+}
+
+//------------------------------------------------------------------------------
+void OGridControlModel::implRemoved(const InterfaceRef& _rxObject)
+{
+    OInterfaceContainer::implRemoved(_rxObject);
+    lostColumn(_rxObject);
 }
 
 //------------------------------------------------------------------------------
 void OGridControlModel::implInserted(const InterfaceRef& _rxObject)
 {
     OInterfaceContainer::implInserted(_rxObject);
+    gotColumn(_rxObject);
 }
 
 //------------------------------------------------------------------------------
 void OGridControlModel::implReplaced(const InterfaceRef& _rxReplacedObject, const InterfaceRef& _rxNewObject)
 {
     OInterfaceContainer::implReplaced(_rxReplacedObject, _rxNewObject);
-
-    if (Reference<XInterface>(m_xSelection, UNO_QUERY).get() == Reference<XInterface>(_rxReplacedObject, UNO_QUERY).get())
-    {   // the currently selected element was replaced
-        m_xSelection.clear();
-        EventObject aEvt(static_cast<XWeak*>(this));
-        NOTIFY_LISTENERS(m_aSelectListeners, XSelectionChangeListener, selectionChanged, aEvt);
-    }
+    lostColumn(_rxReplacedObject);
+    gotColumn(_rxNewObject);
 }
 
 //------------------------------------------------------------------------------
@@ -1072,9 +1088,7 @@ void OGridControlModel::insert(sal_Int32 _nIndex, const InterfaceRef& xElement, 
 {
     OGridColumn* pCol = getColumnImplementation(xElement);
     if (!pCol)
-    {
         throw IllegalArgumentException();
-    }
     OInterfaceContainer::insert(_nIndex, xElement, bEvents);
 }
 

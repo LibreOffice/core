@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
+ *  last change: $Author: fs $ $Date: 2001-05-18 07:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,14 +63,14 @@
 #include "FormComponent.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_FORM_XLOADLISTENER_HPP_
-#include <com/sun/star/form/XLoadListener.hpp>
-#endif
 #ifndef _COM_SUN_STAR_FORM_XGRIDCOLUMNFACTORY_HPP_
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #endif
 #ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
+#include <com/sun/star/form/XLoadable.hpp>
 #endif
 
 #ifndef _LINK_HXX
@@ -126,7 +126,8 @@ class OGridControlModel :public OControlModel
     ::rtl::OUString                         m_sHelpText;
 // [properties]
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>        m_xSelection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xSelection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >           m_xParentFormLoadable;
     sal_uInt32                  m_nFontEvent;
 
 // [properties]
@@ -228,6 +229,9 @@ protected:
     virtual void implRemoved(const InterfaceRef& _rxObject);
     virtual void implInserted(const InterfaceRef& _rxObject);
     virtual void implReplaced(const InterfaceRef& _rxReplacedObject, const InterfaceRef& _rxNewObject);
+
+    void gotColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxColumn);
+    void lostColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxColumn);
 
 private:
     DECL_LINK( OnFontChanged, void* );
