@@ -7170,3 +7170,14 @@ _real@8@3fe7f88d2526f901a800
 ??_C@_0CD@CFBJ@o?3?2SRC621?2wntmsci7?2inc?2vos?1ref?4i@
 ??_C@_0DF@BGGH@O?3?2SRC621?2src?2xmloff?2source?2form@
 ??_C@_0DJ@JCMK@O?3?2SRC621?2src?2xmloff?2source?2form@
+??0ORadioImport@xmloff@@QAE@AAVIFormsImportContext@1@AAVIEventAttacherManager@1@GABVOUString@rtl@@ABV?$Reference@VXNameContainer@container@star@sun@com@@@uno@star@sun@com@@W4ElementType@OControlElement@1@@Z
+??1?$OColumnImport@VOPasswordImport@xmloff@@@xmloff@@UAE@XZ
+??1ORadioImport@xmloff@@UAE@XZ
+??_7?$OColumnImport@VOPasswordImport@xmloff@@@xmloff@@6BIEventAttacher@1@@
+??_7?$OColumnImport@VOPasswordImport@xmloff@@@xmloff@@6BOPropertyImport@1@@
+??_7ORadioImport@xmloff@@6BIEventAttacher@1@@
+??_7ORadioImport@xmloff@@6BOPropertyImport@1@@
+??_G?$OColumnImport@VOPasswordImport@xmloff@@@xmloff@@UAEPAXI@Z
+??_GORadioImport@xmloff@@UAEPAXI@Z
+?createElement@?$OColumnImport@VOPasswordImport@xmloff@@@xmloff@@MAE?AV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@XZ
+?handleAttribute@ORadioImport@xmloff@@UAEXGABVOUString@rtl@@0@Z
