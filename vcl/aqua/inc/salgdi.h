@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-01-23 05:04:59 $
+ *  last change: $Author: bmahbod $ $Date: 2001-01-24 03:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,14 +80,18 @@
 
 const unsigned short kByteMask = 0xFF;
 
-const unsigned short kOneByte  = 8;
+const unsigned short kOneByte  =  8;
 const unsigned short kTwoBytes = 16;
 
-const unsigned short kFiveBits   = 5;
+const unsigned short kFiveBits   =  5;
 const unsigned short kTenBits    = 10;
 const unsigned short kElevenBits = 11;
 
-const unsigned short k32BitScreenDepth = 32;
+const unsigned short kBlackAndWhite  =  1;
+const unsigned short kFourBitColor   =  4;
+const unsigned short kEightBitColor  =  8;
+const unsigned short kThousandsColor = 16;
+const unsigned short kTrueColor      = 32;
 
 // -------------------
 // - Structures -
