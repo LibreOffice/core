@@ -1,6 +1,6 @@
 /*------------------------------------------------------------------------
     $Workfile:   FMSLOTS.SDI  $
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svx/sdi/fmslots.sdi,v 1.1.1.1 2000-09-18 17:01:06 hr Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svx/sdi/fmslots.sdi,v 1.2 2000-10-20 16:16:42 fs Exp $
     Beschreibung:   IDL - File FormularShell
 
     (c) Copyright 1989 - 2000, Star Division GmbH, Hamburg
@@ -149,6 +149,11 @@ interface Form : Object
         StateMethod = GetState ;
     ]
     SID_FM_USE_WIZARDS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_AUTOCONTROLFOCUS
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
@@ -430,6 +435,9 @@ shell FmFormShell
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:01:06  hr
+    initial import
+
     Revision 1.58  1999/10/04 06:38:46  dg
     #68564# Usage of Filters modified
 
