@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:37:31 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ TabDialog TAB_DLG_VALIDATION
     Text[ japanese ] = "„Éá„Éº„Çø„ÅÆÂÖ•ÂäõË¶èÂâá";
     Text[ chinese_traditional ] = "ÊúâÊïà";
     Text[ arabic ] = "«·’·«ÕÌ…";
-    Text[ greek ] = "…Û˜˝Ú";
+    Text[ greek ] = "≈„ÍıÒ¸ÙÁÙ·";
     Text[ korean ] = "Ïú†Ìö®ÏÑ±";
     Text[ turkish ] = "GeÁerlilik";
     Text[ catalan ] = "Validesa";
@@ -290,11 +290,11 @@ TabPage TP_VALIDATION_VALUES
         stringlist [ portuguese_brazilian ] =
         {
             < "Todos os valores" ; Default ; > ;
-            < "N˙meros Inteiros" ; Default ; > ;
-            < "Decimal" ; Default ; > ;
+            < "N˙mero inteiro" ; Default ; > ;
+            < "N˙mero decimal" ; Default ; > ;
             < "Data" ; Default ; > ;
             < "Hora" ; Default ; > ;
-            < "Comprimento do texto" ; Default ; > ;
+            < "Tamanho do texto" ; Default ; > ;
         };
         stringlist [ swedish ] =
         {
@@ -424,12 +424,12 @@ TabPage TP_VALIDATION_VALUES
     };
     StringList [ language_user1 ] =
     {
-            < "Jeden Wert" ; Default ; > ;
-        < "Ganze Zahl" ; Default ; > ;
-        < "Dezimal" ; Default ; > ;
-        < "Datum" ; Default ; > ;
-        < "Zeit" ; Default ; > ;
-        < "Textl?nge" ; Default ; > ;
+            < "; Jeden Wert" ; Default ; > ;
+        < "; Ganze Zahl" ; Default ; > ;
+        < "; Dezimal" ; Default ; > ;
+        < "; Datum" ; Default ; > ;
+        < "; Zeit" ; Default ; > ;
+        < "; Textl?nge" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -518,7 +518,7 @@ TabPage TP_VALIDATION_VALUES
         Text [ french ] = "DonnÈes" ;
         Text [ dutch ] = "~Gegevens" ;
         Text [ portuguese ] = "~Dados" ;
-        Text [ portuguese_brazilian ] = "~Data" ;
+        Text [ portuguese_brazilian ] = "~Dados" ;
         Text[ chinese_simplified ] = "Êï∞ÊçÆ(~D)";
         Text[ russian ] = "”ÒÎÓ‚ËÂ";
         Text[ polish ] = "~Dane";
@@ -581,14 +581,14 @@ TabPage TP_VALIDATION_VALUES
         };
         stringlist [ portuguese_brazilian ] =
         {
-            < "igual" ; Default ; > ;
-            < "menor do que" ; Default ; > ;
-            < "maior do que" ; Default ; > ;
+            < "igual a" ; Default ; > ;
+            < "menor que" ; Default ; > ;
+            < "maior que" ; Default ; > ;
             < "menor ou igual a" ; Default ; > ;
             < "maior ou igual a" ; Default ; > ;
-            < "n„o igual " ; Default ; > ;
+            < "diferente" ; Default ; > ;
             < "entre" ; Default ; > ;
-            < "n„o est· entre" ; Default ; > ;
+            < "n„o incluso em" ; Default ; > ;
         };
         stringlist [ swedish ] =
         {
@@ -757,14 +757,14 @@ TabPage TP_VALIDATION_VALUES
     };
     StringList [ language_user1 ] =
     {
-            < "gleich" ; Default ; > ;
-        < "kleiner als" ; Default ; > ;
-        < "grˆﬂer als" ; Default ; > ;
-        < "kleiner oder gleich" ; Default ; > ;
-        < "gr??er oder gleich" ; Default ; > ;
-        < "ungleich" ; Default ; > ;
-        < "zwischen" ; Default ; > ;
-        < "nicht zwischen" ; Default ; > ;
+            < "; gleich" ; Default ; > ;
+        < "; kleiner als" ; Default ; > ;
+        < "; grˆﬂer als" ; Default ; > ;
+        < "; kleiner oder gleich" ; Default ; > ;
+        < "; gr??er oder gleich" ; Default ; > ;
+        < "; ungleich" ; Default ; > ;
+        < "; zwischen" ; Default ; > ;
+        < "; nicht zwischen" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -1474,10 +1474,10 @@ TabPage TP_VALIDATION_ERROR
     };
     StringList [ language_user1 ] =
     {
-            < "Stopp" ; Default ; > ;
-        < "Warnung" ; Default ; > ;
-        < "Information" ; Default ; > ;
-        < "Makro" ; Default ; > ;
+            < "; Stopp" ; Default ; > ;
+        < "; Warnung" ; Default ; > ;
+        < "; Information" ; Default ; > ;
+        < "; Makro" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -1595,6 +1595,7 @@ TabPage TP_VALIDATION_ERROR
     Text[ hindi ] = "‡§ó‡§≤‡§§‡•Ä ‡§ï‡§æ ‡§∏‡§æ‡§µ‡§ß‡§æ‡§®";
     Text[ slovak ] = "Chybov√© hl√°senie";
 };
+
 
 
 
