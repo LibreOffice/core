@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-20 08:13:25 $
+ *  last change: $Author: oj $ $Date: 2001-03-21 13:49:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,10 +446,11 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
     //////////////////////////////////////////////////////////////////////
     // first delete all connections of this window to others
     String aWinName = pTabWin->GetWinName();
+    String sComposedName = pTabWin->GetComposedName();
     BOOL bRemove = TRUE;
     sal_Int32 nCount = m_vTableConnection.size();
-    ::std::vector<OTableConnection*>::iterator aIter = m_vTableConnection.begin();
-    for(;aIter != m_vTableConnection.end();++aIter)
+    ::std::vector<OTableConnection*>::reverse_iterator aIter = m_vTableConnection.rbegin();
+    for(;aIter != m_vTableConnection.rend();++aIter)
     {
         OTableConnection* pTabConn = (*aIter);
         if(
@@ -469,9 +470,14 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
         {
             delete *aFind;
             m_pView->getController()->getTableWindowData()->erase(aFind);
+            m_pView->getController()->setModified(sal_True);
         }
 
-        m_aTableMap.erase( aWinName );
+        if(m_aTableMap.find(aWinName) != m_aTableMap.end())
+            m_aTableMap.erase( aWinName );
+        else
+            m_aTableMap.erase( sComposedName );
+
         if (pTabWin == m_pLastFocusTabWin)
             m_pLastFocusTabWin = NULL;
         delete pTabWin;
