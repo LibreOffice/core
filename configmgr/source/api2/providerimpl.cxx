@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-05 14:32:55 $
+ *  last change: $Author: jb $ $Date: 2001-04-19 15:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ namespace configmgr
 
     using configapi::NodeElement;
     using configuration::RootTree;
-    using configuration::TemplateProvider;
+    using configuration::SpecialTemplateProvider;
 
     namespace configapi
     {
@@ -114,27 +114,23 @@ namespace configmgr
             UpdateObjectFactory     m_aWriterFactory;
             ApiProvider             m_aReaderProvider;
             ApiProvider             m_aWriterProvider;
-            TemplateProvider        m_aTemplateProvider;
         public:
-            ApiProviderInstances(OProviderImpl& rProviderImpl, ITemplateProvider& rTemplateProvider)
+            ApiProviderInstances(OProviderImpl& rProviderImpl)
             : m_aObjectRegistry(new ObjectRegistry())
             , m_aReaderFactory(m_aReaderProvider,m_aObjectRegistry)
             , m_aWriterFactory(m_aWriterProvider,m_aObjectRegistry)
             , m_aReaderProvider(m_aReaderFactory,rProviderImpl)
             , m_aWriterProvider(m_aWriterFactory,rProviderImpl)
-            , m_aTemplateProvider(rTemplateProvider)
             {
             }
 
             ~ApiProviderInstances()
             {}
 
-            ApiProvider&    getReaderProvider() { return m_aReaderProvider; }
-            ApiProvider&    getWriterProvider() { return m_aWriterProvider; }
-            Factory&        getReaderFactory()  { return m_aReaderFactory; }
-            Factory&        getWriterFactory()  { return m_aWriterFactory; }
-            TemplateProvider& getTemplateProvider() { return m_aTemplateProvider; }
-
+            ApiProvider&        getReaderProvider()     { return m_aReaderProvider; }
+            ApiProvider&        getWriterProvider()     { return m_aWriterProvider; }
+            Factory&            getReaderFactory()      { return m_aReaderFactory; }
+            Factory&            getWriterFactory()      { return m_aWriterFactory; }
         };
     }
 
@@ -173,7 +169,7 @@ namespace configmgr
         m_pTreeMgr->acquire();
 
         // put out of line to get rid of the order dependency (and to have a acquired configuration)
-        m_pNewProviders   = new configapi::ApiProviderInstances(*this,*m_pTreeMgr);
+        m_pNewProviders   = new configapi::ApiProviderInstances(*this);
 
     // now complete our state from the user's profile, if necessary
         if (bNeedProfile)
@@ -282,9 +278,9 @@ namespace configmgr
     // TemplateProvider access
     //-----------------------------------------------------------------------------
 
-    TemplateProvider  OProviderImpl::getTemplateProvider() const
+    ITemplateProvider&  OProviderImpl::getTemplateProvider() const
     {
-        return m_pNewProviders->getTemplateProvider();
+        return *m_pTreeMgr;
     }
 
     // ITreeProvider /ITreeManager
@@ -453,7 +449,8 @@ namespace configmgr
 
         RootTree aRootTree( createReadOnlyTree(
                 AbsolutePath(getBasePath(_rAccessor), Path::NoValidate()),
-                *pTree, nDepth, getTemplateProvider()
+                *pTree, nDepth,
+                TemplateProvider( this->getTemplateProvider(), _xOptions )
             ));
 
         return m_pNewProviders->getReaderFactory().makeAccessRoot(aRootTree, _xOptions);
@@ -497,7 +494,8 @@ namespace configmgr
 
         RootTree aRootTree( createUpdatableTree(
                                 AbsolutePath(getBasePath(_rAccessor),Path::NoValidate()),
-                                *pTree, nDepth, getTemplateProvider()
+                                *pTree, nDepth,
+                                TemplateProvider( this->getTemplateProvider(), _xOptions )
                             ));
 
 

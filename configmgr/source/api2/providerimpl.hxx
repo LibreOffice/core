@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-03 16:31:26 $
+ *  last change: $Author: jb $ $Date: 2001-04-19 15:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ namespace configmgr
     using ::rtl::OUString;
 
     class ISubtree;
+    class ITemplateProvider;
     class IConfigSession;
     class TreeManager;
     class ConnectionSettings;
@@ -109,10 +110,6 @@ namespace configmgr
         class NodeElement;
         class ApiProviderInstances;
         class Factory;
-    }
-    namespace configuration
-    {
-        class TemplateProvider;
     }
 
     // -----------------------------------------------------------------------------
@@ -175,7 +172,7 @@ namespace configmgr
         virtual void SAL_CALL release(  ) throw ();
 
         // TemplateProvider access
-        configuration::TemplateProvider  getTemplateProvider() const;
+        ITemplateProvider&  getTemplateProvider() const;
 
     protected:
         ISynchronizedData      & getTreeLock();
