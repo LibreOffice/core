@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:05:10 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2218,16 +2218,19 @@ namespace xmloff { namespace token {
 
         TOKEN( "keep-together" ),              // XML_KEEP_TOGETHER
 
-        TOKEN( "header-visible" ),              // XML_HEADER_VISIBLE
-        TOKEN( "header-text"),                  // XML_HEADER_TEXT
-        TOKEN( "footer-visible" ),              // XML_FOOTER_VISIBLE
-        TOKEN( "footer-text" ),                 // XML_FOOTER_TEXT
-        TOKEN( "page-number-visible" ),         // XML_PAGE_NUMBER_VISIBLE
-        TOKEN( "date-time-visible" ),           // XML_DATE_TIME_VISIBLE
-        TOKEN( "date-time-format" ),            // XML_DATE_TIME_FORMAT
-        TOKEN( "date-time-update" ),            // XML_DATE_TIME_UPDATE
-        TOKEN( "date-time-text" ),              // XML_DATE_TIME_TEXT
+        TOKEN( "use-header-name" ),             // XML_USE_HEADER_NAME
+        TOKEN( "use-footer-name" ),             // XML_USE_FOOTER_NAME
+        TOKEN( "use-date-time-name" ),          // XML_USE_DATE_TIME_NAME
+        TOKEN( "display-header" ),              // XML_DISPLAY_HEADER
+        TOKEN( "display-footer" ),              // XML_DISPLAY_FOOTER
+        TOKEN( "display-page-number" ),         // XML_DISPLAY_PAGE_NUMBER
+        TOKEN( "display-date-time" ),           // XML_DISPLAY_DATE_TIME
+        TOKEN( "source" ),                      // XML_SOURCE,
+        TOKEN( "current-date" ),                // XML_CURRENT_DATE,
 
+        TOKEN( "header-decl" ),                 // XML_HEADER_DECL
+        TOKEN( "footer-decl" ),                 // XML_FOOTER_DECL
+        TOKEN( "date-time-decl" ),              // XML_DATE_TIME_DECL
 
         TOKEN( "selected-page" ),                   // XML_SELECTED_PAGE
 
