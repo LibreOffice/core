@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp4.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-18 10:31:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,7 @@ dodefine()
         *workp = EOS;                           /* Terminate work       */
         dp->repl = savestring(work);            /* Save the string      */
         dp->nargs = nargs;                      /* Save arg count       */
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         if (debug)
             dumpadef("macro definition", dp);
         else if (bDumpDefs)
@@ -455,7 +455,7 @@ register DEFBUF *tokenp;
     extern FILEINFO     *getfile();
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         if (debug)
             dumpadef("expand entry", tokenp);
 #endif
@@ -525,7 +525,7 @@ register DEFBUF *tokenp;
                     cwarn("Wrong number of macro arguments for \"%s\"",
                         tokenp->name);
                 }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 if (debug)
                     dumpparm("expand");
 #endif
@@ -591,7 +591,7 @@ expcollect()
                 charput(c);                     /* Store this one       */
             }                                   /* Collect an argument  */
             charput(EOS);                       /* Terminate argument   */
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             if (debug)
             fprintf( pCppOut, "parm[%d] = \"%s\"\n", nargs, parlist[nargs - 1]);
 #endif
@@ -662,13 +662,13 @@ nospace:            cfatal("Out of space in macro \"%s\" arg expansion",
             }
         }
         *defp = EOS;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         if (debug > 1)
             fprintf( pCppOut, "macroline: \"%s\"\n", file->buffer);
 #endif
 }
-
-#ifdef DEBUG
+
+#if OSL_DEBUG_LEVEL > 1
 dumpparm(why)
 char            *why;
 /*
