@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-06-06 10:41:25 $
+ *  last change: $Author: os $ $Date: 2001-06-29 06:06:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,8 @@
 #ifndef _SVX_CHECKLBX_HXX //autogen wg. SvxCheckListBox
 #include <svx/checklbx.hxx>
 #endif
-#ifndef _SV_RESARY_HXX //autogen wg. ResStringArray
-#include <vcl/resary.hxx>
+#ifndef _TOOLS_RESARY_HXX
+#include <tools/resary.hxx>
 #endif
 #ifndef _SVTREEBOX_HXX
 #include <svtools/svtreebx.hxx>

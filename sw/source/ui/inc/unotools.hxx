@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
+ *  last change: $Author: os $ $Date: 2001-06-29 06:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,8 @@
 #include <com/sun/star/container/XNamed.hpp>
 #endif
 
-#ifndef _SV_RESARY_HXX
-#include <vcl/resary.hxx>
+#ifndef _TOOLS_RESARY_HXX
+#include <tools/resary.hxx>
 #endif
 #ifndef _SWUNODEF_HXX
 #include <swunodef.hxx>
