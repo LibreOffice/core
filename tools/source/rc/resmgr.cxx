@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:04:40 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1142,7 +1142,7 @@ void* ResMgr::Increment( USHORT nSize )
 const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
 {
     if ( nType == LANGUAGE_SYSTEM || nType == LANGUAGE_DONTKNOW )
-        nType = ::GetSystemLanguage();
+        nType = ::GetSystemUILanguage();
 
     if ( nPrio == 0 )
     {
@@ -1346,7 +1346,7 @@ ResMgr* ResMgr::SearchCreateResMgr(
     LanguageType& nType )
 {
     if( nType == LANGUAGE_DONTKNOW )
-        nType = GetSystemLanguage();
+        nType = GetSystemUILanguage();
 
     ::rtl::OUString aRtlUniAppFileName;
     osl_getExecutableFile( &aRtlUniAppFileName.pData );
