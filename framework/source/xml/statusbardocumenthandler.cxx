@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusbardocumenthandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:13:21 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,7 @@ OReadStatusBarDocumentHandler::OReadStatusBarDocumentHandler(
     OUString aSeparator( RTL_CONSTASCII_USTRINGPARAM( XMLNS_FILTER_SEPARATOR ));
 
     // create hash map
-    for ( int i = 0; i <= (int)SB_XML_ENTRY_COUNT; i++ )
+    for ( int i = 0; i < (int)SB_XML_ENTRY_COUNT; i++ )
     {
         if ( StatusBarEntries[i].nNamespace == SB_NS_STATUSBAR )
         {
