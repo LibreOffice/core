@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: obo $ $Date: 2003-09-01 12:45:37 $
+#   last change: $Author: rt $ $Date: 2003-09-19 08:50:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,18 +109,10 @@ RESLIB1NAME=sw
 RESLIB1SRSFILES= \
     $(sw_res_files)
 
-LIB1TARGET=$(LB)$/swlib.lib
-LIB1ARCHIV=$(LB)$/libswlib.a
-LIB1OBJFILES= \
-        $(OUT)$/obj$/swlib.obj \
-        $(OUT)$/obj$/swcomlib.obj \
-        $(OUT)$/obj$/w4wflt.obj
-
-
-SHL2TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
-SHL2VERSIONMAP= $(TARGET).map
-SHL2IMPLIB= _$(TARGET)
-SHL2LIBS= \
+SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1VERSIONMAP= $(TARGET).map
+SHL1IMPLIB= _$(TARGET)
+SHL1LIBS= \
     $(SLB)$/core1.lib\
     $(SLB)$/core2.lib\
     $(SLB)$/filter.lib\
@@ -129,11 +121,11 @@ SHL2LIBS= \
 
 .IF "$(OS)"!="MACOSX"
 # static libraries
-SHL2STDLIBS+= $(SCHLIB) $(SMLIB)
+SHL1STDLIBS+= $(SCHLIB)
 .ENDIF
 
 # dynamic libraries
-SHL2STDLIBS+= \
+SHL1STDLIBS+= \
     $(OFALIB) \
     $(SVXLIB) \
     $(SFXLIB) \
@@ -159,17 +151,14 @@ SHL2STDLIBS+= \
 
 .IF "$(OS)"=="MACOSX"
 # static libraries at end for OS X
-SHL2STDLIBS+= $(SCHLIB) $(SMLIB)
+SHL1STDLIBS+= $(SCHLIB)
 .ENDIF
 
 .IF "$(GUI)"=="WNT"
-SHL2STDLIBS+= advapi32.lib
+SHL1STDLIBS+= advapi32.lib
 .ENDIF # WNT
 
-#			uno.lib usr.lib sj.lib aofa.lib
-#			ysch.lib  ysim.lib ysm.lib basic.lib ich.lib
-
-SHL2DEPN=   \
+SHL1DEPN=   \
     $(SLB)$/core1.lib\
     $(SLB)$/core2.lib\
     $(SLB)$/filter.lib\
@@ -177,16 +166,42 @@ SHL2DEPN=   \
     $(SLB)$/ui2.lib
 
 
-SHL2OBJS= \
+SHL1OBJS= \
     $(OUT)$/slo$/swmodule.obj \
     $(OUT)$/slo$/swdll.obj
 #	$(SLO)$/.obj		  ^ \ nicht vergessen!
 
 
-SHL2DEF=    $(MISC)$/$(SHL2TARGET).def
-SHL2BASE=	0x1e000000
+SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
+SHL1BASE=	0x1e000000
 
-DEF2NAME	=$(SHL2TARGET)
+DEF1NAME	=$(SHL1TARGET)
+
+SHL2TARGET= swd$(UPD)$(DLLPOSTFIX)
+SHL2IMPLIB= swdimp
+SHL2VERSIONMAP= swd.map
+SHL2DEF=$(MISC)$/$(SHL2TARGET).def
+DEF2NAME=       $(SHL2TARGET)
+
+SHL2STDLIBS= \
+            $(SFX2LIB) \
+            $(SVTOOLLIB) \
+            $(SVLLIB) \
+            $(VCLLIB) \
+            $(SOTLIB) \
+            $(TOOLSLIB) \
+        $(UCBHELPERLIB) \
+            $(COMPHELPERLIB) \
+            $(CPPUHELPERLIB) \
+            $(CPPULIB) \
+            $(SALLIB)
+
+SHL2OBJS=   $(SLO)$/swdetect.obj \
+        $(SLO)$/swdet2.obj \
+        $(SLO)$/detreg.obj  \
+            $(OUT)$/obj$/w4wflt.obj
+
+SHL2DEPN+=  makefile.mk
 
 .INCLUDE :  target.mk
 
