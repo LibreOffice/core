@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 15:59:59 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:37:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,10 @@ class SwDrawContact : public SwContact
     private:
         SwFrm     *pAnchor;
         SwPageFrm *pPage;
+
+        // OD 10.10.2003 #112299# - internal flag to indicate that disconnect
+        // from layout is in progress
+        bool    mbDisconnectInProgress;
 
         // OD 16.05.2003 #108784# - data structure for collecting 'virtual'
         // drawing object supporting drawing objects in headers/footers.
