@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-17 12:46:45 $
+ *  last change: $Author: dr $ $Date: 2001-08-20 14:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2316,9 +2316,10 @@ void ImportExcel::NeueTabelle( void )
     // fuer neue Tabelle eigene Tabellenvorlage erzeugen
     String      aStyleName( GetPageStyleName( nTab ) );
 
-    pStyleSheetItemSet =
-        &pD->GetStyleSheetPool()->Make( aStyleName, SFX_STYLE_FAMILY_PAGE,
-        SFXSTYLEBIT_USERDEF ).GetItemSet();
+    ScStyleSheetPool* pStyleShPool = pD->GetStyleSheetPool();
+    SfxStyleSheetBase* pStyleSh = pStyleShPool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
+    pStyleSheetItemSet = pStyleSh ? &pStyleSh->GetItemSet() :
+        &pStyleShPool->Make( aStyleName, SFX_STYLE_FAMILY_PAGE, SFXSTYLEBIT_USERDEF ).GetItemSet();
 
     pExcRoot->bDefaultPage = TRUE;
 }
