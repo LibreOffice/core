@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-12 11:45:22 $
+#   last change: $Author: hjs $ $Date: 2001-02-12 13:50:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1014,6 +1014,10 @@ PSPRINT=true
 .ENDIF
 
 #to be removed soon!!!
+.IF "$(TF_SVDATA)" != ""
+CDEFS+=-DTF_SVDATA
+.ENDIF
+
 .IF "$(TF_UCB)" != ""
 CDEFS+=-DTF_UCB
 .ENDIF
