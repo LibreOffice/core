@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 16:09:50 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:38:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1136,7 +1136,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 if( bImpress )
                 {
                     WriterRef xWrt;
-                    ::GetRTFWriter( aEmptyStr, xWrt );
+                    // mba: looks as if relative URLs don't make sense here
+                    ::GetRTFWriter( aEmptyStr, String(), xWrt );
                     SvMemoryStream *pStrm = new SvMemoryStream();
                     pStrm->SetBufferSize( 16348 );
                     SwWriter aWrt( *pStrm, *pSmryDoc );
@@ -1201,7 +1202,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case FN_OUTLINE_TO_IMPRESS:
             {
                 WriterRef xWrt;
-                ::GetRTFWriter( 'O', xWrt );
+                // mba: looks as if relative URLs don't make sense here
+                ::GetRTFWriter( 'O', String(), xWrt );
                 SvMemoryStream *pStrm = new SvMemoryStream();
                 pStrm->SetBufferSize( 16348 );
                 SwWriter aWrt( *pStrm, *GetDoc() );
@@ -1741,9 +1743,7 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     pSrcView->SetPool(&GetPool());
 
 
-    String sBaseURL = INetURLObject::GetBaseURL();
     const String& rMedname = GetMedium()->GetName();
-    INetURLObject::SetBaseURL( rMedname );
 
     // fix #51032#: Die HTML-Vorlage muss noch gesetzt werden
     SetHTMLTemplate( *GetDoc() );   //Styles aus HTML.vor
@@ -1759,7 +1759,6 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     SwReader aReader( aMed, rMedname, pDoc );
     aReader.Read( *ReadHTML );
 
-    INetURLObject::SetBaseURL(sBaseURL);
     const SwView* pView = GetView();
     //in print layout the first page(s) may have been formatted as a mix of browse
     //and print layout
@@ -1835,9 +1834,6 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
     INetURLObject aURLObj( rURL );
     String sURL( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
-    String sBaseURL( INetURLObject::GetBaseURL() );
-    INetURLObject::SetBaseURL( sURL );
-
     SwRead pRead = 0;
     SwReader* pReader = 0;
     SwPaM* pPam = 0;
@@ -1891,7 +1887,6 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
     }
     delete pPam;
     delete pReader;
-    INetURLObject::SetBaseURL( sBaseURL );
     return nErr;
 }
 
