@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.183 $
+ *  $Revision: 1.184 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:11:28 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -642,6 +642,7 @@ ScXMLExport::ScXMLExport(
         sAttrColumnsRepeated = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TABLE, GetXMLToken(XML_NUMBER_COLUMNS_REPEATED));
         sAttrFormula = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TABLE, GetXMLToken(XML_FORMULA));
         sAttrStringValue = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_STRING_VALUE));
+        sAttrValueType = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_VALUE_TYPE));
         sElemCell = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TABLE, GetXMLToken(XML_TABLE_CELL));
         sElemCoveredCell = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TABLE, GetXMLToken(XML_COVERED_TABLE_CELL));
         sElemCol = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TABLE, GetXMLToken(XML_TABLE_COLUMN));
@@ -2492,7 +2493,7 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
                 if (sFormula[0] == '\'')
                     sFormula = sFormula.copy(1);
                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                    sFormula, aCell.sStringValue, sal_True, sal_False);
+                    sFormula, aCell.sStringValue, sal_True, sal_True);
             }
         }
         break;
@@ -2542,7 +2543,10 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
                 {
                     if (GetCellText(aCell))
                         if (aCell.sStringValue.getLength())
+                        {
+                            AddAttribute(sAttrValueType, XML_STRING);
                             AddAttribute(sAttrStringValue, aCell.sStringValue);
+                        }
                 }
             }
         }
