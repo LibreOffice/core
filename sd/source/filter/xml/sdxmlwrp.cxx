@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,7 @@ sal_Int32 ReadThroughComponent(
         if( bEncrypted )
             return ERRCODE_SFX_WRONGPASSWORD;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ByteString aError( "SAX parse exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
@@ -316,7 +316,7 @@ sal_Int32 ReadThroughComponent(
         if( bEncrypted )
             return ERRCODE_SFX_WRONGPASSWORD;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ByteString aError( "SAX exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
@@ -325,7 +325,7 @@ sal_Int32 ReadThroughComponent(
     }
     catch( packages::zip::ZipIOException& r )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ByteString aError( "Zip exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
@@ -334,7 +334,7 @@ sal_Int32 ReadThroughComponent(
     }
     catch( io::IOException& r )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ByteString aError( "IO exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
@@ -343,7 +343,7 @@ sal_Int32 ReadThroughComponent(
     }
     catch( uno::Exception& r )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ByteString aError( "uno exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
@@ -849,7 +849,7 @@ sal_Bool SdXMLFilter::Export()
     }
     catch(uno::Exception e)
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ByteString aError( "uno Exception caught while exporting:\n" );
         aError += ByteString( String( e.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
