@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-27 09:42:34 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 16:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1320,7 +1320,8 @@ void SalGraphicsData::DrawServerFontString(
             }
             if (nLen)
             {
-                Point aPoint = RotatedPoint( Point(nX, nY), nAdvance, nFontOrientation_);
+                Point aTmpPoint(nX, nY);
+                Point aPoint(RotatedPoint( aTmpPoint, nAdvance, nFontOrientation_));
                 DispatchServerFontString(aPoint.X(), aPoint.Y(), mpServerSideFont,
                         pFGlyph + nFrom, nLen, pDeltaArray);
             }
@@ -1337,7 +1338,8 @@ void SalGraphicsData::DrawServerFontString(
             }
             if (nLen)
             {
-                Point aPoint = RotatedPoint( Point(nX, nY), nAdvance, nFontOrientation_);
+                Point aTmpPoint(nX, nY);
+                Point aPoint(RotatedPoint( aTmpPoint, nAdvance, nFontOrientation_));
                 DispatchServerFontString(aPoint.X(), aPoint.Y(), mpSrvFallbackFont,
                                         pFFGlyph + nFrom, nLen, pDeltaArray);
             }
