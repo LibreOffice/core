@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 11:57:03 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ void ImplInitKeyEvent( ::com::sun::star::awt::KeyEvent& rEvent, const KeyEvent& 
         rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
 
     rEvent.KeyCode = rEvt.GetKeyCode().GetCode();
-    rEvent.KeyChar = (unsigned char)rEvt.GetCharCode();
+    rEvent.KeyChar = rEvt.GetCharCode();
     rEvent.KeyFunc = rEvt.GetKeyCode().GetFunction();
 }
 
