@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-10 15:51:44 $
+ *  last change: $Author: cmc $ $Date: 2001-09-18 09:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2132,8 +2132,8 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
         static const SwRelationOrient aRelOriTab[ nCntRelTo ] = {
             REL_PG_PRTAREA, // Page printable area, when bound to page. identical with PRTAREA
             REL_PG_FRAME,   // Page,                when bound to page. identical with FRAME
-            FRAME,          // Paragraph Text area
-//          PRTAREA,        // Paragraph area
+//          FRAME,          // Paragraph Text area
+            PRTAREA,        // Paragraph area
             REL_CHAR        // to a Character
 
 //          REL_PG_LEFT,    // in left page-border
@@ -2888,11 +2888,14 @@ void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.34 2001-09-10 15:51:44 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.35 2001-09-18 09:51:53 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.34  2001/09/10 15:51:44  cmc
+      #92059# Consider border widths in {im|ex}port of floating elements
+
       Revision 1.32  2001/08/28 15:24:29  cmc
       #91622 Properties open at begin and end of tables and frames need to be cunningly duplicated outside and inside element
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-10 15:51:44 $
+ *  last change: $Author: cmc $ $Date: 2001-09-18 09:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1006,6 +1006,17 @@ void SwWW8Writer::WriteSdrTextObj( const SdrObject& rObj )
 }
 
 /*  */
+class WinwordAnchoring : public EscherExClientRecord_Base
+{
+public:
+    void WriteData( EscherEx& rEx ) const;
+    void SetAnchoring( const SwFrmFmt& rFmt, BOOL bBROKEN=FALSE );
+private:
+    UINT32 nXAlign;
+    UINT32 nYAlign;
+    UINT32 nXRelTo;
+    UINT32 nYRelTo;
+};
 
 class SwEscherEx : public  EscherEx
 {
@@ -1013,6 +1024,8 @@ class SwEscherEx : public  EscherEx
     SvULongs aFollowShpIds;
     SvPtrarr aSortFmts;
     SwWW8Writer& rWrt;
+    EscherExHostAppData aHostData;
+    WinwordAnchoring aWinwordAnchoring;
     WW8_WrPlcTxtBoxes *pTxtBxs;
     SvStream* pEscherStrm, *pPictStrm;
     long nEmuMul, nEmuDiv;
@@ -1043,12 +1056,13 @@ class SwEscherEx : public  EscherEx
     void WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId );
     USHORT WriteFlyFrameAttr( const SwFrmFmt& rFmt, MSO_SPT eShapeType,
         EscherPropertyContainer& rPropOpt );
-    void WriteGrfAttr( const SwNoTxtNode& rNd, EscherPropertyContainer& rPropOpt );
+    void WriteGrfAttr( const SwNoTxtNode& rNd,
+        EscherPropertyContainer& rPropOpt );
 
     USHORT WriteFlyFrm( const SwFrmFmt& rFmt, UINT32 &rShapeId );
 
     virtual SvStream* QueryPicStream();
-    virtual UINT32 QueryTextID( const uno::Reference< drawing::XShape>& , UINT32 );
+    virtual UINT32 QueryTextID( const uno::Reference< drawing::XShape>&,UINT32);
 
     SwEscherEx( const SwEscherEx& );
 public:
@@ -1060,6 +1074,20 @@ public:
     void WritePictures();
 };
 
+void WinwordAnchoring::WriteData( EscherEx& rEx ) const
+{
+    //Toplevel groups get their winword extra data attached, and sub elements
+    //use the defaults
+    if( rEx.GetGroupLevel() <= 1 )
+    {
+        rEx.AddAtom(24, ESCHER_UDefProp, 3, 4 );
+        SvStream& rSt = rEx.GetStream();
+        rSt << (UINT16)0x038F << nXAlign;
+        rSt << (UINT16)0x0390 << nXRelTo;
+        rSt << (UINT16)0x0391 << nYAlign;
+        rSt << (UINT16)0x0392 << nYRelTo;
+    }
+}
 
 /*  */
 
@@ -1100,6 +1128,7 @@ SwEscherEx::SwEscherEx( SvStream* pStrm, SwWW8Writer& rWW8Wrt )
     : EscherEx( *pStrm, rWW8Wrt.pHFSdrObjs->GetCntntArr().Count() ? 2 : 1 ),
     rWrt( rWW8Wrt ), pTxtBxs( 0 ), pEscherStrm( pStrm ), pPictStrm( 0 )
 {
+    aHostData.SetClientData(&aWinwordAnchoring);
     Init();
     OpenContainer( ESCHER_DggContainer );
 
@@ -1154,6 +1183,7 @@ SwEscherEx::SwEscherEx( SvStream* pStrm, SwWW8Writer& rWW8Wrt )
             }
             else
             {
+                aWinwordAnchoring.SetAnchoring(rFmt, TRUE);
                 const SdrObject* pObj = rFmt.FindRealSdrObject();
                 if( pObj )
                     nShapeId = AddSdrObject( *pObj );
@@ -1308,7 +1338,7 @@ static int
     return( (*((UINT32*)pFirst ) & 0xFFFFFF00) - (*((UINT32*)pSecond)  & 0xFFFFFF00) );
 }
 
-void SwEscherEx::WriteFrmExtraData( const SwFrmFmt& rFmt )
+void WinwordAnchoring::SetAnchoring( const SwFrmFmt& rFmt, BOOL bBROKEN )
 {
     const RndStdIds eAnchor = rFmt.GetAnchor().GetAnchorId();
 
@@ -1320,6 +1350,16 @@ void SwEscherEx::WriteFrmExtraData( const SwFrmFmt& rFmt )
 
     SwRelationOrient   eHRel = rHoriOri.GetRelationOrient();
     SwRelationOrient   eVRel = rVertOri.GetRelationOrient();
+
+    //There must be a problem with page anchoring and draw objects in writer
+    //must be a problem somewhere.
+    if (bBROKEN)
+    {
+        if (eHRel = PRTAREA)
+            eHRel = FRAME;
+        if (eVRel = PRTAREA)
+            eVRel = FRAME;
+    }
 
     UINT32 nHIndex = 0;
     UINT32 nVIndex = 0;
@@ -1749,8 +1789,8 @@ void SwEscherEx::WriteFrmExtraData( const SwFrmFmt& rFmt )
                               CompUINT32 );
     if( !pFound )
         pFound = (UINT32*)aHVMatcher; // take Element #0 if none found
-    UINT32 nXAlign = (*pFound & 0x000000F0) >> 4;
-    UINT32 nXRelTo = (*pFound & 0x0000000F);
+    nXAlign = (*pFound & 0x000000F0) >> 4;
+    nXRelTo = (*pFound & 0x0000000F);
 
     // find vertical values
     pFound= (UINT32*)bsearch( (BYTE*) &nVIndex,
@@ -1760,18 +1800,15 @@ void SwEscherEx::WriteFrmExtraData( const SwFrmFmt& rFmt )
                               CompUINT32 );
     if( !pFound )
         pFound = (UINT32*)aHVMatcher; // take Element #0 if none found
-    UINT32 nYAlign = (*pFound & 0x000000F0) >> 4;
-    UINT32 nYRelTo = (*pFound & 0x0000000F);
-
-    AddAtom(24, ESCHER_UDefProp, 3, 4 );
-    SvStream& rSt = GetStream();
-
-    rSt << (UINT16)0x038F << nXAlign;
-    rSt << (UINT16)0x0390 << nXRelTo;
-    rSt << (UINT16)0x0391 << nYAlign;
-    rSt << (UINT16)0x0392 << nYRelTo;
+    nYAlign = (*pFound & 0x000000F0) >> 4;
+    nYRelTo = (*pFound & 0x0000000F);
 }
 
+void SwEscherEx::WriteFrmExtraData( const SwFrmFmt& rFmt )
+{
+    aWinwordAnchoring.SetAnchoring(rFmt );
+    aWinwordAnchoring.WriteData(*this);
+}
 
 USHORT SwEscherEx::WriteFlyFrm( const SwFrmFmt& rFmt, UINT32 &rShapeId )
 {
@@ -2442,11 +2479,14 @@ BOOL SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.19 2001-09-10 15:51:44 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.20 2001-09-18 09:51:53 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.19  2001/09/10 15:51:44  cmc
+      #92059# Consider border widths in {im|ex}port of floating elements
+
       Revision 1.18  2001/09/05 10:16:19  cmc
       #91916# Improve size calculation of inline graphics to consider borders,shadows and spacing as word does
 
