@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:30:32 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include <svx/svdundo.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include "drawview.hxx"
 #include "global.hxx"
@@ -166,6 +167,7 @@ void lcl_RefreshChartData( SdrModel* pModel, ScDocument* pSourceDoc )
                             SchMemChart* pNewData = aArray.CreateMemChart();
                             SchDLL::Update( aIPObj, pNewData );
                             delete pNewData;
+                            ((SdrOle2Obj*)pObject)->GetNewReplacement();
                         }
                     }
                 }
@@ -222,8 +224,7 @@ BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
         ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
         uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
-        SvEmbeddedObjectRef aPersistRef( aDragShellRef );
-        pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
+        pTransferObj->SetDrawPersist( &aDragShellRef );    // keep persist for ole objects alive
         pTransferObj->SetDragSource( this );            // copies selection
 
         SC_MOD()->SetDragObject( NULL, pTransferObj );      // for internal D&D
@@ -262,8 +263,7 @@ void ScDrawView::DoCopy()
 
     if ( ScGlobal::pDrawClipDocShellRef )
     {
-        SvEmbeddedObjectRef aPersistRef( *ScGlobal::pDrawClipDocShellRef );
-        pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
+        pTransferObj->SetDrawPersist( &(*ScGlobal::pDrawClipDocShellRef) );    // keep persist for ole objects alive
     }
 
     pTransferObj->CopyToClipboard( pViewData->GetActiveWin() );     // system clipboard
@@ -309,12 +309,14 @@ void ScDrawView::SetMarkedOriginalSize()
         Size aOriginalSize;
         if (nIdent == OBJ_OLE2)
         {
-            SvInPlaceObjectRef xIPObj = ((SdrOle2Obj*)pObj)->GetObjRef();
-            if (xIPObj.Is())
+            uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
+            if ( xObj.is() )
             {
+                MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( ((SdrOle2Obj*)pObj)->GetAspect() ) );
+                awt::Size aSz = xObj->getVisualAreaSize( ((SdrOle2Obj*)pObj)->GetAspect() );
                 aOriginalSize = OutputDevice::LogicToLogic(
-                                        xIPObj->GetVisArea().GetSize(),
-                                        xIPObj->GetMapUnit(), MAP_100TH_MM );
+                                        Size( aSz.Width, aSz.Height ),
+                                        aUnit, MAP_100TH_MM );
                 bDo = TRUE;
             }
         }
