@@ -2,9 +2,9 @@
 *
 *  $RCSfile: hidother.src,v $
 *
-*  $Revision: 1.58 $
+*  $Revision: 1.59 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-21 12:46:48 $
+*  last change: $Author: obo $ $Date: 2005-03-18 10:12:46 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -516,4 +516,5 @@ hidspecial HID_DSADMIN_DOSLINEENDS                                          { He
 hidspecial SID_DB_QUERY_PREVIEW                                             { HelpId = SID_DB_QUERY_PREVIEW ; };
 hidspecial HID_PAGE_DBWIZARD_USERDEFINED_ET_BROWSE                          { HelpId = HID_PAGE_DBWIZARD_USERDEFINED_ET_BROWSE ; };
 hidspecial HID_PAGE_DBWIZARD_USERDEFINED_BROWSE                             { HelpId = HID_PAGE_DBWIZARD_USERDEFINED_BROWSE ; };
+hidspecial HID_DLG_DATABASE_WIZARD                                          { HelpId = HID_DLG_DATABASE_WIZARD ; };
 
