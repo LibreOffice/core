@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-09 17:16:33 $
+ *  last change: $Author: ka $ $Date: 2001-03-12 12:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,8 @@ public:
 
                         GalleryValueSet( GalleryBrowser2* pParent, GalleryTheme* pTheme, WinBits nWinStyle );
                         ~GalleryValueSet();
+
+    void                InitDrag();
 };
 
 // ------------------------------------------------------------------------
@@ -232,6 +234,16 @@ sal_Int8 GalleryValueSet::AcceptDrop( const AcceptDropEvent& rEvt )
 sal_Int8 GalleryValueSet::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     return( ( (GalleryBrowser2*) GetParent() )->ExecuteDrop( *this, rEvt ) );
+}
+
+// ------------------------------------------------------------------------
+
+void GalleryValueSet::InitDrag()
+{
+    const CommandEvent  aEvt( GetPointerPosPixel(), COMMAND_STARTDRAG, TRUE );
+    Region              aRegion;
+
+    StartDrag( aEvt, aRegion );
 }
 
 // --------------------------
@@ -551,7 +563,7 @@ sal_Int8 GalleryBrowser2::ExecuteDrop( DropTargetHelper& rTarget, const ExecuteD
         if( mpCurTheme->IsDragging() )
             mpCurTheme->ChangeObjectPos( mpCurTheme->GetDragPos(), nInsertPos );
         else
-            nRet = mpCurTheme->InsertTransferable( rEvt.maDropEvent.Transferable );
+            nRet = mpCurTheme->InsertTransferable( rEvt.maDropEvent.Transferable, nInsertPos );
     }
 
     return nRet;
@@ -895,7 +907,14 @@ IMPL_LINK( GalleryBrowser2, StartDragHdl, Timer*, pTimer )
     const USHORT nId = mbIsPreview ? mpValueSet->GetSelectItemId() : mpValueSet->GetItemId( GetPointerPosPixel() );
 
     if( nId && mpCurTheme && ( nId <= mpCurTheme->GetObjectCount() ) )
+    {
+        if( mbIsPreview )
+            mpPreview->InitDrag();
+        else
+            mpValueSet->InitDrag();
+
         mpCurTheme->StartDrag( this, nId - 1 );
+    }
 
     return 0L;
 }
