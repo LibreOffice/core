@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertestdialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2003-05-08 09:00:38 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,7 +576,7 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
             utl::TempFile aTempFile;
             OUString aTempFileURL( aTempFile.GetURL() );
 
-            const application_info_impl* pAppInfo = getApplicationInfo( mpFilterInfo->maDocumentService );
+            const application_info_impl* pAppInfo = getApplicationInfo( mpFilterInfo->maExportService );
             if( pAppInfo )
             {
                 File aOutputFile( aTempFileURL );
