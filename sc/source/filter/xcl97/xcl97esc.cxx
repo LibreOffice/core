@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:22:17 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,7 +433,7 @@ XclEscherClientAnchor::XclEscherClientAnchor( RootData& rRoot, const SdrObject& 
     nFlag = GetMoveSizeFlag( rObj );
     const MapMode aSrc( MAP_100TH_MM );
     const MapMode aDst( MAP_TWIP );
-    Rectangle aRect( OutputDevice::LogicToLogic( rObj.GetBoundRect(), aSrc, aDst ) );
+    Rectangle aRect( OutputDevice::LogicToLogic( rObj.GetCurrentBoundRect(), aSrc, aDst ) );
     Init( aRect );
 }
 
