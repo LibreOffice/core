@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localizedtreeactions.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:38 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,7 +501,7 @@ std::auto_ptr<ISubtree>  ExpandTreeForLocale::expanded(ValueNode const& _aNode, 
 
     node::Attributes aValueAttributes = _aNode.getAttributes();
 
-    aValueAttributes.bLocalized = false;
+    aValueAttributes.setLocalized(false);
     if (aValueAttributes.state() == node::isMerged)
         aValueAttributes.setState( node::isReplaced );
 
@@ -596,7 +596,7 @@ std::auto_ptr<SubtreeChange> ExpandChangesForLocale::expanded(ValueChange const&
 
         node::Attributes aValueAttributes = _aNode.getAttributes();
 
-        aValueAttributes.bLocalized = false;
+        aValueAttributes.setLocalized(false);
         if (aValueAttributes.state() == node::isMerged)
             aValueAttributes.setState( node::isReplaced );
 
