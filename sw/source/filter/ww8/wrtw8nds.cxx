@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-13 14:19:05 $
+ *  last change: $Author: cmc $ $Date: 2002-06-25 09:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2015,30 +2015,27 @@ void SwWW8Writer::OutWW8FlyFrm( const SwFrmFmt& rFrmFmt,
 
 void SwWW8Writer::OutFlyFrms( const SwCntntNode& rNode )
 {
-    if( !pFlyPos )
-        return;
-
     // gib alle freifliegenden Rahmen die sich auf den akt. Absatz
     // und evt. auf das aktuelle Zeichen beziehen, aus.
     ULONG nCurPos = rNode.GetIndex();
 
     // suche nach dem Anfang der FlyFrames
-    for( USHORT n = 0; n < pFlyPos->Count() &&
-            (*pFlyPos)[n]->GetNdIndex().GetIndex() <
-                nCurPos; ++n )
+    for (USHORT n = 0; n < maFlyPos.Count() &&
+            maFlyPos[n]->GetNdIndex().GetIndex() < nCurPos; ++n)
         ;
 
     Point aNdPos, aPgPos;
     Point* pLayPos;
     BOOL bValidNdPos = FALSE, bValidPgPos = FALSE;
 
-    if( n < pFlyPos->Count() )
+    if (n < maFlyPos.Count())
     {
-        while(     ( n < pFlyPos->Count() )
-                && (   nCurPos
-                    == (*pFlyPos)[n]->GetNdIndex().GetIndex() ) )
+        while (
+                (n < maFlyPos.Count()) &&
+                (nCurPos == maFlyPos[n]->GetNdIndex().GetIndex())
+              )
         {
-            const SwFrmFmt& rFmt = (*pFlyPos)[ n ]->GetFmt();
+            const SwFrmFmt& rFmt = maFlyPos[n]->GetFmt();
             if( FLY_PAGE == rFmt.GetAnchor().GetAnchorId() )
             {
                 // get the Layout Node-Position.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-13 14:19:05 $
+ *  last change: $Author: cmc $ $Date: 2002-06-25 09:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef WRT_FN_HXX
 #include <wrt_fn.hxx>
+#endif
+#ifndef _FLYPOS_HXX
+#include <flypos.hxx>
 #endif
 #ifndef WW8STRUC_HXX
 #include <ww8struc.hxx>
@@ -339,7 +342,7 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
     wwFontHelper maFontHelper;
     String aMainStg;
     SvPtrarr aTOXArr;
-    SwPosFlyFrms* pFlyPos;      // Pointer auf die aktuelle "FlyFrmTabelle"
+    SwPosFlyFrms maFlyPos;      // Pointer auf die aktuelle "FlyFrmTabelle"
     const SfxItemSet* pISet;    // fuer Doppel-Attribute
     WW8_WrPct*  pPiece;         // Pointer auf Piece-Table
     SwNumRuleTbl* pUsedNumTbl;  // alle used NumRules

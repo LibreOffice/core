@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-13 13:14:46 $
+ *  last change: $Author: cmc $ $Date: 2002-06-25 09:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,9 +155,6 @@
 #endif
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
-#endif
-#ifndef _FLYPOS_HXX
-#include <flypos.hxx>
 #endif
 #ifndef _BOOKMRK_HXX
 #include <bookmrk.hxx>
@@ -2236,23 +2233,35 @@ ULONG SwWW8Writer::StoreDoc()
     USHORT nRedlineMode = pDoc->GetRedlineMode();
     pDop->fRevMarking = 0 != (REDLINE_ON & nRedlineMode);
     pDop->fRMView = 0 != ( REDLINE_SHOW_DELETE & nRedlineMode );
-    if( pDoc->GetRedlineTbl().Count() )
-        pDoc->SetRedlineMode( nRedlineMode | REDLINE_SHOW_DELETE |
-                                            REDLINE_SHOW_INSERT );
+    if (pDoc->GetRedlineTbl().Count())
+    {
+        pDoc->SetRedlineMode(nRedlineMode | REDLINE_SHOW_DELETE |
+            REDLINE_SHOW_INSERT);
+    }
+
+    // Tabelle fuer die freifliegenden Rahmen erzeugen, aber nur wenn
+    // das gesamte Dokument geschrieben wird
+    pDoc->GetAllFlyFmts(maFlyPos, bWriteAll ? 0 : pOrigPam, bWrtWW8);
 
     // set AutoHyphenation flag if found in default para style
     const SfxPoolItem* pItem;
-    SwTxtFmtColl* pStdTxtFmtColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
-    if(    pStdTxtFmtColl
-        && SFX_ITEM_SET == pStdTxtFmtColl->GetItemState(
-                                        RES_PARATR_HYPHENZONE, FALSE, &pItem ) )
-        pDop->fAutoHyphen = ((SvxHyphenZoneItem*)pItem)->IsHyphen();
+    SwTxtFmtColl* pStdTxtFmtColl =
+        pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
+    if (pStdTxtFmtColl && SFX_ITEM_SET == pStdTxtFmtColl->GetItemState(
+        RES_PARATR_HYPHENZONE, FALSE, &pItem))
+    {
+        pDop->fAutoHyphen = ((const SvxHyphenZoneItem*)pItem)->IsHyphen();
+    }
 
     // make unique OrdNums (Z-Order) for all drawing-/fly Objects
-    if( pDoc->GetDrawModel() )
+    if (pDoc->GetDrawModel())
         pDoc->GetDrawModel()->GetPage( 0 )->RecalcObjOrdNums();
 
     StoreDoc1();
+
+    // loesche die Tabelle mit den freifliegenden Rahmen
+    for (USHORT i = maFlyPos.Count(); i > 0;)
+        delete maFlyPos[--i];
 
     if( nRedlineMode != pDoc->GetRedlineMode() )
         pDoc->SetRedlineMode( nRedlineMode );
@@ -2390,18 +2399,7 @@ ULONG SwWW8Writer::WriteStorage()
             pCurPam->GetPoint()->nNode = *pTNd;
     }
 
-    // Tabelle fuer die freifliegenden Rahmen erzeugen, aber nur wenn
-    // das gesamte Dokument geschrieben wird
-    SwPosFlyFrms aFlyPos;
-    pDoc->GetAllFlyFmts( aFlyPos, bWriteAll ? 0 : pOrigPam, bWrtWW8 );
-    // Die Sonderbehandlung fuer Teilausgabe fehlt noch ( siehe RTF )
-    pFlyPos = &aFlyPos;
-
     ULONG nRet = StoreDoc();
-
-    // loesche die Tabelle mit den freifliegenden Rahmen
-    for( USHORT i = aFlyPos.Count(); i > 0; )
-        delete aFlyPos[ --i ];
 
     ::EndProgress( pDoc->GetDocShell() );
     bWrtWW8 = FALSE;        // sicherheitshalber: Default fuer's naechste Mal
