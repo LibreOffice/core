@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 17:53:28 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 12:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,8 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include "rtl/ref.hxx"
 
+#include "canvas/elapsedtime.hxx"
+#include "canvas/prioritybooster.hxx"
 
 // TODO(Q3): This breaks encapsulation. Either export
 // these strings from avmedia, or provide an XManager
@@ -172,7 +174,7 @@ using ::rtl::OString;
 using ::comphelper::ImplementationReference;
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::drawing;
 
@@ -369,6 +371,7 @@ SlideshowImpl::SlideshowImpl(
     msOnClick( RTL_CONSTASCII_USTRINGPARAM("OnClick") ),
     msBookmark( RTL_CONSTASCII_USTRINGPARAM("Bookmark") ),
     msVerb( RTL_CONSTASCII_USTRINGPARAM("Verb") ),
+    mnEntryCounter(0),
     mnLastPageNumber(-1),
     mbIsPaused(false),
     mbInputFreeze(false)
@@ -1263,6 +1266,7 @@ bool SlideshowImpl::pause( bool bPause )
 {
     if( bPause != mbIsPaused )
     {
+        mbIsPaused = bPause;
         if( mxShow.is() )
         {
             bool bRet = mxShow->pause(bPause);
@@ -1557,8 +1561,6 @@ double SlideshowImpl::update()
         const bool bUpdate = xShow->update(fUpdate);
         if (bUpdate)
         {
-            if (fUpdate == 0.0) // ASAP case
-                fUpdate = 0.033; // lowest time resolution: 30 updates per sec
             maUpdateTimer.SetTimeout( static_cast<ULONG>(fUpdate * 1000.0) );
             maUpdateTimer.Start();
         }
@@ -1590,22 +1592,32 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
     // doing some nMagic
     const rtl::Reference<SlideshowImpl> this_(this);
 
+    // prevent recursive calls
+    if(mnEntryCounter)
+        return 0;
+    mnEntryCounter++;
+
     try
     {
-        const sal_uInt32 nLoopTime = osl_getGlobalTimer();
-        double fUpdate = update();
+        // TODO(Q3): Evaluate under various systems and setups,
+        // whether this is really necessary. Under WinXP and Matrox
+        // G550, the frame rates were much more steadier with this
+        // tweak, although.
 
-        while (mxShow.is() &&
-               (fUpdate >= 0.0) && (fUpdate <= 0.05) &&
-               ((osl_getGlobalTimer() - nLoopTime) < 500))
-        {
+// currently no solution, because this kills sound (at least on Windows)
+//         // Boost our prio, as long as we're in the render loop
+//         ::canvas::tools::PriorityBooster aBooster(2);
+
+        double fUpdate = update();
+        while(mxShow.is() && fUpdate <= 0.0) {
+            sal_uInt32 nCurrentTime = osl_getGlobalTimer();
             Application::Reschedule();
             fUpdate = update();
         }
     }
     catch( Exception& e )
     {
-        e;
+        static_cast<void>(e);
         DBG_ERROR(
             (OString("sd::SlideshowImpl::updateHdl(), "
                      "exception caught: ") +
@@ -1613,6 +1625,8 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
                  comphelper::anyToString( cppu::getCaughtException() ),
                  RTL_TEXTENCODING_UTF8 )).getStr() );
     }
+
+    --mnEntryCounter;
 
     return 0;
 }
