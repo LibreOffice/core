@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profileitem_python.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-02-11 16:54:01 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 14:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@ Profile gid_Profile_Pythonloader_Uno_Ini
     Styles = (NETWORK);
 End
 
+#ifndef SYSTEM_PYTHON
 ProfileItem gid_Profileitem_Pythonloader_Pythonhome
     ProfileID = gid_Profile_Pythonloader_Uno_Ini;
     ModuleID = gid_Module_Optional_Pyuno;
@@ -81,6 +82,7 @@ ProfileItem gid_Profileitem_Pythonloader_Pythonhome
     Key = "PYTHONHOME";
     Value = "$ORIGIN/python-core";
 End
+#endif
 
 ProfileItem gid_Profileitem_Pythonloader_Pythonpath
     ProfileID = gid_Profile_Pythonloader_Uno_Ini;
@@ -88,9 +90,13 @@ ProfileItem gid_Profileitem_Pythonloader_Pythonpath
     Section = "Bootstrap";
     Order = 1;
     Key = "PYTHONPATH";
+#ifdef SYSTEM_PYTHON
+    Value = "$ORIGIN";
+#else
   #ifdef UNX
     Value = "$ORIGIN/python-core/lib $ORIGIN/python-core/lib/lib-dynload $ORIGIN/python-core/lib/lib-tk $ORIGIN";
   #else
     Value = STRING(CONCAT3($ORIGIN/python-core-,PYVERSION,/lib $ORIGIN));
   #endif
+#endif
 End
