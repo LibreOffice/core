@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-12-11 09:34:46 $
+ *  last change: $Author: os $ $Date: 2001-12-12 09:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1441,7 +1441,8 @@ long SvxRuler::GetRightFrameMargin() const
     else if(pLRSpaceItem)
         l += pLRSpaceItem->GetRight();
 
-    if((!pColumnItem || pColumnItem->IsTable())&& pParaBorderItem)
+    if(pParaBorderItem &&
+        (!pColumnItem || pColumnItem->IsTable()||IsActLastColumn( TRUE )))
         l += pParaBorderItem->GetRight();
 
     return pPagePosItem->GetWidth() - l;
