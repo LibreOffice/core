@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:59:49 $
+ *  last change: $Author: dr $ $Date: 2001-03-15 09:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,9 +109,9 @@ XclImpChangeTrack::XclImpChangeTrack( RootData* pRootData ) :
     bGlobExit( sal_False ),
     eNestedMode( nmBase )
 {
-    DBG_ASSERT( pExcRoot && pExcRoot->pImpTabIdBuffer && pExcRoot->pSupbookBuffer,
+    DBG_ASSERT( pExcRoot && pExcRoot->pImpTabIdBuffer && pExcRoot->pExtsheetBuffer,
         "XclImpChangeTrack::XclImpChangeTrack - root data incomplete" );
-    if( !pExcRoot || !pExcRoot->pImpTabIdBuffer || !pExcRoot->pSupbookBuffer )
+    if( !pExcRoot || !pExcRoot->pImpTabIdBuffer || !pExcRoot->pExtsheetBuffer )
         return;
 
     String sStreamName( RTL_CONSTASCII_STRINGPARAM( pRevLogStreamName ) );
@@ -234,8 +234,8 @@ sal_Bool XclImpChangeTrack::Read3DTabRefInfo( sal_uInt16& rFirstTab, sal_uInt16&
         pStrm->Ignore( 1 );
         XclImpSupbook::ReadTabName( *pStrm, *pExcRoot, sTabName );
         pStrm->Ignore( 1 );
-        const XclImpSupbook* pSupbook = pExcRoot->pSupbookBuffer->Get( sDocName );
-        rFirstTab = rLastTab = pSupbook ? pSupbook->GetScTabNum( sTabName ) : 0xFFFF;
+        const XclImpSupbook* pSupbook = pExcRoot->pExtsheetBuffer->GetSupbook( sDocName );
+        rFirstTab = rLastTab = pSupbook ? pSupbook->GetScTabNum( sTabName ) : EXC_TAB_INVALID;
     }
     return sal_True;
 }

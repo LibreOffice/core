@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:55:35 $
+ *  last change: $Author: dr $ $Date: 2001-03-15 09:02:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,18 +498,14 @@ void ImportExcel::ChartSelection( void )
                     nCol2 &= 0x3FFF;
                 }
 
-                const XclImpXti* pXti = pExcRoot->pXtiBuffer->Get( nIxti );
+                const XclImpXti*        pXti = pExcRoot->pExtsheetBuffer->GetXti( nIxti );
+                const XclImpSupbook*    pSupbook = pExcRoot->pExtsheetBuffer->GetSupbook( nIxti );
 
-                if( pXti )
-                {
-                    const XclImpSupbook* pSbE = pExcRoot->pSupbookBuffer->Get( pXti->nSupbook );
-
-                    if( pSbE /*&& pSbE->IsSameSheet()*/ )
-                    {// in aktuellem Workbook
-                        nTab1 = pXti->nFirst;
-                        nTab2 = pXti->nLast;
-                        bValues = TRUE;
-                    }
+                if( pXti && pSupbook /*&& pSupbook->IsSameSheet()*/ )
+                {// in aktuellem Workbook
+                    nTab1 = pXti->nFirst;
+                    nTab2 = pXti->nLast;
+                    bValues = TRUE;
                 }
             }
         }   // Ende Biff8

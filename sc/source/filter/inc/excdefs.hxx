@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:52:10 $
+ *  last change: $Author: dr $ $Date: 2001-03-15 09:03:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,9 @@
 #define EXC_MAXRECLEN_BIFF8         8224
 
 //_________________________________________________________
-// ExcETabNumBuffer
+// Supbooks, ExcETabNumBuffer
 
+#define EXC_TAB_INVALID             0xFFFF
 #define EXC_TABBUF_INVALID          0xFFFF
 #define EXC_TABBUF_MASKTAB          0x0000FFFF
 #define EXC_TABBUF_MASKFLAGS        0xFFFF0000

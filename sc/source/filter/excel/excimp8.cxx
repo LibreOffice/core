@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-27 14:53:00 $
+ *  last change: $Author: dr $ $Date: 2001-03-15 09:02:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1251,8 +1251,7 @@ ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* 
 {
     delete pFormConv;
 
-    pExcRoot->pXtiBuffer = new XclImpXtiBuffer;
-    pExcRoot->pSupbookBuffer = new XclImpSupbookBuffer;
+    pExcRoot->pExtsheetBuffer = new XclImpExternsheetBuffer;
     pExcRoot->pImpTabIdBuffer = new XclImpTabIdBuffer;
 
     pFormConv = new ExcelToSc8( pExcRoot, aIn, nTab );
@@ -1392,16 +1391,6 @@ void ImportExcel8::Format( void )
 }
 
 
-void ImportExcel8::Externsheet( void )
-{
-    UINT16  nXtiCnt;
-
-    aIn >> nXtiCnt;
-
-    pExcRoot->pXtiBuffer->Read( aIn, nXtiCnt );
-}
-
-
 void ImportExcel8::Externname( void )
 {
     UINT32          nRes;
@@ -1524,91 +1513,6 @@ void ImportExcel8::Dconref( void )
         aFileName.Erase();
     }
     pCurrPivotCache->SetSource( nC1, nR1, nC2, nR2, aFileName, aTabName, bSelf );
-}
-
-
-void ImportExcel8::Xct( void )
-{
-    if( pExcRoot->pCurrSupbook )
-    {
-        UINT16  nCrnCount;
-        UINT16  nTabNum = 0;
-
-        aIn >> nCrnCount;
-        if( aIn.GetRecLeft() > 3 )
-            aIn >> nTabNum;
-
-        pExcRoot->pCurrSupbook->SetCurrScTab( nTabNum );
-    }
-}
-
-
-void ImportExcel8::Crn( void )
-{
-    if( pExcRoot->pCurrSupbook )
-    {
-        XclImpSupbook& rSB = *pExcRoot->pCurrSupbook;
-
-        if( rSB.HasValidScTab() )
-        {
-            UINT8       nLastCol;
-            UINT8       nFirstCol;
-            UINT16      nRow;
-            UINT16      nTab = rSB.GetCurrScTab();
-            UINT8       nValType;
-
-            aIn >> nLastCol >> nFirstCol >> nRow;
-
-            ScAddress   aAddr( (UINT16) 0, nRow, nTab );
-
-            for( UINT16 iCol = nFirstCol; (iCol <= nLastCol) && (aIn.GetRecLeft() > 1); iCol++ )
-            {
-                aAddr.SetCol( iCol );
-                aIn >> nValType;
-                switch( nValType )
-                {
-                    case EXC_CRN_DOUBLE:
-                    {
-                        double fVal;
-                        aIn >> fVal;
-                        if( aIn.IsValid() )
-                            pD->SetValue( iCol, nRow, nTab, fVal );
-                    }
-                    break;
-                    case EXC_CRN_STRING:
-                    {
-                        String sText( aIn.ReadUniString( eQuellChar ) );
-                        if( aIn.IsValid() )
-                        {
-                            ScStringCell* pStrCell = new ScStringCell( sText );
-                            pD->PutCell( aAddr, pStrCell );
-                        }
-                    }
-                    break;
-                    case EXC_CRN_BOOL:
-                    case EXC_CRN_ERROR:
-                    {
-                        BOOL    bIsErr = (nValType == EXC_CRN_ERROR);
-                        UINT16  nErrBool;
-                        double  fVal;
-
-                        aIn >> nErrBool;
-                        aIn.Ignore( 6 );
-
-                        if( aIn.IsValid() )
-                        {
-                            const ScTokenArray* pTok    = ErrorToFormula( bIsErr, (UINT8)nErrBool, fVal );
-                            ScFormulaCell*      pCell   = new ScFormulaCell( pD, aAddr, pTok );
-
-                            pCell->SetDouble( fVal );
-                            pD->PutCell( aAddr, pCell );
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-    }
 }
 
 
@@ -1743,27 +1647,6 @@ void ImportExcel8::Boundsheet( void )
 }
 
 
-void ImportExcel8::FilterMode( void )
-{
-}
-
-
-void ImportExcel8::AutoFilterInfo( void )
-{
-    AutoFilterData* pData = pAutoFilter->GetByTab( nTab );
-    if( pData )
-        pData->SetAdvancedRange( NULL );
-}
-
-
-void ImportExcel8::AutoFilter( void )
-{
-    AutoFilterData* pData = pAutoFilter->GetByTab( nTab );
-    if( pData )
-        pData->ReadAutoFilter( aIn );
-}
-
-
 void ImportExcel8::Scenman( void )
 {
     UINT16              nLastDispl;
@@ -1778,84 +1661,6 @@ void ImportExcel8::Scenman( void )
 void ImportExcel8::Scenario( void )
 {
     aScenList.Append( new ExcScenario( aIn, *pExcRoot ) );
-}
-
-
-void ImportExcel8::SXView( void )
-{
-    pCurrPivTab = new XclImpPivotTable( aIn, pExcRoot, (UINT8) nTab );
-    aPivotTabList.Append( pCurrPivTab );
-}
-
-
-void ImportExcel8::SXVd( void )
-{
-    if( !pCurrPivTab )
-        return;
-    pCurrPivTab->AddViewField( aIn );
-}
-
-
-void ImportExcel8::SXVi( void )
-{
-    if( !pCurrPivTab )
-        return;
-
-    UINT16  nItemType, nGrBit, nCache;
-    aIn >> nItemType >> nGrBit >> nCache;
-    pCurrPivTab->AddViewItem( nItemType, nCache, nGrBit );
-}
-
-
-void ImportExcel8::SXIvd( void )
-{
-    if( !pCurrPivTab )
-        return;
-    pCurrPivTab->ReadRCFieldIDs( aIn );
-}
-
-
-void ImportExcel8::SXLi( void )
-{
-}   // unnecessary to read this record
-
-
-void ImportExcel8::SXPi( void )
-{
-    if( !pCurrPivTab )
-        return;
-
-    UINT16  nArrayCnt = (UINT16)(aIn.GetRecLen() / 6);      // SXPI contains 6-byte-arrays
-    UINT16  nSXVD;
-    UINT16  nSXVI;
-    UINT16  nObjID;
-
-    for( UINT16 iArray = 0; iArray < nArrayCnt; iArray++ )
-    {
-        aIn >> nSXVD >> nSXVI >> nObjID;
-        pCurrPivTab->AddPageItemInfo( nSXVD, nSXVI );
-    }
-}
-
-
-void ImportExcel8::SXDi( void )
-{
-    if( !pCurrPivTab )
-        return;
-    pCurrPivTab->AddDataItem( aIn );
-}
-
-
-void ImportExcel8::SXIdStm( void )
-{
-    UINT16 nStrId;
-    aIn >> nStrId;
-
-    if( !pExcRoot->pImpPivotCacheList )
-        pExcRoot->pImpPivotCacheList = new XclImpPivotCacheList;
-
-    pCurrPivotCache = new XclImpPivotCache( pExcRoot, nStrId );
-    pExcRoot->pImpPivotCacheList->Append( pCurrPivotCache );
 }
 
 
@@ -1933,17 +1738,6 @@ void ImportExcel8::Xf( void )
     nXFCnt++;
 
 #undef  HASATTRSET
-}
-
-
-void ImportExcel8::SXVs( void )
-{
-    if( !pCurrPivotCache )
-        return;
-
-    UINT16 nSrcType;
-    aIn >> nSrcType;
-    pCurrPivotCache->SetSourceType( nSrcType );
 }
 
 
@@ -2151,26 +1945,6 @@ void ImportExcel8::Msodrawingselection( void )
 }
 
 
-void ImportExcel8::SXRule( void )
-{
-}
-
-
-void ImportExcel8::SXEx( void )
-{
-}
-
-
-void ImportExcel8::SXFilt( void )
-{
-}
-
-
-void ImportExcel8::SXSelect( void )
-{
-}
-
-
 void ImportExcel8::Sst( void )
 {
     aIn.Ignore( 8 );
@@ -2219,17 +1993,6 @@ ScBaseCell* ImportExcel8::CreateCellFromShStrTabEntry( const ShStrTabEntry* p, c
         pRet = ScBaseCell::CreateTextCell( aSstErrTxt, pD );
 
     return pRet;
-}
-
-
-void ImportExcel8::SXVdex( void )
-{
-    if( !pCurrPivTab )
-        return;
-
-    UINT32 nFlags;
-    aIn >> nFlags;
-    pCurrPivTab->SetShowEmpty( TRUEBOOL( nFlags & 0x00000001 ) );
 }
 
 
@@ -2315,13 +2078,6 @@ void ImportExcel8::Tabid( void )
     DBG_ASSERT( pExcRoot->pImpTabIdBuffer, "ImportExcel8::Tabid - missing tab id buffer" );
     if( pExcRoot->pImpTabIdBuffer )
         pExcRoot->pImpTabIdBuffer->Fill( aIn, (UINT16)(aIn.GetRecLen() >> 1) );
-}
-
-
-void ImportExcel8::Supbook( void )
-{
-    pExcRoot->pCurrSupbook = new XclImpSupbook( aIn, *pExcRoot );
-    pExcRoot->pSupbookBuffer->Append( pExcRoot->pCurrSupbook );
 }
 
 
@@ -2938,32 +2694,100 @@ void ImportExcel8::CreateTmpCtrlStorage( void )
 
 
 //___________________________________________________________________
+// 3D references
 
-inline XclImpStream& operator>>( XclImpStream& rStrm, XclImpXti& rXti )
+void ImportExcel8::Supbook( void )
 {
-    rStrm >> rXti.nSupbook >> rXti.nFirst >> rXti.nLast;
-    return rStrm;
+    pExcRoot->pExtsheetBuffer->AppendSupbook( new XclImpSupbook( aIn, *pExcRoot ) );
 }
 
-
-
-XclImpXtiBuffer::~XclImpXtiBuffer()
+void ImportExcel8::Xct( void )
 {
-    for( XclImpXti* pXti = (XclImpXti*) List::First(); pXti; pXti = (XclImpXti*) List::Next() )
-        delete pXti;
-}
-
-void XclImpXtiBuffer::Read( XclImpStream& rIn, UINT32 nNumOfEntries )
-{
-    XclImpXti* pXti;
-
-    while( nNumOfEntries )
+    XclImpSupbook* pSupbook = pExcRoot->pExtsheetBuffer->GetCurrSupbook();
+    if( pSupbook )
     {
-        pXti = new XclImpXti;
-        rIn >> *pXti;
-        List::Insert( pXti, LIST_APPEND );
-        nNumOfEntries--;
+        UINT16  nCrnCount;
+        UINT16  nTabNum = 0;
+
+        aIn >> nCrnCount;
+        if( aIn.GetRecLeft() > 3 )
+            aIn >> nTabNum;
+
+        pSupbook->SetCurrScTab( nTabNum );
     }
+}
+
+void ImportExcel8::Crn( void )
+{
+    XclImpSupbook* pSupbook = pExcRoot->pExtsheetBuffer->GetCurrSupbook();
+    if( pSupbook )
+    {
+        if( pSupbook->HasValidScTab() )
+        {
+            UINT8       nLastCol;
+            UINT8       nFirstCol;
+            UINT16      nRow;
+            UINT16      nTab = pSupbook->GetCurrScTab();
+            UINT8       nValType;
+
+            aIn >> nLastCol >> nFirstCol >> nRow;
+
+            ScAddress   aAddr( (UINT16) 0, nRow, nTab );
+
+            for( UINT16 iCol = nFirstCol; (iCol <= nLastCol) && (aIn.GetRecLeft() > 1); iCol++ )
+            {
+                aAddr.SetCol( iCol );
+                aIn >> nValType;
+                switch( nValType )
+                {
+                    case EXC_CRN_DOUBLE:
+                    {
+                        double fVal;
+                        aIn >> fVal;
+                        if( aIn.IsValid() )
+                            pD->SetValue( iCol, nRow, nTab, fVal );
+                    }
+                    break;
+                    case EXC_CRN_STRING:
+                    {
+                        String sText( aIn.ReadUniString( eQuellChar ) );
+                        if( aIn.IsValid() )
+                        {
+                            ScStringCell* pStrCell = new ScStringCell( sText );
+                            pD->PutCell( aAddr, pStrCell );
+                        }
+                    }
+                    break;
+                    case EXC_CRN_BOOL:
+                    case EXC_CRN_ERROR:
+                    {
+                        BOOL    bIsErr = (nValType == EXC_CRN_ERROR);
+                        UINT16  nErrBool;
+                        double  fVal;
+
+                        aIn >> nErrBool;
+                        aIn.Ignore( 6 );
+
+                        if( aIn.IsValid() )
+                        {
+                            const ScTokenArray* pTok    = ErrorToFormula( bIsErr, (UINT8)nErrBool, fVal );
+                            ScFormulaCell*      pCell   = new ScFormulaCell( pD, aAddr, pTok );
+
+                            pCell->SetDouble( fVal );
+                            pD->PutCell( aAddr, pCell );
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    }
+}
+
+void ImportExcel8::Externsheet( void )
+{
+    pExcRoot->pExtsheetBuffer->Read( aIn );
+    pExcRoot->pExtsheetBuffer->CreateTables( *pExcRoot );
 }
 
 
@@ -2973,56 +2797,29 @@ XclImpSupbook::XclImpSupbook( XclImpStream& rIn, RootData& rExcRoot )
     UINT16 nTabCnt;
     rIn >> nTabCnt;
 
-    if( rIn.GetRecLeft() < (ULONG)(2 + 2 * nTabCnt) )
-    {
-        // shortened record without strings
-        bSelf = TRUE;
+    bSelf = (rIn.GetRecLeft() < (ULONG)(2 + 2 * nTabCnt));
+    if( bSelf ) return;
 
-        rIn.Seek( rIn.GetRecLen() );
+    String aTabName;
+    XclImpSupbookTab* pNewTab;
+
+    ReadDocName( rIn, aFileName, bSelf );
+
+    if( nTabCnt )
+    {
+        for( UINT16 nTab = 0; nTab < nTabCnt; nTab++ )
+        {
+            pNewTab = new XclImpSupbookTab;
+            ReadTabName( rIn, rExcRoot, pNewTab->aName );
+            List::Insert( pNewTab, LIST_APPEND );
+        }
     }
     else
     {
-        bSelf = FALSE;
-
-        String aTabName;
-        XclImpSupbookTab* pNewTab;
-
-        ReadDocName( rIn, aFileName, bSelf );
-        String aURL( ScGlobal::GetAbsDocName( aFileName, rExcRoot.pDoc->GetDocumentShell() ) );
-
-        if( nTabCnt )
-        {
-            while( nTabCnt )
-            {
-                pNewTab = new XclImpSupbookTab;
-                ReadTabName( rIn, rExcRoot, pNewTab->aName );
-
-                if( rExcRoot.pExtDocOpt->nLinkCnt < 1 )
-                {
-                    UINT16 nNewTabNum;
-                    String aTabName( ScGlobal::GetDocTabName( aURL, pNewTab->aName ) );
-
-                    if( rExcRoot.pDoc->LinkEmptyTab( nNewTabNum, aTabName, aURL, pNewTab->aName ) )
-                        pNewTab->nScNum = nNewTabNum;
-                    else
-                        pNewTab->nScNum = 0xFFFF;
-                }
-                else
-                    pNewTab->nScNum = 0xFFFF;
-
-                List::Insert( pNewTab, LIST_APPEND );
-
-                nTabCnt--;
-            }
-        }
-        else
-        {
-            // create dummy list entry
-            pNewTab = new XclImpSupbookTab;
-            pNewTab->aName = aFileName;
-            pNewTab->nScNum = 0xFFFF;
-            List::Insert( pNewTab, LIST_APPEND );
-        }
+        // create dummy list entry
+        pNewTab = new XclImpSupbookTab;
+        pNewTab->aName = aFileName;
+        List::Insert( pNewTab, LIST_APPEND );
     }
 }
 
@@ -3051,7 +2848,7 @@ UINT16 XclImpSupbook::GetScTabNum( UINT16 nTab ) const
     if( bSelf )
         return nTab;
     const XclImpSupbookTab* pTab = Get( nTab );
-    return pTab ? pTab->nScNum : 0xFFFF;
+    return pTab ? pTab->nScNum : EXC_TAB_INVALID;
 }
 
 UINT16 XclImpSupbook::GetScTabNum( const String& rTabName ) const
@@ -3062,7 +2859,28 @@ UINT16 XclImpSupbook::GetScTabNum( const String& rTabName ) const
         if( pTab && (pTab->aName == rTabName) )
             return pTab->nScNum;
     }
-    return 0xFFFF;
+    return EXC_TAB_INVALID;
+}
+
+void XclImpSupbook::CreateTables( RootData& rRootData, UINT16 nFirst, UINT16 nLast ) const
+{
+    if( bSelf || (rRootData.pExtDocOpt->nLinkCnt >= 1) )
+        return;
+
+    String aURL( ScGlobal::GetAbsDocName( aFileName, rRootData.pDoc->GetDocumentShell() ) );
+
+    for( UINT16 nTab = nFirst; nTab <= nLast; nTab++ )
+    {
+        XclImpSupbookTab* pSBTab = Get( nTab );
+        if( pSBTab )
+        {
+            UINT16 nNewTabNum;
+            String aTabName( ScGlobal::GetDocTabName( aURL, pSBTab->aName ) );
+
+            if( rRootData.pDoc->LinkEmptyTab( nNewTabNum, aTabName, aURL, pSBTab->aName ) )
+                pSBTab->nScNum = nNewTabNum;
+        }
+    }
 }
 
 
@@ -3084,8 +2902,205 @@ const XclImpSupbook* XclImpSupbookBuffer::Get( const String& rDocName ) const
     return NULL;
 }
 
+
+
+XclImpExternsheetBuffer::~XclImpExternsheetBuffer()
+{
+    for( XclImpXti* pXti = _First(); pXti; pXti = _Next() )
+        delete pXti;
+}
+
+BOOL XclImpExternsheetBuffer::FindNextTabRange( UINT16 nSupb, UINT16 nStart, UINT16& rnFirst, UINT16& rnLast )
+{
+    rnFirst = rnLast = 0xFFFF;
+    for( const XclImpXti* pXti = _First(); pXti; pXti = _Next() )
+    {
+        if( (nSupb == pXti->nSupbook) && (nStart <= pXti->nLast) && (pXti->nFirst < rnFirst) )
+        {
+            rnFirst = Max( nStart, pXti->nFirst );
+            rnLast = pXti->nLast;
+        }
+    }
+    return (rnFirst < 0xFFFF);
+}
+
+void XclImpExternsheetBuffer::Read( XclImpStream& rIn )
+{
+    UINT16 nXtiCount;
+    rIn >> nXtiCount;
+
+    XclImpXti* pXti;
+    while( nXtiCount )
+    {
+        pXti = new XclImpXti;
+        rIn >> pXti->nSupbook >> pXti->nFirst >> pXti->nLast;
+        List::Insert( pXti, LIST_APPEND );
+        nXtiCount--;
+    }
+}
+
+void XclImpExternsheetBuffer::CreateTables( RootData& rRootData )
+{
+    DBG_ASSERT( !bCreated, "XclImpExternsheetBuffer::CreateTables - multiple call!!" );
+    if( bCreated ) return;
+
+    UINT16 nFirst, nLast;
+
+    for( UINT16 nSupbook = 0; nSupbook < aSupbookBuffer.Count(); nSupbook++ )
+    {
+        const XclImpSupbook* pSupbook = aSupbookBuffer.Get( nSupbook );
+        BOOL bLoop = FindNextTabRange( nSupbook, 0, nFirst, nLast );
+        while( bLoop && pSupbook )
+        {
+            pSupbook->CreateTables( rRootData, nFirst, nLast );
+            bLoop = FindNextTabRange( nSupbook, nLast + 1, nFirst, nLast );
+        }
+    }
+
+    bCreated = TRUE;
+}
+
+const XclImpSupbook* XclImpExternsheetBuffer::GetSupbook( ULONG nXtiIndex ) const
+{
+    const XclImpXti* pXti = GetXti( nXtiIndex );
+    return pXti ? aSupbookBuffer.Get( pXti->nSupbook ) : NULL;
+}
+
+
+
 //___________________________________________________________________
-// classes AutoFilterRange, AutoFilterRangeBuffer
+// pivot tables
+
+void ImportExcel8::SXView( void )
+{
+    pCurrPivTab = new XclImpPivotTable( aIn, pExcRoot, (UINT8) nTab );
+    aPivotTabList.Append( pCurrPivTab );
+}
+
+void ImportExcel8::SXVd( void )
+{
+    if( !pCurrPivTab )
+        return;
+    pCurrPivTab->AddViewField( aIn );
+}
+
+void ImportExcel8::SXVi( void )
+{
+    if( !pCurrPivTab )
+        return;
+
+    UINT16  nItemType, nGrBit, nCache;
+    aIn >> nItemType >> nGrBit >> nCache;
+    pCurrPivTab->AddViewItem( nItemType, nCache, nGrBit );
+}
+
+void ImportExcel8::SXIvd( void )
+{
+    if( !pCurrPivTab )
+        return;
+    pCurrPivTab->ReadRCFieldIDs( aIn );
+}
+
+void ImportExcel8::SXLi( void )
+{
+}   // unnecessary to read this record
+
+void ImportExcel8::SXPi( void )
+{
+    if( !pCurrPivTab )
+        return;
+
+    UINT16  nArrayCnt = (UINT16)(aIn.GetRecLen() / 6);      // SXPI contains 6-byte-arrays
+    UINT16  nSXVD;
+    UINT16  nSXVI;
+    UINT16  nObjID;
+
+    for( UINT16 iArray = 0; iArray < nArrayCnt; iArray++ )
+    {
+        aIn >> nSXVD >> nSXVI >> nObjID;
+        pCurrPivTab->AddPageItemInfo( nSXVD, nSXVI );
+    }
+}
+
+void ImportExcel8::SXDi( void )
+{
+    if( !pCurrPivTab )
+        return;
+    pCurrPivTab->AddDataItem( aIn );
+}
+
+void ImportExcel8::SXIdStm( void )
+{
+    UINT16 nStrId;
+    aIn >> nStrId;
+
+    if( !pExcRoot->pImpPivotCacheList )
+        pExcRoot->pImpPivotCacheList = new XclImpPivotCacheList;
+
+    pCurrPivotCache = new XclImpPivotCache( pExcRoot, nStrId );
+    pExcRoot->pImpPivotCacheList->Append( pCurrPivotCache );
+}
+
+void ImportExcel8::SXVs( void )
+{
+    if( !pCurrPivotCache )
+        return;
+
+    UINT16 nSrcType;
+    aIn >> nSrcType;
+    pCurrPivotCache->SetSourceType( nSrcType );
+}
+
+void ImportExcel8::SXRule( void )
+{
+}
+
+void ImportExcel8::SXEx( void )
+{
+}
+
+void ImportExcel8::SXFilt( void )
+{
+}
+
+void ImportExcel8::SXSelect( void )
+{
+}
+
+void ImportExcel8::SXVdex( void )
+{
+    if( !pCurrPivTab )
+        return;
+
+    UINT32 nFlags;
+    aIn >> nFlags;
+    pCurrPivTab->SetShowEmpty( TRUEBOOL( nFlags & 0x00000001 ) );
+}
+
+
+
+//___________________________________________________________________
+// autofilter
+
+void ImportExcel8::FilterMode( void )
+{
+}
+
+void ImportExcel8::AutoFilterInfo( void )
+{
+    AutoFilterData* pData = pAutoFilter->GetByTab( nTab );
+    if( pData )
+        pData->SetAdvancedRange( NULL );
+}
+
+void ImportExcel8::AutoFilter( void )
+{
+    AutoFilterData* pData = pAutoFilter->GetByTab( nTab );
+    if( pData )
+        pData->ReadAutoFilter( aIn );
+}
+
+
 
 AutoFilterData::AutoFilterData( RootData* pRoot, const ScRange& rRange, const String& rName ) :
         ExcRoot( pRoot ),
@@ -3367,7 +3382,4 @@ BOOL AutoFilterBuffer::HasDropDown( UINT16 nCol, UINT16 nRow, UINT16 nTab )
             return TRUE;
     return FALSE;
 }
-
-
-
 

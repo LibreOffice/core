@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-27 14:05:40 $
+ *  last change: $Author: dr $ $Date: 2001-03-15 09:02:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,9 +187,7 @@ RootData::RootData( void )
     bBreakSharedFormula = TRUE;
     bDefaultPage = bChartTab = FALSE;
 
-    pXtiBuffer = NULL;
-    pSupbookBuffer = NULL;
-    pCurrSupbook = NULL;
+    pExtsheetBuffer = NULL;
     pImpTabIdBuffer = NULL;
 
     pRootStorage = pPivotCacheStorage = /*pCtrlStorage = */NULL;
@@ -250,10 +248,8 @@ RootData::~RootData()
     if( pExtSheetCntAndRecs )
         delete pExtSheetCntAndRecs;
 
-    if( pXtiBuffer )
-        delete pXtiBuffer;
-    if( pSupbookBuffer )
-        delete pSupbookBuffer;
+    if( pExtsheetBuffer )
+        delete pExtsheetBuffer;
     if( pImpTabIdBuffer )
         delete pImpTabIdBuffer;
 

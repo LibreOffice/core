@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-20 15:23:42 $
+ *  last change: $Author: dr $ $Date: 2001-03-15 09:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,9 +102,7 @@ class XF_Buffer;
 class FilterProgressBar;
 class XclImpPivotCacheList;
 
-class XclImpXtiBuffer;
-class XclImpSupbookBuffer;
-class XclImpSupbook;
+class XclImpExternsheetBuffer;
 class XclImpTabIdBuffer;
 
 class ExcETabNumBuffer;
@@ -164,13 +162,11 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     BOOL                bChartTab;              // Tabelle mit einem einzigen Chart
 
     // Biff8
-    XclImpXtiBuffer*    pXtiBuffer;             // Elemente der Externsheet-Records
-    XclImpSupbookBuffer* pSupbookBuffer;        // Liste Suporting External Workbooks
-    XclImpSupbook*      pCurrSupbook;           // current supbook in pSupbookBuffer
-    XclImpTabIdBuffer*  pImpTabIdBuffer;        // table id's for change tracking
+    XclImpExternsheetBuffer* pExtsheetBuffer;   // supbooks and externsheet list
+    XclImpTabIdBuffer*      pImpTabIdBuffer;        // table id's for change tracking
 
-    SvStorage*          pPivotCacheStorage;
-    XclImpPivotCacheList* pImpPivotCacheList;       // pivot caches for import
+    SvStorage*              pPivotCacheStorage;
+    XclImpPivotCacheList*   pImpPivotCacheList;     // pivot caches for import
 
     SvStorageRef        xCtrlStorage;           // SvxMSConvertOCXControls compatibel storage
 //  SvStorage*          pCtrlStorage;           // SvxMSConvertOCXControls compatibel storage
