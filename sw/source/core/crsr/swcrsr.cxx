@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-16 18:04:42 $
+ *  last change: $Author: jp $ $Date: 2001-08-28 14:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1541,6 +1541,17 @@ FASTBOOL SwCursor::GotoTblBox( const String& rName )
 
 FASTBOOL SwCursor::MovePara(SwWhichPara fnWhichPara, SwPosPara fnPosPara )
 {
+    //JP 28.8.2001: for optimization test something before
+    const SwNode* pNd;
+    if( fnWhichPara == fnParaCurr ||
+        (( pNd = &GetPoint()->nNode.GetNode())->IsTxtNode() &&
+          pNd->GetNodes()[ pNd->GetIndex() +
+                    (fnWhichPara == fnParaNext ? 1 : -1 ) ]->IsTxtNode() ) )
+    {
+        return (*fnWhichPara)( *this, fnPosPara );
+    }
+    // else we must use the SaveStructure, because the next/prev is not
+    // a same node type.
     SwCrsrSaveState aSave( *this );
     return (*fnWhichPara)( *this, fnPosPara ) &&
             !IsInProtectTable( TRUE ) &&
