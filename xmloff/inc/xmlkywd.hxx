@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 23:02:55 $
+ *  last change: $Author: ab $ $Date: 2000-12-07 14:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,7 +519,6 @@ XML_CONSTASCII_ACTION( sXML_editor, "editor" );
 XML_CONSTASCII_ACTION( sXML_ellipse , "ellipse" );
 XML_CONSTASCII_ACTION( sXML_email, "email" );
 XML_CONSTASCII_ACTION( sXML_embed, "embed" );
-XML_CONSTASCII_ACTION( sXML_embedded_library, "embedded-library" );
 XML_CONSTASCII_ACTION( sXML_emissive_color, "emissive-color" );
 XML_CONSTASCII_ACTION( sXML_empty, "empty");
 XML_CONSTASCII_ACTION( sXML_enabled, "enabled" );
@@ -817,6 +816,8 @@ XML_CONSTASCII_ACTION( sXML_letter_kerning, "letter-kerning" );
 XML_CONSTASCII_ACTION( sXML_letter_spacing, "letter-spacing" );
 XML_CONSTASCII_ACTION( sXML_letters, "letters" );
 XML_CONSTASCII_ACTION( sXML_level, "level" );
+XML_CONSTASCII_ACTION( sXML_library_embedded, "library-embedded" );
+XML_CONSTASCII_ACTION( sXML_library_linked, "library-linked" );
 XML_CONSTASCII_ACTION( sXML_light, "light");
 XML_CONSTASCII_ACTION( sXML_lighting_mode, "lighting-mode");
 XML_CONSTASCII_ACTION( sXML_limit, "limit" );
@@ -828,9 +829,7 @@ XML_CONSTASCII_ACTION( sXML_line_spacing, "line-spacing" );
 XML_CONSTASCII_ACTION( sXML_linear, "linear" );
 XML_CONSTASCII_ACTION( sXML_lines, "lines" );
 XML_CONSTASCII_ACTION( sXML_lines_used, "lines-used" );
-XML_CONSTASCII_ACTION( sXML_link_target_url, "link-target-url" );
 XML_CONSTASCII_ACTION( sXML_link_to_source_data, "link-to-source-data" );
-XML_CONSTASCII_ACTION( sXML_linked_library, "linked-library" );
 XML_CONSTASCII_ACTION( sXML_list, "list");
 XML_CONSTASCII_ACTION( sXML_list_block, "list-block" );
 XML_CONSTASCII_ACTION( sXML_list_header, "list-header" );
