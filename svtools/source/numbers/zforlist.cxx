@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: er $ $Date: 2001-01-30 14:56:09 $
+ *  last change: $Author: er $ $Date: 2001-01-30 19:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,8 +307,8 @@ void SvNumberFormatter::ImpChangeSysCL( LanguageType eLnge, BOOL bLoadingSO5 )
     else if ( bLoadingSO5 )
     {   // delete additional standard formats
         ULONG nKey;
-        aFTable.Seek( SV_MAX_ANZ_STANDARD_FORMATE );
-        while ( (nKey = aFTable.GetCurKey()) >= SV_MAX_ANZ_STANDARD_FORMATE &&
+        aFTable.Seek( SV_MAX_ANZ_STANDARD_FORMATE + 1 );
+        while ( (nKey = aFTable.GetCurKey()) > SV_MAX_ANZ_STANDARD_FORMATE &&
                 nKey < SV_COUNTRY_LANGUAGE_OFFSET )
         {
             SvNumberformat* pEntry = (SvNumberformat*) aFTable.Remove( nKey );
