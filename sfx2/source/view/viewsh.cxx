@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:46:27 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:23:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,8 +401,8 @@ ErrCode SfxViewShell::DoVerb(long nVerb)
 /*  [Beschreibung]
 
     Virtuelle Methode, um am selektierten Objekt ein Verb auszuf"uhren.
-    Da dieses Objekt nur den abgeleiteten Klassen bekannt ist, mu� DoVerb
-    dort "uberlschrieben werden.
+    Da dieses Objekt nur den abgeleiteten Klassen bekannt ist, muss DoVerb
+    dort "uberschrieben werden.
 
 */
 
@@ -583,7 +583,7 @@ void SfxViewShell::OuterResizePixel
 
 /*  [Beschreibung]
 
-    Diese Methode mu� �berladen werden, um auf "Anderungen der Gr��e
+    Diese Methode muss ueberladen werden, um auf "Anderungen der Groesse
     der View zu reagieren. Dabei definieren wir die View als das Edit-Window
     zuz"uglich der um das Edit-Window angeordnenten Tools (z.B. Lineale).
 
@@ -638,7 +638,7 @@ void SfxViewShell::InnerResizePixel
 
 /*  [Beschreibung]
 
-    Diese Methode mu� �berladen werden, um auf "Anderungen der Gr��e
+    Diese Methode muss ueberladen werden, um auf "Anderungen der Groesse
     des Edit-Windows zu reagieren.
 
     Das Edit-Window darf weder in Gr"o\se noch Position ver"andert werden.
@@ -933,7 +933,7 @@ String SfxViewShell::GetSelectionText
                                 Der selektierte Text wird soweit erweitert,
                                 da\s nur ganze W"orter zur"uckgegeben werden.
                                 Als Worttrenner gelten White-Spaces und die
-                                Satzzeichen �.,;� sowie einfache und doppelte
+                                Satzzeichen ".,;" sowie einfache und doppelte
                                 Anf"uhrungszeichen.
                             */
 )
@@ -944,7 +944,7 @@ String SfxViewShell::GetSelectionText
     um einen Text zur"uckzuliefern, der in der aktuellen Selektion
     steht. Dieser wird z.B. beim Versenden (email) verwendet.
 
-    Mit �bCompleteWords == TRUE� ger"ufen, reicht z.B. auch der Cursor,
+    Mit "CompleteWords == TRUE" ger"ufen, reicht z.B. auch der Cursor,
     der in einer URL steht, um die gesamte URL zu liefern.
 */
 
