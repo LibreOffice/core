@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msfiltertracer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:09:40 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,36 +132,36 @@ MSFilterTracer::MSFilterTracer( const ::rtl::OUString& rConfigPath, uno::Sequenc
                 mpCfgItem->ReadInt32( rtl::OUString::createFromAscii( "SearchAlgorithm" ), util::SearchAlgorithms_ABSOLUTE );
 
             // creating the name of the log file
-            String aPath( mpCfgItem->ReadString( rtl::OUString::createFromAscii( "Path" ), aEmptyString ) );
-            String aName( mpCfgItem->ReadString( rtl::OUString::createFromAscii( "Name" ), aEmptyString ) );
-            String aDocumentURL( mpCfgItem->ReadString( rtl::OUString::createFromAscii( "DocumentURL" ), aEmptyString ) );
+            rtl::OUString aPath( mpCfgItem->ReadString( rtl::OUString::createFromAscii( "Path" ), aEmptyString ) );
+            rtl::OUString aName( mpCfgItem->ReadString( rtl::OUString::createFromAscii( "Name" ), aEmptyString ) );
+            rtl::OUString aDocumentURL( mpCfgItem->ReadString( rtl::OUString::createFromAscii( "DocumentURL" ), aEmptyString ) );
             INetURLObject aLogFile( aDocumentURL );
-            if ( aLogFile.GetMainURL( INetURLObject::NO_DECODE ).Len() )
+            if ( aLogFile.GetMainURL( INetURLObject::NO_DECODE ).getLength() )
             {
-                if ( aPath.Len() )
+                if ( aPath.getLength() )
                 {
                     String aOldName( aLogFile.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::NO_DECODE ) );
                     aLogFile = INetURLObject( aPath );
                     aLogFile.insertName( aOldName );
                 }
-                if ( aName.Len() )
+                if ( aName.getLength() )
                     aLogFile.setName( aName );
             }
             else
             {
-                if ( aPath.Len() )
+                if ( aPath.getLength() )
                     aLogFile = INetURLObject( aPath );
                 else
                 {
                     String aURLStr;
                     if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( Application::GetAppFileName(), aURLStr ) )
                     {
-                        aLogFile = aURLStr;
+                        aLogFile = INetURLObject(aURLStr);
                         aLogFile .removeSegment();
                         aLogFile .removeFinalSlash();
                     }
                 }
-                if ( !aName.Len() )
+                if ( !aName.getLength() )
                     aName = rtl::OUString::createFromAscii( "tracer" );
                 aLogFile.insertName( aName );
             }
