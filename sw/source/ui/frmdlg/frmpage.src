@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:36:27 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 07:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1140,7 +1140,7 @@ TabPage TP_FRM_STD
         Text[ polish ] = "Przy stronie";
         Text[ portuguese_brazilian ] = "At page";
         Text[ japanese ] = "Íß°¼Þ‚É";
-        Text[ korean ] = "At page";
+        Text[ korean ] = "ÂÊ¿¡";
         Text[ chinese_simplified ] = "ÔÚÒ³ÃæÉÏ";
         Text[ chinese_traditional ] = "¦b­¶­±¤W";
         Text[ turkish ] = "At page";
@@ -1167,7 +1167,7 @@ TabPage TP_FRM_STD
         Text[ polish ] = "Przy akapicie";
         Text[ portuguese_brazilian ] = "At paragraph";
         Text[ japanese ] = "’i—Ž‚É";
-        Text[ korean ] = "At paragraph";
+        Text[ korean ] = "´Ü¶ô¿¡";
         Text[ chinese_simplified ] = "ÔÚ¶ÎÂäÉÏ";
         Text[ chinese_traditional ] = "¦b¬q¸¨¤W";
         Text[ turkish ] = "At paragraph";
@@ -1194,7 +1194,7 @@ TabPage TP_FRM_STD
         Text[ polish ] = "Przy znaku";
         Text[ portuguese_brazilian ] = "At character";
         Text[ japanese ] = "•¶Žš‚É";
-        Text[ korean ] = "At character";
+        Text[ korean ] = "¹®ÀÚ¿¡";
         Text[ chinese_simplified ] = "ÔÚ×Ö·ûÉÏ";
         Text[ chinese_traditional ] = "¦b¦r¤¸¤W";
         Text[ turkish ] = "At character";
@@ -1249,7 +1249,7 @@ TabPage TP_FRM_STD
         Text[ polish ] = "Przy ramce";
         Text[ portuguese_brazilian ] = "At frame";
         Text[ japanese ] = "˜g‚É";
-        Text[ korean ] = "At frame";
+        Text[ korean ] = "ÇÁ·¹ÀÓ¿¡";
         Text[ chinese_simplified ] = "ÔÚ¿ò±ß";
         Text[ chinese_traditional ] = "¦b®ØÃä";
         Text[ turkish ] = "At frame";
