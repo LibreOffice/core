@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-09 16:36:42 $
+ *  last change: $Author: dbo $ $Date: 2001-05-10 12:30:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,9 +268,9 @@ static Reference< XComponentContext > initializeSF(
     if (xRegistry.is())
     {
         // rdbtdp: registries to be used
-        context_values[ 2 ].bLateInitService = false;
-        context_values[ 2 ].name = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.RegistryTypeDescriptionProvider.Registries") );
-        context_values[ 2 ].value = makeAny( Sequence< Reference< registry::XSimpleRegistry > >( &xRegistry, 1 ) );
+        context_values[ 3 ].bLateInitService = false;
+        context_values[ 3 ].name = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.RegistryTypeDescriptionProvider.Registries") );
+        context_values[ 3 ].value = makeAny( Sequence< Reference< registry::XSimpleRegistry > >( &xRegistry, 1 ) );
         nEntries = 4;
     }
 
