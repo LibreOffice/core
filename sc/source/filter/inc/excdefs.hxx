@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:27:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,58 +169,6 @@ const sal_uInt16 EXC_WIN2_MIRRORED          = 0x0040;
 
 #define EXC_OUTLINE_MAX             7
 #define EXC_OUTLINE_COUNT           (EXC_OUTLINE_MAX + 1)
-
-// data pilot / pivot tables ==================================================
-
-// subtotal functions
-#define EXC_PIVOT_SUBT_SUM          0x0000
-#define EXC_PIVOT_SUBT_COUNT        0x0001
-#define EXC_PIVOT_SUBT_AVERAGE      0x0002
-#define EXC_PIVOT_SUBT_MAX          0x0003
-#define EXC_PIVOT_SUBT_MIN          0x0004
-#define EXC_PIVOT_SUBT_PROD         0x0005
-#define EXC_PIVOT_SUBT_COUNTNUM     0x0006
-#define EXC_PIVOT_SUBT_STDDEV       0x0007
-#define EXC_PIVOT_SUBT_STDDEVP      0x0008
-#define EXC_PIVOT_SUBT_VAR          0x0009
-#define EXC_PIVOT_SUBT_VARP         0x000A
-
-// field orientation
-#define EXC_PIVOT_AXIS_NONE         0x0000
-#define EXC_PIVOT_AXIS_ROW          0x0001
-#define EXC_PIVOT_AXIS_COL          0x0002
-#define EXC_PIVOT_AXIS_PAGE         0x0004
-#define EXC_PIVOT_AXIS_DATA         0x0008
-#define EXC_PIVOT_AXIS_RCP_MASK     (EXC_PIVOT_AXIS_ROW|EXC_PIVOT_AXIS_COL|EXC_PIVOT_AXIS_PAGE)
-
-// misc xcl record flags
-#define EXC_SXVIEW_COMMON           0x0208
-#define EXC_SXVIEW_ROWGRAND         0x0001
-#define EXC_SXVIEW_COLGRAND         0x0002
-
-#define EXC_SXVDEX_COMMON           0x0A00141E
-#define EXC_SXVDEX_SHOWALL          0x00000001
-
-#define EXC_SXVI_HIDDEN             0x0001
-#define EXC_SXVI_HIDEDETAIL         0x0002
-#define EXC_SXVI_FORMULA            0x0004
-#define EXC_SXVI_MISSING            0x0008
-
-#define EXC_SXVS_EXCEL              0x0001
-#define EXC_SXVS_EXTERN             0x0002
-#define EXC_SXVS_MULTICONSR         0x0004
-#define EXC_SXVS_PIVOTTAB           0x0008
-#define EXC_SXVS_SCENMAN            0x0010
-
-#define EXC_SXIVD_IDDATA            0xFFFE
-
-const sal_uInt16 EXC_ID_SXPI            = 0x00B6;
-const sal_uInt16 EXC_SXPI_ALLITEMS      = 0x7FFD;
-
-// pivot cache record flags
-#define EXC_SXFIELD_COMMON          0x0001
-#define EXC_SXFIELD_READLATER       0x0002
-#define EXC_SXFIELD_16BIT           0x0200
 
 // defines for change tracking ================================================
 
