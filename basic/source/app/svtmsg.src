@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 11:17:30 $
+ *  last change: $Author: obo $ $Date: 2000-12-06 10:32:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 ///////////////////////////////
 String S_GPF_ABORT
 {
-    Text = "Programm abgebrochen mit GPF";
+    Text = "Programm%PRODUCTVERSIONabgebrochen%PRODUCTVERSIONmit%PRODUCTVERSIONGPF";
     Text[ english_us ] = "Program aborted with GPF";
     Text[ portuguese ] = "Programa abortado com GPF";
     Text[ russian ] = "Program aborted with GPF";
@@ -97,7 +97,7 @@ String S_GPF_ABORT
 };
 String S_APP_SHUTDOWN
 {
-    Text = "Applikation wurde Beendet";
+    Text = "Applikation%PRODUCTVERSIONwurde%PRODUCTVERSIONBeendet";
     Text[ english_us ] = "Application has been shut down";
     Text[ portuguese ] = "A aplicação foi fechada.";
     Text[ russian ] = "Application has been shut down";
@@ -119,7 +119,7 @@ String S_APP_SHUTDOWN
 };
 String S_SID_EXECUTE_FAILED_NO_DISPATCHER
 {
-    Text = "Konnte Slot ID nicht ausführen: Kein ActiveDispatcher";
+    Text = "Konnte%PRODUCTVERSIONSlot%PRODUCTVERSIONID%PRODUCTVERSIONnicht%PRODUCTVERSIONausführen%PRODUCTVERSIONKein%PRODUCTVERSIONActiveDispatcher";
     Text[ english_us ] = "Slot ID cannot be run. No ActiveDispatcher";
     Text[ portuguese ] = "Foi impossível executar Slot ID: ActiveDispatcher inexistente";
     Text[ russian ] = "Slot ID cannot be run. No ActiveDispatcher";
@@ -141,7 +141,7 @@ String S_SID_EXECUTE_FAILED_NO_DISPATCHER
 };
 String S_SID_EXECUTE_FAILED
 {
-    Text = "Konnte Slot ID nicht ausführen";
+    Text = "Konnte%PRODUCTVERSIONSlot%PRODUCTVERSIONID%PRODUCTVERSIONnicht%PRODUCTVERSIONausführen";
     Text[ english_us ] = "Slot ID could not be run";
     Text[ portuguese ] = "Impossível executar Slot ID.";
     Text[ russian ] = "Slot ID could not be run";
@@ -163,7 +163,7 @@ String S_SID_EXECUTE_FAILED
 };
 String S_UNO_PROPERTY_NITIALIZE_FAILED
 {
-    Text = "UnoSlot: Konnte Properties nicht initialisieren.";
+    Text = "UnoSlot%PRODUCTVERSIONKonnte%PRODUCTVERSIONProperties%PRODUCTVERSIONnicht%PRODUCTVERSIONinitialisieren%PRODUCTVERSION";
     Text[ english_us ] = "UnoSlot: Properties could not be initialized";
     Text[ portuguese ] = "UnoSlot: impossível inicializar Properties.";
     Text[ russian ] = "UnoSlot: Properties could not be initialized";
@@ -185,7 +185,7 @@ String S_UNO_PROPERTY_NITIALIZE_FAILED
 };
 String S_RESETAPPLICATION_FAILED_COMPLEX
 {
-    Text = "ResetApplication fehlgeschlagen: Zu komplex";
+    Text = "ResetApplication%PRODUCTVERSIONfehlgeschlagen%PRODUCTVERSIONZu%PRODUCTVERSIONkomplex";
     Text[ english_us ] = "ResetApplication failed: too complex";
     Text[ portuguese ] = "ResetApplication falhou: demasiado complexa";
     Text[ russian ] = "ResetApplication failed: too complex";
@@ -207,7 +207,7 @@ String S_RESETAPPLICATION_FAILED_COMPLEX
 };
 String S_RESETAPPLICATION_FAILED_UNKNOWN
 {
-    Text = "ResetApplication fehlgeschlagen: Unbekannter Fenstertyp";
+    Text = "ResetApplication%PRODUCTVERSIONfehlgeschlagen%PRODUCTVERSIONUnbekannter%PRODUCTVERSIONFenstertyp";
     Text[ english_us ] = "ResetApplication failed: unknown window type";
     Text[ portuguese ] = "ResetApplication falhou: tipo de janela desconhecido";
     Text[ russian ] = "ResetApplication failed: unknown window type";
@@ -229,7 +229,7 @@ String S_RESETAPPLICATION_FAILED_UNKNOWN
 };
 String S_NO_ACTIVE_WINDOW
 {
-    Text = "Kein aktives Fenster gefunden (GetNextCloseWindow)";
+    Text = "Kein%PRODUCTVERSIONaktives%PRODUCTVERSIONFenster%PRODUCTVERSIONgefunden%PRODUCTVERSIONGetNextCloseWindow%PRODUCTVERSION";
     Text[ english_us ] = "Active window not found (GetNextCloseWindow)";
     Text[ portuguese ] = "Impossível encontrar janela activa (GetNextCloseWindow)";
     Text[ russian ] = "Active window not found (GetNextCloseWindow)";
@@ -251,7 +251,7 @@ String S_NO_ACTIVE_WINDOW
 };
 String S_NO_DIALOG_IN_GETACTIVE
 {
-    Text = "GetActive liefert keinen Dialog zurück! Bitte Entwicklung informieren";
+    Text = "GetActive%PRODUCTVERSIONliefert%PRODUCTVERSIONkeinen%PRODUCTVERSIONDialog%PRODUCTVERSIONzurück%PRODUCTVERSIONBitte%PRODUCTVERSIONEntwicklung%PRODUCTVERSIONinformieren";
     Text[ english_us ] = "GetActive does not show a dialog! Inform development.";
     Text[ portuguese ] = "GetActive não devolve nenhuma caixa de diálogo! Informe o departamento de programação.";
     Text[ russian ] = "GetActive does not deliver a dialog! Inform development.";
@@ -273,7 +273,7 @@ String S_NO_DIALOG_IN_GETACTIVE
 };
 String S_NO_POPUP
 {
-    Text = "Kein PopupMenu geöffnet";
+    Text = "Kein%PRODUCTVERSIONPopupMenu%PRODUCTVERSIONgeöffnet";
     Text[ english_us ] = "PopUp menu not open";
     Text[ portuguese ] = "PopupMenu não está aberto";
     Text[ russian ] = "PopUp menu not open";
@@ -295,7 +295,7 @@ String S_NO_POPUP
 };
 String S_NO_SUBMENU
 {
-    Text = "Untermenü nicht vorhanden";
+    Text = "Untermenü%PRODUCTVERSIONnicht%PRODUCTVERSIONvorhanden";
     Text[ english_us ] = "Submenu does not exist";
     Text[ portuguese ] = "Submenu inexistente";
     Text[ russian ] = "Submenu does not exist";
@@ -317,7 +317,7 @@ String S_NO_SUBMENU
 };
 String S_CONTROLTYPE_NOT_SUPPORTED
 {
-    Text = "ControlType ($Arg1) wird nicht unterstützt";
+    Text = "ControlType%PRODUCTVERSIONArg%PRODUCTVERSIONwird%PRODUCTVERSIONnicht%PRODUCTVERSIONunterstützt";
     Text[ english_us ] = "ControlType ($Arg1) is not supported";
     Text[ portuguese ] = "ControlType ($Arg1) não tem suporte";
     Text[ russian ] = "ControlType ($Arg1) is not supported";
@@ -339,7 +339,7 @@ String S_CONTROLTYPE_NOT_SUPPORTED
 };
 String S_SELECTION_BY_ATTRIBUTE_ONLY_DIRECTORIES
 {
-    Text = "Selektion nach Attributen nur für Directories möglich.";
+    Text = "Selektion%PRODUCTVERSIONnach%PRODUCTVERSIONAttributen%PRODUCTVERSIONnur%PRODUCTVERSIONfür%PRODUCTVERSIONDirectories%PRODUCTVERSIONmöglich%PRODUCTVERSION";
     Text[ english_us ] = "Selection by attributes only possible for directories";
     Text[ portuguese ] = "A selecção por atributos é somente possível para directórios.";
     Text[ russian ] = "Selection by attributes only possible for directories";
@@ -361,7 +361,7 @@ String S_SELECTION_BY_ATTRIBUTE_ONLY_DIRECTORIES
 };
 String S_NO_MORE_FILES
 {
-    Text = "Keine weiteren Dateien";
+    Text = "Keine%PRODUCTVERSIONweiteren%PRODUCTVERSIONDateien";
     Text[ english_us ] = "No further files";
     Text[ portuguese ] = "Não existem outros ficheiros";
     Text[ russian ] = "No further files";
@@ -383,7 +383,7 @@ String S_NO_MORE_FILES
 };
 String S_UNKNOWN_METHOD
 {
-    Text = "Unbekannte Methode '($Arg1)' an ($Arg2)";
+    Text = "Unbekannte%PRODUCTVERSIONMethode%PRODUCTVERSIONArg%PRODUCTVERSIONan%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Unknown method '($Arg1)' to ($Arg2)";
     Text[ portuguese ] = "Método desconhecido ($Arg1) para ($Arg2)";
     Text[ russian ] = "Unknown method '($Arg1)' to ($Arg2)";
@@ -405,7 +405,7 @@ String S_UNKNOWN_METHOD
 };
 String S_INVALID_PARAMETERS
 {
-    Text = "Ungültige Parameter";
+    Text = "Ungültige%PRODUCTVERSIONParameter";
     Text[ english_us ] = "Invalid Parameters";
     Text[ portuguese ] = "Parâmetros não válidos";
     Text[ russian ] = "Invalid Parameters";
@@ -427,7 +427,7 @@ String S_INVALID_PARAMETERS
 };
 String S_POINTER_OUTSIDE_APPWIN
 {
-    Text = "Pointer nicht innerhalb des Applikationsfensters bei '($Arg1)'";
+    Text = "Pointer%PRODUCTVERSIONnicht%PRODUCTVERSIONinnerhalb%PRODUCTVERSIONdes%PRODUCTVERSIONApplikationsfensters%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Pointer not located in application window at '($Arg1)'";
     Text[ portuguese ] = "O ponteiro não está dentro da janela de aplicação em '($Arg1)'";
     Text[ russian ] = "Pointer not located in application window at '($Arg1)'";
@@ -449,7 +449,7 @@ String S_POINTER_OUTSIDE_APPWIN
 };
 String S_UNKNOWN_COMMAND
 {
-    Text = "Unbekannter Befehl '($Arg1)'";
+    Text = "Unbekannter%PRODUCTVERSIONBefehl%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Unknown command '($Arg1)'";
     Text[ portuguese ] = "Comando desconhecido '($Arg1)'";
     Text[ russian ] = "Unknown command '($Arg1)'";
@@ -471,7 +471,7 @@ String S_UNKNOWN_COMMAND
 };
 String S_WIN_NOT_FOUND
 {
-    Text = "Konnte ($Arg1) nicht finden.";
+    Text = "Konnte%PRODUCTVERSIONArg%PRODUCTVERSIONnicht%PRODUCTVERSIONfinden%PRODUCTVERSION";
     Text[ english_us ] = "($Arg1) could not be found";
     Text[ portuguese ] = "Foi impossível encontrar ($Arg1).";
     Text[ russian ] = "($Arg1) could not be found";
@@ -493,7 +493,7 @@ String S_WIN_NOT_FOUND
 };
 String S_WIN_INVISIBLE
 {
-    Text = "($Arg1) ist unsichtbar.";
+    Text = "%PRODUCTVERSIONArg%PRODUCTVERSIONist%PRODUCTVERSIONunsichtbar%PRODUCTVERSION";
     Text[ english_us ] = "($Arg1) is not visible";
     Text[ portuguese ] = "($Arg1) é invisível.";
     Text[ russian ] = "($Arg1) is not visible";
@@ -515,7 +515,7 @@ String S_WIN_INVISIBLE
 };
 String S_WIN_DISABLED
 {
-    Text = "Konnte auf ($Arg1) nicht zugreifen.";
+    Text = "Konnte%PRODUCTVERSIONauf%PRODUCTVERSIONArg%PRODUCTVERSIONnicht%PRODUCTVERSIONzugreifen%PRODUCTVERSION";
     Text[ english_us ] = "($Arg1) could not be accessed.";
     Text[ portuguese ] = "Impossível o acesso a ($Arg1).";
     Text[ russian ] = "($Arg1) could not be accessed";
@@ -537,7 +537,7 @@ String S_WIN_DISABLED
 };
 String S_NUMBER_TOO_BIG
 {
-    Text = "Eintragsnummer ($Arg2) zu groß in ($Arg1). Maximum ist ($Arg3)";
+    Text = "Eintragsnummer%PRODUCTVERSIONArg%PRODUCTVERSIONzu%PRODUCTVERSIONgroß%PRODUCTVERSIONin%PRODUCTVERSIONArg%PRODUCTVERSIONMaximum%PRODUCTVERSIONist%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
     Text[ portuguese ] = "O número da entrada ($Arg2) é muito elevado em ($Arg1). O máximo é ($Arg3)";
     Text[ russian ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
@@ -559,7 +559,7 @@ String S_NUMBER_TOO_BIG
 };
 String S_NUMBER_TOO_SMALL
 {
-    Text = "Eintragsnummer ($Arg2) zu klein in ($Arg1). Minimum ist ($Arg3)";
+    Text = "Eintragsnummer%PRODUCTVERSIONArg%PRODUCTVERSIONzu%PRODUCTVERSIONklein%PRODUCTVERSIONin%PRODUCTVERSIONArg%PRODUCTVERSIONMinimum%PRODUCTVERSIONist%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
     Text[ portuguese ] = "O número da entrada ($Arg2) é muito baixo em ($Arg1). O mínimo é ($Arg3)";
     Text[ russian ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
@@ -581,7 +581,7 @@ String S_NUMBER_TOO_SMALL
 };
 String S_WINDOW_DISAPPEARED
 {
-    Text = "Window zwischenzeitlich verschwunden bei ($Arg1)";
+    Text = "Window%PRODUCTVERSIONzwischenzeitlich%PRODUCTVERSIONverschwunden%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Window momentarily not visible at ($Arg1)";
     Text[ portuguese ] = "Desaparecimento momentâneo da janela em ($Arg1)";
     Text[ russian ] = "Window momentarily not visible at ($Arg1)";
@@ -603,7 +603,7 @@ String S_WINDOW_DISAPPEARED
 };
 String S_ERROR_SAVING_IMAGE
 {
-    Text = "Fehler #($Arg1) beim Speichern des Bildes";
+    Text = "Fehler%PRODUCTVERSIONArg%PRODUCTVERSIONbeim%PRODUCTVERSIONSpeichern%PRODUCTVERSIONdes%PRODUCTVERSIONBildes";
     Text[ english_us ] = "Error #($Arg1) when saving the image";
     Text[ portuguese ] = "Erro #($Arg1) ao guardar a imagem";
     Text[ russian ] = "Error #($Arg1) when saving the image";
@@ -625,7 +625,7 @@ String S_ERROR_SAVING_IMAGE
 };
 String S_INVALID_POSITION
 {
-    Text = "Ungültige Positionsangabe bei ($Arg1)";
+    Text = "Ungültige%PRODUCTVERSIONPositionsangabe%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Invalid positon at ($Arg1)";
     Text[ portuguese ] = "Posição indicada incorrectamente em ($Arg1)";
     Text[ russian ] = "Invalid positon at ($Arg1)";
@@ -647,7 +647,7 @@ String S_INVALID_POSITION
 };
 String S_SPLITWIN_NOT_FOUND
 {
-    Text = "Konnte SplitWindow nicht finden bei ($Arg1)";
+    Text = "Konnte%PRODUCTVERSIONSplitWindow%PRODUCTVERSIONnicht%PRODUCTVERSIONfinden%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Split window not found at ($Arg1)";
     Text[ portuguese ] = "Foi impossível encontrar SplitWindow em ($Arg1)";
     Text[ russian ] = "Split window not found at ($Arg1)";
@@ -669,7 +669,7 @@ String S_SPLITWIN_NOT_FOUND
 };
 String S_INTERNAL_ERROR
 {
-    Text = "Interner Fehler bei ($Arg1)";
+    Text = "Interner%PRODUCTVERSIONFehler%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Internal error at ($Arg1)";
     Text[ portuguese ] = "Erro interno em ($Arg1)";
     Text[ russian ] = "Internal error at ($Arg1)";
@@ -691,7 +691,7 @@ String S_INTERNAL_ERROR
 };
 String S_NO_STATUSBAR
 {
-    Text = "Keine StatusBar vorhanden bei ($Arg1)";
+    Text = "Keine%PRODUCTVERSIONStatusBar%PRODUCTVERSIONvorhanden%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "No status bar at ($Arg1)";
     Text[ portuguese ] = "Barra de estado em ($Arg1) inexistente";
     Text[ russian ] = "No status bar at ($Arg1)";
@@ -713,7 +713,7 @@ String S_NO_STATUSBAR
 };
 String S_ITEMS_INVISIBLE
 {
-    Text = "Die Items sind ausgeblendet bei ($Arg1)";
+    Text = "Die%PRODUCTVERSIONItems%PRODUCTVERSIONsind%PRODUCTVERSIONausgeblendet%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "The items are hidden at ($Arg1)";
     Text[ portuguese ] = "Os items em ($Arg1) estão ocultos";
     Text[ russian ] = "The items are hidden at ($Arg1)";
@@ -735,7 +735,7 @@ String S_ITEMS_INVISIBLE
 };
 String S_TABPAGE_NOT_FOUND
 {
-    Text = "Tabpage nicht gefunden bei ($Arg1)";
+    Text = "Tabpage%PRODUCTVERSIONnicht%PRODUCTVERSIONgefunden%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Tab page not found at ($Arg1)";
     Text[ portuguese ] = "Foi impossível encontrar o separador em ($Arg1)";
     Text[ russian ] = "Tab page not found at ($Arg1)";
@@ -757,7 +757,7 @@ String S_TABPAGE_NOT_FOUND
 };
 String S_TRISTATE_NOT_ALLOWED
 {
-    Text = "Tristate darf nicht gesetzt werden bei ($Arg1)";
+    Text = "Tristate%PRODUCTVERSIONdarf%PRODUCTVERSIONnicht%PRODUCTVERSIONgesetzt%PRODUCTVERSIONwerden%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Three state cannot be set at ($Arg1)";
     Text[ portuguese ] = "Impossível indicar um valor \"tristate\" em ($Arg1)";
     Text[ russian ] = "Three state cannot be set at ($Arg1)";
@@ -780,7 +780,7 @@ String S_TRISTATE_NOT_ALLOWED
 };
 String S_ERROR_IN_SET_TEXT
 {
-    Text = "SetText hat nicht funktioniert";
+    Text = "SetText%PRODUCTVERSIONhat%PRODUCTVERSIONnicht%PRODUCTVERSIONfunktioniert";
     Text[ english_us ] = "Set text did not function";
     Text[ portuguese ] = "SetText não funcionou";
     Text[ russian ] = "Set text did not function";
@@ -802,7 +802,7 @@ String S_ERROR_IN_SET_TEXT
 };
 String S_ATTEMPT_TO_WRITE_READONLY
 {
-    Text = "Schreibversuch auf ReadOnly ($Arg1)";
+    Text = "Schreibversuch%PRODUCTVERSIONauf%PRODUCTVERSIONReadOnly%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Attempt to write on read-only ($Arg1)";
     Text[ portuguese ] = "Tentativa de escrita em ($Arg1) como só leitura";
     Text[ russian ] = "Attempt to write on read-only ($Arg1)";
@@ -824,7 +824,7 @@ String S_ATTEMPT_TO_WRITE_READONLY
 };
 String S_NO_SELECT_FALSE
 {
-    Text = "Select FALSE nicht erlaubt. Bitte MultiSelect verwenden bei ($Arg1)";
+    Text = "Select%PRODUCTVERSIONFALSE%PRODUCTVERSIONnicht%PRODUCTVERSIONerlaubt%PRODUCTVERSIONBitte%PRODUCTVERSIONMultiSelect%PRODUCTVERSIONverwenden%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
     Text[ portuguese ] = "Interdito seleccionar FALSE. Utilizar MultiSelect em ($Arg1)";
     Text[ russian ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
@@ -846,7 +846,7 @@ String S_NO_SELECT_FALSE
 };
 String S_ENTRY_NOT_FOUND
 {
-    Text = "Eintrag \"($Arg2)\" bei ($Arg1) nicht gefunden";
+    Text = "Eintrag%PRODUCTVERSIONArg%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSIONnicht%PRODUCTVERSIONgefunden";
     Text[ english_us ] = "\"($Arg2)\" entry at ($Arg1) not found";
     Text[ portuguese ] = "Foi impossível encontrar a entrada \"($Arg2) em ($Arg1)";
     Text[ russian ] = "\"($Arg2)\" entry at ($Arg1) not found";
@@ -868,7 +868,7 @@ String S_ENTRY_NOT_FOUND
 };
 String S_METHOD_FAILED
 {
-    Text = "($Arg1) von Eintrag \"($Arg2)\" ist fehlgeschlagen";
+    Text = "%PRODUCTVERSIONArg%PRODUCTVERSIONvon%PRODUCTVERSIONEintrag%PRODUCTVERSIONArg%PRODUCTVERSIONist%PRODUCTVERSIONfehlgeschlagen";
     Text[ english_us ] = "($Arg1) of entry \"($Arg2)\" failed";
     Text[ portuguese ] = "($Arg1) da entrada \"($Arg2)\" falhou";
     Text[ russian ] = "($Arg1) of entry \"($Arg2)\" failed";
@@ -890,7 +890,7 @@ String S_METHOD_FAILED
 };
 String S_HELPID_ON_TOOLBOX_NOT_FOUND
 {
-    Text = "HelpID auf ToolBox nicht gefunden bei ($Arg1)";
+    Text = "HelpID%PRODUCTVERSIONauf%PRODUCTVERSIONToolBox%PRODUCTVERSIONnicht%PRODUCTVERSIONgefunden%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "HelpID in ToolBox not found at ($Arg1)";
     Text[ portuguese ] = "Impossível encontrar o HelpID da ToolBox em ($Arg1)";
     Text[ russian ] = "HelpID in ToolBox not found at ($Arg1)";
@@ -912,7 +912,7 @@ String S_HELPID_ON_TOOLBOX_NOT_FOUND
 };
 String S_BUTTON_DISABLED_ON_TOOLBOX
 {
-    Text = "Der Button ist disabled in ToolBox bei ($Arg1)";
+    Text = "Der%PRODUCTVERSIONButton%PRODUCTVERSIONist%PRODUCTVERSIONdisabled%PRODUCTVERSIONin%PRODUCTVERSIONToolBox%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "The button is disabled in ToolBox at ($Arg1)";
     Text[ portuguese ] = "O botão da ToolBox em ($Arg1) está desactivado";
     Text[ russian ] = "The button is disabled in ToolBox at ($Arg1)";
@@ -934,7 +934,7 @@ String S_BUTTON_DISABLED_ON_TOOLBOX
 };
 String S_BUTTON_HIDDEN_ON_TOOLBOX
 {
-    Text = "Der Button ist hidden in ToolBox bei ($Arg1)";
+    Text = "Der%PRODUCTVERSIONButton%PRODUCTVERSIONist%PRODUCTVERSIONhidden%PRODUCTVERSIONin%PRODUCTVERSIONToolBox%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "The button is hidden in ToolBox at ($Arg1)";
     Text[ portuguese ] = "O botão da ToolBox em ($Arg1) está oculto";
     Text[ russian ] = "The button is hidden in ToolBox at ($Arg1)";
@@ -956,7 +956,7 @@ String S_BUTTON_HIDDEN_ON_TOOLBOX
 };
 String S_CANNOT_MAKE_BUTTON_VISIBLE_IN_TOOLBOX
 {
-    Text = "Button konnte nicht sichtbar gemacht werden in ToolBox bei ($Arg1)";
+    Text = "Button%PRODUCTVERSIONkonnte%PRODUCTVERSIONnicht%PRODUCTVERSIONsichtbar%PRODUCTVERSIONgemacht%PRODUCTVERSIONwerden%PRODUCTVERSIONin%PRODUCTVERSIONToolBox%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Button cannot be made visible in ToolBox at ($Arg1)";
     Text[ portuguese ] = "Foi impossível tornar o botão da ToolBox em ($Arg1) visível";
     Text[ russian ] = "Button cannot be made visible in ToolBox at ($Arg1)";
@@ -978,7 +978,7 @@ String S_CANNOT_MAKE_BUTTON_VISIBLE_IN_TOOLBOX
 };
 String S_TEAROFF_FAILED
 {
-    Text = "TearOff Fehlgeschlagen in ToolBox bei ($Arg1)";
+    Text = "TearOff%PRODUCTVERSIONFehlgeschlagen%PRODUCTVERSIONin%PRODUCTVERSIONToolBox%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "TearOff failed in ToolBox at ($Arg1)";
     Text[ portuguese ] = "TearOff falhou na ToolBox em ($Arg1)";
     Text[ russian ] = "TearOff failed in ToolBox at ($Arg1)";
@@ -1000,7 +1000,7 @@ String S_TEAROFF_FAILED
 };
 String S_NO_SELECTED_ENTRY
 {
-    Text = "Es ist kein Eintrag Selektiert in TreeListBox bei ($Arg1)";
+    Text = "Es%PRODUCTVERSIONist%PRODUCTVERSIONkein%PRODUCTVERSIONEintrag%PRODUCTVERSIONSelektiert%PRODUCTVERSIONin%PRODUCTVERSIONTreeListBox%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ portuguese ] = "Nenhuma entrada seleccionada na TreeListBox para ($Arg1)";
     Text[ russian ] = "An entry has not been selected in TreeListBox at ($Arg1)";
@@ -1022,7 +1022,7 @@ String S_NO_SELECTED_ENTRY
 };
 String S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED
 {
-    Text = "Select/Deselect mit String nicht implementiert bei ($Arg1)";
+    Text = "Select%PRODUCTVERSIONDeselect%PRODUCTVERSIONmit%PRODUCTVERSIONString%PRODUCTVERSIONnicht%PRODUCTVERSIONimplementiert%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Select/Deselect with string not implemented at ($Arg1)";
     Text[ portuguese ] = "Seleccionar/Desseleccionar com String não implementado em ($Arg1)";
     Text[ russian ] = "Select/Deselect with string not implemented at ($Arg1)";
@@ -1044,7 +1044,7 @@ String S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED
 };
 String S_ALLOWED_ONLY_IN_FLOATING_MODE
 {
-    Text = "Methode nur im Froating-Mode erlaubt bei ($Arg1)";
+    Text = "Methode%PRODUCTVERSIONnur%PRODUCTVERSIONim%PRODUCTVERSIONFroating%PRODUCTVERSIONMode%PRODUCTVERSIONerlaubt%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Method only allowed in floating mode at ($Arg1)";
     Text[ portuguese ] = "Método autorizado apenas em modo Froating em ($Arg1)";
     Text[ russian ] = "Method only allowed in floating mode at ($Arg1)";
@@ -1058,7 +1058,7 @@ String S_ALLOWED_ONLY_IN_FLOATING_MODE
     Text[ polish ] = "Method only allowed in floating mode at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "Method only allowed in floating mode at ($Arg1)";
-    Text[ korean ] = "($Arg1)¿¡¼­ ¸Þ¼Òµå´Â ºÎµ¿ ¸ðµå¿¡¼­¸¸ Çã¿ëµË´Ï´Ù.";
+    Text[ korean ] = "¸Þ¼Òµå´Â ºÎµ¿-¸ðµå ($Arg1)¿¡¼­¸¸ Çã¿ëµË´Ï´Ù.";
     Text[ chinese_simplified ] = "Method only allowed in floating mode at ($Arg1)";
     Text[ chinese_traditional ] = "Method only allowed in floating mode at ($Arg1)";
     Text[ arabic ] = "Method only allowed in floating mode at ($Arg1)";
@@ -1066,7 +1066,7 @@ String S_ALLOWED_ONLY_IN_FLOATING_MODE
 };
 String S_ALLOWED_ONLY_IN_DOCKING_MODE
 {
-    Text = "Methode nur im Docking-Mode erlaubt bei ($Arg1)";
+    Text = "Methode%PRODUCTVERSIONnur%PRODUCTVERSIONim%PRODUCTVERSIONDocking%PRODUCTVERSIONMode%PRODUCTVERSIONerlaubt%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Method only allowed in docking mode at ($Arg1)";
     Text[ portuguese ] = "Método somente autorizado em modo Docking em ($Arg1)";
     Text[ russian ] = "Method only allowed in docking mode at ($Arg1)";
@@ -1088,7 +1088,7 @@ String S_ALLOWED_ONLY_IN_DOCKING_MODE
 };
 String S_SIZE_NOT_CHANGEABLE
 {
-    Text = "Größe ist nicht veränderbar bei ($Arg1)";
+    Text = "Größe%PRODUCTVERSIONist%PRODUCTVERSIONnicht%PRODUCTVERSIONveränderbar%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "Size cannot be altered at ($Arg1)";
     Text[ portuguese ] = "Impossível alterar o tamanho em ($Arg1)";
     Text[ russian ] = "Size cannot be altered at ($Arg1)";
@@ -1110,7 +1110,7 @@ String S_SIZE_NOT_CHANGEABLE
 };
 String S_NO_OK_BUTTON
 {
-    Text = "Kein OK Button Vorhanden bei ($Arg1)";
+    Text = "Kein%PRODUCTVERSIONOK%PRODUCTVERSIONButton%PRODUCTVERSIONVorhanden%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "There is no OK button at ($Arg1)";
     Text[ portuguese ] = "Botão OK inexistente em ($Arg1)";
     Text[ russian ] = "There is no OK button at ($Arg1)";
@@ -1132,7 +1132,7 @@ String S_NO_OK_BUTTON
 };
 String S_NO_CANCEL_BUTTON
 {
-    Text = "Kein Abbrechen Button Vorhanden bei ($Arg1)";
+    Text = "Kein%PRODUCTVERSIONAbbrechen%PRODUCTVERSIONButton%PRODUCTVERSIONVorhanden%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "There is no Cancel button at ($Arg1)";
     Text[ portuguese ] = "Botão Cancelar inexistente em ($Arg1)";
     Text[ russian ] = "There is no Cancel button at ($Arg1)";
@@ -1154,7 +1154,7 @@ String S_NO_CANCEL_BUTTON
 };
 String S_NO_YES_BUTTON
 {
-    Text = "Kein Ja Button Vorhanden bei ($Arg1)";
+    Text = "Kein%PRODUCTVERSIONJa%PRODUCTVERSIONButton%PRODUCTVERSIONVorhanden%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "There is no Yes button at ($Arg1)";
     Text[ portuguese ] = "Botão Sim inexistente em ($Arg1)";
     Text[ russian ] = "There is no Yes button at ($Arg1)";
@@ -1176,7 +1176,7 @@ String S_NO_YES_BUTTON
 };
 String S_NO_NO_BUTTON
 {
-    Text = "Kein Nein Button Vorhanden bei ($Arg1)";
+    Text = "Kein%PRODUCTVERSIONNein%PRODUCTVERSIONButton%PRODUCTVERSIONVorhanden%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "There is no No button at ($Arg1)";
     Text[ portuguese ] = "Botão Não inexistente em ($Arg1)";
     Text[ russian ] = "There is no No button at ($Arg1)";
@@ -1198,7 +1198,7 @@ String S_NO_NO_BUTTON
 };
 String S_NO_RETRY_BUTTON
 {
-    Text = "Kein Wiederholen Button Vorhanden bei ($Arg1)";
+    Text = "Kein%PRODUCTVERSIONWiederholen%PRODUCTVERSIONButton%PRODUCTVERSIONVorhanden%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "There is no Repeat button at ($Arg1)";
     Text[ portuguese ] = "Botão Repetir inexistente em ($Arg1)";
     Text[ russian ] = "There is no Repeat button at ($Arg1)";
@@ -1220,7 +1220,7 @@ String S_NO_RETRY_BUTTON
 };
 String S_NO_HELP_BUTTON
 {
-    Text = "Kein Hilfe Button Vorhanden bei ($Arg1)";
+    Text = "Kein%PRODUCTVERSIONHilfe%PRODUCTVERSIONButton%PRODUCTVERSIONVorhanden%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "There is no Help button at ($Arg1)";
     Text[ portuguese ] = "Botão Ajuda inexistente em ($Arg1)";
     Text[ russian ] = "There is no Help button at ($Arg1)";
@@ -1242,7 +1242,7 @@ String S_NO_HELP_BUTTON
 };
 String S_NO_DEFAULT_BUTTON
 {
-    Text = "Kein Default Button Definiert bei ($Arg1)";
+    Text = "Kein%PRODUCTVERSIONDefault%PRODUCTVERSIONButton%PRODUCTVERSIONDefiniert%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "There is no Default button defined at ($Arg1)";
     Text[ portuguese ] = "Botão Padrão inexistente em ($Arg1)";
     Text[ russian ] = "There is no Default button defined at ($Arg1)";
@@ -1264,7 +1264,7 @@ String S_NO_DEFAULT_BUTTON
 };
 String S_BUTTON_ID_NOT_THERE
 {
-    Text = "Kein Button mit der ID ($Arg1) Vorhanden bei ($Arg2)";
+    Text = "Kein%PRODUCTVERSIONButton%PRODUCTVERSIONmit%PRODUCTVERSIONder%PRODUCTVERSIONID%PRODUCTVERSIONArg%PRODUCTVERSIONVorhanden%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "There is no button with a ($Arg1) ID at ($Arg2)";
     Text[ portuguese ] = "Botão com ID ($Arg1) inexistente em ($Arg2)";
     Text[ russian ] = "There is no button with a ($Arg1) ID at ($Arg2)";
@@ -1286,7 +1286,7 @@ String S_BUTTON_ID_NOT_THERE
 };
 String S_BUTTONID_REQUIRED
 {
-    Text = "Es muss eine ButtonId angegeben werden bei ($Arg1)";
+    Text = "Es%PRODUCTVERSIONmuss%PRODUCTVERSIONeine%PRODUCTVERSIONButtonId%PRODUCTVERSIONangegeben%PRODUCTVERSIONwerden%PRODUCTVERSIONbei%PRODUCTVERSIONArg%PRODUCTVERSION";
     Text[ english_us ] = "A button ID needs to be entered at ($Arg1)";
     Text[ portuguese ] = "Necessário indicar ButtonId em ($Arg1)";
     Text[ russian ] = "A button ID needs to be entered at ($Arg1)";
@@ -1308,7 +1308,7 @@ String S_BUTTONID_REQUIRED
 };
 String S_UNKNOWN_TYPE
 {
-    Text = "Unbekannter Objekttyp ($Arg1) aus UId";
+    Text = "Unbekannter%PRODUCTVERSIONObjekttyp%PRODUCTVERSIONArg%PRODUCTVERSIONaus%PRODUCTVERSIONUId";
     Text[ english_us ] = "Unknown object type ($Arg1) from UId";
     Text[ portuguese ] = "Tipo de objecto ($Arg1) desconhecido deste UId";
     Text[ russian ] = "Unknown object type ($Arg1) from UId";
