@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-14 08:26:40 $
+ *  last change: $Author: mba $ $Date: 2001-02-15 08:49:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,7 +723,7 @@ Reference< XFrame > SAL_CALL Frame::findFrame(  const   OUString&   sTargetFrame
                                     {
                                         xSearchedFrame = m_xParent->findFrame( sTargetFrameName, nSearchFlags );
                                     }
-                                    m_bRecursiveSearchProtection = sal_True;
+                                    m_bRecursiveSearchProtection = sal_False;
                                 }
                                 break;
         }
