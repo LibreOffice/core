@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _viewsh.sdi,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:12:09 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,6 +416,12 @@ interface BaseTextEditView : View
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
         SID_HANGUL_HANJA_CONVERSION // status(final|play)
+        [
+                ExecMethod = ExecLingu ;
+                StateMethod = GetState ;
+                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        ]
+        SID_CHINESE_CONVERSION
         [
                 ExecMethod = ExecLingu ;
                 StateMethod = GetState ;
