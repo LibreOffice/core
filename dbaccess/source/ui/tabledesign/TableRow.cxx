@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableRow.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:24:43 $
+ *  last change: $Author: oj $ $Date: 2001-02-20 11:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ void OTableRow::SetFieldType( const OTypeInfo* _pType )
             {
                 case DataType::CHAR:
                 case DataType::VARCHAR:
-                    m_pActFieldDescr->SetPrecision(::std::min(sal_Int32(50),_pType->nPrecision));
+                    m_pActFieldDescr->SetPrecision(::std::min<sal_Int32>(sal_Int32(50),_pType->nPrecision));
                     break;
                 default:
                     if(_pType->nPrecision && _pType->nMaximumScale)
@@ -139,7 +139,7 @@ void OTableRow::SetFieldType( const OTypeInfo* _pType )
                         m_pActFieldDescr->SetScale(0);
                     }
                     else if(_pType->nPrecision)
-                        m_pActFieldDescr->SetPrecision(::std::min(sal_Int32(16),_pType->nPrecision));
+                        m_pActFieldDescr->SetPrecision(::std::min<sal_Int32>(sal_Int32(16),_pType->nPrecision));
             }
         }
         // type checking
