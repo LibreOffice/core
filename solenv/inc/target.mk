@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.136 $
+#   $Revision: 1.137 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-29 17:34:27 $
+#   last change: $Author: vg $ $Date: 2003-06-04 10:39:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2341,6 +2341,10 @@ $(MISC)$/$(TARGET)_xxl_%.done : %.xxl
 .INCLUDE : tg_rslb.mk
 .ENDIF
 .ENDIF
+
+.IF "$(RSC_MULTI1)$(RSC_MULTI2)$(RSC_MULTI3)$(RSC_MULTI4)$(RSC_MULTI5)$(RSC_MULTI6)$(RSC_MULTI7)$(RSC_MULTI8)$(RSC_MULTI9)"!=""
+$(RSC_MULTI1) $(RSC_MULTI2) $(RSC_MULTI3) $(RSC_MULTI4) $(RSC_MULTI5) $(RSC_MULTI6) $(RSC_MULTI7) $(RSC_MULTI8) $(RSC_MULTI9): $(IMGLSTTARGET)
+.ENDIF          # "$(RSC_MULTI1)$(RSC_MULTI2)$(RSC_MULTI3)$(RSC_MULTI4)$(RSC_MULTI5)$(RSC_MULTI6)$(RSC_MULTI7)$(RSC_MULTI8)$(RSC_MULTI9)"!=""
 
 # -------
 # - SHL -
