@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdgi.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 12:49:30 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 10:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,8 @@ public:
 
     // Rechnet von den SFX_STYLE_FAMILY Ids auf 1-5 um
     static USHORT       SfxFamilyIdToNId( USHORT nFamily );
+
+    void                SetAutomaticFilter();
 };
 /* -----------------10.12.2003 11:42-----------------
 
