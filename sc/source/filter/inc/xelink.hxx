@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xelink.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:08 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 10:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef SC_XELINK_HXX
 #define SC_XELINK_HXX
+
+#ifndef SC_MARKDATA_HXX
+#include "markdata.hxx"
+#endif
 
 #ifndef SC_XEHELPER_HXX
 #include "xehelper.hxx"
@@ -273,11 +277,6 @@ private:
     sal_uInt16                  mnRow;      /// Row index of the external cell.
     sal_uInt8                   mnId;       /// Identifier for data type (EXC_CACHEDVAL_***).
 
-public:
-    /** Returns true, if this CRN has the given cell address. */
-    inline bool                 IsAddress( sal_uInt16 nCol, sal_uInt16 nRow ) const
-                                    { return (nCol == mnCol) && (nRow == mnRow); }
-
 protected:
     /** @param nAddSize  The size of additional data derived classes will write. */
     explicit                    XclExpCrn( sal_uInt16 nCol, sal_uInt16 nRow, sal_uInt8 nId, sal_uInt32 nAddLen = 0 );
@@ -351,15 +350,13 @@ class XclExpXct : public XclExpRecord
 {
 private:
     XclExpRecordList< XclExpCrn > maCrnList;    /// CRN records that follow this record.
+    ScMarkData                  maUsedCells;    /// Contains addresses of all stored cells.
     XclExpString                maTable;        /// Sheet name of the external sheet.
     sal_uInt16                  mnXclTab;       /// Excel sheet index.
 
 public:
     explicit                    XclExpXct( const String& rTabName );
 
-    /** Returns the size the sheet name will take in stream. */
-    inline sal_uInt16           GetTableBytes() const
-                                    { return static_cast< sal_uInt16 >( maTable.GetSize() ); }
     /** Returns the external sheet name. */
     inline const XclExpString&  GetTableName() const { return maTable; }
 
@@ -372,9 +369,6 @@ public:
     virtual void                Save( XclExpStream& rStrm );
 
 private:
-    /** Returns true, if the CRN list already contains an CRN with the given address. */
-    bool                        Exists( sal_uInt16 nCol, sal_uInt16 nRow ) const;
-
     /** Writes the XCT record contents. */
     virtual void                WriteBody( XclExpStream& rStrm );
 };
