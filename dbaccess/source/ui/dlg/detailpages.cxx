@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:22 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1054,6 +1054,9 @@ namespace dbaui
         m_aUrl.SetText(sURL);
         m_aUrl.ClearModifyFlag();
 
+        if ( _bSaveValue )
+            m_aEDDriverClass.SaveValue();
+
         if ( !m_aEDDriverClass.GetText().Len() )
             m_aEDDriverClass.SetText(String::CreateFromAscii("com.mysql.jdbc.Driver"));
         m_aEDDriverClass.ClearModifyFlag();
@@ -1067,7 +1070,6 @@ namespace dbaui
             m_aUseJDBC.SaveValue();
             m_aUrl.SaveValue();
             m_aUrl.SaveValueNoPrefix();
-            m_aEDDriverClass.SaveValue();
         }
 
         if ( bReadonly )
