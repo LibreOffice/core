@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: nf $ $Date: 2001-07-04 13:06:41 $
+ *  last change: $Author: nf $ $Date: 2002-06-03 13:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,6 +451,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
         case CFG_TOKEN_COMPONENT:
         case CFG_TOKEN_TEMPLATE:
         case CFG_TOKEN_CONFIGNAME:
+        case CFG_TOKEN_OORNAME:
         case CFG_TAG:
         case ANYTOKEN:
         case CFG_TEXT_START:
@@ -471,6 +472,10 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                     break;
                     case CFG_TOKEN_CONFIGNAME:
                         sSearch = "cfg:name=";
+                    break;
+                    case CFG_TOKEN_OORNAME:
+                        sSearch = "oor:name=";
+                        bLocalize = TRUE;
                     break;
                     case CFG_TEXT_START: {
                         sCurrentResTyp = sTokenName;
@@ -556,7 +561,9 @@ int CfgParser::Execute( int nToken, char * pToken )
             else if ( sToken.Search( "template-id=" ) != STRING_NOTFOUND )
                 return ExecuteAnalyzedToken( CFG_TOKEN_TEMPLATE, pToken );
             else if ( sToken.Search( "cfg:name=" ) != STRING_NOTFOUND )
-                return ExecuteAnalyzedToken( CFG_TOKEN_CONFIGNAME, pToken );
+                return ExecuteAnalyzedToken( CFG_TOKEN_OORNAME, pToken );
+            else if ( sToken.Search( "oor:name=" ) != STRING_NOTFOUND )
+                return ExecuteAnalyzedToken( CFG_TOKEN_OORNAME, pToken );
         break;
     }
     return ExecuteAnalyzedToken( nToken, pToken );
