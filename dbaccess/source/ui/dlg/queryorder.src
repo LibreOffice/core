@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:27 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ ModalDialog DLG_ORDERCRIT
     Text [ ENGLISH ] = "Sort Order" ;
     Text [ norwegian ] = "Sort Order" ;
     Text [ italian ] = "Ordine" ;
-    Text [ portuguese_brazilian ] = "Crit?rio de Ordena??o" ;
+    Text [ portuguese_brazilian ] = "Ordem de classifica��o" ;
     Text [ portuguese ] = "Ordenar" ;
     Text [ finnish ] = "Lajitteluj�rjestys" ;
     Text [ danish ] = "Sortering" ;
@@ -125,8 +125,8 @@ ModalDialog DLG_ORDERCRIT
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "aufsteigend" ; Default ; > ;
-            < "descendente" ; Default ; > ;
+            < "crescente" ; Default ; > ;
+            < "decrescente" ; Default ; > ;
         };
         StringList [ portuguese ] =
         {
@@ -210,8 +210,8 @@ ModalDialog DLG_ORDERCRIT
     };
     StringList [ turkish ] =
     {
-            < "Artan d�zen" ; Default ; > ;
-        < "Azalan d�zen" ; Default ; > ;
+            < "artan" ; Default ; > ;
+        < "azalan" ; Default ; > ;
     };
     StringList [ language_user1 ] =
     {
@@ -227,6 +227,21 @@ ModalDialog DLG_ORDERCRIT
     {
          < "จากน้อยไปมาก" ; Default ; > ;
         < "จากมากไปน้อย" ; Default ; > ;
+    };
+    StringList [ czech ] =
+    {
+         < "vzestupně" ; Default ; > ;
+        < "sestupně" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "aufsteigend" ; Default ; > ;
+        < "absteigend" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "आरोहण क्रम" ; Default ; > ;
+        < "अवरोहण क्रम" ; Default ; > ;
     };
     };
     ListBox LB_ORDERFIELD2
@@ -268,8 +283,8 @@ ModalDialog DLG_ORDERCRIT
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "aufsteigend" ; Default ; > ;
-            < "descendente" ; Default ; > ;
+            < "ascendente" ; Default ; > ;
+            < "descesdente" ; Default ; > ;
         };
         StringList [ portuguese ] =
         {
@@ -353,8 +368,8 @@ ModalDialog DLG_ORDERCRIT
     };
     StringList [ turkish ] =
     {
-            < "Artan d�zen" ; Default ; > ;
-        < "Azalan d�zen" ; Default ; > ;
+            < "artan" ; Default ; > ;
+        < "azalan" ; Default ; > ;
     };
     StringList [ language_user1 ] =
     {
@@ -370,6 +385,21 @@ ModalDialog DLG_ORDERCRIT
     {
          < "จากน้อยไปมาก" ; Default ; > ;
         < "จากมากไปน้อย" ; Default ; > ;
+    };
+    StringList [ czech ] =
+    {
+         < "vzestupně" ; Default ; > ;
+        < "sestupně" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "aufsteigend" ; Default ; > ;
+        < "absteigend" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "आरोहण क्रम" ; Default ; > ;
+        < "अवरोहण क्रम" ; Default ; > ;
     };
     };
     ListBox LB_ORDERFIELD3
@@ -411,8 +441,8 @@ ModalDialog DLG_ORDERCRIT
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "aufsteigend" ; Default ; > ;
-            < "descendente" ; Default ; > ;
+            < "crescente" ; Default ; > ;
+            < "decrescente" ; Default ; > ;
         };
         StringList [ portuguese ] =
         {
@@ -496,8 +526,8 @@ ModalDialog DLG_ORDERCRIT
     };
     StringList [ turkish ] =
     {
-            < "Artan d�zen" ; Default ; > ;
-        < "Azalan d�zen" ; Default ; > ;
+            < "artan" ; Default ; > ;
+        < "azalan" ; Default ; > ;
     };
     StringList [ language_user1 ] =
     {
@@ -514,6 +544,21 @@ ModalDialog DLG_ORDERCRIT
          < "จากน้อยไปมาก" ; Default ; > ;
         < "จากมากไปน้อย" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "vzestupně" ; Default ; > ;
+        < "sestupně" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "aufsteigend" ; Default ; > ;
+        < "absteigend" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "आरोहण क्रम" ; Default ; > ;
+        < "अवरोहण क्रम" ; Default ; > ;
+    };
     };
     FixedText FT_ORDERFIELD
     {
@@ -523,7 +568,7 @@ ModalDialog DLG_ORDERCRIT
         Text [ ENGLISH ] = "Fieldname" ;
         Text [ norwegian ] = "Fieldname" ;
         Text [ italian ] = "Nome di campo" ;
-        Text [ portuguese_brazilian ] = "Nome de campo" ;
+        Text [ portuguese_brazilian ] = "Nome do campo" ;
         Text [ portuguese ] = "Nome de campo" ;
         Text [ finnish ] = "Kent�n nimi" ;
         Text [ danish ] = "Feltnavn" ;
@@ -545,6 +590,9 @@ ModalDialog DLG_ORDERCRIT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nom del camp";
         Text[ thai ] = "ชื่อเขตข้อมูล";
+        Text[ czech ] = "Název pole";
+        Text[ hebrew ] = "Feldname";
+        Text[ hindi ] = "क्षेत्र नाम";
     };
 
     FixedText FT_ORDERAFTER1
@@ -555,7 +603,7 @@ ModalDialog DLG_ORDERCRIT
         Text [ ENGLISH ] = "and then" ;
         Text [ norwegian ] = "and then" ;
         Text [ italian ] = "poi per" ;
-        Text [ portuguese_brazilian ] = "e, em seguida," ;
+        Text [ portuguese_brazilian ] = "e ent�o" ;
         Text [ portuguese ] = "depois" ;
         Text [ finnish ] = "ja sitten" ;
         Text [ danish ] = "derefter" ;
@@ -566,16 +614,19 @@ ModalDialog DLG_ORDERCRIT
         Text [ ENGLISH_US ] = "and then" ;
         Text[ chinese_simplified ] = "之后";
         Text[ russian ] = "�����";
-        Text[ polish ] = "wed�ug";
+        Text[ polish ] = "a nast�pnie";
         Text[ japanese ] = "それから";
         Text[ chinese_traditional ] = "之後";
         Text[ arabic ] = "��� ���";
         Text[ greek ] = "������";
         Text[ korean ] = "그 다음";
-        Text[ turkish ] = "Sonra";
+        Text[ turkish ] = "ve sonra";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "i despr�s";
         Text[ thai ] = "และ  จากนั้น";
+        Text[ czech ] = "a pak";
+        Text[ hebrew ] = "danach";
+        Text[ hindi ] = "उसके बाद";
     };
     FixedText FT_ORDERAFTER2
     {
@@ -585,7 +636,7 @@ ModalDialog DLG_ORDERCRIT
         Text [ ENGLISH ] = "and then" ;
         Text [ norwegian ] = "and then" ;
         Text [ italian ] = "poi per" ;
-        Text [ portuguese_brazilian ] = "e, em seguida," ;
+        Text [ portuguese_brazilian ] = "e ent�o" ;
         Text [ portuguese ] = "depois" ;
         Text [ finnish ] = "ja sitten" ;
         Text [ danish ] = "derefter" ;
@@ -596,16 +647,19 @@ ModalDialog DLG_ORDERCRIT
         Text [ ENGLISH_US ] = "and then" ;
         Text[ chinese_simplified ] = "之后";
         Text[ russian ] = "�����";
-        Text[ polish ] = "wed�ug";
+        Text[ polish ] = "a nast�pnie";
         Text[ japanese ] = "それから";
         Text[ chinese_traditional ] = "之後";
         Text[ arabic ] = "��� ���";
         Text[ greek ] = "������";
         Text[ korean ] = "그 다음";
-        Text[ turkish ] = "Sonra";
+        Text[ turkish ] = "ve sonra";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "i despr�s";
         Text[ thai ] = "และ  จากนั้น";
+        Text[ czech ] = "a pak";
+        Text[ hebrew ] = "danach";
+        Text[ hindi ] = "उसके बाद";
     };
     FixedText FT_ORDEROPER
     {
@@ -627,16 +681,19 @@ ModalDialog DLG_ORDERCRIT
         Text [ ENGLISH_US ] = "Operator" ;
         Text[ chinese_simplified ] = "链接";
         Text[ russian ] = "��������";
-        Text[ polish ] = "��cze";
+        Text[ polish ] = "Operator";
         Text[ japanese ] = "演算子";
         Text[ chinese_traditional ] = "捷徑";
         Text[ arabic ] = "������";
         Text[ greek ] = "�������";
         Text[ korean ] = "연산자";
-        Text[ turkish ] = "��le�";
+        Text[ turkish ] = "��lemci";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Operador";
         Text[ thai ] = "ตัวปฏิบัติการ";
+        Text[ czech ] = "Operátor";
+        Text[ hebrew ] = "Verknüpfung";
+        Text[ hindi ] = "प्रवर्तक";
     };
     FixedText FT_ORDERDIR
     {
@@ -646,7 +703,7 @@ ModalDialog DLG_ORDERCRIT
         Text [ ENGLISH ] = "Direction" ;
         Text [ norwegian ] = "Retning" ;
         Text [ italian ] = "Sequenza" ;
-        Text [ portuguese_brazilian ] = "Dire??o" ;
+        Text [ portuguese_brazilian ] = "Ordem" ;
         Text [ portuguese ] = "Ordem" ;
         Text [ finnish ] = "J�rjestys" ;
         Text [ danish ] = "R�kkef�lge" ;
@@ -658,7 +715,7 @@ ModalDialog DLG_ORDERCRIT
         Center = TRUE ;
         Text[ chinese_simplified ] = "顺序";
         Text[ russian ] = "�������";
-        Text[ polish ] = "Kolejno��";
+        Text[ polish ] = "Porz�dek";
         Text[ japanese ] = "並べ替え順序";
         Text[ chinese_traditional ] = "順序";
         Text[ arabic ] = "�������";
@@ -668,6 +725,9 @@ ModalDialog DLG_ORDERCRIT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ordre";
         Text[ thai ] = "ลำดับ";
+        Text[ czech ] = "Pořadí";
+        Text[ hebrew ] = "Reihenfolge";
+        Text[ hindi ] = "क्रम";
     };
     OKButton BT_OK
     {
@@ -696,7 +756,7 @@ ModalDialog DLG_ORDERCRIT
         Text [ ENGLISH ] = "Sort order" ;
         Text [ norwegian ] = "Sort order" ;
         Text [ italian ] = "Ordine" ;
-        Text [ portuguese_brazilian ] = "Ordem de ordena??o" ;
+        Text [ portuguese_brazilian ] = "Ordem de classifica��o" ;
         Text [ portuguese ] = "Ordenar" ;
         Text [ finnish ] = "Lajitteluj�rjestys" ;
         Text [ danish ] = "Sortering" ;
@@ -707,16 +767,19 @@ ModalDialog DLG_ORDERCRIT
         Text [ ENGLISH_US ] = "Sort order" ;
         Text[ chinese_simplified ] = "排序";
         Text[ russian ] = "����������";
-        Text[ polish ] = "Sortowanie";
+        Text[ polish ] = "Porz�dek sortowania";
         Text[ japanese ] = "並べ替え";
         Text[ chinese_traditional ] = "排序";
         Text[ arabic ] = "�����";
         Text[ greek ] = "����������";
         Text[ korean ] = "정렬 순서";
-        Text[ turkish ] = "S�ralama";
+        Text[ turkish ] = "S�ralama kural�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ordre";
         Text[ thai ] = "เรียงลำดับ";
+        Text[ czech ] = "Pořadí řazení";
+        Text[ hebrew ] = "Sortierung";
+        Text[ hindi ] = "सोर्ट क्रम";
     };
     String STR_NOENTRY
     {
@@ -745,20 +808,36 @@ ModalDialog DLG_ORDERCRIT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "<cap>";
         Text[ thai ] = "<ไม่มี>";
+        Text[ czech ] = "<nic>";
+        Text[ hebrew ] = "<keines>";
+        Text[ hindi ] = "<कोई नहीं>";
     };
     Text[ chinese_simplified ] = "排序";
     Text[ russian ] = "����������";
-    Text[ polish ] = "Sortowanie";
+    Text[ polish ] = "Porz�dek sortowania";
     Text[ japanese ] = "並べ替え";
     Text[ chinese_traditional ] = "排序";
     Text[ arabic ] = "����� �����";
     Text[ greek ] = "����������";
     Text[ korean ] = "정렬 순서";
-    Text[ turkish ] = "S�ralama";
+    Text[ turkish ] = "S�ralama kural�";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ordenaci�";
     Text[ thai ] = "เรียงลำดับ";
+    Text[ czech ] = "Pořadí řazení";
+    Text[ hebrew ] = "Sortierung";
+    Text[ hindi ] = "सोर्ट क्रम";
 };
+
+
+
+
+
+
+
+
+
+
 
 
 
