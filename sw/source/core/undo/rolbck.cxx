@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rolbck.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:06:46 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 14:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,7 +517,8 @@ void SwSetFtnHint::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
     if ( pUndo )
     {
         // setze die Fussnote im TextNode
-        SwFmtFtn& rNew = (SwFmtFtn&)pDoc->GetAttrPool().Put( SwFmtFtn( bEndNote ) );
+        SwFmtFtn aTemp( bEndNote );
+        SwFmtFtn& rNew = (SwFmtFtn&)pDoc->GetAttrPool().Put(aTemp);
         if( aFtnStr.Len() )
             rNew.SetNumStr( aFtnStr );
         SwTxtFtn* pTxtFtn = new SwTxtFtn( rNew, nStart );
