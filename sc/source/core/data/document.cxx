@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:14 $
+ *  last change: $Author: nn $ $Date: 2000-09-25 11:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@
 #include "cell.hxx"
 #include "dpobject.hxx"
 #include "indexmap.hxx"
-
+#include "detfunc.hxx"      // for UpdateAllComments
 
 
 void ScDocument::MakeTable( USHORT nTab )
@@ -2492,6 +2492,14 @@ void ScDocument::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, BOOL b
         if (pTab[i])
             pTab[i]->StyleSheetChanged
                 ( pStyleSheet, bRemoved, pDev, nPPTX, nPPTY, rZoomX, rZoomY );
+
+    if ( pStyleSheet && pStyleSheet->GetName() == ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
+    {
+        //  update attributes for all note objects
+
+        ScDetectiveFunc aFunc( this, 0 );
+        aFunc.UpdateAllComments();
+    }
 }
 
 
