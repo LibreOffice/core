@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppdep.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:59 $
+ *  last change: $Author: mh $ $Date: 2000-09-19 22:50:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,14 +73,14 @@
 #include <glibc/posix/getopt.h>
 #include <glibc/posix/config.h>
 #else
-#ifdef MAC
+#ifdef MACOSX
 #include <glibc/getopt.h>
 #endif
 #include <glibc/config.h>
 #endif
 #include <unistd.h>
 #endif
-#ifndef MAC
+#ifndef MACOSX
 #include <sys/stat.h>
 #else
 #include <stat.h>
