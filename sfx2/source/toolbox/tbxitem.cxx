@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 13:25:36 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,10 @@ void SfxToolBoxControl::StateChanged
         }
 
         case SFX_ITEM_DONTCARE:
+        {
             eTri = STATE_DONTKNOW;
+            nItemBits |= TIB_CHECKABLE;
+        }
     }
 
     pBox->SetItemState( GetId(), eTri );
