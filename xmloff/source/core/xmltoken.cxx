@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:15:06 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,6 @@ namespace xmloff { namespace token {
         TOKEN( "in",                              XML_UNIT_INCH ),
 
         // any other
-<<<<<<< xmltoken.cxx
         TOKEN( "1",                               XML_1 ),
         TOKEN( "10",                              XML_10 ),
         TOKEN( "2",                               XML_2 ),
@@ -2539,6 +2538,10 @@ namespace xmloff { namespace token {
         TOKEN( "X",                            XML_uX ),
         TOKEN( "dlg",                                    XML_NP_DLG ),
         TOKEN( "http://openoffice.org/2000/dialog",      XML_N_DLG ),
+        TOKEN( "script-data",                  XML_SCRIPT_DATA ),
+        TOKEN( "libraries",                    XML_LIBRARIES ),
+        TOKEN( "source-code",                  XML_SOURCE_CODE ),
+        TOKEN( "readonly",                     XML_READONLY ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
