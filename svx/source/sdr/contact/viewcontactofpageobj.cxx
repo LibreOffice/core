@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofpageobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:32:20 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,7 +382,8 @@ namespace sdr
         ViewContactOfPageObj::ViewContactOfPageObj(SdrPageObj& rPageObj)
         :   ViewContactOfSdrObj(rPageObj),
             mpPagePainter(0L),
-            mbIsPainting(sal_False)
+            mbIsPainting(sal_False),
+            mbIsInActionChange(sal_False)
         {
         }
 
@@ -435,6 +436,22 @@ namespace sdr
             }
 
             return bRetval;
+        }
+
+        // #i35972# React on changes of the object of this ViewContact
+        void ViewContactOfPageObj::ActionChanged()
+        {
+            if(!mbIsInActionChange)
+            {
+                // set recursion flag, see description in *.hxx
+                mbIsInActionChange = sal_True;
+
+                // call parent
+                ViewContactOfSdrObj::ActionChanged();
+
+                // reset recursion flag, see description in *.hxx
+                mbIsInActionChange = sal_False;
+            }
         }
     } // end of namespace contact
 } // end of namespace sdr
