@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:24:07 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 18:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_UI_ITEMTYPE_HPP_
 #include <drafts/com/sun/star/ui/ItemType.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_UI_IMAGETYPE_HPP_
+#include <drafts/com/sun/star/ui/ImageType.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSINGLECOMPONENTFACTORY_HPP_
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #endif
@@ -156,6 +159,12 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
 #include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <drafts/com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <drafts/com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -210,6 +219,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::drafts::com::sun::star::frame;
+using namespace ::drafts::com::sun::star::ui;
 
 static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
 static const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
@@ -270,6 +280,17 @@ const ::rtl::OUString aSpecialWindowCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:
 
 const ::rtl::OUString UNO_COMMAND( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
 
+
+static sal_Int16 getImageTypeFromBools( sal_Bool bBig, sal_Bool bHighContrast )
+{
+    sal_Int16 n( 0 );
+    if ( bBig )
+        n |= ::drafts::com::sun::star::ui::ImageType::SIZE_LARGE;
+    if ( bHighContrast )
+        n |= ::drafts::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST;
+    return n;
+}
+
 // #110897#
 MenuBarManager::MenuBarManager(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
@@ -279,6 +300,8 @@ MenuBarManager::MenuBarManager(
     ThreadHelpBase( &Application::GetSolarMutex() ), OWeakObject()
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
     , m_bDisposed( sal_False )
+    , m_bModuleIdentified( sal_False )
+    , m_bRetrieveImages( sal_False )
 {
     m_xPopupMenuControllerRegistration = Reference< ::drafts::com::sun::star::frame::XUIControllerRegistration >(
         // #110897# ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.frame.PopupMenuControllerFactory" ))),
@@ -298,6 +321,8 @@ MenuBarManager::MenuBarManager(
     , OWeakObject()
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
     , m_bDisposed( sal_False )
+    , m_bModuleIdentified( sal_False )
+    , m_bRetrieveImages( sal_False )
 {
     m_bActive           = sal_False;
     m_bDeleteMenu       = bDelete;
@@ -382,6 +407,8 @@ MenuBarManager::MenuBarManager(
     , OWeakObject()
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
     , m_bDisposed( sal_False )
+    , m_bModuleIdentified( sal_False )
+    , m_bRetrieveImages( sal_False )
 {
     m_bActive           = sal_False;
     m_bDeleteMenu       = bDelete;
@@ -466,6 +493,8 @@ MenuBarManager::MenuBarManager(
     , OWeakObject()
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
     , m_bDisposed( sal_False )
+    , m_bModuleIdentified( sal_False )
+    , m_bRetrieveImages( sal_False )
 {
     m_bActive           = sal_False;
     m_bDeleteMenu       = bDelete;
@@ -545,6 +574,7 @@ Any SAL_CALL MenuBarManager::queryInterface( const ::com::sun::star::uno::Type &
                 rType ,
                 SAL_STATIC_CAST( ::com::sun::star::frame::XStatusListener*, this ),
                 SAL_STATIC_CAST( ::com::sun::star::frame::XFrameActionListener*, this ),
+                SAL_STATIC_CAST( ::drafts::com::sun::star::ui::XUIConfigurationListener*, this ),
                 SAL_STATIC_CAST( ::com::sun::star::lang::XEventListener*, (XStatusListener *)this ),
                 SAL_STATIC_CAST( ::com::sun::star::lang::XComponent*, this ),
                 SAL_STATIC_CAST( ::com::sun::star::awt::XSystemDependentMenuPeer*, this ));
@@ -640,6 +670,33 @@ void SAL_CALL MenuBarManager::dispose() throw( RuntimeException )
         RemoveListener();
         Destroy();
         m_bDisposed = sal_True;
+
+        if ( m_xDocImageManager.is() )
+        {
+            try
+            {
+                m_xDocImageManager->removeConfigurationListener(
+                    Reference< XUIConfigurationListener >(
+                        static_cast< OWeakObject* >( this ), UNO_QUERY ));
+            }
+            catch ( Exception& )
+            {
+            }
+        }
+        if ( m_xModuleImageManager.is() )
+        {
+            try
+            {
+                m_xModuleImageManager->removeConfigurationListener(
+                    Reference< XUIConfigurationListener >(
+                        static_cast< OWeakObject* >( this ), UNO_QUERY ));
+            }
+            catch ( Exception& )
+            {
+            }
+        }
+        m_xDocImageManager.clear();
+        m_xModuleImageManager.clear();
     }
 }
 
@@ -659,6 +716,54 @@ void SAL_CALL MenuBarManager::removeEventListener( const Reference< XEventListen
     ResetableGuard aGuard( m_aLock );
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     m_aListenerContainer.removeInterface( ::getCppuType( ( const Reference< XEventListener >* ) NULL ), xListener );
+}
+
+void SAL_CALL MenuBarManager::elementInserted( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    ResetableGuard aGuard( m_aLock );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    if ( m_bDisposed )
+        return;
+
+    sal_Int16 nImageType;
+    sal_Int16 nCurrentImageType = getImageTypeFromBools( sal_False, m_bWasHiContrast );
+    if (( Event.aInfo >>= nImageType ) &&
+        ( nImageType == nCurrentImageType ))
+        RequestImages();
+}
+
+void SAL_CALL MenuBarManager::elementRemoved( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    ResetableGuard aGuard( m_aLock );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    if ( m_bDisposed )
+        return;
+
+    sal_Int16 nImageType;
+    sal_Int16 nCurrentImageType = getImageTypeFromBools( sal_False, m_bWasHiContrast );
+    if (( Event.aInfo >>= nImageType ) &&
+        ( nImageType == nCurrentImageType ))
+        RequestImages();
+}
+
+void SAL_CALL MenuBarManager::elementReplaced( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    ResetableGuard aGuard( m_aLock );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    if ( m_bDisposed )
+        return;
+
+    sal_Int16 nImageType;
+    sal_Int16 nCurrentImageType = getImageTypeFromBools( sal_False, m_bWasHiContrast );
+    if (( Event.aInfo >>= nImageType ) &&
+        ( nImageType == nCurrentImageType ))
+        RequestImages();
 }
 
 // XFrameActionListener
@@ -760,6 +865,7 @@ throw ( RuntimeException )
                     m_pVCLMenu->SetItemText( pStatusChangedMenu->nItemId, aItemText );
                 }
             }
+
         }
 
         if ( Event.Requery )
@@ -784,6 +890,23 @@ MenuBarManager::MenuItemHandler* MenuBarManager::GetMenuItemHandler( USHORT nIte
     }
 
     return 0;
+}
+
+// Helper to set request images flag
+void MenuBarManager::RequestImages()
+{
+    ResetableGuard aGuard( m_aLock );
+
+    m_bRetrieveImages = sal_True;
+    for ( sal_uInt32 i = 0; i < m_aMenuItemHandlerVector.size(); i++ )
+    {
+        MenuItemHandler* pItemHandler = m_aMenuItemHandlerVector[i];
+        if ( pItemHandler->xSubMenuManager.is() )
+        {
+            MenuBarManager* pMenuBarManager = (MenuBarManager*)(pItemHandler->xSubMenuManager.get());
+            pMenuBarManager->RequestImages();
+        }
+    }
 }
 
 // Helper to reset objects to prepare shutdown
@@ -906,6 +1029,10 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( Run
         // Our frame gets disposed. We have to remove all our listeners
         RemoveListener();
     }
+    else if ( Source.Source == Reference< XInterface >( m_xDocImageManager, UNO_QUERY ))
+        m_xDocImageManager.clear();
+    else if ( Source.Source == Reference< XInterface >( m_xModuleImageManager, UNO_QUERY ))
+        m_xModuleImageManager.clear();
 }
 
 void MenuBarManager::UpdateSpecialFileMenu( Menu* pMenu )
@@ -1227,11 +1354,14 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         sal_Bool bIsHiContrast = rSettings.GetMenuColor().IsDark();
 
-        if ( m_bWasHiContrast != bIsHiContrast || bShowMenuImages != m_bShowMenuImages )
+        if ( m_bRetrieveImages ||
+             m_bWasHiContrast != bIsHiContrast ||
+             bShowMenuImages != m_bShowMenuImages )
         {
             // The mode changed so we have to replace all images
             m_bWasHiContrast    = bIsHiContrast;
             m_bShowMenuImages   = bShowMenuImages;
+            m_bRetrieveImages   = sal_False;
             AddonsOptions       aAddonOptions;
 
             for ( USHORT nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
@@ -1531,22 +1661,31 @@ String MenuBarManager::RetrieveLabelFromCommand( const String& aCmdURL )
     String aLabel;
 
     // Retrieve popup menu labels
-    if ( !m_aModuleIdentifier.getLength() )
+    if ( !m_xUICommandLabels.is() )
     {
-        Reference< XModuleManager > xModuleManager( getServiceFactory()->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
-        Reference< XInterface > xIfac( m_xFrame, UNO_QUERY );
         try
         {
-            m_aModuleIdentifier = xModuleManager->identify( xIfac );
-            if ( m_aModuleIdentifier.getLength() > 0 )
+            if ( !m_bModuleIdentified )
             {
-            Reference< XNameAccess > xNameAccess( getServiceFactory()->createInstance( SERVICENAME_UICOMMANDDESCRIPTION ), UNO_QUERY );
-                if ( xNameAccess.is() )
+                m_bModuleIdentified = sal_True;
+                Reference< XModuleManager > xModuleManager;
+                xModuleManager = Reference< XModuleManager >( getServiceFactory()->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
+
+                try
                 {
-                    Any a = xNameAccess->getByName( m_aModuleIdentifier );
-                    Reference< XNameAccess > xUICommands;
-                    a >>= m_xUICommandLabels;
+                    m_aModuleIdentifier = xModuleManager->identify( m_xFrame );
                 }
+                catch( Exception& )
+                {
+                }
+            }
+
+            Reference< XNameAccess > xNameAccess( getServiceFactory()->createInstance( SERVICENAME_UICOMMANDDESCRIPTION ), UNO_QUERY );
+            if ( xNameAccess.is() )
+            {
+                Any a = xNameAccess->getByName( m_aModuleIdentifier );
+                Reference< XNameAccess > xUICommands;
+                a >>= m_xUICommandLabels;
             }
         }
         catch ( Exception& )
@@ -1598,9 +1737,13 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_bWasHiContrast    = rSettings.GetMenuColor().IsDark();
     m_bShowMenuImages   = SvtMenuOptions().IsMenuIconsEnabled();
+    m_bRetrieveImages   = sal_False;
 
     sal_Int32 nAddonsURLPrefixLength = ADDONSPOPUPMENU_URL_PREFIX.getLength();
     ::std::vector< USHORT > aQueryLabelItemIdVector;
+
+    // Add root as ui configuration listener
+    RetrieveImageManagers();
 
     if ( pMenu->IsMenuBar() && rFrame.is() )
     {
@@ -1889,6 +2032,55 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
     m_pVCLMenu->SetActivateHdl( LINK( this, MenuBarManager, Activate ));
     m_pVCLMenu->SetDeactivateHdl( LINK( this, MenuBarManager, Deactivate ));
     m_pVCLMenu->SetSelectHdl( LINK( this, MenuBarManager, Select ));
+}
+
+void MenuBarManager::RetrieveImageManagers()
+{
+    if ( !m_xDocImageManager.is() )
+    {
+        Reference< XController > xController = m_xFrame->getController();
+        Reference< XModel > xModel;
+        if ( xController.is() )
+        {
+            xModel = xController->getModel();
+            if ( xModel.is() )
+            {
+                Reference< XUIConfigurationManagerSupplier > xSupplier( xModel, UNO_QUERY );
+                if ( xSupplier.is() )
+                {
+                    Reference< XUIConfigurationManager > xDocUICfgMgr( xSupplier->getUIConfigurationManager(), UNO_QUERY );
+                    m_xDocImageManager = Reference< XImageManager >( xDocUICfgMgr->getImageManager(), UNO_QUERY );
+                    m_xDocImageManager->addConfigurationListener(
+                                            Reference< XUIConfigurationListener >(
+                                                static_cast< OWeakObject* >( this ), UNO_QUERY ));
+                }
+            }
+        }
+    }
+
+    Reference< XModuleManager > xModuleManager;
+    if ( m_aModuleIdentifier.getLength() == 0 )
+        xModuleManager = Reference< XModuleManager >( getServiceFactory()->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
+
+    try
+    {
+        if ( xModuleManager.is() )
+            m_aModuleIdentifier = xModuleManager->identify( Reference< XInterface >( m_xFrame, UNO_QUERY ) );
+    }
+    catch( Exception& )
+    {
+    }
+
+    if ( !m_xModuleImageManager.is() )
+    {
+        Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier( getServiceFactory()->createInstance(
+                                                                                    SERVICENAME_MODULEUICONFIGURATIONMANAGERSUPPLIER ),
+                                                                                  UNO_QUERY );
+        Reference< XUIConfigurationManager > xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
+        m_xModuleImageManager = Reference< XImageManager >( xUICfgMgr->getImageManager(), UNO_QUERY );
+        m_xModuleImageManager->addConfigurationListener( Reference< XUIConfigurationListener >(
+                                                            static_cast< OWeakObject* >( this ), UNO_QUERY ));
+    }
 }
 
 void MenuBarManager::FillMenu( USHORT& nId, Menu* pMenu, const Reference< XIndexAccess >& rItemContainer )
