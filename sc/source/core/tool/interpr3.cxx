@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-02-28 14:29:23 $
+ *  last change: $Author: er $ $Date: 2001-04-27 21:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2890,8 +2890,9 @@ void ScInterpreter::GetSortArray(BYTE nParamCount, double** ppSortArray, ULONG& 
         switch (GetStackType())
         {
             case svDouble :
+                Pop();
                 rValCount++;
-                break;
+            break;
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
