@@ -2,9 +2,9 @@
  *
  *  $RCSfile: command.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-28 13:53:44 $
+ *  last change: $Author: nf $ $Date: 2000-11-10 14:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,6 +554,10 @@ ByteString CCommand::Search(ByteString aEnv, ByteString sItem)
             return aComspec;
     }
 
+    DirEntry aItem( String( sItem, RTL_TEXTENCODING_ASCII_US ));
+    if ( aItem.Exists())
+        return sItem;
+
     ByteString aEntry, sReturn;
     ByteString sEnv( aEnv );
     ByteString sEnvironment = GetEnv( sEnv.GetBuffer());
@@ -573,6 +577,7 @@ ByteString CCommand::Search(ByteString aEnv, ByteString sItem)
 
         String sEntry( aEntry, RTL_TEXTENCODING_ASCII_US );
         DirEntry aDirEntry( sEntry );
+        aDirEntry.ToAbs();
         if ( aDirEntry.Exists()) {
             sReturn = aEntry;
             bFound = TRUE;
@@ -595,12 +600,14 @@ ByteString CCommand::Search(ByteString aEnv, ByteString sItem)
 
             String sEntry( aEntry, RTL_TEXTENCODING_ASCII_US );
             DirEntry aDirEntry( sEntry );
+            aDirEntry.ToAbs();
             if ( aDirEntry.Exists()) {
                 sReturn = aEntry;
                 bFound = TRUE;
             }
         }
     }
+
     if ( sReturn == "" )
         sReturn = sItem;
 
