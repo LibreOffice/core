@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sysdir_win.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 16:16:34 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,13 +104,13 @@ UniString _SHGetSpecialFolder( int nFolderID )
 
     if( hHdl == NOERROR )
     {
-        WCHAR *lpFolderA;
-        lpFolderA = ALLOC( WCHAR, 16000 );
+        WCHAR *lpFolderW;
+        lpFolderW = ALLOC( WCHAR, 16000 );
 
-        SHGetPathFromIDListW( pidl, lpFolderA );
-        aFolder = UniString( lpFolderA );
+        SHGetPathFromIDListW( pidl, lpFolderW );
+        aFolder = UniString( lpFolderW );
 
-        FREE( lpFolderA );
+        FREE( lpFolderW );
         _SHFree( pidl );
     }
     return aFolder;
