@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XActiveDataSource.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,9 @@ module com {  module sun {  module star {  module io {
 // DocMerge from xml: interface com::sun::star::io::XActiveDataSource
 /** has to be implemented if the class should be able to write into an output
     stream.
-
     @see XActiveDataControl.
  */
-interface XActiveDataSource: com::sun::star::uno::XInterface
+published interface XActiveDataSource: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 

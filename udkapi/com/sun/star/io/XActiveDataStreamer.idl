@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XActiveDataStreamer.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ module com {  module sun {  module star {  module io {
     <p>If you want to allow control from outside, also implement the
     <type>XActiveDataControl</type> interface. </p>
  */
-interface XActiveDataStreamer: com::sun::star::uno::XInterface
+published interface XActiveDataStreamer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnectable.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,11 +81,10 @@
     classification does not depend on whether the class implements
     <type>XInputStream</type> or <type>XOutputStream</type>; it only
     depends on the direction of data flow.) </p>
-
     <p>This interface allows generic services to navigate between
     arbitrary elements of a connection.</p>
  */
-interface XConnectable: com::sun::star::uno::XInterface
+published interface XConnectable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 

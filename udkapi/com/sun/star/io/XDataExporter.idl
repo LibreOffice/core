@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataExporter.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ module com {  module sun {  module star {  module io {
     <p>Exporter objects are registered for specific components and data types.
     </p>
  */
-interface XDataExporter: com::sun::star::uno::XInterface
+published interface XDataExporter: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
