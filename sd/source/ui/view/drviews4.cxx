@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:24:38 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,7 @@ BOOL DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
         {
             // this should be used for cursor travelling.
             SdPage* pActualPage = GetActualPage();
-            const SdrMarkList& rMarkList = pView->GetMarkList();
+            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
             SdrTextObj* pCandidate = 0L;
 
             if(pActualPage && 1 == rMarkList.GetMarkCount())
@@ -697,10 +697,10 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             else
             {
                 // ist etwas selektiert?
-                if (pDrView->HasMarkedObj() &&
-                    pDrView->GetMarkList().GetMarkCount() == 1 )
+                if (pDrView->AreObjectsMarked() &&
+                    pDrView->GetMarkedObjectList().GetMarkCount() == 1 )
                 {
-                    SdrObject* pObj = pDrView->GetMarkList().GetMark(0)->GetObj();
+                    SdrObject* pObj = pDrView->GetMarkedObjectList().GetMark(0)->GetObj();
 
                     if ( pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT && pObj->ISA(SdrPathObj) )
                     {
@@ -828,10 +828,10 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 }
 
                 // Mehrfachselektion
-                else if (pDrView->HasMarkedObj() &&
-                    pDrView->GetMarkList().GetMarkCount() > 1 )
+                else if (pDrView->AreObjectsMarked() &&
+                    pDrView->GetMarkedObjectList().GetMarkCount() > 1 )
                 {
-                    // SdrObject* pObj = pDrView->GetMarkList().GetMark(0)->GetObj();
+                    // SdrObject* pObj = pDrView->GetMarkedObjectList().GetMark(0)->GetObj();
 
                     nSdResId = bGraphicShell ? RID_GRAPHIC_MULTISELECTION_POPUP :
                                                 RID_DRAW_MULTISELECTION_POPUP;
@@ -860,10 +860,10 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                             ,pWindow->GetSizePixel().Height()/2);
 
                     //middle of the bounding rect if something is marked
-                    if( pDrView->HasMarkedObj() && pDrView->GetMarkList().GetMarkCount() >= 1 )
+                    if( pDrView->AreObjectsMarked() && pDrView->GetMarkedObjectList().GetMarkCount() >= 1 )
                     {
                         Rectangle aMarkRect;
-                        pDrView->GetMarkList().TakeBoundRect(NULL,aMarkRect);
+                        pDrView->GetMarkedObjectList().TakeBoundRect(NULL,aMarkRect);
                         aMenuPos = pWindow->LogicToPixel( aMarkRect.Center() );
 
                         //move the point into the visible window area
