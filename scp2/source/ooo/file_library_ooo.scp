@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.18 $
+*  $Revision: 1.19 $
 *
-*  last change: $Author: rt $ $Date: 2004-05-19 13:11:33 $
+*  last change: $Author: obo $ $Date: 2004-06-01 09:05:43 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -926,11 +926,6 @@ End
 
 #endif
 
-#ifdef SOLAR_JAVA
-
-STD_SETUPZIP_LIB_FILE( gid_File_Lib_Jvm, jvm )
-
-#endif
 
 #ifdef SOLAR_JAVA
 
@@ -1798,3 +1793,40 @@ UNO_JAR_FILE( gid_File_Jar_Xsltvalidate, XSLTValidate )
 STD_SETUPZIP_LIB_FILE( gid_File_Lib_Zip, zip )
 
 #endif
+
+File gid_File_Lib_Xml2
+    TXT_FILE_BODY;
+    Styles = (PACKED,SETUPZIP);
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT2(libxml2,UNXSUFFIX));
+  #else
+    Name = "xml2.dll";
+  #endif
+End
+
+#ifdef SOLAR_JAVA
+File gid_File_Lib_Jvmfwk
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT8(libjvmfwk,UNXSUFFIX,.,UDK_MAJOR,.,UDK_MINOR,.,UDK_MICRO));
+  #else
+    Name = STRING(CONCAT3(jvmfwk,UDK_MAJOR,.dll));
+  #endif
+    Styles = (PACKED,SETUPZIP);
+End
+#endif  
+
+#ifdef SOLAR_JAVA
+File gid_File_Lib_Sunjavaplugin
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = "sunjavaplugin.so";
+  #else
+    Name = "sunjavaplugin.dll";
+  #endif
+    Styles = (PACKED);
+End
+#endif  
