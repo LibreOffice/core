@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:01:44 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6043,10 +6043,10 @@ void WW8PLCF_HdFt::UpdateIndex( BYTE grpfIhdt )
 
 WW8Dop::WW8Dop( SvStream& rSt, INT16 nFib, INT32 nPos, INT32 nSize )
 {
-    BYTE* pDataPtr = new BYTE[ 500 ];
+    BYTE* pDataPtr = new BYTE[ 600 ];
     BYTE* pData = pDataPtr;
 
-    UINT32 nRead = 500 < nSize ? 500 : nSize;
+    UINT32 nRead = 600 < nSize ? 600 : nSize;
     rSt.Seek( nPos );
     if( 2 > nSize || nRead != rSt.Read( pData, nRead ))
     {
@@ -6055,8 +6055,8 @@ WW8Dop::WW8Dop( SvStream& rSt, INT16 nFib, INT32 nPos, INT32 nSize )
     }
     else
     {
-        if( 500 > nRead )
-            memset( pData + nRead, 0, 500 - nRead );
+        if( 600 > nRead )
+            memset( pData + nRead, 0, 600 - nRead );
 
         // dann mal die Daten auswerten
         UINT32 a32Bit;
@@ -6170,34 +6170,16 @@ WW8Dop::WW8Dop( SvStream& rSt, INT16 nFib, INT32 nPos, INT32 nSize )
         /*
             bei nFib >= 103 gehts weiter:
         */
-        if( nFib >= 103 )
+        if (nFib >= 103)
         {
             a32Bit = Get_ULong( pData );
-            fNoTabForInd                = ( a32Bit &  0x00000001 )       ;
-            fNoSpaceRaiseLower          = ( a32Bit &  0x00000002 ) >>  1 ;
-            fSupressSpbfAfterPageBreak  = ( a32Bit &  0x00000004 ) >>  2 ;
-            fWrapTrailSpaces            = ( a32Bit &  0x00000008 ) >>  3 ;
-            fMapPrintTextColor          = ( a32Bit &  0x00000010 ) >>  4 ;
-            fNoColumnBalance            = ( a32Bit &  0x00000020 ) >>  5 ;
-            fConvMailMergeEsc           = ( a32Bit &  0x00000040 ) >>  6 ;
-            fSupressTopSpacing          = ( a32Bit &  0x00000080 ) >>  7 ;
-            fOrigWordTableRules         = ( a32Bit &  0x00000100 ) >>  8 ;
-            fTransparentMetafiles       = ( a32Bit &  0x00000200 ) >>  9 ;
-            fShowBreaksInFrames         = ( a32Bit &  0x00000400 ) >> 10 ;
-            fSwapBordersFacingPgs       = ( a32Bit &  0x00000800 ) >> 11 ;
-            fSuppressTopSpacingMac5     = ( a32Bit &  0x00010000 ) >> 16 ;
-            fTruncDxaExpand             = ( a32Bit &  0x00020000 ) >> 17 ;
-            fPrintBodyBeforeHdr         = ( a32Bit &  0x00040000 ) >> 18 ;
-            fNoLeading                  = ( a32Bit &  0x00080000 ) >> 19 ;
-            fMWSmallCaps                = ( a32Bit &  0x00200000 ) >> 21 ;
-
-            fUsePrinterMetrics          = ( a32Bit &  0x80000000 ) >> 31 ;
+            SetCompatabilityOptions(a32Bit);
         }
 
         /*
             bei nFib > 105 gehts weiter:
         */
-        if( nFib > 105 )
+        if (nFib > 105)
         {
             adt = Get_Short( pData );
 
@@ -6236,6 +6218,16 @@ WW8Dop::WW8Dop( SvStream& rSt, INT16 nFib, INT32 nPos, INT32 nSize )
             nfcEdnRef = Get_Short( pData );
             hpsZoonFontPag = Get_Short( pData );
             dywDispPag = Get_Short( pData );
+
+            if (nRead >= 512)
+            {
+                //500 -> 508, Appear to be repeated here in 2000+
+                pData += 8;
+                a32Bit = Get_Long( pData );
+                SetCompatabilityOptions(a32Bit);
+                a32Bit = Get_Long( pData );
+                fDontUseHTMLAutoSpacing = (a32Bit & 0x4) >> 2;
+            }
         }
     }
     delete[] pDataPtr;
@@ -6290,6 +6282,29 @@ WW8Dop::WW8Dop()
 
     cDBC = /**!!**/ 0;
     cDBCFtnEdn = /**!!**/ 0;
+}
+
+void WW8Dop::SetCompatabilityOptions(UINT32 a32Bit)
+{
+    fNoTabForInd                = ( a32Bit &  0x00000001 )       ;
+    fNoSpaceRaiseLower          = ( a32Bit &  0x00000002 ) >>  1 ;
+    fSupressSpbfAfterPageBreak  = ( a32Bit &  0x00000004 ) >>  2 ;
+    fWrapTrailSpaces            = ( a32Bit &  0x00000008 ) >>  3 ;
+    fMapPrintTextColor          = ( a32Bit &  0x00000010 ) >>  4 ;
+    fNoColumnBalance            = ( a32Bit &  0x00000020 ) >>  5 ;
+    fConvMailMergeEsc           = ( a32Bit &  0x00000040 ) >>  6 ;
+    fSupressTopSpacing          = ( a32Bit &  0x00000080 ) >>  7 ;
+    fOrigWordTableRules         = ( a32Bit &  0x00000100 ) >>  8 ;
+    fTransparentMetafiles       = ( a32Bit &  0x00000200 ) >>  9 ;
+    fShowBreaksInFrames         = ( a32Bit &  0x00000400 ) >> 10 ;
+    fSwapBordersFacingPgs       = ( a32Bit &  0x00000800 ) >> 11 ;
+    fSuppressTopSpacingMac5     = ( a32Bit &  0x00010000 ) >> 16 ;
+    fTruncDxaExpand             = ( a32Bit &  0x00020000 ) >> 17 ;
+    fPrintBodyBeforeHdr         = ( a32Bit &  0x00040000 ) >> 18 ;
+    fNoLeading                  = ( a32Bit &  0x00080000 ) >> 19 ;
+    fMWSmallCaps                = ( a32Bit &  0x00200000 ) >> 21 ;
+
+    fUsePrinterMetrics          = ( a32Bit &  0x00200000 ) >> 31 ;
 }
 
 UINT32 WW8Dop::GetCompatabilityOptions() const
@@ -6494,6 +6509,10 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
         //500 -> 508, Appear to be repeated here in 2000+
         pData += 8;
         Set_UInt32(pData, GetCompatabilityOptions());
+        sal_uInt32 a32Bit = 0;
+        if (fDontUseHTMLAutoSpacing)
+            a32Bit |= 0x0004;
+        Set_UInt32(pData, a32Bit);
     }
     rStrm.Write( aData, nLen );
     return 0 == rStrm.GetError();
@@ -6634,29 +6653,6 @@ USHORT wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm)
             break;
     }
     return nL;
-}
-
-int wwSprmParser::CountSprms(const sal_uInt8* pSp, long nSprmSiz,
-    const wwSprmSequence* pIgnoreSprms) const
-{
-    USHORT nMySprms = 0;
-    USHORT i=0;
-    while (i+1+mnDelta < nSprmSiz)
-    {
-        USHORT nSpId = GetSprmId(pSp);
-
-        if( !nSpId )
-            break;
-
-        USHORT nSpLen = GetSprmSize(nSpId, pSp);
-        // increase pointers so to point to next sprm
-        i += nSpLen;
-        pSp += nSpLen;
-
-        if (!pIgnoreSprms || !pIgnoreSprms->search(nSpId))
-            ++nMySprms;
-    }
-    return nMySprms;
 }
 
 // one or two bytes at the beginning at the sprm id
