@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-05 11:37:40 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:26:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,7 +527,7 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
         const SfxFilter* pFlt = NULL;
 
         // nur nach eigenen Filtern suchen, ohne Auswahlbox (wie in ScDocumentLoader)
-        SfxFilterMatcher aMatcher( ScDocShell::Factory().GetFilterContainer() );
+        SfxFilterMatcher aMatcher( ScDocShell::Factory().GetFilterContainer()->GetName() );
         SfxMedium aSfxMedium( aStrURL, (STREAM_READ | STREAM_SHARE_DENYNONE), FALSE );
         ErrCode nErr = aMatcher.GuessFilter( aSfxMedium, &pFlt );
 
