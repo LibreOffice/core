@@ -20,4 +20,6 @@ ri	ridljar\com\sun\star\loader				nmake	-	all	ri_loader ri_lang ri_registry NULL
 ri	ridljar\com\sun\star\registry			nmake	-	all	ri_registry ri_lang NULL
 ri	ridljar\com\sun\star\script				nmake	-	all	ri_script ri_beans ri_io NULL
 ri	ridljar\com\sun\star\test				nmake	-	all	ri_test ri_lang NULL
-ri	ridljar\util							nmake	-	all	ri_util ri_bridge ri_corba_giop ri_corba_iiop ri_java ri_loader ri_script ri_test ri_typedesc NULL
+ri	ridljar\com\sun\star\test\performance	nmake	-	all	ri_test_perf ri_test NULL
+ri	ridljar\com\sun\star\test\bridge		nmake	-	all	ri_test_bridge ri_test NULL
+ri	ridljar\util							nmake	-	all	ri_util ri_bridge ri_corba_giop ri_corba_iiop ri_java ri_loader ri_script ri_test ri_typedesc ri_test_perf ri_test_bridge NULL
