@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 09:50:58 $
+#   last change: $Author: hr $ $Date: 2003-07-16 17:13:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,17 +72,17 @@ TARGET=so_stlport
 # --- Files --------------------------------------------------------
 .EXPORT : CC CXX
 .IF "$(COMID)"=="gcc3"
-TARFILE_NAME=STLport-4.5
-PATCH_FILE_NAME=$(MISC)$/STLport-4.5.patch
+    TARFILE_NAME=STLport-4.5
+    PATCH_FILE_NAME=$(MISC)$/STLport-4.5.patch
 .ELSE			# "$(COMID)"=="gcc3"
-.IF "$(OS)"=="MACOSX"
-# [ed] For gcc2, we need to use STLport 4.0.  4.5 will not compile with gcc2 on OS X.
-TARFILE_NAME=STLport-4.0
-PATCH_FILE_NAME=STLport-4.0.macosx.patch
-.ELSE
-TARFILE_NAME=STLport-4.0
-PATCH_FILE_NAME=STLport-4.0.patch
-.ENDIF			# "$(OS)"=="MACOSX"
+    .IF "$(OS)"=="MACOSX"
+        # [ed] For gcc2, we need to use STLport 4.0.  4.5 will not compile with gcc2 on OS X.
+        TARFILE_NAME=STLport-4.0
+        PATCH_FILE_NAME=STLport-4.0.macosx.patch
+    .ELSE
+        TARFILE_NAME=STLport-4.0
+        PATCH_FILE_NAME=STLport-4.0.patch
+    .ENDIF			# "$(OS)"=="MACOSX"
 .ENDIF			# "$(COMID)"=="gcc3"
 
 .IF "$(GUI)"=="WNT"
@@ -99,7 +99,7 @@ PATCH_FILE_NAME=STLport-4.5-0119.patch
 TAR_EXCLUDES=*/SC5/*
 .ENDIF          # "$(USE_SHELL)"=="4nt"
 
-ADDITIONAL_FILES=src$/gcc-3.0.mak
+ADDITIONAL_FILES=src$/gcc-3.0.mak src$/gcc-3.0-macosx.mak src$/gcc-3.0-freebsd.mak
 
 
 CONFIGURE_ACTION=none
@@ -117,26 +117,28 @@ BUILD_FLAGS=-f vc7.mak
 .ENDIF
 
 .IF "$(COM)"=="GCC"
-.IF "$(COMID)"=="gcc3"
-# FreeBSD needs a special makefile
-.IF "$(OS)"=="FREEBSD"
-BUILD_FLAGS=-f gcc-3.0-freebsd.mak
-.ELSE
-BUILD_FLAGS=-f gcc-3.0.mak
-.ENDIF
-.ELSE # "$(COMID)"=="gcc3"
-# MacOS X/Darwin need a special makefile
-.IF "$(OS)"=="MACOSX"
-    BUILD_FLAGS=-f gcc-apple-macosx.mak
-.ELIF "$(OS)"=="FREEBSD"
-    BUILD_FLAGS=-f gcc-freebsd.mak
-.ELSE # "$(OS)"=="MACOSX"
-    BUILD_FLAGS=-f gcc.mak
-.ENDIF # "$(OS)"=="MACOSX"
-.ENDIF # "$(COMID)"=="gcc3"
-BUILD_ACTION=$(GNUMAKE)
-# build in parallel
-BUILD_FLAGS+= -j$(MAXPROCESS)
+    .IF "$(COMID)"=="gcc3"
+        # FreeBSD needs a special makefile
+        .IF "$(OS)"=="FREEBSD"
+            BUILD_FLAGS=-f gcc-3.0-freebsd.mak
+        .ELIF "$(OS)"=="MACOSX"
+            BUILD_FLAGS=-f gcc-3.0-macosx.mak
+        .ELSE
+            BUILD_FLAGS=-f gcc-3.0.mak
+        .ENDIF
+    .ELSE # "$(COMID)"=="gcc3"
+        # MacOS X/Darwin need a special makefile
+        .IF "$(OS)"=="MACOSX"
+            BUILD_FLAGS=-f gcc-apple-macosx.mak
+        .ELIF "$(OS)"=="FREEBSD"
+            BUILD_FLAGS=-f gcc-freebsd.mak
+        .ELSE # "$(OS)"=="MACOSX"
+            BUILD_FLAGS=-f gcc.mak
+        .ENDIF # "$(OS)"=="MACOSX"
+    .ENDIF # "$(COMID)"=="gcc3"
+    BUILD_ACTION=$(GNUMAKE)
+    # build in parallel
+    BUILD_FLAGS+= -j$(MAXPROCESS)
 .ENDIF
 
 .IF "$(COM)"=="C52"
@@ -181,16 +183,15 @@ all :
        @echo "         An already available installation of STLport has been chosen in the configure process."
        @echo "         Therefore the version provided here does not need to be built in addition."
        +$(COPY) $(STLPORT4)$/lib$/*stlport*$(DLLPOST) $(DLLDEST)
-.ELSE
-all : $(MISC)$/STLport-4.5.patch ALLTAR
 .ENDIF
 
 .INCLUDE : set_ext.mk
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
 
+$(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(MISC)$/STLport-4.5.patch
 
-$(MISC)$/STLport-4.5.patch : STLport-4.5.patch
+$(MISC)$/STLport-4.5.patch : STLport-4.5.patch $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
     +$(SED)	-e 's#GXX_INCLUDE_PATH#$(GXX_INCLUDE_PATH)#g' < STLport-4.5.patch > $(MISC)$/STLport-4.5.patch
 
 .IF "$(GUI)"=="WNT"
