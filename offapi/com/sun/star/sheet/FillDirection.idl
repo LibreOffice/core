@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FillDirection.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:50 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ module com {  module sun {  module star {  module sheet {
 /** used to specify the direction of filling cells, for example,
     with a series.
  */
-enum FillDirection
+published enum FillDirection
 {
     //-------------------------------------------------------------------------
 
