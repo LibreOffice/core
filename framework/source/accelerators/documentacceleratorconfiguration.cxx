@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentacceleratorconfiguration.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-08 08:33:04 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:34:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,13 +104,13 @@ DEFINE_XINTERFACE_2(DocumentAcceleratorConfiguration                   ,
                     AcceleratorConfiguration                           ,
                     DIRECT_INTERFACE(css::lang::XServiceInfo)          ,
                     DIRECT_INTERFACE(css::lang::XInitialization))
-//                    DIRECT_INTERFACE(dcss::ui::XUIConfigurationStorage))
+//                    DIRECT_INTERFACE(css::ui::XUIConfigurationStorage))
 
 DEFINE_XTYPEPROVIDER_2_WITH_BASECLASS(DocumentAcceleratorConfiguration ,
                                       AcceleratorConfiguration         ,
                                       css::lang::XServiceInfo          ,
                                       css::lang::XInitialization)
-//                                      dcss::ui::XUIConfigurationStorage)
+//                                      css::ui::XUIConfigurationStorage)
 
 DEFINE_XSERVICEINFO_MULTISERVICE(DocumentAcceleratorConfiguration                   ,
                                  ::cppu::OWeakObject                                ,
