@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-08-16 14:17:47 $
+ *  last change: $Author: os $ $Date: 2002-08-23 10:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,6 +423,7 @@
 #define HID_MN_POP_FUNC             (HID_BASE + 639)
 #define HID_MN_RSC_END              (HID_BASE + 640)
 #define HID_MN_CALC_ROUND           (HID_BASE + 641)
+#define HID_MN_SUB_MACRO            (HID_BASE + 642)
 
 #define HID_MN_READONLY_SAVEGRAPHIC             (HID_BASE + 645)
 #define HID_MN_READONLY_GRAPHICTOGALLERY        (HID_BASE + 646)

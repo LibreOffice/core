@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cd $ $Date: 2002-07-31 07:41:45 $
+ *  last change: $Author: os $ $Date: 2002-08-23 10:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@
 #define MN_WIN_PORT                 (RC_APP_BEGIN + 61)
 #define MN_HELP_PORT                (RC_APP_BEGIN + 62)
 #define MN_SUB_TRANSLITERATE        (RC_APP_BEGIN + 63)
-
+#define MN_SUB_MACRO                (RC_APP_BEGIN + 64)
 
 #define RC_INTRO_BEGIN              (RC_APP_BEGIN + 90)
 #define RC_INTRO_END                (RC_APP_BEGIN + 96)
