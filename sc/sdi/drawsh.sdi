@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh.sdi,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 15:33:37 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,25 @@ interface TableDraw : Selection
     SID_HYPERLINK_GETLINK   [ StateMethod = GetHLinkState; Export = FALSE; ]
     SID_ENABLE_HYPHENATION  [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
     SID_RENAME_OBJECT       [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+
+    SID_OPEN_XML_FILTERSETTINGS     [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_TOOGLE            [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_TILT_DOWN         [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_TILT_UP           [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_TILT_LEFT         [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_TILT_RIGHT        [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_DEPTH_FLOATER     [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_DEPTH_DIALOG      [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_DIRECTION_FLOATER [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_LIGHTING_FLOATER  [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_SURFACE_FLOATER   [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_3D_COLOR          [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_DEPTH             [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_DIRECTION         [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_PROJECTION        [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_LIGHTING_DIRECTION[ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_LIGHTING_INTENSITY[ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_SURFACE           [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
 }
 
 
