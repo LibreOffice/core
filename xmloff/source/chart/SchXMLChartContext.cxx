@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: bm $ $Date: 2001-09-28 14:56:18 $
+ *  last change: $Author: bm $ $Date: 2001-10-22 10:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -685,20 +685,29 @@ void    SchXMLChartContext::InitChart   (awt::Size aChartSize,
             fNan = xData->getNotANumber();
 
         // attention: the data must at least be 1 x 1,
+        // (or 2 x 2 for scatter charts)
         // otherwise BuildChart doesn't perform much.
-        uno::Sequence< uno::Sequence< double > > aAlmostEmptySeq( 1 );
         if( bDomainForDefaultDataNeeded )
         {
+            uno::Sequence< uno::Sequence< double > > aAlmostEmptySeq( 2 );
             aAlmostEmptySeq[ 0 ].realloc( 2 );
             aAlmostEmptySeq[ 0 ][ 0 ] = 0.0;
             aAlmostEmptySeq[ 0 ][ 1 ] = fNan;
+
+            aAlmostEmptySeq[ 1 ].realloc( 2 );
+            aAlmostEmptySeq[ 1 ][ 0 ] = 0.0;
+            aAlmostEmptySeq[ 1 ][ 1 ] = fNan;
+
+            xArray->setData( aAlmostEmptySeq );
         }
         else
         {
+            uno::Sequence< uno::Sequence< double > > aAlmostEmptySeq( 1 );
             aAlmostEmptySeq[ 0 ].realloc( 1 );
-            aAlmostEmptySeq[ 0 ][ 0 ] = fNan;
+            aAlmostEmptySeq[ 0 ][ 0 ] = 0.0;
+
+            xArray->setData( aAlmostEmptySeq );
         }
-        xArray->setData( aAlmostEmptySeq );
     }
 
     if( xModel.is())
