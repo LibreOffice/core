@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 15:07:32 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,8 +380,9 @@ BOOL ScDocument::IsPageStyleInUse( const String& rStrPageStyle, USHORT* pInTab )
 {
     BOOL         bInUse = FALSE;
     const USHORT nCount = GetTableCount();
+    USHORT i;
 
-    for ( USHORT i=0; !bInUse && i<nCount && pTab[i]; i++ )
+    for ( i = 0; !bInUse && i < nCount && pTab[i]; i++ )
         bInUse = ( pTab[i]->GetPageStyle() == rStrPageStyle );
 
     if ( pInTab )
