@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-08 13:23:52 $
+ *  last change: $Author: sab $ $Date: 2002-08-12 09:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,9 @@
 #endif
 #ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
 #include <unotools/accessiblerelationsethelper.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
+#include <toolkit/helper/convert.hxx>
 #endif
 
 #include <list>
@@ -1337,10 +1340,13 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAt(
     ScUnoGuard aGuard;
     IsObjectValid();
     uno::Reference<XAccessible> xAccessible = NULL;
-    if (mpChildrenShapes)
-        xAccessible = mpChildrenShapes->GetAt(rPoint);
-    if(!xAccessible.is())
-        xAccessible = GetAccessibleSpreadsheet();
+    if (GetBoundingBox().IsInside(VCLPoint(rPoint)))
+    {
+        if (mpChildrenShapes)
+            xAccessible = mpChildrenShapes->GetAt(rPoint);
+        if(!xAccessible.is())
+            xAccessible = GetAccessibleSpreadsheet();
+    }
     return xAccessible;
 }
 
