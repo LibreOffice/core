@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-12 08:26:02 $
+ *  last change: $Author: jp $ $Date: 2001-04-27 10:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,7 +364,8 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
         break;
         case FN_REDLINE_ON:
         {
-            if (SFX_ITEM_SET == pArgs->GetItemState(nSlot, FALSE, &pItem))
+            if( pArgs &&
+                SFX_ITEM_SET == pArgs->GetItemState(nSlot, FALSE, &pItem ))
             {
                 USHORT nOn = ((const SfxBoolItem*)pItem)->GetValue() ? REDLINE_ON : 0;
                 USHORT nMode = pWrtShell->GetRedlineMode();
@@ -374,7 +375,8 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
         break;
         case FN_REDLINE_SHOW:
 
-            if (SFX_ITEM_SET == pArgs->GetItemState(nSlot, FALSE, &pItem))
+            if( pArgs &&
+                SFX_ITEM_SET == pArgs->GetItemState(nSlot, FALSE, &pItem))
             {
                 USHORT nMode = ( ~(REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE)
                         & pWrtShell->GetRedlineMode() ) | REDLINE_SHOW_INSERT;
