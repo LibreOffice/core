@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:30:36 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:04:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1505,7 +1505,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
         else if ((rRef.GetId() == SC_HINT_ACC_ENTEREDITMODE)) // this event comes only on creating edit field of a cell
         {
-            if (mpViewShell && mpViewShell->GetViewData()->GetEditView(meSplitPos))
+            if (mpViewShell && mpViewShell->GetViewData()->HasEditView(meSplitPos))
             {
                 mpTempAccEdit = new ScAccessibleEditObject(this, mpViewShell->GetViewData()->GetEditView(meSplitPos),
                     mpViewShell->GetWindowByPos(meSplitPos), GetCurrentCellName(),
