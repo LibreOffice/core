@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:41:37 $
+ *  last change: $Author: oj $ $Date: 2001-02-16 16:06:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,9 @@
 #define HID_BROWSER_TABLE_DELETE                    (HID_DBACCESS_START + 140)
 #define HID_SQLERROR_EXCHAIN_ERRORS                 (HID_DBACCESS_START + 141)
 #define HID_SQLERROR_EXCHAIN_TEXT                   (HID_DBACCESS_START + 142)
+#define HID_BROWSER_TABLE_COPY                      (HID_DBACCESS_START + 143)
+#define HID_BROWSER_QUERY_COPY                      (HID_DBACCESS_START + 144)
+#define HID_BROWSER_TABLE_PASTE                     (HID_DBACCESS_START + 145)
 
 // don't forget to update the file util/hidother.src
 #endif // _DBA_DBACCESS_HELPID_HRC_
@@ -239,6 +242,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20  2001/02/14 14:41:37  oj
+ *  new helpids
+ *
  *  Revision 1.19  2001/02/05 10:08:41  fs
  *  #83327# 2 new help ids for the sql error message dialog
  *

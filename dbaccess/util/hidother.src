@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:42:34 $
+ *  last change: $Author: oj $ $Date: 2001-02-16 16:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,10 +215,17 @@ hidspecial HID_BROWSER_TABLE_EDIT                       { HelpId = HID_BROWSER_T
 hidspecial HID_BROWSER_TABLE_DELETE                     { HelpId = HID_BROWSER_TABLE_DELETE; };
 hidspecial HID_SQLERROR_EXCHAIN_ERRORS                  { HelpId = HID_SQLERROR_EXCHAIN_ERRORS; };
 hidspecial HID_DBACCESS_START                           { HelpId = HID_DBACCESS_START; };
+hidspecial HID_BROWSER_TABLE_COPY                       { HelpId = HID_BROWSER_TABLE_COPY; };
+hidspecial HID_SQLERROR_EXCHAIN_TEXT                    { HelpId = HID_SQLERROR_EXCHAIN_TEXT; };
+hidspecial HID_BROWSER_QUERY_COPY                       { HelpId = HID_BROWSER_QUERY_COPY; };
+hidspecial HID_BROWSER_TABLE_PASTE                      { HelpId = HID_BROWSER_TABLE_PASTE; };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/02/14 14:42:34  oj
+ *  new helpids
+ *
  *  Revision 1.14  2001/02/05 09:57:58  fs
  *  #83327# 2 new help ids for the sql error message dialog
  *
