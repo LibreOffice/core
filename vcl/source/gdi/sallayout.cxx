@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 13:42:40 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,7 +666,7 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolyVector& rVector )
     PolyPolygon aGlyphOutline;
     for( int nStart = 0;;)
     {
-        long nLGlyph;
+        sal_Int32 nLGlyph;
         if( !GetNextGlyphs( 1, &nLGlyph, aPos, nStart ) )
             break;
 
@@ -696,7 +696,7 @@ bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, Rectangle& rRect ) cons
     Rectangle aRectangle;
     for( int nStart = 0;;)
     {
-        long nLGlyph;
+        sal_Int32 nLGlyph;
         if( !GetNextGlyphs( 1, &nLGlyph, aPos, nStart ) )
             break;
 
@@ -770,7 +770,7 @@ void GenericSalLayout::AppendGlyph( const GlyphItem& rGlyphItem )
 
 // -----------------------------------------------------------------------
 
-bool GenericSalLayout::GetCharWidths( long* pCharWidths ) const
+bool GenericSalLayout::GetCharWidths( sal_Int32* pCharWidths ) const
 {
     // initialize character extents buffer
     int nCharCount = mnEndCharPos - mnMinCharPos;
@@ -833,7 +833,7 @@ bool GenericSalLayout::GetCharWidths( long* pCharWidths ) const
 
 // -----------------------------------------------------------------------
 
-long GenericSalLayout::FillDXArray( long* pCharWidths ) const
+long GenericSalLayout::FillDXArray( sal_Int32* pCharWidths ) const
 {
     if( pCharWidths )
         if( !GetCharWidths( pCharWidths ) )
@@ -908,7 +908,7 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
     }
 
     // calculate adjusted cluster widths
-    long* pNewGlyphWidths = (long*)alloca( mnGlyphCount * sizeof(long) );
+    sal_Int32* pNewGlyphWidths = (sal_Int32*)alloca( mnGlyphCount * sizeof(long) );
     for( i = 0; i < mnGlyphCount; ++i )
         pNewGlyphWidths[ i ] = 0;
 
@@ -1131,7 +1131,7 @@ void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
 
 // -----------------------------------------------------------------------
 
-void GenericSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
+void GenericSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const
 {
     // initialize result array
     long nXPos = -1;
@@ -1167,7 +1167,7 @@ void GenericSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) co
 int GenericSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
     int nCharCapacity = mnEndCharPos - mnMinCharPos;
-    long* pCharWidths = (long*)alloca( nCharCapacity * sizeof(long) );
+    sal_Int32* pCharWidths = (sal_Int32*)alloca( nCharCapacity * sizeof(sal_Int32) );
     if( !GetCharWidths( pCharWidths ) )
         return STRING_LEN;
 
@@ -1185,8 +1185,8 @@ int GenericSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor
 
 // -----------------------------------------------------------------------
 
-int GenericSalLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
-    int& nStart, long* pGlyphAdvAry, int* pCharPosAry ) const
+int GenericSalLayout::GetNextGlyphs( int nLen, sal_Int32* pGlyphs, Point& rPos,
+    int& nStart, sal_Int32* pGlyphAdvAry, int* pCharPosAry ) const
 {
     const GlyphItem* pG = mpGlyphItems + nStart;
 
@@ -1402,7 +1402,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             mpLayouts[n]->SalLayout::AdjustLayout( aMultiArgs );
         // then we can measure the unmodified metrics
         int nCharCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
-        long* pJustificationArray = (long*)alloca( nCharCount * sizeof(long) );
+        sal_Int32* pJustificationArray = (sal_Int32*)alloca( nCharCount * sizeof(sal_Int32) );
         FillDXArray( pJustificationArray );
         // #i17359# multilayout is not simplified yet, so calculating the
         // unjustified width needs handholding; also count the number of
@@ -1447,11 +1447,11 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     int nStartOld[ MAX_FALLBACK ];
     int nStartNew[ MAX_FALLBACK ];
     int nCharPos[ MAX_FALLBACK ];
-    long nGlyphAdv[ MAX_FALLBACK ];
+    sal_Int32 nGlyphAdv[ MAX_FALLBACK ];
     int nValid[ MAX_FALLBACK ];
     const ImplLayoutRuns& rLastLevelRuns = maFallbackRuns[ mnLevel-1 ];
 
-    long nDummy;
+    sal_Int32 nDummy;
     Point aPos;
     int nLevel = 0, n;
     for( n = 0; n < mnLevel; ++n )
@@ -1619,7 +1619,7 @@ int MultiSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor )
         return mpLayouts[0]->GetTextBreak( nMaxWidth, nCharExtra, nFactor );
 
     int nCharCount = mnEndCharPos - mnMinCharPos;
-    long* pCharWidths = (long*)alloca( 2*nCharCount * sizeof(long) );
+    sal_Int32* pCharWidths = (sal_Int32*)alloca( 2*nCharCount * sizeof(sal_Int32) );
     mpLayouts[0]->FillDXArray( pCharWidths );
 
     for( int n = 1; n < mnLevel; ++n )
@@ -1648,18 +1648,18 @@ int MultiSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor )
 
 // -----------------------------------------------------------------------
 
-long MultiSalLayout::FillDXArray( long* pCharWidths ) const
+long MultiSalLayout::FillDXArray( sal_Int32* pCharWidths ) const
 {
     long nMaxWidth = 0;
 
     // prepare merging of fallback levels
-    long* pTempWidths = NULL;
+    sal_Int32* pTempWidths = NULL;
     const int nCharCount = mnEndCharPos - mnMinCharPos;
     if( pCharWidths )
     {
         for( int i = 0; i < nCharCount; ++i )
             pCharWidths[i] = 0;
-        pTempWidths = (long*)alloca( nCharCount * sizeof(long) );
+        pTempWidths = (sal_Int32*)alloca( nCharCount * sizeof(sal_Int32) );
     }
 
     for( int n = mnLevel; --n >= 0; )
@@ -1696,14 +1696,14 @@ long MultiSalLayout::FillDXArray( long* pCharWidths ) const
 
 // -----------------------------------------------------------------------
 
-void MultiSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
+void MultiSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const
 {
     SalLayout& rLayout = *mpLayouts[ 0 ];
     rLayout.GetCaretPositions( nMaxIndex, pCaretXArray );
 
     if( mnLevel > 1 )
     {
-        long* pTempPos = (long*)alloca( nMaxIndex * sizeof(long) );
+        sal_Int32* pTempPos = (sal_Int32*)alloca( nMaxIndex * sizeof(sal_Int32) );
         for( int n = 1; n < mnLevel; ++n )
         {
             mpLayouts[ n ]->GetCaretPositions( nMaxIndex, pTempPos );
@@ -1721,8 +1721,8 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) cons
 
 // -----------------------------------------------------------------------
 
-int MultiSalLayout::GetNextGlyphs( int nLen, long* pGlyphIdxAry, Point& rPos,
-    int& nStart, long* pGlyphAdvAry, int* pCharPosAry ) const
+int MultiSalLayout::GetNextGlyphs( int nLen, sal_Int32* pGlyphIdxAry, Point& rPos,
+    int& nStart, sal_Int32* pGlyphAdvAry, int* pCharPosAry ) const
 {
     // for multi-level fallback only single glyphs should be used
     if( mnLevel > 1 && nLen > 1 )
