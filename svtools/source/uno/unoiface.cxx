@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-15 11:41:47 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 11:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::sun::star::awt::Windo
     }
     else if (aServiceName.EqualsIgnoreCaseAscii("FormattedField") )
     {
-        pWindow = new FormattedField(pParent, nWinBits);
+        pWindow = new FormattedField( pParent, nWinBits );
         *ppNewComp = new SVTXFormattedField;
     }
     else if (aServiceName.EqualsIgnoreCaseAscii("NumericField") )
@@ -171,7 +171,7 @@ Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::sun::star::awt::Windo
         static_cast<CalendarField*>(pWindow)->EnableToday();
         static_cast<CalendarField*>(pWindow)->EnableNone();
         static_cast<CalendarField*>(pWindow)->EnableEmptyFieldValue( TRUE );
-        *ppNewComp = new VCLXDateField;
+        *ppNewComp = new SVTXDateField;
         ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(DateField*)pWindow );
     }
     else if ( aServiceName.EqualsIgnoreCaseAscii( "ProgressBar" ) )
@@ -854,6 +854,14 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch (nPropType)
         {
+            case BASEPROPERTY_ENFORCE_FORMAT:
+            {
+                sal_Bool bEnable( sal_True );
+                if ( Value >>= bEnable )
+                    pField->EnableNotANumber( !bEnable );
+            }
+            break;
+
             case BASEPROPERTY_EFFECTIVE_MIN:
             case BASEPROPERTY_VALUEMIN_DOUBLE:
                 SetMinValue(Value);
@@ -869,10 +877,12 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
                 break;
 
             case BASEPROPERTY_TREATASNUMBER:
+            {
                 sal_Bool b;
                 if ( Value >>= b )
                     SetTreatAsNumber(b);
-                break;
+            }
+            break;
 
             case BASEPROPERTY_FORMATSSUPPLIER:
                 if (!Value.hasValue())
@@ -1534,7 +1544,6 @@ sal_Bool SVTXNumericField::isStrictFormat() throw(::com::sun::star::uno::Runtime
     return pField ? pField->IsStrictFormat() : sal_False;
 }
 
-
 //  ----------------------------------------------------
 //  class SVTXCurrencyField
 //  ----------------------------------------------------
@@ -2005,3 +2014,38 @@ void VCLXProgressBar::setProperty( const ::rtl::OUString& PropertyName, const ::
 }
 
 
+//  ----------------------------------------------------
+//  class SVTXDateField
+//  ----------------------------------------------------
+SVTXDateField::SVTXDateField()
+    :VCLXDateField()
+{
+}
+
+SVTXDateField::~SVTXDateField()
+{
+}
+
+void SAL_CALL SVTXDateField::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException)
+{
+    VCLXDateField::setProperty( PropertyName, Value );
+
+    // some properties need to be forwarded to the sub edit, too
+    Edit* pSubEdit = GetWindow() ? static_cast< Edit* >( GetWindow() )->GetSubEdit() : NULL;
+    if ( !pSubEdit )
+        return;
+
+    switch ( GetPropertyId( PropertyName ) )
+    {
+    case BASEPROPERTY_TEXTLINECOLOR:
+        if ( !Value.hasValue() )
+            pSubEdit->SetTextLineColor();
+        else
+        {
+            sal_Int32 nColor;
+            if ( Value >>= nColor )
+                pSubEdit->SetTextLineColor( Color( nColor ) );
+        }
+        break;
+    }
+}
