@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 11:55:07 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,7 +588,6 @@ void ZipPackageFolder::releaseUpwardRef( void )
             rInfo.pStream->clearParent();
     }
     clearParent();
-    VOS_ENSURE ( m_refCount == 1, "Ref-count is not 1!" );
 }
 
 sal_Int64 SAL_CALL ZipPackageFolder::getSomething( const Sequence< sal_Int8 >& aIdentifier )
