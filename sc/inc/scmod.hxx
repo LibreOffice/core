@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:20:57 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ class SfxErrorHandler;
 class SvxErrorHandler;
 class SvtAccessibilityOptions;
 class SvtCTLOptions;
+class SvtUserOptions;
 
 namespace svtools { class ColorConfig; }
 
@@ -173,6 +174,7 @@ class ScModule: public SfxModule, public SfxListener
     svtools::ColorConfig*   pColorConfig;
     SvtAccessibilityOptions* pAccessOptions;
     SvtCTLOptions*      pCTLOptions;
+    SvtUserOptions*     pUserOptions;
     SfxErrorHandler*    pErrorHdl;
     SvxErrorHandler*    pSvxErrorHdl;
     ScFormEditData*     pFormEditData;
@@ -252,6 +254,7 @@ public:
     svtools::ColorConfig&   GetColorConfig();
     SvtAccessibilityOptions& GetAccessOptions();
     SvtCTLOptions&      GetCTLOptions();
+    SvtUserOptions&     GetUserOptions();
 
     void                ModifyOptions( const SfxItemSet& rOptSet );
 
