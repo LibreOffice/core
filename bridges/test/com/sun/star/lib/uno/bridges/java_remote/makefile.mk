@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-08-07 14:31:18 $
+#   last change: $Author: hr $ $Date: 2003-08-13 17:21:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,8 +69,9 @@ JAVATESTFILES := \
     Bug97697_Test.java \
     Bug98508_Test.java \
     Bug107753_Test.java \
-    Bug108825_Test.java
-#JAVAFILES := Bug92174_Test.java # fails as long as bug 92174 is not fixed
+    Bug108825_Test.java \
+    Bug110892_Test.java \
+    Bug111153_Test.java
 JARFILES := juh.jar jurt.jar ridl.jar sandbox.jar
 
 .INCLUDE: javaunittest.mk
