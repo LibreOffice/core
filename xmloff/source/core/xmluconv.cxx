@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:04:12 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,12 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_I18N_XCHARACTERCLASSIFICATION_HPP_
+#include <com/sun/star/i18n/XCharacterClassification.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_UNICODETYPE_HPP_
+#include <com/sun/star/i18n/UnicodeType.hpp>
+#endif
 
 #ifndef _SVX_VECTOR3D_HXX
 #include <goodies/vector3d.hxx>
@@ -132,6 +138,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::text;
 using namespace com::sun::star::style;
+using namespace ::com::sun::star::i18n;
 using namespace ::xmloff::token;
 
 const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 11;
@@ -352,8 +359,8 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
                     break;
                 case sal_Unicode('i'):
                 case sal_Unicode('I'):
-                    aCmpsL[0] = "inch";
-                    aCmpsU[0] = "INCH";
+                    aCmpsL[0] = "in";
+                    aCmpsU[0] = "IN";
                     aScales[0] = 72.*20.; // twip
                     break;
                 case sal_Unicode('m'):
@@ -397,8 +404,8 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
                     break;
                 case sal_Unicode('i'):
                 case sal_Unicode('I'):
-                    aCmpsL[0] = "inch";
-                    aCmpsU[0] = "INCH";
+                    aCmpsL[0] = "in";
+                    aCmpsU[0] = "IN";
                     aScales[0] = 1000.*2.54; // mm/100
                     break;
                 case sal_Unicode('m'):
@@ -1439,7 +1446,7 @@ sal_Bool SvXMLUnitConverter::convertDateTime( com::sun::star::util::DateTime& rD
         rDateTime.Hours = (sal_uInt16)nHour;
         rDateTime.Minutes = (sal_uInt16)nMin;
         rDateTime.Seconds = (sal_uInt16)nSec;
-        rDateTime.HundredthSeconds = sDoubleStr.toDouble() * 100;
+        rDateTime.HundredthSeconds = (sal_uInt16)(sDoubleStr.toDouble() * 100);
     }
     return bSuccess;
 }
@@ -1697,20 +1704,20 @@ void ThreeByteToFourByte (const sal_Int8* pBuffer, const sal_Int32 nStart, const
 
     sBuffer.appendAscii("====");
 
-    sal_uInt8 nIndex ((nBinaer & 0xFC0000) >> 18);
+    sal_uInt8 nIndex (static_cast<sal_uInt8>((nBinaer & 0xFC0000) >> 18));
     sBuffer.setCharAt(0, aBase64EncodeTable [nIndex]);
 
-    nIndex = (nBinaer & 0x3F000) >> 12;
+    nIndex = static_cast<sal_uInt8>((nBinaer & 0x3F000) >> 12);
     sBuffer.setCharAt(1, aBase64EncodeTable [nIndex]);
     if (nLen == 1)
         return;
 
-    nIndex = (nBinaer & 0xFC0) >> 6;
+    nIndex = static_cast<sal_uInt8>((nBinaer & 0xFC0) >> 6);
     sBuffer.setCharAt(2, aBase64EncodeTable [nIndex]);
     if (nLen == 2)
         return;
 
-    nIndex = (nBinaer & 0x3F);
+    nIndex = static_cast<sal_uInt8>((nBinaer & 0x3F));
     sBuffer.setCharAt(3, aBase64EncodeTable [nIndex]);
 }
 
@@ -1991,5 +1998,121 @@ void SvXMLUnitConverter::clearUndefinedChars(rtl::OUString& rTarget, const rtl::
             sBuffer.append(cChar);
     }
     rTarget = sBuffer.makeStringAndClear();
+}
+
+OUString SvXMLUnitConverter::encodeStyleName(
+        const OUString& rName,
+        sal_Bool *pEncoded ) const
+{
+    if( pEncoded )
+        *pEncoded = sal_False;
+
+    sal_Int32 nLen = rName.getLength();
+    OUStringBuffer aBuffer( nLen );
+
+    for( xub_StrLen i = 0; i < nLen; i++ )
+    {
+        sal_Unicode c = rName[i];
+        sal_Bool bValidChar = sal_False;
+        if( c < 0x00ffU )
+        {
+            bValidChar =
+                (c >= 0x0041 && c <= 0x005a) ||
+                (c >= 0x0061 && c <= 0x007a) ||
+                (c >= 0x00c0 && c <= 0x00d6) ||
+                (c >= 0x00d8 && c <= 0x00f6) ||
+                (c >= 0x00f8 && c <= 0x00ff) ||
+                ( i > 0 && ( (c >= 0x0030 && c <= 0x0039) ||
+                             c == 0x00b7 || c == '-' || c == '.') );
+        }
+        else
+        {
+            if( (c >= 0xf900U && c <= 0xfffeU) ||
+                 (c >= 0x20ddU && c <= 0x20e0U))
+            {
+                bValidChar = sal_False;
+            }
+            else if( (c >= 0x02bbU && c <= 0x02c1U) || c == 0x0559 ||
+                     c == 0x06e5 || c == 0x06e6 )
+            {
+                bValidChar = sal_True;
+            }
+            else if( c == 0x0387 )
+            {
+                bValidChar = i > 0;
+            }
+            else
+            {
+                if( !xCharClass.is() )
+                {
+                    if( mxServiceFactory.is() )
+                    {
+                        try
+                        {
+                            const_cast < SvXMLUnitConverter * >(this)
+                                ->xCharClass =
+                                    Reference < XCharacterClassification >(
+                                mxServiceFactory->createInstance(
+                                    OUString::createFromAscii(
+                        "com.sun.star.i18n.CharacterClassification_Unicode") ),
+                                UNO_QUERY );
+
+                            OSL_ENSURE( xCharClass.is(),
+                    "can't instantiate character clossification component" );
+                        }
+                        catch( com::sun::star::uno::Exception& )
+                        {
+                        }
+                    }
+                }
+                if( xCharClass.is() )
+                {
+                    sal_Int16 nType = xCharClass->getType( rName, i );
+
+                    switch( nType )
+                    {
+                    case UnicodeType::UPPERCASE_LETTER:     // Lu
+                    case UnicodeType::LOWERCASE_LETTER:     // Ll
+                    case UnicodeType::TITLECASE_LETTER:     // Lt
+                    case UnicodeType::OTHER_LETTER:         // Lo
+                    case UnicodeType::LETTER_NUMBER:        // Nl
+                        bValidChar = sal_True;
+                        break;
+                    case UnicodeType::NON_SPACING_MARK:     // Ms
+                    case UnicodeType::ENCLOSING_MARK:       // Me
+                    case UnicodeType::COMBINING_SPACING_MARK:   //Mc
+                    case UnicodeType::MODIFIER_LETTER:      // Lm
+                    case UnicodeType::DECIMAL_DIGIT_NUMBER: // Nd
+                        bValidChar = i > 0;
+                        break;
+                    }
+                }
+            }
+        }
+        if( bValidChar )
+        {
+            aBuffer.append( c );
+        }
+        else
+        {
+            aBuffer.append( static_cast< sal_Unicode >( '_' ) );
+            if( c > 0x0fff )
+                aBuffer.append( static_cast< sal_Unicode >(
+                            aHexTab[ (c >> 12) & 0x0f ]  ) );
+            if( c > 0x00ff )
+                aBuffer.append( static_cast< sal_Unicode >(
+                        aHexTab[ (c >> 8) & 0x0f ] ) );
+            if( c > 0x000f )
+                aBuffer.append( static_cast< sal_Unicode >(
+                        aHexTab[ (c >> 4) & 0x0f ] ) );
+            aBuffer.append( static_cast< sal_Unicode >(
+                        aHexTab[ c & 0x0f ] ) );
+            aBuffer.append( static_cast< sal_Unicode >( '_' ) );
+            if( pEncoded )
+                *pEncoded = sal_True;
+        }
+    }
+
+    return aBuffer.makeStringAndClear();
 }
 
