@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-29 14:16:21 $
+ *  last change: $Author: kz $ $Date: 2001-09-26 20:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
     Text [ spanish ] = "Fuente de datos" ;
     Text [ english_us ] = "Data Source" ;
     Text[ chinese_simplified ] = "ж•°жЌ®жєђ";
-    Text[ russian ] = "Источник данных";
+    Text[ russian ] = "Исходные данные";
     Text[ polish ] = "Џrуdіo danych";
     Text[ japanese ] = "пѕѓпѕћпЅ°пѕЂпЅїпЅ°пЅЅ";
     Text[ chinese_traditional ] = "иі‡ж–™жєђ";
@@ -241,6 +241,9 @@ ModalDialog DLG_DATASOURCE_SELECTION
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.24  2001/08/29 14:16:21  kz
+ *  Merge SRC638: 29.08.01 - 16:15:47
+ *
  *  Revision 1.23  2001/08/24 11:21:36  kz
  *  Merge SRC638: 24.08.01 - 13:20:44
  *
@@ -313,6 +316,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
  *
  *  Revision 1.0 24.10.00 09:42:47  fs
  ************************************************************************/
+
 
 
 
