@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APreparedStatement.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 16:23:14 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ namespace connectivity
             const OTypeInfoMap& m_aTypeInfo;
             ADOParameters*      m_pParameters;
 
-            ~OPreparedStatement();
+            virtual ~OPreparedStatement();
 
         public:
             DECLARE_SERVICE_INFO();
