@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 10:12:02 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #endif
 
 #ifndef _UIPARAM_HXX
@@ -735,7 +738,16 @@ BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef&  xRef )
         sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
         MapMode aRefMap( VCLUnoHelper::UnoEmbed2VCLMapUnit( xRef->getMapUnit( nAspect ) ) );
 
-        awt::Size aSize = xRef->getVisualAreaSize( nAspect );
+        awt::Size aSize;
+        try
+        {
+            aSize = xRef->getVisualAreaSize( nAspect );
+        }
+        catch( embed::NoVisualAreaSizeException& )
+        {
+            // the default size will be set later
+        }
+
         Size aSz( aSize.Width, aSize.Height );
         if ( !aSz.Width() || !aSz.Height() )
         {
@@ -882,7 +894,17 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     // TODO/LEAN: getMapUnit can switch object to running state
     // xObj.TryRunningState();
 
-    awt::Size aSize = xObj->getVisualAreaSize( nAspect );
+    awt::Size aSize;
+    try
+    {
+        aSize = xObj->getVisualAreaSize( nAspect );
+    }
+    catch( embed::NoVisualAreaSizeException& )
+    {
+        DBG_ERROR( "Can't get visual area size!\n" );
+        // the scaling will not be done
+    }
+
     Size aVisArea( aSize.Width, aSize.Height );
 
     BOOL bSetScale100 = TRUE;
@@ -964,9 +986,6 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     aArea.Width ( Fraction( aArea.Width()  ) / pCli->GetScaleWidth() );
     aArea.Height( Fraction( aArea.Height() ) / pCli->GetScaleHeight());
     pCli->SetObjArea( aArea.SVRect() );
-
-    if ( embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY & nMisc )
-        xObj->doVerb(0);
 }
 
 
