@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:32:54 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ VCLXAccessibleComponent::~VCLXAccessibleComponent()
 
     delete m_pSolarLock;
     m_pSolarLock = NULL;
-    // This is not completely sure. If we assume that the base class dtor calls some method which
+    // This is not completely safe. If we assume that the base class dtor calls some method which
     // uses this lock, the we crash. However, as the base class' dtor does not have a chance to call _out_
     // virtual methods, this is no problem as long as the base class is safe, i.e. does not use the external
     // lock from within it's dtor. At the moment, we _know_ the base class is safe in this respect, so
