@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:18:27 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ FltError ImportExcel::Read( void )
 {
 #if EXC_INCL_DUMPER
     {
-        Biff8RecDumper aDumper( *pExcRoot, FALSE );
+        Biff8RecDumper aDumper( GetRoot(), FALSE );
         if( aDumper.Dump( aIn ) )
             return eERR_OK;
     }
@@ -161,7 +161,7 @@ FltError ImportExcel::Read( void )
     DBG_ASSERT( &aIn != NULL, "-ImportExcel::Read(): Kein Stream - wie dass?!" );
 
     ::std::auto_ptr< ScfSimpleProgressBar > pProgress( new ScfSimpleProgressBar(
-        aIn.GetStreamSize(), GetDocShell(), STR_LOAD_DOC ) );
+        aIn.GetSvStreamSize(), GetDocShell(), STR_LOAD_DOC ) );
 
     while( eAkt != Z_Ende )
     {
@@ -175,7 +175,7 @@ FltError ImportExcel::Read( void )
         }
 
         if( eAkt != Z_Biff5Pre && eAkt != Z_Biff5WPre )
-            pProgress->Progress( aIn.Tell() );
+            pProgress->Progress( aIn.GetSvStreamPos() );
 
         switch( eAkt )
         {
@@ -270,11 +270,9 @@ FltError ImportExcel::Read( void )
                     case 0x2A:  GetPageSettings().ReadPrintheaders( maStrm );   break;
                     case 0x2B:  GetPageSettings().ReadPrintgridlines( maStrm ); break;
                     case 0x2F:                          // FILEPASS     [ 2345]
-                        if( Filepass() )
-                        {
-                            eLastErr = eERR_FILEPASSWD;
+                        eLastErr = XclImpDecryptHelper::ReadFilepass( maStrm );
+                        if( eLastErr != ERRCODE_NONE )
                             eAkt = Z_Ende;
-                        }
                         break;
                     case 0x31:  GetFontBuffer().ReadFont( maStrm );             break;
                     case 0x41:  Pane(); break;          // PANE         [ 2345]
@@ -312,11 +310,9 @@ FltError ImportExcel::Read( void )
                     case 0x2A:  GetPageSettings().ReadPrintheaders( maStrm );   break;
                     case 0x2B:  GetPageSettings().ReadPrintgridlines( maStrm ); break;
                     case 0x2F:                          // FILEPASS     [ 2345]
-                        if( Filepass() )
-                        {
-                            eLastErr = eERR_FILEPASSWD;
+                        eLastErr = XclImpDecryptHelper::ReadFilepass( maStrm );
+                        if( eLastErr != ERRCODE_NONE )
                             eAkt = Z_Ende;
-                        }
                         break;
                     case 0x41:  Pane(); break;          // PANE         [ 2345]
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
@@ -371,11 +367,10 @@ FltError ImportExcel::Read( void )
                     case 0x2A:  GetPageSettings().ReadPrintheaders( maStrm );   break;
                     case 0x2B:  GetPageSettings().ReadPrintgridlines( maStrm ); break;
                     case 0x2F:                          // FILEPASS     [ 2345]
-                        if( Filepass() )
-                        {
-                            eLastErr = eERR_FILEPASSWD;
+                        eLastErr = XclImpDecryptHelper::ReadFilepass( maStrm );
+                        if( eLastErr != ERRCODE_NONE )
                             eAkt = Z_Ende;
-                        }
+                        break;
                     case 0x41:  Pane(); break;          // PANE         [ 2345]
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x55:  DefColWidth(); break;
@@ -416,11 +411,9 @@ FltError ImportExcel::Read( void )
                         break;
                     case 0x12:  DocProtect(); break;    // PROTECT      [    5]
                     case 0x2F:                          // FILEPASS     [ 2345]
-                        if( Filepass() )
-                        {
-                            eLastErr = eERR_FILEPASSWD;
+                        eLastErr = XclImpDecryptHelper::ReadFilepass( maStrm );
+                        if( eLastErr != ERRCODE_NONE )
                             eAkt = Z_Ende;
-                        }
                         break;
                     case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345]
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
@@ -472,11 +465,9 @@ FltError ImportExcel::Read( void )
                         break;
                     case 0x1D:  Selection(); break;     // SELECTION    [ 2345]
                     case 0x2F:                          // FILEPASS     [ 2345]
-                        if( Filepass() )
-                        {
-                            eLastErr = eERR_FILEPASSWD;
+                        eLastErr = XclImpDecryptHelper::ReadFilepass( maStrm );
+                        if( eLastErr != ERRCODE_NONE )
                             eAkt = Z_Ende;
-                        }
                         break;
                     case 0x41:  Pane(); break;          // PANE         [ 2345]
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
@@ -589,11 +580,9 @@ FltError ImportExcel::Read( void )
                         break;
                     case 0x12:  DocProtect(); break;    // PROTECT      [    5]
                     case 0x2F:                          // FILEPASS     [ 2345]
-                        if( Filepass() )
-                        {
-                            eLastErr = eERR_FILEPASSWD;
+                        eLastErr = XclImpDecryptHelper::ReadFilepass( maStrm );
+                        if( eLastErr != ERRCODE_NONE )
                             eAkt = Z_Ende;
-                        }
                         break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x85:  Boundsheet(); break;    // BOUNDSHEET   [    5]
@@ -616,13 +605,6 @@ FltError ImportExcel::Read( void )
                     case 0x1E:  GetNumFmtBuffer().ReadFormat( maStrm );         break;
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345]
                     case 0x25:  Defrowheight2(); break; // DEFAULTROWHEI[ 2   ]
-                    case 0x2F:                          // FILEPASS     [ 2345]
-                        if( Filepass() )
-                        {
-                            eLastErr = eERR_FILEPASSWD;
-                            eAkt = Z_Ende;
-                        }
-                        break;
                     case 0x31:  GetFontBuffer().ReadFont( maStrm );             break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x55:  DefColWidth(); break;
@@ -685,11 +667,9 @@ FltError ImportExcel::Read( void )
                     case 0x2A:  GetPageSettings().ReadPrintheaders( maStrm );   break;
                     case 0x2B:  GetPageSettings().ReadPrintgridlines( maStrm ); break;
                     case 0x2F:                          // FILEPASS     [ 2345]
-                        if( Filepass() )
-                        {
-                            eLastErr = eERR_FILEPASSWD;
+                        eLastErr = XclImpDecryptHelper::ReadFilepass( maStrm );
+                        if( eLastErr != ERRCODE_NONE )
                             eAkt = Z_Ende;
-                        }
                         break;
                     case 0x5D:
                         if( bWithDrawLayer )
@@ -1018,7 +998,7 @@ FltError ImportExcel8::Read( void )
 {
 #if EXC_INCL_DUMPER
     {
-        Biff8RecDumper aDumper( *pExcRoot, TRUE );
+        Biff8RecDumper aDumper( GetRoot(), TRUE );
         if( aDumper.Dump( aIn ) )
             return eERR_OK;
     }
@@ -1050,7 +1030,7 @@ FltError ImportExcel8::Read( void )
         "-ImportExcel8::Read(): Kein Stream - wie dass?!" );
 
     ::std::auto_ptr< ScfSimpleProgressBar > pProgress( new ScfSimpleProgressBar(
-        aIn.GetStreamSize(), GetDocShell(), STR_LOAD_DOC ) );
+        aIn.GetSvStreamSize(), GetDocShell(), STR_LOAD_DOC ) );
 
     bObjSection = FALSE;
 
@@ -1065,11 +1045,11 @@ FltError ImportExcel8::Read( void )
         }
 
         if( eAkt != Z_Biff8Pre && eAkt != Z_Biff8WPre )
-            pProgress->Progress( aIn.Tell() );
+            pProgress->Progress( aIn.GetSvStreamPos() );
 
         if( nOpcode != EXC_ID_CONT )
         {
-            aIn.InitializeRecord( TRUE );       // enable internal CONTINUE handling
+            aIn.ResetRecord( true );            // enable internal CONTINUE handling
             bObjSection =
                 (nOpcode == 0x005D) ||          // OBJ
                 (nOpcode == 0x00EB) ||          // MSODRAWINGGROUP
@@ -1114,12 +1094,9 @@ FltError ImportExcel8::Read( void )
                     case 0x12:  DocProtect(); break;    // PROTECT      [    5678]
                     case 0x19:  WinProtection(); break;
                     case 0x2F:                          // FILEPASS     [ 2345   ]
-                        if( Filepass() )
-                        {
-                            GetTracer().TraceLog(ePassword);
-                            eLastErr = eERR_FILEPASSWD;
+                        eLastErr = XclImpDecryptHelper::ReadFilepass( maStrm );
+                        if( eLastErr != ERRCODE_NONE )
                             eAkt = Z_Ende;
-                        }
                         break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345   ]
                     case 0x85:  Boundsheet(); break;    // BOUNDSHEET   [    5   ]
@@ -1342,15 +1319,6 @@ FltError ImportExcel8::Read( void )
                             IncCurrScTab();
                         }
                         break;
-                        case 0x002F:                            // FILEPASS     [ 2345   ]
-                        {
-                            if( Filepass() )
-                            {
-                                eLastErr = eERR_FILEPASSWD;
-                                eAkt = Z_Ende;
-                            }
-                        }
-                        break;
                         default:    bFound = FALSE;
                     }
                 }
@@ -1487,7 +1455,7 @@ FltError ImportExcel8::Read( void )
         PostDocLoad();
 
         // import change tracking data
-        XclImpChangeTrack aImpChTr( pExcRoot );
+        XclImpChangeTrack aImpChTr( pExcRoot, maStrm );
         aImpChTr.Apply();
 
         if( bTabTruncated || IsTruncated() )
@@ -1518,7 +1486,7 @@ FltError ImportExcel8::ReadChart8( ScfSimpleProgressBar& rProgress, const BOOL b
             if( bLoop )
                 bLoop = (aIn.GetRecId() != 0x000A);
         }
-        rProgress.Progress( aIn.Tell() );
+        rProgress.Progress( aIn.GetSvStreamPos() );
 
         return eERR_OK;
     }
@@ -1529,7 +1497,7 @@ FltError ImportExcel8::ReadChart8( ScfSimpleProgressBar& rProgress, const BOOL b
         bLoop = aIn.StartNextRecord();
         nOpcode = aIn.GetRecId();
 
-        rProgress.Progress( aIn.Tell() );
+        rProgress.Progress( aIn.GetSvStreamPos() );
 
         // page settings - only for charts in entire sheet
         if( bOwnTab ) switch( nOpcode )
