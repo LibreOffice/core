@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:56 $
+ *  last change: $Author: ka $ $Date: 2000-10-25 14:44:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,9 +106,9 @@
 #define GALLERY_THEME_RULERS        17
 #define GALLERY_THEME_SOUNDS        18
 #define GALLERY_THEME_SYMBOLS       19
+#define GALLERY_THEME_MYTHEME       20
+#define GALLERY_THEME_USERSOUNDS    21
 
-#define GALLERY_THEME_DUMMY1        20
-#define GALLERY_THEME_DUMMY2        21
 #define GALLERY_THEME_DUMMY3        22
 #define GALLERY_THEME_DUMMY4        23
 #define GALLERY_THEME_DUMMY5        24
