@@ -41,8 +41,8 @@
 #    can not run through on testshl2 env while the same code can run successfully in normal seperate
 #    files.
 #    1) in DatagramSocket class:
-        osl_receiveFromSocket;
-        osl_sendToSocket;
+#        osl_receiveFromSocket;
+#        osl_sendToSocket;
 
 #    2) in StreamSocket class:
 #        osl_readSocket;
@@ -51,8 +51,8 @@
 #        osl_sendSocket;
 
 #    3) in Socket class:
-        osl_isExceptionPending;
-        osl_shutdownSocket;
+         osl_isExceptionPending;
+#        osl_shutdownSocket;
 
 #    4) in Pipe class:
 #        osl_acceptPipe;
@@ -74,26 +74,23 @@
         osl_addToSocketSet;
         osl_clearSocketSet;
         osl_createSocketSet;
-
-        osl_copyHostAddr;
         osl_destroySocketSet;
-        osl_createHostAddr;
-
+        osl_isInSocketSet;
+        osl_removeFromSocketSet
+         
         osl_createHostAddrByName;
         osl_createHostAddrByAddr;
 
+	osl_createHostAddr;
         osl_copyHostAddr;
         osl_destroyHostAddr;
         osl_getHostnameOfHostAddr;
-
         osl_getSocketAddrOfHostAddr;
         osl_createInetBroadcastAddr;
 
         osl_demultiplexSocketEvents;
         osl_getDottedInetAddrOfSocketAddr;
-
-        osl_getFamilyOfSocketAddr;
-        osl_isInSocketSet;
+        osl_getFamilyOfSocketAddr;        
 
 #    3) in thread module*:
         osl_createThread;
