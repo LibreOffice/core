@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:16:46 $
+ *  last change: $Author: obo $ $Date: 2004-10-21 11:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,7 +461,8 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(
     m_xDispatchProvider( rDispatchProvider ),
     aClearFormatKey ( rClearFormatKey ),
     aMoreKey        ( rMoreKey ),
-    bInSpecialMode  ( bInSpec )
+    bInSpecialMode  ( bInSpec ),
+    bVisible(FALSE)
 {
     aLogicalSize = PixelToLogic( GetSizePixel(), MAP_APPFONT );
     EnableAutocomplete( TRUE );
