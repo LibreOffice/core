@@ -1,0 +1,1480 @@
+/*************************************************************************
+ *
+ *  $RCSfile: menuids_tmpl.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 14:31:03 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include <svx/dialogs.hrc>
+#include "app.hrc"
+#include "res_bmp.hrc"
+#define SEPARATOR       MenuItem { Separator = TRUE; };
+ // DUMMY ist eine ID wo ein SubMenu folgt
+ // (muss jeweils immer erhoeht werden!)
+#define DUMMY 333
+ // Nichtobjektbezogen
+
+#define MN_DISTRIBUTE \
+    MenuItem\
+    {\
+        Identifier = SID_DISTRIBUTE_DLG ; \
+        HelpID = SID_DISTRIBUTE_DLG ; \
+        Text [ de ] = "~Verteilung..." ; \
+        Text [ en-US ] = "~Distribution..." ; \
+    };
+
+/* ### ACHTUNG: Neuer Text in Resource! */
+#define MN_DRAWINGMODE \
+    MenuItem\
+    {\
+        Identifier = SID_DRAWINGMODE ; \
+        HelpID = SID_DRAWINGMODE ; \
+        Check = TRUE ; \
+        Text [ de ] = "~Zeichnungsansicht" ; \
+        Text [ en-US ] = "~Drawing View" ; \
+    };
+
+#define MN_OUTLINEMODE \
+    MenuItem\
+    {\
+        Identifier = SID_OUTLINEMODE ; \
+        HelpID = SID_OUTLINEMODE ; \
+        Check = TRUE ; \
+        Text [ de ] = "~Gliederungsansicht" ; \
+        Text [ en-US ] = "~Outline View" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_DIAMODE \
+    MenuItem\
+    {\
+        Identifier = SID_DIAMODE ; \
+        HelpID = SID_DIAMODE ; \
+        Check = TRUE ; \
+        Text [ de ] = "~Diaansicht" ; \
+        Text [ en-US ] = "~Slides View" ; \
+    };
+
+#define MN_PRESENTATION \
+    MenuItem\
+    {\
+        Identifier = SID_PRESENTATION ; \
+        HelpID = SID_PRESENTATION ; \
+        /* ### ACHTUNG: Neuer Text in Resource? ~Bildschirmpräsentation : ~Bildschirmpräsentation... */\
+        /* ### ACHTUNG: Neuer Text in Resource? ~Bildschirmpräsentation : ~Bildschirmpräsentation... */\
+        /* ### ACHTUNG: Neuer Text in Resource? ~Bildschirmpräsentation : ~Bildschirmprõsentation */\
+        Text [ de ] = "~Bildschirmpräsentation" ; \
+        Text [ en-US ] = "Slide Sho~w" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Bildschirmpräsentation starten : Bildschirmprõsentation starten */\
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_CAPTUREPOINT \
+    MenuItem\
+    {\
+        Identifier = SID_CAPTUREPOINT ; \
+        HelpID = SID_CAPTUREPOINT ; \
+        /* ### ACHTUNG: Neuer Text in Resource? F~angpunkt/-linie einfügen... : F~angpunkt/-linie einf³gen... */\
+        Text [ de ] = "F~angpunkt/-linie einfügen..." ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Fangpunkt oder -linie einfügen : Fangpunkt oder -linie einf³gen */\
+        Text [ en-US ] = "~Insert Snap Point/Line..." ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_SET_SNAPITEM \
+    MenuItem\
+    {\
+        Identifier = SID_SET_SNAPITEM ; \
+        HelpID = SID_SET_SNAPITEM ; \
+        Text [ de ] = "~Bearbeiten..." ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Fangobjekt bearbeiten oder löschen : Fangobjekt bearbeiten oder l÷schen */\
+        Text [ en-US ] = "~Edit..." ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_DELETE_SNAPITEM \
+    MenuItem\
+    {\
+        Identifier = SID_DELETE_SNAPITEM ; \
+        HelpID = SID_DELETE_SNAPITEM ; \
+        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */\
+        Text [ de ] = "~Löschen" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Fangobjekt löschen : Fangobjekt l÷schen */\
+        Text [ en-US ] = "~Delete" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+ // Seiten-Attribute
+#define MN_MODIFY_PAGE \
+    MenuItem\
+    {\
+        Identifier = SID_MODIFYPAGE ; \
+        HelpID = SID_MODIFYPAGE ; \
+        Text [ de ] = "Seite~nlayout ändern..." ; \
+        Text [ en-US ] = "~Modify Slide..." ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_FORMAT_PAGE \
+    MenuItem\
+    {\
+        Identifier = SID_PAGESETUP ; \
+        HelpID = SID_PAGESETUP ; \
+        Text [ de ] = "Seite e~inrichten..." ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Seitengröße, Ausrichtung, Rahmen festlegen : Seitengr÷˜e, Ausrichtung, Rahmen festlegen */\
+        Text [ en-US ] = "~Page Setup..." ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_INSERT_PAGE \
+    MenuItem\
+    {\
+        Identifier = SID_INSERTPAGE ; \
+        HelpID = SID_INSERTPAGE ; \
+        Text [ de ] = "Seite ~einfügen..." ; \
+        Text [ en-US ] = "Insert ~Slide..." ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_INSERT_PAGE_DRAW \
+    MenuItem\
+    {\
+        Identifier = SID_INSERTPAGE ; \
+        HelpID = SID_INSERTPAGE ; \
+        Text [ de ] = "Seite ~einfügen" ; \
+        Text [ en-US ] = "Insert ~Slide" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_PAGE_MENU \
+    MenuItem\
+    {\
+        Identifier = DUMMY + 3 ; \
+        Command = ".uno:PageMenu" ; \
+        Text [ de ] = "~Seite" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_FORMAT_PAGE\
+                MN_PRESENTATION_LAYOUT\
+                MN_MODIFY_PAGE\
+                MN_RENAME_PAGE\
+                SEPARATOR\
+                MN_INSERT_PAGE\
+                MN_DELETE_PAGE\
+            };\
+        };\
+        Text [ en-US ] = "Slid~e" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+ // Layer
+#define MN_RENAME_LAYER \
+    MenuItem\
+    {\
+        Identifier = SID_RENAMELAYER ; \
+        HelpID = SID_RENAMELAYER ; \
+        Text [ de ] = "Ebene ~umbenennen..." ; \
+        Text [ en-US ] = "~Rename Layer..." ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_RENAME_PAGE \
+    MenuItem\
+    {\
+        Identifier = SID_RENAMEPAGE ; \
+        HelpID = SID_RENAMEPAGE ; \
+        Text [ de ] = "Seite ~umbenennen" ; \
+        Text [ en-US ] = "~Rename Slide..." ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_DELETE_PAGE \
+    MenuItem\
+    {\
+        Identifier = SID_DELETE_PAGE ; \
+        HelpID = SID_DELETE_PAGE ; \
+        Text [ de ] = "Seite ~löschen" ; \
+        Text [ en-US ] = "D~elete Slide..." ; \
+        Text [ x-comment ] = " ";\
+    };
+
+ // Grafik-Attribute
+#define MN_LINE \
+    MenuItem\
+    {\
+        Identifier = SID_ATTRIBUTES_LINE ; \
+        HelpID = SID_ATTRIBUTES_LINE ; \
+        Text [ de ] = "~Linie..." ; \
+        Text [ en-US ] = "L~ine..." ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_AREA \
+    MenuItem\
+    {\
+        Identifier = SID_ATTRIBUTES_AREA ; \
+        HelpID = SID_ATTRIBUTES_AREA ; \
+        /* ### ACHTUNG: Neuer Text in Resource? ~Fläche... : ~Flõche... */\
+        Text [ de ] = "~Fläche..." ; \
+        Text [ en-US ] = "A~rea..." ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Flächen bearbeiten und definieren : Flõchen bearbeiten und definieren */\
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_TEXTATTR \
+    MenuItem\
+    {\
+        Identifier = SID_TEXTATTR_DLG ; \
+        HelpID = SID_TEXTATTR_DLG ; \
+        Text [ de ] = "Te~xt..." ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Textattribute für die selektierten Textobjekte festlegen : Textattribute f³r die selektierten Textobjekte festlegen */\
+        Text [ en-US ] = "~Text..." ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_CONNECTION \
+    MenuItem\
+    {\
+        Identifier = SID_CONNECTION_DLG ; \
+        HelpID = SID_CONNECTION_DLG ; \
+        Text [ de ] = "Verbin~der..." ; \
+        Text [ en-US ] = "~Connector..." ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_NEW_ROUTING \
+    MenuItem\
+    {\
+        Identifier = SID_CONNECTION_NEW_ROUTING ; \
+        HelpID = SID_CONNECTION_NEW_ROUTING ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Linienverlauf ~zurücksetzen : Linienverlauf ~zur³cksetzen */\
+        Text [ de ] = "Linienverlauf ~zurücksetzen" ; \
+        Text [ en-US ] = "Reset ~Routing" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_MEASURE \
+    MenuItem\
+    {\
+        Identifier = SID_MEASURE_DLG ; \
+        HelpID = SID_MEASURE_DLG ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Bema~ßung... : Bema~˜ung... */\
+        Text [ de ] = "Bema~ßung..." ; \
+        Text [ en-US ] = "Dimen~sions..." ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_TRANSFORM \
+    MenuItem\
+    {\
+        Identifier = SID_ATTR_TRANSFORM ; \
+        HelpID = SID_ATTR_TRANSFORM ; \
+        /* ### ACHTUNG: Neuer Text in Resource? P~osition und Größe... : P~osition und Gr÷˜e... */\
+        Text [ de ] = "P~osition und Größe..." ; \
+        Text [ en-US ] = "Position and Si~ze..." ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Position, Größe und Winkel der selektierten Objekte ändern : Position, Gr÷˜e und Winkel der selektierten Objekte õndern */\
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_EDIT_POINTS \
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_EDIT ; \
+        HelpID = SID_BEZIER_EDIT ; \
+        Text [ de ] = "~Punkte bearbeiten" ; \
+        Text [ en-US ] = "Edit ~Points" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+ // Anordnung
+#define MN_POSITION \
+    MenuItem\
+    {\
+        Identifier = SID_POSITION ; \
+        HelpID = SID_POSITION ; \
+        Command = ".uno:ObjectPosition"; \
+        Text [ de ] = "~Anordnung" ; \
+        Text [ en-US ] = "~Arrange" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = SID_FRAME_TO_TOP ; \
+                    HelpID = SID_FRAME_TO_TOP ; \
+                    Text [ de ] = "~Ganz nach vorn" ; \
+                    Text [ en-US ] = "~Bring to Front" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_MOREFRONT ; \
+                    HelpID = SID_MOREFRONT ; \
+                    Text [ de ] = "W~eiter nach vorn" ; \
+                    Text [ en-US ] = "Bring ~Forward" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_MOREBACK ; \
+                    HelpID = SID_MOREBACK ; \
+                    Text [ de ] = "Weiter ~nach hinten" ; \
+                    Text [ en-US ] = "Send Back~ward" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_FRAME_TO_BOTTOM ; \
+                    HelpID = SID_FRAME_TO_BOTTOM ; \
+                    Text [ de ] = "Ganz nach ~hinten" ; \
+                    Text [ en-US ] = "~Send to Back" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Separator = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_BEFORE_OBJ ; \
+                    HelpID = SID_BEFORE_OBJ ; \
+                    Text [ de ] = "V~or das Objekt" ; \
+                    Text [ en-US ] = "In Front of ~Object" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_BEHIND_OBJ ; \
+                    HelpID = SID_BEHIND_OBJ ; \
+                    Text [ de ] = "H~inter das Objekt" ; \
+                    Text [ en-US ] = "Be~hind Object" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Separator = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_REVERSE_ORDER ; \
+                    HelpID = SID_REVERSE_ORDER ; \
+                    Text [ de ] = "Ver~tauschen" ; \
+                    Text [ en-US ] = "~Reverse" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+            };\
+        };\
+        Text [ x-comment ] = " ";\
+    };
+
+ // Text-Elemente
+#define MN_CHAR \
+    MenuItem\
+    {\
+        Identifier = SID_CHAR_DLG ; \
+        HelpID = SID_CHAR_DLG ; \
+        Text [ de ] = "Zei~chen..." ; \
+        Text [ en-US ] = "C~haracter..." ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Zeichenattribute für den selektierten Bereich auswählen : Zeichenattribute f³r den selektierten Bereich auswõhlen */\
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_CHAR_PARAGRAPH \
+    MN_CHAR \
+    MenuItem {\
+        Identifier = SID_PARA_DLG;\
+        HelpID = SID_PARA_DLG;\
+        Text [ de ] = "A~bsatz...";\
+        Text [ en-US ] = "P~aragraph...";\
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_TEXT_ATTR\
+    MenuItem\
+    {\
+        Identifier = SID_ATTR_CHAR_FONT ; \
+        HelpID = SID_ATTR_CHAR_FONT ; \
+        Text [ de ] = "Sc~hrift" ; \
+        Text [ en-US ] = "~Font" ; \
+        Text [ x-comment ] = " ";\
+    };\
+    MenuItem\
+    {\
+        Identifier = SID_ATTR_CHAR_FONTHEIGHT ; \
+        HelpID = SID_ATTR_CHAR_FONTHEIGHT ; \
+        /* ### ACHTUNG: Neuer Text in Resource? ~Größe : ~Gr÷˜e */\
+        Text [ de ] = "~Größe" ; \
+        Text [ en-US ] = "~Size" ; \
+        Text [ x-comment ] = " ";\
+    };\
+    MenuItem\
+    {\
+        Identifier = DUMMY ; \
+        Command = ".uno:StyleMenu" ; \
+        Text [ de ] = "Sti~l" ; \
+        Text [ en-US ] = "St~yle" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_CHAR_WEIGHT ; \
+                    HelpID = SID_ATTR_CHAR_WEIGHT ; \
+                    Text [ de ] = "~Fett" ; \
+                    Text [ en-US ] = "Bold" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_CHAR_POSTURE ; \
+                    HelpID = SID_ATTR_CHAR_POSTURE ; \
+                    Text [ de ] = "~Kursiv" ; \
+                    Text [ en-US ] = "Italic" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_CHAR_UNDERLINE ; \
+                    HelpID = SID_ATTR_CHAR_UNDERLINE ; \
+                    Text [ de ] = "~Unterstreichen" ; \
+                    Text [ en-US ] = "Underline" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_CHAR_STRIKEOUT ; \
+                    HelpID = SID_ATTR_CHAR_STRIKEOUT ; \
+                    Text [ de ] = "~Durchstreichen" ; \
+                    Text [ en-US ] = "Strikethrough" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_CHAR_SHADOWED ; \
+                    HelpID = SID_ATTR_CHAR_SHADOWED ; \
+                    Text [ de ] = "~Schatten" ; \
+                    Text [ en-US ] = "Shadow" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_CHAR_CONTOUR ; \
+                    HelpID = SID_ATTR_CHAR_CONTOUR ; \
+                    Text [ de ] = "K~ontur" ; \
+                    Text [ en-US ] = "~Contour" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+            };\
+        };\
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_LINESPACING_ATTR\
+    MenuItem\
+    {\
+        Identifier = DUMMY + 1 ; \
+        Text [ de ] = "Zeilenabs~tand" ; \
+        Command = ".uno:LineSpacingMenu" ; \
+        Text [ en-US ] = "~Line Spacing" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_PARA_LINESPACE_10 ; \
+                    HelpID = SID_ATTR_PARA_LINESPACE_10 ; \
+                    RadioCheck = TRUE ; \
+                    Text [ de ] = "~Einzeilig" ; \
+                    Text [ en-US ] = "Single Line Spacing" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_PARA_LINESPACE_15 ; \
+                    HelpID = SID_ATTR_PARA_LINESPACE_15 ; \
+                    RadioCheck = TRUE ; \
+                    Text [ de ] = "1,~5zeilig" ; \
+                    Text [ en-US ] = "1.5 Lines" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_PARA_LINESPACE_20 ; \
+                    HelpID = SID_ATTR_PARA_LINESPACE_20 ; \
+                    RadioCheck = TRUE ; \
+                    Text [ de ] = "~Zweizeilig" ; \
+                    Text [ en-US ] = "~Double" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+            };\
+        };\
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_BULLET \
+    MenuItem\
+    {\
+        Identifier = SID_BULLET ; \
+        HelpID = SID_BULLET ; \
+        Text [ de ] = "~Sonderzeichen..." ; \
+        Text [ en-US ] = "S~pecial Character..." ; \
+        Text [ x-comment ] = " ";\
+    };
+
+ // Text-Ausrichtung
+#define MN_TEXT_ALIGN\
+    MenuItem\
+    {\
+        Identifier = DUMMY + 2 ; \
+        Command = ".uno:AlignTextMenu" ; \
+        Text [ de ] = "Aus~richtung" ; \
+        Text [ en-US ] = "A~lignment" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_PARA_ADJUST_LEFT ; \
+                    HelpID = SID_ATTR_PARA_ADJUST_LEFT ; \
+                    RadioCheck = TRUE ; \
+                    Text [ de ] = "~Links" ; \
+                    Text [ en-US ] = "~Left" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_PARA_ADJUST_RIGHT ; \
+                    HelpID = SID_ATTR_PARA_ADJUST_RIGHT ; \
+                    RadioCheck = TRUE ; \
+                    Text [ de ] = "~Rechts" ; \
+                    Text [ en-US ] = "~Right" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_PARA_ADJUST_CENTER ; \
+                    HelpID = SID_ATTR_PARA_ADJUST_CENTER ; \
+                    RadioCheck = TRUE ; \
+                    Text [ de ] = "~Zentriert" ; \
+                    Text [ en-US ] = "~Centered" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_PARA_ADJUST_BLOCK ; \
+                    HelpID = SID_ATTR_PARA_ADJUST_BLOCK ; \
+                    RadioCheck = TRUE ; \
+                    Text [ de ] = "~Blocksatz" ; \
+                    Text [ en-US ] = "Justified" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+            };\
+        };\
+        Text [ x-comment ] = " ";\
+    };
+
+ // Objekt-Ausrichtung
+#define MN_OBJECT_ALIGN \
+    MenuItem\
+    {\
+        Identifier = SID_OBJECT_ALIGN ; \
+        Command = ".uno:AlignObjetMenu" ; \
+        HelpID = SID_OBJECT_ALIGN ; \
+        Text [ de ] = "Aus~richtung" ; \
+        Text [ en-US ] = "A~lignment" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = SID_OBJECT_ALIGN_LEFT ; \
+                    HelpID = SID_OBJECT_ALIGN_LEFT ; \
+                    Text [ de ] = "~Links" ; \
+                    Text [ en-US ] = "~Left" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_OBJECT_ALIGN_CENTER ; \
+                    HelpID = SID_OBJECT_ALIGN_CENTER ; \
+                    Text [ de ] = "~Zentriert" ; \
+                    Text [ en-US ] = "~Centered" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_OBJECT_ALIGN_RIGHT ; \
+                    HelpID = SID_OBJECT_ALIGN_RIGHT ; \
+                    Text [ de ] = "~Rechts" ; \
+                    Text [ en-US ] = "~Right" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                SEPARATOR\
+                MenuItem\
+                {\
+                    Identifier = SID_OBJECT_ALIGN_UP ; \
+                    HelpID = SID_OBJECT_ALIGN_UP ; \
+                    Text [ de ] = "~Oben" ; \
+                    Text [ en-US ] = "~Top" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_OBJECT_ALIGN_MIDDLE ; \
+                    HelpID = SID_OBJECT_ALIGN_MIDDLE ; \
+                    Text [ de ] = "~Mitte" ; \
+                    Text [ en-US ] = "C~enter" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_OBJECT_ALIGN_DOWN ; \
+                    HelpID = SID_OBJECT_ALIGN_DOWN ; \
+                    Text [ de ] = "~Unten" ; \
+                    Text [ en-US ] = "~Bottom" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+            };\
+        };\
+        Text [ x-comment ] = " ";\
+    };
+
+ // Bezier-Funktionen
+#define MN_CLOSE_OBJECT \
+    MenuItem\
+    {\
+        Identifier = SID_OBJECT_CLOSE ; \
+        HelpID = SID_OBJECT_CLOSE ; \
+        /* ### ACHTUNG: Neuer Text in Resource? ~Objekt schließen : ~Objekt schlie˜en */\
+        Text [ de ] = "Obje~kt schließen" ; \
+        Text [ en-US ] = "Close ~Object" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_BEZIER \
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_EDIT ; \
+        HelpID = SID_BEZIER_EDIT ; \
+        Text [ de ] = "~Punkte bearbeiten" ; \
+        Text [ en-US ] = "Edit ~Points" ; \
+        Text [ x-comment ] = " ";\
+    };\
+    SEPARATOR\
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_MOVE ; \
+        HelpID = SID_BEZIER_MOVE ; \
+        Text [ de ] = "Punkte ~verschieben" ; \
+        Text [ en-US ] = "~Move Points" ; \
+        Text [ x-comment ] = " ";\
+    };\
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_INSERT ; \
+        HelpID = SID_BEZIER_INSERT ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Punkte ~einfügen : Punkte ~einf³gen */\
+        Text [ de ] = "Punkte ~einfügen" ; \
+        Text [ en-US ] = "Insert ~Points" ; \
+        Text [ x-comment ] = " ";\
+    };\
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_DELETE ; \
+        HelpID = SID_BEZIER_DELETE ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Punkte l~öschen : Punkte l~÷schen */\
+        Text [ de ] = "Punkte l~öschen" ; \
+        Text [ en-US ] = "~Delete Points" ; \
+        Text [ x-comment ] = " ";\
+    };\
+    SEPARATOR\
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_CLOSE ; \
+        HelpID = SID_BEZIER_CLOSE ; \
+        /* ### ACHTUNG: Neuer Text in Resource? ~Objekt schließen : ~Objekt schlie˜en */\
+        Text [ de ] = "~Objekt schließen" ; \
+        Text [ en-US ] = "Close ~Object" ; \
+        Text [ x-comment ] = " ";\
+    };\
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_CUTLINE ; \
+        HelpID = SID_BEZIER_CUTLINE ; \
+        Text [ de ] = "Kurve ~auftrennen" ; \
+        Text [ en-US ] = "~Split Curve" ; \
+        Text [ x-comment ] = " ";\
+    };\
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_CONVERT ; \
+        HelpID = SID_BEZIER_CONVERT ; \
+        Text [ de ] = "~In Kurve wandeln" ; \
+        Text [ en-US ] = "Con~vert to Curve" ; \
+        Text [ x-comment ] = " ";\
+    };\
+    SEPARATOR\
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_EDGE ; \
+        HelpID = SID_BEZIER_EDGE ; \
+        Text [ de ] = "E~cke" ; \
+        Text [ en-US ] = "~Corner" ; \
+        Text [ x-comment ] = " ";\
+    };\
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_SMOOTH ; \
+        HelpID = SID_BEZIER_SMOOTH ; \
+        Text [ de ] = "~Glatt" ; \
+        Text [ en-US ] = "Smoot~h" ; \
+        Text [ x-comment ] = " ";\
+    };\
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_SYMMTR ; \
+        HelpID = SID_BEZIER_SYMMTR ; \
+        Text [ de ] = "~Symmetrisch" ; \
+        Text [ en-US ] = "S~ymmetric" ; \
+        Text [ x-comment ] = " ";\
+    };\
+    SEPARATOR\
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_ELIMINATE_POINTS ; \
+        HelpID = SID_BEZIER_ELIMINATE_POINTS ; \
+        Text [ de ] = "Punkte reduzieren" ; \
+        Text [ en-US ] = "~Reduce Points" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+ // Gruppen-/Kombination-Funktionen
+#define MN_GROUP \
+    MenuItem\
+    {\
+        Identifier = SID_GROUP ; \
+        HelpID = SID_GROUP ; \
+        Text [ de ] = "~Gruppieren" ; \
+        Text [ en-US ] = "~Group" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Objekte gruppieren : Ausgewõhlte Objekte gruppieren */\
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_UNGROUP \
+    MenuItem\
+    {\
+        Identifier = SID_UNGROUP ; \
+        HelpID = SID_UNGROUP ; \
+        Text [ de ] = "Gruppierung ~aufheben" ; \
+        Text [ en-US ] = "~Ungroup" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_COMBINE \
+    MenuItem\
+    {\
+        Identifier = SID_COMBINE ; \
+        HelpID = SID_COMBINE ; \
+        Text [ de ] = "~Kombinieren" ; \
+        Text [ en-US ] = "Comb~ine" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Objekte kombinieren : Ausgewõhlte Objekte kombinieren */\
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_DISMANTLE \
+    MenuItem\
+    {\
+        Identifier = SID_DISMANTLE ; \
+        HelpID = SID_DISMANTLE ; \
+        Text [ de ] = "Ko~mbination aufheben" ; \
+        Text [ en-US ] = "~Split" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_ENTER_GROUP \
+    MenuItem\
+    {\
+        Identifier = SID_ENTER_GROUP ; \
+        HelpID = SID_ENTER_GROUP ; \
+        Text [ de ] = "Gruppierung be~treten" ; \
+        Text [ en-US ] = "~Enter Group" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Objekte der Gruppierung können bearbeitet werden : Objekte der Gruppierung k÷nnen bearbeitet werden */\
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_LEAVE_GROUP \
+    MenuItem\
+    {\
+        Identifier = SID_LEAVE_GROUP ; \
+        HelpID = SID_LEAVE_GROUP ; \
+        Text [ de ] = "Gruppierung ~verlassen" ; \
+        Text [ en-US ] = "E~xit Group" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Objekte der Gruppierung können nicht mehr bearbeitet werden : Objekte der Gruppierung k÷nnen nicht mehr bearbeitet werden */\
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_NAME_GROUP \
+    MenuItem\
+    {\
+        Identifier = SID_NAME_GROUP ; \
+        HelpID = SID_NAME_GROUP ; \
+        Text [ de ] = "Obje~kt benennen..." ; \
+        Text [ en-US ] = "~Name Object..." ; \
+        Text [ x-comment ] = " ";\
+    };
+
+ // Dia-Funktionen
+#define MN_REHEARSE_TIMINGS \
+    MenuItem\
+    {\
+        Identifier = SID_REHEARSE_TIMINGS ; \
+        HelpID = SID_REHEARSE_TIMINGS ; \
+        Text [ de ] = "Bildschirmp~räsentation mit Zeitnahme" ; \
+        Text [ en-US ] = "~Rehearse Timings" ; \
+    };
+
+#define MN_EFFECT \
+    MenuItem\
+    {\
+        Identifier = SID_EFFECT_WIN ; \
+        HelpID = SID_EFFECT_WIN ; \
+        Text [ de ] = "Benutzerdefinierte Animation..." ; \
+        Text [ en-us ] = "Custom Animation..." ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_ACTION \
+    MenuItem\
+    {\
+        Identifier = SID_ANIMATION_EFFECTS ; \
+        HelpID = SID_ANIMATION_EFFECTS ; \
+        Text [ de ] = "I~nteraktion..." ; \
+        Text [ en-US ] = "Interaction..." ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_PRESENTATIONOBJECT \
+    MenuItem\
+    {\
+        Identifier = SID_PRESENTATIONOBJECT ; \
+        HelpID = SID_PRESENTATIONOBJECT ; \
+        /* ### ACHTUNG: Neuer Text in Resource? ~Präsentationsobjekt... : ~Prõsentationsobjekt... */\
+        Text [ de ] = "~Präsentationsobjekt..." ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Selektiertes Präsentationsobjekt bearbeiten : Selektiertes Prõsentationsobjekt bearbeiten */\
+        Text [ en-US ] = "Presentation ~Object..." ; \
+        Text [ x-comment ] = " ";\
+    };
+
+ // Diverse allgemeine Funktionen
+#define MN_DELETE \
+    MenuItem\
+    {\
+        Identifier = SID_DELETE ; \
+        HelpID = SID_DELETE ; \
+        /* ### ACHTUNG: Neuer Text in Resource? L~öschen : L~÷schen */\
+        Text [ de ] = "L~öschen" ; \
+        Text [ en-US ] = "~Delete" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Alle selektierten Objekte löschen : Alle selektierten Objekte l÷schen */\
+        Text [ x-comment ] = " ";\
+    };
+
+
+#define MN_SET_DEFAULT\
+    MenuItem\
+    {\
+        Identifier = SID_SET_DEFAULT ; \
+        HelpID = SID_SET_DEFAULT ; \
+        Text [ de ] = "Standar~d" ; \
+        Text [ en-US ] = "~Default" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_FONTWORK\
+    MenuItem\
+    {\
+        Identifier = SID_FONTWORK ; \
+        HelpID = SID_FONTWORK ; \
+        Text [ de ] = "Font~Work" ; \
+        Text [ en-US ] = "F~ontwork" ; \
+    };
+
+#define MN_OLE_OBJECT\
+    MenuItem\
+    {\
+        Identifier = SID_OBJECT ; \
+        HelpID = SID_OBJECT ; \
+        Text [ de ] = "O~LE-Objekt" ; \
+        Text [ en-US ] = "~OLE Object" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_ORIGINAL_SIZE\
+    MenuItem\
+    {\
+        Identifier = SID_ORIGINAL_SIZE ; \
+        HelpID = SID_ORIGINAL_SIZE ; \
+        Text [ de ] = "Origi~nalgröße" ; \
+        Text [ en-US ] = "Original ~Size" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_STARIMAGE\
+    MenuItem\
+    {\
+        Identifier = SID_OBJECT ; \
+        HelpID = SID_OBJECT ; \
+        Text [ de ] = "Bi~ld" ; \
+        Text [ en-US ] = "~Image" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_NAVIGATOR\
+    MenuItem\
+    {\
+        Identifier = SID_NAVIGATOR ; \
+        Command = ".uno:Navigator" ; \
+        HelpID = SID_NAVIGATOR ; \
+        Text [ de ] = "Na~vigator" ; \
+        Text [ en-US ] = "Na~vigator" ; \
+    };
+
+#define MN_GLUE_INSERT_POINT\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_INSERT_POINT ; \
+        HelpID = SID_GLUE_INSERT_POINT ; \
+        /* ### ACHTUNG: Neuer Text in Resource? ~Punkt einfügen : ~Punkt einf³gen */\
+        Text [ de ] = "~Punkt einfügen" ; \
+        Text [ en-US ] = "Insert ~Point" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_GLUE_ESC_DIR_LEFT\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_ESCDIR_LEFT ; \
+        HelpID = SID_GLUE_ESCDIR_LEFT ; \
+        Text [ de ] = "~Links" ; \
+        Text [ en-US ] = "~Left" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_GLUE_ESC_DIR_TOP\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_ESCDIR_TOP ; \
+        HelpID = SID_GLUE_ESCDIR_TOP ; \
+        Text [ de ] = "~Oben" ; \
+        Text [ en-US ] = "~Top" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_GLUE_ESC_DIR_RIGHT\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_ESCDIR_RIGHT ; \
+        HelpID = SID_GLUE_ESCDIR_RIGHT ; \
+        Text [ de ] = "~Rechts" ; \
+        Text [ en-US ] = "~Right" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_GLUE_ESC_DIR_BOTTOM\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_ESCDIR_BOTTOM ; \
+        HelpID = SID_GLUE_ESCDIR_BOTTOM ; \
+        Text [ de ] = "~Unten" ; \
+        Text [ en-US ] = "~Bottom" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_GLUE_PERCENT\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_PERCENT ; \
+        HelpID = SID_GLUE_PERCENT ; \
+        Text [ de ] = "Position an ~Objekt anpassen" ; \
+        Text [ en-US ] = "~Adapt Position to Object" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_GLUE_HORZALIGN_LEFT\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_HORZALIGN_LEFT ; \
+        HelpID = SID_GLUE_HORZALIGN_LEFT ; \
+        RadioCheck = TRUE ; \
+        Text [ de ] = "~Horizontal links fixiert" ; \
+        Text [ en-US ] = "Fixed ~Horizontal Left" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_GLUE_HORZALIGN_CENTER\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_HORZALIGN_CENTER ; \
+        HelpID = SID_GLUE_HORZALIGN_CENTER ; \
+        RadioCheck = TRUE ; \
+        Text [ de ] = "Horizontal ~zentriert fixiert" ; \
+        Text [ en-US ] = "Fixed Horizontal ~Center" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_GLUE_HORZALIGN_RIGHT\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_HORZALIGN_RIGHT ; \
+        HelpID = SID_GLUE_HORZALIGN_RIGHT ; \
+        RadioCheck = TRUE ; \
+        Text [ de ] = "Hori~zontal rechts fixiert" ; \
+        Text [ en-US ] = "Fixed Hori~zontal Right" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_GLUE_VERTALIGN_TOP\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_VERTALIGN_TOP ; \
+        HelpID = SID_GLUE_VERTALIGN_TOP ; \
+        RadioCheck = TRUE ; \
+        Text [ de ] = "~Vertikal oben fixiert" ; \
+        Text [ en-US ] = "Fixed ~Vertical Top" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_GLUE_VERTALIGN_CENTER\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_VERTALIGN_CENTER ; \
+        HelpID = SID_GLUE_VERTALIGN_CENTER ; \
+        RadioCheck = TRUE ; \
+        Text [ de ] = "V~ertikal zentriert fixiert" ; \
+        Text [ en-US ] = "Fixed V~ertical Center" ; \
+        Text [ x-comment ] = " "; \
+    };
+
+#define MN_GLUE_VERTALIGN_BOTTOM\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_VERTALIGN_BOTTOM ; \
+        HelpID = SID_GLUE_VERTALIGN_BOTTOM ; \
+        RadioCheck = TRUE ; \
+        Text [ de ] = "Verti~kal unten fixiert" ; \
+        Text [ en-US ] = "Fixed Ver~tical Bottom" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_GRID_VISIBLE\
+    MenuItem\
+    {\
+        Identifier = SID_GRID_VISIBLE ; \
+        HelpID = SID_GRID_VISIBLE ; \
+        Text [ de ] = "~Raster sichtbar" ; \
+        Text [ en-US ] = "~Visible Grid" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_GRID_USE\
+    MenuItem\
+    {\
+        Identifier = SID_GRID_USE ; \
+        HelpID = SID_GRID_USE; \
+        Text [ de ] = "~Am Raster fangen"; \
+        Text [ en-US ] = "Snap to Grid"; \
+        Text [ x-comment ] = " "; \
+    };
+
+#define MN_GRID_FRONT\
+    MenuItem\
+    {\
+        Identifier = SID_GRID_FRONT ; \
+        HelpID = SID_GRID_FRONT ; \
+        Text [ de ] = "Ras~ter vorn" ; \
+        Text [ en-US ] = "Grid to ~Front" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_GRID \
+    MenuItem\
+    {\
+        Identifier = DUMMY + 5 ; \
+        Command = ".uno:GridMenu" ; \
+        Text [ de ] = "~Raster" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_GRID_VISIBLE\
+                MN_GRID_USE\
+                MN_GRID_FRONT\
+            };\
+        };\
+        Text [ en-US ] = "~Grid";\
+    };
+
+#define MN_HELPLINES_VISIBLE\
+    MenuItem\
+    {\
+        Identifier = SID_HELPLINES_VISIBLE ; \
+        HelpID = SID_HELPLINES_VISIBLE ; \
+        /* ### ACHTUNG: Neuer Text in Resource? ~Fanglinien sichtbar : ~Hilfslinien sichtbar */\
+        Text [ de ] = "~Fanglinien sichtbar" ; \
+        Text [ en-US ] = "~Snap Lines Visible" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_HELPLINES_USE\
+    MenuItem\
+    {\
+        Identifier = SID_HELPLINES_USE ; \
+        HelpID = SID_HELPLINES_USE ; \
+        Text [ de ] = "~An Fanglinien fangen"; \
+        Text [ en-US ] = "Snap to Snap Lines"; \
+        Text [ x-comment ] = " "; \
+    };
+
+#define MN_HELPLINES_FRONT\
+    MenuItem\
+    {\
+        Identifier = SID_HELPLINES_FRONT ; \
+        HelpID = SID_HELPLINES_FRONT ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Fanglini~en vorn : H~ilfslinien vorn */\
+        Text [ de ] = "Fanglini~en vorn" ; \
+        Text [ en-US ] = "Snap Lines to Front" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_HELPLINES \
+    MenuItem\
+    {\
+        Identifier = DUMMY + 6 ; \
+        Command = ".uno:SnapLinesMenu" ; \
+        Text [ de ] = "Fanglini~en" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_HELPLINES_VISIBLE\
+                MN_HELPLINES_USE\
+                MN_HELPLINES_FRONT\
+            };\
+        };\
+        Text [ en-US ] = "~Snap Lines";\
+    };
+
+#define MN_CONTROL_SHOW_BROWSER\
+    MenuItem\
+    {\
+        Identifier = SID_SHOW_BROWSER ; \
+        HelpID = SID_SHOW_BROWSER ; \
+        Text [ de ] = "~Eigenschaften..." ; \
+        Text [ en-US ] = "Propert~ies..." ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_CONVERT_TO_1BIT_THRESHOLD\
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_1BIT_THRESHOLD ; \
+        HelpID = SID_CONVERT_TO_1BIT_THRESHOLD ; \
+        Text [ de ] = "1Bit-~Schwellenwert" ; \
+        Text [ en-US ] = "1Bit ~Threshold" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_CONVERT_TO_1BIT_MATRIX\
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_1BIT_MATRIX ; \
+        HelpID = SID_CONVERT_TO_1BIT_MATRIX ; \
+        Text [ de ] = "1Bit-~Gedithert" ; \
+        Text [ en-US ] = "1 Bit ~Dithering" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_CONVERT_TO_4BIT_GRAYS\
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_4BIT_GRAYS ; \
+        HelpID = SID_CONVERT_TO_4BIT_GRAYS ; \
+        Text [ de ] = "4Bit-G~raustufenpalette" ; \
+        Text [ en-US ] = "4 Bit G~rayscales" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_CONVERT_TO_4BIT_COLORS\
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_4BIT_COLORS ; \
+        HelpID = SID_CONVERT_TO_4BIT_COLORS ; \
+        Text [ de ] = "4Bit-~Farbpalette" ; \
+        Text [ en-US ] = "4 Bit ~Color Palette" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_CONVERT_TO_8BIT_GRAYS\
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_8BIT_GRAYS ; \
+        HelpID = SID_CONVERT_TO_8BIT_GRAYS ; \
+        Text [ de ] = "8Bit-Gr~austufenpalette" ; \
+        Text [ en-US ] = "8 Bit Gr~ayscales" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_CONVERT_TO_8BIT_COLORS\
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_8BIT_COLORS ; \
+        HelpID = SID_CONVERT_TO_8BIT_COLORS ; \
+        Text [ de ] = "8Bit-Far~bpalette" ; \
+        Text [ en-US ] = "8 Bit C~olor Palette" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_CONVERT_TO_24BIT\
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_24BIT ; \
+        HelpID = SID_CONVERT_TO_24BIT ; \
+        Text [ de ] = "24Bit-~Echtfarben" ; \
+        Text [ en-US ] = "24 Bit ~True Colors" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_COLORRESOLUTION \
+    MenuItem\
+    {\
+        Identifier = DUMMY + 4 ; \
+        Command = ".uno:ColorResMenu" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? ~Farbauflösung : ~Farbaufl÷sung */\
+        Text [ de ] = "~Farbauflösung" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_CONVERT_TO_1BIT_THRESHOLD\
+                MN_CONVERT_TO_1BIT_MATRIX\
+                MN_CONVERT_TO_4BIT_GRAYS\
+                MN_CONVERT_TO_4BIT_COLORS\
+                MN_CONVERT_TO_8BIT_GRAYS\
+                MN_CONVERT_TO_8BIT_COLORS\
+                MN_CONVERT_TO_24BIT\
+            };\
+        };\
+        Text [ en-US ] = "~Color Resolution" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MNSUB_CONVERT \
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT ; \
+        Command = ".uno:ConvertMenu" ; \
+        HelpID = SID_CONVERT ; \
+        Text [ de ] = "~Umwandeln" ; \
+        Text [ en-US ] = "~Convert" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_CHANGEBEZIER\
+                MN_CHANGEPOLYGON\
+                MN_CONVERT_TO_CONTOUR\
+                MN_CONVERT_TO_3D\
+                MN_CONVERT_TO_3D_LATHE_FAST\
+                MN_CONVERT_TO_BITMAP\
+                MN_CONVERT_TO_METAFILE\
+            };\
+        };\
+        Text [ x-comment ] = " ";\
+    };
+
+#define MNSUB_MIRROR \
+    MenuItem\
+    {\
+        Identifier = SID_MIRROR ; \
+        HelpID = SID_MIRROR ; \
+        Command = ".uno:MirrorMenu" ; \
+        Text [ de ] = "Sp~iegeln" ; \
+        Text [ en-US ] = "~Flip" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_VERTICAL\
+                MN_HORIZONTAL\
+            };\
+        };\
+        Text [ x-comment ] = " ";\
+    };
+
+#define MNSUB_ROTATE \
+    MenuItem\
+    {\
+        Identifier = SID_OBJECT_ROTATE ; \
+        HelpID = SID_OBJECT_ROTATE ; \
+        Text [ de ] = "~Drehen" ; \
+        Text [ en-US ] = "~Rotate";\
+    };
+
+#define MN_CONNECT \
+    MenuItem\
+    {\
+        Identifier = SID_CONNECT ; \
+        HelpID = SID_CONNECT ; \
+        Text [ de ] = "~Verbinden" ; \
+        Text [ en-US ] = "C~onnect" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_BREAK \
+    MenuItem\
+    {\
+        Identifier = SID_BREAK ; \
+        HelpID = SID_BREAK ; \
+        Text [ de ] = "Au~fbrechen" ; \
+        Text [ en-US ] = "~Break" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_STYLEDT \
+    MenuItem\
+    {\
+        Identifier = SID_STYLE_EDIT ; \
+        HelpID = SID_STYLE_EDIT ; \
+        Text [ de ] = "~Vorlage bearbeiten..." ; \
+        Text [ en-US ] = "Edit Style..." ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_EDIT_HYPERLINK \
+    MenuItem\
+    {\
+        Identifier = SID_EDIT_HYPERLINK ; \
+        HelpID = SID_EDIT_HYPERLINK ; \
+        Text [ de ] = "H~yperlink..." ; \
+        Text [ en-US ] = "H~yperlink..." ; \
+    };
+
+#define MN_POINT_EDITMODE \
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_EDIT ; \
+        HelpID = SID_BEZIER_EDIT ; \
+        Text [ de ] = "Pu~nkte" ; \
+        Text [ en-US ] = "Poi~nts";\
+    };
+
+#define MN_GLUE_EDITMODE \
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_EDITMODE ; \
+        HelpID = SID_GLUE_EDITMODE ; \
+        Text [ de ] = "~Klebepunkte"; \
+        Text [ en-US ] = "~Glue Points";\
+    };
+
+#define MN_LAYER_EDITMODE \
+    MenuItem\
+    {\
+        Identifier = DUMMY + 7 ; \
+        Command = ".uno:LayerMenu" ; \
+        Text [ de ] = "~Ebene" ; \
+        Text [ en-US ] =  "La~yer"; \
+        SubMenu = Menu \
+        {\
+            ItemList = \
+            {\
+                MenuItem \
+                {\
+                    Identifier = SID_INSERTLAYER ; \
+                    HelpID = SID_INSERTLAYER ; \
+                    Text [ de ] = "~Einfügen";\
+                    Text [ en-US ] = "~Insert";\
+                };\
+                MenuItem \
+                {\
+                    Identifier = SID_MODIFYLAYER ; \
+                    HelpID = SID_MODIFYLAYER ; \
+                    Text [ de ] = "~Ändern";\
+                    Text [ en-US ] = "~Modify";\
+                };\
+                MenuItem \
+                {\
+                    Identifier = SID_DELETE_LAYER ; \
+                    HelpID = SID_DELETE_LAYER ; \
+                    Text [ de ] = "~Löschen";\
+                    Text [ en-US ] = "Delete";\
+                };\
+                MenuItem \
+                {\
+                    Identifier = SID_RENAMELAYER ; \
+                    HelpID = SID_RENAMELAYER ; \
+                    Text [ de ] = "~Umbenennen";\
+                    Text [ en-US ] = "~Rename";\
+                }; \
+            };\
+        };\
+    };
