@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-19 23:04:14 $
+ *  last change: $Author: os $ $Date: 2002-06-10 14:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1064,6 +1064,62 @@
       <prop oor:name="Document" oor:type="xs:boolean">
         <!-- Responsible: JP / OS-->
         <!-- UIHints: Tools - Options - Text document  Default Fonts (Asian)-->
+        <value>false</value>
+        <info>
+          <desc xml:lang="en-US">To apply the settings to the current document only (true). Otherwise, the settings will apply to all future documents (false).</desc>
+          <label xml:lang="en-US">Current document only</label>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="DefaultFontCTL">
+      <prop oor:name="Standard" oor:type="xs:string">
+        <!-- Responsible: OS -->
+        <!-- UIHints: Tools - Options - Text document  Default Fonts (CTL) -->
+        <value xsi:nil="true"/>
+        <info>
+          <desc xml:lang="en-US">Specifies the font type to be used for the Standard paragraph style</desc>
+          <label xml:lang="en-US">Standard</label>
+        </info>
+      </prop>
+      <prop oor:name="Heading" oor:type="xs:string">
+        <!-- Responsible: OS -->
+        <!-- UIHints: Tools - Options - Text document  Default Fonts (CTL)-->
+        <value xsi:nil="true"/>
+        <info>
+          <desc xml:lang="en-US">Specifies the font type to be used for the paragraph&amp;apos;s headings</desc>
+          <label xml:lang="en-US">Heading</label>
+        </info>
+      </prop>
+      <prop oor:name="List" oor:type="xs:string">
+        <!-- Responsible: OS -->
+        <!-- UIHints: Tools - Options - Text document  Default Fonts (CTL)-->
+        <value xsi:nil="true"/>
+        <info>
+          <desc xml:lang="en-US">Specifies the font to be used in the paragraph styles for lists and numbering</desc>
+          <label xml:lang="en-US">List</label>
+        </info>
+      </prop>
+      <prop oor:name="Caption" oor:type="xs:string">
+        <!-- Responsible: OS -->
+        <!-- UIHints: Tools - Options - Text document  Default Fonts (CTL)-->
+        <value xsi:nil="true"/>
+        <info>
+          <desc xml:lang="en-US">Specifies the font to be used for the labels of images and tables</desc>
+          <label xml:lang="en-US">Caption</label>
+        </info>
+      </prop>
+      <prop oor:name="Index" oor:type="xs:string">
+        <!-- Responsible: OS -->
+        <!-- UIHints: Tools - Options - Text document  Default Fonts (CTL)-->
+        <value xsi:nil="true"/>
+        <info>
+          <desc xml:lang="en-US">Specifies the fonts to be applied to the paragraph styles for user-defined indexes, alphabetical indexes, tables of contents and to all of the paragraph styles derived from this.</desc>
+          <label xml:lang="en-US">Index</label>
+        </info>
+      </prop>
+      <prop oor:name="Document" oor:type="xs:boolean">
+        <!-- Responsible: OS / OS-->
+        <!-- UIHints: Tools - Options - Text document  Default Fonts (CTL)-->
         <value>false</value>
         <info>
           <desc xml:lang="en-US">To apply the settings to the current document only (true). Otherwise, the settings will apply to all future documents (false).</desc>
