@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: sj $ $Date: 2002-03-18 16:01:07 $
+ *  last change: $Author: sj $ $Date: 2002-03-18 17:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1747,6 +1747,9 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
         {
             nPropertyFlags = 0;
             sal_uInt32 nCharAttr = pPortion->mnCharAttr;
+
+            if (pPortion->mnCharColor & 0xffffff)       // #97884# the fact that Ppt is displaying embossed text always using
+                nCharAttr &=~ 0x200;                    // a black color, we can't export this attribute for all other colors,
 
             if ( nInstance == 4 )                       // special handling for normal textobjects:
                 nPropertyFlags |= nCharAttr & 0x217;    // not all attributes ar inherited
