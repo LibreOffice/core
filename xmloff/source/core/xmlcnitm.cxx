@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcnitm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:31:44 $
+ *  last change: $Author: sab $ $Date: 2001-03-16 14:19:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ BOOL SvXMLAttrContainerItem_Impl::AddAttr( const OUString& rPrefix,
 }
 
 BOOL SvXMLAttrContainerItem_Impl::SetAt( USHORT i,
-            const NAMESPACE_RTL(OUString)& rLName, const NAMESPACE_RTL(OUString)& rValue )
+            const rtl::OUString& rLName, const rtl::OUString& rValue )
 {
     if( i >= GetAttrCount() )
         return FALSE;
@@ -171,8 +171,8 @@ BOOL SvXMLAttrContainerItem_Impl::SetAt( USHORT i,
 }
 
 BOOL SvXMLAttrContainerItem_Impl::SetAt( USHORT i,
-            const NAMESPACE_RTL(OUString)& rPrefix, const NAMESPACE_RTL(OUString)& rNamespace,
-            const NAMESPACE_RTL(OUString)& rLName, const NAMESPACE_RTL(OUString)& rValue )
+            const rtl::OUString& rPrefix, const rtl::OUString& rNamespace,
+            const rtl::OUString& rLName, const rtl::OUString& rValue )
 {
     if( i >= GetAttrCount() )
         return FALSE;
@@ -189,9 +189,9 @@ BOOL SvXMLAttrContainerItem_Impl::SetAt( USHORT i,
 }
 
 BOOL SvXMLAttrContainerItem_Impl::SetAt( USHORT i,
-            const NAMESPACE_RTL(OUString)& rPrefix,
-            const NAMESPACE_RTL(OUString)& rLName,
-            const NAMESPACE_RTL(OUString)& rValue )
+            const rtl::OUString& rPrefix,
+            const rtl::OUString& rLName,
+            const rtl::OUString& rValue )
 {
     if( i >= GetAttrCount() )
         return FALSE;

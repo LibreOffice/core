@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VisAreaContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-21 18:05:31 $
+ *  last change: $Author: sab $ $Date: 2001-03-16 14:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ using namespace com::sun::star;
 
 XMLVisAreaContext::XMLVisAreaContext( SvXMLImport& rImport,
                                               USHORT nPrfx,
-                                                   const NAMESPACE_RTL(OUString)& rLName,
+                                                   const rtl::OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                               Rectangle& rRect, const MapUnit aMapUnit ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
@@ -113,7 +113,7 @@ XMLVisAreaContext::XMLVisAreaContext( SvXMLImport& rImport,
 
 XMLVisAreaContext::XMLVisAreaContext( SvXMLImport& rImport,
                                          USHORT nPrfx,
-                                                   const NAMESPACE_RTL(OUString)& rLName,
+                                                   const rtl::OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                             ::com::sun::star::awt::Rectangle& rRect, const sal_Int16 nMeasureUnit ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
@@ -169,7 +169,7 @@ void XMLVisAreaContext::process( const uno::Reference< xml::sax::XAttributeList>
 }
 
 SvXMLImportContext *XMLVisAreaContext::CreateChildContext( USHORT nPrefix,
-                                     const NAMESPACE_RTL(OUString)& rLocalName,
+                                     const rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageHeaderFooterContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-25 15:00:52 $
+ *  last change: $Author: sab $ $Date: 2001-03-16 14:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ using namespace com::sun::star;
 
 PageHeaderFooterContext::PageHeaderFooterContext( SvXMLImport& rImport,
                                       USHORT nPrfx,
-                                      const NAMESPACE_RTL(OUString)& rLName,
+                                      const rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ::std::vector< XMLPropertyState > & rTempProperties,
@@ -107,7 +107,7 @@ PageHeaderFooterContext::~PageHeaderFooterContext()
 }
 
 SvXMLImportContext *PageHeaderFooterContext::CreateChildContext( USHORT nPrefix,
-                                            const NAMESPACE_RTL(OUString)& rLName,
+                                            const rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlprcon.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-25 11:46:38 $
+ *  last change: $Author: sab $ $Date: 2001-03-16 14:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ SvXMLImportContext *SvXMLPropertySetContext::CreateChildContext(
 */
 SvXMLImportContext *SvXMLPropertySetContext::CreateChildContext(
     USHORT nPrefix,
-    const NAMESPACE_RTL(OUString)& rLocalName,
+    const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
     ::std::vector< XMLPropertyState > &rProperties,
     const XMLPropertyState& rProp )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VisAreaContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-27 10:40:45 $
+ *  last change: $Author: sab $ $Date: 2001-03-16 14:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,12 +80,12 @@ class XMLVisAreaContext : public SvXMLImportContext
 {
 public:
     // read all attributes and set the values in rRect
-    XMLVisAreaContext( SvXMLImport& rImport, USHORT nPrfx, const NAMESPACE_RTL(OUString)& rLName,
+    XMLVisAreaContext( SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       Rectangle& rRect, const MapUnit aMapUnit);
 
-    XMLVisAreaContext( SvXMLImport& rImport, USHORT nPrfx, const NAMESPACE_RTL(OUString)& rLName,
+    XMLVisAreaContext( SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ::com::sun::star::awt::Rectangle& rRect, const sal_Int16 nMeasureUnit);
@@ -93,7 +93,7 @@ public:
     virtual ~XMLVisAreaContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                                    const NAMESPACE_RTL(OUString)& rLocalName,
+                                                    const rtl::OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
