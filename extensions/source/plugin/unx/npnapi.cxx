@@ -2,7 +2,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/npnapi.cxx,v 1.6 2004-03-17 10:15:31 obo Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/npnapi.cxx,v 1.7 2004-10-13 09:03:01 hr Exp $
 
 *************************************************************************/
 #include <plugin/unx/plugcon.hxx>
@@ -767,5 +767,23 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
         delete pMessage;
     }
     return 0;
+}
+
+void LoadAdditionalLibs( const char* pPluginLib )
+{
+    void *pLib;
+    medDebug( 1, "LoadAdditionalLibs %s\n", pPluginLib );
+
+    if( ! strncmp( pPluginLib, "libflashplayer.so", 17 ) )
+    {
+        /*  #b4951312# flash 7 implicitly assumes a gtk application
+         *  if the API version is greater or equal to 12 (probably
+         *  because they think they run in mozilla then). In that
+         *  case they try to find gtk within the process and crash
+         *  when they don't find it.
+         */
+        aNetscapeFuncs.version = 11;
+        aPluginFuncs.version = 11;
+    }
 }
 
