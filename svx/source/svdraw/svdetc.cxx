@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:19:49 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 14:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,9 @@
 #ifndef _SVX_EXTRUSION_BAR_HXX
 #include "extrusionbar.hxx"
 #endif
+#ifndef _SVX_FONTWORK_BAR_HXX
+#include "fontworkbar.hxx"
+#endif
 
 
 /******************************************************************************
@@ -190,6 +193,7 @@ SdrGlobalData::SdrGlobalData() :
     pLocaleData = pSysLocale->GetLocaleDataPtr();
 
     svx::ExtrusionBar::RegisterInterface();
+    svx::FontworkBar::RegisterInterface();
 }
 
 SdrGlobalData::~SdrGlobalData()
