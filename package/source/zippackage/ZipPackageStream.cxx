@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:42 $
+ *  last change: $Author: mtg $ $Date: 2001-04-19 14:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,16 @@
  ************************************************************************/
 
 #ifndef _ZIP_PACKAGE_STREAM_HXX
-#include "ZipPackageStream.hxx"
+#include <ZipPackageStream.hxx>
 #endif
+#ifndef _ZIP_FILE_HXX
+#include <ZipFile.hxx>
+#endif
+#ifndef _VOS_DIAGNOSE_H_
+#include <vos/diagnose.hxx>
+#endif
+
+
 
 using namespace com::sun::star;
 using namespace cppu;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageSink.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:41 $
+ *  last change: $Author: mtg $ $Date: 2001-04-19 14:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 #ifndef _ZIP_PACKAGE_SINK_HXX
-#include "ZipPackageSink.hxx"
+#include <ZipPackageSink.hxx>
 #endif
 
 ZipPackageSink::ZipPackageSink(void)

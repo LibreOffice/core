@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-26 10:33:35 $
+ *  last change: $Author: mtg $ $Date: 2001-04-19 14:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,44 +59,51 @@
  *
  ************************************************************************/
 #ifndef _ZIP_PACKAGE_HXX
-#include "ZipPackage.hxx"
+#include <ZipPackage.hxx>
+#endif
+#ifndef _ZIP_PACKAGE_SINK_HXX
+#include <ZipPackageSink.hxx>
+#endif
+#ifndef _ZIP_PACKAGE_STREAM_HXX
+#include <ZipPackageStream.hxx>
+#endif
+#ifndef _ZIP_PACKAGE_FOLDER_HXX
+#include <ZipPackageFolder.hxx>
+#endif
+#ifndef _ZIP_OUTPUT_STREAM_HXX
+#include <ZipOutputStream.hxx>
+#endif
+#ifndef _ZIP_FILE_HXX
+#include <ZipFile.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PACKAGES_ZIPCONSTANTS_HPP_
+#include <com/sun/star/packages/ZipConstants.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PACKAGES_MANIFEST_XMANIFESTREADER_HPP_
+#include <com/sun/star/packages/manifest/XManifestReader.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PACKAGES_MANIFEST_XMANIFESTWRITER_HPP_
+#include <com/sun/star/packages/manifest/XManifestWriter.hpp>
 #endif
 
 using namespace rtl;
+using namespace std;
 using namespace com::sun::star::io;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::util;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
-using namespace com::sun::star::packages;
 using namespace com::sun::star::lang;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::packages;
+using namespace com::sun::star::packages::manifest;
 using namespace com::sun::star::packages::ZipConstants;
-
-ZipPackage::ZipPackage (Reference < XInputStream > &xNewInput,
-                        const Reference < XMultiServiceFactory > &xNewFactory)
-: pContent(NULL)
-, pZipFile(NULL)
-, xZipFile (NULL)
-, pRootFolder(NULL)
-, xRootFolder (NULL)
-, xContentStream (xNewInput)
-, xContentSeek (xNewInput, UNO_QUERY)
-, xFactory(xNewFactory)
-{
-    try
-    {
-        pZipFile    = new ZipFile(xContentStream, sal_True);
-    }
-    catch (ZipException&)// rException)
-    {
-        VOS_ENSURE( 0, "ZipException thrown...bad ZipFile"); // rException.Message );
-    }
-
-    xZipFile    = Reference < XZipFile > ( pZipFile );
-    pRootFolder = new ZipPackageFolder( );
-    xRootFolder = Reference < XNameContainer > ( pRootFolder );
-    getZipFileContents();
-}
 
 ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 : pContent(NULL)
@@ -126,38 +133,6 @@ ZipPackage::~ZipPackage( void )
     pRootFolder->releaseUpwardRef();
 }
 
-void ZipPackage::destroyFolderTree( Reference < XUnoTunnel > xFolder )
-{
-
-    ZipPackageFolder *pCurrentFolder = reinterpret_cast < ZipPackageFolder* > (xFolder->getSomething(ZipPackageFolder::getUnoTunnelImplementationId()));
-    Reference < XEnumeration > xEnum = pCurrentFolder->createEnumeration();
-    while (xEnum->hasMoreElements())
-    {
-        Reference < XUnoTunnel > xTunnel;
-        Any aAny = xEnum->nextElement();
-
-        ZipPackageFolder *pFolder = NULL;
-        ZipPackageStream *pStream = NULL;
-        sal_Bool bIsFolder = sal_False;
-
-        aAny >>= xTunnel;
-        try
-        {
-            pFolder = reinterpret_cast < ZipPackageFolder* > (xTunnel->getSomething(ZipPackageFolder::getUnoTunnelImplementationId()));
-            bIsFolder = sal_True;
-        }
-        catch (RuntimeException&)
-        {
-            pStream = reinterpret_cast < ZipPackageStream* > (xTunnel->getSomething(ZipPackageStream::getUnoTunnelImplementationId()));
-            bIsFolder = sal_False;
-        }
-        if (bIsFolder)
-            destroyFolderTree(xTunnel);
-        else
-            pStream->release();
-    }
-}
-
 void ZipPackage::getZipFileContents()
 {
     Reference< XEnumeration > xEnum = pZipFile->entries();
@@ -166,7 +141,6 @@ void ZipPackage::getZipFileContents()
     ZipPackageFolder *pPkgFolder;
     ZipEntry aEntry;
     Any aAny;
-
     while (xEnum->hasMoreElements())
     {
         xCurrent  = xRootFolder;
@@ -238,43 +212,17 @@ void ZipPackage::getZipFileContents()
                 nOldIndex = nIndex+1;
             }
             OUString sStreamName = rName.copy( nOldIndex, rName.getLength() - nOldIndex);
-            /*
-             * disabled this funky but useless functionality on 8/03/2001 due to problems
-             * with copying streams - mtg
-             *
-             * It may be of some use to future generations :)
-            if (isZipFile(aEntry))
+            pPkgStream = new ZipPackageStream( pZipFile );
+            pPkgStream->bPackageMember = sal_True;
+            pPkgStream->setZipEntry( aEntry );
+            pPkgStream->setName( sStreamName );
+            try
             {
-                Reference < XInputStream > xContentStream = pZipFile->getInputStream(aEntry);
-                ZipPackage *pInZip = new ZipPackage (xContentStream, xFactory );
-                pPkgFolder = pInZip->getRootFolder();
-                pPkgFolder->setName(sStreamName);
-                pPkgFolder->pPackage = pInZip;
-                pPkgFolder->xPackage = Reference < XSingleServiceFactory > (pInZip);
-                try
-                {
-                    pPkgFolder->setParent( Reference < XInterface >(xCurrent, UNO_QUERY));
-                }
-                catch ( NoSupportException& )
-                {
-                    VOS_ENSURE( 0, "setParent threw an exception: attempted to set Parent to non-existing interface!");
-                }
+                pPkgStream->setParent( Reference < XInterface > (xCurrent, UNO_QUERY));
             }
-            else
-            */
+            catch ( NoSupportException& )
             {
-                pPkgStream = new ZipPackageStream( pZipFile );
-                pPkgStream->bPackageMember = sal_True;
-                pPkgStream->setZipEntry( aEntry );
-                pPkgStream->setName( sStreamName );
-                try
-                {
-                    pPkgStream->setParent( Reference < XInterface > (xCurrent, UNO_QUERY));
-                }
-                catch ( NoSupportException& )
-                {
-                    VOS_ENSURE( 0, "setParent threw an exception: attempted to set Parent to non-existing interface!");
-                }
+                VOS_ENSURE( 0, "setParent threw an exception: attempted to set Parent to non-existing interface!");
             }
         }
     }
@@ -287,14 +235,41 @@ void ZipPackage::getZipFileContents()
         Reference < XActiveDataSink > xSink (xTunnel, UNO_QUERY);
         if (xSink.is())
         {
-            try
+            OUString sManifestReader ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.ManifestReader" ) );
+            Reference < XManifestReader > xReader (xFactory->createInstance( sManifestReader ), UNO_QUERY );
+            if ( xReader.is() )
             {
-                ManifestReader aReader(*this, xSink->getInputStream(), xFactory);
-                aReader.Read();
-            }
-            catch ( com::sun::star::xml::sax::SAXException & )
-            {
-                VOS_ENSURE( 0,  "SAX threw an exception when reading XML Manifest!");
+                const OUString sFullPath ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
+                const OUString sMediaType ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
+                Sequence < Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
+                sal_Int32 nLength = aManifestSequence.getLength();
+                const Sequence < PropertyValue > *pSequence = aManifestSequence.getConstArray();
+
+
+                for (sal_Int32 i = 0; i < nLength ; i++, pSequence++)
+                {
+                    OUString sPath;
+                    Any aValueAny;
+                    const PropertyValue *pValue = pSequence->getConstArray();
+                    for (sal_Int32 j = 0, nNum = pSequence->getLength(); j < nNum; j++ )
+                    {
+                        if (pValue[j].Name.equals( sFullPath ) )
+                            pValue[j].Value >>= sPath;
+                        else if (pValue[j].Name.equals( sMediaType ) )
+                            aValueAny = pValue[j].Value;
+                    }
+                    if (sPath.getLength() && aValueAny.getValueTypeClass() == TypeClass_STRING)
+                    {
+                        if ( hasByHierarchicalName ( sPath ) )
+                        {
+                            Any aAny = getByHierarchicalName( sPath );
+                            Reference < XUnoTunnel > xTunnel;
+                            aAny >>= xTunnel;
+                            Reference < XPropertySet > xProps ( xTunnel, UNO_QUERY );
+                            xProps->setPropertyValue ( sMediaType, aValueAny );
+                        }
+                    }
+                }
             }
         }
     }
@@ -520,11 +495,12 @@ Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const 
 
     return xRef;
 }
-ZipPackageBuffer & SAL_CALL ZipPackage::writeToBuffer(  )
+
+// XChangesBatch
+void SAL_CALL ZipPackage::commitChanges(  )
         throw(WrappedTargetException, RuntimeException)
 {
-    std::vector < ManifestEntry * > aManList;
-    Any aAny;
+    std::vector < Sequence < PropertyValue > > aManList;
 
     // Set up output buffer. ZipPackageBuffer implements both
     // XInputStream and XOutputStream as the UCB requires an XInputStream
@@ -533,11 +509,16 @@ ZipPackageBuffer & SAL_CALL ZipPackage::writeToBuffer(  )
     ZipPackageBuffer *pZipBuffer = new ZipPackageBuffer( 65535 );
     Reference < XOutputStream > xOutStream (pZipBuffer);
     ZipOutputStream *pZipOut = new ZipOutputStream( xOutStream, 65535 );
+
+    // Make a reference to the manifest output stream so it persists
+    // until the call to ZipOutputStream->finish()
+
+    Reference < XOutputStream > xManOutStream;
+    ZipPackageStream *pManifestStream = NULL;
+
     Reference < XZipOutputStream > xZipOut (pZipOut);
     pZipOut->setMethod(DEFLATED);
     pZipOut->setLevel(DEFAULT_COMPRESSION);
-
-    sal_Bool bAddMetaFolder = sal_False;
 
     // Remove the old META-INF directory as this will be re-generated below.
     // Pass save-contents a vector which will be used to store the entries which
@@ -545,123 +526,78 @@ ZipPackageBuffer & SAL_CALL ZipPackage::writeToBuffer(  )
     // recursively.
 
     const OUString sMeta ( RTL_CONSTASCII_USTRINGPARAM ( "META-INF" ) );
+    const OUString sMediaType ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
+    const OUString sFullPath ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
     if (xRootFolder->hasByName( sMeta ) )
         xRootFolder->removeByName( sMeta );
 
-    ManifestEntry *pMan = new ManifestEntry;
-    ZipPackageFolder::copyZipEntry(pMan->aEntry, pRootFolder->aEntry);
-    pMan->aEntry.sName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
-    try
-    {
-        Any aAny = pRootFolder->getPropertyValue(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType") ) );
-        aAny >>= pMan->sMediaType;
-    }
-    catch (::com::sun::star::beans::UnknownPropertyException & )
-    {
-        VOS_ENSURE( 0, "MediaType is an unknown property!!" );
-    }
+    Sequence < PropertyValue > aPropSeq ( 2 );
+    aPropSeq [0].Name = sMediaType;
+    aPropSeq [0].Value <<= pRootFolder->getPropertyValue( sMediaType ) ;
+    aPropSeq [1].Name = sFullPath;
+    aPropSeq [1].Value <<= OUString ( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
 
-    aManList.push_back(pMan);
+    aManList.push_back( aPropSeq );
     pRootFolder->saveContents(OUString(), aManList, *pZipOut);
 
-    ZipPackageFolder *pMetaInfFolder = new ZipPackageFolder();
-    ZipPackageStream *pManifestStream = new ZipPackageStream( pZipFile );
-    aAny <<= Reference < XUnoTunnel > (pMetaInfFolder);
-    xRootFolder->insertByName(sMeta, aAny);
+    OUString sManifestWriter( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.ManifestWriter" ) );
+    Reference < XManifestWriter > xWriter (xFactory->createInstance( sManifestWriter ), UNO_QUERY );
+    if ( xWriter.is() )
+    {
+        ZipEntry * pEntry = new ZipEntry;
+        ZipPackageBuffer *pBuffer = new ZipPackageBuffer(65535);
+        xManOutStream = Reference < XOutputStream > (*pBuffer, UNO_QUERY);
 
-    ZipPackageBuffer *pBuffer = new ZipPackageBuffer(65535);
-    Reference < XOutputStream > xManOutStream (pBuffer);
+        pEntry->sName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "META-INF/manifest.xml") );
+        pEntry->nMethod = STORED;
 
-    pManifestStream->aEntry.sName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "META-INF/manifest.xml") );
-    pManifestStream->aEntry.nMethod = STORED;
-    pManifestStream->bPackageMember = sal_True;
+        Sequence < Sequence < PropertyValue > > aManifestSequence ( aManList.size());
+        Sequence < PropertyValue > * pSequence = aManifestSequence.getArray();
+        for (vector < Sequence < PropertyValue > >::const_iterator aIter = aManList.begin(), aEnd = aManList.end();
+             aIter != aEnd;
+             aIter++, pSequence++)
+            *pSequence= (*aIter);
+        xWriter->writeManifestSequence ( xManOutStream,  aManifestSequence );
 
+        pEntry->nSize = pEntry->nCompressedSize = static_cast < sal_Int32 > (pBuffer->getPosition());
+        pBuffer->aBuffer.realloc(pEntry->nSize);
+        CRC32 aCRC;
+        aCRC.update(pBuffer->aBuffer);
+        pEntry->nCrc = aCRC.getValue();
+
+        try
+        {
+            pZipOut->putNextEntry(*pEntry);
+            pZipOut->write(pBuffer->aBuffer, 0, pEntry->nSize);
+            pZipOut->closeEntry();
+        }
+        catch (::com::sun::star::io::IOException & )
+        {
+            VOS_ENSURE( 0, "Error adding META-INF/manifest.xml to the ZipOutputStream" );
+        }
+    }
     try
     {
-        ManifestWriter aWriter ( xManOutStream, xFactory, aManList);
-        aWriter.Write();
-    }
-    catch ( com::sun::star::xml::sax::SAXException & )
-    {
-        VOS_ENSURE( 0,  "SAX threw an exception when writing XML Manifest!");
-    }
-    pManifestStream->setInputStream(Reference < XInputStream > (xManOutStream, UNO_QUERY));
-
-    pManifestStream->aEntry.nSize = pManifestStream->aEntry.nCompressedSize = static_cast < sal_Int32 > (pBuffer->getPosition());
-    pBuffer->aBuffer.realloc(pManifestStream->aEntry.nSize);
-    CRC32 aCRC;
-    aCRC.update(pBuffer->aBuffer);
-    pManifestStream->aEntry.nCrc = aCRC.getValue();
-
-    try
-    {
-        pZipOut->putNextEntry(pManifestStream->aEntry);
-        pZipOut->write(pBuffer->aBuffer, 0, pManifestStream->aEntry.nSize);
-        pZipOut->closeEntry();
         pZipOut->finish();
     }
     catch (::com::sun::star::io::IOException & )
     {
-        VOS_ENSURE( 0, "Error writing ZipOutputStream" );
+        VOS_ENSURE( 0, "Error writing ZIP file to disk" );
     }
-
-    aAny <<= Reference < XUnoTunnel > (pManifestStream);
-    pMetaInfFolder->insertByName(OUString( RTL_CONSTASCII_USTRINGPARAM ( "manifest.xml") ) , aAny);
-    pManifestStream->aEntry.nOffset *=-1;
 
     xContentStream = Reference < XInputStream > (pZipBuffer);
     xContentSeek   = Reference < XSeekable > (pZipBuffer);
 
-    // If we have a valid pZipFile pointer, then we opened a stream
-    // earlier and read from it
-    // Otherwise we are writing a new ZipFile
-    pZipBuffer->seek(0);
-    /*
-    try
-    {
-        pZipFile    = new ZipFile(xContentStream, sal_False);
-        xZipFile    = Reference < XZipFile > ( pZipFile );
-        pRootFolder->updateReferences ( pZipFile );
-    }
-    catch (ZipException&)// rException)
-    {
-        VOS_ENSURE( 0, "ZipException thrown - bad ZipFile " );//rException.Message);
-    }
-    */
-
     pZipFile->setInputStream ( xContentStream );
-    pZipFile->updateFromManList( aManList );
-    for (sal_uInt32 i=0 ; i < aManList.size(); i++)
-    {
-        aManList[i]->aEntry.sName = aManList[i]->sShortName;
-        delete aManList[i];
-    }
-
     pZipBuffer->seek(0);
-        // If we are writing the zip file for the first time, pZipBuffer becomes
-        // the xContentStream. If so, it will have a refcount of 1 before the following
-        // call.
-        //
-        // Otherwise, it will have a refcount of 0, and will be deleted after the
-        // following call
-        //
-        // (at least...that's the plan!) mtg 6/12/00
-    return *pZipBuffer;
-    // Likewise, pBuffer and pZipOut will be deleted automagically due to the xZipOut and xOutStream
-}
-// XChangesBatch
-void SAL_CALL ZipPackage::commitChanges(  )
-        throw(WrappedTargetException, RuntimeException)
-{
     try
     {
-        pContent->writeStream(Reference < XInputStream > (&writeToBuffer()), sal_True);
+        pContent->writeStream( Reference < XInputStream > (pZipBuffer), sal_True );
     }
     catch (::com::sun::star::ucb::CommandAbortedException&)
     {
         VOS_ENSURE( 0, "Unable to write Zip File to disk!");
     }
-
 }
 
 sal_Bool SAL_CALL ZipPackage::hasPendingChanges(  )
@@ -675,151 +611,61 @@ Sequence< ElementChange > SAL_CALL ZipPackage::getPendingChanges(  )
     return Sequence < ElementChange > ( NULL, 0 );
 }
 
-sal_Bool ZipPackage::isZipFile(ZipEntry &rEntry)
-{
-    if (rEntry.nMethod == STORED)
-    {
-        if (rEntry.nSize < 98) // smallest possible zip file size
-            return sal_False;
-    }
-    return (pZipFile->getHeader(rEntry) == LOCSIG);
-}
-
 /**
  * Function to create a new component instance; is needed by factory helper implementation.
  * @param xMgr service manager to if the components needs other component instances
  */
-Reference < XInterface >SAL_CALL ZipPackage_create(
+Reference < XInterface >SAL_CALL ZipPackage_createInstance(
     const Reference< XMultiServiceFactory > & xMgr )
 {
     return Reference< XInterface >( *new ZipPackage(xMgr) );
-    //return Reference < XInterface > (NULL);
 }
 
-extern "C" void SAL_CALL component_getImplementationEnvironment(
-                const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+OUString ZipPackage::getImplementationName()
 {
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-Sequence< OUString > ZipPackage_getSupportedServiceNames()
-{
-    Sequence< OUString > seqNames(1);
 #if SUPD>625
-    seqNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.comp.ZipPackage" ) );
+    return OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.comp.ZipPackage" ) );
 #else
-    seqNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.package.Package" ) );
+    return OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.package.Package" ) );
 #endif
-
-    return seqNames;
 }
 
-/**
- * This function creates an implementation section in the registry and another subkey
- * for each supported service.
- * @param pServiceManager generic uno interface providing a service manager
- * @param pRegistryKey generic uno interface providing registry key to write
- */
-extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey )
+Sequence< OUString > ZipPackage::getSupportedServiceNames()
 {
-    if (pRegistryKey)
-    {
-        try
-        {
+    Sequence< OUString > aNames(1);
 #if SUPD>625
-            Reference< XRegistryKey > xNewKey(
-            reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                 OUString( RTL_CONSTASCII_USTRINGPARAM ( "/com.sun.star.packages.comp.ZipPackage/UNO/SERVICES" ) ) ) );
+    aNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.comp.ZipPackage" ) );
 #else
-            Reference< XRegistryKey > xNewKey(
-            reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                 OUString( RTL_CONSTASCII_USTRINGPARAM ( "/com.sun.star.package.Package/UNO/SERVICES" ) ) ) );
+    aNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.package.Package" ) );
 #endif
-
-            const Sequence< OUString > & rSNL = ZipPackage_getSupportedServiceNames();
-            const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
-           return sal_True;
-        }
-        catch ( InvalidRegistryException& )
-        {
-            VOS_ENSURE( 0, "InvalidRegistryException detected\n");
-            return sal_False;
-        }
-
-    }
-    return sal_False;
+    return aNames;
 }
-
-
-/**
- * This function is called to get service factories for an implementation.
- * @param pImplName name of implementation
- * @param pServiceManager generic uno interface providing a service manager to instantiate components
- * @param pRegistryKey registry data key to read and write component persistent data
- * @return a component factory (generic uno interface)
- */
-extern "C" void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+sal_Bool SAL_CALL ZipPackage::supportsService( OUString const & rServiceName )
 {
-    void * pRet = 0;
-    // which implementation is demanded?
-#if SUPD>625
-    if (pServiceManager && !rtl_str_compare( pImplName, "com.sun.star.packages.comp.ZipPackage" ))
-    {
-        Reference< XSingleServiceFactory > xFactory(
-           cppu::createSingleFactory( // helper function from cppuhelper lib
-           reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-           OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.packages.comp.ZipPackage") ),
-           ZipPackage_create, ZipPackage_getSupportedServiceNames() ) );
-
-        if (xFactory.is())
-        {
-           xFactory->acquire();
-           pRet = xFactory.get();
-        }
-    }
-#else
-    if (pServiceManager && !rtl_str_compare( pImplName, "com.sun.star.package.Package" ))
-    {
-        Reference< XSingleServiceFactory > xFactory(
-           cppu::createSingleFactory( // helper function from cppuhelper lib
-           reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-           OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.package.Package") ),
-           ZipPackage_create, ZipPackage_getSupportedServiceNames() ) );
-
-        if (xFactory.is())
-        {
-           xFactory->acquire();
-           pRet = xFactory.get();
-        }
-    }
-#endif
-    return pRet;
+    return rServiceName == getSupportedServiceNames()[0];
 }
+Reference < XSingleServiceFactory > ZipPackage::createServiceFactory( Reference < XMultiServiceFactory > const & rServiceFactory )
+{
+    return cppu::createSingleFactory (rServiceFactory,
+                                           getImplementationName(),
+                                           ZipPackage_createInstance,
+                                           getSupportedServiceNames());
+}
+
 //XInterface
 Any SAL_CALL ZipPackage::queryInterface( const Type& rType )
     throw(RuntimeException)
 {
-    // Ask for my own supported interfaces ...
-    Any aReturn ( ::cppu::queryInterface    (   rType                                       ,
-                                                static_cast< XInitialization*               > ( this )  ,
-                                                static_cast< XSingleServiceFactory*     > ( this )  ,
-                                                static_cast< XUnoTunnel*                    > ( this )  ,
-                                                static_cast< XHierarchicalNameAccess*> ( this ) ,
-                                                static_cast< XChangesBatch*             > ( this ) ) );
-
-    // If searched interface supported by this class ...
-    if ( aReturn.hasValue () == sal_True )
-    {
-        // ... return this information.
-        return aReturn ;
-    }
-    else
-    {
-        // Else; ... ask baseclass for interfaces!
-        return OWeakObject::queryInterface ( rType ) ;
-    }
+        return ::cppu::queryInterface ( rType                                       ,
+                                        // OWeakObject interfaces
+                                        reinterpret_cast< XInterface*       > ( this )  ,
+                                        static_cast< XWeak*         > ( this )  ,
+                                        // my own interfaces
+                                        static_cast< XInitialization*       > ( this )  ,
+                                        static_cast< XSingleServiceFactory*     > ( this )  ,
+                                        static_cast< XUnoTunnel*        > ( this )  ,
+                                        static_cast< XHierarchicalNameAccess*       > ( this )  ,
+                                        static_cast< XChangesBatch* > ( this ) );
 }
 
 void SAL_CALL ZipPackage::acquire(  )

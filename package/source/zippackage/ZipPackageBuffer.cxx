@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageBuffer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:41 $
+ *  last change: $Author: mtg $ $Date: 2001-04-19 14:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 #ifndef _ZIP_PACKAGE_BUFFER_HXX
-#include "ZipPackageBuffer.hxx"
+#include <ZipPackageBuffer.hxx>
 #endif
 
 using namespace com::sun::star::uno;
@@ -78,14 +78,15 @@ ZipPackageBuffer::~ZipPackageBuffer(void)
 Any SAL_CALL  ZipPackageBuffer::queryInterface( const Type& rType )
         throw(RuntimeException)
 {
-    Any aReturn( ::cppu::queryInterface
-                (   rType, static_cast< com::sun::star::io::XInputStream*>  ( this ),
-                           static_cast< com::sun::star::io::XSeekable*> ( this ),
-                           static_cast< com::sun::star::io::XOutputStream*> ( this )));
-    if ( aReturn.hasValue () == sal_True )
-        return aReturn ;
-    else
-        return OWeakObject::queryInterface ( rType ) ;
+    return ::cppu::queryInterface ( rType                                       ,
+                                        // OWeakObject interfaces
+                                        reinterpret_cast< XInterface*       > ( this )  ,
+                                        static_cast< XWeak*         > ( this )  ,
+                                        // my interfaces
+                                        static_cast< XInputStream*      > ( this )  ,
+                                        static_cast< XSeekable*     > ( this )  ,
+                                        static_cast< XOutputStream*     > ( this ) );
+
 }
 void SAL_CALL  ZipPackageBuffer::acquire(void)
     throw()

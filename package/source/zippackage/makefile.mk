@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: mtg $ $Date: 2001-01-10 19:15:28 $
+#   last change: $Author: mtg $ $Date: 2001-04-19 14:16:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,11 +80,6 @@ SLOFILES= \
         $(SLO)$/ZipPackageBuffer.obj	\
         $(SLO)$/ZipPackageEntry.obj	\
         $(SLO)$/ZipPackageFolder.obj	\
-        $(SLO)$/ManifestExport.obj				\
-        $(SLO)$/ManifestWriter.obj				\
-        $(SLO)$/ManifestReader.obj				\
-        $(SLO)$/ManifestImport.obj				\
-        $(SLO)$/AttributeList.obj				\
         $(SLO)$/ZipPackageFolderEnumeration.obj	\
         $(SLO)$/ZipPackageSink.obj	\
         $(SLO)$/ZipPackageStream.obj
@@ -95,21 +90,12 @@ CPPUMAKERFLAGS=
 #UNOUCROUT=$(OUT)$/inc
 #INCPRE+=$(UNOUCROUT)
 
-UNOUCRDEP=  $(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=  $(SOLARBINDIR)$/applicat.rdb
+UNOUCRDEP=  $(SOLARBINDIR)$/offapi.rdb
+UNOUCRRDB=  $(SOLARBINDIR)$/offapi.rdb
 
 UNOTYPES=\
-    com.sun.star.io.XSeekable \
-    com.sun.star.io.XOutputStream \
-    com.sun.star.lang.XInitialization \
-    com.sun.star.container.XHierarchicalNameAccess \
-    com.sun.star.lang.XSingleServiceFactory \
-    com.sun.star.util.XChangesBatch \
-    com.sun.star.container.XEnumeration \
-    com.sun.star.container.XNamed \
-    com.sun.star.container.XNameContainer \
-    com.sun.star.container.XEnumerationAccess \
-    com.sun.star.io.XActiveDataSink 
+    com.sun.star.packages.manifest.XManifestReader \
+    com.sun.star.packages.manifest.XManifestWriter
 
 # --- Targets ------------------------------------------------------
 
