@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:46:02 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,7 +321,7 @@ SwFmDrawPage::~SwFmDrawPage() throw ()
 const SdrMarkList&  SwFmDrawPage::PreGroup(const uno::Reference< drawing::XShapes > & xShapes)
 {
     _SelectObjectsInView( xShapes, GetPageView() );
-    const SdrMarkList& rMarkList = pView->GetMarkList();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     return rMarkList;
 }
 /*-- 22.01.99 11:13:08---------------------------------------------------
@@ -771,7 +771,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
                     pDoc->StartUndo( UNDO_START );
 
                     SwDrawContact* pContact = pDoc->GroupSelection( *pPage->GetDrawView() );
-                    pDoc->ChgAnchor( pPage->GetDrawView()->GetMarkList(), FLY_AT_CNTNT/*int eAnchorId*/,
+                    pDoc->ChgAnchor( pPage->GetDrawView()->GetMarkedObjectList(), FLY_AT_CNTNT/*int eAnchorId*/,
                         sal_True, sal_False );
 
                     pPage->GetDrawView()->UnmarkAll();
@@ -806,7 +806,7 @@ void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & xShapeG
             pDoc->StartUndo( UNDO_START );
 
             pDoc->UnGroupSelection( *pPage->GetDrawView() );
-            pDoc->ChgAnchor( pPage->GetDrawView()->GetMarkList(), FLY_AT_CNTNT/*int eAnchorId*/,
+            pDoc->ChgAnchor( pPage->GetDrawView()->GetMarkedObjectList(), FLY_AT_CNTNT/*int eAnchorId*/,
                         sal_True, sal_False );
             pDoc->EndUndo( UNDO_END );
         }
