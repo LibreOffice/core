@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:52:17 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:08:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,6 +505,9 @@ public:
                long nFlags = 0 );
     virtual ~ViewShell();
 
+    // --> FME 2004-06-15 #i12836# enhanced pdf export
+    sal_Int32 GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwRect& rRect ) const;
+    // <--
     inline bool IsInConstructor() const
     {
         return mbInConstructor;
