@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCellRangeFormula.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:11:02 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ module com {  module sun {  module star {  module sheet {
     @since #107627#
  */
 
-interface XCellRangeFormula: com::sun::star::uno::XInterface
+published interface XCellRangeFormula: com::sun::star::uno::XInterface
 {
     /** gets an array from the contents of the cell range.
 
