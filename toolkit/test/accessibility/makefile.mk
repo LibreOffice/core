@@ -42,6 +42,7 @@ JAVA_FILES = \
     AccessibleHypertextHandler.java	\
     AccessibleImageHandler.java	\
     AccessibleObject.java		\
+    AccessibleSelectionHandler.java	\
     AccessibleTableHandler.java	\
     AccessibleTextHandler.java	\
     AccessibleTreeCellRenderer.java		\
