@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:31:17 $
+ *  last change: $Author: pb $ $Date: 2002-01-10 11:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@ ModalDialog DLG_VERSIONS
     Text [ English ] = "Versions in" ;
     SvLook = TRUE ;
     Moveable = TRUE ;
-    Closeable = TRUE ;
+//! Closeable = TRUE ;
     FixedLine GB_NEWVERSIONS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
@@ -87,7 +87,7 @@ ModalDialog DLG_VERSIONS
         Text[ chinese_simplified ] = "ζ–°η‰ζ¬";
         Text[ russian ] = "Νξβϋε βεπρθθ";
         Text[ polish ] = "Nowe wersje";
-        Text[ japanese ] = "ζ–°γ—γ„οΎοΎο½°ο½ΌοΎο½®οΎ";
+        Text[ japanese ] = "ζ–°γ—γ„γƒγƒΌγ‚Έγƒ§γƒ³";
         Text[ chinese_traditional ] = "ζ–°η‰ζ¬";
         Text[ arabic ] = "ΕΥΟΗΡΗΚ ΜΟνΟΙ";
         Text[ greek ] = "Νέες εκδόσεις";
@@ -95,12 +95,12 @@ ModalDialog DLG_VERSIONS
         Text[ turkish ] = "Yeni sόrόmler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nuevas versiones";
-        Text[ finnish ] = "New versions";
+        Text[ finnish ] = "Uudet versiot";
     };
     PushButton PB_SAVE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 80 , 14 ) ;
+        Size = MAP_APPFONT ( 90 , 14 ) ;
         Text = "~Neue Version speichern" ;
         Text [ English ] = "~Save new version" ;
         TabStop = TRUE ;
@@ -116,7 +116,7 @@ ModalDialog DLG_VERSIONS
         Text[ chinese_simplified ] = "δΏε­ζ–°η‰ζ¬(~N)";
         Text[ russian ] = "Ρξυπΰνθςό νξβσώ βεπρθώ";
         Text[ polish ] = "Zapisz nowΉ wersjκ";
-        Text[ japanese ] = "ζ–°γ—γ„οΎοΎο½°ο½ΌοΎο½®οΎγ®δΏε­(~N)";
+        Text[ japanese ] = "ζ–°γ—γ„γƒγƒΌγ‚Έγƒ§γƒ³γ®δΏε­(~N)";
         Text[ chinese_traditional ] = "δΏε­ζ–°η‰ζ¬(~N)";
         Text[ arabic ] = "ΝέΩ ΗαΕΥΟΗΡ ΗαΜΟνΟ";
         Text[ greek ] = "Αποθήκευση νέας έκδοσης";
@@ -128,8 +128,8 @@ ModalDialog DLG_VERSIONS
     };
     CheckBox CB_SAVEONCLOSE
     {
-        Pos = MAP_APPFONT ( 131 , 16 ) ;
-        Size = MAP_APPFONT ( 144 , 10 ) ;
+        Pos = MAP_APPFONT ( 108 , 16 ) ;
+        Size = MAP_APPFONT ( 164 , 10 ) ;
         Text = "~Beim Schlieίen immer Version speichern" ;
         Text [ English ] = "~Always save a version on closing" ;
         TabStop = TRUE ;
@@ -137,7 +137,7 @@ ModalDialog DLG_VERSIONS
         Text [ portuguese_brazilian ] = "~Beim Schlie?en immer Version speichern" ;
         Text [ swedish ] = "~Spara alltid en version vid stδngning" ;
         Text [ danish ] = "Gem version altid ved lukning" ;
-        Text [ italian ] = "~Salva sempre la versione quando chiudi" ;
+        Text [ italian ] = "Salva sempre la versione ~quando chiudi" ;
         Text [ spanish ] = "Guardar ~versiσn siempre al cerrar" ;
         Text [ french ] = "~Toujours enregistrer une version lors de la fermeture" ;
         Text [ dutch ] = "~Bij sluiten altijd versie opslaan" ;
@@ -145,7 +145,7 @@ ModalDialog DLG_VERSIONS
         Text[ chinese_simplified ] = "ε¨ε…³ι—­ζ—¶θ‡ªε¨δΏε­η‰ζ¬δΏ΅ζ―(~A)";
         Text[ russian ] = "Οπθ ηΰκπϋςθθ βρεγδΰ ρξυπΰνÿςό βεπρθώ";
         Text[ polish ] = "Zawsze zapisuj wersjκ przy zamykaniu";
-        Text[ japanese ] = "ι–‰γγ‚‹γ¨γγ€εΈΈγ«οΎοΎο½°ο½ΌοΎο½®οΎγ®δΏε­(~A)";
+        Text[ japanese ] = "ι–‰γγ‚‹γ¨γγ€εΈΈγ«γƒγƒΌγ‚Έγƒ§γƒ³γ®δΏε­(~A)";
         Text[ chinese_traditional ] = "ε¨ι—ι–‰ζ™‚θ‡ªε‹•δΏε­η‰ζ¬θ³‡θ¨(~A)";
         Text[ arabic ] = "ΝέΩ ΗαΕΥΟΗΡ ΟΗΖγΗπ ΪδΟ ΗαΕΫαΗή";
         Text[ greek ] = "Κατά το κλείσιμο να αποθηκεύεται πάντα η έκδοση";
@@ -173,7 +173,7 @@ ModalDialog DLG_VERSIONS
         Text[ chinese_simplified ] = "η°ε­η„η‰ζ¬";
         Text[ russian ] = "Θμεώωθερÿ βεπρθθ";
         Text[ polish ] = "IstniejΉce wersje";
-        Text[ japanese ] = "ζ—Άε­γ®οΎοΎο½°ο½ΌοΎο½®οΎ";
+        Text[ japanese ] = "ζ—Άε­γ®γƒγƒΌγ‚Έγƒ§γƒ³";
         Text[ chinese_traditional ] = "ηΎε­η„η‰ζ¬";
         Text[ arabic ] = "ΗαΕΥΟΗΡΗΚ ΗαγζΜζΟΙ";
         Text[ greek ] = "Υπάρχουσες εκδόσεις";
@@ -181,7 +181,7 @@ ModalDialog DLG_VERSIONS
         Text[ turkish ] = "Mevcut sόrόmler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Versiones existentes";
-        Text[ finnish ] = "Existing versions";
+        Text[ finnish ] = "Nykyiset versiot";
     };
     FixedText FT_DATETIME
     {
@@ -257,7 +257,7 @@ ModalDialog DLG_VERSIONS
         Text[ chinese_simplified ] = "ζ³¨θ§£";
         Text[ russian ] = "Κξμμενςΰπθι";
         Text[ polish ] = "Komentarz";
-        Text[ japanese ] = "ο½ΊοΎ’οΎοΎ„";
+        Text[ japanese ] = "γ‚³γƒ΅γƒ³γƒ";
         Text[ chinese_traditional ] = "θ¨»θ§£";
         Text[ arabic ] = "ΚΪανή";
         Text[ greek ] = "Σχόλιο";
@@ -274,7 +274,7 @@ ModalDialog DLG_VERSIONS
         Size = MAP_APPFONT ( 260 , 114 ) ;
         TabStop = TRUE ;
     };
-    PushButton PB_CLOSE
+    CancelButton PB_CLOSE
     {
         Pos = MAP_APPFONT ( 284 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
@@ -356,7 +356,7 @@ ModalDialog DLG_VERSIONS
         Text[ chinese_traditional ] = "ι΅―η¤Ί(~S)...";
         Text[ arabic ] = "ΕΩεΗΡ...";
         Text[ greek ] = "Εμφάνιση...";
-        Text[ korean ] = "λ³΄μ΄κΈ°(~S)...";
+        Text[ korean ] = "ν‘μ‹(~S)...";
         Text[ turkish ] = "~Gφrόntόle...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mostrar...";
@@ -438,7 +438,7 @@ ModalDialog DLG_VERSIONS
     Text[ chinese_simplified ] = "η‰ζ¬";
     Text[ russian ] = "Βεπρθθ β";
     Text[ polish ] = "Wersje w";
-    Text[ japanese ] = "οΎοΎο½°ο½ΌοΎο½®οΎ";
+    Text[ japanese ] = "γƒγƒΌγ‚Έγƒ§γƒ³";
     Text[ chinese_traditional ] = "η‰ζ¬ε¨";
     Text[ arabic ] = "ΕΥΟΗΡΗΚ έν";
     Text[ language_user1 ] = "LS 16.07.99: Erkl?ung laut Help Agent: In der Titelleiste des Dialogs sehen Sie hinter \"Versionen in\" den Dateinamen ohne Pfad oder (wenn gesetzt) den Titel des Dokuments. (z.B. \"Versionen in brief.sdw\". (Warum nicht eher Versionen VON?)";
@@ -543,7 +543,7 @@ ModalDialog DLG_COMMENTS
         Text [ portuguese_brazilian ] = "~Schlie?en" ;
         Text [ swedish ] = "~Stδng" ;
         Text [ danish ] = "Luk" ;
-        Text [ italian ] = "~Chiudi" ;
+        Text [ italian ] = "C~hiudi" ;
         Text [ spanish ] = "~Cerrar" ;
         Text [ french ] = "~Fermer" ;
         Text [ dutch ] = "~Sluiten" ;
@@ -579,7 +579,7 @@ ModalDialog DLG_COMMENTS
     Text[ chinese_simplified ] = "ι”®ε…¥η‰ζ¬ζ³¨θ§£";
     Text[ russian ] = "Ββερςθ κξμμενςΰπθι κ βεπρθθ";
     Text[ polish ] = "Wprowad komentarz do wersji";
-    Text[ japanese ] = "οΎοΎο½°ο½ΌοΎο½®οΎο½ΊοΎ’οΎοΎ„γ®ε…¥ε›";
+    Text[ japanese ] = "γƒγƒΌγ‚Έγƒ§γƒ³γ‚³γƒ΅γƒ³γƒγ®ε…¥ε›";
     Text[ chinese_traditional ] = "θΌΈε…¥η‰ζ¬θ¨»θ§£";
     Text[ arabic ] = "ΕΟΡΗΜ ΚΪανή ΗαΕΥΟΗΡ";
     Text[ greek ] = "Εισαγωγή σχολίου έκδοσης";
@@ -605,7 +605,7 @@ String DLG_COMMENTS
     Text[ chinese_simplified ] = "η‰ζ¬ζ³¨θ§£";
     Text[ russian ] = "Κξμμενςΰπθι κ βεπρθθ";
     Text[ polish ] = "Komentarz do wersji";
-    Text[ japanese ] = "οΎοΎο½°ο½ΌοΎο½®οΎο½ΊοΎ’οΎοΎ„";
+    Text[ japanese ] = "γƒγƒΌγ‚Έγƒ§γƒ³γ‚³γƒ΅γƒ³γƒ";
     Text[ chinese_traditional ] = "η‰ζ¬θ¨»θ§£";
     Text[ arabic ] = "ΚΪανή ΗαΕΥΟΗΡ";
     Text[ greek ] = "Σχόλιο έκδοσης";
@@ -615,14 +615,4 @@ String DLG_COMMENTS
     Text[ catalan ] = "Comentario sobre la versiσn";
     Text[ finnish ] = "Versiohuomautus";
 };
-
-
-
-
-
-
-
-
-
-
 
