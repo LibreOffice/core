@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optiongrouplayouter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:30 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:04:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,9 +187,9 @@ namespace dbp
         ::rtl::OUString sElementsName = ::rtl::OUString::createFromAscii("RadioGroup");
         disambiguateName(Reference< XNameAccess >(_rContext.xForm, UNO_QUERY), sElementsName);
 
-        const String* pLabels = _rSettings.aLabels.begin();
-        const String* pValues = _rSettings.aValues.begin();
-        for (sal_Int32 i=0; i<nRadioButtons; ++i, ++pLabels, ++pValues)
+        StringArray::const_iterator aLabelIter = _rSettings.aLabels.begin();
+        StringArray::const_iterator aValueIter = _rSettings.aValues.begin();
+        for (sal_Int32 i=0; i<nRadioButtons; ++i, ++aLabelIter, ++aValueIter)
         {
             aButtonPosition.Y = aShapePosition.Y + (i+1) * nTempHeight + nTopSpace;
 
@@ -198,12 +198,12 @@ namespace dbp
                 UNO_QUERY);
 
             // the label
-            xRadioModel->setPropertyValue(::rtl::OUString::createFromAscii("Label"), makeAny(::rtl::OUString(*pLabels)));
+            xRadioModel->setPropertyValue(::rtl::OUString::createFromAscii("Label"), makeAny(rtl::OUString(*aLabelIter)));
             // the value
-            xRadioModel->setPropertyValue(::rtl::OUString::createFromAscii("RefValue"), makeAny(::rtl::OUString(*pValues)));
+            xRadioModel->setPropertyValue(::rtl::OUString::createFromAscii("RefValue"), makeAny(rtl::OUString(*aValueIter)));
 
             // default selection
-            if (_rSettings.sDefaultField == *pLabels)
+            if (_rSettings.sDefaultField == *aLabelIter)
                 xRadioModel->setPropertyValue(::rtl::OUString::createFromAscii("DefaultState"), makeAny(sal_Int16(1)));
 
             // the connection to the database field
