@@ -77,7 +77,7 @@ rtl::OUString SAL_CALL
 XInputStream_impl::getImplementationName()
     throw(uno::RuntimeException)
 {
-    return rtl::OUString();
+    return rtl::OUString::createFromAscii("com.sun.star.io.comp.XInputStream");
 }
 
 
