@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:37:35 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,7 +429,9 @@ static ULONG SwDocStat::* __READONLY_DATA aDocStat2[ 4 ] =
 
     SwSbxValue nVal;
     String sTmpStr;
-    for( USHORT n = 0; n < 25; ++n )
+    USHORT n;
+
+    for( n = 0; n < 25; ++n )
     {
         sTmpStr.AssignAscii( sNTypeTab[ n ] );
         VarTable[ aHashValue[ n ] ] = new SwCalcExp( sTmpStr, nVal, 0 );
