@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:31:09 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:49:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ struct XclRootData
     String                      maDocUrl;       /// Document URL of imported/exported file.
     String                      maBasePath;     /// Base path of imported/exported file (path of maDocUrl).
     CharSet                     meCharSet;      /// Character set to import/export byte strings.
+    LanguageType                meSysLang;      /// System language.
     LanguageType                meDocLang;      /// Document language (import: from file, export: from system).
     LanguageType                meUILang;       /// UI language (import: from file, export: from system).
     ScAddress                   maScMaxPos;     /// Highest Calc cell position.
@@ -154,7 +155,9 @@ public:
     inline const XclRoot&       GetRoot() const { return *this; }
     /** Returns the current BIFF version of the importer/exporter. */
     inline XclBiff              GetBiff() const { return mrData.meBiff; }
-    /** Returns the document language, i.e. for number formats. */
+    /** Returns the system language, i.e. for number formats. */
+    inline LanguageType         GetSysLanguage() const { return mrData.meSysLang; }
+    /** Returns the document language. */
     inline LanguageType         GetDocLanguage() const { return mrData.meDocLang; }
     /** Returns the UI language. */
     inline LanguageType         GetUILanguage() const { return mrData.meUILang; }
@@ -213,7 +216,7 @@ protected:
 
     /** Sets the BIFF version. */
     void                        SetBiff( XclBiff eBiff );
-    /** Sets the document language, i.e. for number formats. */
+    /** Sets the document language. */
     inline void                 SetDocLanguage( LanguageType eLang ) { mrData.meDocLang = eLang; }
     /** Sets the UI language, i.e. if it has been read from a file. */
     inline void                 SetUILanguage( LanguageType eLang ) { mrData.meUILang = eLang; }
