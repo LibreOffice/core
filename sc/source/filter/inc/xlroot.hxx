@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:43:20 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ struct XclRootData
     ScAddress                   maScMaxPos;     /// Highest Calc cell position.
     ScAddress                   maXclMaxPos;    /// Highest Excel cell position.
     long                        mnCharWidth;    /// Width of '0' in default font (twips).
-    sal_uInt16                  mnScTab;        /// Current Calc sheet index.
+    SCTAB                       mnScTab;        /// Current Calc sheet index.
     bool                        mbTruncated;    /// Flag for the table truncated warning box.
 
     ScEditEngineDefaulterPtr    mpEditEngine;   /// Edit engine for rich strings etc.
@@ -162,7 +162,7 @@ public:
     /** Returns the UI language. */
     inline LanguageType         GetUILanguage() const { return mrData.meUILang; }
     /** Returns the current Calc sheet index. */
-    inline sal_uInt16           GetScTab() const { return mrData.mnScTab; }
+    inline SCTAB                GetScTab() const { return mrData.mnScTab; }
     /** Returns whether the "some cells have been cut" warning box should show. */
     inline bool                 IsTruncated() const { return mrData.mbTruncated; }
 
