@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-08-10 18:02:39 $
+ *  last change: $Author: nn $ $Date: 2001-10-19 15:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -819,6 +819,7 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
             pEngine->SetRefDevice( pDev );
             pEngine->SetForbiddenCharsTable( pDocument->GetForbiddenCharacters() );
             pEngine->SetAsianCompressionMode( pDocument->GetAsianCompression() );
+            pEngine->SetKernAsianPunctuation( pDocument->GetAsianKerning() );
             SfxItemSet* pSet = new SfxItemSet( pEngine->GetEmptyItemSet() );
             pPattern->FillEditItemSet( pSet, pCondSet );
             pEngine->SetDefaults( pSet );
@@ -1381,6 +1382,7 @@ void ScColumn::RemoveEditAttribs( USHORT nStartRow, USHORT nEndRow )
                 pEngine->SetControlWord( pEngine->GetControlWord() | EE_CNTRL_ONLINESPELLING );
                 pEngine->SetForbiddenCharsTable( pDocument->GetForbiddenCharacters() );
                 pEngine->SetAsianCompressionMode( pDocument->GetAsianCompression() );
+                pEngine->SetKernAsianPunctuation( pDocument->GetAsianKerning() );
             }
             pEngine->SetText( *pData );
             USHORT nParCount = pEngine->GetParagraphCount();

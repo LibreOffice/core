@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-02 18:16:22 $
+ *  last change: $Author: nn $ $Date: 2001-10-19 15:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,6 +289,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
 
         pDrawLayer->SetForbiddenCharsTable( xForbiddenCharacters );
         pDrawLayer->SetCharCompressType( GetAsianCompression() );
+        pDrawLayer->SetKernAsianPunctuation( GetAsianKerning() );
     }
 }
 
@@ -931,5 +932,27 @@ void ScDocument::SetAsianCompression(BYTE nNew)
         pEditEngine->SetAsianCompressionMode( nAsianCompression );
     if ( pDrawLayer )
         pDrawLayer->SetCharCompressType( nAsianCompression );
+}
+
+BOOL ScDocument::IsValidAsianKerning() const
+{
+    return ( nAsianKerning != SC_ASIANKERNING_INVALID );
+}
+
+BOOL ScDocument::GetAsianKerning() const
+{
+    if ( nAsianKerning == SC_ASIANKERNING_INVALID )
+        return FALSE;
+    else
+        return (BOOL)nAsianKerning;
+}
+
+void ScDocument::SetAsianKerning(BOOL bNew)
+{
+    nAsianKerning = (BYTE)bNew;
+    if ( pEditEngine )
+        pEditEngine->SetKernAsianPunctuation( (BOOL)nAsianKerning );
+    if ( pDrawLayer )
+        pDrawLayer->SetKernAsianPunctuation( (BOOL)nAsianKerning );
 }
 

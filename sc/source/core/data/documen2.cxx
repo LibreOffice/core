@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: er $ $Date: 2001-10-08 18:40:50 $
+ *  last change: $Author: nn $ $Date: 2001-10-19 15:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,6 +375,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pDPCollection( NULL ),
         pScriptTypeData( NULL ),
         nAsianCompression(SC_ASIANCOMPRESSION_INVALID),
+        nAsianKerning(SC_ASIANKERNING_INVALID),
         pLoadedSymbolStringCellList( NULL )
 {
     eSrcSet = gsl_getSystemTextEncoding();

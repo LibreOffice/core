@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-10 14:58:17 $
+ *  last change: $Author: nn $ $Date: 2001-10-19 16:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1666,6 +1666,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                             pEngine->SetControlWord( nCtrl );
                             pEngine->SetForbiddenCharsTable( pDoc->GetForbiddenCharacters() );
                             pEngine->SetAsianCompressionMode( pDoc->GetAsianCompression() );
+                            pEngine->SetKernAsianPunctuation( pDoc->GetAsianKerning() );
                         }
                         else
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(FALSE)
@@ -2445,6 +2446,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                             pEngine->SetControlWord( nCtrl );
                             pEngine->SetForbiddenCharsTable( pDoc->GetForbiddenCharacters() );
                             pEngine->SetAsianCompressionMode( pDoc->GetAsianCompression() );
+                            pEngine->SetKernAsianPunctuation( pDoc->GetAsianKerning() );
                         }
                         else
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(FALSE)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-18 20:25:16 $
+ *  last change: $Author: nn $ $Date: 2001-10-19 15:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,7 @@ typedef Table SvULONGTable;
 #define SC_MACROCALL_ASK            2
 
 #define SC_ASIANCOMPRESSION_INVALID     0xff
+#define SC_ASIANKERNING_INVALID         0xff
 
 
 enum ScDocumentMode
@@ -463,6 +464,7 @@ private:
     BYTE                nVisSpellState;
 
     BYTE                nAsianCompression;
+    BYTE                nAsianKerning;
 
     inline BOOL         RowHidden( USHORT nRow, USHORT nTab );      // FillInfo
 
@@ -1375,6 +1377,10 @@ public:
     BYTE            GetAsianCompression() const;        // CharacterCompressionType values
     BOOL            IsValidAsianCompression() const;
     void            SetAsianCompression(BYTE nNew);
+
+    BOOL            GetAsianKerning() const;
+    BOOL            IsValidAsianKerning() const;
+    void            SetAsianKerning(BOOL bNew);
 
     ScLkUpdMode     GetLinkMode() const             { return eLinkMode ;}
     void            SetLinkMode( ScLkUpdMode nSet ) {   eLinkMode  = nSet;}

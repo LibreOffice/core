@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-28 17:17:59 $
+ *  last change: $Author: nn $ $Date: 2001-10-19 16:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ const SfxItemPropertyMap* lcl_GetConfigPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_APPLYDOCINF),  0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SC_UNO_FORBIDDEN),    0,  &getCppuType((uno::Reference<i18n::XForbiddenCharacters>*)0), beans::PropertyAttribute::READONLY},
         {MAP_CHAR_LEN(SC_UNO_CHARCOMP),     0,  &getCppuType((sal_Int16*)0),        0},
+        {MAP_CHAR_LEN(SC_UNO_ASIANKERN),    0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SCSAVEVERSION),       0,  &getBooleanCppuType(),              0},
         {0,0,0,0}
     };
@@ -182,6 +183,8 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
         ScDocument* pDoc = pDocShell->GetDocument();
         if (pDoc)
         {
+            sal_Bool bUpdateHeights = sal_False;
+
             ScViewOptions aViewOpt(pDoc->GetViewOptions());
             if ( aPropertyName.compareToAscii( SC_UNO_SHOWZERO ) == 0 )
                 aViewOpt.SetOption(VOPT_NULLVALS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
@@ -259,15 +262,12 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 // Int16 contains CharacterCompressionType values
                 sal_Int16 nUno = ScUnoHelpFunctions::GetInt16FromAny( aValue );
                 pDoc->SetAsianCompression( (BYTE) nUno );
-                if ( !pDoc->IsImportingXML() )
-                {
-                    //  update automatic row heights and repaint
-                    USHORT nTabCount = pDoc->GetTableCount();
-                    for (USHORT nTab=0; nTab<nTabCount; nTab++)
-                        if ( !pDocShell->AdjustRowHeight( 0, MAXROW, nTab ) )
-                            pDocShell->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID );
-                    pDocShell->SetDocumentModified();
-                }
+                bUpdateHeights = sal_True;
+            }
+            else if ( aPropertyName.compareToAscii( SC_UNO_ASIANKERN ) == 0 )
+            {
+                pDoc->SetAsianKerning( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+                bUpdateHeights = sal_True;
             }
             else if ( aPropertyName.compareToAscii( SCSAVEVERSION ) == 0)
                 pDocShell->GetDocInfo().SetSaveVersionOnClose( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
@@ -293,6 +293,16 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 aViewOpt.SetGridOptions(aGridOpt);
             }
             pDoc->SetViewOptions(aViewOpt);
+
+            if ( bUpdateHeights && !pDoc->IsImportingXML() )
+            {
+                //  update automatic row heights and repaint
+                USHORT nTabCount = pDoc->GetTableCount();
+                for (USHORT nTab=0; nTab<nTabCount; nTab++)
+                    if ( !pDocShell->AdjustRowHeight( 0, MAXROW, nTab ) )
+                        pDocShell->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID );
+                pDocShell->SetDocumentModified();
+            }
         }
         else
             throw uno::RuntimeException();
@@ -370,6 +380,8 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_CHARCOMP ) == 0 )
                 aRet <<= static_cast<sal_Int16> ( pDoc->GetAsianCompression() );
+            else if ( aPropertyName.compareToAscii( SC_UNO_ASIANKERN ) == 0 )
+                ScUnoHelpFunctions::SetBoolInAny( aRet, pDoc->GetAsianKerning() );
             else if ( aPropertyName.compareToAscii( SCSAVEVERSION ) == 0)
                 ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->GetDocInfo().IsSaveVersionOnClose() );
             else

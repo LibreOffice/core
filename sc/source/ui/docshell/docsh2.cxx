@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-04 19:59:41 $
+ *  last change: $Author: nn $ $Date: 2001-10-19 15:59:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,36 +191,47 @@ void ScDocShell::InitItems()
         PutItem( SvxColorTableItem( OFF_APP()->GetStdColorTable() ) );
     }
 
-    if ( !aDocument.GetForbiddenCharacters().isValid() )
+    if ( !aDocument.GetForbiddenCharacters().isValid() ||
+            !aDocument.IsValidAsianCompression() || !aDocument.IsValidAsianKerning() )
     {
-        // set forbidden characters if necessary
-        SvxAsianConfig aAsian;
-        uno::Sequence<lang::Locale> aLocales = aAsian.GetStartEndCharLocales();
-        if (aLocales.getLength())
+        //  get settings from SvxAsianConfig
+        SvxAsianConfig aAsian( sal_False );
+
+        if ( !aDocument.GetForbiddenCharacters().isValid() )
         {
-            vos::ORef<SvxForbiddenCharactersTable> xForbiddenTable =
-                    new SvxForbiddenCharactersTable( aDocument.GetServiceManager() );
-
-            const lang::Locale* pLocales = aLocales.getConstArray();
-            for (sal_Int32 i = 0; i < aLocales.getLength(); i++)
+            // set forbidden characters if necessary
+            uno::Sequence<lang::Locale> aLocales = aAsian.GetStartEndCharLocales();
+            if (aLocales.getLength())
             {
-                i18n::ForbiddenCharacters aForbidden;
-                aAsian.GetStartEndChars( pLocales[i], aForbidden.beginLine, aForbidden.endLine );
-                LanguageType eLang = SvxLocaleToLanguage(pLocales[i]);
-                //pDoc->SetForbiddenCharacters( eLang, aForbidden );
+                vos::ORef<SvxForbiddenCharactersTable> xForbiddenTable =
+                        new SvxForbiddenCharactersTable( aDocument.GetServiceManager() );
 
-                xForbiddenTable->SetForbiddenCharacters( eLang, aForbidden );
+                const lang::Locale* pLocales = aLocales.getConstArray();
+                for (sal_Int32 i = 0; i < aLocales.getLength(); i++)
+                {
+                    i18n::ForbiddenCharacters aForbidden;
+                    aAsian.GetStartEndChars( pLocales[i], aForbidden.beginLine, aForbidden.endLine );
+                    LanguageType eLang = SvxLocaleToLanguage(pLocales[i]);
+                    //pDoc->SetForbiddenCharacters( eLang, aForbidden );
+
+                    xForbiddenTable->SetForbiddenCharacters( eLang, aForbidden );
+                }
+
+                aDocument.SetForbiddenCharacters( xForbiddenTable );
             }
-
-            aDocument.SetForbiddenCharacters( xForbiddenTable );
         }
-    }
 
-    if ( !aDocument.IsValidAsianCompression() )
-    {
-        // set compression mode from configuration if not already set (e.g. XML import)
-        SvxAsianConfig aAsian( sal_False );     //! share with forbidden characters
-        aDocument.SetAsianCompression( aAsian.GetCharDistanceCompression() );
+        if ( !aDocument.IsValidAsianCompression() )
+        {
+            // set compression mode from configuration if not already set (e.g. XML import)
+            aDocument.SetAsianCompression( aAsian.GetCharDistanceCompression() );
+        }
+
+        if ( !aDocument.IsValidAsianKerning() )
+        {
+            // set asian punctuation kerning from configuration if not already set (e.g. XML import)
+            aDocument.SetAsianKerning( !aAsian.IsKerningWesternTextOnly() );    // reversed
+        }
     }
 }
 
