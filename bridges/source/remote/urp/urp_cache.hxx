@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_cache.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-08-31 16:16:52 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:17:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 #include <stdio.h>
 #include <list>
+#include <algorithm>
 
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
