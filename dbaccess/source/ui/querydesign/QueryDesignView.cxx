@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:19:45 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -739,7 +739,7 @@ namespace
                     if  ( pEntryField->isAggreateFunction() )
                     {
                         DBG_ASSERT(pEntryField->GetFunction().getLength(),"Functionname darf hier nicht leer sein! ;-(");
-                        ::rtl::OUString aTmpStr2(pEntryField->GetFunction());
+                        ::rtl::OUString aTmpStr2( pEntryField->GetFunction());
                         aTmpStr2 +=  ::rtl::OUString('(');
                         aTmpStr2 += aTmpStr;
                         aTmpStr2 +=  ::rtl::OUString(')');
@@ -2071,7 +2071,7 @@ namespace
 
                                     ::rtl::OUString sFunctionName = pFunctionName->getTokenValue();
                                     if ( !sFunctionName.getLength() )
-                                        sFunctionName = ::rtl::OStringToOUString(OSQLParser::TokenIDToStr(pFunctionName->getTokenID()),RTL_TEXTENCODING_MS_1252);
+                                        sFunctionName = ::rtl::OStringToOUString(OSQLParser::TokenIDToStr(pFunctionName->getTokenID()),RTL_TEXTENCODING_UTF8);
 
                                     nDataType = OSQLParser::getFunctionReturnType(
                                                         sFunctionName
