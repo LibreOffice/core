@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:24:58 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,14 +132,15 @@ class SfxStateCache
 {
 friend class BindDispatch_Impl;
     BindDispatch_Impl*      pDispatch;
-    sal_uInt16                  nId;           // Slot-Id
+    sal_uInt16              nId;           // Slot-Id
     SfxControllerItem*      pController;   // Ptr auf 1. gebundenen Controller (untereinander verkettet)
     SfxSlotServer           aSlotServ;     // SlotServer, SlotPtr = 0 -> Nicht auf Stack
     SfxPoolItem*            pLastItem;     // zuletzt verschicktes Item, nie -1
     SfxItemState            eLastState;    // zuletzt verschickter State
-    sal_Bool                    bCtrlDirty:1;  // Controller aktualisiert?
-    sal_Bool                    bSlotDirty:1;  // Funktion gfs. vorhanden, muss aktualisiert werden
-    sal_Bool                    bItemDirty;    // G"ultigkeit von pLastItem
+    sal_Bool                bCtrlDirty:1;  // Controller aktualisiert?
+    sal_Bool                bSlotDirty:1;  // Funktion gfs. vorhanden, muss aktualisiert werden
+    sal_Bool                bItemVisible:1;// item visibility
+    sal_Bool                bItemDirty;    // G"ultigkeit von pLastItem
 
 private:
                             SfxStateCache( const SfxStateCache& rOrig ); // n.i.
@@ -165,6 +166,7 @@ public:
     void                    SetCachedState(BOOL bAlways = FALSE);
     void                    DeleteFloatingWindows();
     void                    Invalidate( sal_Bool bWithSlot );
+    void                    SetVisibleState( BOOL bShow=TRUE );
 
     SfxControllerItem*      ChangeItemLink( SfxControllerItem* pNewBinding );
     SfxControllerItem*      GetItemLink() const;
