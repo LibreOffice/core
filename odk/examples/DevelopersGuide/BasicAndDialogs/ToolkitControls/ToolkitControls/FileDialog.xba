@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="FileDialog" script:language="StarBasic">REM  *****  BASIC  *****
+
+Dim oDialog As Object
+
+Sub Main()
+
+	Dim oLibContainer As Object, oLib As Object
+	Dim oInputStreamProvider As Object
+		
+	Const sLibName = &quot;ToolkitControls&quot;
+	Const sDialogName = &quot;FileDialogDlg&quot;
+
+	REM load/get library and input stream provider
+	oLibContainer = DialogLibraries	
+	oLibContainer.loadLibrary( sLibName )
+	oLib = oLibContainer.getByName( sLibName )	
+	oInputStreamProvider = oLib.getByName( sDialogName )
+
+	REM create dialog control
+	oDialog = CreateUnoDialog( oInputStreamProvider )
+											
+	REM show the dialog
+	oDialog.execute()
+			
+End Sub
+
+Sub OpenFileDialog()
+
+	Dim oFilePicker As Object, oSimpleFileAccess As Object
+	Dim oPathSettings As Object
+	Dim oTextField As Object, oTextFieldModel As Object
+	Dim sFileURL As String
+	Dim sFiles As Variant
+
+	REM file dialog
+	oFilePicker = CreateUnoService( &quot;com.sun.star.ui.dialogs.FilePicker&quot; )
+
+	REM set filter
+	oFilePicker.AppendFilter( &quot;All files (*.*)&quot;, &quot;*.*&quot; )	
+	oFilePicker.AppendFilter( &quot;StarOffice 6.0 Text Text Document&quot;, &quot;*.sxw&quot; )
+	oFilePicker.AppendFilter( &quot;StarOffice 6.0 Spreadsheet&quot;, &quot;*.sxc&quot; )		
+	oFilePicker.SetCurrentFilter( &quot;All files (*.*)&quot; )
+
+	REM if no file URL is set, get path settings from configuration
+	oTextFieldModel = oDialog.Model.TextField1
+	sFileURL = ConvertToURL( oTextFieldModel.Text )	
+	If sFileURL = &quot;&quot; Then
+		oSettings = CreateUnoService( &quot;com.sun.star.frame.Settings&quot; )
+		oPathSettings = CreateUnoService( &quot;com.sun.star.util.PathSettings&quot; )
+	 	sFileURL = oPathSettings.getPropertyValue( &quot;Work&quot; )	 		 	
+	End If
+
+	REM set display directory
+	oSimpleFileAccess = CreateUnoService( &quot;com.sun.star.ucb.SimpleFileAccess&quot; )
+	If oSimpleFileAccess.exists( sFileURL ) And oSimpleFileAccess.isFolder( sFileURL ) Then
+		oFilePicker.setDisplayDirectory( sFileURL )		
+	End If
+
+	REM execute file dialog
+	If oFilePicker.execute() Then
+		sFiles = oFilePicker.getFiles()
+		sFileURL = sFiles(0)
+		If oSimpleFileAccess.exists( sFileURL ) Then
+			REM set file path in text field
+			oTextField = oDialog.GetControl(&quot;TextField1&quot;)
+			oTextField.SetText( ConvertFromURL( sFileURL ) )
+		End If
+	End If
+
+End Sub
+</script:module>
