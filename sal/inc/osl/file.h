@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:07:29 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1067,6 +1067,86 @@ oslFileError SAL_CALL osl_createDirectory( rtl_uString* pustrDirectoryURL );
 
 oslFileError SAL_CALL osl_removeDirectory( rtl_uString* pustrDirectoryURL );
 
+/** Function pointer representing a function that will be called by osl_createDirectoryPath
+    if a directory has been created.
+
+    To avoid unpredictable results the callee must not access the directory whose
+    creation is just notified.
+
+    @param pData
+    [in] User specified data given in osl_createDirectoryPath.
+
+    @param aDirectoryUrl
+    [in] The absolute file URL of the directory that was just created by
+    osl_createDirectoryPath.
+
+    @see osl_createDirectoryPath
+*/
+typedef void (SAL_CALL *oslDirectoryCreationCallbackFunc)(void* pData, rtl_uString* aDirectoryUrl);
+
+/** Create a directory path.
+
+    The osl_createDirectoryPath function creates a specified directory path.
+    All nonexisting sub directories will be created.
+    <p><strong>PLEASE NOTE:</strong> You cannot rely on getting the error code
+    osl_File_E_EXIST for existing directories. Programming against this error
+    code is in general a strong indication of a wrong usage of osl_createDirectoryPath.</p>
+
+    @param aDirectoryUrl
+    [in] The absolute file URL of the directory path to create.
+    A relative file URL will not be accepted.
+
+    @param aDirectoryCreationFunc
+    [in] Pointer to a function that will be called synchronously
+    for each sub directory that was created. The value of this
+    parameter may be NULL, in this case notifications will not be
+    sent.
+
+    @param pData
+    [in] User specified data to be passed to the directory creation
+    callback function. The value of this parameter may be arbitrary
+    and will not be interpreted by osl_createDirectoryPath.
+
+    @return
+    <dl>
+    <dt>osl_File_E_None</dt>
+    <dd>On success</dd>
+    <dt>osl_File_E_INVAL</dt>
+    <dd>The format of the parameters was not valid</dd>
+    <dt>osl_File_E_ACCES</dt>
+    <dd>Permission denied</dd>
+    <dt>osl_File_E_EXIST</dt>
+    <dd>The final node of the specified directory path already exist</dd>
+    <dt>osl_File_E_NAMETOOLONG</dt>
+    <dd>The name of the specified directory path exceeds the maximum allowed length</dd>
+    <dt>osl_File_E_NOTDIR</dt>
+    <dd>A component of the specified directory path already exist as file in any part of the directory path</dd>
+    <dt>osl_File_E_ROFS</dt>
+    <dd>Read-only file system</dd>
+    <dt>osl_File_E_NOSPC</dt>
+    <dd>No space left on device</dd>
+    <dt>osl_File_E_DQUOT</dt>
+    <dd>Quota exceeded</dd>
+    <dt>osl_File_E_FAULT</dt>
+    <dd>Bad address</dd>
+    <dt>osl_File_E_IO</dt>
+    <dd>I/O error</dd>
+    <dt>osl_File_E_LOOP</dt>
+    <dd>Too many symbolic links encountered</dd>
+    <dt>osl_File_E_NOLINK</dt>
+    <dd>Link has been severed</dd>
+    <dt>osl_File_E_invalidError</dt>
+    <dd>An unknown error occurred</dd>
+    </dl>
+
+    @see oslDirectoryCreationFunc
+    @see oslFileError
+    @see osl_createDirectory
+*/
+oslFileError SAL_CALL osl_createDirectoryPath(
+    rtl_uString* aDirectoryUrl,
+    oslDirectoryCreationCallbackFunc aDirectoryCreationCallbackFunc,
+    void* pData);
 
 /** Remove a regular file.
 
