@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdgi.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-04 12:13:19 $
+ *  last change: $Author: rt $ $Date: 2004-01-20 11:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,16 +111,15 @@ private:
     DECL_LINK( OnAsyncExecuteDrop, SvLBoxEntry* );
     DECL_LINK( OnAsyncExecuteError, void* );
 protected:
-    SvLBoxEntry*                    pPreDropEntry;
     SfxCommonTemplateDialog_Impl*   pDialog;
     USHORT                          nModifier;
 
 public:
     DropListBox_Impl( Window* pParent, const ResId& rId, SfxCommonTemplateDialog_Impl* pD ) :
-        SvTreeListBox( pParent, rId ), pDialog( pD ), pPreDropEntry( NULL )
+        SvTreeListBox( pParent, rId ), pDialog( pD )
             {}
     DropListBox_Impl( Window* pParent, WinBits nWinBits, SfxCommonTemplateDialog_Impl* pD ) :
-        SvTreeListBox( pParent, nWinBits ), pDialog( pD ), pPreDropEntry( NULL )
+        SvTreeListBox( pParent, nWinBits ), pDialog( pD )
             {}
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt );
@@ -128,7 +127,6 @@ public:
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
 
     USHORT              GetModifier() const { return nModifier; }
-    SvLBoxEntry*        GetPreDropEntry() const { return pPreDropEntry; }
 
     virtual long        Notify( NotifyEvent& rNEvt );
 };
@@ -219,8 +217,6 @@ protected:
     DECL_LINK( DropHdl, StyleTreeListBox_Impl * );
     DECL_LINK( TimeOut, Timer * );
 
-                        // Rechnet von den SFX_STYLE_FAMILY Ids auf 1-5 um
-    static USHORT       SfxFamilyIdToNId( USHORT nFamily );
 
     virtual void        EnableItem( USHORT nMesId, BOOL bCheck = TRUE ) {}
     virtual void        CheckItem( USHORT nMesId, BOOL bCheck = TRUE ) {}
@@ -300,8 +296,24 @@ public:
 
     // normaly for derivates from SvTreeListBoxes, but in this case the dialog handles context menus
     virtual PopupMenu*  CreateContextMenu( void );
-};
 
+    // Rechnet von den SFX_STYLE_FAMILY Ids auf 1-5 um
+    static USHORT       SfxFamilyIdToNId( USHORT nFamily );
+};
+/* -----------------10.12.2003 11:42-----------------
+
+ --------------------------------------------------*/
+
+class DropToolBox_Impl : public ToolBox, public DropTargetHelper
+{
+    SfxTemplateDialog_Impl&     rParent;
+protected:
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+public:
+    DropToolBox_Impl(Window* pParent, SfxTemplateDialog_Impl* pTemplateDialog);
+    ~DropToolBox_Impl();
+};
 // class SfxTemplateDialog_Impl ------------------------------------------
 
 class SfxTemplateDialog_Impl :  public SfxCommonTemplateDialog_Impl
@@ -309,10 +321,11 @@ class SfxTemplateDialog_Impl :  public SfxCommonTemplateDialog_Impl
 private:
     friend class SfxTemplateControllerItem;
     friend class SfxTemplateDialogWrapper;
+    friend class DropToolBox_Impl;
 
     SfxTemplateDialog*  m_pFloat;
     BOOL                m_bZoomIn;
-    ToolBox             m_aActionTbL;
+    DropToolBox_Impl    m_aActionTbL;
     ToolBox             m_aActionTbR;
 
     DECL_LINK( ToolBoxLSelect, ToolBox * );
