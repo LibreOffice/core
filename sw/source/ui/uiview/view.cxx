@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-04 10:48:52 $
+ *  last change: $Author: mtg $ $Date: 2001-05-16 17:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1190,12 +1190,21 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
 void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
 {
     sal_Int32 nLength = rSequence.getLength();
-    if (nLength)
+    if (nLength && (!pWrtShell->IsNewLayout() || pWrtShell->IsBrowseMode() || bBrowse) )
     {
+        SET_CURR_SHELL(pWrtShell);
         const com::sun::star::beans::PropertyValue *pValue = rSequence.getConstArray();
-        long nX = 0, nY = 0, nLeft = 0, nTop = 0, nRight = 0, nBottom = 0;
-        sal_Int16 nZoomType = 0, nZoomFactor = 0;
-        sal_Bool bSelectedFrame = sal_False;
+        const SwRect& rRect = pWrtShell->GetCharRect();
+        const Rectangle &rVis = GetVisArea();
+
+        long nX = rRect.Left(), nY = rRect.Top(), nLeft = rVis.Left(), nTop = rVis.Top();
+        long nRight = bBrowse ? LONG_MIN : rVis.Right(), nBottom = bBrowse ? LONG_MIN : rVis.Bottom();
+        sal_Int16 nZoomType = pWrtShell->GetViewOptions()->GetZoomType();
+        sal_Int16 nZoomFactor = static_cast < sal_Int16 > (pWrtShell->GetViewOptions()->GetZoom());
+        sal_Bool bSelectedFrame = pWrtShell->GetSelFrmType(), bGotViewLeft = sal_False, bGotViewTop = sal_False,
+                 bGotVisibleLeft = sal_False, bGotVisibleTop = sal_False, bGotVisibleRight = sal_False,
+                 bGotVisibleBottom = sal_False, bGotZoomType = sal_False, bGotZoomFactor = sal_False,
+                 bGotIsSelectedFrame = sal_False;
 
         for (sal_Int16 i = 0 ; i < nLength; i++)
         {
@@ -1203,88 +1212,102 @@ void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::s
             {
                pValue->Value >>= nX;
                nX = MM100_TO_TWIP( nX );
+               bGotViewLeft = sal_True;
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ViewTop" ) ) )
             {
                pValue->Value >>= nY;
                nY = MM100_TO_TWIP( nY );
+               bGotViewTop = sal_True;
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VisibleLeft" ) ) )
             {
                pValue->Value >>= nLeft;
                nLeft = MM100_TO_TWIP( nLeft );
+               bGotVisibleLeft = sal_True;
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VisibleTop" ) ) )
             {
                pValue->Value >>= nTop;
                nTop = MM100_TO_TWIP( nTop );
+               bGotVisibleTop = sal_True;
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VisibleRight" ) ) )
             {
                pValue->Value >>= nRight;
                nRight = MM100_TO_TWIP( nRight );
+               bGotVisibleRight = sal_True;
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VisibleBottom" ) ) )
             {
                pValue->Value >>= nBottom;
                nBottom = MM100_TO_TWIP( nBottom );
+               bGotVisibleBottom = sal_True;
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ZoomType" ) ) )
             {
                pValue->Value >>= nZoomType;
+               bGotZoomType = sal_True;
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ZoomFactor" ) ) )
             {
                pValue->Value >>= nZoomFactor;
+               bGotZoomFactor = sal_True;
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsSelectedFrame" ) ) )
             {
-               pValue->Value >>= bSelectedFrame;
+               bSelectedFrame = * (sal_Bool *) pValue->Value.getValue();
+               bGotIsSelectedFrame = sal_True;
             }
             pValue++;
         }
-        Point aCrsrPos( nX, nY );
-        const long nAdd = pWrtShell->IsBrowseMode() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
-        if (nBottom <= (pWrtShell->GetDocSize().Height()+nAdd) )
+        if (bGotVisibleBottom)
         {
-            pWrtShell->EnableSmooth( sal_False );
-            const Rectangle aVis( nLeft, nTop, nRight, nBottom );
-
-            sal_uInt16 nOff = 0;
-            SvxZoomType eZoom;
-            if( !pWrtShell->GetDoc()->IsBrowseMode() )
-                eZoom = static_cast < SvxZoomType > ( nZoomType );
-            else
+            Point aCrsrPos( nX, nY );
+            const long nAdd = pWrtShell->IsBrowseMode() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
+            if (nBottom <= (pWrtShell->GetDocSize().Height()+nAdd) )
             {
-                eZoom = SVX_ZOOM_PERCENT;
-                ++nOff;
+                pWrtShell->EnableSmooth( sal_False );
+                const Rectangle aVis( nLeft, nTop, nRight, nBottom );
+
+                sal_uInt16 nOff = 0;
+                SvxZoomType eZoom;
+                if( !pWrtShell->GetDoc()->IsBrowseMode() )
+                    eZoom = static_cast < SvxZoomType > ( nZoomType );
+                else
+                {
+                    eZoom = SVX_ZOOM_PERCENT;
+                    ++nOff;
+                }
+                if (bGotIsSelectedFrame)
+                {
+                    sal_Bool bSelectObj = (sal_False != bSelectedFrame )
+                                        && pWrtShell->IsObjSelectable( aCrsrPos );
+
+                    pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, !bSelectObj );
+                    if( bSelectObj )
+                    {
+                        pWrtShell->SelectObj( aCrsrPos );
+                        pWrtShell->EnterSelFrmMode( &aCrsrPos );
+                    }
+                }
+                SelectShell();
+
+                pWrtShell->StartAction();
+                const SwViewOption* pVOpt = pWrtShell->GetViewOptions();
+                if ( bGotZoomType && bGotZoomFactor &&
+                   ( pVOpt->GetZoom() != nZoomFactor || pVOpt->GetZoomType() != eZoom ) )
+                    SetZoom( eZoom, nZoomFactor);
+                if ( bBrowse && bGotVisibleLeft && bGotVisibleTop )
+                    SetVisArea( aVis.TopLeft() );
+                else if (bGotVisibleLeft && bGotVisibleTop && bGotVisibleRight && bGotVisibleBottom )
+                    SetVisArea( aVis );
+
+                pWrtShell->LockView( sal_True );
+                pWrtShell->EndAction();
+                pWrtShell->LockView( sal_False );
+                pWrtShell->EnableSmooth( sal_True );
             }
-
-            sal_Bool bSelectObj = (0 != bSelectedFrame )
-                                && pWrtShell->IsObjSelectable( aCrsrPos );
-
-            pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, !bSelectObj );
-            if( bSelectObj )
-            {
-                pWrtShell->SelectObj( aCrsrPos );
-                pWrtShell->EnterSelFrmMode( &aCrsrPos );
-            }
-
-            SelectShell();
-
-            pWrtShell->StartAction();
-            const SwViewOption* pVOpt = pWrtShell->GetViewOptions();
-            if( pVOpt->GetZoom() != nZoomFactor || pVOpt->GetZoomType() != eZoom )
-                SetZoom( eZoom, nZoomFactor);
-            if ( bBrowse )
-                SetVisArea( aVis.TopLeft() );
-            else
-                SetVisArea( aVis );
-
-            pWrtShell->LockView( sal_True );
-            pWrtShell->EndAction();
-            pWrtShell->LockView( sal_False );
-            pWrtShell->EnableSmooth( sal_True );
         }
     }
 }
@@ -1340,7 +1363,8 @@ void SwView::WriteUserDataSequence ( com::sun::star::uno::Sequence < com::sun::s
     pValue++;nIndex++;
 
     pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "IsSelectedFrame" ) );
-    pValue->Value <<= FRMTYPE_NONE == pWrtShell->GetSelFrmType() ? sal_False : sal_True;
+    sal_Bool bIsSelected = FRMTYPE_NONE == pWrtShell->GetSelFrmType() ? sal_False : sal_True;
+    pValue->Value.setValue ( &bIsSelected, ::getBooleanCppuType() );
     nIndex++;
 
     if ( nIndex < NUM_VIEW_SETTINGS )
