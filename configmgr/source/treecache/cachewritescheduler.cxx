@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachewritescheduler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 09:08:05 $
+ *  last change: $Author: jb $ $Date: 2002-07-12 11:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@ void OCacheWriteScheduler::stopAndWriteCache()
     aOwnGuard.clear();
 
     runWriter();
+
+    osl::MutexGuard aClearGuard( m_aMutex );
+    m_aWriteList.clear();
 }
 
 // -------------------------------------------------------------------------
@@ -101,6 +104,12 @@ void OCacheWriteScheduler::Timer::onShot()
     osl::MutexGuard aGuard(m_aMutex);
     if (pParent)
         pParent->onTimerShot();
+
+    else
+    {
+        CFG_TRACE_WARNING("Timer shot for disposed cache writer");
+    }
+
 }
 
 // -----------------------------------------------------------------------------
@@ -108,14 +117,16 @@ void OCacheWriteScheduler::onTimerShot()
 {
     //m_aTimer.stop();
 
-    CFG_TRACE_INFO("Cleanup Timer invoked - executing dispose task");
+    CFG_TRACE_INFO("Write Timer invoked - executing write task");
 
     try
     {
         runWriter();
+        CFG_TRACE_INFO_NI("Write timer: writing ended");
     }
     catch (...)
     {
+        CFG_TRACE_ERROR_NI("Write timer: writing failed with an unknown exception");
         OSL_ENSURE(false, "ERROR: Unknown Exception left a writer");
     }
 
@@ -128,43 +139,62 @@ void OCacheWriteScheduler::onTimerShot()
 void OCacheWriteScheduler::runWriter()
 {
     // Write Cache
-    CFG_TRACE_INFO("Starting lazy write");
+    CFG_TRACE_INFO("Running write operations");
 //  osl::ClearableMutexGuard aGuard( m_rTreeManager.m_aUpdateMutex );
 
-    for (CacheWriteList::iterator it = m_aWriteList.begin();
-         it != m_aWriteList.end();
-         )
+    osl::ClearableMutexGuard aListGuard( m_aMutex );
+    CacheWriteList aPendingWrites;
+    m_aWriteList.swap(aPendingWrites);
+    aListGuard.clear();
+
+    CFG_TRACE_INFO_NI("Found %d sections to write", int(aPendingWrites.size()));
+    for (CacheWriteList::iterator it = aPendingWrites.begin();
+         it != aPendingWrites.end();
+         ++it)
     {
         RequestOptions aTaskOption = *it;
-        ++it; // advance iterator now - writeOneTree.. may erase current element
         try
         {
             writeOneTreeFoundByOption(aTaskOption);
         }
         catch (uno::Exception& e)
         {
-            CFG_TRACE_ERROR("TreeCacheWriteScheduler: Attempt to write data failed - error is '%s' (currently ignored)",OUSTRING2ASCII(e.Message));
+            CFG_TRACE_ERROR_NI("TreeCacheWriteScheduler: Attempt to write data failed - error is '%s' (currently ignored)",OUSTRING2ASCII(e.Message));
         }
     }
     // m_aWriteList.clear();
+    CFG_TRACE_INFO_NI("DONE: Running write operations");
 }
 
 // -----------------------------------------------------------------------------
 void OCacheWriteScheduler::writeOneTreeFoundByOption(RequestOptions const& _aOptions) CFG_UNO_THROW_ALL(  )
 {
+    CFG_TRACE_INFO("Writeing one cache tree for user '%s' with locale '%s'",
+                    OUSTRING2ASCII(_aOptions.getEntity()),
+                    OUSTRING2ASCII(_aOptions.getLocale()));
+
     // PRE: m_aUpdateMutex of TreeMgr must be acuired
     CacheManager::CacheRef aCache = m_rTreeManager.m_aCacheList.get(_aOptions);
     if (aCache.is())
     {
         CFG_TRACE_INFO_NI("- Found matching data container  - starting write task");
-        m_rTreeManager.saveAllPendingChanges(aCache,_aOptions);
+        if (m_rTreeManager.saveAllPendingChanges(aCache,_aOptions))
+        {
+            osl::MutexGuard aListGuard( m_aMutex );
+            m_aWriteList.insert(_aOptions);
+
+            CFG_TRACE_INFO_NI("- Write task incomplete -reregistering");
+        }
         // we got a pending list with pointers from TreeInfo.
     }
     else
     {
         CFG_TRACE_WARNING_NI("- Data container (TreeInfo) to write not found: Ignoring task");
     }
-    m_aWriteList.erase(_aOptions);
+
+    CFG_TRACE_INFO_NI("Removing written cache tree (for user '%s' with locale '%s')",
+                    OUSTRING2ASCII(_aOptions.getEntity()),
+                    OUSTRING2ASCII(_aOptions.getLocale()));
 }
 
 // -----------------------------------------------------------------------------
@@ -174,6 +204,12 @@ bool OCacheWriteScheduler::clearTasks(RequestOptions const& _aOptions)
 
     // sadly list::remove doesn't return an indication of what it did
     bool bFound = m_aWriteList.erase(_aOptions) !=0;
+    if (bFound)
+    {
+        CFG_TRACE_INFO("Write Scheduler: Dropped cache tree (for user '%s' with locale '%s') from task list",
+                            OUSTRING2ASCII(_aOptions.getEntity()),
+                            OUSTRING2ASCII(_aOptions.getLocale()));
+    }
 
     return bFound;
 }
@@ -182,6 +218,7 @@ bool OCacheWriteScheduler::clearTasks(RequestOptions const& _aOptions)
 // should be called guarded only
 void OCacheWriteScheduler::implStartBefore(TimeStamp const& _aTime)
 {
+    CFG_TRACE_INFO("Triggering write timer");
     // check if we were cleared
     if (!m_aWriteList.empty())
     {
@@ -194,13 +231,13 @@ void OCacheWriteScheduler::implStartBefore(TimeStamp const& _aTime)
 
             OSL_ASSERT( m_xTimer->isTicking() );
         }
-        CFG_TRACE_INFO_NI("- Cleanup timer running - next execution in %d seconds", int (m_xTimer->getRemainingTime().Seconds) );
-        CFG_TRACE_INFO_NI("- %d cleanup tasks are pending", int(m_aWriteList.size()) );
+        CFG_TRACE_INFO_NI("- Write timer running - next execution in %d seconds", int (m_xTimer->getRemainingTime().Seconds) );
+        CFG_TRACE_INFO_NI("- %d write tasks are pending", int(m_aWriteList.size()) );
     }
     else
     {
         m_xTimer->stop();
-        CFG_TRACE_INFO_NI("- Stopped timer - no more open cleanup tasks");
+        CFG_TRACE_INFO_NI("- Stopped timer - no more open write tasks");
     }
 }
 
@@ -221,8 +258,6 @@ void OCacheWriteScheduler::scheduleWrite(backend::ComponentRequest _aComponent) 
 
     TimeStamp aNewTime = implGetScheduleTime(TimeStamp::getCurrentTime(), m_aWriteInterval);
     implStartBefore(aNewTime);
-
-    CFG_TRACE_INFO_NI("- cache write will be started in about %d seconds", int(m_aWriteInterval.getTimeValue().Seconds));
 }
 
 // -----------------------------------------------------------------------------

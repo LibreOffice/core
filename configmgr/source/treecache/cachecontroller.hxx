@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachecontroller.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 09:06:57 $
+ *  last change: $Author: jb $ $Date: 2002-07-12 11:42:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,8 +326,8 @@ namespace configmgr
         void savePendingChanges(CacheRef const & _aCache, ComponentRequest const & _aComponent)
             CFG_UNO_THROW_ALL(  );
         // saves all pending changes from a cache access to the backend
-        void saveAllPendingChanges(CacheRef const & _aCache, RequestOptions const & _aOptions)
-            CFG_UNO_THROW_ALL(  );
+        bool saveAllPendingChanges(CacheRef const & _aCache, RequestOptions const & _aOptions)
+            CFG_UNO_THROW_RTE(  );
 
 
         CacheRef getCacheAlways(RequestOptions const & _aOptions);
@@ -338,7 +338,7 @@ namespace configmgr
         void flushPendingUpdates();
 
         // disposing
-        void disposeAll();
+        void disposeAll(bool _bFlushRemainingUpdates);
         void disposeOne(RequestOptions const & _aOptions, bool _bFlushUpdates = true);
         void disposeUser(RequestOptions const & _aUserOptions, bool _bFlushUpdates = true);
         void implDisposeOne(CacheRef const & _aCache, RequestOptions const & _aOptions, bool _bFlushUpdates);

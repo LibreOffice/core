@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachecontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-11 15:50:39 $
+ *  last change: $Author: jb $ $Date: 2002-07-12 11:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ memory::HeapManager & CacheController::getCacheHeapManager() const
 
 // disposing
 // -------------------------------------------------------------------------
-void CacheController::disposeAll()
+void CacheController::disposeAll(bool _bFlushRemainingUpdates)
 {
     CFG_TRACE_INFO("CacheController: Disposing all data" );
     CacheList::Map aReleaseList;
@@ -183,6 +183,11 @@ void CacheController::disposeAll()
         m_aCacheList.swap(aReleaseList); // move data out of m_aCacheList and empty m_aCacheList
     }
 
+    if (_bFlushRemainingUpdates)
+    {
+        for (CacheList::Map::iterator it = aReleaseList.begin(); it != aReleaseList.end(); ++it)
+            saveAllPendingChanges(it->second,it->first);
+    }
     // free all the trees
     aReleaseList.clear();
 }
@@ -190,7 +195,7 @@ void CacheController::disposeAll()
 // -------------------------------------------------------------------------
 void CacheController::dispose() CFG_UNO_THROW_RTE()
 {
-    CFG_TRACE_INFO("CacheController: dispoing the treemanager" );
+    CFG_TRACE_INFO("CacheController: dispose()" );
 
     RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::CacheController", "jb99855", "dispose(), disable lazy write cache.");
     m_bDisposing = true;                         // we are in dispose, handling of errors must be something different.
@@ -199,7 +204,7 @@ void CacheController::dispose() CFG_UNO_THROW_RTE()
     this->flushPendingUpdates();
 
     // cleaning the cache
-    this->disposeAll();
+    this->disposeAll(true);
 }
 
 // -------------------------------------------------------------------------
@@ -212,10 +217,13 @@ void CacheController::disposeOne(RequestOptions const & _aOptions, bool _bFlushU
 
     m_pDisposer->clearTasks(_aOptions);
     if (!m_pCacheWriter->clearTasks(_aOptions)) // had no pending updates
+    {
         _bFlushUpdates = false;
-
+    }
     else if (!_bFlushUpdates)
+    {
         CFG_TRACE_WARNING_NI("Found orphaned Changes in the cache - Discarding.");
+    }
 
     CacheRef aRemoved = m_aCacheList.remove(_aOptions);
 
@@ -311,14 +319,18 @@ void CacheController::disposeUser(RequestOptions const & _aUserOptions, bool _bF
 void CacheController::implDisposeOne(CacheRef const & _aDisposedCache, RequestOptions const & _aOptions, bool _bFlushUpdates)
 {
     OSL_ASSERT(_aDisposedCache.is());
-    CFG_TRACE_INFO("Now removing TreeInfo (user '%s' with locale '%s') and broadcaster",
+    CFG_TRACE_INFO("Now removing Cache section (user '%s' with locale '%s')",
                     OUSTRING2ASCII(_aOptions.getEntity()), OUSTRING2ASCII(_aOptions.getLocale()) );
 
     if (_bFlushUpdates) try
     {
         CFG_TRACE_INFO_NI("- Flushing pending changes" );
 
-        this->saveAllPendingChanges(_aDisposedCache,_aOptions);
+        if ( !this->saveAllPendingChanges(_aDisposedCache,_aOptions) )
+        {
+            CFG_TRACE_ERROR_NI("- Error while flushing - changes will be lost" );
+            OSL_ENSURE(false,"Error while flushing changes from discarded Cache section - changes will be lost" );
+        }
     }
     catch (uno::Exception& e)
     {
@@ -410,7 +422,7 @@ CacheLocation makeCacheLocation(memory::SegmentAddress const & _aSegment, memory
 
 CacheLocation CacheController::loadComponent(ComponentRequest const & _aRequest)
 {
-    CFG_TRACE_INFO("cache manager: checking the cache");
+    CFG_TRACE_INFO("CacheController: loading component '%s'", OUSTRING2ASCII(_aRequest.getComponentName().toString()));
 
     CacheRef aCache = this->getCacheAlways(_aRequest.getOptions());
 
@@ -422,7 +434,7 @@ CacheLocation CacheController::loadComponent(ComponentRequest const & _aRequest)
 
     if (aCache->hasModule(_aRequest.getComponentName()))
     {
-        CFG_TRACE_INFO_NI("cache manager: found node in cache");
+        CFG_TRACE_INFO_NI("CacheController: found node in cache");
         OSL_ENSURE(!_aRequest.getOptions().isForcingReload(),"CacheController: Found node in cache for non-cachable request");
 
         aResultAddress = aCache->acquireModule(_aRequest.getComponentName());
@@ -432,6 +444,8 @@ CacheLocation CacheController::loadComponent(ComponentRequest const & _aRequest)
         NodeResult aData = this->loadDirectly(_aRequest);
 
         bool bWithDefaults = ! m_xBackend->isStrippingDefaults();
+
+        CFG_TRACE_INFO_NI("CacheController: adding loaded data to the cache");
 
         memory::UpdateAccessor aTargetSpace( aCache->createNewDataSegment(_aRequest.getComponentName()) );
 
@@ -503,7 +517,7 @@ AbsolutePath CacheController::ensureTemplate(const Name& _rName, Name const& _rM
 {
     OSL_ENSURE(!_rName.isEmpty(), "CacheController::ensureTemplate : invalid template name !");
 
-    CFG_TRACE_INFO("cache manager: going to get a template named %s", OUSTRING2ASCII(_rName.toString()));
+    CFG_TRACE_INFO("CacheController: going to get a template named %s", OUSTRING2ASCII(_rName.toString()));
 
 //  OReadSynchronized aReadGuard(this);
     osl::MutexGuard aGuard(m_aTemplatesMutex);
@@ -526,7 +540,7 @@ AbsolutePath CacheController::ensureTemplate(const Name& _rName, Name const& _rM
 
         if (!m_aTemplates.hasNode(aTemplatesUpdater.accessor(),aTemplateParent))
         {
-            CFG_TRACE_INFO("cache manager: cache miss for that template");
+            CFG_TRACE_INFO_NI("CacheController: cache miss for that template - loading from backend");
 
             TemplateRequest aTemplateRequest = TemplateRequest::forComponent(_rModule);
 
@@ -549,14 +563,19 @@ AbsolutePath CacheController::ensureTemplate(const Name& _rName, Name const& _rM
 
             if (aMultiTemplates.get() != NULL)
             {
-                CFG_TRACE_INFO("cache manager: adding the templates to the cache");
+                CFG_TRACE_INFO_NI("CacheController: adding the loaded templates to the cache");
 
                 NodeInstance aTemplatesNode(aMultiTemplates, aTemplateParent);
 
                 m_aTemplates.addTemplates(aTemplatesUpdater, aTemplatesNode);
             }
             else
+            {
+                CFG_TRACE_ERROR_NI("CacheController: could not load the templates");
+
                 throw uno::Exception(::rtl::OUString::createFromAscii("The template description could not be loaded. The template does not exist."), NULL);
+
+            }
         }
     }
 
@@ -607,7 +626,7 @@ void CacheController::saveAndNotify(UpdateRequest const & _anUpdate) CFG_UNO_THR
     {
         // ---------- preworking on the changes ----------
         // caller must own a read lock on this cache line
-        CFG_TRACE_INFO("cache loading manager: saving an update");
+        CFG_TRACE_INFO("CacheController: saving an update for '%s'",OUSTRING2ASCII(_anUpdate.getUpdateRoot().toString()));
 
         CacheRef aCache = m_aCacheList.get(_anUpdate.getOptions());
 
@@ -618,16 +637,24 @@ void CacheController::saveAndNotify(UpdateRequest const & _anUpdate) CFG_UNO_THR
         aCache->addChangesToPending(_anUpdate.getUpdate());
 
         if ( _anUpdate.isForcingFlush()||  m_bDisposing ) // cannot do it asynchronously
+        {
+            CFG_TRACE_INFO_NI("Running synchronous write");
             savePendingChanges( aCache, getComponentRequest(_anUpdate) );
+        }
 
         else
+        {
+            CFG_TRACE_INFO_NI("Posting asynchronous write");
             m_pCacheWriter->scheduleWrite( getComponentRequest(_anUpdate) );
+        }
 
+        CFG_TRACE_INFO_NI("Notifying the changes");
         // notify the changes to all clients
         m_aNotifier.notifyChanged(_anUpdate);
     }
     catch(configuration::Exception& ex)
     {
+        CFG_TRACE_ERROR_NI("Got unexpected exception: %s", ex.what());
         configapi::ExceptionMapper e(ex);
         e.unhandled();
     }
@@ -638,9 +665,12 @@ void CacheController::saveAndNotify(UpdateRequest const & _anUpdate) CFG_UNO_THR
 void CacheController::flushPendingUpdates()
 {
     OSL_ASSERT(m_bDisposing);
+
     if (m_pCacheWriter)
     {
         osl::MutexGuard aShotGuard(m_pCacheWriter->getShotMutex());
+
+        CFG_TRACE_INFO("CacheController: flushing all pending updates");
 
         m_pCacheWriter->stopAndWriteCache();
     }
@@ -685,29 +715,44 @@ bool CacheController::normalizeResult(NodeResult & _aResult, RequestOptions cons
 
 NodeResult CacheController::loadDirectly(ComponentRequest const & _aRequest) CFG_UNO_THROW_ALL(  )
 {
+    CFG_TRACE_INFO("CacheController: loading data for component '%s' from the backend", OUSTRING2ASCII(_aRequest.getComponentName().toString()));
+
     AbsolutePath aRequestPath = AbsolutePath::makeModulePath(_aRequest.getComponentName(), AbsolutePath::NoValidate());
 
     NodeRequest aNodeRequest(aRequestPath, _aRequest.getOptions());
 
     NodeResult aResult = m_xBackend->getNodeData(aNodeRequest);
 
+    CFG_TRACE_INFO_NI("- loading data completed - normalizing result");
+
     if (!normalizeResult(aResult,_aRequest.getOptions()))
     {
+        CFG_TRACE_ERROR_NI(" - cannot normalized result: failing");
+
         OUString sMsg(RTL_CONSTASCII_USTRINGPARAM("Requested data at '"));
         sMsg += aRequestPath.toString();
         sMsg += OUString(RTL_CONSTASCII_USTRINGPARAM("'is not available: "));
 
         throw com::sun::star::container::NoSuchElementException(sMsg,NULL);
     }
+
+    CFG_TRACE_INFO_NI(" - returning normalized defaults");
+
     return aResult;
 }
 // -----------------------------------------------------------------------------
 
 NodeResult CacheController::loadDefaultsDirectly(NodeRequest const & _aRequest) CFG_UNO_THROW_ALL(  )
 {
+    CFG_TRACE_INFO("CacheController: loading defaults for '%s' from the backend", OUSTRING2ASCII(_aRequest.getPath().toString()));
+
     NodeResult aResult = m_xBackend->getDefaultData(_aRequest);
 
+    CFG_TRACE_INFO_NI("- loading defaultscompleted - normalizing result");
+
     normalizeResult(aResult,_aRequest.getOptions());
+
+    CFG_TRACE_INFO_NI(" - returning normalized defaults");
 
     return aResult;
 }
@@ -725,6 +770,8 @@ void CacheController::savePendingChanges(CacheRef const & _aCache, ComponentRequ
 
     try
     {
+        CFG_TRACE_INFO("CacheController: saving updates for tree: '%s'", OUSTRING2ASCII(_aComponent.getComponentName().toString()));
+
           std::auto_ptr<SubtreeChange> aChangeData = _aCache->releasePendingChanges(_aComponent.getComponentName());
 
         if (aChangeData.get())
@@ -738,24 +785,30 @@ void CacheController::savePendingChanges(CacheRef const & _aCache, ComponentRequ
             // anUpdateSpec.setRequestId(pInfo->getRequestId(_aRootPath));
 
             this->saveDirectly(anUpdateSpec);
+
+            CFG_TRACE_INFO_NI("- saving changes completed successfully");
         }
         else
             CFG_TRACE_WARNING_NI("- no changes found - cannot save");
     }
     catch(uno::Exception& e)
     {
-        CFG_TRACE_ERROR_NI("CacheController: saving failed: %s", OUSTRING2ASCII(e.Message));
+        CFG_TRACE_ERROR_NI("CacheController: saving tree '%s' failed: %s",
+                                OUSTRING2ASCII(_aComponent.getComponentName().toString()),
+                                OUSTRING2ASCII(e.Message) );
 
         this->invalidateComponent(_aComponent);
+        CFG_TRACE_INFO_NI("- component data invalidated");
 
         throw;
     }
 }
 // -----------------------------------------------------------------------------
 
-void CacheController::saveAllPendingChanges(CacheRef const & _aCache, RequestOptions const & _aOptions)
-    CFG_UNO_THROW_ALL(  )
+bool CacheController::saveAllPendingChanges(CacheRef const & _aCache, RequestOptions const & _aOptions)
+    CFG_UNO_THROW_RTE(  )
 {
+    CFG_TRACE_INFO("CacheController: Saving all pending changes for cache line");
     OSL_ASSERT(_aCache.is());
 
     typedef Cache::Data::PendingModuleList PMList;
@@ -763,12 +816,26 @@ void CacheController::saveAllPendingChanges(CacheRef const & _aCache, RequestOpt
     PMList aPendingModules;
     _aCache->findPendingChangedModules(aPendingModules);
 
+    CFG_TRACE_INFO_NI("Found %d changed modules",int(aPendingModules.size()));
+
+    bool bSuccess = true;
     for (PMList::iterator it = aPendingModules.begin();
             it != aPendingModules.end();
             ++it )
     {
-        this->savePendingChanges(_aCache, ComponentRequest(*it,_aOptions) );
+        try
+        {
+            this->savePendingChanges(_aCache, ComponentRequest(*it,_aOptions) );
+        }
+        catch (uno::Exception & )
+        {
+            CFG_TRACE_ERROR_NI("CacheController: Exception while saving one module - ignoring");
+            bSuccess = false;
+        }
     }
+    CFG_TRACE_INFO_NI("Done saving pending changes for cache line");
+
+    return bSuccess;
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
