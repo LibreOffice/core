@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oletest.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-12-03 13:57:04 $
+ *  last change: $Author: jl $ $Date: 2002-06-05 13:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include <com/sun/star/script/XInvocation.idl>
 //#include <stardiv/uno/beans/propset.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/lang/XEventListener.idl>
 
 module oletest
 {
@@ -83,6 +84,8 @@ interface XTestSequence: com::sun::star::uno::XInterface
     sequence<com::sun::star::uno::XInterface> methodXInterface ( [in] sequence<com::sun::star::uno::XInterface> aSeq);
     sequence< sequence <long> > methodSequence( [in] sequence< sequence< long > > aSeq);
     sequence< sequence <sequence <long> > > methodSequence2( [in] sequence< sequence< sequence<long> > > aSeq);
+    sequence< com::sun::star::lang::XEventListener > methodXEventListeners( [in] sequence<com::sun::star::lang::XEventListener> aSeq);
+    sequence< sequence< com::sun::star::lang::XEventListener > > methodXEventListenersMul( [in] sequence< sequence< com::sun::star::lang::XEventListener> > aSeq);
 
     [attribute] sequence<byte> AttrByte;
     [attribute] sequence<float> AttrFloat;

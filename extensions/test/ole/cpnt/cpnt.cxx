@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpnt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-12-03 13:56:48 $
+ *  last change: $Author: jl $ $Date: 2002-06-05 13:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,8 @@ public: // XTestSequence
     virtual Sequence< Reference< XInterface > > SAL_CALL methodXInterface( const Sequence< Reference< XInterface > >& aSeq ) throw(RuntimeException) ;
     virtual Sequence< Sequence< sal_Int32 > > SAL_CALL methodSequence(const Sequence< Sequence< sal_Int32 > >& aSeq) throw( RuntimeException );
     virtual Sequence< Sequence< Sequence< sal_Int32 > > > SAL_CALL methodSequence2(const Sequence< Sequence< Sequence< sal_Int32 > > >& aSeq) throw( RuntimeException );
+    virtual Sequence< Reference<XEventListener> > SAL_CALL methodXEventListeners( const Sequence<Reference<XEventListener> >& aSeq) throw( RuntimeException);
+    virtual Sequence< Sequence<Reference<XEventListener > > > SAL_CALL methodXEventListenersMul( const Sequence<Sequence<Reference<XEventListener > > >& aSeq ) throw (RuntimeException);
 
     virtual Sequence< sal_Int8 > SAL_CALL getAttrByte(void) throw( RuntimeException );
     virtual void SAL_CALL setAttrByte(const Sequence< sal_Int8 >& AttrByte_) throw( RuntimeException );
@@ -478,7 +480,33 @@ Sequence< Sequence< Sequence< sal_Int32 > > > SAL_CALL OComponent::methodSequenc
     return aSeq;
 }
 
+Sequence< Reference< XEventListener> > SAL_CALL OComponent::methodXEventListeners( const Sequence< Reference <XEventListener> >& aSeq) throw( RuntimeException)
+{
+    Reference<XEventListener> listener;
+    for( int i= 0; i < aSeq.getLength(); i++)
+    {
+        listener= aSeq[i];
 
+        listener->disposing( EventObject() );
+    }
+
+    return aSeq;
+}
+
+Sequence< Sequence<Reference<XEventListener > > > SAL_CALL OComponent::methodXEventListenersMul( const Sequence<Sequence<Reference<XEventListener > > >& aSeq ) throw (RuntimeException)
+{
+    Reference<XEventListener> listener;
+    for( int i= 0; i < aSeq.getLength(); i++)
+    {
+        Sequence<Reference<XEventListener> > seqInner= aSeq[i];
+        for( int j= 0; j < seqInner.getLength(); j++)
+        {
+            listener= seqInner[j];
+            listener->disposing( EventObject() );
+        }
+    }
+    return aSeq;
+}
 
 //---------------------------------------------------------------------------------------------
 

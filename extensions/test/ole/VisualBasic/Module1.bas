@@ -459,6 +459,50 @@ For countvar = 0 To 2
     End If
 Next
 
+'Array containing interfaces (element type is VT_DISPATCH)
+Dim arEventListener(2) As Object
+For countvar = 0 To 2
+    Set arEventListener(countvar) = CreateObject("VBasicEventListener.VBEventListener")
+    arEventListener(countvar).setQuiet True
+Next
+
+'The function calls disposing on the listeners
+seq = objOleTest.methodXEventListeners(arEventListener)
+Dim count
+For countvar = 0 To 2
+    If arEventListener(countvar).disposingCalled = False Then
+        MsgBox "Error"
+    End If
+Next
+'Array containing interfaces (element type is VT_VARIANT which contains VT_DISPATCH
+Dim arEventListener2(2) As Variant
+For countvar = 0 To 2
+     Set arEventListener2(countvar) = CreateObject("VBasicEventListener.VBEventListener")
+     arEventListener2(countvar).setQuiet True
+Next
+seq = objOleTest.methodXEventListeners(arEventListener2)
+For countvar = 0 To 2
+    If arEventListener2(countvar).disposingCalled = False Then
+        MsgBox "Error"
+    End If
+Next
+
+'Variant containing Array containing interfaces (element type is VT_VARIANT which contains VT_DISPATCH
+Dim arEventListener3(2) As Variant
+For countvar = 0 To 2
+     Dim var As Variant
+     Set arEventListener3(countvar) = CreateObject("VBasicEventListener.VBEventListener")
+     arEventListener3(countvar).setQuiet True
+Next
+Dim varContAr As Variant
+varContAr = arEventListener3
+seq = objOleTest.methodXEventListeners(varContAr)
+For countvar = 0 To 2
+    If arEventListener3(countvar).disposingCalled = False Then
+        MsgBox "Error"
+    End If
+Next
+
 'Get a sequence created in UNO, out param is Variant ( VT_BYREF|VT_VARIANT)
 Dim seqX As Variant
 
@@ -562,6 +606,63 @@ For countDim2 = 0 To 1
     Next countDim1
 Next countDim2
 
+'Array containing interfaces (element type is VT_DISPATCH)
+Dim arArEventListener(1, 2) As Object
+For i = 0 To 1
+    For j = 0 To 2
+        Set arArEventListener(i, j) = CreateObject("VBasicEventListener.VBEventListener")
+        arArEventListener(i, j).setQuiet True
+    Next
+Next
+'The function calls disposing on the listeners
+seq = objOleTest.methodXEventListenersMul(arArEventListener)
+For i = 0 To 1
+    For j = 0 To 2
+        If arArEventListener(i, j).disposingCalled = False Then
+            MsgBox "Error"
+        End If
+    Next
+Next
+
+'Array containing interfaces (element type is VT_VARIANT containing VT_DISPATCH)
+Dim arArEventListener2(1, 2) As Variant
+For i = 0 To 1
+    For j = 0 To 2
+        Set arArEventListener2(i, j) = CreateObject("VBasicEventListener.VBEventListener")
+        arArEventListener2(i, j).setQuiet True
+    Next
+Next
+'The function calls disposing on the listeners
+seq = objOleTest.methodXEventListenersMul(arArEventListener2)
+For i = 0 To 1
+    For j = 0 To 2
+        If arArEventListener2(i, j).disposingCalled = False Then
+            MsgBox "Error"
+        End If
+    Next
+Next
+
+' SAFEARRAY of VARIANTS containing SAFEARRAYs
+'The ultimate element type is VT_DISPATCH ( XEventListener)
+Dim arEventListener4(1) As Variant
+Dim seq1(2) As Object
+Dim seq2(2) As Object
+For i = 0 To 2
+    Set seq1(i) = CreateObject("VBasicEventListener.VBEventListener")
+    Set seq2(i) = CreateObject("VBasicEventListener.VBEventListener")
+    seq1(i).setQuiet True
+    seq2(i).setQuiet True
+Next
+arEventListener4(0) = seq1
+arEventListener4(1) = seq2
+'The function calls disposing on the listeners
+seq = objOleTest.methodXEventListenersMul(arEventListener4)
+For i = 0 To 2
+    If seq1(i).disposingCalled = False Or seq2(i).disposingCalled = False Then
+            MsgBox "Error"
+    End If
+Next
+
 'Bridge_GetStruct
 '========================================================
 'Try to create a hidden document
@@ -620,7 +721,7 @@ For Each key In ret
 Next key
 
 
-objVal.InitInOutParam "[]byte", 10
+objVal.InitInOutParam "byte", 10
 objOleTest.testinout_methodByte objVal
 
 ret = 0
