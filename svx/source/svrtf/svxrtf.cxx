@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-16 10:28:44 $
+ *  last change: $Author: jp $ $Date: 2001-03-12 16:19:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1340,6 +1340,7 @@ RTFPlainAttrMapIds::RTFPlainAttrMapIds( const SfxItemPool& rPool )
     nRuby = 0; //rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_RUBY, FALSE );
     nCharScaleX = rPool.GetTrueWhich( SID_ATTR_CHAR_SCALEWIDTH, FALSE );
     nHorzVert = rPool.GetTrueWhich( SID_ATTR_CHAR_ROTATED, FALSE );
+    nRelief = rPool.GetTrueWhich( SID_ATTR_CHAR_RELIEF, FALSE );
 }
 
 RTFPardAttrMapIds ::RTFPardAttrMapIds ( const SfxItemPool& rPool )

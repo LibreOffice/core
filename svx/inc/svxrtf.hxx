@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-16 10:28:22 $
+ *  last change: $Author: jp $ $Date: 2001-03-12 16:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,8 @@ struct RTFPlainAttrMapIds
             nTwoLines,
             nCharScaleX,
             nHorzVert,
-            nRuby
+            nRuby,
+            nRelief
             ;
     RTFPlainAttrMapIds( const SfxItemPool& rPool );
 };
@@ -468,11 +469,14 @@ inline SfxItemSet& SvxRTFParser::GetAttrSet()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svx/inc/svxrtf.hxx,v 1.4 2001-02-16 10:28:22 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svx/inc/svxrtf.hxx,v 1.5 2001-03-12 16:19:49 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2001/02/16 10:28:22  jp
+      im-/export the Rotate-/ScaleWidth-Character attribut
+
       Revision 1.3  2001/02/06 17:56:21  jp
       Bug #81999#: replace GetWhichId with SetScriptAttr - for asian/complex char.attributes
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-16 10:28:44 $
+ *  last change: $Author: jp $ $Date: 2001-03-12 16:19:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@
 #define ITEMID_TWOLINES     0
 #define ITEMID_CHARSCALE_W  0
 #define ITEMID_CHARROTATE   0
+#define ITEMID_CHARRELIEF   0
 
 #include "flstitem.hxx"
 #include "fontitem.hxx"
@@ -161,6 +162,7 @@
 #include "hyznitem.hxx"
 #include "charscaleitem.hxx"
 #include "charrotateitem.hxx"
+#include "charreliefitem.hxx"
 
 #ifndef _RTFTOKEN_H
 #include <svtools/rtftoken.h>
@@ -995,6 +997,22 @@ ATTR_SETEMPHASIS:
                     // RTF knows only 90°
                     pSet->Put( SvxCharRotateItem( 900, 1 == nTokenValue,
                                                        PLAINID->nHorzVert ));
+                }
+                break;
+
+            case RTF_EMBO:
+                if( PLAINID->nRelief )
+                {
+                    pSet->Put( SvxCharReliefItem( RELIEF_EMBOSSED,
+                                                    PLAINID->nRelief ));
+                }
+                break;
+
+            case RTF_IMPR:
+                if( PLAINID->nRelief )
+                {
+                    pSet->Put( SvxCharReliefItem( RELIEF_ENGRAVED,
+                                                    PLAINID->nRelief ));
                 }
                 break;
 
