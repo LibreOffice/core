@@ -2387,3 +2387,16 @@ File gid_Starregistry_Services_Rdb
     Dir = gid_Dir_Program;
     Styles = (PACKED, STARREGISTRY);
 End
+
+#ifdef UNX
+
+File gid_File_Registry_Spool_Oo_Office_Common_UseOOoFileDialogs_Xcu
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
+    Name = "/registry/spool/org/openoffice/Office/Common-UseOOoFileDialogs.xcu";
+    Styles = (PACKED,SCPZIP_REPLACE);
+End
+
+#endif
+
+
