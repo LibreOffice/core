@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-29 10:13:59 $
+ *  last change: $Author: er $ $Date: 2000-11-21 10:27:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1675,6 +1675,17 @@ void ScChangeActionContent::SetNewValue( const ScBaseCell* pCell,
 }
 
 
+void ScChangeActionContent::SetOldNewCells( ScBaseCell* pOldCellP,
+                        ULONG nOldFormat, ScBaseCell* pNewCellP,
+                        ULONG nNewFormat, ScDocument* pDoc )
+{
+    pOldCell = pOldCellP;
+    pNewCell = pNewCellP;
+    ScChangeActionContent::SetCell( aOldValue, pOldCell, nOldFormat, pDoc );
+    ScChangeActionContent::SetCell( aNewValue, pNewCell, nNewFormat, pDoc );
+}
+
+
 void ScChangeActionContent::SetValueString( String& rValue, ScBaseCell*& pCell,
         const String& rStr, ScDocument* pDoc )
 {
@@ -1952,6 +1963,27 @@ void ScChangeActionContent::SetValue( String& rStr, ScBaseCell*& pCell,
     }
     else
         pCell = NULL;
+}
+
+
+// static
+void ScChangeActionContent::SetCell( String& rStr, ScBaseCell* pCell,
+        ULONG nFormat, const ScDocument* pDoc )
+{
+    rStr.Erase();
+    switch ( pCell->GetCellType() )
+    {
+        case CELLTYPE_VALUE :
+        {   // e.g. remember date as date string
+            double nValue = ((ScValueCell*)pCell)->GetValue();
+            pDoc->GetFormatTable()->GetInputLineString( nValue,
+                nFormat, rStr );
+        }
+        break;
+        case CELLTYPE_FORMULA :
+            ((ScFormulaCell*)pCell)->SetInChangeTrack( TRUE );
+        break;
+    }
 }
 
 
@@ -3171,6 +3203,18 @@ void ScChangeTrack::AppendContentsIfInRefDoc( ScDocument* pRefDoc,
     }
     else
         nStartAction = nEndAction = 0;
+}
+
+
+ScChangeActionContent* ScChangeTrack::AppendContentOnTheFly(
+        const ScAddress& rPos, ScBaseCell* pOldCell, ScBaseCell* pNewCell,
+        ULONG nOldFormat, ULONG nNewFormat )
+{
+    ScRange aRange( rPos );
+    ScChangeActionContent* pAct = new ScChangeActionContent( aRange );
+    pAct->SetOldNewCells( pOldCell, nOldFormat, pNewCell, nNewFormat, pDoc );
+    Append( pAct );
+    return pAct;
 }
 
 

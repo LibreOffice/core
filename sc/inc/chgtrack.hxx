@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: er $ $Date: 2000-11-21 10:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -769,6 +769,9 @@ class ScChangeActionContent : public ScChangeAction
                                     const ScDocument* pFromDoc,
                                     ScDocument* pToDoc );
 
+    static  void                SetCell( String& rStr, ScBaseCell* pCell,
+                                    ULONG nFormat, const ScDocument* pDoc );
+
     static  BOOL                IsContentCellType( const ScBaseCell* );
 
     static  BOOL                NeedsNumberFormat( const ScBaseCell* );
@@ -838,6 +841,12 @@ public:
                                     const ScDocument* pFromDoc,
                                     ScDocument* pToDoc );
             void                SetNewValue( const ScBaseCell*, ScDocument* );
+
+                                // Used in import filter AppendContentOnTheFly,
+                                // takes ownership of cells.
+            void                SetOldNewCells( ScBaseCell* pOldCell,
+                                    ULONG nOldFormat, ScBaseCell* pNewCell,
+                                    ULONG nNewFormat, ScDocument* pDoc );
 
                                 // moeglichst nicht verwenden,
                                 // setzt nur String bzw. generiert Formelzelle
@@ -1109,6 +1118,8 @@ public:
 
             void                Append( ScChangeAction* );
 
+                                // pRefDoc may be NULL => no lookup of contents
+                                // => no generation of deleted contents
             void                AppendDeleteRange( const ScRange&,
                                     ScDocument* pRefDoc,
                                     ULONG& nStartAction, ULONG& nEndAction,
@@ -1147,6 +1158,20 @@ public:
             void                AppendContentsIfInRefDoc( ScDocument* pRefDoc,
                                     ULONG& nStartAction, ULONG& nEndAction );
 
+                                // Meant for import filter, creates and inserts
+                                // an unconditional content action of the two
+                                // cells without querying the document, not
+                                // even for number formats (though the number
+                                // formatter of the document may be used).
+                                // The action is returned and may be used to
+                                // set user name, description, date/time et al.
+                                // Takes ownership of the cells!
+        ScChangeActionContent*  AppendContentOnTheFly( const ScAddress& rPos,
+                                    ScBaseCell* pOldCell,
+                                    ScBaseCell* pNewCell,
+                                    ULONG nOldFormat = 0,
+                                    ULONG nNewFormat = 0 );
+
                                 // die folgenden beiden nur benutzen wenn's
                                 // nicht anders geht (setzen nur String fuer
                                 // NewValue bzw. Formelerzeugung)
@@ -1161,6 +1186,8 @@ public:
 
             void                AppendInsert( const ScRange& );
 
+                                // pRefDoc may be NULL => no lookup of contents
+                                // => no generation of deleted contents
             void                AppendMove( const ScRange& rFromRange,
                                     const ScRange& rToRange,
                                     ScDocument* pRefDoc );
