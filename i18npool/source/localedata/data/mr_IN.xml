@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale version="1.2">
+<LC_INFO>
+<Language>
+<LangID>hi</LangID>
+<DefaultName>Marathi</DefaultName>
+</Language>
+<Country>
+<CountryID>IN</CountryID>
+<DefaultName>India</DefaultName>
+</Country>
+</LC_INFO>
+<LC_CTYPE ref="hi_IN"/>
+<LC_FORMAT ref="hi_IN" replaceTo="[$रु.-44e]"/>
+<LC_COLLATION ref="en_US"/>
+<LC_SEARCH ref="en_US"/>
+<LC_CALENDAR ref="hi_IN"/>
+<LC_CURRENCY ref="hi_IN"/>
+<LC_TRANSLITERATION ref="en_US"/>
+<LC_MISC ref="hi_IN"/>
+<LC_NumberingLevel ref="hi_IN"/>
+<LC_OutLineNumberingLevel ref="en_US"/>
+</Locale>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale version="1.2">
+<LC_INFO>
+<Language>
+<LangID>gu</LangID>
+<DefaultName>Gujarati</DefaultName>
+</Language>
+<Country>
+<CountryID>IN</CountryID>
+<DefaultName>India</DefaultName>
+</Country>
+</LC_INFO>
+<LC_CTYPE ref="hi_IN"/>
+<LC_FORMAT ref="hi_IN" replaceTo="[$ઋુ.-447]"/>
+<LC_COLLATION ref="hi_IN"/>
+<LC_SEARCH ref="hi_IN"/>
+<LC_CALENDAR>
+<Calendar unoid="gregorian" default="true">
+<DaysOfWeek>
+<Day>
+<DayID>sun</DayID>
+<DefaultAbbrvName>ઋવિ.</DefaultAbbrvName>
+<DefaultFullName>ઋવિવાઋ</DefaultFullName>
+</Day>
+<Day>
+<DayID>mon</DayID>
+<DefaultAbbrvName>સોમ.</DefaultAbbrvName>
+<DefaultFullName>સોમવાઋ્</DefaultFullName>
+</Day>
+<Day>
+<DayID>tue</DayID>
+<DefaultAbbrvName>મંગલ.</DefaultAbbrvName>
+<DefaultFullName>મંગલવાઋ</DefaultFullName>
+</Day>
+<Day>
+<DayID>wed</DayID>
+<DefaultAbbrvName>બુધ.</DefaultAbbrvName>
+<DefaultFullName>બુધવાઋ</DefaultFullName>
+</Day>
+<Day>
+<DayID>thu</DayID>
+<DefaultAbbrvName>ગુઋુ.</DefaultAbbrvName>
+<DefaultFullName>ગુઋુવાઋ</DefaultFullName>
+</Day>
+<Day>
+<DayID>fri</DayID>
+<DefaultAbbrvName>શુક્ઋ.</DefaultAbbrvName>
+<DefaultFullName>શુક્ઋવાઋ</DefaultFullName>
+</Day>
+<Day>
+<DayID>sat</DayID>
+<DefaultAbbrvName>શનિ.</DefaultAbbrvName>
+<DefaultFullName>શનિવાઋ</DefaultFullName>
+</Day>
+</DaysOfWeek>
+<MonthsOfYear>
+<Month>
+<MonthID>jan</MonthID>
+<DefaultAbbrvName>જનવઋી.</DefaultAbbrvName>
+<DefaultFullName>જનવઋી</DefaultFullName>
+</Month>
+<Month>
+<MonthID>feb</MonthID>
+<DefaultAbbrvName>ફઋવઋી.</DefaultAbbrvName>
+<DefaultFullName>ફઋવઋી</DefaultFullName>
+</Month>
+<Month>
+<MonthID>mar</MonthID>
+<DefaultAbbrvName>માઋ્ચ.</DefaultAbbrvName>
+<DefaultFullName>માઋ્ચ</DefaultFullName>
+</Month>
+<Month>
+<MonthID>apr</MonthID>
+<DefaultAbbrvName>અપ્ઋેલ.</DefaultAbbrvName>
+<DefaultFullName>અપ્ઋેલ</DefaultFullName>
+</Month>
+<Month>
+<MonthID>may</MonthID>
+<DefaultAbbrvName>મઈ.</DefaultAbbrvName>
+<DefaultFullName>મઈ</DefaultFullName>
+</Month>
+<Month>
+<MonthID>jun</MonthID>
+<DefaultAbbrvName>જૂન.</DefaultAbbrvName>
+<DefaultFullName>જૂન</DefaultFullName>
+</Month>
+<Month>
+<MonthID>jul</MonthID>
+<DefaultAbbrvName>જુલાઇ.</DefaultAbbrvName>
+<DefaultFullName>જુલાઇ</DefaultFullName>
+</Month>
+<Month>
+<MonthID>aug</MonthID>
+<DefaultAbbrvName>અગસ્ત.</DefaultAbbrvName>
+<DefaultFullName>અગસ્ત</DefaultFullName>
+</Month>
+<Month>
+<MonthID>sep</MonthID>
+<DefaultAbbrvName>સિતંબઋ.</DefaultAbbrvName>
+<DefaultFullName>સિતંબઋ</DefaultFullName>
+</Month>
+<Month>
+<MonthID>oct</MonthID>
+<DefaultAbbrvName>અક્તોબઋ.</DefaultAbbrvName>
+<DefaultFullName>અક્તોબઋ</DefaultFullName>
+</Month>
+<Month>
+<MonthID>nov</MonthID>
+<DefaultAbbrvName>નવંબઋ.</DefaultAbbrvName>
+<DefaultFullName>નવંબઋ</DefaultFullName>
+</Month>
+<Month>
+<MonthID>dec</MonthID>
+<DefaultAbbrvName>ડિસધંબઋ.</DefaultAbbrvName>
+<DefaultFullName>ડિસંબઋ</DefaultFullName>
+</Month>
+</MonthsOfYear>
+<Eras>
+<Era>
+<EraID>bc</EraID>
+<DefaultAbbrvName>ઈસાપૂઋ્વ.હ્ન</DefaultAbbrvName>
+<DefaultFullName>ઈસાપૂઋ્વ.</DefaultFullName>
+</Era>
+<Era>
+<EraID>ad</EraID>
+<DefaultAbbrvName>સન.</DefaultAbbrvName>
+<DefaultFullName>સન.</DefaultFullName>
+</Era>
+</Eras>
+<StartDayOfWeek>
+<DayID>sun</DayID>
+</StartDayOfWeek>
+<MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+</Calendar>
+</LC_CALENDAR>
+<LC_CURRENCY>
+<Currency default="true" usedInCompatibleFormatCodes="true">
+<CurrencyID>ઋુ.</CurrencyID>
+<CurrencySymbol>ઋુ.</CurrencySymbol>
+<BankSymbol>INR</BankSymbol>
+<CurrencyName>Rupee</CurrencyName>
+<DecimalPlaces>2</DecimalPlaces>
+</Currency>
+</LC_CURRENCY>
+<LC_TRANSLITERATION ref="en_US"/>
+<LC_MISC>
+<ReservedWords>
+<trueWord>સહી</trueWord>
+<falseWord>ગલત</falseWord>
+<quarter1Word>પેહલા હંત 1</quarter1Word>
+<quarter2Word>ડૂસઋા હંત 2</quarter2Word>
+<quarter3Word>તીસઋા હંત 3</quarter3Word>
+<quarter4Word>ચૌતા હંત 4</quarter4Word>
+<aboveWord>ઊપઋ</aboveWord>
+<belowWord>નીચે</belowWord>
+<quarter1Abbreviation>Q1</quarter1Abbreviation>
+<quarter2Abbreviation>Q2</quarter2Abbreviation>
+<quarter3Abbreviation>Q3</quarter3Abbreviation>
+<quarter4Abbreviation>Q4</quarter4Abbreviation>
+</ReservedWords>
+</LC_MISC>
+<LC_NumberingLevel ref="hi_IN"/>
+<LC_OutLineNumberingLevel ref="en_US"/>
+</Locale>

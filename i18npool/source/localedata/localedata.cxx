@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: khong $ $Date: 2002-07-31 21:58:06 $
+ *  last change: $Author: khong $ $Date: 2002-08-08 00:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,8 @@ static const struct {
     { "kn_IN",  lcl_DATA_OTHERS, "kn" },
     { "ta_IN",  lcl_DATA_OTHERS, "ta" },
     { "te_IN",  lcl_DATA_OTHERS, "te" },
+    { "gu_IN",  lcl_DATA_OTHERS, "gu" },
+    { "mr_IN",  lcl_DATA_OTHERS, "mr" },
     { "th_TH",  lcl_DATA_OTHERS, "th" },
 
     { "af_ZA",  lcl_DATA_OTHERS, "af" },

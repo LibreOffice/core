@@ -367,6 +367,15 @@
 <quarter4Abbreviation>Q4</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
-<LC_NumberingLevel ref="en_US"/>
+<LC_NumberingLevel>
+<NumberingLevel Prefix=" " NumType="12" Suffix=")" NatNum="1"/>
+<NumberingLevel Prefix=" " NumType="12" Suffix="." NatNum="1"/>
+<NumberingLevel Prefix="(" NumType="12" Suffix=")" NatNum="1"/>
+<NumberingLevel Prefix=" " NumType="2" Suffix="." />
+<NumberingLevel Prefix=" " NumType="0" Suffix=")" />
+<NumberingLevel Prefix=" " NumType="1" Suffix=")" />
+<NumberingLevel Prefix="(" NumType="1" Suffix=")" />
+<NumberingLevel Prefix=" " NumType="3" Suffix="." />
+</LC_NumberingLevel>
 <LC_OutLineNumberingLevel ref="en_US"/>
 </Locale>
