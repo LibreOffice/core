@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:53:38 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:33:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -913,11 +913,11 @@ Menu RID_SVXMN_IMAP
                         Text [ dutch ] = "Helemaal ~vooraan" ;
                         Text [ spanish ] = "Traer al ~frente" ;
                         Text [ english_us ] = "Bring to Front" ;
-                        Text[ chinese_simplified ] = "ÖÃÓÚ¶¥²ã(~T)";
+                        Text[ chinese_simplified ] = "ÒÆ¶¯µ½×îÉÏÃæ(~T)";
                         Text[ russian ] = "Íà ~ïåğåäíèé ïëàí";
                         Text[ polish ] = "Przesuñ na wierzch";
                         Text[ japanese ] = "Å‘O–Ê‚ÖˆÚ“®(~F)";
-                        Text[ chinese_traditional ] = "¸m©ó³»¼h(~T)";
+                        Text[ chinese_traditional ] = "²¾°Ê¨ì³Ì¤W­±(~T)";
                         Text[ arabic ] = "ÅÍÖÇÑ Åáì ÇáÃãÇã";
                         Text[ greek ] = "ÌåôáöïñÜ óå ğ~ñşôï ğëÜíï";
                         Text[ korean ] = "¸Ç ¾ÕÀ¸·Î";
@@ -940,11 +940,11 @@ Menu RID_SVXMN_IMAP
                         Text [ dutch ] = "Naar v~oren" ;
                         Text [ spanish ] = "Traer ~más adelante" ;
                         Text [ english_us ] = "Bring ~Forward" ;
-                        Text[ chinese_simplified ] = "ÔÙÇ°ÖÃ(~F)";
+                        Text[ chinese_simplified ] = "ÉÏÒÆÒ»²ã(~F)";
                         Text[ russian ] = "Ïåğåìåñòèòü ~âïåğåä";
                         Text[ polish ] = "Przesuñ do przodu";
                         Text[ japanese ] = "‚³‚ç‚É‘O‚Ö(~F)";
-                        Text[ chinese_traditional ] = "¦A«e¸m(~F)";
+                        Text[ chinese_traditional ] = "¤W²¾¤@¼h(~F)";
                         Text[ arabic ] = "ÅÍÖÇÑ ÃãÇãÇğ";
                         Text[ greek ] = "Ì~åôáöïñÜ İíá åğßğåäï åìğñüò";
                         Text[ korean ] = "¾ÕÀ¸·Î °¡Á®¿À±â(~F)";
@@ -967,11 +967,11 @@ Menu RID_SVXMN_IMAP
                         Text [ dutch ] = "Naar a~chteren" ;
                         Text [ spanish ] = "Enviar hacia a~trás" ;
                         Text [ english_us ] = "Send Back~ward" ;
-                        Text[ chinese_simplified ] = "ÔÙºóÖÃ(~W)";
+                        Text[ chinese_simplified ] = "ÏÂÒÆÒ»²ã(~W)";
                         Text[ russian ] = "Ïåğåìåñòèòü ~íàçàä";
                         Text[ polish ] = "Przesuñ do ty³u";
                         Text[ japanese ] = "‚³‚ç‚ÉŒã‚Ö(~W)";
-                        Text[ chinese_traditional ] = "¦A«á¸m(~W)";
+                        Text[ chinese_traditional ] = "¤U²¾¤@¼h(~W)";
                         Text[ arabic ] = "ÅÑÓÇá ÎáİÇó";
                         Text[ greek ] = "~ÌåôáöïñÜ ğßóù";
                         Text[ korean ] = "µÚ·Î º¸³»±â(~W)";
@@ -994,7 +994,7 @@ Menu RID_SVXMN_IMAP
                         Text [ dutch ] = "Helemaal~achteraan" ;
                         Text [ spanish ] = "Enviar al ~fondo" ;
                         Text [ english_us ] = "~Send to Back" ;
-                        Text[ chinese_simplified ] = "ÖÃÓÚµ×²ã(~S)";
+                        Text[ chinese_simplified ] = "ÒÆµ½µ×²ã(~S)";
                         Text[ russian ] = "Íà ~çàäíèé ïëàí";
                         Text[ polish ] = "Przesuñ na spód";
                         Text[ japanese ] = "Å”w–Ê‚ÖˆÚ“®(~S)";
