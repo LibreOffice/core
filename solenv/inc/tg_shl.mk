@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: svesik $ $Date: 2000-12-06 19:08:11 $
+#   last change: $Author: svesik $ $Date: 2000-12-06 19:17:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -419,6 +419,11 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF
+.IF "$(OS)"=="IRIX"
+        $(CC) -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+        @+if ( ! -e $(SOLARLIBDIR) ) mkdir $(SOLARLIBDIR)
+        @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
+.ENDIF			# "$(OS)"=="IRIX"
 .ENDIF
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL$(TNR)VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
