@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery1.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:26:07 $
+ *  last change: $Author: rt $ $Date: 2004-07-05 09:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,11 +317,17 @@ void Gallery::ReleaseGallery( Gallery* pGallery )
         if( pGallery == pEntry->GetGallery() )
             pFound = pEntry;
 
-    DBG_ASSERT( pFound, "Gallery::ReleaseGallery(...): Gallery entry not found" );
-    pFound->DecRefCount();
+    if( pFound )
+    {
+        pFound->DecRefCount();
 
-    if( !pFound->GetRefCount() )
-        delete (GalleryCacheEntry*) aGalleryCache.Remove( pFound );
+        if( !pFound->GetRefCount() )
+            delete (GalleryCacheEntry*) aGalleryCache.Remove( pFound );
+    }
+    else
+    {
+        DBG_ERROR( "Gallery::ReleaseGallery(...): Gallery entry not found" );
+    }
 }
 
 // ------------------------------------------------------------------------
