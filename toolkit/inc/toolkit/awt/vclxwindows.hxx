@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:54:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:04:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _TOOLKIT_AWT_VCLXWINDOWS_HXX_
 #define _TOOLKIT_AWT_VCLXWINDOWS_HXX_
 
+#ifndef TOOLKIT_DLLAPI_H
+#include <toolkit/dllapi.h>
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -688,7 +691,7 @@ public:
 //  ----------------------------------------------------
 //  class VCLXEdit
 //  ----------------------------------------------------
-class VCLXEdit :    public ::com::sun::star::awt::XTextComponent,
+class TOOLKIT_DLLPUBLIC VCLXEdit :  public ::com::sun::star::awt::XTextComponent,
                     public ::com::sun::star::awt::XTextEditField,
                     public ::com::sun::star::awt::XTextLayoutConstrains,
                     public VCLXWindow
@@ -882,7 +885,7 @@ public:
 //  ----------------------------------------------------
 //  class VCLXSpinField
 //  ----------------------------------------------------
-class VCLXSpinField :   public ::com::sun::star::awt::XSpinField,
+class TOOLKIT_DLLPUBLIC VCLXSpinField : public ::com::sun::star::awt::XSpinField,
                         public VCLXEdit
 {
 private:
@@ -942,7 +945,7 @@ public:
 //  ----------------------------------------------------
 //  class VCLXDateField
 //  ----------------------------------------------------
-class VCLXDateField :   public ::com::sun::star::awt::XDateField,
+class TOOLKIT_DLLPUBLIC VCLXDateField : public ::com::sun::star::awt::XDateField,
                         public VCLXFormattedSpinField
 {
 public:
