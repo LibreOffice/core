@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2000-12-05 13:00:20 $
+ *  last change: $Author: os $ $Date: 2000-12-06 10:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,7 +580,6 @@ sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
                 try
                 {
                     xCont->removeByName(pNames[i]);
-                    xBatch->commitChanges();
                 }
                 catch(Exception& rEx)
                 {
@@ -589,6 +588,7 @@ sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
         #endif
                 }
             }
+            xBatch->commitChanges();
         }
         catch(Exception& rEx)
         {
@@ -597,6 +597,7 @@ sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
 #endif
             bRet = sal_False;
         }
+
     }
     return bRet;
 }
@@ -626,14 +627,14 @@ sal_Bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString
                 xCont = Reference<XNameContainer> (xHierarchyAccess, UNO_QUERY);
             if(!xCont.is())
                 return sal_False;
-            Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
             try
             {
                 for(sal_Int32 nElement = 0; nElement < rElements.getLength(); nElement++)
                 {
                     xCont->removeByName(pElements[nElement]);
-                    xBatch->commitChanges();
                 }
+                Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
+                xBatch->commitChanges();
             }
             catch(Exception& rEx)
             {
@@ -711,28 +712,8 @@ sal_Bool ConfigItem::SetSetProperties(
                         Reference<XInterface> xInst = xFac->createInstance();
                         Any aVal; aVal <<= xInst;
                         xCont->insertByName(pSubNodeNames[j], aVal);
-                        //node changes must be commited before values can be changed
-                        try
-                        {
-                            xBatch->commitChanges();
-                        }
-                        catch(Exception& rEx)
-                        {
-#ifdef DBG_UTIL
-                            lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
-#endif
-                        }
                     }
                     //set values
-                }
-                Sequence< OUString > aSetNames(rValues.getLength());
-                OUString* pSetNames = aSetNames.getArray();
-                Sequence< Any> aSetValues(rValues.getLength());
-                Any* pSetValues = aSetValues.getArray();
-                for(sal_Int32 k = 0; k < rValues.getLength(); k++)
-                {
-                    pSetNames[k] =  pProperties[k].Name;
-                    pSetValues[k] = pProperties[k].Value;
                 }
                 try
                 {
@@ -743,6 +724,16 @@ sal_Bool ConfigItem::SetSetProperties(
 #ifdef DBG_UTIL
                     lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
 #endif
+                }
+
+                Sequence< OUString > aSetNames(rValues.getLength());
+                OUString* pSetNames = aSetNames.getArray();
+                Sequence< Any> aSetValues(rValues.getLength());
+                Any* pSetValues = aSetValues.getArray();
+                for(sal_Int32 k = 0; k < rValues.getLength(); k++)
+                {
+                    pSetNames[k] =  pProperties[k].Name;
+                    pSetValues[k] = pProperties[k].Value;
                 }
                 bRet = PutProperties(aSetNames, aSetValues);
             }
@@ -761,9 +752,6 @@ sal_Bool ConfigItem::SetSetProperties(
                             xCont->replaceByName(sSubNode, pValues[nValue].Value);
                         else
                             xCont->insertByName(sSubNode, pValues[nValue].Value);
-
-                        //node changes must be commited before values can be changed
-                        xBatch->commitChanges();
                     }
                     catch(Exception& rEx)
                     {
@@ -772,8 +760,8 @@ sal_Bool ConfigItem::SetSetProperties(
 #endif
                     }
                 }
+                xBatch->commitChanges();
             }
-
         }
         catch(Exception& rEx)
         {
@@ -852,18 +840,14 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                     if(!bFound)
                     {
                         xCont->removeByName(pContainerSubNodes[nContSub]);
-                        //node changes must be commited before values can be changed
-                        try
-                        {
-                            xBatch->commitChanges();
-                        }
-                        catch(Exception& rEx)
-                        {
-#ifdef DBG_UTIL
-                            lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
-#endif
-                        }
                     }
+                }
+                try { xBatch->commitChanges(); }
+                catch(Exception& rEx)
+                {
+#ifdef DBG_UTIL
+                    lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
+#endif
                 }
 
                 for(sal_Int32 j = 0; j < nSubIndex; j++)
@@ -874,19 +858,14 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                         Reference<XInterface> xInst = xFac->createInstance();
                         Any aVal; aVal <<= xInst;
                         xCont->insertByName(pSubNodeNames[j], aVal);
-                        //node changes must be commited before values can be changed
-                        try
-                        {
-                            xBatch->commitChanges();
-                        }
-                        catch(Exception& rEx)
-                        {
-#ifdef DBG_UTIL
-                            lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
-#endif
-                        }
                     }
-                    //set values
+                }
+                try { xBatch->commitChanges(); }
+                catch(Exception& rEx)
+                {
+#ifdef DBG_UTIL
+                    lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
+#endif
                 }
                 Sequence< OUString > aSetNames(rValues.getLength());
                 OUString* pSetNames = aSetNames.getArray();
@@ -896,18 +875,6 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                 {
                     pSetNames[k] =  pProperties[k].Name;
                     pSetValues[k] = pProperties[k].Value;
-                }
-
-                //node changes must be commited before values can be changed
-                try
-                {
-                    xBatch->commitChanges();
-                }
-                catch(Exception& rEx)
-                {
-#ifdef DBG_UTIL
-                    lcl_CFG_DBG_EXCEPTION("Exception from commitChanges(): ", rEx);
-#endif
                 }
                 bRet = PutProperties(aSetNames, aSetValues);
             }
@@ -946,9 +913,6 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                             xCont->replaceByName(pValues[nValue].Name, pValues[nValue].Value);
                         else
                             xCont->insertByName(pValues[nValue].Name, pValues[nValue].Value);
-
-                        //node changes must be commited before values can be changed
-                        xBatch->commitChanges();
                     }
                     catch(Exception& rEx)
                     {
@@ -957,6 +921,7 @@ sal_Bool ConfigItem::ReplaceSetProperties(
 #endif
                     }
                 }
+                xBatch->commitChanges();
             }
         }
         catch(Exception& rEx)
