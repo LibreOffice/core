@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-03 16:58:55 $
+#   last change: $Author: hjs $ $Date: 2002-04-15 14:08:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,7 +101,7 @@ NEW_PATCH_FILE_NAME:=$(PATCH_FILE_NAME)
 .ENDIF			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
 
 .IF "$(TAR_EXCLUDES)"!=""
-TAR_EXCLUDE_SWITCH=--exclude $(TAR_EXCLUDES)
+TAR_EXCLUDE_SWITCH=--exclude=$(TAR_EXCLUDES)
 .ENDIF          # "$(TAR_EXCLUDES)"!=""
 
 #clean PWD to let a build_action=dmake set it with new value
