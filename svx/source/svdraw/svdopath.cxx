@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-13 10:17:00 $
+ *  last change: $Author: cl $ $Date: 2001-11-22 17:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3218,8 +3218,11 @@ BOOL SdrPathObj::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& rPolyPolygon) c
     rPolyPolygon.Move(-aRectangle.Left(), -aRectangle.Top());
 
     // position maybe relative to anchorpos, convert
-    if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
-        aTranslate -= Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
+    if( pModel->IsWriter() )
+    {
+        if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
+            aTranslate -= Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
+    }
 
     // force MapUnit to 100th mm
     SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
@@ -3326,9 +3329,12 @@ void SdrPathObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPo
         }
     }
 
-    // if anchor is used, make position relative to it
-    if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
-        aTranslate -= Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
+    if( pModel->IsWriter() )
+    {
+        // if anchor is used, make position relative to it
+        if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
+            aTranslate -= Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
+    }
 
     // set PathPoly and get type
     SetPathPoly(aNewPolyPolygon);

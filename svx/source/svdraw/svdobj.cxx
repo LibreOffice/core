@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-22 14:05:25 $
+ *  last change: $Author: cl $ $Date: 2001-11-22 17:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4480,8 +4480,11 @@ BOOL SdrObject::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& rPolyPolygon) co
     Vector2D aTranslate((double)aRectangle.Left(), (double)aRectangle.Top());
 
     // position maybe relative to anchorpos, convert
-    if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
-        aTranslate -= Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
+    if( pModel->IsWriter() )
+    {
+        if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
+            aTranslate -= Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
+    }
 
     // force MapUnit to 100th mm
     SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
@@ -4554,8 +4557,11 @@ void SdrObject::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPol
     }
 
     // if anchor is used, make position relative to it
-    if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
-        aTranslate -= Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
+    if( pModel->IsWriter() )
+    {
+        if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
+            aTranslate -= Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
+    }
 
     // build BaseRect
     Point aPoint(FRound(aTranslate.X()), FRound(aTranslate.Y()));
