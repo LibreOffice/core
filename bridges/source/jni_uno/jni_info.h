@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:30:47 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:50:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,9 @@ inline bool type_equals(
     if (type1 == type2)
         return true;
     ::rtl::OUString const & name1 =
-          *reinterpret_cast< ::rtl::OUString const * >( &type1->pTypeName );
+          ::rtl::OUString::unacquired( &type1->pTypeName );
     ::rtl::OUString const & name2 =
-          *reinterpret_cast< ::rtl::OUString const * >( &type2->pTypeName );
+          ::rtl::OUString::unacquired( &type2->pTypeName );
     return ((type1->eTypeClass == type2->eTypeClass) && name1.equals( name2 ));
 }
 
@@ -97,10 +97,8 @@ inline bool type_equals(
 inline bool is_XInterface( typelib_TypeDescriptionReference * type )
 {
     return ((typelib_TypeClass_INTERFACE == type->eTypeClass) &&
-            reinterpret_cast< ::rtl::OUString const * >(
-                &type->pTypeName )->equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "com.sun.star.uno.XInterface") ));
+            ::rtl::OUString::unacquired( &type->pTypeName ).equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XInterface") ));
 }
 
 //==============================================================================
@@ -115,9 +113,8 @@ protected:
     inline void destruct( JNIEnv * jni_env )
         { jni_env->DeleteGlobalRef( m_class ); }
     inline ~JNI_type_info() {}
-    JNI_type_info(
-        JNI_context const & jni,
-        ::com::sun::star::uno::TypeDescription const & td );
+    explicit JNI_type_info(
+        JNI_context const & jni, typelib_TypeDescription * td );
 };
 
 //==============================================================================
@@ -129,9 +126,8 @@ struct JNI_interface_type_info : public JNI_type_info
     jmethodID *                                 m_methods;
 
     virtual void destroy( JNIEnv * jni_env );
-    JNI_interface_type_info(
-        JNI_context const & jni,
-        ::com::sun::star::uno::TypeDescription const & td );
+    explicit JNI_interface_type_info(
+        JNI_context const & jni, typelib_TypeDescription * td );
 };
 
 //==============================================================================
@@ -143,9 +139,8 @@ struct JNI_compound_type_info : public JNI_type_info
     jfieldID *                                  m_fields;
 
     virtual void destroy( JNIEnv * jni_env );
-    JNI_compound_type_info(
-        JNI_context const & jni,
-        ::com::sun::star::uno::TypeDescription const & td );
+    explicit JNI_compound_type_info(
+        JNI_context const & jni, typelib_TypeDescription * td );
 };
 
 //==============================================================================
@@ -269,7 +264,7 @@ private:
 
     void destruct( JNIEnv * jni_env );
 
-    JNI_info( JNIEnv * jni_env );
+    explicit JNI_info( JNIEnv * jni_env );
     inline ~JNI_info() {}
 };
 
@@ -331,7 +326,7 @@ inline void JNI_info::append_sig(
     case typelib_TypeClass_EXCEPTION:
     {
         ::rtl::OUString const & uno_name =
-              *reinterpret_cast< ::rtl::OUString const * >( &type->pTypeName );
+              ::rtl::OUString::unacquired( &type->pTypeName );
         buf->append( 'L' );
         buf->append(
             ::rtl::OUStringToOString(
@@ -356,8 +351,7 @@ inline void JNI_info::append_sig(
         else
         {
             ::rtl::OUString const & uno_name =
-                  *reinterpret_cast< ::rtl::OUString const * >(
-                      &type->pTypeName );
+                  ::rtl::OUString::unacquired( &type->pTypeName );
             buf->append( 'L' );
             buf->append(
                 ::rtl::OUStringToOString(
@@ -369,7 +363,7 @@ inline void JNI_info::append_sig(
     default:
         throw BridgeRuntimeError(
             OUSTR("unsupported type: ") +
-            *reinterpret_cast< ::rtl::OUString const * >( &type->pTypeName ) );
+            ::rtl::OUString::unacquired( &type->pTypeName ) );
     }
 }
 
