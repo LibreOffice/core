@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-04 13:17:40 $
+ *  last change: $Author: tbe $ $Date: 2001-05-04 15:15:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -646,7 +646,7 @@ void ElementDescriptor::readOrientationAttr( OUString const & rPropName, OUStrin
     if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
     {
         Any a( _xProps->getPropertyValue( rPropName ) );
-        if (a.getValueTypeClass() == TypeClass_SHORT)
+        if (a.getValueTypeClass() == TypeClass_LONG)
         {
             switch (*(sal_Int32 const *)a.getValue())
             {
