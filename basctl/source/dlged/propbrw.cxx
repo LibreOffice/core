@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-04 11:09:44 $
+ *  last change: $Author: tbe $ $Date: 2001-08-17 13:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,6 +484,10 @@ void PropBrw::implSetNewObject(const Reference< XPropertySet >& _rxObject)
         else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFixedLineModel") ))
         {
             nResId = RID_STR_CLASS_FIXEDLINE;
+        }
+        else
+        {
+            nResId = RID_STR_CLASS_CONTROL;
         }
 
         if (nResId)

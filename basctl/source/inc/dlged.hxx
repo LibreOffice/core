@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-04-10 15:17:46 $
+ *  last change: $Author: tbe $ $Date: 2001-08-17 13:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 #endif
 
 
-enum VCDlgMode { VCDLGED_INSERT, VCDLGED_SELECT, VCDLGED_TEST, VCDLGED_BLOCK_PAINT };
+enum DlgEdMode { DLGED_INSERT, DLGED_SELECT, DLGED_TEST };
 
 //============================================================================
 // DlgEditor
@@ -111,7 +111,7 @@ protected:
     DlgEdFactory*       pObjFac;
     Window*             pWindow;
     DlgEdFunc*          pFunc;
-    VCDlgMode           eMode;
+    DlgEdMode           eMode;
     USHORT              eActObj;
     BOOL                bFirstDraw;
     Size                aGridSize;
@@ -163,10 +163,10 @@ public:
     void            Paint( const Rectangle& rRect );
     BOOL            KeyInput( const KeyEvent& rKEvt );
 
-    void            SetMode( VCDlgMode eMode );
+    void            SetMode( DlgEdMode eMode );
     void            SetInsertObj( USHORT eObj );
     USHORT          GetInsertObj() const;
-    VCDlgMode       GetMode() const { return eMode; }
+    DlgEdMode       GetMode() const { return eMode; }
     BOOL            IsCreateOK() const { return bCreateOK; }
 
     void            Cut();

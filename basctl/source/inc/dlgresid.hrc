@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgresid.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-04 11:10:36 $
+ *  last change: $Author: tbe $ $Date: 2001-08-17 13:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,19 +68,20 @@
 
 // Dialog Control Id's -----------------------------------------------------------
 
-#define RID_STR_CLASS_DIALOG                ( RID_DLG_START +   0 )
-#define RID_STR_CLASS_BUTTON                ( RID_DLG_START +   1 )
-#define RID_STR_CLASS_RADIOBUTTON           ( RID_DLG_START +   2 )
-#define RID_STR_CLASS_CHECKBOX              ( RID_DLG_START +   3 )
-#define RID_STR_CLASS_LISTBOX               ( RID_DLG_START +   4 )
-#define RID_STR_CLASS_COMBOBOX              ( RID_DLG_START +   5 )
-#define RID_STR_CLASS_GROUPBOX              ( RID_DLG_START +   6 )
-#define RID_STR_CLASS_EDIT                  ( RID_DLG_START +   7 )
-#define RID_STR_CLASS_FIXEDTEXT             ( RID_DLG_START +   8 )
-#define RID_STR_CLASS_IMAGECONTROL          ( RID_DLG_START +   9 )
-#define RID_STR_CLASS_PROGRESSBAR           ( RID_DLG_START +  10 )
-#define RID_STR_CLASS_SCROLLBAR             ( RID_DLG_START +  11 )
-#define RID_STR_CLASS_FIXEDLINE             ( RID_DLG_START +  12 )
+#define RID_STR_CLASS_CONTROL               ( RID_DLG_START +   0 )
+#define RID_STR_CLASS_DIALOG                ( RID_DLG_START +   1 )
+#define RID_STR_CLASS_BUTTON                ( RID_DLG_START +   2 )
+#define RID_STR_CLASS_RADIOBUTTON           ( RID_DLG_START +   3 )
+#define RID_STR_CLASS_CHECKBOX              ( RID_DLG_START +   4 )
+#define RID_STR_CLASS_LISTBOX               ( RID_DLG_START +   5 )
+#define RID_STR_CLASS_COMBOBOX              ( RID_DLG_START +   6 )
+#define RID_STR_CLASS_GROUPBOX              ( RID_DLG_START +   7 )
+#define RID_STR_CLASS_EDIT                  ( RID_DLG_START +   8 )
+#define RID_STR_CLASS_FIXEDTEXT             ( RID_DLG_START +   9 )
+#define RID_STR_CLASS_IMAGECONTROL          ( RID_DLG_START +  10 )
+#define RID_STR_CLASS_PROGRESSBAR           ( RID_DLG_START +  11 )
+#define RID_STR_CLASS_SCROLLBAR             ( RID_DLG_START +  12 )
+#define RID_STR_CLASS_FIXEDLINE             ( RID_DLG_START +  13 )
 
 // Property Browser Headline Id's -----------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeddef.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-30 07:44:39 $
+ *  last change: $Author: tbe $ $Date: 2001-08-17 13:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,24 +73,22 @@ const UINT32 DlgInventor = UINT32('D')*0x00000001+
                            UINT32('1')*0x01000000;
 
 
-#define OBJ_DLG_DIALOG          ((UINT16) 1)
-#define OBJ_DLG_PUSHBUTTON      ((UINT16) 2)
-#define OBJ_DLG_RADIOBUTTON     ((UINT16) 3)
-#define OBJ_DLG_CHECKBOX        ((UINT16) 4)
-#define OBJ_DLG_LISTBOX         ((UINT16) 5)
-#define OBJ_DLG_COMBOBOX        ((UINT16) 6)
-#define OBJ_DLG_GROUPBOX        ((UINT16) 7)
-#define OBJ_DLG_EDIT            ((UINT16) 8)
-#define OBJ_DLG_FIXEDTEXT       ((UINT16) 9)
-#define OBJ_DLG_HSCROLLBAR      ((UINT16)10)
-#define OBJ_DLG_VSCROLLBAR      ((UINT16)11)
-#define OBJ_DLG_IMAGECONTROL    ((UINT16)12)
-#define OBJ_DLG_PROGRESSBAR     ((UINT16)13)
-#define OBJ_DLG_HFIXEDLINE      ((UINT16)14)
-#define OBJ_DLG_VFIXEDLINE      ((UINT16)15)
-#define OBJ_DLG_SPINBUTTON      ((UINT16)16)
-#define OBJ_DLG_URLBUTTON       ((UINT16)17)
-#define OBJ_DLG_PREVIEW         ((UINT16)18)
+#define OBJ_DLG_CONTROL         ((UINT16) 1)
+#define OBJ_DLG_DIALOG          ((UINT16) 2)
+#define OBJ_DLG_PUSHBUTTON      ((UINT16) 3)
+#define OBJ_DLG_RADIOBUTTON     ((UINT16) 4)
+#define OBJ_DLG_CHECKBOX        ((UINT16) 5)
+#define OBJ_DLG_LISTBOX         ((UINT16) 6)
+#define OBJ_DLG_COMBOBOX        ((UINT16) 7)
+#define OBJ_DLG_GROUPBOX        ((UINT16) 8)
+#define OBJ_DLG_EDIT            ((UINT16) 9)
+#define OBJ_DLG_FIXEDTEXT       ((UINT16)10)
+#define OBJ_DLG_IMAGECONTROL    ((UINT16)11)
+#define OBJ_DLG_PROGRESSBAR     ((UINT16)12)
+#define OBJ_DLG_HSCROLLBAR      ((UINT16)13)
+#define OBJ_DLG_VSCROLLBAR      ((UINT16)14)
+#define OBJ_DLG_HFIXEDLINE      ((UINT16)15)
+#define OBJ_DLG_VFIXEDLINE      ((UINT16)16)
 
 
 #endif // _BASCTL_DLGEDDEF_HXX

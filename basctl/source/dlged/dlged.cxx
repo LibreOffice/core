@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-27 18:06:15 $
+ *  last change: $Author: tbe $ $Date: 2001-08-17 13:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ DlgEditor::DlgEditor()
     ,pObjFac(NULL)
     ,pWindow(NULL)
     ,pFunc(NULL)
-    ,eMode( VCDLGED_SELECT )
+    ,eMode( DLGED_SELECT )
     ,eActObj( OBJ_DLG_PUSHBUTTON )
     ,bFirstDraw(FALSE)
     ,aGridSize( 100, 100 )  // 100TH_MM
@@ -335,84 +335,6 @@ void DlgEditor::DoScroll( ScrollBar* pActScroll )
 
 void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoControlDialogModel )
 {
-    /* FOR TEST
-    // my dialog model  --  delete this later
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMSF = getProcessServiceFactory();
-
-
-    //uno::Reference< awt::XToolkit> xToolkit( xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.ExtToolkit" ) ) ), uno::UNO_QUERY );
-
-    // Create a DialogModel
-    uno::Reference< container::XNameContainer > xC( xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), uno::UNO_QUERY );
-    uno::Reference< lang::XMultiServiceFactory >  xModFact( xC, uno::UNO_QUERY );
-    uno::Reference< beans::XPropertySet > xDlgPSet( xC, uno::UNO_QUERY );
-    uno::Any aValue;
-    aValue <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Test-Dialog" ) );
-    xDlgPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" ) ), aValue );
-    aValue <<= (sal_Int32) 0;
-    xDlgPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ), aValue );
-    aValue <<= (sal_Int32) 0;
-    xDlgPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) ), aValue );
-    aValue <<= (sal_Int32) 0;
-    xDlgPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Width" ) ), aValue );
-    aValue <<= (sal_Int32) 0;
-    xDlgPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), aValue );
-
-    // Create a ButtonModel as a DialogModel substitute
-    uno::Reference< awt::XControlModel > xDlg1( xModFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlButtonModel" ) ) ), uno::UNO_QUERY );
-    uno::Reference< beans::XPropertySet > xPSet( xDlg1, uno::UNO_QUERY );
-    //aValue <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Test-Dialog" ) );
-    //xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" ) ), aValue );
-    aValue <<= (sal_Int32) 50;
-    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ), aValue );
-    aValue <<= (sal_Int32) 50;
-    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) ), aValue );
-    aValue <<= (sal_Int32) 150;
-    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Width" ) ), aValue );
-    aValue <<= (sal_Int32) 150;
-    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), aValue );
-
-    // Create a ButtonModel
-    uno::Reference< awt::XControlModel > xCtrl1( xModFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlButtonModel" ) ) ), uno::UNO_QUERY );
-    xPSet = uno::Reference< beans::XPropertySet >( xCtrl1, uno::UNO_QUERY );
-    aValue <<= (sal_Int32) 10;
-    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ), aValue );
-    aValue <<= (sal_Int32) 80;
-    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) ), aValue );
-    aValue <<= (sal_Int32) 50;
-    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Width" ) ), aValue );
-    aValue <<= (sal_Int32) 20;
-    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), aValue );
-    aValue <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Button1" ) );
-    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aValue );
-    aValue <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Test!" ) );
-    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Label" ) ), aValue );
-    uno::Any aAny;
-    aAny <<= xCtrl1;
-    xC->insertByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Button1" ) ), aAny );
-
-     // Create a EditModel
-    uno::Reference< awt::XControlModel > xCtrl2( xModFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlEditModel" ) ) ), uno::UNO_QUERY );
-    xPSet = uno::Reference< beans::XPropertySet >( xCtrl2, uno::UNO_QUERY );
-    aValue <<= (sal_Int32) 10;
-    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ), aValue );
-    aValue <<= (sal_Int32) 50;
-    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) ), aValue );
-    aValue <<= (sal_Int32) 50;
-    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Width" ) ), aValue );
-    aValue <<= (sal_Int32) 20;
-    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), aValue );
-    aValue <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Edit1" ) );
-    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aValue );
-    aValue <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Text..." ) );
-    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Text" ) ), aValue );
-    aAny <<= xCtrl2;
-    xC->insertByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Edit1" ) ), aAny );
-
-    // end of delete
-    */
-
     // set dialog model
     m_xUnoControlDialogModel = xUnoControlDialogModel;
 
@@ -471,7 +393,7 @@ void DlgEditor::MouseButtonUp( const MouseEvent& rMEvt )
 {
     BOOL bRet = pFunc->MouseButtonUp( rMEvt );
 
-    if( (eMode == VCDLGED_INSERT) )
+    if( (eMode == DLGED_INSERT) )
         bCreateOK = bRet;
 }
 
@@ -584,7 +506,7 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
 
 //----------------------------------------------------------------------------
 
-void DlgEditor::SetMode( VCDlgMode eNewMode )
+void DlgEditor::SetMode( DlgEdMode eNewMode )
 {
     if( eMode != eNewMode )
     {
@@ -593,12 +515,12 @@ void DlgEditor::SetMode( VCDlgMode eNewMode )
     }
 
     eMode = eNewMode;
-    if( eMode == VCDLGED_INSERT )
+    if( eMode == DLGED_INSERT )
         pFunc = new DlgEdFuncInsert( this );
     else
         pFunc = new DlgEdFuncSelect( this );
 
-    if( eMode == VCDLGED_TEST )
+    if( eMode == DLGED_TEST )
         ShowDialog();
 }
 

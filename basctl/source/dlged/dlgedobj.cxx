@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-27 18:06:15 $
+ *  last change: $Author: tbe $ $Date: 2001-08-17 13:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,6 +600,10 @@ void SAL_CALL DlgEdObj::TabIndexChange( const  ::com::sun::star::beans::Property
     {
         nResId = RID_STR_CLASS_FIXEDLINE;
     }
+    else
+    {
+        nResId = RID_STR_CLASS_CONTROL;
+    }
 
     if (nResId)
     {
@@ -607,23 +611,6 @@ void SAL_CALL DlgEdObj::TabIndexChange( const  ::com::sun::star::beans::Property
     }
 
     return aDefaultName;
-
-    /* old version
-
-    String aStr(aServiceName);
-
-    sal_Unicode pDelims[] = { '.' , 0 };
-    xub_StrLen nPos = aStr.SearchCharBackward( pDelims );
-    if( nPos != STRING_NOTFOUND )
-    {
-        aStr.Erase( 0, ++nPos );
-    }
-
-    aStr.SearchAndReplaceAscii("UnoControl", UniString() );
-    aStr.SearchAndReplaceAscii("Model", UniString() );
-
-    return aStr;
-    */
 }
 
 //----------------------------------------------------------------------------
@@ -714,7 +701,7 @@ sal_uInt16 DlgEdObj::GetObjIdentifier() const
     }
     else
     {
-        return 0;
+        return OBJ_DLG_CONTROL;
     }
 }
 
