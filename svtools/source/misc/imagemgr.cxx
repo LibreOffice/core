@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:38:18 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:32:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,12 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
     { "met",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_MET },
     { "mml",   FALSE, STR_DESCRIPTION_MATHML_DOC,            IMG_MATH },
     { "mod",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
+    { "ood",   FALSE, STR_DESCRIPTION_SXDRAW_DOC,            IMG_DRAW },
+    { "oof",   FALSE, STR_DESCRIPTION_SXMATH_DOC,            IMG_MATH },
+    { "oom",   FALSE, STR_DESCRIPTION_SXGLOBAL_DOC,          IMG_GLOBAL_DOC },
+    { "oop",   FALSE, STR_DESCRIPTION_SXIMPRESS_DOC,         IMG_IMPRESS },
+    { "oos",   FALSE, STR_DESCRIPTION_SXCALC_DOC,            IMG_CALC },
+    { "oot",   FALSE, STR_DESCRIPTION_SXWRITER_DOC,          IMG_WRITER },
     { "pas",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
     { "pcd",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCD },
     { "pct",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCT },
