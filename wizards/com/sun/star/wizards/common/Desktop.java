@@ -2,9 +2,9 @@
 *
 *  $RCSfile: Desktop.java,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-21 13:50:24 $
+*  last change: $Author: vg $ $Date: 2005-03-08 15:32:59 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -140,22 +140,52 @@ public class Desktop {
     }
 
 
-    public static void dispatchURL(XMultiServiceFactory xMSF, String sURL, com.sun.star.frame.XFrame xFrame) {
+    public static XDispatch getDispatcher(XMultiServiceFactory xMSF, XFrame xFrame, String _stargetframe, com.sun.star.util.URL oURL) {
         try {
-            PropertyValue[] oArg = new PropertyValue[0];
-            com.sun.star.util.URL[] oUrl = new com.sun.star.util.URL[1];
-            oUrl[0] = new com.sun.star.util.URL();
-            oUrl[0].Complete = sURL;
+            com.sun.star.util.URL[] oURLArray = new com.sun.star.util.URL[1];
+            oURLArray[0] = oURL;
+            XDispatchProvider xDispatchProvider = (XDispatchProvider) UnoRuntime.queryInterface(XDispatchProvider.class, xFrame);
+            XDispatch xDispatch = xDispatchProvider.queryDispatch(oURLArray[0], _stargetframe, FrameSearchFlag.ALL); // "_self"
+            return xDispatch;
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+        }
+        return null;
+    }
+
+    public static com.sun.star.util.URL getDispatchURL(XMultiServiceFactory xMSF, String _sURL){
+        try {
             Object oTransformer = xMSF.createInstance("com.sun.star.util.URLTransformer");
             XURLTransformer xTransformer = (XURLTransformer) UnoRuntime.queryInterface(XURLTransformer.class, oTransformer);
-            xTransformer.parseStrict(oUrl);
-            XDispatchProvider xDispatchProvider = (XDispatchProvider) UnoRuntime.queryInterface(XDispatchProvider.class, xFrame);
-            XDispatch xDispatch = xDispatchProvider.queryDispatch(oUrl[0], "", 0); // "_self"
-            xDispatch.dispatch(oUrl[0], oArg);
-        } catch (Exception exception) {
-            exception.printStackTrace(System.out);
+            com.sun.star.util.URL[] oURL = new com.sun.star.util.URL[1];
+            oURL[0] = new com.sun.star.util.URL();
+            oURL[0].Complete = _sURL;
+            xTransformer.parseStrict(oURL);
+        return oURL[0];
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
         }
+        return null;
     }
+
+
+    public static void dispatchURL(XMultiServiceFactory xMSF, String sURL, XFrame xFrame, String _stargetframe) {
+        com.sun.star.util.URL oURL = getDispatchURL(xMSF, sURL);
+        XDispatch xDispatch = getDispatcher(xMSF, xFrame, _stargetframe, oURL);
+        dispatchURL(xDispatch, oURL);
+    }
+
+
+    public static void dispatchURL(XMultiServiceFactory xMSF, String sURL, XFrame xFrame) {
+        dispatchURL(xMSF, sURL, xFrame, "");
+    }
+
+    public static void dispatchURL(XDispatch _xDispatch, com.sun.star.util.URL oURL ) {
+        PropertyValue[] oArg = new PropertyValue[0];
+        _xDispatch.dispatch(oURL, oArg);
+    }
+
+
 
     public static XMultiComponentFactory getMultiComponentFactory() throws com.sun.star.uno.Exception, RuntimeException, java.lang.Exception{
         XComponentContext xcomponentcontext = Bootstrap.createInitialComponentContext(null);
