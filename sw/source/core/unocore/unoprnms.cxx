@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: os $ $Date: 2001-02-02 11:48:01 $
+ *  last change: $Author: os $ $Date: 2001-02-13 08:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,3 +653,10 @@ const SwPropNameLen __FAR_DATA UNO_NAME_RUBY_BASE_TEXT                      (MAP
 const SwPropNameLen __FAR_DATA UNO_NAME_RUBY_TEXT                           (MAP_CHAR_LEN("RubyText"));
 const SwPropNameLen __FAR_DATA UNO_NAME_RUBY_ADJUST                         (MAP_CHAR_LEN("RubyAdjust"));
 
+const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_HEIGHT                     (MAP_CHAR_LEN("FootnoteHeight"));
+const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_WEIGHT                (MAP_CHAR_LEN("FootnoteLineWeight"));
+const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_COLOR                 (MAP_CHAR_LEN("FootnoteLineColor"));
+const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_RELATIVE_WIDTH        (MAP_CHAR_LEN("FootnoteLineRelativeWidth"));
+const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_ADJUST                (MAP_CHAR_LEN("FootnoteLineAdjust"));
+const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_TEXT_DISTANCE         (MAP_CHAR_LEN("FootnoteLineTextDistance"));
+const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_DISTANCE              (MAP_CHAR_LEN("FootnoteLineDistance"));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: os $ $Date: 2001-02-02 11:47:56 $
+ *  last change: $Author: os $ $Date: 2001-02-13 07:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,6 +657,14 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_FORBIDDEN_CHARACTERS;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_RUBY_BASE_TEXT;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_RUBY_TEXT;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_RUBY_ADJUST;
+
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_HEIGHT;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_WEIGHT;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_COLOR;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_RELATIVE_WIDTH;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_ADJUST;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_TEXT_DISTANCE;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_DISTANCE;
 
 #endif
 

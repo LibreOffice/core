@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-30 13:17:25 $
+ *  last change: $Author: os $ $Date: 2001-02-13 08:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2425,6 +2425,33 @@ MakeObject:
 
             }
             break;
+            case FN_PARAM_FTN_INFO :
+            {
+                SwDoc* pDoc = pDocShell->GetDoc();
+                sal_uInt16 nPDescCount = pDoc->GetPageDescCnt();
+                for(sal_uInt16 i = 0; i < nPDescCount; i++)
+                {
+                    const SwPageDesc& rDesc = pDoc->GetPageDesc( i );
+                    const SwPageFtnInfo& rInfo = (SwPageFtnInfo&)rDesc.GetFtnInfo();
+                    switch(pMap->nMemberId & ~CONVERT_TWIPS)
+                    {
+                        case MID_FTN_HEIGHT        :     aRet <<= (sal_Int32)TWIP_TO_MM100(rInfo.GetHeight());break;
+                        case MID_LINE_WEIGHT       :     aRet <<= (sal_Int16)TWIP_TO_MM100(rInfo.GetLineWidth());break;
+                        case MID_LINE_COLOR        :     aRet <<= (sal_Int32)rInfo.GetLineColor().GetColor();break;
+                        case MID_LINE_RELWIDTH     :
+                        {
+                            Fraction aTmp( 100, 1 );
+                            aTmp *= rInfo.GetWidth();
+                            aRet <<= (sal_Int8)(long)aTmp;
+                        }
+                        break;
+                        case MID_LINE_ADJUST       :     aRet <<= (sal_Int16)rInfo.GetAdj();break;//com::sun::star::text::HorizontalAdjust
+                        case MID_LINE_TEXT_DIST    :     aRet <<= (sal_Int32)TWIP_TO_MM100(rInfo.GetTopDist());break;
+                        case MID_LINE_FOOTNOTE_DIST:     aRet <<= (sal_Int32)TWIP_TO_MM100(rInfo.GetBottomDist());break;
+                    }
+                }
+            }
+            break;
             default:
                 aRet = SwXStyle::getPropertyValue(rPropertyName);
         }
@@ -2593,6 +2620,74 @@ void SwXPageStyle::setPropertyValue(const OUString& rPropertyName, const Any& aV
             case  FN_UNO_FOOTER_LEFT  :
             case  FN_UNO_FOOTER_RIGHT :
                 throw lang::IllegalArgumentException();
+            break;
+            case FN_PARAM_FTN_INFO :
+            {
+                SwDoc* pDoc = pDocShell->GetDoc();
+                sal_uInt16 nPDescCount = pDoc->GetPageDescCnt();
+                sal_Bool bRet = sal_True;
+                for(sal_uInt16 i = 0; i < nPDescCount; i++)
+                {
+                    SwPageDesc aDesc(pDoc->GetPageDesc( i ));
+                    SwPageFtnInfo& rInfo = aDesc.GetFtnInfo();
+                    sal_Int32 nSet32;
+                    switch(pMap->nMemberId  & ~CONVERT_TWIPS)
+                    {
+                        case MID_LINE_COLOR        :
+                            aValue >>= nSet32;
+                            rInfo.SetLineColor(nSet32);
+                        break;
+                        case MID_FTN_HEIGHT:
+                        case MID_LINE_TEXT_DIST    :
+                        case MID_LINE_FOOTNOTE_DIST:
+                                aValue >>= nSet32;
+                                if(nSet32 < 0)
+                                    bRet = sal_False;
+                                else
+                                {
+                                    nSet32 = MM100_TO_TWIP(nSet32);
+                                    switch(pMap->nMemberId & ~CONVERT_TWIPS)
+                                    {
+                                        case MID_FTN_HEIGHT:            rInfo.SetHeight(nSet32);    break;
+                                        case MID_LINE_TEXT_DIST:        rInfo.SetTopDist(nSet32);break;
+                                        case MID_LINE_FOOTNOTE_DIST:    rInfo.SetBottomDist(nSet32);break;
+                                    }
+                                }
+                        case MID_LINE_WEIGHT       :
+                        {
+                            sal_Int16 nSet; aValue >>= nSet;
+                            if(nSet >= 0)
+                                rInfo.SetLineWidth(MM100_TO_TWIP(nSet));
+                            else
+                                bRet = sal_False;
+                        }
+                        break;
+                        case MID_LINE_RELWIDTH     :
+                        {
+                            sal_Int8 nSet; aValue >>= nSet;
+                            if(nSet < 0)
+                                bRet = sal_False;
+                            else
+                                   rInfo.SetWidth(Fraction(nSet, 100));
+                        }
+                        break;
+                        case MID_LINE_ADJUST       :
+                        {
+                            sal_Int16 nSet; aValue >>= nSet;
+                            if(nSet >= 0 && nSet < 3) //com::sun::star::text::HorizontalAdjust
+                                rInfo.SetAdj((SwFtnAdj)nSet);
+                            else
+                                bRet = sal_False;
+                        }
+                        break;
+                    }
+                    if(bRet)
+                        pDoc->ChgPageDesc( i, aDesc );
+                    else
+                        throw IllegalArgumentException();
+                    break;
+                }
+            }
             break;
             default:
                 SwXStyle::setPropertyValue(rPropertyName, aValue);
