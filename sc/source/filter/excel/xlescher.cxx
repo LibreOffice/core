@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlescher.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:24:22 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,22 +98,22 @@ double lclGetTwipsScale( MapUnit eMapUnit )
 }
 
 /** Calculates a drawing layer X position (in twips) from an Escher object column position. */
-long lclGetXFromCol( ScDocument& rDoc, sal_uInt16 nScTab, sal_uInt16 nXclCol, sal_uInt16 nOffset, double fScale )
+long lclGetXFromCol( ScDocument& rDoc, SCTAB nScTab, sal_uInt16 nXclCol, sal_uInt16 nOffset, double fScale )
 {
-    return static_cast< long >( fScale * (rDoc.GetColOffset( nXclCol, nScTab ) +
-        ::std::min( nOffset / 1024.0, 1.0 ) * rDoc.GetColWidth( nXclCol, nScTab )) + 0.5 );
+    return static_cast< long >( fScale * (rDoc.GetColOffset( static_cast<SCCOL>(nXclCol), nScTab ) +
+        ::std::min( nOffset / 1024.0, 1.0 ) * rDoc.GetColWidth( static_cast<SCCOL>(nXclCol), nScTab )) + 0.5 );
 }
 
 /** Calculates a drawing layer Y position (in twips) from an Escher object row position. */
-long lclGetYFromRow( ScDocument& rDoc, sal_uInt16 nScTab, sal_uInt16 nXclRow, sal_uInt16 nOffset, double fScale )
+long lclGetYFromRow( ScDocument& rDoc, SCTAB nScTab, sal_uInt16 nXclRow, sal_uInt16 nOffset, double fScale )
 {
-    return static_cast< long >( fScale * (rDoc.GetRowOffset( nXclRow, nScTab ) +
-        ::std::min( nOffset / 256.0, 1.0 ) * rDoc.GetRowHeight( nXclRow, nScTab )) + 0.5 );
+    return static_cast< long >( fScale * (rDoc.GetRowOffset( static_cast<SCROW>(nXclRow), nScTab ) +
+        ::std::min( nOffset / 256.0, 1.0 ) * rDoc.GetRowHeight( static_cast<SCROW>(nXclRow), nScTab )) + 0.5 );
 }
 
 /** Calculates an Escher object column position from a drawing layer X position (in twips). */
 void lclGetColFromX(
-        ScDocument& rDoc, sal_uInt16 nScTab, sal_uInt16& rnXclCol,
+        ScDocument& rDoc, SCTAB nScTab, sal_uInt16& rnXclCol,
         sal_uInt16& rnOffset, sal_uInt16 nXclStartCol,
         long& rnStartW, long nX, double fScale )
 {
@@ -122,7 +122,7 @@ void lclGetColFromX(
     long nColW = 0;
     for( rnXclCol = nXclStartCol; rnXclCol <= MAXCOL; ++rnXclCol )
     {
-        nColW = rDoc.GetColWidth( rnXclCol, nScTab );
+        nColW = rDoc.GetColWidth( static_cast<SCCOL>(rnXclCol), nScTab );
         if( rnStartW + nColW > nTwipsX )
             break;
         rnStartW += nColW;
@@ -132,16 +132,16 @@ void lclGetColFromX(
 
 /** Calculates an Escher object row position from a drawing layer Y position (in twips). */
 void lclGetRowFromY(
-        ScDocument& rDoc, sal_uInt16 nScTab,
+        ScDocument& rDoc, SCTAB nScTab,
         sal_uInt16& rnXclRow, sal_uInt16& rnOffset, sal_uInt16 nXclStartRow,
         long& rnStartH, long nY, double fScale )
 {
     // rnStartH in conjunction with nXclStartRow is used as buffer for previously calculated height
     long nTwipsY = static_cast< long >( nY / fScale + 0.5 );
     long nRowH = 0;
-    for( rnXclRow = nXclStartRow; rnXclRow <= MAXCOL; ++rnXclRow )
+    for( rnXclRow = nXclStartRow; rnXclRow <= MAXROW; ++rnXclRow )
     {
-        nRowH = rDoc.GetRowHeight( rnXclRow, nScTab );
+        nRowH = rDoc.GetRowHeight( static_cast<SCROW>(rnXclRow), nScTab );
         if( rnStartH + nRowH > nTwipsY )
             break;
         rnStartH += nRowH;
@@ -162,7 +162,7 @@ void lclMirrorRectangle( Rectangle& rRect )
 
 // ----------------------------------------------------------------------------
 
-XclEscherAnchor::XclEscherAnchor( sal_uInt16 nScTab ) :
+XclEscherAnchor::XclEscherAnchor( SCTAB nScTab ) :
     mnLCol( 0 ), mnLX( 0 ),
     mnTRow( 0 ), mnTY( 0 ),
     mnRCol( 0 ), mnRX( 0 ),
