@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 09:57:47 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,9 @@
 #ifndef _SWGRFSH_HXX //autogen
 #include <grfsh.hxx>
 #endif
+#ifndef _SWMEDIASH_HXX //autogen
+#include <mediash.hxx>
+#endif
 #ifndef _SWOLESH_HXX //autogen
 #include <olesh.hxx>
 #endif
@@ -348,6 +351,13 @@
 
 #include <svx/acorrcfg.hxx>
 #include <svtools/moduleoptions.hxx>
+
+#ifndef _AVMEDIA_MEDIAPPLAYER_HXX
+#include <avmedia/mediaplayer.hxx>
+#endif
+#ifndef _AVMEDIA_MEDIATOOLBOX_HXX
+#include <avmedia/mediatoolbox.hxx>
+#endif
 
 #include <app.hrc>
 
@@ -532,6 +542,7 @@ void SwDLL::RegisterInterfaces()
     SwWebDrawBaseShell::RegisterInterface(pMod);
     SwWebDrawFormShell::RegisterInterface(pMod);
     SwWebOleShell::RegisterInterface(pMod);
+    SwMediaShell::RegisterInterface(pMod);
 }
 
 //************************************************************************
@@ -631,7 +642,11 @@ void SwDLL::RegisterControls()
     svx::ExtrusionColorControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
 
     GalleryChildWindow::RegisterChildWindow(0, pMod);
+
+    ::avmedia::MediaToolBoxControl::RegisterControl(SID_AVMEDIA_TOOLBOX, pMod);
+    ::avmedia::MediaPlayer::RegisterChildWindow(0, pMod);
 }
+
 
 
 /*************************************************************************
