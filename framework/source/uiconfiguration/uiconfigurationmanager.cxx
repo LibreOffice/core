@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:10:51 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,10 @@
 
 #ifndef _DRAFTS_COM_SUN_STAR_UI_CONFIGURATIONEVENT_HPP_
 #include <drafts/com/sun/star/ui/ConfigurationEvent.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
@@ -1155,7 +1159,24 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager() throw
 
 Reference< XInterface > SAL_CALL UIConfigurationManager::getShortCutManager() throw (::com::sun::star::uno::RuntimeException)
 {
-    return Reference< XInterface >();
+    ResetableGuard aGuard( m_aLock );
+    Reference< XMultiServiceFactory > xSMGR         = m_xServiceManager;
+    Reference< XStorage >             xDocumentRoot = m_xDocConfigStorage;
+    aGuard.unlock();
+
+    Reference< XInterface >      xManager = xSMGR->createInstance(SERVICENAME_DOCUMENTACCELERATORCONFIGURATION);
+    Reference< XInitialization > xInit    (xManager, UNO_QUERY_THROW);
+
+    PropertyValue aProp;
+    aProp.Name    = ::rtl::OUString::createFromAscii("DocumentRoot");
+    aProp.Value <<= xDocumentRoot;
+
+    Sequence< Any > lArgs(1);
+    lArgs[0] <<= aProp;
+
+    xInit->initialize(lArgs);
+
+    return xManager;
 }
 
 Reference< XInterface > SAL_CALL UIConfigurationManager::getEventsManager() throw (::com::sun::star::uno::RuntimeException)
