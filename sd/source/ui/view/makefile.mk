@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2004-01-20 12:51:10 $
+#   last change: $Author: rt $ $Date: 2004-05-07 15:54:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -143,6 +143,7 @@ SLOFILES =	\
         $(SLO)$/zoomlist.obj	\
         $(SLO)$/unmodpg.obj	\
         $(SLO)$/DrawObjectBar.obj				\
+        $(SLO)$/FormShellManager.obj			\
         $(SLO)$/GraphicObjectBar.obj			\
         $(SLO)$/GraphicViewShellBase.obj		\
         $(SLO)$/ImpressObjectBar.obj			\
