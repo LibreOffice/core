@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibledialogcontrolshape.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:54:08 $
+ *  last change: $Author: rt $ $Date: 2004-12-10 17:01:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #ifndef _BASIDE3_HXX
 #include <baside3.hxx>
+#endif
+#ifndef _BASCTL_DLGEDDEF_HXX
+#include <dlgeddef.hxx>
 #endif
 #ifndef _BASCTL_DLGEDVIEW_HXX
 #include <dlgedview.hxx>
@@ -363,20 +366,20 @@ void AccessibleDialogControlShape::disposing( const lang::EventObject& rSource )
 
 void AccessibleDialogControlShape::propertyChange( const beans::PropertyChangeEvent& rEvent ) throw (RuntimeException)
 {
-    if ( rEvent.PropertyName == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ) )
+    if ( rEvent.PropertyName == DLGED_PROP_NAME )
     {
         NotifyAccessibleEvent( AccessibleEventId::NAME_CHANGED, rEvent.OldValue, rEvent.NewValue );
     }
-    else if ( rEvent.PropertyName == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ) ||
-              rEvent.PropertyName == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) ) ||
-              rEvent.PropertyName == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) ) ||
-              rEvent.PropertyName == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ) ) )
+    else if ( rEvent.PropertyName == DLGED_PROP_POSITIONX ||
+              rEvent.PropertyName == DLGED_PROP_POSITIONY ||
+              rEvent.PropertyName == DLGED_PROP_WIDTH ||
+              rEvent.PropertyName == DLGED_PROP_HEIGHT )
     {
         SetBounds( GetBounds() );
     }
-    else if ( rEvent.PropertyName == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BackgroundColor" ) ) ||
-              rEvent.PropertyName == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextColor" ) ) ||
-              rEvent.PropertyName == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextLineColor" ) ) )
+    else if ( rEvent.PropertyName == DLGED_PROP_BACKGROUNDCOLOR ||
+              rEvent.PropertyName == DLGED_PROP_TEXTCOLOR ||
+              rEvent.PropertyName == DLGED_PROP_TEXTLINECOLOR )
     {
         NotifyAccessibleEvent( AccessibleEventId::VISIBLE_DATA_CHANGED, Any(), Any() );
     }
