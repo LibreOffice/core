@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-31 16:53:40 $
+ *  last change: $Author: mtg $ $Date: 2001-11-01 09:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,17 +678,13 @@ sal_Bool    SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, 
                                                     SFX_STYLE_FAMILY_FRAME);
     }
 
-    SwDocStyleSheet* pDocStyle = 0;
     if ( pStyle )
     {
-        pDocStyle = new SwDocStyleSheet(*pStyle);
-        pItemSet = &pDocStyle->GetItemSet();
+        SwDocStyleSheet aStyle (*pStyle);
+           bRet = FillBaseProperties(rSet, aStyle.GetItemSet(), rSizeFound );
     }
     else
-        pItemSet = &pDoc->GetFrmFmtFromPool( RES_POOLFRM_FRAME )->GetAttrSet();
-
-       bRet = FillBaseProperties(rSet, *pItemSet, rSizeFound );
-    delete pDocStyle;
+           bRet = FillBaseProperties( rSet, pDoc->GetFrmFmtFromPool( RES_POOLFRM_FRAME )->GetAttrSet(), rSizeFound );
 
     uno::Any* pEdit;
     if(GetProperty(RES_EDIT_IN_READONLY, 0, pEdit))
