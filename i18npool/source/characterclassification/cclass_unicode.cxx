@@ -1,0 +1,236 @@
+/*************************************************************************
+ *
+ *  $RCSfile: cclass_unicode.cxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: bustamam $ $Date: 2002-03-26 06:31:13 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include <cclass_unicode.hxx>
+#include <com/sun/star/i18n/UnicodeScript.hpp>
+#include <com/sun/star/i18n/UnicodeType.hpp>
+#include <unicode.hxx>
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::rtl;
+
+namespace com { namespace sun { namespace star { namespace i18n {
+//  ----------------------------------------------------
+//  class cclass_Unicode
+//  ----------------------------------------------------;
+
+cclass_Unicode::cclass_Unicode( uno::Reference < XMultiServiceFactory > xSMgr ) : xMSF( xSMgr ),
+        pTable( NULL ),
+        pStart( NULL ),
+        pCont( NULL ),
+        nStartTypes( 0 ),
+        nContTypes( 0 ),
+        eState( ssGetChar ),
+        cGroupSep( ',' ),
+        cDecimalSep( '.' )
+{
+    trans = new Transliteration_casemapping();
+    cClass = "com.sun.star.i18n.CharacterClassification_Unicode";
+}
+
+cclass_Unicode::~cclass_Unicode() {
+    destroyParserTable();
+    delete trans;
+}
+
+
+OUString SAL_CALL
+cclass_Unicode::toUpper( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException) {
+    Sequence< sal_Int32 > offset;
+    trans->setMappingType(MappingTypeToUpper, rLocale);
+    return trans->transliterate(Text, nPos, nCount, offset);
+}
+
+OUString SAL_CALL
+cclass_Unicode::toLower( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException) {
+    Sequence< sal_Int32 > offset;
+    trans->setMappingType(MappingTypeToLower, rLocale);
+    return trans->transliterate(Text, nPos, nCount, offset);
+}
+
+OUString SAL_CALL
+cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException) {
+    Sequence< sal_Int32 > offset;
+    trans->setMappingType(MappingTypeToTitle, rLocale);
+    return trans->transliterate(Text, nPos, nCount, offset);
+}
+
+sal_Int16 SAL_CALL
+cclass_Unicode::getType( const OUString& Text, sal_Int32 nPos ) throw(RuntimeException) {
+    if ( Text.getLength() <= nPos ) return 0;
+    return unicode::getUnicodeType(Text[nPos]);
+}
+
+sal_Int16 SAL_CALL
+cclass_Unicode::getCharacterDirection( const OUString& Text, sal_Int32 nPos ) throw(RuntimeException) {
+    if ( Text.getLength() <= nPos ) return 0;
+    return unicode::getUnicodeDirection(Text[nPos]);
+}
+
+
+sal_Int16 SAL_CALL
+cclass_Unicode::getScript( const OUString& Text, sal_Int32 nPos ) throw(RuntimeException) {
+    if ( Text.getLength() <= nPos ) return 0;
+    return unicode::getUnicodeScriptType(Text[nPos], (ScriptTypeList*) 0, 0);
+}
+
+
+sal_Int32 SAL_CALL
+cclass_Unicode::getCharacterType( const OUString& Text, sal_Int32 nPos, const Locale& rLocale ) throw(RuntimeException) {
+    if ( Text.getLength() <= nPos ) return 0;
+    return unicode::getCharType(Text[nPos]);
+}
+
+sal_Int32 SAL_CALL
+cclass_Unicode::getStringType( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException) {
+    if ( Text.getLength() <= nPos ) return 0;
+
+    if ( Text.getLength() < nPos + nCount )
+        nCount = Text.getLength() - nPos;
+
+    sal_Int32 result = 0;
+    for (int i = 0; i < nCount; i++)
+    result |= unicode::getCharType(Text[nPos+i]);
+    return result;
+}
+
+ParseResult SAL_CALL cclass_Unicode::parseAnyToken(
+            const OUString& Text,
+            sal_Int32 nPos,
+            const Locale& rLocale,
+            sal_Int32 startCharTokenType,
+            const OUString& userDefinedCharactersStart,
+            sal_Int32 contCharTokenType,
+            const OUString& userDefinedCharactersCont )
+                throw(RuntimeException)
+{
+    ParseResult r;
+    if ( Text.getLength() <= nPos )
+        return r;
+
+    setupParserTable( rLocale,
+        startCharTokenType, userDefinedCharactersStart,
+        contCharTokenType, userDefinedCharactersCont );
+    parseText( r, Text, nPos );
+
+    return r;
+}
+
+
+ParseResult SAL_CALL cclass_Unicode::parsePredefinedToken(
+            sal_Int32 nTokenType,
+            const OUString& Text,
+            sal_Int32 nPos,
+            const Locale& rLocale,
+            sal_Int32 startCharTokenType,
+            const OUString& userDefinedCharactersStart,
+            sal_Int32 contCharTokenType,
+            const OUString& userDefinedCharactersCont )
+                throw(RuntimeException)
+{
+    ParseResult r;
+    if ( Text.getLength() <= nPos )
+        return r;
+
+    setupParserTable( rLocale,
+        startCharTokenType, userDefinedCharactersStart,
+        contCharTokenType, userDefinedCharactersCont );
+    parseText( r, Text, nPos, nTokenType );
+
+    return r;
+}
+
+OUString SAL_CALL cclass_Unicode::getImplementationName() throw( RuntimeException )
+{
+    return OUString::createFromAscii(cClass);
+}
+
+
+sal_Bool SAL_CALL cclass_Unicode::supportsService(const OUString& rServiceName) throw( RuntimeException )
+{
+    return !rServiceName.compareToAscii(cClass);
+}
+
+Sequence< OUString > SAL_CALL cclass_Unicode::getSupportedServiceNames() throw( RuntimeException )
+{
+    Sequence< OUString > aRet(1);
+    aRet[0] = OUString::createFromAscii(cClass);
+    return aRet;
+}
+
+} } } }
+
+/**************************************************************************
+
+    Source Code Control System - Updates
+
+    $Log: not supported by cvs2svn $
+    Revision 1.4  2001/10/19 21:24:42  bustamam.harun
+    #84725# add XServiceInfo implementation
+
+    Revision 1.3  2001/05/18 17:58:15  er
+    #79771# optimize: disentangled: cclass_Unicode not derived from CharacterClassificationImpl; reuse instance if locale didn't change; OUString instead of String
+
+    Revision 1.2  2001/04/12 23:55:36  bustamam.harun
+    Fix compile problem on Solaris: change String to OUString
+
+    Revision 1.1  2001/03/27 21:10:36  bustamam.harun
+    Rename characterclassification to cclass_Unicode
+
+    Revision 1.8  2001/01/29 17:06:50  er
+    cclass_Unicode with service manager
+
+    Revision 1.7  2000/10/29 17:02:41  er
+    i18n API moved from com.sun.star.lang to com.sun.star.i18n
+
+    Revision 1.6  2000/08/11 14:52:52  er
+    removed queryInterface/aquire/release, using WeakImplHelper instead
+
+    Revision 1.5  2000/07/19 10:59:59  er
+    toUpper, toLower, toTitle: nCount characters are converted; other: optimizations
+
+    Revision 1.4  2000/07/06 15:46:57  gmu
+    implemented parsing functions
+
+    Revision 1.1  2000/07/06 08:52:43  er
+    new: cclass_Unicode with parser
+
+
+**************************************************************************/
