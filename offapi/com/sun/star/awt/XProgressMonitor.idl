@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XProgressMonitor.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:52 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,29 +72,27 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XProgressMonitor
-/** @deprecated
+/** gives access to the text of a progress monitor.
+
+    @deprecated
  */
 interface XProgressMonitor: com::sun::star::awt::XProgressBar
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XProgressMonitor::addText
-    /** add new textline to control
+    /** adds a new text line to the control.
      */
     [oneway] void addText ( [in] string Topic, [in] string Text, [in] boolean beforeProgress ) ;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XProgressMonitor::removeText
-    /** remove textline from control
+    /** removes a text line from the control.
      */
     [oneway] void removeText ( [in] string Topic, [in] boolean beforeProgress ) ;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XProgressMonitor::updateText
-    /** update existing textline at control
+    /** updates an existing text line at the control.
      */
     [oneway] void updateText ( [in] string Topic, [in] string Text, [in] boolean beforeProgress ) ;
 

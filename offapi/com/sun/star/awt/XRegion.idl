@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRegion.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:52 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:05:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,35 +69,31 @@
 #include <com/sun/star/awt/Rectangle.idl>
 #endif
 
+
 //=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XRegion
 /** manages multiple rectangles which make up a region.
  */
 interface XRegion: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XRegion::getBounds
-    /** @returns
-                the bounding box of the shape.
+    /** returns the bounding box of the shape.
      */
     Rectangle getBounds();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XRegion::clear
     /** makes this region an empty region.
      */
     [oneway] void clear();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XRegion::move
     /** moves this region by the specified horizontal and vertical delta.
      */
     [oneway] void move( [in] long nHorzMove,
@@ -105,65 +101,57 @@ interface XRegion: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XRegion::unionRectangle
     /** adds the specified rectangle to this region.
      */
     [oneway] void unionRectangle( [in] Rectangle Rect );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XRegion::intersectRectangle
     /** intersects the specified rectangle with the current region.
      */
     [oneway] void intersectRectangle( [in] Rectangle Region );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XRegion::excludeRectangle
     /** removes the area of the specified rectangle from this region.
      */
     [oneway] void excludeRectangle( [in] Rectangle Rect );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XRegion::xOrRectangle
-    /** applies an exclusive-or operation with the specified rectangle to this region.
+    /** applies an exclusive-or operation with the specified rectangle
+        to this region.
      */
     [oneway] void xOrRectangle( [in] Rectangle Rect );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XRegion::unionRegion
     /** adds the specified region to this region.
      */
     [oneway] void unionRegion( [in] XRegion Region );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XRegion::intersectRegion
     /** intersects the specified region with the current region.
      */
     [oneway] void intersectRegion( [in] XRegion Region );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XRegion::excludeRegion
     /** removes the area of the specified region from this region.
      */
     [oneway] void excludeRegion( [in] XRegion Region );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XRegion::xOrRegion
-    /** applies an exclusive-or operation with the specified region to this region.
+    /** applies an exclusive-or operation with the specified region
+        to this region.
      */
     [oneway] void xOrRegion( [in] XRegion Region );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XRegion::getRectangles
-    /** @returns
-                    all rectangles which are making up this region.
+    /** returns all rectangles which are making up this region.
      */
     sequence<Rectangle> getRectangles();
 

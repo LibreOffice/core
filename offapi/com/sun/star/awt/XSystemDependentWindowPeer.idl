@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSystemDependentWindowPeer.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:52 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
-#ifndef __com_sun_star_uno_Uik_idl__
-#include <com/sun/star/uno/Uik.idl>
-#endif
-
 
 //=============================================================================
 
@@ -76,39 +72,42 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XSystemDependentWindowPeer
-/** provides access to the sytem dependent implementation of the window.@see com::sun::star::lang::SystemDependent
-        @see WindowAttribute
-        @see WindowAttribute::SYSTEMDEPENDENT
+/** provides access to the system dependent implementation of the window.
+
+    @see com::sun::star::lang::SystemDependent
+    @see WindowAttribute
+    @see WindowAttribute::SYSTEMDEPENDENT
  */
 interface XSystemDependentWindowPeer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XSystemDependentWindowPeer::getWindowHandle
-    /** @returns
-                a sytem-specific handle to a window
-                or 0 if the window is not in the same process.
+    /** returns a system-specific window handle.
 
-                <p>You must check the machine ID and the process ID.<BR>
-                WIN32: Returns an HWND if possible, otherwise 0.<BR>
-                WIN16: Returns an HWND if possible, otherwise 0.<BR>
+        @returns
+        a sytem-specific handle to a window
+        or 0 if the window is not in the same process.
 
-                JAVA: Returns a global reference to a java.awt.Component
-                object provided from the JNI-API.<BR>
+        <p>You must check the machine ID and the process ID.<BR>
+        WIN32: Returns an HWND if possible, otherwise 0.<BR>
+        WIN16: Returns an HWND if possible, otherwise 0.<BR>
 
-                OS2: Returns an HWND if possible, otherwise 0.<BR>
-                MAC: Not supported<BR>
+        JAVA: Returns a global reference to a java.awt.Component
+        object provided from the JNI-API.<BR>
 
-                XWINDOW: Returns a structure SystemDependentXWindow or void if it is not reachable.<BR>
+        OS2: Returns an HWND if possible, otherwise 0.<BR>
+        MAC: Not supported.<BR>
 
-                @param ProcessId
-                the process identifier. Use the sal_getGlobalProcessId
-                function of the RTL library.
+        XWINDOW: Returns a structure SystemDependentXWindow
+        or void if it is not reachable.<BR></p>
 
-                @param SystemType
-                one constant out of the constant group
-                SystemDependent.
+        @param ProcessId
+        the process identifier. Use the sal_getGlobalProcessId
+        function of the RTL library.
+
+        @param SystemType
+        one constant out of the constant group
+        <type scope="com::sun::star::lang">SystemDependent</type>.
      */
     any getWindowHandle( [in] sequence< byte > ProcessId, [in] short SystemType );
 
