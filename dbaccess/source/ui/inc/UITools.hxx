@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 06:25:16 $
+ *  last change: $Author: oj $ $Date: 2001-11-12 10:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,17 @@ namespace dbaui
                                     SvxCellHorJustify& _eJustify,
                                     sal_uInt16& _nFlags,
                                     sal_Bool  _bHasFormat);
+    /** append a name to tablefilter of a datasource
+        @param  _xConnection    the connection is need to get the datasource
+        @param  _sName          the name which should be appended
+        @param  _xFactory       needed to check if datasource is available
+        @param  _pParent        needed when an error must be shown
+        @return false when datsource is not available otherwise true
+    */
+    sal_Bool appendToFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+                            const ::rtl::OUString& _sName,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory,
+                            Window* _pParent);
 
 // .........................................................................
 }

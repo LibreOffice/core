@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:26:29 $
+ *  last change: $Author: oj $ $Date: 2001-11-12 10:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1016,7 +1016,12 @@ namespace dbaui
                                         xProp->getPropertyValue(PROPERTY_CATALOGNAME) >>= sCatalog;
                                         ::dbtools::composeTableName(xMeta,sCatalog,sSchema,sNewName,sName,sal_False);
                                         sOldName = sName;
+                                        // now check if our datasource has set a tablefilter and if append the new table name to it
+                                        ::dbaui::appendToFilter(xConnection,sOldName,getORB(),getView()); // we are not interessted in the return value
                                     }
+                                    else
+                                        sOldName = sNewName;
+
                                 }
                             }
                         }
@@ -1186,6 +1191,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.30  2001/10/08 07:26:29  oj
+ *  #92786# refcount implemented for connectiondata and sqlexception catched
+ *
  *  Revision 1.29  2001/09/25 13:24:38  oj
  *  #91719# implementing the XRename handling
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-30 11:05:07 $
+ *  last change: $Author: oj $ $Date: 2001-11-12 10:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1115,41 +1115,7 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
                                     m_sName = sComposedName;
                                 }
                                 // now check if our datasource has set a tablefilter and if append the new table name to it
-                                Reference< XChild> xChild(getConnection(),UNO_QUERY);
-                                if(xChild.is())
-                                {
-                                    Reference< XPropertySet> xDSProp(xChild->getParent(),UNO_QUERY);
-                                    if(xDSProp.is())
-                                    {
-                                        Sequence< ::rtl::OUString > aFilter;
-                                        xDSProp->getPropertyValue(PROPERTY_TABLEFILTER) >>= aFilter;
-                                        // first check if we have something like SCHEMA.%
-                                        sal_Bool bHasToInsert = sal_True;
-                                        static ::rtl::OUString sPattern = ::rtl::OUString::createFromAscii("%");
-                                        const ::rtl::OUString* pBegin = aFilter.getConstArray();
-                                        const ::rtl::OUString* pEnd = pBegin + aFilter.getLength();
-                                        for (;pBegin != pEnd; ++pBegin)
-                                        {
-                                            if(pBegin->indexOf('%') != -1)
-                                            {
-                                                sal_Int32 nLen;
-                                                if((nLen = pBegin->lastIndexOf('.')) != -1 && !pBegin->compareTo(m_sName,nLen))
-                                                    bHasToInsert = sal_False;
-                                                else if(pBegin->getLength() == 1)
-                                                    bHasToInsert = sal_False;
-                                            }
-                                        }
-                                        if(bHasToInsert)
-                                        {
-                                            aFilter.realloc(aFilter.getLength()+1);
-                                            aFilter.getArray()[aFilter.getLength()-1] = m_sName;
-                                            xDSProp->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(aFilter));
-                                            Reference<XFlushable> xFlush(xDSProp,UNO_QUERY);
-                                            if(xFlush.is())
-                                                xFlush->flush();
-                                        }
-                                    }
-                                }
+                                ::dbaui::appendToFilter(getConnection(),m_sName,getORB(),getView()); // we are not interessted in the return value
                             }
                         }
                         else

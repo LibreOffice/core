@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-22 11:18:15 $
+ *  last change: $Author: oj $ $Date: 2001-11-12 10:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,21 @@
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
+#include <com/sun/star/util/XFlushable.hpp>
+#endif
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
+#endif
+#ifndef _DBAUI_SQLMESSAGE_HXX_
+#include "sqlmessage.hxx"
 #endif
 // .........................................................................
 namespace dbaui
@@ -914,6 +929,63 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
     for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
         delete pDefaults[i];
 
+    return bRet;
+}
+// -----------------------------------------------------------------------------
+sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
+                        const ::rtl::OUString& _sName,
+                        const Reference< XMultiServiceFactory >& _xFactory,
+                        Window* _pParent)
+{
+    sal_Bool bRet = sal_False;
+    Reference< XChild> xChild(_xConnection,UNO_QUERY);
+    if(xChild.is())
+    {
+        Reference< XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
+        if(xProp.is())
+        {
+            Sequence< ::rtl::OUString > aFilter;
+            xProp->getPropertyValue(PROPERTY_TABLEFILTER) >>= aFilter;
+            // first check if we have something like SCHEMA.%
+            sal_Bool bHasToInsert = sal_True;
+            static ::rtl::OUString sPattern = ::rtl::OUString::createFromAscii("%");
+            const ::rtl::OUString* pBegin = aFilter.getConstArray();
+            const ::rtl::OUString* pEnd = pBegin + aFilter.getLength();
+            for (;pBegin != pEnd; ++pBegin)
+            {
+                if(pBegin->indexOf('%') != -1)
+                {
+                    sal_Int32 nLen;
+                    if((nLen = pBegin->lastIndexOf('.')) != -1 && !pBegin->compareTo(_sName,nLen))
+                        bHasToInsert = sal_False;
+                    else if(pBegin->getLength() == 1)
+                        bHasToInsert = sal_False;
+                }
+            }
+
+            bRet = sal_True;
+            if(bHasToInsert)
+            {
+                if(! ::dbaui::checkDataSourceAvailable(::comphelper::getString(xProp->getPropertyValue(PROPERTY_NAME)),_xFactory))
+                {
+                    String aMessage(ModuleRes(STR_TABLEDESIGN_DATASOURCE_DELETED));
+                    String sTitle(ModuleRes(STR_STAT_WARNING));
+                    OSQLMessageBox aMsg(_pParent,sTitle,aMessage);
+                    aMsg.Execute();
+                    bRet = sal_False;
+                }
+                else
+                {
+                    aFilter.realloc(aFilter.getLength()+1);
+                    aFilter.getArray()[aFilter.getLength()-1] = _sName;
+                    xProp->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(aFilter));
+                    Reference<XFlushable> xFlush(xProp,UNO_QUERY);
+                    if(xFlush.is())
+                        xFlush->flush();
+                }
+            }
+        }
+    }
     return bRet;
 }
 // .........................................................................
