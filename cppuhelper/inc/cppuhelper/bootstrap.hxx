@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-09 14:00:27 $
+ *  last change: $Author: kr $ $Date: 2001-05-29 14:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,20 @@ bootstrap_InitialComponentContext(
     ::com::sun::star::uno::Reference< ::com::sun::star::registry::XSimpleRegistry > const & xRegistry,
     ::rtl::OUString const & rBootstrapPath = ::rtl::OUString() )
     SAL_THROW( (::com::sun::star::uno::Exception) );
+
+
+
+/** Bootstraps an initial component context with service manager upon default types and services registry.
+    This includes insertion of initial services:
+         (registry) service manager, shared lib loader,
+         simple registry, nested registry,
+         implementation registration
+         registry typedescription provider, typedescription manager (also installs it into cppu core)
+
+    @return component context
+*/
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SAL_CALL
+defaultBootstrap_InitialComponentContext() SAL_THROW( (::com::sun::star::uno::Exception) );
 
 } // end namespace cppu
 
