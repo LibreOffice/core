@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:32 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,12 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_FORM_XBINDABLEVALUE_HPP_
+#include <drafts/com/sun/star/form/XBindableValue.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_FORM_XLISTENTRYSINK_HPP_
+#include <drafts/com/sun/star/form/XListEntrySink.hpp>
 #endif
 #ifndef _SVX_FMGLOB_HXX
 #include <fmglob.hxx>
@@ -407,6 +413,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;
+using namespace ::drafts::com::sun::star::form;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
@@ -1367,6 +1374,27 @@ sal_Bool FmXFormShell::ConvertControlTo(const Reference< XFormComponent>& xModel
             }
         }
         TransferEventScripts(xNewModel, xControl, aOldScripts);
+    }
+
+    // transfer value bindings, if possible
+    {
+        Reference< XBindableValue > xOldBindable( xOldModel, UNO_QUERY );
+        Reference< XBindableValue > xNewBindable( xNewModel, UNO_QUERY );
+        if ( xOldBindable.is() && xNewBindable.is() )
+        {
+            xNewBindable->setValueBinding( xOldBindable->getValueBinding() );
+            xOldBindable->setValueBinding( NULL );
+        }
+    }
+    // same for list entry sources
+    {
+        Reference< XListEntrySink > xOldSink( xOldModel, UNO_QUERY );
+        Reference< XListEntrySink > xNewSink( xNewModel, UNO_QUERY );
+        if ( xOldSink.is() && xNewSink.is() )
+        {
+            xNewSink->setListEntrySource( xOldSink->getListEntrySource() );
+            xOldSink->setListEntrySource( NULL );
+        }
     }
 
     // create an undo action
@@ -4698,10 +4726,18 @@ void FmXFormShell::smartControlReset( const Reference< XIndexAccess >& _rxModels
             else
                 xBoundField.clear();
 
-            if (!xBoundField.is())
-            {   // no, not valid bound -> reset it
-                Reference< XReset > xControlReset(xCurrent, UNO_QUERY);
-                if (xControlReset.is())
+            // reset only if it's *not* bound
+            bool bReset = !xBoundField.is();
+
+            // and additionally, check if it has an external value binding
+            Reference< XBindableValue > xBindable( xCurrent, UNO_QUERY );
+            if ( xBindable.is() && xBindable->getValueBinding().is() )
+                bReset = false;
+
+            if ( bReset )
+            {
+                Reference< XReset > xControlReset( xCurrent, UNO_QUERY );
+                if ( xControlReset.is() )
                     xControlReset->reset();
             }
         }
@@ -4766,27 +4802,19 @@ void FmXFormShell::loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour /
                 {
                     if ( ::isLoadable( xForm ) && !xForm->isLoaded() )
                         xForm->load();
-
-                    if ( _nBehaviour & FORMS_RESET )
-                    {
-                        Reference< XIndexAccess > xContainer( xForm, UNO_QUERY );
-                        DBG_ASSERT( xContainer.is(), "FmXFormShell::loadForms: the form is no container!" );
-                        if ( xContainer.is() )
-                            smartControlReset( xContainer );
-                    }
                 }
                 else
                 {
                     if ( xForm->isLoaded() )
                         xForm->unload();
+                }
 
-                    if ( _nBehaviour & FORMS_RESET )
-                    {
-                        Reference< XReset > xReset( xForm, UNO_QUERY );
-                        DBG_ASSERT( xReset.is(), "FmXFormShell::loadForms: the form cannot be resets!" );
-                        if ( xReset.is() )
-                            xReset->reset();
-                    }
+                if ( _nBehaviour & FORMS_RESET )
+                {
+                    Reference< XIndexAccess > xContainer( xForm, UNO_QUERY );
+                    DBG_ASSERT( xContainer.is(), "FmXFormShell::loadForms: the form is no container!" );
+                    if ( xContainer.is() )
+                        smartControlReset( xContainer );
                 }
             }
         }
