@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainerwindow.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:59 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,6 @@ namespace dbaui
     DBG_NAME(OQueryContainerWindow)
     OQueryContainerWindow::OQueryContainerWindow(Window* pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
         :ODataView(pParent,_pController, _rFactory)
-        ,m_pBeamerSeparator( NULL )
         ,m_pBeamer(NULL)
         ,m_pViewSwitch(NULL)
     {
@@ -125,7 +124,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     OQueryContainerWindow::~OQueryContainerWindow()
     {
-
+        DBG_DTOR(OQueryContainerWindow,NULL);
         {
             ::std::auto_ptr<OQueryViewSwitch> aTemp(m_pViewSwitch);
             m_pViewSwitch = NULL;
@@ -142,15 +141,9 @@ namespace dbaui
             //  m_xBeamer->setComponent(NULL,NULL);
         }
         {
-            ::std::auto_ptr<Window> aTemp(m_pBeamerSeparator);
-            m_pBeamerSeparator = NULL;
-        }
-        {
             ::std::auto_ptr<Window> aTemp(m_pSplitter);
             m_pSplitter = NULL;
         }
-
-        DBG_DTOR(OQueryContainerWindow,NULL);
     }
     // -----------------------------------------------------------------------------
     sal_Bool OQueryContainerWindow::switchView()
@@ -165,14 +158,6 @@ namespace dbaui
 
         if ( m_pBeamer && m_pBeamer->IsVisible() )
         {
-            // position the beamer separator
-            if ( m_pBeamerSeparator )
-            {
-                Size aSeparatorSize = Size( aPlayground.GetWidth(), 2 );
-                m_pBeamerSeparator->SetPosSizePixel( aPlayground.TopLeft(), aSeparatorSize );
-                aPlayground.Top() += aSeparatorSize.Height() + 1;
-            }
-
             // calc pos and size of the splitter
             Point aSplitPos     = m_pSplitter->GetPosPixel();
             Size aSplitSize     = m_pSplitter->GetOutputSizePixel();
@@ -278,7 +263,7 @@ namespace dbaui
 
             ::dbaui::notifySystemWindow(this,m_pBeamer,::comphelper::mem_fun(&TaskPaneList::AddWindow));
 
-            m_xBeamer = Reference<XFrame>(m_pViewSwitch->getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Frame")),UNO_QUERY);
+            m_xBeamer.set(m_pViewSwitch->getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Frame")),UNO_QUERY);
             OSL_ENSURE(m_xBeamer.is(),"No frame created!");
             m_xBeamer->initialize( VCLUnoHelper::GetInterface ( m_pBeamer ) );
             m_xBeamer->setName(FRAME_NAME_QUERY_PREVIEW);
@@ -303,12 +288,6 @@ namespace dbaui
             m_pViewSwitch->SetPosSizePixel(aPos,Size(aBeamer.Width(),aSize.Height() - aBeamer.Height()-nFrameHeight));
 
             m_pSplitter->Show();
-
-            if ( !m_pBeamerSeparator )
-            {
-                m_pBeamerSeparator = new FixedLine( this );
-                m_pBeamerSeparator->Show( );
-            }
 
             Resize();
         }
