@@ -2,9 +2,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 14:55:45 $
+#   last change: $Author: rt $ $Date: 2004-09-20 11:57:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -689,6 +689,40 @@ sub remove_Files_For_Ada_Products
     push( @installer::globals::logfileinfo, $infoline);
 
     return \@newfilesarray;
+}
+
+#################################################################################
+# Setting flag UNO_COMPONENT to files, which are listed in
+# @installer::globals::add_unocomponent_libraries
+# This has to be removed after removal of old setup.
+#################################################################################
+
+sub set_unocomponent_flags
+{
+    my ($filesarrayref) = @_;
+
+    my $infoline;
+
+    for ( my $j = 0; $j <= $#installer::globals::add_unocomponent_libraries; $j++ )
+    {
+        my $onegid = $installer::globals::add_unocomponent_libraries[$j];
+
+        for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
+        {
+            my $onefile = ${$filesarrayref}[$i];
+
+            my $filegid = $onefile->{'gid'};
+
+            if ($filegid eq $onegid)
+            {
+                if ( $onefile->{'Styles'} ) { $onefile->{'Styles'} =~ s/\)/\,UNO_COMPONENT\)/; }    # adding the flag UNO_COMPONENT
+                else { $onefile->{'Styles'} = "(UNO_COMPONENT)"; }
+                $infoline = "Adding the flag UNO_COMPONENT to file $filegid\n";
+                push( @installer::globals::logfileinfo, $infoline);
+                last;
+            }
+        }
+    }
 }
 
 #################################################################################
