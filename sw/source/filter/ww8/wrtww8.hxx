@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:12 $
+ *  last change: $Author: cmc $ $Date: 2002-07-15 14:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,7 +682,7 @@ private:
     SvULongs aShapeIds;             // VARARR of ShapeIds for the SwFrmFmts
     SvPtrarr aCntnt;                // PTRARR of SwFrmFmt
     SvPtrarr aParentPos;            // PTRARR of Points
-    SvInt32s aThick;                // VARARR of Border Thicknesses
+    ::std::vector<INT32> maThick;   // VARARR of Border Thicknesses
     BYTE nTTyp;
 
     //No copying
@@ -698,7 +698,7 @@ public:
     const SvPtrarr& GetCntntArr() const { return aCntnt; }
     void SetShapeDetails( const SwFrmFmt& rFmt, UINT32 nId, INT32 nThick );
     UINT32 GetShapeId( USHORT n ) const { return aShapeIds[ n ]; }
-    INT32 GetShapeBorder( USHORT n ) const { return aThick[ n ]; }
+    INT32 GetShapeBorder(USHORT n) const { return maThick[n]; }
 
 };
 

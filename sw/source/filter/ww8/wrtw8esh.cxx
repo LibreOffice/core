@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-27 11:07:38 $
+ *  last change: $Author: cmc $ $Date: 2002-07-15 14:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,10 +310,10 @@ void WW8_WrPlcDrawObj::WritePlc( SwWW8Writer& rWrt ) const
             //xaLeft/yaTop/xaRight/yaBottom - rel. to anchor
             //(most of) the border is outside the graphic is word, so
             //change dimensions to fit
-            SwWW8Writer::WriteLong(*rWrt.pTableStrm,aRect.Left() + aThick[i]);
-            SwWW8Writer::WriteLong(*rWrt.pTableStrm,aRect.Top() + aThick[i]);
-            SwWW8Writer::WriteLong(*rWrt.pTableStrm,aRect.Right() - aThick[i]);
-            SwWW8Writer::WriteLong(*rWrt.pTableStrm,aRect.Bottom() - aThick[i]);
+            SwWW8Writer::WriteLong(*rWrt.pTableStrm,aRect.Left()+maThick[i]);
+            SwWW8Writer::WriteLong(*rWrt.pTableStrm,aRect.Top()+maThick[i]);
+            SwWW8Writer::WriteLong(*rWrt.pTableStrm,aRect.Right()-maThick[i]);
+            SwWW8Writer::WriteLong(*rWrt.pTableStrm,aRect.Bottom()-maThick[i]);
 
             //fHdr/bx/by/wr/wrk/fRcaSimple/fBelowText/fAnchorLock
             USHORT nFlags=0;
@@ -395,7 +395,7 @@ BOOL WW8_WrPlcDrawObj::Append( SwWW8Writer& rWrt, WW8_CP nCp,
         void* pPos = new Point( rNdTopLeft );
         aParentPos.Insert( pPos, aParentPos.Count() );
         aShapeIds.Insert( ULONG(0), aShapeIds.Count() );
-        aThick.C40_INSERT( SvInt32s, USHORT(0), aThick.Count() );
+        maThick.push_back(0);
     }
     return bRet;
 }
@@ -410,7 +410,7 @@ void WW8_WrPlcDrawObj::SetShapeDetails( const SwFrmFmt& rFmt, UINT32 nId,
         if (aCntnt[nI] == p)
         {
             aShapeIds[nI] = nId;
-            aThick[nI] = nThick;
+            maThick[nI] = nThick;
         }
     }
 }

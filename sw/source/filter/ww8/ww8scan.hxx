@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-15 13:09:07 $
+ *  last change: $Author: cmc $ $Date: 2002-07-15 14:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,8 @@ private:
 
     SprmInfo GetSprmInfo(sal_uInt16 nId) const;
 
+    BYTE SprmDataOfs(sal_uInt16 nId) const;
+
     enum SprmType {L_FIX=0, L_VAR=1, L_VAR2=2};
 public:
     //7- ids are very different to 8+ ones
@@ -145,7 +147,6 @@ public:
     sal_uInt16 GetSprmId(const sal_uInt8* pSp) const;
 
     USHORT GetSprmSize(sal_uInt16 nId, const sal_uInt8* pSprm) const;
-    BYTE SprmDataOfs(sal_uInt16 nId) const;
 
     //Get known len of a sprms head, the bytes of the sprm id + any bytes
     //reserved to hold a variable length
