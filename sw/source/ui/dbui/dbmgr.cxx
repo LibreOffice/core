@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:08:38 $
+ *  last change: $Author: vg $ $Date: 2003-07-21 11:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2084,7 +2084,7 @@ sal_uInt32      SwNewDBMgr::GetSelectedRecordId(
                 if(pFound->aSelection.getLength())
                 {
                     sal_Int32 nSelIndex = pFound->nSelectionIndex;
-                    if(nSelIndex > pFound->aSelection.getLength())
+                    if(nSelIndex >= pFound->aSelection.getLength())
                         nSelIndex = pFound->aSelection.getLength() -1;
                     pFound->aSelection.getConstArray()[nSelIndex] >>= nRet;
 
@@ -2112,6 +2112,13 @@ void    SwNewDBMgr::CloseAll(BOOL bIncludingMerge)
         {
             pParam->nSelectionIndex = 0;
             pParam->bAfterSelection = sal_False;
+            try
+            {
+                if(!bInMerge && pParam->xResultSet.is())
+                    pParam->xResultSet->first();
+            }
+            catch(Exception& )
+            {}
         }
     }
 }
