@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlocx.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:39:42 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,17 +94,17 @@
 #ifndef _COM_SUN_STAR_FORM_XFORMCOMPONENT_HPP_
 #include <com/sun/star/form/XFormComponent.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FORM_XBINDABLEVALUE_HPP_
-#include <drafts/com/sun/star/form/XBindableValue.hpp>
+#ifndef _COM_SUN_STAR_FORM_BINDING_XBINDABLEVALUE_HPP_
+#include <com/sun/star/form/binding/XBindableValue.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FORM_XVALUEBINDING_HPP_
-#include <drafts/com/sun/star/form/XValueBinding.hpp>
+#ifndef _COM_SUN_STAR_FORM_BINDING_XVALUEBINDING_HPP_
+#include <com/sun/star/form/binding/XValueBinding.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FORM_XLISTENTRYSINK_HPP_
-#include <drafts/com/sun/star/form/XListEntrySink.hpp>
+#ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYSINK_HPP_
+#include <com/sun/star/form/binding/XListEntrySink.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FORM_XLISTENTRYSOURCE_HPP_
-#include <drafts/com/sun/star/form/XListEntrySource.hpp>
+#ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYSOURCE_HPP_
+#include <com/sun/star/form/binding/XListEntrySource.hpp>
 #endif
 
 #ifndef _SFX_OBJSH_HXX
@@ -154,10 +154,10 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::XServiceInfo;
 using ::com::sun::star::awt::XControlModel;
 using ::com::sun::star::form::XFormComponent;
-using ::drafts::com::sun::star::form::XBindableValue;
-using ::drafts::com::sun::star::form::XValueBinding;
-using ::drafts::com::sun::star::form::XListEntrySink;
-using ::drafts::com::sun::star::form::XListEntrySource;
+using ::com::sun::star::form::binding::XBindableValue;
+using ::com::sun::star::form::binding::XValueBinding;
+using ::com::sun::star::form::binding::XListEntrySink;
+using ::com::sun::star::form::binding::XListEntrySource;
 using ::com::sun::star::drawing::XDrawPage;
 using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::drawing::XControlShape;
