@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hdu $ $Date: 2002-05-07 16:36:37 $
+ *  last change: $Author: hdu $ $Date: 2002-05-23 17:29:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,13 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     {
         nRC = ::GetCharacterPlacementW( mhDC, rArgs.mpStr + rArgs.mnFirstCharIndex,
                     mnGlyphCount, rArgs.mnLayoutWidth, &aGCP, nGcpOption );
+        // try again if it didn't fit
+        if( aGCP.nMaxFit < mnGlyphCount )
+        {
+            nGcpOption &= ~(GCP_JUSTIFY |GCP_MAXEXTENT);
+            nRC = ::GetCharacterPlacementW( mhDC, rArgs.mpStr + rArgs.mnFirstCharIndex,
+                    mnGlyphCount, 0, &aGCP, nGcpOption );
+        }
     }
     else
     {
@@ -198,22 +205,24 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
         // note: because aGCP.lpOutString==NULL GCP_RESULTSA is compatible with GCP_RESULTSW
         nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
                     rArgs.mnLayoutWidth, (GCP_RESULTSA*)&aGCP, nGcpOption );
+        // try again if it didn't fit
+        if( aGCP.nMaxFit < mnGlyphCount )
+        {
+            nGcpOption &= ~(GCP_JUSTIFY |GCP_MAXEXTENT);
+            nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
+                    0, (GCP_RESULTSA*)&aGCP, nGcpOption );
+        }
     }
 
     // cache essential layout properties
-    if( rArgs.mnLayoutWidth )
-    {
-        mnWidth = rArgs.mnLayoutWidth;
-        mnGlyphCount = aGCP.nMaxFit;
-    }
-    else
-    {
-        mnWidth = nRC & 0xFFFF; // TODO: check API docs for updates
+    mnWidth = nRC & 0xFFFF; // TODO: check API docs for clarification
 
-        // adjust positions if requested
-        if( rArgs.mpDXArray )
-            ApplyDXArray( rArgs.mpDXArray );
-    }
+    // adjust positions if requested
+    if( rArgs.mpDXArray )
+        ApplyDXArray( rArgs.mpDXArray );
+
+    if( rArgs.mnLayoutWidth && (rArgs.mnLayoutWidth < mnWidth) )
+        Justify( rArgs.mnLayoutWidth );
 
     return (nRC != 0);
 }
@@ -327,21 +336,20 @@ void SimpleWinLayout::Justify( long nNewWidth )
     if( mnGlyphCount <= 0 )
         return;
 
-    // position of rightmost glyph will be (nNewWidth-nGlyphWidth)
-    nNewWidth -= mpGlyphAdvances[ mnGlyphCount-1 ];
-
-    int i;
-    // calculate old width
-    long nOldWidth = 0;
-    for( i = 0; i < mnGlyphCount-1; ++i )
-        nOldWidth += mpGlyphAdvances[i];
-
-    if( (nNewWidth < 0) || (nNewWidth == nOldWidth) )
+    long nOldWidth = mnWidth;
+    if( nNewWidth == nOldWidth )
         return;
 
-    // stretch to new width
-    for( i = 0; i < mnGlyphCount-1; ++i )
+    int i = mnGlyphCount-1;
+    // the last glyph cannot be stretched
+    nOldWidth -= mpGlyphAdvances[i];
+    nNewWidth -= mpGlyphAdvances[i];
+
+    // stretch remaining glyphs to new width
+    while( --i >= 0 )
     {
+        if( nNewWidth < 0 )
+            nNewWidth = 0;
         double fStretch = (nOldWidth<0) ? 0.0 : (double)nNewWidth / nOldWidth;
         nOldWidth -= mpGlyphAdvances[i];
         mpGlyphAdvances[i] = (long)(mpGlyphAdvances[i] * fStretch + 0.5);
@@ -1046,7 +1054,7 @@ SalLayout* SalGraphics::LayoutText( const ImplLayoutArgs& rArgs )
     &&  !bUspDisabled
     && (aUspModule || InitUSP())
     && ((rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
-         || (S_OK == (*pScriptIsComplex)
+        || (S_OK == (*pScriptIsComplex)
                     ( rArgs.mpStr + rArgs.mnFirstCharIndex,
                       rArgs.mnEndCharIndex - rArgs.mnFirstCharIndex, SIC_COMPLEX ) ) ) )
         pWinLayout = new UniscribeLayout( maGraphicsData.mhDC, rArgs );
