@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:27:55 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 09:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,8 @@
 #ifndef _SV_SALFRAME_H
 #include <salframe.h>
 #endif
-#ifndef _SV_SALGDI_H
-#include <salgdi.h>
+#ifndef _VCL_PSPGRAPHICS_H
+#include <pspgraphics.h>
 #endif
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
@@ -614,11 +614,8 @@ SalGraphics* PspSalInfoPrinter::GetGraphics()
     SalGraphics* pRet = NULL;
     if( ! m_pGraphics )
     {
-        m_pGraphics = new X11SalGraphics;
+        m_pGraphics = new PspGraphics( &m_aJobData, &m_aPrinterGfx );
         m_pGraphics->SetLayout( 0 );
-        m_pGraphics->m_pJobData = &m_aJobData;
-        m_pGraphics->m_pPrinterGfx  = &m_aPrinterGfx;
-        m_pGraphics->bPrinter_      = TRUE;
         pRet = m_pGraphics;
     }
     return pRet;
@@ -1079,13 +1076,8 @@ BOOL PspSalPrinter::AbortJob()
 SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, BOOL bNewJobData )
 {
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, m_aJobData );
-    m_pGraphics = new X11SalGraphics();
+    m_pGraphics = new PspGraphics( &m_aJobData, &m_aPrinterGfx, m_bFax ? &m_aFaxNr : NULL, m_bSwallowFaxNo  );
     m_pGraphics->SetLayout( 0 );
-    m_pGraphics->m_pJobData     = &m_aJobData;
-    m_pGraphics->m_pPrinterGfx      = &m_aPrinterGfx;
-    m_pGraphics->bPrinter_          = true;
-    m_pGraphics->m_pPhoneNr     = m_bFax ? &m_aFaxNr : NULL;
-    m_pGraphics->m_bSwallowFaxNo    = m_bSwallowFaxNo;
     if( m_nCopies > 1 )
         // in case user did not do anything (m_nCopies=1)
         // take the default from jobsetup
