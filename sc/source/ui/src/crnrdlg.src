@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:01:48 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "crnrdlg.hrc"
 ModelessDialog RID_SCDLG_COLROWNAMERANGES
 {
@@ -176,7 +175,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ dutch ] = "~bevat kolomkoppen" ;
         Text [ spanish ] = "Contiene títulos de ~columnas" ;
         Text [ english_us ] = "Contains ~column labels" ;
-        Text[ chinese_simplified ] = "åŒ…å«åˆ—æ ‡é¢˜(~C)";
+        Text[ chinese_simplified ] = "åŒ…å«åˆ—æ ‡ç­¾";
         Text[ russian ] = "Ñîäåğæèò çàãîëîâêè ñòîëáöîâ";
         Text[ polish ] = "Zawiera nag³ówki ~kolumn";
         Text[ japanese ] = "åˆ—ã®é …ç›®æ¬„ã‚’å«ã‚€(~C)";
@@ -211,7 +210,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text [ french ] = "Contient des étiquettes de ligne" ;
         Text [ portuguese ] = "Contém ~cabeçalhos das linhas" ;
         Text [ portuguese_brazilian ] = "Contém cabeçalhos de ~linhas" ;
-        Text[ chinese_simplified ] = "åŒ…å«è¡Œæ ‡é¢˜(~R)";
+        Text[ chinese_simplified ] = "åŒ…å«è¡Œæ ‡ç­¾";
         Text[ russian ] = "Ñîäåğæèò çàãîëîâêè ñòğîê";
         Text[ polish ] = "Zawiera nag³ówki ~wierszy";
         Text[ japanese ] = "è¡Œã®é …ç›®æ¬„ã‚’å«ã‚€(~R)";
