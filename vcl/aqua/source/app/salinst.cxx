@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-01 22:29:20 $
+ *  last change: $Author: pluby $ $Date: 2000-12-02 01:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,9 +287,6 @@ SalFrame* SalInstance::CreateFrame( SalFrame* pParent, ULONG nSalFrameStyle )
 
     pFrame->maFrameData.mpParent = pParent;
 
-    // Setup up autorelease pool for this window's Objective-C objects
-    pFrame->maFrameData.mhAutoreleasePool = VCLAutoreleasePool_Init();
-
     // Create the native window
     pFrame->maFrameData.mhWnd = VCLWindow_New( nSalFrameStyle, NULL,
         pFrame, &(pFrame->maFrameData) );
@@ -301,9 +298,6 @@ SalFrame* SalInstance::CreateFrame( SalFrame* pParent, ULONG nSalFrameStyle )
 
 void SalInstance::DestroyFrame( SalFrame* pFrame )
 {
-    // Release autorelease pool
-    VCLAutoreleasePool_Release( pFrame->maFrameData.mhAutoreleasePool );
-
     delete ( pFrame );
 }
 
