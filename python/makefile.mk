@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: hjs $ $Date: 2005-02-17 18:57:27 $
+#   last change: $Author: kz $ $Date: 2005-03-01 13:25:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -148,7 +148,7 @@ BUILD_DIR=PCbuild
 # ensures that certain *.pyc files are generated which would otherwise be created on
 # solver during registration in insetoo_native
 BUILD_ACTION= \
-    $(foreach,i,$(PYPROJECTS) nmake -F $(i).mak CFG="$(i) - Win32 Release" OS="Windows_NT" && ) \
+    $(foreach,i,$(PYPROJECTS) nmake /e /f $(i).mak CFG="$(i) - Win32 Release" OS="Windows_NT" && ) \
     python.exe -c "import os" && \
     echo build done
 .ENDIF
