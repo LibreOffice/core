@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementparser.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 11:00:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:43:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,13 +104,13 @@ namespace configmgr
             ElementName getName(OUString const& _sTag, SaxAttributeList const& xAttribs, ElementType::Enum eType = ElementType::unknown) const;
 
             /// query whether the node has an operation
-            Operation::Enum getOperation(SaxAttributeList const& xAttribs) const;
+            Operation::Enum getOperation(SaxAttributeList const& xAttribs, ElementType::Enum _eType) const;
 
             /// retrieve the language (if any) stored in the attribute list
             bool getLanguage(SaxAttributeList const& xAttribs, OUString & _rsLanguage) const;
 
             /// reads attributes for nodes from the attribute list
-            ElementInfo::FlagsType getNodeFlags(SaxAttributeList const& xAttribs) const;
+            ElementInfo::FlagsType getNodeFlags(SaxAttributeList const& xAttribs, ElementType::Enum _eType) const;
 
             /// retrieve element type and associated module name of a set,
             bool getSetElementType(SaxAttributeList const& _xAttribs, OUString& _rsElementType, OUString& _rsElementTypeModule) const;
