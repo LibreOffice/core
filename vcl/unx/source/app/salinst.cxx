@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 13:55:53 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,11 @@
 #ifndef _SV_SALDISP_HXX
 #include <saldisp.hxx>
 #endif
-#ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#ifndef _SV_SALINST_H
+#include <salinst.h>
 #endif
-#ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#ifndef _SV_SALFRAME_H
+#include <salframe.h>
 #endif
 #ifndef _SV_SALWTYPE_HXX
 #include <salwtype.hxx>
@@ -92,25 +92,15 @@
 #ifndef _SV_DTINT_HXX
 #include <dtint.hxx>
 #endif
-#if !defined(_USE_PRINT_EXTENSION_)
 #ifndef _SV_SALPRN_H
 #include <salprn.h>
-#endif
 #endif
 #ifndef _VCL_SM_HXX
 #include <sm.hxx>
 #endif
-// -=-= C++ globals =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-void SalAbort( const XubString& rErrorText )
-{
-    if( !rErrorText.Len() )
-        fprintf( stderr, "Application Error" );
-    else
-        fprintf( stderr, ByteString( rErrorText, gsl_getSystemTextEncoding() ).GetBuffer() );
-    abort();
-}
-
+#ifndef _SV_SALOGL_H
+#include <salogl.h>
+#endif
 
 // -------------------------------------------------------------------------
 //
@@ -156,87 +146,48 @@ sal_Bool SalYieldMutex::tryToAcquire()
 
 //----------------------------------------------------------------------------
 
-void InitSalData()
-{
-    SalData *pSalData = new SalData;
-    SetSalData( pSalData );
-}
+// -=-= SalInstance =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-void DeInitSalData()
+// plugin factory function
+extern "C"
 {
-    SalData *pSalData = GetSalData();
-    delete pSalData;
-    SetSalData( NULL );
-}
-
-void InitSalMain()
-{
-    if (GetSalData())
+    SalInstance* create_SalInstance()
     {
-        int argc = 0;
-        GetSalData()->Init( &argc, 0 );
+        return new X11SalInstance();
     }
 }
 
-void DeInitSalMain()
+X11SalInstance::X11SalInstance()
 {
+    mpSalYieldMutex     = new SalYieldMutex;
+    mpSalYieldMutex->acquire();
+    mbPrinterInit       = false;
+
+    // initialize SalData
+    SalData *pSalData = new SalData;
+    SetSalData( pSalData );
+    pSalData->pInstance_ = this;
+    pSalData->Init();
 }
 
-void SetFilterCallback( void* pCallback, void* pInst )
+X11SalInstance::~X11SalInstance()
 {
-    SalData* pSalData = GetSalData();
+    // eventually free OpenGL lib
+    X11SalOpenGL::Release();
 
-    pSalData->pFirstInstance_->maInstData.mpFilterCallback = pCallback;
-    pSalData->pFirstInstance_->maInstData.mpFilterInst = pInst;
-}
-
-SalInstance *CreateSalInstance()
-{
-    SalData     *pSalData = GetSalData();
-    SalInstance *pInst    = new SalInstance;
-
-    // init instance (only one instance in this version !!!)
-    pSalData->pFirstInstance_ = pInst;
-
-    return pInst;
-}
-
-void DestroySalInstance( SalInstance *pInst )
-{
+    // close session management
     SessionManagerClient::close();
-    SalData *pSalData = GetSalData();
     // dispose SalDisplay list from SalData
     // would be done in a static destructor else which is
     // a little late
-    pSalData->DeleteDisplays();
 
-    // reset instance (only one instance in this version !!!)
-    if( pSalData->pFirstInstance_ == pInst )
-        pSalData->pFirstInstance_ = NULL;
+    SalData *pSalData = GetSalData();
+    delete pSalData;
+    SetSalData( NULL );
 
-    delete pInst;
-}
-
-// -=-= SalInstance =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-SalInstance::SalInstance()
-{
-    maInstData.mpFilterCallback     = NULL;
-    maInstData.mpFilterInst         = NULL;
-    maInstData.mpEventInst          = NULL;
-    maInstData.mpEventCallback      = NULL;
-    maInstData.mpErrorEventInst     = NULL;
-    maInstData.mpErrorEventCallback = NULL;
-    maInstData.mpSalYieldMutex      = new SalYieldMutex;
-    maInstData.mpSalYieldMutex->acquire();
-    maInstData.mbPrinterInit        = false;
-}
-
-SalInstance::~SalInstance()
-{
-// #75711# - java is running
-      maInstData.mpSalYieldMutex->release();
-      delete maInstData.mpSalYieldMutex;
+      mpSalYieldMutex->release();
+      delete mpSalYieldMutex;
 }
 
 
@@ -288,7 +239,8 @@ Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
 }
 
 
-BOOL SalInstance::AnyInput(USHORT nType)
+
+bool X11SalInstance::AnyInput(USHORT nType)
 {
     SalData *pSalData = GetSalData();
     Display *pDisplay  = pSalData->GetDefDisp()->GetDisplay();
@@ -315,20 +267,16 @@ BOOL SalInstance::AnyInput(USHORT nType)
     return bRet;
 }
 
-#ifdef _VOS_NO_NAMESPACE
-IMutex* SalInstance::GetYieldMutex()
-#else
-vos::IMutex* SalInstance::GetYieldMutex()
-#endif
+vos::IMutex* X11SalInstance::GetYieldMutex()
 {
-    return maInstData.mpSalYieldMutex;
+    return mpSalYieldMutex;
 }
 
 // -----------------------------------------------------------------------
 
-ULONG SalInstance::ReleaseYieldMutex()
+ULONG X11SalInstance::ReleaseYieldMutex()
 {
-    SalYieldMutex* pYieldMutex = maInstData.mpSalYieldMutex;
+    SalYieldMutex* pYieldMutex = mpSalYieldMutex;
     if ( pYieldMutex->GetThreadId() ==
          NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
     {
@@ -348,9 +296,9 @@ ULONG SalInstance::ReleaseYieldMutex()
 
 // -----------------------------------------------------------------------
 
-void SalInstance::AcquireYieldMutex( ULONG nCount )
+void X11SalInstance::AcquireYieldMutex( ULONG nCount )
 {
-    SalYieldMutex* pYieldMutex = maInstData.mpSalYieldMutex;
+    SalYieldMutex* pYieldMutex = mpSalYieldMutex;
     while ( nCount )
     {
         pYieldMutex->acquire();
@@ -358,25 +306,38 @@ void SalInstance::AcquireYieldMutex( ULONG nCount )
     }
 }
 
-void SalInstance::Yield( BOOL bWait )
+void X11SalInstance::Yield( BOOL bWait )
 { GetSalData()->GetLib()->Yield( bWait ); }
 
-void SalInstance::SetEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) )
-{
-    maInstData.mpEventInst      = pInstance;
-    maInstData.mpEventCallback  = pCallback;
-}
-
-void SalInstance::SetErrorEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) )
-{
-    maInstData.mpErrorEventInst     = pInstance;
-    maInstData.mpErrorEventCallback = pCallback;
-}
-
-void* SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )
+void* X11SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )
 {
     static const char* pDisplay = getenv( "DISPLAY" );
     rReturnedType   = AsciiCString;
     rReturnedBytes  = pDisplay ? strlen( pDisplay )+1 : 1;
     return pDisplay ? (void*)pDisplay : (void*)"";
 }
+
+SalFrame *X11SalInstance::CreateFrame( SalFrame *pParent, ULONG nSalFrameStyle )
+{
+    SalFrame *pFrame = new X11SalFrame( pParent, nSalFrameStyle );
+
+    return pFrame;
+}
+
+SalFrame* X11SalInstance::CreateChildFrame( SystemParentData* pParentData, ULONG nStyle )
+{
+    SalFrame* pFrame = new X11SalFrame( NULL, nStyle, pParentData );
+
+    return pFrame;
+}
+
+void X11SalInstance::DestroyFrame( SalFrame* pFrame )
+{
+    delete pFrame;
+}
+
+SalOpenGL* X11SalInstance::CreateSalOpenGL( SalGraphics* pGraphics )
+{
+    return new X11SalOpenGL( pGraphics );
+}
+
