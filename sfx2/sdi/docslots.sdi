@@ -2,7 +2,7 @@
     shell SfxObjectShell
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: kz $ $Date: 2004-10-04 20:41:06 $ $Revision: 1.12 $
+    $Author: rt $ $Date: 2004-11-26 15:06:02 $ $Revision: 1.13 $
     $Logfile:   T:/sfx2/sdi/docslots.sdv  $ $Workfile:   DOCSLOTS.SDI  $
 =========================================================================*/
 
@@ -190,11 +190,16 @@ interface OfficeDocument : Document
         ExecMethod = ExecFile_Impl;
         StateMethod = GetState_Impl;
     ]
-    SID_SIGNATURE
-    [
+        SID_SIGNATURE
+        [
         ExecMethod = ExecFile_Impl;
         StateMethod = GetState_Impl;
-    ]
+        ]
+        SID_MACRO_SIGNATURE
+        [
+        ExecMethod = ExecFile_Impl;
+        StateMethod = GetState_Impl;
+        ]
 }
 
  //=========================================================================
@@ -236,14 +241,19 @@ shell SfxObjectShell
         ExecMethod = ExecFile_Impl ;
         StateMethod = GetState_Impl ;
     ]
-    SID_SAVE_VERSION_ON_CLOSE
+        SID_SAVE_VERSION_ON_CLOSE
     [
-        ExecMethod = ExecFile_Impl ;
-        StateMethod = GetState_Impl ;
+                ExecMethod = ExecFile_Impl ;
+                StateMethod = GetState_Impl ;
     ]
     SID_SIGNATURE
     [
-        ExecMethod = ExecFile_Impl;
-        StateMethod = GetState_Impl;
+                ExecMethod = ExecFile_Impl;
+                StateMethod = GetState_Impl;
     ]
+        SID_MACRO_SIGNATURE
+        [
+                ExecMethod = ExecFile_Impl;
+                StateMethod = GetState_Impl;
+        ]
 } ;
