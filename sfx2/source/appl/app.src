@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:17:18 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,74 +411,13 @@ ErrorBox MSG_SIGNAL
     Message[ slovenian ] = "Pojavila se je nepriÄakovana napaka v programu.\n\nAli Å¾elite poskusiti shraniti svoje spremembe v vseh odprtih dokumentih, preden bo program konÄan?";
 };
 
-ErrorBox MSG_ERR_WEBBROWSER_NOT_STARTED
+ErrorBox MSG_ERR_NO_WEBBROWSER_FOUND
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message = "Beim Starten des Web-Browsers ist ein Fehler aufgetreten. Bitte überprüfen Sie die Einstellungen von %PRODUCTNAME unter 'Extras - Optionen - %PRODUCTNAME - Hilfsprogramme' und die Einstellungen Ihres Web-Browsers." ;
-    Message [ ENGLISH ] = "An error occurred in starting the web browser. Please check the %PRODUCTNAME settings under 'Tools - Options - %PRODUCTNAME - External Programs' and the settings for your web browser." ;
-    Message[ english_us ] = "An error occurred in starting the web browser. Please check the %PRODUCTNAME settings under 'Tools - Options - %PRODUCTNAME - External Programs' and the settings for your web browser.";
-    Message[ portuguese ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
-    Message[ russian ] = "Îøèáêà çàïóñêà âåá-áğàóçåğà.\nÏğîâåğüòå íàñòğîéêè %PRODUCTNAME è âåá-áğàóçåğà.";
-    Message[ greek ] = "ĞáñïõóéÜóôçêå óöÜëìá êáôÜ ôçí åêêßíçóç ôïõ ğñïãñÜììáôïò ğåñéŞãçóçò óôï web.\nÅëİãîôå ôéò ñõèìßóåéò ôïõ %PRODUCTNAME êáé ôïõ ğñïãñÜììáôïò ğåñéŞãçóçò óôï web.";
-    Message[ dutch ] = "Fout bij starten van webbrowser.\nControleer de instellingen van %PRODUCTNAME en van de webbrowser.";
-    Message[ french ] = "Erreur lors du lancement du navigateur Web. Vérifiez les paramètres de %PRODUCTNAME sous 'Outils - Options - %PRODUCTNAME - Programmes auxiliaires', ainsi que ceux du navigateur Web.";
-    Message[ spanish ] = "Se ha producido un error al iniciar el navegador web. Compruebe la configuración de %PRODUCTNAME en 'Herramientas - Opciones - %PRODUCTNAME - Programas auxiliares' así como la del navegador web. ";
-    Message[ finnish ] = "Web-selaimen käynnistyksessä tapahtui virhe.\nTarkista %PRODUCTNAMEn ja Web-selaimen asetukset.";
-    Message[ italian ] = "Si è verificato un errore durante l'avvio del browser Web. Verificate le impostazioni di %PRODUCTNAME al menu 'Strumenti - Opzioni - %PRODUCTNAME - Programmi ausiliari' e le impostazioni del browser Web.";
-    Message[ danish ] = "Fejl ved start af webbrowseren. Kontroller venligst indstillingerne for %PRODUCTNAME og for webbrowseren.";
-    Message[ swedish ] = "Det uppstod ett fel när webbläsaren skulle startas. Kontrollera inställningarna i %PRODUCTNAME under 'Verktyg - Alternativ - %PRODUCTNAME - Hjälpprogram' och inställningarna i din webbläsare.";
-    Message[ polish ] = "Wyst¹pi³ b³¹d podczas uruchamiania przegl¹darki stron WWW.\nSprawdŸ ustawienia programu %PRODUCTNAME i przegl¹darki.";
-    Message[ portuguese_brazilian ] = "Ocorreu um erro ao iniciar o navegador da web.\nPor favor, verifique as configurações do %PRODUCTNAME em 'Ferramentas - Opções - %PRODUCTNAME - Programas externos' o navegador da web.";
-    Message[ japanese ] = "webãƒ–ãƒ©ã‚¦ã‚¶ã®èµ·å‹•æ™‚ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚ãƒ„ãƒ¼ãƒ« â†’ ã‚ªãƒ—ã‚·ãƒ§ãƒ³ â†’ %PRODUCTNAME â†’ ãƒ˜ãƒ«ãƒ—ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã§ %PRODUCTNAME ã®è¨­å®šã¨ãŠä½¿ã„ã® webãƒ–ãƒ©ã‚¦ã‚¶ã®è¨­å®šã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚";
-    Message[ korean ] = "ì›¹ ë¸Œë¼ìš°ì €ë¥¼ ì‹œì‘í•˜ëŠ” ë™ì•ˆ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤. %PRODUCTNAME ì˜ 'ë„êµ¬ - ì˜µì…˜ - %PRODUCTNAME - ë³´ì¡° í”„ë¡œê·¸ë¨ì˜ ì„¤ì • ë° ì›¹ ë¸Œë¼ìš°ì € ì„¤ì •ì„ ì¬ê²€í•´ë³´ì‹­ì‹œì˜¤.";
-    Message[ chinese_simplified ] = "å¯åŠ¨ç½‘é¡µæµè§ˆå™¨æ—¶å‘ç”Ÿé”™è¯¯ã€‚è¯·æ‚¨æ£€æŸ¥ 'å·¥å…· - é€‰é¡¹ - %PRODUCTNAME - å¤–éƒ¨ç¨‹åº'ä¸‹çš„ %PRODUCTNAME è®¾ç½®å’Œæµè§ˆå™¨çš„è®¾ç½®ã€‚";
-    Message[ chinese_traditional ] = "å•Ÿå‹• Web ç€è¦½å™¨æ™‚ç™¼ç”Ÿä¸€å€‹éŒ¯èª¤ã€‚\nè«‹é€éã€Œå·¥å…·ã€-ã€Œé¸é …ã€-ã€Œ%PRODUCTNAME è¼”åŠ©ç¨‹å¼ã€ä¾†æª¢æŸ¥ %PRODUCTNAME çš„è¨­å®šåŠç€è¦½å™¨çš„è¨­å®šã€‚";
-    Message[ turkish ] = "Web tarayıcısını başlatırken bir hata oluştu.\nLütfen, %PRODUCTNAME ve web tarayıcınızın ayarlarını kontrol ediniz.";
-    Message[ arabic ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
-    Message[ catalan ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
-    Message[ thai ] = "An error occurred in starting the web browser. Please check the %PRODUCTNAME settings under 'Tools - Options - %PRODUCTNAME - External Programs' and the settings for your web browser.";
-    Message[ czech ] = "PÅ™i spouÅ¡tÄ›nÃ­ webovÃ©ho prohlÃ­Å¾eÄe nastala chyba.\nProsÃ­m zkontrolujte nastavenÃ­ %PRODUCTNAME a webovÃ©ho prohlÃ­Å¾eÄe.";
-    Message[ hebrew ] = "â€®××¨×¢×” ×©×’×™××” ×‘×¢×ª ××™×ª×—×•×œ ×”×“×¤×“×¤×Ÿ. × × ×œ×‘×“×•×§ ×”×’×“×¨×•×ª ×‘ \"×›×œ×™×\" > \"××¤×©×¨×•×™×•×ª\" > %PRODUCTNAME > \"×ª×•×›× ×™×•×ª ×—×™×¦×•× ×™×•×ª\", ×•×’× ×”×”×’×“×¨×•×ª ×©×œ ×”×“×¤×“×¤×Ÿ ×¢×¦××•.â€¬";
-    Message[ hindi ] = "An error occurred in starting the web browser. Please check the %PRODUCTNAME settings under 'Tools - Options - %PRODUCTNAME - External Programs' and the settings for your web browser.";
-    Message[ slovak ] = "Pri spÃºÅ¡Å¥anÃ­ webovÃ©ho prehliadaÄa nastala chyba.\nProsÃ­m skontrolujte nastavenia %PRODUCTNAME a webovÃ©ho prehliadaÄa.";
-    Message[ hungarian ] = "Hiba tÃ¶rtÃ©nt a webbÃ¶ngÃ©szÅ‘ indÃ­tÃ¡sa kÃ¶zben. EllenÅ‘rizze az %PRODUCTNAME beÃ¡llÃ­tÃ¡sait az 'EszkÃ¶zÃ¶k - BeÃ¡llÃ­tÃ¡sok - %PRODUCTNAME - KÃ¼lsÅ‘ programok' rÃ©szben, tovÃ¡bbÃ¡ a bÃ¶ngÃ©szÅ‘ beÃ¡llÃ­tÃ¡sait is.";
-    Message[ slovenian ] = "Pri zagonu spletnega brskalnika se je pojavila napaka. Preverite nastavitve programa %PRODUCTNAME v meniju 'Orodja - MoÅ¾nosti - %PRODUCTNAME - Zunanji programi' ter nastavitve brskalnika.";
-};
-
-ErrorBox MSG_ERR_EXTERNAL_APP_NOT_FOUND
-{
-    BUTTONS = WB_OK;
-    DEFBUTTON = WB_DEF_OK ;
-    Message = "Es konnte keine zugehörige externe Applikation für den angewählten Dateitypen gefunden werden.\nBitte überprüfen Sie die Einstellungen von %PRODUCTNAME." ;
-    Message [ ENGLISH ] = "An error occurred in starting the external application for the given file type.\nPlease check the %PRODUCTNAME settings." ;
-    Message[ english_us ] = "No corresponding external application could be found for the given file type.\nPlease check the %PRODUCTNAME settings.";
-    Message[ portuguese ] = "An error occurred in starting the external application for the given file type.\nPlease check the %PRODUCTNAME settings.";
-    Message[ russian ] = "Äëÿ çàäàííîãî òèïà ôàéëîâ íå íàéäåíî ñîîòâåòñòâóşùèõ âíåøíèõ ïğèëîæåíèé.\nÏğîâåğüòå íàñòğîéêè %PRODUCTNAME.";
-    Message[ greek ] = "Äåí Şôáí äõíáôŞ ç åıñåóç áíôßóôïé÷çò åîùôåñéêŞò åöáñìïãŞò ãéá ôïí êáèïñéóìİíï ôığï áñ÷åßïõ.\nÅëİãîôå ôéò ñõèìßóåéò ôïõ %PRODUCTNAME.";
-    Message[ dutch ] = "Er is geen bijbehorende externe toepassing voor de geselecteerde bestandstypen gevonden.\nControleer de instellingen van %PRODUCTNAME.";
-    Message[ french ] = "Impossible de détecter une application externe correspondant au type de fichier spécifié.\nVérifiez le paramétrage de %PRODUCTNAME.";
-    Message[ spanish ] = "No se pudo encontrar ninguna aplicación exterior correspondiente al tipo de archivo seleccionado.\nCompruebe la configuración del %PRODUCTNAME.";
-    Message[ finnish ] = "Annetulle tiedostotyypille ei löytynyt vastaavaa ulkoista sovellusta.\nTarkista %PRODUCTNAME-asetukset.";
-    Message[ italian ] = "Impossibile trovare le applicazioni esterne per il tipo di file selezionato.\\Verificate le impostazioni di %PRODUCTNAME.";
-    Message[ danish ] = "Der kunne ikke findes nogen tilhørende ekstern applikation til den valgte filtype.\nKontroller venligst indstillingerne for %PRODUCTNAME.";
-    Message[ swedish ] = "Det gick inte att hitta något tillhörande externt program för den valda filtypen.\nKontrollera inställningarna i %PRODUCTNAME.";
-    Message[ polish ] = "Nie znaleziono aplikacji zewnêtrznej, odpowiadaj¹cej podanemu typowi pliku.\nSprawdŸ ustawienia programu %PRODUCTNAME.";
-    Message[ portuguese_brazilian ] = "Não foi encontrado nenhuma aplicação externa associada ao tipo de arquivo selecionado.\nPor favor, verifique a configuração do %PRODUCTNAME.";
-    Message[ japanese ] = "é¸æŠã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã®ç¨®é¡ã‚’é–‹ãå¤–éƒ¨ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚\n%PRODUCTNAME è¨­å®šã‚’ã‚‚ã†ä¸€åº¦ç¢ºèªã—ã¦ãã ã•ã„ã€‚";
-    Message[ korean ] = "ì§€ì •í•˜ì‹  íŒŒì¼ í˜•ì‹ì— í•´ë‹¹í•˜ëŠ” ì‘ìš© í”„ë¡œê·¸ë¨ì„ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.\n%PRODUCTNAMEì˜ ì„¤ì •ì„ í™•ì¸í•´ë³´ì‹­ì‹œì˜¤.";
-    Message[ chinese_simplified ] = "æ²¡æœ‰æ‰¾åˆ°ç”¨äºæ‰“å¼€æŒ‡å®šæ–‡ä»¶ç±»å‹çš„å¤–æ¥çš„åº”ç”¨ç¨‹åºã€‚\nè¯·æ‚¨æ£€æŸ¥ %PRODUCTNAME çš„è®¾å®šã€‚";
-    Message[ chinese_traditional ] = "æ²’æœ‰æ‰¾åˆ°ç”¨æ–¼é–‹å•ŸæŒ‡å®šæª”æ¡ˆé¡å‹çš„å¤–ä¾†çš„æ‡‰ç”¨ç¨‹å¼ã€‚\nè«‹æª¢æŸ¥ %PRODUCTNAME çš„è¨­å®šã€‚";
-    Message[ turkish ] = "Seçilen dosya tipine göre çalıştırılacak dış bir program bulunamadı.\\Lütfen, %PRODUCTNAME ayarlarını kontrol ediniz.";
-    Message[ arabic ] = "An error occurred in starting the external application for the given file type.\nPlease check the %PRODUCTNAME settings.";
-    Message[ catalan ] = "An error occurred in starting the external application for the given file type.\nPlease check the %PRODUCTNAME settings.";
-    Message[ thai ] = "No corresponding external application could be found for the given file type.\nPlease check the %PRODUCTNAME settings.";
-    Message[ czech ] = "Pro zadanÃ½ typ souboru nebyla nalezena Å¾Ã¡dnÃ¡ vhodnÃ¡ externÃ­ aplikace.\nProsÃ­m zkontrolujte nastavenÃ­ %PRODUCTNAME.";
-    Message[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ××ª×¨ ×™×™×©×•× ×”××ª××™× ×œ×¡×•×’ ×§×•×‘×¥ ×–×”.\n× × ×œ×‘×“×•×§ ×‘××¤×©×¨×•×™×•×ª %PRODUCTNAME.â€¬";
-    Message[ hindi ] = "No corresponding external application could be found for the given file type.\nPlease check the %PRODUCTNAME settings.";
-    Message[ slovak ] = "Pre zadanÃ½ typ sÃºboru nebola nÃ¡jdenÃ¡ Å¾iadna vhodnÃ¡ externÃ¡ aplikÃ¡cia.\nProsÃ­m skontrolujte nastavenie %PRODUCTNAME.";
-    Message[ hungarian ] = "A megadott fÃ¡jltÃ­pushoz nincs megfelelÅ‘ kÃ¼lsÅ‘ alkalmazÃ¡s. \nEllenÅ‘rizze az %PRODUCTNAME beÃ¡llÃ­tÃ¡sait.";
-    Message[ slovenian ] = "Za podano vrsto datoteke ni mogoÄe najti ustrezne zunanje aplikacije.\nProsimo, preverite nastavitve programa %PRODUCTNAME.";
+    Message = "%PRODUCTNAME konnte auf Ihrem Rechner keinen Web-Browser finden. Bitte überprüfen Sie Ihre Arbeitsplatz-Einstellungen, oder installieren Sie einen Web-Browser (z.B. Mozilla) an die von dem Web-Browser vorgeschriebene Stelle." ;
+    Message [ ENGLISH ] = "%PRODUCTNAME could not find a web browser on your system. Please check your Desktop Preferences or install a web browser (for example, Mozilla) in the default  location requested during the browser installation." ;
+    Message[ english_us ] = "%PRODUCTNAME could not find a web browser on your system. Please check your Desktop Preferences or install a web browser (for example, Mozilla) in the default  location requested during the browser installation." ;
 };
 
 Resource SID_UNKNOWN
