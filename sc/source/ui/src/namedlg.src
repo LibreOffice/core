@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:34:42 $
+ *  last change: $Author: dr $ $Date: 2001-05-11 15:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   namedlg.src  $
- //   $Author: kz $
- //     $Date: 2001-05-10 06:34:42 $
- // $Revision: 1.8 $
+ //   $Author: dr $
+ //     $Date: 2001-05-11 15:03:49 $
+ // $Revision: 1.9 $
  //  $Logfile:   T:/sc/source/ui/src/namedlg.srv  $
  //---------------------------------------------------------------------------
 
@@ -105,9 +105,15 @@ ModelessDialog RID_SCDLG_NAMES
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 166 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
     PushButton BTN_ADD
     {
-        Pos = MAP_APPFONT ( 166 , 71 ) ;
+        Pos = MAP_APPFONT ( 166 , 76 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Hinzu~f¸gen : Hinzu~f≥gen */
         Text = "Hinzu~f¸gen" ;
@@ -139,7 +145,7 @@ ModelessDialog RID_SCDLG_NAMES
     };
     PushButton BTN_REMOVE
     {
-        Pos = MAP_APPFONT ( 166 , 87 ) ;
+        Pos = MAP_APPFONT ( 166 , 93 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Lˆschen : ~L˜schen */
         Text = "~Lˆschen" ;
@@ -168,16 +174,10 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
     };
-    HelpButton BTN_HELP
-    {
-        Pos = MAP_APPFONT ( 166 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    GroupBox GB_NAME
+    FixedText FT_NAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 154 , 98 ) ;
+        Size = MAP_APPFONT ( 154 , 8 ) ;
         Text = "Name" ;
         Text [ ENGLISH ] = "Name" ;
         Text [ norwegian ] = "Navn" ;
@@ -205,16 +205,16 @@ ModelessDialog RID_SCDLG_NAMES
     };
     ComboBox ED_NAME
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 142 , 80 ) ;
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 154 , 93 ) ;
         TabStop = TRUE ;
         VScroll = TRUE ;
         Sort = TRUE ;
     };
-    GroupBox GB_ASSIGN
+    FixedText FT_ASSIGN
     {
-        Pos = MAP_APPFONT ( 6 , 108 ) ;
-        Size = MAP_APPFONT ( 154 , 28 ) ;
+        Pos = MAP_APPFONT ( 6 , 113 ) ;
+        Size = MAP_APPFONT ( 154 , 8 ) ;
         Text = "Zugeordnet zu" ;
         Text [ ENGLISH ] = "Refers to" ;
         Text [ norwegian ] = "Refers to" ;
@@ -243,15 +243,15 @@ ModelessDialog RID_SCDLG_NAMES
     Edit ED_ASSIGN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 119 ) ;
-        Size = MAP_APPFONT ( 128 , 12 ) ;
+        Pos = MAP_APPFONT ( 6 , 124 ) ;
+        Size = MAP_APPFONT ( 138 , 12 ) ;
         TabStop = TRUE ;
     };
     ImageButton RB_ASSIGN
     {
         QuickHelpText = "Verkleinern" ;
         QuickHelpText [ ENGLISH ] = "Shrink" ;
-        Pos = MAP_APPFONT ( 142 , 119 ) ;
+        Pos = MAP_APPFONT ( 148 , 124 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
@@ -263,7 +263,7 @@ ModelessDialog RID_SCDLG_NAMES
         QuickHelpText [ french ] = "RÈduire" ;
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
-    QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
+        QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
         QuickHelpText[ japanese ] = "èkè¨";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
@@ -278,7 +278,7 @@ ModelessDialog RID_SCDLG_NAMES
     };
     MoreButton BTN_MORE
     {
-        Pos = MAP_APPFONT ( 166 , 123 ) ;
+        Pos = MAP_APPFONT ( 166 , 122 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /*
             Text = "~Zus‰tze";
@@ -297,12 +297,12 @@ ModelessDialog RID_SCDLG_NAMES
             */
         TabStop = TRUE ;
         MapUnit = MAP_APPFONT ;
-        Delta = 44 ;
+        Delta = 41 ;
     };
-    GroupBox GB_TYPE
+    FixedLine FL_TYPE
     {
         Pos = MAP_APPFONT ( 6 , 142 ) ;
-        Size = MAP_APPFONT ( 154 , 40 ) ;
+        Size = MAP_APPFONT ( 154 , 8 ) ;
         Text = "Bereichsart" ;
         Text [ ENGLISH ] = "Type of Area" ;
         Text [ norwegian ] = "Type of Area" ;

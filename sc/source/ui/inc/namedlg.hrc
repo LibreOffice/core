@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *  last change: $Author: dr $ $Date: 2001-05-11 15:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,9 @@
 #define BTN_HELP        5
 #define BTN_MORE        6
 //
-#define GB_NAME         11
+#define FT_NAME         11
 #define ED_NAME         12
-#define GB_ASSIGN       13
+#define FT_ASSIGN       13
 #define ED_ASSIGN       15
 #define RB_ASSIGN       16
 //
@@ -82,5 +82,5 @@
 #define BTN_PRINTAREA   32
 #define BTN_COLHEADER   33
 #define BTN_ROWHEADER   34
-#define GB_TYPE         35
+#define FL_TYPE         35
 

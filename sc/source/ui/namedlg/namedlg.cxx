@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:03 $
+ *  last change: $Author: dr $ $Date: 2001-05-11 15:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,10 +165,10 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
     :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_NAMES ),
         //
+        aFtName         ( this, ScResId( FT_NAME ) ),
         aEdName         ( this, ScResId( ED_NAME ) ),
-        aGbName         ( this, ScResId( GB_NAME ) ),
         //
-        aGbAssign       ( this, ScResId( GB_ASSIGN ) ),
+        aFtAssign       ( this, ScResId( FT_ASSIGN ) ),
         aEdAssign       ( this, ScResId( ED_ASSIGN ) ),
         aRbAssign       ( this, ScResId( RB_ASSIGN ), &aEdAssign ),
         //
@@ -176,7 +176,7 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         aBtnPrintArea   ( this, ScResId( BTN_PRINTAREA ) ),
         aBtnColHeader   ( this, ScResId( BTN_COLHEADER ) ),
         aBtnRowHeader   ( this, ScResId( BTN_ROWHEADER ) ),
-        aGbType         ( this, ScResId( GB_TYPE ) ),
+        aFlType         ( this, ScResId( FL_TYPE ) ),
         //
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
@@ -232,7 +232,7 @@ void __EXPORT ScNameDlg::Init()
     aBtnColHeader.Hide();
     aBtnRowHeader.Hide();
 
-    aBtnMore.AddWindow( &aGbType );
+    aBtnMore.AddWindow( &aFlType );
     aBtnMore.AddWindow( &aBtnCriteria );
     aBtnMore.AddWindow( &aBtnPrintArea );
     aBtnMore.AddWindow( &aBtnColHeader );
@@ -327,26 +327,26 @@ void __EXPORT ScNameDlg::UpdateChecks()
 
     if ( aEdName.GetText().Len() != 0 )
     {
-        if ( !aGbType.IsEnabled() )
+        if ( !aFlType.IsEnabled() )
         {
-            aGbType      .Enable();
+            aFlType      .Enable();
             aBtnCriteria .Enable();
             aBtnPrintArea.Enable();
             aBtnColHeader.Enable();
             aBtnRowHeader.Enable();
-            aGbAssign    .Enable();
+            aFtAssign    .Enable();
             aEdAssign    .Enable();
             aRbAssign    .Enable();
         }
     }
-    else if ( aGbType.IsEnabled() )
+    else if ( aFlType.IsEnabled() )
     {
-        aGbType      .Disable();
+        aFlType      .Disable();
         aBtnCriteria .Disable();
         aBtnPrintArea.Disable();
         aBtnColHeader.Disable();
         aBtnRowHeader.Disable();
-        aGbAssign    .Disable();
+        aFtAssign    .Disable();
         aEdAssign    .Disable();
         aRbAssign    .Disable();
     }
@@ -612,7 +612,7 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
                 aBtnAdd.SetText( aStrAdd );
             aBtnAdd.Disable();
             aBtnRemove.Disable();
-            aGbAssign.Disable();
+            aFtAssign.Disable();
             aEdAssign.Disable();
             aRbAssign.Disable();
             //@BugID 54702 raus mit dem Sch.
@@ -650,7 +650,7 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
             else
                 aBtnAdd.Disable();
 
-            aGbAssign.Enable();
+            aFtAssign.Enable();
             aEdAssign.Enable();
             aRbAssign.Enable();
             //@BugID 54702 raus mit dem Sch.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *  last change: $Author: dr $ $Date: 2001-05-11 15:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,14 +92,14 @@ class ScDocument;
 class ScNameDlg : public ScAnyRefDlg
 {
 private:
+    FixedText       aFtName;
     ComboBox        aEdName;
-    GroupBox        aGbName;
 
-    GroupBox        aGbAssign;
+    FixedText       aFtAssign;
     ScRefEdit       aEdAssign;
     ScRefButton     aRbAssign;
 
-    GroupBox        aGbType;
+    FixedLine       aFlType;
     CheckBox        aBtnPrintArea;
     CheckBox        aBtnColHeader;
     CheckBox        aBtnCriteria;
