@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblafmt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:54:52 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,9 +141,13 @@ const USHORT AUTOFORMAT_DATA_ID_552 = 9902;
 const USHORT AUTOFORMAT_ID_641      = 10001;
 const USHORT AUTOFORMAT_DATA_ID_641 = 10002;
 
+// --- from 680/dr14 on: diagonal frame lines
+const USHORT AUTOFORMAT_ID_680DR14      = 10011;
+const USHORT AUTOFORMAT_DATA_ID_680DR14 = 10012;
+
 // current version
-const USHORT AUTOFORMAT_ID          = AUTOFORMAT_ID_641;
-const USHORT AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_641;
+const USHORT AUTOFORMAT_ID          = AUTOFORMAT_ID_680DR14;
+const USHORT AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_680DR14;
 
 
 #ifdef READ_OLDVERS
@@ -176,6 +180,7 @@ public:
     USHORT nShadowedVersion;
     USHORT nColorVersion;
     USHORT nBoxVersion;
+    USHORT nLineVersion;
     USHORT nBrushVersion;
 
     USHORT nAdjustVersion;
@@ -205,6 +210,7 @@ SwAfVersions::SwAfVersions() :
     nShadowedVersion(0),
     nColorVersion(0),
     nBoxVersion(0),
+    nLineVersion(0),
     nBrushVersion(0),
     nAdjustVersion(0),
     nHorJustifyVersion(0),
@@ -230,6 +236,8 @@ void SwAfVersions::Load( SvStream& rStream, USHORT nVer )
     rStream >> nShadowedVersion;
     rStream >> nColorVersion;
     rStream >> nBoxVersion;
+    if ( nVer >= AUTOFORMAT_ID_680DR14 )
+        rStream >> nLineVersion;
     rStream >> nBrushVersion;
     rStream >> nAdjustVersion;
     rStream >> nHorJustifyVersion;
@@ -257,6 +265,9 @@ SwBoxAutoFmt::SwBoxAutoFmt()
     aCTLHeight( 240, 100, RES_CHRATR_CTL_FONTSIZE ),
     aCTLWeight( WEIGHT_NORMAL, RES_CHRATR_CTL_WEIGHT ),
     aCTLPosture( ITALIC_NONE, RES_CHRATR_CTL_POSTURE ),
+// FIXME - add attribute IDs for the diagonal line items
+//    aTLBR( RES_... ),
+//    aBLTR( RES_... ),
     aRotateMode( SVX_ROTATE_MODE_STANDARD, 0 )
 {
     eSysLanguage = eNumFmtLanguage = ::GetAppLanguage();
@@ -284,10 +295,12 @@ SwBoxAutoFmt::SwBoxAutoFmt( const SwBoxAutoFmt& rNew )
     aColor( rNew.aColor ),
     aAdjust( rNew.aAdjust ),
     aBox( rNew.aBox ),
+    aTLBR( rNew.aTLBR ),
+    aBLTR( rNew.aBLTR ),
     aBackground( rNew.aBackground ),
     aHorJustify( rNew.aHorJustify ),
     aVerJustify( rNew.aVerJustify ),
-    aOrientation( rNew.aOrientation ),
+    aStacked( rNew.aStacked ),
     aMargin( rNew.aMargin ),
     aLinebreak( rNew.aLinebreak ),
     aRotateAngle( rNew.aRotateAngle ),
@@ -326,6 +339,8 @@ int SwBoxAutoFmt::operator==( const SwBoxAutoFmt& rCmp ) const
             aColor == rCmp.aColor &&
             aAdjust == rCmp.aAdjust &&
             aBox == rCmp.aBox &&
+            aTLBR == rCmp.aTLBR &&
+            aBLTR == rCmp.aBLTR &&
             aBackground == rCmp.aBackground;
 }
 #endif
@@ -352,11 +367,13 @@ SwBoxAutoFmt& SwBoxAutoFmt::operator=( const SwBoxAutoFmt& rNew )
     aColor = rNew.aColor;
     SetAdjust( rNew.aAdjust );
     aBox = rNew.aBox;
+    aTLBR = rNew.aTLBR;
+    aBLTR = rNew.aBLTR;
     aBackground = rNew.aBackground;
 
     aHorJustify = rNew.aHorJustify;
     aVerJustify = rNew.aVerJustify;
-    aOrientation = rNew.aOrientation;
+    aStacked.SetValue( rNew.aStacked.GetValue() );
     aMargin = rNew.aMargin;
     aLinebreak.SetValue( rNew.aLinebreak.GetValue() );
     aRotateAngle.SetValue( rNew.aRotateAngle.GetValue() );
@@ -378,6 +395,8 @@ SwBoxAutoFmt& SwBoxAutoFmt::operator=( const SwBoxAutoFmt& rNew )
 BOOL SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, USHORT nVer )
 {
     SfxPoolItem* pNew;
+    SvxOrientationItem aOrientation;
+
     READ( aFont,        SvxFontItem         , rVersions.nFontVersion)
 
     if( rStream.GetStreamCharSet() == aFont.GetCharSet() )
@@ -405,6 +424,14 @@ BOOL SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, USHOR
     READ( aColor,       SvxColorItem        , rVersions.nColorVersion)
 
     READ( aBox,         SvxBoxItem          , rVersions.nBoxVersion)
+
+    // --- from 680/dr14 on: diagonal frame lines
+    if( nVer >= AUTOFORMAT_DATA_ID_680DR14 )
+    {
+        READ( aTLBR, SvxLineItem, rVersions.nLineVersion)
+        READ( aBLTR, SvxLineItem, rVersions.nLineVersion)
+    }
+
     READ( aBackground,  SvxBrushItem        , rVersions.nBrushVersion)
 
     pNew = aAdjust.Create(rStream, rVersions.nAdjustVersion );
@@ -440,6 +467,9 @@ BOOL SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, USHOR
         if ( eSysLanguage == LANGUAGE_SYSTEM )      // von alten Versionen (Calc)
             eSysLanguage = ::GetAppLanguage();
     }
+
+    aStacked.SetValue( aOrientation.IsStacked() );
+    aRotateAngle.SetValue( aOrientation.GetRotation( aRotateAngle.GetValue() ) );
 
     return 0 == rStream.GetError();
 }
@@ -478,6 +508,8 @@ BOOL SwBoxAutoFmt::LoadOld( SvStream& rStream, USHORT aLoadVer[] )
 
 BOOL SwBoxAutoFmt::Save( SvStream& rStream ) const
 {
+    SvxOrientationItem aOrientation( aRotateAngle.GetValue(), aStacked.GetValue() );
+
     aFont.Store( rStream, aFont.GetVersion(SOFFICE_FILEFORMAT_40)  );
     aHeight.Store( rStream, aHeight.GetVersion(SOFFICE_FILEFORMAT_40) );
     aWeight.Store( rStream, aWeight.GetVersion(SOFFICE_FILEFORMAT_40) );
@@ -496,6 +528,8 @@ BOOL SwBoxAutoFmt::Save( SvStream& rStream ) const
     aShadowed.Store( rStream, aShadowed.GetVersion(SOFFICE_FILEFORMAT_40) );
     aColor.Store( rStream, aColor.GetVersion(SOFFICE_FILEFORMAT_40) );
     aBox.Store( rStream, aBox.GetVersion(SOFFICE_FILEFORMAT_40) );
+    aTLBR.Store( rStream, aTLBR.GetVersion(SOFFICE_FILEFORMAT_40) );
+    aBLTR.Store( rStream, aBLTR.GetVersion(SOFFICE_FILEFORMAT_40) );
     aBackground.Store( rStream, aBackground.GetVersion(SOFFICE_FILEFORMAT_40) );
 
     aAdjust.Store( rStream, aAdjust.GetVersion(SOFFICE_FILEFORMAT_40) );
@@ -528,13 +562,14 @@ BOOL SwBoxAutoFmt::SaveVerionNo( SvStream& rStream ) const
     rStream << aShadowed.GetVersion( SOFFICE_FILEFORMAT_40 );
     rStream << aColor.GetVersion( SOFFICE_FILEFORMAT_40 );
     rStream << aBox.GetVersion( SOFFICE_FILEFORMAT_40 );
+    rStream << aTLBR.GetVersion( SOFFICE_FILEFORMAT_40 );
     rStream << aBackground.GetVersion( SOFFICE_FILEFORMAT_40 );
 
     rStream << aAdjust.GetVersion( SOFFICE_FILEFORMAT_40 );
 
     rStream << aHorJustify.GetVersion( SOFFICE_FILEFORMAT_40 );
     rStream << aVerJustify.GetVersion( SOFFICE_FILEFORMAT_40 );
-    rStream << aOrientation.GetVersion( SOFFICE_FILEFORMAT_40 );
+    rStream << SvxOrientationItem().GetVersion( SOFFICE_FILEFORMAT_40 );
     rStream << aMargin.GetVersion( SOFFICE_FILEFORMAT_40 );
     rStream << aLinebreak.GetVersion( SOFFICE_FILEFORMAT_40 );
     rStream << aRotateAngle.GetVersion( SOFFICE_FILEFORMAT_40 );
@@ -673,6 +708,9 @@ SwBoxAutoFmt& SwTableAutoFmt::UpdateFromSet( BYTE nPos,
     if( UPDATE_BOX & eFlags )
     {
         pFmt->SetBox( (SvxBoxItem&)rSet.Get( RES_BOX ) );
+// FIXME - add attribute IDs for the diagonal line items
+//        pFmt->SetTLBR( (SvxLineItem&)rSet.Get( RES_... ) );
+//        pFmt->SetBLTR( (SvxLineItem&)rSet.Get( RES_... ) );
         pFmt->SetBackground( (SvxBrushItem&)rSet.Get( RES_BACKGROUND ) );
 
         const SwTblBoxNumFormat* pNumFmtItem;
@@ -752,7 +790,12 @@ void SwTableAutoFmt::UpdateToSet( BYTE nPos, SfxItemSet& rSet,
     if( UPDATE_BOX & eFlags )
     {
         if( IsFrame() )
+        {
             rSet.Put( rChg.GetBox() );
+// FIXME - uncomment the lines to put the diagonal line items
+//            rSet.Put( rChg.GetTLBR() );
+//            rSet.Put( rChg.GetBLTR() );
+        }
         if( IsBackground() )
             rSet.Put( rChg.GetBackground() );
 
