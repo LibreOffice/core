@@ -1,4 +1,4 @@
-inp  i18npool    :   bridges sax stoc i18npool NULL
+inp  i18npool    :   bridges sax stoc NULL
 inp  i18npool                                    usr1    -   all in_mkout NULL
 inp  i18npool\source\unotypes                    nmake   -   all in_utypes NULL
 inp  i18npool\source\registerservices            nmake   -   all in_rserv in_utypes NULL
