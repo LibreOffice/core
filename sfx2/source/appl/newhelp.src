@@ -1,30 +1,85 @@
+/*************************************************************************
+ *
+ *  $RCSfile: newhelp.src,v $
+ *
+ *  $Revision: 1.10 $
+ *
+ *  last change: $Author: pb $ $Date: 2000-12-11 09:12:52 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
 #include "app.hrc"
+#include "newhelp.hrc"
 
 Window WIN_HELP_INDEX
 {
     Hide = TRUE ;
     Size = MAP_APPFONT ( 120 , 200 ) ;
-    FixedText FT_ACTIVE
-    {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text = "~Active Subset" ;
-    };
     ListBox LB_ACTIVE
     {
         Border = TRUE ;
         DropDown = TRUE;
-        Pos = MAP_APPFONT ( 6 , 19 ) ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 108 , 40 ) ;
     };
     FixedLine FL_ACTIVE
     {
-        Pos = MAP_APPFONT ( 2, 36 ) ;
+        Pos = MAP_APPFONT ( 2, 19 ) ;
         Size = MAP_APPFONT ( 118 , 1 ) ;
     };
     TabControl TC_INDEX
     {
-        Pos = MAP_APPFONT ( 0, 40 ) ;
+        Pos = MAP_APPFONT ( 0, 23 ) ;
         PageList =
         {
 /*          PageItem
@@ -112,18 +167,26 @@ TabPage TP_HELP_INDEX
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "~Suchbegriff" ;
+        Text [ english_us ] = "~Suchbegriff" ;
     };
     Edit ED_EXPRESSION
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 19 ) ;
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
         Size = MAP_APPFONT ( 108 , 12 ) ;
     };
     ListBox LB_RESULTS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 34 ) ;
+        Pos = MAP_APPFONT ( 6 , 32 ) ;
         Size = MAP_APPFONT ( 108 , 80 ) ;
+    };
+    PushButton PB_OPEN_INDEX
+    {
+        Pos = MAP_APPFONT ( 64 , 115 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Anzeigen" ;
+        Text [ english_us ] = "~Display" ;
     };
 };
 
@@ -136,6 +199,7 @@ TabPage TP_HELP_SEARCH
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "S~uchbegriff" ;
+        Text [ english_us ] = "~Suchbegriff" ;
     };
     ComboBox ED_SEARCH
     {
@@ -144,42 +208,25 @@ TabPage TP_HELP_SEARCH
         Pos = MAP_APPFONT ( 6 , 19 ) ;
         Size = MAP_APPFONT ( 72 , 40 ) ;
     };
-    PushButton PB_OPERATOR
+    PushButton PB_SEARCH
     {
         Pos = MAP_APPFONT ( 81 , 19 ) ;
-        Size = MAP_APPFONT ( 33 , 12 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Suchen";
         Text [ english_us ] = "Search";
-    };
-    FixedText FT_RESULT
-    {
-        Pos = MAP_APPFONT ( 6 , 34 ) ;
-        Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text = "S~elect topic: %1, Found: %2" ;
     };
     ListBox LB_RESULT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 47 ) ;
+        Pos = MAP_APPFONT ( 6 , 36 ) ;
         Size = MAP_APPFONT ( 108 , 30 ) ;
     };
-    CheckBox CB_PREVIOUS
+    PushButton PB_OPEN_SEARCH
     {
-        Pos = MAP_APPFONT ( 6 , 80 ) ;
-        Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text = "~Search previous results" ;
-    };
-    CheckBox CB_MATCH
-    {
-        Pos = MAP_APPFONT ( 6 , 93 ) ;
-        Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text = "~Match similar words" ;
-    };
-    CheckBox CB_TITLE
-    {
-        Pos = MAP_APPFONT ( 6 , 106 ) ;
-        Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text = "Search ~titles only" ;
+        Pos = MAP_APPFONT ( 64 , 69 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Anzeigen" ;
+        Text [ english_us ] = "~Display" ;
     };
 };
 

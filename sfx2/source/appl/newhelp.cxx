@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-10 16:44:58 $
+ *  last change: $Author: pb $ $Date: 2000-12-11 09:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include "helper.hxx"
 
 #include "app.hrc"
+#include "newhelp.hrc"
 
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
@@ -187,10 +188,13 @@ IndexTabPage_Impl::IndexTabPage_Impl( Window* pParent ) :
 
     aExpressionFT   ( this, ResId( FT_EXPRESSION ) ),
     aExpressionED   ( this, ResId( ED_EXPRESSION ) ),
-    aResultsLB      ( this, ResId( LB_RESULTS ) )
+    aResultsLB      ( this, ResId( LB_RESULTS ) ),
+    aOpenBtn        ( this, ResId( PB_OPEN_INDEX ) )
 
 {
     FreeResource();
+
+    aOpenBtn.SetClickHdl( LINK( this, IndexTabPage_Impl, OpenHdl ) );
 
     nMinWidth = GetSizePixel().Width();
 }
@@ -303,6 +307,14 @@ void IndexTabPage_Impl::ClearIndex()
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( IndexTabPage_Impl, OpenHdl, PushButton*, EMPTYARG )
+{
+    aResultsLB.GetDoubleClickHdl().Call( &aResultsLB );
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
 void IndexTabPage_Impl::Resize()
 {
     Size aSize = GetSizePixel();
@@ -310,6 +322,7 @@ void IndexTabPage_Impl::Resize()
     if ( aSize.Width() > nMinWidth || nWidth > aSize.Width() )
     {
         Point aPnt = aExpressionFT.GetPosPixel();
+        long nDelta = ( aPnt.X() / 2 );
         Size aNewSize = aExpressionFT.GetSizePixel();
         aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
         aExpressionFT.SetSizePixel( aNewSize );
@@ -323,7 +336,15 @@ void IndexTabPage_Impl::Resize()
         aNewSize = aResultsLB.GetSizePixel();
         aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
         aNewSize.Height() = aSize.Height() - ( aPnt.Y() + aPnt.X() );
+        aNewSize.Height() -= aOpenBtn.GetSizePixel().Height();
+        aNewSize.Height() -= ( aPnt.X() / 2 );
         aResultsLB.SetSizePixel( aNewSize );
+
+        aPnt.X() += aNewSize.Width();
+        aPnt.X() -= aOpenBtn.GetSizePixel().Width();
+        aPnt.Y() += aNewSize.Height();
+        aPnt.Y() += nDelta;
+        aOpenBtn.SetPosPixel( aPnt );
     }
 }
 
@@ -353,24 +374,15 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent ) :
 
     aSearchFT   ( this, ResId( FT_SEARCH ) ),
     aSearchED   ( this, ResId( ED_SEARCH ) ),
-    aOperatorBtn( this, ResId( PB_OPERATOR ) ),
-    aResultsFT  ( this, ResId( FT_RESULT ) ),
+    aSearchBtn  ( this, ResId( PB_SEARCH ) ),
     aResultsLB  ( this, ResId( LB_RESULT ) ),
-    aPreviousCB ( this, ResId( CB_PREVIOUS ) ),
-    aMatchCB    ( this, ResId( CB_MATCH ) ),
-    aTitleCB    ( this, ResId( CB_TITLE ) )
+    aOpenBtn    ( this, ResId( PB_OPEN_SEARCH ) )
 
 {
     FreeResource();
 
-//! aOperatorBtn.SetSymbol( SYMBOL_SPIN_RIGHT );
-
-    String aText = aResultsFT.GetText();
-    aText.SearchAndReplace( DEFINE_CONST_UNICODE("%1"), DEFINE_CONST_UNICODE(" ") );
-    aText.SearchAndReplace( DEFINE_CONST_UNICODE("%2"), DEFINE_CONST_UNICODE("0") );
-    aResultsFT.SetText( aText );
-    aResultsFT.Hide();
-    aOperatorBtn.SetClickHdl( LINK( this, SearchTabPage_Impl, SearchHdl ) );
+    aSearchBtn.SetClickHdl( LINK( this, SearchTabPage_Impl, SearchHdl ) );
+    aOpenBtn.SetClickHdl( LINK( this, SearchTabPage_Impl, OpenHdl ) );
 
     aMinSize = GetSizePixel();
 }
@@ -414,6 +426,14 @@ IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( SearchTabPage_Impl, OpenHdl, PushButton*, EMPTYARG )
+{
+    aResultsLB.GetDoubleClickHdl().Call( &aResultsLB );
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
 void SearchTabPage_Impl::Resize()
 {
     Size aSize = GetSizePixel();
@@ -423,43 +443,37 @@ void SearchTabPage_Impl::Resize()
         Size aNewSize = aSearchFT.GetSizePixel();
         aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
         aSearchFT.SetSizePixel( aNewSize );
-        aResultsFT.SetSizePixel( aNewSize );
-        aPreviousCB.SetSizePixel( aNewSize );
-        aMatchCB.SetSizePixel( aNewSize );
-        aTitleCB.SetSizePixel( aNewSize );
         aNewSize.Height() = aResultsLB.GetSizePixel().Height();
         aResultsLB.SetSizePixel( aNewSize );
 
         aNewSize = aSearchED.GetSizePixel();
         aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 ) -
-                           ( aOperatorBtn.GetSizePixel().Width() + ( aPnt.X() / 2 ) );
+                           ( aSearchBtn.GetSizePixel().Width() + ( aPnt.X() / 2 ) );
         aSearchED.SetSizePixel( aNewSize );
-        Point aNewPnt = aOperatorBtn.GetPosPixel();
+        Point aNewPnt = aSearchBtn.GetPosPixel();
         aNewPnt.X() = aPnt.X() + aNewSize.Width() + ( aPnt.X() / 2 );
-        aOperatorBtn.SetPosPixel( aNewPnt );
+        aSearchBtn.SetPosPixel( aNewPnt );
     }
 
     if ( aSize.Height() > aMinSize.Height() )
     {
         Point aPnt = aSearchFT.GetPosPixel();
-        long nH = aPreviousCB.GetSizePixel().Height();
-        nH *= 3;
-        nH += ( aPnt.Y() * 5 / 2 );
+        long nX = aPnt.X();
+        long nH = aOpenBtn.GetSizePixel().Height();
+        nH += ( aPnt.Y() / 2 );
+
         aPnt = aResultsLB.GetPosPixel();
         Size aOldSize = aResultsLB.GetSizePixel();
+        nX += aOldSize.Width();
         Size aNewSize = aOldSize;
         aNewSize.Height() = aSize.Height() - aPnt.Y() - nH;
         aResultsLB.SetSizePixel( aNewSize );
         long nDeltaH = aNewSize.Height() - aOldSize.Height();
-        aPnt = aPreviousCB.GetPosPixel();
+        aPnt = aOpenBtn.GetPosPixel();
         aPnt.Y() += nDeltaH;
-        aPreviousCB.SetPosPixel( aPnt );
-        aPnt = aMatchCB.GetPosPixel();
-        aPnt.Y() += nDeltaH;
-        aMatchCB.SetPosPixel( aPnt );
-        aPnt = aTitleCB.GetPosPixel();
-        aPnt.Y() += nDeltaH;
-        aTitleCB.SetPosPixel( aPnt );
+        nX -= aOpenBtn.GetSizePixel().Width();
+        aPnt.X() = nX;
+        aOpenBtn.SetPosPixel( aPnt );
     }
 }
 
@@ -476,7 +490,6 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( Window* pParent ) :
 
     Window( pParent, SfxResId( WIN_HELP_INDEX ) ),
 
-    aActiveFT   ( this, ResId( FT_ACTIVE ) ),
     aActiveLB   ( this, ResId( LB_ACTIVE ) ),
     aActiveLine ( this, ResId( FL_ACTIVE ) ),
     aTabCtrl    ( this, ResId( TC_INDEX ) ),
@@ -618,11 +631,6 @@ void SfxHelpIndexWindow_Impl::Resize()
         aSize.Width() = nMinWidth;
     else
     {
-        aPnt = aActiveFT.GetPosPixel();
-        aNewSize = aActiveFT.GetSizePixel();
-        aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
-        aActiveFT.SetSizePixel( aNewSize );
-
         aPnt = aActiveLB.GetPosPixel();
         aNewSize = aActiveLB.GetSizePixel();
         aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );

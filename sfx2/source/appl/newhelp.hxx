@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-10 16:44:58 $
+ *  last change: $Author: pb $ $Date: 2000-12-11 09:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,12 +100,15 @@ private:
     FixedText           aExpressionFT;
     Edit                aExpressionED;
     ListBox             aResultsLB;
+    PushButton          aOpenBtn;
 
     long                nMinWidth;
     String              aFactory;
 
     void                InitializeIndex();
     void                ClearIndex();
+
+    DECL_LINK(          OpenHdl, PushButton* );
 
 public:
     IndexTabPage_Impl( Window* pParent );
@@ -125,12 +128,9 @@ class SearchTabPage_Impl : public TabPage
 private:
     FixedText           aSearchFT;
     ComboBox            aSearchED;
-    PushButton          aOperatorBtn;
-    FixedText           aResultsFT;
+    PushButton          aSearchBtn;
     ListBox             aResultsLB;
-    CheckBox            aPreviousCB;
-    CheckBox            aMatchCB;
-    CheckBox            aTitleCB;
+    PushButton          aOpenBtn;
 
     Size                aMinSize;
     String              aFactory;
@@ -138,6 +138,7 @@ private:
     void                ClearSearchResults();
 
     DECL_LINK(          SearchHdl, PushButton* );
+    DECL_LINK(          OpenHdl, PushButton* );
 
 public:
     SearchTabPage_Impl( Window* pParent );
@@ -153,7 +154,6 @@ public:
 class SfxHelpIndexWindow_Impl : public Window
 {
 private:
-    FixedText           aActiveFT;
     ListBox             aActiveLB;
     FixedLine           aActiveLine;
 
