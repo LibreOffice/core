@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:59:45 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1357,7 +1357,7 @@ SvStream* SdDrawDocument::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) 
 {
     uno::Reference < embed::XStorage > xStor;
     if (pDocSh)
-        xStor = pDocSh->GetMedium()->GetStorage();
+        xStor = pDocSh->GetStorage();
     SvStream*   pRet = NULL;
 
     if( xStor.is() )
