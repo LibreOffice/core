@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cli_bridgetest_inprocess.cs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 12:59:23 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,8 +163,10 @@ public class BridgeTest
                 // I.
                 // direct unbridged test
                 // get client object via singleton entry
-                Object test_client = new cs_testobj.BridgeTest( xContext );
-                XMain xClient = (XMain) test_client;
+                Object test_client;
+                XMain xClient;
+                test_client = new cs_testobj.BridgeTest( xContext );
+                xClient = (XMain) test_client;
                 Console.WriteLine(
                     "[cli bridgetest] client: {0}", xClient.ToString() );
                 // run with CLI target object
@@ -227,17 +229,17 @@ public class BridgeTest
                 //     -s com.sun.star.test.bridge.BridgeTest
                 //     -- com.sun.star.test.bridge.cli_uno.VbTestObject
                 // get CLI client
-                test_client =
-                    xContext.getServiceManager().createInstanceWithContext(
-                        "com.sun.star.test.bridge.BridgeTest", xContext );
-                xClient = (XMain) test_client;
-                Console.WriteLine(
-                    "[cli bridgetest] Visual Basic client: {0}",
-                    xClient.ToString() );
-                // run with native target object
-                xClient.run(
-                    new String [] {
-                    "com.sun.star.test.bridge.cli_uno.VbTestObject" } );
+//                 test_client =
+//                     xContext.getServiceManager().createInstanceWithContext(
+//                         "com.sun.star.test.bridge.BridgeTest", xContext );
+//                 xClient = (XMain) test_client;
+//                 Console.WriteLine(
+//                     "[cli bridgetest] Visual Basic client: {0}",
+//                     xClient.ToString() );
+//                 // run with native target object
+//                 xClient.run(
+//                     new String [] {
+//                     "com.sun.star.test.bridge.cli_uno.VbTestObject" } );
 
                 // VI:
                 // uno -ro uno_services.rdb -ro uno_types.rdb 
