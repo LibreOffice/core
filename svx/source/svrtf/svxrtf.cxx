@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-01 11:02:25 $
+ *  last change: $Author: jp $ $Date: 2001-11-21 16:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,12 +527,13 @@ void SvxRTFParser::ReadFontTable()
     int nToken;
     int nOpenBrakets = 1;       // die erste wurde schon vorher erkannt !!
     Font* pFont = new Font();
-    short nFontNo;
+    short nFontNo, nInsFontNo;
     String sAltNm, sFntNm;
-    BOOL bIsAltFntNm = FALSE;
+    BOOL bIsAltFntNm = FALSE, bCheckNewFont;
 
     while( nOpenBrakets && IsParserWorking() )
     {
+        bCheckNewFont = FALSE;
         switch( ( nToken = GetNextToken() ))
         {
         case '}':
@@ -541,18 +542,8 @@ void SvxRTFParser::ReadFontTable()
                             // Style konnte vollstaendig gelesen werden,
                             // also ist das noch ein stabiler Status
                             SaveState( RTF_FONTTBL );
-                        if( 1 == nOpenBrakets && sFntNm.Len() )  // one font is ready
-                        {
-                            // alle Daten vom Font vorhanden, also ab in die Tabelle
-                            if( sAltNm.Len() && 6380 < GetVersionNo() )
-                                (sFntNm += ';' ) += sAltNm;
-
-                            pFont->SetName( sFntNm );
-                            aFontTbl.Insert( nFontNo, pFont );
-                            pFont = new Font();
-                            sAltNm.Erase();
-                            sFntNm.Erase();
-                        }
+                        bCheckNewFont = TRUE;
+                        nInsFontNo = nFontNo;
                         break;
 
         case '{':
@@ -602,7 +593,12 @@ void SvxRTFParser::ReadFontTable()
             }
             break;
 
-        case RTF_F:         nFontNo = (short)nTokenValue;   break;
+        case RTF_F:
+            bCheckNewFont = TRUE;
+            nInsFontNo = nFontNo;
+            nFontNo = (short)nTokenValue;
+            break;
+
         case RTF_FALT:      bIsAltFntNm = TRUE;             break;
 
         case RTF_TEXTTOKEN:
@@ -617,6 +613,18 @@ void SvxRTFParser::ReadFontTable()
                 }
             }
             break;
+        }
+        if( bCheckNewFont && 1 >= nOpenBrakets && sFntNm.Len() )  // one font is ready
+        {
+            // alle Daten vom Font vorhanden, also ab in die Tabelle
+            if( sAltNm.Len() && 6380 < GetVersionNo() )
+                (sFntNm += ';' ) += sAltNm;
+
+            pFont->SetName( sFntNm );
+            aFontTbl.Insert( nInsFontNo, pFont );
+            pFont = new Font();
+            sAltNm.Erase();
+            sFntNm.Erase();
         }
     }
     // den letzen muessen wir selbst loeschen
@@ -1089,7 +1097,27 @@ void SvxRTFParser::AttrGroupEnd()   // den akt. Bearbeiten, vom Stack loeschen
                     _ClearStyleAttr( *pOld );
 
                 if( pAkt )
+                {
                     pAkt->Add( pOld );
+                    // split up and create new entry, because it make no sense
+                    // to create a "so long" depend list. Bug 95010
+                    if( bCrsrBack && 50 < pAkt->pChildList->Count() )
+                    {
+                        // am Absatzanfang ? eine Position zurueck
+                        MovePos( TRUE );
+                        bCrsrBack = FALSE;
+
+                        // eine neue Gruppe aufmachen
+                        SvxRTFItemStackType* pNew = new SvxRTFItemStackType(
+                                                *pAkt, *pInsPos, TRUE );
+                        pNew->aAttrSet.SetParent( pAkt->aAttrSet.GetParent() );
+                        pNew->SetRTFDefaults( GetRTFDefaults() );
+
+                        // alle bis hierher gueltigen Attribute "setzen"
+                        AttrGroupEnd();
+                        aAttrStack.Push( pNew );
+                    }
+                }
                 else
                     // letzter vom Stack, also zwischenspeichern, bis der
                     // naechste Text eingelesen wurde. (keine Attribute
@@ -1255,7 +1283,7 @@ SvxRTFItemStackType::~SvxRTFItemStackType()
 void SvxRTFItemStackType::Add( SvxRTFItemStackType* pIns )
 {
     if( !pChildList )
-         pChildList = new SvxRTFItemStackList;
+         pChildList = new SvxRTFItemStackList( 4, 16 );
     pChildList->Insert( pIns, pChildList->Count() );
 }
 
