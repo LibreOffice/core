@@ -83,6 +83,8 @@ hedabu: ..\inc\charmap.hxx %_DEST%\inc%_EXT%\svx\charmap.hxx
 hedabu: ..\inc\checklbx.hxx %_DEST%\inc%_EXT%\svx\checklbx.hxx
 hedabu: ..\inc\chrtitem.hxx %_DEST%\inc%_EXT%\svx\chrtitem.hxx
 hedabu: ..\inc\class3d.hxx %_DEST%\inc%_EXT%\svx\class3d.hxx
+hedabu: ..\inc\clipboardctl.hxx %_DEST%\inc%_EXT%\svx\clipboardctl.hxx
+hedabu: ..\inc\clipfmtitem.hxx %_DEST%\inc%_EXT%\svx\clipfmtitem.hxx
 hedabu: ..\inc\cmapitem.hxx %_DEST%\inc%_EXT%\svx\cmapitem.hxx
 hedabu: ..\inc\cntritem.hxx %_DEST%\inc%_EXT%\svx\cntritem.hxx
 hedabu: ..\inc\colritem.hxx %_DEST%\inc%_EXT%\svx\colritem.hxx
