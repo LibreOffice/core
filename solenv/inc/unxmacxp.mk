@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 15:31:07 $
+#   last change: $Author: vg $ $Date: 2005-02-24 14:06:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -201,6 +201,7 @@ SONAME_SWITCH=-Wl,-h
 
 STDLIBCPP=-lstdc++
 
+STDOBJVCL=$(L)$/salmain.o
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
