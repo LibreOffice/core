@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableConnection.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-08 09:09:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 using namespace dbaui;
 using namespace comphelper;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 TYPEINIT0(OTableConnection);
 //========================================================================
