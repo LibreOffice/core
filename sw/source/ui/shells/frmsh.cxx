@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-05-27 13:02:32 $
+ *  last change: $Author: os $ $Date: 2002-08-09 09:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,17 @@
 // Prototypen ------------------------------------------------------------
 
 void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine);
+const SwFrmFmt* lcl_GetFrmFmtByName(SwWrtShell& rSh, const String& rName)
+{
+    sal_uInt16 nCount = rSh.GetFlyCount(FLYCNTTYPE_FRM);
+    for( sal_uInt16 i = 0; i < nCount; i++)
+    {
+        const SwFrmFmt* pFmt = rSh.GetFlyNum(i, FLYCNTTYPE_FRM);
+        if(pFmt->GetName() == rName)
+            return pFmt;
+    }
+    return 0;
+}
 
 #define SwFrameShell
 #include "itemdef.hxx"
@@ -440,6 +451,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                             SID_DOCFRAME,           SID_DOCFRAME,
                                             SID_HTML_MODE,          SID_HTML_MODE,
                                             FN_SET_FRM_ALT_NAME,    FN_SET_FRM_ALT_NAME,
+                                            FN_PARAM_CHAIN_PREVIOUS, FN_PARAM_CHAIN_NEXT,
                                             0);
 
                 const SwViewOption* pVOpt = rSh.GetViewOptions();
@@ -528,6 +540,53 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                         }
                         else
                             aMgr.SetAttrSet( *pOutSet );
+
+                        const SwFrmFmt* pCurrFlyFmt = rSh.GetFlyFrmFmt();
+                        if(SFX_ITEM_SET == pOutSet->GetItemState(FN_PARAM_CHAIN_PREVIOUS, FALSE, &pItem))
+                        {
+                            String sPrevName = ((const SfxStringItem*)pItem)->GetValue();
+                            const SwFmtChain &rChain = pCurrFlyFmt->GetChain();
+                            //needs cast - no non-const method available
+                            SwFlyFrmFmt* pFlyFmt = (SwFlyFrmFmt*)rChain.GetPrev();
+                            if(pFlyFmt && pFlyFmt->GetName() != sPrevName)
+                            {
+                                rSh.Unchain(*pFlyFmt);
+                                sPrevName.Erase();
+                            }
+                            if(sPrevName.Len())
+                            {
+                                //needs cast - no non-const method available
+                                SwFrmFmt* pPrevFmt = (SwFrmFmt*)lcl_GetFrmFmtByName(rSh, sPrevName);
+                                DBG_ASSERT(pPrevFmt, "No frame found!")
+                                if(pPrevFmt)
+                                {
+                                    rSh.Chain(*pPrevFmt, *pCurrFlyFmt);
+                                }
+                            }
+                        }
+                        if(SFX_ITEM_SET == pOutSet->GetItemState(FN_PARAM_CHAIN_NEXT, FALSE, &pItem))
+                        {
+                            String sNextName = ((const SfxStringItem*)pItem)->GetValue();
+                            const SwFmtChain &rChain = pCurrFlyFmt->GetChain();
+                            //needs cast - no non-const method available
+                            SwFlyFrmFmt* pFlyFmt = (SwFlyFrmFmt*)rChain.GetNext();
+                            if(pFlyFmt && pFlyFmt->GetName() != sNextName)
+                            {
+                                rSh.Unchain(*pFlyFmt);
+                                sNextName.Erase();
+                            }
+                            if(sNextName.Len())
+                            {
+                                //needs cast - no non-const method available
+                                SwFrmFmt* pNextFmt = (SwFrmFmt*)lcl_GetFrmFmtByName(rSh, sNextName);
+                                DBG_ASSERT(pNextFmt, "No frame found!")
+                                if(pNextFmt)
+                                {
+                                    rSh.Chain(*(SwFrmFmt*)pCurrFlyFmt, *pNextFmt);
+                                }
+                            }
+                        }
+
 
                     }
                 }
