@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Addons.xcs,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 18:26:19 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 13:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@
 		</group>
 		<group oor:name="UserDefinedImages">
 			<info>
-				<desc xml:lang="en-US">A group of optional user-defined images.</desc>
+				<desc xml:lang="en-US">A group of optional user-defined images. There are two ways to define image - 1. Embed the image data directly into the configuration. 2. Use file URLs to address external bitmap files. Embedded image data has a higher priority than file URLs.</desc>
 			</info>
 			<prop oor:name="ImageSmall" oor:type="xs:hexBinary">
 				<info>
@@ -191,6 +191,26 @@
 				<info>
 					<desc xml:lang="en-US">Binary bitmap data used for high contrast displays. Standard size of a big image is 26x26 pixel.</desc>
 					<desc xml:lang="zh-CN">高对比度显示使用的二元位图数据。大图像的标准大小为 26x26 像素。</desc>
+				</info>
+			</prop>
+			<prop oor:name="ImageSmallURL" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+				</info>
+			</prop>
+			<prop oor:name="ImageBigURL" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+				</info>
+			</prop>
+			<prop oor:name="ImageSmallHCURL" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+				</info>
+			</prop>
+			<prop oor:name="ImageBigHCURL" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
 				</info>
 			</prop>
 		</group>
