@@ -61,6 +61,7 @@ hedabu: ..\inc\compat.hxx %_DEST%\inc%_EXT%\svtools\compat.hxx
 hedabu: ..\inc\ctrlbox.hxx %_DEST%\inc%_EXT%\svtools\ctrlbox.hxx
 hedabu: ..\inc\ctrltool.hxx %_DEST%\inc%_EXT%\svtools\ctrltool.hxx
 hedabu: ..\inc\collatorres.hxx %_DEST%\inc%_EXT%\svtools\collatorres.hxx
+hedabu: ..\inc\indexentryres.hxx %_DEST%\inc%_EXT%\svtools\indexentryres.hxx
 hedabu: ..\inc\cntwids.hrc %_DEST%\inc%_EXT%\svtools\cntwids.hrc
 hedabu: ..\inc\dateitem.hxx %_DEST%\inc%_EXT%\svtools\dateitem.hxx
 hedabu: ..\inc\dtritem.hxx %_DEST%\inc%_EXT%\svtools\dtritem.hxx
