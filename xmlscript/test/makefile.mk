@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: dbo $ $Date: 2001-09-19 08:46:35 $
+#   last change: $Author: dbo $ $Date: 2001-10-15 13:54:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,6 +63,7 @@ PRJ=..
 
 PRJNAME=xmlscript
 TARGET=imexp
+TARGETTYPE=GUI
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
