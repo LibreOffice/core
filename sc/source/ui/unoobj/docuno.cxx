@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-19 19:17:54 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 09:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1744,7 +1744,7 @@ void SAL_CALL ScTableColumnsObj::setPropertyValue(
     {
         sal_Int32 nNewWidth;
         if ( aValue >>= nNewWidth )
-            aFunc.SetWidthOrHeight( TRUE, 1, nColArr, nTab, SC_SIZE_DIRECT,
+            aFunc.SetWidthOrHeight( TRUE, 1, nColArr, nTab, SC_SIZE_ORIGINAL,
                                     (USHORT)HMMToTwips(nNewWidth), TRUE, TRUE );
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_CELLVIS ) )
@@ -1790,7 +1790,8 @@ uno::Any SAL_CALL ScTableColumnsObj::getPropertyValue( const rtl::OUString& aPro
 
     if ( aNameString.EqualsAscii( SC_UNONAME_CELLWID ) )
     {
-        USHORT nWidth = pDoc->GetColWidth( nStartCol, nTab );
+        // for hidden column, return original height
+        USHORT nWidth = pDoc->GetOriginalWidth( nStartCol, nTab );
         aAny <<= (sal_Int32)TwipsToHMM(nWidth);
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_CELLVIS ) )
@@ -1971,7 +1972,7 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
     {
         sal_Int32 nNewHeight;
         if ( aValue >>= nNewHeight )
-            aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, nTab, SC_SIZE_DIRECT,
+            aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, nTab, SC_SIZE_ORIGINAL,
                                     (USHORT)HMMToTwips(nNewHeight), TRUE, TRUE );
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_CELLVIS ) )
@@ -2033,7 +2034,8 @@ uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const rtl::OUString& aProper
 
     if ( aNameString.EqualsAscii( SC_UNONAME_CELLHGT ) )
     {
-        USHORT nHeight = pDoc->GetRowHeight( nStartRow, nTab );
+        // for hidden row, return original height
+        USHORT nHeight = pDoc->GetOriginalHeight( nStartRow, nTab );
         aAny <<= (sal_Int32)TwipsToHMM(nHeight);
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_CELLVIS ) )

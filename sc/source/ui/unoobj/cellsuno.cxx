@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:52:48 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 09:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6995,7 +6995,7 @@ void SAL_CALL ScTableColumnObj::setPropertyValue(
         {
             //  property is 1/100mm, column width is twips
             nNewWidth = HMMToTwips(nNewWidth);
-            aFunc.SetWidthOrHeight( TRUE, 1, nColArr, nTab, SC_SIZE_DIRECT,
+            aFunc.SetWidthOrHeight( TRUE, 1, nColArr, nTab, SC_SIZE_ORIGINAL,
                                     (USHORT)nNewWidth, TRUE, TRUE );
         }
     }
@@ -7054,8 +7054,9 @@ uno::Any SAL_CALL ScTableColumnObj::getPropertyValue( const rtl::OUString& aProp
     uno::Any aAny;
     if ( aNameString.EqualsAscii( SC_UNONAME_CELLWID ) )
     {
-        USHORT nWidth = pDoc->GetColWidth( nCol, nTab );
-        //  Property ist 1/100mm, Spaltenbreite in Twips
+        // for hidden column, return original height
+        USHORT nWidth = pDoc->GetOriginalWidth( nCol, nTab );
+        //  property is 1/100mm, column width is twips
         nWidth = (USHORT) TwipsToHMM(nWidth);
         aAny <<= (sal_Int32)( nWidth );
     }
@@ -7150,7 +7151,7 @@ void SAL_CALL ScTableRowObj::setPropertyValue(
         {
             //  property is 1/100mm, row height is twips
             nNewHeight = HMMToTwips(nNewHeight);
-            aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, nTab, SC_SIZE_DIRECT,
+            aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, nTab, SC_SIZE_ORIGINAL,
                                     (USHORT)nNewHeight, TRUE, TRUE );
         }
     }
@@ -7181,9 +7182,9 @@ void SAL_CALL ScTableRowObj::setPropertyValue(
             aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, nTab, SC_SIZE_OPTIMAL, 0, TRUE, TRUE );
         else
         {
-            //  alte Hoehe nochmal manuell setzen
-            USHORT nHeight = pDoc->GetRowHeight( nRow, nTab );
-            aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, nTab, SC_SIZE_DIRECT, nHeight, TRUE, TRUE );
+            //  set current height again manually
+            USHORT nHeight = pDoc->GetOriginalHeight( nRow, nTab );
+            aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, nTab, SC_SIZE_ORIGINAL, nHeight, TRUE, TRUE );
         }
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_NEWPAGE) || aNameString.EqualsAscii( SC_UNONAME_MANPAGE) )
@@ -7226,8 +7227,9 @@ uno::Any SAL_CALL ScTableRowObj::getPropertyValue( const rtl::OUString& aPropert
     uno::Any aAny;
     if ( aNameString.EqualsAscii( SC_UNONAME_CELLHGT ) )
     {
-        USHORT nHeight = pDoc->GetRowHeight( nRow, nTab );
-        //  Property ist 1/100mm, Zeilenhoehe in Twips
+        // for hidden row, return original height
+        USHORT nHeight = pDoc->GetOriginalHeight( nRow, nTab );
+        //  property is 1/100mm, row height is twips
         nHeight = (USHORT) TwipsToHMM(nHeight);
         aAny <<= (sal_Int32)( nHeight );
     }
