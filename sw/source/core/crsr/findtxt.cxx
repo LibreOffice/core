@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findtxt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-09 17:00:35 $
+ *  last change: $Author: fme $ $Date: 2002-06-13 10:43:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,8 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     BOOL bChkEmptyPara = bRegSearch && 2 == rSearchOpt.searchString.getLength() &&
                         ( !rSearchOpt.searchString.compareToAscii( "^$" ) ||
                           !rSearchOpt.searchString.compareToAscii( "$^" ) );
+    BOOL bChkParaEnd = bRegSearch && 1 == rSearchOpt.searchString.getLength() &&
+                      !rSearchOpt.searchString.compareToAscii( "$" );
 
     while( 0 != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly ) ))
     {
@@ -306,10 +308,10 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                 bFound = TRUE;
                 break;
             }
-            else if( bChkEmptyPara && !nStart && !nTxtLen )
+            else if( ( bChkEmptyPara && !nStart && !nTxtLen ) || bChkParaEnd )
             {
                 *GetPoint() = *pPam->GetPoint();
-                GetPoint()->nContent = 0;
+                GetPoint()->nContent = bChkParaEnd ? nTxtLen : 0;
                 SetMark();
                 if( (bSrchForward || pSttNd != &rNdIdx.GetNode()) &&
                     Move( fnMoveForward, fnGoCntnt ) &&
