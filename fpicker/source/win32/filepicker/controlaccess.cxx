@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlaccess.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2002-10-30 14:48:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 //------------------------------------------------------------------------
 // includes
 //------------------------------------------------------------------------
+
+#include <tchar.h>
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -261,12 +263,12 @@ CTRL_GETVALUE_FUNCTION_T SAL_CALL GetCtrlGetValueFunction( CTRL_CLASS aCtrlClass
 CTRL_CLASS SAL_CALL GetCtrlClass( HWND hwndCtrl )
 {
     CTRL_CLASS aCtrlClass = UNKNOWN;
-    char aClassName[256];
+    TCHAR aClassName[256];
 
-    int nRet = GetClassNameA(hwndCtrl,aClassName,sizeof(aClassName));
+    int nRet = GetClassName(hwndCtrl,aClassName,sizeof(aClassName));
     if (nRet)
     {
-        if (0 == _stricmp(aClassName,"button"))
+        if (0 == _tcsicmp(aClassName,TEXT("button")))
         {
             // button means many things so we have
             // to find out what button it is
@@ -276,8 +278,8 @@ CTRL_CLASS SAL_CALL GetCtrlClass( HWND hwndCtrl )
             else if (((lBtnStyle & BS_PUSHBUTTON) == 0) || (lBtnStyle & BS_DEFPUSHBUTTON))
                 aCtrlClass = PUSHBUTTON;
         }
-        else if (0 == _stricmp(aClassName,"listbox") ||
-                  0 == _stricmp(aClassName,"combobox"))
+        else if (0 == _tcsicmp(aClassName,TEXT("listbox")) ||
+                  0 == _tcsicmp(aClassName,TEXT("combobox")))
             aCtrlClass = LISTBOX;
     }
 

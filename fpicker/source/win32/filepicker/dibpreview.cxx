@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dibpreview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-15 08:41:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@
 // includes
 //------------------------------------------------------------------------
 
+#include <tchar.h>
+
 #ifndef _DIBPREVIEW_HXX_
 #include "dibpreview.hxx"
 #endif
@@ -98,14 +100,14 @@ using rtl::OUString;
 
 namespace /* private */
 {
-    const char* CURRENT_INSTANCE = "CurrInst";
+    const LPTSTR CURRENT_INSTANCE = TEXT("CurrInst");
 };
 
 //------------------------------------------------------------------------
 // defines
 //------------------------------------------------------------------------
 
-#define PREVIEWWND_CLASS_NAME L"DIBPreviewWnd###"
+#define PREVIEWWND_CLASS_NAME TEXT("DIBPreviewWnd###")
 
 // means 3 pixel left and 3 pixel right
 #define HORZ_BODER_SPACE    6
@@ -135,8 +137,10 @@ CDIBPreview::CDIBPreview(HINSTANCE instance,HWND parent,sal_Bool bShowWindow) :
     if (bShowWindow)
         dwStyle |= WS_VISIBLE;
 
-    m_Hwnd = CreateWindowExW(
-        WS_EX_CLIENTEDGE, PREVIEWWND_CLASS_NAME, L"",
+    m_Hwnd = CreateWindowEx(
+        WS_EX_CLIENTEDGE,
+        PREVIEWWND_CLASS_NAME,
+        TEXT(""),
         dwStyle,
         0, 0, 0, 0,
         parent,
@@ -387,7 +391,7 @@ LRESULT CALLBACK CDIBPreview::WndProc(
             OSL_ASSERT(lpcs->lpCreateParams);
 
             // connect the instance handle to the window
-            SetPropA(hWnd,CURRENT_INSTANCE,lpcs->lpCreateParams);
+            SetProp(hWnd, CURRENT_INSTANCE, lpcs->lpCreateParams);
         }
         break;
 
@@ -397,7 +401,7 @@ LRESULT CALLBACK CDIBPreview::WndProc(
         {
             // RemoveProp returns the saved value on success
             CDIBPreview* pImpl = reinterpret_cast<CDIBPreview*>(
-                RemovePropA(hWnd,CURRENT_INSTANCE));
+                RemoveProp(hWnd, CURRENT_INSTANCE));
 
             OSL_ASSERT(pImpl);
         }
@@ -406,7 +410,7 @@ LRESULT CALLBACK CDIBPreview::WndProc(
     case WM_PAINT:
     {
         CDIBPreview* pImpl = reinterpret_cast<CDIBPreview*>(
-            GetPropA(hWnd,CURRENT_INSTANCE));
+            GetProp(hWnd, CURRENT_INSTANCE));
 
         OSL_ASSERT(pImpl);
 
@@ -426,7 +430,7 @@ LRESULT CALLBACK CDIBPreview::WndProc(
         break;
 
     default:
-        return DefWindowProcA( hWnd, uMsg, wParam, lParam );
+        return DefWindowProc(hWnd, uMsg, wParam, lParam);
     }
 
     return lResult;
@@ -443,10 +447,10 @@ ATOM SAL_CALL CDIBPreview::RegisterDibPreviewWindowClass()
     if (0 == s_ClassAtom)
     {
         // register the preview window class
-        WNDCLASSEXW wndClsEx;
-        ZeroMemory(&wndClsEx, sizeof(WNDCLASSEXW));
+        WNDCLASSEX wndClsEx;
+        ZeroMemory(&wndClsEx, sizeof(wndClsEx));
 
-        wndClsEx.cbSize        = sizeof(WNDCLASSEXW);
+        wndClsEx.cbSize        = sizeof(wndClsEx);
         wndClsEx.style         = CS_HREDRAW | CS_VREDRAW;
         wndClsEx.lpfnWndProc   = CDIBPreview::WndProc;
         wndClsEx.hInstance     = m_Instance;
@@ -458,7 +462,7 @@ ATOM SAL_CALL CDIBPreview::RegisterDibPreviewWindowClass()
         //               if the dll is unloaded
         //     Win2000 - the window class must be unregistered manually
         //               if the dll is unloaded
-        s_ClassAtom = RegisterClassExW(&wndClsEx);
+        s_ClassAtom = RegisterClassEx(&wndClsEx);
 
         OSL_POSTCOND(s_ClassAtom,"Could  not register preview window class");
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2002-06-12 10:09:15 $
+#   last change: $Author: hr $ $Date: 2003-03-25 18:05:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,7 +71,7 @@ LIBTARGET=NO
 
 .INCLUDE : ..$/..$/cppumaker.mk
 
-CFLAGS+=-GX
+CFLAGS+=-GX -DUNICODE -D_UNICODE
 
 # --- Files -------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tra $ $Date: 2002-11-26 09:30:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ CWinFileOpenImpl::CWinFileOpenImpl(
     sal_uInt32 dwTemplateId,
     HINSTANCE hInstance) :
     CFileOpenDialog(bFileOpenDialog, dwFlags, dwTemplateId, hInstance),
-    m_filterContainer( new CFilterContainer()),
+    m_filterContainer(new CFilterContainer()),
     m_Preview(new CPreviewAdapter(hInstance)),
     m_CustomControlFactory(new CCustomControlFactory()),
     m_CustomControls(m_CustomControlFactory->CreateCustomControlContainer()),
@@ -531,7 +531,7 @@ void SAL_CALL CWinFileOpenImpl::cancel()
     {
         // simulate a mouse click to the
         // cancel button
-        PostMessageA(
+        PostMessage(
             m_hwndFileOpenDlg,
             WM_COMMAND,
             MAKEWPARAM(IDCANCEL,BN_CLICKED),
@@ -571,8 +571,8 @@ inline sal_Bool SAL_CALL CWinFileOpenImpl::IsCustomControlHelpRequested(LPHELPIN
 // if one instance dies
 //-----------------------------------------------------------------------------------------
 
-unsigned int CALLBACK CWinFileOpenImpl::SubClassFunc(
-    HWND hWnd, WORD wMessage, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK CWinFileOpenImpl::SubClassFunc(
+    HWND hWnd, UINT wMessage, WPARAM wParam, LPARAM lParam)
 {
     unsigned int lResult = 0;
 
@@ -587,14 +587,14 @@ unsigned int CALLBACK CWinFileOpenImpl::SubClassFunc(
         if (pImpl->IsCustomControlHelpRequested(lphi))
             pImpl->onCustomControlHelpRequest(lphi);
         else
-            lResult = CallWindowProcA(
+            lResult = CallWindowProc(
                 reinterpret_cast<WNDPROC>(pImpl->m_pfnOldDlgProc),
                 hWnd,wMessage,wParam,lParam);
     }
     break;
 
     case WM_SIZE:
-        lResult = CallWindowProcA(
+        lResult = CallWindowProc(
             reinterpret_cast<WNDPROC>(pImpl->m_pfnOldDlgProc),
             hWnd,wMessage,wParam,lParam);
 
@@ -602,7 +602,7 @@ unsigned int CALLBACK CWinFileOpenImpl::SubClassFunc(
         break;
 
     case WM_WINDOWPOSCHANGED:
-        lResult = CallWindowProcA(
+        lResult = CallWindowProc(
             reinterpret_cast<WNDPROC>(pImpl->m_pfnOldDlgProc),
             hWnd,wMessage,wParam,lParam);
 
@@ -610,7 +610,7 @@ unsigned int CALLBACK CWinFileOpenImpl::SubClassFunc(
         break;
 
     case WM_SHOWWINDOW:
-        lResult = CallWindowProcA(
+        lResult = CallWindowProc(
             reinterpret_cast<WNDPROC>(pImpl->m_pfnOldDlgProc),
             hWnd,wMessage,wParam,lParam);
 
@@ -619,17 +619,16 @@ unsigned int CALLBACK CWinFileOpenImpl::SubClassFunc(
 
     case WM_NCDESTROY:
         // restore the old window proc
-        SetWindowLong(hWnd, DWL_DLGPROC,
-            reinterpret_cast<DWORD>(pImpl->m_pfnOldDlgProc));
+        SetWindowLong(hWnd, GWL_WNDPROC,
+            reinterpret_cast<LONG>(pImpl->m_pfnOldDlgProc));
 
-        lResult = CallWindowProcA(
+        lResult = CallWindowProc(
             reinterpret_cast<WNDPROC>(pImpl->m_pfnOldDlgProc),
             hWnd,wMessage,wParam,lParam);
         break;
 
     default:
-        // !!! we use CallWindowProcA
-        lResult = CallWindowProcA(
+        lResult = CallWindowProc(
             reinterpret_cast<WNDPROC>(pImpl->m_pfnOldDlgProc),
             hWnd,wMessage,wParam,lParam);
     break;
@@ -797,11 +796,18 @@ void SAL_CALL CWinFileOpenImpl::onInitDone()
     m_CustomControls->Align();
 
     m_CustomControls->SetFont(
-        reinterpret_cast<HFONT>(SendMessageA(m_hwndFileOpenDlg, WM_GETFONT, 0, 0)));
+        reinterpret_cast<HFONT>(SendMessage(m_hwndFileOpenDlg, WM_GETFONT, 0, 0)));
 
     // resume event notification that was
     // defered in onInitDialog
     m_FilePicker->resumeEventNotification();
+
+    //#105996 let vcl know that now a system window is active
+    PostMessage(
+        HWND_BROADCAST,
+        RegisterWindowMessage(TEXT("SYSTEM_WINDOW_ACTIVATED")),
+        0,
+        0);
 
     // call the parent function to center the
     // dialog to it's parent
@@ -913,9 +919,9 @@ void SAL_CALL CWinFileOpenImpl::onInitDialog(HWND hwndDlg, HWND hwndChild)
 {
     // subclass the dialog window
     m_pfnOldDlgProc =
-        reinterpret_cast<DLGPROC>(
-            SetWindowLong( hwndDlg, DWL_DLGPROC,
-            reinterpret_cast<DWORD>(SubClassFunc)));
+        reinterpret_cast<WNDPROC>(
+            SetWindowLong( hwndDlg, GWL_WNDPROC,
+            reinterpret_cast<LONG>(SubClassFunc)));
 }
 
 //-----------------------------------------------------------------------------------------
@@ -952,66 +958,44 @@ void CWinFileOpenImpl::postModal(sal_Int16 nDialogResult)
 
 void SAL_CALL CWinFileOpenImpl::SetDefaultExtension()
 {
-    // !!! HACK !!!
+    HWND hwndChkSaveWithExt = GetDlgItem(m_hwndFileOpenDlgChild, 100);
 
-    OSVERSIONINFOA  OSVerInfo;
-
-    OSVerInfo.dwOSVersionInfoSize = sizeof( OSVERSIONINFOA );
-    GetVersionExA( &OSVerInfo );
-
-    // if windows 95/98
-    sal_Bool bIsWin9x = ( VER_PLATFORM_WIN32_WINDOWS == OSVerInfo.dwPlatformId );
-
-    HWND hwndChkSaveWithExt = GetDlgItem( m_hwndFileOpenDlgChild, 100 );
-
-    if ( hwndChkSaveWithExt )
+    if (hwndChkSaveWithExt)
     {
-        uno::Any aAny = CheckboxGetState( hwndChkSaveWithExt );
-        sal_Bool bChecked = *reinterpret_cast< const sal_Bool* >( aAny.getValue( ) );
+        uno::Any aAny = CheckboxGetState(hwndChkSaveWithExt);
+        sal_Bool bChecked = *reinterpret_cast<const sal_Bool*>(aAny.getValue());
 
-        if ( bChecked )
+        if (bChecked)
         {
-            sal_uInt32 nIndex = getSelectedFilterIndex( );
+            sal_uInt32 nIndex = getSelectedFilterIndex();
 
             rtl::OUString currentFilter;
-            if ( nIndex > 0 )
+            if (nIndex > 0)
             {
                 // filter index of the base class starts with 1
-                sal_Bool bRet = m_filterContainer->getFilter( nIndex - 1, currentFilter );
+                sal_Bool bRet = m_filterContainer->getFilter(nIndex - 1, currentFilter);
 
-                if ( currentFilter.getLength( ) )
+                if (currentFilter.getLength())
                 {
                     rtl::OUString FilterExt;
-                    m_filterContainer->getFilter( currentFilter, FilterExt );
+                    m_filterContainer->getFilter(currentFilter, FilterExt);
 
-                    sal_Int32 posOfPoint = FilterExt.indexOf( L'.' );
-                    const sal_Unicode* pFirstExtStart = FilterExt.getStr( ) + posOfPoint + 1;
+                    sal_Int32 posOfPoint = FilterExt.indexOf(L'.');
+                    const sal_Unicode* pFirstExtStart = FilterExt.getStr() + posOfPoint + 1;
 
-                    sal_Int32 posOfSemiColon = FilterExt.indexOf( L';' ) - 1;
-                    if ( posOfSemiColon < 0 )
-                        posOfSemiColon = FilterExt.getLength( ) - 1;
+                    sal_Int32 posOfSemiColon = FilterExt.indexOf(L';') - 1;
+                    if (posOfSemiColon < 0)
+                        posOfSemiColon = FilterExt.getLength() - 1;
 
-                    FilterExt = rtl::OUString( pFirstExtStart, posOfSemiColon - posOfPoint );
+                    FilterExt = rtl::OUString(pFirstExtStart, posOfSemiColon - posOfPoint);
 
-                    if ( bIsWin9x )
-                    {
-                        rtl::OString tmp = rtl::OUStringToOString( FilterExt, osl_getThreadTextEncoding( ) );
-
-                        SendMessageA( m_hwndFileOpenDlg, CDM_SETDEFEXT, 0, (LPARAM)( tmp.getStr( ) ) );
-                    }
-                    else
-                    {
-                        SendMessageW( m_hwndFileOpenDlg, CDM_SETDEFEXT, 0, (LPARAM)( FilterExt.getStr( ) ) );
-                    }
-                }
+                    SendMessage(m_hwndFileOpenDlg, CDM_SETDEFEXT, 0, reinterpret_cast<LPARAM>(FilterExt.getStr()));
+                 }
             }
         }
         else
         {
-            if ( bIsWin9x )
-                SendMessageA( m_hwndFileOpenDlg, CDM_SETDEFEXT, 0, (LPARAM)"" );
-            else
-                SendMessageW( m_hwndFileOpenDlg, CDM_SETDEFEXT, 0, (LPARAM)L"");
+            SendMessage(m_hwndFileOpenDlg, CDM_SETDEFEXT, 0, reinterpret_cast<LPARAM>(TEXT("")));
         }
     }
 
@@ -1039,7 +1023,7 @@ void SAL_CALL CWinFileOpenImpl::InitialSetDefaultName()
             edt1Id = cmb13;
 
         HWND hwndEdt1 = GetDlgItem(m_hwndFileOpenDlg, edt1Id);
-        SetWindowTextW(hwndEdt1, m_defaultName.getStr());
+        SetWindowText(hwndEdt1, m_defaultName.getStr());
     }
 
     m_bInitialSelChanged = sal_False;

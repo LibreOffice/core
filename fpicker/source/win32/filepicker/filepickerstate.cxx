@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filepickerstate.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2002-07-29 11:53:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,7 +532,7 @@ void SAL_CALL CExecuteFilePickerState::setLabel( sal_Int16 aControlId, const OUS
 
     // somewhat risky because we don't know if OUString
     // has a terminating '\0'
-    SetWindowTextW( hwndCtrl, aWinLabel.getStr( ) );
+    SetWindowText( hwndCtrl, aWinLabel.getStr( ) );
 }
 
 //---------------------------------------------
@@ -549,7 +549,7 @@ OUString SAL_CALL CExecuteFilePickerState::getLabel( sal_Int16 aControlId )
         hwndCtrl = GetListboxLabelItem( aControlId );
 
     sal_Unicode aLabel[MAX_LABEL];
-    int nRet = GetWindowTextW( hwndCtrl, aLabel, MAX_LABEL );
+    int nRet = GetWindowText( hwndCtrl, aLabel, MAX_LABEL );
 
     OUString ctrlLabel;
     if ( nRet )

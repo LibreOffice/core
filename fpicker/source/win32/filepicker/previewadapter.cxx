@@ -2,9 +2,9 @@
  *
  *  $RCSfile: previewadapter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-28 08:57:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:05:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include <tchar.h>
 
 #ifndef _PREVIEWADAPTER_HXX_
 #include "previewadapter.hxx"
@@ -118,11 +120,11 @@ public:
     // parent notification handler
     //-------------------------------------
 
-    virtual void SAL_CALL notifyParentShow(bool bShow);
+    virtual void SAL_CALL notifyParentShow(sal_Bool bShow);
 
     virtual void SAL_CALL notifyParentSizeChanged();
 
-    virtual void SAL_CALL notifyParentWindowPosChanged(bool bIsVisible);
+    virtual void SAL_CALL notifyParentWindowPosChanged(sal_Bool bIsVisible);
 
 protected:
     virtual void SAL_CALL calcRightMargin();
@@ -280,7 +282,7 @@ void SAL_CALL CPreviewAdapterImpl::calcRightMargin()
 //
 //-----------------------------------------
 
-void SAL_CALL CPreviewAdapterImpl::notifyParentShow(bool bShow)
+void SAL_CALL CPreviewAdapterImpl::notifyParentShow(sal_Bool bShow)
 {
 }
 
@@ -297,7 +299,7 @@ void SAL_CALL CPreviewAdapterImpl::notifyParentSizeChanged()
 //
 //-----------------------------------------
 
-void SAL_CALL CPreviewAdapterImpl::notifyParentWindowPosChanged(bool bIsVisible)
+void SAL_CALL CPreviewAdapterImpl::notifyParentWindowPosChanged(sal_Bool bIsVisible)
 {
 }
 
@@ -345,7 +347,7 @@ void SAL_CALL CPreviewAdapterImpl::rearrangeLayout()
     // to the WM_SHOWWINDOW message, somehow the WS_VISIBLE
     // style bit of the FileOpen dialog must be set after that
     // message
-    LONG lStyle = GetWindowLongA(prvwnd,GWL_STYLE);
+    LONG lStyle = GetWindowLong(prvwnd,GWL_STYLE);
     BOOL bIsVisible = (BOOL)(lStyle & WS_VISIBLE);
 
     int cx = 0;
@@ -453,7 +455,7 @@ class CWin98PreviewAdapterImpl : public CPreviewAdapterImpl
 public:
     CWin98PreviewAdapterImpl(HINSTANCE instance);
 
-    virtual void SAL_CALL notifyParentWindowPosChanged(bool bIsVisible);
+    virtual void SAL_CALL notifyParentWindowPosChanged(sal_Bool bIsVisible);
 
 protected:
     virtual void SAL_CALL rearrangeLayout();
@@ -486,7 +488,7 @@ CWin98PreviewAdapterImpl::CWin98PreviewAdapterImpl(HINSTANCE instance) :
 //
 //--------------------------------------------
 
-void SAL_CALL CWin98PreviewAdapterImpl::notifyParentWindowPosChanged(bool bIsVisible)
+void SAL_CALL CWin98PreviewAdapterImpl::notifyParentWindowPosChanged(sal_Bool bIsVisible)
 {
     try
     {
@@ -555,7 +557,7 @@ void SAL_CALL CWin98PreviewAdapterImpl::rearrangeLayout()
     if (isValidToolbarDimension())
     {
         HWND hwndTlb = FindWindowEx(
-            m_FileDialog,NULL,"ToolbarWindow32",NULL);
+            m_FileDialog,NULL,TEXT("ToolbarWindow32"),NULL);
 
         SetWindowPos(hwndTlb,
             HWND_TOP,
@@ -593,7 +595,7 @@ class CWin95NTPreviewAdapterImpl : public CPreviewAdapterImpl
 public:
     CWin95NTPreviewAdapterImpl(HINSTANCE instance);
 
-    virtual void SAL_CALL notifyParentShow(bool bShow);
+    virtual void SAL_CALL notifyParentShow(sal_Bool bShow);
 };
 
 //--------------------------------------------
@@ -609,7 +611,7 @@ CWin95NTPreviewAdapterImpl::CWin95NTPreviewAdapterImpl(HINSTANCE instance) :
 //
 //--------------------------------------------
 
-void SAL_CALL CWin95NTPreviewAdapterImpl::notifyParentShow(bool bShow)
+void SAL_CALL CWin95NTPreviewAdapterImpl::notifyParentShow(sal_Bool bShow)
 {
     try
     {
@@ -727,7 +729,7 @@ void SAL_CALL CPreviewAdapter::setParent(HWND parent)
 //
 //-------------------------------
 
-void SAL_CALL CPreviewAdapter::notifyParentShow(bool bShow)
+void SAL_CALL CPreviewAdapter::notifyParentShow(sal_Bool bShow)
 {
     m_pImpl->notifyParentShow(bShow);
 }
@@ -745,7 +747,7 @@ void SAL_CALL CPreviewAdapter::notifyParentSizeChanged()
 //
 //-------------------------------
 
-void SAL_CALL CPreviewAdapter::notifyParentWindowPosChanged(bool bIsVisible)
+void SAL_CALL CPreviewAdapter::notifyParentWindowPosChanged(sal_Bool bIsVisible)
 {
     m_pImpl->notifyParentWindowPosChanged(bIsVisible);
 }

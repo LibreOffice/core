@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaFop.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-14 15:45:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,23 @@ namespace
     {
         OSL_ASSERT( aRequestContext && aRequestContext->hEvent );
         CloseHandle( aRequestContext->hEvent );
+    }
+
+    //-------------------------------
+    // Determine if current thread is
+    // an MTA or STA thread
+    //-------------------------------
+    bool IsMTA()
+    {
+        HRESULT hr = CoInitialize(NULL);
+
+        if (RPC_E_CHANGED_MODE == hr)
+            return true;
+
+        if(SUCCEEDED(hr))
+            CoUninitialize();
+
+        return false;
     }
 }
 
@@ -276,70 +293,80 @@ CMtaFolderPicker::~CMtaFolderPicker( )
 
 sal_Bool CMtaFolderPicker::browseForFolder( )
 {
-    OSL_ASSERT( m_hEvtThrdReady );
+    sal_Bool bRet = sal_False;
 
-    if ( WaitForSingleObject( m_hEvtThrdReady, MAX_WAITTIME ) != WAIT_OBJECT_0 )
+    if (IsMTA())
     {
-        OSL_ENSURE( sal_False, "sta thread not ready" );
-        return sal_False;
-    }
 
-    RequestContext aReqCtx;
+        OSL_ASSERT( m_hEvtThrdReady );
 
-    if ( !InitializeRequestContext( &aReqCtx ) )
-    {
-        OSL_ASSERT( sal_False );
-        return sal_False;
-    }
-
-    // marshall request into the sta thread
-    PostMessageA(
-        m_hwndStaRequestWnd,
-        MSG_BROWSEFORFOLDER,
-        0,
-        reinterpret_cast< LPARAM >( &aReqCtx ) );
-
-    // waiting for the event to be signaled or
-    // window messages so that we don't block
-    // our parent window
-
-    sal_Bool bContinue = sal_True;
-
-    while ( bContinue )
-    {
-        DWORD dwResult = MsgWaitForMultipleObjects(
-            1, &aReqCtx.hEvent, FALSE, INFINITE, QS_ALLEVENTS );
-
-        switch ( dwResult )
+        if ( WaitForSingleObject( m_hEvtThrdReady, MAX_WAITTIME ) != WAIT_OBJECT_0 )
         {
-        // the request context event is signaled
-        case WAIT_OBJECT_0:
-            bContinue = sal_False;
-            break;
-
-        // a window message has arrived
-        case WAIT_OBJECT_0 + 1:
-            {
-                // dispatching all messages but we expect to
-                // receive only paint or timer messages that's
-                // why we don't need to call TranslateMessage or
-                // TranslateAccelerator, because keybord or
-                // mouse messages are for the FolderPicker which
-                // is in the foreground and should not arrive here
-                MSG msg;
-                while ( PeekMessageA( &msg, NULL, 0, 0, PM_REMOVE ) )
-                    DispatchMessageA(&msg);
-            }
-            break;
-
-        // should not happen
-        default:
-            OSL_ASSERT( sal_False );
+            OSL_ENSURE( sal_False, "sta thread not ready" );
+            return sal_False;
         }
-    }
 
-    sal_Bool bRet = aReqCtx.bRet;
-    DeinitializeRequestContext( &aReqCtx );
+        RequestContext aReqCtx;
+
+        if ( !InitializeRequestContext( &aReqCtx ) )
+        {
+            OSL_ASSERT( sal_False );
+            return sal_False;
+        }
+
+        // marshall request into the sta thread
+        PostMessageA(
+            m_hwndStaRequestWnd,
+            MSG_BROWSEFORFOLDER,
+            0,
+            reinterpret_cast< LPARAM >( &aReqCtx ) );
+
+        // waiting for the event to be signaled or
+        // window messages so that we don't block
+        // our parent window
+
+        sal_Bool bContinue = sal_True;
+
+        while ( bContinue )
+        {
+            DWORD dwResult = MsgWaitForMultipleObjects(
+                1, &aReqCtx.hEvent, FALSE, INFINITE, QS_ALLEVENTS );
+
+            switch ( dwResult )
+            {
+            // the request context event is signaled
+            case WAIT_OBJECT_0:
+                bContinue = sal_False;
+                break;
+
+            // a window message has arrived
+            case WAIT_OBJECT_0 + 1:
+                {
+                    // dispatching all messages but we expect to
+                    // receive only paint or timer messages that's
+                    // why we don't need to call TranslateMessage or
+                    // TranslateAccelerator, because keybord or
+                    // mouse messages are for the FolderPicker which
+                    // is in the foreground and should not arrive here
+                    MSG msg;
+                    while ( PeekMessageA( &msg, NULL, 0, 0, PM_REMOVE ) )
+                        DispatchMessageA(&msg);
+                }
+                break;
+
+            // should not happen
+            default:
+                OSL_ASSERT( sal_False );
+            }
+        }
+
+        /*sal_Bool*/ bRet = aReqCtx.bRet;
+        DeinitializeRequestContext( &aReqCtx );
+    }
+    else
+    {
+        bRet = onBrowseForFolder();
+    }
 
     return bRet;
 }

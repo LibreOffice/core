@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Test_fps.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2002-11-26 10:00:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ using namespace std                     ;
 void TestFilterManager( Reference< XFilePicker > xFilePicker );
 
 
-#define RDB_SYSPATH "D:\\Projects\\SRX644\\fpicker\\wntmsci9\\bin\\applicat.rdb"
+#define RDB_SYSPATH "D:\\Projects\\gsl\\sysui\\wntmsci7\\bin\\applicat.rdb"
 
 //_________________________________________________________________________________________________________________________
 //  global variables
@@ -294,56 +294,7 @@ void SAL_CALL FilePickerListener::directoryChanged( const ::com::sun::star::ui::
 OUString SAL_CALL FilePickerListener::helpRequested( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    OUString aHelpText;
-
-    switch ( aEvent.ElementId )
-    {
-    case CHECKBOX_AUTOEXTENSION:
-        aHelpText = OUString( L"Automatische Dateinamenserweiterung" );
-        break;
-
-    case CHECKBOX_PASSWORD:
-        aHelpText = OUString( L"Password" );
-        break;
-
-    case CHECKBOX_FILTEROPTIONS:
-        aHelpText = OUString( L"Filteroptionen" );
-        break;
-
-    case CHECKBOX_READONLY:
-        aHelpText = OUString( L"Nur lesbar" );
-        break;
-
-    case CHECKBOX_LINK:
-        aHelpText = OUString( L"Link" );
-        break;
-
-    case CHECKBOX_PREVIEW:
-        aHelpText = OUString( L"Vorschau" );
-        break;
-
-    case PUSHBUTTON_PLAY:
-        aHelpText = OUString( L"Abspielen" );
-        break;
-
-    case LISTBOX_VERSION:
-        aHelpText = OUString( L"Dokumentenversion" );
-        break;
-
-    case LISTBOX_TEMPLATE:
-        aHelpText = OUString( L"Vorlage" );
-        break;
-
-    case LISTBOX_IMAGE_TEMPLATE:
-        aHelpText = OUString( L"Bildvorlage" );
-        break;
-
-    case CHECKBOX_SELECTION:
-        aHelpText = OUString( L"Selektion" );
-        break;
-    }
-
-    return aHelpText;
+    return OUString( );
 }
 
 void SAL_CALL FilePickerListener::controlStateChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent )
@@ -414,7 +365,7 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
     //-------------------------------------------------
 
     Sequence< Any > arguments(1);
-        arguments[0] = makeAny( FILEOPEN_SIMPLE );
+        //arguments[0] = makeAny( FILEOPEN_SIMPLE );
         //arguments[0] = makeAny( FILESAVE_SIMPLE );
         //arguments[0] = makeAny( FILESAVE_AUTOEXTENSION_PASSWORD );
         //arguments[0] = makeAny( FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS );
@@ -422,14 +373,12 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
         //arguments[0] = makeAny( FILESAVE_AUTOEXTENSION_TEMPLATE );
         //arguments[0] = makeAny( FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE );
         //arguments[0] = makeAny( FILEOPEN_PLAY );
-        //arguments[0] = makeAny( FILEOPEN_READONLY_VERSION );
-        //arguments[0] = makeAny( FILESAVE_AUTOEXTENSION );
-
+        arguments[0] = makeAny( FILEOPEN_READONLY_VERSION );
 
     Reference< XFilePicker > xFilePicker = Reference< XFilePicker >(
         g_xFactory->createInstanceWithArguments(
             OUString::createFromAscii( FILE_PICKER_SERVICE_NAME ), arguments ), UNO_QUERY );
-/*
+
         // install a FilePicker notifier
         Reference< XFilePickerListener > xFPListener(
             static_cast< XFilePickerListener* >( new FilePickerListener()), UNO_QUERY );
@@ -455,10 +404,9 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
             xFilterMgr->appendFilter( L"SDW", L"*.sdw;*.sdc;*.sdi" );
             xFilterMgr->appendFilter( L"SXW", L"*.sxw;*.sxi" );
         }
-*/
+
         Reference< XFilePickerControlAccess > xFPControlAccess( xFilePicker, UNO_QUERY );
 
- /*
         Any aAny;
         sal_Bool bChkState = sal_False;
 
@@ -470,13 +418,9 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
         xFPControlAccess->setValue( LISTBOX_VERSION, ADD_ITEM, aAny );
         xFPControlAccess->setValue( LISTBOX_VERSION, ADD_ITEM, aAny );
         xFPControlAccess->setValue( LISTBOX_VERSION, ADD_ITEM, aAny );
-*/
-
-        xFPControlAccess->setLabel( 6, OUString::createFromAscii( "Welt" ) ); // filter label
-        xFPControlAccess->setLabel( 7, OUString::createFromAscii( "Hallo" ) );  // file name label
 
         xFilePicker->execute( );
-/*
+
         sal_Bool bCheckState;
         aAny = xFPControlAccess->getValue( CHECKBOX_AUTOEXTENSION, 0 );
         if ( aAny.hasValue( ) )
@@ -500,7 +444,7 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
 
         if ( xFPNotifier.is( ) )
             xFPNotifier->removeFilePickerListener( xFPListener );
-*/
+
     //--------------------------------------------------
     // shutdown
     //--------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tra $ $Date: 2002-11-26 09:21:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@
 // includes
 //------------------------------------------------------------------------
 
+#include <tchar.h>
+
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
@@ -107,7 +109,7 @@ using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
 // defines
 //------------------------------------------------------------------------
 
-#define FILE_PICKER_DLL_NAME  "fps.dll"
+#define FILE_PICKER_DLL_NAME  TEXT("fps.dll")
 
 //------------------------------------------------------------------------
 // helper functions
@@ -146,7 +148,7 @@ CFilePicker::CFilePicker( const uno::Reference<lang::XMultiServiceFactory>& xSer
         m_xServiceMgr(xServiceMgr),
         m_aAsyncEventNotifier(rBHelper)
 {
-    HINSTANCE hInstance = GetModuleHandleA( FILE_PICKER_DLL_NAME );
+    HINSTANCE hInstance = GetModuleHandle(FILE_PICKER_DLL_NAME);
     OSL_POSTCOND( hInstance, "The name of the service dll must have changed" );
 
     // create a default FileOpen dialog without any additional ui elements
@@ -738,7 +740,7 @@ void SAL_CALL CFilePicker::initialize(const uno::Sequence<uno::Any>& aArguments)
             1 );
     }
 
-    HINSTANCE hInstance = GetModuleHandleA( FILE_PICKER_DLL_NAME );
+    HINSTANCE hInstance = GetModuleHandle( FILE_PICKER_DLL_NAME );
     OSL_POSTCOND( hInstance, "The name of the service dll must have changed" );
 
     // create a new impl-class here based on the

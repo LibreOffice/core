@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 08:54:35 $
+#   last change: $Author: hr $ $Date: 2003-03-25 18:05:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ COMPRDB=$(SOLARBINDIR)$/types.rdb
 .INCLUDE : ..$/..$/cppumaker.mk
 
 # enable rtti
-CFLAGS+=/GR
+CFLAGS+=-GR
 
 SLOFILES=$(SLO)$/fopentry.obj\
          $(SLO)$/folderpicker.obj\

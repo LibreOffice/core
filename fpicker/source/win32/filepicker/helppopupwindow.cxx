@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helppopupwindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-09-05 13:32:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@
 // includes
 //------------------------------------------------------------------------
 
+#include <tchar.h>
+
 #ifndef _HELPPOPUPWINDOW_HXX_
 #include "helppopupwindow.hxx"
 #endif
@@ -85,7 +87,7 @@ using osl::Mutex;
 namespace /* private */
 {
 
-    const char* CURRENT_INSTANCE = "CurrInst";
+    const LPTSTR CURRENT_INSTANCE = TEXT("CurrInst");
 
 };
 
@@ -93,7 +95,7 @@ namespace /* private */
 // defines
 //------------------------------------------------------------------------
 
-#define HELPPOPUPWND_CLASS_NAME L"hlppopupwnd###"
+#define HELPPOPUPWND_CLASS_NAME TEXT("hlppopupwnd###")
 
 const sal_Int32 MAX_CHARS_PER_LINE = 55;
 
@@ -185,7 +187,7 @@ void SAL_CALL CHelpPopupWindow::show( sal_Int32 x, sal_Int32 y )
     // window, then we calculate the upper left corner
     // and the dimensions and resize the window
 
-    m_hwnd = CreateWindowExW(
+    m_hwnd = CreateWindowEx(
         NULL,
         HELPPOPUPWND_CLASS_NAME,
         NULL,
@@ -246,7 +248,7 @@ void SAL_CALL CHelpPopupWindow::calcWindowRect( LPRECT lprect )
     if ( m_HelpText.getLength( ) <= MAX_CHARS_PER_LINE )
         nFormat |= DT_SINGLELINE;
 
-    int nRet = DrawTextW(
+    int nRet = DrawText(
       hdc,
       m_HelpText.getStr( ),
       m_HelpText.getLength( ),
@@ -422,7 +424,7 @@ void SAL_CALL CHelpPopupWindow::onPaint( HWND hWnd, HDC hdc )
     if ( m_HelpText.getLength( ) <= MAX_CHARS_PER_LINE )
         nFormat |= DT_SINGLELINE;
 
-    DrawTextW(
+    DrawText(
         hdc,
         (LPWSTR)m_HelpText.getStr( ),
         m_HelpText.getLength( ),
@@ -528,7 +530,7 @@ LRESULT CALLBACK CHelpPopupWindow::WndProc(
                     lpcs->lpCreateParams );
 
                 // connect the instance handle to the window
-                SetPropA( hWnd, CURRENT_INSTANCE, pImpl );
+                SetProp( hWnd, CURRENT_INSTANCE, pImpl );
 
                 pImpl->onCreate( hWnd );
 
@@ -540,7 +542,7 @@ LRESULT CALLBACK CHelpPopupWindow::WndProc(
         case WM_PAINT:
             {
                 CHelpPopupWindow* pImpl = reinterpret_cast< CHelpPopupWindow* >(
-                GetPropA( hWnd, CURRENT_INSTANCE ) );
+                GetProp( hWnd, CURRENT_INSTANCE ) );
 
                 OSL_ASSERT( pImpl );
 
@@ -556,7 +558,7 @@ LRESULT CALLBACK CHelpPopupWindow::WndProc(
             {
                 // RemoveProp returns the saved value on success
                 CHelpPopupWindow* pImpl = reinterpret_cast< CHelpPopupWindow* >(
-                    RemovePropA( hWnd, CURRENT_INSTANCE ) );
+                    RemoveProp( hWnd, CURRENT_INSTANCE ) );
 
                 OSL_ASSERT( pImpl );
 
@@ -574,7 +576,7 @@ LRESULT CALLBACK CHelpPopupWindow::WndProc(
          break;
 
          default:
-             return DefWindowProcA(hWnd, uMsg, wParam, lParam);
+             return DefWindowProc(hWnd, uMsg, wParam, lParam);
        }
 
     return lResult;
@@ -591,11 +593,11 @@ ATOM SAL_CALL CHelpPopupWindow::RegisterWindowClass( )
     if ( 0 == s_ClassAtom )
     {
         // register the window class
-        WNDCLASSEXW wndClsEx;
+        WNDCLASSEX wndClsEx;
 
-        ZeroMemory( &wndClsEx, sizeof( WNDCLASSEXW ) );
+        ZeroMemory(&wndClsEx, sizeof(wndClsEx));
 
-        wndClsEx.cbSize        = sizeof( WNDCLASSEXW );
+        wndClsEx.cbSize        = sizeof(wndClsEx);
         wndClsEx.lpfnWndProc   = CHelpPopupWindow::WndProc;
         wndClsEx.hInstance     = m_hInstance;
         wndClsEx.hCursor       = LoadCursor(NULL, IDC_ARROW);
@@ -607,14 +609,14 @@ ATOM SAL_CALL CHelpPopupWindow::RegisterWindowClass( )
         //               if the dll is unloaded
         //     Win2000 - the window class must be unregistered manually
         //               if the dll is unloaded
-        s_ClassAtom = RegisterClassExW( &wndClsEx );
-        OSL_ASSERT( s_ClassAtom );
+        s_ClassAtom = RegisterClassEx( &wndClsEx );
+        OSL_ASSERT(s_ClassAtom);
     }
 
     // increment the register class counter
     // so that we keep track of the number
     // of class registrations
-    if ( 0 != s_ClassAtom )
+    if (0 != s_ClassAtom)
         s_RegisterWndClassCount++;
 
     return s_ClassAtom;

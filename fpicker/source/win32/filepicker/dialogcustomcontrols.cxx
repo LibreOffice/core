@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogcustomcontrols.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-21 07:07:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ CDialogCustomControlBase::CDialogCustomControlBase(HWND aControlHandle, HWND aPa
 
 void SAL_CALL CDialogCustomControlBase::SetFont(HFONT hFont)
 {
-    SendMessageA(
+    SendMessage(
         m_CustomControlHandle,
         WM_SETFONT,
         (WPARAM)hFont,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileOpenDlg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-28 08:57:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,11 +88,41 @@
 // into our build environment if have stolen the definition
 // for the new OPENFILENAME structure from the new headers
 
-#if (_WIN32_WINNT >= 0x0500)
-
-#ifndef CDSIZEOF_STRUCT
-#define CDSIZEOF_STRUCT(structname, member)  (((int)((LPBYTE)(&((structname*)0)->member) - ((LPBYTE)((structname*)0)))) + sizeof(((structname*)0)->member))
+#ifndef _CDSIZEOF_STRUCT
+#define _CDSIZEOF_STRUCT(structname, member)  (((int)((LPBYTE)(&((structname*)0)->member) - ((LPBYTE)((structname*)0)))) + sizeof(((structname*)0)->member))
 #endif
+
+typedef struct _tagOFNA {
+   DWORD        lStructSize;
+   HWND         hwndOwner;
+   HINSTANCE    hInstance;
+   LPCSTR       lpstrFilter;
+   LPSTR        lpstrCustomFilter;
+   DWORD        nMaxCustFilter;
+   DWORD        nFilterIndex;
+   LPSTR        lpstrFile;
+   DWORD        nMaxFile;
+   LPSTR        lpstrFileTitle;
+   DWORD        nMaxFileTitle;
+   LPCSTR       lpstrInitialDir;
+   LPCSTR       lpstrTitle;
+   DWORD        Flags;
+   WORD         nFileOffset;
+   WORD         nFileExtension;
+   LPCSTR       lpstrDefExt;
+   LPARAM       lCustData;
+   LPOFNHOOKPROC lpfnHook;
+   LPCSTR       lpTemplateName;
+#ifdef _MAC
+   LPEDITMENU   lpEditInfo;
+   LPCSTR       lpstrPrompt;
+#endif
+#if (_WIN32_WINNT >= 0x0500)
+   void *       pvReserved;
+   DWORD        dwReserved;
+   DWORD        FlagsEx;
+#endif // (_WIN32_WINNT >= 0x0500)
+} _OPENFILENAMEA, *_LPOPENFILENAMEA;
 
 typedef struct _tagOFNW {
    DWORD        lStructSize;
@@ -122,8 +152,22 @@ typedef struct _tagOFNW {
 #endif // (_WIN32_WINNT >= 0x0500)
 } _OPENFILENAMEW, *_LPOPENFILENAMEW;
 
-#define _OPENFILENAME_SIZE_VERSION_400W  CDSIZEOF_STRUCT(OPENFILENAMEW,lpTemplateName)
+#ifdef UNICODE
+typedef _OPENFILENAMEW _OPENFILENAME;
+typedef _LPOPENFILENAMEW _LPOPENFILENAME;
+#else
+typedef _OPENFILENAMEA _OPENFILENAME;
+typedef _LPOPENFILENAMEA _LPOPENFILENAME;
+#endif // UNICODE
 
+#if (_WIN32_WINNT >= 0x0500)
+#define _OPENFILENAME_SIZE_VERSION_400A  _CDSIZEOF_STRUCT(_OPENFILENAMEA,lpTemplateName)
+#define _OPENFILENAME_SIZE_VERSION_400W  _CDSIZEOF_STRUCT(_OPENFILENAMEW,lpTemplateName)
+#ifdef UNICODE
+#define _OPENFILENAME_SIZE_VERSION_400  _OPENFILENAME_SIZE_VERSION_400W
+#else
+#define _OPENFILENAME_SIZE_VERSION_400  _OPENFILENAME_SIZE_VERSION_400A
+#endif // !UNICODE
 #endif // (_WIN32_WINNT >= 0x0500)
 
 
@@ -275,7 +319,7 @@ protected:
     HWND    m_hwndFileOpenDlg;
     HWND    m_hwndFileOpenDlgChild;
 
-    _OPENFILENAMEW  m_ofn;
+    _OPENFILENAME   m_ofn;
 
     // we connect the instance with the dialog window using
     // SetProp, with this function we can reconnect from
@@ -298,7 +342,7 @@ private:
 
     CGetFileNameWrapper m_GetFileNameWrapper;
 
-    DLGPROC             m_pfnBaseDlgProc;
+    WNDPROC             m_pfnBaseDlgProc;
 
     // callback function
     static unsigned int CALLBACK ofnHookProc(
@@ -312,8 +356,8 @@ private:
     // to clean up the window property we are
     // using to connect the window with a class
     // instance in WM_NCDESTROY
-    static unsigned int CALLBACK BaseDlgProc(
-        HWND hWnd, WORD wMessage, WPARAM wParam, LPARAM lParam );
+    static LRESULT CALLBACK BaseDlgProc(
+        HWND hWnd, UINT wMessage, WPARAM wParam, LPARAM lParam );
 
 private:
     // avoid copy and assignment

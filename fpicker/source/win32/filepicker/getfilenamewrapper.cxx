@@ -2,9 +2,9 @@
  *
  *  $RCSfile: getfilenamewrapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-15 08:44:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ namespace /* private */
 
     struct GetFileNameParam
     {
-        GetFileNameParam(bool bOpen, LPOPENFILENAMEW lpofn) :
+        GetFileNameParam(bool bOpen, LPOPENFILENAME lpofn) :
             m_bOpen(bOpen),
             m_lpofn(lpofn),
             m_bRet(false),
@@ -92,7 +92,7 @@ namespace /* private */
         {}
 
         bool            m_bOpen;
-        LPOPENFILENAMEW m_lpofn;
+        LPOPENFILENAME  m_lpofn;
         bool            m_bRet;
         int             m_ExtErr;
     };
@@ -107,9 +107,9 @@ namespace /* private */
             reinterpret_cast<GetFileNameParam*>(pParam);
 
         if (lpgfnp->m_bOpen)
-            lpgfnp->m_bRet = GetOpenFileNameW(lpgfnp->m_lpofn);
+            lpgfnp->m_bRet = GetOpenFileName(lpgfnp->m_lpofn);
         else
-            lpgfnp->m_bRet = GetSaveFileNameW(lpgfnp->m_lpofn);
+            lpgfnp->m_bRet = GetSaveFileName(lpgfnp->m_lpofn);
 
         lpgfnp->m_ExtErr = CommDlgExtendedError();
 
@@ -121,7 +121,7 @@ namespace /* private */
     // a separat thread
     //-----------------------------------------------
 
-    bool ThreadExecGetFileName(LPOPENFILENAMEW lpofn, bool bOpen, /*out*/ int& ExtErr)
+    bool ThreadExecGetFileName(LPOPENFILENAME lpofn, bool bOpen, /*out*/ int& ExtErr)
     {
         GetFileNameParam gfnp(bOpen,lpofn);
         unsigned         id;
@@ -174,7 +174,7 @@ CGetFileNameWrapper::CGetFileNameWrapper() :
 //
 //-----------------------------------------------
 
-bool CGetFileNameWrapper::getOpenFileName(LPOPENFILENAMEW lpofn)
+bool CGetFileNameWrapper::getOpenFileName(LPOPENFILENAME lpofn)
 {
     OSL_PRECOND(lpofn,"invalid parameter");
 
@@ -187,7 +187,7 @@ bool CGetFileNameWrapper::getOpenFileName(LPOPENFILENAMEW lpofn)
     }
     else
     {
-        bRet = GetOpenFileNameW(lpofn);
+        bRet = GetOpenFileName(lpofn);
         m_ExtendedDialogError = CommDlgExtendedError();
     }
 
@@ -198,7 +198,7 @@ bool CGetFileNameWrapper::getOpenFileName(LPOPENFILENAMEW lpofn)
 //
 //-----------------------------------------------
 
-bool CGetFileNameWrapper::getSaveFileName(LPOPENFILENAMEW lpofn)
+bool CGetFileNameWrapper::getSaveFileName(LPOPENFILENAME lpofn)
 {
     OSL_PRECOND(lpofn,"invalid parameter");
 
@@ -211,7 +211,7 @@ bool CGetFileNameWrapper::getSaveFileName(LPOPENFILENAMEW lpofn)
     }
     else
     {
-        bRet = GetSaveFileNameW(lpofn);
+        bRet = GetSaveFileName(lpofn);
         m_ExtendedDialogError = CommDlgExtendedError();
     }
 

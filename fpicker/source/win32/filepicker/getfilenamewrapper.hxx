@@ -2,9 +2,9 @@
  *
  *  $RCSfile: getfilenamewrapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-15 08:44:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,8 @@ class CGetFileNameWrapper
 public:
     CGetFileNameWrapper();
 
-    bool getOpenFileName(LPOPENFILENAMEW lpofn);
-    bool getSaveFileName(LPOPENFILENAMEW lpofn);
+    bool getOpenFileName(LPOPENFILENAME lpofn);
+    bool getSaveFileName(LPOPENFILENAME lpofn);
     int  commDlgExtendedError();
 
 private:

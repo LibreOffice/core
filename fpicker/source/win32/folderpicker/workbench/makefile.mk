@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: tra $ $Date: 2001-06-28 11:16:52 $
+#   last change: $Author: hr $ $Date: 2003-03-25 18:05:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ TARGETTYPE=		CUI
 
 .INCLUDE : ..$/..$/..$/cppumaker.mk
 
-CFLAGS+=/GR /GX
+CFLAGS+=-GR -GX
 
 # --- Files --------------------------------------------------------
 

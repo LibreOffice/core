@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-28 08:57:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,12 +263,12 @@ private:
     void SAL_CALL InitCustomControlContainer(HWND hCustomControl);
 
     // save the control state
-    void SAL_CALL CacheControlState( HWND hWnd );
+    void SAL_CALL CacheControlState(HWND hWnd);
 
-    void SAL_CALL SetDefaultExtension( );
-    void SAL_CALL InitialSetDefaultName( );
+    void SAL_CALL SetDefaultExtension();
+    void SAL_CALL InitialSetDefaultName();
 
-    static unsigned int CALLBACK SubClassFunc( HWND hWnd, WORD wMessage, WPARAM wParam, LPARAM lParam );
+    static LRESULT CALLBACK SubClassFunc(HWND hWnd, UINT wMessage, WPARAM wParam, LPARAM lParam);
 
     static BOOL CALLBACK EnumChildWndProc( HWND hWnd, LPARAM lParam );
 
@@ -278,7 +278,7 @@ private:
     std::auto_ptr<CCustomControlFactory>    m_CustomControlFactory;
     std::auto_ptr<CCustomControl>           m_CustomControls;
     CFilePicker*                            m_FilePicker;
-    DLGPROC                                 m_pfnOldDlgProc;
+    WNDPROC                                 m_pfnOldDlgProc;
     rtl::OUString                           m_defaultName;
     sal_Bool                                m_bInitialSelChanged;
     CHelpPopupWindow                        m_HelpPopupWindow;

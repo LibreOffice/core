@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PreviewCtrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-14 15:52:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@
 // includes
 //------------------------------------------------------------------------
 
+#include <tchar.h>
+
 #ifndef _PREVIEWCTRL_HXX_
 #include "PreviewCtrl.hxx"
 #endif
@@ -79,7 +81,7 @@
 // defines
 //------------------------------------------------------------------------
 
-#define PREVIEWWND_CLASS_NAME L"PreviewWnd###"
+#define PREVIEWWND_CLASS_NAME TEXT("PreviewWnd###")
 
 #define HIMETRIC_INCH 2540
 
@@ -281,10 +283,10 @@ CFilePreview::CFilePreview(
     m_bEnabled( bEnabled )
 {
     // register the preview window class
-    WNDCLASSEXW wndClsEx;
-    ZeroMemory( &wndClsEx, sizeof( WNDCLASSEXW ) );
+    WNDCLASSEX wndClsEx;
+    ZeroMemory(&wndClsEx, sizeof(wndClsEx));
 
-    wndClsEx.cbSize        = sizeof( WNDCLASSEXW );
+    wndClsEx.cbSize        = sizeof(wndClsEx);
     wndClsEx.style         = CS_HREDRAW | CS_VREDRAW;
     wndClsEx.lpfnWndProc   = CFilePreview::WndProc;
     wndClsEx.hInstance     = m_hInstance;
@@ -296,16 +298,16 @@ CFilePreview::CFilePreview(
     //               if the dll is unloaded
     //     Win2000 - the window class must be unregistered manually
     //               if the dll is unloaded
-    m_atomPrevWndClass = RegisterClassExW( &wndClsEx );
+    m_atomPrevWndClass = RegisterClassEx(&wndClsEx);
     if ( !m_atomPrevWndClass )
         throw CPreviewException( );
 
     // create the preview window in invisible state
     sal_uInt32 dwStyle = bShow ? (WS_CHILD | WS_VISIBLE) : WS_CHILD;
-    m_hwnd = CreateWindowExW(
+    m_hwnd = CreateWindowEx(
         WS_EX_CLIENTEDGE,
         PREVIEWWND_CLASS_NAME,
-        L"",
+        TEXT(""),
         dwStyle,
         ulCorner.x,
         ulCorner.y,
@@ -316,7 +318,7 @@ CFilePreview::CFilePreview(
                     // be used as child window identifier
         m_hInstance,
         0 );
-    if ( !IsWindow( m_hwnd ) )
+    if (!IsWindow(m_hwnd))
         throw CPreviewException( );
 }
 
@@ -544,7 +546,7 @@ sal_Bool CFilePreview::loadFile( const rtl::OUString& aFileName )
     sal_uInt32  fszExtra;
     sal_uInt32  fsize;
 
-    hFile = CreateFileW(
+    hFile = CreateFile(
         aFileName.getStr( ),
         GENERIC_READ,
         0,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: customcontrolfactory.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-21 07:07:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include <tchar.h>
+
 #ifndef _CUSTOMCONTROLFACTORY_HXX_
 #include "customcontrolfactory.hxx"
 #endif
@@ -87,17 +89,17 @@ CCustomControl* CCustomControlFactory::CreateCustomControl(HWND aControlHandle, 
     // get window class
     // if static text create static text control etc.
 
-    char aClsName[256];
+    TCHAR aClsName[256];
     ZeroMemory(aClsName,sizeof(aClsName));
-    int nRet = GetClassNameA(aControlHandle,aClsName,sizeof(aClsName));
+    int nRet = GetClassName(aControlHandle,aClsName,sizeof(aClsName));
 
-    OSL_ASSERT(nRet,"Invalid window handle");
+    OSL_ENSURE(nRet,"Invalid window handle");
 
-    if (0 == _stricmp(aClsName,"button"))
+    if (0 == _tcsicmp(aClsName,TEXT("button")))
     {
         // button means many things so we have
         // to find out what button it is
-        LONG lBtnStyle = GetWindowLongA(aControlHandle,GWL_STYLE);
+        LONG lBtnStyle = GetWindowLong(aControlHandle,GWL_STYLE);
 
         if (lBtnStyle & BS_CHECKBOX)
             return new CCheckboxCustomControl(aControlHandle,aParentHandle);
@@ -108,10 +110,10 @@ CCustomControl* CCustomControlFactory::CreateCustomControl(HWND aControlHandle, 
         return new CDummyCustomControl(aControlHandle,aParentHandle);
     }
 
-    if (0 == _stricmp(aClsName,"listbox") || 0 == _stricmp(aClsName,"combobox"))
+    if (0 == _tcsicmp(aClsName,TEXT("listbox")) || 0 == _tcsicmp(aClsName,TEXT("combobox")))
         return new CComboboxCustomControl(aControlHandle,aParentHandle);
 
-    if (0 == _stricmp(aClsName,"static"))
+    if (0 == _tcsicmp(aClsName,TEXT("static")))
         return new CStaticCustomControl(aControlHandle,aParentHandle);
 
     return new CDummyCustomControl(aControlHandle,aParentHandle);

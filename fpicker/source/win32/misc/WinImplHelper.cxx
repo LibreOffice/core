@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinImplHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-14 15:38:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,16 +118,11 @@ const sal_Unicode   AMPERSAND_SIGN = L'&';
 
 bool SAL_CALL IsWindowsVersion(unsigned int PlatformId, unsigned int MajorVersion, int MinorVersion = -1)
 {
-    OSVERSIONINFOEXA osvi;
-    osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXA);
+    OSVERSIONINFO osvi;
+    osvi.dwOSVersionInfoSize = sizeof(osvi);
 
-    if(!GetVersionExA((OSVERSIONINFOA*)&osvi))
-    {
-        // if OSVERSIONINFOEX doesn't work
-        osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
-        if(!GetVersionEx((OSVERSIONINFOA*)&osvi))
-            return false;
-    }
+    if(!GetVersionEx(&osvi))
+        return false;
 
     bool bRet = (PlatformId == osvi.dwPlatformId) &&
                 (MajorVersion == osvi.dwMajorVersion);

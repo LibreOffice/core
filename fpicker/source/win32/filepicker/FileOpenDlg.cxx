@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileOpenDlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-14 15:51:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@
 // includes
 //------------------------------------------------------------------------
 
+#include <tchar.h>
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -95,7 +97,27 @@ namespace /* private */
     const size_t MAX_FILETITLE_BUFF_SIZE = 32000;
     const size_t MAX_FILTER_BUFF_SIZE    = 4096;
 
-    const char* CURRENT_INSTANCE = "CurrInst";
+    const LPTSTR CURRENT_INSTANCE = TEXT("CurrInst");
+
+    //------------------------------------------
+    // find an appropriate parent window
+    //------------------------------------------
+
+    inline bool is_current_process_window(HWND hwnd)
+    {
+        DWORD pid;
+        GetWindowThreadProcessId(hwnd, &pid);
+        return (pid == GetCurrentProcessId());
+    }
+
+    HWND choose_parent_window()
+    {
+        HWND hwnd_parent = GetForegroundWindow();
+        if (!is_current_process_window(hwnd_parent))
+            hwnd_parent = GetDesktopWindow();
+
+        return hwnd_parent;
+    }
 };
 
 //------------------------------------------------------------------------
@@ -117,7 +139,7 @@ CFileOpenDialog::CFileOpenDialog(
     m_pfnBaseDlgProc(0)
 {
     // initialize the OPENFILENAME struct
-    if (IsWindows2000Platform())
+    if (IsWindows2000Platform() || IsWindowsME())
     {
         ZeroMemory(&m_ofn, sizeof(m_ofn));
         m_ofn.lStructSize = sizeof(m_ofn);
@@ -126,8 +148,8 @@ CFileOpenDialog::CFileOpenDialog(
     {
         // the size of the OPENFILENAME structure is different
         // under windows < win2000
-        ZeroMemory( &m_ofn, _OPENFILENAME_SIZE_VERSION_400W );
-        m_ofn.lStructSize = _OPENFILENAME_SIZE_VERSION_400W;
+        ZeroMemory(&m_ofn, _OPENFILENAME_SIZE_VERSION_400);
+        m_ofn.lStructSize = _OPENFILENAME_SIZE_VERSION_400;
     }
 
     // 0x02000000 for #97681, sfx will make the entry into
@@ -144,7 +166,7 @@ CFileOpenDialog::CFileOpenDialog(
 
     // it is a little hack but how else could
     // we get a parent window (using a vcl window?)
-    m_ofn.hwndOwner = GetForegroundWindow( );
+    m_ofn.hwndOwner = choose_parent_window();
 
     m_ofn.lpstrFile = const_cast<sal_Unicode*>(m_fileNameBuffer.getStr());
     m_ofn.nMaxFile  = m_fileNameBuffer.getCapacity();
@@ -159,9 +181,9 @@ CFileOpenDialog::CFileOpenDialog(
     {
         OSL_ASSERT(hInstance);
 
-        m_ofn.Flags |= OFN_ENABLETEMPLATE;
-        m_ofn.lpTemplateName = MAKEINTRESOURCEW(dwTemplateId);
-        m_ofn.hInstance = hInstance;
+        m_ofn.Flags          |= OFN_ENABLETEMPLATE;
+        m_ofn.lpTemplateName  = MAKEINTRESOURCE(dwTemplateId);
+        m_ofn.hInstance       = hInstance;
     }
 
     // set a pointer to myself as ofn parameter
@@ -326,10 +348,10 @@ sal_Int16 SAL_CALL CFileOpenDialog::doModal()
 
         if (m_bFileOpenDialog)
             bRet = m_GetFileNameWrapper.getOpenFileName(
-                reinterpret_cast<LPOPENFILENAMEW>(&m_ofn));
+                reinterpret_cast<LPOPENFILENAME>(&m_ofn));
         else
             bRet = m_GetFileNameWrapper.getSaveFileName(
-                reinterpret_cast<LPOPENFILENAMEW>(&m_ofn));
+                reinterpret_cast<LPOPENFILENAME>(&m_ofn));
 
         nRC = 1;
 
@@ -386,7 +408,7 @@ rtl::OUString SAL_CALL CFileOpenDialog::getCurrentFilePath() const
 {
     OSL_ASSERT(IsWindow(m_hwndFileOpenDlg));
 
-    LPARAM nLen = SendMessageW(
+    LPARAM nLen = SendMessage(
         m_hwndFileOpenDlg,
         CDM_GETFILEPATH,
         m_helperBuffer.getCapacity(),
@@ -394,10 +416,9 @@ rtl::OUString SAL_CALL CFileOpenDialog::getCurrentFilePath() const
 
     if (nLen > 0)
     {
-        m_helperBuffer.setLength(nLen - 1);
+        m_helperBuffer.setLength((nLen * sizeof(sal_Unicode)) - 1);
         return rtl::OUString(m_helperBuffer);
     }
-
     return rtl::OUString();
 }
 
@@ -409,7 +430,7 @@ rtl::OUString SAL_CALL CFileOpenDialog::getCurrentFolderPath() const
 {
     OSL_ASSERT(IsWindow(m_hwndFileOpenDlg));
 
-    LPARAM nLen = SendMessageW(
+    LPARAM nLen = SendMessage(
         m_hwndFileOpenDlg,
         CDM_GETFOLDERPATH,
         m_helperBuffer.getCapacity(),
@@ -417,10 +438,9 @@ rtl::OUString SAL_CALL CFileOpenDialog::getCurrentFolderPath() const
 
     if (nLen > 0)
     {
-        m_helperBuffer.setLength(nLen - 1);
+        m_helperBuffer.setLength((nLen * sizeof(sal_Unicode)) - 1);
         return rtl::OUString(m_helperBuffer);
     }
-
     return rtl::OUString();
 }
 
@@ -432,33 +452,17 @@ rtl::OUString SAL_CALL CFileOpenDialog::getCurrentFileName() const
 {
     OSL_ASSERT(IsWindow(m_hwndFileOpenDlg));
 
-    // this is an ugly hack because beause
-    // CDM_GETSPEC and BFFM_SETSTATUSTEXT
-    // message id are equal and we have only
-    // one SendMessageW wrapper for Win95
-    int MsgId = CDM_GETSPEC;
-
-    OSVERSIONINFO   OSVerInfo;
-
-    OSVerInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-    GetVersionEx( &OSVerInfo );
-
-    // if windows 95/98
-    if (VER_PLATFORM_WIN32_WINDOWS == OSVerInfo.dwPlatformId)
-        MsgId = CDM_GETSPEC + 100;
-
-    LPARAM nLen = SendMessageW(
+    LPARAM nLen = SendMessage(
         m_hwndFileOpenDlg,
-        MsgId,
+        CDM_GETSPEC,
         m_helperBuffer.getCapacity(),
         reinterpret_cast<LPARAM>(m_helperBuffer.getStr()));
 
     if (nLen > 0)
     {
-        m_helperBuffer.setLength(nLen - 1);
+        m_helperBuffer.setLength((nLen * sizeof(sal_Unicode)) - 1);
         return rtl::OUString(m_helperBuffer);
     }
-
     return rtl::OUString();
 }
 
@@ -543,7 +547,7 @@ sal_uInt32 SAL_CALL CFileOpenDialog::onCtrlCommand(
 //
 //------------------------------------------------------------------------
 
-sal_uInt32 SAL_CALL CFileOpenDialog::onWMNotify(HWND hwndChild, LPOFNOTIFYW lpOfNotify)
+sal_uInt32 SAL_CALL CFileOpenDialog::onWMNotify( HWND hwndChild, LPOFNOTIFY lpOfNotify )
 {
     switch(lpOfNotify->hdr.code)
     {
@@ -601,27 +605,26 @@ void SAL_CALL CFileOpenDialog::handleInitDialog(HWND hwndDlg, HWND hwndChild)
 unsigned int CALLBACK CFileOpenDialog::ofnHookProc(
     HWND hChildDlg, unsigned int uiMsg, WPARAM wParam, LPARAM lParam)
 {
-    HWND hwndDlg = GetParent( hChildDlg );
+    HWND hwndDlg = GetParent(hChildDlg);
     CFileOpenDialog* pImpl = NULL;
 
     switch( uiMsg )
     {
     case WM_INITDIALOG:
         {
-            _OPENFILENAMEW* lpofn = reinterpret_cast<_OPENFILENAMEW*>(lParam);
+            _LPOPENFILENAME lpofn = reinterpret_cast<_LPOPENFILENAME>(lParam);
             pImpl = reinterpret_cast<CFileOpenDialog*>(lpofn->lCustData);
             OSL_ASSERT(pImpl);
 
             // subclass the base dialog for WM_NCDESTROY processing
             pImpl->m_pfnBaseDlgProc =
-                reinterpret_cast< DLGPROC >(
-                    SetWindowLong( hwndDlg,
-                    DWL_DLGPROC,
-                    reinterpret_cast<DWORD>(CFileOpenDialog::BaseDlgProc)));
-
+                reinterpret_cast<WNDPROC>(
+                    SetWindowLong(
+                        hwndDlg,
+                        GWL_WNDPROC,
+                        reinterpret_cast<LONG>(CFileOpenDialog::BaseDlgProc)));
             // connect the instance handle to the window
-            SetPropA(hwndDlg, CURRENT_INSTANCE, pImpl);
-
+            SetProp(hwndDlg, CURRENT_INSTANCE, pImpl);
             pImpl->handleInitDialog(hwndDlg, hChildDlg);
         }
         return 0;
@@ -630,7 +633,7 @@ unsigned int CALLBACK CFileOpenDialog::ofnHookProc(
         {
             pImpl = getCurrentInstance(hwndDlg);
             return pImpl->onWMNotify(
-                hChildDlg, reinterpret_cast<LPOFNOTIFYW>(lParam));
+                hChildDlg, reinterpret_cast<LPOFNOTIFY>(lParam));
         }
 
     case WM_COMMAND:
@@ -650,18 +653,18 @@ unsigned int CALLBACK CFileOpenDialog::ofnHookProc(
 //
 //------------------------------------------------------------------------
 
-unsigned int CALLBACK CFileOpenDialog::BaseDlgProc(
-    HWND hWnd, WORD wMessage, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK CFileOpenDialog::BaseDlgProc(
+    HWND hWnd, UINT wMessage, WPARAM wParam, LPARAM lParam)
 {
     CFileOpenDialog* pImpl = 0;
 
     if (WM_NCDESTROY == wMessage)
     {
         pImpl = reinterpret_cast<CFileOpenDialog*>(
-            RemovePropA(hWnd,CURRENT_INSTANCE));
+            RemoveProp(hWnd,CURRENT_INSTANCE));
 
-        SetWindowLong(hWnd, DWL_DLGPROC,
-            reinterpret_cast<DWORD>(pImpl->m_pfnBaseDlgProc));
+        SetWindowLong(hWnd, GWL_WNDPROC,
+            reinterpret_cast<LONG>(pImpl->m_pfnBaseDlgProc));
     }
     else
     {
@@ -670,7 +673,7 @@ unsigned int CALLBACK CFileOpenDialog::BaseDlgProc(
 
     OSL_ASSERT(pImpl);
 
-    return CallWindowProcA(
+    return CallWindowProc(
         reinterpret_cast<WNDPROC>(pImpl->m_pfnBaseDlgProc),
         hWnd,wMessage,wParam,lParam);
 }
@@ -681,10 +684,9 @@ unsigned int CALLBACK CFileOpenDialog::BaseDlgProc(
 
 CFileOpenDialog* SAL_CALL CFileOpenDialog::getCurrentInstance(HWND hwnd)
 {
-    OSL_ASSERT(IsWindow(hwnd));
-
+    OSL_ASSERT(IsWindow( hwnd));
     return reinterpret_cast<CFileOpenDialog*>(
-        GetPropA(hwnd, CURRENT_INSTANCE));
+        GetProp(hwnd, CURRENT_INSTANCE));
 }
 
 //------------------------------------------------------------------------
