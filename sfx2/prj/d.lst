@@ -25,6 +25,7 @@ mkdir: %_DEST%\inc%_EXT%\sfx2
 ..\util\sfx.xml %_DEST%\xml%_EXT%\sfx.xml
 ..\%__SRC%\misc\sfx2.csv %_DEST%\inc%_EXT%\sfx2.csv
 ..\%__SRC%\inc\macropg.hxx %_DEST%\inc%_EXT%\macropg.hxx
+..\inc\qswin32.h %_DEST%\inc%_EXT%\sfx2\qswin32.h
 
 hedabu: ..\inc\app.hxx %_DEST%\inc%_EXT%\sfx2\app.hxx
 hedabu: ..\inc\basedlgs.hxx %_DEST%\inc%_EXT%\sfx2\basedlgs.hxx
