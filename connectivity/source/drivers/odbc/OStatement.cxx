@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:35:31 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     osl_incrementInterlockedCount( &m_refCount );
     m_pConnection->acquire();
     m_aStatementHandle = m_pConnection->createStatementHandle();
+    setMaxFieldSize(0);
     osl_decrementInterlockedCount( &m_refCount );
 }
 // -----------------------------------------------------------------------------
