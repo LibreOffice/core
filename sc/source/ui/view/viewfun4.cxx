@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:27:45 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,8 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             aEditView.SetOutputArea(Rectangle(0,0,100000,100000));
 
             // same method now for clipboard or drag&drop
-            aEditView.InsertText( rxTransferable, TRUE );
+            // mba: clipboard always must contain absolute URLs (could be from alien source)
+            aEditView.InsertText( rxTransferable, String(), TRUE );
         }
 
         ULONG nParCnt = pEngine->GetParagraphCount();
@@ -211,7 +212,8 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         ::rtl::OUString aStr;
         SotStorageStreamRef xStream;
         if ( aDataHelper.GetSotStorageStream( SOT_FORMAT_RTF, xStream ) && xStream.Is() )
-            aImpEx.ImportStream( *xStream, SOT_FORMAT_RTF );
+            // mba: clipboard always must contain absolute URLs (could be from alien source)
+            aImpEx.ImportStream( *xStream, String(), SOT_FORMAT_RTF );
         else if ( aDataHelper.GetString( SOT_FORMAT_RTF, aStr ) )
             aImpEx.ImportString( aStr, SOT_FORMAT_RTF );
 
