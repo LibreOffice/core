@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:28:52 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
         rSet.DisableItem( SID_MIRROR_VERTICAL );
     }
 
-    const SdrMarkList& rMarkList = pView->GetMarkList();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     ULONG nMarkCount = rMarkList.GetMarkCount();
 
     if ( nMarkCount <= 1 || !pView->IsGroupPossible() )
@@ -260,7 +260,7 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
     Window*     pWindow     = pViewData->GetActiveWin();
     ScDrawView* pDrView     = pViewData->GetScDrawView();
     Point       aPos        = pWindow->PixelToLogic(aMousePos);
-    BOOL        bHasMarked  = pDrView->HasMarkedObj();
+    BOOL        bHasMarked  = pDrView->AreObjectsMarked();
 
     if( bHasMarked )
     {
@@ -305,7 +305,7 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
     }
     if ( !bActionItem )
     {
-        if ( pDrView->HasMarkedObj() )      // selected objects
+        if ( pDrView->AreObjectsMarked() )      // selected objects
         {
             Rectangle aRect = pDrView->GetAllMarkedRect();
             pDrView->GetPageViewPvNum(0)->LogicToPagePos(aRect);
