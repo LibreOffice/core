@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:26:49 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1861,11 +1861,13 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
         String  sLinkCharacterStyle; //default to "Default" character style - which is none
         String sURL;
         // create an enumerator
-        SwFormTokenEnumerator aTokenEnum = GetTOXForm().CreateTokenEnumerator(nLvl);
+        // #i21237#
+        SwFormTokens aPattern = GetTOXForm().GetPattern(nLvl);
+        SwFormTokens::iterator aIt = aPattern.begin();
         // remove text from node
-        while(aTokenEnum.HasNextToken())
+        while(aIt != aPattern.end()) // #i21237#
         {
-            SwFormToken aToken = aTokenEnum.GetNextToken();
+            SwFormToken aToken = *aIt; // #i21237#
             xub_StrLen nStartCharStyle = rTxt.Len();
             switch( aToken.eTokenType )
             {
@@ -1892,8 +1894,10 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                 break;
 
             case TOKEN_TAB_STOP:
-                rTxt.Append('\t');
+                if (aToken.bWithTab) // #i21237#
+                    rTxt.Append('\t');
                 //
+
                 if(SVX_TAB_ADJUST_END > aToken.eTabAlign)
                 {
                     const SvxLRSpaceItem& rLR = (SvxLRSpaceItem&)pTOXNd->
@@ -2081,7 +2085,10 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                     pTOXNd->Insert( SwFmtCharFmt( pCharFmt ), nStartCharStyle,
                                     rTxt.Len(), SETATTR_DONTEXPAND );
             }
+
+            aIt++; // #i21237#
         }
+
         pTOXNd->SwCntntNode::SetAttr( aTStops );
     }
 
