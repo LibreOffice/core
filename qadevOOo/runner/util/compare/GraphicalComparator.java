@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicalComparator.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-11-02 11:52:18 $
+ *  last change: $Date: 2005-01-25 15:39:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 package util.compare;
 
 import convwatch.GraphicalDifferenceCheck;
@@ -150,7 +149,7 @@ class GraphicalComparator implements DocComparator
 
             // LLA? What if sReferencePath is a directory, but directory is empty? is the result then true or false;
 
-            // wir müssen durch den InputPath durch und dann für jedes Dokument prufen, ob im angegebenen ReferencePath eine Reference existiert.
+            // wir muessen durch den InputPath durch und dann fuer jedes Dokument prufen, ob im angegebenen ReferencePath eine Reference existiert.
             String sInputPath = m_aArguments.getInputPath();
             if (FileHelper.isDir(sInputPath))
             {

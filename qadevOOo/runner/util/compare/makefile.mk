@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Date: 2004-11-02 11:53:21 $
+#   last change: $Date: 2005-01-25 15:40:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 PRJ=..$/..$/..
 
 PRJNAME = OOoRunner
@@ -70,6 +69,10 @@ TARGET = runner_util_compare
 
 .INCLUDE :  settings.mk
 
+.IF "$(JDK)" == "gcj"
+all:
+        @echo This dir cannot be build with gcj because of convwatch
+.ELSE
 # --- Files --------------------------------------------------------
 
 JARFILES = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar
@@ -88,3 +91,4 @@ JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+.ENDIF
