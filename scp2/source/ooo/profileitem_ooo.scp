@@ -2,9 +2,9 @@
 *
 *  $RCSfile: profileitem_ooo.scp,v $
 *
-*  $Revision: 1.10 $
+*  $Revision: 1.11 $
 *
-*  last change: $Author: hr $ $Date: 2004-08-03 14:59:01 $
+*  last change: $Author: hr $ $Date: 2004-11-09 14:03:08 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -524,5 +524,67 @@ ProfileItem gid_Profileitem_Versions_Staroffice5_2
     ModuleID = gid_Module_Root;
     Key = "%PRODUCTNAME %PRODUCTVERSION ${EVAL}";
     Value = "<workpath_url>";
+End
+
+ProfileItem gid_Profileitem_Jvmfwk_BaseInstallation
+    ProfileID = gid_Profile_Jvmfwk_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "BaseInstallation";
+  #ifdef UNX
+    Value = "${$ORIGIN/bootstraprc:BaseInstallation}";
+  #else
+    Value = "${$ORIGIN/bootstrap.ini:BaseInstallation}";
+  #endif
+End
+
+ProfileItem gid_Profileitem_Jvmfwk_UserInstallation
+    ProfileID = gid_Profile_Jvmfwk_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 2;
+    Key = "UserInstallation";
+  #ifdef UNX
+    Value = "${$ORIGIN/bootstraprc:UserInstallation}";
+  #else
+    Value = "${$ORIGIN/bootstrap.ini:UserInstallation}";
+  #endif
+End
+
+ProfileItem gid_Profileitem_Jvmfwk_Uno_Java_Jfw_User_Data
+    ProfileID = gid_Profile_Jvmfwk_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 3;
+    Key = "UNO_JAVA_JFW_USER_DATA";
+    Value = "$UserInstallation/user/config/javasettings_${_OS}_${_ARCH}.xml";
+End
+
+ProfileItem gid_Profileitem_Jvmfwk_Uno_Java_Jfw_Shared_Data
+    ProfileID = gid_Profile_Jvmfwk_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 4;
+    Key = "UNO_JAVA_JFW_SHARED_DATA";
+    Value = "$BaseInstallation/share/config/javasettings_${_OS}_${_ARCH}.xml";
+End
+
+ProfileItem gid_Profileitem_Jvmfwk_Uno_Java_Jfw_Vendor_Settings
+    ProfileID = gid_Profile_Jvmfwk_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 5;
+    Key = "UNO_JAVA_JFW_VENDOR_SETTINGS";
+    Value = "$BaseInstallation/share/config/javavendors.xml";
+End
+
+ProfileItem gid_Profileitem_Jvmfwk_Uno_Java_Jfw_Classpath_Urls
+    ProfileID = gid_Profile_Jvmfwk_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 6;
+    Key = "UNO_JAVA_JFW_CLASSPATH_URLS";
+    Value = "${${$ORIGIN/uno.ini:PKG_UserUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/uno.ini:PKG_SharedUnoFile}:UNO_JAVA_CLASSPATH} $ORIGIN/classes/jurt.jar $ORIGIN/classes/ridl.jar $ORIGIN/classes/java_uno.jar $ORIGIN/classes/sandbox.jar $ORIGIN/classes/bsh.jar $ORIGIN/classes/classes.jar $ORIGIN/classes/commonwizards.jar $ORIGIN/classes/docbook.jar $ORIGIN/classes/htmlsoff.jar $ORIGIN/classes/java_uno_accessbridge.jar $ORIGIN/classes/js.jar $ORIGIN/classes/juh.jar $ORIGIN/classes/jut.jar $ORIGIN/classes/letter.jar $ORIGIN/classes/officebean.jar $ORIGIN/classes/query.jar $ORIGIN/classes/report.jar $ORIGIN/classes/ScriptFramework.jar $ORIGIN/classes/ScriptProviderForBeanShell.jar $ORIGIN/classes/ScriptProviderForJava.jar $ORIGIN/classes/ScriptProviderForJavaScript.jar $ORIGIN/classes/tutorial.jar $ORIGIN/classes/unoil.jar $ORIGIN/classes/web.jar $ORIGIN/classes/XFlatXml.jar $ORIGIN/classes/xmerge.jar $ORIGIN/classes/XMergeBridge.jar $ORIGIN/classes/XSLTFilter.jar $ORIGIN/classes/XSLTValidate.jar $ORIGIN/classes/xt.jar $ORIGIN/classes/activation.jar $ORIGIN/classes/agenda.jar $ORIGIN/classes/aportisdoc.jar $ORIGIN/classes/avmedia.jar $ORIGIN/classes/email.jar $ORIGIN/classes/fax.jar $ORIGIN/classes/pexcel.jar $ORIGIN/classes/pocketword.jar $ORIGIN/classes/mail.jar";
 End
 
