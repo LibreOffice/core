@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-24 16:20:07 $
+ *  last change: $Author: abi $ $Date: 2001-10-31 14:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+#ifndef _OSL_SECURITY_HXX_
+#include <osl/security.hxx>
+#endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
@@ -640,17 +643,22 @@ private:
 
 
 XPropertySetInfoImpl2::XPropertySetInfoImpl2()
-    : m_seq( 2 )
+    : m_seq( 3 )
 {
     m_seq[0] = Property( rtl::OUString::createFromAscii( "HostName" ),
-                                -1,
-                                getCppuType( static_cast< rtl::OUString* >( 0 ) ),
-                                PropertyAttribute::READONLY );
+                         -1,
+                         getCppuType( static_cast< rtl::OUString* >( 0 ) ),
+                         PropertyAttribute::READONLY );
 
-    m_seq[1] = Property( rtl::OUString::createFromAscii( "FileSystemNotation" ),
-                                -1,
-                                getCppuType( static_cast< sal_Int32* >( 0 ) ),
-                                PropertyAttribute::READONLY );
+    m_seq[1] = Property( rtl::OUString::createFromAscii( "HomeDirectory" ),
+                         -1,
+                         getCppuType( static_cast< rtl::OUString* >( 0 ) ),
+                         PropertyAttribute::READONLY );
+
+    m_seq[2] = Property( rtl::OUString::createFromAscii( "FileSystemNotation" ),
+                         -1,
+                         getCppuType( static_cast< sal_Int32* >( 0 ) ),
+                         PropertyAttribute::READONLY );
 }
 
 
@@ -730,6 +738,7 @@ XPropertySetInfoImpl2::hasPropertyByName(
 
 void SAL_CALL FileProvider::initProperties( void )
 {
+    vos::OGuard aGuard( m_aMutex );
     if( ! m_xPropertySetInfo.is() )
     {
         osl_getLocalHostname( &m_HostName.pData );
@@ -741,6 +750,13 @@ void SAL_CALL FileProvider::initProperties( void )
 #else
         m_FileSystemNotation = FileSystemNotation::UNKNOWN_NOTATION;
 #endif
+        if( ! m_pMyShell->m_bFaked )
+        {
+            osl::Security aSecurity;
+            aSecurity.getHomeDir( m_HomeDirectory );
+        }
+        else
+            m_HomeDirectory = rtl::OUString::createFromAscii( "file:///user/work" );
 
         // static const sal_Int32 UNKNOWN_NOTATION = (sal_Int32)0;
         // static const sal_Int32 UNIX_NOTATION = (sal_Int32)1;
@@ -774,6 +790,7 @@ FileProvider::setPropertyValue( const rtl::OUString& aPropertyName,
            RuntimeException )
 {
     if( aPropertyName.compareToAscii( "FileSystemNotation" ) == 0 ||
+        aPropertyName.compareToAscii( "HomeDirectory" ) == 0      ||
         aPropertyName.compareToAscii( "HostName" ) == 0 )
         return;
     else
@@ -794,6 +811,12 @@ FileProvider::getPropertyValue(
     {
         Any aAny;
         aAny <<= m_FileSystemNotation;
+        return aAny;
+    }
+    else if( aPropertyName.compareToAscii( "HomeDirectory" ) == 0 )
+    {
+        Any aAny;
+        aAny <<= m_HomeDirectory;
         return aAny;
     }
     else if( aPropertyName.compareToAscii( "HostName" ) == 0 )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-24 16:20:07 $
+ *  last change: $Author: abi $ $Date: 2001-10-31 14:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,8 +279,11 @@ namespace fileaccess {
         com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >  m_xMultiServiceFactory;
 
         void SAL_CALL initProperties( void );
+        vos::OMutex   m_aMutex;
         rtl::OUString m_HostName;
+        rtl::OUString m_HomeDirectory;
         sal_Int32     m_FileSystemNotation;
+
         com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >     m_xPropertySetInfo;
 
         shell*                                                                        m_pMyShell;
