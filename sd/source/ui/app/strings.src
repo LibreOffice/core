@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 19:31:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:50:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ String RID_PLUGINTOOLBOX
 };
 String STR_SLIDE_TOOLBOX
 {
-    Text [ de ] = "Diawerkzeugleiste" ;
+    Text [ de ] = "Folienwerkzeugleiste" ;
     Text [ en-US ] = "Slide Bar" ;
 };
 String STR_OUTLINE_TOOLBOX
@@ -114,7 +114,7 @@ String STR_DRAW_COMMONTASK_TOOLBOX
 };
 String STR_SLIDE_OBJ_TOOLBOX
 {
-    Text [ de ] = "Diaobjektleiste" ;
+    Text [ de ] = "Folienobjektleiste" ;
     Text [ en-US ] = "Slide Object Bar" ;
 };
 String STR_BEZIER_TOOLBOX
@@ -154,7 +154,7 @@ String STR_SPECIALVIEW
 };
 String STR_DIAVIEW
 {
-    Text [ de ] = "Dia" ;
+    Text [ de ] = "Folie" ;
     Text [ en-US ] = "Slide" ;
 };
 String STR_NULL
@@ -352,12 +352,12 @@ String STR_NO_EFFECT
 };
 String STR_UNDO_SLIDE_PARAMS
 {
-    Text [ de ] = "Dia-Parameter" ;
+    Text [ de ] = "Folien Parameter" ;
     Text [ en-US ] = "Slide parameter" ;
 };
 String STR_UNDO_SLIDE_MOVE
 {
-    Text [ de ] = "Dia verschieben" ;
+    Text [ de ] = "Folie verschieben" ;
     Text [ en-US ] = "Move slide" ;
 };
 String STR_UNDO_CUT
@@ -568,7 +568,7 @@ String STR_PRESENTATION_LAYOUT
 };
 String STR_AUTOLAYOUT_NONE
 {
-    Text [ de ] = "Leeres Dia" ;
+    Text [ de ] = "Leere Folie" ;
     Text [ en-US ] = "Blank Slide" ;
 };
 String STR_AUTOLAYOUT_ONLY_TITLE
@@ -578,7 +578,7 @@ String STR_AUTOLAYOUT_ONLY_TITLE
 };
 String STR_AUTOLAYOUT_TITLE
 {
-    Text [ de ] = "Titeldia" ;
+    Text [ de ] = "Titelfolie" ;
     Text [ en-US ] = "Title Slide" ;
 };
 String STR_AUTOLAYOUT_OBJ
@@ -1031,12 +1031,6 @@ String STR_UNDO_INSERTPAGES
     Text [ de ] = "Seiten einfügen" ;
     Text [ en-US ] = "Insert slides" ;
 };
-String STR_ASK_DELETE_PAGE
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Wollen Sie die Seite '$' wirklich löschen? : Wollen Sie die Seite '$' wirklich l÷schen? */
-    Text [ de ] = "Wollen Sie die Seite '$' wirklich löschen?" ;
-    Text [ en-US ] = "Are you sure you want to delete \"$\"?" ;
-};
 String STR_ASK_DELETE_LAYER
 {
     /* ### ACHTUNG: Neuer Text in Resource? Wollen Sie die Ebene '$' wirklich löschen?\nHinweis: Alle Objekte auf dieser Ebene werden ebenfalls gelöscht! : Wollen Sie die Ebene '$' wirklich l÷schen?\nHinweis: Alle Objekte auf dieser Ebene werden ebenfalls gel÷scht! */
@@ -1201,23 +1195,6 @@ String STR_SOUNDFILE5
 {
     Text [ de ] = "<Klangformat 5>" ;
     Text [ en-US ] = "<Sound Format 5>" ;
-};
-String STR_WARN_DEL_PAGE
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Diese Aktion löscht die Seite '$'. \nDie Seite enthält Zeichenobjekte! : Diese Aktion l÷scht die Seite '$'. \nDie Seite enthõlt Zeichenobjekte! */
-    Text [ de ] = "Diese Aktion löscht die Seite '$'. \nDie Seite enthält Zeichenobjekte!" ;
-    Text [ en-US ] = "This action deletes the page '$'. \nNote: the page contains drawing objects!" ;
-};
-String STR_WARN_DEL_SEL_PAGES
-{
-    Text [ de ] = "Diese Aktion löscht die selektierten Seiten. \nDie Seiten enthalten Zeichenobjekte!" ;
-    Text [ en-US ] = "This action deletes the selected pages.\nNote: the pages contain drawing objects!" ;
-};
-
-String STR_WARN_DEL_SEL_PAGE
-{
-    Text [ de ] = "Diese Aktion löscht die selektierte Seite. \nDie Seite enthält Zeichenobjekte!" ;
-    Text [ en-US ] = "This action deletes the selected page.\nNote: the page contains drawing objects!" ;
 };
 
 ModalDialog RID_UNDO_DELETE_WARNING
@@ -2126,12 +2103,12 @@ String STR_INSERT_TEXT
 };
 String STR_SLIDE_SINGULAR
 {
-    Text [ de ] = " Dia" ;
+    Text [ de ] = " Folie" ;
     Text [ en-US ] = " Slide" ;
 };
 String STR_SLIDE_PLURAL
 {
-    Text [ de ] = " Dias" ;
+    Text [ de ] = " Folien" ;
     Text [ en-US ] = " Slides" ;
 };
 String STR_CHART_MAINTITLE
