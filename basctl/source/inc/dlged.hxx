@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2002-04-24 14:47:06 $
+ *  last change: $Author: vg $ $Date: 2003-03-26 12:51:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,43 +62,85 @@
 #ifndef _BASCTL_DLGED_HXX
 #define _BASCTL_DLGED_HXX
 
-#ifndef _BASCTL_DLGEDPAGE_HXX
-#include <dlgedpage.hxx>
-#endif
-
-#ifndef _BASCTL_DLGEDMOD_HXX
-#include <dlgedmod.hxx>
-#endif
-
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_DATATRANSFER_DATAFLAVOR_HPP_
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #endif
 
-enum DlgEdMode { DLGED_INSERT, DLGED_SELECT, DLGED_TEST, DLGED_READONLY };
+#ifndef _LINK_HXX
+#include <tools/link.hxx>
+#endif
+#ifndef _SV_GEN_HXX
+#include <vcl/gen.hxx>
+#endif
+#ifndef _SV_TIMER_HXX
+#include <vcl/timer.hxx>
+#endif
+#ifndef _SFXHINT_HXX
+#include <svtools/hint.hxx>
+#endif
+#ifndef _SFXBRDCST_HXX
+#include <svtools/brdcst.hxx>
+#endif
+
+
+//============================================================================
+// DlgEdHint
+//============================================================================
+
+enum DlgEdHintKind
+{
+    DLGED_HINT_UNKNOWN,
+    DLGED_HINT_WINDOWSCROLLED,
+    DLGED_HINT_LAYERCHANGED,
+    DLGED_HINT_OBJORDERCHANGED,
+    DLGED_HINT_SELECTIONCHANGED
+};
+
+class DlgEdObj;
+
+class DlgEdHint: public SfxHint
+{
+private:
+    DlgEdHintKind   eHintKind;
+    DlgEdObj*       pDlgEdObj;
+
+public:
+    TYPEINFO();
+    DlgEdHint( DlgEdHintKind eHint );
+    DlgEdHint( DlgEdHintKind eHint, DlgEdObj* pObj );
+    virtual ~DlgEdHint();
+
+    DlgEdHintKind   GetKind() const { return eHintKind; }
+    DlgEdObj*       GetObject() const { return pDlgEdObj; }
+};
 
 
 //============================================================================
 // DlgEditor
 //============================================================================
 
+enum DlgEdMode { DLGED_INSERT, DLGED_SELECT, DLGED_TEST, DLGED_READONLY };
+
 class ScrollBar;
-class SdrModel;
-class SdrPage;
-class SdrView;
+class DlgEdModel;
+class DlgEdPage;
+class DlgEdView;
 class DlgEdForm;
 class DlgEdFactory;
 class DlgEdFunc;
 class Printer;
+class KeyEvent;
+class MouseEvent;
+class Timer;
+class Window;
 
-class DlgEditor
+class DlgEditor: public SfxBroadcaster
 {
 private:
     DECL_LINK( PaintTimeout, Timer * );
@@ -106,9 +148,9 @@ private:
 protected:
     ScrollBar*          pHScroll;
     ScrollBar*          pVScroll;
-    DlgEdModel*         pSdrModel;
-    DlgEdPage*          pSdrPage;
-    SdrView*            pSdrView;
+    DlgEdModel*         pDlgEdModel;
+    DlgEdPage*          pDlgEdPage;
+    DlgEdView*          pDlgEdView;
     DlgEdForm*          pDlgEdForm;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >     m_xUnoControlDialogModel;
     ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >       m_ClipboardDataFlavors;
@@ -150,9 +192,9 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > const & GetNumberFormatsSupplier();
 
-    SdrModel*       GetModel()      const { return pSdrModel; }
-    SdrView*        GetView()       const { return pSdrView; }
-    SdrPage*        GetPage()       const { return pSdrPage; }
+    DlgEdModel*     GetModel()      const { return pDlgEdModel; }
+    DlgEdView*      GetView()       const { return pDlgEdView; }
+    DlgEdPage*      GetPage()       const { return pDlgEdPage; }
 
     void            ShowDialog();
 
