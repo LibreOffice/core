@@ -2,9 +2,9 @@
  *
  *  $RCSfile: widorp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 11:26:00 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 14:24:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,6 +369,10 @@ WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pFrm, const SwTwips nRst,
 sal_Bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
     sal_Bool bHasToFit )
 {
+    // OD 2004-02-25 #i16128# - Why member <pFrm> _*and*_ parameter <pFrame>??
+    // Thus, assertion on situation, that these are different to figure out why.
+    ASSERT( pFrm == pFrame, "<WidowsAndOrphans::FindBreak> - pFrm != pFrame" );
+
     SWAP_IF_SWAPPED( pFrm )
 
     sal_Bool bRet = sal_True;
@@ -376,12 +380,14 @@ sal_Bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
     if( bHasToFit )
         nOrphLines = 0;
     rLine.Bottom();
-    if( !IsBreakNow( rLine ) )
+    // OD 2004-02-25 #i16128# - method renamed
+    if( !IsBreakNowWidAndOrp( rLine ) )
         bRet = sal_False;
     if( !FindWidows( pFrame, rLine ) )
     {
         sal_Bool bBack = sal_False;
-        while( IsBreakNow( rLine ) )
+        // OD 2004-02-25 #i16128# - method renamed
+        while( IsBreakNowWidAndOrp( rLine ) )
         {
             if( rLine.PrevLine() )
                 bBack = sal_True;
@@ -395,7 +401,7 @@ sal_Bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
         // komplett auf die naechste Seite/Spalte.
         if( rLine.GetLineNr() <= nOldOrphans &&
             rLine.GetInfo().GetParaPortion()->IsDummy() &&
-            ( ( bHasToFit && bRet ) || SwTxtFrmBreak::IsBreakNow( rLine ) ) )
+            ( ( bHasToFit && bRet ) || IsBreakNow( rLine ) ) )
             rLine.Top();
 
         rLine.TruncLines( sal_True );
