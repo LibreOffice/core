@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:33 $
+ *  last change: $Author: hr $ $Date: 2003-04-23 17:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ void XclImpChangeTrack::ReadCell(
             if( pStrm->IsValid() )
             {
                 rpCell = new ScValueCell( fValue );
-                rFormat = pExcRoot->pIR->GetFormatter().GetStandardFormat( NUMBERFORMAT_LOGICAL, pExcRoot->pIR->GetDefLanguage() );
+                rFormat = pExcRoot->pIR->GetFormatter().GetStandardFormat( NUMBERFORMAT_LOGICAL, ScGlobal::eLnge );
             }
         }
         break;
