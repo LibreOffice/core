@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextColumnsContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:24:44 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,8 @@ enum SvXMLSepTokenMapAttrs
 static __FAR_DATA SvXMLTokenMapEntry aColAttrTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,  XML_REL_WIDTH,      XML_TOK_COLUMN_WIDTH },
-    { XML_NAMESPACE_FO,     XML_MARGIN_LEFT,    XML_TOK_COLUMN_MARGIN_LEFT },
-    { XML_NAMESPACE_FO,     XML_MARGIN_RIGHT,   XML_TOK_COLUMN_MARGIN_RIGHT },
+    { XML_NAMESPACE_FO,     XML_START_INDENT,   XML_TOK_COLUMN_MARGIN_LEFT },
+    { XML_NAMESPACE_FO,     XML_END_INDENT,     XML_TOK_COLUMN_MARGIN_RIGHT },
     XML_TOKEN_MAP_END
 };
 
