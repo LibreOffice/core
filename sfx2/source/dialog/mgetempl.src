@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mgetempl.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-26 20:27:00 $
+ *  last change: $Author: rt $ $Date: 2001-10-17 08:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ TabPage TP_MANAGE_STYLES
         Text[ chinese_simplified ] = "é“¾æ¥åˆ°(~B)";
         Text[ russian ] = "Ñâÿçàí ñ";
         Text[ polish ] = "Po³¹czony z";
-        Text[ japanese ] = "ï¾˜ï¾ï½¸å…ˆ(~B)";
+        Text[ japanese ] = "åŸå‹ï½½ï¾€ï½²ï¾™(~B)";
         Text[ chinese_traditional ] = "é€£çµåˆ°(~B)";
         Text[ arabic ] = "ãÑÊÈØ ÈÜ";
         Text[ greek ] = "~Óıíäåóç ìå";
@@ -222,7 +222,7 @@ TabPage TP_MANAGE_STYLES
         Text [ finnish ] = "~Luokka" ;
         Text [ danish ] = "Område" ;
         Text [ french ] = "~Catégorie" ;
-        Text [ swedish ] = "~Område" ;
+        Text [ swedish ] = "~Kategori" ;
         Text [ dutch ] = "~Bereik" ;
         Text [ spanish ] = "~Área" ;
         Text [ english_us ] = "~Category" ;
@@ -289,6 +289,7 @@ TabPage TP_MANAGE_STYLES
     };
 };
  // ********************************************************************** EOF
+
 
 
 
