@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XShapeGrouper.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 19:30:38 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 23:08:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,11 @@ published interface XShapeGrouper: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     /** groups the <type>Shape</type>s inside a collection.
+
+        <p>Grouping of objects in text documents works only if none
+        of the objects has an anchor of type
+        <member scope="com::sun::star::text::TextContentAnchorType">AS_CHARACTER</member>
+        </p>.
 
         @param xShapes
             the <type>Shape</type>s that will be grouped. They
