@@ -2,9 +2,9 @@
  *
  *  $RCSfile: switems.sdi,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:01:35 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+/*
 enum SwHoriOrient
 {
     HORI_NONE,
@@ -98,38 +99,41 @@ enum SwSurround
 
 struct FmtHoriOrient
 {
-    INT32               XPos            MID_1;
-    SwHoriOrient        HorzOrientation MID_2;
-    SwRelationOrient    HorzRelation    MID_3;
+    INT32               XPos            MID_HORIORIENT_POSITION;
+    SwHoriOrient        HorzOrientation MID_HORIORIENT_ORIENT;
+    SwRelationOrient    HorzRelation    MID_HORIORIENT_RELATION;
+    BOOL                PageToggle      MID_HORIORIENT_PAGETOGGLE;
 };
-
 item FmtHoriOrient SwFmtHoriOrient;
 
 struct FmtVertOrient
 {
-    INT32               YPos            MID_1;
-    SwVertOrient        VertOrientation MID_2;
-    SwRelationOrient    VertRelation    MID_3;
+    INT32               YPos            MID_VERTORIENT_POSITION;
+    SwVertOrient        VertOrientation MID_VERTORIENT_ORIENT;
+    SwRelationOrient    VertRelation    MID_VERTORIENT_RELATION;
 };
 item FmtVertOrient SwFmtVertOrient;
 
 struct FmtFrmSize
 {
-    UINT32  Width           MID_WIDTH;
-    UINT32  Height          MID_HEIGHT;
-    BYTE    WidthPercent    MID_1;
-    BYTE    HeightPercent   MID_2;
+    INT32  Width           MID_FRMSIZE_WIDTH;
+    INT32  Height          MID_FRMSIZE_HEIGHT;
+    INT16  WidthPercent    MID_FRMSIZE_REL_WIDTH;
+    INT16  HeightPercent   MID_FRMSIZE_REL_HEIGHT;
+    INT16  SizeType        MID_FRMSIZE_SIZE_TYPE;
 };
 item FmtFrmSize SwFmtFrmSize;
-
+*/
 struct Drop
 {
     BYTE    Lines       MID_LINES;
     BYTE    Count       MID_CHARS;
-    UINT16  Distance    MID_DIST;
+    INT16   Distance    MID_DIST;
+    BOOL    WholeWord   MID_DROPCAP_WHOLE_WORD;
 };
 item Drop SwFmtDrop;
 
+/*
 struct SwDocDisplay
 {
     BOOL    ParagraphEnd        MID_1;
@@ -148,9 +152,8 @@ struct SwDocDisplay
     BOOL    FieldName           MID_E;
     BOOL    Notes               MID_F;
     BOOL    ShowHiddenPara      MID_10;
+    sal_Int32 IndexBackGroundColor MID_11;
 }
-
-
 item SwDocDisplay SwDocDisplayItem;
 
 struct SwElem
@@ -166,7 +169,6 @@ struct SwElem
     BOOL    SolidHandles    MID_9;
     BOOL    SmoothScroll    MID_A;
 }
-
 item SwElem SwElemItem;
 
 struct SwPrintOpt
@@ -201,33 +203,6 @@ struct SwPageFtnInfo
 };
 item SwPageFtnInfo SwPageFtnInfoItem;
 
-item String     SvxBoxInfoItem; //! Dummy
-
-
-//umdefiniert wg. doppelter Benutzung
-
-struct SwPageLRSpace
-{
-    UINT16      PageLeftMargin      MID_LEFT_MARGIN;        // % or direct
-    UINT16      PageRightMargin     MID_RIGHT_MARGIN;       // % or direct
-};
-item SwPageLRSpace SwPageLRSpaceItem;
-
-struct SwPageULSpace
-{
-    UINT16              PageTopMargin           MID_UPPER;  // % or direct
-    UINT16              PageBottomMargin        MID_LOWER;  // % or direct
-};
-item SwPageULSpace SwPageULSpaceItem
-
-
-struct SwGraphicSize
-{
-    UINT32  GraphicWidth        MID_WIDTH;
-    UINT32  GraphicHeight       MID_HEIGHT;
-};
-item SwGraphicSize SwGraphicSizeItem;
-
 struct CropGrf
 {
     INT32   Left    MID_1;
@@ -253,7 +228,6 @@ struct FmtSurround
     BOOL            Contour     MID_4;
     BOOL            Outside     MID_5
 };
-
 item FmtSurround    SwFmtSurround;
 
 struct SwShadowCursor
@@ -263,3 +237,4 @@ struct SwShadowCursor
     INT32           ShadowCursorColor   MID_3;
 };
 item SwShadowCursor SwShadowCursorItem;
+*/

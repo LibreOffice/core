@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-23 08:16:36 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #include <sfx2/sfx.hrc>
 #endif
 
+#include <unomid.h>
 /* Flags die mittels des Disable-Features in den Slot-Definitionen ausgenutzt
  * werden */
 #define SW_DISABLE_ON_PROTECTED_CURSOR  0x00000001

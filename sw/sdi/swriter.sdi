@@ -1,4 +1,29 @@
 //--------------------------------------------------------------------------
+SfxVoidItem CreateSWDrawView SID_CREATE_SW_DRAWVIEW
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_INSERT;
+]
+
+//--------------------------------------------------------------------------
 SfxBoolItem AcceptRedlining FN_REDLINE_ACCEPT
 ()
 [
@@ -619,6 +644,7 @@ SfxVoidItem BulletsAndNumberingDialog FN_NUMBER_BULLETS
     RecordPerSet;
     Asynchron;
 
+    ImageRotation = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1067,31 +1093,6 @@ SfxVoidItem CreateAbstract FN_ABSTRACT_NEWDOC
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem CreateSWDrawView SID_CREATE_SW_DRAWVIEW
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INSERT;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem DecrementIndentValue FN_DEC_INDENT_OFFSET
 ()
 [
@@ -1133,6 +1134,7 @@ SfxVoidItem DecrementLevel FN_NUM_BULLET_DOWN
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1158,6 +1160,7 @@ SfxVoidItem DecrementSubLevels FN_NUM_BULLET_OUTLINE_DOWN
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2152,33 +2155,6 @@ SfxVoidItem FrameDialog FN_FORMAT_FRAME_DLG
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_FRAME;
-]
-
-//--------------------------------------------------------------------------
-SfxBoolItem Gallery SID_GALLERY
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = TRUE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_OPTIONS;
 ]
 
 //--------------------------------------------------------------------------
@@ -3679,6 +3655,7 @@ SfxVoidItem IncrementLevel FN_NUM_BULLET_UP
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3704,6 +3681,7 @@ SfxVoidItem IncrementSubLevels FN_NUM_BULLET_OUTLINE_UP
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4159,6 +4137,7 @@ SfxBoolItem InsertField FN_INSERT_FIELD
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     Readonly = FALSE,
 
     /* config: */
@@ -4598,6 +4577,7 @@ SfxVoidItem InsertNeutralParagraph FN_NUM_BULLET_NONUM
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5865,6 +5845,7 @@ SfxVoidItem MoveDown FN_NUM_BULLET_MOVEDOWN
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5890,6 +5871,7 @@ SfxVoidItem MoveDownSubItems FN_NUM_BULLET_OUTLINE_MOVEDOWN
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5915,6 +5897,7 @@ SfxVoidItem MoveUp FN_NUM_BULLET_MOVEUP
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5940,6 +5923,7 @@ SfxVoidItem MoveUpSubItems FN_NUM_BULLET_OUTLINE_MOVEUP
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6245,6 +6229,7 @@ SfxBoolItem NumberingStart FN_NUMBER_NEWSTART
     RecordPerSet;
     Asynchron;
 
+    ImageRotation = TRUE;
     Readonly = FALSE,
 
     /* config: */
@@ -6838,6 +6823,7 @@ SfxVoidItem Remove FN_NUM_BULLET_OFF
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7106,7 +7092,7 @@ SfxVoidItem ScrollNextPrev FN_SCROLL_NEXT_PREV
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Cachable,
+ICachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -8947,6 +8933,7 @@ SfxBoolItem WrapContour FN_FRAME_WRAP_CONTOUR
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9022,6 +9009,7 @@ SfxBoolItem WrapOff FN_FRAME_NOWRAP
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9047,6 +9035,7 @@ SfxBoolItem WrapOn FN_FRAME_WRAP
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9097,6 +9086,7 @@ SfxBoolItem WrapThrough FN_FRAME_WRAPTHRU
     RecordPerSet;
     Synchron;
 
+    ImageRotation = TRUE;
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9129,9 +9119,10 @@ SfxBoolItem WrapThroughTransparent FN_FRAME_WRAPTHRU_TRANSP
     ToolBoxConfig = TRUE,
     GroupId = GID_FRAME;
 ]
+
 //--------------------------------------------------------------------------
 SfxVoidItem Insert FN_INSERT_STRING
-( SfxStringItem StringName FN_INSERT_STRING )
+(SfxStringItem StringName FN_INSERT_STRING)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -9141,16 +9132,10 @@ SfxVoidItem Insert FN_INSERT_STRING
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
-    Synchron;
-
-    /* plugin: */
     Container = FALSE,
-
-    /* api: */
-    Export = TRUE,
-    IsCollection = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Synchron;
 
     /* config: */
     AccelConfig = FALSE,
