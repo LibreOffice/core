@@ -17,7 +17,7 @@ mkdir: %_DEST%\bin%_EXT%\zh-CN
 mkdir: %_DEST%\bin%_EXT%\zh-TW
 mkdir: %_DEST%\bin%_EXT%\tr
 mkdir: %_DEST%\bin%_EXT%\ar
-..\%__SRC%\bin\en-US\soreport.exe %_DEST%\bin%_EXT%\crashrep.exe
+..\%__SRC%\bin\soreport.exe %_DEST%\bin%_EXT%\crashrep.exe
 ..\%__SRC%\bin\soreport.exe.manifest %_DEST%\bin%_EXT%\crashrep.exe.manifest
 %_DEST%\bin%_EXT%\guistdio.com %_DEST%\bin%_EXT%\crashrep.com
 ..\%__SRC%\bin\crash_report.bin %_DEST%\bin%_EXT%\crash_report.bin
