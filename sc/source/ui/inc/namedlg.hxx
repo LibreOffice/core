@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-11 15:02:34 $
+ *  last change: $Author: dr $ $Date: 2001-05-17 15:18:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,10 +92,10 @@ class ScDocument;
 class ScNameDlg : public ScAnyRefDlg
 {
 private:
-    FixedText       aFtName;
+    FixedLine       aFlName;
     ComboBox        aEdName;
 
-    FixedText       aFtAssign;
+    FixedLine       aFlAssign;
     ScRefEdit       aEdAssign;
     ScRefButton     aRbAssign;
 

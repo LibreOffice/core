@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbseldlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: dr $ $Date: 2001-05-17 15:17:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,14 +83,14 @@ ScSelEntryDlg::ScSelEntryDlg(      Window*  pParent,
                                    List&    aEntryList ) :
     ModalDialog     ( pParent, ScResId( nResId ) ),
     //
+    aFlLbTitle      ( this, ScResId( FL_ENTRYLIST ) ),
     aLb             ( this, ScResId( LB_ENTRYLIST ) ),
     aBtnOk          ( this, ScResId( BTN_OK ) ),
     aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-    aFtLbTitle      ( this, ScResId( FT_LABEL ) )
+    aBtnHelp        ( this, ScResId( BTN_HELP ) )
 {
     SetText( aTitle );
-    aFtLbTitle.SetText( aLbTitle );
+    aFlLbTitle.SetText( aLbTitle );
     aLb.Clear();
     aLb.SetDoubleClickHdl( LINK( this, ScSelEntryDlg, DblClkHdl ) );
 

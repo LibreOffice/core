@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *  last change: $Author: dr $ $Date: 2001-05-17 15:18:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,8 @@
 #define BTN_DEFVAL      1
 
 // Auswahl aus einer (String-)ListBox
-#define LB_ENTRYLIST    10
+#define FL_ENTRYLIST    10
+#define LB_ENTRYLIST    11
 
 // Reihen fuellen
 #define BTN_LEFT        1

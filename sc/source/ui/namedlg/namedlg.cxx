@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-11 15:01:56 $
+ *  last change: $Author: dr $ $Date: 2001-05-17 15:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,10 +66,6 @@
 #endif
 
 #pragma hdrstop
-
-#ifndef PCH
-#include <segmentc.hxx>
-#endif
 
 // INCLUDE -------------------------------------------------------------------
 
@@ -151,8 +147,6 @@ static SaveData* pSaveObj = NULL;
 
 #define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute();
 
-SEG_EOFGLOBALS()
-
 
 //============================================================================
 //  class ScNameDlg
@@ -165,10 +159,10 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
     :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_NAMES ),
         //
-        aFtName         ( this, ScResId( FT_NAME ) ),
+        aFlName         ( this, ScResId( FL_NAME ) ),
         aEdName         ( this, ScResId( ED_NAME ) ),
         //
-        aFtAssign       ( this, ScResId( FT_ASSIGN ) ),
+        aFlAssign       ( this, ScResId( FL_ASSIGN ) ),
         aEdAssign       ( this, ScResId( ED_ASSIGN ) ),
         aRbAssign       ( this, ScResId( RB_ASSIGN ), &aEdAssign ),
         //
@@ -334,7 +328,7 @@ void __EXPORT ScNameDlg::UpdateChecks()
             aBtnPrintArea.Enable();
             aBtnColHeader.Enable();
             aBtnRowHeader.Enable();
-            aFtAssign    .Enable();
+            aFlAssign    .Enable();
             aEdAssign    .Enable();
             aRbAssign    .Enable();
         }
@@ -346,7 +340,7 @@ void __EXPORT ScNameDlg::UpdateChecks()
         aBtnPrintArea.Disable();
         aBtnColHeader.Disable();
         aBtnRowHeader.Disable();
-        aFtAssign    .Disable();
+        aFlAssign    .Disable();
         aEdAssign    .Disable();
         aRbAssign    .Disable();
     }
@@ -612,7 +606,7 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
                 aBtnAdd.SetText( aStrAdd );
             aBtnAdd.Disable();
             aBtnRemove.Disable();
-            aFtAssign.Disable();
+            aFlAssign.Disable();
             aEdAssign.Disable();
             aRbAssign.Disable();
             //@BugID 54702 raus mit dem Sch.
@@ -650,7 +644,7 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
             else
                 aBtnAdd.Disable();
 
-            aFtAssign.Enable();
+            aFlAssign.Enable();
             aEdAssign.Enable();
             aRbAssign.Enable();
             //@BugID 54702 raus mit dem Sch.
@@ -684,8 +678,5 @@ IMPL_LINK_INLINE_START( ScNameDlg, AssignGetFocusHdl, void *, EMPTYARG )
     return 0;
 }
 IMPL_LINK_INLINE_END( ScNameDlg, AssignGetFocusHdl, void *, EMPTYARG )
-
-
-
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:58 $
+ *  last change: $Author: dr $ $Date: 2001-05-17 15:18:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,20 +66,20 @@
 #define BTN_ADD         3
 #define BTN_REMOVE      4
 #define BTN_HELP        5
-#define GB_NAME         10
+#define FL_NAME         10
 #define ED_NAME         11
-#define GB_ASSIGN       12
+#define FL_ASSIGN       12
 #define ED_DBAREA       13
 #define RB_DBAREA       14
-#define BTN_HEADER      15
-#define BTN_SIZE        16
-#define BTN_FORMAT      17
-#define FT_SOURCE       18
-#define FT_OPERATIONS   19
-#define STR_ADD         20
-#define STR_MODIFY      21
-#define STR_DB_INVALID  22
-#define BTN_MORE        23
-#define GB_OPTIONS      24
-#define BTN_STRIPDATA   25
+#define FL_OPTIONS      20
+#define BTN_HEADER      21
+#define BTN_SIZE        22
+#define BTN_FORMAT      23
+#define BTN_STRIPDATA   24
+#define FT_SOURCE       25
+#define FT_OPERATIONS   26
+#define STR_ADD         30
+#define STR_MODIFY      31
+#define STR_DB_INVALID  32
+#define BTN_MORE        33
 

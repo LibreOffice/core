@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:10:49 $
+ *  last change: $Author: dr $ $Date: 2001-05-17 15:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   namedlg.src  $
- //   $Author: kz $
- //     $Date: 2001-05-17 08:10:49 $
- // $Revision: 1.10 $
+ //   $Author: dr $
+ //     $Date: 2001-05-17 15:14:44 $
+ // $Revision: 1.11 $
  //  $Logfile:   T:/sc/source/ui/src/namedlg.srv  $
  //---------------------------------------------------------------------------
 
@@ -174,7 +174,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
     };
-    FixedText FT_NAME
+    FixedLine FL_NAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 154 , 8 ) ;
@@ -205,13 +205,13 @@ ModelessDialog RID_SCDLG_NAMES
     };
     ComboBox ED_NAME
     {
-        Pos = MAP_APPFONT ( 6 , 14 ) ;
-        Size = MAP_APPFONT ( 154 , 93 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 145 , 93 ) ;
         TabStop = TRUE ;
         VScroll = TRUE ;
         Sort = TRUE ;
     };
-    FixedText FT_ASSIGN
+    FixedLine FL_ASSIGN
     {
         Pos = MAP_APPFONT ( 6 , 113 ) ;
         Size = MAP_APPFONT ( 154 , 8 ) ;
@@ -243,15 +243,15 @@ ModelessDialog RID_SCDLG_NAMES
     Edit ED_ASSIGN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 124 ) ;
-        Size = MAP_APPFONT ( 138 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 124 ) ;
+        Size = MAP_APPFONT ( 129 , 12 ) ;
         TabStop = TRUE ;
     };
     ImageButton RB_ASSIGN
     {
         QuickHelpText = "Verkleinern" ;
         QuickHelpText [ ENGLISH ] = "Shrink" ;
-        Pos = MAP_APPFONT ( 148 , 124 ) ;
+        Pos = MAP_APPFONT ( 145 , 124 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
@@ -330,7 +330,7 @@ ModelessDialog RID_SCDLG_NAMES
     };
     CheckBox BTN_PRINTAREA
     {
-        Pos = MAP_APPFONT ( 12 , 154 ) ;
+        Pos = MAP_APPFONT ( 12 , 153 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "Druc~kbereich" ;
         Text [ ENGLISH ] = "~Print Area" ;
@@ -420,7 +420,7 @@ ModelessDialog RID_SCDLG_NAMES
     };
     CheckBox BTN_COLHEADER
     {
-        Pos = MAP_APPFONT ( 75 , 154 ) ;
+        Pos = MAP_APPFONT ( 75 , 153 ) ;
         Size = MAP_APPFONT ( 82 , 10 ) ;
         Text = "~Wiederholungsspalte" ;
         Text [ ENGLISH ] = "Label ~Column" ;

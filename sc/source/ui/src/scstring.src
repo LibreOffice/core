@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:29:21 $
+ *  last change: $Author: dr $ $Date: 2001-05-17 15:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1492,8 +1492,8 @@ String SCSTR_SELECTDB
 };
 String SCSTR_AREAS
 {
-    Text = "Bereiche" ;
-    Text [ ENGLISH ] = "Table areas" ;
+    Text = "~Bereiche" ;
+    Text [ ENGLISH ] = "Table ~areas" ;
     Text [ norwegian ] = "Tabellområde" ;
     Text [ italian ] = "Aree" ;
     Text [ portuguese_brazilian ] = "?reas da tabela" ;

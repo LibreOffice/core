@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:58 $
+ *  last change: $Author: dr $ $Date: 2001-05-17 15:18:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,6 @@
 #ifndef SC_DBNAMDLG_HXX
 #define SC_DBNAMDLG_HXX
 
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-
 #ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
 #endif
@@ -110,13 +106,14 @@ public:
     virtual BOOL    Close();
 
 private:
-    GroupBox            aGbName;
+    FixedLine           aFlName;
     ComboBox            aEdName;
 
-    GroupBox            aGbAssign;
+    FixedLine           aFlAssign;
     ScRefEdit           aEdAssign;
     ScRefButton         aRbAssign;
-    GroupBox            aGbOptions;
+
+    FixedLine           aFlOptions;
     CheckBox            aBtnHeader;
     CheckBox            aBtnDoSize;
     CheckBox            aBtnKeepFmt;

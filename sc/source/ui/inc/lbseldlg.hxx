@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbseldlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *  last change: $Author: dr $ $Date: 2001-05-17 15:18:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,11 +85,11 @@
 class ScSelEntryDlg : public ModalDialog
 {
 private:
+    FixedLine       aFlLbTitle;
     ListBox         aLb;
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
-    FixedText       aFtLbTitle;
 
     DECL_LINK( DblClkHdl, void * );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-23 14:58:48 $
+ *  last change: $Author: dr $ $Date: 2001-05-17 15:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,6 @@
 
 #pragma hdrstop
 
-#ifndef PCH
-#include <segmentc.hxx>
-#endif
-
 // INCLUDE -------------------------------------------------------------------
 
 #include <vcl/msgbox.hxx>
@@ -104,9 +100,6 @@ static DBSaveData* pSaveObj = NULL;
 
 #define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute()
 #define QUERYBOX(m) QueryBox(this,WinBits(WB_YES_NO|WB_DEF_YES),m).Execute()
-
-SEG_EOFGLOBALS()
-
 
 //============================================================================
 //  class DBSaveData
@@ -144,7 +137,6 @@ private:
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(dbnamdlg_0f)
 
 void DBSaveData::Clear()
 {
@@ -155,7 +147,6 @@ void DBSaveData::Clear()
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(dbnamdlg_10)
 
 void DBSaveData::Save()
 {
@@ -170,7 +161,6 @@ void DBSaveData::Save()
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(dbnamdlg_11)
 
 void DBSaveData::Restore()
 {
@@ -191,20 +181,20 @@ void DBSaveData::Restore()
 //  class ScDbNameDlg
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(dbnamdlg_01)
 
 ScDbNameDlg::ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                           ScViewData*   ptrViewData )
 
     :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_DBNAMES ),
         //
-        aGbName         ( this, ScResId( GB_NAME ) ),
+        aFlName         ( this, ScResId( FL_NAME ) ),
         aEdName         ( this, ScResId( ED_NAME ) ),
 
-        aGbAssign       ( this, ScResId( GB_ASSIGN ) ),
+        aFlAssign       ( this, ScResId( FL_ASSIGN ) ),
         aEdAssign       ( this, ScResId( ED_DBAREA ) ),
         aRbAssign       ( this, ScResId( RB_DBAREA ), &aEdAssign ),
-        aGbOptions      ( this, ScResId( GB_OPTIONS ) ),
+
+        aFlOptions      ( this, ScResId( FL_OPTIONS ) ),
         aBtnHeader      ( this, ScResId( BTN_HEADER ) ),
         aBtnDoSize      ( this, ScResId( BTN_SIZE ) ),
         aBtnKeepFmt     ( this, ScResId( BTN_FORMAT ) ),
@@ -245,7 +235,6 @@ ScDbNameDlg::ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(dbnamdlg_02)
 
 __EXPORT ScDbNameDlg::~ScDbNameDlg()
 {
@@ -261,13 +250,12 @@ __EXPORT ScDbNameDlg::~ScDbNameDlg()
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(dbnamdlg_03)
 
 void ScDbNameDlg::Init()
 {
     aBtnHeader.Check( TRUE );       // Default: mit Spaltenkoepfen
 
-    aBtnMore.AddWindow( &aGbOptions );
+    aBtnMore.AddWindow( &aFlOptions );
     aBtnMore.AddWindow( &aBtnHeader );
     aBtnMore.AddWindow( &aBtnDoSize );
     aBtnMore.AddWindow( &aBtnKeepFmt );
@@ -343,7 +331,6 @@ void ScDbNameDlg::Init()
     NameModifyHdl( 0 );
 }
 
-#pragma SEG_FUNCDEF(dbnamdlg_14)
 
 void ScDbNameDlg::SetInfoStrings( const ScDBData* pDBData )
 {
@@ -367,7 +354,6 @@ void ScDbNameDlg::SetInfoStrings( const ScDBData* pDBData )
 //----------------------------------------------------------------------------
 // Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
 //  neue Selektion im Referenz-Fenster angezeigt wird.
-#pragma SEG_FUNCDEF(dbnamdlg_04)
 
 void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
 {
@@ -395,7 +381,6 @@ void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
 
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(dbnamdlg_05)
 
 BOOL __EXPORT ScDbNameDlg::Close()
 {
@@ -403,7 +388,6 @@ BOOL __EXPORT ScDbNameDlg::Close()
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(dbnamdlg_06)
 
 void ScDbNameDlg::SetActive()
 {
@@ -417,7 +401,6 @@ void ScDbNameDlg::SetActive()
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(dbnamdlg_07)
 
 void ScDbNameDlg::UpdateNames()
 {
@@ -456,7 +439,6 @@ void ScDbNameDlg::UpdateNames()
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(dbnamdlg_0e)
 
 void ScDbNameDlg::UpdateDBData( const String& rStrName )
 {
@@ -501,7 +483,6 @@ void ScDbNameDlg::UpdateDBData( const String& rStrName )
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(dbnamdlg_12)
 
 BOOL ScDbNameDlg::IsRefInputMode() const
 {
@@ -511,7 +492,6 @@ BOOL ScDbNameDlg::IsRefInputMode() const
 //------------------------------------------------------------------------
 // Handler:
 // ========
-#pragma SEG_FUNCDEF(dbnamdlg_08)
 
 IMPL_LINK( ScDbNameDlg, OkBtnHdl, void *, EMPTYARG )
 {
@@ -529,7 +509,6 @@ IMPL_LINK( ScDbNameDlg, OkBtnHdl, void *, EMPTYARG )
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(dbnamdlg_0d)
 
 IMPL_LINK_INLINE_START( ScDbNameDlg, CancelBtnHdl, void *, EMPTYARG )
 {
@@ -539,7 +518,6 @@ IMPL_LINK_INLINE_START( ScDbNameDlg, CancelBtnHdl, void *, EMPTYARG )
 IMPL_LINK_INLINE_END( ScDbNameDlg, CancelBtnHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(dbnamdlg_09)
 
 IMPL_LINK( ScDbNameDlg, AddBtnHdl, void *, EMPTYARG )
 {
@@ -630,7 +608,6 @@ IMPL_LINK( ScDbNameDlg, AddBtnHdl, void *, EMPTYARG )
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(dbnamdlg_0a)
 
 IMPL_LINK( ScDbNameDlg, RemoveBtnHdl, void *, EMPTYARG )
 {
@@ -682,7 +659,6 @@ IMPL_LINK( ScDbNameDlg, RemoveBtnHdl, void *, EMPTYARG )
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(dbnamdlg_0c)
 
 IMPL_LINK( ScDbNameDlg, NameModifyHdl, void *, EMPTYARG )
 {
@@ -696,7 +672,7 @@ IMPL_LINK( ScDbNameDlg, NameModifyHdl, void *, EMPTYARG )
             aBtnAdd.SetText( aStrAdd );
         aBtnAdd     .Disable();
         aBtnRemove  .Disable();
-        aGbAssign   .Disable();
+        aFlAssign   .Disable();
         aBtnHeader  .Disable();
         aBtnDoSize  .Disable();
         aBtnKeepFmt .Disable();
@@ -756,7 +732,7 @@ IMPL_LINK( ScDbNameDlg, NameModifyHdl, void *, EMPTYARG )
             aBtnRemove.Disable();
         }
 
-        aGbAssign.Enable();
+        aFlAssign.Enable();
         aEdAssign.Enable();
         aRbAssign.Enable();
 
@@ -768,7 +744,6 @@ IMPL_LINK( ScDbNameDlg, NameModifyHdl, void *, EMPTYARG )
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(dbnamdlg_13)
 
 IMPL_LINK( ScDbNameDlg, AssModifyHdl, void *, EMPTYARG )
 {
@@ -782,183 +757,4 @@ IMPL_LINK( ScDbNameDlg, AssModifyHdl, void *, EMPTYARG )
     return 0;
 }
 
-/*----------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 16:44:54  hr
-    initial import
-
-    Revision 1.54  2000/09/17 14:08:56  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.53  2000/08/31 16:38:20  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.52  2000/02/11 12:22:54  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.51  1999/06/09 16:09:04  NN
-    Sfx-appwin removed
-
-
-      Rev 1.50   09 Jun 1999 18:09:04   NN
-   Sfx-appwin removed
-
-      Rev 1.49   10 Dec 1998 20:09:18   ANK
-   #51738# Umstellung auf ScRefEdit zum Anzeigen von Referenzen
-
-      Rev 1.48   12 Aug 1998 19:47:34   ANK
-   #54702# IsRefInputMode ueberarbeitet
-
-      Rev 1.47   06 Aug 1998 21:19:48   ANK
-   #54702# Enablen/Disablen der Applikation nur noch in ScAnyRefDlg
-
-      Rev 1.46   01 Jul 1998 15:00:12   ANK
-   MUSS-Aenderung wg. Autocomplete
-
-      Rev 1.45   15 Mar 1998 14:23:20   NN
-   App-Fenster disablen mit bChild=FALSE
-
-      Rev 1.44   05 Dec 1997 19:56:22   ANK
-   Includes geaendert
-
-      Rev 1.43   03 Sep 1997 15:23:42   RG
-   change header
-
-      Rev 1.42   12 Jun 1997 13:16:18   NN
-   #40646# STR_DB_NONAME statt SCSTR_NONAME fuer DB-Bereiche
-
-      Rev 1.41   04 Mar 1997 18:47:48   NN
-   37186# nur gueltige Namen (wie Bereichsnamen) zulassen
-
-      Rev 1.40   23 Feb 1997 22:49:22   NN
-   Button 'Importierte Daten nicht speichern'
-
-      Rev 1.39   13 Feb 1997 22:46:16   NN
-   neue Optionen einstellbar
-
-      Rev 1.38   17 Jan 1997 15:10:44   NN
-   #35110# Bereich kann auch im Edit eingegeben werden
-
-      Rev 1.37   18 Dec 1996 14:22:32   ER
-   AddBtnHdl: Index eines geaenderten Bereiches erhalten
-
-      Rev 1.36   13 Nov 1996 20:11:16   NN
-   #33143# AutoHide nur bei Bereichsreferenz
-
-      Rev 1.35   29 Oct 1996 14:03:34   NN
-   ueberall ScResId statt ResId
-
-      Rev 1.34   22 Oct 1996 15:29:58   RJ
-   Buttons fuer Referenzeingabe
-
-      Rev 1.33   08 Oct 1996 15:00:02   RJ
-   Einklappen des Fensters bei Referenzeingabe
-
-      Rev 1.32   15 Aug 1996 12:20:26   NN
-   #30362# SetReference: ggf. Add-Button enablen
-
-      Rev 1.31   18 Jul 1996 16:51:54   NN
-   Parameter bStartOnly bei IsDBAtCursor
-
-      Rev 1.30   10 Jun 1996 16:28:48   NN
-   #28513# Restore statt Save im RemoveButtonHdl
-
-      Rev 1.29   07 Jun 1996 14:23:42   NN
-   #28451# kein NameModifyHdl in SetActive
-
-      Rev 1.28   05 Jun 1996 19:19:00   NN
-   kein Show im ctor (Position wird von aussen gesetzt)
-
-      Rev 1.27   26 Apr 1996 12:02:40   NN
-   SfxModelessDialog statt ModelessDialog
-
-      Rev 1.26   25 Apr 1996 18:08:34   NN
-   SetReference aufgeteilt in SetReference und AddRefEntry
-
-      Rev 1.25   29 Jan 1996 15:12:22   MO
-   neuer Link
-
-      Rev 1.24   27 Nov 1995 16:39:50   MO
-   RangeUtil/Area/Tripel gegen Address/Range ersetzt
-
-      Rev 1.23   14 Nov 1995 18:05:36   MO
-   Disable-Enable-Logik, DBName ueberpruefen
-
-      Rev 1.22   09 Nov 1995 10:20:14   JN
-   weitere Verbesseungen Modeless Dialoge
-
-      Rev 1.21   08 Nov 1995 13:05:48   MO
-   301-Aenderungen
-
-      Rev 1.20   08 Nov 1995 10:45:48   JN
-   Umstellung auf SfxChildWindow
-
-      Rev 1.19   26 Oct 1995 11:29:44   MO
-   Nachfrage beim Loeschen von Eintraegen
-
-      Rev 1.18   14 Sep 1995 12:37:24   MO
-   FixedInfos
-
-      Rev 1.17   31 Jul 1995 08:58:00   MO
-   CancelBtnHdl
-
-      Rev 1.16   25 Apr 1995 17:01:30   MO
-   Knopfflackern beseitigt
-
-      Rev 1.15   20 Apr 1995 10:34:06   MO
-   Show() im Ctor
-
-      Rev 1.14   18 Apr 1995 16:55:00   MO
-   Flackern bei SetText() an Buttons unterbunden
-
-      Rev 1.13   24 Mar 1995 15:37:50   MO
-   Mauseingabe von Referenzen korrigiert
-
-      Rev 1.12   29 Jan 1995 13:17:42   NN
-   include dbfunc statt tabview
-
-      Rev 1.11   27 Jan 1995 18:39:50   MO
-   __EXECUTE durch __EXPORT ersetzt
-
-      Rev 1.10   26 Jan 1995 18:28:00   TRI
-   __EXPORT bei virtuellen Methoden eingebaut
-
-      Rev 1.9   23 Jan 1995 16:44:34   MO
-   * unbenannt-DB-Bereich wird ignoriert
-   * NotifyClose nicht mehr im Close() sondern im Ok-Handler
-     damit ist wieder Abbrechen moeglich
-
-      Rev 1.8   19 Jan 1995 17:12:14   TRI
-   __EXPORT vor verschiedene LinkHandler gesetzt
-
-      Rev 1.7   19 Jan 1995 11:36:20   MO
-   Uebergabe der Veraenderungen an die View in der Close()-Methode.
-   Dabei werden nur Referenzen weitergereicht, so dass im Dialog
-   keine Speicherleichen entstehen.
-
-      Rev 1.6   18 Jan 1995 13:56:26   TRI
-   Pragmas zur Segementierung eingebaut
-
-      Rev 1.5   12 Jan 1995 14:45:56   MO
-   * Verwendung von ScRangeUtil
-   * Enable/Disable-Logik ueberarbeitet
-   * Erkennung von DB-Bereichen
-
-      Rev 1.4   04 Jan 1995 19:28:00   MO
-   Verwendung von DbUiUtil
-
-      Rev 1.3   04 Jan 1995 13:09:46   MO
-   Hinzufuegen/Loeschen-Knoepfe: Enable/Diable-Fehler beseitigt
-
-      Rev 1.2   23 Dec 1994 12:26:52   MO
-   Bereichseingabe nur noch mit der Maus moeglich
-
-      Rev 1.1   23 Dec 1994 09:27:58   MO
-   Korrigierte Version. Zusammen mit namedlg und den
-   Collections auf einen lauffaehhigen Stand gebracht.
-
-----------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 
