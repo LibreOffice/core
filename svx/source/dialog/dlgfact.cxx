@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:27:35 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,9 +231,19 @@ void AbstractHangulHanjaConversionDialog_Impl::SetByCharacter( sal_Bool _bByChar
     pDlg->SetByCharacter(_bByCharacter);
 }
 
+void AbstractHangulHanjaConversionDialog_Impl::SetConversionDirectionState( sal_Bool _bTryBothDirections, HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection )
+{
+    pDlg->SetConversionDirectionState(_bTryBothDirections, _ePrimaryConversionDirection);
+}
+
 void AbstractHangulHanjaConversionDialog_Impl::SetConversionFormat( HangulHanjaConversion::ConversionFormat _eType )
 {
      pDlg->SetConversionFormat(_eType);
+}
+
+void AbstractHangulHanjaConversionDialog_Impl::SetOptionsChangedHdl( const Link& _rHdl )
+{
+     pDlg->SetOptionsChangedHdl(_rHdl );
 }
 
 void AbstractHangulHanjaConversionDialog_Impl::SetIgnoreHdl( const Link& _rHdl )
@@ -274,6 +284,12 @@ sal_Bool AbstractHangulHanjaConversionDialog_Impl::GetUseBothDirections( ) const
 {
     return pDlg->GetUseBothDirections();
 }
+
+HangulHanjaConversion::ConversionDirection AbstractHangulHanjaConversionDialog_Impl::GetDirection( HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const
+{
+    return pDlg->GetDirection( _eDefaultDirection );
+}
+
 void AbstractHangulHanjaConversionDialog_Impl::SetCurrentString(
                     const String& _rNewString,
                     const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rSuggestions,
