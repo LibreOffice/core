@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataaccessdescriptor.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-25 08:45:37 $
+ *  last change: $Author: fs $ $Date: 2002-05-06 10:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,6 +460,27 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
+    ODataAccessDescriptor::ODataAccessDescriptor( const Any& _rValues )
+#ifndef SVX_LIGHT
+        :m_pImpl(new ODADescriptorImpl)
+#else
+        :m_pImpl(NULL)
+#endif
+    {
+#ifndef SVX_LIGHT
+        // check if we know the format in the Any
+        Sequence< PropertyValue > aValues;
+        Reference< XPropertySet > xValues;
+        if ( _rValues >>= aValues )
+            m_pImpl->buildFrom( aValues );
+        else if ( _rValues >>= xValues )
+            m_pImpl->buildFrom( xValues );
+#else
+        OSL_ENSURE(sal_False, "ODataAccessDescriptor::ODataAccessDescriptor: not available in the SVX_LIGHT version!");
+#endif
+    }
+
+    //--------------------------------------------------------------------
     ODataAccessDescriptor::ODataAccessDescriptor( const Sequence< PropertyValue >& _rValues )
 #ifndef SVX_LIGHT
         :m_pImpl(new ODADescriptorImpl)
@@ -587,6 +608,9 @@ namespace svx
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/06/25 08:45:37  fs
+ *  #82371# +initializeFrom
+ *
  *  Revision 1.4  2001/05/10 14:18:45  fs
  *  Cursor is of type XResultSet, not string
  *
