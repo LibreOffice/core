@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyle.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:07:43 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:27:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,12 @@
 #endif
 #ifndef _XMLOFF_XMLLINENUMBERINGEXPORT_HXX_
 #include "XMLLineNumberingExport.hxx"
+#endif
+#ifndef _XMLOFF_TXTEXPPR_HXX
+#include "txtexppr.hxx"
+#endif
+#ifndef _XMLOFF_TXTPRMAP_HXX
+#include "txtprmap.hxx"
 #endif
 
 #ifndef _XMLOFF_STYLEEXP_HXX
@@ -218,7 +224,25 @@ void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed, sal_Bool bProg )
         {
             Reference < XPropertySet > xPropSet (xInt, UNO_QUERY);
             if (xPropSet.is())
-                exportDefaultStyle( xPropSet, GetXMLToken(XML_PARAGRAPH), GetParaDefaultPropMapper());
+            {
+                exportDefaultStyle( xPropSet, GetXMLToken(XML_PARAGRAPH), GetParaPropMapper());
+
+                exportDefaultStyle(
+                    xPropSet,
+                    GetXMLToken(XML_TABLE),
+                    new XMLTextExportPropertySetMapper(
+                        new XMLTextPropertySetMapper(
+                            TEXT_PROP_MAP_TABLE_DEFAULTS ),
+                        GetExport() ) );
+
+                exportDefaultStyle(
+                    xPropSet,
+                    GetXMLToken(XML_TABLE_ROW),
+                    new XMLTextExportPropertySetMapper(
+                        new XMLTextPropertySetMapper(
+                            TEXT_PROP_MAP_TABLE_ROW_DEFAULTS ),
+                        GetExport() ) );
+            }
         }
     }
     exportStyleFamily( "ParagraphStyles", GetXMLToken(XML_PARAGRAPH), GetParaPropMapper(),
