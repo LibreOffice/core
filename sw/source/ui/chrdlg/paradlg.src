@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paradlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-29 09:33:24 $
+ *  last change: $Author: kz $ $Date: 2001-09-26 20:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,7 @@ TabDialog DLG_PARA
                 Text [ english_us ] = "Drop Caps" ;
                 PageResID = TP_DROPCAPS ;
                 Text[ chinese_simplified ] = "å­—é¦–å¤§å†™";
-                Text[ russian ] = "Èíèöèàëû";
+                Text[ russian ] = "Áóêâèöà";
                 Text[ polish ] = "Inicja³y";
                 Text[ japanese ] = "ï¾„ï¾žï¾›ï½¯ï¾Œï¾Ÿï½·ï½¬ï½¯ï¾Œï¾Ÿ";
                 Text[ chinese_traditional ] = "å­—é¦–å¤§å¯«";
@@ -510,6 +510,7 @@ TabDialog DLG_DRAWPARA
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Párrafo";
 };
+
 
 
 
