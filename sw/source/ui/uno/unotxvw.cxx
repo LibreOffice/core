@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-06-19 10:30:11 $
+ *  last change: $Author: os $ $Date: 2001-06-20 09:22:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,7 +330,10 @@ Sequence< sal_Int8 > SAL_CALL SwXTextView::getImplementationId(  ) throw(::com::
     static uno::Sequence< sal_Int8 > aId( 16 );
     static BOOL bInit = FALSE;
     if(!bInit)
+    {
         rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
+        bInit = TRUE;
+    }
     return aId;
 }
 /* -----------------------------18.05.00 10:18--------------------------------
