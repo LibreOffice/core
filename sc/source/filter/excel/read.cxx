@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dr $ $Date: 2001-12-14 15:58:38 $
+ *  last change: $Author: dr $ $Date: 2002-04-11 12:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1256,6 +1256,7 @@ FltError ImportExcel8::Read( void )
                         case 0x00EC:    Msodrawing();           break;  // MSODRAWING
                         case 0x00ED:    Msodrawingselection();  break;  // MSODRAWINGSELECTION
                         case 0x00FD:    Labelsst();             break;  // LABELSST     [      8 ]
+                        case 0x015F:    Labelranges();          break;  // LABELRANGES
                         case 0x01AD:    Qsi();                  break;  // QSI
                         case 0x01B0:    Condfmt();              break;  // CONDFMT
                         case 0x01B2:    Dval();                 break;  // DVAL

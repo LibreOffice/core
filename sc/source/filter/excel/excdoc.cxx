@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-10 12:58:12 $
+ *  last change: $Author: dr $ $Date: 2002-04-11 12:16:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1048,6 +1048,9 @@ void ExcTable::FillAsTable( void )
                 aRange.aEnd.SetCol( aIterator.GetEndCol() );
                 pRecDval->InsertCellRange( aRange, nHandle );
             }
+
+            // label ranges
+            Add( new XclExpRecLabelranges( rR ) );
         }
 
         bIter = aIterator.GetNext();

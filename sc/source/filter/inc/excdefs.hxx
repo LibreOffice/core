@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-10 12:59:15 $
+ *  last change: $Author: dr $ $Date: 2002-04-11 12:15:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,6 +478,11 @@ enum XclEscapement
 #define EXC_WIN2_FROZENNOSPLIT      0x0100
 #define EXC_WIN2_SELECTED           0x0200
 #define EXC_WIN2_DISPLAYED          0x0400
+
+// ----------------------------------------------------------------------------
+// (0x015F) LABELRANGES
+
+const sal_uInt16 EXC_ID_LABELRANGES         = 0x015F;
 
 // ----------------------------------------------------------------------------
 // (0x01B2) DVAL, (0x01BE) DV

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-10 12:52:52 $
+ *  last change: $Author: dr $ $Date: 2002-04-11 12:15:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,7 @@ class ImportExcel8 : public ImportExcel
                                                                 const UINT16 nXF );
         void                    Labelsst( void );               // 0xFD
         void                    SXVdex( void );                 // 0x0100
+        void                    Labelranges();                  // 0x015F
         void                    Label( void );                  // 0x0204
 
         void                    Tabid( void );                  // 0x013D

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-10 12:58:12 $
+ *  last change: $Author: dr $ $Date: 2002-04-11 12:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1043,19 +1043,15 @@ void ImportExcel8::Dv()
             // we do not own pFmla2
         }
 
-        aIn >> nLen;
-        if( nLen && (aIn.GetRecLeft() >= 8UL * nLen) )
+        // read all cell ranges
+        ScRangeList aRanges;
+        XclTools::ReadCellRangeList( aIn, aRanges, nTab );
+        XclRangeState eRangeState = XclTools::CropCellRangeList( aRanges, ScAddress( MAXCOL, MAXROW, MAXTAB ) );
+        bTabTruncated |= (eRangeState != xlRangeInside);
+
+        if( aRanges.Count() )
         {
             sal_Bool bIsValid = sal_True;   // valid settings in flags field
-
-            // read all cell ranges
-            sal_uInt16 nRow1, nCol1, nRow2, nCol2;
-            ScRangeList aRanges;
-            for( sal_uInt32 nRange = 0; nRange < nLen; ++nRange )
-            {
-                aIn >> nRow1 >> nRow2 >> nCol1 >> nCol2;
-                aRanges.Append( ScRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab ) );
-            }
 
             // create the Calc validation object
             ScValidationMode eValMode;
@@ -1122,19 +1118,64 @@ void ImportExcel8::Dv()
 
                 // apply all ranges
                 for( pRange = aRanges.First(); pRange; pRange = aRanges.Next() )
-                {
-                    XclRangeState eRangeState = XclTools::CropXclCellRange( *pRange );
-
-                    // apply valid and partly valid ranges
-                    if( eRangeState != xlRangeOutside )
-                        pD->ApplyPatternAreaTab( pRange->aStart.Col(), pRange->aStart.Row(),
-                            pRange->aEnd.Col(), pRange->aEnd.Row(), nTab, aPattern );
-
-                    bTabTruncated |= (eRangeState != xlRangeInside);
-                }
+                    pD->ApplyPatternAreaTab( pRange->aStart.Col(), pRange->aStart.Row(),
+                        pRange->aEnd.Col(), pRange->aEnd.Row(), nTab, aPattern );
             }
         }
         delete pFmla1;
+    }
+}
+
+
+void ImportExcel8::Labelranges()
+{
+    ScRangeList aRanges;
+    ScAddress aMaxPos( MAXCOL, MAXROW, MAXTAB );
+    XclRangeState eRangeState;
+    ScRangePairListRef xLabelRangesRef;
+    const ScRange* pRange;
+
+    // row label ranges
+    XclTools::ReadCellRangeList( aIn, aRanges, nTab );
+    eRangeState = XclTools::CropCellRangeList( aRanges, aMaxPos );
+    bTabTruncated |= (eRangeState != xlRangeInside);
+    xLabelRangesRef = pExcRoot->pDoc->GetRowNameRangesRef();
+    for( pRange = aRanges.First(); pRange; pRange = aRanges.Next() )
+    {
+        ScRange aDataRange( *pRange );
+        if( aDataRange.aEnd.Col() < MAXCOL )
+        {
+            aDataRange.aStart.SetCol( aDataRange.aEnd.Col() + 1 );
+            aDataRange.aEnd.SetCol( MAXCOL );
+        }
+        else if( aDataRange.aStart.Col() > 0 )
+        {
+            aDataRange.aEnd.SetCol( aDataRange.aStart.Col() - 1 );
+            aDataRange.aStart.SetCol( 0 );
+        }
+        xLabelRangesRef->Append( ScRangePair( *pRange, aDataRange ) );
+    }
+
+    // column label ranges
+    aRanges.RemoveAll();
+    XclTools::ReadCellRangeList( aIn, aRanges, nTab );
+    eRangeState = XclTools::CropCellRangeList( aRanges, aMaxPos );
+    bTabTruncated |= (eRangeState != xlRangeInside);
+    xLabelRangesRef = pExcRoot->pDoc->GetColNameRangesRef();
+    for( pRange = aRanges.First(); pRange; pRange = aRanges.Next() )
+    {
+        ScRange aDataRange( *pRange );
+        if( aDataRange.aEnd.Row() < MAXROW )
+        {
+            aDataRange.aStart.SetRow( aDataRange.aEnd.Row() + 1 );
+            aDataRange.aEnd.SetRow( MAXROW );
+        }
+        else if( aDataRange.aStart.Row() > 0 )
+        {
+            aDataRange.aEnd.SetRow( aDataRange.aStart.Row() - 1 );
+            aDataRange.aStart.SetRow( 0 );
+        }
+        xLabelRangesRef->Append( ScRangePair( *pRange, aDataRange ) );
     }
 }
 
