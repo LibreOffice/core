@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cws.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-06-26 00:20:18 $
+#   last change: $Author: rt $ $Date: 2004-07-09 13:54:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -344,13 +344,15 @@ sub get_tags
         carp("ERROR: Can't determine creation MWS.\n");
         return undef;
     }
+    my $milestone = $self->milestone();
 
     my $master_branch_tag
         = (lc($current_master) eq lc($cvs_head)) ? '' : 'mws_' . lc($current_master);
     my $cws_branch_tag = 'cws_' . lc($creation_master) . '_' . lc($self->child());
     my $cws_root_tag   = uc($cws_branch_tag) . "_ANCHOR";
+    my $master_milestone_tag = uc($current_master) . "_" . $milestone;
 
-    return ($master_branch_tag, $cws_branch_tag, $cws_root_tag);
+    return ($master_branch_tag, $cws_branch_tag, $cws_root_tag, $master_milestone_tag );
 }
 
 # Get child workspace approval status,
