@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: bm $ $Date: 2003-10-06 09:58:31 $
+#   last change: $Author: bm $ $Date: 2003-10-17 14:32:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,6 +100,7 @@ SLOFILES=	\
     $(SLO)$/LayoutContainer.obj \
     $(SLO)$/Legend.obj \
     $(SLO)$/LineProperties.obj \
+    $(SLO)$/PageBackground.obj \
     $(SLO)$/PolarCoordinateSystem.obj \
     $(SLO)$/PolarTransformation.obj \
     $(SLO)$/Scale.obj \
