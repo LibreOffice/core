@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cmc $ $Date: 2001-12-06 14:22:31 $
+ *  last change: $Author: cmc $ $Date: 2001-12-07 14:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,6 +553,18 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
             break;
         case 0x222c:
             pC = " iint ";
+            break;
+        case 0x222d:
+            pC = " iiint ";
+            break;
+        case 0x222e:
+            pC = " lint ";
+            break;
+        case 0x222f:
+            pC = " llint ";
+            break;
+        case 0x2230:
+            pC = " lllint ";
             break;
         case 0x2245:
             pC = " simeq ";
