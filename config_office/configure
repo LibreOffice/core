@@ -1965,8 +1965,10 @@ echo "${ECHO_T}found OSVERSION=$OSVERSION" >&6
 		PTHREAD_CFLAGS="-D_THREAD_SAFE"
 		if test "$OSVERSION" -lt "500016"; then
 			PTHREAD_LIBS="-pthread"
-		else
+		elif test "$OSVERSION" -lt "502102"; then
 			PTHREAD_LIBS="-lc_r"
+		else
+			PTHREAD_LIBS="-lpthread"
 		fi
 		;;
 	"OSF1")
