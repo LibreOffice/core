@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-17 12:46:45 $
+ *  last change: $Author: dr $ $Date: 2001-07-31 13:10:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,24 +309,24 @@ BOOL ShrfmlaBuffer::GetAddress( const String& rName, ScRange& rRet )
         rRet.aEnd.Set( 0, 0, 0 );
         String              aTmp( rName, nBaseNameLen, rName.Len() );
 
-        xub_StrLen          nPos = aTmp.SearchAscii( "_" );
+        xub_StrLen          nPos = aTmp.Search( '_' );
         if( nPos != STRING_NOTFOUND )
         {
             rRet.aStart.SetCol( ( USHORT ) aTmp.ToInt32() );
             aTmp.Erase( 0, nPos + 1 );
 
-            nPos = aTmp.SearchAscii( "_" );
+            nPos = aTmp.Search( '_' );
             if( nPos != STRING_NOTFOUND )
             {
                 rRet.aStart.SetRow( ( USHORT ) aTmp.ToInt32() );
                 aTmp.Erase( 0, nPos + 1 );
 
-                nPos = aTmp.SearchAscii( "_" );
+                nPos = aTmp.Search( '_' );
                 if( nPos != STRING_NOTFOUND )
                 {
                     rRet.aEnd.SetCol( ( USHORT ) aTmp.ToInt32() );
                     aTmp.Erase( 0, nPos + 1 );
-                    nPos = aTmp.SearchAscii( "_" );
+                    nPos = aTmp.Search( '_' );
                     if( nPos != STRING_NOTFOUND )
                     {
                         rRet.aStart.SetRow( ( USHORT ) aTmp.ToInt32() );
@@ -334,11 +334,11 @@ BOOL ShrfmlaBuffer::GetAddress( const String& rName, ScRange& rRet )
 
                         rRet.aStart.SetTab( ( USHORT ) aTmp.ToInt32() );
                         rRet.aEnd.SetTab( rRet.aStart.Tab() );
+                        return TRUE;
                     }
                 }
             }
         }
-        return TRUE;
     }
 
     return FALSE;
