@@ -3,9 +3,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hdu $ $Date: 2002-07-26 11:58:32 $
+ *  last change: $Author: hdu $ $Date: 2002-07-26 12:32:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1376,10 +1376,8 @@ SalLayout* SalGraphics::LayoutText( const ImplLayoutArgs& rArgs )
     if( !(rArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED)
     &&  bUspEnabled && (aUspModule || InitUSP()) )
     {
-        /* script complexity must be determined in upper layers
-        if( S_OK == (*pScriptIsComplex)( rArgs.mpStr + rArgs.mnFirstCharIndex,
-                      rArgs.mnEndCharIndex - rArgs.mnFirstCharIndex, SIC_COMPLEX ) ) */
-            pWinLayout = new UniscribeLayout( maGraphicsData.mhDC, rArgs );
+        // script complexity is determined in upper layers
+        pWinLayout = new UniscribeLayout( maGraphicsData.mhDC, rArgs );
     }
     else
 #endif // USE_UNISCRIBE
@@ -1388,7 +1386,7 @@ SalLayout* SalGraphics::LayoutText( const ImplLayoutArgs& rArgs )
         // also for printer, because the drivers often transparently replace TTs with PS fonts
         // TODO: use a cached value from SetFont
         DWORD nFLI = GetFontLanguageInfo( maGraphicsData.mhDC );
-        bool bEnableGlyphs = ((nFLI & FLI_GLYPHS) != 0);
+        bool bEnableGlyphs = ((nFLI & GCP_GLYPHSHAPE) != 0);
         pWinLayout = new SimpleWinLayout( maGraphicsData.mhDC, rArgs, bEnableGlyphs );
     }
 
