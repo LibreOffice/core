@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-06 14:37:54 $
+ *  last change: $Author: nn $ $Date: 2001-04-20 11:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,9 +354,6 @@ BOOL __EXPORT ScDocShell::InitNew( SvStorage * pStor )
     aDocument.MakeTable(0);
     //  zusaetzliche Tabellen werden von der ersten View angelegt,
     //  wenn bIsEmpty dann noch TRUE ist
-
-    if ( !pStor )
-        pStor = GetStorage();
 
     if( bRet )
     {
