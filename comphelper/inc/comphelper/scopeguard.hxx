@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scopeguard.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:59:33 $
+ *  last change: $Author: rt $ $Date: 2005-03-14 09:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,15 @@
 #include "boost/function.hpp"
 #include "boost/noncopyable.hpp"
 
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
+
 namespace comphelper {
 
 /** ScopeGuard to ease writing exception-safe code.
  */
-class ScopeGuard : private boost::noncopyable // noncopyable until we have
+class COMPHELPER_DLLPUBLIC ScopeGuard : private boost::noncopyable // noncopyable until we have
                                               // good reasons...
 {
 public:
