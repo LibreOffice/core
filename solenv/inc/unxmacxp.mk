@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-06 19:20:33 $
+#   last change: $Author: pluby $ $Date: 2001-03-08 18:49:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,6 +120,11 @@ CFLAGSSLOCUIMT=-fPIC
 CFLAGSPROF=
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
+# Workaround for the compiler's buggy opitmizer when exceptions are turned on.
+# Note that we have to define NO_OPTIMIZE for all files as once you turn off
+# optimizing for one file, we need to adjust our compiling of the remaining
+# optimized files.
+CDEFS+=-DNO_OPTIMIZE
 .IF "$(ENABLE_EXCEPTIONS)"==""
 CFLAGSOPT=-O2
 CFLAGSNOOPT=-O
