@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstate.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-01-30 09:32:57 $
+ *  last change: $Author: ama $ $Date: 2001-09-10 15:02:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ struct SwCrsrMoveState
     BOOL bSetInReadOnly :1;     // ReadOnlyBereiche duerfen betreten werden
     BOOL bRealWidth     :1;     // Calculation of the width required
     BOOL b2Lines        :1;     // Check 2line portions and fill p2Lines
+    BOOL bNoScroll      :1;     // No scrolling of undersized textframes
 
     SwCrsrMoveState( CrsrMoveState eSt = MV_NONE ) :
         pFill( NULL ),
@@ -146,7 +147,8 @@ struct SwCrsrMoveState
         bExactOnly( FALSE ),
         bSetInReadOnly( FALSE ),
         bRealWidth( FALSE ),
-        b2Lines( FALSE )
+        b2Lines( FALSE ),
+        bNoScroll( FALSE )
     {}
     SwCrsrMoveState( SwFillCrsrPos *pInitFill ) :
         pFill( pInitFill ),
@@ -159,7 +161,8 @@ struct SwCrsrMoveState
         bExactOnly( FALSE ),
         bSetInReadOnly( FALSE ),
         bRealWidth( FALSE ),
-        b2Lines( FALSE )
+        b2Lines( FALSE ),
+        bNoScroll( FALSE )
     {}
 };
 

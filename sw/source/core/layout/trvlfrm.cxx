@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-12 12:40:15 $
+ *  last change: $Author: ama $ $Date: 2001-09-10 15:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1958,6 +1958,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
 
         SwCrsrMoveState aTmpState( MV_NONE );
         aTmpState.b2Lines = sal_True;
+        aTmpState.bNoScroll = sal_True;
         //CntntRects zu Start- und EndFrms.
         SwRect aStRect, aEndRect;
         pStartFrm->GetCharRect( aStRect, *pStartPos, &aTmpState );
