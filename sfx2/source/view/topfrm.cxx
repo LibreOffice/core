@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:38:48 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:09:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef GCC
 #pragma hdrstop
 #endif
@@ -855,6 +854,9 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
     // Plugin (external InPlace)
     SFX_ITEMSET_ARG(
         pSet, pPluginMode, SfxUInt16Item, SID_PLUGIN_MODE, sal_False);
+    // Jump (GotoBookmark)
+    SFX_ITEMSET_ARG(
+        pSet, pJumpItem, SfxStringItem, SID_JUMPMARK, sal_False);
 
     if ( pEditItem  && pEditItem->GetValue() )
         SetMenuBarOn_Impl( FALSE );
@@ -868,7 +870,7 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
     // Wenn z.B. eine Fenstergr"o\se gesetzt wurde, soll keine Fensterinformation
     // aus den Dokument geladen werden, z.B. weil InsertDocument seinerseits
     // aus LoadWindows_Impl aufgerufen wurde!
-    if ( !pPluginMode && pDoc && !pAreaItem && !pViewIdItem && !pModeItem &&
+    if ( !pJumpItem && !pPluginMode && pDoc && !pAreaItem && !pViewIdItem && !pModeItem &&
             !pImp->bHidden && pDoc->LoadWindows_Impl( this ) )
     {
         pDoc->OwnerLock( sal_False );
