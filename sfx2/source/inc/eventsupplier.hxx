@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-09 11:28:12 $
+ *  last change: $Author: dv $ $Date: 2001-02-21 09:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #ifndef  _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
+#endif
 
 #ifndef  _SFX_SFXUNO_HXX
 #include <sfxuno.hxx>
@@ -119,10 +122,8 @@ class SfxBaseModel;
 
 //--------------------------------------------------------------------------------------------------------
 
-class SfxEvents_Impl : public ::com::sun::star::lang::XTypeProvider
-                     , public ::com::sun::star::container::XNameReplace
-                     , public ::com::sun::star::document::XEventListener
-                     , public ::cppu::OWeakObject
+
+class SfxEvents_Impl : public ::cppu::WeakImplHelper2< ::com::sun::star::container::XNameReplace, ::com::sun::star::document::XEventListener  >
 {
     SEQUENCE< OUSTRING >            maEventNames;
     SEQUENCE< ANY >                 maEventData;
@@ -137,9 +138,6 @@ public:
                                 SfxEvents_Impl( SfxObjectShell* pShell,
                                                 REFERENCE< XEVENTBROADCASTER > xBroadcaster );
                                ~SfxEvents_Impl();
-
-    //  --- XInterface --- , --- XTypeProvider ---
-    SFX_DECL_XINTERFACE_XTYPEPROVIDER
 
     //  --- XNameReplace ---
     virtual void SAL_CALL       replaceByName( const OUSTRING & aName, const ANY & aElement )
