@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-27 09:28:19 $
+ *  last change: $Author: vg $ $Date: 2003-04-22 16:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,17 +82,11 @@
 #ifndef _CONNECTIVITY_JAVA_SQL_SQLEXCEPTION_HXX_
 #include "java/sql/SQLException.hxx"
 #endif
-#ifndef _VOS_MODULE_HXX_
-#include <vos/module.hxx>
-#endif
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-#ifndef _VOS_DYNLOAD_HXX_
-#include <vos/dynload.hxx>
 #endif
 
 #ifndef _RTL_PROCESS_H_
