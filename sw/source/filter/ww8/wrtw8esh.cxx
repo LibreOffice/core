@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:54:23 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:25:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -811,6 +811,18 @@ void HdFtPlcDrawObj::RegisterWithFib(WW8Fib &rFib, sal_uInt32 nStart,
 WW8_CP HdFtPlcDrawObj::GetCpOffset(const WW8Fib &rFib) const
 {
     return rFib.ccpText + rFib.ccpFtn;
+}
+
+DrawObj& DrawObj::operator=(const DrawObj& rOther)
+{
+    mnCp = rOther.mnCp;
+    mnShapeId = rOther.mnShapeId;
+    maCntnt = rOther.maCntnt;
+    maParentPos = rOther.maParentPos;
+    mnThick = rOther.mnThick;
+    mnDirection = rOther.mnDirection;
+    mnHdFtIndex = rOther.mnHdFtIndex;
+    return *this;
 }
 
 bool PlcDrawObj::Append(SwWW8Writer& rWrt, WW8_CP nCp, const sw::Frame& rFmt,
