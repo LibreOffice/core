@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-30 09:53:33 $
+ *  last change: $Author: cp $ $Date: 2001-09-11 15:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,101 @@ using namespace vcl;
 #ifdef SOLARIS
 extern "C" char * XSetIMValues(XIM im, ...);
 #endif
+
+// ------------------------------------------------------------------------------------
+//
+// kinput2 IME needs special key handling since key release events are filtered in
+// preeditmode
+//
+// ------------------------------------------------------------------------------------
+
+Bool
+IMServerKinput2 ()
+{
+    const static char* p_xmodifiers = getenv ("XMODIFIERS");
+    const static Bool  b_kinput2    =    (p_xmodifiers != NULL)
+                                      && (strcmp(p_xmodifiers, "@im=kinput2") == 0);
+
+    return b_kinput2;
+}
+
+class XKeyEventOp : XKeyEvent
+{
+    private:
+        void            init();
+
+    public:
+                        XKeyEventOp();
+                        ~XKeyEventOp();
+
+        XKeyEventOp&    operator= (const XKeyEvent &rEvent);
+        void            erase ();
+        Bool            match (const XKeyEvent &rEvent) const;
+};
+
+void
+XKeyEventOp::init()
+{
+    type        = 0; /* serial = 0; */
+    send_event  = 0; display   = 0;
+    window      = 0; root      = 0;
+    subwindow   = 0; /* time   = 0; */
+ /* x           = 0; y         = 0; */
+ /* x_root      = 0; y_root    = 0; */
+    state       = 0; keycode   = 0;
+    same_screen = 0;
+}
+
+XKeyEventOp::XKeyEventOp()
+{
+    init();
+}
+
+XKeyEventOp::~XKeyEventOp()
+{
+}
+
+XKeyEventOp&
+XKeyEventOp::operator= (const XKeyEvent &rEvent)
+{
+    type        = rEvent.type;     /* serial  = rEvent.serial; */
+    send_event  = rEvent.send_event;  display = rEvent.display;
+    window      = rEvent.window;      root    = rEvent.root;
+    subwindow   = rEvent.subwindow;/* time    = rEvent.time;   */
+ /* x           = rEvent.x,           y       = rEvent.y;      */
+ /* x_root      = rEvent.x_root,      y_root  = rEvent.y_root; */
+    state       = rEvent.state;       keycode = rEvent.keycode;
+    same_screen = rEvent.same_screen;
+
+    return *this;
+}
+
+void
+XKeyEventOp::erase ()
+{
+    init();
+}
+
+Bool
+XKeyEventOp::match (const XKeyEvent &rEvent) const
+{
+    return (   (type == XLIB_KeyPress   && rEvent.type == KeyRelease)
+            || (type == KeyRelease && rEvent.type == XLIB_KeyPress  ))
+         /* && serial      == rEvent.serial */
+            && send_event  == rEvent.send_event
+            && display     == rEvent.display
+            && window      == rEvent.window
+            && root        == rEvent.root
+            && subwindow   == rEvent.subwindow
+         /* && time        == rEvent.time
+            && x           == rEvent.x
+            && y           == rEvent.y
+            && x_root      == rEvent.x_root
+            && y_root      == rEvent.y_root */
+            && state       == rEvent.state
+            && keycode     == rEvent.keycode
+            && same_screen == rEvent.same_screen;
+}
 
 // -------------------------------------------------------------------------
 //
@@ -399,7 +494,39 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
 Bool
 SalI18N_InputMethod::FilterEvent( XEvent *pEvent, XLIB_Window window    )
 {
-    return mbUseable && (Bool)XFilterEvent( pEvent, window );
+    if (!mbUseable)
+        return False;
+
+    Bool bFilterEvent = XFilterEvent (pEvent, window);
+
+    if (! IMServerKinput2())
+        return bFilterEvent;
+    if (pEvent->type != XLIB_KeyPress && pEvent->type != KeyRelease)
+        return bFilterEvent;
+    if (mbMultiLingual)
+        return bFilterEvent;
+
+    /*
+     * fix kinput2 key release handling
+     */
+    XKeyEvent*         pKeyEvent = &(pEvent->xkey);
+    static XKeyEventOp maLastKeyPress;
+
+    if (bFilterEvent)
+    {
+        if (pKeyEvent->type == KeyRelease)
+            bFilterEvent = !maLastKeyPress.match (*pKeyEvent);
+        maLastKeyPress.erase();
+    }
+    else /* (!bFilterEvent) */
+    {
+        if (pKeyEvent->type == XLIB_KeyPress)
+            maLastKeyPress = *pKeyEvent;
+        else
+            maLastKeyPress.erase();
+    }
+
+    return bFilterEvent;
 }
 
 void
