@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmtlb.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:40:56 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,15 +465,6 @@ ULONG NumFormatListBox::GetFormat() const
     USHORT nPos = GetSelectEntryPos();
 
     return (ULONG)GetEntryData(nPos);
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-const String& NumFormatListBox::GetFormatStr() const
-{
-    return aEmptyStr;
 }
 
 /*--------------------------------------------------------------------
