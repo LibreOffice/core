@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-20 11:53:38 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,12 +106,7 @@
 #ifndef _FCHRFMT_HXX //autogen
 #include <fchrfmt.hxx>
 #endif
-#ifndef _OFA_HTMLCFG_HXX //autogen
-#include <offmgr/htmlcfg.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
+#include <svx/htmlcfg.hxx>
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
@@ -258,7 +253,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
 
             case SID_STYLE_FAMILY4:
             {
-                OfaHtmlOptions* pHtmlOpt = OFF_APP()->GetHtmlOptions();
+                SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
                 if( pDoc->IsHTMLMode() && !pHtmlOpt->IsPrintLayoutExtension())
                     rSet.DisableItem( nWhich );
                 else
