@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevloc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-23 18:19:43 $
+ *  last change: $Author: nn $ $Date: 2002-04-24 07:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,11 @@ ScPreviewLocationData::~ScPreviewLocationData()
 void ScPreviewLocationData::SetCellMapMode( const MapMode& rMapMode )
 {
     aCellMapMode = rMapMode;
+}
+
+void ScPreviewLocationData::SetPrintTab( USHORT nNew )
+{
+    nPrintTab = nNew;
 }
 
 void ScPreviewLocationData::Clear()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevloc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-23 18:18:32 $
+ *  last change: $Author: nn $ $Date: 2002-04-24 07:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ class ScPreviewLocationData
     Window*     pWindow;
     ScDocument* pDoc;
     MapMode     aCellMapMode;
+    USHORT      nPrintTab;
     List        aEntries;
 
     ScAddress   GetCellFromRange( const Size& rOffsetPixel, const ScRange& rRange ) const;
@@ -135,6 +136,7 @@ public:
             ~ScPreviewLocationData();
 
     void    SetCellMapMode( const MapMode& rMapMode );
+    void    SetPrintTab( USHORT nNew );
     void    Clear();
     void    AddCellRange( const Rectangle& rRect, const ScRange& rRange, BOOL bRepCol, BOOL bRepRow );
     void    AddColHeaders( const Rectangle& rRect, USHORT nStartCol, USHORT nEndCol, BOOL bRepCol );
@@ -142,6 +144,8 @@ public:
     void    AddHeaderFooter( const Rectangle& rRect, BOOL bHeader, BOOL bLeft );
     void    AddNoteMark( const Rectangle& rRect, const ScAddress& rPos );
     void    AddNoteText( const Rectangle& rRect, const ScAddress& rPos );
+
+    USHORT  GetPrintTab() const     { return nPrintTab; }
 
     //  Get info on visible columns/rows in the visible area
     void    GetTableInfo( const Rectangle& rVisiblePixel, ScPreviewTableInfo& rInfo ) const;

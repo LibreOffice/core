@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-23 18:19:43 $
+ *  last change: $Author: nn $ $Date: 2002-04-24 07:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2527,7 +2527,10 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
 
     InitModes();
     if ( pLocationData )
+    {
         pLocationData->SetCellMapMode( aOffsetMode );
+        pLocationData->SetPrintTab( nPrintTab );
+    }
 
     MakeTableString();
 
