@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_rslb.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 16:53:01 $
+#   last change: $Author: hjs $ $Date: 2004-07-23 14:15:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,7 +118,7 @@ $(RSC_MULTI$(TNR)) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg=$i \
+    $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
@@ -135,7 +135,7 @@ $(RSC_MULTI$(TNR)) : \
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg=$i \
+    $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \

@@ -27,7 +27,7 @@ $(RSC_MULTI1) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg=$i \
+    $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB1NAME)$(RESLIB1VERSION)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
@@ -44,7 +44,7 @@ $(RSC_MULTI1) : \
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg=$i \
+    $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)$/$(RESLIB1NAME)$(RESLIB1VERSION)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
@@ -109,7 +109,7 @@ $(RSC_MULTI2) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg=$i \
+    $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB2NAME)$(RESLIB2VERSION)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
@@ -126,7 +126,7 @@ $(RSC_MULTI2) : \
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg=$i \
+    $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)$/$(RESLIB2NAME)$(RESLIB2VERSION)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
@@ -191,7 +191,7 @@ $(RSC_MULTI3) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg=$i \
+    $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB3NAME)$(RESLIB3VERSION)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
@@ -208,7 +208,7 @@ $(RSC_MULTI3) : \
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg=$i \
+    $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)$/$(RESLIB3NAME)$(RESLIB3VERSION)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
@@ -273,7 +273,7 @@ $(RSC_MULTI4) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg=$i \
+    $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB4NAME)$(RESLIB4VERSION)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
@@ -290,7 +290,7 @@ $(RSC_MULTI4) : \
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg=$i \
+    $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)$/$(RESLIB4NAME)$(RESLIB4VERSION)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
@@ -355,7 +355,7 @@ $(RSC_MULTI5) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg=$i \
+    $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB5NAME)$(RESLIB5VERSION)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
@@ -372,7 +372,7 @@ $(RSC_MULTI5) : \
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg=$i \
+    $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)$/$(RESLIB5NAME)$(RESLIB5VERSION)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
@@ -437,7 +437,7 @@ $(RSC_MULTI6) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg=$i \
+    $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB6NAME)$(RESLIB6VERSION)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
@@ -454,7 +454,7 @@ $(RSC_MULTI6) : \
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg=$i \
+    $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)$/$(RESLIB6NAME)$(RESLIB6VERSION)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
@@ -519,7 +519,7 @@ $(RSC_MULTI7) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg=$i \
+    $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB7NAME)$(RESLIB7VERSION)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
@@ -536,7 +536,7 @@ $(RSC_MULTI7) : \
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg=$i \
+    $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)$/$(RESLIB7NAME)$(RESLIB7VERSION)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
@@ -601,7 +601,7 @@ $(RSC_MULTI8) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg=$i \
+    $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB8NAME)$(RESLIB8VERSION)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
@@ -618,7 +618,7 @@ $(RSC_MULTI8) : \
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg=$i \
+    $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)$/$(RESLIB8NAME)$(RESLIB8VERSION)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
@@ -683,7 +683,7 @@ $(RSC_MULTI9) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg=$i \
+    $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB9NAME)$(RESLIB9VERSION)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
@@ -700,7 +700,7 @@ $(RSC_MULTI9) : \
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg=$i \
+    $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)$/$(RESLIB9NAME)$(RESLIB9VERSION)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
@@ -765,7 +765,7 @@ $(RSC_MULTI10) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg=$i \
+    $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB10NAME)$(RESLIB10VERSION)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
@@ -782,7 +782,7 @@ $(RSC_MULTI10) : \
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg=$i \
+    $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)$/$(RESLIB10NAME)$(RESLIB10VERSION)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
