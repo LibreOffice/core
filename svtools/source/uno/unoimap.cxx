@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoimap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-20 16:23:18 $
+ *  last change: $Author: dvo $ $Date: 2001-03-27 18:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -776,7 +776,7 @@ Type SAL_CALL SvUnoImageMap::getElementType(  ) throw(RuntimeException)
 
 sal_Bool SAL_CALL SvUnoImageMap::hasElements(  ) throw(RuntimeException)
 {
-    return maObjectList.size() == 0;
+    return maObjectList.size() != 0;
 }
 
 // XSerivceInfo
