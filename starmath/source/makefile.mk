@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-16 13:56:08 $
+#   last change: $Author: hjs $ $Date: 2002-10-23 13:26:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -147,7 +147,7 @@ $(INCCOM)$/dllname.hxx: makefile.mk
 .IF "$(USE_SHELL)"!="4nt"
     echo \#define DLL_NAME "sm$(UPD)$(DLLPOSTFIX)$(DLLPOST)" >$@
 .ELSE          # "$(USE_SHELL)"!="4nt"
-    echo #define DLL_NAME "sm$(UPD)$(DLLPOSTFIX)$(DLLPOST)" >$@
+    echo #define DLL_NAME \"sm$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ENDIF          # "$(USE_SHELL)"!="4nt"
 .ENDIF
 
