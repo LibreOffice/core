@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:30:41 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,6 @@
 #endif
 
 #include <svx/dialogs.hrc>
-#include <svx/extrusionbar.hxx>
 
 #include "glob.hrc"
 #include "app.hrc"
@@ -385,17 +384,6 @@ void DrawViewShell::SelectionHasChanged (void)
 
     if (GetController() != NULL)
         GetController()->FireSelectionChangeListener();
-
-    if (::svx::checkForSelectedCustomShapes( GetView(),
-                                             false /* ! bOnlyExtruded */ ))
-    {
-        rObjectBarManager.ActivateObjectBar(RID_SVX_EXTRUSION_BAR);
-    }
-    else
-    {
-        rObjectBarManager.DeactivateObjectBar(
-            rObjectBarManager.GetObjectBar(RID_SVX_EXTRUSION_BAR) );
-    }
 }
 
 
@@ -528,11 +516,23 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         eEditMode = eEMode;
         mbIsLayerModeActive = bIsLayerModeActive;
 
+        // Determine whether to show the master view toolbar.  The master
+        // page mode has to be active and the shell must not be a handout
+        // view.
+        bool bShowMasterViewToolbar (eEditMode == EM_MASTERPAGE
+             && GetShellType() != ViewShell::ST_HANDOUT);
+
+        // If the master view toolbar is not shown we hide it before
+        // switching the edit mode.
+        if (mpImpl->mbIsInitialized
+            && IsMainViewShell()
+            && ! bShowMasterViewToolbar)
+        {
+            GetObjectBarManager().HideToolBar (MASTER_VIEW_TOOL_BAR_NAME);
+        }
+
         if (eEditMode == EM_PAGE)
         {
-            if (mpImpl->mbIsInitialized)
-                GetObjectBarManager().HideToolBar (MASTER_VIEW_TOOL_BAR_NAME);
-
             /******************************************************************
             * PAGEMODE
             ******************************************************************/
@@ -603,9 +603,15 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             SfxBoolItem aItem(SID_PREVIEW_WIN, pFrameView->IsShowPreviewInMasterPageMode() != 0 );
             GetViewFrame()->GetDispatcher()->Execute(
                 SID_PREVIEW_WIN, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+        }
 
-            if (mpImpl->mbIsInitialized)
-                GetObjectBarManager().ShowToolBar (MASTER_VIEW_TOOL_BAR_NAME);
+        // If the master view toolbar is to be shown we turn it on after the
+        // edit mode has been changed.
+        if (mpImpl->mbIsInitialized
+            && IsMainViewShell()
+            && bShowMasterViewToolbar)
+        {
+            GetObjectBarManager().ShowToolBar (MASTER_VIEW_TOOL_BAR_NAME);
         }
 
         if ( ! mbIsLayerModeActive)
