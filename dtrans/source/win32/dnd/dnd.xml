@@ -1,61 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
-
-<COMPONENTDESCRIPTION
-    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
-
-<Author> Joachim Lingner </Author>
-
-<Name>  com.sun.star.comp.datatransfer.dnd.OleDragSource_V1 </Name>
-<Name>  com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1 </Name>
-
-<Description>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>   dnd </module-name>
+    <component-description>
+        <author> Joachim Lingner </author>
+        <name>  com.sun.star.comp.datatransfer.dnd.OleDragSource_V1 </name>
+        <name>  com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1 </name>
+        <description>
     The win32 implementation of the drop target service.
-</Description>
-
-<ModuleName>    dnd </ModuleName>
-
-<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
-
-<Language>  c++ </Language>
-
-<Status StatusValue="experimental"/>
-
-<SupportedService>  com.sun.star.datatransfer.dnd.OleDragSource</SupportedService>
-<SupportedService>  com.sun.star.datatransfer.dnd.OleDropTarget</SupportedService>
-
-<ServiceDependency> ... </ServiceDependency>
-
-<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
-<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
-<ProjectBuildDependency>    sal         </ProjectBuildDependency>
-
-<RuntimeModuleDependency>   cppuhelper  </RuntimeModuleDependency>
-<RuntimeModuleDependency>   cppu2       </RuntimeModuleDependency>
-<RuntimeModuleDependency>   sal2        </RuntimeModuleDependency>
-
-<Type>   com.sun.star.datatransfer.dnd.DNDConstants         </Type>
-<Type>   com.sun.star.datatransfer.dnd.XDropTarget          </Type>
-<Type>   com.sun.star.datatransfer.dnd.XDropTargetDragContext   </Type>
-<Type>   com.sun.star.datatransfer.dnd.XDropTargetListener  </Type>
-<Type>   com.sun.star.datatransfer.dnd.XDropTargetDropContext   </Type>
-<Type>   com.sun.star.datatransfer.dnd.XDragSourceContext   </Type>
-<Type>   com.sun.star.datatransfer.dnd.XDragSource              </Type>
-<Type>   com.sun.star.datatransfer.XTransferable                </Type>
-<Type>   com.sun.star.lang.XComponent                       </Type>
-<Type>   com.sun.star.lang.XMultiServiceFactory             </Type>
-<Type>   com.sun.star.lang.XSingleServiceFactory            </Type>
-<Type>   com.sun.star.lang.XServiceInfo                     </Type>
-<Type>   com.sun.star.lang.XTypeProvider                    </Type>
-<Type>   com.sun.star.lang.IllegalArgumentException         </Type>
-<Type>   com.sun.star.lang.XInitialization                  </Type>
-<Type>   com.sun.star.lang.XUnoTunnel                       </Type>
-<Type>   com.sun.star.uno.TypeClass                         </Type>
-<Type>   com.sun.star.uno.XWeak                             </Type>
-<Type>   com.sun.star.uno.XAggregation                      </Type>
-<Type>   com.sun.star.registry.XRegistryKey                 </Type>
-<Type>   com.sun.star.awt.MouseButton                       </Type>
-<Type>   com.sun.star.awt.MouseEvent                        </Type>
-
-</COMPONENTDESCRIPTION>
-
+</description>
+        <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
+        <language>  c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.datatransfer.dnd.OleDragSource</supported-service>
+        <supported-service> com.sun.star.datatransfer.dnd.OleDropTarget</supported-service>
+        <type>   com.sun.star.datatransfer.dnd.DNDConstants         </type>
+        <type>   com.sun.star.datatransfer.dnd.XDropTarget          </type>
+        <type>   com.sun.star.datatransfer.dnd.XDropTargetDragContext   </type>
+        <type>   com.sun.star.datatransfer.dnd.XDropTargetListener  </type>
+        <type>   com.sun.star.datatransfer.dnd.XDropTargetDropContext   </type>
+        <type>   com.sun.star.datatransfer.dnd.XDragSourceContext   </type>
+        <type>   com.sun.star.datatransfer.dnd.XDragSource              </type>
+        <type>   com.sun.star.datatransfer.XTransferable                </type>
+        <type>   com.sun.star.lang.XComponent                       </type>
+        <type>   com.sun.star.lang.XMultiServiceFactory             </type>
+        <type>   com.sun.star.lang.XSingleServiceFactory            </type>
+        <type>   com.sun.star.lang.XServiceInfo                     </type>
+        <type>   com.sun.star.lang.XTypeProvider                    </type>
+        <type>   com.sun.star.lang.IllegalArgumentException         </type>
+        <type>   com.sun.star.lang.XInitialization                  </type>
+        <type>   com.sun.star.lang.XUnoTunnel                       </type>
+        <type>   com.sun.star.uno.TypeClass                         </type>
+        <type>   com.sun.star.uno.XWeak                             </type>
+        <type>   com.sun.star.uno.XAggregation                      </type>
+        <type>   com.sun.star.registry.XRegistryKey                 </type>
+        <type>   com.sun.star.awt.MouseButton                       </type>
+        <type>   com.sun.star.awt.MouseEvent                        </type>
+    </component-description>
+    <project-build-dependency>  cppuhelper  </project-build-dependency>
+    <project-build-dependency>  cppu        </project-build-dependency>
+    <project-build-dependency>  sal         </project-build-dependency>
+    <runtime-module-dependency> cppuhelper  </runtime-module-dependency>
+    <runtime-module-dependency> cppu2       </runtime-module-dependency>
+    <runtime-module-dependency> sal2        </runtime-module-dependency>
+</module-description>
