@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: tl $ $Date: 2001-09-14 08:23:34 $
+ *  last change: $Author: cmc $ $Date: 2001-09-25 10:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,23 +377,8 @@ ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
     }
     else
     {
-        uno::Reference<io::XActiveDataSource> xSource(rMedium.GetDataSource());
-        DBG_ASSERT(xSource.is(),"XMLReader::Read: data source missing");
-
-        // get a pipe for connecting the data source to the parser
-        Reference< XInterface > xPipe =
-            xServiceFactory->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe")));
-        DBG_ASSERT(xPipe.is(),"com.sun.star.io.Pipe service missing");
-
-        uno::Reference<io::XOutputStream> xPipeOutput(xPipe, uno::UNO_QUERY);
-        xSource->setOutputStream(xPipeOutput);
-
-        Reference<io::XInputStream> xInputStream(xPipe, uno::UNO_QUERY);
-
-        uno::Reference<io::XActiveDataControl> xSourceControl(
-            xSource,uno::UNO_QUERY);
-        xSourceControl->start();
+        Reference<io::XInputStream> xInputStream =
+            new utl::OInputStreamWrapper(rMedium.GetInStream());
 
         if (xStatusIndicator.is())
             xStatusIndicator->setValue(nSteps++);
