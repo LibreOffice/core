@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-26 13:02:02 $
+ *  last change: $Author: cd $ $Date: 2002-08-30 11:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ WarningBox WARNINGBOX_JAVANOTCONFIGURED
 {
     Buttons = WB_OK_CANCEL ;
     DefButton = WB_DEF_OK ;
-    Message = "%PRODUCTNAME %PRODUCTVERSION hat eine fehlerhafte java.ini Konfiguration gefunden. %PRODUCTNAME benötigt die java.ini.  Klicken Sie 'OK' um das Java Setup zu starten. Mit dem Java Setup können Sie ein JRE installieren oder aus vorhanden JREs eins auswählen. Um die aktuelle Operation zu beenden klicken Sie auf 'Abbrechen'." ;
+    Message = "%PRODUCTNAME %PRODUCTVERSION hat eine fehlerhafte java.ini-Konfiguration gefunden. %PRODUCTNAME benötigt die java.ini.  Klicken Sie 'OK' um das Java-Setup zu starten. Mit dem Java-Setup können Sie ein JRE installieren oder aus vorhandenen JREs eins auswählen.\nUm die aktuelle Operation zu beenden, klicken Sie auf 'Abbrechen'." ;
     Message[ ENGLISH ] ="%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation." ;
     Message[ english_us ] ="%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation." ;
 };
@@ -92,7 +92,7 @@ WarningBox WARNINGBOX_JVMCREATIONFAILED
 {
     Buttons = WB_OK_CANCEL ;
     DefButton = WB_DEF_OK ;
-    Message = "Für diese Operation ist ein Java Runtime Environment (JRE) erforderlich. %PRODUCTNAME %PRODUCTVERSION hat ein fehlerhaftes JRE gefunden.Klicken Sie auf 'OK' um das Java-Setup zu starten. Um die aktuelle Operation zu beenden, klicken Sie auf 'Abbrechen'." ;
+    Message = "Für diese Operation ist ein Java Runtime Environment (JRE) erforderlich. %PRODUCTNAME %PRODUCTVERSION hat ein fehlerhaftes JRE gefunden.\nKlicken Sie auf 'OK' um das Java-Setup zu starten. Um die aktuelle Operation zu beenden, klicken Sie auf 'Abbrechen'." ;
     Message[ ENGLISH ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'." ;
     Message[ english_us ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'." ;
 };
@@ -633,7 +633,7 @@ String STR_WARNING_CANNOTSTARTJVMSETUP
 
 String STR_WARNING_CANNOTSTARTJAVALDX
 {
-    Text = "JavaLDX kann nicht gestarted werden" ;
+    Text = "Java-LDX konnte nicht gestartet werden" ;
     Text[ ENGLISH ] = "Could Not Start Java LDX" ;
     Text[ english_us ] = "Could Not Start Java LDX" ;
 };
