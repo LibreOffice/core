@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opredlin.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:10:13 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text = "~Änderungen" ;
         Text [ ENGLISH ] = "Changes" ;
         Text [ english_us ] = "Chan~ges" ;
-        Text [ portuguese_brazilian ] = "~Änderungen" ;
+        Text [ portuguese_brazilian ] = "~?nderungen" ;
         Text [ swedish ] = "~Ändringar" ;
         Text [ danish ] = "Ændringer" ;
         Text [ italian ] = "~Modifica" ;
@@ -104,7 +104,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text [ ENGLISH ] = "Removed Entrys" ;
         Text [ portuguese ] = "~Eliminações" ;
         Text [ english_us ] = "~Deletions" ;
-        Text [ portuguese_brazilian ] = "~Löschungen" ;
+        Text [ portuguese_brazilian ] = "~L?chungen" ;
         Text [ swedish ] = "~Raderingar" ;
         Text [ danish ] = "Sletninger" ;
         Text [ italian ] = "~Elimina" ;
@@ -132,7 +132,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text [ ENGLISH ] = "Inserted Entrys" ;
         Text [ portuguese ] = "~Inserções" ;
         Text [ english_us ] = "~Insertions" ;
-        Text [ portuguese_brazilian ] = "~Einfügungen" ;
+        Text [ portuguese_brazilian ] = "~Einf?ungen" ;
         Text [ swedish ] = "~Infogningar" ;
         Text [ danish ] = "Indsættelser" ;
         Text [ italian ] = "~Inserisci" ;
@@ -188,7 +188,7 @@ TabPage RID_SCPAGE_OPREDLINE
         Text [ ENGLISH ] = "Colors for Changes" ;
         Text [ portuguese ] = "Cores para modificações" ;
         Text [ english_us ] = "Colors for changes" ;
-        Text [ portuguese_brazilian ] = "Farbgebung für Änderungen" ;
+        Text [ portuguese_brazilian ] = "Farbgebung f? ?nderungen" ;
         Text [ swedish ] = "Färggivning för ändringar" ;
         Text [ danish ] = "Farver for ændringer" ;
         Text [ italian ] = "Colori per i comandi" ;
