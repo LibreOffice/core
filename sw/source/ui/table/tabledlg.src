@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,7 @@ TabPage TP_FORMAT_TABLE
         Text[ chinese_simplified ] = "Ãû³Æ(~N)";
         Text[ russian ] = "Èìÿ";
         Text[ polish ] = "Nazwa";
-        Text[ japanese ] = "–¼‘O(~N)";
+        Text[ japanese ] = "•\\‚Ì–¼‘O(~N)";
         Text[ chinese_traditional ] = "¦WºÙ(~N)";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
@@ -392,8 +392,8 @@ TabPage TP_FORMAT_TABLE
         Text [ english_us ] = "Properties" ;
         Text[ chinese_simplified ] = "ÊôĞÔ";
         Text[ russian ] = "Ñâîéñòâà";
-        Text[ polish ] = "W³a?ciwo?ci";
-        Text[ japanese ] = "ÌßÛÊßÃ¨";
+        Text[ polish ] = "W³aœciwoœci";
+        Text[ japanese ] = "‘®«";
         Text[ chinese_traditional ] = "Äİ©Ê";
         Text[ arabic ] = "ÎÕÇÆÕ";
         Text[ greek ] = "Éäéüôçôåò";
@@ -539,7 +539,7 @@ TabPage TP_FORMAT_TABLE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "¾ÓÖĞ(~C)";
         Text[ russian ] = "Ïî öåíòğó";
-        Text[ polish ] = "Wy?rodkowany";
+        Text[ polish ] = "Wyœrodkowany";
         Text[ japanese ] = "’†‰›(~C)";
         Text[ chinese_traditional ] = "¸m¤¤(~C)";
         Text[ arabic ] = "ÊæÓíØ";
@@ -627,7 +627,7 @@ TabPage TP_FORMAT_TABLE
         Text[ chinese_simplified ] = "¼ä¸ô";
         Text[ russian ] = "Èíòåğâàëû";
         Text[ polish ] = "Odstêpy";
-        Text[ japanese ] = "—]”’";
+        Text[ japanese ] = "ŠÔŠu";
         Text[ chinese_traditional ] = "¶¡¹j";
         Text[ arabic ] = "ÇáÊÈÇÚÏ";
         Text[ greek ] = "AğïóôÜóåéò";
@@ -850,7 +850,7 @@ TabPage TP_TABLE_COLUMN
         Text [ portuguese ] = "A~justar largura da tabela" ;
         Text[ chinese_simplified ] = "µ÷Õû±í¸ñ¿í¶È(~W)";
         Text[ russian ] = "Ñîãëàñîâàòü øèğèíó òàáëèöû";
-        Text[ polish ] = "Dopasuj szeroko?æ tabeli";
+        Text[ polish ] = "Dopasuj szerokoœæ tabeli";
         Text[ japanese ] = "•\\‚Ì•‚Ö‚Ìì—p‚ğ”F‚ß‚é(~W)";
         Text[ chinese_traditional ] = "½Õ¾ãªí®æ¼e«×(~W)";
         Text[ arabic ] = "ãáÇÁãÉ áÚÑÖ ÇáÌÏæá";
@@ -912,7 +912,7 @@ TabPage TP_TABLE_COLUMN
         Text[ chinese_traditional ] = "ÁÙ¦³²{¦s¥i¥ÎªÅ¶¡";
         Text[ arabic ] = "ÇáãÓÇÍÉ ÇáãÊÈŞíÉ";
         Text[ greek ] = "Õğïëåéğüìåíïò ÷şñïò";
-        Text[ korean ] = "¾ÆÁ÷¡¡»ç¿ë°¡´ÉÇÑ¡¡°ø°£";
+        Text[ korean ] = "¾ÆÁ÷ »ç¿ë°¡´ÉÇÑ °ø°£";
         Text[ turkish ] = "Kalan boşluk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Espacio disponible";
@@ -1132,7 +1132,7 @@ TabPage TP_TABLE_COLUMN
         Text [ english_us ] = "Column width" ;
         Text[ chinese_simplified ] = "À¸¿í";
         Text[ russian ] = "Øèğèíà ñòîëáöîâ";
-        Text[ polish ] = "Szer. kolumny";
+        Text[ polish ] = "Szerokoœæ kolumny";
         Text[ japanese ] = "—ñ•";
         Text[ chinese_traditional ] = "Äæ¼e";
         Text[ arabic ] = "ÚÑÖ ÇáÚãæÏ";
@@ -1421,7 +1421,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text[ chinese_traditional ] = "¤£¤À¶}ªí®æ(~D)";
         Text[ arabic ] = "ÚÏã İÕá ÇáÌÏæá";
         Text[ greek ] = "Íá ìç äéáéñåèåß ï ğßíáêáò";
-        Text[ korean ] = "Ç¥ ³ª´©Áö ¾ÊÀ½.(~D)";
+        Text[ korean ] = "Å×ÀÌºí ³ª´©Áö ¾ÊÀ½.(~D)";
         Text[ turkish ] = "Tabloyu ayırma";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~No dividir tabla";
@@ -1559,7 +1559,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ portuguese ] = "~Centro" ;
         Text[ chinese_simplified ] = "ÖĞ(~R)";
         Text[ russian ] = "Ïî ñåğåäèíå";
-        Text[ polish ] = "Po?rodku";
+        Text[ polish ] = "Poœrodku";
         Text[ japanese ] = "’†‰›(~R)";
         Text[ chinese_traditional ] = "¤¤(~R)";
         Text[ arabic ] = "ÇáæÓØ";
@@ -1619,9 +1619,10 @@ InfoBox MSG_WRONG_TABLENAME
     Message[ chinese_traditional ] = "ªí®æ¦WºÙ¤£¯à§t¦³ªÅ®æ¦r¤¸¡C";
     Message[ arabic ] = "íÌÈ ÃáÇ íÍÊæí ÇÓã ÇáÌÏæá Úáì ÃÍÑİ ãÓÇİÉ.";
     Message[ greek ] = "Ôï üíïìá ôïõ ğßíáêá äåí åğéôñİğåôáé íá ğåñéİ÷åé êåíÜ";
-    Message[ korean ] = "Ç¥ ÀÌ¸§¿¡´Â °ø¹éÀÌ Æ÷ÇÔµÇ¾î¼­´Â ¾ÈµË´Ï´Ù.";
+    Message[ korean ] = "Å×ÀÌºí ÀÌ¸§¿¡´Â °ø¹éÀÌ Æ÷ÇÔµÇ¾î¼­´Â ¾ÈµË´Ï´Ù.";
     Message[ turkish ] = "Tablo adında boşluk bulunmamalıdır.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "El nombre de la tabla no debe contener espacios.";
     Message[ finnish ] = "Taulukon nimessä ei saa olla välejä.";
 };
+
