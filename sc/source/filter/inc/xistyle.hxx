@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:12:27 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,7 @@ class ScDocumentPool;
 
 /* ============================================================================
 - Buffers for style records (PALETTE, FONT, FORMAT, XF)
-and a container for XF indexes for every used cell in a sheet.
-- Page styles import.
+    and a container for XF indexes for every used cell in a sheet.
 ============================================================================ */
 
 // PALETTE record - color information =========================================
@@ -606,6 +605,9 @@ public:
     explicit            XclImpXFRangeBuffer( const XclImpRoot& rRoot );
     virtual             ~XclImpXFRangeBuffer();
 
+    /** Clears all buffered data, used to set up for a new sheet. */
+    void                Initialize();
+
     /** Inserts a new XF index. */
     void                SetXF( SCCOL nScCol, SCROW nScRow, sal_uInt16 nXFIndex );
     /** Inserts a new XF index for blank cells. */
@@ -623,7 +625,7 @@ public:
     void                SetMerge( SCCOL nScCol1, SCROW nScRow1, SCCOL nScCol2, SCROW nScRow2 );
 
     /** Applies styles and cell merging to the current sheet in the document. */
-    void                Apply();
+    void                Finalize();
 
 private:
     /** Insertion mode of an XF index. */
@@ -636,9 +638,6 @@ private:
     };
 
 private:
-    /** Clears all buffered data, used to set up for a new sheet. */
-    void                Clear();
-
     /** Inserts a new XF index for the specified cell type. */
     void                SetXF( SCCOL nScCol, SCROW nScRow,
                             sal_uInt16 nXFIndex, XclImpXFInsertMode eMode );
