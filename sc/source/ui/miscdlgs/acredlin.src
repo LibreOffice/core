@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:01:10 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ ModelessDialog RID_SCDLG_CHANGES
         QuickHelpText[ dutch ] = "Verkleinen/vergroten";
         QuickHelpText[ chinese_simplified ] = "ΛυΠ΅/·Ε΄σ";
         QuickHelpText[ greek ] = "Σμίκρυνση/Μεγέθυνση";
-        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ korean ] = "ΓΰΌÒ£―Θ®΄λ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
@@ -373,7 +373,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ dutch ] = "Inhoudsverandering";
         Text[ chinese_simplified ] = "ΔΪΘέΈόΈΔ";
         Text[ greek ] = "Αλλαγές περιεχομένων";
-        Text[ korean ] = "Ί―°ζ ³»Ώλ";
+        Text[ korean ] = "³»Ώλ΅΅Ί―°ζ";
         Text[ turkish ] = "έηerik deπiώikliπi";
         Text[ language_user1 ] = " ";
     };
@@ -399,7 +399,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ dutch ] = "Inhoudsverandering";
         Text[ chinese_simplified ] = "ΔΪΘέΈόΈΔ";
         Text[ greek ] = "Αλλαγές περιεχομένων";
-        Text[ korean ] = "Ί―°ζ ³»Ώλ";
+        Text[ korean ] = "³»Ώλ΅΅Ί―°ζ";
         Text[ turkish ] = "έηerik deπiώikliπi";
         Text[ language_user1 ] = " ";
     };
@@ -425,7 +425,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ dutch ] = "Wijziging in  ";
         Text[ chinese_simplified ] = "ΈόΈΔ³Ι ";
         Text[ greek ] = "Αλλαγή προς ";
-        Text[ korean ] = "·Ξ Ί―°ζ. ";
+        Text[ korean ] = "ΐΗ Ί―°ζ. ";
         Text[ turkish ] = "Deπiώiklikler: ";
         Text[ language_user1 ] = " ";
     };
@@ -451,7 +451,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ dutch ] = "Origineel";
         Text[ chinese_simplified ] = "Τ­Όώ";
         Text[ greek ] = "Αρχικό";
-        Text[ korean ] = "Ί»·΅ΐΗ";
+        Text[ korean ] = "Ώψ·΅ΐΗ";
         Text[ turkish ] = "Φzgόn hali";
         Text[ language_user1 ] = " ";
     };
@@ -503,7 +503,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ dutch ] = "Geaccepteerde";
         Text[ chinese_simplified ] = "½ΣΚάµΔ";
         Text[ greek ] = "Αποδεχόμενα";
-        Text[ korean ] = "ΌφΏλµΚ";
+        Text[ korean ] = "Όφ¶τµΘ";
         Text[ turkish ] = "Kabul edilenler";
         Text[ language_user1 ] = " ";
     };
@@ -529,7 +529,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ dutch ] = "Geweigerde";
         Text[ chinese_simplified ] = "±»ΎάΎψµΔ";
         Text[ greek ] = "Απορριπτόμενα";
-        Text[ korean ] = "°ΕΊΞµΚ";
+        Text[ korean ] = "°ΕΊΞµΘ";
         Text[ turkish ] = "Reddedilenler";
         Text[ language_user1 ] = " ";
     };
@@ -555,7 +555,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ dutch ] = "Geen item";
         Text[ chinese_simplified ] = "ΞήΜυΔΏ";
         Text[ greek ] = "Καμία καταχώριση";
-        Text[ korean ] = "µξ·ΟΐΜ ΎΘµΗΎϊ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΐΤ·Β΅΅Ύψΐ½";
         Text[ turkish ] = "Giriώ yok";
         Text[ language_user1 ] = " ";
     };
