@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-24 15:07:11 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,10 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+
+#ifndef _SVX3DITEMS_HXX
+#include <svx3ditems.hxx>
 #endif
 
 #ifndef _UCBHELPER_CONTENT_HXX_
@@ -2027,7 +2031,9 @@ FASTBOOL SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
                 SfxItemSet aSet(rOutliner.GetEmptyItemSet());
                 aSet.Put(SvxColorItem( COL_BLACK ));
                 rOutliner.SetParaAttribs(0,aSet);
-                pText->NbcSetAttributes(aSet,FALSE);
+
+//-/                pText->NbcSetAttributes(aSet,FALSE);
+                pText->SetItemSet(aSet);
 
                 bClearParaAttribs = FALSE;
                 if( bClearParaAttribs )
@@ -2391,7 +2397,10 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
 
         rCamera.SetProjection( GetPropertyValue( DFF_Prop_fc3DFillHarsh, 0 ) & 4 ? PR_PERSPECTIVE : PR_PARALLEL );
         pScene->SetCamera( rCamera );
-        pScene->NbcSetAttributes( aSet, FALSE );
+
+//-/        pScene->NbcSetAttributes( aSet, FALSE );
+        pScene->SetItemSet(aSet);
+
         pScene->SetRectsDirty();
         pScene->InitTransformationSet();
 
@@ -2428,7 +2437,9 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
             {
                 aSet.Put( XLineStyleItem( XLINE_SOLID ) );  // Linien: Durchgehend
                 aSet.Put( XFillStyleItem ( XFILL_NONE ) );  // Flaeche: unsichtbar
-                pScene->NbcSetAttributes( aSet, FALSE );
+
+//-/                pScene->NbcSetAttributes( aSet, FALSE );
+                pScene->SetItemSet(aSet);
 
                 // 3D: Doppelseitig
                 SdrObjListIter aIter( *pScene, IM_DEEPWITHGROUPS );
@@ -2438,7 +2449,8 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
                     if ( pSingleObj->ISA(E3dExtrudeObj ) )
                     {
                         E3dExtrudeObj* pSingleExtrude = (E3dExtrudeObj*)pSingleObj;
-                        pSingleExtrude->SetDoubleSided( TRUE );
+//-/                        pSingleExtrude->SetDoubleSided( TRUE );
+                        pSingleExtrude->SetItem(Svx3DDoubleSidedItem(TRUE));
                     }
                 }
             }
@@ -2456,21 +2468,32 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
                 if ( pSingleObj->ISA( E3dExtrudeObj ) )
                 {
                     E3dExtrudeObj* pSingleExtrude = (E3dExtrudeObj*)pSingleObj;
-                    if ( nVal != (long)pSingleExtrude->GetExtrudeDepth() )
+//-/                    if ( nVal != (long)pSingleExtrude->GetExtrudeDepth() )
+                    sal_uInt32 nSingleExtrudeDepth = (sal_uInt32)((Svx3DDepthItem&)(pSingleExtrude->GetItem(SDRATTR_3DOBJ_DEPTH))).GetValue();
+                    if( nVal != (sal_Int32)nSingleExtrudeDepth)
                     {
                         if ( nVal == 338667 )
                         {
                             // MS unendlich
-                            pSingleExtrude->SetExtrudeDepth( fDepth * 18.0 );
-                            pSingleExtrude->SetExtrudeBackScale( 0.1 );
-                            pSingleExtrude->SetExtrudePercentDiag( 0.01 );
+//-/                            pSingleExtrude->SetExtrudeDepth( fDepth * 18.0 );
+                            pSingleExtrude->SetItem(Svx3DDepthItem(sal_uInt32((fDepth * 18.0)+0.5)));
+
+//-/                            pSingleExtrude->SetExtrudeBackScale( 0.1 );
+                            UINT16 nBackScale = (UINT16)((0.1 * 100.0) + 0.5);
+                            pSingleExtrude->SetItem(Svx3DBackscaleItem(nBackScale));
+
+//-/                            pSingleExtrude->SetExtrudePercentDiag( 0.01 );
+                            UINT16 nPercentDiagonal = (UINT16)((0.01 * 200.0) + 0.5);
+                            pSingleExtrude->SetItem(Svx3DPercentDiagonalItem(nPercentDiagonal));
+
                             Matrix4D aMirrorMat;
                             aMirrorMat.Scale( 1.0, -1.0, -1.0 );
                             pSingleExtrude->NbcSetTransform( pSingleExtrude->GetTransform() * aMirrorMat);
                             bUseBackSide = TRUE;
                         }
                         else
-                            pSingleExtrude->SetExtrudeDepth( (double)nVal );
+//-/                            pSingleExtrude->SetExtrudeDepth( (double)nVal );
+                            pSingleExtrude->SetItem(Svx3DDepthItem(sal_uInt32(nVal + 0.5)));
                     }
                 }
             }
@@ -2541,7 +2564,10 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
             if ( pSingleObj->ISA( E3dExtrudeObj ) )
             {
                 E3dExtrudeObj* pSingleExtrude = (E3dExtrudeObj*)pSingleObj;
-                double fFrontPlaneDepth = pSingleExtrude->GetExtrudeDepth();
+
+//-/                double fFrontPlaneDepth = pSingleExtrude->GetExtrudeDepth();
+                double fFrontPlaneDepth = (double)((Svx3DDepthItem&)(pSingleExtrude->GetItem(SDRATTR_3DOBJ_DEPTH))).GetValue();
+
                 if ( bUseBackSide )
                     fFrontPlaneDepth = 0.0;
                 Matrix4D aFullTransMat = pSingleExtrude->GetFullTransform();
@@ -2575,7 +2601,9 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
         // UpperLeft uebertragen
         pScene->NbcSetSnapRect( aNewSize );
         pScene->SetModel( pSdrModel );
-        pScene->NbcSetAttributes( aSet, FALSE );
+
+//-/        pScene->NbcSetAttributes( aSet, FALSE );
+        pScene->SetItemSet(aSet);
     }
     else
         delete pScene;  // Aufraeumen
@@ -2628,7 +2656,9 @@ SdrObject* SvxMSDffManager::ImportWordArt( SvStream& rStCtrl, SfxItemSet& rSet, 
             rSet.Put( SdrTextAutoGrowHeightItem( FALSE ) );
             rSet.Put( SdrTextAutoGrowWidthItem( FALSE ) );
             rSet.Put( SvxFontItem( FAMILY_DONTKNOW, aFontName, String() ) );
-            pNewObj->NbcSetAttributes( rSet, FALSE );
+
+//-/            pNewObj->NbcSetAttributes( rSet, FALSE );
+            pNewObj->SetItemSet(rSet);
 
             pRet = pNewObj->ConvertToPolyObj( FALSE, FALSE );
             if( !pRet )
@@ -3224,7 +3254,10 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                         if ( aObjData.eShapeType == mso_sptTextBox )
                             aSet.Put( SdrTextMinFrameHeightItem( aBoundRect.GetHeight() ) );
                         pRet->SetModel( pSdrModel );
-                        pRet->NbcSetAttributes( aSet, FALSE );
+
+//-/                        pRet->NbcSetAttributes( aSet, FALSE );
+                        pRet->SetItemSet(aSet);
+
                         // Rotieren
                         if( mnFix16Angle && !bIsConnector )
                         {
@@ -3264,7 +3297,8 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                                 {
                                     SdrObject*  pObj = pObjectList->GetObj( i );
                                     if ( pObj )
-                                        pObj->NbcSetAttributes( aSet, FALSE );
+//-/                                        pObj->NbcSetAttributes( aSet, FALSE );
+                                        pObj->SetItemSet(aSet);
                                 }
                             }
                         }
@@ -3560,7 +3594,8 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             aSet.Put( SdrTextMinFrameHeightItem( rTextRect.Bottom() - rTextRect.Top() ) );
 
             pTextObj->SetModel( pSdrModel );
-            pTextObj->NbcSetAttributes( aSet, FALSE );
+//-/            pTextObj->NbcSetAttributes( aSet, FALSE );
+            pTextObj->SetItemSet(aSet);
 
             // rotate text with shape ?
             if ( mnFix16Angle )
@@ -3603,7 +3638,8 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 aSet.Put( XFillColorItem( String(),
                           Color( mnDefaultColor ) ) );
 
-            pObj->NbcSetAttributes( aSet, FALSE );
+//-/            pObj->NbcSetAttributes( aSet, FALSE );
+            pObj->SetItemSet(aSet);
 
         }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-09-27 14:03:34 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,18 @@
 #include <vcl/metaact.hxx>
 #endif
 
+#ifndef _SVX3DITEMS_HXX
+#include "svx3ditems.hxx"
+#endif
+
+#ifndef _SFX_WHITER_HXX
+#include <svtools/whiter.hxx>
+#endif
+
+#ifndef _EEITEM_HXX
+#include "eeitem.hxx"
+#endif
+
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
 /*************************************************************************
@@ -314,8 +326,8 @@ E3dObject::E3dObject() :
     nPartOfParent(0),
     bTfHasChanged(TRUE),
     bBoundVolValid(TRUE),
-    bIsSelected(FALSE),
-    bAttrUseSubObjects(TRUE)
+    bIsSelected(FALSE)
+//-/    bAttrUseSubObjects(TRUE)
 {
     bIs3DObj = TRUE;
     pSub = new E3dObjList(NULL, NULL);
@@ -438,14 +450,8 @@ void E3dObject::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bTransparenceAllowed = FALSE;
 
     // gradient depends on fillstyle
-
     // BM *** check if SetItem is NULL ***
-    XFillStyle eFillStyle = XFILL_NONE;
-    const SfxSetItem *pSet = GetSetItem( 1 );           // pFillAttr
-    if( pSet )
-    {
-        eFillStyle = ((XFillStyleItem&)(pSet->GetItemSet().Get(XATTR_FILLSTYLE))).GetValue();
-    }
+    XFillStyle eFillStyle = ((XFillStyleItem&)(GetItem(XATTR_FILLSTYLE))).GetValue();
     rInfo.bGradientAllowed = (eFillStyle == XFILL_GRADIENT);
 
     // Umwandeln von 3D-Koerpern in Gruppe von Polygonen:
@@ -455,7 +461,7 @@ void E3dObject::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     // also bei Durchdringugnen auch gegeneinander geschnitten werden
     // muessten. Auch die Texturkoorinaten waeren ein ungeloestes
     // Problem.
-    rInfo.bCanConvToPoly        = FALSE;
+    rInfo.bCanConvToPoly = FALSE;
     rInfo.bCanConvToContour = FALSE;
 
     rInfo.bCanConvToPathLineToArea = FALSE;
@@ -799,7 +805,7 @@ void E3dObject::DrawShadows(Base3D *pBase3D,
 
 void E3dObject::RecalcSnapRect()
 {
-    aSnapRect = Rectangle();
+    maSnapRect = Rectangle();
     if(pSub && pSub->GetObjCount())
     {
         for (ULONG i = 0; i < pSub->GetObjCount(); i++)
@@ -807,7 +813,7 @@ void E3dObject::RecalcSnapRect()
             SdrObject* pObj = pSub->GetObj(i);
             DBG_ASSERT(pObj->ISA(E3dObject), "AW: In E3dObject sind nur 3D-Objekte erlaubt!");
             Rectangle aSubRect = ((E3dObject*)pObj)->GetSnapRect();
-            aSnapRect.Union(aSubRect);
+            maSnapRect.Union(aSubRect);
         }
     }
 }
@@ -909,30 +915,31 @@ void E3dObject::Remove3DObj(E3dObject* p3DObj)
 |*
 \************************************************************************/
 
-const XLineAttrSetItem* E3dObject::GetLineAttr() const
-{
-    const XLineAttrSetItem* pSetItem = pLineAttr;
+//-/const XLineAttrSetItem* E3dObject::GetLineAttr() const
+//-/{
+//-/    const XLineAttrSetItem* pSetItem = pLineAttr;
+//-/
+//-/    if ( pSetItem == NULL && GetParentObj() )
+//-/        pSetItem = GetParentObj()->GetLineAttr();
+//-/
+//-/    return pSetItem;
+//-/}
 
-    if ( pSetItem == NULL && GetParentObj() )
-        pSetItem = GetParentObj()->GetLineAttr();
-
-    return pSetItem;
-}
 /*************************************************************************
 |*
 |* Flaechenattribute abfragen, ggf. vom Parent holen
 |*
 \************************************************************************/
 
-const XFillAttrSetItem* E3dObject::GetFillAttr() const
-{
-    const XFillAttrSetItem* pSetItem = pFillAttr;
-
-    if ( pSetItem == NULL && GetParentObj() )
-        pSetItem = GetParentObj()->GetFillAttr();
-
-    return pSetItem;
-}
+//-/const XFillAttrSetItem* E3dObject::GetFillAttr() const
+//-/{
+//-/    const XFillAttrSetItem* pSetItem = pFillAttr;
+//-/
+//-/    if ( pSetItem == NULL && GetParentObj() )
+//-/        pSetItem = GetParentObj()->GetFillAttr();
+//-/
+//-/    return pSetItem;
+//-/}
 
 /*************************************************************************
 |*
@@ -1659,25 +1666,29 @@ void E3dObject::operator=(const SdrObject& rObj)
 |*
 \************************************************************************/
 
-void E3dObject::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
-{
-    // call parent
-    if(!ISA(E3dScene))
-        SdrAttrObj::NbcSetAttributes(rAttr, bReplaceAll);
+//-/void E3dObject::Distribute3DAttributes(const SfxItemSet& rAttr)
+//-/{
+//-/}
 
-    if(bAttrUseSubObjects)
-    {
-        E3dObjList* pOL = pSub;
-        ULONG nObjCnt = pOL->GetObjCount();
-        for ( ULONG i = 0; i < nObjCnt; i++ )
-            pOL->GetObj(i)->NbcSetAttributes(rAttr, bReplaceAll);
-    }
-    else
-    {
-        bAttrUseSubObjects = TRUE;
-    }
-    StructureChanged(this);
-}
+//-/void E3dObject::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/{
+//-/    // call parent
+//-/    if(!ISA(E3dScene))
+//-/        SdrAttrObj::NbcSetAttributes(rAttr, bReplaceAll);
+//-/
+//-/    if(bAttrUseSubObjects)
+//-/    {
+//-/        E3dObjList* pOL = pSub;
+//-/        ULONG nObjCnt = pOL->GetObjCount();
+//-/        for ( ULONG i = 0; i < nObjCnt; i++ )
+//-/            pOL->GetObj(i)->NbcSetAttributes(rAttr, bReplaceAll);
+//-/    }
+//-/    else
+//-/    {
+//-/        bAttrUseSubObjects = TRUE;
+//-/    }
+//-/    StructureChanged(this);
+//-/}
 
 /*************************************************************************
 |*
@@ -1685,24 +1696,189 @@ void E3dObject::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
 |*
 \************************************************************************/
 
-void E3dObject::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge,
-    FASTBOOL bOnlyHardAttr) const
-{
-    // call parent (only with real 3d objects, not with groups)
-    if(!ISA(E3dScene))
-        SdrAttrObj::TakeAttributes(rAttr, bMerge, bOnlyHardAttr);
+//-/void E3dObject::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge,
+//-/    FASTBOOL bOnlyHardAttr) const
+//-/{
+//-/    // call parent (only with real 3d objects, not with groups)
+//-/    if(!ISA(E3dScene))
+//-/        SdrAttrObj::TakeAttributes(rAttr, bMerge, bOnlyHardAttr);
+//-/
+//-/    if(bAttrUseSubObjects)
+//-/    {
+//-/        E3dObjList* pOL = pSub;
+//-/        ULONG nObjCnt = pOL->GetObjCount();
+//-/        for ( ULONG i = 0; i < nObjCnt; i++ )
+//-/            pOL->GetObj(i)->TakeAttributes(rAttr, TRUE, bOnlyHardAttr);
+//-/    }
+//-/    else
+//-/    {
+//-/        ((E3dObject*)this)->bAttrUseSubObjects = TRUE;
+//-/    }
+//-/}
 
-    if(bAttrUseSubObjects)
+//-/void E3dObject::Collect3DAttributes(SfxItemSet& rAttr) const
+//-/{
+//-/}
+
+// ItemSet access
+//-/SfxItemSet* E3dObject::CreateNewItemSet(SfxItemPool& rPool)
+//-/{
+//-/    return new SfxItemSet(rPool,
+//-/        SDRATTR_START,  SDRATTR_END,
+//-/        SID_ATTR_3D_START, SID_ATTR_3D_END,
+//-/        0, 0);
+//-/}
+
+const SfxItemSet& E3dObject::GetItemSet() const
+{
+    E3dScene* pScene = GetScene();
+    if(pScene && pScene != this)
     {
-        E3dObjList* pOL = pSub;
-        ULONG nObjCnt = pOL->GetObjCount();
-        for ( ULONG i = 0; i < nObjCnt; i++ )
-            pOL->GetObj(i)->TakeAttributes(rAttr, TRUE, bOnlyHardAttr);
+        SfxItemSet& rSet = (SfxItemSet&)SdrAttrObj::GetItemSet();
+        SfxItemSet aSet(*rSet.GetPool(), SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST);
+        aSet.Put(pScene->E3dObject::GetItemSet());
+//-/        rSet.MergeValues(aSet, TRUE);
+        SfxWhichIter aIter(aSet);
+        sal_uInt16 nWhich(aIter.FirstWhich());
+        while(nWhich)
+        {
+            const SfxPoolItem* pItem = NULL;
+            aSet.GetItemState(nWhich, TRUE, &pItem);
+
+            if(pItem)
+            {
+                if(pItem == (SfxPoolItem *)-1)
+                    rSet.InvalidateItem(nWhich);
+                else
+                    rSet.MergeValue(*pItem, TRUE);
+            }
+            nWhich = aIter.NextWhich();
+        }
     }
-    else
+
+    return SdrAttrObj::GetItemSet();
+}
+//-/const SfxItemSet& E3dObject::GetItemSet() const
+//-/{
+//-/    // get base items from SdrAttrObj
+//-/    SfxItemSet& rSet = (SfxItemSet&)SdrAttrObj::GetItemSet();
+//-/
+//-/    // add local 3D items of this object
+//-/    Collect3DAttributes(rSet);
+//-/
+//-/    // add outmost scene (if available)
+//-/    E3dScene* pScene = GetScene();
+//-/    if(pScene)
+//-/        pScene->Collect3DAttributes(rSet);
+//-/
+//-/    // return completed ItemSet
+//-/    return rSet;
+//-/}
+
+void E3dObject::SetItem( const SfxPoolItem& rItem )
+{
+    if(rItem.Which() >= SDRATTR_3DSCENE_FIRST && rItem.Which() <= SDRATTR_3DSCENE_LAST)
     {
-        ((E3dObject*)this)->bAttrUseSubObjects = TRUE;
+        E3dScene* pScene = GetScene();
+        if(pScene && pScene != this)
+        {
+            pScene->E3dObject::SetItem(rItem);
+        }
     }
+
+    SdrAttrObj::SetItem(rItem);
+    StructureChanged(this);
+}
+//-/void E3dObject::SetItem( const SfxPoolItem& rItem )
+//-/{
+//-/    // set base items
+//-/    SdrAttrObj::SetItem(rItem);
+//-/
+//-/    // set local 3D attributes
+//-/    const SfxItemSet& rSet = SdrAttrObj::GetItemSet();
+//-/    Distribute3DAttributes(rSet);
+//-/
+//-/    // set at outmost scene (if available)
+//-/    E3dScene* pScene = GetScene();
+//-/    if(pScene)
+//-/        pScene->Distribute3DAttributes(rSet);
+//-/}
+
+void E3dObject::ClearItem( USHORT nWhich )
+{
+    if(nWhich >= SDRATTR_3DSCENE_FIRST && nWhich <= SDRATTR_3DSCENE_LAST)
+    {
+        E3dScene* pScene = GetScene();
+        if(pScene && pScene != this)
+        {
+            pScene->E3dObject::ClearItem(nWhich);
+        }
+    }
+
+    if(mpObjectItemSet)
+    {
+        SdrAttrObj::ClearItem(nWhich);
+        StructureChanged(this);
+    }
+}
+//-/void E3dObject::ClearItem( USHORT nWhich )
+//-/{
+//-/    if(mpObjectItemSet)
+//-/    {
+//-/        // clear base item
+//-/        SdrAttrObj::ClearItem(nWhich);
+//-/
+//-/        // clear local 3D attributes
+//-/        const SfxItemSet& rSet = SdrAttrObj::GetItemSet();
+//-/        Distribute3DAttributes(rSet);
+//-/
+//-/        // clear at outmost scene (if available)
+//-/        E3dScene* pScene = GetScene();
+//-/        if(pScene)
+//-/            pScene->Distribute3DAttributes(rSet);
+//-/    }
+//-/}
+
+void E3dObject::SetItemSet( const SfxItemSet& rSet )
+{
+    E3dScene* pScene = GetScene();
+    if(pScene && pScene != this)
+    {
+        pScene->E3dObject::SetItemSet(rSet);
+    }
+
+    // set base items
+    SdrAttrObj::SetItemSet(rSet);
+    StructureChanged(this);
+}
+//-/void E3dObject::SetItemSet( const SfxItemSet& rSet )
+//-/{
+//-/    // set base items
+//-/    SdrAttrObj::SetItemSet(rSet);
+//-/
+//-/    // set local 3D attributes
+//-/    Distribute3DAttributes(rSet);
+//-/
+//-/    // set at outmost scene (if available)
+//-/    E3dScene* pScene = GetScene();
+//-/    if(pScene)
+//-/        pScene->Distribute3DAttributes(rSet);
+//-/}
+
+SfxItemSet* E3dObject::CreateNewItemSet(SfxItemPool& rPool)
+{
+    // include ALL items, 2D and 3D
+    return new SfxItemSet(rPool,
+        // ranges from SdrAttrObj
+        SDRATTR_START, SDRATTRSET_SHADOW,
+        SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
+
+        // ranges for 3D (object and scene)
+        SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
+
+        // outliner and end
+        EE_ITEMS_START, EE_ITEMS_END,
+        0, 0);
 }
 
 /*************************************************************************
@@ -1890,6 +2066,13 @@ void E3dObject::AfterRead()
     SdrAttrObj::AfterRead();
     if (pSub)
         pSub->AfterRead();
+
+    // put loaded items to ItemSet
+    Collect3DAttributes((SfxItemSet&)GetItemSet());
+}
+
+void E3dObject::Collect3DAttributes(SfxItemSet& rAttr) const
+{
 }
 
 /*************************************************************************
@@ -1974,7 +2157,7 @@ BOOL E3dObject::ImpCheckSubRecords (const SdrObjIOHeader& rHead,
 |*
 \************************************************************************/
 
-void E3dObject::ForceDefaultAttr(SfxItemPool* pPool)
+void E3dObject::ForceDefaultAttr()
 {
 }
 
@@ -1984,9 +2167,9 @@ void E3dObject::ForceDefaultAttr(SfxItemPool* pPool)
 |*
 \************************************************************************/
 
-void E3dObject::ForceDefaultAttrAgain ()
+void E3dObject::ForceDefaultAttrAgain()
 {
-    SdrAttrObj::ForceDefaultAttr (&GetModel ()->GetItemPool ());
+    SdrAttrObj::ForceDefaultAttr();
 }
 
 /*************************************************************************
@@ -2114,9 +2297,9 @@ UINT16 E3dCompoundObject::GetObjIdentifier() const
 |*
 \************************************************************************/
 
-void E3dCompoundObject::ForceDefaultAttr(SfxItemPool* pPool)
+void E3dCompoundObject::ForceDefaultAttr()
 {
-    SdrAttrObj::ForceDefaultAttr (pPool);
+    SdrAttrObj::ForceDefaultAttr();
 }
 
 /*************************************************************************
@@ -2132,7 +2315,7 @@ void E3dCompoundObject::RecalcSnapRect()
     {
         // Objekttransformation uebernehmen
         const Volume3D& rBoundVol = GetBoundVolume();
-        aSnapRect = Rectangle();
+        maSnapRect = Rectangle();
 
         if(rBoundVol.IsValid())
         {
@@ -2143,7 +2326,7 @@ void E3dCompoundObject::RecalcSnapRect()
             {
                 aTfVec = pScene->GetCameraSet().WorldToViewCoor(aTfVec);
                 Point aPoint((long)(aTfVec.X() + 0.5), (long)(aTfVec.Y() + 0.5));
-                aSnapRect.Union(Rectangle(aPoint, aPoint));
+                maSnapRect.Union(Rectangle(aPoint, aPoint));
             }
         }
         bSnapRectDirty = FALSE;
@@ -2182,21 +2365,16 @@ void E3dCompoundObject::RecalcBoundRect()
         }
 
         // Linienbreite beruecksichtigen
-        const XLineAttrSetItem* pLineAttr = GetLineAttr();
-        if(pLineAttr)
+//-/        const XLineAttrSetItem* pLineAttr = GetLineAttr();
+        INT32 nLineWidth = ((const XLineWidthItem&)(GetItem(XATTR_LINEWIDTH))).GetValue();
+        if(nLineWidth)
         {
-            const SfxItemSet &rSet = pLineAttr->GetItemSet();
-            INT32 nLineWidth = ((const XLineWidthItem&) (rSet.
-                Get(XATTR_LINEWIDTH))).GetValue();
-            if(nLineWidth)
-            {
-                Rectangle aShadowRect = aOutRect;
-                aShadowRect.Left() -= nLineWidth;
-                aShadowRect.Right() += nLineWidth;
-                aShadowRect.Top() -= nLineWidth;
-                aShadowRect.Bottom() += nLineWidth;
-                aOutRect.Union(aShadowRect);
-            }
+            Rectangle aShadowRect = aOutRect;
+            aShadowRect.Left() -= nLineWidth;
+            aShadowRect.Right() += nLineWidth;
+            aShadowRect.Top() -= nLineWidth;
+            aShadowRect.Bottom() += nLineWidth;
+            aOutRect.Union(aShadowRect);
         }
     }
 }
@@ -2358,16 +2536,17 @@ Bitmap E3dCompoundObject::GetGradientBitmap(const SfxItemSet& rSet)
     Size aVDSize(256, 256);
     pVD->SetOutputSizePixel( aVDSize );
     XOutputDevice *pXOut = new XOutputDevice( pVD );
-    XFillAttrSetItem *pXFSet = new XFillAttrSetItem( rSet.GetPool() );
+//-/    XFillAttrSetItem *pXFSet = new XFillAttrSetItem( rSet.GetPool() );
+    SfxItemSet aFillSet(*rSet.GetPool());
 
-    pXFSet->GetItemSet().Put( XFillStyleItem( XFILL_GRADIENT ) );
-    pXFSet->GetItemSet().Put( rSet.Get(XATTR_FILLGRADIENT) );
-    pXFSet->GetItemSet().Put( rSet.Get(XATTR_GRADIENTSTEPCOUNT) );
-    pXOut->SetFillAttr( *pXFSet );
+    aFillSet.Put( XFillStyleItem( XFILL_GRADIENT ) );
+    aFillSet.Put( rSet.Get(XATTR_FILLGRADIENT) );
+    aFillSet.Put( rSet.Get(XATTR_GRADIENTSTEPCOUNT) );
+    pXOut->SetFillAttr( aFillSet );
 
-    XLineAttrSetItem *pXLSet = new XLineAttrSetItem( rSet.GetPool() );
-    pXLSet->GetItemSet().Put( XLineStyleItem( XLINE_NONE ) );
-    pXOut->SetLineAttr( *pXLSet );
+//-/    XLineAttrSetItem *pXLSet = new XLineAttrSetItem( rSet.GetPool() );
+    aFillSet.Put( XLineStyleItem( XLINE_NONE ) );
+    pXOut->SetLineAttr( aFillSet );
 
     pXOut->DrawRect( Rectangle( Point(), aVDSize ) );
     Bitmap aGradientBitmap = pVD->GetBitmap( Point(), aVDSize );
@@ -2376,10 +2555,10 @@ Bitmap E3dCompoundObject::GetGradientBitmap(const SfxItemSet& rSet)
         delete pVD;
     if( pXOut )
         delete pXOut;
-    if( pXFSet )
-        delete pXFSet;
-    if( pXLSet )
-        delete pXLSet;
+//-/    if( pXFSet )
+//-/        delete pXFSet;
+//-/    if( pXLSet )
+//-/        delete pXLSet;
 
     return aGradientBitmap;
 }
@@ -2469,19 +2648,20 @@ Bitmap E3dCompoundObject::GetHatchBitmap(const SfxItemSet& rSet)
     pVD->SetMapMode(aMapMode);
 
     XOutputDevice *pXOut = new XOutputDevice( pVD );
-    XFillAttrSetItem *pXFSet = new XFillAttrSetItem( rSet.GetPool() );
-    XLineAttrSetItem *pXLSet = new XLineAttrSetItem( rSet.GetPool() );
+//-/    XFillAttrSetItem *pXFSet = new XFillAttrSetItem( rSet.GetPool() );
+//-/    XLineAttrSetItem *pXLSet = new XLineAttrSetItem( rSet.GetPool() );
+    SfxItemSet aFillSet(*rSet.GetPool());
 
-    pXFSet->GetItemSet().Put( XFillStyleItem( XFILL_SOLID ) );
-    pXFSet->GetItemSet().Put( XFillColorItem( String(), RGB_Color( COL_WHITE ) ) );
-    pXLSet->GetItemSet().Put( XLineStyleItem( XLINE_NONE ) );
-    pXOut->SetLineAttr( *pXLSet );
-    pXOut->SetFillAttr( *pXFSet );
+    aFillSet.Put( XFillStyleItem( XFILL_SOLID ) );
+    aFillSet.Put( XFillColorItem( String(), RGB_Color( COL_WHITE ) ) );
+    aFillSet.Put( XLineStyleItem( XLINE_NONE ) );
+    pXOut->SetLineAttr( aFillSet );
+    pXOut->SetFillAttr( aFillSet );
     pXOut->DrawRect( Rectangle( Point(), pVD->PixelToLogic(aVDSize) ) );
 
-    pXFSet->GetItemSet().Put( XFillStyleItem( XFILL_HATCH ) );
-    pXFSet->GetItemSet().Put( rSet.Get(XATTR_FILLHATCH) );
-    pXOut->SetFillAttr( *pXFSet );
+    aFillSet.Put( XFillStyleItem( XFILL_HATCH ) );
+    aFillSet.Put( rSet.Get(XATTR_FILLHATCH) );
+    pXOut->SetFillAttr( aFillSet );
 
     Size aLogicalSize = pVD->PixelToLogic(aVDSize);
     Fraction aFractionX(aLogicalSize.Width(), nDistanceX);
@@ -2497,10 +2677,10 @@ Bitmap E3dCompoundObject::GetHatchBitmap(const SfxItemSet& rSet)
         delete pVD;
     if( pXOut )
         delete pXOut;
-    if( pXFSet )
-        delete pXFSet;
-    if( pXLSet )
-        delete pXLSet;
+//-/    if( pXFSet )
+//-/        delete pXFSet;
+//-/    if( pXLSet )
+//-/        delete pXLSet;
 
     return aHatchBitmap;
 }
@@ -2593,7 +2773,7 @@ void E3dCompoundObject::AddGeometry(const PolyPolygon3D& rPolyPolygon3D,
         if(bCreateE3dPolyObj)
         {
             E3dPolyObj* pObj = new E3dPolyObj(
-                rPolyPolygon3D, GetDoubleSided(), TRUE);
+                rPolyPolygon3D, bDoubleSided, TRUE);
             pObj->SetPartOfParent();
             Insert3DObj(pObj);
         }
@@ -2628,7 +2808,7 @@ void E3dCompoundObject::AddGeometry(
         if(bCreateE3dPolyObj)
         {
             E3dPolyObj* pObj = new E3dPolyObj(
-                rPolyPolygon3D, rPolyNormal3D, GetDoubleSided(), TRUE);
+                rPolyPolygon3D, rPolyNormal3D, bDoubleSided, TRUE);
             pObj->SetPartOfParent();
             Insert3DObj(pObj);
         }
@@ -2666,7 +2846,7 @@ void E3dCompoundObject::AddGeometry(
         {
             E3dPolyObj* pObj = new E3dPolyObj(
                 rPolyPolygon3D, rPolyNormal3D,
-                rPolyTexture3D, GetDoubleSided(), TRUE);
+                rPolyTexture3D, bDoubleSided, TRUE);
             pObj->SetPartOfParent();
             Insert3DObj(pObj);
         }
@@ -3189,10 +3369,10 @@ void E3dCompoundObject::SetBase3DParams(ExtOutputDevice& rOut, Base3D* pBase3D,
     if(bDrawObject)
     {
         // Attribute aus dem Objekt holen
-        const XFillAttrSetItem* pFillAttr = GetFillAttr();
-        if(pFillAttr && !bIsFillDraft)
+//-/        const XFillAttrSetItem* pFillAttr = GetFillAttr();
+        if(!bIsFillDraft)
         {
-            const SfxItemSet& rSet = pFillAttr->GetItemSet();
+            const SfxItemSet& rSet = GetItemSet();
             UINT16 nFillTrans = ITEMVALUE(rSet, XATTR_FILLTRANSPARENCE, XFillTransparenceItem);
 
             if(
@@ -3495,9 +3675,9 @@ void E3dCompoundObject::SetBase3DParams(ExtOutputDevice& rOut, Base3D* pBase3D,
                 if(pTexture)
                 {
                     // Einige Modi einstellen
-                    pTexture->SetTextureKind(GetTextureKind());
-                    pTexture->SetTextureMode(GetTextureMode());
-                    pTexture->SetTextureFilter(GetFilterTexture() ? Base3DTextureLinear : Base3DTextureNearest);
+                    pTexture->SetTextureKind(eTextureKind);
+                    pTexture->SetTextureMode(eTextureMode);
+                    pTexture->SetTextureFilter(bFilterTexture ? Base3DTextureLinear : Base3DTextureNearest);
 
                     pTexture->SetTextureWrapS(eWrapX);
                     pTexture->SetTextureWrapT(eWrapY);
@@ -3533,18 +3713,17 @@ void E3dCompoundObject::SetBase3DParams(ExtOutputDevice& rOut, Base3D* pBase3D,
     if(bDrawOutline)
     {
         XLineStyle aLineStyle(XLINE_NONE);
-        const XLineAttrSetItem* pLineAttr = GetLineAttr();
-        if(pLineAttr && !rOut.GetIgnoreLineStyle())
+//-/        const XLineAttrSetItem* pLineAttr = GetLineAttr();
+        if(!rOut.GetIgnoreLineStyle())
         {
             Color aColorLine(COL_WHITE);
-            const SfxItemSet &rSet = pLineAttr->GetItemSet();
-            UINT16 nLineTransparence = ITEMVALUE( rSet, XATTR_LINETRANSPARENCE, XLineTransparenceItem );
+            UINT16 nLineTransparence = ITEMVALUE(GetItemSet(), XATTR_LINETRANSPARENCE, XLineTransparenceItem);
 
             if(
                 (nLineTransparence && (nDrawFlags & E3D_DRAWFLAG_TRANSPARENT))
                 || (!nLineTransparence && !(nDrawFlags & E3D_DRAWFLAG_TRANSPARENT)))
             {
-                aColorLine = ((const XLineColorItem&) (rSet.Get(XATTR_LINECOLOR))).GetValue();
+                aColorLine = ((const XLineColorItem&)(GetItem(XATTR_LINECOLOR))).GetValue();
 
                 if(bGhosted)
                 {
@@ -3554,10 +3733,8 @@ void E3dCompoundObject::SetBase3DParams(ExtOutputDevice& rOut, Base3D* pBase3D,
                 }
 
                 aColorLine.SetTransparency((UINT8)(nLineTransparence * 255 / 100));
-                aLineStyle = ((const XLineStyleItem&) (rSet.
-                    Get(XATTR_LINESTYLE))).GetValue();
-                INT32 nLineWidth = ((const XLineWidthItem&) (rSet.
-                    Get(XATTR_LINEWIDTH))).GetValue();
+                aLineStyle = ((const XLineStyleItem&)(GetItem(XATTR_LINESTYLE))).GetValue();
+                INT32 nLineWidth = ((const XLineWidthItem&)(GetItem(XATTR_LINEWIDTH))).GetValue();
                 if(nLineWidth && !bIsLineDraft)
                 {
                     Point aPnt(nLineWidth, 0);
@@ -3737,83 +3914,108 @@ void E3dCompoundObject::CenterObject(const Vector3D& rCenter)
 
 Color E3dCompoundObject::GetShadowColor()
 {
-    Color aShadCol;
-
-    if (pShadAttr!=NULL)
-    {
-        const SdrShadowColorItem& rShadColItem=((SdrShadowColorItem&)(pShadAttr->GetItemSet().Get(SDRATTR_SHADOWCOLOR)));
-        aShadCol = rShadColItem.GetValue();
-    }
-
+    const SdrShadowColorItem& rShadColItem = ((SdrShadowColorItem&)(GetItem(SDRATTR_SHADOWCOLOR)));
+    Color aShadCol = rShadColItem.GetValue();
     return aShadCol;
+//-/    Color aShadCol;
+//-/
+//-/    if (pShadAttr!=NULL)
+//-/    {
+//-/        const SdrShadowColorItem& rShadColItem=((SdrShadowColorItem&)(pShadAttr->GetItem(SDRATTR_SHADOWCOLOR)));
+//-/        aShadCol = rShadColItem.GetValue();
+//-/    }
+//-/
+//-/    return aShadCol;
 }
 
 BOOL E3dCompoundObject::DrawShadowAsOutline()
 {
-    BOOL bRetval = FALSE;
-
-    if (pShadAttr!=NULL)
-    {
-        BOOL bFillAttrIsNone = TRUE;
-        if (pFillAttr!=NULL)
-        {
-            XFillStyle eFillStyle=((XFillStyleItem&)(pFillAttr->GetItemSet().Get(XATTR_FILLSTYLE))).GetValue();
-            if (eFillStyle!=XFILL_NONE)
-                bFillAttrIsNone = FALSE;
-        }
-
-        BOOL bLineAttrIsNone = TRUE;
-        if (pLineAttr!=NULL)
-        {
-            XLineStyle eLineStyle=((XLineStyleItem&)(pLineAttr->GetItemSet().Get(XATTR_LINESTYLE))).GetValue();
-            if (eLineStyle!=XLINE_NONE)
-                bLineAttrIsNone = FALSE;
-        }
-
-        bRetval = bFillAttrIsNone && !bLineAttrIsNone;
-    }
-
-    return bRetval;
+    const SfxItemSet& rSet = GetItemSet();
+    XFillStyle eFillStyle = ((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
+    XLineStyle eLineStyle = ((XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
+    BOOL bFillAttrIsNone = eFillStyle == XFILL_NONE;
+    BOOL bLineAttrIsNone = eLineStyle == XLINE_NONE;
+    return (bFillAttrIsNone && !bLineAttrIsNone);
+//-/    BOOL bRetval = FALSE;
+//-/
+//-/    if (pShadAttr!=NULL)
+//-/    {
+//-/        BOOL bFillAttrIsNone = TRUE;
+//-/        if (pFillAttr!=NULL)
+//-/        {
+//-/            XFillStyle eFillStyle=((XFillStyleItem&)(pFillAttr->GetItem(XATTR_FILLSTYLE))).GetValue();
+//-/            if (eFillStyle!=XFILL_NONE)
+//-/                bFillAttrIsNone = FALSE;
+//-/        }
+//-/
+//-/        BOOL bLineAttrIsNone = TRUE;
+//-/        if (pLineAttr!=NULL)
+//-/        {
+//-/            XLineStyle eLineStyle=((XLineStyleItem&)(pLineAttr->GetItem(XATTR_LINESTYLE))).GetValue();
+//-/            if (eLineStyle!=XLINE_NONE)
+//-/                bLineAttrIsNone = FALSE;
+//-/        }
+//-/
+//-/        bRetval = bFillAttrIsNone && !bLineAttrIsNone;
+//-/    }
+//-/
+//-/    return bRetval;
 }
 
 INT32 E3dCompoundObject::GetShadowXDistance()
 {
-    return (long)((SdrShadowXDistItem&)(pShadAttr->GetItemSet().Get(SDRATTR_SHADOWXDIST))).GetValue();
+    return (long)((SdrShadowXDistItem&)(GetItem(SDRATTR_SHADOWXDIST))).GetValue();
 }
 
 INT32 E3dCompoundObject::GetShadowYDistance()
 {
-    return (long)((SdrShadowYDistItem&)(pShadAttr->GetItemSet().Get(SDRATTR_SHADOWYDIST))).GetValue();
+    return (long)((SdrShadowYDistItem&)(GetItem(SDRATTR_SHADOWYDIST))).GetValue();
 }
 
 UINT16 E3dCompoundObject::GetShadowTransparence()
 {
-    return (UINT16)((SdrShadowTransparenceItem&)(pShadAttr->GetItemSet().Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue();
+    return (UINT16)((SdrShadowTransparenceItem&)(GetItem(SDRATTR_SHADOWTRANSPARENCE))).GetValue();
 }
 
 BOOL E3dCompoundObject::DoDrawShadow()
 {
-    BOOL bRetval = FALSE;
+    const SfxItemSet& rSet = GetItemSet();
+    BOOL bRetval(FALSE);
+    BOOL bShadOn = ((SdrShadowItem&)(rSet.Get(SDRATTR_SHADOW))).GetValue();
 
-    if (pShadAttr!=NULL)
+    if(bShadOn)
     {
-        FASTBOOL bShadOn=((SdrShadowItem&)(pShadAttr->GetItemSet().Get(SDRATTR_SHADOW))).GetValue();
-        if (bShadOn) {
-            bRetval = TRUE;
+        bRetval = TRUE;
 
-            // Eventuell bRetval auf FALSE falls nicht gefuellt und
-            // kein Linienstil!
-            if(!pFillAttr
-                || ((XFillStyleItem&)(pFillAttr->GetItemSet().Get(XATTR_FILLSTYLE))).GetValue() == XFILL_NONE)
+        if(((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue() == XFILL_NONE)
+        {
+            if(((XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue() == XLINE_NONE)
             {
-                if(!pLineAttr
-                    || ((XLineStyleItem&)(pLineAttr->GetItemSet().Get(XATTR_LINESTYLE))).GetValue() == XLINE_NONE)
-                {
-                    bRetval = FALSE;
-                }
+                bRetval = FALSE;
             }
         }
     }
+//-/    BOOL bRetval = FALSE;
+//-/
+//-/    if (pShadAttr!=NULL)
+//-/    {
+//-/        FASTBOOL bShadOn=((SdrShadowItem&)(pShadAttr->GetItem(SDRATTR_SHADOW))).GetValue();
+//-/        if (bShadOn) {
+//-/            bRetval = TRUE;
+//-/
+//-/            // Eventuell bRetval auf FALSE falls nicht gefuellt und
+//-/            // kein Linienstil!
+//-/            if(!pFillAttr
+//-/                || ((XFillStyleItem&)(pFillAttr->GetItem(XATTR_FILLSTYLE))).GetValue() == XFILL_NONE)
+//-/            {
+//-/                if(!pLineAttr
+//-/                    || ((XLineStyleItem&)(pLineAttr->GetItem(XATTR_LINESTYLE))).GetValue() == XLINE_NONE)
+//-/                {
+//-/                    bRetval = FALSE;
+//-/                }
+//-/            }
+//-/        }
+//-/    }
     return bRetval;
 }
 
@@ -4200,15 +4402,6 @@ void E3dCompoundObject::CreateSegment(
 |*
 \************************************************************************/
 
-void E3dCompoundObject::SetDoubleSided (BOOL bNew)
-{
-    if(bDoubleSided != bNew)
-    {
-        bDoubleSided = bNew;
-        bGeometryValid = FALSE;
-    }
-}
-
 void E3dCompoundObject::SetCreateNormals(BOOL bNew)
 {
     if(bCreateNormals != bNew)
@@ -4223,69 +4416,6 @@ void E3dCompoundObject::SetCreateTexture(BOOL bNew)
     if(bCreateTexture != bNew)
     {
         bCreateTexture = bNew;
-        bGeometryValid = FALSE;
-    }
-}
-
-void E3dCompoundObject::SetUseStdNormals(BOOL bNew)
-{
-    if(bUseStdNormals != bNew)
-    {
-        bUseStdNormals = bNew;
-        bGeometryValid = FALSE;
-    }
-}
-
-void E3dCompoundObject::SetUseStdNormalsUseSphere(BOOL bNew)
-{
-    if(bUseStdNormalsUseSphere != bNew)
-    {
-        bUseStdNormalsUseSphere = bNew;
-        bGeometryValid = FALSE;
-    }
-}
-
-void E3dCompoundObject::SetInvertNormals(BOOL bNew)
-{
-    if(bInvertNormals != bNew)
-    {
-        bInvertNormals = bNew;
-        GetDisplayGeometry().InvertNormals();
-    }
-}
-
-void E3dCompoundObject::SetUseStdTextureX(BOOL bNew)
-{
-    if(bUseStdTextureX != bNew)
-    {
-        bUseStdTextureX = bNew;
-        bGeometryValid = FALSE;
-    }
-}
-
-void E3dCompoundObject::SetUseStdTextureXUseSphere(BOOL bNew)
-{
-    if(bUseStdTextureXUseSphere != bNew)
-    {
-        bUseStdTextureXUseSphere = bNew;
-        bGeometryValid = FALSE;
-    }
-}
-
-void E3dCompoundObject::SetUseStdTextureY(BOOL bNew)
-{
-    if(bUseStdTextureY != bNew)
-    {
-        bUseStdTextureY = bNew;
-        bGeometryValid = FALSE;
-    }
-}
-
-void E3dCompoundObject::SetUseStdTextureYUseSphere(BOOL bNew)
-{
-    if(bUseStdTextureYUseSphere != bNew)
-    {
-        bUseStdTextureYUseSphere = bNew;
         bGeometryValid = FALSE;
     }
 }
@@ -4337,36 +4467,6 @@ void E3dCompoundObject::SetUseDifferentBackMaterial(BOOL bNew)
 
 /*************************************************************************
 |*
-|* Texturattribute
-|*
-\************************************************************************/
-
-void E3dCompoundObject::SetTextureKind(Base3DTextureKind eNew)
-{
-    if(eTextureKind != eNew)
-    {
-        eTextureKind = eNew;
-    }
-}
-
-void E3dCompoundObject::SetTextureMode(Base3DTextureMode eNew)
-{
-    if(eTextureMode != eNew)
-    {
-        eTextureMode = eNew;
-    }
-}
-
-void E3dCompoundObject::SetFilterTexture(BOOL bNew)
-{
-    if(bFilterTexture != bNew)
-    {
-        bFilterTexture = bNew;
-    }
-}
-
-/*************************************************************************
-|*
 |* 3D Ausgabe
 |*
 \************************************************************************/
@@ -4395,7 +4495,7 @@ void E3dCompoundObject::Paint3D(ExtOutputDevice& rOut, Base3D* pBase3D,
             bIsLineDraft, bIsFillDraft);
 
         // Culling?
-        pBase3D->SetCullMode(GetDoubleSided() ? Base3DCullNone : Base3DCullBack);
+        pBase3D->SetCullMode(bDoubleSided ? Base3DCullNone : Base3DCullBack);
 
         // Objekt flat darstellen?
         BOOL bForceFlat = (bUseStdNormals && !bUseStdNormalsUseSphere);
@@ -4541,7 +4641,7 @@ void E3dCompoundObject::GetShadowPolygon(PolyPolygon& rPoly)
     B3dEntityBucket& rEntityBucket = GetDisplayGeometry().GetEntityBucket();
     GeometryIndexValueBucket& rIndexBucket = GetDisplayGeometry().GetIndexBucket();
 
-    if(GetDrawShadow3D())
+    if(bShadow3D)
     {
         // 3D Schatten. Nimm Lichtquelle und Ebene. Projiziere
         // die Punkte und jage sie durch die 3D Darstellung.
@@ -4885,156 +4985,486 @@ XPolyPolygon E3dCompoundObject::TransformToScreenCoor(const PolyPolygon3D &rExtr
 |*
 \************************************************************************/
 
-void E3dCompoundObject::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/void E3dCompoundObject::Distribute3DAttributes(const SfxItemSet& rAttr)
+//-/{
+//-/    // call parent
+//-/    E3dObject::Distribute3DAttributes(rAttr);
+//-/
+//-/    // special Attr for E3dCompoundObject
+//-/    const SfxPoolItem* pPoolItem = NULL;
+//-/    B3dMaterial aNewMat = GetFrontMaterial();
+//-/    BOOL bNewMatUsed = FALSE;
+//-/
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_DOUBLE_SIDED, TRUE, &pPoolItem ) )
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        SetDoubleSided(bNew);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_NORMALS_KIND, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
+//-/        if(nNew == 0)
+//-/        {
+//-/            SetUseStdNormals(FALSE);
+//-/            SetUseStdNormalsUseSphere(FALSE);
+//-/        }
+//-/        else if(nNew == 1)
+//-/        {
+//-/            SetUseStdNormals(TRUE);
+//-/            SetUseStdNormalsUseSphere(FALSE);
+//-/        }
+//-/        else
+//-/        {
+//-/            SetUseStdNormals(TRUE);
+//-/            SetUseStdNormalsUseSphere(TRUE);
+//-/        }
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_NORMALS_INVERT, TRUE, &pPoolItem ) )
+//-/    {
+//-/        BOOL bNew = ( ( const SfxBoolItem* ) pPoolItem )->GetValue();
+//-/        SetInvertNormals(bNew);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_PROJ_X, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
+//-/        if(nNew == 0)
+//-/        {
+//-/            SetUseStdTextureX(FALSE);
+//-/            SetUseStdTextureXUseSphere(FALSE);
+//-/        }
+//-/        else if(nNew == 1)
+//-/        {
+//-/            SetUseStdTextureX(TRUE);
+//-/            SetUseStdTextureXUseSphere(FALSE);
+//-/        }
+//-/        else
+//-/        {
+//-/            SetUseStdTextureX(TRUE);
+//-/            SetUseStdTextureXUseSphere(TRUE);
+//-/        }
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_PROJ_Y, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
+//-/        if(nNew == 0)
+//-/        {
+//-/            SetUseStdTextureY(FALSE);
+//-/            SetUseStdTextureYUseSphere(FALSE);
+//-/        }
+//-/        else if(nNew == 1)
+//-/        {
+//-/            SetUseStdTextureY(TRUE);
+//-/            SetUseStdTextureYUseSphere(FALSE);
+//-/        }
+//-/        else
+//-/        {
+//-/            SetUseStdTextureY(TRUE);
+//-/            SetUseStdTextureYUseSphere(TRUE);
+//-/        }
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_SHADOW_3D, TRUE, &pPoolItem ) )
+//-/    {
+//-/        BOOL bNew = ( ( const SfxBoolItem* ) pPoolItem )->GetValue();
+//-/        SetDrawShadow3D(bNew);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_MAT_COLOR, TRUE, &pPoolItem ) )
+//-/    {
+//-/        Color aNew = ( ( const SvxColorItem* ) pPoolItem )->GetValue();
+//-/        aNewMat.SetMaterial(aNew, Base3DMaterialDiffuse);
+//-/        bNewMatUsed = TRUE;
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_MAT_EMISSION, TRUE, &pPoolItem ) )
+//-/    {
+//-/        Color aNew = ( ( const SvxColorItem* ) pPoolItem )->GetValue();
+//-/        aNewMat.SetMaterial(aNew, Base3DMaterialEmission);
+//-/        bNewMatUsed = TRUE;
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_MAT_SPECULAR, TRUE, &pPoolItem ) )
+//-/    {
+//-/        Color aNew = ( ( const SvxColorItem* ) pPoolItem )->GetValue();
+//-/        aNewMat.SetMaterial(aNew, Base3DMaterialSpecular);
+//-/        bNewMatUsed = TRUE;
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_MAT_SPECULAR_INTENSITY, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
+//-/        aNewMat.SetShininess(nNew);
+//-/        bNewMatUsed = TRUE;
+//-/    }
+//-/    if(bNewMatUsed)
+//-/        SetFrontMaterial(aNewMat);
+//-/
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_KIND, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
+//-/        if(nNew == 0)
+//-/        {
+//-/            SetTextureKind(Base3DTextureLuminance);
+//-/        }
+//-/        else
+//-/        {
+//-/            SetTextureKind(Base3DTextureColor);
+//-/        }
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_MODE, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
+//-/        if(nNew == 0)
+//-/        {
+//-/            SetTextureMode(Base3DTextureReplace);
+//-/        }
+//-/        else if(nNew == 1)
+//-/        {
+//-/            SetTextureMode(Base3DTextureModulate);
+//-/        }
+//-/        else
+//-/        {
+//-/            SetTextureMode(Base3DTextureBlend);
+//-/        }
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_FILTER, TRUE, &pPoolItem ) )
+//-/    {
+//-/        BOOL bNew = ( ( const SfxBoolItem* ) pPoolItem )->GetValue();
+//-/        SetFilterTexture(bNew);
+//-/    }
+//-/}
+
+void E3dCompoundObject::ImpLocalItemValueChange(const SfxPoolItem& rNew)
 {
-    // call parent
-    E3dObject::NbcSetAttributes(rAttr, bReplaceAll);
-
-    // special Attr for E3dCompoundObject
-    const SfxPoolItem* pPoolItem = NULL;
-    B3dMaterial aNewMat = GetFrontMaterial();
-    BOOL bNewMatUsed = FALSE;
-
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_DOUBLE_SIDED, TRUE, &pPoolItem ) )
+    switch(rNew.Which())
     {
-        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
-        SetDoubleSided(bNew);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_NORMALS_KIND, TRUE, &pPoolItem ) )
-    {
-        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
-        if(nNew == 0)
+        case SDRATTR_3DOBJ_DOUBLE_SIDED:
         {
-            SetUseStdNormals(FALSE);
-            SetUseStdNormalsUseSphere(FALSE);
+            BOOL bNew = ((const Svx3DDoubleSidedItem&)rNew).GetValue();
+            ImpSetDoubleSided(bNew);
+            break;
         }
-        else if(nNew == 1)
+        case SDRATTR_3DOBJ_NORMALS_KIND:
         {
-            SetUseStdNormals(TRUE);
-            SetUseStdNormalsUseSphere(FALSE);
+            UINT16 nNew = ((const Svx3DNormalsKindItem&)rNew).GetValue();
+            if(nNew == 0)
+            {
+                ImpSetUseStdNormals(FALSE);
+                ImpSetUseStdNormalsUseSphere(FALSE);
+            }
+            else if(nNew == 1)
+            {
+                ImpSetUseStdNormals(TRUE);
+                ImpSetUseStdNormalsUseSphere(FALSE);
+            }
+            else
+            {
+                ImpSetUseStdNormals(TRUE);
+                ImpSetUseStdNormalsUseSphere(TRUE);
+            }
+            break;
         }
-        else
+        case SDRATTR_3DOBJ_NORMALS_INVERT:
         {
-            SetUseStdNormals(TRUE);
-            SetUseStdNormalsUseSphere(TRUE);
+            BOOL bNew = ((const Svx3DNormalsInvertItem&)rNew).GetValue();
+            ImpSetInvertNormals(bNew);
+            break;
         }
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_NORMALS_INVERT, TRUE, &pPoolItem ) )
-    {
-        BOOL bNew = ( ( const SfxBoolItem* ) pPoolItem )->GetValue();
-        SetInvertNormals(bNew);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_PROJ_X, TRUE, &pPoolItem ) )
-    {
-        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
-        if(nNew == 0)
+        case SDRATTR_3DOBJ_TEXTURE_PROJ_X:
         {
-            SetUseStdTextureX(FALSE);
-            SetUseStdTextureXUseSphere(FALSE);
+            UINT16 nNew = ((const Svx3DTextureProjectionXItem&)rNew).GetValue();
+            if(nNew == 0)
+            {
+                ImpSetUseStdTextureX(FALSE);
+                ImpSetUseStdTextureXUseSphere(FALSE);
+            }
+            else if(nNew == 1)
+            {
+                ImpSetUseStdTextureX(TRUE);
+                ImpSetUseStdTextureXUseSphere(FALSE);
+            }
+            else
+            {
+                ImpSetUseStdTextureX(TRUE);
+                ImpSetUseStdTextureXUseSphere(TRUE);
+            }
+            break;
         }
-        else if(nNew == 1)
+        case SDRATTR_3DOBJ_TEXTURE_PROJ_Y:
         {
-            SetUseStdTextureX(TRUE);
-            SetUseStdTextureXUseSphere(FALSE);
+            UINT16 nNew = ((const Svx3DTextureProjectionYItem&)rNew).GetValue();
+            if(nNew == 0)
+            {
+                ImpSetUseStdTextureY(FALSE);
+                ImpSetUseStdTextureYUseSphere(FALSE);
+            }
+            else if(nNew == 1)
+            {
+                ImpSetUseStdTextureY(TRUE);
+                ImpSetUseStdTextureYUseSphere(FALSE);
+            }
+            else
+            {
+                ImpSetUseStdTextureY(TRUE);
+                ImpSetUseStdTextureYUseSphere(TRUE);
+            }
+            break;
         }
-        else
+        case SDRATTR_3DOBJ_SHADOW_3D:
         {
-            SetUseStdTextureX(TRUE);
-            SetUseStdTextureXUseSphere(TRUE);
+            BOOL bNew = ((const Svx3DShadow3DItem&)rNew).GetValue();
+            ImpSetDrawShadow3D(bNew);
+            break;
         }
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_PROJ_Y, TRUE, &pPoolItem ) )
-    {
-        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
-        if(nNew == 0)
+        case SDRATTR_3DOBJ_MAT_COLOR:
         {
-            SetUseStdTextureY(FALSE);
-            SetUseStdTextureYUseSphere(FALSE);
+            B3dMaterial aNewMat = GetFrontMaterial();
+            Color aNew = ((const Svx3DMaterialColorItem&)rNew).GetValue();
+            aNewMat.SetMaterial(aNew, Base3DMaterialDiffuse);
+            SetFrontMaterial(aNewMat);
+            break;
         }
-        else if(nNew == 1)
+        case SDRATTR_3DOBJ_MAT_EMISSION:
         {
-            SetUseStdTextureY(TRUE);
-            SetUseStdTextureYUseSphere(FALSE);
+            B3dMaterial aNewMat = GetFrontMaterial();
+            Color aNew = ((const Svx3DMaterialEmissionItem&)rNew).GetValue();
+            aNewMat.SetMaterial(aNew, Base3DMaterialEmission);
+            SetFrontMaterial(aNewMat);
+            break;
         }
-        else
+        case SDRATTR_3DOBJ_MAT_SPECULAR:
         {
-            SetUseStdTextureY(TRUE);
-            SetUseStdTextureYUseSphere(TRUE);
+            B3dMaterial aNewMat = GetFrontMaterial();
+            Color aNew = ((const Svx3DMaterialSpecularItem&)rNew).GetValue();
+            aNewMat.SetMaterial(aNew, Base3DMaterialSpecular);
+            SetFrontMaterial(aNewMat);
+            break;
         }
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_SHADOW_3D, TRUE, &pPoolItem ) )
-    {
-        BOOL bNew = ( ( const SfxBoolItem* ) pPoolItem )->GetValue();
-        SetDrawShadow3D(bNew);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_MAT_COLOR, TRUE, &pPoolItem ) )
-    {
-        Color aNew = ( ( const SvxColorItem* ) pPoolItem )->GetValue();
-
-        // Im Objekt setzen
-        SfxItemSet aNewSet(GetModel()->GetItemPool());
-        aNewSet.Put(XFillColorItem(String(), aNew));
-        SdrAttrObj::NbcSetAttributes(aNewSet, FALSE);
-
-        // ...und im Material setzen
-        aNewMat.SetMaterial(aNew, Base3DMaterialDiffuse);
-        bNewMatUsed = TRUE;
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_MAT_EMISSION, TRUE, &pPoolItem ) )
-    {
-        Color aNew = ( ( const SvxColorItem* ) pPoolItem )->GetValue();
-        aNewMat.SetMaterial(aNew, Base3DMaterialEmission);
-        bNewMatUsed = TRUE;
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_MAT_SPECULAR, TRUE, &pPoolItem ) )
-    {
-        Color aNew = ( ( const SvxColorItem* ) pPoolItem )->GetValue();
-        aNewMat.SetMaterial(aNew, Base3DMaterialSpecular);
-        bNewMatUsed = TRUE;
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_MAT_SPECULAR_INTENSITY, TRUE, &pPoolItem ) )
-    {
-        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
-        aNewMat.SetShininess(nNew);
-        bNewMatUsed = TRUE;
-    }
-    if(bNewMatUsed)
-        SetFrontMaterial(aNewMat);
-
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_KIND, TRUE, &pPoolItem ) )
-    {
-        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
-        if(nNew == 0)
+        case SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY:
         {
-            SetTextureKind(Base3DTextureLuminance);
+            B3dMaterial aNewMat = GetFrontMaterial();
+            UINT16 nNew = ((const Svx3DMaterialSpecularIntensityItem&)rNew).GetValue();
+            aNewMat.SetShininess(nNew);
+            SetFrontMaterial(aNewMat);
+            break;
         }
-        else
+        case SDRATTR_3DOBJ_TEXTURE_KIND:
         {
-            SetTextureKind(Base3DTextureColor);
+            UINT16 nNew = ((const Svx3DTextureKindItem&)rNew).GetValue();
+            if(nNew == 0)
+            {
+                ImpSetTextureKind(Base3DTextureLuminance);
+            }
+            else
+            {
+                ImpSetTextureKind(Base3DTextureColor);
+            }
+            break;
         }
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_MODE, TRUE, &pPoolItem ) )
-    {
-        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
-        if(nNew == 0)
+        case SDRATTR_3DOBJ_TEXTURE_MODE:
         {
-            SetTextureMode(Base3DTextureReplace);
+            UINT16 nNew = ((const Svx3DTextureModeItem&)rNew).GetValue();
+            if(nNew == 0)
+            {
+                ImpSetTextureMode(Base3DTextureReplace);
+            }
+            else if(nNew == 1)
+            {
+                ImpSetTextureMode(Base3DTextureModulate);
+            }
+            else
+            {
+                ImpSetTextureMode(Base3DTextureBlend);
+            }
+            break;
         }
-        else if(nNew == 1)
+        case SDRATTR_3DOBJ_TEXTURE_FILTER:
         {
-            SetTextureMode(Base3DTextureModulate);
+            BOOL bNew = ((const Svx3DTextureFilterItem&)rNew).GetValue();
+            ImpSetFilterTexture(bNew);
+            break;
         }
-        else
-        {
-            SetTextureMode(Base3DTextureBlend);
-        }
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_FILTER, TRUE, &pPoolItem ) )
-    {
-        BOOL bNew = ( ( const SfxBoolItem* ) pPoolItem )->GetValue();
-        SetFilterTexture(bNew);
     }
 }
+
+void E3dCompoundObject::SetItem( const SfxPoolItem& rItem )
+{
+    // set item
+    E3dObject::SetItem(rItem);
+
+    // handle value change
+    if(rItem.Which() >= SDRATTR_3DOBJ_FIRST && rItem.Which() <= SDRATTR_3DOBJ_LAST)
+        ImpLocalItemValueChange(rItem);
+}
+
+void E3dCompoundObject::ClearItem( USHORT nWhich )
+{
+    if(mpObjectItemSet)
+    {
+        // clear base items at SdrAttrObj, NOT at E3dObject(!)
+        E3dObject::ClearItem(nWhich);
+
+        // handle value change
+        if(nWhich >= SDRATTR_3DOBJ_FIRST && nWhich <= SDRATTR_3DOBJ_LAST)
+            ImpLocalItemValueChange(mpObjectItemSet->Get(nWhich));
+    }
+}
+
+void E3dCompoundObject::SetItemSet( const SfxItemSet& rSet )
+{
+    // set base items at SdrAttrObj, NOT at E3dObject(!)
+    E3dObject::SetItemSet(rSet);
+
+    // handle value change
+    for(sal_uInt16 nWhich(SDRATTR_3DOBJ_FIRST); nWhich <= SDRATTR_3DOBJ_TEXTURE_FILTER; nWhich++)
+        ImpLocalItemValueChange(rSet.Get(nWhich));
+}
+
+//-/void E3dCompoundObject::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/{
+//-/    // call parent
+//-/    E3dObject::NbcSetAttributes(rAttr, bReplaceAll);
+//-/
+//-/    // special Attr for E3dCompoundObject
+//-/    const SfxPoolItem* pPoolItem = NULL;
+//-/    B3dMaterial aNewMat = GetFrontMaterial();
+//-/    BOOL bNewMatUsed = FALSE;
+//-/
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_DOUBLE_SIDED, TRUE, &pPoolItem ) )
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        SetDoubleSided(bNew);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_NORMALS_KIND, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
+//-/        if(nNew == 0)
+//-/        {
+//-/            SetUseStdNormals(FALSE);
+//-/            SetUseStdNormalsUseSphere(FALSE);
+//-/        }
+//-/        else if(nNew == 1)
+//-/        {
+//-/            SetUseStdNormals(TRUE);
+//-/            SetUseStdNormalsUseSphere(FALSE);
+//-/        }
+//-/        else
+//-/        {
+//-/            SetUseStdNormals(TRUE);
+//-/            SetUseStdNormalsUseSphere(TRUE);
+//-/        }
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_NORMALS_INVERT, TRUE, &pPoolItem ) )
+//-/    {
+//-/        BOOL bNew = ( ( const SfxBoolItem* ) pPoolItem )->GetValue();
+//-/        SetInvertNormals(bNew);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_PROJ_X, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
+//-/        if(nNew == 0)
+//-/        {
+//-/            SetUseStdTextureX(FALSE);
+//-/            SetUseStdTextureXUseSphere(FALSE);
+//-/        }
+//-/        else if(nNew == 1)
+//-/        {
+//-/            SetUseStdTextureX(TRUE);
+//-/            SetUseStdTextureXUseSphere(FALSE);
+//-/        }
+//-/        else
+//-/        {
+//-/            SetUseStdTextureX(TRUE);
+//-/            SetUseStdTextureXUseSphere(TRUE);
+//-/        }
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_PROJ_Y, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
+//-/        if(nNew == 0)
+//-/        {
+//-/            SetUseStdTextureY(FALSE);
+//-/            SetUseStdTextureYUseSphere(FALSE);
+//-/        }
+//-/        else if(nNew == 1)
+//-/        {
+//-/            SetUseStdTextureY(TRUE);
+//-/            SetUseStdTextureYUseSphere(FALSE);
+//-/        }
+//-/        else
+//-/        {
+//-/            SetUseStdTextureY(TRUE);
+//-/            SetUseStdTextureYUseSphere(TRUE);
+//-/        }
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_SHADOW_3D, TRUE, &pPoolItem ) )
+//-/    {
+//-/        BOOL bNew = ( ( const SfxBoolItem* ) pPoolItem )->GetValue();
+//-/        SetDrawShadow3D(bNew);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_MAT_COLOR, TRUE, &pPoolItem ) )
+//-/    {
+//-/        Color aNew = ( ( const SvxColorItem* ) pPoolItem )->GetValue();
+//-/
+//-/        // Im Objekt setzen
+//-/        SfxItemSet aNewSet(GetModel()->GetItemPool());
+//-/        aNewSet.Put(XFillColorItem(String(), aNew));
+//-/        SdrAttrObj::NbcSetAttributes(aNewSet, FALSE);
+//-/
+//-/        // ...und im Material setzen
+//-/        aNewMat.SetMaterial(aNew, Base3DMaterialDiffuse);
+//-/        bNewMatUsed = TRUE;
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_MAT_EMISSION, TRUE, &pPoolItem ) )
+//-/    {
+//-/        Color aNew = ( ( const SvxColorItem* ) pPoolItem )->GetValue();
+//-/        aNewMat.SetMaterial(aNew, Base3DMaterialEmission);
+//-/        bNewMatUsed = TRUE;
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_MAT_SPECULAR, TRUE, &pPoolItem ) )
+//-/    {
+//-/        Color aNew = ( ( const SvxColorItem* ) pPoolItem )->GetValue();
+//-/        aNewMat.SetMaterial(aNew, Base3DMaterialSpecular);
+//-/        bNewMatUsed = TRUE;
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_MAT_SPECULAR_INTENSITY, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
+//-/        aNewMat.SetShininess(nNew);
+//-/        bNewMatUsed = TRUE;
+//-/    }
+//-/    if(bNewMatUsed)
+//-/        SetFrontMaterial(aNewMat);
+//-/
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_KIND, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
+//-/        if(nNew == 0)
+//-/        {
+//-/            SetTextureKind(Base3DTextureLuminance);
+//-/        }
+//-/        else
+//-/        {
+//-/            SetTextureKind(Base3DTextureColor);
+//-/        }
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_MODE, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
+//-/        if(nNew == 0)
+//-/        {
+//-/            SetTextureMode(Base3DTextureReplace);
+//-/        }
+//-/        else if(nNew == 1)
+//-/        {
+//-/            SetTextureMode(Base3DTextureModulate);
+//-/        }
+//-/        else
+//-/        {
+//-/            SetTextureMode(Base3DTextureBlend);
+//-/        }
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_FILTER, TRUE, &pPoolItem ) )
+//-/    {
+//-/        BOOL bNew = ( ( const SfxBoolItem* ) pPoolItem )->GetValue();
+//-/        SetFilterTexture(bNew);
+//-/    }
+//-/}
 
 /*************************************************************************
 |*
@@ -5042,24 +5472,21 @@ void E3dCompoundObject::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bRepl
 |*
 \************************************************************************/
 
-void E3dCompoundObject::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
+void E3dCompoundObject::Collect3DAttributes(SfxItemSet& rAttr) const
 {
     // call parent
-    E3dObject::TakeAttributes(rAttr, bMerge, bOnlyHardAttr);
+    E3dObject::Collect3DAttributes(rAttr);
 
     // special Attr for E3dCompoundObject
-    const SfxPoolItem* pPoolItem = NULL;
-    SfxItemState eState;
-
-    BOOL bObjDoubleSided = GetDoubleSided();
+    BOOL bObjDoubleSided = bDoubleSided;
     UINT16 nObjNormalsKind;
-    if(!GetUseStdNormals())
+    if(!bUseStdNormals)
     {
         nObjNormalsKind = 0;
     }
     else
     {
-        if(GetUseStdNormalsUseSphere())
+        if(bUseStdNormalsUseSphere)
         {
             nObjNormalsKind = 2;
         }
@@ -5068,15 +5495,15 @@ void E3dCompoundObject::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTB
             nObjNormalsKind = 1;
         }
     }
-    BOOL bObjNormalsInvert = GetInvertNormals();
+    BOOL bObjNormalsInvert = bInvertNormals;
     UINT16 nObjTextureProjX;
-    if(!GetUseStdTextureX())
+    if(!bUseStdTextureX)
     {
         nObjTextureProjX = 0;
     }
     else
     {
-        if(GetUseStdTextureXUseSphere())
+        if(bUseStdTextureXUseSphere)
         {
             nObjTextureProjX = 2;
         }
@@ -5086,13 +5513,13 @@ void E3dCompoundObject::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTB
         }
     }
     UINT16 nObjTextureProjY;
-    if(!GetUseStdTextureY())
+    if(!bUseStdTextureY)
     {
         nObjTextureProjY = 0;
     }
     else
     {
-        if(GetUseStdTextureYUseSphere())
+        if(bUseStdTextureYUseSphere)
         {
             nObjTextureProjY = 2;
         }
@@ -5101,25 +5528,14 @@ void E3dCompoundObject::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTB
             nObjTextureProjY = 1;
         }
     }
-    BOOL bObjShadow3D = GetDrawShadow3D();
-    const XFillAttrSetItem* pFillAttr = GetFillAttr();
+    BOOL bObjShadow3D = bShadow3D;
     const B3dMaterial& rMat = GetFrontMaterial();
-    Color aObjMaterialColor;
-    if(pFillAttr)
-    {
-        const SfxItemSet& rSet = pFillAttr->GetItemSet();
-        aObjMaterialColor = ((const XFillColorItem&) (rSet.
-            Get(XATTR_FILLCOLOR))).GetValue();
-    }
-    else
-    {
-        aObjMaterialColor = rMat.GetMaterial(Base3DMaterialDiffuse);
-    }
+    Color aObjMaterialColor = ((const XFillColorItem&)(GetItem(XATTR_FILLCOLOR))).GetValue();
     Color aObjMaterialEmission = rMat.GetMaterial(Base3DMaterialEmission);
     Color aObjMaterialSpecular = rMat.GetMaterial(Base3DMaterialSpecular);
     UINT16 nObjMaterialIntensity = rMat.GetShininess();
     UINT16 nObjTextureKind;
-    if(GetTextureKind() == Base3DTextureColor)
+    if(eTextureKind == Base3DTextureColor)
     {
         nObjTextureKind = 1;
     }
@@ -5128,11 +5544,11 @@ void E3dCompoundObject::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTB
         nObjTextureKind = 0;
     }
     UINT16 nObjTextureMode;
-    if(GetTextureMode() == Base3DTextureReplace)
+    if(eTextureMode == Base3DTextureReplace)
     {
         nObjTextureMode = 0;
     }
-    else if(GetTextureMode() == Base3DTextureModulate)
+    else if(eTextureMode == Base3DTextureModulate)
     {
         nObjTextureMode = 1;
     }
@@ -5140,270 +5556,499 @@ void E3dCompoundObject::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTB
     {
         nObjTextureMode = 2;
     }
-    BOOL bObjTextureFilter = GetFilterTexture();
+    BOOL bObjTextureFilter = bFilterTexture;
 
     // DoubleSided
-    eState = rAttr.GetItemState(SID_ATTR_3D_DOUBLE_SIDED, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(bObjDoubleSided != ((const SfxBoolItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_DOUBLE_SIDED);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxBoolItem(SID_ATTR_3D_DOUBLE_SIDED, bObjDoubleSided));
-        }
-    }
+    rAttr.Put(SfxBoolItem(SDRATTR_3DOBJ_DOUBLE_SIDED, bObjDoubleSided));
 
     // NormalsKind
-    eState = rAttr.GetItemState(SID_ATTR_3D_NORMALS_KIND, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(nObjNormalsKind != ((const SfxUInt16Item*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_NORMALS_KIND);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_NORMALS_KIND, nObjNormalsKind));
-        }
-    }
+    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_NORMALS_KIND, nObjNormalsKind));
 
     // NormalsInvert
-    eState = rAttr.GetItemState(SID_ATTR_3D_NORMALS_INVERT, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(bObjNormalsInvert != ((const SfxBoolItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_NORMALS_INVERT);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxBoolItem(SID_ATTR_3D_NORMALS_INVERT, bObjNormalsInvert));
-        }
-    }
+    rAttr.Put(SfxBoolItem(SDRATTR_3DOBJ_NORMALS_INVERT, bObjNormalsInvert));
 
     // TextureProjectionX
-    eState = rAttr.GetItemState(SID_ATTR_3D_TEXTURE_PROJ_X, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(nObjTextureProjX != ((const SfxUInt16Item*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_TEXTURE_PROJ_X);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_TEXTURE_PROJ_X, nObjTextureProjX));
-        }
-    }
+    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_PROJ_X, nObjTextureProjX));
 
     // TextureProjectionY
-    eState = rAttr.GetItemState(SID_ATTR_3D_TEXTURE_PROJ_Y, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(nObjTextureProjY != ((const SfxUInt16Item*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_TEXTURE_PROJ_Y);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_TEXTURE_PROJ_Y, nObjTextureProjY));
-        }
-    }
+    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_PROJ_Y, nObjTextureProjY));
 
     // Shadow3D
-    eState = rAttr.GetItemState(SID_ATTR_3D_SHADOW_3D, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(bObjShadow3D != ((const SfxBoolItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_SHADOW_3D);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxBoolItem(SID_ATTR_3D_SHADOW_3D, bObjShadow3D));
-        }
-    }
+    rAttr.Put(SfxBoolItem(SDRATTR_3DOBJ_SHADOW_3D, bObjShadow3D));
 
     // Material
-    eState = rAttr.GetItemState(SID_ATTR_3D_MAT_COLOR, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(aObjMaterialColor != ((const SvxColorItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_MAT_COLOR);
-            rAttr.InvalidateItem(XATTR_FILLCOLOR);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SvxColorItem(aObjMaterialColor, SID_ATTR_3D_MAT_COLOR));
-        }
-        else
-        {
-            // kann nur invalidate sein, setze auch die farbe wieder so
-            rAttr.InvalidateItem(XATTR_FILLCOLOR);
-        }
-    }
-
-    eState = rAttr.GetItemState(SID_ATTR_3D_MAT_EMISSION, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(aObjMaterialEmission != ((const SvxColorItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_MAT_EMISSION);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SvxColorItem(aObjMaterialEmission, SID_ATTR_3D_MAT_EMISSION));
-        }
-    }
-
-    eState = rAttr.GetItemState(SID_ATTR_3D_MAT_SPECULAR, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(aObjMaterialSpecular != ((const SvxColorItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_MAT_SPECULAR);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SvxColorItem(aObjMaterialSpecular, SID_ATTR_3D_MAT_SPECULAR));
-        }
-    }
-
-    eState = rAttr.GetItemState(SID_ATTR_3D_MAT_SPECULAR_INTENSITY, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(nObjMaterialIntensity != ((const SfxUInt16Item*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_MAT_SPECULAR_INTENSITY);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_MAT_SPECULAR_INTENSITY, nObjMaterialIntensity));
-        }
-    }
+    rAttr.Put(SvxColorItem(aObjMaterialColor, SDRATTR_3DOBJ_MAT_COLOR));
+    rAttr.Put(SvxColorItem(aObjMaterialEmission, SDRATTR_3DOBJ_MAT_EMISSION));
+    rAttr.Put(SvxColorItem(aObjMaterialSpecular, SDRATTR_3DOBJ_MAT_SPECULAR));
+    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY, nObjMaterialIntensity));
 
     // TextureKind
-    eState = rAttr.GetItemState(SID_ATTR_3D_TEXTURE_KIND, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(nObjTextureKind != ((const SfxUInt16Item*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_TEXTURE_KIND);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_TEXTURE_KIND, nObjTextureKind));
-        }
-    }
+    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_KIND, nObjTextureKind));
 
     // TextureMode
-    eState = rAttr.GetItemState(SID_ATTR_3D_TEXTURE_MODE, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(nObjTextureMode != ((const SfxUInt16Item*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_TEXTURE_MODE);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_TEXTURE_MODE, nObjTextureMode));
-        }
-    }
+    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_MODE, nObjTextureMode));
 
     // TextureFilter
-    eState = rAttr.GetItemState(SID_ATTR_3D_TEXTURE_FILTER, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
+    rAttr.Put(SfxBoolItem(SDRATTR_3DOBJ_TEXTURE_FILTER, bObjTextureFilter));
+}
+
+//-/void E3dCompoundObject::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
+//-/{
+//-/    // call parent
+//-/    E3dObject::TakeAttributes(rAttr, bMerge, bOnlyHardAttr);
+//-/
+//-/    // special Attr for E3dCompoundObject
+//-/    const SfxPoolItem* pPoolItem = NULL;
+//-/    SfxItemState eState;
+//-/
+//-/    BOOL bObjDoubleSided = GetDoubleSided();
+//-/    UINT16 nObjNormalsKind;
+//-/    if(!GetUseStdNormals())
+//-/    {
+//-/        nObjNormalsKind = 0;
+//-/    }
+//-/    else
+//-/    {
+//-/        if(GetUseStdNormalsUseSphere())
+//-/        {
+//-/            nObjNormalsKind = 2;
+//-/        }
+//-/        else
+//-/        {
+//-/            nObjNormalsKind = 1;
+//-/        }
+//-/    }
+//-/    BOOL bObjNormalsInvert = GetInvertNormals();
+//-/    UINT16 nObjTextureProjX;
+//-/    if(!GetUseStdTextureX())
+//-/    {
+//-/        nObjTextureProjX = 0;
+//-/    }
+//-/    else
+//-/    {
+//-/        if(GetUseStdTextureXUseSphere())
+//-/        {
+//-/            nObjTextureProjX = 2;
+//-/        }
+//-/        else
+//-/        {
+//-/            nObjTextureProjX = 1;
+//-/        }
+//-/    }
+//-/    UINT16 nObjTextureProjY;
+//-/    if(!GetUseStdTextureY())
+//-/    {
+//-/        nObjTextureProjY = 0;
+//-/    }
+//-/    else
+//-/    {
+//-/        if(GetUseStdTextureYUseSphere())
+//-/        {
+//-/            nObjTextureProjY = 2;
+//-/        }
+//-/        else
+//-/        {
+//-/            nObjTextureProjY = 1;
+//-/        }
+//-/    }
+//-/    BOOL bObjShadow3D = GetDrawShadow3D();
+//-///-/    const XFillAttrSetItem* pFillAttr = GetFillAttr();
+//-/    const B3dMaterial& rMat = GetFrontMaterial();
+//-///-/    Color aObjMaterialColor;
+//-///-/    if(pFillAttr)
+//-///-/    {
+//-///-/        const SfxItemSet& rSet = pFillAttr->GetItemSet();
+//-/    Color aObjMaterialColor = ((const XFillColorItem&) (GetItemSet().Get(XATTR_FILLCOLOR))).GetValue();
+//-///-/    }
+//-///-/    else
+//-///-/    {
+//-///-/        aObjMaterialColor = rMat.GetMaterial(Base3DMaterialDiffuse);
+//-///-/    }
+//-/    Color aObjMaterialEmission = rMat.GetMaterial(Base3DMaterialEmission);
+//-/    Color aObjMaterialSpecular = rMat.GetMaterial(Base3DMaterialSpecular);
+//-/    UINT16 nObjMaterialIntensity = rMat.GetShininess();
+//-/    UINT16 nObjTextureKind;
+//-/    if(GetTextureKind() == Base3DTextureColor)
+//-/    {
+//-/        nObjTextureKind = 1;
+//-/    }
+//-/    else
+//-/    {
+//-/        nObjTextureKind = 0;
+//-/    }
+//-/    UINT16 nObjTextureMode;
+//-/    if(GetTextureMode() == Base3DTextureReplace)
+//-/    {
+//-/        nObjTextureMode = 0;
+//-/    }
+//-/    else if(GetTextureMode() == Base3DTextureModulate)
+//-/    {
+//-/        nObjTextureMode = 1;
+//-/    }
+//-/    else
+//-/    {
+//-/        nObjTextureMode = 2;
+//-/    }
+//-/    BOOL bObjTextureFilter = GetFilterTexture();
+//-/
+//-/    // DoubleSided
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_DOUBLE_SIDED, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(bObjDoubleSided != ((const SfxBoolItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_DOUBLE_SIDED);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxBoolItem(SID_ATTR_3D_DOUBLE_SIDED, bObjDoubleSided));
+//-/        }
+//-/    }
+//-/
+//-/    // NormalsKind
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_NORMALS_KIND, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(nObjNormalsKind != ((const SfxUInt16Item*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_NORMALS_KIND);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_NORMALS_KIND, nObjNormalsKind));
+//-/        }
+//-/    }
+//-/
+//-/    // NormalsInvert
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_NORMALS_INVERT, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(bObjNormalsInvert != ((const SfxBoolItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_NORMALS_INVERT);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxBoolItem(SID_ATTR_3D_NORMALS_INVERT, bObjNormalsInvert));
+//-/        }
+//-/    }
+//-/
+//-/    // TextureProjectionX
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_TEXTURE_PROJ_X, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(nObjTextureProjX != ((const SfxUInt16Item*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_TEXTURE_PROJ_X);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_TEXTURE_PROJ_X, nObjTextureProjX));
+//-/        }
+//-/    }
+//-/
+//-/    // TextureProjectionY
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_TEXTURE_PROJ_Y, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(nObjTextureProjY != ((const SfxUInt16Item*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_TEXTURE_PROJ_Y);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_TEXTURE_PROJ_Y, nObjTextureProjY));
+//-/        }
+//-/    }
+//-/
+//-/    // Shadow3D
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_SHADOW_3D, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(bObjShadow3D != ((const SfxBoolItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_SHADOW_3D);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxBoolItem(SID_ATTR_3D_SHADOW_3D, bObjShadow3D));
+//-/        }
+//-/    }
+//-/
+//-/    // Material
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_MAT_COLOR, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(aObjMaterialColor != ((const SvxColorItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_MAT_COLOR);
+//-/            rAttr.InvalidateItem(XATTR_FILLCOLOR);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SvxColorItem(aObjMaterialColor, SID_ATTR_3D_MAT_COLOR));
+//-/        }
+//-/        else
+//-/        {
+//-/            // kann nur invalidate sein, setze auch die farbe wieder so
+//-/            rAttr.InvalidateItem(XATTR_FILLCOLOR);
+//-/        }
+//-/    }
+//-/
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_MAT_EMISSION, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(aObjMaterialEmission != ((const SvxColorItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_MAT_EMISSION);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SvxColorItem(aObjMaterialEmission, SID_ATTR_3D_MAT_EMISSION));
+//-/        }
+//-/    }
+//-/
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_MAT_SPECULAR, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(aObjMaterialSpecular != ((const SvxColorItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_MAT_SPECULAR);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SvxColorItem(aObjMaterialSpecular, SID_ATTR_3D_MAT_SPECULAR));
+//-/        }
+//-/    }
+//-/
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_MAT_SPECULAR_INTENSITY, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(nObjMaterialIntensity != ((const SfxUInt16Item*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_MAT_SPECULAR_INTENSITY);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_MAT_SPECULAR_INTENSITY, nObjMaterialIntensity));
+//-/        }
+//-/    }
+//-/
+//-/    // TextureKind
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_TEXTURE_KIND, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(nObjTextureKind != ((const SfxUInt16Item*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_TEXTURE_KIND);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_TEXTURE_KIND, nObjTextureKind));
+//-/        }
+//-/    }
+//-/
+//-/    // TextureMode
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_TEXTURE_MODE, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(nObjTextureMode != ((const SfxUInt16Item*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_TEXTURE_MODE);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_TEXTURE_MODE, nObjTextureMode));
+//-/        }
+//-/    }
+//-/
+//-/    // TextureFilter
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_TEXTURE_FILTER, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(bObjTextureFilter != ((const SfxBoolItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_TEXTURE_FILTER);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxBoolItem(SID_ATTR_3D_TEXTURE_FILTER, bObjTextureFilter));
+//-/        }
+//-/    }
+//-/}
+
+void E3dCompoundObject::ImpSetDoubleSided(BOOL bNew)
+{
+    if(bDoubleSided != bNew)
     {
-        // Ist gesetzt
-        if(bObjTextureFilter != ((const SfxBoolItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_TEXTURE_FILTER);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxBoolItem(SID_ATTR_3D_TEXTURE_FILTER, bObjTextureFilter));
-        }
+        bDoubleSided = bNew;
+        bGeometryValid = FALSE;
     }
 }
 
+void E3dCompoundObject::ImpSetUseStdNormals(BOOL bNew)
+{
+    if(bUseStdNormals != bNew)
+    {
+        bUseStdNormals = bNew;
+        bGeometryValid = FALSE;
+    }
+}
 
+void E3dCompoundObject::ImpSetUseStdNormalsUseSphere(BOOL bNew)
+{
+    if(bUseStdNormalsUseSphere != bNew)
+    {
+        bUseStdNormalsUseSphere = bNew;
+        bGeometryValid = FALSE;
+    }
+}
+
+void E3dCompoundObject::ImpSetInvertNormals(BOOL bNew)
+{
+    if(bInvertNormals != bNew)
+    {
+        bInvertNormals = bNew;
+        GetDisplayGeometry().InvertNormals();
+    }
+}
+
+void E3dCompoundObject::ImpSetUseStdTextureX(BOOL bNew)
+{
+    if(bUseStdTextureX != bNew)
+    {
+        bUseStdTextureX = bNew;
+        bGeometryValid = FALSE;
+    }
+}
+
+void E3dCompoundObject::ImpSetUseStdTextureXUseSphere(BOOL bNew)
+{
+    if(bUseStdTextureXUseSphere != bNew)
+    {
+        bUseStdTextureXUseSphere = bNew;
+        bGeometryValid = FALSE;
+    }
+}
+
+void E3dCompoundObject::ImpSetUseStdTextureY(BOOL bNew)
+{
+    if(bUseStdTextureY != bNew)
+    {
+        bUseStdTextureY = bNew;
+        bGeometryValid = FALSE;
+    }
+}
+
+void E3dCompoundObject::ImpSetUseStdTextureYUseSphere(BOOL bNew)
+{
+    if(bUseStdTextureYUseSphere != bNew)
+    {
+        bUseStdTextureYUseSphere = bNew;
+        bGeometryValid = FALSE;
+    }
+}
+
+void E3dCompoundObject::ImpSetTextureKind(Base3DTextureKind eNew)
+{
+    if(eTextureKind != eNew)
+    {
+        eTextureKind = eNew;
+    }
+}
+
+void E3dCompoundObject::ImpSetTextureMode(Base3DTextureMode eNew)
+{
+    if(eTextureMode != eNew)
+    {
+        eTextureMode = eNew;
+    }
+}
+
+void E3dCompoundObject::ImpSetFilterTexture(BOOL bNew)
+{
+    if(bFilterTexture != bNew)
+    {
+        bFilterTexture = bNew;
+    }
+}
+
+// EOF

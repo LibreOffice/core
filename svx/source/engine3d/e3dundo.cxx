@@ -2,9 +2,9 @@
  *
  *  $RCSfile: e3dundo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:15 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,11 +189,16 @@ E3dAttributesUndoAction::~E3dAttributesUndoAction()
 \************************************************************************/
 void E3dAttributesUndoAction::Undo()
 {
-    if(pObject->ISA(E3dObject))
-    {
-        ((E3dObject*)pObject)->SetAttrUseSubObjects(bUseSubObjects);
-    }
-    pObject->SetAttributes( aOldSet, FALSE);
+//-/    if(pObject->ISA(E3dObject))
+//-/    {
+//-/        ((E3dObject*)pObject)->SetAttrUseSubObjects(bUseSubObjects);
+//-/    }
+
+//-/    pObject->SetAttributes( aOldSet, FALSE);
+//-/    SdrBroadcastItemChange aItemChange(*pObject);
+    pObject->SetItemSetAndBroadcast(aOldSet);
+//-/    pObject->BroadcastItemChange(aItemChange);
+
     if(pObject->ISA(E3dObject))
     {
         E3dScene* pScene = ((E3dObject*)pObject)->GetScene();
@@ -209,11 +214,16 @@ void E3dAttributesUndoAction::Undo()
 \************************************************************************/
 void E3dAttributesUndoAction::Redo()
 {
-    if(pObject->ISA(E3dObject))
-    {
-        ((E3dObject*)pObject)->SetAttrUseSubObjects(bUseSubObjects);
-    }
-    pObject->SetAttributes( aNewSet, FALSE);
+//-/    if(pObject->ISA(E3dObject))
+//-/    {
+//-/        ((E3dObject*)pObject)->SetAttrUseSubObjects(bUseSubObjects);
+//-/    }
+
+//-/    pObject->SetAttributes( aNewSet, FALSE);
+//-/    SdrBroadcastItemChange aItemChange(*pObject);
+    pObject->SetItemSetAndBroadcast(aNewSet);
+//-/    pObject->BroadcastItemChange(aItemChange);
+
     if(pObject->ISA(E3dObject))
     {
         E3dScene* pScene = ((E3dObject*)pObject)->GetScene();

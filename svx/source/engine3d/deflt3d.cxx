@@ -2,9 +2,9 @@
  *
  *  $RCSfile: deflt3d.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:15 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,586 +160,586 @@ void E3dDefaultAttributes::Reset()
 |*
 \************************************************************************/
 
-void E3dDefaultAttributes::SetDefaultValues(const SfxItemSet& rAttr)
-{
-    const SfxPoolItem* pPoolItem = NULL;
-    B3dMaterial aNewMat = GetDefaultFrontMaterial();
-    BOOL bNewMatUsed = FALSE;
+//-/void E3dDefaultAttributes::SetDefaultValues(const SfxItemSet& rAttr)
+//-/{
+//-/    const SfxPoolItem* pPoolItem = NULL;
+//-/    B3dMaterial aNewMat = GetDefaultFrontMaterial();
+//-/    BOOL bNewMatUsed = FALSE;
+//-/
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_DOUBLE_SIDED, TRUE, &pPoolItem ) )
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        SetDefaultDoubleSided(bNew);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_NORMALS_KIND, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
+//-/        if(nNew == 0)
+//-/        {
+//-/            SetDefaultUseStdNormals(FALSE);
+//-/            SetDefaultUseStdNormalsUseSphere(FALSE);
+//-/        }
+//-/        else if(nNew == 1)
+//-/        {
+//-/            SetDefaultUseStdNormals(TRUE);
+//-/            SetDefaultUseStdNormalsUseSphere(FALSE);
+//-/        }
+//-/        else
+//-/        {
+//-/            SetDefaultUseStdNormals(TRUE);
+//-/            SetDefaultUseStdNormalsUseSphere(TRUE);
+//-/        }
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_NORMALS_INVERT, TRUE, &pPoolItem ) )
+//-/    {
+//-/        BOOL bNew = ( ( const SfxBoolItem* ) pPoolItem )->GetValue();
+//-/        SetDefaultInvertNormals(bNew);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_PROJ_X, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
+//-/        if(nNew == 0)
+//-/        {
+//-/            SetDefaultUseStdTextureX(FALSE);
+//-/            SetDefaultUseStdTextureXUseSphere(FALSE);
+//-/        }
+//-/        else if(nNew == 1)
+//-/        {
+//-/            SetDefaultUseStdTextureX(TRUE);
+//-/            SetDefaultUseStdTextureXUseSphere(FALSE);
+//-/        }
+//-/        else
+//-/        {
+//-/            SetDefaultUseStdTextureX(TRUE);
+//-/            SetDefaultUseStdTextureXUseSphere(TRUE);
+//-/        }
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_PROJ_Y, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
+//-/        if(nNew == 0)
+//-/        {
+//-/            SetDefaultUseStdTextureY(FALSE);
+//-/            SetDefaultUseStdTextureYUseSphere(FALSE);
+//-/        }
+//-/        else if(nNew == 1)
+//-/        {
+//-/            SetDefaultUseStdTextureY(TRUE);
+//-/            SetDefaultUseStdTextureYUseSphere(FALSE);
+//-/        }
+//-/        else
+//-/        {
+//-/            SetDefaultUseStdTextureY(TRUE);
+//-/            SetDefaultUseStdTextureYUseSphere(TRUE);
+//-/        }
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_SHADOW_3D, TRUE, &pPoolItem ) )
+//-/    {
+//-/        BOOL bNew = ( ( const SfxBoolItem* ) pPoolItem )->GetValue();
+//-/        SetDefaultShadow3D(bNew);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_MAT_COLOR, TRUE, &pPoolItem ) )
+//-/    {
+//-/        Color aNew = ( ( const SvxColorItem* ) pPoolItem )->GetValue();
+//-/        aNewMat.SetMaterial(aNew, Base3DMaterialDiffuse);
+//-/        bNewMatUsed = TRUE;
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_MAT_EMISSION, TRUE, &pPoolItem ) )
+//-/    {
+//-/        Color aNew = ( ( const SvxColorItem* ) pPoolItem )->GetValue();
+//-/        aNewMat.SetMaterial(aNew, Base3DMaterialEmission);
+//-/        bNewMatUsed = TRUE;
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_MAT_SPECULAR, TRUE, &pPoolItem ) )
+//-/    {
+//-/        Color aNew = ( ( const SvxColorItem* ) pPoolItem )->GetValue();
+//-/        aNewMat.SetMaterial(aNew, Base3DMaterialSpecular);
+//-/        bNewMatUsed = TRUE;
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_MAT_SPECULAR_INTENSITY, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
+//-/        aNewMat.SetShininess(nNew);
+//-/        bNewMatUsed = TRUE;
+//-/    }
+//-/    if(bNewMatUsed)
+//-/        SetDefaultFrontMaterial(aNewMat);
+//-/
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_KIND, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
+//-/        if(nNew == 0)
+//-/        {
+//-/            SetDefaultTextureKind(Base3DTextureLuminance);
+//-/        }
+//-/        else
+//-/        {
+//-/            SetDefaultTextureKind(Base3DTextureColor);
+//-/        }
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_MODE, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
+//-/        if(nNew == 0)
+//-/        {
+//-/            SetDefaultTextureMode(Base3DTextureReplace);
+//-/        }
+//-/        else if(nNew == 1)
+//-/        {
+//-/            SetDefaultTextureMode(Base3DTextureModulate);
+//-/        }
+//-/        else
+//-/        {
+//-/            SetDefaultTextureMode(Base3DTextureBlend);
+//-/        }
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_FILTER, TRUE, &pPoolItem ) )
+//-/    {
+//-/        BOOL bNew = ( ( const SfxBoolItem* ) pPoolItem )->GetValue();
+//-/        SetDefaultFilterTexture(bNew);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_HORZ_SEGS, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT32 nNew = ( ( const SfxUInt32Item* ) pPoolItem )->GetValue();
+//-/        SetDefaultHSegments(nNew);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_VERT_SEGS, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT32 nNew = ( ( const SfxUInt32Item* ) pPoolItem )->GetValue();
+//-/        SetDefaultVSegments(nNew);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_PERCENT_DIAGONAL, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
+//-/        SetDefaultPercentDiag(((double)(nNew)) / 200.0);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_BACKSCALE, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
+//-/        SetDefaultBackScale(((double)(nNew)) / 100.0);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_END_ANGLE, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
+//-/        SetDefaultLatheEndAngle((long)nNew);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_DEPTH, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT32 nNew = ((const SfxUInt32Item*)pPoolItem)->GetValue();
+//-/        SetDefaultExtrudeDepth((double)nNew);
+//-/    }
+//-/
+//-/    // Szene
+//-/    B3dLightGroup aLightGroup = GetDefaultLightGroup();
+//-/
+//-/    // TwoSidedLighting
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_TWO_SIDED_LIGHTING, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.SetModelTwoSide( bNew );
+//-/    }
+//-/
+//-/    // LightColors
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_1, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight0);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_2, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight1);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_3, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight2);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_4, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight3);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_5, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight4);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_6, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight5);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_7, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight6);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_8, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight7);
+//-/    }
+//-/
+//-/    // AmbientColor
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_AMBIENTCOLOR, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.SetGlobalAmbientLight( aNew );
+//-/    }
+//-/
+//-/    // LightOn
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_1, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.Enable( bNew, Base3DLight0);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_2, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.Enable( bNew, Base3DLight1);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_3, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.Enable( bNew, Base3DLight2);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_4, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.Enable( bNew, Base3DLight3);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_5, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.Enable( bNew, Base3DLight4);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_6, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.Enable( bNew, Base3DLight5);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_7, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.Enable( bNew, Base3DLight6);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_8, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.Enable( bNew, Base3DLight7);
+//-/    }
+//-/
+//-/    // LightDirection
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_1, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.SetDirection( aNew, Base3DLight0);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_2, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.SetDirection( aNew, Base3DLight1);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_3, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.SetDirection( aNew, Base3DLight2);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_4, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.SetDirection( aNew, Base3DLight3);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_5, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.SetDirection( aNew, Base3DLight4);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_6, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.SetDirection( aNew, Base3DLight5);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_7, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.SetDirection( aNew, Base3DLight6);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_8, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        aLightGroup.SetDirection( aNew, Base3DLight7);
+//-/    }
+//-/
+//-/    // ShadowSlant
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_SHADOW_SLANT, FALSE, &pPoolItem))
+//-/    {
+//-/        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
+//-/        double fWink = (double)nNew * F_PI180;
+//-/        Vector3D aVec(0.0, sin(fWink), cos(fWink));
+//-/        aVec.Normalize();
+//-/        SetDefaultShadowPlaneDirection(aVec);
+//-/    }
+//-/
+//-/    // ShadeMode
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_SHADE_MODE, FALSE, &pPoolItem))
+//-/    {
+//-/        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
+//-/        if(nNew == 3)
+//-/        {
+//-/            SetDefaultForceDraftShadeModel(TRUE);
+//-/            SetDefaultShadeModel(Base3DSmooth);
+//-/        }
+//-/        else
+//-/        {
+//-/            SetDefaultForceDraftShadeModel(FALSE);
+//-/            if(nNew == 0)
+//-/            {
+//-/                SetDefaultShadeModel(Base3DFlat);
+//-/            }
+//-/            else if(nNew == 1)
+//-/            {
+//-/                SetDefaultShadeModel(Base3DPhong);
+//-/            }
+//-/            else
+//-/            {
+//-/                // Gouraud
+//-/                SetDefaultShadeModel(Base3DSmooth);
+//-/            }
+//-/        }
+//-/    }
+//-/
+//-/    // Nachbehandlung
+//-/    SetDefaultLightGroup(aLightGroup);
+//-/}
 
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_DOUBLE_SIDED, TRUE, &pPoolItem ) )
-    {
-        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
-        SetDefaultDoubleSided(bNew);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_NORMALS_KIND, TRUE, &pPoolItem ) )
-    {
-        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
-        if(nNew == 0)
-        {
-            SetDefaultUseStdNormals(FALSE);
-            SetDefaultUseStdNormalsUseSphere(FALSE);
-        }
-        else if(nNew == 1)
-        {
-            SetDefaultUseStdNormals(TRUE);
-            SetDefaultUseStdNormalsUseSphere(FALSE);
-        }
-        else
-        {
-            SetDefaultUseStdNormals(TRUE);
-            SetDefaultUseStdNormalsUseSphere(TRUE);
-        }
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_NORMALS_INVERT, TRUE, &pPoolItem ) )
-    {
-        BOOL bNew = ( ( const SfxBoolItem* ) pPoolItem )->GetValue();
-        SetDefaultInvertNormals(bNew);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_PROJ_X, TRUE, &pPoolItem ) )
-    {
-        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
-        if(nNew == 0)
-        {
-            SetDefaultUseStdTextureX(FALSE);
-            SetDefaultUseStdTextureXUseSphere(FALSE);
-        }
-        else if(nNew == 1)
-        {
-            SetDefaultUseStdTextureX(TRUE);
-            SetDefaultUseStdTextureXUseSphere(FALSE);
-        }
-        else
-        {
-            SetDefaultUseStdTextureX(TRUE);
-            SetDefaultUseStdTextureXUseSphere(TRUE);
-        }
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_PROJ_Y, TRUE, &pPoolItem ) )
-    {
-        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
-        if(nNew == 0)
-        {
-            SetDefaultUseStdTextureY(FALSE);
-            SetDefaultUseStdTextureYUseSphere(FALSE);
-        }
-        else if(nNew == 1)
-        {
-            SetDefaultUseStdTextureY(TRUE);
-            SetDefaultUseStdTextureYUseSphere(FALSE);
-        }
-        else
-        {
-            SetDefaultUseStdTextureY(TRUE);
-            SetDefaultUseStdTextureYUseSphere(TRUE);
-        }
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_SHADOW_3D, TRUE, &pPoolItem ) )
-    {
-        BOOL bNew = ( ( const SfxBoolItem* ) pPoolItem )->GetValue();
-        SetDefaultShadow3D(bNew);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_MAT_COLOR, TRUE, &pPoolItem ) )
-    {
-        Color aNew = ( ( const SvxColorItem* ) pPoolItem )->GetValue();
-        aNewMat.SetMaterial(aNew, Base3DMaterialDiffuse);
-        bNewMatUsed = TRUE;
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_MAT_EMISSION, TRUE, &pPoolItem ) )
-    {
-        Color aNew = ( ( const SvxColorItem* ) pPoolItem )->GetValue();
-        aNewMat.SetMaterial(aNew, Base3DMaterialEmission);
-        bNewMatUsed = TRUE;
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_MAT_SPECULAR, TRUE, &pPoolItem ) )
-    {
-        Color aNew = ( ( const SvxColorItem* ) pPoolItem )->GetValue();
-        aNewMat.SetMaterial(aNew, Base3DMaterialSpecular);
-        bNewMatUsed = TRUE;
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_MAT_SPECULAR_INTENSITY, TRUE, &pPoolItem ) )
-    {
-        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
-        aNewMat.SetShininess(nNew);
-        bNewMatUsed = TRUE;
-    }
-    if(bNewMatUsed)
-        SetDefaultFrontMaterial(aNewMat);
-
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_KIND, TRUE, &pPoolItem ) )
-    {
-        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
-        if(nNew == 0)
-        {
-            SetDefaultTextureKind(Base3DTextureLuminance);
-        }
-        else
-        {
-            SetDefaultTextureKind(Base3DTextureColor);
-        }
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_MODE, TRUE, &pPoolItem ) )
-    {
-        UINT16 nNew = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
-        if(nNew == 0)
-        {
-            SetDefaultTextureMode(Base3DTextureReplace);
-        }
-        else if(nNew == 1)
-        {
-            SetDefaultTextureMode(Base3DTextureModulate);
-        }
-        else
-        {
-            SetDefaultTextureMode(Base3DTextureBlend);
-        }
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_TEXTURE_FILTER, TRUE, &pPoolItem ) )
-    {
-        BOOL bNew = ( ( const SfxBoolItem* ) pPoolItem )->GetValue();
-        SetDefaultFilterTexture(bNew);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_HORZ_SEGS, TRUE, &pPoolItem ) )
-    {
-        UINT32 nNew = ( ( const SfxUInt32Item* ) pPoolItem )->GetValue();
-        SetDefaultHSegments(nNew);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_VERT_SEGS, TRUE, &pPoolItem ) )
-    {
-        UINT32 nNew = ( ( const SfxUInt32Item* ) pPoolItem )->GetValue();
-        SetDefaultVSegments(nNew);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_PERCENT_DIAGONAL, TRUE, &pPoolItem ) )
-    {
-        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
-        SetDefaultPercentDiag(((double)(nNew)) / 200.0);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_BACKSCALE, TRUE, &pPoolItem ) )
-    {
-        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
-        SetDefaultBackScale(((double)(nNew)) / 100.0);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_END_ANGLE, TRUE, &pPoolItem ) )
-    {
-        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
-        SetDefaultLatheEndAngle((long)nNew);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_DEPTH, TRUE, &pPoolItem ) )
-    {
-        UINT32 nNew = ((const SfxUInt32Item*)pPoolItem)->GetValue();
-        SetDefaultExtrudeDepth((double)nNew);
-    }
-
-    // Szene
-    B3dLightGroup aLightGroup = GetDefaultLightGroup();
-
-    // TwoSidedLighting
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_TWO_SIDED_LIGHTING, FALSE, &pPoolItem))
-    {
-        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
-        aLightGroup.SetModelTwoSide( bNew );
-    }
-
-    // LightColors
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_1, FALSE, &pPoolItem))
-    {
-        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
-        aLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight0);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_2, FALSE, &pPoolItem))
-    {
-        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
-        aLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight1);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_3, FALSE, &pPoolItem))
-    {
-        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
-        aLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight2);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_4, FALSE, &pPoolItem))
-    {
-        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
-        aLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight3);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_5, FALSE, &pPoolItem))
-    {
-        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
-        aLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight4);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_6, FALSE, &pPoolItem))
-    {
-        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
-        aLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight5);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_7, FALSE, &pPoolItem))
-    {
-        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
-        aLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight6);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_8, FALSE, &pPoolItem))
-    {
-        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
-        aLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight7);
-    }
-
-    // AmbientColor
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_AMBIENTCOLOR, FALSE, &pPoolItem))
-    {
-        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
-        aLightGroup.SetGlobalAmbientLight( aNew );
-    }
-
-    // LightOn
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_1, FALSE, &pPoolItem))
-    {
-        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
-        aLightGroup.Enable( bNew, Base3DLight0);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_2, FALSE, &pPoolItem))
-    {
-        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
-        aLightGroup.Enable( bNew, Base3DLight1);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_3, FALSE, &pPoolItem))
-    {
-        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
-        aLightGroup.Enable( bNew, Base3DLight2);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_4, FALSE, &pPoolItem))
-    {
-        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
-        aLightGroup.Enable( bNew, Base3DLight3);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_5, FALSE, &pPoolItem))
-    {
-        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
-        aLightGroup.Enable( bNew, Base3DLight4);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_6, FALSE, &pPoolItem))
-    {
-        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
-        aLightGroup.Enable( bNew, Base3DLight5);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_7, FALSE, &pPoolItem))
-    {
-        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
-        aLightGroup.Enable( bNew, Base3DLight6);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_8, FALSE, &pPoolItem))
-    {
-        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
-        aLightGroup.Enable( bNew, Base3DLight7);
-    }
-
-    // LightDirection
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_1, FALSE, &pPoolItem))
-    {
-        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
-        aLightGroup.SetDirection( aNew, Base3DLight0);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_2, FALSE, &pPoolItem))
-    {
-        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
-        aLightGroup.SetDirection( aNew, Base3DLight1);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_3, FALSE, &pPoolItem))
-    {
-        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
-        aLightGroup.SetDirection( aNew, Base3DLight2);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_4, FALSE, &pPoolItem))
-    {
-        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
-        aLightGroup.SetDirection( aNew, Base3DLight3);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_5, FALSE, &pPoolItem))
-    {
-        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
-        aLightGroup.SetDirection( aNew, Base3DLight4);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_6, FALSE, &pPoolItem))
-    {
-        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
-        aLightGroup.SetDirection( aNew, Base3DLight5);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_7, FALSE, &pPoolItem))
-    {
-        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
-        aLightGroup.SetDirection( aNew, Base3DLight6);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_8, FALSE, &pPoolItem))
-    {
-        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
-        aLightGroup.SetDirection( aNew, Base3DLight7);
-    }
-
-    // ShadowSlant
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_SHADOW_SLANT, FALSE, &pPoolItem))
-    {
-        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
-        double fWink = (double)nNew * F_PI180;
-        Vector3D aVec(0.0, sin(fWink), cos(fWink));
-        aVec.Normalize();
-        SetDefaultShadowPlaneDirection(aVec);
-    }
-
-    // ShadeMode
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_SHADE_MODE, FALSE, &pPoolItem))
-    {
-        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
-        if(nNew == 3)
-        {
-            SetDefaultForceDraftShadeModel(TRUE);
-            SetDefaultShadeModel(Base3DSmooth);
-        }
-        else
-        {
-            SetDefaultForceDraftShadeModel(FALSE);
-            if(nNew == 0)
-            {
-                SetDefaultShadeModel(Base3DFlat);
-            }
-            else if(nNew == 1)
-            {
-                SetDefaultShadeModel(Base3DPhong);
-            }
-            else
-            {
-                // Gouraud
-                SetDefaultShadeModel(Base3DSmooth);
-            }
-        }
-    }
-
-    // Nachbehandlung
-    SetDefaultLightGroup(aLightGroup);
-}
-
-void E3dDefaultAttributes::TakeDefaultValues(SfxItemSet& rAttr)
-{
-    // DoubleSided
-    rAttr.Put(SfxBoolItem(SID_ATTR_3D_DOUBLE_SIDED, GetDefaultDoubleSided()));
-
-    // NormalsKind
-    UINT16 nObjNormalsKind;
-    if(!GetDefaultUseStdNormals())
-    {
-        nObjNormalsKind = 0;
-    }
-    else
-    {
-        if(GetDefaultUseStdNormalsUseSphere())
-        {
-            nObjNormalsKind = 2;
-        }
-        else
-        {
-            nObjNormalsKind = 1;
-        }
-    }
-    rAttr.Put(SfxUInt16Item(SID_ATTR_3D_NORMALS_KIND, nObjNormalsKind));
-
-    // NormalsInvert
-    rAttr.Put(SfxBoolItem(SID_ATTR_3D_NORMALS_INVERT, GetDefaultInvertNormals()));
-
-    // TextureProjectionX
-    UINT16 nObjTextureProjX;
-    if(!GetDefaultUseStdTextureX())
-    {
-        nObjTextureProjX = 0;
-    }
-    else
-    {
-        if(GetDefaultUseStdTextureXUseSphere())
-        {
-            nObjTextureProjX = 2;
-        }
-        else
-        {
-            nObjTextureProjX = 1;
-        }
-    }
-    rAttr.Put(SfxUInt16Item(SID_ATTR_3D_TEXTURE_PROJ_X, nObjTextureProjX));
-
-    // TextureProjectionY
-    UINT16 nObjTextureProjY;
-    if(!GetDefaultUseStdTextureY())
-    {
-        nObjTextureProjY = 0;
-    }
-    else
-    {
-        if(GetDefaultUseStdTextureYUseSphere())
-        {
-            nObjTextureProjY = 2;
-        }
-        else
-        {
-            nObjTextureProjY = 1;
-        }
-    }
-    rAttr.Put(SfxUInt16Item(SID_ATTR_3D_TEXTURE_PROJ_Y, nObjTextureProjY));
-
-    // Shadow3D UND Shadow2D
-    rAttr.Put(SfxBoolItem(SID_ATTR_3D_SHADOW_3D, GetDefaultShadow3D()));
-    rAttr.Put(SdrShadowItem( GetDefaultShadow3D() ));
-
-    // Material
-    const B3dMaterial& rMat = GetDefaultFrontMaterial();
-    Color aObjMaterialColor = rMat.GetMaterial(Base3DMaterialDiffuse);
-    Color aObjMaterialEmission = rMat.GetMaterial(Base3DMaterialEmission);
-    Color aObjMaterialSpecular = rMat.GetMaterial(Base3DMaterialSpecular);
-    UINT16 nObjMaterialIntensity = rMat.GetShininess();
-    rAttr.Put(SvxColorItem(aObjMaterialColor, SID_ATTR_3D_MAT_COLOR));
-    rAttr.Put(SvxColorItem(aObjMaterialEmission, SID_ATTR_3D_MAT_EMISSION));
-    rAttr.Put(SvxColorItem(aObjMaterialSpecular, SID_ATTR_3D_MAT_SPECULAR));
-    rAttr.Put(SfxUInt16Item(SID_ATTR_3D_MAT_SPECULAR_INTENSITY, nObjMaterialIntensity));
-
-    // TextureKind
-    UINT16 nObjTextureKind;
-    if(GetDefaultTextureKind() == Base3DTextureColor)
-    {
-        nObjTextureKind = 1;
-    }
-    else
-    {
-        nObjTextureKind = 0;
-    }
-    rAttr.Put(SfxUInt16Item(SID_ATTR_3D_TEXTURE_KIND, nObjTextureKind));
-
-    // TextureMode
-    UINT16 nObjTextureMode;
-    if(GetDefaultTextureMode() == Base3DTextureReplace)
-    {
-        nObjTextureMode = 0;
-    }
-    else if(GetDefaultTextureMode() == Base3DTextureModulate)
-    {
-        nObjTextureMode = 1;
-    }
-    else
-    {
-        nObjTextureMode = 2;
-    }
-    rAttr.Put(SfxUInt16Item(SID_ATTR_3D_TEXTURE_MODE, nObjTextureMode));
-
-    // TextureFilter
-    rAttr.Put(SfxBoolItem(SID_ATTR_3D_TEXTURE_FILTER, GetDefaultFilterTexture()));
-
-    // HorizSegs
-    rAttr.Put(SfxUInt32Item(SID_ATTR_3D_HORZ_SEGS, (UINT32)GetDefaultHSegments()));
-
-    // VertSegs
-    rAttr.Put(SfxUInt32Item(SID_ATTR_3D_VERT_SEGS, (UINT32)GetDefaultVSegments()));
-
-    // PercentDiagonal
-    UINT16 nObjPercentDiagonal = (UINT16)((GetDefaultPercentDiag() * 200.0) + 0.5);
-    rAttr.Put(SfxUInt16Item(SID_ATTR_3D_PERCENT_DIAGONAL, nObjPercentDiagonal));
-
-    // BackScale
-    UINT16 nObjBackScale = (UINT16)((GetDefaultBackScale() * 100.0) + 0.5);
-    rAttr.Put(SfxUInt16Item(SID_ATTR_3D_BACKSCALE, nObjBackScale));
-
-    // EndAngle
-    UINT16 nObjEndAngle = (UINT16)(GetDefaultLatheEndAngle() + 0.5);
-    rAttr.Put(SfxUInt16Item(SID_ATTR_3D_END_ANGLE, nObjEndAngle));
-
-    // ExtrudeDepth
-    UINT32 nObjDeepth = (UINT32)(GetDefaultExtrudeDepth() + 0.5);
-    rAttr.Put(SfxUInt32Item(SID_ATTR_3D_DEPTH, nObjDeepth));
-
-    // Szenenparameter
-    B3dLightGroup& rLightGroup = (B3dLightGroup&)GetDefaultLightGroup();
-    BOOL     bSceneTwoSidedLighting = rLightGroup.GetModelTwoSide();
-    Color    aSceneLightColor1 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight0);
-    Color    aSceneLightColor2 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight1);
-    Color    aSceneLightColor3 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight2);
-    Color    aSceneLightColor4 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight3);
-    Color    aSceneLightColor5 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight4);
-    Color    aSceneLightColor6 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight5);
-    Color    aSceneLightColor7 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight6);
-    Color    aSceneLightColor8 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight7);
-    Color    aSceneAmbientColor = rLightGroup.GetGlobalAmbientLight();
-    BOOL     bSceneLightOn1 = rLightGroup.IsEnabled(Base3DLight0);
-    BOOL     bSceneLightOn2 = rLightGroup.IsEnabled(Base3DLight1);
-    BOOL     bSceneLightOn3 = rLightGroup.IsEnabled(Base3DLight2);
-    BOOL     bSceneLightOn4 = rLightGroup.IsEnabled(Base3DLight3);
-    BOOL     bSceneLightOn5 = rLightGroup.IsEnabled(Base3DLight4);
-    BOOL     bSceneLightOn6 = rLightGroup.IsEnabled(Base3DLight5);
-    BOOL     bSceneLightOn7 = rLightGroup.IsEnabled(Base3DLight6);
-    BOOL     bSceneLightOn8 = rLightGroup.IsEnabled(Base3DLight7);
-    Vector3D aSceneLightDirection1 = rLightGroup.GetDirection( Base3DLight0 );
-    Vector3D aSceneLightDirection2 = rLightGroup.GetDirection( Base3DLight1 );
-    Vector3D aSceneLightDirection3 = rLightGroup.GetDirection( Base3DLight2 );
-    Vector3D aSceneLightDirection4 = rLightGroup.GetDirection( Base3DLight3 );
-    Vector3D aSceneLightDirection5 = rLightGroup.GetDirection( Base3DLight4 );
-    Vector3D aSceneLightDirection6 = rLightGroup.GetDirection( Base3DLight5 );
-    Vector3D aSceneLightDirection7 = rLightGroup.GetDirection( Base3DLight6 );
-    Vector3D aSceneLightDirection8 = rLightGroup.GetDirection( Base3DLight7 );
-    UINT16   nSceneShadeMode;
-    const Vector3D& rShadowVec = GetDefaultShadowPlaneDirection();
-    UINT16 nSceneShadowSlant = (UINT16)((atan2(rShadowVec.Y(), rShadowVec.Z()) / F_PI180) + 0.5);
-
-    if(GetDefaultForceDraftShadeModel())
-    {
-        nSceneShadeMode = 3; // Draft-Modus
-    }
-    else
-    {
-        if(GetDefaultShadeModel() == Base3DSmooth)
-        {
-            nSceneShadeMode = 2; // Gouraud
-        }
-        else if(GetDefaultShadeModel() == Base3DFlat)
-        {
-            nSceneShadeMode = 0; // Flat
-        }
-        else // Base3DPhong
-        {
-            nSceneShadeMode = 1; // Phong
-        }
-    }
-
-    // TwoSidedLighting
-    rAttr.Put(SfxBoolItem(SID_ATTR_3D_TWO_SIDED_LIGHTING, bSceneTwoSidedLighting));
-
-    // LightColors
-    rAttr.Put(SvxColorItem(aSceneLightColor1, SID_ATTR_3D_LIGHTCOLOR_1));
-    rAttr.Put(SvxColorItem(aSceneLightColor2, SID_ATTR_3D_LIGHTCOLOR_2));
-    rAttr.Put(SvxColorItem(aSceneLightColor3, SID_ATTR_3D_LIGHTCOLOR_3));
-    rAttr.Put(SvxColorItem(aSceneLightColor4, SID_ATTR_3D_LIGHTCOLOR_4));
-    rAttr.Put(SvxColorItem(aSceneLightColor5, SID_ATTR_3D_LIGHTCOLOR_5));
-    rAttr.Put(SvxColorItem(aSceneLightColor6, SID_ATTR_3D_LIGHTCOLOR_6));
-    rAttr.Put(SvxColorItem(aSceneLightColor7, SID_ATTR_3D_LIGHTCOLOR_7));
-    rAttr.Put(SvxColorItem(aSceneLightColor8, SID_ATTR_3D_LIGHTCOLOR_8));
-
-    // AmbientColor
-    rAttr.Put(SvxColorItem(aSceneAmbientColor, SID_ATTR_3D_AMBIENTCOLOR));
-
-    // LightOn
-    rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_1, bSceneLightOn1));
-    rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_2, bSceneLightOn2));
-    rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_3, bSceneLightOn3));
-    rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_4, bSceneLightOn4));
-    rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_5, bSceneLightOn5));
-    rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_6, bSceneLightOn6));
-    rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_7, bSceneLightOn7));
-    rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_8, bSceneLightOn8));
-
-    // LightDirection
-    rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_1, aSceneLightDirection1));
-    rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_2, aSceneLightDirection2));
-    rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_3, aSceneLightDirection3));
-    rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_4, aSceneLightDirection4));
-    rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_5, aSceneLightDirection5));
-    rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_6, aSceneLightDirection6));
-    rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_7, aSceneLightDirection7));
-    rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_8, aSceneLightDirection8));
-
-    // ShadowSlant
-    rAttr.Put(SfxUInt16Item(SID_ATTR_3D_SHADOW_SLANT, nSceneShadowSlant));
-
-    // ShadeMode
-    rAttr.Put(SfxUInt16Item(SID_ATTR_3D_SHADE_MODE, nSceneShadeMode));
-}
+//-/void E3dDefaultAttributes::TakeDefaultValues(SfxItemSet& rAttr)
+//-/{
+//-/    // DoubleSided
+//-/    rAttr.Put(SfxBoolItem(SID_ATTR_3D_DOUBLE_SIDED, GetDefaultDoubleSided()));
+//-/
+//-/    // NormalsKind
+//-/    UINT16 nObjNormalsKind;
+//-/    if(!GetDefaultUseStdNormals())
+//-/    {
+//-/        nObjNormalsKind = 0;
+//-/    }
+//-/    else
+//-/    {
+//-/        if(GetDefaultUseStdNormalsUseSphere())
+//-/        {
+//-/            nObjNormalsKind = 2;
+//-/        }
+//-/        else
+//-/        {
+//-/            nObjNormalsKind = 1;
+//-/        }
+//-/    }
+//-/    rAttr.Put(SfxUInt16Item(SID_ATTR_3D_NORMALS_KIND, nObjNormalsKind));
+//-/
+//-/    // NormalsInvert
+//-/    rAttr.Put(SfxBoolItem(SID_ATTR_3D_NORMALS_INVERT, GetDefaultInvertNormals()));
+//-/
+//-/    // TextureProjectionX
+//-/    UINT16 nObjTextureProjX;
+//-/    if(!GetDefaultUseStdTextureX())
+//-/    {
+//-/        nObjTextureProjX = 0;
+//-/    }
+//-/    else
+//-/    {
+//-/        if(GetDefaultUseStdTextureXUseSphere())
+//-/        {
+//-/            nObjTextureProjX = 2;
+//-/        }
+//-/        else
+//-/        {
+//-/            nObjTextureProjX = 1;
+//-/        }
+//-/    }
+//-/    rAttr.Put(SfxUInt16Item(SID_ATTR_3D_TEXTURE_PROJ_X, nObjTextureProjX));
+//-/
+//-/    // TextureProjectionY
+//-/    UINT16 nObjTextureProjY;
+//-/    if(!GetDefaultUseStdTextureY())
+//-/    {
+//-/        nObjTextureProjY = 0;
+//-/    }
+//-/    else
+//-/    {
+//-/        if(GetDefaultUseStdTextureYUseSphere())
+//-/        {
+//-/            nObjTextureProjY = 2;
+//-/        }
+//-/        else
+//-/        {
+//-/            nObjTextureProjY = 1;
+//-/        }
+//-/    }
+//-/    rAttr.Put(SfxUInt16Item(SID_ATTR_3D_TEXTURE_PROJ_Y, nObjTextureProjY));
+//-/
+//-/    // Shadow3D UND Shadow2D
+//-/    rAttr.Put(SfxBoolItem(SID_ATTR_3D_SHADOW_3D, GetDefaultShadow3D()));
+//-/    rAttr.Put(SdrShadowItem( GetDefaultShadow3D() ));
+//-/
+//-/    // Material
+//-/    const B3dMaterial& rMat = GetDefaultFrontMaterial();
+//-/    Color aObjMaterialColor = rMat.GetMaterial(Base3DMaterialDiffuse);
+//-/    Color aObjMaterialEmission = rMat.GetMaterial(Base3DMaterialEmission);
+//-/    Color aObjMaterialSpecular = rMat.GetMaterial(Base3DMaterialSpecular);
+//-/    UINT16 nObjMaterialIntensity = rMat.GetShininess();
+//-/    rAttr.Put(SvxColorItem(aObjMaterialColor, SID_ATTR_3D_MAT_COLOR));
+//-/    rAttr.Put(SvxColorItem(aObjMaterialEmission, SID_ATTR_3D_MAT_EMISSION));
+//-/    rAttr.Put(SvxColorItem(aObjMaterialSpecular, SID_ATTR_3D_MAT_SPECULAR));
+//-/    rAttr.Put(SfxUInt16Item(SID_ATTR_3D_MAT_SPECULAR_INTENSITY, nObjMaterialIntensity));
+//-/
+//-/    // TextureKind
+//-/    UINT16 nObjTextureKind;
+//-/    if(GetDefaultTextureKind() == Base3DTextureColor)
+//-/    {
+//-/        nObjTextureKind = 1;
+//-/    }
+//-/    else
+//-/    {
+//-/        nObjTextureKind = 0;
+//-/    }
+//-/    rAttr.Put(SfxUInt16Item(SID_ATTR_3D_TEXTURE_KIND, nObjTextureKind));
+//-/
+//-/    // TextureMode
+//-/    UINT16 nObjTextureMode;
+//-/    if(GetDefaultTextureMode() == Base3DTextureReplace)
+//-/    {
+//-/        nObjTextureMode = 0;
+//-/    }
+//-/    else if(GetDefaultTextureMode() == Base3DTextureModulate)
+//-/    {
+//-/        nObjTextureMode = 1;
+//-/    }
+//-/    else
+//-/    {
+//-/        nObjTextureMode = 2;
+//-/    }
+//-/    rAttr.Put(SfxUInt16Item(SID_ATTR_3D_TEXTURE_MODE, nObjTextureMode));
+//-/
+//-/    // TextureFilter
+//-/    rAttr.Put(SfxBoolItem(SID_ATTR_3D_TEXTURE_FILTER, GetDefaultFilterTexture()));
+//-/
+//-/    // HorizSegs
+//-/    rAttr.Put(SfxUInt32Item(SID_ATTR_3D_HORZ_SEGS, (UINT32)GetDefaultHSegments()));
+//-/
+//-/    // VertSegs
+//-/    rAttr.Put(SfxUInt32Item(SID_ATTR_3D_VERT_SEGS, (UINT32)GetDefaultVSegments()));
+//-/
+//-/    // PercentDiagonal
+//-/    UINT16 nObjPercentDiagonal = (UINT16)((GetDefaultPercentDiag() * 200.0) + 0.5);
+//-/    rAttr.Put(SfxUInt16Item(SID_ATTR_3D_PERCENT_DIAGONAL, nObjPercentDiagonal));
+//-/
+//-/    // BackScale
+//-/    UINT16 nObjBackScale = (UINT16)((GetDefaultBackScale() * 100.0) + 0.5);
+//-/    rAttr.Put(SfxUInt16Item(SID_ATTR_3D_BACKSCALE, nObjBackScale));
+//-/
+//-/    // EndAngle
+//-/    UINT16 nObjEndAngle = (UINT16)(GetDefaultLatheEndAngle() + 0.5);
+//-/    rAttr.Put(SfxUInt16Item(SID_ATTR_3D_END_ANGLE, nObjEndAngle));
+//-/
+//-/    // ExtrudeDepth
+//-/    UINT32 nObjDeepth = (UINT32)(GetDefaultExtrudeDepth() + 0.5);
+//-/    rAttr.Put(SfxUInt32Item(SID_ATTR_3D_DEPTH, nObjDeepth));
+//-/
+//-/    // Szenenparameter
+//-/    B3dLightGroup& rLightGroup = (B3dLightGroup&)GetDefaultLightGroup();
+//-/    BOOL     bSceneTwoSidedLighting = rLightGroup.GetModelTwoSide();
+//-/    Color    aSceneLightColor1 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight0);
+//-/    Color    aSceneLightColor2 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight1);
+//-/    Color    aSceneLightColor3 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight2);
+//-/    Color    aSceneLightColor4 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight3);
+//-/    Color    aSceneLightColor5 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight4);
+//-/    Color    aSceneLightColor6 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight5);
+//-/    Color    aSceneLightColor7 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight6);
+//-/    Color    aSceneLightColor8 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight7);
+//-/    Color    aSceneAmbientColor = rLightGroup.GetGlobalAmbientLight();
+//-/    BOOL     bSceneLightOn1 = rLightGroup.IsEnabled(Base3DLight0);
+//-/    BOOL     bSceneLightOn2 = rLightGroup.IsEnabled(Base3DLight1);
+//-/    BOOL     bSceneLightOn3 = rLightGroup.IsEnabled(Base3DLight2);
+//-/    BOOL     bSceneLightOn4 = rLightGroup.IsEnabled(Base3DLight3);
+//-/    BOOL     bSceneLightOn5 = rLightGroup.IsEnabled(Base3DLight4);
+//-/    BOOL     bSceneLightOn6 = rLightGroup.IsEnabled(Base3DLight5);
+//-/    BOOL     bSceneLightOn7 = rLightGroup.IsEnabled(Base3DLight6);
+//-/    BOOL     bSceneLightOn8 = rLightGroup.IsEnabled(Base3DLight7);
+//-/    Vector3D aSceneLightDirection1 = rLightGroup.GetDirection( Base3DLight0 );
+//-/    Vector3D aSceneLightDirection2 = rLightGroup.GetDirection( Base3DLight1 );
+//-/    Vector3D aSceneLightDirection3 = rLightGroup.GetDirection( Base3DLight2 );
+//-/    Vector3D aSceneLightDirection4 = rLightGroup.GetDirection( Base3DLight3 );
+//-/    Vector3D aSceneLightDirection5 = rLightGroup.GetDirection( Base3DLight4 );
+//-/    Vector3D aSceneLightDirection6 = rLightGroup.GetDirection( Base3DLight5 );
+//-/    Vector3D aSceneLightDirection7 = rLightGroup.GetDirection( Base3DLight6 );
+//-/    Vector3D aSceneLightDirection8 = rLightGroup.GetDirection( Base3DLight7 );
+//-/    UINT16   nSceneShadeMode;
+//-/    const Vector3D& rShadowVec = GetDefaultShadowPlaneDirection();
+//-/    UINT16 nSceneShadowSlant = (UINT16)((atan2(rShadowVec.Y(), rShadowVec.Z()) / F_PI180) + 0.5);
+//-/
+//-/    if(GetDefaultForceDraftShadeModel())
+//-/    {
+//-/        nSceneShadeMode = 3; // Draft-Modus
+//-/    }
+//-/    else
+//-/    {
+//-/        if(GetDefaultShadeModel() == Base3DSmooth)
+//-/        {
+//-/            nSceneShadeMode = 2; // Gouraud
+//-/        }
+//-/        else if(GetDefaultShadeModel() == Base3DFlat)
+//-/        {
+//-/            nSceneShadeMode = 0; // Flat
+//-/        }
+//-/        else // Base3DPhong
+//-/        {
+//-/            nSceneShadeMode = 1; // Phong
+//-/        }
+//-/    }
+//-/
+//-/    // TwoSidedLighting
+//-/    rAttr.Put(SfxBoolItem(SID_ATTR_3D_TWO_SIDED_LIGHTING, bSceneTwoSidedLighting));
+//-/
+//-/    // LightColors
+//-/    rAttr.Put(SvxColorItem(aSceneLightColor1, SID_ATTR_3D_LIGHTCOLOR_1));
+//-/    rAttr.Put(SvxColorItem(aSceneLightColor2, SID_ATTR_3D_LIGHTCOLOR_2));
+//-/    rAttr.Put(SvxColorItem(aSceneLightColor3, SID_ATTR_3D_LIGHTCOLOR_3));
+//-/    rAttr.Put(SvxColorItem(aSceneLightColor4, SID_ATTR_3D_LIGHTCOLOR_4));
+//-/    rAttr.Put(SvxColorItem(aSceneLightColor5, SID_ATTR_3D_LIGHTCOLOR_5));
+//-/    rAttr.Put(SvxColorItem(aSceneLightColor6, SID_ATTR_3D_LIGHTCOLOR_6));
+//-/    rAttr.Put(SvxColorItem(aSceneLightColor7, SID_ATTR_3D_LIGHTCOLOR_7));
+//-/    rAttr.Put(SvxColorItem(aSceneLightColor8, SID_ATTR_3D_LIGHTCOLOR_8));
+//-/
+//-/    // AmbientColor
+//-/    rAttr.Put(SvxColorItem(aSceneAmbientColor, SID_ATTR_3D_AMBIENTCOLOR));
+//-/
+//-/    // LightOn
+//-/    rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_1, bSceneLightOn1));
+//-/    rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_2, bSceneLightOn2));
+//-/    rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_3, bSceneLightOn3));
+//-/    rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_4, bSceneLightOn4));
+//-/    rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_5, bSceneLightOn5));
+//-/    rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_6, bSceneLightOn6));
+//-/    rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_7, bSceneLightOn7));
+//-/    rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_8, bSceneLightOn8));
+//-/
+//-/    // LightDirection
+//-/    rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_1, aSceneLightDirection1));
+//-/    rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_2, aSceneLightDirection2));
+//-/    rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_3, aSceneLightDirection3));
+//-/    rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_4, aSceneLightDirection4));
+//-/    rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_5, aSceneLightDirection5));
+//-/    rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_6, aSceneLightDirection6));
+//-/    rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_7, aSceneLightDirection7));
+//-/    rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_8, aSceneLightDirection8));
+//-/
+//-/    // ShadowSlant
+//-/    rAttr.Put(SfxUInt16Item(SID_ATTR_3D_SHADOW_SLANT, nSceneShadowSlant));
+//-/
+//-/    // ShadeMode
+//-/    rAttr.Put(SfxUInt16Item(SID_ATTR_3D_SHADE_MODE, nSceneShadeMode));
+//-/}
 
 

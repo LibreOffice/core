@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view3d1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:15 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,103 +201,62 @@ void E3dView::ConvertMarkedToPolyObj(BOOL bLineToArea)
 |*
 \************************************************************************/
 
-SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene,
-    BOOL bOnly3DAttr) const
+void Imp_E3dView_InorderRun3DObjects(const SdrObject* pObj, sal_uInt32& rMask, BOOL bCorrectScenes)
+{
+    if(pObj->ISA(E3dLatheObj))
+    {
+        rMask |= 0x0001;
+    }
+    else if(pObj->ISA(E3dExtrudeObj))
+    {
+        rMask |= 0x0002;
+    }
+    else if(pObj->ISA(E3dSphereObj))
+    {
+        rMask |= 0x0004;
+    }
+    else if(pObj->ISA(E3dCubeObj))
+    {
+        rMask |= 0x0008;
+    }
+    else if(pObj->IsGroupObject())
+    {
+        if(bCorrectScenes && pObj->ISA(E3dScene))
+            ((E3dScene*)pObj)->CorrectSceneDimensions();
+
+        SdrObjList* pList = pObj->GetSubList();
+        for(sal_uInt32 a(0); a < pList->GetObjCount(); a++)
+            Imp_E3dView_InorderRun3DObjects(pList->GetObj(a), rMask, bCorrectScenes);
+    }
+}
+
+SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, BOOL bOnly3DAttr) const
 {
     // ItemSet mit entspr. Bereich anlegen
     SfxItemSet aSet(pMod->GetItemPool(),
-        SDRATTR_START,  SDRATTR_END,
-        SID_ATTR_3D_START, SID_ATTR_3D_END,
+        SDRATTR_START,      SDRATTR_END,
+        SID_ATTR_3D_INTERN, SID_ATTR_3D_INTERN,
         0, 0);
+    sal_uInt32 nSelectedItems(0L);
 
-    UINT32 nSelectedItems = 0L;
     if(pInScene)
     {
-        // Spezielle Szene
-        pInScene->TakeAttributes(aSet, TRUE, TRUE);
-        nSelectedItems = 0x0010;
+        // special scene
+        aSet.Put(pInScene->GetItemSet());
     }
     else
     {
+        // get attributes from all selected objects
+        MergeAttrFromMarked(aSet, FALSE);
+
+        // calc flags for SID_ATTR_3D_INTERN
         const SdrMarkList& rMarkList = GetMarkList();
-        UINT32 nMarkCnt = rMarkList.GetMarkCount();
-        if(nMarkCnt)
+        sal_uInt32 nMarkCnt(rMarkList.GetMarkCount());
+
+        for(sal_uInt32 a(0); a < nMarkCnt; a++)
         {
-            BOOL bSceneSelected = FALSE;
-            BOOL b3DSelected = FALSE;
-
-            UINT32 a;
-            for(a=0;a<nMarkCnt;a++)
-            {
-                SdrObject* pObj = aMark.GetMark(a)->GetObj();
-                if(pObj)
-                {
-                    if(pObj->ISA(E3dScene))
-                    {
-                        bSceneSelected = TRUE;
-                        b3DSelected = TRUE;
-                    }
-                    else if(pObj->ISA(E3dObject))
-                    {
-                        b3DSelected = TRUE;
-                    }
-                    else if(pObj->ISA(SdrObjGroup) && !b3DSelected && !bSceneSelected)
-                    {
-                        // Befinden sich 3D-Objekte in dieser Gruppe?
-                        // Mache einen TIEFEN Durchlauf, solange
-                        // b3DSelected == FALSE
-                        SdrObjListIter aIter(*(pObj->GetSubList()), IM_DEEPWITHGROUPS);
-                        while(aIter.IsMore() && !b3DSelected)
-                        {
-                            SdrObject* pIterObj = aIter.Next();
-                            if(pIterObj->ISA(E3dObject))
-                                b3DSelected = TRUE;
-                        }
-                    }
-                }
-            }
-
-            if(b3DSelected)
-            {
-                for(a=0;a<nMarkCnt;a++)
-                {
-                    SdrObject* pObj = aMark.GetMark(a)->GetObj();
-
-                    // Nimm die Szene des ersten selektierten CompoundObjects,
-                    // falls keine Szene selektiert war
-                    if(!bSceneSelected && pObj && pObj->ISA(E3dObject))
-                    {
-                        E3dScene* pScene = ((E3dObject*)pObj)->GetScene();
-                        if(pScene)
-                        {
-                            pScene->SetAttrUseSubObjects(FALSE);
-                            pScene->TakeAttributes(aSet, TRUE, TRUE);
-                            bSceneSelected = TRUE;
-                        }
-                    }
-
-                    // Das Objekt selbst aufnehmen
-                    pObj->TakeAttributes(aSet, TRUE, TRUE);
-
-                    // Selektion Pflegen
-                    if(pObj->ISA(E3dLatheObj))
-                        nSelectedItems |= 0x0001;
-                    else if(pObj->ISA(E3dExtrudeObj))
-                        nSelectedItems |= 0x0002;
-                    else if(pObj->ISA(E3dSphereObj))
-                        nSelectedItems |= 0x0004;
-                    else if(pObj->ISA(E3dCubeObj))
-                        nSelectedItems |= 0x0008;
-                }
-            }
-            else
-            {
-                nSelectedItems = 0x0010;
-            }
-        }
-        else
-        {
-            nSelectedItems = 0x0010;
+            SdrObject* pObj = aMark.GetMark(a)->GetObj();
+            Imp_E3dView_InorderRun3DObjects(pObj, nSelectedItems, FALSE);
         }
     }
 
@@ -305,31 +264,19 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene,
     aSet.Put(SfxUInt32Item(SID_ATTR_3D_INTERN, nSelectedItems));
 
     // DefaultValues pflegen
-    if(nSelectedItems == 0x0010 && !pInScene)
+    if(!nSelectedItems  && !pInScene)
     {
-        // aus den 3D-Objekten holen
-        ((E3dView*)this)->Get3DDefaultAttributes().TakeDefaultValues(aSet);
-
-        // Weitere, alte Attribute
-        // Camera Distance (SID_ATTR_3D_DISTANCE)
-        double fCamPosZ = DefaultCamPos().Z();
-        aSet.Put(SfxUInt32Item(SID_ATTR_3D_DISTANCE, (UINT32)(fCamPosZ + 0.5)));
-
-        // Camera FocalLength (SID_ATTR_3D_FOCAL_LENGTH)
-        double fFocalLength = DefaultCamFocal();
-        aSet.Put(SfxUInt32Item(SID_ATTR_3D_FOCAL_LENGTH, (INT32)(fFocalLength*100.0)));
-
-        // 2D Defaults holen und hinzufuegen
-        SfxItemSet aSet2D(GetModel()->GetItemPool());
-        GetAttributes(aSet2D);
-        aSet.Put(aSet2D);
+        // Defaults holen und hinzufuegen
+        SfxItemSet aDefaultSet(pMod->GetItemPool(), SDRATTR_3D_FIRST, SDRATTR_3D_LAST);
+        GetAttributes(aDefaultSet);
+        aSet.Put(aDefaultSet);
 
         // ... aber keine Linien fuer 3D
         aSet.Put(XLineStyleItem (XLINE_NONE));
     }
 
     // ItemSet zurueckgeben
-    return( aSet );
+    return(aSet);
 }
 
 /*************************************************************************
@@ -338,164 +285,218 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene,
 |*
 \************************************************************************/
 
-void E3dView::Set3DAttributes( const SfxItemSet& rAttr,
-    E3dScene* pInScene, BOOL bReplaceAll)
+void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, BOOL bReplaceAll)
 {
-    UINT32 nSelectedItems = 0L;
+    sal_uInt32 nSelectedItems(0L);
+
     if(pInScene)
     {
-        // Spezielle Szene
-        pInScene->SetAttributes(rAttr, bReplaceAll);
-        nSelectedItems = 0x0010;
+        // special scene
+        SdrBroadcastItemChange aItemChange(*pInScene);
+        if(bReplaceAll)
+            pInScene->ClearItem();
+        pInScene->SetItemSet(rAttr);
+        pInScene->BroadcastItemChange(aItemChange);
     }
     else
     {
+        // set at selected objects
+        SetAttrToMarked(rAttr, bReplaceAll);
+
+        // Durchlauf mit Korrektur der veraenderten Szenen,
+        // da die enthaltenen Objekte geometrisch veraendert sein koennen
         const SdrMarkList& rMarkList = GetMarkList();
-        UINT32 nMarkCnt = rMarkList.GetMarkCount();
-        if(nMarkCnt)
+        sal_uInt32 nMarkCnt(rMarkList.GetMarkCount());
+
+        for(sal_uInt32 a(0); a < nMarkCnt; a++)
         {
-            BOOL bIsSceneSelected = FALSE;
-            UINT32 a;
-            for(a=0;a<nMarkCnt;a++)
-            {
-                SdrObject* pObj = aMark.GetMark(a)->GetObj();
-                if(pObj && pObj->ISA(E3dScene))
-                    bIsSceneSelected = TRUE;
-            }
-
-            BOOL bSceneSelected = bIsSceneSelected;
-            BegUndo( String( SVX_RES( RID_SVX_3D_UNDO_ATTRIBUTES ) ) );
-            for(a=0;a<nMarkCnt;a++)
-            {
-                SdrObject* pObj = aMark.GetMark(a)->GetObj();
-                if(pObj->ISA(E3dObject))
-                {
-                    // Nimm die Szene des ersten selektierten CompoundObjects,
-                    // falls keine Szene selektiert war
-                    if(pObj->ISA(E3dObject) && !bSceneSelected)
-                    {
-                        E3dScene* pScene = ((E3dObject*)pObj)->GetScene();
-                        if(pScene)
-                        {
-                            SfxItemSet aOldSet(pMod->GetItemPool(),
-                                SDRATTR_START,  SDRATTR_END,
-                                SID_ATTR_3D_START, SID_ATTR_3D_END,
-                                0, 0);
-                            pScene->SetAttrUseSubObjects(FALSE);
-                            pScene->TakeAttributes(aOldSet, TRUE, FALSE);
-                            pScene->SetAttrUseSubObjects(FALSE);
-                            pScene->SetAttributes(rAttr, bReplaceAll);
-                            AddUndo(new E3dAttributesUndoAction(*pMod, this, pScene, rAttr, aOldSet, FALSE));
-                            bSceneSelected = TRUE;
-                        }
-                    }
-
-                    // Das Objekt selbst in UNDO aufnehmen
-                    if(!pObj->ISA(SdrObjGroup))
-                    {
-                        SfxItemSet aOldSet(pMod->GetItemPool(),
-                            SDRATTR_START,  SDRATTR_END,
-                            SID_ATTR_3D_START, SID_ATTR_3D_END,
-                            0, 0);
-                        if(pObj->ISA(E3dObject))
-                            ((E3dObject*)pObj)->SetAttrUseSubObjects(FALSE);
-                        pObj->TakeAttributes(aOldSet, TRUE, FALSE);
-                        AddUndo(new E3dAttributesUndoAction(*pMod, this, (E3dObject*)pObj, rAttr, aOldSet, FALSE));
-                    }
-
-                    // SubObjekte in UNDO aufnehmen
-                    if(pObj->ISA(SdrObjGroup) || pObj->ISA(E3dObject))
-                    {
-                        SdrObjListIter aIter(*(pObj->GetSubList()), IM_DEEPWITHGROUPS);
-                        while(aIter.IsMore())
-                        {
-                            SdrObject* pIterObj = aIter.Next();
-                            SfxItemSet aOldSet(pMod->GetItemPool(),
-                                SDRATTR_START,  SDRATTR_END,
-                                SID_ATTR_3D_START, SID_ATTR_3D_END,
-                                0, 0);
-                            if(pIterObj->ISA(E3dObject))
-                                ((E3dObject*)pIterObj)->SetAttrUseSubObjects(FALSE);
-                            pIterObj->TakeAttributes(aOldSet, TRUE, FALSE);
-                            AddUndo(new E3dAttributesUndoAction(*pMod, this, (E3dObject*)pIterObj, rAttr, aOldSet, FALSE));
-                        }
-                    }
-
-                    // Am Objekt selbst Attribute setzen
-                    pObj->SetAttributes(rAttr, bReplaceAll);
-
-                    // Selektion Pflegen
-                    if(pObj->ISA(E3dLatheObj))
-                        nSelectedItems |= 0x0001;
-                    else if(pObj->ISA(E3dExtrudeObj))
-                        nSelectedItems |= 0x0002;
-                    else if(pObj->ISA(E3dSphereObj))
-                        nSelectedItems |= 0x0004;
-                    else if(pObj->ISA(E3dCubeObj))
-                        nSelectedItems |= 0x0008;
-                }
-            }
-            EndUndo();
-
-            // Nochmaliger Durchlauf mit Korrektur der veraenderten Szenen,
-            // da die enthaltenen Objekte geometrisch veraendert sein koennen
-            E3dScene* pToBeRefreshedScene = NULL;
-            bSceneSelected = bIsSceneSelected;
-            for(a=0;a<nMarkCnt;a++)
-            {
-                SdrObject* pObj = aMark.GetMark(a)->GetObj();
-                if(!bSceneSelected && pObj && pObj->ISA(E3dObject))
-                {
-                    E3dScene* pScene = ((E3dObject*)pObj)->GetScene();
-                    if(pScene)
-                    {
-                        if(pScene != pToBeRefreshedScene)
-                        {
-                            pScene->CorrectSceneDimensions();
-                            pToBeRefreshedScene = pScene;
-                        }
-                    }
-                }
-                if(pObj->ISA(E3dScene))
-                {
-                    E3dScene* pTheScene = (E3dScene*)pObj;
-                    if(pTheScene != pToBeRefreshedScene)
-                    {
-                        pTheScene->CorrectSceneDimensions();
-                        pToBeRefreshedScene = pTheScene;
-                    }
-                }
-            }
+            SdrObject* pObj = aMark.GetMark(a)->GetObj();
+            Imp_E3dView_InorderRun3DObjects(pObj, nSelectedItems, TRUE);
         }
-        else
-        {
-            nSelectedItems = 0x0010;
-        }
+
     }
 
     // DefaultValues pflegen
-    if(nSelectedItems == 0x0010 && !pInScene)
+    if(!nSelectedItems && !pInScene)
     {
+        // Defaults setzen
+        SfxItemSet aDefaultSet(pMod->GetItemPool(), SDRATTR_3D_FIRST, SDRATTR_3D_LAST);
+        aDefaultSet.Put(rAttr);
+        SetAttributes(aDefaultSet);
+
         // in den 3D-Objekten setzen
-        Get3DDefaultAttributes().SetDefaultValues(rAttr);
+//-/        Get3DDefaultAttributes().SetDefaultValues(rAttr);
 
         // Weitere, alte Attribute
-        const SfxPoolItem* pPoolItem = NULL;
+//-/        const SfxPoolItem* pPoolItem = NULL;
 
         // Camera Distance (SID_ATTR_3D_DISTANCE)
-        if(SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_DISTANCE, TRUE, &pPoolItem))
-        {
-            double fCamPosZ = ((const SfxUInt32Item*)pPoolItem)->GetValue();
-            DefaultCamPos() = Vector3D(DefaultCamPos().X(), DefaultCamPos().Y(), fCamPosZ);
-        }
+//-/        if(SFX_ITEM_SET == rAttr.GetItemState(SDRATTR_3DSCENE_DISTANCE, TRUE, &pPoolItem))
+//-/        {
+//-/            double fCamPosZ = ((const SfxUInt32Item*)pPoolItem)->GetValue();
+//-/            DefaultCamPos() = Vector3D(DefaultCamPos().X(), DefaultCamPos().Y(), fCamPosZ);
+//-/        }
 
         // Camera FocalLength (SID_ATTR_3D_FOCAL_LENGTH)
-        if(SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_FOCAL_LENGTH, TRUE, &pPoolItem))
-        {
-            double fFocalLength = ((double)((const SfxUInt32Item*)pPoolItem)->GetValue()) / 100.0;
-            DefaultCamFocal() = fFocalLength;
-        }
+//-/        if(SFX_ITEM_SET == rAttr.GetItemState(SDRATTR_3DSCENE_FOCAL_LENGTH, TRUE, &pPoolItem))
+//-/        {
+//-/            double fFocalLength = ((double)((const SfxUInt32Item*)pPoolItem)->GetValue()) / 100.0;
+//-/            DefaultCamFocal() = fFocalLength;
+//-/        }
     }
+//-/        if(nMarkCnt)
+//-/        {
+//-/            BOOL bIsSceneSelected = FALSE;
+//-/            UINT32 a;
+//-/            for(a=0;a<nMarkCnt;a++)
+//-/            {
+//-/                SdrObject* pObj = aMark.GetMark(a)->GetObj();
+//-/                if(pObj && pObj->ISA(E3dScene))
+//-/                    bIsSceneSelected = TRUE;
+//-/            }
+//-/
+//-/            BOOL bSceneSelected = bIsSceneSelected;
+//-/            BegUndo( String( SVX_RES( RID_SVX_3D_UNDO_ATTRIBUTES ) ) );
+//-/            for(a=0;a<nMarkCnt;a++)
+//-/            {
+//-/                SdrObject* pObj = aMark.GetMark(a)->GetObj();
+//-/                if(pObj->ISA(E3dObject))
+//-/                {
+//-/                    // Nimm die Szene des ersten selektierten CompoundObjects,
+//-/                    // falls keine Szene selektiert war
+//-/                    if(pObj->ISA(E3dObject) && !bSceneSelected)
+//-/                    {
+//-/                        E3dScene* pScene = ((E3dObject*)pObj)->GetScene();
+//-/                        if(pScene)
+//-/                        {
+//-/                            SfxItemSet aOldSet(pMod->GetItemPool(),
+//-/                                SDRATTR_START,      SDRATTR_END,
+//-/                                SID_ATTR_3D_INTERN, SID_ATTR_3D_INTERN,
+//-///-/                                SID_ATTR_3D_START, SID_ATTR_3D_END,
+//-/                                0, 0);
+//-///-/                            pScene->SetAttrUseSubObjects(FALSE);
+//-///-/                            pScene->TakeAttributes(aOldSet, TRUE, FALSE);
+//-/                            aOldSet.Put(pScene->GetItemSet());
+//-///-/                            pScene->SetAttrUseSubObjects(FALSE);
+//-///-/                            pScene->SetAttributes(rAttr, bReplaceAll);
+//-/                            SdrBroadcastItemChange aItemChange(*pScene);
+//-/                            if(bReplaceAll)
+//-/                                pScene->ClearItem();
+//-/                            pScene->SetItemSet(rAttr);
+//-/                            pScene->BroadcastItemChange(aItemChange);
+//-/
+//-/                            AddUndo(new E3dAttributesUndoAction(*pMod, this, pScene, rAttr, aOldSet, FALSE));
+//-/                            bSceneSelected = TRUE;
+//-/                        }
+//-/                    }
+//-/
+//-/                    // Das Objekt selbst in UNDO aufnehmen
+//-/                    if(!pObj->ISA(SdrObjGroup))
+//-/                    {
+//-///-/                        SfxItemSet aOldSet(pMod->GetItemPool(),
+//-///-/                            SDRATTR_START,  SDRATTR_END,
+//-///-/                            SID_ATTR_3D_START, SID_ATTR_3D_END,
+//-///-/                            0, 0);
+//-///-/                        if(pObj->ISA(E3dObject))
+//-///-/                            ((E3dObject*)pObj)->SetAttrUseSubObjects(FALSE);
+//-///-/                        pObj->TakeAttributes(aOldSet, TRUE, FALSE);
+//-///-/                        AddUndo(new E3dAttributesUndoAction(*pMod, this,
+//-///-/                            (E3dObject*)pObj, rAttr, aOldSet, FALSE));
+//-/                        AddUndo(new E3dAttributesUndoAction(*pMod, this,
+//-/                            (E3dObject*)pObj, rAttr, pObj->GetItemSet(), FALSE));
+//-/                    }
+//-/
+//-/                    // SubObjekte in UNDO aufnehmen
+//-/                    if(pObj->ISA(SdrObjGroup) || pObj->ISA(E3dObject))
+//-/                    {
+//-/                        SdrObjListIter aIter(*(pObj->GetSubList()), IM_DEEPWITHGROUPS);
+//-/                        while(aIter.IsMore())
+//-/                        {
+//-/                            SdrObject* pIterObj = aIter.Next();
+//-///-/                            SfxItemSet aOldSet(pMod->GetItemPool(),
+//-///-/                                SDRATTR_START,  SDRATTR_END,
+//-///-/                                SID_ATTR_3D_START, SID_ATTR_3D_END,
+//-///-/                                0, 0);
+//-///-/                            if(pIterObj->ISA(E3dObject))
+//-///-/                                ((E3dObject*)pIterObj)->SetAttrUseSubObjects(FALSE);
+//-///-/                            pIterObj->TakeAttributes(aOldSet, TRUE, FALSE);
+//-///-/                            AddUndo(new E3dAttributesUndoAction(*pMod, this,
+//-///-/                                (E3dObject*)pIterObj, rAttr, aOldSet, FALSE));
+//-/                            AddUndo(new E3dAttributesUndoAction(*pMod, this,
+//-/                                (E3dObject*)pIterObj, rAttr, pIterObj->GetItemSet(), FALSE));
+//-/                        }
+//-/                    }
+//-/
+//-/                    // Am Objekt selbst Attribute setzen
+//-///-/                    pObj->SetAttributes(rAttr, bReplaceAll);
+//-/                    SdrBroadcastItemChange aItemChange(*pObj);
+//-/                    if(bReplaceAll)
+//-/                        pObj->ClearItem();
+//-/                    pObj->SetItemSet(rAttr);
+//-/                    pObj->BroadcastItemChange(aItemChange);
+//-/
+//-/                    // Selektion Pflegen
+//-/                    if(pObj->ISA(E3dLatheObj))
+//-/                        nSelectedItems |= 0x0001;
+//-/                    else if(pObj->ISA(E3dExtrudeObj))
+//-/                        nSelectedItems |= 0x0002;
+//-/                    else if(pObj->ISA(E3dSphereObj))
+//-/                        nSelectedItems |= 0x0004;
+//-/                    else if(pObj->ISA(E3dCubeObj))
+//-/                        nSelectedItems |= 0x0008;
+//-/                }
+//-/            }
+//-/            EndUndo();
+//-/
+//-/            // Nochmaliger Durchlauf mit Korrektur der veraenderten Szenen,
+//-/            // da die enthaltenen Objekte geometrisch veraendert sein koennen
+//-/            E3dScene* pToBeRefreshedScene = NULL;
+//-/            bSceneSelected = bIsSceneSelected;
+//-/            for(a=0;a<nMarkCnt;a++)
+//-/            {
+//-/                SdrObject* pObj = aMark.GetMark(a)->GetObj();
+//-/                if(!bSceneSelected && pObj && pObj->ISA(E3dObject))
+//-/                {
+//-/                    E3dScene* pScene = ((E3dObject*)pObj)->GetScene();
+//-/                    if(pScene)
+//-/                    {
+//-/                        if(pScene != pToBeRefreshedScene)
+//-/                        {
+//-/                            pScene->CorrectSceneDimensions();
+//-/                            pToBeRefreshedScene = pScene;
+//-/                        }
+//-/                    }
+//-/                }
+//-/                if(pObj->ISA(E3dScene))
+//-/                {
+//-/                    E3dScene* pTheScene = (E3dScene*)pObj;
+//-/                    if(pTheScene != pToBeRefreshedScene)
+//-/                    {
+//-/                        pTheScene->CorrectSceneDimensions();
+//-/                        pToBeRefreshedScene = pTheScene;
+//-/                    }
+//-/                }
+//-/            }
+//-/        }
+//-/        else
+//-/        {
+//-/            nSelectedItems = 0x0010;
+//-/        }
 }
 
+double E3dView::GetDefaultCamPosZ()
+{
+    return (double)((const SfxUInt32Item&)pMod->GetItemPool().GetDefaultItem(SDRATTR_3DSCENE_DISTANCE)).GetValue();
+//-/    SfxItemSet aDefaultSet(pMod->GetItemPool(), SDRATTR_3D_FIRST, SDRATTR_3D_LAST);
+//-/    double fDefaultCamPosZ = (double)((const SfxUInt32Item&)aDefaultSet.Get(SDRATTR_3DSCENE_DISTANCE)).GetValue();
+//-/    return fDefaultCamPosZ;
+}
+
+double E3dView::GetDefaultCamFocal()
+{
+    return (double)((const SfxUInt32Item&)pMod->GetItemPool().GetDefaultItem(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
+//-/    SfxItemSet aDefaultSet(pMod->GetItemPool(), SDRATTR_3D_FIRST, SDRATTR_3D_LAST);
+//-/    double fDefaultCamFocal = (double)((const SfxUInt32Item&)aDefaultSet.Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
+//-/    return fDefaultCamFocal;
+}
 

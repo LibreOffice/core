@@ -2,9 +2,9 @@
  *
  *  $RCSfile: polysc3d.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:15 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,10 +236,10 @@ BOOL E3dPolyScene::LocalPaint3D(ExtOutputDevice& rOut,
     Time aStartTime;
     Rectangle aBound(GetSnapRect());
     OutputDevice* pOut = rOut.GetOutDev();
-    Base3D *pBase3D = Base3D::Create(pOut, GetForceDraftShadeModel());
+    Base3D *pBase3D = Base3D::Create(pOut, bForceDraftShadeModel);
     DBG_ASSERT(pBase3D, "Habe keinen Base3D Kontext bekommen!!");
     pBase3D->SetDisplayQuality(GetDisplayQuality());
-    pBase3D->SetShadeModel(GetShadeModel());
+    pBase3D->SetShadeModel(eShadeModel);
 
     Rectangle aVisible(Point(0,0), pOut->GetOutputSizePixel());
     aVisible = pOut->PixelToLogic(aVisible);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrud3d.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:15 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,10 @@
 
 #ifndef _SVDMODEL_HXX
 #include "svdmodel.hxx"
+#endif
+
+#ifndef _SVX3DITEMS_HXX
+#include "svx3ditems.hxx"
 #endif
 
 TYPEINIT1(E3dExtrudeObj, E3dCompoundObject);
@@ -282,7 +286,7 @@ void E3dExtrudeObj::CreateGeometry()
     else
     {
         // nur ein Polygon erzeugen
-        SetDoubleSided(TRUE);
+        bDoubleSided = TRUE;
 
         // Fuer evtl. selbst erzeugte Normalen
         PolyPolygon3D aNormalsFront;
@@ -618,33 +622,6 @@ void E3dExtrudeObj::SetExtrudeScale(double fNew)
     }
 }
 
-void E3dExtrudeObj::SetExtrudeDepth(double fNew)
-{
-    if(fExtrudeDepth != fNew)
-    {
-        fExtrudeDepth = fNew;
-        bGeometryValid = FALSE;
-    }
-}
-
-void E3dExtrudeObj::SetExtrudeBackScale(double fNew)
-{
-    if(fExtrudeBackScale != fNew)
-    {
-        fExtrudeBackScale = fNew;
-        bGeometryValid = FALSE;
-    }
-}
-
-void E3dExtrudeObj::SetExtrudePercentDiag(double fNew)
-{
-    if(fExtrudePercentDiag != fNew)
-    {
-        fExtrudePercentDiag = fNew;
-        bGeometryValid = FALSE;
-    }
-}
-
 void E3dExtrudeObj::SetExtrudeSmoothed(BOOL bNew)
 {
     if(bExtrudeSmoothed != bNew)
@@ -696,30 +673,115 @@ void E3dExtrudeObj::SetExtrudeCloseBack(BOOL bNew)
 |*
 \************************************************************************/
 
-void E3dExtrudeObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+void E3dExtrudeObj::ImpLocalItemValueChange(const SfxPoolItem& rNew)
 {
-    // call parent
-    E3dCompoundObject::NbcSetAttributes(rAttr, bReplaceAll);
-
-    // special Attr for E3dExtrudeObj
-    const SfxPoolItem* pPoolItem = NULL;
-
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_PERCENT_DIAGONAL, TRUE, &pPoolItem ) )
+    switch(rNew.Which())
     {
-        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
-        SetExtrudePercentDiag((double)nNew / 200.0);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_BACKSCALE, TRUE, &pPoolItem ) )
-    {
-        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
-        SetExtrudeBackScale((double)nNew / 100.0);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_DEPTH, TRUE, &pPoolItem ) )
-    {
-        UINT32 nNew = ((const SfxUInt32Item*)pPoolItem)->GetValue();
-        SetExtrudeDepth((double)nNew);
+        case SDRATTR_3DOBJ_PERCENT_DIAGONAL:
+        {
+            UINT16 nNew = ((const Svx3DPercentDiagonalItem&)rNew).GetValue();
+            ImpSetExtrudePercentDiag((double)nNew / 200.0);
+            break;
+        }
+        case SDRATTR_3DOBJ_BACKSCALE:
+        {
+            UINT16 nNew = ((const Svx3DBackscaleItem&)rNew).GetValue();
+            ImpSetExtrudeBackScale((double)nNew / 100.0);
+            break;
+        }
+        case SDRATTR_3DOBJ_DEPTH:
+        {
+            UINT32 nNew = ((const Svx3DDepthItem&)rNew).GetValue();
+            ImpSetExtrudeDepth((double)nNew);
+            break;
+        }
     }
 }
+
+void E3dExtrudeObj::SetItem( const SfxPoolItem& rItem )
+{
+    // set item
+    E3dCompoundObject::SetItem(rItem);
+
+    // handle value change
+    if(rItem.Which() >= SDRATTR_3DOBJ_PERCENT_DIAGONAL && rItem.Which() <= SDRATTR_3DOBJ_DEPTH)
+        ImpLocalItemValueChange(rItem);
+}
+
+void E3dExtrudeObj::ClearItem( USHORT nWhich )
+{
+    if(mpObjectItemSet)
+    {
+        // clear base items at SdrAttrObj, NOT at E3dObject(!)
+        E3dCompoundObject::ClearItem(nWhich);
+
+        // handle value change
+        if(nWhich >= SDRATTR_3DOBJ_PERCENT_DIAGONAL && nWhich <= SDRATTR_3DOBJ_DEPTH)
+            ImpLocalItemValueChange(mpObjectItemSet->Get(nWhich));
+    }
+}
+
+void E3dExtrudeObj::SetItemSet( const SfxItemSet& rSet )
+{
+    // set base items at SdrAttrObj, NOT at E3dObject(!)
+    E3dCompoundObject::SetItemSet(rSet);
+
+    // handle value change
+    for(sal_uInt16 nWhich(SDRATTR_3DOBJ_PERCENT_DIAGONAL); nWhich <= SDRATTR_3DOBJ_DEPTH; nWhich++)
+        ImpLocalItemValueChange(rSet.Get(nWhich));
+}
+
+
+
+//-/void E3dExtrudeObj::Distribute3DAttributes(const SfxItemSet& rAttr)
+//-/{
+//-/    // call parent
+//-/    E3dCompoundObject::Distribute3DAttributes(rAttr);
+//-/
+//-/    // special Attr for E3dExtrudeObj
+//-/    const SfxPoolItem* pPoolItem = NULL;
+//-/
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_PERCENT_DIAGONAL, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
+//-/        SetExtrudePercentDiag((double)nNew / 200.0);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_BACKSCALE, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
+//-/        SetExtrudeBackScale((double)nNew / 100.0);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_DEPTH, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT32 nNew = ((const SfxUInt32Item*)pPoolItem)->GetValue();
+//-/        SetExtrudeDepth((double)nNew);
+//-/    }
+//-/}
+
+//-/void E3dExtrudeObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/{
+//-/    // call parent
+//-/    E3dCompoundObject::NbcSetAttributes(rAttr, bReplaceAll);
+//-/
+//-/    // special Attr for E3dExtrudeObj
+//-/    const SfxPoolItem* pPoolItem = NULL;
+//-/
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_PERCENT_DIAGONAL, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
+//-/        SetExtrudePercentDiag((double)nNew / 200.0);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_BACKSCALE, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
+//-/        SetExtrudeBackScale((double)nNew / 100.0);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_DEPTH, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT32 nNew = ((const SfxUInt32Item*)pPoolItem)->GetValue();
+//-/        SetExtrudeDepth((double)nNew);
+//-/    }
+//-/}
 
 /*************************************************************************
 |*
@@ -727,79 +789,99 @@ void E3dExtrudeObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceA
 |*
 \************************************************************************/
 
-void E3dExtrudeObj::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
+void E3dExtrudeObj::Collect3DAttributes(SfxItemSet& rAttr) const
 {
     // call parent
-    E3dCompoundObject::TakeAttributes(rAttr, bMerge, bOnlyHardAttr);
+    E3dCompoundObject::Collect3DAttributes(rAttr);
 
     // special Attr for E3dExtrudeObj
-    const SfxPoolItem* pPoolItem = NULL;
-    SfxItemState eState;
-
-    UINT16 nObjPercentDiagonal = (UINT16)((GetExtrudePercentDiag() * 200.0) + 0.5);
-    UINT16 nObjBackScale = (UINT16)((GetExtrudeBackScale() * 100.0) + 0.5);
-    UINT32 nObjDeepth = (UINT32)(GetExtrudeDepth() + 0.5);
+    UINT16 nObjPercentDiagonal = (UINT16)((fExtrudePercentDiag * 200.0) + 0.5);
+    UINT16 nObjBackScale = (UINT16)((fExtrudeBackScale * 100.0) + 0.5);
+    UINT32 nObjDeepth = (UINT32)(fExtrudeDepth + 0.5);
 
     // PercentDiagonal
-    eState = rAttr.GetItemState(SID_ATTR_3D_PERCENT_DIAGONAL, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(nObjPercentDiagonal != ((const SfxUInt16Item*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_PERCENT_DIAGONAL);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_PERCENT_DIAGONAL, nObjPercentDiagonal));
-        }
-    }
+    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_PERCENT_DIAGONAL, nObjPercentDiagonal));
 
     // BackScale
-    eState = rAttr.GetItemState(SID_ATTR_3D_BACKSCALE, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(nObjBackScale != ((const SfxUInt16Item*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_BACKSCALE);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_BACKSCALE, nObjBackScale));
-        }
-    }
+    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_BACKSCALE, nObjBackScale));
 
     // ExtrudeDepth
-    eState = rAttr.GetItemState(SID_ATTR_3D_DEPTH, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(nObjDeepth != ((const SfxUInt32Item*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_DEPTH);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxUInt32Item(SID_ATTR_3D_DEPTH, nObjDeepth));
-        }
-    }
+    rAttr.Put(SfxUInt32Item(SDRATTR_3DOBJ_DEPTH, nObjDeepth));
 }
+
+//-/void E3dExtrudeObj::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
+//-/{
+//-/    // call parent
+//-/    E3dCompoundObject::TakeAttributes(rAttr, bMerge, bOnlyHardAttr);
+//-/
+//-/    // special Attr for E3dExtrudeObj
+//-/    const SfxPoolItem* pPoolItem = NULL;
+//-/    SfxItemState eState;
+//-/
+//-/    UINT16 nObjPercentDiagonal = (UINT16)((GetExtrudePercentDiag() * 200.0) + 0.5);
+//-/    UINT16 nObjBackScale = (UINT16)((GetExtrudeBackScale() * 100.0) + 0.5);
+//-/    UINT32 nObjDeepth = (UINT32)(GetExtrudeDepth() + 0.5);
+//-/
+//-/    // PercentDiagonal
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_PERCENT_DIAGONAL, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(nObjPercentDiagonal != ((const SfxUInt16Item*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_PERCENT_DIAGONAL);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_PERCENT_DIAGONAL, nObjPercentDiagonal));
+//-/        }
+//-/    }
+//-/
+//-/    // BackScale
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_BACKSCALE, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(nObjBackScale != ((const SfxUInt16Item*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_BACKSCALE);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_BACKSCALE, nObjBackScale));
+//-/        }
+//-/    }
+//-/
+//-/    // ExtrudeDepth
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_DEPTH, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(nObjDeepth != ((const SfxUInt32Item*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_DEPTH);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxUInt32Item(SID_ATTR_3D_DEPTH, nObjDeepth));
+//-/        }
+//-/    }
+//-/}
 
 /*************************************************************************
 |*
@@ -855,16 +937,47 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
             pPathObj->ToggleClosed(0);
 
         // Attribute setzen
-        SfxItemSet aAttr(GetModel()->GetItemPool());
-        TakeAttributes(aAttr, TRUE, FALSE);
+//-/        SfxItemSet aAttr(GetModel()->GetItemPool());
+//-/        TakeAttributes(aAttr, TRUE, FALSE);
+        SfxItemSet aSet(GetItemSet());
 
         // Linien aktivieren, um Objekt garantiert sichtbar zu machen
-        aAttr.Put(XLineStyleItem (XLINE_SOLID));
+//-/        aAttr.Put(XLineStyleItem (XLINE_SOLID));
+        aSet.Put(XLineStyleItem (XLINE_SOLID));
 
-        pPathObj->NbcSetAttributes(aAttr, FALSE);
+//-/        pPathObj->NbcSetAttributes(aAttr, FALSE);
+        pPathObj->SetItemSet(aSet);
     }
 
     return pPathObj;
 }
 
+void E3dExtrudeObj::ImpSetExtrudePercentDiag(double fNew)
+{
+    if(fExtrudePercentDiag != fNew)
+    {
+        fExtrudePercentDiag = fNew;
+        bGeometryValid = FALSE;
+    }
+}
 
+void E3dExtrudeObj::ImpSetExtrudeBackScale(double fNew)
+{
+    if(fExtrudeBackScale != fNew)
+    {
+        fExtrudeBackScale = fNew;
+        bGeometryValid = FALSE;
+    }
+}
+
+void E3dExtrudeObj::ImpSetExtrudeDepth(double fNew)
+{
+    if(fExtrudeDepth != fNew)
+    {
+        fExtrudeDepth = fNew;
+        bGeometryValid = FALSE;
+    }
+}
+
+
+// EOF

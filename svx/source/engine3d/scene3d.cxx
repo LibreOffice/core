@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:15 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,14 @@
 #include "xfltrit.hxx"
 #endif
 
+#ifndef _SVX3DITEMS_HXX
+#include "svx3ditems.hxx"
+#endif
+
+#ifndef _SFX_WHITER_HXX
+#include <svtools/whiter.hxx>
+#endif
+
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
 TYPEINIT1(E3dScene, E3dObject);
@@ -239,26 +247,21 @@ BOOL E3dScene::AreThereTransparentParts() const
         if(pObj->ISA(E3dCompoundObject))
         {
             // Flaechenattribut testen
-            const XFillAttrSetItem* pFillAttr = ((E3dCompoundObject*)pObj)->GetFillAttr();
-            if ( pFillAttr)
-            {
-                const SfxItemSet& rSet = pFillAttr->GetItemSet();
-                UINT16 nFillTrans = ITEMVALUE(rSet, XATTR_FILLTRANSPARENCE, XFillTransparenceItem);
-                if(nFillTrans)
-                    bRetval = TRUE;
-            }
+//-/            const XFillAttrSetItem* pFillAttr = ((E3dCompoundObject*)pObj)->GetFillAttr();
+//-/            if ( pFillAttr)
+//-/            {
+//-/            const SfxItemSet& rSet = pFillAttr->GetItemSet();
+            UINT16 nFillTrans = ITEMVALUE(GetItemSet(), XATTR_FILLTRANSPARENCE, XFillTransparenceItem);
+            if(nFillTrans)
+                bRetval = TRUE;
+//-/            }
 
             if(!bRetval)
             {
                 // Linienattribut testen
-                const XLineAttrSetItem* pLineAttr = ((E3dCompoundObject*)pObj)->GetLineAttr();
-                if ( pLineAttr)
-                {
-                    const SfxItemSet &rSet = pLineAttr->GetItemSet();
-                    UINT16 nLineTransparence = ITEMVALUE( rSet, XATTR_LINETRANSPARENCE, XLineTransparenceItem );
-                    if(nLineTransparence)
-                        bRetval = TRUE;
-                }
+                UINT16 nLineTransparence = ITEMVALUE( GetItemSet(), XATTR_LINETRANSPARENCE, XLineTransparenceItem );
+                if(nLineTransparence)
+                    bRetval = TRUE;
             }
         }
     }
@@ -1012,9 +1015,9 @@ void E3dScene::SFX_NOTIFY(SfxBroadcaster &rBC,
 |*
 \************************************************************************/
 
-void E3dScene::ForceDefaultAttr(SfxItemPool* pPool)
+void E3dScene::ForceDefaultAttr()
 {
-    SdrAttrObj::ForceDefaultAttr (pPool);
+    SdrAttrObj::ForceDefaultAttr();
 }
 
 /*************************************************************************
@@ -1165,18 +1168,6 @@ void E3dScene::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
                                             // zum Urpsung des Blattes
     SetGlueReallyAbsolute(FALSE);  // ab jetzt sind sie wieder relativ zum BoundRect (also dem aOutRect definiert)
     SetRectsDirty();
-}
-
-/*************************************************************************
-|*
-|* ShadowPlaneDirection setzen und normalisieren
-|*
-\************************************************************************/
-
-void E3dScene::SetShadowPlaneDirection(const Vector3D& rNew)
-{
-    aShadowPlaneDirection = rNew;
-    aShadowPlaneDirection.Normalize();
 }
 
 /*************************************************************************
@@ -1365,30 +1356,6 @@ UINT16 E3dScene::CountNumberOfLights()
 
 /*************************************************************************
 |*
-|* ShadeModel
-|*
-\************************************************************************/
-
-void E3dScene::SetShadeModel(Base3DShadeModel eNew)
-{
-    if(eShadeModel != eNew)
-    {
-        eShadeModel = eNew;
-        SetRectsDirty();
-    }
-}
-
-void E3dScene::SetForceDraftShadeModel(BOOL bNew)
-{
-    if(bNew != bForceDraftShadeModel)
-    {
-        bForceDraftShadeModel = bNew;
-        SetRectsDirty();
-    }
-}
-
-/*************************************************************************
-|*
 |* SnapRect berechnen
 |*
 \************************************************************************/
@@ -1401,7 +1368,7 @@ void E3dScene::RecalcSnapRect()
         // Szene wird als 2D-Objekt benutzt, nimm SnapRect aus der
         // 2D Bildschrimdarstellung
         Camera3D& rCam = (Camera3D&)pScene->GetCamera();
-        aSnapRect = rCam.GetDeviceWindow();
+        maSnapRect = rCam.GetDeviceWindow();
     }
     else
     {
@@ -1417,236 +1384,465 @@ void E3dScene::RecalcSnapRect()
 |*
 \************************************************************************/
 
-void E3dScene::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
-{
-    // call parent
-    E3dObject::NbcSetAttributes(rAttr, bReplaceAll);
-    StructureChanged(this);
+//-/void E3dScene::Distribute3DAttributes(const SfxItemSet& rAttr)
+//-/{
+//-/    // call parent
+//-/    E3dObject::Distribute3DAttributes(rAttr);
+//-/
+//-/    const SfxPoolItem* pPoolItem = NULL;
+//-/    B3dLightGroup& rLightGroup = GetLightGroup();
+//-/    Camera3D aSceneCam (GetCamera());
+//-/    BOOL bSceneCamChanged = FALSE;
+//-/
+//-/    // ProjectionType
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_PERSPECTIVE, FALSE, &pPoolItem))
+//-/    {
+//-/        ProjectionType eNew = (ProjectionType)((const SfxUInt16Item*)pPoolItem)->GetValue();
+//-/        if(eNew != aSceneCam.GetProjection())
+//-/        {
+//-/            aSceneCam.SetProjection( eNew );
+//-/            bSceneCamChanged = TRUE;
+//-/        }
+//-/    }
+//-/
+//-/    // CamPos
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_DISTANCE, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aActualPosition = aSceneCam.GetPosition();
+//-/        double fNew = (double)((const SfxUInt32Item*)pPoolItem)->GetValue();
+//-/        if(fabs(fNew - aActualPosition.Z()) > 1.0)
+//-/        {
+//-/            aSceneCam.SetPosition( Vector3D( aActualPosition.X(), aActualPosition.Y(), fNew) );
+//-/            bSceneCamChanged = TRUE;
+//-/        }
+//-/    }
+//-/
+//-/    // FocalLength
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_FOCAL_LENGTH, FALSE, &pPoolItem))
+//-/    {
+//-/        double fNew = (double)((const SfxUInt32Item*)pPoolItem)->GetValue() / 100.0;
+//-/        if(fNew != aSceneCam.GetFocalLength())
+//-/        {
+//-/            aSceneCam.SetFocalLength( fNew);
+//-/            bSceneCamChanged = TRUE;
+//-/        }
+//-/    }
+//-/
+//-/    // TwoSidedLighting
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_TWO_SIDED_LIGHTING, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetModelTwoSide( bNew );
+//-/    }
+//-/
+//-/    // LightColors
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_1, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight0);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_2, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight1);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_3, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight2);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_4, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight3);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_5, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight4);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_6, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight5);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_7, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight6);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_8, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight7);
+//-/    }
+//-/
+//-/    // AmbientColor
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_AMBIENTCOLOR, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetGlobalAmbientLight( aNew );
+//-/    }
+//-/
+//-/    // LightOn
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_1, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.Enable( bNew, Base3DLight0);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_2, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.Enable( bNew, Base3DLight1);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_3, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.Enable( bNew, Base3DLight2);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_4, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.Enable( bNew, Base3DLight3);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_5, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.Enable( bNew, Base3DLight4);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_6, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.Enable( bNew, Base3DLight5);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_7, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.Enable( bNew, Base3DLight6);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_8, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.Enable( bNew, Base3DLight7);
+//-/    }
+//-/
+//-/    // LightDirection
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_1, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetDirection( aNew, Base3DLight0);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_2, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetDirection( aNew, Base3DLight1);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_3, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetDirection( aNew, Base3DLight2);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_4, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetDirection( aNew, Base3DLight3);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_5, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetDirection( aNew, Base3DLight4);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_6, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetDirection( aNew, Base3DLight5);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_7, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetDirection( aNew, Base3DLight6);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_8, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetDirection( aNew, Base3DLight7);
+//-/    }
+//-/
+//-/    // ShadowSlant
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_SHADOW_SLANT, FALSE, &pPoolItem))
+//-/    {
+//-/        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
+//-/        double fWink = (double)nNew * F_PI180;
+//-/        Vector3D aVec(0.0, sin(fWink), cos(fWink));
+//-/        aVec.Normalize();
+//-/        SetShadowPlaneDirection(aVec);
+//-/    }
+//-/
+//-/    // ShadeMode
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_SHADE_MODE, FALSE, &pPoolItem))
+//-/    {
+//-/        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
+//-/        if(nNew == 3)
+//-/        {
+//-/            SetForceDraftShadeModel(TRUE);
+//-/            SetShadeModel(Base3DSmooth);
+//-/        }
+//-/        else
+//-/        {
+//-/            SetForceDraftShadeModel(FALSE);
+//-/            if(nNew == 0)
+//-/            {
+//-/                SetShadeModel(Base3DFlat);
+//-/            }
+//-/            else if(nNew == 1)
+//-/            {
+//-/                SetShadeModel(Base3DPhong);
+//-/            }
+//-/            else
+//-/            {
+//-/                // Gouraud
+//-/                SetShadeModel(Base3DSmooth);
+//-/            }
+//-/        }
+//-/    }
+//-/
+//-/    // Nachbehandlung
+//-/    if(bSceneCamChanged)
+//-/    {
+//-/        SetCamera( aSceneCam );
+//-/    }
+//-/}
 
-    // special Attr for E3dScene
-    const SfxPoolItem* pPoolItem = NULL;
-    B3dLightGroup& rLightGroup = GetLightGroup();
-    Camera3D aSceneCam (GetCamera());
-    BOOL bSceneCamChanged = FALSE;
-
-    // ProjectionType
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_PERSPECTIVE, FALSE, &pPoolItem))
-    {
-        ProjectionType eNew = (ProjectionType)((const SfxUInt16Item*)pPoolItem)->GetValue();
-        if(eNew != aSceneCam.GetProjection())
-        {
-            aSceneCam.SetProjection( eNew );
-            bSceneCamChanged = TRUE;
-        }
-    }
-
-    // CamPos
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_DISTANCE, FALSE, &pPoolItem))
-    {
-        Vector3D aActualPosition = aSceneCam.GetPosition();
-        double fNew = (double)((const SfxUInt32Item*)pPoolItem)->GetValue();
-        if(fabs(fNew - aActualPosition.Z()) > 1.0)
-        {
-            aSceneCam.SetPosition( Vector3D( aActualPosition.X(), aActualPosition.Y(), fNew) );
-            bSceneCamChanged = TRUE;
-        }
-    }
-
-    // FocalLength
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_FOCAL_LENGTH, FALSE, &pPoolItem))
-    {
-        double fNew = (double)((const SfxUInt32Item*)pPoolItem)->GetValue() / 100.0;
-        if(fNew != aSceneCam.GetFocalLength())
-        {
-            aSceneCam.SetFocalLength( fNew);
-            bSceneCamChanged = TRUE;
-        }
-    }
-
-    // TwoSidedLighting
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_TWO_SIDED_LIGHTING, FALSE, &pPoolItem))
-    {
-        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
-        rLightGroup.SetModelTwoSide( bNew );
-    }
-
-    // LightColors
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_1, FALSE, &pPoolItem))
-    {
-        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
-        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight0);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_2, FALSE, &pPoolItem))
-    {
-        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
-        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight1);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_3, FALSE, &pPoolItem))
-    {
-        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
-        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight2);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_4, FALSE, &pPoolItem))
-    {
-        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
-        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight3);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_5, FALSE, &pPoolItem))
-    {
-        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
-        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight4);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_6, FALSE, &pPoolItem))
-    {
-        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
-        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight5);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_7, FALSE, &pPoolItem))
-    {
-        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
-        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight6);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_8, FALSE, &pPoolItem))
-    {
-        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
-        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight7);
-    }
-
-    // AmbientColor
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_AMBIENTCOLOR, FALSE, &pPoolItem))
-    {
-        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
-        rLightGroup.SetGlobalAmbientLight( aNew );
-    }
-
-    // LightOn
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_1, FALSE, &pPoolItem))
-    {
-        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
-        rLightGroup.Enable( bNew, Base3DLight0);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_2, FALSE, &pPoolItem))
-    {
-        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
-        rLightGroup.Enable( bNew, Base3DLight1);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_3, FALSE, &pPoolItem))
-    {
-        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
-        rLightGroup.Enable( bNew, Base3DLight2);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_4, FALSE, &pPoolItem))
-    {
-        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
-        rLightGroup.Enable( bNew, Base3DLight3);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_5, FALSE, &pPoolItem))
-    {
-        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
-        rLightGroup.Enable( bNew, Base3DLight4);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_6, FALSE, &pPoolItem))
-    {
-        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
-        rLightGroup.Enable( bNew, Base3DLight5);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_7, FALSE, &pPoolItem))
-    {
-        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
-        rLightGroup.Enable( bNew, Base3DLight6);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_8, FALSE, &pPoolItem))
-    {
-        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
-        rLightGroup.Enable( bNew, Base3DLight7);
-    }
-
-    // LightDirection
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_1, FALSE, &pPoolItem))
-    {
-        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
-        rLightGroup.SetDirection( aNew, Base3DLight0);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_2, FALSE, &pPoolItem))
-    {
-        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
-        rLightGroup.SetDirection( aNew, Base3DLight1);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_3, FALSE, &pPoolItem))
-    {
-        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
-        rLightGroup.SetDirection( aNew, Base3DLight2);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_4, FALSE, &pPoolItem))
-    {
-        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
-        rLightGroup.SetDirection( aNew, Base3DLight3);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_5, FALSE, &pPoolItem))
-    {
-        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
-        rLightGroup.SetDirection( aNew, Base3DLight4);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_6, FALSE, &pPoolItem))
-    {
-        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
-        rLightGroup.SetDirection( aNew, Base3DLight5);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_7, FALSE, &pPoolItem))
-    {
-        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
-        rLightGroup.SetDirection( aNew, Base3DLight6);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_8, FALSE, &pPoolItem))
-    {
-        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
-        rLightGroup.SetDirection( aNew, Base3DLight7);
-    }
-
-    // ShadowSlant
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_SHADOW_SLANT, FALSE, &pPoolItem))
-    {
-        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
-        double fWink = (double)nNew * F_PI180;
-        Vector3D aVec(0.0, sin(fWink), cos(fWink));
-        aVec.Normalize();
-        SetShadowPlaneDirection(aVec);
-    }
-
-    // ShadeMode
-    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_SHADE_MODE, FALSE, &pPoolItem))
-    {
-        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
-        if(nNew == 3)
-        {
-            SetForceDraftShadeModel(TRUE);
-            SetShadeModel(Base3DSmooth);
-        }
-        else
-        {
-            SetForceDraftShadeModel(FALSE);
-            if(nNew == 0)
-            {
-                SetShadeModel(Base3DFlat);
-            }
-            else if(nNew == 1)
-            {
-                SetShadeModel(Base3DPhong);
-            }
-            else
-            {
-                // Gouraud
-                SetShadeModel(Base3DSmooth);
-            }
-        }
-    }
-
-    // Nachbehandlung
-    if(bSceneCamChanged)
-    {
-        SetCamera( aSceneCam );
-    }
-}
+//-/void E3dScene::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/{
+//-/    // call parent
+//-/    E3dObject::NbcSetAttributes(rAttr, bReplaceAll);
+//-/    StructureChanged(this);
+//-/
+//-/    // special Attr for E3dScene
+//-/    const SfxPoolItem* pPoolItem = NULL;
+//-/    B3dLightGroup& rLightGroup = GetLightGroup();
+//-/    Camera3D aSceneCam (GetCamera());
+//-/    BOOL bSceneCamChanged = FALSE;
+//-/
+//-/    // ProjectionType
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_PERSPECTIVE, FALSE, &pPoolItem))
+//-/    {
+//-/        ProjectionType eNew = (ProjectionType)((const SfxUInt16Item*)pPoolItem)->GetValue();
+//-/        if(eNew != aSceneCam.GetProjection())
+//-/        {
+//-/            aSceneCam.SetProjection( eNew );
+//-/            bSceneCamChanged = TRUE;
+//-/        }
+//-/    }
+//-/
+//-/    // CamPos
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_DISTANCE, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aActualPosition = aSceneCam.GetPosition();
+//-/        double fNew = (double)((const SfxUInt32Item*)pPoolItem)->GetValue();
+//-/        if(fabs(fNew - aActualPosition.Z()) > 1.0)
+//-/        {
+//-/            aSceneCam.SetPosition( Vector3D( aActualPosition.X(), aActualPosition.Y(), fNew) );
+//-/            bSceneCamChanged = TRUE;
+//-/        }
+//-/    }
+//-/
+//-/    // FocalLength
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_FOCAL_LENGTH, FALSE, &pPoolItem))
+//-/    {
+//-/        double fNew = (double)((const SfxUInt32Item*)pPoolItem)->GetValue() / 100.0;
+//-/        if(fNew != aSceneCam.GetFocalLength())
+//-/        {
+//-/            aSceneCam.SetFocalLength( fNew);
+//-/            bSceneCamChanged = TRUE;
+//-/        }
+//-/    }
+//-/
+//-/    // TwoSidedLighting
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_TWO_SIDED_LIGHTING, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetModelTwoSide( bNew );
+//-/    }
+//-/
+//-/    // LightColors
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_1, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight0);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_2, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight1);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_3, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight2);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_4, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight3);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_5, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight4);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_6, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight5);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_7, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight6);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_8, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight7);
+//-/    }
+//-/
+//-/    // AmbientColor
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_AMBIENTCOLOR, FALSE, &pPoolItem))
+//-/    {
+//-/        Color aNew = ((const SvxColorItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetGlobalAmbientLight( aNew );
+//-/    }
+//-/
+//-/    // LightOn
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_1, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.Enable( bNew, Base3DLight0);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_2, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.Enable( bNew, Base3DLight1);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_3, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.Enable( bNew, Base3DLight2);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_4, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.Enable( bNew, Base3DLight3);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_5, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.Enable( bNew, Base3DLight4);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_6, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.Enable( bNew, Base3DLight5);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_7, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.Enable( bNew, Base3DLight6);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTON_8, FALSE, &pPoolItem))
+//-/    {
+//-/        BOOL bNew = ((const SfxBoolItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.Enable( bNew, Base3DLight7);
+//-/    }
+//-/
+//-/    // LightDirection
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_1, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetDirection( aNew, Base3DLight0);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_2, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetDirection( aNew, Base3DLight1);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_3, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetDirection( aNew, Base3DLight2);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_4, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetDirection( aNew, Base3DLight3);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_5, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetDirection( aNew, Base3DLight4);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_6, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetDirection( aNew, Base3DLight5);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_7, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetDirection( aNew, Base3DLight6);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_8, FALSE, &pPoolItem))
+//-/    {
+//-/        Vector3D aNew = ((const SvxVector3DItem*)pPoolItem)->GetValue();
+//-/        rLightGroup.SetDirection( aNew, Base3DLight7);
+//-/    }
+//-/
+//-/    // ShadowSlant
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_SHADOW_SLANT, FALSE, &pPoolItem))
+//-/    {
+//-/        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
+//-/        double fWink = (double)nNew * F_PI180;
+//-/        Vector3D aVec(0.0, sin(fWink), cos(fWink));
+//-/        aVec.Normalize();
+//-/        SetShadowPlaneDirection(aVec);
+//-/    }
+//-/
+//-/    // ShadeMode
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_3D_SHADE_MODE, FALSE, &pPoolItem))
+//-/    {
+//-/        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
+//-/        if(nNew == 3)
+//-/        {
+//-/            SetForceDraftShadeModel(TRUE);
+//-/            SetShadeModel(Base3DSmooth);
+//-/        }
+//-/        else
+//-/        {
+//-/            SetForceDraftShadeModel(FALSE);
+//-/            if(nNew == 0)
+//-/            {
+//-/                SetShadeModel(Base3DFlat);
+//-/            }
+//-/            else if(nNew == 1)
+//-/            {
+//-/                SetShadeModel(Base3DPhong);
+//-/            }
+//-/            else
+//-/            {
+//-/                // Gouraud
+//-/                SetShadeModel(Base3DSmooth);
+//-/            }
+//-/        }
+//-/    }
+//-/
+//-/    // Nachbehandlung
+//-/    if(bSceneCamChanged)
+//-/    {
+//-/        SetCamera( aSceneCam );
+//-/    }
+//-/}
 
 /*************************************************************************
 |*
@@ -1654,15 +1850,12 @@ void E3dScene::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
 |*
 \************************************************************************/
 
-void E3dScene::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
+void E3dScene::Collect3DAttributes(SfxItemSet& rAttr) const
 {
     // call parent
-    E3dObject::TakeAttributes(rAttr, bMerge, bOnlyHardAttr);
+    E3dObject::Collect3DAttributes(rAttr);
 
     // special Attr for E3dCompoundObject
-    const SfxPoolItem* pPoolItem = NULL;
-    SfxItemState eState;
-
     B3dLightGroup& rLightGroup = ((E3dScene*)this)->GetLightGroup();
     Camera3D aSceneCam (GetCamera());
     double   fSceneCamPosZ = aSceneCam.GetPosition().Z();
@@ -1695,21 +1888,20 @@ void E3dScene::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnly
     Vector3D aSceneLightDirection8 = rLightGroup.GetDirection( Base3DLight7 );
     ProjectionType eScenePT = aSceneCam.GetProjection();
     UINT16   nSceneShadeMode;
-
     const Vector3D& rShadowVec = ((E3dScene*)this)->GetShadowPlaneDirection();
     UINT16 nSceneShadowSlant = (UINT16)((atan2(rShadowVec.Y(), rShadowVec.Z()) / F_PI180) + 0.5);
 
-    if(((E3dScene*)this)->GetForceDraftShadeModel())
+    if(bForceDraftShadeModel)
     {
         nSceneShadeMode = 3; // Draft-Modus
     }
     else
     {
-        if(((E3dScene*)this)->GetShadeModel() == Base3DSmooth)
+        if(eShadeModel == Base3DSmooth)
         {
             nSceneShadeMode = 2; // Gouraud
         }
-        else if(((E3dScene*)this)->GetShadeModel() == Base3DFlat)
+        else if(eShadeModel == Base3DFlat)
         {
             nSceneShadeMode = 0; // Flat
         }
@@ -1720,583 +1912,1120 @@ void E3dScene::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnly
     }
 
     // ProjectionType
-    eState = rAttr.GetItemState(SID_ATTR_3D_PERSPECTIVE, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if((UINT16)eScenePT != ((const SfxUInt16Item*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_PERSPECTIVE);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_PERSPECTIVE, (UINT16)eScenePT));
-        }
-    }
+    rAttr.Put(SfxUInt16Item(SDRATTR_3DSCENE_PERSPECTIVE, (UINT16)eScenePT));
 
     // CamPos
-    eState = rAttr.GetItemState(SID_ATTR_3D_DISTANCE, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if((UINT32)(fSceneCamPosZ + 0.5) != ((const SfxUInt32Item*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_DISTANCE);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxUInt32Item(SID_ATTR_3D_DISTANCE, (UINT32)(fSceneCamPosZ + 0.5)));
-        }
-    }
+    rAttr.Put(SfxUInt32Item(SDRATTR_3DSCENE_DISTANCE, (UINT32)(fSceneCamPosZ + 0.5)));
 
     // FocalLength
-    eState = rAttr.GetItemState(SID_ATTR_3D_FOCAL_LENGTH, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if((UINT32)(fSceneFocal + 0.5) != ((const SfxUInt32Item*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_FOCAL_LENGTH);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxUInt32Item(SID_ATTR_3D_FOCAL_LENGTH, (UINT32)(fSceneFocal + 0.5)));
-        }
-    }
+    rAttr.Put(SfxUInt32Item(SDRATTR_3DSCENE_FOCAL_LENGTH, (UINT32)(fSceneFocal + 0.5)));
 
     // TwoSidedLighting
-    eState = rAttr.GetItemState(SID_ATTR_3D_TWO_SIDED_LIGHTING, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(bSceneTwoSidedLighting != ((const SfxBoolItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_TWO_SIDED_LIGHTING);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxBoolItem(SID_ATTR_3D_TWO_SIDED_LIGHTING, bSceneTwoSidedLighting));
-        }
-    }
+    rAttr.Put(SfxBoolItem(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING, bSceneTwoSidedLighting));
 
     // LightColors
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_1, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(aSceneLightColor1 != ((const SvxColorItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTCOLOR_1);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SvxColorItem(aSceneLightColor1, SID_ATTR_3D_LIGHTCOLOR_1));
-        }
-    }
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_2, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(aSceneLightColor2 != ((const SvxColorItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTCOLOR_2);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SvxColorItem(aSceneLightColor2, SID_ATTR_3D_LIGHTCOLOR_2));
-        }
-    }
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_3, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(aSceneLightColor3 != ((const SvxColorItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTCOLOR_3);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SvxColorItem(aSceneLightColor3, SID_ATTR_3D_LIGHTCOLOR_3));
-        }
-    }
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_4, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(aSceneLightColor4 != ((const SvxColorItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTCOLOR_4);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SvxColorItem(aSceneLightColor4, SID_ATTR_3D_LIGHTCOLOR_4));
-        }
-    }
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_5, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(aSceneLightColor5 != ((const SvxColorItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTCOLOR_5);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SvxColorItem(aSceneLightColor5, SID_ATTR_3D_LIGHTCOLOR_5));
-        }
-    }
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_6, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(aSceneLightColor6 != ((const SvxColorItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTCOLOR_6);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SvxColorItem(aSceneLightColor6, SID_ATTR_3D_LIGHTCOLOR_6));
-        }
-    }
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_7, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(aSceneLightColor7 != ((const SvxColorItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTCOLOR_7);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SvxColorItem(aSceneLightColor7, SID_ATTR_3D_LIGHTCOLOR_7));
-        }
-    }
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_8, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(aSceneLightColor8 != ((const SvxColorItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTCOLOR_8);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SvxColorItem(aSceneLightColor8, SID_ATTR_3D_LIGHTCOLOR_8));
-        }
-    }
+    rAttr.Put(SvxColorItem(aSceneLightColor1, SDRATTR_3DSCENE_LIGHTCOLOR_1));
+    rAttr.Put(SvxColorItem(aSceneLightColor2, SDRATTR_3DSCENE_LIGHTCOLOR_2));
+    rAttr.Put(SvxColorItem(aSceneLightColor3, SDRATTR_3DSCENE_LIGHTCOLOR_3));
+    rAttr.Put(SvxColorItem(aSceneLightColor4, SDRATTR_3DSCENE_LIGHTCOLOR_4));
+    rAttr.Put(SvxColorItem(aSceneLightColor5, SDRATTR_3DSCENE_LIGHTCOLOR_5));
+    rAttr.Put(SvxColorItem(aSceneLightColor6, SDRATTR_3DSCENE_LIGHTCOLOR_6));
+    rAttr.Put(SvxColorItem(aSceneLightColor7, SDRATTR_3DSCENE_LIGHTCOLOR_7));
+    rAttr.Put(SvxColorItem(aSceneLightColor8, SDRATTR_3DSCENE_LIGHTCOLOR_8));
 
     // AmbientColor
-    eState = rAttr.GetItemState(SID_ATTR_3D_AMBIENTCOLOR, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(aSceneAmbientColor != ((const SvxColorItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_AMBIENTCOLOR);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SvxColorItem(aSceneAmbientColor, SID_ATTR_3D_AMBIENTCOLOR));
-        }
-    }
+    rAttr.Put(SvxColorItem(aSceneAmbientColor, SDRATTR_3DSCENE_AMBIENTCOLOR));
 
     // LightOn
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTON_1, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(bSceneLightOn1 != ((const SfxBoolItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTON_1);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_1, bSceneLightOn1));
-        }
-    }
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTON_2, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(bSceneLightOn2 != ((const SfxBoolItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTON_2);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_2, bSceneLightOn2));
-        }
-    }
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTON_3, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(bSceneLightOn3 != ((const SfxBoolItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTON_3);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_3, bSceneLightOn3));
-        }
-    }
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTON_4, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(bSceneLightOn4 != ((const SfxBoolItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTON_4);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_4, bSceneLightOn4));
-        }
-    }
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTON_5, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(bSceneLightOn5 != ((const SfxBoolItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTON_5);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_5, bSceneLightOn5));
-        }
-    }
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTON_6, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(bSceneLightOn6 != ((const SfxBoolItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTON_6);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_6, bSceneLightOn6));
-        }
-    }
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTON_7, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(bSceneLightOn7 != ((const SfxBoolItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTON_7);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_7, bSceneLightOn7));
-        }
-    }
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTON_8, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(bSceneLightOn8 != ((const SfxBoolItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTON_8);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_8, bSceneLightOn8));
-        }
-    }
+    rAttr.Put(SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_1, bSceneLightOn1));
+    rAttr.Put(SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_2, bSceneLightOn2));
+    rAttr.Put(SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_3, bSceneLightOn3));
+    rAttr.Put(SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_4, bSceneLightOn4));
+    rAttr.Put(SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_5, bSceneLightOn5));
+    rAttr.Put(SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_6, bSceneLightOn6));
+    rAttr.Put(SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_7, bSceneLightOn7));
+    rAttr.Put(SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_8, bSceneLightOn8));
 
     // LightDirection
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_1, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(aSceneLightDirection1 != ((const SvxVector3DItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTDIRECTION_1);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_1, aSceneLightDirection1));
-        }
-    }
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_2, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(aSceneLightDirection2 != ((const SvxVector3DItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTDIRECTION_2);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_2, aSceneLightDirection2));
-        }
-    }
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_3, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(aSceneLightDirection3 != ((const SvxVector3DItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTDIRECTION_3);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_3, aSceneLightDirection3));
-        }
-    }
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_4, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(aSceneLightDirection4 != ((const SvxVector3DItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTDIRECTION_4);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_4, aSceneLightDirection4));
-        }
-    }
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_5, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(aSceneLightDirection5 != ((const SvxVector3DItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTDIRECTION_5);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_5, aSceneLightDirection5));
-        }
-    }
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_6, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(aSceneLightDirection6 != ((const SvxVector3DItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTDIRECTION_6);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_6, aSceneLightDirection6));
-        }
-    }
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_7, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(aSceneLightDirection7 != ((const SvxVector3DItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTDIRECTION_7);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_7, aSceneLightDirection7));
-        }
-    }
-    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_8, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(aSceneLightDirection8 != ((const SvxVector3DItem*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTDIRECTION_8);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_8, aSceneLightDirection8));
-        }
-    }
+    rAttr.Put(SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_1, aSceneLightDirection1));
+    rAttr.Put(SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_2, aSceneLightDirection2));
+    rAttr.Put(SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_3, aSceneLightDirection3));
+    rAttr.Put(SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_4, aSceneLightDirection4));
+    rAttr.Put(SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_5, aSceneLightDirection5));
+    rAttr.Put(SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_6, aSceneLightDirection6));
+    rAttr.Put(SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_7, aSceneLightDirection7));
+    rAttr.Put(SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_8, aSceneLightDirection8));
 
     // ShadowSlant
-    eState = rAttr.GetItemState(SID_ATTR_3D_SHADOW_SLANT, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
+    rAttr.Put(SfxUInt16Item(SDRATTR_3DSCENE_SHADOW_SLANT, nSceneShadowSlant));
+
+    // ShadeMode
+    rAttr.Put(SfxUInt16Item(SDRATTR_3DSCENE_SHADE_MODE, nSceneShadeMode));
+}
+
+// ItemSet access
+const sal_uInt16 E3dScene::mnSceneRangeData[4] = { SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST, 0, 0 };
+const sal_uInt16 E3dScene::mnAllRangeData[4] = { SDRATTR_START, SDRATTR_END, 0, 0 };
+
+void E3dScene::ImpResetToSceneItems()
+{
+    ImpForceItemSet();
+    mpObjectItemSet->SetRanges(mnSceneRangeData);
+    mpObjectItemSet->SetRanges(mnAllRangeData);
+}
+
+const SfxItemSet& E3dScene::GetItemSet() const
+{
+    // collect all ItemSets in mpGroupItemSet
+    ((E3dScene*)this)->ImpResetToSceneItems();
+
+    sal_uInt32 nCount(pSub->GetObjCount());
+    for(sal_uInt32 a(0); a < nCount; a++)
     {
-        // Ist gesetzt
-        if(nSceneShadowSlant != ((const SfxUInt16Item*)pPoolItem)->GetValue())
+//-/        mpObjectItemSet->MergeValues(pSub->GetObj(a)->GetItemSet(), TRUE);
+        const SfxItemSet& rSet = pSub->GetObj(a)->GetItemSet();
+        SfxWhichIter aIter(rSet);
+        sal_uInt16 nWhich(aIter.FirstWhich());
+
+        while(nWhich)
         {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_SHADOW_SLANT);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_SHADOW_SLANT, nSceneShadowSlant));
+            const SfxPoolItem* pItem = NULL;
+            rSet.GetItemState(nWhich, TRUE, &pItem);
+
+            if(pItem)
+            {
+                if(pItem == (SfxPoolItem *)-1)
+                    mpObjectItemSet->InvalidateItem(nWhich);
+                else
+                    mpObjectItemSet->MergeValue(*pItem, TRUE);
+            }
+            nWhich = aIter.NextWhich();
         }
     }
 
-    // ShadeMode
-    eState = rAttr.GetItemState(SID_ATTR_3D_SHADE_MODE, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
+    return *mpObjectItemSet;
+}
+
+//-/const SfxItemSet& E3dScene::GetItemSet() const
+//-/{
+//-/    if(mpItemSet)
+//-/        mpItemSet->ClearItem();
+//-/    else
+//-/        ((SdrObjGroup*)this)->mpItemSet =
+//-/        ((SdrObjGroup*)this)->CreateNewItemSet((SfxItemPool&)(*GetItemPool()));
+//-/    DBG_ASSERT(mpItemSet, "Could not create an SfxItemSet(!)");
+//-/
+//-/    // collect all ItemSets in mpItemSet
+//-/    SdrObjList* pSubList = GetSubList();
+//-/    if(pSubList)
+//-/    {
+//-/        SdrObjListIter a3DIterator(*pSubList, IM_DEEPWITHGROUPS);
+//-/        while ( a3DIterator.IsMore() )
+//-/        {
+//-/            E3dObject* pObj = (E3dObject*) a3DIterator.Next();
+//-/            DBG_ASSERT(pObj->ISA(E3dObject), "AW: In Szenen sind nur 3D-Objekte erlaubt!");
+//-/            mpItemSet->Put(pObj->GetItemSet());
+//-/        }
+//-/    }
+//-/
+//-/    return *mpItemSet;
+//-/    // get base items from SdrAttrObj, NOT from E3dObject(!)
+//-/    SfxItemSet& rSet = (SfxItemSet&)SdrAttrObj::GetItemSet();
+//-/
+//-/    // add local 3D items of this object
+//-/    Collect3DAttributes(rSet);
+//-/
+//-/    // add all contained objects
+//-/    SdrObjList* pSubList = GetSubList();
+//-/    if(pSubList)
+//-/    {
+//-/        SdrObjListIter a3DIterator(*pSubList, IM_DEEPWITHGROUPS);
+//-/        while ( a3DIterator.IsMore() )
+//-/        {
+//-/            E3dObject* pObj = (E3dObject*) a3DIterator.Next();
+//-/            DBG_ASSERT(pObj->ISA(E3dObject), "AW: In Szenen sind nur 3D-Objekte erlaubt!");
+//-/            pObj->Collect3DAttributes(rSet);
+//-/        }
+//-/    }
+//-/
+//-/    // return completed ItemSet
+//-/    return rSet;
+//-/}
+
+void E3dScene::ImpLocalItemValueChange(const SfxPoolItem& rNew)
+{
+    switch(rNew.Which())
     {
-        // Ist gesetzt
-        if(nSceneShadeMode != ((const SfxUInt16Item*)pPoolItem)->GetValue())
+        case SDRATTR_3DSCENE_PERSPECTIVE            :
         {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_SHADE_MODE);
+            Camera3D aSceneCam(GetCamera());
+            ProjectionType eNew = (ProjectionType)((const Svx3DPerspectiveItem&)rNew).GetValue();
+            aSceneCam.SetProjection( eNew );
+            SetCamera( aSceneCam );
+            break;
         }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
+        case SDRATTR_3DSCENE_DISTANCE               :
         {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_SHADE_MODE, nSceneShadeMode));
+            Camera3D aSceneCam(GetCamera());
+            Vector3D aActualPosition = aSceneCam.GetPosition();
+            double fNew = (double)((const Svx3DDistanceItem&)rNew).GetValue();
+            if(fabs(fNew - aActualPosition.Z()) > 1.0)
+            {
+                aSceneCam.SetPosition( Vector3D( aActualPosition.X(), aActualPosition.Y(), fNew) );
+                SetCamera( aSceneCam );
+            }
+            break;
+        }
+        case SDRATTR_3DSCENE_FOCAL_LENGTH           :
+        {
+            Camera3D aSceneCam(GetCamera());
+            double fNew = (double)((const Svx3DFocalLengthItem&)rNew).GetValue() / 100.0;
+            aSceneCam.SetFocalLength( fNew);
+            SetCamera( aSceneCam );
+            break;
+        }
+        case SDRATTR_3DSCENE_TWO_SIDED_LIGHTING     :
+        {
+            BOOL bNew = ((const Svx3DTwoSidedLightingItem&)rNew).GetValue();
+            GetLightGroup().SetModelTwoSide( bNew );
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTCOLOR_1           :
+        {
+            Color aNew = ((const Svx3DLightcolor1Item&)rNew).GetValue();
+            GetLightGroup().SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight0);
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTCOLOR_2           :
+        {
+            Color aNew = ((const Svx3DLightcolor2Item&)rNew).GetValue();
+            GetLightGroup().SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight1);
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTCOLOR_3           :
+        {
+            Color aNew = ((const Svx3DLightcolor3Item&)rNew).GetValue();
+            GetLightGroup().SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight2);
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTCOLOR_4           :
+        {
+            Color aNew = ((const Svx3DLightcolor4Item&)rNew).GetValue();
+            GetLightGroup().SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight3);
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTCOLOR_5           :
+        {
+            Color aNew = ((const Svx3DLightcolor5Item&)rNew).GetValue();
+            GetLightGroup().SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight4);
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTCOLOR_6           :
+        {
+            Color aNew = ((const Svx3DLightcolor6Item&)rNew).GetValue();
+            GetLightGroup().SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight5);
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTCOLOR_7           :
+        {
+            Color aNew = ((const Svx3DLightcolor7Item&)rNew).GetValue();
+            GetLightGroup().SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight6);
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTCOLOR_8           :
+        {
+            Color aNew = ((const Svx3DLightcolor8Item&)rNew).GetValue();
+            GetLightGroup().SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight7);
+            break;
+        }
+        case SDRATTR_3DSCENE_AMBIENTCOLOR           :
+        {
+            Color aNew = ((const Svx3DAmbientcolorItem&)rNew).GetValue();
+            GetLightGroup().SetGlobalAmbientLight( aNew );
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTON_1              :
+        {
+            BOOL bNew = ((const Svx3DLightOnOff1Item&)rNew).GetValue();
+            GetLightGroup().Enable( bNew, Base3DLight0);
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTON_2              :
+        {
+            BOOL bNew = ((const Svx3DLightOnOff2Item&)rNew).GetValue();
+            GetLightGroup().Enable( bNew, Base3DLight1);
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTON_3              :
+        {
+            BOOL bNew = ((const Svx3DLightOnOff3Item&)rNew).GetValue();
+            GetLightGroup().Enable( bNew, Base3DLight2);
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTON_4              :
+        {
+            BOOL bNew = ((const Svx3DLightOnOff4Item&)rNew).GetValue();
+            GetLightGroup().Enable( bNew, Base3DLight3);
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTON_5              :
+        {
+            BOOL bNew = ((const Svx3DLightOnOff5Item&)rNew).GetValue();
+            GetLightGroup().Enable( bNew, Base3DLight4);
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTON_6              :
+        {
+            BOOL bNew = ((const Svx3DLightOnOff6Item&)rNew).GetValue();
+            GetLightGroup().Enable( bNew, Base3DLight5);
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTON_7              :
+        {
+            BOOL bNew = ((const Svx3DLightOnOff7Item&)rNew).GetValue();
+            GetLightGroup().Enable( bNew, Base3DLight6);
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTON_8              :
+        {
+            BOOL bNew = ((const Svx3DLightOnOff8Item&)rNew).GetValue();
+            GetLightGroup().Enable( bNew, Base3DLight7);
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTDIRECTION_1       :
+        {
+            Vector3D aNew = ((const Svx3DLightDirection1Item&)rNew).GetValue();
+            GetLightGroup().SetDirection( aNew, Base3DLight0);
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTDIRECTION_2       :
+        {
+            Vector3D aNew = ((const Svx3DLightDirection2Item&)rNew).GetValue();
+            GetLightGroup().SetDirection( aNew, Base3DLight1);
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTDIRECTION_3       :
+        {
+            Vector3D aNew = ((const Svx3DLightDirection3Item&)rNew).GetValue();
+            GetLightGroup().SetDirection( aNew, Base3DLight2);
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTDIRECTION_4       :
+        {
+            Vector3D aNew = ((const Svx3DLightDirection4Item&)rNew).GetValue();
+            GetLightGroup().SetDirection( aNew, Base3DLight3);
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTDIRECTION_5       :
+        {
+            Vector3D aNew = ((const Svx3DLightDirection5Item&)rNew).GetValue();
+            GetLightGroup().SetDirection( aNew, Base3DLight4);
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTDIRECTION_6       :
+        {
+            Vector3D aNew = ((const Svx3DLightDirection6Item&)rNew).GetValue();
+            GetLightGroup().SetDirection( aNew, Base3DLight5);
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTDIRECTION_7       :
+        {
+            Vector3D aNew = ((const Svx3DLightDirection7Item&)rNew).GetValue();
+            GetLightGroup().SetDirection( aNew, Base3DLight6);
+            break;
+        }
+        case SDRATTR_3DSCENE_LIGHTDIRECTION_8       :
+        {
+            Vector3D aNew = ((const Svx3DLightDirection8Item&)rNew).GetValue();
+            GetLightGroup().SetDirection( aNew, Base3DLight7);
+            break;
+        }
+        case SDRATTR_3DSCENE_SHADOW_SLANT           :
+        {
+            UINT16 nNew = ((const Svx3DShadowSlantItem&)rNew).GetValue();
+            double fWink = (double)nNew * F_PI180;
+            Vector3D aVec(0.0, sin(fWink), cos(fWink));
+            aVec.Normalize();
+            ImpSetShadowPlaneDirection(aVec);
+            break;
+        }
+        case SDRATTR_3DSCENE_SHADE_MODE             :
+        {
+            UINT16 nNew = ((const Svx3DShadeModeItem&)rNew).GetValue();
+            if(nNew == 3)
+            {
+                ImpSetForceDraftShadeModel(TRUE);
+                ImpSetShadeModel(Base3DSmooth);
+            }
+            else
+            {
+                ImpSetForceDraftShadeModel(FALSE);
+
+                if(nNew == 0)
+                {
+                    ImpSetShadeModel(Base3DFlat);
+                }
+                else if(nNew == 1)
+                {
+                    ImpSetShadeModel(Base3DPhong);
+                }
+                else
+                {
+                    // Gouraud
+                    ImpSetShadeModel(Base3DSmooth);
+                }
+            }
+            break;
         }
     }
 }
+
+void E3dScene::SetItem( const SfxPoolItem& rItem )
+{
+    // handle value change
+    if(rItem.Which() >= SDRATTR_3DSCENE_FIRST && rItem.Which() <= SDRATTR_3DSCENE_LAST)
+    {
+        SdrAttrObj::SetItem(rItem);
+        ImpLocalItemValueChange(rItem);
+    }
+
+    // set at all contained objects
+    sal_uInt32 nCount(pSub->GetObjCount());
+    for(sal_uInt32 a(0); a < nCount; a++)
+        pSub->GetObj(a)->SetItem(rItem);
+
+    StructureChanged(this);
+//-/    // set local 3D attributes
+//-/    const SfxItemSet& rSet = SdrAttrObj::GetItemSet();
+//-/    Distribute3DAttributes(rSet);
+//-/
+//-/    // set at all contained objects
+//-/    SdrObjList* pSubList = GetSubList();
+//-/    if(pSubList)
+//-/    {
+//-/        SdrObjListIter a3DIterator(*pSubList, IM_DEEPWITHGROUPS);
+//-/        while ( a3DIterator.IsMore() )
+//-/        {
+//-/            E3dObject* pObj = (E3dObject*) a3DIterator.Next();
+//-/            DBG_ASSERT(pObj->ISA(E3dObject), "AW: In Szenen sind nur 3D-Objekte erlaubt!");
+//-/            pObj->Distribute3DAttributes(rSet);
+//-/        }
+//-/    }
+}
+
+void E3dScene::ClearItem( USHORT nWhich )
+{
+    if(mpObjectItemSet)
+    {
+        // handle value change
+        if(nWhich >= SDRATTR_3DSCENE_FIRST && nWhich <= SDRATTR_3DSCENE_LAST)
+        {
+            SdrAttrObj::ClearItem(nWhich);
+            ImpLocalItemValueChange(mpObjectItemSet->Get(nWhich));
+        }
+
+        // clear at all contained objects
+        sal_uInt32 nCount(pSub->GetObjCount());
+        for(sal_uInt32 a(0); a < nCount; a++)
+            pSub->GetObj(a)->ClearItem(nWhich);
+
+        StructureChanged(this);
+//-/        // clear local 3D attributes
+//-/        const SfxItemSet& rSet = SdrAttrObj::GetItemSet();
+//-/        Distribute3DAttributes(rSet);
+//-/
+//-/        // clear at all contained objects
+//-/        SdrObjList* pSubList = GetSubList();
+//-/        if(pSubList)
+//-/        {
+//-/            SdrObjListIter a3DIterator(*pSubList, IM_DEEPWITHGROUPS);
+//-/            while ( a3DIterator.IsMore() )
+//-/            {
+//-/                E3dObject* pObj = (E3dObject*) a3DIterator.Next();
+//-/                DBG_ASSERT(pObj->ISA(E3dObject), "AW: In Szenen sind nur 3D-Objekte erlaubt!");
+//-/                pObj->Distribute3DAttributes(rSet);
+//-/            }
+//-/        }
+    }
+}
+
+void E3dScene::SetItemSet( const SfxItemSet& rSet )
+{
+    // set base items at SdrAttrObj, NOT at E3dObject(!)
+    SdrAttrObj::SetItemSet(rSet);
+
+    // handle value change
+    for(sal_uInt16 nWhich(SDRATTR_3DSCENE_FIRST); nWhich <= SDRATTR_3DSCENE_LAST; nWhich++)
+        ImpLocalItemValueChange(rSet.Get(nWhich));
+
+    // set at all contained objects
+    sal_uInt32 nCount(pSub->GetObjCount());
+    for(sal_uInt32 a(0); a < nCount; a++)
+        pSub->GetObj(a)->SetItemSet(rSet);
+
+    StructureChanged(this);
+
+
+//-/    // set local 3D attributes
+//-/    Distribute3DAttributes(rSet);
+//-/
+//-/    // set at all contained objects
+//-/    SdrObjList* pSubList = GetSubList();
+//-/    if(pSubList)
+//-/    {
+//-/        SdrObjListIter a3DIterator(*pSubList, IM_DEEPWITHGROUPS);
+//-/        while ( a3DIterator.IsMore() )
+//-/        {
+//-/            E3dObject* pObj = (E3dObject*) a3DIterator.Next();
+//-/            DBG_ASSERT(pObj->ISA(E3dObject), "AW: In Szenen sind nur 3D-Objekte erlaubt!");
+//-/            pObj->Distribute3DAttributes(rSet);
+//-/        }
+//-/    }
+}
+
+//-/void E3dScene::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
+//-/{
+//-/    // call parent
+//-/    E3dObject::TakeAttributes(rAttr, bMerge, bOnlyHardAttr);
+//-/
+//-/    // special Attr for E3dCompoundObject
+//-/    const SfxPoolItem* pPoolItem = NULL;
+//-/    SfxItemState eState;
+//-/
+//-/    B3dLightGroup& rLightGroup = ((E3dScene*)this)->GetLightGroup();
+//-/    Camera3D aSceneCam (GetCamera());
+//-/    double   fSceneCamPosZ = aSceneCam.GetPosition().Z();
+//-/    double   fSceneFocal = aSceneCam.GetFocalLength() * 100.0;
+//-/    BOOL     bSceneTwoSidedLighting = rLightGroup.GetModelTwoSide();
+//-/    Color    aSceneLightColor1 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight0);
+//-/    Color    aSceneLightColor2 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight1);
+//-/    Color    aSceneLightColor3 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight2);
+//-/    Color    aSceneLightColor4 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight3);
+//-/    Color    aSceneLightColor5 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight4);
+//-/    Color    aSceneLightColor6 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight5);
+//-/    Color    aSceneLightColor7 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight6);
+//-/    Color    aSceneLightColor8 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight7);
+//-/    Color    aSceneAmbientColor = rLightGroup.GetGlobalAmbientLight();
+//-/    BOOL     bSceneLightOn1 = rLightGroup.IsEnabled(Base3DLight0);
+//-/    BOOL     bSceneLightOn2 = rLightGroup.IsEnabled(Base3DLight1);
+//-/    BOOL     bSceneLightOn3 = rLightGroup.IsEnabled(Base3DLight2);
+//-/    BOOL     bSceneLightOn4 = rLightGroup.IsEnabled(Base3DLight3);
+//-/    BOOL     bSceneLightOn5 = rLightGroup.IsEnabled(Base3DLight4);
+//-/    BOOL     bSceneLightOn6 = rLightGroup.IsEnabled(Base3DLight5);
+//-/    BOOL     bSceneLightOn7 = rLightGroup.IsEnabled(Base3DLight6);
+//-/    BOOL     bSceneLightOn8 = rLightGroup.IsEnabled(Base3DLight7);
+//-/    Vector3D aSceneLightDirection1 = rLightGroup.GetDirection( Base3DLight0 );
+//-/    Vector3D aSceneLightDirection2 = rLightGroup.GetDirection( Base3DLight1 );
+//-/    Vector3D aSceneLightDirection3 = rLightGroup.GetDirection( Base3DLight2 );
+//-/    Vector3D aSceneLightDirection4 = rLightGroup.GetDirection( Base3DLight3 );
+//-/    Vector3D aSceneLightDirection5 = rLightGroup.GetDirection( Base3DLight4 );
+//-/    Vector3D aSceneLightDirection6 = rLightGroup.GetDirection( Base3DLight5 );
+//-/    Vector3D aSceneLightDirection7 = rLightGroup.GetDirection( Base3DLight6 );
+//-/    Vector3D aSceneLightDirection8 = rLightGroup.GetDirection( Base3DLight7 );
+//-/    ProjectionType eScenePT = aSceneCam.GetProjection();
+//-/    UINT16   nSceneShadeMode;
+//-/
+//-/    const Vector3D& rShadowVec = ((E3dScene*)this)->GetShadowPlaneDirection();
+//-/    UINT16 nSceneShadowSlant = (UINT16)((atan2(rShadowVec.Y(), rShadowVec.Z()) / F_PI180) + 0.5);
+//-/
+//-/    if(((E3dScene*)this)->GetForceDraftShadeModel())
+//-/    {
+//-/        nSceneShadeMode = 3; // Draft-Modus
+//-/    }
+//-/    else
+//-/    {
+//-/        if(((E3dScene*)this)->GetShadeModel() == Base3DSmooth)
+//-/        {
+//-/            nSceneShadeMode = 2; // Gouraud
+//-/        }
+//-/        else if(((E3dScene*)this)->GetShadeModel() == Base3DFlat)
+//-/        {
+//-/            nSceneShadeMode = 0; // Flat
+//-/        }
+//-/        else // Base3DPhong
+//-/        {
+//-/            nSceneShadeMode = 1; // Phong
+//-/        }
+//-/    }
+//-/
+//-/    // ProjectionType
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_PERSPECTIVE, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if((UINT16)eScenePT != ((const SfxUInt16Item*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_PERSPECTIVE);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_PERSPECTIVE, (UINT16)eScenePT));
+//-/        }
+//-/    }
+//-/
+//-/    // CamPos
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_DISTANCE, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if((UINT32)(fSceneCamPosZ + 0.5) != ((const SfxUInt32Item*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_DISTANCE);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxUInt32Item(SID_ATTR_3D_DISTANCE, (UINT32)(fSceneCamPosZ + 0.5)));
+//-/        }
+//-/    }
+//-/
+//-/    // FocalLength
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_FOCAL_LENGTH, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if((UINT32)(fSceneFocal + 0.5) != ((const SfxUInt32Item*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_FOCAL_LENGTH);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxUInt32Item(SID_ATTR_3D_FOCAL_LENGTH, (UINT32)(fSceneFocal + 0.5)));
+//-/        }
+//-/    }
+//-/
+//-/    // TwoSidedLighting
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_TWO_SIDED_LIGHTING, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(bSceneTwoSidedLighting != ((const SfxBoolItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_TWO_SIDED_LIGHTING);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxBoolItem(SID_ATTR_3D_TWO_SIDED_LIGHTING, bSceneTwoSidedLighting));
+//-/        }
+//-/    }
+//-/
+//-/    // LightColors
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_1, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(aSceneLightColor1 != ((const SvxColorItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTCOLOR_1);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SvxColorItem(aSceneLightColor1, SID_ATTR_3D_LIGHTCOLOR_1));
+//-/        }
+//-/    }
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_2, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(aSceneLightColor2 != ((const SvxColorItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTCOLOR_2);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SvxColorItem(aSceneLightColor2, SID_ATTR_3D_LIGHTCOLOR_2));
+//-/        }
+//-/    }
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_3, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(aSceneLightColor3 != ((const SvxColorItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTCOLOR_3);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SvxColorItem(aSceneLightColor3, SID_ATTR_3D_LIGHTCOLOR_3));
+//-/        }
+//-/    }
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_4, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(aSceneLightColor4 != ((const SvxColorItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTCOLOR_4);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SvxColorItem(aSceneLightColor4, SID_ATTR_3D_LIGHTCOLOR_4));
+//-/        }
+//-/    }
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_5, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(aSceneLightColor5 != ((const SvxColorItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTCOLOR_5);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SvxColorItem(aSceneLightColor5, SID_ATTR_3D_LIGHTCOLOR_5));
+//-/        }
+//-/    }
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_6, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(aSceneLightColor6 != ((const SvxColorItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTCOLOR_6);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SvxColorItem(aSceneLightColor6, SID_ATTR_3D_LIGHTCOLOR_6));
+//-/        }
+//-/    }
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_7, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(aSceneLightColor7 != ((const SvxColorItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTCOLOR_7);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SvxColorItem(aSceneLightColor7, SID_ATTR_3D_LIGHTCOLOR_7));
+//-/        }
+//-/    }
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTCOLOR_8, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(aSceneLightColor8 != ((const SvxColorItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTCOLOR_8);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SvxColorItem(aSceneLightColor8, SID_ATTR_3D_LIGHTCOLOR_8));
+//-/        }
+//-/    }
+//-/
+//-/    // AmbientColor
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_AMBIENTCOLOR, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(aSceneAmbientColor != ((const SvxColorItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_AMBIENTCOLOR);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SvxColorItem(aSceneAmbientColor, SID_ATTR_3D_AMBIENTCOLOR));
+//-/        }
+//-/    }
+//-/
+//-/    // LightOn
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTON_1, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(bSceneLightOn1 != ((const SfxBoolItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTON_1);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_1, bSceneLightOn1));
+//-/        }
+//-/    }
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTON_2, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(bSceneLightOn2 != ((const SfxBoolItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTON_2);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_2, bSceneLightOn2));
+//-/        }
+//-/    }
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTON_3, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(bSceneLightOn3 != ((const SfxBoolItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTON_3);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_3, bSceneLightOn3));
+//-/        }
+//-/    }
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTON_4, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(bSceneLightOn4 != ((const SfxBoolItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTON_4);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_4, bSceneLightOn4));
+//-/        }
+//-/    }
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTON_5, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(bSceneLightOn5 != ((const SfxBoolItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTON_5);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_5, bSceneLightOn5));
+//-/        }
+//-/    }
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTON_6, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(bSceneLightOn6 != ((const SfxBoolItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTON_6);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_6, bSceneLightOn6));
+//-/        }
+//-/    }
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTON_7, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(bSceneLightOn7 != ((const SfxBoolItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTON_7);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_7, bSceneLightOn7));
+//-/        }
+//-/    }
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTON_8, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(bSceneLightOn8 != ((const SfxBoolItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTON_8);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxBoolItem(SID_ATTR_3D_LIGHTON_8, bSceneLightOn8));
+//-/        }
+//-/    }
+//-/
+//-/    // LightDirection
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_1, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(aSceneLightDirection1 != ((const SvxVector3DItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTDIRECTION_1);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_1, aSceneLightDirection1));
+//-/        }
+//-/    }
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_2, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(aSceneLightDirection2 != ((const SvxVector3DItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTDIRECTION_2);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_2, aSceneLightDirection2));
+//-/        }
+//-/    }
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_3, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(aSceneLightDirection3 != ((const SvxVector3DItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTDIRECTION_3);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_3, aSceneLightDirection3));
+//-/        }
+//-/    }
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_4, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(aSceneLightDirection4 != ((const SvxVector3DItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTDIRECTION_4);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_4, aSceneLightDirection4));
+//-/        }
+//-/    }
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_5, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(aSceneLightDirection5 != ((const SvxVector3DItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTDIRECTION_5);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_5, aSceneLightDirection5));
+//-/        }
+//-/    }
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_6, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(aSceneLightDirection6 != ((const SvxVector3DItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTDIRECTION_6);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_6, aSceneLightDirection6));
+//-/        }
+//-/    }
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_7, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(aSceneLightDirection7 != ((const SvxVector3DItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTDIRECTION_7);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_7, aSceneLightDirection7));
+//-/        }
+//-/    }
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_LIGHTDIRECTION_8, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(aSceneLightDirection8 != ((const SvxVector3DItem*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_LIGHTDIRECTION_8);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SvxVector3DItem(SID_ATTR_3D_LIGHTDIRECTION_8, aSceneLightDirection8));
+//-/        }
+//-/    }
+//-/
+//-/    // ShadowSlant
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_SHADOW_SLANT, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(nSceneShadowSlant != ((const SfxUInt16Item*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_SHADOW_SLANT);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_SHADOW_SLANT, nSceneShadowSlant));
+//-/        }
+//-/    }
+//-/
+//-/    // ShadeMode
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_SHADE_MODE, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(nSceneShadeMode != ((const SfxUInt16Item*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_SHADE_MODE);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_SHADE_MODE, nSceneShadeMode));
+//-/        }
+//-/    }
+//-/}
 
 /*************************************************************************
 |*
@@ -2330,21 +3059,48 @@ BOOL E3dScene::IsBreakObjPossible()
 
 void E3dScene::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool)
 {
-    // call parent
-    E3dObject::MigrateItemPool(pSrcPool, pDestPool);
-
-    // own reaction, but only with outmost scene
-    SdrObjList* pSubList = GetSubList();
-    if(pSubList && GetScene() == this)
+    if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
     {
-        SdrObjListIter a3DIterator(*pSubList, IM_DEEPWITHGROUPS);
-        while ( a3DIterator.IsMore() )
+        // call parent
+        E3dObject::MigrateItemPool(pSrcPool, pDestPool);
+
+        // own reaction, but only with outmost scene
+        SdrObjList* pSubList = GetSubList();
+        if(pSubList && GetScene() == this)
         {
-            E3dObject* pObj = (E3dObject*) a3DIterator.Next();
-            DBG_ASSERT(pObj->ISA(E3dObject), "AW: In Szenen sind nur 3D-Objekte erlaubt!");
-            pObj->MigrateItemPool(pSrcPool, pDestPool);
+            SdrObjListIter a3DIterator(*pSubList, IM_DEEPWITHGROUPS);
+            while ( a3DIterator.IsMore() )
+            {
+                E3dObject* pObj = (E3dObject*) a3DIterator.Next();
+                DBG_ASSERT(pObj->ISA(E3dObject), "AW: In Szenen sind nur 3D-Objekte erlaubt!");
+                pObj->MigrateItemPool(pSrcPool, pDestPool);
+            }
         }
     }
 }
 
+void E3dScene::ImpSetShadowPlaneDirection(const Vector3D& rNew)
+{
+    aShadowPlaneDirection = rNew;
+    aShadowPlaneDirection.Normalize();
+}
 
+void E3dScene::ImpSetShadeModel(Base3DShadeModel eNew)
+{
+    if(eShadeModel != eNew)
+    {
+        eShadeModel = eNew;
+        SetRectsDirty();
+    }
+}
+
+void E3dScene::ImpSetForceDraftShadeModel(BOOL bNew)
+{
+    if(bNew != bForceDraftShadeModel)
+    {
+        bForceDraftShadeModel = bNew;
+        SetRectsDirty();
+    }
+}
+
+// EOF

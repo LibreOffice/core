@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lathe3d.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:15 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,10 @@
 
 #ifndef _SVDMODEL_HXX
 #include "svdmodel.hxx"
+#endif
+
+#ifndef _SVX3DITEMS_HXX
+#include "svx3ditems.hxx"
 #endif
 
 TYPEINIT1(E3dLatheObj, E3dCompoundObject);
@@ -274,7 +278,7 @@ void E3dLatheObj::CreateGeometry()
     if(bSinglePoly)
     {
         // nur ein Polygon erzeugen
-        SetDoubleSided(TRUE);
+        bDoubleSided = TRUE;
 
         // Fuer evtl. selbst erzeugte Normalen
         PolyPolygon3D aNormalsFront;
@@ -290,7 +294,7 @@ void E3dLatheObj::CreateGeometry()
             bDoubleSided = TRUE;
 
         // Seiten genenrieren?
-        BOOL bCreateSides = ((nEndAngle < 3600 && !GetDoubleSided()) || (fLatheBackScale != 1.0));
+        BOOL bCreateSides = ((nEndAngle < 3600 && !bDoubleSided) || (fLatheBackScale != 1.0));
 
         // Polygone vorbereiten
         PolyPolygon3D aPrev, aFront, aBack, aNext;
@@ -541,7 +545,7 @@ void E3dLatheObj::WriteData(SvStream& rOut) const
 
     rOut << nHSegments;
     rOut << nEndAngle;
-    rOut << ((E3dLatheObj*)this)->GetDoubleSided();
+    rOut << ((E3dLatheObj*)this)->bDoubleSided;
     rOut << fLatheScale;
 
     // Ab Version 364f (19.06.97)
@@ -776,56 +780,11 @@ void E3dLatheObj::SetPolyPoly3D(const PolyPolygon3D& rNew)
     }
 }
 
-void E3dLatheObj::SetHSegments(long nNew)
-{
-    if(nHSegments != nNew)
-    {
-        nHSegments = nNew;
-        bGeometryValid = FALSE;
-    }
-}
-
-void E3dLatheObj::SetVSegments(long nNew)
-{
-    if(nVSegments != nNew)
-    {
-        nVSegments = nNew;
-        bGeometryValid = FALSE;
-    }
-}
-
-void E3dLatheObj::SetEndAngle(long nNew)
-{
-    if(nEndAngle != nNew)
-    {
-        nEndAngle = nNew;
-        bGeometryValid = FALSE;
-    }
-}
-
 void E3dLatheObj::SetLatheScale(double fNew)
 {
     if(fLatheScale != fNew)
     {
         fLatheScale = fNew;
-        bGeometryValid = FALSE;
-    }
-}
-
-void E3dLatheObj::SetLatheBackScale(double fNew)
-{
-    if(fLatheBackScale != fNew)
-    {
-        fLatheBackScale = fNew;
-        bGeometryValid = FALSE;
-    }
-}
-
-void E3dLatheObj::SetLathePercentDiag(double fNew)
-{
-    if(fLathePercentDiag != fNew)
-    {
-        fLathePercentDiag = fNew;
         bGeometryValid = FALSE;
     }
 }
@@ -881,40 +840,145 @@ void E3dLatheObj::SetLatheCloseBack(BOOL bNew)
 |*
 \************************************************************************/
 
-void E3dLatheObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/void E3dLatheObj::Distribute3DAttributes(const SfxItemSet& rAttr)
+//-/{
+//-/    // call parent
+//-/    E3dCompoundObject::Distribute3DAttributes(rAttr);
+//-/
+//-/    // special Attr for E3dLatheObj
+//-/    const SfxPoolItem* pPoolItem = NULL;
+//-/
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_HORZ_SEGS, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT32 nNew = ((const SfxUInt32Item*)pPoolItem)->GetValue();
+//-/        SetHSegments(nNew);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_VERT_SEGS, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT32 nNew = ((const SfxUInt32Item*)pPoolItem)->GetValue();
+//-/        SetVSegments(nNew);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_PERCENT_DIAGONAL, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
+//-/        SetLathePercentDiag((double)nNew / 200.0);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_BACKSCALE, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
+//-/        SetLatheBackScale((double)nNew / 100.0);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_END_ANGLE, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
+//-/        SetEndAngle((long)nNew);
+//-/    }
+//-/}
+
+void E3dLatheObj::ImpLocalItemValueChange(const SfxPoolItem& rNew)
 {
-    // call parent
-    E3dCompoundObject::NbcSetAttributes(rAttr, bReplaceAll);
-
-    // special Attr for E3dLatheObj
-    const SfxPoolItem* pPoolItem = NULL;
-
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_HORZ_SEGS, TRUE, &pPoolItem ) )
+    switch(rNew.Which())
     {
-        UINT32 nNew = ((const SfxUInt32Item*)pPoolItem)->GetValue();
-        SetHSegments(nNew);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_VERT_SEGS, TRUE, &pPoolItem ) )
-    {
-        UINT32 nNew = ((const SfxUInt32Item*)pPoolItem)->GetValue();
-        SetVSegments(nNew);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_PERCENT_DIAGONAL, TRUE, &pPoolItem ) )
-    {
-        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
-        SetLathePercentDiag((double)nNew / 200.0);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_BACKSCALE, TRUE, &pPoolItem ) )
-    {
-        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
-        SetLatheBackScale((double)nNew / 100.0);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_END_ANGLE, TRUE, &pPoolItem ) )
-    {
-        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
-        SetEndAngle((long)nNew);
+        case SDRATTR_3DOBJ_HORZ_SEGS:
+        {
+            UINT32 nNew = ((const Svx3DHorizontalSegmentsItem&)rNew).GetValue();
+            ImpSetHSegments(nNew);
+            break;
+        }
+        case SDRATTR_3DOBJ_VERT_SEGS:
+        {
+            UINT32 nNew = ((const Svx3DVerticalSegmentsItem&)rNew).GetValue();
+            ImpSetVSegments(nNew);
+            break;
+        }
+        case SDRATTR_3DOBJ_PERCENT_DIAGONAL:
+        {
+            UINT16 nNew = ((const Svx3DPercentDiagonalItem&)rNew).GetValue();
+            ImpSetLathePercentDiag((double)nNew / 200.0);
+            break;
+        }
+        case SDRATTR_3DOBJ_BACKSCALE:
+        {
+            UINT16 nNew = ((const Svx3DBackscaleItem&)rNew).GetValue();
+            ImpSetLatheBackScale((double)nNew / 100.0);
+            break;
+        }
+        case SDRATTR_3DOBJ_END_ANGLE:
+        {
+            UINT16 nNew = ((const Svx3DEndAngleItem&)rNew).GetValue();
+            ImpSetEndAngle((long)nNew);
+            break;
+        }
     }
 }
+
+void E3dLatheObj::SetItem( const SfxPoolItem& rItem )
+{
+    // set item
+    E3dCompoundObject::SetItem(rItem);
+
+    // handle value change
+    if(rItem.Which() >= SDRATTR_3DOBJ_PERCENT_DIAGONAL && rItem.Which() <= SDRATTR_3DOBJ_END_ANGLE)
+        ImpLocalItemValueChange(rItem);
+}
+
+void E3dLatheObj::ClearItem( USHORT nWhich )
+{
+    if(mpObjectItemSet)
+    {
+        // clear base items at SdrAttrObj, NOT at E3dObject(!)
+        E3dCompoundObject::ClearItem(nWhich);
+
+        // handle value change
+        if(nWhich >= SDRATTR_3DOBJ_PERCENT_DIAGONAL && nWhich <= SDRATTR_3DOBJ_END_ANGLE)
+            ImpLocalItemValueChange(mpObjectItemSet->Get(nWhich));
+    }
+}
+
+void E3dLatheObj::SetItemSet( const SfxItemSet& rSet )
+{
+    // set base items at SdrAttrObj, NOT at E3dObject(!)
+    E3dCompoundObject::SetItemSet(rSet);
+
+    // handle value change
+    for(sal_uInt16 nWhich(SDRATTR_3DOBJ_PERCENT_DIAGONAL); nWhich <= SDRATTR_3DOBJ_END_ANGLE; nWhich++)
+        ImpLocalItemValueChange(rSet.Get(nWhich));
+}
+
+//-/void E3dLatheObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/{
+//-/    // call parent
+//-/    E3dCompoundObject::NbcSetAttributes(rAttr, bReplaceAll);
+//-/
+//-/    // special Attr for E3dLatheObj
+//-/    const SfxPoolItem* pPoolItem = NULL;
+//-/
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_HORZ_SEGS, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT32 nNew = ((const SfxUInt32Item*)pPoolItem)->GetValue();
+//-/        SetHSegments(nNew);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_VERT_SEGS, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT32 nNew = ((const SfxUInt32Item*)pPoolItem)->GetValue();
+//-/        SetVSegments(nNew);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_PERCENT_DIAGONAL, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
+//-/        SetLathePercentDiag((double)nNew / 200.0);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_BACKSCALE, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
+//-/        SetLatheBackScale((double)nNew / 100.0);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_END_ANGLE, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT16 nNew = ((const SfxUInt16Item*)pPoolItem)->GetValue();
+//-/        SetEndAngle((long)nNew);
+//-/    }
+//-/}
 
 /*************************************************************************
 |*
@@ -922,121 +986,149 @@ void E3dLatheObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll
 |*
 \************************************************************************/
 
-void E3dLatheObj::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
+void E3dLatheObj::Collect3DAttributes(SfxItemSet& rAttr) const
 {
     // call parent
-    E3dCompoundObject::TakeAttributes(rAttr, bMerge, bOnlyHardAttr);
+    E3dCompoundObject::Collect3DAttributes(rAttr);
 
     // special Attr for E3dLatheObj
-    const SfxPoolItem* pPoolItem = NULL;
-    SfxItemState eState;
-
-    long nObjHorzSegs = GetHSegments();
-    long nObjVertSegs = GetVSegments();
-    UINT16 nObjPercentDiagonal = (UINT16)((GetLathePercentDiag() * 200.0) + 0.5);
-    UINT16 nObjBackScale = (UINT16)((GetLatheBackScale() * 100.0) + 0.5);
-    UINT16 nObjEndAngle = (UINT16)(GetEndAngle() + 0.5);
+    long nObjHorzSegs = nHSegments;
+    long nObjVertSegs = nVSegments;
+    UINT16 nObjPercentDiagonal = (UINT16)((fLathePercentDiag * 200.0) + 0.5);
+    UINT16 nObjBackScale = (UINT16)((fLatheBackScale * 100.0) + 0.5);
+    UINT16 nObjEndAngle = (UINT16)(nEndAngle + 0.5);
 
     // HorizSegs
-    eState = rAttr.GetItemState(SID_ATTR_3D_HORZ_SEGS, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if((UINT32)nObjHorzSegs != ((const SfxUInt32Item*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_HORZ_SEGS);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxUInt32Item(SID_ATTR_3D_HORZ_SEGS, nObjHorzSegs));
-        }
-    }
+    rAttr.Put(SfxUInt32Item(SDRATTR_3DOBJ_HORZ_SEGS, nObjHorzSegs));
 
     // VertSegs
-    eState = rAttr.GetItemState(SID_ATTR_3D_VERT_SEGS, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if((UINT32)nObjVertSegs != ((const SfxUInt32Item*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_VERT_SEGS);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxUInt32Item(SID_ATTR_3D_VERT_SEGS, nObjVertSegs));
-        }
-    }
+    rAttr.Put(SfxUInt32Item(SDRATTR_3DOBJ_VERT_SEGS, nObjVertSegs));
 
     // PercentDiagonal
-    eState = rAttr.GetItemState(SID_ATTR_3D_PERCENT_DIAGONAL, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(nObjPercentDiagonal != ((const SfxUInt16Item*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_PERCENT_DIAGONAL);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_PERCENT_DIAGONAL, nObjPercentDiagonal));
-        }
-    }
+    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_PERCENT_DIAGONAL, nObjPercentDiagonal));
 
     // BackScale
-    eState = rAttr.GetItemState(SID_ATTR_3D_BACKSCALE, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(nObjBackScale != ((const SfxUInt16Item*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_BACKSCALE);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_BACKSCALE, nObjBackScale));
-        }
-    }
+    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_BACKSCALE, nObjBackScale));
 
     // EndAngle
-    eState = rAttr.GetItemState(SID_ATTR_3D_END_ANGLE, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if(nObjEndAngle != ((const SfxUInt16Item*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_END_ANGLE);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_END_ANGLE, nObjEndAngle));
-        }
-    }
+    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_END_ANGLE, nObjEndAngle));
 }
+
+//-/void E3dLatheObj::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
+//-/{
+//-/    // call parent
+//-/    E3dCompoundObject::TakeAttributes(rAttr, bMerge, bOnlyHardAttr);
+//-/
+//-/    // special Attr for E3dLatheObj
+//-/    const SfxPoolItem* pPoolItem = NULL;
+//-/    SfxItemState eState;
+//-/
+//-/    long nObjHorzSegs = GetHSegments();
+//-/    long nObjVertSegs = GetVSegments();
+//-/    UINT16 nObjPercentDiagonal = (UINT16)((GetLathePercentDiag() * 200.0) + 0.5);
+//-/    UINT16 nObjBackScale = (UINT16)((GetLatheBackScale() * 100.0) + 0.5);
+//-/    UINT16 nObjEndAngle = (UINT16)(GetEndAngle() + 0.5);
+//-/
+//-/    // HorizSegs
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_HORZ_SEGS, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if((UINT32)nObjHorzSegs != ((const SfxUInt32Item*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_HORZ_SEGS);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxUInt32Item(SID_ATTR_3D_HORZ_SEGS, nObjHorzSegs));
+//-/        }
+//-/    }
+//-/
+//-/    // VertSegs
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_VERT_SEGS, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if((UINT32)nObjVertSegs != ((const SfxUInt32Item*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_VERT_SEGS);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxUInt32Item(SID_ATTR_3D_VERT_SEGS, nObjVertSegs));
+//-/        }
+//-/    }
+//-/
+//-/    // PercentDiagonal
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_PERCENT_DIAGONAL, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(nObjPercentDiagonal != ((const SfxUInt16Item*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_PERCENT_DIAGONAL);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_PERCENT_DIAGONAL, nObjPercentDiagonal));
+//-/        }
+//-/    }
+//-/
+//-/    // BackScale
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_BACKSCALE, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(nObjBackScale != ((const SfxUInt16Item*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_BACKSCALE);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_BACKSCALE, nObjBackScale));
+//-/        }
+//-/    }
+//-/
+//-/    // EndAngle
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_END_ANGLE, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if(nObjEndAngle != ((const SfxUInt16Item*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_END_ANGLE);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxUInt16Item(SID_ATTR_3D_END_ANGLE, nObjEndAngle));
+//-/        }
+//-/    }
+//-/}
 
 /*************************************************************************
 |*
@@ -1093,16 +1185,65 @@ SdrAttrObj* E3dLatheObj::GetBreakObj()
             pPathObj->ToggleClosed(0);
 
         // Attribute setzen
-        SfxItemSet aAttr(GetModel()->GetItemPool());
-        TakeAttributes(aAttr, TRUE, FALSE);
+//-/        SfxItemSet aAttr(GetModel()->GetItemPool());
+//-/        TakeAttributes(aAttr, TRUE, FALSE);
+        SfxItemSet aSet(GetItemSet());
 
         // Linien aktivieren, um Objekt garantiert sichtbar zu machen
-        aAttr.Put(XLineStyleItem (XLINE_SOLID));
+//-/        aAttr.Put(XLineStyleItem (XLINE_SOLID));
+        aSet.Put(XLineStyleItem (XLINE_SOLID));
 
-        pPathObj->NbcSetAttributes(aAttr, FALSE);
+//-/        pPathObj->NbcSetAttributes(aAttr, FALSE);
+        pPathObj->SetItemSet(aSet);
     }
 
     return pPathObj;
 }
 
+void E3dLatheObj::ImpSetHSegments(long nNew)
+{
+    if(nHSegments != nNew)
+    {
+        nHSegments = nNew;
+        bGeometryValid = FALSE;
+    }
+}
 
+void E3dLatheObj::ImpSetVSegments(long nNew)
+{
+    if(nVSegments != nNew)
+    {
+        nVSegments = nNew;
+        bGeometryValid = FALSE;
+    }
+}
+
+void E3dLatheObj::ImpSetLathePercentDiag(double fNew)
+{
+    if(fLathePercentDiag != fNew)
+    {
+        fLathePercentDiag = fNew;
+        bGeometryValid = FALSE;
+    }
+}
+
+void E3dLatheObj::ImpSetLatheBackScale(double fNew)
+{
+    if(fLatheBackScale != fNew)
+    {
+        fLatheBackScale = fNew;
+        bGeometryValid = FALSE;
+    }
+}
+
+void E3dLatheObj::ImpSetEndAngle(long nNew)
+{
+    if(nEndAngle != nNew)
+    {
+        nEndAngle = nNew;
+        bGeometryValid = FALSE;
+    }
+}
+
+
+// EOF

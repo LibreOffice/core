@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-16 16:45:01 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3874,7 +3874,8 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
         if ( pRet )
         {
             pRet->SetModel( pSdrModel );
-            pRet->NbcSetAttributes( rSet, FALSE );
+//-/            pRet->NbcSetAttributes( rSet, FALSE );
+            pRet->SetItemSet(rSet);
         }
         else
         {
@@ -3972,7 +3973,8 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                 }
                 pRet->NbcSetSnapRect( aSnapRect );
                 pRet->SetModel( pSdrModel );
-                pRet->NbcSetAttributes( rSet, FALSE );
+//-/                pRet->NbcSetAttributes( rSet, FALSE );
+                pRet->SetItemSet(rSet);
             }
             if ( !pRet )
             {
@@ -3988,7 +3990,8 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                     pRet = new SdrPathObj( bClosed ? OBJ_POLY : OBJ_PLIN, aXP );
                     pRet->NbcSetSnapRect( aSnapRect );
                     pRet->SetModel( pSdrModel );
-                    pRet->NbcSetAttributes( rSet, FALSE );
+//-/                    pRet->NbcSetAttributes( rSet, FALSE );
+                    pRet->SetItemSet(rSet);
                 }
                 else
                 {
@@ -4072,7 +4075,8 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                                             rSet.Put( XFillColorItem( String(), aColor ) );
                                         }
                                     }
-                                    pSdrPathObj->NbcSetAttributes( rSet, FALSE );
+//-/                                    pSdrPathObj->NbcSetAttributes( rSet, FALSE );
+                                    pSdrPathObj->SetItemSet(rSet);
                                     if ( pGrp )
                                     {
                                         if ( pSdrPathObj )
@@ -4386,7 +4390,8 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                     }
                     SfxItemSet aSet( pSdrModel->GetItemPool() );
                     aSet.Put( aAdjustItem );
-                    pFirstObject->NbcSetAttributes( aSet, FALSE );
+//-/                    pFirstObject->NbcSetAttributes( aSet, FALSE );
+                    pFirstObject->SetItemSet(aSet);
                 }
             }
         }

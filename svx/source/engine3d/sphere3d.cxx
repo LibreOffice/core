@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sphere3d.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:15 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,10 @@
 
 #ifndef _SVX_SVXIDS_HRC
 #include "svxids.hrc"
+#endif
+
+#ifndef _SVX3DITEMS_HXX
+#include "svx3ditems.hxx"
 #endif
 
 TYPEINIT1(E3dSphereObj, E3dCompoundObject);
@@ -407,7 +411,7 @@ void E3dSphereObj::WriteData(SvStream& rOut) const
     rOut << aSize;
 
     // Das hier ist ein Merkmal eines Compound-Objektes
-    rOut << (BOOL) ((E3dCompoundObject *) this)->GetDoubleSided();
+    rOut << bDoubleSided;
 
     // Ab Version 395 (8.6.98): Parameter aus dem Objekt
     // E3dCompoundObject. Da irgendwann mal jemand die Ableitungs-
@@ -533,7 +537,7 @@ void E3dSphereObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             if (aCompat.GetBytesLeft ())
             {
                 rIn >> bMyDoubleSided;
-                SetDoubleSided (bMyDoubleSided); // FG: Member des E3dCompounds wird dort eigentlich
+                bDoubleSided = bMyDoubleSided; // FG: Member des E3dCompounds wird dort eigentlich
             }                                    //     sowieso nochmal gemacht, ist aber sicherer so.
 
             if (aCompat.GetBytesLeft())
@@ -627,24 +631,6 @@ void E3dSphereObj::ApplyTransform(const Matrix4D& rMatrix)
 |*
 \************************************************************************/
 
-void E3dSphereObj::SetHSegments(long nNew)
-{
-    if(nHSegments != nNew)
-    {
-        nHSegments = nNew;
-        bGeometryValid = FALSE;
-    }
-}
-
-void E3dSphereObj::SetVSegments(long nNew)
-{
-    if(nVSegments != nNew)
-    {
-        nVSegments = nNew;
-        bGeometryValid = FALSE;
-    }
-}
-
 void E3dSphereObj::SetCenter(const Vector3D& rNew)
 {
     if(aCenter != rNew)
@@ -669,25 +655,97 @@ void E3dSphereObj::SetSize(const Vector3D& rNew)
 |*
 \************************************************************************/
 
-void E3dSphereObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/void E3dSphereObj::Distribute3DAttributes(const SfxItemSet& rAttr)
+//-/{
+//-/    // call parent
+//-/    E3dCompoundObject::Distribute3DAttributes(rAttr);
+//-/
+//-/    // special Attr for E3dSphereObj
+//-/    const SfxPoolItem* pPoolItem = NULL;
+//-/
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_HORZ_SEGS, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT32 nNew = ((const SfxUInt32Item*)pPoolItem)->GetValue();
+//-/        SetHSegments(nNew);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_VERT_SEGS, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT32 nNew = ((const SfxUInt32Item*)pPoolItem)->GetValue();
+//-/        SetVSegments(nNew);
+//-/    }
+//-/}
+
+void E3dSphereObj::ImpLocalItemValueChange(const SfxPoolItem& rNew)
 {
-    // call parent
-    E3dCompoundObject::NbcSetAttributes(rAttr, bReplaceAll);
-
-    // special Attr for E3dSphereObj
-    const SfxPoolItem* pPoolItem = NULL;
-
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_HORZ_SEGS, TRUE, &pPoolItem ) )
+    switch(rNew.Which())
     {
-        UINT32 nNew = ((const SfxUInt32Item*)pPoolItem)->GetValue();
-        SetHSegments(nNew);
-    }
-    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_VERT_SEGS, TRUE, &pPoolItem ) )
-    {
-        UINT32 nNew = ((const SfxUInt32Item*)pPoolItem)->GetValue();
-        SetVSegments(nNew);
+        case SDRATTR_3DOBJ_HORZ_SEGS:
+        {
+            UINT32 nNew = ((const Svx3DHorizontalSegmentsItem&)rNew).GetValue();
+            ImpSetHSegments(nNew);
+            break;
+        }
+        case SDRATTR_3DOBJ_VERT_SEGS:
+        {
+            UINT32 nNew = ((const Svx3DVerticalSegmentsItem&)rNew).GetValue();
+            ImpSetVSegments(nNew);
+            break;
+        }
     }
 }
+
+void E3dSphereObj::SetItem( const SfxPoolItem& rItem )
+{
+    // set item
+    E3dCompoundObject::SetItem(rItem);
+
+    // handle value change
+    if(rItem.Which() >= SDRATTR_3DOBJ_HORZ_SEGS && rItem.Which() <= SDRATTR_3DOBJ_VERT_SEGS)
+        ImpLocalItemValueChange(rItem);
+}
+
+void E3dSphereObj::ClearItem( USHORT nWhich )
+{
+    if(mpObjectItemSet)
+    {
+        // clear base items at SdrAttrObj, NOT at E3dObject(!)
+        E3dCompoundObject::ClearItem(nWhich);
+
+        // handle value change
+        if(nWhich >= SDRATTR_3DOBJ_HORZ_SEGS && nWhich <= SDRATTR_3DOBJ_VERT_SEGS)
+            ImpLocalItemValueChange(mpObjectItemSet->Get(nWhich));
+    }
+}
+
+void E3dSphereObj::SetItemSet( const SfxItemSet& rSet )
+{
+    // set base items at SdrAttrObj, NOT at E3dObject(!)
+    E3dCompoundObject::SetItemSet(rSet);
+
+    // handle value change
+    for(sal_uInt16 nWhich(SDRATTR_3DOBJ_HORZ_SEGS); nWhich <= SDRATTR_3DOBJ_VERT_SEGS; nWhich++)
+        ImpLocalItemValueChange(rSet.Get(nWhich));
+}
+
+//-/void E3dSphereObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/{
+//-/    // call parent
+//-/    E3dCompoundObject::NbcSetAttributes(rAttr, bReplaceAll);
+//-/
+//-/    // special Attr for E3dSphereObj
+//-/    const SfxPoolItem* pPoolItem = NULL;
+//-/
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_HORZ_SEGS, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT32 nNew = ((const SfxUInt32Item*)pPoolItem)->GetValue();
+//-/        SetHSegments(nNew);
+//-/    }
+//-/    if( SFX_ITEM_SET == rAttr.GetItemState( SID_ATTR_3D_VERT_SEGS, TRUE, &pPoolItem ) )
+//-/    {
+//-/        UINT32 nNew = ((const SfxUInt32Item*)pPoolItem)->GetValue();
+//-/        SetVSegments(nNew);
+//-/    }
+//-/}
 
 /*************************************************************************
 |*
@@ -695,58 +753,74 @@ void E3dSphereObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAl
 |*
 \************************************************************************/
 
-void E3dSphereObj::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
+void E3dSphereObj::Collect3DAttributes(SfxItemSet& rAttr) const
 {
     // call parent
-    E3dCompoundObject::TakeAttributes(rAttr, bMerge, bOnlyHardAttr);
+    E3dCompoundObject::Collect3DAttributes(rAttr);
 
     // special Attr for E3dSphereObj
-    const SfxPoolItem* pPoolItem = NULL;
-    SfxItemState eState;
-
-    long nObjHorzSegs = GetHSegments();
-    long nObjVertSegs = GetVSegments();
+    long nObjHorzSegs = nHSegments;
+    long nObjVertSegs = nVSegments;
 
     // HorizSegs
-    eState = rAttr.GetItemState(SID_ATTR_3D_HORZ_SEGS, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if((UINT32)nObjHorzSegs != ((const SfxUInt32Item*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_HORZ_SEGS);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxUInt32Item(SID_ATTR_3D_HORZ_SEGS, nObjHorzSegs));
-        }
-    }
+    rAttr.Put(SfxUInt32Item(SDRATTR_3DOBJ_HORZ_SEGS, nObjHorzSegs));
 
     // VertSegs
-    eState = rAttr.GetItemState(SID_ATTR_3D_VERT_SEGS, FALSE, &pPoolItem);
-    if(eState == SFX_ITEM_SET)
-    {
-        // Ist gesetzt
-        if((UINT32)nObjVertSegs != ((const SfxUInt32Item*)pPoolItem)->GetValue())
-        {
-            // SfxPoolItem muss invalidiert werden
-            rAttr.InvalidateItem(SID_ATTR_3D_VERT_SEGS);
-        }
-    }
-    else
-    {
-        if(!(eState == SFX_ITEM_DONTCARE))
-        {
-            // Item gab es noch nicht, setze es
-            rAttr.Put(SfxUInt32Item(SID_ATTR_3D_VERT_SEGS, nObjVertSegs));
-        }
-    }
+    rAttr.Put(SfxUInt32Item(SDRATTR_3DOBJ_VERT_SEGS, nObjVertSegs));
 }
+
+//-/void E3dSphereObj::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
+//-/{
+//-/    // call parent
+//-/    E3dCompoundObject::TakeAttributes(rAttr, bMerge, bOnlyHardAttr);
+//-/
+//-/    // special Attr for E3dSphereObj
+//-/    const SfxPoolItem* pPoolItem = NULL;
+//-/    SfxItemState eState;
+//-/
+//-/    long nObjHorzSegs = GetHSegments();
+//-/    long nObjVertSegs = GetVSegments();
+//-/
+//-/    // HorizSegs
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_HORZ_SEGS, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if((UINT32)nObjHorzSegs != ((const SfxUInt32Item*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_HORZ_SEGS);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxUInt32Item(SID_ATTR_3D_HORZ_SEGS, nObjHorzSegs));
+//-/        }
+//-/    }
+//-/
+//-/    // VertSegs
+//-/    eState = rAttr.GetItemState(SID_ATTR_3D_VERT_SEGS, FALSE, &pPoolItem);
+//-/    if(eState == SFX_ITEM_SET)
+//-/    {
+//-/        // Ist gesetzt
+//-/        if((UINT32)nObjVertSegs != ((const SfxUInt32Item*)pPoolItem)->GetValue())
+//-/        {
+//-/            // SfxPoolItem muss invalidiert werden
+//-/            rAttr.InvalidateItem(SID_ATTR_3D_VERT_SEGS);
+//-/        }
+//-/    }
+//-/    else
+//-/    {
+//-/        if(!(eState == SFX_ITEM_DONTCARE))
+//-/        {
+//-/            // Item gab es noch nicht, setze es
+//-/            rAttr.Put(SfxUInt32Item(SID_ATTR_3D_VERT_SEGS, nObjVertSegs));
+//-/        }
+//-/    }
+//-/}
 
 /*************************************************************************
 |*
@@ -770,4 +844,22 @@ void E3dSphereObj::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralSphere3d);
 }
 
+void E3dSphereObj::ImpSetHSegments(long nNew)
+{
+    if(nHSegments != nNew)
+    {
+        nHSegments = nNew;
+        bGeometryValid = FALSE;
+    }
+}
 
+void E3dSphereObj::ImpSetVSegments(long nNew)
+{
+    if(nVSegments != nNew)
+    {
+        nVSegments = nNew;
+        bGeometryValid = FALSE;
+    }
+}
+
+// EOF

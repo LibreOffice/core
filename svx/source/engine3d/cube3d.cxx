@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cube3d.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:14 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,13 +424,19 @@ void E3dCubeObj::SetSideFlags(UINT16 nNew)
 |*
 \************************************************************************/
 
-void E3dCubeObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
-{
-    // call parent
-    E3dCompoundObject::NbcSetAttributes(rAttr, bReplaceAll);
+//-/void E3dCubeObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
+//-/{
+//-/    // call parent
+//-/    E3dCompoundObject::NbcSetAttributes(rAttr, bReplaceAll);
+//-/
+//-/    // special Attr for E3dCubeObj
+//-/}
 
-    // special Attr for E3dCubeObj
-}
+//-/void E3dCubeObj::Distribute3DAttributes(const SfxItemSet& rAttr)
+//-/{
+//-/    // call parent
+//-/    E3dCompoundObject::Distribute3DAttributes(rAttr);
+//-/}
 
 /*************************************************************************
 |*
@@ -438,13 +444,19 @@ void E3dCubeObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
 |*
 \************************************************************************/
 
-void E3dCubeObj::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
-{
-    // call parent
-    E3dCompoundObject::TakeAttributes(rAttr, bMerge, bOnlyHardAttr);
+//-/void E3dCubeObj::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
+//-/{
+//-/    // call parent
+//-/    E3dCompoundObject::TakeAttributes(rAttr, bMerge, bOnlyHardAttr);
+//-/
+//-/    // special Attr for E3dCubeObj
+//-/}
 
-    // special Attr for E3dCubeObj
-}
+//-/void E3dCubeObj::Collect3DAttributes(SfxItemSet& rAttr) const
+//-/{
+//-/    // call parent
+//-/    E3dCompoundObject::Collect3DAttributes(rAttr);
+//-/}
 
 /*************************************************************************
 |*
