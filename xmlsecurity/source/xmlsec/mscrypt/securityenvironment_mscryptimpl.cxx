@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityenvironment_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 07:29:33 $
+ *  last change: $Author: mmi $ $Date: 2004-08-02 03:32:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1045,7 +1045,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate( const ::com::sun
         CertFreeCertificateChain( pChainContext ) ;
 
         if( chainStatus == CERT_TRUST_NO_ERROR ) {
-            validity = ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_VALID ;
+            validity = !( ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_INVALID ) ;
         } else {
             validity = ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_INVALID ;
         }

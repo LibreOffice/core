@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityenvironment_nssimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 07:29:33 $
+ *  last change: $Author: mmi $ $Date: 2004-08-02 03:32:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -742,7 +742,7 @@ sal_Int32 SecurityEnvironment_NssImpl :: verifyCertificate( const ::com::sun::st
         }
 
         if( status == SECSuccess ) {
-            validity = ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_VALID ;
+            validity = 0x00000000 ;
         } else {
             validity = ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_INVALID ;
             switch( status ) {
