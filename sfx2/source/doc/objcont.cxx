@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 15:55:40 $
+ *  last change: $Author: mba $ $Date: 2001-02-02 15:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ FASTBOOL SfxObjectShell::SaveWindows_Impl( SvStorage &rStor ) const
 
     // "uber alle Fenster iterieren (aber aktives Window zuletzt)
     SfxViewFrame *pActFrame = SfxViewFrame::Current();
-    if ( pActFrame->GetObjectShell() != this )
+    if ( !pActFrame || pActFrame->GetObjectShell() != this )
         pActFrame = SfxViewFrame::GetFirst(this);
 
     String aActWinData;
