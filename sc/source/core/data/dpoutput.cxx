@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpoutput.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-30 17:30:44 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 #include "docpool.hxx"
 #include "markdata.hxx"
 #include "attrib.hxx"
-#include "compiler.hxx"     // errNoValue
+#include "errorcodes.hxx"       // errNoValue
 #include "miscuno.hxx"
 #include "globstr.hrc"
 #include "stlpool.hxx"
