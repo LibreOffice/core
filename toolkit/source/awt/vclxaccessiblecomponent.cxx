@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: tbe $ $Date: 2002-11-20 16:56:19 $
+ *  last change: $Author: tbe $ $Date: 2002-11-22 14:03:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,9 +216,7 @@ IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclSimpleEvent*, pEvent
         DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow(), "Window???" );
         if( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() || ( pEvent->GetId() == VCLEVENT_OBJECT_DYING ) )
         {
-            ULONG nCount = Application::ReleaseSolarMutex();
             ProcessWindowEvent( *(VclWindowEvent*)pEvent );
-            Application::AcquireSolarMutex( nCount );
         }
     }
     return 0;
@@ -237,9 +235,7 @@ IMPL_LINK( VCLXAccessibleComponent, WindowChildEventListener, VclSimpleEvent*, p
             // #103087# to prevent an early release of the component
             uno::Reference< accessibility::XAccessibleContext > xTmp = this;
 
-            ULONG nCount = Application::ReleaseSolarMutex();
             ProcessWindowChildEvent( *(VclWindowEvent*)pEvent );
-            Application::AcquireSolarMutex( nCount );
         }
     }
     return 0;
@@ -422,6 +418,13 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         }
         break;
     }
+}
+
+void VCLXAccessibleComponent::NotifyAccessibleEvent( const sal_Int16 _nEventId, const uno::Any& _rOldValue, const uno::Any& _rNewValue )
+{
+    ULONG nCount = Application::ReleaseSolarMutex();
+    AccessibleExtendedComponentHelper_BASE::NotifyAccessibleEvent( _nEventId, _rOldValue, _rNewValue );
+    Application::AcquireSolarMutex( nCount );
 }
 
 void VCLXAccessibleComponent::disposing()
