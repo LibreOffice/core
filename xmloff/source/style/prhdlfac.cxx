@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prhdlfac.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:46:23 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,6 +293,15 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
         case XML_TYPE_PERCENT16 :
             pPropHdl = new XMLPercentPropHdl( 2 );
             break;
+        case XML_TYPE_NEG_PERCENT :
+            pPropHdl = new XMLNegPercentPropHdl( 4 );
+            break;
+        case XML_TYPE_NEG_PERCENT8 :
+            pPropHdl = new XMLNegPercentPropHdl( 1 );
+            break;
+        case XML_TYPE_NEG_PERCENT16 :
+            pPropHdl = new XMLNegPercentPropHdl( 2 );
+            break;
         case XML_TYPE_MEASURE_PX :
             pPropHdl = new XMLMeasurePxPropHdl( 4 );
             break;
@@ -349,13 +358,22 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
             pPropHdl = new XMLRectangleMembersHdl( nType );
             break;
 
-        case XML_TYPE_TEXT_CROSSEDOUT:
-            pPropHdl = new XMLCrossedOutPropHdl ;
+        case XML_TYPE_TEXT_CROSSEDOUT_TYPE:
+            pPropHdl = new XMLCrossedOutTypePropHdl ;
+            break;
+        case XML_TYPE_TEXT_CROSSEDOUT_STYLE:
+            pPropHdl = new XMLCrossedOutStylePropHdl ;
+            break;
+        case XML_TYPE_TEXT_CROSSEDOUT_WIDTH:
+            pPropHdl = new XMLCrossedOutWidthPropHdl ;
+            break;
+        case XML_TYPE_TEXT_CROSSEDOUT_TEXT:
+            pPropHdl = new XMLCrossedOutTextPropHdl ;
             break;
         case XML_TYPE_TEXT_BOOLCROSSEDOUT:
             pPropHdl = new XMLNamedBoolPropertyHdl(
-                GetXMLToken(XML_CROSSEDOUT_SINGLE),
-                GetXMLToken(XML_CROSSEDOUT_NONE)    );
+                GetXMLToken(XML_SOLID),
+                GetXMLToken(XML_NONE) );
             break;
         case XML_TYPE_TEXT_ESCAPEMENT:
             pPropHdl = new XMLEscapementPropHdl;
@@ -390,8 +408,14 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
         case XML_TYPE_TEXT_SHADOWED:
             pPropHdl = new XMLShadowedPropHdl;
             break;
-        case XML_TYPE_TEXT_UNDERLINE:
-            pPropHdl = new XMLUnderlinePropHdl;
+        case XML_TYPE_TEXT_UNDERLINE_TYPE:
+            pPropHdl = new XMLUnderlineTypePropHdl;
+            break;
+        case XML_TYPE_TEXT_UNDERLINE_STYLE:
+            pPropHdl = new XMLUnderlineStylePropHdl;
+            break;
+        case XML_TYPE_TEXT_UNDERLINE_WIDTH:
+            pPropHdl = new XMLUnderlineWidthPropHdl;
             break;
         case XML_TYPE_TEXT_UNDERLINE_COLOR:
             pPropHdl = new XMLColorTransparentPropHdl( XML_FONT_COLOR );
@@ -486,6 +510,9 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
             pPropHdl = new XMLNamedBoolPropertyHdl(
                 GetXMLToken(XML_TRUE),
                 GetXMLToken(XML_NONE) );
+            break;
+        case XML_TYPE_STYLENAME :
+            pPropHdl = new XMLStyleNamePropHdl;
             break;
     }
 
