@@ -3,9 +3,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 09:59:52 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,12 @@
 <oor:component-data oor:name="GenericCommands" oor:package="org.openoffice.Office.UI" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <node oor:name="UserInterface">
         <node oor:name="Commands">
+            <node oor:name=".uno:NewPresentation" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Neue Präsentation</value>
+                    <value xml:lang="en-US">New Presentation</value>
+                </prop>
+            </node>
             <node oor:name=".uno:FontworkGalleryFloater" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Fontwork Gallery</value>
@@ -70,6 +76,12 @@
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:FontworkCharacterSpacingDialog" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Fontwork Character Spacing</value>
+                    <value xml:lang="en-US">Fontwork Zeichenabstand</value>
                 </prop>
             </node>
             <node oor:name=".uno:FontworkShapeTypes" oor:op="replace">
@@ -1498,6 +1510,12 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Ersetzen durch Drehfeld</value>
                     <value xml:lang="en-US">Replace with Spin Button</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ConvertToNavigationBar" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Ersetzen durch Navigationsleiste</value>
+                    <value xml:lang="en-US">Replace with Navigation Bar</value>
                 </prop>
             </node>
             <node oor:name=".uno:ToggleBreakPoint" oor:op="replace">
@@ -4893,11 +4911,6 @@
                     <value xml:lang="en-US">~Support</value>
                 </prop>
             </node>
-            <node oor:name=".uno:NewPresentation" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value/>
-                </prop>
-            </node>
             <node oor:name=".uno:StatusBarVisible" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Statusleiste</value>
@@ -5950,12 +5963,14 @@
             </node>
             <node oor:name=".uno:ExtrusionDepth" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value/>
+                    <value xml:lang="de">Extrusion</value>
+                    <value xml:lang="en-US">Extrusion</value>
                 </prop>
             </node>
             <node oor:name=".uno:ExtrusionDepthDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value/>
+                    <value xml:lang="de">Extrusion Depth</value>
+                    <value xml:lang="en-US">Extrusionstiefe</value>
                 </prop>
             </node>
             <node oor:name=".uno:ExtrusionDepthFloater" oor:op="replace">
