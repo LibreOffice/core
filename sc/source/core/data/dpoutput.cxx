@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpoutput.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-08 14:25:49 $
+ *  last change: $Author: nn $ $Date: 2001-03-12 09:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,10 +182,7 @@ void lcl_SetFrame( ScDocument* pDoc, USHORT nTab,
     aBoxInfo.SetValid(VALID_VERT,FALSE);
     aBoxInfo.SetValid(VALID_DISTANCE,FALSE);
 
-    ScMarkData aMark;
-    aMark.SelectTable( nTab, TRUE );
-    aMark.SetMarkArea( ScRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab ) );
-    pDoc->ApplySelectionFrame( aMark, &aBox, &aBoxInfo );
+    pDoc->ApplyFrameAreaTab( ScRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab ), &aBox, &aBoxInfo );
 }
 
 void lcl_AttrArea( ScDocument* pDoc, USHORT nTab,
