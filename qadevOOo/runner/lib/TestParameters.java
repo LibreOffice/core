@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestParameters.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:16:03 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 package lib;
 
 import java.util.Hashtable;
+import util.PropertyName;
+
 //import com.sun.star.lang.XMultiServiceFactory;
 
 /**
@@ -99,6 +101,11 @@ public class TestParameters extends Hashtable {
      */
 
     public String AppExecutionCommand="";
+
+    /**
+     * Shoert wait time for the Office: default is 500 milliseconds
+     */
+    public int ShortWait = 500;
 
 
     /**
@@ -259,19 +266,22 @@ public class TestParameters extends Hashtable {
     /**
      * Constructor, defaults for Parameters are set.
      */
-
     public TestParameters() {
         //fill the propertyset
-        put("ConnectionString",ConnectionString);
-        put("TestBase",TestBase);
-        put("TestDocumentPath",TestDocumentPath);
-        put("LoggingIsActive",Boolean.valueOf(LoggingIsActive));
-        put("DebugIsActive",Boolean.valueOf(DebugIsActive));
-        put("OutProducer",OutProducer);
-        put("OfficeProvider",OfficeProvider);
-        put("LogWriter",LogWriter);
-        put("AppExecutionCommand",AppExecutionCommand);
-        put("TimeOut",TimeOut);
+        put(PropertyName.CONNECTION_STRING,ConnectionString);
+        put(PropertyName.TEST_BASE,TestBase);
+        put(PropertyName.TEST_DOCUMENT_PATH,TestDocumentPath);
+        put(PropertyName.LOGGING_IS_ACTIVE,Boolean.valueOf(LoggingIsActive));
+        put(PropertyName.DEBUG_IS_ACTIVE,Boolean.valueOf(DebugIsActive));
+        put(PropertyName.OUT_PRODUCER,OutProducer);
+        put(PropertyName.SHORT_WAIT,new Integer(ShortWait));
+        put(PropertyName.OFFICE_PROVIDER,OfficeProvider);
+        put(PropertyName.LOG_WRITER,LogWriter);
+        put(PropertyName.APP_EXECUTION_COMMAND,AppExecutionCommand);
+        put(PropertyName.TIME_OUT,TimeOut);
+
+        // get the operating system
+        put(PropertyName.OPERATING_SYSTEM, getSOCompatibleOSName());
 
         //For compatibility Reasons
         put("CNCSTR",ConnectionString);
@@ -286,6 +296,29 @@ public class TestParameters extends Hashtable {
         Object ret = null;
         ret = get("ServiceFactory");
         return ret;
+    }
+
+    /**
+     * Convert the system dependent operating system name to a name according
+     * to OOo rules.
+     * @return A valid OS name, or "" if the name is not known.
+     */
+    String getSOCompatibleOSName() {
+        String osname = System.getProperty ("os.name").toLowerCase ();
+        String osarch = System.getProperty ("os.arch");
+        String operatingSystem = "";
+        if (osname.indexOf ("windows")>-1) {
+            operatingSystem = PropertyName.WNTMSCI;
+        } else if (osname.indexOf ("linux")>-1) {
+            operatingSystem = PropertyName.UNXLNGI;
+        } else if (osname.indexOf ("sunos")>-1) {
+            if (osarch.equals ("x86")) {
+                operatingSystem = PropertyName.UNXSOLI;
+            } else {
+                operatingSystem = PropertyName.UNXSOLS;
+            }
+        }
+        return operatingSystem;
     }
 
 }// finish class TestParamenters
