@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: as $ $Date: 2001-02-26 09:21:58 $
+ *  last change: $Author: mba $ $Date: 2001-03-05 12:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1057,7 +1057,7 @@ IMPL_STATIC_LINK( SfxFilterContainer, LoadHdl_Impl, void*, EMPTYARG )
     if( pThis->pImpl->bLoadPending )
     {
         pThis->pImpl->bLoadPending = sal_False;
-        pThis->RealLoad_Impl();
+//        pThis->RealLoad_Impl();
     }
     return 0;
 }
@@ -1156,7 +1156,7 @@ void SfxFilterContainer::RealLoad_Impl()
         aMacType = aLine.GetToken( i++, ',' );
         aTypeName = aLine.GetToken( i++, ',' );
         aWild = aLine.GetToken( i++, ',' );
-        sal_uInt16 nDocIconId = aLine.GetToken( i++, ',' ).ToInt32();
+        sal_uInt16 nDocIconId = (sal_uInt16) aLine.GetToken( i++, ',' ).ToInt32();
         aUserData = aLine.GetToken( i++, ',' );
         sal_uInt32 nVersion = SOFFICE_FILEFORMAT_50;
         if( nTokCount >= 8 )
@@ -2298,73 +2298,126 @@ void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
 
         // get names of all registered filters
         ::com::sun::star::uno::Sequence < ::rtl::OUString > aNames = xFilters->getElementNames();
-        const ::rtl::OUString* pNames = aNames.getConstArray();
         sal_Int32 nLength = aNames.getLength();
-        for ( sal_Int32 n=0; n<nLength; n++ )
+        for ( sal_Int32 nName=0; nName<nLength; nName++ )
         {
-            // if it is no external filter, skip it
-            String aOldName = impl_getOldFilterName( pNames[n] );
-            if ( aOldName.Len() )
-                continue;
-
             // iterate filters; each filter is described by a property value sequence
-            ::com::sun::star::uno::Any aAny = xFilters->getByName( pNames[n] );
             ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aProps;
-            if ( aAny >>= aProps )
+            ::rtl::OUString aName( aNames[nName] );
+            if ( xFilters->hasByName( aName ) )
+                xFilters->getByName( aName ) >>= aProps;
+
+            sal_Int32 nFilterFlags = 0, nClipId = 0, nDocIconId = 0, nVersion = 0;
+            ::rtl::OUString aMimeType, aUserData, aType, aUIName, aDefaultTemplate;
+            String aEmptyStr, aFilterName;
+            String aExtension, aWildCard( DEFINE_CONST_UNICODE("*.") );
+            BOOL bMatches = FALSE;
+
+            // evaluate properties : get document service name
+            sal_Int32 nFilterProps = aProps.getLength();
+            for ( sal_Int32 nFilterProp = 0; nFilterProp<nFilterProps; nFilterProp++ )
             {
-                // evaluate properties : get document service name
-                const ::com::sun::star::beans::PropertyValue* pProps = aProps.getConstArray();
-                aAny = aProps[2].Value;
-                ::rtl::OUString aTmp;
-                if ( ( aAny >>= aTmp ) && aTmp.equals( rDocServiceName ) )
+                const ::com::sun::star::beans::PropertyValue& rFilterProp = aProps[nFilterProp];
+                if ( rFilterProp.Name.compareToAscii("DocumentService") == COMPARE_EQUAL )
                 {
-                    // it's me!
-                    // evaluate properties : FilterFlags, Type
-                    aAny = aProps[4].Value;
-                    ULONG nFilterFlags = 0;
-                    if ( ( aAny >>= nFilterFlags ) && nFilterFlags )
+                    ::rtl::OUString aTmp;
+                    rFilterProp.Value >>= aTmp;
+                    if ( aTmp.equals( rDocServiceName ) )
+                        // it's me!
+                        bMatches = TRUE;
+                    else
+                        break;
+                }
+                else if ( rFilterProp.Name.compareToAscii("Flags") == COMPARE_EQUAL )
+                {
+                    if ( rFilterProp.Value >>= nFilterFlags )
                     {
                         // mark filter as external filter
-                        nFilterFlags |= SFX_FILTER_STARONEFILTER;
-
-                        ::rtl::OUString aMimeType;
-                        String aExtension, aWildCard( DEFINE_CONST_UNICODE("*.") );
-                        aAny = aProps[0].Value;
-                        if ( aAny >>= aTmp )
-                        {
-                            // get the Type; each type is described by a property value sequence too
-                            ::com::sun::star::uno::Any aType = xTypes->getByName( aTmp );
-                            ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aTypeProps;
-                            if ( aType >>= aTypeProps )
-                            {
-                                // evaluate the Types' properties: ContentType, Extensions
-                                aAny = aTypeProps[1].Value;
-                                aAny >>= aMimeType;
-                                aAny = aTypeProps[4].Value;
-                                ::com::sun::star::uno::Sequence < ::rtl::OUString > aExtensions;
-                                if ( aAny >>= aExtensions )
-                                {
-                                    sal_Int32 nExtensions = aExtensions.getLength();
-                                    const ::rtl::OUString* pExtensions = aExtensions.getConstArray();
-                                    for ( sal_Int32 nExt=0; nExt<nExtensions; nExt++ )
-                                    {
-                                        aExtension += aWildCard;
-                                        aExtension += (String) pExtensions[nExt];
-                                        if ( nExt+1 < nExtensions )
-                                            aExtension += ';';
-                                    }
-                                }
-                            }
-                        }
-
-                        // register SfxFilter
-                        SfxFilter *pFilter = new SfxFilter( pNames[n], aExtension, nFilterFlags, 0, String(), String(), 0, aMimeType, this, String() );
-                        aAny = aProps[1].Value;
-                        aAny >>= aTmp;
-                        pFilter->SetUIName( aTmp );
-                        AddFilter( pFilter, GetFilterCount() );
+                        aFilterName = impl_getOldFilterName( aName );
+                        if ( !aFilterName.Len() )
+                            nFilterFlags |= SFX_FILTER_STARONEFILTER;
                     }
                 }
+                else if ( rFilterProp.Name.compareToAscii("Type") == COMPARE_EQUAL )
+                {
+                    if ( ( rFilterProp.Value >>= aType ) && aType.getLength() )
+                    {
+                        // get the Type; each type is described by a property value sequence too
+                        ::com::sun::star::uno::Any aTmp;
+                        if ( !xTypes->hasByName( aType ) || !( xTypes->getByName( aType ) >>= aTmp ) )
+                            break;
+
+                        ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aTypeProps;
+                        if ( aTmp >>= aTypeProps )
+                        {
+                            sal_Int32 nLength = aTypeProps.getLength();
+                            for ( sal_Int32 nProp = 0; nProp<nLength; nProp++ )
+                            {
+                                const ::com::sun::star::beans::PropertyValue& rProp = aTypeProps[nProp];
+
+                                if ( rProp.Name.compareToAscii("MediaType") == COMPARE_EQUAL )
+                                    rProp.Value >>= aMimeType;
+                                else if ( rProp.Name.compareToAscii("Extensions") == COMPARE_EQUAL )
+                                {
+                                    ::com::sun::star::uno::Sequence < ::rtl::OUString > aExtensions;
+                                    if ( rProp.Value >>= aExtensions )
+                                    {
+                                        sal_Int32 nExtensions = aExtensions.getLength();
+                                        const ::rtl::OUString* pExtensions = aExtensions.getConstArray();
+                                        for ( sal_Int32 nExt=0; nExt<nExtensions; nExt++ )
+                                        {
+                                            aExtension += aWildCard;
+                                            aExtension += (String) pExtensions[nExt];
+                                            if ( nExt+1 < nExtensions )
+                                                aExtension += ';';
+                                        }
+                                    }
+                                }
+                                else if ( rProp.Name.compareToAscii("ClipboardFormat") == COMPARE_EQUAL )
+                                {
+                                    ::rtl::OUString aFormat;
+                                    if ( rProp.Value >>= aFormat )
+                                    {
+                                        ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
+                                        aDataFlavor.MimeType = aFormat;
+                                        nClipId = SotExchange::GetFormat( aDataFlavor );
+                                    }
+                                }
+                                else if ( rProp.Name.compareToAscii("DocumentIconId") == COMPARE_EQUAL )
+                                    rProp.Value >>= nClipId;
+                            }
+                        }
+                    }
+                }
+                else if ( rFilterProp.Name.compareToAscii("UIName") == COMPARE_EQUAL )
+                    rFilterProp.Value >>= aUIName;
+                else if ( rFilterProp.Name.compareToAscii("TemplateName") == COMPARE_EQUAL )
+                    rFilterProp.Value >>= aDefaultTemplate;
+                else if ( rFilterProp.Name.compareToAscii("FileFormatVersion") == COMPARE_EQUAL )
+                    rFilterProp.Value >>= nVersion;
+                else if ( rFilterProp.Name.compareToAscii("UserData") == COMPARE_EQUAL )
+                    rFilterProp.Value >>= aUserData;
+            }
+
+            if ( bMatches && aType.getLength() )
+            {
+                // register SfxFilter
+                if ( aFilterName.Len() )
+                {
+                    USHORT nPos = aFilterName.Search( ':' );
+                    aFilterName.Erase( 0, nPos+2 );
+                }
+                else
+                    aFilterName = aName;
+                SfxFilter *pFilter = new SfxFilter( aFilterName, aExtension, nFilterFlags, nClipId, aEmptyStr,
+                        aEmptyStr, (USHORT) nDocIconId, aMimeType, this, aUserData );
+
+                pFilter->SetUIName( aUIName );
+                pFilter->SetDefaultTemplate( aDefaultTemplate );
+                if( nVersion )
+                    pFilter->SetVersion( nVersion );
+                BOOL bIsDefault = (( nFilterFlags & SFX_FILTER_DEFAULT ) != 0 );
+                AddFilter( pFilter, bIsDefault ? 0 : GetFilterCount() );
             }
         }
     }
