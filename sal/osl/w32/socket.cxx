@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-04-27 10:53:33 $
+ *  last change: $Author: jbu $ $Date: 2001-05-02 11:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -758,7 +758,8 @@ oslSocketAddr SAL_CALL osl_createInetBroadcastAddr (
         nAddr = htonl(nAddr);
     }
 
-    oslSocketAddr pAddr = __osl_createSocketAddrWithFamily( osl_Socket_FamilyInet, Port, nAddr );
+    oslSocketAddr pAddr =
+        __osl_createSocketAddrWithFamily( osl_Socket_FamilyInet, htons( (sal_uInt16) Port), nAddr );
     return pAddr;
 }
 
@@ -782,7 +783,7 @@ oslSocketAddr SAL_CALL osl_createInetSocketAddr (
     oslSocketAddr pAddr = 0;
     if(Addr != -1)
     {
-        pAddr = __osl_createSocketAddrWithFamily( osl_Socket_FamilyInet, Port, Addr );
+        pAddr = __osl_createSocketAddrWithFamily( osl_Socket_FamilyInet, htons( (sal_uInt16)Port), Addr );
     }
     return pAddr;
 }
