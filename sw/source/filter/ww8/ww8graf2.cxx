@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cmc $ $Date: 2001-05-08 14:02:43 $
+ *  last change: $Author: jp $ $Date: 2001-05-18 12:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1045,8 +1045,13 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
 
                         if( !bDone )
                         {
-                            pNewFlyFmt= rDoc.Insert(*pPaM, aEmptyStr,
-                                aEmptyStr, &rGraph, &aAttrSet, &aGrSet );
+                            if( nObjLocFc )  // is it a OLE-Object?
+                                bDone = 0 != ( pNewFlyFmt = ImportOle(
+                                                        &rGraph, &aAttrSet ));
+
+                            if( !bDone )
+                                pNewFlyFmt= rDoc.Insert(*pPaM, aEmptyStr,
+                                    aEmptyStr, &rGraph, &aAttrSet, &aGrSet );
                         }
 
                     }
@@ -1189,11 +1194,14 @@ void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.8 2001-05-08 14:02:43 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.9 2001-05-18 12:28:06 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/05/08 14:02:43  cmc
+      ##845## Don't use fallback stream to find escher graphics when stored directly after PICF header
+
       Revision 1.7  2001/04/11 15:08:02  jp
       Bug #85614#: SdrOleObject - set InPlaceObject pointer to zero if the object is insert as SW-OleObject
 
