@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexception.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 13:37:07 $
+ *  last change: $Author: fs $ $Date: 2001-04-19 07:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,6 +382,11 @@ FunctionSequenceException::FunctionSequenceException(const Reference< XInterface
                       SQLSTATE_SEQUENCE, 0,
                       _Next){};
 
+//------------------------------------------------------------
+void throwFunctionSequenceException(const Reference< XInterface >& _Context, const Any& _Next)
+{
+    throw SQLException(ERRORMSG_SEQUENCE, _Context, SQLSTATE_SEQUENCE, 0, _Next);
+}
 
 //.........................................................................
 }   // namespace dbtools
@@ -391,6 +396,9 @@ FunctionSequenceException::FunctionSequenceException(const Reference< XInterface
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/03/21 13:37:07  jl
+ *  OSL_ENSHURE replaced by OSL_ENSURE
+ *
  *  Revision 1.4  2001/03/01 17:02:19  fs
  *  operator= for SQLExceptionInfo, new ctor for SQLExceptionIteratorHelper, new next method
  *
