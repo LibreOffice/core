@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:21:15 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ TabPage RID_SVXPAGE_BORDER
         Text [ portuguese ] = "Moldura" ;
         Text [ finnish ] = "Reunaviiva" ;
         Text [ danish ] = "Ramme" ;
-        Text [ french ] = "Cadre" ;
+        Text [ french ] = "Disposition des lignes" ;
         Text [ swedish ] = "Linjeplacering" ;
         Text [ dutch ] = "Voorbeeld" ;
         Text [ spanish ] = "Marco" ;
@@ -354,7 +354,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ russian ] = "Синхронизировать";
         Text[ greek ] = "У~хгчспнйумьт";
         Text[ dutch ] = "S~ynchroniseren";
-        Text[ french ] = "~Synchroniser";
+        Text[ french ] = "S~ynchroniser";
         Text[ spanish ] = "~Sincronizar";
         Text[ italian ] = "~Sicronizza";
         Text[ danish ] = "Synkroniser";
@@ -380,7 +380,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ russian ] = "Расстояние от содержимого";
         Text[ greek ] = "Брьуфбуз брь ресйечьменб";
         Text[ dutch ] = "Instellingen";
-        Text[ french ] = "Paramиtres";
+        Text[ french ] = "Йcart avec le contenu";
         Text[ spanish ] = "Configuraciуn";
         Text[ italian ] = "Impostazioni";
         Text[ danish ] = "Indstillinger";
