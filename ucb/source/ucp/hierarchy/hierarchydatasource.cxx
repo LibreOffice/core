@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydatasource.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 14:59:43 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -875,7 +875,7 @@ void SAL_CALL HierarchyDataAccess::removeEventListener(
 
     OSL_ENSURE( xOrig.is(),
                 "HierarchyDataAccess : Data source is not an XComponent!" );
-    xOrig->addEventListener( aListener );
+    xOrig->removeEventListener( aListener );
 }
 
 //=========================================================================
