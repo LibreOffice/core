@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:37:27 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,6 +572,8 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
  ---------------------------------------------------------------------------*/
 Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Sequence< rtl::OUString >& rNames)
 {
+    sal_Int32 i;
+
     // size of return list is fix!
     // Every item must match to length of incoming name list.
     sal_Int32 nCount = rNames.getLength();
@@ -579,7 +581,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Se
 
     // We must be shure to return a valid information everytime!
     // Set default to non readonly ... similar to the configuration handling of this property.
-    for (sal_Int32 i=0; i<nCount; ++i)
+    for ( i=0; i<nCount; ++i)
         lStates[i] = sal_False;
 
     // no access - no informations ...
