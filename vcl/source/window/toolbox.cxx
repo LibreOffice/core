@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:19:58 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3505,7 +3505,7 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
             if ( !pTempItem->mbShowWindow && !pTempItem->mbBreak )
             {
                 long nCenterPos, nSlim;
-                SetLineColor( rStyleSettings.GetShadowColor() );
+                SetLineColor( rStyleSettings.GetSeparatorColor() );
                 if ( IsHorizontal() )
                 {
                     nSlim = (pItem->maRect.Bottom() - pItem->maRect.Top ()) / 4;
