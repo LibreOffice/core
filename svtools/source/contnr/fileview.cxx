@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-18 10:25:26 $
+ *  last change: $Author: kz $ $Date: 2002-01-03 10:43:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@
 #include <unotools/ucbhelper.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
-#include <svtools/syslocale.hxx>
+#include "syslocale.hxx"
 #endif
 
 using namespace ::com::sun::star::lang;
