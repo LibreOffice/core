@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-30 12:07:32 $
+ *  last change: $Author: cl $ $Date: 2002-04-30 13:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,12 @@ SdDrawView::SdDrawView(SdDrawDocShell* pDocSh, OutputDevice* pOutDev,
                        bActionMode(TRUE)
 {
     SetCurrentObj(OBJ_RECT, SdrInventor);
+
+    svx::ColorConfig aConfig;
+    svx::ColorConfigValue aGridValue( aConfig.GetColorValue( svx::DRAWGRID ) );
+
+    SetGridVisible( aGridValue.bIsVisible );
+    SetGridColor( Color( aGridValue.nColor ) );
 }
 
 /*************************************************************************
