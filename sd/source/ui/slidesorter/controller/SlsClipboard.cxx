@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsClipboard.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:51:10 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,10 @@ namespace sd { namespace slidesorter { namespace controller {
 
 Clipboard::Clipboard (SlideSorterController& rController)
     : ViewClipboard (rController.GetView()),
-      mrController (rController)
+      mrController (rController),
+      maPagesToRemove(),
+      maPagesToSelect(),
+      mbUpdateSelectionPending(false)
 {
 }
 
@@ -429,6 +432,7 @@ void Clipboard::StartDrag (
 {
     maPagesToRemove.clear();
     maPagesToSelect.clear();
+    mbUpdateSelectionPending = false;
     CreateSlideTransferable (pWindow, TRUE);
 }
 
@@ -447,7 +451,8 @@ void Clipboard::DragFinished (sal_Int8 nDropAction)
         pDragTransferable->SetView (NULL);
 
     PageSelector& rSelector (mrController.GetPageSelector());
-    if ((nDropAction & DND_ACTION_MOVE) != 0)
+    if ((nDropAction & DND_ACTION_MOVE) != 0
+        && ! maPagesToRemove.empty())
     {
         // Remove the pages that have been moved to another place (possibly
         // in the same document.)
@@ -550,6 +555,8 @@ sal_Int8 Clipboard::ExecuteDrop (
 
         if (bContinue)
         {
+            SlideSorterController::ModelChangeLock aModelChangeLock (mrController);
+
             if (pDragTransferable->GetView() == &mrController.GetView()
                 && rEvent.mnAction == DND_ACTION_MOVE)
             {
@@ -558,7 +565,7 @@ sal_Int8 Clipboard::ExecuteDrop (
                 // generic way.
 
                 // Remember to select the moved pages afterwards.
-                maPagesToRemove.swap (maPagesToSelect);
+                maPagesToRemove.swap(maPagesToSelect);
                 maPagesToRemove.clear();
 
                 USHORT nSdrModelIndex;
@@ -566,7 +573,8 @@ sal_Int8 Clipboard::ExecuteDrop (
                     nSdrModelIndex = nIndex / 2 - 1;
                 else
                     nSdrModelIndex = SDRPAGE_NOTFOUND;
-                mrController.MoveSelectedPages (nSdrModelIndex);
+                mrController.MoveSelectedPages(nSdrModelIndex);
+                mbUpdateSelectionPending = true;
                 nResult = DND_ACTION_NONE;
             }
             else
@@ -624,123 +632,11 @@ USHORT Clipboard::InsertSlides (
         if (pDescriptor != NULL)
             maPagesToSelect.push_back (pDescriptor->GetPage());
     }
+
+    mbUpdateSelectionPending |= (nInsertedPageCount>0);
+
     return nInsertedPageCount;
 }
-
-#if 0
-    SdDrawDocument* pDocument = mrController.GetModel().GetDocument();
-    do
-    {
-        if (pDragTransferable == NULL)
-            break;
-        if ( ! pDragTransferable->IsPageTransferable())
-            break;
-
-        const Point aEventModelPosition (
-            pTargetWindow->PixelToLogic (rEvent.maPosPixel));
-        long int nXOffset = labs (pDragTransferable->GetStartPos().X()
-            - aEventModelPosition.X());
-        long int nYOffset = labs (pDragTransferable->GetStartPos().Y()
-            - aEventModelPosition.Y());
-        const bool bContinue =
-            ( pDragTransferable->GetView() != &mrController.GetView() )
-            || ( nXOffset >= 2 && nYOffset >= 2 );
-
-        if ( ! bContinue)
-            break;
-
-        // Tell the model to move the dragged pages behind the one with the
-        // index nInsertionIndex which first has to be transformed into an
-        // index understandable by the document.
-        view::InsertionIndicatorOverlay& rInsertionIndicatorOverlay (
-            mrController.GetView().GetOverlay()
-            .GetInsertionIndicatorOverlay());
-        rInsertionIndicatorOverlay.SetPosition(aEventModelPosition);
-        sal_Int32 nInsertionIndex
-            = rInsertionIndicatorOverlay.GetInsertionPageIndex();
-        if (nInsertionIndex < 0)
-            break;
-        USHORT nDocumentIndex = (USHORT)nInsertionIndex-1;
-
-        if ((pDragTransferable->GetView() == &mrController.GetView())
-            && (rEvent.mnAction == DND_ACTION_MOVE))
-        {
-            mrController.MoveSelectedPages (nDocumentIndex);
-            nResult = DND_ACTION_NONE;
-        }
-        else
-        {
-            USHORT nInsertPgCnt;
-            USHORT nInsertPos = (nDocumentIndex + 1) * 2 + 1;
-            bool bMergeMasterPages = !pDragTransferable->HasSourceDoc(
-                pDocument);
-
-            if( pDragTransferable->HasPageBookmarks() )
-            {
-                const List& rBookmarkList
-                    = pDragTransferable->GetPageBookmarks();
-
-                nInsertPgCnt = (USHORT) rBookmarkList.Count();
-                pDocument->InsertBookmarkAsPage (
-                    const_cast< List* >( &rBookmarkList ),
-                    NULL,
-                    FALSE,
-                    FALSE,
-                    nInsertPos,
-                    TRUE,
-                    pDragTransferable->GetPageDocShell(),
-                    TRUE,
-                    bMergeMasterPages,
-                    FALSE);
-            }
-            else
-            {
-                SvEmbeddedObject* pObj = pDragTransferable->GetDocShell();
-                DrawDocShell* pDataDocShell;
-                if (pDragTransferable->HasPageBookmarks())
-                    pDataDocShell = pDragTransferable->GetPageDocShell();
-                else
-                    pDataDocShell = static_cast<DrawDocShell*>(pObj);
-                SdDrawDocument* pDataDoc = pDataDocShell->GetDoc();
-
-                nInsertPgCnt = pDataDoc->GetSdPageCount( PK_STANDARD );
-                pDocument->InsertBookmarkAsPage (
-                    NULL,
-                    NULL,
-                    FALSE,
-                    FALSE,
-                    nInsertPos,
-                    TRUE,
-                    pDataDocShell,
-                    TRUE,
-                    bMergeMasterPages,
-                    FALSE);
-            }
-
-            PageSelector& rSelector = mrController.GetPageSelector();
-            rSelector.DeselectAllPages();
-            // select inserted pages
-            for (USHORT i=1; i<=nInsertPgCnt; i++)
-            {
-                model::PageDescriptor* pDescriptor
-                    = mrController.GetModel().GetPageDescriptor(
-                        nDocumentIndex + i);
-
-                if (pDescriptor != NULL)
-                    rSelector.SelectPage (*pDescriptor);
-            }
-
-            // Update
-            //af                ( (DragAndDropManagerShell*) pViewSh )->SetPagesPerRow( nPagesPerRow );
-            nResult = rEvent.mnAction;
-        }
-    }
-    while (false);
-
-    return nResult;
-}
-
-#endif
 
 
 } } } // end of namespace ::sd::slidesorter::controller
