@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.130 $
+#   $Revision: 1.131 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 16:40:33 $
+#   last change: $Author: hr $ $Date: 2003-04-28 16:43:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -421,13 +421,13 @@ use_shl_versions*=$(USE_SHL_VERSIONS)
 
 # --- env flags not case sensitive --------------------------------
 
-.IF "$(envcflags)"!=""
+#.IF "$(envcflags)"!=""
 ENVCFLAGS*=$(envcflags)
-.ENDIF
+#.ENDIF
 
-.IF "$(envcflagscxx)"!=""
+#.IF "$(envcflagscxx)"!=""
 ENVCFLAGSCXX*=$(envcflagscxx)
-.ENDIF
+#.ENDIF
 
 
 .IF "$(envcdefs)"!=""
@@ -945,6 +945,9 @@ SOLARDOCDIR=$(SOLARVERSION)$/$(INPATH)$/doc$(EXT_UPDMINOR)
 SOLARPCKDIR=$(SOLARVERSION)$/$(INPATH)$/pck$(EXT_UPDMINOR)
 SOLARCOMMONBINDIR=$(SOLARVERSION)$/common$(PROEXT)$/bin$(EXT_UPDMINOR)
 .IF "$(common_build)"==""
+SOLARCOMMONBINDIR=$(SOLARBINDIR)
+.ENDIF
+.IF "$(COMMON_BUILD)"==""
 SOLARCOMMONBINDIR=$(SOLARBINDIR)
 .ENDIF
 
