@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:21:23 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 11:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ namespace dbaui
     class OTableWindowListBox;
     class OJoinDesignView;
     class OJoinTableView;
-    class IAccessibleHelper;
+    class OTableWindowAccess;
 
     class OTableWindow : public Window,
                          public ::utl::OEventListenerAdapter
@@ -111,7 +111,7 @@ namespace dbaui
         // und die Tabelle selber (brauche ich, da ich sie locken will, solange das Fenster lebt)
         OTableWindowTitle       m_aTitle;
         OTableWindowListBox*    m_pListBox;
-        IAccessibleHelper*      m_pAccessible;
+        OTableWindowAccess*     m_pAccessible;
 
     private:
         // the columns of the table
