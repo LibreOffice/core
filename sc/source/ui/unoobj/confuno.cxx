@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-11 12:36:11 $
+ *  last change: $Author: kz $ $Date: 2003-08-27 16:33:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,8 @@ const SfxItemPropertyMap* lcl_GetConfigPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_ASIANKERN),    0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SCSAVEVERSION),       0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SC_UNO_UPDTEMPL),     0,  &getBooleanCppuType(),              0},
+        /*Stampit enable/disable print cancel */
+        {MAP_CHAR_LEN(SC_UNO_ALLOWPRINTJOBCANCEL), 0, &getBooleanCppuType(), 0},
         {0,0,0,0}
     };
     return aConfigPropertyMap_Impl;
@@ -187,7 +189,13 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             sal_Bool bUpdateHeights = sal_False;
 
             ScViewOptions aViewOpt(pDoc->GetViewOptions());
-            if ( aPropertyName.compareToAscii( SC_UNO_SHOWZERO ) == 0 )
+
+            /*Stampit enable/disable print cancel */
+            if ( aPropertyName.compareToAscii( SC_UNO_ALLOWPRINTJOBCANCEL ) == 0 )
+                pDocShell->Stamp_SetPrintCancelState( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+            /*Stampit enable/disable print cancel */
+
+            else if ( aPropertyName.compareToAscii( SC_UNO_SHOWZERO ) == 0 )
                 aViewOpt.SetOption(VOPT_NULLVALS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
             else if ( aPropertyName.compareToAscii( SC_UNO_SHOWNOTES ) == 0 )
                 aViewOpt.SetOption(VOPT_NOTES, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
@@ -327,7 +335,13 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
         if (pDoc)
         {
             const ScViewOptions& aViewOpt = pDoc->GetViewOptions();
-            if ( aPropertyName.compareToAscii( SC_UNO_SHOWZERO ) == 0 )
+
+            /*Stampit enable/disable print cancel */
+            if ( aPropertyName.compareToAscii( SC_UNO_ALLOWPRINTJOBCANCEL ) == 0 )
+                ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->Stamp_GetPrintCancelState() );
+            /*Stampit enable/disable print cancel */
+
+            else if ( aPropertyName.compareToAscii( SC_UNO_SHOWZERO ) == 0 )
                 ScUnoHelpFunctions::SetBoolInAny( aRet, aViewOpt.GetOption( VOPT_NULLVALS ) );
             else if ( aPropertyName.compareToAscii( SC_UNO_SHOWNOTES ) == 0 )
                 ScUnoHelpFunctions::SetBoolInAny( aRet, aViewOpt.GetOption( VOPT_NOTES ) );
