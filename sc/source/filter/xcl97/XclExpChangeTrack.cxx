@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:33 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,7 +565,7 @@ XclExpChTrAction::XclExpChTrAction( const XclExpChTrAction& rCopy ) :
     sUsername( rCopy.sUsername ),
     aDateTime( rCopy.aDateTime ),
     nIndex( 0 ),
-    rTabBuffer( rCopy.rTabBuffer ),
+    rTabInfo( rCopy.rTabInfo ),
     pAddAction( NULL ),
     rIdBuffer( rCopy.rIdBuffer ),
     nLength( rCopy.nLength ),
@@ -583,7 +583,7 @@ XclExpChTrAction::XclExpChTrAction(
     nIndex( 0 ),
     pAddAction( NULL ),
     bAccepted( rAction.IsAccepted() ),
-    rTabBuffer( rRootData.pER->GetTabIdBuffer() ),
+    rTabInfo( rRootData.pER->GetTabInfo() ),
     rIdBuffer( rTabIdBuffer ),
     nLength( 0 ),
     nOpCode( nNewOpCode ),
@@ -686,7 +686,7 @@ void XclExpChTrData::WriteFormula(
         sal_uInt16 nXclFirst = aIter->first;
         sal_uInt16 nXclLast = aIter->second;
         const XclExpUniString* pUrl = rRootData.pER->GetLinkManager().GetUrl( nXclFirst );
-        const XclExpUniString* pTabName = rRootData.pER->GetLinkManager().GetTableName( nXclFirst );
+        const XclExpUniString* pTabName = rRootData.pER->GetLinkManager().GetTabName( nXclFirst );
         if( pUrl && pTabName )
             rStrm << *pUrl << (sal_uInt8) 0x01 << *pTabName << (sal_uInt8) 0x02;
         else
@@ -820,13 +820,13 @@ void XclExpChTrCellContent::GetCellData(
             const ScTokenArray* pTokenArray = pFmlCell->GetCode();
             if( pTokenArray )
             {
-                XclExpTabIdBuffer& rTabBuffer = pExcRoot->pER->GetTabIdBuffer();
+                XclExpTabInfo& rTabInfo = pExcRoot->pER->GetTabInfo();
                 XclExpLinkManager& rLinkMan = pExcRoot->pER->GetLinkManager();
 
-                rTabBuffer.StartRefLog();
+                rTabInfo.StartRefLog();
                 EC_Codetype eDummy;
                 rpData->pUPN = new ExcUPN( pExcRoot, *pTokenArray, eDummy, &pFmlCell->aPos );
-                rpData->aRefLog = rTabBuffer.EndRefLog();
+                rpData->aRefLog = rTabInfo.EndRefLog();
                 rpData->nType = EXC_CHTR_TYPE_FORMULA;
                 sal_uInt32 nSize = rpData->pUPN->GetLen() + 3;
 
@@ -836,7 +836,7 @@ void XclExpChTrCellContent::GetCellData(
                     sal_uInt16 nXclFirst = aIter->first;
                     sal_uInt16 nXclLast = aIter->second;
                     const XclExpUniString* pUrl = pExcRoot->pER->GetLinkManager().GetUrl( nXclFirst );
-                    const XclExpUniString* pTabName = pExcRoot->pER->GetLinkManager().GetTableName( nXclFirst );
+                    const XclExpUniString* pTabName = pExcRoot->pER->GetLinkManager().GetTabName( nXclFirst );
                     if( pUrl && pTabName )
                         nSize += pUrl->GetSize() + pTabName->GetSize() + 2;
                     else
@@ -1136,7 +1136,7 @@ XclExpChangeTrack::XclExpChangeTrack( RootData* pRootData ) :
     if( !CreateTempChangeTrack() )
         return;
 
-    pTabIdBuffer = new XclExpChTrTabIdBuffer( pExcRoot->pER->GetTabIdBuffer().GetXclTabCount() );
+    pTabIdBuffer = new XclExpChTrTabIdBuffer( pExcRoot->pER->GetTabInfo().GetXclTabCount() );
     aTabIdBufferList.Append( pTabIdBuffer );
 
     // calculate final table order (tab id list)
@@ -1146,7 +1146,7 @@ XclExpChangeTrack::XclExpChangeTrack( RootData* pRootData ) :
         if( pScAction->GetType() == SC_CAT_INSERT_TABS )
         {
             sal_uInt16 nScTab = (sal_uInt16) pScAction->GetBigRange().aStart.Tab();
-            pTabIdBuffer->InitFill( pExcRoot->pER->GetTabIdBuffer().GetXclTab( nScTab ) );
+            pTabIdBuffer->InitFill( pExcRoot->pER->GetTabInfo().GetXclTab( nScTab ) );
         }
     }
     pTabIdBuffer->InitFillup();
