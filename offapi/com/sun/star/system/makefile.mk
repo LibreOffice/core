@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obr $ $Date: 2001-06-26 08:45:50 $
+#   last change: $Author: tra $ $Date: 2001-06-28 13:35:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,11 @@ IDLFILES=\
     XSimpleMailClient.idl\
     XSimpleMailClientSupplier.idl\
     SimpleCommandMail.idl \
-    SimpleSystemMail.idl
+    SimpleSystemMail.idl\
+    ProxySettings.idl\
+    SOfficeProxySettings.idl\
+    SystemProxySettings.idl\
+    XProxySettings.idl
 
 # ------------------------------------------------------------------
 
