@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:04:52 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,10 +307,6 @@ class SwDoc
     //Fuer das Loeschen der Header-/Footer-Formate
     //Implementierung und Benutzung in frmatr.cxx
     friend void DelHFFormat( SwClient *, SwFrmFmt * );
-
-#if !( defined(PRODUCT) || defined(MAC) || defined(PM2) )
-    friend class SwUndoWriter;  // fuers Schreiben der Undo/Redo-History
-#endif
 
     //---------------- private Member --------------------------------
 
