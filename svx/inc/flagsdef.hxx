@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flagsdef.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:46:07 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,7 @@
 #ifndef _SVX_FLAGSDEF_HXX
 #define _SVX_FLAGSDEF_HXX
 
-//CHINA001 copy from align.hxx
 // defines ---------------------------------------------------------------
-#define WBA_NO_ORIENTATION  ((USHORT)0x0001)
-#define WBA_NO_LINEBREAK    ((USHORT)0x0002)
-#define WBA_NO_HORIZONTAL   ((USHORT)0x0004)
-#define WBA_NO_LEFTINDENT   ((USHORT)0x0008)
-#define WBA_NO_VERTICAL     ((USHORT)0x0010)
-#define WBA_NO_GRIDLINES    ((USHORT)0x0020)
-#define WBA_NO_HYPHENATION  ((USHORT)0x0040)
 
 //CHINA001 copy from border.hxx
 // Border-Modes for paragraphs, textframes and tables
