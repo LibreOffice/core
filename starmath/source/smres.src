@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:26:04 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ ModalDialog RID_FONTDIALOG
         Text[ czech ] = "Písmo";
         Text[ hebrew ] = "‮גופן‬";
         Text[ hindi ] = "~फ़ॉन्ट";
+        Text[ slovak ] = "~Písmo";
     };
     ComboBox 1
     {
@@ -168,6 +169,7 @@ ModalDialog RID_FONTDIALOG
         Text[ czech ] = "Tučné";
         Text[ hebrew ] = "‮מודגש‬";
         Text[ hindi ] = "~मोटा";
+        Text[ slovak ] = "~Tučné";
     };
     CheckBox 2
     {
@@ -202,6 +204,7 @@ ModalDialog RID_FONTDIALOG
         Text[ czech ] = "Kurzíva";
         Text[ hebrew ] = "‮איטלקי‬";
         Text[ hindi ] = "~ढेड़ा";
+        Text[ slovak ] = "~Kurzíva";
     };
     OKButton 1
     {
@@ -255,6 +258,7 @@ ModalDialog RID_FONTDIALOG
         Text[ czech ] = "Styl písma";
         Text[ hebrew ] = "‮תכונות‬";
         Text[ hindi ] = "ऐट्रिब्यूट्स";
+        Text[ slovak ] = "Atribúty";
     };
     Text[ chinese_simplified ] = "字体";
     Text[ russian ] = "������";
@@ -271,6 +275,7 @@ ModalDialog RID_FONTDIALOG
     Text[ czech ] = "Písma";
     Text[ hebrew ] = "‮גופנים‬";
     Text[ hindi ] = "फ़ॉन्ट";
+    Text[ slovak ] = "Písma";
 };
 
 ModalDialog RID_FONTSIZEDIALOG
@@ -326,6 +331,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ czech ] = "Základní velikost";
         Text[ hebrew ] = "‮גודל בסיסי‬";
         Text[ hindi ] = "~आधार परिमाण";
+        Text[ slovak ] = "~Základná veľkosť";
     };
     MetricField 1
     {
@@ -371,6 +377,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ czech ] = "Text";
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "~टेक्स्ट्";
+        Text[ slovak ] = "~Text";
     };
     MetricField 4
     {
@@ -417,6 +424,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ czech ] = "Indexy";
         Text[ hebrew ] = "‮מפתח עניינים‬";
         Text[ hindi ] = "~अनुक्रमणी";
+        Text[ slovak ] = "~Indexy";
     };
     MetricField 5
     {
@@ -463,6 +471,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ czech ] = "Funkce";
         Text[ hebrew ] = "‮תפקודים‬";
         Text[ hindi ] = "~फंक्शन्";
+        Text[ slovak ] = "~Funkcie";
     };
     MetricField 6
     {
@@ -509,6 +518,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ czech ] = "Operátory";
         Text[ hebrew ] = "‮אופרטורים‬";
         Text[ hindi ] = "~प्रवर्तक";
+        Text[ slovak ] = "~Operátory";
     };
     MetricField 7
     {
@@ -555,6 +565,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ czech ] = "Limity";
         Text[ hebrew ] = "‮גבולות‬";
         Text[ hindi ] = "~सीमा";
+        Text[ slovak ] = "~Limity";
     };
     MetricField 8
     {
@@ -603,6 +614,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ czech ] = "Relativní velikosti";
         Text[ hebrew ] = "‮גדלים יחסיים‬";
         Text[ hindi ] = "सम्बन्धित परिमाण";
+        Text[ slovak ] = "Relatívne veľkosti";
     };
     OKButton 1
     {
@@ -649,6 +661,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ czech ] = "Uložit výchozí";
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "~अनुपस्थिति";
+        Text[ slovak ] = "Výcho~dzie";
     };
     Text[ chinese_simplified ] = "字体";
     Text[ russian ] = "������ ������";
@@ -665,6 +678,7 @@ ModalDialog RID_FONTSIZEDIALOG
     Text[ czech ] = "Velikosti písma";
     Text[ hebrew ] = "‮גודל גופנים‬";
     Text[ hindi ] = "फ़ॉन्ट परिमाण";
+    Text[ slovak ] = "Veľkosti písma";
 };
 
 ModalDialog RID_FONTTYPEDIALOG
@@ -725,6 +739,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ czech ] = "Písma ve vzorci";
         Text[ hebrew ] = "‮גופנים לנוסחאות‬";
         Text[ hindi ] = "सूत्र फ़ॉन्ट";
+        Text[ slovak ] = "Písmo pre vzorce";
     };
     FixedLine 2
     {
@@ -758,6 +773,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ czech ] = "Uživatelská písma";
         Text[ hebrew ] = "‮גופנים מותאמים‬";
         Text[ hindi ] = "फ़ॉन्ट को व्यवस्था करो";
+        Text[ slovak ] = "Užívateľské písma";
     };
     FixedText 1
     {
@@ -782,7 +798,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ japanese ] = "変数(~V)";
         Text[ korean ] = "변수(~V):";
         Text[ chinese_simplified ] = "变量(~V)";
-        Text[ chinese_traditional ] = "變量(~V)";
+        Text[ chinese_traditional ] = "變數(~V)";
         Text[ turkish ] = "~De�i�kenler";
         Text[ arabic ] = "���������:";
         Text[ catalan ] = "~Variables:";
@@ -790,6 +806,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ czech ] = "Proměnné";
         Text[ hebrew ] = "‮משתנים‬";
         Text[ hindi ] = "~परिवर्ती";
+        Text[ slovak ] = "~Premenné";
     };
     ListBox 1
     {
@@ -830,6 +847,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ czech ] = "Funkce";
         Text[ hebrew ] = "‮תפקודים‬";
         Text[ hindi ] = "~फंक्शन्";
+        Text[ slovak ] = "~Funkcie";
     };
     ListBox 2
     {
@@ -870,6 +888,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ czech ] = "Čísla";
         Text[ hebrew ] = "‮מספרים‬";
         Text[ hindi ] = "~संख्या";
+        Text[ slovak ] = "Čís~la";
     };
     ListBox 3
     {
@@ -910,6 +929,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ czech ] = "Text";
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "~टेक्स्ट्";
+        Text[ slovak ] = "~Text";
     };
     ListBox 4
     {
@@ -950,6 +970,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ czech ] = "Patkové písmo (serif)";
         Text[ hebrew ] = "‮סריף‬";
         Text[ hindi ] = "~सेरिफ्";
+        Text[ slovak ] = "Pätkové pí~smo (serif)";
     };
     ListBox 5
     {
@@ -990,6 +1011,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ czech ] = "Bezpatkové písmo (sans)";
         Text[ hebrew ] = "‮ללא‬";
         Text[ hindi ] = "~सान्स";
+        Text[ slovak ] = "Bezpätkové písmo (s~ans)";
     };
     ListBox 6
     {
@@ -1030,6 +1052,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ czech ] = "S pevnou šířkou (fixed)";
         Text[ hebrew ] = "‮קבוע‬";
         Text[ hindi ] = "~स्थिर";
+        Text[ slovak ] = "S pevnou šírkou (fi~xed)";
     };
     ListBox 7
     {
@@ -1086,6 +1109,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ czech ] = "Upravit";
         Text[ hebrew ] = "‮שינוי‬";
         Text[ hindi ] = "~सुधारो";
+        Text[ slovak ] = "~Upraviť";
     };
     PushButton 2
     {
@@ -1119,6 +1143,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ czech ] = "Uložit výchozí";
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "~अनुपस्थिति";
+        Text[ slovak ] = "Výcho~dzie";
     };
     Text[ greek ] = "����� ��������������";
     Text[ korean ] = "글꼴";
@@ -1129,6 +1154,7 @@ ModalDialog RID_FONTTYPEDIALOG
     Text[ czech ] = "Písma";
     Text[ hebrew ] = "‮גופנים‬";
     Text[ hindi ] = "फ़ॉन्ट";
+    Text[ slovak ] = "Písma";
 };
 
 ModalDialog RID_DISTANCEDIALOG
@@ -1194,6 +1220,7 @@ ModalDialog RID_DISTANCEDIALOG
         CustomUnitText[ czech ] = "%";
         CustomUnitText[ hebrew ] = "%";
         CustomUnitText[ hindi ] = "%";
+        CustomUnitText[ slovak ] = "%";
     };
     FixedText 2
     {
@@ -1239,6 +1266,7 @@ ModalDialog RID_DISTANCEDIALOG
         CustomUnitText[ czech ] = "%";
         CustomUnitText[ hebrew ] = "%";
         CustomUnitText[ hindi ] = "%";
+        CustomUnitText[ slovak ] = "%";
     };
     CheckBox 1
     {
@@ -1272,6 +1300,7 @@ ModalDialog RID_DISTANCEDIALOG
         Text[ czech ] = "Zvětšovat všechny vnořené závorky";
         Text[ hebrew ] = "‮התאמת גודל הסוגריים‬";
         Text[ hindi ] = "सब कोष्ठकों को नापो";
+        Text[ slovak ] = "Upraviť všetky zátvorky";
     };
     FixedText 3
     {
@@ -1317,6 +1346,7 @@ ModalDialog RID_DISTANCEDIALOG
         CustomUnitText[ czech ] = "%";
         CustomUnitText[ hebrew ] = "%";
         CustomUnitText[ hindi ] = "%";
+        CustomUnitText[ slovak ] = "%";
     };
     FixedText 4
     {
@@ -1383,6 +1413,7 @@ ModalDialog RID_DISTANCEDIALOG
         Text[ czech ] = "Uložit výchozí";
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "~अनुपस्थिति";
+        Text[ slovak ] = "Výcho~dzie";
     };
     MenuButton 1
     {
@@ -1418,6 +1449,7 @@ ModalDialog RID_DISTANCEDIALOG
         Text[ czech ] = "Kategorie";
         Text[ hebrew ] = "‮סיווג‬";
         Text[ hindi ] = "~समान वर्ग";
+        Text[ slovak ] = "~Kategória";
     };
     FixedBitmap 1
     {
@@ -1457,6 +1489,7 @@ ModalDialog RID_DISTANCEDIALOG
         Text[ czech ] = "Kategorie";
         Text[ hebrew ] = "‮סיווג‬";
         Text[ hindi ] = "समान वर्ग";
+        Text[ slovak ] = "Kategória";
     };
     Resource 1
     {
@@ -1491,6 +1524,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Prokládání znaků";
             Text[ hebrew ] = "‮ריווח‬";
             Text[ hindi ] = "अंतर देना";
+            Text[ slovak ] = "Vzdialenosť";
         };
         String 2
         {
@@ -1520,6 +1554,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Proklad mezi písmeny";
             Text[ hebrew ] = "‮ריווח‬";
             Text[ hindi ] = "~अंतर देना";
+            Text[ slovak ] = "Vzdialenosť medzi pí~smenami";
         };
         Bitmap 20
         {
@@ -1557,6 +1592,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Proklad mezi řádky";
             Text[ hebrew ] = "‮ריווח שורה‬";
             Text[ hindi ] = "~रेखा अंतर देना";
+            Text[ slovak ] = "Vzdia~lenosť medzi riadkami";
         };
         Bitmap 30
         {
@@ -1594,6 +1630,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Proklad pod odmocninou";
             Text[ hebrew ] = "‮ריווח שורש‬";
             Text[ hindi ] = "~रूट अंतर दो";
+            Text[ slovak ] = "Vzdialenosť ~pod odmocninou";
         };
         Bitmap 40
         {
@@ -1634,6 +1671,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Indexy";
             Text[ hebrew ] = "‮מפתח ענינים‬";
             Text[ hindi ] = "अनुक्रमणी";
+            Text[ slovak ] = "Obsahy";
         };
         String 2
         {
@@ -1663,6 +1701,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Nad písmem";
             Text[ hebrew ] = "‮כתיבה עילית‬";
             Text[ hindi ] = "~सूपरस्क्रिप्ट्";
+            Text[ slovak ] = "~Horný index";
         };
         Bitmap 20
         {
@@ -1700,6 +1739,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Pod písmem";
             Text[ hebrew ] = "‮כתיבה תחתית‬";
             Text[ hindi ] = "~सबस्क्रिप्ट्";
+            Text[ slovak ] = "~Dolný index";
         };
         Bitmap 30
         {
@@ -1743,6 +1783,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Zlomky";
             Text[ hebrew ] = "‮שברים‬";
             Text[ hindi ] = "फ्रॉक्शन";
+            Text[ slovak ] = "Zlomky";
         };
         String 2
         {
@@ -1773,6 +1814,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Dělenec";
             Text[ hebrew ] = "‮מונה‬";
             Text[ hindi ] = "~न्युमरेटर";
+            Text[ slovak ] = "Dele~nec";
         };
         Bitmap 20
         {
@@ -1810,6 +1852,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Dělitel";
             Text[ hebrew ] = "‮מכנה‬";
             Text[ hindi ] = "~डिनोमिनेटर";
+            Text[ slovak ] = "~Deliteľ";
         };
         Bitmap 30
         {
@@ -1852,6 +1895,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Zlomková čára";
             Text[ hebrew ] = "‮סרגל שברים‬";
             Text[ hindi ] = "फ्रॉक्शन पट्टी";
+            Text[ slovak ] = "Zlomková čiara";
         };
         String 2
         {
@@ -1882,6 +1926,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Délka přesahu";
             Text[ hebrew ] = "‮אורך עודף‬";
             Text[ hindi ] = "~अधिक विस्तार";
+            Text[ slovak ] = "Dĺžka prekroč~enia";
         };
         Bitmap 20
         {
@@ -1920,6 +1965,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Tloušťka";
             Text[ hebrew ] = "‮משקל‬";
             Text[ hindi ] = "~भार";
+            Text[ slovak ] = "~Váha";
         };
         Bitmap 30
         {
@@ -1962,6 +2008,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Meze";
             Text[ hebrew ] = "‮גבולות‬";
             Text[ hindi ] = "सीमा";
+            Text[ slovak ] = "Ohraničenia";
         };
         String 2
         {
@@ -1992,6 +2039,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Horní mez";
             Text[ hebrew ] = "‮גבול עליון‬";
             Text[ hindi ] = "~ऊपरी सीमा";
+            Text[ slovak ] = "~Horná medza";
         };
         Bitmap 20
         {
@@ -2029,6 +2077,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Dolní mez";
             Text[ hebrew ] = "‮גבול תחתון‬";
             Text[ hindi ] = "~निचला सीमा";
+            Text[ slovak ] = "~Dolná medza";
         };
         Bitmap 30
         {
@@ -2071,6 +2120,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Závorky";
             Text[ hebrew ] = "‮סוגריים מרובעים‬";
             Text[ hindi ] = "कोष्ठकें";
+            Text[ slovak ] = "Zátvorky";
         };
         String 2
         {
@@ -2100,6 +2150,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Přírůstek velikosti (vpravo i vlevo)";
             Text[ hebrew ] = "‮גודל עודף (ימין\\שמאל)‬";
             Text[ hindi ] = "~अधिक परिमाण (बायाँ/दाहिना)";
+            Text[ slovak ] = "Prírastok v~eľkosti (vpravo i vľavo)";
         };
         Bitmap 20
         {
@@ -2137,6 +2188,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Proklad za závorkou";
             Text[ hebrew ] = "‮ריווח‬";
             Text[ hindi ] = "~अंतर देना";
+            Text[ slovak ] = "Preklad za ~zátvorkou";
         };
         Bitmap 30
         {
@@ -2174,6 +2226,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Velikost přesahu";
             Text[ hebrew ] = "‮גודל עודף‬";
             Text[ hindi ] = "~अधिक परिमाण";
+            Text[ slovak ] = "Dĺžka pr~ekročenia";
         };
         Bitmap 50
         {
@@ -2216,6 +2269,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Matice";
             Text[ hebrew ] = "‮מטריצה‬";
             Text[ hindi ] = "कोष्ठ वर्ग";
+            Text[ slovak ] = "Matica";
         };
         String 2
         {
@@ -2245,6 +2299,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Proklad mezi řádky";
             Text[ hebrew ] = "‮ריווח שורה‬";
             Text[ hindi ] = "~रेखा अंतर देना";
+            Text[ slovak ] = "Vzdia~lenosť medzi riadkami";
         };
         Bitmap 20
         {
@@ -2282,6 +2337,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Proklad mezi sloupci";
             Text[ hebrew ] = "‮ריווח טורים‬";
             Text[ hindi ] = "~स्तंभ का अंतर देना";
+            Text[ slovak ] = "Vzdialenosť medzi stĺp~cami";
         };
         Bitmap 30
         {
@@ -2324,6 +2380,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Symboly";
             Text[ hebrew ] = "‮סמלים‬";
             Text[ hindi ] = "संकेत";
+            Text[ slovak ] = "Symboly";
         };
         String 2
         {
@@ -2354,6 +2411,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Základní výška";
             Text[ hebrew ] = "‮גובה בסיסי‬";
             Text[ hindi ] = "~मुख्य ऊँचाई";
+            Text[ slovak ] = "~Základná výška";
         };
         Bitmap 20
         {
@@ -2391,6 +2449,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Minimální mezera";
             Text[ hebrew ] = "‮ריווח מזערי‬";
             Text[ hindi ] = "~न्यूनतम अंतर";
+            Text[ slovak ] = "~Minimálna medzera";
         };
         Bitmap 30
         {
@@ -2433,6 +2492,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Operátory";
             Text[ hebrew ] = "‮אופרטורים‬";
             Text[ hindi ] = "प्रवर्तक";
+            Text[ slovak ] = "Operátory";
         };
         String 2
         {
@@ -2463,6 +2523,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Velikost přesahu";
             Text[ hebrew ] = "‮גודל עודף‬";
             Text[ hindi ] = "~अधिक परिमाण";
+            Text[ slovak ] = "Dĺžka pr~ekročenia";
         };
         Bitmap 20
         {
@@ -2500,6 +2561,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Proložení znaků";
             Text[ hebrew ] = "‮ריווח‬";
             Text[ hindi ] = "~अंतर देना";
+            Text[ slovak ] = "Vzdialeno~sti znakov";
         };
         Bitmap 30
         {
@@ -2541,6 +2603,7 @@ ModalDialog RID_DISTANCEDIALOG
             TEXT[ czech ] = "Okraje";
             TEXT[ hebrew ] = "‮מסגרות‬";
             TEXT[ hindi ] = "किनारें";
+            TEXT[ slovak ] = "Okraje";
         };
         String 2
         {
@@ -2570,6 +2633,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Levý";
             Text[ hebrew ] = "‮שמאל‬";
             Text[ hindi ] = "~बायाँ";
+            Text[ slovak ] = "Ľ~avý";
         };
         Bitmap 20
         {
@@ -2607,6 +2671,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Pravý";
             Text[ hebrew ] = "‮ימין‬";
             Text[ hindi ] = "~दाहिना";
+            Text[ slovak ] = "P~ravý";
         };
         Bitmap 30
         {
@@ -2644,6 +2709,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Horní";
             Text[ hebrew ] = "‮עליון‬";
             Text[ hindi ] = "~ऊपर";
+            Text[ slovak ] = "~Horný";
         };
         Bitmap 40
         {
@@ -2681,6 +2747,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ czech ] = "Dolní";
             Text[ hebrew ] = "‮תחתון‬";
             Text[ hindi ] = "~नीचे";
+            Text[ slovak ] = "Spo~dný";
         };
         Bitmap 50
         {
@@ -2706,6 +2773,7 @@ ModalDialog RID_DISTANCEDIALOG
     Text[ czech ] = "Proložení znaků";
     Text[ hebrew ] = "‮ריווח‬";
     Text[ hindi ] = "अंतर देना";
+    Text[ slovak ] = "Vzdialenosť";
 };
 
 
@@ -2762,6 +2830,7 @@ ModalDialog RID_ALIGNDIALOG
         Text[ czech ] = "Vlevo";
         Text[ hebrew ] = "‮שמאל‬";
         Text[ hindi ] = "~बायाँ";
+        Text[ slovak ] = "~Vľavo";
     };
     RadioButton 2
     {
@@ -2796,6 +2865,7 @@ ModalDialog RID_ALIGNDIALOG
         Text[ czech ] = "Na střed";
         Text[ hebrew ] = "‮ממורכז‬";
         Text[ hindi ] = "~केन्द्रित";
+        Text[ slovak ] = "~Na stred";
     };
     RadioButton 3
     {
@@ -2830,6 +2900,7 @@ ModalDialog RID_ALIGNDIALOG
         Text[ czech ] = "Vpravo";
         Text[ hebrew ] = "‮ימין‬";
         Text[ hindi ] = "~दाहिना";
+        Text[ slovak ] = "Vp~ravo";
     };
     FixedLine 1
     {
@@ -2862,6 +2933,7 @@ ModalDialog RID_ALIGNDIALOG
         Text[ czech ] = "Vodorovné zarovnání";
         Text[ hebrew ] = "‮אופקי‬";
         Text[ hindi ] = "समतल";
+        Text[ slovak ] = "Vodorovne";
     };
     OKButton 1
     {
@@ -2908,6 +2980,7 @@ ModalDialog RID_ALIGNDIALOG
         Text[ czech ] = "Uložit výchozí";
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "~अनुपस्थिति";
+        Text[ slovak ] = "Výcho~dzie";
     };
     Text[ chinese_simplified ] = "对齐";
     Text[ russian ] = "������������";
@@ -2924,6 +2997,7 @@ ModalDialog RID_ALIGNDIALOG
     Text[ czech ] = "Zarovnání";
     Text[ hebrew ] = "‮יישור‬";
     Text[ hindi ] = "पंक्तिकरण";
+    Text[ slovak ] = "Zarovnanie";
 };
 
 TabPage RID_PRINTOPTIONPAGE
@@ -2981,6 +3055,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ czech ] = "Volby tisku";
         Text[ hebrew ] = "‮אפשרויות הדפסה‬";
         Text[ hindi ] = "छपाई विकल्प";
+        Text[ slovak ] = "Voľby tlače";
     };
     CheckBox CB_TITLEROW
     {
@@ -3014,6 +3089,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ czech ] = "Titulek";
         Text[ hebrew ] = "‮שורת כותרת‬";
         Text[ hindi ] = "~शीर्षक पंक्ति";
+        Text[ slovak ] = "~Titulný riadok";
     };
     CheckBox CB_EQUATION_TEXT
     {
@@ -3047,6 +3123,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ czech ] = "Text vzorce";
         Text[ hebrew ] = "‮טקסט נוסחה‬";
         Text[ hindi ] = "~सूत्र टेक्स्ट्";
+        Text[ slovak ] = "T~ext vzorca";
     };
     CheckBox CB_FRAME
     {
@@ -3080,6 +3157,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ czech ] = "Okraje";
         Text[ hebrew ] = "‮שוליים‬";
         Text[ hindi ] = "~किनारा";
+        Text[ slovak ] = "~Okraje";
     };
     FixedLine FL_PRINT_FORMAT
     {
@@ -3113,6 +3191,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ czech ] = "Formát tisku";
         Text[ hebrew ] = "‮צורת הדפסה‬";
         Text[ hindi ] = "छपाई रचना";
+        Text[ slovak ] = "Formát tlače";
     };
     RadioButton RB_ORIGINAL_SIZE
     {
@@ -3147,6 +3226,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ czech ] = "Původní velikost";
         Text[ hebrew ] = "‮גודל מקורי‬";
         Text[ hindi ] = "~यथार्थ परिमाण";
+        Text[ slovak ] = "Pôvo~dná veľkosť";
     };
     RadioButton RB_FIT_TO_PAGE
     {
@@ -3181,6 +3261,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ czech ] = "Přizpůsobit velikosti stránky";
         Text[ hebrew ] = "‮התאמה לגודל דף‬";
         Text[ hindi ] = "पृष्ठ केलि~ए योग्य";
+        Text[ slovak ] = "~Prispôsobiť veľkosti stránky";
     };
     RadioButton RB_ZOOM
     {
@@ -3215,6 +3296,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ czech ] = "Nastavení měřítka";
         Text[ hebrew ] = "‮התאמת גודל‬";
         Text[ hindi ] = "~नापना";
+        Text[ slovak ] = "Na~stavenie mierky";
     };
     MetricField MF_ZOOM
     {
@@ -3261,6 +3343,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ czech ] = "Různé volby";
         Text[ hebrew ] = "‮אפשרויות שונות‬";
         Text[ hindi ] = "मिला जुला विकल्प";
+        Text[ slovak ] = "Rôzne nastavenia";
     };
     CheckBox CB_IGNORE_SPACING
     {
@@ -3294,6 +3377,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ czech ] = "Ignorovat ~~ a ` na konci řádku";
         Text[ hebrew ] = "‮לא להתיחס ל ~ ו ` בסוף שורה‬";
         Text[ hindi ] = "रे~खा के अंत में ~~ और ` को उपेक्षा करो";
+        Text[ slovak ] = "Ig~norovať ~~ a ` na konci riadku";
     };
     Text[ catalan ] = "Opcions de f�rmules: Configuraci�";
     Text[ finnish ] = "Kaava-asetukset:Asetukset";
@@ -3301,6 +3385,7 @@ TabPage RID_PRINTOPTIONPAGE
     Text[ czech ] = "Volby vzorce: Nastavení";
     Text[ hebrew ] = "‮אפשרויות נוסחה: קביעות‬";
     Text[ hindi ] = "सूत्र विकल्प:निर्धारण";
+    Text[ slovak ] = "Voľby vzorca: Nastavenia";
 };
 
 ModalDialog RID_SYMBOLDIALOG
@@ -3354,6 +3439,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ czech ] = "Sada symbolů";
         Text[ hebrew ] = "‮אוצר סמלים‬";
         Text[ hindi ] = "~संकेत समूह";
+        Text[ slovak ] = "Množina ~symbolov";
     };
     ListBox 1
     {
@@ -3411,6 +3497,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ czech ] = "Neznámé";
         Text[ hebrew ] = "‮לא מוכר‬";
         Text[ hindi ] = "अज्ञात";
+        Text[ slovak ] = "Neznáme";
     };
     PushButton 2
     {
@@ -3450,6 +3537,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ czech ] = "Vložit";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
+        Text[ slovak ] = "V~ložiť";
     };
     PushButton 3
     {
@@ -3484,6 +3572,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ czech ] = "Zavřít";
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "~बन्द करो";
+        Text[ slovak ] = "~Zatvoriť";
     };
     PushButton 1
     {
@@ -3518,6 +3607,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text[ czech ] = "Upravit...";
         Text[ hebrew ] = "‮עריכה...‬";
         Text[ hindi ] = "~संपादन...";
+        Text[ slovak ] = "~Upraviť...";
     };
     Text[ chinese_simplified ] = "图标";
     Text[ russian ] = "�������";
@@ -3534,6 +3624,7 @@ ModalDialog RID_SYMBOLDIALOG
     Text[ czech ] = "Symboly";
     Text[ hebrew ] = "‮סמלים‬";
     Text[ hindi ] = "संकेत";
+    Text[ slovak ] = "Symboly";
 };
 
 ModalDialog RID_SYMDEFINEDIALOG
@@ -3597,6 +3688,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ czech ] = "Původní symbol";
         Text[ hebrew ] = "‮סמל ישן‬";
         Text[ hindi ] = "~पुराना संकेत";
+        Text[ slovak ] = "Pôv~odný symbol";
     };
     ComboBox 1
     {
@@ -3637,6 +3729,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ czech ] = "Původní sada symbolů";
         Text[ hebrew ] = "‮איצר סמלים ישן‬";
         Text[ hindi ] = "~पुराना संकेत समूह";
+        Text[ slovak ] = "Pôvo~dná množina symbolov";
     };
     ComboBox 2
     {
@@ -3685,6 +3778,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ czech ] = "Symbol";
         Text[ hebrew ] = "‮סמל‬";
         Text[ hindi ] = "~संकेत";
+        Text[ slovak ] = "~Symbol";
     };
     ComboBox 4
     {
@@ -3725,6 +3819,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ czech ] = "Sada symbolů";
         Text[ hebrew ] = "‮אוצר סמלים‬";
         Text[ hindi ] = "~संकेत समूह";
+        Text[ slovak ] = "S~ada symbolov";
     };
     ComboBox 5
     {
@@ -3765,6 +3860,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ czech ] = "Písmo";
         Text[ hebrew ] = "‮גופן‬";
         Text[ hindi ] = "~फ़ॉन्ट";
+        Text[ slovak ] = "~Písmo";
     };
     ListBox 1
     {
@@ -3806,6 +3902,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ czech ] = "Podmnožina";
         Text[ hebrew ] = "‮תת קבוצה‬";
         Text[ hindi ] = "~अधीन सेट्ट";
+        Text[ slovak ] = "Po~dmnožina";
     };
     ListBox LB_FONTS_SUBSET
     {
@@ -3847,6 +3944,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ czech ] = "Styl písma";
         Text[ hebrew ] = "‮סגנון גופן‬";
         Text[ hindi ] = "~टइपफेस";
+        Text[ slovak ] = "Š~týl písma";
     };
     ComboBox 3
     {
@@ -3937,6 +4035,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ czech ] = "Přidat";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
+        Text[ slovak ] = "Prid~ať";
     };
     PushButton 2
     {
@@ -3971,6 +4070,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ czech ] = "Upravit";
         Text[ hebrew ] = "‮שינוי‬";
         Text[ hindi ] = "~सुधारो";
+        Text[ slovak ] = "~Upraviť";
     };
     PushButton 3
     {
@@ -4005,6 +4105,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
+        Text[ slovak ] = "~Zmazať";
     };
     OKButton 1
     {
@@ -4023,6 +4124,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     Text[ czech ] = "Upravit symboly";
     Text[ hebrew ] = "‮עריכת סמלים‬";
     Text[ hindi ] = "संकेतों का संपादन";
+    Text[ slovak ] = "Upraviť symboly";
 };
 
 WarningBox RID_NOMATHTYPEFACEWARNING
@@ -4055,6 +4157,7 @@ WarningBox RID_NOMATHTYPEFACEWARNING
     Message[ czech ] = "Font \"StarMath\" nebyl nainstalován.\nBez tohoto fontu %PRODUCTNAME Math nedokáže korektně fungovat.\nProsím nainstalujte tento font a znovu spusťte %PRODUCTNAME Math.";
     Message[ hebrew ] = "‮גופן ה \"StarMath\" אינו מותקן.\nללא גופן זה, %PRODUCTNAME Math לא יפעל באופן תקין.\nנא להתקין את הגופן ולאתחל את %PRODUCTNAME Math.‬";
     Message[ hindi ] = "StarMath अक्षर को प्रतिष्ठापित नहीं किया है ।\nइस अक्षर के बिना %PRODUCTNAME गणित ठीक तरह से कार्य पूरा नहीं कर सकता है ।\nकृपया इस अक्षर को प्रतिष्ठापित कीजिए और %PRODUCTNAME गणित को पुनः प्रारंभ कीजिए ।";
+    Message[ slovak ] = "Písmo \"StarMath\" nebolo nainštalované.\nBez tohto písma %PRODUCTNAME Math nedokáže korektne pracovať.\nProsím nainštalujte toto písmo a znovu spustte %PRODUCTNAME Math.";
 };
 
 QueryBox RID_DEFAULTSAVEQUERY
@@ -4090,6 +4193,7 @@ QueryBox RID_DEFAULTSAVEQUERY
     Message[ czech ] = "Přejete si uložit změny jako výchozí nastavení?\n\nTyto změny se potom budou týkat i všech dalších vzorců.";
     Message[ hebrew ] = "‮האם לשמור את השינוים כברירות מחדל?\n\nהשינוים יושמו בכל נוסחה חדשה.‬";
     Message[ hindi ] = "परिवर्तनों को अनुपस्थिति जैसे संचित करना चाहते है ?\n\nयह परिवर्तन सभी नया सूत्रों को लागू होगा ।";
+    Message[ slovak ] = "Prajete si uložiť zmeny ako východzie nastavenie?\n\nTieto zmeny sa potom budú týkať aj všetkých nových vzorcov.";
 };
 
 String RID_FONTREGULAR
@@ -4122,6 +4226,7 @@ String RID_FONTREGULAR
     Text[ czech ] = "Standardní";
     Text[ hebrew ] = "‮רגיל‬";
     Text[ hindi ] = "स्टान्डर्ड";
+    Text[ slovak ] = "Štandardný";
 };
 String RID_FONTITALIC
 {
@@ -4153,6 +4258,7 @@ String RID_FONTITALIC
     Text[ czech ] = "Kurzíva";
     Text[ hebrew ] = "‮איטלקי‬";
     Text[ hindi ] = "ढेड़ा";
+    Text[ slovak ] = "Kurzíva";
 };
 String RID_FONTBOLD
 {
@@ -4184,6 +4290,7 @@ String RID_FONTBOLD
     Text[ czech ] = "Tučné";
     Text[ hebrew ] = "‮מודגש‬";
     Text[ hindi ] = "मोटा";
+    Text[ slovak ] = "Tučné";
 };
 String RID_APPLICATION
 {
@@ -4245,6 +4352,7 @@ Menu RID_VIEWMENU
             Text[ czech ] = "Měřítko 50%";
             Text[ hebrew ] = "‮תצוגה 50%‬";
             Text[ hindi ] = "~दृश्य 50%";
+            Text[ slovak ] = "Pohľa~d 50%";
         };
         MenuItem
         {
@@ -4278,6 +4386,7 @@ Menu RID_VIEWMENU
             Text[ czech ] = "Měřítko 100%";
             Text[ hebrew ] = "‮תצוגה 100%‬";
             Text[ hindi ] = "~दृश्य 100%";
+            Text[ slovak ] = "Pohľad ~100%";
         };
         MenuItem
         {
@@ -4311,6 +4420,7 @@ Menu RID_VIEWMENU
             Text[ czech ] = "Měřítko 200%";
             Text[ hebrew ] = "‮תצוגה 200%‬";
             Text[ hindi ] = "~दृश्य 200%";
+            Text[ slovak ] = "Pohľad ~200%";
         };
         MenuItem
         {
@@ -4345,6 +4455,7 @@ Menu RID_VIEWMENU
             Text[ czech ] = "Zvětšit";
             Text[ hebrew ] = "‮זום קדימה‬";
             Text[ hindi ] = "~झूम अन्दर";
+            Text[ slovak ] = "~Zväčšiť";
         };
         MenuItem
         {
@@ -4378,6 +4489,7 @@ Menu RID_VIEWMENU
             Text[ czech ] = "Zmenšit";
             Text[ hebrew ] = "‮זופ אחורה‬";
             Text[ hindi ] = "~झूम बाहर";
+            Text[ slovak ] = "Z~menšiť";
         };
         MenuItem
         {
@@ -4411,6 +4523,7 @@ Menu RID_VIEWMENU
             Text[ czech ] = "Zobrazit vše";
             Text[ hebrew ] = "‮הצגת הכל‬";
             Text[ hindi ] = "~सब दिखाओ";
+            Text[ slovak ] = "Zobraziť všet~ko";
         };
         MenuItem
         {
@@ -4448,6 +4561,7 @@ Menu RID_VIEWMENU
             Text[ czech ] = "Aktualizovat";
             Text[ hebrew ] = "‮עידכון‬";
             Text[ hindi ] = "~अपडेट् करो";
+            Text[ slovak ] = "Ak~tualizovať";
         };
     };
 };
@@ -4486,6 +4600,7 @@ Menu RID_DISTANCEMENU
             Text[ czech ] = "Vzdálenost";
             Text[ hebrew ] = "‮ריווח‬";
             Text[ hindi ] = "अंतर देना";
+            Text[ slovak ] = "Vzdialenosť";
         };
         MenuItem
         {
@@ -4517,6 +4632,7 @@ Menu RID_DISTANCEMENU
             Text[ czech ] = "Indexy";
             Text[ hebrew ] = "‮מונים‬";
             Text[ hindi ] = "अनुक्रमणी";
+            Text[ slovak ] = "Obsahy";
         };
         MenuItem
         {
@@ -4548,6 +4664,7 @@ Menu RID_DISTANCEMENU
             Text[ czech ] = "Zlomky";
             Text[ hebrew ] = "Brüche";
             Text[ hindi ] = "फ्रॉक्शन";
+            Text[ slovak ] = "Zlomky";
         };
         MenuItem
         {
@@ -4579,6 +4696,7 @@ Menu RID_DISTANCEMENU
             Text[ czech ] = "Zlomkové čáry";
             Text[ hebrew ] = "‮קוי שברים‬";
             Text[ hindi ] = "फ्रॉक्शन पट्टी";
+            Text[ slovak ] = "Zlomkové čiary";
         };
         MenuItem
         {
@@ -4610,6 +4728,7 @@ Menu RID_DISTANCEMENU
             Text[ czech ] = "Meze";
             Text[ hebrew ] = "‮גבולות‬";
             Text[ hindi ] = "सीमा";
+            Text[ slovak ] = "Ohraničenia";
         };
         MenuItem
         {
@@ -4642,6 +4761,7 @@ Menu RID_DISTANCEMENU
             Text[ czech ] = "Závorky";
             Text[ hebrew ] = "‮סוגריים‬";
             Text[ hindi ] = "कोष्ठक";
+            Text[ slovak ] = "Zátvorky";
         };
         MenuItem
         {
@@ -4673,6 +4793,7 @@ Menu RID_DISTANCEMENU
             Text[ czech ] = "Matice";
             Text[ hebrew ] = "‮מטריצות‬";
             Text[ hindi ] = "कोष्ठ वर्ग";
+            Text[ slovak ] = "Matice";
         };
         MenuItem
         {
@@ -4704,6 +4825,7 @@ Menu RID_DISTANCEMENU
             Text[ czech ] = "Symboly";
             Text[ hebrew ] = "‮סמלים‬";
             Text[ hindi ] = "संकेत";
+            Text[ slovak ] = "Symboly";
         };
         MenuItem
         {
@@ -4735,6 +4857,7 @@ Menu RID_DISTANCEMENU
             Text[ czech ] = "Operátory";
             Text[ hebrew ] = "‮אופרטורים‬";
             Text[ hindi ] = "प्रवर्तक";
+            Text[ slovak ] = "Operátory";
         };
         MenuItem
         {
@@ -4765,6 +4888,7 @@ Menu RID_DISTANCEMENU
             TEXT[ czech ] = "Okraje";
             TEXT[ hebrew ] = "‮מסגרות‬";
             TEXT[ hindi ] = "किनारें";
+            TEXT[ slovak ] = "Okraje";
         };
     };
 };
@@ -4793,7 +4917,7 @@ Menu RID_FONTMENU
             Text[ russian ] = "����������";
             Text[ polish ] = "Zmienne";
             Text[ japanese ] = "変数";
-            Text[ chinese_traditional ] = "變量";
+            Text[ chinese_traditional ] = "變數";
             Text[ arabic ] = "�������";
             Text[ greek ] = "����������";
             Text[ korean ] = "변수";
@@ -4804,6 +4928,7 @@ Menu RID_FONTMENU
             Text[ czech ] = "Proměnné";
             Text[ hebrew ] = "‮משתנים‬";
             Text[ hindi ] = "परिवर्ती";
+            Text[ slovak ] = "Premenné";
         };
         MenuItem
         {
@@ -4835,6 +4960,7 @@ Menu RID_FONTMENU
             Text[ czech ] = "Funkce";
             Text[ hebrew ] = "‮פונקציות‬";
             Text[ hindi ] = "फंक्शन्";
+            Text[ slovak ] = "Funkcie";
         };
         MenuItem
         {
@@ -4866,6 +4992,7 @@ Menu RID_FONTMENU
             Text[ czech ] = "Čísla";
             Text[ hebrew ] = "‮מספרים‬";
             Text[ hindi ] = "संख्या";
+            Text[ slovak ] = "Čísla";
         };
         MenuItem
         {
@@ -4898,6 +5025,7 @@ Menu RID_FONTMENU
             Text[ czech ] = "Text";
             Text[ hebrew ] = "‮טקסט‬";
             Text[ hindi ] = "टेक्स्ट्";
+            Text[ slovak ] = "Text";
         };
         MenuItem
         {
@@ -4929,6 +5057,7 @@ Menu RID_FONTMENU
             Text[ czech ] = "Patkové písmo (serif)";
             Text[ hebrew ] = "‮סריף‬";
             Text[ hindi ] = "सेरिफ्";
+            Text[ slovak ] = "Pätkové písmo";
         };
         MenuItem
         {
@@ -4960,6 +5089,7 @@ Menu RID_FONTMENU
             Text[ czech ] = "Bezpatkové písmo (sans)";
             Text[ hebrew ] = "‮בלי‬";
             Text[ hindi ] = "सान्स";
+            Text[ slovak ] = "Bezpätkové písmo";
         };
         MenuItem
         {
@@ -4991,6 +5121,7 @@ Menu RID_FONTMENU
             Text[ czech ] = "Písmo s pevnou šířkou (fixed)";
             Text[ hebrew ] = "‮קבוע‬";
             Text[ hindi ] = "स्थिर";
+            Text[ slovak ] = "Písmo s nemennou šírkou";
         };
     };
 };
@@ -5050,6 +5181,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Znaménko +";
                 Text[ hebrew ] = "‮סימן +‬";
                 Text[ hindi ] = "#NAME?";
+                Text[ slovak ] = "Znamienko +";
             };
             ToolBoxItem
             {
@@ -5082,6 +5214,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Znaménko -";
                 Text[ hebrew ] = "‮סימן -‬";
                 Text[ hindi ] = "#NAME?";
+                Text[ slovak ] = "Znamienko -";
             };
             ToolBoxItem
             {
@@ -5114,6 +5247,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Znaménko +-";
                 Text[ hebrew ] = "‮סימן +-‬";
                 Text[ hindi ] = "#NAME?";
+                Text[ slovak ] = "Znamienko +-";
             };
             ToolBoxItem
             {
@@ -5146,6 +5280,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Znaménko -+";
                 Text[ hebrew ] = "‮סימן -+‬";
                 Text[ hindi ] = "#NAME?";
+                Text[ slovak ] = "Znamienko -+";
             };
             ToolBoxItem
             {
@@ -5178,6 +5313,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Booleovské NOT";
                 Text[ hebrew ] = "‮NOT בוליאני‬";
                 Text[ hindi ] = "बूलियन NOT";
+                Text[ slovak ] = "Booleovské NOT";
             };
             ToolBoxItem
             {
@@ -5214,6 +5350,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Sčítání +";
                 Text[ hebrew ] = "‮חיבור +‬";
                 Text[ hindi ] = "जोड +";
+                Text[ slovak ] = "Súčet +";
             };
             ToolBoxItem
             {
@@ -5246,6 +5383,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Násobení (tečka)";
                 Text[ hebrew ] = "‮כפל (נקודה)‬";
                 Text[ hindi ] = "गुणन (Dot )";
+                Text[ slovak ] = "Násobenie (bodka )";
             };
             ToolBoxItem
             {
@@ -5278,6 +5416,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Násobení (x)";
                 Text[ hebrew ] = "‮כפל (איקס)‬";
                 Text[ hindi ] = "गुणन (x)";
+                Text[ slovak ] = "Násobenie (x)";
             };
             ToolBoxItem
             {
@@ -5310,6 +5449,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Násobení (*)";
                 Text[ hebrew ] = "‮כפל (כוכבית)‬";
                 Text[ hindi ] = "गुणन (*)";
+                Text[ slovak ] = "Násobenie (*)";
             };
             ToolBoxItem
             {
@@ -5342,6 +5482,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Booleovské AND";
                 Text[ hebrew ] = "‮AND בוליאני‬";
                 Text[ hindi ] = "बूलियन AND";
+                Text[ slovak ] = "Booleovské AND";
             };
             ToolBoxItem
             {
@@ -5378,6 +5519,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Odčítání -";
                 Text[ hebrew ] = "‮חיסור‬";
                 Text[ hindi ] = "घटाव -";
+                Text[ slovak ] = "Odčítanie -";
             };
             ToolBoxItem
             {
@@ -5410,6 +5552,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Dělení (zlomek)";
                 Text[ hebrew ] = "‮חלוקה (שבר)‬";
                 Text[ hindi ] = "विभाजन (अंश)";
+                Text[ slovak ] = "Delenie (zlomok)";
             };
             ToolBoxItem
             {
@@ -5442,6 +5585,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Dělení (÷)";
                 Text[ hebrew ] = "‮חלוקה (÷)‬";
                 Text[ hindi ] = "विभाजन (Ã·)";
+                Text[ slovak ] = "Delenie (÷)";
             };
             ToolBoxItem
             {
@@ -5474,6 +5618,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Dělení (lomítko)";
                 Text[ hebrew ] = "‮חלוקה (\\)‬";
                 Text[ hindi ] = "विभाजन (स्लॉश)";
+                Text[ slovak ] = "Delenie (lomítko)";
             };
             ToolBoxItem
             {
@@ -5506,6 +5651,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Booleovské OR";
                 Text[ hebrew ] = "‮OR בוליאני‬";
                 Text[ hindi ] = "बूलियन OR";
+                Text[ slovak ] = "Booleovské OR";
             };
             ToolBoxItem
             {
@@ -5542,6 +5688,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Sjednocení";
                 TEXT[ hebrew ] = "‮שירשור‬";
                 TEXT[ hindi ] = "Concatenate";
+                TEXT[ slovak ] = "Spojiť";
             };
         };
     };
@@ -5587,6 +5734,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Je rovno";
                 Text[ hebrew ] = "‮שווה‬";
                 Text[ hindi ] = "समान";
+                Text[ slovak ] = "Je rovné";
             };
             ToolBoxItem
             {
@@ -5619,6 +5767,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Není rovno";
                 Text[ hebrew ] = "‮לא שווה‬";
                 Text[ hindi ] = "असमान";
+                Text[ slovak ] = "Nie je rovné";
             };
             ToolBoxItem
             {
@@ -5651,6 +5800,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Je přibližně rovno";
                 Text[ hebrew ] = "‮שווה בקירוב‬";
                 Text[ hindi ] = "सदृश समान";
+                Text[ slovak ] = "Je približne rovné";
             };
             ToolBoxItem
             {
@@ -5683,6 +5833,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Dělitelné";
                 TEXT[ hebrew ] = "‮מתחלק‬";
                 TEXT[ hindi ] = "भाग करना";
+                TEXT[ slovak ] = "Deliteľné";
             };
             ToolBoxItem
             {
@@ -5715,6 +5866,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Nedělitelné";
                 TEXT[ hebrew ] = "‮לא מתחלק‬";
                 TEXT[ hindi ] = "विभाजन नहीं करता है";
+                TEXT[ slovak ] = "Nedeliteľné";
             };
             ToolBoxItem
             {
@@ -5751,6 +5903,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Je menší než";
                 Text[ hebrew ] = "‮פחות מ‬";
                 Text[ hindi ] = "से कम";
+                Text[ slovak ] = "Menšie ako";
             };
             ToolBoxItem
             {
@@ -5783,6 +5936,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Je větší než";
                 Text[ hebrew ] = "‮גדול מ‬";
                 Text[ hindi ] = "से अधिक";
+                Text[ slovak ] = "Je väčšie ako";
             };
             ToolBoxItem
             {
@@ -5816,6 +5970,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Je podobné nebo rovno";
                 Text[ hebrew ] = "‮דומה או שווה‬";
                 Text[ hindi ] = "सदृश अथवा समान";
+                Text[ slovak ] = "Je podobné alebo rovné";
             };
             ToolBoxItem
             {
@@ -5848,6 +6003,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Je rovnoběžné s";
                 Text[ hebrew ] = "‮מקביל ל‬";
                 Text[ hindi ] = "समानान्तर";
+                Text[ slovak ] = "Je rovnobežné s";
             };
             ToolBoxItem
             {
@@ -5880,6 +6036,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Je kolmo k";
                 Text[ hebrew ] = "‮מאונך ל‬";
                 Text[ hindi ] = "समकोणाकार";
+                Text[ slovak ] = "Je kolmé k";
             };
             ToolBoxItem
             {
@@ -5917,6 +6074,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Je menší nebo rovno";
                 Text[ hebrew ] = "‮פחות או שווה ל‬";
                 Text[ hindi ] = "से कम अथवा समान";
+                Text[ slovak ] = "Je menšie alebo rovné s";
             };
             ToolBoxItem
             {
@@ -5949,6 +6107,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Je větší nebo rovno";
                 Text[ hebrew ] = "‮גדול או שווה ל‬";
                 Text[ hindi ] = "से अधिक अथवा के समान";
+                Text[ slovak ] = "Je väčšie alebo rovné s";
             };
             ToolBoxItem
             {
@@ -5981,6 +6140,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Je podobné";
                 Text[ hebrew ] = "‮דומה ל‬";
                 Text[ hindi ] = "सदृश";
+                Text[ slovak ] = "Je podobné s";
             };
             ToolBoxItem
             {
@@ -6013,6 +6173,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Je kongruentní (shodné) s";
                 Text[ hebrew ] = "‮חופף ל‬";
                 Text[ hindi ] = "अनुरूप";
+                Text[ slovak ] = "Je zhodné s";
             };
             ToolBoxItem
             {
@@ -6053,6 +6214,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Je menší nebo rovno";
                 Text[ hebrew ] = "‮פחות או שווה ל‬";
                 Text[ hindi ] = "से कम अथवा समान";
+                Text[ slovak ] = "Je menšie alebo rovné s";
             };
             ToolBoxItem
             {
@@ -6085,6 +6247,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Je větší nebo rovno";
                 Text[ hebrew ] = "‮גדול או שווה ל‬";
                 Text[ hindi ] = "से अधिक अथवा के समान";
+                Text[ slovak ] = "Je väčšie alebo rovné s";
             };
             ToolBoxItem
             {
@@ -6117,6 +6280,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Je úměrné k";
                 Text[ hebrew ] = "‮יחסי ל‬";
                 Text[ hindi ] = "अनुरूप";
+                Text[ slovak ] = "Je priamo úmerné s";
             };
             ToolBoxItem
             {
@@ -6149,6 +6313,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Směřuje k";
                 Text[ hebrew ] = "‮בכיוון‬";
                 Text[ hindi ] = "समीप";
+                Text[ slovak ] = "Smerom";
             };
             ToolBoxItem
             {
@@ -6189,6 +6354,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Dvojitá šipka vlevo";
                 TEXT[ hebrew ] = "‮חץ כפול שמאלה‬";
                 TEXT[ hindi ] = "द्विगुणित तीर बायाँ";
+                TEXT[ slovak ] = "Dvojitá šípka vľavo";
             };
             ToolBoxItem
             {
@@ -6221,6 +6387,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Dvojitá šipka vlevo a vpravo";
                 TEXT[ hebrew ] = "‮חץ כפול שמאלה וימינה‬";
                 TEXT[ hindi ] = "द्विगुणित तीर बायाँ और दाहिना";
+                TEXT[ slovak ] = "Dvojitá šípka vľavo a vpravo";
             };
             ToolBoxItem
             {
@@ -6253,6 +6420,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Dvojitá šipka vpravo";
                 TEXT[ hebrew ] = "‮חץ כפול ימינה‬";
                 TEXT[ hindi ] = "द्विगुणित तीर दाहिना";
+                TEXT[ slovak ] = "Dvojitá šípka vpravo";
             };
         };
     };
@@ -6298,6 +6466,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Je členem";
                 Text[ hebrew ] = "‮כלול ב‬";
                 Text[ hindi ] = "में";
+                Text[ slovak ] = "Je obsiahnuté";
             };
             ToolBoxItem
             {
@@ -6330,6 +6499,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Není členem";
                 Text[ hebrew ] = "‮אינו כלול ב‬";
                 Text[ hindi ] = "में नहीं";
+                Text[ slovak ] = "Nie je obsiahnuté";
             };
             ToolBoxItem
             {
@@ -6362,6 +6532,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Je vlastníkem";
                 Text[ hebrew ] = "‮הבעלים של‬";
                 Text[ hindi ] = "अपनाना";
+                Text[ slovak ] = "Je vlastníkom";
             };
             ToolBoxItem
             {
@@ -6398,6 +6569,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Prázdná množina";
                 TEXT[ hebrew ] = "‮סט ריק‬";
                 TEXT[ hindi ] = "खाली समूह";
+                TEXT[ slovak ] = "Prázdna množina";
             };
             ToolBoxItem
             {
@@ -6434,6 +6606,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Průnik";
                 Text[ hebrew ] = "‮חיתוך‬";
                 Text[ hindi ] = "प्रतिच्छेद";
+                Text[ slovak ] = "Prienik";
             };
             ToolBoxItem
             {
@@ -6466,6 +6639,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Sjednocení";
                 Text[ hebrew ] = "‮איגוד‬";
                 Text[ hindi ] = "यूनियन";
+                Text[ slovak ] = "Zjednotenie";
             };
             ToolBoxItem
             {
@@ -6498,6 +6672,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Rozdíl";
                 Text[ hebrew ] = "‮הפרש‬";
                 Text[ hindi ] = "भिन्नता";
+                Text[ slovak ] = "Rozdiel";
             };
             ToolBoxItem
             {
@@ -6530,6 +6705,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Množina dělitelnosti";
                 Text[ hebrew ] = "‮סט מנים‬";
                 Text[ hindi ] = "भागाफल समूह";
+                Text[ slovak ] = "Množina kvocientov";
             };
             ToolBoxItem
             {
@@ -6562,6 +6738,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Aleph";
                 TEXT[ hebrew ] = "‮אלף‬";
                 TEXT[ hindi ] = "अलेफ";
+                TEXT[ slovak ] = "Aleph";
             };
             ToolBoxItem
             {
@@ -6598,6 +6775,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Podmnožina";
                 Text[ hebrew ] = "‮תת סט‬";
                 Text[ hindi ] = "अधीन सेट्ट";
+                Text[ slovak ] = "Podmnožina";
             };
             ToolBoxItem
             {
@@ -6630,6 +6808,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Je podmnožinou nebo rovno";
                 Text[ hebrew ] = "‮תת סט או שווה ל‬";
                 Text[ hindi ] = "सबसेट्ट अथवा समान";
+                Text[ slovak ] = "Podmnožina alebo rovné";
             };
             ToolBoxItem
             {
@@ -6662,6 +6841,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Nadmnožina";
                 Text[ hebrew ] = "‮סט מכיל‬";
                 Text[ hindi ] = "सूपरसेट्ट";
+                Text[ slovak ] = "Nadmnožina";
             };
             ToolBoxItem
             {
@@ -6694,6 +6874,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Je nadmnožinou nebo rovno";
                 Text[ hebrew ] = "‮סט מכיל או שווה ל‬";
                 Text[ hindi ] = "सूपरसेट्ट अथवा समान";
+                Text[ slovak ] = "Nadmnožina alebo rovné";
             };
             ToolBoxItem
             {
@@ -6734,6 +6915,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Není podmnožinou";
                 Text[ hebrew ] = "‮אינו תת סט‬";
                 Text[ hindi ] = "सबसेट्ट नहीं";
+                Text[ slovak ] = "Nie je podmnožinou";
             };
             ToolBoxItem
             {
@@ -6766,6 +6948,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Není podmnožinou ani rovno";
                 Text[ hebrew ] = "‮אינו תת סט או שווה‬";
                 Text[ hindi ] = "सबसेट्ट अथवा समान नहीं";
+                Text[ slovak ] = "Nie je podmnožinou alebo rovné";
             };
             ToolBoxItem
             {
@@ -6798,6 +6981,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Není nadmnožinou";
                 Text[ hebrew ] = "‮אינו סט מכיל‬";
                 Text[ hindi ] = "सूपरसेट्ट नहीं";
+                Text[ slovak ] = "Nie je nadmnožinou";
             };
             ToolBoxItem
             {
@@ -6830,6 +7014,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Není nadmnožinou ani rovno";
                 Text[ hebrew ] = "‮אינו סט מכיל או שווה‬";
                 Text[ hindi ] = "सूपरसेट्ट अथवा समान नहीं";
+                Text[ slovak ] = "Nie je nadmnožinou alebo rovné";
             };
             ToolBoxItem
             {
@@ -6870,6 +7055,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Množina přirozených čísel";
                 TEXT[ hebrew ] = "‮סט המספרים הטבעים‬";
                 TEXT[ hindi ] = "प्राकृतिक संख्या समूह";
+                TEXT[ slovak ] = "Množina prirodzených čísiel";
             };
             ToolBoxItem
             {
@@ -6902,6 +7088,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Množina celých čísel";
                 TEXT[ hebrew ] = "‮סט המספרים השלמים‬";
                 TEXT[ hindi ] = "पूर्णांक समूह";
+                TEXT[ slovak ] = "Množina celých čísel";
             };
             ToolBoxItem
             {
@@ -6934,6 +7121,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Množina racionálních čísel";
                 TEXT[ hebrew ] = "‮סט המספרים הרציונליים‬";
                 TEXT[ hindi ] = "रेशनल संख्या समूह";
+                TEXT[ slovak ] = "Množina racionálnych čísel";
             };
             ToolBoxItem
             {
@@ -6966,6 +7154,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Množina reálných čísel";
                 TEXT[ hebrew ] = "‮סט מספרים ריאליים‬";
                 TEXT[ hindi ] = "रियल संख्या समूह";
+                TEXT[ slovak ] = "Množina reálnych čísiel";
             };
             ToolBoxItem
             {
@@ -6998,6 +7187,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Množina komplexních čísel";
                 TEXT[ hebrew ] = "‮סט מספרים מורכבים‬";
                 TEXT[ hindi ] = "जटिल संख्या समूह";
+                TEXT[ slovak ] = "Množina komplexných čísiel";
             };
         };
     };
@@ -7044,6 +7234,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Exponenciální funkce";
                 Text[ hebrew ] = "‮פונקציה אקספוננציאלית‬";
                 Text[ hindi ] = "ऐक्स्पोनेश्यल फ़ंक्शन";
+                Text[ slovak ] = "Exponenciálna funkcia";
             };
             ToolBoxItem
             {
@@ -7076,6 +7267,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Přirozený logaritmus";
                 Text[ hebrew ] = "‮לוגריתים טבעי‬";
                 Text[ hindi ] = "प्राकृतिक लघुगणकविधि";
+                Text[ slovak ] = "Prirodzený logaritmus";
             };
             ToolBoxItem
             {
@@ -7108,6 +7300,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Exponenciální funkce";
                 Text[ hebrew ] = "‮פונקציה אקספוננציאלית‬";
                 Text[ hindi ] = "ऐक्स्पोनेश्यल फ़ंक्शन";
+                Text[ slovak ] = "Exponenciálna funkcia";
             };
             ToolBoxItem
             {
@@ -7140,6 +7333,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Logaritmus";
                 Text[ hebrew ] = "‮לוגריתים‬";
                 Text[ hindi ] = "लघुगणक";
+                Text[ slovak ] = "Logaritmus";
             };
             ToolBoxItem
             {
@@ -7172,6 +7366,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Mocnina";
                 TEXT[ hebrew ] = "‮חזקה‬";
                 TEXT[ hindi ] = "पवर";
+                TEXT[ slovak ] = "Exponent";
             };
             ToolBoxItem
             {
@@ -7208,6 +7403,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Sinus";
                 Text[ hebrew ] = "‮סינוס‬";
                 Text[ hindi ] = "सैन";
+                Text[ slovak ] = "Sínus";
             };
             ToolBoxItem
             {
@@ -7240,6 +7436,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Kosinus";
                 Text[ hebrew ] = "‮קוסינוס‬";
                 Text[ hindi ] = "कोसैन";
+                Text[ slovak ] = "Kosínus";
             };
             ToolBoxItem
             {
@@ -7272,6 +7469,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Tangens";
                 Text[ hebrew ] = "‮טנגנס‬";
                 Text[ hindi ] = "टॉन्जेन्ट्";
+                Text[ slovak ] = "Tangens";
             };
             ToolBoxItem
             {
@@ -7304,6 +7502,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Kotangens";
                 Text[ hebrew ] = "‮קוטנגנס‬";
                 Text[ hindi ] = "कोटान्जेन्ट";
+                Text[ slovak ] = "Kotangens";
             };
             ToolBoxItem
             {
@@ -7336,6 +7535,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Druhá odmocnina";
                 Text[ hebrew ] = "‮שורש‬";
                 Text[ hindi ] = "वर्ग मूल";
+                Text[ slovak ] = "Druhá odmocnina";
             };
             ToolBoxItem
             {
@@ -7372,6 +7572,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Arkussinus";
                 Text[ hebrew ] = "‮ארקסינוס‬";
                 Text[ hindi ] = "आर्कसैन";
+                Text[ slovak ] = "Arkussínus";
             };
             ToolBoxItem
             {
@@ -7404,6 +7605,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Arkuskosinus";
                 Text[ hebrew ] = "‮ארקוסינוס‬";
                 Text[ hindi ] = "आर्ककोसैन";
+                Text[ slovak ] = "Arkuskosínus";
             };
             ToolBoxItem
             {
@@ -7436,6 +7638,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Arkustangens";
                 Text[ hebrew ] = "‮ארקטנגנס‬";
                 Text[ hindi ] = "आर्कटान्जेन्ट्";
+                Text[ slovak ] = "Arkustangens";
             };
             ToolBoxItem
             {
@@ -7468,6 +7671,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Arkuskotangens";
                 Text[ hebrew ] = "‮ארקוטנגנס‬";
                 Text[ hindi ] = "आर्ककोटान्जेन्ट्";
+                Text[ slovak ] = "Arkuskotangens";
             };
             ToolBoxItem
             {
@@ -7500,6 +7704,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "n-tá odmocnina";
                 Text[ hebrew ] = "‮שורש מעריך N‬";
                 Text[ hindi ] = "n-th वर्गमूल";
+                Text[ slovak ] = "n-tá odmocnina";
             };
             ToolBoxItem
             {
@@ -7536,6 +7741,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Hyperbolický sinus";
                 Text[ hebrew ] = "‮סינוס היפרבולי‬";
                 Text[ hindi ] = "हाइपरबोलिक सैन";
+                Text[ slovak ] = "Hyperbolický sínus";
             };
             ToolBoxItem
             {
@@ -7568,6 +7774,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Hyperbolický kosinus";
                 Text[ hebrew ] = "‮קוסינוס היפרבולי‬";
                 Text[ hindi ] = "हाइपरबोलिक कोसैन";
+                Text[ slovak ] = "Hyperbolický kosínus";
             };
             ToolBoxItem
             {
@@ -7600,6 +7807,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Hyperbolický tangens";
                 Text[ hebrew ] = "‮טנגנס היפרבולי‬";
                 Text[ hindi ] = "हाइपरबोलिक टान्जेन्ट";
+                Text[ slovak ] = "Hyperbolický tangens";
             };
             ToolBoxItem
             {
@@ -7632,6 +7840,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Hyperbolický kotangens";
                 Text[ hebrew ] = "‮קוטנגנס היפרבולי‬";
                 Text[ hindi ] = "हाइपरबोलिक कोटान्जेन्ट";
+                Text[ slovak ] = "Hyperbolický kotangens";
             };
             ToolBoxItem
             {
@@ -7664,6 +7873,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Absolutní hodnota";
                 Text[ hebrew ] = "‮ערך מוחלט‬";
                 Text[ hindi ] = "निश्चित मूल्य";
+                Text[ slovak ] = "Absolútna hodnota";
             };
             ToolBoxItem
             {
@@ -7700,6 +7910,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Arg-hyper-sinus";
                 Text[ hebrew ] = "‮שטח סינוס היפרבולי‬";
                 Text[ hindi ] = "विस्तीर्ण हाइपरबोलिक सैन";
+                Text[ slovak ] = "Arg-hyper-sínus";
             };
             ToolBoxItem
             {
@@ -7732,6 +7943,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Arg-hyper-kosinus";
                 Text[ hebrew ] = "‮שטח קוסינוס היפרבולי‬";
                 Text[ hindi ] = "विस्तीर्ण हाइपरबोलिक कोसैन";
+                Text[ slovak ] = "Arg-hyper-kosínus";
             };
             ToolBoxItem
             {
@@ -7764,6 +7976,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Arg-hyper-tangens";
                 Text[ hebrew ] = "‮שטח טנגנס היפרבולי‬";
                 Text[ hindi ] = "विस्तीर्ण हाइपरबोलिक टान्जेन्ट";
+                Text[ slovak ] = "Arg-hyper-tangens";
             };
             ToolBoxItem
             {
@@ -7796,6 +8009,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Arg-hyper-kotangens";
                 Text[ hebrew ] = "‮שטח קוטנגנס היפרבולי‬";
                 Text[ hindi ] = "विस्तीर्ण हाइपरबोलिक कोटान्जेन्ट";
+                Text[ slovak ] = "Arg-hyper-kotangens";
             };
             ToolBoxItem
             {
@@ -7828,6 +8042,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Faktoriál";
                 Text[ hebrew ] = "‮עצרת‬";
                 Text[ hindi ] = "क्रमगुणित";
+                Text[ slovak ] = "Faktoriál";
             };
         };
     };
@@ -7873,6 +8088,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Limity";
                 Text[ hebrew ] = "‮פונקצית גבול‬";
                 Text[ hindi ] = "लइमस";
+                Text[ slovak ] = "Limity";
             };
             ToolBoxItem
             {
@@ -7905,6 +8121,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Sumace";
                 Text[ hebrew ] = "‮סכום‬";
                 Text[ hindi ] = "जोड़";
+                Text[ slovak ] = "Celkom";
             };
             ToolBoxItem
             {
@@ -7937,6 +8154,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Součin (produkt)";
                 Text[ hebrew ] = "‮תוצר‬";
                 Text[ hindi ] = "उत्पाद";
+                Text[ slovak ] = "Súčin (produkt)";
             };
             ToolBoxItem
             {
@@ -7969,6 +8187,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Podružný součin";
                 Text[ hebrew ] = "‮תוצר משנה‬";
                 Text[ hindi ] = "कोप्रोडक्ट";
+                Text[ slovak ] = "Koprodukt";
             };
             ToolBoxItem
             {
@@ -8001,6 +8220,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Horní a dolní mez";
                 Text[ hebrew ] = "‮גבול עליון ותחתון‬";
                 Text[ hindi ] = "ऊपरी और निचला सीमा";
+                Text[ slovak ] = "Horná a dolná medza";
             };
             ToolBoxItem
             {
@@ -8037,6 +8257,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Integrál";
                 Text[ hebrew ] = "‮אינטגרל‬";
                 Text[ hindi ] = "समस्त";
+                Text[ slovak ] = "Integrál";
             };
             ToolBoxItem
             {
@@ -8069,6 +8290,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Dvojný integrál";
                 Text[ hebrew ] = "‮אינטגרל כפול‬";
                 Text[ hindi ] = "द्विगुणित पूरा";
+                Text[ slovak ] = "Dvojitý integrál";
             };
             ToolBoxItem
             {
@@ -8101,6 +8323,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Trojný integrál";
                 Text[ hebrew ] = "‮אינטגרל משולש‬";
                 Text[ hindi ] = "तिगुना सम्पूर्ण";
+                Text[ slovak ] = "Trojitý integrál";
             };
             ToolBoxItem
             {
@@ -8137,6 +8360,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Dolní mez";
                 Text[ hebrew ] = "‮גבול תחתון‬";
                 Text[ hindi ] = "निचला सीमा";
+                Text[ slovak ] = "Dolná hranica";
             };
             ToolBoxItem
             {
@@ -8173,6 +8397,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Křivkový integrál";
                 Text[ hebrew ] = "‮אינטגרל עקומה‬";
                 Text[ hindi ] = "पूरा वक्र";
+                Text[ slovak ] = "Krivkový integrál";
             };
             ToolBoxItem
             {
@@ -8205,6 +8430,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Plošný integrál";
                 Text[ hebrew ] = "‮אינטגרל עקומה כפול‬";
                 Text[ hindi ] = "द्विगुणित पूरा वक्र";
+                Text[ slovak ] = "Plošný integrál";
             };
             ToolBoxItem
             {
@@ -8237,6 +8463,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Objemový integrál";
                 Text[ hebrew ] = "‮אינטגרל עקומה משולש‬";
                 Text[ hindi ] = "तिगुना वक्र सम्पूर्ण";
+                Text[ slovak ] = "Objemový integrál";
             };
             ToolBoxItem
             {
@@ -8273,6 +8500,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Horní mez";
                 Text[ hebrew ] = "‮גבול עליון‬";
                 Text[ hindi ] = "ऊपरी सीमा";
+                Text[ slovak ] = "Horná medza";
             };
         };
     };
@@ -8317,6 +8545,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Čárka";
                 Text[ hebrew ] = "‮גרש‬";
                 Text[ hindi ] = "तेज उच्चारण";
+                Text[ slovak ] = "Čiarka";
             };
             ToolBoxItem
             {
@@ -8348,6 +8577,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Zpětná čárka";
                 Text[ hebrew ] = "‮גרש ימני‬";
                 Text[ hindi ] = "गंभीर उच्चारण";
+                Text[ slovak ] = "Spätná čiarka";
             };
             ToolBoxItem
             {
@@ -8380,6 +8610,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Háček";
                 Text[ hebrew ] = "‮חץ למטה‬";
                 Text[ hindi ] = "उलटा सर्खफ्लेक्स";
+                Text[ slovak ] = "S mäkčeňom";
             };
             ToolBoxItem
             {
@@ -8412,6 +8643,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Oblouček";
                 Text[ hebrew ] = "‮קערית‬";
                 Text[ hindi ] = "लघु स्वर का चिह्न";
+                Text[ slovak ] = "S čiarkou nad";
             };
             ToolBoxItem
             {
@@ -8444,6 +8676,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Kroužek";
                 Text[ hebrew ] = "‮עיגול‬";
                 Text[ hindi ] = "वृत्त";
+                Text[ slovak ] = "Kruh";
             };
             ToolBoxItem
             {
@@ -8480,6 +8713,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Vektorová šipka";
                 Text[ hebrew ] = "‮חץ‬";
                 Text[ hindi ] = "वेक्टर तीर रेखा";
+                Text[ slovak ] = "Vektorová šípka";
             };
             ToolBoxItem
             {
@@ -8512,6 +8746,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Vlnovka";
                 Text[ hebrew ] = "‮גל‬";
                 Text[ hindi ] = "टिल्ड";
+                Text[ slovak ] = "Vlnovka";
             };
             ToolBoxItem
             {
@@ -8544,6 +8779,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Stříška";
                 Text[ hebrew ] = "‮חץ למעלה‬";
                 Text[ hindi ] = "सर्कमफ्लेक्स";
+                Text[ slovak ] = "So strieškou";
             };
             ToolBoxItem
             {
@@ -8576,6 +8812,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Pruh nahoře";
                 Text[ hebrew ] = "‮קו עליון‬";
                 Text[ hindi ] = "ऊपरी रेखा";
+                Text[ slovak ] = "S pruhom";
             };
             ToolBoxItem
             {
@@ -8608,6 +8845,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Tečka";
                 Text[ hebrew ] = "‮נקודה‬";
                 Text[ hindi ] = "बिन्दू";
+                Text[ slovak ] = "Bodka";
             };
             ToolBoxItem
             {
@@ -8644,6 +8882,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Velká vektorová šipka";
                 TEXT[ hebrew ] = "‮חץ גדול‬";
                 TEXT[ hindi ] = "बडा वेक्टर तीर";
+                TEXT[ slovak ] = "S veľkou vektorovou šípkou";
             };
             ToolBoxItem
             {
@@ -8676,6 +8915,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Velká vlnovka";
                 TEXT[ hebrew ] = "‮גל גדול‬";
                 TEXT[ hindi ] = "बडा टिल्ड";
+                TEXT[ slovak ] = "S veľkou vlnovkou";
             };
             ToolBoxItem
             {
@@ -8708,6 +8948,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Velká stříška";
                 TEXT[ hebrew ] = "‮חץ למעלה גדול‬";
                 TEXT[ hindi ] = "बडा सर्कमफ्लेक्स";
+                TEXT[ slovak ] = "S veľkou strieškou";
             };
             ToolBoxItem
             {
@@ -8744,6 +8985,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Dvojitá tečka";
                 Text[ hebrew ] = "‮נקודה כפולה‬";
                 Text[ hindi ] = "द्विगुणित";
+                Text[ slovak ] = "Dvojitá bodka";
             };
             ToolBoxItem
             {
@@ -8780,6 +9022,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Čára nad";
                 Text[ hebrew ] = "‮קו מעל‬";
                 Text[ hindi ] = "रेखा ऊपर";
+                Text[ slovak ] = "Čiara nad";
             };
             ToolBoxItem
             {
@@ -8812,6 +9055,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Čára pod";
                 Text[ hebrew ] = "‮קו תחתון‬";
                 Text[ hindi ] = "नीचे की रेखा";
+                Text[ slovak ] = "Čiara pod";
             };
             ToolBoxItem
             {
@@ -8844,6 +9088,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Čára přes";
                 Text[ hebrew ] = "‮קו מחיקה‬";
                 Text[ hindi ] = "रेखा अंत तक";
+                Text[ slovak ] = "Čiara cez";
             };
             ToolBoxItem
             {
@@ -8880,6 +9125,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Trojitá tečka";
                 Text[ hebrew ] = "‮נקודה משולשת‬";
                 Text[ hindi ] = "तिगुना बिंदू";
+                Text[ slovak ] = "Trojbodka";
             };
             ToolBoxItem
             {
@@ -8916,6 +9162,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Průhledné písmo";
                 Text[ hebrew ] = "‮שקוף‬";
                 Text[ hindi ] = "पारदर्शक";
+                Text[ slovak ] = "Priehľadné";
             };
             ToolBoxItem
             {
@@ -8948,6 +9195,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Tučné písmo";
                 Text[ hebrew ] = "‮גופן מודגש‬";
                 Text[ hindi ] = "मोटा अक्षर";
+                Text[ slovak ] = "Tučné písmo";
             };
             ToolBoxItem
             {
@@ -8980,6 +9228,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Kurzíva";
                 Text[ hebrew ] = "‮גופן איטלקי‬";
                 Text[ hindi ] = "ढेड़ा अक्षर";
+                Text[ slovak ] = "Kurzíva";
             };
             ToolBoxItem
             {
@@ -9012,6 +9261,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Změnit velikost";
                 Text[ hebrew ] = "‮שינוי גודל‬";
                 Text[ hindi ] = "पुनः परिमाण दो";
+                Text[ slovak ] = "Zmeniť veľkosť";
             };
             ToolBoxItem
             {
@@ -9023,7 +9273,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ portuguese_brazilian ] = "Alterar a fonte" ;
                 Text [ swedish ] = "�ndra teckensnitt" ;
                 Text [ danish ] = "modificer skrifttype" ;
-                Text [ italian ] = "Cambia font" ;
+                Text [ italian ] = "Cambia tipo di carattere" ;
                 Text [ spanish ] = "Cambiar fuente" ;
                 Text [ french ] = "Modifier la police" ;
                 Text [ dutch ] = "Lettertype wijzigen" ;
@@ -9044,6 +9294,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Změnit písmo";
                 Text[ hebrew ] = "‮שינוי גופן‬";
                 Text[ hindi ] = "फॉन्ट बदलो";
+                Text[ slovak ] = "Zmeniť písmo";
             };
         };
     };
@@ -9089,6 +9340,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Kulaté závorky";
                 Text[ hebrew ] = "‮סוגריים מעוגלות‬";
                 Text[ hindi ] = "गोलाकार कोष्ठक";
+                Text[ slovak ] = "Okrúhle zátvorky";
             };
             ToolBoxItem
             {
@@ -9121,6 +9373,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Hranaté závorky";
                 Text[ hebrew ] = "‮סוגריים מרובעות‬";
                 Text[ hindi ] = "समचतुर्भुज कोष्ठक";
+                Text[ slovak ] = "Hranaté zátvorky";
             };
             ToolBoxItem
             {
@@ -9153,6 +9406,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Dvojité hranaté závorky";
                 Text[ hebrew ] = "‮סוגריים מרובעות כפולות‬";
                 Text[ hindi ] = "द्विगुणित समचतुर्भुज कोष्ठ";
+                Text[ slovak ] = "Dvojité hranaté úvodzovky";
             };
             ToolBoxItem
             {
@@ -9185,6 +9439,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Svislé čáry";
                 Text[ hebrew ] = "‮קווים בודדים‬";
                 Text[ hindi ] = "अकेला रेखाएँ";
+                Text[ slovak ] = "Samostatné riadky";
             };
             ToolBoxItem
             {
@@ -9198,7 +9453,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "dobbelte streger" ;
                 Text [ italian ] = "Linee doppie" ;
                 Text [ spanish ] = "L�neas dobles" ;
-                Text [ french ] = "Lignes doubles" ;
+                Text [ french ] = "Doubles lignes" ;
                 Text [ dutch ] = "dubbele lijnen" ;
                 Text [ portuguese ] = "Linhas duplas" ;
                 Text[ chinese_simplified ] = "双线";
@@ -9217,6 +9472,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Dvojité svislé čáry";
                 Text[ hebrew ] = "‮קווים כפולים‬";
                 Text[ hindi ] = "द्विगुणित रेखाएँ";
+                Text[ slovak ] = "Dvojité riadky";
             };
             ToolBoxItem
             {
@@ -9253,6 +9509,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Složené závorky";
                 Text[ hebrew ] = "‮סוגריים מסורסלות‬";
                 Text[ hindi ] = "कोष्ठक";
+                Text[ slovak ] = "Zložené zátvorky";
             };
             ToolBoxItem
             {
@@ -9285,6 +9542,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Špičaté závorky";
                 Text[ hebrew ] = "‮סוגריים זוויות‬";
                 Text[ hindi ] = "कोणीय कोष्ठक";
+                Text[ slovak ] = "Podporný uhol";
             };
             ToolBoxItem
             {
@@ -9317,6 +9575,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Operátorové závorky";
                 Text[ hebrew ] = "‮סוגריים אופרטיביות‬";
                 Text[ hindi ] = "प्रवर्तक कोष्ठक";
+                Text[ slovak ] = "Zátvorky operátora";
             };
             ToolBoxItem
             {
@@ -9353,6 +9612,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Skupinové závorky";
                 Text[ hebrew ] = "‮סוגריים קיבוציות‬";
                 Text[ hindi ] = "समूह कोष्ठक";
+                Text[ slovak ] = "Skupinové zátvorky";
             };
             ToolBoxItem
             {
@@ -9389,6 +9649,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Kulaté závorky (zvětšující se)";
                 Text[ hebrew ] = "‮סוגריים עגולות מותאמות לגודל‬";
                 Text[ hindi ] = "गोलाकार कोष्ठकें (नापने योग्य)";
+                Text[ slovak ] = "Okrúhle zátvorky (škálovateľné)";
             };
             ToolBoxItem
             {
@@ -9421,6 +9682,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Hranaté závorky (zvětšující se)";
                 Text[ hebrew ] = "‮סוגריים מרובעות מותאמות לגודל‬";
                 Text[ hindi ] = "समचतुर्भुज कोष्ठकें (नापने योग्य)";
+                Text[ slovak ] = "Hranaté zátvorky (škálovateľné)";
             };
             ToolBoxItem
             {
@@ -9433,7 +9695,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ russian ] = "������� ���������� ������ (��������������)";
                 Text[ greek ] = "������� (������������)";
                 Text[ dutch ] = "dubbele hoekige haakjes (aanpasbaar)";
-                Text[ french ] = "Crochets doubles (taille variable)";
+                Text[ french ] = "Doubles crochets (taille variable)";
                 Text[ spanish ] = "corchetes dobles (graduables)";
                 Text[ italian ] = "Parentesi quadre doppie (in scala)";
                 Text[ danish ] = "dobbelte firkantede parenteser (skalerbare)";
@@ -9453,6 +9715,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Dvojité hranaté závorky (zvětšující se)";
                 Text[ hebrew ] = "‮סוגריים מרובעות כפולות מותאמות לגודל‬";
                 Text[ hindi ] = "द्विगुणित समचतुर्भुज कोष्ठकें (नापने योग्य)";
+                Text[ slovak ] = "Dvojité hranaté úvodzovky (rozšíriteľné)";
             };
             ToolBoxItem
             {
@@ -9485,6 +9748,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Svislé čáry (zvětšující se)";
                 Text[ hebrew ] = "‮קוים בודדים מותאים לגודל‬";
                 Text[ hindi ] = "अकेला रेखा (नापने योग्य)";
+                Text[ slovak ] = "Samostatné riadky (škálovateľné)";
             };
             ToolBoxItem
             {
@@ -9517,6 +9781,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Dvojité svislé čáry (zvětšující se)";
                 Text[ hebrew ] = "‮קוים כפולים מותאמים לגודל‬";
                 Text[ hindi ] = "द्विगुणित रेखाएँ (नापने योग्य)";
+                Text[ slovak ] = "Dvojité riadky (rozšíriteľné)";
             };
             ToolBoxItem
             {
@@ -9553,6 +9818,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Složené závorky (zvětšující se)";
                 Text[ hebrew ] = "‮סוגריים מסורסלות מותאמות לגודל‬";
                 Text[ hindi ] = "कोष्ठकें (नापने योग्य)";
+                Text[ slovak ] = "Oblé zátvorky (rozšíriteľné)";
             };
             ToolBoxItem
             {
@@ -9585,6 +9851,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Špičaté závorky (zvětšující se)";
                 Text[ hebrew ] = "‮סוגריים זוויות מותאמות לגודל‬";
                 Text[ hindi ] = "कोणीय कोष्ठक (नापने योग्य)";
+                Text[ slovak ] = "Podporný uhol (rozšíriteľný)";
             };
             ToolBoxItem
             {
@@ -9617,6 +9884,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Operátorové závorky (zvětšující se)";
                 Text[ hebrew ] = "‮סוגריים אופרטיביות מותאמות לגודל‬";
                 Text[ hindi ] = "प्रवर्तक कोष्ठकें (नापने योग्य)";
+                Text[ slovak ] = "Zátvorky operátora (rozšíriteľné)";
             };
             ToolBoxItem
             {
@@ -9653,6 +9921,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Složená závorka nahoře (zvětšující se)";
                 Text[ hebrew ] = "‮סוגריים עליונות מותאמות לגודל‬";
                 Text[ hindi ] = "कोष्ठकें ऊपर (नापने योग्य)";
+                Text[ slovak ] = "Vrchné oblé zátvorky (rozšíriteľné)";
             };
             ToolBoxItem
             {
@@ -9685,6 +9954,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Složená závorka dole (zvětšující se)";
                 Text[ hebrew ] = "‮סוגריים תחתונות מותאמות לגודל‬";
                 Text[ hindi ] = "कोष्ठकें नीचे (नापने योग्य)";
+                Text[ slovak ] = "Spodné oblé zátvorky (rozšíriteľné)";
             };
         };
     };
@@ -9730,6 +10000,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Horní index vlevo";
                 Text[ hebrew ] = "‮כתב עילי שמאל‬";
                 Text[ hindi ] = "सूपरस्क्रिप्ट् बायाँ";
+                Text[ slovak ] = "Horný index vľavo";
             };
             ToolBoxItem
             {
@@ -9762,6 +10033,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Horní index nahoře";
                 TEXT[ hebrew ] = "‮כתב עילי עליון‬";
                 TEXT[ hindi ] = "सूपरस्क्रिप्ट् ऊपर";
+                TEXT[ slovak ] = "Horný index hore";
             };
             ToolBoxItem
             {
@@ -9794,6 +10066,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Horní index vpravo";
                 Text[ hebrew ] = "‮כתב עילי ימין‬";
                 Text[ hindi ] = "सूपरस्क्रिप्ट् दाहिना";
+                Text[ slovak ] = "Horný index vpravo";
             };
             ToolBoxItem
             {
@@ -9826,6 +10099,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Sloupec (2 prvky)";
                 Text[ hebrew ] = "‮ערימה אנכית (2 רכיבים)‬";
                 Text[ hindi ] = "लंबरूप स्टॉक (2 ऐलिमेन्ट्स)";
+                Text[ slovak ] = "Vertikálny zásobník (2 prvky)";
             };
             ToolBoxItem
             {
@@ -9858,6 +10132,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Nový řádek";
                 Text[ hebrew ] = "‮שורה חדשה‬";
                 Text[ hindi ] = "नया रेखा";
+                Text[ slovak ] = "Nový riadok";
             };
             ToolBoxItem
             {
@@ -9894,6 +10169,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Dolní index vlevo";
                 Text[ hebrew ] = "‮כתב תחתי שמאל‬";
                 Text[ hindi ] = "स्क्रिप्टिं बायाँ";
+                Text[ slovak ] = "Dolný index vľavo";
             };
             ToolBoxItem
             {
@@ -9926,6 +10202,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Dolní index uprostřed";
                 TEXT[ hebrew ] = "‮כתב תחתי למטה‬";
                 TEXT[ hindi ] = "सबस्क्रिप्ट् नीचे";
+                TEXT[ slovak ] = "Dolný index uprostred";
             };
             ToolBoxItem
             {
@@ -9958,6 +10235,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Dolní index vpravo";
                 Text[ hebrew ] = "‮כתב תחתי ימין‬";
                 Text[ hindi ] = "सबस्क्रिप्ट् दाहिना";
+                Text[ slovak ] = "Dolný index vpravo";
             };
             ToolBoxItem
             {
@@ -9990,6 +10268,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Sloupec";
                 Text[ hebrew ] = "‮ערימה אנכית‬";
                 Text[ hindi ] = "लंबरूप स्टॉक";
+                Text[ slovak ] = "Vertikálny zásobník";
             };
             ToolBoxItem
             {
@@ -10022,6 +10301,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Malá mezera";
                 Text[ hebrew ] = "‮מרווח קטן‬";
                 Text[ hindi ] = "छोटा अंतर";
+                Text[ slovak ] = "Malá medzera";
             };
             ToolBoxItem
             {
@@ -10058,6 +10338,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Zarovnat vlevo";
                 Text[ hebrew ] = "‮יישור לשמאל‬";
                 Text[ hindi ] = "बायाँ ओर पंक्तिकरण";
+                Text[ slovak ] = "Zarovnať vľavo";
             };
             ToolBoxItem
             {
@@ -10091,6 +10372,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Zarovnat na střed";
                 Text[ hebrew ] = "‮יישור למרכז‬";
                 Text[ hindi ] = "मध्य का पंक्तिकरण";
+                Text[ slovak ] = "Zarovnať na stred";
             };
             ToolBoxItem
             {
@@ -10123,6 +10405,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Zarovnat vpravo";
                 Text[ hebrew ] = "‮יישור לימין‬";
                 Text[ hindi ] = "दाहिनी ओर पंक्तिकरण";
+                Text[ slovak ] = "Zarovnať vpravo";
             };
             ToolBoxItem
             {
@@ -10155,6 +10438,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Matice";
                 Text[ hebrew ] = "‮מחסנית מטריצית‬";
                 Text[ hindi ] = "कोष्ठ वर्ग स्टॉक";
+                Text[ slovak ] = "Maticový zásobník";
             };
             ToolBoxItem
             {
@@ -10187,6 +10471,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Mezera";
                 Text[ hebrew ] = "‮פער‬";
                 Text[ hindi ] = "अंतर";
+                Text[ slovak ] = "Voľný priestor";
             };
         };
     };
@@ -10232,6 +10517,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Nekonečno";
                 TEXT[ hebrew ] = "‮אין סופי‬";
                 TEXT[ hindi ] = "अनंत";
+                TEXT[ slovak ] = "Nekonečno";
             };
             ToolBoxItem
             {
@@ -10264,6 +10550,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Parciální";
                 TEXT[ hebrew ] = "‮חלקי‬";
                 TEXT[ hindi ] = "असम्पूर्ण";
+                TEXT[ slovak ] = "Čiastočný";
             };
             ToolBoxItem
             {
@@ -10296,6 +10583,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Nabla";
                 TEXT[ hebrew ] = "‮משולש הפוך (נאבלה)‬";
                 TEXT[ hindi ] = "नाब्ला";
+                TEXT[ slovak ] = "Nabla";
             };
             ToolBoxItem
             {
@@ -10328,6 +10616,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Existuje";
                 TEXT[ hebrew ] = "‮קיים‬";
                 TEXT[ hindi ] = "वहाँ रह था";
+                TEXT[ slovak ] = "Existuje";
             };
             ToolBoxItem
             {
@@ -10360,6 +10649,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Pro všechny";
                 TEXT[ hebrew ] = "‮לכל‬";
                 TEXT[ hindi ] = "सब केलिए";
+                TEXT[ slovak ] = "Pre všetky";
             };
             ToolBoxItem
             {
@@ -10396,6 +10686,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "h s pruhem";
                 TEXT[ hebrew ] = "‮מוט h‬";
                 TEXT[ hindi ] = "h पट्टी";
+                TEXT[ slovak ] = "h panel";
             };
             ToolBoxItem
             {
@@ -10428,6 +10719,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Lambda s pruhem";
                 TEXT[ hebrew ] = "‮מוט למבדה‬";
                 TEXT[ hindi ] = "लाम्डा पट्टी";
+                TEXT[ slovak ] = "Lambda s pruhom";
             };
             ToolBoxItem
             {
@@ -10460,6 +10752,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Reálná část";
                 TEXT[ hebrew ] = "‮החלק האמיתי‬";
                 TEXT[ hindi ] = "रियल पार्ट";
+                TEXT[ slovak ] = "Reálna časť";
             };
             ToolBoxItem
             {
@@ -10492,6 +10785,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Imaginární část";
                 TEXT[ hebrew ] = "‮החלק הדמיוני‬";
                 TEXT[ hindi ] = "काल्पनिक भाग";
+                TEXT[ slovak ] = "Imaginárna časť";
             };
             ToolBoxItem
             {
@@ -10524,6 +10818,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Weierstrassovo p";
                 TEXT[ hebrew ] = "‮P וויארסטראס‬";
                 TEXT[ hindi ] = "वैयर्स्ट्रस् पि";
+                TEXT[ slovak ] = "Weierstrassovo p";
             };
             ToolBoxItem
             {
@@ -10560,6 +10855,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Šipka vlevo";
                 TEXT[ hebrew ] = "‮חץ שמאלי‬";
                 TEXT[ hindi ] = "बायाँ तीर";
+                TEXT[ slovak ] = "Šípka doľava";
             };
             ToolBoxItem
             {
@@ -10592,6 +10888,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Šipka vpravo";
                 TEXT[ hebrew ] = "‮חץ ימני‬";
                 TEXT[ hindi ] = "दाहिना तीर रेखा";
+                TEXT[ slovak ] = "Šípka doprava";
             };
             ToolBoxItem
             {
@@ -10624,6 +10921,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Šipka nahoru";
                 TEXT[ hebrew ] = "‮חץ למעלה‬";
                 TEXT[ hindi ] = "ऊपर का तीर";
+                TEXT[ slovak ] = "Šípka hore";
             };
             ToolBoxItem
             {
@@ -10656,6 +10954,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Šipka dolů";
                 TEXT[ hebrew ] = "‮חץ למטה‬";
                 TEXT[ hindi ] = "नीचे की तीर";
+                TEXT[ slovak ] = "Šípka dole";
             };
             ToolBoxItem
             {
@@ -10696,6 +10995,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Tečky dole";
                 TEXT[ hebrew ] = "‮נקודות תחתונות‬";
                 TEXT[ hindi ] = "बिन्दु नीचे में";
+                TEXT[ slovak ] = "Bodky dole";
             };
             ToolBoxItem
             {
@@ -10728,6 +11028,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Tečky uprostřed";
                 TEXT[ hebrew ] = "‮נקודות אמצעיות‬";
                 TEXT[ hindi ] = "बिन्दु मध्य में";
+                TEXT[ slovak ] = "Bodky uprostred";
             };
             ToolBoxItem
             {
@@ -10760,6 +11061,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Tečky svisle";
                 TEXT[ hebrew ] = "‮נקודות אנכיות‬";
                 TEXT[ hindi ] = "लंबरूप प्रकार से बिन्दु";
+                TEXT[ slovak ] = "Bodky zvisle";
             };
             ToolBoxItem
             {
@@ -10792,6 +11094,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Tečky nahoru";
                 TEXT[ hebrew ] = "‮נקודות עליונות‬";
                 TEXT[ hindi ] = "ऊपर केलिए बिन्दु";
+                TEXT[ slovak ] = "Bodky hore";
             };
             ToolBoxItem
             {
@@ -10824,6 +11127,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Tečky dolů";
                 TEXT[ hebrew ] = "‮נקודות עד למטה‬";
                 TEXT[ hindi ] = "बिन्दु नीचे में";
+                TEXT[ slovak ] = "Bodky dole";
             };
         };
     };
@@ -10868,6 +11172,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Unární/binární operátory";
                 Text[ hebrew ] = "‮אופרטורים אונריים\\בינריים‬";
                 Text[ hindi ] = "यूनारि/बैनारि प्रवर्तक";
+                Text[ slovak ] = "Unárne/binárne operátory";
             };
             ToolBoxItem
             {
@@ -10900,6 +11205,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Relace";
                 Text[ hebrew ] = "‮יחסים‬";
                 Text[ hindi ] = "सम्बन्धें";
+                Text[ slovak ] = "Relácie";
             };
             ToolBoxItem
             {
@@ -10932,6 +11238,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Množinové operace";
                 Text[ hebrew ] = "‮פעולות סטים‬";
                 Text[ hindi ] = "कार्य सेट्ट करो";
+                Text[ slovak ] = "Množinové operácie";
             };
             ToolBoxItem
             {
@@ -10964,6 +11271,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Funkce";
                 Text[ hebrew ] = "‮פונקציות‬";
                 Text[ hindi ] = "फंक्शन्";
+                Text[ slovak ] = "Funkcie";
             };
             ToolBoxItem
             {
@@ -10996,6 +11304,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Operátory";
                 Text[ hebrew ] = "‮אופרטורים‬";
                 Text[ hindi ] = "प्रवर्तक";
+                Text[ slovak ] = "Operátory";
             };
             ToolBoxItem
             {
@@ -11032,6 +11341,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Matematické značky";
                 Text[ hebrew ] = "‮תכונות‬";
                 Text[ hindi ] = "ऐट्रिब्यूट्स";
+                Text[ slovak ] = "Atribúty";
             };
             ToolBoxItem
             {
@@ -11064,6 +11374,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ czech ] = "Ostatní";
                 TEXT[ hebrew ] = "‮אחרים‬";
                 TEXT[ hindi ] = "अन्य";
+                TEXT[ slovak ] = "Iné";
             };
             ToolBoxItem
             {
@@ -11100,6 +11411,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Závorky";
                 Text[ hebrew ] = "‮סוגריים‬";
                 Text[ hindi ] = "कोष्ठकें";
+                Text[ slovak ] = "Zátvorky";
             };
             ToolBoxItem
             {
@@ -11132,6 +11444,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ czech ] = "Formátování";
                 Text[ hebrew ] = "‮צורות‬";
                 Text[ hindi ] = "रचना";
+                Text[ slovak ] = "Formáty";
             };
         };
     };
@@ -11539,6 +11852,7 @@ FloatingWindow RID_TOOLBOXWINDOW
     Text[ czech ] = "Výběr";
     Text[ hebrew ] = "‮מבחר‬";
     Text[ hindi ] = "चुनाव";
+    Text[ slovak ] = "Výber";
 };
 
 #define CMDBOXWINDOW_TEXT           \
@@ -11569,7 +11883,8 @@ FloatingWindow RID_TOOLBOXWINDOW
     Text[ thai ] = "คำสั่ง";    \
     Text[ czech ] = "Příkazy";    \
     Text[ hebrew ] = "‮פקודות‬";  \
-    Text[ hindi ] = "Commands";
+    Text[ hindi ] = "Commands"; \
+    Text[ slovak ] = "Príkazy";
 
 DockingWindow RID_CMDBOXWINDOW
 {
@@ -11713,6 +12028,7 @@ String RID_DOCUMENTSTR
     Text[ czech ] = "Vzorec";
     Text[ hebrew ] = "‮נוסחה‬";
     Text[ hindi ] = "सूत्र";
+    Text[ slovak ] = "Vzorec";
 };
 
 String STR_STATSTR_READING
@@ -11747,6 +12063,7 @@ String STR_STATSTR_READING
     Text[ czech ] = "Načítání dokumentu...";
     Text[ hebrew ] = "‮טעינת המסמך...‬";
     Text[ hindi ] = "लेखपत्र लोड हो रहा है...";
+    Text[ slovak ] = "Načítavam dokument...";
 };
 
 String STR_STATSTR_WRITING
@@ -11782,6 +12099,7 @@ String STR_STATSTR_WRITING
     Text[ czech ] = "Ukládání dokumentu...";
     Text[ hebrew ] = "‮שמירת המסמך...‬";
     Text[ hindi ] = "लेखपत्र बचाना...";
+    Text[ slovak ] = "Ukladanie dokumentu...";
 };
 
 
@@ -11813,6 +12131,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_60
     Text[ czech ] = "%PRODUCTNAME 6.0 Formula";
     Text[ hebrew ] = "‮נוסחת %PRODUCTNAME 6.0‬";
     Text[ hindi ] = "%PRODUCTNAME 6.0 सूत्र";
+    Text[ slovak ] = "%PRODUCTNAME 6.0 vzorec";
 };
 String STR_MATH_DOCUMENT_FULLTYPE_50
 {
@@ -11843,6 +12162,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_50
     Text[ czech ] = "%PRODUCTNAME 5.0 Formula";
     Text[ hebrew ] = "‮נוסחת %PRODUCTNAME 5.0‬";
     Text[ hindi ] = "%PRODUCTNAME 5.0 सूत्र";
+    Text[ slovak ] = "%PRODUCTNAME 5.0 Vzorec";
 };
 
 String STR_MATH_DOCUMENT_FULLTYPE_40
@@ -11874,6 +12194,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_40
     Text[ czech ] = "%PRODUCTNAME 4.0 Formula";
     Text[ hebrew ] = "‮נוסחת %PRODUCTNAME 4.0‬";
     Text[ hindi ] = "%PRODUCTNAME 4.0 सूत्र";
+    Text[ slovak ] = "%PRODUCTNAME 4.0 vzorec";
 };
 
 String STR_MATH_DOCUMENT_FULLTYPE_31
@@ -11905,6 +12226,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_31
     Text[ czech ] = "%PRODUCTNAME 3.0 Formula";
     Text[ hebrew ] = "‮נוסחת %PRODUCTNAME 3.0‬";
     Text[ hindi ] = "%PRODUCTNAME 3.0 सूत्र";
+    Text[ slovak ] = "%PRODUCTNAME 3.0 vzorec";
 };
 
 String RID_SYMBOLFILESSTR
@@ -11935,6 +12257,7 @@ String RID_SYMBOLFILESSTR
     Text[ czech ] = "Soubory se symboly (*.sms)";
     Text[ hebrew ] = "‮קבצי סמלים (*.sms)‬";
     Text[ hindi ] = "संकेत फाइलें (*.sms)";
+    Text[ slovak ] = "Súbory so symbolmi (*.sms)";
 };
 
 String RID_ALLFILESSTR
@@ -11966,6 +12289,7 @@ String RID_ALLFILESSTR
     Text[ czech ] = "Všechny soubory (*.*)";
     Text[ hebrew ] = "‮כל הקבצים (*.*)‬";
     Text[ hindi ] = "All Files (*.*)";
+    Text[ slovak ] = "Všetky súbory (*.*)";
 };
 
 String RID_ERR_IDENT
@@ -11997,6 +12321,7 @@ String RID_ERR_IDENT
     Text[ czech ] = "CHYBA : ";
     Text[ hebrew ] = "‮שגיאה: ‬";
     Text[ hindi ] = "ERROR :";
+    Text[ slovak ] = "CHYBA : ";
 };
 
 String RID_ERR_UNKOWN
@@ -12028,6 +12353,7 @@ String RID_ERR_UNKOWN
     Text[ czech ] = "Nastala neznámá chyba";
     Text[ hebrew ] = "‮ארעה שגיאה לא מוכרת‬";
     Text[ hindi ] = "अज्ञात गलती घटित हुआ";
+    Text[ slovak ] = "Neznáma chyba";
 };
 
 String RID_ERR_UNEXPECTEDCHARACTER
@@ -12059,6 +12385,7 @@ String RID_ERR_UNEXPECTEDCHARACTER
     Text[ czech ] = "Neočekávaný znak";
     Text[ hebrew ] = "‮תו לא צפוי‬";
     Text[ hindi ] = "आकस्मिक अक्षर";
+    Text[ slovak ] = "Neočakávaný znak";
 };
 
 String RID_ERR_OVERFLOW
@@ -12090,6 +12417,7 @@ String RID_ERR_OVERFLOW
     Text[ czech ] = "Vzorec je příliš složitý";
     Text[ hebrew ] = "‮נוסחה מסובכת מידי‬";
     Text[ hindi ] = "सूत्र प्रविष्टि बहुत जटिल है";
+    Text[ slovak ] = "Vzorec je príliš zložitý";
 };
 
 String RID_ERR_LGROUPEXPECTED
@@ -12121,6 +12449,7 @@ String RID_ERR_LGROUPEXPECTED
     Text[ czech ] = "Očekávána '{'";
     Text[ hebrew ] = "‮צפויה '{'‬";
     Text[ hindi ] = "'{' की प्रतीक्षा";
+    Text[ slovak ] = "Očakávaná '{'";
 };
 
 String RID_ERR_RGROUPEXPECTED
@@ -12152,6 +12481,7 @@ String RID_ERR_RGROUPEXPECTED
     Text[ czech ] = "Očekávána '}'";
     Text[ hebrew ] = "‮צפויה '}'‬";
     Text[ hindi ] = "'}' की प्रतीक्षा";
+    Text[ slovak ] = "Očakávaná '}'";
 };
 
 String RID_ERR_LBRACEEXPECTED
@@ -12183,6 +12513,7 @@ String RID_ERR_LBRACEEXPECTED
     Text[ czech ] = "Očekávána '('";
     Text[ hebrew ] = "‮צפויה '('‬";
     Text[ hindi ] = "'(' की प्रतीक्षा";
+    Text[ slovak ] = "Očakávaná '('";
 };
 
 String RID_ERR_RBRACEEXPECTED
@@ -12214,6 +12545,7 @@ String RID_ERR_RBRACEEXPECTED
     Text[ czech ] = "Očekávána ')'";
     Text[ hebrew ] = "‮צפויה ')'‬";
     Text[ hindi ] = "')' की प्रतीक्षा";
+    Text[ slovak ] = "Očakávaná ')'";
 };
 
 String RID_ERR_FUNCEXPECTED
@@ -12245,6 +12577,7 @@ String RID_ERR_FUNCEXPECTED
     Text[ czech ] = "Očekávána funkce";
     Text[ hebrew ] = "‮צפויה פונקציה‬";
     Text[ hindi ] = "फंक्शन् की प्रतीक्षा";
+    Text[ slovak ] = "Očakávaná funkcia";
 };
 
 String RID_ERR_UNOPEREXPECTED
@@ -12277,6 +12610,7 @@ String RID_ERR_UNOPEREXPECTED
     Text[ czech ] = "Očekáván unární operátor";
     Text[ hebrew ] = "‮צפוי אופרטור אונרי‬";
     Text[ hindi ] = "यूनारि प्रवर्तक की प्रतीक्षा";
+    Text[ slovak ] = "Očakávaný unárny operátor";
 };
 
 String RID_ERR_BINOPEREXPECTED
@@ -12309,6 +12643,7 @@ String RID_ERR_BINOPEREXPECTED
     Text[ czech ] = "Očekáván binární operátor";
     Text[ hebrew ] = "‮צפוי אופרטור בינרי‬";
     Text[ hindi ] = "बैनरी प्रवर्तक की प्रतीक्षा";
+    Text[ slovak ] = "Očakávaný binárny operátor";
 };
 
 String RID_ERR_SYMBOLEXPECTED
@@ -12340,6 +12675,7 @@ String RID_ERR_SYMBOLEXPECTED
     Text[ czech ] = "Očekáván symbol";
     Text[ hebrew ] = "‮צפוע סמל‬";
     Text[ hindi ] = "संकेत प्रतीक्षा";
+    Text[ slovak ] = "Očakávaný symbol";
 };
 
 String RID_ERR_IDENTEXPECTED
@@ -12371,6 +12707,7 @@ String RID_ERR_IDENTEXPECTED
     Text[ czech ] = "Očekáván identifikátor";
     Text[ hebrew ] = "‮צפוי מזהה‬";
     Text[ hindi ] = "अइडेन्टिफयर की प्रतीक्षा";
+    Text[ slovak ] = "Očakávaný identifikátor";
 };
 
 String RID_ERR_POUNDEXPECTED
@@ -12402,6 +12739,7 @@ String RID_ERR_POUNDEXPECTED
     Text[ czech ] = "Očekáván '#'";
     Text[ hebrew ] = "‮צפויה '#'‬";
     Text[ hindi ] = "'#' की प्रतीक्षा";
+    Text[ slovak ] = "Očakávaný '#'";
 };
 
 String RID_ERR_COLOREXPECTED
@@ -12433,6 +12771,7 @@ String RID_ERR_COLOREXPECTED
     Text[ czech ] = "Je požadována barva";
     Text[ hebrew ] = "‮נדרש צבע‬";
     Text[ hindi ] = "रंग की आवश्यकता";
+    Text[ slovak ] = "Vyžaduje sa farba";
 };
 
 String RID_ERR_LPARENTEXPECTED
@@ -12464,6 +12803,7 @@ String RID_ERR_LPARENTEXPECTED
     Text[ czech ] = "Očekávána levá mez";
     Text[ hebrew ] = "‮צפוי גבול שמאלי‬";
     Text[ hindi ] = "बायाँ सीमा की प्रतीक्षा";
+    Text[ slovak ] = "Očakávané ohraničenie zľava";
 };
 
 String RID_ERR_RPARENTEXPECTED
@@ -12495,6 +12835,7 @@ String RID_ERR_RPARENTEXPECTED
     Text[ czech ] = "Očekávána pravá mez";
     Text[ hebrew ] = "‮צפוי גבול ימני‬";
     Text[ hindi ] = "दाहिना सीमा की प्रतीक्षा";
+    Text[ slovak ] = "Prekročený limit vpravo";
 };
 
 String RID_ERR_RIGHTEXPECTED
@@ -12526,6 +12867,7 @@ String RID_ERR_RIGHTEXPECTED
     Text[ czech ] = "Očekáváno 'RIGHT'";
     Text[ hebrew ] = "‮צפוי 'RIGHT'‬";
     Text[ hindi ] = "'RIGHT' की प्रतीक्षा";
+    Text[ slovak ] = "Očakávané 'RIGHT'";
 };
 
 String RID_PLUGINTOOLBOX
@@ -12557,6 +12899,7 @@ String RID_PLUGINTOOLBOX
     Text[ czech ] = "Panel zásuvných modulů";
     Text[ hebrew ] = "‮סרגל תוספים‬";
     Text[ hindi ] = "प्लग-ईन पट्टी";
+    Text[ slovak ] = "Panel zásuvných modulov";
 };
 
 #include "menu.src"
@@ -12613,6 +12956,7 @@ ToolBox RID_MATH_TOOLBOX
             Text[ czech ] = "Přiblížit";
             Text[ hebrew ] = "‮זום קדימה‬";
             Text[ hindi ] = "झूम अन्दर";
+            Text[ slovak ] = "Zväčšiť";
         };
         ToolBoxItem
         {
@@ -12645,6 +12989,7 @@ ToolBox RID_MATH_TOOLBOX
             Text[ czech ] = "Oddálit";
             Text[ hebrew ] = "‮זום אחורה‬";
             Text[ hindi ] = "झूम बाहर";
+            Text[ slovak ] = "Zmenšiť";
         };
         ToolBoxItem
         {
@@ -12678,6 +13023,7 @@ ToolBox RID_MATH_TOOLBOX
             Text[ czech ] = "Měřítko 100%";
             Text[ hebrew ] = "‮זום 100%‬";
             Text[ hindi ] = "झूम 100%";
+            Text[ slovak ] = "Priblížiť na 100%";
         };
         ToolBoxItem
         {
@@ -12710,6 +13056,7 @@ ToolBox RID_MATH_TOOLBOX
             Text[ czech ] = "Celý vzorec";
             Text[ hebrew ] = "‮הנוסחה כולה‬";
             Text[ hindi ] = "सम्पूर्ण सूत्र";
+            Text[ slovak ] = "Celý vzorec";
         };
         ToolBoxItem
         {
@@ -12747,6 +13094,7 @@ ToolBox RID_MATH_TOOLBOX
             Text[ czech ] = "Obnovit";
             Text[ hebrew ] = "‮רענון‬";
             Text[ hindi ] = "नवीकरण";
+            Text[ slovak ] = "Obnoviť";
         };
         ToolBoxItem
         {
@@ -12779,6 +13127,7 @@ ToolBox RID_MATH_TOOLBOX
             Text[ czech ] = "Kurzor ve vzorci";
             Text[ hebrew ] = "‮סמן נוסחה‬";
             Text[ hindi ] = "सूत्र कर्सर";
+            Text[ slovak ] = "Kurzor pre vzorce";
         };
         ToolBoxItem
         {
@@ -12813,6 +13162,7 @@ ToolBox RID_MATH_TOOLBOX
             Text[ czech ] = "Symboly";
             Text[ hebrew ] = "‮סמלים‬";
             Text[ hindi ] = "संकेत";
+            Text[ slovak ] = "Symboly";
         };
     };
 };
@@ -12846,7 +13196,10 @@ String RID_MATH_TOOLBOX
     Text[ czech ] = "Hlavní panel nástrojů";
     Text[ hebrew ] = "‮סרגל כלים ראשי‬";
     Text[ hindi ] = "मुख्य औज़ार पट्टी";
+    Text[ slovak ] = "Hlavný panel nástrojov";
 };
+
+
 
 
 
