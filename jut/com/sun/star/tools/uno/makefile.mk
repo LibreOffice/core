@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jsc $ $Date: 2000-11-08 12:54:32 $
+#   last change: $Author: kr $ $Date: 2001-02-02 10:37:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,8 @@ TARGET  = com_sun_star_tools_uno
 
 JAVACLASSFILES= 											\
     $(CLASSDIR)$/$(PACKAGE)$/RegistryKey.class				\
-    $(CLASSDIR)$/$(PACKAGE)$/UnoApp.class
+    $(CLASSDIR)$/$(PACKAGE)$/UnoApp.class					\
+    $(CLASSDIR)$/$(PACKAGE)$/RegComp.class
 
 # --- Targets ------------------------------------------------------
 
