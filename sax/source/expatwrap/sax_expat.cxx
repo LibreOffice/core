@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sax_expat.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2001-05-02 01:18:24 $
+ *  last change: $Author: tbe $ $Date: 2001-05-11 14:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
     }
 
     entity.converter.setInputStream( entity.structSource.aInputStream );
-    if( entity.structSource.sEncoding.len() )
+    if( entity.structSource.sEncoding.getLength() )
     {
         entity.converter.setEncoding(
             OUStringToOString( entity.structSource.sEncoding , RTL_TEXTENCODING_ASCII_US ) );
