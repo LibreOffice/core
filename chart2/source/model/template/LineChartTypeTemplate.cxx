@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-19 16:50:13 $
+ *  last change: $Author: bm $ $Date: 2003-11-19 17:26:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,8 @@ uno::Reference< chart2::XDiagram > SAL_CALL
             ASSERT_EXCEPTION( ex );
         }
     }
+
+    // todo: set symbol type at data points
 
     return ChartTypeTemplate::createDiagram( aSeriesSeq );
 }
