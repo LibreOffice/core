@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gdimtf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-18 12:54:25 $
+ *  last change: $Author: rt $ $Date: 2001-06-19 07:05:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -902,7 +902,8 @@ void GDIMetaFile::Rotate( long nAngle10 )
         const double    fAngle = F_PI1800 * nAngle10;
         const double    fSin = sin( fAngle );
         const double    fCos = cos( fAngle );
-        Polygon         aPoly( Rectangle( Point(), GetPrefSize() ) );
+        Rectangle       aRect=Rectangle( Point(), GetPrefSize() );
+        Polygon         aPoly( aRect );
 
         aPoly.Rotate( Point(), fSin, fCos );
 
