@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-15 11:18:24 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,30 +162,31 @@ struct DialogImpl :
         getSelectedPackages( bool onlyFirstLevel = false );
     };
 
-    typedef void (DialogImpl::* t_clickCallback)( USHORT id );
-
-    class ThreadedPushButton : public PushButton
+    class SyncPushButton : public PushButton
     {
-        oslThread m_thread;
+    public:
+        typedef void (DialogImpl::* t_clickCallback)( USHORT id );
+        inline SyncPushButton(
+            DialogImpl * dialog, t_clickCallback cb, USHORT id )
+            : PushButton( dialog, getResId(id) ),
+              m_dialog(dialog), m_clickCallback(cb), m_id(id) {}
+        // PushButton
+        virtual void Click();
+    private:
         DialogImpl * m_dialog;
         t_clickCallback m_clickCallback;
         USHORT m_id;
+    };
 
+    class ThreadedPushButton : public SyncPushButton
+    {
+        oslThread m_thread;
     public:
-        /// called by ThreadedPushButton_callback only:
-        void action();
-
         virtual ~ThreadedPushButton();
         inline ThreadedPushButton(
             DialogImpl * dialog, t_clickCallback cb, USHORT id )
-            : PushButton( dialog, getResId(id) ),
-              m_thread( 0 ),
-              m_dialog( dialog ),
-              m_clickCallback( cb ),
-              m_id( id )
-            {}
-
-        // Button
+            : SyncPushButton( dialog, cb, id ), m_thread(0) {}
+        // PushButton
         virtual void Click();
     };
 
