@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cp $ $Date: 2001-04-09 10:55:07 $
+ *  last change: $Author: hdu $ $Date: 2001-07-06 13:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,6 +566,14 @@ ExtendedFontStruct::GetCharWidth( sal_Unicode nFrom, sal_Unicode nTo, long *pWid
     }
 
     return nConverted;
+}
+
+ULONG ExtendedFontStruct::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
+{
+    // TODO: get better info
+    // problems are 1) the X Server will lie about monospaced fonts
+    // and 2) translation into unicode and query for every unicode char is very costly
+    return 0;
 }
 
 static short
