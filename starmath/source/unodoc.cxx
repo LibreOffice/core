@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodoc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:13:01 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
-#include "smmod.hxx"
+#include "smdll.hxx"
+#include "document.hxx"
 
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
@@ -95,21 +96,12 @@ uno::Reference< uno::XInterface > SAL_CALL SmDocument_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( !SM_MOD() )
+        SmDLL::Init();
 
-    // to create the service the SW_MOD should be already initialized
-    DBG_ASSERT( SM_MOD(), "No StarMath module!" );
-
-    if ( SM_MOD() )
-    {
-        ::rtl::OUString aFactoryURL( RTL_CONSTASCII_USTRINGPARAM ( "private:factory/smath" ) );
-        const SfxObjectFactory* pFactory = SfxObjectFactory::GetFactory( aFactoryURL );
-        if ( pFactory )
-        {
-            SfxObjectShell* pShell = pFactory->CreateObject();
-            if( pShell )
-                return uno::Reference< uno::XInterface >( pShell->GetModel() );
-        }
-    }
+    SfxObjectShell* pShell = new SmDocShell( SFX_CREATE_MODE_STANDARD );
+    if( pShell )
+        return uno::Reference< uno::XInterface >( pShell->GetModel() );
 
     return uno::Reference< uno::XInterface >();
 }
