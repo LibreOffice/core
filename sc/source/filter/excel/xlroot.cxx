@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:54:41 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-// ============================================================================
 
 #ifndef SC_XLROOT_HXX
 #include "xlroot.hxx"
@@ -119,6 +117,9 @@
 #ifndef SC_FAPIHELPER_HXX
 #include "fapihelper.hxx"
 #endif
+#ifndef SC_XLCONST_HXX
+#include "xlconst.hxx"
+#endif
 #ifndef SC_XLSTYLE_HXX
 #include "xlstyle.hxx"
 #endif
@@ -144,14 +145,14 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium, ScDocument& rDocume
     meDocLang( Application::GetSettings().GetLanguage() ),
     meUILang( Application::GetSettings().GetUILanguage() ),
     maScMaxPos( MAXCOL, MAXROW, MAXTAB ),
-    maXclMaxPos( static_cast<SCCOL>(EXC_MAXCOL2),
-            static_cast<SCROW>(EXC_MAXROW2), static_cast<SCTAB>(EXC_MAXTAB2) ),
-    maMaxPos( static_cast<SCCOL>(EXC_MAXCOL2), static_cast<SCROW>(EXC_MAXROW2),
-            static_cast<SCTAB>(EXC_MAXTAB2) ),
+    maXclMaxPos( EXC_MAXCOL2, EXC_MAXROW2, EXC_MAXTAB2 ),
+    maMaxPos( EXC_MAXCOL2, EXC_MAXROW2, EXC_MAXTAB2 ),
     mnCharWidth( 110 ),
     mnScTab( 0 ),
     mbExport( bExport ),
-    mbTruncated( false ),
+    mbColTrunc( false ),
+    mbRowTrunc( false ),
+    mbTabTrunc( false ),
     mbHasPassw( false ),
     mxRD( new RootData )//!
 {
@@ -162,27 +163,12 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium, ScDocument& rDocume
     // maximum cell position
     switch( meBiff )
     {
-        case xlBiff2:   maXclMaxPos.Set(
-                            static_cast<SCCOL>(EXC_MAXCOL2),
-                            static_cast<SCROW>(EXC_MAXROW2),
-                            static_cast<SCTAB>(EXC_MAXTAB2) );  break;
-        case xlBiff3:   maXclMaxPos.Set(
-                            static_cast<SCCOL>(EXC_MAXCOL3),
-                            static_cast<SCROW>(EXC_MAXROW3),
-                            static_cast<SCTAB>(EXC_MAXTAB3) );  break;
-        case xlBiff4:   maXclMaxPos.Set(
-                            static_cast<SCCOL>(EXC_MAXCOL4),
-                            static_cast<SCROW>(EXC_MAXROW4),
-                            static_cast<SCTAB>(EXC_MAXTAB4) );  break;
+        case xlBiff2:   maXclMaxPos.Set( EXC_MAXCOL2, EXC_MAXROW2, EXC_MAXTAB2 );   break;
+        case xlBiff3:   maXclMaxPos.Set( EXC_MAXCOL3, EXC_MAXROW3, EXC_MAXTAB3 );   break;
+        case xlBiff4:   maXclMaxPos.Set( EXC_MAXCOL4, EXC_MAXROW4, EXC_MAXTAB4 );   break;
         case xlBiff5:
-        case xlBiff7:   maXclMaxPos.Set(
-                            static_cast<SCCOL>(EXC_MAXCOL5),
-                            static_cast<SCROW>(EXC_MAXROW5),
-                            static_cast<SCTAB>(EXC_MAXTAB5) );  break;
-        case xlBiff8:   maXclMaxPos.Set(
-                            static_cast<SCCOL>(EXC_MAXCOL8),
-                            static_cast<SCROW>(EXC_MAXROW8),
-                            static_cast<SCTAB>(EXC_MAXTAB8) );  break;
+        case xlBiff7:   maXclMaxPos.Set( EXC_MAXCOL5, EXC_MAXROW5, EXC_MAXTAB5 );   break;
+        case xlBiff8:   maXclMaxPos.Set( EXC_MAXCOL8, EXC_MAXROW8, EXC_MAXTAB8 );   break;
         default:        DBG_ERROR_BIFF();
     }
     maMaxPos.SetCol( ::std::min( maScMaxPos.Col(), maXclMaxPos.Col() ) );
@@ -197,12 +183,12 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium, ScDocument& rDocume
 
     // extended document options
     if( mrDoc.GetExtDocOptions() )
-        mpExtDocOpt.reset( new ScExtDocOptions( *mrDoc.GetExtDocOptions() ) );
+        mxExtDocOpt.reset( new ScExtDocOptions( *mrDoc.GetExtDocOptions() ) );
     else
-        mpExtDocOpt.reset( new ScExtDocOptions );
+        mxExtDocOpt.reset( new ScExtDocOptions );
 
     // filter tracer
-    mpTracer.reset( new XclTracer( maDocUrl, CREATE_OUSTRING(
+    mxTracer.reset( new XclTracer( maDocUrl, CREATE_OUSTRING(
         mbExport ? "Office.Tracing/Export/Excel" : "Office.Tracing/Import/Excel" ) ) );
 }
 
@@ -312,7 +298,7 @@ SfxObjectShell* XclRoot::GetDocShell() const
 ScModelObj* XclRoot::GetDocModelObj() const
 {
     SfxObjectShell* pDocShell = GetDocShell();
-    return pDocShell ? ScModelObj::getImplementation( Reference< XModel >( pDocShell->GetModel() ) ) : NULL;
+    return pDocShell ? ScModelObj::getImplementation( Reference< XModel >( pDocShell->GetModel() ) ) : 0;
 }
 
 SfxPrinter* XclRoot::GetPrinter() const
@@ -335,27 +321,33 @@ ScRangeName& XclRoot::GetNamedRanges() const
     return *GetDoc().GetRangeName();
 }
 
+SdrPage* XclRoot::GetSdrPage( SCTAB nScTab ) const
+{
+    return GetDoc().GetDrawLayer() ?
+        GetDoc().GetDrawLayer()->GetPage( static_cast< sal_uInt16 >( nScTab ) ) : 0;
+}
+
 ScEditEngineDefaulter& XclRoot::GetEditEngine() const
 {
-    if( !mrData.mpEditEngine.get() )
+    if( !mrData.mxEditEngine.get() )
     {
-        mrData.mpEditEngine.reset( new ScEditEngineDefaulter( GetDoc().GetEnginePool() ) );
-        ScEditEngineDefaulter& rEE = *mrData.mpEditEngine;
+        mrData.mxEditEngine.reset( new ScEditEngineDefaulter( GetDoc().GetEnginePool() ) );
+        ScEditEngineDefaulter& rEE = *mrData.mxEditEngine;
         rEE.SetRefMapMode( MAP_100TH_MM );
         rEE.SetEditTextObjectPool( GetDoc().GetEditPool() );
         rEE.SetUpdateMode( FALSE );
         rEE.EnableUndo( FALSE );
         rEE.SetControlWord( rEE.GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
     }
-    return *mrData.mpEditEngine;
+    return *mrData.mxEditEngine;
 }
 
 ScHeaderEditEngine& XclRoot::GetHFEditEngine() const
 {
-    if( !mrData.mpHFEditEngine.get() )
+    if( !mrData.mxHFEditEngine.get() )
     {
-        mrData.mpHFEditEngine.reset( new ScHeaderEditEngine( EditEngine::CreatePool(), TRUE ) );
-        ScHeaderEditEngine& rEE = *mrData.mpHFEditEngine;
+        mrData.mxHFEditEngine.reset( new ScHeaderEditEngine( EditEngine::CreatePool(), TRUE ) );
+        ScHeaderEditEngine& rEE = *mrData.mxHFEditEngine;
         rEE.SetRefMapMode( MAP_TWIP );  // headers/footers use twips as default metric
         rEE.SetUpdateMode( FALSE );
         rEE.EnableUndo( FALSE );
@@ -371,39 +363,44 @@ ScHeaderEditEngine& XclRoot::GetHFEditEngine() const
         pEditSet->Put( aItemSet.Get( ATTR_CTL_FONT_HEIGHT ), EE_CHAR_FONTHEIGHT_CTL );
         rEE.SetDefaults( pEditSet );    // takes ownership
    }
-    return *mrData.mpHFEditEngine;
+    return *mrData.mxHFEditEngine;
 }
 
 EditEngine& XclRoot::GetDrawEditEngine() const
 {
-    if( !mrData.mpDrawEditEng.get() )
+    if( !mrData.mxDrawEditEng.get() )
     {
-        mrData.mpDrawEditEng.reset( new EditEngine( &GetDoc().GetDrawLayer()->GetItemPool() ) );
-        EditEngine& rEE = *mrData.mpDrawEditEng;
+        mrData.mxDrawEditEng.reset( new EditEngine( &GetDoc().GetDrawLayer()->GetItemPool() ) );
+        EditEngine& rEE = *mrData.mxDrawEditEng;
         rEE.SetRefMapMode( MAP_100TH_MM );
         rEE.SetUpdateMode( FALSE );
         rEE.EnableUndo( FALSE );
         rEE.SetControlWord( rEE.GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
     }
-    return *mrData.mpDrawEditEng;
+    return *mrData.mxDrawEditEng;
 }
 
 ScExtDocOptions& XclRoot::GetExtDocOptions() const
 {
-    return *mrData.mpExtDocOpt;
+    return *mrData.mxExtDocOpt;
 }
 
 XclTracer& XclRoot::GetTracer() const
 {
-    return *mrData.mpTracer;
+    return *mrData.mxTracer;
 }
 
 bool XclRoot::CheckCellAddress( const ScAddress& rPos, const ScAddress& rMaxPos ) const
 {
-    bool bValid = (rPos.Col() <= rMaxPos.Col()) && (rPos.Row() <= rMaxPos.Row()) && (rPos.Tab() <= rMaxPos.Tab());
+    bool bValidCol = (0 <= rPos.Col()) && (rPos.Col() <= rMaxPos.Col());
+    bool bValidRow = (0 <= rPos.Row()) && (rPos.Row() <= rMaxPos.Row());
+    bool bValidTab = (0 <= rPos.Tab()) && (rPos.Tab() <= rMaxPos.Tab());
+    bool bValid = bValidCol && bValidRow && bValidTab;
     if( !bValid )
     {
-        mrData.mbTruncated = true;
+        mrData.mbColTrunc |= !bValidCol;
+        mrData.mbRowTrunc |= !bValidRow;
+        mrData.mbTabTrunc |= (rPos.Tab() > rMaxPos.Tab());  // do not warn for deleted refs
         GetTracer().TraceInvalidAddress(rPos, rMaxPos);
     }
     return bValid;
@@ -416,17 +413,19 @@ bool XclRoot::CheckCellRange( ScRange& rRange, const ScAddress& rMaxPos ) const
     // check start position
     bool bValidStart = CheckCellAddress( rRange.aStart, rMaxPos );
 
-    // check & correct end position
     if( bValidStart )
     {
-        CheckCellAddress( rRange.aEnd, rMaxPos );
-
-        if( rRange.aEnd.Col() > rMaxPos.Col() )
-            rRange.aEnd.SetCol( rMaxPos.Col() );
-        if( rRange.aEnd.Row() > rMaxPos.Row() )
-            rRange.aEnd.SetRow( rMaxPos.Row() );
-        if( rRange.aEnd.Tab() > rMaxPos.Tab() )
-            rRange.aEnd.SetTab( rMaxPos.Tab() );
+        // check & correct end position
+        ScAddress& rEnd = rRange.aEnd;
+        if( !CheckCellAddress( rEnd, rMaxPos ) )
+        {
+            if( rEnd.Col() > rMaxPos.Col() )
+                rEnd.SetCol( rMaxPos.Col() );
+            if( rEnd.Row() > rMaxPos.Row() )
+                rEnd.SetRow( rMaxPos.Row() );
+            if( rEnd.Tab() > rMaxPos.Tab() )
+                rEnd.SetTab( rMaxPos.Tab() );
+        }
     }
 
     return bValidStart;
