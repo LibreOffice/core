@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: bootstrap.pl,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kr $ $Date: 2001-11-01 16:44:07 $
+#   last change: $Author: kr $ $Date: 2002-01-07 16:16:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,10 +100,10 @@ if (!$rc) {
 }
 
 if ($ENV{GUI} eq "WNT") {
-    $rc = system "./testbootstrap", "auxaux", "-env:iniName=ini.ini";
+    $rc = system "./testbootstrap", "auxaux", "-env:iniName=ini.ini", '-env:MYBOOTSTRAPTESTVALUE=$CUSTOMINIVALUE';
 }
 else {
-    $rc = system "./testbootstrap", "auxaux", "-env:iniName=inirc";
+    $rc = system "./testbootstrap", "auxaux", "-env:iniName=inirc", '-env:MYBOOTSTRAPTESTVALUE=$CUSTOMINIVALUE';
 }
 if (!$rc) {
     $comment = $comment . "custom ini test not passed\n";
@@ -164,10 +164,10 @@ if (!$rc) {
 }
 
 if ($ENV{GUI} eq "WNT") {
-    $rc = system "./testbootstrap", "inherited_overwritten_value", '-env:MYBOOTSTRAPTESTVALUE=$INHERITED_OVERWRITTEN_VALUE', "-env:iniName=ini.ini";
+    $rc = system "./testbootstrap", "not_overwritten", '-env:MYBOOTSTRAPTESTVALUE=$INHERITED_OVERWRITTEN_VALUE', "-env:iniName=ini.ini";
 }
 else {
-    $rc = system "./testbootstrap", "inherited_overwritten_value", '-env:MYBOOTSTRAPTESTVALUE=$INHERITED_OVERWRITTEN_VALUE', "-env:iniName=inirc";
+    $rc = system "./testbootstrap", "not_overwritten", '-env:MYBOOTSTRAPTESTVALUE=$INHERITED_OVERWRITTEN_VALUE', "-env:iniName=inirc";
 }
 if (!$rc) {
     $comment = $comment . "inherited overwritten value not passed\n";
@@ -177,17 +177,17 @@ if (!$rc) {
 delete $ENV{MYBOOTSTRAPTESTVALUE};
 
 
-$rc = system "./testbootstrap", "defaultvalue", "-env:INIFILENAME=", "-env:Default=defaultvalue";
+$rc = system "./testbootstrap", "defaultvalue", "-env:INIFILENAME=", "-env:Default=defaultvalue", "-env:USEDEFAULT=1";
 if (!$rc) {
     $comment = $comment . "default test from parameter not passed\n";
     $state = 0;
 }
 
 if ($ENV{GUI} eq "WNT") {
-    $rc = system "./testbootstrap",  "defaultValue", "-env:iniName=default.ini", "-env:INIFILENAME=";
+    $rc = system "./testbootstrap",  "defaultValue", "-env:iniName=default.ini", "-env:INIFILENAME=", "-env:USEDEFAULT=1";
 }
 else {
-    $rc = system "./testbootstrap",  "defaultValue", "-env:iniName=defaultrc", "-env:INIFILENAME=";
+    $rc = system "./testbootstrap",  "defaultValue", "-env:iniName=defaultrc", "-env:INIFILENAME=", "-env:USEDEFAULT=1";
 }
 if (!$rc) {
     $comment = $comment . "default test from custom ini not passed\n";

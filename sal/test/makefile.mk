@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kr $ $Date: 2001-11-01 16:44:07 $
+#   last change: $Author: kr $ $Date: 2002-01-07 16:16:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,7 +129,7 @@ $(BIN)$/$(APP2TARGET).exe : $(APP2TARGETN)
     cp $(APP2TARGETN) $@
 
 $(BIN)$/inirc:
-        echo "MYBOOTSTRAPTESTVALUE=auxaux"   > $@
+        echo "CUSTOMINIVALUE=auxaux"   > $@
         echo "INHERITED_OVERWRITTEN_VALUE=inherited_overwritten_value" >> $@
 
 $(BIN)$/defaultrc:
@@ -141,7 +141,7 @@ ALL:  $(BIN)$/ini.ini		\
       $(BIN)$/default.ini
 
 $(BIN)$/ini.ini:
-        echo MYBOOTSTRAPTESTVALUE=auxaux     > $@
+        echo CUSTOMINIVALUE=auxaux     > $@
         echo INHERITED_OVERWRITTEN_VALUE=inherited_overwritten_value   >> $@
 
 
