@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-06 09:49:52 $
+ *  last change: $Author: mt $ $Date: 2002-11-08 10:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,7 +712,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                 continue;
             }
 
-            if ( pNextFeature && ( pNextFeature->GetStart() == nIndex ) )
+            if ( pNextFeature && ( pNextFeature->GetStart() == nIndex ) && ( pNextFeature->GetItem()->Which() != EE_FEATURE_FIELD ) )
             {
                 WriteItemAsRTF( *pNextFeature->GetItem(), rOutput, nNode, nIndex, aFontTable, aColorList );
                 pNextFeature = pNode->GetCharAttribs().FindFeature( pNextFeature->GetStart() + 1 );
