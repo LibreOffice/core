@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: er $ $Date: 2002-06-26 17:15:49 $
+ *  last change: $Author: er $ $Date: 2002-07-25 09:59:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef _COM_SUN_STAR_I18N_CALENDARDISPLAYINDEX_HPP_
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_CALENDARDISPLAYCODE_HPP_
+#include <drafts/com/sun/star/i18n/CalendarDisplayCode.hpp>
 #endif
 #ifndef _COM_SUN_STAR_I18N_AMPMVALUE_HPP_
 #include <com/sun/star/i18n/AmPmValue.hpp>
@@ -558,7 +561,7 @@ SvNumberformat::SvNumberformat( ImpSvNumberformatScan& rSc, LanguageType eLge )
 {
 }
 
-void SvNumberformat::CopyNumberformat( const SvNumberformat& rFormat )
+void SvNumberformat::ImpCopyNumberformat( const SvNumberformat& rFormat )
 {
     sFormatstring = rFormat.sFormatstring;
     eType         = rFormat.eType;
@@ -578,13 +581,13 @@ void SvNumberformat::CopyNumberformat( const SvNumberformat& rFormat )
 SvNumberformat::SvNumberformat( SvNumberformat& rFormat )
     : rScan(rFormat.rScan), bStarFlag( rFormat.bStarFlag )
 {
-    CopyNumberformat( rFormat );
+    ImpCopyNumberformat( rFormat );
 }
 
 SvNumberformat::SvNumberformat( SvNumberformat& rFormat, ImpSvNumberformatScan& rSc )
     : rScan(rSc), bStarFlag( rFormat.bStarFlag )
 {
-    CopyNumberformat( rFormat );
+    ImpCopyNumberformat( rFormat );
 }
 
 
@@ -1527,7 +1530,7 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
         SvNumberformat* pFormat = new SvNumberformat( aStr, &rScan, &rISc,
             nCheckPos, eLnge, bStandard );
         DBG_ASSERT( !nCheckPos, "SvNumberformat::Load: NewCurrencyRescan nCheckPos" );
-        CopyNumberformat( *pFormat );
+        ImpCopyNumberformat( *pFormat );
         delete pFormat;
         // Zustaende wiederherstellen
         eType |= nDefined;
@@ -1572,7 +1575,7 @@ void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
     DBG_ASSERT( pFormat, "SvNumberformat::ConvertLanguage: Conversion ohne Format" );
     if ( pFormat )
     {
-        CopyNumberformat( *pFormat );
+        ImpCopyNumberformat( *pFormat );
         // aus Formatter/Scanner uebernommene Werte zuruecksetzen
         if ( bSystem )
             eLnge = LANGUAGE_SYSTEM;
@@ -2596,7 +2599,7 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
 }
 
 
-BOOL SvNumberformat::IsOtherCalendar( const ImpSvNumFor& rNumFor ) const
+BOOL SvNumberformat::ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const
 {
     if ( GetCal().getUniqueID() != sGregorian )
         return FALSE;
@@ -2624,7 +2627,7 @@ BOOL SvNumberformat::IsOtherCalendar( const ImpSvNumFor& rNumFor ) const
 }
 
 
-void SvNumberformat::SwitchToOtherCalendar( String& rOrgCalendar, double& fOrgDateTime )
+void SvNumberformat::ImpSwitchToOtherCalendar( String& rOrgCalendar, double& fOrgDateTime )
 {
     CalendarWrapper& rCal = GetCal();
     if ( rCal.getUniqueID() == sGregorian )
@@ -2654,7 +2657,7 @@ void SvNumberformat::SwitchToOtherCalendar( String& rOrgCalendar, double& fOrgDa
 }
 
 
-void SvNumberformat::SwitchToGregorianCalendar( const String& rOrgCalendar, double fOrgDateTime )
+void SvNumberformat::ImpSwitchToGregorianCalendar( const String& rOrgCalendar, double fOrgDateTime )
 {
     CalendarWrapper& rCal = GetCal();
     if ( rOrgCalendar.Len() && rCal.getUniqueID() != sGregorian )
@@ -2665,7 +2668,7 @@ void SvNumberformat::SwitchToGregorianCalendar( const String& rOrgCalendar, doub
 }
 
 
-BOOL SvNumberformat::FallBackToGregorianCalendar( String& rOrgCalendar, double& fOrgDateTime )
+BOOL SvNumberformat::ImpFallBackToGregorianCalendar( String& rOrgCalendar, double& fOrgDateTime )
 {
     using namespace ::com::sun::star::i18n;
     CalendarWrapper& rCal = GetCal();
@@ -2691,13 +2694,16 @@ BOOL SvNumberformat::FallBackToGregorianCalendar( String& rOrgCalendar, double& 
 }
 
 
-void lcl_SvNumberformat_AppendEraG( String& OutString, const CalendarWrapper& rCal )
+// static
+void SvNumberformat::ImpAppendEraG( String& OutString,
+        const CalendarWrapper& rCal, sal_Int16 nNatNum )
 {
     using namespace ::com::sun::star::i18n;
-    sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
+    using namespace ::drafts::com::sun::star::i18n;
     if ( rCal.getUniqueID().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "gengou" ) ) )
     {
         sal_Unicode cEra;
+        sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
         switch ( nVal )
         {
             case 1 :    cEra = 'M'; break;
@@ -2710,7 +2716,7 @@ void lcl_SvNumberformat_AppendEraG( String& OutString, const CalendarWrapper& rC
         OutString += cEra;
     }
     else
-        OutString += rCal.getDisplayName( CalendarDisplayIndex::ERA, nVal, 0 );
+        OutString += rCal.getDisplayString( CalendarDisplayCode::SHORT_ERA, nNatNum );
 }
 
 
@@ -2719,6 +2725,7 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                                    String& OutString)
 {
     using namespace ::com::sun::star::i18n;
+    using namespace ::drafts::com::sun::star::i18n;
     BOOL bRes = FALSE;
     CalendarWrapper& rCal = GetCal();
     double fDiff = DateTime(*(rScan.GetNullDate())) - rCal.getEpochStart();
@@ -2726,13 +2733,14 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
     rCal.setDateTime( fNumber );
     String aOrgCalendar;        // empty => not changed yet
     double fOrgDateTime;
-    BOOL bOtherCalendar = IsOtherCalendar( NumFor[nIx] );
+    BOOL bOtherCalendar = ImpIsOtherCalendar( NumFor[nIx] );
     if ( bOtherCalendar )
-        SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
-    if ( FallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime ) )
+        ImpSwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+    if ( ImpFallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime ) )
         bOtherCalendar = FALSE;
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     const USHORT nAnz = NumFor[nIx].GetnAnz();
+    sal_Int16 nNatNum = NumFor[nIx].GetNatNum().GetNatNum();
     for (USHORT i = 0; i < nAnz; i++)
     {
         switch (rInfo.nTypeArray[i])
@@ -2745,7 +2753,7 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                 }
                 rCal.loadCalendar( rInfo.sStrArray[i], rLoc().getLocale() );
                 rCal.setDateTime( fOrgDateTime );
-                FallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                ImpFallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 break;
             case SYMBOLTYPE_STAR:
                 if( bStarFlag )
@@ -2764,149 +2772,117 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                 OutString += rInfo.sStrArray[i];
                 break;
             case NF_KEY_M:                  // M
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH ) + 1;
-                OutString += ImpIntToString( nIx, nVal );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::SHORT_MONTH, nNatNum );
             break;
             case NF_KEY_MM:                 // MM
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH ) + 1;
-                OutString += ImpIntToString( nIx, nVal, 2 );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_MONTH, nNatNum );
             break;
             case NF_KEY_MMM:                // MMM
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::MONTH,
-                    nVal, 0 );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::SHORT_MONTH_NAME, nNatNum );
             break;
             case NF_KEY_MMMM:               // MMMM
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::MONTH,
-                    nVal, 1 );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_MONTH_NAME, nNatNum );
             break;
             case NF_KEY_MMMMM:              // MMMMM
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::MONTH,
-                    nVal, 1 ).GetChar(0);
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_MONTH_NAME, nNatNum ).GetChar(0);
             break;
             case NF_KEY_Q:                  // Q
             {
                 OutString += 'Q';
                 if ( bOtherCalendar )
-                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                    ImpSwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
                 OutString += sal_Unicode( '1' + (nVal / 3) );
                 if ( bOtherCalendar )
-                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+                    ImpSwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_QQ:                 // QQ
             {
                 if ( bOtherCalendar )
-                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                    ImpSwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
                 OutString += rLoc().getQuarterWord( nVal / 3 );
                 if ( bOtherCalendar )
-                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+                    ImpSwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_D:                  // D
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
-                OutString += ImpIntToString( nIx, nVal );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::SHORT_DAY, nNatNum );
             break;
             case NF_KEY_DD:                 // DD
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
-                OutString += ImpIntToString( nIx, nVal, 2 );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_DAY, nNatNum );
             break;
             case NF_KEY_DDD:                // DDD
             {
                 if ( bOtherCalendar )
-                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
-                    nVal, 0 );
+                    ImpSwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::SHORT_DAY_NAME, nNatNum );
                 if ( bOtherCalendar )
-                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+                    ImpSwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_DDDD:               // DDDD
             {
                 if ( bOtherCalendar )
-                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
-                    nVal, 1 );
+                    ImpSwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_DAY_NAME, nNatNum );
                 if ( bOtherCalendar )
-                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+                    ImpSwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_YY:                 // YY
             {
                 if ( bOtherCalendar )
-                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
-                if ( 99 < nVal )
-                    nVal %= 100;
-                OutString += ImpIntToString( nIx, nVal, 2 );
+                    ImpSwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::SHORT_YEAR, nNatNum );
                 if ( bOtherCalendar )
-                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+                    ImpSwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_YYYY:               // YYYY
             {
                 if ( bOtherCalendar )
-                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
-                OutString += ImpIntToString( nIx, nVal );
+                    ImpSwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_YEAR, nNatNum );
                 if ( bOtherCalendar )
-                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+                    ImpSwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_EC:                 // E
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
-                OutString += ImpIntToString( nIx, nVal );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::SHORT_YEAR, nNatNum );
             break;
             case NF_KEY_EEC:                // EE
             case NF_KEY_R:                  // R
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
-                OutString += ImpIntToString( nIx, nVal, 2 );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_YEAR, nNatNum );
             break;
             case NF_KEY_NN:                 // NN
             case NF_KEY_AAA:                // AAA
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
-                    nVal, 0 );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::SHORT_DAY_NAME, nNatNum );
             break;
             case NF_KEY_NNN:                // NNN
             case NF_KEY_AAAA:               // AAAA
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
-                    nVal, 1 );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_DAY_NAME, nNatNum );
             break;
             case NF_KEY_NNNN:               // NNNN
             {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
-                    nVal, 1 );
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_DAY_NAME, nNatNum );
                 OutString += rLoc().getLongDateDayOfWeekSep();
             }
             break;
@@ -2917,30 +2893,19 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
             }
             break;
             case NF_KEY_G:                  // G
-                lcl_SvNumberformat_AppendEraG( OutString, rCal );
+                ImpAppendEraG( OutString, rCal, nNatNum );
             break;
             case NF_KEY_GG:                 // GG
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::ERA,
-                    nVal, 0 );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::SHORT_ERA, nNatNum );
             break;
             case NF_KEY_GGG:                // GGG
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::ERA,
-                    nVal, 1 );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_ERA, nNatNum );
             break;
             case NF_KEY_RR:                 // RR => GGGEE
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::ERA,
-                    nVal, 1 );
-                nVal = rCal.getValue( CalendarFieldIndex::YEAR );
-                OutString += ImpIntToString( nIx, nVal, 2 );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_YEAR_AND_ERA, nNatNum );
             break;
         }
     }
@@ -2954,6 +2919,7 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                                        String& OutString)
 {
     using namespace ::com::sun::star::i18n;
+    using namespace ::drafts::com::sun::star::i18n;
     BOOL bRes = FALSE;
 
     CalendarWrapper& rCal = GetCal();
@@ -2962,11 +2928,12 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     rCal.setDateTime( fNumber );
     String aOrgCalendar;        // empty => not changed yet
     double fOrgDateTime;
-    BOOL bOtherCalendar = IsOtherCalendar( NumFor[nIx] );
+    BOOL bOtherCalendar = ImpIsOtherCalendar( NumFor[nIx] );
     if ( bOtherCalendar )
-        SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
-    if ( FallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime ) )
+        ImpSwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+    if ( ImpFallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime ) )
         bOtherCalendar = FALSE;
+    sal_Int16 nNatNum = NumFor[nIx].GetNatNum().GetNatNum();
 
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     BOOL bInputLine;
@@ -3058,7 +3025,7 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                 }
                 rCal.loadCalendar( rInfo.sStrArray[i], rLoc().getLocale() );
                 rCal.setDateTime( fOrgDateTime );
-                FallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                ImpFallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 break;
             case SYMBOLTYPE_STAR:
                 if( bStarFlag )
@@ -3129,147 +3096,117 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                 OutString += ImpIntToString( nIx, nSec, 2 );
             break;
             case NF_KEY_M:                  // M
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH ) + 1;
-                OutString += ImpIntToString( nIx, nVal );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::SHORT_MONTH, nNatNum );
             break;
             case NF_KEY_MM:                 // MM
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH ) + 1;
-                OutString += ImpIntToString( nIx, nVal, 2 );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_MONTH, nNatNum );
             break;
             case NF_KEY_MMM:                // MMM
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::MONTH,
-                    nVal, 0 );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::SHORT_MONTH_NAME, nNatNum );
             break;
             case NF_KEY_MMMM:               // MMMM
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::MONTH,
-                    nVal, 1 );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_MONTH_NAME, nNatNum );
             break;
             case NF_KEY_MMMMM:              // MMMMM
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::MONTH,
-                    nVal, 1 ).GetChar(0);
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_MONTH_NAME, nNatNum ).GetChar(0);
             break;
             case NF_KEY_Q:                  // Q
             {
                 OutString += 'Q';
                 if ( bOtherCalendar )
-                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                    ImpSwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
                 OutString += sal_Unicode( '1' + (nVal / 3) );
                 if ( bOtherCalendar )
-                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+                    ImpSwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_QQ:                 // QQ
             {
                 if ( bOtherCalendar )
-                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                    ImpSwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
                 OutString += rLoc().getQuarterWord( nVal / 3 );
                 if ( bOtherCalendar )
-                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+                    ImpSwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_D:                  // D
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
-                OutString += ImpIntToString( nIx, nVal );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::SHORT_DAY, nNatNum );
             break;
             case NF_KEY_DD:                 // DD
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
-                OutString += ImpIntToString( nIx, nVal, 2 );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_DAY, nNatNum );
             break;
             case NF_KEY_DDD:                // DDD
             {
                 if ( bOtherCalendar )
-                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
-                    nVal, 0 );
+                    ImpSwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::SHORT_DAY_NAME, nNatNum );
                 if ( bOtherCalendar )
-                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+                    ImpSwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_DDDD:               // DDDD
             {
                 if ( bOtherCalendar )
-                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
-                    nVal, 1 );
+                    ImpSwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_DAY_NAME, nNatNum );
                 if ( bOtherCalendar )
-                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+                    ImpSwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_YY:                 // YY
             {
                 if ( bOtherCalendar )
-                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
-                if ( 99 < nVal )
-                    nVal %= 100;
-                OutString += ImpIntToString( nIx, nVal, 2 );
+                    ImpSwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::SHORT_YEAR, nNatNum );
                 if ( bOtherCalendar )
-                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+                    ImpSwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_YYYY:               // YYYY
             {
                 if ( bOtherCalendar )
-                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
-                OutString += ImpIntToString( nIx, nVal );
+                    ImpSwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_YEAR, nNatNum );
                 if ( bOtherCalendar )
-                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+                    ImpSwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_EC:                 // E
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
-                OutString += ImpIntToString( nIx, nVal );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::SHORT_YEAR, nNatNum );
             break;
             case NF_KEY_EEC:                // EE
             case NF_KEY_R:                  // R
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
-                OutString += ImpIntToString( nIx, nVal, 2 );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_YEAR, nNatNum );
             break;
             case NF_KEY_NN:                 // NN
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
-                    nVal, 0 );
-            }
+            case NF_KEY_AAA:                // AAA
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::SHORT_DAY_NAME, nNatNum );
             break;
             case NF_KEY_NNN:                // NNN
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
-                    nVal, 1 );
-            }
+            case NF_KEY_AAAA:               // AAAA
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_DAY_NAME, nNatNum );
             break;
             case NF_KEY_NNNN:               // NNNN
             {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
-                    nVal, 1 );
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_DAY_NAME, nNatNum );
                 OutString += rLoc().getLongDateDayOfWeekSep();
             }
             break;
@@ -3280,30 +3217,19 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             }
             break;
             case NF_KEY_G:                  // G
-                lcl_SvNumberformat_AppendEraG( OutString, rCal );
+                ImpAppendEraG( OutString, rCal, nNatNum );
             break;
             case NF_KEY_GG:                 // GG
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::ERA,
-                    nVal, 0 );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::SHORT_ERA, nNatNum );
             break;
             case NF_KEY_GGG:                // GGG
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::ERA,
-                    nVal, 1 );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_ERA, nNatNum );
             break;
             case NF_KEY_RR:                 // RR => GGGEE
-            {
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
-                OutString += rCal.getDisplayName( CalendarDisplayIndex::ERA,
-                    nVal, 1 );
-                nVal = rCal.getValue( CalendarFieldIndex::YEAR );
-                OutString += ImpIntToString( nIx, nVal, 2 );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_YEAR_AND_ERA, nNatNum );
             break;
         }
     }
