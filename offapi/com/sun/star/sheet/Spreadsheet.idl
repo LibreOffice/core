@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Spreadsheet.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:21:13 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ service Spreadsheet
 
     //=========================================================================
 
-    [optional] service com::sun::star::sheet::Scenario;
+    service com::sun::star::sheet::Scenario;
 
     //=========================================================================
 
@@ -236,29 +236,17 @@ service Spreadsheet
      */
     interface com::sun::star::sheet::XSheetLinkable;
 
-    //-------------------------------------------------------------------------
-
-    interface com::sun::star::sheet::XScenario;
-
     //=========================================================================
 
     /** specifies if the sheet is visible.
      */
-    [readonly, property] boolean IsVisible;
+    [property] boolean IsVisible;
 
     //-------------------------------------------------------------------------
 
     /** specifies the page style of the sheet.
      */
-    [readonly, property] string PageStyle;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies the layout of the sheet as represented by the
-        <type scope="com::sun::star::text">WritingMode2</type> constants
-        Only the both constants LR_TB and RL_TB are supported.
-     */
-    [optional, property] short TableLayout;
+    [property] string PageStyle;
 
     //-------------------------------------------------------------------------
 
