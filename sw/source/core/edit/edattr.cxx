@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-23 17:34:17 $
+ *  last change: $Author: jp $ $Date: 2001-08-16 15:25:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
 #endif
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
 
 #ifndef _TXATBASE_HXX //autogen
 #include <txatbase.hxx>
@@ -122,17 +125,8 @@
 #include <breakit.hxx>
 #endif
 
-#if SUPD<614
-#ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HDL_
-#include <com/sun/star/text/ScriptType.hdl>
-#endif
-using namespace ::com::sun::star::text;
-#else
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
-#include <com/sun/star/i18n/ScriptType.hdl>
-#endif
+
 using namespace ::com::sun::star::i18n;
-#endif
 
 /*************************************
  * harte Formatierung (Attribute)
@@ -484,41 +478,57 @@ USHORT SwEditShell::GetScriptType() const
                                     : PCURCRSR->GetMark();
             if( pStt == pEnd || *pStt == *pEnd )
             {
-                if( pStt->nNode.GetNode().IsTxtNode() )
+                const SwTxtNode* pTNd = pStt->nNode.GetNode().GetTxtNode();
+                if( pTNd )
                 {
-                    const String& rTxt = pStt->nNode.GetNode().
-                                                    GetTxtNode()->GetTxt();
+                    xub_StrLen nPos = pStt->nContent.GetIndex();
+                    //Task 90448: we need the scripttype of the previous
+                    //              position, if no selection exist!
+                    if( nPos )
+                    {
+                        SwIndex aIdx( pStt->nContent );
+                        if( pTNd->GoPrevious( &aIdx ) )
+                            nPos = aIdx.GetIndex();
+                    }
                     nRet |= lcl_SetScriptFlags( pBreakIt->xBreak->
-                        getScriptType( rTxt, pStt->nContent.GetIndex() ));
+                                    getScriptType( pTNd->GetTxt(), nPos ));
                 }
             }
             else
             {
-                ULONG nEnd = pEnd->nNode.GetIndex();
+                ULONG nEndIdx = pEnd->nNode.GetIndex();
                 SwNodeIndex aIdx( pStt->nNode );
-                for( ; aIdx.GetIndex() <= nEnd; aIdx++ )
+                for( ; aIdx.GetIndex() <= nEndIdx; aIdx++ )
                     if( aIdx.GetNode().IsTxtNode() )
                     {
                         const String& rTxt = aIdx.GetNode().GetTxtNode()->GetTxt();
                         xub_StrLen nChg = aIdx == pStt->nNode
                                                 ? pStt->nContent.GetIndex()
                                                 : 0,
-                                    nLen = aIdx == nEnd
+                                    nEndPos = aIdx == nEndIdx
                                                 ? pEnd->nContent.GetIndex()
                                                 : rTxt.Len();
-                        ASSERT( nLen <= rTxt.Len(), "Index outside the range - endless loop!" );
-                        if( nLen > rTxt.Len() )
-                            nLen = rTxt.Len();
+                        ASSERT( nEndPos <= rTxt.Len(), "Index outside the range - endless loop!" );
+                        if( nEndPos > rTxt.Len() )
+                            nEndPos = rTxt.Len();
 
+                        BOOL bFirstCall = TRUE;
                         USHORT nScript = pBreakIt->xBreak->getScriptType(
                                                                 rTxt, nChg );
                         if( ScriptType::WEAK == nScript )
+                        {
+                            bFirstCall = FALSE;
                             nChg = pBreakIt->xBreak->endOfScript(
                                                         rTxt, nChg, nScript );
+                        }
 
-                        while( nChg < nLen )
+                        while( nChg < nEndPos )
                         {
-                            nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
+                            if( bFirstCall )
+                                bFirstCall = FALSE;
+                            else
+                                nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
+
                             nRet |= lcl_SetScriptFlags( nScript );
                             if( (SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN |
                                 SCRIPTTYPE_COMPLEX) == nRet )
