@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: tbe $ $Date: 2002-07-24 16:30:00 $
+ *  last change: $Author: tbe $ $Date: 2002-07-25 11:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1735,14 +1735,6 @@ void Menu::SelectItem( USHORT nItemId )
     }
 
     return mxAccessible;
-}
-
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > Menu::GetAccessible( BOOL bCreate ) const
-{
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
-    if( pWindow )
-        xAcc = pWindow->GetAccessible( bCreate );
-    return xAcc;
 }
 
 void Menu::SetAccessible( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& rxAccessible )
@@ -3772,18 +3764,6 @@ void MenuFloatingWindow::Command( const CommandEvent& rCEvt )
         xAcc = pMenu->GetAccessible();
 
     return xAcc;
-
-    // old
-
-    /*
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
-
-    UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
-    if ( pWrapper )
-        xAcc = pWrapper->CreateAccessible( this, pMenu );
-
-    return xAcc;
-    */
 }
 
 
@@ -4486,16 +4466,4 @@ void MenuBarWindow::GetFocus()
         xAcc = pMenu->GetAccessible();
 
     return xAcc;
-
-    // old
-
-    /*
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
-
-    UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
-    if ( pWrapper )
-        xAcc = pWrapper->CreateAccessible( this, pMenu );
-
-    return xAcc;
-    */
 }
