@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:23:23 $
+ *  last change: $Author: vg $ $Date: 2003-07-21 11:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,7 +738,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             const SfxItemSet* pSet = NULL;
             if ( !bUseDialog )
                 pSet = pArgs;
-            else if ( pDlg->Execute() == RET_OK )
+            else if ( NULL != pDlg && pDlg->Execute() == RET_OK ) /* #110771# pDlg can be NULL */
             {
                 pSet = pDlg->GetOutputItemSet();
             }
