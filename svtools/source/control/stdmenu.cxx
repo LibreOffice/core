@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdmenu.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-28 10:23:16 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:12:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,7 +447,7 @@ void FontSizeMenu::Highlight()
         mnCurHeight = 0;
     else
     {
-        sal_Int32 nValue = GetItemText( nCurItemId ).ToInt32();
+        //sal_Int32 nValue = GetItemText( nCurItemId ).ToInt32();
         mnCurHeight = mpHeightAry[ nCurItemId - 1 ];
     }
     maHighlightHdl.Call( this );
