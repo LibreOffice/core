@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 08:53:24 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 09:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,8 @@
 #include <svx/svxids.hrc>
 #include <svx/srchitem.hxx>
 #include <svx/svxerr.hxx>
+
+#include <svx/xmlsecctrl.hxx>
 
 #pragma hdrstop
 
@@ -238,6 +240,11 @@ void SdModule::FillStatusBar(StatusBar& rStatusBar)
 */
     // Dokument geaendert
     rStatusBar.InsertItem( SID_DOC_MODIFIED, SvxModifyControl::GetDefItemWidth(rStatusBar) );
+
+    // signatures
+    rStatusBar.InsertItem( SID_SIGNATURE, XmlSecStatusBarControl::GetDefItemWidth( rStatusBar ), SIB_USERDRAW );
+    rStatusBar.SetHelpId(SID_SIGNATURE, SID_SIGNATURE);
+
 
 
     // Seite
