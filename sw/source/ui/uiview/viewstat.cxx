@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:25:25 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,7 +412,12 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_CHINESE_CONVERSION:
             {
                 if (!SvtCJKOptions().IsAnyEnabled())
+                {
+                    GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_False );
                     rSet.DisableItem(nWhich);
+                }
+                else
+                    GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_True );
             }
             break;
             case SID_MAIL_SCROLLBODY_PAGEDOWN:
