@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpview.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:03 $
+ *  last change: $Author: nn $ $Date: 2000-10-27 13:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,17 +525,19 @@ void ScTpLayoutOptions::InitGridOpt()
 
         aColorLB.SetUpdateMode( TRUE );
 
-        String  aName;
-        Color   aCol    = pLocalOptions->GetGridColor( &aName );
-        USHORT  nSelPos = aColorLB.GetEntryPos( aCol );
-
-        if ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
-            aColorLB.SelectEntryPos( nSelPos );
-        else
-            aColorLB.SelectEntryPos( aColorLB.InsertEntry( aCol, aName ) );
-
         Invalidate();
     }
+
+    //  #79720# also select grid color entry on subsequent calls
+
+    String  aName;
+    Color   aCol    = pLocalOptions->GetGridColor( &aName );
+    USHORT  nSelPos = aColorLB.GetEntryPos( aCol );
+
+    if ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
+        aColorLB.SelectEntryPos( nSelPos );
+    else
+        aColorLB.SelectEntryPos( aColorLB.InsertEntry( aCol, aName ) );
 }
 
 /*-----------------11.01.97 13.40-------------------
