@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-30 15:59:45 $
+ *  last change: $Author: mtg $ $Date: 2001-08-31 10:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,8 @@
 #ifndef _COM_SUN_STAR_PACKAGES_MANIFEST_XMANIFESTREADER_HPP_
 #include <com/sun/star/packages/manifest/XManifestReader.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEFILEIOEXCEPTION_HPP_
-#include <com/sun/star/ucb/InteractiveFileIOException.hpp>
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEAUGMENTEDIOEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVEWRONGMEDIUMEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveWrongMediumException.hpp>
@@ -1435,9 +1435,14 @@ sal_Bool ZipPackage::HandleError ( Any &rAny, sal_uInt16 eContinuations )
 sal_Bool ZipPackage::HandleError ( oslFileError aRC, sal_uInt16 eContinuations, const OUString &rFileName )
 {
     Any aAny;
-    InteractiveFileIOException aException;
+    InteractiveAugmentedIOException aException;
     aException.Code = Impl_OSLFileErrorToUCBIoErrorCode ( aRC );
-    aException.FileName = rFileName;
+    aException.Arguments.realloc ( 1 );
+    PropertyValue aProperty;
+    aProperty.Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Uri" ) );
+    aProperty.Handle = static_cast < sal_Int32 > ( -1 );
+    aProperty.Value <<= rFileName;
+    aException.Arguments[0] <<= aProperty;
     aAny <<= aException;
     return HandleError (aAny, eContinuations );
 }
