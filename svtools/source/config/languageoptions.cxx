@@ -2,9 +2,9 @@
  *
  *  $RCSfile: languageoptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:37:06 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 07:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,8 @@ sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
         case LANGUAGE_ARABIC_UAE:
         case LANGUAGE_ARABIC_BAHRAIN:
         case LANGUAGE_ARABIC_QATAR:
+        case LANGUAGE_ASSAMESE:
+        case LANGUAGE_BENGALI:
         case LANGUAGE_FARSI:
         case LANGUAGE_HEBREW:
         case LANGUAGE_MARATHI:
@@ -278,9 +280,25 @@ sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
         case LANGUAGE_GUJARATI:
         case LANGUAGE_HINDI:
         case LANGUAGE_KANNADA:
+        case LANGUAGE_KASHMIRI:
+        case LANGUAGE_KASHMIRI_INDIA:
+        case LANGUAGE_KHMER:
+        case LANGUAGE_LAO:
+        case LANGUAGE_MALAYALAM:
+        case LANGUAGE_MANIPURI:
+        case LANGUAGE_MONGOLIAN_MONGOLIAN:
+        case LANGUAGE_NEPALI:
+        case LANGUAGE_NEPALI_INDIA:
+        case LANGUAGE_ORIYA:
+        case LANGUAGE_SANSKRIT:
+        case LANGUAGE_SINDHI:
+        case LANGUAGE_SINDHI_PAKISTAN:
+        case LANGUAGE_SINHALESE_SRI_LANKA:
+        case LANGUAGE_SYRIAC:
         case LANGUAGE_TAMIL:
         case LANGUAGE_TELUGU:
         case LANGUAGE_THAI:
+        case LANGUAGE_TIBETAN:
         case LANGUAGE_URDU:
         case LANGUAGE_URDU_PAKISTAN:
         case LANGUAGE_URDU_INDIA:
@@ -292,48 +310,29 @@ sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
 
 // currently not knowing scripttype - defaultet to LATIN:
 /*
-#define LANGUAGE_AFRIKAANS                  0x0436
 #define LANGUAGE_ARMENIAN                   0x042B
-#define LANGUAGE_ASSAMESE                   0x044D
-#define LANGUAGE_AZERI                      0x002C
-#define LANGUAGE_AZERI_LATIN                0x042C
-#define LANGUAGE_AZERI_CYRILLIC             0x082C
-#define LANGUAGE_BASQUE                     0x042D
-#define LANGUAGE_BELARUSIAN                 0x0423
-#define LANGUAGE_BENGALI                    0x0445
 #define LANGUAGE_INDONESIAN                 0x0421
-#define LANGUAGE_KASHMIRI                   0x0460
-#define LANGUAGE_KASHMIRI_INDIA             0x0860
 #define LANGUAGE_KAZAK                      0x043F
 #define LANGUAGE_KONKANI                    0x0457
-#define LANGUAGE_LATVIAN                    0x0426
-#define LANGUAGE_LITHUANIAN                 0x0427
-#define LANGUAGE_LITHUANIAN_CLASSIC         0x0827
 #define LANGUAGE_MACEDONIAN                 0x042F
-#define LANGUAGE_MALAY                      0x003E
-#define LANGUAGE_MALAY_MALAYSIA             0x043E
-#define LANGUAGE_MALAY_BRUNEI_DARUSSALAM    0x083E
-#define LANGUAGE_MALAYALAM                  0x044C
-#define LANGUAGE_MANIPURI                   0x0458
-#define LANGUAGE_NEPALI                     0x0461
-#define LANGUAGE_NEPALI_INDIA               0x0861
-#define LANGUAGE_ORIYA                      0x0448
-#define LANGUAGE_SANSKRIT                   0x044F
-#define LANGUAGE_SERBIAN                    0x041A
-#define LANGUAGE_SERBIAN_LATIN              0x081A
-#define LANGUAGE_SERBIAN_CYRILLIC           0x0C1A
-#define LANGUAGE_SINDHI                     0x0459
-#define LANGUAGE_SWAHILI                    0x5041
 #define LANGUAGE_TATAR                      0x0444
-#define LANGUAGE_TURKISH                    0x041F
-#define LANGUAGE_UKRAINIAN                  0x0422
-#define LANGUAGE_UZBEK                      0x0043
-#define LANGUAGE_UZBEK_LATIN                0x0443
-#define LANGUAGE_UZBEK_CYRILLIC             0x0843
 */
 
     default:
-        nScript = SCRIPTTYPE_LATIN;
+        switch ( nLang & LANGUAGE_MASK_PRIMARY )
+        {
+            // CJK catcher
+            case LANGUAGE_CHINESE & LANGUAGE_MASK_PRIMARY:
+                nScript = SCRIPTTYPE_ASIAN;
+                break;
+            // CTL catcher
+            case LANGUAGE_ARABIC & LANGUAGE_MASK_PRIMARY:
+                nScript = SCRIPTTYPE_COMPLEX;
+                break;
+            // Western (actually not necessarily Latin but also Cyrillic, for example)
+            default:
+                nScript = SCRIPTTYPE_LATIN;
+        }
         break;
     }
     return nScript;
