@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-17 17:21:38 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 07:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1443,20 +1443,52 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                     // Execute makro
                     String aMacro = pInfo->aBookmark;
 
-                    // aMacro has got following format:
-                    // "Macroname.Modulname.Libname.Documentname" or
-                    // "Macroname.Modulname.Libname.Applicationsname"
-                    String aMacroName = aMacro.GetToken(0, sal_Unicode('.'));
-                    String aModulName = aMacro.GetToken(1, sal_Unicode('.'));
-                    String aLibName   = aMacro.GetToken(2, sal_Unicode('.'));
-                    String aDocName   = aMacro.GetToken(3, sal_Unicode('.'));
+                    if ( SfxApplication::IsXScriptURL( aMacro ) )
+                    {
+                        uno::Any aRet;
+                        uno::Sequence< sal_Int16 > aOutArgsIndex;
+                        uno::Sequence< uno::Any > aOutArgs;
+                        uno::Sequence< uno::Any >* pInArgs =
+                            new uno::Sequence< uno::Any >(0);
 
-                    // In this moment the Call-method only
-                    // resolves modulename+macroname
-                    String aExecMacro(aModulName);
-                    aExecMacro.Append( sal_Unicode('.') );
-                    aExecMacro.Append( aMacroName );
-                    bAnimated = pDocSh->GetBasic()->Call(aExecMacro);
+                        ErrCode eErr = pDocSh->CallXScript( aMacro,
+                            *pInArgs, aRet, aOutArgsIndex, aOutArgs);
+
+                        // Check the return value from the script
+                        BOOL bTmp;
+                        if ( eErr == ERRCODE_NONE &&
+                             aRet.getValueType() == getCppuBooleanType() &&
+                             sal_True == ( aRet >>= bTmp ) &&
+                             bTmp == TRUE )
+                        {
+                            bAnimated = TRUE;
+                        }
+                        else
+                        {
+                            bAnimated = FALSE;
+                        }
+                    }
+                    else
+                    {
+                        // aMacro has got following format:
+                        // "Macroname.Modulname.Libname.Documentname" or
+                        // "Macroname.Modulname.Libname.Applicationsname"
+                        String aMacroName =
+                            aMacro.GetToken(0, sal_Unicode('.'));
+                        String aModulName =
+                             aMacro.GetToken(1, sal_Unicode('.'));
+                        String aLibName   =
+                             aMacro.GetToken(2, sal_Unicode('.'));
+                        String aDocName   =
+                             aMacro.GetToken(3, sal_Unicode('.'));
+
+                        // In this moment the Call-method only
+                        // resolves modulename+macroname
+                        String aExecMacro(aModulName);
+                        aExecMacro.Append( sal_Unicode('.') );
+                        aExecMacro.Append( aMacroName );
+                        bAnimated = pDocSh->GetBasic()->Call(aExecMacro);
+                    }
                 }
                 break;
 
