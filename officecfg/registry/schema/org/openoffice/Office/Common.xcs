@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-16 13:08:04 $
+ *  last change: $Author: hdu $ $Date: 2002-07-16 15:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2058,6 +2058,7 @@
                         <desc xml:lang="en-US">specifies whethe or not fonts should be antialiased. This settings is used on UNIX systems only.</desc>
                         <label xml:lang="en-US">Font Antialiasing Enabled</label>
                     </info>
+                    <!-- Responsible: HDU -->
                 </prop>
                 <prop oor:name="MinPixelHeight" oor:type="xs:short">
                     <value>8</value>
@@ -2065,6 +2066,7 @@
                         <desc xml:lang="en-US">If Font Antialiasing is enabled, this values specifies an additional limit: Fonts which are smaller than the value given as limit here are not antialiased at all.</desc>
                         <label xml:lang="en-US">Font Antialiasing Minimum Pixel Height</label>
                     </info>
+                    <!-- Responsible: HDU -->
                 </prop>
             </group>
         </group>
