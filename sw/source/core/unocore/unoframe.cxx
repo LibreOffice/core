@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:31:53 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1422,7 +1422,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
         }
         else if(RES_ANCHOR == pCur->nWID && MID_ANCHOR_ANCHORFRAME == pCur->nMemberId)
         {
-            sal_Bool bDone = sal_True;
+            sal_Bool bDone = sal_False;
             Reference<XTextFrame> xFrame;
             if(aValue >>= xFrame)
             {
