@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-06 16:01:59 $
+ *  last change: $Author: ama $ $Date: 2001-03-06 16:24:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,8 +114,8 @@
 #include <breakit.hxx>
 #endif
 #ifndef OLD_ATTR_HANDLING
-#ifndef _ATRSTCK_HXX
-#include <atrstck.hxx>
+#ifndef _ATRHNDL_HXX
+#include <atrhndl.hxx>
 #endif
 #endif
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-06 16:02:49 $
+ *  last change: $Author: ama $ $Date: 2001-03-06 16:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
-#ifndef _ATRSTCK_HXX
-#include <atrstck.hxx>
+#ifndef _ATRHNDL_HXX
+#include <atrhndl.hxx>
 #endif
 
 #include "txttypes.hxx"

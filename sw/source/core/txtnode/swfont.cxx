@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-06 15:05:47 $
+ *  last change: $Author: ama $ $Date: 2001-03-06 16:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,8 +147,8 @@
 #include <swatrset.hxx>
 #endif
 #ifndef OLD_ATTR_HANDLING
-#ifndef _ATRSTCK_HXX
-#include <atrstck.hxx>
+#ifndef _ATRHNDL_HXX
+#include <atrhndl.hxx>
 #endif
 #endif
 

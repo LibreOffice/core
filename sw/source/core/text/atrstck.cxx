@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-06 16:01:37 $
+ *  last change: $Author: ama $ $Date: 2001-03-06 16:22:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _ERRHDL_HXX
 #include <errhdl.hxx>   // ASSERT
 #endif
-#ifndef _ATRSTCK_HXX
-#include <atrstck.hxx>
+#ifndef _ATRHNDL_HXX
+#include <atrhndl.hxx>
 #endif
 #ifndef _SWFONT_HXX
 #include <swfont.hxx>
