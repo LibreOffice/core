@@ -6,7 +6,9 @@
 
 package com.sun.star.wizards.web;
 
+import com.sun.star.awt.XTopWindow;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Desktop;
 
 /**
@@ -23,8 +25,15 @@ public class WebWizard extends WWD_Events{
         super(xmsf);
     }
 
-    public void flash() {
-        myOwnFrame.activate();
+    public void activate() {
+        try {
+            XTopWindow top = (XTopWindow)UnoRuntime.queryInterface(XTopWindow.class,  xWindow );
+            if (top != null)
+                   top.toFront();
+        }
+        catch (Exception ex) {
+            // do nothing;
+        }
     }
 
     public static void main(String args[]) {
