@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.159 $
+ *  $Revision: 1.160 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:57:59 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -719,6 +719,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_RELATIVE_HEIGHT), RES_FRM_SIZE,         CPPU_E2T(CPPUTYPE_INT16)  ,         PROPERTY_NONE,   MID_FRMSIZE_REL_HEIGHT },
                     { SW_PROP_NMID(UNO_NAME_RELATIVE_WIDTH), RES_FRM_SIZE,          CPPU_E2T(CPPUTYPE_INT16)  ,         PROPERTY_NONE,   MID_FRMSIZE_REL_WIDTH  },
                     { SW_PROP_NMID(UNO_NAME_SIZE_TYPE), RES_FRM_SIZE,           CPPU_E2T(CPPUTYPE_INT16)  ,         PROPERTY_NONE,   MID_FRMSIZE_SIZE_TYPE  },
+                    { SW_PROP_NMID(UNO_NAME_WIDTH_TYPE), RES_FRM_SIZE,          CPPU_E2T(CPPUTYPE_INT16)  ,         PROPERTY_NONE,   MID_FRMSIZE_WIDTH_TYPE },
                     { SW_PROP_NMID(UNO_NAME_SIZE), RES_FRM_SIZE,            CPPU_E2T(CPPUTYPE_AWTSIZE),             PROPERTY_NONE, MID_FRMSIZE_SIZE|CONVERT_TWIPS},
                     { SW_PROP_NMID(UNO_NAME_IS_SYNC_WIDTH_TO_HEIGHT), RES_FRM_SIZE,         CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT    },
                     { SW_PROP_NMID(UNO_NAME_IS_SYNC_HEIGHT_TO_WIDTH), RES_FRM_SIZE,         CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH },
@@ -1087,6 +1088,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_FRAME_WIDTH_ABSOLUTE),          RES_FRM_SIZE,           CPPU_E2T(CPPUTYPE_INT32),       PROPERTY_NONE, MID_FRMSIZE_WIDTH|CONVERT_TWIPS          },
                     { SW_PROP_NMID(UNO_NAME_FRAME_WIDTH_PERCENT),               RES_FRM_SIZE,           CPPU_E2T(CPPUTYPE_INT8),        PROPERTY_NONE, MID_FRMSIZE_REL_WIDTH    },
                     { SW_PROP_NMID(UNO_NAME_SIZE_TYPE), RES_FRM_SIZE,           CPPU_E2T(CPPUTYPE_INT16)  ,         PROPERTY_NONE,   MID_FRMSIZE_SIZE_TYPE  },
+                    { SW_PROP_NMID(UNO_NAME_WIDTH_TYPE), RES_FRM_SIZE,          CPPU_E2T(CPPUTYPE_INT16)  ,         PROPERTY_NONE,   MID_FRMSIZE_WIDTH_TYPE },
                     { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0 },
                     {0,0,0,0,0}
                 };
@@ -1428,6 +1430,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_HEIGHT), FN_UNO_ROW_HEIGHT,     CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,CONVERT_TWIPS },
                     { SW_PROP_NMID(UNO_NAME_IS_AUTO_HEIGHT), FN_UNO_ROW_AUTO_HEIGHT,    CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE , 0 },
                     { SW_PROP_NMID(UNO_NAME_SIZE_TYPE), RES_FRM_SIZE,           CPPU_E2T(CPPUTYPE_INT16)  ,         PROPERTY_NONE,   MID_FRMSIZE_SIZE_TYPE  },
+                    { SW_PROP_NMID(UNO_NAME_WIDTH_TYPE), RES_FRM_SIZE,          CPPU_E2T(CPPUTYPE_INT16)  ,         PROPERTY_NONE,   MID_FRMSIZE_WIDTH_TYPE },
                     { SW_PROP_NMID(UNO_NAME_IS_SPLIT_ALLOWED), RES_ROW_SPLIT,       CPPU_E2T(CPPUTYPE_BOOLEAN)  , PropertyAttribute::MAYBEVOID, 0},
                 //  { SW_PROP_NMID(UNO_NAME_HEIGHT), RES_FRM_SIZE,          CPPU_E2T(CPPUTYPE_INT32)  ,         PROPERTY_NONE, MID_FRMSIZE_HEIGHT|CONVERT_TWIPS         },
                 //  { SW_PROP_NMID(UNO_NAME_SHADOW_FORMAT), RES_SHADOW,             CPPU_E2T(CPPUTYPE_SHADOWFMT),   PROPERTY_NONE, CONVERT_TWIPS},
