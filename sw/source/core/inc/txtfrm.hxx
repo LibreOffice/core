@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-09 11:35:30 $
+ *  last change: $Author: ama $ $Date: 2000-11-21 11:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,6 +320,9 @@ public:
     inline const SwParaPortion *GetPara() const;
     inline sal_Bool HasPara() const;
     sal_Bool _HasPara() const;
+    // If there are any hanging punctuation portions in the margin
+    // the offset will be returned.
+    SwTwips HangingMargin() const;
 
     // RTTI
     TYPEINFO();

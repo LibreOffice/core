@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-16 12:47:04 $
+ *  last change: $Author: ama $ $Date: 2000-11-21 11:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,7 +409,7 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
     const sal_Bool bFull = !aGuess.Guess( rInf, Height() );
     if( !InExpGrp() || IsFtnPortion() )
         Height( aGuess.Height() );
-    if( bFull )
+    if( bFull && !aGuess.GetHangingPortion() )
         BreakLine( rInf, aGuess );
     else
     {
@@ -426,15 +426,27 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
                       << aSize.Height() << "!=" << Height() << endl;
         }
 #endif
-        short nKern = rInf.GetFont()->CheckKerning();
-        if( nKern > 0 && rInf.Width() < rInf.X() + Width() + nKern )
+        if( aGuess.GetHangingPortion() )
         {
-            nKern = rInf.Width() - rInf.X() - Width();
-            if( nKern < 0 )
-                nKern = 0;
+            Insert( aGuess.GetHangingPortion() );
+            SwTwips nTmpW = rInf.Width() - rInf.X() - Width();
+            if( nTmpW > 0 )
+                aGuess.GetHangingPortion()->Width( nTmpW );
+            aGuess.GetHangingPortion()->SetAscent( GetAscent() );
+            aGuess.ClearHangingPortion();
         }
-        if( nKern )
-            new SwKernPortion( *this, nKern );
+        else
+        {
+            short nKern = rInf.GetFont()->CheckKerning();
+            if( nKern > 0 && rInf.Width() < rInf.X() + Width() + nKern )
+            {
+                nKern = rInf.Width() - rInf.X() - Width();
+                if( nKern < 0 )
+                    nKern = 0;
+            }
+            if( nKern )
+                new SwKernPortion( *this, nKern );
+        }
     }
     return bFull;
 }

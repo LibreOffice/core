@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 12:09:37 $
+ *  last change: $Author: ama $ $Date: 2000-11-21 11:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 
 #include "txttypes.hxx"
 #include "breakit.hxx"
+#include "porrst.hxx"   // SwHangingPortion
 
 class SwTxtSizeInfo;
 class SwTxtFormatInfo;
@@ -87,6 +88,7 @@ using namespace ::com::sun::star::linguistic2;
 class SwTxtGuess
 {
     uno::Reference< XHyphenatedWord >  xHyphWord;
+    SwHangingPortion *pHanging; // for hanging punctuation
     xub_StrLen nLeftPos;        // untere Kante: Idx
     xub_StrLen nRightPos;       // obere  Kante: Idx
     KSHORT nLeftWidth;          // untere Kante: Width
@@ -95,14 +97,16 @@ class SwTxtGuess
     xub_StrLen GetWordEnd( const SwTxtFormatInfo &rInf,
                         const xub_StrLen nPos, const sal_Bool bFwd = sal_True ) const;
 public:
-    inline SwTxtGuess(): nLeftPos(0), nLeftWidth(0), nRightPos(0),
-                         nRightWidth(0), nHeight(0)
-
+    inline SwTxtGuess(): pHanging( NULL ), nLeftPos(0), nRightPos(0),
+                         nLeftWidth(0), nRightWidth(0), nHeight(0)
         { }
+    ~SwTxtGuess() { delete pHanging; }
 
     // liefert zuerueck, ob es noch passte
     sal_Bool Guess( const SwTxtFormatInfo &rInf, const KSHORT nHeight );
 
+    inline SwHangingPortion* GetHangingPortion() const { return pHanging; }
+    inline void ClearHangingPortion() { pHanging = NULL; }
     inline xub_StrLen LeftPos() const { return nLeftPos; }
     inline KSHORT LeftWidth() const { return nLeftWidth; }
     inline xub_StrLen RightPos() const { return nRightPos; }

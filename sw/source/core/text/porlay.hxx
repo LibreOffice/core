@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: ama $ $Date: 2000-11-21 11:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,9 @@ private:
     sal_Bool bContent   : 1; // enthaelt Text, fuer Zeilennumerierung
     sal_Bool bRedline   : 1; // enthaelt Redlining
     sal_Bool bForcedLeftMargin : 1; // vom Fly verschobener linker Einzug
+    sal_Bool bHanging : 1; // contents a hanging portion in the margin
+
+    SwTwips _GetHangingMargin() const;
 
 public:
     // von SwLinePortion
@@ -184,6 +187,8 @@ public:
     inline sal_Bool HasRedline() const { return bRedline; }
     inline void SetForcedLeftMargin( const sal_Bool bNew = sal_True ) { bForcedLeftMargin = bNew; }
     inline sal_Bool HasForcedLeftMargin() const { return bForcedLeftMargin; }
+    inline void SetHanging( const sal_Bool bNew = sal_True ) { bHanging = bNew; }
+    inline sal_Bool IsHanging() const { return bHanging; }
 
     // Beruecksichtigung von Dummyleerzeilen
     // 4147, 8221:
@@ -210,6 +215,9 @@ public:
 
     // Erstellt bei kurzen Zeilen die Glue-Kette.
     SwMarginPortion *CalcLeftMargin();
+
+    inline SwTwips GetHangingMargin() const
+        { if( IsHanging() ) return _GetHangingMargin(); return 0; }
 
     // fuer die Sonderbehandlung bei leeren Zeilen
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
@@ -250,7 +258,7 @@ class SwParaPortion : public SwLineLayout
 
     sal_Bool bFixLineHeight : 1; // Feste Zeilenhoehe
     sal_Bool bFtnNum    : 1; // contents a footnotenumberportion
-    sal_Bool bFlag09    : 1; //
+    sal_Bool bMargin    : 1; // contents a hanging punctuation in the margin
 
     sal_Bool bFlag00    : 1; //
     sal_Bool bFlag11    : 1; //
@@ -303,8 +311,8 @@ public:
 
     inline void SetFtnNum( const sal_Bool bNew = sal_True ) { bFtnNum = bNew; }
     inline sal_Bool  IsFtnNum() const { return bFtnNum; }
-    inline void SetFlag09( const sal_Bool bNew = sal_True ) { bFlag09 = bNew; }
-    inline sal_Bool  IsFlag09() const { return bFlag09; }
+    inline void SetMargin( const sal_Bool bNew = sal_True ) { bMargin = bNew; }
+    inline sal_Bool  IsMargin() const { return bMargin; }
     inline void SetFlag00( const sal_Bool bNew = sal_True ) { bFlag00 = bNew; }
     inline sal_Bool  IsFlag00() const { return bFlag00; }
     inline void SetFlag11( const sal_Bool bNew = sal_True ) { bFlag11 = bNew; }
@@ -341,7 +349,7 @@ inline void SwLineLayout::ResetFlags()
 {
     bFormatAdj = bDummy = bFntChg = bTab = bEndHyph = bMidHyph = bFly = bFlyCnt
     = bRest = bBlinking = bClipping = bContent = bRedline
-    = bForcedLeftMargin = sal_False;
+    = bForcedLeftMargin = bHanging = sal_False;
     pSpaceAdd = NULL;
 }
 
@@ -366,7 +374,7 @@ inline void SwParaPortion::FormatReset()
 //  neu formatieren, wenn der Rahmen aus dem Bereich verschwindet.
 //  bFlys = sal_False;
     ResetPreps();
-    bFollowField = bFixLineHeight = sal_False;
+    bFollowField = bFixLineHeight = bMargin = sal_False;
 }
 
 #ifdef UNX

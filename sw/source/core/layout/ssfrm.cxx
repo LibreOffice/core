@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:22 $
+ *  last change: $Author: ama $ $Date: 2000-11-21 11:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,6 +316,9 @@ const SwRect SwFrm::UnionFrm( BOOL bBorder ) const
         aRet.Left( aRet.Left() + Prt().Left() );
     if( Prt().Left() + Prt().Width() > Frm().Width() )
         aRet.Width(aRet.Width() + Prt().Left() + Prt().Width() - Frm().Width());
+    SwTwips nRight = aRet.Left() + aRet.Width();
+    if( IsTxtFrm() && ((SwTxtFrm*)this)->HasPara() )
+        nRight += ((SwTxtFrm*)this)->HangingMargin();
     if( bBorder )
     {
         SwBorderAttrAccess aAccess( SwFrm::GetCache(), this );
@@ -337,6 +340,8 @@ const SwRect SwFrm::UnionFrm( BOOL bBorder ) const
             aRet.SSize().Width()  += rShadow.CalcShadowSpace(SHADOW_RIGHT);
         }
     }
+    if( nRight > aRet.Left() + aRet.Width() )
+        aRet.Width( nRight - aRet.Left() );
     return aRet;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: ama $ $Date: 2000-11-21 11:17:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #include "blink.hxx"    // pBlink
 #include "redlnitr.hxx" // SwRedlineItr
 #include "porfly.hxx"   // SwFlyCntPortion
+#ifndef _PORRST_HXX
+#include <porrst.hxx>       // SwHangingPortion
+#endif
 
 
 /*************************************************************************
@@ -229,6 +232,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine )
     KSHORT nFlyHeight;
     KSHORT nFlyDescent;
     sal_Bool bOnlyPostIts = sal_True;
+    SetHanging( sal_False );
 
     sal_Bool bTmpDummy = ( 0 == GetLen() );
     SwFlyCntPortion* pFlyCnt = 0;
@@ -292,7 +296,11 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine )
 
                 ASSERT( nPosHeight >= nPosAscent,
                         "SwLineLayout::CalcLine: bad ascent or height" );
-
+                if( pPos->IsHangingPortion() )
+                {
+                    SetHanging( sal_True );
+                    rInf.GetParaPortion()->SetMargin( sal_True );
+                }
 
                 // Damit ein Paragraphende-Zeichen nicht durch ein Descent zu einer
                 // geaenderten Zeilenhoehe und zum Umformatieren fuehrt.
@@ -446,7 +454,7 @@ SwCharRange &SwCharRange::operator+=(const SwCharRange &rRange)
 SwParaPortion::SwParaPortion()
 {
     FormatReset();
-    bFlys = bFtnNum = sal_False;
+    bFlys = bFtnNum = bMargin = sal_False;
     SetWhichPor( POR_PARA );
 }
 
@@ -501,4 +509,49 @@ void SwLineLayout::Init( SwLinePortion* pNextPortion )
     SetPortion( pNextPortion );
 }
 
+/*-----------------16.11.00 11:04-------------------
+ * HangingMargin()
+ * looks for hanging punctuation portions in the paragraph
+ * and return the maximum right offset of them.
+ * If no such portion is found, the Margin/Hanging-flags will be atualized.
+ * --------------------------------------------------*/
+
+SwTwips SwLineLayout::_GetHangingMargin() const
+{
+    SwLinePortion* pPor = GetPortion();
+    BOOL bFound = sal_False;
+    SwTwips nDiff = 0;
+    while( pPor)
+    {
+        if( pPor->IsHangingPortion() )
+        {
+            nDiff = ((SwHangingPortion*)pPor)->GetInnerWidth() - pPor->Width();
+            if( nDiff )
+                bFound = sal_True;
+        }
+        pPor = pPor->GetPortion();
+    }
+    if( !bFound ) // actualize the hanging-flag
+        ((SwLineLayout*)this)->SetHanging( sal_False );
+    return nDiff;
+}
+
+SwTwips SwTxtFrm::HangingMargin() const
+{
+    ASSERT( HasPara(), "Don't call me without a paraportion" );
+    if( !GetPara()->IsMargin() )
+        return 0;
+    const SwLineLayout* pLine = GetPara();
+    SwTwips nRet = 0;
+    do
+    {
+        SwTwips nDiff = pLine->GetHangingMargin();
+        if( nDiff > nRet )
+            nRet = nDiff;
+        pLine = pLine->GetNext();
+    } while ( pLine );
+    if( !nRet ) // actualize the margin-flag
+        ((SwParaPortion*)GetPara())->SetMargin( sal_False );
+    return nRet;
+}
 

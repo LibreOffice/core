@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:26 $
+ *  last change: $Author: ama $ $Date: 2000-11-21 11:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,24 @@ public:
     inline sal_Bool IsLeft() const { return bLeft; }
     inline const Point& GetPos() const { return aPos; }
     OUTPUT_OPERATOR
+};
+
+/*************************************************************************
+ *                      class SwHangingPortion
+ * The characters which are forbidden at the start of a line like the dot and
+ * other punctuation marks are allowed to display in the margin of the page
+ * by a user option.
+ * The SwHangingPortion is the corresponding textportion to do that.
+ *************************************************************************/
+
+class SwHangingPortion : public SwTxtPortion
+{
+    KSHORT nInnerWidth;
+public:
+    inline SwHangingPortion( SwPosSize aSize ) : nInnerWidth( aSize.Width() )
+        { SetWhichPor( POR_HNG );  SetLen( 1 ); Height( aSize.Height() ); }
+
+    inline KSHORT GetInnerWidth() const { return nInnerWidth; }
 };
 
 

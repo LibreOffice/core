@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-09 11:34:16 $
+ *  last change: $Author: ama $ $Date: 2000-11-21 11:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1044,7 +1044,7 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
     const xub_StrLen nOldLen    = pOldCur->GetLen();
     const KSHORT nOldAscent = pOldCur->GetAscent();
     const KSHORT nOldHeight = pOldCur->Height();
-    const KSHORT nOldWidth  = pOldCur->Width();
+    const SwTwips nOldWidth = pOldCur->Width() + pOldCur->GetHangingMargin();
     const sal_Bool bOldHyph = pOldCur->IsEndHyph();
     SwTwips nOldTop = 0;
     SwTwips nOldBottom;
@@ -1116,17 +1116,17 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
                 rLine.SetUnclipped( sal_False );
             }
         }
-        if ( rRepaint.GetOfst() )
-        {
-            SwTwips nRght = Max( nOldWidth, pNew->Width() );
-            ViewShell *pSh = GetShell();
-            const SwViewOption *pOpt = pSh ? pSh->GetViewOptions() : 0;
-            if( pOpt && (pOpt->IsParagraph() || pOpt->IsLineBreak()) )
-                nRght += ( Max( nOldAscent, pNew->GetAscent() ) );
-            else
-                nRght += ( Max( nOldAscent, pNew->GetAscent() ) / 4);
-            rRepaint.SetRightOfst( rLine.GetLeftMargin() + nRght );
-        }
+        SwTwips nRght = Max( nOldWidth, pNew->Width() +
+                             pNew->GetHangingMargin() );
+        ViewShell *pSh = GetShell();
+        const SwViewOption *pOpt = pSh ? pSh->GetViewOptions() : 0;
+        if( pOpt && (pOpt->IsParagraph() || pOpt->IsLineBreak()) )
+            nRght += ( Max( nOldAscent, pNew->GetAscent() ) );
+        else
+            nRght += ( Max( nOldAscent, pNew->GetAscent() ) / 4);
+        nRght += rLine.GetLeftMargin();
+        if( rRepaint.GetOfst() || rRepaint.GetRightOfst() < nRght )
+            rRepaint.SetRightOfst( nRght );
     }
     if( !bUnChg )
         rLine.SetChanges();
@@ -1253,6 +1253,8 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     rRepaint.SetOfst( 0 );
     rRepaint.SetRightOfst( 0 );
     rRepaint.Chg( Frm().Pos() + Prt().Pos(), Prt().SSize() );
+    if( pPara->IsMargin() )
+        rRepaint.Width( rRepaint.Width() + pPara->GetHangingMargin() );
     rRepaint.Top( rLine.Y() );
     // 6792: Rrand < LRand und Repaint
     if( 0 >= rRepaint.Width() )

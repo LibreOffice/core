@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-19 11:33:39 $
+ *  last change: $Author: ama $ $Date: 2000-11-21 11:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,9 @@
 #endif
 #ifndef _PORFTN_HXX
 #include <porftn.hxx>   // SwFtnPortion
+#endif
+#ifndef _PORRST_HXX
+#include <porrst.hxx>       // SwHangingPortion
 #endif
 #ifndef _FRMSH_HXX
 #include <frmsh.hxx>
@@ -603,6 +606,8 @@ SwRect lcl_CalcRect( const SwTxtPaintInfo *pInf, const SwLinePortion &rPor )
 {
     SwRect aRect( GetDrawPos( pInf->GetPos(), rPor ),
                   Size( rPor.Width(), rPor.Height() ) );
+    if( rPor.IsHangingPortion() )
+        aRect.Width( ((SwHangingPortion&)rPor).GetInnerWidth() );
     if( rPor.InSpaceGrp() && pInf->GetSpaceAdd() )
     {
         SwTwips nAdd = rPor.CalcSpacing( pInf->GetSpaceAdd(), *pInf );
