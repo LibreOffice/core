@@ -47,8 +47,8 @@ public interface FaxWizardDialogConst {
    *                 Help IDs
    * ====================================
    */
-  public final static int HID = 0; //TODO enter first hid here
-  public static final int HIDMAIN = 40820;
+  public final static int HID = 41119; //TODO enter first hid here
+  public static final int HIDMAIN = 41180;
 
   public final String OPTBUSINESSFAX_HID = "HID:" + (HID + 1);
   public final String LSTBUSINESSSTYLE_HID = "HID:" + (HID + 2);
