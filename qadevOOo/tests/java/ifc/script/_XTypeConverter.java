@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTypeConverter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-04 11:29:25 $
+ *  last change:$Date: 2003-05-27 12:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ public class _XTypeConverter extends MultiMethodTest {
     * @see com.sun.star.container.XSet
     */
     public void _convertTo() {
-        XMultiServiceFactory xMSF = tParam.getMSF() ;
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF() ;
         Object value = null ;
 
         try {
