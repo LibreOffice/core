@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:51:41 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,20 +60,20 @@
  ************************************************************************/
 
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTLISTENER_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleEventListener.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTLISTENER_HPP_
+#include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRelationType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #endif
 
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
@@ -119,7 +119,6 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 using namespace ::comphelper;
 
 
@@ -194,7 +193,7 @@ sal_Bool VCLXAccessibleComponent::supportsService( const ::rtl::OUString& rServi
 uno::Sequence< ::rtl::OUString > VCLXAccessibleComponent::getSupportedServiceNames() throw (uno::RuntimeException)
 {
     uno::Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii( "drafts.com.sun.star.awt.AccessibleWindow" );
+    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleWindow" );
     return aNames;
 }
 
@@ -259,7 +258,7 @@ void VCLXAccessibleComponent::ProcessWindowChildEvent( const VclWindowEvent& rVc
             if( xAcc.is() )
             {
                 aNewValue <<= xAcc;
-                NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldValue, aNewValue );
+                NotifyAccessibleEvent( accessibility::AccessibleEventId::CHILD, aOldValue, aNewValue );
             }
         }
         break;
@@ -269,7 +268,7 @@ void VCLXAccessibleComponent::ProcessWindowChildEvent( const VclWindowEvent& rVc
             if( xAcc.is() )
             {
                 aOldValue <<= xAcc;
-                NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldValue, aNewValue );
+                NotifyAccessibleEvent( accessibility::AccessibleEventId::CHILD, aOldValue, aNewValue );
             }
         }
         break;
@@ -303,7 +302,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             Window* pWindow = (Window*) rVclWindowEvent.GetData();
             DBG_ASSERT( pWindow, "VCLEVENT_WINDOW_CHILDCREATED - Window=?" );
             aNewValue <<= pWindow->GetAccessible();
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::CHILD, aOldValue, aNewValue );
         }
         break;
         */
@@ -314,7 +313,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             if ( pWindow->GetAccessible( FALSE ).is() )
             {
                 aOldValue <<= pWindow->GetAccessible( FALSE );
-                NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldValue, aNewValue );
+                NotifyAccessibleEvent( accessibility::AccessibleEventId::CHILD, aOldValue, aNewValue );
             }
         }
         break;
@@ -327,27 +326,27 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         case VCLEVENT_WINDOW_SHOW:
         {
             aNewValue <<= accessibility::AccessibleStateType::VISIBLE;
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
 
             aNewValue <<= accessibility::AccessibleStateType::SHOWING;
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
 
             aNewValue.clear();
             aOldValue <<= accessibility::AccessibleStateType::INVALID;
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
         case VCLEVENT_WINDOW_HIDE:
         {
             aOldValue <<= accessibility::AccessibleStateType::VISIBLE;
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
 
             aOldValue <<= accessibility::AccessibleStateType::SHOWING;
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
 
             aOldValue.clear();
             aNewValue <<= accessibility::AccessibleStateType::INVALID;
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
         */
@@ -358,14 +357,14 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             if( !pWindow->HasActiveChildFrame() )
             {
                 aNewValue <<= accessibility::AccessibleStateType::ACTIVE;
-                NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+                NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
             }
         }
         break;
         case VCLEVENT_WINDOW_DEACTIVATE:
         {
             aOldValue <<= accessibility::AccessibleStateType::ACTIVE;
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
         case VCLEVENT_WINDOW_GETFOCUS:
@@ -381,7 +380,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
                     (!pWindow->IsCompoundControl() && pWindow->HasFocus()) )
                 {
                     aNewValue <<= accessibility::AccessibleStateType::FOCUSED;
-                    NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+                    NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
                 }
             }
         }
@@ -393,7 +392,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
                 (!pWindow->IsCompoundControl() && rVclWindowEvent.GetId() == VCLEVENT_WINDOW_LOSEFOCUS) )
             {
                 aOldValue <<= accessibility::AccessibleStateType::FOCUSED;
-                NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+                NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
             }
         }
         break;
@@ -403,25 +402,25 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             ::rtl::OUString aNewName( getAccessibleName() );
             aOldValue <<= aOldName;
             aNewValue <<= aNewName;
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_NAME_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::NAME_CHANGED, aOldValue, aNewValue );
         }
         break;
         case VCLEVENT_WINDOW_ENABLED:
         {
             aNewValue <<= accessibility::AccessibleStateType::ENABLED;
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
         case VCLEVENT_WINDOW_DISABLED:
         {
             aOldValue <<= accessibility::AccessibleStateType::ENABLED;
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
         case VCLEVENT_WINDOW_MOVE:
         case VCLEVENT_WINDOW_RESIZE:
         {
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_BOUNDRECT_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::BOUNDRECT_CHANGED, aOldValue, aNewValue );
         }
         break;
         case VCLEVENT_WINDOW_MENUBARADDED:
@@ -433,7 +432,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
                 if ( xChild.is() )
                 {
                     aNewValue <<= xChild;
-                    NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldValue, aNewValue );
+                    NotifyAccessibleEvent( accessibility::AccessibleEventId::CHILD, aOldValue, aNewValue );
                 }
             }
         }
@@ -447,7 +446,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
                 if ( xChild.is() )
                 {
                     aOldValue <<= xChild;
-                    NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldValue, aNewValue );
+                    NotifyAccessibleEvent( accessibility::AccessibleEventId::CHILD, aOldValue, aNewValue );
                 }
             }
         }
@@ -455,13 +454,13 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         case VCLEVENT_WINDOW_ICONIFIED:
         {
             aNewValue <<= accessibility::AccessibleStateType::ICONIFIED;
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
         case VCLEVENT_WINDOW_RESTORED:
         {
             aOldValue <<= accessibility::AccessibleStateType::ICONIFIED;
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
         }
         break;
         default:
@@ -571,7 +570,7 @@ HORIZONTAL
 VERTICAL
 ICONIFIED
 MULTILINE
-MULTISELECTABLE
+MULTI_SELECTABLE
 PRESSED
 SELECTABLE
 SELECTED
@@ -764,7 +763,7 @@ lang::Locale VCLXAccessibleComponent::getLocale() throw (accessibility::IllegalA
     return Application::GetSettings().GetLocale();
 }
 
-uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleAt( const awt::Point& rPoint ) throw (uno::RuntimeException)
+uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleAtPoint( const awt::Point& rPoint ) throw (uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
