@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-04 17:25:56 $
+ *  last change: $Author: pl $ $Date: 2002-09-10 13:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2197,6 +2197,8 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
     sal_Int32 pMappedFontObjects[nMaxGlyphs];
     sal_Unicode pUnicodes[nMaxGlyphs];
     int pCharPosAry[nMaxGlyphs];
+    long pAdvanceWidths[nMaxGlyphs];
+    long nGlyphFlags[nMaxGlyphs];
     int nGlyphs;
     int nIndex = 0;
     Point aPos;
@@ -2221,11 +2223,7 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
         // force state before GetFontMetric
         m_pReferenceDevice->ImplNewFont();
     }
-    double fAngle = (double)m_aCurrentPDFState.m_aFont.GetOrientation() * M_PI / 1800.0;
-    double fSin = sin( fAngle );
-    double fCos = cos( fAngle );
-
-    while( (nGlyphs = rLayout.GetNextGlyphs( nMaxGlyphs, pGlyphs, aPos, nIndex, NULL, pCharPosAry )) )
+    while( (nGlyphs = rLayout.GetNextGlyphs( nMaxGlyphs, pGlyphs, aPos, nIndex, pAdvanceWidths, pCharPosAry )) )
     {
         // back transformation to current coordinate system
         aPos = m_pReferenceDevice->PixelToLogic( aPos );
@@ -2235,29 +2233,13 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
         else if ( eAlign == ALIGN_TOP )
             aPos.Y() += m_pReferenceDevice->GetFontMetric().GetAscent();
 
-        // optimize use of Td vs. Tm
-        if( bFirst && fXScale == 1.0 && fCos == 1.0 && fSin == 0.0 )
-        {
-            m_aPages.back().appendPoint( aPos, aLine );
-            aLine.append( " Td " );
-            bFirst = false;
-        }
-        else
-        {
-            appendDouble( fXScale*fCos, aLine );
-            aLine.append( ' ' );
-            appendDouble( fSin*fXScale, aLine );
-            aLine.append( ' ' );
-            appendDouble( -fSin, aLine );
-            aLine.append( ' ' );
-            appendDouble( fCos, aLine );
-            aLine.append( ' ' );
-            m_aPages.back().appendPoint( aPos, aLine );
-            aLine.append( " Tm\r\n" );
-        }
+        bool bSinglePlacement = false;
         for( int i = 0; i < nGlyphs; i++ )
         {
+            nGlyphFlags[i] = (pGlyphs[i] & GF_FLAGMASK);
             pGlyphs[i] &= GF_IDXMASK;
+            if( nGlyphFlags[i] & GF_ROTMASK )
+                bSinglePlacement = true;
             if( pCharPosAry[i] >= nMinCharPos && pCharPosAry[i] <= nMaxCharPos )
                 pUnicodes[i] = rText.GetChar( pCharPosAry[i] );
             else
@@ -2268,26 +2250,109 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
             // mapping is possible
         }
         registerGlyphs( nGlyphs, pGlyphs, pUnicodes, pMappedGlyphs, pMappedFontObjects );
-        int nLast = 0;
-        while( nLast < nGlyphs )
-        {
-            int nNext = nLast+1;
-            while( nNext < nGlyphs && pMappedFontObjects[ nNext ] == pMappedFontObjects[nLast] )
-                nNext++;
-            aLine.append( "/F" );
-            aLine.append( pMappedFontObjects[nLast] );
-            aLine.append( ' ' );
-            m_aPages.back().appendMappedLength( nFontHeight, aLine, true );
-            aLine.append( " Tf [ <" );
-            for( int i = nLast; i < nNext; i++ )
-            {
-                appendHex( (sal_Int8)pMappedGlyphs[i], aLine );
-                if( i && (i % 35) == 0 )
-                    aLine.append( "\r\n" );
-            }
-            aLine.append( "> ] TJ\r\n" );
 
-            nLast = nNext;
+        double fAngle = (double)m_aCurrentPDFState.m_aFont.GetOrientation() * M_PI / 1800.0;
+        double fSin = sin( fAngle );
+        double fCos = cos( fAngle );
+
+        if( m_aCurrentPDFState.m_aFont.IsVertical() && bSinglePlacement )
+        {
+            // have to emit each glyph on its own
+            long nXOffset = 0;
+            for( int n = 0; n < nGlyphs; n++ )
+            {
+                double fDeltaAngle = 0.0;
+                double fYScale = 1.0;
+                double fTempXScale = fXScale;
+
+                Point aDeltaPos;
+                if( nGlyphFlags[n] & GF_ROTL )
+                {
+                    fDeltaAngle = M_PI/2.0;
+                    aDeltaPos.X() = m_pReferenceDevice->GetFontMetric().GetAscent() + m_pReferenceDevice->GetFontMetric().GetDescent();
+                    aDeltaPos.Y() = m_pReferenceDevice->GetFontMetric().GetDescent();
+                    fYScale = fXScale;
+                    fTempXScale = 1.0;
+                }
+                else if( nGlyphFlags[n] & GF_ROTR )
+                {
+                    fDeltaAngle = -M_PI/2.0;
+                    aDeltaPos.X() = m_pReferenceDevice->GetFontMetric().GetDescent();
+                    aDeltaPos.Y() = -(m_pReferenceDevice->GetFontMetric().GetAscent() + m_pReferenceDevice->GetFontMetric().GetDescent());
+                    fYScale = fXScale;
+                    fTempXScale = 1.0;
+                }
+                aDeltaPos += m_pReferenceDevice->PixelToLogic( Point( (int)((double)nXOffset/fXScale)/rLayout.GetUnitsPerPixel(), 0 ) );
+                nXOffset += pAdvanceWidths[n];
+
+
+                aDeltaPos = Point( (int)(fXScale * fCos * (double)aDeltaPos.X() + fSin * (double)aDeltaPos.Y()),
+                                   -(int)(fXScale * fSin * (double)aDeltaPos.X() - fCos * (double)aDeltaPos.Y()) );
+
+                double fDSin = sin( fAngle+fDeltaAngle );
+                double fDCos = cos( fAngle+fDeltaAngle );
+
+                appendDouble( fTempXScale*fDCos, aLine );
+                aLine.append( ' ' );
+                appendDouble( fDSin*fTempXScale, aLine );
+                aLine.append( ' ' );
+                appendDouble( -fDSin*fYScale, aLine );
+                aLine.append( ' ' );
+                appendDouble( fDCos*fYScale, aLine );
+                aLine.append( ' ' );
+                m_aPages.back().appendPoint( aPos+aDeltaPos, aLine );
+                aLine.append( " Tm /F" );
+                aLine.append( pMappedFontObjects[n] );
+                aLine.append( ' ' );
+                m_aPages.back().appendMappedLength( nFontHeight, aLine, true );
+                aLine.append( " Tf [ <" );
+                appendHex( (sal_Int8)pMappedGlyphs[n], aLine );
+                aLine.append( "> ] TJ\r\n" );
+            }
+        }
+        else // normal case
+        {
+            // optimize use of Td vs. Tm
+            if( bFirst && fXScale == 1.0 && fCos == 1.0 && fSin == 0.0 )
+            {
+                m_aPages.back().appendPoint( aPos, aLine );
+                aLine.append( " Td " );
+                bFirst = false;
+            }
+            else
+            {
+                appendDouble( fXScale*fCos, aLine );
+                aLine.append( ' ' );
+                appendDouble( fSin*fXScale, aLine );
+                aLine.append( ' ' );
+                appendDouble( -fSin, aLine );
+                aLine.append( ' ' );
+                appendDouble( fCos, aLine );
+                aLine.append( ' ' );
+                m_aPages.back().appendPoint( aPos, aLine );
+                aLine.append( " Tm\r\n" );
+            }
+            int nLast = 0;
+            while( nLast < nGlyphs )
+            {
+                int nNext = nLast+1;
+                while( nNext < nGlyphs && pMappedFontObjects[ nNext ] == pMappedFontObjects[nLast] )
+                    nNext++;
+                aLine.append( "/F" );
+                aLine.append( pMappedFontObjects[nLast] );
+                aLine.append( ' ' );
+                m_aPages.back().appendMappedLength( nFontHeight, aLine, true );
+                aLine.append( " Tf [ <" );
+                for( int i = nLast; i < nNext; i++ )
+                {
+                    appendHex( (sal_Int8)pMappedGlyphs[i], aLine );
+                    if( i && (i % 35) == 0 )
+                        aLine.append( "\r\n" );
+                }
+                aLine.append( "> ] TJ\r\n" );
+
+                nLast = nNext;
+            }
         }
     }
 
