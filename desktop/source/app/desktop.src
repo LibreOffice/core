@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-12 10:13:54 $
+ *  last change: $Author: kz $ $Date: 2002-09-13 08:48:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ WarningBox WARNINGBOX_JVMCREATIONFAILED
     Message[ finnish ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
     Message[ italian ] = "Questa operazione richiede JRE (Java Runtime Environment). %PRODUCTNAME %PRODUCTVERSION ne ha rilevato una configurazione difettosa.\nFate click su 'OK' per avviare il setup di Java. Per terminare l'operazione cliccate 'Annulla'.";
     Message[ danish ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
-    Message[ swedish ] = "F�r den h�r operationen kr�vs en Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION har hittat en felaktig JRE.\nKlicka p� 'OK' om du vill starta Java Setup. Klicka p� 'Avbryt' om du vill avbryta den aktuella operationen.";
+    Message[ swedish ] = "F�r den h�r operationen kr�vs en Java Runtime Environment (JRE). Men den JRE som %PRODUCTNAME %PRODUCTVERSION har hittat �r felaktig.\nKlicka p� 'OK' om du vill starta Java Setup. Klicka p� 'Avbryt' om du vill avbryta den aktuella operationen.";
     Message[ polish ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
     Message[ portuguese_brazilian ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'.";
     Message[ japanese ] = "現在の操作には、Java Runtime Environment (JRE)が必要ですが、%PRODUCTNAME %PRODUCTVERSION が検出した JRE は正しくありません。\nOK ボタンを押すと、Java セットアップが開始します。[キャンセル]を押すと、現在の操作は終了します。";
