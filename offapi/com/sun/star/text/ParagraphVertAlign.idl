@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParagraphVertAlign.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-02 11:57:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 /** These enumeration values are used to specify the vertical alignment of paragaphs.
  */
-constants ParagraphVertAlign
+published constants ParagraphVertAlign
 {
     //-------------------------------------------------------------------------
     /** In automatic mode, horizontal text is aligned to the baseline. The same applies to
