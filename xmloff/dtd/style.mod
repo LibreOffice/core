@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.54 2002-08-29 17:44:32 dvo Exp $
+	$Id: style.mod,v 1.55 2002-08-30 17:30:42 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -280,6 +280,7 @@
 <!ATTLIST style:properties fo:break-after (auto|column|page) #IMPLIED>
 <!ATTLIST style:properties fo:background-color %transparentOrColor; #IMPLIED>
 <!ATTLIST style:properties style:background-transparency %percentage; #IMPLIED>
+<!ATTLIST style:properties style:dynamic-spacing %boolean; #IMPLIED>
 
 <!ELEMENT style:background-image (office:binary-data?)>
 <!ATTLIST style:background-image xlink:type (simple) #IMPLIED>
