@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 15:48:36 $
+#   last change: $Author: rt $ $Date: 2004-05-21 14:57:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,6 +105,7 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/impbmp.obj		\
             $(SLO)$/impgraph.obj	\
             $(SLO)$/impimage.obj	\
+            $(SLO)$/impimagetree.obj \
             $(SLO)$/impprn.obj		\
             $(SLO)$/impvect.obj 	\
             $(SLO)$/implncvt.obj	\
@@ -136,13 +137,16 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/sallayout.obj		\
             $(SLO)$/salgdilayout.obj	\
             $(SLO)$/salnativewidgets-none.obj	\
-            $(SLO)$/bmpconv.obj
+            $(SLO)$/bmpconv.obj		\
+            $(SLO)$/pngread.obj		\
+            $(SLO)$/pngwrite.obj	
 
 EXCEPTIONSFILES=	$(SLO)$/outdev.obj		\
                     $(SLO)$/gfxlink.obj		\
                     $(SLO)$/print.obj		\
                     $(SLO)$/impgraph.obj	\
-                    $(SLO)$/bmpconv.obj
+                    $(SLO)$/bmpconv.obj		\
+                    $(SLO)$/impimagetree.obj		
 
 # --- Targets ------------------------------------------------------
 
