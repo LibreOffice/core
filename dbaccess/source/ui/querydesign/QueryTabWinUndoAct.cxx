@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTabWinUndoAct.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:58 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,8 @@ OQueryDesignFieldUndoAct::OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwB
 // -----------------------------------------------------------------------------
 OQueryDesignFieldUndoAct::~OQueryDesignFieldUndoAct()
 {
-    pOwner = NULL;
     DBG_DTOR(OQueryDesignFieldUndoAct,NULL);
+    pOwner = NULL;
 }
 // -----------------------------------------------------------------------------
 
@@ -112,6 +112,7 @@ OQueryTabWinUndoAct::OQueryTabWinUndoAct(OQueryTableView* pOwner, USHORT nCommen
 //==============================================================================
 OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
 {
+    DBG_DTOR(OQueryTabWinUndoAct ,NULL);
     if (m_bOwnerOfObjects)
     {   // wenn ich der alleinige Owner des Fenster bin, muss ich dafuer sorgen, dass es geloescht wird
         OSL_ENSURE(m_pTabWin != NULL, "OQueryTabWinUndoAct::~OQueryTabWinUndoAct() : m_pTabWin sollte nicht NULL sein");
@@ -132,7 +133,6 @@ OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
         }
         m_vTableConnection.clear();
     }
-    DBG_DTOR(OQueryTabWinUndoAct ,NULL);
 }
 //------------------------------------------------------------------------------
 void OTabFieldCellModifiedUndoAct::Undo()
