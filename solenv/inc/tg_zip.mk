@@ -4,8 +4,8 @@
 #*    $Workfile:   tg_zip.mk  $
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: hjs $ $Date: 2001-01-22 16:52:18 $
-#*    $Revision: 1.3 $
+#*    Letzte Aenderung  $Author: hjs $ $Date: 2001-01-29 15:38:02 $
+#*    $Revision: 1.4 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_zip.mkv  $
 #*
@@ -43,7 +43,6 @@ ZIP1 ZIP2 ZIP3 ZIP4 ZIP5 ZIP6 ZIP7 ZIP8 ZIP9:
 # Anweisungen fuer das Linken
 # unroll begin
 
-#ZIPDIR*=LANGDIR
 .IF "$(GUI)"=="WNT"
 command_seperator=&&
 #command_seperator=^
@@ -57,7 +56,12 @@ avoid_cvs_dir=-x "*/CVS/*"
 
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP$(TNR)TARGET).dpzz : $(ZIP$(TNR)TARGETN)
 
+.IF "$(common_build_zip)"!=""
 ZIP$(TNR)HELPVAR={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP$(TNR)TARGET)}
+.ELSE			# "$(common_build_zip)"!=""
+ZIP$(TNR)HELPVAR=$(BIN)$/$(ZIP$(TNR)TARGET)
+.ENDIF			# "$(common_build_zip)"!=""
+
 .IF "$(make_zip_deps)" == ""
 $(ZIP$(TNR)TARGETN) : delzip
 .ELSE			# "$(make_zip_deps)" == ""
@@ -77,7 +81,7 @@ $(ZIP$(TNR)TARGETN) :
     @+-$(GNUCOPY) -p $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) >& $(NULLDEV)
 .IF "$(ZIPDIR)" != ""
 #	+-echo $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP$(TNR)HELPVAR), $(@:db))}) $(ZIPDIR))
-    +-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP$(TNR)HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} $(ZIP$(TNR)LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
+    @+-cd $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP$(TNR)HELPVAR), $(@:db))}) $(ZIPDIR)) $(command_seperator) zip $(ZIPFLAGS) ..$/{$(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)} $(ZIP$(TNR)LIST:s/LANGDIR/./) -x delzip $(avoid_cvs_dir) 
 .ELSE			# "$(ZIPDIR)" != ""
     @+-zip $(ZIPFLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP$(TNR)LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(ZIP$(TNR)HELPVAR), $(@:db))}) $j )) -x delzip
 .ENDIF			# "$(ZIPDIR)" != ""
