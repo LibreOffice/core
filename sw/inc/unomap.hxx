@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-28 11:05:33 $
+ *  last change: $Author: mtg $ $Date: 2001-03-29 17:15:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,8 @@
 #define WID_DOC_ADD_PARA_TABLE_SPACING          1013
 #define WID_DOC_ADD_PARA_TABLE_SPACING_AT_START 1014
 #define WID_DOC_PRINTER_NAME                    1015
+#define WID_DOC_IS_KERN_ASIAN_PUNCTUATION       1016
+#define WID_DOC_CHARACTER_COMPRESSION_TYPE      1017
 
 //AutoText
 #define WID_GROUP_PATH                          0
