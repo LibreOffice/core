@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexfieldscontrol.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-19 07:21:01 $
+ *  last change: $Author: oj $ $Date: 2002-04-09 07:43:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ namespace dbaui
         Point aPos(_rRect.TopLeft());
         aPos.X() += 1;
 
-        String aText = GetCurrentRowCellText(_nColumnId);
+        String aText = GetRowCellText(m_aSeekRow,_nColumnId);
         Size TxtSize(GetDataWindow().GetTextWidth(aText), GetDataWindow().GetTextHeight());
 
         // clipping
@@ -499,21 +499,31 @@ namespace dbaui
         }
         return 0L;
     }
-
     //------------------------------------------------------------------
-    String IndexFieldsControl::GetCurrentRowCellText(sal_uInt16 nColId) const
+    String IndexFieldsControl::GetCellText(long _nRow,sal_uInt16 nColId) const
     {
-        if (m_aSeekRow < m_aFields.end())
+        ConstIndexFieldsIterator aRow = m_aFields.end();
+        if ( _nRow >= 0 )
+        {
+            aRow = m_aFields.begin() + _nRow;
+            OSL_ENSURE(aRow <= m_aFields.end(), "IndexFieldsControl::SeekRow: invalid row!");
+        }
+        return GetRowCellText(aRow,nColId);
+    }
+    //------------------------------------------------------------------
+    String IndexFieldsControl::GetRowCellText(const ConstIndexFieldsIterator& _rRow,sal_uInt16 nColId) const
+    {
+        if (_rRow < m_aFields.end())
         {
             switch (nColId)
             {
                 case COLUMN_ID_FIELDNAME:
-                    return m_aSeekRow->sFieldName;
+                    return _rRow->sFieldName;
                 case COLUMN_ID_ORDER:
-                    if (0 == m_aSeekRow->sFieldName.Len())
+                    if (0 == _rRow->sFieldName.Len())
                         return String();
                     else
-                        return m_aSeekRow->bSortAscending ? m_sAscendingText : m_sDescendingText;
+                        return _rRow->bSortAscending ? m_sAscendingText : m_sDescendingText;
                 default:
                     OSL_ENSURE(sal_False, "IndexFieldsControl::GetCurrentRowCellText: invalid column id!");
             }
@@ -534,6 +544,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2002/03/19 07:21:01  oj
+ *  #97274# disable traveling with tab to allow control change
+ *
  *  Revision 1.7  2001/08/06 07:44:33  fs
  *  #90529# help ids
  *

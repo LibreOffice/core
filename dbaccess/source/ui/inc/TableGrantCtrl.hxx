@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableGrantCtrl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-29 08:35:25 $
+ *  last change: $Author: oj $ $Date: 2002-04-09 07:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ protected:
     virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, USHORT nColId ) const;
     virtual BOOL SeekRow( long nRow );
     virtual BOOL SaveModified();
-    virtual String GetCellText( long nRow, USHORT nColId );
+    virtual String GetCellText( long nRow, USHORT nColId ) const;
 
     virtual void CellModified();
 

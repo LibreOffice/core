@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
+ *  last change: $Author: oj $ $Date: 2002-04-09 07:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,15 @@ namespace dbaui
 
         void                        Fill();
         void                        PreFill();
+        /** GetCellText returns the text at the given position
+            @param  _nRow
+                the number of the row
+            @param  _nColId
+                the ID of the column
+            @return
+                the text out of the cell
+        */
+        virtual String              GetCellText(long _nRow, USHORT _nColId) const;
 
     protected:
         virtual sal_Bool            SeekRow( long nRow );
@@ -206,7 +215,6 @@ namespace dbaui
         virtual void                CellModified();
         virtual sal_Bool            SaveModified();
         virtual void                Init();
-        virtual String              GetCellText(long nRow, sal_uInt16 nColId) const;
         virtual sal_uInt32          GetTotalCellWidth(long nRow, sal_uInt16 nColId) const;
         virtual void                ColumnResized( sal_uInt16 nColId );
 

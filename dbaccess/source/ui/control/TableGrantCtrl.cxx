@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableGrantCtrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-29 08:39:06 $
+ *  last change: $Author: oj $ $Date: 2002-04-09 07:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,7 @@ BOOL OTableGrantControl::SaveModified()
 }
 
 //------------------------------------------------------------------------------
-String OTableGrantControl::GetCellText( long nRow, USHORT nColId )
+String OTableGrantControl::GetCellText( long nRow, USHORT nColId ) const
 {
     DBG_CHKTHIS(OTableGrantControl,NULL);
     if(COL_TABLE_NAME == nColId)

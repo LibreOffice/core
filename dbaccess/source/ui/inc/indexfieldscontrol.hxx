@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexfieldscontrol.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-19 07:21:30 $
+ *  last change: $Author: oj $ $Date: 2002-04-09 07:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ namespace dbaui
 
         void SetModifyHdl(const Link& _rHdl) { m_aModifyHdl = _rHdl; }
         Link GetModifyHdl() const { return m_aModifyHdl; }
+        virtual String GetCellText(long _nRow,sal_uInt16 nColId) const;
 
     protected:
         // EditBrowseBox overridables
@@ -127,7 +128,7 @@ namespace dbaui
         void                InitController(::svt::CellControllerRef&, long _nRow, sal_uInt16 _nColumnId);
 
     protected:
-        String GetCurrentRowCellText(sal_uInt16 nColId) const;
+        String GetRowCellText(const ConstIndexFieldsIterator& _rRow,sal_uInt16 nColId) const;
         sal_Bool implGetFieldDesc(long _nRow, ConstIndexFieldsIterator& _rPos);
 
         sal_Bool isNewField() const { return GetCurRow() >= (sal_Int32)m_aFields.size(); }
@@ -144,6 +145,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2002/03/19 07:21:30  oj
+ *  #97274# disable traveling with tab to allow control change
+ *
  *  Revision 1.4  2001/06/29 08:35:25  fs
  *  #86721# DbBrowseBox replaced by svt::EditBrowseBox
  *
