@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textconversionImpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:53:51 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,31 +70,37 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 TextConversionResult SAL_CALL
 TextConversionImpl::getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
-    const Locale& aLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions)
+    const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions)
     throw(  RuntimeException, IllegalArgumentException, NoSupportException )
 {
-    getLocaleSpecificTextConversion(aLocale);
+    getLocaleSpecificTextConversion(rLocale);
 
-    return xTC->getConversions(aText, nStartPos, nLength, aLocale, nConversionType, nConversionOptions);
+    sal_Int32 len = aText.getLength() - nStartPos;
+    if (nLength > len)
+        nLength = len > 0 ? len : 0;
+    return xTC->getConversions(aText, nStartPos, nLength, rLocale, nConversionType, nConversionOptions);
 }
 
 OUString SAL_CALL
 TextConversionImpl::getConversion( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
-    const Locale& aLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions)
+    const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions)
     throw(  RuntimeException, IllegalArgumentException, NoSupportException )
 {
-    getLocaleSpecificTextConversion(aLocale);
+    getLocaleSpecificTextConversion(rLocale);
 
-    return xTC->getConversion(aText, nStartPos, nLength, aLocale, nConversionType, nConversionOptions);
+    sal_Int32 len = aText.getLength() - nStartPos;
+    if (nLength > len)
+        nLength = len > 0 ? len : 0;
+    return xTC->getConversion(aText, nStartPos, nLength, rLocale, nConversionType, nConversionOptions);
 }
 
 sal_Bool SAL_CALL
-TextConversionImpl::interactiveConversion( const Locale& aLocale, sal_Int16 nTextConversionType, sal_Int32 nTextConversionOptions )
+TextConversionImpl::interactiveConversion( const Locale& rLocale, sal_Int16 nTextConversionType, sal_Int32 nTextConversionOptions )
     throw(  RuntimeException, IllegalArgumentException, NoSupportException )
 {
-    getLocaleSpecificTextConversion(aLocale);
+    getLocaleSpecificTextConversion(rLocale);
 
-    return xTC->interactiveConversion(aLocale, nTextConversionType, nTextConversionOptions);
+    return xTC->interactiveConversion(rLocale, nTextConversionType, nTextConversionOptions);
 }
 
 static inline sal_Bool operator != (const Locale& l1, const Locale& l2) {
