@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:07:31 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -921,7 +921,7 @@ void Databases::errorDocument( const rtl::OUString& Language,
 void Databases::changeCSS(const rtl::OUString& newStyleSheet)
 {
     m_aCSS = newStyleSheet.toAsciiLowerCase();
-    delete m_pCustomCSSDoc, m_pCustomCSSDoc = 0,m_nCustomCSSDocLength = 0;
+    delete[] m_pCustomCSSDoc, m_pCustomCSSDoc = 0,m_nCustomCSSDocLength = 0;
 }
 
 
