@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unmodpg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:42 $
+ *  last change: $Author: aw $ $Date: 2001-07-30 14:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@ class SdPage;
 
 class ModifyPageUndoAction : public SdUndoAction
 {
+    // #67720#
+    SfxUndoManager* mpManager;
+
     SdPage*         pPage;
     String          aOldName;
     String          aNewName;
@@ -84,12 +87,14 @@ class ModifyPageUndoAction : public SdUndoAction
 
 public:
     TYPEINFO();
-    ModifyPageUndoAction(SdDrawDocument* pTheDoc,
-                         SdPage*         pThePage,
-                         String          aTheNewName,
-                         AutoLayout      eTheNewAutoLayout,
-                         BOOL            bTheNewBckgrndVisible,
-                         BOOL            bTheNewBckgrndObjsVisible);
+    ModifyPageUndoAction(
+        SfxUndoManager*         pManager, // #67720#
+        SdDrawDocument*         pTheDoc,
+        SdPage*                 pThePage,
+        String                  aTheNewName,
+        AutoLayout              eTheNewAutoLayout,
+        BOOL                    bTheNewBckgrndVisible,
+        BOOL                    bTheNewBckgrndObjsVisible);
 
     virtual ~ModifyPageUndoAction();
     virtual void Undo();

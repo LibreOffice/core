@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unmodpg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:12:21 $
+ *  last change: $Author: aw $ $Date: 2001-07-30 14:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,13 +90,16 @@ TYPEINIT1(ModifyPageUndoAction, SdUndoAction);
 |*
 \************************************************************************/
 
-ModifyPageUndoAction::ModifyPageUndoAction(SdDrawDocument* pTheDoc,
-                                           SdPage*         pThePage,
-                                           String          aTheNewName,
-                                           AutoLayout      eTheNewAutoLayout,
-                                           BOOL            bTheNewBckgrndVisible,
-                                           BOOL            bTheNewBckgrndObjsVisible):
-                      SdUndoAction(pTheDoc)
+ModifyPageUndoAction::ModifyPageUndoAction(
+    SfxUndoManager* pTheManager, // #67720#
+    SdDrawDocument* pTheDoc,
+    SdPage* pThePage,
+    String aTheNewName,
+    AutoLayout  eTheNewAutoLayout,
+    BOOL bTheNewBckgrndVisible,
+    BOOL bTheNewBckgrndObjsVisible)
+:   SdUndoAction(pTheDoc),
+    mpManager(pTheManager)
 {
     DBG_ASSERT(pThePage, "Undo ohne Seite ???");
 
@@ -162,6 +165,14 @@ void __EXPORT ModifyPageUndoAction::Undo()
     // Redisplay
     SfxViewFrame::Current()->GetDispatcher()->Execute(
         SID_SWITCHPAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+
+    // #67720# clear undo manager
+    if(mpManager)
+    {
+        // BEWARE: Do this as LAST action here since this will delete
+        // all actions which are added, inclusive to this one (!)
+        mpManager->Clear();
+    }
 }
 
 /*************************************************************************
@@ -202,6 +213,14 @@ void __EXPORT ModifyPageUndoAction::Redo()
     // Redisplay
     SfxViewFrame::Current()->GetDispatcher()->Execute(
         SID_SWITCHPAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+
+    // #67720# clear undo manager
+    if(mpManager)
+    {
+        // BEWARE: Do this as LAST action here since this will delete
+        // all actions which are added, inclusive to this one (!)
+        mpManager->Clear();
+    }
 }
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-10 11:04:27 $
+ *  last change: $Author: aw $ $Date: 2001-07-30 14:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -798,13 +798,11 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                 SdPage* pUndoPage =
                             bHandoutMode ? pHandoutMPage : pActualPage;
 
+                // #67720#
+                SfxUndoManager* pUndoManager = pDocSh->GetUndoManager();
                 ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
-                                                    pDoc, pUndoPage,
-                                                    aNewName,
-                                                    aNewAutoLayout,
-                                                    bBVisible,
-                                                    bBObjsVisible);
-                pDocSh->GetUndoManager()->AddUndoAction(pAction);
+                    pUndoManager, pDoc, pUndoPage, aNewName, aNewAutoLayout, bBVisible, bBObjsVisible);
+                pUndoManager->AddUndoAction(pAction);
 
                 SfxChildWindow* pPreviewChildWindow = GetViewFrame()->GetChildWindow( SdPreviewChildWindow::GetChildWindowId() );
                 SdPreviewWin*   pPreviewWin = NULL;

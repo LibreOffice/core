@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcontr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-02 11:51:17 $
+ *  last change: $Author: aw $ $Date: 2001-07-30 14:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,12 +408,13 @@ void SdTabControl::EndRenaming()
             BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
             SetOfByte aVisibleLayers = pActualPage->GetMasterPageVisibleLayers(0);
 
-            ModifyPageUndoAction* pAction = new ModifyPageUndoAction(pDoc, pUndoPage,
-                                            aNewName, pActualPage->GetAutoLayout(),
-                                            aVisibleLayers.IsSet(aBckgrnd),
-                                            aVisibleLayers.IsSet(aBckgrndObj));
-
-            pDoc->GetDocSh()->GetUndoManager()->AddUndoAction(pAction);
+            // #67720#
+            SfxUndoManager* pManager = pDoc->GetDocSh()->GetUndoManager();
+            ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
+                pManager, pDoc, pUndoPage, aNewName, pActualPage->GetAutoLayout(),
+                aVisibleLayers.IsSet(aBckgrnd),
+                aVisibleLayers.IsSet(aBckgrndObj));
+            pManager->AddUndoAction(pAction);
 
             pActualPage->SetName(aNewName);
             aNewName = pActualPage->GetName();
