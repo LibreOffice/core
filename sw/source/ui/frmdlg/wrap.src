@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:11:31 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 12:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,13 +756,13 @@ TabPage TP_FRM_WRAP
         IdCount = { 11 ; };
     ImageList IL_WRAP
     {
-        ImageBitmap = Bitmap { File = "wr_aplist.bmp" ; };
+        Prefix = "wr";
         MaskColor = IMAGE_MASK_COLOR ;
         WRAP_IDLIST
     };
     ImageList ILH_WRAP
     {
-        ImageBitmap = Bitmap { File = "wrh_aplist.bmp" ; };
+        Prefix = "wrh";
         MaskColor = IMAGE_MASK_COLOR ;
         WRAP_IDLIST
     };
