@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 11:12:25 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,11 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_H_
+#include <com/sun/star/embed/XStorage.hpp>
+#endif
+
+
 #ifndef _RTTI_HXX //autogen
 #include <tools/rtti.hxx>
 #endif
@@ -87,6 +92,10 @@
 #ifndef _TOOLS_GLOBNAME_HXX //autogen
 #include <tools/globname.hxx>
 #endif
+
+#include <list>
+class UNOStorageHolder;
+typedef ::std::list< UNOStorageHolder* > UNOStorageHolderList;
 
 class Storage;
 class StorageStream;
@@ -410,6 +419,10 @@ public:
     BOOL                        SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
     BOOL                        GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
     BOOL                        GetProperty( const String& rEleName, const String& rName, ::com::sun::star::uno::Any& rValue );
+
+    // HACK to avoid incompatible build, can be done since this feature is only for development
+    // should be removed before release
+    UNOStorageHolderList* GetUNOStorageHolderList();
 
 #if _SOLAR__PRIVATE
     UCBStorageElement_Impl*     FindElement_Impl( const String& rName ) const;
