@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2001-01-24 13:25:07 $
+#   last change: $Author: dbo $ $Date: 2002-01-10 13:35:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ PACKAGE=com$/sun$/star$/connection
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    SocketPermission.idl\
     XConnection.idl\
     XConnection2.idl\
     XConnectionBroadcaster.idl\
