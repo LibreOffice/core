@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-14 09:44:46 $
+ *  last change: $Author: fs $ $Date: 2001-05-21 13:57:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ namespace dbaui
         m_aSeq = aDescriptor.createPropertyValueSequence();
 
         // calculate some stuff which helps us providing the different formats
-        if (m_nFormats && DCF_OBJECT_DESCRIPTOR)
+        if (DCF_OBJECT_DESCRIPTOR == (m_nFormats & DCF_OBJECT_DESCRIPTOR))
         {
             // extract the single values from the sequence
             ::rtl::OUString sDatasourceName;
@@ -166,14 +166,14 @@ namespace dbaui
             m_sCompatibleObjectDescription += sSeparator;
         }
 
-        if (m_nFormats && DCF_HTML_TABLE)
+        if (DCF_HTML_TABLE == (m_nFormats & DCF_HTML_TABLE))
         {
             m_pHtml = new OHTMLImportExport(m_aSeq, _rxORB, _rxFormatter);
             m_xHtml = m_pHtml;
             m_pHtml->initialize();
         }
 
-        if (m_nFormats && DCF_RTF_TABLE)
+        if (DCF_RTF_TABLE == (m_nFormats & DCF_RTF_TABLE))
         {
             m_pRtf = new ORTFImportExport(m_aSeq, _rxORB, _rxFormatter);
             m_xRtf = m_pRtf;
@@ -257,7 +257,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     void ODataClipboard::addRow(sal_Int32 _nRow)
     {
-        OSL_ENSURE(m_nFormats && DCF_OBJECT_DESCRIPTOR, "ODataClipboard::addRow: don't have this (object descriptor) format!");
+        OSL_ENSURE(m_nFormats & DCF_OBJECT_DESCRIPTOR, "ODataClipboard::addRow: don't have this (object descriptor) format!");
 
         const sal_Unicode       cSeparator(11);
         const ::rtl::OUString   sSeparator(&cSeparator, 1);
@@ -285,15 +285,15 @@ namespace dbaui
     void ODataClipboard::AddSupportedFormats()
     {
         // RTF?
-        if (m_nFormats && DCF_RTF_TABLE)
+        if (DCF_RTF_TABLE == (m_nFormats & DCF_RTF_TABLE))
             AddFormat(SOT_FORMAT_RTF);
 
         // HTML?
-        if (m_nFormats && DCF_HTML_TABLE)
+        if (DCF_HTML_TABLE == (m_nFormats & DCF_HTML_TABLE))
             AddFormat(SOT_FORMATSTR_ID_HTML);
 
         // object descriptor?
-        if (m_nFormats && DCF_OBJECT_DESCRIPTOR)
+        if (DCF_OBJECT_DESCRIPTOR == (m_nFormats & DCF_OBJECT_DESCRIPTOR))
         {
             switch (m_nObjectType)
             {
