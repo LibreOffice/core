@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-17 09:45:53 $
+#   last change: $Author: kz $ $Date: 2005-03-18 17:03:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,8 @@ SLOFILES =      							\
     $(SLO)$/IdleDetection.obj				\
     $(SLO)$/EventMultiplexer.obj			\
     $(SLO)$/PreviewRenderer.obj				\
-    $(SLO)$/SdGlobalResourceContainer.obj
+    $(SLO)$/SdGlobalResourceContainer.obj	\
+    $(SLO)$/SlotStateListener.obj
 
 EXCEPTIONSFILES=
 
