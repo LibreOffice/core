@@ -2,8 +2,9 @@
  *
  *  $RCSfile: regpathhelper.cxx,v $
  *
- *  $Revision: 1.8 $
- *  last change: $Author: tlx $ $Date: 2001-06-01 18:51:05 $
+ *  $Revision: 1.9 $
+ *
+ *  last change: $Author: jbu $ $Date: 2001-06-07 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,29 +61,14 @@
 
 #include <stdio.h>
 
-#ifndef _OSL_SECURITY_H_
-#include <osl/security.h>
-#endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
+#endif
+#ifndef _OSL_SECURITY_HXX_
+#include <osl/security.hxx>
 #endif
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
-#endif
-#ifndef _VOS_PROFILE_HXX_
-#include <vos/profile.hxx>
-#endif
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
-#endif
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
-
-
-#if defined ( UNX ) || defined( MAC )
-#include <limits.h>
-#define _MAX_PATH PATH_MAX
 #endif
 
 using namespace vos;
@@ -93,29 +79,29 @@ using namespace rtl;
 
 #define USER_REGISTRY_NAME_ENV      "STAR_USER_REGISTRY"
 #define SYSTEM_REGISTRY_NAME_ENV    "STAR_REGISTRY"
-
-#define SVERSION_NAME           "sversion"
-#define REGISTRY_SECTION        "Registry"
-#define REGISTRY_VERSION_KEY    "UserRegistry 6.0"
-#define REGISTRY_LOCAL_NAME     "user60.rdb"
 #define REGISTRY_SYSTEM_NAME    "applicat.rdb"
 
-#define LOCALREGISTRY_DEFAULTLOCATION       "?^"
-#define LOCALREGISTRY_PORTALLOCATION        "?#"
+#define REGISTRY_LOCAL_NAME     "user60.rdb"
 
-#define SVERSION_LOCATION       "?^"
-#define SVERSION_FALLBACK       "?$"
+#ifdef SAL_UNX
+#define CONFIG_PATH_PREFIX      "."
+#else
+#define CONFIG_PATH_PREFIX      ""
+#endif
 
 namespace comphelper
 {
 
-static OUString getDefaultLocalRegistry()
+/**
+   @return sal_True, if the office is started in a portal
+                     environment.
+           sal_False, if the common office is started
+ */
+static sal_Bool retrievePortalUserDir( OUString *pDirectory )
 {
-    OUString uBuffer, userRegistryName;
-
     OStartupInfo startInfo;
     sal_uInt32 nArgs = startInfo.getCommandArgCount();
-    sal_Bool bIsPortalUser = sal_False, bFindProfile = sal_False;
+    sal_Bool bIsPortalUser = sal_False;
     OUString sArg;
     while( nArgs > 0 )
       {
@@ -123,33 +109,62 @@ static OUString getDefaultLocalRegistry()
           {
             if ( sArg.indexOf(OUString::createFromAscii("-userid")) == 0 )
             {
+
                   bIsPortalUser = sal_True;
+                sal_Int32 nStart = sArg.lastIndexOf( '[' );
+                sal_Int32 nEnd   = sArg.lastIndexOf( ']' );
+                if( -1 == nStart || -1 == nEnd || nEnd < nStart)
+                {
+                    *pDirectory = OUString();
+                }
+                else
+                {
+                    *pDirectory = sArg.copy( nStart + 1 , nEnd - nStart -1 );
+                }
                   break;
             }
           }
      }
+    return bIsPortalUser;
+}
 
-    if ( bIsPortalUser )
+
+static OUString getDefaultLocalRegistry()
+{
+    OUString uBuffer, userRegistryName;
+    OUString portalUserDir;
+
+    sal_Bool bIsPortalUser = retrievePortalUserDir( &portalUserDir );
+
+    if ( bIsPortalUser && portalUserDir.getLength() )
        {
-        bFindProfile = OProfile::getProfileName(uBuffer,
-                               OUString::createFromAscii(REGISTRY_LOCAL_NAME),
-                               OUString::createFromAscii(LOCALREGISTRY_PORTALLOCATION));
+        FileBase::getFileURLFromSystemPath( portalUserDir , portalUserDir );
 
-#ifdef TF_FILEURL
-        if (bFindProfile)
+        FileBase::getAbsoluteFileURL(
+            portalUserDir,
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "user/" REGISTRY_LOCAL_NAME ) ),
+            userRegistryName );
+
+        // Directory creation is probably necessary for bootstrapping a new
+        // user in the portal environment (the ucb uses this function).
+        // This should be solved differently, as
+        // no one expects this function to create anything ...
+
+        OUString sSeparator(RTL_CONSTASCII_USTRINGPARAM("/"));
+        OUString sPath(RTL_CONSTASCII_USTRINGPARAM("file://"));
+        FileBase::RC retRC = FileBase::E_None;
+
+        sal_Int32 nIndex = 3;
+        sPath += userRegistryName.getToken(2, '/', nIndex);
+        while( nIndex != -1 )
         {
-            static OUString sSeparator(RTL_CONSTASCII_USTRINGPARAM("/"));
-            OUString sPath(RTL_CONSTASCII_USTRINGPARAM("file://"));
-            FileBase::RC retRC = FileBase::E_None;
-
-            sal_Int32 nIndex = 0;
-            sPath += uBuffer.getToken(2, '/', nIndex);
-            while( nIndex != -1 )
+            sPath += sSeparator;
+            sPath += userRegistryName.getToken(0, '/', nIndex);
+            if( nIndex == -1 )
+                break;
+            Directory aDir( sPath );
+            if( aDir.open() == FileBase::E_NOENT )
             {
-                sPath += sSeparator;
-                sPath += uBuffer.getToken(0, '/', nIndex);
-                if( nIndex == -1 )
-                    break;
                 retRC = Directory::create(sPath);
                 if ( retRC != FileBase::E_None && retRC != FileBase::E_EXIST)
                 {
@@ -157,46 +172,15 @@ static OUString getDefaultLocalRegistry()
                 }
             }
         }
-#else
-        if (bFindProfile)
-        {
-            static OUString sSeparator(RTL_CONSTASCII_USTRINGPARAM("/"));
-            OUString sPath(RTL_CONSTASCII_USTRINGPARAM("//"));
-            FileBase::RC retRC = FileBase::E_None;
-
-            sal_Int32 nIndex = 0;
-            sPath += uBuffer.getToken(2, '/', nIndex);
-            while( nIndex != -1 )
-            {
-                sPath += sSeparator;
-                sPath += uBuffer.getToken(0, '/', nIndex);
-                if( nIndex == -1 )
-                    break;
-                Directory aDir( sPath );
-                if( aDir.open() == FileBase::E_NOENT )
-                {
-                    retRC = Directory::create(sPath);
-                    if ( retRC != FileBase::E_None && retRC != FileBase::E_EXIST)
-                    {
-                        return OUString();
-                    }
-                }
-            }
-        }
-#endif
-    } else
-       {
-        bFindProfile = OProfile::getProfileName(uBuffer,
-                               OUString::createFromAscii(REGISTRY_LOCAL_NAME),
-                               OUString::createFromAscii(LOCALREGISTRY_DEFAULTLOCATION));
     }
-    if ( bFindProfile )
-    {
-#ifdef TF_FILEURL
-        FileBase::getSystemPathFromFileURL(uBuffer, userRegistryName);
-#else
-        FileBase::getSystemPathFromNormalizedPath(uBuffer, userRegistryName);
-#endif
+    else
+       {
+        ::osl::Security aUserSecurity;
+        aUserSecurity.getConfigDir( uBuffer );
+        FileBase::getAbsoluteFileURL(
+            uBuffer,
+            OUString( RTL_CONSTASCII_USTRINGPARAM( CONFIG_PATH_PREFIX REGISTRY_LOCAL_NAME ) ),
+            userRegistryName );
     }
 
     return userRegistryName;
@@ -205,11 +189,8 @@ static OUString getDefaultLocalRegistry()
 
 OUString getPathToUserRegistry()
 {
-    OUString    uBuffer;
     OUString    userRegistryName;
-    sal_Char    buffer[_MAX_PATH]= "";
     FILE        *f=NULL;
-    sal_Bool    findProfile = sal_False;
 
     // search the environment STAR_USER_REGISTRY
     OString sBuffer( getenv(USER_REGISTRY_NAME_ENV) );
@@ -221,133 +202,6 @@ OUString getPathToUserRegistry()
         {
             fclose(f);
             userRegistryName = OStringToOUString( sBuffer, RTL_TEXTENCODING_ASCII_US);
-            return userRegistryName;
-        }
-    }
-
-    // search for entry in sversion.ini in config directory
-    if ( OProfile::getProfileName( uBuffer,
-                                   OUString( RTL_CONSTASCII_USTRINGPARAM(SVERSION_NAME) ),
-                                   OUString( RTL_CONSTASCII_USTRINGPARAM(SVERSION_LOCATION) )) )
-    {
-        OProfile profile;
-
-        if ( profile.open(uBuffer) )
-        {
-            findProfile = sal_True;
-
-            OString userRegistryKey( REGISTRY_VERSION_KEY );
-            userRegistryKey += "/";
-            userRegistryKey += OString::valueOf((sal_Int32)SUPD);
-
-            if ( profile.readString(REGISTRY_SECTION, userRegistryKey.getStr(), buffer, _MAX_PATH, "") )
-            {
-                if ( buffer[0] == '\0' )
-                {
-                    if ( profile.readString(REGISTRY_SECTION, REGISTRY_VERSION_KEY, buffer, _MAX_PATH, "") )
-                        sBuffer = buffer;
-                } else
-                {
-                    sBuffer = buffer;
-                }
-            }
-        }
-
-        if ( sBuffer.getLength() > 0 )
-        {
-            f = fopen( sBuffer.getStr(), "r");
-
-            if (f != NULL)
-            {
-                fclose(f);
-                userRegistryName = OStringToOUString(sBuffer, RTL_TEXTENCODING_ASCII_US);
-                return userRegistryName;
-            }
-        }
-    }
-    // search for entry in sversion.ini in system directory
-    if ( !findProfile &&
-         OProfile::getProfileName( uBuffer,
-                                    OUString::createFromAscii(SVERSION_NAME),
-                                    OUString::createFromAscii(SVERSION_FALLBACK) ))
-    {
-        OProfile profile;
-
-        if ( profile.open(uBuffer) )
-        {
-            OString userRegistryKey(REGISTRY_VERSION_KEY);
-            userRegistryKey += OString::valueOf(PATH_DELEMITTER);
-            userRegistryKey += OString::valueOf((sal_Int32)SUPD);
-
-            if ( profile.readString(REGISTRY_SECTION, userRegistryKey.getStr(), buffer, _MAX_PATH, "") )
-            {
-                if (buffer[0] == '\0')
-                {
-                    if (profile.readString(REGISTRY_SECTION, REGISTRY_VERSION_KEY, buffer, _MAX_PATH, ""))
-                        sBuffer = buffer;
-                } else
-                {
-                    sBuffer = buffer;
-                }
-            }
-        }
-
-        if ( sBuffer.getLength() > 0 )
-        {
-            f = fopen( sBuffer.getStr(), "r" );
-
-            if (f != NULL)
-            {
-                fclose(f);
-                userRegistryName = OStringToOUString(sBuffer, RTL_TEXTENCODING_ASCII_US);
-                return userRegistryName;
-            }
-        }
-    }
-
-    // default security of logged in user
-    OSecurity sec;
-    if ( sec.getConfigDir(uBuffer) && uBuffer.getLength() )
-    {
-        // search without dot
-        OUString normalizedPath;
-#ifdef TF_FILEURL
-        if (!FileBase::getSystemPathFromFileURL(uBuffer, normalizedPath))
-#else
-        if (!FileBase::getSystemPathFromNormalizedPath(uBuffer, normalizedPath))
-#endif
-        {
-            sBuffer = OUStringToOString(normalizedPath, RTL_TEXTENCODING_ASCII_US);
-            if ( sBuffer.getLength() > 0 )
-                sBuffer += OString::valueOf(PATH_DELEMITTER);
-            sBuffer += REGISTRY_LOCAL_NAME;
-
-            userRegistryName = OStringToOUString( sBuffer, RTL_TEXTENCODING_ASCII_US);
-            f = fopen(sBuffer.getStr(), "r");
-
-            if (f == NULL)
-            {
-                // search with dot
-                sBuffer = OUStringToOString(normalizedPath, RTL_TEXTENCODING_ASCII_US);
-                if ( sBuffer.getLength() > 0 )
-                    sBuffer += OString::valueOf(PATH_DELEMITTER);
-
-                sBuffer += ".";
-                sBuffer += REGISTRY_LOCAL_NAME;
-
-                userRegistryName = OStringToOUString( sBuffer, RTL_TEXTENCODING_ASCII_US);
-                f = fopen( sBuffer.getStr(), "r" );
-
-                if (f == NULL)
-                {
-                    userRegistryName = OUString();
-                }
-            }
-
-            if (f != NULL)
-            {
-                fclose(f);
-            }
         }
     }
 
@@ -377,11 +231,7 @@ OUString getPathToSystemRegistry()
 
         uBuffer += registryBaseName;
 
-#ifdef TF_FILEURL
         if (!FileBase::getSystemPathFromFileURL(uBuffer, systemRegistryName))
-#else
-        if (!FileBase::getSystemPathFromNormalizedPath(uBuffer, systemRegistryName))
-#endif
         {
             OString tmpStr( OUStringToOString(systemRegistryName, RTL_TEXTENCODING_ASCII_US) );
             f = fopen( tmpStr.getStr(), "r" );
