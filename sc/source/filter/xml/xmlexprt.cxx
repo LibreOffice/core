@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.180 $
+ *  $Revision: 1.181 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:11:53 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:29:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,7 +621,7 @@ ScXMLExport::ScXMLExport(
     xRowStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScRowStylesProperties, xScPropHdlFactory);
     xTableStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScTableStylesProperties, xScPropHdlFactory);
     xCellStylesExportPropertySetMapper = new ScXMLCellExportPropertyMapper(xCellStylesPropertySetMapper);
-    xCellStylesExportPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateCharExtPropMapper(*this));
+    xCellStylesExportPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(*this));
     xColumnStylesExportPropertySetMapper = new ScXMLColumnExportPropertyMapper(xColumnStylesPropertySetMapper);
     xRowStylesExportPropertySetMapper = new ScXMLRowExportPropertyMapper(xRowStylesPropertySetMapper);
     xTableStylesExportPropertySetMapper = new ScXMLTableExportPropertyMapper(xTableStylesPropertySetMapper);
@@ -1649,8 +1649,8 @@ void ScXMLExport::_ExportContent()
                             rtl::OUString sPrintRanges( GetPrintRanges() );
                             if( sPrintRanges.getLength() )
                                 AddAttribute( XML_NAMESPACE_TABLE, XML_PRINT_RANGES, sPrintRanges );
-                            else
-                                AddAttribute( XML_NAMESPACE_TABLE, XML_AUTOMATIC_PRINT_RANGE, pDoc->IsPrintEntireSheet(static_cast<SCTAB>(nTable)) ? XML_TRUE : XML_FALSE);
+                            else if (!pDoc->IsPrintEntireSheet(static_cast<SCTAB>(nTable)))
+                                AddAttribute( XML_NAMESPACE_TABLE, XML_PRINT, XML_FALSE);
                             SvXMLElementExport aElemT(*this, sElemTab, sal_True, sal_True);
                             CheckAttrList();
                             WriteTableSource();
@@ -2647,16 +2647,23 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                                 bMemChart = sal_True;
                                 rtl::OUString sRanges;
                                 ScXMLConverter::GetStringFromRangeList(sRanges, rRangeListRef, GetDocument());
+                                SvXMLAttributeList* pAttrList;
                                 if (sRanges.getLength())
-                                    AddAttribute(XML_NAMESPACE_DRAW, XML_NOTIFY_ON_UPDATE_OF_RANGES, sRanges);
-                                GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint);
+                                {
+                                    pAttrList = new SvXMLAttributeList();
+                                    pAttrList->AddAttribute(
+                                        GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken(XML_NOTIFY_ON_UPDATE_OF_RANGES) ), sRanges );
+                                }
+                                GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint, pAttrList);
                             }
                         }
                         else
                         {
                             bMemChart = sal_True;
-                            AddAttribute(XML_NAMESPACE_DRAW, XML_NOTIFY_ON_UPDATE_OF_RANGES, rtl::OUString());
-                            GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint);
+                            SvXMLAttributeList* pAttrList = new SvXMLAttributeList();
+                            pAttrList->AddAttribute(
+                                GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken(XML_NOTIFY_ON_UPDATE_OF_RANGES) ), rtl::OUString() );
+                            GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint, pAttrList);
                         }
                     }
 /*                  SchMemChart* pMemChart = pDoc->FindChartData(sName);
