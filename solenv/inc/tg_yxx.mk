@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_yxx.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-16 11:39:28 $
+#   last change: $Author: hr $ $Date: 2004-09-09 11:14:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,8 +72,8 @@ $(MISC)$/%.cxx : %.y
 .ENDIF
     $(BISON) $(YACCFLAGS) -o $(YACCTARGET) $(MISC)$/stripped_$<
 # removing -f switch - avoid getting nothing when copying a file to itself
-    @+-$(COPY:s/-f//) $@.h $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
-    @+-$(COPY:s/-f//) $(@:d)$/$(@:b).hxx $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
+    +-$(COPY:s/-f//) $@.h $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
+    +-$(COPY:s/-f//) $(@:d)$/$(@:b).hxx $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
     +$(TYPE) $(INCCOM)$/$(@:b).hxx >& $(NULLDEV)
 
 $(INCCOM)$/yy%.cxx : %.y
