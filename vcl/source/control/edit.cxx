@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mt $ $Date: 2002-01-18 08:30:09 $
+ *  last change: $Author: tbe $ $Date: 2002-03-18 17:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,13 +146,15 @@
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #endif
 
-
-
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <rtl/memory.h>
 
 #include <unohelp.hxx>
+
+#ifndef _VCL_UNOHELP2_HXX
+#include <unohelp2.hxx>
+#endif
 
 
 #pragma hdrstop
@@ -163,87 +165,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::rtl;
 
 #define EXTRAOFFSET_X   2
-
-
-// =======================================================================
-
-class TextDataObject :  public ::com::sun::star::datatransfer::XTransferable,
-                        public ::cppu::OWeakObject
-
-{
-private:
-//    uno::Reference< datatransfer::clipboard::XClipboard >& mxClipboard;
-    String          maText;
-
-public:
-//                  TextDataObject( uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard, const String& rText );
-                    TextDataObject( const String& rText );
-                    ~TextDataObject();
-
-    String&         GetString() { return maText; }
-
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
-
-    // ::com::sun::star::datatransfer::XTransferable
-    ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::uno::RuntimeException);
-};
-
-// TextDataObject::TextDataObject( uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard, const String& rText ) : maText( rText )
-TextDataObject::TextDataObject( const String& rText ) : maText( rText )
-{
-//    mxClipboard = rxClipboard;
-}
-
-TextDataObject::~TextDataObject()
-{
-}
-
-// uno::XInterface
-uno::Any TextDataObject::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
-{
-    uno::Any aRet = ::cppu::queryInterface( rType, SAL_STATIC_CAST( datatransfer::XTransferable*, this ) );
-    return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
-}
-
-// datatransfer::XTransferable
-uno::Any TextDataObject::getTransferData( const datatransfer::DataFlavor& rFlavor ) throw(datatransfer::UnsupportedFlavorException, io::IOException, uno::RuntimeException)
-{
-    uno::Any aAny;
-
-    ULONG nT = SotExchange::GetFormat( rFlavor );
-    if ( nT == SOT_FORMAT_STRING )
-    {
-        aAny <<= (::rtl::OUString)GetString();
-    }
-    else
-    {
-        throw datatransfer::UnsupportedFlavorException();
-    }
-    return aAny;
-}
-
-uno::Sequence< datatransfer::DataFlavor > TextDataObject::getTransferDataFlavors(  ) throw(uno::RuntimeException)
-{
-    uno::Sequence< datatransfer::DataFlavor > aDataFlavors(1);
-    SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aDataFlavors.getArray()[0] );
-    return aDataFlavors;
-}
-
-sal_Bool TextDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& rFlavor ) throw(uno::RuntimeException)
-{
-    ULONG nT = SotExchange::GetFormat( rFlavor );
-    return ( nT == SOT_FORMAT_STRING );
-}
-
-
-
-
-
 
 
 // - Redo
@@ -1018,7 +939,7 @@ void Edit::ImplCopy( uno::Reference< datatransfer::clipboard::XClipboard >& rxCl
 {
     if ( rxClipboard.is() )
     {
-        TextDataObject* pDataObj = new TextDataObject( GetSelected() );
+        ::vcl::unohelper::TextDataObject* pDataObj = new ::vcl::unohelper::TextDataObject( GetSelected() );
         const sal_uInt32 nRef = Application::ReleaseSolarMutex();
         rxClipboard->setContents( pDataObj, NULL );
 
@@ -2336,7 +2257,7 @@ void Edit::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::Dra
             if ( IsTracking() )
                 EndTracking();  // Vor D&D Tracking ausschalten
 
-            TextDataObject* pDataObj = new TextDataObject( GetSelected() );
+            ::vcl::unohelper::TextDataObject* pDataObj = new ::vcl::unohelper::TextDataObject( GetSelected() );
             sal_Int8 nActions = datatransfer::dnd::DNDConstants::ACTION_COPY;
             if ( !IsReadOnly() )
                 nActions |= datatransfer::dnd::DNDConstants::ACTION_MOVE;
