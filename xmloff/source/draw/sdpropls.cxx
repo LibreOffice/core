@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-04 08:54:01 $
+ *  last change: $Author: cl $ $Date: 2000-12-05 15:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,25 +235,18 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "ParaLineSpacing",        XML_NAMESPACE_FO,       sXML_line_height,           XML_TYPE_LINE_SPACE_FIXED, 0 },
     { "ParaLineSpacing",        XML_NAMESPACE_STYLE,    sXML_line_height_at_least,  XML_TYPE_LINE_SPACE_MINIMUM, 0 },
     { "ParaLineSpacing",        XML_NAMESPACE_STYLE,    sXML_line_spacing,          XML_TYPE_LINE_SPACE_DISTANCE, 0 },
-    { "ParaAdjust",         XML_NAMESPACE_FO,       sXML_text_align,            XML_TYPE_TEXT_ADJUST, 0 },
-    { "ParaLastLineAdjust", XML_NAMESPACE_STYLE,    sXML_text_align_last,   XML_TYPE_TEXT_ADJUSTLAST, 0 },
-// ??   { "ParaExpandSingleWord",XML_NAMESPACE_STYLE,   sXML_justify_single_word,XML_TYPE_BOOL, 0 },
-    { "ParaIsHyphenation",  XML_NAMESPACE_FO,       sXML_hyphenate,         XML_TYPE_BOOL, 0 },
-// ??   { "ParaHyphenationMaxLeadingChars", XML_NAMESPACE_FO, sXML_hyphenation_remain_char_count, XML_TYPE_NUMBER, 0 },
-// ??   { "ParaHyphenationMaxTrailingChars",XML_NAMESPACE_FO, sXML_hyphenation_push_char_count, XML_TYPE_NUMBER, 0 },
-// ??   { "ParaHyphenationMaxHyphens",  XML_NAMESPACE_FO, sXML_hyphenation_ladder_count, XML_TYPE_NUMBER_NONE, 0 },
-    { "ParaLeftMargin",         XML_NAMESPACE_FO,   sXML_margin_left,       XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARALEFTMARGIN },
-// ??   { "ParaLeftMarginRelative", XML_NAMESPACE_FO,   sXML_margin_left,       XML_TYPE_PERCENT, CTF_PARALEFTMARGIN_REL },
-    { "ParaRightMargin",            XML_NAMESPACE_FO,   sXML_margin_right,      XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARARIGHTMARGIN },
-// ??   { "ParaRightMarginRelative",    XML_NAMESPACE_FO,   sXML_margin_right,      XML_TYPE_PERCENT, CTF_PARARIGHTMARGIN_REL },
-// ??   { "ParaFirstLineIndent",        XML_NAMESPACE_FO,   sXML_text_indent,       XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARAFIRSTLINE },
-// ??   { "ParaFirstLineIndentRelative",    XML_NAMESPACE_FO,   sXML_text_indent,   XML_TYPE_PERCENT, CTF_PARAFIRSTLINE_REL },
-    { "ParaLastLineAdjust", XML_NAMESPACE_FO, sXML_text_align_last,     XML_TYPE_TEXT_ADJUSTLAST, 0 },
-
-    { "ParaTopMargin",          XML_NAMESPACE_FO,   sXML_margin_top,            XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARATOPMARGIN },
-// ??   { "ParaTopMarginRelative",  XML_NAMESPACE_FO,   sXML_margin_top,            XML_TYPE_PERCENT, CTF_PARATOPMARGIN_REL },
-    { "ParaBottomMargin",       XML_NAMESPACE_FO,   sXML_margin_bottom,     XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARABOTTOMMARGIN },
-// ??   { "ParaBottomMarginRelative",XML_NAMESPACE_FO,  sXML_margin_bottom,     XML_TYPE_PERCENT, CTF_PARABOTTOMMARGIN_REL },
+    { "ParaAdjust",             XML_NAMESPACE_FO,       sXML_text_align,            XML_TYPE_TEXT_ADJUST, 0 },
+    { "ParaLastLineAdjust",     XML_NAMESPACE_STYLE,    sXML_text_align_last,       XML_TYPE_TEXT_ADJUSTLAST, 0 },
+    { "ParaIsHyphenation",      XML_NAMESPACE_FO,       sXML_hyphenate,             XML_TYPE_BOOL, 0 },
+    { "ParaLeftMargin",         XML_NAMESPACE_FO,       sXML_margin_left,           XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARALEFTMARGIN },
+    { "ParaRightMargin",        XML_NAMESPACE_FO,       sXML_margin_right,          XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARARIGHTMARGIN },
+    { "ParaFirstLineIndent",    XML_NAMESPACE_FO,       sXML_text_indent,           XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARAFIRSTLINE },
+    { "ParaLastLineAdjust",     XML_NAMESPACE_FO,       sXML_text_align_last,       XML_TYPE_TEXT_ADJUSTLAST, 0 },
+    { "ParaTopMargin",          XML_NAMESPACE_FO,       sXML_margin_top,            XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARATOPMARGIN },
+    { "ParaBottomMargin",       XML_NAMESPACE_FO,       sXML_margin_bottom,         XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARABOTTOMMARGIN },
+    { "NumberingRules",         XML_NAMESPACE_TEXT,     sXML_list_style,            XML_SD_TYPE_NUMBULLET|MID_FLAG_ELEMENT_ITEM, CTF_NUMBERINGRULES },
+    { "NumberingRules",         XML_NAMESPACE_STYLE,    sXML_list_style_name,       XML_TYPE_STRING, CTF_NUMBERINGRULES_NAME },
+    { "IsNumbering",            XML_NAMESPACE_TEXT,     sXML_enable_numbering,      XML_TYPE_BOOL, 0 },
     { "ParaIsCharacterDistance", XML_NAMESPACE_STYLE, sXML_text_autospace, XML_TYPE_TEXT_AUTOSPACE, 0 },
     { "ParaIsHangingPunctuation", XML_NAMESPACE_STYLE, sXML_punctuation_wrap, XML_TYPE_TEXT_PUNCTUATION_WRAP, 0 },
     { "ParaIsForbiddenRules", XML_NAMESPACE_STYLE, sXML_line_break, XML_TYPE_TEXT_LINE_BREAK, 0 },
