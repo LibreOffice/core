@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 15:25:26 $
+ *  last change: $Author: nn $ $Date: 2000-11-15 10:35:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2099,9 +2099,10 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
     USHORT nCmd = rCEvt.GetCommand();
     ScModule* pScMod = SC_MOD();
 
-    if ( rCEvt.GetCommand() == COMMAND_STARTEXTTEXTINPUT ||
-         rCEvt.GetCommand() == COMMAND_ENDEXTTEXTINPUT ||
-         rCEvt.GetCommand() == COMMAND_EXTTEXTINPUT  )
+    if ( nCmd == COMMAND_STARTEXTTEXTINPUT ||
+         nCmd == COMMAND_ENDEXTTEXTINPUT ||
+         nCmd == COMMAND_EXTTEXTINPUT ||
+         nCmd == COMMAND_CURSORPOS )
     {
         BOOL bEditView = pViewData->HasEditView( eWhich );
         if (!bEditView)
