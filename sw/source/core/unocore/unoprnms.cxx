@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 11:03:43 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,9 +772,13 @@ const SwPropNameTab aPropNameTab = {
 /* 0690 UNO_NAME_BLIND_COPIES_TO     */  {MAP_CHAR_LEN("BlindCopiesTo")},
 /* 0691 UNO_NAME_IN_SERVER_PASSWORD  */  {MAP_CHAR_LEN("InServerPassword")},
 /* 0692 UNO_NAME_OUT_SERVER_PASSWORD */  {MAP_CHAR_LEN("OutServerPassword")},
-/* 0693 UNO_NAME_SAVE_FILTER         */  {MAP_CHAR_LEN("SaveFilterOptions")},
-/* 0694 UNO_NAME_SAVE_DATA           */  {MAP_CHAR_LEN("SaveFilterData")},
+/* 0693 UNO_NAME_SAVE_FILTER_OPTIONS */  {MAP_CHAR_LEN("SaveFilterOptions")},
+/* 0694 UNO_NAME_SAVE_FILTER_DATA    */  {MAP_CHAR_LEN("SaveFilterData")},
 /* 0695 UNO_NAME_LOCK_UPDATES        */  {MAP_CHAR_LEN("LockUpdates")}
+/* 0696 UNO_NAME_PAGE_COUNT*/               {MAP_CHAR_LEN("PageCount")},
+/* 0697 UNO_NAME_LINE_COUNT*/               {MAP_CHAR_LEN("LineCount")},
+/* 0698 UNO_NAME_IS_CONSTANT_SPELLCHECK*/   {MAP_CHAR_LEN("IsConstantSpellcheck")},
+/* 0699 UNO_NAME_IS_HIDE_SPELL_MARKS*/      {MAP_CHAR_LEN("IsHideSpellMarks")}
 };
 
 const SwPropNameLen& SwGetPropName( USHORT nId )
