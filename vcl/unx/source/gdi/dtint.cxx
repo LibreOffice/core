@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:33:47 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 #include <gnomeint.hxx>
 #include <saldisp.hxx>
 #include <saldata.hxx>
-#include <salframe.hxx>
 #include <wmadaptor.hxx>
 
 #include <svapp.hxx>
@@ -103,16 +102,12 @@ BOOL bSymbolLoadFailed = FALSE;
 DtIntegratorList DtIntegrator::aIntegratorList;
 String DtIntegrator::aHomeDir;
 
-DtIntegrator::DtIntegrator( SalFrame* pFrame ) :
-        mpSalFrame( pFrame ),
+DtIntegrator::DtIntegrator() :
         meType( DtGeneric ),
         mnRefCount( 0 ),
         mnSystemLookCommandProcess( -1 )
 {
-    if( pFrame )
-        mpSalDisplay = pFrame->maFrameData.GetDisplay();
-    else
-        mpSalDisplay = GetSalData()->GetDefDisp();
+    mpSalDisplay = GetSalData()->GetDefDisp();
     mpDisplay = mpSalDisplay->GetDisplay();
     aIntegratorList.Insert( this, LIST_APPEND );
     static const char* pHome = getenv( "HOME" );
@@ -123,16 +118,12 @@ DtIntegrator::~DtIntegrator()
 {
 }
 
-DtIntegrator* DtIntegrator::CreateDtIntegrator( SalFrame* pFrame )
+DtIntegrator* DtIntegrator::CreateDtIntegrator()
 {
-    // hack for sclient
-    if( ! pFrame && aIntegratorList.Count() )
-        return aIntegratorList.GetObject( 0 );
-
-    SalDisplay* pSalDisplay = pFrame ? pFrame->maFrameData.GetDisplay() : GetSalData()->GetDefDisp();
+    SalDisplay* pSalDisplay = GetSalData()->GetDefDisp();
     Display* pDisplay = pSalDisplay->GetDisplay();
 
-    for( int i = 0; i < aIntegratorList.Count(); i++ )
+    for( unsigned int i = 0; i < aIntegratorList.Count(); i++ )
     {
         DtIntegrator* pIntegrator = aIntegratorList.GetObject( i );
         if( pIntegrator->mpDisplay == pDisplay )
@@ -150,12 +141,12 @@ DtIntegrator* DtIntegrator::CreateDtIntegrator( SalFrame* pFrame )
     if( nDtAtom && ( pLibrary = dlopen( "libDtSvc.so", DLOPEN_MODE ) ) )
     {
         dlclose( pLibrary );
-        return new CDEIntegrator( pFrame );
+        return new CDEIntegrator();
     }
 #endif
 
     if( pSalDisplay->getWMAdaptor()->getWindowManagerName().EqualsAscii( "KWin" ) )
-        return new KDEIntegrator( pFrame );
+        return new KDEIntegrator();
 
     // actually this is not that good an indicator for a GNOME running
     // but there currently does not seem to be a better one
@@ -172,14 +163,14 @@ DtIntegrator* DtIntegrator::CreateDtIntegrator( SalFrame* pFrame )
                     pProperties[ i ] == nDtAtom2 )
                 {
                     XFree( pProperties );
-                    return new GNOMEIntegrator( pFrame );
+                    return new GNOMEIntegrator();
                 }
             XFree( pProperties );
         }
     }
 
     // default: generic implementation
-    return new DtIntegrator( pFrame );
+    return new DtIntegrator();
 }
 
 void DtIntegrator::GetSystemLook( AllSettings& rSettings )
@@ -197,7 +188,7 @@ Color DtIntegrator::parseColor( const ByteString& rLine )
     {
         ByteString aTriple( rLine.Copy( nPos1+1, nPos2-nPos1-1 ) );
         xub_StrLen nIndex = 0;
-        int nRed, nGreen, nBlue, nColor = 0;
+        int nRed = 0, nGreen = 0, nBlue = 0, nColor = 0;
         do
         {
             switch( nColor )
@@ -365,12 +356,12 @@ void DtIntegrator::GetSystemLook( const char* pCommand, AllSettings& rSettings )
             if( nFormat == 8 && nType == XA_STRING && nItems )
             {
 #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "got %d data items:\n%.*s", nItems, nItems, pData );
+                fprintf( stderr, "got %ld data items:\n%.*s", nItems, (int)nItems, pData );
 #endif
                 // fill in the lines
                 char* pRun = pData;
                 char* pLastLine = pData;
-                while( (pRun-pData) <= nItems )
+                while( (pRun-pData) <= (int)nItems )
                 {
                     if( *pRun == '\n' )
                     {
@@ -385,7 +376,7 @@ void DtIntegrator::GetSystemLook( const char* pCommand, AllSettings& rSettings )
             }
 #if OSL_DEBUG_LEVEL > 1
             else
-                fprintf( stderr, "query of data failed with nFormat = %d, nType = %d, nItems = %d\n", nFormat, nType, nItems );
+                fprintf( stderr, "query of data failed with nFormat = %d, nType = %d, nItems = %ld\n", nFormat, (int)nType, nItems );
 #endif
             XFree( pData );
         }
