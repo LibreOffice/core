@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-05 09:05:03 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         sal_Char cFldChr = 0;
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         XubString aDebugString;
 #endif
 
@@ -368,7 +368,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                 nCutPos += nFieldDiff;
                 nHyphPos += nFieldDiff;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 aDebugString = rInf.GetTxt();
 #endif
 
@@ -485,7 +485,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             xHyphWord = aResult.rHyphenatedWord;
             nBreakPos += xHyphWord->getHyphenationPos() + 1;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             // e.g., Schif-fahrt, referes to our string
             const String aWord = xHyphWord->getWord();
             // e.g., Schiff-fahrt, referes to the word after hyphenation
@@ -592,7 +592,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             rOldTxt.Insert( cFldChr, nOldIdx - 1 );
             rInf.SetIdx( nOldIdx );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             ASSERT( aDebugString == rInf.GetTxt(),
                     "Somebody, somebody, somebody put something in my string" );
 #endif
