@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NestedRegistry.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:45 $
+ *  last change:$Date: 2003-05-27 12:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ public class NestedRegistry extends TestCase {
         Object oInterface = null;
         Object fileAcc = null;
 
-        final String tmpDir = utils.getOfficeTempDirSys(Param.getMSF()) ;
+        final String tmpDir = utils.getOfficeTempDirSys((XMultiServiceFactory)Param.getMSF()) ;
         final String openF = tmpDir + "XSimpleRegistry_open" + uniq + ".rdb" ;
         final String destroyF = tmpDir
             + "XSimpleRegistry_destroy" + uniq + ".rdb" ;
@@ -193,7 +193,7 @@ public class NestedRegistry extends TestCase {
         }
 
         try {
-            XMultiServiceFactory xMSF = Param.getMSF();
+            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
             reg1 = RegistryTools.
                     createRegistryService(xMSF) ;
             reg1.open(mergeF, false, true) ;

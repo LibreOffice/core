@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnectionPool.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:43 $
+ *  last change:$Date: 2003-05-27 12:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ import util.DBTools;
 public class OConnectionPool extends TestCase {
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
-        XMultiServiceFactory xMSF = Param.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
         XInterface oObj = null;
 
         try {
