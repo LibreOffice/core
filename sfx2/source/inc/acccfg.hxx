@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-05-17 12:10:57 $
+ *  last change: $Author: pb $ $Date: 2001-06-28 13:39:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,19 +64,16 @@
 
 // #include *****************************************************************
 
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
+#ifndef _SV_FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
 #endif
-#ifndef _BUTTON_HXX //autogen
+#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
-#ifndef _DIALOG_HXX //autogen
+#ifndef _SV_DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
 #endif
-#ifndef _LSTBOX_HXX //autogen
+#ifndef _SV_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
 #include "minarray.hxx"

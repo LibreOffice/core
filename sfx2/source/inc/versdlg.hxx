@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-05-17 12:10:57 $
+ *  last change: $Author: pb $ $Date: 2001-06-28 13:39:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,17 +64,14 @@
 
 // #include *****************************************************************
 
-#ifndef _BUTTON_HXX //autogen
+#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
-#ifndef _FIXED_HXX //autogen
+#ifndef _SV_FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
 #endif
 #ifndef _SVTREEBOX_HXX //autogen
 #include <svtools/svtabbx.hxx>
-#endif
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
 #endif
 #ifndef _SVEDIT_HXX //autogen
 #include <svtools/svmedit.hxx>

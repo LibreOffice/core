@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-05-17 12:10:57 $
+ *  last change: $Author: pb $ $Date: 2001-06-28 13:39:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,7 @@
 #ifndef _EVENTDLG_HXX
 #define _EVENTDLG_HXX
 
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-#ifndef _MENUBTN_HXX //autogen
+#ifndef _SV_MENUBTN_HXX //autogen
 #include <vcl/menubtn.hxx>
 #endif
 

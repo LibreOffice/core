@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-27 13:38:25 $
+ *  last change: $Author: pb $ $Date: 2001-06-28 13:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,6 @@ namespace com { namespace sun { namespace star { namespace awt { class XWindow; 
 #include <vcl/tabpage.hxx>
 #include <vcl/splitwin.hxx>
 #include <vcl/tabctrl.hxx>
-#include <vcl/group.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
