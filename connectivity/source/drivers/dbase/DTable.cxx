@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-16 12:35:13 $
+ *  last change: $Author: oj $ $Date: 2000-11-17 07:37:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,6 +287,7 @@ ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection,
                                   _Description,
                                   _SchemaName,
                                   _CatalogName)
+                ,m_pMemoStream(NULL)
 {
     // initialize the header
     m_aHeader.db_typ    = dBaseIII;
