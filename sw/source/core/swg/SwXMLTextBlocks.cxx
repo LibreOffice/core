@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:44:33 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,6 @@ SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
     pDoc->SetOle2Link( Link() );
     pDoc->DoUndo( FALSE );      // always FALSE
     pDoc->AddLink();
-    uno::Reference< embed::XStorage > refStg;
     if( !aDateModified.GetDate() || !aTimeModified.GetTime() )
         Touch();        // falls neu angelegt -> neuen ZeitStempel besorgen
     try
@@ -189,7 +188,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
     bInfoChanged = FALSE;
 }
 
-SwXMLTextBlocks::SwXMLTextBlocks( const uno::Reference < embed::XStorage >& rStg, const String& rName  )
+SwXMLTextBlocks::SwXMLTextBlocks( const uno::Reference < embed::XStorage >& rStg, const String& rName )
 : SwImpBlocks( rName )
 , bAutocorrBlock( TRUE )
 , nFlags ( 0 )
@@ -429,8 +428,7 @@ ULONG SwXMLTextBlocks::PutBlock( SwPaM& rPam, const String& rLong )
     nFlags |= nCommitFlags;
 
     WriterRef xWrt;
-    //::GetXMLWriter ( String::CreateFromAscii(FILTER_XML), xWrt);
-    ::GetXMLWriter ( aEmptyStr, xWrt);
+    ::GetXMLWriter ( aEmptyStr, GetBaseURL(), xWrt);
     SwWriter aWriter (xRoot, *pDoc );
 
     xWrt->bBlock = sal_True;
@@ -442,7 +440,10 @@ ULONG SwXMLTextBlocks::PutBlock( SwPaM& rPam, const String& rLong )
     sal_Bool bHasChildren = pDocSh && pDocSh->GetEmbeddedObjectContainer().HasEmbeddedObjects();
     if( !nRes && bHasChildren )
     {
-        sal_Bool bOK = pDocSh->SaveAsChildren( xRoot );
+        // TODO/LATER: no progress bar?!
+        // TODO/MBA: strange construct
+        xMedium = new SfxMedium( xRoot, GetBaseURL() );
+        sal_Bool bOK = pDocSh->SaveAsChildren( *xMedium );
         if( bOK )
             bOK = pDocSh->SaveCompletedChildren( sal_True );
         if( !bOK )
@@ -664,30 +665,8 @@ void SwXMLTextBlocks::GeneratePackageName ( const String& rShort, String& rPacka
         rPackageName.SetChar( nPos, '_' );
         ++nPos;
     }
-#if 0
-    /*
-     * We can assume that if the package name we generate is already in the storage,
-     * then we are over-writing it...*/
-    if (xBlkRoot.Is() || 0 == OpenFile ( FALSE ) )
-    {
-        if ( xBlkRoot->IsContained( rPackageName ) )
-        {
-            xBlkRoot->Remove ( rPackageName  );
-            xBlkRoot->Commit();
-        }
-
-        /*
-        ULONG nIdx=0;
-        while ( xBlkRoot->IsContained( rPackageName ))
-        {
-            ++nIdx;
-            rPackageName += String::CreateFromInt32( nIdx );
-        }
-        */
-    }
-#endif
-
 }
+
 ULONG SwXMLTextBlocks::PutText( const String& rShort, const String& rName,
                                 const String& rText )
 {
