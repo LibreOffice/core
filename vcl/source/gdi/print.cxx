@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-20 12:25:34 $
+ *  last change: $Author: cd $ $Date: 2001-12-21 15:50:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,13 +509,6 @@ static void ImplInitPrnQueueList()
         pNewInfo->mnStatus      = pInfos[i].PrinterStatus;
         pNewInfo->mnJobs        = pInfos[i].Jobs;
         pNewInfo->mpSysData     = NULL;
-        pSVData->maGDIData.mpPrinterQueueList->Add( pNewInfo );
-    }
-    if ( !pSVData->maGDIData.mpPrinterQueueList->Count() )
-    {
-        SalPrinterQueueInfo* pNewInfo   = new SalPrinterQueueInfo;
-        pNewInfo->maPrinterName         = String::CreateFromAscii("No Printer");
-        pNewInfo->mpSysData             = NULL;
         pSVData->maGDIData.mpPrinterQueueList->Add( pNewInfo );
     }
 #endif
