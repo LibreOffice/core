@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cd $ $Date: 2002-07-29 13:44:20 $
+ *  last change: $Author: cd $ $Date: 2002-10-10 08:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,6 +536,36 @@ throw ( RuntimeException )
                 xMenuItemDispatch->addStatusListener( SAL_STATIC_CAST( XSTATUSLISTENER*, this ), aTargetURL );
             }
         }
+    }
+}
+
+
+void MenuManager::RemoveListener()
+{
+    ResetableGuard aGuard( m_aLock );
+
+    // disposing called from parent dispatcher
+    // remove all listener to prepare shutdown
+    REFERENCE< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
+
+    std::vector< MenuItemHandler* >::iterator p;
+    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+    {
+        MenuItemHandler* pItemHandler = *p;
+        if ( pItemHandler->xMenuItemDispatch.is() )
+        {
+            URL aTargetURL;
+            aTargetURL.Complete = pItemHandler->aMenuItemURL;
+            xTrans->parseStrict( aTargetURL );
+
+            pItemHandler->xMenuItemDispatch->removeStatusListener(
+                SAL_STATIC_CAST( XSTATUSLISTENER*, this ), aTargetURL );
+        }
+
+        pItemHandler->xMenuItemDispatch = REFERENCE< XDISPATCH >();
+        if ( pItemHandler->pSubMenuManager )
+            pItemHandler->pSubMenuManager->RemoveListener();
     }
 }
 
