@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-08 11:56:26 $
+ *  last change: $Author: dr $ $Date: 2001-02-26 06:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,9 @@
 
 #ifndef _EXCDEFS_HXX
 #define _EXCDEFS_HXX
-//_________________________________________________________
-//
-// excdefs.hxx: constants for import/export
-//_________________________________________________________
 
+//_________________________________________________________
+// excdefs.hxx: defines for Excel import/export
 
 //_________________________________________________________
 // unicode strings
@@ -74,6 +72,15 @@
 #define EXC_STR_FAREAST             0x04
 #define EXC_STR_RICH                0x08
 #define EXC_STR_UNKNOWN             0xF2
+
+//_________________________________________________________
+// in/out stream
+
+#define RECORD_SEEK_TO_BEGIN        0UL
+#define RECORD_SEEK_TO_END          (~0UL)
+
+#define EXC_MAXRECLEN_BIFF5         2080
+#define EXC_MAXRECLEN_BIFF8         8224
 
 //_________________________________________________________
 // ExcETabNumBuffer
@@ -113,6 +120,11 @@
 #define EXC_BUILTIN_SHEETTITLE      0x0C
 #define EXC_BUILTIN_AUTOFILTER      0x0D
 #define EXC_BUILTIN_UNKNOWN         0x0E
+
+//_________________________________________________________
+// (0x001C) NOTE
+
+#define EXC_NOTE5_MAXTEXT           2048
 
 //_________________________________________________________
 // (0x0031) FONT
@@ -170,6 +182,11 @@
 #define EXC_FONTCSET_IBM_865        0x00
 #define EXC_FONTCSET_SYSTEM         0x00
 #define EXC_FONTCSET_SYMBOL         0x02
+
+//_________________________________________________________
+// (0x003C) CONTINUE
+
+#define EXC_CONT                    0x003C
 
 //_________________________________________________________
 // (0x0059, 0x005A) CRN, XCT
