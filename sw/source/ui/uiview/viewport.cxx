@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:48:51 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ static USHORT nPgNum = 0;
 
 inline BOOL SwView::IsDocumentBorder()
 {
-    return GetDocShell()->GetProtocol().IsInPlaceActive() ||
+    return GetDocShell()->IsInPlaceActive() ||
            GetDocShell()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
            pWrtShell->IsBrowseMode() ||
            SVX_ZOOM_PAGEWIDTH_NOBORDER == (SvxZoomType)pWrtShell->GetViewOptions()->GetZoomType();
@@ -284,7 +284,7 @@ extern int bDocSzUpdated;
         SetVisArea( aNewVisArea, FALSE );
 
     if ( UpdateScrollbars() && !bInOuterResizePixel && !bInInnerResizePixel &&
-            !GetDocShell()->GetProtocol().IsInPlaceActive())
+            !GetDocShell()->IsInPlaceActive())
         OuterResizePixel( Point(),
                           GetViewFrame()->GetWindow().GetOutputSizePixel() );
 }
@@ -414,7 +414,7 @@ void SwView::SetVisArea( const Point &rPt, BOOL bUpdateScrollbar )
 void SwView::CheckVisArea()
 {
     pHScrollbar->SetAuto( pWrtShell->IsBrowseMode() &&
-                              !GetDocShell()->GetProtocol().IsInPlaceActive() );
+                              !GetDocShell()->IsInPlaceActive() );
     if ( IsDocumentBorder() )
     {
         if ( aVisArea.Left() != DOCUMENTBORDER ||
@@ -792,7 +792,7 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
         {
             // JP 21.07.00: the end scrollhandler invalidate the FN_STAT_PAGE,
             //              so we dont must do it agin.
-//          if(!GetDocShell()->GetProtocol().IsInPlaceActive())
+//          if(!GetDocShell()->IsInPlaceActive())
 //              S F X_BINDINGS().Update(FN_STAT_PAGE);
 
             //QuickHelp:
@@ -1086,7 +1086,7 @@ void SwView::ShowAtResize()
     bShowAtResize = FALSE;
     if ( pWrtShell->GetViewOptions()->IsViewHRuler() )
         pHRuler->Show();
-//    if ( !bBrowse ||GetDocShell()->GetProtocol().IsInPlaceActive())
+//    if ( !bBrowse ||GetDocShell()->IsInPlaceActive())
 //        pHScrollbar->Show();
 //    if ( !bBrowse && pVScrollbar->IsVisible() && pHScrollbar->IsVisible())
 //            pScrollFill->Show();
