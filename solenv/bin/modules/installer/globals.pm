@@ -2,9 +2,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:27:25 $
+#   last change: $Author: kz $ $Date: 2004-06-11 18:15:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,8 +108,10 @@ BEGIN
     $fontsfoldername = "Fonts";
     $officefolder = "OfficeFolder";
     $officemenufolder = "OfficeMenuFolder";
+    $startupfolder = "StartupFolder";
     $programfilesfolder = "ProgramFilesFolder";
     $programmenufolder = "ProgramMenuFolder";
+    $adafolder = "adabas";
     $listfileproductname = "";
 
     $is_special_epm = 0;
@@ -128,11 +130,13 @@ BEGIN
     $globallogging = 0;
     $logfilename = "logfile.log";   # the default logfile name for global errors
     @logfileinfo = ();
+    @errorlogfileinfo = ();
     @globallogfileinfo = ();
     $exitlog = "";
 
     $debug = 0;
     $debugfilename = "debug.txt";
+    $checksumfilename = "checksum.txt";
     @functioncalls = ();
 
     $ismultilingual = 0;
@@ -142,12 +146,24 @@ BEGIN
     $productcode = "";
     $upgradecode = "";
 
-    $is_copy_only_project = 0;
+    $javafilespath = "";
 
-    @environmentvariables = ( "SOLARVERSION", "GUI", "COMMON_OUTDIR", "ENV_ROOT", "WORK_STAMP", "UPDMINOR", "OUTPATH" );
+    $is_copy_only_project = 0;
+    $addchildprojects = 0;
+    $languagepack = 0;
+
+    $one_cab_file  = 1;
+    $many_cab_files = 0;
+    $updatepack = 0;
+    $winshipdrive = "";
+    $unixshipdrive = "";
+
+    @environmentvariables = ( "SOLARVERSION", "GUI", "COMMON_OUTDIR", "ENV_ROOT", "WORK_STAMP", "OUTPATH", "LOCAL_OUT", "LOCAL_COMMON_OUT" );
     @packagelistitems = ("module", "solarispackagename", "packagename", "copyright", "vendor", "description" );
     @regcompjars = ( "unoil.jar", "java_uno.jar", "ridl.jar", "sandbox.jar", "jurt.jar", "juh.jar", "xmerge.jar" );
     @regcompregisterlibs = ( "javavm.uno", "javaloader.uno" );
+    @selfreglibraries = ("shlxthdl.dll");               # to be removed after scp changes, see parameter.pm
+    @binarytablefiles = ("gid_File_Lib_Reg4msdocmsi", "gid_File_Lib_Regactivex_Msi", "gid_File_Lib_Jfregca");   # to be removed after scp changes, see parameter.pm
 
     $plat = $^O;
 
@@ -155,6 +171,7 @@ BEGIN
     {
         $unzippath = "unzip.exe";           # Has to be in the path: r:\btw\unzip.exe
         $zippath= "zip.exe";                # Has to be in the path: r:\btw\zip.exe
+        $checksumfile = "so_checksum.exe";
         $separator = "\\";
         $pathseparator = "\;";
         $libextension = "\.dll";
@@ -166,6 +183,7 @@ BEGIN
     {
         $unzippath = "unzip";               # Has to be in the path: /usr/bin/unzip
         $zippath = "zip";                   # Has to be in the path: /usr/bin/zip
+        $checksumfile = "so_checksum";
         $separator = "/";
         $pathseparator = "\:";
         $libextension = "\.so";
