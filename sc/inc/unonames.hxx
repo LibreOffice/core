@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-24 09:05:51 $
+ *  last change: $Author: sab $ $Date: 2002-03-14 15:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,6 +471,7 @@
 #define SC_UNO_APPLYDOCINF          "ApplyUserData"
 #define SC_UNO_CHARCOMP             "CharacterCompressionType"
 #define SC_UNO_ASIANKERN            "IsKernAsianPunctuation"
+#define SC_UNO_VISAREA              "VisibleArea"
 
 //  old (5.2) property names for view options - for compatibility only!
 #define OLD_UNO_COLROWHDR           "ColumnRowHeaders"
