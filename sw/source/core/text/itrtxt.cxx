@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
+ *  last change: $Author: fme $ $Date: 2001-06-25 14:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,11 +493,47 @@ const SwLineLayout *SwTxtIter::TwipsToLine( const SwTwips y)
 void SwTxtIter::TruncLines( sal_Bool bNoteFollow )
 {
     SwLineLayout *pDel = pCurr->GetNext();
+    const xub_StrLen nEnd = nStart + pCurr->GetLen();
+
     if( pDel )
     {
         pCurr->SetNext( 0 );
         if( GetHints() && bNoteFollow )
+        {
             GetInfo().GetParaPortion()->SetFollowField( pDel->IsRest() );
+
+            // bug 88534: wrong positioning of flys
+            SwTxtFrm* pFollow = GetTxtFrm()->GetFollow();
+            if ( pFollow && ! pFollow->IsLocked() &&
+                 nEnd == pFollow->GetOfst() )
+            {
+                xub_StrLen nRangeEnd = nEnd;
+                SwLineLayout* pLine = pDel;
+
+                // determine range to be searched for flys anchored as characters
+                while ( pLine )
+                {
+                    nRangeEnd += pLine->GetLen();
+                    pLine = pLine->GetNext();
+                }
+
+                SwpHints* pHints = GetTxtFrm()->GetTxtNode()->GetpSwpHints();
+
+                // examine hints in range nEnd - (nEnd + nRangeChar)
+                for( USHORT i = 0; i < pHints->Count(); i++ )
+                {
+                    const SwTxtAttr* pHt = pHints->GetHt( i );
+                    if( RES_TXTATR_FLYCNT == pHt->Which() )
+                    {
+                        // check, if hint is in our range
+                        const USHORT nPos = *pHt->GetStart();
+                        if ( nEnd <= nPos && nPos < nRangeEnd )
+                            pFollow->_InvalidateRange(
+                                SwCharRange( nPos, nPos ), 0 );
+                    }
+                }
+            }
+        }
         delete pDel;
     }
     if( pCurr->IsDummy() &&
@@ -505,7 +541,7 @@ void SwTxtIter::TruncLines( sal_Bool bNoteFollow )
          nStart < GetTxtFrm()->GetTxt().Len() )
         pCurr->SetRealHeight( 1 );
     if( GetHints() )
-        pFrm->RemoveFtn( nStart + pCurr->GetLen() );
+        pFrm->RemoveFtn( nEnd );
 }
 
 /*************************************************************************

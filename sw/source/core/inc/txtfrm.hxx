@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-21 11:11:08 $
+ *  last change: $Author: fme $ $Date: 2001-06-25 14:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,11 @@ struct SwFillData;
 
 class SwTxtFrm: public SwCntntFrm
 {
+    friend class SwTxtIter;
     friend class SwTestFormat;
     friend class WidowsAndOrphans;
     friend class SwTxtFrmLocker;        // duerfen Lock()/Unlock()
     friend sal_Bool lcl_ChangeOffset( SwTxtFrm* pFrm, USHORT nNew );
-
 
     static SwCache *pTxtCache;  //Pointer auf den Line-Cache
     static long nMinPrtLine;    //Diese Linie darf beim Drucken nicht
