@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:59:56 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 13:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@ using namespace ::osl;
 #define WRITER_URL      "private:factory/swriter"
 #define CALC_URL        "private:factory/scalc"
 #define IMPRESS_URL     "private:factory/simpress"
+#define IMPRESS_WIZARD_URL     "private:factory/simpress?slot=10425"
 #define DRAW_URL        "private:factory/sdraw"
 #define MATH_URL        "private:factory/smath"
 
@@ -494,7 +495,7 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 break;
                 case IDM_IMPRESS:
                     if (checkOEM())
-                    ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( IMPRESS_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
+                    ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( IMPRESS_WIZARD_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
                 break;
                 case IDM_DRAW:
                     if (checkOEM())
