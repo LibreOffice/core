@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-25 11:30:52 $
+ *  last change: $Author: mba $ $Date: 2000-09-25 11:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                                     bUseUserData = bTemp;
                                     break;
                                 case CREATEBACKUP :
-                                    bUseUserData = bTemp;
+                                    bCreateBackup = bTemp;
                                     break;
                                 case AUTOSAVE :
                                     bAutoSave = bTemp;
@@ -289,7 +289,7 @@ void SvtSaveOptions_Impl::Commit()
                 pValues[nProp] <<= bUseUserData;
                 break;
             case CREATEBACKUP :
-                pValues[nProp] <<= bUseUserData;
+                pValues[nProp] <<= bCreateBackup;
                 break;
             case AUTOSAVE :
                 pValues[nProp] <<= bAutoSave;
