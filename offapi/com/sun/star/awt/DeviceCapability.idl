@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DeviceCapability.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:44:49 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 /** defines which capabilities a device supports.
  */
-constants DeviceCapability
+published constants DeviceCapability
 {
     //-------------------------------------------------------------------------
 

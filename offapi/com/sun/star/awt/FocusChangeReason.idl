@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FocusChangeReason.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:45:10 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 /** A combination of these values can be used to specify the reason
     for a focus change.
  */
-constants FocusChangeReason
+published constants FocusChangeReason
 {
     //-------------------------------------------------------------------------
 
