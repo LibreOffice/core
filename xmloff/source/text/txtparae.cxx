@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-21 14:25:43 $
+ *  last change: $Author: sab $ $Date: 2000-11-22 19:51:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -909,7 +909,8 @@ void XMLTextParagraphExport::exportPageFrames( sal_Bool bAutoStyles,
 void XMLTextParagraphExport::exportText(
         const Reference < XText > & rText,
         sal_Bool bAutoStyles,
-        sal_Bool bProgress )
+        sal_Bool bProgress,
+        sal_Bool bExportParagraph )
 {
     Reference < XEnumerationAccess > xEA( rText, UNO_QUERY );
     Reference < XEnumeration > xParaEnum = xEA->createEnumeration();
@@ -925,14 +926,15 @@ void XMLTextParagraphExport::exportText(
         }
     }
     exportTextContentEnumeration( xParaEnum, bAutoStyles, xBaseSection,
-                                  bProgress );
+                                  bProgress, bExportParagraph   );
 }
 
 void XMLTextParagraphExport::exportTextContentEnumeration(
         const Reference < XEnumeration > & rContEnum,
         sal_Bool bAutoStyles,
         const Reference < XTextSection > & rBaseSection,
-        sal_Bool bProgress)
+        sal_Bool bProgress,
+        sal_Bool bExportParagraph )
 {
     XMLTextNumRuleInfo aPrevNumInfo;
     XMLTextNumRuleInfo aNextNumInfo;
@@ -958,7 +960,7 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
                                         aPrevNumInfo, aNextNumInfo,
                                         bAutoStyles );
 
-            exportParagraph( xTxtCntnt, bAutoStyles, bProgress );
+            exportParagraph( xTxtCntnt, bAutoStyles, bProgress,  bExportParagraph );
             bHasContent = sal_True;
         }
         else if( xServiceInfo->supportsService( sTableService ) )
@@ -1015,7 +1017,7 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
 
 void XMLTextParagraphExport::exportParagraph(
         const Reference < XTextContent > & rTextContent,
-        sal_Bool bAutoStyles, sal_Bool bProgress )
+        sal_Bool bAutoStyles, sal_Bool bProgress, sal_Bool bExportParagraph )
 {
     sal_Int8 nOutlineLevel = -1;
 
@@ -1030,51 +1032,54 @@ void XMLTextParagraphExport::exportParagraph(
         xPropSet->getPropertySetInfo();
     Any aAny;
 
-    if( bAutoStyles )
+    if( bExportParagraph )
     {
-        Add( XML_STYLE_FAMILY_TEXT_PARAGRAPH, xPropSet );
-    }
-    else
-    {
-        OUString sStyle;
-        if( xPropSetInfo->hasPropertyByName( sParaStyleName ) )
+        if( bAutoStyles )
         {
-            aAny = xPropSet->getPropertyValue( sParaStyleName );
-            aAny >>= sStyle;
+            Add( XML_STYLE_FAMILY_TEXT_PARAGRAPH, xPropSet );
         }
-
-        OUString sAutoStyle( sStyle );
-        sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, xPropSet, sStyle );
-        if( sAutoStyle.getLength() )
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_style_name,
-                                      sAutoStyle );
-
-        if( xPropSetInfo->hasPropertyByName( sParaConditionalStyleName ) )
+        else
         {
-            OUString sCondStyle;
-            aAny = xPropSet->getPropertyValue( sParaConditionalStyleName );
-            aAny >>= sCondStyle;
-            if( sCondStyle != sStyle )
+            OUString sStyle;
+            if( xPropSetInfo->hasPropertyByName( sParaStyleName ) )
             {
-                sCondStyle = Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, xPropSet,
-                                      sCondStyle );
-                if( sCondStyle.getLength() )
-                    GetExport().AddAttribute( XML_NAMESPACE_TEXT,
-                                              sXML_cond_style_name,
-                                              sCondStyle );
+                aAny = xPropSet->getPropertyValue( sParaStyleName );
+                aAny >>= sStyle;
             }
-        }
 
-        if( xPropSetInfo->hasPropertyByName( sParaChapterNumberingLevel ) )
-        {
-            aAny = xPropSet->getPropertyValue( sParaChapterNumberingLevel );
-            aAny >>= nOutlineLevel;
-            if( -1 != nOutlineLevel )
+            OUString sAutoStyle( sStyle );
+            sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, xPropSet, sStyle );
+            if( sAutoStyle.getLength() )
+                GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_style_name,
+                                          sAutoStyle );
+
+            if( xPropSetInfo->hasPropertyByName( sParaConditionalStyleName ) )
             {
-                OUStringBuffer sTmp;
-                sTmp.append( (sal_Int32)nOutlineLevel+1L );
-                GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_level,
-                              sTmp.makeStringAndClear() );
+                OUString sCondStyle;
+                aAny = xPropSet->getPropertyValue( sParaConditionalStyleName );
+                aAny >>= sCondStyle;
+                if( sCondStyle != sStyle )
+                {
+                    sCondStyle = Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, xPropSet,
+                                          sCondStyle );
+                    if( sCondStyle.getLength() )
+                        GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                                  sXML_cond_style_name,
+                                                  sCondStyle );
+                }
+            }
+
+            if( xPropSetInfo->hasPropertyByName( sParaChapterNumberingLevel ) )
+            {
+                aAny = xPropSet->getPropertyValue( sParaChapterNumberingLevel );
+                aAny >>= nOutlineLevel;
+                if( -1 != nOutlineLevel )
+                {
+                    OUStringBuffer sTmp;
+                    sTmp.append( (sal_Int32)nOutlineLevel+1L );
+                    GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_level,
+                                  sTmp.makeStringAndClear() );
+                }
             }
         }
     }

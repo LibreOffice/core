@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextMasterPageExport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-23 11:33:22 $
+ *  last change: $Author: sab $ $Date: 2000-11-22 19:51:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,14 +113,14 @@ XMLTextMasterPageExport::~XMLTextMasterPageExport()
 
 void XMLTextMasterPageExport::exportHeaderFooterContent(
             const Reference< XText >& rText,
-            sal_Bool bAutoStyles )
+            sal_Bool bAutoStyles, sal_Bool bExportParagraph )
 {
     DBG_ASSERT( rText.is(), "There is the text" );
     if( bAutoStyles )
         GetExport().GetTextParagraphExport()
-                ->collectTextAutoStyles( rText );
+                ->collectTextAutoStyles( rText, sal_False, bExportParagraph );
     else
-        GetExport().GetTextParagraphExport()->exportText( rText );
+        GetExport().GetTextParagraphExport()->exportText( rText, sal_False, bExportParagraph );
 }
 
 void XMLTextMasterPageExport::exportMasterPageContent(
