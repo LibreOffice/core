@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-17 17:33:27 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1998 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   ctredlin.src  $
- //   $Author: nn $
- //     $Date: 2001-07-17 17:33:27 $
- // $Revision: 1.22 $
+ //   $Author: kz $
+ //     $Date: 2001-08-07 15:05:12 $
+ // $Revision: 1.23 $
  //  $Logfile:   T:/svx/source/dialog/ctredlin.srv  $
  //---------------------------------------------------------------------------
 
@@ -90,14 +90,14 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text [ spanish ] = "Filtro" ;
         Text [ french ] = "Filtre" ;
         Text [ dutch ] = "Filter" ;
-        Text[ chinese_simplified ] = "É¸Ñ¡";
+        Text[ chinese_simplified ] = "ç­›é€‰";
         Text[ russian ] = "Ôèëüòğ";
         Text[ polish ] = "Filtr";
-        Text[ japanese ] = "Ì¨ÙÀ";
-        Text[ chinese_traditional ] = "¿z¿ï";
+        Text[ japanese ] = "ï¾Œï½¨ï¾™ï¾€";
+        Text[ chinese_traditional ] = "ç¯©é¸";
         Text[ arabic ] = "İáÊÑ";
         Text[ greek ] = "Ößëôñï";
-        Text[ korean ] = "ÇÊÅÍ";
+        Text[ korean ] = "í•„í„°";
         Text[ turkish ] = "Filtre";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Filtro";
@@ -125,14 +125,14 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text [ french ] = "Date" ;
         Text [ dutch ] = "~Datum" ;
         Text [ portuguese ] = "~Data" ;
-        Text[ chinese_simplified ] = "ÈÕÆÚ(~D)";
+        Text[ chinese_simplified ] = "æ—¥æœŸ(~D)";
         Text[ russian ] = "Äàòà";
         Text[ polish ] = "Data";
-        Text[ japanese ] = "“ú•t‚Æ(~D)";
-        Text[ chinese_traditional ] = "¤é´Á(~D)";
+        Text[ japanese ] = "æ—¥ä»˜ã¨æ™‚åˆ»(~D)";
+        Text[ chinese_traditional ] = "æ—¥æœŸ(~D)";
         Text[ arabic ] = "ÇáÊÇÑíÎ";
         Text[ greek ] = "Çìåñïìçíßá";
-        Text[ korean ] = "³¯Â¥(~D)";
+        Text[ korean ] = "ë‚ ì§œ(~D)";
         Text[ turkish ] = "~Tarih";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Fecha";
@@ -248,12 +248,12 @@ TabPage SID_REDLIN_FILTER_PAGE
         };
     StringList [ chinese_simplified ] =
     {
-            < "Ôçì¶" ; Default ; > ;
-        < "´Ó" ; Default ; > ;
-        < "µÈÍ¬ÓÚ" ; Default ; > ;
-        < "²»µÈÓÚ" ; Default ; > ;
-        < "ÖĞ¼äÓÚ" ; Default ; > ;
-        < "ÔÚ´æÅÌºó" ; Default ; > ;
+            < "æ—©æ–¼" ; Default ; > ;
+        < "ä»" ; Default ; > ;
+        < "ç­‰åŒäº" ; Default ; > ;
+        < "ä¸ç­‰äº" ; Default ; > ;
+        < "ä¸­é—´äº" ; Default ; > ;
+        < "åœ¨å­˜ç›˜å" ; Default ; > ;
     };
     StringList [ russian ] =
     {
@@ -275,21 +275,21 @@ TabPage SID_REDLIN_FILTER_PAGE
     };
     StringList [ japanese ] =
     {
-            < "Ÿ‚Ì“ú‚Ü‚Å" ; Default ; > ;
-        < "Ÿ‚Ì“ú‚©‚ç" ; Default ; > ;
-        < "Ÿ‚Ì“ú•t" ; Default ; > ;
-        < "Ÿ‚Ì“ú•tˆÈŠO" ; Default ; > ;
-        < "Ÿ‚Ì“ú‚ÌŠÔ" ; Default ; > ;
-        < "ÅI•Û‘¶ˆÈ~" ; Default ; > ;
+            < "æ¬¡ã®æ—¥æ™‚ã¾ã§" ; Default ; > ;
+        < "æ¬¡ã®æ—¥æ™‚ã‹ã‚‰" ; Default ; > ;
+        < "æ¬¡ã®æ—¥ä»˜" ; Default ; > ;
+        < "æ¬¡ã®æ—¥ä»˜ä»¥å¤–" ; Default ; > ;
+        < "æ¬¡ã®æ—¥æ™‚ã®é–“" ; Default ; > ;
+        < "æœ€çµ‚ä¿å­˜ä»¥é™" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "¦­©ó" ; Default ; > ;
-        < "±q" ; Default ; > ;
-        < "µ¥¦P¤_" ; Default ; > ;
-        < "¤£µ¥©ó" ; Default ; > ;
-        < "¤¤¶¡©ó" ; Default ; > ;
-        < "¦bÀx¦s«á" ; Default ; > ;
+            < "æ—©æ–¼" ; Default ; > ;
+        < "å¾" ; Default ; > ;
+        < "ç­‰åŒäº" ; Default ; > ;
+        < "ä¸ç­‰æ–¼" ; Default ; > ;
+        < "ä¸­é–“æ–¼" ; Default ; > ;
+        < "åœ¨å„²å­˜å¾Œ" ; Default ; > ;
     };
     StringList [ arabic ] =
     {
@@ -311,12 +311,12 @@ TabPage SID_REDLIN_FILTER_PAGE
     };
     StringList [ korean ] =
     {
-            < "Àü" ; Default ; > ;
-        < "ºÎÅÍ" ; Default ; > ;
-        < "(¿Í)°ú °°À½" ; Default ; > ;
-        < "(¿Í)°ú °°Áö ¾ÊÀ½" ; Default ; > ;
-        < "´ÙÀ½ÀÇ »çÀÌÀÓ" ; Default ; > ;
-        < "ÀúÀåÇÒ ¶§ºÎÅÍ" ; Default ; > ;
+            < "ì „" ; Default ; > ;
+        < "ë¶€í„°" ; Default ; > ;
+        < "(ì™€)ê³¼ ê°™ìŒ" ; Default ; > ;
+        < "(ì™€)ê³¼ ê°™ì§€ ì•ŠìŒ" ; Default ; > ;
+        < "ë‹¤ìŒì˜ ì‚¬ì´ì„" ; Default ; > ;
+        < "ì €ì¥í•  ë•Œë¶€í„°" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -414,12 +414,12 @@ TabPage SID_REDLIN_FILTER_PAGE
         QuickHelpText [ portuguese ] = "Define data e hora" ;
         QuickHelpText[ russian ] = "Âûñòàâèòü âğåìÿ è äàòó";
         QuickHelpText[ polish ] = "Ustaw datê/godzinê";
-        QuickHelpText[ japanese ] = "“ú•t‚Æ‚Ìİ’è";
-        QuickHelpText[ chinese_simplified ] = "Éè¶¨ÈÕÆÚ/Ê±¼ä";
-        QuickHelpText[ chinese_traditional ] = "³]©w¤é´Á/®É¶¡";
+        QuickHelpText[ japanese ] = "æ—¥ä»˜ã¨æ™‚åˆ»ã®è¨­å®š";
+        QuickHelpText[ chinese_simplified ] = "è®¾å®šæ—¥æœŸ/æ—¶é—´";
+        QuickHelpText[ chinese_traditional ] = "è¨­å®šæ—¥æœŸ/æ™‚é–“";
         QuickHelpText[ arabic ] = "ÖÈØ ÇáÊÇÑíÎ/ÇáæŞÊ";
         QuickHelpText[ greek ] = "ÅéóáãùãŞ çìåñïìçíßáò/şñáò";
-        QuickHelpText[ korean ] = "³¯Â¥/½Ã°£ ¼³Á¤";
+        QuickHelpText[ korean ] = "ë‚ ì§œ/ì‹œê°„ ì„¤ì •";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Datum/Uhrzeit einstellen";
@@ -443,14 +443,14 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text [ french ] = "~et" ;
         Text [ dutch ] = "~en de" ;
         Text [ portuguese ] = "e" ;
-        Text[ chinese_simplified ] = "ºÍ";
+        Text[ chinese_simplified ] = "å’Œ";
         Text[ russian ] = "è";
         Text[ polish ] = "i";
-        Text[ japanese ] = "‚Æ";
-        Text[ chinese_traditional ] = "©M";
+        Text[ japanese ] = "ã¨";
+        Text[ chinese_traditional ] = "å’Œ";
         Text[ arabic ] = "æ";
         Text[ greek ] = "êáé";
-        Text[ korean ] = "±×¸®°í";
+        Text[ korean ] = "ê·¸ë¦¬ê³ ";
         Text[ turkish ] = "~ile";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "y";
@@ -515,12 +515,12 @@ TabPage SID_REDLIN_FILTER_PAGE
         QuickHelpText [ portuguese ] = "Define data e hora" ;
         QuickHelpText[ russian ] = "Âûñòàâèòü âğåìÿ è äàòó";
         QuickHelpText[ polish ] = "Ustaw datê/godzinê";
-        QuickHelpText[ japanese ] = "“ú•t‚Æ‚Ìİ’è";
-        QuickHelpText[ chinese_simplified ] = "Éè¶¨ÈÕÆÚ/Ê±¼ä";
-        QuickHelpText[ chinese_traditional ] = "³]©w¤é´Á/®É¶¡";
+        QuickHelpText[ japanese ] = "æ—¥ä»˜ã¨æ™‚åˆ»ã®è¨­å®š";
+        QuickHelpText[ chinese_simplified ] = "è®¾å®šæ—¥æœŸ/æ—¶é—´";
+        QuickHelpText[ chinese_traditional ] = "è¨­å®šæ—¥æœŸ/æ™‚é–“";
         QuickHelpText[ arabic ] = "ÖÈØ ÇáÊÇÑíÎ/ÇáæŞÊ";
         QuickHelpText[ greek ] = "ÅéóáãùãŞ çìåñïìçíßáò/şñáò";
-        QuickHelpText[ korean ] = "³¯Â¥/½Ã°£ ¼³Á¤";
+        QuickHelpText[ korean ] = "ë‚ ì§œ/ì‹œê°„ ì„¤ì •";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Datum/Uhrzeit einstellen";
@@ -544,14 +544,14 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text [ french ] = "Auteur" ;
         Text [ dutch ] = "~Auteur" ;
         Text [ portuguese ] = "~Autor" ;
-        Text[ chinese_simplified ] = "×÷Õß(~A)";
+        Text[ chinese_simplified ] = "ä½œè€…(~A)";
         Text[ russian ] = "Àâòîğ";
         Text[ polish ] = "Autor";
-        Text[ japanese ] = "ì¬Ò(~A)";
-        Text[ chinese_traditional ] = "§@ªÌ(~A)";
+        Text[ japanese ] = "ä½œæˆè€…(~A)";
+        Text[ chinese_traditional ] = "ä½œè€…(~A)";
         Text[ arabic ] = "ÇáãÄáİ";
         Text[ greek ] = "ÓõíôÜêôçò";
-        Text[ korean ] = "ÀÛ¼ºÀÚ(~A)";
+        Text[ korean ] = "ì‘ì„±ì(~A)";
         Text[ turkish ] = "~Yazan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Autor";
@@ -584,14 +584,14 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text [ french ] = "~Plage" ;
         Text [ dutch ] = "~Bereik" ;
         Text [ portuguese ] = "Intervalo" ;
-        Text[ chinese_simplified ] = "ÇøÓò(~R)";
+        Text[ chinese_simplified ] = "åŒºåŸŸ(~R)";
         Text[ russian ] = "Îáëàñòü";
         Text[ polish ] = "Zakres";
-        Text[ japanese ] = "”ÍˆÍ(~R)";
-        Text[ chinese_traditional ] = "°Ï°ì(~R)";
+        Text[ japanese ] = "ç¯„å›²(~R)";
+        Text[ chinese_traditional ] = "å€åŸŸ(~R)";
         Text[ arabic ] = "ÇáäØÇŞ";
         Text[ greek ] = "Ğåñéï÷Ş";
-        Text[ korean ] = "¹üÀ§(~R)";
+        Text[ korean ] = "ë²”ìœ„(~R)";
         Text[ turkish ] = "~Aralık";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Área";
@@ -619,14 +619,14 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text [ spanish ] = "~Acción" ;
         Text [ french ] = "A~ction" ;
         Text [ dutch ] = "A~ctiviteit" ;
-        Text[ chinese_simplified ] = "²Ù×÷(~C)";
+        Text[ chinese_simplified ] = "æ“ä½œ(~C)";
         Text[ russian ] = "Äåéñòâèå";
         Text[ polish ] = "Akcja";
-        Text[ japanese ] = "±¸¼®İ(~C)";
-        Text[ chinese_traditional ] = "°Ê§@(~C)";
+        Text[ japanese ] = "ï½±ï½¸ï½¼ï½®ï¾(~C)";
+        Text[ chinese_traditional ] = "å‹•ä½œ(~C)";
         Text[ arabic ] = "ÇáÅÌÑÇÁ";
         Text[ greek ] = "Åíİñãåéá";
-        Text[ korean ] = "¼öÇà(~C)";
+        Text[ korean ] = "ìˆ˜í–‰(~C)";
         Text[ turkish ] = "İ~şlem";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Acción";
@@ -679,14 +679,14 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ arabic ] = "...";
         QuickHelpText[ russian ] = "Óñòàíîâèòü ññûëêó";
         QuickHelpText[ polish ] = "Ustaw tabelê odwo³añ";
-        QuickHelpText[ japanese ] = "•\\‚ÌQÆ‚ğİ’è";
-        QuickHelpText[ chinese_simplified ] = "Éè¶¨±í¸ñÒıÓÃ";
-        QuickHelpText[ chinese_traditional ] = "³]©w¤u§@ªí°Ñ·Ó";
+        QuickHelpText[ japanese ] = "è¡¨ã®å‚ç…§ã‚’è¨­å®š";
+        QuickHelpText[ chinese_simplified ] = "è®¾å®šè¡¨æ ¼å¼•ç”¨";
+        QuickHelpText[ chinese_traditional ] = "è¨­å®šå·¥ä½œè¡¨åƒç…§";
         QuickHelpText[ arabic ] = "ÊÚííä ãÑÌÚ ÇáÌÏæá";
         Text[ greek ] = "...";
         Text[ korean ] = "...";
         QuickHelpText[ greek ] = "Set Reference";
-        QuickHelpText[ korean ] = "ÂüÁ¶ ¼³Á¤";
+        QuickHelpText[ korean ] = "ì°¸ì¡° ì„¤ì •";
         Text[ turkish ] = "...";
         Text[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Tabellenreferenz einstellen";
@@ -712,14 +712,14 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ dutch ] = "~Commentaar";
         Text[ spanish ] = "~Descripción";
         Text[ english_us ] = "Comment";
-        Text[ chinese_simplified ] = "ËµÃ÷";
+        Text[ chinese_simplified ] = "è¯´æ˜";
         Text[ russian ] = "Îïèñàíèå";
         Text[ polish ] = "Opis";
-        Text[ japanese ] = "ºÒİÄ";
-        Text[ chinese_traditional ] = "´y­z";
+        Text[ japanese ] = "ï½ºï¾’ï¾ï¾„";
+        Text[ chinese_traditional ] = "æè¿°";
         Text[ arabic ] = "ÇáæÕİ";
         Text[ greek ] = "ĞåñéãñáöŞ";
-        Text[ korean ] = "¼³¸í";
+        Text[ korean ] = "ì„¤ëª…";
         Text[ turkish ] = "Açık~lama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Descripción";
@@ -755,14 +755,14 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ french ] = "Liste" ;
         Text [ dutch ] = "Lijst" ;
         Text [ portuguese ] = "Lista" ;
-        Text[ chinese_simplified ] = "ÁĞµ¥";
+        Text[ chinese_simplified ] = "åˆ—å•";
         Text[ russian ] = "Ñïèñîê";
         Text[ polish ] = "Lista";
-        Text[ japanese ] = "Ø½Ä";
-        Text[ chinese_traditional ] = "²M³æ";
+        Text[ japanese ] = "ï¾˜ï½½ï¾„";
+        Text[ chinese_traditional ] = "æ¸…å–®";
         Text[ arabic ] = "ÇáŞÇÆãÉ";
         Text[ greek ] = "Ëßóôá";
-        Text[ korean ] = "¸ñ·Ï";
+        Text[ korean ] = "ëª©ë¡";
         Text[ turkish ] = "Liste";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Lista";
@@ -791,14 +791,14 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ spanish ] = "~Aceptar" ;
         Text [ french ] = "~Accepter" ;
         Text [ dutch ] = "~Accepteren" ;
-        Text[ chinese_simplified ] = "½ÓÊÜ(~A)";
+        Text[ chinese_simplified ] = "æ¥å—(~A)";
         Text[ russian ] = "Ïğèíÿòü";
         Text[ polish ] = "Zaakceptuj";
-        Text[ japanese ] = "“K—p(~A)";
-        Text[ chinese_traditional ] = "±µ¨ü(~A)";
+        Text[ japanese ] = "é©ç”¨(~A)";
+        Text[ chinese_traditional ] = "æ¥å—(~A)";
         Text[ arabic ] = "ŞÈæá";
         Text[ greek ] = "~Áğïäï÷Ş";
-        Text[ korean ] = "¼ö¶ô(~A)";
+        Text[ korean ] = "ìˆ˜ë½(~A)";
         Text[ turkish ] = "~Kabul et";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Aceptar";
@@ -820,14 +820,14 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ french ] = "~Refuser" ;
         Text [ dutch ] = "V~erwerpen" ;
         Text [ portuguese ] = "~Rejeitar" ;
-        Text[ chinese_simplified ] = "¾Ü¾ø(~R)";
+        Text[ chinese_simplified ] = "æ‹’ç»(~R)";
         Text[ russian ] = "Îòêëîíèòü";
         Text[ polish ] = "Odrzuæ";
-        Text[ japanese ] = "·¬İ¾Ù(~R)";
-        Text[ chinese_traditional ] = "©Úµ´(~R)";
+        Text[ japanese ] = "ï½·ï½¬ï¾ï½¾ï¾™(~R)";
+        Text[ chinese_traditional ] = "æ‹’çµ•(~R)";
         Text[ arabic ] = "ÑİÖ";
         Text[ greek ] = "Áğüññéøç";
-        Text[ korean ] = "°ÅºÎ(~R)";
+        Text[ korean ] = "ê±°ë¶€(~R)";
         Text[ turkish ] = "R~eddet";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Rechazar";
@@ -849,14 +849,14 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ french ] = "Tout a~ccepter" ;
         Text [ dutch ] = "Alle ac~cepteren" ;
         Text [ portuguese ] = "~Aceitar tudo" ;
-        Text[ chinese_simplified ] = "È«²¿½ÓÊÜ(~C)";
+        Text[ chinese_simplified ] = "å…¨éƒ¨æ¥å—(~C)";
         Text[ russian ] = "Ïğèíÿòü âñå";
         Text[ polish ] = "Akcept. wszystkie";
-        Text[ japanese ] = "‚·‚×‚Ä“K—p(~C)";
-        Text[ chinese_traditional ] = "¥ş³¡±µ¨ü(~C)";
+        Text[ japanese ] = "ã™ã¹ã¦é©ç”¨(~C)";
+        Text[ chinese_traditional ] = "å…¨éƒ¨æ¥å—(~C)";
         Text[ arabic ] = "ŞÈæá Çáßá";
         Text[ greek ] = "Áğïäï~÷Ş üëùí";
-        Text[ korean ] = "¸ğµÎ ¼ö¶ô(~C)";
+        Text[ korean ] = "ëª¨ë‘ ìˆ˜ë½(~C)";
         Text[ turkish ] = "~Tümünü kabul et";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Aceptar todo";
@@ -878,14 +878,14 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ french ] = "Tout r~efuser" ;
         Text [ dutch ] = "Alle ver~werpen" ;
         Text [ portuguese ] = "Rejeitar ~tudo" ;
-        Text[ chinese_simplified ] = "È«²¿¾Ü¾ø(~E)";
+        Text[ chinese_simplified ] = "å…¨éƒ¨æ‹’ç»(~E)";
         Text[ russian ] = "Îòêëîíèòü âñå";
         Text[ polish ] = "Odrzuæ wszystkie";
-        Text[ japanese ] = "‚·‚×‚Ä·¬İ¾Ù(~E)";
-        Text[ chinese_traditional ] = "¥ş³¡©Úµ´(~E)";
+        Text[ japanese ] = "ã™ã¹ã¦ï½·ï½¬ï¾ï½¾ï¾™(~E)";
+        Text[ chinese_traditional ] = "å…¨éƒ¨æ‹’çµ•(~E)";
         Text[ arabic ] = "ÑİÖ Çáßá";
         Text[ greek ] = "Áğüññéøç üëùí";
-        Text[ korean ] = "¸ğµÎ °ÅºÎ(~E)";
+        Text[ korean ] = "ëª¨ë‘ ê±°ë¶€(~E)";
         Text[ turkish ] = "Tümünü ~reddet";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Rechazar todo";
@@ -909,14 +909,14 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ dutch ] = "~Ongedaan maken";
         Text[ spanish ] = "~Deshacer";
         Text[ english_us ] = "Undo";
-        Text[ chinese_simplified ] = "³·ÏûÃüÁî";
+        Text[ chinese_simplified ] = "æ’¤æ¶ˆå‘½ä»¤";
         Text[ russian ] = "Îòìåíèòü";
         Text[ polish ] = "Cofnij";
-        Text[ japanese ] = "Œ³‚É–ß‚·(~U)";
-        Text[ chinese_traditional ] = "´_­ì";
+        Text[ japanese ] = "å…ƒã«æˆ»ã™(~U)";
+        Text[ chinese_traditional ] = "å¾©åŸ";
         Text[ arabic ] = "ÊÑÇÌÚ";
         Text[ greek ] = "Áíáßñåóç";
-        Text[ korean ] = "½ÇÇàÃë¼Ò";
+        Text[ korean ] = "ì‹¤í–‰ì·¨ì†Œ";
         Text[ turkish ] = "~Geri al";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Deshacer";
@@ -935,14 +935,14 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ french ] = "Action" ;
         Text [ dutch ] = "Activiteit" ;
         Text [ portuguese ] = "Acção" ;
-        Text[ chinese_simplified ] = "²Ù×÷";
+        Text[ chinese_simplified ] = "æ“ä½œ";
         Text[ russian ] = "Äåéñòâèå";
         Text[ polish ] = "Akcja";
-        Text[ japanese ] = "±¸¼®İ";
-        Text[ chinese_traditional ] = "°Ê§@";
+        Text[ japanese ] = "ï½±ï½¸ï½¼ï½®ï¾";
+        Text[ chinese_traditional ] = "å‹•ä½œ";
         Text[ arabic ] = "ÇáÅÌÑÇÁ";
         Text[ greek ] = "Åíİñãåéá";
-        Text[ korean ] = "¼öÇà";
+        Text[ korean ] = "ìˆ˜í–‰";
         Text[ turkish ] = "İşlem";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Acción";
@@ -961,14 +961,14 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ french ] = "Position" ;
         Text [ dutch ] = "Positie" ;
         Text [ portuguese ] = "Posição" ;
-        Text[ chinese_simplified ] = "Î»ÖÃ";
+        Text[ chinese_simplified ] = "ä½ç½®";
         Text[ russian ] = "Ïîëîæåíèå";
         Text[ polish ] = "Pozycja";
-        Text[ japanese ] = "ˆÊ’u";
-        Text[ chinese_traditional ] = "¦ì¸m";
+        Text[ japanese ] = "ä½ç½®";
+        Text[ chinese_traditional ] = "ä½ç½®";
         Text[ arabic ] = "ÇáãæÖÚ";
         Text[ greek ] = "Èİóç";
-        Text[ korean ] = "À§Ä¡";
+        Text[ korean ] = "ìœ„ì¹˜";
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Posición";
@@ -987,14 +987,14 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ french ] = "Auteur" ;
         Text [ dutch ] = "Auteur" ;
         Text [ portuguese ] = "Autor" ;
-        Text[ chinese_simplified ] = "×÷Õß";
+        Text[ chinese_simplified ] = "ä½œè€…";
         Text[ russian ] = "Àâòîğ";
         Text[ polish ] = "Autor";
-        Text[ japanese ] = "ì¬Ò";
-        Text[ chinese_traditional ] = "§@ªÌ";
+        Text[ japanese ] = "ä½œæˆè€…";
+        Text[ chinese_traditional ] = "ä½œè€…";
         Text[ arabic ] = "ÇáãÄáİ";
         Text[ greek ] = "ÓõíôÜêôçò";
-        Text[ korean ] = "ÀÛ¼ºÀÚ";
+        Text[ korean ] = "ì‘ì„±ì";
         Text[ turkish ] = "Yazan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Autor";
@@ -1013,14 +1013,14 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ french ] = "Date" ;
         Text [ dutch ] = "Datum" ;
         Text [ portuguese ] = "Data" ;
-        Text[ chinese_simplified ] = "ÈÕÆÚ";
+        Text[ chinese_simplified ] = "æ—¥æœŸ";
         Text[ russian ] = "Äàòà";
         Text[ polish ] = "Data";
-        Text[ japanese ] = "“ú•t‚Æ";
-        Text[ chinese_traditional ] = "¤é´Á";
+        Text[ japanese ] = "æ—¥ä»˜ã¨æ™‚åˆ»";
+        Text[ chinese_traditional ] = "æ—¥æœŸ";
         Text[ arabic ] = "ÇáÊÇÑíÎ";
         Text[ greek ] = "Çìåñïìçíßá";
-        Text[ korean ] = "³¯Â¥";
+        Text[ korean ] = "ë‚ ì§œ";
         Text[ turkish ] = "Tarih";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fecha";
@@ -1039,20 +1039,21 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ french ] = "Description" ;
         Text [ dutch ] = "Omschrijviing" ;
         Text [ portuguese ] = "Descrição" ;
-        Text[ chinese_simplified ] = "ËµÃ÷";
+        Text[ chinese_simplified ] = "è¯´æ˜";
         Text[ russian ] = "Îïèñàíèå";
         Text[ polish ] = "Komentarz";
-        Text[ japanese ] = "ºÒİÄ";
-        Text[ chinese_traditional ] = "´y­z";
+        Text[ japanese ] = "ï½ºï¾’ï¾ï¾„";
+        Text[ chinese_traditional ] = "æè¿°";
         Text[ arabic ] = "ÇáæÕİ";
         Text[ greek ] = "ĞåñéãñáöŞ";
-        Text[ korean ] = "¼³¸í";
+        Text[ korean ] = "ì„¤ëª…";
         Text[ turkish ] = "Açıklama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Descripción";
         Text[ finnish ] = "Kommentti";
     };
 };
+
 
 
 
