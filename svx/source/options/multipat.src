@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-14 21:23:08 $
+ *  last change: $Author: kz $ $Date: 2002-01-16 21:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,7 @@ String RID_SVXSTR_ARCHIVE_HEADLINE
     Text[ polish ] = "Archives";
     Text[ portuguese_brazilian ] = "Archives";
     Text[ japanese ] = "アーカイブ";
-    Text[ korean ] = "저장 위치";
+    Text[ korean ] = "자료 저장";
     Text[ chinese_simplified ] = "备件";
     Text[ chinese_traditional ] = "備件";
     Text[ turkish ] = "Archives";
