@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh8.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-05 17:41:05 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:54:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,12 +454,12 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
 
 // -----------------------------------------------------------------------
 
-inline IsAsciiDigit( sal_Unicode c )
+inline sal_Bool IsAsciiDigit( sal_Unicode c )
 {
     return 0x31 <= c && c <= 0x39;
 }
 
-inline IsAsciiAlpha( sal_Unicode c )
+inline sal_Bool IsAsciiAlpha( sal_Unicode c )
 {
     return (0x41 <= c && c <= 0x5a) || (0x61 <= c && c <= 0x7a);
 }
