@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:33:22 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,12 +113,21 @@
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONREQUEST_HPP_
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
+#endif
+#ifndef _COMPHELPER_STORAGEHELPER_HXX_
+#include <comphelper/storagehelper.hxx>
 #endif
 
 #ifndef _SV_WRKWIN_HXX
@@ -135,9 +144,6 @@
 #endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
 #endif
 #ifndef _SFXDOCTEMPL_HXX //autogen
 #include <doctempl.hxx>
@@ -204,6 +210,7 @@
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
@@ -321,26 +328,23 @@ SfxObjectShellRef SfxApplication::DocAlreadyLoaded
 
 //====================================================================
 
-void SetTemplate_Impl( SvStorage *pStorage,
-                       const String &rFileName,
-                       const String &rLongName,
-                       SfxObjectShell *pDoc)
+void SetTemplate_Impl( const String &rFileName,
+                        const String &rLongName,
+                        SfxObjectShell *pDoc)
 {
     // DocInfo von pDoc 'plattmachen'
     SfxDocumentInfo &rInfo = pDoc->GetDocInfo();
     rInfo.Clear();
 
     // DocInfo vom Template laden
-    SvStorageRef xTemplStor = new SvStorage( rFileName, STREAM_STD_READ );
-    SfxDocumentInfo aTemplInfo;
-
-    if ( aTemplInfo.Load( xTemplStor ) )
-        rInfo.SetTemplateDate( aTemplInfo.GetChanged().GetTime() );
-
-    // Template in DocInfo von pDoc eintragen
     INetURLObject aObj( rFileName );
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL" );
 
+    // TODO/LATER: the template date must be retrieved from document ( was not really implemented for XML format in SO7 )
+    SfxDocumentInfo aTemplInfo;
+    rInfo.SetTemplateDate( aTemplInfo.GetChanged().GetTime() );
+
+    // Template in DocInfo von pDoc eintragen
     if( ::utl::LocalFileHelper::IsLocalFile( rFileName ) )
     {
         String aFoundName;
@@ -350,9 +354,10 @@ void SetTemplate_Impl( SvStorage *pStorage,
             rInfo.SetTemplateName( rLongName );
 
             // wenn schon eine Config da ist, mu\s sie aus dem Template sein
-            BOOL bHasConfig = (pDoc->GetConfigManager() != 0);
-            rInfo.SetTemplateConfig( bHasConfig );
-            pDoc->SetTemplateConfig( bHasConfig );
+//REMOVE                BOOL bHasConfig = (pDoc->GetConfigManager() != 0);
+//REMOVE                rInfo.SetTemplateConfig( bHasConfig );
+//REMOVE                pDoc->SetTemplateConfig( bHasConfig );
+            rInfo.SetTemplateConfig( sal_False );
         }
     }
 
@@ -377,62 +382,76 @@ ULONG CheckPasswd_Impl
     Wenn in der Documentinfo das Passwort-Flag gesetzt ist, wird
     das Passwort vom Benutzer per Dialog erfragt und an dem Set
     des Mediums gesetzt; das Set wird, wenn nicht vorhanden, erzeugt.
-
 */
-
 {
-    ULONG nRet=0;
-    if( ( !pFile->GetFilter() || pFile->GetFilter()->UsesStorage() ) )
+    ULONG nRet = ERRCODE_NONE;
+
+    if( ( !pFile->GetFilter() || pFile->IsStorage() ) )
     {
-        SvStorageRef aRef = pFile->GetStorage();
-        if(aRef.Is())
+        uno::Reference< embed::XStorage > xStorage = pFile->GetStorage();
+        if( xStorage.is() )
         {
-            sal_Bool bIsEncrypted = sal_False;
-            ::com::sun::star::uno::Any aAny;
-            if ( aRef->GetProperty( ::rtl::OUString::createFromAscii("HasEncryptedEntries"), aAny ) )
-                aAny >>= bIsEncrypted;
-            else
+            uno::Reference< beans::XPropertySet > xStorageProps( xStorage, uno::UNO_QUERY );
+            if ( xStorageProps.is() )
             {
-                SfxDocumentInfo aInfo;
-                bIsEncrypted = ( aInfo.Load(aRef) && aInfo.IsPasswd() );
-            }
-
-            if ( bIsEncrypted )
-            {
-                Window* pWin = pDoc ? pDoc->GetDialogParent( pFile ) : NULL;
-                if ( pWin )
-                    pWin->Show();
-
-                nRet = ERRCODE_SFX_CANTGETPASSWD;
-
-                SfxItemSet *pSet = pFile->GetItemSet();
-                if( pSet )
+                sal_Bool bIsEncrypted = sal_False;
+                try {
+                    xStorageProps->getPropertyValue( ::rtl::OUString::createFromAscii("HasEncryptedEntries") )
+                        >>= bIsEncrypted;
+                } catch( uno::Exception& )
                 {
-                    Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler;
+                    // TODO/LATER:
+                    // the storage either has no encrypted elements or it's just
+                    // does not allow to detect it, probably it should be implemented laiter
+                    /*
+                    SfxDocumentInfo aInfo;
+                    bIsEncrypted = ( aInfo.Load( xStorage ) && aInfo.IsPasswd() );
+                    */
+                }
 
-                    SFX_ITEMSET_ARG( pSet, pxInteractionItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, sal_False );
-                    if( pxInteractionItem && ( pxInteractionItem->GetValue() >>= xInteractionHandler )
-                     && xInteractionHandler.is() )
+                if ( bIsEncrypted )
+                {
+                    Window* pWin = pDoc ? pDoc->GetDialogParent( pFile ) : NULL;
+                    if ( pWin )
+                        pWin->Show();
+
+                    nRet = ERRCODE_SFX_CANTGETPASSWD;
+
+                    SfxItemSet *pSet = pFile->GetItemSet();
+                    if( pSet )
                     {
-                        RequestDocumentPassword* pPasswordRequest = new RequestDocumentPassword(
-                            ::com::sun::star::task::PasswordRequestMode_PASSWORD_ENTER,
-                            INetURLObject( pFile->GetOrigURL() ).GetName( INetURLObject::DECODE_WITH_CHARSET ) );
+                        Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler;
 
-                        Reference< XInteractionRequest > rRequest( pPasswordRequest );
-                        xInteractionHandler->handle( rRequest );
-
-                        if ( pPasswordRequest->isPassword() )
+                        SFX_ITEMSET_ARG( pSet, pxInteractionItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, sal_False );
+                        if( pxInteractionItem && ( pxInteractionItem->GetValue() >>= xInteractionHandler )
+                         && xInteractionHandler.is() )
                         {
-                            pSet->Put( SfxStringItem( SID_PASSWORD, pPasswordRequest->getPassword() ) );
-                            nRet = ERRCODE_NONE;
+                            RequestDocumentPassword* pPasswordRequest = new RequestDocumentPassword(
+                                ::com::sun::star::task::PasswordRequestMode_PASSWORD_ENTER,
+                                INetURLObject( pFile->GetOrigURL() ).GetName( INetURLObject::DECODE_WITH_CHARSET ) );
+
+                            Reference< XInteractionRequest > rRequest( pPasswordRequest );
+                            xInteractionHandler->handle( rRequest );
+
+                            if ( pPasswordRequest->isPassword() )
+                            {
+                                pSet->Put( SfxStringItem( SID_PASSWORD, pPasswordRequest->getPassword() ) );
+                                nRet = ERRCODE_NONE;
+                            }
+                            else
+                                nRet = ERRCODE_IO_ABORT;
                         }
-                        else
-                            nRet = ERRCODE_IO_ABORT;
                     }
                 }
             }
+            else
+            {
+                OSL_ENSURE( sal_False, "A storage must implement XPropertySet interface!" );
+                nRet = ERRCODE_SFX_CANTGETPASSWD;
+            }
         }
     }
+
     return nRet;
 }
 
@@ -444,7 +463,7 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
     const SfxFilter* pFilter = NULL;
     SfxMedium aMedium( rFileName,  ( STREAM_READ | STREAM_SHARE_DENYNONE ), FALSE );
 
-    if ( !aMedium.GetStorage() )
+    if ( !aMedium.GetStorage().is() )
         aMedium.GetInStream();
 
     if ( aMedium.GetError() )
@@ -498,26 +517,34 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
 
     if( bCopy )
     {
-        SvStorageRef aTmpStor = new SvStorage( (xDoc->GetStorage()->GetVersion() >= SOFFICE_FILEFORMAT_60) ,String() );
-        if( 0 != aTmpStor->GetError())
+        try
         {
-            xDoc->DoClose();
-            xDoc.Clear();
-            return aTmpStor->GetErrorCode();
+            // TODO: introduce error handling
+
+            uno::Reference< embed::XStorage > xTempStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
+            if( !xTempStorage.is() )
+                throw uno::RuntimeException();
+
+               xDoc->GetStorage()->copyToStorage( xTempStorage );
+
+//REMOVE                // the following operations should be done in one step
+//REMOVE                xDoc->DoHandsOff();
+               if ( !xDoc->DoSaveCompleted( xTempStorage ) )
+                throw uno::RuntimeException();
         }
-        xDoc->GetStorage()->CopyTo( &aTmpStor );
-        xDoc->DoHandsOff();
-        if ( !xDoc->DoSaveCompleted( aTmpStor ) )
+        catch( uno::Exception& )
         {
             xDoc->DoClose();
             xDoc.Clear();
-            return aTmpStor->GetErrorCode();
+
+            // TODO: transfer correct error outside
+            return ERRCODE_SFX_GENERAL;
         }
 
-        SetTemplate_Impl( aTmpStor, rFileName, String(), xDoc );
+        SetTemplate_Impl( rFileName, String(), xDoc );
     }
     else
-        SetTemplate_Impl( xDoc->GetStorage(), rFileName, String(), xDoc );
+        SetTemplate_Impl( rFileName, String(), xDoc );
 
     xDoc->Broadcast( SfxDocumentInfoHint( &xDoc->GetDocInfo() ) );
     xDoc->SetNoName();
@@ -543,36 +570,6 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
     }
 
     return xDoc->GetErrorCode();
-}
-
-//--------------------------------------------------------------------
-
-void SfxApplication::LoadEa_Impl(SfxMedium &rMedium, SfxObjectShell& rObj)
-{
-    if ( !rMedium.GetStorage() )
-        return;
-    const SfxFilter *pFilter = rMedium.GetFilter();
-    if ( !pFilter || !pFilter->IsOwnFormat() )
-        return;
-    SvStorage *pStor = rMedium.GetStorage();
-    if ( !pStor )
-        return;
-    SvStream *pStream = pStor->GetTargetSvStream();
-    if ( pStream && pStream->IsA() == ID_FILESTREAM )
-    {
-        SvEaMgr aEaMgr(*(SvFileStream *)pStream);
-        String aBuffer;
-        // Langnamen merken f"ur Titel und erneutes Setzen
-        // beim Speichern
-        if ( aEaMgr.GetLongName(aBuffer) )
-            rMedium.SetLongName(aBuffer);
-        if ( aEaMgr.GetComment(aBuffer) )
-        {
-            SfxDocumentInfo *pInfo = &rObj.GetDocInfo();
-            // Kommentar aus der WPS mit DocInfo abgleichen
-            pInfo->SetComment(aBuffer);
-        }
-    }
 }
 
 //--------------------------------------------------------------------
