@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:14:56 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:40:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #ifndef _SAL_I18N_INPUTMETHOD_HXX
 #include "i18n_im.hxx"
 #endif
+#ifndef _OSL_THREAD_H
+#include <osl/thread.h>
+#endif
 
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
@@ -128,9 +131,9 @@ PreeditDoneCallback ( XIC ic, XPointer client_data, XPointer call_data )
         if( pPreeditData->pFrame )
         {
 #ifdef __synchronous_extinput__
-            pPreeditData->pFrame->maFrameData.Call( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
+            pPreeditData->pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
 #else
-            pPreeditData->pFrame->maFrameData.PostExtTextEvent( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
+            pPreeditData->pFrame->PostExtTextEvent( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
 #endif
         }
     }
@@ -470,12 +473,11 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
       aTextEvent.mbOnlyCursor = False;
 
       if ( pPreeditData->eState == ePreeditStatusActive && pPreeditData->pFrame )
-        pPreeditData->pFrame->maFrameData.Call(SALEVENT_EXTTEXTINPUT,
-                (void*)&aTextEvent);
+        pPreeditData->pFrame->CallCallback(SALEVENT_EXTTEXTINPUT, (void*)&aTextEvent);
       if (aTextEvent.mpTextAttr)
         free((void*)aTextEvent.mpTextAttr);
     if (pPreeditData->aText.nLength == 0 && pPreeditData->pFrame )
-        pPreeditData->pFrame->maFrameData.Call( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
+        pPreeditData->pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
 
 #else
 
@@ -493,10 +495,10 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
 
     if( pPreeditData->pFrame )
     {
-        pPreeditData->pFrame->maFrameData.PostExtTextEvent (SALEVENT_EXTTEXTINPUT,
+        pPreeditData->pFrame->PostExtTextEvent (SALEVENT_EXTTEXTINPUT,
                                                             (void*)pTextEvent);
         if (pPreeditData->aText.nLength == 0)
-            pPreeditData->pFrame->maFrameData.PostExtTextEvent( SALEVENT_ENDEXTTEXTINPUT,
+            pPreeditData->pFrame->PostExtTextEvent( SALEVENT_ENDEXTTEXTINPUT,
                                                                 (void*)NULL );
     }
 #endif
@@ -519,8 +521,7 @@ GetPreeditSpotLocation(XIC ic, XPointer client_data)
       preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
 
     if( pPreeditData->pFrame )
-        pPreeditData->pFrame->maFrameData.Call(SALEVENT_EXTTEXTINPUTPOS,
-                                               (void*)&mPosEvent);
+        pPreeditData->pFrame->CallCallback(SALEVENT_EXTTEXTINPUTPOS, (void*)&mPosEvent);
 
       XPoint point;
       point.x = mPosEvent.mnX + mPosEvent.mnWidth;
@@ -547,8 +548,8 @@ PreeditCaretCallback ( XIC ic, XPointer client_data,
     XIMPreeditCaretCallbackStruct *call_data )
 {
     // XXX PreeditCaretCallback is pure debug code for now
-    char *direction = "?";
-    char *style = "?";
+    const char *direction = "?";
+    const char *style = "?";
 
     switch ( call_data->style )
     {
@@ -611,11 +612,9 @@ CommitStringCallback( XIC ic, XPointer client_data, XPointer call_data )
         if( pPreeditData->pFrame )
         {
 #ifdef __synchronous_extinput__
-            pPreeditData->pFrame->maFrameData.Call( SALEVENT_ENDEXTTEXTINPUT,
-                                                    (void*)NULL );
+            pPreeditData->pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
 #else
-            pPreeditData->pFrame->maFrameData.PostExtTextEvent(SALEVENT_ENDEXTTEXTINPUT,
-                                                               (void*)NULL );
+            pPreeditData->pFrame->PostExtTextEvent(SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
 #endif
         }
     }
@@ -635,10 +634,8 @@ CommitStringCallback( XIC ic, XPointer client_data, XPointer call_data )
             aTextEvent.mnDeltaStart     = 0;
             aTextEvent.mbOnlyCursor     = False;
 
-            pPreeditData->pFrame->maFrameData.Call( SALEVENT_EXTTEXTINPUT,
-                                                    (void*)&aTextEvent);
-            pPreeditData->pFrame->maFrameData.Call( SALEVENT_ENDEXTTEXTINPUT,
-                                                    (void*)NULL );
+            pPreeditData->pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&aTextEvent);
+            pPreeditData->pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
 #else
 
             SalExtTextInputEvent *pTextEvent = new SalExtTextInputEvent;
@@ -651,9 +648,9 @@ CommitStringCallback( XIC ic, XPointer client_data, XPointer call_data )
             pTextEvent->mnDeltaStart    = 0;
             pTextEvent->mbOnlyCursor    = False;
 
-            pPreeditData->pFrame->maFrameData.PostExtTextEvent( SALEVENT_EXTTEXTINPUT,
+            pPreeditData->pFrame->PostExtTextEvent( SALEVENT_EXTTEXTINPUT,
                                                                 (void*)pTextEvent);
-            pPreeditData->pFrame->maFrameData.PostExtTextEvent( SALEVENT_ENDEXTTEXTINPUT,
+            pPreeditData->pFrame->PostExtTextEvent( SALEVENT_ENDEXTTEXTINPUT,
                                                                 (void*)NULL );
 #endif
         }
