@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:15 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 19:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1070,7 +1070,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ danish ] = "Normaler" ;
         Text [ italian ] = "Normali" ;
         Text [ spanish ] = "Normales" ;
-        Text [ french ] = "Verticales" ;
+        Text [ french ] = "Normales" ;
         Text [ dutch ] = "Normale" ;
         Text [ portuguese ] = "Verticais" ;
         Text[ chinese_simplified ] = "·¨Οί";
@@ -2578,7 +2578,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ english_us ] = "Textures" ;
         Text [ portuguese_brazilian ] = "Texturen" ;
         Text [ swedish ] = "Texturer" ;
-        Text [ danish ] = "Tekstur" ;
+        Text [ danish ] = "Teksturer" ;
         Text [ italian ] = "Motivi" ;
         Text [ spanish ] = "Texturas" ;
         Text [ french ] = "Textures" ;
@@ -3223,7 +3223,7 @@ String RID_SVXFLOAT3D_FAVORITE
     Text[ greek ] = "Προτίμηση";
     Text[ dutch ] = "Favoriet";
     Text[ french ] = "Favori";
-    Text[ spanish ] = "Favorite";
+    Text[ spanish ] = "Favorito";
     Text[ italian ] = "Favorite";
     Text[ danish ] = "Favorit";
     Text[ swedish ] = "Favorit";
@@ -3338,7 +3338,7 @@ String RID_SVXFLOAT3D_FIX_G
     Text[ greek ] = "G:";
     Text[ dutch ] = "G:";
     Text[ french ] = "V :";
-    Text[ spanish ] = "G:";
+    Text[ spanish ] = "V:";
     Text[ italian ] = "G:";
     Text[ danish ] = "G:";
     Text[ swedish ] = "G:";
@@ -3361,7 +3361,7 @@ String RID_SVXFLOAT3D_FIX_B
     Text[ greek ] = "B:";
     Text[ dutch ] = "B:";
     Text[ french ] = "B :";
-    Text[ spanish ] = "B:";
+    Text[ spanish ] = "A:";
     Text[ italian ] = "B:";
     Text[ danish ] = "B:";
     Text[ swedish ] = "B:";
