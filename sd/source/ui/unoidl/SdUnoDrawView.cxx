@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-19 08:19:49 $
+ *  last change: $Author: af $ $Date: 2002-08-27 14:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,35 +116,9 @@ SdUnoDrawView::SdUnoDrawView(SdView* pSdView, SdDrawViewShell* pSdViewSh) throw(
     mbDisposing(sal_False),
     mbOldMasterPageMode(sal_False),
     mbOldLayerMode(sal_False),
-    mpCurrentPage(NULL)
+    mpCurrentPage(NULL),
+    meKind (SdUnoDrawView::unknown)
 {
-    if( pSdViewSh->ISA( SdGraphicViewShell ) )
-    {
-        meKind = SdUnoDrawView::drawing;
-    }
-    else if( pSdViewSh->ISA( SdPresViewShell ) )
-    {
-        meKind = SdUnoDrawView::slideshow;
-    }
-    else if( pSdViewSh->ISA( SdPreviewViewShell ) )
-    {
-        meKind = SdUnoDrawView::preview;
-    }
-    else
-    {
-        switch( pSdViewSh->GetPageKind() )
-        {
-        case PK_NOTES:
-            meKind = SdUnoDrawView::notes;
-            break;
-        case PK_HANDOUT:
-            meKind = SdUnoDrawView::handout;
-            break;
-        default:
-            meKind = SdUnoDrawView::presentation;
-            break;
-        }
-    }
 }
 
 SdUnoDrawView::~SdUnoDrawView() throw()
@@ -392,7 +366,7 @@ static sal_Char pImplSdUnoHandoutViewService[sizeof("com.sun.star.presentation.H
 
 sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    switch( meKind )
+    switch(GetDrawViewKind())
     {
     case slideshow:
         return ServiceName.equalsAscii( pImplSdUnoSlideViewService );
@@ -416,10 +390,11 @@ sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName ) 
 
 Sequence< OUString > SAL_CALL SdUnoDrawView::getSupportedServiceNames(  ) throw(RuntimeException)
 {
-    Sequence< OUString > aSeq( ((meKind != notes) && (meKind != handout) && (meKind != presentation)) ? 1 : 2 );
+    SdUnoDrawViewKind eKind = GetDrawViewKind();
+    Sequence< OUString > aSeq( ((eKind != notes) && (eKind != handout) && (eKind != presentation)) ? 1 : 2 );
     OUString* pServices = aSeq.getArray();
 
-    switch( meKind )
+    switch( eKind )
     {
     case slideshow:
         pServices[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( pImplSdUnoSlideViewService ) );
@@ -1120,5 +1095,47 @@ void SAL_CALL SdUnoDrawView::removePaintListener( const ::com::sun::star::uno::R
     Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
     if( xWindow.is() )
         xWindow->removePaintListener( xListener );
+}
+
+
+
+/** Detect the type of the view by first determining the view shell's
+    implementation.  For a <type>SdDrawViewShell</type> the <member
+    scope="SdDrawViewShell">GetPageKind</member> method is used as an
+    additional indicator.
+*/
+SdUnoDrawView::SdUnoDrawViewKind SdUnoDrawView::GetDrawViewKind (void) const
+{
+    if (meKind == SdUnoDrawView::unknown)
+    {
+        if( mpViewSh->ISA( SdGraphicViewShell ) )
+        {
+            meKind = SdUnoDrawView::drawing;
+        }
+        else if( mpViewSh->ISA( SdPresViewShell ) )
+        {
+            meKind = SdUnoDrawView::slideshow;
+        }
+        else if( mpViewSh->ISA( SdPreviewViewShell ) )
+        {
+            meKind = SdUnoDrawView::preview;
+        }
+        else // Assuming SdDrawViewShell.
+        {
+            switch( mpViewSh->GetPageKind() )
+            {
+                case PK_NOTES:
+                    meKind = SdUnoDrawView::notes;
+                    break;
+                case PK_HANDOUT:
+                    meKind = SdUnoDrawView::handout;
+                    break;
+                default:
+                    meKind = SdUnoDrawView::presentation;
+                    break;
+            }
+        }
+    }
+    return meKind;
 }
 
