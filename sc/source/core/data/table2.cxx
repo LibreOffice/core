@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: er $ $Date: 2002-11-21 16:01:05 $
+ *  last change: $Author: er $ $Date: 2002-11-27 21:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,11 +159,10 @@ void ScTable::InsertRow( USHORT nStartCol, USHORT nEndCol, USHORT nStartRow, USH
     {
         if (pRowHeight && pRowFlags)
         {
-            for (i=MAXROW; i>=nStartRow+nSize; i--)
-            {
-                pRowHeight[i] = pRowHeight[i-nSize];
-                pRowFlags[i] = pRowFlags[i-nSize];
-            }
+            memmove( &pRowHeight[nStartRow+nSize], &pRowHeight[nStartRow],
+                    (MAXROW - nStartRow + 1 - nSize) * sizeof(pRowHeight[0]) );
+            memmove( &pRowFlags[nStartRow+nSize], &pRowFlags[nStartRow],
+                    (MAXROW - nStartRow + 1 - nSize) * sizeof(pRowFlags[0]) );
 
             //  #67451# copy row height from row above
             USHORT nSourceRow = ( nStartRow > 0 ) ? ( nStartRow - 1 ) : 0;
@@ -194,11 +193,12 @@ void ScTable::DeleteRow( USHORT nStartCol, USHORT nEndCol, USHORT nStartRow, USH
     if (nStartCol==0 && nEndCol==MAXCOL)
     {
         if (pRowHeight && pRowFlags)
-            for (i=nStartRow; i+nSize<=MAXROW; i++)
-            {
-                pRowHeight[i] = pRowHeight[i+nSize];
-                pRowFlags[i] = pRowFlags[i+nSize];
-            }
+        {
+            memmove( &pRowHeight[nStartRow], &pRowHeight[nStartRow+nSize],
+                    (MAXROW - nStartRow + 1 - nSize) * sizeof(pRowHeight[0]) );
+            memmove( &pRowFlags[nStartRow], &pRowFlags[nStartRow+nSize],
+                    (MAXROW - nStartRow + 1 - nSize) * sizeof(pRowFlags[0]) );
+        }
         if (pOutlineTable)
             if (pOutlineTable->DeleteRow( nStartRow, nSize ))
                 if (pUndoOutline)
@@ -236,11 +236,12 @@ void ScTable::InsertCol( USHORT nStartCol, USHORT nStartRow, USHORT nEndRow, USH
     if (nStartRow==0 && nEndRow==MAXROW)
     {
         if (pColWidth && pColFlags)
-            for (i=MAXCOL; i>=nStartCol+nSize; i--)
-            {
-                pColWidth[i] = pColWidth[i-nSize];
-                pColFlags[i] = pColFlags[i-nSize];
-            }
+        {
+            memmove( &pColWidth[nStartCol+nSize], &pColWidth[nStartCol],
+                    (MAXCOL - nStartCol + 1 - nSize) * sizeof(pColWidth[0]) );
+            memmove( &pColFlags[nStartCol+nSize], &pColFlags[nStartCol],
+                    (MAXCOL - nStartCol + 1 - nSize) * sizeof(pColFlags[0]) );
+        }
         if (pOutlineTable)
             pOutlineTable->InsertCol( nStartCol, nSize );
     }
@@ -286,11 +287,12 @@ void ScTable::DeleteCol( USHORT nStartCol, USHORT nStartRow, USHORT nEndRow, USH
     if (nStartRow==0 && nEndRow==MAXROW)
     {
         if (pColWidth && pColFlags)
-            for (i=nStartCol; i+nSize<=MAXCOL; i++)
-            {
-                pColWidth[i] = pColWidth[i+nSize];
-                pColFlags[i] = pColFlags[i+nSize];
-            }
+        {
+            memmove( &pColWidth[nStartCol], &pColWidth[nStartCol+nSize],
+                    (MAXCOL - nStartCol + 1 - nSize) * sizeof(pColWidth[0]) );
+            memmove( &pColFlags[nStartCol], &pColFlags[nStartCol+nSize],
+                    (MAXCOL - nStartCol + 1 - nSize) * sizeof(pColFlags[0]) );
+        }
         if (pOutlineTable)
             if (pOutlineTable->DeleteCol( nStartCol, nSize ))
                 if (pUndoOutline)
