@@ -72,11 +72,15 @@ mkdir: %_DEST%\bin%_EXT%\96
 ..\%__SRC%\bin\91\loader2.ex? %_DEST%\bin%_EXT%\91\loader2.ex?
 ..\%__SRC%\bin\96\loader2.ex? %_DEST%\bin%_EXT%\96\loader2.ex?
 
-..\%__SRC%\bin\pkgchk.exe %_DEST%\bin%_EXT%\pkgchk.exe
-..\%__SRC%\bin\pkgchk %_DEST%\bin%_EXT%\pkgchk.bin
 ..\%__SRC%\bin\deployment*.uno.dll %_DEST%\bin%_EXT%\deployment*.uno.dll
 ..\%__SRC%\lib\deployment*.uno.so %_DEST%\lib%_EXT%\deployment*.uno.so
 ..\%__SRC%\lib\deployment*.uno.dylib %_DEST%\lib%_EXT%\deployment*.uno.dylib
+..\%__SRC%\bin\unopkg.exe %_DEST%\bin%_EXT%\unopkg.exe
+..\%__SRC%\bin\unopkg %_DEST%\bin%_EXT%\unopkg.bin
+..\%__SRC%\misc\unopkg.sh %_DEST%\bin%_EXT%\unopkg
+..\%__SRC%\bin\pkgchk.exe %_DEST%\bin%_EXT%\pkgchk.exe
+..\%__SRC%\bin\msi-pkgchk.exe %_DEST%\bin%_EXT%\msi-pkgchk.exe
+..\%__SRC%\bin\pkgchk %_DEST%\bin%_EXT%\pkgchk.bin
 
 ..\%__SRC%\bin\pagein %_DEST%\bin%_EXT%\pagein
 ..\%__SRC%\misc\pagein-* %_DEST%\bin%_EXT%\pagein-*
