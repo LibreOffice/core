@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:24:14 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,12 +351,15 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         SvStorage *pStorage = 0;
         if( pMedium )
         {
+            try
+            {
             pStorage = pMedium->GetStorage();
 
-            sal_uInt32 nError = pMedium->GetError();
-
-            nError = nError;
-
+                //  nError = pMedium->GetError();
+            }
+            catch(const Exception&)
+            {
+            }
         }
 
         OSL_ENSURE(pStorage,"No Storage for read!");
@@ -586,6 +589,7 @@ const SvXMLTokenMap& ODBFilter::GetDataSourceInfoElemTokenMap() const
             { XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_TYPE,   XML_TOK_DATA_SOURCE_SETTING_TYPE},
             { XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_NAME,   XML_TOK_DATA_SOURCE_SETTING_NAME},
             { XML_NAMESPACE_DB, XML_FONT_CHARSET,               XML_TOK_FONT_CHARSET},
+            { XML_NAMESPACE_DB, XML_ENCODING,                   XML_TOK_ENCODING},
             XML_TOKEN_MAP_END
         };
         m_pDataSourceInfoElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));

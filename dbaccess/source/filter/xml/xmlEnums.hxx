@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlEnums.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:21:11 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,8 @@ namespace dbaxml
         XML_TOK_AUTO_INCREMENT,
         XML_TOK_DELIMITER,
         XML_TOK_DATA_SOURCE_SETTINGS,
-        XML_TOK_FONT_CHARSET
+        XML_TOK_FONT_CHARSET,
+        XML_TOK_ENCODING
     };
     enum XMLLogin
     {
