@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:45:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,11 +75,11 @@
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLE_ROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLE_ROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLE_STATE_TYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLE_STATE_TYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -136,7 +136,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
 
 namespace accessibility {
@@ -497,7 +497,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     instantiate the remaining ones.
 */
 uno::Reference<XAccessible > SAL_CALL
-    AccessibleShape::getAccessibleAt (
+    AccessibleShape::getAccessibleAtPoint (
         const awt::Point& aPoint)
     throw (uno::RuntimeException)
 {
@@ -870,7 +870,7 @@ uno::Sequence<OUString> SAL_CALL
     // ...and add additional names.
     aServiceNames.realloc (nCount + 1);
     static const OUString sAdditionalServiceName (RTL_CONSTASCII_USTRINGPARAM(
-        "drafts.com.sun.star.drawing.AccessibleShape"));
+        "com.sun.star.drawing.AccessibleShape"));
     aServiceNames[nCount] = sAdditionalServiceName;
 
     return aServiceNames;
@@ -973,7 +973,7 @@ void SAL_CALL
             // Some property of a shape has been modified.  Send an event
             // that indicates a change of the visible data to all listeners.
             CommitChange (
-                AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT,
+                AccessibleEventId::VISIBLE_DATA_CHANGED,
                 uno::Any(),
                 uno::Any());
         }
@@ -1040,7 +1040,7 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
 {
     // Inform all listeners that the graphical representation (i.e. size
     // and/or position) of the shape has changed.
-    CommitChange (AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT,
+    CommitChange (AccessibleEventId::VISIBLE_DATA_CHANGED,
         uno::Any(),
         uno::Any());
 
