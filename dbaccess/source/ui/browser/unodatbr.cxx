@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 15:16:26 $
+ *  last change: $Author: fs $ $Date: 2001-03-02 17:07:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XWARNINGSSUPPLIER_HPP_
+#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #endif
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
@@ -1435,7 +1438,9 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
         if (pEntry && !m_pTreeView->getListBox()->IsSelected(pEntry))
         {
             pOldSelection = m_pTreeView->getListBox()->FirstSelected();
+            m_pTreeView->getListBox()->lockAutoSelect();
             m_pTreeView->getListBox()->Select(pEntry);
+            m_pTreeView->getListBox()->unlockAutoSelect();
         }
     }
     else
@@ -1510,7 +1515,11 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
 
     // restore the old selection
     if (pOldSelection)
+    {
+        m_pTreeView->getListBox()->lockAutoSelect();
         m_pTreeView->getListBox()->Select(pOldSelection);
+        m_pTreeView->getListBox()->unlockAutoSelect();
+    }
 
     switch (nPos)
     {
@@ -2093,14 +2102,18 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
         // it could be that we already have a connection
         DBTreeListModel::DBTreeListUserData* pFirstData = static_cast<DBTreeListModel::DBTreeListUserData*>(pFirstParent->GetUserData());
         Reference<XConnection> xConnection(pFirstData->xObject,UNO_QUERY);
+        WaitObject aWaitCursor(getBrowserView());
         if(!pFirstData->xObject.is())
         {
-            WaitObject aWaitCursor(getBrowserView());
             xConnection = connect(pString->GetText());
             pFirstData->xObject = xConnection;
         }
         if(xConnection.is())
         {
+            Reference< XWarningsSupplier > xWarnings(xConnection, UNO_QUERY);
+            if (xWarnings.is())
+                xWarnings->clearWarnings();
+
             Reference<XTablesSupplier> xTabSup(xConnection,UNO_QUERY);
             if(xTabSup.is())
             {
@@ -2119,8 +2132,25 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
                 populateTree(xViewSup->getViews(),_pParent,aImage);
                 Reference<XContainer> xCont(xViewSup->getViews(),UNO_QUERY);
                 if(xCont.is())
-                    // add as listener to know when elements are inserted or removed
+                    // add as listener to get notified if elements are inserted or removed
                     xCont->addContainerListener(this);
+            }
+
+            if (xWarnings.is())
+            {
+                SQLExceptionInfo aInfo(xWarnings->getWarnings());
+                if (aInfo.isValid() && sal_False)
+                {
+                    SQLContext aContext;
+                    aContext.Message = String(ModuleRes(STR_OPENTABLES_WARNINGS));
+                    aContext.Details = String(ModuleRes(STR_OPENTABLES_WARNINGS_DETAILS));
+                    aContext.NextException = aInfo.get();
+                    aInfo = aContext;
+                    showError(aInfo);
+                }
+                // TODO: we need a better concept for these warnings:
+                // something like "don't show any warnings for this datasource, again" would be nice
+                // But this requires an extension of the InteractionHandler and an additional property on the data source
             }
         }
         else
