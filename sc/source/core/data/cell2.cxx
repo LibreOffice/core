@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-08-31 12:33:01 $
+ *  last change: $Author: er $ $Date: 2001-10-08 18:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1085,7 +1085,7 @@ BOOL ScFormulaCell::TestTabRefAbs(USHORT nTable)
 void ScFormulaCell::UpdateCompile( BOOL bForceIfNameInUse )
 {
     if ( bForceIfNameInUse && !bCompile )
-        bCompile = pCode->HasName();
+        bCompile = pCode->HasNameOrColRowName();
     if ( bCompile )
         pCode->SetError( 0 );   // damit auch wirklich kompiliert wird
     CompileTokenArray();

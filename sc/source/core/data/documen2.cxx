@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: er $ $Date: 2001-08-10 18:02:39 $
+ *  last change: $Author: er $ $Date: 2001-10-08 18:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1760,7 +1760,10 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, USHORT nSrcPos,
             pTab[nDestPos]->UpdateReference(URM_COPY, 0, 0, nDestPos,
                                                      MAXCOL, MAXROW, nDestPos,
                                                      0, 0, nDz, NULL);
-            BOOL bIsAbsRef = pTab[nDestPos]->TestTabRefAbs(nSrcPos); // eigene Ref retten
+            // Test for outside absolute references for info box
+            BOOL bIsAbsRef = pSrcDoc->pTab[nSrcPos]->TestTabRefAbs(nSrcPos);
+            // Readjust self-contained absolute references to this sheet
+            pTab[nDestPos]->TestTabRefAbs(nSrcPos);
             if (bIsAbsRef)
             {
                 nRetVal += 1;
