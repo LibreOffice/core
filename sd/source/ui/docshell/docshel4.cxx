@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-16 17:38:54 $
+ *  last change: $Author: ka $ $Date: 2001-03-21 11:46:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -674,10 +674,12 @@ BOOL SdDrawDocShell::SaveCompleted( SvStorage * pStor )
 
         bRet = TRUE;
 
-        // Damit der Navigator nach dem Speichern updaten kann!
-        ( ( pViewShell && pViewShell->GetViewFrame() ) ?
-          pViewShell->GetViewFrame() : SfxViewFrame::Current() )->
-          GetBindings().Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
+        SfxViewFrame* pFrame = ( pViewShell && pViewShell->GetViewFrame() ) ?
+                               pViewShell->GetViewFrame() :
+                               SfxViewFrame::Current();
+
+        if( pFrame )
+            pFrame->GetBindings().Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
     }
     return bRet;
 }
