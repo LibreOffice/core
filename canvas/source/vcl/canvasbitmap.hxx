@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvasbitmap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:38:39 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 17:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,26 +62,34 @@
 #ifndef _VCLCANVAS_CANVASBITMAP_HXX
 #define _VCLCANVAS_CANVASBITMAP_HXX
 
-#include <memory>
-
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_COMPBASE3_HXX_
+#include <cppuhelper/compbase3.hxx>
 #endif
+
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-
+#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XBITMAPCANVAS_HPP_
+#include <drafts/com/sun/star/rendering/XBitmapCanvas.hpp>
+#endif
 #ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XINTEGERBITMAP_HPP_
 #include <drafts/com/sun/star/rendering/XIntegerBitmap.hpp>
 #endif
 
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
 #ifndef _SV_BITMAPEX_HXX
 #include <vcl/bitmapex.hxx>
 #endif
 
-#include "spritecanvas.hxx"
-#include "bitmapcanvas.hxx"
+#include <canvas/vclwrapper.hxx>
+
+#include <canvas/bitmapcanvasbase.hxx>
+#include <canvasbitmaphelper.hxx>
+
 #include "impltools.hxx"
+
 
 #define CANVASBITMAP_IMPLEMENTATION_NAME "VCLCanvas::CanvasBitmap"
 
@@ -89,33 +97,42 @@
 
 namespace vclcanvas
 {
-    class CanvasBitmap : public ::cppu::WeakImplHelper2< ::drafts::com::sun::star::rendering::XIntegerBitmap,
-                                                          ::com::sun::star::lang::XServiceInfo >
+    typedef ::cppu::WeakComponentImplHelper3< ::drafts::com::sun::star::rendering::XBitmapCanvas,
+                                               ::drafts::com::sun::star::rendering::XIntegerBitmap,
+                                                ::com::sun::star::lang::XServiceInfo >                                  CanvasBitmapBase_Base;
+    typedef ::canvas::internal::BitmapCanvasBase< CanvasBitmapBase_Base, CanvasBitmapHelper, tools::LocalGuard >    CanvasBitmap_Base;
+
+    class CanvasBitmap : public CanvasBitmap_Base
     {
     public:
-        // Must be called with locked Solar mutex
-        CanvasBitmap( const ::Size&                     rSize,
-                      const OutDevProvider::ImplRef&    rReferenceCanvas );
+        /** Must be called with locked Solar mutex
 
-        // XBitmap
-        virtual ::drafts::com::sun::star::geometry::IntegerSize2D SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XBitmapCanvas > SAL_CALL queryBitmapCanvas(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XBitmap > SAL_CALL getScaledBitmap( const ::drafts::com::sun::star::geometry::RealSize2D& newSize, sal_Bool beFast ) throw (::com::sun::star::uno::RuntimeException);
+            @param rSize
+            Size in pixel of the bitmap to generate
 
-        // XIntegerBitmap
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getData( const ::drafts::com::sun::star::geometry::IntegerRectangle2D& rect ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::drafts::com::sun::star::rendering::VolatileContentDestroyedException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setData( const ::com::sun::star::uno::Sequence< sal_Int8 >& data, const ::drafts::com::sun::star::geometry::IntegerRectangle2D& rect ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setPixel( const ::com::sun::star::uno::Sequence< sal_Int8 >& color, const ::drafts::com::sun::star::geometry::IntegerPoint2D& pos ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getPixel( const ::drafts::com::sun::star::geometry::IntegerPoint2D& pos ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::drafts::com::sun::star::rendering::VolatileContentDestroyedException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XBitmapPalette > SAL_CALL getPalette(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::drafts::com::sun::star::rendering::IntegerBitmapLayout SAL_CALL getMemoryLayout(  ) throw (::com::sun::star::uno::RuntimeException);
+            @param bAlphaBitmap
+            When true, bitmap will have an alpha channel
+
+            @param rDevice
+            Reference device, with which bitmap should be compatible
+         */
+        CanvasBitmap( const ::Size&                         rSize,
+                      bool                                  bAlphaBitmap,
+                      const WindowGraphicDevice::ImplRef&   rDevice );
+
+        /// Must be called with locked Solar mutex
+        CanvasBitmap( const BitmapEx&                       rBitmap,
+                      const WindowGraphicDevice::ImplRef&   rDevice );
+
+        /// Dispose all internal references
+        virtual void SAL_CALL disposing();
 
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
-        VirtualDevice& getVirDev();
+        BitmapEx getBitmap() const;
 
     protected:
         ~CanvasBitmap(); // we're a ref-counted UNO class. _We_ destroy ourselves.
@@ -124,13 +141,6 @@ namespace vclcanvas
         // default: disabled copy/assignment
         CanvasBitmap(const CanvasBitmap&);
         CanvasBitmap& operator=( const CanvasBitmap& );
-
-        // only needed internally
-        CanvasBitmap( const BitmapEx&                   rBitmap,
-                      const OutDevProvider::ImplRef&    rReferenceCanvas );
-
-        OutDevProvider::ImplRef     mpReferenceCanvas;
-        BitmapCanvas::ImplRef       mpBitmapCanvas;
     };
 }
 
