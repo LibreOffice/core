@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paminit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:13:44 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:43:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,10 @@ SwWhichPara SwuiGetfnParaCurr() //CHINA001
 SwPosPara SwuiGetfnParaStart() //CHINA001
 {
      return  fnParaStart;
+}
+SwPosPara SwuiGetfnParaEnd() //CHINA001
+{
+     return  fnParaEnd;
 }
 SwWhichTable SwuiGetfnTablePrev() //CHINA001
 {
