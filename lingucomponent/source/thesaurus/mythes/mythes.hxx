@@ -57,6 +57,15 @@ private:
         // binary search on null terminated character strings
         int binsearch(char * wrd, char* list[], int nlst);
 
+        // string duplication routine
+        char * mystrdup(const char * p);
+
+        // remove cross-platform text line end characters
+        void mychomp(char * s);
+
+        // return index of char in string
+        int mystr_indexOfChar(const char * d, int c);
+
 };
 
 #endif

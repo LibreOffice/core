@@ -6,46 +6,6 @@
 
 #include "mythes.hxx"
 
-// some basic utility routines
-
-#ifdef MYTHES_STANDALONE
-
-// string duplication routine
-char * mystrdup(const char * p)
-{
-
-  int sl = strlen(p) + 1;
-  char * d = (char *)malloc(sl);
-  if (d) {
-    memcpy(d,p,sl);
-    return d;
-  }
-  return NULL;
-}
-
-// remove cross-platform text line end characters
-void mychomp(char * s)
-{
-  int k = strlen(s);
-  if ((k > 0) && ((*(s+k-1)=='\r') || (*(s+k-1)=='\n'))) *(s+k-1) = '\0';
-  if ((k > 1) && (*(s+k-2) == '\r')) *(s+k-2) = '\0';
-}
-
-#else
-
-extern char * mystrdup(const char * p);
-extern void mychomp(char * s);
-
-#endif
-
-
-// return index of char in string
-int mystr_indexOfChar(const char * d, int c)
-{
-  char * p = strchr((char *)d,c);
-  if (p) return (int)(p-d);
-  return -1;
-}
 
 
 MyThes::MyThes(const char* idxpath, const char * datpath)
@@ -367,5 +327,35 @@ char * MyThes::get_th_encoding()
 {
   if (encoding) return encoding;
   return NULL;
+}
+
+
+// string duplication routine
+char * MyThes::mystrdup(const char * p)
+{
+  int sl = strlen(p) + 1;
+  char * d = (char *)malloc(sl);
+  if (d) {
+    memcpy(d,p,sl);
+    return d;
+  }
+  return NULL;
+}
+
+// remove cross-platform text line end characters
+void MyThes::mychomp(char * s)
+{
+  int k = strlen(s);
+  if ((k > 0) && ((*(s+k-1)=='\r') || (*(s+k-1)=='\n'))) *(s+k-1) = '\0';
+  if ((k > 1) && (*(s+k-2) == '\r')) *(s+k-2) = '\0';
+}
+
+
+// return index of char in string
+int MyThes::mystr_indexOfChar(const char * d, int c)
+{
+  char * p = strchr((char *)d,c);
+  if (p) return (int)(p-d);
+  return -1;
 }
 
