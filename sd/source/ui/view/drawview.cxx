@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:15:11 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1337,7 +1337,7 @@ void DrawView::SetPixelMode(BOOL bOn)
 |*
 \************************************************************************/
 
-void DrawView::MakeVisible(const Rectangle& rRect, Window& rWin)
+void DrawView::MakeVisible(const Rectangle& rRect, ::Window& rWin)
 {
     if (!rRect.IsEmpty())
     {
