@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 10:50:37 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 10:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,7 +315,7 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
             {
                 if(!aErr.getLength())
                 {
-                    aErr = ::rtl::OUString::createFromAscii("Unknown table name in SELECT statement: !");
+                    aErr = ::rtl::OUString::createFromAscii("Unknown table name in SELECT statement:\n");
                     aErr += sql;
                 }
                 throw SQLException(aErr,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
