@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-09 19:56:33 $
+ *  last change: $Author: vg $ $Date: 2001-08-10 12:04:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,16 @@
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
 #endif
+#ifndef _SV_SALGGDI_HXX
+#include <salgdi.hxx>
+#endif
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
 #endif
 
 #include <prex.h>
 #include <X11/X.h>
+#include <X11/Xatom.h>
 #include <postx.h>
 
 #ifdef DEBUG
@@ -140,9 +144,11 @@ static const WMAdaptorProtocol aAtomTab[] =
     { "SAL_EXTTEXTEVENT", WMAdaptor::SAL_EXTTEXTEVENT }
 };
 
-extern "C" static int compareProtocol( const void* pLeft, const void* pRight )
+extern "C" {
+static int compareProtocol( const void* pLeft, const void* pRight )
 {
     return strcmp( ((const WMAdaptorProtocol*)pLeft)->pProtocol, ((const WMAdaptorProtocol*)pRight)->pProtocol );
+}
 }
 
 /*
@@ -365,12 +371,11 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
                 sal_uInt32* pValues = (sal_uInt32*)pProperty;
                 for( int i = 0; i < m_nDesktops; i++ )
                 {
-                    Rectangle aWorkArea(
-                                        Point( pValues[4*i],
-                                               pValues[4*i+1] ),
-                                        Size( pValues[4*i+2],
-                                              pValues[4*i+3] )
-                                        );
+                    Point aPoint( pValues[4*i],
+                                  pValues[4*i+1] );
+                    Size aSize( pValues[4*i+2],
+                                pValues[4*i+3] );
+                    Rectangle aWorkArea( aPoint, aSize );
                     m_aWMWorkAreas[i] = aWorkArea;
                     if( aWorkArea != m_aWMWorkAreas[0] )
                         m_bEqualWorkAreas = false;
