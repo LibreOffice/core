@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedclip.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2001-04-10 15:17:07 $
+ *  last change: $Author: th $ $Date: 2001-05-11 09:21:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ sal_Bool DlgEdTransferableImpl::compareDataFlavors( const DataFlavor& lFlavor, c
         ::rtl::OUString aLFullMediaType = xLType->getFullMediaType();
         ::rtl::OUString aRFullMediaType = xRType->getFullMediaType();
 
-        bRet = aLFullMediaType.equalsIgnoreCase( aRFullMediaType );
+        bRet = aLFullMediaType.equalsIgnoreAsciiCase( aRFullMediaType );
     }
 
     return bRet;
