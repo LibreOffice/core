@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:24:28 $
+ *  last change: $Author: rt $ $Date: 2004-11-17 08:22:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,12 +388,15 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         // swithc for more actions
         switch( ((SfxSimpleHint&) rHint).GetId() )
         {
-        case SFX_HINT_TITLECHANGED:
-            if( GetMedium() )
-                nAction = 2;
+            case SFX_HINT_TITLECHANGED:
+                if( GetMedium() )
+                    nAction = 2;
             break;
         }
     }
+    else if( rHint.ISA(SfxEventHint) &&
+        ((SfxEventHint&) rHint).GetEventId() == SFX_EVENT_LOADFINISHED )
+        nAction = 1;
 
     if( nAction )
     {
@@ -407,7 +410,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         switch( nAction )
         {
         case 1:
-            pDoc->DocInfoChgd( *((SfxDocumentInfoHint&)rHint).GetObject() );
+            pDoc->DocInfoChgd( GetDocInfo() );
             break;
 
         case 2:
