@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:41:24 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -629,7 +629,7 @@ Image IMG_HELP_TOOLBOX_BOOKMARKS
 };
 Image IMG_HELP_TOOLBOX_SEARCHDIALOG
 {
-    ImageBitmap = Bitmap { File = "search_small.bmp" ; };
+    ImageBitmap = Bitmap { File = "sc05961.bmp" ; };
     MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_TOOLBOX_COPY
@@ -913,8 +913,8 @@ String STR_HELP_BUTTON_ADDBOOKMARK
 };
 String STR_HELP_BUTTON_SEARCHDIALOG
 {
-    Text = "Suchen...";
-    Text [ english_us ] = "Find...";
+    Text = "Auf dieser Seite suchen...";
+    Text [ english_us ] = "Find on this Page...";
     Text[ portuguese ] = "Localizar...";
     Text[ russian ] = "Íàéòè...";
     Text[ greek ] = "Åıñåóç...";
@@ -1047,6 +1047,33 @@ ModalDialog DLG_HELP_ADDBOOKMARK
     Size = MAP_APPFONT ( 208 , 43 ) ;
     TEXT = "Lesezeichen hinzufügen" ;
     TEXT [ ENGLISH ] = "Add to Bookmarks" ;
+    TEXT[ english_us ] = "Add to Bookmarks";
+    TEXT[ portuguese ] = "Adicionar marcador";
+    TEXT[ russian ] = "Äîáàâèòü çàêëàäêó";
+    TEXT[ greek ] = "ĞñïóèŞêç óôïõò óåëéäïäåßêôåò";
+    TEXT[ dutch ] = "Bladwijzer toevoegen";
+    TEXT[ french ] = "Ajouter un marque-page";
+    TEXT[ spanish ] = "Añadir marcador";
+    TEXT[ finnish ] = "Lisää kirjanmerkkeihin";
+    TEXT[ italian ] = "Aggiungi segnalibro";
+    TEXT[ danish ] = "Tilføj bogmærke";
+    TEXT[ swedish ] = "Lägg till bokmärke";
+    TEXT[ polish ] = "Dodaj do zak³adek";
+    TEXT[ portuguese_brazilian ] = "Adicionar marcador";
+    TEXT[ japanese ] = "ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯ã®è¿½åŠ ";
+    TEXT[ korean ] = "ì±…ê°ˆí”¼ì— ì¶”ê°€";
+    TEXT[ chinese_simplified ] = "åŠ å…¥ä¹¦ç­¾";
+    TEXT[ chinese_traditional ] = "åŠ å…¥æ›¸ç±¤";
+    TEXT[ turkish ] = "Yer işaretlerine ekle";
+    TEXT[ arabic ] = "ÅÖÇİÉ ÅÔÇÑÇÊ ãÑÌÚíÉ";
+    TEXT[ catalan ] = "Afegeix als marcadors";
+    TEXT[ thai ] = "à¹€à¸à¸´à¹ˆà¸¡à¸–à¸¶à¸‡à¸•à¸±à¸§à¸„à¸±à¹ˆà¸™";
+    TEXT[ czech ] = "PÅ™idat k zÃ¡loÅ¾kÃ¡m";
+    TEXT[ hebrew ] = "â€®×”×•×¡×¤×” ×œ×¡×™×× ×™×•×ªâ€¬";
+    TEXT[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ à¤¸à¤‚à¤•à¥‡à¤¤à¥‹à¤‚ à¤®à¥‡à¤‚ à¤œà¥‹à¤¡à¤¼à¥‹";
+    TEXT[ slovak ] = "PridaÅ¥ k zÃ¡loÅ¾kÃ¡m";
+    TEXT[ hungarian ] = "HozzÃ¡adÃ¡s a kÃ¶nyvjelzÅ‘khÃ¶z";
+    TEXT[ slovenian ] = "Dodaj k zaznamkom";
     MOVEABLE = TRUE ;
     CLOSEABLE = TRUE ;
     OUTPUTSIZE = TRUE ;
@@ -1149,33 +1176,6 @@ ModalDialog DLG_HELP_ADDBOOKMARK
         TEXT[ hungarian ] = "KÃ¶nyvjelzÅ‘ Ã¡tnevezÃ©se";
         TEXT[ slovenian ] = "Preimenuj zaznamek";
     };
-    TEXT[ english_us ] = "Add to Bookmarks";
-    TEXT[ portuguese ] = "Adicionar marcador";
-    TEXT[ russian ] = "Äîáàâèòü çàêëàäêó";
-    TEXT[ greek ] = "ĞñïóèŞêç óôïõò óåëéäïäåßêôåò";
-    TEXT[ dutch ] = "Bladwijzer toevoegen";
-    TEXT[ french ] = "Ajouter un marque-page";
-    TEXT[ spanish ] = "Añadir marcador";
-    TEXT[ finnish ] = "Lisää kirjanmerkkeihin";
-    TEXT[ italian ] = "Aggiungi segnalibro";
-    TEXT[ danish ] = "Tilføj bogmærke";
-    TEXT[ swedish ] = "Lägg till bokmärke";
-    TEXT[ polish ] = "Dodaj do zak³adek";
-    TEXT[ portuguese_brazilian ] = "Adicionar marcador";
-    TEXT[ japanese ] = "ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯ã®è¿½åŠ ";
-    TEXT[ korean ] = "ì±…ê°ˆí”¼ì— ì¶”ê°€";
-    TEXT[ chinese_simplified ] = "åŠ å…¥ä¹¦ç­¾";
-    TEXT[ chinese_traditional ] = "åŠ å…¥æ›¸ç±¤";
-    TEXT[ turkish ] = "Yer işaretlerine ekle";
-    TEXT[ arabic ] = "ÅÖÇİÉ ÅÔÇÑÇÊ ãÑÌÚíÉ";
-    TEXT[ catalan ] = "Afegeix als marcadors";
-    TEXT[ thai ] = "à¹€à¸à¸´à¹ˆà¸¡à¸–à¸¶à¸‡à¸•à¸±à¸§à¸„à¸±à¹ˆà¸™";
-    TEXT[ czech ] = "PÅ™idat k zÃ¡loÅ¾kÃ¡m";
-    TEXT[ hebrew ] = "â€®×”×•×¡×¤×” ×œ×¡×™×× ×™×•×ªâ€¬";
-    TEXT[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ à¤¸à¤‚à¤•à¥‡à¤¤à¥‹à¤‚ à¤®à¥‡à¤‚ à¤œà¥‹à¤¡à¤¼à¥‹";
-    TEXT[ slovak ] = "PridaÅ¥ k zÃ¡loÅ¾kÃ¡m";
-    TEXT[ hungarian ] = "HozzÃ¡adÃ¡s a kÃ¶nyvjelzÅ‘khÃ¶z";
-    TEXT[ slovenian ] = "Dodaj k zaznamkom";
 };
 
 Menu MENU_HELP_BOOKMARKS
@@ -1326,6 +1326,14 @@ InfoBox RID_INFO_NOSEARCHRESULTS
     MESSAGE[ slovenian ] = "Teme ni mogoÄe najti.";
 };
 
+InfoBox RID_INFO_NOSEARCHTEXTFOUND
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    MESSAGE = "Der eingegebene Text wurde nicht gefunden." ;
+    MESSAGE[ english_us ] = "The text you entered was not found.";
+};
+
 Image IMG_HELP_TOOLBOX_HC_INDEX_ON
 {
     ImageBitmap = Bitmap { File = "indexon_small_h.bmp" ; };
@@ -1363,7 +1371,7 @@ Image IMG_HELP_TOOLBOX_HC_BOOKMARKS
 };
 Image IMG_HELP_TOOLBOX_HC_SEARCHDIALOG
 {
-    ImageBitmap = Bitmap { File = "search_small_h.bmp" ; };
+    ImageBitmap = Bitmap { File = "sch05961.bmp" ; };
     MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_TOOLBOX_HC_COPY
@@ -1409,7 +1417,7 @@ Image IMG_HELP_TOOLBOX_L_BOOKMARKS
 };
 Image IMG_HELP_TOOLBOX_L_SEARCHDIALOG
 {
-    ImageBitmap = Bitmap { File = "search_large.bmp" ; };
+    ImageBitmap = Bitmap { File = "lc05961.bmp" ; };
     MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_TOOLBOX_L_COPY
@@ -1455,7 +1463,7 @@ Image IMG_HELP_TOOLBOX_HCL_BOOKMARKS
 };
 Image IMG_HELP_TOOLBOX_HCL_SEARCHDIALOG
 {
-    ImageBitmap = Bitmap { File = "search_large_h.bmp" ; };
+    ImageBitmap = Bitmap { File = "lch05961.bmp" ; };
     MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_TOOLBOX_HCL_COPY
