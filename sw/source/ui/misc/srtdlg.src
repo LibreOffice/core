@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:23:20 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Sloupec";
         Text[ hebrew ] = "Spalte";
         Text[ hindi ] = "स्तंभ";
+        Text[ slovak ] = "Stĺpec";
     };
     FixedText FT_KEYTYP
     {
@@ -171,6 +172,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Druh klíče";
         Text[ hebrew ] = "Schlüsseltyp";
         Text[ hindi ] = "की वर्ग";
+        Text[ slovak ] = "Druh kľúča";
     };
     FixedText FT_DIR
     {
@@ -204,6 +206,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Pořadí";
         Text[ hebrew ] = "Reihenfolge";
         Text[ hindi ] = "क्रम";
+        Text[ slovak ] = "Poradie";
     };
     CheckBox CB_KEY1
     {
@@ -239,6 +242,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Klíč 1";
         Text[ hebrew ] = "Schlüssel ~1";
         Text[ hindi ] = "की ~1";
+        Text[ slovak ] = "Kľúč ~1";
     };
     NumericField ED_KEY1
     {
@@ -285,6 +289,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Číselný";
         Text[ hebrew ] = "Numerisch";
         Text[ hindi ] = "संख्या";
+        Text[ slovak ] = "Číselný";
     };
     ListBox DLB_KEY1
     {
@@ -329,6 +334,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Vzestupně";
         Text[ hebrew ] = "~Aufsteigend";
         Text[ hindi ] = "~आरोहण क्रम";
+        Text[ slovak ] = "~Vzostupne";
     };
     RadioButton RB_DN
     {
@@ -363,6 +369,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Sestupně";
         Text[ hebrew ] = "A~bsteigend";
         Text[ hindi ] = "~अवरोहण क्रम";
+        Text[ slovak ] = "~Zostupne";
     };
     CheckBox CB_KEY2
     {
@@ -397,6 +404,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Klíč 2";
         Text[ hebrew ] = "Schlüssel ~2";
         Text[ hindi ] = "की ~2";
+        Text[ slovak ] = "Kľúč ~2";
     };
     NumericField ED_KEY2
     {
@@ -457,6 +465,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Vzestupně";
         Text[ hebrew ] = "A~ufsteigend";
         Text[ hindi ] = "आरोहण क्रम";
+        Text[ slovak ] = "Vzostupne";
     };
     RadioButton RB_DN2
     {
@@ -491,6 +500,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Sestupně";
         Text[ hebrew ] = "Ab~steigend";
         Text[ hindi ] = "अवरोहण क्रम";
+        Text[ slovak ] = "Zostupne";
     };
     CheckBox CB_KEY3
     {
@@ -525,6 +535,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Klíč 3";
         Text[ hebrew ] = "Schlüssel ~3";
         Text[ hindi ] = "की ~3";
+        Text[ slovak ] = "Kľúč ~3";
     };
     NumericField ED_KEY3
     {
@@ -585,6 +596,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Vzestupně";
         Text[ hebrew ] = "Aufstei~gend";
         Text[ hindi ] = "आरोहण क्रम";
+        Text[ slovak ] = "Vzostupne";
     };
     RadioButton RB_DN3
     {
@@ -619,6 +631,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Sestupně";
         Text[ hebrew ] = "Absteigen~d";
         Text[ hindi ] = "अवरोहण क्रम";
+        Text[ slovak ] = "Zostupne";
     };
     FixedLine FL_SORT_2
     {
@@ -652,6 +665,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Seřadit podle";
         Text[ hebrew ] = "Regel";
         Text[ hindi ] = "सोर्ट सिद्धान्त";
+        Text[ slovak ] = "Kritériá radenia";
     };
     RadioButton RB_COL
     {
@@ -686,6 +700,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Sloupce";
         Text[ hebrew ] = "S~palten";
         Text[ hindi ] = "स्तं~भें";
+        Text[ slovak ] = "S~tĺpce";
     };
     RadioButton RB_ROW
     {
@@ -721,6 +736,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Řádky";
         Text[ hebrew ] = "~Zeilen";
         Text[ hindi ] = "पंक्ति~याँ";
+        Text[ slovak ] = "~Riadky";
     };
     FixedLine FL_DIR
     {
@@ -754,6 +770,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Směr";
         Text[ hebrew ] = "Richtung";
         Text[ hindi ] = "दिशा";
+        Text[ slovak ] = "Smer";
     };
     RadioButton RB_TAB
     {
@@ -789,6 +806,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Tabulátory";
         Text[ hebrew ] = "~Tabulator";
         Text[ hindi ] = "~टॉब्स";
+        Text[ slovak ] = "~Tabulátory";
     };
     RadioButton RB_TABCH
     {
@@ -823,6 +841,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Znak";
         Text[ hebrew ] = "Z~eichen";
         Text[ hindi ] = "~अक्षर";
+        Text[ slovak ] = "~Znak";
     };
     Edit ED_TABCH
     {
@@ -843,7 +862,7 @@ ModalDialog DLG_SORTING
         Text [ portuguese_brazilian ] = "Delimitador" ;
         Text [ portuguese ] = "Separador" ;
         Text [ finnish ] = "Erotin" ;
-        Text [ danish ] = "Separator" ;
+        Text [ danish ] = "Skilletegn" ;
         Text [ french ] = "S�parateur" ;
         Text [ swedish ] = "Avgr�nsare" ;
         Text [ dutch ] = "Scheidingsteken" ;
@@ -864,6 +883,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Oddělovač";
         Text[ hebrew ] = "Trenner";
         Text[ hindi ] = "अलगानेवाला";
+        Text[ slovak ] = "Oddeľovač";
     };
     String STR_ROW
     {
@@ -895,6 +915,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Řádky";
         Text[ hebrew ] = "Zeile";
         Text[ hindi ] = "पंक्तियाँ";
+        Text[ slovak ] = "Riadky";
     };
     String STR_COL
     {
@@ -926,6 +947,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Sloupec";
         Text[ hebrew ] = "Spalte";
         Text[ hindi ] = "स्तंभ";
+        Text[ slovak ] = "Stĺpec";
     };
     PushButton PB_DELIM
     {
@@ -964,6 +986,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Jazyk";
         Text[ hebrew ] = "‮שפה‬";
         Text[ hindi ] = "भाषा";
+        Text[ slovak ] = "Jazyk";
     };
     ListBox LB_LANG
     {
@@ -1003,6 +1026,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Nastavení";
         Text[ hebrew ] = "Einstellung";
         Text[ hindi ] = "निर्धारण";
+        Text[ slovak ] = "Nastavenie";
     };
     CheckBox CB_CASE
     {
@@ -1035,6 +1059,7 @@ ModalDialog DLG_SORTING
         Text[ czech ] = "Rozlišovat velikost";
         Text[ hebrew ] = "‮התאמת אותיות גדולות/קטנות‬";
         Text[ hindi ] = "केस तुलना";
+        Text[ slovak ] = "Rozlišovať veľkosť";
     };
 
     Text[ chinese_simplified ] = "排序";
@@ -1052,6 +1077,7 @@ ModalDialog DLG_SORTING
     Text[ czech ] = "Seřadit";
     Text[ hebrew ] = "‮מיון‬";
     Text[ hindi ] = "सोर्ट";
+    Text[ slovak ] = "Zoradiť";
 };
 InfoBox MSG_SRTERR
 {
@@ -1085,7 +1111,10 @@ InfoBox MSG_SRTERR
     MESSAGE[ czech ] = "Vybrané objekty není možné seřadit";
     MESSAGE[ hebrew ] = "Selektion konnte nicht sortiert werden";
     MESSAGE[ hindi ] = "चुनाव को सोर्ट नहीं कर सकता है";
+    MESSAGE[ slovak ] = "Vybrané objekty nie je možné zoradiť";
 };
+
+
 
 
 
