@@ -1,0 +1,308 @@
+/*************************************************************************
+ *
+ *  $RCSfile: mmgreetingspage.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:16:30 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include <mmgreetingspage.hrc>
+#include <dbui.hrc>
+#include <helpid.h>
+
+#define GREETINGS_BODY  \
+    CheckBox CB_PERSONALIZED                                                    \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 12 + LEFT_OFFSET , 17 + TOP_OFFSET ) ;                  \
+        Size = MAP_APPFONT ( 236 , 10 ) ;                                           \
+        Text [ de ] = "Personalisierte Briefanrede einfügen" ;                              \
+        Text[ en-US ] = "Insert personalized salutation";                    \
+    };                                                                              \
+    FixedText   FT_FEMALE                                                           \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 32 + TOP_OFFSET ) ;                  \
+        Size = MAP_APPFONT ( 50 , 8 ) ;                                             \
+        Text [ de ] = "Weiblich" ;                                                         \
+        Text[ en-US ] = "~Female";                                              \
+    };                                                                              \
+    ListBox     LB_FEMALE                                                           \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 71 + LEFT_OFFSET , 30 + TOP_OFFSET ) ;                                             \
+        Size = MAP_APPFONT ( 121 , 50 ) ;                                           \
+        DropDown = TRUE;                                                            \
+        Border = TRUE;                                                              \
+    };                                                                              \
+    PushButton  PB_FEMALE                                                           \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 198 + LEFT_OFFSET , 29 + TOP_OFFSET ) ;                                            \
+        Size = MAP_APPFONT ( 50 , 14 ) ;                                            \
+        Text [ de ] = "Neu..." ;                                                           \
+        Text[ en-US ] = "~New...";                                              \
+    };                                                                              \
+    FixedText   FT_MALE                                                             \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 49 + TOP_OFFSET ) ;                                             \
+        Size = MAP_APPFONT ( 50 , 8 ) ;                                             \
+        Text [ de ] = "Männlich" ;                                                         \
+        Text[ en-US ] = "~Male";                                                \
+    };                                                                              \
+    ListBox     LB_MALE                                                             \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 71 + LEFT_OFFSET , 47 + TOP_OFFSET ) ;                                             \
+        Size = MAP_APPFONT ( 121 , 50 ) ;                                           \
+        DropDown = TRUE;                                                            \
+        Border = TRUE;                                                              \
+    };                                                                              \
+    PushButton  PB_MALE                                                             \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 198 + LEFT_OFFSET , 48 + TOP_OFFSET ) ;                                            \
+        Size = MAP_APPFONT ( 50 , 14 ) ;                                            \
+        Text [ de ] = "Neu..." ;                                                           \
+        Text[ en-US ] = "N~ew...";                                              \
+    };                                                                              \
+    FixedText   FI_FEMALE                                                       \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 63 + TOP_OFFSET ) ;                                             \
+        Size = MAP_APPFONT ( 230 , 8 ) ;                                            \
+        Text [ de ] = "Adresslistenwert für einen weiblichen Empfänger" ;                     \
+        Text[ en-US ] = "Address list field indicating a female recipient";     \
+    };                                                                              \
+    FixedText   FT_FEMALECOLUMN                                                     \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 76 + TOP_OFFSET ) ;                  \
+        Size = MAP_APPFONT ( 50 , 8 ) ;                                            \
+        Text [ de ] = "Spaltentitel" ;                     \
+        Text[ en-US ] = "Field name";           \
+    };                                                                              \
+    ListBox LB_FEMALECOLUMN                                                         \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 71 + LEFT_OFFSET , 74 + TOP_OFFSET ) ;                  \
+        Size = MAP_APPFONT ( 121 , 50 ) ;                                           \
+        DropDown = TRUE;                                                            \
+        Border = TRUE;                                                              \
+        StringList =                \
+        {                           \
+            < "< nicht verfügbar >" ; > ;       \
+        };                          \
+        StringList [en-US]=    \
+        {                           \
+            < "< not available >" ; > ;        \
+        };                          \
+    };                                                                              \
+    FixedText   FT_FEMALEFIELD                                                       \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 91 + TOP_OFFSET ) ;                  \
+        Size = MAP_APPFONT ( 50 , 8 ) ;                                            \
+        Text [ de ] = "Feldinhalt" ;                     \
+        Text[ en-US ] = "Field value";           \
+    };                                                                              \
+    ComboBox CB_FEMALEFIELD                                                         \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 71 + LEFT_OFFSET , 89 + TOP_OFFSET ) ;                                             \
+        Size = MAP_APPFONT ( 121 , 50 ) ;                                           \
+        DropDown = TRUE;                                                            \
+        Border = TRUE;                                                              \
+    };                                                                              \
+    FixedText   FT_NEUTRAL                                                       \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 12 + LEFT_OFFSET , 105 + TOP_OFFSET ) ;                                             \
+        Size = MAP_APPFONT ( 180 , 8 ) ;                                            \
+        Text [ de ] = "Allgemeine Briefanrede";                     \
+        Text[ en-US ] = "General salutation";           \
+    };                                                                              \
+    ComboBox     CB_NEUTRAL                                                         \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 12 + LEFT_OFFSET , 116 + TOP_OFFSET ) ;                 \
+        Size = MAP_APPFONT ( 180 , 50 ) ;                                           \
+        DropDown = TRUE;                                                            \
+        Border = TRUE;                                                              \
+    };                                                                              \
+
+
+TabPage DLG_MM_GREETINGS_PAGE
+{
+    HelpID = HID_MM_GREETINGSPAGE ;
+    Size = MAP_APPFONT ( 260 , 220 ) ;
+    Hide = TRUE ;
+
+    FixedText FI_HEADER
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ de ] = "Briefanrede erstellen";
+        Text [ en-US ] = "Create a salutation";
+    };
+    #define TOP_OFFSET 20
+    #define LEFT_OFFSET 6
+
+    CheckBox    CB_GREETINGLINE                                                     \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 6 + LEFT_OFFSET , 3 + TOP_OFFSET ) ;                    \
+        Size = MAP_APPFONT ( 242 , 10 ) ;                                           \
+        Text [ de ] = "Eine Briefanrede in das Dokument einfügen" ;                        \
+        Text[ en-US ] = "This document should contain a salutation";         \
+    };                                                                              \
+    GREETINGS_BODY
+    #undef TOP_OFFSET
+    #undef LEFT_OFFSET
+    FixedText       FI_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 12 , 160 ) ;
+        Size = MAP_APPFONT ( 242 , 8 ) ;
+        Text [ de ] = "Vorschau" ;
+        Text[ en-US ] = "Preview";
+    };
+    Window          WIN_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 12 , 171 );
+        Size = MAP_APPFONT ( 186 , 21 ) ;
+    };
+    PushButton      PB_ASSIGN
+    {
+        Pos = MAP_APPFONT ( 204 , 171 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ de ] = "Felder wählen..." ;
+        Text[ en-US ] = "~Match fields...";
+    };
+    FixedText       FI_DOCINDEX
+    {
+        Pos = MAP_APPFONT ( 121 , 197 ) ;
+        Size = MAP_APPFONT (  50, 8 ) ;
+        Right = TRUE;
+    };
+    ImageButton     IB_PREVSET
+    {
+        Pos = MAP_APPFONT ( 177 , 195 ) ;
+        Size = MAP_APPFONT ( 10 , 10 ) ;
+        SYMBOL = IMAGEBUTTON_PREV;
+        QuickHelpText [ de ] = "Vorige Briefanrede ansehen" ;
+        QuickHelpText[ en-US ] = "Preview Previous Salutation";
+    };
+    ImageButton     IB_NEXTSET
+    {
+        Pos = MAP_APPFONT ( 188 , 195 ) ;
+        Size = MAP_APPFONT ( 10 , 10 ) ;
+        SYMBOL = IMAGEBUTTON_NEXT ;
+        QuickHelpText [ de ] = "Nächste Briefanrede ansehen" ;
+        QuickHelpText[ en-US ] = "Preview Next Salutation";
+    };
+    String STR_DOCUMENT
+    {
+        Text [ de ] = "Dokument: %1" ;
+        Text[ en-US ] = "Document: %1";
+    };
+};
+
+ModalDialog DLG_MM_MAILBODY
+{
+    HelpID = HID_MM_MAILBODY;
+    Size = MAP_APPFONT ( 254 , 225 ) ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Text [ de ] = "E-Mail-Nachricht";
+    Text [ en-US ] = "E-Mail Message";
+
+    #define TOP_OFFSET 0
+    #define LEFT_OFFSET 0
+    CheckBox    CB_GREETINGLINE
+    {
+        Pos = MAP_APPFONT ( 6  , 3 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Text [ de ] = "Eine Briefanrede in die E-Mail-Nachrichteinfügen" ;
+        Text[ en-US ] = "This e-mail should contain a salutation";
+    };
+    GREETINGS_BODY
+    FixedText           FT_BODY
+    {
+        Pos = MAP_APPFONT ( 12 , 132 ) ;
+        Size = MAP_APPFONT ( 174 , 8 ) ;
+        Text [ de ] = "Schreiben Sie Ihre Nachricht hier" ;
+        Text[ en-US ] = "Write your message here";
+    };
+    MultiLineEdit MLE_BODY
+    {
+        Pos = MAP_APPFONT ( 12,   143 ) ;
+        Size = MAP_APPFONT ( 180 , 50 ) ;
+        Border = TRUE;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        VScroll = TRUE ;
+        HScroll = TRUE ;
+        IgnoreTab = TRUE;
+    };
+    FixedLine           FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 0 , 199 ) ;
+        Size = MAP_APPFONT ( 254 , 8 ) ;
+    };
+    OKButton            PB_OK
+    {
+        Pos = MAP_APPFONT ( 89, 205 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    CancelButton        PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 142 , 205 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton          PB_HELP
+    {
+        Pos = MAP_APPFONT ( 198 , 205 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+};
+
+
