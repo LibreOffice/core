@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-21 10:57:18 $
+ *  last change: $Author: mba $ $Date: 2001-08-31 15:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1035,6 +1035,7 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
         }
 
         case SID_CLOSEWIN:
+        case SID_BACKTOWEBTOP:
         {
             // disable CloseWin, if frame is not a task
             Reference < XTask > xTask( GetFrame()->GetFrameInterface(),  UNO_QUERY );
@@ -1054,9 +1055,22 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
 
                 // Doc braucht nur gefragt zu werden, wenn keine weitere ::com::sun::star::sdbcx::View
                 sal_Bool bClosed = sal_False;
-                if ( ( bOther || pDocSh->PrepareClose() ) )
+                sal_Bool bUI = TRUE;
+                if ( SfxApplication::IsPlugin() && rReq.GetSlot() == SID_BACKTOWEBTOP )
+                    bUI = 2;
+                if ( ( bOther || pDocSh->PrepareClose( bUI ) ) )
                 {
                     rReq.Done(); // unbedingt vor Close() rufen!
+                    if ( SfxApplication::IsPlugin() && rReq.GetSlot() == SID_BACKTOWEBTOP )
+                    {
+                        String aName = String::CreateFromAscii("private:factory/desktop");
+                        SfxStringItem aNameItem( SID_FILE_NAME, aName );
+                        SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE( "private/user" ) );
+                        SfxFrameItem aFrame( SID_DOCFRAME, GetFrame() );
+                        SFX_APP()->GetAppDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SLOT, &aNameItem, &aReferer, 0L );
+                        return;
+                    }
+
                     if ( rReq.IsAPI() )
                     {
                         if( !pCloser )
@@ -1112,6 +1126,7 @@ void SfxTopViewFrame::GetState_Impl( SfxItemSet &rSet )
                 break;
 
             case SID_CLOSEWIN:
+            case SID_BACKTOWEBTOP:
             {
                 // disable CloseWin, if frame is not a task
                 Reference < XTask > xTask( GetFrame()->GetFrameInterface(),  UNO_QUERY );

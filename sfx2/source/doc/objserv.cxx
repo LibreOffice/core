@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-03 12:11:20 $
+ *  last change: $Author: mba $ $Date: 2001-08-31 15:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,8 +324,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( SFX_APP()->IsPlugin() && !HasName() )
             {
                 SFX_REQUEST_ARG( rReq, pWarnItem, SfxBoolItem, SID_FAIL_ON_WARNING, FALSE);
-                if ( pWarnItem && pWarnItem->GetValue() )
+                if ( pWarnItem && pWarnItem->GetValue() == TRUE )
                 {
+                    // saving done from PrepareClose without UI
                     INetURLObject aObj( SvtPathOptions().GetWorkPath() );
                     aObj.insertName( GetTitle(), false, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
                     const SfxFilter* pFilter = GetFactory().GetFilter(0);
@@ -602,7 +603,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             }
 
             // Benutzer bricht ab?
-            if ( !PrepareClose( !rReq.IsAPI() ) )
+            if ( !PrepareClose( 2 ) )
             {
                 rReq.SetReturnValue( SfxBoolItem(0, FALSE) );
                 rReq.Done();
@@ -615,6 +616,20 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             rReq.SetReturnValue( SfxBoolItem(0, TRUE) );
             rReq.Done();
             rReq.ReleaseArgs(); // da der Pool in Close zerst"ort wird
+
+            if ( SfxApplication::IsPlugin() )
+            {
+                for ( SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this ); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, this ) )
+                {
+                    String aName = String::CreateFromAscii("vnd.sun.star.cmd:close");
+                    SfxStringItem aNameItem( SID_FILE_NAME, aName );
+                    SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE( "private/user" ) );
+                    SfxFrameItem aFrame( SID_DOCFRAME, pFrame->GetFrame() );
+                    SFX_APP()->GetAppDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SLOT, &aNameItem, &aReferer, 0L );
+                    return;
+                }
+            }
+
             if ( rReq.IsAPI() )
                 // falls Handler eines Controls dies ruft, sonst GPF nach return
             {

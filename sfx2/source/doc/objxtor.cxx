@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ab $ $Date: 2001-08-02 08:09:00 $
+ *  last change: $Author: mba $ $Date: 2001-08-31 15:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,7 +492,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
             /*HACK for plugin::destroy()*/
             // Don't show SAVE dialog in plugin mode! We save our document in every way.
             short nRet = RET_YES;
-            if( SfxApplication::IsPlugin() == sal_False )
+            if( SfxApplication::IsPlugin() == sal_False || bUI == 2 )
             {
                 QueryBox aQBox( &pFrame->GetWindow(), WB_YES_NO_CANCEL | WB_DEF_YES, aText );
                 aQBox.SetButtonText( BUTTONID_NO, SfxResId( STR_NOSAVEANDCLOSE ) );
@@ -512,13 +512,13 @@ sal_uInt16 SfxObjectShell::PrepareClose
                 if ( bVersion )
                 {
                     SfxStringItem aItem( SID_VERSION, String( SfxResId( STR_AUTOMATICVERSION ) ) );
-                    SfxBoolItem aWarnItem( SID_FAIL_ON_WARNING, TRUE );
+                    SfxBoolItem aWarnItem( SID_FAIL_ON_WARNING, bUI );
                     const SfxPoolItem* ppArgs[] = { &aItem, &aWarnItem, 0 };
                     pPoolItem = pFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, ppArgs );
                 }
                 else
                 {
-                    SfxBoolItem aWarnItem( SID_FAIL_ON_WARNING, TRUE );
+                    SfxBoolItem aWarnItem( SID_FAIL_ON_WARNING, bUI );
                     const SfxPoolItem* ppArgs[] = { &aWarnItem, 0 };
                     pPoolItem = pFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, ppArgs );
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-15 14:56:21 $
+ *  last change: $Author: mba $ $Date: 2001-08-31 15:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,10 +471,27 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_QUITAPP:
         case SID_EXITANDRETURN:
+        case SID_LOGOUT:
         {
             // protect against reentrant calls
             if ( pAppData_Impl->bInQuit )
                 return;
+
+            if ( rReq.GetSlot() == SID_LOGOUT )
+            {
+                for ( SfxObjectShell *pObjSh = SfxObjectShell::GetFirst();
+                    pObjSh; pObjSh = SfxObjectShell::GetNext( *pObjSh ) )
+                {
+                    if ( pObjSh->IsModified() && !pObjSh->PrepareClose(2) )
+                        return;
+                }
+
+                String aName = String::CreateFromAscii("vnd.sun.star.cmd:logout");
+                SfxStringItem aNameItem( SID_FILE_NAME, aName );
+                SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE( "private/user" ) );
+                pAppDispat->Execute( SID_OPENDOC, SFX_CALLMODE_SLOT, &aNameItem, &aReferer, 0L );
+                return;
+            }
 
             // aus verschachtelten Requests nach 100ms nochmal probieren
             if( Application::GetDispatchLevel() > 1 )
