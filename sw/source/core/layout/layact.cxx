@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:47:54 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:22:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1787,19 +1787,14 @@ void MA_FASTCALL lcl_ValidateLowers( SwLayoutFrm *pLay, const SwTwips nOfst,
         while ( pLow != pRow )
             pLow = pLow->GetNext();
 
-#ifdef ACCESSIBLE_LAYOUT
     SwRootFrm *pRootFrm = 0;
-#endif
 
     while ( pLow )
     {
         if ( !bResetOnly )
         {
-#ifdef ACCESSIBLE_LAYOUT
             SwRect aOldFrm( pLow->Frm() );
-#endif
             pLow->Frm().Pos().Y() += nOfst;
-#ifdef ACCESSIBLE_LAYOUT
             if( pLow->IsAccessibleFrm() )
             {
                 if( !pRootFrm )
@@ -1810,10 +1805,6 @@ void MA_FASTCALL lcl_ValidateLowers( SwLayoutFrm *pLay, const SwTwips nOfst,
                     pRootFrm->GetCurrShell()->Imp()->MoveAccessibleFrm( pLow, aOldFrm );
                 }
             }
-#endif
-//#55435# schon hier wuerden die zeichengeb. Rahmen formatiert und dann unten
-//faelschlich noch einmal verschoben.
-            //pLow->Calc();
         }
         if ( pLow->IsLayoutFrm() )
         {
@@ -1841,11 +1832,31 @@ void MA_FASTCALL lcl_ValidateLowers( SwLayoutFrm *pLay, const SwTwips nOfst,
                     }
                     else
                     {
-                        pO->SetAnchorPos( pLow->GetFrmAnchorPos( ::HasWrap( pO ) ) );
-                        SwFrmFmt *pFrmFmt = FindFrmFmt( pO );
-                        if( !pFrmFmt ||
-                            FLY_IN_CNTNT != pFrmFmt->GetAnchor().GetAnchorId() )
-                            ((SwDrawContact*)pO->GetUserCall())->ChkPage();
+                        // OD 30.06.2003 #108784# - consider 'virtual' drawing objects.
+                        if ( pO->ISA(SwDrawVirtObj) )
+                        {
+                            SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pO);
+                            pDrawVirtObj->SetAnchorPos( pLow->GetFrmAnchorPos( ::HasWrap( pO ) ) );
+                            pDrawVirtObj->AdjustRelativePosToReference();
+                        }
+                        else
+                        {
+                            pO->SetAnchorPos( pLow->GetFrmAnchorPos( ::HasWrap( pO ) ) );
+                            SwFrmFmt *pFrmFmt = FindFrmFmt( pO );
+                            if( !pFrmFmt ||
+                                FLY_IN_CNTNT != pFrmFmt->GetAnchor().GetAnchorId() )
+                            {
+                                ((SwDrawContact*)pO->GetUserCall())->ChkPage();
+                            }
+                            // OD 30.06.2003 #108784# - correct relative position
+                            // of 'virtual' drawing objects.
+                            SwDrawContact* pDrawContact =
+                                static_cast<SwDrawContact*>(pO->GetUserCall());
+                            if ( pDrawContact )
+                            {
+                                pDrawContact->CorrectRelativePosOfVirtObjs();
+                            }
+                        }
                     }
                 }
             }
