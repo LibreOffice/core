@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-28 09:01:19 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,7 @@ IMPL_LINK( ScInsertTableDlg, BrowseHdl_Impl, PushButton*, EMPTYARG )
         //  Dialog-Parent ist schon in Execute gesetzt worden
 
     SfxApplication* pApp = SFX_APP();
-    SfxMedium* pMed = pApp->InsertDocumentDialog( 0, ScDocShell::Factory() );
+    SfxMedium* pMed = pApp->InsertDocumentDialog( 0, String::CreateFromAscii( ScDocShell::Factory().GetShortName() ) );
 
     if ( pMed )
     {
