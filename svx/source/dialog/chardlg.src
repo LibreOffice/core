@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-18 11:46:45 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,7 +689,7 @@ TabPage RID_SVXPAGE_CHAR_STD
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 86 , 107 ) ;
-        Size = MAP_APPFONT ( 71 , 68 ) ;
+        Size = MAP_APPFONT ( 71 , 72 ) ;
         DropDown = TRUE ;
         Sort = TRUE ;
     };
@@ -2591,6 +2591,32 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ catalan ] = "Fuente";
         Text[ finnish ] = "Fontti";
     };
+    FixedText FT_WEST_NAME_NOCJK
+    {
+        Pos = MAP_APPFONT ( 12 , 3  );
+        Size = MAP_APPFONT ( 80 , 8 );
+        Text = "~Schriftart";
+        Text [ english_us ] = "Font";
+        Text[ portuguese ] = "~Tipo de letra";
+        Text[ russian ] = "“ËÔ ¯ËÙÚ‡";
+        Text[ greek ] = "√Ò·ÏÏ·ÙÔ~ÛÂÈÒ‹";
+        Text[ dutch ] = "~Lettertype";
+        Text[ french ] = "~Police";
+        Text[ spanish ] = "Fuente";
+        Text[ italian ] = "Tipo di carattere";
+        Text[ danish ] = "Font";
+        Text[ swedish ] = "Tecken~snitt";
+        Text[ polish ] = "Czcionka";
+        Text[ portuguese_brazilian ] = "Font";
+        Text[ japanese ] = "Ã´›ƒ";
+        Text[ korean ] = "±€≤√";
+        Text[ chinese_simplified ] = "◊÷ÃÂ";
+        Text[ chinese_traditional ] = "¶r´¨";
+        Text[ turkish ] = "Font";
+        Text[ arabic ] = "‰Ê⁄ «·Œÿ";
+        Text[ catalan ] = "Fuente";
+        Text[ finnish ] = "Fontti";
+    };
     ComboBox LB_WEST_NAME
     {
         Border = TRUE;
@@ -2599,10 +2625,44 @@ TabPage RID_SVXPAGE_CHAR_NAME
         TabStop = TRUE;
         DropDown = TRUE;
     };
+    ComboBox LB_WEST_NAME_NOCJK
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 12 , 14 );
+        Size = MAP_APPFONT ( 100 , 72 );
+        TabStop = TRUE;
+        DropDown = FALSE;
+    };
     FixedText FT_WEST_STYLE
     {
         Pos = MAP_APPFONT ( 98 , 14  );
         Size = MAP_APPFONT ( 40 , 10 );
+        Text = "S~chriftschnitt";
+        Text [ english_us ] = "~Typeface";
+        Text[ portuguese ] = "Estilo";
+        Text[ russian ] = "Õ‡˜ÂÚ‡ÌËÂ";
+        Text[ greek ] = "‘˝ÔÚ";
+        Text[ dutch ] = "~Type";
+        Text[ french ] = "T~ype";
+        Text[ spanish ] = "Estilo";
+        Text[ italian ] = "Stile";
+        Text[ danish ] = "Type";
+        Text[ swedish ] = "Te~ckenstil";
+        Text[ polish ] = "KrÛj czcionki";
+        Text[ portuguese_brazilian ] = "Type";
+        Text[ japanese ] = "Ω¿≤Ÿ(~T)";
+        Text[ korean ] = "±€≤√°°¿Ø«¸(~T)";
+        Text[ chinese_simplified ] = "◊÷ÃÂ–Œ Ω(~T)";
+        Text[ chinese_traditional ] = "¶r´¨ßŒ™¨(~T)";
+        Text[ turkish ] = "Type";
+        Text[ arabic ] = "‰„ÿ «·Œÿ";
+        Text[ catalan ] = "Estilo";
+        Text[ finnish ] = "Tyyppi";
+    };
+    FixedText FT_WEST_STYLE_NOCJK
+    {
+        Pos = MAP_APPFONT ( 118 , 3  );
+        Size = MAP_APPFONT ( 40 , 8 );
         Text = "S~chriftschnitt";
         Text [ english_us ] = "~Typeface";
         Text[ portuguese ] = "Estilo";
@@ -2787,10 +2847,198 @@ TabPage RID_SVXPAGE_CHAR_NAME
             "Lihavointi ja kursivointi" ;
         };
     };
+    ComboBox LB_WEST_STYLE_NOCJK
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 118 , 14 );
+        Size = MAP_APPFONT ( 70 , 72 );
+        TabStop = TRUE;
+        DropDown = FALSE;
+        StringList =
+        {
+            "Normal" ;
+            "Kursiv" ;
+            "Fett" ;
+            "Fett Kursiv" ;
+        };
+        StringList [ english_us ] =
+        {
+            "Normal" ;
+            "Italic" ;
+            "Bold" ;
+            "Bold italic" ;
+        };
+        StringList [ language_user1 ] =
+        {
+            "Normal" ;
+            "Kursiv" ;
+            "Fett" ;
+            "Fett Kursiv" ;
+        };
+        StringList [ portuguese ] =
+        {
+            "Normal" ;
+            "It·lico" ;
+            "Negrito" ;
+            "It·lico negrito" ;
+        };
+        StringList [ russian ] =
+        {
+            "Œ·˚˜Ì˚È" ;
+            " ÛÒË‚" ;
+            "∆ËÌ˚È" ;
+            "∆ËÌ˚È ÍÛÒË‚" ;
+        };
+        StringList [ greek ] =
+        {
+            " ·ÌÔÌÈÍ‹" ;
+            "–Î‹„È·" ;
+            "∏ÌÙÔÌ·" ;
+            "–Î‹„È· ∏ÌÙÔÌ·" ;
+        };
+        StringList [ dutch ] =
+        {
+            "Normaal" ;
+            "Cursief" ;
+            "Vet" ;
+            "Vet cursief" ;
+        };
+        StringList [ french ] =
+        {
+            "Normal" ;
+            "Italique" ;
+            "Gras" ;
+            "Italique gras" ;
+        };
+        StringList [ spanish ] =
+        {
+            "Normal" ;
+            "Cursiva" ;
+            "Negrita" ;
+            "Negrita cursiva" ;
+        };
+        StringList [ italian ] =
+        {
+            "Normale" ;
+            "Corsivo" ;
+            "Grassetto" ;
+            "Grassetto corsivo" ;
+        };
+        StringList [ danish ] =
+        {
+            "Normal" ;
+            "Kursiv" ;
+            "Fed" ;
+            "Fed kursiv" ;
+        };
+        StringList [ swedish ] =
+        {
+            "Normal" ;
+            "Kursiv" ;
+            "Fet" ;
+            "Fet kursiv" ;
+        };
+        StringList [ polish ] =
+        {
+            "Zwyk≥a" ;
+            "Kursywa" ;
+            "Pogrubienie" ;
+            "Kursywa pogrubiona" ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+            "Normal" ;
+            "Kursiv" ;
+            "Fett" ;
+            "Fett Kursiv" ;
+        };
+        StringList [ japanese ] =
+        {
+            "ïWèÄ" ;
+            "éŒëÃ" ;
+            "ëæéö" ;
+            "ëæéöéŒëÃ" ;
+        };
+        StringList [ korean ] =
+        {
+            "∫∏≈Î" ;
+            "¿Ã≈≈∏Ø√º" ;
+            "±Ω¿∫" ;
+            "¿Ã≈≈∏Ø√º (±Ω¿∫)" ;
+        };
+        StringList [ chinese_simplified ] =
+        {
+            "∆’Õ®" ;
+            "–±ÃÂ" ;
+            "¥÷ÃÂ" ;
+            "¥÷–±ÃÂ" ;
+        };
+        StringList [ chinese_traditional ] =
+        {
+            "¥∂≥q" ;
+            "±◊≈È" ;
+            "≤ ≈È" ;
+            "≤ ±◊≈È" ;
+        };
+        StringList [ turkish ] =
+        {
+            "Normal" ;
+            "›talik" ;
+            "Kal˝n" ;
+            "Kal˝n italik" ;
+        };
+        StringList [ arabic ] =
+        {
+            "⁄«œÌ" ;
+            "„«∆·" ;
+            "⁄—Ì÷" ;
+            "⁄—Ì÷ „«∆·" ;
+        };
+        StringList [ catalan ] =
+        {
+            "Normal" ;
+            "Cursiva" ;
+            "Negrita" ;
+            "Negrita cursiva" ;
+        };
+        StringList [ finnish ] =
+        {
+            "Normaali" ;
+            "Kursivointi" ;
+            "Lihavointi" ;
+            "Lihavointi ja kursivointi" ;
+        };
+    };
     FixedText FT_WEST_SIZE
     {
         Pos = MAP_APPFONT ( 144 , 14  );
         Size = MAP_APPFONT ( 38 , 10 );
+        Text = "Sch~riftgrad";
+        Text [ english_us ] = "Size";
+        Text[ portuguese ] = "~Tamanho";
+        Text[ russian ] = "–‡ÁÏÂ ¯ËÙÚ‡";
+        Text[ greek ] = "Ã›„ÂËÔÚ";
+        Text[ dutch ] = "Sch~riftgrootte";
+        Text[ french ] = "T~aille de la police";
+        Text[ spanish ] = "TamaÒo";
+        Text[ italian ] = "Dimesione carattere";
+        Text[ danish ] = "Size";
+        Text[ swedish ] = "Teckensto~rlek";
+        Text[ polish ] = "Rozmiar czcionki";
+        Text[ portuguese_brazilian ] = "Size";
+        Text[ japanese ] = "ª≤Ωﬁ";
+        Text[ korean ] = "≈©±‚";
+        Text[ chinese_simplified ] = "◊÷ÃÂ¥Û–°";
+        Text[ chinese_traditional ] = "¶r´¨§j§p";
+        Text[ turkish ] = "Size";
+        Text[ arabic ] = "ÕÃ„ «·Œÿ";
+        Text[ catalan ] = "TamaÒo";
+        Text[ finnish ] = "Koko";
+    };
+    FixedText FT_WEST_SIZE_NOCJK
+    {
+        Pos = MAP_APPFONT ( 194 , 3  );
+        Size = MAP_APPFONT ( 38 , 8 );
         Text = "Sch~riftgrad";
         Text [ english_us ] = "Size";
         Text[ portuguese ] = "~Tamanho";
@@ -2821,6 +3069,14 @@ TabPage RID_SVXPAGE_CHAR_NAME
         TabStop = TRUE;
         DropDown = TRUE;
     };
+    MetricBox LB_WEST_SIZE_NOCJK
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 194 , 14  );
+        Size = MAP_APPFONT ( 38 , 72 );
+        TabStop = TRUE;
+        DropDown = FALSE;
+    };
     FixedText FT_WEST_LANG
     {
         Pos = MAP_APPFONT ( 188 , 14  );
@@ -2847,11 +3103,46 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ catalan ] = "Idioma";
         Text[ finnish ] = "Kieli";
     };
+    FixedText FT_WEST_LANG_NOCJK
+    {
+        Pos = MAP_APPFONT ( 118 , 94  );
+        Size = MAP_APPFONT ( 70 , 8 );
+        Text = "S~prache";
+        Text [ english_us ] = "Language";
+        Text[ portuguese ] = "~LÌngua";
+        Text[ russian ] = "ﬂÁ˚Í";
+        Text[ greek ] = "√Î˛ÛÛ·";
+        Text[ dutch ] = "T~aal";
+        Text[ french ] = "~Langue";
+        Text[ spanish ] = "Idioma";
+        Text[ italian ] = "Lingua";
+        Text[ danish ] = "Language";
+        Text[ swedish ] = "S~prÂk";
+        Text[ polish ] = "JÍzyk";
+        Text[ portuguese_brazilian ] = "Language";
+        Text[ japanese ] = "åæåÍ";
+        Text[ korean ] = "ææÓ";
+        Text[ chinese_simplified ] = "”Ô—‘";
+        Text[ chinese_traditional ] = "ªy®•";
+        Text[ turkish ] = "Language";
+        Text[ arabic ] = "«··€…";
+        Text[ catalan ] = "Idioma";
+        Text[ finnish ] = "Kieli";
+    };
     ListBox LB_WEST_LANG
     {
         Border = TRUE;
         Pos = MAP_APPFONT ( 188 , 25  );
-        Size = MAP_APPFONT ( 66 , 48 );
+        Size = MAP_APPFONT ( 66 , 72 );
+        TabStop = TRUE;
+        Sort = TRUE ;
+        DropDown = TRUE;
+    };
+    ListBox LB_WEST_LANG_NOCJK
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 118 , 105 );
+        Size = MAP_APPFONT ( 70 , 72 );
         TabStop = TRUE;
         Sort = TRUE ;
         DropDown = TRUE;
@@ -3168,7 +3459,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     {
         Border = TRUE;
         Pos = MAP_APPFONT ( 188 , 65  );
-        Size = MAP_APPFONT ( 66 , 48 );
+        Size = MAP_APPFONT ( 66 , 72 );
         TabStop = TRUE;
         Sort = TRUE ;
         DropDown = TRUE;
@@ -3237,7 +3528,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     FixedText FT_COLOR2
     {
         Pos = MAP_APPFONT ( 12 , 94  );
-        Size = MAP_APPFONT ( 58 , 10 );
+        Size = MAP_APPFONT ( 58 , 8 );
         Text = "Schriftfar~be";
         Text [ english_us ] = "Font ~Color" ;
         Text[ portuguese ] = "~Cor da letra";
@@ -5774,39 +6065,13 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ catalan ] = "~Ajuste par entre caracteres";
         Text[ finnish ] = "~Parilimitys";
     };
-    FixedLine FL_POS_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 4 , 126  );
-        Size = MAP_APPFONT ( 252 , 8 );
-        Text = "Vorschau";
-        Text [ english_us ] = "Preview" ;
-        Text[ portuguese ] = "Previsualizar";
-        Text[ russian ] = "œÓÒÏÓÚ";
-        Text[ greek ] = "–ÒÔÂÈÛÍ¸ÁÛÁ";
-        Text[ dutch ] = "Voorbeeld";
-        Text[ french ] = "AperÁu";
-        Text[ spanish ] = "PrevisualizaciÛn";
-        Text[ italian ] = "Anteprima";
-        Text[ danish ] = "Preview";
-        Text[ swedish ] = "Fˆrhandsvisning";
-        Text[ polish ] = "Podglπd";
-        Text[ portuguese_brazilian ] = "Preview";
-        Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞";
-        Text[ korean ] = "πÃ∏Æ∫∏±‚";
-        Text[ chinese_simplified ] = "‘§¿¿";
-        Text[ chinese_traditional ] = "πwƒ˝";
-        Text[ turkish ] = "Preview";
-        Text[ arabic ] = "«·„⁄«Ì‰…";
-        Text[ catalan ] = "PrevisualizaciÛn";
-        Text[ finnish ] = "Esikatselu";
-    };
     Window WIN_POS_PREVIEW
     {
         Text = "Beispiel" ;
         Text [ english_us ] = "Example" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 7 , 137  ) ;
-        Size = MAP_APPFONT ( 246 , 30 ) ;
+        Pos = MAP_APPFONT ( 6 , 129  ) ;
+        Size = MAP_APPFONT ( 248 , 39 ) ;
         Text[ portuguese ] = "Exemplo";
         Text[ russian ] = "œËÏÂ";
         Text[ greek ] = "–·Ò‹‰ÂÈ„Ï·";
@@ -6409,8 +6674,8 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     Window WIN_TWOLINES_PREVIEW
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 7 , 108  ) ;
-        Size = MAP_APPFONT ( 246 , 59 ) ;
+        Pos = MAP_APPFONT ( 6 , 108  ) ;
+        Size = MAP_APPFONT ( 248 , 59 ) ;
         Text = "Beispiel";
         Text [ english_us ] = "Example" ;
         Text[ portuguese ] = "Exemplo";

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 12:47:49 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2954,14 +2954,16 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_CHAR_NAME ), rInSet ),
 
     m_aWestLine             ( this, ResId( FL_WEST ) ),
-    m_aWestFontNameFT       ( this, ResId( FT_WEST_NAME ) ),
-    m_pWestFontNameLB(new FontNameBox( this, ResId( LB_WEST_NAME ) )),
-    m_aWestFontStyleFT      ( this, ResId( FT_WEST_STYLE ) ),
-    m_pWestFontStyleLB(new FontStyleBox( this, ResId( LB_WEST_STYLE ) )),
-    m_aWestFontSizeFT       ( this, ResId( FT_WEST_SIZE ) ),
-    m_pWestFontSizeLB( new FontSizeBox       ( this, ResId( LB_WEST_SIZE ) )),
-    m_aWestFontLanguageFT   ( this, ResId( FT_WEST_LANG ) ),
-    m_pWestFontLanguageLB(new SvxLanguageBox( this, ResId( LB_WEST_LANG ))),
+
+    m_pWestFontNameFT  ( new FixedText   ( this, ResId( FT_WEST_NAME ) )),
+    m_pWestFontStyleFT ( new FixedText   ( this, ResId( FT_WEST_STYLE ))),
+    m_pWestFontSizeFT  ( new FixedText   ( this, ResId( FT_WEST_SIZE ) )),
+    m_pWestFontLanguageFT( new FixedText ( this, ResId( FT_WEST_LANG ) )),
+
+    m_pWestFontNameLB     (new FontNameBox    ( this, ResId( LB_WEST_NAME ) )),
+    m_pWestFontStyleLB    (new FontStyleBox   ( this, ResId( LB_WEST_STYLE ) )),
+    m_pWestFontSizeLB     (new FontSizeBox    ( this, ResId( LB_WEST_SIZE ) )),
+    m_pWestFontLanguageLB (new SvxLanguageBox ( this, ResId( LB_WEST_LANG ))),
 
     m_aEastLine             ( this, ResId( FL_EAST ) ),
     m_aEastFontNameFT       ( this, ResId( FT_EAST_NAME ) ),
@@ -2986,11 +2988,10 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
     m_pImpl->m_aNoStyleText = String( ResId( STR_CHARNAME_NOSTYLE ) );
     m_pImpl->m_aTransparentText = String( ResId( STR_CHARNAME_TRANSPARENT ) );
 
-    FreeResource();
-
     SvtCJKOptions aCJKOptions;
     if(!aCJKOptions.IsCJKFontEnabled())
     {
+        m_aWestLine           .Hide();
         m_aEastLine           .Hide();
         m_aEastFontNameFT     .Hide();
         m_aEastFontNameLB     .Hide();
@@ -3000,45 +3001,58 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
         m_aEastFontSizeLB     .Hide();
         m_aEastFontLanguageFT .Hide();
         m_aEastFontLanguageLB .Hide();
-        FontNameBox* pTempName = new FontNameBox(this, m_pWestFontNameLB->GetStyle() & ~WB_DROPDOWN);
+        m_aColorFL            .Hide();
+
+        FixedText* pTempNameFT = new FixedText(this, ResId( FT_WEST_NAME_NOCJK ));
+        pTempNameFT->SetHelpId(m_pWestFontNameFT->GetHelpId());
+        pTempNameFT->Show();
+        delete m_pWestFontNameFT;
+        m_pWestFontNameFT = pTempNameFT;
+
+        FixedText* pTempStyleFT = new FixedText(this, ResId( FT_WEST_STYLE_NOCJK ));
+        pTempStyleFT->SetHelpId(m_pWestFontStyleFT->GetHelpId());
+        pTempStyleFT->Show();
+        delete m_pWestFontStyleFT;
+        m_pWestFontStyleFT = pTempStyleFT;
+
+        FixedText* pTempSizeFT = new FixedText(this, ResId( FT_WEST_SIZE_NOCJK ));
+        pTempSizeFT->SetHelpId(m_pWestFontSizeFT->GetHelpId());
+        pTempSizeFT->Show();
+        delete m_pWestFontSizeFT;
+        m_pWestFontSizeFT = pTempSizeFT;
+
+        FixedText* pTempLangFT = new FixedText(this, ResId( FT_WEST_LANG_NOCJK ));
+        pTempLangFT->SetHelpId(m_pWestFontLanguageFT->GetHelpId());
+        pTempLangFT->Show();
+        delete m_pWestFontLanguageFT;
+        m_pWestFontLanguageFT = pTempLangFT;
+
+        FontNameBox* pTempName = new FontNameBox(this, ResId( LB_WEST_NAME_NOCJK ));
         pTempName->SetHelpId(m_pWestFontNameLB->GetHelpId());
-        Point aPos(m_pWestFontNameLB->GetPosPixel());
-        Point aEastPos = m_aEastFontNameLB.GetPosPixel();
-        long nHeight = aEastPos.Y() - aPos.Y();
-        Size aSize = m_pWestFontNameLB->GetSizePixel();
-        aSize.Height() += nHeight;
-        pTempName->SetPosSizePixel(aPos,  aSize);
         pTempName->Show();
         delete m_pWestFontNameLB;
         m_pWestFontNameLB = pTempName;
 
-        FontStyleBox* pTempStyle = new FontStyleBox( this, m_pWestFontStyleLB->GetStyle() & ~WB_DROPDOWN);
+        FontStyleBox* pTempStyle = new FontStyleBox( this, ResId( LB_WEST_STYLE_NOCJK ));
         pTempStyle->SetHelpId(m_pWestFontStyleLB->GetHelpId());
-        aSize = m_pWestFontStyleLB->GetSizePixel();
-        aSize.Height() += nHeight;
-        pTempStyle->SetPosSizePixel(m_pWestFontStyleLB->GetPosPixel(),  aSize);
         pTempStyle->Show();
         delete m_pWestFontStyleLB;
         m_pWestFontStyleLB = pTempStyle;
 
-        FontSizeBox* pTempSize = new FontSizeBox( this, m_pWestFontSizeLB->GetStyle() & ~WB_DROPDOWN);
+        FontSizeBox* pTempSize = new FontSizeBox( this, ResId( LB_WEST_SIZE_NOCJK ));
         pTempSize->SetHelpId(m_pWestFontSizeLB->GetHelpId());
-        aSize = m_pWestFontSizeLB->GetSizePixel();
-        aSize.Height() += nHeight;
-        pTempSize->SetPosSizePixel(m_pWestFontSizeLB->GetPosPixel(),  aSize);
         pTempSize->Show();
         delete m_pWestFontSizeLB;
         m_pWestFontSizeLB = pTempSize;
 
-        SvxLanguageBox* pTempLang = new SvxLanguageBox( this, m_pWestFontLanguageLB->GetStyle() & ~WB_DROPDOWN);
+        SvxLanguageBox* pTempLang = new SvxLanguageBox( this, ResId( LB_WEST_LANG_NOCJK ));
         pTempLang->SetHelpId(m_pWestFontLanguageLB->GetHelpId());
-        aSize = m_pWestFontLanguageLB->GetSizePixel();
-        aSize.Height() += nHeight;
-        pTempLang->SetPosSizePixel(m_pWestFontLanguageLB->GetPosPixel(),  aSize);
         pTempLang->Show();
         delete m_pWestFontLanguageLB;
         m_pWestFontLanguageLB = pTempLang;
     }
+
+    FreeResource();
 
     m_pWestFontLanguageLB->SetLanguageList( LANG_LIST_WESTERN, TRUE, FALSE );
     m_aEastFontLanguageLB.SetLanguageList( LANG_LIST_CJK,     TRUE, FALSE );
@@ -3057,6 +3071,11 @@ SvxCharNamePage::~SvxCharNamePage()
     delete m_pWestFontSizeLB;
     delete m_pWestFontStyleLB;
     delete m_pWestFontNameLB;
+
+    delete m_pWestFontNameFT;
+    delete m_pWestFontStyleFT;
+    delete m_pWestFontSizeFT;
+    delete m_pWestFontLanguageFT;
 }
 
 // -----------------------------------------------------------------------
@@ -3234,12 +3253,12 @@ void SvxCharNamePage::FillSizeBox_Impl( const FontNameBox* pBox )
 void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
 {
     FontNameBox* pNameBox = bWest ? m_pWestFontNameLB : &m_aEastFontNameLB;
-    FixedText* pNameLabel = bWest ? &m_aWestFontNameFT : &m_aEastFontNameFT;
+    FixedText* pNameLabel = bWest ? m_pWestFontNameFT : &m_aEastFontNameFT;
     FontStyleBox* pStyleBox = bWest ? m_pWestFontStyleLB : &m_aEastFontStyleLB;
-    FixedText* pStyleLabel = bWest ? &m_aWestFontStyleFT : &m_aEastFontStyleFT;
+    FixedText* pStyleLabel = bWest ? m_pWestFontStyleFT : &m_aEastFontStyleFT;
     FontSizeBox* pSizeBox = bWest ? m_pWestFontSizeLB : &m_aEastFontSizeLB;
-    FixedText* pSizeLabel = bWest ? &m_aWestFontSizeFT : &m_aEastFontSizeFT;
-    FixedText* pLangFT = bWest ? &m_aWestFontLanguageFT : &m_aEastFontLanguageFT;
+    FixedText* pSizeLabel = bWest ? m_pWestFontSizeFT : &m_aEastFontSizeFT;
+    FixedText* pLangFT = bWest ? m_pWestFontLanguageFT : &m_aEastFontLanguageFT;
     SvxLanguageBox* pLangBox = bWest ? m_pWestFontLanguageLB : &m_aEastFontLanguageLB;
 
     // die FontListBox fuellen
@@ -4755,7 +4774,6 @@ SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rIn
     m_aKerningEdit      ( this, ResId( ED_KERNING2 ) ),
     m_aPairKerningBtn   ( this, ResId( CB_PAIRKERNING ) ),
 
-    m_aPreviewLine      ( this, ResId( FL_POS_PREVIEW ) ),
     m_aPreviewWin       ( this, ResId( WIN_POS_PREVIEW ) ),
     m_aFontTypeFT       ( this, ResId( FT_POS_FONTTYPE ) ),
 

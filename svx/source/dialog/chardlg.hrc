@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-15 11:12:27 $
+ *  last change: $Author: fme $ $Date: 2001-05-30 16:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,6 @@
 #define ED_KERNING2             323
 #define CB_PAIRKERNING          324
 
-#define FL_POS_PREVIEW          330
 #define WIN_POS_PREVIEW         331
 #define FT_POS_FONTTYPE         332
 
@@ -247,6 +246,15 @@
 #define FL_TWOLINES_PREVIEW     420
 #define WIN_TWOLINES_PREVIEW    421
 #define FT_TWOLINES_FONTTYPE    422
+
+#define FT_WEST_NAME_NOCJK                    423
+#define LB_WEST_NAME_NOCJK                    424
+#define FT_WEST_STYLE_NOCJK                   425
+#define LB_WEST_STYLE_NOCJK                   426
+#define FT_WEST_SIZE_NOCJK                    427
+#define LB_WEST_SIZE_NOCJK                    428
+#define FT_WEST_LANG_NOCJK                    429
+#define LB_WEST_LANG_NOCJK                    430
 
 #endif
 
