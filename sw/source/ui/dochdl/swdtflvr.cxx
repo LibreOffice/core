@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-10 13:44:36 $
+ *  last change: $Author: os $ $Date: 2001-10-16 11:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2430,6 +2430,7 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
             SfxUsrAnyItem* pCommandItem = 0;
             SfxUsrAnyItem* pCommandTypeItem = 0;
             SfxUsrAnyItem* pColumnNameItem = 0;
+            SfxUsrAnyItem* pSelectionItem = 0;
 
             BOOL bDataAvailable = TRUE;
             ODataAccessDescriptor aDesc;
@@ -2447,6 +2448,7 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
                 pCommandItem = new SfxUsrAnyItem(FN_DB_DATA_COMMAND_ANY, aDesc[daCommand]);
                 pCommandTypeItem = new SfxUsrAnyItem(FN_DB_DATA_COMMAND_TYPE_ANY, aDesc[daCommandType]);
                 pColumnNameItem = new SfxUsrAnyItem(FN_DB_DATA_COLUMN_NAME_ANY, aDesc[daColumnName]);
+                pSelectionItem = new SfxUsrAnyItem(FN_DB_DATA_SELECTION_ANY, aDesc[daSelection]);
             }
 
             SwView& rView = rSh.GetView();
@@ -2458,7 +2460,7 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
                                 nWh, SFX_CALLMODE_ASYNCHRON, &aDataDesc,
                                 pConnectionItem, pColumnItem,
                                 pSourceItem, pCommandItem, pCommandTypeItem,
-                                pColumnNameItem, 0L);
+                                pColumnNameItem, pSelectionItem, 0L);
             delete pConnectionItem;
             delete pColumnItem;
             delete pSourceItem;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-09 15:06:29 $
+ *  last change: $Author: os $ $Date: 2001-10-16 11:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1045,6 +1045,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_DB_DATA_COMMAND_ANY          (FN_QUERY2 + 6)
 #define FN_DB_DATA_COMMAND_TYPE_ANY     (FN_QUERY2 + 7)
 #define FN_DB_DATA_COLUMN_NAME_ANY      (FN_QUERY2 + 8)
+#define FN_DB_DATA_SELECTION_ANY        (FN_QUERY2 + 9)
 
 /*--------------------------------------------------------------------
     Bereich: Envelope
