@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:00:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,15 +126,15 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
         rtl::OUString sName;
         rtl::OUString sStyleName;
         rtl::OUString sPassword;
-        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+        sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
         const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
-        for( sal_Int16 i=0; i < nAttrCount; i++ )
+        for( sal_Int16 i=0; i < nAttrCount; ++i )
         {
-            rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+            const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
             rtl::OUString aLocalName;
-            USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                                sAttrName, &aLocalName );
-            rtl::OUString sValue = xAttrList->getValueByIndex( i );
+            USHORT nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
+                                                sAttrName, &aLocalName ));
+            const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
             switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
             {
@@ -178,9 +178,9 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext(0);
 
-    const SvXMLTokenMap& rTokenMap = GetScImport().GetTableElemTokenMap();
+    const SvXMLTokenMap& rTokenMap(GetScImport().GetTableElemTokenMap());
     switch( rTokenMap.Get( nPrefix, rLName ) )
     {
     case XML_TOK_TABLE_COL_GROUP:
@@ -251,39 +251,34 @@ void ScXMLTableContext::EndElement()
 {
     GetScImport().LockSolarMutex();
     GetScImport().GetStylesImportHelper()->EndTable();
-    ScDocument* pDoc = GetScImport().GetDocument();
+    ScDocument* pDoc(GetScImport().GetDocument());
     if (pDoc)
     {
         if (sPrintRanges.getLength())
         {
-            uno::Reference< sheet::XSpreadsheet > xTable = GetScImport().GetTables().GetCurrentXSheet();
-            if( xTable.is() )
+            uno::Reference< sheet::XPrintAreas > xPrintAreas( GetScImport().GetTables().GetCurrentXSheet(), uno::UNO_QUERY );
+            if( xPrintAreas.is() )
             {
-                uno::Reference< sheet::XPrintAreas > xPrintAreas( xTable, uno::UNO_QUERY );
-                if( xPrintAreas.is() )
-                {
-                    uno::Sequence< table::CellRangeAddress > aRangeList;
-                    ScXMLConverter::GetRangeListFromString( aRangeList, sPrintRanges, pDoc );
-                    xPrintAreas->setPrintAreas( aRangeList );
-                }
+                uno::Sequence< table::CellRangeAddress > aRangeList;
+                ScXMLConverter::GetRangeListFromString( aRangeList, sPrintRanges, pDoc );
+                xPrintAreas->setPrintAreas( aRangeList );
             }
         }
         else if (bPrintEntireSheet) pDoc->SetPrintEntireSheet(static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet()));
 
-        ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet()), sal_False);
+        ScOutlineTable* pOutlineTable(pDoc->GetOutlineTable(static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet()), sal_False));
         if (pOutlineTable)
         {
-            ScOutlineArray* pColArray = pOutlineTable->GetColArray();
-            sal_Int32 nDepth = pColArray->GetDepth();
+            ScOutlineArray* pColArray(pOutlineTable->GetColArray());
+            sal_Int32 nDepth(pColArray->GetDepth());
             sal_Int32 i;
-
-            for ( i = 0; i < nDepth; i++)
+            for (i = 0; i < nDepth; ++i)
             {
-                sal_Int32 nCount = pColArray->GetCount(static_cast<USHORT>(i));
+                sal_Int32 nCount(pColArray->GetCount(static_cast<USHORT>(i)));
                 sal_Bool bChanged(sal_False);
-                for (sal_Int32 j = 0; j < nCount && !bChanged; j++)
+                for (sal_Int32 j = 0; j < nCount && !bChanged; ++j)
                 {
-                    ScOutlineEntry* pEntry = pColArray->GetEntry(static_cast<USHORT>(i), static_cast<USHORT>(j));
+                    ScOutlineEntry* pEntry(pColArray->GetEntry(static_cast<USHORT>(i), static_cast<USHORT>(j)));
                     if (pEntry->IsHidden())
                     {
                         pColArray->SetVisibleBelow(static_cast<USHORT>(i), static_cast<USHORT>(j), sal_False);
@@ -291,15 +286,15 @@ void ScXMLTableContext::EndElement()
                     }
                 }
             }
-            ScOutlineArray* pRowArray = pOutlineTable->GetRowArray();
+            ScOutlineArray* pRowArray(pOutlineTable->GetRowArray());
             nDepth = pRowArray->GetDepth();
-            for (i = 0; i < nDepth; i++)
+            for (i = 0; i < nDepth; ++i)
             {
-                sal_Int32 nCount = pRowArray->GetCount(static_cast<USHORT>(i));
+                sal_Int32 nCount(pRowArray->GetCount(static_cast<USHORT>(i)));
                 sal_Bool bChanged(sal_False);
-                for (sal_Int32 j = 0; j < nCount && !bChanged; j++)
+                for (sal_Int32 j = 0; j < nCount && !bChanged; ++j)
                 {
-                    ScOutlineEntry* pEntry = pRowArray->GetEntry(static_cast<USHORT>(i), static_cast<USHORT>(j));
+                    ScOutlineEntry* pEntry(pRowArray->GetEntry(static_cast<USHORT>(i), static_cast<USHORT>(j)));
                     if (pEntry->IsHidden())
                     {
                         pRowArray->SetVisibleBelow(static_cast<USHORT>(i), static_cast<USHORT>(j), sal_False);
@@ -313,8 +308,8 @@ void ScXMLTableContext::EndElement()
             if (GetScImport().GetTables().HasXShapes())
             {
                 GetScImport().GetShapeImport()->popGroupAndSort();
-                uno::Reference<drawing::XShapes> xXShapes(GetScImport().GetTables().GetCurrentXShapes());
-                GetScImport().GetShapeImport()->endPage(xXShapes);
+                uno::Reference < drawing::XShapes > xTempShapes(GetScImport().GetTables().GetCurrentXShapes());
+                GetScImport().GetShapeImport()->endPage(xTempShapes);
             }
             if (bStartFormPage)
                 GetScImport().GetFormImport()->endPage();
