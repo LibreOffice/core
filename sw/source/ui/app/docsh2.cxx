@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-18 14:57:34 $
+ *  last change: $Author: os $ $Date: 2001-05-21 06:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1243,6 +1243,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 sal_Int32 nIdx = 0;
                 sal_Int32 nSelect = 0;
                 OUString sStartTemplate;
+                SwTxtFmtColl *pFnd = 0, *pAny = 0;
                 for(USHORT i = 0; i < nCount; ++i)
                 {
                     SwTxtFmtColl &rTxtColl = pWrtShell->GetTxtFmtColl(i);
@@ -1250,7 +1251,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         if(!sStartTemplate.getLength())
                         {
-                            SwTxtFmtColl *pFnd = 0, *pAny = 0;
                             if( MAXLEVEL >= rTxtColl.GetOutlineLevel() && ( !pFnd ||
                                 pFnd->GetOutlineLevel() > rTxtColl.GetOutlineLevel() ))
                                     pFnd = &rTxtColl;
