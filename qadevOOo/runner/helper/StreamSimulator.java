@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StreamSimulator.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2003-05-27 12:03:16 $
+ *  last change: $Date: 2003-11-18 16:14:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,10 +166,10 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
     }
 
-    public void finalize()
+/*    public void finalize()
     {
         ////m_aProtocol.log("finalize was called. Please check if it was right or not.\n");
-    }
+    } */
 
     //_________________________________
     /**
