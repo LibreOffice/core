@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-30 15:14:46 $
+ *  last change: $Author: mba $ $Date: 2002-10-11 18:06:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -770,11 +770,14 @@ long Select_Impl( void* pHdl, void* pVoid )
     }
     if ( xDisp.is() )
     {
+/*
         Sequence<PropertyValue> aArgs(1);
         PropertyValue* pArg = aArgs.getArray();
         pArg[0].Name = rtl::OUString::createFromAscii("Referer");
         pArg[0].Value <<= ::rtl::OUString::createFromAscii("private:user");
         xDisp->dispatch( aTargetURL, aArgs );
+ */
+        xDisp->dispatch( aTargetURL, Sequence<PropertyValue>() );
     }
 
     return TRUE;

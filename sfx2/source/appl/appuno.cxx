@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-12 15:01:23 $
+ *  last change: $Author: mba $ $Date: 2002-10-11 18:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,7 @@ using namespace ::rtl;
 #include "objshimp.hxx"
 #include "fltoptint.hxx"
 #include "docfile.hxx"
+#include "sfxbasecontroller.hxx"
 
 #define FRAMELOADER_SERVICENAME         "com.sun.star.frame.FrameLoader"
 #define PROTOCOLHANDLER_SERVICENAME     "com.sun.star.frame.ProtocolHandler"
@@ -241,7 +242,6 @@ static const String sReadOnly       = String::CreateFromAscii( "ReadOnly"       
 static const String sFrameName      = String::CreateFromAscii( "FrameName"      );
 static const String sMediaType      = String::CreateFromAscii( "MediaType"    );
 static const String sPostData       = String::CreateFromAscii( "PostData"       );
-static const String sPosSize        = String::CreateFromAscii( "PosSize"        );
 static const String sCharacterSet   = String::CreateFromAscii( "CharacterSet"   );
 static const String sInputStream    = String::CreateFromAscii( "InputStream"    );
 static const String sOutputStream   = String::CreateFromAscii( "OutputStream"    );
@@ -264,6 +264,7 @@ static const String sMacroExecMode  = String::CreateFromAscii( "MacroExecutionMo
 static const String sUpdateDocMode  = String::CreateFromAscii( "UpdateDocMode" );
 static const String sMinimized      = String::CreateFromAscii( "Minimized" );
 static const String sInteractionHdl = String::CreateFromAscii( "InteractionHandler" );
+static const String sWindowState    = String::CreateFromAscii( "WindowState" );
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -705,6 +706,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         if (bOK)
                             rSet.Put( SfxStringItem( SID_CONTENTTYPE, sVal ) );
                      }
+                else if ( aName == sWindowState )
+                     {
+                        ::rtl::OUString sVal;
+                        sal_Bool bOK = ((rProp.Value >>= sVal) && (sVal.getLength() > 0));
+                        DBG_ASSERT( bOK, "invalid type for WindowState" )
+                        if (bOK)
+                            rSet.Put( SfxStringItem( SID_WIN_POSSIZE, sVal ) );
+                     }
                 else if ( aName == sTemplateName )
                      {
                         ::rtl::OUString sVal;
@@ -745,18 +754,6 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         if (bOK)
                             rSet.Put( SfxStringItem( SID_FILE_FILTEROPTIONS, sVal ) );
                      }
-                else if ( aName == sPosSize )
-                {
-                    DBG_ASSERT( sal_False, "TransformParameters()\nProperty \"PosSize\" isn't supported yet!\n" );
-                    /*
-                    ::rtl::OUString sVal;
-                    if (rProp.Value >>= sVal && sVal.getLength() > 0)
-                    {
-                        Size aSize;
-                        Point aPos;
-                    }
-                    */
-                }
                 else if ( aName == sMacroExecMode )
                 {
                     sal_Int16 nVal =-1;
@@ -899,6 +896,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_CONTENTTYPE ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_WIN_POSSIZE ) == SFX_ITEM_SET )
+                nAdditional++;
     //        if ( rSet.GetItemState( SID_VIEW_POS_SIZE ) == SFX_ITEM_SET )
     //            nAdditional++;
             if ( rSet.GetItemState( SID_POSTDATA ) == SFX_ITEM_SET )
@@ -1021,6 +1020,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_DOC_SALVAGE )
                         continue;
                     if ( nId == SID_CONTENTTYPE )
+                        continue;
+                    if ( nId == SID_WIN_POSSIZE )
                         continue;
                     if ( nId == SID_TEMPLATE_NAME )
                         continue;
@@ -1269,6 +1270,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 pValue[nProps].Name = sMediaType;
                 pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
             }
+            if ( rSet.GetItemState( SID_WIN_POSSIZE, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sWindowState;
+                pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
+            }
             if ( rSet.GetItemState( SID_TEMPLATE_NAME, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nProps].Name = sTemplateName;
@@ -1288,8 +1294,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             SFX_ITEMSET_ARG( &rSet, pRectItem, SfxRectangleItem, SID_VIEW_POS_SIZE, sal_False );
             if ( pRectItem )
             {
-    //            pValue[nProps].Name = sPosSize;
-    //            Rectangle aRect = pRectItem->GetValue();
                 DBG_ERROR("PosSizeItem not supported yet!");
             }
 
@@ -1314,10 +1318,29 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     rArgs = aSequ;
 }
 
-SFX_IMPL_XINTERFACE_3( SfxMacroLoader, OWeakObject, ::com::sun::star::frame::XDispatchProvider, ::com::sun::star::frame::XNotifyingDispatch, ::com::sun::star::frame::XDispatch )
-SFX_IMPL_XTYPEPROVIDER_3( SfxMacroLoader, ::com::sun::star::frame::XDispatchProvider, ::com::sun::star::frame::XNotifyingDispatch, ::com::sun::star::frame::XDispatch )
+SFX_IMPL_XINTERFACE_4( SfxMacroLoader, OWeakObject, ::com::sun::star::frame::XDispatchProvider, ::com::sun::star::frame::XNotifyingDispatch, ::com::sun::star::frame::XDispatch, ::com::sun::star::lang::XInitialization )
+SFX_IMPL_XTYPEPROVIDER_4( SfxMacroLoader, ::com::sun::star::frame::XDispatchProvider, ::com::sun::star::frame::XNotifyingDispatch, ::com::sun::star::frame::XDispatch, ::com::sun::star::lang::XInitialization  )
 SFX_IMPL_XSERVICEINFO( SfxMacroLoader, PROTOCOLHANDLER_SERVICENAME, "com.sun.star.comp.sfx2.SfxMacroLoader" )
 SFX_IMPL_SINGLEFACTORY( SfxMacroLoader )
+
+void SAL_CALL SfxMacroLoader::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+{
+    if ( aArguments.getLength() )
+        aArguments[0] >>= m_xFrame;
+
+    if ( m_xFrame.is() )
+    {
+        SfxFrame* pFrame=0;
+        for ( pFrame = SfxFrame::GetFirst(); pFrame; pFrame = SfxFrame::GetNext( *pFrame ) )
+        {
+            if ( pFrame->GetFrameInterface() == m_xFrame )
+                break;
+        }
+
+        if ( pFrame )
+            pDocShell = pFrame->GetCurrentDocument();
+    }
+}
 
 // -----------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL SfxMacroLoader::queryDispatch( const ::com::sun::star::util::URL&   aURL            ,
@@ -1363,13 +1386,7 @@ void SAL_CALL SfxMacroLoader::dispatchWithNotification( const ::com::sun::star::
         }
     }
 
-    // call from UI?
-    ErrCode nErr = ERRCODE_NONE;
-    if ( aReferer.compareToAscii("private:select", 12) == 0 )
-        nErr = loadMacro( aURL.Complete, SfxObjectShell::Current() );
-    else
-        nErr = loadMacro( aURL.Complete );
-
+    ErrCode nErr = loadMacro( aURL.Complete, pDocShell );
     if( xListener.is() )
     {
         // always call dispatchFinished(), because we didn't load a document but
@@ -1404,11 +1421,7 @@ void SAL_CALL SfxMacroLoader::dispatch( const ::com::sun::star::util::URL&      
         }
     }
 
-    // call from UI?
-    if ( aReferer.compareToAscii("private:select", 12) == 0 )
-        loadMacro( aURL.Complete, SfxObjectShell::Current() );
-    else
-        loadMacro( aURL.Complete );
+    ErrCode nErr = loadMacro( aURL.Complete, pDocShell );
 }
 
 // -----------------------------------------------------------------------
@@ -1431,6 +1444,7 @@ void SAL_CALL SfxMacroLoader::removeStatusListener( const ::com::sun::star::uno:
 
 // -----------------------------------------------------------------------
 SfxMacroLoader::SfxMacroLoader( com::sun::star::uno::Reference < class com::sun::star::lang::XMultiServiceFactory > const &)
+    : pDocShell(0)
 {
 }
 
@@ -1608,6 +1622,12 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, SfxObjectShell* 
 
 SFX_IMPL_XSERVICEINFO( SfxAppDispatchProvider, "com.sun.star.frame.DispatchProvider", "com.sun.star.comp.sfx2.AppDispatchProvider" )                                                                \
 SFX_IMPL_ONEINSTANCEFACTORY( SfxAppDispatchProvider );
+
+void SAL_CALL SfxAppDispatchProvider::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+{
+    if ( aArguments.getLength() )
+        aArguments[0] >>= m_xFrame;
+}
 
 Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch( const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& sTargetFrameName,
                     FrameSearchFlags eSearchFlags ) throw( RuntimeException )
