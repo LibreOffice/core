@@ -14,8 +14,6 @@ touch: ..\inc\hid.lst %_DEST%\bin%_EXT%\hid.lst
 del %_DEST%\inc%_EXT%\baside.hxx
 
 mkdir: %_DEST%\inc%_EXT%\basctl
-hedabu: ..\inc\sidll.hxx %_DEST%\inc%_EXT%\basctl\sidll.hxx
-hedabu: ..\inc\vcsbxdef.hxx %_DEST%\inc%_EXT%\basctl\vcsbxdef.hxx
 hedabu: ..\inc\basobj.hxx %_DEST%\inc%_EXT%\basctl\basobj.hxx
 hedabu: ..\source\basicide\idetemp.hxx %_DEST%\inc%_EXT%\basctl\idetemp.hxx
 hedabu: ..\source\basicide\tbxctl.hxx %_DEST%\inc%_EXT%\basctl\btbxctl.hxx
