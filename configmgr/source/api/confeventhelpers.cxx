@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confeventhelpers.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:23 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,8 @@ void ConfigChangesBroadcasterImpl::remove(INodeListenerRef const& pListener)
 
 static Change const* resolvePath(Change const& rChange, RelativePath& aRelativePath, RemoveNode const*& pRemoveNode)
 {
+    RelativePath::Iterator aIter;
+
     OSL_ASSERT(pRemoveNode == NULL);
     pRemoveNode = NULL;
 
@@ -165,7 +167,7 @@ static Change const* resolvePath(Change const& rChange, RelativePath& aRelativeP
 
     RelativePath::Iterator const aEnd(aRelativePath.end());
 
-    for( RelativePath::Iterator aIter = aRelativePath.begin();
+    for( aIter = aRelativePath.begin();
          aIter != aEnd;
          ++aIter)
     {
