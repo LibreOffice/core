@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentacceleratorconfiguration.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-08 08:32:53 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONSTORAGE_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationStorage.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONSTORAGE_HPP_
+#include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #endif
 
 //__________________________________________
@@ -113,7 +113,7 @@ namespace framework
 class DocumentAcceleratorConfiguration : public AcceleratorConfiguration
                                        , public css::lang::XServiceInfo
                                        , public css::lang::XInitialization
-//                                       , public dcss::ui::XUIConfigurationStorage
+//                                       , public css::ui::XUIConfigurationStorage
 {
     //______________________________________
     // member
