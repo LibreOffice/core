@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:16:23 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 21:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #include <svtools/sbxobj.hxx>
 #endif
 #include "viewsh.hxx"
-
+#include "viewfrm.hxx"                  // SvBorder
 #include <osl/mutex.hxx>
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
@@ -114,6 +114,7 @@ struct SfxViewShell_Impl
     BOOL                        bFrameSetImpl;
     BOOL                        bOwnsMenu;
     BOOL                        bGotOwnerShip;
+    BOOL                        bGotFrameOwnerShip;
     SfxScrollingMode            eScroll;
     ResId*                      pMenuBarResId;
     SfxMenuBarManager*          pMenu;
