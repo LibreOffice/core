@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-15 13:08:29 $
+ *  last change: $Author: jp $ $Date: 2001-03-15 13:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,40 @@ ULONG SotExchange::RegisterFormatName( const String& rName )
 
     pNewFlavor->MimeType = rName;
     pNewFlavor->HumanPresentableName = rName;
+    pNewFlavor->DataType = ::getCppuType( (const ::rtl::OUString*) 0 );
+
+    rL.Insert( pNewFlavor, LIST_APPEND );
+
+    return nMax + SOT_FORMATSTR_ID_USER_END + 1;
+}
+
+ULONG SotExchange::RegisterFormatMimeType( const String& rMimeType )
+{
+    // teste zuerst die Standard - Name
+    ULONG i, nMax = SOT_FORMAT_FILE_LIST;
+    for( i = SOT_FORMAT_STRING; i <= nMax;  ++i )
+        if( rMimeType.EqualsAscii( aFormatArray_Impl[ i ].pMimeType ) )
+            return i;
+
+    nMax = SOT_FORMATSTR_ID_USER_END;
+    for( i = SOT_FORMAT_RTF; i <= nMax;  ++i )
+        if( rMimeType.EqualsAscii( aFormatArray_Impl[ i ].pMimeType ) )
+            return i;
+
+    // dann in der dynamischen Liste
+    List& rL = InitFormats_Impl();
+    for( i = 0, nMax = rL.Count(); i < nMax; i++ )
+    {
+        DataFlavor* pFlavor = (DataFlavor*) rL.GetObject( i );
+        if( pFlavor && rMimeType == String( pFlavor->MimeType ) )
+            return i + SOT_FORMATSTR_ID_USER_END + 1;
+    }
+
+    // nMax ist der neue Platz
+    DataFlavor* pNewFlavor = new DataFlavor;
+
+    pNewFlavor->MimeType = rMimeType;
+    pNewFlavor->HumanPresentableName = rMimeType;
     pNewFlavor->DataType = ::getCppuType( (const ::rtl::OUString*) 0 );
 
     rL.Insert( pNewFlavor, LIST_APPEND );
