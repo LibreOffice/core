@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-17 08:56:52 $
+ *  last change: $Author: mh $ $Date: 2002-01-11 12:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,6 +298,10 @@ char const INSTALLER_INITFILENAME[] = "initialize.ini";
 char const INSTALLMODE_STANDALONE[] = "STANDALONE";
 char const INSTALLMODE_NETWORK[]    = "NETWORK";
 #ifndef BUILD_SOSL
+
+// include strings for copyright notice
+#include "copyright_ascii.txt"
+
 char const OEM_PRELOAD_SECTION[]    = "Bootstrap";
 char const OEM_PRELOAD[]            = "Preload";
 #endif
