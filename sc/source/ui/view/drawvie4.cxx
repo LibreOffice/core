@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:08:00 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#endif
+
 #ifdef PCH
 #include "ui_pch.hxx"
 #endif
@@ -66,7 +70,6 @@
 #pragma hdrstop
 
 // INCLUDE ---------------------------------------------------------------
-
 #include <sch/memchrt.hxx>
 #include <sch/schdll.hxx>
 #include <svx/svditer.hxx>
@@ -312,11 +315,18 @@ void ScDrawView::SetMarkedOriginalSize()
             // TODO/LEAN: working with visual area can switch object to running state
             uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
             MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( ((SdrOle2Obj*)pObj)->GetAspect() ) );
-            awt::Size aSz = xObj->getVisualAreaSize( ((SdrOle2Obj*)pObj)->GetAspect() );
-            aOriginalSize = OutputDevice::LogicToLogic(
+            awt::Size aSz;
+            try
+            {
+                aSz = xObj->getVisualAreaSize( ((SdrOle2Obj*)pObj)->GetAspect() );
+                aOriginalSize = OutputDevice::LogicToLogic(
                                     Size( aSz.Width, aSz.Height ),
                                     aUnit, MAP_100TH_MM );
-            bDo = TRUE;
+                bDo = TRUE;
+            } catch( embed::NoVisualAreaSizeException& )
+            {
+                OSL_ENSURE( sal_False, "Can't get the original size of the object!" );
+            }
         }
         else if (nIdent == OBJ_GRAF)
         {
