@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-29 02:33:56 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ chinese_traditional ] = "¤À¶}¦C¦L¦b¦h­Ó­¶­±¤W(~P)";
         Text[ arabic ] = "ØÈÇÚÉ Úáì ÕİÍÇÊ ãÊÚÏÏÉ";
         Text[ greek ] = "Åêôığùóç óå ğåñéóóüôåñåò óåëßäåò";
-        Text[ korean ] = "¿©·¯ ÂÊ¿¡ ÀÎ¼â(~P)";
+        Text[ korean ] = "¿©·¯ ÂÊÀ¸·Î ÀÎ¼â(~P)";
         Text[ turkish ] = "Birden çok sayfaya yazdır";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Imprimir en ~varias páginas";
@@ -189,7 +189,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text [ spanish ] = "~Cortar" ;
         Text [ french ] = "~Couper" ;
         Text [ dutch ] = "~Afknippen" ;
-        Text[ chinese_simplified ] = "²Ã¼ô(~T)";
+        Text[ chinese_simplified ] = "¼ôÇĞ(~T)";
         Text[ russian ] = "~Îáğåçàòü";
         Text[ polish ] = "Przytnij";
         Text[ japanese ] = "Ø‚èæ‚è(~T)";
@@ -254,6 +254,7 @@ ModalDialog DLG_PRINT_WARNINGS
     Text[ catalan ] = "Advertencia opciones de impresión";
     Text[ finnish ] = "Tulostimen varoitusasetukset";
 };
+
 
 
 
