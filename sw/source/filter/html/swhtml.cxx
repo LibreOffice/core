@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:27:20 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,12 +113,7 @@
 #include <sfx2/docfile.hxx>
 #endif
 
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
-#ifndef _OFA_HTMLCFG_HXX //autogen
-#include <offmgr/htmlcfg.hxx>
-#endif
+#include <svx/htmlcfg.hxx>
 
 #ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
@@ -497,7 +492,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     memset( &aAttrTab, 0, sizeof( _HTMLAttrTable ));
 
     // Die Font-Groessen 1-7 aus der INI-Datei lesen
-    OfaHtmlOptions* pHtmlOptions = OFF_APP()->GetHtmlOptions();
+    SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
     aFontHeights[0] = pHtmlOptions->GetFontSize( 0 ) * 20;
     aFontHeights[1] = pHtmlOptions->GetFontSize( 1 ) * 20;
     aFontHeights[2] = pHtmlOptions->GetFontSize( 2 ) * 20;
