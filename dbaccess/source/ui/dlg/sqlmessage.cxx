@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:16:05 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const Any& _rStart
             if ( pListEntry )
                 pListEntry->SetUserData( pUserData );
             else
-                delete pUserData;
+                delete (SQLExceptionInfo*)pUserData;
         }
     }
 
