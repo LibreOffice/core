@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-23 09:05:47 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,9 +286,13 @@ Any SAL_CALL OImageControlModel::queryAggregation(const Type& _rType) throw (Run
 {
     // oder matters: we want to "override" the XImageProducer interface of the aggreate with out
     // own XImageProducer interface, thus we need to query OImageControlModel_Base first
-
     Any aReturn = OImageControlModel_Base::queryInterface( _rType );
-    if (!aReturn.hasValue())
+
+    // BUT: _don't_ let it feel responsible for the XTypeProvider interface
+    // (as this is implemented by our base class in the proper way)
+    if  (   _rType.equals( ::getCppuType( static_cast< Reference< XTypeProvider >* >( NULL ) ) )
+        ||  !aReturn.hasValue()
+        )
         aReturn = OBoundControlModel::queryAggregation( _rType );
 
     return aReturn;
