@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Java.xcs,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:37:47 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 				<!-- OldLocation: java.ini -->
 				<!-- Notice: Default: depends on Java installation path -->
 				<info>
+					<deprecated/>
 					<desc>Specifies the path of the Java installation.</desc>
 					<label>Java Home</label>
 				</info>
@@ -83,6 +84,7 @@
 				<!-- OldLocation: java.ini -->
 				<!-- Notice: Default: depends on version used -->
 				<info>
+					<deprecated/>
 					<desc>Specifies the version of the Java installation that is used.</desc>
 					<label>Java Version</label>
 				</info>
@@ -92,6 +94,7 @@
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<info>
+					<deprecated/>
 					<desc>Specifies the JVM shared library that is used.</desc>
 				</info>
 				<value/>
@@ -101,6 +104,7 @@
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<info>
+					<deprecated/>
 					<desc>Contains jars of the Office installation and may also contain other jars or folders.</desc>
 				</info>
 				<value/>
@@ -110,6 +114,7 @@
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<info>
+					<deprecated/>
 					<desc>Determines if the com.sun.star.java.JavaVirtualMachine service instantiates a JVM.</desc>
 					<label>Enable JVM</label>
 				</info>
@@ -156,6 +161,7 @@
 				<!-- OldLocation: java.ini -->
 				<!-- UIHints: Tools  Options  StarOffice Security  [Section] Java -->
 				<info>
+					<deprecated/>
 					<desc>Specifies additional Java classes or jars which are contained in the classpath of the JVM (java.class.path system property).</desc>
 					<label>Classpath</label>
 				</info>
@@ -294,6 +300,7 @@
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<info>
+					<deprecated/>
 					<desc>Indicates if a JRE or SDK is used.</desc>
 				</info>
 				<constraints>
@@ -314,6 +321,7 @@
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<info>
+					<deprecated/>
 					<desc>Contains directories which contain shared libraries that are used by the Java runtime library.</desc>
 				</info>
 				<value/>
@@ -330,6 +338,7 @@
 		</group>
 		<group oor:name="Install">
 			<info>
+				<deprecated/>
 				<desc>Provides information which are used by jvmsetup. </desc>
 			</info>
 			<prop oor:name="PackageInstallationDirectory" oor:type="xs:string">
@@ -399,7 +408,6 @@
 				<!-- OldPath: Install -->
 				<!-- OldLocation: java.ini -->
 				<info>
-					<deprecated/>
 					<desc>Locates resources.</desc>
 				</info>
 				<value/>
