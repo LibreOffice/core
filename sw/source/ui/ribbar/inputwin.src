@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:15 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ ToolBox RID_TBX_FORMULA
             Text [ English ] = "Formula" ;
             Text [ norwegian ] = "Formel" ;
             Text [ italian ] = "Formula" ;
-            Text [ portuguese_brazilian ] = "F?mula" ;
+            Text [ portuguese_brazilian ] = "FÛrmula" ;
             Text [ portuguese ] = "FÛrmula" ;
             Text [ finnish ] = "Kaava" ;
             Text [ danish ] = "Formel" ;
@@ -107,6 +107,9 @@ ToolBox RID_TBX_FORMULA
             Text[ turkish ] = "Form¸l";
             Text[ catalan ] = "FÛrmula";
             Text[ thai ] = "‡∏™‡∏π‡∏ï‡∏£‡∏Ñ‡∏≥‡∏ô‡∏ß‡∏ì";
+            Text[ czech ] = "Vzorec";
+            Text[ hebrew ] = "‚ÄÆ◊†◊ï◊°◊ó◊î‚Ä¨";
+            Text[ hindi ] = "‡§∏‡•Ç‡§§‡•ç‡§∞";
         };
         ToolBoxItem
         {
@@ -139,6 +142,9 @@ ToolBox RID_TBX_FORMULA
             Text[ turkish ] = "›ptal";
             Text[ catalan ] = "Cancel.la";
             Text[ thai ] = "‡∏¢‡∏Å‡πÄ‡∏•‡∏¥‡∏Å";
+            Text[ czech ] = "Zru≈°it";
+            Text[ hebrew ] = "‚ÄÆ◊ë◊ô◊ò◊ï◊ú‚Ä¨";
+            Text[ hindi ] = "‡§∞‡§¶‡•ç‡§¶ ‡§ï‡§∞‡•ã";
         };
         ToolBoxItem
         {
@@ -172,6 +178,9 @@ ToolBox RID_TBX_FORMULA
             Text[ turkish ] = "Uygula";
             Text[ catalan ] = "Aplica";
             Text[ thai ] = "‡πÉ‡∏ä‡πâ";
+            Text[ czech ] = "Pou≈æ√≠t";
+            Text[ hebrew ] = "‚ÄÆ◊ô◊ô◊©◊ï◊ù‚Ä¨";
+            Text[ hindi ] = "‡§≤‡§æ‡§ó‡•Ç ‡§ï‡§∞‡•ã";
         };
     };
     Edit ED_POS
@@ -205,7 +214,7 @@ Menu MN_CALC_POPUP
             Text [ english_us ] = "Sum" ;
             Text [ norwegian ] = "~Sum" ;
             Text [ italian ] = "~Somma" ;
-            Text [ portuguese_brazilian ] = "~Somat?io" ;
+            Text [ portuguese_brazilian ] = "Soma" ;
             Text [ portuguese ] = "~Soma" ;
             Text [ finnish ] = "Summa" ;
             Text [ danish ] = "Sum" ;
@@ -224,6 +233,9 @@ Menu MN_CALC_POPUP
             Text[ turkish ] = "Toplam";
             Text[ catalan ] = "Suma";
             Text[ thai ] = "‡∏ú‡∏•‡∏£‡∏ß‡∏°";
+            Text[ czech ] = "Celkem";
+            Text[ hebrew ] = "‚ÄÆ◊°◊õ◊ï◊ù‚Ä¨";
+            Text[ hindi ] = "‡§ú‡•ã‡§°‡§º";
         };
         MenuItem
         {
@@ -239,10 +251,10 @@ Menu MN_CALC_POPUP
             Text [ swedish ] = "~Avrunda" ;
             Text [ danish ] = "Rund" ;
             Text [ portuguese ] = "A~rredondar" ;
-            Text [ portuguese_brazilian ] = "Run~den" ;
+            Text [ portuguese_brazilian ] = "Arredondar" ;
             Text[ chinese_simplified ] = "ËΩ¨Êç¢ÊàêÊï¥Êï∞";
             Text[ russian ] = "ŒÍÛ„ÎËÚ¸";
-            Text[ polish ] = "Zaokrπglaj";
+            Text[ polish ] = "Zaokrπglenie";
             Text[ japanese ] = "ÂõõÊç®‰∫îÂÖ•";
             Text[ chinese_traditional ] = "ËΩâÊèõÊàêÊï¥Êï∏";
             Text[ arabic ] = " ﬁ—Ì»";
@@ -254,6 +266,9 @@ Menu MN_CALC_POPUP
             Text[ catalan ] = "Arrodoneix";
             Text[ finnish ] = "Pyˆrist‰";
             Text[ thai ] = "‡∏£‡∏≠‡∏ö";
+            Text[ czech ] = "Zaokrouhlen√≠";
+            Text[ hebrew ] = "Run~den";
+            Text[ hindi ] = "Round";
         };
         MenuItem
         {
@@ -266,7 +281,7 @@ Menu MN_CALC_POPUP
             Text [ english_us ] = "Percent" ;
             Text [ norwegian ] = "~Prosent" ;
             Text [ italian ] = "~Percentuale" ;
-            Text [ portuguese_brazilian ] = "~Percentual" ;
+            Text [ portuguese_brazilian ] = "Percentual" ;
             Text [ portuguese ] = "~Percentagem" ;
             Text [ finnish ] = "Prosenttia" ;
             Text [ danish ] = "Procent" ;
@@ -285,6 +300,9 @@ Menu MN_CALC_POPUP
             Text[ turkish ] = "Y¸zde";
             Text[ catalan ] = "Percentatge";
             Text[ thai ] = "‡πÄ‡∏õ‡∏≠‡∏£‡πå‡πÄ‡∏ã‡πá‡∏ô‡∏ï‡πå";
+            Text[ czech ] = "Procento";
+            Text[ hebrew ] = "~Prozent";
+            Text[ hindi ] = "‡§™‡•ç‡§∞‡§§‡§ø‡§∂‡§§";
         };
         MenuItem
         {
@@ -297,7 +315,7 @@ Menu MN_CALC_POPUP
             Text [ english_us ] = "Square Root" ;
             Text [ norwegian ] = "Kvadrat ~Rot" ;
             Text [ italian ] = "~Radice" ;
-            Text [ portuguese_brazilian ] = "Raiz ~Quadrada" ;
+            Text [ portuguese_brazilian ] = "RaÌz Quadrada" ;
             Text [ portuguese ] = "RaÌz ~quadrada" ;
             Text [ finnish ] = "Neliˆjuuri" ;
             Text [ danish ] = "Kvadratrod" ;
@@ -305,7 +323,7 @@ Menu MN_CALC_POPUP
             Text [ swedish ] = "~Kvadratrot" ;
             Text[ chinese_simplified ] = "Âπ≥ÊñπÊ†π";
             Text[ russian ] = " ÓÂÌ¸";
-            Text[ polish ] = "Pierwiastek";
+            Text[ polish ] = "Pierwiastek kwadratowy";
             Text[ japanese ] = "Âπ≥ÊñπÊ†π";
             Text[ chinese_traditional ] = "Âπ≥ÊñπÊ†π";
             Text[ arabic ] = "Ã–—";
@@ -317,6 +335,9 @@ Menu MN_CALC_POPUP
             Text[ turkish ] = "Karekˆk";
             Text[ catalan ] = "Arrel quadrada";
             Text[ thai ] = "‡∏£‡∏≤‡∏Å‡∏ó‡∏µ‡πà‡∏™‡∏≠‡∏á";
+            Text[ czech ] = "Druh√° odmocnina";
+            Text[ hebrew ] = "~Wurzel";
+            Text[ hindi ] = "‡§µ‡§∞‡•ç‡§ó ‡§Æ‡•Ç‡§≤";
         };
         MenuItem
         {
@@ -329,7 +350,7 @@ Menu MN_CALC_POPUP
             Text [ english_us ] = "Power" ;
             Text [ norwegian ] = "Po~tens" ;
             Text [ italian ] = "Elevare a potenza" ;
-            Text [ portuguese_brazilian ] = "Po~t?ncia" ;
+            Text [ portuguese_brazilian ] = "PotÍncia" ;
             Text [ portuguese ] = "Elevar a po~tÍncia" ;
             Text [ finnish ] = "Potenssim‰‰ritys" ;
             Text [ danish ] = "Opl¯ft i potens" ;
@@ -337,7 +358,7 @@ Menu MN_CALC_POPUP
             Text [ swedish ] = "~Upphˆja" ;
             Text[ chinese_simplified ] = "‰πòÂπÇ";
             Text[ russian ] = "—ÚÂÔÂÌ¸";
-            Text[ polish ] = "PotÍguj";
+            Text[ polish ] = "PotÍga";
             Text[ japanese ] = "Á¥Ø‰πó";
             Text[ chinese_traditional ] = "‰πòÂÜ™";
             Text[ arabic ] = "ﬁÊ…";
@@ -345,9 +366,12 @@ Menu MN_CALC_POPUP
             Text[ chinese_simplified ] = "‰πòÂπÇ";
             Text[ greek ] = "æ¯~˘ÛÁ ÛÂ ‰˝Ì·ÏÁ";
             Text[ korean ] = "Ï†úÍ≥±";
-            Text[ turkish ] = "Kuvvet Á˝kar";
+            Text[ turkish ] = "Kuvvet";
             Text[ catalan ] = "Po~tencia";
             Text[ thai ] = "‡∏¢‡∏Å‡∏Å‡∏≥‡∏•‡∏±‡∏á";
+            Text[ czech ] = "Exponent";
+            Text[ hebrew ] = "Poten~ziere";
+            Text[ hindi ] = "‡§ò‡§æ‡§§";
         };
         MenuItem
         {
@@ -360,7 +384,7 @@ Menu MN_CALC_POPUP
             Text [ english_us ] = "Operators" ;
             Text [ norwegian ] = "+++~Operators" ;
             Text [ italian ] = "Operatori" ;
-            Text [ portuguese_brazilian ] = "~Operadores" ;
+            Text [ portuguese_brazilian ] = "Operadores" ;
             Text [ portuguese ] = "~Operadores" ;
             Text [ finnish ] = "Operaattorit" ;
             Text [ danish ] = "Operatorer" ;
@@ -381,7 +405,7 @@ Menu MN_CALC_POPUP
                         Text [ english_us ] = "List Separator" ;
                         Text [ norwegian ] = "+++Lis~t Separator" ;
                         Text [ italian ] = "~Separatore elenco" ;
-                        Text [ portuguese_brazilian ] = "Separador de Lis~ta" ;
+                        Text [ portuguese_brazilian ] = "Separador de Lista" ;
                         Text [ portuguese ] = "Separador de lis~ta" ;
                         Text [ finnish ] = "Luetteloerotin" ;
                         Text [ danish ] = "Listeseparator" ;
@@ -389,7 +413,7 @@ Menu MN_CALC_POPUP
                         Text [ swedish ] = "List~avgr‰nsare" ;
                         Text[ chinese_simplified ] = "ÂàóË°®ÂàÜÈöîÁ¨¶";
                         Text[ russian ] = "–‡Á‰ÂÎËÚÂÎ¸ ÒÔËÒÍ‡";
-                        Text[ polish ] = "Separator list";
+                        Text[ polish ] = "Separator listy";
                         Text[ japanese ] = "„É™„Çπ„Éà„ÅÆÂå∫Âàá„ÇäË®òÂè∑";
                         Text[ chinese_traditional ] = "Ê∏ÖÂñÆÂàÜÈöîÁ¨¶";
                         Text[ arabic ] = "›«’· «·ﬁ«∆„…";
@@ -397,9 +421,12 @@ Menu MN_CALC_POPUP
                         Text[ chinese_simplified ] = "ÂàóË°®ÂàÜÈöîÁ¨¶";
                         Text[ greek ] = "ƒÈ·˜˘ÒÈÛÙÈÍ‹ ~ÎﬂÛÙ·Ú";
                         Text[ korean ] = "Î™©Î°ù Íµ¨Î∂Ñ Í∏∞Ìò∏";
-                        Text[ turkish ] = "~Liste ˆeleri ay˝r˝c˝s˝";
+                        Text[ turkish ] = "~Liste ayrac˝";
                         Text[ catalan ] = "Separador de llista";
                         Text[ thai ] = "‡∏£‡∏≤‡∏¢‡∏Å‡∏≤‡∏£‡∏ï‡∏±‡∏ß‡πÅ‡∏¢‡∏Å";
+                        Text[ czech ] = "Oddƒõlovaƒç v seznamu";
+                        Text[ hebrew ] = "~Listentrenner";
+                        Text[ hindi ] = "‡§∏‡•Ç‡§ö‡•Ä ‡§Ö‡§≤‡§ó‡§æ‡§®‡•á‡§µ‡§æ‡§≤‡§æ";
                     };
                     MenuItem
                     {
@@ -412,7 +439,7 @@ Menu MN_CALC_POPUP
                         Text [ english_us ] = "Equal" ;
                         Text [ norwegian ] = "~Lik" ;
                         Text [ italian ] = "~Uguale" ;
-                        Text [ portuguese_brazilian ] = "~Igual" ;
+                        Text [ portuguese_brazilian ] = "Igual" ;
                         Text [ portuguese ] = "~Igual" ;
                         Text [ finnish ] = "yht‰ suuri" ;
                         Text [ danish ] = "Lig med" ;
@@ -431,6 +458,9 @@ Menu MN_CALC_POPUP
                         Text[ turkish ] = "E˛ittir";
                         Text[ catalan ] = "Igual";
                         Text[ thai ] = "‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ô";
+                        Text[ czech ] = "Rovno";
+                        Text[ hebrew ] = "~Gleich";
+                        Text[ hindi ] = "‡§∏‡§Æ‡§æ‡§®";
                     };
                     MenuItem
                     {
@@ -443,7 +473,7 @@ Menu MN_CALC_POPUP
                         Text [ english_us ] = "Not Equal" ;
                         Text [ norwegian ] = "~Ulik" ;
                         Text [ italian ] = "Non uguale" ;
-                        Text [ portuguese_brazilian ] = "~N?o Igual" ;
+                        Text [ portuguese_brazilian ] = "Diferente de" ;
                         Text [ portuguese ] = "~Desigual" ;
                         Text [ finnish ] = "Eri suuri" ;
                         Text [ danish ] = "Forskellig fra" ;
@@ -462,6 +492,9 @@ Menu MN_CALC_POPUP
                         Text[ turkish ] = "E˛it deil";
                         Text[ catalan ] = "~No igual";
                         Text[ thai ] = "‡πÑ‡∏°‡πà‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ô";
+                        Text[ czech ] = "Nen√≠ rovno";
+                        Text[ hebrew ] = "~Nicht Gleich";
+                        Text[ hindi ] = "‡§∏‡§Æ‡§æ‡§® ‡§®‡§π‡•Ä‡§Ç";
                     };
                     MenuItem
                     {
@@ -474,7 +507,7 @@ Menu MN_CALC_POPUP
                         Text [ english_us ] = "Less Than or Equal" ;
                         Text [ norwegian ] = "Mind~re enn" ;
                         Text [ italian ] = "Minore o uguale" ;
-                        Text [ portuguese_brazilian ] = "Me~nor ou Igual" ;
+                        Text [ portuguese_brazilian ] = "Menor ou Igual a" ;
                         Text [ portuguese ] = "Me~nor ou igual" ;
                         Text [ finnish ] = "Pienempi tai yht‰ suuri kuin" ;
                         Text [ danish ] = "Mindre end eller lig med" ;
@@ -482,7 +515,7 @@ Menu MN_CALC_POPUP
                         Text [ swedish ] = "Mi~ndre ‰n eller lika med" ;
                         Text[ chinese_simplified ] = "Â∞è‰∫éÊàñÁ≠â‰∫é";
                         Text[ russian ] = "ÃÂÌ¸¯Â ËÎË ‡‚ÌÓ";
-                        Text[ polish ] = "Mniejszy lub rÛwny";
+                        Text[ polish ] = "Mniejsze lub rÛwne";
                         Text[ japanese ] = "‰ª•‰∏ã";
                         Text[ chinese_traditional ] = "Â∞èÊñºÊàñÁ≠âÊñº";
                         Text[ arabic ] = "√’€— „‰ √Ê Ì”«ÊÌ";
@@ -493,6 +526,9 @@ Menu MN_CALC_POPUP
                         Text[ turkish ] = "K¸Á¸k ya da e˛ittir";
                         Text[ catalan ] = "Menor que o igual";
                         Text[ thai ] = "‡∏ô‡πâ‡∏≠‡∏¢‡∏Å‡∏ß‡πà‡∏≤‡∏´‡∏£‡∏∑‡∏≠‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ö";
+                        Text[ czech ] = "Men≈°√≠ nebo rovno";
+                        Text[ hebrew ] = "~Kleiner Gleich";
+                        Text[ hindi ] = "‡§ï‡§Æ ‡§Ö‡§•‡§µ‡§æ ‡§∏‡§Æ‡§æ‡§®";
                     };
                     MenuItem
                     {
@@ -506,7 +542,7 @@ Menu MN_CALC_POPUP
                         Text [ english_us ] = "Greater Than or Equal" ;
                         Text [ norwegian ] = "~St¯rre enn" ;
                         Text [ italian ] = "~Maggiore uguale" ;
-                        Text [ portuguese_brazilian ] = "~Maior ou Igual" ;
+                        Text [ portuguese_brazilian ] = "Maior ou Igual a" ;
                         Text [ portuguese ] = "M~aior ou igual" ;
                         Text [ finnish ] = "Suurempi tai yht‰ suuri kuin" ;
                         Text [ danish ] = "St¯rre end lig med" ;
@@ -525,6 +561,9 @@ Menu MN_CALC_POPUP
                         Text[ turkish ] = "B¸y¸k ya da e˛ittir";
                         Text[ catalan ] = "Major que o igual";
                         Text[ thai ] = "‡∏°‡∏≤‡∏Å‡∏Å‡∏ß‡πà‡∏≤‡∏´‡∏£‡∏∑‡∏≠‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ö";
+                        Text[ czech ] = "Vƒõt≈°√≠ nebo rovno";
+                        Text[ hebrew ] = "Gr~√∂√üer Gleich";
+                        Text[ hindi ] = "‡§Ö‡§ß‡§ø‡§ï ‡§Ö‡§•‡§µ‡§æ ‡§∏‡§Æ‡§æ‡§®";
                     };
                     MenuItem
                     {
@@ -537,7 +576,7 @@ Menu MN_CALC_POPUP
                         Text [ english_us ] = "Less" ;
                         Text [ norwegian ] = "~Mindre" ;
                         Text [ italian ] = "Minore" ;
-                        Text [ portuguese_brazilian ] = "~Menos" ;
+                        Text [ portuguese_brazilian ] = "Menor" ;
                         Text [ portuguese ] = "~Menor" ;
                         Text [ finnish ] = "Pienempi" ;
                         Text [ danish ] = "Mindre end" ;
@@ -545,7 +584,7 @@ Menu MN_CALC_POPUP
                         Text [ swedish ] = "~Mindre ‰n" ;
                         Text[ chinese_simplified ] = "Â∞è‰∫é";
                         Text[ russian ] = "ÃÂÌ¸¯Â";
-                        Text[ polish ] = "Mniejszy";
+                        Text[ polish ] = "Mniejsze";
                         Text[ japanese ] = "„Çà„ÇäÂ∞è„Åï„ÅÑ";
                         Text[ chinese_traditional ] = "Â∞èÊñº";
                         Text[ arabic ] = "√’€—";
@@ -553,9 +592,12 @@ Menu MN_CALC_POPUP
                         Text[ chinese_simplified ] = "Â∞è‰∫é";
                         Text[ greek ] = "Ã~ÈÍÒ¸ÙÂÒÔ";
                         Text[ korean ] = "ÎØ∏Îßå";
-                        Text[ turkish ] = "K¸Á¸kt¸r";
+                        Text[ turkish ] = "K¸Á¸k";
                         Text[ catalan ] = "Menys";
                         Text[ thai ] = "‡∏ô‡πâ‡∏≠‡∏¢‡∏Å‡∏ß‡πà‡∏≤";
+                        Text[ czech ] = "Men≈°√≠";
+                        Text[ hebrew ] = "Kle~iner";
+                        Text[ hindi ] = "‡§ï‡§Æ";
                     };
                     MenuItem
                     {
@@ -569,7 +611,7 @@ Menu MN_CALC_POPUP
                         Text [ english_us ] = "Greater" ;
                         Text [ norwegian ] = "S~t¯rre" ;
                         Text [ italian ] = "Maggiore" ;
-                        Text [ portuguese_brazilian ] = "M~aior" ;
+                        Text [ portuguese_brazilian ] = "Maior" ;
                         Text [ portuguese ] = "M~aior" ;
                         Text [ finnish ] = "Suurempi" ;
                         Text [ danish ] = "St¯rre end" ;
@@ -585,9 +627,12 @@ Menu MN_CALC_POPUP
                         Text[ chinese_simplified ] = "Â§ß‰∫é";
                         Text[ greek ] = "ÃÂ„·Î˝ÙÂ~ÒÔ";
                         Text[ korean ] = "Î≥¥Îã§ ÌÅº";
-                        Text[ turkish ] = "B¸y¸kt¸r";
+                        Text[ turkish ] = "B¸y¸k";
                         Text[ catalan ] = "~Major";
                         Text[ thai ] = "‡∏°‡∏≤‡∏Å‡∏Å‡∏ß‡πà‡∏≤";
+                        Text[ czech ] = "Vƒõt≈°√≠";
+                        Text[ hebrew ] = "G~r√∂√üer";
+                        Text[ hindi ] = "‡§Ö‡§ß‡§ø‡§ï";
                     };
                     MenuItem
                     {
@@ -604,7 +649,7 @@ Menu MN_CALC_POPUP
                         Text [ english_us ] = "Boolean Or" ;
                         Text [ norwegian ] = "Logisk ~Eller" ;
                         Text [ italian ] = "~O logico" ;
-                        Text [ portuguese_brazilian ] = "Ou l?ico ~" ;
+                        Text [ portuguese_brazilian ] = "OU Booleano" ;
                         Text [ portuguese ] = "~OU lÛgico" ;
                         Text [ finnish ] = "Boolen ehto TAI" ;
                         Text [ danish ] = "Logisk ELLER" ;
@@ -612,7 +657,7 @@ Menu MN_CALC_POPUP
                         Text [ swedish ] = "Logiskt ~Eller" ;
                         Text[ chinese_simplified ] = "ÈÄªËæëÁöÑ Or";
                         Text[ russian ] = "ÀÓ„Ë˜ÂÒÍÓÂ »À»";
-                        Text[ polish ] = "Funkcja logiczna LUB";
+                        Text[ polish ] = "Operator logiczny LUB";
                         Text[ japanese ] = "Ë´ñÁêÜÂºè";
                         Text[ chinese_traditional ] = "ÈÇèËºØÁöÑ Or";
                         Text[ arabic ] = "√Ê „‰ÿﬁÌ…";
@@ -623,6 +668,9 @@ Menu MN_CALC_POPUP
                         Text[ turkish ] = "Mant˝ksal Veya";
                         Text[ catalan ] = "~O lÚgic";
                         Text[ thai ] = "‡∏ö‡∏π‡∏•‡∏µ‡∏ô‡∏´‡∏£‡∏∑‡∏≠";
+                        Text[ czech ] = "Booleovsk√© OR";
+                        Text[ hebrew ] = "Logisches ~Oder";
+                        Text[ hindi ] = "‡§¨‡•Ç‡§≤‡§ø‡§Ø‡§® ‡§ì‡§∞";
                     };
                     MenuItem
                     {
@@ -635,7 +683,7 @@ Menu MN_CALC_POPUP
                         Text [ english_us ] = "Boolean Xor" ;
                         Text [ norwegian ] = "Logisk ~Xeller" ;
                         Text [ italian ] = "Logica O esclusiva" ;
-                        Text [ portuguese_brazilian ] = "Xou l?ico" ;
+                        Text [ portuguese_brazilian ] = "OU Exclusivo Booleano" ;
                         Text [ portuguese ] = "OU lÛgico e~xclusivo" ;
                         Text [ finnish ] = "Boolen ehto XTAI" ;
                         Text [ danish ] = "Logisk eksklusiv ELLER" ;
@@ -643,7 +691,7 @@ Menu MN_CALC_POPUP
                         Text [ swedish ] = "Logiskt E~xklusivt Eller" ;
                         Text[ chinese_simplified ] = "ÈÄªËæëÁöÑÈô§Â§ñÁöÑ Or";
                         Text[ russian ] = "ÀÓ„Ë˜ÂÒÍÓÂ ËÒÍÎ˛˜‡˛˘ÂÂ »À»";
-                        Text[ polish ] = "Wy≥πczna funkcja logiczna LUB";
+                        Text[ polish ] = "Operator logiczny ALBO";
                         Text[ japanese ] = "Êéí‰ªñÁöÑË´ñÁêÜÂíå(EXOR)";
                         Text[ chinese_traditional ] = "ÈÇèËºØÁöÑÈô§Â§ñÁöÑ Or";
                         Text[ arabic ] = "√Ê „‰ÿﬁÌ… Œ«’…";
@@ -651,9 +699,12 @@ Menu MN_CALC_POPUP
                         Text[ chinese_simplified ] = "ÈÄªËæëÁöÑÈô§Â§ñÁöÑ Or";
                         Text[ greek ] = "‘ÂÎÂÛÙﬁÚ ~Xor ÙÔı Boole";
                         Text[ korean ] = "Î∂àÎ¶¨Ïñ∏ Xor";
-                        Text[ turkish ] = "Mant˝ksal ~tek Veya";
+                        Text[ turkish ] = "Mant˝ksal Xor";
                         Text[ catalan ] = "O lÚgic e~xclusiu";
                         Text[ thai ] = "‡∏ö‡∏π‡∏•‡∏µ‡∏ô Xor";
+                        Text[ czech ] = "Booleovsk√© XOR";
+                        Text[ hebrew ] = "Logisches E~xklusives Oder";
+                        Text[ hindi ] = "‡§¨‡•Ç‡§≤‡§ø‡§Ø‡§® ‡§è‡§ï‡•ç‡§∏‡•ã‡§∞";
                     };
                     MenuItem
                     {
@@ -666,7 +717,7 @@ Menu MN_CALC_POPUP
                         Text [ english_us ] = "Boolean And" ;
                         Text [ norwegian ] = "Logisk ~Og" ;
                         Text [ italian ] = "~E logico" ;
-                        Text [ portuguese_brazilian ] = "E ~l?ico" ;
+                        Text [ portuguese_brazilian ] = "E Booleano" ;
                         Text [ portuguese ] = "~E lÛgico" ;
                         Text [ finnish ] = "Boolen ehto JA" ;
                         Text [ danish ] = "Logisk OG" ;
@@ -674,7 +725,7 @@ Menu MN_CALC_POPUP
                         Text [ swedish ] = "Logiskt ~Och" ;
                         Text[ chinese_simplified ] = "ÈÄªËæëÁöÑ And";
                         Text[ russian ] = "ÀÓ„Ë˜ÂÒÍÓÂ ~»";
-                        Text[ polish ] = "Funkcja logiczna ORAZ";
+                        Text[ polish ] = "Operator logiczny I";
                         Text[ japanese ] = "Ë´ñÁêÜÂºè(And)";
                         Text[ chinese_traditional ] = "ÈÇèËºØÁöÑ And";
                         Text[ arabic ] = "Ê „‰ÿﬁÌ…";
@@ -682,9 +733,12 @@ Menu MN_CALC_POPUP
                         Text[ chinese_simplified ] = "ÈÄªËæëÁöÑ And";
                         Text[ greek ] = "‘ÂÎÂÛÙﬁÚ ~And ÙÔı Boole";
                         Text[ korean ] = "Î∂àÎ¶¨Ïñ∏ And";
-                        Text[ turkish ] = "Mant˝ksal ~Ve";
+                        Text[ turkish ] = "Mant˝ksal Ve";
                         Text[ catalan ] = "~Y lÚgic";
                         Text[ thai ] = "‡∏ö‡∏π‡∏•‡∏µ‡∏ô‡πÅ‡∏•‡∏∞";
+                        Text[ czech ] = "Booleovsk√© AND";
+                        Text[ hebrew ] = "Logisches ~Und";
+                        Text[ hindi ] = "‡§¨‡•Ç‡§≤‡§ø‡§Ø‡§® ‡§ê‡§®‡•ç‡§°";
                     };
                     MenuItem
                     {
@@ -697,7 +751,7 @@ Menu MN_CALC_POPUP
                         Text [ english_us ] = "Boolean Not" ;
                         Text [ norwegian ] = "Log~isk Ikke" ;
                         Text [ italian ] = "Logica Non" ;
-                        Text [ portuguese_brazilian ] = "N?o L?~ico" ;
+                        Text [ portuguese_brazilian ] = "N√O Booleano" ;
                         Text [ portuguese ] = "~N√O lÛgico" ;
                         Text [ finnish ] = "Boolen ehto EI" ;
                         Text [ danish ] = "Logisk IKKE" ;
@@ -705,7 +759,7 @@ Menu MN_CALC_POPUP
                         Text [ swedish ] = "Logiskt I~nte" ;
                         Text[ chinese_simplified ] = "ÈÄªËæëÁöÑ Not";
                         Text[ russian ] = "ÀÓ„Ë˜ÂÒÍÓÂ Õ≈";
-                        Text[ polish ] = "Funkcja logiczna NIE";
+                        Text[ polish ] = "Operator logiczny NIE";
                         Text[ japanese ] = "Ë´ñÁêÜÂºè(Not)";
                         Text[ chinese_traditional ] = "ÈÇèËºØÁöÑ Not";
                         Text[ arabic ] = "·« „‰ÿﬁÌ…";
@@ -713,9 +767,12 @@ Menu MN_CALC_POPUP
                         Text[ chinese_simplified ] = "ÈÄªËæëÁöÑ Not";
                         Text[ greek ] = "‘ÂÎÂ~ÛÙﬁÚ Not ÙÔı Boole";
                         Text[ korean ] = "Î∂àÎ¶¨Ïñ∏ Not";
-                        Text[ turkish ] = "Mat˝k~al Deil";
+                        Text[ turkish ] = "Mant˝ksal Deil";
                         Text[ catalan ] = "~No lÚgic";
                         Text[ thai ] = "‡∏ö‡∏π‡∏•‡∏µ‡∏ô‡πÑ‡∏°‡πà";
+                        Text[ czech ] = "Booleovsk√© NOT";
+                        Text[ hebrew ] = "Logi~sches Nicht";
+                        Text[ hindi ] = "‡§¨‡•Ç‡§≤‡§ø‡§Ø‡§® ‡§®‡•ã‡§ü‡•ç";
                     };
                 };
             };
@@ -732,6 +789,9 @@ Menu MN_CALC_POPUP
             Text[ turkish ] = "›˛leÁler";
             Text[ catalan ] = "Operadors";
             Text[ thai ] = "‡∏ï‡∏±‡∏ß‡∏õ‡∏è‡∏¥‡∏ö‡∏±‡∏ï‡∏¥‡∏Å‡∏≤‡∏£";
+            Text[ czech ] = "Oper√°tory";
+            Text[ hebrew ] = "~Operatoren";
+            Text[ hindi ] = "‡§™‡•ç‡§∞‡§µ‡§∞‡•ç‡§§‡§ï‡•á‡§Ç";
         };
         MenuItem
         {
@@ -744,7 +804,7 @@ Menu MN_CALC_POPUP
             Text [ english_us ] = "Statistical Functions" ;
             Text [ norwegian ] = "S~tatistiske Funksjoner" ;
             Text [ italian ] = "Funzioni statistiche" ;
-            Text [ portuguese_brazilian ] = "Fun?~oes Estat?sticas" ;
+            Text [ portuguese_brazilian ] = "FunÁıes EstatÌsticas" ;
             Text [ portuguese ] = "FunÁıes e~statÌsticas" ;
             Text [ finnish ] = "Tilastofunktiot" ;
             Text [ danish ] = "Statistiske funktioner" ;
@@ -765,7 +825,7 @@ Menu MN_CALC_POPUP
                         Text [ english_us ] = "Mean" ;
                         Text [ norwegian ] = "Gjennomsnitt" ;
                         Text [ italian ] = "Valore medio" ;
-                        Text [ portuguese_brazilian ] = "M?dia" ;
+                        Text [ portuguese_brazilian ] = "MÈdia" ;
                         Text [ portuguese ] = "~MÈdia" ;
                         Text [ finnish ] = "Keskiarvo" ;
                         Text [ danish ] = "Middel" ;
@@ -773,7 +833,7 @@ Menu MN_CALC_POPUP
                         Text [ swedish ] = "M~edelv‰rde" ;
                         Text[ chinese_simplified ] = "Âπ≥ÂùáÂÄº";
                         Text[ russian ] = "—Â‰ÌÂÂ ÁÌ‡˜ÂÌËÂ";
-                        Text[ polish ] = "årednia wartoúÊ";
+                        Text[ polish ] = "årednia";
                         Text[ japanese ] = "Âπ≥ÂùáÂÄ§";
                         Text[ chinese_traditional ] = "Âπ≥ÂùáÂÄº";
                         Text[ arabic ] = "«·„⁄œ·";
@@ -784,6 +844,9 @@ Menu MN_CALC_POPUP
                         Text[ turkish ] = "Ortalama deer";
                         Text[ catalan ] = "Mitja";
                         Text[ thai ] = "‡∏Ñ‡πà‡∏≤‡πÄ‡∏â‡∏•‡∏µ‡πà‡∏¢";
+                        Text[ czech ] = "St≈ôedn√≠ hodnota";
+                        Text[ hebrew ] = "~Mittelwert";
+                        Text[ hindi ] = "‡§Æ‡§æ‡§ß‡•ç‡§Ø";
                     };
                     MenuItem
                     {
@@ -796,7 +859,7 @@ Menu MN_CALC_POPUP
                         Text [ english_us ] = "Minimum" ;
                         Text [ norwegian ] = "Minimum" ;
                         Text [ italian ] = "Valore minimo" ;
-                        Text [ portuguese_brazilian ] = "M?nimo" ;
+                        Text [ portuguese_brazilian ] = "Valor mÌnimo" ;
                         Text [ portuguese ] = "Valor mÌ~nimo" ;
                         Text [ finnish ] = "Minimi" ;
                         Text [ danish ] = "MinimumvÊrdi" ;
@@ -815,6 +878,9 @@ Menu MN_CALC_POPUP
                         Text[ turkish ] = "Asgari deer";
                         Text[ catalan ] = "Valor mÌ~nim";
                         Text[ thai ] = "‡∏ô‡πâ‡∏≠‡∏¢‡∏ó‡∏µ‡πà‡∏™‡∏∏‡∏î";
+                        Text[ czech ] = "Minimum";
+                        Text[ hebrew ] = "Mi~nimalwert";
+                        Text[ hindi ] = "‡§®‡•ç‡§Ø‡•Ç‡§®‡§§‡§Æ";
                     };
                     MenuItem
                     {
@@ -827,7 +893,7 @@ Menu MN_CALC_POPUP
                         Text [ english_us ] = "Maximum" ;
                         Text [ norwegian ] = "Maksimum" ;
                         Text [ italian ] = "Valore massimo" ;
-                        Text [ portuguese_brazilian ] = "M?ximo" ;
+                        Text [ portuguese_brazilian ] = "Valor m·ximo" ;
                         Text [ portuguese ] = "Valor m·~ximo" ;
                         Text [ finnish ] = "Maksimi" ;
                         Text [ danish ] = "MaksimumvÊrdi" ;
@@ -846,6 +912,9 @@ Menu MN_CALC_POPUP
                         Text[ turkish ] = "Azami deer";
                         Text[ catalan ] = "Valor m‡~xim";
                         Text[ thai ] = "‡∏°‡∏≤‡∏Å‡∏ó‡∏µ‡πà‡∏™‡∏∏‡∏î";
+                        Text[ czech ] = "Maximum";
+                        Text[ hebrew ] = "Ma~ximalwert";
+                        Text[ hindi ] = "‡§Ö‡§ß‡§ø‡§ï‡§§‡§Æ";
                     };
                 };
             };
@@ -862,6 +931,9 @@ Menu MN_CALC_POPUP
             Text[ turkish ] = "›statistik i˛levleri";
             Text[ catalan ] = "F~uncions estadÌstiques";
             Text[ thai ] = "‡∏ü‡∏±‡∏á‡∏Å‡πå‡∏ä‡∏±‡πà‡∏ô‡∏ó‡∏≤‡∏á‡∏™‡∏ñ‡∏¥‡∏ï‡∏¥";
+            Text[ czech ] = "Statistick√© funkce";
+            Text[ hebrew ] = "S~tatistische Funktionen";
+            Text[ hindi ] = "‡§Ö‡§Ç‡§ï‡§∂‡§æ‡§∏‡•ç‡§§‡•ç‡§∞ ‡§´‡§Ç‡§ï‡•ç‡§∂‡§®‡•ç‡§∏";
         };
         MenuItem
         {
@@ -874,7 +946,7 @@ Menu MN_CALC_POPUP
             Text [ english_us ] = "Functions" ;
             Text [ norwegian ] = "~Funksjoner" ;
             Text [ italian ] = "Funzioni" ;
-            Text [ portuguese_brazilian ] = "~Fun??s" ;
+            Text [ portuguese_brazilian ] = "FunÁıes" ;
             Text [ portuguese ] = "~FunÁıes" ;
             Text [ finnish ] = "Funktiot" ;
             Text [ danish ] = "Funktioner" ;
@@ -891,7 +963,7 @@ Menu MN_CALC_POPUP
                         Text = "~Sinus" ;
                         Text [ english ] = "~Sinus" ;
                         Text [ english_us ] = "Sine" ;
-                        Text [ portuguese_brazilian ] = "~Sinus" ;
+                        Text [ portuguese_brazilian ] = "Seno" ;
                         Text [ swedish ] = "~sinus" ;
                         Text [ danish ] = "Sinus" ;
                         Text [ italian ] = "~Seno" ;
@@ -913,6 +985,9 @@ Menu MN_CALC_POPUP
                         Text[ catalan ] = "Sinus";
                         Text[ finnish ] = "Sini";
                         Text[ thai ] = "Sine";
+                        Text[ czech ] = "Sinus";
+                        Text[ hebrew ] = "~Sinus";
+                        Text[ hindi ] = "‡§ú‡•ç‡§Ø‡§æ";
                     };
                     MenuItem
                     {
@@ -921,7 +996,7 @@ Menu MN_CALC_POPUP
                         Text = "~Cosinus" ;
                         Text [ english ] = "~Cosinus" ;
                         Text [ english_us ] = "Cosine" ;
-                        Text [ portuguese_brazilian ] = "~Cosinus" ;
+                        Text [ portuguese_brazilian ] = "Co-seno" ;
                         Text [ swedish ] = "~cosinus" ;
                         Text [ danish ] = "Cosinus" ;
                         Text [ italian ] = "~Coseno" ;
@@ -943,6 +1018,9 @@ Menu MN_CALC_POPUP
                         Text[ catalan ] = "Cosinus";
                         Text[ finnish ] = "Kosini";
                         Text[ thai ] = "Cosine";
+                        Text[ czech ] = "Kosinus";
+                        Text[ hebrew ] = "~Cosinus";
+                        Text[ hindi ] = "‡§ï‡•ã‡§ü‡§ø‡§ú‡•ç‡§Ø‡§æ";
                     };
                     MenuItem
                     {
@@ -951,7 +1029,7 @@ Menu MN_CALC_POPUP
                         Text = "~Tangens" ;
                         Text [ english ] = "~Tangens" ;
                         Text [ english_us ] = "Tangent" ;
-                        Text [ portuguese_brazilian ] = "~Tangens" ;
+                        Text [ portuguese_brazilian ] = "Tangente" ;
                         Text [ swedish ] = "~tangens" ;
                         Text [ danish ] = "Tangens" ;
                         Text [ italian ] = "~Tangente" ;
@@ -973,6 +1051,9 @@ Menu MN_CALC_POPUP
                         Text[ catalan ] = "Tangent";
                         Text[ finnish ] = "Tangentti";
                         Text[ thai ] = "Tangent";
+                        Text[ czech ] = "Tangens";
+                        Text[ hebrew ] = "~Tangens";
+                        Text[ hindi ] = "‡§ü‡§æ‡§®‡•ç‡§ú‡•á‡§®‡•ç‡§ü‡•ç";
                     };
                     MenuItem
                     {
@@ -981,7 +1062,7 @@ Menu MN_CALC_POPUP
                         Text = "~Arcussinus" ;
                         Text [ english ] = "~Arcussinus" ;
                         Text [ english_us ] = "Arcsine" ;
-                        Text [ portuguese_brazilian ] = "~Arcussinus" ;
+                        Text [ portuguese_brazilian ] = "Arco Seno" ;
                         Text [ swedish ] = "~arcussinus" ;
                         Text [ danish ] = "Arcus sinus" ;
                         Text [ italian ] = "~Arcoseno" ;
@@ -1003,6 +1084,9 @@ Menu MN_CALC_POPUP
                         Text[ catalan ] = "Arcsinus";
                         Text[ finnish ] = "Arkussini";
                         Text[ thai ] = "Arcsine";
+                        Text[ czech ] = "Arkussinus";
+                        Text[ hebrew ] = "~Arcussinus";
+                        Text[ hindi ] = "‡§Ü‡§∞‡•ç‡§ï‡§∏‡•à‡§®";
                     };
                     MenuItem
                     {
@@ -1011,7 +1095,7 @@ Menu MN_CALC_POPUP
                         Text = "A~rcuscosinus" ;
                         Text [ english ] = "A~rcuscosinus" ;
                         Text [ english_us ] = "Arccosine" ;
-                        Text [ portuguese_brazilian ] = "A~rcuscosinus" ;
+                        Text [ portuguese_brazilian ] = "Arco Co-seno" ;
                         Text [ swedish ] = "a~rcuscosinus" ;
                         Text [ danish ] = "Arcus cosinus" ;
                         Text [ italian ] = "A~rcocoseno" ;
@@ -1033,6 +1117,9 @@ Menu MN_CALC_POPUP
                         Text[ catalan ] = "Arccosinus";
                         Text[ finnish ] = "Arkuskosini";
                         Text[ thai ] = "Arccosine";
+                        Text[ czech ] = "Arkuskosinus";
+                        Text[ hebrew ] = "A~rcuscosinus";
+                        Text[ hindi ] = "‡§Ü‡§∞‡•ç‡§ï‡§ï‡•ã‡§∏‡•à‡§®‡•ç";
                     };
                     MenuItem
                     {
@@ -1041,7 +1128,7 @@ Menu MN_CALC_POPUP
                         Text = "Arcustan~gens" ;
                         Text [ english ] = "Arcustan~gens" ;
                         Text [ english_us ] = "Arctangent" ;
-                        Text [ portuguese_brazilian ] = "Arcustan~gens" ;
+                        Text [ portuguese_brazilian ] = "Arco Tangente" ;
                         Text [ swedish ] = "arcustan~gens" ;
                         Text [ danish ] = "Arcus tangens" ;
                         Text [ italian ] = "Arcotan~gente" ;
@@ -1063,6 +1150,9 @@ Menu MN_CALC_POPUP
                         Text[ catalan ] = "Arctangent";
                         Text[ finnish ] = "Arkustangentti";
                         Text[ thai ] = "Arctangent";
+                        Text[ czech ] = "Arkustangens";
+                        Text[ hebrew ] = "Arcustan~gens";
+                        Text[ hindi ] = "‡§Ü‡§∞‡•ç‡§ï‡§ü‡§æ‡§®‡•ç‡§ú‡•á‡§®‡•ç‡§ü‡•ç";
                     };
                 };
             };
@@ -1080,6 +1170,9 @@ Menu MN_CALC_POPUP
             Text[ turkish ] = "›˛levler";
             Text[ catalan ] = "Funcions";
             Text[ thai ] = "‡∏ü‡∏±‡∏á‡∏Å‡πå‡∏ä‡∏±‡πà‡∏ô";
+            Text[ czech ] = "Funkce";
+            Text[ hebrew ] = "~Funktionen";
+            Text[ hindi ] = "‡§´‡§Ç‡§ï‡•ç‡§∂‡§®‡•ç‡§∏";
         };
     };
 };
@@ -1092,7 +1185,7 @@ String STR_FORMULA
     Text [ english_us ] = "Text formula" ;
     Text [ norwegian ] = "Tekstformel" ;
     Text [ italian ] = "Formula testo" ;
-    Text [ portuguese_brazilian ] = "F?mula do Texto" ;
+    Text [ portuguese_brazilian ] = "FÛrmula do texto" ;
     Text [ portuguese ] = "FÛrmula do texto" ;
     Text [ finnish ] = "Tekstikaava" ;
     Text [ danish ] = "Tekstformel" ;
@@ -1112,6 +1205,9 @@ String STR_FORMULA
     Text[ turkish ] = "Metin formul¸";
     Text[ catalan ] = "FÛrmula de text";
     Text[ thai ] = "‡∏Ç‡πâ‡∏≠‡∏Ñ‡∏ß‡∏≤‡∏°‡∏™‡∏π‡∏ï‡∏£‡∏Ñ‡∏≥‡∏ô‡∏ß‡∏ì";
+    Text[ czech ] = "Textov√Ω vzorec";
+    Text[ hebrew ] = "Textformel";
+    Text[ hindi ] = "‡§ü‡•á‡§ï‡•ç‡§∏‡•ç‡§ü‡•ç ‡§∏‡•Ç‡§§‡•ç‡§∞";
 };
 #define TB_INPUT  \
     ToolBoxItem\
@@ -1122,7 +1218,7 @@ String STR_FORMULA
         Text [ English ] = "Formula" ; \
         Text [ norwegian ] = "Formel" ; \
         Text [ italian ] = "Formula" ; \
-        Text [ portuguese_brazilian ] = "F?mula" ; \
+        Text [ portuguese_brazilian ] = "FÛrmula" ; \
         Text [ portuguese ] = "FÛrmula" ; \
         Text [ finnish ] = "Kaava" ; \
         Text [ danish ] = "Formel" ; \
@@ -1145,6 +1241,9 @@ String STR_FORMULA
         Text[ turkish ] = "Form¸l";\
         Text[ catalan ] = "FÛrmula";\
         Text[ thai ] = "‡∏™‡∏π‡∏ï‡∏£‡∏Ñ‡∏≥‡∏ô‡∏ß‡∏ì";\
+        Text[ czech ] = "Vzorec";\
+        Text[ hebrew ] = "‚ÄÆ◊†◊ï◊°◊ó◊î‚Ä¨";\
+        Text[ hindi ] = "‡§∏‡•Ç‡§§‡•ç‡§∞";\
     };\
     ToolBoxItem\
     {\
@@ -1177,6 +1276,9 @@ String STR_FORMULA
         Text[ turkish ] = "›ptal";\
         Text[ catalan ] = "Cancel.la";\
         Text[ thai ] = "‡∏¢‡∏Å‡πÄ‡∏•‡∏¥‡∏Å";\
+        Text[ czech ] = "Zru≈°it";\
+        Text[ hebrew ] = "‚ÄÆ◊ë◊ô◊ò◊ï◊ú‚Ä¨";\
+        Text[ hindi ] = "‡§∞‡§¶‡•ç‡§¶ ‡§ï‡§∞‡•ã";\
     };\
     ToolBoxItem\
     {\
@@ -1210,7 +1312,23 @@ String STR_FORMULA
         Text[ turkish ] = "Uygula";\
         Text[ catalan ] = "Aplica";\
         Text[ thai ] = "‡πÉ‡∏ä‡πâ";\
+        Text[ czech ] = "Pou≈æ√≠t";\
+        Text[ hebrew ] = "‚ÄÆ◊ô◊ô◊©◊ï◊ù‚Ä¨";\
+        Text[ hindi ] = "‡§≤‡§æ‡§ó‡•Ç ‡§ï‡§∞‡•ã";\
     };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
