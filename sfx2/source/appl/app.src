@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-10 20:19:57 $
+ *  last change: $Author: kz $ $Date: 2001-08-13 20:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ ErrorBox MSG_ERR_WRITE_CFG
     Message[ chinese_simplified ] = "åœ¨å†™å…¥é…ç½®æ–‡ä»¶æ—¶å‘å‡ºé”™è¯¯ã€‚";
     Message[ russian ] = "Îøèáêà ïğè çàïèñè êîíôèãóğàöèè.";
     Message[ polish ] = "B³¹d przy zapisie konfiguracji.";
-    Message[ japanese ] = "è¨­å®šã®èª­ã¿è¾¼ã¿ã®éš›ã®ï½´ï¾—ï½°ï½¡";
+    Message[ japanese ] = "è¨­å®šã‚’èª­ã¿è¾¼ã‚€éš›ã®ï½´ï¾—ï½°ã€‚";
     Message[ chinese_traditional ] = "åœ¨å¯«å…¥é…ç½®æª”æ¡ˆæ™‚ç™¼å‡ºéŒ¯èª¤ã€‚";
     Message[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ßÊÇÈÉ ãáİ ÇáÊßæíä.";
     Message[ dutch ] = "Fout bij het schrijven van het configuratiebestand.";
@@ -705,7 +705,7 @@ String GID_OPTIONS
     Text[ chinese_simplified ] = "å…¶å®ƒ";
     Text[ russian ] = "Ñåğâèñ";
     Text[ polish ] = "Narzêdzia";
-    Text[ japanese ] = "è©³ç´°è¨­å®š";
+    Text[ japanese ] = "ï¾‚ï½°ï¾™";
     Text[ chinese_traditional ] = "å…¶å®ƒ";
     Text[ arabic ] = "ÎíÇÑÇÊ";
     Text[ dutch ] = "Extra";
@@ -850,7 +850,7 @@ String GID_TEMPLATE
     Text[ chinese_simplified ] = "æ ·å¼";
     Text[ russian ] = "Øàáëîíû";
     Text[ polish ] = "Szablony";
-    Text[ japanese ] = "ï¾ƒï¾ï¾Œï¾Ÿï¾šï½°ï¾„";
+    Text[ japanese ] = "ï¾ƒï¾ï¾Œï¾Ÿï¾šï½°ï¾„ã¨ï½½ï¾€ï½²ï¾™";
     Text[ chinese_traditional ] = "æ¨£å¼";
     Text[ arabic ] = "ŞæÇáÈ";
     Text[ dutch ] = "Sjablonen";
@@ -4159,6 +4159,7 @@ String STR_QUICKSTART_LNKNAME
 
 
  // ********************************************************************** EOF
+
 
 
 
