@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:20:13 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ norwegian ] = "Sortere etter" ;
         Text [ italian ] = "Ordina per" ;
         Text [ portuguese_brazilian ] = "Ordenar por" ;
-        Text [ portuguese ] = "Ordenar por" ;
+        Text [ portuguese ] = "~Ordenar por" ;
         Text [ finnish ] = "Lajitteluperuste" ;
         Text [ danish ] = "Sorter efter" ;
         Text [ french ] = "~Trier selon" ;
@@ -157,7 +157,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ japanese ] = "Ε—Dζ·°";
         Text[ chinese_traditional ] = "±Ζ§Η«φ·Σ";
         Text[ arabic ] = "έΡÒ ΝΣΘ";
-        Text[ greek ] = "Ταξινόμηση κατά";
+        Text[ greek ] = "Ταξινόμη~ση κατά";
         Text[ korean ] = "·Ξ Α¤·Δ";
         Text[ turkish ] = "Sύralama esasύ";
         Text[ language_user1 ] = " ";
@@ -241,7 +241,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ norwegian ] = "Og sε etter" ;
         Text [ italian ] = "poi per" ;
         Text [ portuguese_brazilian ] = "Em seguida por" ;
-        Text [ portuguese ] = "Concluindo por" ;
+        Text [ portuguese ] = "~Depois por" ;
         Text [ finnish ] = "Toinen lajitteluehto" ;
         Text [ danish ] = "Og derefter" ;
         Text [ french ] = "~Puis selon" ;
@@ -255,7 +255,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ japanese ] = "‚Q”Τ–Ϊ‚Ι—Dζ‚³‚κ‚ι·°";
         Text[ chinese_traditional ] = "µM«α«φ·Σ";
         Text[ arabic ] = "Λγ ΝΣΘ";
-        Text[ greek ] = "Κατόπιν κατά";
+        Text[ greek ] = "Κ~ατόπιν κατά";
         Text[ korean ] = "ΐΜΎξΌ­";
         Text[ turkish ] = "Sonraki sύralama esasύ";
         Text[ language_user1 ] = " ";
@@ -339,7 +339,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ norwegian ] = "Og sε etter" ;
         Text [ italian ] = "poi per" ;
         Text [ portuguese_brazilian ] = "Em seguida por" ;
-        Text [ portuguese ] = "Concluindo por" ;
+        Text [ portuguese ] = "~Depois por" ;
         Text [ finnish ] = "Toinen lajitteluehto" ;
         Text [ danish ] = "Og derefter" ;
         Text [ french ] = "P~uis selon" ;
@@ -353,7 +353,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text[ japanese ] = "‚R”Τ–Ϊ‚Ι—Dζ‚³‚κ‚ι·°";
         Text[ chinese_traditional ] = "µM«α«φ·Σ";
         Text[ arabic ] = "Λγ ΝΣΘ";
-        Text[ greek ] = "Κατόπιν κατά";
+        Text[ greek ] = "Κατόπι~ν κατά";
         Text[ korean ] = "ΐΜΎξΌ­";
         Text[ turkish ] = "Sonraki sύralama esasύ";
         Text[ language_user1 ] = " ";
@@ -644,9 +644,9 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text = "Op~tionen" ;
         Text [ ENGLISH ] = "O~ptions" ;
         Text[ english_us ] = "O~ptions";
-        Text[ portuguese ] = "O~ptions";
+        Text[ portuguese ] = "O~pηυes";
         Text[ russian ] = "Οΰπΰμεςπϋ";
-        Text[ greek ] = "O~ptions";
+        Text[ greek ] = "Επιλογές";
         Text[ dutch ] = "O~ptions";
         Text[ french ] = "Op~tions";
         Text[ spanish ] = "Opciones";
@@ -915,4 +915,5 @@ TabDialog RID_SCDLG_SORT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ordenar";
 };
+
 
