@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 19:13:07 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 15:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3565,9 +3565,8 @@ FloatingWindow RID_TOOLBOXWINDOW
     };
     FixedLine FL_TOOLBOX_CAT_DELIM
     {
-        Pos = MAP_APPFONT ( 0 , 38 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
-
+        Pos = MAP_APPFONT ( 0 , 44 ) ;
+        Size = MAP_APPFONT ( 65 , 4 ) ;
     };
 };
 
