@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 09:10:58 $
+ *  last change: $Author: cd $ $Date: 2002-07-12 07:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@
         <!-- Responsible: CD -->
         <!-- UIHints: Tools - Options - General - View -->
         <info>
-          <desc xml:lang="en-US">Setting for displaying the product Logo when starting the program.</desc>
+          <desc xml:lang="en-US">Deprecated. This feature is controlled by an entry in the soffice.ini or the -nologo command line parameter.</desc>
         </info>
       </prop>
       <prop oor:name="ooSetupConnectionURL" oor:type="xs:string">
@@ -179,7 +179,7 @@
         <!-- OldLocation: soffice.ini -->
         <!-- Responsible: CD-->
         <info>
-          <desc xml:lang="en-US">Specifies the URL for an UNO connection. No default is given, the URL has to be entered manually by the user.</desc>
+          <desc xml:lang="en-US">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
         </info>
       </prop>
       <set oor:name="Factories" oor:node-type="Factory"/>
