@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:43:35 $
+#   last change: $Author: oj $ $Date: 2001-04-26 10:40:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ IDLFILES=\
     ColumnType.idl \
     ColumnValue.idl \
     Connection.idl \
+    ConnectionPool.idl \
     DataTruncation.idl \
     DataType.idl \
     Deferrability.idl \
@@ -107,6 +108,7 @@ IDLFILES=\
     XClob.idl \
     XCloseable.idl \
     XConnection.idl \
+    XPooledConnection.idl \
     XDatabaseMetaData.idl \
     XDataSource.idl \
     XDriver.idl \
