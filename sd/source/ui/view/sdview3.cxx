@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 00:46:12 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,11 +388,11 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                     if( !pPV->IsLayerLocked( aLayer ) )
                     {
                         pOwnData->SetInternalMove( TRUE );
-                        aMark.ForceSort();
+                        SortMarkedObjects();
 
-                        for( ULONG nM = 0; nM < aMark.GetMarkCount(); nM++ )
+                        for( ULONG nM = 0; nM < GetMarkedObjectCount(); nM++ )
                         {
-                            SdrMark*    pM = aMark.GetMark( nM );
+                            SdrMark*    pM = GetSdrMarkByIndex( nM );
                             SdrObject*  pO = pM->GetObj();
 
                             if( pO )
@@ -438,7 +438,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                                 }
                                 else
                                     // actual mark list is used
-                                    pMarkList = new SdrMarkList( aMark );
+                                    pMarkList = new SdrMarkList( GetMarkedObjectList());
 
                                 pMarkList->ForceSort();
 
