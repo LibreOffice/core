@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:17:27 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ french ] = "Param�tres";
         Text[ spanish ] = "Par�metros";
         Text[ italian ] = "Parametri";
-        Text[ danish ] = "Parameter";
+        Text[ danish ] = "Parametre";
         Text[ swedish ] = "Parametrar";
         Text[ polish ] = "Parametry";
         Text[ portuguese_brazilian ] = "Par�metros";
@@ -135,6 +135,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ hebrew ] = "‮פרמטרים‬";
         Text[ hindi ] = "पैरामीटरें";
         Text[ slovak ] = "Parametre";
+        Text[ hungarian ] = "Paraméterek";
+        Text[ slovenian ] = "Parametri";
     };
     Control CTL_PREVIEW
     {
@@ -175,6 +177,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "चौ~ड़ाई";
         Text[ slovak ] = "Ší~rka";
+        Text[ hungarian ] = "S~zélesség";
+        Text[ slovenian ] = "~Širina";
     };
 #define MA_Y1   MA_Y0 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERMOSAIC_MTR_WIDTH
@@ -228,6 +232,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "ऊँ~चाई";
         Text[ slovak ] = "~Výška";
+        Text[ hungarian ] = "~Magasság";
+        Text[ slovenian ] = "Vi~šina";
     };
 #define MA_Y3   MA_Y2 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERMOSAIC_MTR_HEIGHT
@@ -280,6 +286,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ hebrew ] = "‮הדגשת קצוות‬";
         Text[ hindi ] = "कि~नारों को बढ़ाओ";
         Text[ slovak ] = "Vylepšiť hra~ny";
+        Text[ hungarian ] = "É~lek kiemelése";
+        Text[ slovenian ] = "Po~udari robove";
     };
     OKButton BTN_OK
     {
@@ -306,6 +314,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
     Text[ hebrew ] = "‮פסיפס‬";
     Text[ hindi ] = "मोसाइक";
     Text[ slovak ] = "Mozaika";
+    Text[ hungarian ] = "Mozaik";
+    Text[ slovenian ] = "Mozaik";
 };
 
 // ----------------------
@@ -358,7 +368,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ french ] = "Param�tres";
         Text[ spanish ] = "Par�metros";
         Text[ italian ] = "Parametri";
-        Text[ danish ] = "Parameter";
+        Text[ danish ] = "Parametre";
         Text[ swedish ] = "Parametrar";
         Text[ polish ] = "Parametry";
         Text[ portuguese_brazilian ] = "Par�metros";
@@ -375,6 +385,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ hebrew ] = "‮פרמטרים‬";
         Text[ hindi ] = "पैरामीटरें";
         Text[ slovak ] = "Parametre";
+        Text[ hungarian ] = "Paraméterek";
+        Text[ slovenian ] = "Parametri";
     };
     Control CTL_PREVIEW
     {
@@ -415,6 +427,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ hebrew ] = "‮ערך סף‬";
         Text[ hindi ] = "थ्रेशोल्ड ~मूल्य";
         Text[ slovak ] = "~Hodnota prahu";
+        Text[ hungarian ] = "~Küszöbérték";
+        Text[ slovenian ] = "~Vrednost praga";
     };
 #define MA_Y6   MA_Y5 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERSOLARIZE_MTR_THRESHOLD
@@ -467,6 +481,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ hebrew ] = "‮היפוך‬";
         Text[ hindi ] = "~उलटा करो";
         Text[ slovak ] = "~Invertovať";
+        Text[ hungarian ] = "~Invertálás";
+        Text[ slovenian ] = "~Obrni";
     };
     OKButton BTN_OK
     {
@@ -493,6 +509,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
     Text[ hebrew ] = "‮תאורה‬";
     Text[ hindi ] = "सोलरैसेशन";
     Text[ slovak ] = "Solarizácia";
+    Text[ hungarian ] = "Fakítás";
+    Text[ slovenian ] = "Sončenje";
 };
 
 // ----------------------
@@ -546,7 +564,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
         Text[ french ] = "Param�tre";
         Text[ spanish ] = "Par�metros";
         Text[ italian ] = "Parametri";
-        Text[ danish ] = "Parameter";
+        Text[ danish ] = "Parametre";
         Text[ swedish ] = "Parametrar";
         Text[ polish ] = "Parametry";
         Text[ portuguese_brazilian ] = "Par�metros";
@@ -563,6 +581,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
         Text[ hebrew ] = "‮פרמטרים‬";
         Text[ hindi ] = "पैरामीटरें";
         Text[ slovak ] = "Parametre";
+        Text[ hungarian ] = "Paraméterek";
+        Text[ slovenian ] = "Parametri";
     };
     Control CTL_PREVIEW
     {
@@ -604,6 +624,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
         Text[ hebrew ] = "‮דרגת עתיקות‬";
         Text[ hindi ] = "ऐजिंग डिग्री";
         Text[ slovak ] = "Stupeň tmavnutia";
+        Text[ hungarian ] = "Elévülés mértéke";
+        Text[ slovenian ] = "Stopnja staranja";
     };
 #define MA_Y9   MA_Y8 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERSEPIA_MTR_SEPIA
@@ -649,6 +671,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
     Text[ hebrew ] = "‮עיתוק‬";
     Text[ hindi ] = "ऐजिंग";
     Text[ slovak ] = "Stmavnutie";
+    Text[ hungarian ] = "Elévülés";
+    Text[ slovenian ] = "Staranje";
 };
 
 // --------------------
@@ -700,7 +724,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
         Text[ french ] = "Param�tre";
         Text[ spanish ] = "Par�metros";
         Text[ italian ] = "Parametri";
-        Text[ danish ] = "Parameter";
+        Text[ danish ] = "Parametre";
         Text[ swedish ] = "Parametrar";
         Text[ polish ] = "Parametry";
         Text[ portuguese_brazilian ] = "Par�metros";
@@ -717,6 +741,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
         Text[ hebrew ] = "‮פרמטרים‬";
         Text[ hindi ] = "पैरामीटरें";
         Text[ slovak ] = "Parametre";
+        Text[ hungarian ] = "Paraméterek";
+        Text[ slovenian ] = "Parametri";
     };
     Control CTL_PREVIEW
     {
@@ -756,6 +782,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
         Text[ hebrew ] = "‮צבעי שלט‬";
         Text[ hindi ] = "पोस्टर रंग";
         Text[ slovak ] = "Farby plagátu";
+        Text[ hungarian ] = "Poszterszínek";
+        Text[ slovenian ] = "Barve za posterizacijo";
     };
 #define MA_Y11  MA_Y10 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     NumericField DLG_FILTERPOSTER_NUM_POSTER
@@ -798,6 +826,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
     Text[ hebrew ] = "‮שילוט חוצות‬";
     Text[ hindi ] = "पोस्टरैज";
     Text[ slovak ] = "Posterizovať";
+    Text[ hungarian ] = "Poszterizálás";
+    Text[ slovenian ] = "Zmanjšaj št. barv";
 };
 
 // --------------------
@@ -856,7 +886,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         Text[ french ] = "Param�tre";
         Text[ spanish ] = "Par�metros";
         Text[ italian ] = "Parametri";
-        Text[ danish ] = "Parameter";
+        Text[ danish ] = "Parametre";
         Text[ swedish ] = "Parametrar";
         Text[ polish ] = "Parametry";
         Text[ portuguese_brazilian ] = "Par�metros";
@@ -873,6 +903,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         Text[ hebrew ] = "‮פרמטרים‬";
         Text[ hindi ] = "पैरामीटरें";
         Text[ slovak ] = "Parametre";
+        Text[ hungarian ] = "Paraméterek";
+        Text[ slovenian ] = "Parametri";
     };
     Control CTL_PREVIEW
     {
@@ -912,6 +944,8 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         Text[ hebrew ] = "‮מקור אור‬";
         Text[ hindi ] = "हल्का मूल";
         Text[ slovak ] = "Svetelný zdroj";
+        Text[ hungarian ] = "Fényforrás";
+        Text[ slovenian ] = "Vir svetlobe";
     };
 #define MA_Y13  MA_Y12 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     Control DLG_FILTEREMBOSS_CTL_LIGHT
@@ -947,7 +981,10 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
     Text[ hebrew ] = "‮תבליט‬";
     Text[ hindi ] = "सहायता";
     Text[ slovak ] = "Reliéf";
+    Text[ hungarian ] = "Kiemelés";
+    Text[ slovenian ] = "Relief";
 };
+
 
 
 
