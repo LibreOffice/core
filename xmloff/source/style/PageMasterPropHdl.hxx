@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropHdl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-20 06:14:52 $
+ *  last change: $Author: sab $ $Date: 2000-10-20 12:31:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 
 class XMLPMPropHdl_PageStyleLayout : public XMLPropertyHandler
 {
+public:
     virtual             ~XMLPMPropHdl_PageStyleLayout();
     virtual sal_Bool    equals(
                             const ::com::sun::star::uno::Any& rAny1,
@@ -95,6 +96,7 @@ class XMLPMPropHdl_PageStyleLayout : public XMLPropertyHandler
 
 class XMLPMPropHdl_NumFormat : public XMLPropertyHandler
 {
+public:
     virtual                 ~XMLPMPropHdl_NumFormat();
     virtual sal_Bool        importXML(
                                 const ::rtl::OUString& rStrImpValue,
@@ -114,6 +116,7 @@ class XMLPMPropHdl_NumFormat : public XMLPropertyHandler
 
 class XMLPMPropHdl_NumLetterSync : public XMLPropertyHandler
 {
+public:
     virtual                 ~XMLPMPropHdl_NumLetterSync();
     virtual sal_Bool        importXML(
                                 const ::rtl::OUString& rStrImpValue,
@@ -133,6 +136,7 @@ class XMLPMPropHdl_NumLetterSync : public XMLPropertyHandler
 
 class XMLPMPropHdl_PaperTrayNumber : public XMLPropertyHandler
 {
+public:
     virtual                 ~XMLPMPropHdl_PaperTrayNumber();
     virtual sal_Bool        importXML(
                                 const ::rtl::OUString& rStrImpValue,
@@ -152,6 +156,7 @@ class XMLPMPropHdl_PaperTrayNumber : public XMLPropertyHandler
 
 class XMLPMPropHdl_PrintOrientation : public XMLPropertyHandler
 {
+public:
     virtual                 ~XMLPMPropHdl_PrintOrientation();
     virtual sal_Bool        importXML(
                                 const ::rtl::OUString& rStrImpValue,
