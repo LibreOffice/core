@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-01 12:12:16 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 09:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #endif
 
 
-#ifndef _TOOLS_TEMPFILE_HXX
-#include <tools/tempfile.hxx>
+#ifndef _UNOTOOLS_TEMPFILE_HXX
+#include <unotools/tempfile.hxx>
 #endif
 #ifndef _SVX_IMPGRF_HXX //autogen
 #include <svx/impgrf.hxx>
@@ -231,10 +231,10 @@ BOOL SwWW8ImplReader::GetPictGrafFromStream( Graphic& rGraphic,
                                          SvStream& rSrc, ULONG nLen )
 {
     String sExt(WW8_ASCII2STR(".pct"));
-    TempFile aTempFile( aEmptyStr, &sExt );
+    utl::TempFile aTempFile( aEmptyStr, &sExt );
     aTempFile.EnableKillingFile();
     {
-        SvFileStream aOut( aTempFile.GetName(),
+        SvFileStream aOut( aTempFile.GetFileName(),
                             STREAM_READ | STREAM_WRITE | STREAM_TRUNC );
         BYTE* pBuf = new BYTE[ ULONG_MAX != nLen ? 4096 : 512 ];
         memset( pBuf, 0, 512 );
@@ -257,7 +257,7 @@ BOOL SwWW8ImplReader::GetPictGrafFromStream( Graphic& rGraphic,
     }
 
     return 0 == ::GetGrfFilter()->ImportGraphic( rGraphic,
-                            INetURLObject( aTempFile.GetName() ),
+                            INetURLObject( aTempFile.GetFileName() ),
                             GRFILTER_FORMAT_DONTKNOW );
 }
 
@@ -1169,11 +1169,14 @@ void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.2 2000-11-01 12:12:16 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.3 2000-11-06 09:42:28 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/11/01 12:12:16  jp
+      optimize: use the same code to read MAC-Pict
+
       Revision 1.1.1.1  2000/09/18 17:14:58  hr
       initial import
 

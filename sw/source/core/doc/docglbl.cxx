@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docglbl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-19 09:44:23 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 09:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _TOOLS_TEMPFILE_HXX
-#include <tools/tempfile.hxx>
+#ifndef _UNOTOOLS_TEMPFILE_HXX
+#include <unotools/tempfile.hxx>
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
@@ -251,7 +251,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
     String sLeading(aEntry.GetBase());
     aEntry.removeSegment();
     String sPath = aEntry.GetMainURL();
-    TempFile aTemp(sLeading,&sExt,&sPath );
+    utl::TempFile aTemp(sLeading,&sExt,&sPath );
     aTemp.EnableKillingFile();
 
     DateTime aTmplDate;
@@ -367,8 +367,8 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                     INetURLObject aEntry2(rPath);
                     aEntry2.removeSegment();
                     String sPath = aEntry2.GetMainURL();
-                    TempFile aTempFile2(sLeading,&sExt,&sPath );
-                    sFileName = aTempFile2.GetName();
+                    utl::TempFile aTempFile2(sLeading,&sExt,&sPath );
+                    sFileName = aTempFile2.GetFileName();
                     SfxMedium* pTmpMed = new SfxMedium( sFileName,
                                                 STREAM_STD_READWRITE, TRUE );
                     pTmpMed->SetFilter( pFilter );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-01 12:12:16 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 09:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _TOOLS_TEMPFILE_HXX
-#include <tools/tempfile.hxx>
-#endif
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
@@ -648,11 +645,14 @@ void SwWW8ImplReader::Read_CPropRMark( USHORT nId, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.3 2000-11-01 12:12:16 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.4 2000-11-06 09:42:28 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/11/01 12:12:16  jp
+      optimize: use the same code to read MAC-Pict
+
       Revision 1.2  2000/10/10 16:54:06  cmc
       MSOffice 97/2000 Controls {Im|Ex}port
 
