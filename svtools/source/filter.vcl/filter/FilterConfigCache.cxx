@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-27 13:01:59 $
+ *  last change: $Author: sj $ $Date: 2001-08-03 14:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,6 +594,15 @@ String FilterConfigCache::GetExportFormatExtension( sal_uInt16 nFormat, sal_Int3
             aExtension = aIter->lExtensionList[ nEntry ];
     }
     return aExtension;
+}
+
+String FilterConfigCache::GetExportFilterTypeName( sal_uInt16 nFormat )
+{
+    CacheVector::iterator aIter( aExport.begin() + nFormat );
+    String aFilterType;
+    if ( aIter < aImport.end() )
+        aFilterType = aIter->sFilterType;
+    return aFilterType;
 }
 
 String FilterConfigCache::GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry )
