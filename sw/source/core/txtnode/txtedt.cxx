@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:27:19 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@
 #endif
 #ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #include <unotools/transliterationwrapper.hxx>
+#endif
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
 #endif
 
 #ifndef _DLELSTNR_HXX_
@@ -567,42 +570,48 @@ SwScanner::SwScanner( const SwTxtNode& rNd,
 BOOL SwScanner::NextWord()
 {
     nBegin += nLen;
-
-    // first we have to skip some whitespace characters
     const XubString& rText = rNode.GetTxt();
     Boundary aBound;
 
+    CharClass& rCC = GetAppCharClass();
+    ::com::sun::star::lang::Locale aOldLocale = rCC.getLocale();
+
     while ( true )
     {
-
-    while ( nBegin < rText.Len() &&
-            lcl_IsSkippableWhiteSpace( rText.GetChar( nBegin ) ) )
-        ++nBegin;
+        // skip non-letter characters:
+        while ( nBegin < rText.Len() )
+        {
+            if ( !lcl_IsSkippableWhiteSpace( rText.GetChar( nBegin ) ) )
+            {
+                const USHORT nNextScript =
+                        pBreakIt->xBreak->getScriptType( rText, nBegin );
+                aCurrLang = rNode.GetLang( nBegin, nNextScript );
+                rCC.setLocale( pBreakIt->GetLocale( aCurrLang ) );
+                if ( rCC.isLetterNumeric( rText.GetChar( nBegin ) ) )
+                    break;
+            }
+            ++nBegin;
+        }
 
         if ( nBegin >= rText.Len() || nBegin >= nEndPos )
             return FALSE;
 
-        // get next language in order to find next or previous word
-        const USHORT nNextScript =
-                pBreakIt->xBreak->getScriptType( rText, nBegin );
-        aCurrLang = rNode.GetLang( nBegin, nNextScript );
-
         // get the word boundaries
         aBound = pBreakIt->xBreak->getWordBoundary( rText, nBegin,
                 pBreakIt->GetLocale( aCurrLang ), nWordType, sal_True );
+
         //no word boundaries could be found
         if(aBound.endPos == aBound.startPos)
             return FALSE;
+
         //if a word before is found it has to be searched for the next
         if(aBound.endPos == nBegin)
-        {
             ++nBegin;
-        }
         else
             break;
-
     } // end while( true )
 
+    rCC.setLocale( aOldLocale );
 
     // we have to differenciate between these cases:
     if ( aBound.startPos <= nBegin )
@@ -766,24 +775,6 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
                     }
                 }
             }
-
-            // get next language in order to find next or previous word
-            xub_StrLen nNextBegin;
-            short nInc = 1;
-
-            nNextBegin = aScanner.GetBegin() + rWord.Len();
-
-            // first we have to skip some whitespace characters
-            while ( ( nNextBegin < aText.Len() ) &&
-                    lcl_IsSkippableWhiteSpace( aText.GetChar( nNextBegin ) ) )
-            {
-                nNextBegin += nInc;
-            }
-
-            if ( nNextBegin < aText.Len() )
-                eActLang = GetLang( nNextBegin );
-            else
-                break;
         }
     }
 
@@ -1006,18 +997,6 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
                         rACW.InsertWord( rWord, *pDoc );
                 }
             }
-
-            // get next language in order to find next word
-            xub_StrLen nNextBegin = aScanner.GetBegin() + rWord.Len();
-            // first we have to skip some whitespace characters
-            while ( nNextBegin < pNode->aText.Len() &&
-                    lcl_IsSkippableWhiteSpace( pNode->aText.GetChar( nNextBegin ) ) )
-                nNextBegin++;
-
-            if ( nNextBegin < pNode->aText.Len() )
-                eActLang = pNode->GetLang( nNextBegin );
-            else
-                break;
         }
     }
     if( pNode->GetWrong() )
