@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appluno.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-11 11:02:07 $
+ *  last change: $Author: sab $ $Date: 2002-09-11 09:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -956,7 +956,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScFunctionListObj::createEnumer
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScIndexEnumeration(this);
+    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.FunctionDescriptionEnumeration")));
 }
 
 // XElementAccess

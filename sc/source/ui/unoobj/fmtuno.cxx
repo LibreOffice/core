@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtuno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-16 17:59:22 $
+ *  last change: $Author: sab $ $Date: 2002-09-11 09:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScTableConditionalFormat::creat
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScIndexEnumeration(this);
+    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.TableConditionalEntryEnumeration")));
 }
 
 // XIndexAccess

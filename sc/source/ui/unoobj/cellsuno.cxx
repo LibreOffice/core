@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-09 13:59:30 $
+ *  last change: $Author: sab $ $Date: 2002-09-11 09:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4204,7 +4204,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScCellRangesObj::createEnumerat
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScIndexEnumeration(this);
+    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SheetCellRangesEnumeration")));
 }
 
 // XIndexAccess

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-06 09:00:05 $
+ *  last change: $Author: sab $ $Date: 2002-09-11 09:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -674,7 +674,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScSubTotalDescriptorBase::creat
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScIndexEnumeration(this);
+    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SubTotalFieldsEnumeration")));
 }
 
 // XIndexAccess
@@ -1960,7 +1960,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScDatabaseRangesObj::createEnum
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScIndexEnumeration(this);
+    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.DatabaseRangesEnumeration")));
 }
 
 // XIndexAccess

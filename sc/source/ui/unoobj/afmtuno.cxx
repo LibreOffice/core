@@ -2,9 +2,9 @@
  *
  *  $RCSfile: afmtuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-14 15:10:01 $
+ *  last change: $Author: sab $ $Date: 2002-09-11 09:52:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScAutoFormatsObj::createEnumera
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScIndexEnumeration(this);
+    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.TableAutoFormatEnumeration")));
 }
 
 // container::XIndexAccess
@@ -606,7 +606,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScAutoFormatObj::createEnumerat
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScIndexEnumeration(this);
+    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.TableAutoFormatEnumeration")));
 }
 
 // container::XIndexAccess

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-28 17:57:47 $
+ *  last change: $Author: sab $ $Date: 2002-09-11 09:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1749,7 +1749,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScTableSheetsObj::createEnumera
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScIndexEnumeration(this);
+    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetsEnumeration")));
 }
 
 // XIndexAccess
@@ -1933,7 +1933,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScTableColumnsObj::createEnumer
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScIndexEnumeration(this);
+    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.table.TableColumnsEnumeration")));
 }
 
 // XIndexAccess
@@ -2201,7 +2201,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScTableRowsObj::createEnumerati
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScIndexEnumeration(this);
+    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.table.TableRowsEnumeration")));
 }
 
 // XIndexAccess
@@ -2527,7 +2527,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScAnnotationsObj::createEnumera
     //! iterate directly (more efficiently)?
 
     ScUnoGuard aGuard;
-    return new ScIndexEnumeration(this);
+    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.CellAnnotationsEnumeration")));
 }
 
 // XIndexAccess
@@ -2703,7 +2703,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScScenariosObj::createEnumerati
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScIndexEnumeration(this);
+    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.ScenariosEnumeration")));
 }
 
 // XIndexAccess

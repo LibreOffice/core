@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapiuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-04 08:29:32 $
+ *  last change: $Author: sab $ $Date: 2002-09-11 09:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,7 +518,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScDataPilotTablesObj::createEnu
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScIndexEnumeration(this);
+    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.DataPilotTablesEnumeration")));
 }
 
 // XIndexAccess
@@ -1420,7 +1420,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScDataPilotFieldsObj::createEnu
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScIndexEnumeration(this);
+    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.DataPilotFieldsEnumeration")));
 }
 
 // XIndexAccess

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-26 18:14:36 $
+ *  last change: $Author: sab $ $Date: 2002-09-11 09:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -924,7 +924,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScTabViewObj::createEnumeration
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScIndexEnumeration(this);
+    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetViewPanesEnumeration")));
 }
 
 // XIndexAccess

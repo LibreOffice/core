@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nameuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-15 13:41:53 $
+ *  last change: $Author: sab $ $Date: 2002-09-11 09:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,7 +570,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScNamedRangesObj::createEnumera
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScIndexEnumeration(this);
+    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.NamedRangesEnumeration")));
 }
 
 // container::XIndexAccess
@@ -922,7 +922,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScLabelRangesObj::createEnumera
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScIndexEnumeration(this);
+    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.LabelRangesEnumeration")));
 }
 
 // container::XIndexAccess

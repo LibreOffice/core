@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fielduno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 11:39:50 $
+ *  last change: $Author: sab $ $Date: 2002-09-11 09:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,7 +369,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScCellFieldsObj::createEnumerat
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScIndexEnumeration(this);
+    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFieldEnumeration")));
 }
 
 void SAL_CALL ScCellFieldsObj::addContainerListener(
@@ -949,7 +949,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScHeaderFieldsObj::createEnumer
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScIndexEnumeration(this);
+    return new ScIndexEnumeration(this, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFieldEnumeration")));
 }
 
 void SAL_CALL ScHeaderFieldsObj::addContainerListener(
