@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedPDFExportHelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:40:16 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _OUTDEV_HXX
 #include <vcl/outdev.hxx>
 #endif
+#ifndef _SV_MULTISEL_HXX
+#include <tools/multisel.hxx>
+#endif
 #ifndef _SVX_ADJITEM_HXX
 #include <svx/adjitem.hxx>
 #endif
@@ -123,6 +126,9 @@
 #ifndef _FMTANCHR_HXX
 #include <fmtanchr.hxx>
 #endif
+#ifndef _FMTURL_HXX
+#include <fmturl.hxx>
+#endif
 #ifndef _EDITSH_HXX
 #include <editsh.hxx>
 #endif
@@ -137,6 +143,9 @@
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
+#endif
+#ifndef _DOCARY_HXX
+#include <docary.hxx>
 #endif
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
@@ -158,6 +167,9 @@
 #endif
 #ifndef _FMTFTN_HXX
 #include <fmtftn.hxx>
+#endif
+#ifndef _ROOTFRM_HXX
+#include <rootfrm.hxx>
 #endif
 #ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
@@ -1128,9 +1140,18 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
  */
 SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
                                                       OutputDevice& rOut,
+                                                      const rtl::OUString& rPageRange,
+                                                      bool bSkipEmptyPages,
                                                       bool bEditEngineOnly )
-    : mrSh( rSh ), mrOut( rOut )
+    : mrSh( rSh ),
+      mrOut( rOut ),
+      pPageRange( 0 ),
+      mbSkipEmptyPages( bSkipEmptyPages ),
+      mbEditEngineOnly( bEditEngineOnly )
 {
+    if ( rPageRange.getLength() )
+        pPageRange = new MultiSelection( rPageRange );
+
     aLinkIdMap.clear();
     aFrmTagIdMap.clear();
 
@@ -1138,14 +1159,18 @@ SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
     aStructStack.clear();
 #endif
 
-    EnhancedPDFExport( bEditEngineOnly );
+    EnhancedPDFExport();
 }
 
+SwEnhancedPDFExportHelper::~SwEnhancedPDFExportHelper()
+{
+    delete pPageRange;
+}
 
 /*
  * SwEnhancedPDFExportHelper::EnhancedPDFExport()
  */
-void SwEnhancedPDFExportHelper::EnhancedPDFExport( bool bEditEngineOnly )
+void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 {
     vcl::PDFExtOutDevData* pPDFExtOutDevData =
         PTR_CAST( vcl::PDFExtOutDevData, mrOut.GetExtOutDevData() );
@@ -1170,7 +1195,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport( bool bEditEngineOnly )
     const BOOL bOldLockView = mrSh.IsViewLocked();
     mrSh.LockView( TRUE );
 
-    if ( !bEditEngineOnly )
+    if ( !mbEditEngineOnly )
     {
         //
         // POSTITS
@@ -1196,38 +1221,38 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport( bool bEditEngineOnly )
                           mrSh.GotoFld( *(SwFmtFld*)pFirst ) &&
                          !mrSh.SelectHiddenRange() )
                     {
-
-                        // Link Note
-                        vcl::PDFNote aNote;
-
-                        // Use the NumberFormatter to get the date string:
-                        const SwPostItField* pField = (SwPostItField*)((SwFmtFld*)pFirst)->GetFld();
-                        SvNumberFormatter* pNumFormatter = pDoc->GetNumberFormatter();
-                        const Date aDateDiff( pField->GetDate() -
-                                             *pNumFormatter->GetNullDate() );
-                        const ULONG nFormat =
-                            pNumFormatter->GetStandardFormat( NUMBERFORMAT_DATE, pField->GetLanguage() );
-                        String sDate;
-                        Color* pColor;
-                        pNumFormatter->GetOutputString( aDateDiff.GetDate(), nFormat, sDate, &pColor );
-
-                        // The title should consist of the author and the date:
-                        String sTitle( pField->GetPar1() );
-                        sTitle.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
-                        sTitle += sDate;
-                        aNote.Title = sTitle;
-                        // Guess what the contents contains...
-                        aNote.Contents = pField->GetTxt();
-
                         // Link Rectangle
                         const SwRect& rNoteRect = mrSh.GetCharRect();
 
                         // Link PageNum
-                        const sal_Int32 nPageNum =
-                            mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rNoteRect );
+                        const sal_Int32 nNotePageNum = CalcOutputPageNum( rNoteRect );
+                        if ( -1 != nNotePageNum )
+                        {
+                            // Link Note
+                            vcl::PDFNote aNote;
 
-                        // Link Export
-                        pPDFExtOutDevData->CreateNote( rNoteRect.SVRect(), aNote, nPageNum );
+                            // Use the NumberFormatter to get the date string:
+                            const SwPostItField* pField = (SwPostItField*)((SwFmtFld*)pFirst)->GetFld();
+                            SvNumberFormatter* pNumFormatter = pDoc->GetNumberFormatter();
+                            const Date aDateDiff( pField->GetDate() -
+                                                 *pNumFormatter->GetNullDate() );
+                            const ULONG nFormat =
+                                pNumFormatter->GetStandardFormat( NUMBERFORMAT_DATE, pField->GetLanguage() );
+                            String sDate;
+                            Color* pColor;
+                            pNumFormatter->GetOutputString( aDateDiff.GetDate(), nFormat, sDate, &pColor );
+
+                            // The title should consist of the author and the date:
+                            String sTitle( pField->GetPar1() );
+                            sTitle.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
+                            sTitle += sDate;
+                            aNote.Title = sTitle;
+                            // Guess what the contents contains...
+                            aNote.Contents = pField->GetTxt();
+
+                            // Link Export
+                            pPDFExtOutDevData->CreateNote( rNoteRect.SVRect(), aNote, nNotePageNum );
+                        }
                     }
                 }
                 pFirst = aIter++;
@@ -1280,7 +1305,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport( bool bEditEngineOnly )
                     ASSERT( aTmp.Count() > 0, "Enhanced pdf export - rectangles are missing" )
 
                     // Create the destination for internal links:
-                    sal_Int32 nDestId = 0;
+                    sal_Int32 nDestId = -1;
                     if ( bIntern )
                     {
                         aURL.Erase( 0, 1 );
@@ -1291,31 +1316,95 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport( bool bEditEngineOnly )
                         const SwRect& rDestRect = mrSh.GetCharRect();
 
                         // Destination PageNum
-                        const sal_Int32 nDestPageNum =
-                            mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rDestRect );
+                        const sal_Int32 nDestPageNum = CalcOutputPageNum( rDestRect );
 
                         // Destination Export
-                        nDestId = pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
+                        if ( -1 != nDestPageNum )
+                            nDestId = pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
                     }
 
-                    // Create links for all selected rectangles:
-                    const USHORT nNumOfRects = aTmp.Count();
-                    for ( int i = 0; i < nNumOfRects; ++i )
+                    if ( !bIntern || -1 != nDestId )
                     {
-                        // Link Rectangle
-                        const SwRect& rLinkRect( aTmp[ i ] );
+                        // Create links for all selected rectangles:
+                        const USHORT nNumOfRects = aTmp.Count();
+                        for ( int i = 0; i < nNumOfRects; ++i )
+                        {
+                            // Link Rectangle
+                            const SwRect& rLinkRect( aTmp[ i ] );
 
-                        // Link PageNum
-                        const sal_Int32 nLinkPageNum =
-                            mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rLinkRect );
+                            // Link PageNum
+                            const sal_Int32 nLinkPageNum = CalcOutputPageNum( rLinkRect );
 
-                        // Link Export
+                            if ( -1 != nLinkPageNum )
+                            {
+                                // Link Export
+                                const sal_Int32 nLinkId =
+                                    pPDFExtOutDevData->CreateLink( rLinkRect.SVRect(), nLinkPageNum );
+
+                                // Store link info for tagged pdf output:
+                                const IdMapEntry aLinkEntry( rLinkRect, nLinkId );
+                                aLinkIdMap.push_back( aLinkEntry );
+
+                                // Connect Link and Destination:
+                                if ( bIntern )
+                                    pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
+                                else
+                                    pPDFExtOutDevData->SetLinkURL( nLinkId, aURL );
+                            }
+                        }
+                    }
+                }
+            }
+            mrSh.SwCrsrShell::ClearMark();
+        }
+
+        //
+        // HYPERLINKS (Graphics, Frames, OLEs )
+        //
+        const SwSpzFrmFmts* pTbl = pDoc->GetSpzFrmFmts();
+        const sal_uInt16 nSpzFrmFmtsCount = pTbl->Count();
+        for( sal_uInt16 n = 0; n < nSpzFrmFmtsCount; ++n )
+        {
+            const SwFrmFmt* pFrmFmt = (*pTbl)[n];
+            const SfxPoolItem* pItem;
+            if ( RES_DRAWFRMFMT != pFrmFmt->Which() &&
+                 SFX_ITEM_SET == pFrmFmt->GetAttrSet().GetItemState( RES_URL, TRUE, &pItem ) )
+            {
+                String aURL( static_cast<const SwFmtURL*>(pItem)->GetURL() );
+                const bool bIntern = '#' == aURL.GetChar( 0 );
+
+                // Create the destination for internal links:
+                sal_Int32 nDestId = -1;
+                if ( bIntern )
+                {
+                    aURL.Erase( 0, 1 );
+                    mrSh.SwCrsrShell::ClearMark();
+                    JumpToSwMark( &mrSh, aURL );
+
+                    // Destination Rectangle
+                    const SwRect& rDestRect = mrSh.GetCharRect();
+
+                    // Destination PageNum
+                    const sal_Int32 nDestPageNum = CalcOutputPageNum( rDestRect );
+
+                    // Destination Export
+                    if ( -1 != nDestPageNum )
+                        nDestId = pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
+                }
+
+                if ( !bIntern || -1 != nDestId )
+                {
+                    Point aNullPt;
+                    const SwRect aLinkRect = pFrmFmt->FindLayoutRect( sal_False, &aNullPt );
+
+                    // Link PageNum
+                    const sal_Int32 nLinkPageNum = CalcOutputPageNum( aLinkRect );
+
+                    // Link Export
+                    if ( -1 != nLinkPageNum )
+                    {
                         const sal_Int32 nLinkId =
-                            pPDFExtOutDevData->CreateLink( rLinkRect.SVRect(), nLinkPageNum );
-
-                        // Store link info for tagged pdf output:
-                        const IdMapEntry aLinkEntry( rLinkRect, nLinkId );
-                        aLinkIdMap.push_back( aLinkEntry );
+                            pPDFExtOutDevData->CreateLink( aLinkRect.SVRect(), nLinkPageNum );
 
                         // Connect Link and Destination:
                         if ( bIntern )
@@ -1369,33 +1458,37 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport( bool bEditEngineOnly )
                     const SwRect& rDestRect = mrSh.GetCharRect();
 
                     // Destination PageNum
-                    const sal_Int32 nDestPageNum =
-                        mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rDestRect );
+                    const sal_Int32 nDestPageNum = CalcOutputPageNum( rDestRect );
 
-                    // Destination Export
-                    const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
-
-                    // Create links for all selected rectangles:
-                    const USHORT nNumOfRects = aTmp.Count();
-                    for ( int i = 0; i < nNumOfRects; ++i )
+                    if ( -1 != nDestPageNum )
                     {
-                        // Link rectangle
-                        const SwRect& rLinkRect( aTmp[ i ] );
+                        // Destination Export
+                        const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
 
-                        // Link PageNum
-                        const sal_Int32 nLinkPageNum =
-                            mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rLinkRect );
+                        // Create links for all selected rectangles:
+                        const USHORT nNumOfRects = aTmp.Count();
+                        for ( int i = 0; i < nNumOfRects; ++i )
+                        {
+                            // Link rectangle
+                            const SwRect& rLinkRect( aTmp[ i ] );
 
-                        // Link Export
-                        const sal_Int32 nLinkId =
-                            pPDFExtOutDevData->CreateLink( rLinkRect.SVRect(), nLinkPageNum );
+                            // Link PageNum
+                            const sal_Int32 nLinkPageNum = CalcOutputPageNum( rLinkRect );
 
-                        // Store link info for tagged pdf output:
-                        const IdMapEntry aLinkEntry( rLinkRect, nLinkId );
-                        aLinkIdMap.push_back( aLinkEntry );
+                            if ( -1 != nLinkPageNum )
+                            {
+                                // Link Export
+                                const sal_Int32 nLinkId =
+                                    pPDFExtOutDevData->CreateLink( rLinkRect.SVRect(), nLinkPageNum );
 
-                        // Connect Link and Destination:
-                        pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
+                                // Store link info for tagged pdf output:
+                                const IdMapEntry aLinkEntry( rLinkRect, nLinkId );
+                                aLinkIdMap.push_back( aLinkEntry );
+
+                                // Connect Link and Destination:
+                                pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
+                            }
+                        }
                     }
                 }
             }
@@ -1441,29 +1534,33 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport( bool bEditEngineOnly )
             if ( mrSh.GotoFtnTxt() )
             {
                 // Link PageNum
-                const sal_Int32 nLinkPageNum =
-                    mrSh.GetPageNumAndSetOffsetForPDF( mrOut, aLinkRect );
+                const sal_Int32 nLinkPageNum = CalcOutputPageNum( aLinkRect );
 
-                // Link Export
-                const sal_Int32 nLinkId =
-                    pPDFExtOutDevData->CreateLink( aLinkRect.SVRect(), nLinkPageNum );
+                if ( -1 != nLinkPageNum )
+                {
+                    // Link Export
+                    const sal_Int32 nLinkId =
+                        pPDFExtOutDevData->CreateLink( aLinkRect.SVRect(), nLinkPageNum );
 
-                // Store link info for tagged pdf output:
-                const IdMapEntry aLinkEntry( aLinkRect, nLinkId );
-                aLinkIdMap.push_back( aLinkEntry );
+                    // Store link info for tagged pdf output:
+                    const IdMapEntry aLinkEntry( aLinkRect, nLinkId );
+                    aLinkIdMap.push_back( aLinkEntry );
 
-                // Destination Rectangle
-                const SwRect& rDestRect = mrSh.GetCharRect();
+                    // Destination Rectangle
+                    const SwRect& rDestRect = mrSh.GetCharRect();
 
-                // Destination PageNum
-                const sal_Int32 nDestPageNum =
-                     mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rDestRect );
+                    // Destination PageNum
+                    const sal_Int32 nDestPageNum = CalcOutputPageNum( rDestRect );
 
-                // Destination Export
-                const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
+                    if ( -1 != nDestPageNum )
+                    {
+                        // Destination Export
+                        const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
 
-                // Connect Link and Destination:
-                pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
+                        // Connect Link and Destination:
+                        pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
+                    }
+                }
             }
         }
 
@@ -1503,22 +1600,24 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport( bool bEditEngineOnly )
             const SwRect& rDestRect = mrSh.GetCharRect();
 
             // Destination PageNum
-            const sal_Int32 nDestPageNum =
-                mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rDestRect );
+            const sal_Int32 nDestPageNum = CalcOutputPageNum( rDestRect );
 
-            // Destination Export
-            const sal_Int32 nDestId =
-                pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
+            if ( -1 != nDestPageNum )
+            {
+                // Destination Export
+                const sal_Int32 nDestId =
+                    pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
 
-            // Outline entry text
-            const String& rEntry = mrSh.GetOutlineText( i );
+                // Outline entry text
+                const String& rEntry = mrSh.GetOutlineText( i );
 
-            // Create a new outline item:
-            const sal_Int32 nOutlineId =
-                pPDFExtOutDevData->CreateOutlineItem( nParent, rEntry, nDestId );
+                // Create a new outline item:
+                const sal_Int32 nOutlineId =
+                    pPDFExtOutDevData->CreateOutlineItem( nParent, rEntry, nDestId );
 
-            // Push current level and nOutlineId on stack:
-            aOutlineStack.push( StackEntry( nLevel, nOutlineId ) );
+                // Push current level and nOutlineId on stack:
+                aOutlineStack.push( StackEntry( nLevel, nOutlineId ) );
+            }
         }
     }
     else
@@ -1542,15 +1641,17 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport( bool bEditEngineOnly )
                 const SwRect& rDestRect = mrSh.GetCharRect();
 
                 // Destination PageNum
-                const sal_Int32 nDestPageNum =
-                    mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rDestRect );
+                const sal_Int32 nDestPageNum = CalcOutputPageNum( rDestRect );
 
-                // Destination Export
-                const sal_Int32 nDestId =
-                    pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
+                if ( -1 != nDestPageNum )
+                {
+                    // Destination Export
+                    const sal_Int32 nDestId =
+                        pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
 
-                // Connect Link and Destination:
-                pPDFExtOutDevData->SetLinkDest( aIBeg->nLinkId, nDestId );
+                    // Connect Link and Destination:
+                    pPDFExtOutDevData->SetLinkDest( aIBeg->nLinkId, nDestId );
+                }
             }
             else
                 pPDFExtOutDevData->SetLinkURL( aIBeg->nLinkId, aBookmarkName );
@@ -1564,4 +1665,40 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport( bool bEditEngineOnly )
     mrSh.LockView( bOldLockView );
     mrSh.SwCrsrShell::Pop( FALSE );
     mrOut.Pop();
+}
+
+/*
+ * SwEnhancedPDFExportHelper::CalcOutputPageNum()
+ */
+sal_Int32 SwEnhancedPDFExportHelper::CalcOutputPageNum( const SwRect& rRect )
+{
+    // Document page numbers are 0, 1, 2, ...
+    const sal_Int32 nPageNumOfRect = mrSh.GetPageNumAndSetOffsetForPDF( mrOut, rRect );
+
+    // Shortcut:
+    if ( -1 == nPageNumOfRect || ( !pPageRange && !mbSkipEmptyPages ) )
+        return nPageNumOfRect;
+
+    // pPageRange page numbers are 1, 2, 3, ...
+    if ( pPageRange && !pPageRange->IsSelected( nPageNumOfRect + 1 ) )
+        return -1;
+
+    // What will be the page number of page nPageNumOfRect in the output doc?
+    sal_Int32 nOutputPageNum = -1;
+    const SwRootFrm* pRootFrm = mrSh.GetLayout();
+    const SwPageFrm* pCurrPage = static_cast<const SwPageFrm*>(pRootFrm->Lower());
+
+    for ( sal_Int32 nPageIndex = 0;
+          nPageIndex <= nPageNumOfRect && pCurrPage;
+          ++nPageIndex )
+    {
+        if ( ( !pPageRange || pPageRange->IsSelected( nPageIndex + 1 ) ) &&
+             ( !mbSkipEmptyPages || !pCurrPage->IsEmptyPage() ) )
+            ++nOutputPageNum;
+
+        pCurrPage = static_cast<const SwPageFrm*>(pCurrPage->GetNext());
+    }
+
+    // pdf export page numbers are 0, 1, 2, ...
+    return nOutputPageNum;
 }
