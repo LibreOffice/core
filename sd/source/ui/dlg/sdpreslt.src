@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpreslt.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:17:37 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 07:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ ModalDialog DLG_PRESLT
         Text[ chinese_simplified ] = "ÇëÑ¡ÔñÒ»¸öÒ³ÃæÑùÊ½(~S)";
         Text[ russian ] = "Âûáåğèòå äèçàéí ñëàéäà";
         Text[ polish ] = "Wybierz uk³ad slajdu";
-        Text[ japanese ] = "Íß°¼Ş½À²Ù‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢";
+        Text[ japanese ] = "Íß°¼Ş½À²Ù‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢(~S)";
         Text[ chinese_traditional ] = "½Ğ±z¿ï¾Ü¤@­Ó­¶­±¼Ë¦¡(~S)";
         Text[ arabic ] = "ÇáÑÌÇÁ ÇÎÊíÇÑ ÊÎØíØ ÇáÕİÍÉ";
         Text[ greek ] = "Åğéëİîôå İíá ğñüôõğï ~óåëßäáò";
@@ -163,12 +163,12 @@ ModalDialog DLG_PRESLT
         Text[ swedish ] = "Radera ~ej använda bakgrundssidor";
         Text[ polish ] = "Usuñ nieu¿ywane strony t³a";
         Text[ portuguese_brazilian ] = "~Remove not used master pages";
-        Text[ japanese ] = "–¢g—p‚Ì”wŒiÍß°¼Ş‚Ííœ‚·‚é(~R)";
-        Text[ chinese_simplified ] = "É¾³ı²»ÓÃµÄ±³¾°Ò³Ãæ(~R)";
-        Text[ chinese_traditional ] = "§R°£¤£¥Îªº­I´º­¶­±(~R)";
+        Text[ japanese ] = "–¢g—p‚Ì”wŒiÍß°¼Ş‚Ííœ‚·‚é(~D)";
+        Text[ chinese_simplified ] = "É¾³ı²»ÓÃµÄ±³¾°Ò³Ãæ(~D)";
+        Text[ chinese_traditional ] = "§R°£¤£¥Îªº­I´º­¶­±(~D)";
         Text[ arabic ] = "ÍĞİ ÕİÍÇÊ ÇáÎáİíÉ ÇáÊí áã ÊõÓÊÚãá";
         Text[ greek ] = "ÄéáãñáöŞ ìç ÷ñçóéìïğïéïõìİíùí óåëéäşí ~öüíôïõ";
-        Text[ korean ] = "»ç¿ëÇÏÁö ¾ÊÀº ¹è°æ ÂÊ »èÁ¦";
+        Text[ korean ] = "»ç¿ëÇÏÁö ¾ÊÀº ¹è°æ ÂÊ »èÁ¦(~D)";
         Text[ turkish ] = "Kullanılmayan artalan sayfalarını sil";
         Text[ language_user1 ] = " ";
     };
