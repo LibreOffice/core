@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:27:20 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@
 #ifndef _WRAPSTREAMFORSHARE_HXX_
 #include "wrapstreamforshare.hxx"
 #endif
+
+#include <comphelper/seekableinput.hxx>
+
 
 using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star::packages::zip;
@@ -289,33 +292,39 @@ sal_Bool ZipPackageStream::ParsePackageRawStream()
     sal_Int32 nMagHackSize = 0;
     Sequence < sal_Int8 > aHeader ( 4 );
 
-    if ( xStream->readBytes ( aHeader, 4 ) == 4 )
+    try
     {
-        const sal_Int8 *pHeader = aHeader.getConstArray();
-        sal_uInt32 nHeader = ( pHeader [0] & 0xFF )       |
-                             ( pHeader [1] & 0xFF ) << 8  |
-                             ( pHeader [2] & 0xFF ) << 16 |
-                             ( pHeader [3] & 0xFF ) << 24;
-        if ( nHeader == n_ConstHeader )
+        if ( xStream->readBytes ( aHeader, 4 ) == 4 )
         {
-            // this is one of our god-awful, but extremely devious hacks, everyone cheer
-            xTempEncrData = new EncryptionData;
-
-            ::rtl::OUString aMediaType;
-            if ( ZipFile::StaticFillData ( xTempEncrData, nMagHackSize, aMediaType, xStream ) )
+            const sal_Int8 *pHeader = aHeader.getConstArray();
+            sal_uInt32 nHeader = ( pHeader [0] & 0xFF )       |
+                                 ( pHeader [1] & 0xFF ) << 8  |
+                                 ( pHeader [2] & 0xFF ) << 16 |
+                                 ( pHeader [3] & 0xFF ) << 24;
+            if ( nHeader == n_ConstHeader )
             {
-                // We'll want to skip the data we've just read, so calculate how much we just read
-                // and remember it
-                m_nMagicalHackPos = n_ConstHeaderSize + xTempEncrData->aSalt.getLength()
-                                                    + xTempEncrData->aInitVector.getLength()
-                                                    + xTempEncrData->aDigest.getLength()
-                                                    + aMediaType.getLength() * sizeof( sal_Unicode );
-                m_nMagicalHackSize = nMagHackSize;
-                sMediaType = aMediaType;
+                // this is one of our god-awful, but extremely devious hacks, everyone cheer
+                xTempEncrData = new EncryptionData;
 
-                bOk = sal_True;
+                ::rtl::OUString aMediaType;
+                if ( ZipFile::StaticFillData ( xTempEncrData, nMagHackSize, aMediaType, xStream ) )
+                {
+                    // We'll want to skip the data we've just read, so calculate how much we just read
+                    // and remember it
+                    m_nMagicalHackPos = n_ConstHeaderSize + xTempEncrData->aSalt.getLength()
+                                                        + xTempEncrData->aInitVector.getLength()
+                                                        + xTempEncrData->aDigest.getLength()
+                                                        + aMediaType.getLength() * sizeof( sal_Unicode );
+                    m_nMagicalHackSize = nMagHackSize;
+                    sMediaType = aMediaType;
+
+                    bOk = sal_True;
+                }
             }
         }
+    }
+    catch( Exception& )
+    {
     }
 
     if ( !bOk )
@@ -349,15 +358,16 @@ void ZipPackageStream::SetPackageMember( sal_Bool bNewValue )
 void SAL_CALL ZipPackageStream::setInputStream( const Reference< io::XInputStream >& aStream )
         throw(RuntimeException)
 {
-    // TODO: wrap the stream in case it is not seekable
     // The package component requires that every stream either be FROM a package or it must support XSeekable!
-    Reference< io::XSeekable > xSeek( aStream, UNO_QUERY );
+    // wrap the stream in case it is not seekable
+    Reference< io::XInputStream > xNewStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( aStream, m_xFactory );
+    Reference< io::XSeekable > xSeek( xNewStream, UNO_QUERY );
     if ( !xSeek.is() )
         throw RuntimeException( OUString::createFromAscii( "The stream must support XSeekable!" ),
-                                Reference< XInterface >() );
+                                    Reference< XInterface >() );
 
     m_aSharedMutexRef = new SotMutexHolder();
-    xStream = aStream;
+    xStream = xNewStream;
     SetPackageMember ( sal_False );
     aEntry.nTime = -1;
     m_nStreamMode = PACKAGE_STREAM_DETECT;
@@ -514,16 +524,16 @@ void SAL_CALL ZipPackageStream::setRawStream( const Reference< io::XInputStream 
                 io::IOException,
                 RuntimeException)
 {
-    // TODO: wrap the stream in case it is not seekable
-    // The package component requires that every stream either be FROM a package or it must support XSeekable!
-    Reference< io::XSeekable > xSeek( aStream, UNO_QUERY );
+    // wrap the stream in case it is not seekable
+    Reference< io::XInputStream > xNewStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( aStream, m_xFactory );
+    Reference< io::XSeekable > xSeek( xNewStream, UNO_QUERY );
     if ( !xSeek.is() )
         throw RuntimeException( OUString::createFromAscii( "The stream must support XSeekable!" ),
-                                Reference< XInterface >() );
+                                    Reference< XInterface >() );
 
     xSeek->seek( 0 );
     Reference< io::XInputStream > xOldStream = xStream;
-    xStream = aStream;
+    xStream = xNewStream;
     if ( !ParsePackageRawStream() )
     {
         xStream = xOldStream;
@@ -684,6 +694,11 @@ Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
     else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Encrypted" ) ) )
     {
         aAny <<= ( m_nStreamMode == PACKAGE_STREAM_RAW ) ? sal_True : bToBeEncrypted;
+        return aAny;
+    }
+    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "WasEncrypted" ) ) )
+    {
+        aAny <<= bIsEncrypted;
         return aAny;
     }
     else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Compressed" ) ) )
