@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utils.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change:$Date: 2005-02-24 17:23:20 $
+ *  last change:$Date: 2005-03-29 11:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ public class utils {
      * This method get's the user dir of the connected office
      *
      */
-    public static String getOfficeUserPath (XMultiServiceFactory msf) {
+    public static String getOfficeUserPath(XMultiServiceFactory msf) {
         String userPath = null;
 
         // get a folder wich is located in the user dir
@@ -265,12 +265,13 @@ public class utils {
         }
 
         // strip the returned folder to the user dir
-        String[] split =  userPath.split("/");
-        String returnValue = split[0];
-        for (int i=1; i<(split.length-1); i++)
-            returnValue += "/" + split[i];
+        if (userPath.charAt(userPath.length() - 1) == '/')
+            userPath = userPath.substring(0, userPath.length() - 1);
+        int index = userPath.lastIndexOf('/');
+        if (index != -1)
+            userPath = userPath.substring(0, index);
 
-        return returnValue;
+        return userPath;
     }
 
     /**
