@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:26:33 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:36:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,16 @@ public:
     XMLPercentPropHdl( sal_Int8 nB=4 ) : nBytes( nB ) {}
     virtual ~XMLPercentPropHdl();
 
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+/**
+    PropertyHandler for the XML-data-type: XML_TYPE_PERCENT
+    that is mapped on a double from 0.0 to 1.0
+*/
+class XMLDoublePercentPropHdl : public XMLPropertyHandler
+{
     virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
