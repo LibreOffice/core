@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgutil.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-10 07:59:51 $
+ *  last change: $Author: cl $ $Date: 2002-06-04 11:09:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,10 @@ long    TransformMetric( long nVal, FieldUnit aOld, FieldUnit aNew );
 // replacement of the SfxIniManager
 String      ConvertPosSizeToIniString( const Point& rPos, const Size& rSize );
 sal_Bool    ConvertIniStringToPosSize(  const String& rIniStr, Point& rPos, Size& rSize );
+
+
+#define OUTPUT_DRAWMODE_COLOR       (DRAWMODE_DEFAULT)
+#define OUTPUT_DRAWMODE_CONTRAST    (DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT)
 
 #endif
 
