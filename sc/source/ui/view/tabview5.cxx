@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview5.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-31 07:42:57 $
+ *  last change: $Author: ssa $ $Date: 2002-07-19 15:47:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,10 @@ void __EXPORT ScTabView::Init()
 
     pHSplitter = new ScTabSplitter( pFrameWin, WinBits( WB_HSCROLL ), &aViewData );
     pVSplitter = new ScTabSplitter( pFrameWin, WinBits( WB_VSCROLL ), &aViewData );
+
+    // SSA: override default keyboard step size to allow snap to row/column
+    pHSplitter->SetKeyboardStepSize( 1 );
+    pVSplitter->SetKeyboardStepSize( 1 );
 
     pTabControl = new ScTabControl( pFrameWin, &aViewData );
     //MI: nie! das war mal eine MUSS-Aenderung von MBA
