@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewCell.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-22 16:12:58 $
+ *  last change: $Author: thb $ $Date: 2002-05-17 19:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,8 @@
 #include "prevloc.hxx"
 #include "document.hxx"
 
-#ifndef _SVX_UNOEDACC_HXX_
-#include <svx/unoedacc.hxx>
+#ifndef _SVX_ACCESSILE_TEXT_HELPER_HXX_
+#include <svx/AccessibleTextHelper.hxx>
 #endif
 #include <unotools/accessiblestatesethelper.hxx>
 #include <svx/brshitem.hxx>
@@ -303,7 +303,7 @@ void ScAccessiblePreviewCell::CreateTextHelper()
             (new ScAccessiblePreviewCellTextData(mpViewShell, maCellAddress));
         ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessiblePreviewCellTextData));
 
-        mpTextHelper = new SvxAccessibleTextHelper(this, pEditSource );
+        mpTextHelper = new accessibility::AccessibleTextHelper(this, pEditSource );
     }
 }
 

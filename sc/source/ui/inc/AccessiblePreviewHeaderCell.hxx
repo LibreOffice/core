@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewHeaderCell.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2002-03-22 16:34:54 $
+ *  last change: $Author: thb $ $Date: 2002-05-17 19:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 #endif
 
 class ScPreviewShell;
-class SvxAccessibleTextHelper;
+class accessibility::AccessibleTextHelper;
 
 typedef cppu::ImplHelper1< ::drafts::com::sun::star::accessibility::XAccessibleValue>
                     ScAccessiblePreviewHeaderCellImpl;
@@ -176,7 +176,7 @@ protected:
 
 private:
     ScPreviewShell*     mpViewShell;
-    SvxAccessibleTextHelper* mpTextHelper;
+    accessibility::AccessibleTextHelper* mpTextHelper;
     sal_Int32           mnIndex;
     ScAddress           maCellPos;
     sal_Bool            mbColumnHeader;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-22 16:07:26 $
+ *  last change: $Author: thb $ $Date: 2002-05-17 19:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,11 @@
 #endif
 
 class ScTabViewShell;
-class SvxAccessibleTextHelper;
+
+namespace accessibility
+{
+    class AccessibleTextHelper;
+}
 
 /** @descr
         This base class provides an implementation of the
@@ -176,7 +180,7 @@ public:
 private:
     ScTabViewShell* mpViewShell;
 
-    SvxAccessibleTextHelper* mpTextHelper;
+    accessibility::AccessibleTextHelper* mpTextHelper;
 
     ScSplitPos meSplitPos;
 

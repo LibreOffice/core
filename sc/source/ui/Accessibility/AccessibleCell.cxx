@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-22 16:09:06 $
+ *  last change: $Author: thb $ $Date: 2002-05-17 19:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,8 +121,8 @@
 #ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
 #endif
-#ifndef _SVX_UNOEDACC_HXX_
-#include <svx/unoedacc.hxx>
+#ifndef _SVX_ACCESSILE_TEXT_HELPER_HXX_
+#include <svx/AccessibleTextHelper.hxx>
 #endif
 
 #include <float.h>
@@ -410,7 +410,7 @@ void ScAccessibleCell::CreateTextHelper()
             (new ScAccessibleCellTextData(mpViewShell, maCellAddress, meSplitPos));
         ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleCellTextData));
 
-        mpTextHelper = new SvxAccessibleTextHelper(this, pEditSource );
+        mpTextHelper = new accessibility::AccessibleTextHelper(this, pEditSource );
     }
 }
 
