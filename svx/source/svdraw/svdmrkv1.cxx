@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-09 12:04:03 $
+ *  last change: $Author: aw $ $Date: 2002-02-26 14:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,9 @@ BOOL SdrMarkView::ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, BOOL bUnmark)
 
     // refresh IAOs
 //  RefreshAllIAOManagers();
+
+    // #97016# II: Sort handles. This was missing in ImpMarkPoint all the time.
+    aHdl.Sort();
 
     return TRUE;
 }
