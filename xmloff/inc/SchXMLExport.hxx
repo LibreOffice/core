@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2001-09-14 11:19:47 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,10 @@ protected:
     virtual void _ExportContent();
 
 public:
-    SchXMLExport( sal_uInt16 nExportFlags = EXPORT_ALL );
+    // #110680#
+    SchXMLExport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+        sal_uInt16 nExportFlags = EXPORT_ALL );
     virtual ~SchXMLExport();
 
     void SetProgress( sal_Int32 nPercentage );
