@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nfuncs.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-07 10:54:52 $
+ *  last change: $Author: dbo $ $Date: 2001-12-07 11:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,22 +74,28 @@ static FILE * s_file = 0;
 void TRACE( char const * s )
 {
     if (! s_file)
-        s_file = fopen( "f:\\pluginlog.txt", "w" );
-    oslThreadIdentifier t = osl_getThreadIdentifier(0);
-    fprintf( s_file, "log [t_id=%d]: %s\n", t, s );
-    fflush( s_file );
+        s_file = stderr;//fopen( "f:\\pluginlog.txt", "w" );
+    if (s_file)
+    {
+        oslThreadIdentifier t = osl_getThreadIdentifier(0);
+        fprintf( s_file, "log [t_id=%d]: %s\n", t, s );
+        fflush( s_file );
+    }
 }
-void TRACE( char const * s, long n )
+void TRACEN( char const * s, long n )
 {
     if (! s_file)
-        s_file = fopen( "f:\\pluginlog.txt", "w" );
-    oslThreadIdentifier t = osl_getThreadIdentifier(0);
-    fprintf( s_file, "log [t_id=%d]: %s%d\n", t, s, n );
-    fflush( s_file );
+        s_file = stderr;//fopen( "f:\\pluginlog.txt", "w" );
+    if (s_file)
+    {
+        oslThreadIdentifier t = osl_getThreadIdentifier(0);
+        fprintf( s_file, "log [t_id=%d]: %s%d\n", t, s, n );
+        fflush( s_file );
+    }
 }
 #else
 #define TRACE(x)
-#define TRACE(x,n)
+#define TRACEN(x,n)
 #endif
 
 
