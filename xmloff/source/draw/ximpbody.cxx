@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-09 14:18:24 $
+ *  last change: $Author: cl $ $Date: 2001-04-17 15:58:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
     }
 
     // set PresentationPageLayout?
-    if(maPageLayoutName.getLength())
+    if(GetSdImport().IsImpress() && maPageLayoutName.getLength())
     {
         sal_Int32 nType = -1;
 
