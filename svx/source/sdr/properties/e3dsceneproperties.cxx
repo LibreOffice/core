@@ -2,9 +2,9 @@
  *
  *  $RCSfile: e3dsceneproperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:49:43 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,6 +504,7 @@ namespace sdr
 
         void E3dSceneProperties::SetLightItemsFromLightGroup(B3dLightGroup& rLightGroup)
         {
+            // force ItemSet
             GetObjectItemSet();
 
             // TwoSidedLighting
@@ -545,7 +546,9 @@ namespace sdr
 
         void E3dSceneProperties::SetSceneItemsFromCamera()
         {
+            // force ItemSet
             GetObjectItemSet();
+
             E3dScene& rObj = (E3dScene&)GetSdrObject();
             Camera3D aSceneCam(rObj.GetCamera());
 
