@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:22:32 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#include <memory>
-
 #include "macro.hxx"
 
 #ifndef _OSL_DIAGNOSE_H_
@@ -92,16 +90,12 @@
 #include <rtl/byteseq.hxx>
 #endif
 
-#ifndef INCLUDED_LIST
 #include <list>
-#define INCLUDED_LIST
-#endif
+#include <hash_map>
 
-using rtl::OString;
-using rtl::OUString;
 
-using rtl::OStringToOUString;
-using rtl::OUStringToOString;
+using namespace ::rtl;
+using namespace ::osl;
 
 //----------------------------------------------------------------------------
 
@@ -376,7 +370,8 @@ static NameValueList s_rtl_bootstrap_set_list;
 
 struct Bootstrap_Impl
 {
-    ::std::auto_ptr< Bootstrap_Impl > _base_ini;
+    sal_Int32 _nRefCount;
+    Bootstrap_Impl * _base_ini;
 
     NameValueList _nameValueList;
     OUString      _iniName;
@@ -394,18 +389,28 @@ struct Bootstrap_Impl
 
 static inline bool path_exists( ::rtl::OUString const & path )
 {
-    ::osl::DirectoryItem dirItem;
-    return (::osl::DirectoryItem::E_None ==
-            ::osl::DirectoryItem::get( path, dirItem ));
+    DirectoryItem dirItem;
+    return (DirectoryItem::E_None == DirectoryItem::get( path, dirItem ));
 }
 
 Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
-    : _iniName (rIniName)
+    : _nRefCount( 0 ),
+      _iniName (rIniName),
+      _base_ini( 0 )
 {
-    OUString const & base_ini = getIniFileNameImpl();
-    if (!rIniName.equals( base_ini ) && path_exists( base_ini ))
+    OUString base_ini( getIniFileNameImpl() );
+    // normalize path
+    FileStatus status( FileStatusMask_FileURL );
+    DirectoryItem dirItem;
+    if (DirectoryItem::E_None == DirectoryItem::get( base_ini, dirItem ) &&
+        DirectoryItem::E_None == dirItem.getFileStatus( status ))
     {
-        _base_ini.reset( new Bootstrap_Impl( base_ini ) );
+        base_ini = status.getFileURL();
+        if (! rIniName.equals( base_ini ))
+        {
+            _base_ini = static_cast< Bootstrap_Impl * >(
+                rtl_bootstrap_args_open( base_ini.pData ) );
+        }
     }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -459,6 +464,8 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
 
 Bootstrap_Impl::~Bootstrap_Impl()
 {
+    if (_base_ini != 0)
+        rtl_bootstrap_args_close( _base_ini );
 }
 
 
@@ -481,7 +488,7 @@ sal_Bool Bootstrap_Impl::getValue(
     }
     else
     {
-        if (0 != _base_ini.get())
+        if (0 != _base_ini)
         {
             if (_base_ini->getValue( pName, ppValue, pDefault ))
                 return sal_True;
@@ -566,28 +573,97 @@ sal_Bool Bootstrap_Impl::getValue(
 extern "C"
 {
 
-rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open(rtl_uString * pIniName)
+// map<> may be preferred here, but hash_map<> is implemented fully inline,
+// thus there is no need to link against the stlport.
+typedef ::std::hash_map<
+    OUString, Bootstrap_Impl *,
+    OUStringHash, ::std::equal_to< OUString >,
+    MyAllocator< OUString > > t_bootstrap_map;
+static t_bootstrap_map s_bootstrap_map;
+
+rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open( rtl_uString * pIniName )
 {
     OUString workDir;
-    OUString iniName (pIniName);
+    OUString iniName( pIniName );
 
-    osl_getProcessWorkingDir(&workDir.pData);
-    osl::FileBase::getAbsoluteFileURL(workDir, iniName, iniName);
+    osl_getProcessWorkingDir( &workDir.pData );
+    FileBase::getAbsoluteFileURL( workDir, iniName, iniName );
+    // normalize path
+    FileStatus status( FileStatusMask_FileURL );
+    DirectoryItem dirItem;
+    if (DirectoryItem::E_None != DirectoryItem::get( iniName, dirItem ) ||
+        DirectoryItem::E_None != dirItem.getFileStatus( status ))
+    {
+        return 0;
+    }
+    iniName = status.getFileURL();
 
-    Bootstrap_Impl * pImpl = new Bootstrap_Impl (iniName);
-    return static_cast<rtlBootstrapHandle>(pImpl);
+    Bootstrap_Impl * that;
+    ResettableMutexGuard guard( Mutex::getGlobalMutex() );
+    t_bootstrap_map::const_iterator iFind( s_bootstrap_map.find( iniName ) );
+    if (iFind == s_bootstrap_map.end())
+    {
+        guard.clear();
+        that = new Bootstrap_Impl( iniName );
+        guard.reset();
+        iFind = s_bootstrap_map.find( iniName );
+        if (iFind == s_bootstrap_map.end())
+        {
+            ++that->_nRefCount;
+            ::std::pair< t_bootstrap_map::iterator, bool > insertion(
+                s_bootstrap_map.insert(
+                    t_bootstrap_map::value_type( iniName, that ) ) );
+            OSL_ASSERT( insertion.second );
+        }
+        else
+        {
+            Bootstrap_Impl * obsolete = that;
+            that = iFind->second;
+            ++that->_nRefCount;
+            guard.clear();
+            delete obsolete;
+        }
+    }
+    else
+    {
+        that = iFind->second;
+        ++that->_nRefCount;
+    }
+    return static_cast< rtlBootstrapHandle >( that );
 }
 
-
-void SAL_CALL rtl_bootstrap_args_close(rtlBootstrapHandle handle)
+void SAL_CALL rtl_bootstrap_args_close( rtlBootstrapHandle handle )
 {
-    delete static_cast<Bootstrap_Impl*>(handle);
+    if (handle == 0)
+        return;
+    Bootstrap_Impl * that = static_cast< Bootstrap_Impl * >( handle );
+
+    MutexGuard guard( Mutex::getGlobalMutex() );
+    OSL_ASSERT(
+        s_bootstrap_map.find( that->_iniName )->second == that );
+    --that->_nRefCount;
+    if (that->_nRefCount == 0)
+    {
+        ::std::size_t nLeaking = 8; // only hold up to 8 files statically
+#if OSL_DEBUG_LEVEL == 1 // nonpro
+        nLeaking = 0;
+#elif OSL_DEBUG_LEVEL > 1 // debug
+        nLeaking = 1;
+#endif
+        if (s_bootstrap_map.size() > nLeaking)
+        {
+            ::std::size_t erased = s_bootstrap_map.erase( that->_iniName );
+            OSL_ASSERT( erased == 1 );
+            delete that;
+        }
+    }
 }
 
 sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(
-    rtlBootstrapHandle handle, rtl_uString *pName, rtl_uString **ppValue, rtl_uString *pDefault )
+    rtlBootstrapHandle handle, rtl_uString *pName, rtl_uString **ppValue,
+    rtl_uString *pDefault )
 {
-    osl::MutexGuard guard(osl::Mutex::getGlobalMutex());
+    MutexGuard guard(  Mutex::getGlobalMutex() );
 
     sal_Bool found = sal_False;
     if(ppValue && pName)
@@ -625,14 +701,14 @@ void SAL_CALL rtl_bootstrap_get_iniName_from_handle(
 
 void SAL_CALL rtl_bootstrap_setIniFileName( rtl_uString *pName )
 {
-    osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
+    MutexGuard guard( Mutex::getGlobalMutex() );
     OUString & file = getIniFileNameImpl();
     file = pName;
 }
 
 static rtlBootstrapHandle get_static_bootstrap_handle() SAL_THROW( () )
 {
-    osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
+    MutexGuard guard( Mutex::getGlobalMutex() );
 
     static Bootstrap_Impl * pBootstrap_Impl = 0;
 
@@ -658,7 +734,7 @@ void SAL_CALL rtl_bootstrap_set( rtl_uString * pName, rtl_uString * pValue )
     OUString const & name = *reinterpret_cast< OUString const * >( &pName );
     OUString const & value = *reinterpret_cast< OUString const * >( &pValue );
 
-    ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
+    MutexGuard guard( Mutex::getGlobalMutex() );
 
     NameValueList::iterator iPos( s_rtl_bootstrap_set_list.begin() );
     NameValueList::iterator iEnd( s_rtl_bootstrap_set_list.end() );
