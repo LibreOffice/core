@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:56:49 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,8 +501,10 @@ SbiExprNode* SbiParser::GetWithVar()
 void SbiParser::Symbol()
 {
     SbiExpression aVar( this, SbSYMBOL );
+
     bool bEQ = ( Peek() == EQ );
-    aVar.Gen( bEQ );
+    RecursiveMode eRecMode = ( bEQ ? PREVENT_CALL : FORCE_CALL );
+    aVar.Gen( eRecMode );
     if( !bEQ )
     {
         aGen.Gen( _GET );
