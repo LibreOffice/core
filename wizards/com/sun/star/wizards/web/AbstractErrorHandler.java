@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AbstractErrorHandler.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $  $Date: 2004-09-08 14:10:46 $
+ *  last change: $Author: vg $  $Date: 2005-02-21 14:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -57,7 +57,6 @@
  *  Contributor(s): _______________________________________
  *
  */
-
 package com.sun.star.wizards.web;
 
 import com.sun.star.awt.VclWindowPeerAttribute;
@@ -114,7 +113,7 @@ public abstract class AbstractErrorHandler implements ErrorHandler {
             case ErrorHandler.ERROR_MESSAGE :
                 return showMessage(getMessageFor(ex,arg,ix,errorType),errorType );
         }
-        throw new IllegalArgumentException("unkonown error type");
+        throw new IllegalArgumentException("unknown error type");
     }
 
     /**
