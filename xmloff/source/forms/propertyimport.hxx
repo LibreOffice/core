@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-01 09:46:47 $
+ *  last change: $Author: fs $ $Date: 2001-03-28 09:59:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,8 @@ namespace xmloff
             SvXMLImport& _rImporter,
             const ::com::sun::star::uno::Type& _rExpectedType,
             const ::rtl::OUString& _rReadCharacters,
-            const SvXMLEnumMapEntry* _pEnumMap = NULL
+            const SvXMLEnumMapEntry* _pEnumMap = NULL,
+            const sal_Bool _bInvertBoolean = sal_False
             );
 
     private:
@@ -243,6 +244,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/02/01 09:46:47  fs
+ *  no own style handling anymore - the shape exporter is responsible for our styles now
+ *
  *  Revision 1.4  2000/12/18 15:14:35  fs
  *  some changes ... now exporting/importing styles
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-16 14:36:39 $
+ *  last change: $Author: fs $ $Date: 2001-03-28 09:59:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ namespace xmloff
             aNewValue.Name = pProperty->sPropertyName;
 
             // convert the value string into the target type
-            aNewValue.Value = convertString(m_rContext.getGlobalContext(), pProperty->aPropertyType, _rValue, pProperty->pEnumMap);
+            aNewValue.Value = convertString(m_rContext.getGlobalContext(), pProperty->aPropertyType, _rValue, pProperty->pEnumMap, pProperty->bInverseSemantics);
             m_aValues.push_back(aNewValue);
         }
         else
@@ -201,7 +201,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    Any OPropertyImport::convertString(SvXMLImport& _rImporter, const ::com::sun::star::uno::Type& _rExpectedType, const ::rtl::OUString& _rReadCharacters, const SvXMLEnumMapEntry* _pEnumMap)
+    Any OPropertyImport::convertString(SvXMLImport& _rImporter, const ::com::sun::star::uno::Type& _rExpectedType, const ::rtl::OUString& _rReadCharacters, const SvXMLEnumMapEntry* _pEnumMap, const sal_Bool _bInvertBoolean)
     {
         Any aReturn;
         sal_Bool bEnumAsInt = sal_False;
@@ -218,7 +218,7 @@ namespace xmloff
                         ::rtl::OString("OPropertyImport::convertString: could not convert \"")
                     +=  ::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
                     +=  ::rtl::OString("\" into a boolean!"));
-                aReturn = ::cppu::bool2any(bValue);
+                aReturn = ::cppu::bool2any(_bInvertBoolean ? !bValue : bValue);
             }
             break;
             case TypeClass_SHORT:       // sal_Int16
@@ -536,6 +536,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/03/16 14:36:39  sab
+ *  did the required change (move of extract.hxx form cppuhelper to comphelper)
+ *
  *  Revision 1.8  2001/02/28 16:44:38  fs
  *  convertString: for SHORTs, use sal_Int16 ...
  *
