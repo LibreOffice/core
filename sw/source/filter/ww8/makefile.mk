@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2003-09-25 07:40:43 $
+#   last change: $Author: rt $ $Date: 2003-11-06 12:50:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -130,6 +130,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/ww8par5.obj \
         $(SLO)$/tracer.obj \
         $(SLO)$/fields.obj \
+        $(SLO)$/ww8graf.obj \
         $(SLO)$/ww8graf2.obj \
         $(SLO)$/wrtw8esh.obj \
         $(SLO)$/wrtw8nds.obj \
