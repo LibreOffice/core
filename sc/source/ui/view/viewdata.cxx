@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:51 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -646,15 +646,19 @@ void ScViewData::SetPagebreakMode( BOOL bSet )
 }
 
 BOOL ScViewData::GetSimpleArea( USHORT& rStartCol, USHORT& rStartRow, USHORT& rStartTab,
-                                USHORT& rEndCol, USHORT& rEndRow, USHORT& rEndTab, BOOL bMergeMark )
+                                USHORT& rEndCol, USHORT& rEndRow, USHORT& rEndTab )
 {
+    //  parameter bMergeMark is no longer needed: The view's selection is never modified
+    //  (a local copy is used), and a multi selection that adds to a single range can always
+    //  be treated like a single selection (#108266# - GetSimpleArea isn't used in selection
+    //  handling itself)
+
     ScMarkData aNewMark( aMarkData );       // use a local copy for MarkToSimple
 
     if ( aNewMark.IsMarked() || aNewMark.IsMultiMarked() )
     {
-        if ( bMergeMark )
-            if ( aNewMark.IsMultiMarked() )
-                aNewMark.MarkToSimple();
+        if ( aNewMark.IsMultiMarked() )
+            aNewMark.MarkToSimple();
 
         if ( aNewMark.IsMarked() && !aNewMark.IsMultiMarked() )
         {
@@ -684,15 +688,16 @@ BOOL ScViewData::GetSimpleArea( USHORT& rStartCol, USHORT& rStartRow, USHORT& rS
     return TRUE;
 }
 
-BOOL ScViewData::GetSimpleArea( ScRange& rRange, BOOL bMergeMark )
+BOOL ScViewData::GetSimpleArea( ScRange& rRange )
 {
+    //  parameter bMergeMark is no longer needed, see above
+
     ScMarkData aNewMark( aMarkData );       // use a local copy for MarkToSimple
 
     if ( aNewMark.IsMarked() || aNewMark.IsMultiMarked() )
     {
-        if ( bMergeMark )
-            if ( aNewMark.IsMultiMarked() )
-                aNewMark.MarkToSimple();
+        if ( aNewMark.IsMultiMarked() )
+            aNewMark.MarkToSimple();
 
         if ( aNewMark.IsMarked() && !aNewMark.IsMultiMarked() )
             aNewMark.GetMarkArea( rRange );
@@ -709,12 +714,14 @@ BOOL ScViewData::GetSimpleArea( ScRange& rRange, BOOL bMergeMark )
     return TRUE;
 }
 
-void ScViewData::GetMultiArea( ScRangeListRef& rRange, BOOL bMergeMark )
+void ScViewData::GetMultiArea( ScRangeListRef& rRange )
 {
+    //  parameter bMergeMark is no longer needed, see GetSimpleArea
+
     ScMarkData aNewMark( aMarkData );       // use a local copy for MarkToSimple
 
     BOOL bMulti = aNewMark.IsMultiMarked();
-    if (bMulti && bMergeMark)
+    if (bMulti)
     {
         aNewMark.MarkToSimple();
         bMulti = aNewMark.IsMultiMarked();
@@ -727,7 +734,7 @@ void ScViewData::GetMultiArea( ScRangeListRef& rRange, BOOL bMergeMark )
     else
     {
         ScRange aSimple;
-        GetSimpleArea(aSimple,FALSE);
+        GetSimpleArea(aSimple);
         rRange = new ScRangeList;
         rRange->Append(aSimple);
     }
