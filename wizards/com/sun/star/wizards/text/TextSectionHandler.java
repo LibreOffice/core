@@ -2,9 +2,9 @@
 *
 *  $RCSfile: TextSectionHandler.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 12:49:13 $
+*  last change: $Author: obo $ $Date: 2004-09-08 14:05:55 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -65,6 +65,7 @@ import com.sun.star.container.XNamed;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.SectionFileLink;
 import com.sun.star.text.XTextContent;
+import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextSectionsSupplier;
 import com.sun.star.uno.Exception;
@@ -149,6 +150,12 @@ public class TextSectionHandler {
         }
     }
 
+    public void breakLinkOfTextSection(Object oTextSection) {
+        SectionFileLink oSectionLink = new SectionFileLink();
+        oSectionLink.FileURL = "";
+        Helper.setUnoPropertyValues(oTextSection, new String[] { "FileLink", "LinkRegion" }, new Object[] { oSectionLink, "" });
+    }
+
     public void linkSectiontoTemplate(String TemplateName, String SectionName) {
         try {
             Object oTextSection = xTextSectionsSupplier.getTextSections().getByName(SectionName);
@@ -162,8 +169,9 @@ public class TextSectionHandler {
     public void linkSectiontoTemplate(Object oTextSection, String TemplateName, String SectionName) {
         SectionFileLink oSectionLink = new SectionFileLink();
         oSectionLink.FileURL = TemplateName;
-        Helper.setUnoPropertyValue(oTextSection, "FileLink", oSectionLink);
-        Helper.setUnoPropertyValue(oTextSection, "LinkRegion", SectionName);
+        //Helper.setUnoPropertyValue(oTextSection, "FileLink", oSectionLink);
+        Helper.setUnoPropertyValues(oTextSection, new String[] { "FileLink", "LinkRegion" }
+        , new Object[] { oSectionLink, SectionName });
         XNamed xSectionName = (XNamed) UnoRuntime.queryInterface(XNamed.class, oTextSection);
         String NewSectionName = xSectionName.getName();
         if (NewSectionName.compareTo(SectionName) != 0)
@@ -171,18 +179,22 @@ public class TextSectionHandler {
     }
 
     public void insertTextSection(String GroupName, String TemplateName) {
+        com.sun.star.text.XTextCursor xTextCursor = xTextDocument.getText().createTextCursor();
+        xTextCursor.gotoEnd(false);
+        insertTextSection( GroupName, TemplateName, xTextCursor );
+    }
+
+    public void insertTextSection( String sectionName, String templateName, XTextCursor position ) {
         try {
             Object xTextSection;
-            if (xTextSectionsSupplier.getTextSections().hasByName(GroupName) == true)
-                xTextSection = xTextSectionsSupplier.getTextSections().getByName(GroupName);
+            if (xTextSectionsSupplier.getTextSections().hasByName(sectionName) == true)
+                xTextSection = xTextSectionsSupplier.getTextSections().getByName(sectionName);
             else {
                 xTextSection = xMSFDoc.createInstance("com.sun.star.text.TextSection");
                 XTextContent xTextContentSection = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, xTextSection);
-                com.sun.star.text.XTextCursor xTextCursor = xTextDocument.getText().createTextCursor();
-                xTextCursor.gotoEnd(false);
-                xTextCursor.getText().insertTextContent(xTextCursor, xTextContentSection, false);
+                position.getText().insertTextContent(position , xTextContentSection, false);
             }
-            linkSectiontoTemplate(xTextSection, TemplateName, GroupName);
+            linkSectiontoTemplate(xTextSection, templateName, sectionName);
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
         }
