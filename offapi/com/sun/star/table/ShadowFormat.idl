@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShadowFormat.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:09:38 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef __com_sun_star_table_ShadowFormat_idl__
 #define __com_sun_star_table_ShadowFormat_idl__
 
+#ifndef __com_sun_star_util_Color_idl__
+#include <com/sun/star/util/Color.idl>
+#endif
+
 #ifndef __com_sun_star_table_ShadowLocation_idl__
 #include <com/sun/star/table/ShadowLocation.idl>
 #endif
@@ -98,7 +102,7 @@ struct ShadowFormat
 
     /** contains the color value of the shadow.
      */
-    long Color;
+    com::sun::star::util::Color Color;
 
 };
 
