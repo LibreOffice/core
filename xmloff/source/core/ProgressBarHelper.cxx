@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProgressBarHelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-12 12:59:24 $
+ *  last change: $Author: dvo $ $Date: 2001-09-24 17:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,8 @@ void ProgressBarHelper::SetValue(sal_Int32 nTempValue)
 {
     if (nTempValue >= nValue)
     {
-        nValue = nTempValue;
+        // #91317# no progress bar with values > 100%
+        nValue = (nTempValue > nReference) ? nReference : nTempValue;
         if (xStatusIndicator.is() && (nReference > 0))
         {
             double fValue(nValue);
