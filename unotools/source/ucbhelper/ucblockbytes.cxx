@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-02 07:54:24 $
+ *  last change: $Author: mba $ $Date: 2001-07-16 09:28:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,12 @@
 #include <unotools/ucblockbytes.hxx>
 #include <comphelper/processfactory.hxx>
 
+#ifndef _COM_SUN_STAR_UCB_COMMANDFAILEDEXCEPTION_HPP_
+#include <com/sun/star/ucb/CommandFailedException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEIODEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveIOException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASTREAMER_HPP_
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #endif
@@ -405,10 +411,29 @@ sal_Bool CommandThread_Impl::DoIt()
     catch ( CommandAbortedException )
     {
         bAborted = true;
+        m_xLockBytes->SetError( ERRCODE_ABORT );
+    }
+    catch ( CommandFailedException )
+    {
+        bAborted = true;
+        m_xLockBytes->SetError( ERRCODE_ABORT );
+    }
+    catch ( InteractiveIOException& r )
+    {
+        bException = true;
+        if ( r.Code == IOErrorCode_ACCESS_DENIED )
+            m_xLockBytes->SetError( ERRCODE_IO_ACCESSDENIED );
+        else if ( r.Code == IOErrorCode_NOT_EXISTING )
+            m_xLockBytes->SetError( ERRCODE_IO_NOTEXISTS );
+        else if ( r.Code == IOErrorCode_CANT_READ )
+            m_xLockBytes->SetError( ERRCODE_IO_CANTREAD );
+        else
+            m_xLockBytes->SetError( ERRCODE_IO_GENERAL );
     }
     catch ( Exception )
     {
         bException = true;
+        m_xLockBytes->SetError( ERRCODE_IO_GENERAL );
     }
 
     if ( bAborted || bException )
@@ -558,7 +583,10 @@ void UcbLockBytes::terminate_Impl()
     m_aTerminated.set();
 
     if ( GetError() == ERRCODE_NONE && !m_xInputStream.is() )
+    {
+        DBG_ERROR("No InputStream, but no error set!" );
         SetError( ERRCODE_IO_NOTEXISTS );
+    }
 
     if ( m_xHandler.Is() )
         m_xHandler->Handle( UcbLockBytesHandler::DONE, this );
@@ -792,14 +820,10 @@ UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStrea
 }
 
 UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent > xContent, const Sequence < PropertyValue >& rProps,
-        Reference < XInputStream > xPostData, UcbLockBytesHandler* pHandler )
+        Reference < XInputStream > xPostData, Reference < XInteractionHandler > xInteractionHandler, UcbLockBytesHandler* pHandler )
 {
     if( !xContent.is() )
         return NULL;;
-
-    Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-    Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
-                xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY );
 
     UcbLockBytesRef xLockBytes = new UcbLockBytes( pHandler );
     xLockBytes->SetSynchronMode( !pHandler );
@@ -829,8 +853,12 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent > xCon
     if ( !pHandler )
     {
         sal_Bool bError = pThread->DoIt();
-        if ( bError || !xLockBytes->getInputStream_Impl().is() )
-            xLockBytes->SetError( ERRCODE_IO_NOTEXISTS );
+        if ( xLockBytes->GetError() == ERRCODE_NONE && ( bError || !xLockBytes->getInputStream().is() ) )
+        {
+            DBG_ERROR("No InputStream, but no error set!" );
+            xLockBytes->SetError( ERRCODE_IO_GENERAL );
+        }
+
         delete pThread;
     }
     else
@@ -842,14 +870,10 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent > xCon
 }
 
 UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent > xContent, const Sequence < PropertyValue >& rProps,
-        StreamMode eOpenMode, UcbLockBytesHandler* pHandler )
+        StreamMode eOpenMode, Reference < XInteractionHandler > xInteractionHandler, UcbLockBytesHandler* pHandler )
 {
     if( !xContent.is() )
         return NULL;;
-
-    Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-    Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
-                xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY );
 
     UcbLockBytesRef xLockBytes = new UcbLockBytes( pHandler );
     xLockBytes->SetSynchronMode( !pHandler );
@@ -884,8 +908,12 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent > xCon
     {
         // first try read/write mode
         sal_Bool bError = pThread->DoIt();
-        if ( bError || !xLockBytes->getInputStream_Impl().is() )
-            xLockBytes->SetError( ERRCODE_IO_NOTEXISTS );
+        if ( xLockBytes->GetError() == ERRCODE_NONE && ( bError || !xLockBytes->getInputStream().is() ) )
+        {
+            DBG_ERROR("No InputStream, but no error set!" );
+            xLockBytes->SetError( ERRCODE_IO_GENERAL );
+        }
+
         delete pThread;
     }
     else

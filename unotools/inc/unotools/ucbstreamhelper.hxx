@@ -9,8 +9,23 @@
 #endif
 #include <tools/stream.hxx>
 
+namespace com
+{
+    namespace sun
+    {
+        namespace star
+        {
+            namespace task
+            {
+                class XInteractionHandler;
+            };
+        };
+    };
+};
+
 #define NS_UNO ::com::sun::star::uno
 #define NS_IO ::com::sun::star::io
+#define NS_TASK ::com::sun::star::task
 
 class String;
 namespace utl
@@ -20,7 +35,11 @@ namespace utl
     class UcbStreamHelper : public SvStream
     {
     public:
-        static SvStream*    CreateStream( const String& rFileName, StreamMode eOpenMode, UcbLockBytesHandler* pHandler=0, sal_Bool bForceSynchron=sal_True );
+        static SvStream*    CreateStream( const String& rFileName, StreamMode eOpenMode,
+                                UcbLockBytesHandler* pHandler=0, sal_Bool bForceSynchron=sal_True );
+        static SvStream*    CreateStream( const String& rFileName, StreamMode eOpenMode,
+                                NS_UNO::Reference < NS_TASK::XInteractionHandler >,
+                                UcbLockBytesHandler* pHandler=0, sal_Bool bForceSynchron=sal_True );
         static SvStream*    CreateStream( NS_UNO::Reference < NS_IO::XInputStream > xStream );
     };
 };

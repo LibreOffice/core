@@ -31,6 +31,20 @@
 #include <tools/errcode.hxx>
 #include <tools/datetime.hxx>
 
+namespace com
+{
+    namespace sun
+    {
+        namespace star
+        {
+            namespace task
+            {
+                class XInteractionHandler;
+            };
+        };
+    };
+};
+
 namespace utl
 {
 SV_DECL_REF( UcbLockBytes )
@@ -63,6 +77,7 @@ SV_DECL_IMPL_REF( UcbLockBytesHandler )
 #define NS_IO ::com::sun::star::io
 #define NS_UCB ::com::sun::star::ucb
 #define NS_BEANS ::com::sun::star::beans
+#define NS_TASK ::com::sun::star::task
 
 class CommandThread_Impl;
 class UcbLockBytes : public virtual SvLockBytes
@@ -99,11 +114,15 @@ public:
                             // properties: Referer, PostMimeType
     static UcbLockBytesRef  CreateLockBytes( const NS_UNO::Reference < NS_UCB::XContent > xContent,
                                             const NS_UNO::Sequence < NS_BEANS::PropertyValue >& rProps,
-                                            NS_UNO::Reference < NS_IO::XInputStream > xPostData, UcbLockBytesHandler* pHandler=0 );
+                                            NS_UNO::Reference < NS_IO::XInputStream > xPostData,
+                                            const NS_UNO::Reference < NS_TASK::XInteractionHandler > xInter,
+                                            UcbLockBytesHandler* pHandler=0 );
 
     static UcbLockBytesRef  CreateLockBytes( const NS_UNO::Reference < NS_UCB::XContent > xContent,
                                             const NS_UNO::Sequence < NS_BEANS::PropertyValue >& rProps,
-                                            StreamMode eMode, UcbLockBytesHandler* pHandler=0 );
+                                            StreamMode eMode,
+                                            const NS_UNO::Reference < NS_TASK::XInteractionHandler > xInter,
+                                            UcbLockBytesHandler* pHandler=0 );
 
     static UcbLockBytesRef  CreateInputLockBytes( const NS_UNO::Reference < NS_IO::XInputStream > xContent );
 

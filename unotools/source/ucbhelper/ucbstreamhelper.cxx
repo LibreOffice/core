@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstreamhelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-02 15:46:11 $
+ *  last change: $Author: mba $ $Date: 2001-07-16 09:28:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,15 @@ using namespace ::com::sun::star::beans;
 namespace utl
 {
 
-SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOpenMode, UcbLockBytesHandler* pHandler, sal_Bool bForceSynchron )
+SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOpenMode,
+        UcbLockBytesHandler* pHandler, sal_Bool bForceSynchron )
+{
+    return CreateStream( rFileName, eOpenMode, Reference < XInteractionHandler >(), pHandler, bForceSynchron );
+}
+
+SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOpenMode,
+        Reference < XInteractionHandler > xInteractionHandler,
+        UcbLockBytesHandler* pHandler, sal_Bool bForceSynchron )
 {
     SvStream* pStream = NULL;
     ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
@@ -153,7 +161,8 @@ SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOp
         {
             // create LockBytes using UCB
             ::ucb::Content aContent( rFileName, Reference < XCommandEnvironment >() );
-            xLockBytes = UcbLockBytes::CreateLockBytes( aContent.get(), Sequence < PropertyValue >(), eOpenMode, pHandler );
+            xLockBytes = UcbLockBytes::CreateLockBytes( aContent.get(), Sequence < PropertyValue >(),
+                                                eOpenMode, xInteractionHandler, pHandler );
             if ( xLockBytes.Is() )
             {
                 pStream = new SvStream( xLockBytes );

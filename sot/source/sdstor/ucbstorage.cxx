@@ -337,7 +337,8 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
             m_pStream = m_pTempFile->GetStream( nMode );
 
             // copy the original stream into the temporary stream ( only transacted mode is supported )
-            if ( m_pSource->GetError() == ERRCODE_IO_NOTEXISTS )
+            if ( m_pSource->GetError() == ERRCODE_IO_NOTEXISTS || m_pSource->GetError() == ERRCODE_IO_CANTREAD ||
+                    m_pSource->GetError() == ERRCODE_IO_ACCESSDENIED )
                 m_pSource->ResetError();
             else
             {
@@ -406,7 +407,8 @@ void UCBStorageStream_Impl::SwitchToWritable( StreamMode nMode, BOOL bDirect )
             m_pStream = m_pTempFile->GetStream( nMode );
 
             // copy the original stream into the temporary stream ( only transacted mode is supported )
-            if ( m_pSource->GetError() == ERRCODE_IO_NOTEXISTS )
+            if ( m_pSource->GetError() == ERRCODE_IO_NOTEXISTS || m_pSource->GetError() == ERRCODE_IO_CANTREAD ||
+                    m_pSource->GetError() == ERRCODE_IO_ACCESSDENIED )
                 m_pSource->ResetError();
             else
             {
@@ -2086,11 +2088,10 @@ String UCBStorage::CreateLinkFile( const String& rName )
     String aName = aFolderObj.GetName();
     aFolderObj.removeSegment();
     String aFolderURL( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ) );
-    ::utl::TempFile aTempFile( &aFolderURL );
-    aTempFile.EnableKillingFile( TRUE );
+    ::utl::TempFile* pTempFile = new ::utl::TempFile( &aFolderURL );
 
     // get the stream from the temp file
-    SvStream* pStream = aTempFile.GetStream( STREAM_STD_READWRITE | STREAM_TRUNC );
+    SvStream* pStream = pTempFile->GetStream( STREAM_STD_READWRITE | STREAM_TRUNC );
 
     // write header
     *pStream << ( UINT32 ) 0x04034b50;
@@ -2132,12 +2133,14 @@ String UCBStorage::CreateLinkFile( const String& rName )
         pStream->Flush();
 
         // move the stream to its desired location
-        Content aSource( aTempFile.GetURL(), Reference < XCommandEnvironment >() );
+        Content aSource( pTempFile->GetURL(), Reference < XCommandEnvironment >() );
+        DELETEZ( pTempFile );
         aFolder.transferContent( aSource, InsertOperation_MOVE, aName, NameClash::OVERWRITE );
-
         return aURL;
     }
 
+    pTempFile->EnableKillingFile( TRUE );
+    delete pTempFile;
     return String();
 }
 

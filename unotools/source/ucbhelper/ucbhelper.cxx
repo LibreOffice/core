@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbhelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-09 10:44:24 $
+ *  last change: $Author: mba $ $Date: 2001-07-16 09:28:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,6 @@ sal_Bool UCBContentHelper::Transfer_Impl( const String& rSource, const String& r
     }
     catch( ::com::sun::star::uno::Exception& )
     {
-        DBG_ERRORFILE( "Any other exception" );
         bRet = sal_False;
     }
 
@@ -217,7 +216,7 @@ sal_Bool UCBContentHelper::IsDocument( const String& rContent )
     }
     catch( ::com::sun::star::uno::Exception& )
     {
-        DBG_ERRORFILE( "Any other exception" );
+        DBG_WARNING( "Any other exception" );
     }
 
     return bRet;
@@ -249,7 +248,7 @@ sal_Bool UCBContentHelper::IsFolder( const String& rContent )
     }
     catch( ::com::sun::star::uno::Exception& )
     {
-        DBG_ERRORFILE( "Any other exception" );
+        DBG_WARNING( "Any other exception" );
     }
 
     return bRet;
@@ -274,11 +273,9 @@ sal_Bool UCBContentHelper::GetTitle( const String& rContent, String& rTitle )
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
     {
-        DBG_ERRORFILE( "CommandAbortedException" );
     }
     catch( ::com::sun::star::uno::Exception& )
     {
-        DBG_ERRORFILE( "Any other exception" );
     }
     return bRet;
 }
@@ -303,7 +300,7 @@ sal_Bool UCBContentHelper::Kill( const String& rContent )
     }
     catch( ::com::sun::star::uno::Exception& )
     {
-        DBG_ERRORFILE( "Any other exception" );
+        DBG_WARNING( "Any other exception" );
         bRet = sal_False;
     }
 
@@ -364,9 +361,8 @@ Sequence < OUString > UCBContentHelper::GetFolderContents( const String& rFolder
         {
             // folder not exists?
         }
-    catch( ::com::sun::star::uno::Exception& )
+        catch( ::com::sun::star::uno::Exception& )
         {
-            DBG_ERRORFILE( "createCursor: Any other exception" );
         }
 
         if ( xResultSet.is() )
@@ -384,17 +380,14 @@ Sequence < OUString > UCBContentHelper::GetFolderContents( const String& rFolder
             }
             catch( ::com::sun::star::ucb::CommandAbortedException& )
             {
-                DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
             }
             catch( ::com::sun::star::uno::Exception& )
             {
-                DBG_ERRORFILE( "XContentAccess::next(): Any other exception" );
             }
         }
     }
     catch( ::com::sun::star::uno::Exception& )
     {
-        DBG_ERRORFILE( "GetFolderContents: Any other exception" );
     }
 
     if ( pFiles )
@@ -439,11 +432,9 @@ Sequence < OUString > UCBContentHelper::GetResultSet( const String& rURL )
         }
         catch( ::com::sun::star::ucb::CommandAbortedException& )
         {
-            DBG_ERRORFILE( "createCursor: CommandAbortedException" );
         }
         catch( ::com::sun::star::uno::Exception& )
         {
-            DBG_ERRORFILE( "createCursor: Any other exception" );
         }
 
         if ( xResultSet.is() )
@@ -470,17 +461,14 @@ Sequence < OUString > UCBContentHelper::GetResultSet( const String& rURL )
             }
             catch( ::com::sun::star::ucb::CommandAbortedException& )
             {
-                DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
             }
             catch( ::com::sun::star::uno::Exception& )
             {
-                DBG_ERRORFILE( "XContentAccess::next(): Any other exception" );
             }
         }
     }
     catch( ::com::sun::star::uno::Exception& )
     {
-        DBG_ERRORFILE( "GetResultSet: Any other exception" );
     }
 
     if ( pList )
@@ -638,11 +626,9 @@ sal_Bool UCBContentHelper::HasParentFolder( const String& rFolder )
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
     {
-        DBG_ERRORFILE( "UCBContentHelper::HasParentFolder(): CommandAbortedException" );
     }
     catch( ::com::sun::star::uno::Exception& )
     {
-        DBG_ERRORFILE( "UCBContentHelper::HasParentFolder(): Any other exception" );
     }
 
     return bRet;
@@ -663,11 +649,9 @@ ULONG UCBContentHelper::GetSize( const String& rContent )
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
     {
-        DBG_ERRORFILE( "CommandAbortedException" );
     }
     catch( ::com::sun::star::uno::Exception& )
     {
-        DBG_ERRORFILE( "Any other exception" );
     }
     nSize = (UINT32)nTemp;
     return nSize;
@@ -696,11 +680,9 @@ sal_Bool UCBContentHelper::IsYounger( const String& rIsYoung, const String& rIsO
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
     {
-        DBG_ERRORFILE( "CommandAbortedException" );
     }
     catch( ::com::sun::star::uno::Exception& )
     {
-        DBG_ERRORFILE( "Any other exception" );
     }
 
     return ( aYoungDate > aOlderDate );
