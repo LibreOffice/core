@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:38:20 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ ModalDialog DLG_COLOR
         Text[ czech ] = "Azurová";
         Text[ hebrew ] = "‮צבע קיין (כחול עמוק)‬";
         Text[ hindi ] = "~सियान";
+        Text[ slovak ] = "~Azúrová";
     };
     FixedText FT_MAGENTA
     {
@@ -178,6 +179,7 @@ ModalDialog DLG_COLOR
         Text[ czech ] = "Purpurová";
         Text[ hebrew ] = "‮צבע מג'נטה‬";
         Text[ hindi ] = "~मेज़न्टा";
+        Text[ slovak ] = "~Purpurová";
     };
     FixedText FT_YELLOW
     {
@@ -212,6 +214,7 @@ ModalDialog DLG_COLOR
         Text[ czech ] = "Žlutá";
         Text[ hebrew ] = "‮צהוב‬";
         Text[ hindi ] = "~पीला";
+        Text[ slovak ] = "Ž~ltá";
     };
     FixedText FT_KEY
     {
@@ -246,6 +249,7 @@ ModalDialog DLG_COLOR
         Text[ czech ] = "Klíč";
         Text[ hebrew ] = "‮מפתח‬";
         Text[ hindi ] = "~चाभी";
+        Text[ slovak ] = "~Kľúč";
     };
     MetricField NUM_CYAN
     {
@@ -332,6 +336,7 @@ ModalDialog DLG_COLOR
         Text[ czech ] = "Červená";
         Text[ hebrew ] = "‮אדום‬";
         Text[ hindi ] = "~लाल";
+        Text[ slovak ] = "Če~rvená";
     };
     FixedText FT_GREEN
     {
@@ -366,6 +371,7 @@ ModalDialog DLG_COLOR
         Text[ czech ] = "Zelená";
         Text[ hebrew ] = "‮ירוק‬";
         Text[ hindi ] = "~हरा";
+        Text[ slovak ] = "Zele~ná";
     };
     FixedText FT_BLUE
     {
@@ -400,6 +406,7 @@ ModalDialog DLG_COLOR
         Text[ czech ] = "Modrá";
         Text[ hebrew ] = "‮כחול‬";
         Text[ hindi ] = "~नीला";
+        Text[ slovak ] = "Mo~drá";
     };
     NumericField NUM_RED
     {
@@ -467,6 +474,7 @@ ModalDialog DLG_COLOR
         Text[ czech ] = "Tón";
         Text[ hebrew ] = "‮גוון‬";
         Text[ hindi ] = "ह~यू";
+        Text[ slovak ] = "Od~tieň";
     };
     NumericField NUM_HUE
     {
@@ -512,6 +520,7 @@ ModalDialog DLG_COLOR
         Text[ czech ] = "Nasycení";
         Text[ hebrew ] = "‮רווית הצבע‬";
         Text[ hindi ] = "प~रिपूर्णता";
+        Text[ slovak ] = "~Sýtosť";
     };
     NumericField NUM_SATURATION
     {
@@ -557,6 +566,7 @@ ModalDialog DLG_COLOR
         Text[ czech ] = "Jas";
         Text[ hebrew ] = "‮בהירות‬";
         Text[ hindi ] = "Bright~ness";
+        Text[ slovak ] = "~Jas";
     };
     NumericField NUM_LUMINANCE
     {
@@ -615,7 +625,10 @@ ModalDialog DLG_COLOR
     Text[ czech ] = "Barva";
     Text[ hebrew ] = "‮צבע‬";
     Text[ hindi ] = "रंग";
+    Text[ slovak ] = "Farba";
 };
+
+
 
 
 
