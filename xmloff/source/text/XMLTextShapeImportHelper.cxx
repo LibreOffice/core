@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-07 18:48:47 $
+ *  last change: $Author: cl $ $Date: 2000-12-19 16:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,8 @@
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HDL_
-#include <com/sun/star/drawing/XShapes.hdl>
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
+#include <com/sun/star/drawing/XShapes.hpp>
 #endif
 
 #ifndef _XMLTEXTSHAPEIMPORTHELPER_HXX
