@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docglbl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-31 11:07:56 $
+ *  last change: $Author: jp $ $Date: 2001-10-25 14:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,19 +229,20 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
             return FALSE;
     }
 
-
     const SfxFilter* pFilter;
     switch( eDocType )
     {
     case SPLITDOC_TO_HTML:
         pFilter = SwIoSystem::GetFilterOfFormat( String::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM( "HTML" )));
+                            RTL_CONSTASCII_STRINGPARAM( "HTML" )),
+                            pDocShell->GetFactory().GetFilterContainer());
         break;
 
     default:
 //  case SPLITDOC_TO_GLOBALDOC:
-        pFilter = SwIoSystem::GetFilterOfFormat( String::CreateFromAscii(
-                                                    FILTER_XML ));
+        pFilter = SwIoSystem::GetFilterOfFormat(
+                            String::CreateFromAscii( FILTER_XML ),
+                            pDocShell->GetFactory().GetFilterContainer());
         eDocType = SPLITDOC_TO_GLOBALDOC;
         break;
     }
