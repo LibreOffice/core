@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parawin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-31 15:12:33 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,7 @@ void ScParaWin::SetArgumentFonts(const Font&aBoldFont,const Font&aLightFont)
     aFntLight=aLightFont;
 }
 
-void ScParaWin::SetFunctionDesc(ScFuncDesc* pFDesc)
+void ScParaWin::SetFunctionDesc(const ScFuncDesc* pFDesc)
 {
     pFuncDesc=pFDesc;
 
