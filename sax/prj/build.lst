@@ -1,4 +1,4 @@
-ax	sax	:	cppuhelper external offapi NULL
+ax	sax	:	cppuhelper external drafts NULL
 ax	sax										usr1	-	all	ax_mkout NULL
 ax	sax\unotypes							nmake	-	all	ax_unotypes NULL
 ax	sax\source\expatwrap					nmake	-	all	ax_expatwrap ax_unotypes NULL
