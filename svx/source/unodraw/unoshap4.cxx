@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:06:45 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,14 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
+#include <com/sun/star/util/XModifiable.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_XLINKAGESUPPORT_HPP_
+#include <com/sun/star/embed/XLinkageSupport.hpp>
+#endif
+
 #define _SVX_USE_UNOGLOBALS_
 
 #ifndef _SVDOOLE2_HXX
@@ -67,8 +75,6 @@
 #ifndef _SVDOMEDIA_HXX
 #include "svdomedia.hxx"
 #endif
-
-#include <so3/outplace.hxx>
 
 #ifndef SVX_LIGHT
 #ifndef _SOT_CLSIDS_HXX
@@ -84,6 +90,8 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
+
+#include <sfx2/objsh.hxx>
 
 #ifndef _SVDMODEL_HXX
 #include "svdmodel.hxx"
@@ -107,13 +115,13 @@ using namespace ::osl;
 using namespace ::vos;
 using namespace ::rtl;
 using namespace ::cppu;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 
 ///////////////////////////////////////////////////////////////////////
-
 SvxOle2Shape::SvxOle2Shape( SdrObject* pObject ) throw()
 : SvxShape( pObject, aSvxMapProvider.GetMap(SVXMAP_OLE2)  )
 {
@@ -142,7 +150,6 @@ void SAL_CALL SvxOle2Shape::setPropertyValue( const OUString& aPropertyName, con
 
     if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CLSID" ) ) )
     {
-#ifndef SVX_LIGHT
         OUString aCLSID;
         if( aValue >>= aCLSID )
         {
@@ -159,14 +166,9 @@ void SAL_CALL SvxOle2Shape::setPropertyValue( const OUString& aPropertyName, con
         }
 
         throw IllegalArgumentException();
-#endif
     }
     else if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ThumbnailGraphicURL" ) ) )
     {
-#ifndef SVX_LIGHT
-        // only allow setting of thumbnail for player
-        return;
-#else
         OUString aURL;
         if( aValue >>= aURL )
         {
@@ -180,7 +182,6 @@ void SAL_CALL SvxOle2Shape::setPropertyValue( const OUString& aPropertyName, con
         }
 
         throw IllegalArgumentException();
-#endif
     }
     else if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UNO_NAME_OLE2_PERSISTNAME ) ) )
     {
@@ -192,6 +193,19 @@ void SAL_CALL SvxOle2Shape::setPropertyValue( const OUString& aPropertyName, con
 
             if( pOle )
                 pOle->SetPersistName( aPersistName );
+
+            return;
+        }
+
+        throw IllegalArgumentException();
+    }
+    else if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LinkURL" ) ) )
+    {
+        OUString aLinkURL;
+        if ( aValue >>= aLinkURL )
+        {
+            if( pObj )
+                createLink( aLinkURL );
 
             return;
         }
@@ -218,15 +232,7 @@ Any SAL_CALL SvxOle2Shape::getPropertyValue( const OUString& PropertyName ) thro
             // if there isn't already a preview graphic set, check if we need to generate
             // one if model says so
             if( pGraphic == NULL && !pOle->IsEmptyPresObj() && pModel->IsSaveOLEPreview() )
-            {
-                const GDIMetaFile* pMetaFile = pOle->GetGDIMetaFile();
-                if( pMetaFile )
-                {
-                    Graphic aNewGrf( *pMetaFile );
-                    pOle->SetGraphic( &aNewGrf );
-                    pGraphic = pOle->GetGraphic();
-                }
-            }
+                pGraphic = pOle->GetGraphic();
 
             if( pGraphic )
             {
@@ -247,13 +253,27 @@ Any SAL_CALL SvxOle2Shape::getPropertyValue( const OUString& PropertyName ) thro
             aPersistName = pOle->GetPersistName();
             if( aPersistName.getLength() )
             {
-                SvPersist *pPersist = pObj->GetModel()->GetPersist();
-                if( (NULL == pPersist) || ( NULL == pPersist->Find( static_cast< SdrOle2Obj* >( pObj )->GetPersistName() ) ) )
+                SfxObjectShell *pPersist = pObj->GetModel()->GetPersist();
+                if( (NULL == pPersist) || !pPersist->GetEmbeddedObjectContainer().HasEmbeddedObject( static_cast< SdrOle2Obj* >( pObj )->GetPersistName() ) )
                     aPersistName = OUString();
             }
         }
 
         return makeAny( aPersistName );
+    }
+    else if( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LinkURL" ) ) )
+    {
+        OUString    aLinkURL;
+        SdrOle2Obj* pOle = PTR_CAST( SdrOle2Obj, pObj );
+
+        if( pOle )
+        {
+            uno::Reference< embed::XLinkageSupport > xLink( pOle->GetObjRef(), uno::UNO_QUERY );
+            if ( xLink.is() && xLink->isLink() )
+                aLinkURL = xLink->getLinkURL();
+        }
+
+        return makeAny( aLinkURL );
     }
 
     return SvxShape::getPropertyValue( PropertyName );
@@ -262,123 +282,102 @@ Any SAL_CALL SvxOle2Shape::getPropertyValue( const OUString& PropertyName ) thro
 
 sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
 {
-    const SvInPlaceObjectRef& rIPRef = static_cast< SdrOle2Obj* >( pObj )->GetObjRef();
+    sal_Bool            bOk = sal_False;
 
-    if( rIPRef.Is() )
+    if ( !static_cast< SdrOle2Obj* >( pObj )->IsEmpty() )
         return sal_False;
 
     // create storage and inplace object
-    String              aEmptyStr;
-    SvStorageRef        aStor;
-    SvInPlaceObjectRef aIPObj = SvInPlaceObject::CreateObject( aClassName );
-
-    SvPersist*          pPersist = pModel->GetPersist();
-    sal_Bool            bOk = sal_False;
-    String              aPersistName;
+    SfxObjectShell*     pPersist = pModel->GetPersist();
+    ::rtl::OUString              aPersistName;
     OUString            aTmpStr;
     Any                 aAny( getPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ) ) );
-
     if( aAny >>= aTmpStr )
         aPersistName = aTmpStr;
 
-    // if we already have a shape name check if its a unique
-    // storage name
-    if( aPersistName.Len() && !pPersist->Find( aPersistName ) )
-    {
-        SvInfoObjectRef xSub = new SvEmbeddedInfoObject( aIPObj, aPersistName );
-        bOk = pPersist->Move( xSub, aPersistName );
-    }
-    else
-    {
-        // generate a unique name
-        String aStr( aPersistName = String( RTL_CONSTASCII_USTRINGPARAM("Object ") ) );
-
-        // for-Schleife wegen Storage Bug 46033
-        for( sal_uInt32 i = 1, n = 0; n < 100; n++ )
-        {
-            do
-            {
-                aStr = aPersistName;
-                aStr += String::CreateFromInt32( i++ );
-            }
-            while( pPersist->Find( aStr ) );
-
-            SvInfoObjectRef xSub( new SvEmbeddedInfoObject( aIPObj, aStr ) );
-
-            if( pPersist->Move( xSub, aStr ) ) // Eigentuemer Uebergang
-            {
-                bOk = sal_True;
-                aPersistName = aStr;
-                break;
-            }
-        }
-    }
-
-    DBG_ASSERT( bOk, "could not create move ole stream!" )
-
-    if( bOk )
+    //TODO/LATER: how to cope with creation failure?!
+    uno::Reference < embed::XEmbeddedObject > xObj =
+            pPersist->GetEmbeddedObjectContainer().CreateEmbeddedObject( aClassName.GetByteSequence(), aPersistName );
+    if( xObj.is() )
     {
         aAny <<= ( aTmpStr = aPersistName );
         setPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ), aAny );
+
+        // the object is inserted during setting of PersistName property usually
+        if ( static_cast< SdrOle2Obj* >( pObj )->IsEmpty() )
+            static_cast< SdrOle2Obj* >( pObj )->SetObjRef( xObj );
+
+        Rectangle aRect = static_cast< SdrOle2Obj* >( pObj )->GetLogicRect();
+        if ( aRect.GetWidth() == 100 && aRect.GetHeight() == 100 )
+        {
+            // default size
+            awt::Size aSz = xObj->getVisualAreaSize( static_cast< SdrOle2Obj* >( pObj )->GetAspect() );
+            aRect.SetSize( Size( aSz.Width, aSz.Height ) );
+            static_cast< SdrOle2Obj* >( pObj )->SetLogicRect( aRect );
+        }
+        else
+        {
+            awt::Size aSz;
+            Size aSize = static_cast< SdrOle2Obj* >( pObj )->GetLogicRect().GetSize();
+            aSz.Width = aSize.Width();
+            aSz.Height = aSize.Height();
+            xObj->setVisualAreaSize(  static_cast< SdrOle2Obj* >( pObj )->GetAspect(), aSz );
+        }
     }
 
-    static_cast< SdrOle2Obj* >( pObj )->SetObjRef( aIPObj );
-    Rectangle aRect = static_cast< SdrOle2Obj* >( pObj )->GetLogicRect();
-    if ( aRect.GetWidth() == 100 && aRect.GetHeight() == 100 )
+    return xObj.is();
+}
+
+sal_Bool SvxOle2Shape::createLink( const ::rtl::OUString& aLinkURL )
+{
+    sal_Bool bResult = sal_False;
+
+    if ( !static_cast< SdrOle2Obj* >( pObj )->IsEmpty() )
+        return sal_False;
+
+    ::rtl::OUString aPersistName;
+
+    SfxObjectShell* pPersist = pModel->GetPersist();
+
+    uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
+    aMediaDescr[0].Name = ::rtl::OUString::createFromAscii( "URL" );
+    aMediaDescr[0].Value <<= aLinkURL;
+
+    //TODO/LATER: how to cope with creation failure?!
+    uno::Reference< embed::XEmbeddedObject > xObj =
+            pPersist->GetEmbeddedObjectContainer().InsertEmbeddedLink( aMediaDescr , aPersistName );
+
+    if( xObj.is() )
     {
-        // default size
-        aRect.SetSize( aIPObj->GetVisArea().GetSize() );
-        static_cast< SdrOle2Obj* >( pObj )->SetLogicRect( aRect );
+        setPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ), uno::makeAny( aPersistName ) );
+
+        // the object is inserted during setting of PersistName property usually
+        if ( static_cast< SdrOle2Obj* >( pObj )->IsEmpty() )
+            static_cast< SdrOle2Obj* >( pObj )->SetObjRef( xObj );
+
+        Rectangle aRect = static_cast< SdrOle2Obj* >( pObj )->GetLogicRect();
+        if ( aRect.GetWidth() == 100 && aRect.GetHeight() == 100 )
+        {
+            // default size
+            awt::Size aSz = xObj->getVisualAreaSize( static_cast< SdrOle2Obj* >( pObj )->GetAspect() );
+            aRect.SetSize( Size( aSz.Width, aSz.Height ) );
+            static_cast< SdrOle2Obj* >( pObj )->SetLogicRect( aRect );
+        }
+        else
+        {
+            awt::Size aSz;
+            Size aSize = static_cast< SdrOle2Obj* >( pObj )->GetLogicRect().GetSize();
+            aSz.Width = aSize.Width();
+            aSz.Height = aSize.Height();
+            xObj->setVisualAreaSize(  static_cast< SdrOle2Obj* >( pObj )->GetAspect(), aSz );
+        }
     }
-    else
-        aIPObj->SetVisAreaSize( static_cast< SdrOle2Obj* >( pObj )->GetLogicRect().GetSize() );
-    return bOk;
+
+    return xObj.is();
 }
 
 ///////////////////////////////////////////////////////////////////////
-
-// the following code is currently not working in the player
 #ifndef SVX_LIGHT
-
-static sal_Bool SvxImplFillCommandList( const Sequence< PropertyValue >& aCommandSequence, SvCommandList& aNewCommands )
-{
-    const sal_Int32 nCount = aCommandSequence.getLength();
-
-    String aCommand, aArg;
-    OUString aApiArg;
-    for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
-    {
-        aCommand = aCommandSequence[nIndex].Name;
-
-        if( !( aCommandSequence[nIndex].Value >>= aApiArg ) )
-            return sal_False;
-
-        aArg = aApiArg;
-        aNewCommands.Append( aCommand, aArg );
-    }
-
-    return sal_True;
-}
-
-static void SvxImplFillCommandSequence( const SvCommandList& aCommands, Sequence< PropertyValue >& aCommandSequence )
-{
-    const sal_Int32 nCount = aCommands.Count();
-    aCommandSequence.realloc( nCount );
-
-    for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
-    {
-        const SvCommand& rCommand = aCommands[ nIndex ];
-
-        aCommandSequence[nIndex].Name = rCommand.GetCommand();
-        aCommandSequence[nIndex].Handle = -1;
-        aCommandSequence[nIndex].Value = makeAny( OUString( rCommand.GetArgument() ) );
-        aCommandSequence[nIndex].State = PropertyState_DIRECT_VALUE;
-
-    }
-}
-
-///////////////////////////////////////////////////////////////////////
-
 SvxAppletShape::SvxAppletShape( SdrObject* pObject ) throw()
 : SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_APPLET)  )
 {
@@ -410,74 +409,28 @@ void SAL_CALL SvxAppletShape::setPropertyValue( const OUString& aPropertyName, c
     {
         if( pMap->nWID >= OWN_ATTR_APPLET_CODEBASE && pMap->nWID <= OWN_ATTR_APPLET_ISSCRIPT )
         {
-            SvAppletObjectRef xApplet = SvAppletObjectRef( ((SdrOle2Obj*)pObj)->GetObjRef() );
-            DBG_ASSERT( xApplet.Is(), "wrong ole object inside applet" );
-            if( !xApplet.Is() )
+            uno::Reference < embed::XComponentSupplier > xSup( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
+            if ( !xSup.is() )
+                return;
+
+            uno::Reference < beans::XPropertySet > xSet( xSup->getComponent(), uno::UNO_QUERY );
+            if ( !xSet.is() )
                 return;
 
             switch( pMap->nWID )
             {
                 case OWN_ATTR_APPLET_CODEBASE:
-                    {
-                        OUString aCodeBase;
-                        if( aValue >>= aCodeBase )
-                        {
-                            const String aStrCodeBase( aCodeBase );
-                            xApplet->SetCodeBase( aStrCodeBase );
-                            bOwn = sal_True;
-                        }
-                    }
-                    break;
                 case OWN_ATTR_APPLET_NAME:
-                    {
-                        OUString aName;
-                        if( aValue >>= aName )
-                        {
-                            const String aStrName( aName );
-                            xApplet->SetName( aStrName );
-                            bOwn = sal_True;
-                        }
-                    }
-                    break;
                 case OWN_ATTR_APPLET_CODE:
-                    {
-                        OUString aCode;
-                        if( aValue >>= aCode )
-                        {
-                            const String aStrCode( aCode );
-                            xApplet->SetClass( aStrCode );
-                            bOwn = sal_True;
-                        }
-                    }
-                    break;
                 case OWN_ATTR_APPLET_COMMANDS:
-                    {
-                        Sequence< PropertyValue > aCommandSequence;
-                        if( aValue >>= aCommandSequence )
-                        {
-                            SvCommandList aNewCommands;
-                            if( SvxImplFillCommandList( aCommandSequence, aNewCommands ) )
-                            {
-                                xApplet->SetCommandList( aNewCommands );
-                                bOwn = sal_True;
-                            }
-                        }
-                    }
-                    break;
                 case OWN_ATTR_APPLET_ISSCRIPT:
-                    {
-                        sal_Bool bScript;
-                        if( aValue >>= bScript )
-                        {
-                            xApplet->SetMayScript( bScript );
-                            bOwn = sal_True;
-                        }
-                    }
+                    // allow exceptions to pass through
+                    xSet->setPropertyValue( aPropertyName, aValue );
+                    bOwn = sal_True;
                     break;
+                default:
+                    throw IllegalArgumentException();
             }
-
-            if( !bOwn )
-                throw IllegalArgumentException();
         }
     }
 
@@ -486,16 +439,15 @@ void SAL_CALL SvxAppletShape::setPropertyValue( const OUString& aPropertyName, c
 
     if( pModel )
     {
-        SvPersist* pPersist = pModel->GetPersist();
+        SfxObjectShell* pPersist = pModel->GetPersist();
         if( pPersist && !pPersist->IsEnableSetModified() )
         {
             SdrOle2Obj* pOle = static_cast< SdrOle2Obj* >( pObj );
-            if( pOle && ! pOle->IsEmpty() )
+            if( pOle && !pOle->IsEmpty() )
             {
-                const SvInPlaceObjectRef& rIPRef = pOle->GetObjRef();
-
-                if( rIPRef.Is() )
-                    rIPRef->SetModified( sal_False );
+                uno::Reference < util::XModifiable > xMod( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
+                if( xMod.is() )
+                    xMod->setModified( sal_False );
             }
         }
     }
@@ -511,32 +463,26 @@ Any SAL_CALL SvxAppletShape::getPropertyValue( const OUString& PropertyName ) th
     {
         if( pMap->nWID >= OWN_ATTR_APPLET_CODEBASE && pMap->nWID <= OWN_ATTR_APPLET_ISSCRIPT )
         {
-            SvAppletObjectRef xApplet = SvAppletObjectRef( ((SdrOle2Obj*)pObj)->GetObjRef() );
-            DBG_ASSERT( xApplet.Is(), "wrong ole object inside applet" );
-            if( xApplet.Is() )
+            uno::Reference < embed::XComponentSupplier > xSup( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
+            if ( !xSup.is() )
+                return uno::Any();
+
+            uno::Reference < beans::XPropertySet > xSet( xSup->getComponent(), uno::UNO_QUERY );
+            if ( !xSet.is() )
+                return uno::Any();
+
+            switch( pMap->nWID )
             {
-
-                switch( pMap->nWID )
-                {
-                    case OWN_ATTR_APPLET_CODEBASE:
-                        return makeAny( OUString( xApplet->GetCodeBase() ) );
-                    case OWN_ATTR_APPLET_NAME:
-                        return makeAny( OUString( xApplet->GetName() ) );
-                    case OWN_ATTR_APPLET_CODE:
-                        return makeAny( OUString( xApplet->GetClass() ) );
-                    case OWN_ATTR_APPLET_COMMANDS:
-                        {
-                            Sequence< PropertyValue > aCommandSequence;
-                            SvxImplFillCommandSequence( xApplet->GetCommandList(), aCommandSequence );
-                            return makeAny( aCommandSequence );
-                        }
-                    case OWN_ATTR_APPLET_ISSCRIPT:
-                        return makeAny( (sal_Bool) xApplet->IsMayScript() );
-                }
+                case OWN_ATTR_APPLET_CODEBASE:
+                case OWN_ATTR_APPLET_NAME:
+                case OWN_ATTR_APPLET_CODE:
+                case OWN_ATTR_APPLET_COMMANDS:
+                case OWN_ATTR_APPLET_ISSCRIPT:
+                    return xSet->getPropertyValue( PropertyName );
+                    break;
+                default:
+                    throw IllegalArgumentException();
             }
-
-            Any aAny;
-            return aAny;
         }
     }
 
@@ -577,53 +523,26 @@ void SAL_CALL SvxPluginShape::setPropertyValue( const OUString& aPropertyName, c
     {
         if( pMap->nWID >= OWN_ATTR_PLUGIN_MIMETYPE && pMap->nWID <= OWN_ATTR_PLUGIN_COMMANDS )
         {
-            SvPlugInObjectRef xPlugin = SvPlugInObjectRef( ((SdrOle2Obj*)pObj)->GetObjRef() );
-            DBG_ASSERT( xPlugin.Is(), "wrong ole object inside plugin" );
-            if( !xPlugin.Is() )
+            uno::Reference < embed::XComponentSupplier > xSup( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
+            if ( !xSup.is() )
+                return;
+
+            uno::Reference < beans::XPropertySet > xSet( xSup->getComponent(), uno::UNO_QUERY );
+            if ( !xSet.is() )
                 return;
 
             switch( pMap->nWID )
             {
                 case OWN_ATTR_PLUGIN_MIMETYPE:
-                    {
-                        OUString aMimeType;
-                        if( aValue >>= aMimeType )
-                        {
-                            const String aStrMimeType( aMimeType );
-                            xPlugin->SetMimeType( aStrMimeType );
-                            bOwn = sal_True;
-                        }
-                    }
-                    break;
                 case OWN_ATTR_PLUGIN_URL:
-                    {
-                        OUString aURL;
-                        if( aValue >>= aURL )
-                        {
-                            const String aStrURL( aURL );
-                            xPlugin->SetURL( aStrURL );
-                            bOwn = sal_True;
-                        }
-                    }
-                    break;
                 case OWN_ATTR_PLUGIN_COMMANDS:
-                    {
-                        Sequence< PropertyValue > aCommandSequence;
-                        if( aValue >>= aCommandSequence )
-                        {
-                            SvCommandList aNewCommands;
-                            if( SvxImplFillCommandList( aCommandSequence, aNewCommands ) )
-                            {
-                                xPlugin->SetCommandList( aNewCommands );
-                                bOwn = sal_True;
-                            }
-                        }
-                    }
+                    // allow exceptions to pass through
+                    xSet->setPropertyValue( aPropertyName, aValue );
+                    bOwn = sal_True;
                     break;
+                default:
+                    throw IllegalArgumentException();
             }
-
-            if( !bOwn )
-                throw IllegalArgumentException();
         }
     }
 
@@ -632,16 +551,15 @@ void SAL_CALL SvxPluginShape::setPropertyValue( const OUString& aPropertyName, c
 
     if( pModel )
     {
-        SvPersist* pPersist = pModel->GetPersist();
+        SfxObjectShell* pPersist = pModel->GetPersist();
         if( pPersist && !pPersist->IsEnableSetModified() )
         {
             SdrOle2Obj* pOle = static_cast< SdrOle2Obj* >( pObj );
-            if( pOle && ! pOle->IsEmpty() )
+            if( pOle && !pOle->IsEmpty() )
             {
-                const SvInPlaceObjectRef& rIPRef = pOle->GetObjRef();
-
-                if( rIPRef.Is() )
-                    rIPRef->SetModified( sal_False );
+                uno::Reference < util::XModifiable > xMod( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
+                if( xMod.is() )
+                    xMod->setModified( sal_False );
             }
         }
     }
@@ -657,34 +575,24 @@ Any SAL_CALL SvxPluginShape::getPropertyValue( const OUString& PropertyName ) th
     {
         if( pMap->nWID >= OWN_ATTR_PLUGIN_MIMETYPE && pMap->nWID <= OWN_ATTR_PLUGIN_COMMANDS )
         {
-            SvPlugInObjectRef xPlugin = SvPlugInObjectRef( ((SdrOle2Obj*)pObj)->GetObjRef() );
-            DBG_ASSERT( xPlugin.Is(), "wrong ole object inside plugin" );
-            if( xPlugin.Is() )
+            uno::Reference < embed::XComponentSupplier > xSup( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
+            if ( !xSup.is() )
+                return uno::Any();
+
+            uno::Reference < beans::XPropertySet > xSet( xSup->getComponent(), uno::UNO_QUERY );
+            if ( !xSet.is() )
+                return uno::Any();
+
+            switch( pMap->nWID )
             {
-
-                switch( pMap->nWID )
-                {
-                    case OWN_ATTR_PLUGIN_MIMETYPE:
-                        return makeAny( OUString( xPlugin->GetMimeType() ) );
-                    case OWN_ATTR_PLUGIN_URL:
-                    {
-                        OUString aURL;
-                        DBG_ASSERT( xPlugin->GetURL(), "Plugin without a URL!" );
-                        if( xPlugin->GetURL() )
-                            aURL = xPlugin->GetURL()->GetMainURL( INetURLObject::NO_DECODE );
-                        return makeAny( aURL );
-                    }
-                    case OWN_ATTR_PLUGIN_COMMANDS:
-                        {
-                            Sequence< PropertyValue > aCommandSequence;
-                            SvxImplFillCommandSequence( xPlugin->GetCommandList(), aCommandSequence );
-                            return makeAny( aCommandSequence );
-                        }
-                }
+                case OWN_ATTR_PLUGIN_MIMETYPE:
+                case OWN_ATTR_PLUGIN_URL:
+                case OWN_ATTR_PLUGIN_COMMANDS:
+                    return xSet->getPropertyValue( PropertyName );
+                    break;
+                default:
+                    throw IllegalArgumentException();
             }
-
-            Any aAny;
-            return aAny;
         }
     }
 
@@ -726,99 +634,30 @@ void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, co
     {
         if( pMap->nWID >= OWN_ATTR_FRAME_URL && pMap->nWID <= OWN_ATTR_FRAME_MARGIN_HEIGHT )
         {
-            SfxFrameObjectRef xFrame = SfxFrameObjectRef( ((SdrOle2Obj*)pObj)->GetObjRef() );
-            DBG_ASSERT( xFrame.Is(), "wrong ole object inside frame" );
-            if( !xFrame.Is() )
+            uno::Reference < embed::XComponentSupplier > xSup( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
+            if ( !xSup.is() )
                 return;
 
-            SfxFrameDescriptor *pDescriptor = xFrame->GetFrameDescriptor()->Clone( NULL );
-            DBG_ASSERT( pDescriptor, "no descriptor for frame!" );
-            if( !pDescriptor )
+            uno::Reference < beans::XPropertySet > xSet( xSup->getComponent(), uno::UNO_QUERY );
+            if ( !xSet.is() )
                 return;
 
             switch( pMap->nWID )
             {
+                //TODO/LATER: more properties!
                 case OWN_ATTR_FRAME_URL:
-                    {
-                        OUString aURL;
-                        if( aValue >>= aURL )
-                        {
-                            const String aStrURL( aURL );
-                            pDescriptor->SetURL( aStrURL );
-                            xFrame->SetFrameDescriptor( pDescriptor );
-                            bOwn = sal_True;
-                        }
-                    }
-                    break;
                 case OWN_ATTR_FRAME_NAME:
-                    {
-                        OUString aName;
-                        if( aValue >>= aName )
-                        {
-                            const String aStrName( aName );
-                            pDescriptor->SetName( aStrName );
-                            xFrame->SetFrameDescriptor( pDescriptor );
-                            bOwn = sal_True;
-                        }
-                    }
-                    break;
                 case OWN_ATTR_FRAME_ISAUTOSCROLL:
-                    {
-                        sal_Bool bScroll;
-                        if( !aValue.hasValue() )
-                        {
-                            pDescriptor->SetScrollingMode( ScrollingAuto );
-                            xFrame->SetFrameDescriptor( pDescriptor );
-                            bOwn = sal_True;
-                        }
-                        else if( aValue >>= bScroll )
-                        {
-                            pDescriptor->SetScrollingMode( bScroll ? ScrollingYes : ScrollingNo );
-                            xFrame->SetFrameDescriptor( pDescriptor );
-                            bOwn = sal_True;
-                        }
-                    }
-                    break;
                 case OWN_ATTR_FRAME_ISBORDER:
-                    {
-                        sal_Bool bBorder;
-                        if( aValue >>= bBorder )
-                        {
-                            pDescriptor->SetFrameBorder( bBorder );
-                            xFrame->SetFrameDescriptor( pDescriptor );
-                            bOwn = sal_True;
-                        }
-                    }
-                    break;
-
                 case OWN_ATTR_FRAME_MARGIN_WIDTH:
-                    {
-                        sal_Int32 nMargin;
-                        if( aValue >>= nMargin )
-                        {
-                            const Size aNewMargin( nMargin, pDescriptor->GetMargin().Height() );
-                            pDescriptor->SetMargin( aNewMargin );
-                            xFrame->SetFrameDescriptor( pDescriptor );
-                            bOwn = sal_True;
-                        }
-                    }
-                    break;
                 case OWN_ATTR_FRAME_MARGIN_HEIGHT:
-                    {
-                        sal_Int32 nMargin;
-                        if( aValue >>= nMargin )
-                        {
-                            const Size aNewMargin( pDescriptor->GetMargin().Width(), nMargin );
-                            pDescriptor->SetMargin( aNewMargin );
-                            xFrame->SetFrameDescriptor( pDescriptor );
-                            bOwn = sal_True;
-                        }
-                    }
+                    // allow exceptions to pass through
+                    xSet->setPropertyValue( aPropertyName, aValue );
+                    bOwn = sal_True;
                     break;
+                default:
+                    throw IllegalArgumentException();
             }
-
-            if( !bOwn )
-                throw IllegalArgumentException();
         }
     }
 
@@ -827,16 +666,15 @@ void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, co
 
     if( pModel )
     {
-        SvPersist* pPersist = pModel->GetPersist();
+        SfxObjectShell* pPersist = pModel->GetPersist();
         if( pPersist && !pPersist->IsEnableSetModified() )
         {
             SdrOle2Obj* pOle = static_cast< SdrOle2Obj* >( pObj );
-            if( pOle && ! pOle->IsEmpty() )
+            if( pOle && !pOle->IsEmpty() )
             {
-                const SvInPlaceObjectRef& rIPRef = pOle->GetObjRef();
-
-                if( rIPRef.Is() )
-                    rIPRef->SetModified( sal_False );
+                uno::Reference < util::XModifiable > xMod( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
+                if( xMod.is() )
+                    xMod->setModified( sal_False );
             }
         }
     }
@@ -853,41 +691,28 @@ Any SAL_CALL SvxFrameShape::getPropertyValue( const OUString& PropertyName ) thr
     {
         if( pMap->nWID >= OWN_ATTR_FRAME_URL && pMap->nWID <= OWN_ATTR_FRAME_MARGIN_HEIGHT )
         {
-            SfxFrameObjectRef xFrame = SfxFrameObjectRef( ((SdrOle2Obj*)pObj)->GetObjRef() );
-            DBG_ASSERT( xFrame.Is(), "wrong ole object inside frame" );
-            if( !xFrame.Is() )
-            {
-                Any aAny;
-                return aAny;
-            }
+            uno::Reference < embed::XComponentSupplier > xSup( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
+            if ( !xSup.is() )
+                return uno::Any();
 
-            const SfxFrameDescriptor *pDescriptor = xFrame->GetFrameDescriptor();
-            DBG_ASSERT( pDescriptor, "no descriptor for frame!" );
+            uno::Reference < beans::XPropertySet > xSet( xSup->getComponent(), uno::UNO_QUERY );
+            if ( !xSet.is() )
+                return uno::Any();
 
             switch( pMap->nWID )
             {
+                //TODO/LATER: more properties!
                 case OWN_ATTR_FRAME_URL:
-                    return makeAny( OUString( pDescriptor->GetURL().GetMainURL( INetURLObject::NO_DECODE ) ) );
                 case OWN_ATTR_FRAME_NAME:
-                    return makeAny( OUString( pDescriptor->GetName() ) );
                 case OWN_ATTR_FRAME_ISAUTOSCROLL:
-                    if( pDescriptor->GetScrollingMode() == ScrollingAuto )
-                    {
-                        Any aAny;
-                        return aAny;
-                    }
-                    else
-                    {
-                        return makeAny( (sal_Bool)(pDescriptor->GetScrollingMode() == ScrollingYes) );
-                    }
                 case OWN_ATTR_FRAME_ISBORDER:
-                    return makeAny( (sal_Bool)pDescriptor->IsFrameBorderOn() );
                 case OWN_ATTR_FRAME_MARGIN_WIDTH:
-                    return makeAny( (sal_Int32)pDescriptor->GetMargin().Width() );
                 case OWN_ATTR_FRAME_MARGIN_HEIGHT:
-                    return makeAny( (sal_Int32)pDescriptor->GetMargin().Height() );
+                    return xSet->getPropertyValue( PropertyName );
+                    break;
+                default:
+                    throw IllegalArgumentException();
             }
-            throw IllegalArgumentException();
         }
     }
 
