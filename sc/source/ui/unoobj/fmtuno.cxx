@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-04 16:47:35 $
+ *  last change: $Author: nn $ $Date: 2000-11-01 17:45:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,8 @@ ScTableConditionalFormat::ScTableConditionalFormat()
 {
 }
 
-ScTableConditionalFormat::ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey, BOOL bEnglish)
+ScTableConditionalFormat::ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
+                                                    BOOL bEnglish, BOOL bCompileXML)
 {
     //  Eintrag aus dem Dokument lesen...
 
@@ -172,8 +173,8 @@ ScTableConditionalFormat::ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
                     const ScCondFormatEntry* pFormatEntry = pFormat->GetEntry(i);
                     ScConditionMode eMode = pFormatEntry->GetOperation();
                     ScAddress aPos = pFormatEntry->GetSrcPos();
-                    String aExpr1 = pFormatEntry->GetExpression( aPos, 0, 0, bEnglish );
-                    String aExpr2 = pFormatEntry->GetExpression( aPos, 1, 0, bEnglish );
+                    String aExpr1 = pFormatEntry->GetExpression( aPos, 0, 0, bEnglish, bCompileXML );
+                    String aExpr2 = pFormatEntry->GetExpression( aPos, 1, 0, bEnglish, bCompileXML );
                     String aStyle = pFormatEntry->GetStyle();
 
                     AddEntry_Impl( eMode, aExpr1, aExpr2, aPos, aStyle );
@@ -184,7 +185,7 @@ ScTableConditionalFormat::ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
 }
 
 void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
-                                            ScDocument* pDoc, BOOL bEnglish ) const
+                                            ScDocument* pDoc, BOOL bEnglish, BOOL bCompileXML ) const
 {
     //  ScConditionalFormat = Core-Struktur, muss leer sein
 
@@ -200,7 +201,7 @@ void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
             ScAddress aPos;
             pEntry->GetData( nMode, aExpr1, aExpr2, aPos, aStyle );
             ScCondFormatEntry aCoreEntry( (ScConditionMode)nMode,
-                                aExpr1, aExpr2, pDoc, aPos, aStyle, bEnglish );
+                                aExpr1, aExpr2, pDoc, aPos, aStyle, bEnglish, bCompileXML );
             rFormat.AddEntry( aCoreEntry );
         }
     }
@@ -593,7 +594,8 @@ ScTableValidationObj::ScTableValidationObj() :
 {
 }
 
-ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey, BOOL bEnglish) :
+ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
+                                            BOOL bEnglish, BOOL bCompileXML) :
     aPropSet( lcl_GetValidatePropertyMap() )
 {
     //  Eintrag aus dem Dokument lesen...
@@ -606,8 +608,8 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey, BOOL bE
         {
             nMode = pData->GetOperation();
             aSrcPos = pData->GetSrcPos();
-            aExpr1 = pData->GetExpression( aSrcPos, 0, 0, bEnglish );
-            aExpr2 = pData->GetExpression( aSrcPos, 1, 0, bEnglish );
+            aExpr1 = pData->GetExpression( aSrcPos, 0, 0, bEnglish, bCompileXML );
+            aExpr2 = pData->GetExpression( aSrcPos, 1, 0, bEnglish, bCompileXML );
             nValMode = pData->GetDataMode();
             bIgnoreBlank = pData->IsIgnoreBlank();
             bShowInput = pData->GetInput( aInputTitle, aInputMessage );
@@ -622,13 +624,15 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey, BOOL bE
         ClearData_Impl();       // Defaults
 }
 
-ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc, BOOL bEnglish ) const
+ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
+                                            BOOL bEnglish, BOOL bCompileXML ) const
 {
     //  ScValidationData = Core-Struktur
 
     ScValidationData* pRet = new ScValidationData( (ScValidationMode)nValMode,
                                                    (ScConditionMode)nMode,
-                                                   aExpr1, aExpr2, pDoc, aSrcPos, bEnglish );
+                                                   aExpr1, aExpr2, pDoc, aSrcPos,
+                                                   bEnglish, bCompileXML );
     pRet->SetIgnoreBlank(bIgnoreBlank);
     if (bShowInput)
         pRet->SetInput( aInputTitle, aInputMessage );
