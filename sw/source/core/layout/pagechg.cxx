@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:30:52 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,14 +203,25 @@ void SwBodyFrm::Format( const SwBorderAttrs *pAttrs )
             }
             (Prt().*fnRect->fnSetPosX)( nBorder );
             (Prt().*fnRect->fnSetWidth)( nSize );
+
+            // Height of body frame:
             nBorder = (Frm().*fnRect->fnGetHeight)();
-            nSize = nBorder / nSum;
-            if( nSize > pGrid->GetLines() )
-                nSize = pGrid->GetLines();
-            nSize *= nSum;
+
+            // Number of possible lines in area of body frame:
+            long nNumberOfLines = nBorder / nSum;
+            if( nNumberOfLines > pGrid->GetLines() )
+                nNumberOfLines = pGrid->GetLines();
+
+            // Space required for nNumberOfLines lines:
+            nSize = nNumberOfLines * nSum;
             nBorder -= nSize;
             nBorder /= 2;
-            (Prt().*fnRect->fnSetPosY)( nBorder );
+
+            // #i21774# Footnotes and centering the grid does not work together:
+            const bool bAdjust = 0 == ((SwPageFrm*)GetUpper())->GetFmt()->GetDoc()->
+                                        GetFtnIdxs().Count();
+
+            (Prt().*fnRect->fnSetPosY)( bAdjust ? nBorder : 0 );
             (Prt().*fnRect->fnSetHeight)( nSize );
         }
     }
