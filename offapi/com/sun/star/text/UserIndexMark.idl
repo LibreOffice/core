@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserIndexMark.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-01-07 16:15:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 /** is a <type>TextRange</type> which is explicitly marked
     as an index entry for a <type>UserIndex</type>.
  */
-service UserIndexMark
+published service UserIndexMark
 {
     service com::sun::star::text::TextContent;
 
