@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-21 16:03:49 $
+ *  last change: $Author: dvo $ $Date: 2001-04-09 13:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,8 @@ class XMLSectionImportContext : public SvXMLImportContext
     sal_Bool bIsVisible;
     sal_Bool bValid;
     sal_Bool bSequenceOK;
+
+    sal_Bool bHasContent;
 
 public:
 

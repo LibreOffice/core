@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-21 16:03:49 $
+ *  last change: $Author: dvo $ $Date: 2001-04-09 13:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,8 @@ XMLSectionImportContext::XMLSectionImportContext(
         bCondOK(sal_False),
         bIsVisible(sal_True),
         bSequenceOK(sal_False),
-        bProtect(sal_False)
+        bProtect(sal_False),
+        bHasContent(sal_False)
 {
 }
 
@@ -385,11 +386,15 @@ void XMLSectionImportContext::ProcessAttributes(
 void XMLSectionImportContext::EndElement()
 {
     // get rid of last paragraph
+    // (unless it's the only paragraph in the section)
     UniReference<XMLTextImportHelper> rHelper = GetImport().GetTextImport();
     rHelper->GetCursor()->goRight(1, sal_False);
-    rHelper->GetCursor()->goLeft(1, sal_True);
-    rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
-                                     sEmpty, sal_True);
+    if (bHasContent)
+    {
+        rHelper->GetCursor()->goLeft(1, sal_True);
+        rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
+                                         sEmpty, sal_True);
+    }
 
     // and delete second marker
     rHelper->GetCursor()->goRight(1, sal_True);
@@ -434,6 +439,8 @@ SvXMLImportContext* XMLSectionImportContext::CreateChildContext(
             pContext = new SvXMLImportContext( GetImport(),
                                                nPrefix, rLocalName );
         }
+        else
+            bHasContent = sal_True;
     }
 
     return pContext;
