@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:51:56 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   solvrdlg.src  $
- //   $Author: nf $
- //     $Date: 2000-09-27 20:51:56 $
- // $Revision: 1.2 $
+ //   $Author: kz $
+ //     $Date: 2000-11-09 13:18:13 $
+ // $Revision: 1.3 $
  //  $Logfile:   T:/sc/source/ui/src/solvrdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -318,7 +318,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ chinese_simplified ] = "Ä¿±êÊıÖµÎŞĞ§£¡";
         Text[ russian ] = "Íåäîïóñòèìîå êîíå÷íîå çíà÷åíèå!";
         Text[ polish ] = "Nieprawid³owa wartoœæ docelowa!";
-        Text[ japanese ] = "‹–‚³‚ê‚È‚¢–Ú•W’l!";
+        Text[ japanese ] = "‚±‚Ì–Ú•W’l‚Í–³Œø‚Å‚·B";
         Text[ chinese_traditional ] = "¥Ø¼Ğ¼Æ­ÈµL®Ä¡I";
         Text[ arabic ] = "ŞíãÉ åÏİ ÛíÑ ÕÇáÍÉ!";
         Text[ greek ] = "Ìç İãêõñç ôéìŞ ğñïïñéóìïı!";
