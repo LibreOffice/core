@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 16:23:20 $
+#   last change: $Author: kz $ $Date: 2004-10-04 19:26:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,9 @@ SRC1FILES =  \
 SLOFILES =  \
         $(SLO)$/gloshdl.obj \
         $(SLO)$/selglos.obj \
+        $(SLO)$/swdtflvr.obj
+
+EXCEPTIONSFILES =  \
         $(SLO)$/swdtflvr.obj
 
 #        $(SLO)$/dataex.obj \
