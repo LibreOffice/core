@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:55:22 $
+ *  last change: $Author: af $ $Date: 2004-08-02 12:43:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ void DrawViewShell::Resize (const Point &rPos, const Size &rSize)
 
     FuSlideShow* pSlideShow = ( pFuSlideShow ? pFuSlideShow : ( pDrView ? pDrView->GetSlideShow() : NULL ) );
 
-    if( pSlideShow && !pSlideShow->IsFullScreen())
+    if (pSlideShow != NULL)
         pSlideShow->Resize( rSize );
 }
 
