@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-21 15:07:05 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 11:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,13 @@
 
 #include "rtl/ustring.h"
 #include "osl/mutex.h"
+#ifdef SOLAR_JAVA
 #include "jni.h"
+#else
+struct JavaVMOption;
+struct JavaVM;
+struct JNIEnv;
+#endif
 
 #ifdef __cplusplus
 extern "C" {
