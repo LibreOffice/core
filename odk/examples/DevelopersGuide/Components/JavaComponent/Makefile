@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:21:31 $
+#  last change: $Author: rt $ $Date: 2005-01-31 16:14:20 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -54,40 +54,41 @@ OUT_COMP_CLASS = $(OUT_CLASS)/$(COMPONENT_NAME)
 OUT_COMP_GEN = $(OUT_MISC)/$(COMPONENT_NAME)
 COMPONENT_RDB_NAME = $(COMPONENT_NAME).uno.rdb
 COMPONENT_RDB = $(OUT_COMP_GEN)/$(COMPONENT_RDB_NAME)
-COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).uno.zip
-COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).uno.zip")
+COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).$(UNOPKG_EXT)
+COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOPKG_EXT)")
 COMPONENT_JAR_NAME = $(COMPONENT_NAME).uno.jar
-COMPONENT_JAR = $(OUT_CLASS)/$(COMPONENT_JAR_NAME)
+COMPONENT_JAR = $(OUT_COMP_CLASS)/$(COMPONENT_JAR_NAME)
 COMPONENT_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMPONENT_NAME).uno.Manifest
+COMPONENT_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMPONENT_NAME)/META-INF/manifest.xml
+APP1_NAME=TestJavaComponent
+APP1_JAR=$(OUT_COMP_CLASS)/$(APP1_NAME).jar
 
 REGISTERFLAG = $(OUT_MISC)$(PS)devguide_$(COMPONENT_NAME)_register_component.flag
 
 IDLFILES = XSomethingA.idl \
-	 XSomethingB.idl
+	XSomethingB.idl \
+	SomethingA.idl \
+	SomethingB.idl
 
-# normally the idl file should be stored in a directory tree fitting the module structure,
-# for the example we know the module structure
+# normally the idl file should be stored in a directory tree fitting the module 
+# structure, for the example we know the module structure
 PACKAGE = com/sun/star/test
 
-JAVAFILES  = \
-	   TestServiceProvider.java \
+COMPJAVAFILES  = \
 	   TestComponentA.java \
-	   TestComponentB.java
+	   TestComponentB.java  \
+	   TestServiceProvider.java
 
-JAVAFILES2 = RunComponent.java
-
-GENJAVAFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/$(PACKAGE)/%.java,$(IDLFILES))
+GENCLASSFILES = $(patsubst %.idl,$(OUT_COMP_CLASS)/$(PACKAGE)/%.class,$(IDLFILES))
+GENCLASSNAMES = $(patsubst %.idl,$(PACKAGE)/%.class,$(IDLFILES))
+GENTYPELIST = $(subst /,.,$(patsubst %.idl,-T$(PACKAGE)/% ,$(IDLFILES)))
 GENURDFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/%.urd,$(IDLFILES))
 
-CLASSFILES = $(subst $(OUT_COMP_GEN),$(OUT_COMP_CLASS),$(GENJAVAFILES:.java=.class))
-CLASSFILES += $(patsubst %.java,$(OUT_COMP_CLASS)/JavaComp/%.class,$(JAVAFILES))
-CLASSFILES += $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES2))
+COMPCLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(COMPJAVAFILES))
 
-$(COMPONENT_NAME)_CLASSFILES = JavaComp/TestServiceProvider.class\
-		      JavaComp/TestComponentA.class \
-		      JavaComp/TestComponentB.class
+$(COMPONENT_NAME)_CLASSFILES = $(patsubst %.java,%.class,$(COMPJAVAFILES))
 
-$(COMPONENT_NAME)_CLASSFILES += $(subst $(OUT_COMP_GEN)/,,$(GENJAVAFILES:.java=.class))
+$(COMPONENT_NAME)_CLASSFILES += $(subst $(OUT_COMP_CLASS)/,,$(GENCLASSFILES))
 
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
@@ -102,39 +103,76 @@ include $(SETTINGS)/stdtarget.mk
 
 $(OUT_COMP_CLASS)/%.Manifest :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	@echo RegistrationClassName: JavaComp.TestServiceProvider> $@
+	@echo RegistrationClassName: TestServiceProvider> $@
 
 $(OUT_COMP_GEN)/%.urd : %.idl
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(IDLC) -I. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $^
 
 $(OUT_COMP_GEN)/%.rdb : $(GENURDFILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$@)
 	$(REGMERGE) $@ /UCR $(GENURDFILES)
 
-$(OUT_COMP_GEN)/%.java : $(COMPONENT_RDB)
+$(OUT_COMP_CLASS)/$(PACKAGE)/%.class : $(COMPONENT_RDB)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(JAVAMAKER) -BUCR -nD -T$(subst /,.,$(patsubst $(OUT_COMP_GEN)/%.java,%,$@)) -O$(OUT_COMP_GEN) $(COMPONENT_RDB) $(DKREGISTRYNAME)
+	$(JAVAMAKER) -BUCR -nD $(GENTYPELIST) -O$(OUT_COMP_CLASS) $(COMPONENT_RDB) $(OFFICE_TYPE_LIBRARY)
 
-$(CLASSFILES) : $(GENJAVAFILES) $(JAVAFILES) $(JAVAFILES2) 
+$(OUT_COMP_CLASS)/%.class : %.java $(GENCLASSFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(GENJAVAFILES) $(JAVAFILES) $(JAVAFILES2) 
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $<
 
-$(COMPONENT_JAR) : $(COMPONENT_MANIFESTFILE) $(CLASSFILES)
+$(COMPCLASSFILES) : $(COMPJAVAFILES) $(GENCLASSFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm ../$(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(COMPJAVAFILES) 
 
-$(COMPONENT_PACKAGE) : $(COMPONENT_RDB) $(COMPONENT_JAR)
+# rule for client/example application manifest file
+$(OUT_COMP_CLASS)/%.mf :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_CLASS))
-	cd $(subst /,$(PS),$(OUT_CLASS)) && $(SDK_JAR) cvfM ../bin/$(@F) $(^F)
-	$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_CLASS)/$(<F)))
+	@echo Main-Class: com.sun.star.lib.loader.Loader> $@
+	$(ECHOLINE)>> $@
+	@echo Name: com/sun/star/lib/loader/Loader.class>> $@
+	@echo Application-Class: $*>> $@
+
+# rule for client/example application jar file
+# Note that the example needs the component files as well for local usage
+$(APP1_JAR) : $(OUT_COMP_CLASS)/$(APP1_NAME).mf $(OUT_COMP_CLASS)/$(APP1_NAME).class $(COMPCLASSFILES) $(GENCLASSFILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	+cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(basename $(@F)).mf $(basename $(@F)).class $($(COMPONENT_NAME)_CLASSFILES)
+	+$(SDK_JAR) uvf $@ $(SDK_JAVA_UNO_BOOTSTRAP_FILES)
+
+# rule for component jar file
+$(COMPONENT_JAR) : $(COMPONENT_MANIFESTFILE) $(COMPCLASSFILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
+
+# rule for component package manifest
+$(OUT_COMP_CLASS)/%/manifest.xml :
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	@echo $(OSEP)?xml version="$(QM)1.0$(QM)" encoding="$(QM)UTF-8$(QM)"?$(CSEP) > $@
+	@echo $(OSEP)!DOCTYPE manifest:manifest PUBLIC "$(QM)-//OpenOffice.org//DTD Manifest 1.0//EN$(QM)" "$(QM)Manifest.dtd$(QM)"$(CSEP) >> $@
+	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-typelibrary;type=RDB$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_COMP_CLASS)/,,$(@D))).uno.rdb$(QM)"/$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=Java$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_COMP_CLASS)/,,$(@D))).uno.jar$(QM)"/$(CSEP) >> $@
+	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
+
+# rule for component pacakge file
+$(COMPONENT_PACKAGE) : $(COMPONENT_RDB) $(COMPONENT_JAR) $(COMPONENT_UNOPKG_MANIFEST)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	$(COPY) $(subst /,$(PS),$(COMPONENT_RDB)) $(subst /,$(PS),$(OUT_COMP_CLASS))
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(COMPONENT_RDB_NAME) $(COMPONENT_JAR_NAME)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+	$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_COMP_CLASS)/$(COMPONENT_RDB_NAME)))
 
 $(REGISTERFLAG) : $(COMPONENT_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$@)
 	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
 else
@@ -145,28 +183,27 @@ else
 	@echo --------------------------------------------------------------------------------
 endif
 
-JavaComponentExample : $(REGISTERFLAG)
+JavaComponentExample : $(REGISTERFLAG) $(APP1_JAR)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use one of the following commands to execute the examples!
 	@echo -
-	@echo make RunComponent.run
-	@echo make RunComponent.local
+	@echo make $(APP1_NAME).run
+	@echo make $(APP1_NAME).local
 	@echo --------
 	@echo The Java components were installed if SDK_AUTO_DEPLOYMENT = YES.
-	@echo You can use this component inside your office installation, see the example
-	@echo description.
+	@echo You can use this component inside your office installation, see the
+	@echo example description.
 	@echo --------------------------------------------------------------------------------
 
-%.run: $(OUT_COMP_CLASS)/%.class
-	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@)
+%.run: $(OUT_COMP_CLASS)/%.jar
+	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $<
 
-%.local: $(OUT_COMP_CLASS)/%.class
-	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@) local
+%.local: $(OUT_COMP_CLASS)/%.jar
+	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $< local
 
 .PHONY: clean
 clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_PACKAGE_URL)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_JAR)))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(REGISTERFLAG)))
