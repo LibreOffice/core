@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmod_import.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-08-09 15:45:14 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ ModuleElement::~ModuleElement()
         _pParent->release();
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OString aStr( OUStringToOString( _aLocalName, RTL_TEXTENCODING_ASCII_US ) );
     OSL_TRACE( "ModuleElement::~ModuleElement(): %s\n", aStr.getStr() );
 #endif
@@ -223,7 +223,7 @@ Reference< xml::XImportContext > ModuleImport::createRootContext(
 ModuleImport::~ModuleImport()
     SAL_THROW( () )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OSL_TRACE( "ModuleImport::~ModuleImport().\n" );
 #endif
 }
