@@ -6,6 +6,7 @@ mkdir: %_DEST%\inc%_EXT%\registry
 ..\%__SRC%\lib\ireg.lib %_DEST%\lib%_EXT%\ireg.lib
 ..\%__SRC%\lib\libreg*.so %_DEST%\lib%_EXT%\libreg*.so
 ..\%__SRC%\lib\libreg*.so.* %_DEST%\lib%_EXT%\libreg*.so.*
+..\%__SRC%\lib\librgt*.so %_DEST%\lib%_EXT%\librgt*.so
 ..\%__SRC%\bin\reg*.dll %_DEST%\bin%_EXT%\reg*.dll
 ..\%__SRC%\lib\libreg*.dylib %_DEST%\lib%_EXT%\libreg*.dylib
 
