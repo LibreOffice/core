@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: th $ $Date: 2001-05-09 12:56:53 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 14:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -974,7 +974,7 @@ sal_uInt32 SAL_CALL rtl_getBestMacTextEncodingFromTextEncoding( rtl_TextEncoding
 }
 */
 /* ----------------------------------------------------------------------- */
-/*
+
 const sal_Char* SAL_CALL rtl_getBestUnixCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding  )
 {
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
@@ -985,7 +985,7 @@ const sal_Char* SAL_CALL rtl_getBestUnixCharsetFromTextEncoding( rtl_TextEncodin
     else
         return 0;
 }
-*/
+
 /* ----------------------------------------------------------------------- */
 
 const sal_Char* SAL_CALL rtl_getBestMimeCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding )
