@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2000-12-12 14:49:24 $
+ *  last change: $Author: os $ $Date: 2000-12-14 12:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1795,6 +1795,8 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                 break;
             }
         }
+        if(bExcept && COMPARE_EQUAL == rProp.Name.compareToAscii("BulletRelSize"))
+            bExcept = sal_False;
         PropValData* pData = new PropValData(rProp.Value, rProp.Name );
         aPropertyValues.Insert(pData, aPropertyValues.Count());
     }
@@ -2080,6 +2082,8 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                             rTxtColl.SetOutlineLevel(sal_Int8(nIndex));
                     }
                 }
+                break;
+                case 19: // BulletRelSize - unsupported - only available in Impress
                 break;
             }
         }
