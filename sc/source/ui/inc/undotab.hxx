@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undotab.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:43:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:45:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,13 @@
 #ifndef SC_MARKDATA_HXX
 #include "markdata.hxx"
 #endif
+#ifndef _TOOLS_COLOR_HXX
+#include <tools/color.hxx>
+#endif
 
-#ifndef _SVSTDARR_USHORTS
+#ifndef _SVSTDARR_SHORTS
 
-#define _SVSTDARR_USHORTS
+#define _SVSTDARR_SHORTS
 #include <svtools/svstdarr.hxx>
 
 #endif
@@ -81,6 +84,10 @@
 #define _SVSTDARR_STRINGS
 #include <svtools/svstdarr.hxx>
 
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
 #endif
 
 class ScDocShell;
@@ -97,7 +104,7 @@ public:
                     TYPEINFO();
                     ScUndoInsertTab(
                             ScDocShell* pNewDocShell,
-                            USHORT nTabNum,
+                            SCTAB nTabNum,
                             BOOL bApp,
                             const String& rNewName);
     virtual         ~ScUndoInsertTab();
@@ -113,7 +120,7 @@ private:
     String          sNewName;
     SdrUndoAction*  pDrawUndo;
     ULONG           nEndChangeAction;
-    USHORT          nTab;
+    SCTAB           nTab;
     BOOL            bAppend;
 
     void            SetChangeTrack();
@@ -125,7 +132,7 @@ public:
                     TYPEINFO();
                     ScUndoInsertTables(
                             ScDocShell* pNewDocShell,
-                            USHORT nTabNum,
+                            SCTAB nTabNum,
                             BOOL bApp,
                             SvStrings *pNewNameList);
     virtual         ~ScUndoInsertTables();
@@ -143,7 +150,7 @@ private:
     SvStrings*      pNameList;
     ULONG           nStartChangeAction;
     ULONG           nEndChangeAction;
-    USHORT          nTab;
+    SCTAB           nTab;
     BOOL            bAppend;
 
     void            SetChangeTrack();
@@ -156,7 +163,7 @@ public:
                     TYPEINFO();
                     ScUndoDeleteTab(
                             ScDocShell* pNewDocShell,
-                            const SvUShorts &theTabs,       //USHORT nNewTab,
+                            const SvShorts &theTabs,        //SCTAB nNewTab,
                             ScDocument* pUndoDocument,
                             ScRefUndoData* pRefData );
     virtual         ~ScUndoDeleteTab();
@@ -169,7 +176,7 @@ public:
     virtual String  GetComment() const;
 
 private:
-    SvUShorts   theTabs;
+    SvShorts    theTabs;
     ULONG           nStartChangeAction;
     ULONG           nEndChangeAction;
 
@@ -183,7 +190,7 @@ public:
                     TYPEINFO();
                     ScUndoRenameTab(
                             ScDocShell* pNewDocShell,
-                            USHORT nT,
+                            SCTAB nT,
                             const String& rOldName,
                             const String& rNewName);
     virtual         ~ScUndoRenameTab();
@@ -196,11 +203,11 @@ public:
     virtual String  GetComment() const;
 
 private:
-    USHORT  nTab;
+    SCTAB   nTab;
     String  sOldName;
     String  sNewName;
 
-    void DoChange( USHORT nTab, const String& rName ) const;
+    void DoChange( SCTAB nTab, const String& rName ) const;
 };
 
 
@@ -209,8 +216,8 @@ class ScUndoMoveTab: public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoMoveTab( ScDocShell* pNewDocShell,
-                                  const SvUShorts &aOldTab,
-                                  const SvUShorts &aNewTab);
+                                  const SvShorts &aOldTab,
+                                  const SvShorts &aNewTab);
     virtual         ~ScUndoMoveTab();
 
     virtual void    Undo();
@@ -221,8 +228,8 @@ public:
     virtual String  GetComment() const;
 
 private:
-    SvUShorts   theOldTabs;
-    SvUShorts   theNewTabs;
+    SvShorts    theOldTabs;
+    SvShorts    theNewTabs;
 
     void DoChange( BOOL bUndo ) const;
 };
@@ -233,8 +240,8 @@ class ScUndoCopyTab: public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoCopyTab(ScDocShell* pNewDocShell,
-                                  const SvUShorts &aOldTab,
-                                  const SvUShorts &aNewTab);
+                                  const SvShorts &aOldTab,
+                                  const SvShorts &aNewTab);
 
     virtual         ~ScUndoCopyTab();
 
@@ -247,8 +254,8 @@ public:
 
 private:
     SdrUndoAction*  pDrawUndo;
-    SvUShorts   theOldTabs;
-    SvUShorts   theNewTabs;
+    SvShorts    theOldTabs;
+    SvShorts    theNewTabs;
 
     void DoChange() const;
 };
@@ -260,7 +267,7 @@ public:
                     TYPEINFO();
                     ScUndoMakeScenario(
                             ScDocShell* pNewDocShell,
-                            USHORT nSrc, USHORT nDest,
+                            SCTAB nSrc, SCTAB nDest,
                             ScDocument* pUndo,
                             const String& rN, const String& rC,
                             const Color& rCol, USHORT nF,
@@ -275,8 +282,8 @@ public:
     virtual String  GetComment() const;
 
 private:
-    USHORT      nSrcTab;
-    USHORT      nDestTab;
+    SCTAB       nSrcTab;
+    SCTAB       nDestTab;
     ScDocument* pUndoDoc;
     String      aName;
     String      aComment;
@@ -292,7 +299,7 @@ public:
                     TYPEINFO();
                     ScUndoImportTab(
                             ScDocShell* pShell,
-                            USHORT nNewTab, USHORT nNewCount,
+                            SCTAB nNewTab, SCTAB nNewCount,
                             BOOL bNewLink );
     virtual         ~ScUndoImportTab();
 
@@ -304,8 +311,8 @@ public:
     virtual String  GetComment() const;
 
 private:
-    USHORT      nTab;
-    USHORT      nCount;
+    SCTAB       nTab;
+    SCTAB       nCount;
     BOOL        bLink;
     ScDocument* pRedoDoc;
     SdrUndoAction*  pDrawUndo;
@@ -336,7 +343,7 @@ private:
     String  aOptions;
     ULONG   nRefreshDelay;
     USHORT  nCount;
-    USHORT* pTabs;
+    SCTAB*  pTabs;
     BYTE*   pModes;
     String* pTabNames;
 
@@ -350,7 +357,7 @@ public:
                     TYPEINFO();
                     ScUndoShowHideTab(
                             ScDocShell* pShell,
-                            USHORT nNewTab, BOOL bNewShow );
+                            SCTAB nNewTab, BOOL bNewShow );
     virtual         ~ScUndoShowHideTab();
 
     virtual void    Undo();
@@ -361,7 +368,7 @@ public:
     virtual String  GetComment() const;
 
 private:
-    USHORT  nTab;
+    SCTAB   nTab;
     BOOL    bShow;
 
     void DoChange( BOOL bShow ) const;
@@ -372,7 +379,7 @@ class ScUndoProtect : public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoProtect( ScDocShell* pShell, USHORT nNewTab,
+                    ScUndoProtect( ScDocShell* pShell, SCTAB nNewTab,
                                     BOOL bNewProtect, const com::sun::star::uno::Sequence<sal_Int8>& rNewPassword );
     virtual         ~ScUndoProtect();
 
@@ -384,7 +391,7 @@ public:
     virtual String  GetComment() const;
 
 private:
-    USHORT  nTab;
+    SCTAB   nTab;
     BOOL    bProtect;
     com::sun::star::uno::Sequence<sal_Int8> aPassword;
 
@@ -396,7 +403,7 @@ class ScUndoPrintRange : public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoPrintRange( ScDocShell* pShell, USHORT nNewTab,
+                    ScUndoPrintRange( ScDocShell* pShell, SCTAB nNewTab,
                                         ScPrintRangeSaver* pOld, ScPrintRangeSaver* pNew );
     virtual         ~ScUndoPrintRange();
 
@@ -408,7 +415,7 @@ public:
     virtual String  GetComment() const;
 
 private:
-    USHORT              nTab;
+    SCTAB               nTab;
     ScPrintRangeSaver*  pOldRanges;
     ScPrintRangeSaver*  pNewRanges;
 
@@ -421,7 +428,7 @@ class ScUndoScenarioFlags: public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoScenarioFlags(
-                            ScDocShell* pNewDocShell, USHORT nT,
+                            ScDocShell* pNewDocShell, SCTAB nT,
                             const String& rON, const String& rNN,
                             const String& rOC, const String& rNC,
                             const Color& rOCol, const Color& rNCol,
@@ -437,7 +444,7 @@ public:
     virtual String  GetComment() const;
 
 private:
-    USHORT  nTab;
+    SCTAB   nTab;
     String  aOldName;
     String  aNewName;
     String  aOldComment;
@@ -479,7 +486,7 @@ class ScUndoLayoutRTL : public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoLayoutRTL( ScDocShell* pShell, USHORT nNewTab, BOOL bNewRTL );
+                    ScUndoLayoutRTL( ScDocShell* pShell, SCTAB nNewTab, BOOL bNewRTL );
     virtual         ~ScUndoLayoutRTL();
 
     virtual void    Undo();
@@ -490,7 +497,7 @@ public:
     virtual String  GetComment() const;
 
 private:
-    USHORT  nTab;
+    SCTAB   nTab;
     BOOL    bRTL;
 
     void DoChange( BOOL bNew );
