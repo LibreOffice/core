@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:37:20 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #endif
+#ifndef _COM_SUN_STAR_I18N_NUMBERFORMATINDEX_HPP_
+#include <com/sun/star/i18n/NumberFormatIndex.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -142,8 +145,6 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include "connectivity/dbtools.hxx"
 #endif
-
-
 
 
 using namespace ::com::sun::star::sdbc;
@@ -654,7 +655,57 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
                         case DataType::TIMESTAMP:
                             nErg = -1;
                             if (m_xFormatter.is())
-                                nErg = buildDate(pLiteral->getTokenValue(),nType,pAppend,pLiteral,pCompare);
+                            {
+                                try
+                                {
+                                    // do we have a date
+                                    if ( !m_nFormatKey )
+                                    {
+                                        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSup = m_xFormatter->getNumberFormatsSupplier();
+                                        Reference< ::com::sun::star::util::XNumberFormatTypes >  xFormatTypes(xFormatSup->getNumberFormats(),UNO_QUERY);
+                                        m_nFormatKey = ::dbtools::getDefaultNumberFormat(m_xField,xFormatTypes,*m_pLocale);
+                                    }
+                                    double fValue = m_xFormatter->convertStringToNumber(m_nFormatKey, pLiteral->getTokenValue().getStr());
+                                    nErg = buildNode_Date(fValue, nType, pAppend,pLiteral,pCompare);
+                                }
+                                catch( Exception& )
+                                {
+                                    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSup = m_xFormatter->getNumberFormatsSupplier();
+                                    Reference< ::com::sun::star::util::XNumberFormatTypes >  xFormatTypes(xFormatSup->getNumberFormats(),UNO_QUERY);
+                                    if (xFormatTypes.is())
+                                    {
+                                        try
+                                        {
+
+                                            double fValue = m_xFormatter->convertStringToNumber(
+                                                xFormatTypes->getStandardFormat(::com::sun::star::util::NumberFormat::DATE, *m_pLocale),
+                                                                                pLiteral->getTokenValue().getStr());
+                                            nErg = buildNode_Date(fValue, nType, pAppend,pLiteral,pCompare);
+
+                                        }
+                                        catch( Exception& )
+                                        {
+                                            try
+                                            {
+                                                double fValue = m_xFormatter->convertStringToNumber(
+                                                    xFormatTypes->getFormatIndex(::com::sun::star::i18n::NumberFormatIndex::DATE_DIN_YYYYMMDD, *m_pLocale),
+                                                                                    pLiteral->getTokenValue());
+                                                nErg = buildNode_Date(fValue, nType, pAppend,pLiteral,pCompare);
+                                            }
+                                            catch( Exception& )
+                                            {
+                                                nErg = -1;
+                                                m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_DATE_COMPARE);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        nErg = -1;
+                                        m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_DATE_COMPARE);
+                                    }
+                                }
+                            }
                             else
                                 m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_DATE_COMPARE);
                             break;
