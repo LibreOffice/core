@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-16 08:13:00 $
+ *  last change: $Author: cl $ $Date: 2002-08-02 12:13:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
+#include <com/sun/star/frame/XStorable.hpp>
 #endif
 #ifndef _SFX_PROGRESS_HXX
 #include <sfx2/progress.hxx>
@@ -198,6 +201,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::frame;
 
 #define KEY_QUALITY     "JPG-EXPORT-QUALITY"
 
@@ -459,7 +463,6 @@ HtmlExport::HtmlExport( OUString aPath, const Sequence< PropertyValue >& rParams
     m_bContentsPage(FALSE),
     m_nButtonThema(-1),
     m_bNotes(FALSE),
-//-/    m_bCreated(FALSE),
     m_eEC(NULL),
     pDocSh( pDocShell ),
     m_eMode( PUBLISH_HTML ),
@@ -768,7 +771,7 @@ void HtmlExport::ExportHtml()
         if(nSepPos != STRING_NOTFOUND)
             m_aDocFileName.Erase(nSepPos);
 
-        m_aDocFileName += ".sdd";
+        m_aDocFileName += ".sxi";
     }
 
     //////
@@ -777,7 +780,6 @@ void HtmlExport::ExportHtml()
     nProgrCount += m_bImpress?m_nSdPageCount:0;
     nProgrCount += m_bContentsPage?1:0;
     nProgrCount += (m_bFrames && m_bNotes)?m_nSdPageCount:0;
-//-/    nProgrCount += (m_bCreated)?1:0;
     nProgrCount += (m_bFrames)?8:0;
     InitProgress( nProgrCount );
 
@@ -981,49 +983,27 @@ BOOL HtmlExport::SavePresentation()
     ByteString aFull( m_aExportPath );
     aFull += m_aDocFileName;
 
-    SfxFilterMatcher&   rMatcher = SFX_APP()->GetFilterMatcher();
-    SfxMedium*          pMedium = pDoc->GetDocSh()->GetMedium();
-    SvStorage*          pStorage = ( pMedium && pMedium->IsStorage() ) ? pMedium->GetOutputStorage() : NULL;
-    BOOL                bRet;
-
-    if( pStorage )
+    String aURL( aFull, RTL_TEXTENCODING_UTF8 );
+    try
     {
-        SfxFilterContainer *pImpr = rMatcher.GetContainer( String( RTL_CONSTASCII_USTRINGPARAM("simpress")) ); // dito
-        ULONG nStorFmt = pStorage->GetFormat();
-        const SfxFilter* pFilter = pImpr->GetFilter4ClipBoardId( nStorFmt );
-        if(pFilter == NULL)
-            pFilter = SdDrawDocShell::Factory().GetFilter(0);
-        String aFilterName;
-        if(pFilter)
-            aFilterName = pFilter->GetName();
-
-        SfxStringItem* pFilterOptions = NULL;
-
-        // Applikation zum Speichern auffordern
-        SfxStringItem aFilter( SID_FILTER_NAME, aFilterName );
-        SfxStringItem aFileName( SID_FILE_NAME, String( aFull, RTL_TEXTENCODING_UTF8 ) );
-        SfxBoolItem aPicklist( SID_PICKLIST, FALSE );
-        SfxBoolItem aSaveTo( SID_SAVETO, TRUE );
-        SfxStringItem aFilterOptions( SID_FILE_FILTEROPTIONS, String( RTL_CONSTASCII_USTRINGPARAM(CALC_OPTIONS)) );
-
-        SdViewShell* pViewShell = pDoc->GetDocSh()->GetViewShell();
-
-        if( pViewShell )
+        uno::Reference< frame::XStorable > xStorable( pDoc->getUnoModel(), uno::UNO_QUERY );
+        if( xStorable.is() )
         {
-            SfxBoolItem *pRet = (SfxBoolItem*)pViewShell->GetViewFrame()->
-                GetDispatcher()->Execute(   SID_SAVEASDOC,
-                                            SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_API,
-                                            &aFilter, &aFileName, &aSaveTo,
-                                            &aPicklist, &aFilterOptions, 0L );
-            bRet = TRUE;
-        }
-        else
-            bRet = FALSE;
-    }
-    else
-        bRet = FALSE;
+            uno::Sequence< beans::PropertyValue > aProperties( 2 );
+            aProperties[ 0 ].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Overwrite"));
+            aProperties[ 0 ].Value <<= (sal_Bool)sal_True;
+            aProperties[ 1 ].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
+            aProperties[ 1 ].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("StarOffice XML (Impress)"));
+            xStorable->storeToURL( OUString( aURL ), aProperties );
 
-    return bRet;
+            return true;
+        }
+    }
+    catch( Exception& )
+    {
+    }
+
+    return false;
 }
 
 Graphic HtmlExport::CreateImage( USHORT nPageNumber )
@@ -2005,15 +1985,6 @@ BOOL HtmlExport::CreateContentPage()
         aStr += "</p>\r\n";
     }
 
-//-/    if(m_bCreated)
-//-/    {
-//-/        aStr += "<p>";
-//-/        aStr += RESTOHTML(STR_HTMLEXP_CREATED);
-//-/        aStr += "<br><a href=\"http://www.sun.com\">";
-//-/        aStr += "<img src=\"sologo.gif\" alt=\"StarOffice\" ";
-//-/        aStr += "border=0 align=center></a></p>\r\n";
-//-/    }
-
     if(m_bDownload)
     {
         aStr += "<p><a href=\"";
@@ -2832,10 +2803,6 @@ BOOL HtmlExport::CreateBitmaps()
                 nErr = CreateBitmap(GALLERY_THEME_HTMLBUTTONS, nButtons + nButton, pButtonNames[nButton]);
             }
 
-            // sologo.gif
-//-/    if(nErr == 0 && m_bCreated && m_bContentsPage)
-//-/        nErr = CreateBitmap(GALLERY_THEME_HTMLBUTTONS, 0, "sologo.gif");
-
             GalleryExplorer::EndLocking( GALLERY_THEME_HTMLBUTTONS );
         }
     }
@@ -3511,7 +3478,6 @@ void HtmlExport::HideSpecialObjects( SdPage* pPage )
                 {
                     SfxItemSet aSet(pDoc->GetPool());
 
-//-/                    pPath->TakeAttributes(aSet, FALSE, TRUE);
                     aSet.Put(pPath->GetItemSet());
 
                     // not hided yet, so hide it
@@ -3536,10 +3502,7 @@ void HtmlExport::HideSpecialObjects( SdPage* pPage )
 
                     aSpecialObjects.Insert( (void*)pHSOI );
 
-//-/                    pPath->SetAttributes( aSet, FALSE );
-//-/                    SdrBroadcastItemChange aItemChange(*pPath);
                     pPath->SetItemSetAndBroadcast(aSet);
-//-/                    pPath->BroadcastItemChange(aItemChange);
                 }
             }
         }
@@ -3557,7 +3520,6 @@ void HtmlExport::ShowSpecialObjects()
         SdrObject* pPath = pHSOI->mpObj;
 
         SfxItemSet aSet(pDoc->GetPool());
-//-/        pPath->TakeAttributes(aSet, FALSE, TRUE);
         aSet.Put(pPath->GetItemSet());
 
         if( pHSOI->mnLineStyleState == SFX_ITEM_SET )
@@ -3580,10 +3542,7 @@ void HtmlExport::ShowSpecialObjects()
             aSet.ClearItem( XATTR_LINESTYLE );
         }
 
-//-/        pPath->SetAttributes( aSet, TRUE );
-//-/        SdrBroadcastItemChange aItemChange(*pPath);
         pPath->SetItemSetAndBroadcast(aSet);
-//-/        pPath->BroadcastItemChange(aItemChange);
 
         delete pHSOI;
 
@@ -3752,71 +3711,3 @@ void HtmlErrorContext::SetContext( USHORT nResId, const ByteString& rURL1, const
 }
 
 // =====================================================================
-
-/*
-Notify()
-{
-    // Login failure?
-    const CntLoginErrorHint *pLoginErrorHint
-                                    = PTR_CAST(CntLoginErrorHint, &rHint);
-    if ( pLoginErrorHint )
-    {
-        LoginErrorInfo& rErrorInfo = pLoginErrorHint->GetErrorInfo();
-
-        // #?????# - Do not show the login dialog in case the application
-        // is minimized.
-        WorkWindow* pWindow = Application::GetAppWindow();
-        if ( !pWindow || pWindow->IsMinimized() )
-        {
-            rErrorInfo.SetResult( ERRCODE_BUTTON_CANCEL );
-            return;
-        }
-
-        // #47381# - Do not show login dialog while the user does
-        // mark operations, menu selections,...
-        if ( Application::IsUICaptured() )
-        {
-            rErrorInfo.SetResult( ERRCODE_BUTTON_RETRY );
-            return;
-        }
-
-        //////////////////////////////////////////////////////////////////
-        // Create, initialize and show login dialog...
-        //////////////////////////////////////////////////////////////////
-
-        USHORT nFlags = 0;
-
-        if ( !rErrorInfo.GetPath().Len() )
-            nFlags |= LF_NO_PATH;
-
-        if ( !rErrorInfo.GetErrorText().Len() )
-            nFlags |= LF_NO_ERRORTEXT;
-
-        FASTBOOL bAccount = ( rErrorInfo.GetFlags() & LOGINERROR_FLAG_MODIFY_ACCOUNT ) ==
-            LOGINERROR_FLAG_MODIFY_ACCOUNT;
-
-        if ( !bAccount )
-            nFlags |= LF_NO_ACCOUNT;
-
-        ResMgr* pResMgr = SFX_APP()->GetSfxResManager();
-        LoginDialog* pDlg =
-            new LoginDialog( NULL, pResMgr, nFlags, rErrorInfo.GetServer(),
-                             (String*)&( rErrorInfo.GetAccount() ) );
-
-        if ( rErrorInfo.GetErrorText().Len() )
-            pDlg->SetErrorText( rErrorInfo.GetErrorText() );
-
-        pDlg->SetName( rErrorInfo.GetUserName() );
-        if ( bAccount )
-            pDlg->ClearAccount();
-        else
-            pDlg->ClearPassword();  // this sets the focus on the pw field
-        pDlg->SetPassword( rErrorInfo.GetPassword() );
-        pDlg->SetSavePasswordText( rErrorInfo.GetSavePasswordText() );
-        pDlg->SetSavePassword( rErrorInfo.GetIsSavePassword() );
-
-        USHORT nRet = pDlg->Execute();
-    }
-}
-*/
-
