@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolderEnumeration.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 10:43:06 $
+ *  last change: $Author: mtg $ $Date: 2000-11-27 12:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,9 @@ uno::Any SAL_CALL ZipPackageFolderEnumeration::nextElement(  )
         throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aAny;
-    aIterator++;
+    if (aIterator == rContents.end() )
+        throw (container::NoSuchElementException());
     aAny <<= (*aIterator).second;
+    aIterator++;
     return aAny;
 }
