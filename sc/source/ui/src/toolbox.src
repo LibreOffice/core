@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:09:27 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: vg $ $Date: 2003-05-26 08:09:27 $ $Revision: 1.53 $
+ // $Author: hr $ $Date: 2003-06-13 13:47:39 $ $Revision: 1.54 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -159,6 +159,7 @@ String SCSTR_QHELP_POSWND
     Text[ czech ] = "Oblast listu";
     Text[ hebrew ] = "Tabellenbereich";
     Text[ hindi ] = "शीट् विस्तीर्ण";
+    Text[ slovak ] = "Oblasť listu";
 };
 
 String SCSTR_QHELP_INPUTWND
@@ -191,6 +192,7 @@ String SCSTR_QHELP_INPUTWND
     Text[ czech ] = "Vstupní řádka";
     Text[ hebrew ] = "Eingabezeile";
     Text[ hindi ] = "इनपुट् रेखा";
+    Text[ slovak ] = "Vstupný riadok";
 };
 
 String SCSTR_QHELP_BTNCALC
@@ -223,6 +225,7 @@ String SCSTR_QHELP_BTNCALC
     Text[ czech ] = "Průvodce: funkce";
     Text[ hebrew ] = "Funktionsautopilot";
     Text[ hindi ] = "ओटोपैलट्: फ़ंक्शन्स";
+    Text[ slovak ] = "Sprievodca: Funkcie";
 };
 
 String SCSTR_QHELP_BTNOK
@@ -256,6 +259,7 @@ String SCSTR_QHELP_BTNOK
     Text[ czech ] = "Přijmout";
     Text[ hebrew ] = "‮קבלת שינוים‬";
     Text[ hindi ] = "स्वीकार";
+    Text[ slovak ] = "Prijať";
 };
 
 String SCSTR_QHELP_BTNCANCEL
@@ -288,6 +292,7 @@ String SCSTR_QHELP_BTNCANCEL
     Text[ czech ] = "Zrušit";
     Text[ hebrew ] = "‮ביטול‬";
     Text[ hindi ] = "रद्द करो";
+    Text[ slovak ] = "Zrušiť";
 };
 
 String SCSTR_QHELP_BTNSUM
@@ -320,6 +325,7 @@ String SCSTR_QHELP_BTNSUM
     Text[ czech ] = "Součet";
     Text[ hebrew ] = "‮סכום‬";
     Text[ hindi ] = "कुलजोड़";
+    Text[ slovak ] = "Celkom";
 };
 
 String SCSTR_QHELP_BTNEQUAL
@@ -352,6 +358,7 @@ String SCSTR_QHELP_BTNEQUAL
     Text[ czech ] = "Funkce";
     Text[ hebrew ] = "‮פעולה‬";
     Text[ hindi ] = "फ़ंक्शन्";
+    Text[ slovak ] = "Funkcia";
 };
 
 String RID_OBJECTBAR_FORMAT
@@ -384,6 +391,7 @@ String RID_OBJECTBAR_FORMAT
     Text[ czech ] = "Panel nástrojů Sešit";
     Text[ hebrew ] = "Tabellenobjektleiste";
     Text[ hindi ] = "स्प्रेडशीट् वस्तु पट्टी";
+    Text[ slovak ] = "Panel nástrojov zošita";
 };
 
 ToolBox RID_OBJECTBAR_FORMAT
@@ -1178,6 +1186,7 @@ String RID_OBJECTBAR_PREVIEW
     Text[ czech ] = "Panel nástrojů Zobrazení stránky";
     Text[ hebrew ] = "Seitenansichtobjektleiste";
     Text[ hindi ] = "पृष्ठ दृश्य वस्तु पट्टी";
+    Text[ slovak ] = "Panel objektového zobrazenia stránky";
 };
 
 ToolBox RID_OBJECTBAR_PREVIEW
@@ -1298,6 +1307,7 @@ String RID_OBJECTBAR_TOOLS
     Text[ czech ] = "Hlavní panel nástrojů";
     Text[ hebrew ] = "‮סרגל ראשי‬";
     Text[ hindi ] = "मुख्य औज़ार पट्टी";
+    Text[ slovak ] = "Hlavný panel nástrojov";
 };
 
 ToolBox RID_OBJECTBAR_TOOLS
@@ -1505,6 +1515,7 @@ FloatingWindow RID_TBXCTL_INSERT
     Text[ czech ] = "Vložit";
     Text[ hebrew ] = "‮הוספה‬";
     Text[ hindi ] = "जोड़ो";
+    Text[ slovak ] = "Vložiť";
 };
 
 FloatingWindow RID_TBXCTL_INSCELLS
@@ -1572,6 +1583,7 @@ FloatingWindow RID_TBXCTL_INSCELLS
     Text[ czech ] = "Vložit buňky";
     Text[ hebrew ] = "Zellen einfügen";
     Text[ hindi ] = "कोष्ठों को जोड़ो";
+    Text[ slovak ] = "Vložiť bunky";
 };
 
 FloatingWindow RID_TBXCTL_INSOBJ
@@ -1652,6 +1664,7 @@ FloatingWindow RID_TBXCTL_INSOBJ
     Text[ czech ] = "Vložit objekt";
     Text[ hebrew ] = "‮הוספת אוביקט‬";
     Text[ hindi ] = "वस्तु जोड़ो";
+    Text[ slovak ] = "Vložiť objekt";
 };
 
  // Image-Liste fuer ToolBoxen -----------------------------------------------
@@ -2066,7 +2079,7 @@ String RID_OBJECTBAR_APP
     Text[ russian ] = "������ �������";
     Text[ polish ] = "Pasek funkcji";
     Text[ japanese ] = "ファンクションバー（表示モード）";
-    Text[ chinese_traditional ] = "工具列(檢視模式)";
+    Text[ chinese_traditional ] = "功能列(檢視模式)";
     Text[ arabic ] = "���� ������";
     Text[ dutch ] = "Werkbalk";
     Text[ chinese_simplified ] = "功能栏(视图模式)";
@@ -2080,6 +2093,7 @@ String RID_OBJECTBAR_APP
     Text[ czech ] = "Panel funkcí";
     Text[ hebrew ] = "‮סרגל פעולות נפוצות‬";
     Text[ hindi ] = "फ़ंक्शन् पट्टी";
+    Text[ slovak ] = "Panel funkcií (mód náhľadu)";
 };
 
 ToolBox RID_OBJECTBAR_APP
@@ -2157,6 +2171,8 @@ ToolBox RID_OBJECTBAR_APP
     };
     Scroll = TRUE ;
 };
+
+
 
 
 
