@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mt $ $Date: 2001-09-27 17:46:27 $
+ *  last change: $Author: mt $ $Date: 2001-10-24 11:51:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2524,7 +2524,7 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
     // Minimale Hoehe, falls Hoehe nicht auf Float-Hoehe eingestellt wurde.
     // Der Parent vom FloatWin muss die DropDown-Combo/Listbox sein.
     Size aParentSz = GetParent()->GetSizePixel();
-    if( aFloatSz.Height() < aParentSz.Height() )
+    if( !mnDDLineCount && ( aFloatSz.Height() < aParentSz.Height() ) )
         aFloatSz.Height() = aParentSz.Height();
 
     // Nicht schmaler als der Parent werden...
