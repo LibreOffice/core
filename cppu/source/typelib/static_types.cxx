@@ -2,9 +2,9 @@
  *
  *  $RCSfile: static_types.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:39:26 $
+ *  last change: $Author: dbo $ $Date: 2001-01-09 12:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ SAL_DLLEXPORT typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_g
                         &s_aTypes[typelib_TypeClass_TYPE], typelib_TypeClass_TYPE, sTypeName.pData );
 #ifndef CPPU_LEAK_STATIC_DATA
                     // another static ref
-                    ++(*(sal_Int32 *)&s_aTypes[typelib_TypeClass_TYPE]->pReserved);
+                    ++s_aTypes[typelib_TypeClass_TYPE]->nStaticRefCount;
 #endif
                 }
                 // any
@@ -194,7 +194,7 @@ SAL_DLLEXPORT typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_g
                         &s_aTypes[typelib_TypeClass_ANY], typelib_TypeClass_ANY, sTypeName.pData );
 #ifndef CPPU_LEAK_STATIC_DATA
                     // another static ref
-                    ++(*(sal_Int32 *)&s_aTypes[typelib_TypeClass_ANY]->pReserved);
+                    ++s_aTypes[typelib_TypeClass_ANY]->nStaticRefCount;
 #endif
                 }
                 // string
@@ -205,7 +205,7 @@ SAL_DLLEXPORT typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_g
                         &s_aTypes[typelib_TypeClass_STRING], typelib_TypeClass_STRING, sTypeName.pData );
 #ifndef CPPU_LEAK_STATIC_DATA
                     // another static ref
-                    ++(*(sal_Int32 *)&s_aTypes[typelib_TypeClass_STRING]->pReserved);
+                    ++s_aTypes[typelib_TypeClass_STRING]->nStaticRefCount;
 #endif
                 }
                 // XInterface
@@ -235,7 +235,7 @@ SAL_DLLEXPORT typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_g
                         s_aTypes[typelib_TypeClass_INTERFACE] = ((typelib_TypeDescription *)pTD)->pWeakRef );
 #ifndef CPPU_LEAK_STATIC_DATA
                     // another static ref
-                    ++(*(sal_Int32 *)&s_aTypes[typelib_TypeClass_INTERFACE]->pReserved);
+                    ++s_aTypes[typelib_TypeClass_INTERFACE]->nStaticRefCount;
 #endif
                     ::typelib_typedescription_release( (typelib_TypeDescription*)pTD );
 
@@ -267,7 +267,7 @@ SAL_DLLEXPORT typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_g
                         s_aTypes[typelib_TypeClass_EXCEPTION] = pTD->pWeakRef );
 #ifndef CPPU_LEAK_STATIC_DATA
                     // another static ref
-                    ++(*(sal_Int32 *)&s_aTypes[typelib_TypeClass_EXCEPTION]->pReserved);
+                    ++s_aTypes[typelib_TypeClass_EXCEPTION]->nStaticRefCount;
 #endif
                     // RuntimeException
                     OUString sTypeName2( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.RuntimeException") );
@@ -317,7 +317,7 @@ SAL_DLLEXPORT typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_g
                 ::typelib_typedescriptionreference_new( &s_aTypes[eTypeClass], eTypeClass, aTypeName.pData );
 #ifndef CPPU_LEAK_STATIC_DATA
                 // another static ref
-                ++(*(sal_Int32 *)&s_aTypes[eTypeClass]->pReserved);
+                ++s_aTypes[eTypeClass]->nStaticRefCount;
 #endif
             }
             }
@@ -342,7 +342,7 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_type_init(
 
 #ifndef CPPU_LEAK_STATIC_DATA
             // another static ref
-            ++(*(sal_Int32 *)&(*ppRef)->pReserved);
+            ++((*ppRef)->nStaticRefCount);
 #endif
         }
     }
@@ -388,7 +388,7 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_sequence_type_init(
             }
 #ifndef CPPU_LEAK_STATIC_DATA
             // another static ref
-            ++(*(sal_Int32 *)&(*ppRef)->pReserved);
+            ++((*ppRef)->nStaticRefCount);
 #endif
         }
     }
@@ -460,7 +460,7 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_compound_type_init(
             }
 #ifndef CPPU_LEAK_STATIC_DATA
             // another static ref
-            ++(*(sal_Int32 *)&(*ppRef)->pReserved);
+            ++((*ppRef)->nStaticRefCount);
 #endif
         }
     }
@@ -512,7 +512,7 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_interface_type_init(
             }
 #ifndef CPPU_LEAK_STATIC_DATA
             // another static ref
-            ++(*(sal_Int32 *)&(*ppRef)->pReserved);
+            ++((*ppRef)->nStaticRefCount);
 #endif
         }
     }
@@ -552,7 +552,7 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_enum_type_init(
             }
 #ifndef CPPU_LEAK_STATIC_DATA
             // another static ref
-            ++(*(sal_Int32 *)&(*ppRef)->pReserved);
+            ++((*ppRef)->nStaticRefCount);
 #endif
         }
     }
@@ -624,7 +624,7 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_union_type_init(
             }
 #ifndef CPPU_LEAK_STATIC_DATA
             // another static ref
-            ++(*(sal_Int32 *)&(*ppRef)->pReserved);
+            ++((*ppRef)->nStaticRefCount);
 #endif
         }
     }

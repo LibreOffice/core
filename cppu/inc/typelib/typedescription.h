@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedescription.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:35:25 $
+ *  last change: $Author: dbo $ $Date: 2001-01-09 12:47:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,29 +92,35 @@ typedef struct _typelib_TypeDescription typelib_TypeDescription;
 */
 typedef struct _typelib_TypeDescriptionReference
 {
-    /** reference count of reference;
+    /** reference count of type;
         don't ever modify this by yourself, use
         typelib_typedescriptionreference_acquire() and
         typelib_typedescriptionreference_release()
         <br>
     */
-    sal_Int32                   nRefCount;
+    sal_Int32                           nRefCount;
+    /** number of static references of type,
+        because of the fact that some types are needed
+        until program termination and are commonly held static.
+        <br>
+    */
+    sal_Int32                           nStaticRefCount;
     /** type class of type<br>
     */
-    typelib_TypeClass           eTypeClass;
+    typelib_TypeClass                   eTypeClass;
     /** fully qualified name of type<br>
     */
-    rtl_uString *               pTypeName;
+    rtl_uString *                       pTypeName;
     /** pointer to full typedescription; this value is only valid if
         the type is never swapped out<br>
     */
-    typelib_TypeDescription *   pType;
+    typelib_TypeDescription *           pType;
     /** pointer to optimize the runtime; not for public use<br>
     */
-    void *                      pUniqueIdentifier;
+    void *                              pUniqueIdentifier;
     /** reserved for future use; 0 if not used<br>
     */
-    void *                      pReserved;
+    void *                              pReserved;
 } typelib_TypeDescriptionReference;
 
 /** Full type description of a type. Memory layout of this struct
@@ -131,6 +137,12 @@ typedef struct _typelib_TypeDescription
         <br>
     */
     sal_Int32                           nRefCount;
+    /** number of static references of type,
+        because of the fact that some types are needed
+        until program termination and are commonly held static.
+        <br>
+    */
+    sal_Int32                           nStaticRefCount;
     /** type class of type<br>
     */
     typelib_TypeClass                   eTypeClass;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:39:26 $
+ *  last change: $Author: dbo $ $Date: 2001-01-09 12:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,19 +350,20 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() throw ()
 
         for( i = 0; i < nSize; i++ )
         {
-            sal_Int32 nStaticCounts = (sal_Int32)ppTDR[i]->pReserved;
-            OSL_ASSERT( ppTDR[i]->nRefCount > nStaticCounts );
-            ppTDR[i]->nRefCount -= nStaticCounts;
+            typelib_TypeDescriptionReference * pTDR = ppTDR[i];
+            sal_Int32 nStaticCounts = pTDR->nStaticRefCount;
+            OSL_ASSERT( pTDR->nRefCount > pTDR->nStaticRefCount );
+            pTDR->nRefCount -= pTDR->nStaticRefCount;
 
-            if( ppTDR[i]->pType && !ppTDR[i]->pType->bOnDemand )
+            if( pTDR->pType && !pTDR->pType->bOnDemand )
             {
-                ppTDR[i]->pType->bOnDemand = sal_True;
-                typelib_typedescription_release( ppTDR[i]->pType );
+                pTDR->pType->bOnDemand = sal_True;
+                typelib_typedescription_release( pTDR->pType );
             }
-            typelib_typedescriptionreference_release( ppTDR[i] );
+            typelib_typedescriptionreference_release( pTDR );
         }
 
-        delete[] ppTDR;
+        delete [] ppTDR;
 
 #ifdef CPPU_ASSERTIONS
         aIt = pWeakMap->begin();
@@ -669,6 +670,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
     }
 
     pRet->nRefCount = 1; // reference count is initially 1
+    pRet->nStaticRefCount = 0;
     pRet->eTypeClass = eTypeClass;
     pRet->pTypeName = 0;
     pRet->pUniqueIdentifier = 0;
@@ -1021,7 +1023,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_newInterfaceAttri
 extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_acquire(
     typelib_TypeDescription * pTypeDescription ) throw ()
 {
-    osl_incrementInterlockedCount( &pTypeDescription->nRefCount );
+    ::osl_incrementInterlockedCount( &pTypeDescription->nRefCount );
 }
 
 //------------------------------------------------------------------------
@@ -1040,25 +1042,27 @@ static inline void typelib_typedescription_destructExtendedMembers(
         break;
     case typelib_TypeClass_UNION:
     {
-        typelib_typedescriptionreference_release(
-            ((typelib_UnionTypeDescription *)pTD)->pDiscriminantTypeRef );
-        typelib_typedescriptionreference_release(
-            ((typelib_UnionTypeDescription *)pTD)->pDefaultTypeRef );
+        typelib_UnionTypeDescription * pUTD = (typelib_UnionTypeDescription *)pTD;
+        typelib_typedescriptionreference_release( pUTD->pDiscriminantTypeRef );
+        typelib_typedescriptionreference_release( pUTD->pDefaultTypeRef );
+
         sal_Int32 nPos;
-        for ( nPos = ((typelib_UnionTypeDescription *)pTD)->nMembers; nPos--; )
+
+        typelib_TypeDescriptionReference ** ppTypeRefs = pUTD->ppTypeRefs;
+        for ( nPos = pUTD->nMembers; nPos--; )
         {
-            typelib_typedescriptionreference_release(
-                ((typelib_UnionTypeDescription *)pTD)->ppTypeRefs[nPos] );
+            typelib_typedescriptionreference_release( ppTypeRefs[nPos] );
         }
 
-        for ( nPos = ((typelib_UnionTypeDescription *)pTD)->nMembers; nPos--; )
+        rtl_uString ** ppMemberNames = pUTD->ppMemberNames;
+        for ( nPos = pUTD->nMembers; nPos--; )
         {
-            rtl_uString_release(
-                ((typelib_UnionTypeDescription *)pTD)->ppMemberNames[nPos] );
+            rtl_uString_release( ppMemberNames[nPos] );
         }
-        delete [] ((typelib_UnionTypeDescription *)pTD)->ppMemberNames;
-        delete [] ((typelib_UnionTypeDescription *)pTD)->pDiscriminants;
-        delete [] ((typelib_UnionTypeDescription *)pTD)->ppTypeRefs;
+
+        delete [] ppTypeRefs;
+        delete [] ppMemberNames;
+        delete [] pUTD->pDiscriminants;
     }
     break;
     case typelib_TypeClass_STRUCT:
@@ -1150,7 +1154,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_release(
 {
     OSL_ASSERT(pTD->nRefCount > 0);
 
-    if( !osl_decrementInterlockedCount( &pTD->nRefCount ) )
+    if( ! ::osl_decrementInterlockedCount( &pTD->nRefCount ) )
     {
         if( reallyWeak( pTD->eTypeClass ) )
         {
@@ -1728,6 +1732,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_new(
         osl_incrementInterlockedCount( &aInit.nTypeDescriptionReferenceCount );
 #endif
         pTDR->nRefCount = 1;
+        pTDR->nStaticRefCount = 0;
         pTDR->eTypeClass = eTypeClass;
         pTDR->pUniqueIdentifier = 0;
         pTDR->pReserved = 0;
@@ -1754,7 +1759,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_new(
 extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_acquire(
     typelib_TypeDescriptionReference * pRef ) throw ()
 {
-    osl_incrementInterlockedCount( &pRef->nRefCount );
+    ::osl_incrementInterlockedCount( &pRef->nRefCount );
 }
 
 //------------------------------------------------------------------------
@@ -1764,7 +1769,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_release(
     // Is it a type description?
     if( reallyWeak( pRef->eTypeClass ) )
     {
-        if( !osl_decrementInterlockedCount( &pRef->nRefCount ) )
+        if( ! ::osl_decrementInterlockedCount( &pRef->nRefCount ) )
         {
             if( aInit.pWeakMap )
             {
@@ -1815,7 +1820,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_getDescr
     // pRef->pType->pWeakRef == 0 means that the description is empty
     if( pRef->pType && pRef->pType->pWeakRef )
     {
-        sal_Int32 n = osl_incrementInterlockedCount( &pRef->pType->nRefCount );
+        sal_Int32 n = ::osl_incrementInterlockedCount( &pRef->pType->nRefCount );
         if( n > 1 )
         {
             // The refence is incremented. The object cannot be destroyed.
@@ -1825,7 +1830,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_getDescr
         }
         else
         {
-            osl_decrementInterlockedCount( &pRef->pType->nRefCount );
+            ::osl_decrementInterlockedCount( &pRef->pType->nRefCount );
             // detruction of this type in progress (another thread!)
             // no acces through this weak reference
             pRef->pType = 0;
@@ -1856,15 +1861,19 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_getByName(
         WeakMap_Impl::const_iterator aIt = aInit.pWeakMap->find( (sal_Unicode*)pName->buffer );
         if( !(aIt == aInit.pWeakMap->end()) ) // != failed on msc4.2
         {
-            sal_Int32 n = osl_incrementInterlockedCount( &(*aIt).second->nRefCount );
+            sal_Int32 n = ::osl_incrementInterlockedCount( &(*aIt).second->nRefCount );
             if( n > 1 )
+            {
                 // The refence is incremented. The object cannot be destroyed.
                 // Release the guard at the earliest point.
                 *ppRet = (*aIt).second;
+            }
             else
+            {
                 // detruction of this type in progress (another thread!)
                 // no acces through this weak reference
-                osl_decrementInterlockedCount( &(*aIt).second->nRefCount );
+                ::osl_decrementInterlockedCount( &(*aIt).second->nRefCount );
+            }
         }
     }
 }
