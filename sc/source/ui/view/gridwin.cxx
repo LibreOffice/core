@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:33:06 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3908,6 +3908,7 @@ void __EXPORT ScGridWindow::GetFocus()
 {
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
     pViewShell->GotFocus();
+    pViewShell->SetFormShellAtTop( FALSE );     // focus in GridWindow -> FormShell no longer on top
 
     if (pViewShell->HasAccessibilityObjects())
         pViewShell->BroadcastAccessibility(ScAccGridWinFocusGotHint(eWhich, GetAccessible()));
