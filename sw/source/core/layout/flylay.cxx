@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:50:59 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 08:51:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,14 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
 
                 // OD 07.08.2003 #i17297#, #111066#, #111070# - reactivate change
                 // of size attribute for fly frames containing an ole object.
-                if ( static_cast<SwCntntFrm*>(Lower())->GetNode()->GetOLENode() &&
+                // FME: 2004-05-19 Added the aFrmRect.HasArea() hack, because
+                // the environment of the ole object does not have to be valid
+                // at this moment, or even worse, it does not have to have a
+                // resonable size. In this case we do not want to change to
+                // attributes permanentely. Maybe one day somebody dares to remove
+                // this code.
+                if ( aFrmRect.HasArea() &&
+                     static_cast<SwCntntFrm*>(Lower())->GetNode()->GetOLENode() &&
                      ( bWidthClipped || bHeightClipped ) )
                 {
                     SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
@@ -496,24 +503,6 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                 } while ( pLow );
                 ::CalcCntnt( this );
                 ColUnlock();
-/* MA 02. Sep. 96: Wenn das Attribut gesetzt wird funktionieren Flys in Flys
- * nicht  (30095 30096)
-                SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
-                pFmt->LockModify();
-                SwFmtFrmSize aFrmSize( rSz );
-                if ( bRig )
-                    aFrmSize.SetWidth( Frm().Width() );
-                if ( bBot )
-                {
-                    aFrmSize.SetHeightSizeType( ATT_FIX_SIZE );
-                    aFrmSize.SetHeight( Frm().Height() );
-                    bFixHeight = TRUE;
-                    bMinHeight = FALSE;
-                }
-                pFmt->SetAttr( aFrmSize );
-                pFmt->UnlockModify();
-*/
-//Stattdessen:
                 if ( !bValidSize && !bWidthClipped )
                     bFormatHeightOnly = bValidSize = TRUE;
             }
