@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-17 15:50:34 $
+ *  last change: $Author: pb $ $Date: 2001-08-21 10:22:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
+#include <com/sun/star/frame/XTask.hpp>
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
@@ -1033,6 +1036,11 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
 
         case SID_CLOSEWIN:
         {
+            // disable CloseWin, if frame is not a task
+            Reference < XTask > xTask( GetFrame()->GetFrameInterface(),  UNO_QUERY );
+            if ( !xTask.is() )
+                break;
+
             if ( GetViewShell()->PrepareClose() )
             {
                 // weitere Views auf dasselbe Doc?
@@ -1104,6 +1112,14 @@ void SfxTopViewFrame::GetState_Impl( SfxItemSet &rSet )
                 break;
 
             case SID_CLOSEWIN:
+            {
+                // disable CloseWin, if frame is not a task
+                Reference < XTask > xTask( GetFrame()->GetFrameInterface(),  UNO_QUERY );
+                if ( !xTask.is() )
+                    rSet.DisableItem(nWhich);
+                break;
+            }
+
             case SID_SHOWPOPUPS :
                 break;
 
