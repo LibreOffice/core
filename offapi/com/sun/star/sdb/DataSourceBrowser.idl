@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataSourceBrowser.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:41 $
+ *  last change: $Author: fs $ $Date: 2001-05-23 14:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #endif
 #ifndef __com_sun_star_frame_XDispatchProvider_idl__
 #include <com/sun/star/frame/XDispatchProvider.idl>
+#endif
+#ifndef __com_sun_star_form_FormController_idl__
+#include <com/sun/star/form/FormController.idl>
 #endif
 
 module com {  module sun {  module star {  module sdb {
@@ -159,6 +162,19 @@ module com {  module sun {  module star {  module sdb {
 */
 service DataSourceBrowser
 {
+    /** implements basic form controller functionality.
+        <p>With a data source browser implementing this interface, external components have access to
+        <ul><li>the grid control which is used to display the currently selected table/query
+            (see <method scope="com.sun.star.form">XFormController::getControls</method>)
+            </li>
+            <li>the data form used for displaying objects. As always for components implementing this service,
+            the object returned by <method scope="com.sun.star.awt">XTabController::getModel</method> is a data form.
+            </li>
+        </ul>
+        </p>
+    */
+    [optional] service com::sun::star::form::FormController;
+
     /** allows the component to be plugged into frames.
     */
     interface com::sun::star::frame::XController;
