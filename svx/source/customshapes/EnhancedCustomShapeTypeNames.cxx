@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeTypeNames.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:05:15 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,6 @@
 #endif
 #include <hash_map>
 
-using namespace ::std;
-
 struct TCheck
 {
     bool operator()( const char* s1, const char* s2 ) const
@@ -76,7 +74,7 @@ struct TCheck
         return strcmp( s1, s2 ) == 0;
     }
 };
-typedef hash_map< const char*, MSO_SPT, std::hash<const char*>, TCheck> TypeNameHashMap;
+typedef std::hash_map< const char*, MSO_SPT, std::hash<const char*>, TCheck> TypeNameHashMap;
 static TypeNameHashMap* pHashMap = NULL;
 static ::osl::Mutex& getHashMapMutex()
 {
