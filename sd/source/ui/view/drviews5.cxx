@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:58:05 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:06:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -871,7 +871,7 @@ void SdDrawViewShell::VisAreaChanged(const Rectangle& rRect)
     reference).
 */
 ::com::sun::star::uno::Reference<
-    ::drafts::com::sun::star::accessibility::XAccessible>
+    ::com::sun::star::accessibility::XAccessible>
     SdDrawViewShell::CreateAccessibleDocumentView (SdWindow* pWindow)
 {
     if (GetController() != NULL)
@@ -884,7 +884,7 @@ void SdDrawViewShell::VisAreaChanged(const Rectangle& rRect)
                 pWindow->GetAccessibleParentWindow()->GetAccessible());
         pDocumentView->Init();
         return ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessible>
+            ::com::sun::star::accessibility::XAccessible>
             (static_cast< ::com::sun::star::uno::XWeak*>(pDocumentView),
                 ::com::sun::star::uno::UNO_QUERY);
     }
