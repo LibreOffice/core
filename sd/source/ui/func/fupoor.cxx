@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:51:50 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,13 +131,12 @@
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #include "zoomlist.hxx"
-#ifndef SD_CLIENT_HXX
-#include "Client.hxx"
-#endif
 #ifndef SD_FU_SLIDE_SHOW_HXX
 #include "fuslshow.hxx"
 #endif
 #include "LayerTabBar.hxx"
+
+#include <sfx2/viewfrm.hxx>
 
 // #97016# IV
 #ifndef _SVDITER_HXX
