@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-23 08:01:24 $
+ *  last change: $Author: mba $ $Date: 2002-04-26 15:40:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,10 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
         if ( nSubCount == 0 )
         {
             // simple property
-            DBG_ASSERT( nCount==1, "Wrong number of parameters!" );
+#ifdef DBG_UTIL
+            if ( nCount != 1 )
+                DBG_WARNING( "Playing macro: wrong number of parameters!" );
+#endif
             if ( nCount )
             {
                 const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[0];
@@ -300,6 +303,10 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
         }
         else
         {
+#ifdef DBG_UTIL
+            if ( nCount != nSubCount )
+                DBG_WARNING( "Playing macro: wrong number of parameters!" );
+#endif
             // complex property; collect sub items and reconstruct complex item
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
@@ -318,7 +325,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 
         delete pItem;
     }
-    else
+    else if ( nCount )
     {
         // slot is a method
         for ( sal_uInt16 nArgs=0; nArgs<pSlot->nArgDefCount; nArgs++ )
@@ -347,6 +354,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             else
             {
                 // complex argument; collect sub items and reconstruct complex item
+                BOOL bDone = FALSE;
                 for ( sal_uInt16 n=0; n<nCount; n++ )
                 {
                     const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
@@ -355,11 +363,17 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     {
                         // search sub item by name
                         if ( !strcmp( pType->aAttrib[nSub].pName, pName ) )
-                            pItem->PutValue( rProp.Value, (BYTE) (sal_Int8) pType->aAttrib[nSub].nAID );
+                        {
+                            BOOL bSuccess = pItem->PutValue( rProp.Value, (BYTE) (sal_Int8) pType->aAttrib[nSub].nAID );
+                            DBG_ASSERT(bSuccess, "Property not convertable!");
+                            if ( bSuccess )
+                                bDone = TRUE;
+                        }
                     }
                 }
 
-                rSet.Put( *pItem );
+                if ( bDone )
+                    rSet.Put( *pItem );
             }
 
             delete pItem;
