@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IMemberDescription.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:55:53 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,6 @@ package com.sun.star.uno;
  * @deprecated This interface does not cover all the features supported by the
  * corresponding (unpublished) implementation.  But no client code should need
  * to access this functionality, anyway.
- *
- * @since       UDK3.0
  */
 public interface IMemberDescription {
     /**
