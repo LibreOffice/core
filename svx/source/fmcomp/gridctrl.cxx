@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-29 15:15:56 $
+ *  last change: $Author: fs $ $Date: 2001-11-01 15:33:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2786,7 +2786,7 @@ void DbGridControl::copyCellText(sal_Int32 _nRow, sal_Int16 _nColId)
     DBG_ASSERT(canCopyCellText(_nRow, _nColId), "DbGridControl::copyCellText: invalid call!");
     DbGridColumn* pColumn = m_aColumns.GetObject(GetModelColumnPos(_nColId));
     SeekRow(_nRow);
-    OStringTransfer::CopyString(GetCellText(pColumn));
+    OStringTransfer::CopyString( GetCellText( pColumn ), this );
 }
 
 //------------------------------------------------------------------------------
@@ -3335,7 +3335,7 @@ void DbGridControl::KeyInput( const KeyEvent& rEvt )
         if (nRow >= 0 && nRow < GetRowCount() && nColId < ColCount())
         {
             DbGridColumn* pColumn = m_aColumns.GetObject(GetModelColumnPos(nColId));
-            OStringTransfer::CopyString(GetCellText(pColumn));
+            OStringTransfer::CopyString( GetCellText( pColumn ), this );
             return;
         }
     }
