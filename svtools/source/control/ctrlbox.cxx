@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-19 11:10:38 $
+ *  last change: $Author: gt $ $Date: 2002-07-19 12:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,62 +563,14 @@ long LineListBox::GetEntryDistance( USHORT nPos ) const
 
 // -----------------------------------------------------------------------
 
-/*void LineListBox::SetColor( const Color& rColor )
-{
-    // exchange colours
-    aColor = rColor;
-
-    UpdateLineColors();
-
-    // Variablen anlegen
-    ULONG n = 0;
-    ULONG nCount = pLineList->Count();
-    if ( !nCount )
-        return;
-
-    XubString aStr;
-    Bitmap   aBmp;
-
-    // Eintrage mit Linien austauschen
-    SetUpdateMode( FALSE );
-    USHORT nSelEntry = GetSelectEntryPos();
-    while ( n < nCount )
-    {
-        ImpLineListData* pData = pLineList->GetObject( n );
-        if ( pData )
-        {
-            // exchange listbox data
-            ListBox::RemoveEntry( (USHORT)n );
-            ImpGetLine( pData->nLine1, pData->nLine2, pData->nDistance,
-                        aBmp, aStr );
-            ListBox::InsertEntry( aStr, aBmp, (USHORT)n );
-        }
-
-        n++;
-    }
-
-    if ( nSelEntry != LISTBOX_ENTRY_NOTFOUND )
-        SelectEntryPos( nSelEntry );
-
-    SetUpdateMode( TRUE );
-    Invalidate();
-}*/
-
-// -----------------------------------------------------------------------
-
 void LineListBox::UpdateLineColors( void )
 {
-//  maPaintCol = GetDisplayBackground().GetColor().IsDark()? Application::GetSettings().GetStyleSettings() : aColor;
-    if( GetDisplayBackground().GetColor().IsDark() )
-        maPaintCol = GetSettings().GetStyleSettings().GetLabelTextColor();
-    else
-        maPaintCol = aColor;
+    maPaintCol = GetDisplayBackground().GetColor().IsDark()? GetSettings().GetStyleSettings().GetLabelTextColor() : aColor;
 
     ULONG       nCount = pLineList->Count();
     if( !nCount )
         return;
 
-//  ULONG       n = 0;
     XubString   aStr;
     Bitmap      aBmp;
 
@@ -626,7 +578,6 @@ void LineListBox::UpdateLineColors( void )
     SetUpdateMode( FALSE );
 
     USHORT      nSelEntry = GetSelectEntryPos();
-//  while( n < nCount )
     for( ULONG n = 0 ; n < nCount ; ++n )
     {
         ImpLineListData*    pData = pLineList->GetObject( n );
@@ -637,8 +588,6 @@ void LineListBox::UpdateLineColors( void )
             ImpGetLine( pData->nLine1, pData->nLine2, pData->nDistance, aBmp, aStr );
             ListBox::InsertEntry( aStr, aBmp, USHORT( n ) );
         }
-
-//      ++n;
     }
 
     if( nSelEntry != LISTBOX_ENTRY_NOTFOUND )
