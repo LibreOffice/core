@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-11 07:02:27 $
+ *  last change: $Author: oj $ $Date: 2002-08-08 07:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,7 +653,7 @@ sal_Bool SAL_CALL ORowSetCache::moveToBookmark( const Any& bookmark ) throw(SQLE
 //  if(m_bInserted)
 //      m_bInserted = sal_False;
 
-    if(m_pCacheSet->moveToBookmark(bookmark))
+    if ( m_pCacheSet->moveToBookmark(bookmark) )
     {
         m_bDeleted  = m_bBeforeFirst    = sal_False;
         m_nPosition = m_pCacheSet->getRow();
@@ -1453,6 +1453,8 @@ void SAL_CALL ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow ) th
 
     Any aBookmark = (*(*_rUpdateRow))[0].makeAny();
     OSL_ENSURE(aBookmark.hasValue(),"Bookmark must have a value!");
+    // here we don't have to reposition our CacheSet, when we try to update a row,
+    // the row was already fetched
     moveToBookmark(aBookmark);
     m_pCacheSet->updateRow(*_rUpdateRow,*m_aMatrixIter,m_aUpdateTable);
     //  *(*m_aMatrixIter) = *(*_rUpdateRow);
@@ -1576,7 +1578,9 @@ Sequence< sal_Int32 > SAL_CALL ORowSetCache::deleteRows( const Sequence< Any >& 
     sal_Int32 nOldPosition;
     for(;pBegin != pEnd;++pBegin,++pRet)
     {
-        if(moveToBookmark(*pBegin))
+        // first we have to position our own and then we have to position our CacheSet again,
+        // it could be repositioned in the moveToBookmark call
+        if ( moveToBookmark(*pBegin) && m_pCacheSet->moveToBookmark(*pBegin) )
         {
             nOldPosition = m_nPosition;
             deleteRow();
