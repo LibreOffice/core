@@ -17,9 +17,9 @@
             <menu:menu menu:id=".uno:SendToMenu" menu:label="" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:SendMail" menu:helpid="5331" menu:label="" />
-                    <menu:menuitem menu:id=".uno:DBSendReportAsMail" menu:helpid="5331" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DBSendReportAsMail" menu:helpid="12312" menu:label="" />
                     <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:DBSendReportToWriter" menu:helpid="0" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DBSendReportToWriter" menu:helpid="12313" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
@@ -93,7 +93,7 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:DBNewTable" menu:helpid="38906" menu:label="" />
             <menu:menuitem menu:id=".uno:DBNewView" menu:helpid="38930" menu:label="" />
-            <menu:menuitem menu:id=".uno:DBNewViewSQL" menu:helpid="0" menu:label="" />
+            <menu:menuitem menu:id=".uno:DBNewViewSQL" menu:helpid="12315" menu:label="" />
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:DBNewFolder" menu:helpid="12304" menu:label="" />
         </menu:menupopup>
@@ -129,10 +129,7 @@
     <menu:menu menu:id=".uno:HelpMenu" menu:label="" >
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:HelpIndex" menu:helpid="5401" menu:label="" />
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:HelperDialog" menu:helpid="5962" menu:label="" />
-            <menu:menuitem menu:id=".uno:HelpTip" menu:helpid="5404" menu:label="" />
-            <menu:menuitem menu:id=".uno:ActiveHelp" menu:helpid="5403" menu:label="" />
+            <menu:menuitem menu:id=".uno:ExtendedHelp" menu:helpid="5402" menu:label="" />
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:HelpSupport" menu:helpid="6683" menu:label="" />
             <menu:menuitem menu:id=".uno:OnlineRegistrationDlg" menu:helpid="6537" menu:label="" />
