@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 12:23:59 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,20 +88,11 @@
 #ifndef _EHDL_HXX //autogen
 #include <svtools/ehdl.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
 #ifndef _SVDOOLE2_HXX //autogen
 #include <svx/svdoole2.hxx>
 #endif
-#ifndef _SOERR_HXX //autogen
-#include <so3/soerr.hxx>
-#endif
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
-#endif
-#ifndef _IPENV_HXX //autogen
-#include <so3/ipenv.hxx>
 #endif
 #ifndef _SVX_FMSHELL_HXX            // XXX nur temp (dg)
 #include <svx/fmshell.hxx>
@@ -159,14 +150,9 @@
 #include "ViewShellBase.hxx"
 #endif
 
-#ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
-#define SO2_DECL_SVINPLACEOBJECT_DEFINED
-SO2_DECL_REF(SvInPlaceObject)
-#endif
-#ifndef SO2_DECL_SVSTORAGE_DEFINED
-#define SO2_DECL_SVSTORAGE_DEFINED
-SO2_DECL_REF(SvStorage)
-#endif
+#include <sfx2/viewfrm.hxx>
+#include <svtools/soerr.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #ifdef WNT
 #pragma optimize ( "", off )
@@ -908,6 +894,7 @@ void ViewShell::UpdateWindows()
 BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 {
     ErrCode aErrCode = 0;
+
     SfxErrorContext aEC(ERRCTX_SO_DOVERB, GetActiveWindow(), RID_SO_ERRCTX);
     BOOL bAbort = FALSE;
     BOOL bChartActive = FALSE;
@@ -915,38 +902,36 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
     SfxViewShell* pViewShell = GetViewShell();
     OSL_ASSERT (pViewShell!=NULL);
 
-    SvInPlaceObjectRef aIPObj = pObj->GetObjRef();
-
-    if ( !aIPObj.Is() )
+    uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
+    if ( !xObj.is() )
     {
         /**********************************************************
         * Leeres OLE-Objekt mit OLE-Objekt versehen
         **********************************************************/
-        SvInPlaceObjectRef aNewIPObj;
         String aName = pObj->GetProgName();
+        ::rtl::OUString aObjName;
+        SvGlobalName aClass;
 
-        if( aName.EqualsAscii( "StarChart" ))
+        if( aName.EqualsAscii( "StarChart" ) || aName.EqualsAscii("StarOrg") )
         {
             if( SvtModuleOptions().IsChart() )
-                aNewIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SCH_CLASSID ) );
-        }
-        else if( aName.EqualsAscii( "StarOrg" ))
-        {
-            if( SvtModuleOptions().IsChart() )
-                aNewIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SCH_CLASSID ) );
+                aClass = SvGlobalName( SO3_SCH_CLASSID );
         }
         else if( aName.EqualsAscii( "StarCalc" ))
         {
             if( SvtModuleOptions().IsCalc() )
-                aNewIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SC_CLASSID ) );
+                aClass = SvGlobalName( SO3_SC_CLASSID );
         }
         else if( aName.EqualsAscii( "StarMath" ))
         {
             if( SvtModuleOptions().IsMath() )
-                aNewIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SM_CLASSID ) );
+                aClass = SvGlobalName( SO3_SM_CLASSID );
         }
 
-        if( !aNewIPObj.Is() )
+        if ( aClass != SvGlobalName() )
+            xObj = GetDocSh()->GetEmbeddedObjectContainer().CreateEmbeddedObject( aClass.GetByteSequence(), aObjName );
+
+        if( !xObj.is() )
         {
             aName = String();
 
@@ -955,16 +940,16 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             pViewShell->GetViewFrame()->GetDispatcher()->Execute(
                 SID_INSERT_OBJECT,
                 SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
-            aNewIPObj = pObj->GetObjRef();
+            xObj = pObj->GetObjRef();
             GetDocSh()->SetWaitCursor( TRUE );
 
-            if (!aNewIPObj.Is())
+            if (!xObj.is())
             {
                 bAbort = TRUE;
             }
         }
 
-        if( aNewIPObj.Is() )
+        if ( xObj.is() )
         {
             /******************************************************
             * OLE-Objekt ist nicht mehr leer
@@ -978,26 +963,29 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             ******************************************************/
             if (aName.Len())
             {
-                String aObjName = GetDocSh()->InsertObject(aNewIPObj, String())->GetObjName();
-                pObj->SetObjRef(aNewIPObj);
+                pObj->SetObjRef(xObj);
                 pObj->SetName(aObjName);
                 pObj->SetPersistName(aObjName);
             }
             else
             {
                 // Das Einfuegen hat der Dialog schon gemacht
-                pObj->SetObjRef(aNewIPObj);
+                pObj->SetObjRef(xObj);
             }
 
             Rectangle aRect = pObj->GetLogicRect();
-            aNewIPObj->SetVisAreaSize( aRect.GetSize() );
+            awt::Size aSz;
+            aSz.Width = aRect.GetWidth();
+            aSz.Height = aRect.GetHeight();
+            xObj->setVisualAreaSize( pObj->GetAspect(), aSz );
 
-            SetVerbs( &aNewIPObj->GetVerbList() );
+            SetVerbs( xObj->getSupportedVerbs() );
 
             if( aName.EqualsAscii( "StarChart" ))
             {
                 bChartActive = TRUE;
-                SchDLL::Update(aNewIPObj, NULL, GetActiveWindow());     // BM: use different DLL-call
+                // TODO/LATER: looks like there is no need to update graphical replacement, but it should be checked.
+                SchDLL::Update(xObj, NULL, GetActiveWindow());      // BM: use different DLL-call
             }
 
             nVerb = SVVERB_SHOW;
@@ -1017,38 +1005,35 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             pView->EndTextEdit();
         }
 
-        const SvInPlaceObjectRef& rIPObjRef = pObj->GetObjRef();
-        SfxInPlaceClientRef pSdClient =
+        SfxInPlaceClient* pSdClient =
             static_cast<Client*>(pViewShell->FindIPClient(
-                rIPObjRef, GetActiveWindow()));
+                pObj->GetObjRef(), GetActiveWindow()));
 
-        if ( !pSdClient.Is() )
+        if ( !pSdClient )
         {
             pSdClient = new Client(pObj, this, GetActiveWindow());
         }
 
-        rIPObjRef->DoConnect(pSdClient);
         Rectangle aRect = pObj->GetLogicRect();
-        SvClientData* pClientData = pSdClient->GetEnv();
+        Size aDrawSize = aRect.GetSize();
 
-        if (pClientData)
-        {
-            Size aDrawSize = aRect.GetSize();
-            Size aObjAreaSize = rIPObjRef->GetVisArea().GetSize();
-            aObjAreaSize = OutputDevice::LogicToLogic( aObjAreaSize,
-                                                   rIPObjRef->GetMapUnit(),
-                                                   GetDoc()->GetScaleUnit() );
+        awt::Size aSz = pObj->GetObjRef()->getVisualAreaSize( pSdClient->GetAspect() );
+        Size aObjAreaSize( aSz.Width, aSz.Height );
 
-            // sichtbarer Ausschnitt wird nur inplace veraendert!
-            aRect.SetSize(aObjAreaSize);
-            pClientData->SetObjArea(aRect);
+        MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( pObj->GetObjRef()->getMapUnit( pSdClient->GetAspect() ) );
+        aObjAreaSize = OutputDevice::LogicToLogic( aObjAreaSize,
+                                                aUnit,
+                                                GetDoc()->GetScaleUnit() );
 
-            Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
-            Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
-            aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
-            aScaleHeight.ReduceInaccurate(10);
-            pClientData->SetSizeScale(aScaleWidth, aScaleHeight);
-        }
+        // sichtbarer Ausschnitt wird nur inplace veraendert!
+        aRect.SetSize(aObjAreaSize);
+        pSdClient->SetObjArea(aRect);
+
+        Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
+        Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
+        aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
+        aScaleHeight.ReduceInaccurate(10);
+        pSdClient->SetSizeScale(aScaleWidth, aScaleHeight);
 
         // switching to edit mode for OLEs was disabled when OLE
         // is member of a group all the time. I dont know why it
@@ -1057,7 +1042,7 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 //          if( !pView->IsGroupEntered() )
         SfxViewShell* pViewShell = GetViewShell();
         OSL_ASSERT (pViewShell!=NULL);
-        pViewShell->DoVerb(pSdClient, nVerb);   // ErrCode wird ggf. vom Sfx ausgegeben
+        pSdClient->DoVerb(nVerb);   // ErrCode wird ggf. vom Sfx ausgegeben
         pViewShell->GetViewFrame()->GetBindings().Invalidate(
             SID_NAVIGATOR_STATE, TRUE, FALSE);
     }
