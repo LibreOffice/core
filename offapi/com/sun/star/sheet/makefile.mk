@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: sab $ $Date: 2002-11-13 06:19:55 $
+#   last change: $Author: nn $ $Date: 2002-12-09 16:12:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -140,6 +140,7 @@ IDLFILES=\
     DataResultFlags.idl\
     DDELink.idl\
     DDELinks.idl\
+    DocumentSettings.idl\
     FillDateMode.idl\
     FillDirection.idl\
     FillMode.idl\
