@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpcustomshape.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:06:26 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 12:36:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,8 @@ const SvXMLEnumMapEntry aXML_GluePointEnumMap[] =
     { XML_NONE,         0 },
     { XML_SEGMENTS,     1 },
     { XML_NONE,         2 },
-    { XML_RECTANGLE,    3 }
+    { XML_RECTANGLE,    3 },
+    { XML_TOKEN_INVALID, 0 }
 };
 void GetBool( std::vector< com::sun::star::beans::PropertyValue >& rDest,
                         const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
