@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 13:25:29 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:52:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5082,8 +5082,7 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
                 // Wegen Systemmenu und anderen System-HotKeys, nur
                 // eigenstaendige Character-Kombinationen auswerten
                 USHORT nKeyCode = rKEvent.GetKeyCode().GetCode();
-                if ( !nKeyCode ||
-                     ((nKeyCode >= KEY_A) && (nKeyCode <= KEY_Z)) )
+                if ( ((nKeyCode >= KEY_A) && (nKeyCode <= KEY_Z)) )
                     Sound::Beep();
             }
         }
