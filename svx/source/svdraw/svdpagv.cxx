@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:00:23 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:49:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -718,7 +718,7 @@ B2dIAOManager* SdrPageViewWindow::GetIAOManager() const
 // #110094# ObjectContact section
 sdr::contact::ObjectContact* SdrPageViewWindow::CreateViewSpecificObjectContact()
 {
-    return new sdr::contact::ObjectContactOfPageView(mrPageView);
+    return new sdr::contact::ObjectContactOfPageView(*this);
 }
 
 SdrPaintInfoRec* SdrPageViewWindow::ImpCreateNewPageInfoRec(const Rectangle& rDirtyRect,
@@ -786,7 +786,6 @@ void SdrPageViewWindow::Redraw(const Region& rReg, sal_uInt16 nPaintMode, const 
     pModel->SetPaintingPageView(&mrPageView);
 
     ExtOutputDevice* pXOut = rView.GetExtendedOutputDevice();
-    Rectangle aDirtyRect(rReg.GetBoundRect() - mrPageView.GetOffset());
     sal_Bool bTextEdit(rView.IsTextEdit() && rView.GetTextEditPageView() == &mrPageView);
     pXOut->SetOffset(mrPageView.GetOffset());
 
@@ -811,8 +810,9 @@ void SdrPageViewWindow::Redraw(const Region& rReg, sal_uInt16 nPaintMode, const 
         // force output to this one given target
         pXOut->SetOutDev(&mrOutputDevice);
 
-        // create PaintInfoRec
-        SdrPaintInfoRec* pInfoRec = ImpCreateNewPageInfoRec(aDirtyRect, nPaintMode, pPaintProc, pId);
+        // create PaintInfoRec, #114359# use Rectangle only temporarily
+        Rectangle aDirtyRectForInfo(rReg.GetBoundRect() - mrPageView.GetOffset());
+        SdrPaintInfoRec* pInfoRec = ImpCreateNewPageInfoRec(aDirtyRectForInfo, nPaintMode, pPaintProc, pId);
 
         // create processing data
         sdr::contact::DisplayInfo aDisplayInfo(&mrPageView);
@@ -827,7 +827,11 @@ void SdrPageViewWindow::Redraw(const Region& rReg, sal_uInt16 nPaintMode, const 
         aDisplayInfo.SetExtendedOutputDevice(pXOut);
         aDisplayInfo.SetPaintInfoRec(pInfoRec);
         aDisplayInfo.SetOutputDevice(&mrOutputDevice);
-        aDisplayInfo.SetRedrawArea(Region(aDirtyRect));
+
+        // #114359# Set region as redraw area, not a rectangle
+        Region aRegionWithoutOffset(rReg);
+        aRegionWithoutOffset.Move(-mrPageView.GetOffset().X(), -mrPageView.GetOffset().Y());
+        aDisplayInfo.SetRedrawArea(aRegionWithoutOffset);
 
         if(pId)
         {
@@ -862,6 +866,16 @@ void SdrPageViewWindow::Redraw(const Region& rReg, sal_uInt16 nPaintMode, const 
     // ?!?!{
     // ?!?! mpIAOManager->UpdateDisplay();
     // ?!?!}
+}
+
+// Invalidate call, used from ObjectContact(OfPageView) in InvalidatePartOfView(...)
+void SdrPageViewWindow::Invalidate(const Rectangle& rRectangle)
+{
+    if(GetPageView().IsVisible() && OUTDEV_WINDOW == mrOutputDevice.GetOutDevType())
+    {
+        Rectangle aRectWithOffset(rRectangle + GetPageView().GetOffset());
+        ((Window&)mrOutputDevice).Invalidate(aRectWithOffset, INVALIDATE_NOERASE);
+    }
 }
 
 // #110094# ObjectContact section
