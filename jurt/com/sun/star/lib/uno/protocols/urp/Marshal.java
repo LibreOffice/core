@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Marshal.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kr $ $Date: 2001-01-16 18:01:32 $
+ *  last change: $Author: kr $ $Date: 2001-03-06 17:09:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ class Marshal implements IMarshal {
     private Cache                 _objectCache;
     private Cache                 _typeCache;
     private Cache                 _threadIdCache;
-    private boolean               _useCaches = false;
+    private boolean               _useCaches = true;
 
     Marshal(IBridge iBridge, short cacheSize) {
         _iBridge = iBridge;
