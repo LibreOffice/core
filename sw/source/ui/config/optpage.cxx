@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2002-06-11 08:38:12 $
+ *  last change: $Author: gt $ $Date: 2002-07-26 16:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1958,7 +1958,7 @@ IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, ListBox *, pLB )
     rFont.SetUnderline(UNDERLINE_NONE);
     rFont.SetStrikeout(STRIKEOUT_NONE);
     rFont.SetCaseMap(SVX_CASEMAP_NOT_MAPPED);
-    pPrev->SetColor(Color(COL_WHITE));
+    pPrev->SetColor( GetBackground().GetColor() );
 
     USHORT nPos = pColorLB->GetSelectEntryPos();
 
@@ -2114,12 +2114,13 @@ IMPL_LINK( SwRedlineOptionsTabPage, ChangedMaskPrevHdl, ListBox *, pLB )
 
 void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
 {
+    Color aBackCol( GetBackground().GetColor() );
     SvxFont& rFont = rExampleWin.GetFont();
     Font aFont( OutputDevice::GetDefaultFont( DEFAULTFONT_SERIF,
                 Application::GetSettings().GetUILanguage(),
                 DEFAULTFONT_FLAGS_ONLYONE, &rExampleWin ));
     aFont.SetSize( Size( 0, 12 ) );
-    aFont.SetFillColor(Color(COL_WHITE));
+    aFont.SetFillColor( aBackCol );
     aFont.SetWeight(WEIGHT_NORMAL);
     rFont = aFont;
     const Size aLogSize( rExampleWin.GetOutputSize() );
@@ -2127,8 +2128,7 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
     rExampleWin.SetFont(rFont);
     rExampleWin.UseResourceText();
 
-    Color aWhiteColor = COL_WHITE;
-    Wallpaper aWall(aWhiteColor);
+    Wallpaper aWall( aBackCol );
     rExampleWin.SetBackground(aWall);
     rExampleWin.Invalidate();
 }
