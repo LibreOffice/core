@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:40:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -709,7 +709,7 @@ BOOL GetDocFontList_Impl( const FontList** ppFontList, SvxFontNameBox_Impl* pBox
 SvxFontNameBox_Impl::SvxFontNameBox_Impl( Window* pParent, const Reference< XDispatchProvider >& rDispatchProvider, WinBits nStyle ) :
 
     FontNameBox        ( pParent, nStyle | WinBits( WB_DROPDOWN | WB_AUTOHSCROLL ) ),
-    aLogicalSize       ( 75,80 ),
+    aLogicalSize       ( 75,160 ),
     pFontList          ( NULL ),
     nFtCount           ( 0 ),
     bRelease           ( TRUE ),
@@ -912,7 +912,7 @@ SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
 
     pCtrl               ( &rCtrl ),
     bRelease            ( TRUE ),
-    aLogicalSize        ( 20,80 ),
+    aLogicalSize        ( 30,100 ),
     m_xDispatchProvider ( rDispatchProvider )
 
 {
