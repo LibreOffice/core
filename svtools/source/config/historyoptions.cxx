@@ -2,9 +2,9 @@
  *
  *  $RCSfile: historyoptions.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: as $ $Date: 2001-12-07 12:30:39 $
+ *  last change: $Author: vg $ $Date: 2003-07-11 10:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,10 +678,12 @@ void SvtHistoryOptions_Impl::AppendItem(            EHistoryType    eHistory    
             pList->push_front( aItem );
             ConfigItem::SetModified();
         }
-        else
+        else if (pItem != pList->begin())
         {
-            pList->push_front( *pItem );
-            pList->erase     ( pItem  );
+            IMPL_THistoryItem aTempItem = *pItem;
+            pList->erase(pItem);
+            pList->push_front(aTempItem);
+            ConfigItem::SetModified();
         }
     }
 }
