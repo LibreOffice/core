@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:28 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,11 +93,11 @@
 #ifndef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
 #include <com/sun/star/awt/XFocusListener.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FORM_XCHANGEBROADCASTER_HPP_
-#include <com/sun/star/form/XChangeBroadcaster.hpp>
-#endif
 #ifndef FORMS_ERRORBROADCASTER_HXX
 #include "errorbroadcaster.hxx"
+#endif
+#ifndef FORMS_ENTRYLISTHELPER_HXX
+#include "entrylisthelper.hxx"
 #endif
 
 //.........................................................................
@@ -109,6 +109,7 @@ namespace frm
 //==================================================================
 class OComboBoxModel
             :public OBoundControlModel
+            ,public OEntryListHelper
             ,public OErrorBroadcaster
             ,public ::comphelper::OAggregationArrayUsageHelper< OComboBoxModel >
 {
@@ -133,10 +134,7 @@ class OComboBoxModel
 
 
 
-    static sal_Int32        nTextHandle;
-
 protected:
-    virtual void _onValueChanged();
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
 
 public:
@@ -153,9 +151,6 @@ public:
                 throw (::com::sun::star::lang::IllegalArgumentException);
 
     // XLoadListener
-    virtual void         _loaded(const ::com::sun::star::lang::EventObject& rEvent);
-    virtual void         _unloaded();
-
     virtual void SAL_CALL reloaded( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
@@ -165,9 +160,6 @@ public:
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OComboBoxModel, OBoundControlModel);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);
-
-    // XBoundComponent
-    virtual sal_Bool _commit();
 
     // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
@@ -180,15 +172,34 @@ public:
     virtual void SAL_CALL
         read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
-    // XReset
-    virtual void _reset();
-
     // OAggregationArrayUsageHelper
     virtual void fillProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
+
+    // XEventListener
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException);
+
+protected:
+    // OBoundControlModel overridables
+    virtual ::com::sun::star::uno::Any
+                            translateDbColumnToControlValue( );
+    virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
+
+    virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
+    virtual void            onDisconnectedDbColumn();
+
+    virtual ::com::sun::star::uno::Any
+                            getDefaultForReset() const;
+
+    virtual sal_Bool        approveValueBinding( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XValueBinding >& _rxBinding );
+
+    // OEntryListHelper overriables
+    virtual void    stringItemListChanged( );
+    virtual void    connectedExternalListSource( );
+    virtual void    disconnectedExternalListSource( );
 
 protected:
     void loadData();
