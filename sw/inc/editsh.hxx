@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:49:54 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,9 @@ class SwEndNoteInfo;
 class SwLineNumberInfo;
 class SwAttrSet;
 class SwAuthEntry;
+class SwHHCWrapper;
 class SwRewriter;
+
 
 namespace com { namespace sun { namespace star { namespace uno {
     template < class > class Sequence;
@@ -724,12 +726,12 @@ public:
 
     // Selektionen sichern
     void SpellStart( SwDocPositions eStart, SwDocPositions eEnde,
-                     SwDocPositions eCurr, sal_Bool bIsConversion = sal_False );
+                     SwDocPositions eCurr, SwHHCWrapper *pConvWrapper = 0 );
     // Selektionen wiederherstellen
-    void SpellEnd( sal_Bool bIsConversion = sal_False );
+    void SpellEnd( SwHHCWrapper *pConvWrapper = 0 );
     ::com::sun::star::uno::Any SpellContinue(
                     USHORT* pPageCnt, USHORT* pPageSt,
-                    sal_Bool bIsConversion = sal_False );
+                    SwHHCWrapper *pConvWrapper = 0 );
 
     // Is spelling active somewhere else?
     BOOL HasSpellIter() const;
