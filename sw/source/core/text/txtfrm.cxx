@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:25:16 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,10 @@
 #endif
 #ifndef _SW_PORTIONHANDLER_HXX
 #include <SwPortionHandler.hxx>
+#endif
+// OD 2004-01-15 #110582#
+#ifndef _DCONTACT_HXX
+#include <dcontact.hxx>
 #endif
 
 #if OSL_DEBUG_LEVEL > 1
@@ -465,9 +469,6 @@ void SwTxtFrm::ResetPreps()
 /*************************************************************************
  *                        SwTxtFrm::IsHiddenNow()
  *************************************************************************/
-// liefert nur sal_True zurueck, wenn das Outputdevice ein Printer ist
-// und bHidden gesetzt ist.
-
 sal_Bool SwTxtFrm::IsHiddenNow() const
 {
     SwFrmSwapper aSwapper( this, sal_True );
@@ -475,22 +476,28 @@ sal_Bool SwTxtFrm::IsHiddenNow() const
     if( !Frm().Width() && IsValid() && GetUpper()->IsValid() )
                                        //bei Stackueberlauf (StackHack) invalid!
     {
-        ASSERT( Frm().Width(), "SwTxtFrm::IsHiddenNow: thin frame" );
+        ASSERT( false, "SwTxtFrm::IsHiddenNow: thin frame" );
         return sal_True;
     }
 
-    if( !GetTxtNode()->IsVisible() )
-    {
-        const ViewShell *pVsh = GetShell();
-        if ( !pVsh )
-            return sal_False;
+    const bool bHiddenCharsHidePara = GetTxtNode()->HasHiddenCharAttribute( true );
+    const bool bHiddenParaField = GetTxtNode()->HasHiddenParaField();
+    const ViewShell* pVsh = GetShell();
 
-        return ! pVsh->GetWin() ||
-               (!pVsh->GetViewOptions()->IsShowHiddenPara()      &&
-                !pVsh->GetViewOptions()->IsFldName());
+    if ( pVsh && ( bHiddenCharsHidePara || bHiddenParaField ) )
+    {
+        if ( !pVsh->GetWin() ||
+             ( bHiddenParaField &&
+               ( !pVsh->GetViewOptions()->IsShowHiddenPara() &&
+                 !pVsh->GetViewOptions()->IsFldName() ) ) ||
+             ( bHiddenCharsHidePara &&
+               !pVsh->GetViewOptions()->IsShowHiddenChar() ) )
+        {
+            return sal_True;
+        }
     }
-    else
-        return sal_False;
+
+    return sal_False;
 }
 
 
@@ -501,14 +508,27 @@ sal_Bool SwTxtFrm::IsHiddenNow() const
 
 void SwTxtFrm::HideHidden()
 {
-    ASSERT( IsHiddenNow(), "HideHidden on visible frame" );
+    ASSERT( !GetFollow() && IsHiddenNow(),
+            "HideHidden on visible frame of hidden frame has follow" );
 
-    //Erst die Fussnoten
+    const xub_StrLen nEnd = STRING_LEN;
+    HideFootnotes( GetOfst(), nEnd );
+    // OD 2004-01-15 #110582#
+    HideAndShowObjects();
+
+    //Die Formatinfos sind jetzt obsolete
+    ClearPara();
+}
+
+/*************************************************************************
+ *                        SwTxtFrm::HideFootnotes()
+ *************************************************************************/
+void SwTxtFrm::HideFootnotes( xub_StrLen nStart, xub_StrLen nEnd )
+{
     const SwpHints *pHints = GetTxtNode()->GetpSwpHints();
     if( pHints )
     {
         const MSHORT nSize = pHints->Count();
-        const xub_StrLen nEnd = GetFollow() ? GetFollow()->GetOfst():STRING_LEN;
         SwPageFrm *pPage = 0;
         for( MSHORT i = 0; i < nSize; ++i )
         {
@@ -518,7 +538,7 @@ void SwTxtFrm::HideHidden()
                 const xub_StrLen nIdx = *pHt->GetStart();
                 if ( nEnd < nIdx )
                     break;
-                if( GetOfst() <= nIdx )
+                if( nStart <= nIdx )
                 {
                     if( !pPage )
                         pPage = FindPageFrm();
@@ -527,25 +547,84 @@ void SwTxtFrm::HideHidden()
             }
         }
     }
-    //Dann die zeichengebundenen Rahmen
+}
+
+/*************************************************************************
+ *                        SwTxtFrm::HideAndShowObjects()
+ *************************************************************************/
+/** method to hide/show objects
+
+    OD 2004-01-15 #110582#
+    method hides respectively shows objects, which are anchored at paragraph,
+    at/as a character of the paragraph, corresponding to the paragraph and
+    paragraph portion visibility.
+
+    - is called from HideHidden() - should hide objects in hidden paragraphs and
+    - from _Format() - should hide/show objects in partly visible paragraphs
+
+    @author OD
+*/
+void SwTxtFrm::HideAndShowObjects()
+{
     if ( GetDrawObjs() )
     {
-        for ( int i = GetDrawObjs()->Count()-1; i >= 0; --i )
+        if ( IsHiddenNow() )
         {
-            SdrObject *pObj = (*GetDrawObjs())[i];
-            SwFlyFrm *pFly;
-            if ( pObj->ISA(SwVirtFlyDrawObj) &&
-                 (pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm())->IsFlyInCntFrm())
+            // complete paragraph is hidden. Thus, hide all objects
+            for ( sal_Int8 i = 0; i < GetDrawObjs()->Count(); ++i )
             {
-                pFly->GetAnchor()->RemoveFly( pFly );
-                delete pFly;
+                SdrObject* pObj = (*GetDrawObjs())[i];
+                SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
+                pContact->MoveObjToInvisibleLayer( pObj );
+            }
+        }
+        else
+        {
+            // paragraph is visible, but can contain hidden text portion.
+            // first we check if objects are allowed to be hidden:
+            const SwTxtNode& rNode = *GetTxtNode();
+            const ViewShell* pVsh = GetShell();
+            const bool bShouldBeHidden = !pVsh || !pVsh->GetWin() ||
+                                         !pVsh->GetViewOptions()->IsShowHiddenChar();
+
+            // Thus, show all objects, which are anchored at paragraph and
+            // hide/show objects, which are anchored at/as character, according
+            // to the visibility of the anchor character.
+            for ( sal_Int8 i = 0; i < GetDrawObjs()->Count(); ++i )
+            {
+                SdrObject* pObj = (*GetDrawObjs())[i];
+                SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
+
+                if ( pContact->ObjAnchoredAtPara() )
+                {
+                    pContact->MoveObjToVisibleLayer( pObj );
+                }
+                else if ( pContact->ObjAnchoredAtChar() ||
+                          pContact->ObjAnchoredAsChar() )
+                {
+                    xub_StrLen nHiddenStart;
+                    xub_StrLen nHiddenEnd;
+                    xub_StrLen nObjAnchorPos = pContact->GetCntntAnchorIndex().GetIndex();
+                    SwScriptInfo::GetBoundsOfHiddenRange( rNode, nObjAnchorPos, nHiddenStart, nHiddenEnd, 0 );
+                    if ( nHiddenStart != STRING_LEN && bShouldBeHidden )
+                        pContact->MoveObjToInvisibleLayer( pObj );
+                    else
+                        pContact->MoveObjToVisibleLayer( pObj );
+                }
+                else
+                {
+                    ASSERT( false,
+                            "<SwTxtFrm::HideAndShowObjects()> - object not anchored at/inside paragraph!?" );
+                }
             }
         }
     }
-    //Die Formatinfos sind jetzt obsolete
-    ClearPara();
-}
 
+    if ( IsFollow() )
+    {
+        FindMaster()->HideAndShowObjects();
+    }
+}
 
 /*************************************************************************
  *                      SwTxtFrm::FindBrk()
@@ -910,8 +989,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                           RES_CHRATR_CJK_LANGUAGE == nTmp ||
                           RES_CHRATR_CTL_LANGUAGE == nTmp )
                     SET_WRONG( nPos, nPos + nLen, Invalidate )
-                else if ( RES_CHRATR_FONT == nTmp || RES_CHRATR_CJK_FONT == nTmp ||
-                          RES_CHRATR_CTL_FONT == nTmp )
+                else if ( RES_CHRATR_HIDDEN == nTmp )
                     SET_SCRIPT_INVAL( nPos )
             }
         }
