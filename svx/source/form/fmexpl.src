@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:02:57 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 09:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1104,14 +1104,14 @@ Menu RID_FMSHELL_CONVERSIONMENU
 
 ImageList RID_SVXIMGLIST_FMEXPL
 {
-    ImageBitmap = Bitmap { File = "sx_form.bmp" ; };
+    Prefix = "sx";
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
     NAVIGATOR_IMAGEIDS;
 };
 
 ImageList RID_SVXIMGLIST_FMEXPL_HC
 {
-    ImageBitmap = Bitmap { File = "sxh_form.bmp" ; };
+    Prefix = "sxh";
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
     NAVIGATOR_IMAGEIDS;
 };
