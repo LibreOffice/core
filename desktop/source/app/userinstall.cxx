@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinstall.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: lo $ $Date: 2004-07-28 15:02:07 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,10 +286,15 @@ namespace desktop {
         return err;
     }
 
-    static const char *pszCopyList[] = {
+    static const char *pszSrcList[] = {
+        "/presets",
+        NULL
+    };
+    static const char *pszDstList[] = {
         "/user",
         NULL
     };
+
 
     UserInstall::UserInstallError UserInstall::configureLanguage()
     {
@@ -362,11 +367,11 @@ namespace desktop {
         if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST)) return UserInstall::E_Creation;
 
             // copy data from shared data directory of base installation
-        for (sal_Int32 i=0; pszCopyList[i]!=NULL; i++)
+        for (sal_Int32 i=0; pszSrcList[i]!=NULL && pszDstList[i]!=NULL; i++)
         {
             rc = copy_recursive(
-                    aBasePath + OUString::createFromAscii(pszCopyList[i]),
-                    aUserPath + OUString::createFromAscii(pszCopyList[i]));
+                    aBasePath + OUString::createFromAscii(pszSrcList[i]),
+                    aUserPath + OUString::createFromAscii(pszDstList[i]));
             if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST)) return UserInstall::E_Creation;
         }
         try
@@ -388,8 +393,11 @@ namespace desktop {
             hpset->setHierarchicalPropertyValue(OUString::createFromAscii("Office/ooSetupInstCompleted"), makeAny(sal_True));
             Reference< XChangesBatch >(hpset, UNO_QUERY_THROW)->commitChanges();
         }
-        catch (Exception&)
+        catch (Exception& e)
         {
+            OString aMsg("create_user_install(): ");
+            aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
+            OSL_ENSURE(sal_False, aMsg.getStr());
             return UserInstall::E_Creation;
         }
 
