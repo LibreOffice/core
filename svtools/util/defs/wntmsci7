@@ -9136,3 +9136,5 @@ lpfnGetWindowTextW
 ?useStorage@StorageItem@@QAEEXZ
 _TI3?AVNoMasterException@task@star@sun@com@@
 ??0InteractionRetry@ucbhelper@@QAE@PAVInteractionRequest@1@@Z
+?SetUseSystemFileDialog@SvtMiscOptions@@QAEXE@Z
+?UseSystemFileDialog@SvtMiscOptions@@QBEEXZ
