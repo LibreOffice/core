@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-19 16:04:18 $
+ *  last change: $Author: jp $ $Date: 2001-03-27 21:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,15 +165,6 @@
 #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
 #include <com/sun/star/util/SearchOptions.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
-#include <com/sun/star/util/SearchFlags.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
-#include <com/sun/star/i18n/TransliterationModules.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-#include <com/sun/star/lang/Locale.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #endif
@@ -230,8 +221,12 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
+#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#include "swcont.hxx"
+#endif
+#ifndef _SWCONT_HXX
+#include <swcont.hxx>
+#endif
 #ifndef _UNODEFAULTS_HXX
 #include <unodefaults.hxx>
 #endif
@@ -817,63 +812,8 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     sal_Bool bBackward = sal_False;
     int eRanges(FND_IN_BODY|FND_IN_SELALL);
 
-#ifdef NEVER
-    utl::SearchParam aSrchParam(pSearch->sSearchText);
-    aSrchParam.SetReplaceStr(pSearch->sReplaceText);
-//bInSel: 1;  // wie geht   das?
-    //TODO: pSearch->bStyles!
-    aSrchParam.SetCaseSensitive(pSearch->bCase);
-
-//      inSelection??
-//      aSrchParam.SetSrchInSelection(TypeConversion::toBOOL(aVal));
-    aSrchParam.SetSrchWordOnly(pSearch->bWord);
-    aSrchParam.SetSrchRelaxed(pSearch->bLevRelax);
-    aSrchParam.SetLEVOther(pSearch->nLevExchange);
-    aSrchParam.SetLEVShorter(pSearch->nLevRemove);
-    aSrchParam.SetLEVLonger(pSearch->nLevAdd);
-    if(pSearch->bExpr)
-        aSrchParam.SetSrchType(utl::SearchParam::SRCH_REGEXP);
-    // similarity setzt sich gegen RegExp durch!
-    if(pSearch->bSimilarity)
-        aSrchParam.SetSrchType(utl::SearchParam::SRCH_LEVDIST);
-#endif
-    SearchAlgorithms eSrchType  = SearchAlgorithms_ABSOLUTE;
-    //OUString aSrchStr = rText;
-    BOOL bCaseSensitive = pSearch->bCase;
-    BOOL bWordOnly      = pSearch->bWord;
-    BOOL bSrchInSel     = FALSE;
-    BOOL bLEV_Relaxed   = pSearch->bLevRelax;
-    INT32 nLEV_Other    = pSearch->nLevExchange;    //  -> changedChars;
-    INT32 nLEV_Longer   = pSearch->nLevAdd;         //! -> deletedChars;
-    INT32 nLEV_Shorter  = pSearch->nLevRemove;      //! -> insertedChars;
-    INT32 nTransliterationFlags = 0;
-    //
-    INT32 nSrchFlags = 0;
-    if (!bCaseSensitive)
-    {
-        //nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
-        nTransliterationFlags |= TransliterationModules_IGNORE_CASE;
-    }
-    if ( bWordOnly)
-        nSrchFlags |= SearchFlags::NORM_WORD_ONLY;
-    if ( bLEV_Relaxed)
-        nSrchFlags |= SearchFlags::LEV_RELAXED;
-    if ( bSrchInSel)
-        nSrchFlags |= (SearchFlags::REG_NOT_BEGINOFLINE |
-                        SearchFlags::REG_NOT_ENDOFLINE );
-    //
-    if(pSearch->bExpr)
-        eSrchType = SearchAlgorithms_REGEXP;
-    //! similarity overrules RegExp !
-    if(pSearch->bSimilarity)
-        eSrchType = SearchAlgorithms_APPROXIMATE;
-    //
-    SearchOptions aSearchOpt(
-                        eSrchType, nSrchFlags,
-                        pSearch->sSearchText, pSearch->sReplaceText,
-                        CreateLocale( LANGUAGE_SYSTEM ),
-                        nLEV_Other, nLEV_Longer, nLEV_Shorter,
-                        nTransliterationFlags );
+    SearchOptions aSearchOpt;
+    pSearch->FillSearchOptions( aSearchOpt );
 
     SwDocPositions eStart = pSearch->bBack ? DOCPOS_END : DOCPOS_START;
     SwDocPositions eEnd = pSearch->bBack ? DOCPOS_START : DOCPOS_END;
@@ -995,62 +935,8 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
     }
 
     sal_Bool bBackward = sal_False;
-
-#ifdef NEVER
-    utl::SearchParam aSrchParam(pSearch->sSearchText);
-//bInSel: 1;  // wie geht   das?
-    aSrchParam.SetCaseSensitive(pSearch->bCase);
-//      inSelection??
-//      aSrchParam.SetSrchInSelection(TypeConversion::toBOOL(aVal));
-    aSrchParam.SetSrchWordOnly(pSearch->bWord);
-    aSrchParam.SetSrchRelaxed(pSearch->bLevRelax);
-    aSrchParam.SetLEVOther(pSearch->nLevExchange);
-    aSrchParam.SetLEVShorter(pSearch->nLevRemove);
-    aSrchParam.SetLEVLonger(pSearch->nLevAdd);
-    if(pSearch->bExpr)
-        aSrchParam.SetSrchType(utl::SearchParam::SRCH_REGEXP);
-    // similarity setzt sich gegen RegExp durch!
-    if(pSearch->bSimilarity)
-        aSrchParam.SetSrchType(utl::SearchParam::SRCH_LEVDIST);
-#endif
-    SearchAlgorithms eSrchType  = SearchAlgorithms_ABSOLUTE;
-    //OUString aSrchStr = rText;
-    BOOL bCaseSensitive = pSearch->bCase;
-    BOOL bWordOnly      = pSearch->bWord;
-    BOOL bSrchInSel     = FALSE;
-    BOOL bLEV_Relaxed   = pSearch->bLevRelax;
-    INT32 nLEV_Other    = pSearch->nLevExchange;    //  -> changedChars;
-    INT32 nLEV_Longer   = pSearch->nLevAdd;         //! -> deletedChars;
-    INT32 nLEV_Shorter  = pSearch->nLevRemove;      //! -> insertedChars;
-    INT32 nTransliterationFlags = 0;
-    //
-    INT32 nSrchFlags = 0;
-    if (!bCaseSensitive)
-    {
-        //nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
-        nTransliterationFlags |= TransliterationModules_IGNORE_CASE;
-    }
-    if ( bWordOnly)
-        nSrchFlags |= SearchFlags::NORM_WORD_ONLY;
-    if ( bLEV_Relaxed)
-        nSrchFlags |= SearchFlags::LEV_RELAXED;
-    if ( bSrchInSel)
-        nSrchFlags |= (SearchFlags::REG_NOT_BEGINOFLINE |
-                        SearchFlags::REG_NOT_ENDOFLINE );
-    //
-    if(pSearch->bExpr)
-        eSrchType = SearchAlgorithms_REGEXP;
-    //! similarity overrules RegExp !
-    if(pSearch->bSimilarity)
-        eSrchType = SearchAlgorithms_APPROXIMATE;
-    //
-    SearchOptions aSearchOpt(
-                        eSrchType, nSrchFlags,
-                        pSearch->sSearchText, OUString(),
-                        CreateLocale( LANGUAGE_SYSTEM ),
-                        nLEV_Other, nLEV_Longer, nLEV_Shorter,
-                        nTransliterationFlags );
-
+    SearchOptions aSearchOpt;
+    pSearch->FillSearchOptions( aSearchOpt );
 
 /*
  * folgende Kombinationen sind erlaubt:
