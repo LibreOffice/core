@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:36:15 $
+ *  last change: $Author: kz $ $Date: 2004-02-27 13:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -743,7 +743,7 @@ const SwPropNameTab aPropNameTab = {
 /* 0661 UNO_NAME_ITEMS*/ {MAP_CHAR_LEN("Items")},
 /* 0662 UNO_NAME_SELITEM*/ {MAP_CHAR_LEN("SelectedItem")},
 /* 0663 UNO_NAME_IS_SPLIT_ALLOWED*/ {MAP_CHAR_LEN("IsSplitAllowed")},
-/* 0664 UNO_NAME_CHAR_HIDDEN*/ {MAP_CHAR_LEN("CharHidden")}
+/* 0664 UNO_NAME_CHAR_HIDDEN*/ {MAP_CHAR_LEN("CharHidden")},
 /* 0665 UNO_NAME_IS_FOLLOWING_TEXT_FLOW*/ {MAP_CHAR_LEN("IsFollowingTextFlow")}
 };
 
