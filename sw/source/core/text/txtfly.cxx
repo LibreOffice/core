@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ama $ $Date: 2002-09-12 09:26:38 $
+ *  last change: $Author: fme $ $Date: 2002-09-16 09:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1952,7 +1952,9 @@ sal_Bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid 
                         continue;
 #ifdef VERTICAL_LAYOUT
                     if( !bRet || (aFly.*fnRect->fnGetLeft)() <
-                                  (pRect->*fnRect->fnGetLeft)() )
+                                  (pRect->*fnRect->fnGetLeft)() ||
+                                  ( pCurrFrm->IsRightToLeft() &&
+                                  aFly.Right() > pRect->Right() ) )
 #else
                     if( !bRet || aFly.Left() < pRect->Left() )
 #endif
