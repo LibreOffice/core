@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:07:41 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,17 +61,17 @@
 
 #pragma hdrstop
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventObject.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
+#include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
@@ -143,7 +143,7 @@
 #define SPLITTERWIDTH   2
 
 
-using namespace drafts::com::sun::star::accessibility;
+using namespace com::sun::star::accessibility;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
@@ -693,7 +693,7 @@ void SmEditWindow::GetFocus()
     if (xAccessible.is())
     {
         // Note: will implicitly send the AccessibleStateType::FOCUSED event
-        accessibility::AccessibleTextHelper *pHelper = pAccessible->GetTextHelper();
+        ::accessibility::AccessibleTextHelper *pHelper = pAccessible->GetTextHelper();
         if (pHelper)
             pHelper->SetFocus( sal_True );
     }
@@ -717,7 +717,7 @@ void SmEditWindow::LoseFocus()
     if (xAccessible.is())
     {
         // Note: will implicitly send the AccessibleStateType::FOCUSED event
-        accessibility::AccessibleTextHelper *pHelper = pAccessible->GetTextHelper();
+        ::accessibility::AccessibleTextHelper *pHelper = pAccessible->GetTextHelper();
         if (pHelper)
             pHelper->SetFocus( sal_False );
     }
