@@ -84,7 +84,7 @@ File gid_File_Xdg_Writer
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Xdg;
     Name = "writer.desktop";
-    Styles = (PACKED);
+    Styles = (PACKED,SCPZIP_REPLACE);
 End
 
 #endif
