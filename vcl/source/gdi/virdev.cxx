@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:44:04 $
+ *  last change: $Author: rt $ $Date: 2003-05-02 14:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,6 +463,56 @@ void VirtualDevice::SetReferenceDevice()
     // reference device has 600dpi
     mnDPIX = 600;
     mnDPIY = 600;
+    mbScreenComp = FALSE;
+
+    // the reference device should have only scalable fonts
+    // => clean up the original font lists before getting new ones
+    if ( mpFontEntry )
+    {
+        mpFontCache->Release( mpFontEntry );
+        mpFontEntry = NULL;
+    }
+    if ( mpGetDevFontList )
+    {
+        delete mpGetDevFontList;
+        mpGetDevFontList = NULL;
+    }
+    if ( mpGetDevSizeList )
+    {
+        delete mpGetDevSizeList;
+        mpGetDevSizeList = NULL;
+    }
+
+    // preserve global font lists
+    ImplSVData* pSVData = ImplGetSVData();
+    if( mpFontList && (mpFontList != pSVData->maGDIData.mpScreenFontList) )
+        delete mpFontList;
+    if( mpFontCache && (mpFontCache != pSVData->maGDIData.mpScreenFontCache) )
+        delete mpFontCache;
+
+    // get font list with scalable fonts only
+    ImplDevFontList* pScalableDevFonts = new ImplDevFontList();
+    ImplDevFontListData* pData = pSVData->maGDIData.mpScreenFontList->First();
+    for(; pData; pData = pSVData->maGDIData.mpScreenFontList->Next() )
+    {
+        ImplFontData* pEntry = pData->mpFirst;
+        for(; pEntry; pEntry = pEntry->mpNext )
+        {
+            if( (pEntry->meType != TYPE_VECTOR)
+            && (pEntry->meType != TYPE_SCALABLE) )
+                continue;
+            ImplFontData* pNewData = new ImplFontData();
+            *pNewData = *pEntry;
+            pScalableDevFonts->Add( pNewData );
+        }
+    }
+    mpFontList = pScalableDevFonts;
+
+    // prepare to use new font lists
+    mpFontCache = new ImplFontCache( FALSE );
+    mbInitFont = TRUE;
+    mbNewFont = TRUE;
+
     // TODO: increase maFont's size accordingly?
 }
 
