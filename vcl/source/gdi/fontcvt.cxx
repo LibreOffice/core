@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcvt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hdu $ $Date: 2002-05-27 12:43:08 $
+ *  last change: $Author: cmc $ $Date: 2002-06-07 14:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,19 @@
 
 #ifndef _SV_OUTDEV_H
 #include <outdev.h>
+#endif
+
+#ifndef __SGI_STL_MAP
+#include <map>
+#endif
+#ifndef __SGI_STL_VECTOR
+#include <vector>
+#endif
+#ifndef __SGI_STL_ALGORITHM
+#include <algorithm>
+#endif
+#ifndef __SGI_STL_FUNCTIONAL
+#include <functional>
 #endif
 
 //=======================================================================
@@ -757,6 +770,81 @@ static const sal_Unicode aMonotypeSorts2Tab[224] =
 };
 */
 
+static const sal_Unicode aMTExtraTab[224] =
+{
+    // F020
+        0x0020,         0,         0,    0xE095,
+        0xE091,    0xE096,    0x02D9,         0,
+        0xE093,         0,         0,         0,
+             0,         0,         0,         0,
+    // F030
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+        0x25C1,         0,    0x25B7,         0,
+    // F040
+             0,         0,    0x2210,    0x019b,
+             0,         0,         0,         0,
+             0,    0x2229,         0,    0xE08B,
+        0x22EF,    0x22EE,    0x22F0,    0x22F1,
+    // F050
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+    // F060
+        0xE095,         0,    0xE25C,    0xE4BA,
+             0,         0,    0x210F,         0,
+             0,         0,         0,         0,
+        0x2113,    0x2213,         0,    0x00B0,
+    // F070
+             0,         0,    0xE098,         0,
+             0,    0xE097,         0,         0,
+             0,         0,         0,    0xE081,
+             0,    0xE082,         0,         0,
+    // F080
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+    // F090
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+    // F0a0
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+    // F0b0
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+    // F0c0
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+    // F0d0
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+    // F0e0
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+    // F0f0
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+             0,         0,         0,         0,
+             0,         0,         0,         0
+};
+
+
 //=======================================================================
 
 static sal_Unicode ImplStarSymbolToStarBats( sal_Unicode c )
@@ -989,6 +1077,319 @@ static sal_Unicode ImplStarSymbolToStarBats( sal_Unicode c )
     return c;
 }
 
+enum SymbolFont
+{
+    Symbol=1, Wingdings=2, MonotypeSorts=4, Webdings=8, Wingdings2=16,
+    Wingdings3=32, MTExtra=64, TimesNewRoman=128
+};
+
+const char *aSymbolNames[] =
+{
+    "Symbol", "Wingdings", "Monotype Sorts", "Webdings", "Wingdings 2",
+    "Wingdings 3", "MT Extra", "Times New Roman"
+};
+
+struct SymbolEntry
+{
+    sal_uInt8 cIndex;
+    enum SymbolFont eFont;
+};
+
+class StarSymbolToMSMultiFontImpl : public StarSymbolToMSMultiFont
+{
+private:
+    ::std::multimap<sal_Unicode, SymbolEntry> maMagicMap;
+public:
+    StarSymbolToMSMultiFontImpl(bool bPerfectOnly);
+    String ConvertChar(sal_Unicode &rChar);
+    String ConvertString(String &rString, xub_StrLen& rIndex);
+};
+
+struct ExtraTable { sal_Unicode cStar; sal_uInt8 cMS;};
+
+ExtraTable aWingDingsExtraTab[] =
+{
+    {0xe000, 0x6F}, {0xe001, 0x73}, {0xe002, 0x74}, {0xe003, 0x75},
+    {0xe004, 0x77}, {0xe005, 0xA6}, {0xe006, 0xE0}, {0xe007, 0xFC},
+    {0xe008, 0x6C}, {0xe009, 0x6D}, {0xe00a, 0x6E}, {0xe00b, 0x72},
+    {0xe00c, 0x75}, {0xe00d, 0x76}, {0xe00e, 0x74}, {0xe00f, 0x8B},
+    {0xe010, 0x80}, {0xe011, 0x2B}, {0xe012, 0x3A}, {0xe013, 0x5D},
+    {0xe014, 0x29}, {0xe015, 0x3A}, {0xe016, 0x3C}, {0xe017, 0x38},
+    {0xe018, 0x3A}, {0xe019, 0x2A}, {0xe01a, 0x2B}, {0xe01b, 0x3F},
+    {0xe01c, 0x9F}, {0xe01d, 0x80}, {0xe01e, 0x8B}, {0xe023, 0x4A},
+    {0xe025, 0xF0}, {0xe026, 0xF2}, {0xe027, 0xEF}, {0xe028, 0xF1},
+    {0xe029, 0x52}, {0xe02a, 0x29}, {0xe02b, 0xE0}, {0xe02c, 0xE2},
+    {0xe02d, 0xDF}, {0xe02e, 0xE1}, {0xe02f, 0xAC}, {0xe030, 0xAD},
+    {0xe031, 0xAE}, {0xe032, 0x7C}, {0xe033, 0x43}, {0xe034, 0x4D},
+    {0xe0aa, 0x71}, {0xe422, 0x44}
+};
+
+ExtraTable aSymbolExtraTab2[] =
+{
+    {0x0020, 0x20}, {0x00A0, 0x20}, {0x0021, 0x21}, {0x2200, 0x22},
+    {0x0023, 0x23}, {0x2203, 0x24}, {0x0025, 0x25}, {0x0026, 0x26},
+    {0x220B, 0x27}, {0x0028, 0x28}, {0x0029, 0x29}, {0x2217, 0x2A},
+    {0x002B, 0x2B}, {0x002C, 0x2C}, {0x2212, 0x2D}, {0x002E, 0x2E},
+    {0x002F, 0x2F}, {0x003A, 0x3A}, {0x003B, 0x3B}, {0x003C, 0x3C},
+    {0x003D, 0x3D}, {0x003E, 0x3E}, {0x2245, 0x40}, {0x2206, 0x44},
+    {0x2126, 0x57}, {0x005B, 0x5B}, {0x005D, 0x5D}, {0x22A5, 0x5E},
+    {0x03C6, 0x66}, {0x03D5, 0x6A}, {0x00B5, 0x6D}, {0x007B, 0x7B},
+    {0x007C, 0x7C}, {0x007D, 0x7D}, {0x223C, 0x7E}, {0x20AC, 0xA0},
+    {0x2032, 0xA2}, {0x2264, 0xA3}, {0x2044, 0xA4}, {0x221E, 0xA5},
+    {0x0192, 0xA6}, {0x2663, 0xA7}, {0x2665, 0xA9}, {0x2660, 0xAA},
+    {0x2194, 0xAB}, {0x2190, 0xAC}, {0x2191, 0xAD}, {0x2192, 0xAE},
+    {0x2193, 0xAF}, {0x00B0, 0xB0}, {0x00B1, 0xB1}, {0x2265, 0xB3},
+    {0x00D7, 0xB4}, {0x221D, 0xB5}, {0x2202, 0xB6}, {0x2022, 0xB7},
+    {0x00F7, 0xB8}, {0x2260, 0xB9}, {0x2261, 0xBA}, {0x2248, 0xBB},
+    {0x2026, 0xBC}, {0x21B5, 0xBF}, {0x2135, 0xC0}, {0x2111, 0xC1},
+    {0x211C, 0xC2}, {0x2118, 0xC3}, {0x2297, 0xC4}, {0x2295, 0xC5},
+    {0x2205, 0xC6}, {0x2229, 0xC7}, {0x222A, 0xC8}, {0x2283, 0xC9},
+    {0x2287, 0xCA}, {0x2284, 0xCB}, {0x2282, 0xCC}, {0x2286, 0xCD},
+    {0x2208, 0xCE}, {0x2209, 0xCF}, {0x2207, 0xD1}, {0x220F, 0xD5},
+    {0x221A, 0xD6}, {0x22C5, 0xD7}, {0x00AC, 0xD8}, {0x2227, 0xD9},
+    {0x2228, 0xDA}, {0x21D4, 0xDB}, {0x21D0, 0xDC}, {0x21D2, 0xDE},
+    {0x2329, 0xE1}, {0x2211, 0xE5}, {0x232A, 0xF1}, {0x222B, 0xF2},
+    {0x2320, 0xF3}, {0x2321, 0xF5}
+};
+
+ExtraTable aSymbolExtraTab[] =
+{
+    {0xe021, 0xD3}, {0xe024, 0xD2}, {0xe035, 0x20}, {0xe036, 0x28},
+    {0xe037, 0x29}, {0xe039, 0x20}, {0xe083, 0x2B}, {0xe084, 0x3C},
+    {0xe085, 0x3E}, {0xe086, 0xA3}, {0xe087, 0xB3}, {0xe089, 0xCE},
+    {0xe08a, 0xA6}, {0xe08c, 0xAE}, {0xe08d, 0xD6}, {0xe08e, 0xD6},
+    {0xe08f, 0xD6}, {0xe094, 0xA2}, {0xe09e, 0x28}, {0xe09f, 0x29},
+    {0xe0a0, 0xD0}, {0xe0a6, 0xA2}, {0xe0a7, 0x7C}, {0xe0a8, 0x2F},
+    {0xe0ab, 0x7C}, {0xe0ac, 0x47}, {0xe0ad, 0x44}, {0xe0ae, 0x51},
+    {0xe0af, 0x4C}, {0xe0b0, 0x58}, {0xe0b1, 0x50}, {0xe0b2, 0x53},
+    {0xe0b3, 0x55}, {0xe0b4, 0x46}, {0xe0b5, 0x59}, {0xe0b6, 0x57},
+    {0xe0b7, 0x61}, {0xe0b8, 0x62}, {0xe0b9, 0x67}, {0xe0ba, 0x64},
+    {0xe0bb, 0x65}, {0xe0bc, 0x7A}, {0xe0bd, 0x68}, {0xe0be, 0x71},
+    {0xe0bf, 0x69}, {0xe0c0, 0x6B}, {0xe0c1, 0x6C}, {0xe0c2, 0x6D},
+    {0xe0c3, 0x6E}, {0xe0c4, 0x78}, {0xe0c5, 0x6F}, {0xe0c6, 0x70},
+    {0xe0c7, 0x72}, {0xe0c8, 0x73}, {0xe0c9, 0x74}, {0xe0ca, 0x75},
+    {0xe0cb, 0x66}, {0xe0cc, 0x63}, {0xe0cd, 0x79}, {0xe0ce, 0x77},
+    {0xe0cf, 0x65}, {0xe0d0, 0x4A}, {0xe0d1, 0x76}, {0xe0d3, 0x56},
+    {0xe0d4, 0x6A}, {0xe0d5, 0xB6}, {0xe0d6, 0x69}, {0xe0db, 0xAC},
+    {0xe0dc, 0xAD}, {0xe0dd, 0xAF}
+};
+
+ExtraTable aTNRExtraTab[] =
+{
+    {0xe021, 0xA9},
+    {0xe022, 0x40},
+    {0xe024, 0xAE},
+    {0xe035, 0x20},
+    {0xe036, '('},
+    {0xe037, ')'},
+    {0xe039, 0x20},
+    {0xe03a, 0x80},
+    {0xe080, 0x89},
+    {0xe083, '+'},
+    {0xe084, '<'},
+    {0xe085, '>'},
+    {0xe0a9, '\\'}
+};
+
+StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl(bool bPerfectOnly)
+{
+    struct ConvertTable
+    {
+        enum SymbolFont meFont;
+        const sal_Unicode* pTab;
+    };
+
+    //In order of preference
+    const ConvertTable aConservativeTable[] =
+    {
+        {Symbol,         aAdobeSymbolTab},
+        {Wingdings,      aWingDingsTab},
+        {MonotypeSorts,  aMonotypeSortsTab},
+        {Webdings,       aWebDingsTab},
+        {Wingdings2,     aWingDings2Tab},
+        {Wingdings3,     aWingDings3Tab},
+        {MTExtra,        aMTExtraTab}
+    };
+
+    struct ExtendedConvertTable
+    {
+        enum SymbolFont meFont;
+        const ExtraTable *mpTable;
+        size_t mnSize;
+        ExtendedConvertTable(SymbolFont eFont, const ExtraTable *pTable,
+            size_t nSize)
+            : meFont(eFont), mpTable(pTable), mnSize(nSize) {}
+    };
+
+    //Reverse map from a given starsymbol char to exact matches in ms symbol
+    //fonts.
+    int nEntries = sizeof(aConservativeTable) / sizeof(aConservativeTable[0]);
+    int i;
+    for (i = 0; i < nEntries; ++i)
+    {
+        const ConvertTable& r = aConservativeTable[i];
+        SymbolEntry aEntry;
+        aEntry.eFont = r.meFont;
+        for (aEntry.cIndex = 0xFF; aEntry.cIndex >= 0x20; --aEntry.cIndex)
+        {
+            if (sal_Unicode cChar = r.pTab[aEntry.cIndex-0x20])
+#if 1
+                maMagicMap.insert(
+                    ::std::multimap<sal_Unicode, SymbolEntry>::value_type(
+                    cChar, aEntry));
+#else
+                maMagicMap.insert(::std::make_pair(cChar, aEntry));
+#endif
+        }
+    }
+
+    //In order of preference
+    const ExtendedConvertTable aAgressiveTable[] =
+    {
+        ExtendedConvertTable(Symbol, aSymbolExtraTab2,
+            sizeof(aSymbolExtraTab2)),
+        ExtendedConvertTable(Symbol, aSymbolExtraTab,
+            sizeof(aSymbolExtraTab)),
+        ExtendedConvertTable(Wingdings, aWingDingsExtraTab,
+            sizeof(aWingDingsExtraTab)),
+        ExtendedConvertTable(TimesNewRoman, aTNRExtraTab,
+            sizeof(aTNRExtraTab))
+    };
+
+     //Allow extra conversions that are not perfect, but "good enough"
+    if (!bPerfectOnly)
+        nEntries = sizeof(aAgressiveTable) / sizeof(aAgressiveTable[0]);
+    else
+        nEntries = 1;
+
+    for (i = 0; i < nEntries; ++i)
+    {
+        const ExtendedConvertTable& r = aAgressiveTable[i];
+        SymbolEntry aEntry;
+        aEntry.eFont = r.meFont;
+        for (int j = r.mnSize / sizeof(r.mpTable[0]); j >=0; --j)
+        {
+            aEntry.cIndex = r.mpTable[j].cMS;
+#if 1
+            maMagicMap.insert(
+                ::std::multimap<sal_Unicode, SymbolEntry>::value_type(
+                r.mpTable[j].cStar, aEntry));
+#else
+            maMagicMap.insert(::std::make_pair(r.mpTable[j].cStar,aEntry));
+#endif
+
+        }
+    }
+}
+
+const char *SymbolFontToString(int nResult)
+{
+    const char **ppName = aSymbolNames;
+    int nI = Symbol;
+    while (nI <= nResult)
+    {
+        if (!(nI & nResult))
+            nI = nI << 1;
+        else
+            break;
+        ppName++;
+    }
+    return *ppName;
+}
+
+String StarSymbolToMSMultiFontImpl::ConvertChar(sal_Unicode &rChar)
+{
+    String sRet;
+
+    ::std::multimap<sal_Unicode, SymbolEntry>::const_iterator aResult =
+        maMagicMap.find(rChar);
+
+    if (aResult != maMagicMap.end())
+    {
+        const SymbolEntry &rEntry = (*aResult).second;
+        sRet.AssignAscii(SymbolFontToString(rEntry.eFont));
+        rChar = rEntry.cIndex;
+    }
+
+    return sRet;
+}
+
+String StarSymbolToMSMultiFontImpl::ConvertString(String &rString,
+    xub_StrLen& rIndex)
+{
+    typedef ::std::multimap<sal_Unicode, SymbolEntry>::const_iterator MI;
+    typedef ::std::pair<MI, MI> Result;
+
+    String sRet;
+
+    xub_StrLen nLen = rString.Len();
+    if (rIndex >= nLen)
+        return sRet;
+
+    int nTotal = 0, nResult = 0;
+    ::std::vector<Result> aPossibilities;
+    aPossibilities.reserve(nLen - rIndex);
+    xub_StrLen nStart = rIndex;
+    do
+    {
+        Result aResult = maMagicMap.equal_range(rString.GetChar(rIndex));
+        int nBitfield = 0;
+        for (MI aIndex = aResult.first; aIndex != aResult.second; ++aIndex)
+            nBitfield |= aIndex->second.eFont;
+
+        if (!nTotal)
+            nTotal = nBitfield;
+        else
+        {
+            if (nTotal != nBitfield)    //Allow a series of failures
+            {
+                nTotal &= nBitfield;
+                if (!nTotal)
+                    break;
+            }
+        }
+        nResult = nTotal;
+        if (nResult)    //Don't bother storing a series of failures
+            aPossibilities.push_back(aResult);
+        ++rIndex;
+    }while(rIndex < nLen);
+
+    if (nResult)
+    {
+        int nI = Symbol;
+        while (nI <= nResult)
+        {
+            if (!(nI & nResult))
+                nI = nI << 1;
+            else
+                break;
+        }
+        sRet.AssignAscii(SymbolFontToString(nI));
+
+        xub_StrLen nSize = aPossibilities.size();
+        for(xub_StrLen nPos = 0; nPos < nSize; ++nPos)
+        {
+            const Result &rResult = aPossibilities[nPos];
+
+            for (MI aIndex = rResult.first; aIndex != rResult.second; ++aIndex)
+            {
+                if (aIndex->second.eFont == nI)
+                {
+                    rString.SetChar(nPos+nStart, aIndex->second.cIndex);
+                    break;
+                }
+            }
+        }
+    }
+
+    return sRet;
+}
+
+StarSymbolToMSMultiFont *CreateStarSymbolToMSMultiFont(bool bPerfectOnly)
+{
+    return new StarSymbolToMSMultiFontImpl(bPerfectOnly);
+}
+
 //=======================================================================
 
 sal_Unicode ImplRecodeChar( const ImplCvtChar* pConversion, sal_Unicode cChar )
@@ -1042,6 +1443,7 @@ static RecodeTable aRecodeTable[] =
     {"wingdings",       {aWingDingsTab,  "StarSymbol", NULL}},
     {"wingdings2",      {aWingDings2Tab, "StarSymbol", NULL}},
     {"wingdings3",      {aWingDings3Tab, "StarSymbol", NULL}},
+    {"mtextra",         {aMTExtraTab, "StarSymbol", NULL}}
 };
 
 static ImplCvtChar aImplStarSymbolCvt = { NULL, "StarBats", ImplStarSymbolToStarBats };
