@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:27:42 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1023,10 +1023,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
         !((SvEmbeddedObject *)pDocSh)->GetVisArea().IsEmpty() )
         SetVisArea( ((SvEmbeddedObject *)pDocSh)->GetVisArea(),sal_False);
 
-    {
-        SvtUndoOptions aOpt;
-        SwEditShell::SetUndoActionCount( aOpt.GetUndoCount() );
-    }
+    SwEditShell::SetUndoActionCount( SW_MOD()->GetUndoOptions().GetUndoCount() );
     pWrtShell->DoUndo( 0 != SwEditShell::GetUndoActionCount() );
 
     const FASTBOOL bBrowse = pWrtShell->GetDoc()->IsBrowseMode();
