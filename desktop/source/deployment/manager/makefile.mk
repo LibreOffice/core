@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 12:08:13 $
+#   last change: $Author: obo $ $Date: 2004-08-12 12:07:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,8 @@ SRC1FILES = \
     dp_manager.src
 
 SLOFILES = \
-        $(SLO)$/dp_manager.obj
+        $(SLO)$/dp_manager.obj \
+        $(SLO)$/dp_managerfac.obj
 
 .INCLUDE : ..$/target.pmk
 .INCLUDE : target.mk
