@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:19:50 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,11 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
 
     XEvent *pEvent = (XEvent *)sys_event;
     GtkSalDisplay *pDisplay = (GtkSalDisplay *)data;
+
+    // dispatch all XEvents to event callback
+    if( GetSalData()->pInstance_->
+        CallEventCallback( pEvent, sizeof( XEvent ) ) )
+        aFilterReturn = GDK_FILTER_REMOVE;
 
     if (pDisplay->GetDisplay() == pEvent->xany.display )
     {
