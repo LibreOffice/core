@@ -60,7 +60,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\portal
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\portal\client
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\portal\daemons
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\portal\daemons\sadmind
-mkdir: %_DEST%\XAccessibleinc%_EXT%\com\sun\star\portal\daemons\sofficed
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\portal\daemons\sofficed
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\portal\system
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\mozilla
 
