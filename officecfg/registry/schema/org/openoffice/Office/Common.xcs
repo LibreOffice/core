@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dg $ $Date: 2002-07-01 12:56:19 $
+ *  last change: $Author: af $ $Date: 2002-07-02 13:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4156,11 +4156,12 @@
         </group>
         <group oor:name="Accessibility">
             <prop oor:name="IsForDrawings" oor:type="xs:boolean">
-                <!-- Responsible: -->
+                <!-- Responsible: AF -->
                 <value>true</value>
                 <info>
-                    <desc xml:lang="en-US">This option defaults the new contrast mode of Draw/Impress, when high contrast mode is "active".</desc>
-                    <label xml:lang="en-US">For drawings and presentations</label>
+                    <desc xml:lang="en-US">Indicates whether to use high contrast mode, when
+                    activated, in Draw and Impress.</desc> 
+                    <label xml:lang="en-US">Use high contrast for drawings and presentations</label>
                 </info>
             </prop>
             <prop oor:name="IsForBorders" oor:type="xs:boolean">
@@ -4200,18 +4201,22 @@
                 </constraints>
             </prop>
             <prop oor:name="IsAllowAnimatedGraphics" oor:type="xs:boolean">
-                <!-- Responsible: -->
+                <!-- Responsible: AF -->
                 <value>true</value>
                 <info>
-                    <desc xml:lang="en-US">Activating this option will stop all graphical animation in all SO/OO applications. (i.e. animated GIF's, animated objects in Impress (during presentation), animated graphical previews (Gallery, Insert-Graphics-From File, Animation Tool in Impress)</desc>
+                    <desc xml:lang="en-US">Indicates whether to allow the graphical
+                    animation in all SO/OO applications (i.e. animated GIFs and objects in Impress
+                    during presentation, animated graphical previews (Gallery, Insert-Graphics-From
+                    File, Animation Tool in Impress.)</desc> 
                     <label xml:lang="en-US">Allow animated graphics</label>
                 </info>
             </prop>
             <prop oor:name="IsAllowAnimatedText" oor:type="xs:boolean">
-                <!-- Responsible: -->
+                <!-- Responsible: AF -->
                 <value>true</value>
                 <info>
-                    <desc xml:lang="en-US">This options stop all textual animation like blinking and scrolling in all SO/OO applications.</desc>
+                    <desc xml:lang="en-US">Indicates whether to all textual animation like blinking and
+                    scrolling in all SO/OO applications.</desc>
                     <label xml:lang="en-US">Allow animated text</label>
                 </info>
             </prop>
