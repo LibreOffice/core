@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hdu $ $Date: 2001-03-02 11:17:13 $
+#   last change: $Author: pl $ $Date: 2001-05-15 15:06:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,12 +67,15 @@ PDBTARGET=vcl
 GUIBASE=aqua
 .ENDIF
 
-.IF "$(BUILD_SOSL)" == ""
 .IF "$(OS)" != "MACOSX"
 .IF "$(USE_XPRINTER)" == ""
 CFLAGSDEFS += -DUSE_PSPRINT
 PSPRINT=true
 .ENDIF
+.ENDIF
+
+.IF "$(BUILD_SOSL)" == ""
+.IF "$(OS)" != "MACOSX"
 .IF "$(remote)" != ""
 USE_BUILTIN_RASTERIZER=true
 .ENDIF
