@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-09 07:38:21 $
+ *  last change: $Author: tl $ $Date: 2001-04-10 08:16:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,45 @@
 #include "lboxctrl.hrc"
 
 class SvxPopupWindowListBox;
+
+/////////////////////////////////////////////////////////////////
+
+class SvxPopupWindowListBox : public SfxPopupWindow
+{
+    FixedInfo       aInfo;
+    ListBox *       pListBox;
+    ToolBox &       rToolBox;
+    USHORT          nItemId;
+    BOOL            bUserSel;
+
+    // disallow copy-constructor and assignment-operator
+    SvxPopupWindowListBox( const & SvxPopupWindowListBox );
+    SvxPopupWindowListBox & operator = ( const & SvxPopupWindowListBox );
+
+    DECL_LINK( SelectHdl, void * );
+
+    SvxPopupWindowListBox( USHORT nSlotId,
+                           ToolBox& rTbx, USHORT nTbxItemId );
+
+public:
+    SvxPopupWindowListBox( USHORT nSlotId,
+                           ToolBox& rTbx, USHORT nTbxItemId,
+                           SfxBindings &rBindings );
+    virtual ~SvxPopupWindowListBox();
+
+    // SfxPopupWindow
+    virtual SfxPopupWindow *    Clone() const;
+    virtual void                PopupModeEnd();
+    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+                                              const SfxPoolItem* pState );
+
+    void                        StartSelection();
+    inline ListBox &            GetListBox()    { return *pListBox; }
+    inline FixedInfo &          GetInfo()       { return aInfo; }
+
+    BOOL                        IsUserSelected() const          { return bUserSel; }
+    void                        SetUserSelected( BOOL bVal )    { bUserSel = bVal; }
+};
 
 /////////////////////////////////////////////////////////////////
 
