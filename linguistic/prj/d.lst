@@ -4,7 +4,7 @@
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\lib\liblng*.so %_DEST%\lib%_EXT%\liblng*.so
 
-..\xml\*.xml %_DEST%\xml\*.xml
+..\xml\*.xml %_DEST%\xml%_EXT%\*.xml
 
 mkdir: %_DEST%\inc%_EXT%\linguistic
 hedabu: ..\inc\lngprops.hxx %_DEST%\inc%_EXT%\linguistic\lngprops.hxx
