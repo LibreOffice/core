@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStarBasicContextFactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-02 18:51:34 $
+ *  last change: $Author: dvo $ $Date: 2001-08-03 18:14:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,15 +88,14 @@
 #endif
 
 
+using namespace ::xmloff::token;
+
 using ::rtl::OUString;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
-using ::xmloff::token::IsXMLToken;
-using ::xmloff::token::XML_LIBRARY;
-using ::xmloff::token::XML_MACRO_NAME;
 
 
 XMLStarBasicContextFactory::XMLStarBasicContextFactory() :
@@ -135,6 +134,13 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
             if (IsXMLToken(sLocalName, XML_LIBRARY))
             {
                 sLibraryVal = xAttrList->getValueByIndex(nAttr);
+            }
+            if (IsXMLToken(sLocalName, XML_LOCATION))
+            {
+                sLibraryVal = xAttrList->getValueByIndex(nAttr);
+                if ( IsXMLToken( sLibraryVal, XML_APPLICATION ) )
+                    sLibraryVal =
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("StarOffice"));
             }
             else if (IsXMLToken(sLocalName, XML_MACRO_NAME))
             {

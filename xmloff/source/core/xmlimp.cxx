@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-03 16:24:00 $
+ *  last change: $Author: dvo $ $Date: 2001-08-03 18:14:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1047,6 +1047,11 @@ XMLEventImportHelper& SvXMLImport::GetEventImport()
         pEventImportHelper->RegisterFactory(sStarBasic,
                                             new XMLStarBasicContextFactory());
         pEventImportHelper->AddTranslationTable(aStandardEventTable);
+
+        // register StarBasic event handler with capitalized spelling
+        OUString sStarBasicCap(RTL_CONSTASCII_USTRINGPARAM("StarBasic"));
+        pEventImportHelper->RegisterFactory(sStarBasicCap,
+                                            new XMLStarBasicContextFactory());
     }
 #endif
 

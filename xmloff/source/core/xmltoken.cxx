@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-31 09:57:08 $
+ *  last change: $Author: dvo $ $Date: 2001-08-03 18:14:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2065,6 +2065,9 @@ namespace xmloff { namespace token {
 
         TOKEN( "byte" ),                        // XML_BYTE
         TOKEN( "macro" ),                       // XML_MACRO
+        TOKEN( "location" ),                   // XML_LOCATION
+        TOKEN( "application" ),                // XML_APPLICATION
+
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };

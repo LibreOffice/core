@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStarBasicExportHandler.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-19 18:56:47 $
+ *  last change: $Author: dvo $ $Date: 2001-08-03 18:14:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,10 +90,12 @@ class XMLStarBasicExportHandler : public XMLEventExportHandler
     const ::rtl::OUString sStarBasic;
     const ::rtl::OUString sLibrary;
     const ::rtl::OUString sMacroName;
+    const ::rtl::OUString sStarOffice;
 
 public:
     XMLStarBasicExportHandler();
     virtual ~XMLStarBasicExportHandler();
+
     virtual void Export(
         SvXMLExport& rExport,
         const ::rtl::OUString& rEventName,
