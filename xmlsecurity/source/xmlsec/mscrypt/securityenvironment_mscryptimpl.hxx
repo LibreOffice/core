@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityenvironment_mscryptimpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-19 11:36:23 $
+ *  last change: $Author: mmi $ $Date: 2004-08-02 04:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,11 +106,11 @@
 #include <com/sun/star/security/XCertificate.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_SECURITY_CERTIFICATECHARACTERS_HDL_
+#ifndef _COM_SUN_STAR_SECURITY_CERTIFICATECHARACTERS_HPP_
 #include <com/sun/star/security/CertificateCharacters.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_SECURITY_CERTIFICATEVALIDITY_HDL_
+#ifndef _COM_SUN_STAR_SECURITY_CERTIFICATEVALIDITY_HPP_
 #include <com/sun/star/security/CertificateValidity.hpp>
 #endif
 

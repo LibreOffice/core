@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mmi $ $Date: 2004-07-26 06:15:42 $
+#   last change: $Author: mmi $ $Date: 2004-08-02 04:46:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,7 @@ CDEFS += -DXMLSEC_CRYPTO_NSS -DXMLSEC_NO_XSLT
 SLOFILES = \
     $(SLO)$/baseencoding.obj \
     $(SLO)$/biginteger.obj \
+    $(SLO)$/certvalidity.obj \
     $(SLO)$/saxhelper.obj \
     $(SLO)$/xmldocumentwrapper_xmlsecimpl.obj \
     $(SLO)$/xmlelementwrapper_xmlsecimpl.obj \
