@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UriSchemeParser_vndDOTsunDOTstarDOTscript.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 13:18:17 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:57:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,31 +62,29 @@
 #ifndef __com_sun_star_uri_UriSchemeParser_vndDOTsunDOTstarDOTscript_idl__
 #define __com_sun_star_uri_UriSchemeParser_vndDOTsunDOTstarDOTscript_idl__
 
-#include <com/sun/star/uri/XUriSchemeParser.idl>
-
 module com { module sun { module star { module uri {
+
+interface XUriSchemeParser;
 
 /**
    parses textual representations of absolute &ldquo;vnd.sun.star.script&rdquo;
    URLs.
 
+   <p>The argument <code>scheme</code> of method
+   <member scope="com::sun::star::uri">XUriSchemeParser::parse</member> must
+   always be equal to the <atom>string</atom>
+   <code>"vnd.sun.star.script"</code>, ignoring case.  The objects returned by
+   <member scope="com::sun::star::uri">XUriSchemeParser::parse</member>
+   implement
+   <type scope="com::sun::star::uri">XVndSunStarScriptUrlReference</type>.</p>
+
+   <p>This service is not intended to be instantiated directly by client code.
+   Rather, it should be used indirectly through the
+   <type scope="com::sun::star::uri">UriReferenceFactory</type> service.</p>
+
    @since #i19971#
  */
-service UriSchemeParser_vndDOTsunDOTstarDOTscript {
-    /**
-       used to parse textual representations of absolute
-       &ldquo;vnd.sun.star.script&rdquo; URLs.
-
-       <p>The argument <code>scheme</code> of method
-       <member scope="com::sun::star::uri">XUriSchemeParser::parse</member>
-       must always be equal to the <atom>string</atom>
-       <code>"vnd.sun.star.script"</code>, ignoring case.  The objects returned
-       by <member scope="com::sun::star::uri">XUriSchemeParser::parse</member>
-       implement
-       <type scope="com::sun::star::uri">XVndSunStarScriptUrlReference</type>.
-     */
-    interface XUriSchemeParser;
-};
+service UriSchemeParser_vndDOTsunDOTstarDOTscript: XUriSchemeParser {};
 
 }; }; }; };
 
