@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-12 11:27:45 $
+ *  last change: $Author: fs $ $Date: 2002-11-14 14:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,6 +380,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::form;
 using namespace ::svxform;
 
 //========================================================================
@@ -1366,19 +1367,50 @@ void FmFormShell::Execute(SfxRequest &rReq)
             }
             rReq.Done();
         }   break;
+
         case SID_FM_FILTER_EXECUTE:
-        {
-            Reference< ::com::sun::star::form::XFormController >  xController(GetImpl()->getActiveController());
-            if (xController.is() && !FmXFormShell::CommitCurrent(xController))
-            {
-                rReq.Done();
-                break;
-            }
-        }   // continue !!!
         case SID_FM_FILTER_EXIT:
-            GetImpl()->stopFiltering(SID_FM_FILTER_EXECUTE == nSlot);
+        {
+            sal_Bool bCancelled = ( SID_FM_FILTER_EXIT == nSlot );
+            sal_Bool bReopenNavigator = sal_False;
+
+            if ( !bCancelled )
+            {
+                // if the filter navigator is still open, we need to close it, so it can possibly
+                // commit it's most recent changes
+                if ( GetViewShell() && GetViewShell()->GetViewFrame() )
+                    if ( GetViewShell()->GetViewFrame()->HasChildWindow( SID_FM_FILTER_NAVIGATOR ) )
+                    {
+                        GetViewShell()->GetViewFrame()->ToggleChildWindow( SID_FM_FILTER_NAVIGATOR );
+                        bReopenNavigator = sal_True;
+                    }
+
+                Reference< XFormController >  xController( GetImpl()->getActiveController() );
+
+                if  (   GetViewShell()->GetViewFrame()->HasChildWindow( SID_FM_FILTER_NAVIGATOR )
+                        // closing the window was denied, for instance because of a invalid criterion
+
+                    ||  (   xController.is()
+                        && !FmXFormShell::CommitCurrent( xController )
+                        )
+                        // committing the controller was denied
+                    )
+                {
+                    rReq.Done();
+                    break;
+                }
+            }
+
+            GetImpl()->stopFiltering( !bCancelled );
             rReq.Done();
-            break;
+
+            if ( bReopenNavigator )
+                // we closed the navigator only to implicitly commit it (as we do not have another
+                // direct wire to it), but to the user, it should look it it was always open
+                GetViewShell()->GetViewFrame()->ToggleChildWindow( SID_FM_FILTER_NAVIGATOR );
+        }
+        break;
+
         case SID_FM_FILTER_START:
         {
             GetImpl()->startFiltering();
