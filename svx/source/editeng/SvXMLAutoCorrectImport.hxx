@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvXMLAutoCorrectImport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-05 13:53:29 $
+ *  last change: $Author: hr $ $Date: 2001-07-11 11:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,6 @@
 
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLITMAP_HXX
-#include <xmloff/xmlitmap.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
