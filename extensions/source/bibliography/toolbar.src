@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:13:14 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ danish ] = "Tabel";
             Text[ swedish ] = "Tabell";
             Text[ polish ] = "Tabela";
-            Text[ portuguese_brazilian ] = "Data source";
+            Text[ portuguese_brazilian ] = "Tabela";
             Text[ japanese ] = "テーブル";
             Text[ korean ] = "테이블";
             Text[ chinese_simplified ] = "表格";
@@ -106,6 +106,9 @@ ToolBox RID_BIB_TOOLBAR
             Text[ catalan ] = "Taula";
             Text[ finnish ] = "Taulukko";
             Text[ thai ] = "ตาราง";
+            Text[ czech ] = "Tabulka";
+            Text[ hebrew ] = "‮טבלה‬";
+            Text[ hindi ] = "सारणी";
         };
         ToolBoxItem
         {
@@ -135,7 +138,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ danish ] = "S�geord";
             Text[ swedish ] = "S�kord";
             Text[ polish ] = "Szukane has�o";
-            Text[ portuguese_brazilian ] = "Search key";
+            Text[ portuguese_brazilian ] = "Chave de pesquisa";
             Text[ japanese ] = "検索キー";
             Text[ korean ] = "검색 키";
             Text[ chinese_simplified ] = "搜寻条目";
@@ -145,6 +148,9 @@ ToolBox RID_BIB_TOOLBAR
             Text[ catalan ] = "Clau de cerca";
             Text[ finnish ] = "Etsitt�v�";
             Text[ thai ] = "ปุ่มค้นหา";
+            Text[ czech ] = "Hledat klíčové slovo";
+            Text[ hebrew ] = "Suchbegriff";
+            Text[ hindi ] = "खोज करने की चाभी";
         };
         ToolBoxItem
         {
@@ -177,7 +183,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ danish ] = "AutoFilter";
             Text[ swedish ] = "AutoFilter";
             Text[ polish ] = "Autofiltr";
-            Text[ portuguese_brazilian ] = "AutoFilter";
+            Text[ portuguese_brazilian ] = "AutoFiltro";
             Text[ japanese ] = "オートフィルタ";
             Text[ korean ] = "자동 필터";
             Text[ chinese_simplified ] = "自动筛选";
@@ -188,6 +194,9 @@ ToolBox RID_BIB_TOOLBAR
             Text[ catalan ] = "Filtre autom�tic";
             Text[ finnish ] = "Automaattinen suodatus";
             Text[ thai ] = "ตัวกรองอัตโนมัติ";
+            Text[ czech ] = "Automatický filtr";
+            Text[ hebrew ] = "‮סינון אוטומטי‬";
+            Text[ hindi ] = "स्वचालित ढंग से छानना";
         };
 
         ToolBoxItem
@@ -209,9 +218,9 @@ ToolBox RID_BIB_TOOLBAR
             Text[ danish ] = "Standardfilter";
             Text[ swedish ] = "Standardfilter";
             Text[ polish ] = "Filtr standardowy";
-            Text[ portuguese_brazilian ] = "Standard Filter";
+            Text[ portuguese_brazilian ] = "Filtro padr�o";
             Text[ japanese ] = "標準フィルタ";
-            Text[ korean ] = "기본 필터";
+            Text[ korean ] = "표준 필터";
             Text[ chinese_simplified ] = "标准筛选";
             Text[ chinese_traditional ] = "標準篩選";
             Text[ arabic ] = "���� �����";
@@ -220,6 +229,9 @@ ToolBox RID_BIB_TOOLBAR
             Text[ catalan ] = "Filtre est�ndard";
             Text[ finnish ] = "Oletussuodatin";
             Text[ thai ] = "ตัวกรองมาตรฐาน";
+            Text[ czech ] = "Standardní filtr";
+            Text[ hebrew ] = "Standard Filter";
+            Text[ hindi ] = "स्टान्डर्ड फिल्टर";
         };
 
         ToolBoxItem
@@ -241,7 +253,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ danish ] = "Fjern filter";
             Text[ swedish ] = "Ta bort filter";
             Text[ polish ] = "Usu� filtr";
-            Text[ portuguese_brazilian ] = "Remove Filter";
+            Text[ portuguese_brazilian ] = "Remover Filtro";
             Text[ japanese ] = "フィルタの解除";
             Text[ korean ] = "필터 제거";
             Text[ chinese_simplified ] = "删除筛选";
@@ -252,6 +264,9 @@ ToolBox RID_BIB_TOOLBAR
             Text[ catalan ] = "Suprimeix el filtre";
             Text[ finnish ] = "Poista suodatus";
             Text[ thai ] = "เอาตัวกรองออก";
+            Text[ czech ] = "Odstranit filtr";
+            Text[ hebrew ] = "Filter entfernen";
+            Text[ hindi ] = "फिल्टर हटाओ";
         };
         ToolBoxItem
         {
@@ -271,8 +286,8 @@ ToolBox RID_BIB_TOOLBAR
             Text[ italian ] = "Assegnazione colonne";
             Text[ danish ] = "Kolonnetildeling";
             Text[ swedish ] = "Kolumntilldelning";
-            Text[ polish ] = "Przyporz�dkowanie kolumn";
-            Text[ portuguese_brazilian ] = "Column assignment";
+            Text[ polish ] = "Rozmieszczenie kolumn";
+            Text[ portuguese_brazilian ] = "Disposi��o das Colunas";
             Text[ japanese ] = "列の分類";
             Text[ korean ] = "열 배치";
             Text[ chinese_simplified ] = "编排列(C)";
@@ -283,6 +298,9 @@ ToolBox RID_BIB_TOOLBAR
             Text[ catalan ] = "Disposici� de les columnes";
             Text[ finnish ] = "Sarakej�rjestys";
             Text[ thai ] = "จัดเรียงคอลัมน์";
+            Text[ czech ] = "Uspořádání sloupců";
+            Text[ hebrew ] = "Spaltenzuordnung";
+            Text[ hindi ] = "स्तंभ को क्रम में रखना";
         };
         ToolBoxItem
         {
@@ -304,17 +322,20 @@ ToolBox RID_BIB_TOOLBAR
             Text[ danish ] = "Datakilde";
             Text[ swedish ] = "Datak�lla";
             Text[ polish ] = "�r�d�o danych";
-            Text[ portuguese_brazilian ] = "Data source";
+            Text[ portuguese_brazilian ] = "Fonte de dados";
             Text[ japanese ] = "データソース";
             Text[ korean ] = "데이터 원본";
             Text[ chinese_simplified ] = "数据源(D)";
             Text[ chinese_traditional ] = "資料源(D)";
             Text[ arabic ] = "���� ��������";
-            Text[ turkish ] = "Veri kayna��";
+            Text[ turkish ] = "Veri Kaynak kodu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Font de les dades";
             Text[ finnish ] = "Tietol�hde";
             Text[ thai ] = "แหล่งข้อมูล";
+            Text[ czech ] = "Zdroj dat";
+            Text[ hebrew ] = "‮מקור הנתונים‬";
+            Text[ hindi ] = "ड़ॉटा मूल";
         };
 /*
         ToolBoxItem
@@ -520,6 +541,7 @@ ImageList RID_TOOLBAR_IMGLIST_HC
     MASKCOLOR
     BIB_IMAGES
 };
+
 ImageList RID_TOOLBAR_BIGIMGLIST
 {
     ImageBitmap = Bitmap { File = "lc_bibdb.bmp" ; };
@@ -532,3 +554,5 @@ ImageList RID_TOOLBAR_BIGIMGLIST_HC
     MASKCOLOR
     BIB_IMAGES
 };
+
+
