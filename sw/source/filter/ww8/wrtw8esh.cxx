@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-11 14:31:03 $
+ *  last change: $Author: sj $ $Date: 2000-12-13 14:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
 #endif
-
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 #ifndef _SVSTOR_HXX
 #include <so3/svstor.hxx>
 #endif
@@ -219,6 +221,9 @@
 #endif
 #ifndef _ERRHDL_HXX
 #include <errhdl.hxx>
+#endif
+#ifndef _GRFMGR_HXX
+#include <goodies/grfmgr.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -1803,8 +1808,30 @@ void SwEscherEx::WriteGrfFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
     else
     {
         rGrfNd.SwapIn( TRUE );
-        aPropOpt.AddOpt( ESCHER_Prop_pib, AddGraphic( *QueryPicStream(),
-                                            rGrfNd.GetGrf() ), TRUE );
+
+        Graphic         aGraphic( rGrfNd.GetGrf() );
+        GraphicObject   aGraphicObject( aGraphic );
+        ByteString      aUniqueId = aGraphicObject.GetUniqueID();
+
+        if ( aUniqueId.Len() )
+        {
+             const  MapMode aMap100mm( MAP_100TH_MM );
+            Size    aSize( aGraphic.GetPrefSize() );
+
+            if ( MAP_PIXEL == aGraphic.GetPrefMapMode().GetMapUnit() )
+                aSize = Application::GetDefaultDevice()->PixelToLogic( aSize, aMap100mm );
+            else
+                aSize = OutputDevice::LogicToLogic( aSize, aGraphic.GetPrefMapMode(), aMap100mm );
+
+            Rectangle aRect( Point(), aSize );
+
+            sal_uInt32 nBlibId = GetBlibID( *QueryPicStream(), aUniqueId, aRect, NULL );
+            if ( nBlibId )
+            {
+                aPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
+                aPropOpt.AddOpt( ESCHER_Prop_pib, nBlibId, sal_True );
+            }
+        }
     }
     aPropOpt.AddOpt( ESCHER_Prop_pibFlags, nFlags );
     WriteFlyFrameAttr( rFmt, aPropOpt );
@@ -1870,7 +1897,9 @@ void SwEscherEx::WriteOLEFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
 
         AddShape( ESCHER_ShpInst_PictureFrame, 0xa10, nShapeId );
         EscherPropertyContainer aPropOpt;
+        if ( pMtf )
         {
+/*
             SvMemoryStream aGrfStrm;
             WriteWindowMetafile( aGrfStrm, *pMtf );
             const BYTE* pMem = (BYTE*)aGrfStrm.GetData();
@@ -1879,8 +1908,26 @@ void SwEscherEx::WriteOLEFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
             aSz.Width() = DrawModelToEmu( aSz.Width() );
             aSz.Height() = DrawModelToEmu( aSz.Height() );
             Rectangle aRect( Point(0,0), aSz );
-            aPropOpt.AddOpt( ESCHER_Prop_pib, AddWMF( *QueryPicStream(),
-                                    pMem + 22, nLen - 22, aRect ), TRUE );
+*/
+            Graphic         aGraphic( *pMtf );
+            GraphicObject   aGraphicObject( aGraphic );
+            ByteString      aUniqueId = aGraphicObject.GetUniqueID();
+            if ( aUniqueId.Len() )
+            {
+                Size aSz( rOLENd.GetTwipSize() );
+                aSz.Width() = DrawModelToEmu( aSz.Width() );
+                aSz.Height() = DrawModelToEmu( aSz.Height() );
+                Rectangle aRect( Point(0,0), aSz );
+
+                sal_uInt32 nBlibId = GetBlibID( *QueryPicStream(), aUniqueId, aRect, NULL );
+                if ( nBlibId )
+                {
+                    aPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
+                    aPropOpt.AddOpt( ESCHER_Prop_pib, nBlibId, sal_True );
+                }
+            }
+//          aPropOpt.AddOpt( ESCHER_Prop_pib, AddWMF( *QueryPicStream(),
+//                                  pMem + 22, nLen - 22, aRect ), TRUE );
         }
         pTxtBxs->Append( *pSdrObj, nShapeId );
         UINT32 nPicId = pTxtBxs->Count();
@@ -2029,9 +2076,31 @@ void SwEscherEx::WriteFlyFrameAttr( const SwFrmFmt& rFmt, EscherPropertyContaine
             else
 */
             {
-                rPropOpt.AddOpt( ESCHER_Prop_fillBlip, AddGraphic( *QueryPicStream(),
-                                    *((SvxBrushItem*)pItem)->GetGraphic() ),
-                                    TRUE );
+//              rPropOpt.AddOpt( ESCHER_Prop_fillBlip, AddGraphic( *QueryPicStream(),
+//                                  *((SvxBrushItem*)pItem)->GetGraphic() ),
+//                                  TRUE );
+
+                Graphic         aGraphic( *((SvxBrushItem*)pItem)->GetGraphic() );
+                GraphicObject   aGraphicObject( aGraphic );
+                ByteString      aUniqueId = aGraphicObject.GetUniqueID();
+
+                if ( aUniqueId.Len() )
+                {
+                     const  MapMode aMap100mm( MAP_100TH_MM );
+                    Size    aSize( aGraphic.GetPrefSize() );
+
+                    if ( MAP_PIXEL == aGraphic.GetPrefMapMode().GetMapUnit() )
+                        aSize = Application::GetDefaultDevice()->PixelToLogic( aSize, aMap100mm );
+                    else
+                        aSize = OutputDevice::LogicToLogic( aSize, aGraphic.GetPrefMapMode(), aMap100mm );
+
+                    Rectangle aRect( Point(), aSize );
+
+                    sal_uInt32 nBlibId = GetBlibID( *QueryPicStream(), aUniqueId, aRect, NULL );
+                    if ( nBlibId )
+                        rPropOpt.AddOpt( ESCHER_Prop_fillBlip, nBlibId, sal_True );
+                }
+
             }
             rPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
             rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
@@ -2228,11 +2297,14 @@ BOOL SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.5 2000-12-11 14:31:03 sj Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.6 2000-12-13 14:13:35 sj Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/12/11 14:31:03  sj
+      now using EscherPropertyContainer to create the ESCHER_OPT atom
+
       Revision 1.4  2000/11/13 10:11:28  khz
       export extended WW9-Frame-Alignment (write Escher record 0xF122)
 
