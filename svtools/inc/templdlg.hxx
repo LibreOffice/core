@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-19 06:25:14 $
+ *  last change: $Author: pb $ $Date: 2001-07-05 12:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,9 @@
 struct SvtTmplDlg_Impl;
 
 // class SvtDocumentTemplateDialog ---------------------------------------
+
 class SvtTemplateWindow;
+
 class SvtDocumentTemplateDialog : public ModalDialog
 {
 private:
@@ -84,10 +86,14 @@ private:
     DECL_LINK(          SelectHdl_Impl, SvtTemplateWindow* );
     DECL_LINK(          DoubleClickHdl_Impl, SvtTemplateWindow* );
     DECL_LINK(          NewFolderHdl_Impl, SvtTemplateWindow* );
+    DECL_LINK(          SendFocusHdl_Impl, SvtTemplateWindow* );
     DECL_LINK(          OKHdl_Impl, PushButton* );
     DECL_LINK(          UpdateHdl_Impl, Timer* );
 
     void                UpdateDocumentTemplates_Impl();
+
+protected:
+    virtual long        PreNotify( NotifyEvent& rNEvt );
 
 public:
     SvtDocumentTemplateDialog( Window* pParent );
