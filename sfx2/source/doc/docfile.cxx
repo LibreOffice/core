@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.142 $
+ *  $Revision: 1.143 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:53:11 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 15:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1199,7 +1199,15 @@ void SfxMedium::CloseStorage()
     {
         uno::Reference < lang::XComponent > xComp( pImp->xStorage, uno::UNO_QUERY );
         if ( pImp->bDisposeStorage )
-            xComp->dispose();
+        {
+            try {
+                xComp->dispose();
+            } catch( uno::Exception& )
+            {
+                OSL_ENSURE( sal_False, "Medium's storage is already disposed!\n" );
+            }
+        }
+
         pImp->xStorage = 0;
     }
 
