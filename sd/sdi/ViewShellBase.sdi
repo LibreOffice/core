@@ -1,0 +1,39 @@
+
+SfxInt32Item SwitchViewShell SID_SWITCH_SHELL
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_VIEW;
+]
+
+interface ViewShellBaseView : View
+{
+    SID_SWITCH_SHELL
+    [
+        ExecMethod = ExecuteModeChange;
+    ]
+}
+
+shell ViewShellBase : SfxViewShell
+{
+    import ViewShellBaseView[Automation];
+}
