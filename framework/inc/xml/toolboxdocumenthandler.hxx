@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolboxdocumenthandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:41:31 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,12 @@
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
+#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -128,6 +132,7 @@ class OReadToolBoxDocumentHandler : public ::com::sun::star::xml::sax::XDocument
             TB_ATTRIBUTE_USER,
             TB_ATTRIBUTE_HELPID,
             TB_ATTRIBUTE_STYLE,
+            TB_ATTRIBUTE_UINAME,
             TB_XML_ENTRY_COUNT
         };
 
@@ -138,7 +143,7 @@ class OReadToolBoxDocumentHandler : public ::com::sun::star::xml::sax::XDocument
             TB_XML_NAMESPACES_COUNT
         };
 
-        OReadToolBoxDocumentHandler( ToolBoxDescriptor& aToolBoxItems );
+        OReadToolBoxDocumentHandler( const ::com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >& rItemContainer );
         virtual ~OReadToolBoxDocumentHandler();
 
         // XInterface
@@ -201,30 +206,31 @@ class OReadToolBoxDocumentHandler : public ::com::sun::star::xml::sax::XDocument
                 }
         };
 
-        sal_Bool                                                                    m_bToolBarStartFound;
-        sal_Bool                                                                    m_bToolBarEndFound;
-        sal_Bool                                                                    m_bToolBarItemStartFound;
-        sal_Bool                                                                    m_bToolBarSpaceStartFound;
-        sal_Bool                                                                    m_bToolBarBreakStartFound;
-        sal_Bool                                                                    m_bToolBarSeparatorStartFound;
-        ToolBoxHashMap                                                              m_aToolBoxMap;
-        ToolBoxDescriptor&                                                          m_aToolBoxItems;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >    m_xLocator;
+        sal_Bool                                                                        m_bToolBarStartFound;
+        sal_Bool                                                                        m_bToolBarEndFound;
+        sal_Bool                                                                        m_bToolBarItemStartFound;
+        sal_Bool                                                                        m_bToolBarSpaceStartFound;
+        sal_Bool                                                                        m_bToolBarBreakStartFound;
+        sal_Bool                                                                        m_bToolBarSeparatorStartFound;
+        ToolBoxHashMap                                                                  m_aToolBoxMap;
+        com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >    m_rItemContainer;
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >        m_xLocator;
 
-        sal_Int32                                                                   m_nHashCode_Style_Radio;
-        sal_Int32                                                                   m_nHashCode_Style_Auto;
-        sal_Int32                                                                   m_nHashCode_Style_Left;
-        sal_Int32                                                                   m_nHashCode_Style_AutoSize;
-        sal_Int32                                                                   m_nHashCode_Style_DropDown;
-        sal_Int32                                                                   m_nHashCode_Style_Repeat;
+        sal_Int32                                                                       m_nHashCode_Style_Radio;
+        sal_Int32                                                                       m_nHashCode_Style_Auto;
+        sal_Int32                                                                       m_nHashCode_Style_Left;
+        sal_Int32                                                                       m_nHashCode_Style_AutoSize;
+        sal_Int32                                                                       m_nHashCode_Style_DropDown;
+        sal_Int32                                                                       m_nHashCode_Style_Repeat;
 };
+
 
 class OWriteToolBoxDocumentHandler : private ThreadHelpBase // Struct for right initalization of lock member! Must be first of baseclasses.
 {
     public:
-        OWriteToolBoxDocumentHandler(
-            const ToolBoxDescriptor& aToolBoxItems,
-            ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > );
+            OWriteToolBoxDocumentHandler(
+            const ::com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& rItemAccess,
+            ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& rDocumentHandler );
         virtual ~OWriteToolBoxDocumentHandler();
 
         void WriteToolBoxDocument() throw
@@ -232,7 +238,8 @@ class OWriteToolBoxDocumentHandler : private ThreadHelpBase // Struct for right 
               ::com::sun::star::uno::RuntimeException );
 
     protected:
-        virtual void WriteToolBoxItem( const ToolBoxItemDescriptor* ) throw
+        virtual void WriteToolBoxItem( const rtl::OUString& aCommandURL, const rtl::OUString& aLabel, const rtl::OUString& aHelpURL,
+                                       sal_Bool bVisible ) throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
 
@@ -248,9 +255,9 @@ class OWriteToolBoxDocumentHandler : private ThreadHelpBase // Struct for right 
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
 
-        const ToolBoxDescriptor&                                                            m_aToolBoxItems;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >      m_xEmptyList;
+        com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >           m_rItemAccess;
         ::rtl::OUString                                                                     m_aXMLToolbarNS;
         ::rtl::OUString                                                                     m_aXMLXlinkNS;
         ::rtl::OUString                                                                     m_aAttributeType;
