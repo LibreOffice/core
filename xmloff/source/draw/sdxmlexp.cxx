@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-01 16:31:32 $
+ *  last change: $Author: cl $ $Date: 2001-03-04 16:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2083,7 +2083,7 @@ void SdXMLExport::exportFormsElement( uno::Reference< drawing::XDrawPage > xDraw
 
 uno::Sequence< OUString > SAL_CALL SdImpressXMLExport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.exporter.Impress" ) );
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLExporter" ) );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
@@ -2100,7 +2100,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLExport_createInstance(con
 
 uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.exporter.Draw" ) );
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.XMLExporter" ) );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
@@ -2119,7 +2119,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_createInstance(const 
 
 uno::Sequence< OUString > SAL_CALL SdImpressXMLExport_Style_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.exporter.Impress.Styles" ) );
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLStylesExporter" ) );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
@@ -2136,7 +2136,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLExport_Style_createInstan
 
 uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_Style_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.exporter.Draw.Styles" ) );
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.XMLStylesExporter" ) );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
@@ -2153,9 +2153,45 @@ uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_Style_createInstance(
 
 //////////////////////////////////////////////////////////////////////////////
 
+uno::Sequence< OUString > SAL_CALL SdImpressXMLExport_Meta_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLMetaExporter" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SdImpressXMLExport_Meta_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLExport.Impress.Meta" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLExport_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SdXMLExport( sal_False, EXPORT_META );
+}
+
+uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_Meta_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.XMLMetaExporter" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SdDrawXMLExport_Meta_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLExport.Draw.Meta" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SdXMLExport( sal_True, EXPORT_META );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 uno::Sequence< OUString > SAL_CALL SdImpressXMLExport_Content_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.exporter.Impress.Content" ) );
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLContentExporter" ) );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
@@ -2172,7 +2208,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLExport_Content_createInst
 
 uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_Content_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.exporter.Draw.Content" ) );
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.XMLContentExporter" ) );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 13:06:33 $
+ *  last change: $Author: cl $ $Date: 2001-03-04 16:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,7 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
 
 uno::Sequence< OUString > SAL_CALL SdImpressXMLImport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.importer.Impress" ) );
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLImporter" ) );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
@@ -371,7 +371,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLImport_createInstance(con
 
 uno::Sequence< OUString > SAL_CALL SdDrawXMLImport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.importer.Draw" ) );
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.XMLImporter" ) );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
@@ -390,7 +390,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLImport_createInstance(const 
 
 uno::Sequence< OUString > SAL_CALL SdImpressXMLImport_Style_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.importer.Impress.Styles" ) );
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLStylesImporter" ) );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
@@ -407,7 +407,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLImport_Style_createInstan
 
 uno::Sequence< OUString > SAL_CALL SdDrawXMLImport_Style_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.importer.Draw.Styles" ) );
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.XMLStylesImporter" ) );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
@@ -426,7 +426,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLImport_Style_createInstance(
 
 uno::Sequence< OUString > SAL_CALL SdImpressXMLImport_Content_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.importer.Impress.Content" ) );
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLContentImporter" ) );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
@@ -438,12 +438,12 @@ OUString SAL_CALL SdImpressXMLImport_Content_getImplementationName() throw()
 
 uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLImport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SdXMLImport( sal_False, IMPORT_META|IMPORT_STYLES|IMPORT_MASTERSTYLES|IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_SETTINGS|IMPORT_FONTDECLS );
+    return (cppu::OWeakObject*)new SdXMLImport( sal_False, IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_SETTINGS|IMPORT_FONTDECLS );
 }
 
 uno::Sequence< OUString > SAL_CALL SdDrawXMLImport_Content_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.importer.Draw.Content" ) );
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.XMLContentImporter" ) );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
@@ -455,7 +455,43 @@ OUString SAL_CALL SdDrawXMLImport_Content_getImplementationName() throw()
 
 uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLImport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SdXMLImport( sal_True, IMPORT_META|IMPORT_STYLES|IMPORT_MASTERSTYLES|IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_SETTINGS|IMPORT_FONTDECLS );
+    return (cppu::OWeakObject*)new SdXMLImport( sal_True, IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_SETTINGS|IMPORT_FONTDECLS );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+uno::Sequence< OUString > SAL_CALL SdImpressXMLImport_Meta_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLMetaImporter" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SdImpressXMLImport_Meta_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLImport.Impress.Meta" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLImport_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SdXMLImport( sal_False, IMPORT_META );
+}
+
+uno::Sequence< OUString > SAL_CALL SdDrawXMLImport_Meta_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.XMLMetaImporter" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SdDrawXMLImport_Meta_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLImport.Draw.Meta" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLImport_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SdXMLImport( sal_True, IMPORT_META );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -669,7 +705,11 @@ SvXMLImportContext *SdXMLImport::CreateContext(USHORT nPrefix,
 {
     SvXMLImportContext* pContext = 0;
 
-    if(XML_NAMESPACE_OFFICE == nPrefix && 0 == rLocalName.compareToAscii(sXML_document))
+    if(XML_NAMESPACE_OFFICE == nPrefix &&
+        ( 0 == rLocalName.compareToAscii(sXML_document) ||
+          0 == rLocalName.compareToAscii(sXML_document_meta) ||
+          0 == rLocalName.compareToAscii(sXML_document_styles) ||
+          0 == rLocalName.compareToAscii(sXML_document_content) ))
     {
          pContext = new SdXMLDocContext_Impl(*this, nPrefix, rLocalName, xAttrList);
     }
