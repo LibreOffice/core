@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:10:21 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:57:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ ModelessDialog DLG_JOIN_TABADD
         Text[ russian ] = "Äîáàâèòü";
         Text[ polish ] = "Dodaj";
         Text[ japanese ] = "’Ç‰Á(~A)";
-        Text[ chinese_traditional ] = "¼W¥[(~A)";
+        Text[ chinese_traditional ] = "·s¼W(~A)";
         Text[ arabic ] = "ÅÖÇİÉ";
         Text[ dutch ] = "Toe~voegen";
         Text[ chinese_simplified ] = "ĞÂÔö(~A)";
@@ -268,7 +268,7 @@ ModelessDialog DLG_JOIN_TABADD
     Text[ russian ] = "Äîáàâèòü òàáëèöû";
     Text[ polish ] = "Dodaj tabelê";
     Text[ japanese ] = "Ã°ÌŞÙ‚Ì’Ç‰Á";
-    Text[ chinese_traditional ] = "¼W¥[ªí®æ";
+    Text[ chinese_traditional ] = "·s¼Wªí®æ";
     Text[ arabic ] = "ÅÖÇİÉ ÌÏÇæá";
     Text[ dutch ] = "Tabellen toevoegen";
     Text[ chinese_simplified ] = "ĞÂÔö±í¸ñ";
@@ -278,5 +278,6 @@ ModelessDialog DLG_JOIN_TABADD
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Añadir tablas";
 };
+
 
 
