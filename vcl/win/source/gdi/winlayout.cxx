@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-22 07:54:08 $
+ *  last change: $Author: hdu $ $Date: 2002-08-26 16:16:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ public:
 
     virtual Point   GetCharPosition( int nCharIndex, bool bRTL ) const;
     virtual long    FillDXArray( long* pDXArray ) const;
-    virtual int     GetTextBreak( long nMaxWidth, long nCharExtra ) const;
+    virtual int     GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const;
     virtual bool    HasGlyphs() const { return mbEnableGlyphs; }
 
 protected:
@@ -477,14 +477,14 @@ long SimpleWinLayout::FillDXArray( long* pDXArray ) const
 
 // -----------------------------------------------------------------------
 
-int SimpleWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra ) const
+int SimpleWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
     long nWidth = 0;
 
     for( int i = 0; i < mnGlyphCount; ++i )
     {
         int j = !mpChars2Glyphs ? i : mpChars2Glyphs[i];
-        nWidth += mpGlyphAdvances[j];
+        nWidth += mpGlyphAdvances[j] * nFactor;
         if( nWidth >= nMaxWidth )
             return (mnFirstCharIndex + i);
         nWidth += nCharExtra;
@@ -618,7 +618,7 @@ public:
 
     virtual Point   GetCharPosition( int nCharIndex, bool bRTL ) const;
     virtual long    FillDXArray( long* pDXArray ) const;
-    virtual int     GetTextBreak( long nMaxWidth, long nCharExtra ) const;
+    virtual int     GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const;
 
 protected:
     void            Justify( long nNewWidth );
@@ -1178,12 +1178,12 @@ long UniscribeLayout::FillDXArray( long* pDXArray ) const
 
 // -----------------------------------------------------------------------
 
-int UniscribeLayout::GetTextBreak( long nMaxWidth, long nCharExtra ) const
+int UniscribeLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
     long nWidth = 0;
     for( int i = mnFirstCharIndex; i < mnEndCharIndex; ++i )
     {
-        nWidth += mpCharWidths[ i ];
+        nWidth += mpCharWidths[ i ] * nFactor;
         if( nWidth >= nMaxWidth )
         {
             // go back to cluster start
