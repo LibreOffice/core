@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Configuration.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 12:35:52 $
+ *  last change: $Author: pjunck $  $Date: 2004-10-27 13:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,5 +277,85 @@ public abstract class Configuration {
         XChangesBatch xUpdateControl = (XChangesBatch) UnoRuntime.queryInterface(XChangesBatch.class, view);
         xUpdateControl.commitChanges();
     }
+
+
+    public static String[] getNodeDisplayNames(XNameAccess _xNameAccessNode){
+    String[] snames = null;
+    try {
+        return getNodeChildNames(_xNameAccessNode, "Name");
+    } catch (Exception e) {
+        e.printStackTrace(System.out);
+        return snames;
+    }}
+
+
+    public static String[] getNodeChildNames(XNameAccess xNameAccessNode, String _schildname){
+    String[] snames = null;
+    try {
+        snames = xNameAccessNode.getElementNames();
+        String[] sdisplaynames = new String[snames.length];
+        for (int i = 0; i < snames.length; i++){
+            sdisplaynames[i] = (String) Helper.getUnoPropertyValue(xNameAccessNode.getByName(snames[i]), _schildname);
+        }
+        return sdisplaynames;
+    } catch (Exception e) {
+        e.printStackTrace(System.out);
+        return snames;
+    }}
+
+
+    public static XNameAccess getChildNodebyIndex(Object _oNode, int _index){
+        XNameAccess xNameAccessNode = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, _oNode);
+        return getChildNodebyIndex(xNameAccessNode, _index);
+    }
+
+
+    public static XNameAccess getChildNodebyIndex(XNameAccess _xNameAccess, int _index){
+    try {
+        String[] snames = _xNameAccess.getElementNames();
+        Object oNode = _xNameAccess.getByName(snames[_index]);
+        XNameAccess xNameAccessNode = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oNode);
+        return xNameAccessNode;
+    } catch (Exception e) {
+        e.printStackTrace(System.out);
+        return null;
+    }}
+
+
+    public static XNameAccess getChildNodebyName(XNameAccess _xNameAccessNode, String _SubNodeName){
+    try {
+        if (_xNameAccessNode.hasByName(_SubNodeName))
+            return (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, _xNameAccessNode.getByName(_SubNodeName));
+    } catch (Exception e) {
+        e.printStackTrace(System.out);
+    }
+    return null;
+    }
+
+
+    public static XNameAccess getChildNodebyDisplayName(XNameAccess _xNameAccessNode, String _displayname){
+        String[] snames = null;
+        return getChildNodebyDisplayName(_xNameAccessNode, _displayname, "Name");
+    }
+
+
+    public static XNameAccess getChildNodebyDisplayName(XNameAccess _xNameAccessNode, String _displayname, String _nodename){
+    String[] snames = null;
+    try {
+        snames = _xNameAccessNode.getElementNames();
+        String[] sdisplaynames = new String[snames.length];
+        for (int i = 0; i < snames.length; i++){
+            String curdisplayname = (String) Helper.getUnoPropertyValue(_xNameAccessNode.getByName(snames[i]), _nodename);
+            if (curdisplayname.equals(_displayname))
+                return (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, _xNameAccessNode.getByName(snames[i]));
+        }
+    } catch (Exception e) {
+        e.printStackTrace(System.out);
+    }
+    return null;
+    }
+
+
+
 
 }
