@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gdimtf.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:36:19 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,6 +670,17 @@ void GDIMetaFile::AddAction( MetaAction* pAction, ULONG nPos )
         pAction->Duplicate();
         pPrev->AddAction( pAction, nPos );
     }
+}
+
+// ------------------------------------------------------------------------
+
+// @since #110496#
+void GDIMetaFile::RemoveAction( ULONG nPos )
+{
+    Remove( nPos );
+
+    if( pPrev )
+        pPrev->RemoveAction( nPos );
 }
 
 // ------------------------------------------------------------------------
