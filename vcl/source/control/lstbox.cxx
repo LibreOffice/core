@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:21:44 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:52:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1342,6 +1342,15 @@ USHORT ListBox::GetMaxMRUCount() const
 USHORT ListBox::GetDisplayLineCount() const
 {
     return mpImplLB->GetDisplayLineCount();
+}
+
+// -----------------------------------------------------------------------
+
+// pb: #106948# explicit mirroring for calc
+
+void ListBox::EnableMirroring()
+{
+    mpImplLB->EnableMirroring();
 }
 
 // -----------------------------------------------------------------------
