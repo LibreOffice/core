@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_clipboard.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:09:31 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,6 +294,13 @@ void X11Clipboard::clearTransferable()
 void X11Clipboard::fireContentsChanged()
 {
     fireChangedContentsEvent();
+}
+
+// ------------------------------------------------------------------------
+
+Reference< XInterface > X11Clipboard::getReference() throw()
+{
+    return Reference< XInterface >( static_cast< OWeakObject* >(this) );
 }
 
 // ------------------------------------------------------------------------
