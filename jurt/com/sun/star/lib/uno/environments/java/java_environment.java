@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_environment.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-04 11:52:11 $
+ *  last change: $Author: jl $ $Date: 2002-03-27 13:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ import com.sun.star.uno.XInterface;
  * interface defined in the uno runtime.
  * <p>
  * <p>
- * @version     $Revision: 1.5 $ $ $Date: 2001-05-04 11:52:11 $
+ * @version     $Revision: 1.6 $ $ $Date: 2002-03-27 13:03:56 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @see         com.sun.star.uno.IEnvironment
@@ -187,6 +187,9 @@ public class java_environment implements IEnvironment, Disposable {
         }
 
         public boolean isSame(Object object) {
+            if (object instanceof HolderProxy)
+                object=((HolderProxy) object).object;
+
             return UnoRuntime.areSame(this.object, object);
         }
 
