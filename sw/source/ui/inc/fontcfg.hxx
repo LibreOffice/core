@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-06-11 08:38:52 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #include <tools/lang.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 #define FONT_STANDARD       0
 #define FONT_OUTLINE        1
 #define FONT_LIST           2
@@ -94,11 +98,11 @@
 #define FONT_GROUP_CJK      1
 #define FONT_GROUP_CTL      2
 
-class SwStdFontConfig : public utl::ConfigItem
+class SW_DLLPUBLIC SwStdFontConfig : public utl::ConfigItem
 {
     String      sDefaultFonts[DEF_FONT_COUNT];
 
-    com::sun::star::uno::Sequence<rtl::OUString>    GetPropertyNames();
+    SW_DLLPRIVATE com::sun::star::uno::Sequence<rtl::OUString>    GetPropertyNames();
 
     void ChangeString(USHORT nFontType, const String& rSet)
         {
