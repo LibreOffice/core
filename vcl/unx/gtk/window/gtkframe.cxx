@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:24:44 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:36:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,15 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
 GtkSalFrame::~GtkSalFrame()
 {
     getDisplay()->deregisterFrame( this );
+
+    if( m_hBackgroundPixmap )
+    {
+        XSetWindowBackgroundPixmap( getDisplay()->GetDisplay(),
+                                    GDK_WINDOW_XWINDOW(GTK_WIDGET(m_pWindow)->window),
+                                    None );
+        XFreePixmap( getDisplay()->GetDisplay(), m_hBackgroundPixmap );
+    }
+
     if( m_pIMContext )
     {
         gtk_im_context_reset( m_pIMContext );
@@ -240,6 +249,7 @@ void GtkSalFrame::InitCommon()
     m_bWasPreedit       = false;
     m_aPrevKeyPresses.clear();
     m_nPrevKeyPresses = 0;
+    m_hBackgroundPixmap = None;
 
     gtk_widget_set_app_paintable( GTK_WIDGET(m_pWindow), TRUE );
     gtk_widget_set_double_buffered( GTK_WIDGET(m_pWindow), FALSE );
@@ -1316,6 +1326,44 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
     }
 
     return bContinueDispatch;
+}
+
+void GtkSalFrame::SetBackgroundBitmap( SalBitmap* pBitmap )
+{
+    if( m_hBackgroundPixmap )
+    {
+        XSetWindowBackgroundPixmap( getDisplay()->GetDisplay(),
+                                    GDK_WINDOW_XWINDOW(GTK_WIDGET(m_pWindow)->window),
+                                    None );
+        XFreePixmap( getDisplay()->GetDisplay(), m_hBackgroundPixmap );
+        m_hBackgroundPixmap = None;
+    }
+    if( pBitmap )
+    {
+        X11SalBitmap* pBM = static_cast<X11SalBitmap*>(pBitmap);
+        Size aSize = pBM->GetSize();
+        if( aSize.Width() && aSize.Height() )
+        {
+            m_hBackgroundPixmap =
+                XCreatePixmap( getDisplay()->GetDisplay(),
+                               GDK_WINDOW_XWINDOW(GTK_WIDGET(m_pWindow)->window),
+                               aSize.Width(),
+                               aSize.Height(),
+                               getDisplay()->GetVisual()->GetDepth() );
+            if( m_hBackgroundPixmap )
+            {
+                SalTwoRect aTwoRect;
+                aTwoRect.mnSrcX = aTwoRect.mnSrcY = aTwoRect.mnDestX = aTwoRect.mnDestY = 0;
+                aTwoRect.mnSrcWidth = aTwoRect.mnDestWidth = aSize.Width();
+                aTwoRect.mnSrcHeight = aTwoRect.mnDestHeight = aSize.Height();
+                pBM->ImplDraw( m_hBackgroundPixmap, getDisplay()->GetVisual()->GetDepth(),
+                               aTwoRect, getDisplay()->GetCopyGC(), false );
+                XSetWindowBackgroundPixmap( getDisplay()->GetDisplay(),
+                                            GDK_WINDOW_XWINDOW(GTK_WIDGET(m_pWindow)->window),
+                                            m_hBackgroundPixmap );
+            }
+        }
+    }
 }
 
 gboolean GtkSalFrame::signalButton( GtkWidget* pWidget, GdkEventButton* pEvent, gpointer frame )
