@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 11:18:01 $
+ *  last change: $Author: vg $ $Date: 2001-05-22 13:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,9 +277,19 @@ typedef ::cppu::WeakComponentImplHelper6<   ::com::sun::star::sdbc::XRowSetListe
                                             ::com::sun::star::util::XModifyListener,
                                             ::com::sun::star::container::XContainerListener,
                                             ::com::sun::star::view::XSelectionChangeListener,
-                                            ::com::sun::star::form::XFormControllerListener> FmXFormShell_BASE;
+                                            ::com::sun::star::form::XFormControllerListener> FmXFormShell_BD_BASE;
 
-typedef ::utl::ConfigItem   FmXFormShell_CFGBASE;
+//========================================================================
+class FmXFormShell_Base_Disambiguation : public FmXFormShell_BD_BASE
+{
+protected:
+    FmXFormShell_Base_Disambiguation( ::osl::Mutex& _rMutex );
+    virtual void SAL_CALL disposing();
+};
+
+//========================================================================
+typedef FmXFormShell_Base_Disambiguation    FmXFormShell_BASE;
+typedef ::utl::ConfigItem                   FmXFormShell_CFGBASE;
 
 class FmXFormShell  :public FmXFormShell_BASE
                     ,public FmXFormShell_CFGBASE

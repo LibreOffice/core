@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 15:59:45 $
+ *  last change: $Author: vg $ $Date: 2001-05-22 13:37:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,6 +600,25 @@ Reference< XForm> FmXFormShell::DetermineCurForm(const SdrMarkList& rMarkList, s
     return xReferenceForm;
 }
 
+
+//========================================================================
+// class FmXFormShell_Base_Disambiguation
+//========================================================================
+FmXFormShell_Base_Disambiguation::FmXFormShell_Base_Disambiguation( ::osl::Mutex& _rMutex )
+    :FmXFormShell_BD_BASE( _rMutex )
+{
+}
+
+void SAL_CALL FmXFormShell_Base_Disambiguation::disposing()
+{
+    WeakComponentImplHelperBase::disposing();
+    // Note:
+    // This is a HACK.
+    // Normally it should be sufficient to call the "disposing" of our direct
+    // base class, but SUN PRO 5 does not like this and claims there is a conflict
+    // with the XEventListener::disposing(EventObject) of our various listener
+    // base classes.
+}
 
 //========================================================================
 // class FmXFormShell
