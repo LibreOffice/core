@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:54:11 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:53:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,12 @@
 #ifndef _ACTCTRL_HXX
 #include <actctrl.hxx>
 #endif
+
+#include "textcontrolcombo.hxx"
+
 class SwWrtShell;
 class SwTableAutoFmt;
+
 
 class SwInsTableDlg : public SfxModalDialog
 {
@@ -94,6 +98,12 @@ class SwInsTableDlg : public SfxModalDialog
 
     CheckBox        aHeaderCB;
     CheckBox        aRepeatHeaderCB;
+    FixedText       aRepeatHeaderFT;    // "dummy" to build before and after FT
+    FixedText       aRepeatHeaderBeforeFT;
+    NumericField    aRepeatHeaderNF;
+    FixedText       aRepeatHeaderAfterFT;
+    TextControlCombo    aRepeatHeaderCombo;
+
     CheckBox        aDontSplitCB;
     CheckBox        aBorderCB;
     FixedLine       aOptionsFL;
@@ -106,18 +116,21 @@ class SwInsTableDlg : public SfxModalDialog
 
     SwWrtShell*     pShell;
     SwTableAutoFmt* pTAutoFmt;
+    long            nEnteredValRepeatHeaderNF;
 
     DECL_LINK( ModifyName, Edit * );
     DECL_LINK( ModifyRowCol, NumericField * );
     DECL_LINK( AutoFmtHdl, PushButton* );
     DECL_LINK( CheckBoxHdl, CheckBox *pCB = 0 );
+    DECL_LINK( ReapeatHeaderCheckBoxHdl, void* p = 0 );
+    DECL_LINK( ModifyRepeatHeaderNF_Hdl, void* p = 0 );
 
 public:
     SwInsTableDlg( SwView& rView );
     ~SwInsTableDlg();
 
     void GetValues( String& rName, USHORT& rRow, USHORT& rCol,
-                    USHORT& rInsTblFlags, String& rTableAutoFmtName,
+                    SwInsertTableOptions& rInsTblOpts, String& rTableAutoFmtName,
                     SwTableAutoFmt *& prTAFmt );
 };
 
