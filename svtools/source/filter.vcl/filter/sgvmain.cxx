@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgvmain.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:27:52 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -852,7 +852,9 @@ void BmapType::Draw(OutputDevice& rOut)
     //ifstream aInp;
     unsigned char   nSgfTyp;
     USHORT          nVersion;
-    String          aStr( Filename[ 1 ], (xub_StrLen)Filename[ 0 ], RTL_TEXTENCODING_UTF8 );
+    String          aStr(
+        reinterpret_cast< char const * >(&Filename[ 1 ]),
+        (xub_StrLen)Filename[ 0 ], RTL_TEXTENCODING_UTF8 );
     INetURLObject   aFNam( aStr );
 
     SvStream* pInp = ::utl::UcbStreamHelper::CreateStream( aFNam.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
