@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-14 18:30:44 $
+ *  last change: $Author: sab $ $Date: 2000-11-20 18:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,21 +160,21 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
         sal_Int16 nContextID = getPropertySetMapper()->GetEntryContextId(property->mnIndex);
         switch (nContextID)
         {
-            case CTF_ALLPADDING                 : pAllPaddingProperty = property; break;
-            case CTF_LEFTPADDING                : pPadding[XML_LINE_LEFT] = property; break;
-            case CTF_RIGHTPADDING               : pPadding[XML_LINE_RIGHT] = property; break;
-            case CTF_TOPPADDING                 : pPadding[XML_LINE_TOP] = property; break;
-            case CTF_BOTTOMPADDING              : pPadding[XML_LINE_BOTTOM] = property; break;
-            case CTF_ALLBORDER                  : pAllBorderProperty = property; break;
-            case CTF_LEFTBORDER                 : pBorders[XML_LINE_LEFT] = property; break;
-            case CTF_RIGHTBORDER                : pBorders[XML_LINE_RIGHT] = property; break;
-            case CTF_TOPBORDER                  : pBorders[XML_LINE_TOP] = property; break;
-            case CTF_BOTTOMBORDER               : pBorders[XML_LINE_BOTTOM] = property; break;
-            case CTF_ALLBORDERWIDTH             : pAllBorderWidthProperty = property; break;
-            case CTF_LEFTBORDERWIDTH            : pBorderWidths[XML_LINE_LEFT] = property; break;
-            case CTF_RIGHTBORDERWIDTH           : pBorderWidths[XML_LINE_RIGHT] = property; break;
-            case CTF_TOPBORDERWIDTH             : pBorderWidths[XML_LINE_TOP] = property; break;
-            case CTF_BOTTOMBORDERWIDTH          : pBorderWidths[XML_LINE_BOTTOM] = property; break;
+            case CTF_SC_ALLPADDING                  : pAllPaddingProperty = property; break;
+            case CTF_SC_LEFTPADDING                 : pPadding[XML_LINE_LEFT] = property; break;
+            case CTF_SC_RIGHTPADDING                : pPadding[XML_LINE_RIGHT] = property; break;
+            case CTF_SC_TOPPADDING                  : pPadding[XML_LINE_TOP] = property; break;
+            case CTF_SC_BOTTOMPADDING               : pPadding[XML_LINE_BOTTOM] = property; break;
+            case CTF_SC_ALLBORDER                   : pAllBorderProperty = property; break;
+            case CTF_SC_LEFTBORDER                  : pBorders[XML_LINE_LEFT] = property; break;
+            case CTF_SC_RIGHTBORDER                 : pBorders[XML_LINE_RIGHT] = property; break;
+            case CTF_SC_TOPBORDER                   : pBorders[XML_LINE_TOP] = property; break;
+            case CTF_SC_BOTTOMBORDER                : pBorders[XML_LINE_BOTTOM] = property; break;
+            case CTF_SC_ALLBORDERWIDTH              : pAllBorderWidthProperty = property; break;
+            case CTF_SC_LEFTBORDERWIDTH             : pBorderWidths[XML_LINE_LEFT] = property; break;
+            case CTF_SC_RIGHTBORDERWIDTH            : pBorderWidths[XML_LINE_RIGHT] = property; break;
+            case CTF_SC_TOPBORDERWIDTH              : pBorderWidths[XML_LINE_TOP] = property; break;
+            case CTF_SC_BOTTOMBORDERWIDTH           : pBorderWidths[XML_LINE_BOTTOM] = property; break;
         }
     }
     for (sal_uInt16 i = 0; i < 4; i++)
@@ -241,8 +241,8 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
         sal_Int16 nContextID = getPropertySetMapper()->GetEntryContextId(property->mnIndex);
         switch (nContextID)
         {
-            case CTF_ROWHEIGHT                  : pHeight = property; break;
-            case CTF_ROWOPTIMALHEIGHT           : pOptimalHeight = property; break;
+            case CTF_SC_ROWHEIGHT                   : pHeight = property; break;
+            case CTF_SC_ROWOPTIMALHEIGHT            : pOptimalHeight = property; break;
         }
     }
     if (!pOptimalHeight)
@@ -713,6 +713,7 @@ UniReference < SvXMLImportPropertyMapper >
                 if( !xCellImpPropMapper.is() )
                     ((XMLTableStylesContext *)this)->xCellImpPropMapper =
                         new ScXMLCellImportPropertyMapper( GetScImport().GetCellStylesPropertySetMapper() );
+                xCellImpPropMapper->ChainImportMapper(XMLTextImportHelper::CreateCharExtPropMapper());
                 xMapper = xCellImpPropMapper;
             }
             break;

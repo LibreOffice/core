@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-17 08:11:15 $
+ *  last change: $Author: sab $ $Date: 2000-11-20 18:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #endif
 
 class ScOutlineArray;
+class SvXMLExportPropertyMapper;
 
 typedef std::vector<sal_Int32> ScMyTableShapeIndexes;
 typedef std::vector<ScMyTableShapeIndexes> ScMyTableShapes;
