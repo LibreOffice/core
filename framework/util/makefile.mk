@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.75 $
+#   $Revision: 1.76 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-28 14:42:18 $
+#   last change: $Author: kz $ $Date: 2004-02-25 17:56:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,13 @@ LIB1OBJFILES=   \
                 $(SLO)$/protocolhandlercache.obj				\
                 $(SLO)$/networkdomain.obj                       \
                 $(SLO)$/configaccess.obj                        \
-                $(SLO)$/framelistanalyzer.obj
+                $(SLO)$/framelistanalyzer.obj                   \
+                $(SLO)$/shareablemutex.obj                      \
+                $(SLO)$/itemcontainer.obj                       \
+                $(SLO)$/rootitemcontainer.obj                   \
+                $(SLO)$/constitemcontainer.obj                  \
+                $(SLO)$/moduleidentifier.obj
+
 
 
 # --- export library for sfx2 -------------------------------------------------
@@ -115,13 +121,15 @@ LIB2OBJFILES=   $(SLO)$/attributelist.obj                       \
                 $(SLO)$/propertysetcontainer.obj                \
                 $(SLO)$/rootactiontriggercontainer.obj          \
                 $(SLO)$/actiontriggerhelper.obj                 \
-                $(SLO)$/imagewrapper.obj        \
-        $(SLO)$/interaction.obj		\
-        $(SLO)$/addonmenu.obj		\
-        $(SLO)$/addonsoptions.obj	\
-        $(SLO)$/fwkresid.obj		\
-        $(SLO)$/acceleratorinfo.obj
-
+                $(SLO)$/imagewrapper.obj                        \
+                $(SLO)$/interaction.obj							\
+                $(SLO)$/addonmenu.obj							\
+                $(SLO)$/addonsoptions.obj						\
+                $(SLO)$/fwkresid.obj						    \
+                $(SLO)$/acceleratorinfo.obj        	            \
+                $(SLO)$/sfxhelperfunctions.obj                  \
+                $(SLO)$/uielementwrapperbase.obj                \
+                $(SLO)$/uiconfigelementwrapperbase.obj
 
 # --- import classes library ---------------------------------------------------
 
@@ -132,10 +140,11 @@ SHL1IMPLIB=     ifwi
 SHL1LIBS=       $(LIB1TARGET)
 
 SHL1STDLIBS=    \
-                $(UNOTOOLSLIB)	\
-                $(TOOLSLIB)		\
-                $(VOSLIB)		\
-                $(CPPULIB)		\
+                $(UNOTOOLSLIB)	    \
+                $(CPPUHELPERLIB)	\
+                $(TOOLSLIB)		    \
+                $(VOSLIB)		    \
+                $(CPPULIB)		    \
                 $(SALLIB)
 
 .IF "$(GUI)"=="WNT"
@@ -163,6 +172,7 @@ SHL2IMPLIB=     ifwe
 SHL2LIBS=       $(LIB2TARGET)
 
 SHL2STDLIBS=    \
+                $(FWILIB)							\
                 $(VCLLIB)                           \
                 $(SVLLIB)							\
                 $(UNOTOOLSLIB)                      \
@@ -257,6 +267,26 @@ SHL4OBJS=       \
                 $(SLO)$/colorlistener.obj           \
                 $(SLO)$/backingcomp.obj				\
                 $(SLO)$/dispatchhelper.obj          \
+                $(SLO)$/layoutmanager.obj           \
+                $(SLO)$/menubarmanager.obj          \
+                $(SLO)$/menubarwrapper.obj          \
+                $(SLO)$/popupmenucontrollerfactory.obj\
+                $(SLO)$/uielementfactorymanager.obj \
+                $(SLO)$/popupmenucontrollerbase.obj \
+                $(SLO)$/fontmenucontroller.obj      \
+                $(SLO)$/fontsizemenucontroller.obj  \
+                $(SLO)$/formatmenucontroller.obj    \
+                $(SLO)$/objectmenucontroller.obj    \
+                $(SLO)$/headermenucontroller.obj    \
+                $(SLO)$/footermenucontroller.obj    \
+                $(SLO)$/controlmenucontroller.obj   \
+                $(SLO)$/dockingareadefaultacceptor.obj  \
+                $(SLO)$/uicommanddescription.obj    \
+                $(SLO)$/modulemanager.obj           \
+                $(SLO)$/uiconfigurationmanager.obj  \
+                $(SLO)$/moduleuicfgsupplier.obj     \
+                $(SLO)$/moduleuiconfigurationmanager.obj \
+                $(SLO)$/menubarfactory.obj          \
                 $(SLO)$/mediadescriptor.obj         \
                 $(SLO)$/filter.obj                  \
                 $(SLO)$/frameloader.obj             \
@@ -266,8 +296,8 @@ SHL4OBJS=       \
                 $(SLO)$/targethelper.obj
 
 SHL4STDLIBS=	\
-                $(FWELIB)							\
                 $(FWILIB)                           \
+                $(FWELIB)							\
                 $(SVTOOLLIB)						\
                 $(TKLIB)							\
                 $(VCLLIB)							\
