@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_graphicfilter.scp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 12:58:44 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,7 @@ Module gid_Module_Optional_Grfflt
     MOD_NAME_DESC ( MODULE_OPTIONAL_GRFFLT );
     ParentID = gid_Module_Optional;
     Default = YES;
-    Files = (gid_File_Filter_Ipd,gid_File_Filter_Itg,gid_File_Filter_Eps,gid_File_Res_Eps,gid_File_Filter_Ips,
-    gid_File_Filter_Exp,gid_File_Filter_Epb,gid_File_Filter_Epg,gid_File_Filter_Epp,gid_File_Filter_Ipb,
-    gid_File_Filter_Era,gid_File_Filter_Ira,gid_File_Filter_Idx,gid_File_Filter_Icd,gid_File_Filter_Ept,
-    gid_File_Filter_Ipt,gid_File_Res_Ept,gid_File_Filter_Icd,gid_File_Filter_Ime,gid_File_Res_Eme,
-    gid_File_Filter_Ipx,gid_File_Filter_Iti,gid_File_Filter_Eti,gid_File_Lib_Svg, gid_File_Lib_Flash,
-    gid_File_Registry_Spool_Oo_TypeDetection_InternalGraphics_Types_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_InternalGraphics_Filters_Xcu,
-    gid_File_Registry_Spool_Oo_TypeDetection_ImpressGraphics_Types_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_ImpressGraphics_Filters_Xcu,
-    gid_File_Registry_Spool_Oo_TypeDetection_DrawGraphics_Types_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_DrawGraphics_Filters_Xcu);
+    Files = (gid_File_Lib_Svg, gid_File_Lib_Flash,
+    		 gid_File_Registry_Spool_Oo_TypeDetection_ImpressGraphics_Types_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_ImpressGraphics_Filters_Xcu,
+    		 gid_File_Registry_Spool_Oo_TypeDetection_DrawGraphics_Types_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_DrawGraphics_Filters_Xcu);
 End
