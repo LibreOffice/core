@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropHdl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 10:52:52 $
+ *  last change: $Author: mib $ $Date: 2001-06-29 11:18:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ sal_Bool XMLPMPropHdl_NumFormat::exportXML(
         OUStringBuffer aBuffer( 10 );
         rUnitConverter.convertNumFormat( aBuffer, nNumType );
         rStrExpValue = aBuffer.makeStringAndClear();
-        bRet = rStrExpValue.getLength() > 0;
+        bRet = sal_True;
     }
     return bRet;
 }
