@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testiadapter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:14:29 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <stdio.h>
 
+#include <sal/main.h>
 #include <osl/diagnose.h>
 
 #include <cppuhelper/servicefactory.hxx>
@@ -791,7 +792,8 @@ sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
 
         assign( (test::TestElement &)aData,
                 sal_True, '@', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
-                0x123456789abcdef0, 0xfedcba9876543210,
+                SAL_CONST_INT64(0x123456789abcdef0),
+                SAL_CONST_UINT64(0xfedcba9876543210),
                 (float)17.0815, 3.1415926359, TestEnum_LOLA, OUString::createFromAscii("dumdidum"), xI,
                 Any( &xI, ::getCppuType( (const Reference<XInterface > *)0 ) ) );
 
@@ -1042,8 +1044,7 @@ static sal_Bool test_invocation( const Reference< XMultiServiceFactory > & xMgr 
     return (performTest( xLBT ) && raiseException( xLBT ));
 }
 
-
-int SAL_CALL main( int argc, char * argv[] )
+SAL_IMPLEMENT_MAIN()
 {
     Reference< XMultiServiceFactory > xMgr( createRegistryServiceFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("stoctest.rdb") ) ) );
@@ -1073,7 +1074,7 @@ int SAL_CALL main( int argc, char * argv[] )
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
             OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
-            OUString::createFromAscii("corereflection.uno" SAL_DLLEXTENSION),
+            OUString::createFromAscii("reflection.uno" SAL_DLLEXTENSION),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
             OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
