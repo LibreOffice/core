@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: aw $ $Date: 2002-10-08 15:46:37 $
+ *  last change: $Author: af $ $Date: 2002-10-25 14:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -898,10 +898,24 @@ void SdDrawViewShell::SetActiveTabLayerIndex (int nIndex)
     // Ignore invalid indices silently.
     if (nIndex>=0 && nIndex<aLayerTab.GetPageCount())
     {
-        // Tell the draw view of the new active layer.
+        // Tell the draw view and the tab control of the new active layer.
         pDrView->SetActiveLayer (aLayerTab.GetPageText (aLayerTab.GetPageId (nIndex)));
-        // Update the layer tab bar and do everything else that has to be done.
-        ResetActualLayer ();
-    }
+        aLayerTab.SetCurPageId (aLayerTab.GetPageId (nIndex));
+   }
 }
 
+
+
+
+SdTabControl* SdDrawViewShell::GetPageTabControl (void)
+{
+    return &aTabControl;
+}
+
+
+
+
+SdLayerTab* SdDrawViewShell::GetLayerTabControl (void)
+{
+    return &aLayerTab;
+}
