@@ -68,7 +68,7 @@
 			      xmlns:form="http://openoffice.org/2000/form" 
 			      xmlns:script="http://openoffice.org/2000/script"
 			      >
-<xsl:output method="html" />
+<xsl:output method="xml" />
 
 
 <xsl:template match="/">
