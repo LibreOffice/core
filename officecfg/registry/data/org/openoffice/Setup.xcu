@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcu,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:32:41 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,9 @@
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >DbRelationWindowState</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryIcon">
+                    <value >14</value>
+                </prop>
             </node>
             <node oor:name="com.sun.star.sdb.QueryDesign" oor:op="replace">
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
@@ -286,6 +289,9 @@
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >DbQueryWindowState</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryIcon">
+                    <value >14</value>
+                </prop>
             </node>
             <node oor:name="com.sun.star.sdb.TableDesign" oor:op="replace">
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
@@ -296,6 +302,23 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >DbTableWindowState</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryIcon">
+                    <value >14</value>
+                </prop>
+            </node>
+            <node oor:name="com.sun.star.sdb.DataSourceBrowser" oor:op="replace">
+                <prop oor:name="ooSetupFactoryCommandConfigRef">
+                    <value >DbuCommands</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryShortName">
+                    <value >dbbrowser</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+                    <value >DbBrowserWindowState</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryIcon">
+                    <value >14</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.frame.Bibliography" oor:op="replace">
@@ -355,6 +378,32 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryWindowStateConfigRef">
                     <value >ChartWindowState</value>
+                </prop>
+            </node>
+            <node oor:name="com.sun.star.sdb.DatabaseDocument" oor:op="replace">
+                <prop oor:name="ooSetupFactoryCommandConfigRef">
+                    <value >DbuCommands</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryDefaultFilter">
+                    <value >StarOffice XML (Base)</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryEmptyDocumentURL">
+                    <value >private:factory/sdatabase</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryWindowAttributes">
+                    <value ></value>
+                </prop>
+                <prop oor:name="ooSetupFactoryIcon">
+                    <value >14</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryTemplateFile">
+                    <value ></value>
+                </prop>
+                <prop oor:name="ooSetupFactoryShortName">
+                    <value >dbapp</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+                    <value >BaseWindowState</value>
                 </prop>
             </node>
         </node>
