@@ -1,0 +1,13 @@
+    <node oor:name="SGF - StarOffice Writer SGF" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>sgf_StarOffice_Writer_SGF</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.drawing.DrawingDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">SGF - StarWriter Graphics Format</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT ALIEN</value></prop>
+    </node>
