@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-15 09:28:25 $
+ *  last change: $Author: sab $ $Date: 2001-02-15 15:36:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,9 @@
 #ifndef _SC_XMLCHANGETRACKINGEXPORTHELPER_HXX
 #include "XMLChangeTrackingExportHelper.hxx"
 #endif
+#ifndef SC_DOCUNO_HXX
+#include "docuno.hxx"
+#endif
 
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include <xmloff/xmlkywd.hxx>
@@ -152,6 +155,9 @@
 #ifndef _XMLOFF_TXTPARAE_HXX
 #include <xmloff/txtparae.hxx>
 #endif
+#ifndef _XMLOFF_VISAREAEXPORT_HXX
+#include <xmloff/VisAreaExport.hxx>
+#endif
 
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
@@ -171,6 +177,9 @@
 #endif
 #ifndef _SCH_MEMCHRT_HXX
 #include <sch/memchrt.hxx>
+#endif
+#ifndef _EMBOBJ_HXX
+#include <so3/embobj.hxx>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -582,6 +591,13 @@ void ScXMLExport::_ExportViewSettings()
     SvXMLElementExport aViewSettingsElem(*this, XML_NAMESPACE_TABLE, sXML_view_settings, sal_True, sal_True);
     if (pChangeTrackingExportHelper)
         pChangeTrackingExportHelper->WriteChangeViewSettings();
+    ScModelObj* pDocObj = ScModelObj::getImplementation( xModel );
+    if (pDocObj)
+    {
+        SvEmbeddedObject* pEmbeddedObj = pDocObj->GetEmbeddedObject();
+        if (pEmbeddedObj)
+            XMLVisAreaExport aVisAreaExport(*this, sXML_embedded_visible_area, pEmbeddedObj->GetVisArea(), pEmbeddedObj->GetMapUnit());
+    }
 }
 
 void ScXMLExport::_ExportFontDecls()
