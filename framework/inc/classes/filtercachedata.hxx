@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercachedata.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: as $ $Date: 2002-04-03 10:20:30 $
+ *  last change: $Author: as $ $Date: 2002-04-04 09:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -831,7 +831,7 @@ class DataContainer
         PerformanceHash         m_aFastLoaderCache          ;     /// hold all registered loader services for a special file type
         PerformanceHash         m_aFastContentHandlerCache  ;     /// hold all registered content handler services for a special file type
         PerformanceHash         m_aFastProtocolHandlerCache ;     /// hold all registered protocol handler services for a special protocol pattern
-        PreferredHash           m_aPreferredTypesCache      ;     /// assignment of extensions to preferred types for this ~
+        PreferredHash           m_aPreferredTypesCache      ;     /// assignment of extensions to preferred types for it
         Detector                m_aDefaultDetector          ;     /// informations about our default deep detection service
         Loader                  m_aGenericLoader            ;     /// informations about our default frame loader
         ::rtl::OUString         m_sLocale                   ;     /// current set locale of configuration to handle right UIName from set of all UINames!
