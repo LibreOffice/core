@@ -509,26 +509,11 @@ Sub InitializeProgressPage(oDialog as Object)
 End Sub
 
 
-Sub GetFolderName(aEvent as Object)
-Dim oFolderDialog
-Dim iAccept as Integer
-Dim sPath as String
-Dim InitPath as String
+Sub TakoverFolderName(aEvent as Object)
 Dim RefControlName as String
 Dim oRefControl
-	oFolderDialog = CreateUnoService(&quot;com.sun.star.ui.dialogs.FolderPicker&quot;)
 	RefControlName = aEvent.Source.Model.Tag
 	oRefControl = ImportDialogArea.GetControl(RefControlName)
-	InitPath = ConvertToUrl(oRefControl.Model.Text)
-	If oUcb.Exists(InitPath) Then
-		oFolderDialog.SetDisplayDirectory(InitPath)
-	End If
-	iAccept = oFolderDialog.Execute()
-	If iAccept = 1 Then
-		sPath = oFolderDialog.GetDisplayDirectory()
-		If oUcb.Exists(sPath) Then
-			oRefControl.Text = ConvertFromUrl(sPath)
-		End If
-	End If
+	GetFolderName(oRefControl.Model)
 End Sub
 </script:module>
