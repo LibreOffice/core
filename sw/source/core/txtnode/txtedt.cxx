@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 13:43:05 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 
@@ -582,6 +581,11 @@ BOOL SwScanner::NextWord()
 
     // first we have to skip some whitespace characters
     const XubString& rText = rNode.GetTxt();
+    Boundary aBound;
+
+    while ( true )
+    {
+
     while ( nBegin < rText.Len() &&
             lcl_IsSkippableWhiteSpace( rText.GetChar( nBegin ) ) )
         ++nBegin;
@@ -599,12 +603,20 @@ BOOL SwScanner::NextWord()
     }
 
     // get the word boundaries
-    Boundary aBound = pBreakIt->xBreak->getWordBoundary( rText, nBegin,
+    aBound = pBreakIt->xBreak->getWordBoundary( rText, nBegin,
             pBreakIt->GetLocale( aCurrLang ), nWordType, sal_True );
 
     //no word boundaries could be found
     if(aBound.endPos == aBound.startPos)
         return FALSE;
+
+    if( nBegin == aBound.endPos )
+        ++nBegin;
+    else
+        break;
+
+    } // end while( true )
+
 
     // we have to differenciate between these cases:
     if ( aBound.startPos <= nBegin )
