@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strimp.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-13 17:05:30 $
+ *  last change: $Author: er $ $Date: 2002-10-30 11:39:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,7 @@ sal_Int32 rtl_ImplFloatToString( sal_Char* pStr, float f )
      * (like in Java Ctor FloatingDecimal( float f ) ) */
     sal_uInt32 nFBits       = *(sal_uInt32*)(&f);
     sal_uInt32 nBinExp      = (sal_uInt32)((nFBits & FLOAT_EXPMASK) >> FLOAT_EXPSHIFT);
-    sal_uInt32 nFractBits   = nFractBits & FLOAT_FRACTMASK;
+    sal_uInt32 nFractBits   = nFBits & FLOAT_FRACTMASK;
     if ( nBinExp == (sal_uInt32)(FLOAT_EXPMASK>>FLOAT_EXPSHIFT) )
     {
         if ( !nFractBits )
