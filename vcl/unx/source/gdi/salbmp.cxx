@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:59:43 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,8 @@
 #ifndef _SV_SALDISP_HXX
 #include <saldisp.hxx>
 #endif
-#ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#ifndef _SV_SALGDI_H
+#include <salgdi.h>
 #endif
 #ifndef _SV_SALBMP_H
 #include <salbmp.h>
@@ -210,7 +210,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( Drawable aDrawable,
 
     if( aDrawable && nWidth && nHeight && nDrawableDepth )
     {
-        SalDisplay* pSalDisp = GetSalData()->GetCurDisp();
+        SalDisplay* pSalDisp = GetSalData()->GetDisplay();
         SalXLib*    pXLib = pSalDisp->GetXLib();
         Display*    pXDisp = pSalDisp->GetDisplay();
 
@@ -685,7 +685,7 @@ void X11SalBitmap::ImplDraw( Drawable aDrawable, long nDrawableDepth,
             aTwoRect.mnSrcHeight = aTwoRect.mnDestHeight = aSize.Height();
         }
 
-        XImage* pImage = ImplCreateXImage( GetSalData()->GetCurDisp(),
+        XImage* pImage = ImplCreateXImage( GetSalData()->GetDisplay(),
                 nDrawableDepth, aTwoRect );
 
         if( pImage )
@@ -856,7 +856,7 @@ ImplSalDDB::ImplSalDDB(
     mnDepth     ( pImage->depth )
 {
 #if !defined(_USE_PRINT_EXTENSION_)
-    SalDisplay* pSalDisp = GetSalData()->GetCurDisp();
+    SalDisplay* pSalDisp = GetSalData()->GetDisplay();
     Display*    pXDisp = pSalDisp->GetDisplay();
 #else
     Display*    pXDisp = pDisplay->GetDisplay();
@@ -931,7 +931,7 @@ ImplSalDDB::ImplSalDDB(
     mnDepth( nDrawableDepth )
 {
 #if !defined(_USE_PRINT_EXTENSION_)
-    SalDisplay* pSalDisp = GetSalData()->GetCurDisp();
+    SalDisplay* pSalDisp = GetSalData()->GetDisplay();
     Display*    pXDisp = pSalDisp->GetDisplay();
 #else
     Display*    pXDisp = pDisplay->GetDisplay();
@@ -972,7 +972,7 @@ ImplSalDDB::ImplSalDDB(
 ImplSalDDB::~ImplSalDDB()
 {
     if( maPixmap && ImplGetSVData() )
-        XFreePixmap( GetSalData()->GetCurDisp()->GetDisplay(), maPixmap );
+        XFreePixmap( GetSalData()->GetDisplay()->GetDisplay(), maPixmap );
 }
 
 // -----------------------------------------------------------------------------
@@ -1037,7 +1037,7 @@ void ImplSalDDB::ImplDraw(
                            long nDestX, long nDestY, const GC& rGC )
 {
 #if !defined(_USE_PRINT_EXTENSION_)
-    SalDisplay* pSalDisp = GetSalData()->GetCurDisp();
+    SalDisplay* pSalDisp = GetSalData()->GetDisplay();
     Display*    pXDisp = pSalDisp->GetDisplay();
 #else
     Display*    pXDisp = pDisplay->GetDisplay();
@@ -1050,18 +1050,10 @@ void ImplSalDDB::ImplDraw(
     }
     else
     {
-        if( nDestWidth > SAL_DRAWPIXMAP_MAX_EXT )
-        {
-            // !!! Broken XCopyArea
-            XCopyArea( pXDisp, aSrcDrawable, aDstDrawable, rGC,
-                       nSrcX, nSrcY, nDestWidth, nDestHeight, nDestX, nDestY );
-        }
-        else
-        {
-            XCopyArea( pXDisp, aSrcDrawable, aDstDrawable, rGC,
-                       nSrcX, nSrcY, nDestWidth, nDestHeight, nDestX, nDestY );
-        }
+        XCopyArea( pXDisp, aSrcDrawable, aDstDrawable, rGC,
+                   nSrcX, nSrcY, nDestWidth, nDestHeight, nDestX, nDestY );
     }
+    X11SalGraphics::YieldGraphicsExpose( pXDisp, NULL, aDstDrawable );
 }
 
 // ----------------------
