@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-27 16:04:33 $
+ *  last change: $Author: cmc $ $Date: 2002-06-28 08:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,8 +117,6 @@ struct SprmInfo
     sal_uInt16 nId;         //A ww8 sprm is hardcoded as 16bits
     int nLen : 6;
     int nVari : 2;
-
-    enum SprmType {L_FIX=0, L_VAR=1, L_VAR2=2};
 };
 
 class wwSprmParser
@@ -136,6 +134,8 @@ private:
 
     int CountSprms(const sal_uInt8 * pSp, long nSprmSiz,
         const SvUShortsSort* pIgnoreSprms) const;
+
+    enum SprmType {L_FIX=0, L_VAR=1, L_VAR2=2};
 public:
     //7- ids are very different to 8+ ones
     wwSprmParser(int nVersion);
