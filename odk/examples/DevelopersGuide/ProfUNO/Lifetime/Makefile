@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:28:17 $
+#  last change: $Author: rt $ $Date: 2005-01-31 16:49:55 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -99,7 +99,7 @@ $(OUT_COMP_CLASS)/%.class : %.java
 
 $(GENHPPFILES) :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(DKREGISTRYNAME)
+	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(OFFICE_TYPE_LIBRARY)
 
 $(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(GENHPPFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
