@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:24:49 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:33:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1400,11 +1400,15 @@ SwFlyList *SwTxtFly::InitFlyList()
             SdrObject *pO = (*pSorted)[ i ];
             const SwRect aBound( GetBoundRect( pO ) );
 
-            if( nRight < (aBound.*fnRect->fnGetLeft)() ||
-                (*fnRect->fnYDiff)( (aRect.*fnRect->fnGetTop)(),
-                                    (aBound.*fnRect->fnGetBottom)() ) > 0 ||
-                nLeft > (aBound.*fnRect->fnGetRight)() )
+            // OD 2004-01-15 #110582# - do not consider hidden objects
+            if ( !pCurrFrm->GetTxtNode()->GetDoc()->IsVisibleLayerId( pO->GetLayer() ) ||
+                 nRight < (aBound.*fnRect->fnGetLeft)() ||
+                 (*fnRect->fnYDiff)( (aRect.*fnRect->fnGetTop)(),
+                                     (aBound.*fnRect->fnGetBottom)() ) > 0 ||
+                 nLeft > (aBound.*fnRect->fnGetRight)() )
+            {
                 continue;
+            }
 
             if( GetTop( pO, pCurrFrm->IsInFtn(),
                         0 != pCurrFrm->FindFooterOrHeader() ) )
