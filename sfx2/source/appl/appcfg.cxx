@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 16:26:52 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1451,7 +1451,7 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, FASTBOOL bSync
     }
 
     // load on demand
-    pAppData_Impl->pEventConfig->GetAppEventConfig_Impl();
+//  pAppData_Impl->pEventConfig->GetAppEventConfig_Impl();
 
     //if ( bSynchron )
     {
