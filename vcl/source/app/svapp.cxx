@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-11 15:52:21 $
+ *  last change: $Author: mt $ $Date: 2001-11-27 09:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2026,4 +2026,10 @@ void Application::WaitForClientConnect()
     }
 #endif
 }
+
+BOOL Application::IsAccessibilityEnabled()
+{
+    return FALSE;
+}
+
 
