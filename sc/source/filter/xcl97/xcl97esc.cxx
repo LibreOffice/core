@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:48:28 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,10 @@
 #endif
 
 #include <sot/exchange.hxx>
+
+#ifndef SC_XEESCHER_HXX
+#include "xeescher.hxx"
+#endif
 
 #include "global.hxx"
 #include "document.hxx"
