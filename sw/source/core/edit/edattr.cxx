@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:18 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 12:29:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HDL_
+#include <com/sun/star/text/ScriptType.hdl>
+#endif
 
 #ifndef _TXATBASE_HXX //autogen
 #include <txatbase.hxx>
@@ -115,7 +118,14 @@
 #ifndef _CNTFRM_HXX
 #include <cntfrm.hxx>
 #endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
+#ifndef _SCRPMTCH_HXX
+#include <scrpmtch.hxx>
+#endif
 
+using namespace ::com::sun::star::text;
 
 /*************************************
  * harte Formatierung (Attribute)
@@ -440,5 +450,247 @@ void SwEditShell::MoveLeftMargin( BOOL bRight, BOOL bModulus )
     EndAllAction();
 }
 
+
+inline USHORT lcl_SetScriptFlags( USHORT nType )
+{
+    USHORT nRet;
+       switch( nType )
+    {
+    case ScriptType::LATIN:     nRet = SCRIPTTYPE_LATIN;    break;
+    case ScriptType::ASIAN:     nRet = SCRIPTTYPE_ASIAN;    break;
+    case ScriptType::COMPLEX:   nRet = SCRIPTTYPE_COMPLEX;  break;
+    default: nRet = 0;
+    }
+    return nRet;
+}
+
+// returns the scripttpye of the selection
+USHORT SwEditShell::GetScriptType() const
+{
+    USHORT nRet = SCRIPTTYPE_NONE;
+    if( pBreakIt->xBreak.is() )
+    {
+        FOREACHPAM_START(this)
+
+            const SwPosition *pStt = PCURCRSR->Start(),
+                             *pEnd = pStt == PCURCRSR->GetMark()
+                                    ? PCURCRSR->GetPoint()
+                                    : PCURCRSR->GetMark();
+            if( pStt == pEnd || *pStt == *pEnd )
+            {
+                if( pStt->nNode.GetNode().IsTxtNode() )
+                {
+                    const String& rTxt = pStt->nNode.GetNode().
+                                                    GetTxtNode()->GetTxt();
+                    nRet |= lcl_SetScriptFlags( pBreakIt->xBreak->
+                        getScriptType( rTxt, pStt->nContent.GetIndex() ));
+                }
+            }
+            else
+            {
+                ULONG nEnd = pEnd->nNode.GetIndex();
+                SwNodeIndex aIdx( pStt->nNode );
+                for( ; aIdx.GetIndex() <= nEnd; aIdx++ )
+                    if( aIdx.GetNode().IsTxtNode() )
+                    {
+                        const String& rTxt = aIdx.GetNode().GetTxtNode()->GetTxt();
+                        xub_StrLen nChg = aIdx == pStt->nNode
+                                                ? pStt->nContent.GetIndex()
+                                                : 0,
+                                    nLen = aIdx == nEnd
+                                                ? pEnd->nContent.GetIndex()
+                                                : rTxt.Len();
+
+                        USHORT nScript = pBreakIt->xBreak->getScriptType(
+                                                                rTxt, nChg );
+                        if( ScriptType::WEAK == nScript )
+                            nChg = pBreakIt->xBreak->endOfScript(
+                                                        rTxt, nChg, nScript );
+
+                        while( nChg < nLen )
+                        {
+                            nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
+                            nRet |= lcl_SetScriptFlags( nScript );
+                            if( (SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN |
+                                SCRIPTTYPE_COMPLEX) == nRet )
+                                break;
+                            nChg = pBreakIt->xBreak->endOfScript(
+                                                        rTxt, nChg, nScript );
+                        }
+                        if( (SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN |
+                                SCRIPTTYPE_COMPLEX) == nRet )
+                            break;
+                    }
+            }
+            if( (SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN |
+                                SCRIPTTYPE_COMPLEX) == nRet )
+                break;
+
+        FOREACHPAM_END()
+    }
+    return nRet;
+}
+
+
+GetLatinAsianComplexAttr::GetLatinAsianComplexAttr( USHORT nWhich )
+    : nWhId( nWhich ), pSet( 0 )
+{
+    Init();
+}
+
+GetLatinAsianComplexAttr::GetLatinAsianComplexAttr( USHORT nWhich,
+                                                    SwEditShell& rSh )
+    : nWhId( nWhich )
+{
+    Init();
+    pSet = new SfxItemSet( rSh.GetAttrPool(), nWhId, nWhId,
+                                        nCJKWhId, nCJKWhId,
+                                        nCTLWhId, nCTLWhId,
+                                        0 );
+    rSh.GetAttr( *pSet );
+}
+GetLatinAsianComplexAttr::~GetLatinAsianComplexAttr()
+{
+    delete pSet;
+}
+
+void GetLatinAsianComplexAttr::Init()
+{
+    switch( nWhId )
+    {
+    case RES_CHRATR_FONT:
+        nCJKWhId = RES_CHRATR_CJK_FONT;
+        nCTLWhId = RES_CHRATR_CTL_FONT;
+        break;
+    case RES_CHRATR_FONTSIZE:
+        nCJKWhId = RES_CHRATR_CJK_FONTSIZE;
+        nCTLWhId = RES_CHRATR_CTL_FONTSIZE;
+        break;
+    case RES_CHRATR_POSTURE:
+        nCJKWhId = RES_CHRATR_CJK_POSTURE;
+        nCTLWhId = RES_CHRATR_CTL_POSTURE;
+        break;
+    case RES_CHRATR_WEIGHT:
+        nCJKWhId = RES_CHRATR_CJK_WEIGHT;
+        nCTLWhId = RES_CHRATR_CTL_WEIGHT;
+        break;
+    case RES_CHRATR_LANGUAGE:
+        nCJKWhId = RES_CHRATR_CJK_LANGUAGE;
+        nCTLWhId = RES_CHRATR_CTL_LANGUAGE;
+        break;
+
+    default:
+        ASSERT( !this, "wrong WhichId for this class" );
+        nWhId = 0;
+    }
+}
+
+
+const SfxItemSet* GetLatinAsianComplexAttr::GetItemSet( USHORT nScriptType,
+                                                const SfxItemSet* pGetSet )
+{
+    if( !pGetSet )
+        pGetSet = pSet;
+
+    const USHORT nArrLen = 3;
+    struct {
+        const SfxPoolItem* pItem;
+        USHORT nWhichId, nClearId;
+    } aItemArr[ nArrLen ] = {
+        { 0, nWhId, nWhId },
+        { 0, nCJKWhId, nCJKWhId },
+        { 0, nCTLWhId, nCTLWhId }
+    };
+
+
+    for( USHORT nArrIdx = 0; nArrIdx < nArrLen; ++nArrIdx )
+    {
+        USHORT nWId = aItemArr[ nArrIdx ].nWhichId;
+        SfxItemState eState = pGetSet->GetItemState( nWId, FALSE,
+                                            &aItemArr[ nArrIdx ].pItem );
+        if( SFX_ITEM_DONTCARE == eState )
+            aItemArr[ nArrIdx ].pItem = 0;
+        else if( SFX_ITEM_SET != eState || pGetSet != pSet )
+        {
+            pSet->Put( pSet->Get( nWId ));
+            aItemArr[ nArrIdx ].pItem = &pSet->Get( nWId );
+        }
+    }
+
+#define SCRIPTTYPE_NONE     0
+#define SCRIPTTYPE_LATIN    1
+#define SCRIPTTYPE_ASIAN    2
+#define SCRIPTTYPE_COMPLEX  4
+
+    switch( nScriptType )
+    {
+    case SCRIPTTYPE_NONE:       //no one valid -> match to latin
+    case SCRIPTTYPE_LATIN:
+        if( aItemArr[ 0 ].pItem )
+            aItemArr[ 0 ].nClearId = 0;
+        break;
+    case SCRIPTTYPE_ASIAN:
+        if( aItemArr[ 1 ].pItem )
+            aItemArr[ 1 ].nClearId = 0;
+        break;
+    case SCRIPTTYPE_COMPLEX:
+        if( aItemArr[ 2 ].pItem )
+            aItemArr[ 2 ].nClearId = 0;
+        break;
+
+    case SCRIPTTYPE_LATIN|SCRIPTTYPE_ASIAN:
+        if(  aItemArr[ 0 ].pItem &&  aItemArr[ 1 ].pItem &&
+            *aItemArr[ 0 ].pItem == *aItemArr[ 1 ].pItem )
+            aItemArr[ 0 ].nClearId = aItemArr[ 1 ].nClearId = 0;
+        break;
+
+    case SCRIPTTYPE_LATIN|SCRIPTTYPE_COMPLEX:
+        if(  aItemArr[ 0 ].pItem &&  aItemArr[ 2 ].pItem &&
+            *aItemArr[ 0 ].pItem == *aItemArr[ 2 ].pItem )
+            aItemArr[ 0 ].nClearId = aItemArr[ 2 ].nClearId = 0;
+        break;
+
+    case SCRIPTTYPE_ASIAN|SCRIPTTYPE_COMPLEX:
+        if(  aItemArr[ 1 ].pItem &&  aItemArr[ 2 ].pItem &&
+            *aItemArr[ 1 ].pItem == *aItemArr[ 2 ].pItem )
+            aItemArr[ 1 ].nClearId = aItemArr[ 2 ].nClearId = 0;
+        break;
+
+    case SCRIPTTYPE_LATIN|SCRIPTTYPE_ASIAN|SCRIPTTYPE_COMPLEX:
+        if( aItemArr[0].pItem && aItemArr[1].pItem && aItemArr[2].pItem &&
+            *aItemArr[0].pItem == *aItemArr[1].pItem &&
+            *aItemArr[0].pItem == *aItemArr[2].pItem )
+            aItemArr[0].nClearId = aItemArr[1].nClearId =
+                aItemArr[2].nClearId = 0;
+        break;
+    }
+
+    for( nArrIdx = 0; nArrIdx < nArrLen; ++nArrIdx )
+    {
+        USHORT nWId = aItemArr[nArrIdx].nClearId;
+        if( nWId )
+            pSet->ClearItem( nWId );
+    }
+    if( !pSet->Count() )
+        delete pSet, pSet = 0;
+
+    return pSet;
+}
+
+const SfxItemSet* GetLatinAsianComplexAttr::GetItemSet(USHORT nScriptType)
+{
+    return ( pSet && nWhId ) ? GetItemSet( nScriptType, 0 ) : 0;
+}
+
+const SfxItemSet* GetLatinAsianComplexAttr::GetItemSet( USHORT nScriptType,
+                                                const SfxItemSet& rSet )
+{
+    if( !pSet && nWhId )
+        pSet = new SfxItemSet( *rSet.GetPool(), nWhId, nWhId,
+                                        nCJKWhId, nCJKWhId,
+                                        nCTLWhId, nCTLWhId,
+                                        0 );
+    return nWhId ? GetItemSet( nScriptType, &rSet ) : 0;
+}
 
 
