@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XListBox.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:35 $
+ *  last change:$Date: 2003-09-08 10:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,10 @@
 package ifc.awt;
 
 
-import com.sun.star.awt.XListBox;
 import lib.MultiMethodTest;
 import lib.Status;
+
+import com.sun.star.awt.XListBox;
 
 /**
 * Testing <code>com.sun.star.awt.XListBox</code>
@@ -154,7 +155,6 @@ public class _XListBox extends MultiMethodTest {
     */
     public void _addItemListener() {
 
-        boolean result = true ;
         oObj.addItemListener(itemListener) ;
 
         tRes.tested("addItemListener()", Status.skipped(true)) ;
@@ -166,7 +166,6 @@ public class _XListBox extends MultiMethodTest {
     public void _removeItemListener() {
         requiredMethod("addItemListener()") ;
 
-        boolean result = true ;
         oObj.removeItemListener(itemListener) ;
 
         tRes.tested("removeItemListener()", Status.skipped(true)) ;
@@ -177,7 +176,6 @@ public class _XListBox extends MultiMethodTest {
     */
     public void _addActionListener() {
 
-        boolean result = true ;
         oObj.addActionListener(actionListener) ;
 
         tRes.tested("addActionListener()", Status.skipped(true)) ;
@@ -189,7 +187,6 @@ public class _XListBox extends MultiMethodTest {
     public void _removeActionListener() {
         requiredMethod("addActionListener()") ;
 
-        boolean result = true ;
         oObj.removeActionListener(actionListener) ;
 
         tRes.tested("removeActionListener()", Status.skipped(true)) ;
@@ -266,7 +263,6 @@ public class _XListBox extends MultiMethodTest {
     */
     public void _getItemCount() {
 
-        boolean result = true ;
         itemCount = oObj.getItemCount() ;
 
         tRes.tested("getItemCount()", itemCount >= 0) ;
@@ -549,5 +545,3 @@ public class _XListBox extends MultiMethodTest {
         tRes.tested("makeVisible()", result) ;
     }
 }
-
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XNumericField.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:34 $
+ *  last change:$Date: 2003-09-08 10:12:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,9 @@
 package ifc.awt;
 
 
-import com.sun.star.awt.XNumericField;
 import lib.MultiMethodTest;
+
+import com.sun.star.awt.XNumericField;
 
 /**
 * Testing <code>com.sun.star.awt.XNumericField</code>
@@ -112,7 +113,6 @@ public class _XNumericField extends MultiMethodTest {
     public void _setValue() {
         requiredMethod("getValue()");
 
-        boolean result = true ;
         oObj.setValue(val + 1.1) ;
 
         tRes.tested("setValue()", oObj.getValue() == val + 1.1) ;
