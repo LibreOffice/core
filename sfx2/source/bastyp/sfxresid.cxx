@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxresid.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:28 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,11 @@
 
 // -----------------------------------------------------------------------
 
+static ResMgr* pMgr=NULL;
+
 SfxResId::SfxResId( USHORT nId ) :
 
-    ResId( nId, SFX_APP()->GetSfxResManager() )
+    ResId( nId, GetResMgr() )
 {
 }
 
@@ -86,5 +88,19 @@ SfxSimpleResId::SfxSimpleResId(USHORT nID):
     m_sText( SFX_APP()->GetSimpleResManager()->ReadString(nID) )
 {}
 
+ResMgr* SfxResId::GetResMgr()
+{
+    if ( !pMgr )
+    {
+        pMgr = SfxApplication::CreateResManager("sfx");
+    }
+
+    return pMgr;
+}
+
+void SfxResId::DeleteResMgr()
+{
+    DELETEZ( pMgr );
+}
 
 
