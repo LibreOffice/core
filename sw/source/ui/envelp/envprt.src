@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:11:03 $
+ *  last change: $Author: jp $ $Date: 2001-06-29 16:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@ TabPage TP_ENV_PRT
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Umschlageinzug" ;
+        Text[ ENGLISH ] = "Envelope orientation" ;
     };
     ToolBox BOX_ALIGN
     {
@@ -273,6 +274,7 @@ TabPage TP_ENV_PRT
         Pos = MAP_APPFONT ( 3 , 103 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Aktueller Drucker" ;
+        Text[ ENGLISH ] = "Current printer" ;
     };
     FixedText TXT_PRINTER
     {
