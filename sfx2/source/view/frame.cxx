@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:36 $
+ *  last change: $Author: mba $ $Date: 2000-10-09 10:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,27 +342,23 @@ sal_Bool SfxFrame::DoClose()
         sal_Bool bRet = sal_True;
         SfxBindings* pBindings = NULL;
         if ( pImp->pCurrentViewFrame )
-        {
             pBindings = &pImp->pCurrentViewFrame->GetBindings();
-            bRet = pImp->pCurrentViewFrame->Close();
-        }
 
-        Reference < XFrame > xFrame( pImp-> xFrame );
-        if ( bRet )
+        // Bei internen Tasks m"ussen Controller und Tools abger"aumt werden
+        if ( pImp->pWorkWin )
         {
-            // Bei internen Tasks m"ussen Controller und Tools abger"aumt werden
-            if ( pImp->pWorkWin )
-            {
-                pImp->pWorkWin->DeleteControllers_Impl();
-                DELETEZ( pImp->pWorkWin );
-            }
-
-            if ( pImp->bOwnsBindings )
-                delete pBindings;
-
-            // now close frame; it will be deleted if this call is successful, so don't use any members after that!
-            bRet = Close();
+            pImp->pWorkWin->DeleteControllers_Impl();
+            DELETEZ( pImp->pWorkWin );
         }
+
+        bRet = pImp->pCurrentViewFrame->Close();
+
+        if ( pImp->bOwnsBindings )
+            delete pBindings;
+
+        // now close frame; it will be deleted if this call is successful, so don't use any members after that!
+        Reference < XFrame > xFrame( pImp-> xFrame );
+        bRet = Close();
 
         if ( bRet )
         {
@@ -1970,9 +1966,7 @@ SfxWorkWindow* SfxFrame::GetWorkWindow_Impl() const
     else if ( pParentFrame )
         return pParentFrame->GetWorkWindow_Impl();
     else
-    {
-        return SFX_APP()->GetWorkWindow_Impl( pImp->pCurrentViewFrame );
-    }
+        return NULL;
 }
 
 void SfxFrame::CreateWorkWindow_Impl()
@@ -2146,8 +2140,11 @@ void SfxFrame::Resize()
     if ( OwnsBindings_Impl() )
     {
         SfxWorkWindow *pWork = GetWorkWindow_Impl();
-        pWork->ArrangeChilds_Impl();
-        pWork->ShowChilds_Impl();
+        if ( pWork )
+        {
+            pWork->ArrangeChilds_Impl();
+            pWork->ShowChilds_Impl();
+        }
 
         // problem in presence of UIActive object: when the window is resized, but the toolspace border
         // remains the same, setting the toolspace border at the ContainerEnvironment doesn't force a
