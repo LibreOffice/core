@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-13 18:05:05 $
+ *  last change: $Author: er $ $Date: 2001-01-15 16:30:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -720,8 +720,12 @@ void ScHTMLExport::WriteTables()
         nEndRow = nEndRowFix = aRange.aEnd.Row();
         nEndTab = aRange.aEnd.Tab();
     }
+    USHORT nTableStrNum = 1;
     for ( USHORT nTab=nStartTab; nTab<=nEndTab; nTab++ )
     {
+        if ( !pDoc->IsVisible( nTab ) )
+            continue;   // for
+
         if ( bAll )
         {
             if ( !GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow ) )
@@ -731,7 +735,7 @@ void ScHTMLExport::WriteTables()
             {
                 aStrOut  = aStrTable;
                 aStrOut.AppendAscii( " " );
-                aStrOut += String::CreateFromInt32( nTab + 1 );
+                aStrOut += String::CreateFromInt32( nTableStrNum++ );
                 aStrOut.AppendAscii( ": " );
 
                 OUT_HR();
