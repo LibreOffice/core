@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-12 09:07:57 $
+ *  last change: $Author: pb $ $Date: 2001-01-24 14:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3749,14 +3749,13 @@ void SvxCharNamePage::ActivatePage( const SfxItemSet& rSet )
 
     // Effects
     nWhich = GetWhich( SID_ATTR_CHAR_CASEMAP );
-    SvxCaseMap eCaseMap = SVX_CASEMAP_END;
 
     if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
     {
         const SvxCaseMapItem& rItem = (const SvxCaseMapItem&)rSet.Get( nWhich );
-        eCaseMap = (SvxCaseMap)rItem.GetValue();
+        SvxCaseMap eCaseMap = (SvxCaseMap)rItem.GetValue();
+        rFont.SetCaseMap( eCaseMap );
     }
-    rFont.SetCaseMap( eCaseMap );
 
     // Outline
     nWhich = GetWhich( SID_ATTR_CHAR_CONTOUR );
@@ -4562,6 +4561,17 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
 
 void SvxCharEffectsPage::DisableControls( USHORT nDisable )
 {
+    if ( ( DISABLE_CASEMAP & nDisable ) == DISABLE_CASEMAP )
+    {
+        m_aEffectsFT.Disable();
+        m_aEffects2LB.Disable();
+    }
+
+    if ( ( DISABLE_WORDLINE & nDisable ) == DISABLE_WORDLINE )
+        m_aIndividualWordsBtn.Disable();
+
+    if ( ( DISABLE_BLINK & nDisable ) == DISABLE_BLINK )
+        m_aBlinkingBtn.Disable();
 }
 
 void SvxCharEffectsPage::EnableFlash()
