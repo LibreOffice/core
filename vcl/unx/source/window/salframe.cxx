@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-08 12:41:38 $
+ *  last change: $Author: pl $ $Date: 2002-05-08 13:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3281,6 +3281,7 @@ long SalFrameData::Dispatch( XEvent *pEvent )
 
                     if( hPresentationWindow != None )
                         XSetInputFocus( GetXDisplay(), GetShellWindow(), RevertToParent, CurrentTime );
+                    RestackChildren();
                 }
                 break;
 

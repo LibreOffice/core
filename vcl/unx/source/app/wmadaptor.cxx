@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 14:56:14 $
+ *  last change: $Author: pl $ $Date: 2002-05-08 13:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,13 +306,19 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
 #endif
             {
                 m_aWMName = String(RTL_CONSTASCII_USTRINGPARAM("Dtwm"));
+                m_bTransientBehaviour = false;
+#if 0
                 /*
                  *  Note: m_bTransientBehaviour was originally false in
                  *  in case of Dtwm. The transient behaviour can be restored
                  *  by settting the following X-resource in $HOME/.Xdefaults:
                  *  Dtwm*VCLSalFrame*secondariesOnTop: True
                  */
-                m_bTransientBehaviour = false;
+                /*
+                 * Sad but true: there are Dtwm versions, where the resource
+                 * database is set correctly but the transient behaviour is still
+                 * rotten. So back to always false.
+                 */
                 char* pDisplayResource = XResourceManagerString( m_pDisplay );
                 if( pDisplayResource )
                 {
@@ -333,6 +339,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
 #endif
                     XrmDestroyDatabase( aDB );
                 }
+#endif
             }
             XFree (pProperty);
         }
