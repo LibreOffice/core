@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdundogr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:58 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:22:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,16 @@
 #ifndef _CONTNR_HXX //autogen
 #include <tools/contnr.hxx>
 #endif
-#include "sdundo.hxx"
 
-class SdUndoGroup : public SdUndoAction
+#ifndef _SD_SDUNDO_HXX
+#include "sdundo.hxx"
+#endif
+
+#ifndef INCLUDED_SDDLLAPI_H
+#include "sddllapi.h"
+#endif
+
+class SD_DLLPUBLIC SdUndoGroup : public SdUndoAction
 {
     Container      aCtn;
 public:
