@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-09 21:16:27 $
+ *  last change: $Author: obo $ $Date: 2001-03-19 12:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,7 +515,7 @@ TabPage TP_FORMAT_TABLE
         Text [ finnish ] = "~Keski" ;
         Text [ danish ] = "Centreret" ;
         Text [ french ] = "~Centré" ;
-        Text [ swedish ] = "Centrerat" ;
+        Text [ swedish ] = "~Centrerat" ;
         Text [ dutch ] = "~Centreren" ;
         Text [ spanish ] = "~Centrado" ;
         Text [ english_us ] = "~Center" ;
@@ -814,17 +814,17 @@ TabPage TP_TABLE_COLUMN
         Text = "~Tabellenbreite anpassen" ;
         TabStop = TRUE ;
         Text [ italian ] = "Adatta larghezza tabella" ;
-        Text [ spanish ] = "Ajustar al ancho de la tabla" ;
+        Text [ spanish ] = "~Ajustar ancho de la tabla" ;
         Text [ french ] = "Adapter largeur de tableau" ;
         Text [ dutch ] = "Tabelbreedte aanpassen" ;
-        Text [ english_us ] = "Fit to table width" ;
-        Text [ swedish ] = "Anpassa tabellbredd" ;
+        Text [ english_us ] = "Adapt table ~width" ;
+        Text [ swedish ] = "Anpassa ~tabellbredd" ;
         Text [ danish ] = "Tilpas tabelbredde" ;
         Text [ portuguese_brazilian ] = "Tabellenbreite anpassen" ;
         Text [ portuguese ] = "Ajustar largura da tabela" ;
         Text[ chinese_simplified ] = "µ÷Õû±í¸ñ¿í¶È";
-        Text[ russian ] = "Âûğîâíÿòü øèğèíó òàáëèöû";
-        Text[ polish ] = "Dostosuj szerokoœæ tabeli";
+        Text[ russian ] = "Ñîãëàñîâàòü øèğèíó òàáëèöû";
+        Text[ polish ] = "Dopasuj szerokoœæ tabeli";
         Text[ japanese ] = "•\\‚Ì•‚Ö‚Ìì—p‚ğ”F‚ß‚é";
         Text[ chinese_traditional ] = "½Õ¾ãªí®æ¼e«×";
         Text[ arabic ] = "ãáÇÁãÉ áÚÑÖ ÇáÌÏæá";
@@ -840,19 +840,19 @@ TabPage TP_TABLE_COLUMN
         Text = "~Spalten gleichmäßig ändern" ;
         Text [ ENGLISH ] = "Adjust columns equally" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "Adjust columns proportionally" ;
+        Text [ english_us ] = "Ad~just columns proportionally" ;
         Text [ portuguese_brazilian ] = "Spalten proportional ändern" ;
-        Text [ swedish ] = "Ändra kolumner proportionellt" ;
+        Text [ swedish ] = "Ändra ~kolumner proportionellt" ;
         Text [ danish ] = "Modificer kolonner jævnt" ;
         Text [ italian ] = "Modifica colonne proporzionalmente" ;
-        Text [ spanish ] = "Modificar columnas proporcionalmente" ;
+        Text [ spanish ] = "~Modificar columnas proporcionalmente" ;
         Text [ french ] = "Modifier les colonnes proportionnellement" ;
         Text [ dutch ] = "Kolommen gelijkmatig wijzigen" ;
         Text [ portuguese ] = "Ajustar colunas proporcionalmente" ;
         Text[ chinese_simplified ] = "¶Ô³ÆµØµ÷ÕûÁĞ¿í";
         Text[ russian ] = "Èçìåíèòü ğàâíîìåğíî ñòîëáöû";
         Text[ polish ] = "Z~modyfikuj równomiernie kolumny";
-        Text[ japanese ] = "‹Ï“™—ñ•";
+        Text[ japanese ] = "‘S—ñ‚ğ“¯—l‚É’²®";
         Text[ chinese_traditional ] = "¹ïºÙ½Õ¾ãÄæ¼e";
         Text[ arabic ] = "ÊÛííÑ ÇáÃÚãÏÉ ÈÔßá ãÊßÇİÆ";
         Text[ greek ] = "Ïìïéüìïñöç áëëáãŞ ~óôçëşí";
@@ -1473,10 +1473,10 @@ TabPage TP_TABLE_TEXTFLOW
         Text = "~Oben" ;
         Text [ ENGLISH ] = "Top" ;
         Text [ english_us ] = "Top" ;
-        Text [ swedish ] = "Uppe" ;
+        Text [ swedish ] = "~Uppe" ;
         Text [ danish ] = "Top" ;
         Text [ italian ] = "Alto" ;
-        Text [ spanish ] = "Arriba" ;
+        Text [ spanish ] = "~Arriba" ;
         Text [ french ] = "En haut" ;
         Text [ dutch ] = "Boven" ;
         Text [ portuguese_brazilian ] = "Oben" ;
@@ -1499,17 +1499,17 @@ TabPage TP_TABLE_TEXTFLOW
         Text = "~Mitte" ;
         Text [ ENGLISH ] = "Middle" ;
         Text [ english_us ] = "~Centered" ;
-        Text [ swedish ] = "Mitten" ;
+        Text [ swedish ] = "~Mitten" ;
         Text [ danish ] = "Centreret" ;
         Text [ italian ] = "Centro" ;
-        Text [ spanish ] = "Centro" ;
+        Text [ spanish ] = "~Centro" ;
         Text [ french ] = "Milieu" ;
         Text [ dutch ] = "Midden" ;
         Text [ portuguese_brazilian ] = "Mitte" ;
         Text [ portuguese ] = "Centro" ;
         Text[ chinese_simplified ] = "ÖĞ";
         Text[ russian ] = "Ïî ñåğåäèíå";
-        Text[ polish ] = "Œrodek";
+        Text[ polish ] = "Poœrodku";
         Text[ japanese ] = "’†‰›";
         Text[ chinese_traditional ] = "¤¤";
         Text[ arabic ] = "ÇáæÓØ";
@@ -1525,17 +1525,17 @@ TabPage TP_TABLE_TEXTFLOW
         Text = "Unt~en" ;
         Text [ ENGLISH ] = "Bottom" ;
         Text [ english_us ] = "Bottom" ;
-        Text [ swedish ] = "Nere" ;
+        Text [ swedish ] = "~Nere" ;
         Text [ danish ] = "Nederst" ;
         Text [ italian ] = "Basso" ;
-        Text [ spanish ] = "Abajo" ;
+        Text [ spanish ] = "A~bajo" ;
         Text [ french ] = "En bas" ;
         Text [ dutch ] = "Beneden" ;
         Text [ portuguese_brazilian ] = "Unten" ;
         Text [ portuguese ] = "Em baixo" ;
         Text[ chinese_simplified ] = "ÏÂ";
         Text[ russian ] = "Âíèçó";
-        Text[ polish ] = "W dole";
+        Text[ polish ] = "Na dole";
         Text[ japanese ] = "‰º";
         Text[ chinese_traditional ] = "¤U";
         Text[ arabic ] = "ÃÓİá";
