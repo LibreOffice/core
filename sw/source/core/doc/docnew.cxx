@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-15 12:35:07 $
+ *  last change: $Author: tl $ $Date: 2002-10-16 08:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#include <paratr.hxx>
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
@@ -456,6 +457,13 @@ SwDoc::SwDoc() :
 
 SwDoc::~SwDoc()
 {
+    //!! needs to be done to destroy a possible SwFmtDrop format that may
+    //!! be connected to a char format which may not otherwise be removed
+    //!! and thus would leave a unremoved SwFmt object. (TL)
+    //!! (this is case is not possible via UI but via API...)
+    SwFmtDrop aDrop;
+    SetDefault(aDrop);
+
     aIdleTimer.Stop();  // den Idltimer abschalten
 
     delete pUnoCallBack, pUnoCallBack = 0;
