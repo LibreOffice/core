@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-02-26 13:43:00 $
+ *  last change: $Author: os $ $Date: 2001-03-02 15:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
-#ifndef _OFA_MISCCFG_HXX //autogen
+#ifndef _SFX_MISCCFG_HXX
 #include <sfx2/misccfg.hxx>
 #endif
 #ifndef _SVX_PRTQRY_HXX
@@ -610,7 +610,7 @@ void SetAppPrintOptions( ViewShell* pSh, BOOL bWeb )
                     SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
                     0 );
 
-            OfaMiscCfg* pMisc = SFX_APP()->GetMiscConfig();
+            SfxMiscCfg* pMisc = SFX_APP()->GetMiscConfig();
 
         if(bWeb)
             aSet.Put(SfxUInt16Item(SID_HTML_MODE,
@@ -620,7 +620,7 @@ void SetAppPrintOptions( ViewShell* pSh, BOOL bWeb )
         aSet.Put(aAddPrinterItem);
         aSet.Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC,
             (pMisc->IsPaperSizeWarning() ? SFX_PRINTER_CHG_SIZE : 0)   |
-            (pMisc->IsPaperBinWarning()  ? SFX_PRINTER_CHG_ORIENTATION : 0 )));
+            (pMisc->IsPaperOrientationWarning()  ? SFX_PRINTER_CHG_ORIENTATION : 0 )));
 
         pSh->GetPrt()->SetOptions( aSet );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 16:36:06 $
+ *  last change: $Author: os $ $Date: 2001-03-02 15:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ SO2_DECL_REF(SvLinkName)
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
 #endif
-#ifndef _OFA_MISCCFG_HXX
+#ifndef _SFX_MISCCFG_HXX
 #include <sfx2/misccfg.hxx>
 #endif
 #ifndef _SVX_TSTPITEM_HXX //autogen
