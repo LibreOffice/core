@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uri.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-04-23 09:15:58 $
+ *  last change: $Author: sb $ $Date: 2001-05-09 12:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,13 +265,15 @@ sal_Bool const * rtl_getUriCharClass(rtl_UriCharClass eCharClass)
     sequences already present in the input text are interpreted as characters
     of this charset.
 
-    @return
-    An encoded representation of the input text.
+    @param pResult
+    An encoded representation of the input text.  Must itself not be null, and
+    must point to either null or a valid string.
  */
-rtl_uString * rtl_uriEncode(rtl_uString * pText,
-                            sal_Bool const * pCharClass,
-                            rtl_UriEncodeMechanism eMechanism,
-                            rtl_TextEncoding eCharset)
+void rtl_uriEncode(rtl_uString * pText,
+                   sal_Bool const * pCharClass,
+                   rtl_UriEncodeMechanism eMechanism,
+                   rtl_TextEncoding eCharset,
+                   rtl_uString ** pResult)
     SAL_THROW_EXTERN_C();
 
 /** Decode (a part of) a URI.
@@ -295,12 +297,14 @@ rtl_uString * rtl_uriEncode(rtl_uString * pText,
     this parameter is ignored (and is best specified as
     RTL_TEXTENCODING_UTF8).
 
-    @return
-    A decoded representation of the input text.
+    @param pResult
+    A decoded representation of the input text.  Must itself not be null, and
+    must point to either null or a valid string.
  */
-rtl_uString * rtl_uriDecode(rtl_uString * pText,
-                            rtl_UriDecodeMechanism eMechanism,
-                            rtl_TextEncoding eCharset)
+void rtl_uriDecode(rtl_uString * pText,
+                   rtl_UriDecodeMechanism eMechanism,
+                   rtl_TextEncoding eCharset,
+                   rtl_uString ** pResult)
     SAL_THROW_EXTERN_C();
 
 #if defined __cplusplus
