@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FunctionHelper.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 16:38:04 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 12:09:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -797,7 +797,7 @@ public class FunctionHelper
     /**
      * Try to close the document without any saving of modifications.
      * We can try it only! Controller and/or model of this document
-     * can disagree with that. But mostly they doesn't ´do so.
+     * can disagree with that. But mostly they doesn't do so.
      *
      * @param   xDocument   document which should be clcosed
      */
