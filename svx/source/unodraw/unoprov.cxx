@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-23 21:33:15 $
+ *  last change: $Author: avy $ $Date: 2001-02-28 14:21:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -822,10 +822,14 @@ bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount
     int i;
     for( i = 0; i < nCount; i++ )
     {
-        const String aCompare( SVX_RESSTR( nSourceResIds + i ) );
+        USHORT nResId = (USHORT)(nSourceResIds + i);
+        const ResId aRes( SVX_RES(nResId));
+        const String aCompare( aRes );
         if( rString.Search( aCompare ) == 0 )
         {
-            rString.Replace( 0, aCompare.Len(), String( SVX_RESSTR( nDestResIds + i ) ) );
+            USHORT nNewResId = (USHORT)(nDestResIds + i);
+            ResId aNewRes( SVX_RES( nNewResId ));
+            rString.Replace( 0, aCompare.Len(), String( aNewRes ) );
             return TRUE;
         }
     }
@@ -899,10 +903,11 @@ bool SvxUnoConvertResourceString( USHORT* pSourceResIds, USHORT* pDestResIds, in
 
     for( i = 0; i < nCount; i++ )
     {
-        String aStrDefName( SVX_RESSTR( pSourceResIds[i] ) );
+        String aStrDefName = SVX_RESSTR( pSourceResIds[i] );
         if( rString.Search( aStrDefName ) == 0 )
         {
-            rString.Replace( 0, aStrDefName.Len(), SVX_RESSTR( pDestResIds[i] ) );
+            String aReplace = SVX_RESSTR( pDestResIds[i] );
+            rString.Replace( 0, aStrDefName.Len(), aReplace );
             return true;
         }
     }
