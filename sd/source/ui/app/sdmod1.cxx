@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-21 07:31:22 $
+ *  last change: $Author: cl $ $Date: 2001-03-27 16:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,19 +339,33 @@ void SdModule::Execute(SfxRequest& rReq)
 
                         if(aFileToOpen.Len() != 0)
                         {
-
                             SfxStringItem aFile( SID_FILE_NAME, aFileToOpen );
                             SfxStringItem aReferer( SID_REFERER, UniString() );
                             SfxStringItem aPassword( SID_PASSWORD, aPasswrd );
 
-                            SdDrawDocShell*             pDocShell = PTR_CAST(SdDrawDocShell, SfxObjectShell::Current());
-                            SdViewShell*                pViewShell = pDocShell ? pDocShell->GetViewShell() : NULL;
-                            const SfxObjectShellItem*   pRet = (SfxObjectShellItem*)
-                                                                 ( ( pViewShell && pViewShell->GetViewFrame() ) ?
-                                                                  pViewShell->GetViewFrame() :
-                                                                  SfxViewFrame::Current() )->
-                                                                GetDispatcher()->Execute( SID_OPENDOC,
-                                                                SFX_CALLMODE_SYNCHRON, &aFile, &aReferer, &aPassword, 0L );
+                            SFX_REQUEST_ARG( rReq, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
+                            if ( pFrmItem && pFrmItem->GetFrame())
+                            {
+                                SfxFrame* pFrame = pFrmItem->GetFrame();
+
+                                SfxAllItemSet aSet( *pSet->GetPool() );
+                                aSet.Put( aFile );
+                                aSet.Put( aReferer );
+                                aSet.Put( aPassword );
+
+                                const SfxPoolItem* pRet = pFrame->LoadDocumentSynchron( aSet );
+                            }
+                            else
+                            {
+                                SfxViewFrame* pFrame = SfxViewFrame::Current();
+                                DBG_ASSERT( pFrame, "The autopilot needs a frame to load a document!" );
+                                if( pFrame )
+                                {
+                                    SdDrawDocShell*             pDocShell = PTR_CAST(SdDrawDocShell, SfxObjectShell::Current());
+                                    SdViewShell*                pViewShell = pDocShell ? pDocShell->GetViewShell() : NULL;
+                                    const SfxObjectShellItem*   pRet = (SfxObjectShellItem*)pFrame->GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, &aFile, &aReferer, &aPassword, 0L );
+                                }
+                            }
                         }
 
                         pOpt->SetStartWithTemplate(bStartWithTemplate);
