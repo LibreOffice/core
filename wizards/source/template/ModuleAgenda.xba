@@ -78,9 +78,7 @@ End Sub
 
 &apos; Attention This Sub is also called from the correspondence stuff
 Sub DisposeDocument
-	TemplateDialog.EndExecute
-	oDocument = StarDesktop.ActiveFrame.Controller.Model
-	oDocument.Dispose
+  TemplateDialog.EndExecute
 End Sub
 
 
