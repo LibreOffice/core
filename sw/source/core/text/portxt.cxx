@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-28 12:42:19 $
+ *  last change: $Author: fme $ $Date: 2002-03-08 10:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,65 +118,105 @@ using namespace ::com::sun::star::i18n::ScriptType;
 
 /*************************************************************************
  *                          lcl_AddSpace
- * Returns if for position nPos in String rStr an extra space has to
- * be added (for justification ).
+ * Returns for how many characters an extra space has to be added
+ * (for justified alignment).
  *************************************************************************/
 
-sal_Bool lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString& rStr,
-                       const SwScriptInfo* pSI, const SwLinePortion& rPor,
-                       xub_StrLen nPos, xub_StrLen nEnd )
+USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
+                     const SwLinePortion& rPor )
 {
-    // The last character in front of a hole or margin portion
-    // does only need some extra space if it is a BLANK
-    if ( nPos + 1 == nEnd && ( ! rPor.GetPortion() ||
-                                 rPor.GetPortion()->IsHolePortion() ||
-                                 rPor.GetPortion()->InFixMargGrp() ) )
+    xub_StrLen nPos, nEnd;
+    const SwScriptInfo* pSI = 0;
+
+    if ( pStr )
     {
-        return CH_BLANK == rStr.GetChar( nPos );
+        // passing a string means we are inside a field
+        nPos = 0;
+        nEnd = pStr->Len();
+    }
+    else
+    {
+        nPos = rInf.GetIdx();
+        nEnd = rInf.GetIdx() + rPor.GetLen();
+        pStr = &rInf.GetTxt();
+        pSI = &((SwParaPortion*)rInf.GetParaPortion())->GetScriptInfo();
     }
 
-    if( CH_BLANK == rStr.GetChar( nPos ) )
-        return sal_True;
-
-    // pSI is only valid if we are looking for regular text in regular portions.
-    // If we examine text in fields, we have to use the break iterator directly.
+    USHORT nCnt = 0;
     BYTE nScript = 0;
-    for ( BYTE i = 0; i < 2 && nPos < rStr.Len(); ++i )
+
+    // If portion consists of Asian characters and language is not
+    // Korean, we add extra space to each character.
+    // first we get the script type
+    if ( pSI )
+        nScript = pSI->ScriptType( nPos );
+    else if ( pBreakIt->xBreak.is() )
+        nScript = (BYTE)pBreakIt->xBreak->getScriptType( *pStr, nPos );
+
+    // Now we check the language. Note: rInf.GetIdx() can differ from nPos,
+    // e.g., when rPor is a field portion. nPos referes to the string passed
+    // to the function, rInf.GetIdx() referes to the original string.
+    if ( nEnd > nPos && ASIAN == nScript &&
+         ( LANGUAGE_KOREAN !=
+           rInf.GetTxtFrm()->GetTxtNode()->GetLang( rInf.GetIdx(), 1, nScript ) ) )
     {
-        if ( pSI )
-            nScript = pSI->ScriptType( nPos );
-        else if ( pBreakIt->xBreak.is() )
-            nScript = (BYTE)pBreakIt->xBreak->getScriptType( rStr, nPos );
+        const SwLinePortion* pPor = rPor.GetPortion();
+        if ( pPor->IsKernPortion() )
+            pPor = pPor->GetPortion();
 
-        // this character is ASIAN, not KOREAN?
-        if( ASIAN == nScript &&
-            LANGUAGE_KOREAN != rInf.GetTxtFrm()->GetTxtNode()->GetLang( nPos ) )
-            return sal_True;
+        nCnt += nEnd - nPos;
 
-        if ( ! i )
-            ++nPos;
-        else
-        {
-            // next character is inside a field?
-            if ( CH_TXTATR_BREAKWORD == rStr.GetChar( nPos ) &&
-                rPor.GetPortion() && rPor.GetPortion()->InExpGrp() &&
-                pBreakIt->xBreak.is() )
-            {
-                sal_Bool bOldOnWin = rInf.OnWin();
-                ((SwTxtSizeInfo &)rInf).SetOnWin( sal_False );
+        if ( ! pPor || pPor->IsHolePortion() || pPor->InFixMargGrp() )
+            --nCnt;
 
-                XubString aStr( aEmptyStr );
-                rPor.GetPortion()->GetExpTxt( rInf, aStr );
-                ((SwTxtSizeInfo &)rInf).SetOnWin( bOldOnWin );
-
-                nScript = (BYTE)pBreakIt->xBreak->getScriptType( aStr, 0 );
-                if( ASIAN == nScript )
-                    return sal_True;
-            }
-        }
+        return nCnt;
     }
 
-    return sal_False;
+    // now we search for ordinary blanks
+    for ( ; nPos < nEnd; ++nPos )
+    {
+        if( CH_BLANK == pStr->GetChar( nPos ) )
+            ++nCnt;
+    }
+
+    // We still have to examine the next character:
+    // If the next character is ASIAN and not KOREAN we have
+    // to add an extra space
+    // nPos referes to the original string, even if a field string has
+    // been passed to this function
+    nPos = rInf.GetIdx() + rPor.GetLen();
+    if ( nPos < rInf.GetTxt().Len() )
+    {
+        BYTE nScript = 0;
+        const SwLinePortion* pPor = rPor.GetPortion();
+        if ( pPor->IsKernPortion() )
+            pPor = pPor->GetPortion();
+
+        if ( ! pBreakIt->xBreak.is() || ! pPor || pPor->InFixMargGrp() )
+            return nCnt;
+
+        // next character is inside a field?
+        if ( CH_TXTATR_BREAKWORD == rInf.GetChar( nPos ) && pPor->InExpGrp() )
+        {
+            sal_Bool bOldOnWin = rInf.OnWin();
+            ((SwTxtSizeInfo &)rInf).SetOnWin( sal_False );
+
+            XubString aStr( aEmptyStr );
+            pPor->GetExpTxt( rInf, aStr );
+            ((SwTxtSizeInfo &)rInf).SetOnWin( bOldOnWin );
+
+            nScript = (BYTE)pBreakIt->xBreak->getScriptType( aStr, 0 );
+        }
+        else
+            nScript = (BYTE)pBreakIt->xBreak->getScriptType( rInf.GetTxt(), nPos );
+
+        if( ASIAN == nScript &&
+            ( LANGUAGE_KOREAN !=
+            rInf.GetTxtFrm()->GetTxtNode()->GetLang( nPos, 1, nScript ) ) )
+            ++nCnt;
+    }
+
+    return nCnt;
 }
 
 #endif
@@ -580,33 +620,31 @@ xub_StrLen SwTxtPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf,
             XubString aStr( aEmptyStr );
             GetExpTxt( rInf, aStr );
             ((SwTxtSizeInfo &)rInf).SetOnWin( bOldOnWin );
+
+#ifdef VERTICAL_LAYOUT
+            nCnt += lcl_AddSpace( rInf, &aStr, *this );
+#else
             for ( nPos = 0; nPos < aStr.Len(); ++nPos )
             {
-#ifdef VERTICAL_LAYOUT
-                if ( lcl_AddSpace( rInf, aStr, 0, *this, nPos, aStr.Len() ) )
-#else
                 if( CH_BLANK == aStr.GetChar( nPos ) )
-#endif
                     ++nCnt;
             }
+#endif
         }
     }
     else if( !IsDropPortion() )
     {
 #ifdef VERTICAL_LAYOUT
-        const SwScriptInfo& rSI =
-               ((SwParaPortion*)rInf.GetParaPortion())->GetScriptInfo();
-#endif
+        nCnt += lcl_AddSpace( rInf, 0, *this );
+#else
         xub_StrLen nEndPos = rInf.GetIdx() + GetLen();
         for ( nPos = rInf.GetIdx(); nPos < nEndPos; ++nPos )
         {
-#ifdef VERTICAL_LAYOUT
-            if ( lcl_AddSpace( rInf, rInf.GetTxt(), &rSI, *this, nPos, nEndPos ) )
-#else
             if( CH_BLANK == rInf.GetChar( nPos ) )
-#endif
                 ++nCnt;
         }
+#endif
+
         nPos = GetLen();
     }
     rCharCnt += nPos;
@@ -630,15 +668,15 @@ long SwTxtPortion::CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) con
             ((SwTxtSizeInfo &)rInf).SetOnWin( bOldOnWin );
             if( nSpaceAdd > 0 )
             {
+#ifdef VERTICAL_LAYOUT
+                nCnt += lcl_AddSpace( rInf, &aStr, *this );
+#else
                 for ( xub_StrLen nPos = 0; nPos < aStr.Len(); ++nPos )
                 {
-#ifdef VERTICAL_LAYOUT
-                    if ( lcl_AddSpace( rInf, aStr, 0, *this, nPos, aStr.Len() ) )
-#else
                     if( CH_BLANK == aStr.GetChar( nPos ) )
-#endif
                         ++nCnt;
                 }
+#endif
             }
             else
             {
@@ -651,21 +689,18 @@ long SwTxtPortion::CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) con
     {
         if( nSpaceAdd > 0 )
         {
-#ifdef VERTICAL_LAYOUT
-            const SwScriptInfo& rSI =
-                ((SwParaPortion*)rInf.GetParaPortion())->GetScriptInfo();
-#endif
-            xub_StrLen nEndPos = rInf.GetIdx() + GetLen();
-            for ( xub_StrLen nPos = rInf.GetIdx(); nPos < nEndPos; ++nPos )
-            {
 
 #ifdef VERTICAL_LAYOUT
-                if ( lcl_AddSpace( rInf, rInf.GetTxt(), &rSI, *this, nPos, nEndPos ) )
+            nCnt += lcl_AddSpace( rInf, 0, *this );
 #else
+            xub_StrLen nEndPos = rInf.GetIdx() + GetLen();
+
+            for ( xub_StrLen nPos = rInf.GetIdx(); nPos < nEndPos; ++nPos )
+            {
                 if( CH_BLANK == rInf.GetChar( nPos ) )
-#endif
                     ++nCnt;
             }
+#endif
         }
         else
         {
