@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertySet.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2002-05-02 11:02:18 $
+ *  last change: $Author: jl $ $Date: 2002-05-03 14:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,7 @@ XMultiPropertySet
     /** Assigns an identifyer object to a Property object so that the identifyer
      *  can be obtained by {@link #getPropertyId getPropertyId} later on. The identifyer
      *  is used to specify a certain storage for the property's value. If you do not
-     *  override {@link #setPropertyValueNoBroadcast() setPropertyValueNoBroadcast} or {@link #getPropertyValue(Property)}
+     *  override {@link #setPropertyValueNoBroadcast setPropertyValueNoBroadcast} or {@link #getPropertyValue(Property)}
      *  then the argument <em>id</em> has to be a java.lang.String that equals the name of
      *  the member variable that holds the Property's value.
      *  Override this method if you want to implement your own mapping from Property objects  to ids or
@@ -811,7 +811,7 @@ XMultiPropertySet
      *  (see {@link #convertPropertyValue convertPropertyValue} Notification of property listeners
      *  does not occur in this method. By overriding this method one can take full control about how property values
      *  are stored. But then, the {@link #convertPropertyValue convertPropertyValue} and
-     *  {@link getPropertyValue(Property)} must be overridden too.
+     *  {@link #getPropertyValue(Property)} must be overridden too.
      *
      *  A Property with the MAYBEVOID attribute set, is stored as null value. Therefore the member variable must be
      *  an Object in order to make use of the property attribute. An exception is Any. The Any variable can be initially null, but
