@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bcaslot.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-// System - Includes -----------------------------------------------------
-
 #ifdef PCH
 #include "core_pch.hxx"
 #endif
@@ -68,9 +66,7 @@
 #pragma hdrstop
 
 #include <sfx2/objsh.hxx>
-#include <svtools/lstner.hxx>
-
-// INCLUDE ---------------------------------------------------------------
+#include <svtools/listener.hxx>
 
 #include "document.hxx"
 #include "brdcst.hxx"
@@ -80,81 +76,72 @@
 #include "refupdat.hxx"
 #include "table.hxx"
 
-// Anzahl der Slots je Dimension
-// muessen ganzzahlige Teiler von MAXCOL+1 bzw. MAXROW+1 sein
-#define BCA_SLOTS_COL 16
+// Number of slots per dimension
+// must be integer divisors of MAXCOLCOUNT respectively MAXROWCOUNT
+#define BCA_SLOTS_COL ((MAXCOLCOUNT_DEFINE) / 16)
+#if MAXROWCOUNT_DEFINE == 32000
 #define BCA_SLOTS_ROW 256
-#define BCA_SLOT_COLS ((MAXCOL+1) / BCA_SLOTS_COL)
-#define BCA_SLOT_ROWS ((MAXROW+1) / BCA_SLOTS_ROW)
-// vielfaches?
-#if (BCA_SLOT_COLS * BCA_SLOTS_COL) != (MAXCOL+1)
+#else
+#define BCA_SLOTS_ROW ((MAXROWCOUNT_DEFINE) / 128)
+#endif
+#define BCA_SLOT_COLS ((MAXCOLCOUNT_DEFINE) / BCA_SLOTS_COL)
+#define BCA_SLOT_ROWS ((MAXROWCOUNT_DEFINE) / BCA_SLOTS_ROW)
+// multiple?
+#if (BCA_SLOT_COLS * BCA_SLOTS_COL) != (MAXCOLCOUNT_DEFINE)
 #error bad BCA_SLOTS_COL value!
 #endif
-#if (BCA_SLOT_ROWS * BCA_SLOTS_ROW) != (MAXROW+1)
+#if (BCA_SLOT_ROWS * BCA_SLOTS_ROW) != (MAXROWCOUNT_DEFINE)
 #error bad BCA_SLOTS_ROW value!
 #endif
-// Groesse des Slot-Arrays
-#define BCA_SLOTS (BCA_SLOTS_COL * BCA_SLOTS_ROW)
-#if BCA_SLOTS > 16350
-#error BCA_SLOTS DOOMed!
+// size of slot array
+#define BCA_SLOTS_DEFINE (BCA_SLOTS_COL * BCA_SLOTS_ROW)
+// Arbitrary 2**31/8, assuming size_t can hold at least 2^31 values and
+// sizeof_ptr is at most 8 bytes. You'd probably doom your machine's memory
+// anyway, once you reached these values..
+#if BCA_SLOTS_DEFINE > 268435456
+#error BCA_SLOTS_DEFINE DOOMed!
 #endif
-
-DECLARE_LIST( ScBroadcastAreaList, ScBroadcastArea* );
+// type safe constant
+const SCSIZE BCA_SLOTS = BCA_SLOTS_DEFINE;
 
 // STATIC DATA -----------------------------------------------------------
 
-#ifdef erDEBUG
-ULONG erCountBCAInserts = 0;
-ULONG erCountBCAFinds = 0;
-#endif
-
-SV_IMPL_OP_PTRARR_SORT( ScBroadcastAreas, ScBroadcastAreaPtr );
 TYPEINIT1( ScHint, SfxSimpleHint );
 TYPEINIT1( ScAreaChangedHint, SfxHint );
 
 
 ScBroadcastAreaSlot::ScBroadcastAreaSlot( ScDocument* pDocument,
         ScBroadcastAreaSlotMachine* pBASMa ) :
+    aTmpSeekBroadcastArea( ScRange()),
     pDoc( pDocument ),
     pBASM( pBASMa )
 {
-    pBroadcastAreaTbl = new ScBroadcastAreas( BCA_INITGROWSIZE, BCA_INITGROWSIZE );
-    pTmpSeekBroadcastArea = new ScBroadcastArea( ScRange() );
 }
 
 
 ScBroadcastAreaSlot::~ScBroadcastAreaSlot()
 {
-    USHORT nPos = pBroadcastAreaTbl->Count();
-    if ( nPos )
+    for ( ScBroadcastAreas::iterator aIter = aBroadcastAreaTbl.begin();
+            aIter != aBroadcastAreaTbl.end(); ++aIter)
     {
-        ScBroadcastArea** ppArea =
-            ((ScBroadcastArea**) pBroadcastAreaTbl->GetData()) + nPos - 1;
-        for ( ; nPos-- >0; ppArea-- )
-        {
-            if ( !(*ppArea)->DecRef() )
-                delete *ppArea;
-        }
+        if (!(*aIter)->DecRef())
+            delete *aIter;
     }
-    delete pBroadcastAreaTbl;
-    delete pTmpSeekBroadcastArea;
 }
 
 
-// nur hier werden neue BroadcastAreas angelegt, wodurch keine doppelten entstehen.
-// Ist rpArea != NULL werden keine Listener gestartet sondern nur die Area
-// eingetragen und der RefCount erhoeht
+// Only here new ScBroadcastArea objects are created, prevention of dupes.
+// If rpArea != NULL then no listeners are startet, only the area is inserted
+// and the reference count increased.
 void ScBroadcastAreaSlot::StartListeningArea( const ScRange& rRange,
-        SfxListener* pListener, ScBroadcastArea*& rpArea
+        SvtListener* pListener, ScBroadcastArea*& rpArea
     )
 {
     DBG_ASSERT(pListener, "StartListeningArea: pListener Null");
     if ( pDoc->GetHardRecalcState() )
         return;
-    if ( (long)( (pBroadcastAreaTbl->Count() + 1 + BCA_INITGROWSIZE)
-            * sizeof(ScBroadcastArea*) ) >= USHRT_MAX
-        )
-    {
+    if (aBroadcastAreaTbl.size() >= aBroadcastAreaTbl.max_size())
+    {   // this is more hypothetical now, check existed for old SV_PTRARR_SORT
         if ( !pDoc->GetHardRecalcState() )
         {
             pDoc->SetHardRecalcState( 1 );
@@ -173,42 +160,50 @@ void ScBroadcastAreaSlot::StartListeningArea( const ScRange& rRange,
     if ( !rpArea )
     {
         rpArea = new ScBroadcastArea( rRange );
-        // meistens existiert die Area noch nicht, der Versuch sofort zu inserten
-        // erspart in diesen Faellen ein doppeltes Seek_Entry
-        if ( pBroadcastAreaTbl->Insert( rpArea ) )
+        // Most times the area doesn't exist yet, immediately trying to insert
+        // it saves an attempt to find it.
+        if (aBroadcastAreaTbl.insert( rpArea).second)
             rpArea->IncRef();
         else
         {
             delete rpArea;
-            rpArea = GetBroadcastArea( rRange );
+            ScBroadcastAreas::const_iterator aIter( FindBroadcastArea( rRange));
+            if (aIter != aBroadcastAreaTbl.end())
+                rpArea = *aIter;
+            else
+            {
+                DBG_ERRORFILE("BroadcastArea not inserted and not found?!?");
+                rpArea = 0;
+            }
         }
-        pListener->StartListening( *rpArea, TRUE );
+        if (rpArea)
+            pListener->StartListening( rpArea->GetBroadcaster() );
     }
     else
     {
-        if ( pBroadcastAreaTbl->Insert( rpArea ) )
-            rpArea->IncRef();
+        aBroadcastAreaTbl.insert( rpArea );
+        rpArea->IncRef();
     }
 }
 
 
-// Ist rpArea != NULL werden keine Listener gestopt sondern nur die Area
-// ausgetragen und der RefCount vermindert
+// If rpArea != NULL then no listeners are stopped, only the area is removed
+// and the reference count decreased.
 void ScBroadcastAreaSlot::EndListeningArea( const ScRange& rRange,
-        SfxListener* pListener, ScBroadcastArea*& rpArea
+        SvtListener* pListener, ScBroadcastArea*& rpArea
     )
 {
     DBG_ASSERT(pListener, "EndListeningArea: pListener Null");
     if ( !rpArea )
     {
-        USHORT nPos;
-        if ( (nPos = FindBroadcastArea( rRange )) == USHRT_MAX )
+        ScBroadcastAreas::iterator aIter( FindBroadcastArea( rRange));
+        if (aIter == aBroadcastAreaTbl.end())
             return;
-        rpArea = (*pBroadcastAreaTbl)[ nPos ];
-        pListener->EndListening( *rpArea );
-        if ( !rpArea->HasListeners() )
-        {   // wenn keiner mehr zuhoert ist die Area ueberfluessig
-            pBroadcastAreaTbl->Remove( nPos );
+        rpArea = *aIter;
+        pListener->EndListening( rpArea->GetBroadcaster() );
+        if ( !rpArea->GetBroadcaster().HasListeners() )
+        {   // if nobody is listening we can dispose it
+            aBroadcastAreaTbl.erase( aIter);
             if ( !rpArea->DecRef() )
             {
                 delete rpArea;
@@ -218,12 +213,12 @@ void ScBroadcastAreaSlot::EndListeningArea( const ScRange& rRange,
     }
     else
     {
-        if ( !rpArea->HasListeners() )
+        if ( !rpArea->GetBroadcaster().HasListeners() )
         {
-            USHORT nPos;
-            if ( (nPos = FindBroadcastArea( rRange )) == USHRT_MAX )
+            ScBroadcastAreas::iterator aIter( FindBroadcastArea( rRange));
+            if (aIter == aBroadcastAreaTbl.end())
                 return;
-            pBroadcastAreaTbl->Remove( nPos );
+            aBroadcastAreaTbl.erase( aIter);
             if ( !rpArea->DecRef() )
             {
                 delete rpArea;
@@ -234,52 +229,32 @@ void ScBroadcastAreaSlot::EndListeningArea( const ScRange& rRange,
 }
 
 
-USHORT ScBroadcastAreaSlot::FindBroadcastArea( const ScRange& rRange ) const
-{
-    USHORT nPos;
-    pTmpSeekBroadcastArea->UpdateRange( rRange );
-    if ( pBroadcastAreaTbl->Seek_Entry( pTmpSeekBroadcastArea, &nPos ) )
-        return nPos;
-    return USHRT_MAX;
-}
-
-
-ScBroadcastArea* ScBroadcastAreaSlot::GetBroadcastArea(
+ScBroadcastAreas::iterator ScBroadcastAreaSlot::FindBroadcastArea(
         const ScRange& rRange ) const
 {
-    USHORT nPos;
-    if ( (nPos = FindBroadcastArea( rRange )) != USHRT_MAX )
-        return (*pBroadcastAreaTbl)[ nPos ];
-    return 0;
+    aTmpSeekBroadcastArea.UpdateRange( rRange);
+    return aBroadcastAreaTbl.find( &aTmpSeekBroadcastArea);
 }
 
 
 BOOL ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint) const
 {
-    USHORT nCount = pBroadcastAreaTbl->Count();
-    if ( nCount == 0 )
+    if (aBroadcastAreaTbl.empty())
         return FALSE;
-    const ScBroadcastArea** ppArea =
-        (const ScBroadcastArea**) pBroadcastAreaTbl->GetData();
     BOOL bIsBroadcasted = FALSE;
-    // leider laesst sich nicht nach dem erstmoeglichen suchen
-    USHORT nPos = 0;
-    // den letztmoeglichen suchen, Seek_Entry liefert naechst groesseren
-    // oder freie Position wenn nicht gefunden
-    USHORT nPosEnd;
     const ScAddress& rAddress = rHint.GetAddress();
-    pTmpSeekBroadcastArea->UpdateRange( ScRange( rAddress,
-        ScAddress( MAXCOL, MAXROW, MAXTAB ) ) );
-    if ( !pBroadcastAreaTbl->Seek_Entry( pTmpSeekBroadcastArea, &nPosEnd )
-      && nPosEnd > 0 )
-        --nPosEnd;
-    for ( ; nPos <= nPosEnd; ++nPos, ppArea++ )
+    // Unfortunately we can't search for the first matching entry.
+    for ( ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin());
+            aIter != aBroadcastAreaTbl.end(); ++aIter)
     {
-        if ( ((ScBroadcastArea*)*ppArea)->In( rAddress ) )
+        const ScRange& rAreaRange = (*aIter)->GetRange();
+        if (rAreaRange.In( rAddress))
         {
-            ((ScBroadcastArea*)*ppArea)->Broadcast( rHint );
+            (*aIter)->GetBroadcaster().Broadcast( rHint);
             bIsBroadcasted = TRUE;
         }
+        else if (rAddress < rAreaRange.aStart)
+            break;  // for loop, only ranges greater than rAddress follow
     }
     return bIsBroadcasted;
 }
@@ -288,124 +263,108 @@ BOOL ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint) const
 BOOL ScBroadcastAreaSlot::AreaBroadcastInRange( const ScRange& rRange,
         const ScHint& rHint) const
 {
-    USHORT nCount = pBroadcastAreaTbl->Count();
-    if ( nCount == 0 )
+    if (aBroadcastAreaTbl.empty())
         return FALSE;
-    const ScBroadcastArea** ppArea =
-        (const ScBroadcastArea**) pBroadcastAreaTbl->GetData();
     BOOL bIsBroadcasted = FALSE;
-    // unfortunately we can't search for the first matching entry
-    USHORT nPos = 0;
-    // search the last matching entry, Seek_Entry returns the next being
-    // greater, or a free position if not found
-    USHORT nPosEnd;
-    pTmpSeekBroadcastArea->UpdateRange( rRange );
-    if ( !pBroadcastAreaTbl->Seek_Entry( pTmpSeekBroadcastArea, &nPosEnd ) &&
-            nPosEnd > 0 )
-        --nPosEnd;
-    for ( ; nPos <= nPosEnd; ++nPos, ppArea++ )
+    // Unfortunately we can't search for the first matching entry.
+    for ( ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin());
+            aIter != aBroadcastAreaTbl.end(); ++aIter)
     {
-        if ( ((ScBroadcastArea*)*ppArea)->Intersects( rRange ) )
+        const ScRange& rAreaRange = (*aIter)->GetRange();
+        if (rAreaRange.Intersects( rRange ))
         {
-            ((ScBroadcastArea*)*ppArea)->Broadcast( rHint );
+            (*aIter)->GetBroadcaster().Broadcast( rHint);
             bIsBroadcasted = TRUE;
         }
+        else if (rRange.aEnd < rAreaRange.aStart)
+            break;  // for loop, only ranges greater than end address follow
     }
     return bIsBroadcasted;
 }
 
 
-//  DelBroadcastAreasInRange wird unter Windows (16 Bit) kaputtoptimiert
-
-#ifdef WIN
-#pragma optimize("",off)
-#endif
-
 void ScBroadcastAreaSlot::DelBroadcastAreasInRange( const ScRange& rRange )
 {
-    ScBroadcastArea* pArea;
-    ScAddress aStart( rRange.aStart );
-    USHORT nPos = pBroadcastAreaTbl->Count();
-    const ScBroadcastArea** ppArea =
-        (const ScBroadcastArea**) pBroadcastAreaTbl->GetData() + nPos - 1;
-    for ( ; nPos-- >0; ppArea-- )
-    {   // rueckwaerts wg. Pointer-Aufrueckerei im Array
-        pArea = (ScBroadcastArea*)*ppArea;
-        if ( pArea->aStart < aStart )
-            return;     // davor nur noch niedrigere
-            // gesuchte muessen komplett innerhalb von rRange liegen
-        if ( rRange.In( pArea->aStart ) && rRange.In( pArea->aEnd ) )
+    if (aBroadcastAreaTbl.empty())
+        return;
+    // Searching for areas bound completely within rRange, so it's fine to
+    // exclude all upper left corners smaller than the upper left corner of
+    // rRange and get a lower bound.
+    aTmpSeekBroadcastArea.UpdateRange( ScRange( rRange.aStart));
+    // Search for lower bound, inclusive, not less than.
+    ScBroadcastAreas::iterator aIter( aBroadcastAreaTbl.lower_bound(
+                &aTmpSeekBroadcastArea));
+    for ( ; aIter != aBroadcastAreaTbl.end(); )
+    {
+        const ScRange& rAreaRange = (*aIter)->GetRange();
+        if (rRange.In( rAreaRange))
         {
-            pBroadcastAreaTbl->Remove( nPos );
-            ppArea = (const ScBroadcastArea**) pBroadcastAreaTbl->GetData()
-                + nPos;
-            if ( !pArea->DecRef() )
+            ScBroadcastArea* pArea = *aIter;
+            if (!pArea->DecRef())
                 delete pArea;
+            ScBroadcastAreas::iterator aDel( aIter);
+            ++aIter;
+            aBroadcastAreaTbl.erase( aDel);
         }
+        else if (rRange.aEnd < rAreaRange.aStart)
+            break;  // for loop, only ranges greater than end address follow
+        else
+            ++aIter;
     }
 }
 
-#ifdef WIN
-#pragma optimize("",on)
-#endif
 
 void ScBroadcastAreaSlot::UpdateRemove( UpdateRefMode eUpdateRefMode,
-        const ScRange& rRange, short nDx, short nDy, short nDz
+        const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz
     )
 {
-    USHORT nPos = pBroadcastAreaTbl->Count();
-    if ( nPos )
+    if (aBroadcastAreaTbl.empty())
+        return;
+
+    SCCOL nCol1, nCol2, theCol1, theCol2;
+    SCROW nRow1, nRow2, theRow1, theRow2;
+    SCTAB nTab1, nTab2, theTab1, theTab2;
+    nCol1 = rRange.aStart.Col();
+    nRow1 = rRange.aStart.Row();
+    nTab1 = rRange.aStart.Tab();
+    nCol2 = rRange.aEnd.Col();
+    nRow2 = rRange.aEnd.Row();
+    nTab2 = rRange.aEnd.Tab();
+    for ( ScBroadcastAreas::iterator aIter( aBroadcastAreaTbl.begin());
+            aIter != aBroadcastAreaTbl.end(); )
     {
-        USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
-        USHORT theCol1, theRow1, theTab1, theCol2, theRow2, theTab2;
-        nCol1 = rRange.aStart.Col();
-        nRow1 = rRange.aStart.Row();
-        nTab1 = rRange.aStart.Tab();
-        nCol2 = rRange.aEnd.Col();
-        nRow2 = rRange.aEnd.Row();
-        nTab2 = rRange.aEnd.Tab();
-        ScAddress aAdr;
-        const ScBroadcastArea** ppArea =
-            ((const ScBroadcastArea**) pBroadcastAreaTbl->GetData()) + nPos - 1;
-        for ( ; nPos-- >0; ppArea-- )
-        {   // rueckwaerts wg. Pointer-Aufrueckerei im Array
-            ScBroadcastArea* pArea = (ScBroadcastArea*) *ppArea;
-            if ( pArea->IsInUpdateChain() )
+        ScBroadcastArea* pArea = *aIter;
+        ScBroadcastAreas::iterator aDel( aIter);
+        ++aIter;
+        if ( pArea->IsInUpdateChain() )
+        {
+            aBroadcastAreaTbl.erase( aDel);
+            pArea->DecRef();
+        }
+        else
+        {
+            const ScAddress& rAdr1 = pArea->GetStart();
+            theCol1 = rAdr1.Col();
+            theRow1 = rAdr1.Row();
+            theTab1 = rAdr1.Tab();
+            const ScAddress& rAdr2 = pArea->GetEnd();
+            theCol2 = rAdr2.Col();
+            theRow2 = rAdr2.Row();
+            theTab2 = rAdr2.Tab();
+            if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
+                    nCol1,nRow1,nTab1, nCol2,nRow2,nTab2, nDx,nDy,nDz,
+                    theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 )
+                )
             {
-                pBroadcastAreaTbl->Remove( nPos );
-                // Remove kann pData veraendern
-                ppArea = (const ScBroadcastArea**)
-                    pBroadcastAreaTbl->GetData() + nPos;
+                aBroadcastAreaTbl.erase( aDel);
                 pArea->DecRef();
-            }
-            else
-            {
-                aAdr = pArea->GetStart();
-                theCol1 = aAdr.Col();
-                theRow1 = aAdr.Row();
-                theTab1 = aAdr.Tab();
-                aAdr = pArea->GetEnd();
-                theCol2 = aAdr.Col();
-                theRow2 = aAdr.Row();
-                theTab2 = aAdr.Tab();
-                if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
-                        nCol1,nRow1,nTab1, nCol2,nRow2,nTab2, nDx,nDy,nDz,
-                        theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 )
-                    )
-                {
-                    pBroadcastAreaTbl->Remove( nPos );
-                    // Remove kann pData veraendern
-                    ppArea = (const ScBroadcastArea**)
-                        pBroadcastAreaTbl->GetData() + nPos;
-                    pArea->DecRef();
-                    pArea->SetInUpdateChain( TRUE );
-                    ScBroadcastArea* pUC = pBASM->GetEOUpdateChain();
-                    if ( pUC )
-                        pUC->SetUpdateChainNext( pArea );
-                    else    // kein Ende kein Anfang
-                        pBASM->SetUpdateChain( pArea );
-                    pBASM->SetEOUpdateChain( pArea );
-                }
+                pArea->SetInUpdateChain( TRUE );
+                ScBroadcastArea* pUC = pBASM->GetEOUpdateChain();
+                if ( pUC )
+                    pUC->SetUpdateChainNext( pArea );
+                else    // no tail => no head
+                    pBASM->SetUpdateChain( pArea );
+                pBASM->SetEOUpdateChain( pArea );
             }
         }
     }
@@ -414,8 +373,8 @@ void ScBroadcastAreaSlot::UpdateRemove( UpdateRefMode eUpdateRefMode,
 
 void ScBroadcastAreaSlot::UpdateInsert( ScBroadcastArea* pArea )
 {
-    if ( pBroadcastAreaTbl->Insert( pArea ) )
-        pArea->IncRef();
+    aBroadcastAreaTbl.insert( pArea );
+    pArea->IncRef();
 }
 
 
@@ -423,8 +382,8 @@ void ScBroadcastAreaSlot::UpdateInsert( ScBroadcastArea* pArea )
 
 ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
         ScDocument* pDocument ) :
+    pBCAlways( NULL ),
     pDoc( pDocument ),
-    pBCAlwaysList( new ScBroadcastAreaList ),
     pUpdateChain( NULL ),
     pEOUpdateChain( NULL )
 {
@@ -435,95 +394,69 @@ ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
 
 ScBroadcastAreaSlotMachine::~ScBroadcastAreaSlotMachine()
 {
-
-    ScBroadcastAreaSlot** pp = ppSlots;
-    for ( USHORT j=0; j < BCA_SLOTS; ++j, ++pp )
+    for ( ScBroadcastAreaSlot** pp = ppSlots + BCA_SLOTS; --pp >= ppSlots; )
     {
         if ( *pp )
             delete *pp;
     }
     delete[] ppSlots;
 
-    for ( ScBroadcastArea* pBCA = pBCAlwaysList->First(); pBCA; pBCA = pBCAlwaysList->Next() )
-    {
-        delete pBCA;
-    }
-    delete pBCAlwaysList;
+    delete pBCAlways;
 }
 
 
-inline USHORT ScBroadcastAreaSlotMachine::ComputeSlotOffset(
+inline SCSIZE ScBroadcastAreaSlotMachine::ComputeSlotOffset(
         const ScAddress& rAddress ) const
 {
-    USHORT nRow = rAddress.Row();
-    USHORT nCol = rAddress.Col();
-    if ( nRow > MAXROW || nCol > MAXCOL )
+    SCROW nRow = rAddress.Row();
+    SCCOL nCol = rAddress.Col();
+    if ( !ValidRow(nRow) || !ValidCol(nCol) )
     {
         DBG_ASSERT( FALSE, "Row/Col ungueltig!" );
         return 0;
     }
     else
         return
-            nRow / BCA_SLOT_ROWS +
-            nCol / BCA_SLOT_COLS * BCA_SLOTS_ROW;
+            static_cast<SCSIZE>(nRow) / BCA_SLOT_ROWS +
+            static_cast<SCSIZE>(nCol) / BCA_SLOT_COLS * BCA_SLOTS_ROW;
 }
 
 
 void ScBroadcastAreaSlotMachine::ComputeAreaPoints( const ScRange& rRange,
-        USHORT& rStart, USHORT& rEnd, USHORT& rRowBreak
+        SCSIZE& rStart, SCSIZE& rEnd, SCSIZE& rRowBreak
     ) const
 {
     rStart = ComputeSlotOffset( rRange.aStart );
     rEnd = ComputeSlotOffset( rRange.aEnd );
-    // Anzahl Zeilen-Slots pro Spalte minus eins
+    // count of row slots per column minus one
     rRowBreak = ComputeSlotOffset(
         ScAddress( rRange.aStart.Col(), rRange.aEnd.Row(), 0 ) ) - rStart;
 }
 
 
 void ScBroadcastAreaSlotMachine::StartListeningArea( const ScRange& rRange,
-        SfxListener* pListener
+        SvtListener* pListener
     )
 {
     if ( rRange == BCA_LISTEN_ALWAYS  )
     {
-        ScBroadcastArea* pBCA;
-        if ( !pBCAlwaysList->Count() )
-        {
-            pBCA = new ScBroadcastArea( rRange );
-            pListener->StartListening( *pBCA, FALSE );  // kein PreventDupes
-            pBCAlwaysList->Insert( pBCA, LIST_APPEND );
-            return ;
-        }
-        ScBroadcastArea* pLast;
-        for ( pBCA = pBCAlwaysList->First(); pBCA; pBCA = pBCAlwaysList->Next() )
-        {
-            if ( pListener->IsListening( *pBCA ) )
-                return ;        // keine Dupes
-            pLast = pBCA;
-        }
-        pBCA = pLast;
-        //! ListenerArrays don't shrink!
-        if ( pBCA->GetListenerCount() > ((USHRT_MAX / 2) / sizeof(SfxBroadcaster*)) )
-        {   // Arrays nicht zu gross werden lassen
-            pBCA = new ScBroadcastArea( rRange );
-            pBCAlwaysList->Insert( pBCA, LIST_APPEND );
-        }
-        pListener->StartListening( *pBCA, FALSE );  // kein PreventDupes
+        if ( !pBCAlways )
+            pBCAlways = new SvtBroadcaster;
+        pListener->StartListening( *pBCAlways );
     }
     else
     {
-        USHORT nStart, nEnd, nRowBreak;
+        SCSIZE nStart, nEnd, nRowBreak;
         ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
-        USHORT nOff = nStart;
-        USHORT nBreak = nOff + nRowBreak;
+        SCSIZE nOff = nStart;
+        SCSIZE nBreak = nOff + nRowBreak;
         ScBroadcastAreaSlot** pp = ppSlots + nOff;
         ScBroadcastArea* pArea = NULL;
         while ( nOff <= nEnd )
         {
             if ( !*pp )
                 *pp = new ScBroadcastAreaSlot( pDoc, this );
-            // der erste erzeugt ggbf. die BroadcastArea
+            // the first call creates the ScBroadcastArea
             (*pp)->StartListeningArea( rRange, pListener, pArea );
             if ( nOff < nBreak )
             {
@@ -543,34 +476,28 @@ void ScBroadcastAreaSlotMachine::StartListeningArea( const ScRange& rRange,
 
 
 void ScBroadcastAreaSlotMachine::EndListeningArea( const ScRange& rRange,
-        SfxListener* pListener
+        SvtListener* pListener
     )
 {
     if ( rRange == BCA_LISTEN_ALWAYS  )
     {
-        if ( pBCAlwaysList->Count() )
+        DBG_ASSERT( pBCAlways, "ScBroadcastAreaSlotMachine::EndListeningArea: BCA_LISTEN_ALWAYS but none established");
+        if ( pBCAlways )
         {
-            for ( ScBroadcastArea* pBCA = pBCAlwaysList->First(); pBCA; pBCA = pBCAlwaysList->Next() )
+            pListener->EndListening( *pBCAlways);
+            if (!pBCAlways->HasListeners())
             {
-                // EndListening liefert FALSE wenn !IsListening, keine Dupes
-                if ( pListener->EndListening( *pBCA, FALSE ) )
-                {
-                    if ( !pBCA->HasListeners() )
-                    {
-                        pBCAlwaysList->Remove();
-                        delete pBCA;
-                    }
-                    return ;
-                }
+                delete pBCAlways;
+                pBCAlways = NULL;
             }
         }
     }
     else
     {
-        USHORT nStart, nEnd, nRowBreak;
+        SCSIZE nStart, nEnd, nRowBreak;
         ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
-        USHORT nOff = nStart;
-        USHORT nBreak = nOff + nRowBreak;
+        SCSIZE nOff = nStart;
+        SCSIZE nBreak = nOff + nRowBreak;
         ScBroadcastAreaSlot** pp = ppSlots + nOff;
         ScBroadcastArea* pArea = NULL;
         while ( nOff <= nEnd )
@@ -599,12 +526,9 @@ BOOL ScBroadcastAreaSlotMachine::AreaBroadcast( const ScHint& rHint ) const
     const ScAddress& rAddress = rHint.GetAddress();
     if ( rAddress == BCA_BRDCST_ALWAYS )
     {
-        if ( pBCAlwaysList->Count() )
+        if ( pBCAlways )
         {
-            for ( ScBroadcastArea* pBCA = pBCAlwaysList->First(); pBCA; pBCA = pBCAlwaysList->Next() )
-            {
-                pBCA->Broadcast( rHint );
-            }
+            pBCAlways->Broadcast( rHint );
             return TRUE;
         }
         else
@@ -625,10 +549,10 @@ BOOL ScBroadcastAreaSlotMachine::AreaBroadcastInRange( const ScRange& rRange,
         const ScHint& rHint ) const
 {
     BOOL bBroadcasted = FALSE;
-    USHORT nStart, nEnd, nRowBreak;
+    SCSIZE nStart, nEnd, nRowBreak;
     ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
-    USHORT nOff = nStart;
-    USHORT nBreak = nOff + nRowBreak;
+    SCSIZE nOff = nStart;
+    SCSIZE nBreak = nOff + nRowBreak;
     ScBroadcastAreaSlot** pp = ppSlots + nOff;
     while ( nOff <= nEnd )
     {
@@ -655,10 +579,10 @@ void ScBroadcastAreaSlotMachine::DelBroadcastAreasInRange(
         const ScRange& rRange
     )
 {
-    USHORT nStart, nEnd, nRowBreak;
+    SCSIZE nStart, nEnd, nRowBreak;
     ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
-    USHORT nOff = nStart;
-    USHORT nBreak = nOff + nRowBreak;
+    SCSIZE nOff = nStart;
+    SCSIZE nBreak = nOff + nRowBreak;
     ScBroadcastAreaSlot** pp = ppSlots + nOff;
     while ( nOff <= nEnd )
     {
@@ -680,17 +604,17 @@ void ScBroadcastAreaSlotMachine::DelBroadcastAreasInRange(
 }
 
 
-// alle Betroffenen austragen, verketten, Range anpassen, neu eintragen
+// for all affected: remove, chain, update range, insert
 void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
         UpdateRefMode eUpdateRefMode,
-        const ScRange& rRange, short nDx, short nDy, short nDz
+        const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz
     )
 {
-    USHORT nStart, nEnd, nRowBreak;
-    // Betroffene austragen und verketten
+    SCSIZE nStart, nEnd, nRowBreak;
+    // remove affected and put in chain
     ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
-    USHORT nOff = nStart;
-    USHORT nBreak = nOff + nRowBreak;
+    SCSIZE nOff = nStart;
+    SCSIZE nBreak = nOff + nRowBreak;
     ScBroadcastAreaSlot** pp = ppSlots + nOff;
     while ( nOff <= nEnd )
     {
@@ -709,9 +633,10 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
             nBreak = nOff + nRowBreak;
         }
     }
-    // Verkettung abarbeiten
-    USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
-    USHORT theCol1, theRow1, theTab1, theCol2, theRow2, theTab2;
+    // work off chain
+    SCCOL nCol1, nCol2, theCol1, theCol2;
+    SCROW nRow1, nRow2, theRow1, theRow2;
+    SCTAB nTab1, nTab2, theTab1, theTab2;
     nCol1 = rRange.aStart.Col();
     nRow1 = rRange.aStart.Row();
     nTab1 = rRange.aStart.Tab();
@@ -725,7 +650,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
         ScBroadcastArea* pArea = pUpdateChain;
         pUpdateChain = pArea->GetUpdateChainNext();
 
-        // Range anpassen
+        // update range
         aAdr = pArea->GetStart();
         theCol1 = aAdr.Col();
         theRow1 = aAdr.Row();
@@ -742,10 +667,10 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
             aRange = ScRange( ScAddress( theCol1,theRow1,theTab1 ),
                                 ScAddress( theCol2,theRow2,theTab2 ) );
             pArea->UpdateRange( aRange );
-            pArea->Broadcast( ScAreaChangedHint( aRange ) );    // fuer DDE
+            pArea->GetBroadcaster().Broadcast( ScAreaChangedHint( aRange ) );   // for DDE
         }
 
-        // in die Slots eintragen
+        // insert in slot
         ComputeAreaPoints( aRange, nStart, nEnd, nRowBreak );
         nOff = nStart;
         nBreak = nOff + nRowBreak;
@@ -768,7 +693,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
             }
         }
 
-        // Verkettung loesen
+        // unchain
         pArea->SetUpdateChainNext( NULL );
         pArea->SetInUpdateChain( FALSE );
     }
