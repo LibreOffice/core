@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-12 07:50:24 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,13 +524,13 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text = "Halb-/normalbreite Formen" ;
         Text [ English ] = "Match half/full width forms" ;
         Text[ english_us ] = "Match half/full-width forms";
-        Text[ portuguese ] = "Match half/full width forms";
+        Text[ portuguese ] = "Formas de meia-largura e largura normal";
         Text[ russian ] = "Íîğìàëüíûå/ïîëóøèğîêèå ôîğìû";
         Text[ greek ] = "Öüñìåò ìå êáíïíéêü/ìéóü ğëÜôïò";
         Text[ dutch ] = "Halve/normale breedte";
         Text[ french ] = "Formes de demi et pleine chasse";
         Text[ spanish ] = "Formas con ancho medio o normal";
-        Text[ italian ] = "Match half/full width forms";
+        Text[ italian ] = "Forme larghezza normale/dimezzata";
         Text[ danish ] = "Match half/full width forms";
         Text[ swedish ] = "Halv-/normalbreda former";
         Text[ polish ] = "Formy o zwyk³ej/o po³owie szerokoœci";
@@ -550,13 +550,13 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text = "Ähnl. Schreibweise (Jap.)" ;
         Text [ English ] = "Sounds like (Japanese)" ;
         Text[ english_us ] = "Sounds like (Japanese)";
-        Text[ portuguese ] = "Sounds like (Japanese)";
+        Text[ portuguese ] = "Ortografia semelhante (Japonês)";
         Text[ russian ] = "Ïîäîáíîå ïèñüìî (ÿïîíñêèé)";
         Text[ greek ] = "Ğáñüìïéá ãñáöŞ (Éáğùíİæéêá)";
         Text[ dutch ] = "Overeenkomstige schrijfwijze (Japans)";
         Text[ french ] = "Similarités japonaises";
         Text[ spanish ] = "Ortografía similar (Japonés)";
-        Text[ italian ] = "Sounds like (Japanese)";
+        Text[ italian ] = "Ortografia simile (giapponese)";
         Text[ danish ] = "Sounds like (Japanese)";
         Text[ swedish ] = "Likn. skrivsätt (japanska)";
         Text[ polish ] = "Podobna pisownia (Japoñski)";
@@ -682,7 +682,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_simplified ] = "±¸×¢(~N)";
         Text[ russian ] = "ïğèìå÷àíèÿõ";
         Text[ polish ] = "~notatkach";
-        Text[ japanese ] = "ÒÓ’ (~N)";
+        Text[ japanese ] = "É°Ä(~N)";
         Text[ chinese_traditional ] = "³Æµù(~N)";
         Text[ arabic ] = "ÇáãáÇÍÙÇÊ";
         Text[ greek ] = "Óçìåéşóåéò";
