@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentIndexParagraphStyles.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:44 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 /** provides access to the names of paragraph styles that are included
     in content indexes of user defined indexes. The element type is  sequence of string.
  */
-service DocumentIndexParagraphStyles
+published service DocumentIndexParagraphStyles
 {
     // DocMerge: empty anyway
     interface com::sun::star::container::XIndexReplace;
