@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-28 07:58:21 $
+ *  last change: $Author: aw $ $Date: 2001-04-19 16:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -812,18 +812,8 @@ void SdrAttrObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem
             pItem = ((XFillGradientItem*)pItem)->checkForUniqueItem( pModel );
             break;
         case XATTR_FILLFLOATTRANSPARENCE:
-            if( ((XFillFloatTransparenceItem*)pItem)->IsEnabled() )
-            {
-                pItem = ((XFillFloatTransparenceItem*)pItem)->checkForUniqueItem( pModel );
-            }
-            else
-            {
-                if( mpObjectItemSet )
-                    mpObjectItemSet->ClearItem( nWhich );
-
-                // do not set it at all
-                pItem = 0L;
-            }
+            // #85953# allow all kinds of XFillFloatTransparenceItem to be set
+            pItem = ((XFillFloatTransparenceItem*)pItem)->checkForUniqueItem( pModel );
             break;
         case XATTR_FILLHATCH:
             pItem = ((XFillHatchItem*)pItem)->checkForUniqueItem( pModel );
