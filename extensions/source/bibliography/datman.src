@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-22 20:17:32 $
+ *  last change: $Author: fs $ $Date: 2002-06-05 06:40:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ ModalDialog RID_DLG_MAPPING
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 391 , 195 ) ;
     Moveable = TRUE ;
-    Text = "Spaltenzuordung für Tabelle %1";
+    Text = "Spaltenzuordnung für Tabelle %1";
     Text [ENGLISH] = "Column assignment for table %1";
 
     OKButton BT_OK
@@ -110,8 +110,9 @@ ModalDialog RID_DLG_MAPPING
         Text[ arabic ] = "ÃÓãÇÁ ÇáÃÚãÏÉ";
         Text[ turkish ] = "Sütun adları";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nombres de columna";
+        Text[ catalan ] = "Noms de columna";
         Text[ finnish ] = "Sarakkeiden nimet";
+        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
     };
     FixedText   FT_IDENTIFIER
     {
@@ -477,8 +478,9 @@ ModalDialog RID_DLG_MAPPING
         Text[ arabic ] = "<ÈÏæä>";
         Text[ turkish ] = "<Yok>";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "<ninguno>";
+        Text[ catalan ] = "<cap>";
         Text[ finnish ] = "<ei mitään>";
+        Text[ thai ] = "<à¹„à¸¡à¹ˆà¸¡à¸µ>";
     };
     Text[ english_us ] = "Column Layout for Table %1";
     Text[ portuguese ] = "Atribuição de colunas para a tabela %1";
@@ -493,13 +495,14 @@ ModalDialog RID_DLG_MAPPING
     Text[ swedish ] = "Kolumntilldelning för tabell %1";
     Text[ polish ] = "Przyporz¹dkowanie kolumn tabeli %1";
     Text[ portuguese_brazilian ] = "Column assignment for table %1";
-    Text[ japanese ] = "%1 ï¾ƒï½°ï¾Œï¾ï¾™ã®åˆ—åˆ†é¡";
-    Text[ korean ] = "í…Œì´ë¸” %1ì˜ ì—´ ë ˆì´ì•„ì›ƒ";
+    Text[ japanese ] = "%1 ãƒ†ãƒ¼ãƒ–ãƒ«ã®åˆ—åˆ†é¡";
+    Text[ korean ] = "í‘œ %1ì˜ ì—´ ë ˆì´ì•„ì›ƒ";
     Text[ chinese_simplified ] = "ä¸ºè¡¨æ ¼ %1 ç¼–æ’è®¾è®¡åˆ—";
     Text[ chinese_traditional ] = "ç·¨æ’ %1 è¡¨æ ¼çš„æ¬„";
     Text[ turkish ] = "Tablo %1 için sütun düzeni";
     Text[ arabic ] = "ÊÚííä ÇáÃÚãÏÉ ááÌÏæá %1";
-    Text[ catalan ] = "Asignación de columnas para tabla %1";
+    Text[ catalan ] = "Assignació de columnes per a la taula %1";
+    Text[ thai ] = "à¹€à¸„à¹‰à¸²à¹‚à¸„à¸£à¸‡à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¸‚à¸­à¸‡à¸•à¸²à¸£à¸²à¸‡ %1";
 };
 ModalDialog RID_DLG_DBCHANGE
 {
@@ -553,6 +556,7 @@ ModalDialog RID_DLG_DBCHANGE
         Text[ turkish ] = "Giriş";
         Text[ catalan ] = "Entrada";
         Text[ finnish ] = "Merkintä";
+        Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£";
     };
     Control LB_SELECTION
     {
@@ -568,20 +572,3 @@ ModalDialog RID_DLG_DBCHANGE
         Border = TRUE;
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
