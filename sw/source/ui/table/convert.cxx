@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:45:53 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:47:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,8 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
 {
     if( aTabBtn.IsChecked() )
     {
-        bIsKeepColumn = aKeepColumn.IsChecked();
+        //0x0b mustn't be set when re-converting table into text
+        bIsKeepColumn = !aKeepColumn.IsVisible() || aKeepColumn.IsChecked();
         rDelim = bIsKeepColumn ? 0x09 : 0x0b;
         nSaveButtonState = 0;
     }
