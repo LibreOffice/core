@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-09 13:03:17 $
+ *  last change: $Author: dr $ $Date: 2002-08-08 11:28:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2831,6 +2831,17 @@ sal_Int16 ConvertData::GetMatchingLevel( const STRING& rRef ) const
                 default:
                             n = INV_MATCHLEV;
             }
+
+//! <HACK> #100616# "cm3" is not 10^-2 m^3 but 10^-6 m^3 !!! ------------------
+            if( n != INV_MATCHLEV )
+            {
+                sal_Unicode cLast = p[ rRef.getLength() - 1 ];
+                if( cLast == '2' )
+                    n *= 2;
+                else if( cLast == '3' )
+                    n *= 3;
+            }
+//! </HACK> -------------------------------------------------------------------
 
             return n;
         }
