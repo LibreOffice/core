@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-12-14 16:32:48 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,45 +59,66 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUINSERT_HXX
-#define _SD_FUINSERT_HXX
+#ifndef SD_FU_INSERT_HXX
+#define SD_FU_INSERT_HXX
 
-#ifndef _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
 
-class FuInsertGraphic : public FuPoor
+namespace sd {
+
+class FuInsertGraphic
+    : public FuPoor
 {
- public:
+public:
     TYPEINFO();
 
-    FuInsertGraphic( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                    SdDrawDocument* pDoc, SfxRequest& rReq);
-    virtual ~FuInsertGraphic();
+    FuInsertGraphic (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuInsertGraphic (void);
 };
+
 
 /************************************************************************/
 
-class FuInsertClipboard : public FuPoor
+class FuInsertClipboard
+    : public FuPoor
 {
- public:
+public:
     TYPEINFO();
 
-    FuInsertClipboard( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                    SdDrawDocument* pDoc, SfxRequest& rReq);
-    virtual ~FuInsertClipboard();
+    FuInsertClipboard (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuInsertClipboard (void);
 };
+
 
 /************************************************************************/
 
-class FuInsertOLE : public FuPoor
+class FuInsertOLE
+    : public FuPoor
 {
  public:
     TYPEINFO();
 
-    FuInsertOLE( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                 SdDrawDocument* pDoc, SfxRequest& rReq);
-    virtual ~FuInsertOLE();
+    FuInsertOLE (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuInsertOLE (void);
 };
 
-#endif      // _SD_FUINSERT_HXX
+} // end of namespace sd
+
+#endif
