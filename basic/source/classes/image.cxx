@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:30 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:55:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,9 +194,13 @@ BOOL SbiImage::Load( SvStream& r )
                 //r >> aComment;
                 break;
             case B_SOURCE:
-                r.ReadByteString( aSource, eCharSet );
+            {
+                String aTmp;
+                r.ReadByteString( aTmp, eCharSet );
+                aOUSource = aTmp;
                 //r >> aSource;
                 break;
+            }
             case B_PCODE:
                 if( bBadVer ) break;
                 pCode = new char[ nLen ];
@@ -284,10 +288,16 @@ BOOL SbiImage::Save( SvStream& r )
         SbiCloseRecord( r, nPos );
     }
     // Source?
-    if( aSource.Len() && SbiGood( r ) )
+    if( aOUSource.getLength() && SbiGood( r ) )
     {
         nPos = SbiOpenRecord( r, B_SOURCE, 1 );
-        r.WriteByteString( aSource, eCharSet );
+        String aTmp;
+        sal_Int32 nLen = aOUSource.getLength();
+        if( nLen > STRING_MAXLEN )
+            aTmp = aOUSource.copy( 0, STRING_MAXLEN - 1 );
+        else
+            aTmp = aOUSource;
+        r.WriteByteString( aTmp, eCharSet );
         //r << aSource;
         SbiCloseRecord( r, nPos );
     }
