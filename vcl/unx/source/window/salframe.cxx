@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.165 $
+ *  $Revision: 1.166 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:47:31 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1570,6 +1570,17 @@ SalBitmap* X11SalFrame::SnapShot()
     }
 
     return NULL;
+}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+// native menu implementation - currently empty
+void X11SalFrame::DrawMenuBar()
+{
+}
+
+void X11SalFrame::SetMenu( SalMenu* )
+{
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
