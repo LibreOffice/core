@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PolygonPoint.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-03-14 11:47:03 $
+ *  last change: $Author: aw $ $Date: 2003-03-14 14:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,12 @@ public:
     {
         return ((maBackward == rEntry.maBackward) && (maForward == rEntry.maForward));
     }
+
+    void DoInvertForFlip()
+    {
+        maBackward = -maBackward;
+        maForward = -maForward;
+    }
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -165,7 +171,7 @@ template < class Point, class Vector > class PolygonPointList
 
     unsigned                                        mbIsClosed : 1;
 
-    void ImplTryToChangeToSimple()
+    void ImplTryToReduceToPointVector()
     {
         if(!mnBezierCount && mpVectors)
         {
@@ -256,8 +262,8 @@ public:
                     mpVectors->push_back(*aStart);
                 }
 
-                // maybe 0L == mbBezierCount, try to reduce
-                ImplTryToChangeToSimple();
+                // maybe vectors are not needed anymore, try to reduce memory footprint
+                ImplTryToReduceToPointVector();
             }
         }
     }
@@ -389,8 +395,8 @@ public:
     {
         if(nCount)
         {
-            // maybe 0L == mbBezierCount, try to reduce
-            ImplTryToChangeToSimple();
+            // maybe vectors are not needed anymore, try to reduce memory footprint
+            ImplTryToReduceToPointVector();
 
             // add nCount copies of rPoint
             {
@@ -448,8 +454,8 @@ public:
             }
             else
             {
-                // maybe 0L == mbBezierCount, try to reduce
-                ImplTryToChangeToSimple();
+                // maybe vectors are not needed anymore, try to reduce memory footprint
+                ImplTryToReduceToPointVector();
 
                 // add nCount empty entries to keep indices synchronized
                 if(mpVectors)
@@ -467,8 +473,8 @@ public:
     {
         if(nCount)
         {
-            // maybe 0L == mbBezierCount, try to reduce
-            ImplTryToChangeToSimple();
+            // maybe vectors are not needed anymore, try to reduce memory footprint
+            ImplTryToReduceToPointVector();
 
             // remove point data
             {
@@ -506,7 +512,55 @@ public:
                 else
                 {
                     // try to reduce, maybe 0L == mnBezierCount
-                    ImplTryToChangeToSimple();
+                    ImplTryToReduceToPointVector();
+                }
+            }
+        }
+    }
+
+    void Flip()
+    {
+        if(maPoints.size() > 1)
+        {
+            // maybe vectors are not needed anymore, try to reduce memory footprint
+            ImplTryToReduceToPointVector();
+
+            // calculate half size
+            const sal_uInt32 nHalfSize(maPoints.size() >> 1L);
+
+            // flip point data
+            {
+                SimplePointVector::iterator aStart(maPoints.begin());
+                SimplePointVector::iterator aEnd(maPoints.end());
+
+                for(sal_uInt32 a(0); a < nHalfSize; a++)
+                {
+                    LocalSimplePointEntry aTemp = *aStart;
+                    *aStart++ = *aEnd;
+                    *aEnd-- = aTemp;
+                }
+            }
+
+            // flip bezier data
+            if(mpVectors)
+            {
+                SimpleBezierVector::iterator aStart(mpVectors->begin());
+                SimpleBezierVector::iterator aEnd(mpVectors->end());
+
+                for(sal_uInt32 a(0); a < nHalfSize; a++)
+                {
+                    LocalSimpleBezierEntry aTemp = *aStart;
+                    aTemp.DoInvertForFlip();
+                    *aStart = *aEnd;
+                    aStart->DoInvertForFlip();
+                    aStart++;
+                    *aEnd-- = aTemp;
+                }
+
+                // also flip vectors of middle point (if existing)
+                if(maPoints.size() % 2)
+                {
+                    (*mpVectors)[nHalfSize].DoInvertForFlip();
                 }
             }
         }
