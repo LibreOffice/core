@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:59:31 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 11:54:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ static const String ManagerStreamName( String::CreateFromAscii(szManagerStream) 
 #define DEFINE_CONST_UNICODE(CONSTASCII)    UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
 
 
-TYPEINIT1( BasicManager, BasicManager );
+TYPEINIT1( BasicManager, SfxBroadcaster );
 DBG_NAME( BasicManager );
 
 StreamMode eStreamReadMode = STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYALL;
