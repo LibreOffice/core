@@ -2,9 +2,9 @@
  *
  *  $RCSfile: axhost.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-13 15:34:54 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:57:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,4 +82,6 @@ LRESULT HostWin::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
 
     return 0;
 }
+
+
 
