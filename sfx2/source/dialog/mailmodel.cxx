@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 15:56:23 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,6 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocument( String& rFileName
     if ( xDocShell.Is() && xDocShell->GetMedium() )
     {
         // save old settings
-        BOOL bOldDidDangerousSave = xDocShell->Get_Impl()->bDidDangerousSave;
         BOOL bModified = xDocShell->IsModified();
         // prepare for mail export
         SfxDispatcher* pDisp = pTopViewFrm->GetDispatcher();
@@ -344,8 +343,6 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocument( String& rFileName
         // restore old settings
         if ( !bModified && xDocShell->IsEnableSetModified() )
             xDocShell->SetModified( FALSE );
-        if ( !bOldDidDangerousSave )
-            xDocShell->Get_Impl()->bDidDangerousSave = sal_False;
         eRet = bRet ? SAVE_SUCCESSFULL : SAVE_ERROR;
     }
 
@@ -362,7 +359,6 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocAsPDF( String& rFileName
     if ( xDocShell.Is() && xDocShell->GetMedium() )
     {
         // save old settings
-        BOOL bOldDidDangerousSave = xDocShell->Get_Impl()->bDidDangerousSave;
         BOOL bModified = xDocShell->IsModified();
         // prepare for mail export
         SfxDispatcher* pDisp = pTopViewFrm->GetDispatcher();
@@ -431,8 +427,6 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocAsPDF( String& rFileName
         // restore old settings
         if ( !bModified && xDocShell->IsEnableSetModified() )
             xDocShell->SetModified( FALSE );
-        if ( !bOldDidDangerousSave )
-            xDocShell->Get_Impl()->bDidDangerousSave = sal_False;
     }
 
     return eRet;
