@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nfltdlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:34 $
+ *  last change: $Author: pb $ $Date: 2001-06-28 13:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,20 +62,17 @@
 #define _SFXNFLTDLG_HXX
 
 
-#ifndef _DIALOG_HXX //autogen
+#ifndef _SV_DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
 #endif
-#ifndef _LSTBOX_HXX //autogen
+#ifndef _SV_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
-#ifndef _BUTTON_HXX //autogen
+#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
-#ifndef _FIXED_HXX //autogen
+#ifndef _SV_FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
 #endif
 class SfxFilterMatcher;
 
@@ -83,16 +80,18 @@ class SfxMedium;
 class SfxFilterDialog : public ModalDialog
 {
 private:
-    GroupBox aGroupType;
-    FixedText aMIMEType;
-    FixedText aExtension;
-    ListBox aListbox;
-    GroupBox aGroupFrm;
-    OKButton aOkBtn;
-    CancelButton aCancelBtn;
-    HelpButton aHelpBtn;
-    String aDefFilter;
+    FixedLine               aMimeTypeFL;
+    FixedText               aMIMEType;
+    FixedText               aExtension;
+    FixedLine               aFilterFL;
+    ListBox                 aListbox;
+    OKButton                aOkBtn;
+    CancelButton            aCancelBtn;
+    HelpButton              aHelpBtn;
+
+    String                  aDefFilter;
     const SfxFilterMatcher& rMatcher;
+
     DECL_LINK( OkHdl, Control * );
 
 public:
@@ -104,5 +103,5 @@ public:
     String GetSelectEntry() const;
 };
 
-
 #endif
+

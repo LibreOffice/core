@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfedt.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-08 22:00:13 $
+ *  last change: $Author: pb $ $Date: 2001-06-28 13:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@ ModalDialog DLG_DOCINFO_EDT
     HelpId = HID_DOCINFO_EDT ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 166 , 83 ) ;
+    Size = MAP_APPFONT ( 166 , 79 ) ;
     Text = "Infonamen bearbeiten" ;
     Text [ ENGLISH ] = "Edit info names" ;
     Text [ norwegian ] = "Rediger informasjonnavn" ;
@@ -94,34 +94,10 @@ ModalDialog DLG_DOCINFO_EDT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Editar nombres informaciones";
     Moveable = TRUE ;
-    Edit ED_INFO1
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 86 , 12 ) ;
-    };
-    Edit ED_INFO2
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 29 ) ;
-        Size = MAP_APPFONT ( 86 , 12 ) ;
-    };
-    Edit ED_INFO3
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 44 ) ;
-        Size = MAP_APPFONT ( 86 , 12 ) ;
-    };
-    Edit ED_INFO4
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 59 ) ;
-        Size = MAP_APPFONT ( 86 , 12 ) ;
-    };
-    GroupBox GB_INFO
+    FixedLine FL_INFO
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 98 , 74 ) ;
+        Size = MAP_APPFONT ( 98 , 8 ) ;
         Text = "Namen" ;
         Text [ English ] = "Names" ;
         Text [ norwegian ] = "Names" ;
@@ -146,6 +122,30 @@ ModalDialog DLG_DOCINFO_EDT
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nombres";
+    };
+    Edit ED_INFO1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 86 , 12 ) ;
+    };
+    Edit ED_INFO2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 29 ) ;
+        Size = MAP_APPFONT ( 86 , 12 ) ;
+    };
+    Edit ED_INFO3
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Size = MAP_APPFONT ( 86 , 12 ) ;
+    };
+    Edit ED_INFO4
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 59 ) ;
+        Size = MAP_APPFONT ( 86 , 12 ) ;
     };
     OKButton BT_OK
     {

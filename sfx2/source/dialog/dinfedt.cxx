@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfedt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:30 $
+ *  last change: $Author: pb $ $Date: 2001-06-28 13:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,25 +75,22 @@ void InfoEdit_Impl::KeyInput( const KeyEvent& rKEvent )
         Edit::KeyInput( rKEvent );
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung: Init-Liste
- --------------------------------------------------------------------*/
+// class SfxDocInfoEditDlg -----------------------------------------------
 
 SfxDocInfoEditDlg::SfxDocInfoEditDlg( Window* pParent ) :
 
     ModalDialog( pParent, SfxResId( DLG_DOCINFO_EDT ) ),
 
+    aInfoFL     ( this, ResId( FL_INFO ) ),
     aInfo1ED    ( this, ResId( ED_INFO1 ) ),
     aInfo2ED    ( this, ResId( ED_INFO2 ) ),
     aInfo3ED    ( this, ResId( ED_INFO3 ) ),
     aInfo4ED    ( this, ResId( ED_INFO4 ) ),
     aOkBT       ( this, ResId( BT_OK ) ),
     aCancelBT   ( this, ResId( BT_CANCEL ) ),
-    aHelpBtn    ( this, ResId( BTN_HELP ) ),
-    aInfoGB     ( this, ResId( GB_INFO ) )
+    aHelpBtn    ( this, ResId( BTN_HELP ) )
 
 {
     FreeResource();
 }
-
 
