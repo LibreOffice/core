@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 15:34:57 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:06:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,16 +85,6 @@
 #define MN_WEBFORMAT                            (RC_WEB_BEGIN + 34)
 #define MN_WEBEXTRA                             (RC_WEB_BEGIN + 35)
 #define MN_WEBWIN                               (RC_WEB_BEGIN + 36)
-
-#define MN_OBJECTMENU_WEBTEXT               (RC_WEB_BEGIN + 37)
-#define MN_OBJECTMENU_WEBLIST               (RC_WEB_BEGIN + 38)
-#define MN_OBJECTMENU_WEBTABLE              (RC_WEB_BEGIN + 39)
-#define MN_OBJECTMENU_WEBFRAME              (RC_WEB_BEGIN + 40)
-#define MN_OBJECTMENU_WEBGRAFIK             (RC_WEB_BEGIN + 41)
-#define MN_OBJECTMENU_WEBDRAW               (RC_WEB_BEGIN + 42)
-#define MN_OBJECTMENU_WEBDRWTXT             (RC_WEB_BEGIN + 43)
-#define MN_OBJECTMENU_WEBOLE                (RC_WEB_BEGIN + 44)
-#define MN_OBJECTMENU_WEBDRAWCONTROL        (RC_WEB_BEGIN + 45)
 
 #define MN_WEB_TEXT_POPUPMENU               (RC_WEB_BEGIN + 46)
 
