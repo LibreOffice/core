@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-07 15:56:26 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 16:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ namespace dbaui
 
         Link                m_aTypeSelectHandler;   /// to be called if a new type is selected
         Link                m_aNameModifiedHandler; /// to be called whenever the name of the data source is changed by the user
+        Link                m_aNameValidator;       /// to be called to check the validity of a name
         ODbAdminDialog*     m_pAdminDialog;         /// we need the servicefactory
         String              m_sControlUser;         /// set by XExecutableDialog
         String              m_sControlPassword;     /// set by XExecutableDialog
@@ -135,7 +136,9 @@ namespace dbaui
         DATASOURCE_TYPE GetSelectedType() const { return m_eCurrentSelection; }
 
         /// set a handler which gets called every time the user changes the data source name
-        void            SetNameModifyHandler(const Link& _rHandler) { m_aNameModifiedHandler = _rHandler; }
+        void            SetNameModifyHandler( const Link& _rHandler ) { m_aNameModifiedHandler = _rHandler; }
+        // set a handler which is to be called whenever the data source name needs to be validated
+        void            SetNameValidationHandler( const Link& _rHandler ) { m_aNameValidator = _rHandler; }
         /// get the current name the user wants the data source to have
         String          GetCurrentName() const { return m_aName.GetText(); }
 
@@ -212,6 +215,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/08/07 15:56:26  fs
+ *  #88431# centralized methods for setting/retrieving the URL in m_aConnection - this way we can translate URLs so that they're displayed in a decoded version
+ *
  *  Revision 1.5  2001/08/01 08:30:41  fs
  *  #88530# changeConnectionURL / getConnectionURL / minor corrections in the handling of m_eCurrentType
  *

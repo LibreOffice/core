@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 16:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,6 +636,10 @@ namespace dbaui
         if (_bSaveValue)
             m_aName.SaveValue();
 
+        // is the very current name valid?
+        if ( m_aName.IsEnabled() && ( 0L == m_aNameValidator.Call( this ) ) )
+            eSpecialMessage = smInvalidName;
+
         // a special message for the current page state
         switchMessage(eSpecialMessage);
     }
@@ -670,7 +674,7 @@ namespace dbaui
         OGenericAdministrationPage::Reset(_rCoreAttrs);
 
         // there are some things which depend on the current name
-        LINK(this, OGeneralPage, OnNameModified).Call(&m_aName);
+        OnNameModified( &m_aName );
     }
 
     //-------------------------------------------------------------------------
@@ -1379,6 +1383,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.24  2001/08/27 06:57:23  oj
+ *  #90015# some speedup's
+ *
  *  Revision 1.23  2001/08/20 11:31:33  fs
  *  #91278# implInitiControls: more sensitive disabling of the browse button ...
  *
