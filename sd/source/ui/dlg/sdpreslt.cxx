@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpreslt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-18 15:11:02 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,9 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, p)
     }
 
     USHORT nResult = pDlg->Execute();
+    // #96072# OJ: Inserted update to force repaint
+    Update();
+
     String aFile;
     BOOL   bCancel = FALSE;
 
