@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditio.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 17:54:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ public:
             ScConditionEntry( const ScConditionEntry& r );  // flache Kopie der Formeln
             // echte Kopie der Formeln (fuer Ref-Undo):
             ScConditionEntry( ScDocument* pDocument, const ScConditionEntry& r );
-            ~ScConditionEntry();
+    virtual ~ScConditionEntry();
 
     int             operator== ( const ScConditionEntry& r ) const;
 
@@ -218,7 +218,7 @@ public:
             ScCondFormatEntry( ScDocument* pDocument, const ScCondFormatEntry& r );
             ScCondFormatEntry( SvStream& rStream, ScMultipleReadHeader& rHdr,
                                 ScDocument* pDocument );
-            ~ScCondFormatEntry();
+    virtual ~ScCondFormatEntry();
 
     void            SetParent( ScConditionalFormat* pNew )  { pParent = pNew; }
 
