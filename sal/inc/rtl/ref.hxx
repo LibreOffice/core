@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ref.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-12 12:31:39 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 12:00:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ public:
 
     /** Returns True if the handle does point to a valid body.
      */
-    inline sal_Bool SAL_CALL isValid() const
+    inline sal_Bool SAL_CALL is() const
     {
         return (m_pBody != 0);
     }
