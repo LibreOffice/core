@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 11:26:58 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:46:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,23 +78,18 @@ SLOFILES= \
     $(SLO)$/cmdmailsuppl.obj \
     $(SLO)$/cmdmailmsg.obj \
     $(SLO)$/cmdmailentry.obj
+SHL1OBJS=$(SLOFILES) 
             
 SHL1TARGET=$(TARGET)
+SHL1IMPLIB=i$(TARGET)
 
 SHL1STDLIBS=$(CPPULIB)\
             $(CPPUHELPERLIB)\
             $(SALLIB)
 
-SHL1LIBS=
-        
-SHL1DEPN=
-SHL1IMPLIB=i$(SHL1TARGET)
-
-SHL1OBJS=$(SLOFILES) 
+SHL1VERSIONMAP=exports.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
 
 
 # --- Targets ------------------------------------------------------
