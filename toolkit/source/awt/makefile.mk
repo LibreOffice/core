@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: af $ $Date: 2002-09-06 13:00:19 $
+#   last change: $Author: tbe $ $Date: 2002-11-12 17:53:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,7 @@ SLOFILES=   \
             $(SLO)$/accessiblemenubasecomponent.obj		\
             $(SLO)$/accessiblemenucomponent.obj			\
             $(SLO)$/accessiblemenuitemcomponent.obj		\
+            $(SLO)$/vclxaccessiblebox.obj				\
             $(SLO)$/vclxaccessiblebutton.obj			\
             $(SLO)$/vclxaccessiblecheckbox.obj			\
             $(SLO)$/vclxaccessiblecombobox.obj			\
@@ -87,7 +88,9 @@ SLOFILES=   \
             $(SLO)$/vclxaccessibledropdownlistbox.obj	\
             $(SLO)$/vclxaccessibleedit.obj				\
             $(SLO)$/vclxaccessiblefixedtext.obj			\
+            $(SLO)$/vclxaccessiblelist.obj				\
             $(SLO)$/vclxaccessiblelistbox.obj			\
+            $(SLO)$/vclxaccessiblelistboxlist.obj		\
             $(SLO)$/vclxaccessiblelistitem.obj			\
             $(SLO)$/vclxaccessiblemenu.obj				\
             $(SLO)$/vclxaccessiblemenubar.obj			\
@@ -96,15 +99,13 @@ SLOFILES=   \
             $(SLO)$/vclxaccessiblepopupmenu.obj			\
             $(SLO)$/vclxaccessibleradiobutton.obj		\
             $(SLO)$/vclxaccessiblescrollbar.obj			\
+            $(SLO)$/vclxaccessiblespinfield.obj			\
             $(SLO)$/vclxaccessibletabcontrol.obj		\
             $(SLO)$/vclxaccessibletabpage.obj			\
             $(SLO)$/vclxaccessibletextcomponent.obj		\
+            $(SLO)$/vclxaccessibletextfield.obj			\
             $(SLO)$/vclxaccessibletoolbox.obj			\
             $(SLO)$/vclxaccessibletoolboxitem.obj		\
-            $(SLO)$/vclxaccessiblelist.obj				\
-            $(SLO)$/vclxaccessiblelistboxlist.obj		\
-            $(SLO)$/vclxaccessiblebox.obj				\
-            $(SLO)$/vclxaccessibletextfield.obj			\
             $(SLO)$/vclxbitmap.obj 						\
             $(SLO)$/vclxcontainer.obj 					\
             $(SLO)$/vclxdevice.obj 						\
