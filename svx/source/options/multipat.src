@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:36:26 $
+ *  last change: $Author: kz $ $Date: 2001-08-06 08:36:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,7 @@ String RID_SVXSTR_FILE_TITLE
     Text [ danish ] = "Vælg filer" ;
     Text [ italian ] = "Seleziona file" ;
     Text [ spanish ] = "Seleccionar archivos" ;
-    Text [ french ] = "Sélectionner des fichiers" ;
+    Text [ french ] = "Sélection des fichiers" ;
     Text [ dutch ] = "Bestanden selecteren" ;
     Text[ chinese_simplified ] = "Ñ¡ÔñÎÄ¼þ";
     Text[ russian ] = "Âûáîð ôàéëîâ";
@@ -329,6 +329,7 @@ String RID_SVXSTR_FILE_GB
     Text[ finnish ] = "Tiedostot";
 };
  // ******************************************************************* EOF
+
 
 
 
