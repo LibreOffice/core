@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplcitem.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:35 $
+ *  last change: $Author: os $ $Date: 2001-09-05 09:41:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,20 @@
 #define _TPLCITEM_HXX
 
 #include "ctrlitem.hxx"
+#ifndef _LINK_HXX
+#include <tools/link.hxx>
+#endif
 
 class SfxCommonTemplateDialog_Impl;
 
 class SfxTemplateControllerItem: public SfxControllerItem {
     SfxCommonTemplateDialog_Impl  &rTemplateDlg;
+    BYTE                            nWaterCanState;
+
+
+    DECL_STATIC_LINK(SfxTemplateControllerItem, SetWaterCanStateHdl_Impl,
+                                SfxTemplateControllerItem*);
+
 protected:
     virtual void    StateChanged( USHORT, SfxItemState, const SfxPoolItem* pState );
 

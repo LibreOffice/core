@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplcitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:31 $
+ *  last change: $Author: os $ $Date: 2001-09-05 09:41:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,8 @@ SfxTemplateControllerItem::SfxTemplateControllerItem(
         SfxCommonTemplateDialog_Impl &rDlg, // Controller-Instanz, dem dieses Item zugeordnet ist.
         SfxBindings &rBindings):
     SfxControllerItem(nId, rBindings),
-    rTemplateDlg(rDlg)
+    rTemplateDlg(rDlg),
+    nWaterCanState(0xff)
 {
 }
 
@@ -135,13 +136,15 @@ void SfxTemplateControllerItem::StateChanged( USHORT nSID, SfxItemState eState,
         case SID_STYLE_WATERCAN:
         {
             if ( eState == SFX_ITEM_DISABLED )
-                rTemplateDlg.SetWaterCanState(0);
+                nWaterCanState = 0xff;
             else if( eState == SFX_ITEM_AVAILABLE )
             {
                 const SfxBoolItem *pStateItem = PTR_CAST(SfxBoolItem, pItem);
                 DBG_ASSERT(pStateItem != 0, "BoolItem erwartet");
-                rTemplateDlg.SetWaterCanState(pStateItem);
+                nWaterCanState = pStateItem->GetValue() ? 1 : 0;
             }
+            Application::PostUserEvent( STATIC_LINK(
+                        this, SfxTemplateControllerItem, SetWaterCanStateHdl_Impl ) );
             break;
         }
         case SID_STYLE_EDIT:
@@ -183,5 +186,22 @@ void SfxTemplateControllerItem::StateChanged( USHORT nSID, SfxItemState eState,
         }
     }
 }
+/* -----------------------------05.09.2001 10:48------------------------------
 
+ ---------------------------------------------------------------------------*/
+IMPL_STATIC_LINK(SfxTemplateControllerItem, SetWaterCanStateHdl_Impl,
+                                    SfxTemplateControllerItem*, EMPTYARG)
+{
+    SfxBoolItem* pState = 0;
+    switch(pThis->nWaterCanState)
+    {
+        case 0 :
+        case 1 :
+            pState = new SfxBoolItem(SID_STYLE_WATERCAN, pThis->nWaterCanState ? TRUE : FALSE);
+        break;
+    }
+    pThis->rTemplateDlg.SetWaterCanState(pState);
+    delete pState;
+    return 0;
+}
 
