@@ -2,9 +2,9 @@
  *
  *  $RCSfile: partwnd.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: as $ $Date: 2001-11-28 11:22:48 $
+ *  last change: $Author: as $ $Date: 2002-01-07 12:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,8 @@ SfxPartChildWnd_Impl::~SfxPartChildWnd_Impl()
     // If frame reference is valid here ... start dieing from inside by calling dispose().
     SetFrame( NULL );
     pWindow = NULL;
+    if ( pWin && xFrame == pWin->GetBindings().GetActiveFrame() )
+        pWin->GetBindings().SetActiveFrame( GetFrame() );
     if( xFrame.is() )
         xFrame->dispose();
 }
