@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-18 15:53:24 $
+ *  last change: $Author: dg $ $Date: 2000-10-24 11:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _CONFIGMGR_TREEACCESS_HXX_
 #include "treeaccess.hxx"
 #endif
+#ifndef CONFIGMGR_API_CHANGESSET_HXX_
+#include "confchangesset.hxx"
+#endif
 
 // WISDOM
 // !!Never write same code twice!!
@@ -148,12 +151,10 @@ namespace configmgr
     Subtree::Subtree(OUString const& aName)
         :ISubtree(aName)
         ,m_nLevel(0)
-        ,m_bComplete(sal_False)
     {
     }
     Subtree::Subtree()
         :m_nLevel(0)
-        ,m_bComplete(sal_False)
     {
     }
     Subtree::~Subtree() {}
@@ -263,6 +264,11 @@ namespace configmgr
         return aReturn;
     }
 
+    //==========================================================================
+    //= OPropagateLevels
+    //==========================================================================
+    /** fills a subtree with the correct level informations
+    */
     struct OPropagateLevels : public NodeModification
     {
     protected:
@@ -275,14 +281,222 @@ namespace configmgr
         virtual void handle(ValueNode&) { /* not interested in value nodes */ }
         virtual void handle(ISubtree& _rSubtree)
         {
-            if ((ITreeProvider::ALL_LEVELS == nChildLevel) || (nChildLevel > 0))
+            if ((ITreeProvider::ALL_LEVELS == nChildLevel) || nChildLevel > _rSubtree.getLevel())
+                _rSubtree.setLevel(nChildLevel);
+        }
+    };
+
+    //==========================================================================
+    //= OCompleteTree
+    //==========================================================================
+    /** completes the cache with missing subelements
+    */
+    struct OCompleteTree : public NodeModification
+    {
+    protected:
+        ISubtree* m_pCacheSubtree;
+        sal_Int32 m_nChildLevel;
+
+    public:
+        OCompleteTree(ISubtree* pSubtree, sal_Int32 _nParentLevel)
+            :m_pCacheSubtree(pSubtree)
+        {
+            m_nChildLevel = (ITreeProvider::ALL_LEVELS == _nParentLevel) ? ITreeProvider::ALL_LEVELS : _nParentLevel - 1;
+        }
+        virtual void handle(ValueNode&) { /* not interested in value nodes */ }
+        virtual void handle(ISubtree& _rSubtree)
+        {
+            OUString aNodeName = _rSubtree.getName();
+            INode*   pChild    = m_pCacheSubtree->getChild(aNodeName);
+            // now we have different possibilites
+            // a.) the node does not exist than clone the subtree and add it to the cache tree
+            if (!pChild)
             {
-                OPropagateLevels aDeeperInto(nChildLevel);
-                aDeeperInto.applyToChildren(_rSubtree);
+                pChild = _rSubtree.clone();
+                ISubtree* pSubTree = pChild->asISubtree();
+                m_pCacheSubtree->addChild(::std::auto_ptr<INode>(pSubTree));
+            }
+            else
+            {
+                ISubtree* pSubTree = pChild->asISubtree();
+                OSL_ENSHURE(pSubTree, "OCompleteTree::handle : node must be a inner node!");
+
+                // b.) the node does exist with level all or greater level -> nothing to do
+                // c.) the node does exist but with smaller level
+                if (pSubTree && ITreeProvider::ALL_LEVELS != pSubTree->getLevel() &&
+                    (ITreeProvider::ALL_LEVELS == m_nChildLevel ||
+                     m_nChildLevel > pSubTree->getLevel()))
+                {
+                    OCompleteTree aNextLevel(pSubTree, m_nChildLevel);
+                    aNextLevel.applyToChildren(_rSubtree);
+                }
             }
         }
     };
 
+    //==========================================================================
+    //= OBuildChangeTree
+    //==========================================================================
+    /** generates a change tree by comparing two trees
+    */
+    struct OBuildChangeTree : public NodeModification
+    {
+    protected:
+        SubtreeChange&  m_rChangeList;
+        INode*          m_pCacheNode;
+
+    public:
+        OBuildChangeTree(SubtreeChange& rList, INode* pNode)
+            :m_rChangeList(rList)
+            ,m_pCacheNode(pNode)
+        {
+        }
+
+        virtual void handle(ValueNode& _nNode)
+        {
+            OUString aNodeName = _nNode.getName();
+            ISubtree* pTree = m_pCacheNode->asISubtree();
+            OSL_ENSHURE(pTree, "OBuildChangeTree::handle : node must be a inner node!");
+            if (pTree)
+            {
+                INode* pChild = pTree->getChild(aNodeName);
+                ValueNode* pValueNode = pChild ? pChild->asValueNode() : NULL;
+                OSL_ENSHURE(pValueNode, "OBuildChangeTree::handle : node must be a value node!");
+
+                // if the values differ add a new change
+                if (pValueNode && _nNode.getValue() != pValueNode->getValue())
+                {
+                    ValueChange* pChange = new ValueChange(_nNode.getValue(), *pValueNode);
+                    m_rChangeList.addChange(::std::auto_ptr<Change>(pChange));
+                }
+            }
+        }
+
+        virtual void handle(ISubtree& _rSubtree)
+        {
+            OUString aNodeName = _rSubtree.getName();
+            ISubtree* pTree = m_pCacheNode->asISubtree();
+            OSL_ENSHURE(pTree, "OBuildChangeTree::handle : node must be a inner node!");
+            if (pTree)
+            {
+                INode* pChild = pTree->getChild(aNodeName);
+                // node not in cache, so ignore it
+                // later, when we get additions and removements within on transaction, then we have to care about
+                if (pChild)
+                {
+                    ISubtree* pSubTree = pChild->asISubtree();
+                    OSL_ENSHURE(pSubTree, "OBuildChangeTree::handle : node must be a inner node!");
+                    // generate a new change
+
+                    SubtreeChange* pChange = new SubtreeChange(aNodeName);
+                    OBuildChangeTree aNextLevel(*pChange, pSubTree);
+                    aNextLevel.applyToChildren(_rSubtree);
+
+                    // now count if there are any changes
+                    OChangeCounter aCounter;
+                    pChange->dispatch(aCounter);
+
+                    if (aCounter.nCount != 0)
+                        m_rChangeList.addChange(::std::auto_ptr<Change>(pChange));
+                    else
+                        delete pChange;
+                }
+            }
+        }
+    };
+
+    // --------------------------------- updateTree ---------------------------------
+    class TreeUpdate : public ChangeTreeModification
+    {
+        ISubtree* m_pCurrentSubtree;
+#if DBUG
+        std::vector<OString> aLog;
+#endif
+
+    public:
+        TreeUpdate(ISubtree* pSubtree):m_pCurrentSubtree(pSubtree){}
+
+        void handle(ValueChange& aValueNode);
+        void handle(AddNode& aAddNode);
+        void handle(RemoveNode& aRemoveNode);
+        void handle(SubtreeChange& aSubtree);
+    };
+
+    void TreeUpdate::handle(ValueChange& aValueNode)
+    {
+        // Change a Value
+        OSL_ENSURE(m_pCurrentSubtree,"Cannot apply ValueChange without subtree");
+
+        INode* pBaseNode = m_pCurrentSubtree ? m_pCurrentSubtree->getChild(aValueNode.getNodeName()) : 0;
+        OSL_ENSURE(pBaseNode,"Cannot apply Change: No node to change");
+
+        ValueNode* pValue = pBaseNode ? pBaseNode->asValueNode() : 0;
+        OSL_ENSURE(pValue,"Cannot apply ValueChange: Node is not a value");
+
+        if (pValue)
+            aValueNode.applyTo(*pValue);
+#ifdef DBUG
+        else
+        {
+            ::rtl::OString aStr("TreeUpdate: Can't find value with name:=");
+            aStr += rtl::OUStringToOString(aValueNode.getNodeName(),RTL_TEXTENCODING_ASCII_US);
+            OSL_ENSHURE(pValue, aStr.getStr());
+            aLog.push_back(aStr);
+        }
+#endif
+    }
+
+    void TreeUpdate::handle(AddNode& aAddNode)
+    {
+        // Add a new Value
+        if (m_pCurrentSubtree)
+            m_pCurrentSubtree->addChild(aAddNode.releaseAddedNode());
+#ifdef DBUG
+        else
+            aLog.push_back(OString("TreeUpdate: no CurrentSubtree for AddNode"));
+#endif
+
+    }
+
+    void TreeUpdate::handle(RemoveNode& aRemoveNode)
+    {
+        // remove a Value
+        if (m_pCurrentSubtree)
+        {
+            sal_Bool bOk = (NULL != m_pCurrentSubtree->removeChild(aRemoveNode.getNodeName()).get());
+
+#ifdef DBUG
+            ::rtl::OString aStr("TreeUpdate: Can't remove child with name:=");
+            aStr += rtl::OUStringToOString(aRemoveNode.getNodeName(),RTL_TEXTENCODING_ASCII_US);
+            OSL_ENSHURE(bOk, aStr.getStr());
+            if (!bOk)
+                aLog.push_back(aStr);
+#endif
+        }
+    }
+
+
+    void TreeUpdate::handle(SubtreeChange& aSubtree)
+    {
+        // handle traversion
+        ISubtree *pOldSubtree = m_pCurrentSubtree;
+        OSL_ENSHURE(m_pCurrentSubtree->getChild(aSubtree.getNodeName()), "TreeUpdate::handle : invalid subtree change ... this will crash !");
+        m_pCurrentSubtree = m_pCurrentSubtree->getChild(aSubtree.getNodeName())->asISubtree();
+
+#if DBUG
+        ::rtl::OString aStr("TreeUpdate: there is no Subtree for name:=");
+        aStr += rtl::OUStringToOString(aSubtree.getNodeName(),RTL_TEXTENCODING_ASCII_US);
+        OSL_ENSHURE(m_pCurrentSubtree, aStr.getStr());
+        if (!m_pCurrentSubtree)
+            aLog.push_back(aStr);
+#endif
+
+        aSubtree.forEachChange(*this);
+        m_pCurrentSubtree = pOldSubtree;
+    }
+
+
+    //--------------------------------------------------------------------------
     void Subtree::setLevel(sal_Int16 _nLevel)
     {
         m_nLevel = _nLevel;
@@ -294,6 +508,9 @@ namespace configmgr
         OPropagateLevels aDeeperInto(_nLevel);
         aDeeperInto.applyToChildren(*this);
     }
+
+    //--------------------------------------------------------------------------
+    sal_Int16 Subtree::getLevel() const {return m_nLevel;}
 
     void Subtree::forEachChild(NodeAction& anAction) const {
         for(ChildList::const_iterator it = m_aChildren.GetSet().begin();
@@ -460,6 +677,13 @@ namespace configmgr
         // INode* pResult = m_pRoot->getChild(aComponentName);
         // return pResult->asISubtree();
 
+        // looking for the requested subtree: results are
+        // a.) tree not found, tree isn't already cached
+        // b.) tree found, but not complete
+        // c.) tree found and complete
+
+        sal_Bool bCompleteForRequest = sal_False;
+
         // Build SearchName
         OSL_ENSHURE(m_pRoot, "Tree::requestSubtree : m_pRoot MUST NOT BE ZERO");
             // hey, don't cry that loud ....
@@ -473,18 +697,21 @@ namespace configmgr
             if (pSubtree)
             {
                 INode* pNode = pSubtree->getChild(*it);
-                if (!pNode)
+                if (pNode)
+                    pSubtree = pNode->asISubtree();
+                else
                     return NULL;
-
-                pSubtree = pNode->asISubtree();
             }
             else
                 break;
         }
 
-        if (pSubtree && (ALL_LEVELS != pSubtree->getLevel()) && (nLevel > pSubtree->getLevel()))
-            pSubtree = NULL;
-        return pSubtree;
+        // if the tree is not complete: ALL_LEVELS != pSubtree->getLevel()
+        // or not fetched with all requested levels, we have to refetch
+        bCompleteForRequest = pSubtree && (ALL_LEVELS == pSubtree->getLevel() ||
+                                          (ALL_LEVELS != nLevel && nLevel <= pSubtree->getLevel()));
+
+        return bCompleteForRequest ? pSubtree : NULL;
     }
 
 // -----------------------------------------------------------------------------
@@ -565,144 +792,121 @@ namespace configmgr
         */
     }
 
-    Subtree * Tree::addSubtree(const ConfigurationName& _rLocation, std::auto_ptr<Subtree> _pSubtree, sal_Int16 nLevels)
+    ISubtree* Tree::addSubtree(const ConfigurationName& _rLocation, std::auto_ptr<ISubtree> _pSubtree, sal_Int16 nLevels)
     {
         OSL_ENSHURE(nLevels != 0, "Tree::addSubtree : invalid level count !");
-            // there was a time where 0 meant "all levels", but we changed the according enum in ITReeProvider
-            // so that it is -1 now. Since this time, 0 isn't valid as level depth anymore !
+        // there was a time where 0 meant "all levels", but we changed the according enum in ITReeProvider
+        // so that it is -1 now. Since this time, 0 isn't valid as level depth anymore !
 
-        auto_ptr<INode> pNode;
+        // if we notice that a subtree already exists we have to verify
+        // if the subtree is already complete populated
 
-        // look for the place where to insert the given node
-        ConfigurationName::Iterator aGoDown = _rLocation.begin();
-        ConfigurationName::Iterator aStopAt = _rLocation.end();
-        Subtree* pInsertInto = m_pRoot;
-        while (aGoDown != aStopAt)
+        // do we already have the subtree in cache, but not completely populated?
+        // so find the subtree
+        Subtree* pEntry = m_pRoot;
+        for (ConfigurationName::Iterator i = _rLocation.begin(); i != _rLocation.end() && pEntry != NULL; i++)
+            pEntry = static_cast<Subtree*>(pEntry->getChild(*i));
+
+        // we already have a tree, so we fill the subtree with the neccessary fragments
+        if (pEntry)
         {
-            OUString sCurrentName = *aGoDown;
-            ++aGoDown;
-
-            Subtree* pExistentSubtree = static_cast<Subtree*>(pInsertInto->getChild(sCurrentName));
-            if (!pExistentSubtree)
+            OSL_ENSHURE(pEntry->getLevel() != ITreeProvider::ALL_LEVELS, "Tree::addSubtree : node already complete in cache, why adding it again? !");
+            if (pEntry->getLevel() != ITreeProvider::ALL_LEVELS)
             {
-                Subtree* pNewChild = NULL;
-                if (aGoDown != aStopAt)
-                {   // we already incremented aGoDown, so this means we still have (at least) one level to go
-                    // -> we need a new temporary node
-                    pNewChild = new Subtree(sCurrentName);
-                    pNewChild = static_cast<Subtree*>(pInsertInto->addChild(::std::auto_ptr<INode>(pNewChild)));
-                    pNewChild->setLevel(0); // which means "we know nothing about any children"
-                }
-                else
-                {   // at this last level, we don't need an intermediate node, instead we have to insert _pSubtree here
-                    break;
-                }
-                pExistentSubtree = pNewChild;
+                // release the ownership and delete that unnecessary tree
+                OCompleteTree aTreeCompletion(pEntry, nLevels);
+                aTreeCompletion.applyToChildren(*_pSubtree.get());
+
+                // now adjust the levels
+                pEntry->setLevel(nLevels);
             }
 
-            // one level down
-            pInsertInto = pExistentSubtree;
+            // release the ownership and delete that unnecessary tree
+            _pSubtree.release();
+            delete _pSubtree.get();
+            return pEntry;
         }
-
-        Subtree* pNewSubtree = static_cast<Subtree*>(pInsertInto->addChild(::std::auto_ptr<INode>(_pSubtree.release())));
-        pNewSubtree->setLevel(nLevels);
-        return pNewSubtree;
-    }
-
-
-    // --------------------------------- updateTree ---------------------------------
-    class TreeUpdate : public ChangeTreeModification
-    {
-        ISubtree* m_pCurrentSubtree;
-        std::vector<OString> aLog;
-
-    public:
-        TreeUpdate(ISubtree* pSubtree):m_pCurrentSubtree(pSubtree){}
-
-        void handle(ValueChange& aValueNode);
-        void handle(AddNode& aAddNode);
-        void handle(RemoveNode& aRemoveNode);
-        void handle(SubtreeChange& aSubtree);
-    };
-
-    void TreeUpdate::handle(ValueChange& aValueNode)
-    {
-        // Change a Value
-        OSL_ENSURE(m_pCurrentSubtree,"Cannot apply ValueChange without subtree");
-
-        INode* pBaseNode = m_pCurrentSubtree ? m_pCurrentSubtree->getChild(aValueNode.getNodeName()) : 0;
-        OSL_ENSURE(pBaseNode,"Cannot apply Change: No node to change");
-
-        ValueNode* pValue = pBaseNode ? pBaseNode->asValueNode() : 0;
-        OSL_ENSURE(pValue,"Cannot apply ValueChange: Node is not a value");
-
-        if (pValue)
-            aValueNode.applyTo(*pValue);
-#ifdef DBUG
         else
         {
-            ::rtl::OString aStr("TreeUpdate: Can't find value with name:=");
-            aStr += rtl::OUStringToOString(aValueNode.getNodeName(),RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSHURE(pValue, aStr.getStr());
-            aLog.push_back(aStr);
+            // insert the complete subtree because it is not part of the cache yet
+            Subtree* pInsertInto = m_pRoot;
+            ConfigurationName::Iterator i = _rLocation.begin();
+            while (i != _rLocation.end())
+            {
+                // increment the iterator here, as we later may need the next position
+                OUString aNodeName = *i++;
+                Subtree* pEntry = static_cast<Subtree*>(m_pRoot->getChild(aNodeName));
+                if (!pEntry)
+                {
+                    Subtree* pNewChild = NULL;
+                    if (i != _rLocation.end())
+                    {
+                        // do we still have (at least) one level to go than we need a new temporary node
+                        pNewChild = new Subtree(aNodeName);
+                        pNewChild = static_cast<Subtree*>(pInsertInto->addChild(::std::auto_ptr<INode>(pNewChild)));
+                        pNewChild->setLevel(0); // which means "we know nothing about any children"
+                    }
+                    else
+                    {
+                        // at this last level, we don't need an intermediate node, instead we have to insert _pSubtree here
+                        break;
+                    }
+                    pEntry = pNewChild;
+                }
+                // one level down
+                pInsertInto = pEntry;
+            }
+
+            Subtree* pNewSubtree = static_cast<Subtree*>(pInsertInto->addChild(::std::auto_ptr<INode>(_pSubtree.release())));
+            pNewSubtree->setLevel(nLevels);
+            return pNewSubtree;
         }
-#endif
     }
 
-    void TreeUpdate::handle(AddNode& aAddNode)
+
+    std::auto_ptr<TreeChangeList> Tree::mergeSubTree(const ConfigurationName& _rLocation,  std::auto_ptr<ISubtree> pSubtree)
     {
-        // Add a new Value
-        if (m_pCurrentSubtree)
-            m_pCurrentSubtree->addChild(aAddNode.releaseAddedNode());
-#ifdef DBUG
-        else
-            aLog.push_back(OString("TreeUpdate: no CurrentSubtree for AddNode"));
+        // first look for the subtree
+        Subtree* pEntry = m_pRoot;
+        for (ConfigurationName::Iterator i = _rLocation.begin(); i != _rLocation.end() && pEntry != NULL; i++)
+            pEntry = static_cast<Subtree*>(pEntry->getChild(*i));
+
+#ifdef DEBUG
+        ::rtl::OString aStr("Tree: there is no Subtree for name:=");
+        aStr += rtl::OUStringToOString(_rLocation.fullName(), RTL_TEXTENCODING_ASCII_US);
+        OSL_ENSHURE(pEntry, aStr.getStr());
 #endif
-
-    }
-
-    void TreeUpdate::handle(RemoveNode& aRemoveNode)
-    {
-        // remove a Value
-        if (m_pCurrentSubtree)
+        if (pEntry)
         {
-            sal_Bool bOk = (NULL != m_pCurrentSubtree->removeChild(aRemoveNode.getNodeName()).get());
+            std::auto_ptr<TreeChangeList> pChangeList(new TreeChangeList(_rLocation.getParentName().fullName(), _rLocation.localName()));
+            // now fill the change list
+            OBuildChangeTree aTreeChange(pChangeList->root, pEntry);
+            aTreeChange.applyToChildren(*pSubtree.get());
 
-#ifdef DBUG
-            ::rtl::OString aStr("TreeUpdate: Can't remove child with name:=");
-            aStr += rtl::OUStringToOString(aRemoveNode.getNodeName(),RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSHURE(bOk, aStr.getStr());
-            if (!bOk)
-                aLog.push_back(aStr);
-#endif
+            // now count if there are any changes
+            OChangeCounter aCounter;
+            pChangeList->root.dispatch(aCounter);
+
+            if (aCounter.nCount == 0)
+                pChangeList.reset();
+            else
+            {
+                TreeUpdate aTreeUpdate(pEntry);
+                pChangeList->root.forEachChange(aTreeUpdate);
+            }
+            return pChangeList;
+
         }
-    }
-
-
-    void TreeUpdate::handle(SubtreeChange& aSubtree)
-    {
-        // handle traversion
-        ISubtree *pOldSubtree = m_pCurrentSubtree;
-        OSL_ENSHURE(m_pCurrentSubtree->getChild(aSubtree.getNodeName()), "TreeUpdate::handle : invalid subtree change ... this will crash !");
-        m_pCurrentSubtree = m_pCurrentSubtree->getChild(aSubtree.getNodeName())->asISubtree();
-
-#if DEBUG
-        ::rtl::OString aStr("TreeUpdate: there is no Subtree for name:=");
-        aStr += rtl::OUStringToOString(aSubtree.getNodeName(),RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSHURE(m_pCurrentSubtree, aStr.getStr());
-        if (!m_pCurrentSubtree)
-            aLog.push_back(aStr);
-#endif
-
-        aSubtree.forEachChange(*this);
-        m_pCurrentSubtree = pOldSubtree;
+        else
+            return std::auto_ptr<TreeChangeList>(0);
     }
 
 
     void Tree::updateTree( TreeChangeList& aTree) throw (starlang::WrappedTargetException, uno::RuntimeException)
     {
         ConfigurationName aSubtreeName(aTree.pathToRoot, aTree.root.getNodeName());
-        ISubtree *pSubtree = requestSubtree(aSubtreeName.fullName(), ITreeProvider::ALL_LEVELS);
+        // request the subtree, atleast one level must exist!
+        ISubtree *pSubtree = requestSubtree(aSubtreeName.fullName(), 1);
 
 #ifdef DEBUG
         ::rtl::OString aStr("Tree: there is no Subtree for name:=");
