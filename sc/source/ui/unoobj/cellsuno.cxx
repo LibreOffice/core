@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-06 08:37:41 $
+ *  last change: $Author: sab $ $Date: 2001-04-06 09:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1300,6 +1300,7 @@ uno::Any SAL_CALL ScCellRangesBase::queryInterface( const uno::Type& rType )
                                                 throw(uno::RuntimeException)
 {
     SC_QUERYINTERFACE( beans::XPropertySet )
+    SC_QUERYINTERFACE( beans::XMultiPropertySet )
     SC_QUERYINTERFACE( beans::XPropertyState )
     SC_QUERYINTERFACE( sheet::XSheetOperation )
     SC_QUERYINTERFACE( chart::XChartDataArray )
@@ -1331,19 +1332,20 @@ uno::Sequence<uno::Type> SAL_CALL ScCellRangesBase::getTypes() throw(uno::Runtim
     static uno::Sequence<uno::Type> aTypes;
     if ( aTypes.getLength() == 0 )
     {
-        aTypes.realloc(11);
+        aTypes.realloc(12);
         uno::Type* pPtr = aTypes.getArray();
         pPtr[0] = getCppuType((const uno::Reference<beans::XPropertySet>*)0);
-        pPtr[1] = getCppuType((const uno::Reference<beans::XPropertyState>*)0);
-        pPtr[2] = getCppuType((const uno::Reference<sheet::XSheetOperation>*)0);
-        pPtr[3] = getCppuType((const uno::Reference<chart::XChartDataArray>*)0);
-        pPtr[4] = getCppuType((const uno::Reference<util::XIndent>*)0);
-        pPtr[5] = getCppuType((const uno::Reference<sheet::XCellRangesQuery>*)0);
-        pPtr[6] = getCppuType((const uno::Reference<sheet::XFormulaQuery>*)0);
-        pPtr[7] = getCppuType((const uno::Reference<util::XReplaceable>*)0);
-        pPtr[8] = getCppuType((const uno::Reference<lang::XServiceInfo>*)0);
-        pPtr[9] = getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
-        pPtr[10]= getCppuType((const uno::Reference<lang::XTypeProvider>*)0);
+        pPtr[1] = getCppuType((const uno::Reference<beans::XMultiPropertySet>*)0);
+        pPtr[2] = getCppuType((const uno::Reference<beans::XPropertyState>*)0);
+        pPtr[3] = getCppuType((const uno::Reference<sheet::XSheetOperation>*)0);
+        pPtr[4] = getCppuType((const uno::Reference<chart::XChartDataArray>*)0);
+        pPtr[5] = getCppuType((const uno::Reference<util::XIndent>*)0);
+        pPtr[6] = getCppuType((const uno::Reference<sheet::XCellRangesQuery>*)0);
+        pPtr[7] = getCppuType((const uno::Reference<sheet::XFormulaQuery>*)0);
+        pPtr[8] = getCppuType((const uno::Reference<util::XReplaceable>*)0);
+        pPtr[9] = getCppuType((const uno::Reference<lang::XServiceInfo>*)0);
+        pPtr[10] = getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
+        pPtr[11]= getCppuType((const uno::Reference<lang::XTypeProvider>*)0);
     }
     return aTypes;
 }
