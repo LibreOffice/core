@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-26 16:21:59 $
+ *  last change: $Author: sab $ $Date: 2000-10-27 13:59:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,7 @@
 #include "patattr.hxx"
 #include "unonames.hxx"
 #include "XMLTableMasterPageExport.hxx"
+#include "olinetab.hxx"
 
 const sal_Int8 SC_MAXDIGITSCOUNT_TIME = 11;
 
@@ -1294,6 +1295,127 @@ void ScMyValidations::Sort()
 {
     std::sort(aValidationRanges.begin(), aValidationRanges.end(), LessValidationRange);
 }
+//==============================================================================
+
+ScMyColumnRowGroup::ScMyColumnRowGroup()
+{
+}
+
+ScMyOpenCloseColumnRowGroup::ScMyOpenCloseColumnRowGroup(ScXMLExport& rTempExport, const sal_Char *pName)
+    : rExport(rTempExport),
+    sName(rtl::OUString::createFromAscii(pName)),
+    aTableStart(),
+    aTableEnd(),
+    bNamespaced(sal_False)
+{
+}
+
+ScMyOpenCloseColumnRowGroup::~ScMyOpenCloseColumnRowGroup()
+{
+}
+
+void ScMyOpenCloseColumnRowGroup::NewTable()
+{
+    if (!bNamespaced)
+    {
+        sName = rExport.GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, sName);
+        bNamespaced = sal_True;
+    }
+    aTableStart.clear();
+    aTableEnd.clear();
+}
+
+void ScMyOpenCloseColumnRowGroup::AddGroup(const ScMyColumnRowGroup& aGroup, sal_Int32 nEndField)
+{
+    aTableStart.push_back(aGroup);
+    aTableEnd.push_back(nEndField);
+}
+
+sal_Bool ScMyOpenCloseColumnRowGroup::IsGroupStart(const sal_Int32 nField)
+{
+    sal_Bool bGroupStart(sal_False);
+    if (aTableStart.size())
+    {
+        if (aTableStart[0].nField == nField)
+            bGroupStart = sal_True;
+    }
+    return bGroupStart;
+}
+
+void ScMyOpenCloseColumnRowGroup::OpenGroup(const ScMyColumnRowGroup* pGroup)
+{
+    if (!pGroup->bDisplay)
+        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_display, sXML_false);
+    rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
+    rExport.GetDocHandler()->startElement( sName, rExport.GetXAttrList());
+    rExport.ClearAttrList();
+}
+
+void ScMyOpenCloseColumnRowGroup::OpenGroups(const sal_Int32 nField)
+{
+    ScMyColumnRowGroupVec::iterator aItr = aTableStart.begin();
+    sal_Bool bReady(sal_False);
+    while(!bReady && aItr != aTableStart.end())
+    {
+        if (aItr->nField == nField)
+        {
+            OpenGroup(aItr);
+            aItr = aTableStart.erase(aItr);
+        }
+        else
+            bReady = sal_True;
+    }
+}
+
+sal_Bool ScMyOpenCloseColumnRowGroup::IsGroupEnd(const sal_Int32 nField)
+{
+    sal_Bool bGroupEnd(sal_False);
+    if (aTableEnd.size())
+    {
+        if (aTableEnd[0] == nField)
+            bGroupEnd = sal_True;
+    }
+    return bGroupEnd;
+}
+
+void ScMyOpenCloseColumnRowGroup::CloseGroup()
+{
+    rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
+    rExport.GetDocHandler()->endElement( sName);
+}
+
+void ScMyOpenCloseColumnRowGroup::CloseGroups(const sal_Int32 nField)
+{
+    ScMyFieldGroupVec::iterator aItr = aTableEnd.begin();
+    sal_Bool bReady(sal_False);
+    while(!bReady && aItr != aTableEnd.end())
+    {
+        if (*aItr == nField)
+        {
+            CloseGroup();
+            aItr = aTableEnd.erase(aItr);
+        }
+        else
+            bReady = sal_True;
+    }
+}
+
+sal_Bool LessGroup(const ScMyColumnRowGroup& aGroup1, const ScMyColumnRowGroup& aGroup2)
+{
+    if (aGroup1.nField < aGroup2.nField)
+        return sal_True;
+    else
+        if (aGroup1.nField == aGroup2.nField && aGroup1.nLevel < aGroup2.nLevel)
+            return sal_True;
+        else
+            return sal_False;
+}
+
+void ScMyOpenCloseColumnRowGroup::Sort()
+{
+    std::sort(aTableStart.begin(), aTableStart.end(), LessGroup);
+    std::sort(aTableEnd.begin(), aTableEnd.end());
+}
 
 //==============================================================================
 
@@ -1676,19 +1798,8 @@ ScXMLExport::ScXMLExport( const uno::Reference <frame::XModel>& xTempModel, cons
                         sal_Bool bShowProgr ) :
 SvXMLExport( rFileName, rHandler, xTempModel, GetFieldUnit() ),
                xModel(xTempModel),
-//  rDoc(rD),
-//    mpUnitConv(0),
-//  pParaItemMapper( 0 ),
-//  pTableItemMapper( 0 ),
-//  pAutoStylePool( new SwXMLAutoStylePool ),
-//  pListElements( 0 ),
-//  pExportedLists( 0 ),
-//  pTableLines( 0 ),
-//  bExportWholeDoc( bExpWholeDoc ),
-//  bExportFirstTableOnly( bExpFirstTableOnly ),
     pDoc(NULL),
     mbShowProgress( bShowProgr ),
-//  pScAutoStylePool(new SvXMLAutoStylePoolP),
     pScPropHdlFactory(0L),
     pCellStylesPropertySetMapper(0L),
     pColumnStylesPropertySetMapper(0L),
@@ -1709,7 +1820,9 @@ SvXMLExport( rFileName, rHandler, xTempModel, GetFieldUnit() ),
     pCellsItr(NULL),
     pValidations(NULL),
     bHasRowHeader(sal_False),
-    bRowHeaderOpen(sal_False)
+    bRowHeaderOpen(sal_False),
+    aGroupColumns(*this, sXML_table_column_group),
+    aGroupRows(*this, sXML_table_row_group)
 {
     pDoc = GetDocument();
     pValidations = new ScMyValidations();
@@ -2350,6 +2463,24 @@ sal_Bool ScXMLExport::GetRowHeader(com::sun::star::table::CellRangeAddress& aRow
     return bResult;
 }
 
+void ScXMLExport::FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup& aGroup)
+{
+}
+
+void ScXMLExport::FillColumnRowGroups()
+{
+    ScOutlineTable* pOutlineTable = GetDocument()->GetOutlineTable( nCurrentTable, sal_False );
+    if(pOutlineTable)
+    {
+        ScOutlineArray* pCols = pOutlineTable->GetColArray();
+        ScOutlineArray* pRows = pOutlineTable->GetRowArray();
+        if (pCols)
+            FillFieldGroup(pCols, aGroupColumns);
+        if (pRows)
+            FillFieldGroup(pRows, aGroupRows);
+    }
+}
+
 void ScXMLExport::_ExportContent()
 {
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY );
@@ -2406,7 +2537,10 @@ void ScXMLExport::_ExportContent()
                         SetLastColumn(nTable, aRange.EndColumn);
                         SetLastRow(nTable, aRange.EndRow);
                         aCellsItr.SetCurrentTable(nTable);
+                        aGroupColumns.NewTable();
+                        aGroupRows.NewTable();
                         GetxCurrentShapes(xCurrentShapes);
+                        FillColumnRowGroups();
                         table::CellRangeAddress aColumnHeaderRange;
                         sal_Bool bHasColumnHeader(GetColumnHeader(aColumnHeaderRange));
                         if (bHasColumnHeader)

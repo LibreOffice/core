@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-25 14:32:39 $
+ *  last change: $Author: sab $ $Date: 2000-10-27 13:59:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,6 +353,41 @@ struct ScMyValidation
     sal_Bool IsEqual(const ScMyValidation& aVal) const;
 };
 
+struct ScMyColumnRowGroup
+{
+    sal_Int32   nField;
+    sal_Int16   nLevel;
+    sal_Bool    bDisplay;
+
+    ScMyColumnRowGroup();
+};
+
+typedef std::vector <ScMyColumnRowGroup> ScMyColumnRowGroupVec;
+typedef std::vector <sal_Int32> ScMyFieldGroupVec;
+
+class ScMyOpenCloseColumnRowGroup
+{
+    ScXMLExport&                rExport;
+    rtl::OUString               sName;
+    ScMyColumnRowGroupVec       aTableStart;
+    ScMyFieldGroupVec           aTableEnd;
+    sal_Bool                    bNamespaced;
+
+    void OpenGroup(const ScMyColumnRowGroup* pGroup);
+    void CloseGroup();
+public:
+    ScMyOpenCloseColumnRowGroup(ScXMLExport& rExport, const sal_Char *pName);
+    ~ScMyOpenCloseColumnRowGroup();
+
+    void NewTable();
+    void AddGroup(const ScMyColumnRowGroup& aGroup, const sal_Int32 nEndField);
+    sal_Bool IsGroupStart(const sal_Int32 nField);
+    void OpenGroups(const sal_Int32 nField);
+    sal_Bool IsGroupEnd(const sal_Int32 nField);
+    void CloseGroups(const sal_Int32 nField);
+    void Sort();
+};
+
 struct ScMyCell
 {
     com::sun::star::uno::Reference<com::sun::star::table::XCell> xCell;
@@ -376,6 +411,7 @@ struct ScMyCell
 
 class ScMyNotEmptyCellsIterator;
 class ScMyValidations;
+class ScOutlineArray;
 
 class ScXMLExport : public SvXMLExport
 {
@@ -406,6 +442,8 @@ class ScXMLExport : public SvXMLExport
     ScRowFormatRanges                   aRowFormatRanges;
     std::vector<rtl::OUString>          aTableStyles;
     com::sun::star::table::CellRangeAddress aRowHeaderRange;
+    ScMyOpenCloseColumnRowGroup         aGroupColumns;
+    ScMyOpenCloseColumnRowGroup         aGroupRows;
 
     sal_Bool                    bHasRowHeader;
     sal_Bool                    bRowHeaderOpen;
@@ -444,6 +482,8 @@ class ScXMLExport : public SvXMLExport
     void CloseRow(const sal_Int32 nRow);
     sal_Bool GetColumnHeader(com::sun::star::table::CellRangeAddress& aColumnHeaderRange) const;
     sal_Bool GetRowHeader(com::sun::star::table::CellRangeAddress& aRowHeaderRange) const;
+    void FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup& aGroup);
+    void FillColumnRowGroups();
 
     sal_Bool IsMerged (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
         const sal_Int32 nCol, const sal_Int32 nRow,
