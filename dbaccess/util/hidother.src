@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:26:32 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include "../inc/dbaccess_helpid.hrc"
+#include "../inc/dbaccess_slotid.hrc"
 #ifndef _SBASLTID_HRC
 #include <svx/svxids.hrc>
 #endif
@@ -283,14 +284,14 @@ hidspecial HID_BROWSER_SAVE_RECORD                      { HelpId = HID_BROWSER_S
 hidspecial HID_BROWSER_UNDO_RECORD                      { HelpId = HID_BROWSER_UNDO_RECORD ; };
 
 // missing pre processor for helpids so we have to include them here
-hidspecial SID_SBA_ADD_RELATION                         { HelpId = SID_SBA_ADD_RELATION ; };
+hidspecial SID_RELATION_ADD_RELATION                    { HelpId = SID_RELATION_ADD_RELATION ; };
 hidspecial SID_FM_NATIVESQL                             { HelpId = SID_FM_NATIVESQL ; };
-hidspecial SID_SBA_QUERY_VIEW_FUNCTIONS                 { HelpId = SID_SBA_QUERY_VIEW_FUNCTIONS ; };
-hidspecial SID_SBA_QUERY_VIEW_TABLES                    { HelpId = SID_SBA_QUERY_VIEW_TABLES ; };
-hidspecial SID_SBA_QUERY_VIEW_ALIASES                   { HelpId = SID_SBA_QUERY_VIEW_ALIASES ; };
-hidspecial SID_SBA_QUERY_DISTINCT_VALUES                { HelpId = SID_SBA_QUERY_DISTINCT_VALUES ; };
+hidspecial SID_QUERY_VIEW_FUNCTIONS                     { HelpId = SID_QUERY_VIEW_FUNCTIONS ; };
+hidspecial SID_QUERY_VIEW_TABLES                        { HelpId = SID_QUERY_VIEW_TABLES ; };
+hidspecial SID_QUERY_VIEW_ALIASES                       { HelpId = SID_QUERY_VIEW_ALIASES ; };
+hidspecial SID_QUERY_DISTINCT_VALUES                    { HelpId = SID_QUERY_DISTINCT_VALUES ; };
 hidspecial SID_FM_ADDTABLE                              { HelpId = SID_FM_ADDTABLE ; };
-hidspecial SID_SBA_CLEAR_QUERY                          { HelpId = SID_SBA_CLEAR_QUERY ; };
+hidspecial SID_BROWSER_CLEAR_QUERY                      { HelpId = SID_BROWSER_CLEAR_QUERY ; };
 hidspecial SID_FM_EXECUTE                               { HelpId = SID_FM_EXECUTE ; };
 
 hidspecial HID_DSADMIN_SQL92CHECK                       { HelpId = HID_DSADMIN_SQL92CHECK ; };
@@ -378,3 +379,5 @@ hidspecial HID_DSADMIN_IGNOREINDEXAPPENDIX              { HelpId = HID_DSADMIN_I
 hidspecial HID_DSADMIN_USESSL_LDAP                      { HelpId = HID_DSADMIN_USESSL_LDAP ; };
 
 hidspecial HID_DSADMIN_DOSLINEENDS                      { HelpId = HID_DSADMIN_DOSLINEENDS ; };
+hidspecial SID_DB_QUERY_PREVIEW                         { HelpId = SID_DB_QUERY_PREVIEW ; };
+
