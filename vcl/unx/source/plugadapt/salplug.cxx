@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salplug.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:25:42 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,6 +353,21 @@ static bool is_cde_desktop( Display* pDisplay )
 static const char * get_desktop_environment()
 {
     static const char *pRet = NULL;
+    static const char *pOverride = getenv( "OOO_FORCE_DESKTOP" );
+
+    if ( pOverride && *pOverride )
+    {
+        OString aOver( pOverride );
+
+        if ( aOver.equalsIgnoreAsciiCase( "cde" ) )
+            pRet = desktop_strings[DESKTOP_CDE];
+        if ( aOver.equalsIgnoreAsciiCase( "kde" ) )
+            pRet = desktop_strings[DESKTOP_KDE];
+        if ( aOver.equalsIgnoreAsciiCase( "gnome" ) )
+            pRet = desktop_strings[DESKTOP_GNOME];
+        if ( aOver.equalsIgnoreAsciiCase( "none" ) )
+            pRet = desktop_strings[DESKTOP_UNKNOWN];
+    }
 
     if ( NULL == pRet )
     {
