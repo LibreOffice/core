@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2004-05-19 04:35:36 $
+#   last change: $Author: hr $ $Date: 2004-08-02 15:34:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,7 +68,6 @@ TARGET=browser
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES=\
@@ -84,7 +83,6 @@ EXCEPTIONSFILES=\
             $(SLO)$/unodatbr.obj				\
             $(SLO)$/sbamultiplex.obj			\
             $(SLO)$/exsrcbrw.obj                \
-            $(SLO)$/dbtreelistbox.obj           \
             $(SLO)$/dbtreemodel.obj				\
             $(SLO)$/dsEntriesNoExp.obj			\
             $(SLO)$/dbtreeview.obj
