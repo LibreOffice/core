@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: bc $ $Date: 2002-12-05 15:22:49 $
+ *  last change: $Author: bc $ $Date: 2002-12-11 17:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,9 +224,8 @@ public class Dataimport extends ReportWizard{
         CurUNOProgressDialog.insertButton("cmdCancel", 10000, new ActionListenerImpl(),
                             new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
                             new Object[] {new Integer(14), "HID:34321", new Integer(74), new Integer(58), new Integer(0), new Short((short) 1), new Integer(40), sStop});
-
-        CurUNOProgressDialog.calculateDialogPosition(xMSF, CurReportDocument.xFrame.getComponentWindow().getPosSize(), CurReportDocument.xWindowPeer);
-
+        CurUNOProgressDialog.createWindowPeer(CurReportDocument.xWindowPeer);
+        CurUNOProgressDialog.calculateDialogPosition(CurReportDocument.xFrame.getComponentWindow().getPosSize());
         CurUNOProgressDialog.xWindow.setVisible(true);
 
     return;

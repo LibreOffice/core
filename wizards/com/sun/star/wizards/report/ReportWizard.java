@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: bc $ $Date: 2002-12-05 15:22:50 $
+ *  last change: $Author: bc $ $Date: 2002-12-11 17:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,7 @@ public class ReportWizard {
      Object oDBTable;
      int[] iCommandTypes;
      int[][] WidthList;
-     int UITextFieldCount = 6;
+     int UITextFieldCount = 7;
      boolean bEnableBinaryOptionGroup;
      boolean bcreateTemplate;
      boolean buseTemplate;
@@ -1276,27 +1276,25 @@ public class ReportWizard {
 
     public void fillSecondStep(){
     try{
-    int YStartPos = 63;
+    int YStartPos = 55;
     int YPos = YStartPos;
     int HelpID = 34381;
     XScrollBar xTitleScrollBar;
     int LabelHeight = 6 + (UITextFieldCount) * 18;
     int ScrollHeight = LabelHeight-2;
-
     CurUNODialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblColumnNames",
                 new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "Width"},
-                new Object[] {new Integer(8), slblColumnNames, new Integer(12), new Integer(YStartPos - 20), new Integer(2), new Integer(68)});
+                new Object[] {new Integer(8), slblColumnNames, new Integer(12), new Integer(YStartPos - 16), new Integer(2), new Integer(68)});
 
     CurUNODialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblColumnTitles",
                 new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "Width"},
-                new Object[] {new Integer(8), slblColumnTitles, new Integer(90), new Integer(YStartPos - 20), new Integer(2), new Integer(152)});
+                new Object[] {new Integer(8), slblColumnTitles, new Integer(90), new Integer(YStartPos - 16), new Integer(2), new Integer(152)});
 
     CurUNODialog.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", "imgTitle",
                             new String[] {"BackgroundColor", "Border", "Height", "PositionX", "PositionY", "Step", "Width"},
                             new Object[] {new Integer(16777215), new Short("1"), new Integer(LabelHeight), new Integer(6), new Integer(YStartPos-6), new Integer(2), new Integer(256)});
 
     for (short i=0; i<UITextFieldCount; i++){
-
         CurUNODialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblColumnName_"  + Integer.toString(i+1),
                 new String[] {"BackgroundColor", "Height", "PositionX", "PositionY", "Step", "Width"},
                 new Object[] {new Integer(16777215), new Integer(8), new Integer(12), new Integer(YPos+2), new Integer(2), new Integer(68)});
@@ -1528,7 +1526,9 @@ public class ReportWizard {
         bCloseDocument = true;
         CurReportDocument.xProgressBar.end();
         CurReportDocument.CurUNODialog = CurUNODialog;
-        short RetValue = CurUNODialog.executeDialog(xMSF, CurReportDocument.xFrame.getComponentWindow().getPosSize(), CurReportDocument.xWindowPeer);
+        CurReportDocument.CurUNODialog.createWindowPeer(CurReportDocument.xWindowPeer);
+        CurUNODialog.setPeerProperty("imgTitle", new Boolean(true));
+        short RetValue = CurUNODialog.executeDialog(CurReportDocument.xFrame.getComponentWindow().getPosSize());
         boolean bdisposeDialog = true;
         switch (RetValue){
         case 0:                 // via Cancelbutton or via sourceCode with "endExecute"
