@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-06 11:15:38 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1330,24 +1330,34 @@ sal_Bool OTableEditorCtrl::IsCutAllowed( long nRow )
 sal_Bool OTableEditorCtrl::IsCopyAllowed( long nRow )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
-    Reference<XPropertySet> xTable = GetView()->getController()->getTable();
-    if( !GetSelectRowCount() || (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW")))
-        return sal_False;
-
-    //////////////////////////////////////////////////////////////////////
-    // Wenn eine der markierten Zeilen leer ist, kein Copy moeglich
-    OTableRow* pRow;
-    long nIndex = FirstSelectedRow();
-    while( nIndex >= 0 )
+    sal_Bool bIsCopyAllowed = sal_False;
+    if(m_eChildFocus == DESCRIPTION)
+        bIsCopyAllowed = pDescrCell->GetSelected().Len() != 0;
+    else if(m_eChildFocus == NAME)
+        bIsCopyAllowed = pNameCell->GetSelected().Len() != 0;
+    else if(m_eChildFocus == ROW)
     {
-        pRow = (*m_pRowList)[nIndex];
-        if( !pRow->GetActFieldDescr() )
+        Reference<XPropertySet> xTable = GetView()->getController()->getTable();
+        if( !GetSelectRowCount() || (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW")))
             return sal_False;
 
-        nIndex = NextSelectedRow();
+        //////////////////////////////////////////////////////////////////////
+        // Wenn eine der markierten Zeilen leer ist, kein Copy moeglich
+        OTableRow* pRow;
+        long nIndex = FirstSelectedRow();
+        while( nIndex >= 0 )
+        {
+            pRow = (*m_pRowList)[nIndex];
+            if( !pRow->GetActFieldDescr() )
+                return sal_False;
+
+            nIndex = NextSelectedRow();
+        }
+
+        bIsCopyAllowed = sal_True;
     }
 
-    return sal_True;
+    return bIsCopyAllowed;
 }
 
 //------------------------------------------------------------------------------
@@ -1414,12 +1424,18 @@ void OTableEditorCtrl::Paste()
     else if(m_eChildFocus == NAME)
     {
         if(GetView()->getController()->isAlterAllowed())
+        {
             pNameCell->Paste();
+            CellModified();
+        }
     }
     else if(m_eChildFocus == DESCRIPTION)
     {
         if(GetView()->getController()->isAlterAllowed())
+        {
             pDescrCell->Paste();
+            CellModified();
+        }
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescGenWin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 07:54:07 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,10 @@ namespace dbaui
 
         String BoolStringPersistent(const String& rUIString) const;
         String BoolStringUI(const String& rPersistentString) const;
+
         sal_Bool isCutAllowed();
+        sal_Bool isCopyAllowed();
+
         void    cut();
         void    copy();
         void    paste();

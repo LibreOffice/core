@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescGenWin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:32:28 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,11 @@ String OFieldDescGenWin::BoolStringPersistent(const String& rUIString) const
 String OFieldDescGenWin::BoolStringUI(const String& rPersistentString) const
 {
     return m_pFieldControl->BoolStringUI(rPersistentString);
+}
+// -----------------------------------------------------------------------------
+sal_Bool OFieldDescGenWin::isCopyAllowed()
+{
+    return (m_pFieldControl && m_pFieldControl->isCutAllowed());
 }
 // -----------------------------------------------------------------------------
 sal_Bool OFieldDescGenWin::isCutAllowed()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-06 08:16:05 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,7 +321,7 @@ FeatureState OTableController::GetState(sal_uInt16 _nId)
             aReturn.bEnabled = m_bEditable && m_bFrameUiActive && getView() && static_cast<OTableDesignView*>(getView())->isCutAllowed();
             break;
         case ID_BROWSER_COPY:
-            aReturn.bEnabled = sal_True && m_bFrameUiActive;
+            aReturn.bEnabled = m_bFrameUiActive && getView() && static_cast<OTableDesignView*>(getView())->isCopyAllowed();
             break;
         case ID_BROWSER_PASTE:
             aReturn.bEnabled = m_bEditable && m_bFrameUiActive;
@@ -431,7 +431,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             {
                 String aName = String(ModuleRes(STR_TBL_TITLE));
                 aName = aName.GetToken(0,' ');
-                aDefaultName = String(::dbtools::createUniqueName(xTables,aName));
+                aDefaultName = ::dbaui::createDefaultName(m_xConnection->getMetaData(),xTables,aName);
             }
 
             OSaveAsDlg aDlg(getView(),CommandType::TABLE,xTables,m_xConnection->getMetaData(),aDefaultName);
@@ -759,7 +759,7 @@ void OTableController::AddSupportedFeatures()
     //  m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:BrowserMode")] = SID_BROWSER_MODE;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:HelpMenu")]        = SID_HELPMENU;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:NewDoc")]          = SID_NEWDOC;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:SaveAsDoc")]       = SID_SAVEASDOC;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:SaveAsDoc")]       = ID_BROWSER_SAVEASDOC;
 
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Copy")]            = ID_BROWSER_COPY;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Cut")]             = ID_BROWSER_CUT;
@@ -1162,7 +1162,10 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
                 {
                     String strMessage = String(ModuleRes(STR_TABLEDESIGN_DUPLICATE_NAME));
                     strMessage.SearchAndReplaceAscii("$column$", pFieldDesc->GetName());
-                    throw SQLException(strMessage,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+                    String sTitle(ModuleRes(STR_STAT_WARNING));
+                    OSQLMessageBox aMsg(getView(),sTitle,strMessage,WB_OK | WB_DEF_OK,OSQLMessageBox::Error);
+                    aMsg.Execute();
+                    return sal_False;
                 }
             }
         }

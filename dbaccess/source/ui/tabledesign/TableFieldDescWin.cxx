@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldDescWin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-30 10:48:06 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,6 +277,11 @@ void OTableFieldDescWin::Resize()
         m_pHelpBar->Hide();
     }
     Invalidate();
+}
+// -----------------------------------------------------------------------------
+sal_Bool OTableFieldDescWin::isCopyAllowed()
+{
+    return (m_pGenPage && m_pGenPage->isCutAllowed());
 }
 // -----------------------------------------------------------------------------
 sal_Bool OTableFieldDescWin::isCutAllowed()

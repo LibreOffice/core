@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:32:28 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,21 @@ long OTableDesignView::PreNotify( NotifyEvent& rNEvt )
     }
 
     return ODataView::PreNotify(rNEvt);
+}
+// -----------------------------------------------------------------------------
+sal_Bool OTableDesignView::isCopyAllowed()
+{
+    sal_Bool bAllowed = sal_False;
+    switch(m_eChildFocus)
+    {
+        case DESCRIPTION:
+            bAllowed = GetDescWin()->isCopyAllowed();
+            break;
+        case EDITOR:
+            bAllowed = GetEditorCtrl()->IsCopyAllowed();
+            break;
+    }
+    return bAllowed;
 }
 // -----------------------------------------------------------------------------
 sal_Bool OTableDesignView::isCutAllowed()
