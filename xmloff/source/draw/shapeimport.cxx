@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-23 14:17:16 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     // #88546# init to FALSE
     mpImpl->mbHandleProgressBar = sal_False;
 
-    mpSdPropHdlFactory = new XMLSdPropHdlFactory( rModel );
+    mpSdPropHdlFactory = new XMLSdPropHdlFactory( rModel, NULL );
 
     // set lock to avoid deletion
     mpSdPropHdlFactory->acquire();
@@ -1223,7 +1223,7 @@ void XMLShapeImportHelper::restoreConnections()
 
 SvXMLImportPropertyMapper* XMLShapeImportHelper::CreateShapePropMapper( const uno::Reference< frame::XModel>& rModel, SvXMLImport& rImport )
 {
-    UniReference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rModel );
+    UniReference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rModel, NULL );
     UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory );
     SvXMLImportPropertyMapper* pResult = new SvXMLImportPropertyMapper( xMapper, rImport );
 
@@ -1236,7 +1236,7 @@ SvXMLImportPropertyMapper* XMLShapeImportHelper::CreateShapePropMapper( const un
     Only current feature is that the ShapeUserDefinedAttributes property is not included in this one. */
 SvXMLImportPropertyMapper* XMLShapeImportHelper::CreateExternalShapePropMapper( const uno::Reference< frame::XModel>& rModel, SvXMLImport& rImport )
 {
-    UniReference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rModel );
+    UniReference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rModel, NULL );
     UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory, 1 );
     SvXMLImportPropertyMapper* pResult = new SvXMLImportPropertyMapper( xMapper, rImport );
 
