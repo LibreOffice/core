@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 10:35:11 $
+ *  last change: $Author: vg $ $Date: 2003-07-14 12:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2018,7 +2018,7 @@
     </node>
     <node oor:name="Flat XML File" oor:op="replace">
       <prop oor:name="Installed">
-        <value>true</value>
+        <value>false</value>
       </prop>
       <prop oor:name="UIName">
         <value xml:lang="de">Flat Xml</value>
