@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jsc $ $Date: 2001-05-17 14:58:05 $
+#   last change: $Author: rt $ $Date: 2004-04-05 14:54:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,8 +92,7 @@ SHL1IMPLIB= ireg
 SHL1STDLIBS= \
     $(SALLIB) \
     $(SALHELPERLIB) \
-    $(STORELIB) \
-    $(LIBCIMT)
+    $(STORELIB)
 
 SHL1VERSIONMAP=	$(TARGET).map
 
