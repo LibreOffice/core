@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfac.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:15:03 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,6 @@
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-
-#ifndef _EMBOBJ_HXX //autogen
-#include <so3/embobj.hxx>
-#endif
-
 #ifndef _CONFIG_HXX
 #include <tools/config.hxx>
 #endif
@@ -111,16 +106,8 @@ DECL_PTRARRAY( SfxViewFactoryArr_Impl, SfxViewFactory*, 2, 2 );
 //========================================================================
 
 DBG_NAME(SfxObjectFactory);
-TYPEINIT1(SfxObjectFactory,SvFactory);
 
 static SfxObjectFactoryArr_Impl* pObjFac = 0;
-
-static SfxObjectFactoryArr_Impl& GetObjFacArray_Impl()
-{
-    if ( !pObjFac )
-        pObjFac = new SfxObjectFactoryArr_Impl;
-    return *pObjFac;
-}
 
 //========================================================================
 
@@ -129,14 +116,11 @@ struct SfxObjectFactory_Impl
     SfxViewFactoryArr_Impl      aViewFactoryArr;// Liste von <SfxViewFactory>s
     SfxFilterArr_Impl           aFilterArr;     // Liste von <SFxFilter>n
     ResId*                      pMenuBarResId;
-    ResId*                      pPluginMenuBarResId;
     ResId*                      pAccelResId;
     ResId*                      pNameResId;
     String                      aHelpFile;
     String                      aHelpPIFile;
     ::rtl::OUString             aServiceName;
-    sal_Bool                    bInitFactoryCalled;
-    SfxVoidFunc                 pInitFactory;
     SfxFilterContainer*         pFilterContainer;
     SfxModule*                  pModule;
     SfxAcceleratorManager*      pAccMgr;
@@ -144,26 +128,23 @@ struct SfxObjectFactory_Impl
     sal_Bool                    bOwnsAccel;
     String                      aStandardTemplate;
     sal_Bool                    bTemplateInitialized;
-    sal_uInt16                  nCreateNewSlotId;
+    SvGlobalName                aClassName;
 
     SfxObjectFactory_Impl() :
         pMenuBarResId       ( NULL ),
-        pPluginMenuBarResId ( NULL ),
         pAccelResId         ( NULL ),
         pNameResId          ( NULL ),
-        bInitFactoryCalled  ( sal_False ),
-        pInitFactory        ( NULL ),
         pFilterContainer    ( NULL ),
         pModule             ( NULL ),
         pAccMgr             ( NULL ),
         nImageId            ( 0 ),
-        bTemplateInitialized( sal_False ),
-        nCreateNewSlotId    ( 0 ) {}
+        bOwnsAccel          ( sal_False ),
+        bTemplateInitialized( sal_False )
+        {}
 
     ~SfxObjectFactory_Impl()
     {
         delete pMenuBarResId;
-        delete pPluginMenuBarResId;
         delete pAccelResId;
         // Jetzt vom FilterMatcher
         // delete pFilterContainer;
@@ -188,78 +169,19 @@ SfxFilterContainer* SfxObjectFactory::GetFilterContainer( sal_Bool bForceLoad ) 
     return pImpl->pFilterContainer;
 }
 
-void SfxObjectFactory::RegisterInitFactory(SfxVoidFunc pFunc)
-{
-    pImpl->pInitFactory = pFunc;
-    DoInitFactory();
-}
-
 //--------------------------------------------------------------------
 
-void SfxObjectFactory::DoInitFactory()
-{
-    if(!pImpl->bInitFactoryCalled)
-    {
-        pImpl->bInitFactoryCalled = sal_True;
-        (*pImpl->pInitFactory)();
-        String aShortName( String::CreateFromAscii( pShortName ) );
-        aShortName.ToLowerAscii();
-        if ( aShortName.EqualsAscii( "swriter" ) )
-            pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SW );
-        else if ( aShortName.EqualsAscii( "swriter/web" ) )
-            pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SWWEB );
-        else if ( aShortName.EqualsAscii( "swriter/globaldocument" ) )
-            pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SWGLOB );
-        else if ( aShortName.EqualsAscii( "scalc" ) )
-            pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SC );
-        else if ( aShortName.EqualsAscii( "simpress" ) )
-            pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SI );
-        else if ( aShortName.EqualsAscii( "sdraw" ) )
-            pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SD );
-        else if ( aShortName.EqualsAscii( "message" ) )
-            pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_MESSAGE );
-    }
-}
-
-/*
-sal_uInt16 SfxObjectFactory::GetFilterCount() const
-{
-    ((SfxObjectFactory *)this)->DoInitFactory();
-    return pImpl->pFilterContainer->GetFilterCount();
-}
-
-//--------------------------------------------------------------------
-
-const SfxFilter* SfxObjectFactory::GetFilter(sal_uInt16 i) const
-{
-    ((SfxObjectFactory *)this)->DoInitFactory();
-    return pImpl->pFilterContainer->GetFilter( i );
-}
-*/
-//--------------------------------------------------------------------
-
-SfxObjectShell *SfxObjectFactory::CreateObject(SfxObjectCreateMode eMode) const
-{
-    DBG_CHKTHIS(SfxObjectFactory, 0);
-    return (*fnCreate)(eMode);
-}
-
-// -----------------------------------------------------------------------
-
-void SfxObjectFactory::Construct
+SfxObjectFactory::SfxObjectFactory
 (
-    sal_uInt16      nFactoryId,
-    SfxObjectCtor   fnCreateFnc,
-    SfxObjectShellFlags nFlagsP,
-    const char*     pName
+    const SvGlobalName&     rName,
+    SfxObjectShellFlags     nFlagsP,
+    const char*             pName
 )
+    : nFlags( nFlagsP ),
+    pShortName( pName ),
+    pImpl( new SfxObjectFactory_Impl )
 {
-    DBG_CHKTHIS(SfxObjectFactory, 0);
-
-    nFlags = nFlagsP;
-    fnCreate = fnCreateFnc;
-    nId = nFactoryId;
-    pShortName = pName;
+    DBG_CTOR(SfxObjectFactory, 0);
     pImpl->pFilterContainer = new SfxFilterContainer( String::CreateFromAscii( pName ) );
 
     pImpl->aHelpFile = String::CreateFromAscii(pShortName);
@@ -269,27 +191,24 @@ void SfxObjectFactory::Construct
     pImpl->aHelpFile += DEFINE_CONST_UNICODE( ".hlp" );
     pImpl->aHelpPIFile += DEFINE_CONST_UNICODE( ".hlp" );
     pImpl->bOwnsAccel = sal_False;
-}
 
-//--------------------------------------------------------------------
-
-SfxObjectFactory::SfxObjectFactory
-(
-    const SvGlobalName&     rName,
-    const String&           rClassName,
-    CreateInstanceType      funcCIT
-)
-:   SvFactory( rName, rClassName, funcCIT ),
-    fnCreate( 0 ),
-    nId( 0 ),
-//  pIniMgr( 0 ),
-    pShortName( 0 ),
-    pImpl( new SfxObjectFactory_Impl )
-{
-    DBG_CTOR(SfxObjectFactory, 0);
-
-    SfxApplication* pApp = SFX_APP();
-    RegisterObjectFactory_Impl(*this);
+    String aShortName( String::CreateFromAscii( pShortName ) );
+    aShortName.ToLowerAscii();
+    pImpl->aClassName = rName;
+    if ( aShortName.EqualsAscii( "swriter" ) )
+        pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SW );
+    else if ( aShortName.EqualsAscii( "swriter/web" ) )
+        pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SWWEB );
+    else if ( aShortName.EqualsAscii( "swriter/globaldocument" ) )
+        pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SWGLOB );
+    else if ( aShortName.EqualsAscii( "scalc" ) )
+        pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SC );
+    else if ( aShortName.EqualsAscii( "simpress" ) )
+        pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SI );
+    else if ( aShortName.EqualsAscii( "sdraw" ) )
+        pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SD );
+    else if ( aShortName.EqualsAscii( "message" ) )
+        pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_MESSAGE );
 }
 
 //--------------------------------------------------------------------
@@ -303,38 +222,6 @@ SfxObjectFactory::~SfxObjectFactory()
         delete pImpl->aFilterArr[i];
     delete pImpl->pNameResId;
     delete pImpl;
-}
-
-//--------------------------------------------------------------------
-
-void SfxObjectFactory::RemoveAll_Impl()
-{
-    if ( !pObjFac )
-        return;
-
-    for( USHORT n=0; n<pObjFac->Count(); )
-    {
-        SfxObjectFactoryPtr pFac = pObjFac->GetObject(n);
-        pObjFac->Remove( n );
-        delete pFac;
-    }
-}
-
-//--------------------------------------------------------------------
-
-void SfxObjectFactory::ClearAll_Impl()
-{
-    if ( !pObjFac )
-        return;
-
-    for( USHORT n=0; n<pObjFac->Count(); n++ )
-    {
-        // Clear accelerator manager as it uses the same global SfxMacroConfig object as
-        // the application class does. This can lead to problems by using a newly created
-        // SfxMacroConfig object that doesn't have any macros inside => an assertion occur!
-        SfxObjectFactoryPtr pFac = pObjFac->GetObject(n);
-        pFac->pImpl->ClearAccMgr();
-    }
 }
 
 //--------------------------------------------------------------------
@@ -377,24 +264,9 @@ void SfxObjectFactory::RegisterMenuBar( const ResId& rId )
 
 //--------------------------------------------------------------------
 
-void SfxObjectFactory::RegisterPluginMenuBar( const ResId& rId )
-{
-    delete pImpl->pPluginMenuBarResId;
-    pImpl->pPluginMenuBarResId = new ResId( rId );
-}
-
-//--------------------------------------------------------------------
-
 const ResId* SfxObjectFactory::GetMenuBarId() const
 {
     return pImpl->pMenuBarResId;
-}
-
-//--------------------------------------------------------------------
-
-const ResId* SfxObjectFactory::GetPluginMenuBarId() const
-{
-    return pImpl->pPluginMenuBarResId;
 }
 
 //--------------------------------------------------------------------
@@ -428,20 +300,6 @@ const String& SfxObjectFactory::GetHelpFile() const
     return pImpl->aHelpFile;
 }
 
-//--------------------------------------------------------------------
-
-void SfxObjectFactory::RegisterHelpPIFile( const String& rString )
-{
-    pImpl->aHelpPIFile = rString;
-}
-
-//--------------------------------------------------------------------
-
-const String& SfxObjectFactory::GetHelpPIFile() const
-{
-    return pImpl->aHelpPIFile;
-}
-
 SfxModule* SfxObjectFactory::GetModule() const
 {
     return pImpl->pModule;
@@ -451,11 +309,13 @@ SfxAcceleratorManager* SfxObjectFactory::GetAccMgr_Impl()
 {
     if ( !pImpl->pAccMgr && pImpl->pAccelResId )
     {
+        const ResId& rMyId = *GetAccelId();
         // factories in the same module may share their accelerators
+        //TODO: do we want that? How to accomplish?
+/*
         SfxApplication *pApp = SFX_APP();
         SfxObjectFactoryArr_Impl& rArr = GetObjFacArray_Impl();
         sal_uInt32 nCount = rArr.Count();
-        const ResId& rMyId = *GetAccelId();
         for ( sal_uInt32 n=0; n<nCount; n++ )
         {
             SfxObjectFactory *pFact = rArr[(sal_uInt16)n];
@@ -470,10 +330,10 @@ SfxAcceleratorManager* SfxObjectFactory::GetAccMgr_Impl()
                 return pImpl->pAccMgr;
             }
         }
-
+*/
         // create accelerator manager
         pImpl->pAccMgr = new SfxAcceleratorManager( rMyId, SFX_APP()->GetConfigManager_Impl() );
-        pImpl->bOwnsAccel = sal_True;
+        //pImpl->bOwnsAccel = sal_True;
     }
 
     return pImpl->pAccMgr;
@@ -482,16 +342,6 @@ SfxAcceleratorManager* SfxObjectFactory::GetAccMgr_Impl()
 void SfxObjectFactory::SetModule_Impl( SfxModule *pMod )
 {
     pImpl->pModule = pMod;
-}
-
-void SfxObjectFactory::SetExplorerImageId( sal_uInt16 nImageId )
-{
-    pImpl->nImageId = nImageId;
-}
-
-sal_uInt16 SfxObjectFactory::GetExplorerImageId() const
-{
-    return pImpl->nImageId;
 }
 
 void SfxObjectFactory::SetStandardTemplate( const String& rServiceName, const String& rTemplate )
@@ -568,16 +418,6 @@ const SfxFilter* SfxObjectFactory::GetTemplateFilter() const
     return pFilter;
 }
 
-void SfxObjectFactory::SetCreateNewSlotId( sal_uInt16 nId )
-{
-    pImpl->nCreateNewSlotId = nId;
-}
-
-sal_uInt16 SfxObjectFactory::GetCreateNewSlotId() const
-{
-    return pImpl->nCreateNewSlotId;
-}
-
 void SfxObjectFactory::SetDocumentTypeNameResource( const ResId& rId )
 {
     DBG_ASSERT( !pImpl->pNameResId, "UI-Namensresource mehrfach gesetzt!" );
@@ -586,7 +426,6 @@ void SfxObjectFactory::SetDocumentTypeNameResource( const ResId& rId )
 
 String SfxObjectFactory::GetDocumentTypeName() const
 {
-    ((SfxObjectFactory*)this)->DoInitFactory();
     if ( pImpl->pNameResId )
         return String( *pImpl->pNameResId );
     return String();
@@ -602,10 +441,9 @@ const ::rtl::OUString& SfxObjectFactory::GetDocumentServiceName() const
     return pImpl->aServiceName;
 }
 
-void SfxObjectFactory::RegisterObjectFactory_Impl( SfxObjectFactory &rFac )
+const SvGlobalName& SfxObjectFactory::GetClassId() const
 {
-    SfxObjectFactory *pFac = &rFac;
-    GetObjFacArray_Impl().Insert( pFac, GetObjFacArray_Impl().Count() );
+    return pImpl->aClassName;
 }
 
 String SfxObjectFactory::GetModuleName() const
