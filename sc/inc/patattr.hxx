@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:54:08 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #include <vcl/fontcvt.hxx>
 #endif
 
+#ifndef _SVX_SVXENUM_HXX
+#include <svx/svxenum.hxx>
+#endif
 
 class Font;
 class OutputDevice;
@@ -119,6 +122,7 @@ public:
     const SfxPoolItem&      GetItem( USHORT nWhich ) const
                                         { return GetItemSet().Get(nWhich); }
 
+    static const SfxPoolItem& GetItem( USHORT nWhich, const SfxItemSet& rItemSet, const SfxItemSet* pCondSet );
     const SfxPoolItem&      GetItem( USHORT nWhich, const SfxItemSet* pCondSet ) const;
 
                             // pWhich sind keine Ranges, sondern einzelne IDs, 0-terminiert
@@ -126,6 +130,9 @@ public:
     void                    ClearItems( const USHORT* pWhich );
 
     void                    DeleteUnchanged( const ScPatternAttr* pOldAttrs );
+
+    static SvxCellOrientation GetCellOrientation( const SfxItemSet& rItemSet, const SfxItemSet* pCondSet = 0 );
+    SvxCellOrientation      GetCellOrientation( const SfxItemSet* pCondSet = 0 ) const;
 
     /** Static helper function to fill a font object from the passed item set. */
     static void             GetFont( Font& rFont, const SfxItemSet& rItemSet,
