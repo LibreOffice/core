@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propread.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:11:38 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,9 +278,11 @@ UINT32 Dictionary::GetProperty( const String& rString )
 
 Dictionary& Dictionary::operator=( Dictionary& rDictionary )
 {
+    void* pPtr;
+
     if ( this != &rDictionary )
     {
-        for ( void* pPtr = First(); pPtr; pPtr = Next() )
+        for ( pPtr = First(); pPtr; pPtr = Next() )
             delete (Dict*)pPtr;
 
         for ( pPtr = rDictionary.First(); pPtr; pPtr = rDictionary.Next() )
@@ -313,9 +315,10 @@ Section::Section( const sal_uInt8* pFMTID )
 
 sal_Bool Section::GetProperty( sal_uInt32 nId, PropItem& rPropItem )
 {
+    PropEntry* pProp;
     if ( nId )
     {
-        for ( PropEntry* pProp = (PropEntry*)First(); pProp; pProp = (PropEntry*)Next() )
+        for ( pProp = (PropEntry*)First(); pProp; pProp = (PropEntry*)Next() )
         {
             if ( pProp->mnId == nId )
                 break;
@@ -365,8 +368,9 @@ sal_Bool Section::GetDictionary( Dictionary& rDict )
     sal_Bool bRetValue = sal_False;
 
     Dictionary aDict;
+    PropEntry* pProp;
 
-    for ( PropEntry* pProp = (PropEntry*)First(); pProp; pProp = (PropEntry*)Next() )
+    for ( pProp = (PropEntry*)First(); pProp; pProp = (PropEntry*)Next() )
     {
         if ( pProp->mnId == 0 )
             break;
@@ -578,10 +582,12 @@ void Section::Read( SvStorageStream *pStrm )
 
 Section& Section::operator=( Section& rSection )
 {
+    PropEntry* pProp;
+
     if ( this != &rSection )
     {
         memcpy( (void*)aFMTID, (void*)rSection.aFMTID, 16 );
-        for ( PropEntry* pProp = (PropEntry*)First(); pProp; pProp = (PropEntry*)Next() )
+        for ( pProp = (PropEntry*)First(); pProp; pProp = (PropEntry*)Next() )
             delete pProp;
         Clear();
         for ( pProp = (PropEntry*)rSection.First(); pProp; pProp = (PropEntry*)rSection.Next() )
@@ -622,7 +628,9 @@ void PropRead::AddSection( Section& rSection )
 
 const Section* PropRead::GetSection( const sal_uInt8* pFMTID )
 {
-    for ( Section* pSection = (Section*)First(); pSection; pSection = (Section*)Next() )
+    Section* pSection;
+
+    for ( pSection = (Section*)First(); pSection; pSection = (Section*)Next() )
     {
         if ( memcmp( pSection->GetFMTID(), pFMTID, 16 ) == 0 )
             break;
@@ -673,6 +681,8 @@ void PropRead::Read()
 
 PropRead& PropRead::operator=( PropRead& rPropRead )
 {
+    Section* pSection;
+
     if ( this != &rPropRead )
     {
         mbStatus = rPropRead.mbStatus;
@@ -684,7 +694,7 @@ PropRead& PropRead::operator=( PropRead& rPropRead )
         mnVersionHi = rPropRead.mnVersionHi;
         memcpy( mApplicationCLSID, rPropRead.mApplicationCLSID, 16 );
 
-        for ( Section* pSection = (Section*)First(); pSection; pSection = (Section*)Next() )
+        for ( pSection = (Section*)First(); pSection; pSection = (Section*)Next() )
             delete pSection;
         Clear();
         for ( pSection = (Section*)rPropRead.First(); pSection; pSection = (Section*)rPropRead.Next() )
