@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impimage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-16 16:27:06 $
+ *  last change: $Author: ka $ $Date: 2002-07-24 11:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,17 +660,16 @@ void ImplImageBmp::ImplUpdateDisaBmp( USHORT nPos )
         const BitmapColor   aMskWhite( pMsk->GetBestMatchingColor( aWhite ) );
         const BitmapColor   aDisWhite( pDis->GetBestMatchingColor( aWhite ) );
         const BitmapColor   aDisBlack( pDis->GetBestMatchingColor( aBlack ) );
-        long                nLeft;
-        long                nTop;
-        long                nRight;
-        long                nBottom;
+        long                nLeft, nTop, nRight, nBottom;
+        long                nCurLeft, nCurRight;
+        const long          nBlackThreshold = aSize.Width() * aSize.Height() / 15;
 
         if( DISA_ALL != nPos )
         {
             const Point aPos( nPos * aSize.Width(), 0 );
 
             nLeft = aPos.X();
-            nTop = aPos.Y();
+            nTop = 0;
             nRight = nLeft + aSize.Width();
             nBottom = nTop + aSize.Height();
         }
@@ -681,66 +680,104 @@ void ImplImageBmp::ImplUpdateDisaBmp( USHORT nPos )
             nBottom = pDis->Height();
         }
 
-        if( pAcc->GetScanlineFormat() == BMP_FORMAT_4BIT_MSN_PAL &&
-            pMsk->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL )
+        nCurLeft = nLeft;
+        nCurRight = nCurLeft + aSize.Width();
+
+        while( nCurLeft < nRight )
         {
-            // optimized version
-            const BYTE cAccTest = aAccWhite.GetIndex();
-            const BYTE cMskTest = aMskWhite.GetIndex();
+            sal_Int32 nBlackCount = 0;
 
-            for( long nY = nTop; nY < nBottom; nY++ )
+            if( pAcc->GetScanlineFormat() == BMP_FORMAT_4BIT_MSN_PAL &&
+                pMsk->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL )
             {
-                Scanline pAccScan = pAcc->GetScanline( nY );
-                Scanline pMskScan = pMsk->GetScanline( nY );
+                // optimized version
+                const BYTE cAccTest = aAccWhite.GetIndex();
+                const BYTE cMskTest = aMskWhite.GetIndex();
 
-                for( long nX = nLeft; nX < nRight; nX++ )
+                for( long nY = nTop; nY < nBottom; nY++ )
                 {
-                    if( ( cMskTest == ( pMskScan[ nX >> 3 ] & ( 1 << ( 7 - ( nX & 7 ) ) ) ? 1 : 0 ) ) ||
-                        ( cAccTest == ( ( pAccScan[ nX >> 1 ] >> ( nX & 1 ? 0 : 4 ) ) & 0x0f ) ) )
+                    Scanline pAccScan = pAcc->GetScanline( nY );
+                    Scanline pMskScan = pMsk->GetScanline( nY );
+
+                    for( long nX = nCurLeft; nX < nCurRight; nX++ )
                     {
-                        pDis->SetPixel( nY, nX, aDisWhite );
+                        if( ( cMskTest == ( pMskScan[ nX >> 3 ] & ( 1 << ( 7 - ( nX & 7 ) ) ) ? 1 : 0 ) ) ||
+                            ( cAccTest == ( ( pAccScan[ nX >> 1 ] >> ( nX & 1 ? 0 : 4 ) ) & 0x0f ) ) )
+                        {
+                            pDis->SetPixel( nY, nX, aDisWhite );
+                        }
+                        else
+                        {
+                            pDis->SetPixel( nY, nX, aDisBlack );
+                            ++nBlackCount;
+                        }
                     }
-                    else
-                        pDis->SetPixel( nY, nX, aDisBlack );
                 }
             }
-        }
-        else if( pAcc->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL &&
-                 pMsk->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL )
-        {
-            // optimized version
-            const BYTE cAccTest = aAccWhite.GetIndex();
-            const BYTE cMskTest = aMskWhite.GetIndex();
-
-            for( long nY = nTop; nY < nBottom; nY++ )
+            else if( pAcc->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL &&
+                     pMsk->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL )
             {
-                Scanline pAccScan = pAcc->GetScanline( nY );
-                Scanline pMskScan = pMsk->GetScanline( nY );
+                // optimized version
+                const BYTE cAccTest = aAccWhite.GetIndex();
+                const BYTE cMskTest = aMskWhite.GetIndex();
 
-                for( long nX = nLeft; nX < nRight; nX++ )
+                for( long nY = nTop; nY < nBottom; nY++ )
                 {
-                    if( ( cMskTest == ( pMskScan[ nX >> 3 ] & ( 1 << ( 7 - ( nX & 7 ) ) ) ? 1 : 0 ) ) ||
-                        ( cAccTest == pAccScan[ nX ] ) )
+                    Scanline pAccScan = pAcc->GetScanline( nY );
+                    Scanline pMskScan = pMsk->GetScanline( nY );
+
+                    for( long nX = nCurLeft; nX < nCurRight; nX++ )
                     {
-                        pDis->SetPixel( nY, nX, aDisWhite );
+                        if( ( cMskTest == ( pMskScan[ nX >> 3 ] & ( 1 << ( 7 - ( nX & 7 ) ) ) ? 1 : 0 ) ) ||
+                            ( cAccTest == pAccScan[ nX ] ) )
+                        {
+                            pDis->SetPixel( nY, nX, aDisWhite );
+                        }
+                        else
+                        {
+                            pDis->SetPixel( nY, nX, aDisBlack );
+                            ++nBlackCount;
+                        }
                     }
-                    else
-                        pDis->SetPixel( nY, nX, aDisBlack );
                 }
             }
-        }
-        else
-        {
-            for( long nY = nTop; nY < nBottom; nY++ )
+            else
             {
-                for( long nX = nLeft; nX < nRight; nX++ )
+                for( long nY = nTop; nY < nBottom; nY++ )
                 {
-                    if( ( aMskWhite == pMsk->GetPixel( nY, nX ) ) || ( aAccWhite == pAcc->GetPixel( nY, nX ) ) )
-                        pDis->SetPixel( nY, nX, aDisWhite );
-                    else
-                        pDis->SetPixel( nY, nX, aDisBlack );
+                    for( long nX = nCurLeft; nX < nCurRight; nX++ )
+                    {
+                        if( ( aMskWhite == pMsk->GetPixel( nY, nX ) ) ||
+                            ( aAccWhite == pAcc->GetPixel( nY, nX ) ) )
+                        {
+                            pDis->SetPixel( nY, nX, aDisWhite );
+                        }
+                        else
+                        {
+                            pDis->SetPixel( nY, nX, aDisBlack );
+                            ++nBlackCount;
+                        }
+                    }
                 }
             }
+
+            if( nBlackCount < nBlackThreshold )
+            {
+                // emergency solution if paint bitmap is mostly white
+                for( long nY = nTop; nY < nBottom; nY++ )
+                {
+                    for( long nX = nCurLeft; nX < nCurRight; nX++ )
+                    {
+                        if( aMskWhite == pMsk->GetPixel( nY, nX ) )
+                            pDis->SetPixel( nY, nX, aDisWhite );
+                        else
+                            pDis->SetPixel( nY, nX, aDisBlack );
+                    }
+                }
+            }
+
+            nCurLeft += aSize.Width();
+            nCurRight += aSize.Width();
         }
     }
 
