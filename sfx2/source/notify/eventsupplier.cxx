@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 10:08:25 $
+ *  last change: $Author: svesik $ $Date: 2004-04-19 23:17:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,21 +311,49 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
             com::sun::star::uno::Any aAny;
             SfxMacroLoader::loadMacro( aScript, aAny, mpObjShell );
         }
-        else if ( aType.compareToAscii( "Service" ) == 0  || ( aType.compareToAscii( "Script" ) == 0 ) )
+        else if ( aType.compareToAscii( "Service" ) == 0 ||
+                            aType.compareToAscii( "Script" ) == 0 )
         {
             if ( aScript.getLength() )
             {
-                SfxViewFrame* pView = mpObjShell ? SfxViewFrame::GetFirst( mpObjShell ) : SfxViewFrame::Current();
+                SfxViewFrame* pView = mpObjShell ?
+                    SfxViewFrame::GetFirst( mpObjShell ) :
+                    SfxViewFrame::Current();
+
+                ::com::sun::star::uno::Reference
+                    < ::com::sun::star::util::XURLTransformer > xTrans(
+                        ::comphelper::getProcessServiceFactory()->createInstance(
+                            rtl::OUString::createFromAscii(
+                                "com.sun.star.util.URLTransformer" ) ),
+                        UNO_QUERY );
+
                 ::com::sun::star::util::URL aURL;
                 aURL.Complete = aScript;
-                ::com::sun::star::uno::Reference < ::com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                        rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
                 xTrans->parseStrict( aURL );
 
-                ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatchProvider > xProv( pView->GetFrame()->GetFrameInterface(), UNO_QUERY );
+                ::com::sun::star::uno::Reference
+                    < ::com::sun::star::frame::XDispatchProvider > xProv;
+
+                if ( pView != NULL )
+                {
+                    xProv = ::com::sun::star::uno::Reference
+                        < ::com::sun::star::frame::XDispatchProvider > (
+                            pView->GetFrame()->GetFrameInterface(), UNO_QUERY );
+                }
+                else
+                {
+                    xProv = ::com::sun::star::uno::Reference
+                        < ::com::sun::star::frame::XDispatchProvider > (
+                            ::comphelper::getProcessServiceFactory()->createInstance(
+                                rtl::OUString::createFromAscii(
+                                    "com.sun.star.frame.Desktop" ) ),
+                            UNO_QUERY );
+                }
+
                 ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > xDisp;
                 if ( xProv.is() )
                     xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
+
                 if ( xDisp.is() )
                 {
                     //::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aArgs(1);
