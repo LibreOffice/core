@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerhelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 11:52:58 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:06:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -774,7 +774,6 @@ namespace sw
         */
         Polygon PolygonFromPolyPolygon(const PolyPolygon &rPolyPoly);
 
-
         /** Make setting a drawing object's layer in a Writer document easy
 
 
@@ -827,6 +826,65 @@ namespace sw
 
     namespace hack
     {
+            /** Map an ID valid in one SfxItemPool to its equivalent in another
+
+            Given a WhichId (the id that identifies a property e.g. bold) which
+            is correct in a given SfxItemPool, get the equivalent whichId in
+            another SfxItemPool
+
+            This arises because the drawing layer uses the same properties as
+            writer e.g. SvxWeight, but for some reason uses different ids
+            for the same properties as writer.
+
+            @param rDestPool
+            The SfxItemPool in whose terms the Id is returned
+
+            @param rSrcPool
+            The SfxItemPool in whose terms the Id is passed in
+
+            @param nWhich
+            The Id to transform from source to dest
+
+            @return 0 on failure, the correct property Id on success
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        USHORT TransformWhichBetweenPools(const SfxItemPool &rDestPool,
+            const SfxItemPool &rSrcPool, USHORT nWhich);
+
+        /** Map a SwDoc WhichId to the equivalent Id for a given SfxItemSet
+
+            Given a WhichId (the id that identifies a property e.g. bold) which
+            is correct for a Writer document, get the equivalent whichId which
+            for a given SfxItemSet.
+
+            This arises because the drawing layer uses the same properties as
+            writer e.g. SvxWeight, but for some reason uses different ids
+            for the same properties as writer.
+
+            This is effectively the same as TransformWhichBetweenPools except
+            at a slightly different layer.
+
+            @param rSet
+            The SfxItemSet in whose terms the Id is returned
+
+            @param rDoc
+            The SwDoc in whose terms the Id is passed in
+
+            @param nWhich
+            The Id to transform from writer to the SfxItemSet's domain
+
+            @return 0 on failure, the correct SfxItemSet Id on success
+
+            @author
+            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        USHORT GetSetWhichFromSwDocWhich(const SfxItemSet &rSet,
+            const SwDoc &rDoc, USHORT nWhich);
+
+
+
         /** Make inserting an OLE object into a Writer document easy
 
             The rest of Office uses SdrOle2Obj for their OLE objects, Writer
