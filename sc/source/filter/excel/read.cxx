@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:02:09 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1212,6 +1212,8 @@ FltError ImportExcel8::Read( void )
                     case 0xEB:  Msodrawinggroup(); break;
                     case 0x01BA: Codename( TRUE ); break;
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345   ]
+
+                    case EXC_ID_USESELFS:       ReadUsesElfs();                     break;
 
                     case EXC_ID_FONT:           rFontBfr.ReadFont( maStrm );        break;
                     case EXC_ID_FORMAT:         rNumFmtBfr.ReadFormat( maStrm );    break;
