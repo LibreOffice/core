@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kso $ $Date: 2000-10-11 07:55:31 $
+#   last change: $Author: mba $ $Date: 2002-04-12 10:42:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -155,6 +155,7 @@ LIB3OBJFILES=\
     $(SLO)$/stritem.obj	\
     $(SLO)$/style.obj	\
     $(SLO)$/szitem.obj	\
+        $(SLO)$/imageitm.obj    \
     $(SLO)$/wallitem.obj
 
 SLOFILES=\
