@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-26 07:55:17 $
+ *  last change: $Author: mav $ $Date: 2002-08-26 14:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,6 +335,7 @@ private:
     sal_Bool                CheckFilterOptionsCapability( const SfxFilter* _pFilter );
 
     sal_Bool                isInOpenMode() const;
+    String                  getCurrentFilterUIName() const;
 
     DECL_LINK( TimeOutHdl_Impl, Timer* );
     DECL_LINK( HandleEvent, FileDialogHelper* );
@@ -559,13 +560,36 @@ void FileDialogHelper_Impl::dispose()
 }
 
 // ------------------------------------------------------------------------
+String FileDialogHelper_Impl::getCurrentFilterUIName() const
+{
+    String aFilterName;
+    Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+
+    if( xFltMgr.is() )
+    {
+        aFilterName = xFltMgr->getCurrentFilter();
+
+        if ( aFilterName.Len() )
+        {
+            // when we show the filter ui names, we added the extensions
+            // now we have to cut the extensions to find the filter
+            static const String sOpenExtension( DEFINE_CONST_UNICODE( " (*." ) );
+            static const String sSaveExtension( DEFINE_CONST_UNICODE( " (." ) );
+            aFilterName.Erase( aFilterName.Search( isInOpenMode() ? sOpenExtension : sSaveExtension ) );
+        }
+    }
+
+    return aFilterName;
+}
+
+
+// ------------------------------------------------------------------------
 const SfxFilter* FileDialogHelper_Impl::getCurentSfxFilter()
 {
-    Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
-    ::rtl::OUString aFilterName = xFltMgr->getCurrentFilter();
+    String aFilterName = getCurrentFilterUIName();
 
     const SfxFilter* pFilter = NULL;
-    if ( mpMatcher )
+    if ( mpMatcher && aFilterName.Len() )
         pFilter = mpMatcher->GetFilter4UIName( aFilterName, m_nMustFlags, m_nDontFlags );
 
     return pFilter;
@@ -1506,12 +1530,9 @@ OUString FileDialogHelper_Impl::getPath() const
 // ------------------------------------------------------------------------
 OUString FileDialogHelper_Impl::getFilter() const
 {
-    OUString aFilter;
-    Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+    String aFilter = getCurrentFilterUIName();
 
-    if ( xFltMgr.is() )
-        aFilter = xFltMgr->getCurrentFilter();
-    else
+    if( !aFilter.Len() )
         aFilter = maCurFilter;
 
     return aFilter;
@@ -1520,22 +1541,13 @@ OUString FileDialogHelper_Impl::getFilter() const
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::getRealFilter( String& _rFilter ) const
 {
-    Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
-
-    if ( xFltMgr.is() )
-        _rFilter = xFltMgr->getCurrentFilter();
+    _rFilter = getCurrentFilterUIName();
 
     if ( !_rFilter.Len() )
         _rFilter = maCurFilter;
 
     if ( _rFilter.Len() && mpMatcher )
     {
-        // when we show the filter ui names, we added the extensions
-        // now we have to cut the extensions to find the filter
-        static const String sOpenExtension( DEFINE_CONST_UNICODE( " (*." ) );
-        static const String sSaveExtension( DEFINE_CONST_UNICODE( " (." ) );
-        _rFilter.Erase( _rFilter.Search( isInOpenMode() ? sOpenExtension : sSaveExtension ) );
-
         const SfxFilter* pFilter =
             mpMatcher->GetFilter4UIName( _rFilter, m_nMustFlags, m_nDontFlags );
         _rFilter = pFilter ? pFilter->GetFilterName() : _rFilter.Erase();
