@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-11 08:58:14 $
+ *  last change: $Author: nf $ $Date: 2001-05-15 13:02:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2310,6 +2310,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                                     sLine = ( *pList->GetObject( nLIndex ))[ GERMAN_LIST_LINE_INDEX ];
                                 if ( !sLine.Len())
                                     sLine = sLastListLine;
+
                                 if (( nT != LIST_UIENTRIES ) &&
                                     (( sLine.Search( "{" ) == STRING_NOTFOUND ) ||
                                     ( sLine.Search( "{" ) >= sLine.Search( "\"" ))) &&
@@ -2338,6 +2339,8 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
 
                                 ByteString sText( "\t" );
                                 sText += sLine;
+                                sText += " ;";
+
                                 if ( bDefine )
                                     sText += " ;\\\n";
                                 else
@@ -2383,6 +2386,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                 sLine = ( *pList->GetObject( nListIndex ))[ GERMAN_LIST_LINE_INDEX ];
             if ( !sLine.Len())
                 sLine = sLastListLine;
+
             if (( nList != LIST_UIENTRIES ) &&
                 (( sLine.Search( "{" ) == STRING_NOTFOUND ) ||
                 ( sLine.Search( "{" ) >= sLine.Search( "\"" ))) &&
@@ -2394,6 +2398,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
             while( PrepareTextToMerge( sLine, nList, nListLang, pResData )) {
                 ByteString sText( "\t" );
                 sText += sLine;
+                sText += " ;";
                 sText += "\n";
                 for ( USHORT i = 0; i < nLevel; i++ )
                     sText += "\t";
@@ -2403,6 +2408,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                     sLine = ( *pList->GetObject( nListIndex ))[ GERMAN_LIST_LINE_INDEX ];
                 if ( !sLine.Len())
                     sLine = sLastListLine;
+                sLine += " ;";
             }
         }
         break;
