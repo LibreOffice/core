@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 15:05:22 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,10 +232,10 @@ void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         }
         //Flys haengen niemals an einem Follow sondern immer am
         //Master, den suchen wir uns jetzt.
-        const SwFlowFrm *pFlow = pCntnt;
+        SwCntntFrm* pFlow = pCntnt;
         while ( pFlow->IsFollow() )
             pFlow = pFlow->FindMaster();
-        pCntnt = (SwCntntFrm*)pFlow->GetFrm();
+        pCntnt = pFlow;
 
         //und schwupp angehaengt das teil...
         pCntnt->AppendFly( this );
