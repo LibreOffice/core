@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxpicklist.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,14 +443,13 @@ void SfxPickList::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     return;
 
                 // Hilfe nicht in History
-                if ( !pDocSh->Get_Impl()->bIsHelpObjSh )
+                INetURLObject aURL( pMed->GetOrigURL() );
+                if ( aURL.GetProtocol() != INET_PROT_VND_SUN_STAR_HELP )
                 {
                     ::rtl::OUString     aTitle = pDocSh->GetTitle(SFX_TITLE_PICKLIST);
                     ::rtl::OUString     aFilter;
 
-                    INetURLObject       aURL( pMed->GetOrigURL() );
                     const SfxFilter*    pFilter = pMed->GetOrigFilter();
-
                     if ( pFilter )
                         aFilter = pFilter->GetFilterName();
 
