@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:52:17 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,8 @@ public:
     long                    mnHeight;               // client height in pixeln
     int                     mnMinWidth;             // min. client width in pixeln
     int                     mnMinHeight;            // min. client height in pixeln
+    int                     mnMaxWidth;             // max. client width in pixeln
+    int                     mnMaxHeight;            // max. client height in pixeln
     RECT                    maFullScreenRect;       // fullscreen rect
     int                     mnFullScreenShowState;  // fullscreen restore show state
     UINT                    mnInputLang;            // current Input Language
@@ -139,7 +141,8 @@ public:
     virtual void                                DrawMenuBar();
     virtual void                Show( BOOL bVisible, BOOL bNoActivate = FALSE );
     virtual void                Enable( BOOL bEnable );
-    virtual void              SetMinClientSize( long nWidth, long nHeight );
+    virtual void                SetMinClientSize( long nWidth, long nHeight );
+    virtual void                SetMaxClientSize( long nWidth, long nHeight );
     virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT nFlags );
     virtual void                GetClientSize( long& rWidth, long& rHeight );
     virtual void                GetWorkArea( Rectangle& rRect );
