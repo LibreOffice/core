@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-12 15:28:27 $
+ *  last change: $Author: mba $ $Date: 2002-03-11 17:53:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -742,6 +742,7 @@ void SfxEventConfiguration::SetDocEventTable( SfxObjectShell *pDoc,
         pDocEventConfig = pDoc->GetEventConfig_Impl( TRUE );
         pDocEventConfig->aMacroTable = rTable;
         pDocEventConfig->SetDefault(FALSE);
+        pDoc->SetModified(TRUE);
         PropagateEvents_Impl( pDoc, rTable );
     }
     else
