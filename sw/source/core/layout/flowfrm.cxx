@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-16 13:03:07 $
+ *  last change: $Author: ama $ $Date: 2001-08-17 12:22:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,12 +417,14 @@ SwLayoutFrm *SwFlowFrm::CutTree( SwFrm *pStart )
     }
 
     if ( pLay->IsFtnFrm() )
-    {   if ( !pLay->Lower() && !pLay->IsColLocked() )
+    {   if ( !pLay->Lower() && !pLay->IsColLocked() &&
+             !((SwFtnFrm*)pLay)->IsBackMoveLocked() )
         {   pLay->Cut();
             delete pLay;
         }
         else
-        {   ((SwFtnFrm*)pLay)->LockBackMove();
+        {   BOOL bUnlock = !((SwFtnFrm*)pLay)->IsBackMoveLocked();
+            ((SwFtnFrm*)pLay)->LockBackMove();
             pLay->InvalidateSize();
             pLay->Calc();
             SwCntntFrm *pCnt = pLay->ContainsCntnt();
@@ -438,7 +440,8 @@ SwLayoutFrm *SwFlowFrm::CutTree( SwFrm *pStart )
                 pCnt->Calc();
                 pCnt = pCnt->GetNextCntntFrm();
             }
-            ((SwFtnFrm*)pLay)->UnlockBackMove();
+            if( bUnlock )
+                ((SwFtnFrm*)pLay)->UnlockBackMove();
         }
         pLay = 0;
     }

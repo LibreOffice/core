@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-26 12:12:54 $
+ *  last change: $Author: ama $ $Date: 2001-08-17 12:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2247,6 +2247,7 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, BOOL bCalc )
             {
                 SwTxtFtn *pAttr = pFtn->GetAttr();
                 pCnt = pFtn->ContainsAny();
+                BOOL bUnlock = !pFtn->IsBackMoveLocked();
                 pFtn->LockBackMove();
 
                 while ( pCnt && pCnt->FindFtnFrm()->GetAttr() == pAttr )
@@ -2265,7 +2266,15 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, BOOL bCalc )
                     else
                         pCnt = pCnt->FindNext();
                 }
-                pFtn->UnlockBackMove();
+                if( bUnlock )
+                {
+                    pFtn->UnlockBackMove();
+                    if( !pFtn->ContainsAny() && !pFtn->IsColLocked() )
+                    {
+                        pFtn->Cut();
+                        delete pFtn;
+                    }
+                }
             }
         }
         else
@@ -2348,10 +2357,12 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const BOOL bLock,
         SwFrm* pCntnt = pFirst->ContainsAny();
         if( pCntnt )
         {
+            BOOL bUnlock = !pFirst->IsBackMoveLocked();
             pFirst->LockBackMove();
             pFirst->Calc();
             pCntnt->Calc();
-            pFirst->UnlockBackMove();
+            if( bUnlock )
+                pFirst->UnlockBackMove();
         }
         pFtn = FindFirstFtn();
     }
@@ -2374,10 +2385,12 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const BOOL bLock,
                 SwFtnFrm* pTmp = pCnt->FindFtnFrm();
                 if ( bLock )
                 {
+                    BOOL bUnlock = !pTmp->IsBackMoveLocked();
                     pTmp->LockBackMove();
                     pTmp->Calc();
                     pCnt->Calc();
-                    pTmp->UnlockBackMove();
+                    if( bUnlock )
+                        pTmp->UnlockBackMove();
                 }
                 else
                 {
