@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sd_AccessibleOutlineView.xba,v $ 
 '*
-'*  $Revision: 1.4 $ 
+'*  $Revision: 1.5 $ 
 '*
-'*  last change:$Date: 2003-05-27 12:14:08 $ 
+'*  last change:$Date: 2004-03-19 14:32:07 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -73,6 +73,7 @@ option explicit
 
 ' REQUIRED VARIABLES for interface/service tests:
 Global oDPn As Variant
+Global fireCount as Integer
 
 
 Sub CreateObj()
@@ -93,24 +94,14 @@ On Error Goto ErrHndl
     oCntr = oDoc.getCurrentController()
 
     Out.log("Switching to outline view...")
-    aSlotID = "slot:27010"
-    url.Complete = aSlotID
-    urls = Array(url)
-    UrlTransformer = createUnoService("com.sun.star.util.URLTransformer")
-    UrlTransformer.parseStrict(urls())
-    xDispatcher = oCntr.queryDispatch(urls(0),"",0)
-    if Not IsNULL(xDispatcher) then
-        xDispatcher.dispatch( urls(0), null )
-    else
-        Out.log("queryDispatch FAILED... Cannot switch to outline view.")
-        oObj =  NULL_OBJECT
-    endif
-
+    switchOutlineView(oDoc)
+    
     oWin = utils.at_getCurrentWindow(oDoc)
     xRoot = utils.at_getAccessibleObject(oWin)
     oSearchedContext = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.DOCUMENT)
     oObj = oSearchedContext
     oDPn = oDoc.getDrawPages()
+    fireCount = 0
 
 Exit Sub
 ErrHndl:
@@ -124,7 +115,56 @@ End Sub
 
 ' This method is used for XAccessibleEventBroadcaster interface
 Sub fireEvent()
-    oDPn.insertNewByIndex(1)
+    fireCount = fireCount + 1
+    Out.log("fire event...")
+    Dim oDP as Object
+	oDP = oDPn.getByIndex(0)
+    addShape(oDP, fireCount * 500, fireCount * 500)
+    
+    
+    wait(500)
 End Sub
+
+Sub AddShape(oPage as Object, nPosX as Integer, nPosY as Integer)
+    Dim aPoint As New com.sun.star.awt.Point
+    Dim aSize As New com.sun.star.awt.Size
+    Dim oRectangleShape As Object
+
+    aPoint.x = nPosX
+    aPoint.y = nPosY
+    aSize.Width = 10000
+    aSize.Height = 10000
+    oRectangleShape = oDoc.createInstance("com.sun.star.drawing.RectangleShape")
+    oRectangleShape.Size = aSize
+    oRectangleShape.Position = aPoint
+    oRectangleShape.FillColor = RGB(255, 0, 0)
+    oPage.add(oRectangleShape)
+End Sub
+
+Sub switchOutlineView(xDoc as Object)
+On Error Goto ErrHndl
+
+        Dim Contrl as Variant, disp as Variant, transf as Object
+        Dim URL as new com.sun.star.util.URL
+        Dim noProps()
+        Dim res as Boolean
+        
+        Contrl = xDoc.getCurrentController()
+        URL.Complete = "slot:27010"
+        transf = createUnoService("com.sun.star.util.URLTransformer")
+        res = transf.parseStrict(URL)
+        
+        out.log("URL parsed :" + res)
+        
+        disp = Contrl.queryDispatch(URL, "", 0)
+
+        out.log("disp get.")
+
+        disp.dispatch(URL, noProps())
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
 
 </script:module>
