@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-09 15:51:57 $
+ *  last change: $Author: jp $ $Date: 2001-05-14 14:31:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,22 +73,22 @@
 #define NEEDED_BY_FESHVIEW
 #endif
 
-#ifndef _GRAPH_HXX //autogen
+#ifndef _GRAPH_HXX
 #include <vcl/graph.hxx>
 #endif
-#ifndef _EXCHANGE_HXX //autogen
-#include <vcl/exchange.hxx>
+#ifndef _SOT_FORMATS_HXX
+#include <sot/formats.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
+#ifndef _SVSTOR_HXX
 #include <so3/svstor.hxx>
 #endif
-#ifndef _DTRANS_HXX //autogen
+#ifndef _DTRANS_HXX
 #include <so3/dtrans.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
-#ifndef _SFXDISPATCH_HXX //autogen
+#ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
 #endif
 #ifndef _SFXVIEWSH_HXX
@@ -100,65 +100,65 @@
 #ifndef _SVX_XEXCH_HXX
 #include <svx/xexch.hxx>
 #endif
-#ifndef _SVX_XFLASIT_HXX //autogen
+#ifndef _SVX_XFLASIT_HXX
 #include <svx/xflasit.hxx>
 #endif
-#ifndef SVX_XFILLIT0_HXX //autogen
+#ifndef SVX_XFILLIT0_HXX
 #include <svx/xfillit0.hxx>
 #endif
-#ifndef _SVX_XFLCLIT_HXX //autogen
+#ifndef _SVX_XFLCLIT_HXX
 #include <svx/xflclit.hxx>
 #endif
-#ifndef _SVX_BRSHITEM_HXX //autogen
+#ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
 #endif
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#ifndef _SVDCAPT_HXX //autogen
+#ifndef _SVDCAPT_HXX
 #include <svx/svdocapt.hxx>
 #endif
-#ifndef _SVDOUNO_HXX //autogen
+#ifndef _SVDOUNO_HXX
 #include <svx/svdouno.hxx>
 #endif
-#ifndef _SVX_FILLITEM_HXX //autogen
+#ifndef _SVX_FILLITEM_HXX
 #include <svx/xfillit.hxx>
 #endif
-#ifndef _SVDPAGE_HXX //autogen
+#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
 #endif
-#ifndef _XOUTBMP_HXX //autogen
+#ifndef _XOUTBMP_HXX
 #include <svx/xoutbmp.hxx>
 #endif
-#ifndef _SVDOOLE2_HXX //autogen
+#ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
 #endif
 #ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
 #endif
 
-#ifndef _FMTANCHR_HXX //autogen
+#ifndef _FMTANCHR_HXX
 #include <fmtanchr.hxx>
 #endif
-#ifndef _FMTCNTNT_HXX //autogen
+#ifndef _FMTCNTNT_HXX
 #include <fmtcntnt.hxx>
 #endif
-#ifndef _FMTORNT_HXX //autogen
+#ifndef _FMTORNT_HXX
 #include <fmtornt.hxx>
 #endif
-#ifndef _FMTFLCNT_HXX //autogen
+#ifndef _FMTFLCNT_HXX
 #include <fmtflcnt.hxx>
 #endif
-#ifndef _FRMFMT_HXX //autogen
+#ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
 #endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
 #endif
-#ifndef _TXTFRM_HXX //autogen
+#ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
 #endif
-#ifndef _TXTFLCNT_HXX //autogen
+#ifndef _TXTFLCNT_HXX
 #include <txtflcnt.hxx>
 #endif
 #ifndef _FESH_HXX
@@ -214,6 +214,9 @@
 #endif
 #ifndef _REDLENUM_HXX
 #include <redlenum.hxx>
+#endif
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
 #endif
 
 
@@ -1081,7 +1084,7 @@ BOOL SwFEShell::GetDrawObjGraphic( ULONG nFmt, Graphic& rGrf ) const
             if( CNT_GRF == GetCntType() )
             {
                 Graphic aGrf( GetGraphic() );
-                if( FORMAT_GDIMETAFILE == nFmt )
+                if( SOT_FORMAT_GDIMETAFILE == nFmt )
                 {
                     if( GRAPHIC_BITMAP != aGrf.GetType() )
                     {
@@ -1141,9 +1144,9 @@ BOOL SwFEShell::GetDrawObjGraphic( ULONG nFmt, Graphic& rGrf ) const
                 }
             }
         }
-        else if( FORMAT_GDIMETAFILE == nFmt )
+        else if( SOT_FORMAT_GDIMETAFILE == nFmt )
             rGrf = Imp()->GetDrawView()->GetAllMarkedMetaFile();
-        else if( FORMAT_BITMAP == nFmt )
+        else if( SOT_FORMAT_BITMAP == nFmt )
             rGrf = Imp()->GetDrawView()->GetAllMarkedBitmap();
     }
     return bConvert;
@@ -1157,7 +1160,7 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
 
     SvtPathOptions aPathOpt;
     FmFormModel* pModel = new FmFormModel( aPathOpt.GetPalettePath(),
-                    (SfxItemPool*)0, (SvPersist*)GetDoc()->GetDocShell() );
+                                            0, GetDoc()->GetDocShell() );
     pModel->SetStreamingSdrModel(TRUE);
     rStrm.Seek(0);
     pModel->GetItemPool().Load( rStrm );
