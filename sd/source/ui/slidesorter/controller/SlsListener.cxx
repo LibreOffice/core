@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsListener.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:29:25 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,7 +473,6 @@ void SAL_CALL Listener::notifyEvent (
 void SAL_CALL Listener::disposing (void)
 {
     SlideSorterViewShell& rShell (mrController.GetViewShell());
-    rShell.GetFrameView()->Disconnect();
     ReleaseListeners();
 }
 
