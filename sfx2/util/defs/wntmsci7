@@ -7475,3 +7475,6 @@ _TI4?AVout_of_range@_STL@@
 ?SystrayThread@@YGKPAX@Z
 ?executerWndProc@@YGJPAUHWND__@@IIJ@Z
 ?GetMPath@FileDialogHelper@sfx2@@QBE?AV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@XZ
+?DisableHelp@SfxPrintOptionsDialog@@QAEXXZ
+?Notify@SfxPrintOptionsDialog@@UAEJAAVNotifyEvent@@@Z
+?__query@?$Reference@VXTask@frame@star@sun@com@@@uno@star@sun@com@@CAPAVXTask@frame@345@PAVXInterface@2345@@Z
