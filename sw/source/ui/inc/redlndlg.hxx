@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:29:53 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,11 @@
 #ifndef _SWREDLNDLG_HXX
 #define _SWREDLNDLG_HXX
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+#ifndef _CHLDWRAP_HXX
 #include "chldwrap.hxx"
-
-#ifndef _BASEDLGS_HXX //autogen
-#include <sfx2/basedlgs.hxx>
 #endif
 #ifndef _REDLINE_HXX
 #include <redline.hxx> //CHINA001
@@ -72,6 +73,7 @@
 #ifndef _REDLENUM_HXX
 #include <redlenum.hxx>
 #endif
+
 #ifndef _TOOLS_INTN_HXX //autogen
 #include <tools/intn.hxx>
 #endif
@@ -87,6 +89,9 @@
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
+#ifndef _BASEDLGS_HXX //autogen
+#include <sfx2/basedlgs.hxx>
+#endif
 #ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
 #endif
@@ -99,6 +104,7 @@
 #ifndef _SVX_POSTATTR_HXX //autogen
 #include <svx/postattr.hxx>
 #endif
+
 class SwChildWinWrapper;
 
 //CHINA001 class SwRedlineAcceptDlg;
@@ -137,7 +143,7 @@ SV_DECL_PTRARR_DEL(SwRedlineDataChildArr, SwRedlineDataChildPtr, 4, 4)
 typedef SvLBoxEntry* SvLBoxEntryPtr;
 SV_DECL_PTRARR(SvLBoxEntryArr, SvLBoxEntryPtr, 100, 100)
 
-class SwRedlineAcceptDlg
+class SW_DLLPUBLIC SwRedlineAcceptDlg
 {
     Dialog*                 pParentDlg;
     SwRedlineDataParentArr  aRedlineParents;
@@ -166,25 +172,25 @@ class SwRedlineAcceptDlg
     // prevent update dialog data during longer operations (cf #102657#)
     bool                    bInhibitActivate;
 
-    DECL_LINK( AcceptHdl,       void* );
-    DECL_LINK( AcceptAllHdl,    void* );
-    DECL_LINK( RejectHdl,       void* );
-    DECL_LINK( RejectAllHdl,    void* );
-    DECL_LINK( UndoHdl,         void* );
-    DECL_LINK( DeselectHdl,     void* );
-    DECL_LINK( SelectHdl,       void* );
-    DECL_LINK( GotoHdl,         void* );
-    DECL_LINK( CommandHdl,      void* );
+    SW_DLLPRIVATE DECL_LINK( AcceptHdl,     void* );
+    SW_DLLPRIVATE DECL_LINK( AcceptAllHdl,  void* );
+    SW_DLLPRIVATE DECL_LINK( RejectHdl,     void* );
+    SW_DLLPRIVATE DECL_LINK( RejectAllHdl,  void* );
+    SW_DLLPRIVATE DECL_LINK( UndoHdl,           void* );
+    SW_DLLPRIVATE DECL_LINK( DeselectHdl,       void* );
+    SW_DLLPRIVATE DECL_LINK( SelectHdl,     void* );
+    SW_DLLPRIVATE DECL_LINK( GotoHdl,           void* );
+    SW_DLLPRIVATE DECL_LINK( CommandHdl,        void* );
 
-    USHORT          CalcDiff(USHORT nStart, BOOL bChild);
-    void            InsertChilds(SwRedlineDataParent *pParent, const SwRedline& rRedln, const USHORT nAutoFmt);
-    void            InsertParents(USHORT nStart, USHORT nEnd = USHRT_MAX);
-    void            RemoveParents(USHORT nStart, USHORT nEnd);
-    void            InitAuthors();
+    SW_DLLPRIVATE USHORT            CalcDiff(USHORT nStart, BOOL bChild);
+    SW_DLLPRIVATE void          InsertChilds(SwRedlineDataParent *pParent, const SwRedline& rRedln, const USHORT nAutoFmt);
+    SW_DLLPRIVATE void          InsertParents(USHORT nStart, USHORT nEnd = USHRT_MAX);
+    SW_DLLPRIVATE void          RemoveParents(USHORT nStart, USHORT nEnd);
+    SW_DLLPRIVATE void          InitAuthors();
 
-    String          GetRedlineText(const SwRedline& rRedln, DateTime &rDateTime, USHORT nStack = 0);
-    const String&   GetActionText(const SwRedline& rRedln, USHORT nStack = 0);
-    USHORT          GetRedlinePos( const SvLBoxEntry& rEntry) const;
+    SW_DLLPRIVATE String            GetRedlineText(const SwRedline& rRedln, DateTime &rDateTime, USHORT nStack = 0);
+    SW_DLLPRIVATE const String& GetActionText(const SwRedline& rRedln, USHORT nStack = 0);
+    SW_DLLPRIVATE USHORT            GetRedlinePos( const SvLBoxEntry& rEntry) const;
 
 public:
     SwRedlineAcceptDlg(Dialog *pParent, BOOL bAutoFmt = FALSE);
