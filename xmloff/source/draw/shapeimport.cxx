@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:52:44 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:25:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mpStylesContext(0L),
     mpAutoStylesContext(0L),
     mpGroupShapeElemTokenMap(0L),
+    mpFrameShapeElemTokenMap(0L),
     mp3DSceneShapeElemTokenMap(0L),
     mp3DObjectAttrTokenMap(0L),
     mp3DPolygonBasedAttrTokenMap(0L),
@@ -297,6 +298,7 @@ XMLShapeImportHelper::~XMLShapeImportHelper()
     }
 
     if(mpGroupShapeElemTokenMap) delete mpGroupShapeElemTokenMap;
+    if(mpFrameShapeElemTokenMap) delete mpFrameShapeElemTokenMap;
 /*
     if(mpShapeAttrTokenMap) delete mpShapeAttrTokenMap;
     if(mpRectShapeAttrTokenMap) delete mpRectShapeAttrTokenMap;
@@ -345,7 +347,6 @@ static __FAR_DATA SvXMLTokenMapEntry aGroupShapeElemTokenMap[] =
     { XML_NAMESPACE_DRAW,           XML_POLYGON,        XML_TOK_GROUP_POLYGON       },
     { XML_NAMESPACE_DRAW,           XML_POLYLINE,       XML_TOK_GROUP_POLYLINE      },
     { XML_NAMESPACE_DRAW,           XML_PATH,           XML_TOK_GROUP_PATH          },
-    { XML_NAMESPACE_DRAW,           XML_TEXT_BOX,       XML_TOK_GROUP_TEXT_BOX      },
 
     { XML_NAMESPACE_DRAW,           XML_CONTROL,        XML_TOK_GROUP_CONTROL       },
     { XML_NAMESPACE_DRAW,           XML_CONNECTOR,      XML_TOK_GROUP_CONNECTOR     },
@@ -354,14 +355,22 @@ static __FAR_DATA SvXMLTokenMapEntry aGroupShapeElemTokenMap[] =
     { XML_NAMESPACE_DRAW,           XML_CAPTION,        XML_TOK_GROUP_CAPTION       },
 
     { XML_NAMESPACE_CHART,          XML_CHART,          XML_TOK_GROUP_CHART         },
-    { XML_NAMESPACE_DRAW,           XML_IMAGE,          XML_TOK_GROUP_IMAGE         },
     { XML_NAMESPACE_DR3D,           XML_SCENE,          XML_TOK_GROUP_3DSCENE       },
-    { XML_NAMESPACE_DRAW,           XML_OBJECT,         XML_TOK_GROUP_OBJECT        },
-    { XML_NAMESPACE_DRAW,           XML_OBJECT_OLE,     XML_TOK_GROUP_OBJECT_OLE    },
 
-    { XML_NAMESPACE_DRAW,           XML_PLUGIN,         XML_TOK_GROUP_PLUGIN        },
-    { XML_NAMESPACE_DRAW,           XML_FLOATING_FRAME, XML_TOK_GROUP_FRAME         },
-    { XML_NAMESPACE_DRAW,           XML_APPLET,         XML_TOK_GROUP_APPLET        },
+    { XML_NAMESPACE_DRAW,           XML_FRAME,          XML_TOK_GROUP_FRAME         },
+
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aFrameShapeElemTokenMap[] =
+{
+    { XML_NAMESPACE_DRAW,           XML_TEXT_BOX,       XML_TOK_FRAME_TEXT_BOX      },
+    { XML_NAMESPACE_DRAW,           XML_IMAGE,          XML_TOK_FRAME_IMAGE         },
+    { XML_NAMESPACE_DRAW,           XML_OBJECT,         XML_TOK_FRAME_OBJECT        },
+    { XML_NAMESPACE_DRAW,           XML_OBJECT_OLE,     XML_TOK_FRAME_OBJECT_OLE    },
+    { XML_NAMESPACE_DRAW,           XML_PLUGIN,         XML_TOK_FRAME_PLUGIN        },
+    { XML_NAMESPACE_DRAW,           XML_FLOATING_FRAME, XML_TOK_FRAME_FLOATING_FRAME},
+    { XML_NAMESPACE_DRAW,           XML_APPLET,         XML_TOK_FRAME_APPLET        },
 
     { XML_NAMESPACE_DRAW,           XML_CUSTOM_SHAPE,       XML_TOK_GROUP_CUSTOM_SHAPE  },
 
@@ -373,6 +382,13 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetGroupShapeElemTokenMap()
     if(!mpGroupShapeElemTokenMap)
         mpGroupShapeElemTokenMap = new SvXMLTokenMap(aGroupShapeElemTokenMap);
     return *mpGroupShapeElemTokenMap;
+}
+
+const SvXMLTokenMap& XMLShapeImportHelper::GetFrameShapeElemTokenMap()
+{
+    if(!mpFrameShapeElemTokenMap)
+        mpFrameShapeElemTokenMap = new SvXMLTokenMap(aFrameShapeElemTokenMap);
+    return *mpFrameShapeElemTokenMap;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -833,10 +849,10 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
             pContext = new SdXMLPathShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes);
             break;
         }
-        case XML_TOK_GROUP_TEXT_BOX:
+        case XML_TOK_GROUP_FRAME:
         {
             // text:text-box inside group context
-            pContext = new SdXMLTextBoxShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
+            pContext = new SdXMLFrameShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
             break;
         }
         case XML_TOK_GROUP_CONTROL:
@@ -875,32 +891,77 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
             pContext = new SdXMLChartShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
             break;
         }
-        case XML_TOK_GROUP_IMAGE:
+        // add other shapes here...
+        default:
+            return new SvXMLImportContext( rImport, nPrefix, rLocalName );
+    }
+
+    // now parse the attribute list and call the child context for each unknown attribute
+    for(sal_Int16 a(0); a < nAttrCount; a++)
+    {
+        const OUString& rAttrName = xAttrList->getNameByIndex(a);
+        OUString aLocalName;
+        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(rAttrName, &aLocalName);
+        const OUString aValue( xAttrList->getValueByIndex(a) );
+
+        pContext->processAttribute( nPrefix, aLocalName, aValue );
+    }
+
+    return pContext;
+}
+
+// This method is called from SdXMLFrameContext to create children of drawe:frame
+SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
+    SvXMLImport& rImport,
+    USHORT nPrefix,
+    const OUString& rLocalName,
+    const uno::Reference< xml::sax::XAttributeList>& rAttrList,
+    uno::Reference< drawing::XShapes >& rShapes,
+    const uno::Reference< xml::sax::XAttributeList>& rFrameAttrList)
+{
+    SdXMLShapeContext *pContext = 0L;
+
+    const SvXMLTokenMap& rTokenMap = GetFrameShapeElemTokenMap();
+
+    SvXMLAttributeList *pAttrList = new SvXMLAttributeList( rAttrList );
+    pAttrList->AppendAttributeList( rFrameAttrList );
+    uno::Reference < xml::sax::XAttributeList > xAttrList = pAttrList;
+
+
+    switch(rTokenMap.Get(nPrefix, rLocalName))
+    {
+        case XML_TOK_FRAME_TEXT_BOX:
+        {
+            // text:text-box inside group context
+            pContext = new SdXMLTextBoxShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
+            break;
+        }
+        case XML_TOK_FRAME_IMAGE:
         {
             // office:image inside group context
             pContext = new SdXMLGraphicObjectShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
             break;
         }
-        case XML_TOK_GROUP_OBJECT:
-        case XML_TOK_GROUP_OBJECT_OLE:
+        case XML_TOK_FRAME_OBJECT:
+        case XML_TOK_FRAME_OBJECT_OLE:
         {
             // draw:object or draw:object_ole
             pContext = new SdXMLObjectShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
             break;
         }
-        case XML_TOK_GROUP_PLUGIN:
+        case XML_TOK_FRAME_PLUGIN:
         {
             // draw:plugin
             pContext = new SdXMLPluginShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
             break;
         }
-        case XML_TOK_GROUP_FRAME:
+        case XML_TOK_FRAME_FLOATING_FRAME:
         {
-            // draw:frame
-            pContext = new SdXMLFrameShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
+            // draw:floating-frame
+            pContext = new SdXMLFloatingFrameShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
             break;
         }
-        case XML_TOK_GROUP_APPLET:
+        case XML_TOK_FRAME_APPLET:
         {
             // draw:applet
             pContext = new SdXMLAppletShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
@@ -914,19 +975,38 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
         }
         // add other shapes here...
         default:
-            return new SvXMLShapeContext( rImport, nPrefix, rLocalName );
+            break;
     }
 
-    // now parse the attribute list and call the child context for each unknown attribute
-    for(sal_Int16 a(0); a < nAttrCount; a++)
+    if( pContext )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex(a);
-        OUString aLocalName;
-        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(rAttrName, &aLocalName);
-        const OUString aValue( xAttrList->getValueByIndex(a) );
+        // now parse the attribute list and call the child context for each unknown attribute
+        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+        for(sal_Int16 a(0); a < nAttrCount; a++)
+        {
+            const OUString& rAttrName = xAttrList->getNameByIndex(a);
+            OUString aLocalName;
+            sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(rAttrName, &aLocalName);
+            const OUString aValue( xAttrList->getValueByIndex(a) );
 
-        pContext->processAttribute( nPrefix, aLocalName, aValue );
+            pContext->processAttribute( nPrefix, aLocalName, aValue );
+        }
     }
+
+    return pContext;
+}
+
+SvXMLImportContext *XMLShapeImportHelper::CreateFrameChildContext(
+    SvXMLImportContext *pThisContext,
+    USHORT nPrefix,
+    const OUString& rLocalName,
+    const uno::Reference< xml::sax::XAttributeList>& xAttrList )
+{
+    SvXMLImportContext * pContext = NULL;
+
+    SdXMLFrameShapeContext *pFrameContext = PTR_CAST( SdXMLFrameShapeContext, pThisContext );
+    if( pFrameContext )
+        pContext = pFrameContext->CreateChildContext( nPrefix, rLocalName, xAttrList );
 
     return pContext;
 }
