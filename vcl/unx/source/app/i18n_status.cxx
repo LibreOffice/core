@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-28 14:37:42 $
+ *  last change: $Author: sb $ $Date: 2002-11-18 11:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@ class XIMStatusWindow : public StatusWindow
     FixedText               m_aStatusText;
     SalFrame*               m_pLastParent;
     Size                    m_aWindowSize;
+    bool                    m_bAnchoredAtRight;
+        // true if the right edge (instead of the left edge) should stay at a
+        // fixed position when re-sizing the window
 
     // for delayed showing
     bool                    m_bDelayedShow;
@@ -161,6 +164,7 @@ public:
 XIMStatusWindow::XIMStatusWindow() :
         StatusWindow( WB_BORDER ),
         m_aStatusText( this, 0 ),
+        m_bAnchoredAtRight( false ),
         m_pLastParent( NULL ),
         m_bDelayedShow( false ),
         m_eDelayedReason( I18NStatus::contextmap ),
@@ -190,7 +194,20 @@ void XIMStatusWindow::layout()
     m_aStatusText.SetFont( aFont );
     m_aStatusText.Show( TRUE );
 
-    SetOutputSizePixel( m_aWindowSize );
+    if (m_bAnchoredAtRight && IsVisible())
+    {
+        SalFrameData & rData
+            = static_cast< SalFrame * >(
+                GetSystemData()->pSalFrame)->maFrameData;
+        Rectangle aOldRect;
+        rData.getPosSize(aOldRect);
+        long nDelta = aOldRect.GetWidth() - m_aWindowSize.Width();
+        rData.setPosSize(Rectangle(Point(aOldRect.Left() + nDelta,
+                                         aOldRect.Top()),
+                                   m_aWindowSize));
+    }
+    else
+        SetOutputSizePixel( m_aWindowSize );
 }
 
 bool XIMStatusWindow::checkLastParent() const
@@ -233,8 +250,33 @@ Point XIMStatusWindow::updatePosition()
                                0, 0,
                                &x, &y,
                                &aChild );
-        aRet.X() = x + aPosEvent.mnX;
-        aRet.Y() = y + aPosEvent.mnY+aPosEvent.mnHeight + 4;
+
+        // TODO:  Currently, place the status window to the (physical) left of
+        // the cursor iff in vertical mode (assuming that the columns in
+        // vertical mode are always written from right to left, this causes the
+        // status window to keep out of the text already written).  This
+        // heuristic would break if there is ever a vertical mode in which the
+        // columns are written from left to right.  Also, more elaborate
+        // positioning for (both horizontal and vertical) left-to-right and
+        // right-to-left text would be possible.
+        bool bLeft = aPosEvent.mbVertical;
+            // true if status window is to the left of the cursor
+
+        int const nGap = 4; // between cursor and status window
+        if (aPosEvent.mbVertical)
+        {
+            aRet.X() = x + aPosEvent.mnX + (bLeft
+                                            ? -m_aWindowSize.Width() - nGap
+                                            : aPosEvent.mnHeight + nGap);
+            aRet.Y() = y + aPosEvent.mnY;
+        }
+        else
+        {
+            aRet.X() = x + aPosEvent.mnX + (bLeft ? -m_aWindowSize.Width() : 0);
+            aRet.Y() = y + aPosEvent.mnY+aPosEvent.mnHeight + nGap;
+        }
+
+        m_bAnchoredAtRight = bLeft;
     }
     return aRet;
 }

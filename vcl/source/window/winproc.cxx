@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-11 12:24:36 $
+ *  last change: $Author: sb $ $Date: 2002-11-18 11:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1330,7 +1330,8 @@ static long ImplHandleEndExtTextInput( Window* /* pWindow */ )
 // -----------------------------------------------------------------------
 
 static void ImplHandleExtTextInputPos( Window* pWindow,
-                                       Rectangle& rRect, long& rInputWidth )
+                                       Rectangle& rRect, long& rInputWidth,
+                                       bool * pVertical )
 {
     ImplSVData* pSVData = ImplGetSVData();
     Window*     pChild = pSVData->maWinData.mpExtTextInputWin;
@@ -1368,6 +1369,9 @@ static void ImplHandleExtTextInputPos( Window* pWindow,
         if ( !rInputWidth )
             rInputWidth = rRect.GetWidth();
     }
+    if (pVertical != 0)
+        *pVertical
+            = pChild != 0 && pChild->GetInputContext().GetFont().IsVertical();
 }
 
 // -----------------------------------------------------------------------
@@ -2007,7 +2011,7 @@ static void ImplHandleSalSettings( Window* pWindow, USHORT nEvent )
 static void ImplHandleSalExtTextInputPos( Window* pWindow, SalExtTextInputPosEvent* pEvt )
 {
     Rectangle aCursorRect;
-    ImplHandleExtTextInputPos( pWindow, aCursorRect, pEvt->mnExtWidth );
+    ImplHandleExtTextInputPos( pWindow, aCursorRect, pEvt->mnExtWidth, &pEvt->mbVertical );
     if ( aCursorRect.IsEmpty() )
     {
         pEvt->mnX       = -1;
@@ -2215,7 +2219,7 @@ void ImplUpdateCursorRect( Window *pWindow )
         Rectangle rRect;
         long rWidth;
         pFrame->IsInEvtHandler( true ); // avoid recursion
-        ImplHandleExtTextInputPos( pWindow, rRect, rWidth );
+        ImplHandleExtTextInputPos( pWindow, rRect, rWidth, 0 );
         pFrame->IsInEvtHandler( false );
         pFrame->SetCursorRect( &rRect, rWidth );
     }
