@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-21 14:55:25 $
+ *  last change: $Author: sj $ $Date: 2002-09-09 15:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -788,6 +788,99 @@ DffPropertyReader::~DffPropertyReader()
     delete pDefaultPropSet;
 }
 
+static void GetLineArrow( const sal_Int32 nLineWidth, const MSO_LineEnd eLineEnd,
+                            const MSO_LineEndWidth eLineWidth, const MSO_LineEndLength eLineLenght,
+                                sal_Int32& rnArrowWidth, XPolygon& rXPoly, sal_Bool& rbArrowCenter )
+{
+    double  fLineWidth = nLineWidth < 70 ? 70.0 : nLineWidth;
+    double  fLenghtMul, fWidthMul;
+    switch( eLineLenght )
+    {
+        default :
+        case mso_lineMediumLenArrow     : fLenghtMul = 3.0; break;
+        case mso_lineShortArrow         : fLenghtMul = 2.0; break;
+        case mso_lineLongArrow          : fLenghtMul = 5.0; break;
+    }
+    switch( eLineWidth )
+    {
+        default :
+        case mso_lineMediumWidthArrow   : fWidthMul = 3.0; break;
+        case mso_lineNarrowArrow        : fWidthMul = 2.0; break;
+        case mso_lineWideArrow          : fWidthMul = 5.0; break;
+    }
+    rbArrowCenter = sal_False;
+    switch ( eLineEnd )
+    {
+        case mso_lineArrowEnd :
+        {
+            XPolygon aTriangle( 3 );
+            aTriangle[ 0 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 );
+            aTriangle[ 1 ] = Point( (sal_Int32)( fWidthMul * fLineWidth ), (sal_Int32)( fLenghtMul * fLineWidth ) );
+            aTriangle[ 2 ] = Point( 0, (sal_Int32)( fLenghtMul * fLineWidth ) );
+            rXPoly = aTriangle;
+        }
+        break;
+
+        case mso_lineArrowOpenEnd :
+        {
+            switch( eLineLenght )
+            {
+                default :
+                case mso_lineMediumLenArrow     : fLenghtMul = 4.5; break;
+                case mso_lineShortArrow         : fLenghtMul = 3.5; break;
+                case mso_lineLongArrow          : fLenghtMul = 6.0; break;
+            }
+            switch( eLineWidth )
+            {
+                default :
+                case mso_lineMediumWidthArrow   : fWidthMul = 4.5; break;
+                case mso_lineNarrowArrow        : fWidthMul = 3.5; break;
+                case mso_lineWideArrow          : fWidthMul = 6.0; break;
+            }
+            XPolygon aTriangle( 6 );
+            aTriangle[ 0 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 );
+            aTriangle[ 1 ] = Point( (sal_Int32)( fWidthMul * fLineWidth ), (sal_Int32)( fLenghtMul * fLineWidth * 0.91 ) );
+            aTriangle[ 2 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.85 ), (sal_Int32)( fLenghtMul * fLineWidth ) );
+            aTriangle[ 3 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), (sal_Int32)( fLenghtMul * fLineWidth * 0.36 ) );
+            aTriangle[ 4 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.15 ), (sal_Int32)( fLenghtMul * fLineWidth ) );
+            aTriangle[ 5 ] = Point( 0, (sal_Int32)( fLenghtMul * fLineWidth * 0.91 ) );
+            rXPoly = aTriangle;
+        }
+        break;
+        case mso_lineArrowStealthEnd :
+        {
+            XPolygon aTriangle( 4 );
+            aTriangle[ 0 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 );
+            aTriangle[ 1 ] = Point( (sal_Int32)( fWidthMul * fLineWidth ), (sal_Int32)( fLenghtMul * fLineWidth ) );
+            aTriangle[ 2 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), (sal_Int32)( fLenghtMul * fLineWidth * 0.60 ) );
+            aTriangle[ 3 ] = Point( 0, (sal_Int32)( fLenghtMul * fLineWidth ) );
+            rXPoly = aTriangle;
+        }
+        break;
+        case mso_lineArrowDiamondEnd :
+        {
+            XPolygon aTriangle(4);
+            aTriangle[ 0 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 );
+            aTriangle[ 1 ] = Point( (sal_Int32)( fWidthMul * fLineWidth ), (sal_Int32)( fLenghtMul * fLineWidth * 0.50 ) );
+            aTriangle[ 2 ] = Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), (sal_Int32)( fLenghtMul * fLineWidth ) );
+            aTriangle[ 3 ] = Point( 0, (sal_Int32)( fLenghtMul * fLineWidth * 0.50 ) );
+            rXPoly = aTriangle;
+            rbArrowCenter = sal_True;
+
+        }
+        break;
+        case mso_lineArrowOvalEnd :
+        {
+            rXPoly = XPolygon( Point( (sal_Int32)( fWidthMul * fLineWidth * 0.50 ), 0 ),
+                                (sal_Int32)( fWidthMul * fLineWidth * 0.50 ),
+                                    (sal_Int32)( fLenghtMul * fLineWidth * 0.50 ), 0, 3600 );
+            rbArrowCenter = sal_True;
+        }
+        break;
+    }
+    rnArrowWidth = (sal_Int32)( fLineWidth * fWidthMul );
+}
+
 void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObject* pObj ) const
 {
     MapUnit eMap( rManager.GetModel()->GetScaleUnit() );
@@ -976,262 +1069,37 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
             ///////////////
             if ( IsProperty( DFF_Prop_lineStartArrowhead ) )
             {
-                MSO_LineEnd aLineEnd = (MSO_LineEnd)GetPropertyValue( DFF_Prop_lineStartArrowhead );
-                FASTBOOL bLineCenter = FALSE;
-                XPolygon aPoly;
-                INT32 nWdt = ( (const XLineWidthItem&)( rSet.Get( XATTR_LINEWIDTH ) ) ).GetValue();
-                if ( !nWdt )
-                    nWdt = 9;
+                MSO_LineEnd         eLineEnd = (MSO_LineEnd)GetPropertyValue( DFF_Prop_lineStartArrowhead );
+                MSO_LineEndWidth    eWidth = (MSO_LineEndWidth)GetPropertyValue( DFF_Prop_lineStartArrowWidth, mso_lineMediumWidthArrow );
+                MSO_LineEndLength   eLenght = (MSO_LineEndLength)GetPropertyValue( DFF_Prop_lineStartArrowLength, mso_lineMediumLenArrow );
 
-                switch ( aLineEnd )
-                {
-                    case mso_lineArrowEnd :
-                    {
-                        XPolygon aTriangle( 3 );
-                        aTriangle[0].X()=1000; aTriangle[0].Y()=   0;
-                        aTriangle[1].X()=   0; aTriangle[1].Y()=2000;
-                        aTriangle[2].X()=2000; aTriangle[2].Y()=2000;
-                        aPoly = aTriangle;
-                    }
-                    break;
-                    case mso_lineArrowOpenEnd :
-                    {
-                        XPolygon aTriangle( 6 );
-                        aTriangle[0].X()=1000; aTriangle[0].Y()=   0;
-                        aTriangle[1].X()=   0; aTriangle[1].Y()=2000;
-                        aTriangle[2].X()= 400; aTriangle[2].Y()=2000;
-                        aTriangle[3].X()=1000; aTriangle[3].Y()= 500;
-                        aTriangle[4].X()=2000 - 400; aTriangle[4].Y()=2000;
-                        aTriangle[5].X()=2000; aTriangle[5].Y()=2000;
-                        aPoly = aTriangle;
-                    }
-                    break;
-                    case mso_lineArrowStealthEnd :
-                    {
-                        XPolygon aTriangle(4);
-                        aTriangle[0].X()=1000; aTriangle[0].Y()=   0;
-                        aTriangle[1].X()=   0; aTriangle[1].Y()=2000;
-                        aTriangle[2].X()=1000; aTriangle[2].Y()=1500;
-                        aTriangle[3].X()=2000; aTriangle[3].Y()=2000;
-                        aPoly=aTriangle;
-                    }
-                    break;
-                    case mso_lineArrowDiamondEnd :
-                    {
-                        XPolygon aTriangle(4);
-                        aTriangle[0].X()=1000; aTriangle[0].Y()=   0;
-                        aTriangle[1].X()=   0; aTriangle[1].Y()=1000;
-                        aTriangle[2].X()=1000; aTriangle[2].Y()=2000;
-                        aTriangle[3].X()=2000; aTriangle[3].Y()=1000;
-                        aPoly=aTriangle;
-                        bLineCenter=TRUE ;
+                XPolygon    aPoly;
+                sal_Int32   nArrowWidth;
+                sal_Bool    bArrowCenter;
+                GetLineArrow( nLineWidth, eLineEnd, eWidth, eLenght, nArrowWidth, aPoly, bArrowCenter );
 
-                    }
-                    break;
-                    case mso_lineArrowOvalEnd :
-                    {
-                        aPoly = XPolygon( Point( 1000, 0 ), 1000, 1000, 0, 3600 );
-                        bLineCenter = TRUE;
-                    }
-                    break;
-                }
-                // ggfs. Pfeilende/Start an Writer-Mass anpassen
-                double nArrowScaleFactor = ( MAP_TWIP == rManager.GetModel()->GetScaleUnit() ) ? 2.1 : 1.0;
-                rSet.Put( XLineStartWidthItem( (INT32)( ( 280 + (INT32)( (double)nWdt * 2.5 ) ) / nArrowScaleFactor ) ) );
-                rSet.Put( XLineStartItem( String(
-                                    RTL_CONSTASCII_STRINGPARAM( "linestart" ),
-                                    RTL_TEXTENCODING_MS_1252 ),
-                                    aPoly ) );
-                rSet.Put( XLineStartCenterItem( bLineCenter ) );
-
-                MSO_LineEndWidth eWidth = (MSO_LineEndWidth)GetPropertyValue( DFF_Prop_lineStartArrowWidth, mso_lineMediumWidthArrow );
-                double fFactor;
-                switch( eWidth )
-                {
-                    case mso_lineNarrowArrow :
-                        fFactor = 0.583;
-                    break;
-                    case mso_lineWideArrow :
-                        fFactor = 1.715;
-                    break;
-                    default:
-                    case mso_lineMediumWidthArrow :
-                        fFactor = 1.0;
-                    break;
-                }
-                if( 1.0 != fFactor )
-                {
-                    const SfxPoolItem* pPoolItem=NULL;
-                    if ( rSet.GetItemState( XATTR_LINESTART, FALSE, &pPoolItem ) == SFX_ITEM_SET )
-                    {
-                        XPolygon aNewPoly( ( (const XLineStartItem*)pPoolItem )->GetValue() );
-                        aNewPoly.Scale( fFactor, 1.0 );
-                        rSet.Put( XLineStartItem( String(), aNewPoly ) );
-                    }
-                    if ( rSet.GetItemState( XATTR_LINESTARTWIDTH, FALSE, &pPoolItem ) == SFX_ITEM_SET )
-                    {
-                        INT32 nNewWidth = ( (const XLineStartWidthItem*)pPoolItem )->GetValue();
-                        nNewWidth = (INT32)( fFactor * (double)nNewWidth );
-                        rSet.Put( XLineStartWidthItem( nNewWidth ) );
-                    }
-                }
-                MSO_LineEndLength eLength = (MSO_LineEndLength)GetPropertyValue( DFF_Prop_lineStartArrowLength, mso_lineMediumLenArrow );
-                switch ( eLength )
-                {
-                    case mso_lineShortArrow :
-                        fFactor = 1.715;
-                    break;
-                    case mso_lineLongArrow :
-                        fFactor = 0.583;
-                    break;
-                    default :
-                    case mso_lineMediumLenArrow :
-                        fFactor = 1.0;
-                    break;
-                }
-                if ( fFactor != 1.0 )
-                {
-                    const SfxPoolItem* pPoolItem = NULL;
-                    if ( rSet.GetItemState( XATTR_LINESTART, FALSE, &pPoolItem ) == SFX_ITEM_SET )
-                    {
-                        XPolygon aNewPoly( ( (const XLineStartItem*)pPoolItem )->GetValue() );
-                        aNewPoly.Scale( fFactor, 1.0 );
-                        rSet.Put( XLineStartItem( String(), aNewPoly ) );
-                    }
-                }
+                rSet.Put( XLineStartWidthItem( nArrowWidth ) );
+                rSet.Put( XLineStartItem( String( RTL_CONSTASCII_STRINGPARAM( "linestart" ), RTL_TEXTENCODING_MS_1252 ), aPoly ) );
+                rSet.Put( XLineStartCenterItem( bArrowCenter ) );
             }
             /////////////
             // LineEnd //
             /////////////
             if ( IsProperty( DFF_Prop_lineEndArrowhead ) )
             {
-                MSO_LineEnd aLineEnd = (MSO_LineEnd)GetPropertyValue( DFF_Prop_lineEndArrowhead );
-                FASTBOOL bLineCenter = FALSE;
-                XPolygon aPoly;
-                INT32 nWdt = ( (const XLineWidthItem&)( rSet.Get( XATTR_LINEWIDTH ) ) ).GetValue();
-                if ( !nWdt )
-                    nWdt = 9;
+                MSO_LineEnd         eLineEnd = (MSO_LineEnd)GetPropertyValue( DFF_Prop_lineEndArrowhead );
+                MSO_LineEndWidth    eWidth = (MSO_LineEndWidth)GetPropertyValue( DFF_Prop_lineEndArrowWidth, mso_lineMediumWidthArrow );
+                MSO_LineEndLength   eLenght = (MSO_LineEndLength)GetPropertyValue( DFF_Prop_lineEndArrowLength, mso_lineMediumLenArrow );
 
-                switch ( aLineEnd )
-                {
-                    case mso_lineArrowEnd :
-                    {
-                        XPolygon aTriangle( 3 );
-                        aTriangle[0].X()=1000; aTriangle[0].Y()=   0;
-                        aTriangle[1].X()=   0; aTriangle[1].Y()=2000;
-                        aTriangle[2].X()=2000; aTriangle[2].Y()=2000;
-                        aPoly = aTriangle;
-                    }
-                    break;
-                    case mso_lineArrowOpenEnd :
-                    {
-                        XPolygon aTriangle( 6 );
-                        aTriangle[0].X()=1000; aTriangle[0].Y()=   0;
-                        aTriangle[1].X()=   0; aTriangle[1].Y()=2000;
-                        aTriangle[2].X()= 400; aTriangle[2].Y()=2000;
-                        aTriangle[3].X()=1000; aTriangle[3].Y()= 500;
-                        aTriangle[4].X()=2000 - 400; aTriangle[4].Y()=2000;
-                        aTriangle[5].X()=2000; aTriangle[5].Y()=2000;
-                        aPoly = aTriangle;
-                    }
-                    break;
-                    case mso_lineArrowStealthEnd :
-                    {
-                        XPolygon aTriangle(4);
-                        aTriangle[0].X()=1000; aTriangle[0].Y()=   0;
-                        aTriangle[1].X()=   0; aTriangle[1].Y()=2000;
-                        aTriangle[2].X()=1000; aTriangle[2].Y()=1500;
-                        aTriangle[3].X()=2000; aTriangle[3].Y()=2000;
-                        aPoly=aTriangle;
-                    }
-                    break;
-                    case mso_lineArrowDiamondEnd :
-                    {
-                        XPolygon aTriangle(4);
-                        aTriangle[0].X()=1000; aTriangle[0].Y()=   0;
-                        aTriangle[1].X()=   0; aTriangle[1].Y()=1000;
-                        aTriangle[2].X()=1000; aTriangle[2].Y()=2000;
-                        aTriangle[3].X()=2000; aTriangle[3].Y()=1000;
-                        aPoly=aTriangle;
-                        bLineCenter=TRUE ;
+                XPolygon    aPoly;
+                sal_Int32   nArrowWidth;
+                sal_Bool    bArrowCenter;
+                GetLineArrow( nLineWidth, eLineEnd, eWidth, eLenght, nArrowWidth, aPoly, bArrowCenter );
 
-                    }
-                    break;
-                    case mso_lineArrowOvalEnd :
-                    {
-                        aPoly = XPolygon( Point( 1000, 0 ), 1000, 1000, 0, 3600 );
-                        bLineCenter = TRUE;
-                    }
-                    break;
-                }
-                // ggfs. Pfeilende/Start an Writer-Mass anpassen
-                double nArrowScaleFactor = ( MAP_TWIP == rManager.GetModel()->GetScaleUnit() ) ? 2.1 : 1.0;
-                rSet.Put( XLineEndWidthItem( (INT32)( ( 280 + (INT32)( (double)nWdt * 2.5 ) ) / nArrowScaleFactor ) ) );
-                rSet.Put( XLineEndItem( String(
-                                    RTL_CONSTASCII_STRINGPARAM( "lineend" ),
-                                    RTL_TEXTENCODING_MS_1252 ),
-                                    aPoly ) );
-                rSet.Put( XLineEndCenterItem( bLineCenter ) );
-
-                MSO_LineEndWidth eWidth =( MSO_LineEndWidth)GetPropertyValue( DFF_Prop_lineEndArrowWidth, mso_lineMediumWidthArrow );
-                double fFactor;
-                switch( eWidth )
-                {
-                    case mso_lineNarrowArrow :
-                        fFactor = 0.583;
-                    break;
-                    case mso_lineWideArrow :
-                        fFactor = 1.715;
-                    break;
-                    default:
-                    case mso_lineMediumWidthArrow :
-                        fFactor = 1.0;
-                    break;
-                }
-                if( 1.0 != fFactor )
-                {
-                    const SfxPoolItem* pPoolItem = NULL;
-                    if ( rSet.GetItemState( XATTR_LINEEND,FALSE, &pPoolItem ) == SFX_ITEM_SET )
-                    {
-                        XPolygon aNewPoly( ( (const XLineEndItem*)pPoolItem )->GetValue() );
-                        // Basisbreite des Pfeilspizendreiecks veraendern
-                        aNewPoly.Scale( fFactor, 1.0 );
-                        rSet.Put( XLineEndItem( String(), aNewPoly ) );
-                    }
-                    if ( rSet.GetItemState( XATTR_LINEENDWIDTH, FALSE, &pPoolItem ) == SFX_ITEM_SET )
-                    {
-                        INT32 nNewWidth = ( (const XLineEndWidthItem*)pPoolItem )->GetValue();
-                        nNewWidth = (INT32)( fFactor * (double)nNewWidth );
-                        rSet.Put( XLineEndWidthItem( nNewWidth ) );
-                    }
-                }
-                MSO_LineEndLength eLength = (MSO_LineEndLength)GetPropertyValue( DFF_Prop_lineEndArrowLength, mso_lineMediumLenArrow );
-                switch ( eLength )
-                {
-                    case mso_lineShortArrow :
-                        fFactor = 1.715;
-                    break;
-                    case mso_lineLongArrow :
-                        fFactor = 0.583;
-                    break;
-                    default :
-                    case mso_lineMediumLenArrow :
-                        fFactor = 1.0;
-                    break;
-                }
-                if( 1.0 != fFactor )
-                {
-                    const SfxPoolItem* pPoolItem = NULL;
-                    if ( rSet.GetItemState( XATTR_LINEEND, FALSE, &pPoolItem ) == SFX_ITEM_SET )
-                    {
-                        XPolygon aNewPoly( ( (const XLineEndItem*)pPoolItem )->GetValue() );
-                        // Schenkellaenge des Pfeilspizendreiecks veraendern
-                        aNewPoly.Scale( fFactor, 1.0 );
-                        rSet.Put( XLineEndItem( String(), aNewPoly ) );
-                    }
-                }
+                rSet.Put( XLineEndWidthItem( nArrowWidth ) );
+                rSet.Put( XLineEndItem( String( RTL_CONSTASCII_STRINGPARAM( "lineend" ), RTL_TEXTENCODING_MS_1252 ), aPoly ) );
+                rSet.Put( XLineEndCenterItem( bArrowCenter ) );
             }
-
             if ( IsProperty( DFF_Prop_lineEndCapStyle ) )
             {
                 MSO_LineCap eLineCap = (MSO_LineCap)GetPropertyValue( DFF_Prop_lineEndCapStyle );
