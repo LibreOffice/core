@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:31:13 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,9 @@ namespace dbaui
             m_aExceptionInfo = ::dbtools::SQLExceptionInfo();
             return aInfo;
         }
+
+        void clearAddTableDialog() { m_pAddTabDlg = NULL; }
+
     protected:
         virtual OTableWindowData* createTableWindowData() = 0;
         // ask the user if the design should be saved when it is modified
