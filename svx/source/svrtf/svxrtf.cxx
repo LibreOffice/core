@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:30:59 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): cmc@openoffice.org, tono@openoffice.org
  *
  *
  ************************************************************************/
@@ -210,9 +210,13 @@ void SvxRTFParser::Continue( int nToken )
     if( SVPAR_PENDING != GetStatus() )
     {
         SetAllAttrOfStk();
+#if 0
+    //Regardless of what "color 0" is, word defaults to auto as the default colour.
+    //e.g. see #i7713#
         if( bNewDoc && ((RTFPlainAttrMapIds*)aPlainMap.GetData())->nColor )
             pAttrPool->SetPoolDefaultItem( SvxColorItem( GetColor( 0 ),
                         ((RTFPlainAttrMapIds*)aPlainMap.GetData())->nColor ));
+#endif
      }
 }
 
@@ -464,7 +468,9 @@ void SvxRTFParser::ReadStyleTable()
                     if( '{' == GetStackPtr( -1 )->nTokenId )
                     {
                         nToken = SkipToken( -1 );
+#if 0
                         --nOpenBrakets;     // korrigieren!!
+#endif
                     }
                 }
                 ReadAttr( nToken, &pStyle->aAttrSet );
@@ -529,7 +535,7 @@ void SvxRTFParser::ReadFontTable()
     int nToken;
     int nOpenBrakets = 1;       // die erste wurde schon vorher erkannt !!
     Font* pFont = new Font();
-    short nFontNo, nInsFontNo;
+    short nFontNo(0), nInsFontNo;
     String sAltNm, sFntNm;
     BOOL bIsAltFntNm = FALSE, bCheckNewFont;
 
@@ -538,18 +544,16 @@ void SvxRTFParser::ReadFontTable()
         bCheckNewFont = FALSE;
         switch( ( nToken = GetNextToken() ))
         {
-        case '}':
-                        bIsAltFntNm = FALSE;
-                        if( --nOpenBrakets <= 1 && IsParserWorking() )
-                            // Style konnte vollstaendig gelesen werden,
-                            // also ist das noch ein stabiler Status
-                            SaveState( RTF_FONTTBL );
-                        bCheckNewFont = TRUE;
-                        nInsFontNo = nFontNo;
-                        break;
-
-        case '{':
-            {
+            case '}':
+                bIsAltFntNm = FALSE;
+                // Style konnte vollstaendig gelesen werden,
+                // also ist das noch ein stabiler Status
+                if( --nOpenBrakets <= 1 && IsParserWorking() )
+                    SaveState( RTF_FONTTBL );
+                bCheckNewFont = TRUE;
+                nInsFontNo = nFontNo;
+                break;
+            case '{':
                 if( RTF_IGNOREFLAG != GetNextToken() )
                     nToken = SkipToken( -1 );
                 // Unknown und alle bekannten nicht ausgewerteten Gruppen
@@ -568,43 +572,58 @@ void SvxRTFParser::ReadFontTable()
                     break;
                 }
                 ++nOpenBrakets;
-            }
-            break;
-
-        case RTF_FROMAN:    pFont->SetFamily( FAMILY_ROMAN );       break;
-        case RTF_FSWISS:    pFont->SetFamily( FAMILY_SWISS );       break;
-        case RTF_FMODERN:   pFont->SetFamily( FAMILY_MODERN );      break;
-        case RTF_FSCRIPT:   pFont->SetFamily( FAMILY_SCRIPT );      break;
-        case RTF_FDECOR:    pFont->SetFamily( FAMILY_DECORATIVE );  break;
-
-        // bei technischen/symbolischen Font wird der CharSet ungeschaltet!!
-        case RTF_FTECH:     pFont->SetCharSet( RTL_TEXTENCODING_SYMBOL );   // kein break
-        case RTF_FNIL:      pFont->SetFamily( FAMILY_DONTKNOW );    break;
-
-        case RTF_FCHARSET:
-            if( -1 != nTokenValue )
-                pFont->SetCharSet( rtl_getTextEncodingFromWindowsCharset(
-                                        (BYTE)nTokenValue ) );
-            break;
-
-        case RTF_FPRQ:
-            switch( nTokenValue )
-            {
-            case 1:     pFont->SetPitch( PITCH_FIXED );     break;
-            case 2:     pFont->SetPitch( PITCH_VARIABLE );  break;
-            }
-            break;
-
-        case RTF_F:
-            bCheckNewFont = TRUE;
-            nInsFontNo = nFontNo;
-            nFontNo = (short)nTokenValue;
-            break;
-
-        case RTF_FALT:      bIsAltFntNm = TRUE;             break;
-
-        case RTF_TEXTTOKEN:
-            {
+                break;
+            case RTF_FROMAN:
+                pFont->SetFamily( FAMILY_ROMAN );
+                break;
+            case RTF_FSWISS:
+                pFont->SetFamily( FAMILY_SWISS );
+                break;
+            case RTF_FMODERN:
+                pFont->SetFamily( FAMILY_MODERN );
+                break;
+            case RTF_FSCRIPT:
+                pFont->SetFamily( FAMILY_SCRIPT );
+                break;
+            case RTF_FDECOR:
+                pFont->SetFamily( FAMILY_DECORATIVE );
+                break;
+            // bei technischen/symbolischen Font wird der CharSet ungeschaltet!!
+            case RTF_FTECH:
+                pFont->SetCharSet( RTL_TEXTENCODING_SYMBOL );
+                // deliberate fall through
+            case RTF_FNIL:
+                pFont->SetFamily( FAMILY_DONTKNOW );
+                break;
+            case RTF_FCHARSET:
+                if (-1 != nTokenValue)
+                {
+                    CharSet nCharSet = rtl_getTextEncodingFromWindowsCharset(
+                        (BYTE)nTokenValue);
+                    pFont->SetCharSet(nCharSet);
+                    SetEncoding(nCharSet);
+                }
+                break;
+            case RTF_FPRQ:
+                switch( nTokenValue )
+                {
+                    case 1:
+                        pFont->SetPitch( PITCH_FIXED );
+                        break;
+                    case 2:
+                        pFont->SetPitch( PITCH_VARIABLE );
+                        break;
+                }
+                break;
+            case RTF_F:
+                bCheckNewFont = TRUE;
+                nInsFontNo = nFontNo;
+                nFontNo = (short)nTokenValue;
+                break;
+            case RTF_FALT:
+                bIsAltFntNm = TRUE;
+                break;
+            case RTF_TEXTTOKEN:
                 DelCharAtEnd( aToken, ';' );
                 if ( aToken.Len() )
                 {
@@ -613,9 +632,9 @@ void SvxRTFParser::ReadFontTable()
                     else
                         sFntNm = aToken;
                 }
-            }
-            break;
+                break;
         }
+
         if( bCheckNewFont && 1 >= nOpenBrakets && sFntNm.Len() )  // one font is ready
         {
             // alle Daten vom Font vorhanden, also ab in die Tabelle
@@ -1071,7 +1090,10 @@ void SvxRTFParser::AttrGroupEnd()   // den akt. Bearbeiten, vom Stack loeschen
                             pNew->nSttCnt = 0;
 
                             if( IsChkStyleAttr() )
+                            {
                                 _ClearStyleAttr( *pOld );
+                                _ClearStyleAttr( *pNew );   //#i10381#, methinks.
+                            }
 
                             if( pAkt )
                             {
