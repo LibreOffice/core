@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exprgen.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:56:37 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:53:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,7 @@ static OpTable aOpTable [] = {
     { NIL,  _NOP }};
 
 // Ausgabe eines Elements
-
-void SbiExprNode::Gen( BOOL bParam0Allowed )
+void SbiExprNode::Gen( RecursiveMode eRecMode )
 {
     if( IsConstant() )
     {
@@ -119,8 +118,21 @@ void SbiExprNode::Gen( BOOL bParam0Allowed )
         if( aVar.pDef->GetScope() == SbPARAM )
         {
             eOp = _PARAM;
-            if( !bParam0Allowed && 0 == aVar.pDef->GetPos() )
-                eOp = aVar.pDef->IsGlobal() ? _FIND_G : _FIND;
+            if( 0 == aVar.pDef->GetPos() )
+            {
+                bool bTreatFunctionAsParam = true;
+                if( eRecMode == FORCE_CALL )
+                {
+                    bTreatFunctionAsParam = false;
+                }
+                else if( eRecMode == UNDEFINED )
+                {
+                    if( aVar.pPar && aVar.pPar->IsBracket() )
+                         bTreatFunctionAsParam = false;
+                }
+                if( !bTreatFunctionAsParam )
+                    eOp = aVar.pDef->IsGlobal() ? _FIND_G : _FIND;
+            }
         }
         // AB: 17.12.1995, Spezialbehandlung fuer WITH
         else if( (pWithParent = GetWithParent()) != NULL )
@@ -264,11 +276,11 @@ void SbiExprList::Gen()
     }
 }
 
-void SbiExpression::Gen( BOOL bParam0Allowed )
+void SbiExpression::Gen( RecursiveMode eRecMode )
 {
     // AB: 17.12.1995, Spezialbehandlung fuer WITH
     // Wenn pExpr == .-Ausdruck in With, zunaechst Gen fuer Basis-Objekt
-    pExpr->Gen( bParam0Allowed );
+    pExpr->Gen( eRecMode );
     if( bBased )
         pParser->aGen.Gen( _BASED, pParser->nBase ),
         pParser->aGen.Gen( _ARGV );
