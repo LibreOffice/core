@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringhash.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:23:27 $
+ *  last change: $Author: hr $ $Date: 2004-03-11 16:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 #ifndef _STRINGHASH_HXX
 #define _STRINGHASH_HXX
+
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
 
 struct StringEq
 {
