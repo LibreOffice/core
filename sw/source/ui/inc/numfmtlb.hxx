@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmtlb.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-11-15 11:13:10 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:59:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ class NumFormatListBox : public ListBox
 
     DECL_LINK( SelectHdl, ListBox * );
 
-    double          GetDefValue(SvNumberFormatter* pFormatter, const short nFormatType) const;
+    double          GetDefValue(const short nFormatType) const;
     void            Init(short nFormatType, BOOL bUsrFmts);
     SwView*         GetView();
 
