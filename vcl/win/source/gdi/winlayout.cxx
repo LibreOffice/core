@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:07:02 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -894,20 +894,27 @@ void SimpleWinLayout::Justify( long nNewWidth )
     if( nNewWidth == nOldWidth )
         return;
 
-    int i = mnGlyphCount - 1;
     // the rightmost glyph cannot be stretched
-    nOldWidth -= mpGlyphAdvances[i];
-    nNewWidth -= mpGlyphAdvances[i];
+    const int nRight = mnGlyphCount - 1;
+    nOldWidth -= mpGlyphAdvances[ nRight ];
+    nNewWidth -= mpGlyphAdvances[ nRight ];
 
-    // stretch remaining glyphs to new width
-    while( --i >= 0 )
+    // count stretchable glyphs
+    int nStretchable = 0, i;
+    for( i = 0; i < nRight; ++i )
+        if( mpGlyphAdvances[i] >= 0 )
+            ++nStretchable;
+
+    // stretch these glyphs
+    int nDiffWidth = nNewWidth - nOldWidth;
+    for( i = 0; (i < nRight) && (nStretchable > 0); ++i )
     {
-        if( nNewWidth < 0 )
-            nNewWidth = 0;
-        double fStretch = (nOldWidth<0) ? 0.0 : (double)nNewWidth / nOldWidth;
-        nOldWidth -= mpGlyphAdvances[i];
-        mpGlyphAdvances[i] = (long)(mpGlyphAdvances[i] * fStretch + 0.5);
-        nNewWidth -= mpGlyphAdvances[i];
+        if( mpGlyphAdvances[i] <= 0 )
+            continue;
+        int nDeltaWidth = nDiffWidth / nStretchable;
+        mpGlyphAdvances[i] += nDeltaWidth;
+        --nStretchable;
+        nDiffWidth -= nDeltaWidth;
     }
 }
 
