@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstrategy.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:43:20 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,9 @@ namespace configmgr
 
             /// does this hold a child value of the given name
             bool hasValue(GroupNode const& _aNode, Name const& _aName) const;
+
+            /// does this hold a child value
+            bool hasValue(GroupNode const& _aNode) const;
 
             /// are defaults for this node available ?
             bool areValueDefaultsAvailable(GroupNode const& _aNode) const;
