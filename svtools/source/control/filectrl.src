@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filectrl.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:28:02 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,35 +62,8 @@
 #include "filectrl.hrc"
 String STR_FILECTRL_BUTTONTEXT
 {
-    Text = "Durchsuchen..." ;
-    Text [ ENGLISH ] = "Browse..." ;
-    Text [ english_us ] = "Browse..." ;
-    Text [ portuguese_brazilian ] = "Navegar..." ;
-    Text [ swedish ] = "Genomsök..." ;
-    Text [ danish ] = "Gennemse..." ;
-    Text [ italian ] = "Sfoglia..." ;
-    Text [ spanish ] = "Buscar..." ;
-    Text [ french ] = "Parcourir..." ;
-    Text [ dutch ] = "Bladeren..." ;
-    Text [ portuguese ] = "Pesquisar..." ;
-    Text[ chinese_simplified ] = "æµè§ˆ...";
-    Text[ russian ] = "Îáçîğ...";
-    Text[ polish ] = "Przegl¹daj...";
-    Text[ japanese ] = "æ¤œç´¢...";
-    Text[ chinese_traditional ] = "ç€è¦½...";
-    Text[ arabic ] = "ÇÓÊÚÑÇÖ...";
-    Text[ greek ] = "ÁíáæŞôçóç...";
-    Text[ korean ] = "ì°¾ì•„ë³´ê¸°...";
-    Text[ turkish ] = "Tara...";
-    Text[ catalan ] = "Navega...";
-    Text[ finnish ] = "Selaa...";
-    Text[ thai ] = "à¹€à¸£à¸µà¸¢à¸à¸”à¸¹...";
-    Text[ czech ] = "ProhlÃ­Å¾et...";
-    Text[ hebrew ] = "â€®×“×™×¤×“×•×£...â€¬";
-    Text[ hindi ] = "à¤¬à¥à¤°à¤‰à¤œà¤¼...";
-    Text[ slovak ] = "PrehÄ¾adÃ¡vaÅ¥...";
-    Text[ hungarian ] = "TallÃ³zÃ¡s...";
-    Text[ slovenian ] = "Prebrskaj...";
+    Text [ de ] = "Durchsuchen..." ;
+    Text [ en-US ] = "Browse..." ;
 };
 
 
