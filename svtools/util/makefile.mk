@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.13 $
+#*  $Revision: 1.14 $
 #*
-#*  last change: $Author: mba $ $Date: 2000-12-13 11:43:59 $
+#*  last change: $Author: hro $ $Date: 2000-12-13 16:52:36 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -139,6 +139,9 @@ LIB7FILES+= 	$(SLB)$/eaimp.lib
 
 LIB7FILES+= \
             $(SLB)$/svdde.lib
+.IF "$(GUI)"=="WNT"
+LIB7FILES+=$(SOLARLIBDIR)$/user9x.lib $(SOLARLIBDIR)$/tools32.lib
+.ENDIF
 
 LIB8TARGET= $(SLB)$/svl.lib
 #LIB8ARCHIV= $(LB)$/libsvl$(UPD)$(DLLPOSTFIX).a
