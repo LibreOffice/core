@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-27 11:37:50 $
+ *  last change: $Author: ka $ $Date: 2001-05-14 10:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,7 +716,7 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_CLIPBOARD_FORMAT_ITEMS:
         {
             WaitObject              aWait( (Window*)GetActiveWindow() );
-            TransferableDataHelper  aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+            TransferableDataHelper  aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );
             const SfxItemSet*       pReqArgs = rReq.GetArgs();
             UINT32                  nFormat = 0;
 

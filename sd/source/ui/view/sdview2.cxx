@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-11 10:29:19 $
+ *  last change: $Author: ka $ $Date: 2001-05-14 10:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
 
     pTransferable->SetStartPos( aMarkRect.TopLeft() );
     pTransferable->SetObjectDescriptor( aObjDesc );
-    pTransferable->CopyToClipboard();
+    pTransferable->CopyToClipboard( pViewSh->GetActiveWindow() );
 
     return xRet;
 }
@@ -418,7 +418,7 @@ void __EXPORT SdView::DoPaste( Window* pWindow )
 
         if( !bPagesInserted && this->ISA( SdDrawView ) )
         {
-            TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+            TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewSh->GetActiveWindow() ) );
 
             if( aDataHelper.GetTransferable().is() )
             {

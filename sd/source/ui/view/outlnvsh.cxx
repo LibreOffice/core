@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-26 12:40:27 $
+ *  last change: $Author: ka $ $Date: 2001-05-14 10:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1121,7 +1121,7 @@ void SdOutlineViewShell::GetMenuState( SfxItemSet &rSet )
 
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE ) )
     {
-        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );
 
         if( !aDataHelper.GetFormatCount() ||
             ( !aDataHelper.HasFormat( FORMAT_STRING ) &&

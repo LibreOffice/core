@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-25 08:33:16 $
+ *  last change: $Author: ka $ $Date: 2001-05-14 10:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ FuInsertClipboard::FuInsertClipboard(SdViewShell* pViewSh, SdWindow* pWin, SdVie
                  SdDrawDocument* pDoc, SfxRequest& rReq)
        : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
-    TransferableDataHelper                      aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+    TransferableDataHelper                      aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
     SvPasteObjectDialog*                        pDlg = new SvPasteObjectDialog();
     ::com::sun::star::datatransfer::DataFlavor  aFlavor;
 

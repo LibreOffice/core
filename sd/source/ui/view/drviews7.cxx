@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-27 11:36:47 $
+ *  last change: $Author: ka $ $Date: 2001-05-14 10:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,9 +525,9 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE2 ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) )
     {
-        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );
 
-        if( !TransferableDataHelper::CreateFromSystemClipboard().GetFormatCount() )
+        if( !aDataHelper.GetFormatCount() )
         {
             rSet.DisableItem( SID_PASTE );
             rSet.DisableItem( SID_PASTE2 );
