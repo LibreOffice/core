@@ -2,9 +2,9 @@
  *
  *  $RCSfile: romenu.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-16 09:29:36 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ public:
     SwReadOnlyPopup( const Point &rDPos, SwView &rV );
     ~SwReadOnlyPopup();
     void Execute( Window* pWin, const Point &rPPos );
+    void Execute( Window* pWin, USHORT nId );
 };
 
 
