@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-09-28 13:52:03 $
+ *  last change: $Author: ama $ $Date: 2000-10-16 13:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #include "porfly.hxx"       // GetFlyCrsrOfst()
 #include "pordrop.hxx"
 #include "crstate.hxx"      // SwCrsrMoveState
+#ifndef _PORMULTI_HXX
+#include <pormulti.hxx>     // SwMultiPortion
+#endif
 
 // Nicht reentrant !!!
 // wird in GetCharRect gesetzt und im UnitUp/Down ausgewertet.
@@ -344,7 +347,7 @@ sal_Bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                                SwCrsrMoveState* pCMS, const long nMax )
 {
-    BOOL bDropIt = pCMS && pCMS->bDropIt;
+    BOOL bDropIt = TRUE; //pCMS && pCMS->bDropIt;
     CharCrsrToLine(nOfst);
 
     // Adjustierung ggf. nachholen
@@ -461,6 +464,23 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 }
                 else
                 {
+                    if( pPor->IsMultiPortion() )
+                    {
+                        // In a multi-portion we use GetCharRect()-funtion
+                        // rekursively and must add the x-position
+                        // of the multi-portion.
+                        xub_StrLen nOldStart = nStart;
+                        nStart = aInf.GetIdx();
+                        SwLineLayout* pOldCurr = pCurr;
+                        pCurr = &((SwMultiPortion*)pPor)->GetRoot();
+                        if( nStart + pCurr->GetLen() <= nOfst )
+                            Next();
+                        bRet = GetCharRect( pOrig, nOfst, pCMS, nMax );
+                        pOrig->Pos().X() += nX;
+                        pCurr = pOldCurr;
+                        nStart = nOldStart;
+                        return bRet;
+                    }
                     if ( pPor->PrtWidth() )
                     {
                         xub_StrLen nOldLen = pPor->GetLen();

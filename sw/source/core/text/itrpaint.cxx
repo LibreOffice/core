@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: ama $ $Date: 2000-10-16 13:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,7 +368,10 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         if( pFnt->GetEscapement() && UNDERLINE_NONE != pFnt->GetUnderline() )
             CheckSpecialUnderline();
 
-        pPor->Paint( GetInfo() );
+        if( pPor->IsMultiPortion() )
+            PaintMultiPortion( rPaint, (SwMultiPortion&)*pPor );
+        else
+            pPor->Paint( GetInfo() );
 
         if( GetFnt()->IsURL() && pPor->InTxtGrp() )
             GetInfo().NotifyURL( *pPor );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: ama $ $Date: 2000-10-16 13:09:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@ class SwTxtAttr;
 class SwNumberPortion;
 class SwErgoSumPortion;
 class SwExpandPortion;
+class SwMultiPortion;
 
 /*************************************************************************
  *                      class SwTxtFormatter
@@ -80,6 +81,7 @@ class SwExpandPortion;
 class SwTxtFormatter : public SwTxtPainter
 {
     const SwFmtDrop *pDropFmt;
+    SwMultiPortion* pMulti; // during formatting a multi-portion
     xub_StrLen nNextChg;
     sal_uInt8 nCntEndHyph;  // zaehlt aufeinanderfolgende Hyphens am Zeilenende
     sal_uInt8 nCntMidHyph;  // zaehlt aufeinanderfolgende Hyphens vor Flies
@@ -105,6 +107,7 @@ class SwTxtFormatter : public SwTxtPainter
 
     // Das Herzstueck der Formatierung
     void BuildPortions( SwTxtFormatInfo &rInf );
+    BOOL BuildMultiPortion( SwTxtFormatInfo &rInf, SwMultiPortion& rMulti );
 
     // Initialisierung oder Wiederverwertung alter Portions
     void Recycle( SwTxtFormatInfo &rInf );
@@ -203,6 +206,8 @@ public:
 
     inline const SwFmtDrop *GetDropFmt() const { return pDropFmt; }
     inline void ClearDropFmt() { pDropFmt = 0; }
+
+    inline SwMultiPortion *GetMulti() const { return pMulti; }
 
     inline const sal_Bool IsOnceMore() const { return bOnceMore; }
     inline void       SetOnceMore( sal_Bool bNew ) { bOnceMore = bNew; }

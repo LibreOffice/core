@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2000-09-29 13:55:16 $
+ *  last change: $Author: ama $ $Date: 2000-10-16 13:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,9 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>          // SwDoc
 #endif
+#ifndef _PORMULTI_HXX
+#include <pormulti.hxx>     // SwMultiPortion
+#endif
 
 #ifdef DEBUG
 #ifndef _NDTXT_HXX
@@ -166,6 +169,7 @@ void SwTxtFormatter::CtorInit( SwTxtFrm *pFrm, SwTxtFormatInfo *pNewInf )
     SwTxtPainter::CtorInit( pFrm, pNewInf );
     pInf = pNewInf;
     pDropFmt = GetInfo().GetDropFmt();
+    pMulti = NULL;
 
     bOnceMore = sal_False;
     bChanges = sal_False;
@@ -680,7 +684,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         SeekAndChg( rInf );
 
         // In CalcFlyWidth wird Width() verkuerzt, wenn eine FlyPortion vorliegt.
-        ASSERT( !rInf.X(), "SwTxtFormatter::BuildPortion X=0?" );
+        ASSERT( !rInf.X() || pMulti, "SwTxtFormatter::BuildPortion X=0?" );
         CalcFlyWidth( rInf );
         SwFlyPortion *pFly = rInf.GetFly();
         if( pFly )
@@ -746,7 +750,11 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             }
         }
 
-        bFull = pPor->Format( rInf );
+        // the multi-portion has it's own format function
+        if( pPor->IsMultiPortion() && !pMulti )
+            bFull = BuildMultiPortion( rInf, *((SwMultiPortion*)pPor) );
+        else
+            bFull = pPor->Format( rInf );
 
         // Vorsicht: ein Fly im Blocksatz, dann kann das Repaint nur komplett
         // hinter ihm oder vom Zeilenbeginn sein.
@@ -954,6 +962,11 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
         // maximal bis zum naechsten Attributwchsel.
         xub_StrLen nNextAttr = GetNextAttr();
         nNextChg = Min( nNextAttr, rInf.GetTxt().Len() );
+
+        // At the end of a multi-line part we've to break.
+        if( GetMulti() && nNextChg > GetMulti()->GetLen() )
+            nNextChg = GetMulti()->GetLen();
+
         nNextAttr = NextScriptChg( rInf.GetIdx() );
         if( nNextChg > nNextAttr )
             nNextChg = nNextAttr;
@@ -1142,7 +1155,6 @@ sal_Bool lcl_OldFieldRest( const SwLineLayout* pCurr )
 
 SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 {
-
     // Underflow hat Vorrang
     rInf.SetStopUnderFlow( sal_False );
     if( rInf.GetUnderFlow() )
@@ -1221,8 +1233,16 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
     }
 
     SwLinePortion *pPor = WhichFirstPortion( rInf );
+
     if( !pPor )
     {
+        if( !pMulti )
+        {   // We open a multiportion part, if we enter a multi-line part
+            // of the paragraph.
+            xub_StrLen nEndOfMulti = rInf.EndOfMulti( rInf.GetIdx() );
+            if( nEndOfMulti )
+                return new SwMultiPortion( nEndOfMulti);
+        }
         // 5010: Tabs und Felder
         xub_Unicode cChar = rInf.GetHookChar();
 
