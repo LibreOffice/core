@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-12 09:08:17 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,7 +375,7 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
 
             DBG_ASSERT( pFormShell && pFormShell->GetImpl(), "FmFormView::ChangeDesignMode: no valid shell!" );
             if ( pFormShell && pFormShell->GetImpl() )
-                pFormShell->GetImpl()->loadForms( pPage, FORMS_RESET | ( bDesign ? FORMS_UNLOAD : FORMS_LOAD ) );
+                pFormShell->GetImpl()->loadForms( pPage, ( bDesign ? FORMS_UNLOAD : FORMS_LOAD ) );
         }
     }
 
@@ -543,13 +543,27 @@ void FmFormView::ObjectCreated(FmFormObj* pObj)
         xSet->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId;
 
         // some initial property defaults
-        if ( ( nClassId == FormComponentType::SCROLLBAR ) || ( nClassId == FormComponentType::SPINBUTTON ) )
+        switch ( nClassId )
+        {
+        case FormComponentType::SCROLLBAR:
+        case FormComponentType::SPINBUTTON:
         {
             const Rectangle& rBoundRect = pObj->GetCurrentBoundRect();
             sal_Int32 eOrientation = ::com::sun::star::awt::ScrollBarOrientation::HORIZONTAL;
             if ( rBoundRect.GetWidth() < rBoundRect.GetHeight() )
                 eOrientation = ::com::sun::star::awt::ScrollBarOrientation::VERTICAL;
-            xSet->setPropertyValue( FM_PROP_ORIENTATION, makeAny( eOrientation ) );
+            xSet->setPropertyValue( ::rtl::OUString::createFromAscii( "Orientation" ), makeAny( eOrientation ) );
+        }
+        break;
+
+        case FormComponentType::LISTBOX:
+        case FormComponentType::COMBOBOX:
+        {
+            const Rectangle& rBoundRect = pObj->GetCurrentBoundRect();
+            sal_Bool bDropDown = ( rBoundRect.GetWidth() >= 3 * rBoundRect.GetHeight() );
+            xSet->setPropertyValue( FM_PROP_DROPDOWN, makeAny( (sal_Bool)bDropDown ) );
+        }
+        break;
         }
     }
     catch( const Exception& )
