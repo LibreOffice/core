@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-28 11:31:03 $
+ *  last change: $Author: mba $ $Date: 2001-09-04 10:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1240,6 +1240,9 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, FASTBOOL bSync
     DBG_ASSERT(pAppData_Impl->pEventConfig,"Keine Events angemeldet!");
 
     SfxObjectShell *pDoc = rEventHint.GetObjShell();
+    if ( pDoc && pDoc->IsPreview() )
+        return;
+
     pAppData_Impl->pEventConfig->ExecuteEvent( rEventHint.GetEventId(), pDoc, bSynchron, rEventHint.GetArgs() );
 /*
     else
