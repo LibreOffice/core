@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:53:29 $
+ *  last change: $Author: hjs $ $Date: 2004-06-30 14:22:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -9873,8 +9873,8 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text = "Hyperlink.";
-            Text [ english_us ] = "Hyperlink." ;
+            Text [ de ] = "Hyperlink.";
+            Text [ en-US ] = "Hyperlink." ;
         };
         ExtraData =
         {
@@ -9884,23 +9884,23 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 2 // Name of Parameter 1
         {
-            Text = "URL " ;
-            Text [ english_us ] = "URL " ;
+            Text [ de ] = "URL " ;
+            Text [ en-US ] = "URL " ;
         };
         String 3 // Description of Parameter 1
         {
-            Text = "URL";
-            Text [ english_us ] = "URL";
+            Text [ de ] = "URL";
+            Text [ en-US ] = "URL";
         };
         String 4 // Name of Parameter 2
         {
-            Text = "ZellText " ;
-            Text [ english_us ] = "CellText " ;
+            Text [ de ] = "ZellText " ;
+            Text [ en-US ] = "CellText " ;
         };
         String 5 // Description of Parameter 2
         {
-            Text = "Zell text";
-            Text [ english_us ] = "Cell Text";
+            Text [ de ] = "Zell text";
+            Text [ en-US ] = "Cell Text";
         };
     };
      // -=*# Resource for function CODE #*=-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 09:22:24 $
+ *  last change: $Author: hjs $ $Date: 2004-06-30 14:19:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 
 StringArray SCSTR_DPFUNCLISTBOX
 {
-    ItemList =
+    ItemList [ de ] =
     {
         < "Summe" ; Default ; > ;
         < "Anzahl" ; Default ; > ;
@@ -77,147 +77,7 @@ StringArray SCSTR_DPFUNCLISTBOX
         < "Varianz (Stichprobe)" ; Default ; > ;
         < "Varianzen (Grundgesamtheit)" ; Default ; > ;
     };
-    ItemList [ norwegian ] =
-    {
-        < "Summe" ; Default ; > ;
-        < "Anzahl" ; Default ; > ;
-        < "Mittelwert" ; Default ; > ;
-        < "Max" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Produkt" ; Default ; > ;
-        < "Anzahl (nur Zahlen)" ; Default ; > ;
-        < "StAbw (Stichprobe)" ; Default ; > ;
-        < "StAbwN (Grundgesamtheit)" ; Default ; > ;
-        < "Varianz (Stichprobe)" ; Default ; > ;
-        < "Varianzen (Grundgesamtheit)" ; Default ; > ;
-    };
-    ItemList [ italian ] =
-    {
-        < "Somma" ; Default ; > ;
-        < "Numero" ; Default ; > ;
-        < "Media" ; Default ; > ;
-        < "Max" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Prodotto" ; Default ; > ;
-        < "Numero (solo numeri)" ; Default ; > ;
-        < "DevSt (campione)" ; Default ; > ;
-        < "DevStP (popolazione)" ; Default ; > ;
-        < "Varianza (campione)" ; Default ; > ;
-        < "VarP (popolazione)" ; Default ; > ;
-    };
-    ItemList [ portuguese_brazilian ] =
-    {
-        < "Soma" ; Default ; > ;
-        < "Contagem" ; Default ; > ;
-        < "MÈdia" ; Default ; > ;
-        < "M·x" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Produto" ; Default ; > ;
-        < "Contagem  (somente n˙meros)" ; Default ; > ;
-        < "DesvPad (Amostra)" ; Default ; > ;
-        < "DesvPadP (populaÁ„o)" ; Default ; > ;
-        < "Var (amostra)" ; Default ; > ;
-        < "VarP (populaÁ„o)" ; Default ; > ;
-    };
-    ItemList [ portuguese ] =
-    {
-        < "Total" ; Default ; > ;
-        < "Contar" ; Default ; > ;
-        < "MÈdia" ; Default ; > ;
-        < "M·x." ; Default ; > ;
-        < "Min." ; Default ; > ;
-        < "Produto" ; Default ; > ;
-        < "Contar (sÛ n˙meros)" ; Default ; > ;
-        < "DesvPad (amostra)" ; Default ; > ;
-        < "DesvPadN (populaÁ„o)" ; Default ; > ;
-        < "Vari‚ncia (amostra)" ; Default ; > ;
-        < "Vari‚ncia P (populaÁ„o)" ; Default ; > ;
-    };
-    ItemList [ finnish ] =
-    {
-        < "Summa" ; Default ; > ;
-        < "LASKE" ; Default ; > ;
-        < "Keskiarvo" ; Default ; > ;
-        < "MAKS" ; Default ; > ;
-        < "MIN" ; Default ; > ;
-        < "Tulo" ; Default ; > ;
-        < "LASKE (vain luvut)" ; Default ; > ;
-        < "KESKIHAJONTA (otos)" ; Default ; > ;
-        < "KESKIHAJONTA (populaatio)" ; Default ; > ;
-        < "Var (Otos)" ; Default ; > ;
-        < "VarP (populaatio)" ; Default ; > ;
-    };
-    ItemList [ danish ] =
-    {
-        < "Sum" ; Default ; > ;
-        < "Antal" ; Default ; > ;
-        < "Middel" ; Default ; > ;
-        < "Maks" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Produkt" ; Default ; > ;
-        < "Antal (kun tal)" ; Default ; > ;
-        < "Stdafv (stikpr¯ve)" ; Default ; > ;
-        < "StdafvP (population)" ; Default ; > ;
-        < "Varians (stikpr¯ve)" ; Default ; > ;
-        < "VariansP (population)" ; Default ; > ;
-    };
-    ItemList [ french ] =
-    {
-        < "Somme" ; Default ; > ;
-        < "Nombre" ; Default ; > ;
-        < "Moyenne" ; Default ; > ;
-        < "Max" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Produit" ; Default ; > ;
-        < "Nombre (uniquement les nombres)" ; Default ; > ;
-        < "Ecartype (Èchantillon)" ; Default ; > ;
-        < "EcarTypeP (population)" ; Default ; > ;
-        < "Variance (Èchantillon)" ; Default ; > ;
-        < "VarP (population)" ; Default ; > ;
-    };
-    ItemList [ swedish ] =
-    {
-        < "Summa" ; Default ; > ;
-        < "Antal" ; Default ; > ;
-        < "Medelv‰rde" ; Default ; > ;
-        < "Max" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Produkt" ; Default ; > ;
-        < "Antal (endast tal)" ; Default ; > ;
-        < "StdAv (stickprov)" ; Default ; > ;
-        < "StdAvP (population)" ; Default ; > ;
-        < "Varians (stickprov)" ; Default ; > ;
-        < "VariansP (population)" ; Default ; > ;
-    };
-    ItemList [ dutch ] =
-    {
-        < "Som" ; Default ; > ;
-        < "Aantal" ; Default ; > ;
-        < "Gemiddelde waarde" ; Default ; > ;
-        < "Max" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Product" ; Default ; > ;
-        < "Aantal (alleen getallen)" ; Default ; > ;
-        < "StAfw (steekproef)" ; Default ; > ;
-        < "StAfwN (populatie)" ; Default ; > ;
-        < "Variantie (steekproef)" ; Default ; > ;
-        < "VarP (steekproef)" ; Default ; > ;
-    };
-    ItemList [ spanish ] =
-    {
-        < "Suma" ; Default ; > ;
-        < "Cantidad" ; Default ; > ;
-        < "Promedio" ; Default ; > ;
-        < "M·x" ; Default ; > ;
-        < "MÌn" ; Default ; > ;
-        < "Producto" ; Default ; > ;
-        < "Cantidad2 (solo n˙meros)" ; Default ; > ;
-        < "DesvEst (Muestra)" ; Default ; > ;
-        < "DesvEstP (PoblaciÛn)" ; Default ; > ;
-        < "Variancia (muestra)" ; Default ; > ;
-        < "VarP (poblaciÛn)" ; Default ; > ;
-    };
-    ItemList [ english_us ] =
+    ItemList [ en-US ] =
     {
         < "Sum" ; Default ; > ;
         < "Count" ; Default ; > ;
@@ -230,244 +90,6 @@ StringArray SCSTR_DPFUNCLISTBOX
         < "StDevP (Population)" ; Default ; > ;
         < "Var (Sample)" ; Default ; > ;
         < "VarP (Population)" ; Default ; > ;
-    };
-    ItemList [ chinese_simplified ] =
-    {
-        < "ÊÄªËÆ°" ; Default ; > ;
-        < "Êï∞ÁõÆ" ; Default ; > ;
-        < "Âπ≥ÂùáÂÄº" ; Default ; > ;
-        < "ÊúÄÂ§ß" ; Default ; > ;
-        < "ÊúÄÂ∞è" ; Default ; > ;
-        < "‰πòÁßØ" ; Default ; > ;
-        < "Êï∞ÁõÆ(Âè™Êï∞Â≠ó)" ; Default ; > ;
-        < "Ê†áÂáÜÂÅèÂ∑Æ(ÊäΩÊ†∑)" ; Default ; > ;
-        < "Ê†áÂáÜÂÅèÂ∑Æ(ÂÖ®ÈÉ®Âü∫Êï∞)" ; Default ; > ;
-        < "ÊñπÂ∑Æ(ÊäΩÊ†∑)" ; Default ; > ;
-        < "ÊñπÂ∑Æ(ÂÖ®ÈÉ®Âü∫Êï∞)" ; Default ; > ;
-    };
-    ItemList [ russian ] =
-    {
-        < "—ÛÏÏ‡" ; Default ; > ;
-        < " ÓÎË˜ÂÒÚ‚Ó" ; Default ; > ;
-        < "—Â‰ÌÂÂ ÁÌ‡˜ÂÌËÂ" ; Default ; > ;
-        < "Ã‡ÍÒËÏÛÏ" ; Default ; > ;
-        < "ÃËÌËÏÛÏ" ; Default ; > ;
-        < "œÓËÁ‚Â‰ÂÌËÂ" ; Default ; > ;
-        < " ÓÎË˜ÂÒÚ‚Ó (ÚÓÎ¸ÍÓ ˜ËÒÎ‡)" ; Default ; > ;
-        < "—ÏÂ˘ÂÌÌÓÂ ÓÚÍÎÓÌÂÌËÂ (Œ·‡ÁÂˆ)" ; Default ; > ;
-        < "ÕÂÒÏÂ˘ÂÌÌÓÂ ÓÚÍÎÓÌÂÌËÂ (—Ó‚ÓÍÛÔÌÓÒÚ¸)" ; Default ; > ;
-        < "—ÏÂ˘ÂÌÌ‡ˇ ‰ËÒÔÂÒËˇ (Œ·‡ÁÂˆ)" ; Default ; > ;
-        < "ÕÂÒÏÂ˘ÂÌÌ‡ˇ ‰ËÒÔÂÒËˇ (—Ó‚ÓÍÛÔÌÓÒÚ¸)" ; Default ; > ;
-    };
-    ItemList [ polish ] =
-    {
-        < "Suma" ; Default ; > ;
-        < "Liczba" ; Default ; > ;
-        < "årednia" ; Default ; > ;
-        < "Maks" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Iloczyn" ; Default ; > ;
-        < "Liczba (tylko liczby)" ; Default ; > ;
-        < "Odchylenie standardowe (PrÛbka)" ; Default ; > ;
-        < "Odch.stdc (populacja)" ; Default ; > ;
-        < "Wariancja (PrÛbka)" ; Default ; > ;
-        < "Wariancja (populacja)" ; Default ; > ;
-    };
-    ItemList [ japanese ] =
-    {
-        < "ÂêàË®à" ; Default ; > ;
-        < "Á∑èÊï∞" ; Default ; > ;
-        < "Âπ≥ÂùáÂÄ§" ; Default ; > ;
-        < "ÊúÄÂ§ßÂÄ§" ; Default ; > ;
-        < "ÊúÄÂ∞èÂÄ§" ; Default ; > ;
-        < "Á©ç" ; Default ; > ;
-        < "Á∑èÊï∞(Êï∞ÂÄ§„ÅÆ„Åø)" ; Default ; > ;
-        < "StDev(Ê®ôÊú¨)" ; Default ; > ;
-        < "StDevP(ÊØçÈõÜÂõ£)" ; Default ; > ;
-        < "ÂàÜÊï£(Ê®ôÊú¨)" ; Default ; > ;
-        < "ÂàÜÊï£(ÊØçÈõÜÂõ£)" ; Default ; > ;
-    };
-    ItemList [ chinese_traditional ] =
-    {
-        < "Â∞èË®à" ; Default ; > ;
-        < "Êï∏ÁõÆ" ; Default ; > ;
-        < "Âπ≥ÂùáÂÄº" ; Default ; > ;
-        < "ÊúÄÂ§ß" ; Default ; > ;
-        < "ÊúÄÂ∞è" ; Default ; > ;
-        < "‰πòÁ©ç" ; Default ; > ;
-        < "Êï∏ÁõÆ(Âè™ÊòØÊï∏Â≠ó)" ; Default ; > ;
-        < "Ê®ôÊ∫ñÂÅèÂ∑Æ(ÊäΩÊ®£)" ; Default ; > ;
-        < "Ê®ôÊ∫ñÂÅèÂ∑Æ(ÂÖ®ÈÉ®Âü∫Êï∏)" ; Default ; > ;
-        < "ÊñπÂ∑Æ(ÊäΩÊ®£)" ; Default ; > ;
-        < "ÊñπÂ∑Æ(ÂÖ®ÈÉ®Âü∫Êï∏)" ; Default ; > ;
-    };
-    ItemList [ arabic ] =
-    {
-        < "Sum" ; Default ; > ;
-        < "Count" ; Default ; > ;
-        < "Average" ; Default ; > ;
-        < "Max" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Product" ; Default ; > ;
-        < "Count (√—ﬁ«„ ›ﬁÿ)" ; Default ; > ;
-        < "StDev (⁄Ì‰…)" ; Default ; > ;
-        < "StDevP («·„Ã „⁄)" ; Default ; > ;
-        < "VAR (⁄‰Ì…)" ; Default ; > ;
-        < "VarP («·„Ã „⁄)" ; Default ; > ;
-    };
-    ItemList [ greek ] =
-    {
-        < "¢ËÒÔÈÛÏ·" ; Default ; > ;
-        < "¡ÒÈËÏ¸Ú" ; Default ; > ;
-        < "Ã›ÛÁ ÙÈÏﬁ" ; Default ; > ;
-        < "ÃÂ„." ; Default ; > ;
-        < "≈Î·˜." ; Default ; > ;
-        < "√ÈÌ¸ÏÂÌÔ" ; Default ; > ;
-        < "–ÎﬁËÔÚ (Ï¸ÌÔ ·ÒÈËÏÔﬂ)" ; Default ; > ;
-        < "StDev (ƒÂﬂ„Ï·)" ; Default ; > ;
-        < "StDevP (–ÎÁËıÛÏÔ˝)" ; Default ; > ;
-        < "Var (ƒÂﬂ„Ï·)" ; Default ; > ;
-        < "VarP (–ÎÁËıÛÏÔ˝)" ; Default ; > ;
-    };
-    ItemList [ korean ] =
-    {
-        < "Ìï©Í≥Ñ" ; Default ; > ;
-        < "Í∞í" ; Default ; > ;
-        < "ÌèâÍ∑†Í∞í" ; Default ; > ;
-        < "ÏµúÎåÄ" ; Default ; > ;
-        < "ÏµúÏÜå" ; Default ; > ;
-        < "Í≥±" ; Default ; > ;
-        < "Í∞í(Ïà´ÏûêÎßå)" ; Default ; > ;
-        < "StDev(ÏÉòÌîå)" ; Default ; > ;
-        < "Ôº≥tDevP(Î™®ÏßëÎã®)" ; Default ; > ;
-        < "Î∂ÑÏÇ∞(ÏÉòÌîå)" ; Default ; > ;
-        < "Î∂ÑÏÇ∞(Î™®ÏßëÎã®)" ; Default ; > ;
-    };
-    ItemList [ turkish ] =
-    {
-        < "Toplam" ; Default ; > ;
-        < "Say" ; Default ; > ;
-        < "Ortalama " ; Default ; > ;
-        < "Max" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "«arp˝m" ; Default ; > ;
-        < "Say (yaln˝zca say˝lar)" ; Default ; > ;
-        < "StSapma (ˆrnek)" ; Default ; > ;
-        < "StSapmaP (pop¸lasyon)" ; Default ; > ;
-        < "Dei˛ken (ˆrnek)" ; Default ; > ;
-        < "Dei˛kenP (Pop¸lasyon)" ; Default ; > ;
-    };
-    ItemList [ catalan ] =
-    {
-        < "Suma" ; Default ; > ;
-        < "Compta" ; Default ; > ;
-        < "Mitjana" ; Default ; > ;
-        < "M‡x." ; Default ; > ;
-        < "MÌn." ; Default ; > ;
-        < "Producte" ; Default ; > ;
-        < "Compta (nomÈs els n˙meros)" ; Default ; > ;
-        < "StDev (mostra)" ; Default ; > ;
-        < "StDevP (poblaciÛ)" ; Default ; > ;
-        < "Var (mostra)" ; Default ; > ;
-        < "VarP (poblaciÛ)" ; Default ; > ;
-    };
-    ItemList [ thai ] =
-    {
-        < "‡∏ú‡∏•‡∏£‡∏ß‡∏°" ; Default ; > ;
-        < "‡∏ô‡∏±‡∏ö" ; Default ; > ;
-        < "‡πÄ‡∏â‡∏•‡∏µ‡πà‡∏¢" ; Default ; > ;
-        < "‡∏°‡∏≤‡∏Å‡∏ó‡∏µ‡πà‡∏™‡∏∏‡∏î" ; Default ; > ;
-        < "‡∏ô‡πâ‡∏≠‡∏¢‡∏ó‡∏µ‡πà‡∏™‡∏∏‡∏î" ; Default ; > ;
-        < "‡∏ú‡∏•‡∏¥‡∏ï‡∏†‡∏±‡∏ì‡∏ë‡πå" ; Default ; > ;
-        < "‡∏ô‡∏±‡∏ö (‡∏ï‡∏±‡∏ß‡πÄ‡∏•‡∏Ç‡πÄ‡∏ó‡πà‡∏≤‡∏ô‡∏±‡πâ‡∏ô)" ; Default ; > ;
-        < "StDev (‡∏ï‡∏±‡∏ß‡∏≠‡∏¢‡πà‡∏≤‡∏á)" ; Default ; > ;
-        < "StDevP (‡∏õ‡∏£‡∏∞‡∏ä‡∏≤‡∏Å‡∏£)" ; Default ; > ;
-        < "Var (‡∏ï‡∏±‡∏ß‡∏≠‡∏¢‡πà‡∏≤‡∏á)" ; Default ; > ;
-        < "VarP (‡∏õ‡∏£‡∏∞‡∏ä‡∏≤‡∏Å‡∏£)" ; Default ; > ;
-    };
-    ItemList [ czech ] =
-    {
-        < "Souƒçet" ; Default ; > ;
-        < "Poƒçet" ; Default ; > ;
-        < "Pr≈Ømƒõr" ; Default ; > ;
-        < "Max" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Produkt" ; Default ; > ;
-        < "Poƒçet (pouze ƒç√≠sla)" ; Default ; > ;
-        < "StDev (v√Ωbƒõr)" ; Default ; > ;
-        < "StDevP (Populace)" ; Default ; > ;
-        < "Var (v√Ωbƒõr)" ; Default ; > ;
-        < "VarP (z√°kladn√≠ soubor)" ; Default ; > ;
-    };
-    ItemList [ hebrew ] =
-    {
-        < "‚ÄÆ◊°◊õ◊ï◊ù‚Ä¨" ; Default ; > ;
-        < "Anzahl" ; Default ; > ;
-        < "Mittelwert" ; Default ; > ;
-        < "Max" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Produkt" ; Default ; > ;
-        < "Anzahl (nur Zahlen)" ; Default ; > ;
-        < "StAbw (Stichprobe)" ; Default ; > ;
-        < "StAbwN (Grundgesamtheit)" ; Default ; > ;
-        < "Varianz (Stichprobe)" ; Default ; > ;
-        < "Varianzen (Grundgesamtheit)" ; Default ; > ;
-    };
-    ItemList [ hindi ] =
-    {
-        < "‡§ú‡•ã‡§°" ; Default ; > ;
-        < "‡§ó‡§ø‡§®‡§§‡•Ä" ; Default ; > ;
-        < "‡§Æ‡§æ‡§ß‡•ç‡§Ø" ; Default ; > ;
-        < "‡§Ö‡§ß‡§ø‡§ï‡§§‡§Æ" ; Default ; > ;
-        < "‡§®‡•ç‡§Ø‡•Ç‡§®‡§§‡§Æ" ; Default ; > ;
-        < "‡§ó‡•Å‡§¬£‡§®" ; Default ; > ;
-        < "‡§ó‡§ø‡§®‡§§‡•Ä (‡§ï‡•á‡§µ‡§≤ ‡§∏‡§Ç‡§ñ‡•ç‡§Ø‡§æ)" ; Default ; > ;
-        < "StDev (‡§®‡§Æ‡•Ç‡§®‡§æ)" ; Default ; > ;
-        < "StDevP (‡§ú‡§®‡§∏‡§Ç‡§ñ‡•ç‡§Ø‡§æ)" ; Default ; > ;
-        < "Var (‡§®‡§Æ‡•Ç‡§®‡§æ)" ; Default ; > ;
-        < "VarP (‡§ú‡§®‡§∏‡§Ç‡§ñ‡•ç‡§Ø‡§æ)" ; Default ; > ;
-    };
-    ItemList [ slovak ] =
-    {
-        < "S√∫ƒçet" ; Default ; > ;
-        < "Poƒçet" ; Default ; > ;
-        < "Priemer" ; Default ; > ;
-        < "Max" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Produkt" ; Default ; > ;
-        < "Poƒçet (len ƒç√≠sla)" ; Default ; > ;
-        < "≈†tandOdch (vzorka)" ; Default ; > ;
-        < "≈†tandOdchP (Popul√°cia)" ; Default ; > ;
-        < "Var (vzorka)" ; Default ; > ;
-        < "VarP (popul√°cia)" ; Default ; > ;
-    };
-    ItemList [ hungarian ] =
-    {
-        < "Sum" ; Default ; > ;
-        < "Count" ; Default ; > ;
-        < "Average" ; Default ; > ;
-        < "Max" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Product" ; Default ; > ;
-        < "Count (csak sz√°mok)" ; Default ; > ;
-        < "StDev (minta)" ; Default ; > ;
-        < "StDevP (sokas√°g)" ; Default ; > ;
-        < "Var (minta)" ; Default ; > ;
-        < "VarP (sokas√°g)" ; Default ; > ;
-    };
-    ItemList [ slovenian ] =
-    {
-        < "Vsota" ; Default ; > ;
-        < "Se≈°tevek" ; Default ; > ;
-        < "Povpreƒçje" ; Default ; > ;
-        < "Maks" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Produkt" ; Default ; > ;
-        < "Se≈°tevek (samo ≈°tevke)" ; Default ; > ;
-        < "Stand. odklon (vzorec)" ; Default ; > ;
-        < "Stand. odklon pop. (celotna populacija)" ; Default ; > ;
-        < "Varianca (vzorec)" ; Default ; > ;
-        < "Varianca pop. (celotna populacija)" ; Default ; > ;
     };
 };
 
@@ -486,37 +108,8 @@ ModalDialog RID_SCDLG_DPDATAFIELD
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 152 , 8 ) ;
-        Text = "~Funktion" ;
-        Text [ ENGLISH ] = "~Function" ;
-        Text [ norwegian ] = "Funksjon" ;
-        Text [ italian ] = "Funzione" ;
-        Text [ portuguese_brazilian ] = "FunÁ„o" ;
-        Text [ portuguese ] = "FunÁ„o" ;
-        Text [ finnish ] = "Funktio" ;
-        Text [ danish ] = "Funktion" ;
-        Text [ french ] = "Fonction" ;
-        Text [ swedish ] = "Funktion" ;
-        Text [ dutch ] = "Functie" ;
-        Text [ spanish ] = "FunciÛn" ;
-        Text [ english_us ] = "~Function" ;
-        Text[ chinese_simplified ] = "ÂáΩÊï∞";
-        Text[ russian ] = "‘ÛÌÍˆËˇ";
-        Text[ polish ] = "Funkcja";
-        Text[ japanese ] = "Ë®àÁÆóÊñπÊ≥ï";
-        Text[ chinese_traditional ] = "ÂáΩÊï∏";
-        Text[ arabic ] = "Function";
-        Text[ greek ] = "”ıÌ‹ÒÙÁÛÁ";
-        Text[ korean ] = "Í≥ÑÏÇ∞ Î∞©Î≤ï";
-        Text[ turkish ] = "Fonksiyon";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "FunciÛ";
-        Text[ thai ] = "‡∏ü‡∏±‡∏á‡∏Å‡πå‡∏ä‡∏±‡πà‡∏ô";
-        Text[ czech ] = "Funkce";
-        Text[ hebrew ] = "Funktion";
-        Text[ hindi ] = "‡§´‡§Ç‡§ï‡•ç‡§∂‡§®‡•ç";
-        Text[ slovak ] = "Funkcia";
-        Text[ hungarian ] = "F√ºggv√©ny";
-        Text[ slovenian ] = "Funkcija";
+        Text [ de ] = "~Funktion" ;
+        Text [ en-US ] = "~Function" ;
     };
     MultiListBox LB_FUNC
     {
@@ -531,37 +124,8 @@ ModalDialog RID_SCDLG_DPDATAFIELD
     {
         Pos = MAP_APPFONT ( 6 , 85 ) ;
         Size = MAP_APPFONT ( 25 , 8 ) ;
-        Text = "Name:" ;
-        Text [ ENGLISH ] = "Name:" ;
-        Text [ norwegian ] = "Navn:" ;
-        Text [ italian ] = "Nome:" ;
-        Text [ portuguese_brazilian ] = "Nome:" ;
-        Text [ portuguese ] = "Nome:" ;
-        Text [ finnish ] = "Nimi:" ;
-        Text [ danish ] = "Navn:" ;
-        Text [ french ] = "Nom :" ;
-        Text [ swedish ] = "Namn:" ;
-        Text [ dutch ] = "Naam:" ;
-        Text [ spanish ] = "Nombre:" ;
-        Text [ english_us ] = "Name:" ;
-        Text[ chinese_simplified ] = "ÂêçÁß∞Ôºö";
-        Text[ russian ] = "»Ïˇ:";
-        Text[ polish ] = "Nazwa:";
-        Text[ japanese ] = "ÂêçÂâç:";
-        Text[ chinese_traditional ] = "ÂêçÁ®±Ôºö";
-        Text[ arabic ] = "«·«”„:";
-        Text[ greek ] = "ºÌÔÏ·:";
-        Text[ korean ] = "Ïù¥Î¶Ñ:";
-        Text[ turkish ] = "Ad:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nom:";
-        Text[ thai ] = "‡∏ä‡∏∑‡πà‡∏≠:";
-        Text[ czech ] = "Jm√©no:";
-        Text[ hebrew ] = "Name:";
-        Text[ hindi ] = "‡§®‡§æ‡§Æ:";
-        Text[ slovak ] = "N√°zov:";
-        Text[ hungarian ] = "N√©v:";
-        Text[ slovenian ] = "Ime:";
+        Text [ de ] = "Name:" ;
+        Text [ en-US ] = "Name:" ;
     };
     FixedText FT_NAME
     {
@@ -572,15 +136,15 @@ ModalDialog RID_SCDLG_DPDATAFIELD
     {
         Pos = MAP_APPFONT( 6, 99 );
         Size = MAP_APPFONT( 152, 8 );
-        Text = "Angezeigter Wert";
-        Text [ english_us ] = "Displayed value";
+        Text [ de ] = "Angezeigter Wert";
+        Text [ en-US ] = "Displayed value";
     };
     FixedText FT_TYPE
     {
         Pos = MAP_APPFONT( 12, 112 );
         Size = MAP_APPFONT( 60, 8 );
-        Text = "~Typ";
-        Text [ english_us ] = "~Type";
+        Text [ de ] = "~Typ";
+        Text [ en-US ] = "~Type";
     };
     ListBox LB_TYPE
     {
@@ -589,7 +153,7 @@ ModalDialog RID_SCDLG_DPDATAFIELD
         TabStop = TRUE;
         Border = TRUE;
         DropDown = TRUE;
-        StringList =
+        StringList [ de ] =
         {
             < "Standard"; Default; >;
             < "Differenz von"; Default; >;
@@ -601,7 +165,7 @@ ModalDialog RID_SCDLG_DPDATAFIELD
             < "% des Ergebnisses"; Default; >;
             < "Index"; Default; >;
         };
-        StringList [ english_us ] =
+        StringList [ en-US ] =
         {
             < "Normal"; Default; >;
             < "Difference from"; Default; >;
@@ -618,8 +182,8 @@ ModalDialog RID_SCDLG_DPDATAFIELD
     {
         Pos = MAP_APPFONT( 12, 128 );
         Size = MAP_APPFONT( 60, 8 );
-        Text = "~Basisfeld";
-        Text [ english_us ] = "~Base field";
+        Text [ de ] = "~Basisfeld";
+        Text [ en-US ] = "~Base field";
     };
     ListBox LB_BASEFIELD
     {
@@ -633,8 +197,8 @@ ModalDialog RID_SCDLG_DPDATAFIELD
     {
         Pos = MAP_APPFONT( 12, 144 );
         Size = MAP_APPFONT( 60, 8 );
-        Text = "Ba~siselement";
-        Text [ english_us ] = "Ba~se item";
+        Text [ de ] = "Ba~siselement";
+        Text [ en-US ] = "Ba~se item";
     };
     ListBox LB_BASEITEM
     {
@@ -643,12 +207,12 @@ ModalDialog RID_SCDLG_DPDATAFIELD
         TabStop = TRUE;
         Border = TRUE;
         DropDown = TRUE;
-        StringList =
+        StringList [ de ] =
         {
             < "- vorhergehendes Element -"; Default; >;
             < "- n‰chstes Element -"; Default; >;
         };
-        StringList [ english_us ] =
+        StringList [ en-US ] =
         {
             < "- previous item -"; Default; >;
             < "- next item -"; Default; >;
@@ -681,37 +245,8 @@ ModalDialog RID_SCDLG_DPDATAFIELD
         MapUnit = MAP_APPFONT ;
         Delta = 61 ;
     };
-    Text = "Datenfeld" ;
-    Text [ ENGLISH ] = "Data Field" ;
-    Text [ norwegian ] = "Data Field" ;
-    Text [ italian ] = "Campo di dati" ;
-    Text [ portuguese_brazilian ] = "Campo de Dados" ;
-    Text [ portuguese ] = "Campo de dados" ;
-    Text [ english_us ] = "Data Field" ;
-    Text [ spanish ] = "Campo de datos" ;
-    Text [ french ] = "Champ de donnÈes" ;
-    Text [ dutch ] = "Gegevensveld" ;
-    Text [ swedish ] = "Dataf‰lt" ;
-    Text [ danish ] = "Datafelt" ;
-    Text[ chinese_simplified ] = "Êï∞ÊçÆÂ≠óÊÆµ";
-    Text[ russian ] = "œÓÎÂ ‰‡ÌÌ˚ı";
-    Text[ polish ] = "Pole danych";
-    Text[ japanese ] = "„Éá„Éº„Çø„Éï„Ç£„Éº„É´„Éâ";
-    Text[ chinese_traditional ] = "Ë≥áÊñôÊ¨Ñ‰Ωç";
-    Text[ arabic ] = "Õﬁ· »Ì«‰« ";
-    Text[ greek ] = "–Â‰ﬂÔ ‰Â‰ÔÏ›Ì˘Ì";
-    Text[ korean ] = "Îç∞Ïù¥ÌÑ∞ ÌïÑÎìú";
-    Text[ turkish ] = "Veri alan˝";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Camp de dades";
-    Text[ finnish ] = "Tietokentt‰";
-    Text[ thai ] = "‡πÄ‡∏Ç‡∏ï‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•‡∏Ç‡∏≠‡∏á‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•";
-    Text[ czech ] = "Datov√© pole";
-    Text[ hebrew ] = "Datenfeld";
-    Text[ hindi ] = "‡§°‡§º‡•â‡§ü‡§æ ‡§ï‡•ç‡§∑‡•á‡§§‡•ç‡§∞";
-    Text[ slovak ] = "D√°tov√© pole";
-    Text[ hungarian ] = "Adatmez≈ë";
-    Text[ slovenian ] = "Podatkovno polje";
+    Text [ de ] = "Datenfeld" ;
+    Text [ en-US ] = "Data Field" ;
 };
 
 // ----------------------------------------------------------------------------
@@ -833,8 +368,8 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
     {
         Pos = MAP_APPFONT( 6, 3 );
         Size = MAP_APPFONT( 198, 8 );
-        Text = "~Sortieren nach";
-        Text [ english_us ] = "Sort ~by";
+        Text [ de ] = "~Sortieren nach";
+        Text [ en-US ] = "Sort ~by";
     };
     ListBox LB_SORT_BY
     {
@@ -849,38 +384,38 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
         Pos = MAP_APPFONT( 114, 14 );
         Size = MAP_APPFONT( 84, 10 );
         TabStop = TRUE;
-        Text = "~Aufsteigend";
-        Text [ english_us ] = "~Ascending";
+        Text [ de ] = "~Aufsteigend";
+        Text [ en-US ] = "~Ascending";
     };
     RadioButton RB_SORT_DESC
     {
         Pos = MAP_APPFONT( 114, 28 );
         Size = MAP_APPFONT( 84, 10 );
         TabStop = TRUE;
-        Text = "A~bsteigend";
-        Text [ english_us ] = "~Descending";
+        Text [ de ] = "A~bsteigend";
+        Text [ en-US ] = "~Descending";
     };
     RadioButton RB_SORT_MAN
     {
         Pos = MAP_APPFONT( 114, 42 );
         Size = MAP_APPFONT( 84, 10 );
         TabStop = TRUE;
-        Text = "~Manuell";
-        Text [ english_us ] = "~Manual";
+        Text [ de ] = "~Manuell";
+        Text [ en-US ] = "~Manual";
     };
     FixedLine FL_LAYOUT
     {
         Pos = MAP_APPFONT( 6, 56 );
         Size = MAP_APPFONT( 198, 8 );
-        Text = "Anzeigeoptionen";
-        Text [ english_us ] = "Display options";
+        Text [ de ] = "Anzeigeoptionen";
+        Text [ en-US ] = "Display options";
     };
     FixedText FT_LAYOUT
     {
         Pos = MAP_APPFONT( 12, 69 );
         Size = MAP_APPFONT( 70, 8 );
-        Text = "~Layout";
-        Text [ english_us ] = "~Layout";
+        Text [ de ] = "~Layout";
+        Text [ en-US ] = "~Layout";
     };
     ListBox LB_LAYOUT
     {
@@ -889,13 +424,13 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
         TabStop = TRUE;
         Border = TRUE;
         DropDown = TRUE;
-        StringList =
+        StringList [ de ] =
         {
             < "Tabellarisches Layout"; Default; >;
             < "Gliederungsansicht mit Teilergebnissen oben"; Default; >;
             < "Gliederungsansicht mit Teilergebnissen unten"; Default; >;
         };
-        StringList [ english_us ] =
+        StringList [ en-US ] =
         {
             < "Tabular layout"; Default; >;
             < "Outline layout with subtotals at the top"; Default; >;
@@ -907,23 +442,23 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
         Pos = MAP_APPFONT( 12, 85 );
         Size = MAP_APPFONT( 186, 10 );
         TabStop = TRUE;
-        Text = "L~eerzeile nach jedem Element";
-        Text[ english_us ] = "~Empty line after each item";
+        Text [ de ] = "L~eerzeile nach jedem Element";
+        Text [ en-US ] = "~Empty line after each item";
     };
     FixedLine FL_AUTOSHOW
     {
         Pos = MAP_APPFONT( 6, 99 );
         Size = MAP_APPFONT( 198, 8 );
-        Text = "Automatisch anzeigen";
-        Text [ english_us ] = "Show automatically";
+        Text [ de ] = "Automatisch anzeigen";
+        Text [ en-US ] = "Show automatically";
     };
     CheckBox CB_SHOW
     {
         Pos = MAP_APPFONT( 12, 112 );
         Size = MAP_APPFONT( 70, 10 );
         TabStop = TRUE;
-        Text = "An~zeigen";
-        Text[ english_us ] = "~Show";
+        Text [ de ] = "An~zeigen";
+        Text[ en-US ] = "~Show";
     };
     NumericField NF_SHOW
     {
@@ -942,15 +477,15 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
     {
         Pos = MAP_APPFONT( 118, 112 );
         Size = MAP_APPFONT( 80, 8 );
-        Text = "Elemente";
-        Text [ english_us ] = "items";
+        Text [ de ] = "Elemente";
+        Text [ en-US ] = "items";
     };
     FixedText FT_SHOW_FROM
     {
         Pos = MAP_APPFONT( 22, 128 );
         Size = MAP_APPFONT( 60, 8 );
-        Text = "~Von";
-        Text [ english_us ] = "~From";
+        Text [ de ] = "~Von";
+        Text [ en-US ] = "~From";
     };
     ListBox LB_SHOW_FROM
     {
@@ -959,12 +494,12 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
         TabStop = TRUE;
         Border = TRUE;
         DropDown = TRUE;
-        StringList =
+        StringList [ de ] =
         {
             < "Oben"; Default; >;
             < "Unten"; Default; >;
         };
-        StringList [ english_us ] =
+        StringList [ en-US ] =
         {
             < "Top"; Default; >;
             < "Bottom"; Default; >;
@@ -974,8 +509,8 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
     {
         Pos = MAP_APPFONT( 22, 144 );
         Size = MAP_APPFONT( 60, 8 );
-        Text = "~Feld verwenden";
-        Text [ english_us ] = "~Using field";
+        Text [ de ] = "~Feld verwenden";
+        Text [ en-US ] = "~Using field";
     };
     ListBox LB_SHOW_USING
     {
@@ -989,8 +524,8 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
     {
         Pos = MAP_APPFONT( 6, 160 );
         Size = MAP_APPFONT( 198, 8 );
-        Text = "Vers~teckte Elemente";
-        Text [ english_us ] = "Hide i~tems";
+        Text [ de ] = "Vers~teckte Elemente";
+        Text [ en-US ] = "Hide i~tems";
     };
     Control CT_HIDE
     {
@@ -1003,8 +538,8 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
     {
         Pos = MAP_APPFONT( 6, 224 );
         Size = MAP_APPFONT( 76, 8 );
-        Text = "H~ierarchie";
-        Text [ english_us ] = "Hierarch~y";
+        Text [ de ] = "H~ierarchie";
+        Text [ en-US ] = "Hierarch~y";
     };
     ListBox LB_HIERARCHY
     {
@@ -1033,8 +568,8 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
         Size = MAP_APPFONT( 50, 14 );
         TabStop = TRUE;
     };
-    Text = "Datenfeld-Optionen";
-    Text [ english_us ] = "Data Field Options";
+    Text [ de ] = "Datenfeld-Optionen";
+    Text [ en-US ] = "Data Field Options";
 };
 
 // ----------------------------------------------------------------------------

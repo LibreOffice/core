@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:51:42 $
+ *  last change: $Author: hjs $ $Date: 2004-06-30 14:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1689,8 +1689,8 @@ Resource RID_SC_FUNCTION_NAMES
     };
     String SC_OPCODE_HYPERLINK
     {
-        Text = "HYPERLINK";
-        Text[ english_us ] = "HYPERLINK";
+        Text [ de ] = "HYPERLINK";
+        Text[ en-US ] = "HYPERLINK";
     };
 };
 Resource RID_SC_FUNCTION_NAMES_ENGLISH
