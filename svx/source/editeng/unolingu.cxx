@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:16:28 $
+ *  last change: $Author: kz $ $Date: 2004-11-27 13:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,10 @@ Sequence< OUString > lcl_MergeSeq(
 
     for (INT32 k = 0;  k < 2;  ++k)
     {
+        // add previously configuerd service first and append
+        // new found services at the end
         const Sequence< OUString > &rSeq = k == 0 ? rCfgSvcs : rNewSvcs;
+
         INT32 nLen = rSeq.getLength();
         const OUString *pEntry = rSeq.getConstArray();
         for (INT32 i = 0;  i < nLen;  ++i)
@@ -327,7 +330,16 @@ void SvxLinguConfigUpdate::UpdateAll()
 
                 Sequence< OUString > aCfgSvcs(
                         xLngSvcMgr->getConfiguredServices( aService, pAvailLocale[i] ));
+
+                // merge services list (previously configured to be
+                // listed first).
                 aCfgSvcs = lcl_MergeSeq( aCfgSvcs, aNewSvcs );
+
+                // there is at most one Hyphenator per language allowed
+                // to be configured, thus we only use the first one found.
+                if (k == 2 && aCfgSvcs.getLength() > 1)
+                    aCfgSvcs.realloc(1);
+
                 xLngSvcMgr->setConfiguredServices( aService, pAvailLocale[i], aCfgSvcs );
             }
 
