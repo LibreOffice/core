@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:26:10 $
+ *  last change: $Author: kz $ $Date: 2001-07-20 20:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -850,7 +850,7 @@ Menu MENU_BROWSER_QUERYCONTEXT
             Text[ french ] = "~Insérer une requête...";
             Text[ spanish ] = "~Insertar consulta...";
             Text[ finnish ] = "~Insert Query...";
-            Text[ italian ] = "~Insert Query...";
+            Text[ italian ] = "~Inserisci ricerca...";
             Text[ danish ] = "~Insert Query...";
             Text[ swedish ] = "~Infoga sökning...";
             Text[ polish ] = "~Wstaw kwerendê...";
@@ -1362,7 +1362,27 @@ String STR_NO_TABLE_FORMAT_INSIDE
     Text = "Es konnte kein Tabellenformat gefunden werden." ;
     Text [ english ] = "No table format found." ;
     Text [ english_us ] = "No table format found." ;
-};
+    Text[ portuguese ] = "No table format found.";
+        Text[ russian ] = "No table format found.";
+        Text[ greek ] = "No table format found.";
+        Text[ dutch ] = "Geen tabelformaat gevonden.";
+        Text[ french ] = "No table format found.";
+        Text[ spanish ] = "No se pudo encontrar ningún formato de hoja de cálculo.";
+        Text[ finnish ] = "No table format found.";
+        Text[ italian ] = "Il formato della tabella non è stato trovato";
+        Text[ danish ] = "No table format found.";
+        Text[ swedish ] = "Det gick inte att hitta något tabellformat.";
+        Text[ polish ] = "No table format found.";
+        Text[ portuguese_brazilian ] = "No table format found.";
+        Text[ japanese ] = "No table format found.";
+        Text[ korean ] = "No table format found.";
+        Text[ chinese_simplified ] = "No table format found.";
+        Text[ chinese_traditional ] = "No table format found.";
+        Text[ turkish ] = "No table format found.";
+        Text[ arabic ] = "No table format found.";
+        Text[ catalan ] = "No table format found.";
+    };
+
 
 
 
