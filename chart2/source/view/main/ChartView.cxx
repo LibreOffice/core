@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: iha $ $Date: 2003-10-30 15:39:41 $
+ *  last change: $Author: iha $ $Date: 2003-11-08 22:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include "LegendHelper.hxx"
 #include "VLegend.hxx"
 #include "PropertyMapper.hxx"
+#include "ChartModelHelper.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_AXISORIENTATION_HPP_
 #include <drafts/com/sun/star/chart2/AxisOrientation.hpp>
@@ -243,40 +244,8 @@ void getCoordinateOrigin( double* fCoordinateOrigin, const uno::Reference< XBoun
 
 sal_Int32 getDimension( const uno::Reference< XDiagram >& xDiagram )
 {
-    sal_Int32 nDimension = 2;
-
-    //@todo maybe get the dimension better from diagram properties ... -> need model change
-    uno::Reference< XDataSeriesTreeParent > xTree = xDiagram->getTree();
-    if(!xTree.is())
-        return nDimension;
-    uno::Sequence< uno::Reference< XDataSeriesTreeNode > >  aChartTypes( xTree->getChildren() );
-    for( sal_Int32 i = 0; i < aChartTypes.getLength(); ++i )
-    {
-        uno::Reference< XChartTypeGroup > xChartTypeGroup( aChartTypes[i], uno::UNO_QUERY );
-        DBG_ASSERT(xChartTypeGroup.is(),"First node at the diagram tree needs to be a ChartTypeGroup");
-        if( !xChartTypeGroup.is() )
-            continue;
-        uno::Reference< XChartType > xChartType = xChartTypeGroup->getChartType();
-        if( !xChartType.is() )
-            continue;
-        uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY );
-        if( xChartTypeProp.is())
-        {
-            try
-            {
-                if( !(xChartTypeProp->getPropertyValue( C2U( "Dimension" )) >>= nDimension) )
-                {
-                    DBG_ERROR( "Couldn't get Dimension from ChartTypeGroup" );
-                }
-            }
-            catch( beans::UnknownPropertyException ex )
-            {
-                ASSERT_EXCEPTION( ex );
-            }
-            break;
-        }
-    }
-    return nDimension;
+    rtl::OUString aChartType;
+    return ChartModelHelper::getDimensionAndFirstChartType( xDiagram, aChartType );
 }
 
 // void getCoordinateSystems( std::vector< VCoordinateSystem >& rVCooSysList, const uno::Reference< XDiagram >& xDiagram )
@@ -420,7 +389,7 @@ void initializeDiagramAndGetCooSys( std::vector< VCoordinateSystem >& rVCooSysLi
             uno::Reference< XDataSeriesTreeParent > xXSlot = uno::Reference< XDataSeriesTreeParent >::query( aXSlots[nX] );
             DBG_ASSERT( xXSlot.is(), "a node for the first dimension of a chart tree should always be a parent" );
             if(!xXSlot.is())
-                return;
+                continue;
             uno::Reference< XStackableScaleGroup > xStackGroup = uno::Reference< XStackableScaleGroup >::query( xXSlot );
             if( xStackGroup.is() &&
                 xStackGroup->getStackMode()==StackMode_STACKED)
@@ -432,7 +401,7 @@ void initializeDiagramAndGetCooSys( std::vector< VCoordinateSystem >& rVCooSysLi
                 uno::Reference< XDataSeriesTreeParent > xYSlot = uno::Reference< XDataSeriesTreeParent >::query( aYSlots[nY] );
                 DBG_ASSERT( xYSlot.is(), "a node for the second dimension of a chart tree should always be a parent" );
                 if(!xYSlot.is())
-                    return;
+                    continue;
 
                 uno::Reference< XScaleGroup > xScaleGroup( xYSlot, uno::UNO_QUERY );
 
