@@ -2,6 +2,23 @@
 
 .IF "$(RESLIB1TARGETN)"!=""
 
+.IF "$(BUILDHIDS)"!=""
+HIDRES1PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(RESLIB1NAME)_res.hid
+
+#HACK cut off the dirty srs files which are included from solver
+#RESLIB1HIDFILESx=$(shell @+echo $(RESLIB1SRSFILES:t"\n") | $(GREP) -v "$(SOLARRESDIR:s/\/\\/)" )
+RESLIB1HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB1SRSFILES)))
+$(HIDRES1PARTICLE): $(RESLIB1HIDFILES)
+    @echo ------------------------------
+    @echo Making: $@
+    @+if exist $@ rm $@
+    $(TYPE) $(RESLIB1HIDFILES) > $@.$(ROUT).tmp 
+    @+$(RENAME) $@.$(ROUT).tmp $@
+
+ALLTAR : $(HIDRES1PARTICLE)
+
+.ENDIF # "$(BUILDHIDS)"!=""
+
 $(RSC_MULTI1) : \
         $(RESLIB1SRSFILES) \
         $(RESLIB1TARGETN) \
@@ -119,6 +136,23 @@ $(RESLIB1TARGETN): \
 # unroll begin
 
 .IF "$(RESLIB2TARGETN)"!=""
+
+.IF "$(BUILDHIDS)"!=""
+HIDRES2PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(RESLIB2NAME)_res.hid
+
+#HACK cut off the dirty srs files which are included from solver
+#RESLIB2HIDFILESx=$(shell @+echo $(RESLIB2SRSFILES:t"\n") | $(GREP) -v "$(SOLARRESDIR:s/\/\\/)" )
+RESLIB2HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB2SRSFILES)))
+$(HIDRES2PARTICLE): $(RESLIB2HIDFILES)
+    @echo ------------------------------
+    @echo Making: $@
+    @+if exist $@ rm $@
+    $(TYPE) $(RESLIB2HIDFILES) > $@.$(ROUT).tmp 
+    @+$(RENAME) $@.$(ROUT).tmp $@
+
+ALLTAR : $(HIDRES2PARTICLE)
+
+.ENDIF # "$(BUILDHIDS)"!=""
 
 $(RSC_MULTI2) : \
         $(RESLIB2SRSFILES) \
@@ -238,6 +272,23 @@ $(RESLIB2TARGETN): \
 
 .IF "$(RESLIB3TARGETN)"!=""
 
+.IF "$(BUILDHIDS)"!=""
+HIDRES3PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(RESLIB3NAME)_res.hid
+
+#HACK cut off the dirty srs files which are included from solver
+#RESLIB3HIDFILESx=$(shell @+echo $(RESLIB3SRSFILES:t"\n") | $(GREP) -v "$(SOLARRESDIR:s/\/\\/)" )
+RESLIB3HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB3SRSFILES)))
+$(HIDRES3PARTICLE): $(RESLIB3HIDFILES)
+    @echo ------------------------------
+    @echo Making: $@
+    @+if exist $@ rm $@
+    $(TYPE) $(RESLIB3HIDFILES) > $@.$(ROUT).tmp 
+    @+$(RENAME) $@.$(ROUT).tmp $@
+
+ALLTAR : $(HIDRES3PARTICLE)
+
+.ENDIF # "$(BUILDHIDS)"!=""
+
 $(RSC_MULTI3) : \
         $(RESLIB3SRSFILES) \
         $(RESLIB3TARGETN) \
@@ -355,6 +406,23 @@ $(RESLIB3TARGETN): \
 # unroll begin
 
 .IF "$(RESLIB4TARGETN)"!=""
+
+.IF "$(BUILDHIDS)"!=""
+HIDRES4PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(RESLIB4NAME)_res.hid
+
+#HACK cut off the dirty srs files which are included from solver
+#RESLIB4HIDFILESx=$(shell @+echo $(RESLIB4SRSFILES:t"\n") | $(GREP) -v "$(SOLARRESDIR:s/\/\\/)" )
+RESLIB4HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB4SRSFILES)))
+$(HIDRES4PARTICLE): $(RESLIB4HIDFILES)
+    @echo ------------------------------
+    @echo Making: $@
+    @+if exist $@ rm $@
+    $(TYPE) $(RESLIB4HIDFILES) > $@.$(ROUT).tmp 
+    @+$(RENAME) $@.$(ROUT).tmp $@
+
+ALLTAR : $(HIDRES4PARTICLE)
+
+.ENDIF # "$(BUILDHIDS)"!=""
 
 $(RSC_MULTI4) : \
         $(RESLIB4SRSFILES) \
@@ -474,6 +542,23 @@ $(RESLIB4TARGETN): \
 
 .IF "$(RESLIB5TARGETN)"!=""
 
+.IF "$(BUILDHIDS)"!=""
+HIDRES5PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(RESLIB5NAME)_res.hid
+
+#HACK cut off the dirty srs files which are included from solver
+#RESLIB5HIDFILESx=$(shell @+echo $(RESLIB5SRSFILES:t"\n") | $(GREP) -v "$(SOLARRESDIR:s/\/\\/)" )
+RESLIB5HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB5SRSFILES)))
+$(HIDRES5PARTICLE): $(RESLIB5HIDFILES)
+    @echo ------------------------------
+    @echo Making: $@
+    @+if exist $@ rm $@
+    $(TYPE) $(RESLIB5HIDFILES) > $@.$(ROUT).tmp 
+    @+$(RENAME) $@.$(ROUT).tmp $@
+
+ALLTAR : $(HIDRES5PARTICLE)
+
+.ENDIF # "$(BUILDHIDS)"!=""
+
 $(RSC_MULTI5) : \
         $(RESLIB5SRSFILES) \
         $(RESLIB5TARGETN) \
@@ -591,6 +676,23 @@ $(RESLIB5TARGETN): \
 # unroll begin
 
 .IF "$(RESLIB6TARGETN)"!=""
+
+.IF "$(BUILDHIDS)"!=""
+HIDRES6PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(RESLIB6NAME)_res.hid
+
+#HACK cut off the dirty srs files which are included from solver
+#RESLIB6HIDFILESx=$(shell @+echo $(RESLIB6SRSFILES:t"\n") | $(GREP) -v "$(SOLARRESDIR:s/\/\\/)" )
+RESLIB6HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB6SRSFILES)))
+$(HIDRES6PARTICLE): $(RESLIB6HIDFILES)
+    @echo ------------------------------
+    @echo Making: $@
+    @+if exist $@ rm $@
+    $(TYPE) $(RESLIB6HIDFILES) > $@.$(ROUT).tmp 
+    @+$(RENAME) $@.$(ROUT).tmp $@
+
+ALLTAR : $(HIDRES6PARTICLE)
+
+.ENDIF # "$(BUILDHIDS)"!=""
 
 $(RSC_MULTI6) : \
         $(RESLIB6SRSFILES) \
@@ -710,6 +812,23 @@ $(RESLIB6TARGETN): \
 
 .IF "$(RESLIB7TARGETN)"!=""
 
+.IF "$(BUILDHIDS)"!=""
+HIDRES7PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(RESLIB7NAME)_res.hid
+
+#HACK cut off the dirty srs files which are included from solver
+#RESLIB7HIDFILESx=$(shell @+echo $(RESLIB7SRSFILES:t"\n") | $(GREP) -v "$(SOLARRESDIR:s/\/\\/)" )
+RESLIB7HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB7SRSFILES)))
+$(HIDRES7PARTICLE): $(RESLIB7HIDFILES)
+    @echo ------------------------------
+    @echo Making: $@
+    @+if exist $@ rm $@
+    $(TYPE) $(RESLIB7HIDFILES) > $@.$(ROUT).tmp 
+    @+$(RENAME) $@.$(ROUT).tmp $@
+
+ALLTAR : $(HIDRES7PARTICLE)
+
+.ENDIF # "$(BUILDHIDS)"!=""
+
 $(RSC_MULTI7) : \
         $(RESLIB7SRSFILES) \
         $(RESLIB7TARGETN) \
@@ -827,6 +946,23 @@ $(RESLIB7TARGETN): \
 # unroll begin
 
 .IF "$(RESLIB8TARGETN)"!=""
+
+.IF "$(BUILDHIDS)"!=""
+HIDRES8PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(RESLIB8NAME)_res.hid
+
+#HACK cut off the dirty srs files which are included from solver
+#RESLIB8HIDFILESx=$(shell @+echo $(RESLIB8SRSFILES:t"\n") | $(GREP) -v "$(SOLARRESDIR:s/\/\\/)" )
+RESLIB8HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB8SRSFILES)))
+$(HIDRES8PARTICLE): $(RESLIB8HIDFILES)
+    @echo ------------------------------
+    @echo Making: $@
+    @+if exist $@ rm $@
+    $(TYPE) $(RESLIB8HIDFILES) > $@.$(ROUT).tmp 
+    @+$(RENAME) $@.$(ROUT).tmp $@
+
+ALLTAR : $(HIDRES8PARTICLE)
+
+.ENDIF # "$(BUILDHIDS)"!=""
 
 $(RSC_MULTI8) : \
         $(RESLIB8SRSFILES) \
@@ -946,6 +1082,23 @@ $(RESLIB8TARGETN): \
 
 .IF "$(RESLIB9TARGETN)"!=""
 
+.IF "$(BUILDHIDS)"!=""
+HIDRES9PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(RESLIB9NAME)_res.hid
+
+#HACK cut off the dirty srs files which are included from solver
+#RESLIB9HIDFILESx=$(shell @+echo $(RESLIB9SRSFILES:t"\n") | $(GREP) -v "$(SOLARRESDIR:s/\/\\/)" )
+RESLIB9HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB9SRSFILES)))
+$(HIDRES9PARTICLE): $(RESLIB9HIDFILES)
+    @echo ------------------------------
+    @echo Making: $@
+    @+if exist $@ rm $@
+    $(TYPE) $(RESLIB9HIDFILES) > $@.$(ROUT).tmp 
+    @+$(RENAME) $@.$(ROUT).tmp $@
+
+ALLTAR : $(HIDRES9PARTICLE)
+
+.ENDIF # "$(BUILDHIDS)"!=""
+
 $(RSC_MULTI9) : \
         $(RESLIB9SRSFILES) \
         $(RESLIB9TARGETN) \
@@ -1063,6 +1216,23 @@ $(RESLIB9TARGETN): \
 # unroll begin
 
 .IF "$(RESLIB10TARGETN)"!=""
+
+.IF "$(BUILDHIDS)"!=""
+HIDRES10PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(RESLIB10NAME)_res.hid
+
+#HACK cut off the dirty srs files which are included from solver
+#RESLIB10HIDFILESx=$(shell @+echo $(RESLIB10SRSFILES:t"\n") | $(GREP) -v "$(SOLARRESDIR:s/\/\\/)" )
+RESLIB10HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB10SRSFILES)))
+$(HIDRES10PARTICLE): $(RESLIB10HIDFILES)
+    @echo ------------------------------
+    @echo Making: $@
+    @+if exist $@ rm $@
+    $(TYPE) $(RESLIB10HIDFILES) > $@.$(ROUT).tmp 
+    @+$(RENAME) $@.$(ROUT).tmp $@
+
+ALLTAR : $(HIDRES10PARTICLE)
+
+.ENDIF # "$(BUILDHIDS)"!=""
 
 $(RSC_MULTI10) : \
         $(RESLIB10SRSFILES) \
