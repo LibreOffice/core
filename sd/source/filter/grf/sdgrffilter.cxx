@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdgrffilter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-21 11:40:07 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,19 +77,35 @@
 #ifndef SVX_LIGHT
 #include "../../ui/inc/strings.hrc"
 #include "../../ui/inc/graphpro.hxx"
-#include "../../ui/inc/drviewsh.hxx"
-#include "../../ui/inc/docshell.hxx"
-#include "../../ui/inc/clview.hxx"
-#include "../../ui/inc/frmview.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "../../ui/inc/DrawViewShell.hxx"
+#endif
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "../../ui/inc/DrawDocShell.hxx"
+#endif
+#ifndef SD_CLIENT_VIEW_HXX
+#include "../../ui/inc/ClientView.hxx"
+#endif
+#ifndef SD_FRAME_VIEW_HXX
+#include "../../ui/inc/FrameView.hxx"
+#endif
 #endif //!SVX_LIGHT
 #else  //MAC
 #ifndef SVX_LIGHT
 #include "strings.hrc"
 #include "graphpro.hxx"
-#include "drviewsh.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "docshell.hxx"
-#include "clview.hxx"
-#include "frmview.hxx"
+#endif
+#ifndef SD_CLIENT_VIEW_HXX
+#include "ClientView.hxx"
+#endif
+#ifndef SD_FRAME_VIEW_HXX
+#include "FrameView.hxx"
+#endif
 #endif //!SVX_LIGHT
 #endif //!MAC
 
@@ -112,7 +128,7 @@
 // - SdPPTFilter -
 // ---------------
 
-SdGRFFilter::SdGRFFilter( SfxMedium& rMedium, SdDrawDocShell& rDocShell, sal_Bool bShowProgress ) :
+SdGRFFilter::SdGRFFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress ) :
     SdFilter( rMedium, rDocShell, bShowProgress )
 {
 }
@@ -297,7 +313,7 @@ sal_Bool SdGRFFilter::Export()
     SfxItemSet*         pSet = mrMedium.GetItemSet();
     VirtualDevice       aVDev;
     Graphic             aGraphic;
-    SdDrawViewShell*    pDrawViewShell = static_cast< SdDrawViewShell* >( ( ( mrDocShell.GetViewShell() && mrDocShell.GetViewShell()->ISA( SdDrawViewShell ) ) ? mrDocShell.GetViewShell() : NULL ) );
+    sd::DrawViewShell*  pDrawViewShell = static_cast< ::sd::DrawViewShell* >( ( ( mrDocShell.GetViewShell() && mrDocShell.GetViewShell()->ISA(::sd::DrawViewShell ) ) ? mrDocShell.GetViewShell() : NULL ) );
     const Fraction      aFrac( mrDocument.GetScaleFraction() );
     const MapMode       aMap( mrDocument.GetScaleUnit(), Point(), aFrac, aFrac );
     GraphicFilter*      pGraphicFilter = GetGrfFilter();
@@ -362,7 +378,7 @@ sal_Bool SdGRFFilter::Export()
             {
                 const Size      aSizePix( aVDev.LogicToPixel( aNewSize, aMap ) );
                 const long      nWidthPix = ( aSizePix.Width() > 2048 || aSizePix.Height() > 2048 ) ? 2048 : 0;
-                SdView*         pView = new SdView( &mrDocument, &aVDev );
+                ::sd::View* pView = new ::sd::View( &mrDocument, &aVDev );
                 VirtualDevice*  pVDev = pView->CreatePageVDev( nPage, ePageKind, nWidthPix );
 
                 if( pVDev )
@@ -383,7 +399,7 @@ sal_Bool SdGRFFilter::Export()
                 aVDev.EnableOutput( FALSE );
                 aMtf.Record( &aVDev );
 
-                SdClientView* pView = new SdClientView( &mrDocShell, &aVDev, NULL );
+                ::sd::ClientView* pView = new ::sd::ClientView( &mrDocShell, &aVDev, NULL );
 
                 pView->SetBordVisible( FALSE );
                 pView->SetPageVisible( FALSE );
@@ -393,7 +409,7 @@ sal_Bool SdGRFFilter::Export()
                 MapMode         aVMap( aMap );
 
                 SdrPageView* pPageView  = pView->GetPageView( pPage );
-                FrameView*   pFrameView = mrDocShell.GetFrameView();
+                ::sd::FrameView* pFrameView = mrDocShell.GetFrameView();
 
                 pPageView->SetVisibleLayers( pFrameView->GetVisibleLayers() );
                 pPageView->SetLockedLayers( pFrameView->GetLockedLayers() );
@@ -431,7 +447,7 @@ sal_Bool SdGRFFilter::Export()
         else
         {
             // export selected objects
-            SdView* pView = pDrawViewShell->GetView();
+            ::sd::View* pView = pDrawViewShell->GetView();
 
             if( pView )
             {
