@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:09 $
+ *  last change: $Author: hjs $ $Date: 2000-11-03 16:55:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ c |= nSwapTmp;
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include <stream.hxx>
 #include <osl/thread.h>
+#include <algorithm>
 
 // -----------------------------------------------------------------------
 
@@ -354,7 +355,7 @@ ErrCode SvAsyncLockBytes::ReadAt(ULONG nPos, void * pBuffer, ULONG nCount,
         return SvOpenLockBytes::ReadAt(nPos, pBuffer, nCount, pRead);
     else
     {
-        ULONG nTheCount = min(nPos < m_nSize ? m_nSize - nPos : 0, nCount);
+        ULONG nTheCount = std::min(nPos < m_nSize ? m_nSize - nPos : 0, nCount);
         ErrCode nError = SvOpenLockBytes::ReadAt(nPos, pBuffer, nTheCount,
                                                  pRead);
         return !nCount || nTheCount == nCount || nError ? nError :
@@ -371,7 +372,7 @@ ErrCode SvAsyncLockBytes::WriteAt(ULONG nPos, const void * pBuffer,
         return SvOpenLockBytes::WriteAt(nPos, pBuffer, nCount, pWritten);
     else
     {
-        ULONG nTheCount = min(nPos < m_nSize ? m_nSize - nPos : 0, nCount);
+        ULONG nTheCount = std::min(nPos < m_nSize ? m_nSize - nPos : 0, nCount);
         ErrCode nError = SvOpenLockBytes::WriteAt(nPos, pBuffer, nTheCount,
                                                   pWritten);
         return !nCount || nTheCount == nCount || nError ? nError :
