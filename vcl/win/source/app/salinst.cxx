@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 13:47:58 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,7 +471,6 @@ SalData::SalData()
     mnAppThreadId = 0;          // Id from Applikation-Thread
     mbScrSvrEnabled = FALSE;    // ScreenSaver enabled
     mnSageStatus = 0;           // status of Sage-DLL (DISABLE_AGENT == nicht vorhanden)
-    mhSageInst = 0;             // instance handle for the Sage-DLL
     mpSageEnableProc = 0;       // funktion to deactivate the system agent
     mpFirstIcon = 0;            // icon cache, points to first icon, NULL if none
     mpTempFontItem = 0;
