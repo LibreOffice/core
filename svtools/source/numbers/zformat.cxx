@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:16:00 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:23:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3496,8 +3496,16 @@ BOOL SvNumberformat::ImpNumberFillWithThousands(
                 // #i7284# #102685# Insert separator also if number is divided
                 // by thousands and the separator is specified somewhere in
                 // between and not only at the end.
+                // #i12596# But do not insert if it's a parenthesized negative
+                // format like (#,)
+                // In fact, do not insert if divided and regex [0#],[^0#] and
+                // no other digit symbol follows (which was already detected
+                // during scan of format code, otherwise there would be no
+                // division), else do insert.
                 if ( !bDoThousands && j < NumFor[nIx].GetnAnz()-1 )
-                    bDoThousands = (rInfo.nTypeArray[j+1] != SYMBOLTYPE_THSEP);
+                    bDoThousands = ((j == 0) ||
+                            (rInfo.nTypeArray[j-1] != SYMBOLTYPE_DIGIT) ||
+                            (rInfo.nTypeArray[j+1] == SYMBOLTYPE_DIGIT));
                 if ( bDoThousands && k > 0 )
                 {
                     sStr.Insert(rInfo.sStrArray[j],k);
@@ -3867,6 +3875,49 @@ DateFormat SvNumberformat::GetDateOrder() const
     else
         DBG_ERROR( "SvNumberformat::GetDateOrder: no date" );
     return rLoc().getDateFormat();
+}
+
+
+sal_uInt32 SvNumberformat::GetExactDateOrder() const
+{
+    sal_uInt32 nRet = 0;
+    if ( (eType & NUMBERFORMAT_DATE) != NUMBERFORMAT_DATE )
+    {
+        DBG_ERROR( "SvNumberformat::GetExactDateOrder: no date" );
+        return nRet;
+    }
+    short const * const pType = NumFor[0].Info().nTypeArray;
+    USHORT nAnz = NumFor[0].GetnAnz();
+    sal_uInt32 nShift = 0;
+    for ( USHORT j=0; j<nAnz && nShift < 24; j++ )
+    {
+        switch ( pType[j] )
+        {
+            case NF_KEY_D :
+            case NF_KEY_DD :
+                nRet = (nRet << nShift) | 'D';
+                nShift += 8;
+            break;
+            case NF_KEY_M :
+            case NF_KEY_MM :
+            case NF_KEY_MMM :
+            case NF_KEY_MMMM :
+            case NF_KEY_MMMMM :
+                nRet = (nRet << nShift) | 'M';
+                nShift += 8;
+            break;
+            case NF_KEY_YY :
+            case NF_KEY_YYYY :
+            case NF_KEY_EC :
+            case NF_KEY_EEC :
+            case NF_KEY_R :
+            case NF_KEY_RR :
+                nRet = (nRet << nShift) | 'Y';
+                nShift += 8;
+            break;
+        }
+    }
+    return nRet;
 }
 
 
