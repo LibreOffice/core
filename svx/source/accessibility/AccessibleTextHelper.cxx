@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-05 10:39:58 $
+ *  last change: $Author: thb $ $Date: 2002-07-05 13:51:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1553,6 +1553,11 @@ namespace accessibility
 
     void AccessibleTextHelper::Dispose()
     {
+        // As Dispose calls ShutdownEditSource, which in turn
+        // deregisters as listener on the edit source, have to lock
+        // here
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
 #endif
