@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 20:33:23 $
+ *  last change: $Author: kz $ $Date: 2001-08-15 20:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1054,7 +1054,7 @@ String STR_PREVIEWVIEWSHELL
     Text[ french ] = "Fenêtre d'aperçu";
     Text[ spanish ] = "Ventana de previsualización";
     Text[ finnish ] = "Preview window";
-    Text[ italian ] = "Preview window";
+    Text[ italian ] = "Anteprima";
     Text[ danish ] = "Preview window";
     Text[ swedish ] = "Preview window";
     Text[ polish ] = "Preview window";
@@ -2214,6 +2214,7 @@ String STR_SAVE_DOC
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Guardar documento";
 };
+
 
 
 
