@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xpathapi.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:32:02 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #define _XPATHAPI_HXX
 
 #include <map>
+#include <vector>
 
 #include <sal/types.h>
 #include <cppuhelper/implbase2.hxx>
@@ -76,6 +77,8 @@
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/xpath/XXPathAPI.hpp>
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
+#include <com/sun/star/xml/xpath/XXPathExtension.hpp>
+#include <com/sun/star/xml/xpath/Libxml2ExtensionHandle.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -92,15 +95,20 @@ using namespace com::sun::star::xml::xpath;
 namespace XPath
 {
     typedef std::map<OUString, OUString> nsmap_t;
-    
+    typedef std::vector< Reference<XXPathExtension> > extensions_t;
+
     class  CXPathAPI
         : public ::cppu::WeakImplHelper2< XXPathAPI, XServiceInfo >
     {
 
     private:
         nsmap_t m_nsmap;
-        
+        const Reference < XMultiServiceFactory >& m_aFactory;
+        extensions_t m_extensions;
+
     public:
+        // ctor
+        CXPathAPI(const Reference< XMultiServiceFactory >& rSMgr);
 
         // call for factory
         static Reference< XInterface > getInstance(const Reference < XMultiServiceFactory >& xFactory);
@@ -159,7 +167,9 @@ namespace XPath
         virtual Reference< XXPathObject > SAL_CALL evalNS(const Reference< XNode >& contextNode, const OUString& str, const Reference< XNode >&  namespaceNode)
             throw (RuntimeException);
 
-     
+        virtual void SAL_CALL registerExtension(const OUString& aName) throw (RuntimeException);
+        virtual void SAL_CALL registerExtensionInstance(const Reference< XXPathExtension>& aExtension) throw (RuntimeException);
+
 
     };
 }
