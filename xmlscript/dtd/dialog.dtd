@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-        $Id: dialog.dtd,v 1.21 2001-10-22 08:52:19 dbo Exp $
+        $Id: dialog.dtd,v 1.22 2002-03-06 15:23:47 dbo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -175,6 +175,8 @@
                      dlg:value CDATA #IMPLIED
                      dlg:default %boolean; #IMPLIED
                      dlg:tabstop %boolean; #IMPLIED
+                     dlg:image-src CDATA #IMPLIED
+                     dlg:image-align (top|left|right|bottom) #IMPLIED
 		     dlg:button-type (standard|ok|cancel|help) #IMPLIED
                      >
 
@@ -273,6 +275,7 @@
                             dlg:value-max %numeric; #IMPLIED
                             dlg:value-step %numeric; #IMPLIED
                             dlg:spin %boolean; #IMPLIED
+                            dlg:prepend-symbol %boolean; #IMPLIED
                             >
 
 <!ELEMENT dlg:datefield ((%event;)*)>
@@ -285,6 +288,7 @@
                         dlg:value-min CDATA #IMPLIED
                         dlg:value-max CDATA #IMPLIED
                         dlg:spin %boolean; #IMPLIED
+                        dlg:dropdown %boolean; #IMPLIED
                         >
 
 <!ELEMENT dlg:numericfield ((%event;)*)>
