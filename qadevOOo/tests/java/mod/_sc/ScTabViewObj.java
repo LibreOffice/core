@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScTabViewObj.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-02-28 09:23:25 $
+ *  last change:$Date: 2003-02-28 09:35:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,9 @@ public class ScTabViewObj extends TestCase {
         try {
             log.println("creating a spreadsheetdocument");
             xSpreadsheetDoc = SOF.createCalcDoc(null);
+            try {
+                Thread.sleep(1000);
+            } catch (java.lang.InterruptedException e) {}
             xSpreadsheetDoc2 = SOF.createCalcDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace( log );
