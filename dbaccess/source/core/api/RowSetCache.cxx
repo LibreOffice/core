@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-21 12:27:44 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,8 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                             Reference<XColumnsSupplier> xColSup(_xComposer,UNO_QUERY);
                             Reference<XNameAccess> xSelColumns = xColSup->getColumns();
 
-                            OColumnNamePos aColumnNames(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers() ? true : false);
+                            Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
+                            OColumnNamePos aColumnNames(xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers() ? true : false);
                             ::dbaccess::getColumnPositions(xSelColumns,xColumns,aUpdateTableName,aColumnNames);
                             bAllKeysFound = sal_Int32(aColumnNames.size()) == xColumns->getElementNames().getLength();
                         }
@@ -300,7 +301,8 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         }
         else
         {
-            OColumnNamePos aColumnNames(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers() ? true : false);
+            Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
+            OColumnNamePos aColumnNames(xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers() ? true : false);
             Reference<XColumnsSupplier> xColSup(_xComposer,UNO_QUERY);
             Reference<XNameAccess> xSelColumns  = xColSup->getColumns();
             Reference<XNameAccess> xColumns     = m_aUpdateTable->getColumns();
@@ -610,7 +612,7 @@ Any ORowSetCache::getBookmark(  )
     if(m_bAfterLast)
         throwFunctionSequenceException(m_xSet.get());
 
-    if(m_aMatrixIter == m_pMatrix->end() || !(*m_aMatrixIter).isValid())
+    if ( m_aMatrixIter >= m_pMatrix->end() || m_aMatrixIter < m_pMatrix->begin() || !(*m_aMatrixIter).isValid())
     {
         return Any(); // this is allowed here because the rowset knowns what it is doing
     }
@@ -1702,7 +1704,7 @@ ORowSetMatrix::iterator ORowSetCache::calcPosition() const
 {
     sal_Int32 nValue = (m_nPosition - m_nStartPos) - 1;
     OSL_ENSURE(nValue >= 0 && nValue < m_pMatrix->size(),"Position is invalid!");
-    return (nValue < 0) ? m_pMatrix->end() : (m_pMatrix->begin() + nValue);
+    return ( nValue < 0 || nValue >= m_pMatrix->size() ) ? m_pMatrix->end() : (m_pMatrix->begin() + nValue);
 }
 // -----------------------------------------------------------------------------
 

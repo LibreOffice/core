@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 11:02:25 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:18:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,10 +672,15 @@ void ORowSet::freeResources()
         if(m_pColumns)
             m_pColumns->disposing();
         // dispose the composer to avoid that everbody knows that the querycomposer is eol
-        Reference< XComponent > xComp(m_xComposer, UNO_QUERY);
-        if (xComp.is())
-            xComp->dispose();
-        m_xComposer     = NULL;
+        try
+        {
+            ::comphelper::disposeComponent(m_xComposer);
+        }
+        catch(Exception&)
+        {
+            OSL_ENSURE(0,"Composer could be disposed!");
+            m_xComposer = NULL;
+        }
 
         DELETEZ(m_pCache);
 
@@ -1642,59 +1647,60 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                     {
                         // use the meta data
                         Reference<XResultSetMetaDataSupplier> xMetaSup(m_xStatement,UNO_QUERY);
-                        Reference<XResultSetMetaData> xMetaData = xMetaSup->getMetaData();
-
-
                         try
                         {
-                            sal_Int32 nCount = xMetaData->getColumnCount();
-                            m_aDataColumns.reserve(nCount+1);
-                            aColumns->reserve(nCount+1);
-                            DECLARE_STL_USTRINGACCESS_MAP(int,StringMap);
-                            StringMap aColumnMap;
-                            for (sal_Int32 i = 0 ; i < nCount; ++i)
+                            Reference<XResultSetMetaData> xMetaData = xMetaSup->getMetaData();
+                            if ( xMetaData.is() )
                             {
-                                // retrieve the name of the column
-                                ::rtl::OUString sName = xMetaData->getColumnName(i + 1);
-                                // check for duplicate entries
-                                if(aColumnMap.find(sName) != aColumnMap.end())
+                                sal_Int32 nCount = xMetaData->getColumnCount();
+                                m_aDataColumns.reserve(nCount+1);
+                                aColumns->reserve(nCount+1);
+                                DECLARE_STL_USTRINGACCESS_MAP(int,StringMap);
+                                StringMap aColumnMap;
+                                for (sal_Int32 i = 0 ; i < nCount; ++i)
                                 {
-                                    ::rtl::OUString sAlias(sName);
-                                    sal_Int32 i=1;
-                                    while(aColumnMap.find(sAlias) != aColumnMap.end())
+                                    // retrieve the name of the column
+                                    ::rtl::OUString sName = xMetaData->getColumnName(i + 1);
+                                    // check for duplicate entries
+                                    if(aColumnMap.find(sName) != aColumnMap.end())
                                     {
-                                        (sAlias = sName) += ::rtl::OUString::valueOf(i++);
+                                        ::rtl::OUString sAlias(sName);
+                                        sal_Int32 i=1;
+                                        while(aColumnMap.find(sAlias) != aColumnMap.end())
+                                        {
+                                            (sAlias = sName) += ::rtl::OUString::valueOf(i++);
+                                        }
+                                        sName = sAlias;
                                     }
-                                    sName = sAlias;
-                                }
-                                ORowSetDataColumn* pColumn = new ORowSetDataColumn( getMetaData(),
-                                                                                    this,
-                                                                                    this,
-                                                                                    i+1,
-                                                                                    aDescription,
-                                                                                    m_aCurrentRow,
-                                                                                    m_pCache->getEnd());
-                                aColumnMap.insert(StringMap::value_type(sName,0));
-                                aColumns->push_back(pColumn);
-                                pColumn->setName(sName);
-                                aNames.push_back(sName);
-                                m_aDataColumns.push_back(pColumn);
+                                    ORowSetDataColumn* pColumn = new ORowSetDataColumn( getMetaData(),
+                                                                                        this,
+                                                                                        this,
+                                                                                        i+1,
+                                                                                        aDescription,
+                                                                                        m_aCurrentRow,
+                                                                                        m_pCache->getEnd());
+                                    aColumnMap.insert(StringMap::value_type(sName,0));
+                                    aColumns->push_back(pColumn);
+                                    pColumn->setName(sName);
+                                    aNames.push_back(sName);
+                                    m_aDataColumns.push_back(pColumn);
 
-                                try
-                                {
-                                    nFormatKey = 0;
-                                    if(m_xNumberFormatTypes.is())
-                                        nFormatKey = ::dbtools::getDefaultNumberFormat(pColumn,m_xNumberFormatTypes,aLocale);
+                                    try
+                                    {
+                                        nFormatKey = 0;
+                                        if(m_xNumberFormatTypes.is())
+                                            nFormatKey = ::dbtools::getDefaultNumberFormat(pColumn,m_xNumberFormatTypes,aLocale);
 
 
-                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
-                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,makeAny(sal_Int32(i+1)));
-                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,makeAny(sal_Int32(227)));
-                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,makeAny((sal_Int32)0));
-                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,::cppu::bool2any(sal_False));
-                                }
-                                catch(Exception&)
-                                {
+                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
+                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,makeAny(sal_Int32(i+1)));
+                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,makeAny(sal_Int32(227)));
+                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,makeAny((sal_Int32)0));
+                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,::cppu::bool2any(sal_False));
+                                    }
+                                    catch(Exception&)
+                                    {
+                                    }
                                 }
                             }
                         }
@@ -1706,96 +1712,99 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                     {
                         // create the rowset columns
                         Reference<XResultSetMetaData> xMeta = getMetaData();
-                        sal_Int32 nCount = xMeta->getColumnCount();
-                        m_aDataColumns.reserve(nCount+1);
-                        aColumns->reserve(nCount+1);
-                        ::std::map<Reference<XPropertySet>,int> aColumnMap; // need to find duplicates
-
-                        for(sal_Int32 i=1; i <= nCount ;++i)
+                        if ( xMeta.is() )
                         {
-                            sal_Bool bReFetchName = sal_False;
-                            ::rtl::OUString sName = xMeta->getColumnName(i);
-                            Reference<XPropertySet> xColumn;
-                            if (m_xColumns->hasByName(sName))
-                                m_xColumns->getByName(sName) >>= xColumn;
-                            if (!xColumn.is() && m_xColumns->hasByName(xMeta->getColumnLabel(i)))
-                                m_xColumns->getByName(xMeta->getColumnLabel(i)) >>= xColumn;
-                            // check if column already in the list we need another
-                            if(aColumnMap.find(xColumn) != aColumnMap.end())
-                            {
-                                xColumn = NULL;
-                                bReFetchName = sal_True;
-                            }
-                            if(!xColumn.is())
-                            {
-                                // no column found so we could look at the position i
-                                Reference<XIndexAccess> xIndexAccess(m_xColumns,UNO_QUERY);
-                                if(xIndexAccess.is() && i <= xIndexAccess->getCount())
-                                {
-                                    xIndexAccess->getByIndex(i-1) >>= xColumn;
-                                }
-                                else
-                                {
-                                    Sequence< ::rtl::OUString> aSeq = m_xColumns->getElementNames();
-                                    if( i <= aSeq.getLength())
-                                        m_xColumns->getByName(aSeq.getConstArray()[i-1]) >>= xColumn;
-                                }
-                            }
-                            DBG_ASSERT(xColumn.is(), "ORowSet::execute_NoApprove_NoNewConn: invalid column (NULL)!");
-                            if(bReFetchName && xColumn.is())
-                                xColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
-                            aColumnMap.insert(::std::map< Reference<XPropertySet>,int>::value_type(xColumn,0));
+                            sal_Int32 nCount = xMeta->getColumnCount();
+                            m_aDataColumns.reserve(nCount+1);
+                            aColumns->reserve(nCount+1);
+                            ::std::map<Reference<XPropertySet>,int> aColumnMap; // need to find duplicates
 
-                            Reference<XPropertySetInfo> xInfo = xColumn.is() ? xColumn->getPropertySetInfo() : Reference<XPropertySetInfo>();
-                            if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
-                                aDescription = comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
-
-                            ORowSetDataColumn* pColumn = new ORowSetDataColumn( getMetaData(),
-                                                                                this,
-                                                                                this,
-                                                                                i,
-                                                                                aDescription,
-                                                                                m_aCurrentRow,
-                                                                                m_pCache->getEnd());
-                            aColumns->push_back(pColumn);
-                            if(!sName.getLength())
+                            for(sal_Int32 i=1; i <= nCount ;++i)
                             {
-                                if(xColumn.is())
+                                sal_Bool bReFetchName = sal_False;
+                                ::rtl::OUString sName = xMeta->getColumnName(i);
+                                Reference<XPropertySet> xColumn;
+                                if (m_xColumns->hasByName(sName))
+                                    m_xColumns->getByName(sName) >>= xColumn;
+                                if (!xColumn.is() && m_xColumns->hasByName(xMeta->getColumnLabel(i)))
+                                    m_xColumns->getByName(xMeta->getColumnLabel(i)) >>= xColumn;
+                                // check if column already in the list we need another
+                                if(aColumnMap.find(xColumn) != aColumnMap.end())
+                                {
+                                    xColumn = NULL;
+                                    bReFetchName = sal_True;
+                                }
+                                if(!xColumn.is())
+                                {
+                                    // no column found so we could look at the position i
+                                    Reference<XIndexAccess> xIndexAccess(m_xColumns,UNO_QUERY);
+                                    if(xIndexAccess.is() && i <= xIndexAccess->getCount())
+                                    {
+                                        xIndexAccess->getByIndex(i-1) >>= xColumn;
+                                    }
+                                    else
+                                    {
+                                        Sequence< ::rtl::OUString> aSeq = m_xColumns->getElementNames();
+                                        if( i <= aSeq.getLength())
+                                            m_xColumns->getByName(aSeq.getConstArray()[i-1]) >>= xColumn;
+                                    }
+                                }
+                                DBG_ASSERT(xColumn.is(), "ORowSet::execute_NoApprove_NoNewConn: invalid column (NULL)!");
+                                if(bReFetchName && xColumn.is())
                                     xColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
-                                else
-                                    sName = ::rtl::OUString::createFromAscii("Expression1");
-                            }
-                            pColumn->setName(sName);
-                            aNames.push_back(sName);
-                            m_aDataColumns.push_back(pColumn);
+                                aColumnMap.insert(::std::map< Reference<XPropertySet>,int>::value_type(xColumn,0));
 
-                            try
-                            {
-                                if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_ALIGN))
-                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
+                                Reference<XPropertySetInfo> xInfo = xColumn.is() ? xColumn->getPropertySetInfo() : Reference<XPropertySetInfo>();
+                                if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
+                                    aDescription = comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
 
-                                nFormatKey = 0;
-                                if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_NUMBERFORMAT))
-                                    nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
-                                if (!nFormatKey && xColumn.is() && m_xNumberFormatTypes.is())
-                                    nFormatKey = ::dbtools::getDefaultNumberFormat(xColumn,m_xNumberFormatTypes,aLocale);
+                                ORowSetDataColumn* pColumn = new ORowSetDataColumn( getMetaData(),
+                                                                                    this,
+                                                                                    this,
+                                                                                    i,
+                                                                                    aDescription,
+                                                                                    m_aCurrentRow,
+                                                                                    m_pCache->getEnd());
+                                aColumns->push_back(pColumn);
+                                if(!sName.getLength())
+                                {
+                                    if(xColumn.is())
+                                        xColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
+                                    else
+                                        sName = ::rtl::OUString::createFromAscii("Expression1");
+                                }
+                                pColumn->setName(sName);
+                                aNames.push_back(sName);
+                                m_aDataColumns.push_back(pColumn);
 
-                                pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
-                                if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_RELATIVEPOSITION))
-                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,xColumn->getPropertyValue(PROPERTY_RELATIVEPOSITION));
-                                if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_WIDTH))
-                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,xColumn->getPropertyValue(PROPERTY_WIDTH));
-                                if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_HIDDEN))
-                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,xColumn->getPropertyValue(PROPERTY_HIDDEN));
-                                if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_CONTROLMODEL))
-                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLMODEL,xColumn->getPropertyValue(PROPERTY_CONTROLMODEL));
-                                if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_HELPTEXT))
-                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HELPTEXT,xColumn->getPropertyValue(PROPERTY_HELPTEXT));
-                                if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
-                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLDEFAULT,xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT));
-                            }
-                            catch(Exception&)
-                            {
+                                try
+                                {
+                                    if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_ALIGN))
+                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
+
+                                    nFormatKey = 0;
+                                    if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_NUMBERFORMAT))
+                                        nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
+                                    if (!nFormatKey && xColumn.is() && m_xNumberFormatTypes.is())
+                                        nFormatKey = ::dbtools::getDefaultNumberFormat(xColumn,m_xNumberFormatTypes,aLocale);
+
+                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
+                                    if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_RELATIVEPOSITION))
+                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,xColumn->getPropertyValue(PROPERTY_RELATIVEPOSITION));
+                                    if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_WIDTH))
+                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,xColumn->getPropertyValue(PROPERTY_WIDTH));
+                                    if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_HIDDEN))
+                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,xColumn->getPropertyValue(PROPERTY_HIDDEN));
+                                    if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_CONTROLMODEL))
+                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLMODEL,xColumn->getPropertyValue(PROPERTY_CONTROLMODEL));
+                                    if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_HELPTEXT))
+                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HELPTEXT,xColumn->getPropertyValue(PROPERTY_HELPTEXT));
+                                    if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
+                                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLDEFAULT,xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT));
+                                }
+                                catch(Exception&)
+                                {
+                                }
                             }
                         }
                     }
@@ -1803,8 +1812,11 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                     if(m_pColumns)
                         m_pColumns->assign(aColumns,aNames);
                     else
-                        m_pColumns = new ORowSetDataColumns(m_xActiveConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers(),
+                    {
+                        Reference<XDatabaseMetaData> xMeta = m_xActiveConnection->getMetaData();
+                        m_pColumns = new ORowSetDataColumns(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),
                                                             aColumns,*this,m_aColumnsMutex,aNames);
+                    }
                 }
             }
             else
@@ -2031,7 +2043,8 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::
             sal_Bool bCase = sal_True;
             try
             {
-                bCase = m_xActiveConnection->getMetaData()->storesMixedCaseQuotedIdentifiers();
+                Reference<XDatabaseMetaData> xMeta = m_xActiveConnection->getMetaData();
+                bCase = xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers();
             }
             catch(SQLException&)
             {
@@ -2474,7 +2487,8 @@ ORowSetClone::ORowSetClone(ORowSet& rParent,::osl::Mutex* _pMutex)
         pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLDEFAULT,xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT));
 
     }
-    m_pColumns = new ORowSetDataColumns(rParent.m_xActiveConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers(),
+    Reference<XDatabaseMetaData> xMeta = rParent.m_xActiveConnection->getMetaData();
+    m_pColumns = new ORowSetDataColumns(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),
                                         aColumns,*this,m_aMutex,aNames);
 
     sal_Int32 nRT   = PropertyAttribute::READONLY   | PropertyAttribute::TRANSIENT;
@@ -2668,4 +2682,4 @@ sal_Bool ORowSetClone::isNew( )
     return sal_False;
 }
 
-}
+} // dbaccess
