@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:20:42 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,15 @@
 #define GB_JSCPT_WARNING                                223
 #define BTN_JSCPT_YES                                   224
 #define BTN_JSCPT_NO                                    225
+
+
+// Defines - SvxEMailTabPage_Impl
+#define FL_MAIL                     1
+#define FT_MAILERURL                2
+#define FI_MAILERURL                3
+#define ED_MAILERURL                4
+#define PB_MAILERURL                5
+#define STR_DEFAULT_FILENAME        6
 
 #endif // #ifndef _SVX_OPTINET_HRC
 
