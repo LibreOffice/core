@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poly2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 14:21:27 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,24 +61,26 @@
 
 #define _SV_POLY2_CXX
 
-#ifdef HAVE_GPC_H
-
-#ifndef __gpc_h
 extern "C"
 {
-    #include <external/gpc/gpc.h>
-}
-#endif
-
+#if defined (HAVE_GPC_H) && !defined (__gpc_h)
+#  include <external/gpc/gpc.h>
 #else
-
-// No GPC
-#define GPC_INT 0
-#define GPC_UNION 0
-#define GPC_DIFF 0
-#define GPC_XOR 0
-
+#  ifdef HAVE_LIBART_H
+#    include <libart_lgpl/art_misc.h>
+#    include <libart_lgpl/art_vpath.h>
+#    include <libart_lgpl/art_svp.h>
+#    include <libart_lgpl/art_svp_vpath.h>
+#    include <libart_lgpl/art_vpath_svp.h>
+#    include <libart_lgpl/art_svp_ops.h>
+#    include <libart_lgpl/art_svp_intersect.h>
+#  endif
+#  define GPC_INT   0
+#  define GPC_UNION 1
+#  define GPC_DIFF  2
+#  define GPC_XOR   3
 #endif // HAVE_GPC_H
+}
 
 #include <cstring>
 #include <cmath>
@@ -538,18 +540,246 @@ void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rR
 }
 
 #else
-// No GPC implementation
+#ifdef HAVE_LIBART_H
 
-void* PolyPolygon::ImplCreateGPCPolygon() const
+/* Finds the index of the upper rightmost vertex of a polygon */
+static int
+upper_rightmost_vertex (const Polygon &poly)
 {
-    return NULL;
+    int n;
+    int i;
+    double x, y;
+    int k;
+
+    n = poly.GetSize ();
+
+    k = 0;
+    x = poly[0].X ();
+    y = poly[0].Y ();
+
+    for (i = 1; i < n; i++)
+        if (poly[i].Y () < y || (poly[0].Y () == y && poly[i].X () > x)) {
+            k = i;
+            x = poly[i].X ();
+            y = poly[i].Y ();
+        }
+
+    return k;
+}
+
+/* Returns whether a polygon is specified in counterclockwise order */
+static BOOL
+poly_is_ccw (const Polygon &poly)
+{
+    int n;
+    int k;
+    double cross;
+
+    n = poly.GetSize ();
+
+    if (n == 0)
+        return TRUE;
+
+    k = upper_rightmost_vertex (poly);
+
+    const Point &a = poly[(k + n - 1) % n];
+    const Point &b = poly[k];
+    const Point &c = poly[(k + 1) % n];
+
+    cross = -(a.X () * b.Y () - a.Y () * b.X () +
+          a.Y () * c.X () - a.X () * c.Y () +
+          b.X () * c.Y () - c.X () * b.Y ());
+
+      return (cross > 0);
+}
+
+void *
+PolyPolygon::ImplCreateArtVpath () const
+{
+    ArtVpath *vpath;
+    int n_contours;
+    int n_vertices;
+    int i, v;
+
+    n_contours = Count ();
+    n_vertices = 0;
+    for (i = 0; i < n_contours; i++) {
+        const Polygon &poly = GetObject (i);
+        n_vertices += poly.GetSize () + 1; /* plus 1 for if we have to close the path */
+    }
+
+    n_vertices++; /* for the ART_END terminator */
+
+    vpath = art_new (ArtVpath, n_vertices);
+    v = 0;
+
+    for (i = 0; i < n_contours; i++) {
+        int j, k;
+        int n;
+        const Polygon &poly = GetObject (i);
+        BOOL ccw;
+
+        n = poly.GetSize ();
+
+        ccw = poly_is_ccw (poly);
+
+        /* Holes or inside contours need to be listed out in reverse
+         * clockwise direction to the main outwards contour, but OO.o
+         * does not seem to handle holes at all.  So we'll just list all
+         * the contours as non-holes, e.g. in normal counterclockwise
+         * order.
+         */
+
+        if (ccw)
+            k = 0;
+        else
+            k = n - 1;
+
+        for (j = 0; j < n; j++) {
+            const Point &point = poly[k];
+            vpath[v].code = (j == 0) ? ART_MOVETO : ART_LINETO;
+            vpath[v].x = point.X ();
+            vpath[v].y = point.Y ();
+
+            if (ccw)
+                k++;
+            else
+                k--;
+
+            v++;
+        }
+
+        /* Close the path if needed */
+        if (n > 0 &&
+            (vpath[v - 1].x != vpath[v - n].x ||
+             vpath[v - 1].y != vpath[v - n].y)) {
+            vpath[v].code = ART_LINETO;
+            vpath[v].x = vpath[v - n].x;
+            vpath[v].y = vpath[v - n].y;
+            v++;
+        }
+    }
+
+    vpath[v].code = ART_END;
+
+    return vpath;
+}
+
+void
+PolyPolygon::ImplSetFromArtVpath (void *_vpath)
+{
+    ArtVpath *vpath;
+
+    vpath = (ArtVpath *) _vpath;
+
+    Clear ();
+
+    while (vpath->code != ART_END) {
+        ArtVpath *p;
+        int n, n_vertices;
+
+        n = 0;
+        for (p = vpath; n == 0 || p->code == ART_LINETO; p++)
+            n++;
+
+        /* Remove the last duplicated point from closed subpaths */
+        if (n > 0 &&
+            vpath[n - 1].x == vpath[0].x &&
+            vpath[n - 1].y == vpath[0].y)
+            n_vertices = n - 1;
+        else
+            n_vertices = n;
+
+        if (n_vertices != 0) {
+            int i;
+
+            Polygon poly (n_vertices);
+
+            p = vpath;
+            for (i = 0; i < n_vertices; i++) {
+                Point &point = poly[i];
+
+                point.X () = FRound (p->x);
+                point.Y () = FRound (p->y);
+
+                p++;
+            }
+
+            Insert (poly);
+        }
+
+        vpath += n;
+    }
+}
+
+/* Converts an arbitrary SVP to an even-odd SVP */
+static ArtSVP *
+svp_to_even_odd (ArtSVP *pSvp)
+{
+    ArtSVP *pResult;
+    ArtSvpWriter *pSvw;
+
+    pSvw = art_svp_writer_rewind_new( ART_WIND_RULE_ODDEVEN );
+    art_svp_intersector( pSvp, pSvw);
+
+     pResult = art_svp_writer_rewind_reap( pSvw );
+    /* Shallow free because the result contains shared segments */
+    art_free( pSvp );
+
+    return pResult;
 }
 
 void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rResult, ULONG nOperation ) const
 {
-    return;
+    ArtVpath *a, *b;
+    ArtSVP *sa, *sb, *s;
+
+    a = (ArtVpath *) ImplCreateArtVpath ();
+    b = (ArtVpath *) rPolyPoly.ImplCreateArtVpath ();
+
+    sa = svp_to_even_odd (art_svp_from_vpath (a));
+    sb = svp_to_even_odd (art_svp_from_vpath (b));
+
+    art_free (a);
+    art_free (b);
+
+    switch (nOperation) {
+    case GPC_UNION:
+        s = art_svp_union (sa, sb);
+        a = art_vpath_from_svp (s);
+        art_svp_free (s);
+        break;
+    case GPC_DIFF:
+        s = art_svp_minus (sa, sb);
+        a = art_vpath_from_svp (s);
+        art_svp_free (s);
+        break;
+    case GPC_XOR:
+        s = art_svp_diff (sa, sb); /* symmetric difference, *not* set difference */
+        a = art_vpath_from_svp (s);
+        art_svp_free (s);
+        break;
+    default:
+        /* Odd ... */
+    case GPC_INT:
+        s = art_svp_intersect (sa, sb);
+        a = art_vpath_from_svp (s);
+        art_svp_free (s);
+        break;
+    }
+
+
+    rResult.ImplSetFromArtVpath (a);
+    art_free (a);
 }
 
+#else // No GPC or libart implementations
+
+void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rResult, ULONG nOperation ) const
+{
+}
+
+#endif // HAVE_LIBART_H
 #endif // HAVE_GPC_H
 
 // -----------------------------------------------------------------------
