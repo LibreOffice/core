@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-28 14:57:50 $
+ *  last change: $Author: fs $ $Date: 2001-09-04 10:18:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,9 @@ namespace xmloff
     XMLFORM_CONSTASCII_STRING( EVENT_TYPE, "EventType" );
     XMLFORM_CONSTASCII_STRING( EVENT_LIBRARY, "Library" );
     XMLFORM_CONSTASCII_STRING( EVENT_LOCALMACRONAME, "MacroName" );
-
+    XMLFORM_CONSTASCII_STRING( EVENT_STAROFFICE, "StarOffice" );
+    XMLFORM_CONSTASCII_STRING( EVENT_STARBASIC, "StarBasic" );
+    XMLFORM_CONSTASCII_STRING( EVENT_APPLICATION, "application" );
 
 //.........................................................................
 }   // namespace xmloff
@@ -283,6 +285,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/05/28 14:57:50  fs
+ *  #86712# redesigned ConstAsciiString so that it's reusing an rtl_uString / added some properties constants
+ *
  *  Revision 1.5  2001/03/20 13:40:33  fs
  *  #83970# +AutomaticControlFocus / +ApplyFormDesignMode
  *
