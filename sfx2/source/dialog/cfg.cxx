@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cd $ $Date: 2002-09-24 08:38:36 $
+ *  last change: $Author: gt $ $Date: 2002-10-30 10:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 
 #include "dialog.hrc"
 #include "cfg.hrc"
+#ifndef _SFX_HELPID_HRC
+#include "helpid.hrc"
+#endif
 
 #include "app.hxx"
 #include "appdata.hxx"
@@ -1440,15 +1443,12 @@ void SfxStatusBarConfigPage::Reset( const SfxItemSet& )
 
 String SfxConfigDialog::FileDialog_Impl( Window *pParent, WinBits nBits, const String& rTitle )
 {
-    short nDialogType;
-
-    if ( ( nBits & WB_SAVEAS ) == WB_SAVEAS )
-        nDialogType = FILESAVE_SIMPLE;
-    else
-        nDialogType = FILEOPEN_SIMPLE;
+    BOOL bSave = ( ( nBits & WB_SAVEAS ) == WB_SAVEAS );
+    short nDialogType = bSave? FILESAVE_SIMPLE : FILEOPEN_SIMPLE;
 
     sfx2::FileDialogHelper aFileDlg( nDialogType, 0 );
     aFileDlg.SetTitle( rTitle );
+    aFileDlg.SetDialogHelpId( bSave? HID_CONFIG_SAVE : HID_CONFIG_LOAD );
     aFileDlg.AddFilter( String(SfxResId(STR_FILTERNAME_ALL) ), DEFINE_CONST_UNICODE(FILEDIALOG_FILTER_ALL) );
     aFileDlg.AddFilter( String(SfxResId(STR_FILTERNAME_CFG)),DEFINE_CONST_UNICODE("*.cfg") );
     if ( ERRCODE_NONE == aFileDlg.Execute() )
