@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: register.cxx,v $
+ *  $RCSfile: oleregister.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-28 17:54:17 $
+ *  last change: $Author: mav $ $Date: 2003-11-28 17:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,7 @@
 #include <cppuhelper/factory.hxx>
 #endif
 
-#include "xfactory.hxx"
-#include "xcreator.hxx"
+#include "xolefactory.hxx"
 
 using namespace ::com::sun::star;
 
@@ -91,22 +90,12 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
     ::rtl::OUString aImplName( ::rtl::OUString::createFromAscii( pImplName ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
-    if ( pServiceManager )
+    if ( pServiceManager && aImplName.equals( OleEmbeddedObjectFactory::impl_staticGetImplementationName() ) )
     {
-        if ( aImplName.equals( OOoEmbeddedObjectFactory::impl_staticGetImplementationName() ) )
-        {
-            xFactory= ::cppu::createOneInstanceFactory( reinterpret_cast< lang::XMultiServiceFactory*>( pServiceManager ),
-                                                OOoEmbeddedObjectFactory::impl_staticGetImplementationName(),
-                                                OOoEmbeddedObjectFactory::impl_staticCreateSelfInstance,
-                                                OOoEmbeddedObjectFactory::impl_staticGetSupportedServiceNames() );
-        }
-        else if ( aImplName.equals( UNOEmbeddedObjectCreator::impl_staticGetImplementationName() ) )
-        {
-            xFactory= ::cppu::createOneInstanceFactory( reinterpret_cast< lang::XMultiServiceFactory*>( pServiceManager ),
-                                                UNOEmbeddedObjectCreator::impl_staticGetImplementationName(),
-                                                UNOEmbeddedObjectCreator::impl_staticCreateSelfInstance,
-                                                UNOEmbeddedObjectCreator::impl_staticGetSupportedServiceNames() );
-        }
+        xFactory= ::cppu::createOneInstanceFactory( reinterpret_cast< lang::XMultiServiceFactory*>( pServiceManager ),
+                                            OleEmbeddedObjectFactory::impl_staticGetImplementationName(),
+                                            OleEmbeddedObjectFactory::impl_staticCreateSelfInstance,
+                                            OleEmbeddedObjectFactory::impl_staticGetSupportedServiceNames() );
     }
 
     if ( xFactory.is() )
@@ -129,19 +118,10 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             uno::Reference< registry::XRegistryKey >  xNewKey;
 
             xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
-                                        OOoEmbeddedObjectFactory::impl_staticGetImplementationName() +
+                                        OleEmbeddedObjectFactory::impl_staticGetImplementationName() +
                                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
 
-            uno::Sequence< ::rtl::OUString > rServices = OOoEmbeddedObjectFactory::impl_staticGetSupportedServiceNames();
-            for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )
-                xNewKey->createKey( rServices.getConstArray()[ind] );
-
-
-            xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
-                                        UNOEmbeddedObjectCreator::impl_staticGetImplementationName() +
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
-
-            rServices = UNOEmbeddedObjectCreator::impl_staticGetSupportedServiceNames();
+            uno::Sequence< ::rtl::OUString > rServices = OleEmbeddedObjectFactory::impl_staticGetSupportedServiceNames();
             for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )
                 xNewKey->createKey( rServices.getConstArray()[ind] );
 

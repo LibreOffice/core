@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcreator.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-28 17:48:19 $
+ *  last change: $Author: mav $ $Date: 2003-11-28 17:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef __XFACTORY_HXX_
-#define __XFACTORY_HXX_
+#ifndef __XCREATOR_HXX_
+#define __XCREATOR_HXX_
 
 #ifndef _COM_SUN_STAR_EMBED_XEMBEDOBJECTCREATOR_HPP_
 #include <com/sun/star/embed/XEmbedObjectCreator.hpp>
