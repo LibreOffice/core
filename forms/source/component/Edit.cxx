@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 10:24:23 $
+ *  last change: $Author: fs $ $Date: 2001-02-20 11:56:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,6 +363,7 @@ OEditModel::OEditModel(const Reference<XMultiServiceFactory>& _rxFactory)
              ,m_nFormatKey(0)
              ,m_nFieldType(DataType::OTHER)
              ,m_bWritingFormattedFake(sal_False)
+             ,m_bNumericField(sal_False)
 {
     DBG_CTOR(OEditModel,NULL);
 
@@ -515,11 +516,33 @@ sal_Int16 OEditModel::getPersistenceFlags() const
 //------------------------------------------------------------------------------
 void OEditModel::_loaded(const EventObject& rEvent)
 {
+    m_bNumericField = sal_False;
     if (m_xField.is())
     {
         // jetzt den Key und typ ermitteln
         m_nFieldType  = getINT32(m_xField->getPropertyValue(PROPERTY_FIELDTYPE));
         m_nFormatKey = getINT32(m_xField->getPropertyValue(PROPERTY_FORMATKEY));
+
+        switch (m_nFieldType)
+        {
+            case ::com::sun::star::sdbc::DataType::DATE:
+            case ::com::sun::star::sdbc::DataType::TIME:
+            case ::com::sun::star::sdbc::DataType::TIMESTAMP:
+            case ::com::sun::star::sdbc::DataType::BIT:
+            case ::com::sun::star::sdbc::DataType::TINYINT:
+            case ::com::sun::star::sdbc::DataType::SMALLINT:
+            case ::com::sun::star::sdbc::DataType::INTEGER:
+            case ::com::sun::star::sdbc::DataType::REAL:
+            case ::com::sun::star::sdbc::DataType::BIGINT:
+            case ::com::sun::star::sdbc::DataType::DOUBLE:
+            case ::com::sun::star::sdbc::DataType::NUMERIC:
+            case ::com::sun::star::sdbc::DataType::DECIMAL:
+                m_bNumericField = sal_True;
+                break;
+            default:
+                m_bNumericField = sal_False;
+                break;
+        }
 
         // XNumberFormatter besorgen
         Reference<XRowSet>  xRowSet(rEvent.Source, UNO_QUERY);
@@ -585,25 +608,27 @@ void OEditModel::_unloaded()
 //------------------------------------------------------------------------------
 sal_Bool OEditModel::_commit()
 {
-    ::rtl::OUString aNewValue;
-    m_xAggregateFastSet->getFastPropertyValue(OEditModel::nTextHandle) >>= aNewValue;
-    if (aNewValue != m_aSaveValue)
+    ::rtl::OUString sNewValue;
+    m_xAggregateFastSet->getFastPropertyValue(OEditModel::nTextHandle) >>= sNewValue;
+    if (sNewValue != m_aSaveValue)
     {
-        if (!aNewValue.len() && !m_bRequired && m_bEmptyIsNull)
+        if (!sNewValue.len() && !m_bRequired && m_bEmptyIsNull)
             m_xColumnUpdate->updateNull();
         else
         {
             try
             {
-                DBTypeConversion::setValue(m_xColumnUpdate, m_xFormatter, m_aNullDate, aNewValue,
-                                           m_nFormatKey, m_nFieldType, m_nKeyType);
+                if (m_bNumericField)
+                    DBTypeConversion::setValue(m_xColumnUpdate, m_xFormatter, m_aNullDate, sNewValue, m_nFormatKey, m_nFieldType, m_nKeyType);
+                else
+                    m_xColumnUpdate->updateString(sNewValue);
             }
             catch(Exception&)
             {
                 return sal_False;
             }
         }
-        m_aSaveValue = aNewValue;
+        m_aSaveValue = sNewValue;
     }
     return sal_True;
 }
