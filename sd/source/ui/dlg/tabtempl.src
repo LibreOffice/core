@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabtempl.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:33:56 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 21:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ TabDialog TAB_TEMPLATE
                 Text[ arabic ] = "Œÿ «·—”„";
                 Text[ turkish ] = "«izgi";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "LÌnea";
             };
             PageItem
             {
@@ -144,6 +145,7 @@ TabDialog TAB_TEMPLATE
                 Text[ arabic ] = " ⁄»∆…";
                 Text[ turkish ] = "Y¸zey";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Relleno";
             };
             PageItem
             {
@@ -170,6 +172,7 @@ TabDialog TAB_TEMPLATE
                 Text[ arabic ] = "Ÿ·";
                 Text[ turkish ] = "Gˆlge";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Sombra";
             };
             PageItem
             {
@@ -194,6 +197,7 @@ TabDialog TAB_TEMPLATE
                 Text[ chinese_traditional ] = "≥z©˙";
                 Text[ arabic ] = "‘›«›Ì…";
                 Text[ turkish ] = "Saydaml˝k";
+                Text[ catalan ] = "Transparencia";
             };
             PageItem
             {
@@ -222,6 +226,7 @@ TabDialog TAB_TEMPLATE
                 Text[ arabic ] = "«·Œÿ";
                 Text[ turkish ] = "Yaz˝tipi";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Fuente";
             };
             PageItem
             {
@@ -251,6 +256,7 @@ TabDialog TAB_TEMPLATE
                 Text[ arabic ] = "«·≈“«Õ… Ê«· »«⁄œ";
                 Text[ turkish ] = "Girintiler ve aral˝klar";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "SangrÌa y espacios";
             };
             PageItem
             {
@@ -277,6 +283,7 @@ TabDialog TAB_TEMPLATE
                 Text[ arabic ] = "‰’";
                 Text[ turkish ] = "Metin";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Texto";
             };
             PageItem
             {
@@ -303,6 +310,7 @@ TabDialog TAB_TEMPLATE
                 Text[ arabic ] = "‰’ „ Õ—ﬂ";
                 Text[ turkish ] = "Hareketli metin";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "AnimaciÛn de texto";
             };
             PageItem
             {
@@ -330,6 +338,7 @@ TabDialog TAB_TEMPLATE
                 Text[ arabic ] = "«·ﬁÌ«”";
                 Text[ turkish ] = "Boyutlar";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Dimensiones";
             };
             PageItem
             {
@@ -355,6 +364,7 @@ TabDialog TAB_TEMPLATE
                 Text[ arabic ] = "—«»ÿ";
                 Text[ turkish ] = "Balay˝c˝";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Conector";
             };
             PageItem
             {
@@ -380,6 +390,7 @@ TabDialog TAB_TEMPLATE
                 Text[ korean ] = "∏¬√„";
                 Text[ arabic ] = "„Õ«–«…";
                 Text[ turkish ] = "Hizalama";
+                Text[ catalan ] = "AlineaciÛn";
             };
             PageItem
             {
@@ -408,6 +419,7 @@ TabDialog TAB_TEMPLATE
                 Text[ arabic ] = "⁄·«„… ÃœÊ·…";
                 Text[ turkish ] = "Sekmeler";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "TabulaciÛn";
             };
         };
     };
@@ -458,6 +470,7 @@ TabDialog TAB_TEMPLATE
         Text[ arabic ] = "«·”«»ﬁ";
         Text[ turkish ] = "Geri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Regresar";
     };
     Text[ chinese_simplified ] = "Õº–Œ∂‘œÛ—˘ Ω";
     Text[ russian ] = "—ÚËÎË „‡ÙË˜ÂÒÍËı Ó·˙ÂÍÚÓ‚";
@@ -469,4 +482,5 @@ TabDialog TAB_TEMPLATE
     Text[ arabic ] = "√‰„«ÿ ﬂ«∆‰«  ’Ê—…";
     Text[ turkish ] = "Grafik nesne biÁimi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Estilo de objeto gr·fico";
 };
