@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 16:15:24 $
+ *  last change: $Author: rt $ $Date: 2004-12-13 08:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2874,14 +2874,25 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
             case XATTR_FILLGRADIENT:
             case XATTR_FILLHATCH:
             case XATTR_FILLFLOATTRANSPARENCE:
-            case XATTR_LINEEND:
-            case XATTR_LINESTART:
             case XATTR_LINEDASH:
                 {
                     NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((USHORT)pMap->nWID);
                     if( ( pItem == NULL ) || ( pItem->GetName().Len() == 0) )
                         eState = beans::PropertyState_DEFAULT_VALUE;
                 }
+                break;
+
+            // #i36115#
+            // If e.g. the LineStart is on NONE and thus the string has length 0, it still
+            // may be a hard attribute covering the set LineStart of the parent (Style).
+            case XATTR_LINEEND:
+            case XATTR_LINESTART:
+                {
+                    NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((USHORT)pMap->nWID);
+                    if( ( pItem == NULL ) )
+                        eState = beans::PropertyState_DEFAULT_VALUE;
+                }
+                break;
             }
         }
         return eState;
