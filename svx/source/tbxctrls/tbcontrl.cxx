@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-11 11:49:39 $
+ *  last change: $Author: cd $ $Date: 2002-05-15 15:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,6 +381,7 @@ public:
 #define TBX_UPDATER_MODE_NONE               0x00
 #define TBX_UPDATER_MODE_CHAR_COLOR         0x01
 #define TBX_UPDATER_MODE_CHAR_BACKGROUND    0x02
+#define TBX_UPDATER_MODE_CHAR_COLOR_NEW     0x03
 
 class SvxTbxButtonColorUpdater
 {
@@ -1709,7 +1710,8 @@ void SvxTbxButtonColorUpdater::Update( const Color& rColor )
         aVirDev.DrawImage( aNullPnt, aImage );
         delete pBtnBmp;
         pBtnBmp = new Bitmap( aVirDev.GetBitmap( aNullPnt, theBmpSize ) );
-        aVirDev.DrawRect( theUpdRect );
+        if ( nDrawMode != TBX_UPDATER_MODE_CHAR_COLOR_NEW )
+            aVirDev.DrawRect( theUpdRect );
     }
     else if ( !pBtnBmp )
         pBtnBmp = new Bitmap( aVirDev.GetBitmap( aNullPnt, theBmpSize ) );
@@ -1719,7 +1721,16 @@ void SvxTbxButtonColorUpdater::Update( const Color& rColor )
     aVirDev.SetLineColor( COL_BLACK );
     aVirDev.SetFillColor( rColor );
 
-    if( nDrawMode != TBX_UPDATER_MODE_NONE )
+    if ( nDrawMode == TBX_UPDATER_MODE_CHAR_COLOR_NEW )
+    {
+        // New mode for our new high contrast enabled bitmaps
+        if ( theBmpSize.Width() <= 16 )
+            theUpdRect = Rectangle( Point( 0,12 ), Size(theBmpSize.Width(), 4 ) );
+        else
+            theUpdRect = Rectangle( Point( 1,19 ), Size( 24,6 ) );
+        aVirDev.DrawRect( theUpdRect );
+    }
+    else if ( nDrawMode != TBX_UPDATER_MODE_NONE )
     {
         DrawChar( aVirDev, rColor );
     }
@@ -2374,7 +2385,7 @@ SvxFontColorExtToolBoxControl::SvxFontColorExtToolBoxControl
 
 {
     USHORT nMode =  SID_ATTR_CHAR_COLOR2 == nId
-        ? TBX_UPDATER_MODE_CHAR_COLOR : TBX_UPDATER_MODE_CHAR_BACKGROUND;
+        ? TBX_UPDATER_MODE_CHAR_COLOR_NEW : TBX_UPDATER_MODE_CHAR_COLOR_NEW;
     pBtnUpdater = new SvxTbxButtonColorUpdater( nId, &GetToolBox(), nMode );
 }
 
