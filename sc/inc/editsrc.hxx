@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: nn $ $Date: 2001-01-18 15:52:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,23 @@ public:
     virtual void                UpdateData();
 
     virtual void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+};
+
+
+//  EditSource with a shared forwarder for all children of one text object
+
+class ScSimpleEditSource : public SvxEditSource
+{
+private:
+    SvxTextForwarder*   pForwarder;
+
+public:
+                        ScSimpleEditSource( SvxTextForwarder* pForw );
+    virtual             ~ScSimpleEditSource();
+
+    virtual SvxEditSource*      Clone() const ;
+    virtual SvxTextForwarder*   GetTextForwarder();
+    virtual void                UpdateData();
 };
 
 

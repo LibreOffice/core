@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-29 20:53:10 $
+ *  last change: $Author: nn $ $Date: 2001-01-18 15:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <tools/debug.hxx>
 #include <svx/editeng.hxx>
 #include <svx/unofored.hxx>
+#include <svx/editobj.hxx>
 
 #include "textuno.hxx"
 #include "editsrc.hxx"
@@ -399,6 +400,34 @@ void ScAnnotationEditSource::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
 }
 
+//------------------------------------------------------------------------
+
+ScSimpleEditSource::ScSimpleEditSource( SvxTextForwarder* pForw ) :
+    pForwarder( pForw )
+{
+    //  The same forwarder (and EditEngine) is shared by all children of the same Text object.
+    //  Text range and cursor keep a reference to their parent text, so the text object is
+    //  always alive and the forwarder is valid as long as there are children.
+}
+
+ScSimpleEditSource::~ScSimpleEditSource()
+{
+}
+
+SvxEditSource* ScSimpleEditSource::Clone() const
+{
+    return new ScSimpleEditSource( pForwarder );
+}
+
+SvxTextForwarder* ScSimpleEditSource::GetTextForwarder()
+{
+    return pForwarder;
+}
+
+void ScSimpleEditSource::UpdateData()
+{
+    //  nothing
+}
 
 
 
