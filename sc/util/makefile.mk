@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kz $ $Date: 2002-01-10 09:40:05 $
+#   last change: $Author: sab $ $Date: 2002-01-18 10:09:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -176,7 +176,7 @@ LIB3FILES=	\
     $(SLB)$/optdlg.lib \
     $(SLB)$/pagedlg.lib \
     $(SLB)$/drawfunc.lib \
-    $(SLB)$/navipi.lib 
+    $(SLB)$/navipi.lib
 
 LIB3FILES+= \
             $(SLB)$/unoobj.lib
@@ -202,6 +202,7 @@ LIB4FILES=	\
     $(SLB)$/lotus.lib \
     $(SLB)$/rtf.lib \
     $(SLB)$/xml.lib \
+    $(SLB)$/accessibility.lib \
     $(SLB)$/scflt.lib
 
 LIB5TARGET=$(LB)$/sclib.lib
