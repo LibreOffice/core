@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-02-26 12:06:26 $
+ *  last change: $Author: os $ $Date: 2002-03-08 13:59:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,14 +177,13 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxReloadControllerItem,  SfxBoolItem );
 class SvxStyleBox : public ListBox
 {
 public:
-    SvxStyleBox( Window* pParent, USHORT nSlot,
-                 SfxStyleFamily eFamily, WinBits nStyle, SfxBindings& rBind );
     SvxStyleBox( Window* pParent, USHORT nSlot, SfxStyleFamily eFamily, SfxBindings& rBind );
 
     void            SetFamily( SfxStyleFamily eNewFamily );
 
     virtual long    PreNotify( NotifyEvent& rNEvt );
     virtual long    Notify( NotifyEvent& rNEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 protected:
     virtual void    Select();
@@ -195,6 +194,7 @@ private:
     USHORT          nCurSel;
     BOOL            bRelease;
     SfxBindings&    rBindings;
+    Size            aLogicalSize;
 
     void            ReleaseFocus();
 };
@@ -208,6 +208,7 @@ class SvxFontNameBox : public FontNameBox, public SfxListener
 private:
     const FontList* pFontList;
     Font            aCurFont;
+    Size            aLogicalSize;
     String          aCurText;
     USHORT          nFtCount;
     BOOL            bRelease;
@@ -219,6 +220,7 @@ private:
 protected:
     virtual void    Select();
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
     SvxFontNameBox( Window* pParent, SfxBindings& rBind, WinBits nStyle = WB_SORT );
@@ -245,6 +247,7 @@ class SvxFontSizeBox : public FontSizeBox
 private:
     SvxFontHeightToolBoxControl*    pCtrl;
     String                          aCurText;
+    Size                            aLogicalSize;
     BOOL                            bRelease;
     SfxBindings&                    rBindings;
 
@@ -252,6 +255,7 @@ private:
 
 protected:
     virtual void        Select();
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
                         SvxFontSizeBox( Window* pParent,
@@ -421,23 +425,6 @@ private:
 // class SvxStyleBox -----------------------------------------------------
 //========================================================================
 
-SvxStyleBox::SvxStyleBox( Window* pParent, USHORT nSlot,
-                          SfxStyleFamily eFamily, WinBits nStyle, SfxBindings& rBind ) :
-
-    ListBox( pParent, nStyle | WinBits( WB_BORDER | WB_AUTOHSCROLL | WB_DROPDOWN ) ),
-
-    eStyleFamily( eFamily ),
-    nSlotId     ( nSlot ),
-    bRelease    ( TRUE ),
-    rBindings   ( rBind )
-
-{
-    SetSizePixel( Size( 140, 360 ) );
-    SetText( String() );
-}
-
-// -----------------------------------------------------------------------
-
 SvxStyleBox::SvxStyleBox( Window* pParent, USHORT nSlot, SfxStyleFamily eFamily, SfxBindings& rBind ) :
 
     ListBox( pParent, SVX_RES( RID_SVXTBX_STYLE ) ),
@@ -448,6 +435,7 @@ SvxStyleBox::SvxStyleBox( Window* pParent, USHORT nSlot, SfxStyleFamily eFamily,
     rBindings   ( rBind )
 
 {
+    aLogicalSize = PixelToLogic( GetSizePixel(), MAP_APPFONT );
 }
 
 // -----------------------------------------------------------------------
@@ -535,7 +523,19 @@ long SvxStyleBox::Notify( NotifyEvent& rNEvt )
     }
     return nHandled ? nHandled : ListBox::Notify( rNEvt );
 }
+/* -----------------------------08.03.2002 13:03------------------------------
 
+ ---------------------------------------------------------------------------*/
+void SvxStyleBox::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
+    }
+
+    ListBox::DataChanged( rDCEvt );
+}
 // -----------------------------------------------------------------------
 
 #define BRUSH(style,name) BrushStyle(style),SVX_RESSTR(name)
@@ -602,14 +602,14 @@ BOOL GetDocFontList_Impl( const FontList** ppFontList, SvxFontNameBox* pBox )
 SvxFontNameBox::SvxFontNameBox( Window* pParent, SfxBindings& rBind, WinBits nStyle ) :
 
     FontNameBox ( pParent, nStyle | WinBits( WB_DROPDOWN | WB_AUTOHSCROLL ) ),
-
+    aLogicalSize(55,80),
     pFontList   ( NULL ),
     nFtCount    ( 0 ),
     bRelease    ( TRUE ),
     rBindings   ( rBind )
 
 {
-    SetSizePixel( Size( 120, 180 ) );
+    SetSizePixel(LogicToPixel( aLogicalSize, MAP_APPFONT ));
     EnableControls_Impl();
     StartListening( *SFX_APP() );
 }
@@ -691,6 +691,19 @@ long SvxFontNameBox::Notify( NotifyEvent& rNEvt )
     }
 
     return nHandled ? nHandled : FontNameBox::Notify( rNEvt );
+}
+/* -----------------------------08.03.2002 13:23------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SvxFontNameBox::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
+    }
+
+    FontNameBox::DataChanged( rDCEvt );
 }
 
 // -----------------------------------------------------------------------
@@ -780,11 +793,11 @@ SvxFontSizeBox::SvxFontSizeBox( Window* pParent, SvxFontHeightToolBoxControl &rC
 
     pCtrl       ( &rCtrl ),
     bRelease    ( TRUE ),
-    rBindings   ( rBind )
+    rBindings   ( rBind ),
+    aLogicalSize(20,80)
 
 {
-    Size aSiz( 45, 180 );
-    SetSizePixel( aSiz );
+    SetSizePixel(LogicToPixel( aLogicalSize, MAP_APPFONT ));
     SetValue( 0 );
     SetText( String() );
 }
@@ -911,6 +924,19 @@ long SvxFontSizeBox::Notify( NotifyEvent& rNEvt )
     }
 
     return nHandled ? nHandled : FontSizeBox::Notify( rNEvt );
+}
+/* -----------------------------08.03.2002 13:24------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SvxFontSizeBox::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
+    }
+
+    FontSizeBox::DataChanged( rDCEvt );
 }
 
 //========================================================================
