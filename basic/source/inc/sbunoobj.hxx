@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:35:00 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:13:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SB_UNO_OBJ
 #define SB_UNO_OBJ
 
@@ -131,6 +130,10 @@ public:
 
     // Find ueberladen, um z.B. NameAccess zu unterstuetzen
     virtual SbxVariable* Find( const String&, SbxClassType );
+
+    // Force creation of all properties for debugging
+    void createAllProperties( void  )
+        { implCreateAll(); }
 
     // Wert rausgeben
     Any getUnoAny( void );
