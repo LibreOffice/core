@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-21 15:28:03 $
+ *  last change: $Author: sj $ $Date: 2001-10-09 12:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,19 +345,17 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
 
         if( pResMgr )
         {
-            String aPreviewStr( ResId( KEY_PREVIEW, pResMgr ) );
-            String aVersionStr( ResId( KEY_VERSION, pResMgr ) );
-            String aColorStr( ResId( KEY_COLOR, pResMgr ) );
-            String aComprStr( ResId( KEY_COMPR, pResMgr ) );
-
+            String aPreviewStr( RTL_CONSTASCII_USTRINGPARAM( "Preview" ) );
+            String aVersionStr( RTL_CONSTASCII_USTRINGPARAM( "Version" ) );
+            String aColorStr( RTL_CONSTASCII_USTRINGPARAM( "ColorFormat" ) );
+            String aComprStr( RTL_CONSTASCII_USTRINGPARAM( "CompressionMode" ) );
             mnPreview = pConfigItem->ReadInt32( aPreviewStr, 1 );
             mnLevel = pConfigItem->ReadInt32( aVersionStr, 2 );
             if ( mnLevel != 1 )
                 mnLevel = 2;
             mbGrayScale = pConfigItem->ReadInt32( aColorStr, 1 ) == 2;
             mbCompression = pConfigItem->ReadInt32( aComprStr, 1 ) == 1;
-
-            String sTextMode( ResId( KEY_TEXTMODE, pResMgr ) );
+            String sTextMode( RTL_CONSTASCII_USTRINGPARAM( "TextMode" ) );
             mnTextMode = pConfigItem->ReadInt32( sTextMode, 1 );
             if ( mnTextMode > 1 )
                 mnTextMode = 0;

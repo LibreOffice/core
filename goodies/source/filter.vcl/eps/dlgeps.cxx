@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-28 15:41:01 $
+ *  last change: $Author: sj $ $Date: 2001-10-09 12:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,11 +101,11 @@ DlgExportEPS::DlgExportEPS( FltCallDialogParameter& rPara ) :
     pConfigItem = new FilterConfigItem( aFilterConfigPath );
 
     // Config-Parameter lesen
-    String sPreview( ResId( KEY_PREVIEW, pMgr ) );
-    String sVersion( ResId( KEY_VERSION, pMgr ) );
-    String sColorFormat( ResId( KEY_COLOR, pMgr ) );
-    String sCompressionMode( ResId( KEY_COMPR, pMgr ) );
-    String sTextMode( ResId( KEY_TEXTMODE, pMgr ) );
+    String sPreview( RTL_CONSTASCII_USTRINGPARAM( "Preview" ) );
+    String sVersion( RTL_CONSTASCII_USTRINGPARAM( "Version" ) );
+    String sColorFormat( RTL_CONSTASCII_USTRINGPARAM( "ColorFormat" ) );
+    String sCompressionMode( RTL_CONSTASCII_USTRINGPARAM( "CompressionMode" ) );
+    String sTextMode( RTL_CONSTASCII_USTRINGPARAM( "TextMode" ) );
 
     sal_Int32   nPreview = pConfigItem->ReadInt32( sPreview, 0 );
     sal_Int32   nVersion = pConfigItem->ReadInt32( sVersion, 2 );
@@ -181,28 +181,28 @@ IMPL_LINK( DlgExportEPS, OK, void *, EMPTYARG )
     if ( aCBPreviewEPSI.IsChecked() )
         nCheck += 2;
 
-    String sPreview( ResId( KEY_PREVIEW, pMgr ) );
+    String sPreview( RTL_CONSTASCII_USTRINGPARAM( "Preview" ) );
     pConfigItem->WriteInt32( sPreview, nCheck );
 
     nCheck = 1;
     if ( aRBLevel2.IsChecked() )
         nCheck++;
-    String sVersion( ResId( KEY_VERSION, pMgr ) );
+    String sVersion( RTL_CONSTASCII_USTRINGPARAM( "Version" ) );
     pConfigItem->WriteInt32( sVersion, nCheck );
 
     nCheck = 1;
     if ( aRBGrayscale.IsChecked() )
         nCheck++;
-    String sColorFormat( ResId( KEY_COLOR, pMgr ) );
+    String sColorFormat( RTL_CONSTASCII_USTRINGPARAM( "ColorFormat" ) );
     pConfigItem->WriteInt32( sColorFormat, nCheck );
 
     nCheck = 1;
     if ( aRBCompressionNone.IsChecked() )
         nCheck++;
-    String sCompressionMode( ResId( KEY_COMPR, pMgr ) );
+    String sCompressionMode( RTL_CONSTASCII_USTRINGPARAM( "CompressionMode" ) );
     pConfigItem->WriteInt32( sCompressionMode, nCheck );
 
-    String sTextMode( ResId( KEY_TEXTMODE, pMgr ) );
+    String sTextMode( RTL_CONSTASCII_USTRINGPARAM( "TextMode" ) );
     pConfigItem->WriteInt32( sTextMode, aLBTextMode.GetSelectEntryPos() );
 
     EndDialog( RET_OK );
