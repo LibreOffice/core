@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:29:30 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:27:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2313,6 +2313,14 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_uInt16 nPara )
         }
     }
     return aInfos;
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >
+                    EditEngine::CreateTransferable( const ESelection& rSelection ) const
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    EditSelection aSel( pImpEditEngine->CreateSel( rSelection ) );
+    return pImpEditEngine->CreateTransferable( aSel );
 }
 
 // =====================================================================
