@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: th $ $Date: 2001-02-27 15:38:55 $
+ *  last change: $Author: th $ $Date: 2001-03-07 21:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1067,9 +1067,21 @@ int CALLBACK SalEnumFontsProcExA( const ENUMLOGFONTEXA* pLogFont,
         pData->maName = *(pInfo->mpName);
 
         ImplLogMetricToDevFontDataA( &(pLogFont->elfLogFont), &(pMetric->ntmTm), nFontType, pData );
-        // StyleName nur bei TrueType uebernehmen, da sonst bei 3.1 Mist drinsteht
-        if ( pMetric->ntmTm.tmPitchAndFamily & TMPF_TRUETYPE )
-            pData->maStyleName = ImplSalGetUniString( (const char*)pLogFont->elfStyle );
+        // Test if Stylename is correct
+        const char* pStyleName = (const char*)pLogFont->elfStyle;
+        const char* pTemp = pStyleName;
+        const char* pEnd = pTemp + sizeof( pLogFont->elfStyle );
+        while ( *pTemp && (pTemp < pEnd) )
+        {
+            if ( (*pTemp > 0) && (*pTemp < 0x20) )
+            {
+                pStyleName = NULL;
+                break;
+            }
+            pTemp++;
+        }
+        if ( pStyleName && (pTemp < pEnd) )
+            pData->maStyleName = ImplSalGetUniString( pStyleName );
         pData->mpSysData = (void*)(pLogFont->elfLogFont.lfCharSet);
         BOOL bAdd = TRUE;
 
@@ -1132,9 +1144,21 @@ int CALLBACK SalEnumFontsProcExW( const ENUMLOGFONTEXW* pLogFont,
         pData->maName = *(pInfo->mpName);
 
         ImplLogMetricToDevFontDataW( &(pLogFont->elfLogFont), &(pMetric->ntmTm), nFontType, pData );
-        // StyleName nur bei TrueType uebernehmen, da sonst bei 3.1 Mist drinsteht
-        if ( pMetric->ntmTm.tmPitchAndFamily & TMPF_TRUETYPE )
-            pData->maStyleName = pLogFont->elfStyle;
+        // Test if Stylename is correct
+        const wchar_t* pStyleName = pLogFont->elfStyle;
+        const wchar_t* pTemp = pStyleName;
+        const wchar_t* pEnd = pTemp + sizeof( pLogFont->elfStyle )/sizeof( wchar_t );
+        while ( *pTemp && (pTemp < pEnd) )
+        {
+            if ( *pTemp < 0x20 )
+            {
+                pStyleName = NULL;
+                break;
+            }
+            pTemp++;
+        }
+        if ( pStyleName && (pTemp < pEnd) )
+            pData->maStyleName = pStyleName;
         pData->mpSysData = (void*)(pLogFont->elfLogFont.lfCharSet);
         BOOL bAdd = TRUE;
 
