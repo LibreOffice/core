@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-09 14:25:17 $
+ *  last change: $Author: fs $ $Date: 2002-10-11 14:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#include <com/sun/star/sdb/SQLErrorEvent.hpp>
 
 #ifndef _LINK_HXX //autogen
 #include <tools/link.hxx>
@@ -116,9 +117,9 @@ class FmFormObj;
 class FmFormModel;
 class Window;
 class OutputDevice;
-FORWARD_DECLARE_INTERFACE(awt,XControl)
-FORWARD_DECLARE_INTERFACE(beans,XPropertySet)
-FORWARD_DECLARE_INTERFACE(util,XNumberFormats)
+FORWARD_DECLARE_INTERFACE( awt, XControl )
+FORWARD_DECLARE_INTERFACE( beans, XPropertySet )
+FORWARD_DECLARE_INTERFACE( util, XNumberFormats )
 class FmXFormController;
 
 namespace svx {
@@ -187,13 +188,14 @@ class FmXFormView : public ::cppu::WeakImplHelper2<
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
 
     FmFormView*     m_pView;
-    sal_uInt32      m_nEvent;
-    sal_uInt32      m_nErrorMessageEvent;
-    sal_uInt32      m_nAutoFocusEvent;
+    sal_uInt32      m_nActivationEvent;
+    sal_uInt32      m_nErrorMessageEvent;   // event for an asynchronous error message. See also m_aAsyncError
+    sal_uInt32      m_nAutoFocusEvent;      // event for asynchronously setting the focus to a control
 
-    FmWinRecList m_aWinList;    // dieses Liste wird nur im nicht designmodus gefuellt
+    ::com::sun::star::sdb::SQLErrorEvent
+                    m_aAsyncError;          // error event which is to be displayed asyn. See m_nErrorMessageEvent.
 
-    String          m_sErrorMessage;
+    FmWinRecList    m_aWinList;             // to be filled in alive mode only
 
     // Liste der markierten Object, dient zur Restauration beim Umschalten von Alive in DesignMode
     SdrMarkList             m_aMark;
@@ -270,14 +272,17 @@ private:
 
     void ObjectRemovedInAliveMode(const SdrObject* pObject);
 
+    // asynchronously displays an error message. See also OnDelayedErrorMessage.
+    void    displayAsyncErrorMessage( const ::com::sun::star::sdb::SQLErrorEvent& _rEvent );
+
     // cancels all pending async events
     void cancelEvents();
 
     /// the the auto focus to the first (in terms of the tab order) control
     void AutoFocus( sal_Bool _bSync = sal_False );
-    DECL_LINK(OnActivate, void* );
-    DECL_LINK(OnAutoFocus, void* );
-    DECL_LINK(OnDelayedErrorMessage, void*);
+    DECL_LINK( OnActivate, void* );
+    DECL_LINK( OnAutoFocus, void* );
+    DECL_LINK( OnDelayedErrorMessage, void* );
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:02:58 $
+ *  last change: $Author: fs $ $Date: 2002-10-11 14:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,10 +493,10 @@ void FmXPageViewWinRec::updateTabOrder( const ::com::sun::star::uno::Reference< 
 FmXFormView::FmXFormView(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&    _xORB,
             FmFormView* _pView)
     :m_pView(_pView)
-    ,m_nEvent(0)
-    ,m_nErrorMessageEvent(0)
-    ,m_xORB(_xORB)
-    ,m_nAutoFocusEvent(0)
+    ,m_xORB( _xORB )
+    ,m_nActivationEvent(0)
+    ,m_nErrorMessageEvent( 0 )
+    ,m_nAutoFocusEvent( 0 )
     ,m_pWatchStoredList( NULL )
     ,m_bFirstActivation( sal_True )
 {
@@ -505,10 +505,10 @@ FmXFormView::FmXFormView(const ::com::sun::star::uno::Reference< ::com::sun::sta
 //------------------------------------------------------------------------
 void FmXFormView::cancelEvents()
 {
-    if ( m_nEvent )
+    if ( m_nActivationEvent )
     {
-        Application::RemoveUserEvent( m_nEvent );
-        m_nEvent = 0;
+        Application::RemoveUserEvent( m_nActivationEvent );
+        m_nActivationEvent = 0;
     }
 
     if ( m_nErrorMessageEvent )
@@ -676,11 +676,20 @@ void FmXFormView::removeWindow( const ::com::sun::star::uno::Reference< ::com::s
 }
 
 //------------------------------------------------------------------------------
+void FmXFormView::displayAsyncErrorMessage( const SQLErrorEvent& _rEvent )
+{
+    DBG_ASSERT( 0 == m_nErrorMessageEvent, "FmXFormView::displayAsyncErrorMessage: not too fast, please!" );
+        // This should not happen - usually, the PostUserEvent is faster than any possible user
+        // interaction which could trigger a new error. If it happens, we need a queue for the events.
+    m_aAsyncError = _rEvent;
+    m_nErrorMessageEvent = Application::PostUserEvent( LINK( this, FmXFormView, OnDelayedErrorMessage ) );
+}
+
+//------------------------------------------------------------------------------
 IMPL_LINK(FmXFormView, OnDelayedErrorMessage, void*, EMPTYTAG)
 {
     m_nErrorMessageEvent = 0;
-    Window* pParentWindow = Application::GetDefDialogParent();
-    ErrorBox(pParentWindow, WB_OK, m_sErrorMessage).Execute();
+    displayException( m_aAsyncError );
     return 0L;
 }
 
@@ -694,7 +703,7 @@ void FmXFormView::onFirstViewActivation( const FmFormModel* _pDocModel )
 //------------------------------------------------------------------------------
 IMPL_LINK(FmXFormView, OnActivate, void*, EMPTYTAG)
 {
-    m_nEvent = 0;
+    m_nActivationEvent = 0;
 
     if ( !m_pView )
     {
@@ -751,10 +760,10 @@ IMPL_LINK(FmXFormView, OnActivate, void*, EMPTYTAG)
 //------------------------------------------------------------------------------
 void FmXFormView::Activate(sal_Bool bSync)
 {
-    if (m_nEvent)
+    if (m_nActivationEvent)
     {
-        Application::RemoveUserEvent(m_nEvent);
-        m_nEvent = 0;
+        Application::RemoveUserEvent(m_nActivationEvent);
+        m_nActivationEvent = 0;
     }
 
     if (bSync)
@@ -762,16 +771,16 @@ void FmXFormView::Activate(sal_Bool bSync)
         LINK(this,FmXFormView,OnActivate).Call(NULL);
     }
     else
-        m_nEvent = Application::PostUserEvent(LINK(this,FmXFormView,OnActivate));
+        m_nActivationEvent = Application::PostUserEvent(LINK(this,FmXFormView,OnActivate));
 }
 
 //------------------------------------------------------------------------------
 void FmXFormView::Deactivate(BOOL bDeactivateController)
 {
-    if (m_nEvent)
+    if (m_nActivationEvent)
     {
-        Application::RemoveUserEvent(m_nEvent);
-        m_nEvent = 0;
+        Application::RemoveUserEvent(m_nActivationEvent);
+        m_nActivationEvent = 0;
     }
 
     FmXFormShell* pShImpl =  m_pView->GetFormShell() ? m_pView->GetFormShell()->GetImpl() : NULL;
@@ -910,7 +919,7 @@ IMPL_LINK(FmXFormView, OnAutoFocus, void*, EMPTYTAG)
 SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescriptor& _rColumnDescriptor )
 {
     // not if we're in design mode
-    if (!m_pView->IsDesignMode())
+    if ( !m_pView->IsDesignMode() )
         return NULL;
 
     // the very basic information
@@ -948,7 +957,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
     catch(const SQLException& e) { aError.Reason <<= e; }
     if (aError.Reason.hasValue())
     {
-        displayException(aError);
+        displayAsyncErrorMessage( aError );
         return NULL;
     }
 
