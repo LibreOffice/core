@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-20 20:35:34 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:44:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,11 +390,11 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ dutch ] = "B~reedte" ;
         Text [ spanish ] = "A~ncho" ;
         Text [ english_us ] = "~Width" ;
-        Text[ chinese_simplified ] = "¿í(~W)";
+        Text[ chinese_simplified ] = "¿í¶È(~W)";
         Text[ russian ] = "Øèğèíà";
         Text[ polish ] = "Szer.";
         Text[ japanese ] = "•(~W)";
-        Text[ chinese_traditional ] = "¼e(~W)";
+        Text[ chinese_traditional ] = "¼e«×(~W)";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
         Text[ korean ] = "³Êºñ(~W)";
@@ -439,7 +439,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ spanish ] = "A~ltura" ;
         Text [ english_us ] = "H~eight" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "¸ß(~E)";
+        Text[ chinese_simplified ] = "¸ß¶È(~E)";
         Text[ russian ] = "Âûñîòà";
         Text[ polish ] = "Wys.";
         Text[ japanese ] = "‚‚³(~E)";
@@ -515,11 +515,11 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ dutch ] = "B~reedte" ;
         Text [ spanish ] = "A~ncho" ;
         Text [ english_us ] = "~Width" ;
-        Text[ chinese_simplified ] = "¿í(~W)";
+        Text[ chinese_simplified ] = "¿í¶È(~W)";
         Text[ russian ] = "Øèğèíà";
         Text[ polish ] = "Szer.";
         Text[ japanese ] = "•(~W)";
-        Text[ chinese_traditional ] = "¼e(~W)";
+        Text[ chinese_traditional ] = "¼e«×(~W)";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
         Text[ korean ] = "³Êºñ(~W)";
@@ -624,6 +624,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ finnish ] = "~Alkuperäinen koko";
     };
 };
+
 
 
 
