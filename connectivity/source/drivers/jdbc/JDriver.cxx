@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-25 16:04:07 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,9 +148,14 @@ Sequence< ::rtl::OUString > SAL_CALL java_sql_Driver::getSupportedServiceNames( 
 Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUString& url, const
                                                          Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
-    java_sql_Connection* pConnection = new java_sql_Connection(this );
-    Reference< XConnection > xOut = pConnection;
-    pConnection->construct(url,info);
+    Reference< XConnection > xOut;
+    if ( acceptsURL(url ) )
+    {
+        java_sql_Connection* pConnection = new java_sql_Connection(this );
+        xOut = pConnection;
+        if ( !pConnection->construct(url,info) )
+            xOut = NULL; // an error occured and the java driver doesn't throw an exception
+    }
     return xOut;
 }
 // -------------------------------------------------------------------------
