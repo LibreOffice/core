@@ -5,6 +5,9 @@
 Public UserfieldDataType(14) as String
 Public oDocAuto as Object
 Public BulletList(7) as Integer
+Public sTextFieldNotDefined as String
+Public sGeneralError as String
+
 
 Sub Main()
 	Dim oCursor as Object
@@ -18,9 +21,13 @@ Sub Main()
 	Dim FieldStringThere as String
 	Dim ULStringThere as String
 	Dim PHStringThere as String
-
+	On Local Error Goto GENERALERROR
 	&apos; Initialization...
     BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+	If InitResources(&quot;&apos;Template&apos;&quot;, &quot;tpl&quot;) Then
+		sGeneralError = GetResText(1302)
+		sTextFieldNotDefined = GetResText(1400)
+	End If
 
 	UserfieldDatatype(0) = &quot;COMPANY&quot;
 	UserfieldDatatype(1) = &quot;FIRSTNAME&quot;
@@ -79,6 +86,13 @@ Sub Main()
 			CreatePlaceholder(oCursor, sFoundContent)
 		End If
 	Next i
+
+	GENERALERROR:
+	If Err &lt;&gt; 0 Then
+		Msgbox(sGeneralError,16, GetProductName())
+		Resume LETSGO
+	End If
+	LETSGO:
 End Sub
 
 
@@ -86,7 +100,6 @@ End Sub
 &apos; &quot;&lt;field:Company&gt;&quot;
 Sub	CreateUserDatafield(oCursor, sFoundContent as String)
 	Dim MaxIndex as Integer
-	Dim sTextFieldNotDefined as String
 	Dim sFoundList(3)
 	Dim oUserfield as Object
 	Dim UserInfo as String
@@ -101,10 +114,7 @@ Sub	CreateUserDatafield(oCursor, sFoundContent as String)
 		oCursor.Text.InsertTextContent(oCursor,oUserField,True)
 		oUserField.IsFixed = True
 	Else
-		If InitResources(&quot;&apos;Template&apos;&quot;, &quot;tpl&quot;) Then
-			sTextFieldNotDefined = GetResText(1400)
-			Msgbox(UserInfo &amp;&quot;: &quot; &amp; sTextFieldNotDefined,16, GetProductName())
-		End If
+		Msgbox(UserInfo &amp;&quot;: &quot; &amp; sTextFieldNotDefined,16, GetProductName())
 	End If
 End Sub
 
