@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementinfo.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:34:16 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 16:11:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ namespace configmgr
             ElementInfo(ElementType::Enum _type = ElementType::unknown)
             : name()
             , type(_type)
-            , op()
+            , op(Operation::none)
             , flags()
             {}
 
@@ -138,7 +138,7 @@ namespace configmgr
             ElementInfo(ElementName const & _name, ElementType::Enum _type = ElementType::unknown)
             : name(_name)
             , type(_type)
-            , op()
+            , op(Operation::none)
             , flags()
             {}
 
