@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:13:26 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:11:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ String STR_EVENTCONFIG
     Text[ arabic ] = "ΚΪννδ ΗαΓΝΟΗΛ";
     Text[ dutch ] = "Gebeurtenis toewijzen";
     Text[ chinese_simplified ] = "ζ‡ε®δΊ‹δ»¶";
-    Text[ greek ] = "Αντιστοίχιση γεγονότος";
+    Text[ greek ] = "Ανάθεση συμβάντων";
     Text[ korean ] = "μ΄λ²¤νΈ μ§€μ •";
     Text[ turkish ] = "Olay ata";
     Text[ language_user1 ] = " ";
@@ -115,7 +115,7 @@ String STR_FILTERNAME_CFG
     Text[ arabic ] = "Κίζνδ";
     Text[ dutch ] = "Configuratie";
     Text[ chinese_simplified ] = "ι…η½®";
-    Text[ greek ] = "Παράμετροι";
+    Text[ greek ] = "Διαμόρφωση";
     Text[ korean ] = "μ„¤μ •";
     Text[ turkish ] = "Konfigόrasyon";
     Text[ language_user1 ] = " ";
@@ -215,7 +215,7 @@ QueryBox DLG_MACROQUERY
         Text[ arabic ] = "ΪΟγ ΗαΚδένΠ";
         Text[ dutch ] = "Niet uitvoeren";
         Text[ chinese_simplified ] = "δΈζ‰§θ΅";
-        Text[ greek ] = "Να μην εκτελεστεί";
+        Text[ greek ] = "Να μην γίνει εκτέλεση";
         Text[ korean ] = "μ‹¤ν–‰ μ•ν•¨";
         Text[ turkish ] = "Ηalύώtύrma";
         Text[ language_user1 ] = " ";
@@ -234,7 +234,7 @@ QueryBox DLG_MACROQUERY
         Text [english_us] = "According to the security settings, this macro should not be run. Do you want to run it anyway?";
         Text[ portuguese ] = "According to the security settings, this macro should not be run. Do you want to run it anyway?";
         Text[ russian ] = "Μΰκπξρ νε βϋοξλνÿεςρÿ β ρξξςβεςρςβθθ ρ νΰρςπξικΰμθ ηΰωθςϋ. Βϋοξλνθςό μΰκπξρ, νερμξςπÿ νΰ ύςξ?";
-        Text[ greek ] = "Nach den Sicherheitseinstellungen soll dieses Makro nicht ausgefόhrt werden. Mφchten Sie es trotzdem ausfόhren?";
+        Text[ greek ] = "Σύμφωνα με τις ρυθμίσεις ασφαλείας, αυτή η μακροεντολή δεν πρέπει να εκτελεστεί. Είστε βέβαιοι ότι θέλετε να την εκτελέσετε;";
         Text[ dutch ] = "Volgens de beveiligingsopties mag deze macro niet worden uitgevoerd. Wilt u de macro toch uitvoeren?";
         Text[ french ] = "Les paramθtres de sιcuritι n'autorisent normalement pas l'exιcution de cette macro. Exιcuter quand mκme ?";
         Text[ spanish ] = "Por razones de seguridad no se deberνa ejecutar esta macro. ΏDesea ejecutarla a pesar de ello?";
@@ -243,7 +243,7 @@ QueryBox DLG_MACROQUERY
         Text[ danish ] = "Ifψlge sikkerhedsindstillingerne skal denne makro ikke udfψres. Vil du alligevel udfψre den?";
         Text[ swedish ] = "Enligt sδkerhetsinstδllningarna ska det hδr makrot inte kφras. Vill du kφra det i alla fall?";
         Text[ polish ] = "Zgodnie z ustawieniami zabezpieczeρ nie naleΏy uruchamiaζ tego makra. Czy mimo to chcesz je uruchomiζ?";
-        Text[ portuguese_brazilian ] = "De acordo com as configuraηυes de seguranηa, esta macro nγo deve ser executada. Vocκ deseja executa-la mesmo assim?";
+        Text[ portuguese_brazilian ] = "De acordo com as configuraηυes de seguranηa, esta macro nγo deve ser executada. Deseja executα-la mesmo assim?";
         Text[ japanese ] = "γ‚»γ‚­γƒ¥γƒªγƒ†γ‚£θ¨­ε®γ§γ―γ“γ®γƒγ‚―γƒ­γ―ε®θ΅γ§γγªγ„γ―γγ§γ™γ€‚γγ‚γ§γ‚‚ε®θ΅γ—γΎγ™γ‹γ€‚";
         Text[ korean ] = "λ³΄μ• μ„¤μ •μ— λ”°λΌ μ΄ λ§¤ν¬λ΅λ” μ‹¤ν–‰λμ–΄μ„λ” μ• λ©λ‹λ‹¤.";
         Text[ chinese_simplified ] = "ζ‰η…§ε®‰ε…¨η„θ®Ύε®δΈεΊ”θ―¥ζ‰§θ΅θΏ™δΈªε®γ€‚ζ‚¨θΏζ―θ¦ζ‰§θ΅θΏ™δΈªε®ε—οΌ";
@@ -264,7 +264,7 @@ QueryBox DLG_MACROQUERY
         Text [english_us] = "Do you want to run the macro?";
         Text[ portuguese ] = "Do you want to run the macro?";
         Text[ russian ] = "Βϋοξλνθςό μΰκπξρ?";
-        Text[ greek ] = "Mφchten Sie dieses Makro ausfόhren?";
+        Text[ greek ] = "Θέλετε να εκτελέσετε τη μακροεντολή;";
         Text[ dutch ] = "Wilt u deze macro uitvoeren?";
         Text[ french ] = "Exιcuter cette macro ?";
         Text[ spanish ] = "ΏDesea ejecutar esta macro?";
@@ -273,7 +273,7 @@ QueryBox DLG_MACROQUERY
         Text[ danish ] = "Vil du udfψre denne makro?";
         Text[ swedish ] = "Vill du kφra det hδr makrot?";
         Text[ polish ] = "Czy chcesz uruchomiζ makro?";
-        Text[ portuguese_brazilian ] = "Vocκ deseja executar esta macro?";
+        Text[ portuguese_brazilian ] = "Deseja executar esta macro?";
         Text[ japanese ] = "γ“γ®γƒγ‚―γƒ­γ‚’ε®θ΅γ—γΎγ™γ‹γ€‚";
         Text[ korean ] = "μ΄ λ§¤ν¬λ΅λ¥Ό μ‹¤ν–‰ν•μ‹κ² μµλ‹κΉ?";
         Text[ chinese_simplified ] = "ζ‚¨θ¦ζ‰§θ΅θΏ™δΈªε®ε—οΌ";
@@ -289,7 +289,7 @@ QueryBox DLG_MACROQUERY
     };
     Message[ portuguese ] = "Es wurde ein Ereignis ausgelφst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
     Message[ russian ] = "Ρπΰαξςΰλξ ρξαϋςθε, οπθνΰδλεζΰωεε μΰκπξρσ $(MACRO). $(TEXT)";
-    Message[ greek ] = "Es wurde ein Ereignis ausgelφst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
+    Message[ greek ] = "Έγινε εφαρμογή συμβάντος στο οποίο ανήκει η μακροεντολή $(MACRO). $(TEXT)";
     Message[ dutch ] = "Er is een gebeurtenis aangeroepen waarvoor de macro $(MACRO) is geconfigureerd. $(TEXT)";
     Message[ french ] = "Le dιclenchement d'un ιvιnement a eu lieu en rapport avec la macro $(MACRO). $(TEXT)";
     Message[ spanish ] = "Se ha producido el evento para el cual se configurσ la macro $(MACRO). $(TEXT)";
@@ -317,6 +317,7 @@ QueryBox DLG_MACROQUERY
     Message[ slovak ] = "Nastala udalosΕ¥, ku ktorej je priradenΓ© makro $(MACRO). $(TEXT)";
     Title[ slovak ] = "SpustiΕ¥ makro";
 };
+
 
 
 
