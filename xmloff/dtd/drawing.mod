@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.62 2001-06-20 06:08:34 mib Exp $
+	$Id: drawing.mod,v 1.63 2001-06-27 12:02:50 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -340,7 +340,6 @@
 <!ATTLIST style:properties draw:auto-grow-height %boolean; #IMPLIED>
 <!ATTLIST style:properties draw:fit-to-size %boolean; #IMPLIED>
 <!ATTLIST style:properties draw:fit-to-contour %boolean; #IMPLIED>
-<!ATTLIST style:properties fo:vertical-align (top | middle | bottom ) #IMPLIED>
 <!ATTLIST style:properties draw:textarea-horizontal-align ( left | center | right | justify ) #IMPLIED>
 <!ATTLIST style:properties draw:textarea-vertical-align ( top | middle | bottom ) #IMPLIED>
 
