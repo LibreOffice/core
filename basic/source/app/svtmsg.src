@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: gh $ $Date: 2001-08-27 09:27:59 $
+ *  last change: $Author: kz $ $Date: 2001-09-06 20:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1128,6 +1128,9 @@ String S_NO_SELECTED_ENTRY
     Text[ turkish ] = "An entry has not been selected in TreeListBox at ($Arg1)";
     Text[ catalan ] = "No hay ninguna entrada seleccionada en TreeListBox para ($Arg1)";
     Text[ finnish ] = "Valikkoluetteloruudun (TreeListBox) merkintδδ ei ole valittu kohteessa ($Arg1)";
+    Text[ korean ] = "($Arg1)μ ($Arg2)μ—λ” μ„ νƒλ ν•­λª©μ΄ μ—†μµλ‹λ‹¤.";
+    Text[ chinese_simplified ] = "ζ²΅ζ‰ε¨ ($Arg1) η„ ($Arg2) δΈ­ι€‰δΈ­δΈ€δΈªζ΅η›®";
+    Text[ chinese_traditional ] = "No entry was selected in ($Arg2) at ($Arg1)";
 };
 String S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED
 {
@@ -1588,17 +1591,17 @@ String S_NO_MENU
 String S_UNO_URL_EXECUTE_FAILED_DISABLED
 {
     Text = "Konnte UNO Url \"($Arg1)\"nicht ausfόhren: Disabled";
-    Text[ english_us ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop.";
+    Text[ english_us ] = "UNO URL \"($Arg1)\" could not be run: Disabled";
     Text[ portuguese ] = "Impossνvel executar o URL UNO \"($Arg1)\": nγo existe nenhum Frame activo no Desktop";
     Text[ russian ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop.";
     Text[ greek ] = "Δεν ήταν δυνατόν να εκτελεστεί το UNO Url \"($Arg1)\": Δεν υπάρχει ενεργό πλαίσιο στην επιφάνεια εργασίας";
-    Text[ dutch ] = "Kon UNO Url \"($Arg1)\" niet uitvoeren: geen ActiveFrame aan desktop";
+    Text[ dutch ] = "Kon UNO Url \"($Arg1)\" niet uitvoeren: disabled.";
     Text[ french ] = "Impossible d'exιcuter l'URL UNO \"($Arg1)\" : aucun Frame actif sur le Desktop";
-    Text[ spanish ] = "No se pudo ejecutar UNO Url \"($Arg1)\": No existe ningϊn ActiveFrame en el escritorio";
-    Text[ italian ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop.";
+    Text[ spanish ] = "No se pudo ejecutar UNO Url \"($Arg1)\": Disabled";
+    Text[ italian ] = "Impossibile avviare UNO URL \"($Arg1)\": disattivato";
     Text[ danish ] = "Slot ID could not be run";
-    Text[ swedish ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop";
-    Text[ polish ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop.";
+    Text[ swedish ] = "UNO URL \"($Arg1)\" could not be run: Disabled";
+    Text[ polish ] = "UNO URL \"($Arg1)\" could not be run: Disabled";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "UNO Url \"($Arg1)\" γ―ε®θ΅γ§γγΎγ›γ‚“γ§γ—γοΌ οΎƒοΎο½½ο½ΈοΎ„ο½―οΎοΎγ«ο½±ο½ΈοΎƒο½¨οΎοΎοΎοΎο½°οΎ‘γγ‚γ‚γΎγ›γ‚“γ€‚";
     Text[ korean ] = "μ‹¤ν–‰ν•μ§€γ€€λª»ν–μµλ‹λ‹¤. λ°”νƒ•ν™”λ©΄μ— ActiveFrameμ΄ μ—†μµλ‹λ‹¤.";
@@ -1609,4 +1612,5 @@ String S_UNO_URL_EXECUTE_FAILED_DISABLED
     Text[ catalan ] = "No se pudo ejecutar Slot ID";
     Text[ finnish ] = "Paikkatunnusta ei voitu suorittaa";
 };
+
 
