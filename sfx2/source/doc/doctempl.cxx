@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-21 12:37:37 $
+ *  last change: $Author: dv $ $Date: 2000-12-21 16:45:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3039,7 +3039,10 @@ void SfxDocTemplate_Impl::AddToStandard( Content& rRoot,
         pRegion->SetInUse( sal_True );
     }
 
-    pRegion->SetTargetURL( aFolderURL );
+    OUString aOldTarget = pRegion->GetTargetURL();
+
+    if ( !aOldTarget.len() )
+        pRegion->SetTargetURL( aFolderURL );
 
     GetTemplates( rFolder, aFolder, pRegion );
 }
