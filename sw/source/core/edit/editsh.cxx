@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:14:29 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1087,9 +1087,10 @@ void SwEditShell::SetLinkUpdMode( USHORT nMode )
 
 // Schnittstelle fuer die TextInputDaten - ( fuer die Texteingabe
 // von japanischen/chinesischen Zeichen)
-SwExtTextInput* SwEditShell::CreateExtTextInput()
+SwExtTextInput* SwEditShell::CreateExtTextInput(LanguageType eInputLanguage)
 {
     SwExtTextInput* pRet = GetDoc()->CreateExtTextInput( *GetCrsr() );
+    pRet->SetLanguage(eInputLanguage);
     pRet->SetOverwriteCursor( SwCrsrShell::IsOverwriteCrsr() );
     return pRet;
 }
