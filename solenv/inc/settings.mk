@@ -7,8 +7,8 @@
 #*                      Entwicklungtools-Definitionen
 #*
 #*    Ersterstellung    TH 28.03.94
-#*    Letzte Aenderung  $Author: hjs $ $Date: 2000-09-28 11:47:11 $
-#*    $Revision: 1.3 $
+#*    Letzte Aenderung  $Author: patrick.luby $ $Date: 2000-09-28 13:58:42 $
+#*    $Revision: 1.4 $
 #*
 #*    $Logfile:   T:/solar/inc/settings.mkv  $
 #*
@@ -40,17 +40,7 @@ dmake_test_version:
 SOLARVERSION=$(SOLARVER)$/$(UPD)
 .ENDIF
 
-.IF "$(OS)"=="MACOSX"
-BUILDTYPE:=${WORK_STAMP:s/$(UPD)//}
-.IF "$(BUILDTYPE)"=="UDK"
-.INCLUDE : udkminor.mk
-.ELSE
-# Default to "SRC" build type
 .INCLUDE : minor.mk
-.ENDIF
-.ELSE			# "$(OS)"=="MACOSX"
-.INCLUDE : minor.mk
-.ENDIF			# "$(OS)"=="MACOSX"	
 
 .IF "$(BUILD_SOSL)"==""
 
