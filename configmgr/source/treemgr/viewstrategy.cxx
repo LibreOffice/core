@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstrategy.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:43:09 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:33:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,6 +594,15 @@ namespace configmgr
             checkInstance(_aNode.tree());
             return getMemberValueAccess(_aNode,_aName).isValid();
         }
+
+        bool ViewStrategy::hasValue(GroupNode const& _aNode) const
+        {
+            checkInstance(_aNode.tree());
+            configuration::GroupNodeImpl* pGroupNode=_aNode.get_impl();
+            data::GroupNodeAccess aGroupNodeAccess = pGroupNode->getDataAccess( _aNode.accessor() );
+            return aGroupNodeAccess.hasChildren();
+        }
+
 
         bool ViewStrategy::areValueDefaultsAvailable(GroupNode const& _aNode) const
         {
