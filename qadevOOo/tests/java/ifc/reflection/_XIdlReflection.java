@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XIdlReflection.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:20 $
+ *  last change:$Date: 2003-05-27 12:27:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package ifc.reflection;
 
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.reflection.XIdlClass;
 import com.sun.star.reflection.XIdlReflection;
 import com.sun.star.uno.TypeClass;
@@ -115,7 +116,8 @@ public class _XIdlReflection extends MultiMethodTest{
         Object obj = null;
 
         try {
-            obj = tParam.getMSF().createInstance("com.sun.star.io.Pipe") ;
+            obj = ((XMultiServiceFactory)tParam.getMSF()).
+                                    createInstance("com.sun.star.io.Pipe") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Can't create object");
             tRes.tested("getType()", false);
