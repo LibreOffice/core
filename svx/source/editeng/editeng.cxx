@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-04 13:44:16 $
+ *  last change: $Author: mt $ $Date: 2002-11-21 14:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -878,6 +878,30 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
         switch ( nCode )
         {
            #if defined( DBG_UTIL ) || defined( DEBUG )
+            case KEY_F1:
+            {
+                if ( rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
+                {
+                    USHORT nParas = GetParagraphCount();
+                    Point aPos;
+                    Point aViewStart( pEditView->GetOutputArea().TopLeft() );
+                    long n20 = 40 * pImpEditEngine->nOnePixelInRef;
+                    for ( USHORT n = 0; n < nParas; n++ )
+                    {
+                        long nH = GetTextHeight( n );
+                        Point P1( aViewStart.X() + n20 + n20*(n%2), aViewStart.Y() + aPos.Y() );
+                        Point P2( P1 );
+                        P2.X() += n20;
+                        P2.Y() += nH;
+                        pEditView->GetWindow()->SetLineColor();
+                        pEditView->GetWindow()->SetFillColor( Color( (n%2) ? COL_YELLOW : COL_LIGHTGREEN ) );
+                        pEditView->GetWindow()->DrawRect( Rectangle( P1, P2 ) );
+                        aPos.Y() += nH;
+                    }
+                }
+                bDone = FALSE;
+            }
+            break;
             case KEY_F11:
             {
                 if ( rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
