@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:36 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SCRIPT_XEVENTATTACHERMANAGER_HPP_
 #include <com/sun/star/script/XEventAttacherManager.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_FORM_XBINDABLEVALUE_HPP_
+#include <drafts/com/sun/star/form/XBindableValue.hpp>
 #endif
 
 #ifndef _FM_FMMODEL_HXX
@@ -181,6 +184,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::form;
+using namespace ::drafts::com::sun::star::form;
 using namespace ::svxform;
 
 //------------------------------------------------------------------------------
@@ -188,9 +192,9 @@ using namespace ::svxform;
 //------------------------------------------------------------------------------
 struct PropertyInfo
 {
-    BOOL    bIsTransientOrReadOnly      : 1;    // the property is transient or read-only, thus we need no undo action for it
-    BOOL    bIsControlSourceProperty    : 1;    // the property is the special control source property, thus it may be handled
-                                                // as if it's transient or persistent
+    BOOL    bIsTransientOrReadOnly  : 1;    // the property is transient or read-only, thus we need no undo action for it
+    BOOL    bIsValueProperty        : 1;    // the property is the special value property, thus it may be handled
+                                            // as if it's transient or persistent
 };
 
 struct PropertySetInfo
@@ -529,11 +533,14 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
         }
 
         // no Undo for transient and readonly props. But unfortunately "transient" is not only that the
-        // "persistent" flag is not set for the property in question, instead is is somewhat more complex
-        // (depending on whether or not the affected control model is intended to be bound, i.e. has a non-empty
-        // ControlSource property)
+        // "transient" flag is set for the property in question, instead is is somewhat more complex
+        // Transience criterions are:
+        // - the "transient" flag is set for the property
+        // - OR the control has a non-empty COntrolSource property, i.e. is intended to be bound
+        //   to a database column. Note that it doesn't matter here whether the control actually
+        //   *is* bound to a column
+        // - OR the control is bound to an external value via XBindableValue/XValueBinding
 
-        // kein Undo fuer transiente und readonly properties
         if (!m_pPropertySetCache)
             m_pPropertySetCache = new PropertySetInfoCache;
         PropertySetInfoCache* pCache = static_cast<PropertySetInfoCache*>(m_pPropertySetCache);
@@ -582,7 +589,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             aNewEntry.bIsTransientOrReadOnly = ((nAttributes & PropertyAttribute::READONLY) != 0) || ((nAttributes & PropertyAttribute::TRANSIENT) != 0);
 
             // check if it is the special "DataFieldProperty"
-            aNewEntry.bIsControlSourceProperty = sal_False;
+            aNewEntry.bIsValueProperty = sal_False;
             try
             {
                 if (::comphelper::hasProperty(FM_PROP_CONTROLSOURCEPROPERTY, xSet))
@@ -591,7 +598,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
                     ::rtl::OUString sControlSourceProperty;
                     aControlSourceProperty >>= sControlSourceProperty;
 
-                    aNewEntry.bIsControlSourceProperty = (sControlSourceProperty.equals(evt.PropertyName));
+                    aNewEntry.bIsValueProperty = (sControlSourceProperty.equals(evt.PropertyName));
                 }
             }
             catch(Exception&)
@@ -606,14 +613,28 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
         // now we have access to the cached info about the property affected
         // and are able to decide wether or not we need an undo action
 
-        if (!aPropertyPos->second.bIsTransientOrReadOnly)
-        {   // normally we would generate an undo action for all non-readonly and non-transient properties, but ...
+        bool bAddUndoAction = true;
+        // no UNDO for transient/readonly properties
+        if ( aPropertyPos->second.bIsTransientOrReadOnly )
+            bAddUndoAction = false;
 
-            // check if it is a special control property which is required for data field connectivity, these
-            // special properties may be handled as though they were transient ...
-            if (!aPropertyPos->second.bIsControlSourceProperty || aSetPos->second.bHasEmptyControlSource)
-                rModel.AddUndo(new FmUndoPropertyAction(rModel, evt));
+        if ( bAddUndoAction && aPropertyPos->second.bIsValueProperty )
+        {
+            // no UNDO when the "value" property changes, but the ControlSource is non-empty
+            // (in this case the control is intended to be bound to a database column)
+            if ( !aSetPos->second.bHasEmptyControlSource )
+                bAddUndoAction = false;
+
+            // no UNDO if the control is currently bound to an external value
+            if ( bAddUndoAction )
+            {
+                Reference< XBindableValue > xBindable( evt.Source, UNO_QUERY );
+                bAddUndoAction = !xBindable.is() || !xBindable->getValueBinding().is();
+            }
         }
+
+        if ( bAddUndoAction )
+            rModel.AddUndo(new FmUndoPropertyAction(rModel, evt));
     }
     else
     {
