@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-15 09:14:53 $
+ *  last change: $Author: os $ $Date: 2002-04-10 12:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,6 +624,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
                 pInStream->Seek(0);
                 pInStream->SetStreamSize(0);
                 aEditWin.Write( *pInStream );
+                pMed->CloseInStream();
                 pMed->Commit();
                 pDocShell->GetDoc()->ResetModified();
                 SourceSaved();
