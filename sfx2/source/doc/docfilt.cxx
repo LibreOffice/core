@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfilt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:53:22 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,7 +368,7 @@ String SfxFilter::GetTypeFromStorage( const SotStorage& rStg )
     return pType ? String::CreateFromAscii(pType) : String();
 }
 
-String SfxFilter::GetTypeFromStorage( const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xStorage,
+String SfxFilter::GetTypeFromStorage( const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xStorage, BOOL bTemplate,
                                         String* pFilterName )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
@@ -394,6 +394,12 @@ String SfxFilter::GetTypeFromStorage( const com::sun::star::uno::Reference< com:
             sal_uInt32 nClipId = SotExchange::GetFormat( aDataFlavor );
             if ( nClipId )
             {
+                SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
+                if ( bTemplate )
+                    nMust |= SFX_FILTER_TEMPLATE;
+                else
+                    nDont |= SFX_FILTER_TEMPLATE;
+
                 const SfxFilter* pFilter = 0;
                 if ( aName.Len() )
                     pFilter = SFX_APP()->GetFilterMatcher().GetFilter4FilterName( aName );
