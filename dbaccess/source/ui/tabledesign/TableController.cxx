@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:32:28 $
+ *  last change: $Author: oj $ $Date: 2001-04-27 11:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1370,23 +1370,31 @@ void OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::sdbc
                     }
                     else if(aIter->second->nType == DataType::INTEGER)
                         pTypeInfo = aIter->second; // alternative
+                    else if(!pTypeInfo && aIter->second->nType == DataType::DOUBLE)
+                        pTypeInfo = aIter->second; // alternative
+                    else if(!pTypeInfo && aIter->second->nType == DataType::REAL)
+                        pTypeInfo = aIter->second; // alternative
                 }
                 if(!pTypeInfo) // just a fallback
                     pTypeInfo = getTypeInfoByType(DataType::VARCHAR);
 
-                pNewRow->SetFieldType( pTypeInfo );
-                OFieldDescription* pActFieldDescr = pNewRow->GetActFieldDescr();
+                OSL_ENSURE(pTypeInfo,"checkColumns: cann't find a type which is useable as a key!");
+                if(pTypeInfo)
+                {
+                    pNewRow->SetFieldType( pTypeInfo );
+                    OFieldDescription* pActFieldDescr = pNewRow->GetActFieldDescr();
 
-                pActFieldDescr->SetAutoIncrement(pTypeInfo->bAutoIncrement);
-                pActFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
+                    pActFieldDescr->SetAutoIncrement(pTypeInfo->bAutoIncrement);
+                    pActFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
 
 
-                pActFieldDescr->SetName( createUniqueName(::rtl::OUString::createFromAscii("ID") ));
-                pActFieldDescr->SetPrimaryKey( sal_True );
-                m_vRowList.insert(m_vRowList.begin(),pNewRow);
+                    pActFieldDescr->SetName( createUniqueName(::rtl::OUString::createFromAscii("ID") ));
+                    pActFieldDescr->SetPrimaryKey( sal_True );
+                    m_vRowList.insert(m_vRowList.begin(),pNewRow);
 
-                static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->Invalidate();
-                static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->DisplayData(0);
+                    static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->Invalidate();
+                    static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->DisplayData(0);
+                }
             }
         }
     }
