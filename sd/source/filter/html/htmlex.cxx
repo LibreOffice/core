@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:02:23 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1625,7 +1625,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                 SdAnimationInfo* pInfo     = pDoc->GetAnimationInfo(pObject);
                 SdIMapInfo*      pIMapInfo = pDoc->GetIMapInfo(pObject);
 
-                Rectangle aRect(pObject->GetBoundRect());
+                Rectangle aRect(pObject->GetCurrentBoundRect());
                 Point     aLogPos(aRect.TopLeft());
                 bool      bIsSquare = aRect.GetWidth() == aRect.GetHeight();
 
@@ -3363,7 +3363,7 @@ void HtmlExport::HideSpecialObjects( SdPage* pPage )
                 {
                     SfxItemSet aSet(pDoc->GetPool());
 
-                    aSet.Put(pPath->GetItemSet());
+                    aSet.Put(pPath->GetMergedItemSet());
 
                     // not hided yet, so hide it
                     pHSOI = new HideSpecialObjectsInfo( pPath );
@@ -3387,7 +3387,7 @@ void HtmlExport::HideSpecialObjects( SdPage* pPage )
 
                     aSpecialObjects.Insert( (void*)pHSOI );
 
-                    pPath->SetItemSetAndBroadcast(aSet);
+                    pPath->SetMergedItemSetAndBroadcast(aSet);
                 }
             }
         }
@@ -3405,7 +3405,7 @@ void HtmlExport::ShowSpecialObjects()
         SdrObject* pPath = pHSOI->mpObj;
 
         SfxItemSet aSet(pDoc->GetPool());
-        aSet.Put(pPath->GetItemSet());
+        aSet.Put(pPath->GetMergedItemSet());
 
         if( pHSOI->mnLineStyleState == SFX_ITEM_SET )
         {
@@ -3427,7 +3427,7 @@ void HtmlExport::ShowSpecialObjects()
             aSet.ClearItem( XATTR_LINESTYLE );
         }
 
-        pPath->SetItemSetAndBroadcast(aSet);
+        pPath->SetMergedItemSetAndBroadcast(aSet);
 
         delete pHSOI;
 
