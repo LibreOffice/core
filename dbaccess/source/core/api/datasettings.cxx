@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasettings.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:02:13 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:56:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,14 @@ float ConvertFontWidth( ::FontWidth eWidth )
 //--------------------------------------------------------------------------
 void ODataSettings::registerProperties(ODataSettings_Base* _pItem)
 {
+    if ( m_bQuery )
+    {
+        registerProperty(PROPERTY_HAVING_CLAUSE, PROPERTY_ID_HAVING_CLAUSE, PropertyAttribute::BOUND,
+                    &_pItem->m_sHavingClause, ::getCppuType(&_pItem->m_sHavingClause));
+        registerProperty(PROPERTY_GROUP_BY, PROPERTY_ID_GROUP_BY, PropertyAttribute::BOUND,
+                    &_pItem->m_sGroupBy, ::getCppuType(&_pItem->m_sGroupBy));
+    }
+
     registerProperty(PROPERTY_FILTER, PROPERTY_ID_FILTER, PropertyAttribute::BOUND,
                     &_pItem->m_sFilter, ::getCppuType(&_pItem->m_sFilter));
 
@@ -239,16 +247,18 @@ void ODataSettings::registerProperties(ODataSettings_Base* _pItem)
 }
 
 //--------------------------------------------------------------------------
-ODataSettings::ODataSettings(OBroadcastHelper& _rBHelper)
+ODataSettings::ODataSettings(OBroadcastHelper& _rBHelper,sal_Bool _bQuery)
     :OPropertyStateContainer(_rBHelper)
     ,ODataSettings_Base()
+    ,m_bQuery(_bQuery)
 {
 }
 
 //--------------------------------------------------------------------------
-ODataSettings::ODataSettings(const ODataSettings& _rSource, ::cppu::OBroadcastHelper& _rBHelper)
+ODataSettings::ODataSettings(const ODataSettings& _rSource, ::cppu::OBroadcastHelper& _rBHelper,sal_Bool _bQuery)
     :OPropertyStateContainer(_rBHelper)
     ,ODataSettings_Base(_rSource)
+    ,m_bQuery(_bQuery)
 {
 }
 
@@ -265,6 +275,8 @@ ODataSettings_Base::ODataSettings_Base()
 ODataSettings_Base::ODataSettings_Base(const ODataSettings_Base& _rSource)
 {
     m_sFilter       = _rSource.m_sFilter;
+    m_sHavingClause = _rSource.m_sHavingClause;
+    m_sGroupBy      = _rSource.m_sGroupBy;
     m_sOrder        = _rSource.m_sOrder;
     m_bApplyFilter  = _rSource.m_bApplyFilter;
     m_aFont         = _rSource.m_aFont;
