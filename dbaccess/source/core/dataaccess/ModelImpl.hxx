@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ModelImpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 09:45:36 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 11:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
 #include <com/sun/star/container/XContainerListener.hpp>
@@ -222,7 +225,18 @@ public:
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xForms;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xReports;
 
+    /// the URL the document was loaded from
     ::rtl::OUString                                     m_sFileURL;
+    /** the URL which the document should report as it's URL
+
+        This might differ from ->m_sFileURL in case the document was loaded
+        as part of a crash recovery process. In this case, ->m_sFileURL points to
+        the temporary file where the DB had been saved to, after a crash.
+        ->m_sRealFileURL then is the URL of the document which actually had
+        been recovered.
+    */
+    ::rtl::OUString                                     m_sRealFileURL;
+
 // <properties>
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
                                                         m_xNumberFormatsSupplier;
@@ -357,6 +371,13 @@ public:
 
     // disposes all elements in m_aStorages, and clears it
     void    disposeStorages() SAL_THROW(());
+
+    /// creates a ->com::sun::star::embed::StorageFactory
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >
+            createStorageFactory() const;
+
+    /// commits our storage
+    void    commitRootStorage();
 
     void clearConnections();
 
