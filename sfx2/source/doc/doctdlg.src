@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctdlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:56:47 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ czech ] = "Nová šablona";
         Text[ hebrew ] = "‮תבנית חדשה‬";
         Text[ hindi ] = "नया नमूना";
+        Text[ slovak ] = "Nová šablóna";
     };
     Edit ED_NAME
     {
@@ -164,6 +165,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ czech ] = "Šablony";
         Text[ hebrew ] = "‮תבניות‬";
         Text[ hindi ] = "नमूनें";
+        Text[ slovak ] = "Šablóny";
     };
     FixedText FT_SECTION
     {
@@ -197,6 +199,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ czech ] = "Kategorie";
         Text[ hebrew ] = "‮סיווגים‬";
         Text[ hindi ] = "~वर्ग";
+        Text[ slovak ] = "~Kategórie";
     };
     ListBox LB_SECTION
     {
@@ -236,6 +239,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ czech ] = "Šablony";
         Text[ hebrew ] = "‮תבניות‬";
         Text[ hindi ] = "~नमूनें";
+        Text[ slovak ] = "Šabló~ny";
     };
     ListBox LB_STYLESHEETS
     {
@@ -291,6 +295,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ czech ] = "Upravit";
         Text[ hebrew ] = "‮עריכה‬";
         Text[ hindi ] = "~संपादन";
+        Text[ slovak ] = "~Upraviť";
     };
     PushButton BT_ORGANIZE
     {
@@ -324,12 +329,16 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ czech ] = "Organizátor...";
         Text[ hebrew ] = "‮סדרן...‬";
         Text[ hindi ] = "~व्यवस्थापक...";
+        Text[ slovak ] = "~Organizátor...";
     };
     Text[ thai ] = "แม่แบบ";
     Text[ czech ] = "Šablony";
     Text[ hebrew ] = "‮תבניות‬";
     Text[ hindi ] = "नमूनें";
+    Text[ slovak ] = "Šablóny";
 };
+
+
 
 
 
