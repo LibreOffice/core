@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:59:27 $
+ *  last change: $Author: vg $ $Date: 2003-05-15 10:59:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1811,7 +1811,13 @@ void SvxTbxButtonColorUpdater_Impl::Update( const Color& rColor )
     BOOL    bSizeChanged = ( theBmpSize != aImage.GetSizePixel() );
     BOOL    bDisplayModeChanged = ( bWasHiContrastMode != pTbx->GetBackground().GetColor().IsDark() );
 
-    if ( aCurColor == rColor && !bSizeChanged && !bDisplayModeChanged )
+    Color aColor( rColor );
+
+    // #109290# Workaround for SetFillColor with COL_AUTO
+    if ( aColor.GetColor() == COL_AUTO )
+        aColor = Color( IMAGE_COL_TRANSPARENT );
+
+    if ( aCurColor == aColor && !bSizeChanged && !bDisplayModeChanged )
         return;
 
     VirtualDevice aVirDev( *pTbx );
@@ -1850,13 +1856,13 @@ void SvxTbxButtonColorUpdater_Impl::Update( const Color& rColor )
         aVirDev.SetLineColor( COL_BLACK );
 
     if ( nDrawMode == TBX_UPDATER_MODE_CHAR_COLOR_NEW &&
-         ( rColor.GetColor() != COL_AUTO &&
-           rColor.GetColor() != IMAGE_COL_TRANSPARENT ))
+         ( aColor.GetColor() != COL_AUTO &&
+           aColor.GetColor() != IMAGE_COL_TRANSPARENT ))
     {
         // Draw border only if COLOR_AUTO is the new color!
-        aVirDev.SetLineColor( rColor );
+        aVirDev.SetLineColor( aColor );
     }
-    aVirDev.SetFillColor( rColor );
+    aVirDev.SetFillColor( aColor );
 
     if ( nDrawMode == TBX_UPDATER_MODE_CHAR_COLOR_NEW )
     {
@@ -1869,13 +1875,15 @@ void SvxTbxButtonColorUpdater_Impl::Update( const Color& rColor )
     }
     else if ( nDrawMode != TBX_UPDATER_MODE_NONE )
     {
-        DrawChar( aVirDev, rColor );
+        DrawChar( aVirDev, aColor );
     }
     else
         aVirDev.DrawRect( theUpdRect );
 
-    aCurColor = rColor;
+    aCurColor = aColor;
 
+    // The following code asumes that we cannot change the display color depth
+    // during Office runtime. Which is at least NOT true for newer Windows versions!
     const Bitmap    aBmp( aVirDev.GetBitmap( aNullPnt, theBmpSize ) );
     static Color    aTransparentColor;
     static sal_Bool bTransparentColorInitialized = sal_False;
