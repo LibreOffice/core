@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kr $ $Date: 2001-02-15 10:17:59 $
+#   last change: $Author: kr $ $Date: 2001-05-21 09:14:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,14 +67,11 @@ PACKAGE = com$/sun$/star$/lib$/sandbox
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+.INCLUDE :  settings.mk
 
 JARFILES=
 
 # --- Files --------------------------------------------------------
-
-# WORKAROUND FOR #77482#
-JAVAFLAGS+=$(JAVAFLAGSDEBUG)
 
 JAVAFILES=						    \
     AudioProxy.java				    \

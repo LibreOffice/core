@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:24:28 $
+#   last change: $Author: kr $ $Date: 2001-05-21 09:14:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,7 +66,7 @@ TARGET  = lib_sandbox_util
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+.INCLUDE :  settings.mk
 
 JARCLASSDIRS	= com$/sun$/star$/lib$/sandbox
 JARTARGET		= sandbox.jar
