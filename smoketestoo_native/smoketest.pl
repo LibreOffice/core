@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-05 10:36:53 $
+#   last change: $Author: rt $ $Date: 2004-08-11 09:19:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -229,7 +229,7 @@ else {
 }
 
 $StandDir = $ENV{SOLARSRC} . $PathSeparator;
-$SHIP="$ENV{SOLARROOT}$PathSeparator" . "ship" . $PathSeparator . "install$PathSeparator";
+$SHIP=$ENV{SHIPDRIVE} . $PathSeparator;
 $PORDUCT = "$SHIP$ENV{INPATH}$PathSeparator$PRODUCT$PathSeparator";
 $DATA="$ENV{DMAKE_WORK_DIR}$PathSeparator" . "data$PathSeparator";
 $WORK_STAMP_LC=$ENV{WORK_STAMP};
@@ -268,7 +268,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.1 $ ';
+$id_str = ' $Revision: 1.2 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
