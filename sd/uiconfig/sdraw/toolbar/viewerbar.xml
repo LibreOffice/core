@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:SaveAs" toolbar:helpid="helpid:5502" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:EditDoc" toolbar:helpid="helpid:6312" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:SendMail" toolbar:helpid="helpid:5331" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF" toolbar:helpid="helpid:6674" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:PrintDefault" toolbar:helpid="helpid:5509" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Copy" toolbar:helpid="helpid:5711" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:SearchDialog" toolbar:helpid="helpid:5961" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:Navigator" toolbar:helpid="helpid:10366" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Zoom" toolbar:helpid="helpid:10000" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+</toolbar:toolbar>
