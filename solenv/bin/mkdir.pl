@@ -21,41 +21,45 @@ while ( $#ARGV >= 0 ) {
         shift @ARGV ;
         shift @ARGV ;
         }
+    elsif ( $ARGV[0] eq "-p" ) {
+        shift @ARGV ;
+        # -p does not do anything, it's supported just for compatibility
+        }
     else {
 
-$ARGV[0] =~ s?\\|:?/?g ;
-@SUBDIRS = split "/", $ARGV[0] ;
+        $ARGV[0] =~ s?\\|:?/?g ;
+        @SUBDIRS = split "/", $ARGV[0] ;
 
-# absolute path UNIX
-if ( $SUBDIRS[0] eq "" ) {
-    chdir '/' ;
-    shift @SUBDIRS ;
-}
-# absolute path WINDOWS
-if ( $#SUBDIRS > 1 ) {
-    if ( $SUBDIRS[1] eq "" ) {
-        if ( $SUBDIRS[0] =~ /\w/ ) {
-            chdir "$SUBDIRS[0]:\\" ;
+        # absolute path UNIX
+        if ( $SUBDIRS[0] eq "" ) {
+            chdir '/' ;
             shift @SUBDIRS ;
+        }
+        # absolute path WINDOWS
+        if ( $#SUBDIRS > 1 ) {
+            if ( $SUBDIRS[1] eq "" ) {
+                if ( $SUBDIRS[0] =~ /\w/ ) {
+                    chdir "$SUBDIRS[0]:\\" ;
+                    shift @SUBDIRS ;
+                    shift @SUBDIRS ;
+                } ;
+            } ;
+        }
+
+        while (@SUBDIRS) {
+            if ( -e $SUBDIRS[0] ) {
+                if ( ! -d $SUBDIRS[0] ) {
+                    die "file exists\n"
+                }
+            }
+            else {
+                mkdir $SUBDIRS[0], $MODE or die "Can't create directory $SUBDIRS[0]"
+            }
+            chdir $SUBDIRS[0] or die "Can't cd to $SUBDIRS[0]" ;
             shift @SUBDIRS ;
         } ;
-    } ;
-}
 
-
-while (@SUBDIRS) {
-    if ( -e $SUBDIRS[0] ) {
-        if ( ! -d $SUBDIRS[0] ) {
-            die "file exists\n" }
-        }
-    else {
-        mkdir $SUBDIRS[0], $MODE or die "Can't create directory $SUBDIRS[0]"
-        }
-    chdir $SUBDIRS[0] or die "Can't cd to $SUBDIRS[0]" ;
-    shift @SUBDIRS ;
-    } ;
-
-    shift @ARGV ;
+        shift @ARGV ;
     } ;
     chdir $currdir;
 }
