@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hro $ $Date: 2002-08-26 13:57:22 $
+#   last change: $Author: kz $ $Date: 2005-01-14 11:39:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ stoponerror=tr
 
 .INCLUDE : ..$/..$/cppumaker.mk
 
-CFLAGS+=/D_WIN32_DCOM /EHsc /Ob0
+CFLAGS+=-D_WIN32_DCOM -EHsc -Ob0
 
 # --- Files --------------------------------------------------------
 
