@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:57:57 $
+ *  last change: $Author: rt $ $Date: 2003-09-22 08:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,9 +102,6 @@
 #endif
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _FSETOBJSH_HXX //autogen
-#include <sfx2/fsetobsh.hxx>
 #endif
 #ifndef _SFX_FCONTNR_HXX //autogen
 #include <sfx2/fcontnr.hxx>
