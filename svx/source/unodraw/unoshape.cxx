@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:45:46 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1975,8 +1975,19 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
             {
                 awt::Size aTmp( aVisArea.X + aVisArea.Width, aVisArea.Y + aVisArea.Height );
                 uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObj)->GetObjRef();
-                if( xObj.is() && svt::EmbeddedObjectRef::TryRunningState( xObj ) )
-                    xObj->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, aTmp );
+                if( xObj.is() )
+                {
+                    svt::EmbeddedObjectRef::TryRunningState( xObj );
+                    try
+                    {
+                        xObj->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, aTmp );
+                    }
+                    catch( uno::Exception& )
+                    {
+                        OSL_ENSURE( sal_False, "Couldn't set the visual area for the object!\n" );
+                    }
+                }
+
                 return;
             }
             break;
@@ -2326,10 +2337,19 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                 if( pObj->ISA(SdrOle2Obj))
                 {
                     uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef() );
-                    if ( xObj.is() && svt::EmbeddedObjectRef::TryRunningState( xObj ) )
+                    if ( xObj.is() )
                     {
-                        awt::Size aTmp = xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
-                        aVisArea = awt::Rectangle( 0, 0, aTmp.Width, aTmp.Height );
+                        svt::EmbeddedObjectRef::TryRunningState( xObj );
+
+                        try
+                        {
+                            awt::Size aTmp = xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
+                            aVisArea = awt::Rectangle( 0, 0, aTmp.Width, aTmp.Height );
+                        }
+                        catch ( uno::Exception& )
+                        {
+                            OSL_ENSURE( sal_False, "Couldn't get the visual area of the object!\n" );
+                        }
                     }
                 }
 
