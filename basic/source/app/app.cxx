@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: gh $ $Date: 2002-10-17 10:30:01 $
+ *  last change: $Author: jbu $ $Date: 2002-10-18 09:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,12 @@
  *
  ************************************************************************/
 
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -117,8 +123,11 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HDL_
-#include <com/sun/star/beans/PropertyValue.hdl>
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/beans/XComponent.hpp>
 #endif
 #include <cppuhelper/servicefactory.hxx>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
@@ -257,110 +266,85 @@ BOOL IsTTSignatureForUnicodeTextfile( String aLine )
 
 BasicApp aBasicApp;                     // Applikations-Instanz
 
-#ifndef SAL_MODULENAME      // should be defined from src612 on
-#define SAL_MODULENAME( hh ) hh
+static const char * const components[] =
+{
+    SAL_MODULENAME( "ucb1" )    // KSO, ABI
+    , SAL_MODULENAME( "ucpfile1" )
+    , SAL_MODULENAME( "fileacc" )
+    , SAL_MODULENAME( "mcnttype" )
+    , SVLIBRARY( "i18n" )
+    , SAL_MODULENAME( "tinstrm" )
+#ifdef SAL_UNX
+    , SVLIBRARY( "dtransX11" )        // OBR
 #endif
+#ifdef SAL_W32
+    , SAL_MODULENAME( "sysdtrans" )
+    , SAL_MODULENAME( "ftransl" )
+    , SAL_MODULENAME( "dnd" )
+#endif
+    , 0
+};
 
-#ifdef _USE_UNO
 Reference< XContentProviderManager > InitializeUCB( void )
 {
-    Reference< XContentProviderManager > xUcb;
-#ifdef DEBUG
-    ::rtl::OUString test(getPathToSystemRegistry());
-#endif
-
-#ifdef DEBUG
-    ::rtl::OUString aTemp ( getPathToSystemRegistry() );
-#endif
-    //////////////////////////////////////////////////////////////////////
-    // Bootstrap readonly service factory
-    Reference< XMultiServiceFactory > xSMgr( createRegistryServiceFactory( getPathToSystemRegistry(), sal_True ) );
-
-    //////////////////////////////////////////////////////////////////////
-    // Register libraries, check first if already registered
-    if( !xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ).is() )
+    OUString path;
+    if( osl_Process_E_None != osl_getExecutableFile( (rtl_uString**)&path ) )
     {
-        //////////////////////////////////////////////////////////////////////
-        // Bootstrap writable service factory
-        xSMgr.clear();
-        xSMgr = createRegistryServiceFactory( getPathToSystemRegistry() );
-
-        Reference< XImplementationRegistration >
-            xIR( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ) ), UNO_QUERY );
-
-        // Ask Stephan Bergmann or Kai Sommerfeld
-        // Andreas Bille
-        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                        OUString::createFromAscii(SAL_MODULENAME( "ucb1" )),
-                                        Reference< XSimpleRegistry >() );
-        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                        OUString::createFromAscii(SAL_MODULENAME( "ucpfile1" )),
-                                        Reference< XSimpleRegistry >() );
-        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                        OUString::createFromAscii(SAL_MODULENAME( "fileacc" )),
-                                        Reference< XSimpleRegistry >() );
-        //Clipboard   Ask Oliver Braun
-        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                        OUString::createFromAscii(SAL_MODULENAME( "mcnttype" )),
-                                        Reference< XSimpleRegistry >() );
-
-#ifdef UNX
-        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                        OUString::createFromAscii(SVLIBRARY( "dtransX11" )),
-                                        Reference< XSimpleRegistry >() );
-#endif
-#ifdef WNT
-        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                        OUString::createFromAscii(SAL_MODULENAME( "sysdtrans" )),
-                                        Reference< XSimpleRegistry >() );
-        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                        OUString::createFromAscii(SAL_MODULENAME( "ftransl" )),
-                                        Reference< XSimpleRegistry >() );
-        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                        OUString::createFromAscii(SAL_MODULENAME( "dnd" )),
-                                        Reference< XSimpleRegistry >() );
-#endif
-
-
-/*      // Packages
-        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                        OUString::createFromAscii(SAL_MODULENAME( "ucppkg1" )),
-                                        Reference< XSimpleRegistry >() );
-        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                        OUString::createFromAscii(SAL_MODULENAME( "package2" )),
-                                        Reference< XSimpleRegistry >() );
-        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                        OUString::createFromAscii(SAL_MODULENAME( "rdbtdp" )),
-                                        Reference< XSimpleRegistry >() );
-        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                        OUString::createFromAscii(SAL_MODULENAME( "cfgmgr2" )),
-                                        Reference< XSimpleRegistry >() );
-        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                        OUString::createFromAscii(SAL_MODULENAME( "tcv" )),
-                                        Reference< XSimpleRegistry >() );
-        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                        OUString::createFromAscii(SAL_MODULENAME( "sax" )),
-                                        Reference< XSimpleRegistry >() );
-*/
-
-        // i18n
-//      xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-//                                      OUString::createFromAscii(SVLIBRARY( "int" )),
-//                                      Reference< XSimpleRegistry >() );
-        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                        OUString::createFromAscii(SVLIBRARY( "i18n" )),
-                                        Reference< XSimpleRegistry >() );
-
-        // Reading of files in specific encodings like UTF-8 using
-        // createUnoService( "com.sun.star.io.TextInputStream" ) and such
-        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                        OUString::createFromAscii(SAL_MODULENAME( "tinstrm" )),
-                                        Reference< XSimpleRegistry >() );
-
-        //////////////////////////////////////////////////////////////////////
-        // Bootstrap readonly service factory again
-        xSMgr = createRegistryServiceFactory( getPathToSystemRegistry(), sal_True );
+        InfoBox( NULL, String::CreateFromAscii( "Couldn't retrieve directory of executable" ) ).Execute();
+        exit( 1 );
     }
+    OSL_ASSERT( path.lastIndexOf( '/' ) >= 0 );
+
+
+    ::rtl::OUStringBuffer bufServices( path.copy( 0, path.lastIndexOf( '/' )+1 ) );
+    bufServices.appendAscii("services.rdb");
+    OUString services = bufServices.makeStringAndClear();
+
+    ::rtl::OUStringBuffer bufTypes( path.copy( 0, path.lastIndexOf( '/' )+1 ) );
+    bufTypes.appendAscii("types.rdb");
+    OUString types = bufTypes.makeStringAndClear();
+
+
+    Reference< XMultiServiceFactory > xSMgr;
+    try
+    {
+        xSMgr = createRegistryServiceFactory( types, services, sal_True );
+    }
+    catch( com::sun::star::uno::Exception & e )
+    {
+        try
+        {
+            {
+                Reference< XMultiServiceFactory > interimSmgr =
+                    createRegistryServiceFactory( services, types, sal_False );
+                Reference< XImplementationRegistration > xIR(
+                    interimSmgr->createInstance(
+                        OUString::createFromAscii(
+                            "com.sun.star.registry.ImplementationRegistration" ) ), UNO_QUERY );
+
+                OUString loader( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.SharedLibrary" ));
+                for( sal_Int32 i = 0; components[i] ; i ++ )
+                {
+                    xIR->registerImplementation(
+                        loader, OUString::createFromAscii(components[i]),Reference< XSimpleRegistry >());
+                }
+                Reference< XComponent > xComp( interimSmgr, UNO_QUERY );
+                if( xComp.is() )
+                    xComp->dispose();
+            }
+
+            // now try it again readonly
+            xSMgr = createRegistryServiceFactory( types, services, sal_True );
+        }
+        catch( com::sun::star::uno::Exception & exc )
+        {
+            fprintf( stderr, "Couldn't bootstrap uno servicemanager for reason : %s\n" ,
+                     OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            InfoBox( NULL, String( exc.Message ) ).Execute();
+            throw ;
+        }
+    }
+
 
     //////////////////////////////////////////////////////////////////////
     // set global factory
@@ -382,7 +366,8 @@ Reference< XContentProviderManager > InitializeUCB( void )
     aArgs[1] = makeAny ( xConfProvider );*/
     Sequence< Any > aArgs;
     ucb::ContentBroker::initialize( xSMgr, aArgs );
-    xUcb = ucb::ContentBroker::get()->getContentProviderManagerInterface();
+    Reference< XContentProviderManager > xUcb =
+        ucb::ContentBroker::get()->getContentProviderManagerInterface();
 
     Reference< XContentProvider > xFileProvider
         ( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.ucb.FileContentProvider" ) ), UNO_QUERY );
@@ -401,7 +386,6 @@ Reference< XContentProviderManager > InitializeUCB( void )
 
     return xUcb;
 }
-#endif
 
 void BasicApp::Main( )
 {
