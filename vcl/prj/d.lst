@@ -162,6 +162,7 @@ hedabu: ..\inc\tab.hxx %_DEST%\inc%_EXT%\vcl\tab.hxx
 hedabu: ..\inc\tabctrl.hxx %_DEST%\inc%_EXT%\vcl\tabctrl.hxx
 hedabu: ..\inc\tabdlg.hxx %_DEST%\inc%_EXT%\vcl\tabdlg.hxx
 hedabu: ..\inc\tabpage.hxx %_DEST%\inc%_EXT%\vcl\tabpage.hxx
+hedabu: ..\inc\taskpanelist.hxx %_DEST%\inc%_EXT%\vcl\taskpanelist.hxx
 hedabu: ..\inc\timer.hxx %_DEST%\inc%_EXT%\vcl\timer.hxx
 hedabu: ..\inc\toolbox.hxx %_DEST%\inc%_EXT%\vcl\toolbox.hxx
 hedabu: ..\inc\uniqid.hxx %_DEST%\inc%_EXT%\vcl\uniqid.hxx
