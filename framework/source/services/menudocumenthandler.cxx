@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudocumenthandler.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-02 05:39:32 $
+ *  last change: $Author: cd $ $Date: 2001-05-03 08:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,8 @@ const ::rtl::OUString aSpecialWindowMenu( RTL_CONSTASCII_USTRINGPARAM( "window" 
 const USHORT START_ITEMID_PICKLIST      = 4500;
 const USHORT START_ITEMID_WINDOWLIST    = 4600;
 const USHORT END_ITEMID_WINDOWLIST      = 4699;
+
+const ULONG  MENU_SAVE_LABEL            = 0x00000001;
 
 namespace framework
 {
@@ -308,11 +310,11 @@ throw( SAXException, RuntimeException )
             if ( aLabel.getLength() > 0 )
             {
                 m_pMenuBar->SetItemText( nItemId, aLabel );
-//              m_pMenuBar->SetUserValue( 1 );
+                m_pMenuBar->SetUserValue( nItemId, MENU_SAVE_LABEL );
             }
             else
             {
-//              m_pMenuBar->SetUserValue( 0 );
+                m_pMenuBar->SetUserValue( nItemId, 0 );
             }
         }
         else
@@ -520,12 +522,12 @@ throw( SAXException, RuntimeException )
             if ( aLabel.getLength() > 0 )
             {
                 m_pMenu->SetItemText( nItemId, aLabel );
-//              m_pMenu->SetUserValue( 1 );
+                m_pMenu->SetUserValue( nItemId, MENU_SAVE_LABEL );
             }
             else
             {
-//              m_pMenu->SetUserValue( 0 );
-            }
+                m_pMenu->SetUserValue( nItemId, 0 );
+             }
         }
         else
         {
@@ -567,11 +569,11 @@ throw( SAXException, RuntimeException )
             if ( aLabel.getLength() > 0 )
             {
                 m_pMenu->SetItemText( nItemId, aLabel );
-//              m_pMenu->SetUserValue( 1 );
+                m_pMenu->SetUserValue( nItemId, MENU_SAVE_LABEL );
             }
             else
             {
-//              m_pMenu->SetUserValue( 0 );
+                m_pMenu->SetUserValue( nItemId, 0 );
             }
         }
 
@@ -714,9 +716,10 @@ throw ( SAXException, RuntimeException )
                                          m_aAttributeType,
                                          pMenu->GetItemCommand( nItemId ) );
 
-                pListMenu->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_LABEL )),
-                                         m_aAttributeType,
-                                         pMenu->GetItemText( nItemId ) );
+                if ( pMenu->GetUserValue( nItemId ) & MENU_SAVE_LABEL )
+                    pListMenu->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_LABEL )),
+                                             m_aAttributeType,
+                                             pMenu->GetItemText( nItemId ) );
 
                 m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_MENU )), xListMenu );
                 m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
@@ -764,9 +767,10 @@ void OWriteMenuDocumentHandler::WriteMenuItem( Menu* pMenu, USHORT nItemId )
                              OUString::valueOf( sal_Int64( nHelpId )) );
     }
 
-    pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_LABEL )),
-                         m_aAttributeType,
-                         pMenu->GetItemText( nItemId ));
+    if ( pMenu->GetUserValue( nItemId ) & MENU_SAVE_LABEL )
+         pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_LABEL )),
+                             m_aAttributeType,
+                             pMenu->GetItemText( nItemId ));
 
     m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_MENUITEM )), xList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
@@ -782,48 +786,3 @@ void OWriteMenuDocumentHandler::WriteMenuSeparator()
 }
 
 } // namespace framework
-
-
-// --------------------------------- Write XML ---------------------------------
-/*
-Reference<XOutputStream> xOutputStream = new configmgr::OSLOutputStreamWrapper(aWriteFile);
-
-Reference< sax::XDocumentHandler > xWriter;
-xWriter = Reference< sax::XDocumentHandler > (_rxServiceProvider->createInstance(
-    ::rtl::OUString::createFromAscii("com.sun.star.xml.sax.Writer")), UNO_QUERY);
-
-Reference< XActiveDataSource> xDataSource( xWriter , UNO_QUERY );
-xDataSource->setOutputStream(xOutputStream);
-
-
-// write xml
-xWriter->startDocument();
-
-AttributeListImpl *pList = new AttributeListImpl;
-Reference< XAttributeList > rList( (XAttributeList *) pList , UNO_QUERY );
-
-pList->addAttribute( "id",
-                     ASCII("CDATA"),
-                     "sample-menubar"); // write value to stream
-
-xWriter->startElement("menubar", pList);
-xWriter->endElement("menubar");
-
-// Result: <menubar id="sample-menubar"/>
-
-xWriter->startElement("menubar", pList);
-xWriter->characters("blah");
-xWriter->endElement("menubar");
-
-// Result: <menubar id="sample-menubar">blah</menubar>
-
-xWriter->startElement("menubar", pList);
-xWriter->characters("blah");
-xWriter->ignorableWhitespace(OUString());
-xWriter->endElement("menubar");
-
-// Result: <menubar id="sample-menubar">blah
-//         </menubar>
-
-xWriter->endDocument();
-*/
