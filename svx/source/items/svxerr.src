@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-31 21:37:13 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 22:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ Resource RID_SVXERRCTX
         Text[ turkish ] = "Artalan özniteliklerinin tanýmlanmasý sýrasýnda $(ERR) .";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ERR) al definir un atributo de fondo.";
-        Text[ finnish ] = "$(ERR) m??ritett?ess? taustam??ritett?.";
+        Text[ finnish ] = "$(ERR) määritettäessä taustamääritettä.";
     };
     String ERRCTX_SVX_IMPORT_GRAPHIC&ERRCODE_RES_MASK
     {
@@ -275,7 +275,7 @@ Resource RID_SVXERRCODE
         Text[ turkish ] = "Ayarlanan dile iliþkin eþanlamlýlar mevcut deðil.\nLütfen kurulumu kontrol edin ve gerekirse istenilen dili kurun.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No hay ningún diccionario de sinónimos disponible para el idioma seleccionado.\nExamine por favor su instalación e instale en caso dado el idioma deseado.";
-        Text[ finnish ] = "Nykyiselle kielelle ei ole k?ytett?viss? oikeinkirjoituksen tarkistusohjelmaa.\nTarkista asennetut osat ja asenna haluttu kieli";
+        Text[ finnish ] = "Nykyiselle kielelle ei ole käytettävissä oikeinkirjoituksen tarkistusohjelmaa.\nTarkista asennetut osat ja asenna haluttu kieli";
     };
     String ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS&ERRCODE_RES_MASK
     {
@@ -288,7 +288,7 @@ Resource RID_SVXERRCODE
         TEXT[ dutch ] = "$(ARG1) wordt niet ondersteund door de controle, resp. is momenteel niet geactiveerd. \nControleer uw installatie en installeer eventueel de gewenste taalmodule\nresp. activeer de betreffende taalmodule onder 'Extra - Opties - Taalinstellingen - Linguïstiek' ";
         TEXT[ french ] = "$(ARG1) n'est pas supporté par la vérification ou n'est actuellement pas actif.\nVérifiez l'installation et installez le cas échéant le module de langue requis, ou activez-le sous 'Outils - Options - Paramètres linguistiques - Linguistique'.";
         TEXT[ spanish ] = "$(ARG1) no está disponible para la revisión ortográfica o esta no lo apoya.\n Examine su instalación e instale en caso dado el idioma deseado\no active el módulo correspondiente en 'Herramientas - Opciones - Configuración de idiomas - Lingüística'.";
-        TEXT[ finnish ] = "$(ARG1) ei ole k?ytett?viss? oikeinkirjoituksen tarkistusta varten.\nTarkista asennetut osat ja asenna haluttu kieli.\n";
+        TEXT[ finnish ] = "$(ARG1) ei ole käytettävissä oikeinkirjoituksen tarkistusta varten.\nTarkista asennetut osat ja asenna haluttu kieli.\n";
         TEXT[ italian ] = "$(ARG1) non è supportato per il controllo oppure non è attivato al momento.\nControllate l'installazione ed installate, se necessario, la lingua desiderata\noppure impostate il modulo linquistico corrispondente in 'Strumenti - Opzioni - Impostazioni lingua - Linguistica'.";
         TEXT[ danish ] = "$(ARG1) står ikke til rådighed for kontrollen.\nKontroller venligst din installation og installer i givet fald det ønskede sprog.";
         TEXT[ swedish ] = "$(ARG1) stöds inte av kontrollen resp., är inte aktiverat för närvarande.\nKontrollera installationen och installera eventuellt den nödvändiga språkmodulen\nresp. aktivera motsvarande språkmodul under \"Verktyg - Alternativ - Språkinställningar - Lingvistik\".";
@@ -330,7 +330,7 @@ Resource RID_SVXERRCODE
         Text[ turkish ] = "Yazým denetimi iþlevi kullanýlamýyor.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "La revisión ortográfica no está disponible.";
-        Text[ finnish ] = "Oikeinkirjoituksen tarkistus ei ole k?ytett?viss?.";
+        Text[ finnish ] = "Oikeinkirjoituksen tarkistus ei ole käytettävissä.";
     };
     String ERRCODE_SVX_LINGU_HYPHENNOTEXISTS&ERRCODE_RES_MASK
     {
@@ -360,7 +360,7 @@ Resource RID_SVXERRCODE
         Text[ turkish ] = "Heceleme yardýmý mevcut deðil.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "La ayuda para la separación silábica no está disponible.";
-        Text[ finnish ] = "Tavutusta ei ole k?ytett?viss?.";
+        Text[ finnish ] = "Tavutusta ei ole käytettävissä.";
     };
     String ERRCODE_SVX_LINGU_DICT_NOTREADABLE&ERRCODE_RES_MASK
     {
@@ -448,7 +448,7 @@ Resource RID_SVXERRCODE
         Text[ turkish ] = "Grafik $(ARG1) bulunamadý.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudo encontrar la imagen $(ARG1).";
-        Text[ finnish ] = "Kuvaa $(ARG1) ei l?tynyt.";
+        Text[ finnish ] = "Kuvaa $(ARG1) ei löytynyt.";
     };
     String ERRCODE_SVX_GRAPHIC_WRONG_FILEFORMAT&ERRCODE_RES_MASK
     {
@@ -473,7 +473,7 @@ Resource RID_SVXERRCODE
         TEXT[ arabic ] = "ÊÚÐÑ ÊÍãíá ÅÍÏì ÇáÕæÑ ÇáÛíÑ ãÑÊÈØÉ";
         TEXT[ turkish ] = "Baðlantý oluþturulmamýþ bir grafik yüklenemedi";
         TEXT[ catalan ] = "No se pudo cargar una imagen no vinculada";
-        TEXT[ finnish ] = "Linkitt?m?t?t? grafiikkaa ei voitu ladata";
+        TEXT[ finnish ] = "Linkittämätöntä grafiikkaa ei voitu ladata";
     };
     String ERRCODE_SVX_LINGU_NOLANGUAGE&ERRCODE_RES_MASK
     {
@@ -498,7 +498,7 @@ Resource RID_SVXERRCODE
         TEXT[ arabic ] = "áÇ ÊæÌÏ áÛÉ Úáì ÇáßÇÆä ÇáãõÍÏÏ.";
         TEXT[ turkish ] = "Seçilen sözcük için dil belirlenmedi.";
         TEXT[ catalan ] = "No hay idioma determinado para la entrada seleccionada";
-        TEXT[ finnish ] = "Valitulle termille ei ole m??ritetty kielt?.";
+        TEXT[ finnish ] = "Valitulle termille ei ole määritetty kieltä.";
     };
     String (ERRCODE_SVX_FORMS_NOIOSERVICES | ERRCODE_CLASS_READ) & ERRCODE_RES_MASK
     {
@@ -524,7 +524,7 @@ Resource RID_SVXERRCODE
         Text[ arabic ] = "áã íÊã ÊÍãíá ØÈÞÉ ÇáÇÓÊãÇÑÉ¡ ÅÐ ÊÚÐÑ ÅäÔÇÁ ÎÏãÇÊ IO ÇááÇÒãÉ (stardiv.uno.io.*)";
         Text[ turkish ] = "Gerekli IO hizmetleri (stardiv.uno.io.*) baþlatýlamadýðý için, form düzeyi yüklenemedi.";
         Text[ catalan ] = "No se cargó la capa de formulario porque no se pudieron instanciar servicios IO necesarios (stardiv.uno.io.*)";
-        Text[ finnish ] = "Lomakekerrosta ei ladattu, koska vaadittujen IO-palveluiden (stardiv.uno.io.*) k?ytt?ei onnistunut";
+        Text[ finnish ] = "Lomakekerrosta ei ladattu, koska vaadittujen IO-palveluiden (stardiv.uno.io.*) käyttö ei onnistunut";
     };
     String (ERRCODE_SVX_FORMS_NOIOSERVICES | ERRCODE_CLASS_WRITE) & ERRCODE_RES_MASK
     {
@@ -549,7 +549,7 @@ Resource RID_SVXERRCODE
         Text[ arabic ] = "áã íÊã ßÊÇÈÉ ØÈÞÉ ÇáÇÓÊãÇÑÉ¡ ÅÐ ÊÚÐÑ ÅäÔÇÁ ÎÏãÇÊ IO ÇááÇÒãÉ (stardiv.uno.io.*)";
         Text[ turkish ] = "Gerekli IO hizmetleri (stardiv.uno.io.*) baþlatýlamadýðý için, form düzeyi yazýlamadý.";
         Text[ catalan ] = "No se pudo escribir la capa de formulario porque no se pudieron instanciar servicios IO necesarios (stardiv.uno.io.*)";
-        Text[ finnish ] = "Lomakekerrosta ei kirjoitettu, koska vaadittujen IO-palveluiden (stardiv.uno.io.*) k?ytt?ei onnistunut";
+        Text[ finnish ] = "Lomakekerrosta ei kirjoitettu, koska vaadittujen IO-palveluiden (stardiv.uno.io.*) käyttö ei onnistunut";
     };
     String (ERRCODE_SVX_FORMS_READWRITEFAILED | ERRCODE_CLASS_READ) & ERRCODE_RES_MASK
     {
@@ -682,6 +682,7 @@ Resource RID_SVXERRCODE
     };
 };
  // ********************************************************************** EOF
+
 
 
 
