@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontworkbar.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-24 17:34:45 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,10 +368,10 @@ static void impl_execute( SdrView* pSdrView, SfxRequest& rReq, SdrCustomShapeGeo
 
 void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem, const rtl::OUString rCustomShape )
 {
-    const rtl::OUString sPredefinedType( RTL_CONSTASCII_USTRINGPARAM ( "PredefinedType" ) );
+    const rtl::OUString sType( RTL_CONSTASCII_USTRINGPARAM ( "Type" ) );
 
     com::sun::star::beans::PropertyValue aPropVal;
-    aPropVal.Name = sPredefinedType;
+    aPropVal.Name = sType;
     aPropVal.Value <<= rCustomShape;
     rGeometryItem.SetPropertyValue( aPropVal );
 
@@ -411,10 +411,10 @@ void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem, const
                         {
                             PropertyValue aPropVal;
                             SdrCustomShapeGeometryItem& rSourceGeometry = (SdrCustomShapeGeometryItem&)pSourceObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-                            com::sun::star::uno::Any* pAny = rSourceGeometry.GetPropertyValueByName( sPredefinedType );
+                            com::sun::star::uno::Any* pAny = rSourceGeometry.GetPropertyValueByName( sType );
                             if ( pAny )
                             {
-                                aPropVal.Name = sPredefinedType;
+                                aPropVal.Name = sType;
                                 aPropVal.Value = *pAny;
                                 rGeometryItem.SetPropertyValue( aPropVal );
                             }
