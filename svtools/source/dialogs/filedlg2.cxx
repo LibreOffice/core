@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 15:49:37 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,6 @@
 #ifndef _COM_SUN_STAR_I18N_XCOLLATOR_HPP_
 #include <com/sun/star/i18n/XCollator.hpp>
 #endif
-
-#include <vcl/rcid.h>
 
 #include <stdctrl.hxx>
 
@@ -1054,7 +1052,7 @@ void ImpFileDialog::UpdateEntries( const BOOL bWithDirs )
     }
 
     // for the combined box insert a '..'
-    // (this happens only if WB_SVLOOK is not set)
+    // (this happens only if WB_3DLOOK is not set)
 
     if( pDirList == pFileList && nDirCount != 1 )
         pFileList->InsertEntry( UniString( SvtResId( STR_FILEDLG_GOUP ) ) );
