@@ -2,9 +2,9 @@
  *
  *  $RCSfile: threadpool.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-10 11:59:37 $
+ *  last change: $Author: jbu $ $Date: 2001-05-28 15:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,6 @@ namespace cppu_threadpool
         }
 
         // let the thread wait 2 seconds
-        osl_resetCondition( waitingThread.condition );
         TimeValue time = { 2 , 0 };
         osl_waitCondition( waitingThread.condition , &time );
 
