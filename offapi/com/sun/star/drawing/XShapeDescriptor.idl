@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XShapeDescriptor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:34 $
+ *  last change: $Author: mi $ $Date: 2003-01-16 08:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,13 +75,13 @@
 /** offers some settings which are allowed even for objects which are not yet inserted into a draw page.
 
     @deprecated
+        replaced by <type scope="com::sun::star::lang">XServiceName</type>
  */
 interface XShapeDescriptor: com::sun::star::uno::XInterface
 {
     /**
         @returns
-            the service name of a string. Will be replaced
-            by <type>com::sun::star::lang::ServiceName</type>
+            the programmatic name of the shape type.
     */
     string getShapeType();
 
