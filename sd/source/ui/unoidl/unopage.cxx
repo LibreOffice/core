@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-22 13:51:52 $
+ *  last change: $Author: cl $ $Date: 2001-07-10 07:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -802,7 +802,7 @@ uno::Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape( SdrObject *p
         switch( nInventor )
         {
         case OBJ_TITLETEXT:
-            pShape = new SvxShape( pObj );
+            pShape = new SvxShapeText( pObj );
             if( GetPage()->GetPageKind() == PK_NOTES && GetPage()->IsMasterPage() )
             {
                 // fake a empty PageShape if its a title shape on the master page
@@ -815,7 +815,7 @@ uno::Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape( SdrObject *p
             eKind = PRESOBJ_NONE;
             break;
         case OBJ_OUTLINETEXT:
-            pShape = new SvxShape( pObj );
+            pShape = new SvxShapeText( pObj );
             pShape->SetShapeType(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.OutlinerShape")));
             eKind = PRESOBJ_NONE;
             break;
