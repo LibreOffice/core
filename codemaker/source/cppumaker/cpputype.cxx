@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 13:30:03 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:28:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,6 +417,8 @@ sal_Bool CppuType::dumpFile(CppuOptions* pOptions,
     }
 
     OString sFileName = createFileNameFromType(sOutPath, sName, sExtension);
+    if (sFileName.getLength() == 0)
+        return sal_False;
 
     sal_Bool bFileExists = fileExists( sFileName );
     sal_Bool bFileCheck = sal_False;
@@ -4360,62 +4362,31 @@ sal_Bool SingletonType::dumpHxxFile(
 //*************************************************************************
 // produceType
 //*************************************************************************
-sal_Bool produceType(const OString& typeName,
-                     TypeManager const & typeMgr,
-                     codemaker::GeneratedTypeSet & generated,
-                     CppuOptions* pOptions)
+bool produceType(const OString& typeName,
+                 TypeManager const & typeMgr,
+                 codemaker::GeneratedTypeSet & generated,
+                 CppuOptions* pOptions)
     throw( CannotDumpException )
 {
-    if (TypeManager::isBaseType(typeName) || generated.contains(typeName))
-        return sal_True;
+    if (typeName.equals("/") || typeName.equals(typeMgr.getBase()) ||
+        TypeManager::isBaseType(typeName) || generated.contains(typeName))
+    {
+        return true;
+    }
 
     sal_Bool bIsExtraType = sal_False;
     typereg::Reader reader(typeMgr.getTypeReader(typeName, &bIsExtraType));
-    if (bIsExtraType)
-    {
+    if (bIsExtraType) {
         generated.add(typeName);
-        return sal_True;
+        return true;
     }
 
-    if (!reader.isValid())
-    {
-        if (typeName.equals("/"))
-            return sal_True;
-        else
-            return sal_False;
+    if (!reader.isValid()) {
+        return false;
     }
 
-/*  RegistryKey     typeKey = typeMgr.getTypeKey(typeName);
-
-    if (!typeKey.isValid())
-        return sal_False;
-
-    RegValueType    valueType;
-    sal_uInt32      valueSize;
-
-    if (typeKey.getValueInfo(OUString(), &valueType, &valueSize))
-    {
-        if (typeName.equals("/"))
-            return sal_True;
-        else
-            return sal_False;
-    }
-    sal_uInt8* pBuffer = (sal_uInt8*)rtl_allocateMemory(valueSize);
-
-    if (typeKey.getValue(OUString(), pBuffer))
-    {
-        rtl_freeMemory(pBuffer);
-        return sal_False;
-    }
-
-    RegistryTypeReaderLoader & rReaderLoader = getRegistryTypeReaderLoader();
-
-    TypeReader reader(rReaderLoader, pBuffer, valueSize, sal_True);
-
-    rtl_freeMemory(pBuffer);
-*/
     RTTypeClass typeClass = reader.getTypeClass();
-    sal_Bool    ret = sal_False;
+    bool ret = false;
     switch (typeClass)
     {
         case RT_TYPE_INTERFACE:
@@ -4436,7 +4407,7 @@ sal_Bool produceType(const OString& typeName,
                 } else
                 {
                     generated.add(typeName);
-                    ret = sal_True;
+                    ret = true;
                 }
             }
             break;
@@ -4482,7 +4453,7 @@ sal_Bool produceType(const OString& typeName,
                 } else
                 {
                     generated.add(typeName);
-                    ret = sal_True;
+                    ret = true;
                 }
             }
             break;
@@ -4515,7 +4486,139 @@ sal_Bool produceType(const OString& typeName,
             }
             break;
         case RT_TYPE_OBJECT:
-            ret = sal_True;
+            ret = true;
+            break;
+    }
+
+    return ret;
+}
+
+bool produceType(RegistryKey& rTypeKey, bool bIsExtraType,
+                     TypeManager const & typeMgr,
+                     codemaker::GeneratedTypeSet & generated,
+                     CppuOptions* pOptions)
+    throw( CannotDumpException )
+{
+    OString typeName = typeMgr.getTypeName(rTypeKey);
+
+    if (typeName.equals("/") ||typeName.equals(typeMgr.getBase()) ||
+        TypeManager::isBaseType(typeName) || generated.contains(typeName))
+    {
+        return true;
+    }
+
+    if (bIsExtraType) {
+        generated.add(typeName);
+        return true;
+    }
+
+    typereg::Reader reader(typeMgr.getTypeReader(rTypeKey));
+    if (!reader.isValid()) {
+        return false;
+    }
+
+    RTTypeClass typeClass = reader.getTypeClass();
+    bool ret = false;
+    switch (typeClass)
+    {
+        case RT_TYPE_INTERFACE:
+            {
+                InterfaceType iType(reader, typeName, typeMgr);
+                ret = iType.dump(pOptions);
+                if (ret) generated.add(typeName);
+                iType.dumpDependedTypes(generated, pOptions);
+            }
+            break;
+        case RT_TYPE_MODULE:
+            {
+                ModuleType mType(reader, typeName, typeMgr);
+                if (mType.hasConstants())
+                {
+                    ret = mType.dump(pOptions);
+                    if (ret) generated.add(typeName);
+                } else
+                {
+                    generated.add(typeName);
+                    ret = true;
+                }
+            }
+            break;
+        case RT_TYPE_STRUCT:
+            {
+                StructureType sType(reader, typeName, typeMgr);
+                ret = sType.dump(pOptions);
+                if (ret) generated.add(typeName);
+                sType.dumpDependedTypes(generated, pOptions);
+            }
+            break;
+        case RT_TYPE_ENUM:
+            {
+                EnumType enType(reader, typeName, typeMgr);
+                ret = enType.dump(pOptions);
+                if (ret) generated.add(typeName);
+                enType.dumpDependedTypes(generated, pOptions);
+            }
+            break;
+        case RT_TYPE_EXCEPTION:
+            {
+                ExceptionType eType(reader, typeName, typeMgr);
+                ret = eType.dump(pOptions);
+                if (ret) generated.add(typeName);
+                eType.dumpDependedTypes(generated, pOptions);
+            }
+            break;
+        case RT_TYPE_TYPEDEF:
+            {
+                TypeDefType tdType(reader, typeName, typeMgr);
+                ret = tdType.dump(pOptions);
+                if (ret) generated.add(typeName);
+                tdType.dumpDependedTypes(generated, pOptions);
+            }
+            break;
+        case RT_TYPE_CONSTANTS:
+            {
+                ConstantsType cType(reader, typeName, typeMgr);
+                if (cType.hasConstants())
+                {
+                    ret = cType.dump(pOptions);
+                    if (ret) generated.add(typeName);
+                } else
+                {
+                    generated.add(typeName);
+                    ret = true;
+                }
+            }
+            break;
+        case RT_TYPE_SERVICE:
+            {
+                ServiceType t(reader, typeName, typeMgr);
+                if (t.isSingleInterfaceBased()) {
+                    ret = t.dump(pOptions);
+                    if (ret) {
+                        generated.add(typeName);
+                        t.dumpDependedTypes(generated, pOptions);
+                    }
+                } else {
+                    ret = true;
+                }
+            }
+            break;
+        case RT_TYPE_SINGLETON:
+            {
+                SingletonType t(reader, typeName, typeMgr);
+                if (t.isInterfaceBased()) {
+                    ret = t.dump(pOptions);
+                    if (ret) {
+                        generated.add(typeName);
+                        t.dumpDependedTypes(generated, pOptions);
+                    }
+                } else {
+                    ret = true;
+                }
+            }
+            break;
+        case RT_TYPE_OBJECT:
+            ret = true;
             break;
     }
 
