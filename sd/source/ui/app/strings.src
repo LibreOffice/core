@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-22 21:13:07 $
+ *  last change: $Author: kz $ $Date: 2002-02-26 14:21:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2566,7 +2566,7 @@ String STR_HANDOUT_MODE
     Text[ chinese_simplified ] = "θ®²δΉ‰θ§†ε›Ύ";
     Text[ russian ] = "Πεζθμ ςεηθρξβ";
     Text[ polish ] = "Tryb prospektu";
-    Text[ japanese ] = "ι…εΈƒθ³‡ζ–™γƒΆγƒΌγƒ‰";
+    Text[ japanese ] = "γƒγƒ³γƒ‰γ‚Άγ‚¦γƒγƒΆγƒΌγƒ‰";
     Text[ greek ] = "Προβολή σημειώματος";
     Text[ korean ] = "μ μΈλ¬Ό λ³΄κΈ°";
     Text[ chinese_traditional ] = "θ¬›ηΎ©ι θ¦½";
@@ -6864,7 +6864,7 @@ String STR_PRINT_HANDOUT
     Text[ chinese_simplified ] = "(θ®²δΉ‰)";
     Text[ russian ] = "(Òεηθρϋ)";
     Text[ polish ] = "(Materia³y)";
-    Text[ japanese ] = "(ι…εΈƒθ³‡ζ–™)";
+    Text[ japanese ] = " (γƒγƒ³γƒ‰γ‚Άγ‚¦γƒ)";
     Text[ greek ] = "(Σημείωμα)";
     Text[ korean ] = "(μ μΈλ¬Ό)";
     Text[ chinese_traditional ] = "(θ¬›ηΎ©)";
@@ -10193,7 +10193,7 @@ String STR_LOAD_PRESENTATION_LAYOUT
     Text[ polish ] = "Za³aduj uk³ad slajdu";
     Text[ japanese ] = "γƒγƒΌγ‚Έγ‚Ήγ‚Ώγ‚¤γƒ«γ®θª­γΏθΎΌγΏ";
     Text[ greek ] = "Φόρτωση προτύπου σελίδας";
-    Text[ korean ] = "νμ΄μ§€ ν…ν”λ¦Ώ λ΅λ“";
+    Text[ korean ] = "νμ΄μ§€ μ¤νƒ€μΌ λ΅λ“";
     Text[ chinese_traditional ] = "θΌ‰ε…¥ι ιΆζ¨£εΌ";
     Text[ arabic ] = "ΚΝγνα ήΗαΘ ΗαΥέΝΙ";
     Text[ turkish ] = "Sayfa biηimini yόkle";
