@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 11:15:51 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -552,9 +551,10 @@ void SwUndoInsert::Repeat( SwUndoIter& rUndoIter )
 
             // temporary storage until object is inserted
             // TODO/MBA: seems that here a physical copy is done - not as in drawing layer! Testing!
+            // TODO/LATER: Copying through the container would copy the replacement image as well
             comphelper::EmbeddedObjectContainer aCnt;
-            ::rtl::OUString aName;
-            if ( aCnt.CopyEmbeddedObject( rSwOLE.GetOleRef(), aName ) )
+            ::rtl::OUString aName = aCnt.CreateUniqueObjectName();
+            if ( aCnt.StoreEmbeddedObject( rSwOLE.GetOleRef(), aName, sal_True ) )
             {
                 com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > aNew = aCnt.GetEmbeddedObject( aName );
                 rDoc.Insert( *rUndoIter.pAktPam, aNew );
