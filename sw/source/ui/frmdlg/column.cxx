@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:33:14 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,11 @@
  *
  ************************************************************************/
 
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
 
-#pragma hdrstop
+#include "column.hxx"
 
 #include "uiparam.hxx"
 #include "hintids.hxx"
@@ -83,6 +86,13 @@
 #ifndef _SVTOOLS_CTLOPTIONS_HXX
 #include <svtools/ctloptions.hxx>
 #endif
+#ifndef _SFXDISPATCH_HXX //autogen
+#include <sfx2/dispatch.hxx>
+#endif
+#ifndef _SV_MSGBOX_HXX //autogen
+#include <vcl/msgbox.hxx>
+#endif
+
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
@@ -99,7 +109,6 @@
 #include "format.hxx"
 #include "frmmgr.hxx"
 #include "frmdlg.hxx"
-#include "column.hxx"
 #include "colmgr.hxx"
 #include "prcntfld.hxx"
 #include "linetype.hxx"
@@ -107,6 +116,7 @@
 #include "frmui.hrc"
 #include "poolfmt.hrc"
 #include "column.hrc"
+
 #ifndef _SECTION_HXX //autogen
 #include <section.hxx>
 #endif
@@ -116,14 +126,12 @@
 #ifndef _PAGEDESC_HXX //autogen
 #include <pagedesc.hxx>
 #endif
-#ifndef _SFXDISPATCH_HXX //autogen
-#include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX //autogen
-#include <vcl/msgbox.hxx>
-#endif
 
 #define FRAME_FORMAT_WIDTH 1000
+
+// sw/inc/fmtclds.hxx
+SV_IMPL_PTRARR( SwColumns, SwColumnPtr )
+
 /*--------------------------------------------------------------------
     Beschreibung:  Statische Daten
  --------------------------------------------------------------------*/
