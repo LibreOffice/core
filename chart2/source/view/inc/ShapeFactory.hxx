@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-12 18:03:09 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 10:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #define _CHART2_VIEW_SHAPEFACTORY_HXX
 
 #include "DatapointGeometry.hxx"
-#include "ShapeAppearance.hxx"
 #include "PropertyMapper.hxx"
+#include "VLineProperties.hxx"
 
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
@@ -88,6 +88,17 @@ namespace chart
 //.............................................................................
 
 class Stripe;
+
+enum SymbolType { SYMBOL_NONE
+                 , SYMBOL_SQUARE
+                 , SYMBOL_DIAMOND
+                 , SYMBOL_ARROW_DOWN
+                 , SYMBOL_ARROW_UP
+                 , SYMBOL_ARROW_RIGHT
+                 , SYMBOL_ARROW_LEFT
+                 , SYMBOL_BOWTIE
+                 , SYMBOL_SANDGLASS
+                  };
 
 class ShapeFactory
 {
@@ -176,12 +187,12 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createLine2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                     , const ::com::sun::star::drawing::PointSequenceSequence& rPoints
-                    , const LineProperties& rLineProperties );
+                    , const VLineProperties& rLineProperties );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createLine3D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                     , const ::com::sun::star::drawing::PolyPolygonShape3D& rPoints
-                    , const LineProperties& rLineProperties );
+                    , const VLineProperties& rLineProperties );
 
     //------------------- create 2D elements:
 
@@ -194,16 +205,6 @@ public:
                      );
 
     //------
-
-     static void setShapeAppearance( const ShapeAppearance& rAppearance
-                    , const ::com::sun::star::uno::Reference<
-                      ::com::sun::star::beans::XPropertySet >& xProp
-                      , sal_Bool bNoLines = true )
-                         throw (::com::sun::star::beans::UnknownPropertyException
-                              , ::com::sun::star::beans::PropertyVetoException
-                              , ::com::sun::star::lang::IllegalArgumentException
-                              , ::com::sun::star::lang::WrappedTargetException
-                              , ::com::sun::star::uno::RuntimeException);
 
      static void setShapeName( const ::com::sun::star::uno::Reference<
                                      ::com::sun::star::drawing::XShape >& xShape
