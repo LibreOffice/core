@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formdlgs.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 13:41:26 $
+ *  last change: $Author: kz $ $Date: 2001-08-30 20:16:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ TabPage RID_SCTAB_FUNCTION
         QuickHelpText[ korean ] = "Ìï®Ïàò„ÄÄÏ†ÅÏö©";
         QuickHelpText[ turkish ] = "Funktion ¸bernehmen";
         QuickHelpText[ catalan ] = "Aplicar funciÛn";
-        QuickHelpText[ finnish ] = "K‰yt‰ funktiota";
+        QuickHelpText[ finnish ] = "K?yt? funktiota!";
     };
     ListBox LB_CATEGORY
     {
@@ -228,19 +228,19 @@ TabPage RID_SCTAB_FUNCTION
         };
         StringList [ finnish ] =
         {
-            < "Viimeksi k‰ytetty" ; Default ; > ;
+            < "Viimeksi k?ytetty" ; Default ; > ;
             < "Kaikki" ; Default ; > ;
             < "Tietokanta" ; Default ; > ;
-            < "P‰iv‰m‰‰r‰&Aika" ; Default ; > ;
+            < "P?iv?m??r?&Aika" ; Default ; > ;
             < "Rahoitus" ; Default ; > ;
             < "Tiedot" ; Default ; > ;
             < "Looginen" ; Default ; > ;
             < "Matemaattinen" ; Default ; > ;
-            < "Matriisitaulukko" ; Default ; > ;
+            < "Matriisi" ; Default ; > ;
             < "Tilastolliset" ; Default ; > ;
             < "Laskentataulukko" ; Default ; > ;
             < "Teksti" ; Default ; > ;
-            < "Lis‰osa" ; Default ; > ;
+            < "Lis?osa" ; Default ; > ;
              //         < "K‰ytt‰j‰n"; Default; >;
         };
         StringList [ danish ] =
@@ -908,7 +908,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ korean ] = "ÌñâÎ†¨";
         Text[ turkish ] = "Matri~s";
         Text[ catalan ] = "Matri~z";
-        Text[ finnish ] = "Matriisitaulukko";
+        Text[ finnish ] = "Matriisi";
     };
     Edit ED_REF
     {
@@ -942,7 +942,7 @@ ModelessDialog RID_SCDLG_FORMULA
         QuickHelpText[ korean ] = "ÌôïÎåÄ";
         QuickHelpText[ turkish ] = "Vergrˆﬂern";
         QuickHelpText[ catalan ] = "Aumentar";
-        QuickHelpText[ finnish ] = "Maximize";
+        QuickHelpText[ finnish ] = "Suurenna!";
     };
      //
     HelpButton BTN_HELP
@@ -969,7 +969,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ italian ] = "<< Indietro" ;
         Text [ portuguese_brazilian ] = "<< ~Para Tr?s" ;
         Text [ portuguese ] = "<<~Anterior" ;
-        Text [ finnish ] = "<< ~Takaisin" ;
+        Text [ finnish ] = "<< Edellinen" ;
         Text [ danish ] = "<< Tilbage" ;
         Text [ french ] = "<< ~PrÈcÈdent" ;
         Text [ swedish ] = "<< ~Tillbaka" ;
@@ -1077,6 +1077,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ catalan ] = "AutoPiloto de funciones  - ";
     };
 };
+
 
 
 
