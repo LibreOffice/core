@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 12:26:40 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 16:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) thr
 
     if(!isPrepared())
         prepareStatement();
-    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+    OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     if(!m_xMetaData.is())
         m_xMetaData = new OResultSetMetaData(m_aStatementHandle);
     return m_xMetaData;
@@ -196,7 +196,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
     if(!isPrepared())
         prepareStatement();
 
-    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+    OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     try
     {
         SQLRETURN nReturn = N3SQLExecute(m_aStatementHandle);
@@ -390,7 +390,7 @@ void SAL_CALL OPreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x 
     if( !parameterIndex || parameterIndex > numParams)
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 
-    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+    OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_Int8* bindBuf = allocBindBuf(parameterIndex, 4);
     PREP_BIND_PARAM(sal_Int8,SQL_TINYINT);
 }
@@ -413,7 +413,7 @@ void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const Date&
 
     sal_Int8* bindBuf = allocBindBuf (parameterIndex, 32);
 
-    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+    OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     DATE_STRUCT x = OTools::DateToOdbcDate(aData);
     PREP_BIND_PARAM(DATE_STRUCT,DataType::DATE);
 }
@@ -436,7 +436,7 @@ void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const Time&
 
     sal_Int8* bindBuf = allocBindBuf (parameterIndex, 32);
 
-    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+    OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     TIME_STRUCT x = OTools::TimeToOdbcTime(aVal);
     PREP_BIND_PARAM(TIME_STRUCT,DataType::TIME);
 }
@@ -458,7 +458,7 @@ void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const 
 
     sal_Int8* bindBuf = allocBindBuf (parameterIndex, 32);
 
-    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+    OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     TIMESTAMP_STRUCT x = OTools::DateTimeToTimestamp(aVal);
     PREP_BIND_PARAM(TIMESTAMP_STRUCT,DataType::TIMESTAMP);
 }
@@ -478,7 +478,7 @@ void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x 
     if( !parameterIndex || parameterIndex > numParams)
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 
-    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+    OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_Int8* bindBuf = allocBindBuf (parameterIndex, 8);
     PREP_BIND_PARAM(double,DataType::DOUBLE);
 }
@@ -499,7 +499,7 @@ void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) 
     if( !parameterIndex || parameterIndex > numParams)
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 
-    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+    OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_Int8* bindBuf = allocBindBuf (parameterIndex, 8);
     PREP_BIND_PARAM(float,DataType::FLOAT);
 }
@@ -519,7 +519,7 @@ void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x 
     if( !parameterIndex || parameterIndex > numParams)
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 
-    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+    OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_Int8* bindBuf = allocBindBuf (parameterIndex, 4);
     PREP_BIND_PARAM(sal_Int32,DataType::INTEGER);
 }
@@ -540,7 +540,7 @@ void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 a
     if( !parameterIndex || parameterIndex > numParams)
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 
-    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+    OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_Int8 *bindBuf = allocBindBuf (parameterIndex, 8);
     float x = (float)aVal;
     PREP_BIND_PARAM(float,DataType::BIGINT);
@@ -765,7 +765,7 @@ void SAL_CALL OPreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 
     if( !parameterIndex || parameterIndex > numParams)
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 
-    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+    OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     sal_Int8* bindBuf = allocBindBuf (parameterIndex, 4);
     PREP_BIND_PARAM(sal_Int16,DataType::SMALLINT);
 }
@@ -819,7 +819,7 @@ void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, Runtim
 {
     if(!isPrepared())
         prepareStatement();
-    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+    OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     N3SQLFreeStmt (m_aStatementHandle, SQL_RESET_PARAMS);
 }
 // -------------------------------------------------------------------------
@@ -852,7 +852,7 @@ Sequence< sal_Int32 > SAL_CALL OPreparedStatement::executeBatch(  ) throw(SQLExc
 
 void OPreparedStatement::initBoundParam () throw(SQLException)
 {
-    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+    OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     // Get the number of parameters
     numParams = 0;
     N3SQLNumParams (m_aStatementHandle,(short*)&numParams);
@@ -1060,7 +1060,7 @@ void OPreparedStatement::putParamData (sal_Int32 index) throw(SQLException)
         }
 
         // Put the data
-        OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+        OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
 
         N3SQLPutData (m_aStatementHandle, buf.getArray(), realLen);
 
@@ -1135,7 +1135,7 @@ void OPreparedStatement::setStream (
         Ctype = SQL_C_BINARY;
 
 
-    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+    OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     N3SQLBindParameter(m_aStatementHandle, ParameterIndex,SQL_PARAM_INPUT,Ctype,
                                 SQLtype, length,0, dataBuf, sizeof(ParameterIndex),(SDWORD*)lenBuf);
 
@@ -1175,7 +1175,7 @@ void OPreparedStatement::setChar(sal_Int32 parameterIndex,
 //      precision = 2000;
 //
     //  bindParameter(m_aStatementHandle,parameterIndex,bindBuf);
-    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+    OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     PREP_BIND_PARAM(char*,SQLtype);
 
 //  // Make a copy of the data
@@ -1258,7 +1258,7 @@ void OPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
 void OPreparedStatement::prepareStatement()
 {
     m_bPrepared = sal_True;
-    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+    OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     ::rtl::OString aSql(::rtl::OUStringToOString(m_sSqlStatement,getOwnConnection()->getTextEncoding()));
     SQLRETURN nReturn = N3SQLPrepare(m_aStatementHandle,(SDB_ODBC_CHAR *) aSql.getStr(),aSql.getLength());
     OTools::ThrowException(nReturn,m_aStatementHandle,SQL_HANDLE_STMT,*this);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-15 08:17:11 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 16:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -778,7 +778,7 @@ void ODatabaseMetaDataResultSet::setFastPropertyValue_NoBroadcast(
             throw Exception();
             break;
         default:
-            OSL_ENSHURE(0,"setFastPropertyValue_NoBroadcast: Illegal handle value!");
+            OSL_ENSURE(0,"setFastPropertyValue_NoBroadcast: Illegal handle value!");
     }
 }
 // -------------------------------------------------------------------------

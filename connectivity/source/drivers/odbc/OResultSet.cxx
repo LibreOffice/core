@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:54:04 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 16:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ void OResultSet::allocBuffer(sal_Bool _bAllocRow)
                 m_aBindVector.push_back(new sal_Int8[xMeta->getPrecision(i)]);
                 break;
             default:
-                OSL_ENSHURE(0,"Unknown type");
+                OSL_ENSURE(0,"Unknown type");
                 m_aBindVector.push_back(NULL);
         }
     }
@@ -279,7 +279,7 @@ void OResultSet::releaseBuffer()
     void** pValue = m_aBindVector.begin() + 1;
     for(sal_Int32 i = 1; i<=nLen; ++i, ++pValue)
     {
-        OSL_ENSHURE(pValue != m_aBindVector.end(),"Iterator is equal end!");
+        OSL_ENSURE(pValue != m_aBindVector.end(),"Iterator is equal end!");
         switch (xMeta->getColumnType(i))
         {
             case DataType::CHAR:
@@ -1268,7 +1268,7 @@ void SAL_CALL OResultSet::updateObject( sal_Int32 columnIndex, const Any& x ) th
 //              break;
 //          case TypeClass_ENUM:
 //          default:
-//              OSL_ENSHURE(0,"UNKOWN TYPE for OResultSet::updateObject");
+//              OSL_ENSURE(0,"UNKOWN TYPE for OResultSet::updateObject");
 //      }
 //      return;
 //      // Parameter konvertieren
@@ -1287,7 +1287,7 @@ void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any&
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
-    OSL_ENSHURE(0,"OResultSet::updateNumericObject: NYI");
+    OSL_ENSURE(0,"OResultSet::updateNumericObject: NYI");
 //  SDBThreadAttach t;
 //  if( t.pEnv )
 //  {

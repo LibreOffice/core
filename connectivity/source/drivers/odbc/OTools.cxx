@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 12:26:40 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 16:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ void OTools::ThrowException(SQLRETURN _rRetCode,SQLHANDLE _pContext,SQLSMALLINT 
         case SQL_ERROR:             break;
 
 
-        case SQL_INVALID_HANDLE:    OSL_ENSHURE(0,"SdbODBC3_SetStatus: SQL_INVALID_HANDLE");
+        case SQL_INVALID_HANDLE:    OSL_ENSURE(0,"SdbODBC3_SetStatus: SQL_INVALID_HANDLE");
                                     throw RuntimeException();
                                     break;
     }
@@ -123,8 +123,8 @@ void OTools::ThrowException(SQLRETURN _rRetCode,SQLHANDLE _pContext,SQLSMALLINT 
                          szSqlState,
                          &pfNativeError,
                          szErrorMessage,sizeof szErrorMessage - 1,&pcbErrorMsg);
-    OSL_ENSHURE(n != SQL_INVALID_HANDLE,"SdbODBC3_SetStatus: SQLError returned SQL_INVALID_HANDLE");
-    OSL_ENSHURE(n == SQL_SUCCESS || n == SQL_SUCCESS_WITH_INFO || n == SQL_NO_DATA_FOUND || n == SQL_ERROR,"SdbODBC3_SetStatus: SQLError failed");
+    OSL_ENSURE(n != SQL_INVALID_HANDLE,"SdbODBC3_SetStatus: SQLError returned SQL_INVALID_HANDLE");
+    OSL_ENSURE(n == SQL_SUCCESS || n == SQL_SUCCESS_WITH_INFO || n == SQL_NO_DATA_FOUND || n == SQL_ERROR,"SdbODBC3_SetStatus: SQLError failed");
 
     // Zum Return Code von SQLError siehe ODBC 2.0 Programmer's Reference Seite 287ff
     throw SQLException( ::rtl::OUString((char *)szErrorMessage,pcbErrorMsg,_nTextEncoding),
