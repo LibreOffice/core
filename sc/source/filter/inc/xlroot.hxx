@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:14 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,8 @@ public:
     SfxPrinter*                 GetPrinter() const;
     /** Returns the number formatter of the Calc document. */
     SvNumberFormatter&          GetFormatter() const;
+    /** Returns the style sheet pool of the Calc document. */
+    ScStyleSheetPool&           GetStyleSheetPool() const;
     /** Returns the defined names container of the Calc document. */
     ScRangeName&                GetNamedRanges() const;
 
