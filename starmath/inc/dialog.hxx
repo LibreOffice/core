@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-23 08:54:36 $
+ *  last change: $Author: tl $ $Date: 2001-09-13 11:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,9 +534,9 @@ class SmSymDefineDialog : public ModalDialog
     BOOL    SelectStyle(const XubString &rStyleName, BOOL bApplyFont);
 
 
-    SmSymSet              *GetSymbolSet(const ComboBox &rComboBox);
+        SmSymSet              *GetSymbolSet(const ComboBox &rComboBox);
     inline const SmSymSet *GetSymbolSet(const ComboBox &rComboBox) const;
-    SmSym                 *GetSymbol(const ComboBox &rComboBox);
+    SmSym             *GetSymbol(const ComboBox &rComboBox);
     inline const SmSym    *GetSymbol(const ComboBox &rComboBox) const;
 
 public:

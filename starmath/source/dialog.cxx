@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-16 09:20:48 $
+ *  last change: $Author: tl $ $Date: 2001-09-13 11:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1689,7 +1689,7 @@ SmSym * SmSymDefineDialog::GetSymbol(const ComboBox &rComboBox)
     DBG_ASSERT(&rComboBox == &aOldSymbols  ||  &rComboBox == &aSymbols,
         "Sm : falsche ComboBox");
 
-    return aSymSetMgrCopy.GetSymbol(rComboBox.GetText());
+    return aSymSetMgrCopy.GetSymbolByName(rComboBox.GetText());
 }
 
 
@@ -1942,7 +1942,7 @@ void SmSymDefineDialog::UpdateButtons()
                     && aCharsetDisplay.GetSelectCharacter() == pOrigSymbol->GetCharacter();
 
         // hinzufügen nur wenn es noch kein Symbol desgleichen Namens gibt
-        bAdd    = aSymSetMgrCopy.GetSymbol(aSymbolName) == NULL;
+        bAdd    = aSymSetMgrCopy.GetSymbolByName(aSymbolName) == NULL;
 
         // löschen nur wenn alle Einstellungen gleich sind
         bDelete = pOrigSymbol != NULL;
@@ -2224,7 +2224,7 @@ BOOL SmSymDefineDialog::SelectSymbol(ComboBox &rComboBox,
         XubString     aOldSymbolSetName;
         if (nPos != COMBOBOX_ENTRY_NOTFOUND)
         {
-            pOldSymbol        = aSymSetMgrCopy.GetSymbol(aNormName);
+            pOldSymbol        = aSymSetMgrCopy.GetSymbolByName(aNormName);
             aOldSymbolSetName = aOldSymbolSets.GetText();
         }
         SetOrigSymbol(pOldSymbol, aOldSymbolSetName);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-28 07:46:06 $
+ *  last change: $Author: tl $ $Date: 2001-09-13 11:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,27 +257,27 @@ public:
     void        ChangeSymbolSet(SmSymSet* pSymbolSet);
     void        DeleteSymbolSet(USHORT SymbolSetNo);
     USHORT      GetSymbolSetPos(const String& rSymbolSetName) const;
-    USHORT      GetSymbolSetCount() const { return pImpl->NoSymbolSets; }
+        USHORT      GetSymbolSetCount() const { return pImpl->NoSymbolSets; }
     SmSymSet   *GetSymbolSet(USHORT SymbolSetNo) const
     {
         return pImpl->SymbolSets.Get(SymbolSetNo);
     }
 
-    SmSym       *   GetSymbol(const String& rSymbolName);
-    const SmSym *   GetSymbol(const String& rSymbolName) const
+    SmSym       *   GetSymbolByName(const String& rSymbolName);
+    const SmSym *   GetSymbolByName(const String& rSymbolName) const
     {
-        return ((SmSymSetManager *) this)->GetSymbol(rSymbolName);
+        return ((SmSymSetManager *) this)->GetSymbolByName(rSymbolName);
     }
 
-    void            AddReplaceSymbol( const SmSym & rSymbol );
-    USHORT          GetSymbolCount() const;
-    const SmSym *   GetSymbol( USHORT nPos ) const;
+        void            AddReplaceSymbol( const SmSym & rSymbol );
+        USHORT          GetSymbolCount() const;
+        const SmSym *   GetSymbolByPos( USHORT nPos ) const;
 
     BOOL        IsModified() const { return pImpl->Modified; }
     void        SetModified(BOOL Modify) { pImpl->Modified = Modify; }
 
-    void        Load();
-    void        Save();
+        void            Load();
+    void            Save();
 };
 
 #endif
