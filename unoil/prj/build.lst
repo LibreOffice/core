@@ -16,6 +16,7 @@ ul	unoil\com\sun\star\sdbc					nmake	-	all	ul_sdbc ul_cssutil ul_task NULL
 ul	unoil\com\sun\star\sdbcx				nmake	-	all	ul_sdbx ul_sdbc NULL
 ul	unoil\com\sun\star\sdb					nmake	-	all	ul_sdb ul_sdbx NULL
 ul	unoil\com\sun\star\form					nmake	-	all	ul_form ul_awt ul_sdb NULL
+ul	unoil\com\sun\star\i18n					nmake	-	all	ul_i18n ul_linguistic2 NULL
 ul	unoil\com\sun\star\installation			nmake	-	all	ul_installation NULL
 ul	unoil\com\sun\star\linguistic2			nmake	-	all	ul_linguistic2 NULL
 ul	unoil\com\sun\star\mozilla				nmake	-	all	ul_mozilla NULL
