@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 09:49:05 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2700,8 +2700,8 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
                            pPage->GetUppBorder(),
                            pPage->GetRgtBorder(),
                            pPage->GetLwrBorder() );
-        pDoc->InsertMasterPage(pMPage,  (USHORT)nInsertPos);
         pMPage->SetLayoutName( aLayoutName );
+        pDoc->InsertMasterPage(pMPage,  (USHORT)nInsertPos);
 
         { // insert background object
             Point aBackgroundPos ( pMPage->GetLftBorder(), pMPage->GetUppBorder() );
@@ -2722,9 +2722,9 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
                                 pRefNotesPage->GetUppBorder(),
                                 pRefNotesPage->GetRgtBorder(),
                                 pRefNotesPage->GetLwrBorder() );
+        pMNotesPage->SetLayoutName( aLayoutName );
         pDoc->InsertMasterPage(pMNotesPage,  (USHORT)nInsertPos + 1);
 //      pMNotesPage->InsertMasterPage( pMPage->GetPageNum() );
-        pMNotesPage->SetLayoutName( aLayoutName );
         pMNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True, sal_True);
         mpModel->SetModified();
     }
