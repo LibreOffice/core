@@ -2,9 +2,9 @@
  *
  *  $RCSfile: movedfwdfrmsbyobjpos.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:32:29 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 #ifndef _MOVEDFWDFRMSBYOBJPOS_HXX
 #define _MOVEDFWDFRMSBYOBJPOS_HXX
 
-#include <vector>
+#include <map>
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -73,16 +73,15 @@ class SwTxtFrm;
 class SwRowFrm;
 // <--
 
+typedef std::map< const SwTxtNode*, const sal_uInt32 > NodeMap;
+typedef std::map< const SwTxtNode*, const sal_uInt32 >::const_iterator NodeMapIter;
+typedef NodeMap::value_type NodeMapEntry;
+
+
 class SwMovedFwdFrmsByObjPos
 {
     private:
-        struct Entry
-        {
-            const SwTxtNode* mpTxtNode;
-            sal_uInt32 mnToPageNum;
-        };
-
-        std::vector< Entry* > maMovedFwdFrms;
+        NodeMap maMovedFwdFrms;
 
     public:
         SwMovedFwdFrmsByObjPos();
@@ -101,7 +100,8 @@ class SwMovedFwdFrmsByObjPos
         // --> OD 2004-10-05 #i26945#
         bool DoesRowContainMovedFwdFrm( const SwRowFrm& _rRowFrm ) const;
         // <--
-        void Clear();
+
+        void Clear() { maMovedFwdFrms.clear(); };
 };
 
 #endif
