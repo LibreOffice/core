@@ -94,6 +94,10 @@ public class Label extends Component implements javax.accessibility.Accessible {
 
         /** Gets the AccessibleText associated with this object presenting text on the display */
         public javax.accessibility.AccessibleText getAccessibleText() {
+
+            if (disposed)
+                return null;
+
             try {
                 XAccessibleText unoAccessibleText = (XAccessibleText) UnoRuntime.queryInterface(XAccessibleText.class,
                         unoAccessibleContext);
