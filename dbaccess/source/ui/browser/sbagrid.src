@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-08 10:21:50 $
+ *  last change: $Author: fs $ $Date: 2002-05-24 12:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,12 @@
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
 #endif
+#ifndef DBAUI_TOOLBOX_HXX
+#include "toolbox.hrc"
+#endif
+#ifndef _GLOBLMN_HRC
 #include <svx/globlmn.hrc>
+#endif
 
 Menu RID_SBA_GRID_COLCTXMENU
 {
@@ -103,30 +108,8 @@ Menu RID_SBA_GRID_COLCTXMENU
         };
         MenuItem
         {
-            Identifier = ID_BROWSER_COLWIDTH ;
-            HelpID = HID_BROWSER_COLUMNWIDTH ;
-            Text = "Spalten~breite..." ;
-            Text [ ENGLISH ] = "Column ~width..." ;
-            Text [ finnish ] = "Sarakkeen ~leveys" ;
-            Text [ danish ] = "Kolonnebredde..." ;
-            Text [ french ] = "Largeur de colonne..." ;
-            Text [ swedish ] = "Kolumn~bredd..." ;
-            Text [ dutch ] = "K~olombreedte..." ;
-            Text [ spanish ] = "Anc~ho de columna..." ;
-            Text [ english_us ] = "Column ~Width..." ;
-            Text [ italian ] = "~Larghezza colonna..." ;
-            Text [ portuguese_brazilian ] = "Spaltenbreite..." ;
-            Text [ portuguese ] = "~Largura de coluna..." ;
-            Text[ chinese_simplified ] = "åˆ—å®½(~W)...";
-            Text[ russian ] = "Øèðèíà êîëîíîê...";
-            Text[ polish ] = "Szerokoœæ kolumn...";
-            Text[ japanese ] = "åˆ—å¹…(~W)...";
-            Text[ chinese_traditional ] = "æ¬„å¯¬(~W)...";
-            Text[ arabic ] = "ÚÑÖ ÇáÃÚãÏÉ...";
-            Text[ greek ] = "ÐëÜôïò óôÞëçò...";
-            Text[ korean ] = "ì—´ ë„ˆë¹„(~W)...";
-            Text[ turkish ] = "Sütun geniþliði...";
-            Text[ catalan ] = "~Amplada de la columna...";
+            MID_COLUMN_WIDTH
+            HelpID = HID_BROWSER_COLUMNWIDTH;
         };
         MenuItem
         {
