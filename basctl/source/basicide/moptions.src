@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moptions.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-06 08:52:53 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 16:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,14 +125,14 @@ ModalDialog RID_MACROOPTIONS
         Text [ dutch ] = "Beschrijving" ;
         Text [ spanish ] = "Descripción" ;
         Text [ english_us ] = "Description" ;
-        Text[ chinese_simplified ] = "ËµÃ÷";
+        Text[ chinese_simplified ] = "è¯´æ˜";
         Text[ russian ] = "Îïèñàíèå";
         Text[ polish ] = "Opis";
-        Text[ japanese ] = "à–¾";
-        Text[ chinese_traditional ] = "´y­z";
+        Text[ japanese ] = "èª¬æ˜";
+        Text[ chinese_traditional ] = "æè¿°";
         Text[ arabic ] = "ÇáæÕİ";
         Text[ greek ] = "ĞåñéãñáöŞ";
-        Text[ korean ] = "¼³¸í";
+        Text[ korean ] = "ì„¤ëª…";
         Text[ turkish ] = "Açıklama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Descripción";
@@ -164,14 +164,14 @@ ModalDialog RID_MACROOPTIONS
         Text [ dutch ] = "Help informatie" ;
         Text [ spanish ] = "Informaciones - Ayuda" ;
         Text [ english_us ] = "Help information" ;
-        Text[ chinese_simplified ] = "°ïÖú×ÊÁÏ";
+        Text[ chinese_simplified ] = "å¸®åŠ©èµ„æ–™";
         Text[ russian ] = "Ñïğàâêà-èíôîğìàöèÿ";
         Text[ polish ] = "Pomoc - Informacje";
-        Text[ japanese ] = "ÍÙÌßî•ñ";
-        Text[ chinese_traditional ] = "»¡©ú¸ê°T";
+        Text[ japanese ] = "ï¾ï¾™ï¾Œï¾Ÿæƒ…å ±";
+        Text[ chinese_traditional ] = "èªªæ˜è³‡è¨Š";
         Text[ arabic ] = "ãÚáæãÇÊ Úä ÇáãÓÇÚÏÉ";
         Text[ greek ] = "Ğëçñïöïñßåò âïŞèåéáò";
-        Text[ korean ] = "µµ¿ò¸» Á¤º¸";
+        Text[ korean ] = "ë„ì›€ë§ ì •ë³´";
         Text[ turkish ] = "Yardım bilgileri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Informaciones - Ayuda";
@@ -194,14 +194,14 @@ ModalDialog RID_MACROOPTIONS
         Text [ dutch ] = "Help ID" ;
         Text [ spanish ] = "Identificación de ayuda" ;
         Text [ english_us ] = "Help ID" ;
-        Text[ chinese_simplified ] = "°ïÖú±êÖ¾";
+        Text[ chinese_simplified ] = "å¸®åŠ©æ ‡å¿—";
         Text[ russian ] = "Èäåíòèôèêàöèÿ ñïğàâêè";
         Text[ polish ] = "Pomoc - Identyfikacja";
-        Text[ japanese ] = "ÍÙÌßID";
-        Text[ chinese_traditional ] = "»¡©úÃÑ§O²Å";
+        Text[ japanese ] = "ï¾ï¾™ï¾Œï¾ŸID";
+        Text[ chinese_traditional ] = "èªªæ˜è­˜åˆ¥ç¬¦";
         Text[ arabic ] = "ÊÚÑíİ ÇáãÓÇÚÏÉ";
         Text[ greek ] = "Ôáõôüôçôá âïŞèåéáò";
-        Text[ korean ] = "µµ¿ò¸» ID";
+        Text[ korean ] = "ë„ì›€ë§ ID";
         Text[ turkish ] = "Yardım tanıtıcısı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Identificación de ayuda";
@@ -234,14 +234,14 @@ ModalDialog RID_MACROOPTIONS
         Text [ dutch ] = "Help-bestandsnaam" ;
         Text [ spanish ] = "Nombre del archivo de ayuda" ;
         Text [ english_us ] = "Help file name" ;
-        Text[ chinese_simplified ] = "°ïÖúÎÄ¼şÃû";
+        Text[ chinese_simplified ] = "å¸®åŠ©æ–‡ä»¶å";
         Text[ russian ] = "Èìÿ ôàéëà ñïğàâêè";
         Text[ polish ] = "Pomoc - Nazwa pliku";
-        Text[ japanese ] = "ÍÙÌß‚ÌÌ§²Ù–¼";
-        Text[ chinese_traditional ] = "»¡©úÀÉ®×¦WºÙ";
+        Text[ japanese ] = "ï¾ï¾™ï¾Œï¾Ÿã®ï¾Œï½§ï½²ï¾™å";
+        Text[ chinese_traditional ] = "èªªæ˜æª”æ¡ˆåç¨±";
         Text[ arabic ] = "ÇÓã ãáİ ÇáãÓÇÚÏÉ";
         Text[ greek ] = "¼íïìá áñ÷åßïõ âïŞèåéáò";
-        Text[ korean ] = "µµ¿ò¸» ÆÄÀÏ ÀÌ¸§";
+        Text[ korean ] = "ë„ì›€ë§ íŒŒì¼ ì´ë¦„";
         Text[ turkish ] = "Yardım dosyası adı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nombre del archivo de ayuda";
@@ -253,17 +253,18 @@ ModalDialog RID_MACROOPTIONS
         Size = MAP_APPFONT ( 120 , 12 ) ;
         TabStop = TRUE ;
     };
-    Text[ chinese_simplified ] = "ËµÃ÷";
+    Text[ chinese_simplified ] = "è¯´æ˜";
     Text[ russian ] = "Îïèñàíèå";
     Text[ polish ] = "Opis";
-    Text[ japanese ] = "à–¾";
-    Text[ chinese_traditional ] = "´y­z";
+    Text[ japanese ] = "èª¬æ˜";
+    Text[ chinese_traditional ] = "æè¿°";
     Text[ arabic ] = "ÇáæÕİ";
     Text[ greek ] = "ĞåñéãñáöŞ";
-    Text[ korean ] = "¼³¸í";
+    Text[ korean ] = "ì„¤ëª…";
     Text[ turkish ] = "Açıklama";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Descripción";
 };
+
 
 
