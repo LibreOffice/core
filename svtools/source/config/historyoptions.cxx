@@ -2,9 +2,9 @@
  *
  *  $RCSfile: historyoptions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2000-11-21 14:38:17 $
+ *  last change: $Author: as $ $Date: 2000-12-04 12:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,6 +631,7 @@ Sequence< OUString > SvtHistoryOptions_Impl::impl_GetPropertyNames( sal_uInt32& 
     // First get ALL names of current existing list items in configuration!
     Sequence< OUString > seqPicklistItems = GetNodeNames( PROPERTYNAME_PICKLIST );
     Sequence< OUString > seqHistoryItems  = GetNodeNames( PROPERTYNAME_HISTORY  );
+
     // Get information about list counts ...
     nPicklistCount = seqPicklistItems.getLength();
     nHistoryCount  = seqHistoryItems.getLength ();
