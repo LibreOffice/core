@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:25:06 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 11:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,26 +398,26 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
 
         if( !bIsInitialized )
         {
-            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_BREAKS               ), aFalseSet);
-            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_DRAWINGS             ), aTrueSet);
-            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_FIELD_COMMANDS       ), aFalseSet);
-            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_FOOTNOTE_BACKGROUND  ), aFalseSet);
-            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_GRAPHICS             ), aTrueSet);
-            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_HIDDEN_PARAGRAPHS    ), aFalseSet);
-            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_HIDDEN_TEXT          ), aFalseSet);
-            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_HORI_RULER           ), aFalseSet);
-            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_INDEX_MARK_BACKGROUND), aFalseSet);
-            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_PARA_BREAKS          ), aFalseSet);
-            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_PROTECTED_SPACES     ), aFalseSet);
-            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_SOFT_HYPHENS         ), aFalseSet);
-            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_SPACES               ), aFalseSet);
-            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_TABLE_BOUNDARIES     ), aFalseSet);
-            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_TABLES               ), aTrueSet);
-            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_TABSTOPS             ), aFalseSet);
-            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_TEXT_BOUNDARIES      ), aFalseSet);
-            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_TEXT_FIELD_BACKGROUND), aTrueSet);
-            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_VERT_RULER           ), aFalseSet);
-            xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_ONLINE_LAYOUT),
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_BREAKS              )), aFalseSet);
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_DRAWINGS             )), aTrueSet);
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_FIELD_COMMANDS       )), aFalseSet);
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_FOOTNOTE_BACKGROUND  )), aFalseSet);
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_GRAPHICS             )), aTrueSet);
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_HIDDEN_PARAGRAPHS    )), aFalseSet);
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_HIDDEN_TEXT          )), aFalseSet);
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_HORI_RULER          )), aFalseSet);
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_INDEX_MARK_BACKGROUND)), aFalseSet);
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_PARA_BREAKS          )), aFalseSet);
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_PROTECTED_SPACES     )), aFalseSet);
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_SOFT_HYPHENS         )), aFalseSet);
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_SPACES               )), aFalseSet);
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_TABLE_BOUNDARIES     )), aFalseSet);
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_TABLES               )), aTrueSet);
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_TABSTOPS             )), aFalseSet);
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_TEXT_BOUNDARIES      )), aFalseSet);
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_TEXT_FIELD_BACKGROUND)), aTrueSet);
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_VERT_RULER          )), aFalseSet);
+            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_ONLINE_LAYOUT)),
                     (nStyleFlags&EX_SHOW_ONLINE_LAYOUT) ? aTrueSet : aFalseSet );
 
             if(0 ==(nStyleFlags&EX_SHOW_ONLINE_LAYOUT))
@@ -428,13 +428,13 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
 #else
                 aZoom <<= (sal_Int16)view::DocumentZoomType::PAGE_WIDTH_EXACT;
 #endif
-                xViewProps->setPropertyValue(C2U(UNO_NAME_ZOOM_TYPE), aZoom);
+                xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ZOOM_TYPE)), aZoom);
             }
             else
             {
                 uno::Any aZoom;
                 aZoom <<= (sal_Int16)view::DocumentZoomType::BY_VALUE;
-                xViewProps->setPropertyValue(C2U(UNO_NAME_ZOOM_TYPE), aZoom);
+                xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ZOOM_TYPE)), aZoom);
 
                 sal_Int16 nZoomValue = 50;
                 if(EX_SHOW_BUSINESS_CARDS == nStyleFlags)
@@ -442,7 +442,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
                     nZoomValue = 80;
                 }
                 aZoom <<= nZoomValue;
-                xViewProps->setPropertyValue(C2U(UNO_NAME_ZOOM_VALUE), aZoom);
+                xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ZOOM_VALUE)), aZoom);
             }
             bIsInitialized = sal_True;
         }
@@ -452,7 +452,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         _xCursor = xText->createTextCursor();
         uno::Reference< beans::XPropertySet >  xCrsrProp(_xCursor, uno::UNO_QUERY);
         uno::Any aPageStyle = xCrsrProp->getPropertyValue(
-                                            C2U(UNO_NAME_PAGE_STYLE_NAME));
+                                            C2U(SW_PROP_NAME_STR(UNO_NAME_PAGE_STYLE_NAME)));
         OUString sPageStyle;
         aPageStyle >>= sPageStyle;
 
@@ -467,21 +467,21 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
             uno::Reference< style::XStyle >  xPStyle =
                 *(uno::Reference< style::XStyle > *)aPStyle.getValue();
             uno::Reference< beans::XPropertySet >  xPProp(xPStyle, uno::UNO_QUERY);
-            uno::Any aSize = xPProp->getPropertyValue(C2U(UNO_NAME_SIZE));
+            uno::Any aSize = xPProp->getPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SIZE)));
             awt::Size aPSize = *(awt::Size*)aSize.getValue();
             //TODO: set page width to card width
             aPSize.Width = 10000;
             aSize.setValue(&aPSize, ::getCppuType((awt::Size*)0));
-            xPProp->setPropertyValue(C2U(UNO_NAME_SIZE), aSize);
+            xPProp->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SIZE)), aSize);
 
             uno::Any aZero; aZero <<= (sal_Int32)0;
-            xPProp->setPropertyValue(C2U(UNO_NAME_LEFT_MARGIN), aZero);
-            xPProp->setPropertyValue(C2U(UNO_NAME_RIGHT_MARGIN), aZero);
+            xPProp->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_LEFT_MARGIN)), aZero);
+            xPProp->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_RIGHT_MARGIN)), aZero);
         }
 
         // can only be done here - the SFX changes the ScrollBar values
-        xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_HORI_SCROLL_BAR ), aFalseSet);
-        xViewProps->setPropertyValue(C2U(UNO_NAME_SHOW_VERT_SCROLL_BAR ), aFalseSet);
+        xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_HORI_SCROLL_BAR )), aFalseSet);
+        xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_VERT_SCROLL_BAR )), aFalseSet);
 
         if( aInitializedLink.IsSet() )
         {
@@ -584,7 +584,7 @@ void SwOneExampleFrame::CreatePopup(const Point& rPt)
         uno::Reference< view::XViewSettingsSupplier >  xSettings(_xController, uno::UNO_QUERY);
         uno::Reference< beans::XPropertySet >  xViewProps = xSettings->getViewSettings();
 
-        uno::Any aZoom = xViewProps->getPropertyValue(C2U(UNO_NAME_ZOOM_VALUE));
+        uno::Any aZoom = xViewProps->getPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ZOOM_VALUE)));
         sal_Int16 nZoom;
         aZoom >>= nZoom;
 
@@ -617,9 +617,9 @@ IMPL_LINK(SwOneExampleFrame, PopupHdl, Menu*, pMenu )
 
         uno::Any aZoom;
         aZoom <<= nZoom;
-        xViewProps->setPropertyValue(C2U(UNO_NAME_ZOOM_VALUE), aZoom);
+        xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ZOOM_VALUE)), aZoom);
         aZoom <<= (sal_Int16)view::DocumentZoomType::BY_VALUE;
-        xViewProps->setPropertyValue(C2U(UNO_NAME_ZOOM_TYPE), aZoom);
+        xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ZOOM_TYPE)), aZoom);
     }
     else if(ITEM_UP == nId || ITEM_DOWN == nId)
     {

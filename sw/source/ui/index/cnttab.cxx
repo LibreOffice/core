@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-06-06 10:41:26 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 11:27:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -870,12 +870,27 @@ void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
         xProps->setPropertyValue(uPropName, aValue);
     }
 }
+
+inline void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
+                           uno::Reference< XPropertySet > & xProps,
+                           USHORT nId, const String& rValue)
+{
+    ::lcl_SetProp( xInfo, xProps, SW_PROP_NAME_STR(nId), rValue );
+}
+inline void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
+                           uno::Reference< XPropertySet > & xProps,
+                           USHORT nId, sal_Int16 nValue )
+{
+    ::lcl_SetProp( xInfo, xProps, SW_PROP_NAME_STR(nId), nValue );
+}
+
+
 /* --------------------------------------------------
 
  --------------------------------------------------*/
 void lcl_SetBOOLProp( uno::Reference< beans::XPropertySetInfo > & xInfo,
-    uno::Reference< beans::XPropertySet > & xProps,
-    const char* rPropName, sal_Bool bValue)
+                      uno::Reference< beans::XPropertySet > & xProps,
+                      const char* rPropName, sal_Bool bValue)
 {
     OUString uPropName(C2U(rPropName));
     if(xInfo->hasPropertyByName(uPropName))
@@ -885,6 +900,14 @@ void lcl_SetBOOLProp( uno::Reference< beans::XPropertySetInfo > & xInfo,
         xProps->setPropertyValue(uPropName, aValue);
     }
 }
+inline void lcl_SetBOOLProp(
+                uno::Reference< beans::XPropertySetInfo > & xInfo,
+                uno::Reference< beans::XPropertySet > & xProps,
+                USHORT nId, sal_Bool bValue )
+{
+    lcl_SetBOOLProp( xInfo, xProps, SW_PROP_NAME_STR(nId), bValue );
+}
+
 /* --------------------------------------------------
 
  --------------------------------------------------*/
@@ -930,7 +953,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
          uno::Reference< text::XTextRange >  xRg(xCrsr, uno::UNO_QUERY);
             xCrsr->getText()->insertTextContent(xRg, xContent, sal_False);
         }
-        OUString uIsVisible(C2U(UNO_NAME_IS_VISIBLE));
+        OUString uIsVisible(C2U(SW_PROP_NAME_STR(UNO_NAME_IS_VISIBLE)));
         for(sal_uInt16 i = 0 ; i <= TOX_AUTHORITIES; i++)
         {
          uno::Reference< beans::XPropertySet >  xSectPr(pxIndexSectionsArr[i]->xContainerSection, uno::UNO_QUERY);
@@ -956,10 +979,10 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
 
             //stylenames
             sal_uInt16  nContentOptions = rDesc.GetContentOptions();
-            if(xInfo->hasPropertyByName(C2U(UNO_NAME_LEVEL_PARAGRAPH_STYLES)))
+            if(xInfo->hasPropertyByName(C2U(SW_PROP_NAME_STR(UNO_NAME_LEVEL_PARAGRAPH_STYLES))))
             {
                 sal_Bool bOn = 0!=(nContentOptions&TOX_TEMPLATE    );
-                uno::Any aStyleNames(xIdxProps->getPropertyValue(C2U(UNO_NAME_LEVEL_PARAGRAPH_STYLES)));
+                uno::Any aStyleNames(xIdxProps->getPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_LEVEL_PARAGRAPH_STYLES))));
                  uno::Reference< container::XIndexReplace >  xAcc =
                     *(uno::Reference< container::XIndexReplace > *)aStyleNames.getValue();
 
@@ -1024,7 +1047,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_IS_COMMA_SEPARATED, pForm->IsCommaSeparated());
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_ALPHABETICAL_SEPARATORS, 0 != (nIdxOptions&TOI_ALPHA_DELIMITTER));
             if(nCurrentLevel < pForm->GetFormMax() &&
-                xInfo->hasPropertyByName(C2U(UNO_NAME_LEVEL_FORMAT)))
+                xInfo->hasPropertyByName(C2U(SW_PROP_NAME_STR(UNO_NAME_LEVEL_FORMAT))))
             {
                 String sTokenType;
                  uno::Sequence< beans::PropertyValues> aSequPropVals(10);
@@ -1117,7 +1140,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                 }
                 aSequPropVals.realloc(nTokenIndex);
 
-                uno::Any aFormatAccess = xIdxProps->getPropertyValue(C2U(UNO_NAME_LEVEL_FORMAT));
+                uno::Any aFormatAccess = xIdxProps->getPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_LEVEL_FORMAT)));
                 DBG_ASSERT(aFormatAccess.getValueType() == ::getCppuType((uno::Reference<container::XIndexReplace>*)0),
                     "wrong property type")
 
