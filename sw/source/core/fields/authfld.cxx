@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-02 20:31:02 $
+ *  last change: $Author: dvo $ $Date: 2000-12-04 14:43:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -892,7 +892,14 @@ BOOL    SwAuthorityField::PutValue( const Any& rVal, const String& rProperty )
         if(nFound >= 0)
         {
             OUString sContent;
-            pParam[i].Value >>= sContent;
+            if(AUTH_FIELD_AUTHORITY_TYPE == nFound)
+            {
+                sal_Int16 nVal;
+                pParam[i].Value >>= nVal;
+                sContent = OUString::valueOf((sal_Int32)nVal);
+            }
+            else
+                pParam[i].Value >>= sContent;
             sToSet.SetToken(nFound, TOX_STYLE_DELIMITER, sContent);
         }
     }
