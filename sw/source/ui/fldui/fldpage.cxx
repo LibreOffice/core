@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:27:35 $
+ *  last change: $Author: os $ $Date: 2001-06-08 13:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,8 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
 
     if (!IsFldEdit())   // Neues Feld einfuegen
     {
-        bRet = aMgr.InsertFld( nTypeId, nSubType, rPar1, rPar2, nFormatId, 0, cSeparator );
+        SwInsertFld_Data aData(nTypeId, nSubType, rPar1, rPar2, nFormatId, 0, cSeparator );
+        bRet = aMgr.InsertFld( aData );
 
     }
     else    // Feld aendern

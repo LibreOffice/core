@@ -2,9 +2,9 @@
  *
  *  $RCSfile: applab.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-03-28 14:23:55 $
+ *  last change: $Author: os $ $Date: 2001-06-08 13:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,8 @@ const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rItem,
     if( (!rItem.bSynchron || !(nCol|nRow)) && (sDBName = InsertLabEnvText( rSh, rFldMgr, rItem.aWriting )).Len() && !bLast )
     {
         sDBName.SetToken( 2, DB_DELIM, String::CreateFromAscii("True"));
-        rFldMgr.InsertFld( TYP_DBNEXTSETFLD, 0, sDBName, aEmptyStr, 0, &rSh );
+        SwInsertFld_Data aData(TYP_DBNEXTSETFLD, 0, sDBName, aEmptyStr, 0, &rSh );
+        rFldMgr.InsertFld( aData );
     }
 
     return pFmt;

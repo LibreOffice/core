@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-06-06 12:01:40 $
+ *  last change: $Author: os $ $Date: 2001-06-08 13:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,15 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-
+#ifndef _SFXFRAME_HXX
+#include <sfx2/frame.hxx>
+#endif
+#ifndef _FLDMGR_HXX
+#include <fldmgr.hxx>
+#endif
+#ifndef _FLDBAS_HXX
+#include <fldbas.hxx>
+#endif
 #include "dbmgr.hxx"
 
 
@@ -240,6 +248,10 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
         case FN_QRY_INSERT_FIELD:
             {
                 String sSbaData = ((const SfxStringItem&)pArgs->Get(FN_QRY_INSERT_FIELD)).GetValue();
+                const SfxPoolItem* pConnectionItem = 0;
+                const SfxPoolItem* pColumnItem = 0;
+                pArgs->GetItemState(FN_DB_CONNECTION_ANY, FALSE, &pConnectionItem);
+                pArgs->GetItemState(FN_DB_COLUMN_ANY, FALSE, &pColumnItem);
 
                 String sDBName = sSbaData.GetToken(0, DB_DD_DELIM);
                 sDBName += DB_DELIM;
@@ -248,7 +260,13 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                 BOOL bTable = sSbaData.GetToken(2, DB_DD_DELIM) == C2S("1");
                 sDBName += sSbaData.GetToken(3, DB_DD_DELIM);   // Column name
 
-                InsertDBFld(sDBName);
+                SwFldMgr aFldMgr(GetShellPtr());
+                SwInsertFld_Data aData(TYP_DBFLD, 0, sDBName, aEmptyStr, 0, FALSE, TRUE);
+                if(pConnectionItem)
+                    aData.aDBConnection = ((SfxUsrAnyItem*)pConnectionItem)->GetValue();
+                if(pColumnItem)
+                    aData.aDBColumn = ((SfxUsrAnyItem*)pColumnItem)->GetValue();
+                aFldMgr.InsertFld(aData);
             }
             break;
 

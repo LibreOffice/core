@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-07 16:20:20 $
+ *  last change: $Author: os $ $Date: 2001-06-08 13:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,10 @@ namespace com{namespace sun{namespace star{
     }
     namespace sdbc{
         class XResultSet;
+        class XConnection;
     }
 }}}
+
 class SwMailMergeDlg : public SvxStandardDialog
 {
     friend class SwXSelChgLstnr_Impl;
@@ -173,11 +175,11 @@ class SwMailMergeDlg : public SvxStandardDialog
     void            ExecQryShell(BOOL bVisible);
 
 public:
-
      SwMailMergeDlg(Window* pParent, SwWrtShell& rSh,
          const String& rSourceName,
         const String& rTblName,
         sal_Int32 nCommandType,
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>      xConnection,
         ::com::sun::star::uno::Sequence< sal_Int32 >* pSelection = 0);
     ~SwMailMergeDlg();
 

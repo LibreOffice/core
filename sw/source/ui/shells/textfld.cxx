@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:22:30 $
+ *  last change: $Author: os $ $Date: 2001-06-08 13:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,8 +397,11 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     String sAuthor(((const SvxPostItAuthorItem&)pOutSet->Get(SID_ATTR_POSTIT_AUTHOR)).GetValue());
 
                     if(bNew)
+                    {
                         // neues PostIt anlegen
-                        pPostItFldMgr->InsertFld(TYP_POSTITFLD, 0, sAuthor, sMsg, 0);
+                        SwInsertFld_Data aData(TYP_POSTITFLD, 0, sAuthor, sMsg, 0);
+                        pPostItFldMgr->InsertFld(aData);
+                    }
                     else
                         // altes PostIt updaten
                         pPostItFldMgr->UpdateCurFld(0, sAuthor, sMsg);
@@ -537,8 +540,11 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 nInsertType = TYP_AUTHORFLD;
 
 FIELD_INSERT:
-                aFldMgr.InsertFld(nInsertType, nInsertSubType,
+            {
+                SwInsertFld_Data aData(nInsertType, nInsertSubType,
                                     aEmptyStr, aEmptyStr, nInsertFormat);
+                aFldMgr.InsertFld(aData);
+            }
             break;
             default:
                 ASSERT(FALSE, falscher Dispatcher);
@@ -694,18 +700,6 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
             break;
         }
     }
-}
-
-/*---------------------------------------------------------------------------
-    Beschreibung:
- ----------------------------------------------------------------------------*/
-
-
-void SwTextShell::InsertDBFld(const String& sFldName)
-{
-    SwFldMgr aFldMgr(GetShellPtr());
-
-    aFldMgr.InsertFld(TYP_DBFLD, 0, sFldName, aEmptyStr, 0, FALSE, TRUE);
 }
 
 /*--------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaedit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:58:16 $
+ *  last change: $Author: os $ $Date: 2001-06-08 13:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,10 @@ void SwJavaEditDialog::SetFld()
         sType = String::CreateFromAscii("JavaScript");
 
     if( bNew )
-        pMgr->InsertFld(TYP_SCRIPTFLD, 0, sType, sText, bIsUrl);
+    {
+        SwInsertFld_Data aData(TYP_SCRIPTFLD, 0, sType, sText, bIsUrl);
+        pMgr->InsertFld(aData);
+    }
     else if( bIsUrl != pFld->GetFormat() ||
              pFld->GetPar2() != sType || pFld->GetPar1() != sText )
     {

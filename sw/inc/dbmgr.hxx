@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-03-30 11:59:05 $
+ *  last change: $Author: os $ $Date: 2001-06-08 13:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,9 +253,20 @@ public:
 
     // Listbox mit allen Tabellennamen einer Datenbank fuellen
     BOOL            GetTableNames(ListBox* pListBox, const String& rDBName );
+
     // Listbox mit allen Spaltennamen einer Datenbanktabelle fuellen
     BOOL            GetColumnNames(ListBox* pListBox,
                         const String& rDBName, const String& rTableName, BOOL bAppend = FALSE);
+    BOOL            GetColumnNames(ListBox* pListBox,
+                        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xConnection,
+                        const String& rTableName, BOOL bAppend = FALSE);
+
+    ULONG GetColumnFmt( ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> xSource,
+                        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xConnection,
+                        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xColumn,
+                        SvNumberFormatter* pNFmtr,
+                        long nLanguage );
+
     ULONG GetColumnFmt( const String& rDBName,
                         const String& rTableName,
                         const String& rColNm,

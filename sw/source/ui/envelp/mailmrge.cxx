@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-06-08 09:33:00 $
+ *  last change: $Author: os $ $Date: 2001-06-08 13:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
          const String& rSourceName,
         const String& rTblName,
         sal_Int32 nCommandType,
+        Reference< XConnection> xConnection,
         Sequence< sal_Int32 >* pSelection) :
 
     SvxStandardDialog(pParent, SW_RES(DLG_MAILMERGE)),
@@ -344,6 +345,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
             &aFormatRtfCB ,
             &aFormatSwCB  ,
             &aDestFL      ,
+            &aSeparatorFL ,
             0};
 
         for( Window** ppW = aCntrlArr; *ppW; ++ppW )
@@ -444,7 +446,11 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     aFromNF.SetModifyHdl(aLk);
     aToNF.SetModifyHdl(aLk);
 
-    rSh.GetNewDBMgr()->GetColumnNames(&aAddressFldLB, rDBName, rTableName);
+    SwNewDBMgr* pNewDBMgr = rSh.GetNewDBMgr();
+    if(xConnection.is())
+        pNewDBMgr->GetColumnNames(&aAddressFldLB, xConnection, rTableName);
+    else
+        pNewDBMgr->GetColumnNames(&aAddressFldLB, rDBName, rTableName);
     for(USHORT nEntry = 0; nEntry < aAddressFldLB.GetEntryCount(); nEntry++)
         aColumnLB.InsertEntry(aAddressFldLB.GetEntry(nEntry));
     aAddressFldLB.SelectEntry(C2S("EMAIL"));

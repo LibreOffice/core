@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:01:49 $
+ *  last change: $Author: os $ $Date: 2001-06-08 13:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1291,7 +1291,8 @@ IMPL_LINK( SwAuthMarkDlg, InsertHdl, PushButton *, EMPTYARG )
                     aNewData.SetAuthorField((ToxAuthorityField)i, m_sFields[i]);
                 pSh->ChangeAuthorityData(&aNewData);
             }
-            aMgr.InsertFld( TYP_AUTHORITY, 0, sFields, aEmptyStr, 0 );
+            SwInsertFld_Data aData(TYP_AUTHORITY, 0, sFields, aEmptyStr, 0 );
+            aMgr.InsertFld( aData );
         }
         else if(aMgr.GetCurFld())
         {
@@ -1784,6 +1785,9 @@ void    SwAuthMarkModalDlg::Apply()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.11  2001/06/01 11:01:49  fme
+    Fix #86988#: Redesign of dialogs
+
     Revision 1.10  2001/05/29 13:44:26  fme
     Fix #86988#: Redesign of dialogs
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-22 16:19:44 $
+ *  last change: $Author: os $ $Date: 2001-06-08 13:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,12 @@
 #endif
 #ifndef _SVX_XEXCH_HXX
 #include <svx/xexch.hxx>
+#endif
+#ifndef _SVX_DBAEXCHANGE_HXX_
+#include <svx/dbaexchange.hxx>
+#endif
+#ifndef _SFXFRAME_HXX
+#include <sfx2/frame.hxx>
 #endif
 #ifndef _SVX_CLIPFMTITEM_HXX
 #include <svx/clipfmtitem.hxx>
@@ -277,7 +283,8 @@ extern BOOL bExecuteDrag;
 #define SWTRANSFER_OBJECTTYPE_SWOLE             0x00000010
 #define SWTRANSFER_OBJECTTYPE_DDE               0x00000020
 
-
+using namespace ::svx;
+using namespace ::rtl;
 
 #ifdef DDE_AVAILABLE
 
@@ -2401,13 +2408,28 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
                                     : FN_QRY_INSERT_FIELD );
         if( nWh )
         {
+            SfxUsrAnyItem* pConnectionItem = 0;
+            SfxUsrAnyItem* pColumnItem = 0;
+            SfxUsrAnyItem* pSourceItem = 0;
+            DataFlavorExVector& rVector = rData.GetDataFlavorExVector();
+            if(OColumnTransferable::canExtractColumnDescriptor(rVector, CTF_COLUMN_DESCRIPTOR))
+            {
+                ODataAccessDescriptor aColDesc = OColumnTransferable::extractColumnDescriptor(
+                                                                    rData);
+                pConnectionItem = new SfxUsrAnyItem(FN_DB_CONNECTION_ANY, aColDesc[daConnection]);
+                pColumnItem = new SfxUsrAnyItem(FN_DB_COLUMN_ANY, aColDesc[daColumnObject]);
+            }
+
             SwView& rView = rSh.GetView();
             //force ::SelectShell
             rView.StopShellTimer();
 
             SfxStringItem aDataDesc( nWh, sTxt );
             rView.GetViewFrame()->GetDispatcher()->Execute(
-                                nWh, SFX_CALLMODE_SLOT, &aDataDesc, 0L);
+                                nWh, SFX_CALLMODE_ASYNCHRON, &aDataDesc,
+                                pConnectionItem, pColumnItem, 0L);
+            delete pConnectionItem;
+            delete pColumnItem;
         }
         else
         {

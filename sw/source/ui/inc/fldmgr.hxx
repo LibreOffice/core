@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-03-02 14:08:37 $
+ *  last change: $Author: os $ $Date: 2001-06-08 13:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
+#ifndef _COM_SUN_STAR_UNO_ANY_H_
+#include <com/sun/star/uno/Any.h>
+#endif
 namespace com{namespace sun{namespace star{
     namespace container{
         class XNameAccess;
@@ -123,7 +126,34 @@ struct SwFldGroupRgn
     Beschreibung:  Der FeldManager handelt das Einfuegen von Felder
                     ueber Command-Strings
  --------------------------------------------------------------------*/
+struct SwInsertFld_Data
+{
+    USHORT nTypeId;
+    USHORT nSubType;
+    const String sPar1;
+    const String sPar2;
+    ULONG nFormatId;
+    SwWrtShell* pSh;
+    sal_Unicode cSeparator;
+    ::com::sun::star::uno::Any aDBDataSource;
+    ::com::sun::star::uno::Any aDBConnection;
+    ::com::sun::star::uno::Any aDBColumn;
 
+    SwInsertFld_Data(USHORT nType, USHORT nSub, const String& rPar1, const String& rPar2,
+                    ULONG nFmtId, SwWrtShell* pShell = NULL, sal_Unicode cSep = ' ') :
+        nTypeId(nType),
+        nSubType(nSub),
+        sPar1(rPar1),
+        sPar2(rPar2),
+        nFormatId(nFmtId),
+        pSh(pShell),
+        cSeparator(cSep) {}
+
+    SwInsertFld_Data() :
+        pSh(0),
+        cSeparator(' '){}
+
+};
 class SwFldMgr
 {
 private:
@@ -153,13 +183,7 @@ public:
     ~SwFldMgr();
 
     // Feld einfuegen ueber TypeId (TYP_ ...)
-    BOOL            InsertFld(  USHORT nTypeId,
-                                USHORT nSubType,
-                                const String& rPar1,
-                                const String& rPar2,
-                                ULONG nFormatId,
-                                SwWrtShell* pSh = NULL,
-                                sal_Unicode cSeparator = ' ');
+    BOOL            InsertFld(  const SwInsertFld_Data& rData );
 
     BOOL            InsertURL(  const String& rName,
                                 const String& rVal,

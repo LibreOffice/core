@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: os $ $Date: 2001-06-06 12:01:39 $
+ *  last change: $Author: os $ $Date: 2001-06-08 13:47:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
 #endif
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
@@ -319,6 +322,7 @@ const sal_Char cCommand[] = "Command";
 const sal_Char cCommandType[] = "CommandType";
 const sal_Char cDataSourceName[] = "DataSourceName";
 const sal_Char cSelection[] = "Selection";
+const sal_Char cActiveConnection[] = "ActiveConnection";
 
 /* -----------------------------17.07.00 17:04--------------------------------
 
@@ -384,6 +388,7 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
     aData.nCommandType = CommandType::TABLE;
     Reference<XResultSet>  xResSet;
     Sequence<sal_Int32> aSelection;
+    Reference< XConnection> xConnection;
     const PropertyValue* pValues = rProperties.getConstArray();
     for(sal_Int32 nPos = 0; nPos < rProperties.getLength(); nPos++)
     {
@@ -397,6 +402,8 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
             pValues[nPos].Value >>= aSelection;
         else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCommandType)))
             pValues[nPos].Value >>= aData.nCommandType;
+        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cActiveConnection)))
+            pValues[nPos].Value >>= xConnection;
     }
     if(!aData.sDataSource.getLength() || !aData.sCommand.getLength() || !xResSet.is())
     {
@@ -408,6 +415,8 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
         *pTemp = *pMergeData;
     else
         aDataSourceParams.Insert(new SwDSParam(*pMergeData), aDataSourceParams.Count());
+    if(!pMergeData->xConnection.is())
+        pMergeData->xConnection = xConnection;
 
     try{
         //set to start position
@@ -755,6 +764,28 @@ BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
     }
     return(TRUE);
 }
+/* -----------------------------08.06.01 15:11--------------------------------
+
+ ---------------------------------------------------------------------------*/
+BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
+        Reference< XConnection> xConnection,
+        const String& rTableName, BOOL bAppend)
+{
+    if (!bAppend)
+        pListBox->Clear();
+    Reference< XColumnsSupplier> xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
+    if(xColsSupp.is())
+    {
+        Reference <XNameAccess> xCols = xColsSupp->getColumns();
+        const Sequence<OUString> aColNames = xCols->getElementNames();
+        const OUString* pColNames = aColNames.getConstArray();
+        for(int nCol = 0; nCol < aColNames.getLength(); nCol++)
+        {
+            pListBox->InsertEntry(pColNames[nCol]);
+        }
+    }
+    return(TRUE);
+}
 
 /*--------------------------------------------------------------------
     Beschreibung: CTOR
@@ -922,7 +953,7 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
                     aAny <<= aInfo;
                     aNewContent.executeCommand( C2U( "transfer" ), aAny);
                 }
-                catch( ... )
+                catch( Exception& )
                 {
                     bCopyCompleted = FALSE;
                 }
@@ -1050,7 +1081,7 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
                     aTempContent.executeCommand( C2U( "delete" ),
                                         makeAny( sal_Bool( sal_True ) ) );
                 }
-                catch( ... )
+                catch( Exception& )
                 {
                     DBG_ERRORFILE( "Exception" );
                 }
@@ -1236,9 +1267,61 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
                                 SvNumberFormatter* pNFmtr,
                                 long nLanguage )
 {
-    //JP 12.01.99: ggfs. das NumberFormat im Doc setzen
     ULONG nRet = 0;
     if(pNFmtr)
+    {
+        Reference< XDataSource> xSource;
+        Reference< XConnection> xConnection;
+        sal_Bool bUseMergeData = sal_False;
+        if(pMergeData &&
+            pMergeData->sDataSource.equals(rDBName) && pMergeData->sCommand.equals(rTableName))
+        {
+            xConnection = pMergeData->xConnection;
+            Reference<XChild> xChild(xConnection, UNO_QUERY);
+            if(xChild.is())
+                xSource = Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
+            bUseMergeData = sal_True;
+        }
+        if(!xConnection.is() || !xSource.is())
+        {
+            xConnection = SwNewDBMgr::GetConnection(rDBName, xSource);
+            if(bUseMergeData)
+                pMergeData->xConnection = xConnection;
+        }
+        Reference< XColumnsSupplier> xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
+        if(xColsSupp.is())
+        {
+            Reference <XNameAccess> xCols = xColsSupp->getColumns();
+            if(!xCols->hasByName(rColNm))
+                return nRet;
+            Any aCol = xCols->getByName(rColNm);
+            Reference< XPropertySet > xColumn;
+            aCol >>= xColumn;
+            nRet = GetColumnFmt(xSource, xConnection, xColumn, pNFmtr, nLanguage);
+        }
+        else
+            nRet = pNFmtr->GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_SYSTEM );
+    }
+    return nRet;
+}
+/* -----------------------------07.06.01 15:43--------------------------------
+
+ ---------------------------------------------------------------------------*/
+ULONG SwNewDBMgr::GetColumnFmt( Reference< XDataSource> xSource,
+                        Reference< XConnection> xConnection,
+                        Reference< XPropertySet> xColumn,
+                        SvNumberFormatter* pNFmtr,
+                        long nLanguage )
+{
+    //JP 12.01.99: ggfs. das NumberFormat im Doc setzen
+    ULONG nRet = 0;
+
+    if(!xSource.is())
+    {
+        Reference<XChild> xChild(xConnection, UNO_QUERY);
+        xSource = Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
+    }
+    if(xSource.is() && xConnection.is() && xColumn.is() && pNFmtr)
     {
         SvNumberFormatsSupplierObj* pNumFmt = new SvNumberFormatsSupplierObj( pNFmtr );
         Reference< util::XNumberFormatsSupplier >  xDocNumFmtsSupplier = pNumFmt;
@@ -1250,9 +1333,6 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
         Locale aLocale;
         aLocale.Language = sLanguage;
         aLocale.Country = sCountry;
-
-        Reference< XDataSource> xSource;
-        Reference< XConnection> xConnection = SwNewDBMgr::GetConnection(rDBName, xSource);
 
         //get the number formatter of the data source
         Reference<XPropertySet> xSourceProps(xSource, UNO_QUERY);
@@ -1269,48 +1349,39 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
                 }
             }
         }
-        Reference< XColumnsSupplier> xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
-        if(xColsSupp.is())
+        Any aFormat = xColumn->getPropertyValue(C2U("FormatKey"));
+        if(aFormat.hasValue())
         {
-            Reference <XNameAccess> xCols = xColsSupp->getColumns();
-            if(!xCols->hasByName(rColNm))
-                return nRet;
-            Any aCol = xCols->getByName(rColNm);
-            Reference< XPropertySet > xColumnProp = *(Reference< XPropertySet >*)aCol.getValue();;
-
-            Any aFormat = xColumnProp->getPropertyValue(C2U("FormatKey"));
-            if(aFormat.hasValue())
+            sal_Int32 nFmt;
+            aFormat >>= nFmt;
+            if(xNumberFormats.is())
             {
-                sal_Int32 nFmt;
-                aFormat >>= nFmt;
-                if(xNumberFormats.is())
+                try
                 {
-                    try
-                    {
-                        Reference<XPropertySet> xNumProps = xNumberFormats->getByKey( nFmt );
-                        Any aFormat = xNumProps->getPropertyValue(C2U("FormatString"));
-                        Any aLocale = xNumProps->getPropertyValue(C2U("Locale"));
-                        OUString sFormat;
-                        aFormat >>= sFormat;
-                        com::sun::star::lang::Locale aLoc;
-                        aLocale >>= aLoc;
+                    Reference<XPropertySet> xNumProps = xNumberFormats->getByKey( nFmt );
+                    Any aFormat = xNumProps->getPropertyValue(C2U("FormatString"));
+                    Any aLocale = xNumProps->getPropertyValue(C2U("Locale"));
+                    OUString sFormat;
+                    aFormat >>= sFormat;
+                    com::sun::star::lang::Locale aLoc;
+                    aLocale >>= aLoc;
+                    nFmt = xDocNumberFormats->queryKey( sFormat, aLoc, sal_False );
+                    if(NUMBERFORMAT_ENTRY_NOT_FOUND == nFmt)
                         nFmt = xDocNumberFormats->addNew( sFormat, aLoc );
-                        nRet = nFmt;
-                    }
-                    catch(...)
-                    {
-                        DBG_ERROR("illegal number format key")
-                    }
+                    nRet = nFmt;
+                }
+                catch(Exception&)
+                {
+                    DBG_ERROR("illegal number format key")
                 }
             }
-            else
-                nRet = dbtools::getDefaultNumberFormat(xColumnProp, xDocNumberFormatTypes,  aLocale);
         }
         else
-            nRet = pNFmtr->GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_SYSTEM );
+            nRet = dbtools::getDefaultNumberFormat(xColumn, xDocNumberFormatTypes,  aLocale);
     }
     return nRet;
 }
+
 /* -----------------------------17.07.00 09:47--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1463,7 +1534,7 @@ String SwNewDBMgr::GetDBField(Reference<XPropertySet> xColumnProps,
                 if (pNumber)
                     *pNumber = fVal;
             }
-            catch(Exception aExcept)
+            catch(Exception& )
             {
                 DBG_ERROR("exception caught")
             }
@@ -1596,7 +1667,7 @@ BOOL SwNewDBMgr::ToNextMergeRecord()
             ++pMergeData->nSelectionIndex;
         }
     }
-    catch(Exception aExcept)
+    catch(Exception&)
     {
         DBG_ERROR("exception caught")
     }
@@ -1624,7 +1695,7 @@ sal_uInt32  SwNewDBMgr::GetSelectedRecordId()
     {
         nRet = pMergeData->xResultSet->getRow();
     }
-    catch(Exception aExcept)
+    catch(Exception& )
     {
         DBG_ERROR("exception caught")
     }
@@ -1890,6 +1961,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
     sal_Int32 nResultSetIdx = -1;
     sal_Int16 nCmdType = CommandType::TABLE;
     const PropertyValue* pValues = rProperties.getConstArray();
+    Reference< XConnection> xConnection;
     for(sal_Int32 nPos = 0; nPos < rProperties.getLength(); nPos++)
     {
         if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cDataSourceName)))
@@ -1906,6 +1978,8 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
             pValues[nPos].Value >>= nCmdType;
         else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCursor)))
             nResultSetIdx = nPos;
+        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cActiveConnection)))
+            pValues[nPos].Value >>= xConnection;
     }
     if(!sDataSource.getLength() || !sDataTableOrQuery.getLength())
     {
@@ -1917,6 +1991,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                     sDataSource,
                     sDataTableOrQuery,
                     nCmdType,
+                    xConnection,
                     bHasSelectionProperty ? &aSelection : 0 );
 
     if(pMergeDialog->Execute() == RET_OK)
@@ -1963,6 +2038,7 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
     sal_Int32 nSelectionPos = 0;
     sal_Int16 nCmdType = CommandType::TABLE;
     const PropertyValue* pValues = rProperties.getConstArray();
+    Reference< XConnection> xConnection;
     for(sal_Int32 nPos = 0; nPos < rProperties.getLength(); nPos++)
     {
         if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cDataSourceName)))
@@ -1979,6 +2055,8 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
         }
         else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCommandType)))
             pValues[nPos].Value >>= nCmdType;
+        else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cActiveConnection)))
+            pValues[nPos].Value >>= xConnection;
     }
     if(!sDataSource.getLength() || !sDataTableOrQuery.getLength() || !xResSet.is())
     {
@@ -1986,7 +2064,12 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
         return;
     }
     Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-    Reference<XDataSource> xSource = dbtools::getDataSource(sDataSource, xMgr);
+    Reference<XDataSource> xSource;
+    Reference<XChild> xChild(xConnection, UNO_QUERY);
+    if(xChild.is())
+        xSource = Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
+    if(!xSource.is())
+        xSource = dbtools::getDataSource(sDataSource, xMgr);
     Reference< XColumnsSupplier > xColSupp( xResSet, UNO_QUERY );
     SwDBData aDBData;
     aDBData.sDataSource = sDataSource;
@@ -2000,11 +2083,11 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
             aDBData );
     if( RET_OK == pDlg->Execute() )
     {
-        Reference< sdbc::XConnection> xConnection;
         OUString sDummy;
+        if(!xConnection.is())
+            xConnection = xSource->getConnection(sDummy, sDummy);
         try
         {
-            xConnection = xSource->getConnection(sDummy, sDummy);
             pDlg->DataToDoc( aSelection , xSource, xConnection, xResSet);
         }
         catch(Exception& )

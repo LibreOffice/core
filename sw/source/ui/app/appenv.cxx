@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appenv.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-03-28 14:23:55 $
+ *  last change: $Author: os $ $Date: 2001-06-08 13:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,8 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
                     if (nCnt >= 3)
                     {
                         ::ReplacePoint(sDBName);
-                        rFldMgr.InsertFld( TYP_DBFLD, 0, sDBName, aEmptyStr, 0, &rSh );
+                        SwInsertFld_Data aData(TYP_DBFLD, 0, sDBName, aEmptyStr, 0, &rSh );
+                        rFldMgr.InsertFld( aData );
                         sRet = sDBName;
                         bField = TRUE;
                     }
