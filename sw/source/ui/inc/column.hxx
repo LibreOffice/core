@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-06-19 13:59:28 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@
 #include <prcntfld.hxx>
 #endif
 
-const nMaxCols = 99;
+const int nMaxCols = 99;
 class SwColMgr;
 class SwWrtShell;
 class SwColumnPage;
