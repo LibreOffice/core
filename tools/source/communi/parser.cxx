@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gh $ $Date: 2001-11-30 15:03:13 $
+ *  last change: $Author: gh $ $Date: 2001-12-14 16:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,7 +424,10 @@ BOOL InformationParser::Save( SvFileStream &rSourceStream,
 /*****************************************************************************/
 {
     if ( !rSourceStream.IsOpen() || !Save( (SvStream &)rSourceStream, pSaveList, 0 ))
+    {
+        printf( "ERROR saving file \"%s\"\n",ByteString( rSourceStream.GetFileName(), gsl_getSystemTextEncoding()).GetBuffer() );
         return FALSE;
+    }
 
     return TRUE;
 }
