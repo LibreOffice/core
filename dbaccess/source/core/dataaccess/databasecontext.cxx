@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-10 10:22:02 $
+ *  last change: $Author: fs $ $Date: 2000-11-10 17:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,6 +474,10 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
         Reference< XInterface > xExistent = aExistent->second.get();
         if (xExistent.is())
         {
+            Reference< XComponent > xComponent(xExistent, UNO_QUERY);
+            if (xComponent.is())
+                xComponent->removeEventListener(static_cast<XEventListener*>(this));
+
             // solaris compiler needs a construct like this and can't work with comphelper::getImplementation ...
             Reference< XUnoTunnel > xTunnel(xExistent, UNO_QUERY);
             ODatabaseSource* pObjectImpl = NULL;
