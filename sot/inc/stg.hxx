@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-04 11:07:09 $
+ *  last change: $Author: hr $ $Date: 2000-12-07 12:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,7 @@ public:
     virtual const SvStream*     GetSvStream() const;
     virtual BOOL                Equals( const BaseStorage& rStream ) const;
 
-#if __PRIVATE
+#if _SOLAR__PRIVATE
     UCBStorageElement_Impl*     FindElement_Impl( const String& rName ) const;
     BOOL                        CopyStorageElement_Impl( UCBStorageElement_Impl& rElement,
                                     BaseStorage* pDest, const String& rNew ) const;
