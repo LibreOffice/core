@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Autotext" script:language="StarBasic">Option Explicit
+ <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Autotext" script:language="StarBasic">Option Explicit
 
 Public UserfieldDataType(14) as String
 Public oDocAuto as Object
@@ -46,8 +46,8 @@ Sub Main()
 	BulletList(6) = 79
 	BulletList(7) = 58
 
-  oDocAuto = ThisComponent
-	oStyles = oDocAuto.Stylefamilies.NumberingStyles
+	oDocAuto = ThisComponent
+	oStyles = oDocAuto.Stylefamilies.GetByName(&quot;NumberingStyles&quot;)
 
 	&apos; Prepare the Search-Descriptor
 	oSearchDesc = oDocAuto.createsearchDescriptor()
