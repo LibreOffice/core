@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tox.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-06 13:11:57 $
+ *  last change: $Author: cmc $ $Date: 2002-11-18 16:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,13 +246,13 @@ struct SwFormToken
     sal_Unicode     cTabFillChar;
 
     SwFormToken(FormTokenType eType ) :
-        eTokenType(eType),
         nTabStopPosition(0),
+        eTokenType(eType),
         nPoolId(USHRT_MAX),
         eTabAlign(0 /*SVX_TAB_ADJUST_LEFT*/),
-        cTabFillChar(' '),
         nChapterFormat(0 /*CF_NUMBER*/),
-        nAuthorityField(0)/*AUTH_FIELD_IDENTIFIER*/{}
+        nAuthorityField(0 /*AUTH_FIELD_IDENTIFIER*/),
+        cTabFillChar(' ') {}
 
     String GetString() const;
 };
