@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:27:07 $
+ *  last change: $Author: rt $ $Date: 2001-08-07 14:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,16 +77,16 @@ String STR_MENU_CFGITEM
     TEXT [ dutch ] = "Menu" ;
     TEXT [ spanish ] = "Menú" ;
     TEXT [ english_us ] = "Configuration Menu" ;
-    TEXT[ chinese_simplified ] = "²Ëµ¥";
+    TEXT[ chinese_simplified ] = "èœå•";
     TEXT[ russian ] = "Ìåíş";
     TEXT[ polish ] = "Menu";
-    TEXT[ japanese ] = "ÒÆ­°";
-    TEXT[ chinese_traditional ] = "¥\\¯àªí";
+    TEXT[ japanese ] = "ï¾’ï¾†ï½­ï½°";
+    TEXT[ chinese_traditional ] = "åŠŸèƒ½è¡¨";
     TEXT[ arabic ] = "ÇáŞÇÆãÉ";
     TEXT[ dutch ] = "Menu";
-    TEXT[ chinese_simplified ] = "²Ëµ¥";
+    TEXT[ chinese_simplified ] = "èœå•";
     TEXT[ greek ] = "Ìåíïı";
-    TEXT[ korean ] = "¸Ş´º";
+    TEXT[ korean ] = "ë©”ë‰´";
     TEXT[ turkish ] = "Mönü";
     TEXT[ catalan ] = "Menú";
 };
@@ -112,16 +112,16 @@ Menu MN_CLIPBOARDFUNCS
             Text [ dutch ] = "Kn~ippen" ;
             Text [ spanish ] = "C~ortar" ;
             Text [ english_us ] = "Cu~t" ;
-            Text[ chinese_simplified ] = "¼ôÇĞ(~T)";
+            Text[ chinese_simplified ] = "å‰ªåˆ‡(~T)";
             Text[ russian ] = "Âûğåçàòü";
             Text[ polish ] = "~Wytnij";
-            Text[ japanese ] = "Ø‚èæ‚è(~T)";
-            Text[ chinese_traditional ] = "°Å¤U(~T)";
+            Text[ japanese ] = "åˆ‡ã‚Šå–ã‚Š(~T)";
+            Text[ chinese_traditional ] = "å‰ªä¸‹(~T)";
             Text[ arabic ] = "ŞÕ";
             Text[ dutch ] = "Kn~ippen";
-            Text[ chinese_simplified ] = "¼ôÇĞ(~T)";
+            Text[ chinese_simplified ] = "å‰ªåˆ‡(~T)";
             Text[ greek ] = "~ÁğïêïğŞ";
-            Text[ korean ] = "Àß¶ó ³»±â(~T)";
+            Text[ korean ] = "ì˜ë¼ ë‚´ê¸°(~T)";
             Text[ turkish ] = "Kes";
             Text[ catalan ] = "C~ortar";
         };
@@ -142,16 +142,16 @@ Menu MN_CLIPBOARDFUNCS
             Text [ dutch ] = "~Kopiëren" ;
             Text [ spanish ] = "~Copiar" ;
             Text [ english_us ] = "~Copy" ;
-            Text[ chinese_simplified ] = "¸´ÖÆ(~C)";
+            Text[ chinese_simplified ] = "å¤åˆ¶(~C)";
             Text[ russian ] = "Êîïèğîâàòü";
             Text[ polish ] = "~Kopiuj";
-            Text[ japanese ] = "ºËß°(~C)";
-            Text[ chinese_traditional ] = "½Æ»s(~C)";
+            Text[ japanese ] = "ï½ºï¾‹ï¾Ÿï½°(~C)";
+            Text[ chinese_traditional ] = "è¤‡è£½(~C)";
             Text[ arabic ] = "äÓÎ";
             Text[ dutch ] = "~Kopiëren";
-            Text[ chinese_simplified ] = "¸´ÖÆ(~C)";
+            Text[ chinese_simplified ] = "å¤åˆ¶(~C)";
             Text[ greek ] = "Áíôé~ãñáöŞ";
-            Text[ korean ] = "º¹»ç(~C)";
+            Text[ korean ] = "ë³µì‚¬(~C)";
             Text[ turkish ] = "Kopyala";
             Text[ catalan ] = "~Copiar";
         };
@@ -174,14 +174,14 @@ Menu MN_CLIPBOARDFUNCS
             Text [ english_us ] = "~Paste" ;
             Text[ russian ] = "Âñòàâèòü";
             Text[ polish ] = "~Wklej";
-            Text[ japanese ] = "“\\‚è•t‚¯(~P)";
-            Text[ chinese_simplified ] = "²åÈë(~P)";
-            Text[ chinese_traditional ] = "´¡¤J(~P)";
+            Text[ japanese ] = "è²¼ã‚Šä»˜ã‘(~P)";
+            Text[ chinese_simplified ] = "æ’å…¥(~P)";
+            Text[ chinese_traditional ] = "æ’å…¥(~P)";
             Text[ arabic ] = "áÕŞ";
             Text[ dutch ] = "~Plakken";
-            Text[ chinese_simplified ] = "²åÈë(~P)";
+            Text[ chinese_simplified ] = "æ’å…¥(~P)";
             Text[ greek ] = "Åğ~éêüëëçóç";
-            Text[ korean ] = "ºÙ¿© ³Ö±â(~P)";
+            Text[ korean ] = "ë¶™ì—¬ ë„£ê¸°(~P)";
             Text[ turkish ] = "Yapıştır";
             Text[ catalan ] = "~Pegar";
         };
@@ -345,5 +345,6 @@ ImageList RID_IMGLST_BIG
 };
 
 // ******************************************************************* EOF
+
 
 
